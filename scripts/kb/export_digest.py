@@ -41,9 +41,19 @@ def frontmatter_of(text: str) -> dict:
     if not m:
         return {}
     try:
-        return yaml.safe_load(m.group(1)) or {}
+        data = yaml.safe_load(m.group(1)) or {}
     except Exception:  # noqa: BLE001
         return {}
+    # YAML 会把无引号日期解析为 date 对象（新方向条目实测踩坑）——与 lint_kb._normalize 同口径转 ISO
+    def _norm(v):
+        if isinstance(v, dict):
+            return {k: _norm(x) for k, x in v.items()}
+        if isinstance(v, list):
+            return [_norm(x) for x in v]
+        if isinstance(v, (datetime.date, datetime.datetime)):
+            return v.isoformat()
+        return v
+    return _norm(data)
 
 
 def load_meta(path: Path) -> dict:
