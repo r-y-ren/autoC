@@ -15,6 +15,19 @@
             }
           ]
         }
+      ],
+      "PostToolUse": [
+        {
+          "matcher": "Write|Edit|ApplyPatch",
+          "hooks": [
+            {
+              "type": "process",
+              "command": "python",
+              "args": ["${ZCODE_PROJECT_DIR}/scripts/kb/lint_kb.py", "--hook"],
+              "timeoutMs": 8000
+            }
+          ]
+        }
       ]
     }
   }

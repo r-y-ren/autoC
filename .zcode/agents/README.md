@@ -1,10 +1,16 @@
-# .zcode/agents/ —— 角色章程（子 agent 定义，占位）
+# .zcode/agents/ —— 角色章程（子 agent 定义）
 
-Phase 1/2 起随各模块逐个编写。规划角色（与 DESIGN.md §6.2 写入矩阵一一对应）：
+T1 已落盘六份章程（能力契约本体，与 CAPABILITIES.md C-01…C-06 对应）：
 
-Scraper / Hunter / Strategy / Software / Hardware / Document / Acceptor（验收）
+| 文件 | 角色 | 允许写根 |
+|---|---|---|
+| scraper.md | 赛事情报采集（KB-1） | kb/competitions/、kb/raw/ |
+| hunter.md | 前沿科技猎手（KB-2） | kb/tech/、kb/raw/ |
+| software.md | 软件工程 | workspace/software/、workspace/metrics.json |
+| hardware.md | 硬件工程（CLI 路线） | workspace/hardware/ |
+| document.md | 竞赛文档 | workspace/docs/ |
+| acceptor.md | 验收（只开工单不修作品） | workspace/acceptance/ |
 
-每份章程包含：职责边界、输入契约、输出契约、禁止清单、metrics/引用纪律引用。
-
-> 注：workspace 级子 agent 目录的准确名称以客户端 Settings → Subagents 实测为准；
-> 首个章程编写时验证，若客户端采用其他目录名（如 `.zcode/subagents/`），移动本目录并更新 DESIGN.md。
+> Strategy 不设章程：决策需与用户交互，运行在主会话，规程并入 K-02 技能（见 CAPABILITIES.md）。
+> 注：workspace 级子 agent 定义的准确目录/格式以客户端 Settings → Subagents 实测为准；
+> 首个战役派发时验证，若客户端采用其他约定，移动本目录并同步更新 DESIGN.md 与 CAPABILITIES.md。

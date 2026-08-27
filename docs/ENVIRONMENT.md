@@ -18,7 +18,13 @@
 | typst | 项目报告排版 | `winget install --id Typst.Typst` |
 | platformio | 固件编译与板级测试 | `python3 -m pip install platformio`（建议挂在 3.12 环境） |
 | kicad-cli | PCB 设计文件生成 | 随 KiCad 安装（winget install KiCad.KiCad） |
-| jsonschema / pyyaml | KB linter 依赖（Phase 1） | `python -m pip install jsonschema pyyaml` |
+
+## 已随能力层（T1）安装
+
+| 工具 | 版本 | 用途 |
+|---|---|---|
+| pyyaml | 6.0.3 | lint_kb.py frontmatter 解析 |
+| jsonschema | 4.26.0 | lint_kb.py 契约校验 |
 
 ## 说明
 
