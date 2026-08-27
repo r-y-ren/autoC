@@ -14,6 +14,7 @@
 | `scripts/` | 确定性脚本（kb/guard/verify） | idle 态可改 |
 | `kb/` | 知识库（清洗后的轻量 Markdown） | collect 态经跑批写入 |
 | `workspace/` | 当前战役开发区（v1 单战役） | 按阶段/角色受限 |
+| `export/` | KB 交付导出层（S-15 纯投影，D6） | 脚本生成，人读 |
 | `archive/` | 历史作品库 | **永远只读** |
 
 ## 六条铁律

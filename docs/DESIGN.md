@@ -1,6 +1,8 @@
 # autoC — 竞赛情报与作品生成 Agent 框架：结构设计
 
-> 版本 v0.9（2026-08-27）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> 版本 v1.0（2026-08-28）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> v1.0 变更：T4 内容框架轮——K-09 方向冷启动（/discover）、合规模式三分进蓝图硬校验（prep/apply/assist，D10）、
+> 正文层结构 lint（WARN 级）、跑批成本观测列、远程备份（origin 自动 push）、格式规范模板（CUMCM 论文/BP 骨架）。
 > v0.9 变更：T3-c 能力完善——S-13 ocr_pdf（扫描件解析，实测消化 cumcm 待办并升级 verified）；winners/patterns 解构管线（模板+章程契约+CUMCM 首样板）；文档链冒烟（typst/marp 模板原样编译通过）；双频慢循环（K-08 深度评估+周六 cron）；E-09…E-12 登记；D5 裁决（零新增 MCP、RSSHub 缓判、tools/ 落位纪律、S-13 编号）。
 > v0.8 变更：T2.1 修复轮——审查实测确认的 5 缺陷修复（跑批记录多行丢行 / pending_agent 绕归档闸门 / tag 先于 commit / cmd 超时崩溃及孤儿进程劫持管道 / suggested_fields 循环变量泄漏）+ 2 语义裁决（仅 fail 计入 retry；候选队列生命周期：processed/ + .rejections.yaml 台账 + stars 翻倍重评）+ retry.max 单一事实来源（budget.yaml）+ 三套新回归测试。
 > v0.7 变更：T2 落地——S-02…S-06 脚本、K-01…K-07 技能、H-03 会话播报；K-03 前置项裁决（metrics 分片制已实现并 L2 强制；角色身份级守卫评估后不引入，理由见 §6.2 处置记录）；验收清单新增可选 cmd 字段。
@@ -92,6 +94,7 @@
 - **输出**（Strategy Agent 产出两份待确认文档）：
   1. `workspace/strategy.md`：建议赛道对比矩阵（时间窗 × 技术契合度 × 通吃度 × 画像匹配 × 竞争密度）+ "一鱼多吃"复投路线
   2. `workspace/blueprint.md`：作品蓝图（范围 / 技术栈，引用 KB-2 卡片 / 跨 agent 接口契约 / 里程碑 / 验收清单 / 合规检查），**须通过 blueprint.schema.json 校验方可提交确认**
+- **合规模式三分（D10，schema 硬校验）**：prep（赛前范本级，默认）/ apply（申报制参赛型，须附政策原文佐证，申报附件强制进交付）/ assist（赛中零介入，不启动作品构建）
 - **用户确认蓝图**后进入交付；不认可则改蓝图再确认（闸门可重复，但同一时刻只有一个）
 
 ### 3.3 工程交付（全自动）
@@ -187,6 +190,7 @@ autoC/
 | Scraper & Hunter 并发 | `.zcode/agents/` 章程 + 后台子 agent 并行 + 紧循环脚本 |
 | KB 增量调度 | Cron → `scripts/kb/` |
 | Strategy Agent | 主 agent + `.zcode/skills/`，读 `kb/INDEX.md` |
+| 方向冷启动（K-09） | `/discover`：信源目录驱动搜索 → 建方向配置与首批条目（框架泛化入口） |
 | 用户确认蓝图 | 会话交互（原生 human-in-the-loop） |
 | Coordinator | 主 agent 把蓝图拆为任务包 |
 | Software Agent + 沙箱 | 子 agent + Bash 工作区（workspace/software/） |
@@ -216,7 +220,7 @@ autoC/
   - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制：collect 放行整个 kb/、deliver 放行 workspace/（acceptance/ 除外）、verify 仅放行 acceptance/——**不识别调用者角色**。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）。
   - 契约文件（blueprint / KB 条目 / 验收清单）必须通过 `config/templates/*.schema.json` 校验：蓝图不过校验不得进入确认闸门；KB 条目不过校验进 quarantine。
   - PostToolUse 钩子对 kb/ 契约文件即时校验（仅四类目标：`<id>/meta.md`、`kb/tech/<id>.md`、`blueprint.md`、`acceptance/*.json`；winners/patterns/raw 等正文文件明确跳过）。
-- **L3 审计兜底——git**：每阶段一个 commit（阶段日志见 workspace/JOURNAL.md），越界改动必然暴露于 diff，可精确回滚（覆盖钩子未拦截的路径，如经 Bash 的写操作）。
+- **L3 审计兜底——git**：每阶段一个 commit（阶段日志见 workspace/JOURNAL.md），越界改动必然暴露于 diff，可精确回滚（覆盖钩子未拦截的路径，如经 Bash 的写操作）；每轮跑批收尾 `git push` 至私有远程（r-y-ren/autoC）作异地备份。
 
 **流程规则：验收 agent 只开失败工单，不亲手修作品**——修复路由回责任 agent，避免裁判兼运动员。
 

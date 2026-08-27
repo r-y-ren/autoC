@@ -4,7 +4,7 @@
 
 | 文件/目录 | 归属角色 | 说明 |
 |---|---|---|
-| `strategy.md` | Strategy | 对比矩阵 + 一鱼多吃路线（decide 态可写） |
+| `strategy.md` | Strategy | 攻略六节（strategy-template：矩阵/大显身手信号/一鱼多吃/合规风险/推荐结论；decide 态可写） |
 | `blueprint.md` | Strategy | ★ 唯一蓝图契约，须过 blueprint.schema.json 校验 |
 | `JOURNAL.md` | 协调者 | 阶段流转日志（提交入库，可审计） |
 | `metrics.json` | Software/Hardware | 实测数据；Document Agent 数字唯一合法来源 |
