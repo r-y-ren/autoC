@@ -132,7 +132,8 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | E-09 | Tesseract OCR（UB-Mannheim，含 chi_sim） | 扫描件 PDF/图片文字化（S-13 依赖） | ✅ T3-c 已装 | T3 |
 | E-10 | pypdfium2 / pdfplumber / pillow | PDF 渲染与表格化（S-13 及 Scraper 表格分片） | ✅ T3-c 已装 | T3 |
 | E-11 | OpenSCAD | 结构件代码化生成 → STL（hardware 章程已引用） | ✅ T3-d 已装（无头 STL 冒烟通过） | T3 |
-| E-12 | Wokwi CLI | 固件仿真自测 | ⚠ 需 Wokwi 账号/Club 许可——归"用户提供凭据"类（同 E-08），安装时查证，不假装可用 | T3 |
+| E-13 | MPLAB XC8 | PIC18F 固件编译（PlatformIO 不支持 PIC；profile 设备含 pic18f） | 按需：首个用到 PIC 的蓝图出现时先评估再装 | T3 |
+| E-12 | Wokwi CLI | 固件仿真自测（--expect-text 断言式验收） | ✅ T3-e 已装并断言冒烟通过（0.26.1；官方件+自建 Arduino ESP32 双验证；Community License=公开/开源项目口径） | T3 |
 
 ---
 
@@ -170,3 +171,9 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
   3. 节奏 → ~~挂周深度 cron~~（D7 修订：每 3 天跑批刷新草稿，当月最后一次跑批自动转正式版，判定内置 S-15 `--interval-days`）；深度赛事攻略包（Typst 编译）待 patterns 覆盖 ≥2 赛后按需启动
 
 - **D7 慢循环调度合并** ✅ 已裁决（2026-08-27，用户指令）：原"每日轻量 + 每周深度"双 cron 合并为**每 3 天 09:00 一次全量深度**（automation-617d9635）。配套：①K-08 改写为全量 SOP（含增量拉取步骤；K-01 保留为手动轻量补偿入口）；②老化重验阈值 14→12 天对齐节奏；③S-15 正式版判定由"最后一个周六"改为"当月最后一次跑批（today+interval 跨月）"，新增 `--interval-days`（默认 3）
+
+- **D8 EDA/仿真工具面评估** ✅ 已裁决（2026-08-27，T3-e）：
+  1. Wokwi CLI → **已装**（官方安装脚本，非 npm；Community License 对公开/开源项目免费，token 已配置）。`--expect-text/--fail-text` 提供断言式仿真验收，接入 acceptance-cmds 模板
+  2. EDA MCP（E-05 wokwi-mcp / E-06 kicad-mcp）→ **维持不引入**：KiCad 工程（.kicad_sch/.kicad_pcb）为文本 s-表达式，agent 可在守卫边界内直接生成/编辑；kicad-cli 覆盖 DRC 与 gerber/钻孔/贴装等制造输出；无"会话级有状态交互"需求即不引 MCP（§4 选型原则）
+  3. HDL 分析/仿真 → 未启用；首个含 HDL 里程碑的蓝图出现时再评估（yosys/iverilog CLI 可覆盖，届时按"先登记再实现"办理，登记为 E-14+）
+  4. PIC18F 工具链缺口 → 如实登记 E-13（MPLAB XC8，按需未装），不假装 PlatformIO 可覆盖

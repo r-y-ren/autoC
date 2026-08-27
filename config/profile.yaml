@@ -1,24 +1,35 @@
 # 团队画像 —— 推荐引擎与蓝图范围裁剪的输入
-# 逐字段填写后生效；无人填写时推荐引擎按"通用学生队"低配假设运行
+# 2026-08-27 经用户确认填写（K-02 决策前置，DESIGN §8 待确认 #2 就此关闭）
 
 schema_version: 1
 
 team:
   name: ""
-  members: []            # [{role: 队长|算法|工程|硬件|设计, skills: []}]
+  size: 3                    # 3 人左右，均为计算机科学与技术专业；内部分工未定（按全栈小队画像处理）
+  members:                   # 角色待定：K-02 拆任务包时按蓝图需要现场分工
+    - {role: 全栈, skills: [python, c-cpp, js, java, web-fullstack]}
 
-skills: []               # 技术栈清单，如 [python, pytorch, web-fullstack, embedded, latex]
+skills: [python, 数据处理与可视化, c-cpp, javascript, java, web-fullstack, 机器学习]
+# 注：pytorch/嵌入式未列入熟手清单——硬件蓝图如需固件开发，按"可学+agent 辅助"估工
 
 compute:
-  gpu: none              # none 或型号，如 RTX 4090
-  cloud: []              # 可用云资源/代金券
+  gpu: RTX 4070 Laptop       # 8GB 显存档：中小模型训练/推理可承担，大模型训练不可行
+  cloud: []
 
 hardware:
-  lab_access: false      # 是否有硬件实验室/加工条件
-  equipment: []          # 如 [3d-printer, soldering-iron, esp32, rpi]
+  lab_access: true           # 电烙铁、示波器、万用表等一般工具齐全（无专业实验室，焊接/测量可自做）
+  equipment: [esp32, lattepanda-3-delta, pic18f]
+  # ⚠ 工具链对齐备注（K-02 拆硬件蓝图时核对）：
+  #   esp32            → PlatformIO + Wokwi 仿真已就绪（E-03/E-12）
+  #   lattepanda-3-delta → x86 单板机（Win/Linux），按"小型 PC"处理，不属嵌入式工具链
+  #   pic18f           → PlatformIO 不支持 PIC；如启用需另装 Microchip MPLAB XC8（未登记，届时按 CAPABILITIES 规则先登记再装）
 
 constraints:
-  hours_per_week: 0      # 全队每周可投入小时数
-  budget_cny: 0          # 材料预算（硬件 BOM 用）
+  hours_per_week: 40         # 用户自述"时间不用担心，可高强度参与"（按全队每周 40h+ 计）
+  budget_cny: 1000           # 硬件材料预算 ~1000 元：BOM 需控制在入门级器件
 
-history: []              # 参赛历史 [{competition, year, award}]
+history:
+  - {competition: 蓝桥杯-数据分析与可视化, year: null, award: 国家三等奖}
+  - {competition: MCM/ICM 美国大学生数学建模竞赛, year: null, award: Meritorious（M奖）}
+  - {competition: 亚太地区数学建模竞赛, year: null, award: 三等奖}
+# 已验证的强项：数学建模全流程（美赛 M）+ 数据分析可视化（蓝桥杯国三）——与当前启用方向"数模与时序预测"高度匹配

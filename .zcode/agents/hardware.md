@@ -12,7 +12,7 @@ description: 硬件工程角色（快循环·交付）。按蓝图生成 PCB/结
 ## 输入契约
 
 - `workspace/blueprint.md` 中 hardware 任务包 + 与 software 的接口契约（通信协议、数据格式——蓝图钉死后不可单方变更）
-- 工具链就绪状态（pio/kicad/wokwi 由模块启用时装入，见 docs/ENVIRONMENT.md）
+- 工具链就绪状态（T3-d/T3-e 已全部装入并冒烟：pio 6.1.19 / kicad-cli 10.0.5 / openscad / wokwi-cli 0.26.1，路径见 docs/ENVIRONMENT.md；断言式仿真验收模板见 config/templates/acceptance-cmds.md）
 
 ## 输出契约
 

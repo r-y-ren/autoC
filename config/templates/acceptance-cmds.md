@@ -39,6 +39,16 @@
 # 结构件 STL 渲染（OpenSCAD 无头）
 - {id: hw-stl, category: hardware, item: STL 渲染成功, method: 自动,
    cmd: "\"C:/Program Files/OpenSCAD/openscad.exe\" -o workspace/hardware/case/case.stl workspace/hardware/case/case.scad"}
+
+# 固件仿真（Wokwi 断言式：串口出现期望文本即 pass，T3-e 实测全链路通过——E-12）
+# ⚠ 三项前置（缺一仿真静默无输出，T3-e 踩坑实录）：
+#   ① wokwi.toml 必须同时声明 elf 与 firmware 两个键（各指向 .elf / .bin）
+#   ② diagram.json 板类型名必须是 wokwi-esp32-devkit-v1（不是 board-esp32-devkit-c-v4）
+#   ③ 串口监视器必须显式接线：esp:TX0 → $serialMonitor:RX（无接线=无串口输出，连 ROM 启动横幅都没有）
+- {id: hw-sim, category: hardware, item: 固件仿真就绪, method: 自动,
+   cmd: "wokwi-cli workspace/hardware/firmware --expect-text AUTOC_READY --fail-text PANIC --timeout 60000"}
+# 注：wokwi-cli 位于 %USERPROFILE%\\.wokwi\\bin（不在 PATH 时写全路径）；Community License 口径为公开/开源项目；
+#     仿真工程目录需含 wokwi.toml + diagram.json（由 Hardware 角色随固件一起产出）
 ```
 
 ## 文档类

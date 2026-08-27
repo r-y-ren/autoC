@@ -31,6 +31,7 @@
 | PlatformIO Core | 6.1.19（挂 python3=3.12） | C-04 固件编译；调用方式 `python3 -m platformio` |
 | KiCad + kicad-cli | 10.0.5（winget，用户级） | C-04 PCB；路径 `%LOCALAPPDATA%\Programs\KiCad\10.0\bin\kicad-cli.exe`，不在 PATH |
 | OpenSCAD | 2025.x（winget） | C-04 结构件；路径 `C:\Program Files\OpenSCAD\openscad.exe`，无头模式 `-o` 可用 |
+| wokwi-cli | 0.26.1（官方脚本装至 `%USERPROFILE%\.wokwi\bin`） | C-04 固件仿真；token=WOKWI_CLI_TOKEN（用户级环境变量，Community License） |
 
 ## T3-c 冒烟记录（2026-08-27）
 
@@ -44,7 +45,13 @@
 - PlatformIO：`platform=native` 工程 `python3 -m platformio run` 编译+运行 ✓（本机 MinGW gcc 14.2；首次真实嵌入式构建将下载对应工具链，属正常流量）
 - kicad-cli：最小板件 `pcb export gerbers` → 12 个 gerber 文件 ✓
 - OpenSCAD：`cube([10,10,10])` 无头渲染 STL（6 面/1589B）✓
-- E-12 Wokwi CLI 维持登记态：需账号/许可（密钥类，CAPABILITIES D5/D6 记录），未装不假装可用
+## T3-e wokwi-cli 冒烟记录（2026-08-27）
+
+- 官方 esp-idf-hello-world 仓库：`--expect-text "Hello world!"` → TEST PASSED，exit 0 ✓（token/仿真/串口/断言链路验证）
+- 自建 pio+Arduino ESP32（serial 打印 AUTOC_READY）：TEST PASSED，exit 0 ✓
+- 踩坑实录（已固化进 acceptance-cmds.md 模板）：wokwi.toml 须同时有 `elf`+`firmware` 键；diagram 板类型名 `wokwi-esp32-devkit-v1`；串口监视器须显式接线 `esp:TX0→$serialMonitor:RX`——缺任一项仿真静默无输出（连 ROM 启动横幅都没有），CLI 不报错只超时
+- `wokwi-cli init` 需要交互终端（无 TTY 报 uv_tty_init）；diagram/toml 建议手写（模板见 acceptance-cmds.md）
+- 附注：wokwi-cli 自带实验性 MCP server（`wokwi-cli mcp`）——D8 维持不启用，CLI 断言已覆盖验收需求
 
 ## 说明
 
