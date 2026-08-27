@@ -13,3 +13,4 @@
 | 2026-08-27 20:30 | idle | D9 审查遗留项闭合：retry.max 实时同步(场景E)/same_host限速落脚本/tech-card directions字段+6卡回填+简报方向过滤/export_digest 2处措辞残留 | 回归全绿(16/12/6/4/index/digest) |
 | 2026-08-27 23:30 | idle | T4 批次1 框架件：schema 三改（award_levels/track 六值词表/directions 必填）+ 三通用模板 + 信源目录 + K-09/M-06 + K-02 信号显式化 + 6 卡词表回填 | lint 9/9、回归全绿 |
 | 2026-08-28 00:40 | collect | T4 批次2 黑客松类冷启动：4搜索分片（35候选）→4建条分片（8条meta全过lint）→winners首样（Nova 7席：6深构+1降级）；锚点回填×5；13候选留队列 | 泛化判据五条全过（详见复盘） |
+| 2026-08-28 01:30 | idle | T4.1 工作流完善 P1-P4：SPA 预抓机制（catalog 清单+三技能+章程）/ _surveys 必查步 / 分析报告模板六节 / watch 项扫描 | 四项机制件全部落盘 |

@@ -150,6 +150,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 - **T2.1 修复轮（审查驱动）**：✅ 完成——5 个实测缺陷（跑批记录丢行 / pending_agent 绕闸门 / tag 先于 commit / cmd 超时崩溃+孤儿进程劫持 / 循环变量泄漏）+ 2 语义裁决（见 D4）+ retry.max 单一事实来源；新增 S-10/S-11/S-12 三套回归，全量 12+5+4+1 用例通过
 - **T3 外部接入（按模块启用）**：E-01…E-04/E-09…E-11 已装并冒烟；E-05…E-08/E-12 按需（凭据/方向类）
 - **T3-d 能力收口轮**：✅ 完成（2026-08-27）——硬件三件套安装冒烟（pio/kicad-cli/openscad）、S-15 简报导出层、K-01/K-08 预检+收尾断言、验收 cmd 模板库、D6 交付层裁决
+- **T4.1 工作流完善轮（P1-P4）**：✅（2026-08-27）——P1 SPA 抓取修复（catalog SPA 清单 + 主会话预抓规则 + scraper 章程『搜索快照禁作唯一事实源』，Nova 事故机制化）；P2 _surveys 生产触发必查（≥3 卡 / 30 天 / maturity 变化）；P3 作品分析报告模板（六节，挂 acceptor）；P4 watch 项扫描进 K-08 预检
 - **T4 内容框架轮（批次 1 框架件）**：✅（2026-08-27）——schema 三改（meta.award_levels 数据驱动覆盖标准 / tech-card.directions 转必填 / competition_fit.track 六值词表枚举）；winners/patterns/survey 三通用模板（去特化措辞，四节深构含"不足与可改进点"）；config/sources/catalog.md 信源目录；K-09+M-09 落盘；K-02"大显身手"信号显式化；存量 6 卡 track 词表回填
 
 ## 6. 决策记录
