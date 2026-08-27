@@ -157,7 +157,7 @@ autoC/
 │   ├── docs/                    # Document Agent：报告 + PPT 源码（Marp/Typst）
 │   └── acceptance/              # 验收角色：执行记录 / 失败工单 / 分析报告
 ├── export/                      # KB 交付导出层（D6：条目层纯投影，读者=团队自用）
-│   └── digest-<方向>-<YYYY-MM>.md  # 方向情报简报（S-15 生成；周更草稿，月末周六转正式版）
+│   └── digest-<方向>-<YYYY-MM>.md  # 方向情报简报（S-15 生成；每3天刷新，当月最后一次跑批转正式版）
 ├── archive/                     # 历史作品库（交付物 3，归档后只读，带 git tag）
 │   └── 2026-08_挑战杯_智能巡检/
 ├── AGENTS.md                    # 全局纪律与行为红线

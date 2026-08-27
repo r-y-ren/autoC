@@ -14,7 +14,7 @@ description: 慢循环全量深度跑批（每 3 天，D7 合并原每日轻量+
 1. **切换**：`python scripts/guard/init_state.py --phase collect --by kb-deep-sync`
 2. **增量拉取与入库**（原 K-01 第 2-4 步）：
    - `python scripts/kb/sync_competitions.py` + `python scripts/kb/sync_tech.py`（arXiv + gh；gh 已登录）
-   - 活跃队列候选分片派发 hunter/scraper（并发 ≤ budget；**深度配额：每方向 ≤5 卡 / ≤3 条目**；遗留候选按 suggested_fields 信号挑选）
+   - 活跃队列候选分片派发 hunter/scraper（并发 ≤ budget.max_subagents_per_batch；**配额以 budget.yaml quotas 为唯一事实源**——深度跑批当前：每方向 ≤5 卡 / ≤3 条目 / winners 年份分片 1 片；遗留候选按 suggested_fields 信号挑选）
    - 已消费队列移 `kb/raw/candidates/processed/`；Hunter 拒绝者进 `.rejections.yaml` 台账
 3. **老化重验**：`last_verified` 超 **12 天**的条目派 scraper 分片重验（重点关键日期/AI 政策；阈值对齐 3 天节奏）
 4. **拒绝台账复核**：`kb/tech/.rejections.yaml` 拒绝理由质量抽查，明显误拒的标记下轮重评（stars×2 自动重评由 sync_tech 处理）

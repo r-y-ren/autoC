@@ -8,11 +8,17 @@ schema_version: 1
 run_budget:
   max_subagents_per_batch: 4       # T3-a 实测：并发 4（hunter×2+scraper×2）稳定
   max_wallclock_minutes: 60        # T3-a 实测：整波并行约 22min（最长单分片 cumcm ~21min/45 工具调用）
-  checkpoint: true                 # 断点续跑（进度落 .flow/，重跑跳过已完成条目）
+  checkpoint: queue                # 断点续跑语义由候选队列承载（活跃/processed/ 与拒绝台账），无独立进度文件
 
 # T3-a 实测量级（2026-08-27，单方向）：
 #   sync_tech 单次 5-6s；hunter 分片 190-411s（0.25M-0.45M tokens）；
-#   scraper 分片 224-1242s（0.23M-1.34M tokens）——赛事条目分片是成本大头，日常跑批建议限 2-3 条目
+#   scraper 分片 224-1242s（0.23M-1.34M tokens）——赛事条目分片是成本大头
+
+quotas:                             # 跑批配额单一事实源（K-08 与 cron 提示引用此处，勿在别处另立数字）
+  deep_run_per_direction:           # 全量深度跑批（每 3 天）
+    tech_cards: 5                   # 每方向每跑批技术卡上限
+    comp_entries: 3                 # 每方向每跑批赛事条目上限
+    winners_shards: 1               # winners/patterns 年份分片上限（实测 8M tokens/片）
 
 rate_limit:
   requests_per_second: 1           # 对外部站点礼貌限速

@@ -79,7 +79,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | S-11 | test_archive.py | 归档闸门回归（pending_agent/fail/pass 含 tag 内容审计，4 用例） | ✅ T2.1 已落地（4/4） |
 | S-12 | test_index.py | 索引回归（跑批记录多行 append-only 保留） | ✅ T2.1 已落地 |
 | S-13 | ocr_pdf.py | PDF 解析：有文本层直取；无文本层逐页渲染 → tesseract OCR → 文本 + 置信度报告（判断仍归 Scraper） | ✅ T3-c 本轮落地 |
-| S-15 | export_digest.py | 方向情报简报导出（D6 交付层）：条目层纯投影 → export/digest-<方向>-<月>.md，周更草稿/月末周六自动转正式版 | ✅ T3-d 本轮落地（selftest 通过） |
+| S-15 | export_digest.py | 方向情报简报导出（D6 交付层）：条目层纯投影 → export/digest-<方向>-<月>.md，每3天跑批刷新/当月最后一次跑批自动转正式版 | ✅ T3-d 落地（selftest 通过） |
 
 ### 3.3 角色章程（.zcode/agents/）——能力契约本体
 
@@ -164,7 +164,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
   1. MCP 结论 → **本轮零新增 MCP**（OCR/表格/视觉/文档链全部有 CLI/内建解，符合 §4 选型原则）；E-07 RSSHub **缓判**至挑战杯/创新创业类方向启用时再裁决，届时 clone 进 `tools/`（gitignore，本机 node 直跑，不用 docker）
   2. 第三方开源工具落位纪律 → 一律 clone 进 gitignored `tools/` + ENVIRONMENT.md 记版本，不污染 git 主干与审计面
   3. S-13 编号说明 → 计划稿的 "S-12 ocr_pdf" 与已登记 S-12（test_index）撞号，OCR 脚本按 **S-13** 登记
-  4. 双频慢循环 → 每日轻量增量（已有 cron 08:30）+ 每周深度评估（K-08，周六 cron），兑现 DESIGN §3.1 承诺
+  4. 双频慢循环 → 每日轻量增量 + 每周深度评估（**已被 D7 修订**为每 3 天全量深度单 cron）
 - **D6 知识库交付层裁决** ✅ 已裁决（2026-08-27，T3-d）：
   1. 读者 → **团队自用**（决策输入口径：直接给结论与证据链，合规红线照实写；导览见 kb/README.md）
   2. 形式 → **源库不动，导出层纯投影**——export/digest-<方向>-<月>.md 方向情报简报（S-15 生成：赛事日历倒计时/技术雷达速览/patterns 第五节/合规提醒）；每条结论回链条目 ID，**分析增量只允许发生在条目层**，导出物是纯重组

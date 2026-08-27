@@ -30,7 +30,7 @@ competitions/<id>/
 
 ## 支撑目录
 
-- `quarantine/`——schema 不合格条目隔离区（附 `.reason`），周六深度评估处置
+- `quarantine/`——schema 不合格条目隔离区（附 `.reason`），每 3 天深度跑批处置
 - `raw/`——原始快照与 PDF（gitignore，不入 git 主干；`raw/candidates/` 为采集队列，消费后移 `processed/`）
 - `tech/.rejections.yaml`——Hunter 拒绝台账（stars 达快照 ×2 自动重评）
 
