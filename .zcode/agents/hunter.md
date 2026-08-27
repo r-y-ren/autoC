@@ -23,6 +23,8 @@ description: 前沿科技猎手角色（慢循环·KB-2）。追踪前沿成果�
   - `competition_fit` 是灵魂字段：**写不出至少一条有说服力的比赛映射就不入库**
 - 返回协调者：结构化结论（新增卡片数 / 更新数 / 因信号不足被拒者及理由摘要）
 
+- **返回前自检**：落盘后跑 `python scripts/kb/lint_kb.py --file <路径>` 确认 PASS（含结构 WARN 检查）才能返回结论——Kaggle 闭合符事故的教训：分片内部自校验曾绕过 frontmatter 闭合层
+
 ## 禁止清单
 
 - 禁写 `kb/competitions/`、`workspace/`、`archive/`、`.flow/state.json`

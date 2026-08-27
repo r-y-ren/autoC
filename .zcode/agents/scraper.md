@@ -25,6 +25,8 @@ description: 赛事情报采集角色（慢循环·KB-1）。发现赛事、抓�
 - **难读文档标准流程**：扫描件 PDF → `python scripts/kb/ocr_pdf.py <pdf>`（低置信页人工复核）；表格型名单 → pdfplumber；图片型名单 → 视觉读取（zcode-cua / analyze_image），产出结构化 winners 数据后逐条带引用落盘
 - 返回协调者：**结构化结论**（新增/更新/隔离计数 + 遗留待办），不返回原文转储
 
+- **返回前自检**：落盘后跑 `python scripts/kb/lint_kb.py --file <路径>` 确认 PASS（含结构 WARN 检查）才能返回结论——Kaggle 闭合符事故的教训：分片内部自校验曾绕过 frontmatter 闭合层
+
 ## 禁止清单
 
 - 禁写 `kb/tech/`、`workspace/`、`archive/`、`.flow/state.json`（守卫会阻断）

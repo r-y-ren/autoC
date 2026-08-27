@@ -114,6 +114,71 @@ def scan_targets() -> list[Path]:
     return targets
 
 
+# ---------- 正文层轻结构检查（--structure；WARN 级，不隔离） ----------
+# 正文层（winners/patterns/surveys）无 schema，结构合规靠模板；此处只验三件事：
+# frontmatter 存在且可解析、必备键齐、模板必备节存在。历史遗留（如旧五节 patterns）会如实 WARN。
+
+def _fm_ok(text: str) -> tuple[bool, dict]:
+    m = re.match(r"^---\s*\n(.*?)\n---\s*\n?", text, re.S)
+    if not m:
+        return False, {}
+    try:
+        import yaml
+        return True, yaml.safe_load(m.group(1)) or {}
+    except Exception:  # noqa: BLE001
+        return False, {}
+
+
+def check_structure(path: Path) -> tuple[bool, str]:
+    """返回 (结构完好, 说明)。目标：winners/<年>.md、patterns.md、tech/_surveys/*.md。"""
+    rel = path.relative_to(ROOT).as_posix().lower()
+    text = path.read_text(encoding="utf-8", errors="replace")
+    ok, fm = _fm_ok(text)
+    if not ok:
+        return False, "正文层：frontmatter 缺失或不可解析（检查闭合 --- ）"
+    if re.search(r"(?:^|/)winners/[^/]+\.md$", rel):
+        need = ["competition_id", "year", "sources"]
+        miss = [k for k in need if k not in fm]
+        if miss:
+            return False, f"winners：frontmatter 缺 {miss}"
+        if "数据缺口" not in text:
+            return False, "winners：缺『数据缺口声明』节（模板第三节）"
+        if "骨架" in text and "不足与可改进点" not in text:
+            return False, "winners：含深构条目但缺『不足与可改进点』必备节"
+        return True, "winners 结构 OK"
+    if re.search(r"(?:^|/)patterns\.md$", rel):
+        need = ["competition_id", "last_verified", "coverage", "confidence"]
+        miss = [k for k in need if k not in fm]
+        if miss:
+            return False, f"patterns：frontmatter 缺 {miss}"
+        secs = ["评审偏好", "方法论分布", "差异化点", "反面观察", "赛点检查表", "启示"]
+        miss_s = [s for s in secs if s not in text]
+        if miss_s:
+            return False, f"patterns：缺必备节 {miss_s}（六节模板）"
+        return True, "patterns 结构 OK"
+    if "_surveys/" in rel:
+        need = ["family", "cards", "last_verified", "confidence"]
+        miss = [k for k in need if k not in fm]
+        if miss:
+            return False, f"survey：frontmatter 缺 {miss}"
+        if "对比矩阵" not in text or "选型结论" not in text:
+            return False, "survey：缺『对比矩阵』或『选型结论』节"
+        return True, "survey 结构 OK"
+    return True, "非结构检查目标"
+
+
+def structure_targets() -> list[Path]:
+    targets: list[Path] = []
+    comp_root = ROOT / "kb" / "competitions"
+    if comp_root.is_dir():
+        targets += sorted(comp_root.glob("*/winners/*.md"))
+        targets += sorted(comp_root.glob("*/patterns.md"))
+    surv = ROOT / "kb" / "tech" / "_surveys"
+    if surv.is_dir():
+        targets += sorted(surv.glob("*.md"))
+    return targets
+
+
 def quarantine(path: Path, reason: str) -> Path:
     # kb/ 内的条目相对 kb/ 取路径（隔离区本身已在 kb/ 下），其余相对工程根
     try:
@@ -135,6 +200,7 @@ def main() -> int:
     ap.add_argument("--hook", action="store_true", help="PostToolUse 钩子模式")
     ap.add_argument("--file", type=str, default=None, help="校验单个文件")
     ap.add_argument("--quarantine", action="store_true", help="全量模式下隔离不合格条目")
+    ap.add_argument("--structure", action="store_true", help="只跑正文层结构检查（WARN 级）")
     args = ap.parse_args()
 
     if args.hook:
@@ -156,8 +222,24 @@ def main() -> int:
 
     if args.file:
         ok, msg = validate_path(Path(args.file))
-        print(("PASS " if ok else "FAIL ") + str(args.file) + f"  [{msg}]")
+        st_ok, st_msg = check_structure(Path(args.file))
+        line = ("PASS " if ok else "FAIL ") + str(args.file) + f"  [{msg}]"
+        if not st_ok:
+            line += f"  [WARN {st_msg}]"
+        print(line)
         return 0 if ok else 1
+
+    # --structure：只跑正文层结构检查（WARN 级，不隔离、不返回非零）
+    if args.structure:
+        stargets = structure_targets()
+        warns = 0
+        for t in stargets:
+            ok, msg = check_structure(t)
+            rel = t.relative_to(ROOT)
+            print(f"{'PASS' if ok else 'WARN'} {rel}  [{msg}]")
+            warns += 0 if ok else 1
+        print(f"[lint_kb][structure] {len(stargets)} 个正文层文件，{warns} 结构告警")
+        return 0
 
     targets = scan_targets()
     if not targets:
@@ -175,6 +257,11 @@ def main() -> int:
             if args.quarantine:
                 dest = quarantine(t, msg)
                 print(f"     ↳ 已隔离 → {dest.relative_to(ROOT)}")
+    # 全量模式顺带跑正文层结构（WARN 级——不隔离、不影响退出码；待升格项如实亮出）
+    for t in structure_targets():
+        ok, msg = check_structure(t)
+        if not ok:
+            print(f"WARN {t.relative_to(ROOT)}  [{msg}]")
     print(f"[lint_kb] {len(targets)} 条目，{failures} 不合格")
     return 1 if failures else 0
 

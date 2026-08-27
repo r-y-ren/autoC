@@ -24,7 +24,7 @@ description: 慢循环全量深度跑批（每 3 天，D7 合并原每日轻量+
 6. **winners/patterns 推进**：选 1 个赛事推进历年获奖解构（每分片一个年份；扫描件先过 `scripts/kb/ocr_pdf.py`；模板 `config/templates/patterns-template.md`）
 6.5. **`_surveys` 汇总层必查（P2）**：扫描 `kb/tech/` 各技术族——**卡片数 ≥3 且无对应 `tech/_surveys/<族>.md`，或已有 survey 的 `last_verified` 超 30 天 / 族内出现 maturity 变化** → 派 Hunter 分片按 `config/templates/survey-template.md` 建立或刷新（当前欠账：时序预测族 6 卡无 survey）
 7. **质量闸与索引**：`python scripts/kb/lint_kb.py --quarantine` → `python scripts/kb/build_index.py`
-8. **登记收尾**：INDEX 跑批记录追加（类型=deep）、JOURNAL 记行、git commit、`init_state --phase idle --by kb-deep-sync`
+8. **登记收尾**：INDEX 跑批记录追加（类型=deep；**成本列必填：分片数/token 估算/墙钟**——铁律 4 精神：成本也是实测数字）、JOURNAL 记行、git commit、`init_state --phase idle --by kb-deep-sync`
 9. **简报导出（D6 交付层，idle 后执行）**：`python scripts/kb/export_digest.py --interval-days 3`——**当月最后一次跑批（下一次跑批跨月）自动转正式版**；导出后 git commit
 10. **收尾断言（任一不满足 → JOURNAL 记 warn 行并如实报告，不得静默）**：
    - `python -c "import json;print(json.load(open('.flow/state.json'))['phase'])"` 输出 idle
