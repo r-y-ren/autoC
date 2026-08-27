@@ -1,6 +1,7 @@
 # autoC — 竞赛情报与作品生成 Agent 框架：结构设计
 
-> 版本 v0.4（2026-08-27）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> 版本 v0.5（2026-08-27）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> v0.5 变更：按 Phase 0 实测校准——钩子注册落点为 `.zcode/config.json`（`hooks.events`，需 `enabled: true`）、子 agent 目录暂定 `.zcode/agents/`（首个章程编写时经 Settings → Subagents 实测确认）。
 > 各模块细节（信源清单、schema 字段、验收清单条目等）在逐模块讨论后补充为独立模块文档，本文不展开。
 
 ---
@@ -116,10 +117,9 @@
 ```
 autoC/
 ├── .zcode/                      # 客户端原生配置层（原生感知，不自造平行概念）
-│   ├── subagents/               # 角色章程 = 子 agent 定义（Scraper/Hunter/Strategy/Soft/HW/Doc/验收）
+│   ├── agents/                  # 角色章程 = 子 agent 定义（目录名待首个章程编写时实测确认）
 │   ├── skills/                  # SOP 纯函数技能（blueprint-gen / lint / marp-deck / typst-report 等）
-│   └── hooks.json               # 钩子定义（PreToolUse 路径守卫、PostToolUse 即时校验）
-│                                #   ※ 原生目录准确命名在 M0 与客户端实际对齐
+│   └── config.json              # hooks.events 注册（enabled:true；PreToolUse 路径守卫，M0 已实测格式）
 ├── .flow/                       # 运行时状态（gitignore；守卫/脚本动态读写）
 │   └── state.json               # 当前阶段、允许写根、重试计数与熔断状态
 ├── config/                      # 静态配置与契约规范中枢
@@ -205,7 +205,7 @@ autoC/
 
 - **L1 软约束——角色章程即子 agent 身份**：每个角色在 `.zcode/subagents/` 中定义（职责 / 输入输出契约 / 禁止清单）；Coordinator 按名派发，章程由客户端原生感知，不靠"记得引用文件"的自觉。
 - **L2 硬约束——写入路径守卫 + 契约 Schema 校验**：
-  - PreToolUse 钩子（`.zcode/hooks.json` → `scripts/guard/guard_path.py`）拦截 Write/Edit：读 `.flow/state.json` 的"当前阶段 + 允许写根"，越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）。
+  - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）拦截越界写入：读 `.flow/state.json` 的"当前阶段 + 允许写根"，越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）。
   - 契约文件（blueprint / KB 条目 / 验收清单）必须通过 `config/templates/*.schema.json` 校验：蓝图不过校验不得进入确认闸门；KB 条目不过校验进 quarantine。
   - PostToolUse 钩子对 kb/ 新写入即时跑 lint_kb 反馈。
 - **L3 审计兜底——git**：每阶段一个 commit（阶段日志见 workspace/JOURNAL.md），越界改动必然暴露于 diff，可精确回滚（覆盖钩子未拦截的路径，如经 Bash 的写操作）。
@@ -233,7 +233,7 @@ autoC/
 | AGENTS.md | 全局铁律（引用纪律 / 契约纪律 / 合规纪律） |
 | .zcode/subagents/ | 角色章程 = 子 agent 定义（原生感知） |
 | .zcode/skills/ | SOP 纯函数技能（blueprint-gen / lint / marp-deck 等） |
-| .zcode/hooks.json | 写入路径守卫 + kb/ 即时校验（事件字段在 M0 验证） |
+| .zcode/config.json → hooks | 写入路径守卫（PreToolUse，process 型；Phase 0 已注册并冒烟验证） |
 | 斜杠命令 | 阶段入口、换会话重启阶段 |
 | 子 agent | 上下文隔离与并发 |
 | cron | KB 定时增量调度 |
