@@ -43,5 +43,8 @@ archive/    历史作品库（只读，git tag）
 ## 当前状态
 
 - [x] Phase 0：骨架、铁律、守卫钩子、契约模板、环境基线
-- [ ] Phase 1：KB 模块（schema 细化 / sync 脚本 / linter / 角色章程）
-- [ ] Phase 2：决策与交付管线（策略 skill / 验收执行器 / 归档脚本）
+- [x] 能力层 T1：能力登记表（CAPABILITIES.md）+ 6 份角色章程（.zcode/agents/）+ 5 个命令入口（.zcode/commands/）+ H-02 校验钩子与 lint_kb.py（守卫回归 14/14）
+- [ ] T2：编排技能与慢循环脚本（K-01…K-07、sync/build_index/run_acceptance/archive_campaign）
+- [ ] T3：外部接入（marp/typst/pio/kicad CLI、MCP 后置评估、RSSHub、Kaggle key）
+
+能力登记与裁决记录见 [docs/CAPABILITIES.md](docs/CAPABILITIES.md)；角色写入边界的硬度表述（L1 软边界 / L2 阶段硬边界）见 DESIGN.md §6.2。

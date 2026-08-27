@@ -18,6 +18,7 @@ description: 硬件工程角色（快循环·交付）。按蓝图生成 PCB/结
 
 - `workspace/hardware/`：`pins.md`（引脚表）、`bom.csv`、PCB 工程文件、`case/*.scad`+STL、`firmware/`（含 platformio.ini）
 - `workspace/metrics.json` 中 hardware 相关键（功耗/尺寸/成本估算**标注为估算**，仿真实测标注为实测）
+  ⚠ 已知风险：与 software 并发共写顶层 metrics.json 存在覆盖风险；K-03 落地时将改为角色指标分片 + 确定性汇总，届时更新本条（见 DESIGN §6.2 后置项）
 - 仿真证据：Wokwi/编译输出日志路径
 - `MANUAL_TEST.md`：物理装配与实测手册（agent 可验证项之外的全部移交人工）
 - 返回协调者：结构化结论 + 人工环节清单

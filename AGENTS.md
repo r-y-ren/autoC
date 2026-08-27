@@ -20,7 +20,7 @@
 
 1. **引用纪律**：KB 中的一切分析必须基于本次实抓的文档，逐条携带 `来源 URL + 抓取日期`。禁止凭模型记忆撰写获奖分析或赛事信息。
 2. **契约纪律**：`workspace/blueprint.md`、KB 条目、验收记录必须通过 `config/templates/*.schema.json` 校验；蓝图未过校验不得请求用户确认。
-3. **写入纪律**：尊重 `scripts/guard/guard_path.py` 的阶段策略与写入矩阵（DESIGN.md §6.2）。被守卫阻断时，修正自己的目标路径，不要绕道 Bash 写入来规避——Bash 写入同样会被 git 审计（L3）追责。`archive/` 与 `.flow/state.json` 对 agent 永远只读。
+3. **写入纪律**：尊重 `scripts/guard/guard_path.py` 的**阶段级**写入策略与角色写入矩阵（DESIGN.md §6.2；角色目录级边界属 L1 软约束）。被守卫阻断时，修正自己的目标路径，不要绕道 Bash 写入来规避——Bash 写入同样会被 git 审计（L3）追责。`archive/` 与 `.flow/state.json` 对 agent 永远只读。
 4. **数据纪律**：对外文档中的一切性能数字只能来自 `workspace/metrics.json` 的实测值，禁止编造或"合理估计"数字。
 5. **上下文纪律**：主会话是瘦协调者——只读 `kb/INDEX.md` 与各契约文件，不整读 `kb/raw/` 与条目正文；收集/分析任务按条目分片派发子 agent；子 agent 返回结构化结论而非原始转储。
 6. **阶段纪律**：每完成一个阶段在 `workspace/JOURNAL.md` 记录一行并 git commit；阶段流转只能经 `init_state.py`；验收-修复回环超过 `retry.max` 次必须熔断升级人工，不得继续重试。

@@ -43,7 +43,7 @@
         "properties": {
           "url": { "type": "string" },
           "title": { "type": "string" },
-          "accessed": { "type": "string" }
+          "accessed": { "type": "string", "format": "date" }
         }
       }
     }

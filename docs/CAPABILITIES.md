@@ -73,6 +73,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | S-05 | run_acceptance.py | 验收执行器：跑清单、记证据、开工单、更新 retry | T2 |
 | S-06 | archive_campaign.py | workspace → archive/（mv + git tag + 只读）→ 复位 | T2 |
 | S-07 | test_guard.py | 守卫回归测试 | ✅ 本轮已落地（14/14 通过） |
+| S-08 | test_lint.py | lint 回归测试（目标识别/日期格式/跳过清单，12 用例） | ✅ T2 校准已落地（12/12 通过） |
 
 ### 3.3 角色章程（.zcode/agents/）——能力契约本体
 

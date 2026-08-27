@@ -8,14 +8,13 @@
   无参                 全量扫描 kb/competitions/*/meta.md 与 kb/tech/*.md
   --quarantine        全量模式下将不合格条目移入 kb/quarantine/（附 .reason 文件）
 
-schema 判定（按路径标记，temp fixture 同样适用）：
-  *blueprint.md*                          → blueprint.schema.json（YAML frontmatter）
-  *acceptance*/*.json                     → acceptance.schema.json（JSON）
-  */tech/* 或 tech/ 开头                   → tech-card.schema.json（YAML frontmatter）
-  *competitions*                          → kb-meta.schema.json（YAML frontmatter）
-  其余                                     → 跳过（exit 0）
-
-退出码（CLI 模式）：0=全部通过/跳过；1=存在不合格。
+schema 判定（精确结构匹配，任意路径前缀下按尾部结构识别）：
+  .../competitions/<id>/meta.md     → kb-meta.schema.json（YAML frontmatter）
+  .../tech/<id>.md                  → tech-card.schema.json（YAML frontmatter，仅直接子文件）
+  .../blueprint.md                  → blueprint.schema.json（YAML frontmatter）
+  .../acceptance/<file>.json        → acceptance.schema.json（JSON）
+明确跳过（不校验，正文/原料类文件暂无 schema，需要时另立）：
+  kb/raw/**、competitions/<id>/winners/**、patterns.md、各级 README.md、其余一切不匹配者
 """
 
 from __future__ import annotations
@@ -31,6 +30,14 @@ ROOT = Path(__file__).resolve().parents[2]
 TEMPLATES = ROOT / "config" / "templates"
 QUARANTINE = ROOT / "kb" / "quarantine"
 
+# (正则, schema 文件, 数据形态) —— 在小写正斜杠路径上匹配尾部结构
+RULES = [
+    (re.compile(r"(?:^|/)competitions/[^/]+/meta\.md$"), "kb-meta.schema.json", "yaml"),
+    (re.compile(r"(?:^|/)tech/[^/]+\.md$"), "tech-card.schema.json", "yaml"),
+    (re.compile(r"(?:^|/)blueprint\.md$"), "blueprint.schema.json", "yaml"),
+    (re.compile(r"(?:^|/)acceptance/[^/]+\.json$"), "acceptance.schema.json", "json"),
+]
+
 
 def load_schema(name: str) -> dict:
     return json.loads((TEMPLATES / name).read_text(encoding="utf-8"))
@@ -38,14 +45,11 @@ def load_schema(name: str) -> dict:
 
 def schema_for(path: str):
     p = path.replace("\\", "/").lower()
-    if "blueprint.md" in p:
-        return load_schema("blueprint.schema.json"), "yaml"
-    if "acceptance" in p and p.endswith(".json"):
-        return load_schema("acceptance.schema.json"), "json"
-    if "/tech/" in p or p.startswith("tech/"):
-        return load_schema("tech-card.schema.json"), "yaml"
-    if "competitions" in p:
-        return load_schema("kb-meta.schema.json"), "yaml"
+    if p.endswith("readme.md"):
+        return None, None
+    for rx, name, kind in RULES:
+        if rx.search(p):
+            return load_schema(name), kind
     return None, None
 
 
@@ -91,7 +95,8 @@ def validate_path(path: Path) -> tuple[bool, str]:
             return False, err
     import jsonschema
     try:
-        jsonschema.validate(data, schema)
+        # FormatChecker 启用 "format": "date" 等格式校验（默认不校验，错误日期会漏过）
+        jsonschema.validate(data, schema, format_checker=jsonschema.FormatChecker())
         return True, "OK"
     except jsonschema.ValidationError as e:
         loc = "/".join(str(x) for x in e.absolute_path) or "<root>"

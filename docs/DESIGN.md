@@ -1,6 +1,7 @@
 # autoC — 竞赛情报与作品生成 Agent 框架：结构设计
 
-> 版本 v0.5（2026-08-27）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> 版本 v0.6（2026-08-27）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> v0.6 变更：T2 开工校准——①残留 `.zcode/subagents/` 全部修正为 `.zcode/agents/`；②Hardware 更名 Hardware Agent 并按 D2 裁决标注 CLI 路线；③§6.2 如实区分"L1 角色软边界 / L2 阶段硬边界"，角色身份级守卫与 metrics 并发风险列为 K-03 前置评估项。
 > v0.5 变更：按 Phase 0 实测校准——钩子注册落点为 `.zcode/config.json`（`hooks.events`，需 `enabled: true`）、子 agent 目录暂定 `.zcode/agents/`（首个章程编写时经 Settings → Subagents 实测确认）。
 > 各模块细节（信源清单、schema 字段、验收清单条目等）在逐模块讨论后补充为独立模块文档，本文不展开。
 
@@ -52,7 +53,7 @@
                     ▼
               Coordinator 按蓝图并发分发（文件契约为唯一交接物）：
               ├── Software Agent ─► workspace/software/ ─► 沙箱编译 + 测试 ─► metrics.json
-              ├── Hardware MCP ───► workspace/hardware/ ─► PlatformIO / Wokwi 验证 ─┤(并行)
+              ├── Hardware Agent（CLI 路线）──► workspace/hardware/ ─► PlatformIO / Wokwi 验证 ─┤(并行)
               └── (汇合点) Document Agent ◄── 消费工程产物 + metrics.json ─► 报告 + 答辩 PPT
                     │
               [验收节点] ──不通过──► 失败工单路由回责任 agent 修复（唯一回路边，带熔断）
@@ -176,13 +177,13 @@ autoC/
 
 | 骨架组件 | 当前客户端机制 |
 |---|---|
-| Scraper & Hunter 并发 | `.zcode/subagents/` 定义 + 后台子 agent 并行 + 紧循环脚本 |
+| Scraper & Hunter 并发 | `.zcode/agents/` 章程 + 后台子 agent 并行 + 紧循环脚本 |
 | KB 增量调度 | Cron → `scripts/kb/` |
 | Strategy Agent | 主 agent + `.zcode/skills/`，读 `kb/INDEX.md` |
 | 用户确认蓝图 | 会话交互（原生 human-in-the-loop） |
 | Coordinator | 主 agent 把蓝图拆为任务包 |
 | Software Agent + 沙箱 | 子 agent + Bash 工作区（workspace/software/） |
-| Hardware MCP | PlatformIO / kicad-cli / Wokwi（Bash 调用） |
+| Hardware Agent（CLI 路线，D2 裁决） | PlatformIO / kicad-cli / Wokwi（Bash 调用） |
 | Document Agent | Marp / Typst 模板（config/templates/）+ document-skills 兜底（严格 .pptx 需求） |
 | 验收执行器 | `scripts/verify/run_acceptance.py` + browser-use 实测取证 |
 | 归档 | `scripts/verify/archive_campaign.py` + git tag |
@@ -203,16 +204,16 @@ autoC/
 
 ### 6.2 职责边界（防越界）：三层防线
 
-- **L1 软约束——角色章程即子 agent 身份**：每个角色在 `.zcode/subagents/` 中定义（职责 / 输入输出契约 / 禁止清单）；Coordinator 按名派发，章程由客户端原生感知，不靠"记得引用文件"的自觉。
-- **L2 硬约束——写入路径守卫 + 契约 Schema 校验**：
-  - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）拦截越界写入：读 `.flow/state.json` 的"当前阶段 + 允许写根"，越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）。
+- **L1 软边界——角色章程（.zcode/agents/）**：每角色一份（职责 / 输入输出契约 / 禁止清单）；Coordinator 按名派发。角色目录级的写入边界（如"Software 不得写 workspace/hardware/"）目前由**章程约定 + git 审计发现**保障，不是物理强制。
+- **L2 阶段级硬边界——写入路径守卫 + 契约 Schema 校验**：
+  - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制：collect 放行整个 kb/、deliver 放行 workspace/（acceptance/ 除外）、verify 仅放行 acceptance/——**不识别调用者角色**。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）。
   - 契约文件（blueprint / KB 条目 / 验收清单）必须通过 `config/templates/*.schema.json` 校验：蓝图不过校验不得进入确认闸门；KB 条目不过校验进 quarantine。
-  - PostToolUse 钩子对 kb/ 新写入即时跑 lint_kb 反馈。
+  - PostToolUse 钩子对 kb/ 契约文件即时校验（仅四类目标：`<id>/meta.md`、`kb/tech/<id>.md`、`blueprint.md`、`acceptance/*.json`；winners/patterns/raw 等正文文件明确跳过）。
 - **L3 审计兜底——git**：每阶段一个 commit（阶段日志见 workspace/JOURNAL.md），越界改动必然暴露于 diff，可精确回滚（覆盖钩子未拦截的路径，如经 Bash 的写操作）。
 
 **流程规则：验收 agent 只开失败工单，不亲手修作品**——修复路由回责任 agent，避免裁判兼运动员。
 
-**写入范围矩阵（守卫脚本的策略依据）：**
+**角色写入矩阵（L1 章程依据；守卫物理执行的是其中的阶段级子集）：**
 
 | 角色 | 允许写 | 禁止触碰 |
 |---|---|---|
@@ -226,12 +227,17 @@ autoC/
 
 （交付阶段 kb/ 对所有角色只读；archive/ 仅 `archive_campaign.py` 可写。）
 
+**已知边界与后置项（进入 K-03 campaign-run 前必须重估）：**
+
+1. **角色身份级守卫缺失**：守卫不识别 Scraper / Hunter / Software / Document 的调用者身份，同阶段内的跨角色越界目前依赖 L1 章程与 L3 git 审计。是否引入 agent identity 级守卫（如派发时在 `.flow/state.json` 登记 active_role + 钩子校验）在 K-03 设计时评估，不提前宣称已物理强制。
+2. **metrics.json 并发覆盖风险**：software 与 hardware 两份章程均允许写顶层 `workspace/metrics.json`，并发交付时存在互相覆盖风险。K-03 落地时改为**角色指标分片（各角色写各自目录下的 metrics 分片）+ 确定性汇总脚本合并**，并同步更新两份章程与 blueprint 契约。
+
 ### 6.3 客户端自定义能力使用清单
 
 | 机制 | 用途 |
 |---|---|
 | AGENTS.md | 全局铁律（引用纪律 / 契约纪律 / 合规纪律） |
-| .zcode/subagents/ | 角色章程 = 子 agent 定义（原生感知） |
+| .zcode/agents/ | 角色章程（L1 软边界，见 §6.2） |
 | .zcode/skills/ | SOP 纯函数技能（blueprint-gen / lint / marp-deck 等） |
 | .zcode/config.json → hooks | 写入路径守卫（PreToolUse，process 型；Phase 0 已注册并冒烟验证） |
 | 斜杠命令 | 阶段入口、换会话重启阶段 |
