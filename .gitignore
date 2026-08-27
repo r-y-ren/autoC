@@ -1,5 +1,8 @@
 # ===== autoC .gitignore =====
 
+# 第三方开源工具本地落位（RSSHub 等；见 CAPABILITIES D5 纪律）
+tools/
+
 # 运行时状态（新克隆后先运行: python scripts/guard/init_state.py 引导）
 .flow/
 

@@ -68,7 +68,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 |---|---|---|---|
 | S-01 | lint_kb.py | frontmatter 解析 → schema 校验 → 不合格移 quarantine（单文件/钩子/全量三模式；YAML 日期已规范化） | ✅ 本轮已落地 |
 | S-02 | sync_competitions.py | web 信源快照（kb/raw/snapshots/）+ 关键词候选提取（candidates 队列） | ✅ T2 已落地（selftest 通过） |
-| S-03 | sync_tech.py | arXiv API + gh 搜索 → 规范化 ID 去重 → 候选队列（成品卡片仍由 Hunter 判定） | ✅ T2 已落地 |
+| S-03 | sync_tech.py | arXiv API + gh 搜索 → 规范化 ID 去重 → 候选队列（成品卡片仍由 Hunter 判定；field 间限速 ≥3s + 失败退避重试，兑现 budget.yaml） | ✅ T2 落地，T3-c 补限速 |
 | S-04 | build_index.py | 重建 kb/INDEX.md（跑批记录 append-only 保留） | ✅ T2 已落地 |
 | S-05 | run_acceptance.py | 验收执行器：cmd 自动执行 + 证据存档 + 重试熔断 + run-N.json | ✅ T2 已落地（冒烟通过） |
 | S-06 | archive_campaign.py | fail 拒归档 / dry-run / mv + git tag + workspace 复位 + idle | ✅ T2 已落地（冒烟通过） |
@@ -78,6 +78,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | S-10 | test_acceptance.py | 验收执行器回归（cmd/超时杀树/仅fail计数/schema，5 用例） | ✅ T2.1 已落地（5/5） |
 | S-11 | test_archive.py | 归档闸门回归（pending_agent/fail/pass 含 tag 内容审计，4 用例） | ✅ T2.1 已落地（4/4） |
 | S-12 | test_index.py | 索引回归（跑批记录多行 append-only 保留） | ✅ T2.1 已落地 |
+| S-13 | ocr_pdf.py | PDF 解析：有文本层直取；无文本层逐页渲染 → tesseract OCR → 文本 + 置信度报告（判断仍归 Scraper） | ✅ T3-c 本轮落地 |
 
 ### 3.3 角色章程（.zcode/agents/）——能力契约本体
 
@@ -103,6 +104,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | K-05 | archive-run | archive 态→S-06→workspace 复位→idle | ✅ T2 已落地 |
 | K-06 | marp-deck | 模板+metrics 汇总→答辩 PPT（marp-cli 导出 pptx） | ✅ T2 已落地 |
 | K-07 | typst-report | 模板+metrics 汇总→报告 PDF（typst） | ✅ T2 已落地 |
+| K-08 | kb-deep-sync | 每周深度评估：老化条目重验/拒绝台账复核/quarantine 清理/winners-patterns 推进 | ✅ T3-c 本轮落地 |
 
 ### 3.5 命令（.zcode/commands/）——用户入口
 
@@ -126,6 +128,10 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | E-06 | kicad-mcp（社区） | PCB 交互生成 | 可选，逐个评估 | T3 |
 | E-07 | RSSHub | 公众号信源中转 | 慢循环公众号策略确定时 | T3 |
 | E-08 | Kaggle API key | 赛题/榜单拉取 | Kaggle 方向启用时（用户提供） | T3 |
+| E-09 | Tesseract OCR（UB-Mannheim，含 chi_sim） | 扫描件 PDF/图片文字化（S-13 依赖） | ✅ T3-c 已装 | T3 |
+| E-10 | pypdfium2 / pdfplumber / pillow | PDF 渲染与表格化（S-13 及 Scraper 表格分片） | ✅ T3-c 已装 | T3 |
+| E-11 | OpenSCAD | 结构件代码化生成 → STL（hardware 章程已引用） | 含硬件里程碑的蓝图启用时安装（winget） | T3 |
+| E-12 | Wokwi CLI | 固件仿真自测 | ⚠ 需 Wokwi 账号/Club 许可——归"用户提供凭据"类（同 E-08），安装时查证，不假装可用 | T3 |
 
 ---
 
@@ -151,3 +157,8 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
   1. retry 计数语义 → **仅 result=fail 计入**（pending_manual/pending_agent 是"等待"不是"修复失败重试"，manual-heavy 战役不应因状态检查误触熔断）
   2. 候选队列生命周期 → **消费即归档**（K-01 消费后移 candidates/processed/）+ **拒绝台账**（kb/tech/.rejections.yaml：id/reason/stars/decided；stars 达快照 ×2 自动放行重评，解决"10 星被拒的仓库涨到 500 星也进不了候选"的信号增长堵点）
   3. retry.max 单一事实来源 → **config/budget.yaml**（init_state.py / run_acceptance.py 均读取）
+- **D5 T3-c 能力补全裁决** ✅ 已裁决（2026-08-27）：
+  1. MCP 结论 → **本轮零新增 MCP**（OCR/表格/视觉/文档链全部有 CLI/内建解，符合 §4 选型原则）；E-07 RSSHub **缓判**至挑战杯/创新创业类方向启用时再裁决，届时 clone 进 `tools/`（gitignore，本机 node 直跑，不用 docker）
+  2. 第三方开源工具落位纪律 → 一律 clone 进 gitignored `tools/` + ENVIRONMENT.md 记版本，不污染 git 主干与审计面
+  3. S-13 编号说明 → 计划稿的 "S-12 ocr_pdf" 与已登记 S-12（test_index）撞号，OCR 脚本按 **S-13** 登记
+  4. 双频慢循环 → 每日轻量增量（已有 cron 08:30）+ 每周深度评估（K-08，周六 cron），兑现 DESIGN §3.1 承诺

@@ -29,6 +29,7 @@ import json
 import re
 import subprocess
 import sys
+import time
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -61,15 +62,26 @@ def load_directions(direction_name: str | None) -> list[dict]:
 
 # ---------- arXiv ----------
 
+def fetch_arxiv_once(expr_url: str) -> bytes:
+    req = urllib.request.Request(expr_url, headers={"User-Agent": "autoC/0.1 sync_tech"})
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        return resp.read()
+
+
 def fetch_arxiv(query: str, days: int, max_items: int) -> list[dict]:
     # 限定 ML 类目 + 摘要字段短语匹配：all: 全文检索过松，首跑实测混入大量物理/机器人论文
     expr = f'(cat:cs.LG OR cat:stat.ML OR cat:cs.AI) AND abs:"{query}"'
     url = (f"http://export.arxiv.org/api/query?search_query={urllib.parse.quote(expr)}"
            f"&sortBy=submittedDate&sortOrder=descending&max_results={max_items * 2}")
-    req = urllib.request.Request(url, headers={"User-Agent": "autoC/0.1 sync_tech"})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        ns = {"a": "http://www.w3.org/2005/Atom"}
-        root = ET.fromstring(resp.read())
+    # arXiv API 礼仪：失败退避重试一次（budget.yaml retry 承诺；上轮实测 2/3 域超时）
+    import time
+    try:
+        raw = fetch_arxiv_once(url)
+    except Exception:
+        time.sleep(5)
+        raw = fetch_arxiv_once(url)
+    ns = {"a": "http://www.w3.org/2005/Atom"}
+    root = ET.fromstring(raw)
     cutoff = datetime.date.today() - datetime.timedelta(days=days)
     out = []
     for e in root.findall("a:entry", ns):
@@ -203,7 +215,10 @@ def main() -> int:
     for cfg in cfgs:
         radar = cfg.get("tech_radar") or {}
         min_stars = int((radar.get("min_signal") or {}).get("stars") or 0)
-        for field in radar.get("fields") or []:
+        fields = radar.get("fields") or []
+        for idx, field in enumerate(fields):
+            if idx:  # field 间限速（arXiv API 礼仪，budget.yaml 承诺）
+                time.sleep(3)
             # suggested_fields 在候选拼装处随 field 赋值（修复：循环变量泄漏导致全标最后一个 field）
             try:
                 got = fetch_arxiv(field, args.days, args.max)

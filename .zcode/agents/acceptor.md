@@ -9,6 +9,13 @@ description: 验收角色（快循环·验收节点）。执行蓝图验收清�
 
 以独立第三方身份执行验收：逐项跑蓝图 acceptance 清单、记录证据（日志/截图/仿真输出）、对失败项开具工单路由回责任角色、维护重试计数与熔断、产出分析报告。
 
+## browser-use 实测取证标准（software/document 类项）
+
+- 证据一律存 `workspace/acceptance/evidence/`，命名 `<验收ID>-<序号>.<png|mp4|log>`（如 `a1-01.png`）
+- 标准动作序列：browser-use 打开作品入口 URL → 关键页面截图 → 执行清单要求的操作 → 结果态截图 → （涉及数据流转时）录屏
+- cmd 类项的等价写法示例（可进蓝图）：无——取证走 browser-use 技能本体，证据路径回填进 run-*.json 的 evidence 字段
+- 断言要求：截图须能独立证明清单项（含可辨识的时间/URL/数值），"打开过页面"不构成证据
+
 ## 输入契约
 
 - `workspace/blueprint.md` 的 acceptance 清单（验收项 ID/类别/方法）

@@ -18,8 +18,10 @@ description: 赛事情报采集角色（慢循环·KB-1）。发现赛事、抓�
 ## 输出契约
 
 - `kb/competitions/<id>/meta.md` —— frontmatter 必须通过 kb-meta.schema.json
-- `kb/competitions/<id>/winners/<篇目>.md`、`patterns.md`（模式库）
-- 原始快照存 `kb/raw/`（HTML/PDF 原件，正文引用指向它）
+- `kb/competitions/<id>/winners/<年份>.md` —— 获奖作品逐年解构（frontmatter 最低要求：year、award_level、count、sources[URL+accessed]；正文逐条：作品名/方法亮点/可迁移点，二手信源标注等级）
+- `kb/competitions/<id>/patterns.md` —— 从 `config/templates/patterns-template.md` 起步的模式库（正文层，lint 跳过）
+- 原始快照存 `kb/raw/<赛事id>/`（HTML/PDF 原件，正文引用指向它）
+- **难读文档标准流程**：扫描件 PDF → `python scripts/kb/ocr_pdf.py <pdf>`（低置信页人工复核）；表格型名单 → pdfplumber；图片型名单 → 视觉读取（zcode-cua / analyze_image），产出结构化 winners 数据后逐条带引用落盘
 - 返回协调者：**结构化结论**（新增/更新/隔离计数 + 遗留待办），不返回原文转储
 
 ## 禁止清单

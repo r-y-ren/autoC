@@ -92,14 +92,19 @@ def cell(v) -> str:
 
 
 def key_dates_compact(kd) -> str:
-    """key_dates 自由对象 → 紧凑串，如 `报名:2026-09-01、初赛:2026-10-15`。"""
+    """key_dates 自由对象 → 紧凑串，如 `报名:2026-09-01、初赛:2026-10-15`。超长按整条边界截断。"""
     if not isinstance(kd, dict) or not kd:
         return "-"
     parts = []
     for k, v in kd.items():
         d = v.get("date") if isinstance(v, dict) else v
         parts.append(f"{k}:{d if d is not None else '?'}")
-    return "、".join(parts)[:60]
+    out = []
+    for p in parts:  # 截断只发生在条目边界，不切半个日期
+        if len("、".join(out + [p])) > 60:
+            return "、".join(out) + "…"
+        out.append(p)
+    return "、".join(out)
 
 
 def build() -> str:
