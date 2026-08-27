@@ -86,11 +86,26 @@
     },
     "compliance": {
       "type": "object",
-      "required": ["ai_policy_reviewed"],
+      "required": ["ai_policy_reviewed", "mode"],
       "properties": {
         "ai_policy_reviewed": { "type": "boolean", "description": "已核对目标赛事 AI 使用政策" },
+        "mode": {
+          "enum": ["prep", "apply", "assist"],
+          "description": "合规模式三分（D10）：prep=赛前范本级示例作品（默认，数模等竞期限外部交流类必须）；apply=申报制参赛型（赛方 AI 政策允许范围内构建，人主导）；assist=赛中支持型（仅提供赛前已备资产，赛中零介入）"
+        },
+        "policy_basis": { "type": "string", "description": "该赛 ai_policy 原文关键句摘引——mode 判定佐证" },
         "notes": { "type": "string" }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "mode": { "const": "apply" } } },
+          "then": { "required": ["policy_basis"] }
+        },
+        {
+          "if": { "properties": { "mode": { "const": "assist" } } },
+          "then": { "required": ["policy_basis"] }
+        }
+      ]
     }
   }
 }

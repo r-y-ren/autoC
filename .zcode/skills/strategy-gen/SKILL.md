@@ -14,13 +14,13 @@ description: 决策阶段：读取 KB 索引与团队画像，产出建议赛道
 ## 流程
 
 1. **矩阵评分**：对 INDEX 中候选赛事逐个打分（时间窗匹配 2–10 周最优 / 技术契合度=KB-2 卡片与该赛获奖模式重叠——**"大显身手"信号显式化：近 90 天入库新卡 × 该赛 patterns 方法论分布的命中，作为加权项** / 通吃度=同一作品可复投数 / 画像匹配 / 竞争密度），产出对比矩阵写入 `workspace/strategy.md`
-2. **一鱼多吃路线**：识别复用组合（如数模作品→挑战杯论文通道→大创结题），标注各赛事截止时间与改造工作量
-3. **蓝图草稿**：写 `workspace/blueprint.md`，frontmatter 必须含：
-   - campaign / scope（deliverables + out_of_scope 显式排除）/ tech_stack（**每项引用 kb_tech_ids**）
+2. **攻略标准化（D10）**：strategy.md 按 `config/templates/strategy-template.md` 六节产出——情报摘要（逐条回链条目 ID）/ 六维矩阵 / 大显身手信号行（具体卡片 ID）/ 一鱼多吃路线 / **合规与风险（mode 判定：prep/apply/assist，依据该赛 ai_policy 原文）/ 推荐结论（明确推荐第一名 + 理由；无可推荐窗口时诚实兜底，禁止硬推）**
+3. **蓝图草稿**：按 `config/templates/blueprint-template.md` 骨架写 `workspace/blueprint.md`——验收清单默认抄模板的分类型默认线（软件一键启动/测试全过/实测取证；文档编译+数字一致；硬件编译+仿真断言+物理项 manual——"完整可实用"四标准：可运行/可验证/可维护/可交付）；frontmatter 必含：
+   - campaign / scope（deliverables 逐项对齐该赛 meta.deliverables + out_of_scope 显式排除）/ tech_stack（**每项引用 kb_tech_ids**）
    - interface_contracts（software↔hardware 协议、document 消费路径——并发分发前钉死）
-   - milestones（owner_role ∈ {software, hardware, document}）/ acceptance.checklist（id/category/item/method，可机检项加 cmd）/ compliance（ai_policy_reviewed）
+   - milestones（owner_role ∈ {software, hardware, document}）/ acceptance.checklist（id/category/item/method，可机检项加 cmd，样板见 config/templates/acceptance-cmds.md）/ compliance（**mode 三分 + apply/assist 必附 policy_basis 原文摘引**，schema 硬校验）
 4. **校验**：`python scripts/kb/lint_kb.py --file workspace/blueprint.md`——不过不得呈报
-5. **呈报**：矩阵 + 路线 + 蓝图要点呈用户确认（**全流程唯一人工闸门**）；要求修改则回到第 3 步
+5. **呈报（D10 口径：矩阵+明确推荐）**：四块固定格式——①六维矩阵（每格一句证据）②大显身手信号行 ③一鱼多吃路线图 ④推荐结论（明确第一名+理由+备选）——呈用户确认（**全流程唯一人工闸门**）；要求修改则回到第 3 步
 6. 确认后：JOURNAL 记行，交 K-03 campaign-run
 
 ## 纪律

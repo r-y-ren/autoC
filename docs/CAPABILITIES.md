@@ -187,3 +187,10 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
   2. same_host_interval_ms **落脚本**：sync_competitions 同主机抓取间隔强制执行（rps 总约束仍为技能层，budget 头注如实标注）
   3. tech-card **directions 字段落地**（原"第二方向启用前再做"提前完成）：schema 可选字段、sync_tech 候选自动打标（多方向合并）、hunter 章程继承、INDEX 增方向列、简报按方向过滤（未标注卡不进方向简报）、存量 6 卡已回填
   4. export_digest.py 内部 2 处 D7 措辞残留修复（审查漏掉的第 5/6 处：文件头注释与 patterns 占位句）
+
+- **D10 第三类交付物细节裁决** ✅ 已裁决并落地（2026-08-28，用户四项拍板）：
+  1. 攻略载体 → **strategy.md 模板化**（六节：情报摘要/六维矩阵/大显身手信号/一鱼多吃/合规风险/推荐结论；不另造导出层，随归档保留）
+  2. 合规模式 → **三分进 schema 硬校验**：compliance.mode ∈ prep（赛前范本级，默认）/ apply（申报制参赛型，须附 policy_basis 原文摘引）/ assist（赛中支持，零介入）；if/then 硬校验 apply/assist 必带佐证
+  3. 建议呈报 → **矩阵+明确推荐**（四块固定格式：六维矩阵含一句证据/大显身手信号行含卡片 ID/一鱼多吃路线图/推荐第一名+理由+备选；无可推荐窗口时诚实兜底禁止硬推）
+  4. 快循环整链验证 → **暂不验证**（用户裁定时机；机制全绿状态维持，D10 如实记录不催办）
+  落地件：strategy-template / blueprint-template（含"完整可实用"四标准与分类型验收默认线）/ blueprint.schema compliance 改造 / K-02 呈报流程改写 / test_lint 夹具同步

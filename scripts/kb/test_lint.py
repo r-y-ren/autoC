@@ -67,7 +67,7 @@ milestones:
 acceptance:
   checklist:
     - {id: a1, category: software, item: runs, method: exec}
-compliance: {ai_policy_reviewed: true}
+compliance: {ai_policy_reviewed: true, mode: prep}
 ---
 正文
 """
