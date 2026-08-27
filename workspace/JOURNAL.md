@@ -11,3 +11,4 @@
 | 2026-08-27 21:00 | idle | D7 调度合并：双 cron → 每3天全量深度（617d9635）；gh 登录验证生效；S-15 正式版判定改跨月节奏；K-08 改写全量 SOP；老化阈值 14→12 天 | 单 cron 节奏上线 |
 | 2026-08-27 22:15 | idle | T3-e：profile.yaml 落盘（§8-2 关闭）；wokwi-cli 安装+断言冒烟通过（官方件+自建 ESP32；diagram 三坑固化进模板）；D8 EDA 评估（EDA MCP 不引入、E-13 PIC 工具链登记、wokwi-cli mcp 备而不启用） | 能力层对用户侧输入全部就绪 |
 | 2026-08-27 20:30 | idle | D9 审查遗留项闭合：retry.max 实时同步(场景E)/same_host限速落脚本/tech-card directions字段+6卡回填+简报方向过滤/export_digest 2处措辞残留 | 回归全绿(16/12/6/4/index/digest) |
+| 2026-08-27 23:30 | idle | T4 批次1 框架件：schema 三改（award_levels/track 六值词表/directions 必填）+ 三通用模板 + 信源目录 + K-09/M-06 + K-02 信号显式化 + 6 卡词表回填 | lint 9/9、回归全绿 |

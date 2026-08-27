@@ -9,7 +9,7 @@ signal:
   venue: arXiv
   runnable: false
 competition_fit:
-  - track: "数模-预测类赛题"
+  - track: "数模-预测与评估"
     edge: "概率预测（CRPS/区间）+ 趋势-季节显式分解的可解释性，天然贴合数模论文'分解-建模-评估'叙事；权重最多减 93%、推理最多提速 74%，笔记本/CPU 级算力即可跑通，比赛 3-4 天工期内可复现"
     reuse_cost: 中
 sources:

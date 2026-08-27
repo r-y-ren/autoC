@@ -9,11 +9,11 @@ signal:
   venue: arXiv
   runnable: false
 competition_fit:
-  - track: "数模-能源/负荷预测类赛题"
+  - track: "数模-预测与评估"
     edge: "直接套用论文实证结论作为起点配置（小时级分辨率+24h 时域+12 周滚动上下文+气温协变量，更长上下文无增益），省掉网格搜索；用'概率预测+经验校准度对比'替代纯点预测 MSE，评估框架即刻高出常规答卷一档"
     reuse_cost: "中"
     open_source: "https://github.com/PriorLabs/TabPFN（被评测工具本体，pip 可装；论文自身无代码）"
-  - track: "研赛-数据分析题"
+  - track: "数模-数据分析与决策"
     edge: "复用其系统消融协议（协变量/上下文长度/分辨率/时域四轴+全年验证+跨网迁移）作为答卷实验设计模板；多分辨率残差修正（MRRC）双模型架构可移植为方法论创新点"
     reuse_cost: "中"
 sources:

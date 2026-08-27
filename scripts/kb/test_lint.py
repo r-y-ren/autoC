@@ -32,8 +32,9 @@ name: Test Tech
 field: [test]
 published: 2026-08-01
 maturity: demo
+directions: [测试方向]
 competition_fit:
-  - {track: hackathon, edge: "快速原型", reuse_cost: 低}
+  - {track: 黑客松-数据与算法, edge: "快速原型", reuse_cost: 低}
 sources:
   - {url: "https://example.com", accessed: 2026-08-27}
 ---

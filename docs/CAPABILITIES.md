@@ -105,6 +105,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | K-05 | archive-run | archive 态→S-06→workspace 复位→idle | ✅ T2 已落地 |
 | K-06 | marp-deck | 模板+metrics 汇总→答辩 PPT（marp-cli 导出 pptx） | ✅ T2 已落地 |
 | K-07 | typst-report | 模板+metrics 汇总→报告 PDF（typst） | ✅ T2 已落地 |
+| K-09 | direction-discovery | 方向冷启动：信源目录驱动搜索分片→筛选建条→锚点回填→全景报告（框架泛化入口） | ✅ 批次1已落地 |
 | K-08 | kb-deep-sync | 慢循环全量深度跑批（D7 每 3 天）：增量入库+老化重验(12d)/拒绝台账复核/quarantine 清理/winners-patterns 推进/简报导出 | ✅ T3-c 落地，T3-d 按 D7 合并节奏改写 |
 
 ### 3.5 命令（.zcode/commands/）——用户入口
@@ -115,6 +116,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | M-02 | /attack | 发起快循环：刷新 KB→K-02 决策 | ✅ 本轮已落盘（契约入口，指向 K-02） |
 | M-03 | /status | 查 phase/战役/JOURNAL/熔断 | ✅ 本轮已落盘（即时可用） |
 | M-04 | /accept | 手动触发验收（K-04） | ✅ 本轮已落盘（契约入口，指向 K-04） |
+| M-06 | /discover | 方向冷启动入口（指向 K-09） | ✅ 批次1已落地 |
 | M-05 | /archive | 手动归档（K-05） | ✅ 本轮已落盘（契约入口，指向 K-05） |
 
 ### 3.6 外部引入（安装/密钥/部署）
@@ -148,6 +150,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 - **T2.1 修复轮（审查驱动）**：✅ 完成——5 个实测缺陷（跑批记录丢行 / pending_agent 绕闸门 / tag 先于 commit / cmd 超时崩溃+孤儿进程劫持 / 循环变量泄漏）+ 2 语义裁决（见 D4）+ retry.max 单一事实来源；新增 S-10/S-11/S-12 三套回归，全量 12+5+4+1 用例通过
 - **T3 外部接入（按模块启用）**：E-01…E-04/E-09…E-11 已装并冒烟；E-05…E-08/E-12 按需（凭据/方向类）
 - **T3-d 能力收口轮**：✅ 完成（2026-08-27）——硬件三件套安装冒烟（pio/kicad-cli/openscad）、S-15 简报导出层、K-01/K-08 预检+收尾断言、验收 cmd 模板库、D6 交付层裁决
+- **T4 内容框架轮（批次 1 框架件）**：✅（2026-08-27）——schema 三改（meta.award_levels 数据驱动覆盖标准 / tech-card.directions 转必填 / competition_fit.track 六值词表枚举）；winners/patterns/survey 三通用模板（去特化措辞，四节深构含"不足与可改进点"）；config/sources/catalog.md 信源目录；K-09+M-09 落盘；K-02"大显身手"信号显式化；存量 6 卡 track 词表回填
 
 ## 6. 决策记录
 

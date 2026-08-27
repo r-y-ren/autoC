@@ -9,10 +9,10 @@ signal:
   venue: arXiv
   runnable: false
 competition_fit:
-  - track: "数模-预测类赛题"
+  - track: "数模-预测与评估"
     edge: "小样本/冷启动预测题（传染病、气象、电力负荷主题）上提供零训练、零微调的视觉 in-context 对照基线；'把时序预测重述为图像修补'的跨模态范式本身即是论文级创新叙事，可直接作为答辩差异化亮点"
     reuse_cost: "高"
-  - track: "黑客松-数据赛道"
+  - track: "黑客松-数据与算法"
     edge: "短周期内用现成视觉大模型 API 组装'预测=面积图补全'demo，无需训练管线，演示冲击力强"
     reuse_cost: "中"
 sources:

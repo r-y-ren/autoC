@@ -3,7 +3,7 @@
   "$id": "autoc/tech-card",
   "title": "KB-2 技术卡片 frontmatter（kb/tech/cards 按规范化 ID 命名）",
   "type": "object",
-  "required": ["id", "name", "field", "published", "maturity", "competition_fit", "sources"],
+  "required": ["id", "name", "field", "published", "maturity", "directions", "competition_fit", "sources"],
   "properties": {
     "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$", "description": "规范化主键：arXiv ID / GitHub repo / DOI" },
     "name": { "type": "string" },
@@ -32,7 +32,10 @@
         "type": "object",
         "required": ["track", "edge", "reuse_cost"],
         "properties": {
-          "track": { "type": "string" },
+          "track": {
+          "enum": ["数模-预测与评估", "数模-数据分析与决策", "双创-文书与申报", "黑客松-数据与算法", "Kaggle-竞赛", "ACM-训练体系"],
+          "description": "统一赛种词表（六大类）：匹配与聚合的稳定口径，禁自造措辞"
+        },
           "edge": { "type": "string", "description": "能形成的差异化" },
           "reuse_cost": { "enum": ["低", "中", "高"] },
           "open_source": { "type": "string", "description": "现成开源实现链接" }

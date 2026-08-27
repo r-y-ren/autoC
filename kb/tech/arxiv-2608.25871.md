@@ -9,7 +9,7 @@ signal:
   venue: "arXiv (KDD 2026)"
   runnable: false
 competition_fit:
-  - track: "数模-预测类赛题"
+  - track: "数模-预测与评估"
     edge: "移植其 Stage-II'事件驱动残差修正'模式：基础预测器 + 节假日/政策/促销等外部事件信号的残差修正层（含 LLM 文本匹配噪声事件描述），专门处理赛题中的突变日；其决策条件化反事实框架也可为论文'干预情景模拟'章节提供叙事，区别于全场被动式预测"
     reuse_cost: 高
 sources:

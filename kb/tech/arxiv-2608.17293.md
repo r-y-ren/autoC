@@ -11,11 +11,11 @@ signal:
   citations_90d: 0
   runnable: true
 competition_fit:
-  - track: "数模-预测/评估类赛题"
+  - track: "数模-预测与评估"
     edge: "不规则采样时序题（医疗就诊记录、稀疏传感器、缺失严重的监测流）上用 CSE 指标替代 MSE 做模型选择与评估章节，一行级改动即获得'评估方法纠偏'的论文级差异化，理论证明（渐近误差不劣于 MSE）可直接引用"
     reuse_cost: "低"
     open_source: "https://github.com/hnu-vis/ITS-Bench"
-  - track: "研赛-数据分析题"
+  - track: "数模-数据分析与决策"
     edge: "复用 ITS-Bench（合成/半合成/8 个真实数据集 + 可跑代码）直接搭建对比实验，'MSE 排名 vs CSE 排名不一致'本身即是一个现成的分析故事线"
     reuse_cost: "低"
     open_source: "https://github.com/hnu-vis/ITS-Bench"

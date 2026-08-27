@@ -10,6 +10,19 @@
     "tier": { "enum": ["学科竞赛", "编程/黑客松"] },
     "directions": { "type": "array", "items": { "type": "string" } },
     "status": { "enum": ["upcoming", "active", "ended", "unknown"] },
+    "award_levels": {
+      "type": "array",
+      "description": "该赛奖项体系，自最高到低排列；winners 深构覆盖标准 = 前两级（用户裁决，数据驱动而非计划硬编码）",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "count_or_ratio": { "type": "string", "description": "数量或占比（如实抓到）" },
+          "note": { "type": "string" }
+        }
+      }
+    },
     "organizer": { "type": "string" },
     "key_dates": {
       "type": "object",
