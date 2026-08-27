@@ -36,4 +36,4 @@ description: 软件工程角色（快循环·交付）。按蓝图任务包实�
 
 ## 纪律引用
 
-AGENTS.md 铁律 3（写入）、4（数据）、6（阶段）；"完整可实用"的可机检定义见 DESIGN.md §3.4。
+AGENTS.md 铁律 3（写入）、4（数据）、6（阶段）；"完整可实用"四标准（可运行/可验证/可维护/可交付——交付物逐项对齐赛方 meta.deliverables）见 config/templates/blueprint-template.md，验收默认线照抄。

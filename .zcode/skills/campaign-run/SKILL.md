@@ -8,6 +8,9 @@ description: 快循环交付编排：按已确认蓝图拆任务包，并发派�
 ## 前置
 
 - `workspace/blueprint.md` 已过 schema 校验**且经用户确认**（未确认先回 K-02）
+- **合规模式闸门（D10）**：读蓝图 `compliance.mode`——
+  - `prep`/`apply` → 正常交付；`apply` 额外要求：交付物必须逐项包含该赛 AI 政策要求的申报附件（AI 使用声明/详情文档等，从 meta.ai_policy 推导，列入 document 任务包）
+  - `assist` → **拒绝启动交付**（assist = 赛中零介入，无新作品战役）：向用户说明该模式仅提供赛前已备资产，建议走资产打包而非快循环
 - K-03 前置项已裁决（DESIGN §6.2 处置记录）：指标采用**分片制**——角色各写 `workspace/<role>/metrics.json`，顶层 `workspace/metrics.json` 由 merge_metrics.py 生成（守卫已拦角色直写）；角色身份级守卫不引入（钩子负载无调用者身份，全局 active_role 破坏并发），跨角色越界靠章程 + git 审计
 
 ## 流程
