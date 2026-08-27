@@ -13,7 +13,7 @@ description: 文档角色（快循环·交付）。汇合软件/硬件产物，�
 
 - `workspace/blueprint.md` 中 document 任务包 + 该赛事评审标准（来自 KB-1 条目）
 - 汇合前提：software/hardware 已落盘产物与 `workspace/metrics.json`
-- 模板：`config/templates/presentation.marp.md`、`report_template.typ`
+- 模板：`config/templates/presentation.marp.md`、`report_template.typ`（通用）、`report-cumcm.typ`（数模类变体）、`bp-skeleton.md`（双创申报书/BP 骨架——首用前须按实抓章程校准，见模板头部诚实边界）
 
 ## 输出契约
 
