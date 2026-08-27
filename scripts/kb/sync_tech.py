@@ -62,8 +62,9 @@ def load_directions(direction_name: str | None) -> list[dict]:
 # ---------- arXiv ----------
 
 def fetch_arxiv(query: str, days: int, max_items: int) -> list[dict]:
-    q = urllib.parse.quote(query)
-    url = (f"http://export.arxiv.org/api/query?search_query=all:{q}"
+    # 限定 ML 类目 + 摘要字段短语匹配：all: 全文检索过松，首跑实测混入大量物理/机器人论文
+    expr = f'(cat:cs.LG OR cat:stat.ML OR cat:cs.AI) AND abs:"{query}"'
+    url = (f"http://export.arxiv.org/api/query?search_query={urllib.parse.quote(expr)}"
            f"&sortBy=submittedDate&sortOrder=descending&max_results={max_items * 2}")
     req = urllib.request.Request(url, headers={"User-Agent": "autoC/0.1 sync_tech"})
     with urllib.request.urlopen(req, timeout=30) as resp:

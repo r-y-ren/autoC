@@ -1,0 +1,20 @@
+# 方向：数模与时序预测（首个真实启用方向，2026-08-27）
+schema_version: 1
+
+direction: "数模与时序预测"
+
+scopes: ["学科竞赛", "编程/黑客松"]
+
+keywords: [数学建模, 时序预测, forecasting, 时间序列, 数学建模竞赛, spatiotemporal]
+
+sources:
+  api: []          # 赛事侧暂无免密 API；经 Scraper 子 agent 用 WebSearch/WebFetch 核实
+  web: []          # 聚合源 URL 待信源评审后加入（首跑先验证搜索路径）
+  rss: []
+  wechat: []       # 公众号信源策略未裁决（待确认项 #3），暂空
+
+tech_radar:
+  fields: ["time series forecasting", "spatiotemporal forecasting", "time series foundation model"]
+  min_signal:
+    stars: 50      # GitHub 入库门槛；低于此由 Hunter 拒绝并记台账
+    citations_90d: 0
