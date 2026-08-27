@@ -127,6 +127,13 @@ def main() -> int:
             url = src.get("url")
             if not url:
                 continue
+            render = str(src.get("render") or "").lower()
+            if render in ("spa", "api"):
+                # SPA 锚点：urllib 只能拿到空壳；API 锚点：JSON 无链接可提取——
+                # 两者均交主会话预抓/预处理（P1 机制），避免空壳快照污染 kb/raw/snapshots/
+                print(f"[sync_comp][skip] {render} 锚点交主会话处理（catalog 规则）：{src.get('name') or url}",
+                      file=sys.stderr)
+                continue
             host = urllib.parse.urlparse(url).netloc
             wait = last_hit.get(host, 0.0) + interval - time.time()
             if wait > 0:
