@@ -1,5 +1,7 @@
-# 跑批预算与限速 —— 慢循环/快循环所有跑批的硬约束
-# 数值为 Phase 0 占位默认，Phase 1 实测后校准
+# 跑批预算与限速
+# 注意：rate_limit / checkpoint 目前为【技能层（K-01）执行的约定，脚本未强制】——
+# 规模扩大后将下沉到 sync 脚本实现。circuit_breaker.repair_max_retries 是 retry.max
+# 的唯一事实来源（init_state.py 与 run_acceptance.py 均从此读取）。
 
 schema_version: 1
 

@@ -75,6 +75,9 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | S-07 | test_guard.py | 守卫回归测试 | ✅ 本轮已落地（16/16 通过） |
 | S-08 | test_lint.py | lint 回归测试（目标识别/日期格式/跳过清单，12 用例） | ✅ T2 校准已落地（12/12 通过） |
 | S-09 | merge_metrics.py | 角色指标分片 → 顶层汇总（metrics.<role>.<键>；K-03 前置项落地） | ✅ T2 已落地 |
+| S-10 | test_acceptance.py | 验收执行器回归（cmd/超时杀树/仅fail计数/schema，5 用例） | ✅ T2.1 已落地（5/5） |
+| S-11 | test_archive.py | 归档闸门回归（pending_agent/fail/pass 含 tag 内容审计，4 用例） | ✅ T2.1 已落地（4/4） |
+| S-12 | test_index.py | 索引回归（跑批记录多行 append-only 保留） | ✅ T2.1 已落地 |
 
 ### 3.3 角色章程（.zcode/agents/）——能力契约本体
 
@@ -134,6 +137,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 
 - **T1 能力契约固化**：✅ 完成——S-01、S-07、H-02、C-01…C-06、M-01…M-05、本文档；验证：守卫回归 14/14，lint 三模式（单文件/钩子/全量+隔离）实测通过
 - **T2 编排技能与慢循环脚本**：✅ 完成——S-02…S-06、S-09、K-01…K-07、H-03；验证：守卫 16/16、lint 12/12、三脚本 selftest、验收/汇总/归档链路隔离冒烟（fail 拒归档、tag、复位、retry 累计）
+- **T2.1 修复轮（审查驱动）**：✅ 完成——5 个实测缺陷（跑批记录丢行 / pending_agent 绕闸门 / tag 先于 commit / cmd 超时崩溃+孤儿进程劫持 / 循环变量泄漏）+ 2 语义裁决（见 D4）+ retry.max 单一事实来源；新增 S-10/S-11/S-12 三套回归，全量 12+5+4+1 用例通过
 - **T3 外部接入（按模块启用）**：E-01…E-08
 
 ## 6. 决策记录
@@ -143,3 +147,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 - **D3 K-03 前置项处置** ✅ 已裁决并落地（2026-08-27，T2）：
   1. metrics 并发风险 → **分片制**（角色写 workspace/<role>/metrics.json，S-09 汇总为顶层生成物，守卫 deliver 态拒写该生成物；三份章程同步，回归用例固化）
   2. 角色身份级守卫 → **v1 不引入**（钩子负载无调用者身份；全局 active_role 破坏并发派发）。跨角色越界维持 L1 章程 + L3 git 审计；真实写冲突点已被分片制消除
+- **D4 T2.1 语义裁决** ✅ 已裁决（2026-08-27，审查修复轮）：
+  1. retry 计数语义 → **仅 result=fail 计入**（pending_manual/pending_agent 是"等待"不是"修复失败重试"，manual-heavy 战役不应因状态检查误触熔断）
+  2. 候选队列生命周期 → **消费即归档**（K-01 消费后移 candidates/processed/）+ **拒绝台账**（kb/tech/.rejections.yaml：id/reason/stars/decided；stars 达快照 ×2 自动放行重评，解决"10 星被拒的仓库涨到 500 星也进不了候选"的信号增长堵点）
+  3. retry.max 单一事实来源 → **config/budget.yaml**（init_state.py / run_acceptance.py 均读取）

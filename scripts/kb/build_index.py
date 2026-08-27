@@ -30,8 +30,8 @@ HEADER = """# KB 总索引（瘦协调者唯一入口）
 
 ## KB-1 赛事库（交付物 1）
 
-| ID | 赛事 | 方向 | 层级 | 状态 | AI 政策 | 最近核验 | 条目路径 |
-|---|---|---|---|---|---|---|---|
+| ID | 赛事 | 方向 | 层级 | 状态 | 关键日期 | AI 政策 | 最近核验 | 条目路径 |
+|---|---|---|---|---|---|---|---|---|
 {comp_rows}
 
 ## KB-2 科技库（交付物 2）
@@ -60,12 +60,27 @@ def frontmatter(path: Path) -> dict:
 
 
 def preserve_run_log() -> str:
-    """从既有 INDEX 提取跑批记录表的数据行（append-only 语义）。"""
+    """从既有 INDEX 提取跑批记录表的数据行（append-only 语义）。
+
+    逐行收集以 "|" 开头的表格行：正则惰性匹配会在数据行行首 "|" 处提前断开，
+    多行记录只剩第一行（T2.1 修复的 P1 缺陷），故改为行级状态机。
+    """
     if not INDEX.exists():
         return ""
-    text = INDEX.read_text(encoding="utf-8")
-    m = re.search(r"## 跑批记录\s*\n+\|[^\n]*\|\n\|[-| ]+\|\n(.*?)(?=\n\S|\Z)", text, re.S)
-    return (m.group(1) or "").strip("\n") if m else ""
+    in_section = False
+    table: list[str] = []
+    for line in INDEX.read_text(encoding="utf-8").splitlines():
+        s = line.strip()
+        if s.startswith("## 跑批记录"):
+            in_section = True
+            continue
+        if not in_section:
+            continue
+        if s.startswith("|"):
+            table.append(s)
+        elif table and s:
+            break  # 表格结束（遇到非表格正文或新章节）
+    return "\n".join(table[2:])  # 跳过表头与分隔行，其余全部保留
 
 
 def cell(v) -> str:
@@ -74,6 +89,17 @@ def cell(v) -> str:
     if isinstance(v, list):
         return "、".join(str(x) for x in v)
     return str(v).replace("|", "\\|").replace("\n", " ")
+
+
+def key_dates_compact(kd) -> str:
+    """key_dates 自由对象 → 紧凑串，如 `报名:2026-09-01、初赛:2026-10-15`。"""
+    if not isinstance(kd, dict) or not kd:
+        return "-"
+    parts = []
+    for k, v in kd.items():
+        d = v.get("date") if isinstance(v, dict) else v
+        parts.append(f"{k}:{d if d is not None else '?'}")
+    return "、".join(parts)[:60]
 
 
 def build() -> str:
@@ -91,6 +117,7 @@ def build() -> str:
             comp_rows.append(
                 f"| {cell(fm.get('id'))} | {cell(fm.get('name'))} | {cell(fm.get('directions'))} "
                 f"| {cell(fm.get('tier'))} | {cell(fm.get('status'))} "
+                f"| {cell(key_dates_compact(fm.get('key_dates')))} "
                 f"| {cell((fm.get('ai_policy') or {}).get('summary', '-'))[:40]} "
                 f"| {cell(fm.get('last_verified'))} | competitions/{d.name}/ |")
     tech_root = ROOT / "kb" / "tech"

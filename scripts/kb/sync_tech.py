@@ -9,6 +9,12 @@
   arxiv  ：arXiv Atom API（免密），按方向关键词取近 N 天新论文
   github ：gh CLI 搜索近 N 天新建、star 数达标的仓库（未登录则跳过并告警）
 
+候选队列生命周期（T2.1 裁决）：
+  - 活跃队列 = kb/raw/candidates/tech-*.yaml（仅顶层）；K-01 消费完毕后把队列文件
+    移入 kb/raw/candidates/processed/（防重复消费，保留痕迹）
+  - Hunter 拒绝的候选写入 kb/tech/.rejections.yaml 台账（{id, reason, stars, decided}）
+  - 重评规则：被拒候选若当前 stars ≥ 台账快照 ×2 则重新入队（科技信号随时间增长的核心场景）
+
 用法：
   python scripts/kb/sync_tech.py [--direction 名称] [--days 14] [--max 20]
                                  [--dry-run] [--selftest]
@@ -124,6 +130,7 @@ def existing_card_ids() -> set[str]:
 
 
 def existing_candidate_ids(cand_dir: Path) -> set[str]:
+    """只扫活跃队列（顶层 tech-*.yaml）；processed/ 已消费文件不参与去重（允许信号增长后重评）。"""
     ids: set[str] = set()
     import yaml
     for f in sorted(cand_dir.glob("tech-*.yaml")):
@@ -134,6 +141,30 @@ def existing_candidate_ids(cand_dir: Path) -> set[str]:
         except Exception:  # noqa: BLE001
             continue
     return ids
+
+
+def load_rejections() -> dict[str, dict]:
+    """Hunter 拒绝台账：{id: {reason, stars, decided}}。"""
+    import yaml
+    p = ROOT / "kb" / "tech" / ".rejections.yaml"
+    if not p.is_file():
+        return {}
+    try:
+        rows = yaml.safe_load(p.read_text(encoding="utf-8")) or []
+        return {r["id"]: r for r in rows if isinstance(r, dict) and r.get("id")}
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def rejection_blocks(cand: dict, rej: dict | None) -> bool:
+    """被拒候选是否仍应跳过：无动态信号（论文）永久跳过；仓库 stars 翻倍则放行重评。"""
+    if not rej:
+        return False
+    snap = int(rej.get("stars") or 0)
+    now = int((cand.get("signal") or {}).get("stars") or 0)
+    if snap > 0 and now >= snap * 2:
+        return False  # 信号显著增长 → 允许重评
+    return True
 
 
 def selftest() -> int:
@@ -165,42 +196,58 @@ def main() -> int:
 
     cand_dir = ROOT / "kb" / "raw" / "candidates"
     known = existing_card_ids() | existing_candidate_ids(cand_dir)
+    rejections = load_rejections()
     candidates: list[dict] = []
     warnings: list[str] = []
     for cfg in cfgs:
         radar = cfg.get("tech_radar") or {}
         min_stars = int((radar.get("min_signal") or {}).get("stars") or 0)
         for field in radar.get("fields") or []:
+            # suggested_fields 在候选拼装处随 field 赋值（修复：循环变量泄漏导致全标最后一个 field）
             try:
                 got = fetch_arxiv(field, args.days, args.max)
             except Exception as e:  # noqa: BLE001
                 got, w = [], f"arxiv[{field}] {e}"
                 warnings.append(w)
-            candidates += got
-            got, w = fetch_github(field, args.days, args.max, max(min_stars, 10))
+            got_gh, w = fetch_github(field, args.days, args.max, max(min_stars, 10))
             if w:
                 warnings.append(f"github[{field}] {w}")
-            candidates += got
+            for c in got + got_gh:
+                c["suggested_fields"] = [field]
+            candidates += got + got_gh
 
-    fresh = []
+    fresh: dict[str, dict] = {}
+    re_eval = 0
     for c in candidates:
-        if c["id"] in known or c["id"] in {x["id"] for x in fresh}:
+        cid = c["id"]
+        if cid in known:
             continue
-        c["suggested_fields"] = [field]
-        fresh.append(c)
+        rej = rejections.get(cid)
+        if rejection_blocks(c, rej):
+            continue
+        if rej:
+            re_eval += 1
+        if cid in fresh:  # 多 field 命中同一候选 → 合并 suggested_fields
+            for f in c["suggested_fields"]:
+                if f not in fresh[cid]["suggested_fields"]:
+                    fresh[cid]["suggested_fields"].append(f)
+        else:
+            fresh[cid] = c
+    fresh_list = list(fresh.values())
 
     for w in warnings:
         print(f"[sync_tech][warn] {w}", file=sys.stderr)
-    print(f"[sync_tech] 方向 {len(cfgs)} 个 | 拉取 {len(candidates)} | 去重后新增候选 {len(fresh)}")
+    print(f"[sync_tech] 方向 {len(cfgs)} 个 | 拉取 {len(candidates)} | 去重/拒绝过滤后新增候选 "
+          f"{len(fresh_list)}（其中重评放行 {re_eval}）")
 
-    if args.dry_run or not fresh:
+    if args.dry_run or not fresh_list:
         return 0
 
     cand_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     out = cand_dir / f"tech-{stamp}.yaml"
     import yaml
-    out.write_text(yaml.safe_dump(fresh, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    out.write_text(yaml.safe_dump(fresh_list, allow_unicode=True, sort_keys=False), encoding="utf-8")
     print(f"[sync_tech] 候选队列 → {out.relative_to(ROOT)}")
     print("[sync_tech] 下一步：K-01 kb-sync 派发 Hunter 消费候选（写入 kb/tech/ 成品卡片）")
     return 0

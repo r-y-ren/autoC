@@ -8,6 +8,10 @@
   - 非 pass 结果累计 retry 计数，达到 max 触发熔断标记（升级人工）
 
 产出：workspace/acceptance/run-<N>.json（过 acceptance.schema.json）
+重试语义（T2.1 裁决）：**只有 result=fail 计入 retry**——pending（等待人工/核验）不是
+"修复失败重试"，manual-heavy 战役不应因状态检查误触熔断。
+cmd 超时：捕获 TimeoutExpired 记为该条 fail（证据注明 TIMEOUT），执行器不崩溃；
+超时上限默认 600s，可用环境变量 AUTOC_CMD_TIMEOUT 覆盖（测试用）。
 退出码：0=pass｜1=fail｜3=pending_*｜2=配置错误
 """
 
@@ -21,6 +25,8 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+
+CMD_TIMEOUT = int(os.environ.get("AUTOC_CMD_TIMEOUT", "600"))
 
 
 def project_root() -> Path:
@@ -51,12 +57,26 @@ def git_ref() -> str:
         return "n/a"
 
 
+def default_retry_max() -> int:
+    """retry.max 的单一事实来源是 config/budget.yaml（circuit_breaker.repair_max_retries）。"""
+    try:
+        import yaml
+        cfg = yaml.safe_load((ROOT / "config" / "budget.yaml").read_text(encoding="utf-8"))
+        return int((((cfg or {}) or {}).get("circuit_breaker") or {}).get("repair_max_retries"))
+    except Exception:  # noqa: BLE001
+        return 3
+
+
 def read_retry() -> dict:
     try:
         st = json.loads(STATE.read_text(encoding="utf-8"))
-        return st.get("retry") or {"count": 0, "max": 3, "tripped": False}
+        retry = st.get("retry") or {}
+        retry.setdefault("count", 0)
+        retry.setdefault("max", default_retry_max())
+        retry.setdefault("tripped", False)
+        return retry
     except Exception:  # noqa: BLE001
-        return {"count": 0, "max": 3, "tripped": False}
+        return {"count": 0, "max": default_retry_max(), "tripped": False}
 
 
 def write_retry(retry: dict) -> None:
@@ -109,12 +129,30 @@ def main() -> int:
         rid, cat = it.get("id", "?"), it.get("category", "?")
         cmd = it.get("cmd")
         if cmd:
-            proc = subprocess.run(cmd, shell=True, cwd=ROOT, capture_output=True,
-                                  text=True, timeout=600)
             ev = ev_dir / f"{rid}.log"
-            ev.write_text(f"$ {cmd}\nexit={proc.returncode}\n\n{proc.stdout}\n{proc.stderr}",
-                          encoding="utf-8")
-            status = "pass" if proc.returncode == 0 else "fail"
+            # Windows 上 shell=True 超时只杀外壳，孤儿命令进程仍持有管道（实测被扣 149s）。
+            # 解法：新建进程组 + taskkill /T 杀整棵进程树，让执行器在超时后数秒内脱身。
+            creationflags = subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0
+            proc = subprocess.Popen(cmd, shell=True, cwd=ROOT, stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE, text=True, creationflags=creationflags)
+            try:
+                out, err = proc.communicate(timeout=CMD_TIMEOUT)
+                rc = proc.returncode
+                ev_head = f"$ {cmd}\nexit={rc}"
+            except subprocess.TimeoutExpired:
+                if os.name == "nt":
+                    subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)],
+                                   capture_output=True, timeout=15)
+                else:
+                    proc.kill()
+                try:
+                    out, err = proc.communicate(timeout=10)
+                except subprocess.TimeoutExpired:
+                    out, err = "", ""
+                rc = -1
+                ev_head = f"$ {cmd}\nexit=TIMEOUT after {CMD_TIMEOUT}s"
+            ev.write_text(f"{ev_head}\n\n{out}\n{err}", encoding="utf-8")
+            status = "pass" if rc == 0 else "fail"
             results.append({"id": rid, "category": cat, "status": status,
                             "evidence": str(ev.relative_to(ROOT))})
         elif cat == "manual":
@@ -135,7 +173,7 @@ def main() -> int:
         result = "pass"
 
     retry = read_retry()
-    if result != "pass":
+    if result == "fail":  # 仅失败重试计数（T2.1 裁决：pending 不属于修复回环）
         retry["count"] = int(retry.get("count", 0)) + 1
     retry["tripped"] = retry["count"] >= int(retry.get("max", 3))
     write_retry(retry)

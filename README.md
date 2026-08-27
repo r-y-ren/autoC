@@ -44,7 +44,7 @@ archive/    历史作品库（只读，git tag）
 
 - [x] Phase 0：骨架、铁律、守卫钩子、契约模板、环境基线
 - [x] 能力层 T1：能力登记表（CAPABILITIES.md）+ 6 份角色章程（.zcode/agents/）+ 5 个命令入口（.zcode/commands/）+ H-02 校验钩子与 lint_kb.py（守卫回归 14/14）
-- [x] T2：编排技能 K-01…K-07 + 慢循环/验收/归档脚本（S-02…S-06、S-09）+ H-03 会话播报 + metrics 分片制（守卫 16/16、lint 12/12、全链路隔离冒烟通过）
+- [x] T2：编排技能 K-01…K-07 + 慢循环/验收/归档脚本（S-02…S-06、S-09）+ H-03 会话播报 + metrics 分片制；T2.1 修复轮（审查 5 缺陷 + 2 语义裁决 D4 + 三套新回归，全量测试 12+5+4+1+16+16 通过）
 - [ ] T3：外部接入（marp/typst/pio/kicad CLI、MCP 后置评估、RSSHub、Kaggle key）
 
 能力登记与裁决记录见 [docs/CAPABILITIES.md](docs/CAPABILITIES.md)；角色写入边界的硬度表述（L1 软边界 / L2 阶段硬边界）见 DESIGN.md §6.2。

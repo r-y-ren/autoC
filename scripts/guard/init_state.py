@@ -23,6 +23,20 @@ ROOT = Path(__file__).resolve().parents[2]
 STATE_FILE = ROOT / ".flow" / "state.json"
 
 
+def default_retry_max() -> int:
+    """retry.max 单一事实来源：config/budget.yaml → circuit_breaker.repair_max_retries。"""
+    try:
+        import yaml
+        cfg = yaml.safe_load((ROOT / "config" / "budget.yaml").read_text(encoding="utf-8"))
+        return int((((cfg or {}) or {}).get("circuit_breaker") or {}).get("repair_max_retries"))
+    except Exception:  # noqa: BLE001
+        return 3
+
+
+def fresh_retry() -> dict:
+    return {"count": 0, "max": default_retry_max(), "tripped": False}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="autoC 守卫状态引导/流转")
     ap.add_argument("--phase", default=None, choices=PHASES, help="目标阶段（缺省=保持/引导为 idle）")
@@ -38,12 +52,12 @@ def main() -> int:
             state = None
     if not isinstance(state, dict):
         state = {"schema_version": 1, "phase": "idle", "campaign": None, "extra_allow": [],
-                 "retry": {"count": 0, "max": 3, "tripped": False}}
+                 "retry": fresh_retry()}
 
     if args.phase:
         state["phase"] = args.phase
     if args.reset or not state.get("retry"):
-        state["retry"] = {"count": 0, "max": 3, "tripped": False}
+        state["retry"] = fresh_retry()
     state["updated_at"] = datetime.datetime.now().isoformat(timespec="seconds")
     state["updated_by"] = args.by
 

@@ -96,8 +96,9 @@ def main() -> int:
         return 2
     result = latest_result()
     if not args.force:
-        if result == "fail":
-            print("[archive] 最新验收 result=fail，拒绝归档（修复后重验，或 --force）", file=sys.stderr)
+        if result in ("fail", "pending_agent"):
+            print(f"[archive] 最新验收 result={result}（失败或存在未完成 agent 核验项），拒绝归档"
+                  f"（修复/补验后重跑，或 --force 明确强制）", file=sys.stderr)
             return 2
         if result == "pending_manual" and not args.allow_manual:
             print("[archive] 最新验收含人工待测项（pending_manual），加 --allow-manual 确认或先完成人工项", file=sys.stderr)
@@ -140,20 +141,24 @@ def main() -> int:
         (ws / d).mkdir(exist_ok=True)
         (ws / d / ".gitkeep").touch()
 
-    # git 与状态复位
+    # git：add → commit → tag（commit 必须先于 tag，否则 tag 指向归档前旧提交——T2.1 修复的 P2 缺陷）
     if git("add", "-A").returncode == 0:
-        tag = f"archive/{dirname}"
-        if git("tag", tag).returncode == 0:
-            print(f"[archive] git tag → {tag}")
+        c = git("commit", "-m", f"archive: {dirname}")
+        if c.returncode == 0:
+            tag = f"archive/{dirname}"
+            if git("tag", tag).returncode == 0:
+                print(f"[archive] git commit + tag → {tag}（tag 快照包含归档内容）")
+            else:
+                print(f"[archive][warn] tag 失败（可能重名）：{tag}", file=sys.stderr)
         else:
-            print(f"[archive][warn] tag 失败（可能重名）：{tag}", file=sys.stderr)
+            print(f"[archive][warn] git commit 失败（tag 跳过）：{c.stderr.strip()[:100]}", file=sys.stderr)
     else:
-        print("[archive][warn] git add 失败，仅完成文件移动", file=sys.stderr)
+        print("[archive][warn] git add 失败，仅完成文件移动（commit/tag 跳过）", file=sys.stderr)
 
     init = ROOT / "scripts" / "guard" / "init_state.py"
     subprocess.run([sys.executable, str(init), "--phase", "idle", "--reset",
                     "--by", "archive_campaign"], capture_output=True, timeout=15)
-    print("[archive] 完成：workspace 已复位，状态回 idle。请 git commit 归档变更。")
+    print("[archive] 完成：归档已提交并打 tag，workspace 已复位，状态回 idle。")
     return 0
 
 

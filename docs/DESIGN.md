@@ -1,6 +1,7 @@
 # autoC — 竞赛情报与作品生成 Agent 框架：结构设计
 
-> 版本 v0.7（2026-08-27）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> 版本 v0.8（2026-08-27）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> v0.8 变更：T2.1 修复轮——审查实测确认的 5 缺陷修复（跑批记录多行丢行 / pending_agent 绕归档闸门 / tag 先于 commit / cmd 超时崩溃及孤儿进程劫持管道 / suggested_fields 循环变量泄漏）+ 2 语义裁决（仅 fail 计入 retry；候选队列生命周期：processed/ + .rejections.yaml 台账 + stars 翻倍重评）+ retry.max 单一事实来源（budget.yaml）+ 三套新回归测试。
 > v0.7 变更：T2 落地——S-02…S-06 脚本、K-01…K-07 技能、H-03 会话播报；K-03 前置项裁决（metrics 分片制已实现并 L2 强制；角色身份级守卫评估后不引入，理由见 §6.2 处置记录）；验收清单新增可选 cmd 字段。
 > v0.6 变更：T2 开工校准——①残留 `.zcode/subagents/` 全部修正为 `.zcode/agents/`；②Hardware 更名 Hardware Agent 并按 D2 裁决标注 CLI 路线；③§6.2 如实区分"L1 角色软边界 / L2 阶段硬边界"，角色身份级守卫与 metrics 并发风险列为 K-03 前置评估项。
 > v0.5 变更：按 Phase 0 实测校准——钩子注册落点为 `.zcode/config.json`（`hooks.events`，需 `enabled: true`）、子 agent 目录暂定 `.zcode/agents/`（首个章程编写时经 Settings → Subagents 实测确认）。
@@ -80,6 +81,7 @@
 - **执行**：Scraper 与 Hunter 两个后台子 agent 并发；方向级信源配置在 `config/directions/`
 - **写入语义**：条目级增量 merge（`last_verified` + 来源记录），绝不整体重写；原始快照落 `kb/raw/`（不进 git 主干）
 - **质量闸**：lint_kb 校验 frontmatter/引用完整性（schema 在 `config/templates/`）→ 不合格进 quarantine；所有分析基于本次实抓文档、逐条带引用 URL + 抓取日期
+- **候选队列生命周期（T2.1 裁决）**：活跃队列 = `kb/raw/candidates/*.yaml`（仅顶层），K-01 消费完毕移入 `candidates/processed/`（不参与下轮去重）；Hunter 拒绝的候选记入 `kb/tech/.rejections.yaml` 台账（id/reason/stars/decided），sync_tech 对台账候选去重、**stars 达快照 ×2 自动放行重评**（科技信号随时间增长的核心场景）
 - **产物**：KB-1（赛事信息 + 历年获奖解构 + 模式库）、KB-2（技术卡片：是什么/用途/优势/成熟度/比赛映射）、聚合索引 `kb/INDEX.md`
 
 ### 3.2 决策阶段（交互）
@@ -99,16 +101,16 @@
 
 ### 3.4 验收-修复节点（全自动，可升级人工）
 
-- `scripts/verify/run_acceptance.py` 逐项执行蓝图验收清单（**带 cmd 的项自动执行并存证据**；执行前先汇总 metrics 分片），产物写入 `workspace/acceptance/`：
+- `scripts/verify/run_acceptance.py` 逐项执行蓝图验收清单（**带 cmd 的项自动执行并存证据，超时记为 fail 并杀整棵进程树**；执行前先汇总 metrics 分片），产物写入 `workspace/acceptance/`：
   - 软件：一键启动、测试全过、browser-use 实测取证（截图/录屏）、真实数据端到端
   - 硬件：仿真（Wokwi）通过、设计文件/BOM/固件齐备；**物理项列为人工测试项**移交用户
   - 文档：结构完整性、数字与 metrics.json 一致性、格式校验
-- 失败项**带失败证据**生成失败工单，路由回责任 agent 修复后重跑；`.flow/state.json` 记录重试计数，**超限熔断**升级人工
+- 失败项**带失败证据**生成失败工单，路由回责任 agent 修复后重跑；`.flow/state.json` 记录重试计数（**仅 fail 计数**——pending 是等待而非失败重试，T2.1 裁决；retry.max 单一事实来源为 budget.yaml），**超限熔断**升级人工
 - 通过后生成分析报告（对照该赛评审标准自评 + 历年获奖基准对比）
 
 ### 3.5 归档
 
-- `scripts/verify/archive_campaign.py`：workspace/ 整体移入 `archive/<YYYY-MM_赛事_主题>/` + git tag + 只读锁，**归档后不可变**
+- `scripts/verify/archive_campaign.py`：workspace/ 整体移入 `archive/<YYYY-MM_赛事_主题>/`，脚本内完成 **git add → commit → tag**（commit 先于 tag，tag 快照才含归档内容）+ 只读锁，**归档后不可变**
 - 归档内容：攻略、蓝图、作品本体（software/hardware/docs）、验收记录、分析报告、人机分工记录（合规留痕）
 - 归档是**脚本动作**而非 agent 行为；workspace/ 随之清空，可开启下一战役
 

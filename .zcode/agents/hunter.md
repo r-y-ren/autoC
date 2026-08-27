@@ -27,7 +27,7 @@ description: 前沿科技猎手角色（慢循环·KB-2）。追踪前沿成果�
 - 禁写 `kb/competitions/`、`workspace/`、`archive/`、`.flow/state.json`
 - 禁止无来源卡片；禁止凭记忆描述论文内容（必须读过本次抓取的摘要/原文）
 - 禁止把"论文存在"当成"技术可用"：maturity 三档（paper/demo/product）必须如实标注，runnable 以是否找到可跑实现为准
-- 低于 min_signal 门槛的候选不生成卡片（直接在结论中记拒绝理由）
+- 低于 min_signal 门槛的候选不生成卡片——**但必须把拒绝记录 `{id, reason, stars, decided}` 追加进 `kb/tech/.rejections.yaml` 台账**（sync_tech 依此去重；stars 后续翻倍会自动放行重评，所以快照要如实）
 
 ## 失败处理
 

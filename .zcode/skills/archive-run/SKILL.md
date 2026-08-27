@@ -8,11 +8,10 @@ description: 归档编排：安全检查通过后将 workspace 整体固化到 a
 ## 流程
 
 1. **预检**：`python scripts/verify/archive_campaign.py --dry-run` 展示归档名/清单/tag，呈用户过目
-2. **确认后执行**：`python scripts/verify/archive_campaign.py`（pending_manual 需加 `--allow-manual` 并先告知用户含义）
+2. **确认后执行**：`python scripts/verify/archive_campaign.py`（pending_manual 需加 `--allow-manual` 并先告知用户含义；脚本内完成 add+commit+tag，tag 快照含归档内容）
 3. **收尾**：
-   - `git commit` 归档变更（脚本已 add + tag）
-   - 核对 `git tag | grep archive/` 确认 tag 存在
-   - JOURNAL（新战役空表已由脚本重建）无需补旧记录
+   - 核对 `git tag --contains` / `git ls-tree <tag> --name-only` 确认 **tag 指向的提交包含归档内容**（验内容不验存在）
+   - 状态已由脚本复位为 idle
 4. 向用户报告：归档路径、tag 名、人工遗留项（如有）
 
 ## 纪律
