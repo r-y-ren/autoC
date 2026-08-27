@@ -10,14 +10,13 @@
 | pip | 26.2.1 | 依赖安装 |
 | node / npm | v24.19.0 / 11.19.0 | 前端工程、Marp CLI |
 
-## 待安装（按模块启用时再装，Phase 0 不阻塞）
+## 待安装（按需，当前无阻塞项）
 
-| 工具 | 用途 | 安装命令 |
+| 工具 | 用途 | 状态 |
 |---|---|---|
-| marp-cli | 答辩 PPT（Markdown → pptx/pdf） | `npm install -g @marp-team/marp-cli` |
-| typst | 项目报告排版 | `winget install --id Typst.Typst` |
-| platformio | 固件编译与板级测试 | `python3 -m pip install platformio`（建议挂在 3.12 环境） |
-| kicad-cli | PCB 设计文件生成 | 随 KiCad 安装（winget install KiCad.KiCad） |
+| wokwi-mcp（E-05/E-12） | 有状态电路仿真 | 需账号/许可，密钥类；用户提供前维持登记态 |
+| RSSHub（E-07） | 公众号信源中转 | D5 缓判至挑战杯类方向启用；届时 clone 进 gitignored `tools/` |
+| Kaggle API key（E-08） | 赛题/榜单拉取 | Kaggle 方向启用时由用户提供 |
 
 ## 已随能力层安装
 
@@ -25,10 +24,13 @@
 |---|---|---|
 | pyyaml | 6.0.3 | lint_kb.py frontmatter 解析 |
 | jsonschema | 4.26.0 | lint_kb.py 契约校验 |
-| Tesseract OCR（UB-Mannheim） | 5.x | S-13 扫描件 OCR；chi_sim 为 tessdata_fast 用户级包（~/.tessdata） |
+| Tesseract OCR（UB-Mannheim） | 5.4.0 | S-13 扫描件 OCR；chi_sim 为 tessdata_fast 用户级包（~/.tessdata） |
 | pypdfium2 / pdfplumber / pillow | — | S-13 渲染与表格化、winners 名单机读 |
 | typst | 0.15.1（winget） | K-07 报告排版；⚠ PATH 需新 shell，绝对路径见 WinGet/Links |
 | marp-cli | 4.5.0（npm -g） | K-06 PPT；pptx 导出经本机 Chromium 实测可用 |
+| PlatformIO Core | 6.1.19（挂 python3=3.12） | C-04 固件编译；调用方式 `python3 -m platformio` |
+| KiCad + kicad-cli | 10.0.5（winget，用户级） | C-04 PCB；路径 `%LOCALAPPDATA%\Programs\KiCad\10.0\bin\kicad-cli.exe`，不在 PATH |
+| OpenSCAD | 2025.x（winget） | C-04 结构件；路径 `C:\Program Files\OpenSCAD\openscad.exe`，无头模式 `-o` 可用 |
 
 ## T3-c 冒烟记录（2026-08-27）
 
@@ -36,6 +38,13 @@
 - `marp config/templates/presentation.marp.md -o …pptx` → 467KB ✓（HTML 导出 112KB ✓）
 - `ocr_pdf.py` 文本层路径（typst 产物）与 OCR 路径（cumcm 扫描件 11 页，无低置信页）双验证 ✓
 - OCR 注意：`TESSDATA_PREFIX` 是整体替换——用户级目录须自带 configs/ 与默认语言包（ensure_lang 已自动处理）
+
+## T3-d 硬件工具链冒烟记录（2026-08-27）
+
+- PlatformIO：`platform=native` 工程 `python3 -m platformio run` 编译+运行 ✓（本机 MinGW gcc 14.2；首次真实嵌入式构建将下载对应工具链，属正常流量）
+- kicad-cli：最小板件 `pcb export gerbers` → 12 个 gerber 文件 ✓
+- OpenSCAD：`cube([10,10,10])` 无头渲染 STL（6 面/1589B）✓
+- E-12 Wokwi CLI 维持登记态：需账号/许可（密钥类，CAPABILITIES D5/D6 记录），未装不假装可用
 
 ## 说明
 

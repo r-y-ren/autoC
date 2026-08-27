@@ -79,6 +79,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | S-11 | test_archive.py | 归档闸门回归（pending_agent/fail/pass 含 tag 内容审计，4 用例） | ✅ T2.1 已落地（4/4） |
 | S-12 | test_index.py | 索引回归（跑批记录多行 append-only 保留） | ✅ T2.1 已落地 |
 | S-13 | ocr_pdf.py | PDF 解析：有文本层直取；无文本层逐页渲染 → tesseract OCR → 文本 + 置信度报告（判断仍归 Scraper） | ✅ T3-c 本轮落地 |
+| S-15 | export_digest.py | 方向情报简报导出（D6 交付层）：条目层纯投影 → export/digest-<方向>-<月>.md，周更草稿/月末周六自动转正式版 | ✅ T3-d 本轮落地（selftest 通过） |
 
 ### 3.3 角色章程（.zcode/agents/）——能力契约本体
 
@@ -120,17 +121,17 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 
 | ID | 项 | 用途 | 引入条件 | 层 |
 |---|---|---|---|---|
-| E-01 | marp-cli（npm） | PPT 导出 | K-06 启用时 | T3 |
-| E-02 | typst（winget） | 报告排版 | K-07 启用时 | T3 |
-| E-03 | platformio（pip·挂 3.12） | 固件编译测试 | 硬件模块启用时 | T3 |
-| E-04 | kicad（winget，含 kicad-cli） | PCB 生成 | 硬件模块启用时 | T3 |
-| E-05 | wokwi-mcp | 有状态电路仿真（官方 MCP） | 路线决策 D2 | T3 |
+| E-01 | marp-cli（npm） | PPT 导出 | ✅ T3-c 已装（4.5.0，模板冒烟通过） | T3 |
+| E-02 | typst（winget） | 报告排版 | ✅ T3-c 已装（0.15.1，模板冒烟通过） | T3 |
+| E-03 | platformio（pip·挂 3.12） | 固件编译测试 | ✅ T3-d 已装（6.1.19，native 编译运行冒烟通过） | T3 |
+| E-04 | kicad（winget，含 kicad-cli） | PCB 生成 | ✅ T3-d 已装（10.0.5，gerber 导出冒烟通过；用户级路径见 ENVIRONMENT） | T3 |
+| E-05 | wokwi-mcp | 有状态电路仿真（官方 MCP） | 路线决策 D2（仅实测需要会话级交互时评估） | T3 |
 | E-06 | kicad-mcp（社区） | PCB 交互生成 | 可选，逐个评估 | T3 |
-| E-07 | RSSHub | 公众号信源中转 | 慢循环公众号策略确定时 | T3 |
+| E-07 | RSSHub | 公众号信源中转 | D5 缓判至挑战杯类方向启用；届时 clone 进 tools/ | T3 |
 | E-08 | Kaggle API key | 赛题/榜单拉取 | Kaggle 方向启用时（用户提供） | T3 |
 | E-09 | Tesseract OCR（UB-Mannheim，含 chi_sim） | 扫描件 PDF/图片文字化（S-13 依赖） | ✅ T3-c 已装 | T3 |
 | E-10 | pypdfium2 / pdfplumber / pillow | PDF 渲染与表格化（S-13 及 Scraper 表格分片） | ✅ T3-c 已装 | T3 |
-| E-11 | OpenSCAD | 结构件代码化生成 → STL（hardware 章程已引用） | 含硬件里程碑的蓝图启用时安装（winget） | T3 |
+| E-11 | OpenSCAD | 结构件代码化生成 → STL（hardware 章程已引用） | ✅ T3-d 已装（无头 STL 冒烟通过） | T3 |
 | E-12 | Wokwi CLI | 固件仿真自测 | ⚠ 需 Wokwi 账号/Club 许可——归"用户提供凭据"类（同 E-08），安装时查证，不假装可用 | T3 |
 
 ---
@@ -144,7 +145,8 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 - **T1 能力契约固化**：✅ 完成——S-01、S-07、H-02、C-01…C-06、M-01…M-05、本文档；验证：守卫回归 14/14，lint 三模式（单文件/钩子/全量+隔离）实测通过
 - **T2 编排技能与慢循环脚本**：✅ 完成——S-02…S-06、S-09、K-01…K-07、H-03；验证：守卫 16/16、lint 12/12、三脚本 selftest、验收/汇总/归档链路隔离冒烟（fail 拒归档、tag、复位、retry 累计）
 - **T2.1 修复轮（审查驱动）**：✅ 完成——5 个实测缺陷（跑批记录丢行 / pending_agent 绕闸门 / tag 先于 commit / cmd 超时崩溃+孤儿进程劫持 / 循环变量泄漏）+ 2 语义裁决（见 D4）+ retry.max 单一事实来源；新增 S-10/S-11/S-12 三套回归，全量 12+5+4+1 用例通过
-- **T3 外部接入（按模块启用）**：E-01…E-08
+- **T3 外部接入（按模块启用）**：E-01…E-04/E-09…E-11 已装并冒烟；E-05…E-08/E-12 按需（凭据/方向类）
+- **T3-d 能力收口轮**：✅ 完成（2026-08-27）——硬件三件套安装冒烟（pio/kicad-cli/openscad）、S-15 简报导出层、K-01/K-08 预检+收尾断言、验收 cmd 模板库、D6 交付层裁决
 
 ## 6. 决策记录
 
@@ -162,3 +164,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
   2. 第三方开源工具落位纪律 → 一律 clone 进 gitignored `tools/` + ENVIRONMENT.md 记版本，不污染 git 主干与审计面
   3. S-13 编号说明 → 计划稿的 "S-12 ocr_pdf" 与已登记 S-12（test_index）撞号，OCR 脚本按 **S-13** 登记
   4. 双频慢循环 → 每日轻量增量（已有 cron 08:30）+ 每周深度评估（K-08，周六 cron），兑现 DESIGN §3.1 承诺
+- **D6 知识库交付层裁决** ✅ 已裁决（2026-08-27，T3-d）：
+  1. 读者 → **团队自用**（决策输入口径：直接给结论与证据链，合规红线照实写；导览见 kb/README.md）
+  2. 形式 → **源库不动，导出层纯投影**——export/digest-<方向>-<月>.md 方向情报简报（S-15 生成：赛事日历倒计时/技术雷达速览/patterns 第五节/合规提醒）；每条结论回链条目 ID，**分析增量只允许发生在条目层**，导出物是纯重组
+  3. 节奏 → 挂周深度 cron 末尾刷新草稿，**月末最后一个周六自动转正式版**（判定内置于 S-15）；深度赛事攻略包（Typst 编译）待 patterns 覆盖 ≥2 赛后按需启动

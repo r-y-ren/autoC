@@ -84,6 +84,7 @@
 - **质量闸**：lint_kb 校验 frontmatter/引用完整性（schema 在 `config/templates/`）→ 不合格进 quarantine；所有分析基于本次实抓文档、逐条带引用 URL + 抓取日期
 - **候选队列生命周期（T2.1 裁决）**：活跃队列 = `kb/raw/candidates/*.yaml`（仅顶层），K-01 消费完毕移入 `candidates/processed/`（不参与下轮去重）；Hunter 拒绝的候选记入 `kb/tech/.rejections.yaml` 台账（id/reason/stars/decided），sync_tech 对台账候选去重、**stars 达快照 ×2 自动放行重评**（科技信号随时间增长的核心场景）
 - **产物**：KB-1（赛事信息 + 历年获奖解构 + 模式库）、KB-2（技术卡片：是什么/用途/优势/成熟度/比赛映射）、聚合索引 `kb/INDEX.md`
+- **交付形式（D6）**：源库（kb/）面向 agent 检索；人读交付物为 `export/digest-*.md` 方向情报简报——S-15 从条目层纯投影生成（只重组不新增事实），周深度 cron 末尾刷新、月末最后一个周六转正式版
 
 ### 3.2 决策阶段（交互）
 
@@ -155,6 +156,8 @@ autoC/
 │   ├── hardware/                # Hardware Agent：BOM / 引脚表 / 固件
 │   ├── docs/                    # Document Agent：报告 + PPT 源码（Marp/Typst）
 │   └── acceptance/              # 验收角色：执行记录 / 失败工单 / 分析报告
+├── export/                      # KB 交付导出层（D6：条目层纯投影，读者=团队自用）
+│   └── digest-<方向>-<YYYY-MM>.md  # 方向情报简报（S-15 生成；周更草稿，月末周六转正式版）
 ├── archive/                     # 历史作品库（交付物 3，归档后只读，带 git tag）
 │   └── 2026-08_挑战杯_智能巡检/
 ├── AGENTS.md                    # 全局纪律与行为红线

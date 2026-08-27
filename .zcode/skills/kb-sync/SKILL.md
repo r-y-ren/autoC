@@ -23,6 +23,10 @@ description: 慢循环编排：按方向配置增量维护 KB-1/KB-2。当用户
 5. **质量闸与索引**：`python scripts/kb/lint_kb.py --quarantine` → `python scripts/kb/build_index.py`
 6. **登记**：`kb/INDEX.md` 跑批记录表追加一行；`workspace/JOURNAL.md` 记一行；`git add -A && git commit`
 7. **回位**：`python scripts/guard/init_state.py --phase idle --by kb-sync`
+8. **收尾断言（任一不满足 → JOURNAL 记 warn 行并如实报告，不得静默）**：
+   - `python -c "import json;print(json.load(open('.flow/state.json'))['phase'])"` 输出 idle
+   - INDEX 跑批表含今日行
+   - `git status --short` 为空
 
 ## 失败处理
 
