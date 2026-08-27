@@ -77,7 +77,8 @@
               "id": { "type": "string" },
               "category": { "enum": ["software", "hardware", "document", "manual"], "description": "manual=人工测试项，移交用户" },
               "item": { "type": "string" },
-              "method": { "type": "string", "description": "可执行的验证方法" }
+              "method": { "type": "string", "description": "验证方法（人读）" },
+              "cmd": { "type": "string", "description": "可选：可执行命令，run_acceptance.py 直接执行并以退出码判定" }
             }
           }
         }

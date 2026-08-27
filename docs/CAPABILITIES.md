@@ -60,20 +60,21 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 |---|---|---|---|
 | H-01 | PreToolUse 写入路径守卫 | scripts/guard/guard_path.py | ✅ Phase 0 已装（冒烟 10/10） |
 | H-02 | PostToolUse KB 即时校验（kb/ 写入即跑 lint，不合格当场反馈） | S-01 + pyyaml/jsonschema | ✅ 本轮已装（钩子模式验证通过） |
-| H-03 | SessionStart 状态播报（当前阶段/战役/熔断计数） | .flow/state.json | T2 |
+| H-03 | SessionStart 状态播报（当前阶段/战役/熔断计数） | scripts/guard/session_status.py | ✅ T2 已装（additionalContext 注入验证通过） |
 
 ### 3.2 脚本（scripts/）
 
 | ID | 能力 | 说明 | 层 |
 |---|---|---|---|
 | S-01 | lint_kb.py | frontmatter 解析 → schema 校验 → 不合格移 quarantine（单文件/钩子/全量三模式；YAML 日期已规范化） | ✅ 本轮已落地 |
-| S-02 | sync_competitions.py | API/聚合源增量拉取赛事（arXiv/gh/curl 起点） | T2·模块期 |
-| S-03 | sync_tech.py | 科技雷达：拉取→主键去重→信号评分→卡片骨架 | T2·模块期 |
-| S-04 | build_index.py | 重建 kb/INDEX.md（瘦协调者入口） | T2 |
-| S-05 | run_acceptance.py | 验收执行器：跑清单、记证据、开工单、更新 retry | T2 |
-| S-06 | archive_campaign.py | workspace → archive/（mv + git tag + 只读）→ 复位 | T2 |
-| S-07 | test_guard.py | 守卫回归测试 | ✅ 本轮已落地（14/14 通过） |
+| S-02 | sync_competitions.py | web 信源快照（kb/raw/snapshots/）+ 关键词候选提取（candidates 队列） | ✅ T2 已落地（selftest 通过） |
+| S-03 | sync_tech.py | arXiv API + gh 搜索 → 规范化 ID 去重 → 候选队列（成品卡片仍由 Hunter 判定） | ✅ T2 已落地 |
+| S-04 | build_index.py | 重建 kb/INDEX.md（跑批记录 append-only 保留） | ✅ T2 已落地 |
+| S-05 | run_acceptance.py | 验收执行器：cmd 自动执行 + 证据存档 + 重试熔断 + run-N.json | ✅ T2 已落地（冒烟通过） |
+| S-06 | archive_campaign.py | fail 拒归档 / dry-run / mv + git tag + workspace 复位 + idle | ✅ T2 已落地（冒烟通过） |
+| S-07 | test_guard.py | 守卫回归测试 | ✅ 本轮已落地（16/16 通过） |
 | S-08 | test_lint.py | lint 回归测试（目标识别/日期格式/跳过清单，12 用例） | ✅ T2 校准已落地（12/12 通过） |
+| S-09 | merge_metrics.py | 角色指标分片 → 顶层汇总（metrics.<role>.<键>；K-03 前置项落地） | ✅ T2 已落地 |
 
 ### 3.3 角色章程（.zcode/agents/）——能力契约本体
 
@@ -92,13 +93,13 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 
 | ID | 技能 | 职责（SOP） | 层 |
 |---|---|---|---|
-| K-01 | kb-sync | 慢循环编排：读方向配置→collect 态→分片派发 C-01/C-02→API 脚本→S-01→S-04→changelog+commit→idle | T2 |
-| K-02 | strategy-gen | 读 INDEX+profile→矩阵/一鱼多吃/蓝图草稿→schema 校验→呈报用户（唯一闸门） | T2 |
-| K-03 | campaign-run | 读蓝图→deliver 态→任务包→并发派发→汇合派发 C-05→JOURNAL | T2 |
-| K-04 | accept-run | verify 态→S-05→工单路由回环（熔断）→分析报告 | T2 |
-| K-05 | archive-run | archive 态→S-06→workspace 复位→idle | T2 |
-| K-06 | marp-deck | 模板+metrics→答辩 PPT（marp-cli 导出 pptx） | T2 |
-| K-07 | typst-report | 模板+metrics→报告 PDF（typst） | T2 |
+| K-01 | kb-sync | 慢循环编排：读方向配置→collect 态→分片派发 C-01/C-02→API 脚本→S-01→S-04→changelog+commit→idle | ✅ T2 已落地 |
+| K-02 | strategy-gen | 读 INDEX+profile→矩阵/一鱼多吃/蓝图草稿→schema 校验→呈报用户（唯一闸门） | ✅ T2 已落地 |
+| K-03 | campaign-run | 读蓝图→deliver 态→任务包→并发派发→merge_metrics 汇总→派发 C-05→JOURNAL | ✅ T2 已落地（前置项已按 D3 裁决） |
+| K-04 | accept-run | verify 态→S-05→工单路由回环（熔断）→分析报告 | ✅ T2 已落地 |
+| K-05 | archive-run | archive 态→S-06→workspace 复位→idle | ✅ T2 已落地 |
+| K-06 | marp-deck | 模板+metrics 汇总→答辩 PPT（marp-cli 导出 pptx） | ✅ T2 已落地 |
+| K-07 | typst-report | 模板+metrics 汇总→报告 PDF（typst） | ✅ T2 已落地 |
 
 ### 3.5 命令（.zcode/commands/）——用户入口
 
@@ -131,11 +132,14 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 
 ## 5. 分层推进
 
-- **T1 能力契约固化（本轮）**：✅ 完成——S-01、S-07、H-02、C-01…C-06、M-01…M-05、本文档；验证：守卫回归 14/14，lint 三模式（单文件/钩子/全量+隔离）实测通过
-- **T2 编排技能与慢循环脚本**：K-01…K-07、S-02…S-06、H-03
+- **T1 能力契约固化**：✅ 完成——S-01、S-07、H-02、C-01…C-06、M-01…M-05、本文档；验证：守卫回归 14/14，lint 三模式（单文件/钩子/全量+隔离）实测通过
+- **T2 编排技能与慢循环脚本**：✅ 完成——S-02…S-06、S-09、K-01…K-07、H-03；验证：守卫 16/16、lint 12/12、三脚本 selftest、验收/汇总/归档链路隔离冒烟（fail 拒归档、tag、复位、retry 累计）
 - **T3 外部接入（按模块启用）**：E-01…E-08
 
 ## 6. 决策记录
 
 - **D1 赋能范围** ✅ 已裁决（2026-08-27）：选 **T1 契约固化**——技能（K-*）留到模块实现期随脚本一起固化，避免引用空壳脚本的死 SOP
 - **D2 硬件能力路线** ✅ 已裁决（2026-08-27）：选 **CLI 优先**——pio/kicad-cli/wokwi CLI 全走 Bash；E-05（wokwi-mcp）/E-06（kicad-mcp）后置，仅当实测需要仿真会话级有状态交互时再评估引入；C-04 章程已按此路线编写
+- **D3 K-03 前置项处置** ✅ 已裁决并落地（2026-08-27，T2）：
+  1. metrics 并发风险 → **分片制**（角色写 workspace/<role>/metrics.json，S-09 汇总为顶层生成物，守卫 deliver 态拒写该生成物；三份章程同步，回归用例固化）
+  2. 角色身份级守卫 → **v1 不引入**（钩子负载无调用者身份；全局 active_role 破坏并发派发）。跨角色越界维持 L1 章程 + L3 git 审计；真实写冲突点已被分片制消除

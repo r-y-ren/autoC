@@ -21,13 +21,13 @@
         "properties": {
           "id": { "type": "string", "description": "与蓝图验收清单同 ID" },
           "category": { "enum": ["software", "hardware", "document", "manual"] },
-          "status": { "enum": ["pass", "fail", "pending_manual"] },
+          "status": { "enum": ["pass", "fail", "pending", "pending_manual"], "description": "pending=待 acceptor agent 核验；pending_manual=移交用户" },
           "evidence": { "type": "string", "description": "证据路径：日志/截图/录屏/仿真输出" },
           "failure_ticket": { "type": "string", "description": "fail 时生成的工单路径（路由回责任角色）" }
         }
       }
     },
-    "result": { "enum": ["pass", "fail", "pending_manual"] },
+    "result": { "enum": ["pass", "fail", "pending_agent", "pending_manual"] },
     "generated_at": { "type": "string" },
     "retry_state": {
       "type": "object",

@@ -4,7 +4,7 @@ description: 归档当前战役：workspace → archive/（只读+git tag），�
 
 # /archive —— 归档入口
 
-执行流程（K-05 技能与 archive_campaign.py 固化前按 DESIGN.md §3.5 手工编排）：
+执行流程（编排细节见 `.zcode/skills/archive-run/SKILL.md`；归档器 `scripts/verify/archive_campaign.py`）：
 
 1. 前置检查：`workspace/acceptance/` 存在 result=pass 的记录（或用户明确知晓 pending_manual 仍要求归档）
 2. `python scripts/guard/init_state.py --phase archive --by archive`

@@ -4,7 +4,7 @@ description: 触发验收节点：执行蓝图验收清单，失败工单路由�
 
 # /accept —— 验收入口
 
-执行流程（K-04 技能与 run_acceptance.py 固化前按 DESIGN.md §3.4 手工编排）：
+执行流程（编排细节见 `.zcode/skills/accept-run/SKILL.md`；执行器 `scripts/verify/run_acceptance.py`）：
 
 1. 前置检查：`workspace/blueprint.md` 存在且含 acceptance 清单
 2. `python scripts/guard/init_state.py --phase verify --by accept`

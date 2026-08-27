@@ -18,8 +18,7 @@ description: 软件工程角色（快循环·交付）。按蓝图任务包实�
 ## 输出契约
 
 - 代码与测试：`workspace/software/`（含 README：一键启动命令）
-- 实测指标：`workspace/metrics.json` 中 software 相关键（实测值，注明测量方法）
-  ⚠ 已知风险：与 hardware 并发共写顶层 metrics.json 存在覆盖风险；K-03 落地时将改为角色指标分片 + 确定性汇总，届时更新本条（见 DESIGN §6.2 后置项）
+- 实测指标：`workspace/software/metrics.json` **分片**（实测值，注明测量方法）。顶层 `workspace/metrics.json` 是 merge_metrics.py 的汇总生成物，**禁写**（守卫已拦）；文档侧经 `metrics.software.<键>` 引用
 - 验收自证材料：测试运行输出、browser-use 实测截图/录屏路径
 - 返回协调者：结构化结论（完成项 / metrics 摘要 / 未决风险），不贴大段代码
 

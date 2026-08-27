@@ -27,6 +27,8 @@ CASES = [
     ("deliver",  "workspace/software/app.py",      False, "deliver 放行 workspace/software/"),
     ("deliver",  "workspace/acceptance/r.json",    True,  "deliver 拒写验收区（角色边界）"),
     ("deliver",  "kb/tech/x.md",                   True,  "deliver 拒写 kb/"),
+    ("deliver",  "workspace/metrics.json",         True,  "deliver 拒写顶层 metrics.json（分片汇总生成物）"),
+    ("deliver",  "workspace/software/metrics.json", False, "deliver 放行角色指标分片"),
     ("verify",   "workspace/acceptance/r.json",    False, "verify 放行验收区"),
     ("verify",   "workspace/software/app.py",      True,  "verify 拒写工程区"),
     ("archive",  "workspace/software/app.py",      True,  "archive 态全拒（归档走脚本）"),

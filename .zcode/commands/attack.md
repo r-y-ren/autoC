@@ -6,7 +6,7 @@ description: 发起快循环：刷新 KB → 决策（对比矩阵/一鱼多吃/
 
 用法：`/attack <赛事ID或方向描述>`（省略参数时先给出建议赛道再让用户选）。
 
-执行流程（K-02 技能固化前按 DESIGN.md §3.2 手工编排）：
+执行流程（编排细节见 `.zcode/skills/strategy-gen/SKILL.md`）：
 
 1. 先触发一次慢循环增量（`/kb-sync` 的流程）确保决策基于最新 KB
 2. 读 `kb/INDEX.md` + `config/profile.yaml`（画像未填先提示用户）

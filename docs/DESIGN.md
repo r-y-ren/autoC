@@ -1,6 +1,7 @@
 # autoC — 竞赛情报与作品生成 Agent 框架：结构设计
 
-> 版本 v0.6（2026-08-27）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> 版本 v0.7（2026-08-27）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> v0.7 变更：T2 落地——S-02…S-06 脚本、K-01…K-07 技能、H-03 会话播报；K-03 前置项裁决（metrics 分片制已实现并 L2 强制；角色身份级守卫评估后不引入，理由见 §6.2 处置记录）；验收清单新增可选 cmd 字段。
 > v0.6 变更：T2 开工校准——①残留 `.zcode/subagents/` 全部修正为 `.zcode/agents/`；②Hardware 更名 Hardware Agent 并按 D2 裁决标注 CLI 路线；③§6.2 如实区分"L1 角色软边界 / L2 阶段硬边界"，角色身份级守卫与 metrics 并发风险列为 K-03 前置评估项。
 > v0.5 变更：按 Phase 0 实测校准——钩子注册落点为 `.zcode/config.json`（`hooks.events`，需 `enabled: true`）、子 agent 目录暂定 `.zcode/agents/`（首个章程编写时经 Settings → Subagents 实测确认）。
 > 各模块细节（信源清单、schema 字段、验收清单条目等）在逐模块讨论后补充为独立模块文档，本文不展开。
@@ -52,9 +53,9 @@
                     │
                     ▼
               Coordinator 按蓝图并发分发（文件契约为唯一交接物）：
-              ├── Software Agent ─► workspace/software/ ─► 沙箱编译 + 测试 ─► metrics.json
-              ├── Hardware Agent（CLI 路线）──► workspace/hardware/ ─► PlatformIO / Wokwi 验证 ─┤(并行)
-              └── (汇合点) Document Agent ◄── 消费工程产物 + metrics.json ─► 报告 + 答辩 PPT
+              ├── Software Agent ─► workspace/software/ ─► 编码 + 沙箱测试 ─► metrics 分片 ─┐
+              ├── Hardware Agent（CLI 路线）──► workspace/hardware/ ─► PlatformIO / Wokwi 验证 ─► metrics 分片 ─┤(并行)
+              └── (汇合点) merge_metrics.py 汇总 ─► Document Agent ◄── 消费工程产物 + metrics 汇总 ─► 报告 + 答辩 PPT
                     │
               [验收节点] ──不通过──► 失败工单路由回责任 agent 修复（唯一回路边，带熔断）
                     │ 通过
@@ -94,11 +95,11 @@
 - Coordinator（主 agent）按蓝图拆解为**任务包**，每个任务包 = 输入契约 + 输出契约 + 验收标准
 - **并发**：Software 与 Hardware 子 agent 并行；Document Agent 在汇合点后启动（消费前两者落盘的产物文件）
 - 各角色在各自 `workspace/<role>/` 目录内工作，Bash 沙箱内自验（编译 / 测试 / 仿真）
-- **实测数据契约**：工程侧产出 `workspace/metrics.json`（实测 FPS/损耗/成本等）；Document Agent 引用的一切性能数字**只能来自该文件**，禁止自行编造
+- **实测数据契约（分片制）**：各工程角色只写自己的 `workspace/<role>/metrics.json` 分片（实测值+测量方法）；`scripts/verify/merge_metrics.py` 确定性汇总为顶层 `workspace/metrics.json`（命名空间 `metrics.<role>.<键>`，角色禁写，守卫已拦）。Document Agent 引用的一切性能数字**只能来自汇总文件**，禁止自行编造
 
 ### 3.4 验收-修复节点（全自动，可升级人工）
 
-- `scripts/verify/run_acceptance.py` 逐项跑蓝图验收清单，产物写入 `workspace/acceptance/`：
+- `scripts/verify/run_acceptance.py` 逐项执行蓝图验收清单（**带 cmd 的项自动执行并存证据**；执行前先汇总 metrics 分片），产物写入 `workspace/acceptance/`：
   - 软件：一键启动、测试全过、browser-use 实测取证（截图/录屏）、真实数据端到端
   - 硬件：仿真（Wokwi）通过、设计文件/BOM/固件齐备；**物理项列为人工测试项**移交用户
   - 文档：结构完整性、数字与 metrics.json 一致性、格式校验
@@ -146,7 +147,7 @@ autoC/
 │   ├── strategy.md              # 决策阶段输出（对比矩阵 + 一鱼多吃路线）
 │   ├── blueprint.md             # ★ 唯一蓝图契约（schema 校验后方可确认）
 │   ├── JOURNAL.md               # 阶段流转日志（随 git 提交，状态可审计）
-│   ├── metrics.json             # 实测数据（Document Agent 性能数字唯一合法来源）
+│   ├── metrics.json             # 分片汇总生成物（merge_metrics.py 产出；角色禁写，分片在各角色目录）
 │   ├── software/                # Software Agent：代码 + 沙箱测试
 │   ├── hardware/                # Hardware Agent：BOM / 引脚表 / 固件
 │   ├── docs/                    # Document Agent：报告 + PPT 源码（Marp/Typst）
@@ -227,10 +228,10 @@ autoC/
 
 （交付阶段 kb/ 对所有角色只读；archive/ 仅 `archive_campaign.py` 可写。）
 
-**已知边界与后置项（进入 K-03 campaign-run 前必须重估）：**
+**已知边界与处置记录（K-03 前置项，T2 已裁决落地）：**
 
-1. **角色身份级守卫缺失**：守卫不识别 Scraper / Hunter / Software / Document 的调用者身份，同阶段内的跨角色越界目前依赖 L1 章程与 L3 git 审计。是否引入 agent identity 级守卫（如派发时在 `.flow/state.json` 登记 active_role + 钩子校验）在 K-03 设计时评估，不提前宣称已物理强制。
-2. **metrics.json 并发覆盖风险**：software 与 hardware 两份章程均允许写顶层 `workspace/metrics.json`，并发交付时存在互相覆盖风险。K-03 落地时改为**角色指标分片（各角色写各自目录下的 metrics 分片）+ 确定性汇总脚本合并**，并同步更新两份章程与 blueprint 契约。
+1. **角色身份级守卫——评估后不引入（v1）**：钩子负载不含调用者身份，全局 `active_role` 又会破坏 software/hardware 的并发派发。同阶段跨角色越界的保障维持 L1 章程 + L3 git 审计；唯一存在真实写冲突的文件已由下条消除，其余目录冲突风险随分片制大幅降低。
+2. **metrics.json 并发覆盖风险——已解决（分片制）**：角色只写 `workspace/<role>/metrics.json` 分片，`scripts/verify/merge_metrics.py` 确定性汇总为顶层 `workspace/metrics.json`（`metrics.<role>.<键>` 命名空间）。守卫在 deliver 阶段对该生成物拒写（该文件的 L2 强制已生效）；software/hardware/document 三份章程已同步，回归用例已固化。
 
 ### 6.3 客户端自定义能力使用清单
 

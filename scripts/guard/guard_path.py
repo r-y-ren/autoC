@@ -86,7 +86,9 @@ def decide(rel: str, state: dict | None) -> tuple[bool, str]:
         "idle": {"allow": ["*"]},
         "collect": {"allow": ["kb"]},
         "decide": {"allow": ["workspace/strategy.md", "workspace/blueprint.md", "workspace/JOURNAL.md"]},
-        "deliver": {"allow": ["workspace"], "deny": ["workspace/acceptance"]},
+        # workspace/metrics.json 是分片汇总生成物（merge_metrics.py 产出），角色禁写：
+        # 角色只写 workspace/<role>/metrics.json 分片（K-03 前置项裁决，DESIGN §6.2）
+        "deliver": {"allow": ["workspace"], "deny": ["workspace/acceptance", "workspace/metrics.json"]},
         "verify": {"allow": ["workspace/acceptance"]},
         "archive": {"allow": []},
     }.get(phase)

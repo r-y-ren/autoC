@@ -18,7 +18,7 @@ description: 文档角色（快循环·交付）。汇合软件/硬件产物，�
 ## 输出契约
 
 - `workspace/docs/`：报告源文件与 PDF、PPT 源文件与 pptx、申报书等格式化文档
-- 文档内一切性能数字**只能引用 metrics.json 已有键**，并在文内注明来源键名
+- 文档内一切性能数字**只能引用 `workspace/metrics.json`（分片汇总生成物）已有键**，引用形如 `metrics.software.fps`、`metrics.hardware.power_w`，并在文内注明来源键名
 - 人机分工记录（合规留痕）写入报告附录
 - 返回协调者：结构化结论（文档清单 / 缺失输入项）
 

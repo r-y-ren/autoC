@@ -4,7 +4,7 @@ description: 手动触发慢循环：按方向配置增量维护 KB-1/KB-2（技
 
 # /kb-sync —— 慢循环入口
 
-执行流程（K-01 技能固化前按 DESIGN.md §3.1 手工编排，固化后由技能承载）：
+执行流程（编排细节见 `.zcode/skills/kb-sync/SKILL.md`）：
 
 1. 读取 `config/directions/*.yaml`（无启用方向时先询问用户并按 `_template.yaml` 创建）
 2. `python scripts/guard/init_state.py --phase collect --by kb-sync`
