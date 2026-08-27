@@ -79,6 +79,8 @@ def preserve_run_log() -> str:
             continue
         if s.startswith("|"):
             table.append(s)
+        elif s.startswith("<!--"):
+            continue  # 表头与数据行间的 HTML 注释（T4.3 成本列说明）不终止收集
         elif table and s:
             break  # 表格结束（遇到非表格正文或新章节）
     return "\n".join(table[2:])  # 跳过表头与分隔行，其余全部保留

@@ -38,7 +38,7 @@
 
 | 信源 | 类型 | 覆盖 | 抓取方式 | 信源等级 |
 |---|---|---|---|---|
-| Kaggle（kaggle.com/competitions） | 官方 | 数据竞赛：在赛/往赛/奖金/评测指标 | WebFetch（页面公开；API 需 key=E-08 可选） | 官方 |
+| Kaggle（kaggle.com/competitions） | 官方 | 数据竞赛：在赛/往赛/奖金/评测指标 | WebFetch（页面公开；API 需 key=E-08 可选）；**SPA 绕行**：官方内容接口 `kaggle.com/api/i/competitions.PageService/ListPages?competitionId=<id>` 匿名可访问，赛 ID 从 SSR 壳 og:image URL 提取，可取 rules/evaluation/timeline/prizes 全文（2026-08-28 分片 A 实证；Timeline 页 deadline 偶为模板变量需回退渲染抓取） | 官方 |
 | devpost（devpost.com/hackathons） | 实例平台 | 全球黑客松：赛程/获奖项目+代码+评委评语公开 | WebFetch（JS 渲染页用 browser-use） | 平台一手 |
 | MLH（mlh.io/seasons） | 组织方 | 北美黑客松季历 | WebFetch | 平台一手 |
 | 阿里天池（tianchi.aliyun.com/competition） | 官方 | 国内数据竞赛：赛题/奖金/榜单 | WebFetch（公开页） | 官方 |

@@ -131,7 +131,7 @@ def _fm_ok(text: str) -> tuple[bool, dict]:
 
 def check_structure(path: Path) -> tuple[bool, str]:
     """返回 (结构完好, 说明)。目标：winners/<年>.md、patterns.md、tech/_surveys/*.md。"""
-    rel = path.relative_to(ROOT).as_posix().lower()
+    rel = path.resolve().relative_to(ROOT).as_posix().lower()
     text = path.read_text(encoding="utf-8", errors="replace")
     ok, fm = _fm_ok(text)
     if not ok:

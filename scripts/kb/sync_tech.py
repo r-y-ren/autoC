@@ -110,10 +110,12 @@ def fetch_arxiv(query: str, days: int, max_items: int) -> list[dict]:
 
 def fetch_github(query: str, days: int, max_items: int, min_stars: int) -> tuple[list[dict], str]:
     since = (datetime.date.today() - datetime.timedelta(days=days)).isoformat()
-    q = f"{query} created:>={since} stars:>={min_stars}"
+    # 行内 "stars:>=" 限定词在部分 gh 版本被静默忽略（2026-08-28 实证返回 0-star 仓库），
+    # 必须走 --stars/--created 旗标，且结果侧再过滤一次防回归
     try:
         proc = subprocess.run(
-            ["gh", "search", "repos", q, "--limit", str(max_items), "--json",
+            ["gh", "search", "repos", query, "--stars", f">={min_stars}", "--created", f">={since}",
+             "--limit", str(max_items), "--json",
              "fullName,description,stargazersCount,url,createdAt,language"],
             capture_output=True, text=True, timeout=60)
     except FileNotFoundError:
@@ -124,6 +126,8 @@ def fetch_github(query: str, days: int, max_items: int, min_stars: int) -> tuple
     for r in json.loads(proc.stdout or "[]"):
         full = r.get("fullName") or ""
         if not full:
+            continue
+        if (r.get("stargazersCount") or 0) < min_stars:
             continue
         items.append({
             "id": "gh-" + full.replace("/", "_"),
