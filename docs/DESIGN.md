@@ -78,13 +78,13 @@
 
 ### 3.1 慢循环：知识库维护（全自动）
 
-- **触发**：cron（默认每日轻量增量 + 每周深度评估）＋ 快循环启动时强制刷新
+- **触发**：cron（D7 合并节奏：每 3 天一次全量深度跑批=增量+深度）＋ 快循环启动时强制刷新；K-01 保留为手动轻量补偿入口（/kb-sync）
 - **执行**：Scraper 与 Hunter 两个后台子 agent 并发；方向级信源配置在 `config/directions/`
 - **写入语义**：条目级增量 merge（`last_verified` + 来源记录），绝不整体重写；原始快照落 `kb/raw/`（不进 git 主干）
 - **质量闸**：lint_kb 校验 frontmatter/引用完整性（schema 在 `config/templates/`）→ 不合格进 quarantine；所有分析基于本次实抓文档、逐条带引用 URL + 抓取日期
 - **候选队列生命周期（T2.1 裁决）**：活跃队列 = `kb/raw/candidates/*.yaml`（仅顶层），K-01 消费完毕移入 `candidates/processed/`（不参与下轮去重）；Hunter 拒绝的候选记入 `kb/tech/.rejections.yaml` 台账（id/reason/stars/decided），sync_tech 对台账候选去重、**stars 达快照 ×2 自动放行重评**（科技信号随时间增长的核心场景）
 - **产物**：KB-1（赛事信息 + 历年获奖解构 + 模式库）、KB-2（技术卡片：是什么/用途/优势/成熟度/比赛映射）、聚合索引 `kb/INDEX.md`
-- **交付形式（D6）**：源库（kb/）面向 agent 检索；人读交付物为 `export/digest-*.md` 方向情报简报——S-15 从条目层纯投影生成（只重组不新增事实），周深度 cron 末尾刷新、月末最后一个周六转正式版
+- **交付形式（D6）**：源库（kb/）面向 agent 检索；人读交付物为 `export/digest-*.md` 方向情报简报——S-15 从条目层纯投影生成（只重组不新增事实），每 3 天跑批末尾刷新草稿、当月最后一次跑批（下一次跨月）自动转正式版
 
 ### 3.2 决策阶段（交互）
 

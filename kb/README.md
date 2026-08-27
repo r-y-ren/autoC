@@ -36,5 +36,5 @@ competitions/<id>/
 
 ## 维护机制
 
-每日 08:30 轻量增量 + 周六 09:00 深度评估（双 cron）；跑批记录见 `INDEX.md` 跑批表（append-only）；
+每 3 天 09:00 全量深度跑批（D7 合并节奏：增量拉取 + 存量深度 + 简报刷新，单 cron）；跑批记录见 `INDEX.md` 跑批表（append-only）；
 流程 SOP 见 `.zcode/skills/kb-sync`（K-01）与 `kb-deep-sync`（K-08）。

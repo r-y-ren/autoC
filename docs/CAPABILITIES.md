@@ -105,7 +105,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | K-05 | archive-run | archive 态→S-06→workspace 复位→idle | ✅ T2 已落地 |
 | K-06 | marp-deck | 模板+metrics 汇总→答辩 PPT（marp-cli 导出 pptx） | ✅ T2 已落地 |
 | K-07 | typst-report | 模板+metrics 汇总→报告 PDF（typst） | ✅ T2 已落地 |
-| K-08 | kb-deep-sync | 每周深度评估：老化条目重验/拒绝台账复核/quarantine 清理/winners-patterns 推进 | ✅ T3-c 本轮落地 |
+| K-08 | kb-deep-sync | 慢循环全量深度跑批（D7 每 3 天）：增量入库+老化重验(12d)/拒绝台账复核/quarantine 清理/winners-patterns 推进/简报导出 | ✅ T3-c 落地，T3-d 按 D7 合并节奏改写 |
 
 ### 3.5 命令（.zcode/commands/）——用户入口
 
@@ -167,4 +167,6 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 - **D6 知识库交付层裁决** ✅ 已裁决（2026-08-27，T3-d）：
   1. 读者 → **团队自用**（决策输入口径：直接给结论与证据链，合规红线照实写；导览见 kb/README.md）
   2. 形式 → **源库不动，导出层纯投影**——export/digest-<方向>-<月>.md 方向情报简报（S-15 生成：赛事日历倒计时/技术雷达速览/patterns 第五节/合规提醒）；每条结论回链条目 ID，**分析增量只允许发生在条目层**，导出物是纯重组
-  3. 节奏 → 挂周深度 cron 末尾刷新草稿，**月末最后一个周六自动转正式版**（判定内置于 S-15）；深度赛事攻略包（Typst 编译）待 patterns 覆盖 ≥2 赛后按需启动
+  3. 节奏 → ~~挂周深度 cron~~（D7 修订：每 3 天跑批刷新草稿，当月最后一次跑批自动转正式版，判定内置 S-15 `--interval-days`）；深度赛事攻略包（Typst 编译）待 patterns 覆盖 ≥2 赛后按需启动
+
+- **D7 慢循环调度合并** ✅ 已裁决（2026-08-27，用户指令）：原"每日轻量 + 每周深度"双 cron 合并为**每 3 天 09:00 一次全量深度**（automation-617d9635）。配套：①K-08 改写为全量 SOP（含增量拉取步骤；K-01 保留为手动轻量补偿入口）；②老化重验阈值 14→12 天对齐节奏；③S-15 正式版判定由"最后一个周六"改为"当月最后一次跑批（today+interval 跨月）"，新增 `--interval-days`（默认 3）

@@ -10,8 +10,9 @@
   - 技术雷达速览（近期发表卡片 + 比赛映射）
   - 模式库要点（patterns.md 第五节"对 autoC 战役的启示"整段引用）
   - 合规提醒（各赛 AI 政策摘要）
-用法：python scripts/kb/export_digest.py [--direction 名称] [--formal] [--selftest]
-版本判定：缺省自动——当周的下一个周六已跨月 ⇒ 本周为当月最后一个周六 ⇒ 正式版。
+用法：python scripts/kb/export_digest.py [--direction 名称] [--formal] [--interval-days 3] [--selftest]
+版本判定：缺省自动——按跑批节奏（--interval-days，默认 3，对齐每 3 天 cron）推算，
+下一次跑批已跨月 ⇒ 本次为当月最后一次跑批 ⇒ 正式版。
 """
 
 from __future__ import annotations
@@ -60,11 +61,16 @@ def days_until(date_str: str, today: datetime.date) -> int | None:
 
 
 def is_last_saturday(today: datetime.date) -> bool:
-    """今天须为周六，且下一个周六已跨月 ⇒ 本月最后一个周六（简报仅周六生成，判定仅此日有效）。"""
+    """兼容保留：今天须为周六且下一周六跨月（旧的周六节奏判定）。"""
     if today.weekday() != 5:
         return False
     nxt = today + datetime.timedelta(days=7)
     return nxt.month != today.month
+
+
+def is_last_run_of_month(today: datetime.date, interval_days: int) -> bool:
+    """下一次跑批（today + interval）已跨月 ⇒ 本次为当月最后一次跑批（D7 节奏判定）。"""
+    return (today + datetime.timedelta(days=interval_days)).month != today.month
 
 
 def extract_section_five(text: str) -> str:
@@ -93,7 +99,7 @@ def build_digest(direction: str, today: datetime.date, formal: bool) -> str:
             tech.append(fm)
 
     lines: list[str] = []
-    tag = "正式版（月度）" if formal else "草稿（周更）"
+    tag = "正式版（月度）" if formal else "草稿（每3天跑批刷新）"
     lines += [f"# 方向情报简报：{direction} —— {today.strftime('%Y-%m')}",
               "",
               f"> 版本：{tag}｜生成：{today.isoformat()}｜来源：kb/ 条目层纯投影（D6），"
@@ -182,10 +188,11 @@ def selftest() -> int:
             out = build_digest("测试方向", today, formal=False)
             ok = ("演示赛" in out and "2999-01-01" in out and "允许使用但须声明" in out
                   and "纯投影" in out and "暂无已解构 patterns" in out)
-            # 月末判定：08-22（周六，下个周六同月）→草稿日；08-29（周六，下个周六跨入9月）→正式版日
-            ok = ok and not is_last_saturday(datetime.date(2026, 8, 22)) \
-                and is_last_saturday(datetime.date(2026, 8, 29)) \
-                and not is_last_saturday(datetime.date(2026, 8, 27))
+            # 月末判定（D7 每3天节奏，与星期无关）：08-29（周六，+3 跨月）与 08-30（周日，+3 跨月）
+            # 都应为正式版日；08-27（+3=08-30 同月）为草稿日——证明判定只看跨月不看星期几
+            ok = ok and is_last_run_of_month(datetime.date(2026, 8, 29), 3) \
+                and is_last_run_of_month(datetime.date(2026, 8, 30), 3) \
+                and not is_last_run_of_month(datetime.date(2026, 8, 27), 3)
             print(f"[export_digest][selftest] {'PASS' if ok else 'FAIL'} 简报聚合与月末判定")
             return 0 if ok else 1
         finally:
@@ -195,7 +202,9 @@ def selftest() -> int:
 def main() -> int:
     ap = argparse.ArgumentParser(description="方向情报简报导出（D6 交付层）")
     ap.add_argument("--direction", default=None, help="限定方向（缺省=全部启用方向各一份）")
-    ap.add_argument("--formal", action="store_true", help="强制正式版（缺省按月末周六自动判定）")
+    ap.add_argument("--formal", action="store_true", help="强制正式版（缺省按月末最后一次跑批自动判定）")
+    ap.add_argument("--interval-days", type=int, default=3,
+                    help="跑批间隔天数（跨月判定用，对齐 cron 节奏；D7 合并为每 3 天）")
     ap.add_argument("--selftest", action="store_true")
     args = ap.parse_args()
 
@@ -217,7 +226,7 @@ def main() -> int:
         return 2
 
     today = datetime.date.today()
-    formal = args.formal or is_last_saturday(today)
+    formal = args.formal or is_last_run_of_month(today, args.interval_days)
     outdir = ROOT / "export"
     outdir.mkdir(exist_ok=True)
     for d in names:
