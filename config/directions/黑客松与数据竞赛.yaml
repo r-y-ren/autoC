@@ -1,0 +1,25 @@
+# 方向：黑客松与数据竞赛（T4 批次2 泛化验证方向，2026-08-27 经 /discover 冷启动）
+schema_version: 1
+
+direction: "黑客松与数据竞赛"
+
+scopes: ["编程/黑客松"]
+
+keywords: [hackathon, datathon, data competition, 黑客松, 数据竞赛, kaggle, algorithm competition, 创新挑战赛]
+
+sources:
+  api: []          # Kaggle API（E-08）启用后回填
+  web:             # 2026-08-27 冷启动实抓确认的锚点（增量快照基线）
+    - {name: Kaggle 竞赛列表, url: "https://www.kaggle.com/competitions", cadence: weekly}
+    - {name: devpost 黑客松列表, url: "https://devpost.com/hackathons", cadence: weekly}
+    - {name: MLH 赛季日历, url: "https://www.mlh.com/seasons/2027/events", cadence: monthly}
+    - {name: 天池竞赛列表, url: "https://tianchi.aliyun.com/competition/", cadence: weekly}
+    - {name: 和鲸竞赛公开API, url: "https://www.heywhale.com/v2/api/competitions?page=1&perPage=10", cadence: weekly}
+  rss: []
+  wechat: []       # 黑客松类公众号非主渠道；挑战杯类方向启用时再裁决 RSSHub
+
+tech_radar:
+  fields: ["LLM agents", "retrieval augmented generation", "on-device inference"]
+  min_signal:
+    stars: 50
+    citations_90d: 0

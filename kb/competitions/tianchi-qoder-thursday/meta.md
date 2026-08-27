@@ -1,0 +1,113 @@
+---
+id: tianchi-qoder-thursday
+name: Q力星期四（Qoder码力星期四）系列赛（天池·AI大模型赛）
+tier: 编程/黑客松
+directions:
+  - 黑客松与数据竞赛
+status: active
+organizer: 阿里云天池平台 × Qoder（冠名联合；各期另联合主题方，如 8月期×小鹏汽车、OPC 期）
+award_levels:
+  - name: 一等奖（单期 1 名）
+    count_or_ratio: 20,000 Qoder Credits + 阿里云定制背包 1 个
+  - name: 二等奖（单期 1 名）
+    count_or_ratio: 10,000 Qoder Credits + 阿里云定制背包 1 个
+  - name: 三等奖（单期 5 名）
+    count_or_ratio: 阿里云定制背包 1 个
+  - name: 系列级奖池（口径待核）
+    count_or_ratio: 系列卡显示 Bonus ¥80,000
+    note: 实抓各期奖励均为 Qoder Credits+实物，未见现金奖；¥80,000 语义（单期/系列累计）未核实
+key_dates:
+  系列赛期:
+    date: 2026-07-16 至 2027-07-31
+    verified: false
+  7月期·世界杯冠军预测Agent（532498）报名及提交:
+    date: 2026-07-02 00:00 至 2026-07-16 23:59
+    verified: true
+  7月期·评选与结果公布:
+    date: 评选 2026-07-17 至 07-19；结果公布 2026-07-20
+    verified: true
+  OPC先锋创新挑战赛期（532502）初赛:
+    date: 2026-07-09 至 2026-08-10
+    verified: true
+  8月期·小鹏AI出行Agent（532505）报名及提交:
+    date: 2026-07-23 00:00 至 2026-08-13 23:59
+    verified: true
+  8月期·评选与结果公布:
+    date: 评选 2026-08-14 至 08-19；结果公布 2026-08-20
+    verified: true
+deliverables:
+  - 作品发布于当期赛事论坛，题目以"Qoder码力星期四·XXX"开头（世界杯/小鹏期原文要求）
+  - Agent 公开可访问（公开地址或 3-5 分钟 Demo 视频）
+  - 作品介绍（STAR 结构）、技术方案报告 PDF（≤10 页）、完整可运行代码与依赖说明（小鹏期）
+  - ≥4 个典型场景运行效果展示（小鹏期：车主自驾×2 + Robotaxi×2）
+  - Qoder/QoderWork 工作界面截图与对话记录（世界杯期为要求项；小鹏期为加分项）
+ai_policy:
+  summary: >-
+    系列由阿里 AI 编程工具 Qoder 冠名，官方推荐并鼓励使用 AI 编程工具与阿里云技术栈，无任何 AI 使用限制或披露要求。小鹏期原文："Qoder 是本次赛事推荐的 AI 编程开发工具"；"鼓励使用阿里云全栈（阿里云百炼调用千问大模型 + 函数计算托管 Agent + OSS 存储静态资源），但参赛者也可自选其他开源框架（如 LangChain、LangGraph、AutoGen 等）"；"开发过程中使用 Qoder/QoderWork 的截图和对话记录可作为额外加分项"。合规底线：原创、无侵权、抄袭取消资格；受天池通用参赛协议约束——比赛期间禁公开分享相关数据/模型/代码（赛后可自选公开）；参赛成果 IP 归参赛者但授予阿里云非排他、全球、永久、免费、可再许可使用权；世界杯期明示"本赛题下，参赛者提交的所有成果，大赛举办方有权将通过开源平台进行开源"。阿里和蚂蚁员工可参赛排名但不参与评奖。
+  url: https://tianchi.aliyun.com/competition/entrance/532505/introduction
+  checked: "2026-08-27"
+credibility: 官网
+last_verified: "2026-08-27"
+sources:
+  - url: https://tianchi.aliyun.com/competition/
+    title: 天池比赛列表页（Q力星期四系列卡 532514：¥80000、2026.07.16~2027.07.31、471队、"每周四晚上8点直播、发布主题任务、评奖发奖"；及各期卡片）
+    accessed: "2026-08-27"
+  - url: https://tianchi.aliyun.com/competition/entrance/532514/introduction
+    title: Q力星期四系列入口页（未登录态重定向至列表页，详情主体未能渲染；系列卡元数据经重定向落地页捕获）
+    accessed: "2026-08-27"
+  - url: https://tianchi.aliyun.com/competition/entrance/532498/introduction
+    title: 7月期·世界杯冠军预测Agent开发挑战赛详情页（赛程/Qoder工具要求/奖金/规则原文）
+    accessed: "2026-08-27"
+  - url: https://tianchi.aliyun.com/competition/entrance/532505/introduction
+    title: 8月期·小鹏AI出行服务编排Agent挑战赛详情页（赛程/Qoder推荐原文/评分/奖励/协议原文）
+    accessed: "2026-08-27"
+  - url: https://tianchi.aliyun.com/competition/entrance/532502/introduction
+    title: OPC先锋创新挑战赛期详情页（所属专题赛 Q力星期四、初赛 7.9-8.10）
+    accessed: "2026-08-27"
+  - url: https://tianchi.aliyun.com/forum/post/1063958
+    title: 参赛者提交样例帖（官网论坛用户帖·旁证信源，仅佐证提交格式与评审维度，不作主信源）
+    accessed: "2026-08-27"
+---
+
+# Q力星期四（Qoder码力星期四）系列赛（天池·AI大模型赛）
+
+以下正文全部基于 2026-08-27 实抓页面（来源编号对应 frontmatter `sources`；快照存 `kb/raw/tianchi-qoder-thursday/`）。
+
+## 系列定位与机制
+
+- 天池平台 AI 大模型赛专题系列（详情页"所属专题赛：Q力星期四"标注，来源[3][4][5]），系列卡入口 532514（来源[1][2]）。
+- 官方机制原文（系列卡简介，来源[1]）："Build an AI agent in one hour…每周四晚上8点直播、发布主题任务、评奖发奖：'Q力星期四'正式起航，快来开启AI编程之旅吧！"
+- **与任务包线索的出入**："每月一期"表述未获原文支持——官方口径为"每周四晚 8 点直播+主题任务评奖"；实抓各期窗口约 2-4 周、滚动进行（7月期 7.2-7.20、OPC 期初赛 7.9-8.10、8月期 7.23-8.20）。
+
+## 已实抓期次（2026-08-27 时点）
+
+| 期次 | 入口 | 窗口 | 状态 | 奖励 |
+|---|---|---|---|---|
+| 世界杯冠军预测Agent开发挑战赛（7月期） | 532498 | 报名 7.2-7.16，公布 7.20 | Ended | 20000/10000 Credits+背包 |
+| OPC 先锋创新挑战赛 | 532502 | 初赛 7.9-8.10 | Ended（初赛完） | 免费Credits（细则未抓到） |
+| 小鹏AI出行服务编排Agent挑战赛（8月期） | 532505 | 报名 7.23-8.13，公布 8.20 | Ended | 20000/10000 Credits+背包 |
+
+## 奖励结构
+
+- 单期标准结构（世界杯/小鹏两期同构，来源[3][4]）：一等奖 1 名（20,000 Qoder Credits+背包）、二等奖 1 名（10,000 Credits+背包）、三等奖 5 名（背包）。
+- 系列卡显示 Bonus ¥80,000（来源[1]）——与各期实抓的 Credits+实物奖励口径不一致，"¥80,000 单期奖池"的任务包线索未获期级页面支持，语义待核（可能为系列累计或含其他期）。
+
+## AI 政策（Qoder/AI 编程工具规则原文）
+
+- 小鹏期（来源[4]）："Qoder 是本次赛事推荐的 AI 编程开发工具"；"鼓励使用阿里云全栈（阿里云百炼调用千问大模型 + 函数计算托管 Agent + OSS 存储静态资源），但参赛者也可自选其他开源框架（如 LangChain、LangGraph、AutoGen 等）"；Qoder 截图为加分项。
+- 世界杯期（来源[3]）："赛事AI开发工具：Qoder CLI；Qoder Desktop；Qoder JetBrains 插件等"；提交要求含"有完整的 Qoder/Qoderwork 工作界面截图和对话结果"（该期为要求项而非加分项）。
+- 无任何 AI 使用限制/披露条款；IP 与开源条款见 frontmatter ai_policy.summary（世界杯期"举办方有权将成果通过开源平台开源"条款对作品传播策略有实质影响：作品默认可被主办方开源）。
+
+## 信源与核验说明
+
+- 信源等级：来源[1]-[5] 为阿里云天池官网页面；来源[6] 为官网论坛用户帖（旁证，已降级标注）。整体取"官网"。
+- 系列详情页（532514）在未登录态无法渲染（webReader 重定向至列表页、WebFetch 登录墙，两个解析器各试 1 次共 2 次尝试），系列级元数据以列表卡为唯一来源 → 系列赛期 verified: false。
+- 列表卡片数据与详情页存在日期/队伍数互换错位（世界杯卡 7.23-8.20/66队 vs 详情 7.2-7.20/Team 113；小鹏卡 8.7-8.27/119队 vs 详情 7.23-8.13/Team 66），已判定卡片错位、详情页为准，冲突记录存快照。
+
+## 待办
+
+1. 532514 系列详情页待登录态或公告渠道补抓（系列期、¥80,000 口径、"每月一期 vs 每周四"表述复核）。
+2. OPC 期（532502）奖励细则与完整赛程未抓到，待补。
+3. 9月及以后期次日历待按"每周四"节奏跟踪（下一期预计 9 月上旬开启报名）。
+4. 已结束各期获奖名单/优秀作品（论坛帖+公布页）未采集，为 winners/ 首选线索。
+5. patterns.md 本次未建（任务限只建 meta）；该系列"1小时Agent+论坛提交+Credits奖励"模式值得提炼。
