@@ -2,6 +2,7 @@
 id: arxiv-2608.18675
 name: "An Empirical Benchmark of Deep Time-Series Models for Smart Meter Energy Forecasting"
 field: [时序预测, 机器学习, 实证基准]
+directions: [数模与时序预测]
 published: "2026-08-19"
 maturity: paper
 signal:

@@ -2,6 +2,7 @@
 id: arxiv-2608.23855
 name: "ICI-Time: In-Context Inpainting for Time Series Forecasting"
 field: [时序预测, 机器学习, 跨模态学习]
+directions: [数模与时序预测]
 published: "2026-08-24"
 maturity: paper
 signal:

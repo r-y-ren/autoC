@@ -230,6 +230,7 @@ def main() -> int:
                 warnings.append(f"github[{field}] {w}")
             for c in got + got_gh:
                 c["suggested_fields"] = [field]
+                c.setdefault("directions", []).append(cfg["direction"])  # 方向归属（tech-card.directions 源）
             candidates += got + got_gh
 
     fresh: dict[str, dict] = {}
@@ -243,10 +244,13 @@ def main() -> int:
             continue
         if rej:
             re_eval += 1
-        if cid in fresh:  # 多 field 命中同一候选 → 合并 suggested_fields
+        if cid in fresh:  # 多 field/多方向命中同一候选 → 合并 suggested_fields 与 directions
             for f in c["suggested_fields"]:
                 if f not in fresh[cid]["suggested_fields"]:
                     fresh[cid]["suggested_fields"].append(f)
+            for d in c.get("directions") or []:
+                if d not in fresh[cid].get("directions", []):
+                    fresh[cid].setdefault("directions", []).append(d)
         else:
             fresh[cid] = c
     fresh_list = list(fresh.values())

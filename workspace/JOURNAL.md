@@ -10,3 +10,4 @@
 | 2026-08-27 20:15 | idle | T3-d 能力收口：硬件三件套安装冒烟（pio6.1.19/kicad-cli10.0.5/openscad）；S-15 简报导出层 + 首份简报；K-01/K-08 预检断言；验收 cmd 模板库；D6 交付层裁决 | 导出层纯投影上线 |
 | 2026-08-27 21:00 | idle | D7 调度合并：双 cron → 每3天全量深度（617d9635）；gh 登录验证生效；S-15 正式版判定改跨月节奏；K-08 改写全量 SOP；老化阈值 14→12 天 | 单 cron 节奏上线 |
 | 2026-08-27 22:15 | idle | T3-e：profile.yaml 落盘（§8-2 关闭）；wokwi-cli 安装+断言冒烟通过（官方件+自建 ESP32；diagram 三坑固化进模板）；D8 EDA 评估（EDA MCP 不引入、E-13 PIC 工具链登记、wokwi-cli mcp 备而不启用） | 能力层对用户侧输入全部就绪 |
+| 2026-08-27 20:30 | idle | D9 审查遗留项闭合：retry.max 实时同步(场景E)/same_host限速落脚本/tech-card directions字段+6卡回填+简报方向过滤/export_digest 2处措辞残留 | 回归全绿(16/12/6/4/index/digest) |

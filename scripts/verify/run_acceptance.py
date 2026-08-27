@@ -57,26 +57,31 @@ def git_ref() -> str:
         return "n/a"
 
 
-def default_retry_max() -> int:
-    """retry.max 的单一事实来源是 config/budget.yaml（circuit_breaker.repair_max_retries）。"""
+def default_retry_max() -> int | None:
+    """retry.max 的单一事实来源是 config/budget.yaml（circuit_breaker.repair_max_retries）。
+    budget 不可读时返回 None，由调用方兜底，不覆盖已有值。"""
     try:
         import yaml
         cfg = yaml.safe_load((ROOT / "config" / "budget.yaml").read_text(encoding="utf-8"))
         return int((((cfg or {}) or {}).get("circuit_breaker") or {}).get("repair_max_retries"))
     except Exception:  # noqa: BLE001
-        return 3
+        return None
 
 
 def read_retry() -> dict:
     try:
         st = json.loads(STATE.read_text(encoding="utf-8"))
         retry = st.get("retry") or {}
-        retry.setdefault("count", 0)
-        retry.setdefault("max", default_retry_max())
-        retry.setdefault("tripped", False)
-        return retry
     except Exception:  # noqa: BLE001
-        return {"count": 0, "max": default_retry_max(), "tripped": False}
+        retry = {}
+    retry.setdefault("count", 0)
+    # 实时同步（T-audit 备忘项闭合）：中途修改 budget 立即生效，不沿用旧快照
+    live = default_retry_max()
+    if live is not None:
+        retry["max"] = live
+    retry.setdefault("max", 3)
+    retry.setdefault("tripped", False)
+    return retry
 
 
 def write_retry(retry: dict) -> None:

@@ -19,6 +19,7 @@ import html
 import os
 import re
 import sys
+import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -87,6 +88,16 @@ def selftest() -> int:
     return 0 if ok else 1
 
 
+def same_host_interval() -> float:
+    """同主机抓取间隔（秒），读 budget.yaml → rate_limit.same_host_interval_ms（落脚本，T-audit 项）。"""
+    try:
+        import yaml
+        cfg = yaml.safe_load((ROOT / "config" / "budget.yaml").read_text(encoding="utf-8"))
+        return float((((cfg or {}) or {}).get("rate_limit") or {}).get("same_host_interval_ms") or 0) / 1000.0
+    except Exception:  # noqa: BLE001
+        return 0.0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="赛事信源快照与候选提取")
     ap.add_argument("--direction", default=None)
@@ -108,22 +119,30 @@ def main() -> int:
     warnings: list[str] = []
     seen_urls: set[str] = set()
 
+    interval = same_host_interval()
+    last_hit: dict[str, float] = {}
     for cfg in cfgs:
         keywords = list(cfg.get("keywords") or []) + DEFAULT_KEYWORDS
         for src in (cfg.get("sources") or {}).get("web") or []:
             url = src.get("url")
             if not url:
                 continue
+            host = urllib.parse.urlparse(url).netloc
+            wait = last_hit.get(host, 0.0) + interval - time.time()
+            if wait > 0:
+                time.sleep(wait)
             try:
                 page = fetch(url)
             except Exception as e:  # noqa: BLE001
                 warnings.append(f"{url} 抓取失败: {e}")
+                last_hit[host] = time.time()
                 continue
-            host = urllib.parse.urlparse(url).netloc.replace(":", "_")
+            last_hit[host] = time.time()
+            host_file = host.replace(":", "_")
             digest = hashlib.md5(url.encode()).hexdigest()[:8]
             if not args.dry_run:
                 snap_dir.mkdir(parents=True, exist_ok=True)
-                (snap_dir / f"{today}_{host}_{digest}.html").write_text(page, encoding="utf-8")
+                (snap_dir / f"{today}_{host_file}_{digest}.html").write_text(page, encoding="utf-8")
             for c in extract_candidates(page, url, keywords):
                 if c["url"] in seen_urls:
                     continue

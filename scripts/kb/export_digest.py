@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """S-15 方向情报简报导出（export_digest）。
 
-知识库交付层（D6 裁决：读者=自用·团队决策输入；周深度 cron 末尾刷新，月末最后一个
-周六转正式版）。**只重组不新增**：一切数字与结论来自条目层，导出物逐条回链条目 ID；
+知识库交付层（D6 裁决：读者=自用·团队决策输入；每 3 天跑批末尾刷新，当月最后一次
+跑批转正式版，D7 节奏）。**只重组不新增**：一切数字与结论来自条目层，导出物逐条回链条目 ID；
 分析增量只允许发生在 kb/ 条目层，本脚本是纯投影。
 
 产出：export/digest-<方向>-<YYYY-MM>.md
@@ -130,11 +130,13 @@ def build_digest(direction: str, today: datetime.date, formal: bool) -> str:
         lines.append("")
 
     # ── 技术雷达 ──
-    recent = [t for t in tech if days_until(t.get("published", ""), today) is not None
+    # 技术雷达：按方向过滤（tech-card.directions；旧卡未回填前不会出现在方向简报中）
+    dir_tech = [t for t in tech if direction in (t.get("directions") or [])]
+    recent = [t for t in dir_tech if days_until(t.get("published", ""), today) is not None
               and -60 <= days_until(t.get("published", ""), today) <= 60]
-    lines += [f"## 技术雷达速览（库内共 {len(tech)} 卡，近 60 天发表 {len(recent)} 张）", "",
+    lines += [f"## 技术雷达速览（本方向 {len(dir_tech)} 卡，近 60 天发表 {len(recent)} 张；库内共 {len(tech)} 卡）", "",
               "| ID | 领域 | 成熟度 | 比赛映射 |", "|---|---|---|---|"]
-    for t in tech:
+    for t in dir_tech:
         fits = "、".join(str(c.get("track")) for c in t.get("competition_fit") or [])
         lines.append(f"| {t.get('id')} | {('、'.join(t.get('field') or []))[:30]} "
                      f"| {t.get('maturity')} | {fits[:40]} |")
@@ -158,7 +160,7 @@ def build_digest(direction: str, today: datetime.date, formal: bool) -> str:
                      f"｜confidence: {conf.group(1).strip() if conf else '?'}）")
         lines += ["", five, ""]
     if not got:
-        lines += ["（本方向暂无已解构 patterns——由周六深度评估推进）", ""]
+        lines += ["（本方向暂无已解构 patterns——由每 3 天深度跑批推进）", ""]
 
     # ── 合规提醒 ──
     lines += ["## 合规提醒（AI 政策摘要，全文见各条目）", ""]

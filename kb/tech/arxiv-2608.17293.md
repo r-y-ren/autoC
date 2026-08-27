@@ -2,6 +2,7 @@
 id: arxiv-2608.17293
 name: "Beyond MSE: Rethinking the Evaluation Metric and Benchmarking for Irregular Time Series Forecasting"
 field: [时序预测, 机器学习, 评估方法]
+directions: [数模与时序预测]
 published: "2026-08-18"
 maturity: paper
 signal:

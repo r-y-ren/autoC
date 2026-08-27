@@ -2,6 +2,7 @@
 id: arxiv-2608.20024
 name: "Systematic Evaluation of TabPFN-TS for Zero-Shot Probabilistic Heat Load Forecasting in District Heating Networks"
 field: [时序预测, 能源系统, 机器学习]
+directions: [数模与时序预测]
 published: "2026-08-20"
 maturity: paper
 signal:

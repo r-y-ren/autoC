@@ -2,6 +2,7 @@
 id: arxiv-2608.20052
 name: "DecoVAE: a Lightweight Interpretable Trend-Seasonal VAE Framework for Efficient Probabilistic Time Series Forecasting"
 field: [时序预测, 机器学习]
+directions: [数模与时序预测]
 published: "2026-08-20"
 maturity: paper
 signal:

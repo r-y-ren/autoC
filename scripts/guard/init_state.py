@@ -23,18 +23,20 @@ ROOT = Path(__file__).resolve().parents[2]
 STATE_FILE = ROOT / ".flow" / "state.json"
 
 
-def default_retry_max() -> int:
-    """retry.max 单一事实来源：config/budget.yaml → circuit_breaker.repair_max_retries。"""
+def default_retry_max() -> int | None:
+    """retry.max 单一事实来源：config/budget.yaml → circuit_breaker.repair_max_retries。
+    读取失败返回 None（调用方兜底，不覆盖已有值）。"""
     try:
         import yaml
         cfg = yaml.safe_load((ROOT / "config" / "budget.yaml").read_text(encoding="utf-8"))
         return int((((cfg or {}) or {}).get("circuit_breaker") or {}).get("repair_max_retries"))
     except Exception:  # noqa: BLE001
-        return 3
+        return None
 
 
 def fresh_retry() -> dict:
-    return {"count": 0, "max": default_retry_max(), "tripped": False}
+    m = default_retry_max()
+    return {"count": 0, "max": m if m is not None else 3, "tripped": False}
 
 
 def main() -> int:
@@ -58,6 +60,11 @@ def main() -> int:
         state["phase"] = args.phase
     if args.reset or not state.get("retry"):
         state["retry"] = fresh_retry()
+    elif isinstance(state.get("retry"), dict):
+        # 实时同步（T-audit 备忘项闭合）：保留 count/tripped，max 跟随 budget 当前值
+        live = default_retry_max()
+        if live is not None:
+            state["retry"]["max"] = live
     state["updated_at"] = datetime.datetime.now().isoformat(timespec="seconds")
     state["updated_by"] = args.by
 

@@ -2,6 +2,7 @@
 id: arxiv-2608.25871
 name: "CEDAR: Controlled and Event-Driven Demand Forecasting via Residual Decomposition"
 field: [时序预测, 机器学习, 需求预测]
+directions: [数模与时序预测]
 published: "2026-08-26"
 maturity: paper
 signal:

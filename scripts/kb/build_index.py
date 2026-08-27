@@ -36,8 +36,8 @@ HEADER = """# KB 总索引（瘦协调者唯一入口）
 
 ## KB-2 科技库（交付物 2）
 
-| ID | 名称 | 领域 | 成熟度 | 比赛映射 | 发表 | 最近核验 |
-|---|---|---|---|---|---|---|
+| ID | 名称 | 领域 | 方向 | 成熟度 | 比赛映射 | 发表 | 最近核验 |
+|---|---|---|---|---|---|---|---|
 {tech_rows}
 
 ## 跑批记录
@@ -134,6 +134,7 @@ def build() -> str:
             fits = "、".join(str(c.get("track")) for c in fm.get("competition_fit") or [])
             tech_rows.append(
                 f"| {cell(fm.get('id'))} | {cell(fm.get('name'))} | {cell(fm.get('field'))} "
+                f"| {cell(fm.get('directions'))} "
                 f"| {cell(fm.get('maturity'))} | {cell(fits)} "
                 f"| {cell(fm.get('published'))} | {cell(fm.get('sources') and '已引' or '-')} |")
     return HEADER.format(

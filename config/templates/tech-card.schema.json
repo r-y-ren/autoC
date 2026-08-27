@@ -8,6 +8,11 @@
     "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$", "description": "规范化主键：arXiv ID / GitHub repo / DOI" },
     "name": { "type": "string" },
     "field": { "type": "array", "items": { "type": "string" } },
+    "directions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "关联方向（来自 config/directions；跨方向复用的卡片可多值；简报按此过滤）"
+    },
     "published": { "type": "string", "format": "date" },
     "maturity": { "enum": ["paper", "demo", "product"] },
     "signal": {

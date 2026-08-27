@@ -177,3 +177,9 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
   2. EDA MCP（E-05 wokwi-mcp / E-06 kicad-mcp）→ **维持不引入**：KiCad 工程（.kicad_sch/.kicad_pcb）为文本 s-表达式，agent 可在守卫边界内直接生成/编辑；kicad-cli 覆盖 DRC 与 gerber/钻孔/贴装等制造输出；无"会话级有状态交互"需求即不引 MCP（§4 选型原则）
   3. HDL 分析/仿真 → 未启用；首个含 HDL 里程碑的蓝图出现时再评估（yosys/iverilog CLI 可覆盖，届时按"先登记再实现"办理，登记为 E-14+）
   4. PIC18F 工具链缺口 → 如实登记 E-13（MPLAB XC8，按需未装），不假装 PlatformIO 可覆盖
+
+- **D9 审查遗留项闭合** ✅ 已裁决（2026-08-27，全量门禁审查后修复轮）：
+  1. retry.max **实时同步**（取消快照语义）：run_acceptance 每次读取、init_state 每次流转都从 budget 刷新 max（保留 count/tripped；budget 不可读时不覆盖已有值）；test_acceptance 增场景 E 固化
+  2. same_host_interval_ms **落脚本**：sync_competitions 同主机抓取间隔强制执行（rps 总约束仍为技能层，budget 头注如实标注）
+  3. tech-card **directions 字段落地**（原"第二方向启用前再做"提前完成）：schema 可选字段、sync_tech 候选自动打标（多方向合并）、hunter 章程继承、INDEX 增方向列、简报按方向过滤（未标注卡不进方向简报）、存量 6 卡已回填
+  4. export_digest.py 内部 2 处 D7 措辞残留修复（审查漏掉的第 5/6 处：文件头注释与 patterns 占位句）

@@ -19,6 +19,7 @@ description: 前沿科技猎手角色（慢循环·KB-2）。追踪前沿成果�
 
 - `kb/tech/<规范化ID>.md` —— frontmatter 必须通过 tech-card.schema.json
   - ID 为规范化主键：arXiv ID / GitHub repo / DOI（增量去重的依据）
+  - `directions` 从候选的 directions 继承（候选未带时填当前采集方向）——简报按此过滤
   - `competition_fit` 是灵魂字段：**写不出至少一条有说服力的比赛映射就不入库**
 - 返回协调者：结构化结论（新增卡片数 / 更新数 / 因信号不足被拒者及理由摘要）
 

@@ -126,7 +126,25 @@ def main() -> int:
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
-    total = 5
+    # 场景 E：retry.max 实时同步（T-audit 备忘项闭合）——中途改 budget 立即生效
+    root = make_root()
+    try:
+        (root / ".flow").mkdir(parents=True, exist_ok=True)
+        (root / ".flow/state.json").write_text(json.dumps({
+            "phase": "idle", "retry": {"count": 1, "max": 3, "tripped": False}}), encoding="utf-8")
+        bp = root / "config/budget.yaml"
+        bp.write_text(bp.read_text(encoding="utf-8").replace("repair_max_retries: 3",
+                                                             "repair_max_retries: 5"), encoding="utf-8")
+        write_blueprint(root, '    - {id: e1, category: software, item: 失败, method: m, cmd: "exit 1"}\n')
+        p = run_acc(root)
+        st = read_state(root)
+        ok = p.returncode == 1 and st["retry"]["max"] == 5 and st["retry"]["count"] == 2
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} E retry.max 实时同步：max={st['retry']['max']}（期望5） count={st['retry']['count']}（期望2）")
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+    total = 6
     print(f"[test_acceptance] {passed}/{total} 通过")
     return 0 if passed == total else 1
 
