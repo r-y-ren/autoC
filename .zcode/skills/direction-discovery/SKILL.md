@@ -13,6 +13,7 @@ description: 方向冷启动：用户给出新方向描述后，按信源目录�
 1. **建方向配置**：按 `config/directions/_template.yaml` 建 `<方向名>.yaml`（scopes 按两大类 tier 填；keywords 中英；tech_radar.fields 填 2-3 个技术领域；sources.web 首跑留空）
 2. **切阶段**：`python scripts/guard/init_state.py --phase collect --by discover`
 3. **搜索分片派发**（并发 ≤ budget.max_subagents_per_batch）：按 `config/sources/catalog.md` 中该类的信源**以信源为分片**派发 scraper 子 agent（冷启动期没有条目可分片）。每个分片返回结构化候选清单（≤10 条：名称/主办方/URL/关键时间/类型判断依据/信源等级），不返回原文
+   **SPA 预抓（P1 规则）**：catalog SPA 清单内站点（devpost/kaggle/天池/和鲸/lablab）的关键页面，主会话先 browser-use 抓快照落 `kb/raw/<id>/` 供分片消费；搜索分片仅作线索定位时不受此限，但建条分片的事实必须有直抓原件或独立第二源
 4. **候选汇合与筛选**：合并去重 → 按（信息可得性 × 赛事分量 × 时间窗）筛 **≤8 条**（冷启动一次性配额，超出者留 candidates 队列下轮消化）
 5. **建条分片派发**：每分片 ≤3 条目，按 scraper 章程建 `kb/competitions/<id>/meta.md`（schema：config/templates/kb-meta.schema.json；tier 填大类；`award_levels` 实抓该赛奖项体系后填写——winners 覆盖标准=前两级）
 6. **首样可选**：信息最全的 1 个赛事若公开获奖作品，按 winners-template 做首份深构样例（四节必备，含"不足与可改进点"）

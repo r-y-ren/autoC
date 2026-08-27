@@ -25,7 +25,7 @@ description: 验收角色（快循环·验收节点）。执行蓝图验收清�
 ## 输出契约
 
 - `workspace/acceptance/run-<n>.json`（过 acceptance.schema.json）+ 失败工单 `<ticket-id>.md`
-- 分析报告：对照该赛评审标准逐项自评 + 与 KB-1 历年获奖基准对比
+- 分析报告：按 `config/templates/report-analysis-template.md` 六节产出（对照评审标准自评 + 赛点检查表核对 + 历年获奖基准对比 + 人工项 + 人机分工合规留痕 + 可复用资产清单；数字仅引 metrics.json）
 - 熔断状态回写建议（经 init_state.py，不得直改 state.json）
 - 返回协调者：结果（pass/fail/pending_manual）+ 人工测试项清单
 

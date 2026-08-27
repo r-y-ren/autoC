@@ -12,6 +12,8 @@ description: 慢循环编排：按方向配置增量维护 KB-1/KB-2。当用户
 
 ## 流程
 
+0. **预检（无人值守自检）**：`git status --short` 应为空（有未提交变更先查明原因再继续）；`state.json` phase 应为 idle，不是则查明上一跑批是否中断
+0.5. **SPA 预抓（P1 规则）**：核对本方向 `sources.web` 锚点与 `config/sources/catalog.md` 的 SPA 清单——命中 SPA 站点的待抓页面，先由主会话用 browser-use 抓快照落 `kb/raw/<id>/`，再把快照路径写进分片任务包（分片消费本地快照，不上网）
 1. **切阶段**：`python scripts/guard/init_state.py --phase collect --by kb-sync`
 2. **紧循环脚本**（按方向执行，任一失败不阻断另一类）：
    - `python scripts/kb/sync_competitions.py`（快照 + 赛事候选）
