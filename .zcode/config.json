@@ -3,6 +3,21 @@
     "enabled": true,
     "timeoutMs": 8000,
     "events": {
+      "SessionStart": [
+        {
+          "hooks": [
+            {
+              "type": "process",
+              "command": "python",
+              "enabled": true,
+              "args": [
+                "${ZCODE_PROJECT_DIR}/scripts/guard/session_status.py"
+              ],
+              "timeoutMs": 3000
+            }
+          ]
+        }
+      ],
       "PreToolUse": [
         {
           "matcher": "Write|Edit|ApplyPatch",
@@ -10,7 +25,10 @@
             {
               "type": "process",
               "command": "python",
-              "args": ["${ZCODE_PROJECT_DIR}/scripts/guard/guard_path.py"],
+              "enabled": true,
+              "args": [
+                "${ZCODE_PROJECT_DIR}/scripts/guard/guard_path.py"
+              ],
               "timeoutMs": 5000
             }
           ]
@@ -23,20 +41,12 @@
             {
               "type": "process",
               "command": "python",
-              "args": ["${ZCODE_PROJECT_DIR}/scripts/kb/lint_kb.py", "--hook"],
+              "enabled": true,
+              "args": [
+                "${ZCODE_PROJECT_DIR}/scripts/kb/lint_kb.py",
+                "--hook"
+              ],
               "timeoutMs": 8000
-            }
-          ]
-        }
-      ],
-      "SessionStart": [
-        {
-          "hooks": [
-            {
-              "type": "process",
-              "command": "python",
-              "args": ["${ZCODE_PROJECT_DIR}/scripts/guard/session_status.py"],
-              "timeoutMs": 3000
             }
           ]
         }
