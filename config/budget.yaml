@@ -1,0 +1,22 @@
+# 跑批预算与限速 —— 慢循环/快循环所有跑批的硬约束
+# 数值为 Phase 0 占位默认，Phase 1 实测后校准
+
+schema_version: 1
+
+run_budget:
+  max_subagents_per_batch: 4       # 单次跑批并发子 agent 上限
+  max_wallclock_minutes: 60        # 单次跑批墙钟上限（超时保存断点退出）
+  checkpoint: true                 # 断点续跑（进度落 .flow/，重跑跳过已完成条目）
+
+rate_limit:
+  requests_per_second: 1           # 对外部站点礼貌限速
+  same_host_interval_ms: 1500
+  respect_robots_txt: true         # 遵守目标站点 robots 与 ToS，只抓公开信息
+
+retry:
+  max_attempts: 2                  # 单信源失败重试次数
+  backoff_seconds: 5
+
+circuit_breaker:
+  repair_max_retries: 3            # 验收-修复回环熔断阈值（与 state.retry.max 同步）
+  escalation: "停机并向用户报告失败证据，不得继续自动重试"

@@ -1,0 +1,28 @@
+# ===== autoC .gitignore =====
+
+# 运行时状态（新克隆后先运行: python scripts/guard/init_state.py 引导）
+.flow/
+
+# 原始大文件快照（需要审计留痕时切换 Git LFS）
+kb/raw/*
+!kb/raw/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# 构建产物
+dist/
+build/
+*.exe
+*.dll
+
+# 系统杂物
+.DS_Store
+Thumbs.db
+desktop.ini

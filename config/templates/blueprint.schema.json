@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "autoc/blueprint",
+  "title": "作品蓝图契约（workspace/blueprint.md frontmatter）",
+  "description": "唯一人工闸门确认的对象。未通过本校验的蓝图不得提交用户确认。",
+  "type": "object",
+  "required": ["campaign", "scope", "tech_stack", "interface_contracts", "milestones", "acceptance", "compliance"],
+  "properties": {
+    "campaign": {
+      "type": "object",
+      "required": ["competition_id", "name", "theme"],
+      "properties": {
+        "competition_id": { "type": "string", "description": "KB-1 条目 ID" },
+        "name": { "type": "string" },
+        "theme": { "type": "string", "description": "本届主题/赛道" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "required": ["deliverables", "out_of_scope"],
+      "properties": {
+        "deliverables": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "out_of_scope": { "type": "array", "items": { "type": "string" }, "description": "显式排除项，防范围失控" }
+      }
+    },
+    "tech_stack": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "kb_tech_ids", "rationale"],
+        "properties": {
+          "name": { "type": "string" },
+          "kb_tech_ids": { "type": "array", "items": { "type": "string" }, "description": "支撑该选型的 KB-2 卡片 ID" },
+          "rationale": { "type": "string", "description": "差异化逻辑" },
+          "reuse_cost": { "enum": ["低", "中", "高"] }
+        }
+      }
+    },
+    "interface_contracts": {
+      "type": "array",
+      "description": "并发分发前必须钉死的跨角色接口",
+      "items": {
+        "type": "object",
+        "required": ["between", "contract_file"],
+        "properties": {
+          "between": { "type": "array", "minItems": 2, "items": { "type": "string" }, "description": "涉及角色，如 [software, hardware]" },
+          "contract_file": { "type": "string", "description": "接口定义文件在 workspace/ 下的路径" }
+        }
+      }
+    },
+    "milestones": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "task", "owner_role"],
+        "properties": {
+          "id": { "type": "string" },
+          "task": { "type": "string" },
+          "owner_role": { "type": "string" },
+          "depends_on": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "required": ["checklist"],
+      "properties": {
+        "checklist": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "category", "item", "method"],
+            "properties": {
+              "id": { "type": "string" },
+              "category": { "enum": ["software", "hardware", "document", "manual"], "description": "manual=人工测试项，移交用户" },
+              "item": { "type": "string" },
+              "method": { "type": "string", "description": "可执行的验证方法" }
+            }
+          }
+        }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "required": ["ai_policy_reviewed"],
+      "properties": {
+        "ai_policy_reviewed": { "type": "boolean", "description": "已核对目标赛事 AI 使用政策" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

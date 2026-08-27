@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "autoc/acceptance",
+  "title": "验收执行记录（workspace/acceptance/）",
+  "type": "object",
+  "required": ["campaign", "checklist", "result", "generated_at"],
+  "properties": {
+    "campaign": {
+      "type": "object",
+      "required": ["competition_id"],
+      "properties": {
+        "competition_id": { "type": "string" },
+        "blueprint_ref": { "type": "string", "description": "所依据蓝图版本（git commit）" }
+      }
+    },
+    "checklist": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "status", "evidence"],
+        "properties": {
+          "id": { "type": "string", "description": "与蓝图验收清单同 ID" },
+          "category": { "enum": ["software", "hardware", "document", "manual"] },
+          "status": { "enum": ["pass", "fail", "pending_manual"] },
+          "evidence": { "type": "string", "description": "证据路径：日志/截图/录屏/仿真输出" },
+          "failure_ticket": { "type": "string", "description": "fail 时生成的工单路径（路由回责任角色）" }
+        }
+      }
+    },
+    "result": { "enum": ["pass", "fail", "pending_manual"] },
+    "generated_at": { "type": "string" },
+    "retry_state": {
+      "type": "object",
+      "description": "熔断快照：来自 .flow/state.json",
+      "properties": {
+        "count": { "type": "integer" },
+        "max": { "type": "integer" },
+        "tripped": { "type": "boolean" }
+      }
+    }
+  }
+}

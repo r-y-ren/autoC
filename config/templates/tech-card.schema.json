@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "autoc/tech-card",
+  "title": "KB-2 技术卡片 frontmatter（kb/tech/cards 按规范化 ID 命名）",
+  "type": "object",
+  "required": ["id", "name", "field", "published", "maturity", "competition_fit", "sources"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$", "description": "规范化主键：arXiv ID / GitHub repo / DOI" },
+    "name": { "type": "string" },
+    "field": { "type": "array", "items": { "type": "string" } },
+    "published": { "type": "string", "format": "date" },
+    "maturity": { "enum": ["paper", "demo", "product"] },
+    "signal": {
+      "type": "object",
+      "properties": {
+        "venue": { "type": "string" },
+        "stars": { "type": "integer" },
+        "citations_90d": { "type": "integer" },
+        "runnable": { "type": "boolean", "description": "有无可运行 demo/开源实现" }
+      }
+    },
+    "competition_fit": {
+      "type": "array",
+      "minItems": 1,
+      "description": "比赛映射——KB-2 的灵魂字段，缺失则卡片不入库",
+      "items": {
+        "type": "object",
+        "required": ["track", "edge", "reuse_cost"],
+        "properties": {
+          "track": { "type": "string" },
+          "edge": { "type": "string", "description": "能形成的差异化" },
+          "reuse_cost": { "enum": ["低", "中", "高"] },
+          "open_source": { "type": "string", "description": "现成开源实现链接" }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["url", "accessed"],
+        "properties": {
+          "url": { "type": "string" },
+          "title": { "type": "string" },
+          "accessed": { "type": "string" }
+        }
+      }
+    }
+  }
+}

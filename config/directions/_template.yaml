@@ -1,0 +1,22 @@
+# 方向采集配置模板 —— 复制为 <方向名>.yaml 启用（一方向一文件）
+# 例：cp _template.yaml 数模与时序预测.yaml
+
+schema_version: 1
+
+direction: ""                    # 如 "数模与时序预测" / "端侧智能与具身硬件"
+
+scopes: ["学科竞赛", "编程/黑客松"]   # 该方向关注的大类（可裁剪）
+
+keywords: []                     # 检索关键词（中英），如 [数学建模, 时序预测, forecasting]
+
+sources:
+  api: []                        # 结构化源 [{type: kaggle|github|arxiv, query: "..."}]
+  web: []                        # 网页源 [{name, url, cadence: daily|weekly|monthly}]
+  rss: []                        # 订阅源 [url]
+  wechat: []                     # 公众号名列表（信源策略待定：RSSHub 或人工投递 inbox）
+
+tech_radar:
+  fields: []                     # 关注技术领域，如 [具身智能, 多模态, 端侧推理]
+  min_signal:                    # 入库信号门槛（低于此不生成卡片）
+    stars: 0
+    citations_90d: 0

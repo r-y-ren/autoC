@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "autoc/kb-meta",
+  "title": "KB-1 赛事条目 frontmatter（kb/competitions/<id>/meta.md）",
+  "type": "object",
+  "required": ["id", "name", "tier", "directions", "status", "ai_policy", "last_verified", "sources"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "name": { "type": "string" },
+    "tier": { "enum": ["学科竞赛", "编程/黑客松"] },
+    "directions": { "type": "array", "items": { "type": "string" } },
+    "status": { "enum": ["upcoming", "active", "ended", "unknown"] },
+    "organizer": { "type": "string" },
+    "key_dates": {
+      "type": "object",
+      "description": "键为节点名；值须含 date 与 verified（关键字段须双源交叉验证）"
+    },
+    "deliverables": { "type": "array", "items": { "type": "string" } },
+    "ai_policy": {
+      "type": "object",
+      "required": ["summary", "checked"],
+      "properties": {
+        "summary": { "type": "string" },
+        "url": { "type": "string" },
+        "checked": { "type": "string", "format": "date" }
+      }
+    },
+    "credibility": { "enum": ["官网", "主办方公众号", "聚合站", "自媒体", "交叉验证"] },
+    "last_verified": { "type": "string", "format": "date" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["url", "accessed"],
+        "properties": {
+          "url": { "type": "string" },
+          "title": { "type": "string" },
+          "accessed": { "type": "string" }
+        }
+      }
+    }
+  }
+}

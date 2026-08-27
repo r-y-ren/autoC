@@ -1,0 +1,24 @@
+# 团队画像 —— 推荐引擎与蓝图范围裁剪的输入
+# 逐字段填写后生效；无人填写时推荐引擎按"通用学生队"低配假设运行
+
+schema_version: 1
+
+team:
+  name: ""
+  members: []            # [{role: 队长|算法|工程|硬件|设计, skills: []}]
+
+skills: []               # 技术栈清单，如 [python, pytorch, web-fullstack, embedded, latex]
+
+compute:
+  gpu: none              # none 或型号，如 RTX 4090
+  cloud: []              # 可用云资源/代金券
+
+hardware:
+  lab_access: false      # 是否有硬件实验室/加工条件
+  equipment: []          # 如 [3d-printer, soldering-iron, esp32, rpi]
+
+constraints:
+  hours_per_week: 0      # 全队每周可投入小时数
+  budget_cny: 0          # 材料预算（硬件 BOM 用）
+
+history: []              # 参赛历史 [{competition, year, award}]
