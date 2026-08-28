@@ -1,0 +1,419 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-28T10:00:32.829601+00:00",
+  "engine": {
+    "package": "kaggle-environments",
+    "version": "1.32.7+nodeps",
+    "scenario": "kaggriculture",
+    "episode_steps": 720
+  },
+  "config": {
+    "rounds": 2,
+    "seeds": [
+      101,
+      102
+    ],
+    "contenders": [
+      "submission",
+      "baseline_wheat"
+    ],
+    "opponents": [
+      "pass",
+      "random",
+      "starter",
+      "greedy_carrot"
+    ]
+  },
+  "games": [
+    {
+      "p0": "submission",
+      "p1": "pass",
+      "seed": 101,
+      "rewards": [
+        29397.0,
+        3000.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 1.833
+    },
+    {
+      "p0": "submission",
+      "p1": "pass",
+      "seed": 102,
+      "rewards": [
+        31483.0,
+        3000.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 2.73
+    },
+    {
+      "p0": "submission",
+      "p1": "random",
+      "seed": 101,
+      "rewards": [
+        32350.0,
+        0.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 3.615
+    },
+    {
+      "p0": "submission",
+      "p1": "random",
+      "seed": 102,
+      "rewards": [
+        29837.0,
+        0.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 3.545
+    },
+    {
+      "p0": "submission",
+      "p1": "starter",
+      "seed": 101,
+      "rewards": [
+        32260.0,
+        3506.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 2.755
+    },
+    {
+      "p0": "submission",
+      "p1": "starter",
+      "seed": 102,
+      "rewards": [
+        31582.0,
+        3614.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 2.777
+    },
+    {
+      "p0": "submission",
+      "p1": "greedy_carrot",
+      "seed": 101,
+      "rewards": [
+        31477.0,
+        7951.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 3.734
+    },
+    {
+      "p0": "submission",
+      "p1": "greedy_carrot",
+      "seed": 102,
+      "rewards": [
+        32772.0,
+        6012.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 3.157
+    },
+    {
+      "p0": "baseline_wheat",
+      "p1": "pass",
+      "seed": 101,
+      "rewards": [
+        10506.0,
+        3000.0
+      ],
+      "winner": "baseline_wheat",
+      "turns": 720,
+      "elapsed_seconds": 2.316
+    },
+    {
+      "p0": "baseline_wheat",
+      "p1": "pass",
+      "seed": 102,
+      "rewards": [
+        15470.0,
+        3000.0
+      ],
+      "winner": "baseline_wheat",
+      "turns": 720,
+      "elapsed_seconds": 2.324
+    },
+    {
+      "p0": "baseline_wheat",
+      "p1": "random",
+      "seed": 101,
+      "rewards": [
+        10386.0,
+        0.0
+      ],
+      "winner": "baseline_wheat",
+      "turns": 720,
+      "elapsed_seconds": 2.4
+    },
+    {
+      "p0": "baseline_wheat",
+      "p1": "random",
+      "seed": 102,
+      "rewards": [
+        12231.0,
+        0.0
+      ],
+      "winner": "baseline_wheat",
+      "turns": 720,
+      "elapsed_seconds": 2.401
+    },
+    {
+      "p0": "baseline_wheat",
+      "p1": "starter",
+      "seed": 101,
+      "rewards": [
+        11325.0,
+        3560.0
+      ],
+      "winner": "baseline_wheat",
+      "turns": 720,
+      "elapsed_seconds": 2.346
+    },
+    {
+      "p0": "baseline_wheat",
+      "p1": "starter",
+      "seed": 102,
+      "rewards": [
+        13903.0,
+        3553.0
+      ],
+      "winner": "baseline_wheat",
+      "turns": 720,
+      "elapsed_seconds": 2.3
+    },
+    {
+      "p0": "baseline_wheat",
+      "p1": "greedy_carrot",
+      "seed": 101,
+      "rewards": [
+        10658.0,
+        6012.0
+      ],
+      "winner": "baseline_wheat",
+      "turns": 720,
+      "elapsed_seconds": 2.809
+    },
+    {
+      "p0": "baseline_wheat",
+      "p1": "greedy_carrot",
+      "seed": 102,
+      "rewards": [
+        12144.0,
+        11222.0
+      ],
+      "winner": "baseline_wheat",
+      "turns": 720,
+      "elapsed_seconds": 2.757
+    },
+    {
+      "p0": "submission",
+      "p1": "baseline_wheat",
+      "seed": 101,
+      "rewards": [
+        28501.0,
+        11266.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 3.39
+    },
+    {
+      "p0": "submission",
+      "p1": "baseline_wheat",
+      "seed": 102,
+      "rewards": [
+        30126.0,
+        13161.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 3.307
+    },
+    {
+      "p0": "submission",
+      "p1": "baseline_wheat",
+      "seed": 601,
+      "rewards": [
+        29099.0,
+        11318.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 3.256
+    },
+    {
+      "p0": "submission",
+      "p1": "baseline_wheat",
+      "seed": 602,
+      "rewards": [
+        28269.0,
+        10645.0
+      ],
+      "winner": "submission",
+      "turns": 720,
+      "elapsed_seconds": 3.343
+    }
+  ],
+  "head_to_head": [
+    {
+      "pair": "submission vs pass",
+      "games": 2,
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "submission vs random",
+      "games": 2,
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "submission vs starter",
+      "games": 2,
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "submission vs greedy_carrot",
+      "games": 2,
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "baseline_wheat vs pass",
+      "games": 2,
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "baseline_wheat vs random",
+      "games": 2,
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "baseline_wheat vs starter",
+      "games": 2,
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "baseline_wheat vs greedy_carrot",
+      "games": 2,
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "submission vs baseline_wheat",
+      "games": 4,
+      "wins": 4,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
+    }
+  ],
+  "elo": {
+    "k": 32.0,
+    "start": 1200.0,
+    "table": [
+      {
+        "name": "submission",
+        "rating": 1361.8,
+        "played": 12,
+        "record": {
+          "W": 12,
+          "L": 0,
+          "T": 0
+        }
+      },
+      {
+        "name": "baseline_wheat",
+        "rating": 1244.8,
+        "played": 12,
+        "record": {
+          "W": 8,
+          "L": 4,
+          "T": 0
+        }
+      },
+      {
+        "name": "greedy_carrot",
+        "rating": 1154.6,
+        "played": 4,
+        "record": {
+          "W": 0,
+          "L": 4,
+          "T": 0
+        }
+      },
+      {
+        "name": "starter",
+        "rating": 1150.7,
+        "played": 4,
+        "record": {
+          "W": 0,
+          "L": 4,
+          "T": 0
+        }
+      },
+      {
+        "name": "random",
+        "rating": 1146.4,
+        "played": 4,
+        "record": {
+          "W": 0,
+          "L": 4,
+          "T": 0
+        }
+      },
+      {
+        "name": "pass",
+        "rating": 1141.6,
+        "played": 4,
+        "record": {
+          "W": 0,
+          "L": 4,
+          "T": 0
+        }
+      }
+    ]
+  },
+  "runtime_seconds": 57.68
+}

@@ -1,0 +1,40 @@
+{
+  "campaign": {
+    "competition_id": "kaggle-kaggriculture",
+    "blueprint_ref": "7fdd094"
+  },
+  "checklist": [
+    {
+      "id": "m0-deps",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m0-deps.log"
+    },
+    {
+      "id": "m0-boot",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m0-boot.log"
+    },
+    {
+      "id": "m0-test",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m0-test.log"
+    },
+    {
+      "id": "m0-regress",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m0-regress.log"
+    }
+  ],
+  "result": "pending_agent",
+  "generated_at": "2026-08-28T18:00:33",
+  "retry_state": {
+    "count": 0,
+    "max": 3,
+    "tripped": false
+  },
+  "scope": "scoped run（--only，范围外项未验；终验须全量重跑）"
+}

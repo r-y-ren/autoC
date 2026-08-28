@@ -1,0 +1,51 @@
+$ python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression
+exit=0
+
+Loading environment cabt failed: Could not find module 'C:\Users\OSS\AppData\Roaming\Python\Python314\site-packages\kaggle_environments\envs\cabt\cg\cg.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+[01] submission vs pass seed=101: 29397:3000 winner=submission
+[02] submission vs pass seed=102: 31483:3000 winner=submission
+[03] submission vs random seed=101: 32350:0 winner=submission
+[04] submission vs random seed=102: 29837:0 winner=submission
+[05] submission vs starter seed=101: 32260:3506 winner=submission
+[06] submission vs starter seed=102: 31582:3614 winner=submission
+[07] submission vs greedy_carrot seed=101: 31477:7951 winner=submission
+[08] submission vs greedy_carrot seed=102: 32772:6012 winner=submission
+[09] baseline_wheat vs pass seed=101: 10506:3000 winner=baseline_wheat
+[10] baseline_wheat vs pass seed=102: 15470:3000 winner=baseline_wheat
+[11] baseline_wheat vs random seed=101: 10386:0 winner=baseline_wheat
+[12] baseline_wheat vs random seed=102: 12231:0 winner=baseline_wheat
+[13] baseline_wheat vs starter seed=101: 11325:3560 winner=baseline_wheat
+[14] baseline_wheat vs starter seed=102: 13903:3553 winner=baseline_wheat
+[15] baseline_wheat vs greedy_carrot seed=101: 10658:6012 winner=baseline_wheat
+[16] baseline_wheat vs greedy_carrot seed=102: 12144:11222 winner=baseline_wheat
+[17] submission vs baseline_wheat seed=101: 28501:11266 winner=submission
+[18] submission vs baseline_wheat seed=102: 30126:13161 winner=submission
+[19] submission vs baseline_wheat seed=601: 29099:11318 winner=submission
+[20] submission vs baseline_wheat seed=602: 28269:10645 winner=submission
+
+=== Elo table (20 games, 57.68s) ===
+  submission       rating= 1361.8 record W12 L0 T0
+  baseline_wheat   rating= 1244.8 record W8 L4 T0
+  greedy_carrot    rating= 1154.6 record W0 L4 T0
+  starter          rating= 1150.7 record W0 L4 T0
+  random           rating= 1146.4 record W0 L4 T0
+  pass             rating= 1141.6 record W0 L4 T0
+  submission vs pass               games=2 W2 L0 T0 win_rate=1.0 avg_turns=720.0
+  submission vs random             games=2 W2 L0 T0 win_rate=1.0 avg_turns=720.0
+  submission vs starter            games=2 W2 L0 T0 win_rate=1.0 avg_turns=720.0
+  submission vs greedy_carrot      games=2 W2 L0 T0 win_rate=1.0 avg_turns=720.0
+  baseline_wheat vs pass           games=2 W2 L0 T0 win_rate=1.0 avg_turns=720.0
+  baseline_wheat vs random         games=2 W2 L0 T0 win_rate=1.0 avg_turns=720.0
+  baseline_wheat vs starter        games=2 W2 L0 T0 win_rate=1.0 avg_turns=720.0
+  baseline_wheat vs greedy_carrot  games=2 W2 L0 T0 win_rate=1.0 avg_turns=720.0
+  submission vs baseline_wheat     games=4 W4 L0 T0 win_rate=1.0 avg_turns=720.0
+
+wrote C:\Users\OSS\Desktop\autoC\workspace\software\exports\eval_results.json
+wrote C:\Users\OSS\Desktop\autoC\workspace\software\exports\logs\replay_log.jsonl
+
+=== regression gate (seeds fixed: [101, 102] + [601, 602]) ===
+  expected order : submission > baseline_wheat > greedy_carrot > starter > random > pass
+  actual ratings : submission=1361.8 > baseline_wheat=1244.8 > greedy_carrot=1154.6 > starter=1150.7 > random=1146.4 > pass=1141.6
+  regression: PASS (elo order submission > baseline_wheat > greedy_carrot > starter > random > pass; submission 0 losses)
+

@@ -1,0 +1,44 @@
+{
+  "schema": "software-metrics-shard/1.0",
+  "campaign": "kaggle-kaggriculture",
+  "milestone": "m0-skeleton (asset revival + regression line freeze)",
+  "measured_at": "2026-08-28",
+  "engine": {
+    "package": "kaggle-environments",
+    "version": "1.32.7+nodeps (vendored, engine code unmodified)",
+    "scenario": "kaggriculture",
+    "episode_steps": 720,
+    "boundary_note": "All numbers are LOCAL runs on the official engine (PyPI wheel, vendored) during the m0 asset-revival session. No Kaggle online ladder games yet -- online metrics stay null until the team submits."
+  },
+  "metrics": {
+    "tests_total": {"value": 50, "unit": "count", "method": "python -m pytest workspace/software/tests -q (repo root, 2026-08-28; 45 revived baseline tests + 5 new regression-gate tests)"},
+    "tests_passed": {"value": 50, "unit": "count", "method": "same run, 50 passed 0 failed in 1.13s"},
+    "smoke_boot_pass": {"value": true, "unit": "bool", "method": "python workspace/software/smoke_boot.py -> exit 0"},
+    "smoke_boot_runtime_seconds": {"value": 3.3, "unit": "s", "method": "wall clock of the revival smoke_boot run (4 phases, 6 episodes: 24+96+96+720+48+48 steps)"},
+    "regression_gate_pass": {"value": true, "unit": "bool", "method": "python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression -> exit 0 (frozen line: Elo order submission>baseline_wheat>greedy_carrot>starter>random>pass AND submission 0 losses)"},
+    "regression_gate_games": {"value": 20, "unit": "games", "method": "same gate run: 2 contenders x 4 opponents x 2 seeds (101,102) + 4 head-to-head (601,602 + in-matrix 101,102)"},
+    "regression_gate_runtime_seconds": {"value": 55.49, "unit": "s", "method": "wall clock of the gate run (excludes process startup)"},
+    "regression_gate_submission_record": {"value": {"W": 12, "L": 0, "T": 0}, "unit": "W/L/T", "method": "submission record across its 12 gate games (8 vs pool + 4 head-to-head)"},
+    "eval_games_total": {"value": 40, "unit": "games", "method": "python workspace/software/scripts/run_eval.py --rounds 4 (2 contenders x 4 opponents x 4 seeds + 8 head-to-head), same session"},
+    "eval_runtime_seconds": {"value": 107.36, "unit": "s", "method": "wall clock of the eval run backing the on-disk exports/eval_results.json (excludes process startup); a second same-config invocation this session measured 100.92s"},
+    "avg_episode_runtime_seconds": {"value": 2.66, "unit": "s/game", "method": "mean of per-game elapsed_seconds across the 40 games of the same eval run"},
+    "avg_turns_per_game": {"value": 720.0, "unit": "turns", "method": "mean turns_played across the 40 eval games (full-length games)"},
+    "submission_games_played": {"value": 24, "unit": "games", "method": "games involving the submission bot in the eval run"},
+    "submission_win_rate_vs_pool": {"value": 1.0, "unit": "ratio", "method": "16W-0L-0T vs {pass, random, starter, greedy_carrot}, 4 seeds each"},
+    "submission_win_rate_vs_baseline": {"value": 1.0, "unit": "ratio", "method": "8W-0L-0T head-to-head vs baseline_wheat (seeds 101-104, 601-604)"},
+    "submission_avg_final_money": {"value": 30631.46, "unit": "coins", "method": "mean of the submission bot's final reward across its 24 eval games (31284.63 vs pool, 29325.12 vs baseline_wheat head-to-head); a second same-config invocation this session measured 30591.17 -- spread comes only from random-opponent games"},
+    "submission_avg_final_money_h2h": {"value": 29325.12, "unit": "coins", "method": "mean submission reward across the 8 head-to-head games vs baseline_wheat"},
+    "baseline_wheat_avg_final_money_vs_submission": {"value": 11475.25, "unit": "coins", "method": "mean baseline_wheat reward across the same 8 head-to-head games"},
+    "elo_ratings": {
+      "value": {"submission": 1460.9, "baseline_wheat": 1245.8, "greedy_carrot": 1162.2, "starter": 1122.9, "random": 1111.2, "pass": 1097.0},
+      "unit": "elo",
+      "method": "EloTable k=32 start=1200 over the 40 recorded games, win/loss/tie only (official ladder semantics)"
+    },
+    "cross_session_replay_identical_games": {"value": 32, "unit": "games", "method": "per-game diff of this session's 40-game eval vs the archived round-1 eval_results.json: 32/40 games reward-identical (all games vs deterministic opponents); the 8 games vs the engine 'random' opponent drift in rewards because that agent is not fully pinned by the episode seed (drift also observed between two invocations within this session). Winners, W/L records and the whole Elo table are identical"}
+  },
+  "unmeasured": {
+    "llm_ab_win_rate": {"value": null, "note": "LLM provider ships disabled (NullProvider) with a pluggable interface; no LLM-backed A/B games were run, so no number is claimed"},
+    "online_ladder_games": {"value": null, "note": "no Kaggle submission made yet (team-side manual step per blueprint man-submit)"},
+    "online_skill_rating": {"value": null, "note": "depends on online submissions"}
+  }
+}
