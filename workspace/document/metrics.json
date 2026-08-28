@@ -1,0 +1,49 @@
+{
+  "document": {
+    "schema": "document-metrics-shard/1.0",
+    "campaign": "kaggle-kaggriculture",
+    "measured_at": "2026-08-28",
+    "metrics": {
+      "report_compiled": {
+        "value": true,
+        "unit": "bool",
+        "method": "typst compile workspace/docs/report.typ workspace/docs/report.pdf (repo root, typst 0.15.1, exit code 0)"
+      },
+      "report_compile_seconds": {
+        "value": 0.39,
+        "unit": "s",
+        "method": "wall clock of the final acceptance compile run (2026-08-28)"
+      },
+      "report_compile_runs": {
+        "value": 5,
+        "unit": "count",
+        "method": "total typst compile invocations of report.typ during drafting/verification (4 to PDF + 1 page-render check), all exit 0, zero warnings"
+      },
+      "report_pages": {
+        "value": 7,
+        "unit": "pages",
+        "method": "page-object count in workspace/docs/report.pdf (pypdf pages=7)"
+      },
+      "report_pdf_bytes": {
+        "value": 475019,
+        "unit": "bytes",
+        "method": "file size of workspace/docs/report.pdf"
+      },
+      "report_source_chars": {
+        "value": 12823,
+        "unit": "chars",
+        "method": "len() of workspace/docs/report.typ (UTF-8), incl. markup; CJK chars 3138"
+      },
+      "metrics_keys_cited": {
+        "value": 18,
+        "unit": "count",
+        "method": "distinct workspace/metrics.json software keys referenced in report.typ (18/18 measured+unmeasured keys covered; all values byte-identical to metrics.json, script-checked)"
+      },
+      "sop_checklist_items": {
+        "value": 19,
+        "unit": "count",
+        "method": "- [ ] checkbox count in workspace/docs/submit-sop.md (3226 chars)"
+      }
+    }
+  }
+}
