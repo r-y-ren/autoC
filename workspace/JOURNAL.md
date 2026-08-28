@@ -24,3 +24,4 @@
 | 2026-08-28 01:18 | idle | kb-sync 增量跑批：赛事条目+12（Kaggle×3/Devpost×3/MLH×2/天池×2/GOAI按主办方更名/lablab新平台）、技术卡+9（时序4+高星仓5）、拒绝台账+101；CDEC 留尾待 browser-use 预抓；修复候选队列 YAML 语法；编排失误1起已修复（残余队列两步重写致10候选脱队） | 发现2脚本缺陷：gh 行内 star 限定词失效、build_index 注释行断跑批表 |
 | 2026-08-28 01:20 | idle | kb-sync 后置修复：sync_tech gh star 旗标化+结果侧二次过滤（185→71 拉取实证）；build_index preserve_run_log 跳过 HTML 注释行（跑批表 0→3 行保留实证）；lint_kb 相对路径 resolve；catalog 沉淀 Kaggle ListPages 匿名接口通道 | 三缺陷闭合，dry-run 零新增确认去重闸正常 |
 | 2026-08-28 02:00 | idle | T4.4 HF Papers 接入（catalog 可选项落地）：fetch_hf_daily 进 S-03（upvotes≥15+关键词过滤+arxiv-* ID 空间去重）；PwC 关站事实入 catalog；双方向 yaml 开启 | 数模命中0（正常）、黑客松命中1 真实候选；urllib 直连通（curl 环境误报） |
+| 2026-08-28 02:30 | collect | D11 全量构建启动：K-10 落盘、cron 暂停（规格存档）| W0-W5 波次推进，每波提交 |
