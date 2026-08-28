@@ -434,3 +434,31 @@
   reason: competition_fit不足——RL训练型方法：需多轮rollout基建与7B级微调算力（GRPO最小改造+教师环境反馈/纠错提示蒸馏），六类赛种均无自然落点（与已拒arxiv-2608.24588同类）；收益绑定ALFWorld/WebShop/Search-QA训练基准；arXiv页无代码（Comments仅"22 pages, 15 figures, 7 tables"），复现成本高
   stars: null
   decided: '2026-08-28'
+- id: arxiv-2608.22575
+  reason: competition_fit不足——分布式优化器理论（math.NA主分类）：两级域分解AdaGrad（2DD-AG2m）的贡献是图分区+子采样粗图全局步带来的训练算力节省（同性能省4-8倍成本、同成本精度+22%），属分布式GNN训练基建而非预测建模方法，时空预测仅是其实验载体；数模/黑客松/Kaggle赛队无图分区与两级交替迭代的算力与工程语境，写不出有说服力的比赛映射；arXiv页无代码
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.25019
+  reason: competition_fit不足——天文测光领域特化（astro-ph.SR主分类）：EncoTESS是TESS光变曲线上的~1%参数量领域TSFM，任务是恒星年龄/自转周期等性质推断，与数模时序赛题无任务交集；可迁移洞见（领域小TSFM作定宽潜空间特征编码器、原生处理噪声/异方差/不规则采样）有启发性，但赛期内自训领域TSFM不可行，开源库github.com/philvanlane/encotess绑定TESS数据格式且伴生仓gh-philvanlane_encotess已因stars<50被拒；本条拒于映射而非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.24039
+  reason: competition_fit不足——制造工艺规划领域应用（cs.RO主分类）：贡献绑定3D CAD特征识别/2D图纸解读/工艺排序等专用agent流水线，可迁移部分（编排器+专家agent+确定性模块混合编排）属通用多agent实践、不构成本文独有edge；自建300例基准自报口径（下游agent 100%成功等）无外部验证；arXiv页无代码（Comments仅"Submitted to Elsevier Journal"），复现成本高，写不出有说服力的比赛映射
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.27427
+  reason: competition_fit不足——企业治理架构模式论文（cs.SE单作者36页，v1无venue无代码）：persona/execution信任域分离+审批矩阵/DLP/审计桥的收益绑定"多用户部署+执行审计+persona高频漂移"的组织治理语境，六类赛种均无此需求；可迁移内容（人格漂移与执行审计解耦、类型化变更对象过外部闸门、稳定审计锚）是一段设计原则而非可落地技术组件，撑不起差异化主张；唯一实证为作者自述的一个月受监管数字员工平台试点（五模型配置机理检查），无开源实现可跑；本条拒于映射而非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.20005
+  reason: competition_fit不足——TSFM预训练方法（SATS：multi-patch scale-aware token alignment+random/contiguous混合掩码），其收益（LSTF MSE -9.2%、GIFT-Eval MASE +8.3%、效率+65.6%）绑定"跨异构语料预训练基础模型"这一赛队不可控阶段与算力尺度；可迁移洞见（patch尺寸显式当作scale跨尺度对齐、混合掩码SSL预训练）需从零自实现且在赛题数据规模上收益未验证，混合频率数据赛队常规解法是重采样对齐而非多尺度tokenization；arXiv页无代码无Comments（2026-08-28实抓）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.13262
+  reason: competition_fit不足——训练配方研究（ORBIT：Bootstrap多级采样控制数据集/目标变量/上下文/时域暴露+全范围增量训练），属基础模型预训练基建而非预测建模方法；所训Falcon-2.0未放权重与代码（arXiv页2026-08-28实抓无任何链接），其GIFT-Eval/fev-bench零样本结论对赛队不可复用；可迁移trick（Rank-Guided Cross-Depth Alignment：深层stop-gradient教浅层、零推理开销）是辅助设计提示，独立撑不起比赛映射
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.08010
+  reason: competition_fit不足——RL后训练型方法（GTN-R，与已拒arxiv-2608.24114同类）：需对生成式TSFM做RL rollout训练基建与算力，六类赛种赛队无此工程语境；"suboptimal collapse"诊断（RL后训练使输出分布偏离真值）与真值邻域正则属reward shaping设计提示而非可落地组件；arXiv页无代码（2026-08-28实抓无Comments）
+  stars: null
+  decided: '2026-08-28'

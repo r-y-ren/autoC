@@ -31,3 +31,4 @@
 | 2026-08-28 17:00 | collect | 全量构建：C4 patterns（11/11 达成；216 条验证失败全量归类修正 winners 口径）+ MinerU winners（开源捷径 2 深构） | patterns 全量齐 |
 | 2026-08-28 19:00 | collect | 全量构建 W2 收官：patterns 23/23（goai/lablabai/mlh-ghw/cross-embodied 四份补齐，均低置信+刷新触发）；W3 过半（Hunter 6 片 24 入库 8 拒绝，台账 109） | 技术卡 38 张 |
 | 2026-08-28 19:30 | collect | 供应方网络故障：Hunter #7/#8/#9 阵亡（连接/TLS）；Qoder 三期 winners 收拢（1 实抓图片型名单双视觉交叉+2 缺口挂 8-30 watch） | 零残留、lint 全绿 |
+| 2026-08-28 21:00 | collect | 全量构建：25 队列清空归档（20 卡+5 拒）；技术卡 48/台账 116；队列余 43（50 队列 30、18 队列 13） | W3 过半 |
