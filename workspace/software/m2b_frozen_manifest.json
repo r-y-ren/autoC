@@ -9,6 +9,13 @@
     "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
     "dirty_before_gate": false
   },
+  "frozen_snapshot": {
+    "path": "workspace/software/m2b_frozen_candidate.b64",
+    "encoding": "base64",
+    "file_sha256": "3b9eb106b585a4b36e594bc6ecdbf9472994cfd9d31c02a486ffcb95f6320986",
+    "decoded_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+    "reason": "Preserve exact CRLF execution bytes across Git line-ending normalization"
+  },
   "gate": {
     "command": "python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m2b-frozen-clean --rounds 4 --require-complete",
     "input_sha256": "51b99ce89abdd5512e4b71dfbf4f75081a0c6eb02d47ee36b36feb4d4068079b",
