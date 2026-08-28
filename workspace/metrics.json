@@ -1,9 +1,9 @@
 {
-  "_generated_at": "2026-08-29T01:00:41",
+  "_generated_at": "2026-08-29T01:20:17",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
-    "milestone": "m2a-eval-hardening (AB/BA evaluation contract, fail-closed gates, atomic publication; historical keys retained)",
+    "milestone": "m2b-strategy-repair (terminal liquidation, confirmed purchases, inventory reservation, clean frozen candidate; historical keys retained)",
     "measured_at": "2026-08-28",
     "engine": {
       "package": "kaggle-environments",
@@ -553,18 +553,74 @@
       "m2b_candidate_sha256": {
         "value": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
         "unit": "sha256",
-        "method": "actual pre/post identity commands and final iterate_gate candidate snapshot identity; source SHA unchanged"
+        "method": "actual pre/post identity commands and final clean-baseline iterate_gate candidate snapshot identity; source SHA unchanged"
       },
       "m2b_frozen_manifest": {
         "value": {
           "path": "workspace/software/m2b_frozen_manifest.json",
-          "sha256": "0674a1f0f26efcae074d6264a8893291d5c6010776366172a94eab4edb6ddb76",
+          "sha256": "12c95bd0fc6b068282fb6f77826a9311fbaebf7b988fca4297361cb38d31a39c",
           "candidate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-          "git_ref": "1376fb41bd12d15922e4b7909308777dcc02beb1",
-          "dirty": true
+          "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
+          "dirty_before_gate": false
         },
         "unit": "manifest",
-        "method": "written after passing final complete gate from actual gate identity; manifest SHA measured by sha256 command"
+        "method": "written after successful clean-baseline complete gate; manifest SHA measured by sha256 command"
+      },
+      "strategy_repair_test_summary": {
+        "value": {
+          "total": 35,
+          "passed": 35,
+          "failed": 0,
+          "command": "python -m pytest workspace/software/tests/test_strategy_m2.py workspace/software/tests/test_agent_contract.py -q",
+          "evidence": "workspace/acceptance/evidence/m2b-strategy.log"
+        },
+        "unit": "test-run",
+        "method": "m2b-strategy acceptance evidence"
+      },
+      "strategy_repair_checks": {
+        "value": {
+          "terminal_day_no_capex": true,
+          "terminal_day_liquidation": true,
+          "purchase_confirmation": true,
+          "shed_reservation": true,
+          "positive_quantities": true,
+          "seat_and_episode_isolation": true
+        },
+        "unit": "verdict",
+        "method": "m2b-strategy targeted regression suite"
+      },
+      "development_gate_summary": {
+        "value": {
+          "label": "m2b-frozen-clean",
+          "candidate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+          "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
+          "expected_games": 32,
+          "actual_games": 32,
+          "ab_games": 16,
+          "ba_games": 16,
+          "abnormal_games": 0,
+          "formal_pass": true,
+          "record": {
+            "W": 31,
+            "L": 1,
+            "T": 0
+          },
+          "evidence": "workspace/software/exports/logs/iteration_gate_log.jsonl"
+        },
+        "unit": "gate",
+        "method": "latest m2b-frozen-clean gate record"
+      },
+      "frozen_candidate_identity": {
+        "value": {
+          "path": "workspace/software/kaggle_simulations/agent/main.py",
+          "sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+          "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
+          "dirty_before_gate": false,
+          "holdout_eligible": true,
+          "manifest": "workspace/software/m2b_frozen_manifest.json"
+        },
+        "unit": "identity",
+        "method": "m2b clean-baseline gate identity; m2c must verify the candidate blob at this ref and current candidate SHA"
       }
     },
     "unmeasured": {

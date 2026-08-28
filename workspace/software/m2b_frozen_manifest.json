@@ -1,16 +1,16 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "milestone": "m2b-strategy-repair",
-  "label": "m2b-frozen",
-  "created_at": "2026-08-28T16:49:10.782734+00:00",
+  "label": "m2b-frozen-clean",
+  "created_at": "2026-08-28T17:14:17.533887+00:00",
   "candidate": {
     "path": "workspace/software/kaggle_simulations/agent/main.py",
     "sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-    "git_ref": "1376fb41bd12d15922e4b7909308777dcc02beb1",
-    "dirty": true
+    "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
+    "dirty_before_gate": false
   },
   "gate": {
-    "command": "python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m2b-frozen --rounds 4 --require-complete",
+    "command": "python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m2b-frozen-clean --rounds 4 --require-complete",
     "input_sha256": "51b99ce89abdd5512e4b71dfbf4f75081a0c6eb02d47ee36b36feb4d4068079b",
     "log": "workspace/software/exports/logs/iteration_gate_log.jsonl",
     "formal_pass": true,
@@ -18,7 +18,7 @@
     "expected_games": 32,
     "actual_games": 32,
     "abnormal_games": 0,
-    "elapsed_seconds": 83.16,
+    "elapsed_seconds": 62.6,
     "opponents": [
       "cow_baron",
       "melon_hoarder",
@@ -29,19 +29,48 @@
       "AB",
       "BA"
     ],
+    "seat_counts": {
+      "AB": 16,
+      "BA": 16
+    },
     "seed_domain": "development",
     "seeds": [
       101,
       102,
       103,
       104
-    ]
+    ],
+    "candidate_record": {
+      "wins": 31,
+      "losses": 1,
+      "ties": 0
+    }
   },
   "identity_verification": {
     "source_sha_unchanged_during_gate": true,
     "snapshot_sha_matched_source": true,
     "post_gate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-    "post_gate_git_ref": "1376fb41bd12d15922e4b7909308777dcc02beb1",
-    "post_gate_dirty": true
+    "post_gate_git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
+    "evidence_log_changed_dirty_state": true,
+    "post_publish_candidate_verification": true
+  },
+  "test_evidence": {
+    "targeted_strategy_tests": {
+      "passed": 35,
+      "failed": 0,
+      "log": "workspace/acceptance/evidence/m2b-strategy.log"
+    },
+    "complete_software_tests": {
+      "passed": 138,
+      "failed": 0
+    },
+    "smoke_boot_pass": true,
+    "gate_contract_pass": true,
+    "export_contract_pass": true
+  },
+  "holdout": {
+    "revealed": false,
+    "run": false,
+    "candidate_changes_after_freeze_allowed": false
   }
 }
