@@ -1,0 +1,22 @@
+{
+  "campaign": {
+    "competition_id": "kaggle-kaggriculture",
+    "blueprint_ref": "b6b218e"
+  },
+  "checklist": [
+    {
+      "id": "m2-ab",
+      "category": "software",
+      "status": "pending",
+      "evidence": "待 acceptor agent 核验"
+    }
+  ],
+  "result": "pending_agent",
+  "generated_at": "2026-08-28T20:27:48",
+  "retry_state": {
+    "count": 0,
+    "max": 3,
+    "tripped": false
+  },
+  "scope": "scoped run（--only，范围外项未验；终验须全量重跑）"
+}

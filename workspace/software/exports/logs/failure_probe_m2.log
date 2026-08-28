@@ -1,0 +1,78 @@
+Loading environment cabt failed: Could not find module 'C:\Users\OSS\AppData\Roaming\Python\Python314\site-packages\kaggle_environments\envs\cabt\cg\cg.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+[01] submission vs pass seed=201: 75242:3000 winner=submission
+[02] submission vs pass seed=202: 71527:3000 winner=submission
+[03] submission vs pass seed=203: 71388:3000 winner=submission
+[04] submission vs pass seed=204: 56966:3000 winner=submission
+[05] submission vs pass seed=205: 65340:3000 winner=submission
+[06] submission vs pass seed=206: 72877:3000 winner=submission
+[07] submission vs pass seed=207: 52527:3000 winner=submission
+[08] submission vs pass seed=208: 69130:3000 winner=submission
+[09] submission vs random seed=201: 56561:0 winner=submission
+[10] submission vs random seed=202: 73642:0 winner=submission
+[11] submission vs random seed=203: 51437:0 winner=submission
+[12] submission vs random seed=204: 33333:0 winner=submission
+[13] submission vs random seed=205: 68807:0 winner=submission
+[14] submission vs random seed=206: 74190:0 winner=submission
+[15] submission vs random seed=207: 30823:0 winner=submission
+[16] submission vs random seed=208: 57731:10 winner=submission
+[17] submission vs starter seed=201: 54537:3421 winner=submission
+[18] submission vs starter seed=202: 73194:3510 winner=submission
+[19] submission vs starter seed=203: 70578:3562 winner=submission
+[20] submission vs starter seed=204: 21351:3528 winner=submission
+[21] submission vs starter seed=205: 65340:3473 winner=submission
+[22] submission vs starter seed=206: 54116:3688 winner=submission
+[23] submission vs starter seed=207: 26301:3524 winner=submission
+[24] submission vs starter seed=208: 61959:3734 winner=submission
+[25] submission vs greedy_carrot seed=201: 28438:7114 winner=submission
+[26] submission vs greedy_carrot seed=202: 55974:9131 winner=submission
+[27] submission vs greedy_carrot seed=203: 68012:6012 winner=submission
+[28] submission vs greedy_carrot seed=204: 44757:6320 winner=submission
+[29] submission vs greedy_carrot seed=205: 63319:10347 winner=submission
+[30] submission vs greedy_carrot seed=206: 59386:12515 winner=submission
+[31] submission vs greedy_carrot seed=207: 26249:11502 winner=submission
+[32] submission vs greedy_carrot seed=208: 34781:12992 winner=submission
+[33] submission vs baseline_wheat seed=201: 57605:10936 winner=submission
+[34] submission vs baseline_wheat seed=202: 23247:10263 winner=submission
+[35] submission vs baseline_wheat seed=203: 45034:11008 winner=submission
+[36] submission vs baseline_wheat seed=204: 55396:10595 winner=submission
+[37] submission vs baseline_wheat seed=205: 68407:12165 winner=submission
+[38] submission vs baseline_wheat seed=206: 52200:10621 winner=submission
+[39] submission vs baseline_wheat seed=207: 63044:10572 winner=submission
+[40] submission vs baseline_wheat seed=208: 63646:10603 winner=submission
+[41] submission vs expansionist seed=201: 35239:16608 winner=submission
+[42] submission vs expansionist seed=202: 70304:17451 winner=submission
+[43] submission vs expansionist seed=203: 63362:14418 winner=submission
+[44] submission vs expansionist seed=204: 61005:15349 winner=submission
+[45] submission vs expansionist seed=205: 55509:18463 winner=submission
+[46] submission vs expansionist seed=206: 68597:15321 winner=submission
+[47] submission vs expansionist seed=207: 32745:17796 winner=submission
+[48] submission vs expansionist seed=208: 66583:16834 winner=submission
+[49] submission vs melon_hoarder seed=201: 62212:34873 winner=submission
+[50] submission vs melon_hoarder seed=202: 64684:34885 winner=submission
+[51] submission vs melon_hoarder seed=203: 54201:35163 winner=submission
+[52] submission vs melon_hoarder seed=204: 67516:36605 winner=submission
+[53] submission vs melon_hoarder seed=205: 70855:34836 winner=submission
+[54] submission vs melon_hoarder seed=206: 48350:34920 winner=submission
+[55] submission vs melon_hoarder seed=207: 50342:36736 winner=submission
+[56] submission vs melon_hoarder seed=208: 34096:35509 winner=melon_hoarder
+[57] submission vs cow_baron seed=201: 29799:28003 winner=submission
+[58] submission vs cow_baron seed=202: 55239:47624 winner=submission
+[59] submission vs cow_baron seed=203: 62109:48374 winner=submission
+[60] submission vs cow_baron seed=204: 16732:19945 winner=cow_baron
+[61] submission vs cow_baron seed=205: 31224:26090 winner=submission
+[62] submission vs cow_baron seed=206: 16248:19835 winner=cow_baron
+[63] submission vs cow_baron seed=207: 32608:26579 winner=submission
+[64] submission vs cow_baron seed=208: 35348:30890 winner=submission
+
+wrote C:\Users\OSS\Desktop\autoC\workspace\software\exports\failure_probe_report.md
+wrote C:\Users\OSS\Desktop\autoC\workspace\software\exports\logs\failure_probe_log.jsonl
+wrote C:\Users\OSS\Desktop\autoC\workspace\software\exports\failure_probe_summary.json
+  vs cow_baron        6-2-0 avg_margin=+3996 min=-3587
+  vs melon_hoarder    7-1-0 avg_margin=+21091 min=-1413
+  vs greedy_carrot    8-0-0 avg_margin=+38123 min=+14747
+  vs expansionist     8-0-0 avg_margin=+40138 min=+14949
+  vs baseline_wheat   8-0-0 avg_margin=+42727 min=+12984
+  vs starter          8-0-0 avg_margin=+49867 min=+17823
+  vs random           8-0-0 avg_margin=+55814 min=+30823
+  vs pass             8-0-0 avg_margin=+63875 min=+49527

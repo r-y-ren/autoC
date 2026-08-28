@@ -72,7 +72,7 @@ SEASON_DAYS = 30
 
 # ---- strategy knobs (all values trace to curve/economy analysis in the
 # module docstring; tuning changes are logged in the iteration gate log) ----
-HERD_CAP = 10            # labour-ceiling optimum (measured 8/10/12: +1152/+3580/+1852 vs cow_baron)
+HERD_CAP = 10            # H10 VARIANT: labour ceiling probe
 COW_BUY_RESERVE = 380    # cash kept besides a cow purchase (seeds+feed+hires)
 COW_BUY_LAST_DAY = 20    # later cows never reach a production day in time
 PASTURE_RING = 2         # pastures within manhattan dist <= 2 of shed access

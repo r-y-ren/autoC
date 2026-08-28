@@ -32,6 +32,13 @@ python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression
 
 # 7) 失败模式探针（submission 对全池多种子深记录，产出 failure_modes.md 的证据层）
 python workspace/software/scripts/analyze_failure_modes.py --rounds 8
+
+# 8) 迭代门（m2 起候选改动头对头闸门，JSONL 台账；candidate 未过门不得替换主版本）
+python workspace/software/scripts/iterate_gate.py --candidate <path> --label <name> --rounds 4
+
+# 9) LLM A/B（m2-ab：同种子 LLM-on vs LLM-off 双座位对局 + 预算闸/回退计数；
+#    无 KG_LLM_* 环境变量时跑 NullProvider 通路自检，win_rate 如实置 null）
+python workspace/software/scripts/run_llm_ab.py --rounds 4
 ```
 
 ## 目录
@@ -85,19 +92,26 @@ workspace/software/
 对 submission 的威胁见 `exports/failure_modes.md`（cow_baron 7/8、melon_hoarder 8/8 胜 submission——
 第一轮"24/24 全胜"的弱池假象已被打破，失败模式成为 m2 迭代的输入）。
 
-## Bot 策略（kaggle_simulations/agent/main.py）
+## Bot 策略（kaggle_simulations/agent/main.py，m2-full 波次 3 起）
 
-"鹅引擎 + 瓜波段"三段式（全部机制来自官方 How-to-Play/engine 源码）：
+"奶牛引擎 + 显式市场门控"（全部机制来自官方 How-to-Play/engine 源码；失败模式驱动的
+重构，逐 FM 对策见 `exports/failure_modes.md` 顶部状态标注与 `exports/logs/iteration_gate_log.jsonl`）：
 
-1. **鹅引擎**：shed 近区建 coop 养鹅；每日 FEED（小麦）+ CARE（喂养日照护银行化 +1 蛋/日，
-   即每日照护使产蛋翻倍）+ COLLECT_FERTILIZER（每只存活动物每日 1 肥料，~$100）+ 批量 HARVEST。
-   蛋与肥料的价格曲线对抛压耐受（log 上行目标 0.2），可每日倾销。
-2. **瓜波段**：第 0-2 天 6 块西瓜进窗口期浇水（6-12 天龄，1+6=6 果/块），第 12-13 天收获，
-   按价格闸门分批出货（西瓜 glut 曲线 sq 3.6，乱抛直接砸穿到 $1）；价格仍在 $180 以上时第
-   13-16 天续第二波。
-3. **小麦基座**：剩余格种小麦（自给鹅粮 + 现金），max_yield_day 收获，只卖喂养储备外的盈余。
-4. **劳动与土地**：晨间按负载雇佣（fib 成本 1,1,2,3,...）、资金闸门下买地（NE 早期/SW/SE）。
-5. **终局清算**：第 28 天起停 CARE（银行奖金要下个产出日才付），第 29 天清仓一切——只计银行存款。
+1. **奶牛引擎（FM-1 对策）**：shed 环形建 PASTURE 养牛（受照护奶牛 3 奶/2 天 = 1.5/天，
+   单位经济碾压鹅的 2 蛋/天 × 50）；牛群按「现金闸门 + 每日 pace 上限」分期扩张至 10 头
+   上限（NE 扩地后环形牛栏 + 18-22 块施肥小麦 = 劳动天花板内的最优规模，实测 8/10/12
+   三档对比取 10）；奶价 <90（需求枯竭）自动冻结扩栏。
+2. **小麦基座（FM-2/FM-3 对策）**：第 0-1 天先种满小麦再扩栏（饲料管线先行）；小麦 age-2
+   自施肥（4 → 6 单位/块）；季中**零溢价作物敞口**——瓜双波全部移除，因为 MELON 无商铺
+   消费 + 平方 glut 曲线可被任何对手战略性砸穿，而小麦 log 曲线 + 奶的城镇日常消费不可。
+3. **选择性干预市场门控（蓝图选型 arxiv-2608.15291 方法论迁移，main.py `_market_gates`
+   内逐条注释曲线依据）**：奶 HOARD(<105)/RELEASE(清仓式放行,峰值 145+ 加大)/压力护盘
+   (shed≥70 排水防 100 格丢弃悬崖)/终局衰减闸；肥料 50 闸门 + 个位数库存上限（棚位让奶）；
+   小麦 12 闸门日放盈余；第 29 天清仓一切——只计银行存款。
+4. **劳动与后勤**：黎明 HIRE 突发雇佣（hand 每晨清零且只有 h≤2 可雇，单订单/回合会卡在
+   3 人——实测修复）；多载具小麦分桶配送（单载具 24 回合喂不完 10+ 头牛环）；PLACE 优先级
+   压过收割（未落位牛零产出且占棚位）；小麦 age≥5 腐烂抢救权重。
+5. **可插拔 LLM 决策钩子（默认关闭）**：`LLM_PROVIDER=None`，A/B 基建侧专用。
 
 ### LLM 可插拔决策接口（默认关闭）
 
@@ -134,6 +148,22 @@ greedy_carrot 1162.2；回归门 PASS（20 局 55.49s）。
 - 测试：**84 passed**（新增新对手单测 / 方差统计 / 冻结池门语义 / 复盘价格日志）
 - 复现性：确定性对手同配对同种子奖励逐位一致；引擎 `random` 对手奖励漂移（未被子完全
   钉死，已声明边界）
+
+**m2 波次 3（2026-08-28，失败模式驱动的策略重构）**：
+
+- submission 换引擎：鹅+瓜 → **奶牛+施肥小麦+显式市场门控**；16 条迭代门记录
+  （`exports/logs/iteration_gate_log.jsonl`），每轮候选改动先过头对头门再合入
+- 全池矩阵（148 局，363.11s）：**submission Elo 1500.8 全池第一**（W36-0L），cow_baron
+  1419.6 第二；m1 时 submission 1422.8 居第二
+- 对 m1 两大苦主：**cow_baron 10W-2L**（矩阵 4-0 + 探针 6-2，均差 +3996；m1 为 1-7）、
+  **melon_hoarder 11W-1L**（+21091；m1 为 0-8）；探针总战绩 53W-3L（m1 为 49W-15L）
+- 残留负局：cow_baron 种子 204/206（城镇零奶类商铺的需求枯竭局，奶价 9-40 双方地板）、
+  melon_hoarder 种子 208（-1413）——均为市场随机性，非对手可针对行为
+- 回归门 PASS（m2 复跑，冻结线未动）；测试 **101 passed**（新增 17 条策略单测）；
+  smoke_boot PASS（3.7s）
+- LLM A/B harness 就绪（`scripts/run_llm_ab.py` 一条命令）；本环境无 KG_LLM_* key，
+  NullProvider 通路自检实测（4 局 / 1294 次咨询全部回退启发式 / 0 预算阻断），
+  `llm_ab_win_rate` 如实置 null 待 key
 
 ## 已知边界
 

@@ -1,7 +1,7 @@
 {
   "schema": "software-metrics-shard/1.0",
   "campaign": "kaggle-kaggriculture",
-  "milestone": "m1-vertical (opponent pool hardening + failure-mode evidence, wave 2/4)",
+  "milestone": "m2-full (failure-mode-driven strategy overhaul, wave 3/4; m1 keys retained below for the record)",
   "measured_at": "2026-08-28",
   "engine": {
     "package": "kaggle-environments",
@@ -68,14 +68,30 @@
         "FM-4 shared FERTILIZER curve decays under animal-family sell pressure (94->41 vs cow_baron; no $1 crash within 30 days)"
       ],
       "ref": "exports/failure_modes.md"
-    }, "unit": "report", "method": "scripts/analyze_failure_modes.py --rounds 8 (2026-08-28); evidence layer in exports/failure_probe_report.md + logs/failure_probe_log.jsonl; embedded in eval_results.json.failure_modes"}
+    }, "unit": "report", "method": "scripts/analyze_failure_modes.py --rounds 8 (2026-08-28); evidence layer in exports/failure_probe_report.md + logs/failure_probe_log.jsonl; embedded in eval_results.json.failure_modes"},
+
+    "m2_submission_engine": {"value": "dairy engine (cows + fertilized wheat + explicit selective-intervention market gates); replaced the m1 goose+melon engine in kaggle_simulations/agent/main.py", "unit": "str", "method": "m2 wave-3 merge; file is stdlib-only self-contained (verified: no top-level imports); both-seats + short-episode + gym contract tests green"},
+    "m2_iteration_gate_log": {"value": {"entries": 16, "live": 10, "retroactive_from_session_log": 6, "distinct_design_iterations": 8, "final": "PASS (v2c-dairy-r8: dawn HIRE burst + rot-emergency harvest + clear-through milk gates + phantom-feed fix)", "file": "exports/logs/iteration_gate_log.jsonl"}, "unit": "report", "method": "scripts/iterate_gate.py invocations (candidate -> head-to-head vs cow_baron/melon_hoarder + guards -> JSONL ledger); every candidate change gated before merge; 6 later runs appended retroactively with measured numbers from the session run log (flagged retroactive=true)"},
+    "m2_elo_ratings_full_pool": {"value": {"submission": 1500.8, "cow_baron": 1419.6, "melon_hoarder": 1355.1, "expansionist": 1287.1, "baseline_wheat": 1177.7, "greedy_carrot": 1154.1, "starter": 1056.8, "pass": 990.4, "random": 858.4}, "unit": "elo", "method": "run_eval.py --rounds 4 final m2 artifact run (148 games, 363.11s, 2026-08-28): submission #1 at 1500.8 (+81.2 over cow_baron), record W36 L0 T0 across ALL its games; m1 comparison: submission 1422.8 (2nd of 9)"},
+    "m2_matchup_win_rates": {"value": {
+      "matrix_seeds_101_104": {"cow_baron": 1.0, "melon_hoarder": 1.0, "expansionist": 1.0, "baseline_wheat": 1.0, "greedy_carrot": 1.0, "starter": 1.0, "random": 1.0, "pass": 1.0},
+      "probe_seeds_201_208": {"cow_baron": 0.75, "melon_hoarder": 0.875, "expansionist": 1.0, "baseline_wheat": 1.0, "greedy_carrot": 1.0, "starter": 1.0, "random": 1.0, "pass": 1.0},
+      "unique_seed_head_to_head": {"cow_baron": "10W-2L over seeds 101-104+201-208", "melon_hoarder": "11W-1L over seeds 101-104+201-208"}
+    }, "unit": "ratio", "method": "eval_results.json#matchup_win_rates (matrix) + failure_probe (seeds 201-208); m1 comparison: cow_baron 0.0 (1-7), melon_hoarder 0.0 (0-8)"},
+    "m2_submission_margin_vs_pool": {"value": {"cow_baron": 3330, "melon_hoarder": 12875, "expansionist": 28098, "baseline_wheat": 37284, "greedy_carrot": 49333, "starter": 52517, "random": 73943, "pass": 60246}, "unit": "coins", "method": "avg margin (submission - opponent) per pairing, final m2 matrix run (--rounds 4); m1 comparison: cow_baron -17772, melon_hoarder -5410"},
+    "m2_probe_record": {"value": {"record": "53W-3L-0T", "losses": ["cow_baron seed 204 (-3213)", "cow_baron seed 206 (-3587)", "melon_hoarder seed 208 (-1413)"], "loss_character": "cow_baron 204/206 are demand-drought episodes (zero milk shops drawn: milk 9-40 floor for both players, wheat 26-33) -- market randomness keyed to the episode seed, not opponent-identifiable behavior"}, "unit": "report", "method": "scripts/analyze_failure_modes.py --rounds 8 on the merged m2 bot (64 games, seeds 201-208, 178s)"},
+    "m2_tests_total": {"value": 101, "unit": "count", "method": "python -m pytest workspace/software/tests -q (2026-08-28, m2 wave 3): 84 m1 tests + 17 new tests/test_strategy_m2.py (milk gate schedule, hold/release/pressure gate semantics, fert hoard bound, herd/wheat planning caps, phantom-feed-buy guard, buy-pace episode reset, dawn hire burst, demand-drought herd freeze)"},
+    "m2_tests_passed": {"value": 101, "unit": "count", "method": "same run, 101 passed 0 failed in 1.98s"},
+    "m2_regression_gate_pass": {"value": true, "unit": "bool", "method": "m2 re-run (2026-08-28): run_eval --rounds 2 --assert-regression -> exit 0; frozen-subset gate PASS (submission=1355.0 > baseline_wheat=1252.4 > greedy_carrot=1227.5 > starter=1175.3 > pass=1128.9 > random=1061.0, submission 0 losses vs frozen pool)"},
+    "m2_smoke_boot_pass": {"value": true, "unit": "bool", "method": "python workspace/software/smoke_boot.py on the merged m2 bot -> PASS (3.7s, 4 phases incl. 720-step self-play seeds 7/8/9)"},
+    "llm_ab_harness_ready": {"value": true, "unit": "bool", "method": "scripts/run_llm_ab.py --rounds 2 (one command): loads two module instances of main.py, LLM-on side wired to provider_from_env(), both seat orders, instrumented provider counters; writes exports/llm_ab_results.json. NullProvider plumbing-validation run measured: 4 games in 13.06s, 1294 consultations, 1294 heuristic fallbacks, 0 budget blocks (NullProvider carries no budget), seat-symmetric outcomes"},
+    "llm_ab_games": {"value": 4, "unit": "games", "method": "NullProvider baseline-side harness validation only (seeds 701-702, both seats). NOT a real A/B: with KG_LLM_* unset both sides play the identical heuristic policy; win_rate stays null by design"},
+    "llm_ab_fallback_count": {"value": 1294, "unit": "count", "method": "instrumented NullProvider run above: every consultation fell back to the heuristic gate (provider disabled -> returns None); proves the fallback path executes"},
+    "failure_mode_status_m2": {"value": {"FM-1": "已缓解 (root-cause engine swap to cows; residual: demand-drought seeds 204/206)", "FM-2": "已缓解 (no mid-season premium-crop exposure; melon_hoarder 0-8 -> 7-1)", "FM-3": "已缓解 (wheat-first staged opening; expansionist min margin +9421 -> +14949)", "FM-4": "部分缓解 (gated release + wheat self-consumption; linear zero-demand curve still decays)"}, "unit": "report", "method": "exports/failure_modes.md m2 annotations backed by the 64-game probe + iteration gate log"}
   },
   "unmeasured": {
-    "llm_ab_win_rate": {"value": null, "note": "m2 wave: LLM consultant A/B not run yet; provider ships disabled (NullProvider)"},
-    "llm_ab_games": {"value": null, "note": "m2 wave"},
-    "llm_ab_budget_gate_hits": {"value": null, "note": "m2 wave"},
-    "llm_ab_fallback_count": {"value": null, "note": "m2 wave"},
-    "iteration_gate_log": {"value": null, "note": "m2 wave (per-enhancement hypothesis->evidence->merge ledger)"},
+    "llm_ab_win_rate": {"value": null, "note": "待用户提供 KG_LLM_* key: 本环境无相关环境变量，A/B 两侧策略相同，实测无意义故如实置 null（harness 已就绪，见 llm_ab_harness_ready）"},
+    "llm_ab_budget_gate_hits": {"value": null, "note": "预算闸代码在 OpenAICompatProvider 内（max 8 calls/30s），NullProvider 无 budget 对象故未触发；待真实 key 后由 run_llm_ab.py 输出"},
     "online_ladder_games": {"value": null, "note": "no Kaggle submission made yet (team-side manual step per blueprint man-submit)"},
     "online_skill_rating": {"value": null, "note": "depends on online submissions"},
     "online_feedback_calibration": {"value": null, "note": "opponent-pool recalibration triggered by ladder feedback; reserved for man-submit"},

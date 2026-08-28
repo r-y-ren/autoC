@@ -72,7 +72,7 @@ SEASON_DAYS = 30
 
 # ---- strategy knobs (all values trace to curve/economy analysis in the
 # module docstring; tuning changes are logged in the iteration gate log) ----
-HERD_CAP = 10            # labour-ceiling optimum (measured 8/10/12: +1152/+3580/+1852 vs cow_baron)
+HERD_CAP = 12            # H12 VARIANT: post-hire-burst rescale probe
 COW_BUY_RESERVE = 380    # cash kept besides a cow purchase (seeds+feed+hires)
 COW_BUY_LAST_DAY = 20    # later cows never reach a production day in time
 PASTURE_RING = 2         # pastures within manhattan dist <= 2 of shed access
@@ -90,28 +90,19 @@ LLM_PROVIDER = None      # optional consultant, default off; local A/B only
 _STATE = {}
 
 
-def _buy_pace(player, day, hour):
-    """Cows bought today so far (resets on day rollover / new episode).
-
-    Observation clock is strictly increasing within an episode, so a
-    non-increasing (day, hour) read means a fresh episode started in the
-    same process (local eval runs many games on one module instance).
-    """
+def _buy_pace(player, day):
+    """Cows bought today so far (resets on day rollover / new episode)."""
     st = _STATE.get(player)
     if st is None or st["day"] != day:
-        return 0
-    if hour <= st.get("hour", -1):
-        _STATE.pop(player, None)
         return 0
     return st.get("cows_bought", 0)
 
 
-def _note_buys(player, day, hour, n):
+def _note_buys(player, day, n):
     st = _STATE.get(player)
-    if st is None or st["day"] != day or hour <= st.get("hour", -1):
-        st = {"day": day, "hour": hour, "cows_bought": 0}
+    if st is None or st["day"] != day:
+        st = {"day": day, "cows_bought": 0}
         _STATE[player] = st
-    st["hour"] = hour
     st["cows_bought"] = st.get("cows_bought", 0) + n
 
 
@@ -556,14 +547,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
         # floor, milk realized 29-37): freeze scaling -- the marginal cow
         # cannot pay for itself at distressed prices
         target = min(target, max(6, herd_total))
-    bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0))
+    bought = _buy_pace(_get(obs, "player", 0), day)
     if herd_total < target and day <= COW_BUY_LAST_DAY \
             and money >= 400 + reserve and shed_count < 88 and bought < pace:
         n = min(pace - bought, target - herd_total,
                 int((money - reserve) // 400))
         if n > 0:
             orders.append(["BUY_ANIMAL", "COW", n])
-            _note_buys(_get(obs, "player", 0), day, _get(obs, "hour", 0), n)
+            _note_buys(_get(obs, "player", 0), day, n)
     # land: NE adds a shed ring + field; SW/SE follow when flush (FM-1 scale)
     if quads < 2 and money >= 1800 and day >= 4:
         orders.append(["BUY_LAND"])

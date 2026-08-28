@@ -72,13 +72,13 @@ SEASON_DAYS = 30
 
 # ---- strategy knobs (all values trace to curve/economy analysis in the
 # module docstring; tuning changes are logged in the iteration gate log) ----
-HERD_CAP = 10            # labour-ceiling optimum (measured 8/10/12: +1152/+3580/+1852 vs cow_baron)
+HERD_CAP = 8             # LEAN VARIANT: stay inside the labour ceiling
 COW_BUY_RESERVE = 380    # cash kept besides a cow purchase (seeds+feed+hires)
 COW_BUY_LAST_DAY = 20    # later cows never reach a production day in time
 PASTURE_RING = 2         # pastures within manhattan dist <= 2 of shed access
 WHEAT_FEED_RESERVE = 4   # days of feed kept in the shed before selling wheat
 WHEAT_BUY_MAX_PRICE = 65 # feed top-ups while wheat is not ruinous
-FERT_GATE = 50           # fertilizer: hold below, release above
+FERT_GATE = 60           # fertilizer: hold below, release above
 FERT_STOCK_CAP = 6       # hoard bound: shed slots belong to milk first
 FERT_FIELD_RESERVE = 4   # keep some fertilizer for the wheat fields
 LLM_PROVIDER = None      # optional consultant, default off; local A/B only
@@ -90,28 +90,19 @@ LLM_PROVIDER = None      # optional consultant, default off; local A/B only
 _STATE = {}
 
 
-def _buy_pace(player, day, hour):
-    """Cows bought today so far (resets on day rollover / new episode).
-
-    Observation clock is strictly increasing within an episode, so a
-    non-increasing (day, hour) read means a fresh episode started in the
-    same process (local eval runs many games on one module instance).
-    """
+def _buy_pace(player, day):
+    """Cows bought today so far (resets on day rollover / new episode)."""
     st = _STATE.get(player)
     if st is None or st["day"] != day:
-        return 0
-    if hour <= st.get("hour", -1):
-        _STATE.pop(player, None)
         return 0
     return st.get("cows_bought", 0)
 
 
-def _note_buys(player, day, hour, n):
+def _note_buys(player, day, n):
     st = _STATE.get(player)
-    if st is None or st["day"] != day or hour <= st.get("hour", -1):
-        st = {"day": day, "hour": hour, "cows_bought": 0}
+    if st is None or st["day"] != day:
+        st = {"day": day, "cows_bought": 0}
         _STATE[player] = st
-    st["hour"] = hour
     st["cows_bought"] = st.get("cows_bought", 0) + n
 
 
@@ -192,23 +183,21 @@ def _hands_target(day, herd, wheat_tiles):
 def _milk_gate(day):
     """Milk hold-threshold by day (selective intervention, see _market_gates).
 
-    Base 105: in a joint-dairy market (both players milking ~20+/day vs
-    town consumption of ~5/day, measured mirror prices 97-135) holding for
-    higher bands just deferred sales into eventual pressure dumps (measured
-    realized ~60/unit).  Clearing daily at >= 105 dominates: our engine
-    out-produces cow_baron +22..32k solo, and the only way that edge
-    survives the shared milk curve is never dumping below the band.
+    Base 115: in a joint-dairy market (both players milking ~20/day vs town
+    consumption of ~5/day, measured mirror prices 97-135) a 0.8x-base gate
+    of 130 only samples the recovery peaks while inventory piles into
+    forced dumps; 115 keeps daily sell-through at a better realized average.
     Decay late-season: the day-29 liquidation floor is coming for everyone,
     so clearing inventory at a lower-but-positive gate beats holding into
     the joint dump.
     """
     if day >= 28:
-        return 80
+        return 85
     if day >= 26:
-        return 90
+        return 95
     if day >= 24:
-        return 100
-    return 105
+        return 105
+    return 115
 
 
 def _llm_sell_gate(item, price, base_gate, context):
@@ -282,19 +271,19 @@ def _market_gates(day, prices, shed, herd):
         # buffer scales with tomorrow's production (herd * 1.5) and the
         # tranche cap grows with stock -- never let lumpiness turn into a
         # pressure dump at the floor
-        if shed_count >= 70 and p >= 30:
-            # discard-cliff guard: drain to a working buffer rather than
-            # let the 100-slot shed discard milk for free
-            orders.append(["SELL", "MILK", max(0, milk - 15)])
-        elif p >= 145:
-            # recovery peak / early scarcity (d8-11 measured 172-186):
-            # the first batches must clear NOW, in size
-            orders.append(["SELL", "MILK", min(milk, 24)])
-        elif p >= gate:
-            # sell-through, no buffer: yesterday's production clears every
-            # day at the band price; the lumpy every-other-day harvests
-            # ride the same band two days out of two
+        buffer = 8 if herd <= 9 else 12
+        if shed_count >= 78:
+            # discard-cliff override: drain hard rather than let the
+            # 100-slot shed discard milk for free
+            orders.append(["SELL", "MILK", max(0, milk - 25)])
+        elif p >= 150:
+            # recovery peak / early scarcity: town demand is absorbing and
+            # the first batches must clear NOW (measured: a 12-unit buffer
+            # throttled us to ~0/day exactly while cow_baron banked +8k)
             orders.append(["SELL", "MILK", min(milk, 20)])
+        elif p >= gate:
+            # sell-through: small buffer to catch the next peak
+            orders.append(["SELL", "MILK", max(0, min(milk - buffer, 18))])
 
     # ---- FERTILIZER: bounded hoard, gated release ----------------------
     fert = shed.get("FERTILIZER", 0)
@@ -449,13 +438,11 @@ def _build_tasks(obs, farm, private, day):
                     add(34, x, y, ["FERTILIZE"], ("fert", x, y), need="FERTILIZER")
                 if yu > 0:
                     if age >= cd["max_yield_day"] + 1 or last_day:
-                        # rot emergency: one-time crops decay to a weed from
-                        # hour 0 of this day, ~1 unit per 2 turns
-                        add(95, x, y, ["HARVEST"], ("harvest", x, y))
+                        add(72, x, y, ["HARVEST"], ("harvest", x, y))
                     elif age >= cd["max_yield_day"] and (
                             _get(tile, "watered_today", False) or
-                            _get(obs, "hour", 0) >= 18):
-                        add(80, x, y, ["HARVEST"], ("harvest", x, y))
+                            _get(obs, "hour", 0) >= 20):
+                        add(72, x, y, ["HARVEST"], ("harvest", x, y))
             elif "animal" in tile:
                 if not _get(tile, "fed_today", False):
                     animals_to_feed += 1
@@ -528,18 +515,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
 
     # ---- buying: survival purchases FIRST (per-unit lockstep commits in
     # order, and an unaffordable later order must never eat feed money) ---
-    # feed security (FM-3): never let the herd run short of wheat, counting
-    # what carriers already hold (a shed-only check sees the morning pickup
-    # as a shortfall and re-buys what we just sold -- measured -8k/season).
-    # Starvation guard: dear wheat is still cheaper than a lost cow.
-    wheat_carried = sum(_get(inv, "WHEAT", 0)
-                        for inv in (_get(private, "inventories", []) or []) if inv)
-    sys_wheat = shed.get("WHEAT", 0) + wheat_carried
+    # feed security (FM-3): never let the shed run dry while mouths wait.
+    # Starvation guard: dear wheat is still cheaper than a lost cow, so when
+    # the shed is already short we pay up to 85; routine top-ups stay cheap
+    # (our own buying pumps the shared wheat price against us).
     if animals_to_feed > 0 and not last_day \
-            and sys_wheat < animals_to_feed + 3:
-        cap = 85 if sys_wheat < animals_to_feed else WHEAT_BUY_MAX_PRICE
+            and shed.get("WHEAT", 0) < animals_to_feed + 3:
+        cap = 85 if shed.get("WHEAT", 0) < animals_to_feed else WHEAT_BUY_MAX_PRICE
         if prices.get("WHEAT", 25) <= cap:
-            want = min(16, animals_to_feed + 8 - sys_wheat)
+            want = min(16, animals_to_feed + 8 - shed.get("WHEAT", 0))
             if want > 0:
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
     # seeds
@@ -551,19 +535,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
     reserve = 800 if day <= 3 else (550 if day <= 7 else COW_BUY_RESERVE)
     pace = 2 if day <= 3 else 3
     target = _herd_target(day, _plan_tiles(farm, day, prices.get("WHEAT", 25))[3])
-    if day > 10 and prices.get("MILK", 160) < 90:
-        # demand drought (measured crash seeds: joint flow runs to the
-        # floor, milk realized 29-37): freeze scaling -- the marginal cow
-        # cannot pay for itself at distressed prices
-        target = min(target, max(6, herd_total))
-    bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0))
+    bought = _buy_pace(_get(obs, "player", 0), day)
     if herd_total < target and day <= COW_BUY_LAST_DAY \
             and money >= 400 + reserve and shed_count < 88 and bought < pace:
         n = min(pace - bought, target - herd_total,
                 int((money - reserve) // 400))
         if n > 0:
             orders.append(["BUY_ANIMAL", "COW", n])
-            _note_buys(_get(obs, "player", 0), day, _get(obs, "hour", 0), n)
+            _note_buys(_get(obs, "player", 0), day, n)
     # land: NE adds a shed ring + field; SW/SE follow when flush (FM-1 scale)
     if quads < 2 and money >= 1800 and day >= 4:
         orders.append(["BUY_LAND"])
@@ -718,18 +697,13 @@ def agent(obs):
         orders = _market_orders(obs, farm, _get(obs, "private", {}) or {},
                                 day, animals_to_feed, herd_total)
 
-        # HIRE up to the labour plan at dawn. Hands reset every morning and
-        # only hour <= 2 can hire, so ALL hires must go out in the first
-        # turn's order list (one HIRE per turn leaves us stuck at 3 hands
-        # against a plan of 5 -- measured in the crash seeds). Cost is fib:
-        # 1,1,2,3,5 per day, trivial vs a rotting harvest.
+        # HIRE while below the labour plan (cheap: fib costs 1,1,2,3,5/day)
         orders = [o for o in orders if o[0] != "HIRE"]
         hands = _get(farm, "hands", []) or []
         hands_t = _hands_target(day, herd_total, wheat_tiles)
         money = _get(farm, "money", 0.0)
         if hour <= 2 and len(hands) < hands_t and money >= 40:
-            for _ in range(min(3, hands_t - len(hands))):
-                orders.append(["HIRE"])
+            orders.append(["HIRE"])
 
         farmer = actions[0] if actions else ["PASS"]
         hands_actions = actions[1:]
