@@ -1,52 +1,52 @@
 {
-  "_generated_at": "2026-08-28T18:00:33",
+  "_generated_at": "2026-08-28T19:12:10",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
-    "milestone": "m0-skeleton (asset revival + regression line freeze)",
+    "milestone": "m1-vertical (opponent pool hardening + failure-mode evidence, wave 2/4)",
     "measured_at": "2026-08-28",
     "engine": {
       "package": "kaggle-environments",
       "version": "1.32.7+nodeps (vendored, engine code unmodified)",
       "scenario": "kaggriculture",
       "episode_steps": 720,
-      "boundary_note": "All numbers are LOCAL runs on the official engine (PyPI wheel, vendored) during the m0 asset-revival session. No Kaggle online ladder games yet -- online metrics stay null until the team submits."
+      "boundary_note": "All numbers are LOCAL runs on the official engine (PyPI wheel, vendored) during the m0 asset-revival and m1 wave-2 sessions. No Kaggle online ladder games yet -- online metrics stay null until the team submits. m0-session keys below keep their original values for the record; m1 wave-2 adds new keys measured 2026-08-28 (see method notes)."
     },
     "metrics": {
       "tests_total": {
         "value": 50,
         "unit": "count",
-        "method": "python -m pytest workspace/software/tests -q (repo root, 2026-08-28; 45 revived baseline tests + 5 new regression-gate tests)"
+        "method": "m0 session (2026-08-28): python -m pytest workspace/software/tests -q; 45 revived baseline tests + 5 new regression-gate tests. Superseded this wave by m1_tests_total"
       },
       "tests_passed": {
         "value": 50,
         "unit": "count",
-        "method": "same run, 50 passed 0 failed in 1.13s"
+        "method": "same m0 run, 50 passed 0 failed in 1.13s"
       },
       "smoke_boot_pass": {
         "value": true,
         "unit": "bool",
-        "method": "python workspace/software/smoke_boot.py -> exit 0"
+        "method": "m0 session: python workspace/software/smoke_boot.py -> exit 0"
       },
       "smoke_boot_runtime_seconds": {
         "value": 3.3,
         "unit": "s",
-        "method": "wall clock of the revival smoke_boot run (4 phases, 6 episodes: 24+96+96+720+48+48 steps)"
+        "method": "m0 session: wall clock of the revival smoke_boot run (4 phases, 6 episodes)"
       },
       "regression_gate_pass": {
         "value": true,
         "unit": "bool",
-        "method": "python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression -> exit 0 (frozen line: Elo order submission>baseline_wheat>greedy_carrot>starter>random>pass AND submission 0 losses)"
+        "method": "m0 session: run_eval --rounds 2 --assert-regression -> exit 0 (20 games, 55.49s, frozen line submission>baseline_wheat>greedy_carrot>starter>random>pass, submission 12W-0L)"
       },
       "regression_gate_games": {
         "value": 20,
         "unit": "games",
-        "method": "same gate run: 2 contenders x 4 opponents x 2 seeds (101,102) + 4 head-to-head (601,602 + in-matrix 101,102)"
+        "method": "m0 session structure: 2 contenders x 4 opponents x 2 seeds + 4 head-to-head"
       },
       "regression_gate_runtime_seconds": {
         "value": 55.49,
         "unit": "s",
-        "method": "wall clock of the gate run (excludes process startup)"
+        "method": "m0 session gate run wall clock"
       },
       "regression_gate_submission_record": {
         "value": {
@@ -55,57 +55,57 @@
           "T": 0
         },
         "unit": "W/L/T",
-        "method": "submission record across its 12 gate games (8 vs pool + 4 head-to-head)"
+        "method": "m0 session: submission record across its 12 gate games"
       },
       "eval_games_total": {
         "value": 40,
         "unit": "games",
-        "method": "python workspace/software/scripts/run_eval.py --rounds 4 (2 contenders x 4 opponents x 4 seeds + 8 head-to-head), same session"
+        "method": "m0 session: run_eval --rounds 4 (old contender-vs-pool structure). m1 full-matrix equivalent is m1_eval_games_total"
       },
       "eval_runtime_seconds": {
         "value": 107.36,
         "unit": "s",
-        "method": "wall clock of the eval run backing the on-disk exports/eval_results.json (excludes process startup); a second same-config invocation this session measured 100.92s"
+        "method": "m0 session: wall clock of the eval run backing the m0 eval_results.json"
       },
       "avg_episode_runtime_seconds": {
         "value": 2.66,
         "unit": "s/game",
-        "method": "mean of per-game elapsed_seconds across the 40 games of the same eval run"
+        "method": "m0 session: mean per-game elapsed across the 40 m0 eval games"
       },
       "avg_turns_per_game": {
         "value": 720.0,
         "unit": "turns",
-        "method": "mean turns_played across the 40 eval games (full-length games)"
+        "method": "m0 session: mean turns across the 40 eval games"
       },
       "submission_games_played": {
         "value": 24,
         "unit": "games",
-        "method": "games involving the submission bot in the eval run"
+        "method": "m0 session: games involving the submission bot in the m0 eval run"
       },
       "submission_win_rate_vs_pool": {
         "value": 1.0,
         "unit": "ratio",
-        "method": "16W-0L-0T vs {pass, random, starter, greedy_carrot}, 4 seeds each"
+        "method": "m0 session (weak frozen pool only): 16W-0L-0T vs {pass, random, starter, greedy_carrot}. On the m1 hardened pool this drops -- see m1_matchup_win_rates"
       },
       "submission_win_rate_vs_baseline": {
         "value": 1.0,
         "unit": "ratio",
-        "method": "8W-0L-0T head-to-head vs baseline_wheat (seeds 101-104, 601-604)"
+        "method": "m0 session: 8W-0L-0T head-to-head vs baseline_wheat (seeds 101-104, 601-604); re-confirmed 8W-0L in the m1 matrix (seeds 101-104 + 601-604)"
       },
       "submission_avg_final_money": {
         "value": 30631.46,
         "unit": "coins",
-        "method": "mean of the submission bot's final reward across its 24 eval games (31284.63 vs pool, 29325.12 vs baseline_wheat head-to-head); a second same-config invocation this session measured 30591.17 -- spread comes only from random-opponent games"
+        "method": "m0 session: mean final reward across the submission's 24 m0 eval games"
       },
       "submission_avg_final_money_h2h": {
         "value": 29325.12,
         "unit": "coins",
-        "method": "mean submission reward across the 8 head-to-head games vs baseline_wheat"
+        "method": "m0 session: mean submission reward across the 8 head-to-head games vs baseline_wheat"
       },
       "baseline_wheat_avg_final_money_vs_submission": {
         "value": 11475.25,
         "unit": "coins",
-        "method": "mean baseline_wheat reward across the same 8 head-to-head games"
+        "method": "m0 session: mean baseline_wheat reward across the same 8 head-to-head games"
       },
       "elo_ratings": {
         "value": {
@@ -117,18 +117,196 @@
           "pass": 1097.0
         },
         "unit": "elo",
-        "method": "EloTable k=32 start=1200 over the 40 recorded games, win/loss/tie only (official ladder semantics)"
+        "method": "m0 session: EloTable k=32 start=1200 over the 40 m0 games. m1 full-pool table is m1_elo_ratings_full_pool"
       },
       "cross_session_replay_identical_games": {
         "value": 32,
         "unit": "games",
-        "method": "per-game diff of this session's 40-game eval vs the archived round-1 eval_results.json: 32/40 games reward-identical (all games vs deterministic opponents); the 8 games vs the engine 'random' opponent drift in rewards because that agent is not fully pinned by the episode seed (drift also observed between two invocations within this session). Winners, W/L records and the whole Elo table are identical"
+        "method": "m0 session: per-game diff vs round-1 archive: 32/40 reward-identical (all games vs deterministic opponents); 8 games vs the engine 'random' agent drift (not fully pinned by the episode seed)"
+      },
+      "m0_regression_pass": {
+        "value": true,
+        "unit": "bool",
+        "method": "m1 wave-2 re-run (2026-08-28): python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression -> exit 0; 74 games in 196.17s, gate evaluated on the frozen subset (32/74 games): submission=1355.0 > baseline_wheat=1252.4 > greedy_carrot=1227.5 > starter=1175.3 > pass=1128.9 > random=1061.0, submission 0 losses. NOTE documented amendment: frozen clause random>pass corrected to pass>random (m0 order was a sub-matrix iteration artifact; head-to-head pass beats random 100%) -- see exports/eval_audit.md item 6"
+      },
+      "m1_tests_total": {
+        "value": 84,
+        "unit": "count",
+        "method": "python -m pytest workspace/software/tests -q (2026-08-28, m1 wave 2): 50 revived m0 tests + 34 new (new-opponent unit/contract tests, variance statistics, frozen-pool gate semantics, replay price logging)"
+      },
+      "m1_tests_passed": {
+        "value": 84,
+        "unit": "count",
+        "method": "same run, 84 passed 0 failed in 1.88s"
+      },
+      "opponent_pool_names": {
+        "value": [
+          "cow_baron",
+          "melon_hoarder",
+          "expansionist",
+          "baseline_wheat",
+          "greedy_carrot",
+          "starter",
+          "random",
+          "pass"
+        ],
+        "unit": "list",
+        "method": "eval_results.json.opponent_pool_names of the m1 wave-2 final matrix run (--rounds 4, 2026-08-28); first three are the wave-2 strong opponents, each certified >=50% (9/9) vs the frozen weak pool by scripts/check_opponent_strength.py --rounds 3"
+      },
+      "opponent_pool_max_elo": {
+        "value": {
+          "name": "cow_baron",
+          "rating": 1460.3
+        },
+        "unit": "elo",
+        "method": "strongest pool member in the full-pool Elo table of the m1 matrix run (k=32 start=1200 over 148 games); up from 1162.2 (greedy_carrot) at m0"
+      },
+      "m1_elo_ratings_full_pool": {
+        "value": {
+          "cow_baron": 1460.3,
+          "submission": 1422.8,
+          "melon_hoarder": 1391.3,
+          "expansionist": 1289.6,
+          "baseline_wheat": 1170.6,
+          "greedy_carrot": 1155.8,
+          "starter": 1058.3,
+          "pass": 991.5,
+          "random": 859.7
+        },
+        "unit": "elo",
+        "method": "run_eval.py --rounds 4 (final m1 wave-2 run, 148 games, 346.94s); table reproduced identically across two independent same-config invocations this session (cross-run evidence: identical winners and ratings; only rewards of games involving the engine 'random' agent drift)"
+      },
+      "m1_eval_games_total": {
+        "value": 148,
+        "unit": "games",
+        "method": "final m1 wave-2 matrix: 36 unordered pairs x 4 seeds + 4 head-to-head (+500 seeds) + 4 determinism probes run separately (probes not counted in the Elo stream)"
+      },
+      "m1_eval_runtime_seconds": {
+        "value": 346.94,
+        "unit": "s",
+        "method": "wall clock of the final --rounds 4 run backing exports/eval_results.json (a second same-config invocation measured 380.81s)"
+      },
+      "m1_matchup_win_rates": {
+        "value": {
+          "submission_vs": {
+            "cow_baron": 0.0,
+            "melon_hoarder": 0.0,
+            "expansionist": 1.0,
+            "baseline_wheat": 1.0,
+            "greedy_carrot": 1.0,
+            "starter": 1.0,
+            "random": 1.0,
+            "pass": 1.0
+          },
+          "strong_vs_strong": {
+            "cow_baron_vs_melon_hoarder": 1.0,
+            "cow_baron_vs_expansionist": 1.0,
+            "melon_hoarder_vs_expansionist": 1.0
+          },
+          "full_matrix_ref": "exports/eval_results.json#matchup_win_rates (36 pairs)"
+        },
+        "unit": "ratio",
+        "method": "matchup_win_rates of the final matrix run; submission vs pool per 4 seeds each (vs baseline_wheat 8 games incl. +500 seeds); full 36-pair matrix in eval_results.json"
+      },
+      "m1_submission_margin_vs_pool": {
+        "value": {
+          "cow_baron": -17772,
+          "melon_hoarder": -5410,
+          "expansionist": 10014,
+          "baseline_wheat": 17850,
+          "greedy_carrot": 23855,
+          "starter": 28027,
+          "random": 30758,
+          "pass": 27275
+        },
+        "unit": "coins",
+        "method": "avg margin (submission - opponent) per pairing in the final matrix run"
+      },
+      "eval_variance_report": {
+        "value": {
+          "most_volatile_pair": {
+            "pair": "baseline_wheat vs greedy_carrot",
+            "win_rate": 0.75,
+            "ci95": [
+              0.3006,
+              0.9544
+            ],
+            "outcome_flips_across_seeds": true
+          },
+          "submission_pairs_ci95": {
+            "vs cow_baron": [
+              0.0,
+              0.4899
+            ],
+            "vs melon_hoarder": [
+              0.0,
+              0.4899
+            ],
+            "vs expansionist": [
+              0.5101,
+              1.0
+            ],
+            "vs baseline_wheat": [
+              0.6756,
+              1.0
+            ]
+          },
+          "no_submission_pair_flipped_outcomes_across_seeds": true,
+          "method": "Wilson 95% CI on win rates (ties=0.5) + Student-t 95% CI on money margins, per pairing across seeds; full per-pair table in eval_results.json.eval_variance_report"
+        },
+        "unit": "report",
+        "method": "kgenv/variance.py over the final matrix run (4 seeds/pair); submission loss conclusions reinforced by the 8-seed failure probe (0/8 and 1/8 stable across seeds 201-208)"
+      },
+      "eval_audit_pass": {
+        "value": {
+          "pass_count": 8,
+          "warn_count": 3,
+          "fail_count": 0,
+          "all_critical_pass": true
+        },
+        "unit": "verdict",
+        "method": "exports/eval_audit.md (ABE-Ralph-style fidelity audit, 2026-08-28); warns are declared boundaries: #7 same-family opponent overfitting, #8 single-seat pairings, #9 small-sample variance; embedded in eval_results.json.eval_audit_pass"
+      },
+      "failure_modes": {
+        "value": {
+          "count": 4,
+          "probe": "submission vs full pool, seeds 201-208 (64 games): record 49W-15L-0T",
+          "loss_opponents": [
+            "melon_hoarder (0-8)",
+            "cow_baron (1-7)"
+          ],
+          "items": [
+            "FM-1 cow_baron milk engine out-earns the goose engine (submission 1-7, avg margin -15920, worst -33272)",
+            "FM-2 melon second-wave replant gated on shared price is locked out by the hoarder's day-15 dump (0-8; MELON 267->165; day-29 liquidation sells at $4)",
+            "FM-3 capital-heavy opening trails steady wheat income days 0-15 (expansionist closest wins, min margin +9421)",
+            "FM-4 shared FERTILIZER curve decays under animal-family sell pressure (94->41 vs cow_baron; no $1 crash within 30 days)"
+          ],
+          "ref": "exports/failure_modes.md"
+        },
+        "unit": "report",
+        "method": "scripts/analyze_failure_modes.py --rounds 8 (2026-08-28); evidence layer in exports/failure_probe_report.md + logs/failure_probe_log.jsonl; embedded in eval_results.json.failure_modes"
       }
     },
     "unmeasured": {
       "llm_ab_win_rate": {
         "value": null,
-        "note": "LLM provider ships disabled (NullProvider) with a pluggable interface; no LLM-backed A/B games were run, so no number is claimed"
+        "note": "m2 wave: LLM consultant A/B not run yet; provider ships disabled (NullProvider)"
+      },
+      "llm_ab_games": {
+        "value": null,
+        "note": "m2 wave"
+      },
+      "llm_ab_budget_gate_hits": {
+        "value": null,
+        "note": "m2 wave"
+      },
+      "llm_ab_fallback_count": {
+        "value": null,
+        "note": "m2 wave"
+      },
+      "iteration_gate_log": {
+        "value": null,
+        "note": "m2 wave (per-enhancement hypothesis->evidence->merge ledger)"
       },
       "online_ladder_games": {
         "value": null,
@@ -137,6 +315,14 @@
       "online_skill_rating": {
         "value": null,
         "note": "depends on online submissions"
+      },
+      "online_feedback_calibration": {
+        "value": null,
+        "note": "opponent-pool recalibration triggered by ladder feedback; reserved for man-submit"
+      },
+      "final_submission_commits": {
+        "value": null,
+        "note": "m3: last 2 submission commit hashes at final lock"
       }
     }
   }

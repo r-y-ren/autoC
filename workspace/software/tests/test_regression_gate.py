@@ -66,8 +66,8 @@ def test_gate_fails_on_elo_order_violation():
         {"name": "greedy_carrot", "rating": 1300.0},
         {"name": "baseline_wheat", "rating": 1250.0},
         {"name": "starter", "rating": 1200.0},
-        {"name": "random", "rating": 1150.0},
-        {"name": "pass", "rating": 1100.0},
+        {"name": "pass", "rating": 1150.0},
+        {"name": "random", "rating": 1100.0},
     ]
     report = check_regression(_dominance_games(), rows)
     assert report["ok"] is False

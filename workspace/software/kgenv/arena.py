@@ -73,7 +73,8 @@ def write_replay_log(out_dir: str, results: List[Dict[str, Any]],
                 "turns": r.get("turns_played"),
                 "episode_steps": r.get("episode_steps"),
                 "elapsed_seconds": r.get("elapsed_seconds"),
-                "daily_money": r.get("daily_money"),
+                "daily_money": [d.get("money") for d in (r.get("daily_money") or [])],
+                "daily_prices": [d.get("prices") for d in (r.get("daily_money") or [])],
             }
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     return path

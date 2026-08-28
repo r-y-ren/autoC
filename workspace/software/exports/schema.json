@@ -2,12 +2,49 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "kaggriculture.eval_results.schema.json",
   "title": "Kaggriculture local evaluation results (software -> document contract)",
-  "description": "Schema for exports/eval_results.json produced by scripts/run_eval.py. All performance numbers referenced by documents must come from this file (measured values only).",
+  "description": "Schema for exports/eval_results.json produced by scripts/run_eval.py. All performance numbers referenced by documents must come from this file (measured values only). v1.1 (m1 wave 2): full matchup matrix + variance report + determinism probes + audit/failure-mode embeddings + nullable m2 placeholders, aligned with workspace/docs/metrics-keys.md group B. All v1.0 fields are unchanged (backward compatible).",
   "type": "object",
-  "required": ["schema_version", "generated_at", "engine", "config", "games", "head_to_head", "elo", "runtime_seconds"],
+  "$defs": {
+    "pairVariance": {
+      "type": "object",
+      "required": ["pair", "games", "seeds", "wins", "losses", "ties", "win_rate", "win_rate_ci95", "margin", "outcome_flips_across_seeds"],
+      "additionalProperties": false,
+      "properties": {
+        "pair": {"type": "string"},
+        "games": {"type": "integer", "minimum": 0},
+        "seeds": {"type": "array", "items": {"type": "integer"}},
+        "wins": {"type": "integer", "minimum": 0},
+        "losses": {"type": "integer", "minimum": 0},
+        "ties": {"type": "integer", "minimum": 0},
+        "win_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "win_rate_ci95": {
+          "anyOf": [
+            {"type": "null"},
+            {"type": "array", "items": {"type": ["number", "null"]}, "minItems": 2, "maxItems": 2}
+          ]
+        },
+        "margin": {
+          "type": "object",
+          "required": ["n", "mean", "std", "ci95_lo", "ci95_hi", "min", "max"],
+          "additionalProperties": false,
+          "properties": {
+            "n": {"type": "integer", "minimum": 0},
+            "mean": {"type": ["number", "null"]},
+            "std": {"type": ["number", "null"]},
+            "ci95_lo": {"type": ["number", "null"]},
+            "ci95_hi": {"type": ["number", "null"]},
+            "min": {"type": ["number", "null"]},
+            "max": {"type": ["number", "null"]}
+          }
+        },
+        "outcome_flips_across_seeds": {"type": "boolean"}
+      }
+    }
+  },
+  "required": ["schema_version", "generated_at", "engine", "config", "opponent_pool_names", "pool_max_elo", "games", "head_to_head", "matchup_win_rates", "elo", "eval_variance_report", "determinism_probes", "eval_audit_pass", "failure_modes", "m2", "runtime_seconds"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": {"type": "string", "const": "1.0"},
+    "schema_version": {"type": "string", "const": "1.1"},
     "generated_at": {"type": "string", "format": "date-time"},
     "engine": {
       "type": "object",
@@ -28,8 +65,25 @@
         "rounds": {"type": "integer", "minimum": 1},
         "seeds": {"type": "array", "items": {"type": "integer"}, "minItems": 1},
         "contenders": {"type": "array", "items": {"type": "string"}, "minItems": 1},
-        "opponents": {"type": "array", "items": {"type": "string"}, "minItems": 3}
+        "opponents": {"type": "array", "items": {"type": "string"}, "minItems": 3},
+        "matrix_order": {"type": "array", "items": {"type": "string"}, "minItems": 2}
       }
+    },
+    "opponent_pool_names": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 3,
+      "description": "metrics.software.opponent_pool_names -- everyone in the matrix except our submission"
+    },
+    "pool_max_elo": {
+      "type": ["object", "null"],
+      "required": ["name", "rating"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string"},
+        "rating": {"type": "number"}
+      },
+      "description": "metrics.software.opponent_pool_max_elo -- strongest pool member by the run's Elo table"
     },
     "games": {
       "type": "array",
@@ -66,6 +120,25 @@
         }
       }
     },
+    "matchup_win_rates": {
+      "type": "array",
+      "description": "metrics.software.matchup_win_rates -- full matrix, one row per unordered pair, a's perspective",
+      "items": {
+        "type": "object",
+        "required": ["a", "b", "games", "wins_a", "losses_a", "ties", "win_rate_a", "avg_margin_a"],
+        "additionalProperties": false,
+        "properties": {
+          "a": {"type": "string"},
+          "b": {"type": "string"},
+          "games": {"type": "integer", "minimum": 1},
+          "wins_a": {"type": "integer", "minimum": 0},
+          "losses_a": {"type": "integer", "minimum": 0},
+          "ties": {"type": "integer", "minimum": 0},
+          "win_rate_a": {"type": "number", "minimum": 0, "maximum": 1},
+          "avg_margin_a": {"type": ["number", "null"]}
+        }
+      }
+    },
     "elo": {
       "type": "object",
       "required": ["k", "start", "table"],
@@ -96,6 +169,89 @@
             }
           }
         }
+      }
+    },
+    "eval_variance_report": {
+      "type": "object",
+      "description": "metrics.software.eval_variance_report -- seed-variance evidence (anti small-sample self-deception)",
+      "required": ["method", "per_pair", "most_volatile_pair"],
+      "additionalProperties": false,
+      "properties": {
+        "method": {"type": "string"},
+        "per_pair": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/pairVariance"}
+        },
+        "most_volatile_pair": {
+          "anyOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/pairVariance"}
+          ]
+        }
+      }
+    },
+    "determinism_probes": {
+      "type": ["object", "null"],
+      "required": ["note", "probes"],
+      "additionalProperties": false,
+      "properties": {
+        "note": {"type": "string"},
+        "probes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["pair", "seed", "expectation", "run_rewards", "identical"],
+            "additionalProperties": false,
+            "properties": {
+              "pair": {"type": "string"},
+              "seed": {"type": "integer"},
+              "expectation": {"type": "string"},
+              "run_rewards": {"type": "array", "items": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}, "minItems": 2, "maxItems": 2},
+              "identical": {"type": "boolean"}
+            }
+          }
+        }
+      }
+    },
+    "eval_audit_pass": {
+      "type": "object",
+      "description": "metrics.software.eval_audit_pass -- ABE-Ralph-style experiment-fidelity audit verdict (authored evidence in exports/eval_audit.md)",
+      "required": ["ref", "pass_count", "warn_count", "fail_count", "all_critical_pass"],
+      "additionalProperties": false,
+      "properties": {
+        "ref": {"type": "string"},
+        "pass_count": {"type": ["integer", "null"], "minimum": 0},
+        "warn_count": {"type": ["integer", "null"], "minimum": 0},
+        "fail_count": {"type": ["integer", "null"], "minimum": 0},
+        "all_critical_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "failure_modes": {
+      "type": ["object", "null"],
+      "description": "metrics.software.failure_modes -- count + top items from exports/failure_modes.md (embedded when the analysis has run)",
+      "required": ["ref", "count", "top"],
+      "additionalProperties": false,
+      "properties": {
+        "ref": {"type": "string"},
+        "count": {"type": ["integer", "null"], "minimum": 0},
+        "top": {"anyOf": [{"type": "null"}, {"type": "array", "items": {"type": "string"}}]}
+      }
+    },
+    "m2": {
+      "type": "object",
+      "description": "m2/m3 placeholder keys per workspace/docs/metrics-keys.md group B -- null until measured, defined so the contract is stable",
+      "required": ["llm_ab_win_rate", "llm_ab_games", "llm_ab_budget_gate_hits", "llm_ab_fallback_count", "iteration_gate_log", "online_ladder_games", "online_skill_rating", "online_feedback_calibration", "final_submission_commits"],
+      "additionalProperties": false,
+      "properties": {
+        "llm_ab_win_rate": {"type": ["null", "number"]},
+        "llm_ab_games": {"type": ["null", "integer"]},
+        "llm_ab_budget_gate_hits": {"type": ["null", "integer"]},
+        "llm_ab_fallback_count": {"type": ["null", "integer"]},
+        "iteration_gate_log": {"type": ["null", "array"]},
+        "online_ladder_games": {"type": ["null", "integer"]},
+        "online_skill_rating": {"type": ["null", "number"]},
+        "online_feedback_calibration": {"type": ["null", "string", "array"]},
+        "final_submission_commits": {"type": ["null", "array"]}
       }
     },
     "runtime_seconds": {"type": "number", "minimum": 0}

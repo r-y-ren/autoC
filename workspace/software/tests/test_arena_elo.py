@@ -41,6 +41,19 @@ def test_replay_log_roundtrip(tmp_path):
     assert entry["turns"] == 24
 
 
+def test_replay_log_carries_daily_prices(tmp_path):
+    """m1 wave 2: the replay log embeds shared-market daily prices for
+    failure-mode analysis (glut-crash evidence)."""
+    res = run_match("starter", "pass", seed=3, episode_steps=48,
+                    label_a="x", label_b="y", collect_daily=True)
+    path = write_replay_log(str(tmp_path), [res])
+    with open(path, encoding="utf-8") as f:
+        entry = json.loads(f.readline())
+    assert entry["daily_prices"], entry.get("daily_prices")
+    assert "CARROT" in entry["daily_prices"][0]
+    assert entry["daily_money"]
+
+
 def test_summarize_games():
     games = [
         {"players": ["a", "b"], "winner_label": "a", "turns_played": 10},

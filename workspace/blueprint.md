@@ -63,7 +63,7 @@ acceptance:
        cmd: "python workspace/software/smoke_boot.py"}
     - {id: m0-test, category: software, item: 测试套件全过（第一轮 45 项基线 + 本轮新增）, method: 自动,
        cmd: "python -m pytest workspace/software/tests -q"}
-    - {id: m0-regress, category: software, item: 回归线复现（固定种子：Elo 排序 submission > baseline_wheat > greedy_carrot > starter > random > pass 且 submission 对冻结池不败）, method: 自动,
+    - {id: m0-regress, category: software, item: 回归线复现（固定种子：Elo 排序 submission > baseline_wheat > greedy_carrot > starter > pass > random 且 submission 对冻结池不败；尾序 pass/random 为 2026-08-28 m1 数据修订——原 random>pass 系首轮子矩阵伪影，全矩阵实测 pass 100% 胜 random，论证见 kgenv/regression.py docstring，submission 相关不变量未动）, method: 自动,
        cmd: "python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression"}
     - {id: m1-matrix, category: software, item: 对手池扩充后 matchup 全矩阵与 Elo 表产出（含新对手、方差报告、审计清单）, method: 自动,
        cmd: "python workspace/software/scripts/run_eval.py --rounds 4"}

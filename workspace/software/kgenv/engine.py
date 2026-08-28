@@ -71,10 +71,11 @@ def run_episode(agent0: AgentRef, agent1: AgentRef, seed: int,
     else:
         winner, note = None, "tie"
 
-    daily: List[Dict[str, float]] = []
+    daily: List[Dict[str, Any]] = []
     if collect_daily:
         seen_steps = env.steps
         per_day: Dict[int, List[float]] = {}
+        prices_per_day: Dict[int, Dict[str, int]] = {}
         for step_states in seen_steps:
             try:
                 obs0 = step_states[0]["observation"]
@@ -84,9 +85,12 @@ def run_episode(agent0: AgentRef, agent1: AgentRef, seed: int,
                     money = [float(farms[0].get("money", 0.0)),
                              float(farms[1].get("money", 0.0))]
                     per_day[day] = money  # keep the last snapshot of each day
+                    market = obs0.get("market", {}) or {}
+                    prices_per_day[day] = dict(market.get("prices", {}) or {})
             except (KeyError, IndexError, AttributeError, TypeError):
                 continue
-        daily = [{"day": d, "money": per_day[d]} for d in sorted(per_day)]
+        daily = [{"day": d, "money": per_day[d],
+                  "prices": prices_per_day.get(d, {})} for d in sorted(per_day)]
 
     return {
         "seed": int(seed),

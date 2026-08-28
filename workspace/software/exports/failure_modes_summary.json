@@ -1,0 +1,17 @@
+{
+  "ref": "exports/failure_modes.md",
+  "count": 4,
+  "top": [
+    "FM-1 cow_baron milk engine out-earns goose engine: submission 1-7 (avg margin -15920, worst -33272)",
+    "FM-2 melon second-wave replant gated on shared price locked out by hoarder dump (0-8, MELON 267->165 on day 15, day-29 liquidation at $4)",
+    "FM-3 capital-heavy opening trails steady wheat income days 0-15 (expansionist closest wins, min margin +9421)",
+    "FM-4 shared FERTILIZER curve decays under animal-family sell pressure (94->41 vs cow_baron; no $1 crash within 30 days)"
+  ],
+  "probe": {
+    "script": "scripts/analyze_failure_modes.py --rounds 8",
+    "seeds": [201, 202, 203, 204, 205, 206, 207, 208],
+    "games": 64,
+    "submission_record": "49-15-0",
+    "loss_opponents": ["melon_hoarder", "cow_baron"]
+  }
+}

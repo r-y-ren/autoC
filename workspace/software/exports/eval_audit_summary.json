@@ -1,0 +1,8 @@
+{
+  "ref": "exports/eval_audit.md",
+  "pass_count": 8,
+  "warn_count": 3,
+  "fail_count": 0,
+  "all_critical_pass": true,
+  "notes": "3 warns are declared boundaries with owners: #7 same-family overfitting and #8 single-seat pairings -> m2 wave; #9 small-sample variance -> m2 gate requires CI reporting. Frozen-line amendment (pass > random) is documented in kgenv/regression.py and audit item 6."
+}
