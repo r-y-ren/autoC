@@ -5,6 +5,17 @@ tier: 学科竞赛
 directions:
   - 数模与时序预测
 status: upcoming
+award_levels:
+  - name: Outstanding Winner
+    note: 终评认定的 "best of the best"；COMAP 可发表其论文作 exemplary student work（INS IX 节）
+  - name: Finalist
+    note: 进入终评轮，"among the best of all team submissions"（INS IX 节）
+  - name: Meritorious
+    note: 建模/求解/分析/结论/交流各方面 excellent，清晰、支撑有力、组织良好（INS IX 节）
+  - name: Honorable Mention
+    note: above average，过程 sound and supported（INS IX 节）
+  - name: Successful Participant
+    note: 认真作答并提交，但对全部/部分要求回应不全或建模、分析、结论、交流存在缺陷（INS IX 节）
 organizer: "COMAP — Consortium for Mathematics and its Applications（非营利数学教育组织，官网 comap.org）"
 key_dates:
   2027届_竞赛开始:
@@ -38,11 +49,11 @@ ai_policy:
   url: "https://www.contest.comap.com/undergraduate/contests/mcm/instructions.php"
   checked: "2026-08-27"
 credibility: 官网
-last_verified: "2026-08-27"
+last_verified: "2026-08-28"
 sources:
   - url: "https://www.contest.comap.com/undergraduate/contests/mcm/instructions.php"
-    title: "MCM/ICM 2027 官方竞赛说明（Contest Instructions，COMAP contest.comap.com）"
-    accessed: "2026-08-27"
+    title: "MCM/ICM 2027 官方竞赛说明（Contest Instructions，COMAP contest.comap.com；2026-08-28 复抓存快照 kb/raw/mcm-icm/2027-instructions.html，award_levels 依据其 IX 节 designation 描述）"
+    accessed: "2026-08-28"
   - url: "https://www.comap.org/contests/mcm-icm"
     title: "COMAP 官网 MCM/ICM 赛事总览页"
     accessed: "2026-08-27"
@@ -109,7 +120,8 @@ COMAP 全称 **Consortium for Mathematics and its Applications**，自我描述�
 
 ## 奖项结构（供作品策略参考）
 
-- 评级序列（由低到高）：Successful Participant → Honorable Mention → Meritorious → Finalist → Outstanding Winner（另有 Disqualified / Unsuccessful 类别）。[INS, 2026-08-27]
+- 评级序列（由低到高）：Successful Participant → Honorable Mention → Meritorious → Finalist → Outstanding Winner（另有 Disqualified / Unsuccessful 类别）。[INS, 2026-08-28 复抓：IX 节原文 "Levels of awards for successful submissions are Successful Participant, Honorable Mention, Meritorious, Finalist, or Outstanding Winner."]
+- frontmatter `award_levels`（2026-08-28 回填）即按上列自高到低取五级正奖，各级 note 为 IX 节 designation 描述摘译（快照 `kb/raw/mcm-icm/2027-instructions.html`）；COMAP 未在该页公布各级数量或比例，count_or_ratio 宁缺毋滥不填。Disqualified（违规/抄袭/网络共享）/ Unsuccessful Participant（回应不足/涉网）/ Not Judged（未正确提交）为非奖级 designation，不入 award_levels。
 - 国际 COMAP 奖学金奖：最优秀六支队，$9,000 由队员均分（每人上限 $3,000）另奖学校 $1,000；总览页称该奖"每年 5 月 30 日前公布"。[INS, OVR, 2026-08-27]
 - 命名奖项：MCM 侧 Ben Fusaro / Frank R. Giordano / Veena Mendiratta；ICM 侧 Leonhard Euler / Rachel Carson / Pareto；外部学会奖：INFORMS、SIAM、MAA、ASA（仅 C 题）、AMS。[INS, 2026-08-27]
 
@@ -118,4 +130,4 @@ COMAP 全称 **Consortium for Mathematics and its Applications**，自我描述�
 - [ ] 2027 届报名开放后：第二源核验报名截止时间与费用（当前单源 [INS]）。
 - [ ] 成绩公布节点（2027-05-08）目前单源，待官方日历/FAQ 页二次核验。
 - [ ] 历年 Outstanding Winner（O 奖）论文深度解构（本分片未做，待协调者另行派发 winners 分片）。
-- [ ] 原始页面快照归档至 `kb/raw/`（本次 collect 阶段写入范围限 `kb/competitions/mcm-icm/`，未落 raw 快照）。
+- [x] 原始页面快照归档至 `kb/raw/`（2026-08-28 部分关闭：instructions.php 已直抓存 `kb/raw/mcm-icm/2027-instructions.html`；其余来源页快照仍缺，待后续补齐）。

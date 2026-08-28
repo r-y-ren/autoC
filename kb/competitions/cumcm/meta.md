@@ -5,6 +5,16 @@ tier: 学科竞赛
 directions:
   - 数模与时序预测
 status: active
+award_levels:
+  - name: 高教社杯（当年最高奖）
+    count_or_ratio: 本科组、高职高专组各 1 队
+    note: 2025 年本科组清华大学队、2024 年本科组北京师范大学队（获奖名单 p1 直读，来源[11][12]）
+  - name: 全国一等奖
+    count_or_ratio: 2025 年 391 队（本科 294+高职 97）；2024 年 381 队（本科 296+高职 85）
+    note: 名单原件机读/直读（来源[11][12]）；赛区报送全国评阅配额分段 5%-12%，每赛区申报一等奖不超过 40%（2025 须知附件2）
+  - name: 全国二等奖
+    count_or_ratio: 2025 年 1551 队（本科 1224+高职 327）；2024 年 1504 队（本科 1204+高职 300）
+    note: 全国奖之最低级；其下另有赛区一、二等奖（可增设三等奖），由各赛区评阅（章程第五条，来源[4]）
 organizer: 中国工业与应用数学学会（CSIAM）及其全国大学生数学建模竞赛组委会
 key_dates:
   "2026 报名开始":
@@ -70,6 +80,12 @@ sources:
     accessed: "2026-08-27"
   - url: https://ss.dlut.edu.cn/info/1371/26711.htm
     title: 大连理工大学软件学院转发的2025年竞赛报名通知（二手信源·降级）
+    accessed: "2026-08-27"
+  - url: https://www.mcm.edu.cn/upload_cn/node/767/He1YI4ZEe969ff168945f43e52721891ab19945b.pdf
+    title: 2025高教社杯全国大学生数学建模竞赛获奖名单.pdf（官网原件，award_levels 名额依据；本地快照 kb/raw/cumcm/2025-winners-list.pdf）
+    accessed: "2026-08-27"
+  - url: https://www.mcm.edu.cn/upload_cn/node/733/4rFKQqyT96ee1e63dd8d2408e56df8b2ec172125.pdf
+    title: 2024高教社杯全国大学生数学建模竞赛获奖名单.pdf（官网原件，award_levels 名额依据；本地快照 kb/raw/cumcm/2024-winners-list.pdf）
     accessed: "2026-08-27"
 ---
 
@@ -139,7 +155,7 @@ sources:
 
 ## 信源与核验说明
 
-- 信源等级：来源[1][2][4]-[9] 为官网（mcm.edu.cn）；来源[3] 为官网合作网站"中国大学生在线"转发；来源[10] 为高校学院转发【二手·降级】。整体取"交叉验证"。
+- 信源等级：来源[1][2][4]-[9][11][12] 为官网（mcm.edu.cn，其中[11][12]为获奖名单 PDF 原件，frontmatter `award_levels` 名额即出于此）；来源[3] 为官网合作网站"中国大学生在线"转发；来源[10] 为高校学院转发【二手·降级】。整体取"交叉验证"。
 - 本条目 raw 快照（已按章程迁移至 `kb/raw/cumcm/`）：`2026-cumcm-first-notice.pdf`（扫描件）及其 OCR 产物（.txt/.ocr.json）、`2026-ai-policy.pdf`、`2026-rules.pdf`、`baoming-cansai-xuzhi.pdf`（2025 报名和参赛须知，含章程/规则/赛区评阅规范全文）、`CUMCM2025Problems.zip`（2025 官方赛题原件）。
 
 ## 待办
