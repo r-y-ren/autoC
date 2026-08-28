@@ -1,0 +1,15 @@
+$ python -m pytest workspace/software/tests -q && python scripts/verify/test_acceptance.py
+exit=0
+
+........................................................................ [ 56%]
+........................................................                 [100%]
+128 passed in 2.02s
+PASS A 混合清单：exit=1 result=fail 状态={'a1': 'pass', 'a2': 'fail', 'a3': 'pending_manual', 'a4': 'pending'} retry=1
+PASS A2 fail 重跑计数累计：retry=2（期望 2）
+PASS B pending 不计 retry：exit=3 retry=0（期望 0）
+PASS C 超时捕获：exit=1 证据含TIMEOUT=True 记录落盘=True
+PASS D run-N.json 过 schema：OK
+PASS E retry.max 实时同步：max=5（期望5） count=2（期望2）
+PASS F scoped 左移：exit=3 范围=['m0-x', 'm0-y'] 封顶=pending_agent scope标记=True retry不烧=0
+[test_acceptance] 7/7 通过
+
