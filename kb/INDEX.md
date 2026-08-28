@@ -29,6 +29,7 @@
 | tianchi-ijcai18-alimama-cvr | IJCAI-18 阿里妈妈搜索广告转化预测（Alimama International Advertising Algorithm Competition） | 黑客松与数据竞赛 | 编程/黑客松 | ended | 赛事周期:2018-02 至 2018-05（天池用户协议原文 "from February to May 2018"）… | 抓取材料中无 AI 工具使用条款（2018 年赛前 LLM 时代，信息页与用户协 | 2026-08-28 | competitions/tianchi-ijcai18-alimama-cvr/ |
 | tianchi-loreal-beauty-tech-hackathon-2026 | 欧莱雅第二届美妆科技黑客松——用 AI 造点美（天池·AI大模型赛） | 黑客松与数据竞赛 | 编程/黑客松 | active | … | 详情页全文未设任何 AI 工具使用限制、申报或披露条款；赛事本身即以 AI 应用 | 2026-08-27 | competitions/tianchi-loreal-beauty-tech-hackathon-2026/ |
 | tianchi-qoder-thursday | Q力星期四（Qoder码力星期四）系列赛（天池·AI大模型赛） | 黑客松与数据竞赛 | 编程/黑客松 | active | 系列赛期:2026-07-16 至 2027-07-31… | 系列由阿里 AI 编程工具 Qoder 冠名，官方推荐并鼓励使用 AI 编程工具 | 2026-08-27 | competitions/tianchi-qoder-thursday/ |
+| ucla-ai-hackathon-2026 | LA Hacks AI Hackathon 2026 | 黑客松与数据竞赛 | 编程/黑客松 | upcoming | event_start:2026-10-17、event_end:2026-10-18 | 2026-08-28 核对赛事官网公开响应、MLH 赛季条目与 MLH 赛事奖品 | 2026-08-28 | competitions/ucla-ai-hackathon-2026/ |
 
 ## KB-2 科技库（交付物 2）
 
@@ -117,6 +118,7 @@
 | 日期 | 类型 | 新增 | 更新 | 隔离 | 成本 | 说明 |
 |---|---|---|---|---|---|---|
 <!-- 成本列=分片数/token/墙钟（T4.3 起新行必填；旧行无此列属历史格式） -->
+| 2026-08-28 | tech+comp | 赛事条目1 / 技术卡0 | 0 | 1 | 1分片/约14min | /attack 审计后重开预刷新：UCLA AI Hackathon 入库但章程/奖项/AI 政策待 SPA 深核；MLH 赛季日历判聚合噪声；tech 73 拉取后 0 新候选；KB lint 101/101 |
 | 2026-08-28 | refresh | 技术卡1 | 0 | 0 | 1分片/0.11M tok/2.5min | /attack 预刷新：tech 增量1条（UrbanGround 强映射入库）；comp 增量2条全噪（LA Hacks 与在队重复+锚点自指）已弃；LA Hacks 留 8-31 cron 消费 |
 | 2026-08-28 | full | 赛事23三层全量：patterns 23/23、winners 12赛15文件、深构40+篇；技术卡 76/台账 133；surveys 4 族 | 6 波次/50+分片/约 55M tokens（D11 全量） |
 | 2026-08-27 | tech+comp | 技术卡6 / 赛事条目3 | 0 | 0 | 首次真实跑批（T3-a）：arXiv 收紧查询后31候选→6卡；gh未登录按设计降级 |
