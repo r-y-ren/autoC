@@ -121,7 +121,8 @@ def build_digest(direction: str, today: datetime.date, formal: bool) -> str:
     for cid, fm in comps:
         items = []
         for label, v in (fm.get("key_dates") or {}).items():
-            date_s = v.get("date", "") if isinstance(v, dict) else str(v)
+            date_s = v.get("date") if isinstance(v, dict) else v
+            date_s = str(date_s) if date_s is not None else "（日期缺失）"
             d = days_until(date_s, today)
             verified = isinstance(v, dict) and v.get("verified")
             mark = "" if (not verified and re.search(r"未核实|待公布", date_s)) else ("✓" if verified else "未核实")
