@@ -108,7 +108,15 @@
     "m2a_llm_null_games": {"value": 2, "unit": "games", "method": "2026-08-28 actual run with KG_LLM_* unset: run_llm_ab.py --rounds 1; seed 701 AB/BA"},
     "m2a_llm_null_effective_calls": {"value": 0, "unit": "count", "method": "exports/llm_ab_results.json consultation_stats.effective_calls; provider_configured=false and real_ab=false"},
     "m2a_llm_null_fallback_count": {"value": 662, "unit": "count", "method": "exports/llm_ab_results.json; 331 independent NullProvider consultations per game x 2 games"},
-    "m2a_llm_null_runtime_seconds": {"value": 5.46, "unit": "s", "method": "exports/llm_ab_results.json.runtime_seconds from the actual per-game provider isolation run"}
+    "m2a_llm_null_runtime_seconds": {"value": 5.46, "unit": "s", "method": "exports/llm_ab_results.json.runtime_seconds from the actual per-game provider isolation run"},
+    "m2b_strategy_tests_total": {"value": 35, "unit": "count", "method": "2026-08-28 actual command: python -m pytest workspace/software/tests/test_strategy_m2.py workspace/software/tests/test_agent_contract.py -q -> 35 passed 0 failed"},
+    "m2b_strategy_tests_passed": {"value": 35, "unit": "count", "method": "same targeted m2b strategy/contract test command -> 35 passed"},
+    "m2b_complete_gate_pass": {"value": true, "unit": "bool", "method": "2026-08-28 actual command: iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m2b-frozen --rounds 4 --require-complete -> VERDICT PASS"},
+    "m2b_complete_gate_games": {"value": 32, "unit": "games", "method": "same actual complete gate: 4 required opponents x seeds 101-104 x AB/BA; expected=32 actual=32"},
+    "m2b_complete_gate_abnormal": {"value": 0, "unit": "games", "method": "same actual complete gate output: abnormal=0; every game contract-normal"},
+    "m2b_complete_gate_runtime_seconds": {"value": 83.16, "unit": "s", "method": "same actual final complete gate log entry elapsed_seconds=83.16"},
+    "m2b_candidate_sha256": {"value": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a", "unit": "sha256", "method": "actual pre/post identity commands and final iterate_gate candidate snapshot identity; source SHA unchanged"},
+    "m2b_frozen_manifest": {"value": {"path": "workspace/software/m2b_frozen_manifest.json", "sha256": "0674a1f0f26efcae074d6264a8893291d5c6010776366172a94eab4edb6ddb76", "candidate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a", "git_ref": "1376fb41bd12d15922e4b7909308777dcc02beb1", "dirty": true}, "unit": "manifest", "method": "written after passing final complete gate from actual gate identity; manifest SHA measured by sha256 command"}
   },
   "unmeasured": {
     "llm_ab_win_rate": {"value": null, "note": "待用户提供 KG_LLM_* key: 本环境无相关环境变量，A/B 两侧策略相同，实测无意义故如实置 null（harness 已就绪，见 llm_ab_harness_ready）"},

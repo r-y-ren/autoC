@@ -85,34 +85,47 @@ LLM_PROVIDER = None      # optional consultant, default off; local A/B only
 
 # Module-level state keyed by player id (the framework may exec one copy of
 # this file for both seats in self-play validation episodes).  Tracks the
-# per-day cow purchase pace so the cash reserve never races to zero during
-# the pre-wheat/pre-milk opening (FM-3).
+# per-day cow purchase pace by confirming actual cow-count changes in the next
+# observation; orders themselves never consume pace.
 _STATE = {}
 
 
-def _buy_pace(player, day, hour):
-    """Cows bought today so far (resets on day rollover / new episode).
+def _buy_pace(player, day, hour, herd_total):
+    """Return confirmed cow purchases for this day.
 
-    Observation clock is strictly increasing within an episode, so a
-    non-increasing (day, hour) read means a fresh episode started in the
-    same process (local eval runs many games on one module instance).
+    A BUY_ANIMAL order is only a request.  The market may reject it for lack
+    of cash or shed capacity, so pace is advanced only by a positive cow-count
+    delta observed on a later turn.  A backwards clock denotes a new episode.
     """
     st = _STATE.get(player)
-    if st is None or st["day"] != day:
+    if st is None or st["day"] != day or hour <= st.get("hour", -1):
+        _STATE[player] = {"day": day, "hour": hour,
+                           "last_herd": herd_total, "confirmed": 0,
+                           "pending": 0}
         return 0
-    if hour <= st.get("hour", -1):
-        _STATE.pop(player, None)
-        return 0
-    return st.get("cows_bought", 0)
+    delta = max(0, int(herd_total) - int(st.get("last_herd", herd_total)))
+    if delta:
+        st["confirmed"] = st.get("confirmed", 0) + delta
+        st["pending"] = max(0, st.get("pending", 0) - delta)
+    st["hour"] = hour
+    st["last_herd"] = herd_total
+    return st.get("confirmed", 0)
+
+
+def _note_buy_order(player, day, hour, n):
+    """Record an unconfirmed request without consuming the daily pace."""
+    st = _STATE.get(player)
+    if st is None or st["day"] != day or hour < st.get("hour", -1):
+        st = {"day": day, "hour": hour, "last_herd": 0,
+              "confirmed": 0, "pending": 0}
+        _STATE[player] = st
+    st["hour"] = hour
+    st["pending"] = st.get("pending", 0) + max(0, int(n))
 
 
 def _note_buys(player, day, hour, n):
-    st = _STATE.get(player)
-    if st is None or st["day"] != day or hour <= st.get("hour", -1):
-        st = {"day": day, "hour": hour, "cows_bought": 0}
-        _STATE[player] = st
-    st["hour"] = hour
-    st["cows_bought"] = st.get("cows_bought", 0) + n
+    """Compatibility shim for callers from the pre-confirmation strategy."""
+    _note_buy_order(player, day, hour, n)
 
 
 def _get(obj, key, default):
@@ -265,10 +278,11 @@ def _market_gates(day, prices, shed, herd):
     shed_count = sum(v for v in shed.values() if isinstance(v, (int, float)))
 
     if last_day:
-        # day 29: only bank money counts; everything liquidates regardless
-        for item in ("MILK", "FERTILIZER", "WHEAT"):
-            if shed.get(item, 0) > 0:
-                orders.append(["SELL", item, shed[item]])
+        # day 29: only bank money counts; liquidate every tradable shed item
+        for item in BASE_PRICE:
+            n = shed.get(item, 0)
+            if isinstance(n, (int, float)) and n > 0:
+                orders.append(["SELL", item, n])
         return orders
 
     # ---- MILK: hoard / release / defend --------------------------------
@@ -285,7 +299,9 @@ def _market_gates(day, prices, shed, herd):
         if shed_count >= 70 and p >= 30:
             # discard-cliff guard: drain to a working buffer rather than
             # let the 100-slot shed discard milk for free
-            orders.append(["SELL", "MILK", max(0, milk - 15)])
+            sell = max(0, milk - 15)
+            if sell > 0:
+                orders.append(["SELL", "MILK", sell])
         elif p >= 145:
             # recovery peak / early scarcity (d8-11 measured 172-186):
             # the first batches must clear NOW, in size
@@ -401,10 +417,46 @@ def _build_tasks(obs, farm, private, day):
 
     tasks = []
 
-    def add(w, x, y, act, key, need=None):
-        tasks.append({"w": w, "x": x, "y": y, "act": act, "key": key, "need": need})
+    def add(w, x, y, act, key, need=None, units=None):
+        tasks.append({"w": w, "x": x, "y": y, "act": act, "key": key,
+                      "need": need, "units": units})
 
     last_day = day >= SEASON_DAYS - 1
+    if last_day:
+        hour = _get(obs, "hour", 0)
+        positions = [tuple(_get(farm, "farmer", [board // 2 - 1, board // 2 - 1]))]
+        positions.extend(tuple(hand) for hand in (_get(farm, "hands", []) or []))
+        accesses = _shed_access(board)
+
+        for ui, (ux, uy) in enumerate(positions):
+            inv = inventories[ui] if ui < len(inventories) else {}
+            if sum(n for n in inv.values() if isinstance(n, (int, float)) and n > 0) <= 0:
+                continue
+            sx, sy = min(accesses, key=lambda pos: (_dist(ux, uy, *pos), pos[1], pos[0]))
+            add(120, sx, sy, ["DROP"], ("return", ui), units={ui})
+
+        for y, row in enumerate(tiles):
+            for x, tile in enumerate(row):
+                if not isinstance(tile, dict) or _get(tile, "yield_units", 0) <= 0:
+                    continue
+                if _get(tile, "kind", "") != "PLANT" and "animal" not in tile:
+                    continue
+                eligible = set()
+                return_distance = min(_dist(x, y, *pos) for pos in accesses)
+                for ui, (ux, uy) in enumerate(positions):
+                    inv = inventories[ui] if ui < len(inventories) else {}
+                    if any(n > 0 for n in inv.values() if isinstance(n, (int, float))):
+                        continue
+                    turns_needed = _dist(ux, uy, x, y) + 1 + return_distance + 1
+                    if turns_needed <= 23 - hour:
+                        eligible.add(ui)
+                if eligible:
+                    add(110, x, y, ["HARVEST"], ("harvest", x, y),
+                        units=eligible)
+
+        herd_total = n_animals + shed.get("COW", 0) + cows_on_units
+        return tasks, 0, herd_total, len(wheat_set), capacity
+
     for y, row in enumerate(tiles):
         for x, tile in enumerate(row):
             if tile == "LOCKED":
@@ -484,33 +536,39 @@ def _build_tasks(obs, farm, private, day):
 
     board_half = board // 2
     shed_tile = (board_half - 1, board_half - 1)
+    shed_available = {item: max(0, int(n)) for item, n in shed.items()}
     # ---- feed logistics: distribute the wheat across several carriers ----
     # (one carrier cannot FEED a 10+-cow ring within 24 turns; chunks of 5
     # are grabbed by different units because a loaded carrier is barred
     # from picking up another chunk -- see executable() below.  Chunks are
     # raised whenever carried wheat falls short of the mouths, so multiple
     # carriers restock throughout the day.)
-    if animals_to_feed > 0 and shed.get("WHEAT", 0) > 0:
+    if animals_to_feed > 0 and shed_available.get("WHEAT", 0) > 0:
         shortfall = animals_to_feed + 2 - wheat_on_units
         i = 0
-        while shortfall > 0 and i < 4:
-            n = min(5, shortfall, shed.get("WHEAT", 0))
+        while shortfall > 0 and i < 4 and shed_available.get("WHEAT", 0) > 0:
+            n = min(5, shortfall, shed_available["WHEAT"])
             if n <= 0:
                 break
             add(96 - 8 * i, shed_tile[0], shed_tile[1], ["PICKUP", "WHEAT", n],
                 ("pickup_w", i))
             shortfall -= n
+            shed_available["WHEAT"] -= n
             i += 1
     # ---- cow logistics: carry bought cows onto empty pastures ----------
-    if shed.get("COW", 0) > 0 and cows_on_units < 2 and \
+    if shed_available.get("COW", 0) > 0 and cows_on_units < 2 and \
             any(t["key"][0] == "place" for t in tasks):
-        add(94, shed_tile[0], shed_tile[1], ["PICKUP", "COW", min(2, shed.get("COW", 0))],
+        n = min(2, shed_available["COW"])
+        add(94, shed_tile[0], shed_tile[1], ["PICKUP", "COW", n],
             ("pickup_c", 0))
+        shed_available["COW"] -= n
     # ---- fertilizer logistics for the age-2 wheat fertilize tasks -------
-    if any(t["key"][0] == "fert" for t in tasks) and shed.get("FERTILIZER", 0) > 0 \
-            and fert_on_units == 0:
-        add(40, shed_tile[0], shed_tile[1], ["PICKUP", "FERTILIZER", 3],
+    if any(t["key"][0] == "fert" for t in tasks) and \
+            shed_available.get("FERTILIZER", 0) > 0 and fert_on_units == 0:
+        n = min(3, shed_available["FERTILIZER"])
+        add(40, shed_tile[0], shed_tile[1], ["PICKUP", "FERTILIZER", n],
             ("pickup_f", 0))
+        shed_available["FERTILIZER"] -= n
     herd_total = n_animals + shed.get("COW", 0) + cows_on_units
     return tasks, animals_to_feed, herd_total, len(wheat_set), capacity
 
@@ -556,20 +614,41 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
         # floor, milk realized 29-37): freeze scaling -- the marginal cow
         # cannot pay for itself at distressed prices
         target = min(target, max(6, herd_total))
-    bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0))
+    bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0),
+                       herd_total)
     if herd_total < target and day <= COW_BUY_LAST_DAY \
             and money >= 400 + reserve and shed_count < 88 and bought < pace:
         n = min(pace - bought, target - herd_total,
                 int((money - reserve) // 400))
         if n > 0:
             orders.append(["BUY_ANIMAL", "COW", n])
-            _note_buys(_get(obs, "player", 0), day, _get(obs, "hour", 0), n)
+            _note_buy_order(_get(obs, "player", 0), day,
+                            _get(obs, "hour", 0), n)
     # land: NE adds a shed ring + field; SW/SE follow when flush (FM-1 scale)
     if quads < 2 and money >= 1800 and day >= 4:
         orders.append(["BUY_LAND"])
 
     # ---- selling: selective-intervention gates --------------------------
     orders.extend(_market_gates(day, prices, shed, herd_total))
+    if last_day:
+        # Goods already carried can DROP before market processing in this turn,
+        # so include them in liquidation. Failed/partial quantities remain legal
+        # positive orders and simply commit up to actual shed availability.
+        carried = {}
+        for inv in (_get(private, "inventories", []) or []):
+            for item, n in (inv or {}).items():
+                if isinstance(n, (int, float)) and n > 0:
+                    carried[item] = carried.get(item, 0) + n
+        indexed = {order[1]: order for order in orders if order[0] == "SELL"}
+        for item, n in carried.items():
+            if item not in BASE_PRICE:
+                continue
+            if item in indexed:
+                indexed[item][2] += n
+            else:
+                order = ["SELL", item, n]
+                orders.append(order)
+                indexed[item] = order
     # wheat: glut-tolerant curve; sell the surplus above the feed reserve
     if not last_day:
         reserve_w = animals_to_feed + WHEAT_FEED_RESERVE
@@ -597,6 +676,9 @@ def _schedule_units(obs, farm, private, day, tasks):
     actions = []
 
     def executable(task, ui):
+        eligible = task.get("units")
+        if eligible is not None and ui not in eligible:
+            return False
         need = task.get("need")
         if need and _get(unit_inv(ui), need, 0) <= 0:
             return False
@@ -627,6 +709,10 @@ def _schedule_units(obs, farm, private, day, tasks):
             if task["act"][1:2] == ["WHEAT"] and _get(unit_inv(ui), "WHEAT", 0) >= 5:
                 return False
             return True
+        if op == "DROP":
+            return _shed_adjacent(units[ui][0], units[ui][1], board) and any(
+                n > 0 for n in unit_inv(ui).values()
+                if isinstance(n, (int, float)))
         return True
 
     for ui, (ux, uy) in enumerate(units):
@@ -647,7 +733,8 @@ def _schedule_units(obs, farm, private, day, tasks):
             # carried-item requirement this unit already satisfies
             best = None
             for t in tasks:
-                if t["key"] in claimed:
+                if t["key"] in claimed or (t.get("units") is not None and
+                                             ui not in t["units"]):
                     continue
                 score = t["w"] / (1.0 + _dist(ux, uy, t["x"], t["y"]))
                 need = t.get("need")
@@ -727,9 +814,16 @@ def agent(obs):
         hands = _get(farm, "hands", []) or []
         hands_t = _hands_target(day, herd_total, wheat_tiles)
         money = _get(farm, "money", 0.0)
-        if hour <= 2 and len(hands) < hands_t and money >= 40:
+        if day < SEASON_DAYS - 1 and hour <= 2 and len(hands) < hands_t and money >= 40:
             for _ in range(min(3, hands_t - len(hands))):
                 orders.append(["HIRE"])
+
+        # Final defense: every quantity-bearing market order must be positive,
+        # and the terminal day is liquidation-only.
+        orders = [o for o in orders
+                  if len(o) < 3 or (isinstance(o[2], (int, float)) and o[2] > 0)]
+        if day >= SEASON_DAYS - 1:
+            orders = [o for o in orders if o[0] == "SELL"]
 
         farmer = actions[0] if actions else ["PASS"]
         hands_actions = actions[1:]

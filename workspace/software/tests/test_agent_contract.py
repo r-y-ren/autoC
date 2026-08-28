@@ -46,8 +46,9 @@ def check_action_schema(action):
     for o in market:
         assert isinstance(o, list) and len(o) >= 1
         assert o[0] in LEGAL_MARKET_OPS, o
-        if o[0] in ("BUY_SEED", "SELL", "BUY_PRODUCT"):
+        if o[0] in ("BUY_SEED", "BUY_ANIMAL", "SELL", "BUY_PRODUCT"):
             assert len(o) == 3
+            assert isinstance(o[2], (int, float)) and o[2] > 0
         if o[0] == "BUY_SEED":
             assert o[1] in CROPS
 

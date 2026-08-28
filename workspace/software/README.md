@@ -39,7 +39,10 @@ python workspace/software/scripts/analyze_failure_modes.py --rounds 8
 # 9) 完整迭代门（4 对手 × 4 seeds × AB/BA = 32 局；自定义子集仅 exploratory）
 python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label candidate --rounds 4 --require-complete
 
-# 10) LLM A/B（每局重建 provider/budget；无完整 KG_LLM_* 时只做 NullProvider 自检）
+# 10) 校验 m2b 冻结候选 SHA（必须等于 m2b_frozen_manifest.json 的 candidate.sha256）
+python -c "import hashlib,pathlib; print(hashlib.sha256(pathlib.Path('workspace/software/kaggle_simulations/agent/main.py').read_bytes()).hexdigest())"
+
+# 11) LLM A/B（每局重建 provider/budget；无完整 KG_LLM_* 时只做 NullProvider 自检）
 python workspace/software/scripts/run_llm_ab.py --rounds 4
 ```
 

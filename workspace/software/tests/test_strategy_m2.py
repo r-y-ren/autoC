@@ -47,6 +47,30 @@ def _order_qty(orders, op, item):
     return 0
 
 
+def _farm(tiles=None, money=5000.0, farmer=(4, 4), hands=(), quads=None):
+    return {
+        "money": money,
+        "tiles": tiles or _nw_tiles(),
+        "farmer": list(farmer),
+        "hands": [list(hand) for hand in hands],
+        "unlocked_quadrants": quads or ["NW"],
+        "hires_today": 0,
+    }
+
+
+def _obs(day, hour, farm, private, player=0):
+    other = _farm(money=3000.0)
+    farms = [farm, other] if player == 0 else [other, farm]
+    return {
+        "player": player,
+        "day": day,
+        "hour": hour,
+        "farms": farms,
+        "private": private,
+        "market": {"prices": _prices()},
+    }
+
+
 # --------------------------------------------------------------------------
 # milk gate schedule
 # --------------------------------------------------------------------------
@@ -84,11 +108,70 @@ def test_milk_pressure_guard_drains_before_discard_cliff():
     assert _order_qty(orders, "SELL", "MILK") == 25
 
 
+def test_market_gates_never_emit_zero_quantity_pressure_sell():
+    orders = main._market_gates(12, _prices(MILK=70),
+                                _shed(MILK=10, WHEAT=65), 8)
+    assert not _orders_contains(orders, "SELL", "MILK")
+    assert all(order[2] > 0 for order in orders if order[0] == "SELL")
+
+
+def test_agent_never_emits_nonpositive_quantity_order():
+    private = {"shed": _shed(MILK=10, WHEAT=65),
+               "seeds": {"WHEAT": 10}, "inventories": [{}]}
+    action = main.agent(_obs(12, 5, _farm(), private))
+    quantity_orders = [order for order in action["market"] if len(order) == 3]
+    assert quantity_orders
+    assert all(order[2] > 0 for order in quantity_orders)
+
+
 def test_last_day_liquidates_everything():
     orders = main._market_gates(29, _prices(), _shed(MILK=30, WHEAT=10,
-                                                     FERTILIZER=8), 8)
-    for item in ("MILK", "WHEAT", "FERTILIZER"):
+                                                     FERTILIZER=8, CARROT=2,
+                                                     EGG=3), 8)
+    for item in ("MILK", "WHEAT", "FERTILIZER", "CARROT", "EGG"):
         assert _orders_contains(orders, "SELL", item)
+
+
+def test_last_day_never_emits_capital_or_buy_orders():
+    private = {"shed": _shed(MILK=4), "seeds": {"WHEAT": 0},
+               "inventories": [{}]}
+    action = main.agent(_obs(29, 0, _farm(money=10000.0), private))
+    assert action["market"]
+    assert all(order[0] == "SELL" for order in action["market"])
+
+
+def test_last_day_carried_product_returns_and_sells_before_new_harvest():
+    tiles = _nw_tiles()
+    tiles[0][0] = {"kind": "PLANT", "crop": "WHEAT", "planted_day": 24,
+                   "watered_today": True, "consecutive_unwatered": 0,
+                   "yield_units": 4, "fertilized_until_day": -1}
+    private = {"shed": _shed(), "seeds": {"WHEAT": 0},
+               "inventories": [{"MILK": 3}]}
+    action = main.agent(_obs(29, 10, _farm(tiles=tiles, farmer=(4, 4)), private))
+    assert action["farmer"] == ["DROP"]
+    assert ["SELL", "MILK", 3] in action["market"]
+    assert action["farmer"] != ["HARVEST"]
+
+
+def test_last_day_skips_harvest_that_cannot_return_to_shed_in_time():
+    tiles = _nw_tiles()
+    tiles[0][0] = {"kind": "PLANT", "crop": "WHEAT", "planted_day": 24,
+                   "watered_today": True, "consecutive_unwatered": 0,
+                   "yield_units": 4, "fertilized_until_day": -1}
+    farm = _farm(tiles=tiles, farmer=(0, 0))
+    private = {"shed": _shed(), "seeds": {"WHEAT": 0}, "inventories": [{}]}
+    tasks, *_ = main._build_tasks(_obs(29, 22, farm, private), farm, private, 29)
+    assert not any(task["act"][0] == "HARVEST" for task in tasks)
+
+
+def test_last_day_return_task_stays_with_its_loaded_carrier():
+    farm = _farm(farmer=(0, 0), hands=((4, 4),))
+    private = {"shed": _shed(), "seeds": {"WHEAT": 0},
+               "inventories": [{}, {"MILK": 2}]}
+    obs = _obs(29, 10, farm, private)
+    tasks, *_ = main._build_tasks(obs, farm, private, 29)
+    actions = main._schedule_units(obs, farm, private, 29, tasks)
+    assert actions == [["PASS"], ["DROP"]]
 
 
 def test_fertilizer_hoard_is_bounded():
@@ -160,17 +243,59 @@ def test_feed_buy_triggers_on_true_system_shortfall():
 
 def test_buy_pace_resets_across_episodes():
     main._STATE.clear()
-    main._note_buys(0, 5, 10, 2)
-    assert main._buy_pace(0, 5, 11) == 2          # same episode, later hour
-    assert main._buy_pace(0, 0, 0) == 0           # new episode clock
+    assert main._buy_pace(0, 5, 10, 4) == 0
+    main._note_buy_order(0, 5, 10, 2)
+    assert main._buy_pace(0, 5, 11, 6) == 2       # actual herd delta confirms
+    assert main._buy_pace(0, 0, 0, 0) == 0        # new episode clock
     main._STATE.clear()
 
 
 def test_buy_pace_day_rollover():
     main._STATE.clear()
-    main._note_buys(1, 3, 2, 2)
-    assert main._buy_pace(1, 4, 0) == 0
+    assert main._buy_pace(1, 3, 2, 5) == 0
+    main._note_buy_order(1, 3, 2, 2)
+    assert main._buy_pace(1, 4, 0, 7) == 0
     main._STATE.clear()
+
+
+def test_failed_buy_order_does_not_consume_daily_pace():
+    main._STATE.clear()
+    assert main._buy_pace(0, 5, 0, 4) == 0
+    main._note_buy_order(0, 5, 0, 2)
+    assert main._buy_pace(0, 5, 1, 4) == 0        # order failed: no cow delta
+    main._note_buy_order(0, 5, 1, 2)
+    assert main._buy_pace(0, 5, 2, 6) == 2        # retry succeeded
+    main._STATE.clear()
+
+
+def test_buy_confirmation_state_isolated_by_seat_and_episode():
+    main._STATE.clear()
+    assert main._buy_pace(0, 2, 0, 4) == 0
+    assert main._buy_pace(1, 2, 0, 7) == 0
+    main._note_buy_order(0, 2, 0, 2)
+    main._note_buy_order(1, 2, 0, 1)
+    assert main._buy_pace(0, 2, 1, 6) == 2
+    assert main._buy_pace(1, 2, 1, 7) == 0
+    assert main._buy_pace(0, 0, 0, 0) == 0
+    assert main._buy_pace(1, 0, 0, 0) == 0
+    main._STATE.clear()
+
+
+def test_pickup_tasks_reserve_shed_inventory_across_carriers():
+    tiles = _nw_tiles()
+    for x, y in ((3, 3), (2, 3), (3, 2), (1, 3), (3, 1), (2, 2), (1, 2)):
+        tiles[y][x] = {"kind": "PASTURE", "animal": "COW", "placed_day": 10,
+                       "yield_units": 0, "consecutive_unfed": 0,
+                       "fed_today": False, "cared_today": False,
+                       "fertilizer_available": False}
+    farm = _farm(tiles=tiles, hands=((5, 4), (4, 5), (5, 5)))
+    private = {"shed": _shed(WHEAT=6), "seeds": {"WHEAT": 0},
+               "inventories": [{}, {}, {}, {}]}
+    tasks, *_ = main._build_tasks(_obs(12, 0, farm, private), farm, private, 12)
+    pickups = [task["act"] for task in tasks if task["act"][:2] == ["PICKUP", "WHEAT"]]
+    assert len(pickups) == 2
+    assert sum(action[2] for action in pickups) == 6
+    assert all(action[2] > 0 for action in pickups)
 
 
 # --------------------------------------------------------------------------

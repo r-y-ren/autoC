@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "milestone": "m2b-strategy-repair",
+  "label": "m2b-frozen",
+  "created_at": "2026-08-28T16:49:10.782734+00:00",
+  "candidate": {
+    "path": "workspace/software/kaggle_simulations/agent/main.py",
+    "sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+    "git_ref": "1376fb41bd12d15922e4b7909308777dcc02beb1",
+    "dirty": true
+  },
+  "gate": {
+    "command": "python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m2b-frozen --rounds 4 --require-complete",
+    "input_sha256": "51b99ce89abdd5512e4b71dfbf4f75081a0c6eb02d47ee36b36feb4d4068079b",
+    "log": "workspace/software/exports/logs/iteration_gate_log.jsonl",
+    "formal_pass": true,
+    "complete": true,
+    "expected_games": 32,
+    "actual_games": 32,
+    "abnormal_games": 0,
+    "elapsed_seconds": 83.16,
+    "opponents": [
+      "cow_baron",
+      "melon_hoarder",
+      "expansionist",
+      "baseline_wheat"
+    ],
+    "seat_orders": [
+      "AB",
+      "BA"
+    ],
+    "seed_domain": "development",
+    "seeds": [
+      101,
+      102,
+      103,
+      104
+    ]
+  },
+  "identity_verification": {
+    "source_sha_unchanged_during_gate": true,
+    "snapshot_sha_matched_source": true,
+    "post_gate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+    "post_gate_git_ref": "1376fb41bd12d15922e4b7909308777dcc02beb1",
+    "post_gate_dirty": true
+  }
+}
