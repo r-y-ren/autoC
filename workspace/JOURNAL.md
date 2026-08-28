@@ -27,3 +27,4 @@
 | 2026-08-28 02:30 | collect | D11 全量构建启动：K-10 落盘、cron 暂停（规格存档）| W0-W5 波次推进，每波提交 |
 | 2026-08-28 12:00 | collect | 全量构建 W0+首波W1：award_levels×3、结构lint归零、CUMCM2023（13深构）、MathorCup三届（6深构+2026挂watch）、MCM2024（O=35索引+6深构分级）；渠道事实修正：MCM O奖全文在Mathmodels会员墙后 | 首波 4 分片 14.4M tokens |
 | 2026-08-28 14:30 | collect | 全量构建 W2 中段：MCM2026（O=41 索引+6深构）、AIMO（5队全深构+防污染澄清）、C4（拟获奖名单+Docker复现闭环）、ARC patterns（历届方法演进）、欧莱雅+Qoder patterns | patterns 达 7/11 |
+| 2026-08-28 16:00 | collect | 全量构建：MCM2025 收拢（O=43 索引+6 深构，美赛三年齐）；AIMO/MinerU+XPRIZE patterns 落盘 | patterns 10/11，W1b 完成 |
