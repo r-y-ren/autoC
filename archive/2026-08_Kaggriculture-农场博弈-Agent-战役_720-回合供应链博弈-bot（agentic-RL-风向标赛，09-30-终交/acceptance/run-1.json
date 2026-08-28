@@ -1,0 +1,51 @@
+{
+  "campaign": {
+    "competition_id": "kaggle-kaggriculture",
+    "blueprint_ref": "25d4900"
+  },
+  "checklist": [
+    {
+      "id": "sw-deps",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\sw-deps.log"
+    },
+    {
+      "id": "sw-boot",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\sw-boot.log"
+    },
+    {
+      "id": "sw-test",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\sw-test.log"
+    },
+    {
+      "id": "doc-compile",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\doc-compile.log"
+    },
+    {
+      "id": "man-reg",
+      "category": "manual",
+      "status": "pending_manual",
+      "evidence": "manual（移交用户）"
+    },
+    {
+      "id": "man-submit",
+      "category": "manual",
+      "status": "pending_manual",
+      "evidence": "manual（移交用户）"
+    }
+  ],
+  "result": "pending_manual",
+  "generated_at": "2026-08-28T16:54:27",
+  "retry_state": {
+    "count": 0,
+    "max": 3,
+    "tripped": false
+  }
+}
