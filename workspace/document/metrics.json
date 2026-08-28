@@ -1,0 +1,53 @@
+{
+  "schema": "document-metrics-shard/1.0",
+  "campaign": "kaggle-kaggriculture",
+  "milestone": "m3-polish (document finalization, wave 4/4)",
+  "measured_at": "2026-08-28",
+  "metrics": {
+    "report_compile_exit_code": {
+      "value": 0,
+      "unit": "exit_code",
+      "method": "typst 0.15.1 (9dfd3a08): typst compile workspace/docs/report.typ workspace/docs/report.pdf, run from repo root 2026-08-28; final successful invocation exit 0 (two earlier failed attempts on markup escapes of KG_LLM_* inside prose -- fixed by moving the token into inline raw spans; no template-structure changes)"
+    },
+    "report_compile_seconds": {
+      "value": 0.37,
+      "unit": "s",
+      "method": "bash time on the successful compile invocation (real 0m0.374s)"
+    },
+    "report_pages": {
+      "value": 14,
+      "unit": "pages",
+      "method": "pypdf len(PdfReader('workspace/docs/report.pdf').pages) == 14, cross-checked against the PDF /Pages /Count field == 14"
+    },
+    "report_main_sections": {
+      "value": 6,
+      "unit": "count",
+      "method": "level-1 headings in the finalized report.typ: 摘要 / 战役定位与范围 / 方法与选型 / 四阶段波次执行记录 / 实测结果 / 合规与人机分工 / 遗留与可复用资产 -- structure identical to the wave-1 frozen skeleton (six main numbered sections; no section added or dropped)"
+    },
+    "report_appendices": {
+      "value": 2,
+      "unit": "count",
+      "method": "appendix A 人机分工记录 (verified per-wave, placeholder note removed) + appendix B 参考来源 (extended with wave-2/3 artifacts: JOURNAL.md, eval_audit.md, failure_modes.md, iteration_gate_log.jsonl, document shard)"
+    },
+    "report_metric_key_references": {
+      "value": 49,
+      "unit": "count",
+      "method": "programmatic cross-check 2026-08-28: 49 distinct backticked key tokens in report.typ all resolve to existing keys of metrics.software.{metrics,unmeasured} in workspace/metrics.json (1 additional backticked token 'baseline_wheat' is a bot name, not a key); zero references to nonexistent keys, zero placeholder slots remaining (grep for 待回填/占位/大纲包/ph] in extracted PDF text: 0 hits)"
+    },
+    "sop_v2_base_items": {
+      "value": 19,
+      "unit": "count",
+      "method": "checkbox items B01-B19 in workspace/docs/submit-sop.md v2, slot-aligned with the round-1 archived SOP's 19 checkboxes (baselines updated to this round's metrics: 101 tests, 4-command local check incl. --assert-regression, Elo-first regression comparison)"
+    },
+    "sop_v2_new_group_items": {
+      "value": 17,
+      "unit": "count",
+      "method": "checkbox items in the four new groups: N1 registration gate x3, N2 per-submission daily-discipline checks x5, N3 ladder-feedback metrics backfill flow x4 (keys online_ladder_games / online_skill_rating / online_feedback_calibration), N4 final lock checks x5 (commit-hash double check against metrics.software.final_submission_commits, dual Validation Passed, manual sign-off)"
+    },
+    "sop_v2_total_items": {
+      "value": 36,
+      "unit": "count",
+      "method": "total '- [ ] **' checkbox lines in submit-sop.md v2 == 19 base + 17 new-group items (programmatic count)"
+    }
+  }
+}
