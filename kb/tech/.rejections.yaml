@@ -462,3 +462,71 @@
   reason: competition_fit不足——RL后训练型方法（GTN-R，与已拒arxiv-2608.24114同类）：需对生成式TSFM做RL rollout训练基建与算力，六类赛种赛队无此工程语境；"suboptimal collapse"诊断（RL后训练使输出分布偏离真值）与真值邻域正则属reward shaping设计提示而非可落地组件；arXiv页无代码（2026-08-28实抓无Comments）
   stars: null
   decided: '2026-08-28'
+- id: arxiv-2608.23908
+  reason: competition_fit不足——2x2因子实验的负面结果论文：确定性税务引擎主效应显著为负（F(1,29)=9.17, p=.005，开启引擎反而损失约55pp税收节省）、RAG主效应不显著（p=.841）；无可移植方法组件（结论是"加领域引擎不保证更好、内部化知识可能已够"），重复测量ANOVA实验设计属教科书统计而非本文独有edge；无代码无venue无Comments（2026-08-28实抓）；RAG系同质化从严下无入库理由（与已拒arxiv-2608.25717评测型负面结果同类）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.23811
+  reason: competition_fit不足——RL训练型方法：EG-GRPO需对Qwen3.5-4B做多轮rollout微调基建（与已拒arxiv-2608.24588/2608.24114同类），六类赛种赛期内无自然落点；剥离RL后剩"agentic PubMed布尔检索+结构化核查报告"属同质化RAG黑客松套路；arXiv页无Comments无代码（2026-08-28实抓确认），runnable无法核实
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.24764
+  reason: competition_fit不足——agentic检索导航方法变体（AtlasNav：语料一次性组织为Corpus Atlas+多视图持久导航），RAG系同质化从严口径下不属置信证书/统一理论/综述级地图任一独有组件；"证据盲区"三阶段诊断（未浮现/未打开/未显示关键片段）+阶段化证据实现度量是有意思的评估视角，但BrowseComp-Plus 92.05%严格准确/-30.21%在线推理成本的结果绑定其持久化索引基建，无法脱离corpus atlas全套复用；Comments自述"Code, data, and trajectories will be released"——2026-08-28实抓尚未放出，runnable=false，赛队复现需自建持久化多视图导航（高成本），写不出有说服力的比赛映射；本条拒于映射而非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.24214
+  reason: competition_fit不足——RL训练型agentic RAG变体（MetaRAG：verify-first动作生成+内部信念探测+一致性奖励的policy optimization；EMNLP 2026 Main接收属信号非映射）：独有组件internal belief probing仅训练期使用，可被更轻量的答案置信度/可回答性估计替代，不构成赛期可落地差异化；收益需在7个QA基准上跑策略优化训练基建（多轮rollout+RL，与已拒arxiv-2608.24588/2608.24114同类），赛期内不可行；arXiv页无代码链接（2026-08-28实抓），runnable=false；本条拒于映射而非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.22479
+  reason: competition_fit不足——RL训练型方法（GTA-RAG：从实体-文档图采样连通文档路径合成多跳QA轨迹+部署检索器验证得到轨迹级监督，GRPO+轨迹引导奖励微调Qwen2.5-3B/7B后再answer-reward续训；EMNLP 2026接收属信号非映射），与已拒arxiv-2608.24588/2608.24114/2608.23811同类：复用需多轮rollout训练基建+微调算力+实体-文档图构建，六类赛种赛期内无自然落点；虽有官方代码github.com/cjcj46262/GTA-RAG（arXiv摘要页明确给出），但复用即训练工程而非即插组件；可迁移洞见（用部署检索器预先验证合成轨迹质量，不训练亦可作自建评测集的数据质检步骤）单独撑不起比赛映射；RAG系同质化从严下无入库理由
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.26882
+  reason: competition_fit不足——工控安全评测型基准（PLCBench：首个真实PLC硬件在环的LLM agent网络-物理攻击能力测量框架，4商用PLC×4闭环负载、5模型族240 episodes、31.3%达成持续物理目标，定位防御干预点）：贡献绑定工控环境与真实硬件语境，六类赛种无自然落点（赛种词表无安全/CTF向，硬件物理测试按边界备忘属人工移交项）；摘要声称"release ... through the accompanying artifact"但arXiv abs页Comments仅"36 pages, 13 figures"无任何链接（2026-08-28实抓），runnable无法实测核实，与已拒arxiv-2608.24509同理（评测基准+无核实工件不入库）；且"自主agent攻击PLC"的复现演示具双重用途合规风险；本条拒于映射而非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-08-28'
+- id: gh-zorost_AI-Engineering-Lab
+  reason: 教学课程仓库——24周AI工程自学课程（README自述"training program"：43个runnable notebook+ZoroLogistics连续货运案例，受众为转行者/学生，周更四节拍study/build/ship/reflect），属课件而非可复用技术组件，内容为公开知识的教学化组织（RAG/LoRA/MCP/三云平台入门）无独有方法或工具，六类赛种作品无组件落点；MIT、173 stars（2026-08-28 API实抓）达标但按gh代码型"教学demo→拒"口径拒于组件价值
+  stars: 173
+  decided: '2026-08-28'
+- id: gh-turkiyeyapayzekaakademisi_llm-rag-memory-ai-agents
+  reason: 教学demo——土耳其AI学院（Akademi）课程练习清单：README为土耳其语分节步骤（venv建环境→langchain+Gemini首次调用→faiss-cpu向量库RAG→memory→agent），langchain入门教程级内容无独有组件可复用；仓库无license无description无topics（2026-08-28 API实抓），2026-08-19创建；119 stars达标但拒于组件价值与许可缺失双重理由
+  stars: 119
+  decided: '2026-08-28'
+- id: gh-elie222_botdirectory.ai
+  reason: 无组件价值——社区prompt目录内容站（Astro静态站，bots/目录实抓312个markdown prompt，面向Grok Bot/Rakazo等消费级bot的邮件分诊/SEO修复/每日简报等运营自动化配方）+一套目录CRUD公开API与PR投稿工作流；对赛队差异化无技术组件可复用（"抄prompt思路"不构成有说服力的比赛映射）；MIT、132 stars（2026-08-28 API实抓）达标但拒于映射
+  stars: 132
+  decided: '2026-08-28'
+- id: arxiv-2608.26081
+  reason: competition_fit不足——涌现仿真研究（SwarmWorld：无角色无指令的LLM agent群体在空间世界中自发分化探索/建造/维护/协调角色并写可执行控制器，物理信息素stigmergy单独足以支撑社会；技术组合多样性胜best-of-N但单一最优制品上隔离搜索仍有竞争力）：属人工社会/集体智能的科学发现型论文，无可移植方法组件，stigmergy协同亦属swarm领域常识；无代码无Comments（2026-08-28实抓），runnable无法核实；六赛种映射只能硬凑，不入库
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.25570
+  reason: competition_fit不足——领域绑定制方法（KOPE：昇腾CANN硬件算子优化的经验驱动agent工作流+经验图记忆，几何均值加速1.54x于最强基线CANNBot；主动上下文管理注入使pass率60.0%→84.6%、优化token消耗15.9B→1.113B）：复用需CANN工具链+算子基准环境，六赛种词表（数模/双创/黑客松/Kaggle/ACM）无硬件算子优化落点；通用思想（固定token预算下经验检索注入支撑长程优化循环）与库内已有agent记忆/数据生成类卡片重叠，不构成独有edge；无代码无Comments（2026-08-28实抓），runnable=false
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.25986
+  reason: competition_fit不足——RAG系同质化从严拒（CEMMKG：给MMKG图像配局部多粒度+全局摘要的互补文本上下文再走常规MMKG-RAG，属数据构建侧增量改进，不属置信证书/统一理论/综述级地图任一独有组件；对比库内已收PonsRAG——EMNLP Main+11.56%相对提升——信号弱一个量级）：Comments仅"Preprint"无venue，arXiv页无代码、摘要层未给任何量化收益数字（2026-08-28实抓），runnable=false，复现依据不足
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.15502
+  reason: competition_fit不足——VLA端云协同推理系统论文（EcoVLA，APPT 2026接收属信号非映射）：贡献绑定"VLA模型+边服务器+机器人本体"的具身部署语境（跨VLA范式的阶段级统一抽象、端-边-网联合时延/能耗预测、毫秒级运行时能效最优方案选择、级间中间张量轻量传输，20Hz约束下能效+236%），六类赛种赛期内无自然落点——机器人部署的硬件物理测试项本就移交人工，且复现需自实现整套框架（arXiv页无代码，Comments仅"Accepted by APPT 2026"，2026-08-28实抓，runnable=false）；可迁移洞见（先离线建模再运行时选择的端云切分思路）是系统设计原则而非可落地组件，撑不起差异化主张；本条拒于映射而非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.26292
+  reason: competition_fit不足——知识编辑scope分类的负面结果论文（单作者，v1无venue）：结论是SERAC系知识编辑基准根本测不了scope decision（oracle router与一行静态策略在1689查询×9个dataset-condition cell打平到小数点后四位，abstention 0/1689获胜），正面组件INLAY论文自陈输给WISE（Qwen2.5-7B CounterFact）且RAG在严格匹配的RippleEdits上击败所有被测方法——对赛队的可操作结论即"别走知识编辑，用RAG"，而知识编辑本身在六类赛种无自然落点；可迁移洞见（评测集须含应拒答负样本、先测oracle上界再决定建不建路由器）与本批入库arxiv-2608.26385的canary思想重叠且不如其直接可用；虽有代码github.com/Aditya-PS-05/INLAY（2026-08-28 gh api实核，Python/MIT，1 star），本条拒于映射而非信号（arXiv候选citations门槛=0通过）
+  stars: 1
+  decided: '2026-08-28'
+- id: arxiv-2608.26291
+  reason: competition_fit不足——认知科学实证研究（两经济游戏+认知计算建模测LLM mentalization，N=2099 agent×4模型族 vs N=251人类）：核心产出是发现（mentalizing签名按厂商/规模分化、GPT-5自适应递归深度胜人类）而非可移植组件；可带走的两点——『策略性提示提升博弈表现』属通行常识级，『认知建模作评测叙事』需按46页正文自实现潜策略模型且无代码（Comments仅'46 pages, 4 figures, 2 tables. Supplementary information available on request'，2026-08-28实抓无任何链接），赛期内成本收益不成比例；人类基线N=251赛队不可复现；LLM博弈/ToM评测研究同质化，六类赛种写不出有说服力映射；拒于映射非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.27121
+  reason: competition_fit不足——ICMI Companion '26（companion publication非主会）接收的四模态（文本/音频/图像/视频）统一256维嵌入+迭代聚类审美结构分析：管线为现成多模态编码器+共享嵌入+聚类的常规配方，摘要未披露编码器与训练细节且无代码无工件链接（DOI 10.1145/3776591.3837060指向ACM DL，2026-08-28实抓无开源），『AI自身审美范畴化』属科学问题非竞赛组件；其自称应用（媒体库整理供RAG、自动打标）用现成嵌入模型即可实现，不构成本文独有edge——复现要么平凡（无差异化）要么不可行（细节未披露）；六类赛种无自然落点；拒于映射非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.26836
+  reason: competition_fit不足——神经符号逻辑推理变体（SymbolLKG：本体LKG把逻辑规则/约束作一等拓扑节点+Logic Router动态派发符号求解器+拓扑感知混合检索）：LLM+符号求解器做可验证推理的范式已成熟拥挤，本文增量（LKG拓扑建模/动态路由）无代码放出（arXiv页无链接、Comments仅'19 pages, 9 figures'，2026-08-28实抓），复现需自建本体抽取+LKG构建+路由器（高成本）且『显著超SOTA提示/RAG基线』的对比不可独立验证；RAG系同质化从严下无独有可移植组件，六类赛种写不出有说服力映射；拒于映射非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-08-28'

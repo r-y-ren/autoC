@@ -34,6 +34,8 @@
 
 | ID | 名称 | 领域 | 方向 | 成熟度 | 比赛映射 | 发表 | 最近核验 |
 |---|---|---|---|---|---|---|---|
+| arxiv-2608.11327 | Long-Horizon Forecasting of Complete Financial Statements with Forma | 金融时序预测、财务报表建模、机器学习 | 数模与时序预测 | paper | 数模-数据分析与决策、双创-文书与申报 | 2026-08-11 | 已引 |
+| arxiv-2608.11359 | Market-Information-Aware Gated-LoRA of Foundation Models for Transferable Day-Ahead Electricity Price Forecasting | 时序预测、电力市场、参数高效微调 | 数模与时序预测 | paper | 数模-预测与评估、黑客松-数据与算法 | 2026-08-11 | 已引 |
 | arxiv-2608.14106 | Forecast Collapse in Time-Series Foundation Models | 时序预测、金融时序、预测校准与排序 | 数模与时序预测 | paper | 数模-预测与评估、Kaggle-竞赛 | 2026-08-14 | 已引 |
 | arxiv-2608.15291 | ReasonCast: Agentic Demand Forecasting with Selective Semantic Reasoning | 时序预测、需求预测、大语言模型智能体 | 数模与时序预测 | paper | 数模-预测与评估、Kaggle-竞赛 | 2026-08-15 | 已引 |
 | arxiv-2608.16098 | AsyTO: Asymmetric Temporal Operator for Parameter-Efficient Multivariate Time Series Forecasting | 时序预测、轻量化模型 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-17 | 已引 |
@@ -51,25 +53,62 @@
 | arxiv-2608.20052 | DecoVAE: a Lightweight Interpretable Trend-Seasonal VAE Framework for Efficient Probabilistic Time Series Forecasting | 时序预测、机器学习 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-20 | 已引 |
 | arxiv-2608.20761 | Fuzzy-MoE: Interpretable Regime-Conditioned Expert Routing for Non-Stationary Multivariate Time Series Forecasting | 时序预测、机器学习、可解释AI | 数模与时序预测 | paper | 数模-预测与评估、黑客松-数据与算法 | 2026-08-21 | 已引 |
 | arxiv-2608.21277 | ConceptTS: LLM-Guided Concept Bottlenecks for Interpretable Multivariate Time-Series Forecasting | 时序预测、可解释性、大语言模型 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-21 | 已引 |
+| arxiv-2608.22108 | Development and Feasibility Evaluation of an Edge AI as Medical Device System for Breast Cancer Multidisciplinary Team Meetings | on-device AI、语音识别、临床决策支持 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-22 | 已引 |
+| arxiv-2608.22634 | GeoRisk-RAG: A Hierarchy-Aware Risk Framework for Improving RAG Reliability through Selective Answering | retrieval augmented generation、可信 AI、地理空间决策 | 黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2026-08-23 | 已引 |
+| arxiv-2608.22652 | Evaluating Inference-Time Defenses Against Package Hallucination in LLM-Generated Code | LLM 代码生成、软件供应链安全、评测方法 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-23 | 已引 |
+| arxiv-2608.22968 | Do Time-Series Foundation Models Pay Off for Industrial Monitoring? A Cost-Aware Empirical Study | time series foundation model、异常检测与状态监测、模型选型 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-24 | 已引 |
+| arxiv-2608.23011 | Coarse Indexing, Fine Evidence: Decoupling Temporal Granularity in Long-Video RAG | long-video understanding、retrieval augmented generation、高效检索 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-24 | 已引 |
 | arxiv-2608.23221 | Which Histories Matter for Time Series Forecasting? Learning Predictive Relevance with Future Supervision | 时序预测、信息检索、检索增强预测 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-24 | 已引 |
+| arxiv-2608.23241 | Retrieval-Augmented Classification of Environmental Mitigations in Hydropower Licensing Documents | 检索增强生成、文本分类、长尾学习 | 黑客松与数据竞赛 | paper | Kaggle-竞赛、黑客松-数据与算法 | 2026-08-24 | 已引 |
+| arxiv-2608.23252 | The Laws of Context Allocation: Causal Measurement and Closed-Loop Orchestration in Generative Search | 检索增强生成、上下文工程、LLM评测 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法、Kaggle-竞赛 | 2026-08-24 | 已引 |
 | arxiv-2608.23473 | MetaCaster: Meta-Harness-Optimized Agent for End-to-End Few-Shot Learning of Lightweight Time Series Forecasters | 时序预测、智能体、小样本学习 | 数模与时序预测 | paper | 数模-预测与评估、黑客松-数据与算法 | 2026-08-24 | 已引 |
 | arxiv-2608.23855 | ICI-Time: In-Context Inpainting for Time Series Forecasting | 时序预测、机器学习、跨模态学习 | 数模与时序预测 | paper | 数模-预测与评估、黑客松-数据与算法 | 2026-08-24 | 已引 |
+| arxiv-2608.23918 | MARS: Multi-Specialist LLM Relay System for Competitive Programming | 代码生成、多智能体系统、竞赛编程 | 黑客松与数据竞赛 | paper | ACM-训练体系、黑客松-数据与算法 | 2026-08-24 | 已引 |
+| arxiv-2608.23965 | RAGSentinel: Certifiable Geometric Consensus for Robust Retrieval-Augmented Generation | retrieval augmented generation、LLM 安全与鲁棒性 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.23992 | Hybrid Semantic Tool Discovery for Enterprise MCP Gateway（SCOUT） | LLM agents、MCP、工具检索/hybrid search | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.24017 | WebMCP-Phalanx: Enforcing and Characterizing Trust Boundaries for Browser-Integrated LLM Agents | LLM agents、浏览器安全、MCP | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.24022 | What Guides the Agent? Adjudicating Unauthorized Behavior via Localizing Behavior-Guiding Instructions（AttnLocate） | LLM agents、agent 安全、可解释性 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.24033 | ChorusTIC: Training-Free Multivariate Time Series Classification via Chorus In-Context Learning | time series foundation model、时序分类、in-context learning | 数模与时序预测 | paper | 数模-数据分析与决策、Kaggle-竞赛 | 2026-08-25 | 已引 |
 | arxiv-2608.24087 | Knowing When to Ask for Help: Bayesian Self-Escalation in Hierarchical LLM Agents | LLM agents、模型级联、推理成本优化 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
 | arxiv-2608.24103 | ACE: A Self-Correcting Agentic Canvas Editor for Multi-Slide Presentation Automation | LLM agents、文档智能、演示自动化 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.24303 | Causal Analysis for Time Series Foundation Models | time series foundation model、模型评估与选型、因果分析 | 数模与时序预测 | paper | 数模-预测与评估、Kaggle-竞赛 | 2026-08-25 | 已引 |
 | arxiv-2608.24569 | When "Must" Becomes "Maybe": Constraint Weakening in LLM Agent Workflows | LLM agents、工作流可靠性、状态管理 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
 | arxiv-2608.24735 | Meta^n: Recursive Self-Improvement through Emergent Depth | LLM agents、测试时自我改进、智能体记忆 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法、Kaggle-竞赛 | 2026-08-25 | 已引 |
+| arxiv-2608.24753 | The RAT: A Unified Bayesian Model for RAG Evaluation | retrieval augmented generation、LLM 评估与不确定性 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法、数模-预测与评估 | 2026-08-25 | 已引 |
+| arxiv-2608.24977 | Retrieved But Not Reliable: A Survey on Attacks, and Defenses in Retrieval-Augmented Generation | retrieval augmented generation、LLM 安全与鲁棒性 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法、Kaggle-竞赛 | 2026-08-25 | 已引 |
 | arxiv-2608.25039 | LifePlanner: Evaluating LLM Agents for Geo-spatial Planning with Social Media Data | LLM agents、geo-spatial planning、多模态证据检索 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
 | arxiv-2608.25080 | NVExplain: Explaining Time Series Forecasting with Latent Trajectory Analysis and Structure-Preserving Surrogates | 时序预测、可解释性、事后归因 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-25 | 已引 |
+| arxiv-2608.25123 | SelfGraphRAG: Bridging the Supervision Gap in Graph-Based RAG with Synthetic QA Generation | retrieval augmented generation、knowledge graph、合成数据 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
 | arxiv-2608.25128 | When Does Context Routing Help? A Systematic Study of Multi-Modal Fusion in Time Series Forecasting | 时序预测、多模态融合、实证研究 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-25 | 已引 |
 | arxiv-2608.25152 | Belief Cascades Drive Persuasion in LLM Agent Networks | LLM agents、多智能体仿真、舆情传播 | 黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2026-08-25 | 已引 |
 | arxiv-2608.25198 | Tunable Tool-Call Rates in LLM Agents via Representation Steering | LLM agents、可解释性、推理时控制 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
 | arxiv-2608.25486 | PonsRAG: A Pons-Inspired RAG Bridging Cognitive Islands for Coordinated Long Narrative Reasoning | retrieval augmented generation、长上下文推理、叙事理解 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-26 | 已引 |
+| arxiv-2608.25500 | CaSKG: Counterfactual-Causal Skill Graphs for Scalable Agent Skill Retrieval | LLM agents、skill library、skill retrieval | 黑客松与数据竞赛 | paper | 黑客松-数据与算法、Kaggle-竞赛 | 2026-08-26 | 已引 |
 | arxiv-2608.25735 | Pointing the Way, Hiding the Destination: Practical Private Dense Retrieval at Scale | retrieval augmented generation、隐私保护检索、密码学 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-26 | 已引 |
 | arxiv-2608.25871 | CEDAR: Controlled and Event-Driven Demand Forecasting via Residual Decomposition | 时序预测、机器学习、需求预测 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-26 | 已引 |
+| arxiv-2608.25992 | ProgRouter: Online Progress-Guided Orchestration for Multi-Agent LLM Workflows under Quality-Cost Tradeoffs | LLM agents、agent orchestration、cost-aware routing | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-26 | 已引 |
+| arxiv-2608.26199 | Benchmarking AI Agents for Hardware Design Automation via MCP Tool Calling | LLM agents、MCP、agent 评测/基准 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.26385 | Why RAGs Hallucinate: Penalty-Aware Evaluation of Retrieval-Augmented Generation Systems with Knowledge-Gap Canaries | RAG、评测方法、幻觉检测 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-26 | 已引 |
+| arxiv-2608.26604 | hoBIT: A Profile-Aware Retrieval-Augmented Chatbot for University Academic Advising | RAG、个性化检索、对话系统 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-27 | 已引 |
+| arxiv-2608.26747 | AgentFold: Closed-Loop Agentic Search for Protein Folding Model Design | LLM agents、agentic search、多智能体、蛋白质折叠 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-27 | 已引 |
+| arxiv-2608.26753 | ABE-Ralph: Auditing Experimental Fidelity in LLM-Driven Scientific Research | LLM agents、AI for science、evaluation audit | 黑客松与数据竞赛 | demo | 黑客松-数据与算法、Kaggle-竞赛 | 2026-08-27 | 已引 |
+| arxiv-2608.26829 | SAGE: Variate-Wise Semantic Augmentation for Vision-Language Time Series Forecasting | time series forecasting、vision-language models、语义增强 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-27 | 已引 |
+| arxiv-2608.26899 | Counterfactual Bias Testing for Application Tracking Systems | LLM agents、algorithmic fairness、audit | 黑客松与数据竞赛 | paper | 黑客松-数据与算法、数模-数据分析与决策 | 2026-08-27 | 已引 |
+| arxiv-2608.26990 | DSA: Evidence-Aware LLM-Agent Orchestration for Multi-Market Stock Research | LLM agents、multi-agent orchestration、quantitative research | 黑客松与数据竞赛 | demo | 黑客松-数据与算法、数模-数据分析与决策 | 2026-08-27 | 已引 |
+| arxiv-2608.27146 | SARA: Separating Action Induction from Runtime Authorization in Tool-Augmented LLM Agents | LLM agents、agent security、prompt injection | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-27 | 已引 |
+| arxiv-2608.27167 | Calibrated Enough to Know, Not Calibrated to Act: Fabricated Evidence Makes LLM Agents Commit to the Unknowable | LLM agents、校准与可信性、评测方法 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-27 | 已引 |
+| arxiv-2608.27182 | TraceBench: Controlled Evaluation of LLM Agents for Time-Series Root-Cause Attribution | LLM agents、时序异常检测、根因分析 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-27 | 已引 |
+| arxiv-2608.27260 | What Makes Good Agentic Data? An ACE Lens on Data Generation for LLM Agents | LLM agents、合成数据、数据工程方法论 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-27 | 已引 |
+| gh-agents-universe_agents-universe | Agents Universe：知识条目驱动的企业级多角色 Agent 平台（无向量检索的项目记忆） | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法、数模-数据分析与决策 | 2026-08-18 | 已引 |
+| gh-BraxisAI_braxis-blueprint | braxis-blueprint: 零预算免费 LLM 通道路由与自动化运维的实战脚本集 | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-23 | 已引 |
+| gh-joe960913_Jixu | Jixu：TypeScript 持久化单 Agent Harness（事件溯源 Thread，可恢复/重放/分叉） | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-18 | 已引 |
+| gh-memovai_mimimodel | MimiModel: $5 ESP32-S3 上的全离线工具调用 LLM 引擎（单文件 C） | on-device inference、LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-16 | 已引 |
 | gh-only-cli_oc | oc (only-cli): 把任意网站压缩成 AI agent 可浏览的紧凑 CLI | LLM agents、retrieval augmented generation | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-18 | 已引 |
 | gh-rome-os_rome | Rome: 面向人机协作的 Agentic OS 与可安装 App 模型 | LLM agents、agent 工程化 | 黑客松与数据竞赛 | product | 黑客松-数据与算法 | 2026-08-23 | 已引 |
 | gh-squall01337_mixamo-llm-mocap | mixamo-llm-mocap: 视频到 Mixamo 角色动画的 agent 可操作全管线 | LLM agents、3D 动画与动作捕捉 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-17 | 已引 |
+| gh-UditAkhourii_cdaf | CDAF: 视频的 agent 可读文本边车格式——一次生成、逐次省 token | LLM agents、多模态视频理解 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-26 | 已引 |
 | gh-Vistyy_nopus | nopus: 编码 agent 回复的确定性散文质量门 | LLM agents、输出质量评测 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-15 | 已引 |
+| gh-wolfiesch_omp-best-of | omp-best-of: Best-of-N 候选 + LLM-as-a-Verifier 择优的编码 agent 编排插件 | LLM agents | 黑客松与数据竞赛 | demo | Kaggle-竞赛 | 2026-08-18 | 已引 |
 | gh-Zyrexnn_Cybermes | Cybermes: 自主进攻安全/赏金自动化 Agent 框架 | LLM agents、网络安全自动化 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-19 | 已引 |
 
 ## 跑批记录
