@@ -29,3 +29,4 @@
 | 2026-08-28 14:30 | collect | 全量构建 W2 中段：MCM2026（O=41 索引+6深构）、AIMO（5队全深构+防污染澄清）、C4（拟获奖名单+Docker复现闭环）、ARC patterns（历届方法演进）、欧莱雅+Qoder patterns | patterns 达 7/11 |
 | 2026-08-28 16:00 | collect | 全量构建：MCM2025 收拢（O=43 索引+6 深构，美赛三年齐）；AIMO/MinerU+XPRIZE patterns 落盘 | patterns 10/11，W1b 完成 |
 | 2026-08-28 17:00 | collect | 全量构建：C4 patterns（11/11 达成；216 条验证失败全量归类修正 winners 口径）+ MinerU winners（开源捷径 2 深构） | patterns 全量齐 |
+| 2026-08-28 19:00 | collect | 全量构建 W2 收官：patterns 23/23（goai/lablabai/mlh-ghw/cross-embodied 四份补齐，均低置信+刷新触发）；W3 过半（Hunter 6 片 24 入库 8 拒绝，台账 109） | 技术卡 38 张 |

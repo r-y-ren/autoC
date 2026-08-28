@@ -402,3 +402,35 @@
   reason: competition_fit不足——贡献（无标签全局停步判据+Bernoulli时间步采样器）仅在已选定扩散框架做时序预测时适用，而扩散预测在数模类赛道罕见（训练慢、算力重）；可迁移洞见（低噪精修引入统计漂移）单薄，难以构成差异化主张；摘要页未找到开源实现，复现成本高
   stars: null
   decided: '2026-08-28'
+- id: arxiv-2608.25717
+  reason: competition_fit不足——评测型负面结果论文（2000公司事实QA基准+四条件上下文评测，结论"RAG不能消除参数化知识的地理差距"），无可移植方法组件；四条件评测协议虽有实验设计模板价值，但对赛场打法的差异化贡献单薄，撑不起卡片；无开源（Comments仅"10 pages, COLM"未标accepted）
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.25489
+  reason: competition_fit不足——负面可行性研究：per-entity LoRA适配器库离线存储可行（+0.243 EM仅oracle选对适配器时成立），但核心发现是无子图查询时嵌入/权重几何检索均随机水平失败、知识不迁移；比赛时限内训练per-entity LoRA库不可行，"避坑"型价值不足以构成比赛映射；无开源
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.24588
+  reason: competition_fit不足——RL训练型方法：需多轮rollout基建+Qwen3-4B/8B微调算力，六类赛种（数模/双创/黑客松/Kaggle/ACM）均无自然落点；信用分配收益绑定τ²-Bench等训练基准，与赛场作品语境脱节；摘要页无代码（Comments仅"12 pages, 3 figures, 5 tables. Preprint"），复现成本高
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.13741
+  reason: competition_fit不足——文本条件时序合成（text-to-TS）与数模/Kaggle赛题需求错位：赛题无自然语言caption输入，核心卖点"可控生成"无对应场景；降级当数据增强用又不如经典增广（抖动/缩放/现成TS生成器）轻便；无开源实现，对比对齐+flow-matching复现成本高，写不出有说服力的比赛映射
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.13283
+  reason: competition_fit不足——帕金森FOG临床运动分析（13人居家自我中心视觉+IMU）与"数模与时序预测"赛种映射弱：临床验证型工作、数据私有、无代码，且其TSFM冻结特征在该场景输给从头训练的IMU TCN（42.3 vs 32.6 F1），无可迁移的获胜洞见；此类题更适合挑战杯临床方向而非本方向
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.24509
+  reason: competition_fit不足——评测型基准且复用断点失效：摘要所附代码仓 github.com/Czzzk/Staggering-the-Peaks 实抓404，无可跑实现即无法当"自评harness"直接复用（协调者对Bench系的入库前提）；可迁移洞见（资源画像暴露给agent、逻辑规划与物理调度解耦评测）属设计提示而非可落地组件；v1无venue无Comments
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.24252
+  reason: competition_fit不足——纯学术评测贡献：诊断LLM复现论文代码的语义漂移（30论文/1491 SAU/12生成器配置，最优Claude+PaperCoder仅0.301），"论文复现agent"领域与六类赛种作品无直接落点；摘要称benchmark/标注/评测管线publicly available但arXiv页无URL，runnable无法核实；可迁移的"原子可验证声明分解"思想单薄
+  stars: null
+  decided: '2026-08-28'
+- id: arxiv-2608.24114
+  reason: competition_fit不足——RL训练型方法：需多轮rollout基建与7B级微调算力（GRPO最小改造+教师环境反馈/纠错提示蒸馏），六类赛种均无自然落点（与已拒arxiv-2608.24588同类）；收益绑定ALFWorld/WebShop/Search-QA训练基准；arXiv页无代码（Comments仅"22 pages, 15 figures, 7 tables"），复现成本高
+  stars: null
+  decided: '2026-08-28'

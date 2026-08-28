@@ -34,20 +34,37 @@
 
 | ID | 名称 | 领域 | 方向 | 成熟度 | 比赛映射 | 发表 | 最近核验 |
 |---|---|---|---|---|---|---|---|
+| arxiv-2608.14106 | Forecast Collapse in Time-Series Foundation Models | 时序预测、金融时序、预测校准与排序 | 数模与时序预测 | paper | 数模-预测与评估、Kaggle-竞赛 | 2026-08-14 | 已引 |
+| arxiv-2608.15291 | ReasonCast: Agentic Demand Forecasting with Selective Semantic Reasoning | 时序预测、需求预测、大语言模型智能体 | 数模与时序预测 | paper | 数模-预测与评估、Kaggle-竞赛 | 2026-08-15 | 已引 |
 | arxiv-2608.16098 | AsyTO: Asymmetric Temporal Operator for Parameter-Efficient Multivariate Time Series Forecasting | 时序预测、轻量化模型 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-17 | 已引 |
 | arxiv-2608.16410 | TRACE-CASH: Trial-History-Conditioned Reinforcement Learning for Adaptive Configuration Exploration in Time-Series CASH | 时序预测、自动机器学习、超参数优化 | 数模与时序预测 | paper | 数模-数据分析与决策、数模-预测与评估 | 2026-08-17 | 已引 |
 | arxiv-2608.17164 | SCENARIODIFF: A Scenario-level Guidance Framework for Multimodal Time Series Forecasting（扩展版） | 时序预测、多模态学习、大模型智能体 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-17 | 已引 |
 | arxiv-2608.17284 | Rethinking Irregular Time Series Forecasting from the Perspective of Basis Functions（DNBNet） | 时序预测、机器学习 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-18 | 已引 |
 | arxiv-2608.17293 | Beyond MSE: Rethinking the Evaluation Metric and Benchmarking for Irregular Time Series Forecasting | 时序预测、机器学习、评估方法 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-18 | 已引 |
+| arxiv-2608.17299 | LiveHouse-TS: An Open-world Living Benchmark for Time Series Foundation Models | 时序预测、基准评测、基础模型评估 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-18 | 已引 |
+| arxiv-2608.17333 | SPACE: Sample-cloud Predictive Adaptive Conformal Ellipsoids for Multivariate Time-Series Forecasting | 时序预测、不确定性量化、共形预测 | 数模与时序预测 | paper | 数模-预测与评估、Kaggle-竞赛 | 2026-08-18 | 已引 |
 | arxiv-2608.18675 | An Empirical Benchmark of Deep Time-Series Models for Smart Meter Energy Forecasting | 时序预测、机器学习、实证基准 | 数模与时序预测 | paper | 数模-数据分析与决策、数模-预测与评估 | 2026-08-19 | 已引 |
+| arxiv-2608.19447 | Quantifying Event Impacts on Time Series via Multiscale Contrastive Learning | 时序预测、事件影响量化、金融科技 | 数模与时序预测 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2026-08-19 | 已引 |
+| arxiv-2608.19966 | Rethinking Patch Based Multivariate Time Series Forecasting with Semantic Structured Partitioning | 时序预测、Transformer、机器学习 | 数模与时序预测 | paper | Kaggle-竞赛、数模-预测与评估 | 2026-08-20 | 已引 |
 | arxiv-2608.20024 | Systematic Evaluation of TabPFN-TS for Zero-Shot Probabilistic Heat Load Forecasting in District Heating Networks | 时序预测、能源系统、机器学习 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-20 | 已引 |
+| arxiv-2608.20025 | CLaST: Context-aware Contrastive VAE for Probabilistic Time Series Forecasting | 时序预测、概率预测、深度生成模型 | 数模与时序预测 | paper | 数模-预测与评估、Kaggle-竞赛 | 2026-08-20 | 已引 |
 | arxiv-2608.20052 | DecoVAE: a Lightweight Interpretable Trend-Seasonal VAE Framework for Efficient Probabilistic Time Series Forecasting | 时序预测、机器学习 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-20 | 已引 |
+| arxiv-2608.20761 | Fuzzy-MoE: Interpretable Regime-Conditioned Expert Routing for Non-Stationary Multivariate Time Series Forecasting | 时序预测、机器学习、可解释AI | 数模与时序预测 | paper | 数模-预测与评估、黑客松-数据与算法 | 2026-08-21 | 已引 |
 | arxiv-2608.21277 | ConceptTS: LLM-Guided Concept Bottlenecks for Interpretable Multivariate Time-Series Forecasting | 时序预测、可解释性、大语言模型 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-21 | 已引 |
 | arxiv-2608.23221 | Which Histories Matter for Time Series Forecasting? Learning Predictive Relevance with Future Supervision | 时序预测、信息检索、检索增强预测 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-24 | 已引 |
 | arxiv-2608.23473 | MetaCaster: Meta-Harness-Optimized Agent for End-to-End Few-Shot Learning of Lightweight Time Series Forecasters | 时序预测、智能体、小样本学习 | 数模与时序预测 | paper | 数模-预测与评估、黑客松-数据与算法 | 2026-08-24 | 已引 |
 | arxiv-2608.23855 | ICI-Time: In-Context Inpainting for Time Series Forecasting | 时序预测、机器学习、跨模态学习 | 数模与时序预测 | paper | 数模-预测与评估、黑客松-数据与算法 | 2026-08-24 | 已引 |
+| arxiv-2608.24087 | Knowing When to Ask for Help: Bayesian Self-Escalation in Hierarchical LLM Agents | LLM agents、模型级联、推理成本优化 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.24103 | ACE: A Self-Correcting Agentic Canvas Editor for Multi-Slide Presentation Automation | LLM agents、文档智能、演示自动化 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.24569 | When "Must" Becomes "Maybe": Constraint Weakening in LLM Agent Workflows | LLM agents、工作流可靠性、状态管理 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.24735 | Meta^n: Recursive Self-Improvement through Emergent Depth | LLM agents、测试时自我改进、智能体记忆 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法、Kaggle-竞赛 | 2026-08-25 | 已引 |
+| arxiv-2608.25039 | LifePlanner: Evaluating LLM Agents for Geo-spatial Planning with Social Media Data | LLM agents、geo-spatial planning、多模态证据检索 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
 | arxiv-2608.25080 | NVExplain: Explaining Time Series Forecasting with Latent Trajectory Analysis and Structure-Preserving Surrogates | 时序预测、可解释性、事后归因 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-25 | 已引 |
 | arxiv-2608.25128 | When Does Context Routing Help? A Systematic Study of Multi-Modal Fusion in Time Series Forecasting | 时序预测、多模态融合、实证研究 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-08-25 | 已引 |
+| arxiv-2608.25152 | Belief Cascades Drive Persuasion in LLM Agent Networks | LLM agents、多智能体仿真、舆情传播 | 黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.25198 | Tunable Tool-Call Rates in LLM Agents via Representation Steering | LLM agents、可解释性、推理时控制 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-25 | 已引 |
+| arxiv-2608.25486 | PonsRAG: A Pons-Inspired RAG Bridging Cognitive Islands for Coordinated Long Narrative Reasoning | retrieval augmented generation、长上下文推理、叙事理解 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-26 | 已引 |
+| arxiv-2608.25735 | Pointing the Way, Hiding the Destination: Practical Private Dense Retrieval at Scale | retrieval augmented generation、隐私保护检索、密码学 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-26 | 已引 |
 | arxiv-2608.25871 | CEDAR: Controlled and Event-Driven Demand Forecasting via Residual Decomposition | 时序预测、机器学习、需求预测 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-08-26 | 已引 |
 | gh-only-cli_oc | oc (only-cli): 把任意网站压缩成 AI agent 可浏览的紧凑 CLI | LLM agents、retrieval augmented generation | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-18 | 已引 |
 | gh-rome-os_rome | Rome: 面向人机协作的 Agentic OS 与可安装 App 模型 | LLM agents、agent 工程化 | 黑客松与数据竞赛 | product | 黑客松-数据与算法 | 2026-08-23 | 已引 |
