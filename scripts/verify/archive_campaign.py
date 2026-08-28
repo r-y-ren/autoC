@@ -50,7 +50,18 @@ ROOT = project_root()
 
 
 def sanitize(s: str) -> str:
-    return re.sub(r"[\\/:*?\"<>|\s]+", "-", (s or "").strip())[:40] or "unnamed"
+    # 2026-08-28 收紧：全角标点转连字符 + 按显示宽度截断（全角计 2，上限 40）——
+    # 首次真实归档暴露旧版产出超长名且保留全角括号，tag 引用与 Windows 路径均不友好
+    s = re.sub(r"[\\/:*?\"<>|\s（）【】《》，、；：！？。．·—]+", "-", (s or "").strip())
+    s = re.sub(r"-{2,}", "-", s).strip("-")
+    out, width = [], 0
+    for ch in s:
+        w = 2 if ord(ch) > 0x2E80 else 1
+        if width + w > 40:
+            break
+        out.append(ch)
+        width += w
+    return "".join(out) or "unnamed"
 
 
 def load_campaign() -> dict:

@@ -131,8 +131,17 @@ def _fm_ok(text: str) -> tuple[bool, dict]:
 
 def check_structure(path: Path) -> tuple[bool, str]:
     """返回 (结构完好, 说明)。目标：winners/<年>.md、patterns.md、tech/_surveys/*.md。"""
-    rel = path.resolve().relative_to(ROOT).as_posix().lower()
+    try:
+        rel = path.resolve().relative_to(ROOT).as_posix().lower()
+    except ValueError:
+        return True, "非结构检查目标"
     text = path.read_text(encoding="utf-8", errors="replace")
+    # 先分派目标类型——JSON/README 等非正文层文件不因缺 frontmatter 误伤（2026-08-28 修复：
+    # 此前 frontmatter 检查先行，验收 JSON 曾被误报 WARN）
+    is_target = (re.search(r"(?:^|/)winners/[^/]+\.md$", rel)
+                 or re.search(r"(?:^|/)patterns\.md$", rel) or "_surveys/" in rel)
+    if not is_target:
+        return True, "非结构检查目标"
     ok, fm = _fm_ok(text)
     if not ok:
         return False, "正文层：frontmatter 缺失或不可解析（检查闭合 --- ）"

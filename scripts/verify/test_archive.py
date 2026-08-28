@@ -44,8 +44,15 @@ RUN_TMPL = """{{
 
 def make_root() -> Path:
     tmp = Path(tempfile.mkdtemp(prefix="autoc_arch_test_"))
+    # 夹具与真实库隔离：排除 .venv/缓存，并把真实 archive/ 清空重建（保留 .gitkeep）——
+    # 否则真实归档条目会被拷进临时根，击穿"归档区无实体"与 tag 断言（2026-08-28 实际归档后暴露）
     shutil.copytree(SRC_ROOT, tmp, dirs_exist_ok=True,
                     ignore=shutil.ignore_patterns(".venv", "__pycache__", "node_modules"))
+    real_arch = tmp / "archive"
+    if real_arch.is_dir():
+        shutil.rmtree(real_arch)
+    real_arch.mkdir(parents=True)
+    (real_arch / ".gitkeep").touch()
     ws = tmp / "workspace"
     (ws / "acceptance").mkdir(parents=True, exist_ok=True)
     (ws / "blueprint.md").write_text(BLUEPRINT, encoding="utf-8")

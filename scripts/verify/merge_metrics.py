@@ -19,7 +19,9 @@ import os
 import sys
 from pathlib import Path
 
-FRAGMENTS = ["software", "hardware"]
+FRAGMENTS = ["software", "hardware", "document"]
+# 2026-08-28 修复：document 分片此前缺席（Kaggriculture 战役实测暴露——workspace/document/metrics.json
+# 存在但顶层汇总无 document 命名空间）。document 分片承载文档侧实测（编译时长/一致性自检计数等）。
 
 
 def project_root() -> Path:
