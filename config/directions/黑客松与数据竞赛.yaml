@@ -8,7 +8,7 @@ scopes: ["编程/黑客松"]
 keywords: [hackathon, datathon, data competition, 黑客松, 数据竞赛, kaggle, algorithm competition, 创新挑战赛]
 
 sources:
-  api: []          # Kaggle API（E-08）启用后回填
+  api: [{type: hf-papers, min_upvotes: 15}]   # HF Papers（PwC 继任者）；Kaggle API（E-08）启用后再加；可加 base: 指镜像/代理
   web:             # 2026-08-27 冷启动实抓确认的锚点（增量快照基线）
                     # ⚠ 以下均为 SPA 站点（render: spa）：sync_competitions 跳过 urllib 抓取，
                     # 增量发现走 K-08 的主会话 browser-use 预抓（P1 规则）

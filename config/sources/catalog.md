@@ -51,4 +51,5 @@
 |---|---|
 | arXiv API（cat+abs 收紧查询） | ✅ 已实证（sync_tech） |
 | GitHub 搜索（gh CLI，已登录） | ✅ 已启用 |
-| Papers with Code / HuggingFace 博客 | 可选增强，未接入（按需评估） |
+| HuggingFace Papers（/api/daily_papers，免鉴权） | ✅ 已接入（sync_tech，方向 yaml 显式开启；upvotes≥门槛+关键词过滤；与 arXiv 共用 arxiv-* ID 自然去重）⚠ 本机网络当前直连/镜像均超时→按设计告警跳过，网络恢复或配代理（api 条目 base:）即自动生效 |
+| ~~Papers with Code~~ | ❌ 已关站（2025-07，Meta 与 HF 合作收尾，域名重定向 HF Trending Papers；2026-05 在 HF 重启为 PapersWithCode 新版）——不再作独立信源，功能经 HF Papers 覆盖 |

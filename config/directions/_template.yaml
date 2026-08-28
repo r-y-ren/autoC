@@ -10,7 +10,7 @@ scopes: ["学科竞赛", "编程/黑客松"]   # 该方向关注的大类（可�
 keywords: []                     # 检索关键词（中英），如 [数学建模, 时序预测, forecasting]
 
 sources:
-  api: []                        # 结构化源 [{type: kaggle|github|arxiv, query: "..."}]
+  api: []                        # 结构化源：[{type: hf-papers, min_upvotes: 15, base: 可选镜像}]（已实现）；kaggle|github|arxiv 查询型待启用
   web: []                        # 网页源 [{name, url, cadence: daily|weekly|monthly}]
   rss: []                        # 订阅源 [url]
   wechat: []                     # 公众号名列表（信源策略待定：RSSHub 或人工投递 inbox）

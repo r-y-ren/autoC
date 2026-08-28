@@ -68,7 +68,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 |---|---|---|---|
 | S-01 | lint_kb.py | frontmatter 解析 → schema 校验 → 不合格移 quarantine（单文件/钩子/全量三模式；YAML 日期已规范化；T4.3 增正文层 `--structure` 检查：winners 四节/patterns 六节/survey 必备节，WARN 级不隔离） | ✅ 本轮已落地 |
 | S-02 | sync_competitions.py | web 信源快照（kb/raw/snapshots/）+ 关键词候选提取（candidates 队列） | ✅ T2 已落地（selftest 通过） |
-| S-03 | sync_tech.py | arXiv API + gh 搜索 → 规范化 ID 去重 → 候选队列（成品卡片仍由 Hunter 判定；field 间限速 ≥3s + 失败退避重试，兑现 budget.yaml） | ✅ T2 落地，T3-c 补限速 |
+| S-03 | sync_tech.py | arXiv API + gh 搜索 + **HF Papers（/api/daily_papers，T4.4 接入：upvotes 门槛+方向关键词过滤，与 arXiv 共用 arxiv-* ID 自然去重，PwC 继任者）** → 规范化 ID 去重 → 候选队列（成品卡片仍由 Hunter 判定；field 间限速 ≥3s + 失败退避重试） | ✅ T2 落地，T3-c 限速，T4.4 增 HF 源（实测黑客松方向产出真实候选） |
 | S-04 | build_index.py | 重建 kb/INDEX.md（跑批记录 append-only 保留） | ✅ T2 已落地 |
 | S-05 | run_acceptance.py | 验收执行器：cmd 自动执行 + 证据存档 + 重试熔断 + run-N.json | ✅ T2 已落地（冒烟通过） |
 | S-06 | archive_campaign.py | fail 拒归档 / dry-run / mv + git tag + workspace 复位 + idle | ✅ T2 已落地（冒烟通过） |

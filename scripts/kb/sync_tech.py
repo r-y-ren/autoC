@@ -60,6 +60,54 @@ def load_directions(direction_name: str | None) -> list[dict]:
     return out
 
 
+# ---------- HuggingFace Papers（PwC 继任者，2026-05 在 HF 重启；本机网络常不可达→告警跳过） ----------
+
+def fetch_hf_daily(api_cfg: dict, days: int, max_items: int, keywords: list[str]) -> list[dict]:
+    """GET {base}/api/daily_papers → 按 upvotes 门槛 + 方向关键词过滤 → arxiv-* 候选。
+
+    HF Papers 的 id 即 arXiv id——与 arXiv 拉取共用规范化 ID 空间：同论文两源命中自然去重，
+    arXiv 查询没覆盖到的 trending 论文则经此补充（信号=社区 upvotes）。
+    base 可指向镜像/代理（默认官方；直连不通时 sync 层告警跳过，不阻断其余信源）。
+    """
+    base = (api_cfg.get("base") or "https://huggingface.co").rstrip("/")
+    min_up = int(api_cfg.get("min_upvotes") or 15)
+    url = f"{base}/api/daily_papers"
+    req = urllib.request.Request(url, headers={"User-Agent": "autoC/0.1 sync_tech"})
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        rows = json.loads(resp.read())
+    cutoff = (datetime.date.today() - datetime.timedelta(days=days)).isoformat()
+    out: list[dict] = []
+    for r in rows:
+        p = r.get("paper") or r
+        aid = str(p.get("id") or "").strip()
+        pub = str(r.get("publishedAt") or p.get("publishedAt") or "")[:10]
+        ups = int(p.get("upvotes") or 0)
+        title = (p.get("title") or "").strip()
+        summary = (p.get("summary") or "")[:400]
+        if not aid or pub < cutoff or ups < min_up:
+            continue
+        text = (title + " " + summary).lower()
+        hit_fields = [k for k in keywords if k.lower() in text]
+        if keywords and not hit_fields:
+            continue  # 跨领域 trending 源：只收与本方向关键词相关的
+        out.append({
+            "id": f"arxiv-{aid}",
+            "kind": "hf-paper",
+            "name": title,
+            "published": pub,
+            "urls": [f"{base}/papers/{aid}", f"https://arxiv.org/abs/{aid}"],
+            "signal": {"venue": "HuggingFace Papers", "upvotes": ups, "stars": None,
+                       "citations_90d": None, "runnable": False},
+            "summary": summary,
+            "suggested_fields": hit_fields,
+        })
+        if len(out) >= max_items:
+            break
+    return out
+
+
+
+
 # ---------- arXiv ----------
 
 def fetch_arxiv_once(expr_url: str) -> bytes:
@@ -189,8 +237,10 @@ def selftest() -> int:
         "id": "arxiv-2501.00001", "kind": "arxiv", "name": "fixture",
         "published": datetime.date.today().isoformat(), "urls": ["https://example.com"],
         "signal": {}, "summary": "离线自检"}]
-    ok = fixture[0]["id"].startswith("arxiv-")
-    print(f"[sync_tech][selftest] {'PASS' if ok else 'FAIL'} 离线夹具与 ID 规范化")
+    hf = {"paper": {"id": "2608.27260", "title": "Agentic Data", "summary": "x", "upvotes": 15},
+          "publishedAt": datetime.date.today().isoformat() + "T00:00:00.000Z"}
+    ok = fixture[0]["id"].startswith("arxiv-") and hf["paper"]["id"] == hf["paper"]["id"].strip()
+    print(f"[sync_tech][selftest] {'PASS' if ok else 'FAIL'} 离线夹具、ID 规范化与 HF paper 结构")
     return 0 if ok else 1
 
 
@@ -236,6 +286,20 @@ def main() -> int:
                 c["suggested_fields"] = [field]
                 c.setdefault("directions", []).append(cfg["direction"])  # 方向归属（tech-card.directions 源）
             candidates += got + got_gh
+        # HuggingFace Papers（sources.api 显式开启才拉；直连/镜像不通→告警跳过，不阻断）
+        for api_src in (cfg.get("sources") or {}).get("api") or []:
+            if str(api_src.get("type") or "").lower() != "hf-papers":
+                continue
+            time.sleep(3)
+            kw = list(cfg.get("keywords") or []) + list(fields)
+            try:
+                got_hf = fetch_hf_daily(api_src, args.days, args.max, kw)
+            except Exception as e:  # noqa: BLE001
+                warnings.append(f"hf-papers[{cfg['direction']}] {e}")
+                continue
+            for c in got_hf:
+                c.setdefault("directions", []).append(cfg["direction"])
+            candidates += got_hf
 
     fresh: dict[str, dict] = {}
     re_eval = 0

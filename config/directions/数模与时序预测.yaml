@@ -8,7 +8,7 @@ scopes: ["学科竞赛", "编程/黑客松"]
 keywords: [数学建模, 时序预测, forecasting, 时间序列, 数学建模竞赛, spatiotemporal]
 
 sources:
-  api: []          # 赛事侧暂无免密 API；经 Scraper 子 agent 用 WebSearch/WebFetch 核实
+  api: [{type: hf-papers, min_upvotes: 15}]   # HF Papers（PwC 继任者）；直连不通自动告警跳过，可加 base: 指镜像/代理
   web: []          # 聚合源 URL 待信源评审后加入（首跑先验证搜索路径）
   rss: []
   wechat: []       # 公众号信源策略未裁决（待确认项 #3），暂空
