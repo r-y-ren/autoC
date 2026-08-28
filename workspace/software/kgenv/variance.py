@@ -11,11 +11,16 @@ from __future__ import annotations
 import math
 from typing import Dict, List, Optional, Sequence, Tuple
 
-# two-sided 95% Student-t quantiles by degrees of freedom (n-1); normal
-# approximation beyond the table
-_T95 = {1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571,
-        6: 2.447, 7: 2.365, 8: 2.306, 9: 2.262, 10: 2.228,
-        15: 2.131, 20: 2.086, 30: 2.042}
+# Two-sided 95% Student-t quantiles by degrees of freedom (n-1). Values
+# through df=30 avoid silently applying a normal quantile to small samples.
+_T95 = {
+    1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571,
+    6: 2.447, 7: 2.365, 8: 2.306, 9: 2.262, 10: 2.228,
+    11: 2.201, 12: 2.179, 13: 2.160, 14: 2.145, 15: 2.131,
+    16: 2.120, 17: 2.110, 18: 2.101, 19: 2.093, 20: 2.086,
+    21: 2.080, 22: 2.074, 23: 2.069, 24: 2.064, 25: 2.060,
+    26: 2.056, 27: 2.052, 28: 2.048, 29: 2.045, 30: 2.042,
+}
 
 
 def t95(n: int) -> float:
@@ -53,14 +58,14 @@ def margin_stats(margins: Sequence[float]) -> Dict[str, Optional[float]]:
         std = math.sqrt(var)
         half = t95(n) * std / math.sqrt(n)
     else:
-        std = 0.0
-        half = 0.0
+        std = None
+        half = None
     return {
         "n": n,
         "mean": round(mean, 1),
-        "std": round(std, 1),
-        "ci95_lo": round(mean - half, 1),
-        "ci95_hi": round(mean + half, 1),
+        "std": round(std, 1) if std is not None else None,
+        "ci95_lo": round(mean - half, 1) if half is not None else None,
+        "ci95_hi": round(mean + half, 1) if half is not None else None,
         "min": round(min(margins), 1),
         "max": round(max(margins), 1),
     }

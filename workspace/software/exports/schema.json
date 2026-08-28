@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "kaggriculture.eval_results.schema.json",
   "title": "Kaggriculture local evaluation results (software -> document contract)",
-  "description": "Schema for exports/eval_results.json produced by scripts/run_eval.py. All performance numbers referenced by documents must come from this file (measured values only). v1.1 (m1 wave 2): full matchup matrix + variance report + determinism probes + audit/failure-mode embeddings + nullable m2 placeholders, aligned with workspace/docs/metrics-keys.md group B. All v1.0 fields are unchanged (backward compatible).",
+  "description": "Schema for eval exports. Schema 1.1 remains readable for historical artifacts; schema 2.0 adds identity, AB/BA seats, seed domains, abnormal-game evidence, and explicit descriptive-only Elo. Formal publication requires 2.0 semantic validation by check_eval_contract.py.",
   "type": "object",
   "$defs": {
     "pairVariance": {
@@ -43,8 +43,58 @@
   },
   "required": ["schema_version", "generated_at", "engine", "config", "opponent_pool_names", "pool_max_elo", "games", "head_to_head", "matchup_win_rates", "elo", "eval_variance_report", "determinism_probes", "eval_audit_pass", "failure_modes", "m2", "runtime_seconds"],
   "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {"properties": {"schema_version": {"const": "2.0"}}, "required": ["schema_version"]},
+      "then": {
+        "required": ["run_kind", "seed_domain", "identity", "evaluation_input", "abnormal_games", "integrity", "confirmatory", "regression_gate"],
+        "properties": {
+          "config": {"required": ["rounds", "seeds", "contenders", "opponents", "matrix_order", "pairs", "seat_orders", "expected_games"]},
+          "games": {"items": {"required": ["players", "p0", "p1", "seed", "seed_domain", "seat", "statuses", "contract_ok", "rewards", "winner", "winner_label", "turns", "elapsed_seconds"]}},
+          "elo": {"required": ["k", "start", "table", "role", "order_sensitive"]}
+        }
+      }
+    }
+  ],
   "properties": {
-    "schema_version": {"type": "string", "const": "1.1"},
+    "schema_version": {"type": "string", "enum": ["1.1", "2.0"]},
+    "run_kind": {"type": "string", "enum": ["development", "regression", "official"]},
+    "seed_domain": {"type": "string", "enum": ["development", "regression", "holdout"]},
+    "identity": {
+      "type": "object",
+      "required": ["submission_path", "submission_sha256", "git_ref", "dirty", "input_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "submission_path": {"type": "string"},
+        "submission_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "git_ref": {"type": "string"},
+        "dirty": {"type": "boolean"},
+        "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "evaluation_input": {"type": "object"},
+    "abnormal_games": {"type": "integer", "minimum": 0},
+    "integrity": {
+      "type": "object",
+      "required": ["expected_games", "actual_games", "abnormal_games"],
+      "additionalProperties": false,
+      "properties": {
+        "expected_games": {"type": "integer", "minimum": 1},
+        "actual_games": {"type": "integer", "minimum": 0},
+        "abnormal_games": {"type": "integer", "minimum": 0}
+      }
+    },
+    "confirmatory": {
+      "type": "object",
+      "required": ["method", "order_independent"],
+      "additionalProperties": false,
+      "properties": {
+        "method": {"type": "string"},
+        "order_independent": {"type": "boolean"},
+        "standings": {"type": "array"}
+      }
+    },
+    "regression_gate": {"type": ["object", "null"]},
     "generated_at": {"type": "string", "format": "date-time"},
     "engine": {
       "type": "object",
@@ -66,7 +116,10 @@
         "seeds": {"type": "array", "items": {"type": "integer"}, "minItems": 1},
         "contenders": {"type": "array", "items": {"type": "string"}, "minItems": 1},
         "opponents": {"type": "array", "items": {"type": "string"}, "minItems": 3},
-        "matrix_order": {"type": "array", "items": {"type": "string"}, "minItems": 2}
+        "matrix_order": {"type": "array", "items": {"type": "string"}, "minItems": 2},
+        "pairs": {"type": "array", "items": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 2}},
+        "seat_orders": {"type": "array", "items": {"type": "string"}},
+        "expected_games": {"type": "integer", "minimum": 1}
       }
     },
     "opponent_pool_names": {
@@ -93,13 +146,19 @@
         "required": ["p0", "p1", "seed", "rewards", "winner", "turns", "elapsed_seconds"],
         "additionalProperties": false,
         "properties": {
+          "players": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 2},
           "p0": {"type": "string"},
           "p1": {"type": "string"},
           "seed": {"type": "integer"},
           "rewards": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
           "winner": {"type": ["string", "null"]},
           "turns": {"type": "integer", "minimum": 1},
-          "elapsed_seconds": {"type": "number", "minimum": 0}
+          "elapsed_seconds": {"type": "number", "minimum": 0},
+          "seed_domain": {"type": "string", "enum": ["development", "regression", "holdout"]},
+          "seat": {"type": "string", "enum": ["AB", "BA"]},
+          "statuses": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 2},
+          "contract_ok": {"type": "boolean"},
+          "winner_label": {"type": ["string", "null"]}
         }
       }
     },
@@ -168,7 +227,9 @@
               }
             }
           }
-        }
+        },
+        "role": {"type": "string", "const": "descriptive_only"},
+        "order_sensitive": {"type": "boolean"}
       }
     },
     "eval_variance_report": {

@@ -5,7 +5,8 @@ import os
 
 import pytest
 
-from kgenv.arena import run_match, summarize_games, write_replay_log
+from kgenv.arena import (AbnormalMatchError, run_match, summarize_games,
+                         write_replay_log)
 from kgenv.elo import EloTable, expected_score, update
 from kgenv.engine import episode_contract_ok
 
@@ -56,13 +57,26 @@ def test_replay_log_carries_daily_prices(tmp_path):
 
 def test_summarize_games():
     games = [
-        {"players": ["a", "b"], "winner_label": "a", "turns_played": 10},
-        {"players": ["a", "b"], "winner_label": "b", "turns_played": 12},
-        {"players": ["a", "b"], "winner_label": None, "turns_played": 14},
+        {"players": ["a", "b"], "statuses": ["DONE", "DONE"],
+         "contract_ok": True, "winner_label": "a", "rewards": [2, 1],
+         "turns_played": 10},
+        {"players": ["a", "b"], "statuses": ["DONE", "DONE"],
+         "contract_ok": True, "winner_label": "b", "rewards": [1, 2],
+         "turns_played": 12},
+        {"players": ["a", "b"], "statuses": ["DONE", "DONE"],
+         "contract_ok": True, "winner_label": None, "rewards": [1, 1],
+         "turns_played": 14},
     ]
     s = summarize_games(games, "a", "b")
     assert s == {"pair": "a vs b", "games": 3, "wins": 1, "losses": 1,
                  "ties": 1, "win_rate": 0.5, "avg_turns": 12.0}
+
+
+def test_summarize_games_rejects_missing_contract_fields():
+    with pytest.raises(AbnormalMatchError, match="missing statuses"):
+        summarize_games([
+            {"players": ["a", "b"], "winner_label": None, "turns_played": 14}
+        ], "a", "b")
 
 
 def test_elo_math():

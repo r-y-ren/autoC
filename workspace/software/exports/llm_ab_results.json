@@ -1,34 +1,61 @@
 {
-  "schema_version": "1.0",
-  "generated_at": "2026-08-28T12:14:31.288507+00:00",
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28T15:11:51.588391+00:00",
   "provider": "null",
   "provider_configured": false,
+  "real_ab": false,
   "config_env": {
     "KG_LLM_PROVIDER": false,
     "KG_LLM_BASE_URL": false,
     "KG_LLM_API_KEY": false,
     "KG_LLM_MODEL": false
   },
-  "rounds": 2,
+  "rounds": 1,
   "seeds": [
-    701,
-    702
+    701
   ],
-  "games": 4,
+  "seat_orders": [
+    "AB",
+    "BA"
+  ],
+  "games": 2,
   "llm_on": {
-    "wins": 1,
-    "losses": 1,
+    "wins": 0,
+    "losses": 0,
     "ties": 2,
-    "avg_margin": 0.0,
-    "reward_identical_games": 2
+    "avg_margin": 0.0
   },
   "win_rate_llm_on": null,
   "consultation_stats": {
-    "suggest_calls": 1294,
-    "heuristic_fallbacks": 1294,
-    "budget_gate_blocks": 0,
-    "budget": null
+    "suggest_calls": 662,
+    "effective_calls": 0,
+    "heuristic_fallbacks": 662,
+    "budget_gate_blocks": 0
   },
-  "note": "NullProvider (KG_LLM_* unset): the A side plays the same heuristic policy, so win_rate is null by design -- this run validates the harness plumbing, budget gate and fallback path only. Re-run with KG_LLM_PROVIDER=openai_compat plus KG_LLM_BASE_URL/KG_LLM_API_KEY/KG_LLM_MODEL for a real A/B.",
-  "runtime_seconds": 13.06
+  "per_game_consultation_stats": [
+    {
+      "seed": 701,
+      "seat": "AB",
+      "provider": "null",
+      "configured": false,
+      "suggest_calls": 331,
+      "effective_calls": 0,
+      "heuristic_fallbacks": 331,
+      "budget_gate_blocks": 0,
+      "budget": null
+    },
+    {
+      "seed": 701,
+      "seat": "BA",
+      "provider": "null",
+      "configured": false,
+      "suggest_calls": 331,
+      "effective_calls": 0,
+      "heuristic_fallbacks": 331,
+      "budget_gate_blocks": 0,
+      "budget": null
+    }
+  ],
+  "note": "Null/incomplete/no-effective-call provider run: plumbing only; win_rate is null and no real A/B conclusion is permitted",
+  "runtime_seconds": 5.46
 }

@@ -1,9 +1,9 @@
 {
-  "_generated_at": "2026-08-28T20:47:37",
+  "_generated_at": "2026-08-29T00:21:17",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
-    "milestone": "m2-full (failure-mode-driven strategy overhaul, wave 3/4; m1 keys retained below for the record)",
+    "milestone": "m2a-eval-hardening (AB/BA evaluation contract, fail-closed gates, atomic publication; historical keys retained)",
     "measured_at": "2026-08-28",
     "engine": {
       "package": "kaggle-environments",
@@ -419,6 +419,106 @@
         },
         "unit": "report",
         "method": "exports/failure_modes.md m2 annotations backed by the 64-game probe + iteration gate log"
+      },
+      "m2a_tests_total": {
+        "value": 128,
+        "unit": "count",
+        "method": "2026-08-29 final post-review actual run: python -m pytest workspace/software/tests -q -> 128 passed in 2.13s"
+      },
+      "m2a_tests_passed": {
+        "value": 128,
+        "unit": "count",
+        "method": "same final post-review complete software test run; 0 failed"
+      },
+      "m2a_acceptance_fixture_passed": {
+        "value": 7,
+        "unit": "count",
+        "method": "2026-08-28 actual run: python scripts/verify/test_acceptance.py -> 7/7; temporary fixture removes copied historical acceptance runs and reads latest run-N"
+      },
+      "m2a_smoke_boot_pass": {
+        "value": true,
+        "unit": "bool",
+        "method": "2026-08-28 post-review run: python workspace/software/smoke_boot.py -> PASS, 4 phases"
+      },
+      "m2a_smoke_boot_runtime_seconds": {
+        "value": 3.9,
+        "unit": "s",
+        "method": "same post-review smoke_boot console measurement"
+      },
+      "m2a_dev_abba_games": {
+        "value": 16,
+        "unit": "games",
+        "method": "2026-08-28 actual run: run_eval.py --quick; 8 submission/opponent pairs x seed 101 x AB/BA; exports/eval_results.dev.json schema 2.0"
+      },
+      "m2a_dev_abba_runtime_seconds": {
+        "value": 47.14,
+        "unit": "s",
+        "method": "exports/eval_results.dev.json.runtime_seconds from the actual quick development run"
+      },
+      "m2a_dev_abnormal_games": {
+        "value": 0,
+        "unit": "games",
+        "method": "exports/eval_results.dev.json.abnormal_games; all 16 games statuses DONE/DONE and contract_ok=true"
+      },
+      "m2a_formal_export_preserved_by_dev": {
+        "value": true,
+        "unit": "bool",
+        "method": "actual before/after sha256sum around run_eval.py --quick: exports/eval_results.json remained ce540e0471700242ff35d917c331de9fcd8ee494fb9b3a0ce8b8645348ef54ae"
+      },
+      "m2a_complete_gate_pass": {
+        "value": false,
+        "unit": "bool",
+        "method": "invalidated=true: the 104.38s/32-game run preceded independent acceptor findings and the final candidate-snapshot/transaction wiring; retained only as audit history, not a valid merge gate. m2b must rerun the complete gate on the frozen candidate"
+      },
+      "m2a_complete_gate_games": {
+        "value": 32,
+        "unit": "games",
+        "method": "invalidated historical run only; 4 required opponents x seeds 101-104 x AB/BA. Not usable as current PASS evidence"
+      },
+      "m2a_complete_gate_abnormal_games": {
+        "value": 0,
+        "unit": "games",
+        "method": "invalidated historical run reported zero abnormal games; current production fail-closed semantics are verified by m2a_gate_contract_check_pass"
+      },
+      "m2a_complete_gate_runtime_seconds": {
+        "value": 104.38,
+        "unit": "s",
+        "method": "invalidated historical run duration; retained for audit, not performance acceptance"
+      },
+      "m2a_complete_gate_invalidated": {
+        "value": true,
+        "unit": "bool",
+        "method": "independent acceptor rejected the pre-fix gate implementation; no replacement long gate was run in m2a"
+      },
+      "m2a_gate_contract_check_pass": {
+        "value": true,
+        "unit": "bool",
+        "method": "2026-08-28 post-review actual run: check_eval_contract.py --mode gate -> exit 0; production validator rejected missing opponent, single-seat schedule, INVALID status, malformed tie, seed-domain mismatch, and exploratory formal PASS"
+      },
+      "m2a_export_safety_check_pass": {
+        "value": true,
+        "unit": "bool",
+        "method": "2026-08-28 post-review actual run: check_eval_contract.py --mode export -> exit 0; production schema/semantic validator, Windows case alias rejection, dev export+replay isolation, and schema/replay failure preservation verified"
+      },
+      "m2a_llm_null_games": {
+        "value": 2,
+        "unit": "games",
+        "method": "2026-08-28 actual run with KG_LLM_* unset: run_llm_ab.py --rounds 1; seed 701 AB/BA"
+      },
+      "m2a_llm_null_effective_calls": {
+        "value": 0,
+        "unit": "count",
+        "method": "exports/llm_ab_results.json consultation_stats.effective_calls; provider_configured=false and real_ab=false"
+      },
+      "m2a_llm_null_fallback_count": {
+        "value": 662,
+        "unit": "count",
+        "method": "exports/llm_ab_results.json; 331 independent NullProvider consultations per game x 2 games"
+      },
+      "m2a_llm_null_runtime_seconds": {
+        "value": 5.46,
+        "unit": "s",
+        "method": "exports/llm_ab_results.json.runtime_seconds from the actual per-game provider isolation run"
       }
     },
     "unmeasured": {
@@ -451,53 +551,118 @@
   "document": {
     "schema": "document-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
-    "milestone": "m3-polish (document finalization, wave 4/4)",
+    "milestone": "m2a document outline package (revised m2a/m2b/m2c/m3 contract; report rewrite deferred to m3)",
     "measured_at": "2026-08-28",
     "metrics": {
+      "outline_software_metric_keys": {
+        "value": 37,
+        "unit": "count",
+        "method": "Parsed unique full-qualified table-row keys from workspace/docs/metrics-keys.md sections 3-5: m2a 16 + m2b 4 + m2c 17; duplicate-key scan returned zero duplicates"
+      },
+      "outline_holdout_keys_null_before_m2c": {
+        "value": 16,
+        "unit": "count",
+        "method": "Count of the first 16 keys in metrics-keys.md section 5 explicitly governed as null throughout m2a/m2b and until a valid m2c official publication; historical_m2_baseline_status is excluded because it is a classification key, not a holdout result"
+      },
+      "outline_document_metric_keys": {
+        "value": 13,
+        "unit": "count",
+        "method": "Parsed unique metrics.document.* table-row keys from workspace/docs/metrics-keys.md section 6"
+      },
+      "outline_total_new_metric_keys": {
+        "value": 50,
+        "unit": "count",
+        "method": "Programmatic sum of 37 software interface keys and 13 document m3 verification keys defined by the revised outline"
+      },
+      "outline_report_rewrite_mappings": {
+        "value": 12,
+        "unit": "count",
+        "method": "Parsed non-header rows in workspace/docs/metrics-keys.md section 8 report.typ rewrite mapping table"
+      },
+      "outline_blueprint_automatic_acceptance_covered": {
+        "value": 13,
+        "unit": "count",
+        "method": "Unique automatic acceptance IDs mapped in metrics-keys.md section 9: m2a-test, m2a-smoke, m2a-gate-contract, m2a-export-safety, m2b-strategy, m2b-dev-gate, m2c-holdout, m2c-identity, m2c-metrics, m2-ab, doc-compile, doc-consistency, doc-visual"
+      },
+      "outline_manual_acceptance_interfaces_retained": {
+        "value": 3,
+        "unit": "count",
+        "method": "Manual acceptance interfaces retained without claiming completion: man-reg, man-submit, man-final"
+      },
+      "outline_duplicate_metric_keys": {
+        "value": 0,
+        "unit": "count",
+        "method": "Exact duplicate scan across all 50 full-qualified key definitions parsed from sections 3-6"
+      },
+      "outline_markdown_headings": {
+        "value": 12,
+        "unit": "count",
+        "method": "Programmatic count of ATX headings in workspace/docs/metrics-keys.md after the revision"
+      },
+      "outline_markdown_tables": {
+        "value": 8,
+        "unit": "count",
+        "method": "Programmatic count of Markdown table delimiter rows in workspace/docs/metrics-keys.md after the revision"
+      },
+      "outline_inline_code_delimiters_balanced": {
+        "value": true,
+        "unit": "bool",
+        "method": "Programmatic parity check of backtick delimiters in workspace/docs/metrics-keys.md"
+      },
+      "outline_unresolved_software_interfaces": {
+        "value": 4,
+        "unit": "count",
+        "method": "Count of explicitly listed software/m3 tooling interface gaps in metrics-keys.md section 10: schema extension, deterministic metrics projection, authoritative one-shot holdout state/publication record, and report consistency checker capability"
+      },
+      "report_revision_status": {
+        "value": "deferred_to_m3",
+        "unit": "status",
+        "method": "Per revised blueprint and user scope, this wave changes only the metrics outline and document shard; report.typ, report.pdf and submit-sop.md are intentionally untouched until m3"
+      },
       "report_compile_exit_code": {
         "value": 0,
         "unit": "exit_code",
-        "method": "typst 0.15.1 (9dfd3a08): typst compile workspace/docs/report.typ workspace/docs/report.pdf, run from repo root 2026-08-28; final successful invocation exit 0 (two earlier failed attempts on markup escapes of KG_LLM_* inside prose -- fixed by moving the token into inline raw spans; no template-structure changes)"
+        "method": "PRE-REVISION HISTORICAL MEASUREMENT ONLY: typst 0.15.1 compile of the old m3-polish report on 2026-08-28. This does not satisfy revised blueprint doc-compile and must be remeasured after the m3 rewrite"
       },
       "report_compile_seconds": {
         "value": 0.37,
         "unit": "s",
-        "method": "bash time on the successful compile invocation (real 0m0.374s)"
+        "method": "PRE-REVISION HISTORICAL MEASUREMENT ONLY: wall-clock time for the old report compile; not reusable as revised m3 evidence"
       },
       "report_pages": {
         "value": 14,
         "unit": "pages",
-        "method": "pypdf len(PdfReader('workspace/docs/report.pdf').pages) == 14, cross-checked against the PDF /Pages /Count field == 14"
+        "method": "PRE-REVISION HISTORICAL MEASUREMENT ONLY: page count of the old report.pdf; revised m3 PDF must be recounted"
       },
       "report_main_sections": {
         "value": 6,
         "unit": "count",
-        "method": "level-1 headings in the finalized report.typ: 摘要 / 战役定位与范围 / 方法与选型 / 四阶段波次执行记录 / 实测结果 / 合规与人机分工 / 遗留与可复用资产 -- structure identical to the wave-1 frozen skeleton (six main numbered sections; no section added or dropped)"
+        "method": "PRE-REVISION HISTORICAL MEASUREMENT ONLY: numbered main-section count in the old report; the revised outline preserves the existing structure and maps rewrites within it"
       },
       "report_appendices": {
         "value": 2,
         "unit": "count",
-        "method": "appendix A 人机分工记录 (verified per-wave, placeholder note removed) + appendix B 参考来源 (extended with wave-2/3 artifacts: JOURNAL.md, eval_audit.md, failure_modes.md, iteration_gate_log.jsonl, document shard)"
+        "method": "PRE-REVISION HISTORICAL MEASUREMENT ONLY: appendix count in the old report; m3 must recheck human/AI trace and evidence index content"
       },
       "report_metric_key_references": {
         "value": 49,
         "unit": "count",
-        "method": "programmatic cross-check 2026-08-28: 49 distinct backticked key tokens in report.typ all resolve to existing keys of metrics.software.{metrics,unmeasured} in workspace/metrics.json (1 additional backticked token 'baseline_wheat' is a bot name, not a key); zero references to nonexistent keys, zero placeholder slots remaining (grep for 待回填/占位/大纲包/ph] in extracted PDF text: 0 hits)"
+        "method": "PRE-REVISION HISTORICAL MEASUREMENT ONLY: key-reference count for the old report against the old merged metrics. It does not prove revised doc-consistency and must be recomputed in m3"
       },
       "sop_v2_base_items": {
         "value": 19,
         "unit": "count",
-        "method": "checkbox items B01-B19 in workspace/docs/submit-sop.md v2, slot-aligned with the round-1 archived SOP's 19 checkboxes (baselines updated to this round's metrics: 101 tests, 4-command local check incl. --assert-regression, Elo-first regression comparison)"
+        "method": "PRE-REVISION HISTORICAL MEASUREMENT ONLY: old submit-sop.md v2 base items; SOP v3 is deferred to m3"
       },
       "sop_v2_new_group_items": {
         "value": 17,
         "unit": "count",
-        "method": "checkbox items in the four new groups: N1 registration gate x3, N2 per-submission daily-discipline checks x5, N3 ladder-feedback metrics backfill flow x4 (keys online_ladder_games / online_skill_rating / online_feedback_calibration), N4 final lock checks x5 (commit-hash double check against metrics.software.final_submission_commits, dual Validation Passed, manual sign-off)"
+        "method": "PRE-REVISION HISTORICAL MEASUREMENT ONLY: old submit-sop.md v2 new-group items; SOP v3 is deferred to m3"
       },
       "sop_v2_total_items": {
         "value": 36,
         "unit": "count",
-        "method": "total '- [ ] **' checkbox lines in submit-sop.md v2 == 19 base + 17 new-group items (programmatic count)"
+        "method": "PRE-REVISION HISTORICAL MEASUREMENT ONLY: old submit-sop.md v2 total items; SOP v3 is deferred to m3"
       }
     }
   }

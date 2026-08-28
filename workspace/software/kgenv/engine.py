@@ -116,4 +116,5 @@ def episode_contract_ok(result: Dict[str, Any]) -> bool:
         and result.get("winner") in (0, 1, None)
         and isinstance(result.get("turns_played"), int)
         and result["turns_played"] > 0
+        and result["turns_played"] == result.get("episode_steps")
     )

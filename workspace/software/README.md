@@ -23,21 +23,23 @@ python -m pytest workspace/software/tests -q
 # 4) 强度门（m1 新对手须对冻结弱池 >=50% 胜率，不达标退出码 1）
 python workspace/software/scripts/check_opponent_strength.py --rounds 3
 
-# 5) 全量评估（m1 起为全池两两矩阵：9 bot x 36 对 x 4 种子 + 4 局 A/B + 4 局确定性探针，
-#    共 152 局，约 7 分钟；产出矩阵/胜率表/Elo/方差报告/eval_results.json schema v1.1）
+# 5) 开发评估（所有 pair×seed 均跑 AB/BA；只写 eval_results.dev.json）
 python workspace/software/scripts/run_eval.py --rounds 4
 
-# 6) 回归门（冻结回归线在冻结子流上断言，快速档约 3.5 分钟；失败退出码 1 并打印差异表）
-python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression
+# 6) 正式开发门发布（完整矩阵 + 回归门通过后才原子替换 eval_results.json）
+python workspace/software/scripts/run_eval.py --rounds 4 --assert-regression --official
 
-# 7) 失败模式探针（submission 对全池多种子深记录，产出 failure_modes.md 的证据层）
+# 7) m2a 契约自证（缺对手/单座位/异常 fail-closed；发布原子性）
+python workspace/software/scripts/check_eval_contract.py --mode gate
+python workspace/software/scripts/check_eval_contract.py --mode export
+
+# 8) 失败模式探针（submission 对全池多种子深记录，产出 failure_modes.md 的证据层）
 python workspace/software/scripts/analyze_failure_modes.py --rounds 8
 
-# 8) 迭代门（m2 起候选改动头对头闸门，JSONL 台账；candidate 未过门不得替换主版本）
-python workspace/software/scripts/iterate_gate.py --candidate <path> --label <name> --rounds 4
+# 9) 完整迭代门（4 对手 × 4 seeds × AB/BA = 32 局；自定义子集仅 exploratory）
+python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label candidate --rounds 4 --require-complete
 
-# 9) LLM A/B（m2-ab：同种子 LLM-on vs LLM-off 双座位对局 + 预算闸/回退计数；
-#    无 KG_LLM_* 环境变量时跑 NullProvider 通路自检，win_rate 如实置 null）
+# 10) LLM A/B（每局重建 provider/budget；无完整 KG_LLM_* 时只做 NullProvider 自检）
 python workspace/software/scripts/run_llm_ab.py --rounds 4
 ```
 
@@ -67,8 +69,9 @@ workspace/software/
 ├── tests/                             pytest：收益模型/红线/agent 契约/对局器/回归门/
 │                                       新对手单测/方差统计
 ├── exports/
-│   ├── schema.json                    软件->文档接口契约（评估结果 JSON Schema v1.1）
-│   ├── eval_results.json              实测评估样例（全池矩阵 + 方差报告）
+│   ├── schema.json                    软件->文档接口契约（1.1 历史只读兼容；2.0 正式语义）
+│   ├── eval_results.json              仅正式门通过后原子发布的评估证据
+│   ├── eval_results.dev.json          quick/dev 隔离产物，不可作为正式证据
 │   ├── eval_audit.md(+summary.json)   评估保真度审计清单（ABE-Ralph 式，逐项 pass/warn）
 │   ├── failure_modes.md(+summary)     失败模式清单（FM-1..4，含证据局号）
 │   ├── failure_probe_report.md        失败探针自动证据层（分差曲线/价格轨迹）

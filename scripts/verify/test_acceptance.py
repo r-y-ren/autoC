@@ -35,8 +35,16 @@ def make_root() -> Path:
     tmp = Path(tempfile.mkdtemp(prefix="autoc_acc_test_"))
     shutil.copytree(SRC_ROOT, tmp, dirs_exist_ok=True,
                     ignore=shutil.ignore_patterns(".venv", "__pycache__", "node_modules"))
+    shutil.rmtree(tmp / "workspace" / "acceptance", ignore_errors=True)
     (tmp / "workspace" / "acceptance").mkdir(parents=True, exist_ok=True)
     return tmp
+
+
+def latest_run(root: Path) -> Path:
+    runs = list((root / "workspace" / "acceptance").glob("run-*.json"))
+    if not runs:
+        raise FileNotFoundError("acceptance runner produced no run-N.json")
+    return max(runs, key=lambda path: int(path.stem.split("-")[1]))
 
 
 def write_blueprint(root: Path, items_yaml: str) -> None:
@@ -66,7 +74,7 @@ def main() -> int:
             '    - {id: a3, category: manual, item: 人工, method: 现场}',
             '    - {id: a4, category: document, item: 待核验, method: 读产物}']) + "\n")
         p1 = run_acc(root)
-        run1 = json.loads((root / "workspace/acceptance/run-1.json").read_text(encoding="utf-8"))
+        run1 = json.loads(latest_run(root).read_text(encoding="utf-8"))
         st = {c["id"]: c["status"] for c in run1["checklist"]}
         ok = (p1.returncode == 1 and run1["result"] == "fail"
               and st == {"a1": "pass", "a2": "fail", "a3": "pending_manual", "a4": "pending"}
@@ -101,7 +109,7 @@ def main() -> int:
         write_blueprint(root, '    - {id: c1, category: software, item: 卡死, method: m, cmd: "ping -n 30 127.0.0.1 >nul"}\n')
         p = run_acc(root, {"AUTOC_CMD_TIMEOUT": "2"})
         ev = (root / "workspace/acceptance/evidence/c1.log").read_text(encoding="utf-8")
-        run_ok = (root / "workspace/acceptance/run-1.json").is_file()
+        run_ok = latest_run(root).is_file()
         ok = (p.returncode == 1 and "TIMEOUT" in ev and run_ok
               and read_state(root)["retry"]["count"] == 1)
         passed += ok
@@ -120,9 +128,9 @@ def main() -> int:
                 del sys.modules[m]
         import importlib
         lint = importlib.import_module("lint_kb")
-        ok, msg = lint.validate_path(root / "workspace/acceptance/run-1.json")
+        ok, msg = lint.validate_path(latest_run(root))
         passed += ok
-        print(f"{'PASS' if ok else 'FAIL'} D run-1.json 过 schema：{msg}")
+        print(f"{'PASS' if ok else 'FAIL'} D run-N.json 过 schema：{msg}")
     finally:
         shutil.rmtree(root, ignore_errors=True)
 

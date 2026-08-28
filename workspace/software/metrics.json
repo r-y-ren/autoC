@@ -1,7 +1,7 @@
 {
   "schema": "software-metrics-shard/1.0",
   "campaign": "kaggle-kaggriculture",
-  "milestone": "m2-full (failure-mode-driven strategy overhaul, wave 3/4; m1 keys retained below for the record)",
+  "milestone": "m2a-eval-hardening (AB/BA evaluation contract, fail-closed gates, atomic publication; historical keys retained)",
   "measured_at": "2026-08-28",
   "engine": {
     "package": "kaggle-environments",
@@ -87,7 +87,28 @@
     "llm_ab_harness_ready": {"value": true, "unit": "bool", "method": "scripts/run_llm_ab.py --rounds 2 (one command): loads two module instances of main.py, LLM-on side wired to provider_from_env(), both seat orders, instrumented provider counters; writes exports/llm_ab_results.json. NullProvider plumbing-validation run measured: 4 games in 13.06s, 1294 consultations, 1294 heuristic fallbacks, 0 budget blocks (NullProvider carries no budget), seat-symmetric outcomes"},
     "llm_ab_games": {"value": 4, "unit": "games", "method": "NullProvider baseline-side harness validation only (seeds 701-702, both seats). NOT a real A/B: with KG_LLM_* unset both sides play the identical heuristic policy; win_rate stays null by design"},
     "llm_ab_fallback_count": {"value": 1294, "unit": "count", "method": "instrumented NullProvider run above: every consultation fell back to the heuristic gate (provider disabled -> returns None); proves the fallback path executes"},
-    "failure_mode_status_m2": {"value": {"FM-1": "已缓解 (root-cause engine swap to cows; residual: demand-drought seeds 204/206)", "FM-2": "已缓解 (no mid-season premium-crop exposure; melon_hoarder 0-8 -> 7-1)", "FM-3": "已缓解 (wheat-first staged opening; expansionist min margin +9421 -> +14949)", "FM-4": "部分缓解 (gated release + wheat self-consumption; linear zero-demand curve still decays)"}, "unit": "report", "method": "exports/failure_modes.md m2 annotations backed by the 64-game probe + iteration gate log"}
+    "failure_mode_status_m2": {"value": {"FM-1": "已缓解 (root-cause engine swap to cows; residual: demand-drought seeds 204/206)", "FM-2": "已缓解 (no mid-season premium-crop exposure; melon_hoarder 0-8 -> 7-1)", "FM-3": "已缓解 (wheat-first staged opening; expansionist min margin +9421 -> +14949)", "FM-4": "部分缓解 (gated release + wheat self-consumption; linear zero-demand curve still decays)"}, "unit": "report", "method": "exports/failure_modes.md m2 annotations backed by the 64-game probe + iteration gate log"},
+
+    "m2a_tests_total": {"value": 128, "unit": "count", "method": "2026-08-29 final post-review actual run: python -m pytest workspace/software/tests -q -> 128 passed in 2.13s"},
+    "m2a_tests_passed": {"value": 128, "unit": "count", "method": "same final post-review complete software test run; 0 failed"},
+    "m2a_acceptance_fixture_passed": {"value": 7, "unit": "count", "method": "2026-08-28 actual run: python scripts/verify/test_acceptance.py -> 7/7; temporary fixture removes copied historical acceptance runs and reads latest run-N"},
+    "m2a_smoke_boot_pass": {"value": true, "unit": "bool", "method": "2026-08-28 post-review run: python workspace/software/smoke_boot.py -> PASS, 4 phases"},
+    "m2a_smoke_boot_runtime_seconds": {"value": 3.9, "unit": "s", "method": "same post-review smoke_boot console measurement"},
+    "m2a_dev_abba_games": {"value": 16, "unit": "games", "method": "2026-08-28 actual run: run_eval.py --quick; 8 submission/opponent pairs x seed 101 x AB/BA; exports/eval_results.dev.json schema 2.0"},
+    "m2a_dev_abba_runtime_seconds": {"value": 47.14, "unit": "s", "method": "exports/eval_results.dev.json.runtime_seconds from the actual quick development run"},
+    "m2a_dev_abnormal_games": {"value": 0, "unit": "games", "method": "exports/eval_results.dev.json.abnormal_games; all 16 games statuses DONE/DONE and contract_ok=true"},
+    "m2a_formal_export_preserved_by_dev": {"value": true, "unit": "bool", "method": "actual before/after sha256sum around run_eval.py --quick: exports/eval_results.json remained ce540e0471700242ff35d917c331de9fcd8ee494fb9b3a0ce8b8645348ef54ae"},
+    "m2a_complete_gate_pass": {"value": false, "unit": "bool", "method": "invalidated=true: the 104.38s/32-game run preceded independent acceptor findings and the final candidate-snapshot/transaction wiring; retained only as audit history, not a valid merge gate. m2b must rerun the complete gate on the frozen candidate"},
+    "m2a_complete_gate_games": {"value": 32, "unit": "games", "method": "invalidated historical run only; 4 required opponents x seeds 101-104 x AB/BA. Not usable as current PASS evidence"},
+    "m2a_complete_gate_abnormal_games": {"value": 0, "unit": "games", "method": "invalidated historical run reported zero abnormal games; current production fail-closed semantics are verified by m2a_gate_contract_check_pass"},
+    "m2a_complete_gate_runtime_seconds": {"value": 104.38, "unit": "s", "method": "invalidated historical run duration; retained for audit, not performance acceptance"},
+    "m2a_complete_gate_invalidated": {"value": true, "unit": "bool", "method": "independent acceptor rejected the pre-fix gate implementation; no replacement long gate was run in m2a"},
+    "m2a_gate_contract_check_pass": {"value": true, "unit": "bool", "method": "2026-08-28 post-review actual run: check_eval_contract.py --mode gate -> exit 0; production validator rejected missing opponent, single-seat schedule, INVALID status, malformed tie, seed-domain mismatch, and exploratory formal PASS"},
+    "m2a_export_safety_check_pass": {"value": true, "unit": "bool", "method": "2026-08-28 post-review actual run: check_eval_contract.py --mode export -> exit 0; production schema/semantic validator, Windows case alias rejection, dev export+replay isolation, and schema/replay failure preservation verified"},
+    "m2a_llm_null_games": {"value": 2, "unit": "games", "method": "2026-08-28 actual run with KG_LLM_* unset: run_llm_ab.py --rounds 1; seed 701 AB/BA"},
+    "m2a_llm_null_effective_calls": {"value": 0, "unit": "count", "method": "exports/llm_ab_results.json consultation_stats.effective_calls; provider_configured=false and real_ab=false"},
+    "m2a_llm_null_fallback_count": {"value": 662, "unit": "count", "method": "exports/llm_ab_results.json; 331 independent NullProvider consultations per game x 2 games"},
+    "m2a_llm_null_runtime_seconds": {"value": 5.46, "unit": "s", "method": "exports/llm_ab_results.json.runtime_seconds from the actual per-game provider isolation run"}
   },
   "unmeasured": {
     "llm_ab_win_rate": {"value": null, "note": "待用户提供 KG_LLM_* key: 本环境无相关环境变量，A/B 两侧策略相同，实测无意义故如实置 null（harness 已就绪，见 llm_ab_harness_ready）"},

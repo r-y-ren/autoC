@@ -19,6 +19,31 @@ SOFTWARE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SUBMISSION_MAIN = os.path.join(SOFTWARE_ROOT, "kaggle_simulations", "agent", "main.py")
 
 
+class AbnormalMatchError(RuntimeError):
+    """A match did not complete normally and must never be scored as a tie."""
+
+
+def _abnormal_reason(result: Dict[str, Any]) -> Optional[str]:
+    if "statuses" not in result:
+        return "missing statuses"
+    if result["statuses"] != ["DONE", "DONE"]:
+        return f"non-DONE statuses: {result['statuses']}"
+    if result.get("contract_ok") is not True:
+        return "contract_ok is not true"
+    players = result.get("players")
+    rewards = result.get("rewards")
+    if not isinstance(players, list) or len(players) != 2:
+        return "missing or invalid players"
+    if (not isinstance(rewards, list) or len(rewards) != 2 or
+            any(not isinstance(value, (int, float)) for value in rewards)):
+        return "missing or invalid rewards"
+    expected = (players[0] if rewards[0] > rewards[1] else
+                players[1] if rewards[1] > rewards[0] else None)
+    if "winner_label" not in result or result["winner_label"] != expected:
+        return "winner_label is inconsistent with rewards"
+    return None
+
+
 def load_submission_agent(path: str = SUBMISSION_MAIN) -> Callable[[dict], dict]:
     """Import main.py from its file path and return its last-defined callable.
 
@@ -55,6 +80,10 @@ def run_match(a: AgentRef, b: AgentRef, seed: int,
     res["players"] = [label_a, label_b]
     res["winner_label"] = winner_label
     res["contract_ok"] = episode_contract_ok(res)
+    reason = _abnormal_reason(res)
+    if reason:
+        raise AbnormalMatchError(
+            f"match {label_a} vs {label_b} seed={seed} rejected: {reason}")
     return res
 
 
@@ -87,6 +116,9 @@ def summarize_games(games: List[Dict[str, Any]], a: str, b: str) -> Dict[str, An
     for g in games:
         if g.get("players") != [a, b]:
             continue
+        reason = _abnormal_reason(g)
+        if reason:
+            raise AbnormalMatchError(f"cannot summarize {a} vs {b}: {reason}")
         if g["winner_label"] == a:
             w += 1
         elif g["winner_label"] == b:

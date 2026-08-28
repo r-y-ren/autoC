@@ -91,7 +91,7 @@ class OpenAICompatProvider:
 
     @property
     def configured(self) -> bool:
-        return bool(self.base_url and self.model)
+        return bool(self.base_url and self.api_key and self.model)
 
     def suggest(self, prompt: str, context: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         if not self.configured or self.budget.exhausted:
