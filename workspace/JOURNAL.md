@@ -36,3 +36,4 @@
 | 2026-08-28 23:30 | collect | D11 全量构建完成：W0-W5 六波次收官（23 赛三层全量、76 技术卡、4 族 surveys、队列全清零归档）；成本合计约 55M tokens/50+ 分片 | 转正式简报后恢复 cron |
 | 2026-08-28 23:45 | idle | D11 收官：全库 lint 99 条目 0 不合格、结构 51 文件 0 WARN；双正式简报；cron 已恢复注册；PENDING-CRON 删除 | 全量构建完成，回归增量 |
 | 2026-08-28 14:44 | idle | /attack 预刷新：tech+1（UrbanGround）、comp 增量全噪弃置；KB 决策基线就绪 | 转 decide 前置完成 |
+| 2026-08-28 14:48 | decide | /attack 决策：strategy.md（八赛六维矩阵+大显身手信号+一鱼多吃）与 blueprint.md（CUMCM 2026 prep 冲奖工具链战役，schema PASS）产出 | 呈报待用户确认 |
