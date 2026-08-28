@@ -81,14 +81,20 @@ class CandidateSnapshot:
     identity: dict[str, Any]
     repo_root: Path
 
-    def verify_unchanged(self) -> None:
+    def verify_candidate_unchanged(self) -> None:
         if file_sha256(self.source_path) != self.identity["submission_sha256"]:
             raise ContractError("candidate source SHA changed during evaluation")
         if file_sha256(self.snapshot_path) != self.identity["submission_sha256"]:
             raise ContractError("loaded candidate snapshot SHA mismatch")
         state = repo_state(self.repo_root)
-        if state["git_ref"] != self.identity["git_ref"] or state["dirty"] != self.identity["dirty"]:
-            raise ContractError("git ref/dirty state changed during evaluation")
+        if state["git_ref"] != self.identity["git_ref"]:
+            raise ContractError("git ref changed during evaluation")
+
+    def verify_unchanged(self) -> None:
+        self.verify_candidate_unchanged()
+        state = repo_state(self.repo_root)
+        if state["dirty"] != self.identity["dirty"]:
+            raise ContractError("git dirty state changed during evaluation")
 
 
 @contextmanager

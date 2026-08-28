@@ -299,6 +299,9 @@ def test_iterate_gate_verifies_identity_after_incumbent_games(monkeypatch, tmp_p
         def verify_unchanged(self):
             events.append("verify")
 
+        def verify_candidate_unchanged(self):
+            events.append("verify_candidate")
+
     @contextlib.contextmanager
     def fake_snapshot(*args, **kwargs):
         events.append("snapshot")
@@ -330,6 +333,60 @@ def test_iterate_gate_verifies_identity_after_incumbent_games(monkeypatch, tmp_p
     assert iterate_gate.main() == 0
     assert events.count("play") == 2
     assert events.index("verify") > max(i for i, event in enumerate(events) if event == "play")
+    assert events[-1] == "verify_candidate"
+
+
+def test_iterate_gate_allows_its_atomic_log_then_rechecks_candidate(monkeypatch, tmp_path):
+    import contextlib
+    import sys
+    from scripts import iterate_gate
+
+    events = []
+    candidate = tmp_path / "candidate.py"
+    candidate.write_text("def agent(obs): return {}\n", encoding="utf-8")
+    log_path = tmp_path / "iteration_gate_log.jsonl"
+    log_path.write_text('{"old": true}\n', encoding="utf-8")
+
+    class Snapshot:
+        snapshot_path = candidate
+        identity = {"submission_sha256": "a" * 64, "git_ref": "x",
+                    "dirty": False, "input_sha256": "b" * 64}
+
+        def verify_unchanged(self):
+            events.append("verify")
+
+        def verify_candidate_unchanged(self):
+            events.append("verify_candidate")
+
+    @contextlib.contextmanager
+    def fake_snapshot(*args, **kwargs):
+        yield Snapshot()
+
+    summaries = {
+        name: {"games": 0, "wins": 0, "losses": 0, "ties": 0,
+               "win_rate": 1.0, "avg_margin": 0.0, "min_margin": 0.0,
+               "seats": {"AB": 0, "BA": 0}}
+        for name in iterate_gate.REQUIRED_OPPONENTS
+    }
+    gate = {"formal_pass": True, "mode": "official", "expected_games": 32,
+            "actual_games": 32, "abnormal_games": 0}
+
+    monkeypatch.setattr(iterate_gate, "LOG_PATH", str(log_path))
+    monkeypatch.setattr(iterate_gate, "candidate_snapshot", fake_snapshot)
+    monkeypatch.setattr(iterate_gate, "load_submission_agent", lambda path: object())
+    monkeypatch.setattr(iterate_gate, "play_set", lambda *args, **kwargs: [])
+    monkeypatch.setattr(iterate_gate, "gate_verdict", lambda *args: (summaries, gate))
+    monkeypatch.setattr(
+        sys, "argv", ["iterate_gate.py", "--candidate", str(candidate),
+                      "--require-complete"],
+    )
+
+    assert iterate_gate.main() == 0
+    assert events[-2:] == ["verify", "verify_candidate"]
+    lines = log_path.read_text(encoding="utf-8").splitlines()
+    assert json.loads(lines[0]) == {"old": True}
+    assert json.loads(lines[1])["verdict"] == "PASS"
+    assert not list(tmp_path.glob("*.tmp"))
 
 
 def test_t95_uses_correct_intermediate_degrees_of_freedom():

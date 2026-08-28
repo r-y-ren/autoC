@@ -213,11 +213,22 @@ def main() -> int:
                     "elapsed_seconds": elapsed,
                 }
                 snapshot.verify_unchanged()
-                with open(LOG_PATH, "a", encoding="utf-8") as stream:
-                    stream.write(json.dumps(entry, ensure_ascii=False) + "\n")
+                line = (json.dumps(entry, ensure_ascii=False) + "\n").encode("utf-8")
+                previous = open(LOG_PATH, "rb").read() if os.path.exists(LOG_PATH) else b""
+                temp_path = f"{LOG_PATH}.{os.getpid()}.tmp"
+                try:
+                    with open(temp_path, "wb") as stream:
+                        stream.write(previous)
+                        stream.write(line)
+                        stream.flush()
+                        os.fsync(stream.fileno())
+                    os.replace(temp_path, LOG_PATH)
+                finally:
+                    if os.path.exists(temp_path):
+                        os.unlink(temp_path)
                 print(f"  logged -> {os.path.relpath(LOG_PATH, SOFTWARE_ROOT)}")
 
-            snapshot.verify_unchanged()
+            snapshot.verify_candidate_unchanged()
             if gate["formal_pass"]:
                 return 0
             return 3 if gate["mode"] == "exploratory" else 1
