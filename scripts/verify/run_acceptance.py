@@ -105,6 +105,9 @@ def next_run_no(acc_dir: Path) -> int:
 def main() -> int:
     ap = argparse.ArgumentParser(description="验收执行器")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--only", type=str, default=None,
+                    help="波次左移用：只验收 id 匹配任一逗号分隔前缀的项（如 --only m1-,sw-）。"
+                         "范围不覆盖全清单时 result 封顶 pending_agent，防局部通过误开归档闸门")
     args = ap.parse_args()
 
     bp = load_blueprint()
@@ -114,12 +117,24 @@ def main() -> int:
 
     acc_dir = ROOT / "workspace" / "acceptance"
     checklist = bp["acceptance"]["checklist"]
+    scoped = False
+    if args.only:
+        prefixes = [p.strip() for p in args.only.split(",") if p.strip()]
+        full = list(checklist)
+        checklist = [it for it in checklist
+                     if any(str(it.get("id", "")).startswith(p) for p in prefixes)]
+        scoped = len(checklist) < len(full)
+        dropped = len(full) - len(checklist)
+        print(f"[run_acceptance] 范围过滤：{len(checklist)}/{len(full)} 项（前缀 {prefixes}，范围外 {dropped} 项本run不验）")
+        if not checklist:
+            print("[run_acceptance] 过滤后无任何验收项", file=sys.stderr)
+            return 2
 
     if args.dry_run:
         for it in checklist:
             mode = "CMD" if it.get("cmd") else ("MANUAL" if it.get("category") == "manual" else "AGENT")
             print(f"  [{mode:5s}] {it.get('id')}: {it.get('item')}")
-        print(f"[run_acceptance] dry-run：{len(checklist)} 项")
+        print(f"[run_acceptance] dry-run：{len(checklist)} 项" + ("（scoped）" if scoped else ""))
         return 0
 
     # 分片汇总（失败不阻断验收本身，但会体现在证据里）
@@ -178,9 +193,16 @@ def main() -> int:
         result = "pass"
 
     retry = read_retry()
-    if result == "fail":  # 仅失败重试计数（T2.1 裁决：pending 不属于修复回环）
+    if result == "fail" and not scoped:  # 仅【全量】运行的 fail 计入重试（T2.1 裁决；D12：scoped 波门诊断不烧熔断额度）
         retry["count"] = int(retry.get("count", 0)) + 1
     retry["tripped"] = retry["count"] >= int(retry.get("max", 3))
+    # D12 波次左移：scoped 运行即便范围内全过也不得产生可开归档闸门的 pass——
+    # 范围外项未验，result 封顶 pending_agent，终验必须跑全量
+    scope_note = None
+    if scoped:
+        if result == "pass":
+            result = "pending_agent"
+        scope_note = f"scoped run（--only，范围外项未验；终验须全量重跑）"
     write_retry(retry)
 
     n = next_run_no(acc_dir)
@@ -192,6 +214,8 @@ def main() -> int:
         "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
         "retry_state": retry,
     }
+    if scope_note:
+        record["scope"] = scope_note
     out = acc_dir / f"run-{n}.json"
     out.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

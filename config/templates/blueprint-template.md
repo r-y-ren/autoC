@@ -23,10 +23,26 @@ interface_contracts:           # 并发分发前钉死；软件↔硬件协议�
     contract_file: workspace/?
 
 milestones:
-  - id: m1
-    task: ?
-    owner_role: software|hardware|document
+  # ── 里程碑分层模板（D12 波次化，可直接抄改）──
+  # K-03 按 depends_on 拓扑分层成波；轻蓝图推荐四阶段依赖链（大结构默认化）：
+  #   骨架层 → 竖切层 → 完整层 → 打磨层；重蓝图按需加层（如评估层/集成层）
+  - id: m0-skeleton          # 骨架层：可编译空壳 + 接口契约实体化 + 报告大纲
+    task: 工程骨架与接口契约落地（仓库结构/CI 冒烟/报告大纲与 metrics 键清单）
+    owner_role: software
     depends_on: []
+  - id: m1-vertical          # 竖切层：端到端最小可运行（walking skeleton）
+    task: 核心功能一条线打通（最小数据流 + smoke_boot 可跑）
+    owner_role: software
+    depends_on: [m0-skeleton]
+  - id: m2-full              # 完整层：全量功能 + metrics 开始积累真实数据
+    task: 按范围全量实现 + 测试套件齐备
+    owner_role: software
+    depends_on: [m1-vertical]
+  - id: m3-polish            # 打磨层：集成/性能/边界 + 文档成稿（数字回填）
+    task: 跨角色集成与打磨、报告/PPT 成稿（消费 merge_metrics 稳定值）
+    owner_role: document
+    depends_on: [m2-full]
+  # 验收项 id 建议带里程碑前缀（如 m0-、sw-），便于波门 --only 左移检查
 
 acceptance:
   checklist:

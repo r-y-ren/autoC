@@ -44,9 +44,9 @@ def write_blueprint(root: Path, items_yaml: str) -> None:
                                                      encoding="utf-8")
 
 
-def run_acc(root: Path, extra_env: dict | None = None) -> subprocess.CompletedProcess:
+def run_acc(root: Path, extra_env: dict | None = None, extra: list[str] | None = None) -> subprocess.CompletedProcess:
     env = dict(os.environ, ZCODE_PROJECT_DIR=str(root), **(extra_env or {}))
-    return subprocess.run([sys.executable, str(root / SCRIPT)], cwd=root,
+    return subprocess.run([sys.executable, str(root / SCRIPT), *(extra or [])], cwd=root,
                           capture_output=True, text=True, env=env, timeout=120)
 
 
@@ -144,7 +144,31 @@ def main() -> int:
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
-    total = 6
+    # 场景 F（D12）：--only 波门左移——范围过滤生效、scoped 全过封顶 pending_agent、fail 不烧熔断
+    root = make_root()
+    try:
+        (root / ".flow").mkdir(parents=True, exist_ok=True)
+        (root / ".flow/state.json").write_text(json.dumps({
+            "phase": "idle", "retry": {"count": 0, "max": 3, "tripped": False}}), encoding="utf-8")
+        write_blueprint(root,
+            "    - {id: m0-x, category: software, item: 骨架, method: m, cmd: \"exit 0\"}\n"
+            "    - {id: m0-y, category: software, item: 骨架2, method: m, cmd: \"exit 0\"}\n"
+            "    - {id: m2-z, category: software, item: 完整层, method: m, cmd: \"exit 0\"}\n")
+        p = run_acc(root, extra=["--only", "m0-"])
+        runs = sorted((root / "workspace/acceptance").glob("run-*.json"))
+        rec = json.loads(runs[-1].read_text(encoding="utf-8"))
+        ids = [r["id"] for r in rec["checklist"]]
+        st = read_state(root)
+        ok = (p.returncode == 3 and ids == ["m0-x", "m0-y"]
+              and rec["result"] == "pending_agent" and "scope" in rec
+              and st["retry"]["count"] == 0)
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} F scoped 左移：exit={p.returncode} 范围={ids} "
+              f"封顶={rec['result']} scope标记={'scope' in rec} retry不烧={st['retry']['count']}")
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+    total = 7
     print(f"[test_acceptance] {passed}/{total} 通过")
     return 0 if passed == total else 1
 

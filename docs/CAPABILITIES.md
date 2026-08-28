@@ -199,3 +199,10 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 - **D11 全量构建裁决** ✅（2026-08-28，用户指令"不限 token"）：一次性全量知识库构建（K-10 编排）——
   cron 暂停（规格存 PENDING-CRON.md，完成后恢复）、配额豁免但质量门槛不降、W0-W5 波次推进每波提交、
   完成标准=结构 lint 零 WARN + 队列清空 + 全 patterns 六节 + surveys 按族 + 正式简报
+
+- **D12 波次化交付落地** ✅（2026-08-28，首场战役实证驱动）：K-03 从"按角色归并三包单趟"重构为
+  **依赖图驱动的波次编排**——milestones.depends_on 拓扑分层成波（环检测 fail-fast；无依赖轻蓝图自然单波向后兼容）、
+  波内并行派发、波间质量门（可编译/测试/接口契约/metrics 落盘/JOURNAL+commit，波门即断点）、
+  document 双阶段（第 1 波大纲包+末波成稿包）、验收左移（run_acceptance --only 前缀过滤：
+  scoped 诊断不烧熔断额度、result 封顶 pending_agent 防误开归档闸）；blueprint-template 增
+  骨架→竖切→完整→打磨四阶段默认模板。验证：test_acceptance 增场景 F（7/7），全量回归绿。
