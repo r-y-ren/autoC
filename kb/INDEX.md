@@ -99,6 +99,7 @@
 | arxiv-2608.27167 | Calibrated Enough to Know, Not Calibrated to Act: Fabricated Evidence Makes LLM Agents Commit to the Unknowable | LLM agents、校准与可信性、评测方法 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-27 | 已引 |
 | arxiv-2608.27182 | TraceBench: Controlled Evaluation of LLM Agents for Time-Series Root-Cause Attribution | LLM agents、时序异常检测、根因分析 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-27 | 已引 |
 | arxiv-2608.27260 | What Makes Good Agentic Data? An ACE Lens on Data Generation for LLM Agents | LLM agents、合成数据、数据工程方法论 | 黑客松与数据竞赛 | paper | 黑客松-数据与算法 | 2026-08-27 | 已引 |
+| arxiv-2608.27456 | UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City | LLM agents、具身导航、空间推理 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-27 | 已引 |
 | gh-agents-universe_agents-universe | Agents Universe：知识条目驱动的企业级多角色 Agent 平台（无向量检索的项目记忆） | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法、数模-数据分析与决策 | 2026-08-18 | 已引 |
 | gh-BraxisAI_braxis-blueprint | braxis-blueprint: 零预算免费 LLM 通道路由与自动化运维的实战脚本集 | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-23 | 已引 |
 | gh-joe960913_Jixu | Jixu：TypeScript 持久化单 Agent Harness（事件溯源 Thread，可恢复/重放/分叉） | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-18 | 已引 |
@@ -115,8 +116,9 @@
 
 | 日期 | 类型 | 新增 | 更新 | 隔离 | 成本 | 说明 |
 |---|---|---|---|---|---|---|
-| 2026-08-28 | full | 赛事23三层全量：patterns 23/23、winners 12赛15文件、深构40+篇；技术卡 76/台账 133；surveys 4 族 | 6 波次/50+分片/约 55M tokens（D11 全量） |
 <!-- 成本列=分片数/token/墙钟（T4.3 起新行必填；旧行无此列属历史格式） -->
+| 2026-08-28 | refresh | 技术卡1 | 0 | 0 | 1分片/0.11M tok/2.5min | /attack 预刷新：tech 增量1条（UrbanGround 强映射入库）；comp 增量2条全噪（LA Hacks 与在队重复+锚点自指）已弃；LA Hacks 留 8-31 cron 消费 |
+| 2026-08-28 | full | 赛事23三层全量：patterns 23/23、winners 12赛15文件、深构40+篇；技术卡 76/台账 133；surveys 4 族 | 6 波次/50+分片/约 55M tokens（D11 全量） |
 | 2026-08-27 | tech+comp | 技术卡6 / 赛事条目3 | 0 | 0 | 首次真实跑批（T3-a）：arXiv 收紧查询后31候选→6卡；gh未登录按设计降级 |
 | 2026-08-27 | discover | 赛事条目8 | 0 | 0 | 黑客松与数据竞赛冷启动（T4批次2）：4搜索分片→35候选→8入库+13留队列；Amazon Nova winners首样（6深构+1降级）；修正失真公告快照 |
 | 2026-08-28 | tech+comp | 技术卡9 / 赛事条目12 | 0 | 0 | 5分片/19.8M tok/33min | 增量：comp消费discover留存13→12入库+1留尾(CDEC待预抓)；tech 160候选→9卡+100台账+50留队；两脚本缺陷待修(gh行内star限定词失效/build_index注释行断表) |
