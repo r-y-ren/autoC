@@ -29,3 +29,7 @@ build/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# 会话级临时数据（回放抓取/榜单解压等大文件）
+.tmp/
+.tmp-online/

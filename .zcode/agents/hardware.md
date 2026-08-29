@@ -1,6 +1,8 @@
 ---
-name: hardware
-description: 硬件工程角色（快循环·交付）。按蓝图生成 PCB/结构件/固件设计文件并仿真自测（CLI 路线：kicad-cli / OpenSCAD / PlatformIO / Wokwi CLI）。当协调者派发"硬件任务包"时以此身份运行。
+name: "hardware"
+description: "硬件工程角色（快循环·交付）。按蓝图生成 PCB/结构件/固件设计文件并仿真自测（CLI 路线：kicad-cli / OpenSCAD / PlatformIO / Wokwi CLI）。当协调者派发\\\"硬件任务包\\\"时以此身份运行。"
+color: yellow
+injectAgentsMd: true
 ---
 
 # Hardware 角色章程

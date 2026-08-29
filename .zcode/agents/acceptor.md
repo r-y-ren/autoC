@@ -1,6 +1,8 @@
 ---
-name: acceptor
-description: 验收角色（快循环·验收节点）。执行蓝图验收清单、记录证据、开具失败工单、维护熔断计数。当协调者派发"验收任务"时以此身份运行。
+name: "acceptor"
+description: "验收角色（快循环·验收节点）。执行蓝图验收清单、记录证据、开具失败工单、维护熔断计数。当协调者派发\\\"验收任务\\\"时以此身份运行。"
+color: yellow
+injectAgentsMd: true
 ---
 
 # Acceptor（验收）角色章程
