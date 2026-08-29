@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only consistency checks for the revised m3 Typst report."""
+"""Read-only consistency checks for the m5-redocument Typst report (campaign III final)."""
 
 from __future__ import annotations
 
@@ -34,6 +34,42 @@ REQUIRED_SOFTWARE_KEYS = (
     "confirmatory_export_traceability",
 )
 
+# Campaign III (m1-m4) keys that the m5 final report must consume. Names were
+# verified against workspace/metrics.json before being listed here.
+REQUIRED_SOFTWARE_R3_KEYS = (
+    "m1_corpus_episodes_total",
+    "m1_corpus_by_band",
+    "m1_corpus_abnormal_excluded",
+    "m1_profiles_generated",
+    "m1_download_bytes",
+    "m1_corpus_runtime_seconds",
+    "m2_online_style_opponents",
+    "m2_opponent_pool_certification",
+    "m2_gate_required_opponents",
+    "m2_gate_contract_check_pass",
+    "m2_opponent_unit_tests_summary",
+    "m3_strategy_capability_checks",
+    "m3_strategy_regression_summary",
+    "m3_development_gate_summary",
+    "m3_frozen_candidate_identity",
+    "m4_holdout_protocol",
+    "m4_holdout_seed_manifest",
+    "m4_holdout_candidate_hash_match",
+    "m4_holdout_seed_domain_isolation",
+    "m4_holdout_run_status",
+    "m4_holdout_schedule",
+    "m4_holdout_seat_split",
+    "m4_holdout_abnormal_summary",
+    "m4_holdout_integrity_pass",
+    "m4_confirmatory_overall_record",
+    "m4_confirmatory_pair_records",
+    "m4_confirmatory_seat_records",
+    "m4_confirmatory_wilson_intervals",
+    "m4_confirmatory_order_independent_statistics",
+    "m4_confirmatory_elo_appendix",
+    "m4_confirmatory_export_traceability",
+)
+
 REQUIRED_UNMEASURED_KEYS = (
     "online_ladder_games",
     "online_skill_rating",
@@ -41,8 +77,10 @@ REQUIRED_UNMEASURED_KEYS = (
     "final_submission_commits",
 )
 
-# Section 8 has twelve rewrite targets. A completed target is marked by one
-# exact, standalone Typst comment: // CHECK:<marker>.
+# Rewrite targets. The first twelve are the campaign-II targets retained from
+# the m3 checker; the R3_* markers lock the m5 placeholder->key rewrite map.
+# A completed target is marked by one exact, standalone Typst comment:
+# // CHECK:<marker>.
 REWRITE_MARKERS = (
     "METHOD_IDENTITY",
     "METHOD_SEEDS",
@@ -56,6 +94,16 @@ REWRITE_MARKERS = (
     "LIMITATIONS",
     "HUMAN_AI",
     "TRACEABILITY",
+    "R3_ROUND1",
+    "R3_M1_CORPUS",
+    "R3_M2_POOL",
+    "R3_M3_CANDIDATE",
+    "R3_M4_PROTOCOL",
+    "R3_RESULT_OVERALL",
+    "R3_RESULT_PAIRS",
+    "R3_RESULT_SEATS",
+    "R3_RESULT_INTERVALS",
+    "R3_BOUNDARY",
 )
 
 HISTORICAL_LITERALS = ("1500.8", "36-0")
@@ -76,6 +124,7 @@ METRIC_REFERENCE_RE = re.compile(
 
 # These are the current holdout/development performance spellings that must
 # be rendered from m() data rather than duplicated as static report text.
+# Campaign II spellings first, then campaign III (m1-m4) spellings.
 UNKEYED_PERFORMANCE_PATTERNS = (
     ("119W-9L", re.compile(r"(?<!\w)119\s*W\s*[-/]\s*9\s*L(?!\w)", re.IGNORECASE)),
     ("0.929688", re.compile(r"(?<![\d.])0\.929688(?!\d)")),
@@ -87,6 +136,28 @@ UNKEYED_PERFORMANCE_PATTERNS = (
     ("paired upper bound 0.992094", re.compile(r"(?<![\d.])0\.992094(?!\d)")),
     ("31W-1L", re.compile(r"(?<!\w)31\s*W\s*[-/]\s*1\s*L(?!\w)", re.IGNORECASE)),
     ("35/35", re.compile(r"(?<!\d)35\s*/\s*35(?!\d)")),
+    ("m4 overall 108W-20L", re.compile(r"(?<!\w)108\s*W\s*[-/]\s*20\s*L(?!\w)", re.IGNORECASE)),
+    ("m4 score 0.84375", re.compile(r"(?<![\d.])0\.84375(?!\d)")),
+    ("m4 score 84.4 percent", re.compile(r"(?<![\d.])84\.4(?![\d])")),
+    ("m4 Wilson lower 0.771", re.compile(r"(?<![\d.])0\.771(?!\d)")),
+    ("m4 Wilson upper 0.8965", re.compile(r"(?<![\d.])0\.8965(?!\d)")),
+    ("m4 paired lower 0.7551", re.compile(r"(?<![\d.])0\.7551(?!\d)")),
+    ("m4 paired upper 0.9324", re.compile(r"(?<![\d.])0\.9324(?!\d)")),
+    ("m4 holdout 128 games", re.compile(r"(?<!\d)128\s*(?:games?|局|场|对局)(?!\w)", re.IGNORECASE)),
+    ("m4 pair sweep 16-0", re.compile(r"(?<!\w)16\s*[-/]\s*0(?![\d])")),
+    ("m4 crop_rotator 12-4", re.compile(r"(?<!\w)12\s*[-/]\s*4(?![\d])")),
+    ("m4 template_wheat 10-6", re.compile(r"(?<!\w)10\s*[-/]\s*6(?![\d])")),
+    ("m4 self_feed 14-2", re.compile(r"(?<!\w)14\s*[-/]\s*2(?![\d])")),
+    ("m4 near_band 8-8", re.compile(r"(?<!\w)8\s*[-/]\s*8(?![\d])")),
+    ("m3 gate 57W-7L", re.compile(r"(?<!\w)57\s*W\s*[-/]\s*7\s*L(?!\w)", re.IGNORECASE)),
+    ("m3 gate 64 games", re.compile(r"(?<!\d)64\s*(?:games?|局|场|对局)(?!\w)", re.IGNORECASE)),
+    ("m2 certification 12W-0L", re.compile(r"(?<!\w)12\s*W\s*[-/]\s*0\s*L(?!\w)", re.IGNORECASE)),
+    ("m2 certification 84 games", re.compile(r"(?<!\d)84\s*(?:games?|局|场|对局)(?!\w)", re.IGNORECASE)),
+    ("m2 suite 246", re.compile(r"(?<![\d.])246(?![\d.])")),
+    ("m2 opponent tests 42", re.compile(r"(?<![\d.])42(?![\d.])")),
+    ("m3 suite 269", re.compile(r"(?<![\d.])269(?![\d.])")),
+    ("m1 corpus 60 games", re.compile(r"(?<!\d)60\s*(?:games?|局|场|对局)(?!\w)", re.IGNORECASE)),
+    ("m1 corpus 1.9GB", re.compile(r"(?<![\d.])1\.9\s*GB(?!\w)", re.IGNORECASE)),
 )
 
 # The detector intentionally operates sentence by sentence. A hit needs a
@@ -342,6 +413,7 @@ def check_metric_references(
 
     required_references = {
         *(("m", key) for key in REQUIRED_SOFTWARE_KEYS),
+        *(("m", key) for key in REQUIRED_SOFTWARE_R3_KEYS),
         *(("um", key) for key in REQUIRED_UNMEASURED_KEYS),
     }
     for kind, key in sorted(required_references - references):
