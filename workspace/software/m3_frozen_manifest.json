@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.1",
+  "milestone": "m3-adaptive-candidate",
+  "label": "m3-frozen",
+  "created_at": "2026-08-29T08:05:06.779839+00:00",
+  "candidate": {
+    "path": "workspace/software/kaggle_simulations/agent/main.py",
+    "sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee",
+    "git_ref": "b47bc16f426fbfeeab645e86a5b4453d45b5779a",
+    "dirty_before_gate": false,
+    "dirty_state_note": "tree contains only the declared m3 work products (main.py rewrite, tests/test_strategy_m3.py, gate log, manifest, snapshot, metrics shard) plus the pre-existing untracked .tmp-corpus/; committed state is clean at git_ref b47bc16",
+    "work_products": [
+      "M workspace/software/exports/logs/iteration_gate_log.jsonl",
+      " M workspace/software/kaggle_simulations/agent/main.py",
+      "?? .tmp-corpus/",
+      "?? workspace/software/m3_frozen_candidate.b64",
+      "?? workspace/software/tests/test_strategy_m3.py"
+    ]
+  },
+  "frozen_snapshot": {
+    "path": "workspace/software/m3_frozen_candidate.b64",
+    "encoding": "base64",
+    "file_sha256": "7ac70b002c1fa472f5325347c0a5707780ca6708c82c6679555b389ebd180059",
+    "decoded_sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee",
+    "reason": "Preserve exact execution bytes across Git line-ending normalization"
+  },
+  "gate": {
+    "command": "python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m3-frozen --rounds 4 --require-complete",
+    "input_sha256": "f69f77b87ebc3fb49b93fca7bad959414f77b28b38d8f401bb3662beb415deb5",
+    "log": "workspace/software/exports/logs/iteration_gate_log.jsonl",
+    "formal_pass": true,
+    "complete": true,
+    "expected_games": 64,
+    "actual_games": 64,
+    "abnormal_games": 0,
+    "elapsed_seconds": 276.42,
+    "opponents": [
+      "cow_baron",
+      "melon_hoarder",
+      "expansionist",
+      "baseline_wheat",
+      "crop_rotator",
+      "template_wheat",
+      "self_feed_ranch",
+      "near_band_diversified"
+    ],
+    "seat_orders": [
+      "AB",
+      "BA"
+    ],
+    "seat_counts": {
+      "AB": 32,
+      "BA": 32
+    },
+    "seed_domain": "development",
+    "seeds": [
+      101,
+      102,
+      103,
+      104
+    ],
+    "candidate_record": {
+      "wins": 57,
+      "losses": 7,
+      "ties": 0
+    },
+    "per_opponent": {
+      "cow_baron": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0,
+        "win_rate": 1.0,
+        "avg_margin": 24293.0
+      },
+      "melon_hoarder": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0,
+        "win_rate": 1.0,
+        "avg_margin": 44330.6
+      },
+      "expansionist": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0,
+        "win_rate": 1.0,
+        "avg_margin": 63371.2
+      },
+      "baseline_wheat": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0,
+        "win_rate": 1.0,
+        "avg_margin": 71261.8
+      },
+      "crop_rotator": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0,
+        "win_rate": 1.0,
+        "avg_margin": 10216.8
+      },
+      "template_wheat": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0,
+        "win_rate": 1.0,
+        "avg_margin": 5195.0
+      },
+      "self_feed_ranch": {
+        "wins": 5,
+        "losses": 3,
+        "ties": 0,
+        "win_rate": 0.625,
+        "avg_margin": -397.6
+      },
+      "near_band_diversified": {
+        "wins": 4,
+        "losses": 4,
+        "ties": 0,
+        "win_rate": 0.5,
+        "avg_margin": 1648.1
+      }
+    }
+  },
+  "identity_verification": {
+    "source_sha_unchanged_during_gate": true,
+    "snapshot_sha_matched_source": true,
+    "post_gate_sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee",
+    "post_gate_git_ref": "b47bc16f426fbfeeab645e86a5b4453d45b5779a"
+  },
+  "test_evidence": {
+    "targeted_strategy_tests": {
+      "m3_file": "workspace/software/tests/test_strategy_m3.py",
+      "passed": 23,
+      "failed": 0
+    },
+    "m2b_preserved_tests": {
+      "m2_file": "workspace/software/tests/test_strategy_m2.py",
+      "passed": 26,
+      "failed": 0
+    },
+    "complete_software_tests": {
+      "passed": 269,
+      "failed": 0
+    },
+    "smoke_boot_pass": true,
+    "gate_contract_pass": true
+  },
+  "holdout": {
+    "revealed": false,
+    "run": false,
+    "candidate_changes_after_freeze_allowed": false
+  }
+}

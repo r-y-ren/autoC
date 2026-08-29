@@ -1,0 +1,28 @@
+{
+  "campaign": {
+    "competition_id": "kaggle-kaggriculture",
+    "blueprint_ref": "b47bc16"
+  },
+  "checklist": [
+    {
+      "id": "m3-strategy",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m3-strategy.log"
+    },
+    {
+      "id": "m3-dev-gate",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m3-dev-gate.log"
+    }
+  ],
+  "result": "pending_agent",
+  "generated_at": "2026-08-29T16:12:35",
+  "retry_state": {
+    "count": 0,
+    "max": 3,
+    "tripped": false
+  },
+  "scope": "scoped run（--only，范围外项未验；终验须全量重跑）"
+}

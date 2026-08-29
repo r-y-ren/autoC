@@ -1,4 +1,4 @@
-"""Kaggriculture submission agent -- "dairy engine" strategy (m2, v2).
+"""Kaggriculture submission agent -- "rotation ranch" strategy (m3, v3).
 
 Self-contained: standard library only, no imports from the local kgenv
 package, so the file uploads as-is to
@@ -7,46 +7,95 @@ and lives at /kaggle_simulations/agent/main.py (official kit convention).
 The last callable defined in this file is the entry point (that is how
 kaggle_environments picks the agent from a file).
 
-Failure-mode-driven redesign (evidence: exports/failure_modes.md, m1 wave 2):
+Online-feedback redesign (campaign III m3).  The m2b dairy engine won the
+legacy pool 31W-1L but dropped the m2 online-style pool (dev eval seed 101:
+template_wheat 0-2, self_feed_ranch 0-2, crop_rotator 1-1; evidence
+exports/eval_results.dev.json).  The m1 replay profiles of 60 official
+episodes (120 seat profiles, exports/replay_profiles/, captured 2026-08-29)
+pin four structural gaps, addressed as FM-O1..O4:
 
-  FM-1 (cow_baron's dairy out-earns the goose engine) -> the animal engine
-      is COWS, not geese.  Unit economics per structure tile (official
-      constants): a cared cow pays 3 milk / 2 days = 1.5/day vs a cared
-      goose's 2 eggs/day; at the observed gated milk prices (>=130, base
-      160) a cow earns 195-375/day vs a goose's ~100/day, on the same
-      feed (1 wheat/day) and the same daily labour slots.  The herd ramps
-      early (money-gated), is capped by feed capacity, and pastures hug
-      the shed ring in every unlocked quadrant so FEED/CARE walking stays
-      cheap.  Land purchases (NE/SW/SE) add ring pastures + wheat.
-  FM-2 (second melon wave locked out by an opponent's day-15 dump) ->
-      NO melon replant branch exists any more: mid-/late-season tile
-      allocation is exclusively wheat (feed for cows) because wheat sits
-      on a glut-tolerant log curve and cannot be strategically crashed,
-      while MELON has zero shop consumption and a quadratic glut curve.
-      Premium exposure lives in MILK, which three shop types + the town
-      center consume daily, sold through explicit gates (below).
-  FM-3 (capital-heavy opening) -> wheat goes in FIRST (day 0) so the
-      feed pipeline exists before animals scale; cow purchases are staged
-      by a money gate that always keeps a cash reserve for seeds/feed;
-      shed wheat shortfalls trigger bounded BUY_PRODUCT top-ups.
-  FM-4 (shared fertilizer decay) -> fertilizer is partly self-consumed
-      (fertilizing wheat at age 2 turns 4-unit tiles into 6-unit tiles,
-      i.e. converts a decaying commodity into feed capacity) and partly
-      sold through a price gate with a stock cap (hoard bounded so the
-      higher-value milk hoard keeps the shed's 100 slots).
+  FM-O1 (crop revenue share 21% vs top-20 median 54%) -> the field engine
+      is a PRICE-KEYED ROTATION over wheat/strawberry/melon/carrot.
+      Every non-wheat tile decision is gated by a live price floor
+      (CROP_FLOOR) and a calendar phase (CROP_PHASE) copied from the
+      ladder #1 "Crop Dusta" frame (26 consistent games: melon early /
+      strawberry days 0-14 / filler afterwards; each with a price trigger).
+      Wheat is no longer the whole field: it is the crash-proof FEED FLOOR
+      (log glut curve -- it cannot be strategically crashed) sized by
+      _wheat_cap, and everything the floor does not need goes to the
+      highest-priced rotation crop that passes its floor.  Wheat itself
+      joins the rotation as a money crop at 30+ (the rank-1 adaptive
+      ladder runs a 0.45-0.62 wheat share at 36-42+; measured: the
+      volume-farming archetypes monetize 400-520u/season).
+  FM-O2 (labour 4.07 hires/day vs top-20 median 9.4, leader 9.7-9.9;
+      herd all-cow vs the ladder's mixed ranches) -> labour plan ramps to
+      10 hands/day (top-20 100/101 games sit at 9.1-10.2; a flat crew
+      from day 1 measured BETTER than the rank-1's quadrant-scaled crew
+      because our rotation opening needs tending before quadrant two
+      exists), the herd becomes a SMALL MIXED RANCH with sheep primary
+      (6 sheep + 5 cows = 11 -- between Milan's 6c+6s and Crop Dusta's
+      7c+4s+1g; a 12-head plan measurably crowded out tending and the
+      day-8 cash floor), bought INTERLEAVED by relative deficit so cows
+      reach the day-8+ premium-milk window on time; the quadrant plan
+      buys the third quadrant (NE day 4+, SW day 7+ -- the leader's land
+      series; top-20 consensus 3 quadrants, 4th almost nobody) with the
+      purchase fund protected from herd buys while it is pending.
+  FM-O3 (feed autarky burned half the field on wheat the ladder buys
+      externally: top-20 feed purchases 414-2732u/season at avg 26-32) ->
+      wheat is a floor, not the field; the herd's gap is filled by
+      GUARDRAILED external buying (FEED_BUY_MAX_PRICE, starvation cap 85
+      preserved) and the m2 autarky bound on the herd target is released
+      (money gate + pace + HERD_CAP bound it instead).  The wheat surplus
+      sells from WHEAT_SELL_GATE with a cash-flow fallback -- the gate
+      must never starve the land/animal capex plan (measured: 42 wheat
+      hoarded at $516 while the NE purchase window lapsed).
+  FM-O4 (endgame gain +7.2% of final money vs top-20 median +13.0%) -> a
+      48h endgame window: from day 26 wool and from ENDGAME_DAY (28) every
+      other premium hoard dumps in per-turn tranches (banking at the
+      recovered price beats the day-29 joint liquidation floor), and
+      FEEDING STOPS for animals that can no longer repay their wheat
+      (unfed animals still produce their base unit; only the care bonus
+      needs feed -- measured engine rule), freeing both the wheat (sold)
+      and the labour (dump logistics).
 
-Selective-intervention sell gates (methodology transfer of
-arxiv-2608.15291: decide explicitly WHEN to hoard, WHEN to release and
-WHEN to defend the price, instead of dumping on a fixed schedule):
-see _market_gates() -- every rule is commented with its curve rationale.
+  RED LINE (dead-price curves, generalized from the m2b demand-drought
+  freeze): production never scales into a dead price.  Sheep buys freeze
+  when WOOL < 90, cow buys when MILK < 90 (the m2b rule), and each
+  rotation crop's planting freezes under its CROP_FLOOR.  The hoard side
+  of the same red line: wool follows its curve (sq glut, T=105 -- the
+  fastest crasher) and CUTS LOSSES at WOOL_CUT_LOSS once the curve turns
+  (no yarn-store draws), never riding a dead curve into the day-29 floor;
+  fertilizer sacks bid 70+ are SOLD rather than spent on wheat/carrot
+  boosts worth ~60-70 (only the ~200-230/unit strawberry/melon boosts
+  keep the sack -- the self-feed archetype sells 158u for +12.8k).
+
+m2b fixes preserved (tests/test_strategy_m2.py, 26 checks, must not
+regress):
+  FM-1 ring pastures / feed-pipeline-first  -> kept; herd composition is
+      new but pastures still hug the shed ring in every unlocked quadrant.
+  FM-2 glut-tolerance discipline -> melon/strawberry return UNDER price
+      floors + phase windows + small tranches; wheat stays the feed floor.
+  FM-3 capital staging -> wheat-first opening kept (day-0 wheat before any
+      animal), money-gated buys with cash reserves; rotation seeds are
+      additionally staged behind the pending land fund.
+  FM-4 fertilizer -> generalized: animal fertilizer self-consumes on the
+      premium rotation crops (strawberry before each production day,
+      melon at age 2; wheat/carrot only when the sack is cheap), bounded
+      hoard (FERT_STOCK_CAP), gated release.
+  Behavioural fixes kept verbatim: last day is liquidation-only (no
+      capex, carried goods returned and sold first, infeasible harvests
+      skipped); animal purchases confirmed by observed herd deltas
+      (_buy_pace/_note_buy_order, per-seat per-episode state); shed
+      inventory reserved across carriers; every quantity order positive;
+      dawn hire burst within hour <= 2.
+
+Selective-intervention sell gates (decide explicitly WHEN to hoard, WHEN
+to release, WHEN to defend -- see _market_gates; every rule commented with
+its official MARKET_PARAMS curve rationale).
 
 An OPTIONAL pluggable LLM consultant hook (LLM_PROVIDER, default None) is
-provided for local A/B experiments only. Per the competition rules
-(captured 2026-08-28): external models are permitted ("The use of external
-data and models is acceptable unless specifically prohibited by the Host")
-and modest LLM subscription costs pass the Reasonableness Standard. The
-hook is disabled by default and never blocks: any provider failure falls
-back to the heuristic gate.
+provided for local A/B experiments only (scripts/run_llm_ab.py); disabled
+by default, never blocks, falls back to the heuristic gate.
 """
 
 # --------------------------------------------------------------------------
@@ -70,38 +119,110 @@ BASE_PRICE = {"WHEAT": 25, "CARROT": 35, "TOMATO": 60, "STRAWBERRY": 120,
 MOVES = {"NORTH": (0, -1), "SOUTH": (0, 1), "EAST": (1, 0), "WEST": (-1, 0)}
 SEASON_DAYS = 30
 
-# ---- strategy knobs (all values trace to curve/economy analysis in the
-# module docstring; tuning changes are logged in the iteration gate log) ----
-HERD_CAP = 10            # labour-ceiling optimum (measured 8/10/12: +1152/+3580/+1852 vs cow_baron)
-COW_BUY_RESERVE = 380    # cash kept besides a cow purchase (seeds+feed+hires)
-COW_BUY_LAST_DAY = 20    # later cows never reach a production day in time
-PASTURE_RING = 2         # pastures within manhattan dist <= 2 of shed access
-WHEAT_FEED_RESERVE = 4   # days of feed kept in the shed before selling wheat
-WHEAT_BUY_MAX_PRICE = 65 # feed top-ups while wheat is not ruinous
+# ---- strategy knobs (every value carries its evidence in the comment;
+# tuning changes are logged in exports/logs/iteration_gate_log.jsonl) ----
+
+# FM-O2 labour: top-20 median 9.4 hires/day (282-295/season), leader 9.7-9.9
+# (Crop Dusta land/labour series); 24 turns/day per unit, fib cost per day.
+HANDS_RAMP = ((0, 5), (1, 6), (3, 8), (6, 9), (12, 10))
+HIRE_BURST = 5           # HIRE orders per dawn turn (burst, m2b fix)
+HIRE_HOUR_MAX = 2        # dawn window (m2b fix: burst must fit hour <= 2)
+
+# FM-O2 land: leader NE day 4+ / SW day 7+; top-20 3-quadrant consensus
+# (100/101 seats); the 4th quadrant is almost never bought (skip SE).
+# LAND_PLAN[quads_now] = (due_day, protected_fund); fund = price + reserve.
+LAND_PLAN = {1: (4, 1700), 2: (7, 2700)}
+LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
+
+# FM-O2 herd: sheep-primary mixed ranch.  The ladder's ~12-head plans
+# (Milan 6c+6s, template 8c+4s) are self-fed on 46-50% wheat fields; our
+# rotation fields spend their tiles/labour on premium crops, so the herd
+# holds at 10 (measured: 12 head crowded out tending and the day-8 cash
+# floor -- m3-i4/i5 gates).  Cows interleave in early so they reach the
+# day-8+ premium-milk window on time; goose dropped (egg log-curve pays
+# ~2.1k vs a cow's ~5k in the observed premium-milk meta).
+HERD_CAP = 11            # total herd ceiling; m2b tests pin _herd_target
+                         # to the constant, not a literal
+HERD_COMPOSITION = {"SHEEP": 6, "COW": 5, "GOOSE": 0}
+ANIMAL_BUY_LAST_DAY = {"SHEEP": 20, "COW": 20, "GOOSE": 24}
+COW_BUY_RESERVE = 380    # cash kept besides an animal purchase (m2b)
+ANIMAL_PACE = ((8, 3), (4, 2))   # head/day from day: 1 before day 4, 2 to 7, 3 after
+PASTURE_RING = 2         # structures within manhattan dist <= 2 of shed access
+
+# RED LINE dead-price freeze (generalized m2b demand-drought rule): no
+# species scale-up when ITS product curve is dead (milk-crash leader does
+# not expand cows -> applied per species/crop by glut shape).
+DEAD_PRICE_FLOOR = {"MILK": 90, "WOOL": 90, "EGG": 30}
+DEAD_PRICE_FROM_DAY = 10  # m2b gate: freezes apply once curves can be read
+
+# FM-O1 rotation: phase windows from the rank-1 frame (melon early /
+# strawberry 0-14 / late filler), price floors from the m2 online-pool
+# archetypes (crop_rotator min_price 55/150, carrot base 35 minus margin).
+FERT_VALUE_GATE = 70     # fert sack sold at 70+ beats a wheat/carrot boost
+                         # (~60-70/unit); strawberry/melon boosts (~200-230)
+                         # are always worth the sack (self_feed ledger: they
+                         # never fertilize and sold 158u for +12.8k)
+WHEAT_MONEY_GATE = 30   # wheat joins the rotation as a money crop at 30+
+WHEAT_MONEY_CAP_PER_QUAD = 3
+CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (0, 14), "CARROT": (15, 26)}
+CROP_FLOOR = {"MELON": 150, "STRAWBERRY": 55, "CARROT": 28}
+CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 5, "CARROT": 4}
+PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
+
+# FM-O3 feed: guardrailed external buying (profiles: avg buy price 26-32,
+# 414-2732u/season across top-20); 85 = starvation cap (dear wheat is still
+# cheaper than a lost animal -- m2b).
+FEED_BUY_MAX_PRICE = 36
+WHEAT_FEED_RESERVE = 8   # feed days kept before selling wheat (measured: a
+                         # 4-day buffer forced sell-at-33 / rebuy-at-37 churn)
+WHEAT_SELL_GATE = 26     # log glut curve; hold for a real bid, but never
+                         # starve capex (money-fallback below)
+
+# FM-4 fertilizer (m2b, generalized to rotation crops)
 FERT_GATE = 50           # fertilizer: hold below, release above
-FERT_STOCK_CAP = 6       # hoard bound: shed slots belong to milk first
-FERT_FIELD_RESERVE = 4   # keep some fertilizer for the wheat fields
+FERT_STOCK_CAP = 6       # hoard bound: shed slots belong to the products
+FERT_FIELD_RESERVE = 4   # keep some fertilizer for the fields
+
+# FM-O4 endgame 48h window (top-20 median endgame gain +13.0% of final)
+ENDGAME_DAY = 28         # dump tranches + stop feeding from here
+
+# premium sell gates / tranches (curve shapes: wool/melon sq, milk/straw
+# linear, wheat/egg log -- tranche size inversely follows crash speed)
+WOOL_GATE = 150
+WOOL_HOARD_FLOOR = 8
+WOOL_HOARD_CAP = 34
+WOOL_CUT_LOSS = 45      # curve dying (no yarn store drawn): realize fast
+STRAWBERRY_GATE = 105
+STRAWBERRY_HOARD_FLOOR = 8
+MELON_GATE = 180
+MELON_HOARD_FLOOR = 4
+CARROT_GATE = 28
+CARROT_HOARD_FLOOR = 6
+EGG_GATE = 40
+EGG_HOARD_FLOOR = 4
+
 LLM_PROVIDER = None      # optional consultant, default off; local A/B only
 
 # Module-level state keyed by player id (the framework may exec one copy of
 # this file for both seats in self-play validation episodes).  Tracks the
-# per-day cow purchase pace by confirming actual cow-count changes in the next
-# observation; orders themselves never consume pace.
+# per-day animal purchase pace by confirming actual herd-count changes in
+# the next observation; orders themselves never consume pace.
 _STATE = {}
 
 
 def _buy_pace(player, day, hour, herd_total):
-    """Return confirmed cow purchases for this day.
+    """Return confirmed animal purchases for this day.
 
     A BUY_ANIMAL order is only a request.  The market may reject it for lack
-    of cash or shed capacity, so pace is advanced only by a positive cow-count
-    delta observed on a later turn.  A backwards clock denotes a new episode.
+    of cash or shed capacity, so pace is advanced only by a positive
+    herd-count delta observed on a later turn.  A backwards clock denotes a
+    new episode.
     """
     st = _STATE.get(player)
     if st is None or st["day"] != day or hour <= st.get("hour", -1):
         _STATE[player] = {"day": day, "hour": hour,
-                           "last_herd": herd_total, "confirmed": 0,
-                           "pending": 0}
+                          "last_herd": herd_total, "confirmed": 0,
+                          "pending": 0}
         return 0
     delta = max(0, int(herd_total) - int(st.get("last_herd", herd_total)))
     if delta:
@@ -164,42 +285,72 @@ def _quadrant_shed_tile(x, y, board_size):
     return (qx, qy)
 
 
+def _quadrant_of(x, y, board_size):
+    half = board_size // 2
+    return ("N" if y < half else "S") + ("W" if x < half else "E")
+
+
 def _window(crop):
     cd = CROPS[crop]
     return (cd["max_yield_day"] + 1) // 2, cd["max_yield_day"]
 
 
+def _hire_cost(n_already_today):
+    """Engine fib schedule: 1, 1, 2, 3, 5, 8, ... for the (n+1)-th hire."""
+    a, b = 1, 1
+    for _ in range(max(0, n_already_today)):
+        a, b = b, a + b
+    return a
+
+
 def _wheat_cap(day, wheat_price=25):
-    """Field-size plan: the labour budget (farmer + <=5 hands, 24 turns)
-    sustains roughly herd*3.5 + wheat*1.2 unit-actions/day; planting every
-    unlocked tile starves FEED/CARE of walkers and cows escape (measured,
-    iteration log).  16 tiles fund the opening, 18 the full herd (18 fertilized
-tiles = 21.6 wheat/day vs 12 cows eating 12).
+    """Wheat FEED-FLOOR size (m2b base values, test-pinned at 25/40): 16
+    tiles fund the opening, 18 the full herd (18 fertilized tiles =
+    21.6 wheat/day vs 10 animals eating 10).  Dear-wheat bands follow the
+    rank-1 adaptive share (crop_rotator ladder 0.32/0.45/0.62 of a 3-quad
+    field at 30/36/42 coins -- measured seed-102 economy: five wheat shops,
+    wheat 33-45 all season, log curve = no crash risk): at 42+ wheat IS
+    the money crop.  With FM-O3 the floor never has to cover the whole
+    field: rotation crops take the remaining tiles.
     """
     cap = 16 if day <= 2 else 18
-    if day > 2 and wheat_price >= 35:
+    if day > 2 and wheat_price >= 42:
+        cap += 12
+    elif day > 2 and wheat_price >= 35:
         cap += 4          # dear wheat: farm more of it (feed margin + cash)
-    return min(cap, 24)
+    return min(cap, 30)
 
 
 def _herd_target(day, feed_capacity):
-    """Cow-count plan: ramp early, cap by feed capacity and labour.
-
-    4 + day grows the plan one head per day (money gate paces the real
-    purchases); feed_capacity = wheat tiles x 1.2 (fertilized wheat yields
-    6 units / 5-day cycle) bounds it so feeding never outruns the fields.
+    """Total-animal plan (m2b formula, test-pinned): ramp early, cap by
+    HERD_CAP and by feed capacity.  In m3 the autarky feed bound is
+    normally slack (FM-O3 guardrailed external feed covers the gap), so
+    the money gate + daily pace + composition do the real limiting.
     """
     return min(HERD_CAP, 4 + day, max(4, feed_capacity))
 
 
-def _hands_target(day, herd, wheat_tiles):
-    """Labour plan: farmer + hands; each cow costs ~3.5 unit-actions/day
-    (FEED+CARE+COLLECT+harvest/2), each wheat tile ~1.2; 24 turns/day per
-    unit; movement overhead ~35%."""
-    load = herd * 3.5 + wheat_tiles * 1.2
-    if day == 0:
-        return 2
-    return max(2, min(5, int(load / 13) + 1))
+def _hands_target(day, herd, wheat_tiles, quads=3):
+    """Labour plan (FM-O2): top-20 median 9.4 hires/day, leader 9.7-9.9
+    (Crop Dusta labour series; our m2 engine ran 4.07 and lost the labour
+    race -- fields went untended and weeded at 5 units).  Flat ramp to 10
+    by day 12.  (A quadrant-scaled plan was measured WORSE: our rotation
+    opening needs the full crew before the second quadrant exists.)
+    """
+    target = 2
+    for from_day, hands in HANDS_RAMP:
+        if day >= from_day:
+            target = hands
+    return max(2, min(target, 10))
+
+
+def _animal_pace(day):
+    """Confirmed-purchase pace: 1/day through the capital-heavy opening,
+    2/day while the herds ramp, 3/day later (m2b shape)."""
+    for from_day, pace in ANIMAL_PACE:
+        if day >= from_day:
+            return pace
+    return 1
 
 
 def _milk_gate(day):
@@ -208,12 +359,10 @@ def _milk_gate(day):
     Base 105: in a joint-dairy market (both players milking ~20+/day vs
     town consumption of ~5/day, measured mirror prices 97-135) holding for
     higher bands just deferred sales into eventual pressure dumps (measured
-    realized ~60/unit).  Clearing daily at >= 105 dominates: our engine
-    out-produces cow_baron +22..32k solo, and the only way that edge
-    survives the shared milk curve is never dumping below the band.
-    Decay late-season: the day-29 liquidation floor is coming for everyone,
-    so clearing inventory at a lower-but-positive gate beats holding into
-    the joint dump.
+    realized ~60/unit).  Clearing daily at >= 105 dominates.  Decay
+    late-season: the day-29 liquidation floor is coming for everyone, so
+    clearing inventory at a lower-but-positive gate beats holding into the
+    joint dump.
     """
     if day >= 28:
         return 80
@@ -247,34 +396,187 @@ def _llm_sell_gate(item, price, base_gate, context):
     return base_gate
 
 
+def _field_alloc(farm, day, prices):
+    """Deterministic structure + rotation plan (FM-O1/FM-O2).
+
+    Structures: pastures (and one coop) on the manhattan ring
+    (dist <= PASTURE_RING) around the shed-access tile of every unlocked
+    quadrant, built at most 2 ahead of the herd plan (m2b FM-1).
+
+    Field: money crops claim the empties nearest the shed while their
+    (phase, price floor, cap) gates are open -- each gate is the red-line
+    freeze for that crop; wheat fills the rest up to the _wheat_cap feed
+    floor; surplus tiles stay fallow (labour is the binding resource).
+
+    Returns (builds, crop_map, n_animals, wheat_capacity) where
+      builds: {(x, y): "PASTURE"|"COOP"} to build,
+      crop_map: {crop: set(positions)} planned tiles (alive + to-plant),
+      n_animals: animals currently placed,
+      wheat_capacity: wheat tiles * 1.2 (fertilized units/day).
+    """
+    tiles = _get(farm, "tiles", [])
+    board = len(tiles)
+    quads = _get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]
+
+    existing = {crop: set() for crop in CROPS}
+    n_animals = 0
+    n_pasture = 0
+    n_coop = 0
+    empty_ring, empty_field = [], []
+    for y, row in enumerate(tiles):
+        for x, tile in enumerate(row):
+            if tile == "LOCKED":
+                continue
+            pos = (x, y)
+            if tile is None:
+                if _quadrant_of(x, y, board) in quads and \
+                        any(_dist(x, y, qx, qy) <= PASTURE_RING
+                            for qx, qy in _shed_access(board)) and \
+                        not _shed_adjacent(x, y, board):
+                    empty_ring.append(pos)
+                elif _quadrant_of(x, y, board) in quads:
+                    empty_field.append(pos)
+                continue
+            if not isinstance(tile, dict):
+                continue
+            kind = _get(tile, "kind", "")
+            if kind == "WEED":
+                continue
+            if kind == "PASTURE":
+                n_pasture += 1
+                if "animal" in tile:
+                    n_animals += 1
+                continue
+            if kind == "COOP":
+                n_coop += 1
+                if "animal" in tile:
+                    n_animals += 1
+                continue
+            if kind == "PLANT":
+                crop = _get(tile, "crop", "WHEAT")
+                if crop in existing:
+                    existing[crop].add(pos)
+
+    empty_ring.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
+    builds = {}
+    field_extra = []
+    herd_t = _herd_target(day, 99)
+    pasture_want = min(HERD_CAP + 1, herd_t + 2)
+    for pos in empty_ring:
+        if n_coop < min(HERD_COMPOSITION["GOOSE"], herd_t) and \
+                n_coop + n_pasture < pasture_want + 1:
+            builds[pos] = "COOP"
+            n_coop += 1
+        elif n_pasture < pasture_want:
+            builds[pos] = "PASTURE"
+            n_pasture += 1
+        else:
+            field_extra.append(pos)
+
+    empties = field_extra + empty_field
+    empties.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
+    crop_map = {crop: set(existing[crop]) for crop in CROPS}
+    for crop in ("STRAWBERRY", "MELON", "CARROT"):
+        lo, hi = CROP_PHASE[crop]
+        if not (lo <= day <= hi):
+            continue
+        if _get(prices, crop, BASE_PRICE[crop]) < CROP_FLOOR[crop]:
+            continue  # red line: dead-price freeze for this crop
+        room = CROP_CAP_PER_QUAD[crop] * len(quads) - len(crop_map[crop])
+        taken = 0
+        for pos in empties:
+            if taken >= room:
+                break
+            crop_map[crop].add(pos)
+            taken += 1
+        empties = empties[taken:]
+    wheat_room = _wheat_cap(day, _get(prices, "WHEAT", 25)) - len(crop_map["WHEAT"])
+    if _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
+        # log-curve wheat as a rotation money crop (rank-1 adaptive share:
+        # 0.45-0.62 of the field when wheat trades 36-42+); the extra tiles
+        # also soften the wheat price against volume-farming opponents
+        wheat_room += WHEAT_MONEY_CAP_PER_QUAD * len(quads)
+    taken = 0
+    for pos in empties:
+        if taken >= wheat_room:
+            break
+        crop_map["WHEAT"].add(pos)
+        taken += 1
+
+    capacity = int(len(crop_map["WHEAT"]) * 1.2)
+    return builds, crop_map, n_animals, capacity
+
+
+def _count_crops(farm):
+    """Alive PLANT tiles per crop (for seed deficits)."""
+    counts = {crop: 0 for crop in CROPS}
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if isinstance(tile, dict) and _get(tile, "kind", "") == "PLANT":
+                crop = _get(tile, "crop", "")
+                if crop in counts:
+                    counts[crop] += 1
+    return counts
+
+
+def _species_counts(farm, private, herd_total):
+    """Placed + shed + carried animals per species.  Herd totals handed in
+    by abstract callers that carry no observable composition are attributed
+    to the primary species (sheep) -- real observations never need this.
+    """
+    counts = {"COW": 0, "SHEEP": 0, "GOOSE": 0}
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if isinstance(tile, dict) and "animal" in tile:
+                animal = _get(tile, "animal", "")
+                if animal in counts:
+                    counts[animal] += 1
+    shed = _get(private, "shed", {}) or {}
+    for animal in counts:
+        counts[animal] += _get(shed, animal, 0)
+        for inv in (_get(private, "inventories", []) or []):
+            if inv:
+                counts[animal] += _get(inv, animal, 0)
+    extra = int(herd_total) - sum(counts.values())
+    if extra > 0:
+        counts["SHEEP"] += extra
+    return counts
+
+
 def _market_gates(day, prices, shed, herd):
     """Selective-intervention sell decisions: what to SELL this turn, with
     the hoard / release / defend rule per item made explicit.
 
-    Curve rationale (official MARKET_PARAMS, kaggriculture.py):
-      * MILK base 160: above-target glut is LINEAR (~2.1 coins lost per
-        unit dumped above I0) and three shop types + the town center
-        consume milk daily -> holding is safe, dumping is punished
-        moderately, and price recovers through town consumption.
-          - HOARD while price < gate (_milk_gate by day; LLM may advise).
-          - RELEASE in bounded tranches at/above the gate; tranche size is
-            elastic to observed scarcity (deep scarcity -> bigger tranche).
-          - DEFEND: in the band [gate, gate+12) our own dump is what would
-            break the gate, so the tranche is halved there.
-          - shed-pressure override: at >= 80 shed items the 100-slot
-            discard cliff dominates any price consideration (gate -> 20).
-      * FERTILIZER base 100: NO town consumption and a linear glut both
-        sides (0.2 coins/unit) -> the joint daily dump decays it all
-        season (measured 94 -> 41 vs cow_baron).
-          - HOARD below FERT_GATE but only up to FERT_STOCK_CAP slots
-            (the milk hoard owns the shed); RELEASE all above the gate;
-            from day 25 RELEASE unconditionally (decay beats waiting).
-      * WHEAT base 25: log above-curve (glut-tolerant) -> no gating beyond
-        the feed reserve; sell the daily surplus.
+    Curve rationale (official MARKET_PARAMS):
+      * MILK base 160, LINEAR glut (T=122): hoard below _milk_gate, clear
+        through at the band, big tranche at peaks, halve inside the band,
+        drain before the 100-slot discard cliff (m2b logic, kept verbatim).
+      * WOOL base 200, SQ glut (T=105: ~56 units above equilibrium reach
+        the $1 floor -- the fastest crasher): realize in size at real bids
+        (12 at 200+, 8 at the gate, 6 at 100+), CUT LOSSES down to a small
+        buffer at WOOL_CUT_LOSS once the curve is dying (measured: yarn-
+        store draws decide the whole wool market), dump tranches from
+        day 26 (FM-O4).
+      * STRAWBERRY base 120, LINEAR glut (T=100): gate 105, tranche 8,
+        bounded hoard, endgame dump (the near-band premium: their held
+        medians 221-250 come from hoarding, not from dumping daily).
+      * MELON base 250, SQ glut (T=300): gate 180, tranche 8 -- realize
+        BEFORE the volume farmers' 100+ unit flow floors the curve (the
+        m1 engine's melon branch died holding for 250; cap stays 9 tiles
+        because a 12-tile plan measurably crashed our own price).
+      * CARROT base 35, SQRT glut (T=450, hinge below -- town spikes it
+        when scarce): gate 28, generous tranche 15.
+      * EGG base 50, LOG glut (crash-tolerant like wheat): gate 40,
+        tranche 10.
+      * FERTILIZER base 100, linear both sides, no town consumption (m2b):
+        bounded hoard, gated release, unconditional from day 25.
+      * WHEAT base 25, LOG glut: sell the surplus above the feed reserve
+        from WHEAT_SELL_GATE (a real bid, not the floor).
     Returns a list of ["SELL", item, qty] market orders.
     """
     orders = []
     last_day = day >= SEASON_DAYS - 1
+    endgame = day >= ENDGAME_DAY
     shed_count = sum(v for v in shed.values() if isinstance(v, (int, float)))
 
     if last_day:
@@ -285,41 +587,76 @@ def _market_gates(day, prices, shed, herd):
                 orders.append(["SELL", item, n])
         return orders
 
-    # ---- MILK: hoard / release / defend --------------------------------
+    # ---- MILK: hoard / release / defend (m2b, verbatim) ------------------
     milk = shed.get("MILK", 0)
     if milk > 0:
         gate = _llm_sell_gate("MILK", prices.get("MILK", BASE_PRICE["MILK"]),
                               _milk_gate(day), {"day": day, "shed": milk,
                                                 "herd": herd})
         p = prices.get("MILK", BASE_PRICE["MILK"])
-        # milk lands in the shed in lumpy every-other-day harvests, so the
-        # buffer scales with tomorrow's production (herd * 1.5) and the
-        # tranche cap grows with stock -- never let lumpiness turn into a
-        # pressure dump at the floor
         if shed_count >= 70 and p >= 30:
-            # discard-cliff guard: drain to a working buffer rather than
-            # let the 100-slot shed discard milk for free
             sell = max(0, milk - 15)
             if sell > 0:
                 orders.append(["SELL", "MILK", sell])
         elif p >= 145:
-            # recovery peak / early scarcity (d8-11 measured 172-186):
-            # the first batches must clear NOW, in size
             orders.append(["SELL", "MILK", min(milk, 24)])
         elif p >= gate:
-            # sell-through, no buffer: yesterday's production clears every
-            # day at the band price; the lumpy every-other-day harvests
-            # ride the same band two days out of two
             orders.append(["SELL", "MILK", min(milk, 20)])
 
-    # ---- FERTILIZER: bounded hoard, gated release ----------------------
+    # ---- WOOL: sq glut (T=105) -- follow the curve, never ride it down ---
+    # Sheep flow (ours + the opponent's, 9-12 head across the pool) exceeds
+    # base town consumption in most draws: wool either stays scarce (yarn
+    # stores drawn -- observed 240+ all season) or floors (+56 units above
+    # equilibrium is already $5).  So: realize in size at real bids, cut the
+    # hoard fast once the curve turns (WOOL_CUT_LOSS), dump in the endgame
+    # window -- never ride a dead curve into the day-29 joint floor.
+    wool = shed.get("WOOL", 0)
+    if isinstance(wool, (int, float)) and wool > 0:
+        p = prices.get("WOOL", BASE_PRICE["WOOL"])
+        if endgame or day >= 26:
+            orders.append(["SELL", "WOOL", min(wool, 12)])
+        elif shed_count >= 78 and p >= 5:
+            orders.append(["SELL", "WOOL", max(0, wool - 10)])
+        elif wool > WOOL_HOARD_FLOOR:
+            if p >= 200:
+                orders.append(["SELL", "WOOL", min(wool - WOOL_HOARD_FLOOR, 12)])
+            elif p >= WOOL_GATE:
+                orders.append(["SELL", "WOOL", min(wool - WOOL_HOARD_FLOOR, 8)])
+            elif p >= 100:
+                orders.append(["SELL", "WOOL", min(wool - WOOL_HOARD_FLOOR, 6)])
+            elif p >= WOOL_CUT_LOSS and (day >= 18 or wool > WOOL_HOARD_CAP):
+                orders.append(["SELL", "WOOL", min(wool - 4, 8)])
+
+    # ---- premium rotation/herd goods: gated tranches + hoard bounds ------
+    def premium(item, gate, tranche, hoard_floor, hoard_cap, low_gate,
+                endgame_tranche):
+        held = shed.get(item, 0)
+        if not isinstance(held, (int, float)) or held <= hoard_floor:
+            return
+        p = prices.get(item, BASE_PRICE[item])
+        if endgame:
+            orders.append(["SELL", item, min(held, endgame_tranche)])
+        elif shed_count >= 78 and p >= 5:
+            # discard-cliff guard shared with milk
+            orders.append(["SELL", item, max(0, held - 10)])
+        elif p >= gate + 30:
+            orders.append(["SELL", item, min(held - hoard_floor, tranche * 2)])
+        elif p >= gate:
+            orders.append(["SELL", item, min(held - hoard_floor, tranche)])
+        elif held > hoard_cap and p >= low_gate:
+            orders.append(["SELL", item, min(held - hoard_cap, tranche)])
+
+    premium("STRAWBERRY", STRAWBERRY_GATE, 8, STRAWBERRY_HOARD_FLOOR, 26, 70, 12)
+    premium("MELON", MELON_GATE, 8, MELON_HOARD_FLOOR, 14, 120, 8)
+    premium("CARROT", CARROT_GATE, 15, CARROT_HOARD_FLOOR, 30, 22, 20)
+    premium("EGG", EGG_GATE, 10, EGG_HOARD_FLOOR, 16, 30, 12)
+
+    # ---- FERTILIZER: bounded hoard, gated release (m2b) ------------------
     fert = shed.get("FERTILIZER", 0)
     if fert > 0:
         if day >= 25:
             orders.append(["SELL", "FERTILIZER", fert])
         elif fert > FERT_STOCK_CAP:
-            # hoard bound: keep the shed's slots for milk (measured: a 36
-            # hoard forces milk pressure-dumps in the dairy mirror)
             orders.append(["SELL", "FERTILIZER", max(0, fert - FERT_FIELD_RESERVE)])
         elif prices.get("FERTILIZER", BASE_PRICE["FERTILIZER"]) >= FERT_GATE:
             sell = max(0, fert - FERT_FIELD_RESERVE)
@@ -328,91 +665,24 @@ def _market_gates(day, prices, shed, herd):
     return orders
 
 
-def _plan_tiles(farm, day, wheat_price=25):
-    """Deterministic tile allocation.
-
-    Pastures: the manhattan ring (dist <= PASTURE_RING) around the shed
-    access tile of every unlocked quadrant, capped at HERD_CAP + 2 built
-    ahead.  Everything else is wheat (FM-2: no premium-crop branch
-    mid-season; wheat is crash-proof feed).
-
-    Returns (pasture_set, wheat_set, n_animals, wheat_capacity).
-    """
-    tiles = _get(farm, "tiles", [])
-    board = len(tiles)
-    quads = _get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]
-
-    pasture_set, wheat_set = set(), set()
-    empty_ring, empty_field = [], []
-    n_animals = 0
-    n_pastures = 0
-    n_wheat = 0
-    for y, row in enumerate(tiles):
-        for x, tile in enumerate(row):
-            if tile == "LOCKED":
-                continue
-            pos = (x, y)
-            if tile is None:
-                if any(_dist(x, y, *q) <= PASTURE_RING for q in _shed_access(board)
-                       if _quadrant_of(x, y, board) in quads) \
-                        and not _shed_adjacent(x, y, board):
-                    empty_ring.append(pos)
-                else:
-                    empty_field.append(pos)
-                continue
-            if not isinstance(tile, dict):
-                continue
-            kind = _get(tile, "kind", "")
-            if kind == "WEED":
-                continue
-            if kind == "PASTURE":
-                n_pastures += 1
-                pasture_set.add(pos)
-                if "animal" in tile:
-                    n_animals += 1
-            elif kind == "PLANT":
-                wheat_set.add(pos)
-                n_wheat += 1
-
-    # grow the ring toward the herd plan (build-ahead of at most 2)
-    ring_target = min(HERD_CAP + 2, n_pastures + 2, _herd_target(day, 99) + 2)
-    empty_ring.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
-    for pos in empty_ring:
-        if n_pastures < ring_target:
-            pasture_set.add(pos)
-            n_pastures += 1
-        else:
-            wheat_set.add(pos)
-    # field tiles: nearest-first, capped by the labour budget (see _wheat_cap)
-    empty_field.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
-    wheat_room = _wheat_cap(day, wheat_price) - len(wheat_set)
-    for pos in empty_field:
-        if wheat_room > 0:
-            wheat_set.add(pos)
-            wheat_room -= 1
-
-    # fertilized wheat yields 6 units per 5-day cycle => 1.2 units/day/tile
-    capacity = int(len(wheat_set) * 1.2)
-    return pasture_set, wheat_set, n_animals, capacity
-
-
-def _quadrant_of(x, y, board_size):
-    half = board_size // 2
-    return ("N" if y < half else "S") + ("W" if x < half else "E")
-
-
 def _build_tasks(obs, farm, private, day):
     """Return (tasks, animals_to_feed, herd_total, wheat_tiles, capacity)."""
     tiles = _get(farm, "tiles", [])
     board = len(tiles)
-    wheat_px = _get(_get(obs, "market", {}) or {}, "prices", {}).get("WHEAT", 25)
-    pasture_set, wheat_set, n_animals, capacity = _plan_tiles(farm, day, wheat_px)
+    prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
+    builds, crop_map, n_animals, capacity = _field_alloc(farm, day, prices)
     seeds = _get(private, "seeds", {}) or {}
     shed = _get(private, "shed", {}) or {}
     inventories = _get(private, "inventories", []) or []
     wheat_on_units = sum(_get(inv, "WHEAT", 0) for inv in inventories if inv)
-    cows_on_units = sum(_get(inv, "COW", 0) for inv in inventories if inv)
-    fert_on_units = sum(_get(inv, "FERTILIZER", 0) for inv in inventories if inv)
+    species_on_units = {"COW": 0, "SHEEP": 0, "GOOSE": 0}
+    fert_on_units = 0
+    for inv in inventories:
+        if not inv:
+            continue
+        for animal in species_on_units:
+            species_on_units[animal] += _get(inv, animal, 0)
+        fert_on_units += _get(inv, "FERTILIZER", 0)
     animals_to_feed = 0
 
     tasks = []
@@ -422,6 +692,7 @@ def _build_tasks(obs, farm, private, day):
                       "need": need, "units": units})
 
     last_day = day >= SEASON_DAYS - 1
+    stop_feed = day >= ENDGAME_DAY        # FM-O4: doomsday stop-feeding
     if last_day:
         hour = _get(obs, "hour", 0)
         positions = [tuple(_get(farm, "farmer", [board // 2 - 1, board // 2 - 1]))]
@@ -454,8 +725,14 @@ def _build_tasks(obs, farm, private, day):
                     add(110, x, y, ["HARVEST"], ("harvest", x, y),
                         units=eligible)
 
-        herd_total = n_animals + shed.get("COW", 0) + cows_on_units
-        return tasks, 0, herd_total, len(wheat_set), capacity
+        herd_total = n_animals + sum(_get(shed, a, 0) for a in ANIMALS) \
+            + sum(species_on_units.values())
+        return tasks, 0, herd_total, len(crop_map["WHEAT"]), capacity
+
+    # species still waiting in the shed (place tasks need carriers)
+    placeable = {"SHEEP": _get(shed, "SHEEP", 0) + species_on_units["SHEEP"],
+                 "COW": _get(shed, "COW", 0) + species_on_units["COW"],
+                 "GOOSE": _get(shed, "GOOSE", 0) + species_on_units["GOOSE"]}
 
     for y, row in enumerate(tiles):
         for x, tile in enumerate(row):
@@ -463,25 +740,33 @@ def _build_tasks(obs, farm, private, day):
                 continue
             pos = (x, y)
             if tile is None:
-                if pos in pasture_set:
-                    add(46, x, y, ["BUILD_PASTURE"], ("bpast", x, y))
-                elif pos in wheat_set and seeds.get("WHEAT", 0) > 0 \
-                        and day <= SEASON_DAYS - 6:
-                    add(30, x, y, ["PLANT", "WHEAT"], ("plant", x, y))
+                if pos in builds:
+                    op = "BUILD_COOP" if builds[pos] == "COOP" else "BUILD_PASTURE"
+                    add(46, x, y, [op], ("build", x, y))
+                    continue
+                crop = None
+                for c, positions in crop_map.items():
+                    if pos in positions:
+                        crop = c
+                        break
+                if crop is not None and seeds.get(crop, 0) > 0 \
+                        and day <= PLANT_LAST_DAY.get(crop, 24):
+                    add(30 if crop == "WHEAT" else 32, x, y,
+                        ["PLANT", crop], ("plant", x, y))
                 continue
             if not isinstance(tile, dict):
                 continue
             kind = _get(tile, "kind", "")
             if kind == "WEED":
-                if pos in pasture_set or pos in wheat_set:
+                if pos in builds or any(pos in s for s in crop_map.values()):
                     add(22, x, y, ["DIG"], ("dig", x, y))
                 continue
             if kind == "PLANT":
-                # wheat only in this engine; handle any crop defensively
                 crop = _get(tile, "crop", "WHEAT")
                 cd = CROPS.get(crop)
                 if not cd:
                     continue
+                planned = pos in crop_map.get(crop, ())
                 age = day - _get(tile, "planted_day", day)
                 yu = _get(tile, "yield_units", 0)
                 ws, we = _window(crop)
@@ -489,18 +774,32 @@ def _build_tasks(obs, farm, private, day):
                 if not _get(tile, "watered_today", False):
                     if _get(tile, "consecutive_unwatered", 0) >= 1:
                         add(98, x, y, ["WATER"], ("water", x, y))   # dies tonight
-                    elif in_window and pos in wheat_set:
+                    elif planned and cd["ongoing"]:
+                        # ongoing crops: watering doubles fertilized output
+                        # and keeps the 2-day survival streak clear
+                        add(40, x, y, ["WATER"], ("water", x, y))
+                    elif in_window and planned:
                         add(42, x, y, ["WATER"], ("water", x, y))
                     elif age % 2 == 1:
                         add(24, x, y, ["WATER"], ("water", x, y))   # survival
-                # FM-4: fertilizer -> 6-unit wheat instead of 4-unit.
-                # Fertilize at age 2 so the +2 window waters (ages 2-4)
-                # all land inside the 3-day fertilizer window.
-                if crop == "WHEAT" and age == 2 and pos in wheat_set \
-                        and _get(tile, "fertilized_until_day", -1) < day:
-                    add(34, x, y, ["FERTILIZE"], ("fert", x, y), need="FERTILIZER")
+                # FM-4 generalized: animal fertilizer feeds the rotation.
+                # One-time crops at age 2 (the +2 window then lands inside
+                # the 3-day fertilizer window); strawberry refreshed
+                # whenever the 3-day window lapses (each production day
+                # pays +2 instead of +1 while watered).
+                if planned and _get(tile, "fertilized_until_day", -1) < day:
+                    if cd["ongoing"] or age == 2:
+                        premium_boost = crop in ("STRAWBERRY", "MELON")
+                        fert_dear = _get(prices, "FERTILIZER",
+                                         BASE_PRICE["FERTILIZER"]) >= FERT_VALUE_GATE
+                        if premium_boost or not fert_dear:
+                            add(36 if cd["ongoing"] else 34, x, y, ["FERTILIZE"],
+                                ("fert", x, y), need="FERTILIZER")
                 if yu > 0:
-                    if age >= cd["max_yield_day"] + 1 or last_day:
+                    if cd["ongoing"]:
+                        if yu >= 3:
+                            add(70, x, y, ["HARVEST"], ("harvest", x, y))
+                    elif age >= cd["max_yield_day"] + 1 or last_day:
                         # rot emergency: one-time crops decay to a weed from
                         # hour 0 of this day, ~1 unit per 2 turns
                         add(95, x, y, ["HARVEST"], ("harvest", x, y))
@@ -509,36 +808,47 @@ def _build_tasks(obs, farm, private, day):
                             _get(obs, "hour", 0) >= 18):
                         add(80, x, y, ["HARVEST"], ("harvest", x, y))
             elif "animal" in tile:
-                if not _get(tile, "fed_today", False):
-                    animals_to_feed += 1
-                    # escape risk outranks everything: escalate by streak/hour
-                    if _get(tile, "consecutive_unfed", 0) >= 1 or \
-                            _get(obs, "hour", 0) >= 16:
-                        w = 100
-                    else:
-                        w = 88
-                    add(w, x, y, ["FEED"], ("feed", x, y), need="WHEAT")
-                if day <= SEASON_DAYS - 3 and not _get(tile, "cared_today", False) \
-                        and _get(tile, "fed_today", False):
-                    add(56, x, y, ["CARE"], ("care", x, y))
+                if not stop_feed:
+                    if not _get(tile, "fed_today", False):
+                        animals_to_feed += 1
+                        # escape risk outranks everything: escalate by streak/hour
+                        if _get(tile, "consecutive_unfed", 0) >= 1 or \
+                                _get(obs, "hour", 0) >= 16:
+                            w = 100
+                        else:
+                            w = 88
+                        add(w, x, y, ["FEED"], ("feed", x, y), need="WHEAT")
+                    if day <= SEASON_DAYS - 3 and not _get(tile, "cared_today", False) \
+                            and _get(tile, "fed_today", False):
+                        add(56, x, y, ["CARE"], ("care", x, y))
                 yu = _get(tile, "yield_units", 0)
                 if yu >= 5:
                     add(92, x, y, ["HARVEST"], ("harvest", x, y))   # about to cap
-                elif yu >= 3 or (yu > 0 and last_day):
+                elif yu >= 3 or (yu > 0 and (last_day or stop_feed)):
                     add(70, x, y, ["HARVEST"], ("harvest", x, y))
                 if _get(tile, "fertilizer_available", False):
-                    add(32, x, y, ["COLLECT_FERTILIZER"], ("cfert", x, y))
-            elif kind == "PASTURE" and "animal" not in tile:
-                if shed.get("COW", 0) + cows_on_units > 0                         and _get(obs, "hour", 0) <= 18:
-                    # urgent: an unplaced cow produces nothing and squats
+                    add(44, x, y, ["COLLECT_FERTILIZER"], ("cfert", x, y))
+            elif kind in ("PASTURE", "COOP") and "animal" not in tile:
+                animal = None
+                if kind == "COOP" and placeable["GOOSE"] > 0:
+                    animal = "GOOSE"
+                elif kind == "PASTURE":
+                    for candidate in ("SHEEP", "COW"):
+                        if placeable[candidate] > 0:
+                            animal = candidate
+                            break
+                if animal is not None and _get(obs, "hour", 0) <= 18:
+                    # urgent: an unplaced animal produces nothing and squats
                     # in the shed (a 100-slot shared resource)
-                    add(82, x, y, ["PLACE", "COW"], ("place", x, y), need="COW")
+                    placeable[animal] -= 1
+                    add(82, x, y, ["PLACE", animal], ("place", x, y),
+                        need=animal)
 
     board_half = board // 2
     shed_tile = (board_half - 1, board_half - 1)
     shed_available = {item: max(0, int(n)) for item, n in shed.items()}
     # ---- feed logistics: distribute the wheat across several carriers ----
-    # (one carrier cannot FEED a 10+-cow ring within 24 turns; chunks of 5
+    # (one carrier cannot FEED a 10-animal ring within 24 turns; chunks of 5
     # are grabbed by different units because a loaded carrier is barred
     # from picking up another chunk -- see executable() below.  Chunks are
     # raised whenever carried wheat falls short of the mouths, so multiple
@@ -555,22 +865,25 @@ def _build_tasks(obs, farm, private, day):
             shortfall -= n
             shed_available["WHEAT"] -= n
             i += 1
-    # ---- cow logistics: carry bought cows onto empty pastures ----------
-    if shed_available.get("COW", 0) > 0 and cows_on_units < 2 and \
-            any(t["key"][0] == "place" for t in tasks):
-        n = min(2, shed_available["COW"])
-        add(94, shed_tile[0], shed_tile[1], ["PICKUP", "COW", n],
-            ("pickup_c", 0))
-        shed_available["COW"] -= n
-    # ---- fertilizer logistics for the age-2 wheat fertilize tasks -------
+    # ---- animal logistics: carry bought animals onto empty structures ----
+    for animal in ("SHEEP", "COW", "GOOSE"):
+        if shed_available.get(animal, 0) > 0 and species_on_units[animal] < 2 \
+                and any(t["key"][0] == "place" and t["act"][1] == animal
+                        for t in tasks):
+            n = min(2, shed_available[animal])
+            add(94, shed_tile[0], shed_tile[1], ["PICKUP", animal, n],
+                ("pickup_a", animal))
+            shed_available[animal] -= n
+    # ---- fertilizer logistics for the rotation's fertilize tasks --------
     if any(t["key"][0] == "fert" for t in tasks) and \
-            shed_available.get("FERTILIZER", 0) > 0 and fert_on_units == 0:
-        n = min(3, shed_available["FERTILIZER"])
+            shed_available.get("FERTILIZER", 0) > 0 and fert_on_units < 3:
+        n = min(4, shed_available["FERTILIZER"])
         add(40, shed_tile[0], shed_tile[1], ["PICKUP", "FERTILIZER", n],
             ("pickup_f", 0))
         shed_available["FERTILIZER"] -= n
-    herd_total = n_animals + shed.get("COW", 0) + cows_on_units
-    return tasks, animals_to_feed, herd_total, len(wheat_set), capacity
+    herd_total = n_animals + sum(_get(shed, a, 0) for a in ANIMALS) \
+        + sum(species_on_units.values())
+    return tasks, animals_to_feed, herd_total, len(crop_map["WHEAT"]), capacity
 
 
 def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
@@ -581,52 +894,96 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
     quads = len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"])
     shed_count = sum(v for v in shed.values() if isinstance(v, (int, float)))
     last_day = day >= SEASON_DAYS - 1
+    builds, crop_map, _placed, capacity = _field_alloc(farm, day, prices)
 
     orders = []
 
-    # ---- buying: survival purchases FIRST (per-unit lockstep commits in
-    # order, and an unaffordable later order must never eat feed money) ---
-    # feed security (FM-3): never let the herd run short of wheat, counting
-    # what carriers already hold (a shed-only check sees the morning pickup
-    # as a shortfall and re-buys what we just sold -- measured -8k/season).
-    # Starvation guard: dear wheat is still cheaper than a lost cow.
+    # ---- land plan (FM-O2): NE day 4+, SW day 7+; the fund is protected --
+    # (working capital -- seeds/feed -- is never blocked: it pays for the
+    # land; herd buys wait for the fund while it is pending).  The purchase
+    # itself stays eligible every day after the due day -- the block on the
+    # herd simply lapses so a slow season cannot deadlock the ranch.
+    land_fund = 0
+    land_pending = False
+    if quads in LAND_PLAN:
+        due_day, fund = LAND_PLAN[quads]
+        if day >= due_day:
+            land_fund = fund
+            if money >= fund:
+                orders.append(["BUY_LAND"])
+            elif day < due_day + LAND_PEND_WINDOW:
+                land_pending = True
+
+    # ---- feed security (FM-O3 + m2b phantom guard): never let the herd
+    # run short of wheat, counting what carriers already hold (a shed-only
+    # check sees the morning pickup as a shortfall and re-buys what we just
+    # sold -- measured -8k/season).  Guardrail: normal-state buys stop at
+    # FEED_BUY_MAX_PRICE (profile avg 26-32); starvation cap 85 kept (dear
+    # wheat is still cheaper than a lost animal).
     wheat_carried = sum(_get(inv, "WHEAT", 0)
                         for inv in (_get(private, "inventories", []) or []) if inv)
     sys_wheat = shed.get("WHEAT", 0) + wheat_carried
     if animals_to_feed > 0 and not last_day \
             and sys_wheat < animals_to_feed + 3:
-        cap = 85 if sys_wheat < animals_to_feed else WHEAT_BUY_MAX_PRICE
+        cap = 85 if sys_wheat < animals_to_feed else FEED_BUY_MAX_PRICE
         if prices.get("WHEAT", 25) <= cap:
             want = min(16, animals_to_feed + 8 - sys_wheat)
             if want > 0:
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
-    # seeds
+
+    # ---- seeds: the wheat feed floor first (m2b), then rotation crops
+    # staged behind the pending land fund (FM-3 staging).
     if seeds.get("WHEAT", 0) < 6 and day <= SEASON_DAYS - 7 and money >= 150:
         orders.append(["BUY_SEED", "WHEAT", 12])
-    # cows: staged by money gate AND a daily pace cap (FM-3: the reserve
-    # covers seeds + feed + hires, and <=2 head/day through the pre-wheat
-    # opening stops the cash racing to zero before the first harvest)
+    if not last_day:
+        alive = _count_crops(farm)
+        for crop in ("STRAWBERRY", "MELON", "CARROT"):
+            lo, hi = CROP_PHASE[crop]
+            if not (lo <= day <= hi):
+                continue
+            if prices.get(crop, BASE_PRICE[crop]) < CROP_FLOOR[crop]:
+                continue  # red line: dead-price freeze
+            want = CROP_CAP_PER_QUAD[crop] * quads - alive[crop] - seeds.get(crop, 0)
+            batch = min(6, max(0, want))
+            seed_gate = land_fund + 250
+            if batch > 0 and money >= seed_gate + CROPS[crop]["seed"] * batch:
+                orders.append(["BUY_SEED", crop, batch])
+
+    # ---- herd (FM-O2): sheep-primary composition, money-gated, paced by
+    # CONFIRMED purchases (m2b), species-level dead-price freeze (red line).
     reserve = 800 if day <= 3 else (550 if day <= 7 else COW_BUY_RESERVE)
-    pace = 2 if day <= 3 else 3
-    target = _herd_target(day, _plan_tiles(farm, day, prices.get("WHEAT", 25))[3])
-    if day > 10 and prices.get("MILK", 160) < 90:
-        # demand drought (measured crash seeds: joint flow runs to the
-        # floor, milk realized 29-37): freeze scaling -- the marginal cow
-        # cannot pay for itself at distressed prices
-        target = min(target, max(6, herd_total))
+    if land_pending:
+        reserve += land_fund
+    pace = _animal_pace(day)
+    target = _herd_target(day, 99)   # FM-O3: external feed releases autarky
     bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0),
                        herd_total)
-    if herd_total < target and day <= COW_BUY_LAST_DAY \
-            and money >= 400 + reserve and shed_count < 88 and bought < pace:
-        n = min(pace - bought, target - herd_total,
-                int((money - reserve) // 400))
-        if n > 0:
-            orders.append(["BUY_ANIMAL", "COW", n])
-            _note_buy_order(_get(obs, "player", 0), day,
-                            _get(obs, "hour", 0), n)
-    # land: NE adds a shed ring + field; SW/SE follow when flush (FM-1 scale)
-    if quads < 2 and money >= 1800 and day >= 4:
-        orders.append(["BUY_LAND"])
+    if not last_day and herd_total < target and shed_count < 88 and bought < pace:
+        species = _species_counts(farm, private, herd_total)
+        # interleave species by relative deficit so cows reach their day-8+
+        # premium-milk window on time instead of queueing behind the sheep
+        candidates = sorted((a for a in HERD_COMPOSITION if HERD_COMPOSITION[a] > 0),
+                            key=lambda a: species[a] / float(HERD_COMPOSITION[a]))
+        for animal in candidates:
+            if species[animal] >= HERD_COMPOSITION[animal]:
+                continue
+            if day > ANIMAL_BUY_LAST_DAY[animal]:
+                continue
+            product = ANIMALS[animal]["product"]
+            if day >= DEAD_PRICE_FROM_DAY and \
+                    prices.get(product, BASE_PRICE[product]) < DEAD_PRICE_FLOOR[product]:
+                continue  # dead-price freeze (m2b demand-drought generalized)
+            cost = ANIMALS[animal]["cost"]
+            if money < cost + reserve:
+                continue
+            n = min(pace - bought, target - herd_total,
+                    HERD_COMPOSITION[animal] - species[animal],
+                    int((money - reserve) // cost))
+            if n > 0:
+                orders.append(["BUY_ANIMAL", animal, n])
+                _note_buy_order(_get(obs, "player", 0), day,
+                                _get(obs, "hour", 0), n)
+            break   # one species per turn
 
     # ---- selling: selective-intervention gates --------------------------
     orders.extend(_market_gates(day, prices, shed, herd_total))
@@ -649,12 +1006,18 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
                 order = ["SELL", item, n]
                 orders.append(order)
                 indexed[item] = order
-    # wheat: glut-tolerant curve; sell the surplus above the feed reserve
+    # wheat: log glut curve; sell the surplus above the feed reserve at a
+    # real bid (WHEAT_SELL_GATE), under the m2b pressure/late fallbacks
     if not last_day:
         reserve_w = animals_to_feed + WHEAT_FEED_RESERVE
         surplus = shed.get("WHEAT", 0) - reserve_w
-        if surplus > 0 and (prices.get("WHEAT", 25) >= 12 or shed_count >= 70
-                            or day >= 26):
+        wheat_px = prices.get("WHEAT", 25)
+        if surplus > 0 and (wheat_px >= WHEAT_SELL_GATE
+                            or shed_count >= 70 or day >= 26
+                            or (money < 1000 and wheat_px >= 20)):
+            # money < 1000: cash-flow fallback -- the gate must never starve
+            # the land/animal capex plan (measured: 42 wheat hoarded at $516
+            # while the NE purchase window lapsed)
             orders.append(["SELL", "WHEAT", surplus])
     return orders
 
@@ -696,10 +1059,11 @@ def _schedule_units(obs, farm, private, day, tasks):
             return tile is None
         if op == "DIG":
             return kind == "WEED"
-        if op == "BUILD_PASTURE":
+        if op in ("BUILD_PASTURE", "BUILD_COOP"):
             return tile is None
         if op == "PLACE":
-            return isinstance(tile, dict) and _get(tile, "kind", "") == "PASTURE" \
+            structure = ANIMALS.get(task["act"][1], {}).get("structure")
+            return isinstance(tile, dict) and _get(tile, "kind", "") == structure \
                 and "animal" not in tile
         if op == "PICKUP":
             if not _shed_adjacent(units[ui][0], units[ui][1], board):
@@ -805,18 +1169,31 @@ def agent(obs):
         orders = _market_orders(obs, farm, _get(obs, "private", {}) or {},
                                 day, animals_to_feed, herd_total)
 
-        # HIRE up to the labour plan at dawn. Hands reset every morning and
-        # only hour <= 2 can hire, so ALL hires must go out in the first
-        # turn's order list (one HIRE per turn leaves us stuck at 3 hands
-        # against a plan of 5 -- measured in the crash seeds). Cost is fib:
-        # 1,1,2,3,5 per day, trivial vs a rotting harvest.
-        orders = [o for o in orders if o[0] != "HIRE"]
-        hands = _get(farm, "hands", []) or []
-        hands_t = _hands_target(day, herd_total, wheat_tiles)
-        money = _get(farm, "money", 0.0)
-        if day < SEASON_DAYS - 1 and hour <= 2 and len(hands) < hands_t and money >= 40:
-            for _ in range(min(3, hands_t - len(hands))):
-                orders.append(["HIRE"])
+        # FM-O2 labour: hire up to the plan in a dawn burst (hands reset
+        # every morning; one HIRE per order; only hour <= 2 can hire -- m2b
+        # fix).  Each emitted HIRE is affordable at its exact fib price.
+        hires = []
+        if day < SEASON_DAYS - 1 and hour <= HIRE_HOUR_MAX:
+            quads = len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"])
+            hands_t = _hands_target(day, herd_total, wheat_tiles, quads)
+            hands = len(_get(farm, "hands", []) or [])
+            money = _get(farm, "money", 0.0)
+            spend = 0
+            for i in range(hands, hands_t):
+                cost = _hire_cost(i)
+                # keep a working-cash cushion: a broke dawn cannot hire the
+                # crew that would earn it back (measured day-8 stall)
+                if spend + cost > money - 60 or len(hires) >= HIRE_BURST:
+                    break
+                spend += cost
+                hires.append(["HIRE"])
+
+        # buys before sells (a dropped sell tranche simply repeats next
+        # turn, while a dropped HIRE/BUY loses a whole day of the plan);
+        # dawn hires lead the queue.
+        buys = [o for o in orders if o[0] != "SELL"]
+        sells = [o for o in orders if o[0] == "SELL"]
+        orders = hires + buys + sells
 
         # Final defense: every quantity-bearing market order must be positive,
         # and the terminal day is liquidation-only.

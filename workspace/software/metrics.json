@@ -1,1550 +1,1717 @@
 {
- "schema": "software-metrics-shard/1.0",
- "campaign": "kaggle-kaggriculture",
- "milestone": "m1-replay-corpus + m2-online-pool (replay corpus & profile pipeline; online-style opponent pool; historical keys retained)",
- "measured_at": "2026-08-29",
- "engine": {
-  "package": "kaggle-environments",
-  "version": "1.32.7+nodeps (vendored, engine code unmodified)",
-  "scenario": "kaggriculture",
-  "episode_steps": 720,
-  "boundary_note": "All numbers are LOCAL runs on the official engine (PyPI wheel, vendored) during the m0 asset-revival and m1 wave-2 sessions. No Kaggle online ladder games yet -- online metrics stay null until the team submits. m0-session keys below keep their original values for the record; m1 wave-2 adds new keys measured 2026-08-28 (see method notes)."
- },
- "metrics": {
-  "tests_total": {
-   "value": 50,
-   "unit": "count",
-   "method": "m0 session (2026-08-28): python -m pytest workspace/software/tests -q; 45 revived baseline tests + 5 new regression-gate tests. Superseded this wave by m1_tests_total"
+  "schema": "software-metrics-shard/1.0",
+  "campaign": "kaggle-kaggriculture",
+  "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate rebuild; historical keys retained)",
+  "measured_at": "2026-08-29T08:05:40.102261+00:00",
+  "engine": {
+    "package": "kaggle-environments",
+    "version": "1.32.7+nodeps (vendored, engine code unmodified)",
+    "scenario": "kaggriculture",
+    "episode_steps": 720,
+    "boundary_note": "All numbers are LOCAL runs on the official engine (PyPI wheel, vendored) during the m0 asset-revival and m1 wave-2 sessions. No Kaggle online ladder games yet -- online metrics stay null until the team submits. m0-session keys below keep their original values for the record; m1 wave-2 adds new keys measured 2026-08-28 (see method notes)."
   },
-  "tests_passed": {
-   "value": 50,
-   "unit": "count",
-   "method": "same m0 run, 50 passed 0 failed in 1.13s"
-  },
-  "smoke_boot_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "m0 session: python workspace/software/smoke_boot.py -> exit 0"
-  },
-  "smoke_boot_runtime_seconds": {
-   "value": 3.3,
-   "unit": "s",
-   "method": "m0 session: wall clock of the revival smoke_boot run (4 phases, 6 episodes)"
-  },
-  "regression_gate_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "m0 session: run_eval --rounds 2 --assert-regression -> exit 0 (20 games, 55.49s, frozen line submission>baseline_wheat>greedy_carrot>starter>random>pass, submission 12W-0L)"
-  },
-  "regression_gate_games": {
-   "value": 20,
-   "unit": "games",
-   "method": "m0 session structure: 2 contenders x 4 opponents x 2 seeds + 4 head-to-head"
-  },
-  "regression_gate_runtime_seconds": {
-   "value": 55.49,
-   "unit": "s",
-   "method": "m0 session gate run wall clock"
-  },
-  "regression_gate_submission_record": {
-   "value": {
-    "W": 12,
-    "L": 0,
-    "T": 0
-   },
-   "unit": "W/L/T",
-   "method": "m0 session: submission record across its 12 gate games"
-  },
-  "eval_games_total": {
-   "value": 40,
-   "unit": "games",
-   "method": "m0 session: run_eval --rounds 4 (old contender-vs-pool structure). m1 full-matrix equivalent is m1_eval_games_total"
-  },
-  "eval_runtime_seconds": {
-   "value": 107.36,
-   "unit": "s",
-   "method": "m0 session: wall clock of the eval run backing the m0 eval_results.json"
-  },
-  "avg_episode_runtime_seconds": {
-   "value": 2.66,
-   "unit": "s/game",
-   "method": "m0 session: mean per-game elapsed across the 40 m0 eval games"
-  },
-  "avg_turns_per_game": {
-   "value": 720.0,
-   "unit": "turns",
-   "method": "m0 session: mean turns across the 40 eval games"
-  },
-  "submission_games_played": {
-   "value": 24,
-   "unit": "games",
-   "method": "m0 session: games involving the submission bot in the m0 eval run"
-  },
-  "submission_win_rate_vs_pool": {
-   "value": 1.0,
-   "unit": "ratio",
-   "method": "m0 session (weak frozen pool only): 16W-0L-0T vs {pass, random, starter, greedy_carrot}. On the m1 hardened pool this drops -- see m1_matchup_win_rates"
-  },
-  "submission_win_rate_vs_baseline": {
-   "value": 1.0,
-   "unit": "ratio",
-   "method": "m0 session: 8W-0L-0T head-to-head vs baseline_wheat (seeds 101-104, 601-604); re-confirmed 8W-0L in the m1 matrix (seeds 101-104 + 601-604)"
-  },
-  "submission_avg_final_money": {
-   "value": 30631.46,
-   "unit": "coins",
-   "method": "m0 session: mean final reward across the submission's 24 m0 eval games"
-  },
-  "submission_avg_final_money_h2h": {
-   "value": 29325.12,
-   "unit": "coins",
-   "method": "m0 session: mean submission reward across the 8 head-to-head games vs baseline_wheat"
-  },
-  "baseline_wheat_avg_final_money_vs_submission": {
-   "value": 11475.25,
-   "unit": "coins",
-   "method": "m0 session: mean baseline_wheat reward across the same 8 head-to-head games"
-  },
-  "elo_ratings": {
-   "value": {
-    "submission": 1460.9,
-    "baseline_wheat": 1245.8,
-    "greedy_carrot": 1162.2,
-    "starter": 1122.9,
-    "random": 1111.2,
-    "pass": 1097.0
-   },
-   "unit": "elo",
-   "method": "m0 session: EloTable k=32 start=1200 over the 40 m0 games. m1 full-pool table is m1_elo_ratings_full_pool"
-  },
-  "cross_session_replay_identical_games": {
-   "value": 32,
-   "unit": "games",
-   "method": "m0 session: per-game diff vs round-1 archive: 32/40 reward-identical (all games vs deterministic opponents); 8 games vs the engine 'random' agent drift (not fully pinned by the episode seed)"
-  },
-  "m0_regression_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "m1 wave-2 re-run (2026-08-28): python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression -> exit 0; 74 games in 196.17s, gate evaluated on the frozen subset (32/74 games): submission=1355.0 > baseline_wheat=1252.4 > greedy_carrot=1227.5 > starter=1175.3 > pass=1128.9 > random=1061.0, submission 0 losses. NOTE documented amendment: frozen clause random>pass corrected to pass>random (m0 order was a sub-matrix iteration artifact; head-to-head pass beats random 100%) -- see exports/eval_audit.md item 6"
-  },
-  "m1_tests_total": {
-   "value": 84,
-   "unit": "count",
-   "method": "python -m pytest workspace/software/tests -q (2026-08-28, m1 wave 2): 50 revived m0 tests + 34 new (new-opponent unit/contract tests, variance statistics, frozen-pool gate semantics, replay price logging)"
-  },
-  "m1_tests_passed": {
-   "value": 84,
-   "unit": "count",
-   "method": "same run, 84 passed 0 failed in 1.88s"
-  },
-  "opponent_pool_names": {
-   "value": [
-    "cow_baron",
-    "melon_hoarder",
-    "expansionist",
-    "baseline_wheat",
-    "greedy_carrot",
-    "starter",
-    "random",
-    "pass"
-   ],
-   "unit": "list",
-   "method": "eval_results.json.opponent_pool_names of the m1 wave-2 final matrix run (--rounds 4, 2026-08-28); first three are the wave-2 strong opponents, each certified >=50% (9/9) vs the frozen weak pool by scripts/check_opponent_strength.py --rounds 3"
-  },
-  "opponent_pool_max_elo": {
-   "value": {
-    "name": "cow_baron",
-    "rating": 1460.3
-   },
-   "unit": "elo",
-   "method": "strongest pool member in the full-pool Elo table of the m1 matrix run (k=32 start=1200 over 148 games); up from 1162.2 (greedy_carrot) at m0"
-  },
-  "m1_elo_ratings_full_pool": {
-   "value": {
-    "cow_baron": 1460.3,
-    "submission": 1422.8,
-    "melon_hoarder": 1391.3,
-    "expansionist": 1289.6,
-    "baseline_wheat": 1170.6,
-    "greedy_carrot": 1155.8,
-    "starter": 1058.3,
-    "pass": 991.5,
-    "random": 859.7
-   },
-   "unit": "elo",
-   "method": "run_eval.py --rounds 4 (final m1 wave-2 run, 148 games, 346.94s); table reproduced identically across two independent same-config invocations this session (cross-run evidence: identical winners and ratings; only rewards of games involving the engine 'random' agent drift)"
-  },
-  "m1_eval_games_total": {
-   "value": 148,
-   "unit": "games",
-   "method": "final m1 wave-2 matrix: 36 unordered pairs x 4 seeds + 4 head-to-head (+500 seeds) + 4 determinism probes run separately (probes not counted in the Elo stream)"
-  },
-  "m1_eval_runtime_seconds": {
-   "value": 346.94,
-   "unit": "s",
-   "method": "wall clock of the final --rounds 4 run backing exports/eval_results.json (a second same-config invocation measured 380.81s)"
-  },
-  "m1_matchup_win_rates": {
-   "value": {
-    "submission_vs": {
-     "cow_baron": 0.0,
-     "melon_hoarder": 0.0,
-     "expansionist": 1.0,
-     "baseline_wheat": 1.0,
-     "greedy_carrot": 1.0,
-     "starter": 1.0,
-     "random": 1.0,
-     "pass": 1.0
+  "metrics": {
+    "tests_total": {
+      "value": 50,
+      "unit": "count",
+      "method": "m0 session (2026-08-28): python -m pytest workspace/software/tests -q; 45 revived baseline tests + 5 new regression-gate tests. Superseded this wave by m1_tests_total"
     },
-    "strong_vs_strong": {
-     "cow_baron_vs_melon_hoarder": 1.0,
-     "cow_baron_vs_expansionist": 1.0,
-     "melon_hoarder_vs_expansionist": 1.0
+    "tests_passed": {
+      "value": 50,
+      "unit": "count",
+      "method": "same m0 run, 50 passed 0 failed in 1.13s"
     },
-    "full_matrix_ref": "exports/eval_results.json#matchup_win_rates (36 pairs)"
-   },
-   "unit": "ratio",
-   "method": "matchup_win_rates of the final matrix run; submission vs pool per 4 seeds each (vs baseline_wheat 8 games incl. +500 seeds); full 36-pair matrix in eval_results.json"
-  },
-  "m1_submission_margin_vs_pool": {
-   "value": {
-    "cow_baron": -17772,
-    "melon_hoarder": -5410,
-    "expansionist": 10014,
-    "baseline_wheat": 17850,
-    "greedy_carrot": 23855,
-    "starter": 28027,
-    "random": 30758,
-    "pass": 27275
-   },
-   "unit": "coins",
-   "method": "avg margin (submission - opponent) per pairing in the final matrix run"
-  },
-  "eval_variance_report": {
-   "value": {
-    "most_volatile_pair": {
-     "pair": "baseline_wheat vs greedy_carrot",
-     "win_rate": 0.75,
-     "ci95": [
-      0.3006,
-      0.9544
-     ],
-     "outcome_flips_across_seeds": true
+    "smoke_boot_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "m0 session: python workspace/software/smoke_boot.py -> exit 0"
     },
-    "submission_pairs_ci95": {
-     "vs cow_baron": [
-      0.0,
-      0.4899
-     ],
-     "vs melon_hoarder": [
-      0.0,
-      0.4899
-     ],
-     "vs expansionist": [
-      0.5101,
-      1.0
-     ],
-     "vs baseline_wheat": [
-      0.6756,
-      1.0
-     ]
+    "smoke_boot_runtime_seconds": {
+      "value": 3.3,
+      "unit": "s",
+      "method": "m0 session: wall clock of the revival smoke_boot run (4 phases, 6 episodes)"
     },
-    "no_submission_pair_flipped_outcomes_across_seeds": true,
-    "method": "Wilson 95% CI on win rates (ties=0.5) + Student-t 95% CI on money margins, per pairing across seeds; full per-pair table in eval_results.json.eval_variance_report"
-   },
-   "unit": "report",
-   "method": "kgenv/variance.py over the final matrix run (4 seeds/pair); submission loss conclusions reinforced by the 8-seed failure probe (0/8 and 1/8 stable across seeds 201-208)"
-  },
-  "eval_audit_pass": {
-   "value": {
-    "pass_count": 8,
-    "warn_count": 3,
-    "fail_count": 0,
-    "all_critical_pass": true
-   },
-   "unit": "verdict",
-   "method": "exports/eval_audit.md (ABE-Ralph-style fidelity audit, 2026-08-28); warns are declared boundaries: #7 same-family opponent overfitting, #8 single-seat pairings, #9 small-sample variance; embedded in eval_results.json.eval_audit_pass"
-  },
-  "failure_modes": {
-   "value": {
-    "count": 4,
-    "probe": "submission vs full pool, seeds 201-208 (64 games): record 49W-15L-0T",
-    "loss_opponents": [
-     "melon_hoarder (0-8)",
-     "cow_baron (1-7)"
-    ],
-    "items": [
-     "FM-1 cow_baron milk engine out-earns the goose engine (submission 1-7, avg margin -15920, worst -33272)",
-     "FM-2 melon second-wave replant gated on shared price is locked out by the hoarder's day-15 dump (0-8; MELON 267->165; day-29 liquidation sells at $4)",
-     "FM-3 capital-heavy opening trails steady wheat income days 0-15 (expansionist closest wins, min margin +9421)",
-     "FM-4 shared FERTILIZER curve decays under animal-family sell pressure (94->41 vs cow_baron; no $1 crash within 30 days)"
-    ],
-    "ref": "exports/failure_modes.md"
-   },
-   "unit": "report",
-   "method": "scripts/analyze_failure_modes.py --rounds 8 (2026-08-28); evidence layer in exports/failure_probe_report.md + logs/failure_probe_log.jsonl; embedded in eval_results.json.failure_modes"
-  },
-  "m2_submission_engine": {
-   "value": "dairy engine (cows + fertilized wheat + explicit selective-intervention market gates); replaced the m1 goose+melon engine in kaggle_simulations/agent/main.py",
-   "unit": "str",
-   "method": "m2 wave-3 merge; file is stdlib-only self-contained (verified: no top-level imports); both-seats + short-episode + gym contract tests green"
-  },
-  "m2_iteration_gate_log": {
-   "value": {
-    "entries": 16,
-    "live": 10,
-    "retroactive_from_session_log": 6,
-    "distinct_design_iterations": 8,
-    "final": "PASS (v2c-dairy-r8: dawn HIRE burst + rot-emergency harvest + clear-through milk gates + phantom-feed fix)",
-    "file": "exports/logs/iteration_gate_log.jsonl"
-   },
-   "unit": "report",
-   "method": "scripts/iterate_gate.py invocations (candidate -> head-to-head vs cow_baron/melon_hoarder + guards -> JSONL ledger); every candidate change gated before merge; 6 later runs appended retroactively with measured numbers from the session run log (flagged retroactive=true)"
-  },
-  "m2_elo_ratings_full_pool": {
-   "value": {
-    "submission": 1500.8,
-    "cow_baron": 1419.6,
-    "melon_hoarder": 1355.1,
-    "expansionist": 1287.1,
-    "baseline_wheat": 1177.7,
-    "greedy_carrot": 1154.1,
-    "starter": 1056.8,
-    "pass": 990.4,
-    "random": 858.4
-   },
-   "unit": "elo",
-   "method": "run_eval.py --rounds 4 final m2 artifact run (148 games, 363.11s, 2026-08-28): submission #1 at 1500.8 (+81.2 over cow_baron), record W36 L0 T0 across ALL its games; m1 comparison: submission 1422.8 (2nd of 9)"
-  },
-  "m2_matchup_win_rates": {
-   "value": {
-    "matrix_seeds_101_104": {
-     "cow_baron": 1.0,
-     "melon_hoarder": 1.0,
-     "expansionist": 1.0,
-     "baseline_wheat": 1.0,
-     "greedy_carrot": 1.0,
-     "starter": 1.0,
-     "random": 1.0,
-     "pass": 1.0
+    "regression_gate_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "m0 session: run_eval --rounds 2 --assert-regression -> exit 0 (20 games, 55.49s, frozen line submission>baseline_wheat>greedy_carrot>starter>random>pass, submission 12W-0L)"
     },
-    "probe_seeds_201_208": {
-     "cow_baron": 0.75,
-     "melon_hoarder": 0.875,
-     "expansionist": 1.0,
-     "baseline_wheat": 1.0,
-     "greedy_carrot": 1.0,
-     "starter": 1.0,
-     "random": 1.0,
-     "pass": 1.0
+    "regression_gate_games": {
+      "value": 20,
+      "unit": "games",
+      "method": "m0 session structure: 2 contenders x 4 opponents x 2 seeds + 4 head-to-head"
     },
-    "unique_seed_head_to_head": {
-     "cow_baron": "10W-2L over seeds 101-104+201-208",
-     "melon_hoarder": "11W-1L over seeds 101-104+201-208"
+    "regression_gate_runtime_seconds": {
+      "value": 55.49,
+      "unit": "s",
+      "method": "m0 session gate run wall clock"
+    },
+    "regression_gate_submission_record": {
+      "value": {
+        "W": 12,
+        "L": 0,
+        "T": 0
+      },
+      "unit": "W/L/T",
+      "method": "m0 session: submission record across its 12 gate games"
+    },
+    "eval_games_total": {
+      "value": 40,
+      "unit": "games",
+      "method": "m0 session: run_eval --rounds 4 (old contender-vs-pool structure). m1 full-matrix equivalent is m1_eval_games_total"
+    },
+    "eval_runtime_seconds": {
+      "value": 107.36,
+      "unit": "s",
+      "method": "m0 session: wall clock of the eval run backing the m0 eval_results.json"
+    },
+    "avg_episode_runtime_seconds": {
+      "value": 2.66,
+      "unit": "s/game",
+      "method": "m0 session: mean per-game elapsed across the 40 m0 eval games"
+    },
+    "avg_turns_per_game": {
+      "value": 720.0,
+      "unit": "turns",
+      "method": "m0 session: mean turns across the 40 eval games"
+    },
+    "submission_games_played": {
+      "value": 24,
+      "unit": "games",
+      "method": "m0 session: games involving the submission bot in the m0 eval run"
+    },
+    "submission_win_rate_vs_pool": {
+      "value": 1.0,
+      "unit": "ratio",
+      "method": "m0 session (weak frozen pool only): 16W-0L-0T vs {pass, random, starter, greedy_carrot}. On the m1 hardened pool this drops -- see m1_matchup_win_rates"
+    },
+    "submission_win_rate_vs_baseline": {
+      "value": 1.0,
+      "unit": "ratio",
+      "method": "m0 session: 8W-0L-0T head-to-head vs baseline_wheat (seeds 101-104, 601-604); re-confirmed 8W-0L in the m1 matrix (seeds 101-104 + 601-604)"
+    },
+    "submission_avg_final_money": {
+      "value": 30631.46,
+      "unit": "coins",
+      "method": "m0 session: mean final reward across the submission's 24 m0 eval games"
+    },
+    "submission_avg_final_money_h2h": {
+      "value": 29325.12,
+      "unit": "coins",
+      "method": "m0 session: mean submission reward across the 8 head-to-head games vs baseline_wheat"
+    },
+    "baseline_wheat_avg_final_money_vs_submission": {
+      "value": 11475.25,
+      "unit": "coins",
+      "method": "m0 session: mean baseline_wheat reward across the same 8 head-to-head games"
+    },
+    "elo_ratings": {
+      "value": {
+        "submission": 1460.9,
+        "baseline_wheat": 1245.8,
+        "greedy_carrot": 1162.2,
+        "starter": 1122.9,
+        "random": 1111.2,
+        "pass": 1097.0
+      },
+      "unit": "elo",
+      "method": "m0 session: EloTable k=32 start=1200 over the 40 m0 games. m1 full-pool table is m1_elo_ratings_full_pool"
+    },
+    "cross_session_replay_identical_games": {
+      "value": 32,
+      "unit": "games",
+      "method": "m0 session: per-game diff vs round-1 archive: 32/40 reward-identical (all games vs deterministic opponents); 8 games vs the engine 'random' agent drift (not fully pinned by the episode seed)"
+    },
+    "m0_regression_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "m1 wave-2 re-run (2026-08-28): python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression -> exit 0; 74 games in 196.17s, gate evaluated on the frozen subset (32/74 games): submission=1355.0 > baseline_wheat=1252.4 > greedy_carrot=1227.5 > starter=1175.3 > pass=1128.9 > random=1061.0, submission 0 losses. NOTE documented amendment: frozen clause random>pass corrected to pass>random (m0 order was a sub-matrix iteration artifact; head-to-head pass beats random 100%) -- see exports/eval_audit.md item 6"
+    },
+    "m1_tests_total": {
+      "value": 84,
+      "unit": "count",
+      "method": "python -m pytest workspace/software/tests -q (2026-08-28, m1 wave 2): 50 revived m0 tests + 34 new (new-opponent unit/contract tests, variance statistics, frozen-pool gate semantics, replay price logging)"
+    },
+    "m1_tests_passed": {
+      "value": 84,
+      "unit": "count",
+      "method": "same run, 84 passed 0 failed in 1.88s"
+    },
+    "opponent_pool_names": {
+      "value": [
+        "cow_baron",
+        "melon_hoarder",
+        "expansionist",
+        "baseline_wheat",
+        "greedy_carrot",
+        "starter",
+        "random",
+        "pass"
+      ],
+      "unit": "list",
+      "method": "eval_results.json.opponent_pool_names of the m1 wave-2 final matrix run (--rounds 4, 2026-08-28); first three are the wave-2 strong opponents, each certified >=50% (9/9) vs the frozen weak pool by scripts/check_opponent_strength.py --rounds 3"
+    },
+    "opponent_pool_max_elo": {
+      "value": {
+        "name": "cow_baron",
+        "rating": 1460.3
+      },
+      "unit": "elo",
+      "method": "strongest pool member in the full-pool Elo table of the m1 matrix run (k=32 start=1200 over 148 games); up from 1162.2 (greedy_carrot) at m0"
+    },
+    "m1_elo_ratings_full_pool": {
+      "value": {
+        "cow_baron": 1460.3,
+        "submission": 1422.8,
+        "melon_hoarder": 1391.3,
+        "expansionist": 1289.6,
+        "baseline_wheat": 1170.6,
+        "greedy_carrot": 1155.8,
+        "starter": 1058.3,
+        "pass": 991.5,
+        "random": 859.7
+      },
+      "unit": "elo",
+      "method": "run_eval.py --rounds 4 (final m1 wave-2 run, 148 games, 346.94s); table reproduced identically across two independent same-config invocations this session (cross-run evidence: identical winners and ratings; only rewards of games involving the engine 'random' agent drift)"
+    },
+    "m1_eval_games_total": {
+      "value": 148,
+      "unit": "games",
+      "method": "final m1 wave-2 matrix: 36 unordered pairs x 4 seeds + 4 head-to-head (+500 seeds) + 4 determinism probes run separately (probes not counted in the Elo stream)"
+    },
+    "m1_eval_runtime_seconds": {
+      "value": 346.94,
+      "unit": "s",
+      "method": "wall clock of the final --rounds 4 run backing exports/eval_results.json (a second same-config invocation measured 380.81s)"
+    },
+    "m1_matchup_win_rates": {
+      "value": {
+        "submission_vs": {
+          "cow_baron": 0.0,
+          "melon_hoarder": 0.0,
+          "expansionist": 1.0,
+          "baseline_wheat": 1.0,
+          "greedy_carrot": 1.0,
+          "starter": 1.0,
+          "random": 1.0,
+          "pass": 1.0
+        },
+        "strong_vs_strong": {
+          "cow_baron_vs_melon_hoarder": 1.0,
+          "cow_baron_vs_expansionist": 1.0,
+          "melon_hoarder_vs_expansionist": 1.0
+        },
+        "full_matrix_ref": "exports/eval_results.json#matchup_win_rates (36 pairs)"
+      },
+      "unit": "ratio",
+      "method": "matchup_win_rates of the final matrix run; submission vs pool per 4 seeds each (vs baseline_wheat 8 games incl. +500 seeds); full 36-pair matrix in eval_results.json"
+    },
+    "m1_submission_margin_vs_pool": {
+      "value": {
+        "cow_baron": -17772,
+        "melon_hoarder": -5410,
+        "expansionist": 10014,
+        "baseline_wheat": 17850,
+        "greedy_carrot": 23855,
+        "starter": 28027,
+        "random": 30758,
+        "pass": 27275
+      },
+      "unit": "coins",
+      "method": "avg margin (submission - opponent) per pairing in the final matrix run"
+    },
+    "eval_variance_report": {
+      "value": {
+        "most_volatile_pair": {
+          "pair": "baseline_wheat vs greedy_carrot",
+          "win_rate": 0.75,
+          "ci95": [
+            0.3006,
+            0.9544
+          ],
+          "outcome_flips_across_seeds": true
+        },
+        "submission_pairs_ci95": {
+          "vs cow_baron": [
+            0.0,
+            0.4899
+          ],
+          "vs melon_hoarder": [
+            0.0,
+            0.4899
+          ],
+          "vs expansionist": [
+            0.5101,
+            1.0
+          ],
+          "vs baseline_wheat": [
+            0.6756,
+            1.0
+          ]
+        },
+        "no_submission_pair_flipped_outcomes_across_seeds": true,
+        "method": "Wilson 95% CI on win rates (ties=0.5) + Student-t 95% CI on money margins, per pairing across seeds; full per-pair table in eval_results.json.eval_variance_report"
+      },
+      "unit": "report",
+      "method": "kgenv/variance.py over the final matrix run (4 seeds/pair); submission loss conclusions reinforced by the 8-seed failure probe (0/8 and 1/8 stable across seeds 201-208)"
+    },
+    "eval_audit_pass": {
+      "value": {
+        "pass_count": 8,
+        "warn_count": 3,
+        "fail_count": 0,
+        "all_critical_pass": true
+      },
+      "unit": "verdict",
+      "method": "exports/eval_audit.md (ABE-Ralph-style fidelity audit, 2026-08-28); warns are declared boundaries: #7 same-family opponent overfitting, #8 single-seat pairings, #9 small-sample variance; embedded in eval_results.json.eval_audit_pass"
+    },
+    "failure_modes": {
+      "value": {
+        "count": 4,
+        "probe": "submission vs full pool, seeds 201-208 (64 games): record 49W-15L-0T",
+        "loss_opponents": [
+          "melon_hoarder (0-8)",
+          "cow_baron (1-7)"
+        ],
+        "items": [
+          "FM-1 cow_baron milk engine out-earns the goose engine (submission 1-7, avg margin -15920, worst -33272)",
+          "FM-2 melon second-wave replant gated on shared price is locked out by the hoarder's day-15 dump (0-8; MELON 267->165; day-29 liquidation sells at $4)",
+          "FM-3 capital-heavy opening trails steady wheat income days 0-15 (expansionist closest wins, min margin +9421)",
+          "FM-4 shared FERTILIZER curve decays under animal-family sell pressure (94->41 vs cow_baron; no $1 crash within 30 days)"
+        ],
+        "ref": "exports/failure_modes.md"
+      },
+      "unit": "report",
+      "method": "scripts/analyze_failure_modes.py --rounds 8 (2026-08-28); evidence layer in exports/failure_probe_report.md + logs/failure_probe_log.jsonl; embedded in eval_results.json.failure_modes"
+    },
+    "m2_submission_engine": {
+      "value": "dairy engine (cows + fertilized wheat + explicit selective-intervention market gates); replaced the m1 goose+melon engine in kaggle_simulations/agent/main.py",
+      "unit": "str",
+      "method": "m2 wave-3 merge; file is stdlib-only self-contained (verified: no top-level imports); both-seats + short-episode + gym contract tests green"
+    },
+    "m2_iteration_gate_log": {
+      "value": {
+        "entries": 16,
+        "live": 10,
+        "retroactive_from_session_log": 6,
+        "distinct_design_iterations": 8,
+        "final": "PASS (v2c-dairy-r8: dawn HIRE burst + rot-emergency harvest + clear-through milk gates + phantom-feed fix)",
+        "file": "exports/logs/iteration_gate_log.jsonl"
+      },
+      "unit": "report",
+      "method": "scripts/iterate_gate.py invocations (candidate -> head-to-head vs cow_baron/melon_hoarder + guards -> JSONL ledger); every candidate change gated before merge; 6 later runs appended retroactively with measured numbers from the session run log (flagged retroactive=true)"
+    },
+    "m2_elo_ratings_full_pool": {
+      "value": {
+        "submission": 1500.8,
+        "cow_baron": 1419.6,
+        "melon_hoarder": 1355.1,
+        "expansionist": 1287.1,
+        "baseline_wheat": 1177.7,
+        "greedy_carrot": 1154.1,
+        "starter": 1056.8,
+        "pass": 990.4,
+        "random": 858.4
+      },
+      "unit": "elo",
+      "method": "run_eval.py --rounds 4 final m2 artifact run (148 games, 363.11s, 2026-08-28): submission #1 at 1500.8 (+81.2 over cow_baron), record W36 L0 T0 across ALL its games; m1 comparison: submission 1422.8 (2nd of 9)"
+    },
+    "m2_matchup_win_rates": {
+      "value": {
+        "matrix_seeds_101_104": {
+          "cow_baron": 1.0,
+          "melon_hoarder": 1.0,
+          "expansionist": 1.0,
+          "baseline_wheat": 1.0,
+          "greedy_carrot": 1.0,
+          "starter": 1.0,
+          "random": 1.0,
+          "pass": 1.0
+        },
+        "probe_seeds_201_208": {
+          "cow_baron": 0.75,
+          "melon_hoarder": 0.875,
+          "expansionist": 1.0,
+          "baseline_wheat": 1.0,
+          "greedy_carrot": 1.0,
+          "starter": 1.0,
+          "random": 1.0,
+          "pass": 1.0
+        },
+        "unique_seed_head_to_head": {
+          "cow_baron": "10W-2L over seeds 101-104+201-208",
+          "melon_hoarder": "11W-1L over seeds 101-104+201-208"
+        }
+      },
+      "unit": "ratio",
+      "method": "eval_results.json#matchup_win_rates (matrix) + failure_probe (seeds 201-208); m1 comparison: cow_baron 0.0 (1-7), melon_hoarder 0.0 (0-8)"
+    },
+    "m2_submission_margin_vs_pool": {
+      "value": {
+        "cow_baron": 3330,
+        "melon_hoarder": 12875,
+        "expansionist": 28098,
+        "baseline_wheat": 37284,
+        "greedy_carrot": 49333,
+        "starter": 52517,
+        "random": 73943,
+        "pass": 60246
+      },
+      "unit": "coins",
+      "method": "avg margin (submission - opponent) per pairing, final m2 matrix run (--rounds 4); m1 comparison: cow_baron -17772, melon_hoarder -5410"
+    },
+    "m2_probe_record": {
+      "value": {
+        "record": "53W-3L-0T",
+        "losses": [
+          "cow_baron seed 204 (-3213)",
+          "cow_baron seed 206 (-3587)",
+          "melon_hoarder seed 208 (-1413)"
+        ],
+        "loss_character": "cow_baron 204/206 are demand-drought episodes (zero milk shops drawn: milk 9-40 floor for both players, wheat 26-33) -- market randomness keyed to the episode seed, not opponent-identifiable behavior"
+      },
+      "unit": "report",
+      "method": "scripts/analyze_failure_modes.py --rounds 8 on the merged m2 bot (64 games, seeds 201-208, 178s)"
+    },
+    "m2_tests_total": {
+      "value": 101,
+      "unit": "count",
+      "method": "python -m pytest workspace/software/tests -q (2026-08-28, m2 wave 3): 84 m1 tests + 17 new tests/test_strategy_m2.py (milk gate schedule, hold/release/pressure gate semantics, fert hoard bound, herd/wheat planning caps, phantom-feed-buy guard, buy-pace episode reset, dawn hire burst, demand-drought herd freeze)"
+    },
+    "m2_tests_passed": {
+      "value": 101,
+      "unit": "count",
+      "method": "same run, 101 passed 0 failed in 1.98s"
+    },
+    "m2_regression_gate_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "m2 re-run (2026-08-28): run_eval --rounds 2 --assert-regression -> exit 0; frozen-subset gate PASS (submission=1355.0 > baseline_wheat=1252.4 > greedy_carrot=1227.5 > starter=1175.3 > pass=1128.9 > random=1061.0, submission 0 losses vs frozen pool)"
+    },
+    "m2_smoke_boot_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "python workspace/software/smoke_boot.py on the merged m2 bot -> PASS (3.7s, 4 phases incl. 720-step self-play seeds 7/8/9)"
+    },
+    "llm_ab_harness_ready": {
+      "value": true,
+      "unit": "bool",
+      "method": "scripts/run_llm_ab.py --rounds 2 (one command): loads two module instances of main.py, LLM-on side wired to provider_from_env(), both seat orders, instrumented provider counters; writes exports/llm_ab_results.json. NullProvider plumbing-validation run measured: 4 games in 13.06s, 1294 consultations, 1294 heuristic fallbacks, 0 budget blocks (NullProvider carries no budget), seat-symmetric outcomes"
+    },
+    "llm_ab_games": {
+      "value": 4,
+      "unit": "games",
+      "method": "NullProvider baseline-side harness validation only (seeds 701-702, both seats). NOT a real A/B: with KG_LLM_* unset both sides play the identical heuristic policy; win_rate stays null by design"
+    },
+    "llm_ab_fallback_count": {
+      "value": 1294,
+      "unit": "count",
+      "method": "instrumented NullProvider run above: every consultation fell back to the heuristic gate (provider disabled -> returns None); proves the fallback path executes"
+    },
+    "failure_mode_status_m2": {
+      "value": {
+        "FM-1": "已缓解 (root-cause engine swap to cows; residual: demand-drought seeds 204/206)",
+        "FM-2": "已缓解 (no mid-season premium-crop exposure; melon_hoarder 0-8 -> 7-1)",
+        "FM-3": "已缓解 (wheat-first staged opening; expansionist min margin +9421 -> +14949)",
+        "FM-4": "部分缓解 (gated release + wheat self-consumption; linear zero-demand curve still decays)"
+      },
+      "unit": "report",
+      "method": "exports/failure_modes.md m2 annotations backed by the 64-game probe + iteration gate log"
+    },
+    "m2a_tests_total": {
+      "value": 128,
+      "unit": "count",
+      "method": "2026-08-29 final post-review actual run: python -m pytest workspace/software/tests -q -> 128 passed in 2.13s"
+    },
+    "m2a_tests_passed": {
+      "value": 128,
+      "unit": "count",
+      "method": "same final post-review complete software test run; 0 failed"
+    },
+    "m2a_acceptance_fixture_passed": {
+      "value": 7,
+      "unit": "count",
+      "method": "2026-08-28 actual run: python scripts/verify/test_acceptance.py -> 7/7; temporary fixture removes copied historical acceptance runs and reads latest run-N"
+    },
+    "m2a_smoke_boot_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "2026-08-28 post-review run: python workspace/software/smoke_boot.py -> PASS, 4 phases"
+    },
+    "m2a_smoke_boot_runtime_seconds": {
+      "value": 3.9,
+      "unit": "s",
+      "method": "same post-review smoke_boot console measurement"
+    },
+    "m2a_dev_abba_games": {
+      "value": 16,
+      "unit": "games",
+      "method": "2026-08-28 actual run: run_eval.py --quick; 8 submission/opponent pairs x seed 101 x AB/BA; exports/eval_results.dev.json schema 2.0"
+    },
+    "m2a_dev_abba_runtime_seconds": {
+      "value": 47.14,
+      "unit": "s",
+      "method": "exports/eval_results.dev.json.runtime_seconds from the actual quick development run"
+    },
+    "m2a_dev_abnormal_games": {
+      "value": 0,
+      "unit": "games",
+      "method": "exports/eval_results.dev.json.abnormal_games; all 16 games statuses DONE/DONE and contract_ok=true"
+    },
+    "m2a_formal_export_preserved_by_dev": {
+      "value": true,
+      "unit": "bool",
+      "method": "actual before/after sha256sum around run_eval.py --quick: exports/eval_results.json remained ce540e0471700242ff35d917c331de9fcd8ee494fb9b3a0ce8b8645348ef54ae"
+    },
+    "m2a_complete_gate_pass": {
+      "value": false,
+      "unit": "bool",
+      "method": "invalidated=true: the 104.38s/32-game run preceded independent acceptor findings and the final candidate-snapshot/transaction wiring; retained only as audit history, not a valid merge gate. m2b must rerun the complete gate on the frozen candidate"
+    },
+    "m2a_complete_gate_games": {
+      "value": 32,
+      "unit": "games",
+      "method": "invalidated historical run only; 4 required opponents x seeds 101-104 x AB/BA. Not usable as current PASS evidence"
+    },
+    "m2a_complete_gate_abnormal_games": {
+      "value": 0,
+      "unit": "games",
+      "method": "invalidated historical run reported zero abnormal games; current production fail-closed semantics are verified by m2a_gate_contract_check_pass"
+    },
+    "m2a_complete_gate_runtime_seconds": {
+      "value": 104.38,
+      "unit": "s",
+      "method": "invalidated historical run duration; retained for audit, not performance acceptance"
+    },
+    "m2a_complete_gate_invalidated": {
+      "value": true,
+      "unit": "bool",
+      "method": "independent acceptor rejected the pre-fix gate implementation; no replacement long gate was run in m2a"
+    },
+    "m2a_gate_contract_check_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "2026-08-28 post-review actual run: check_eval_contract.py --mode gate -> exit 0; production validator rejected missing opponent, single-seat schedule, INVALID status, malformed tie, seed-domain mismatch, and exploratory formal PASS"
+    },
+    "m2a_export_safety_check_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "2026-08-28 post-review actual run: check_eval_contract.py --mode export -> exit 0; production schema/semantic validator, Windows case alias rejection, dev export+replay isolation, and schema/replay failure preservation verified"
+    },
+    "m2a_llm_null_games": {
+      "value": 2,
+      "unit": "games",
+      "method": "2026-08-28 actual run with KG_LLM_* unset: run_llm_ab.py --rounds 1; seed 701 AB/BA"
+    },
+    "m2a_llm_null_effective_calls": {
+      "value": 0,
+      "unit": "count",
+      "method": "exports/llm_ab_results.json consultation_stats.effective_calls; provider_configured=false and real_ab=false"
+    },
+    "m2a_llm_null_fallback_count": {
+      "value": 662,
+      "unit": "count",
+      "method": "exports/llm_ab_results.json; 331 independent NullProvider consultations per game x 2 games"
+    },
+    "m2a_llm_null_runtime_seconds": {
+      "value": 5.46,
+      "unit": "s",
+      "method": "exports/llm_ab_results.json.runtime_seconds from the actual per-game provider isolation run"
+    },
+    "m2b_strategy_tests_total": {
+      "value": 35,
+      "unit": "count",
+      "method": "2026-08-28 actual command: python -m pytest workspace/software/tests/test_strategy_m2.py workspace/software/tests/test_agent_contract.py -q -> 35 passed 0 failed"
+    },
+    "m2b_strategy_tests_passed": {
+      "value": 35,
+      "unit": "count",
+      "method": "same targeted m2b strategy/contract test command -> 35 passed"
+    },
+    "m2b_complete_gate_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "2026-08-28 actual command: iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m2b-frozen --rounds 4 --require-complete -> VERDICT PASS"
+    },
+    "m2b_complete_gate_games": {
+      "value": 32,
+      "unit": "games",
+      "method": "same actual complete gate: 4 required opponents x seeds 101-104 x AB/BA; expected=32 actual=32"
+    },
+    "m2b_complete_gate_abnormal": {
+      "value": 0,
+      "unit": "games",
+      "method": "same actual complete gate output: abnormal=0; every game contract-normal"
+    },
+    "m2b_complete_gate_runtime_seconds": {
+      "value": 83.16,
+      "unit": "s",
+      "method": "same actual final complete gate log entry elapsed_seconds=83.16"
+    },
+    "m2b_candidate_sha256": {
+      "value": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+      "unit": "sha256",
+      "method": "actual pre/post identity commands and final clean-baseline iterate_gate candidate snapshot identity; source SHA unchanged"
+    },
+    "m2b_frozen_manifest": {
+      "value": {
+        "path": "workspace/software/m2b_frozen_manifest.json",
+        "sha256": "fe02b03cf4d7b53673b77ba18e5ab02a908feb8279fa30ff7f40b71ce32e1141",
+        "candidate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+        "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
+        "dirty_before_gate": false,
+        "snapshot_path": "workspace/software/m2b_frozen_candidate.b64",
+        "snapshot_sha256": "3b9eb106b585a4b36e594bc6ecdbf9472994cfd9d31c02a486ffcb95f6320986"
+      },
+      "unit": "manifest",
+      "method": "clean-baseline gate manifest plus exact-byte base64 snapshot for CRLF-stable holdout execution"
+    },
+    "strategy_repair_test_summary": {
+      "value": {
+        "total": 35,
+        "passed": 35,
+        "failed": 0,
+        "command": "python -m pytest workspace/software/tests/test_strategy_m2.py workspace/software/tests/test_agent_contract.py -q",
+        "evidence": "workspace/acceptance/evidence/m2b-strategy.log"
+      },
+      "unit": "test-run",
+      "method": "m2b-strategy acceptance evidence"
+    },
+    "strategy_repair_checks": {
+      "value": {
+        "terminal_day_no_capex": true,
+        "terminal_day_liquidation": true,
+        "purchase_confirmation": true,
+        "shed_reservation": true,
+        "positive_quantities": true,
+        "seat_and_episode_isolation": true
+      },
+      "unit": "verdict",
+      "method": "m2b-strategy targeted regression suite"
+    },
+    "development_gate_summary": {
+      "value": {
+        "label": "m2b-frozen-clean",
+        "candidate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+        "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
+        "expected_games": 32,
+        "actual_games": 32,
+        "ab_games": 16,
+        "ba_games": 16,
+        "abnormal_games": 0,
+        "formal_pass": true,
+        "record": {
+          "W": 31,
+          "L": 1,
+          "T": 0
+        },
+        "evidence": "workspace/software/exports/logs/iteration_gate_log.jsonl"
+      },
+      "unit": "gate",
+      "method": "latest m2b-frozen-clean gate record"
+    },
+    "frozen_candidate_identity": {
+      "value": {
+        "path": "workspace/software/kaggle_simulations/agent/main.py",
+        "sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+        "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
+        "dirty_before_gate": false,
+        "holdout_eligible": true,
+        "manifest": "workspace/software/m2b_frozen_manifest.json"
+      },
+      "unit": "identity",
+      "method": "m2b clean-baseline gate identity; m2c must verify the candidate blob at this ref and current candidate SHA"
+    },
+    "holdout_protocol": {
+      "value": {
+        "full_matrix": true,
+        "seed_count": 8,
+        "seat_orders": [
+          "AB",
+          "BA"
+        ],
+        "one_time": true,
+        "resume_exact_attempt_only": true,
+        "candidate_change_invalidates": true,
+        "candidate_source": "frozen_git_blob"
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
+    },
+    "holdout_seed_manifest": {
+      "value": {
+        "schema_version": "1.0",
+        "attempt_id": "41c7771a63b90d3e66cb40c7",
+        "generated_after_freeze": true,
+        "random_source": "Python secrets.randbelow (OS cryptographic entropy)",
+        "revealed_at": "2026-08-28T18:51:07.641758+00:00",
+        "seeds": [
+          1434909129,
+          415651673,
+          68483508,
+          141000100,
+          801695889,
+          291593029,
+          1616180299,
+          1369595171
+        ],
+        "sha256": "68292287a9b8254538f312fb6e3d1991ce215ca2ac2a4e4b0ecc51a6ddbdc93a",
+        "historical_seed_exclusion_count": 27,
+        "overlap_with_historical": []
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
+    },
+    "holdout_candidate_hash_match": {
+      "value": {
+        "frozen": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+        "before": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+        "after": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+        "pass": true
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
+    },
+    "holdout_seed_domain_isolation": {
+      "value": {
+        "historical_count": 27,
+        "overlap_count": 0,
+        "pass": true
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
+    },
+    "holdout_run_status": {
+      "value": {
+        "index": 1,
+        "attempt_id": "41c7771a63b90d3e66cb40c7",
+        "status": "published",
+        "started_at": "2026-08-28T18:36:10.491843+00:00",
+        "completed_at": "2026-08-28T18:51:07.643314+00:00",
+        "published": true,
+        "invalidated": false,
+        "invalidation_reason": null
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
+    },
+    "holdout_schedule": {
+      "value": {
+        "expected_games": 576,
+        "actual_games": 576
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity"
+    },
+    "holdout_seat_split": {
+      "value": {
+        "ab_games": 288,
+        "ba_games": 288,
+        "missing_mirrors": 0
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity"
+    },
+    "holdout_abnormal_summary": {
+      "value": {
+        "abnormal_games": 0
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity/abnormal_games"
+    },
+    "holdout_integrity_pass": {
+      "value": true,
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity"
+    },
+    "confirmatory_overall_record": {
+      "value": {
+        "games": 128,
+        "W": 119,
+        "L": 9,
+        "T": 0,
+        "score_rate": 0.929688,
+        "wilson95": [
+          0.8718,
+          0.9626
+        ]
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/overall_record"
+    },
+    "confirmatory_pair_records": {
+      "value": [
+        {
+          "opponent": "cow_baron",
+          "games": 16,
+          "W": 10,
+          "L": 6,
+          "T": 0,
+          "score_rate": 0.625,
+          "wilson95": [
+            0.3864,
+            0.8152
+          ]
+        },
+        {
+          "opponent": "melon_hoarder",
+          "games": 16,
+          "W": 13,
+          "L": 3,
+          "T": 0,
+          "score_rate": 0.8125,
+          "wilson95": [
+            0.5699,
+            0.9341
+          ]
+        },
+        {
+          "opponent": "expansionist",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "baseline_wheat",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "greedy_carrot",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "starter",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "random",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "pass",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        }
+      ],
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/pair_records"
+    },
+    "confirmatory_seat_records": {
+      "value": {
+        "AB": {
+          "games": 64,
+          "W": 60,
+          "L": 4,
+          "T": 0,
+          "score_rate": 0.9375,
+          "wilson95": [
+            0.85,
+            0.9754
+          ],
+          "by_opponent": {
+            "cow_baron": {
+              "games": 8,
+              "W": 5,
+              "L": 3,
+              "T": 0,
+              "score_rate": 0.625,
+              "wilson95": [
+                0.3057,
+                0.8632
+              ]
+            },
+            "melon_hoarder": {
+              "games": 8,
+              "W": 7,
+              "L": 1,
+              "T": 0,
+              "score_rate": 0.875,
+              "wilson95": [
+                0.5291,
+                0.9776
+              ]
+            },
+            "expansionist": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "baseline_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "greedy_carrot": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "starter": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "random": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "pass": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            }
+          }
+        },
+        "BA": {
+          "games": 64,
+          "W": 59,
+          "L": 5,
+          "T": 0,
+          "score_rate": 0.921875,
+          "wilson95": [
+            0.8298,
+            0.9662
+          ],
+          "by_opponent": {
+            "cow_baron": {
+              "games": 8,
+              "W": 5,
+              "L": 3,
+              "T": 0,
+              "score_rate": 0.625,
+              "wilson95": [
+                0.3057,
+                0.8632
+              ]
+            },
+            "melon_hoarder": {
+              "games": 8,
+              "W": 6,
+              "L": 2,
+              "T": 0,
+              "score_rate": 0.75,
+              "wilson95": [
+                0.4093,
+                0.9285
+              ]
+            },
+            "expansionist": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "baseline_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "greedy_carrot": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "starter": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "random": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "pass": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/seat_records"
+    },
+    "confirmatory_wilson_intervals": {
+      "value": {
+        "confidence": 0.95,
+        "method": "Wilson score; tie=0.5",
+        "overall": [
+          0.8718,
+          0.9626
+        ],
+        "pairs": {
+          "cow_baron": [
+            0.3864,
+            0.8152
+          ],
+          "melon_hoarder": [
+            0.5699,
+            0.9341
+          ],
+          "expansionist": [
+            0.8064,
+            1.0
+          ],
+          "baseline_wheat": [
+            0.8064,
+            1.0
+          ],
+          "greedy_carrot": [
+            0.8064,
+            1.0
+          ],
+          "starter": [
+            0.8064,
+            1.0
+          ],
+          "random": [
+            0.8064,
+            1.0
+          ],
+          "pass": [
+            0.8064,
+            1.0
+          ]
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/wilson_intervals"
+    },
+    "confirmatory_order_independent_statistics": {
+      "value": {
+        "method": "mean per-(opponent,seed) AB/BA score; Student-t 95% CI",
+        "order_independent": true,
+        "tie_policy": "tie=0.5 game score",
+        "unit_count": 64,
+        "estimate": 0.929688,
+        "ci95": [
+          0.867281,
+          0.992094
+        ],
+        "input_sha256": "f3061817d74491a4e98bc7025ce913de7180fc6294f22b12b211cf3a8ef33266",
+        "fit_status": "ok"
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/order_independent_statistic"
+    },
+    "confirmatory_elo_appendix": {
+      "value": {
+        "role": "descriptive_only",
+        "order_sensitive": true,
+        "k": 32.0,
+        "start": 1200.0,
+        "table": [
+          {
+            "name": "submission",
+            "rating": 1664.8,
+            "played": 128,
+            "record": {
+              "W": 119,
+              "L": 9,
+              "T": 0
+            }
+          },
+          {
+            "name": "cow_baron",
+            "rating": 1604.5,
+            "played": 128,
+            "record": {
+              "W": 114,
+              "L": 14,
+              "T": 0
+            }
+          },
+          {
+            "name": "melon_hoarder",
+            "rating": 1536.8,
+            "played": 128,
+            "record": {
+              "W": 103,
+              "L": 25,
+              "T": 0
+            }
+          },
+          {
+            "name": "expansionist",
+            "rating": 1420.0,
+            "played": 128,
+            "record": {
+              "W": 80,
+              "L": 48,
+              "T": 0
+            }
+          },
+          {
+            "name": "baseline_wheat",
+            "rating": 1290.8,
+            "played": 128,
+            "record": {
+              "W": 64,
+              "L": 64,
+              "T": 0
+            }
+          },
+          {
+            "name": "greedy_carrot",
+            "rating": 1135.9,
+            "played": 128,
+            "record": {
+              "W": 48,
+              "L": 80,
+              "T": 0
+            }
+          },
+          {
+            "name": "starter",
+            "rating": 949.6,
+            "played": 128,
+            "record": {
+              "W": 32,
+              "L": 96,
+              "T": 0
+            }
+          },
+          {
+            "name": "pass",
+            "rating": 766.6,
+            "played": 128,
+            "record": {
+              "W": 16,
+              "L": 112,
+              "T": 0
+            }
+          },
+          {
+            "name": "random",
+            "rating": 431.0,
+            "played": 128,
+            "record": {
+              "W": 0,
+              "L": 128,
+              "T": 0
+            }
+          }
+        ]
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/elo"
+    },
+    "confirmatory_export_traceability": {
+      "value": {
+        "export_sha256": "ac7684d853e368a26bf8685d6649d3d4d711a13a9eaacdadb6ff89c7aa5504f7",
+        "source": "workspace/software/exports/eval_results.json",
+        "validated_schema": "2.0",
+        "json_pointers": {
+          "holdout_protocol": "/holdout/protocol",
+          "holdout_seed_manifest": "/holdout/seed_manifest",
+          "holdout_candidate_hash_match": "/holdout/candidate_hash_match",
+          "holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
+          "holdout_run_status": "/holdout/attempt",
+          "holdout_schedule": "/integrity",
+          "holdout_seat_split": "/integrity",
+          "holdout_abnormal_summary": "/integrity/abnormal_games",
+          "holdout_integrity_pass": "/integrity",
+          "confirmatory_overall_record": "/confirmatory/overall_record",
+          "confirmatory_pair_records": "/confirmatory/pair_records",
+          "confirmatory_seat_records": "/confirmatory/seat_records",
+          "confirmatory_wilson_intervals": "/confirmatory/wilson_intervals",
+          "confirmatory_order_independent_statistics": "/confirmatory/order_independent_statistic",
+          "confirmatory_elo_appendix": "/elo"
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory_export_traceability"
+    },
+    "m1_corpus_episodes_total": {
+      "value": 60,
+      "unit": "count",
+      "method": "m1-replay-corpus (2026-08-29): python workspace/software/scripts/corpus_build.py over .tmp-corpus raw replays (official Kaggle daily episode shard kaggle/kaggriculture-episodes-2026-08-28 selective downloads + 3 own/top episodes); integrity-gated (both seats DONE, 720 steps)"
+    },
+    "m1_corpus_by_band": {
+      "value": {
+        "top20": 58,
+        "top100": 15,
+        "band_500_900": 2,
+        "baseline": 2
+      },
+      "unit": "episodes per band (episode may count in multiple bands)",
+      "method": "m1-replay-corpus (2026-08-29): band assignment from 2026-08-29 public leaderboard CSV (top20=rank<=20, top100=rank<=100, band_500_900=Score in [500,900], baseline=renyxin seat), computed by scripts/corpus_fetch.py stage; counts from exports/replay_profiles/index.json"
+    },
+    "m1_corpus_abnormal_excluded": {
+      "value": 0,
+      "unit": "count",
+      "method": "m1-replay-corpus (2026-08-29): scripts/corpus_build.py integrity gate (statuses/steps/rewards) over all 60 raw replays; exclusions logged in exports/replay_profiles/exclusions.json (negative path proven by tests/test_replay_corpus.py synthetic dirty fixtures)"
+    },
+    "m1_profiles_generated": {
+      "value": 120,
+      "unit": "count",
+      "method": "m1-replay-corpus (2026-08-29): kgenv/replay_profile.py extractor, one profile per episode x player, archived under exports/replay_profiles/profiles/"
+    },
+    "m1_download_bytes": {
+      "value": 1896052699,
+      "unit": "bytes",
+      "method": "m1-replay-corpus (2026-08-29): sum of raw replay bytes in .tmp-corpus/manifest.json (57 files downloaded from the 2026-08-28 daily shard via selective single-file fetch + 3 previously fetched episodes; within ~3GB budget, 1 daily shard used)"
+    },
+    "m1_corpus_runtime_seconds": {
+      "value": 21.3,
+      "unit": "seconds",
+      "method": "m1-replay-corpus (2026-08-29): wall clock of scripts/corpus_build.py over 60 replays (load + integrity + extract + archive write) as recorded in exports/replay_profiles/index.json build_runtime_seconds"
+    },
+    "m2_online_style_opponents": {
+      "value": [
+        {
+          "name": "crop_rotator",
+          "style": "榜首框架式：恒定雇佣/象限框架 + 价格自适应小麦占比(0.22-0.62)与轮作(西瓜早段/草莓中段/番茄晚段) + 外购饲料价格护栏 + 终局囤倾",
+          "prototype": "Crop Dusta (rank 1)",
+          "param_basis": "同选手 >=3 局一致画像：26 局（雇佣 9.7-9.9/天、3 象限、7牛4羊1鹅、小麦占比 20-69% 波动、外购饲料 506-2732u@均价34-39）",
+          "profile_archives": [
+            "ep101270384_seat1",
+            "ep101270420_seat0",
+            "ep101370699_seat1",
+            "ep101375177_seat1",
+            "ep101381902_seat0"
+          ],
+          "exploratory_params": false,
+          "implementation": "kgenv/bots/online_pool.py",
+          "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
+        },
+        {
+          "name": "template_wheat",
+          "style": "rank6-28 模板式：锁定 42% 麦田 + 每日固定外购饲料配给(15u/天) + 8牛4羊 + 倾销式低价卖出门(奶60/毛45/莓22)",
+          "prototype": "NIklitaCheporev(8局)/Multi-Head Farmers(6局)/Aashka Kapadia(3局)/Gaddam Shiva Teja(3局)/Levin(3局)/heralces(3局) 同构模板集群",
+          "param_basis": "同选手 >=3 局一致画像：外购饲料 414-436u 恒定、小麦田 42% 恒定、雇佣 9.4/天、终群 8牛4羊",
+          "profile_archives": [
+            "ep101279218_seat1",
+            "ep101882239_seat0",
+            "ep101802072_seat1",
+            "ep102000368_seat1",
+            "ep101643308_seat1",
+            "ep101678908_seat1"
+          ],
+          "exploratory_params": false,
+          "implementation": "kgenv/bots/online_pool.py",
+          "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
+        },
+        {
+          "name": "self_feed_ranch",
+          "style": "Milan 式近自给牧场：46% 麦田自供饲料 + 6牛6羊混合群 + 高价门持有(奶190/毛200) + 草莓/西瓜副业 + 小额外购肥料",
+          "prototype": "Milan Leonard (rank 2)",
+          "param_basis": "同选手 >=3 局一致画像：12 局（外购饲料仅 119-147u、小麦 43-50%、雇佣 8.9-9.3/天、奶卖价中位 200/毛 220、外购肥料 31u）",
+          "profile_archives": [
+            "ep102000368_seat0",
+            "ep102002591_seat0",
+            "ep102020456_seat0"
+          ],
+          "exploratory_params": false,
+          "implementation": "kgenv/bots/online_pool.py",
+          "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
+        },
+        {
+          "name": "near_band_diversified",
+          "style": "近段(500-900)多元化式：草莓主导轮作(上限30格)+西瓜、8牛3羊2鹅、第4象限晚开、day27 起重终局倾销",
+          "prototype": "Sooriya Senthilkumar (rank 3629) / Chirag Bhatnagar (rank 3978)",
+          "param_basis": "exploratory：仅 2 局（每选手 1 局），但两名独立选手结构收敛（草莓 51.8%/33.7% 主导 + 7-8牛混合群 + 终局卖出占比 12.6-17.7%）；按蓝图 m2 以真实线上分布代表性纳入",
+          "profile_archives": [
+            "ep102194478_seat1",
+            "ep102196708_seat0"
+          ],
+          "exploratory_params": true,
+          "implementation": "kgenv/bots/online_pool.py",
+          "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
+        }
+      ],
+      "unit": "array",
+      "method": "战役 III m2-online-pool (2026-08-29)：kgenv/bots/online_pool.py 四个画像参数化重建；参数纪律=主打 bot 只用同选手 >=3 局一致发现（exports/replay_profiles/band_summary.md 跨局复核），near_band 显式 exploratory_params=true；档案 ID 指 exports/replay_profiles/profiles/"
+    },
+    "m2_opponent_pool_certification": {
+      "value": {
+        "command": "python workspace/software/scripts/check_opponent_strength.py --rounds 3",
+        "weak_pool": [
+          "pass",
+          "random",
+          "starter",
+          "greedy_carrot"
+        ],
+        "seeds": [
+          101,
+          102,
+          103
+        ],
+        "threshold": 0.5,
+        "threshold_met_by_all": true,
+        "online_style": {
+          "crop_rotator": {
+            "games": 12,
+            "W": 12,
+            "L": 0,
+            "T": 0,
+            "win_rate": 1.0,
+            "vs_greedy_carrot": {
+              "games": 3,
+              "W": 3,
+              "L": 0,
+              "T": 0,
+              "avg_margin": 57035
+            }
+          },
+          "template_wheat": {
+            "games": 12,
+            "W": 12,
+            "L": 0,
+            "T": 0,
+            "win_rate": 1.0,
+            "vs_greedy_carrot": {
+              "games": 3,
+              "W": 3,
+              "L": 0,
+              "T": 0,
+              "avg_margin": 55071
+            }
+          },
+          "self_feed_ranch": {
+            "games": 12,
+            "W": 12,
+            "L": 0,
+            "T": 0,
+            "win_rate": 1.0,
+            "vs_greedy_carrot": {
+              "games": 3,
+              "W": 3,
+              "L": 0,
+              "T": 0,
+              "avg_margin": 66649
+            }
+          },
+          "near_band_diversified": {
+            "games": 12,
+            "W": 12,
+            "L": 0,
+            "T": 0,
+            "win_rate": 1.0,
+            "vs_greedy_carrot": {
+              "games": 3,
+              "W": 3,
+              "L": 0,
+              "T": 0,
+              "avg_margin": 59625
+            }
+          }
+        },
+        "strong_family_recertified": {
+          "cow_baron": {
+            "games": 12,
+            "W": 12,
+            "L": 0,
+            "T": 0,
+            "win_rate": 1.0
+          },
+          "melon_hoarder": {
+            "games": 12,
+            "W": 12,
+            "L": 0,
+            "T": 0,
+            "win_rate": 1.0
+          },
+          "expansionist": {
+            "games": 12,
+            "W": 12,
+            "L": 0,
+            "T": 0,
+            "win_rate": 1.0
+          }
+        },
+        "exit_code": 0,
+        "log": "workspace/software/exports/logs/m2_opponent_certification.log"
+      },
+      "unit": "report",
+      "method": "实测 2026-08-29：认证脚本 7 对手 x 4 弱池 x 3 种子 = 84 局全 STRONG（每个新 bot 12W-0L-0T，>=50% 阈值全部达标）；运行 250s"
+    },
+    "m2_gate_required_opponents": {
+      "value": {
+        "before": [
+          "cow_baron",
+          "melon_hoarder",
+          "expansionist",
+          "baseline_wheat"
+        ],
+        "after": [
+          "cow_baron",
+          "melon_hoarder",
+          "expansionist",
+          "baseline_wheat",
+          "crop_rotator",
+          "template_wheat",
+          "self_feed_ranch",
+          "near_band_diversified"
+        ],
+        "old_members_retained": true,
+        "new_members_added": [
+          "crop_rotator",
+          "template_wheat",
+          "self_feed_ranch",
+          "near_band_diversified"
+        ],
+        "required_list_sha256": "14dcaea76e02cfae963d0a7299ae6f2d758f226b7af865beeed063054b76395c",
+        "gate_games_expected": 64,
+        "enforced_by": [
+          "scripts/check_eval_contract.py --mode gate (REQUIRED_OPPONENTS)",
+          "scripts/iterate_gate.py REQUIRED_OPPONENTS (complete gate)"
+        ],
+        "missing_opponent_schedule_rejected": true
+      },
+      "unit": "report",
+      "method": "实测 2026-08-29：门禁必测集合由 4 扩至 8（旧成员全保留）；check_eval_contract gate 拒绝缺对手赛程（games[:24] 切片按 3 对手构造被拒）与单座位赛程；exploratory 参数的 near_band_diversified 同样必测"
+    },
+    "m2_gate_contract_check_pass": {
+      "value": true,
+      "unit": "bool",
+      "method": "实测 2026-08-29：python workspace/software/scripts/check_eval_contract.py --mode gate -> exit 0（新必测集合 8 对手 x seeds 101-104 x AB/BA = 64 局 fixture 正式通过 + 5 类异常拒绝全过）；同轮复验 --mode official --input exports/eval_results.json -> exit 0（冻结 holdout 未失效，sha256 ac7684d8...）"
+    },
+    "m2_opponent_unit_tests_summary": {
+      "value": {
+        "file": "workspace/software/tests/test_bots_online_pool.py",
+        "file_sha256": "3cddb9b3341b76d1c983d1204d08e49d8173e474bfbb85b1f32dbe141133bc28",
+        "total": 42,
+        "passed": 42,
+        "failed": 0,
+        "full_suite_total": 246,
+        "full_suite_passed": 246,
+        "full_suite_failed": 0,
+        "coverage": [
+          "契约(合法动作/确定性/敌意obs/短局)",
+          "exploratory 标志纪律",
+          "雇佣节律(象限缩放/日斜坡)",
+          "轮作触发(价格门+相位窗)",
+          "外购饲料护栏(价格上限+晨间配给+gap模式)",
+          "卖出门(持有/释放/倾销)",
+          "终局倾销窗口(day27/28)",
+          "象限扩张时机",
+          "畜群构成"
+        ]
+      },
+      "unit": "test-run",
+      "method": "实测 2026-08-29：python -m pytest workspace/software/tests/test_bots_online_pool.py -q -> 42 passed；全量 python -m pytest workspace/software/tests -q -> 246 passed 0 failed (10.24s)"
+    },
+    "m3_strategy_capability_checks": {
+      "value": {
+        "rotation_trigger_and_price_floors": {
+          "verdict": "pass",
+          "tests": 4,
+          "evidence": "tests/test_strategy_m3.py::test_rotation_plants_melon_above_its_price_floor, ::test_rotation_phase_windows, ::test_rotation_freezes_each_crop_under_its_floor, ::test_wheat_is_feed_floor_and_money_crop"
+        },
+        "external_feed_guardrail": {
+          "verdict": "pass",
+          "tests": 3,
+          "evidence": "tests/test_strategy_m3.py::test_feed_buy_guardrail_binds_in_normal_state, ::test_starvation_buys_above_the_guardrail, ::test_wheat_sell_gate_has_cash_flow_fallback"
+        },
+        "labour_expansion_intensity": {
+          "verdict": "pass",
+          "tests": 3,
+          "evidence": "tests/test_strategy_m3.py::test_hands_ramp_reaches_profile_intensity, ::test_dawn_hire_burst_reaches_plan_intensity, ::test_hire_burst_keeps_cash_cushion"
+        },
+        "third_quadrant_expansion": {
+          "verdict": "pass",
+          "tests": 4,
+          "evidence": "tests/test_strategy_m3.py::test_ne_quadrant_due_day4_and_fund_gated, ::test_sw_quadrant_due_day7, ::test_fourth_quadrant_never_bought, ::test_herd_subordinated_to_pending_land_fund"
+        },
+        "endgame_hoard_dump_and_stop_feed": {
+          "verdict": "pass",
+          "tests": 5,
+          "evidence": "tests/test_strategy_m3.py::test_wool_dumps_in_endgame_window_from_day26, ::test_wool_holds_before_the_window_when_curve_unclear, ::test_wool_cut_loss_on_dying_curve, ::test_premium_goods_dump_in_endgame_tranches, ::test_stop_feed_from_day28_but_harvest_held_yield"
+        },
+        "dead_price_freeze_generalized": {
+          "verdict": "pass",
+          "tests": 3,
+          "evidence": "tests/test_strategy_m3.py::test_sheep_buy_freezes_when_wool_curve_dead, ::test_cow_buy_freezes_when_milk_curve_dead, ::test_species_interleave_by_relative_deficit (fertilizer value gate covered by ::test_fert_value_gate_keeps_premium_boosts_only)"
+        },
+        "m2b_fixes_no_regression": {
+          "verdict": "pass",
+          "tests": 26,
+          "evidence": "tests/test_strategy_m2.py 26/26 green on the m3 engine (dairy-era pins: milk gates, last-day liquidation, buy-pace confirmation, shed reservations, positive orders, seat isolation, herd freeze)"
+        }
+      },
+      "unit": "verdict",
+      "method": "pytest function-level regression checks over the frozen candidate (kaggle_simulations/agent/main.py sha256 5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee); run 2026-08-29, 49/49 passed (23 m3 + 26 m2b)"
+    },
+    "m3_strategy_regression_summary": {
+      "value": {
+        "m3_tests_total": 23,
+        "m3_tests_passed": 23,
+        "m3_tests_failed": 0,
+        "m3_test_file_sha256": "3538ab9e2c0289abcf0c5553a7e2ea3e41746d1e5ac3034e341ada81b1d9acab",
+        "m2b_preserved_tests_total": 26,
+        "m2b_preserved_tests_passed": 26,
+        "m2b_preserved_tests_failed": 0,
+        "complete_suite_total": 269,
+        "complete_suite_passed": 269
+      },
+      "unit": "count",
+      "method": "python -m pytest workspace/software/tests -q (full suite) and targeted files, 2026-08-29"
+    },
+    "m3_development_gate_summary": {
+      "value": {
+        "candidate_sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee",
+        "label": "m3-frozen",
+        "required_opponents": [
+          "cow_baron",
+          "melon_hoarder",
+          "expansionist",
+          "baseline_wheat",
+          "crop_rotator",
+          "template_wheat",
+          "self_feed_ranch",
+          "near_band_diversified"
+        ],
+        "expected_games": 64,
+        "actual_games": 64,
+        "seat_split": {
+          "AB": 32,
+          "BA": 32
+        },
+        "abnormal_games": 0,
+        "seeds": [
+          101,
+          102,
+          103,
+          104
+        ],
+        "seed_domain": "development",
+        "candidate_record": {
+          "wins": 57,
+          "losses": 7,
+          "ties": 0
+        },
+        "per_opponent": {
+          "cow_baron": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 24293.0
+          },
+          "melon_hoarder": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 44330.6
+          },
+          "expansionist": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 63371.2
+          },
+          "baseline_wheat": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 71261.8
+          },
+          "crop_rotator": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 10216.8
+          },
+          "template_wheat": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 5195.0
+          },
+          "self_feed_ranch": {
+            "wins": 5,
+            "losses": 3,
+            "ties": 0,
+            "win_rate": 0.625,
+            "avg_margin": -397.6
+          },
+          "near_band_diversified": {
+            "wins": 4,
+            "losses": 4,
+            "ties": 0,
+            "win_rate": 0.5,
+            "avg_margin": 1648.1
+          }
+        },
+        "formal_pass": true,
+        "elapsed_seconds": 276.42
+      },
+      "unit": "summary",
+      "method": "python workspace/software/scripts/iterate_gate.py --label m3-frozen --rounds 4 --require-complete (complete dev gate: 8 opponents x seeds 101-104 x AB/BA on the official engine, 2026-08-29)"
+    },
+    "m3_frozen_candidate_identity": {
+      "value": {
+        "path": "workspace/software/kaggle_simulations/agent/main.py",
+        "sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee",
+        "git_ref": "b47bc16f426fbfeeab645e86a5b4453d45b5779a",
+        "manifest": "workspace/software/m3_frozen_manifest.json",
+        "manifest_sha256": "67e08238e44b7c76a262f34baea27fe6c721bfb545cacb0fe239a6c76a6d3b2a",
+        "snapshot": "workspace/software/m3_frozen_candidate.b64",
+        "snapshot_file_sha256": "7ac70b002c1fa472f5325347c0a5707780ca6708c82c6679555b389ebd180059",
+        "decoded_sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee"
+      },
+      "unit": "identity",
+      "method": "sha256 of kaggle_simulations/agent/main.py at freeze; snapshot b64 round-trip verified decoded==source; manifest written 2026-08-29 after the m3-frozen complete gate PASS"
     }
-   },
-   "unit": "ratio",
-   "method": "eval_results.json#matchup_win_rates (matrix) + failure_probe (seeds 201-208); m1 comparison: cow_baron 0.0 (1-7), melon_hoarder 0.0 (0-8)"
   },
-  "m2_submission_margin_vs_pool": {
-   "value": {
-    "cow_baron": 3330,
-    "melon_hoarder": 12875,
-    "expansionist": 28098,
-    "baseline_wheat": 37284,
-    "greedy_carrot": 49333,
-    "starter": 52517,
-    "random": 73943,
-    "pass": 60246
-   },
-   "unit": "coins",
-   "method": "avg margin (submission - opponent) per pairing, final m2 matrix run (--rounds 4); m1 comparison: cow_baron -17772, melon_hoarder -5410"
-  },
-  "m2_probe_record": {
-   "value": {
-    "record": "53W-3L-0T",
-    "losses": [
-     "cow_baron seed 204 (-3213)",
-     "cow_baron seed 206 (-3587)",
-     "melon_hoarder seed 208 (-1413)"
-    ],
-    "loss_character": "cow_baron 204/206 are demand-drought episodes (zero milk shops drawn: milk 9-40 floor for both players, wheat 26-33) -- market randomness keyed to the episode seed, not opponent-identifiable behavior"
-   },
-   "unit": "report",
-   "method": "scripts/analyze_failure_modes.py --rounds 8 on the merged m2 bot (64 games, seeds 201-208, 178s)"
-  },
-  "m2_tests_total": {
-   "value": 101,
-   "unit": "count",
-   "method": "python -m pytest workspace/software/tests -q (2026-08-28, m2 wave 3): 84 m1 tests + 17 new tests/test_strategy_m2.py (milk gate schedule, hold/release/pressure gate semantics, fert hoard bound, herd/wheat planning caps, phantom-feed-buy guard, buy-pace episode reset, dawn hire burst, demand-drought herd freeze)"
-  },
-  "m2_tests_passed": {
-   "value": 101,
-   "unit": "count",
-   "method": "same run, 101 passed 0 failed in 1.98s"
-  },
-  "m2_regression_gate_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "m2 re-run (2026-08-28): run_eval --rounds 2 --assert-regression -> exit 0; frozen-subset gate PASS (submission=1355.0 > baseline_wheat=1252.4 > greedy_carrot=1227.5 > starter=1175.3 > pass=1128.9 > random=1061.0, submission 0 losses vs frozen pool)"
-  },
-  "m2_smoke_boot_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "python workspace/software/smoke_boot.py on the merged m2 bot -> PASS (3.7s, 4 phases incl. 720-step self-play seeds 7/8/9)"
-  },
-  "llm_ab_harness_ready": {
-   "value": true,
-   "unit": "bool",
-   "method": "scripts/run_llm_ab.py --rounds 2 (one command): loads two module instances of main.py, LLM-on side wired to provider_from_env(), both seat orders, instrumented provider counters; writes exports/llm_ab_results.json. NullProvider plumbing-validation run measured: 4 games in 13.06s, 1294 consultations, 1294 heuristic fallbacks, 0 budget blocks (NullProvider carries no budget), seat-symmetric outcomes"
-  },
-  "llm_ab_games": {
-   "value": 4,
-   "unit": "games",
-   "method": "NullProvider baseline-side harness validation only (seeds 701-702, both seats). NOT a real A/B: with KG_LLM_* unset both sides play the identical heuristic policy; win_rate stays null by design"
-  },
-  "llm_ab_fallback_count": {
-   "value": 1294,
-   "unit": "count",
-   "method": "instrumented NullProvider run above: every consultation fell back to the heuristic gate (provider disabled -> returns None); proves the fallback path executes"
-  },
-  "failure_mode_status_m2": {
-   "value": {
-    "FM-1": "已缓解 (root-cause engine swap to cows; residual: demand-drought seeds 204/206)",
-    "FM-2": "已缓解 (no mid-season premium-crop exposure; melon_hoarder 0-8 -> 7-1)",
-    "FM-3": "已缓解 (wheat-first staged opening; expansionist min margin +9421 -> +14949)",
-    "FM-4": "部分缓解 (gated release + wheat self-consumption; linear zero-demand curve still decays)"
-   },
-   "unit": "report",
-   "method": "exports/failure_modes.md m2 annotations backed by the 64-game probe + iteration gate log"
-  },
-  "m2a_tests_total": {
-   "value": 128,
-   "unit": "count",
-   "method": "2026-08-29 final post-review actual run: python -m pytest workspace/software/tests -q -> 128 passed in 2.13s"
-  },
-  "m2a_tests_passed": {
-   "value": 128,
-   "unit": "count",
-   "method": "same final post-review complete software test run; 0 failed"
-  },
-  "m2a_acceptance_fixture_passed": {
-   "value": 7,
-   "unit": "count",
-   "method": "2026-08-28 actual run: python scripts/verify/test_acceptance.py -> 7/7; temporary fixture removes copied historical acceptance runs and reads latest run-N"
-  },
-  "m2a_smoke_boot_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "2026-08-28 post-review run: python workspace/software/smoke_boot.py -> PASS, 4 phases"
-  },
-  "m2a_smoke_boot_runtime_seconds": {
-   "value": 3.9,
-   "unit": "s",
-   "method": "same post-review smoke_boot console measurement"
-  },
-  "m2a_dev_abba_games": {
-   "value": 16,
-   "unit": "games",
-   "method": "2026-08-28 actual run: run_eval.py --quick; 8 submission/opponent pairs x seed 101 x AB/BA; exports/eval_results.dev.json schema 2.0"
-  },
-  "m2a_dev_abba_runtime_seconds": {
-   "value": 47.14,
-   "unit": "s",
-   "method": "exports/eval_results.dev.json.runtime_seconds from the actual quick development run"
-  },
-  "m2a_dev_abnormal_games": {
-   "value": 0,
-   "unit": "games",
-   "method": "exports/eval_results.dev.json.abnormal_games; all 16 games statuses DONE/DONE and contract_ok=true"
-  },
-  "m2a_formal_export_preserved_by_dev": {
-   "value": true,
-   "unit": "bool",
-   "method": "actual before/after sha256sum around run_eval.py --quick: exports/eval_results.json remained ce540e0471700242ff35d917c331de9fcd8ee494fb9b3a0ce8b8645348ef54ae"
-  },
-  "m2a_complete_gate_pass": {
-   "value": false,
-   "unit": "bool",
-   "method": "invalidated=true: the 104.38s/32-game run preceded independent acceptor findings and the final candidate-snapshot/transaction wiring; retained only as audit history, not a valid merge gate. m2b must rerun the complete gate on the frozen candidate"
-  },
-  "m2a_complete_gate_games": {
-   "value": 32,
-   "unit": "games",
-   "method": "invalidated historical run only; 4 required opponents x seeds 101-104 x AB/BA. Not usable as current PASS evidence"
-  },
-  "m2a_complete_gate_abnormal_games": {
-   "value": 0,
-   "unit": "games",
-   "method": "invalidated historical run reported zero abnormal games; current production fail-closed semantics are verified by m2a_gate_contract_check_pass"
-  },
-  "m2a_complete_gate_runtime_seconds": {
-   "value": 104.38,
-   "unit": "s",
-   "method": "invalidated historical run duration; retained for audit, not performance acceptance"
-  },
-  "m2a_complete_gate_invalidated": {
-   "value": true,
-   "unit": "bool",
-   "method": "independent acceptor rejected the pre-fix gate implementation; no replacement long gate was run in m2a"
-  },
-  "m2a_gate_contract_check_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "2026-08-28 post-review actual run: check_eval_contract.py --mode gate -> exit 0; production validator rejected missing opponent, single-seat schedule, INVALID status, malformed tie, seed-domain mismatch, and exploratory formal PASS"
-  },
-  "m2a_export_safety_check_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "2026-08-28 post-review actual run: check_eval_contract.py --mode export -> exit 0; production schema/semantic validator, Windows case alias rejection, dev export+replay isolation, and schema/replay failure preservation verified"
-  },
-  "m2a_llm_null_games": {
-   "value": 2,
-   "unit": "games",
-   "method": "2026-08-28 actual run with KG_LLM_* unset: run_llm_ab.py --rounds 1; seed 701 AB/BA"
-  },
-  "m2a_llm_null_effective_calls": {
-   "value": 0,
-   "unit": "count",
-   "method": "exports/llm_ab_results.json consultation_stats.effective_calls; provider_configured=false and real_ab=false"
-  },
-  "m2a_llm_null_fallback_count": {
-   "value": 662,
-   "unit": "count",
-   "method": "exports/llm_ab_results.json; 331 independent NullProvider consultations per game x 2 games"
-  },
-  "m2a_llm_null_runtime_seconds": {
-   "value": 5.46,
-   "unit": "s",
-   "method": "exports/llm_ab_results.json.runtime_seconds from the actual per-game provider isolation run"
-  },
-  "m2b_strategy_tests_total": {
-   "value": 35,
-   "unit": "count",
-   "method": "2026-08-28 actual command: python -m pytest workspace/software/tests/test_strategy_m2.py workspace/software/tests/test_agent_contract.py -q -> 35 passed 0 failed"
-  },
-  "m2b_strategy_tests_passed": {
-   "value": 35,
-   "unit": "count",
-   "method": "same targeted m2b strategy/contract test command -> 35 passed"
-  },
-  "m2b_complete_gate_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "2026-08-28 actual command: iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m2b-frozen --rounds 4 --require-complete -> VERDICT PASS"
-  },
-  "m2b_complete_gate_games": {
-   "value": 32,
-   "unit": "games",
-   "method": "same actual complete gate: 4 required opponents x seeds 101-104 x AB/BA; expected=32 actual=32"
-  },
-  "m2b_complete_gate_abnormal": {
-   "value": 0,
-   "unit": "games",
-   "method": "same actual complete gate output: abnormal=0; every game contract-normal"
-  },
-  "m2b_complete_gate_runtime_seconds": {
-   "value": 83.16,
-   "unit": "s",
-   "method": "same actual final complete gate log entry elapsed_seconds=83.16"
-  },
-  "m2b_candidate_sha256": {
-   "value": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-   "unit": "sha256",
-   "method": "actual pre/post identity commands and final clean-baseline iterate_gate candidate snapshot identity; source SHA unchanged"
-  },
-  "m2b_frozen_manifest": {
-   "value": {
-    "path": "workspace/software/m2b_frozen_manifest.json",
-    "sha256": "fe02b03cf4d7b53673b77ba18e5ab02a908feb8279fa30ff7f40b71ce32e1141",
-    "candidate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-    "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
-    "dirty_before_gate": false,
-    "snapshot_path": "workspace/software/m2b_frozen_candidate.b64",
-    "snapshot_sha256": "3b9eb106b585a4b36e594bc6ecdbf9472994cfd9d31c02a486ffcb95f6320986"
-   },
-   "unit": "manifest",
-   "method": "clean-baseline gate manifest plus exact-byte base64 snapshot for CRLF-stable holdout execution"
-  },
-  "strategy_repair_test_summary": {
-   "value": {
-    "total": 35,
-    "passed": 35,
-    "failed": 0,
-    "command": "python -m pytest workspace/software/tests/test_strategy_m2.py workspace/software/tests/test_agent_contract.py -q",
-    "evidence": "workspace/acceptance/evidence/m2b-strategy.log"
-   },
-   "unit": "test-run",
-   "method": "m2b-strategy acceptance evidence"
-  },
-  "strategy_repair_checks": {
-   "value": {
-    "terminal_day_no_capex": true,
-    "terminal_day_liquidation": true,
-    "purchase_confirmation": true,
-    "shed_reservation": true,
-    "positive_quantities": true,
-    "seat_and_episode_isolation": true
-   },
-   "unit": "verdict",
-   "method": "m2b-strategy targeted regression suite"
-  },
-  "development_gate_summary": {
-   "value": {
-    "label": "m2b-frozen-clean",
-    "candidate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-    "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
-    "expected_games": 32,
-    "actual_games": 32,
-    "ab_games": 16,
-    "ba_games": 16,
-    "abnormal_games": 0,
-    "formal_pass": true,
-    "record": {
-     "W": 31,
-     "L": 1,
-     "T": 0
+  "unmeasured": {
+    "llm_ab_win_rate": {
+      "value": null,
+      "note": "待用户提供 KG_LLM_* key: 本环境无相关环境变量，A/B 两侧策略相同，实测无意义故如实置 null（harness 已就绪，见 llm_ab_harness_ready）"
     },
-    "evidence": "workspace/software/exports/logs/iteration_gate_log.jsonl"
-   },
-   "unit": "gate",
-   "method": "latest m2b-frozen-clean gate record"
-  },
-  "frozen_candidate_identity": {
-   "value": {
-    "path": "workspace/software/kaggle_simulations/agent/main.py",
-    "sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-    "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
-    "dirty_before_gate": false,
-    "holdout_eligible": true,
-    "manifest": "workspace/software/m2b_frozen_manifest.json"
-   },
-   "unit": "identity",
-   "method": "m2b clean-baseline gate identity; m2c must verify the candidate blob at this ref and current candidate SHA"
-  },
-  "holdout_protocol": {
-   "value": {
-    "full_matrix": true,
-    "seed_count": 8,
-    "seat_orders": [
-     "AB",
-     "BA"
-    ],
-    "one_time": true,
-    "resume_exact_attempt_only": true,
-    "candidate_change_invalidates": true,
-    "candidate_source": "frozen_git_blob"
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
-  },
-  "holdout_seed_manifest": {
-   "value": {
-    "schema_version": "1.0",
-    "attempt_id": "41c7771a63b90d3e66cb40c7",
-    "generated_after_freeze": true,
-    "random_source": "Python secrets.randbelow (OS cryptographic entropy)",
-    "revealed_at": "2026-08-28T18:51:07.641758+00:00",
-    "seeds": [
-     1434909129,
-     415651673,
-     68483508,
-     141000100,
-     801695889,
-     291593029,
-     1616180299,
-     1369595171
-    ],
-    "sha256": "68292287a9b8254538f312fb6e3d1991ce215ca2ac2a4e4b0ecc51a6ddbdc93a",
-    "historical_seed_exclusion_count": 27,
-    "overlap_with_historical": []
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
-  },
-  "holdout_candidate_hash_match": {
-   "value": {
-    "frozen": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-    "before": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-    "after": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
-    "pass": true
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
-  },
-  "holdout_seed_domain_isolation": {
-   "value": {
-    "historical_count": 27,
-    "overlap_count": 0,
-    "pass": true
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
-  },
-  "holdout_run_status": {
-   "value": {
-    "index": 1,
-    "attempt_id": "41c7771a63b90d3e66cb40c7",
-    "status": "published",
-    "started_at": "2026-08-28T18:36:10.491843+00:00",
-    "completed_at": "2026-08-28T18:51:07.643314+00:00",
-    "published": true,
-    "invalidated": false,
-    "invalidation_reason": null
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
-  },
-  "holdout_schedule": {
-   "value": {
-    "expected_games": 576,
-    "actual_games": 576
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/integrity"
-  },
-  "holdout_seat_split": {
-   "value": {
-    "ab_games": 288,
-    "ba_games": 288,
-    "missing_mirrors": 0
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/integrity"
-  },
-  "holdout_abnormal_summary": {
-   "value": {
-    "abnormal_games": 0
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/integrity/abnormal_games"
-  },
-  "holdout_integrity_pass": {
-   "value": true,
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/integrity"
-  },
-  "confirmatory_overall_record": {
-   "value": {
-    "games": 128,
-    "W": 119,
-    "L": 9,
-    "T": 0,
-    "score_rate": 0.929688,
-    "wilson95": [
-     0.8718,
-     0.9626
-    ]
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/confirmatory/overall_record"
-  },
-  "confirmatory_pair_records": {
-   "value": [
-    {
-     "opponent": "cow_baron",
-     "games": 16,
-     "W": 10,
-     "L": 6,
-     "T": 0,
-     "score_rate": 0.625,
-     "wilson95": [
-      0.3864,
-      0.8152
-     ]
+    "llm_ab_budget_gate_hits": {
+      "value": null,
+      "note": "预算闸代码在 OpenAICompatProvider 内（max 8 calls/30s），NullProvider 无 budget 对象故未触发；待真实 key 后由 run_llm_ab.py 输出"
     },
-    {
-     "opponent": "melon_hoarder",
-     "games": 16,
-     "W": 13,
-     "L": 3,
-     "T": 0,
-     "score_rate": 0.8125,
-     "wilson95": [
-      0.5699,
-      0.9341
-     ]
+    "online_ladder_games": {
+      "value": 3,
+      "note": "online-measured 2026-08-29: completed EPISODE_TYPE_PUBLIC ladder games by submission 55858820 (episodes 102192249 W, 102194478 L, 102196708 L; the 4th episode 102188134 is EPISODE_TYPE_VALIDATION self-play and is excluded). Evidence: workspace/software/exports/online/round1_ledger.json. Key kept in the unmeasured namespace so consumer key locations stay stable"
     },
-    {
-     "opponent": "expansionist",
-     "games": 16,
-     "W": 16,
-     "L": 0,
-     "T": 0,
-     "score_rate": 1.0,
-     "wilson95": [
-      0.8064,
-      1.0
-     ]
+    "online_skill_rating": {
+      "value": 488.9,
+      "note": "online-measured 2026-08-29: Kaggle publicScore (skill rating) 488.9 for submission 55858820 after its 3 public ladder games (1W-2L), read via kaggle competitions submissions CLI on 2026-08-29. Key kept in the unmeasured namespace so consumer key locations stay stable"
     },
-    {
-     "opponent": "baseline_wheat",
-     "games": 16,
-     "W": 16,
-     "L": 0,
-     "T": 0,
-     "score_rate": 1.0,
-     "wilson95": [
-      0.8064,
-      1.0
-     ]
+    "online_feedback_calibration": {
+      "value": {
+        "round1_public_record": "1W-2L",
+        "loss_failure_modes": [
+          "FM-O1 portfolio concentration",
+          "FM-O2 no purchased-wheat feed",
+          "FM-O3 no high-value crops",
+          "FM-O4 CARE/DIG underuse"
+        ],
+        "ledger": "workspace/software/exports/online/round1_ledger.json",
+        "analysis": "workspace/software/exports/online/round1_failure_analysis.md"
+      },
+      "note": "online-measured 2026-08-29: replay analysis (kaggle competitions episodes/replay CLI) of the two public losses (102194478 vs Sooriya Senthilkumar 39377:74792, 102196708 vs Chirag Bhatnagar 47642:62586) produced failure modes FM-O1..FM-O4 with per-winner evidence counts; winners ran diversified economies vs our 10-cow monoculture. Per-candidate recalibration item for the next iteration cycle. Key kept in the unmeasured namespace so consumer key locations stay stable"
     },
-    {
-     "opponent": "greedy_carrot",
-     "games": 16,
-     "W": 16,
-     "L": 0,
-     "T": 0,
-     "score_rate": 1.0,
-     "wilson95": [
-      0.8064,
-      1.0
-     ]
-    },
-    {
-     "opponent": "starter",
-     "games": 16,
-     "W": 16,
-     "L": 0,
-     "T": 0,
-     "score_rate": 1.0,
-     "wilson95": [
-      0.8064,
-      1.0
-     ]
-    },
-    {
-     "opponent": "random",
-     "games": 16,
-     "W": 16,
-     "L": 0,
-     "T": 0,
-     "score_rate": 1.0,
-     "wilson95": [
-      0.8064,
-      1.0
-     ]
-    },
-    {
-     "opponent": "pass",
-     "games": 16,
-     "W": 16,
-     "L": 0,
-     "T": 0,
-     "score_rate": 1.0,
-     "wilson95": [
-      0.8064,
-      1.0
-     ]
+    "final_submission_commits": {
+      "value": null,
+      "note": "m3: last 2 submission commit hashes at final lock"
     }
-   ],
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/confirmatory/pair_records"
-  },
-  "confirmatory_seat_records": {
-   "value": {
-    "AB": {
-     "games": 64,
-     "W": 60,
-     "L": 4,
-     "T": 0,
-     "score_rate": 0.9375,
-     "wilson95": [
-      0.85,
-      0.9754
-     ],
-     "by_opponent": {
-      "cow_baron": {
-       "games": 8,
-       "W": 5,
-       "L": 3,
-       "T": 0,
-       "score_rate": 0.625,
-       "wilson95": [
-        0.3057,
-        0.8632
-       ]
-      },
-      "melon_hoarder": {
-       "games": 8,
-       "W": 7,
-       "L": 1,
-       "T": 0,
-       "score_rate": 0.875,
-       "wilson95": [
-        0.5291,
-        0.9776
-       ]
-      },
-      "expansionist": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "baseline_wheat": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "greedy_carrot": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "starter": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "random": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "pass": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      }
-     }
-    },
-    "BA": {
-     "games": 64,
-     "W": 59,
-     "L": 5,
-     "T": 0,
-     "score_rate": 0.921875,
-     "wilson95": [
-      0.8298,
-      0.9662
-     ],
-     "by_opponent": {
-      "cow_baron": {
-       "games": 8,
-       "W": 5,
-       "L": 3,
-       "T": 0,
-       "score_rate": 0.625,
-       "wilson95": [
-        0.3057,
-        0.8632
-       ]
-      },
-      "melon_hoarder": {
-       "games": 8,
-       "W": 6,
-       "L": 2,
-       "T": 0,
-       "score_rate": 0.75,
-       "wilson95": [
-        0.4093,
-        0.9285
-       ]
-      },
-      "expansionist": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "baseline_wheat": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "greedy_carrot": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "starter": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "random": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      },
-      "pass": {
-       "games": 8,
-       "W": 8,
-       "L": 0,
-       "T": 0,
-       "score_rate": 1.0,
-       "wilson95": [
-        0.6756,
-        1.0
-       ]
-      }
-     }
-    }
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/confirmatory/seat_records"
-  },
-  "confirmatory_wilson_intervals": {
-   "value": {
-    "confidence": 0.95,
-    "method": "Wilson score; tie=0.5",
-    "overall": [
-     0.8718,
-     0.9626
-    ],
-    "pairs": {
-     "cow_baron": [
-      0.3864,
-      0.8152
-     ],
-     "melon_hoarder": [
-      0.5699,
-      0.9341
-     ],
-     "expansionist": [
-      0.8064,
-      1.0
-     ],
-     "baseline_wheat": [
-      0.8064,
-      1.0
-     ],
-     "greedy_carrot": [
-      0.8064,
-      1.0
-     ],
-     "starter": [
-      0.8064,
-      1.0
-     ],
-     "random": [
-      0.8064,
-      1.0
-     ],
-     "pass": [
-      0.8064,
-      1.0
-     ]
-    }
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/confirmatory/wilson_intervals"
-  },
-  "confirmatory_order_independent_statistics": {
-   "value": {
-    "method": "mean per-(opponent,seed) AB/BA score; Student-t 95% CI",
-    "order_independent": true,
-    "tie_policy": "tie=0.5 game score",
-    "unit_count": 64,
-    "estimate": 0.929688,
-    "ci95": [
-     0.867281,
-     0.992094
-    ],
-    "input_sha256": "f3061817d74491a4e98bc7025ce913de7180fc6294f22b12b211cf3a8ef33266",
-    "fit_status": "ok"
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/confirmatory/order_independent_statistic"
-  },
-  "confirmatory_elo_appendix": {
-   "value": {
-    "role": "descriptive_only",
-    "order_sensitive": true,
-    "k": 32.0,
-    "start": 1200.0,
-    "table": [
-     {
-      "name": "submission",
-      "rating": 1664.8,
-      "played": 128,
-      "record": {
-       "W": 119,
-       "L": 9,
-       "T": 0
-      }
-     },
-     {
-      "name": "cow_baron",
-      "rating": 1604.5,
-      "played": 128,
-      "record": {
-       "W": 114,
-       "L": 14,
-       "T": 0
-      }
-     },
-     {
-      "name": "melon_hoarder",
-      "rating": 1536.8,
-      "played": 128,
-      "record": {
-       "W": 103,
-       "L": 25,
-       "T": 0
-      }
-     },
-     {
-      "name": "expansionist",
-      "rating": 1420.0,
-      "played": 128,
-      "record": {
-       "W": 80,
-       "L": 48,
-       "T": 0
-      }
-     },
-     {
-      "name": "baseline_wheat",
-      "rating": 1290.8,
-      "played": 128,
-      "record": {
-       "W": 64,
-       "L": 64,
-       "T": 0
-      }
-     },
-     {
-      "name": "greedy_carrot",
-      "rating": 1135.9,
-      "played": 128,
-      "record": {
-       "W": 48,
-       "L": 80,
-       "T": 0
-      }
-     },
-     {
-      "name": "starter",
-      "rating": 949.6,
-      "played": 128,
-      "record": {
-       "W": 32,
-       "L": 96,
-       "T": 0
-      }
-     },
-     {
-      "name": "pass",
-      "rating": 766.6,
-      "played": 128,
-      "record": {
-       "W": 16,
-       "L": 112,
-       "T": 0
-      }
-     },
-     {
-      "name": "random",
-      "rating": 431.0,
-      "played": 128,
-      "record": {
-       "W": 0,
-       "L": 128,
-       "T": 0
-      }
-     }
-    ]
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/elo"
-  },
-  "confirmatory_export_traceability": {
-   "value": {
-    "export_sha256": "ac7684d853e368a26bf8685d6649d3d4d711a13a9eaacdadb6ff89c7aa5504f7",
-    "source": "workspace/software/exports/eval_results.json",
-    "validated_schema": "2.0",
-    "json_pointers": {
-     "holdout_protocol": "/holdout/protocol",
-     "holdout_seed_manifest": "/holdout/seed_manifest",
-     "holdout_candidate_hash_match": "/holdout/candidate_hash_match",
-     "holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
-     "holdout_run_status": "/holdout/attempt",
-     "holdout_schedule": "/integrity",
-     "holdout_seat_split": "/integrity",
-     "holdout_abnormal_summary": "/integrity/abnormal_games",
-     "holdout_integrity_pass": "/integrity",
-     "confirmatory_overall_record": "/confirmatory/overall_record",
-     "confirmatory_pair_records": "/confirmatory/pair_records",
-     "confirmatory_seat_records": "/confirmatory/seat_records",
-     "confirmatory_wilson_intervals": "/confirmatory/wilson_intervals",
-     "confirmatory_order_independent_statistics": "/confirmatory/order_independent_statistic",
-     "confirmatory_elo_appendix": "/elo"
-    }
-   },
-   "unit": "holdout-evidence",
-   "method": "workspace/software/exports/eval_results.json#/confirmatory_export_traceability"
-  },
-  "m1_corpus_episodes_total": {
-   "value": 60,
-   "unit": "count",
-   "method": "m1-replay-corpus (2026-08-29): python workspace/software/scripts/corpus_build.py over .tmp-corpus raw replays (official Kaggle daily episode shard kaggle/kaggriculture-episodes-2026-08-28 selective downloads + 3 own/top episodes); integrity-gated (both seats DONE, 720 steps)"
-  },
-  "m1_corpus_by_band": {
-   "value": {
-    "top20": 58,
-    "top100": 15,
-    "band_500_900": 2,
-    "baseline": 2
-   },
-   "unit": "episodes per band (episode may count in multiple bands)",
-   "method": "m1-replay-corpus (2026-08-29): band assignment from 2026-08-29 public leaderboard CSV (top20=rank<=20, top100=rank<=100, band_500_900=Score in [500,900], baseline=renyxin seat), computed by scripts/corpus_fetch.py stage; counts from exports/replay_profiles/index.json"
-  },
-  "m1_corpus_abnormal_excluded": {
-   "value": 0,
-   "unit": "count",
-   "method": "m1-replay-corpus (2026-08-29): scripts/corpus_build.py integrity gate (statuses/steps/rewards) over all 60 raw replays; exclusions logged in exports/replay_profiles/exclusions.json (negative path proven by tests/test_replay_corpus.py synthetic dirty fixtures)"
-  },
-  "m1_profiles_generated": {
-   "value": 120,
-   "unit": "count",
-   "method": "m1-replay-corpus (2026-08-29): kgenv/replay_profile.py extractor, one profile per episode x player, archived under exports/replay_profiles/profiles/"
-  },
-  "m1_download_bytes": {
-   "value": 1896052699,
-   "unit": "bytes",
-   "method": "m1-replay-corpus (2026-08-29): sum of raw replay bytes in .tmp-corpus/manifest.json (57 files downloaded from the 2026-08-28 daily shard via selective single-file fetch + 3 previously fetched episodes; within ~3GB budget, 1 daily shard used)"
-  },
-  "m1_corpus_runtime_seconds": {
-   "value": 21.3,
-   "unit": "seconds",
-   "method": "m1-replay-corpus (2026-08-29): wall clock of scripts/corpus_build.py over 60 replays (load + integrity + extract + archive write) as recorded in exports/replay_profiles/index.json build_runtime_seconds"
-  },
-  "m2_online_style_opponents": {
-   "value": [
-    {
-     "name": "crop_rotator",
-     "style": "榜首框架式：恒定雇佣/象限框架 + 价格自适应小麦占比(0.22-0.62)与轮作(西瓜早段/草莓中段/番茄晚段) + 外购饲料价格护栏 + 终局囤倾",
-     "prototype": "Crop Dusta (rank 1)",
-     "param_basis": "同选手 >=3 局一致画像：26 局（雇佣 9.7-9.9/天、3 象限、7牛4羊1鹅、小麦占比 20-69% 波动、外购饲料 506-2732u@均价34-39）",
-     "profile_archives": [
-      "ep101270384_seat1",
-      "ep101270420_seat0",
-      "ep101370699_seat1",
-      "ep101375177_seat1",
-      "ep101381902_seat0"
-     ],
-     "exploratory_params": false,
-     "implementation": "kgenv/bots/online_pool.py",
-     "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
-    },
-    {
-     "name": "template_wheat",
-     "style": "rank6-28 模板式：锁定 42% 麦田 + 每日固定外购饲料配给(15u/天) + 8牛4羊 + 倾销式低价卖出门(奶60/毛45/莓22)",
-     "prototype": "NIklitaCheporev(8局)/Multi-Head Farmers(6局)/Aashka Kapadia(3局)/Gaddam Shiva Teja(3局)/Levin(3局)/heralces(3局) 同构模板集群",
-     "param_basis": "同选手 >=3 局一致画像：外购饲料 414-436u 恒定、小麦田 42% 恒定、雇佣 9.4/天、终群 8牛4羊",
-     "profile_archives": [
-      "ep101279218_seat1",
-      "ep101882239_seat0",
-      "ep101802072_seat1",
-      "ep102000368_seat1",
-      "ep101643308_seat1",
-      "ep101678908_seat1"
-     ],
-     "exploratory_params": false,
-     "implementation": "kgenv/bots/online_pool.py",
-     "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
-    },
-    {
-     "name": "self_feed_ranch",
-     "style": "Milan 式近自给牧场：46% 麦田自供饲料 + 6牛6羊混合群 + 高价门持有(奶190/毛200) + 草莓/西瓜副业 + 小额外购肥料",
-     "prototype": "Milan Leonard (rank 2)",
-     "param_basis": "同选手 >=3 局一致画像：12 局（外购饲料仅 119-147u、小麦 43-50%、雇佣 8.9-9.3/天、奶卖价中位 200/毛 220、外购肥料 31u）",
-     "profile_archives": [
-      "ep102000368_seat0",
-      "ep102002591_seat0",
-      "ep102020456_seat0"
-     ],
-     "exploratory_params": false,
-     "implementation": "kgenv/bots/online_pool.py",
-     "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
-    },
-    {
-     "name": "near_band_diversified",
-     "style": "近段(500-900)多元化式：草莓主导轮作(上限30格)+西瓜、8牛3羊2鹅、第4象限晚开、day27 起重终局倾销",
-     "prototype": "Sooriya Senthilkumar (rank 3629) / Chirag Bhatnagar (rank 3978)",
-     "param_basis": "exploratory：仅 2 局（每选手 1 局），但两名独立选手结构收敛（草莓 51.8%/33.7% 主导 + 7-8牛混合群 + 终局卖出占比 12.6-17.7%）；按蓝图 m2 以真实线上分布代表性纳入",
-     "profile_archives": [
-      "ep102194478_seat1",
-      "ep102196708_seat0"
-     ],
-     "exploratory_params": true,
-     "implementation": "kgenv/bots/online_pool.py",
-     "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
-    }
-   ],
-   "unit": "array",
-   "method": "战役 III m2-online-pool (2026-08-29)：kgenv/bots/online_pool.py 四个画像参数化重建；参数纪律=主打 bot 只用同选手 >=3 局一致发现（exports/replay_profiles/band_summary.md 跨局复核），near_band 显式 exploratory_params=true；档案 ID 指 exports/replay_profiles/profiles/"
-  },
-  "m2_opponent_pool_certification": {
-   "value": {
-    "command": "python workspace/software/scripts/check_opponent_strength.py --rounds 3",
-    "weak_pool": [
-     "pass",
-     "random",
-     "starter",
-     "greedy_carrot"
-    ],
-    "seeds": [
-     101,
-     102,
-     103
-    ],
-    "threshold": 0.5,
-    "threshold_met_by_all": true,
-    "online_style": {
-     "crop_rotator": {
-      "games": 12,
-      "W": 12,
-      "L": 0,
-      "T": 0,
-      "win_rate": 1.0,
-      "vs_greedy_carrot": {
-       "games": 3,
-       "W": 3,
-       "L": 0,
-       "T": 0,
-       "avg_margin": 57035
-      }
-     },
-     "template_wheat": {
-      "games": 12,
-      "W": 12,
-      "L": 0,
-      "T": 0,
-      "win_rate": 1.0,
-      "vs_greedy_carrot": {
-       "games": 3,
-       "W": 3,
-       "L": 0,
-       "T": 0,
-       "avg_margin": 55071
-      }
-     },
-     "self_feed_ranch": {
-      "games": 12,
-      "W": 12,
-      "L": 0,
-      "T": 0,
-      "win_rate": 1.0,
-      "vs_greedy_carrot": {
-       "games": 3,
-       "W": 3,
-       "L": 0,
-       "T": 0,
-       "avg_margin": 66649
-      }
-     },
-     "near_band_diversified": {
-      "games": 12,
-      "W": 12,
-      "L": 0,
-      "T": 0,
-      "win_rate": 1.0,
-      "vs_greedy_carrot": {
-       "games": 3,
-       "W": 3,
-       "L": 0,
-       "T": 0,
-       "avg_margin": 59625
-      }
-     }
-    },
-    "strong_family_recertified": {
-     "cow_baron": {
-      "games": 12,
-      "W": 12,
-      "L": 0,
-      "T": 0,
-      "win_rate": 1.0
-     },
-     "melon_hoarder": {
-      "games": 12,
-      "W": 12,
-      "L": 0,
-      "T": 0,
-      "win_rate": 1.0
-     },
-     "expansionist": {
-      "games": 12,
-      "W": 12,
-      "L": 0,
-      "T": 0,
-      "win_rate": 1.0
-     }
-    },
-    "exit_code": 0,
-    "log": "workspace/software/exports/logs/m2_opponent_certification.log"
-   },
-   "unit": "report",
-   "method": "实测 2026-08-29：认证脚本 7 对手 x 4 弱池 x 3 种子 = 84 局全 STRONG（每个新 bot 12W-0L-0T，>=50% 阈值全部达标）；运行 250s"
-  },
-  "m2_gate_required_opponents": {
-   "value": {
-    "before": [
-     "cow_baron",
-     "melon_hoarder",
-     "expansionist",
-     "baseline_wheat"
-    ],
-    "after": [
-     "cow_baron",
-     "melon_hoarder",
-     "expansionist",
-     "baseline_wheat",
-     "crop_rotator",
-     "template_wheat",
-     "self_feed_ranch",
-     "near_band_diversified"
-    ],
-    "old_members_retained": true,
-    "new_members_added": [
-     "crop_rotator",
-     "template_wheat",
-     "self_feed_ranch",
-     "near_band_diversified"
-    ],
-    "required_list_sha256": "14dcaea76e02cfae963d0a7299ae6f2d758f226b7af865beeed063054b76395c",
-    "gate_games_expected": 64,
-    "enforced_by": [
-     "scripts/check_eval_contract.py --mode gate (REQUIRED_OPPONENTS)",
-     "scripts/iterate_gate.py REQUIRED_OPPONENTS (complete gate)"
-    ],
-    "missing_opponent_schedule_rejected": true
-   },
-   "unit": "report",
-   "method": "实测 2026-08-29：门禁必测集合由 4 扩至 8（旧成员全保留）；check_eval_contract gate 拒绝缺对手赛程（games[:24] 切片按 3 对手构造被拒）与单座位赛程；exploratory 参数的 near_band_diversified 同样必测"
-  },
-  "m2_gate_contract_check_pass": {
-   "value": true,
-   "unit": "bool",
-   "method": "实测 2026-08-29：python workspace/software/scripts/check_eval_contract.py --mode gate -> exit 0（新必测集合 8 对手 x seeds 101-104 x AB/BA = 64 局 fixture 正式通过 + 5 类异常拒绝全过）；同轮复验 --mode official --input exports/eval_results.json -> exit 0（冻结 holdout 未失效，sha256 ac7684d8...）"
-  },
-  "m2_opponent_unit_tests_summary": {
-   "value": {
-    "file": "workspace/software/tests/test_bots_online_pool.py",
-    "file_sha256": "3cddb9b3341b76d1c983d1204d08e49d8173e474bfbb85b1f32dbe141133bc28",
-    "total": 42,
-    "passed": 42,
-    "failed": 0,
-    "full_suite_total": 246,
-    "full_suite_passed": 246,
-    "full_suite_failed": 0,
-    "coverage": [
-     "契约(合法动作/确定性/敌意obs/短局)",
-     "exploratory 标志纪律",
-     "雇佣节律(象限缩放/日斜坡)",
-     "轮作触发(价格门+相位窗)",
-     "外购饲料护栏(价格上限+晨间配给+gap模式)",
-     "卖出门(持有/释放/倾销)",
-     "终局倾销窗口(day27/28)",
-     "象限扩张时机",
-     "畜群构成"
-    ]
-   },
-   "unit": "test-run",
-   "method": "实测 2026-08-29：python -m pytest workspace/software/tests/test_bots_online_pool.py -q -> 42 passed；全量 python -m pytest workspace/software/tests -q -> 246 passed 0 failed (10.24s)"
   }
- },
- "unmeasured": {
-  "llm_ab_win_rate": {
-   "value": null,
-   "note": "待用户提供 KG_LLM_* key: 本环境无相关环境变量，A/B 两侧策略相同，实测无意义故如实置 null（harness 已就绪，见 llm_ab_harness_ready）"
-  },
-  "llm_ab_budget_gate_hits": {
-   "value": null,
-   "note": "预算闸代码在 OpenAICompatProvider 内（max 8 calls/30s），NullProvider 无 budget 对象故未触发；待真实 key 后由 run_llm_ab.py 输出"
-  },
-  "online_ladder_games": {
-   "value": 3,
-   "note": "online-measured 2026-08-29: completed EPISODE_TYPE_PUBLIC ladder games by submission 55858820 (episodes 102192249 W, 102194478 L, 102196708 L; the 4th episode 102188134 is EPISODE_TYPE_VALIDATION self-play and is excluded). Evidence: workspace/software/exports/online/round1_ledger.json. Key kept in the unmeasured namespace so consumer key locations stay stable"
-  },
-  "online_skill_rating": {
-   "value": 488.9,
-   "note": "online-measured 2026-08-29: Kaggle publicScore (skill rating) 488.9 for submission 55858820 after its 3 public ladder games (1W-2L), read via kaggle competitions submissions CLI on 2026-08-29. Key kept in the unmeasured namespace so consumer key locations stay stable"
-  },
-  "online_feedback_calibration": {
-   "value": {
-    "round1_public_record": "1W-2L",
-    "loss_failure_modes": [
-     "FM-O1 portfolio concentration",
-     "FM-O2 no purchased-wheat feed",
-     "FM-O3 no high-value crops",
-     "FM-O4 CARE/DIG underuse"
-    ],
-    "ledger": "workspace/software/exports/online/round1_ledger.json",
-    "analysis": "workspace/software/exports/online/round1_failure_analysis.md"
-   },
-   "note": "online-measured 2026-08-29: replay analysis (kaggle competitions episodes/replay CLI) of the two public losses (102194478 vs Sooriya Senthilkumar 39377:74792, 102196708 vs Chirag Bhatnagar 47642:62586) produced failure modes FM-O1..FM-O4 with per-winner evidence counts; winners ran diversified economies vs our 10-cow monoculture. Per-candidate recalibration item for the next iteration cycle. Key kept in the unmeasured namespace so consumer key locations stay stable"
-  },
-  "final_submission_commits": {
-   "value": null,
-   "note": "m3: last 2 submission commit hashes at final lock"
-  }
- }
 }

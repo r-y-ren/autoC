@@ -1,0 +1,18 @@
+$ python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m3-frozen --rounds 4 --require-complete
+exit=0
+
+Loading environment cabt failed: Could not find module 'C:\Users\OSS\AppData\Roaming\Python\Python314\site-packages\kaggle_environments\envs\cabt\cg\cg.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+=== iteration gate: m3-frozen (workspace/software/kaggle_simulations/agent/main.py) ===
+  vs cow_baron        W8 L0 T0 wr=1.0 seats={'AB': 4, 'BA': 4}
+  vs melon_hoarder    W8 L0 T0 wr=1.0 seats={'AB': 4, 'BA': 4}
+  vs expansionist     W8 L0 T0 wr=1.0 seats={'AB': 4, 'BA': 4}
+  vs baseline_wheat   W8 L0 T0 wr=1.0 seats={'AB': 4, 'BA': 4}
+  vs crop_rotator     W8 L0 T0 wr=1.0 seats={'AB': 4, 'BA': 4}
+  vs template_wheat   W8 L0 T0 wr=1.0 seats={'AB': 4, 'BA': 4}
+  vs self_feed_ranch  W5 L3 T0 wr=0.625 seats={'AB': 4, 'BA': 4}
+  vs near_band_diversified W4 L4 T0 wr=0.5 seats={'AB': 4, 'BA': 4}
+  contract: expected=64 actual=64 abnormal=0 mode=official
+  VERDICT: PASS
+  logged -> exports\logs\iteration_gate_log.jsonl
+
