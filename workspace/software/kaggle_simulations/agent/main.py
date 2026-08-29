@@ -1,3 +1,29 @@
+# ---------------------------------------------------------------------------
+# v6 candidate (r5-P6 development tree, NOT the submission path).
+#
+# v6-1 (single variable F): strawberry per-quad cap 6 -> 8 under the
+# UNCHANGED 18-tile total cap (a wider pre-SW field: 8/16 tiles at
+# 1/2 quads, still 18 at 3 quads -- F2's 24-tile total measured
+# -280k over 40 cells and was REJECTED; the total cap is load-bearing)
+# from the round-3 monster cross-profile after five
+# single-variable iteration gates vs the new wheat_straw_monster sparring
+# partner (labels v6-*-vs-monster / v6-*-fullpool in
+# exports/logs/iteration_gate_log.jsonl):
+#   A crew-10-from-d0     3W-5L, -123.6k total  -> REJECTED (burns the d0
+#     herd-burst cash; the r3 ramp is load-bearing)
+#   B wheat-money 8/quad  byte-identical no-op  -> structural (the defensive
+#     frame has no free tiles; the monster's wheat volume comes from
+#     external-feed structure, not a quota knob)
+#   F strawberry 8/quad   8W-0L vs monster (+83.0k), full pool 38W-2L,
+#     paired vs r5 +78.8k over 40 cells              -> MERGED HERE
+#   F2 total cap 24       -280k vs F (melon -62k x2, template -37k x2:
+#     the 24-tile 3-quad field crashes joint markets)  -> REJECTED
+#   D wheat-last-day 26   5W-3L (+58.1k, below baseline +66.4k) -> rejected
+#   F+D                   identical to F on both gates      -> minimal-change
+#     discipline keeps F only
+# Everything else is the r5 submission byte-for-byte (the macro-plan layer,
+# rollout safety net, red-line scheduler and market gates unchanged).
+# ---------------------------------------------------------------------------
 """Kaggriculture submission agent -- "rotation ranch" strategy (r5, P4).
 
 r5-P4 macro-plan layer: the round-3 public ladder's next band (96-110k
@@ -253,7 +279,7 @@ WHEAT_MONEY_GATE = 30   # wheat joins the rotation as a money crop at 30+
 WHEAT_MONEY_CAP_PER_QUAD = 3
 CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 14), "CARROT": (15, 26)}
 CROP_FLOOR = {"MELON": 150, "STRAWBERRY": 55, "CARROT": 28}
-CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 6, "CARROT": 4}
+CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 8, "CARROT": 4}  # v6-F
 PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
 
 # ---- r5-P4 macro-plan layer: strategy-space extension --------------------

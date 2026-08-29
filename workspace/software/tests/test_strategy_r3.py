@@ -199,13 +199,17 @@ def test_strawberry_phase_opens_day5_not_day0():
 
 
 def test_strawberry_reaches_winner_band_on_three_quadrants():
-    # 6/quad cap x 3 quads = 18 tiles by d11-13 (winner band 16-23; the
-    # ~20 labour-budget ceiling respected)
+    # v6-F: 8/quad with the UNCHANGED 18-tile total cap (wider pre-SW
+    # field, 18 at 3 quads; F2's 24-tile total measured -280k -> rejected)
     farm = _farm(quads=["NW", "NE", "SW"])
     _, crops, _, _ = main._field_alloc(farm, 12, _prices())
     n = len(crops["STRAWBERRY"])
-    assert 15 <= n <= 20
-    assert n == main.CROP_CAP_PER_QUAD["STRAWBERRY"] * 3
+    assert n == 18
+    assert n == min(main.CROP_CAP_PER_QUAD["STRAWBERRY"] * 3,
+                    main._DEFENSIVE_PLAN["straw_total_cap"])
+    # the wider pre-SW field: 8 tiles at one quadrant, 16 at two
+    _, crops1, _, _ = main._field_alloc(_farm(quads=["NW"]), 12, _prices())
+    assert len(crops1["STRAWBERRY"]) == main.CROP_CAP_PER_QUAD["STRAWBERRY"]
 
 
 # --------------------------------------------------------------------------

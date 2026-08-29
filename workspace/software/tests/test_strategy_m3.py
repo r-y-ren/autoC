@@ -134,14 +134,16 @@ def test_rotation_freezes_each_crop_under_its_floor():
 
 
 def test_wheat_is_feed_floor_and_money_crop():
-    farm = _farm(quads=["NW", "NE"])
+    farm = _farm(quads=["NW", "NE", "SW"])
     _, cheap, _, _ = main._field_alloc(farm, 8, _prices(WHEAT=25))
     _, dear, _, _ = main._field_alloc(farm, 8, _prices(WHEAT=31))
     base = main._wheat_cap(8, 25)
     assert len(cheap["WHEAT"]) == base       # feed floor exactly
     # money tranche activates at >= 30: extra wheat tiles are planned
+    # (v6: 3 quads -- at 2 quads the wider strawberry field crowds the
+    # tranche out entirely, the structural no-op the v6-B gate measured)
     assert len(dear["WHEAT"]) > len(cheap["WHEAT"])
-    assert len(dear["WHEAT"]) <= base + main.WHEAT_MONEY_CAP_PER_QUAD * 2
+    assert len(dear["WHEAT"]) <= base + main.WHEAT_MONEY_CAP_PER_QUAD * 3
 
 
 # --------------------------------------------------------------------------

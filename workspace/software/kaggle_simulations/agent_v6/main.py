@@ -1,9 +1,11 @@
 # ---------------------------------------------------------------------------
 # v6 candidate (r5-P6 development tree, NOT the submission path).
 #
-# v6-1 (single variable F): strawberry defensive-frame cap 6 -> 8 per quad
-# (24 tiles across 3 quads), taken from the round-3 monster cross-profile
-# (Renji 42-tile field / DevilQ 33; top-20 p25-p50 band) after five
+# v6-1 (single variable F): strawberry per-quad cap 6 -> 8 under the
+# UNCHANGED 18-tile total cap (a wider pre-SW field: 8/16 tiles at
+# 1/2 quads, still 18 at 3 quads -- F2's 24-tile total measured
+# -280k over 40 cells and was REJECTED; the total cap is load-bearing)
+# from the round-3 monster cross-profile after five
 # single-variable iteration gates vs the new wheat_straw_monster sparring
 # partner (labels v6-*-vs-monster / v6-*-fullpool in
 # exports/logs/iteration_gate_log.jsonl):
@@ -14,6 +16,8 @@
 #     external-feed structure, not a quota knob)
 #   F strawberry 8/quad   8W-0L vs monster (+83.0k), full pool 38W-2L,
 #     paired vs r5 +78.8k over 40 cells              -> MERGED HERE
+#   F2 total cap 24       -280k vs F (melon -62k x2, template -37k x2:
+#     the 24-tile 3-quad field crashes joint markets)  -> REJECTED
 #   D wheat-last-day 26   5W-3L (+58.1k, below baseline +66.4k) -> rejected
 #   F+D                   identical to F on both gates      -> minimal-change
 #     discipline keeps F only
