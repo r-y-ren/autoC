@@ -81,7 +81,7 @@ acceptance:
        cmd: "python scripts/verify/merge_metrics.py"}
     - {id: m2-ab, category: software, item: LLM 真实 A/B 仅在 KG_LLM_* 完整配置时执行且逐局预算隔离；未配置时保持 null 并通过通路自检, method: 自动}
     - {id: doc-compile, category: document, item: 修订报告编译通过, method: 自动,
-       cmd: "typst compile workspace/docs/report.typ workspace/docs/report.pdf"}
+       cmd: "typst compile --root workspace workspace/docs/report.typ workspace/docs/report.pdf"}
     - {id: doc-consistency, category: document, item: 报告数字键零悬空、旧开发基线限制紧邻披露、无天梯或获奖外推, method: 自动,
        cmd: "python workspace/docs/check_report_metrics.py"}
     - {id: doc-visual, category: document, item: 报告 PDF 渲染后逐页视觉验收通过，无溢出、重叠、断页或不可读图表, method: agent 视觉验收}

@@ -1,0 +1,28 @@
+Acceptance ID: doc-visual
+Artifact: C:\Users\OSS\Desktop\autoC\workspace\docs\report.pdf
+PDF SHA256: 1c43cc3a52adca7b1738d81c4f1afef5918f975b7b11de6ef68b1e8fa84074d8
+PDF page count: 5
+
+Designated visual judge results:
+- Page 1: pass - C:\Users\OSS\Desktop\autoC\.tmp\report-pages\report-1.png
+- Page 2: pass - C:\Users\OSS\Desktop\autoC\.tmp\report-pages\report-2.png
+- Page 3: pass - C:\Users\OSS\Desktop\autoC\.tmp\report-pages\report-3.png
+- Page 4: pass - C:\Users\OSS\Desktop\autoC\.tmp\report-pages\report-4.png
+- Page 5: pass - C:\Users\OSS\Desktop\autoC\.tmp\report-pages\report-5.png
+
+Visual judge summary: 5/5 pages passed with no issues. The rendered report has no observed overflow, overlap, bad page break, or unreadable chart.
+
+Automated PDF QA context:
+- pass: metadata
+- pass: page-size consistency
+- pass: nonblank pages
+- pass: punctuation
+- pass: embedded fonts
+- pass: no overflow
+- pass: adequate fill
+- pass: symmetric margins
+- warning only: generic non-full-bleed-cover warning
+
+Warning disposition: not a defect for this acceptance item. The visual brief explicitly defines page 1 as a technical title-and-abstract page and does not require a full-bleed cover.
+
+Final verdict: pass

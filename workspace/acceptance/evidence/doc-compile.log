@@ -1,4 +1,4 @@
-$ typst compile workspace/docs/report.typ workspace/docs/report.pdf
+$ typst compile --root workspace workspace/docs/report.typ workspace/docs/report.pdf
 exit=0
 
 

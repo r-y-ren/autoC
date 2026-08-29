@@ -1,111 +1,120 @@
-# Kaggriculture 提交 SOP v2（成稿——可执行检查单）
+# Kaggriculture 提交 SOP v3
 
-> 适用：Kaggle Simulation Competition「Kaggriculture」（competitionId 147734）。
-> 状态：波次 4/4（m3-polish）成稿。基线：第一轮归档 `submit-sop.md`（7 节、19 项检查单，只读参照）。
-> 规模：**基础 19 项（B01-B19，沿用 v1 槽位、基线数值随本轮 metrics 更新）+ 新增四组 17 项（N1×3 / N2×5 / N3×4 / N4×5）= 36 项**，每项独立编号、可勾选、可执行。
-> 责任分工：全部步骤**队伍人工执行**（蓝图 `man-reg` / `man-submit` / `man-final`），AI 框架不代操作 Kaggle 账号。
-> 事实来源：官方 rules / Timeline / Evaluation / How-to-Play（2026-08-28 经 Kaggle 官方 ListPages API 直抓，经 `kb/competitions/kaggle-kaggriculture/meta.md` 转引）；关键日期——开赛 2026-07-29，**终交 2026-09-30 11:59 PM UTC**，榜单收敛 10-01 至约 10-15。
-> 本地基线数值出处：`workspace/metrics.json`（键名随项标注；线上未发生指标如实 null）。
+> 适用对象: m3-redocument 冻结候选与后续人工线上提交。
+> 责任: Kaggle 账号操作、Validation Episode 复核、线上反馈记录和终交锁定均由队伍人工执行。
+> 证据纪律: 当前已发布 holdout 只允许 verify; 禁止重跑、重抽、重放后择优、替换或覆盖。
 
-## 0. 第 0 天（立即）：报名核对——前置门（man-reg）
+## 0. 权威身份与正式产物
 
-- [ ] **B01** 打开赛站 Overview 与 Rules：<https://www.kaggle.com/competitions/kaggriculture>
-- [ ] **B02** **人工核对 Entry Deadline**：官方 API Timeline 该字段为模板变量（`${competition.ProhibitNewEntrantsExplicitDeadline}`）未解析，**截止日无官方数值**——以赛站页面显示为准，不得臆测
-- [ ] **B03** 确认当前可报名，点 Join Competition 完成报名（18+ 资格、非制裁地区）
-- [ ] **B04** 团队设置：队伍 3 人（上限 5 人合规）；**单账号纪律**——rules 明文禁止多账号报名/提交（"You cannot sign up to Kaggle from multiple accounts..."），全队共用一个账号提交
-- [ ] **B05** 顺手核对奖池徽标：官方 rules/Prizes 双处为 $50,000（10×$5,000）；若列表页显示 $60,000 属待核口径，记录截图反馈至 KB 待核清单
+当前冻结候选必须同时满足以下精确身份:
 
-### 新增组 1：报名前置门强化（本轮新增，对应 man-reg 置顶）
+- candidate: `workspace/software/kaggle_simulations/agent/main.py`
+- candidate SHA-256: `7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a`
+- frozen git ref: `decff3b236fd4cddd8bd6c5fbb1c1226f529a195`
+- formal export: `workspace/software/exports/eval_results.json`
+- formal export SHA-256: `ac7684d853e368a26bf8685d6649d3d4d711a13a9eaacdadb6ff89c7aa5504f7`
+- validated schema: `2.0`
+- metrics 来源键: `metrics.software.frozen_candidate_identity`, `metrics.software.confirmatory_export_traceability`
 
-- [ ] **N1-1** **前置门规则**：报名（man-reg）未完成，不进入本 SOP §1 及之后的任何步骤——man-submit 的第 1 项前置检查即核对报名状态（勾选 B03 完成）
-- [ ] **N1-2** Entry Deadline 核对结果**截图存档**，并把赛站显示数值回填《待核项台账》（§7 表第 1 行状态列）；仍是"缺失/以页面为准"也如实记录
-- [ ] **N1-3** man-reg 完成后在《提交台账》记一行（日期 / 操作人 / 截图存档路径），作为人工项合规留痕
-
-## 1. 提交前本地检查（每次提交必跑，仓库根目录——本轮升级为"本地四查"）
+- [ ] **V3-01** 从 `workspace/metrics.json` 读取上述身份, 不从旧报告、终端历史或聊天记录抄值。
+- [ ] **V3-02** 计算候选 SHA-256, 必须与精确值一致:
 
 ```bash
-python workspace/software/smoke_boot.py                            # 一查 冒烟：exit 0 才继续
-python -m pytest workspace/software/tests -q                       # 二查 测试：101/101（metrics: m2_tests_total / m2_tests_passed）
-python workspace/software/scripts/run_eval.py --rounds 4           # 三查 148 局矩阵：对照 metrics 查回归
-python workspace/software/scripts/run_eval.py --rounds 2 --assert-regression   # 四查 冻结回归线：exit 0
+sha256sum workspace/software/kaggle_simulations/agent/main.py
 ```
 
-- [ ] **B06** 四条命令全部通过；三查结果与 `workspace/metrics.json` 记录无未预期回归——重点核对 submission 全池 Elo 第一（`m2_elo_ratings_full_pool`：1500.8）与对强敌胜率（`m2_matchup_win_rates`）不低于当前台账版本
-- [ ] **B07** 确认提交文件为 `workspace/software/kaggle_simulations/agent/main.py`，且 `LLM_PROVIDER=None`（默认关闭，提交形态 stdlib-only、不依赖任何外部模型/网络）
-- [ ] **B08** 资源裕量自查：本地单局均值见 `metrics.software.avg_episode_runtime_seconds`（2.66 s/局）；线上容器 HDD/RAM/vCPU 限额官方未解析（待核），bot 保持 stdlib-only、无重初始化
-
-## 2. 提交操作与 Validation Episode
+- [ ] **V3-03** 计算正式 export SHA-256, 必须与精确值一致:
 
 ```bash
-kaggle competitions submit kaggriculture -f workspace/software/kaggle_simulations/agent/main.py
+sha256sum workspace/software/exports/eval_results.json
 ```
 
-- [ ] **B09** 提交后在赛站 Submissions 页确认 **Validation Episode 通过**（自博弈 720 回合跑通；显示 Error 即失败，回到 §1 排查后再提交——**失败提交同样消耗当日额度**）
-- [ ] **B10** 在《提交台账》记录：日期、commit hash、本地评估摘要（Elo / 对强敌战绩，引自 `workspace/metrics.json` 更新）、Validation 状态、线上反馈
+- [ ] **V3-04** 任一 SHA 不一致立即停止; 不得用重新运行 holdout 的方式“修复”不一致。
 
-## 3. 每日提交纪律（rules：每日 ≤5 次，仅最近 2 次计入最终评估）
+## 1. 已发布 holdout 保护门
 
-**核心风险**：最终评估只跟踪**最近 2 次**提交——任何新提交都会顶掉旧版本；临近终交的随手提交会覆盖最优版本。第一轮本节为节奏建议，本轮强化为**逐次检查列**（新增组 2）。
+当前正式证据是一个已发布、未失效的一次性 attempt。种子已经公开, 因而只可用于重现性检查, 不可再声称为新独立确认。
 
-### 新增组 2：每次提交前的逐次检查列（本轮新增）
+- [ ] **V3-05** 禁止运行任何会创建新 attempt、继续比赛、重新抽种子或覆盖正式 export 的 holdout 命令。
+- [ ] **V3-06** 禁止依据已公开结果修改策略后, 再用同一批种子复测并替换当前结论。
+- [ ] **V3-07** 禁止重抽多批种子后择优发布, 也禁止把失败 attempt 删除后重来。
+- [ ] **V3-08** 仅运行 verify-only 检查, 该命令不得启动新对局:
 
-- [ ] **N2-1** 核对**当日已用额度 ≤5**（与《提交台账》"当日提交序号 1-5"计数列联动，防遗忘性超限）
-- [ ] **N2-2** 本次提交对应**明确的实验假设与本地矩阵依据**（在台账注明；禁止无依据的随手提交）
-- [ ] **N2-3** §1 本地四查全过才提交（任一查失败即中止本次提交）
-- [ ] **N2-4** **每日收尾提交 = 当日最优版本**（保证"最近 2 次计入"里至少含一个最优版；台账"是否收尾最优提交"列勾选）
-- [ ] **N2-5** 当日额度用尽前 30 分钟自查：最近 2 次提交是否均需保留？不需要的立即用剩余额度以最优版本收尾
+```bash
+python workspace/software/scripts/run_holdout.py --verify-published --require-frozen
+```
 
-《提交台账》本轮新增两列：**当日提交序号（1-5）**、**是否收尾最优提交**。
+- [ ] **V3-09** verify-only 结果必须确认: candidate hash 匹配、published=true、invalidated=false、完整矩阵、AB/BA 对称、零异常、一次性状态未被改变。
 
-## 4. 天梯观察（每日 10 分钟）
+## 2. 正式 export 检查
 
-- [ ] **B11** 记录本队线上 skill rating 与近期对局结果（Elo 式：只看胜负平，净胜金币不影响评分）
-- [ ] **B12** 将线上反馈同步 software 侧：校准本地对手池（引入线上同类评级 bot）、更新 `workspace/metrics.json` 线上三键（当前如实 null，见新增组 3）
-- [ ] **B13** 评估口径提醒：天梯高方差，不追单局结论，以滚动窗口趋势判断版本强弱
+- [ ] **V3-10** 执行正式 schema、语义与跨字段验证:
 
-### 新增组 3：天梯反馈回填 metrics 流程（本轮新增，键名对齐 `workspace/docs/metrics-keys.md`）
+```bash
+python workspace/software/scripts/check_eval_contract.py --mode official --input workspace/software/exports/eval_results.json
+```
 
-- [ ] **N3-1** 每日观察窗口记录：本队 skill rating 数值 + 近期对局结果摘要（胜/负/平与对手风格观察），先记入《提交台账》线上反馈列
-- [ ] **N3-2** 将记录转录至 `workspace/metrics.json` 预留键：`online_ladder_games`（累计线上对局数）、`online_skill_rating`（当日 skill rating）——未发生观察的日子保持 null，不估数
-- [ ] **N3-3** 若线上评级 / 对局形态与本地池**明显背离**（如本地稳赢的对手类型线上频繁出现且失利）：把校准动作（替换 / 引入了哪个对手变体）记录至 `online_feedback_calibration` 键，并交 software 侧执行对手池校准（本地四查 + 回归门重跑后才算完成）
-- [ ] **N3-4** 口径纪律：回填只录实测数值与动作记录，禁止由线上单局推导"胜率提升 X%"类派生数字（铁律 4）
+- [ ] **V3-11** 检查结果必须为通过; 任一 schema、candidate identity、seed domain、expected/actual、AB/BA、异常状态或统计一致性错误都应中止提交。
+- [ ] **V3-12** 核对 `workspace/metrics.json` 中 `confirmatory_export_traceability` 的 `export_sha256`, `validated_schema` 和 JSON Pointer 映射均指向当前正式 export。
+- [ ] **V3-13** 不运行 `merge_metrics.py` 来掩盖正式 export 错误; 只有 software 责任角色确认权威分片后才能重新汇总。
 
-## 5. 09-15 切换决策点（主攻/备选裁决）
+## 3. 提交前候选检查
 
-- [ ] **B14** 若至 09-15 天梯排名趋势 + 迭代边际收益显示投入产出比不佳，启动备选：切 **kaggle-rsna-knee**（10-15 报名截止、10-22 终交）；切换不浪费——本地评估基建（gym 封装 / Elo / 矩阵 / 迭代门）为通用资产；决策由队伍人工裁决（strategy.md 预设兜底路径）
+- [ ] **V3-14** 确认提交文件仍为第 0 节精确 SHA 的冻结候选, 且不是工作区中另一个同名副本。
+- [ ] **V3-15** 运行不改变候选和正式证据的冒烟与测试:
 
-## 6. 终交前检查单（2026-09-30 11:59 PM UTC 前完成，man-final）
+```bash
+python workspace/software/smoke_boot.py
+python -m pytest workspace/software/tests -q
+```
 
-- [ ] **B15** **最近 2 次提交为最优版本**（最易翻车项：终交日不做随手提交；如需最后调整，最后两次提交都应是最优候选）
-- [ ] **B16** 两次计入提交的 **Validation Episode 均 Passed**（逐条在赛站 Submissions 页核对）
-- [ ] **B17** 本地评估最终无回归（§1 四查末次全过）；最优 commit 已记录台账
-- [ ] **B18** 无多账号操作；提交文件 stdlib-only、无外部网络依赖
-- [ ] **B19** 确认无需再动：榜单 10-01 起继续跑对局至收敛（约 10-15），期间无法改提交
+- [ ] **V3-16** 冒烟或测试失败立即停止; 不得借用旧 holdout 结果为已变化或失败的候选背书。
+- [ ] **V3-17** 确认提交形态 stdlib-only、离线自主运行, 不依赖外部 LLM、网络 API 或未申报文件。
+- [ ] **V3-18** 在提交台账记录 candidate SHA、git ref、formal export SHA、检查时间、操作人和验证结果。
 
-### 新增组 4：终交「最近 2 份最优」锁定检查（本轮新增，man-final 验收强化）
+## 4. 人工线上提交
 
-- [ ] **N4-1** 终交日（09-30）**禁止新增实验性提交**——当日仅允许"最优候选重提交"一种操作（且计入 N2-1 额度检查）
-- [ ] **N4-2** 最近 2 次提交 = 台账最优候选：**commit hash 双核对**（赛站 Submissions 页逐条 vs 本地《提交台账》）；终版对账结果回填 `metrics.software.final_submission_commits`（当前 null，锁定时落两份 hash）
-- [ ] **N4-3** 两次计入提交的 Validation Episode 均 Passed——**双核对**（B16 的逐条复核 + 台账状态列一致），任一不符立即用剩余额度以最优版本覆盖
-- [ ] **N4-4** 核对完成后由队伍**人工签字确认**（操作人 + 日期 + 两份 commit hash，记入《提交台账》终交锁定行）——man-final 验收留痕，AI 不代签
-- [ ] **N4-5** 签字后向全队通告"提交已锁定"，此后至 10-01 榜单启动前不再触碰提交入口
+- [ ] **V3-19** 提交前确认账号已报名且团队/账号使用符合竞赛规则。
+- [ ] **V3-20** 将候选提交至 Kaggle; AI 不代操作账号。
+- [ ] **V3-21** 在 Submissions 页面确认 Validation Episode 状态, 并把状态、提交时间和线上返回信息记入台账。
+- [ ] **V3-22** Validation Episode 失败时停止使用该提交作为候选证据; 排查产生的新策略版本按第 6 节处理。
 
-## 7. 待核项台账（随观察回填，来源 meta.md 待核清单）
+## 5. 竞赛运行约束
 
-| 待核项 | 状态 | 核对方式 |
-|---|---|---|
-| Entry Deadline 官方数值 | 缺失（API 模板变量未解析） | 第 0 天人工核对赛站（§0 / N1-2，截图回填） |
-| 奖池 $50K vs $60K 双口径 | $50K 官方双处直抓采信；$60K 待核 | 赛站奖池徽标 + 列表页截图（B05） |
-| agent 运行环境资源限额 | FAQ 模板变量未解析 | 观察线上 Validation/对局日志；bot 保持轻量（B08） |
-| API 型 LLM 容器网络策略 | 官方未载明 | 如启用 LLM 模块须先实测；当前默认关、提交形态不依赖（B07） |
+以下是提交操作约束, 不是本 SOP 已执行声明:
 
-## 计数汇总
+- [ ] **V3-23** 提交前核对当日计数, 保持每日提交不超过 5 次(`<=5/day`)。
+- [ ] **V3-24** 每次提交前确认它会如何影响“最近 2 次提交”; 新提交不得无意覆盖应保留版本。
+- [ ] **V3-25** 台账逐次记录当日提交序号、candidate SHA、Validation Episode 和是否保留。
+- [ ] **V3-26** 终交前由人工逐条确认最近 2 次提交都是拟保留版本, 且两条 Validation Episode 状态符合要求。
+- [ ] **V3-27** 未看到赛站记录前, 不得把任何一项标记为已执行。
 
-| 组 | 项数 | 编号 |
-|---|---|---|
-| 基础（v1 槽位沿用，基线更新） | 19 | B01-B19 |
-| 新增组 1 报名前置门 | 3 | N1-1 - N1-3 |
-| 新增组 2 每日纪律逐次检查列 | 5 | N2-1 - N2-5 |
-| 新增组 3 天梯回填流程 | 4 | N3-1 - N3-4 |
-| 新增组 4 终交锁定 | 5 | N4-1 - N4-5 |
-| **合计** | **36** | —— |
+## 6. 线上反馈与新候选规则
+
+线上反馈是新证据, 不是对当前已发布 holdout 的回填或修订。任何根据线上反馈形成的策略变化都会产生新候选。
+
+- [ ] **V3-28** 原样记录线上反馈: 提交 ID、candidate SHA、时间、Validation 状态、平台返回值和可观察对局现象。
+- [ ] **V3-29** `online_ladder_games`, `online_skill_rating`, `online_feedback_calibration` 只在真实线上证据存在后由责任角色写入; 未发生时保持 null。
+- [ ] **V3-30** 不用本地 holdout 推导、代填或解释为线上指标。
+- [ ] **V3-31** 若线上反馈触发任何策略或代码变化, 为新候选计算新 SHA、建立新冻结记录, 当前 holdout 结论不得迁移到新候选。
+- [ ] **V3-32** 新候选需要新的、此前未公开且未用于开发的独立确认种子; 必须在候选冻结后生成, 且不得复用当前公开种子。
+- [ ] **V3-33** 新确认仍须执行完整 AB/BA、异常 fail-closed、schema/语义校验与原子发布; 结果无论好坏都不得按表现重抽或替换。
+- [ ] **V3-34** 只有新候选的新独立确认完成后, 才能更新面向该新候选的确认性报告; 历史 attempt 保留审计记录。
+
+## 7. 终交锁定
+
+- [ ] **V3-35** 人工核对最近 2 次提交的提交 ID、candidate SHA、git ref 与 Validation Episode 状态。
+- [ ] **V3-36** 将最终保留的 2 个 commit/hash 交由责任角色回填 `metrics.software.unmeasured.final_submission_commits` 对应接口; 回填前保持 null。
+- [ ] **V3-37** 操作人、复核人和日期在台账签字; AI 不代签。
+- [ ] **V3-38** 锁定后不再进行实验性提交; 若确需变化, 重新执行新候选流程并重新评估“最近 2 次”约束。
+
+## 停止条件
+
+出现以下任一情况立即停止提交流程并上报:
+
+- candidate SHA 或 formal export SHA 与第 0 节不一致;
+- verify-only 检查试图启动新对局或改变 attempt 状态;
+- schema、语义、跨字段、完整矩阵、AB/BA 或异常检查失败;
+- 策略已变化但仍试图引用当前公开 holdout;
+- 线上结果尚未产生却要求填写非 null 线上指标;
+- 当日提交额度或最近 2 次提交状态无法确认。
