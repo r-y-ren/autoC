@@ -1,5 +1,5 @@
 {
-  "_generated_at": "2026-08-29T22:26:26",
+  "_generated_at": "2026-08-29T22:56:42",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
@@ -3949,7 +3949,10 @@
             "FM-R2-2 CARE intensity gap (winners 268-586 vs ours ~195)",
             "FM-R2-3 herd scale ceiling (winners 11-17 animals vs our 10-11; m3 i4/i9 scale attempts failed on old pool)"
           ],
-          "stop_loss_status": "not_triggered (6 public games, win rate 50.0%, threshold is <50%)"
+          "stop_loss_status": "not_triggered (round-2: 3/6 = 50.0%; round-3 r4: 3/6 = 50.0%; threshold is <50%)",
+          "round3_probe_record": "11W-10L over 21 public games (r3 skeleton e21c4b5f, submission 55865901, publicScore 628.2, finals band 60-107k)",
+          "round3_r4_record": "3W-3L over 6 public games (layered r4 9298751f, submission 55869018, trajectory 600->719.7->624.8, our finals avg ~75k, losses to 96-110k wheat-strawberry band)",
+          "round3_ledger": "workspace/software/exports/online/round3_ledger.json"
         },
         "note": "online-measured 2026-08-29 (two rounds): round-1 replay analysis of submission 55858820 losses produced FM-O1..O4; round-2 (submission 55864284, rotation ranch 5713c17e) sampled 6 public games 3W-3L via kaggle competitions submissions/episodes/replay CLI -- round-1 killer structures (diversified ranch, heavy-cow wheat) all beaten (FM-O1..O4 fixes validated online), losses concentrated in a next-band economy (95-101k finals, 11-17 animal herds, CARE 268-586, d12->d24 capital ramp 2-3x ours) producing FM-R2-1..R2-3. Stop-loss not triggered at exactly 50%. Round-2 winner replays retained under .tmp-online/round2/ as next-cycle corpus candidates. Key kept in the unmeasured namespace so consumer key locations stay stable"
       },
