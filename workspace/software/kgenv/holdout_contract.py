@@ -48,7 +48,22 @@ HISTORICAL_SEEDS_V2 = frozenset(
     HISTORICAL_SEEDS | PUBLISHED_HOLDOUT_SEEDS_V1 | ONLINE_EPISODE_SEEDS
 )
 assert len(HISTORICAL_SEEDS_V2) == 38
+# Attempt 3 (campaign III r3-3 r4-holdout) additionally forbids the 8 holdout
+# seeds published by attempt 2, extracted verbatim from the attempt-2
+# published generation at exports/holdout/attempt-2/seed_manifest.json (and
+# cross-verified against its projected copy before this generation existed).
+PUBLISHED_HOLDOUT_SEEDS_V2 = frozenset({
+    1118713940, 1814022456, 816612609, 1479804102,
+    1767831484, 12762553, 1780740672, 1897543897,
+})
+HISTORICAL_SEEDS_V3 = frozenset(HISTORICAL_SEEDS_V2 | PUBLISHED_HOLDOUT_SEEDS_V2)
+assert len(HISTORICAL_SEEDS_V3) == 46
 PUBLISHED_HOLDOUT_ATTEMPT_V1_ID = "41c7771a63b90d3e66cb40c7"
+PUBLISHED_HOLDOUT_ATTEMPT_V2_ID = "b75258615f75baf54275ff54"
+PUBLISHED_ATTEMPT_IDS = {
+    1: PUBLISHED_HOLDOUT_ATTEMPT_V1_ID,
+    2: PUBLISHED_HOLDOUT_ATTEMPT_V2_ID,
+}
 HOLDOUT_V2_MATRIX_ORDER = (
     "submission", "cow_baron", "melon_hoarder", "expansionist",
     "baseline_wheat", "crop_rotator", "template_wheat",
@@ -59,6 +74,19 @@ HOLDOUT_V2_OFFICIAL_PAIRS = tuple(
     for i in range(len(HOLDOUT_V2_MATRIX_ORDER))
     for j in range(i + 1, len(HOLDOUT_V2_MATRIX_ORDER))
 )
+# Attempt 3 evaluates the r4 layered candidate (9298751f) on the full
+# 10-agent pool: the attempt-2 pool plus the r3-1 scale_ranch archetype.
+HOLDOUT_V3_MATRIX_ORDER = (
+    "submission", "cow_baron", "melon_hoarder", "expansionist",
+    "baseline_wheat", "crop_rotator", "template_wheat",
+    "self_feed_ranch", "near_band_diversified", "scale_ranch",
+)
+HOLDOUT_V3_OFFICIAL_PAIRS = tuple(
+    (HOLDOUT_V3_MATRIX_ORDER[i], HOLDOUT_V3_MATRIX_ORDER[j])
+    for i in range(len(HOLDOUT_V3_MATRIX_ORDER))
+    for j in range(i + 1, len(HOLDOUT_V3_MATRIX_ORDER))
+)
+assert len(HOLDOUT_V3_OFFICIAL_PAIRS) == 45
 
 
 def holdout_matrix_order(attempt_index: int) -> tuple[str, ...]:
@@ -67,6 +95,8 @@ def holdout_matrix_order(attempt_index: int) -> tuple[str, ...]:
         return STANDARD_MATRIX_ORDER
     if attempt_index == 2:
         return HOLDOUT_V2_MATRIX_ORDER
+    if attempt_index == 3:
+        return HOLDOUT_V3_MATRIX_ORDER
     raise ContractError(f"unknown holdout attempt generation: {attempt_index!r}")
 
 
@@ -75,6 +105,8 @@ def holdout_official_pairs(attempt_index: int) -> tuple[tuple[str, str], ...]:
         return STANDARD_OFFICIAL_PAIRS
     if attempt_index == 2:
         return HOLDOUT_V2_OFFICIAL_PAIRS
+    if attempt_index == 3:
+        return HOLDOUT_V3_OFFICIAL_PAIRS
     raise ContractError(f"unknown holdout attempt generation: {attempt_index!r}")
 
 
@@ -84,6 +116,38 @@ def historical_seeds(attempt_index: int) -> frozenset[int]:
         return HISTORICAL_SEEDS
     if attempt_index == 2:
         return HISTORICAL_SEEDS_V2
+    if attempt_index == 3:
+        return HISTORICAL_SEEDS_V3
+    raise ContractError(f"unknown holdout attempt generation: {attempt_index!r}")
+
+
+def holdout_expected_games(attempt_index: int) -> int:
+    """pairs x seeds x AB/BA for the generation's full matrix."""
+    return len(holdout_official_pairs(attempt_index)) * HOLDOUT_SEED_COUNT * 2
+
+
+def holdout_expected_seats(attempt_index: int) -> int:
+    return holdout_expected_games(attempt_index) // 2
+
+
+def candidate_expected_games(attempt_index: int) -> int:
+    """Candidate games: opponents x seeds x AB/BA."""
+    return (len(holdout_matrix_order(attempt_index)) - 1) * HOLDOUT_SEED_COUNT * 2
+
+
+def candidate_paired_units(attempt_index: int) -> int:
+    """Per-(opponent, seed) AB/BA score units for the paired statistic."""
+    return (len(holdout_matrix_order(attempt_index)) - 1) * HOLDOUT_SEED_COUNT
+
+
+def attempt_metrics_prefix(attempt_index: int) -> str:
+    """Shard-metrics key prefix assigned to a generation's projection."""
+    if attempt_index == 1:
+        return ""
+    if attempt_index == 2:
+        return "m4_"
+    if attempt_index == 3:
+        return "r4_"
     raise ContractError(f"unknown holdout attempt generation: {attempt_index!r}")
 
 
@@ -205,8 +269,12 @@ def create_or_load_attempt(
             "created_at": created_at,
         }
     )[:24]
-    if attempt_index == 2 and attempt_id == PUBLISHED_HOLDOUT_ATTEMPT_V1_ID:
-        raise ContractError("attempt id collision with the published attempt 1 id")
+    if any(
+        attempt_id == published_id
+        for index, published_id in PUBLISHED_ATTEMPT_IDS.items()
+        if index != attempt_index
+    ):
+        raise ContractError("attempt id collision with a published prior attempt id")
     state = {
         "schema_version": "1.0",
         "attempt_id": attempt_id,
@@ -323,7 +391,7 @@ def candidate_confirmatory(games: Sequence[dict[str, Any]],
         "estimate": round(estimate, 6) if estimate is not None else None,
         "ci95": interval,
         "input_sha256": canonical_sha256(paired_units),
-        "fit_status": "ok" if n == 64 else "invalid",
+        "fit_status": "ok" if n == len(opponents) * HOLDOUT_SEED_COUNT else "invalid",
     }
     return {
         "overall_record": overall,
@@ -349,18 +417,20 @@ def validate_holdout_payload(payload: dict[str, Any]) -> dict[str, Any]:
     matrix_order = holdout_matrix_order(attempt_index)
     expected_pairs = [list(pair) for pair in holdout_official_pairs(attempt_index)]
     forbidden_seeds = historical_seeds(attempt_index)
+    expected_games = holdout_expected_games(attempt_index)
+    expected_seats = holdout_expected_seats(attempt_index)
     evaluation = payload.get("evaluation_input") or {}
     seeds = evaluation.get("seeds") or []
     validate_holdout_seeds(seeds, attempt_index=attempt_index)
     if evaluation.get("pairs") != expected_pairs:
-        raise ContractError("holdout requires the canonical 36-pair full matrix")
+        raise ContractError("holdout requires the canonical full-matrix pairs")
     if evaluation.get("seat_orders") != ["AB", "BA"]:
         raise ContractError("holdout requires AB/BA seats")
     if evaluation.get("run_kind") != "official_holdout":
         raise ContractError("holdout evaluation input run kind mismatch")
     schedule = canonical_holdout_schedule(seeds, attempt_index=attempt_index)
-    if len(schedule) != HOLDOUT_EXPECTED_GAMES:
-        raise ContractError("holdout schedule must contain 576 games")
+    if len(schedule) != expected_games:
+        raise ContractError(f"holdout schedule must contain {expected_games} games")
     config = payload.get("config") or {}
     if config.get("seeds") != seeds or config.get("pairs") != evaluation.get("pairs"):
         raise ContractError("holdout config seeds/pairs differ from evaluation input")
@@ -368,8 +438,8 @@ def validate_holdout_payload(payload: dict[str, Any]) -> dict[str, Any]:
         raise ContractError("holdout config rounds/seats are not canonical")
     if config.get("matrix_order") != list(matrix_order):
         raise ContractError("holdout matrix order is not canonical")
-    if config.get("expected_games") != HOLDOUT_EXPECTED_GAMES:
-        raise ContractError("holdout config expected game count is not 576")
+    if config.get("expected_games") != expected_games:
+        raise ContractError(f"holdout config expected game count is not {expected_games}")
     if payload.get("opponent_pool_names") != list(matrix_order[1:]):
         raise ContractError("holdout opponent pool is not canonical")
 
@@ -405,8 +475,8 @@ def validate_holdout_payload(payload: dict[str, Any]) -> dict[str, Any]:
         "candidate_change_invalidates": True,
         "candidate_source": "frozen_git_blob",
     }
-    if attempt_index == 2:
-        expected_protocol["historical_seed_exclusion_count"] = len(HISTORICAL_SEEDS_V2)
+    if attempt_index >= 2:
+        expected_protocol["historical_seed_exclusion_count"] = len(forbidden_seeds)
     if protocol != expected_protocol:
         raise ContractError("holdout protocol differs from the preregistered contract")
     engine = payload.get("engine") or {}
@@ -418,18 +488,19 @@ def validate_holdout_payload(payload: dict[str, Any]) -> dict[str, Any]:
     ):
         raise ContractError("holdout engine claim differs from the verified runtime closure")
     if (
-        attempt.get("index") not in (1, 2)
+        attempt.get("index") not in (1, 2, 3)
         or attempt.get("status") != "published"
         or attempt.get("published") is not True
         or attempt.get("invalidated") is not False
-        or attempt.get("invalidation_reason") is not None
+        or attempt.get("invalidated_reason") is not None
     ):
         raise ContractError("holdout must be a single valid published attempt")
-    if (
-        attempt_index == 2
-        and attempt.get("attempt_id") == PUBLISHED_HOLDOUT_ATTEMPT_V1_ID
+    if any(
+        attempt.get("attempt_id") == published_id
+        for index, published_id in PUBLISHED_ATTEMPT_IDS.items()
+        if index != attempt_index
     ):
-        raise ContractError("attempt 2 must not reuse the published attempt 1 id")
+        raise ContractError("holdout attempt id must not reuse a prior generation's id")
     hash_match = holdout.get("candidate_hash_match") or {}
     expected_sha = frozen.get("sha256")
     if (
@@ -454,10 +525,13 @@ def validate_holdout_payload(payload: dict[str, Any]) -> dict[str, Any]:
     if seed_manifest.get("sha256") != canonical_sha256(seeds):
         raise ContractError("public seed manifest hash mismatch")
     if (
-        attempt_index == 2
-        and seed_manifest.get("historical_seed_exclusion_count") != len(HISTORICAL_SEEDS_V2)
+        attempt_index >= 2
+        and seed_manifest.get("historical_seed_exclusion_count") != len(forbidden_seeds)
     ):
-        raise ContractError("public seed manifest exclusion registry must list 38 seeds")
+        raise ContractError(
+            "public seed manifest exclusion registry must list "
+            f"{len(forbidden_seeds)} seeds"
+        )
 
     games = payload.get("games")
     if not isinstance(games, list):
@@ -468,14 +542,16 @@ def validate_holdout_payload(payload: dict[str, Any]) -> dict[str, Any]:
     expected = [(item["p0"], item["p1"], item["seed"], item["seat"]) for item in schedule]
     observed = [(game["p0"], game["p1"], game["seed"], game["seat"]) for game in games]
     if observed != expected:
-        raise ContractError(f"holdout schedule mismatch: expected 576, observed {len(games)}")
+        raise ContractError(
+            f"holdout schedule mismatch: expected {expected_games}, observed {len(games)}"
+        )
     integrity = payload.get("integrity") or {}
     expected_integrity = {
-        "expected_games": HOLDOUT_EXPECTED_GAMES,
-        "actual_games": HOLDOUT_EXPECTED_GAMES,
+        "expected_games": expected_games,
+        "actual_games": expected_games,
         "abnormal_games": 0,
-        "ab_games": HOLDOUT_EXPECTED_SEATS,
-        "ba_games": HOLDOUT_EXPECTED_SEATS,
+        "ab_games": expected_seats,
+        "ba_games": expected_seats,
         "missing_mirrors": 0,
     }
     if any(integrity.get(key) != value for key, value in expected_integrity.items()):
@@ -486,11 +562,13 @@ def validate_holdout_payload(payload: dict[str, Any]) -> dict[str, Any]:
     for key, value in calculated.items():
         if confirmatory.get(key) != value:
             raise ContractError(f"holdout confirmatory {key} is inconsistent with games")
-    if calculated["overall_record"]["games"] != CANDIDATE_EXPECTED_GAMES:
-        raise ContractError("candidate must have 128 holdout games")
+    if calculated["overall_record"]["games"] != candidate_expected_games(attempt_index):
+        raise ContractError(
+            f"candidate must have {candidate_expected_games(attempt_index)} holdout games"
+        )
     if calculated["order_independent_statistic"]["fit_status"] != "ok":
         raise ContractError("paired holdout statistic is incomplete")
-    return {**expected_integrity, "candidate_games": CANDIDATE_EXPECTED_GAMES, "valid": True}
+    return {**expected_integrity, "candidate_games": candidate_expected_games(attempt_index), "valid": True}
 
 
 def project_holdout_metrics(payload: dict[str, Any], export_sha256: str,
@@ -498,9 +576,10 @@ def project_holdout_metrics(payload: dict[str, Any], export_sha256: str,
     """Project a validated holdout export into shard metrics keys.
 
     Attempt 1 projected to the legacy ``holdout_*``/``confirmatory_*`` names;
-    attempt 2 (m4-holdout-v2) projects to ``m4_*`` per
-    workspace/docs/metrics-keys-r3.md while the legacy keys stay frozen as
-    historical evidence of the 92.9% run.
+    attempt 2 (m4-holdout-v2) projects to ``m4_*``; attempt 3 (r3-3
+    r4-holdout) projects to ``r4_*``.  Prior-generation keys stay frozen in
+    the shard as historical evidence of their published runs (attempt 1:
+    92.9%; attempt 2: 84.4%).
     """
     validate_holdout_payload(payload)
     holdout = payload["holdout"]

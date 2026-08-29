@@ -53,7 +53,7 @@
       "required": ["pairs", "seeds", "seed_domain", "seat_orders", "episode_steps", "run_kind"],
       "additionalProperties": false,
       "properties": {
-        "pairs": {"type": "array", "minItems": 36, "maxItems": 36, "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string"}}},
+        "pairs": {"type": "array", "minItems": 36, "maxItems": 45, "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string"}}},
         "seeds": {"type": "array", "minItems": 8, "maxItems": 8, "uniqueItems": true, "items": {"type": "integer", "minimum": 1}},
         "seed_domain": {"const": "holdout"},
         "seat_orders": {"const": ["AB", "BA"]},
@@ -79,15 +79,15 @@
       "properties": {
         "rounds": {"const": 8},
         "seeds": {"type": "array", "minItems": 8, "maxItems": 8, "items": {"type": "integer"}},
-        "matrix_order": {"type": "array", "minItems": 9, "maxItems": 9, "items": {"type": "string"}},
-        "pairs": {"type": "array", "minItems": 36, "maxItems": 36},
+        "matrix_order": {"type": "array", "minItems": 9, "maxItems": 10, "items": {"type": "string"}},
+        "pairs": {"type": "array", "minItems": 36, "maxItems": 45},
         "seat_orders": {"const": ["AB", "BA"]},
-        "expected_games": {"const": 576}
+        "expected_games": {"enum": [576, 720]}
       }
     },
-    "opponent_pool_names": {"type": "array", "minItems": 8, "maxItems": 8, "items": {"type": "string"}},
+    "opponent_pool_names": {"type": "array", "minItems": 8, "maxItems": 9, "items": {"type": "string"}},
     "games": {
-      "type": "array", "minItems": 576, "maxItems": 576,
+      "type": "array", "minItems": 576, "maxItems": 720,
       "items": {
         "type": "object",
         "required": ["players", "p0", "p1", "seed", "seed_domain", "seat", "statuses", "contract_ok", "rewards", "winner", "winner_label", "turns", "elapsed_seconds"],
@@ -111,9 +111,9 @@
       "required": ["expected_games", "actual_games", "abnormal_games", "ab_games", "ba_games", "missing_mirrors"],
       "additionalProperties": false,
       "properties": {
-        "expected_games": {"const": 576}, "actual_games": {"const": 576},
-        "abnormal_games": {"const": 0}, "ab_games": {"const": 288},
-        "ba_games": {"const": 288}, "missing_mirrors": {"const": 0}
+        "expected_games": {"enum": [576, 720]}, "actual_games": {"enum": [576, 720]},
+        "abnormal_games": {"const": 0}, "ab_games": {"enum": [288, 360]},
+        "ba_games": {"enum": [288, 360]}, "missing_mirrors": {"const": 0}
       }
     },
     "confirmatory": {
@@ -122,7 +122,7 @@
       "additionalProperties": false,
       "properties": {
         "overall_record": {"$ref": "#/$defs/record"},
-        "pair_records": {"type": "array", "minItems": 8, "maxItems": 8, "items": {"$ref": "#/$defs/record"}},
+        "pair_records": {"type": "array", "minItems": 8, "maxItems": 9, "items": {"$ref": "#/$defs/record"}},
         "seat_records": {"type": "object"}, "wilson_intervals": {"type": "object"},
         "order_independent_statistic": {"type": "object"}
       }
@@ -151,7 +151,7 @@
             "resume_exact_attempt_only": {"const": true},
             "candidate_change_invalidates": {"const": true},
             "candidate_source": {"const": "frozen_git_blob"},
-            "historical_seed_exclusion_count": {"type": "integer", "minimum": 1, "maximum": 38}
+            "historical_seed_exclusion_count": {"type": "integer", "minimum": 1, "maximum": 46}
           }
         },
         "frozen_candidate": {"type": "object", "required": ["path", "sha256", "git_ref"]},
@@ -160,7 +160,7 @@
           "type": "object",
           "required": ["index", "attempt_id", "status", "started_at", "completed_at", "published", "invalidated", "invalidation_reason"],
           "properties": {
-            "index": {"enum": [1, 2]}, "status": {"const": "published"},
+            "index": {"enum": [1, 2, 3]}, "status": {"const": "published"},
             "published": {"const": true}, "invalidated": {"const": false},
             "invalidation_reason": {"type": "null"}
           }

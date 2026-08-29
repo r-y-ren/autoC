@@ -462,10 +462,10 @@ def test_verify_published_never_runs_matches(monkeypatch, tmp_path):
     assert run_holdout.verify_published(True)["actual_games"] == 576
 
 
-def test_prior_generation_is_archived_byte_identical_before_attempt2(monkeypatch, tmp_path):
+def test_prior_generation_is_archived_byte_identical_before_attempt3(monkeypatch, tmp_path):
     published = tmp_path / "published"
-    archive = tmp_path / "attempt-1"
-    payload = _fixture_payload(attempt_index=1)
+    archive = tmp_path / "attempt-2"
+    payload = _fixture_payload(attempt_index=2)
     staged = tmp_path / "staged"
     staged.mkdir()
     metrics = tmp_path / "metrics.json"
@@ -479,23 +479,8 @@ def test_prior_generation_is_archived_byte_identical_before_attempt2(monkeypatch
     monkeypatch.setattr(run_holdout, "GEN_MANIFEST", published / "seed_manifest.json")
     monkeypatch.setattr(run_holdout, "GEN_METRICS", published / "software_metrics.json")
 
-    # the real attempt-1 generation was produced by the legacy runner with
-    # unprefixed metric keys; emulate that layout while staging the fixture
-    real_generation_bytes = run_holdout._generation_bytes
-    real_project = run_holdout.project_holdout_metrics
-
-    def legacy_project(payload_, sha, *, prefix="m4_"):
-        return {key.removeprefix(prefix): value
-                for key, value in real_project(payload_, sha, prefix=prefix).items()}
-
-    def legacy_generation_bytes(payload, public_manifest, games):
-        run_holdout.project_holdout_metrics = legacy_project
-        try:
-            return real_generation_bytes(payload, public_manifest, games)
-        finally:
-            run_holdout.project_holdout_metrics = real_project
-
-    monkeypatch.setattr(run_holdout, "_generation_bytes", legacy_generation_bytes)
+    # the real attempt-2 generation carries the m4_-prefixed projection;
+    # _generation_bytes derives that prefix from the payload's attempt index
     run_holdout._stage_generation(
         payload, payload["holdout"]["seed_manifest"], payload["games"]
     )
@@ -506,18 +491,18 @@ def test_prior_generation_is_archived_byte_identical_before_attempt2(monkeypatch
     assert archive.is_dir()
     assert {p.name: p.read_bytes() for p in archive.iterdir()} == original
     archived_payload = run_holdout._validate_generation(archive)
-    assert archived_payload["holdout"]["attempt"]["index"] == 1
-    # a non-attempt-1 generation must never be archived silently
-    monkeypatch.setattr(run_holdout, "_generation_bytes", real_generation_bytes)
-    attempt2 = _fixture_payload(attempt_index=2)
-    staged2 = tmp_path / "staged2"
-    staged2.mkdir()
-    monkeypatch.setattr(run_holdout, "STAGED_GENERATION", staged2)
+    assert archived_payload["holdout"]["attempt"]["index"] == 2
+    # a non-attempt-2 generation (the legacy attempt-1 layout) must never be
+    # archived silently as the prior generation
+    legacy = _fixture_payload(attempt_index=1)
+    staged1 = tmp_path / "staged1"
+    staged1.mkdir()
+    monkeypatch.setattr(run_holdout, "STAGED_GENERATION", staged1)
     run_holdout._stage_generation(
-        attempt2, attempt2["holdout"]["seed_manifest"], attempt2["games"]
+        legacy, legacy["holdout"]["seed_manifest"], legacy["games"]
     )
-    run_holdout._commit_generation(staged2)
-    with pytest.raises(ContractError, match="attempt-1"):
+    run_holdout._commit_generation(staged1)
+    with pytest.raises(ContractError, match="attempt-2"):
         run_holdout._archive_prior_generation()
 
 
@@ -603,12 +588,25 @@ def test_invalid_generation_never_replaces_existing_projections(monkeypatch, tmp
     assert [target.read_text(encoding="utf-8") for target in targets] == original
 
 
-def test_archived_repository_generation_still_validates_if_present():
-    archive = run_holdout.ARCHIVED_GENERATION
-    if not archive.is_dir():
-        pytest.skip("attempt-1 archive not yet materialised")
-    payload = json.loads((archive / "eval_results.json").read_text(encoding="utf-8"))
-    assert payload["holdout"]["attempt"]["index"] == 1
-    assert payload["identity"]["submission_sha256"].startswith("7c482921")
-    report = validate_holdout_payload(payload)
-    assert report["actual_games"] == 576
+def test_archived_repository_generations_still_validate_if_present():
+    m3_manifest = json.loads(
+        (run_holdout.SOFTWARE_ROOT / "m3_frozen_manifest.json").read_text(encoding="utf-8")
+    )
+    expectations = {
+        1: "7c482921",
+        2: m3_manifest["candidate"]["sha256"][:8],
+    }
+    checked = 0
+    for index, directory in sorted(run_holdout._archive_registry().items()):
+        if not directory.is_dir():
+            continue
+        payload = json.loads(
+            (directory / "eval_results.json").read_text(encoding="utf-8")
+        )
+        assert payload["holdout"]["attempt"]["index"] == index
+        assert payload["identity"]["submission_sha256"].startswith(expectations[index])
+        report = validate_holdout_payload(payload)
+        assert report["actual_games"] == 576
+        checked += 1
+    if not checked:
+        pytest.skip("no archived holdout generations materialised yet")

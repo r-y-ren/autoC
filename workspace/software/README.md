@@ -53,10 +53,12 @@ python workspace/software/scripts/run_llm_ab.py --rounds 4
 python workspace/software/scripts/corpus_build.py
 python workspace/software/scripts/corpus_integrity.py --mode official
 
-# 13) m4 holdout v2（一次性；只可验证，不可重跑/换种子）：
+# 13) holdout 证据链（一次性；只可验证，不可重跑/换种子）：
 #     attempt-1（战役 II 92.9%）归档于 exports/holdout/attempt-1/；
-#     attempt-2（m3 候选 5713c17e，全池 9 agent × 36 对 × 8 新种子 × AB/BA = 576 局）
-#     的权威代发布于 exports/holdout/published/，正式投影原子替换 eval_results.json
+#     attempt-2（m3 候选 5713c17e，576 局，84.4%）归档于 exports/holdout/attempt-2/；
+#     attempt-3（r3-3 r4 候选 9298751f，全池 10 agent × C(10,2)=45 对 × 8 新种子
+#     × AB/BA = 720 局，46 种子排除）的权威代发布于 exports/holdout/published/，
+#     正式投影原子替换 eval_results.json；r4 冻结身份只认 r4_frozen_manifest.json
 python workspace/software/scripts/run_holdout.py --verify-published --require-frozen
 python workspace/software/scripts/check_eval_contract.py --mode official --input workspace/software/exports/eval_results.json
 
@@ -106,11 +108,11 @@ workspace/software/
 │                                       新对手单测/方差统计
 ├── exports/
 │   ├── schema.json                    软件->文档接口契约（1.1 历史只读兼容；2.0 正式语义）
-│   ├── holdout_schema.json            一次性 holdout 证据 schema 2.0（attempt 1/2）
-│   ├── eval_results.json              仅正式门通过后原子发布的评估证据（当前 = m4 holdout v2）
+│   ├── holdout_schema.json            一次性 holdout 证据 schema 2.0（attempt 1/2/3 尺寸自适应）
+│   ├── eval_results.json              仅正式门通过后原子发布的评估证据（当前 = r3-3 r4 holdout）
 │   ├── eval_results.dev.json          quick/dev 隔离产物，不可作为正式证据
-│   ├── holdout/                       attempt-1/（战役 II 92.9% 冻结档案）+ published/
-│   │                                  （attempt-2 权威代：export/replay/seed_manifest/
+│   ├── holdout/                       attempt-1/ + attempt-2/（冻结档案）+ published/
+│   │                                  （attempt-3 权威代：export/replay/seed_manifest/
 │   │                                  software_metrics 四件套）+ 公开 seed_manifest.json 投影
 │   ├── eval_audit.md(+summary.json)   评估保真度审计清单（ABE-Ralph 式，逐项 pass/warn）
 │   ├── failure_modes.md(+summary)     失败模式清单（FM-1..4，含证据局号）
@@ -226,6 +228,24 @@ greedy_carrot 1162.2；回归门 PASS（20 局 55.49s）。
 - 数字全部来自 metrics 键 `m4_*`（16 键，见 `workspace/metrics.json`）；战役 II attempt-1 的
   92.9% 结论保留在历史键 `holdout_*`/`confirmatory_*` 与 `exports/holdout/attempt-1/` 冻结档案，
   二者分属不同候选（7c482921 vs 5713c17e），互不外推
+
+**r3-3 r4 holdout（2026-08-29，一次性独立 holdout，候选 9298751f，git_ref 1644397）**：
+
+- attempt-3 `14ffd5eb33785ae8af94cf73`：10 agent 全池（9 对手含 scale_ranch）C(10,2)=45 对
+  × 8 新种子 × AB/BA = **720 局**（2179.8s），零异常局、360/360 座位均衡、0 缺镜像；
+  种子 `secrets` 生成，与全部 **46** 个历史种子（27 开发/回归 + 8 attempt-1 + 3 线上
+  + 8 attempt-2 已公布）交集 0，运行后立即公开（`exports/holdout/seed_manifest.json`）；
+  候选哈希运行前/后与冻结值全等，评估器闭包（含 vendored 引擎 wheel）运行前后不变
+- **候选 144 局 142W-2L-0T（score_rate 0.986111，Wilson95 [0.9508, 0.9962]）**；顺序无关
+  成对统计（72 个 (对手,种子) AB/BA 单元，t 95% CI）estimate 0.986111，CI [0.966628, 1.0]
+- 逐对：melon_hoarder / expansionist / baseline_wheat / crop_rotator / template_wheat /
+  self_feed_ranch / **scale_ranch（新增）** 各 **16-0**；cow_baron 15-1、
+  near_band_diversified 15-1 ——2 负均为 AB 座（候选先手），分差悬殊（-24494 / -45813）
+- 座位分层：AB 70-2（0.9722）/ BA 72-0（1.0）；Elo 附录（描述性、顺序敏感）：
+  submission 1701.6 全池第一，near_band_diversified 1506.7 第二
+- attempt-2（m4，84.4%）权威代已字节不变归档于 `exports/holdout/attempt-2/`；
+  数字全部来自 metrics 键 `r4_holdout_*`/`r4_confirmatory_*`（16 键）；三代证据
+  （7c482921 / 5713c17e / 9298751f）互不外推
 
 ## 已知边界
 

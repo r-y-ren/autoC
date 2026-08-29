@@ -1,8 +1,8 @@
 {
   "schema": "software-metrics-shard/1.0",
   "campaign": "kaggle-kaggriculture",
-  "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained)",
-  "measured_at": "2026-08-29T08:05:40.102261+00:00",
+  "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained) + r3-1 cross-profile & next-band pool + r3-2 timing redesign & freeze (d0 burst/herd14/strawberry d5/crew12; 72-0 dev gate for e21c4b5f) + r3-P0 success-caliber measurement & paired ablation harness + r3-3 r4-holdout (one-time 720-game full-pool confirmatory holdout for 9298751f; 46-seed exclusion; attempt-2 keys retained)",
+  "measured_at": "2026-08-29T20:05:00.000000+00:00",
   "engine": {
     "package": "kaggle-environments",
     "version": "1.32.7+nodeps (vendored, engine code unmodified)",
@@ -2315,6 +2315,1591 @@
       },
       "unit": "holdout-evidence",
       "method": "workspace/software/exports/eval_results.json#/confirmatory_export_traceability"
+    },
+    "r3_cross_profile_summary": {
+      "value": {
+        "method_ref": "workspace/software/exports/online/round2_winner_deep_dive.md",
+        "extractor": "scripts/replay_deep_stats.py (per-day unit-op + flow table, both seats)",
+        "sources": {
+          "round2_replays": [
+            102399852,
+            102402115,
+            102406576,
+            102395408,
+            102397644,
+            102404370
+          ],
+          "top20_corpus": "58 episodes / 116 seats (.tmp-corpus/raw, m1 corpus rescan, same metrics)"
+        },
+        "divergence_chains": [
+          {
+            "episode": 102399852,
+            "winner": "arminhej96",
+            "final": 100559,
+            "vs_ours": 47047,
+            "divergence_day": "d16 (18910 vs 5606 after WOOL 54)",
+            "chain": "d0 5C(2000) + CARE from d0 -> d9 MILK 30 (max_held) -> d8 +9S -> d16 wool cap -> strawberry 23 tiles compounding"
+          },
+          {
+            "episode": 102402115,
+            "winner": "朝闻夕死",
+            "final": 95087,
+            "vs_ours": 46304,
+            "divergence_day": "d11 (4867 vs 188 after MELON 18 sale)",
+            "chain": "d0 3C+2S -> strawberry 18 tiles by d11 -> herd 13 by d11 -> milk 8-24/day + fert 8-12/day steady 4-5k/day"
+          },
+          {
+            "episode": 102406576,
+            "winner": "Danila Galkin",
+            "final": 98770,
+            "vs_ours": 61033,
+            "divergence_day": "d13 set / d18 gap 30645 vs 15482",
+            "chain": "d0 3C+2S + d1-2 feed stockpile 256u -> herd 17 by d11 + strawberry 19 + melon 17 -> 6-7.5k/day"
+          }
+        ],
+        "key_contrast": {
+          "ours_6games": {
+            "d0_herd_head": 1,
+            "herd_complete_day": "d13-15",
+            "peak_head": "9-11",
+            "care_total": "162-197",
+            "strawberry_peak_tiles": "13-15 (d13)",
+            "d12_money": "153-478",
+            "d24_money": "21225-33809",
+            "ramp_d12_d24": "20933-33406"
+          },
+          "winners_3games": {
+            "d0_herd_head": 5,
+            "herd_complete_day": "d8-11",
+            "peak_head": "13-17",
+            "care_total": "268-586",
+            "strawberry_peak_tiles": "16-23 (by d11-13)",
+            "d12_money": "1475-7979",
+            "d24_money": "48940-77464",
+            "ramp_d12_d24": "44678-75989"
+          },
+          "top20_116seats": {
+            "d0_herd_head": "4-5 (116/116)",
+            "herd_12plus_day": "d4-7 (med d6)",
+            "peak_head": "med 12 / p75 15 (105/116 >=12)",
+            "care_total": "med 288 / p25 268",
+            "strawberry": "6+ tiles by d4-7, peak med 36",
+            "d12_money": "med 15418 (only 1/116 <=1.5k)",
+            "d24_money": "med 67270 / p25 55897",
+            "ramp_d12_d24": "med 52302 / p25 39790",
+            "quadrants": "115/116 at 3"
+          },
+          "crop_dusta_26games": {
+            "final": "med 92050 (68822-134159)",
+            "d0_herd": "5 head in 25/26",
+            "herd_12_day": "d6 in 26/26",
+            "peak_head": "med 16",
+            "care": "med 274",
+            "strawberry_6tiles_day": "d4 in 26/26",
+            "strawberry_peak": "10-43 (med~30)",
+            "feed": "med 1732u",
+            "d12": "med 11276",
+            "ramp": "med 53966"
+          }
+        },
+        "counter_examples_scale_without_timing": [
+          {
+            "player": "Anthaus",
+            "final": 60457,
+            "result": "L to us",
+            "peak_head": 18,
+            "care": 303,
+            "why": "cows bought d10-12, first milk d15+, strawberry peak 9, d12 money 210"
+          },
+          {
+            "player": "Muhammad Rafzan",
+            "final": 54586,
+            "result": "L to us",
+            "peak_head": 18,
+            "care": 229,
+            "why": "animals starved and escaped d7 (4->1), herd rebuilt to 18 only by d20"
+          },
+          {
+            "player": "JJ",
+            "final": 48392,
+            "result": "L to us",
+            "peak_head": 13,
+            "care": 178,
+            "why": "first animal d8, zero strawberry, plateau 12k for a week"
+          }
+        ],
+        "care_mechanics_correction": "FM-R2-2 reinterpretation: engine stacks pending_care_bonus (+1 per cared+fed day, consumed on production days, cap max_held 6 -> a cared cow fills 3x faster). Our CARE coverage is already ~100% (care==head daily); totals 162-197 vs 268-586 are a herd-size artifact, not a discipline gap. arminhej96's 586 includes no-op over-issued orders (23-32/day at 14 head, engine caps execution at head).",
+        "ticket_vs_style": {
+          "shared_ticket_high_confidence": [
+            "d0 herd 4-5 head",
+            "herd >=12 by d4-11",
+            "strawberry 6+ tiles by d4-11 peaking >=16",
+            "CARE total >=268 at 12+ head",
+            "d12->24 ramp >=~40k / d24 >=~44k",
+            "3 quadrants by d5-11 + crew 12 + unbroken feeding"
+          ],
+          "individual_style_low_confidence": [
+            "4th quadrant (1/267 games)",
+            "CARE over-issue no-ops",
+            "external feed magnitude 102-2732u",
+            "which of milk/wool to hoard",
+            "d12 cash cushion 11-18k (top20) vs all-in 1.5-8k (winners)",
+            "573 issued hires (mostly rejected)"
+          ]
+        }
+      },
+      "unit": "report",
+      "method": "实测 2026-08-29：scripts/replay_deep_stats.py 重扫 .tmp-online/round2 6 局 + .tmp-corpus/raw 60 局（top-20 58 局/116 座位），逐日资金/畜群/CARE/种植/买卖流水；全部数字为回放计数，档案 exports/online/round2_deep_stats.json 与 corpus_deep_stats.json"
+    },
+    "r3_pool_extension": {
+      "value": {
+        "new_opponents": [
+          {
+            "name": "scale_ranch",
+            "style": "round-2 胜者原型（下一档）：d0 畜群爆发(~1800-2200/3000 买 4-5 头) + 8C6S=14 头 @d9-12 建成 + 草莓 d5 起 cap16 + 满覆盖 CARE + crew12@d7 + 高价奶门190/草莓150 + d28 倾销",
+            "prototype": "arminhej96 (100559) / 朝闻夕死 (95087) / Danila Galkin (98770) 三胜者交叉画像",
+            "param_basis": "每个旋钮引用 >=3 局 top-20 一致发现交叉验证胜者单局轨迹（d0 4-5 头=116/116 座位；畜群12@d4-7 med d6；草莓6+@d4-7 peak med36；CARE p25 268；Crop Dusta 26 局 d0 5 头/畜群12@d6/草莓6@d4）",
+            "single_game_quirks_excluded": [
+              "4th quadrant",
+              "CARE over-issue",
+              "462u feed stockpile"
+            ],
+            "exploratory_params": false,
+            "implementation": "kgenv/bots/online_pool.py::SCALE_RANCH_PARAMS",
+            "implementation_sha256": "74f86f9af4f44f97ed41fa500b5968b1ff0cf3ee84786da6f70db6915b31b49a",
+            "local_reproduction_vs_pass_seeds_101_202_303": {
+              "finals": [
+                85219,
+                73113,
+                70951
+              ],
+              "peak_head": 14,
+              "care_totals": [
+                210,
+                228,
+                198
+              ],
+              "escapes": [
+                4,
+                3,
+                2
+              ]
+            }
+          }
+        ],
+        "certification": {
+          "command": "python scripts/check_opponent_strength.py --rounds 3",
+          "weak_pool": [
+            "pass",
+            "random",
+            "starter",
+            "greedy_carrot"
+          ],
+          "seeds": [
+            101,
+            102,
+            103
+          ],
+          "threshold": 0.5,
+          "exit_code": 0,
+          "all_8_opponents_pass": true,
+          "scale_ranch": {
+            "games": 12,
+            "W": 12,
+            "L": 0,
+            "T": 0,
+            "win_rate": 1.0,
+            "vs_greedy_carrot": {
+              "games": 3,
+              "W": 3,
+              "L": 0,
+              "T": 0,
+              "avg_margin": 50786
+            },
+            "avg_margins": {
+              "pass": 65303,
+              "random": 65107,
+              "starter": 61391,
+              "greedy_carrot": 50786
+            }
+          },
+          "log": "exports/logs/r3_opponent_certification.log",
+          "prior_4_online_bots_recertified": {
+            "crop_rotator": "12-0",
+            "template_wheat": "12-0",
+            "self_feed_ranch": "12-0",
+            "near_band_diversified": "12-0"
+          }
+        },
+        "gate_required_opponents": {
+          "before": [
+            "cow_baron",
+            "melon_hoarder",
+            "expansionist",
+            "baseline_wheat",
+            "crop_rotator",
+            "template_wheat",
+            "self_feed_ranch",
+            "near_band_diversified"
+          ],
+          "after": [
+            "cow_baron",
+            "melon_hoarder",
+            "expansionist",
+            "baseline_wheat",
+            "crop_rotator",
+            "template_wheat",
+            "self_feed_ranch",
+            "near_band_diversified",
+            "scale_ranch"
+          ],
+          "required_list_sha256": "eaf8fb805264b08bf670505cca48323d9704db574f0ba51ef5b36c059a9b0c36",
+          "gate_games_expected": 72,
+          "old_members_retained": true,
+          "enforced_by": [
+            "scripts/check_eval_contract.py --mode gate (REQUIRED_OPPONENTS, exit 0)",
+            "scripts/iterate_gate.py REQUIRED_OPPONENTS (complete gate)",
+            "scripts/run_eval.py --extended-pool ONLINE_STYLE_POOL"
+          ],
+          "holdout_export_untouched": true,
+          "note": "开发门升级为更强门是预期内变更；已发布 holdout (exports/eval_results.json, exports/holdout/) 未触碰"
+        },
+        "unit_tests": {
+          "file": "workspace/software/tests/test_bots_online_pool.py",
+          "file_sha256": "79334105f03b14fd60b593e68937fb4ad14a52f52cea3f0f5232095fed85b218",
+          "file_total": 54,
+          "file_passed": 54,
+          "new_scale_ranch_tests": [
+            "day0 畜群爆发+种子资金地板",
+            "8C6S 畜群构成",
+            "crew12@d7 斜坡",
+            "草莓 d5 相位窗",
+            "照料已喂动物优先级",
+            "奶门 190",
+            "d28 终局倾销"
+          ],
+          "full_suite": {
+            "total": 301,
+            "passed": 301,
+            "failed": 0,
+            "runtime_seconds": 9.98
+          }
+        },
+        "checks": {
+          "gate_contract": "PASS (exit 0, 72 games expected, all 5 rejection probes green)",
+          "smoke_boot": "PASS (4 phases, 3.9s)",
+          "kaggle_simulations_agent_touched": false
+        }
+      },
+      "unit": "report",
+      "method": "实测 2026-08-29：check_opponent_strength --rounds 3 (96 局, exit 0) / check_eval_contract --mode gate (exit 0) / smoke_boot (PASS) / pytest 全量 301 passed"
+    },
+    "r3_tests_total": {
+      "value": 301,
+      "unit": "count",
+      "method": "实测 2026-08-29 r3-1 会话：python -m pytest workspace/software/tests -q -> 301 passed 0 failed (9.98s)"
+    },
+    "r3_tests_passed": {
+      "value": 301,
+      "unit": "count",
+      "method": "同上"
+    },
+    "r3_capability_checks": {
+      "value": {
+        "method_ref": "workspace/software/scripts/r3_trajectory_probe.py (day-by-day snapshot at last hour of each day, vs pass opponent, development seeds 101/202/303)",
+        "comparison": "m3-frozen candidate (sha 5713c17e) vs r3-frozen candidate (sha e21c4b5f), same seeds/opponent",
+        "d0_capital_allocation": {
+          "target": "4-5 head, 1800-2200 of 3000 start, mixed species",
+          "m3_measured": "1-1 head (1 sheep)",
+          "r3_measured": "4-4 head 2C+2S (1800 spent, 3/3 seeds)",
+          "verdict": "pass"
+        },
+        "first_milk_day": {
+          "target": "d8-9",
+          "m3_measured": "10-10",
+          "r3_measured": "9-9",
+          "verdict": "pass"
+        },
+        "herd_deadline_12_by_d11": {
+          "target": ">=12 head by d11, ceiling 14-17",
+          "m3_measured": "never reached 12 (peak 11-11)",
+          "r3_measured": "12-head at d14-14, peak 13-14 (cap 14 = 8C+6S)",
+          "verdict": "partial: peak/cap met, 12-head day lands d11-14 (i1 hit d11-12; the frozen i2 prioritizes the d5 strawberry line over 1-3 days of herd build and won the gate 72-0 vs 71-1)"
+        },
+        "strawberry_cadence": {
+          "target": "6+ tiles by d5-7, 15-20 by d11-13, <=~20 labour ceiling",
+          "m3_measured": "d7=5-5, d11=5-5, d13=11-13, peak=12-15",
+          "r3_measured": "d7=6-6, d11=15-17, d13=18-18, peak=18-18",
+          "verdict": "pass"
+        },
+        "crew_12": {
+          "target": "12 hands from d7 (winners), ramp floor preserved",
+          "m3_measured": "crew@7=9-9, crew@10=9-9 (ramp caps at 10)",
+          "r3_measured": "crew@7=9-9, crew@10=9-9; 12 once herd>=12 (load-following, HANDS_CAP_R3=12)",
+          "verdict": "partial: cap 12 implemented as herd-following (reaches 12 with the herd, ~d10-14, not hard-coded d7)"
+        },
+        "midgame_money_lines": {
+          "target": "d24 >= 44k",
+          "m3_measured": "d12=173-448, d24=38002-44204",
+          "r3_measured": "d12=129-264, d24=52456-62227",
+          "verdict": "pass"
+        },
+        "final_money_band": {
+          "target": "winner band ~95-100k (round-2 winners 95-101k)",
+          "m3_measured": "73785-89439",
+          "r3_measured": "90943-115079",
+          "verdict": "pass"
+        },
+        "quadrants": {
+          "target": "3",
+          "m3_measured": "3",
+          "r3_measured": "3 (3/3 seeds)",
+          "verdict": "pass"
+        }
+      },
+      "unit": "per-day trajectory snapshot (days/money/head/tiles)",
+      "method": "python workspace/software/scripts/r3_trajectory_probe.py --seeds 101 202 303 --json .tmp-r3/probe_*.json (2026-08-29; full runs archived under workspace/software/.tmp-r3/)"
+    },
+    "r3_regression_summary": {
+      "value": {
+        "r3_tests_total": 13,
+        "r3_tests_passed": 13,
+        "r3_tests_failed": 0,
+        "r3_test_file_sha256": "cd8716f029ceab15bda72c2a836cb6f5967531f5888ae6c1b13d01a6efcaa384",
+        "m3_preserved_tests_total": 23,
+        "m3_preserved_tests_passed": 23,
+        "m2b_preserved_tests_total": 26,
+        "m2b_preserved_tests_passed": 26,
+        "complete_suite_total": 314,
+        "complete_suite_passed": 314
+      },
+      "unit": "count",
+      "method": "python -m pytest workspace/software/tests -q -> 314 passed 0 failed; targeted: test_strategy_r3.py 13, test_strategy_m3.py 23, test_strategy_m2.py 26 (2026-08-29)"
+    },
+    "r3_development_gate_summary": {
+      "value": {
+        "candidate_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+        "label": "r3-frozen",
+        "required_opponents": [
+          "cow_baron",
+          "melon_hoarder",
+          "expansionist",
+          "baseline_wheat",
+          "crop_rotator",
+          "template_wheat",
+          "self_feed_ranch",
+          "near_band_diversified",
+          "scale_ranch"
+        ],
+        "expected_games": 72,
+        "actual_games": 72,
+        "seat_split": {
+          "AB": 36,
+          "BA": 36
+        },
+        "abnormal_games": 0,
+        "seeds": [
+          101,
+          102,
+          103,
+          104
+        ],
+        "seed_domain": "development",
+        "candidate_record": {
+          "wins": 72,
+          "losses": 0,
+          "ties": 0
+        },
+        "per_opponent": {
+          "cow_baron": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 42005.8
+          },
+          "melon_hoarder": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 66985.9
+          },
+          "expansionist": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 76590.0
+          },
+          "baseline_wheat": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 85537.9
+          },
+          "crop_rotator": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 29654.8
+          },
+          "template_wheat": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 24860.4
+          },
+          "self_feed_ranch": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 27286.8
+          },
+          "near_band_diversified": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 23530.9
+          },
+          "scale_ranch": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "win_rate": 1.0,
+            "avg_margin": 13826.6
+          }
+        },
+        "previous_best_m3_frozen_record": {
+          "wins": 57,
+          "losses": 7,
+          "ties": 0,
+          "games": 64,
+          "note": "8-opponent gate (no scale_ranch); per-opponent: self_feed 5-3, near_band 4-4"
+        },
+        "formal_pass": true,
+        "elapsed_seconds": 189.55,
+        "iteration_trajectory": [
+          {
+            "label": "r3-i1",
+            "record": "71-1",
+            "change": "r3 timing bundle (d0 2C+2S burst, herd 8C+6S=14, strawberry phase d5+ cap 6/quad, crew-follows-herd to 12)",
+            "note": "loss: crop_rotator seed 103 BA -2811"
+          },
+          {
+            "label": "r3-i2",
+            "record": "72-0",
+            "change": "single variable: strawberry seeds exempt from pending-land-fund staging",
+            "note": "crop_rotator loss fixed"
+          },
+          {
+            "label": "r3-frozen",
+            "record": "72-0",
+            "change": "freeze re-verification of r3-i2 bytes",
+            "note": "abnormal 0, complete 72/72"
+          }
+        ]
+      },
+      "unit": "summary",
+      "method": "python workspace/software/scripts/iterate_gate.py --label r3-frozen --rounds 4 --require-complete (complete dev gate, 9 opponents x 4 seeds x AB/BA = 72 games, 2026-08-29)"
+    },
+    "r3_frozen_candidate_identity": {
+      "value": {
+        "path": "workspace/software/kaggle_simulations/agent/main.py",
+        "sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+        "git_ref": "0480032282729f8c1a6eedb4ab9724aaad035c29",
+        "manifest": "workspace/software/r3_frozen_manifest.json",
+        "manifest_sha256": "b3690a4bf75dcbab228c6c1bedff9c9f8b84e5ca2641109baf17a826da7aedeb",
+        "snapshot": "workspace/software/r3_frozen_candidate.b64",
+        "snapshot_file_sha256": "dbc0ebd145758e45fc54a5682d0667dc6c17b474c7e88d4fcf661491f41e23dd",
+        "decoded_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+        "supersedes": "m3-frozen 5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee"
+      },
+      "unit": "identity",
+      "method": "sha256 of kaggle_simulations/agent/main.py at freeze; snapshot b64 round-trip verified decoded==source; manifest written 2026-08-29 after the r3-frozen complete gate PASS (72/72, abnormal 0)"
+    },
+    "r3_p0_success_metrics_summary": {
+      "value": {
+        "attribution_valid_all_12_seats": true,
+        "attribution_method": "kgenv/replay_profile.extract_success_metrics: observation state-diff measurement; shadow interpreter port validated field-by-field against every recorded step of all 6 round-2 replays (12 seats x 720 steps, 0 mismatch)",
+        "report": "workspace/software/exports/online/round2_success_metrics.md",
+        "backing_json": "workspace/software/exports/online/round2_success_stats.json",
+        "ours_op_success_rates": {
+          "CARE": "162-197 req = 162-197 eff (100%) across 6 games",
+          "FEED": "100%",
+          "HARVEST": "100%",
+          "HIRE": "261-265 req = 261-265 eff (100%)",
+          "WATER": "99.6-99.9% (2-6 invalid unit-op turns per game total)"
+        },
+        "winners_effective_care": {
+          "arminhej96": "334/586 (252 duplicate no-op requests)",
+          "朝闻夕死": "268/268",
+          "Danila Galkin": "394/394"
+        },
+        "danila_hire_effective": "312 effective / 450 engine-visible / 573 raw (123 orders beyond the 10-orders-per-turn cap never parsed; 138 silent no-money rejects)",
+        "ours_escapes": "5 animals / 6 games (4 COW + 1 SHEEP, asset loss 2100) vs winners 0 / 3 games",
+        "ours_care_lapse_weeds": "14-29 tiles per game (143 total; CARROT 5-13 + WHEAT 7-15 heavy), days 10-26; winners 0/30/16 discarding low-value lines only",
+        "ours_shed_overflow": "0-46 units per game, all at the day-25 dump (shedCapacity=100 terminal logistics bottleneck); Anthaus counterexample 259u",
+        "per_head_harvested_yield": {
+          "ours_milk_per_cow": "15.2-21.2u",
+          "winners_milk_per_cow": "24.7-35.6u",
+          "ours_wool_per_sheep": "15.7-21.5u",
+          "winners_wool_per_sheep": "22.0-24.7u"
+        },
+        "market_quality": "our SELL fill 99.1-100% (aborts = same-turn shed races, no_stock); wool dump slippage -10.6 to -35.9/unit in 4/6 games; Danila feed-stockpile buy impact +3.03/unit (paid 36.75 vs quoted 33.72)"
+      },
+      "unit": "report",
+      "method": "r3-P0 (2026-08-29): python scripts/replay_deep_stats.py .tmp-online/round2/*.json --success-json exports/online/round2_success_stats.json over the 6 round-2 online replays; success-caliber numbers re-basing the round-2 request-caliber conclusions (report section 1-2)"
+    },
+    "r3_ablation_harness_ready": {
+      "value": true,
+      "unit": "bool",
+      "method": "scripts/ablate.py (r3-P0, 2026-08-29): paired candidate-vs-champion grid on the same (opponent, seed, seat) cell -- 9 required opponents x seeds x AB/BA x 2 sides; champion default = frozen snapshot r3_frozen_candidate.b64 sha-verified against the manifest; merge gate = new-style pool WR >= champion AND worst single-opponent WR >= champion AND disaster rate (margin < -15000) <= champion; outputs locked to exports/ablations/. Champion-vs-champion semantic smoke measured: 144 games in 453.72s, all 72 pairs exact ties (0W-0L-72T, net diff 0.0), both sides 72-0 vs pool, VERDICT MERGEABLE, exit 0 (exports/ablations/champ-vs-champ-r3p0-smoke.json). Tests: tests/test_ablate.py 11 passed (grid completeness, duplicate/foreign game rejection, pairing diff semantics, gate counterexamples incl. disaster boundary, frozen decode tamper rejection, out-path lock, real-engine champ-vs-champ tie grid)"
+    },
+    "r4_layer_p1_scheduler": {
+      "value": {
+        "attempts": [
+          {
+            "label": "r4-p1-value-scheduler",
+            "candidate_sha256": "dbb4575d993327946fa4ffb8c8bb743467d814043310de6a42e431f6239c2fd6",
+            "champion_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+            "games": 72,
+            "pairs": {
+              "pairs": 72,
+              "W": 27,
+              "L": 45,
+              "T": 0,
+              "net_pair_diff": -462071.0
+            },
+            "candidate": {
+              "new_style_pool_win_rate": 0.9,
+              "worst_opponent_win_rate": 0.75,
+              "worst_opponent": "near_band_diversified",
+              "disaster_rate": 0.0278,
+              "record": {
+                "W": 68,
+                "L": 4,
+                "T": 0
+              }
+            },
+            "champion": {
+              "new_style_pool_win_rate": 1.0,
+              "worst_opponent_win_rate": 1.0,
+              "disaster_rate": 0.0,
+              "record": {
+                "W": 72,
+                "L": 0,
+                "T": 0
+              }
+            },
+            "verdict": false,
+            "checks": {
+              "new_style_pool_win_rate": false,
+              "worst_opponent_win_rate": false,
+              "disaster_rate": false
+            },
+            "runtime_seconds": 586.22
+          },
+          {
+            "label": "r4-p1-value-scheduler-fix1",
+            "candidate_sha256": "697935d3570d45416d5694a2b8baf21f5fe65fe747244a5053c5f21af93f5442",
+            "champion_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+            "games": 72,
+            "pairs": {
+              "pairs": 72,
+              "W": 35,
+              "L": 37,
+              "T": 0,
+              "net_pair_diff": -410175.0
+            },
+            "candidate": {
+              "new_style_pool_win_rate": 0.95,
+              "worst_opponent_win_rate": 0.75,
+              "worst_opponent": "melon_hoarder",
+              "disaster_rate": 0.0278,
+              "record": {
+                "W": 66,
+                "L": 6,
+                "T": 0
+              }
+            },
+            "champion": {
+              "new_style_pool_win_rate": 1.0,
+              "worst_opponent_win_rate": 1.0,
+              "disaster_rate": 0.0,
+              "record": {
+                "W": 72,
+                "L": 0,
+                "T": 0
+              }
+            },
+            "verdict": false,
+            "checks": {
+              "new_style_pool_win_rate": false,
+              "worst_opponent_win_rate": false,
+              "disaster_rate": false
+            },
+            "runtime_seconds": 643.04
+          }
+        ],
+        "merge_decision": "NOT mergeable standalone (volume-vs-price coupling: the scheduler's full-coverage production out-ran the r3 market gates; paired disasters -90949/-109183 on melon_hoarder s103 / baseline_wheat s101); merged WITH P2 in the r4-p1p2 gate",
+        "scheduling_layer_gains": {
+          "avg_escapes_per_game": {
+            "r3_champ": 0.83,
+            "p1_v2_probe": 0.0
+          },
+          "avg_weeds_care_lapse": {
+            "r3_champ": 29.33,
+            "p1_v2_probe": 7.67
+          },
+          "liquidity_death_spiral_fix": "scale_ranch BA seed 102 reward 5496 -> 79389 via shed-occupancy harvest discount"
+        }
+      },
+      "unit": "paired-ablation record per attempt",
+      "method": "scripts/ablate.py --candidate <main.py> --label <layer> vs frozen r3 champion e21c4b5f; 144 games = 9 opponents x seeds 101-104 x AB/BA x 2 sides; success-caliber probe = scripts/r4_success_probe.py (official engine replay, extract_success_metrics state-diff)"
+    },
+    "r4_layer_p2_market": {
+      "value": {
+        "gate": {
+          "label": "r4-p1p2-market-control",
+          "candidate_sha256": "45b0e398034effb5921b228018badfc5fdf73b8a0c79904a43c802b0dcf0a32a",
+          "champion_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+          "games": 72,
+          "pairs": {
+            "pairs": 72,
+            "W": 37,
+            "L": 35,
+            "T": 0,
+            "net_pair_diff": -31945.0
+          },
+          "candidate": {
+            "new_style_pool_win_rate": 1.0,
+            "worst_opponent_win_rate": 1.0,
+            "worst_opponent": "cow_baron",
+            "disaster_rate": 0.0,
+            "record": {
+              "W": 72,
+              "L": 0,
+              "T": 0
+            }
+          },
+          "champion": {
+            "new_style_pool_win_rate": 1.0,
+            "worst_opponent_win_rate": 1.0,
+            "disaster_rate": 0.0,
+            "record": {
+              "W": 72,
+              "L": 0,
+              "T": 0
+            }
+          },
+          "verdict": true,
+          "checks": {
+            "new_style_pool_win_rate": true,
+            "worst_opponent_win_rate": true,
+            "disaster_rate": true
+          },
+          "runtime_seconds": 655.84
+        },
+        "merge_decision": "MERGEABLE with P1",
+        "town_demand_model": "6 draws/day per unlocked shop instance (2x single-product), +1/day town center; observed from obs.town.unlocked_shops",
+        "analytic_engine_check": "embedded MARKET_PARAMS price/offset round-trip equals official market_price on 99/99 spot checks incl. closed-form hinge inversion (tests/test_strategy_r4_p2.py)",
+        "disaster_cell_flips": {
+          "melon_hoarder_s103_pair_diff": {
+            "fix1": -90949.0,
+            "with_p2": 60553.0
+          },
+          "baseline_wheat_s101_pair_diff": {
+            "fix1": -109183.0,
+            "with_p2": 86362.0
+          },
+          "near_band_s102_pair_diff": {
+            "fix1": -30917.0,
+            "with_p2": 13617.0
+          }
+        }
+      },
+      "unit": "paired-ablation record",
+      "method": "scripts/ablate.py --label r4-p1p2-market-control"
+    },
+    "r4_layer_p3_capital": {
+      "value": {
+        "gate": {
+          "label": "r4-p3-npv-capital",
+          "candidate_sha256": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+          "champion_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+          "games": 72,
+          "pairs": {
+            "pairs": 72,
+            "W": 37,
+            "L": 35,
+            "T": 0,
+            "net_pair_diff": -7858.0
+          },
+          "candidate": {
+            "new_style_pool_win_rate": 1.0,
+            "worst_opponent_win_rate": 1.0,
+            "worst_opponent": "cow_baron",
+            "disaster_rate": 0.0,
+            "record": {
+              "W": 72,
+              "L": 0,
+              "T": 0
+            }
+          },
+          "champion": {
+            "new_style_pool_win_rate": 1.0,
+            "worst_opponent_win_rate": 1.0,
+            "disaster_rate": 0.0,
+            "record": {
+              "W": 72,
+              "L": 0,
+              "T": 0
+            }
+          },
+          "verdict": true,
+          "checks": {
+            "new_style_pool_win_rate": true,
+            "worst_opponent_win_rate": true,
+            "disaster_rate": true
+          },
+          "runtime_seconds": 657.52
+        },
+        "merge_decision": "MERGEABLE (three-layer tree)",
+        "recovery_vs_p1p2": {
+          "net_pair_diff": {
+            "p1p2": -31945.0,
+            "with_p3": -7858.0
+          }
+        }
+      },
+      "unit": "paired-ablation record",
+      "method": "scripts/ablate.py --label r4-p3-npv-capital"
+    },
+    "r4_development_gate_summary": {
+      "value": {
+        "label": "r4-frozen",
+        "command": "python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label r4-frozen --rounds 4 --require-complete",
+        "expected_games": 72,
+        "actual_games": 72,
+        "abnormal_games": 0,
+        "candidate_record": {
+          "wins": 72,
+          "losses": 0,
+          "ties": 0
+        },
+        "per_opponent": {
+          "baseline_wheat": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0
+          },
+          "cow_baron": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0
+          },
+          "crop_rotator": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0
+          },
+          "expansionist": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0
+          },
+          "melon_hoarder": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0
+          },
+          "near_band_diversified": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0
+          },
+          "scale_ranch": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0
+          },
+          "self_feed_ranch": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0
+          },
+          "template_wheat": {
+            "wins": 8,
+            "losses": 0,
+            "ties": 0
+          }
+        },
+        "seeds": [
+          101,
+          102,
+          103,
+          104
+        ],
+        "seed_domain": "development",
+        "formal_pass": true,
+        "complete": true,
+        "elapsed_seconds": 310.14
+      },
+      "unit": "gate record",
+      "method": "scripts/iterate_gate.py --label r4-frozen --rounds 4 --require-complete (AB/BA x 9 required opponents x 4 dev seeds)"
+    },
+    "r4_frozen_candidate_identity": {
+      "value": {
+        "label": "r4-frozen",
+        "candidate_sha256": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+        "snapshot_file_sha256": "df2f4ab119eebd9bae09e2b4fec44446bf9d8b6e0dbe75d01e0076749f6bb833",
+        "decoded_sha256": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+        "git_ref": "164439779b293a3d455e6920e631d911dfa2cdb4",
+        "manifest": "workspace/software/r4_frozen_manifest.json",
+        "snapshot": "workspace/software/r4_frozen_candidate.b64",
+        "replaces_champion": "r3_frozen e21c4b5f"
+      },
+      "unit": "sha256 identity record",
+      "method": "scripts/r4_freeze.py post-gate: b64 snapshot byte-roundtrip verified against main.py"
+    },
+    "r4_success_caliber_vs_champion": {
+      "value": {
+        "probe_games": 6,
+        "opponents": [
+          "scale_ranch",
+          "self_feed_ranch",
+          "template_wheat"
+        ],
+        "seeds": [
+          101,
+          102
+        ],
+        "r3_champ_baseline": {
+          "avg_weeds_care_lapse": 29.33,
+          "avg_escapes": 0.83,
+          "avg_capped_tile_days": 12.67,
+          "avg_shed_overflow_units": 12.17,
+          "avg_sell_slippage": 2097.1,
+          "wins": 6
+        },
+        "r4_three_layer": {
+          "avg_weeds_care_lapse": 7.0,
+          "avg_escapes": 0.5,
+          "avg_capped_tile_days": 11.33,
+          "avg_shed_overflow_units": 21.83,
+          "avg_sell_slippage": 2283.28,
+          "wins": 6
+        },
+        "residuals_note": "escape residual = deliberate P4-lite terminal non-feed (zero money at stake); shed overflow concentrated d21-28 (open item for the next wave)"
+      },
+      "unit": "per-game averages over 6 games",
+      "method": "scripts/r4_success_probe.py on the official engine with kgenv.replay_profile.extract_success_metrics (state-diff success caliber, r3-P0 instrument)"
+    },
+    "r4_tests": {
+      "value": {
+        "total": 505,
+        "passed": 505,
+        "new_r4": 34,
+        "baseline_r3": 413,
+        "r3_3_holdout": 58
+      },
+      "unit": "pytest count",
+      "method": "python -m pytest tests/ (workspace/software)"
+    },
+    "r4_holdout_protocol": {
+      "value": {
+        "full_matrix": true,
+        "seed_count": 8,
+        "seat_orders": [
+          "AB",
+          "BA"
+        ],
+        "one_time": true,
+        "resume_exact_attempt_only": true,
+        "candidate_change_invalidates": true,
+        "candidate_source": "frozen_git_blob",
+        "historical_seed_exclusion_count": 46
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
+    },
+    "r4_holdout_seed_manifest": {
+      "value": {
+        "schema_version": "1.0",
+        "attempt_id": "14ffd5eb33785ae8af94cf73",
+        "attempt_index": 3,
+        "generated_after_freeze": true,
+        "random_source": "Python secrets.randbelow (OS cryptographic entropy)",
+        "revealed_at": "2026-08-29T14:23:02.222340+00:00",
+        "seeds": [
+          734418350,
+          811489468,
+          517522921,
+          787132250,
+          818029522,
+          313354833,
+          976852120,
+          676517797
+        ],
+        "sha256": "73d9164f60a6580bc967b0d581a9ef3d27d3666de0e893c59c21f933777b73f2",
+        "historical_seed_exclusion_count": 46,
+        "overlap_with_historical": []
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
+    },
+    "r4_holdout_candidate_hash_match": {
+      "value": {
+        "frozen": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+        "before": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+        "after": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+        "pass": true
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
+    },
+    "r4_holdout_seed_domain_isolation": {
+      "value": {
+        "historical_count": 46,
+        "overlap_count": 0,
+        "pass": true
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
+    },
+    "r4_holdout_run_status": {
+      "value": {
+        "index": 3,
+        "attempt_id": "14ffd5eb33785ae8af94cf73",
+        "status": "published",
+        "started_at": "2026-08-29T13:46:42.412495+00:00",
+        "completed_at": "2026-08-29T14:23:02.225297+00:00",
+        "published": true,
+        "invalidated": false,
+        "invalidation_reason": null,
+        "prior_attempt_index": 2,
+        "prior_attempt_evidence": "workspace/software/exports/holdout/attempt-2",
+        "worktree_state": {
+          "git_ref": "0a311b33c736691819d0375b3510c64ec0228f1e",
+          "status_porcelain": [
+            " D workspace/software/exports/holdout/published/eval_results.json",
+            " D workspace/software/exports/holdout/published/replay_log.jsonl",
+            " D workspace/software/exports/holdout/published/seed_manifest.json",
+            " D workspace/software/exports/holdout/published/software_metrics.json",
+            " M workspace/software/exports/holdout_schema.json",
+            " M workspace/software/kgenv/holdout_contract.py",
+            " M workspace/software/metrics.json",
+            " M workspace/software/scripts/run_holdout.py",
+            " M workspace/software/tests/test_holdout_contract.py",
+            "?? .tmp-corpus/",
+            "?? workspace/software/exports/holdout/attempt-2/",
+            "?? workspace/software/tests/test_holdout_r4.py"
+          ],
+          "tracked_changes_outside_boundary": [],
+          "note": "run executed from a worktree containing declared r3-3 work products; reproduce via recorded input-closure hashes"
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
+    },
+    "r4_holdout_schedule": {
+      "value": {
+        "expected_games": 720,
+        "actual_games": 720
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity"
+    },
+    "r4_holdout_seat_split": {
+      "value": {
+        "ab_games": 360,
+        "ba_games": 360,
+        "missing_mirrors": 0
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity"
+    },
+    "r4_holdout_abnormal_summary": {
+      "value": {
+        "abnormal_games": 0
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity/abnormal_games"
+    },
+    "r4_holdout_integrity_pass": {
+      "value": true,
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity"
+    },
+    "r4_confirmatory_overall_record": {
+      "value": {
+        "games": 144,
+        "W": 142,
+        "L": 2,
+        "T": 0,
+        "score_rate": 0.986111,
+        "wilson95": [
+          0.9508,
+          0.9962
+        ]
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/overall_record"
+    },
+    "r4_confirmatory_pair_records": {
+      "value": [
+        {
+          "opponent": "cow_baron",
+          "games": 16,
+          "W": 15,
+          "L": 1,
+          "T": 0,
+          "score_rate": 0.9375,
+          "wilson95": [
+            0.7167,
+            0.9889
+          ]
+        },
+        {
+          "opponent": "melon_hoarder",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "expansionist",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "baseline_wheat",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "crop_rotator",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "template_wheat",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "self_feed_ranch",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "near_band_diversified",
+          "games": 16,
+          "W": 15,
+          "L": 1,
+          "T": 0,
+          "score_rate": 0.9375,
+          "wilson95": [
+            0.7167,
+            0.9889
+          ]
+        },
+        {
+          "opponent": "scale_ranch",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        }
+      ],
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/pair_records"
+    },
+    "r4_confirmatory_seat_records": {
+      "value": {
+        "AB": {
+          "games": 72,
+          "W": 70,
+          "L": 2,
+          "T": 0,
+          "score_rate": 0.972222,
+          "wilson95": [
+            0.9043,
+            0.9923
+          ],
+          "by_opponent": {
+            "cow_baron": {
+              "games": 8,
+              "W": 7,
+              "L": 1,
+              "T": 0,
+              "score_rate": 0.875,
+              "wilson95": [
+                0.5291,
+                0.9776
+              ]
+            },
+            "melon_hoarder": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "expansionist": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "baseline_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "crop_rotator": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "template_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "self_feed_ranch": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "near_band_diversified": {
+              "games": 8,
+              "W": 7,
+              "L": 1,
+              "T": 0,
+              "score_rate": 0.875,
+              "wilson95": [
+                0.5291,
+                0.9776
+              ]
+            },
+            "scale_ranch": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            }
+          }
+        },
+        "BA": {
+          "games": 72,
+          "W": 72,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.9493,
+            1.0
+          ],
+          "by_opponent": {
+            "cow_baron": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "melon_hoarder": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "expansionist": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "baseline_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "crop_rotator": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "template_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "self_feed_ranch": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "near_band_diversified": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "scale_ranch": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            }
+          }
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/seat_records"
+    },
+    "r4_confirmatory_wilson_intervals": {
+      "value": {
+        "confidence": 0.95,
+        "method": "Wilson score; tie=0.5",
+        "overall": [
+          0.9508,
+          0.9962
+        ],
+        "pairs": {
+          "cow_baron": [
+            0.7167,
+            0.9889
+          ],
+          "melon_hoarder": [
+            0.8064,
+            1.0
+          ],
+          "expansionist": [
+            0.8064,
+            1.0
+          ],
+          "baseline_wheat": [
+            0.8064,
+            1.0
+          ],
+          "crop_rotator": [
+            0.8064,
+            1.0
+          ],
+          "template_wheat": [
+            0.8064,
+            1.0
+          ],
+          "self_feed_ranch": [
+            0.8064,
+            1.0
+          ],
+          "near_band_diversified": [
+            0.7167,
+            0.9889
+          ],
+          "scale_ranch": [
+            0.8064,
+            1.0
+          ]
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/wilson_intervals"
+    },
+    "r4_confirmatory_order_independent_statistics": {
+      "value": {
+        "method": "mean per-(opponent,seed) AB/BA score; Student-t 95% CI",
+        "order_independent": true,
+        "tie_policy": "tie=0.5 game score",
+        "unit_count": 72,
+        "estimate": 0.986111,
+        "ci95": [
+          0.966628,
+          1.0
+        ],
+        "input_sha256": "374842d4146779c24020d99b5525c519de595b452511b02237f76d20ee4be7f5",
+        "fit_status": "ok"
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/order_independent_statistic"
+    },
+    "r4_confirmatory_elo_appendix": {
+      "value": {
+        "role": "descriptive_only",
+        "order_sensitive": true,
+        "k": 32.0,
+        "start": 1200.0,
+        "table": [
+          {
+            "name": "submission",
+            "rating": 1701.6,
+            "played": 144,
+            "record": {
+              "W": 142,
+              "L": 2,
+              "T": 0
+            }
+          },
+          {
+            "name": "near_band_diversified",
+            "rating": 1506.7,
+            "played": 144,
+            "record": {
+              "W": 97,
+              "L": 47,
+              "T": 0
+            }
+          },
+          {
+            "name": "scale_ranch",
+            "rating": 1478.9,
+            "played": 144,
+            "record": {
+              "W": 105,
+              "L": 39,
+              "T": 0
+            }
+          },
+          {
+            "name": "self_feed_ranch",
+            "rating": 1444.3,
+            "played": 144,
+            "record": {
+              "W": 94,
+              "L": 50,
+              "T": 0
+            }
+          },
+          {
+            "name": "template_wheat",
+            "rating": 1368.7,
+            "played": 144,
+            "record": {
+              "W": 93,
+              "L": 51,
+              "T": 0
+            }
+          },
+          {
+            "name": "crop_rotator",
+            "rating": 1245.5,
+            "played": 144,
+            "record": {
+              "W": 88,
+              "L": 56,
+              "T": 0
+            }
+          },
+          {
+            "name": "cow_baron",
+            "rating": 875.0,
+            "played": 144,
+            "record": {
+              "W": 52,
+              "L": 92,
+              "T": 0
+            }
+          },
+          {
+            "name": "melon_hoarder",
+            "rating": 846.0,
+            "played": 144,
+            "record": {
+              "W": 33,
+              "L": 111,
+              "T": 0
+            }
+          },
+          {
+            "name": "expansionist",
+            "rating": 834.7,
+            "played": 144,
+            "record": {
+              "W": 16,
+              "L": 128,
+              "T": 0
+            }
+          },
+          {
+            "name": "baseline_wheat",
+            "rating": 698.5,
+            "played": 144,
+            "record": {
+              "W": 0,
+              "L": 144,
+              "T": 0
+            }
+          }
+        ]
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/elo"
+    },
+    "r4_confirmatory_export_traceability": {
+      "value": {
+        "export_sha256": "bde4874f652daf828e10c036a8b41109f1703afdfa555b34f9e460c0448e063e",
+        "source": "workspace/software/exports/eval_results.json",
+        "validated_schema": "2.0",
+        "json_pointers": {
+          "r4_holdout_protocol": "/holdout/protocol",
+          "r4_holdout_seed_manifest": "/holdout/seed_manifest",
+          "r4_holdout_candidate_hash_match": "/holdout/candidate_hash_match",
+          "r4_holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
+          "r4_holdout_run_status": "/holdout/attempt",
+          "r4_holdout_schedule": "/integrity",
+          "r4_holdout_seat_split": "/integrity",
+          "r4_holdout_abnormal_summary": "/integrity/abnormal_games",
+          "r4_holdout_integrity_pass": "/integrity",
+          "r4_confirmatory_overall_record": "/confirmatory/overall_record",
+          "r4_confirmatory_pair_records": "/confirmatory/pair_records",
+          "r4_confirmatory_seat_records": "/confirmatory/seat_records",
+          "r4_confirmatory_wilson_intervals": "/confirmatory/wilson_intervals",
+          "r4_confirmatory_order_independent_statistics": "/confirmatory/order_independent_statistic",
+          "r4_confirmatory_elo_appendix": "/elo"
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory_export_traceability"
     }
   },
   "unmeasured": {
@@ -2337,16 +3922,34 @@
     "online_feedback_calibration": {
       "value": {
         "round1_public_record": "1W-2L",
-        "loss_failure_modes": [
+        "round1_loss_failure_modes": [
           "FM-O1 portfolio concentration",
           "FM-O2 no purchased-wheat feed",
           "FM-O3 no high-value crops",
           "FM-O4 CARE/DIG underuse"
         ],
-        "ledger": "workspace/software/exports/online/round1_ledger.json",
-        "analysis": "workspace/software/exports/online/round1_failure_analysis.md"
+        "round1_ledger": "workspace/software/exports/online/round1_ledger.json",
+        "round1_analysis": "workspace/software/exports/online/round1_failure_analysis.md",
+        "round2_submission_ref": 55864284,
+        "round2_candidate_sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee",
+        "round2_public_record": "3W-3L",
+        "round2_score_trajectory": [
+          600.0,
+          768.4,
+          651.7,
+          580.7
+        ],
+        "round2_public_games": 6,
+        "round2_sampling_ledger": "workspace/software/exports/online/round2_ledger.json",
+        "round2_pullback_reviews": "workspace/software/exports/online/round2_failure_analysis.md",
+        "round2_loss_failure_modes": [
+          "FM-R2-1 mid-game economy scale gap (winners 95-101k vs ours 46-61k; d12->d24 ramp 2-3x)",
+          "FM-R2-2 CARE intensity gap (winners 268-586 vs ours ~195)",
+          "FM-R2-3 herd scale ceiling (winners 11-17 animals vs our 10-11; m3 i4/i9 scale attempts failed on old pool)"
+        ],
+        "stop_loss_status": "not_triggered (6 public games, win rate 50.0%, threshold is <50%)"
       },
-      "note": "online-measured 2026-08-29: replay analysis (kaggle competitions episodes/replay CLI) of the two public losses (102194478 vs Sooriya Senthilkumar 39377:74792, 102196708 vs Chirag Bhatnagar 47642:62586) produced failure modes FM-O1..FM-O4 with per-winner evidence counts; winners ran diversified economies vs our 10-cow monoculture. Per-candidate recalibration item for the next iteration cycle. Key kept in the unmeasured namespace so consumer key locations stay stable"
+      "note": "online-measured 2026-08-29 (two rounds): round-1 replay analysis of submission 55858820 losses produced FM-O1..O4; round-2 (submission 55864284, rotation ranch 5713c17e) sampled 6 public games 3W-3L via kaggle competitions submissions/episodes/replay CLI -- round-1 killer structures (diversified ranch, heavy-cow wheat) all beaten (FM-O1..O4 fixes validated online), losses concentrated in a next-band economy (95-101k finals, 11-17 animal herds, CARE 268-586, d12->d24 capital ramp 2-3x ours) producing FM-R2-1..R2-3. Stop-loss not triggered at exactly 50%. Round-2 winner replays retained under .tmp-online/round2/ as next-cycle corpus candidates. Key kept in the unmeasured namespace so consumer key locations stay stable"
     },
     "final_submission_commits": {
       "value": null,
