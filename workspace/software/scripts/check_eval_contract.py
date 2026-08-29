@@ -21,7 +21,8 @@ from kgenv.eval_contract import (
     validate_eval_result,
     validate_gate_run,
 )
-from scripts import run_eval
+from kgenv.holdout_contract import validate_holdout_payload
+from scripts import run_eval, run_holdout
 
 REQUIRED_OPPONENTS = [
     "cow_baron",
@@ -286,10 +287,16 @@ def check_export() -> None:
 
 def check_official(input_path: Path) -> None:
     payload = json.loads(input_path.read_text(encoding="utf-8"))
-    run_eval._schema_validate(payload)
-    report = validate_eval_result(payload, require_official=True)
+    if payload.get("run_kind") == "official_holdout":
+        run_holdout._schema_validate(payload)
+        report = validate_holdout_payload(payload)
+        label = "official holdout"
+    else:
+        run_eval._schema_validate(payload)
+        report = validate_eval_result(payload, require_official=True)
+        label = "official development export"
     print(
-        f"PASS official export: expected={report['expected_games']} "
+        f"PASS {label}: expected={report['expected_games']} "
         f"actual={report['actual_games']} abnormal={report['abnormal_games']}"
     )
 

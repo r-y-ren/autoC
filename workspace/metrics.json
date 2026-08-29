@@ -1,9 +1,9 @@
 {
-  "_generated_at": "2026-08-29T01:20:17",
+  "_generated_at": "2026-08-29T10:34:29",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
-    "milestone": "m2b-strategy-repair (terminal liquidation, confirmed purchases, inventory reservation, clean frozen candidate; historical keys retained)",
+    "milestone": "m2c-holdout-confirm (validated one-time full-matrix holdout; historical keys retained)",
     "measured_at": "2026-08-28",
     "engine": {
       "package": "kaggle-environments",
@@ -558,13 +558,15 @@
       "m2b_frozen_manifest": {
         "value": {
           "path": "workspace/software/m2b_frozen_manifest.json",
-          "sha256": "12c95bd0fc6b068282fb6f77826a9311fbaebf7b988fca4297361cb38d31a39c",
+          "sha256": "fe02b03cf4d7b53673b77ba18e5ab02a908feb8279fa30ff7f40b71ce32e1141",
           "candidate_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
           "git_ref": "decff3b236fd4cddd8bd6c5fbb1c1226f529a195",
-          "dirty_before_gate": false
+          "dirty_before_gate": false,
+          "snapshot_path": "workspace/software/m2b_frozen_candidate.b64",
+          "snapshot_sha256": "3b9eb106b585a4b36e594bc6ecdbf9472994cfd9d31c02a486ffcb95f6320986"
         },
         "unit": "manifest",
-        "method": "written after successful clean-baseline complete gate; manifest SHA measured by sha256 command"
+        "method": "clean-baseline gate manifest plus exact-byte base64 snapshot for CRLF-stable holdout execution"
       },
       "strategy_repair_test_summary": {
         "value": {
@@ -621,6 +623,624 @@
         },
         "unit": "identity",
         "method": "m2b clean-baseline gate identity; m2c must verify the candidate blob at this ref and current candidate SHA"
+      },
+      "holdout_protocol": {
+        "value": {
+          "full_matrix": true,
+          "seed_count": 8,
+          "seat_orders": [
+            "AB",
+            "BA"
+          ],
+          "one_time": true,
+          "resume_exact_attempt_only": true,
+          "candidate_change_invalidates": true,
+          "candidate_source": "frozen_git_blob"
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
+      },
+      "holdout_seed_manifest": {
+        "value": {
+          "schema_version": "1.0",
+          "attempt_id": "41c7771a63b90d3e66cb40c7",
+          "generated_after_freeze": true,
+          "random_source": "Python secrets.randbelow (OS cryptographic entropy)",
+          "revealed_at": "2026-08-28T18:51:07.641758+00:00",
+          "seeds": [
+            1434909129,
+            415651673,
+            68483508,
+            141000100,
+            801695889,
+            291593029,
+            1616180299,
+            1369595171
+          ],
+          "sha256": "68292287a9b8254538f312fb6e3d1991ce215ca2ac2a4e4b0ecc51a6ddbdc93a",
+          "historical_seed_exclusion_count": 27,
+          "overlap_with_historical": []
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
+      },
+      "holdout_candidate_hash_match": {
+        "value": {
+          "frozen": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+          "before": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+          "after": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+          "pass": true
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
+      },
+      "holdout_seed_domain_isolation": {
+        "value": {
+          "historical_count": 27,
+          "overlap_count": 0,
+          "pass": true
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
+      },
+      "holdout_run_status": {
+        "value": {
+          "index": 1,
+          "attempt_id": "41c7771a63b90d3e66cb40c7",
+          "status": "published",
+          "started_at": "2026-08-28T18:36:10.491843+00:00",
+          "completed_at": "2026-08-28T18:51:07.643314+00:00",
+          "published": true,
+          "invalidated": false,
+          "invalidation_reason": null
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
+      },
+      "holdout_schedule": {
+        "value": {
+          "expected_games": 576,
+          "actual_games": 576
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/integrity"
+      },
+      "holdout_seat_split": {
+        "value": {
+          "ab_games": 288,
+          "ba_games": 288,
+          "missing_mirrors": 0
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/integrity"
+      },
+      "holdout_abnormal_summary": {
+        "value": {
+          "abnormal_games": 0
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/integrity/abnormal_games"
+      },
+      "holdout_integrity_pass": {
+        "value": true,
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/integrity"
+      },
+      "confirmatory_overall_record": {
+        "value": {
+          "games": 128,
+          "W": 119,
+          "L": 9,
+          "T": 0,
+          "score_rate": 0.929688,
+          "wilson95": [
+            0.8718,
+            0.9626
+          ]
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/confirmatory/overall_record"
+      },
+      "confirmatory_pair_records": {
+        "value": [
+          {
+            "opponent": "cow_baron",
+            "games": 16,
+            "W": 10,
+            "L": 6,
+            "T": 0,
+            "score_rate": 0.625,
+            "wilson95": [
+              0.3864,
+              0.8152
+            ]
+          },
+          {
+            "opponent": "melon_hoarder",
+            "games": 16,
+            "W": 13,
+            "L": 3,
+            "T": 0,
+            "score_rate": 0.8125,
+            "wilson95": [
+              0.5699,
+              0.9341
+            ]
+          },
+          {
+            "opponent": "expansionist",
+            "games": 16,
+            "W": 16,
+            "L": 0,
+            "T": 0,
+            "score_rate": 1.0,
+            "wilson95": [
+              0.8064,
+              1.0
+            ]
+          },
+          {
+            "opponent": "baseline_wheat",
+            "games": 16,
+            "W": 16,
+            "L": 0,
+            "T": 0,
+            "score_rate": 1.0,
+            "wilson95": [
+              0.8064,
+              1.0
+            ]
+          },
+          {
+            "opponent": "greedy_carrot",
+            "games": 16,
+            "W": 16,
+            "L": 0,
+            "T": 0,
+            "score_rate": 1.0,
+            "wilson95": [
+              0.8064,
+              1.0
+            ]
+          },
+          {
+            "opponent": "starter",
+            "games": 16,
+            "W": 16,
+            "L": 0,
+            "T": 0,
+            "score_rate": 1.0,
+            "wilson95": [
+              0.8064,
+              1.0
+            ]
+          },
+          {
+            "opponent": "random",
+            "games": 16,
+            "W": 16,
+            "L": 0,
+            "T": 0,
+            "score_rate": 1.0,
+            "wilson95": [
+              0.8064,
+              1.0
+            ]
+          },
+          {
+            "opponent": "pass",
+            "games": 16,
+            "W": 16,
+            "L": 0,
+            "T": 0,
+            "score_rate": 1.0,
+            "wilson95": [
+              0.8064,
+              1.0
+            ]
+          }
+        ],
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/confirmatory/pair_records"
+      },
+      "confirmatory_seat_records": {
+        "value": {
+          "AB": {
+            "games": 64,
+            "W": 60,
+            "L": 4,
+            "T": 0,
+            "score_rate": 0.9375,
+            "wilson95": [
+              0.85,
+              0.9754
+            ],
+            "by_opponent": {
+              "cow_baron": {
+                "games": 8,
+                "W": 5,
+                "L": 3,
+                "T": 0,
+                "score_rate": 0.625,
+                "wilson95": [
+                  0.3057,
+                  0.8632
+                ]
+              },
+              "melon_hoarder": {
+                "games": 8,
+                "W": 7,
+                "L": 1,
+                "T": 0,
+                "score_rate": 0.875,
+                "wilson95": [
+                  0.5291,
+                  0.9776
+                ]
+              },
+              "expansionist": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "baseline_wheat": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "greedy_carrot": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "starter": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "random": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "pass": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              }
+            }
+          },
+          "BA": {
+            "games": 64,
+            "W": 59,
+            "L": 5,
+            "T": 0,
+            "score_rate": 0.921875,
+            "wilson95": [
+              0.8298,
+              0.9662
+            ],
+            "by_opponent": {
+              "cow_baron": {
+                "games": 8,
+                "W": 5,
+                "L": 3,
+                "T": 0,
+                "score_rate": 0.625,
+                "wilson95": [
+                  0.3057,
+                  0.8632
+                ]
+              },
+              "melon_hoarder": {
+                "games": 8,
+                "W": 6,
+                "L": 2,
+                "T": 0,
+                "score_rate": 0.75,
+                "wilson95": [
+                  0.4093,
+                  0.9285
+                ]
+              },
+              "expansionist": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "baseline_wheat": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "greedy_carrot": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "starter": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "random": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              },
+              "pass": {
+                "games": 8,
+                "W": 8,
+                "L": 0,
+                "T": 0,
+                "score_rate": 1.0,
+                "wilson95": [
+                  0.6756,
+                  1.0
+                ]
+              }
+            }
+          }
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/confirmatory/seat_records"
+      },
+      "confirmatory_wilson_intervals": {
+        "value": {
+          "confidence": 0.95,
+          "method": "Wilson score; tie=0.5",
+          "overall": [
+            0.8718,
+            0.9626
+          ],
+          "pairs": {
+            "cow_baron": [
+              0.3864,
+              0.8152
+            ],
+            "melon_hoarder": [
+              0.5699,
+              0.9341
+            ],
+            "expansionist": [
+              0.8064,
+              1.0
+            ],
+            "baseline_wheat": [
+              0.8064,
+              1.0
+            ],
+            "greedy_carrot": [
+              0.8064,
+              1.0
+            ],
+            "starter": [
+              0.8064,
+              1.0
+            ],
+            "random": [
+              0.8064,
+              1.0
+            ],
+            "pass": [
+              0.8064,
+              1.0
+            ]
+          }
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/confirmatory/wilson_intervals"
+      },
+      "confirmatory_order_independent_statistics": {
+        "value": {
+          "method": "mean per-(opponent,seed) AB/BA score; Student-t 95% CI",
+          "order_independent": true,
+          "tie_policy": "tie=0.5 game score",
+          "unit_count": 64,
+          "estimate": 0.929688,
+          "ci95": [
+            0.867281,
+            0.992094
+          ],
+          "input_sha256": "f3061817d74491a4e98bc7025ce913de7180fc6294f22b12b211cf3a8ef33266",
+          "fit_status": "ok"
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/confirmatory/order_independent_statistic"
+      },
+      "confirmatory_elo_appendix": {
+        "value": {
+          "role": "descriptive_only",
+          "order_sensitive": true,
+          "k": 32.0,
+          "start": 1200.0,
+          "table": [
+            {
+              "name": "submission",
+              "rating": 1664.8,
+              "played": 128,
+              "record": {
+                "W": 119,
+                "L": 9,
+                "T": 0
+              }
+            },
+            {
+              "name": "cow_baron",
+              "rating": 1604.5,
+              "played": 128,
+              "record": {
+                "W": 114,
+                "L": 14,
+                "T": 0
+              }
+            },
+            {
+              "name": "melon_hoarder",
+              "rating": 1536.8,
+              "played": 128,
+              "record": {
+                "W": 103,
+                "L": 25,
+                "T": 0
+              }
+            },
+            {
+              "name": "expansionist",
+              "rating": 1420.0,
+              "played": 128,
+              "record": {
+                "W": 80,
+                "L": 48,
+                "T": 0
+              }
+            },
+            {
+              "name": "baseline_wheat",
+              "rating": 1290.8,
+              "played": 128,
+              "record": {
+                "W": 64,
+                "L": 64,
+                "T": 0
+              }
+            },
+            {
+              "name": "greedy_carrot",
+              "rating": 1135.9,
+              "played": 128,
+              "record": {
+                "W": 48,
+                "L": 80,
+                "T": 0
+              }
+            },
+            {
+              "name": "starter",
+              "rating": 949.6,
+              "played": 128,
+              "record": {
+                "W": 32,
+                "L": 96,
+                "T": 0
+              }
+            },
+            {
+              "name": "pass",
+              "rating": 766.6,
+              "played": 128,
+              "record": {
+                "W": 16,
+                "L": 112,
+                "T": 0
+              }
+            },
+            {
+              "name": "random",
+              "rating": 431.0,
+              "played": 128,
+              "record": {
+                "W": 0,
+                "L": 128,
+                "T": 0
+              }
+            }
+          ]
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/elo"
+      },
+      "confirmatory_export_traceability": {
+        "value": {
+          "export_sha256": "ac7684d853e368a26bf8685d6649d3d4d711a13a9eaacdadb6ff89c7aa5504f7",
+          "source": "workspace/software/exports/eval_results.json",
+          "validated_schema": "2.0",
+          "json_pointers": {
+            "holdout_protocol": "/holdout/protocol",
+            "holdout_seed_manifest": "/holdout/seed_manifest",
+            "holdout_candidate_hash_match": "/holdout/candidate_hash_match",
+            "holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
+            "holdout_run_status": "/holdout/attempt",
+            "holdout_schedule": "/integrity",
+            "holdout_seat_split": "/integrity",
+            "holdout_abnormal_summary": "/integrity/abnormal_games",
+            "holdout_integrity_pass": "/integrity",
+            "confirmatory_overall_record": "/confirmatory/overall_record",
+            "confirmatory_pair_records": "/confirmatory/pair_records",
+            "confirmatory_seat_records": "/confirmatory/seat_records",
+            "confirmatory_wilson_intervals": "/confirmatory/wilson_intervals",
+            "confirmatory_order_independent_statistics": "/confirmatory/order_independent_statistic",
+            "confirmatory_elo_appendix": "/elo"
+          }
+        },
+        "unit": "holdout-evidence",
+        "method": "workspace/software/exports/eval_results.json#/confirmatory_export_traceability"
       }
     },
     "unmeasured": {

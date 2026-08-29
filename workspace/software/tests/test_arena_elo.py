@@ -111,14 +111,19 @@ def test_exports_schema_exists_and_valid_json():
 
 
 def test_eval_results_sample_matches_schema():
-    """The shipped eval sample must validate against the shipped schema."""
+    """The shipped eval sample must validate against its run-kind schema."""
     import jsonschema
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    with open(os.path.join(root, "exports", "schema.json"), encoding="utf-8") as f:
-        schema = json.load(f)
     sample_path = os.path.join(root, "exports", "eval_results.json")
     if not os.path.isfile(sample_path):
         pytest.skip("eval sample not generated yet (run scripts/run_eval.py)")
     with open(sample_path, encoding="utf-8") as f:
         sample = json.load(f)
+    schema_name = (
+        "holdout_schema.json"
+        if sample.get("run_kind") == "official_holdout"
+        else "schema.json"
+    )
+    with open(os.path.join(root, "exports", schema_name), encoding="utf-8") as f:
+        schema = json.load(f)
     jsonschema.validate(sample, schema)
