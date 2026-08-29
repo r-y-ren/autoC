@@ -24,6 +24,7 @@ from kgenv.bots.expansionist import expansionist_agent
 from kgenv.bots.melon_hoarder import melon_hoarder_agent
 from kgenv.bots.online_pool import (crop_rotator_agent,
                                     near_band_diversified_agent,
+                                    scale_ranch_agent,
                                     self_feed_ranch_agent,
                                     template_wheat_agent)
 from kgenv.elo import EloTable
@@ -45,16 +46,17 @@ from kgenv.variance import margin_stats, most_volatile_pair, wilson_ci
 EXPORTS_DIR = os.path.join(SOFTWARE_ROOT, "exports")
 SCHEMA_VERSION = "2.0"
 MATRIX_ORDER = list(STANDARD_MATRIX_ORDER)
-# m2 online-style opponents (campaign III): certified ladder-archetype
-# reconstructions.  The canonical STANDARD_MATRIX_ORDER is FROZEN (the
-# published official_holdout export validates against it), so these join the
-# pool as a development-run extension and as gate required opponents -- never
-# inside the canonical official matrix.
+# m2 online-style opponents (campaign III) + r3-1 scale_ranch: certified
+# ladder-archetype reconstructions.  The canonical STANDARD_MATRIX_ORDER is
+# FROZEN (the published official_holdout export validates against it), so
+# these join the pool as a development-run extension and as gate required
+# opponents -- never inside the canonical official matrix.
 ONLINE_STYLE_POOL = [
     "crop_rotator",
     "template_wheat",
     "self_feed_ranch",
     "near_band_diversified",
+    "scale_ranch",
 ]
 M2_KEYS = [
     "llm_ab_win_rate",
@@ -82,12 +84,14 @@ def build_players(candidate_path: str, extended_pool: bool = False):
         "cow_baron": cow_baron_agent,
         "melon_hoarder": melon_hoarder_agent,
         "expansionist": expansionist_agent,
-        # m2 online-style opponents (campaign III): always part of the
-        # available pool; scheduled by default via --extended-pool
+        # m2 online-style opponents (campaign III) + r3-1 scale_ranch:
+        # always part of the available pool; scheduled by default via
+        # --extended-pool
         "crop_rotator": crop_rotator_agent,
         "template_wheat": template_wheat_agent,
         "self_feed_ranch": self_feed_ranch_agent,
         "near_band_diversified": near_band_diversified_agent,
+        "scale_ranch": scale_ranch_agent,
     }
     if not extended_pool:
         # canonical pool only: keep the historical run_eval opponent dict

@@ -35,6 +35,10 @@ REQUIRED_OPPONENTS = [
     "template_wheat",
     "self_feed_ranch",
     "near_band_diversified",
+    # r3-1 next-band opponent: round-2 winner archetype cross-validated
+    # against the top-20 corpus (exports/online/round2_winner_deep_dive.md);
+    # dev-gate upgrade -- the published holdout export is NOT affected
+    "scale_ranch",
 ]
 GATE_GAMES_PER_OPPONENT = len([101, 102, 103, 104]) * 2   # seeds x AB/BA
 M2_KEYS = [

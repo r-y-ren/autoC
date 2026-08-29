@@ -1,16 +1,21 @@
-"""Online-style opponents (campaign III m2-online-pool): four parameterised
-reconstructions of the ladder archetypes extracted in m1 from 60 official
-episode replays (120 seat profiles; exports/replay_profiles/).
+"""Online-style opponents (campaign III m2-online-pool + r3-1 scale_ranch):
+five parameterised reconstructions of the ladder archetypes extracted in m1
+from 60 official episode replays (120 seat profiles; exports/replay_profiles/)
+plus, for scale_ranch, the three round-2 winner replays
+(exports/online/round2_winner_deep_dive.md).
 
-Parameter discipline (blueprint m2): every knob of the three flagship bots is
+Parameter discipline (blueprint m2): every knob of the flagship bots is
 backed by a SAME-PLAYER >=3-game consistent finding from the cross-game review
-(band_summary.md "Cross-game consistency review").  The fourth bot is marked
+(band_summary.md "Cross-game consistency review").  The near_band bot is marked
 ``exploratory_params = True``: it draws on the 500-900 rating band where only
 2 games exist, but the two seats belong to two INDEPENDENT players whose
 structures converge (strawberry-led diversified portfolio + late 4th quadrant
 + heavy endgame dumping), which is the documented justification for including
 it in the pool anyway -- it represents the real online distribution around
-our own ladder position.
+our own ladder position.  scale_ranch is NOT exploratory: each knob cites a
+>=3-game top-20 finding that cross-validates the round-2 winners' single-game
+trajectories (the winners are 1 game each, so winner-only numbers are treated
+as style, not structure).
 
 Archetypes (see PARAM provenance fields for the exact games):
 
@@ -40,6 +45,20 @@ near_band_diversified -- 500-900 band (Sooriya Senthilkumar ep 102194478,
                         8-cow/3-sheep/2-goose herd, 4th quadrant late,
                         8.5-8.6 hires/day, heavy endgame liquidation
                         (Chirag endgame sell share 17.7%).
+scale_ranch            -- round-2 winner archetype (campaign III r3-1, next
+                        band above our ladder position): cross-profile of the
+                        three round-2 winners (arminhej96 ep102399852 100559,
+                        朝闻夕死 ep102402115 95087, Danila Galkin ep102406576
+                        98770) validated against the top-20 corpus (58
+                        episodes / 116 seats).  Structure: day-0 herd burst
+                        (5 animals, ~2000 of the 3000 start), 8-cow + 6-sheep
+                        herd complete by day ~9-11, strawberry ramped early
+                        (cap 20 tiles), full-coverage CARE, crew 12 from day
+                        7, premium milk/strawberry/melon gates, endgame dump
+                        day 28.  Every knob cites the >=3-game top-20 finding
+                        it cross-validates; single-game winner quirks (4th
+                        quadrant, over-issued CARE no-ops) are excluded --
+                        see exports/online/round2_winner_deep_dive.md.
 
 All four share one claim-based labour scheduler (same contract as the other
 local bots) and are purely functions of the observation: stateless,
@@ -240,6 +259,92 @@ NEAR_BAND_PARAMS: Dict = {
     "endgame_start": 27,                                # Chirag endgame share 17.7%
 }
 
+SCALE_RANCH_PARAMS: Dict = {
+    "name": "scale_ranch",
+    "provenance": "round-2 winners cross-profile (arminhej96 ep102399852 100559, "
+                  "朝闻夕死 ep102402115 95087, Danila Galkin ep102406576 98770; "
+                  "replays .tmp-online/round2/) validated against the top-20 corpus "
+                  "(58 episodes / 116 seats: Crop Dusta 26 g, Milan Leonard 12 g, "
+                  "Ryo Hasegawa 16 g) -- r3-1 deep dive, "
+                  "exports/online/round2_winner_deep_dive.md",
+    "exploratory_params": False,
+    # labour: crew 12 from day 7 (all three winners hold 12 hands from d7-11;
+    # top-20 hires 282-295 = 9.4-9.9/day).  Day 0 runs a lean 6-hand crew so
+    # the herd burst keeps ~2000 of the 3000 start (arminhej96 d0: 4 hands,
+    # 5 cows, 340 money left).
+    "hire_mode": "ramp",
+    "hire_ramp": ((0, 6), (7, 12)),
+    "hire_cap": 12,
+    "hire_until_hour": 6,
+    # land: 3 quadrants, NE ~d5-7 / SW ~d8-11 (winners NE d6-9 / SW d8-11;
+    # Crop Dusta NE ~5 / SW ~8 across 26 games; Milan NE 6 / SW 11 across 12).
+    # The 4th quadrant is arminhej96's single-game quirk: 115/116 top-20
+    # seats stay at 3 quadrants, so it is NOT modelled.
+    "target_quads": 3,
+    "quad_min_day": (4, 7, 10),
+    "quad_reserve": (350, 500, 800),
+    # herd: 8 cows + 6 sheep = 14 head (winners peak 13-17: 5C+9S, 9C+4S,
+    # 8C+9S; top-20 median 12 / p75 15, Crop Dusta median 16, Subramanya 16).
+    # animal_reserve 600 leaves exactly the observed day-0 burst budget:
+    # after the 6-hand morning crew (fib cost 20) the 3000 start buys 5 cows
+    # at the 1000 buy gate (2000 spent, ~500 for seeds) -- all 116 top-20
+    # seats hold 4-5 animals on day 0 (Crop Dusta 5 head in 25/26 games) and
+    # reach 12+ by day 4-7; all three winners buy 5 head on day 0 and
+    # complete the herd by day 8-11.  Sheep follow at the 1100 gate once the
+    # cows' milk + fertilizer income arrives (arminhej96: 9 sheep on day 8).
+    "herd": {"COW": 8, "SHEEP": 6, "GOOSE": 0},
+    "animal_reserve": 600,
+    # field: wheat base 32% (winners 8-19 live wheat tiles / 35-50% share --
+    # the low end, because the herd's feed comes from the market too; top-20
+    # 42-50% with self-feeding herds)
+    "wheat_share_mode": "fixed",
+    "wheat_share": 0.32,
+    "wheat_share_ladder": None,
+    "tiles_per_quad": 22,
+    "tiles_per_unit": 5.5,
+    # strawberry is the mid-game money engine: winners plant 6-8 tiles on
+    # d7-d11 (arminhej d11, 朝闻夕死 d7, Danila d7) and ramp to 16-23 by
+    # d11-13, realising 208-246/unit; top-20 reach 6+ tiles by d4-7 and peak
+    # 33-37.  Cap 16 sits at the winner floor, one notch below the top-20
+    # field share (a bigger field starves the feed/care crews); the day-5
+    # phase keeps the day-0 cash on the herd burst.  Melon 8-10 tiles d0-17
+    # (winners 8/8/17-19, top-20 median 13).
+    "money_crop_caps": {"STRAWBERRY": 16, "MELON": 8},
+    "money_crop_min_price": {"STRAWBERRY": 60, "MELON": 130},
+    "crop_phase": {"MELON": (0, 17), "STRAWBERRY": (5, 14)},
+    # feed: guardrailed gap-fill (winners 102-462u external @ avg 33-34,
+    # i.e. a 15u/day cadence at the Danila end; Danila stockpiled 256u on
+    # d1-2 while wheat was cheap -- the cheap_extra stock-up reproduces
+    # this; top-20 spans 60-2732u, so the magnitude itself is a style knob,
+    # only the guardrail is a ticket)
+    "feed_mode": "gap",
+    "feed_gate": 38,
+    "feed_cheap_at": 30,
+    "feed_daily_base": 15,
+    "feed_cheap_extra": 40,
+    "feed_cover_days": 1.3,
+    "wheat_sell_keep": 10,
+    # care: full-coverage discipline -- winners issue CARE for every animal
+    # every day from day 0 (arminhej96 23-32 issued/day at 14 head, executed
+    # cares are capped at head by the engine), top-20 CARE p25 268.  Weight
+    # above routine water/plant, below urgent water and harvest.
+    "care_weight": 70,
+    # seeds keep the next animal buy liquid while the herd builds (the
+    # winners' day-0 split: 5 cows first, wheat from the leftovers,
+    # strawberry only once the fertilizer/wheat income arrives)
+    "seed_cash_floor": 1100,
+    # sells: premium milk like 朝闻夕死/Danila (realised 207-212) and a mid
+    # wool gate (arminhej 241 hoarded / Danila 116); strawberry 208-246 and
+    # melon 199-231 are always premium; fertilizer streams daily (winners
+    # 61-85 realised, 9.8-18.5k revenue).
+    "sell_gates": {"MILK": 190, "WOOL": 110, "STRAWBERRY": 150, "MELON": 170,
+                   "WHEAT": 30, "EGG": 40},
+    "sell_tranches": {"MILK": 12, "WOOL": 10, "STRAWBERRY": 10, "MELON": 10,
+                      "WHEAT": 40, "EGG": 10},
+    "fert_gate": 45,
+    "endgame_start": 28,    # winners stop feeding/planting and liquidate d28-29
+}
+
 
 def _dist(ax: int, ay: int, bx: int, by: int) -> int:
     return abs(ax - bx) + abs(ay - by)
@@ -313,6 +418,12 @@ def _market_orders(state: Dict, p: Dict) -> List[list]:
         return orders[:10]
 
     # ---- buys: labour, land, herd, feed, seeds ------------------------------
+    # cash_tracked (opt-in via seed_cash_floor, scale_ranch): approximate the
+    # engine's intra-turn sequential commits so later orders in the SAME turn
+    # see the cash the earlier ones already spent -- the default bots keep
+    # the historical turn-start-money behaviour byte-for-byte.
+    cash_tracked = p.get("seed_cash_floor") is not None
+    cash = money
     hire_target = _hire_target(day, state["quads"], p)
     # hiring takes one turn per hand: keep the morning window open long
     # enough for the full daily crew (the profiles' 9.4-9.9 hires/day); the
@@ -350,7 +461,11 @@ def _market_orders(state: Dict, p: Dict) -> List[list]:
             if owned >= target:
                 continue
             budget = land_fund + ANIMALS_INFO[animal]["cost"] + p["animal_reserve"]
-            if money >= budget:
+            if cash_tracked:
+                if cash >= budget:
+                    orders.append(["BUY_ANIMAL", animal, 1])
+                    cash -= ANIMALS_INFO[animal]["cost"]
+            elif money >= budget:
                 orders.append(["BUY_ANIMAL", animal, 1])
 
     # external feed wheat under the price guardrail: buy the herd's gap only,
@@ -384,7 +499,17 @@ def _market_orders(state: Dict, p: Dict) -> List[list]:
             orders.append(["BUY_PRODUCT", "FERTILIZER", p["fert_buy_daily"]])
 
     # seeds: the feed base first, then the largest deficits (orders are
-    # scarce and money crops must not crowd out the wheat field)
+    # scarce and money crops must not crowd out the wheat field).
+    # seed_cash_floor (opt-in, scale_ranch): while the herd is incomplete,
+    # cap seed quantities so the turn keeps `floor` cash for the next animal
+    # buy -- reproduces the winners' "cows first, seeds from the leftovers"
+    # day-0 split (arminhej96: 5 cows + 12 wheat tiles, 340 money left).
+    herd_pending = sum(state["animals_alive"].get(a, 0) + shed.get(a, 0)
+                       + sum((inv or {}).get(a, 0)
+                             for inv in state["inventories"])
+                       for a, target in p["herd"].items()
+                       if target > 0) < sum(n for n in p["herd"].values())
+    seed_floor = p.get("seed_cash_floor", 0) if herd_pending else 0
     deficits = []
     for crop, target in state["plan"]:
         want = target - state["crops_alive"].get(crop, 0) - seeds.get(crop, 0)
@@ -393,7 +518,14 @@ def _market_orders(state: Dict, p: Dict) -> List[list]:
             deficits.append({"crop": crop, "want": want})
     deficits.sort(key=lambda d: (d["crop"] != "WHEAT", -d["want"]))
     for d in deficits[:3]:
-        orders.append(["BUY_SEED", d["crop"], min(d["want"], 12)])
+        seed_cost = CROPS_INFO[d["crop"]]["seed"]
+        qty = min(d["want"], 12)
+        if seed_floor:
+            qty = min(qty, max(0, int((cash - seed_floor) // seed_cost)))
+        if qty > 0:
+            orders.append(["BUY_SEED", d["crop"], qty])
+            if cash_tracked:
+                cash -= qty * seed_cost
 
     # ---- sells: gated tranches with shed-pressure fallback ------------------
     shed_count = sum(v for v in shed.values() if isinstance(v, (int, float)))
@@ -516,6 +648,7 @@ def online_style_agent(obs: Dict, p: Dict) -> Dict:
             kind: len(positions) for kind, positions in structures.items()},
     }
     state["plan"] = _field_plan(state, p)
+    cash_tracked = p.get("seed_cash_floor") is not None
 
     # ---- task list ----------------------------------------------------------
     tasks: List[Dict] = []
@@ -556,10 +689,13 @@ def online_style_agent(obs: Dict, p: Dict) -> Dict:
             elif "animal" in tile:
                 if not last_day:
                     if not tile.get("fed_today", False):
-                        w = 100 if tile.get("consecutive_unfed", 0) >= 1 else 90
+                        if tile.get("consecutive_unfed", 0) >= 1:
+                            w = 110 if cash_tracked else 100
+                        else:
+                            w = 96 if cash_tracked else 90
                         add(w, x, y, ["FEED"], ("feed", x, y), need="WHEAT")
                     if not tile.get("cared_today", False) and tile.get("fed_today", False):
-                        add(30, x, y, ["CARE"], ("care", x, y))
+                        add(p.get("care_weight", 30), x, y, ["CARE"], ("care", x, y))
                 yu = tile.get("yield_units", 0)
                 if yu >= 3 or (yu > 0 and endgame):
                     add(66, x, y, ["HARVEST"], ("harva", x, y))
@@ -608,7 +744,8 @@ def online_style_agent(obs: Dict, p: Dict) -> Dict:
     wheat_carried = sum(inv.get("WHEAT", 0) for inv in inventories)
     if animals_to_feed > 0 and shed.get("WHEAT", 0) > 0 \
             and wheat_carried < animals_to_feed:
-        carriers = max(1, (animals_to_feed + 3) // 4)
+        div = 2 if cash_tracked else 4
+        carriers = max(1, (animals_to_feed + div - 1) // div)
         remaining = min(shed["WHEAT"], animals_to_feed + 2)
         for i in range(carriers):
             n = min(4, remaining)
@@ -619,11 +756,20 @@ def online_style_agent(obs: Dict, p: Dict) -> Dict:
     animal_carried = {a: sum(inv.get(a, 0) for inv in inventories)
                       for a in p["herd"] if p["herd"][a] > 0}
     if any(t["act"][0] == "PLACE" for t in tasks):
-        for animal, carried in animal_carried.items():
-            if carried == 0 and shed.get(animal, 0) > 0:
-                add(93, sx, sy, ["PICKUP", animal, min(2, shed[animal])],
-                    ("pickup_a", animal))
-                break
+        if cash_tracked:
+            # scale_ranch: a bought-but-unplaced animal produces nothing and
+            # blocks the next buy (owned includes the shed), so every animal
+            # type gets its own high-priority pickup each turn
+            for animal, carried in animal_carried.items():
+                if carried == 0 and shed.get(animal, 0) > 0:
+                    add(96, sx, sy, ["PICKUP", animal, min(2, shed[animal])],
+                        ("pickup_a", animal))
+        else:
+            for animal, carried in animal_carried.items():
+                if carried == 0 and shed.get(animal, 0) > 0:
+                    add(93, sx, sy, ["PICKUP", animal, min(2, shed[animal])],
+                        ("pickup_a", animal))
+                    break
 
     # ---- schedule units (claim-based, act-here-first) ------------------------
     claimed: set = set()
@@ -750,15 +896,23 @@ def near_band_diversified_agent(obs: Dict) -> Dict:
     return online_style_agent(obs, NEAR_BAND_PARAMS)
 
 
+def scale_ranch_agent(obs: Dict) -> Dict:
+    """Round-2 winner archetype (r3-1): day-0 herd burst + early strawberry
+    + full-coverage CARE + premium gates; the next band above our ladder."""
+    return online_style_agent(obs, SCALE_RANCH_PARAMS)
+
+
 ONLINE_STYLE_OPPONENTS = {
     "crop_rotator": crop_rotator_agent,
     "template_wheat": template_wheat_agent,
     "self_feed_ranch": self_feed_ranch_agent,
     "near_band_diversified": near_band_diversified_agent,
+    "scale_ranch": scale_ranch_agent,
 }
 ONLINE_STYLE_PARAM_SETS = {
     "crop_rotator": CROP_ROTATOR_PARAMS,
     "template_wheat": TEMPLATE_WHEAT_PARAMS,
     "self_feed_ranch": SELF_FEED_RANCH_PARAMS,
     "near_band_diversified": NEAR_BAND_PARAMS,
+    "scale_ranch": SCALE_RANCH_PARAMS,
 }

@@ -1,10 +1,10 @@
 {
-  "_generated_at": "2026-08-29T18:23:25",
+  "_generated_at": "2026-08-29T19:05:22",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
-    "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained)",
-    "measured_at": "2026-08-29T08:05:40.102261+00:00",
+    "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained) + r3-1 cross-profile & next-band pool",
+    "measured_at": "2026-08-29T10:58:33.146618+00:00",
     "engine": {
       "package": "kaggle-environments",
       "version": "1.32.7+nodeps (vendored, engine code unmodified)",
@@ -2317,6 +2317,294 @@
         },
         "unit": "holdout-evidence",
         "method": "workspace/software/exports/eval_results.json#/confirmatory_export_traceability"
+      },
+      "r3_cross_profile_summary": {
+        "value": {
+          "method_ref": "workspace/software/exports/online/round2_winner_deep_dive.md",
+          "extractor": "scripts/replay_deep_stats.py (per-day unit-op + flow table, both seats)",
+          "sources": {
+            "round2_replays": [
+              102399852,
+              102402115,
+              102406576,
+              102395408,
+              102397644,
+              102404370
+            ],
+            "top20_corpus": "58 episodes / 116 seats (.tmp-corpus/raw, m1 corpus rescan, same metrics)"
+          },
+          "divergence_chains": [
+            {
+              "episode": 102399852,
+              "winner": "arminhej96",
+              "final": 100559,
+              "vs_ours": 47047,
+              "divergence_day": "d16 (18910 vs 5606 after WOOL 54)",
+              "chain": "d0 5C(2000) + CARE from d0 -> d9 MILK 30 (max_held) -> d8 +9S -> d16 wool cap -> strawberry 23 tiles compounding"
+            },
+            {
+              "episode": 102402115,
+              "winner": "朝闻夕死",
+              "final": 95087,
+              "vs_ours": 46304,
+              "divergence_day": "d11 (4867 vs 188 after MELON 18 sale)",
+              "chain": "d0 3C+2S -> strawberry 18 tiles by d11 -> herd 13 by d11 -> milk 8-24/day + fert 8-12/day steady 4-5k/day"
+            },
+            {
+              "episode": 102406576,
+              "winner": "Danila Galkin",
+              "final": 98770,
+              "vs_ours": 61033,
+              "divergence_day": "d13 set / d18 gap 30645 vs 15482",
+              "chain": "d0 3C+2S + d1-2 feed stockpile 256u -> herd 17 by d11 + strawberry 19 + melon 17 -> 6-7.5k/day"
+            }
+          ],
+          "key_contrast": {
+            "ours_6games": {
+              "d0_herd_head": 1,
+              "herd_complete_day": "d13-15",
+              "peak_head": "9-11",
+              "care_total": "162-197",
+              "strawberry_peak_tiles": "13-15 (d13)",
+              "d12_money": "153-478",
+              "d24_money": "21225-33809",
+              "ramp_d12_d24": "20933-33406"
+            },
+            "winners_3games": {
+              "d0_herd_head": 5,
+              "herd_complete_day": "d8-11",
+              "peak_head": "13-17",
+              "care_total": "268-586",
+              "strawberry_peak_tiles": "16-23 (by d11-13)",
+              "d12_money": "1475-7979",
+              "d24_money": "48940-77464",
+              "ramp_d12_d24": "44678-75989"
+            },
+            "top20_116seats": {
+              "d0_herd_head": "4-5 (116/116)",
+              "herd_12plus_day": "d4-7 (med d6)",
+              "peak_head": "med 12 / p75 15 (105/116 >=12)",
+              "care_total": "med 288 / p25 268",
+              "strawberry": "6+ tiles by d4-7, peak med 36",
+              "d12_money": "med 15418 (only 1/116 <=1.5k)",
+              "d24_money": "med 67270 / p25 55897",
+              "ramp_d12_d24": "med 52302 / p25 39790",
+              "quadrants": "115/116 at 3"
+            },
+            "crop_dusta_26games": {
+              "final": "med 92050 (68822-134159)",
+              "d0_herd": "5 head in 25/26",
+              "herd_12_day": "d6 in 26/26",
+              "peak_head": "med 16",
+              "care": "med 274",
+              "strawberry_6tiles_day": "d4 in 26/26",
+              "strawberry_peak": "10-43 (med~30)",
+              "feed": "med 1732u",
+              "d12": "med 11276",
+              "ramp": "med 53966"
+            }
+          },
+          "counter_examples_scale_without_timing": [
+            {
+              "player": "Anthaus",
+              "final": 60457,
+              "result": "L to us",
+              "peak_head": 18,
+              "care": 303,
+              "why": "cows bought d10-12, first milk d15+, strawberry peak 9, d12 money 210"
+            },
+            {
+              "player": "Muhammad Rafzan",
+              "final": 54586,
+              "result": "L to us",
+              "peak_head": 18,
+              "care": 229,
+              "why": "animals starved and escaped d7 (4->1), herd rebuilt to 18 only by d20"
+            },
+            {
+              "player": "JJ",
+              "final": 48392,
+              "result": "L to us",
+              "peak_head": 13,
+              "care": 178,
+              "why": "first animal d8, zero strawberry, plateau 12k for a week"
+            }
+          ],
+          "care_mechanics_correction": "FM-R2-2 reinterpretation: engine stacks pending_care_bonus (+1 per cared+fed day, consumed on production days, cap max_held 6 -> a cared cow fills 3x faster). Our CARE coverage is already ~100% (care==head daily); totals 162-197 vs 268-586 are a herd-size artifact, not a discipline gap. arminhej96's 586 includes no-op over-issued orders (23-32/day at 14 head, engine caps execution at head).",
+          "ticket_vs_style": {
+            "shared_ticket_high_confidence": [
+              "d0 herd 4-5 head",
+              "herd >=12 by d4-11",
+              "strawberry 6+ tiles by d4-11 peaking >=16",
+              "CARE total >=268 at 12+ head",
+              "d12->24 ramp >=~40k / d24 >=~44k",
+              "3 quadrants by d5-11 + crew 12 + unbroken feeding"
+            ],
+            "individual_style_low_confidence": [
+              "4th quadrant (1/267 games)",
+              "CARE over-issue no-ops",
+              "external feed magnitude 102-2732u",
+              "which of milk/wool to hoard",
+              "d12 cash cushion 11-18k (top20) vs all-in 1.5-8k (winners)",
+              "573 issued hires (mostly rejected)"
+            ]
+          }
+        },
+        "unit": "report",
+        "method": "实测 2026-08-29：scripts/replay_deep_stats.py 重扫 .tmp-online/round2 6 局 + .tmp-corpus/raw 60 局（top-20 58 局/116 座位），逐日资金/畜群/CARE/种植/买卖流水；全部数字为回放计数，档案 exports/online/round2_deep_stats.json 与 corpus_deep_stats.json"
+      },
+      "r3_pool_extension": {
+        "value": {
+          "new_opponents": [
+            {
+              "name": "scale_ranch",
+              "style": "round-2 胜者原型（下一档）：d0 畜群爆发(~1800-2200/3000 买 4-5 头) + 8C6S=14 头 @d9-12 建成 + 草莓 d5 起 cap16 + 满覆盖 CARE + crew12@d7 + 高价奶门190/草莓150 + d28 倾销",
+              "prototype": "arminhej96 (100559) / 朝闻夕死 (95087) / Danila Galkin (98770) 三胜者交叉画像",
+              "param_basis": "每个旋钮引用 >=3 局 top-20 一致发现交叉验证胜者单局轨迹（d0 4-5 头=116/116 座位；畜群12@d4-7 med d6；草莓6+@d4-7 peak med36；CARE p25 268；Crop Dusta 26 局 d0 5 头/畜群12@d6/草莓6@d4）",
+              "single_game_quirks_excluded": [
+                "4th quadrant",
+                "CARE over-issue",
+                "462u feed stockpile"
+              ],
+              "exploratory_params": false,
+              "implementation": "kgenv/bots/online_pool.py::SCALE_RANCH_PARAMS",
+              "implementation_sha256": "74f86f9af4f44f97ed41fa500b5968b1ff0cf3ee84786da6f70db6915b31b49a",
+              "local_reproduction_vs_pass_seeds_101_202_303": {
+                "finals": [
+                  85219,
+                  73113,
+                  70951
+                ],
+                "peak_head": 14,
+                "care_totals": [
+                  210,
+                  228,
+                  198
+                ],
+                "escapes": [
+                  4,
+                  3,
+                  2
+                ]
+              }
+            }
+          ],
+          "certification": {
+            "command": "python scripts/check_opponent_strength.py --rounds 3",
+            "weak_pool": [
+              "pass",
+              "random",
+              "starter",
+              "greedy_carrot"
+            ],
+            "seeds": [
+              101,
+              102,
+              103
+            ],
+            "threshold": 0.5,
+            "exit_code": 0,
+            "all_8_opponents_pass": true,
+            "scale_ranch": {
+              "games": 12,
+              "W": 12,
+              "L": 0,
+              "T": 0,
+              "win_rate": 1.0,
+              "vs_greedy_carrot": {
+                "games": 3,
+                "W": 3,
+                "L": 0,
+                "T": 0,
+                "avg_margin": 50786
+              },
+              "avg_margins": {
+                "pass": 65303,
+                "random": 65107,
+                "starter": 61391,
+                "greedy_carrot": 50786
+              }
+            },
+            "log": "exports/logs/r3_opponent_certification.log",
+            "prior_4_online_bots_recertified": {
+              "crop_rotator": "12-0",
+              "template_wheat": "12-0",
+              "self_feed_ranch": "12-0",
+              "near_band_diversified": "12-0"
+            }
+          },
+          "gate_required_opponents": {
+            "before": [
+              "cow_baron",
+              "melon_hoarder",
+              "expansionist",
+              "baseline_wheat",
+              "crop_rotator",
+              "template_wheat",
+              "self_feed_ranch",
+              "near_band_diversified"
+            ],
+            "after": [
+              "cow_baron",
+              "melon_hoarder",
+              "expansionist",
+              "baseline_wheat",
+              "crop_rotator",
+              "template_wheat",
+              "self_feed_ranch",
+              "near_band_diversified",
+              "scale_ranch"
+            ],
+            "required_list_sha256": "eaf8fb805264b08bf670505cca48323d9704db574f0ba51ef5b36c059a9b0c36",
+            "gate_games_expected": 72,
+            "old_members_retained": true,
+            "enforced_by": [
+              "scripts/check_eval_contract.py --mode gate (REQUIRED_OPPONENTS, exit 0)",
+              "scripts/iterate_gate.py REQUIRED_OPPONENTS (complete gate)",
+              "scripts/run_eval.py --extended-pool ONLINE_STYLE_POOL"
+            ],
+            "holdout_export_untouched": true,
+            "note": "开发门升级为更强门是预期内变更；已发布 holdout (exports/eval_results.json, exports/holdout/) 未触碰"
+          },
+          "unit_tests": {
+            "file": "workspace/software/tests/test_bots_online_pool.py",
+            "file_sha256": "79334105f03b14fd60b593e68937fb4ad14a52f52cea3f0f5232095fed85b218",
+            "file_total": 54,
+            "file_passed": 54,
+            "new_scale_ranch_tests": [
+              "day0 畜群爆发+种子资金地板",
+              "8C6S 畜群构成",
+              "crew12@d7 斜坡",
+              "草莓 d5 相位窗",
+              "照料已喂动物优先级",
+              "奶门 190",
+              "d28 终局倾销"
+            ],
+            "full_suite": {
+              "total": 301,
+              "passed": 301,
+              "failed": 0,
+              "runtime_seconds": 9.98
+            }
+          },
+          "checks": {
+            "gate_contract": "PASS (exit 0, 72 games expected, all 5 rejection probes green)",
+            "smoke_boot": "PASS (4 phases, 3.9s)",
+            "kaggle_simulations_agent_touched": false
+          }
+        },
+        "unit": "report",
+        "method": "实测 2026-08-29：check_opponent_strength --rounds 3 (96 局, exit 0) / check_eval_contract --mode gate (exit 0) / smoke_boot (PASS) / pytest 全量 301 passed"
+      },
+      "r3_tests_total": {
+        "value": 301,
+        "unit": "count",
+        "method": "实测 2026-08-29 r3-1 会话：python -m pytest workspace/software/tests -q -> 301 passed 0 failed (9.98s)"
+      },
+      "r3_tests_passed": {
+        "value": 301,
+        "unit": "count",
+        "method": "同上"
       }
     },
     "unmeasured": {

@@ -1,4 +1,5 @@
-"""Unit + contract tests for the m2 online-style opponents (campaign III).
+"""Unit + contract tests for the m2 online-style opponents (campaign III)
+and the r3-1 scale_ranch next-band opponent.
 
 Two layers, mirroring test_bots_variants.py:
 
@@ -8,7 +9,9 @@ Two layers, mirroring test_bots_variants.py:
     the SAME-PLAYER >=3-game consistent profile parameters it was built from
     (hire cadence, rotation triggers, external-feed price guardrails, sell
     gates, endgame liquidation window, quadrant expansion timing), plus the
-    exploratory flag discipline for the 2-game near-band bot.
+    exploratory flag discipline for the 2-game near-band bot.  scale_ranch
+    knobs cite >=3-game top-20 findings that cross-validate the round-2
+    winners' trajectories (r3-1 deep dive).
 
 Strength itself (>=50% vs the frozen weak pool) is certified by
 scripts/check_opponent_strength.py, not by these unit tests.
@@ -22,10 +25,12 @@ from kgenv.bots.online_pool import (
     CROP_ROTATOR_PARAMS,
     NEAR_BAND_PARAMS,
     ONLINE_STYLE_OPPONENTS,
+    SCALE_RANCH_PARAMS,
     SELF_FEED_RANCH_PARAMS,
     TEMPLATE_WHEAT_PARAMS,
     crop_rotator_agent,
     near_band_diversified_agent,
+    scale_ranch_agent,
     self_feed_ranch_agent,
     template_wheat_agent,
 )
@@ -41,6 +46,7 @@ NEW_BOTS = {
     "template_wheat": template_wheat_agent,
     "self_feed_ranch": self_feed_ranch_agent,
     "near_band_diversified": near_band_diversified_agent,
+    "scale_ranch": scale_ranch_agent,
 }
 
 
@@ -152,7 +158,7 @@ def test_only_near_band_bot_carries_exploratory_params():
     assert "2 games" in NEAR_BAND_PARAMS["provenance"] \
         or "2 games" in NEAR_BAND_PARAMS.get("exploratory_note", "")
     for params in (CROP_ROTATOR_PARAMS, TEMPLATE_WHEAT_PARAMS,
-                   SELF_FEED_RANCH_PARAMS):
+                   SELF_FEED_RANCH_PARAMS, SCALE_RANCH_PARAMS):
         assert params["exploratory_params"] is False
 
 
@@ -382,6 +388,82 @@ def test_near_band_herd_is_diversified():
     assert animals == {"COW", "SHEEP", "GOOSE"}       # 8/3/2 mixed herd
 
 
+# ------------------------------------------------------------------ scale_ranch
+
+def fed_cow(x, y, placed=2):
+    return {"kind": "PASTURE", "animal": "COW", "placed_day": placed,
+            "yield_units": 0, "consecutive_unfed": 0,
+            "fed_today": True, "cared_today": False,
+            "fertilizer_available": False}
+
+
+def test_scale_ranch_day0_herd_burst_keeps_seed_floor():
+    # the round-2 winner split: day-0 cash goes to animals FIRST, wheat seeds
+    # from the leftovers -- the seed order must be money-floor capped so the
+    # same turn's animal buys keep their budget (3000 - 2 cows - 2 sheep
+    # leaves ~300 above the 1100 floor -> strawberry seeds excluded, small
+    # wheat order only)
+    act = scale_ranch_agent(synth_obs(day=0, hour=1, money=3000,
+                                      prices={"STRAWBERRY": 240}))
+    assert {o[1] for o in market_orders(act, "BUY_ANIMAL")} == {"COW", "SHEEP"}
+    straw = [o for o in market_orders(act, "BUY_SEED") if o[1] == "STRAWBERRY"]
+    assert not straw                                  # phase starts day 5
+    wheat = [o for o in market_orders(act, "BUY_SEED") if o[1] == "WHEAT"]
+    assert wheat and sum(o[2] for o in wheat) * 10 + 1800 <= 3000 - 1100 + 10
+
+
+def test_scale_ranch_herd_is_8_cows_6_sheep():
+    act = scale_ranch_agent(synth_obs(day=2, money=9000))
+    animals = {o[1] for o in market_orders(act, "BUY_ANIMAL")}
+    assert animals == {"COW", "SHEEP"}                # 8+6 = 14 head target
+
+
+def test_scale_ranch_crew_ramps_to_12_by_day_7():
+    early = scale_ranch_agent(synth_obs(day=2, hands=()))
+    assert market_orders(early, "HIRE")
+    full = scale_ranch_agent(synth_obs(day=20, hands=[(0, 1)] * 12))
+    assert not market_orders(full, "HIRE")            # cap 12 (winners' crew)
+
+
+def test_scale_ranch_strawberry_phase_opens_day_5():
+    early = scale_ranch_agent(synth_obs(day=3, money=8000,
+                                        prices={"STRAWBERRY": 240}))
+    assert seed_qty(early, "STRAWBERRY") == 0         # not before day 5
+    late = scale_ranch_agent(synth_obs(day=6, money=8000,
+                                       prices={"STRAWBERRY": 240}))
+    assert seed_qty(late, "STRAWBERRY") > 0           # the mid-game engine
+
+
+def test_scale_ranch_cares_fed_animals_above_routine_tasks():
+    # full-coverage CARE discipline: a unit standing on a fed, uncared cow
+    # with no co-located urgent task must CARE (weight 70 beats water 42)
+    tiles = three_quad_tiles()
+    tiles[2][2] = fed_cow(2, 2)
+    act = scale_ranch_agent(synth_obs(day=12, hour=10, tiles=tiles,
+                                      farmer=(2, 2), hands=[(0, 1)] * 3,
+                                      quads=("NW", "NE", "SW")))
+    assert act["farmer"] == ["CARE"]
+
+
+def test_scale_ranch_premium_milk_gate():
+    def milk_sells(price):
+        act = scale_ranch_agent(synth_obs(day=14, shed={"MILK": 9},
+                                          prices={"MILK": price}))
+        return [o for o in market_orders(act, "SELL") if o[1] == "MILK"]
+    assert milk_sells(150) == []                      # hold for premium 190
+    assert milk_sells(210) == [["SELL", "MILK", 9]]
+
+
+def test_scale_ranch_endgame_liquidation_day_28():
+    act = scale_ranch_agent(synth_obs(
+        day=28, shed={"MILK": 8, "STRAWBERRY": 12, "WHEAT": 10},
+        prices={"MILK": 5, "STRAWBERRY": 5, "WHEAT": 5}))
+    sells = {o[1]: o[2] for o in market_orders(act, "SELL")}
+    assert sells.get("MILK") == 8 and sells.get("STRAWBERRY") == 12
+    assert not [o for o in act["market"] if o[0] in
+                ("HIRE", "BUY_SEED", "BUY_ANIMAL", "BUY_PRODUCT", "BUY_LAND")]
+
+
 # ---------------------------------------------------------------- shared weights
 
 @pytest.mark.parametrize("name,params", [
@@ -389,6 +471,7 @@ def test_near_band_herd_is_diversified():
     ("template_wheat", TEMPLATE_WHEAT_PARAMS),
     ("self_feed_ranch", SELF_FEED_RANCH_PARAMS),
     ("near_band_diversified", NEAR_BAND_PARAMS),
+    ("scale_ranch", SCALE_RANCH_PARAMS),
 ])
 def test_every_param_set_documents_provenance(name, params):
     assert params["name"] == name

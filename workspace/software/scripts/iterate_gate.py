@@ -22,6 +22,7 @@ from kgenv.bots.expansionist import expansionist_agent
 from kgenv.bots.melon_hoarder import melon_hoarder_agent
 from kgenv.bots.online_pool import (crop_rotator_agent,
                                     near_band_diversified_agent,
+                                    scale_ranch_agent,
                                     self_feed_ranch_agent,
                                     template_wheat_agent)
 from kgenv.engine import FULL_EPISODE_STEPS
@@ -32,13 +33,15 @@ LOG_PATH = os.path.join(SOFTWARE_ROOT, "exports", "logs",
                         "iteration_gate_log.jsonl")
 GATE_OPPONENTS = ["cow_baron", "melon_hoarder"]
 GUARD_OPPONENTS = ["expansionist", "baseline_wheat"]
-# m2 online-style opponents (campaign III): certified ladder-archetype
-# reconstructions -- required in the complete gate alongside the wave-2 set
+# m2 online-style opponents (campaign III) + r3-1 scale_ranch: certified
+# ladder-archetype reconstructions -- required in the complete gate alongside
+# the wave-2 set
 ONLINE_OPPONENTS = [
     "crop_rotator",
     "template_wheat",
     "self_feed_ranch",
     "near_band_diversified",
+    "scale_ranch",
 ]
 REQUIRED_OPPONENTS = GATE_OPPONENTS + GUARD_OPPONENTS + ONLINE_OPPONENTS
 OPPONENTS = {
@@ -50,6 +53,7 @@ OPPONENTS = {
     "template_wheat": template_wheat_agent,
     "self_feed_ranch": self_feed_ranch_agent,
     "near_band_diversified": near_band_diversified_agent,
+    "scale_ranch": scale_ranch_agent,
 }
 
 

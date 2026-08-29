@@ -9,7 +9,8 @@ starter / greedy_carrot) at fixed seeds and asserts the hard requirement:
 Covers the m1 wave-2 strong opponents (cow_baron / melon_hoarder /
 expansionist) and the m2 online-style opponents (campaign III reconstructions
 of ladder archetypes from the replay-profile corpus; see
-kgenv/bots/online_pool.py for parameter provenance).
+kgenv/bots/online_pool.py for parameter provenance), including the r3-1
+scale_ranch reconstruction of the round-2 winner archetype.
 
 Usage:
     python scripts/check_opponent_strength.py [--rounds 3] [--quick]
@@ -39,6 +40,7 @@ from kgenv.bots.expansionist import expansionist_agent  # noqa: E402
 from kgenv.bots.melon_hoarder import melon_hoarder_agent  # noqa: E402
 from kgenv.bots.online_pool import (crop_rotator_agent,  # noqa: E402
                                     near_band_diversified_agent,
+                                    scale_ranch_agent,
                                     self_feed_ranch_agent,
                                     template_wheat_agent)
 from kgenv.engine import FULL_EPISODE_STEPS  # noqa: E402
@@ -53,6 +55,7 @@ ONLINE_BOTS = {
     "template_wheat": template_wheat_agent,
     "self_feed_ranch": self_feed_ranch_agent,
     "near_band_diversified": near_band_diversified_agent,
+    "scale_ranch": scale_ranch_agent,
 }
 WEAK_POOL = {
     "pass": "pass",
