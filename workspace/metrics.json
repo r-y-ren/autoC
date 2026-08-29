@@ -1,10 +1,10 @@
 {
-  "_generated_at": "2026-08-29T14:37:01",
+  "_generated_at": "2026-08-29T16:13:29",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
-    "milestone": "m1-replay-corpus + m2-online-pool (replay corpus & profile pipeline; online-style opponent pool; historical keys retained)",
-    "measured_at": "2026-08-29",
+    "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate rebuild; historical keys retained)",
+    "measured_at": "2026-08-29T08:05:40.102261+00:00",
     "engine": {
       "package": "kaggle-environments",
       "version": "1.32.7+nodeps (vendored, engine code unmodified)",
@@ -1511,6 +1511,173 @@
         },
         "unit": "test-run",
         "method": "实测 2026-08-29：python -m pytest workspace/software/tests/test_bots_online_pool.py -q -> 42 passed；全量 python -m pytest workspace/software/tests -q -> 246 passed 0 failed (10.24s)"
+      },
+      "m3_strategy_capability_checks": {
+        "value": {
+          "rotation_trigger_and_price_floors": {
+            "verdict": "pass",
+            "tests": 4,
+            "evidence": "tests/test_strategy_m3.py::test_rotation_plants_melon_above_its_price_floor, ::test_rotation_phase_windows, ::test_rotation_freezes_each_crop_under_its_floor, ::test_wheat_is_feed_floor_and_money_crop"
+          },
+          "external_feed_guardrail": {
+            "verdict": "pass",
+            "tests": 3,
+            "evidence": "tests/test_strategy_m3.py::test_feed_buy_guardrail_binds_in_normal_state, ::test_starvation_buys_above_the_guardrail, ::test_wheat_sell_gate_has_cash_flow_fallback"
+          },
+          "labour_expansion_intensity": {
+            "verdict": "pass",
+            "tests": 3,
+            "evidence": "tests/test_strategy_m3.py::test_hands_ramp_reaches_profile_intensity, ::test_dawn_hire_burst_reaches_plan_intensity, ::test_hire_burst_keeps_cash_cushion"
+          },
+          "third_quadrant_expansion": {
+            "verdict": "pass",
+            "tests": 4,
+            "evidence": "tests/test_strategy_m3.py::test_ne_quadrant_due_day4_and_fund_gated, ::test_sw_quadrant_due_day7, ::test_fourth_quadrant_never_bought, ::test_herd_subordinated_to_pending_land_fund"
+          },
+          "endgame_hoard_dump_and_stop_feed": {
+            "verdict": "pass",
+            "tests": 5,
+            "evidence": "tests/test_strategy_m3.py::test_wool_dumps_in_endgame_window_from_day26, ::test_wool_holds_before_the_window_when_curve_unclear, ::test_wool_cut_loss_on_dying_curve, ::test_premium_goods_dump_in_endgame_tranches, ::test_stop_feed_from_day28_but_harvest_held_yield"
+          },
+          "dead_price_freeze_generalized": {
+            "verdict": "pass",
+            "tests": 3,
+            "evidence": "tests/test_strategy_m3.py::test_sheep_buy_freezes_when_wool_curve_dead, ::test_cow_buy_freezes_when_milk_curve_dead, ::test_species_interleave_by_relative_deficit (fertilizer value gate covered by ::test_fert_value_gate_keeps_premium_boosts_only)"
+          },
+          "m2b_fixes_no_regression": {
+            "verdict": "pass",
+            "tests": 26,
+            "evidence": "tests/test_strategy_m2.py 26/26 green on the m3 engine (dairy-era pins: milk gates, last-day liquidation, buy-pace confirmation, shed reservations, positive orders, seat isolation, herd freeze)"
+          }
+        },
+        "unit": "verdict",
+        "method": "pytest function-level regression checks over the frozen candidate (kaggle_simulations/agent/main.py sha256 5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee); run 2026-08-29, 49/49 passed (23 m3 + 26 m2b)"
+      },
+      "m3_strategy_regression_summary": {
+        "value": {
+          "m3_tests_total": 23,
+          "m3_tests_passed": 23,
+          "m3_tests_failed": 0,
+          "m3_test_file_sha256": "3538ab9e2c0289abcf0c5553a7e2ea3e41746d1e5ac3034e341ada81b1d9acab",
+          "m2b_preserved_tests_total": 26,
+          "m2b_preserved_tests_passed": 26,
+          "m2b_preserved_tests_failed": 0,
+          "complete_suite_total": 269,
+          "complete_suite_passed": 269
+        },
+        "unit": "count",
+        "method": "python -m pytest workspace/software/tests -q (full suite) and targeted files, 2026-08-29"
+      },
+      "m3_development_gate_summary": {
+        "value": {
+          "candidate_sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee",
+          "label": "m3-frozen",
+          "required_opponents": [
+            "cow_baron",
+            "melon_hoarder",
+            "expansionist",
+            "baseline_wheat",
+            "crop_rotator",
+            "template_wheat",
+            "self_feed_ranch",
+            "near_band_diversified"
+          ],
+          "expected_games": 64,
+          "actual_games": 64,
+          "seat_split": {
+            "AB": 32,
+            "BA": 32
+          },
+          "abnormal_games": 0,
+          "seeds": [
+            101,
+            102,
+            103,
+            104
+          ],
+          "seed_domain": "development",
+          "candidate_record": {
+            "wins": 57,
+            "losses": 7,
+            "ties": 0
+          },
+          "per_opponent": {
+            "cow_baron": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 24293.0
+            },
+            "melon_hoarder": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 44330.6
+            },
+            "expansionist": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 63371.2
+            },
+            "baseline_wheat": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 71261.8
+            },
+            "crop_rotator": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 10216.8
+            },
+            "template_wheat": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 5195.0
+            },
+            "self_feed_ranch": {
+              "wins": 5,
+              "losses": 3,
+              "ties": 0,
+              "win_rate": 0.625,
+              "avg_margin": -397.6
+            },
+            "near_band_diversified": {
+              "wins": 4,
+              "losses": 4,
+              "ties": 0,
+              "win_rate": 0.5,
+              "avg_margin": 1648.1
+            }
+          },
+          "formal_pass": true,
+          "elapsed_seconds": 276.42
+        },
+        "unit": "summary",
+        "method": "python workspace/software/scripts/iterate_gate.py --label m3-frozen --rounds 4 --require-complete (complete dev gate: 8 opponents x seeds 101-104 x AB/BA on the official engine, 2026-08-29)"
+      },
+      "m3_frozen_candidate_identity": {
+        "value": {
+          "path": "workspace/software/kaggle_simulations/agent/main.py",
+          "sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee",
+          "git_ref": "b47bc16f426fbfeeab645e86a5b4453d45b5779a",
+          "manifest": "workspace/software/m3_frozen_manifest.json",
+          "manifest_sha256": "67e08238e44b7c76a262f34baea27fe6c721bfb545cacb0fe239a6c76a6d3b2a",
+          "snapshot": "workspace/software/m3_frozen_candidate.b64",
+          "snapshot_file_sha256": "7ac70b002c1fa472f5325347c0a5707780ca6708c82c6679555b389ebd180059",
+          "decoded_sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee"
+        },
+        "unit": "identity",
+        "method": "sha256 of kaggle_simulations/agent/main.py at freeze; snapshot b64 round-trip verified decoded==source; manifest written 2026-08-29 after the m3-frozen complete gate PASS"
       }
     },
     "unmeasured": {
