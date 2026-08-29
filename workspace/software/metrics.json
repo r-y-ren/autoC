@@ -2337,16 +2337,29 @@
     "online_feedback_calibration": {
       "value": {
         "round1_public_record": "1W-2L",
-        "loss_failure_modes": [
+        "round1_loss_failure_modes": [
           "FM-O1 portfolio concentration",
           "FM-O2 no purchased-wheat feed",
           "FM-O3 no high-value crops",
           "FM-O4 CARE/DIG underuse"
         ],
-        "ledger": "workspace/software/exports/online/round1_ledger.json",
-        "analysis": "workspace/software/exports/online/round1_failure_analysis.md"
+        "round1_ledger": "workspace/software/exports/online/round1_ledger.json",
+        "round1_analysis": "workspace/software/exports/online/round1_failure_analysis.md",
+        "round2_submission_ref": 55864284,
+        "round2_candidate_sha256": "5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee",
+        "round2_public_record": "3W-3L",
+        "round2_score_trajectory": [600.0, 768.4, 651.7, 580.7],
+        "round2_public_games": 6,
+        "round2_sampling_ledger": "workspace/software/exports/online/round2_ledger.json",
+        "round2_pullback_reviews": "workspace/software/exports/online/round2_failure_analysis.md",
+        "round2_loss_failure_modes": [
+          "FM-R2-1 mid-game economy scale gap (winners 95-101k vs ours 46-61k; d12->d24 ramp 2-3x)",
+          "FM-R2-2 CARE intensity gap (winners 268-586 vs ours ~195)",
+          "FM-R2-3 herd scale ceiling (winners 11-17 animals vs our 10-11; m3 i4/i9 scale attempts failed on old pool)"
+        ],
+        "stop_loss_status": "not_triggered (6 public games, win rate 50.0%, threshold is <50%)"
       },
-      "note": "online-measured 2026-08-29: replay analysis (kaggle competitions episodes/replay CLI) of the two public losses (102194478 vs Sooriya Senthilkumar 39377:74792, 102196708 vs Chirag Bhatnagar 47642:62586) produced failure modes FM-O1..FM-O4 with per-winner evidence counts; winners ran diversified economies vs our 10-cow monoculture. Per-candidate recalibration item for the next iteration cycle. Key kept in the unmeasured namespace so consumer key locations stay stable"
+      "note": "online-measured 2026-08-29 (two rounds): round-1 replay analysis of submission 55858820 losses produced FM-O1..O4; round-2 (submission 55864284, rotation ranch 5713c17e) sampled 6 public games 3W-3L via kaggle competitions submissions/episodes/replay CLI -- round-1 killer structures (diversified ranch, heavy-cow wheat) all beaten (FM-O1..O4 fixes validated online), losses concentrated in a next-band economy (95-101k finals, 11-17 animal herds, CARE 268-586, d12->d24 capital ramp 2-3x ours) producing FM-R2-1..R2-3. Stop-loss not triggered at exactly 50%. Round-2 winner replays retained under .tmp-online/round2/ as next-cycle corpus candidates. Key kept in the unmeasured namespace so consumer key locations stay stable"
     },
     "final_submission_commits": {
       "value": null,
