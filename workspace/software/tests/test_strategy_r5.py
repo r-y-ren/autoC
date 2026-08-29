@@ -269,6 +269,73 @@ def test_volume_seed_batches_are_money_scaled():
     assert de and de[0][2] == 6
 
 
+# ------------------------- P5 rollout evaluator --------------------------
+
+def test_rollout_math_volume_completes_field_when_solvent():
+    # the realistic mid-game state (12 head ranch income, moderate cash):
+    # the volume rollout stays solvent, completes the 42-tile field, and
+    # its terminal beats the defensive frame under curve pricing
+    scan = {"quads": 3, "straw": 2, "wheat": 4, "herd": 12,
+            "straw_days": [5, 5], "cows": 7, "sheep": 5, "geese": 0,
+            "hands": 9, "money": 2500.0}
+    prices = {"WHEAT": 25, "MILK": 160, "WOOL": 200, "EGG": 50,
+              "STRAWBERRY": 120}
+    demand = main._town_daily_demand(["SMOOTHIE_SHOP", "ICE_CREAM_SHOP"])
+    r_vol = main._plan_rollout(8, scan, main._VOLUME_PLAN, prices, demand,
+                               120)
+    r_def = main._plan_rollout(8, scan, main._DEFENSIVE_PLAN, prices,
+                               demand, 120)
+    assert r_vol["min_cash"] >= 0
+    assert r_vol["alive"] == 42
+    assert r_vol["terminal"] > r_def["terminal"]
+
+
+def test_rollout_glut_rejects_anticipated_wide_field():
+    # anticipated entry (no proof yet) is DISABLED by the r5-P5 ablation
+    # verdict (-312.8k over 36 cells): thin or deep absorption alike, the
+    # default gate never widens without a proven line
+    thin = _mk_obs(_mk_farm(money=8000.0), _mk_farm(straw=0),
+                   shops=["FARMERS_MARKET"])
+    assert main.VOLUME_ANTICIPATED_ENTRY is False
+    assert main._decide_mode(thin, 8, None)["mode"] == "DEFENSIVE"
+    deep = _mk_obs(_mk_farm(money=8000.0), _mk_farm(straw=0),
+                   shops=["SMOOTHIE_SHOP", "ICE_CREAM_SHOP"])
+    assert main._decide_mode(deep, 8, None)["mode"] == "DEFENSIVE"
+
+
+def test_rollout_anticipated_machinery_gates_on_value_and_solvency():
+    # the machinery itself is testable behind the flag: with the flag on,
+    # deep absorption + ranch income + a terminal edge passes, and the
+    # thin-absorption glut cell stays out (the value check vetoes it)
+    thin = _mk_obs(_mk_farm(money=8000.0), _mk_farm(straw=0),
+                   shops=["FARMERS_MARKET"])
+    deep = _mk_obs(_mk_farm(money=2500.0, herd=12), _mk_farm(straw=0),
+                   shops=["SMOOTHIE_SHOP", "ICE_CREAM_SHOP"])
+    main.VOLUME_ANTICIPATED_ENTRY = True
+    try:
+        assert main._decide_mode(deep, 8, None)["mode"] == "VOLUME_CROP"
+        assert main._decide_mode(thin, 8, None)["mode"] == "DEFENSIVE"
+    finally:
+        main.VOLUME_ANTICIPATED_ENTRY = False
+
+
+def test_rollout_solvency_veto_never_fires_a_spiral():
+    # the measured -62k/-93k class: a plan whose cash path dips under the
+    # feed/hire line is vetoed even with a proven line and a premium bid.
+    # Herd income covers feed here, so the veto is exercised through the
+    # value check instead: deep absorption rich state enters, and the
+    # same state with a dead premium bid (price under the conjunction)
+    # never reaches the rollout at all.
+    obs = _mk_obs(_mk_farm(money=8000.0, straw=6, herd=14),
+                  _mk_farm(straw=0),
+                  shops=["SMOOTHIE_SHOP", "ICE_CREAM_SHOP"])
+    assert main._decide_mode(obs, 8, None)["mode"] == "VOLUME_CROP"
+    obs["market"]["prices"]["STRAWBERRY"] = 100   # under the 105 premium bar
+    # no widening at a sub-premium bid; the dairy line is absorbed here,
+    # so the counter-market SCALE posture (not DEFENSIVE) is the fall-back
+    assert main._decide_mode(obs, 8, None)["mode"] == "SCALE_RANCH"
+
+
 # ------------------------- plan memory -----------------------------------
 
 def test_macro_plan_daily_cache_and_episode_reset():

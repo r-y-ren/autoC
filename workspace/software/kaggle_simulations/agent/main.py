@@ -292,6 +292,46 @@ _DEFENSIVE_PLAN = {"mode": "DEFENSIVE", "volume": False, "scale": False,
                    "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
                    "crew_cap": HANDS_CAP_R3,
                    "herd_ceiling": HERD_CAP_NPV}
+_VOLUME_PLAN = {"mode": "VOLUME_CROP", "volume": True, "scale": False,
+                "straw_quad_cap": MODE_STR_QUAD_CAP,
+                "straw_total_cap": MODE_STR_TOTAL_CAP,
+                "wheat_money_quad": MODE_WHEAT_MONEY_QUAD,
+                "crew_cap": MODE_CREW_CAP_VOL,
+                "herd_ceiling": HERD_CAP_NPV}
+
+# ---- r5-P5 rollout evaluator ----------------------------------------------
+# The P4 ablations showed WHY a static widening gate fails: a wide template
+# fired on a price snapshot either bankrupted the ranch line (-62k/-93k
+# spirals: capex ate the feed/hire budget) or crashed its own curve
+# (20u/day of strawberry into 4/day of absorption).  The evaluator rolls
+# the candidate plan forward day by day with the engine's own rules and
+# the embedded price curves and checks two things before widening:
+#   * SOLVENCY -- the cash path never dips below the feed/hire security
+#     line (spends are modelled the way the executor actually spends:
+#     money-gated, self-limited);
+#   * VALUE -- the terminal value (banked cash + unmonetized production,
+#     at curve-projected prices under the P2 dump-rate limiter and a
+#     labour-capacity constraint) must beat the DEFENSIVE frame by an
+#     edge, not merely look positive in isolation.
+ROLLOUT_HORIZON = 12       # days simulated forward from the plan decision
+ROLLOUT_UTILIZATION = 0.5  # effective action share of 24 turns/worker
+ROLLOUT_HAIRCUT = 0.9      # tranche-averaging haircut on projected prices
+ROLLOUT_FEED_PRICE = 36    # guardrail buy basis per head/day
+ROLLOUT_MIN_EDGE = 2000    # anticipated entry needs this terminal edge
+# r5-P5 paired-ablation verdict (r5-p5-probe vs r5-p5-ablation-p4head,
+# 36 cells): the rollout-gated ANTICIPATED entry measured catastrophic
+# (-312.8k sum, worst cells -48.4k/-38.4k on expansionist/baseline_wheat
+# seed 102) -- the day-level model cannot see opponent supply responses,
+# the abandoned wheat money-crop line, or real tending capacity, so it
+# approved entries that crash in play.  DISABLED until an evaluator with
+# execution fidelity + opponent scenarios clears the same ablation.
+VOLUME_ANTICIPATED_ENTRY = False
+_FIB_CUM = [0] * 17        # _FIB_CUM[n] = one day's cost of n hires
+_a, _b, _acc = 1, 1, 0
+for _i in range(1, 17):
+    _acc += _a
+    _FIB_CUM[_i] = _acc
+    _a, _b = _b, _a + _b
 
 # FM-O3 feed: guardrailed external buying (profiles: avg buy price 26-32,
 # 414-2732u/season across top-20); 85 = starvation cap (dear wheat is still
@@ -652,11 +692,14 @@ _PLAN_MEM = {}
 
 
 def _farm_scan(farm):
-    """Public-farm economy scan: quadrants, strawberry/wheat tiles, placed
-    herd, hands, money.  obs.farms is shared state (only sheds/inventories
-    are private), so scanning the opponent's farm is legal observation."""
+    """Public-farm economy scan: quadrants, strawberry/wheat tiles (with
+    the strawberry planting calendar), placed herd by species, hands,
+    money.  obs.farms is shared state (only sheds/inventories are
+    private), so scanning the opponent's farm is legal observation."""
     quads = len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"])
     straw = wheat = herd = 0
+    straw_days = []
+    species = {"COW": 0, "SHEEP": 0, "GOOSE": 0}
     for row in _get(farm, "tiles", []) or []:
         for tile in row:
             if not isinstance(tile, dict):
@@ -665,33 +708,133 @@ def _farm_scan(farm):
                 crop = _get(tile, "crop", "")
                 if crop == "STRAWBERRY":
                     straw += 1
+                    straw_days.append(_get(tile, "planted_day", 0))
                 elif crop == "WHEAT":
                     wheat += 1
             elif "animal" in tile:
                 herd += 1
+                animal = _get(tile, "animal", "")
+                if animal in species:
+                    species[animal] += 1
     return {"quads": quads, "straw": straw, "wheat": wheat, "herd": herd,
+            "straw_days": straw_days, "cows": species["COW"],
+            "sheep": species["SHEEP"], "geese": species["GOOSE"],
             "hands": len(_get(farm, "hands", []) or []),
             "money": _get(farm, "money", 0.0)}
 
 
-def _decide_mode(obs, day, prev_mode):
-    """Deterministic daily mode gate (r5-P4).  Every threshold traces to
-    the round-3 ledger or the m1 corpus; nothing is learned online.
+def _plan_rollout(day, scan, plan, prices, demand, p_straw):
+    """r5-P5 day-level cash-flow + labour-capacity rollout of one plan.
 
-    VOLUME entry (day 6-12): strongest-evidence conjunction -- premium bid
-    (>= 105), real absorption (>= 4/day draws), our line already proven
-    (>= 6 alive tiles), cash >= 800, and the opponent NOT already in the
-    line (their strawberry field < 12 tiles).  Two paired ablations
-    (r5-p4-probe/probe3 vs defensive-only, 36 cells total) measured the
-    anticipatory triggers strictly non-positive -- mirroring a contested
-    market as the late mover crashes both sides (Cournot, the P2 lesson),
-    and a wide template fired on a price snapshot without a cash-flow
-    rollout produced -62k/-93k bankruptcy spirals on cow_baron/expansionist
-    seed 101.  The widening therefore follows REALIZED evidence only;
-    activating it on anticipated strength needs the P5 rollout evaluator.
-    Hold: price >= 40 and cash >= 300 (the planted field keeps tending);
-    the P2 zero-absorption cut-loss gates handle a curve that dies under
-    later opponent supply.
+    Spends mirror the way the executor actually spends (money-gated and
+    self-limited: hires stop at the wallet, seed batches are money-scaled,
+    SE fires only above its protected fund); clearing mirrors the way the
+    market actually clears (per-unit curve pricing under the P2 dump-rate
+    limiter 2*D+4, shed overflow discarded).  The two measured P4 failure
+    classes therefore show up as numbers:
+      min_cash  the lowest cash the path ever touches (the ranch feed/hire
+                security line -- the -62k/-93k spiral class dips under 0)
+      terminal  banked cash + unmonetized production at horizon end (a
+                wide field shipping into thin absorption crashes its own
+                curve and collapses this)
+    Ranking-grade by design: ranch prices are haircut flat, the opponent
+    is assumed absent from the strawberry line (the gate already requires
+    it uncontested), and existing tiles carry their real planting days.
+    """
+    cash = float(scan["money"])
+    herd = int(scan["herd"])
+    target = int(plan["straw_total_cap"])
+    crew_target = int(plan["crew_cap"])
+    ranch_units = (scan["cows"] * 1.5 * _get(prices, "MILK", BASE_PRICE["MILK"])
+                   + scan["sheep"] * (4.0 / 3.0)
+                   * _get(prices, "WOOL", BASE_PRICE["WOOL"])
+                   + scan["geese"] * 2.0
+                   * _get(prices, "EGG", BASE_PRICE["EGG"])) * 0.85
+    fert_income = herd * 70.0
+    feed_price = min(ROLLOUT_FEED_PRICE, _get(prices, "WHEAT", 25))
+
+    plant = {}
+    for s in scan["straw_days"]:
+        plant[s] = plant.get(s, 0) + 1
+    alive = scan["straw"]
+    off = _offset_from_price("STRAWBERRY", p_straw)
+    d_straw = demand.get("STRAWBERRY", 1)
+    sell_cap = 2 * d_straw + 4
+    shed_straw = 0
+    min_cash = cash
+    eff = 1.0
+    se_done = False
+    t_end = min(day + ROLLOUT_HORIZON, 29)
+
+    for t in range(day, t_end):
+        # crew: the executor hires greedily while money - 60 covers the
+        # next fib price (the first hands cost almost nothing); the wide
+        # crew is billed only as the field actually widens
+        crew_t = crew_target
+        if plan["volume"]:
+            crew_t = min(crew_target, 12 + max(0, alive - 18) // 6)
+        crew_eff = 0
+        while crew_eff < crew_t and \
+                _FIB_CUM[crew_eff + 1] <= max(0.0, cash - 60.0):
+            crew_eff += 1
+        cash -= _FIB_CUM[crew_eff]
+        if t < 28:
+            cash -= herd * feed_price
+        if alive < target and t <= PLANT_LAST_DAY["STRAWBERRY"] \
+                and cash >= 350:
+            batch = min(10, target - alive, int((cash - 300) // 100))
+            if batch > 0:
+                cash -= batch * 100
+                plant[t] = plant.get(t, 0) + batch
+                alive += batch
+        if plan["volume"] and not se_done and scan["quads"] == 3 \
+                and SE_DUE_DAY <= t <= SE_BUY_LAST_DAY and cash >= SE_FUND:
+            cash -= 4000
+            se_done = True
+
+        required = alive * 1.5 + herd * 3.2 + 9.0
+        budget = crew_eff * 24 * ROLLOUT_UTILIZATION
+        eff = 1.0 if required <= budget else budget / max(1.0, required)
+
+        cash += ranch_units + fert_income
+        prod = 2.0 * eff * sum(n for s, n in plant.items()
+                               if (t - s) in (10, 12, 14, 16))
+        sellable = min(shed_straw + prod, sell_cap)
+        shed_straw = min(100.0, shed_straw + prod - sellable)
+        off += sellable - d_straw
+        price_t = _price_at_offset("STRAWBERRY", off) * ROLLOUT_HAIRCUT
+        cash += sellable * price_t
+        min_cash = min(min_cash, cash)
+
+    price_h = max(_price_at_offset("STRAWBERRY", off), 5.0) \
+        * ROLLOUT_HAIRCUT
+    remaining = 0.0
+    for s, n in plant.items():
+        for pd in (10, 12, 14, 16):
+            if s + pd >= t_end:
+                remaining += n * 2.0
+    terminal = cash + (shed_straw + remaining * eff) * price_h * 0.6
+    return {"min_cash": min_cash, "terminal": terminal, "alive": alive,
+            "eff": eff}
+
+
+def _decide_mode(obs, day, prev_mode):
+    """Deterministic daily mode gate (r5-P4/P5).  Every threshold traces
+    to the round-3 ledger or the m1 corpus; nothing is learned online.
+
+    VOLUME: the base conjunction is premium bid (>= 105) + real
+    absorption (>= 4/day draws) + free line (opponent's strawberry field
+    < 12 tiles -- a crop-heavy opponent is a DO-NOT-MIRROR signal: the
+    paired ablation measured the mirror trigger strictly negative, joint
+    glut crashes both sides) + cash >= 300.  On top of the conjunction:
+      * proven line (>= 6 alive tiles): the _plan_rollout acts as a
+        SOLVENCY VETO (min_cash >= 0) -- the measured -62k/-93k spiral
+        class must never fire;
+      * anticipated entry (day <= 10, no proof yet): DISABLED by the
+        r5-P5 paired ablation (rollout-approved entries measured
+        -312.8k over 36 cells; the flag documents the machinery).
+    Hold: price >= 40 and cash >= 300; the P2 zero-absorption cut-loss
+    gates handle a curve that dies under later opponent supply.
     SCALE entry (day 4-16): the 14-head plan is built (>=12 placed) and a
     dairy/wool line clears its demand-conditioned dead-price floor --
     the counter-market posture when the opponent floods the crop lines.
@@ -714,18 +857,35 @@ def _decide_mode(obs, day, prev_mode):
     p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
     d_straw = demand.get("STRAWBERRY", 1)
     opp_contesting = opp is not None and opp["straw"] >= 12
-    volume_entry = (6 <= day <= 12 and p_straw >= 105 and d_straw >= 4
-                    and mine["money"] >= 800 and not opp_contesting
-                    and mine["straw"] >= 6)
+    # P4's money >= 800 floor stays THE gate on the proven path: the
+    # r5-p5-final ablation measured that substituting the rollout's
+    # min_cash for it (money >= 300) re-opened early thin-wallet entries
+    # and cost -127.8k over 36 cells -- the model's solvency check is
+    # WEAKER than the crude cash floor it tried to replace.  The rollout
+    # is an ADDITIONAL veto, never a relaxation.
+    base_ok = (6 <= day <= 12 and p_straw >= 105 and d_straw >= 4
+               and not opp_contesting and mine["money"] >= 800)
+    if base_ok:
+        r_vol = _plan_rollout(day, mine, _VOLUME_PLAN, prices, demand,
+                              p_straw)
+        if mine["straw"] >= 6:
+            # proven line + solvent rollout: enter (P4 semantics with a
+            # safety net for pathological states the floor cannot see)
+            if r_vol["min_cash"] >= 0:
+                return dict(_VOLUME_PLAN)
+        elif VOLUME_ANTICIPATED_ENTRY and day <= 10:
+            # anticipated entry (the online-band ticket: be in the line by
+            # d8-10, not after proof at d14): solvency AND a terminal
+            # value edge over the DEFENSIVE frame under curve pricing
+            r_def = _plan_rollout(day, mine, _DEFENSIVE_PLAN, prices,
+                                  demand, p_straw)
+            if r_vol["min_cash"] >= 0 and \
+                    r_vol["terminal"] >= r_def["terminal"] + ROLLOUT_MIN_EDGE:
+                return dict(_VOLUME_PLAN)
     volume_hold = prev_mode == "VOLUME_CROP" and p_straw >= 40 \
         and mine["money"] >= 300
-    if volume_entry or volume_hold:
-        return {"mode": "VOLUME_CROP", "volume": True, "scale": False,
-                "straw_quad_cap": MODE_STR_QUAD_CAP,
-                "straw_total_cap": MODE_STR_TOTAL_CAP,
-                "wheat_money_quad": MODE_WHEAT_MONEY_QUAD,
-                "crew_cap": MODE_CREW_CAP_VOL,
-                "herd_ceiling": HERD_CAP_NPV}
+    if volume_hold:
+        return dict(_VOLUME_PLAN)
 
     p_milk = _get(prices, "MILK", BASE_PRICE["MILK"])
     p_wool = _get(prices, "WOOL", BASE_PRICE["WOOL"])
