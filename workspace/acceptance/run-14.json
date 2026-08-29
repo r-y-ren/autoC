@@ -1,0 +1,34 @@
+{
+  "campaign": {
+    "competition_id": "kaggle-kaggriculture",
+    "blueprint_ref": "f76a0bb"
+  },
+  "checklist": [
+    {
+      "id": "doc-compile",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\doc-compile.log"
+    },
+    {
+      "id": "doc-consistency",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\doc-consistency.log"
+    },
+    {
+      "id": "doc-visual",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\doc-visual-14-01.log"
+    }
+  ],
+  "result": "pending_agent",
+  "generated_at": "2026-08-29T12:31:00",
+  "retry_state": {
+    "count": 0,
+    "max": 3,
+    "tripped": false
+  },
+  "scope": "scoped run（--only，范围外项未验；终验须全量重跑）"
+}

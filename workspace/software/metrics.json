@@ -1251,16 +1251,26 @@
       "note": "预算闸代码在 OpenAICompatProvider 内（max 8 calls/30s），NullProvider 无 budget 对象故未触发；待真实 key 后由 run_llm_ab.py 输出"
     },
     "online_ladder_games": {
-      "value": null,
-      "note": "no Kaggle submission made yet (team-side manual step per blueprint man-submit)"
+      "value": 3,
+      "note": "online-measured 2026-08-29: completed EPISODE_TYPE_PUBLIC ladder games by submission 55858820 (episodes 102192249 W, 102194478 L, 102196708 L; the 4th episode 102188134 is EPISODE_TYPE_VALIDATION self-play and is excluded). Evidence: workspace/software/exports/online/round1_ledger.json. Key kept in the unmeasured namespace so consumer key locations stay stable"
     },
     "online_skill_rating": {
-      "value": null,
-      "note": "depends on online submissions"
+      "value": 488.9,
+      "note": "online-measured 2026-08-29: Kaggle publicScore (skill rating) 488.9 for submission 55858820 after its 3 public ladder games (1W-2L), read via kaggle competitions submissions CLI on 2026-08-29. Key kept in the unmeasured namespace so consumer key locations stay stable"
     },
     "online_feedback_calibration": {
-      "value": null,
-      "note": "opponent-pool recalibration triggered by ladder feedback; reserved for man-submit"
+      "value": {
+        "round1_public_record": "1W-2L",
+        "loss_failure_modes": [
+          "FM-O1 portfolio concentration",
+          "FM-O2 no purchased-wheat feed",
+          "FM-O3 no high-value crops",
+          "FM-O4 CARE/DIG underuse"
+        ],
+        "ledger": "workspace/software/exports/online/round1_ledger.json",
+        "analysis": "workspace/software/exports/online/round1_failure_analysis.md"
+      },
+      "note": "online-measured 2026-08-29: replay analysis (kaggle competitions episodes/replay CLI) of the two public losses (102194478 vs Sooriya Senthilkumar 39377:74792, 102196708 vs Chirag Bhatnagar 47642:62586) produced failure modes FM-O1..FM-O4 with per-winner evidence counts; winners ran diversified economies vs our 10-cow monoculture. Per-candidate recalibration item for the next iteration cycle. Key kept in the unmeasured namespace so consumer key locations stay stable"
     },
     "final_submission_commits": {
       "value": null,

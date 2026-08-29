@@ -60,7 +60,7 @@
 
 冻结候选在确认子集共 #fmt(overall.at("games")) 局, 战绩 #record(overall), score #fmt(overall.at("score_rate")), Wilson 区间 [#fmt(overall.at("wilson95").at(0)), #fmt(overall.at("wilson95").at(1))]。以每个 (opponent, seed) 的 AB/BA 成对得分为单位, #fmt(paired.at("unit_count")) 个单位的估计为 #fmt(paired.at("estimate")), Student-t 区间 [#fmt(paired.at("ci95").at(0)), #fmt(paired.at("ci95").at(1))]。#source("confirmatory_overall_record") #source("confirmatory_order_independent_statistics")
 
-这些结果仅描述本地官方引擎和既定对手池。线上对局、线上 rating 与线上反馈校准仍显示为 #fmt(um("online_ladder_games")) / #fmt(um("online_skill_rating")) / #fmt(um("online_feedback_calibration")), 不由本地结果代填。#usource("online_ladder_games") #usource("online_skill_rating") #usource("online_feedback_calibration")
+这些结果仅描述本地官方引擎和既定对手池。线上指标只以真实提交证据回填（对局 #fmt(um("online_ladder_games"))、skill rating #fmt(um("online_skill_rating")) 与反馈台账 #fmt(um("online_feedback_calibration").at("round1_public_record"))），不由本地结果代填。#usource("online_ladder_games") #usource("online_skill_rating") #usource("online_feedback_calibration")
 
 = 战役定位与范围
 
@@ -193,15 +193,15 @@ Wilson 方法为 #fmt(wilson.at("method")), confidence=#fmt(wilson.at("confidenc
 )
 #source("confirmatory_seat_records")
 
-== 未测线上项
+== 线上反馈与未回填项
 
 #table(
   columns: (2.7fr, 1.0fr, 2.5fr),
   align: horizon,
   table.header([*指标*], [*值*], [*含义*]),
-  [线上对局], [#fmt(um("online_ladder_games"))], [尚无真实线上提交证据],
-  [线上 skill rating], [#fmt(um("online_skill_rating"))], [依赖真实线上提交],
-  [线上反馈校准], [#fmt(um("online_feedback_calibration"))], [尚未形成新证据],
+  [线上对局], [#fmt(um("online_ladder_games"))], [依赖真实线上提交, 已按第一轮实测回填],
+  [线上 skill rating], [#fmt(um("online_skill_rating"))], [依赖真实线上提交与平台计分],
+  [线上反馈校准], [#fmt(um("online_feedback_calibration").at("round1_public_record"))], [第一轮失败模式台账见 exports/online/],
   [最终提交 commits], [#fmt(um("final_submission_commits"))], [人工终交锁定尚未回填],
 )
 #usource("online_ladder_games") #usource("online_skill_rating") #usource("online_feedback_calibration") #usource("final_submission_commits")
@@ -224,7 +224,7 @@ AI 辅助完成评估器加固、策略修复、测试与本地证据生成, 并
 - 当前确认集对手来自既定本地池, 不能覆盖未知线上策略分布。
 - holdout 种子已公开, 只能复核既有证据, 不得再作为新独立确认集。#source("holdout_seed_manifest")
 - 任何策略变化都会使旧候选身份与确认结果不再适用于新候选。#source("holdout_protocol")
-- 线上指标与真实 LLM A/B 仍为 null, 不以本地管道自检或 holdout 代替。#usource("online_ladder_games") #usource("online_skill_rating") #usource("llm_ab_win_rate")
+- 线上指标按第一轮真实提交证据回填, 但样本极小且对手分布未知; 真实 LLM A/B 仍为 null, 不以本地管道自检或 holdout 代替。#usource("online_ladder_games") #usource("online_skill_rating") #usource("llm_ab_win_rate")
 
 == 可复用资产
 
