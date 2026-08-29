@@ -345,7 +345,12 @@ def test_herd_freezes_when_milk_collapses():
     orders = _market_orders_with(private, animals=8, herd=8,
                                  prices=_prices(MILK=40), day=12, money=9000.0)
     assert not _orders_contains(orders, "BUY_ANIMAL", "COW")
-    # healthy milk: scaling resumes
-    orders2 = _market_orders_with(private, animals=8, herd=8,
-                                  prices=_prices(MILK=150), day=12, money=9000.0)
+    # healthy milk + an absorbing town (r4-P2: scale-up requires the town
+    # to eat the flow): scaling resumes above the m2b 90-floor
+    farm = _farm(money=9000.0, quads=["NW", "NE"])
+    obs = {"player": 0, "day": 12, "hour": 0,
+           "market": {"prices": _prices(MILK=150)},
+           "town": {"unlocked_shops": ["PIZZA_SHOP", "SMOOTHIE_SHOP"]}}
+    main._STATE.clear()
+    orders2 = main._market_orders(obs, farm, private, 12, 8, 8)
     assert _orders_contains(orders2, "BUY_ANIMAL", "COW")

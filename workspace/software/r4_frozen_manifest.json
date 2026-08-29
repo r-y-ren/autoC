@@ -1,0 +1,197 @@
+{
+ "schema_version": "1.1",
+ "milestone": "r4-layered-build",
+ "label": "r4-frozen",
+ "created_at": "2026-08-29T13:30:49.295670+00:00",
+ "candidate": {
+  "path": "workspace/software/kaggle_simulations/agent/main.py",
+  "sha256": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+  "git_ref": "164439779b293a3d455e6920e631d911dfa2cdb4",
+  "dirty_before_gate": true,
+  "dirty_state_note": "tree contains only the declared r4 work products (main.py layered rebuild, tests/test_strategy_r4_p1|p2|p3.py, scripts/r4_success_probe.py + r4_freeze.py, r4 ablation jsons under exports/ablations/, gate log, manifest, snapshot, metrics shard); committed state is clean at git_ref 1644397",
+  "work_products": [
+   "M workspace/software/kaggle_simulations/agent/main.py",
+   "M workspace/software/metrics.json",
+   "M workspace/software/exports/logs/iteration_gate_log.jsonl",
+   "?? workspace/software/tests/test_strategy_r4_p1.py",
+   "?? workspace/software/tests/test_strategy_r4_p2.py",
+   "?? workspace/software/tests/test_strategy_r4_p3.py",
+   "?? workspace/software/scripts/r4_success_probe.py",
+   "?? workspace/software/scripts/r4_freeze.py",
+   "?? workspace/software/r4_frozen_candidate.b64",
+   "?? workspace/software/r4_frozen_manifest.json",
+   "?? workspace/software/exports/ablations/r4_*.json"
+  ]
+ },
+ "frozen_snapshot": {
+  "path": "workspace/software/r4_frozen_candidate.b64",
+  "encoding": "base64",
+  "file_sha256": "df2f4ab119eebd9bae09e2b4fec44446bf9d8b6e0dbe75d01e0076749f6bb833",
+  "decoded_sha256": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+  "reason": "Preserve exact execution bytes across Git line-ending normalization"
+ },
+ "identity_verification": {
+  "source_sha_unchanged_during_gate": true,
+  "snapshot_sha_matched_source": true,
+  "post_gate_sha256": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+  "post_gate_git_ref": "164439779b293a3d455e6920e631d911dfa2cdb4"
+ },
+ "design_changes_vs_r3_frozen": {
+  "basis": "user layered roadmap (P1 state-value scheduling / P2 shop-conditional market / P3 bounded NPV capital) driven by the r3-P0 success-caliber measurement (143 care-lapse weeds with 100% effective requested ops, 5 escapes, d25 shed overflow, -10.6..-35.9/u wool dump slippage)",
+  "layers": {
+   "P1_state_value_scheduler": {
+    "merge_status": "merged_with_P2 (both standalone gates NOT mergeable: production-volume vs market-price coupling; the champion's neglect was accidental supply rationing)",
+    "core": "task Priority = dV_terminal - mu*travel (mu=25/step) - cross-quad penalty (40) + sticky bonus (45); phase A red-line nearest-worker match BEFORE value work (FEED streak>=1 or hour>=16, WATER streak>=1 or planted-today -- planting starts at streak 1, last-day DROP); fetch routing sends wheatless carriers to the shed before the consumer task; shed-occupancy harvest discount (liquidity death-spiral fix, scale_ranch BA seed 102: 5496 -> 79389)",
+    "compat": "legacy w fields kept verbatim (r3 test pins); new v/red fields drive scheduling"
+   },
+   "P2_shop_conditional_market": {
+    "merge_status": "merged (gate r4-p1p2-market-control MERGEABLE)",
+    "core": "town daily-demand model from observed unlocked_shops (6 draws/day per instance, 2x single-product, +1 center); embedded MARKET_PARAMS analytic price engine (99/99 spot-check equal to official market_price, closed-form hinge inversion); dump-rate limiter tranche <= 2*D+4 (wool slippage countermeasure); three-mode rule (absorbed -> hold for gate / zero-absorption + glut flow -> analytic cut-loss at 0.35*base / liquidity & overflow -> 0.5-0.6*base small tranches); species scale-up needs an absorbing shop (floor 0.95*base) else the m2b 90-floor"
+   },
+   "P3_npv_capital": {
+    "merge_status": "merged (gate r4-p3-npv-capital MERGEABLE)",
+    "core": "marginal-NPV herd ceiling 14 -> 17 (evenings*margin > capex AND margin >= 90 AND town demand >= 2x species flow AND wheat line holds; only EXTENDS the completed 14-head plan, never accelerates it); SW land purchase cutoff after day 18; crew drawdown to 10 hands from day 24; P4-lite terminal: animals with no production evening, no held yield and day >= 26 are not fed"
+   }
+  },
+  "ablation_trajectory": {
+   "r4-p1-value-scheduler": {
+    "verdict": "NOT MERGEABLE",
+    "pool_wr": 0.9,
+    "worst_wr": 0.75,
+    "disaster_rate": 0.0278,
+    "pairs": "27W-45L",
+    "net_pair_diff": -462071.0,
+    "json": "exports/ablations/r4-p1-value-scheduler.json"
+   },
+   "r4-p1-value-scheduler-fix1": {
+    "verdict": "NOT MERGEABLE",
+    "pool_wr": 0.95,
+    "worst_wr": 0.75,
+    "disaster_rate": 0.0278,
+    "pairs": "35W-37L",
+    "net_pair_diff": -410175.0,
+    "json": "exports/ablations/r4-p1-value-scheduler-fix1.json"
+   },
+   "r4-p1p2-market-control": {
+    "verdict": "MERGEABLE",
+    "pool_wr": 1.0,
+    "worst_wr": 1.0,
+    "disaster_rate": 0.0,
+    "pairs": "37W-35L",
+    "net_pair_diff": -31945.0,
+    "json": "exports/ablations/r4-p1p2-market-control.json"
+   },
+   "r4-p3-npv-capital": {
+    "verdict": "MERGEABLE",
+    "pool_wr": 1.0,
+    "worst_wr": 1.0,
+    "disaster_rate": 0.0,
+    "pairs": "37W-35L",
+    "net_pair_diff": -7858.0,
+    "json": "exports/ablations/r4-p3-npv-capital.json"
+   }
+  }
+ },
+ "gate": {
+  "command": "python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label r4-frozen --rounds 4 --require-complete",
+  "log": "workspace/software/exports/logs/iteration_gate_log.jsonl",
+  "formal_pass": true,
+  "complete": true,
+  "expected_games": 72,
+  "actual_games": 72,
+  "abnormal_games": 0,
+  "elapsed_seconds": 310.14,
+  "candidate_record": {
+   "wins": 72,
+   "losses": 0,
+   "ties": 0
+  },
+  "per_opponent": {
+   "baseline_wheat": {
+    "wins": 8,
+    "losses": 0,
+    "ties": 0
+   },
+   "cow_baron": {
+    "wins": 8,
+    "losses": 0,
+    "ties": 0
+   },
+   "crop_rotator": {
+    "wins": 8,
+    "losses": 0,
+    "ties": 0
+   },
+   "expansionist": {
+    "wins": 8,
+    "losses": 0,
+    "ties": 0
+   },
+   "melon_hoarder": {
+    "wins": 8,
+    "losses": 0,
+    "ties": 0
+   },
+   "near_band_diversified": {
+    "wins": 8,
+    "losses": 0,
+    "ties": 0
+   },
+   "scale_ranch": {
+    "wins": 8,
+    "losses": 0,
+    "ties": 0
+   },
+   "self_feed_ranch": {
+    "wins": 8,
+    "losses": 0,
+    "ties": 0
+   },
+   "template_wheat": {
+    "wins": 8,
+    "losses": 0,
+    "ties": 0
+   }
+  },
+  "opponents": [
+   "baseline_wheat",
+   "cow_baron",
+   "crop_rotator",
+   "expansionist",
+   "melon_hoarder",
+   "near_band_diversified",
+   "scale_ranch",
+   "self_feed_ranch",
+   "template_wheat"
+  ],
+  "seed_domain": "development (101-104)"
+ },
+ "success_caliber_vs_r3_champion": {
+  "method": "scripts/r4_success_probe.py (official engine replay -> kgenv.replay_profile.extract_success_metrics), 6 games: scale_ranch/self_feed_ranch/template_wheat x seeds 101-102",
+  "baseline_r3_champ": {
+   "avg_weeds_care_lapse": 29.33,
+   "avg_escapes": 0.83,
+   "avg_capped_tile_days": 12.67,
+   "avg_shed_overflow_units": 12.17,
+   "avg_sell_slippage": 2097.1
+  },
+  "r4_three_layer": {
+   "avg_weeds_care_lapse": 7.0,
+   "avg_escapes": 0.5,
+   "avg_capped_tile_days": 11.33,
+   "avg_shed_overflow_units": 21.83,
+   "avg_sell_slippage": 2283.3
+  },
+  "notes": "escapes residual is the deliberate P4-lite terminal non-feed (day>=26, no production evening, no held yield: zero money at stake); overflow residual concentrated d21-28 (known open item)"
+ },
+ "tests": {
+  "total": 447,
+  "passed": 447,
+  "new_r4": 34,
+  "baseline_r3": 413,
+  "updated_pins": [
+   "test_herd_freezes_when_milk_collapses (m2): resume-half now provides an absorbing town (P2 contract)",
+   "test_sheep_buy_freezes_when_wool_curve_dead / test_cow_buy_freezes_when_milk_curve_dead (m3): same P2 absorbing-town contract"
+  ]
+ }
+}

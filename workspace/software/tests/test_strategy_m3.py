@@ -347,9 +347,16 @@ def test_sheep_buy_freezes_when_wool_curve_dead():
     orders, _ = _market_orders_with(private, animals=0, herd=0, day=12,
                                     money=9000.0, prices=_prices(WOOL=60))
     assert not _orders_contains(orders, "BUY_ANIMAL", "SHEEP")
-    orders2, _ = _market_orders_with(private, animals=0, herd=0, day=12,
-                                     money=9000.0, prices=_prices(WOOL=150))
+    # r4-P2: wool 150 only buys sheep when a yarn store absorbs the flow
+    # (zero-absorption markets freeze below base price 190)
+    farm = _farm(money=9000.0, quads=["NW", "NE"])
+    obs = {"player": 0, "day": 12, "hour": 0,
+           "market": {"prices": _prices(WOOL=150)},
+           "town": {"unlocked_shops": ["YARN_STORE"]}}
+    main._STATE.clear()
+    orders2 = main._market_orders(obs, farm, private, 12, 0, 0)
     assert _orders_contains(orders2, "BUY_ANIMAL", "SHEEP")
+    main._STATE.clear()
 
 
 def test_cow_buy_freezes_when_milk_curve_dead():
@@ -364,7 +371,9 @@ def test_cow_buy_freezes_when_milk_curve_dead():
     main._STATE.clear()
     orders = main._market_orders(obs, farm, private, 12, 2, 2)
     assert not _orders_contains(orders, "BUY_ANIMAL", "COW")
+    # r4-P2: milk 150 needs an absorbing town to resume scaling
     obs["market"]["prices"] = _prices(MILK=150, WOOL=200)
+    obs["town"] = {"unlocked_shops": ["SMOOTHIE_SHOP"]}
     main._STATE.clear()
     orders2 = main._market_orders(obs, farm, private, 12, 2, 2)
     assert _orders_contains(orders2, "BUY_ANIMAL", "COW")

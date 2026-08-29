@@ -2860,6 +2860,356 @@
    "value": true,
    "unit": "bool",
    "method": "scripts/ablate.py (r3-P0, 2026-08-29): paired candidate-vs-champion grid on the same (opponent, seed, seat) cell -- 9 required opponents x seeds x AB/BA x 2 sides; champion default = frozen snapshot r3_frozen_candidate.b64 sha-verified against the manifest; merge gate = new-style pool WR >= champion AND worst single-opponent WR >= champion AND disaster rate (margin < -15000) <= champion; outputs locked to exports/ablations/. Champion-vs-champion semantic smoke measured: 144 games in 453.72s, all 72 pairs exact ties (0W-0L-72T, net diff 0.0), both sides 72-0 vs pool, VERDICT MERGEABLE, exit 0 (exports/ablations/champ-vs-champ-r3p0-smoke.json). Tests: tests/test_ablate.py 11 passed (grid completeness, duplicate/foreign game rejection, pairing diff semantics, gate counterexamples incl. disaster boundary, frozen decode tamper rejection, out-path lock, real-engine champ-vs-champ tie grid)"
+  },
+  "r4_layer_p1_scheduler": {
+   "value": {
+    "attempts": [
+     {
+      "label": "r4-p1-value-scheduler",
+      "candidate_sha256": "dbb4575d993327946fa4ffb8c8bb743467d814043310de6a42e431f6239c2fd6",
+      "champion_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+      "games": 72,
+      "pairs": {
+       "pairs": 72,
+       "W": 27,
+       "L": 45,
+       "T": 0,
+       "net_pair_diff": -462071.0
+      },
+      "candidate": {
+       "new_style_pool_win_rate": 0.9,
+       "worst_opponent_win_rate": 0.75,
+       "worst_opponent": "near_band_diversified",
+       "disaster_rate": 0.0278,
+       "record": {
+        "W": 68,
+        "L": 4,
+        "T": 0
+       }
+      },
+      "champion": {
+       "new_style_pool_win_rate": 1.0,
+       "worst_opponent_win_rate": 1.0,
+       "disaster_rate": 0.0,
+       "record": {
+        "W": 72,
+        "L": 0,
+        "T": 0
+       }
+      },
+      "verdict": false,
+      "checks": {
+       "new_style_pool_win_rate": false,
+       "worst_opponent_win_rate": false,
+       "disaster_rate": false
+      },
+      "runtime_seconds": 586.22
+     },
+     {
+      "label": "r4-p1-value-scheduler-fix1",
+      "candidate_sha256": "697935d3570d45416d5694a2b8baf21f5fe65fe747244a5053c5f21af93f5442",
+      "champion_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+      "games": 72,
+      "pairs": {
+       "pairs": 72,
+       "W": 35,
+       "L": 37,
+       "T": 0,
+       "net_pair_diff": -410175.0
+      },
+      "candidate": {
+       "new_style_pool_win_rate": 0.95,
+       "worst_opponent_win_rate": 0.75,
+       "worst_opponent": "melon_hoarder",
+       "disaster_rate": 0.0278,
+       "record": {
+        "W": 66,
+        "L": 6,
+        "T": 0
+       }
+      },
+      "champion": {
+       "new_style_pool_win_rate": 1.0,
+       "worst_opponent_win_rate": 1.0,
+       "disaster_rate": 0.0,
+       "record": {
+        "W": 72,
+        "L": 0,
+        "T": 0
+       }
+      },
+      "verdict": false,
+      "checks": {
+       "new_style_pool_win_rate": false,
+       "worst_opponent_win_rate": false,
+       "disaster_rate": false
+      },
+      "runtime_seconds": 643.04
+     }
+    ],
+    "merge_decision": "NOT mergeable standalone (volume-vs-price coupling: the scheduler's full-coverage production out-ran the r3 market gates; paired disasters -90949/-109183 on melon_hoarder s103 / baseline_wheat s101); merged WITH P2 in the r4-p1p2 gate",
+    "scheduling_layer_gains": {
+     "avg_escapes_per_game": {
+      "r3_champ": 0.83,
+      "p1_v2_probe": 0.0
+     },
+     "avg_weeds_care_lapse": {
+      "r3_champ": 29.33,
+      "p1_v2_probe": 7.67
+     },
+     "liquidity_death_spiral_fix": "scale_ranch BA seed 102 reward 5496 -> 79389 via shed-occupancy harvest discount"
+    }
+   },
+   "unit": "paired-ablation record per attempt",
+   "method": "scripts/ablate.py --candidate <main.py> --label <layer> vs frozen r3 champion e21c4b5f; 144 games = 9 opponents x seeds 101-104 x AB/BA x 2 sides; success-caliber probe = scripts/r4_success_probe.py (official engine replay, extract_success_metrics state-diff)"
+  },
+  "r4_layer_p2_market": {
+   "value": {
+    "gate": {
+     "label": "r4-p1p2-market-control",
+     "candidate_sha256": "45b0e398034effb5921b228018badfc5fdf73b8a0c79904a43c802b0dcf0a32a",
+     "champion_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+     "games": 72,
+     "pairs": {
+      "pairs": 72,
+      "W": 37,
+      "L": 35,
+      "T": 0,
+      "net_pair_diff": -31945.0
+     },
+     "candidate": {
+      "new_style_pool_win_rate": 1.0,
+      "worst_opponent_win_rate": 1.0,
+      "worst_opponent": "cow_baron",
+      "disaster_rate": 0.0,
+      "record": {
+       "W": 72,
+       "L": 0,
+       "T": 0
+      }
+     },
+     "champion": {
+      "new_style_pool_win_rate": 1.0,
+      "worst_opponent_win_rate": 1.0,
+      "disaster_rate": 0.0,
+      "record": {
+       "W": 72,
+       "L": 0,
+       "T": 0
+      }
+     },
+     "verdict": true,
+     "checks": {
+      "new_style_pool_win_rate": true,
+      "worst_opponent_win_rate": true,
+      "disaster_rate": true
+     },
+     "runtime_seconds": 655.84
+    },
+    "merge_decision": "MERGEABLE with P1",
+    "town_demand_model": "6 draws/day per unlocked shop instance (2x single-product), +1/day town center; observed from obs.town.unlocked_shops",
+    "analytic_engine_check": "embedded MARKET_PARAMS price/offset round-trip equals official market_price on 99/99 spot checks incl. closed-form hinge inversion (tests/test_strategy_r4_p2.py)",
+    "disaster_cell_flips": {
+     "melon_hoarder_s103_pair_diff": {
+      "fix1": -90949.0,
+      "with_p2": 60553.0
+     },
+     "baseline_wheat_s101_pair_diff": {
+      "fix1": -109183.0,
+      "with_p2": 86362.0
+     },
+     "near_band_s102_pair_diff": {
+      "fix1": -30917.0,
+      "with_p2": 13617.0
+     }
+    }
+   },
+   "unit": "paired-ablation record",
+   "method": "scripts/ablate.py --label r4-p1p2-market-control"
+  },
+  "r4_layer_p3_capital": {
+   "value": {
+    "gate": {
+     "label": "r4-p3-npv-capital",
+     "candidate_sha256": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+     "champion_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+     "games": 72,
+     "pairs": {
+      "pairs": 72,
+      "W": 37,
+      "L": 35,
+      "T": 0,
+      "net_pair_diff": -7858.0
+     },
+     "candidate": {
+      "new_style_pool_win_rate": 1.0,
+      "worst_opponent_win_rate": 1.0,
+      "worst_opponent": "cow_baron",
+      "disaster_rate": 0.0,
+      "record": {
+       "W": 72,
+       "L": 0,
+       "T": 0
+      }
+     },
+     "champion": {
+      "new_style_pool_win_rate": 1.0,
+      "worst_opponent_win_rate": 1.0,
+      "disaster_rate": 0.0,
+      "record": {
+       "W": 72,
+       "L": 0,
+       "T": 0
+      }
+     },
+     "verdict": true,
+     "checks": {
+      "new_style_pool_win_rate": true,
+      "worst_opponent_win_rate": true,
+      "disaster_rate": true
+     },
+     "runtime_seconds": 657.52
+    },
+    "merge_decision": "MERGEABLE (three-layer tree)",
+    "recovery_vs_p1p2": {
+     "net_pair_diff": {
+      "p1p2": -31945.0,
+      "with_p3": -7858.0
+     }
+    }
+   },
+   "unit": "paired-ablation record",
+   "method": "scripts/ablate.py --label r4-p3-npv-capital"
+  },
+  "r4_development_gate_summary": {
+   "value": {
+    "label": "r4-frozen",
+    "command": "python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label r4-frozen --rounds 4 --require-complete",
+    "expected_games": 72,
+    "actual_games": 72,
+    "abnormal_games": 0,
+    "candidate_record": {
+     "wins": 72,
+     "losses": 0,
+     "ties": 0
+    },
+    "per_opponent": {
+     "baseline_wheat": {
+      "wins": 8,
+      "losses": 0,
+      "ties": 0
+     },
+     "cow_baron": {
+      "wins": 8,
+      "losses": 0,
+      "ties": 0
+     },
+     "crop_rotator": {
+      "wins": 8,
+      "losses": 0,
+      "ties": 0
+     },
+     "expansionist": {
+      "wins": 8,
+      "losses": 0,
+      "ties": 0
+     },
+     "melon_hoarder": {
+      "wins": 8,
+      "losses": 0,
+      "ties": 0
+     },
+     "near_band_diversified": {
+      "wins": 8,
+      "losses": 0,
+      "ties": 0
+     },
+     "scale_ranch": {
+      "wins": 8,
+      "losses": 0,
+      "ties": 0
+     },
+     "self_feed_ranch": {
+      "wins": 8,
+      "losses": 0,
+      "ties": 0
+     },
+     "template_wheat": {
+      "wins": 8,
+      "losses": 0,
+      "ties": 0
+     }
+    },
+    "seeds": [
+     101,
+     102,
+     103,
+     104
+    ],
+    "seed_domain": "development",
+    "formal_pass": true,
+    "complete": true,
+    "elapsed_seconds": 310.14
+   },
+   "unit": "gate record",
+   "method": "scripts/iterate_gate.py --label r4-frozen --rounds 4 --require-complete (AB/BA x 9 required opponents x 4 dev seeds)"
+  },
+  "r4_frozen_candidate_identity": {
+   "value": {
+    "label": "r4-frozen",
+    "candidate_sha256": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+    "snapshot_file_sha256": "df2f4ab119eebd9bae09e2b4fec44446bf9d8b6e0dbe75d01e0076749f6bb833",
+    "decoded_sha256": "9298751f124f02fc13a52f040af33fba2b3c9f5e8223599a830b8a3462cdd64c",
+    "git_ref": "164439779b293a3d455e6920e631d911dfa2cdb4",
+    "manifest": "workspace/software/r4_frozen_manifest.json",
+    "snapshot": "workspace/software/r4_frozen_candidate.b64",
+    "replaces_champion": "r3_frozen e21c4b5f"
+   },
+   "unit": "sha256 identity record",
+   "method": "scripts/r4_freeze.py post-gate: b64 snapshot byte-roundtrip verified against main.py"
+  },
+  "r4_success_caliber_vs_champion": {
+   "value": {
+    "probe_games": 6,
+    "opponents": [
+     "scale_ranch",
+     "self_feed_ranch",
+     "template_wheat"
+    ],
+    "seeds": [
+     101,
+     102
+    ],
+    "r3_champ_baseline": {
+     "avg_weeds_care_lapse": 29.33,
+     "avg_escapes": 0.83,
+     "avg_capped_tile_days": 12.67,
+     "avg_shed_overflow_units": 12.17,
+     "avg_sell_slippage": 2097.1,
+     "wins": 6
+    },
+    "r4_three_layer": {
+     "avg_weeds_care_lapse": 7.0,
+     "avg_escapes": 0.5,
+     "avg_capped_tile_days": 11.33,
+     "avg_shed_overflow_units": 21.83,
+     "avg_sell_slippage": 2283.28,
+     "wins": 6
+    },
+    "residuals_note": "escape residual = deliberate P4-lite terminal non-feed (zero money at stake); shed overflow concentrated d21-28 (open item for the next wave)"
+   },
+   "unit": "per-game averages over 6 games",
+   "method": "scripts/r4_success_probe.py on the official engine with kgenv.replay_profile.extract_success_metrics (state-diff success caliber, r3-P0 instrument)"
+  },
+  "r4_tests": {
+   "value": {
+    "total": 447,
+    "passed": 447,
+    "new_r4": 34,
+    "baseline_r3": 413
+   },
+   "unit": "pytest count",
+   "method": "python -m pytest tests/ (workspace/software)"
   }
  },
  "unmeasured": {

@@ -153,6 +153,27 @@ ANIMALS = {
 BASE_PRICE = {"WHEAT": 25, "CARROT": 35, "TOMATO": 60, "STRAWBERRY": 120,
               "MELON": 250, "EGG": 50, "MILK": 160, "WOOL": 200, "FERTILIZER": 100}
 
+# ---- r4-P2 town-demand model (official engine constants) ----------------
+# Each unlocked shop instance consumes 1 unit of every product it lists
+# every townShopSellInterval=4 steps (6 draws/day), single-product shops
+# draw 2x; the town center draws 1 of every non-fertilizer product per day
+# (townCenterSellInterval=24).  The set of unlocked shops is OBSERVABLE in
+# obs.town.unlocked_shops, so the market layer knows exactly how much the
+# town will absorb per item per day -- the backbone of the P2 sell rule
+# SELL <=> R_now >= E[R_future] - C_overflow - C_liquidity - C_terminal.
+SHOPS = {
+    "BAKERY":         ["EGG", "WHEAT"],
+    "PIZZA_SHOP":     ["MILK", "TOMATO", "WHEAT"],
+    "BRUNCH_SPOT":    ["EGG", "WHEAT", "STRAWBERRY"],
+    "YARN_STORE":     ["WOOL"],
+    "ICE_CREAM_SHOP": ["STRAWBERRY", "MILK", "WHEAT"],
+    "PET_CAFE":       ["CARROT"],
+    "SMOOTHIE_SHOP":  ["STRAWBERRY", "MILK"],
+    "FARMERS_MARKET": ["WHEAT", "CARROT", "TOMATO", "STRAWBERRY"],
+}
+SHOP_DRAWS_PER_DAY = 6      # 24 turns / townShopSellInterval 4
+CENTER_DRAWS_PER_DAY = 1    # 24 turns / townCenterSellInterval 24
+
 MOVES = {"NORTH": (0, -1), "SOUTH": (0, 1), "EAST": (1, 0), "WEST": (-1, 0)}
 SEASON_DAYS = 30
 
@@ -186,6 +207,15 @@ OPENING_HERD = {"COW": 2, "SHEEP": 2}
 OPENING_RESERVE = 800    # cash kept besides the day-0 burst (m2b cushion)
 HERD_CAP = 14            # total herd ceiling; m2b tests pin _herd_target
                          # to the constant, not a literal
+# r4-P3: STATE-DRIVEN herd ceiling.  Beyond the pinned 14-head plan,
+# extra head is bought only on a positive marginal NPV (evenings x margin
+# > cost + feed + service) with an ABSOLUTE safety ceiling of 17.
+HERD_CAP_NPV = 17
+HERD_NPV_LAST_DAY = 16   # an evening on day 17+ repays too little capex
+HERD_NPV_MIN_MARGIN = 90  # per-evening product margin needed to expand
+LAND_LATE_CUTOFF = 18    # no SW purchase after this day (P3 NPV rule)
+CREW_LATE_DAY = 24       # P3 drawdown: fewer hands when the queue thins
+CREW_LATE_CAP = 10
 HERD_COMPOSITION = {"SHEEP": 6, "COW": 8, "GOOSE": 0}
 ANIMAL_BUY_LAST_DAY = {"SHEEP": 20, "COW": 20, "GOOSE": 24}
 COW_BUY_RESERVE = 380    # cash kept besides an animal purchase (m2b)
@@ -250,11 +280,111 @@ EGG_HOARD_FLOOR = 4
 
 LLM_PROVIDER = None      # optional consultant, default off; local A/B only
 
+# ---- r4-P1 state-value scheduling knobs --------------------------------
+# Priority(i) = dV_terminal - C_travel - C_setup - C_opportunity; every task
+# carries a `v` (estimated terminal value) and optional `red` (one-vote
+# veto: death-tonight obligations covered by the nearest worker BEFORE the
+# value phase, regardless of competing weights).  r3-P0 shadow-replay
+# measurement: the r3 scheduler's w/(1+dist) greedy STARVED far red-line
+# tiles -- 14-29 care-lapse weeds/game clustered at manhattan 6-9 from the
+# shed (all requested waters succeeded; the lapsed tiles never received a
+# request because a nearby w=30 task always outscored a distant w=98 one),
+# and 5 animals escaped in 6 games the same way.  Death-tonight facts from
+# the engine source: a plant enters the day with consecutive_unwatered >= 1
+# OR was planted today (planting counts as unwatered) and dies at the
+# evening refresh if still unwatered; an animal with consecutive_unfed >= 1
+# escapes at the evening refresh if still unfed.
+TRAVEL_MU = 25.0            # value charged per walking turn (marginal op)
+CROSS_QUAD_PENALTY = 40.0   # zone stickiness: leaving the current quadrant
+STICKY_BONUS = 45.0         # continuity bonus for the previous target
+FEED_RED_HOUR = 16          # unfed-by-now escalates to red (r3 escalation)
+PROD_HORIZON_DAY = 28       # production evenings after this never cash out
+
 # Module-level state keyed by player id (the framework may exec one copy of
 # this file for both seats in self-play validation episodes).  Tracks the
 # per-day animal purchase pace by confirming actual herd-count changes in
 # the next observation; orders themselves never consume pace.
 _STATE = {}
+
+# r4-P1 sticky per-worker target registry, keyed by player id and reset at
+# each day roll (hour moves backwards).  Kills the r3 turn-to-turn target
+# oscillation measured as a 59% movement share with only 28% effective ops.
+_TARGETS = {}
+
+
+def _sticky_state(player, day, hour):
+    st = _TARGETS.get(player)
+    if st is None or st.get("day") != day or hour <= st.get("hour", -1):
+        st = {"day": day, "hour": hour, "assign": {}}
+        _TARGETS[player] = st
+    st["hour"] = hour
+    return st
+
+
+def _town_daily_demand(unlocked_shops):
+    """Daily town absorption per item from the observed shop set (P2).
+
+    Returns {item: units/day}; every non-fertilizer product also gets the
+    town-center 1/day draw.  A zero-demand premium product (no shop, no
+    center interest beyond the base 1) has NO absorption mechanism: its
+    inventory can only grow while anyone produces, so the sell rule treats
+    it as cut-loss territory instead of hold-for-recovery.
+    """
+    demand = {}
+    for shop in unlocked_shops or []:
+        products = SHOPS.get(shop)
+        if not products:
+            continue
+        mult = 2 if len(products) == 1 else 1
+        for item in products:
+            demand[item] = demand.get(item, 0) + SHOP_DRAWS_PER_DAY * mult
+    for item in BASE_PRICE:
+        if item != "FERTILIZER":
+            demand[item] = demand.get(item, 0) + CENTER_DRAWS_PER_DAY
+    return demand
+
+
+def _prod_evening_from(day, placed_day, first_yield, interval):
+    """True when another production EVENING lands in [day, PROD_HORIZON_DAY].
+
+    The engine produces at the end-of-day refresh of day D where
+    D+1 = placed + first_yield + k*interval (k >= 0), i.e. the first
+    production evening is placed + first_yield - 1; the yield is harvestable
+    on D+1, so evenings after day 28 never cash out.
+    """
+    d0 = placed_day + first_yield - 1
+    if d0 >= day:
+        next_d = d0
+    else:
+        step = ((day - d0 + interval - 1) // interval) * interval
+        next_d = d0 + step
+    return next_d <= PROD_HORIZON_DAY
+
+
+def _crop_future_value(crop, tile, day):
+    """Remaining terminal value of one alive PLANT tile (ranking-grade)."""
+    cd = CROPS[crop]
+    price = BASE_PRICE[crop]
+    if cd["ongoing"]:
+        # strawberry/tomato: one production evening per interval until the
+        # horizon; watered+fertilized evenings pay +2 instead of +1
+        d0 = _get(tile, "planted_day", day) + cd["first_yield_day"] - 1
+        interval = max(1, cd["interval"])
+        probe = d0
+        while probe < day:
+            probe += interval
+        evenings = 0
+        while probe <= PROD_HORIZON_DAY:
+            evenings += 1
+            probe += interval
+        return evenings * price * 1.3
+    # one-time crop: expected units at harvest * price
+    yu = _get(tile, "yield_units", 0)
+    age = day - _get(tile, "planted_day", day)
+    ws, we = _window(crop)
+    window_left = max(0, we - max(age, ws - 1))
+    expect = min(cd["max_yield"], yu + 2 * window_left)
+    return expect * price
 
 
 def _buy_pace(player, day, hour, herd_total):
@@ -413,6 +543,47 @@ def _animal_pace(day):
         if day >= from_day:
             return pace
     return 1
+
+
+def _npv_herd_ceiling(day, prices, herd_total, species_counts, daily_demand,
+                      sys_wheat):
+    """r4-P3 marginal-NPV herd ceiling in [herd plan, HERD_CAP_NPV].
+
+    Extra head above the pinned 14-head plan is allowed only when EVERY
+    condition holds:
+      * calendar: enough production evenings remain to repay the capex
+        (evenings * per-evening margin > cost + feed overhead);
+      * market: the town can absorb the added flow (demand >= 2x the
+        species' projected flow with one more head -- the r4-P2 lesson:
+        scaling into an unabsorbed market crashes both sides);
+      * feed: the wheat system covers the bigger mouth count;
+      * liquidity/cash safety is the caller's (money-gated buy loop).
+    Returns the effective total ceiling (14 when NPV says no).
+    """
+    if herd_total >= HERD_CAP_NPV or day > HERD_NPV_LAST_DAY:
+        return HERD_CAP
+    evenings = max(0, PROD_HORIZON_DAY - day)
+    best_npv = None
+    for animal in ("COW", "SHEEP"):
+        spec = ANIMALS[animal]
+        product = spec["product"]
+        price = _get(prices, product, BASE_PRICE[product])
+        interval = spec["interval"]
+        prod_evenings = max(0, evenings // interval)
+        # feed cost: 1 wheat/day at ~FEED_BUY_MAX_PRICE; service labour
+        # charged at TRAVEL_MU per CARE+FEED op-day
+        margin = price - FEED_BUY_MAX_PRICE - TRAVEL_MU
+        npv = prod_evenings * margin - spec["cost"]
+        demand = daily_demand.get(product, 1)
+        flow = (species_counts.get(animal, 0) + 1) / float(interval)
+        if npv > 0 and margin >= HERD_NPV_MIN_MARGIN and demand >= 2 * flow:
+            if best_npv is None or npv > best_npv[0]:
+                best_npv = (npv, animal)
+    if best_npv is None:
+        return HERD_CAP
+    if sys_wheat is not None and sys_wheat < herd_total + 4:
+        return HERD_CAP      # feed line cannot hold one more mouth
+    return HERD_CAP_NPV
 
 
 def _milk_gate(day):
@@ -605,9 +776,152 @@ def _species_counts(farm, private, herd_total):
     return counts
 
 
-def _market_gates(day, prices, shed, herd):
+# ---- r4-P2 analytic price engine (official MARKET_PARAMS mirror) --------
+# price(inv) = base + sign * amp * f(|inv - I0|); T = one field's 24-day
+# production.  Inventory swings over a season are +-30..400 around I0, so
+# these curves are steep: the sell rule can PROJECT price from the observed
+# net flow instead of simulating.  Net flow per item is inferred from the
+# day-over-day price move (inverted through the curve), which already nets
+# our production + the opponent's + town absorption.
+import math  # noqa: E402  (stdlib only; placed at first analytic use)
+
+MARKET_PARAMS_EMB = {   # item: (base, T, below_f, below_t, above_f, above_t)
+    "WHEAT":      (25, 400, "sqrt", 0.80, "log", 0.20),
+    "CARROT":     (35, 450, "hinge", 1.00, "sqrt", 0.70),
+    "TOMATO":     (60, 200, "hinge", 0.40, "sqrt", 0.60),
+    "STRAWBERRY": (120, 100, "sqrt", 0.70, "linear", 1.60),
+    "MELON":      (250, 300, "log", 0.20, "sq", 3.60),
+    "EGG":        (50, 332, "hinge", 0.40, "log", 0.20),
+    "MILK":       (160, 122, "sqrt", 0.60, "linear", 1.60),
+    "WOOL":       (200, 105, "log", 0.20, "sq", 3.20),
+    "FERTILIZER": (100, 200, "linear", 0.40, "linear", 0.40),
+}
+MARKET_I0_EMB = 10000
+HINGE_GAIN_EMB = 8.0
+PRICE_FLOOR_EMB = 1
+
+
+def _shape_val(func, x, T):
+    x = max(0.0, x)
+    if func == "linear":
+        return x
+    if func == "sq":
+        return x * x
+    if func == "sqrt":
+        return x ** 0.5
+    if func == "log":
+        return math.log(1.0 + x)
+    if func == "hinge":
+        u = x / T if T and T > 0 else x
+        return u + HINGE_GAIN_EMB * max(0.0, u - 1.0) ** 2
+    return x
+
+
+def _price_at_offset(item, off):
+    """Engine price for inventory I0+off (off signed, glut positive)."""
+    base, T, bf, bt, af, at = MARKET_PARAMS_EMB[item]
+    if off < 0:
+        amp = bt * base / max(_shape_val(bf, T, T), 1e-9)
+        p = base + amp * _shape_val(bf, -off, T)
+    else:
+        amp = at * base / max(_shape_val(af, T, T), 1e-9)
+        p = base - amp * _shape_val(af, off, T)
+    return max(float(PRICE_FLOOR_EMB), p)
+
+
+def _offset_from_price(item, price):
+    """Inverse of _price_at_offset (ranking-grade; hinge linearized)."""
+    base, T, bf, bt, af, at = MARKET_PARAMS_EMB[item]
+    price = float(price)
+    if price >= base:
+        amp = bt * base / max(_shape_val(bf, T, T), 1e-9)
+        y = max(0.0, (price - base) / max(amp, 1e-9))
+        if bf == "linear":
+            return -y
+        if bf == "sqrt":
+            return -(y * y)
+        if bf == "log":
+            return -math.expm1(min(y, 50.0))
+        if bf == "sq":
+            return -(y ** 0.5)
+        # hinge: u + 8*(u-1)^2 = y (u = x/T); closed form past the knee
+        if y <= 1.0:
+            return -(y * T)
+        u = (15.0 + math.sqrt(max(0.0, 32.0 * y - 31.0))) / 16.0
+        return -(u * T)
+    amp = at * base / max(_shape_val(af, T, T), 1e-9)
+    y = max(0.0, (base - price) / max(amp, 1e-9))
+    if af == "linear":
+        return y
+    if af == "sqrt":
+        return y * y
+    if af == "log":
+        return math.expm1(min(y, 50.0))
+    if af == "sq":
+        return y ** 0.5
+    return min(y, T)
+
+
+# per-player market memory: yesterday's prices -> observed net flow EMA
+_MARKET_MEM = {}
+
+
+def _market_flow(player, day, prices):
+    """EMA of the observed net inventory flow per item (units/day).
+
+    The day-over-day price move, inverted through the engine curve, IS the
+    market's net supply-minus-demand (ours + the opponent's production and
+    sales, minus town consumption).  Positive flow = glut building.
+    """
+    st = _MARKET_MEM.get(player)
+    if st is None or st.get("day", -1) >= day:
+        _MARKET_MEM[player] = {"day": day, "prices": dict(prices),
+                               "flow": (st or {}).get("flow", {})}
+        return {}
+    prev = st.get("prices", {})
+    flow = {}
+    for item, p_now in prices.items():
+        if item not in MARKET_PARAMS_EMB or item not in prev:
+            continue
+        delta = (_offset_from_price(item, p_now)
+                 - _offset_from_price(item, prev[item]))
+        if delta == 0:
+            flow[item] = 0.0
+        else:
+            ema = st.get("flow", {}).get(item, 0.0)
+            flow[item] = 0.55 * delta + 0.45 * ema
+    _MARKET_MEM[player] = {"day": day, "prices": dict(prices), "flow": flow}
+    return flow
+
+
+def _project_price(item, price_now, flow, horizon):
+    """Analytic E[R_future]: price at I0 + off + flow*horizon."""
+    off = _offset_from_price(item, price_now)
+    return _price_at_offset(item, off + flow * horizon)
+
+
+def _market_gates(day, prices, shed, herd, town_shops=None, money=None,
+                  flow=None):
     """Selective-intervention sell decisions: what to SELL this turn, with
     the hoard / release / defend rule per item made explicit.
+
+    r4-P2 upgrades (active when town_shops is provided -- the legacy
+    4-argument call keeps the r3 semantics for the pinned tests):
+      * DUMP-RATE LIMIT: every tranche is capped near the town's observed
+        absorption (2*D + 4) -- selling far beyond what the shops redraw
+        only crashes our own next tranche (P0 slippage -10.6..-35.9/u).
+      * THREE-MODE rule per item:
+          demand strong (shop draws) + price at/below gate -> HOLD for the
+          gate (town absorption mean-reverts the curve; measured wool 240+
+          all season whenever yarn stores draw);
+          zero absorption (center 1/day only) + glut flow observed ->
+          CUT-LOSS at max(0.35*base, low gate) instead of riding a dead
+          curve into the day-29 floor;
+          liquidity/overflow pressure -> small tranches at 0.5-0.6*base
+          (C_liquidity/C_overflow in the SELL <=> R_now >= E[R_future]
+          - costs rule).
+      * ANALYTIC PROJECTION: E[R_future] from the embedded MARKET_PARAMS
+        curves and the observed net-flow EMA (_market_flow).
 
     Curve rationale (official MARKET_PARAMS):
       * MILK base 160, LINEAR glut (T=122): hoard below _milk_gate, clear
@@ -640,6 +954,14 @@ def _market_gates(day, prices, shed, herd):
     last_day = day >= SEASON_DAYS - 1
     endgame = day >= ENDGAME_DAY
     shed_count = sum(v for v in shed.values() if isinstance(v, (int, float)))
+    demand = _town_daily_demand(town_shops) if town_shops is not None else None
+    flow = flow or {}
+
+    def cap(qty, item):
+        """Dump-rate limiter: town absorption 2*D + 4 (P2)."""
+        if demand is None:
+            return qty
+        return max(4, min(qty, 2 * demand.get(item, 1) + 4))
 
     if last_day:
         # day 29: only bank money counts; liquidate every tradable shed item
@@ -649,7 +971,7 @@ def _market_gates(day, prices, shed, herd):
                 orders.append(["SELL", item, n])
         return orders
 
-    # ---- MILK: hoard / release / defend (m2b, verbatim) ------------------
+    # ---- MILK: hoard / release / defend (m2b, verbatim + P2 caps) --------
     milk = shed.get("MILK", 0)
     if milk > 0:
         gate = _llm_sell_gate("MILK", prices.get("MILK", BASE_PRICE["MILK"]),
@@ -659,35 +981,49 @@ def _market_gates(day, prices, shed, herd):
         if shed_count >= 70 and p >= 30:
             sell = max(0, milk - 15)
             if sell > 0:
-                orders.append(["SELL", "MILK", sell])
+                orders.append(["SELL", "MILK", cap(sell, "MILK")])
         elif p >= 145:
-            orders.append(["SELL", "MILK", min(milk, 24)])
+            orders.append(["SELL", "MILK", cap(min(milk, 24), "MILK")])
         elif p >= gate:
-            orders.append(["SELL", "MILK", min(milk, 20)])
+            orders.append(["SELL", "MILK", cap(min(milk, 20), "MILK")])
+        elif demand is not None and money is not None and money < 1200 \
+                and p >= 0.5 * BASE_PRICE["MILK"]:
+            # C_liquidity: a broke dawn cannot hire the crew that earns it
+            # back -- milk clears at a soft band when cash-starved
+            orders.append(["SELL", "MILK", cap(min(milk, 6), "MILK")])
 
     # ---- WOOL: sq glut (T=105) -- follow the curve, never ride it down ---
     # Sheep flow (ours + the opponent's, 9-12 head across the pool) exceeds
     # base town consumption in most draws: wool either stays scarce (yarn
     # stores drawn -- observed 240+ all season) or floors (+56 units above
-    # equilibrium is already $5).  So: realize in size at real bids, cut the
-    # hoard fast once the curve turns (WOOL_CUT_LOSS), dump in the endgame
-    # window -- never ride a dead curve into the day-29 joint floor.
+    # equilibrium is already $5).  P2: with a yarn store absorbing, the
+    # 100-149 band HOLDS for the gate; with zero absorption the analytic
+    # cut-loss fires as soon as the flow says the curve is dying.
     wool = shed.get("WOOL", 0)
     if isinstance(wool, (int, float)) and wool > 0:
         p = prices.get("WOOL", BASE_PRICE["WOOL"])
+        yarn = demand is None or demand.get("WOOL", 1) >= 12
         if endgame or day >= 26:
-            orders.append(["SELL", "WOOL", min(wool, 12)])
+            orders.append(["SELL", "WOOL", cap(min(wool, 12), "WOOL")])
         elif shed_count >= 78 and p >= 5:
             orders.append(["SELL", "WOOL", max(0, wool - 10)])
         elif wool > WOOL_HOARD_FLOOR:
             if p >= 200:
-                orders.append(["SELL", "WOOL", min(wool - WOOL_HOARD_FLOOR, 12)])
+                orders.append(["SELL", "WOOL",
+                               cap(min(wool - WOOL_HOARD_FLOOR, 12), "WOOL")])
             elif p >= WOOL_GATE:
-                orders.append(["SELL", "WOOL", min(wool - WOOL_HOARD_FLOOR, 8)])
-            elif p >= 100:
-                orders.append(["SELL", "WOOL", min(wool - WOOL_HOARD_FLOOR, 6)])
+                orders.append(["SELL", "WOOL",
+                               cap(min(wool - WOOL_HOARD_FLOOR, 8), "WOOL")])
+            elif p >= 100 and not yarn:
+                orders.append(["SELL", "WOOL",
+                               cap(min(wool - WOOL_HOARD_FLOOR, 6), "WOOL")])
             elif p >= WOOL_CUT_LOSS and (day >= 18 or wool > WOOL_HOARD_CAP):
-                orders.append(["SELL", "WOOL", min(wool - 4, 8)])
+                orders.append(["SELL", "WOOL", cap(min(wool - 4, 8), "WOOL")])
+            elif demand is not None and not yarn and p >= 70 \
+                    and _project_price("WOOL", p, flow.get("WOOL", 0.0), 7) < p:
+                # zero absorption + dying curve: realize before the sq
+                # cliff does it for us
+                orders.append(["SELL", "WOOL", cap(min(wool - 4, 6), "WOOL")])
 
     # ---- premium rotation/herd goods: gated tranches + hoard bounds ------
     def premium(item, gate, tranche, hoard_floor, hoard_cap, low_gate,
@@ -702,11 +1038,26 @@ def _market_gates(day, prices, shed, herd):
             # discard-cliff guard shared with milk
             orders.append(["SELL", item, max(0, held - 10)])
         elif p >= gate + 30:
-            orders.append(["SELL", item, min(held - hoard_floor, tranche * 2)])
+            orders.append(["SELL", item, cap(min(held - hoard_floor,
+                                                 tranche * 2), item)])
         elif p >= gate:
-            orders.append(["SELL", item, min(held - hoard_floor, tranche)])
+            orders.append(["SELL", item, cap(min(held - hoard_floor,
+                                                 tranche), item)])
         elif held > hoard_cap and p >= low_gate:
-            orders.append(["SELL", item, min(held - hoard_cap, tranche)])
+            orders.append(["SELL", item, cap(min(held - hoard_cap,
+                                                 tranche), item)])
+        elif demand is not None:
+            proj3 = _project_price(item, p, flow.get(item, 0.0), 3)
+            if demand.get(item, 1) <= 1 and flow.get(item, 0.0) > 0 \
+                    and proj3 < 0.9 * p and p >= low_gate:
+                # zero absorption + measured glut: cut before the curve
+                orders.append(["SELL", item,
+                               cap(min(held - hoard_floor,
+                                       max(4, tranche // 2)), item)])
+            elif money is not None and money < 1200 \
+                    and p >= 0.55 * BASE_PRICE[item]:
+                orders.append(["SELL", item, cap(min(held - hoard_floor, 6),
+                                                 item)])
 
     premium("STRAWBERRY", STRAWBERRY_GATE, 8, STRAWBERRY_HOARD_FLOOR, 26, 70, 12)
     premium("MELON", MELON_GATE, 8, MELON_HOARD_FLOOR, 14, 120, 8)
@@ -749,9 +1100,10 @@ def _build_tasks(obs, farm, private, day):
 
     tasks = []
 
-    def add(w, x, y, act, key, need=None, units=None):
+    def add(w, x, y, act, key, need=None, units=None, v=None, red=False):
         tasks.append({"w": w, "x": x, "y": y, "act": act, "key": key,
-                      "need": need, "units": units})
+                      "need": need, "units": units,
+                      "v": w if v is None else v, "red": red})
 
     last_day = day >= SEASON_DAYS - 1
     stop_feed = day >= ENDGAME_DAY        # FM-O4: doomsday stop-feeding
@@ -766,8 +1118,10 @@ def _build_tasks(obs, farm, private, day):
             if sum(n for n in inv.values() if isinstance(n, (int, float)) and n > 0) <= 0:
                 continue
             sx, sy = min(accesses, key=lambda pos: (_dist(ux, uy, *pos), pos[1], pos[0]))
-            add(120, sx, sy, ["DROP"], ("return", ui), units={ui})
-
+            add(120, sx, sy, ["DROP"], ("return", ui), units={ui},
+                v=60 * sum(n for n in inv.values()
+                           if isinstance(n, (int, float)) and n > 0),
+                red=True)
         for y, row in enumerate(tiles):
             for x, tile in enumerate(row):
                 if not isinstance(tile, dict) or _get(tile, "yield_units", 0) <= 0:
@@ -784,9 +1138,12 @@ def _build_tasks(obs, farm, private, day):
                     if turns_needed <= 23 - hour:
                         eligible.add(ui)
                 if eligible:
+                    item = _get(tile, "crop", None)
+                    price = BASE_PRICE.get(item if item in BASE_PRICE else
+                                           ANIMALS.get(_get(tile, "animal", ""),
+                                                       {}).get("product", ""), 0)
                     add(110, x, y, ["HARVEST"], ("harvest", x, y),
-                        units=eligible)
-
+                        units=eligible, v=_get(tile, "yield_units", 0) * price)
         herd_total = n_animals + sum(_get(shed, a, 0) for a in ANIMALS) \
             + sum(species_on_units.values())
         return tasks, 0, herd_total, len(crop_map["WHEAT"]), capacity
@@ -795,6 +1152,20 @@ def _build_tasks(obs, farm, private, day):
     placeable = {"SHEEP": _get(shed, "SHEEP", 0) + species_on_units["SHEEP"],
                  "COW": _get(shed, "COW", 0) + species_on_units["COW"],
                  "GOOSE": _get(shed, "GOOSE", 0) + species_on_units["GOOSE"]}
+    # shed-occupancy harvest discount (P1 mandate: HARVEST value includes
+    # the shed occupancy): harvesting into a nearly-full shed whose sell
+    # gates are shut just moves the discard cliff closer -- measured
+    # bankruptcy mechanism on scale_ranch BA seed 102: wool hoard filled
+    # the 100-slot shed, income stopped, no wheat, 12 escapes)
+    shed_count = sum(v for v in shed.values()
+                     if isinstance(v, (int, float)))
+    def _shed_factor(item_price, item_base):
+        if shed_count <= 70:
+            return 1.0
+        # gates open at a real bid -> the goods can leave the shed again
+        if item_price >= 0.75 * item_base:
+            return 1.0
+        return max(0.35, 1.0 - (shed_count - 70) / 50.0)
 
     for y, row in enumerate(tiles):
         for x, tile in enumerate(row):
@@ -804,7 +1175,7 @@ def _build_tasks(obs, farm, private, day):
             if tile is None:
                 if pos in builds:
                     op = "BUILD_COOP" if builds[pos] == "COOP" else "BUILD_PASTURE"
-                    add(46, x, y, [op], ("build", x, y))
+                    add(46, x, y, [op], ("build", x, y), v=180)
                     continue
                 crop = None
                 for c, positions in crop_map.items():
@@ -813,15 +1184,23 @@ def _build_tasks(obs, farm, private, day):
                         break
                 if crop is not None and seeds.get(crop, 0) > 0 \
                         and day <= PLANT_LAST_DAY.get(crop, 24):
+                    # terminal value of planting TODAY; fresh plants must be
+                    # watered the same day -- that obligation is red-flagged
+                    # in the PLANT branch below via planted_day == day
+                    cd = CROPS[crop]
+                    price = _get(prices, crop, BASE_PRICE[crop])
+                    ws0, we0 = _window(crop)
+                    expect = min(cd["max_yield"], 2 * max(1, we0 - ws0 + 1))
+                    net = expect * price - cd["seed"]
                     add(30 if crop == "WHEAT" else 32, x, y,
-                        ["PLANT", crop], ("plant", x, y))
+                        ["PLANT", crop], ("plant", x, y), v=max(30, net * 0.6))
                 continue
             if not isinstance(tile, dict):
                 continue
             kind = _get(tile, "kind", "")
             if kind == "WEED":
                 if pos in builds or any(pos in s for s in crop_map.values()):
-                    add(22, x, y, ["DIG"], ("dig", x, y))
+                    add(22, x, y, ["DIG"], ("dig", x, y), v=50)
                 continue
             if kind == "PLANT":
                 crop = _get(tile, "crop", "WHEAT")
@@ -833,17 +1212,26 @@ def _build_tasks(obs, farm, private, day):
                 yu = _get(tile, "yield_units", 0)
                 ws, we = _window(crop)
                 in_window = ws <= age <= we
+                futval = _crop_future_value(crop, tile, day)
                 if not _get(tile, "watered_today", False):
-                    if _get(tile, "consecutive_unwatered", 0) >= 1:
-                        add(98, x, y, ["WATER"], ("water", x, y))   # dies tonight
+                    price = _get(prices, crop, BASE_PRICE[crop])
+                    if _get(tile, "consecutive_unwatered", 0) >= 1 or \
+                            _get(tile, "planted_day", day) == day:
+                        # dies tonight (streak 1, or planted today: the
+                        # engine starts every fresh plant at streak 1)
+                        add(98, x, y, ["WATER"], ("water", x, y),
+                            v=futval, red=True)
                     elif planned and cd["ongoing"]:
                         # ongoing crops: watering doubles fertilized output
                         # and keeps the 2-day survival streak clear
-                        add(40, x, y, ["WATER"], ("water", x, y))
+                        add(40, x, y, ["WATER"], ("water", x, y),
+                            v=max(0.3 * futval, price))
                     elif in_window and planned:
-                        add(42, x, y, ["WATER"], ("water", x, y))
+                        add(42, x, y, ["WATER"], ("water", x, y),
+                            v=2 * price + 0.1 * futval)
                     elif age % 2 == 1:
-                        add(24, x, y, ["WATER"], ("water", x, y))   # survival
+                        add(24, x, y, ["WATER"], ("water", x, y),
+                            v=0.3 * futval)   # survival
                 # FM-4 generalized: animal fertilizer feeds the rotation.
                 # One-time crops at age 2 (the +2 window then lands inside
                 # the 3-day fertilizer window); strawberry refreshed
@@ -856,40 +1244,79 @@ def _build_tasks(obs, farm, private, day):
                                          BASE_PRICE["FERTILIZER"]) >= FERT_VALUE_GATE
                         if premium_boost or not fert_dear:
                             add(36 if cd["ongoing"] else 34, x, y, ["FERTILIZE"],
-                                ("fert", x, y), need="FERTILIZER")
+                                ("fert", x, y), need="FERTILIZER",
+                                v=190 if premium_boost else 60)
                 if yu > 0:
+                    price = _get(prices, crop, BASE_PRICE[crop])
                     if cd["ongoing"]:
                         if yu >= 3:
-                            add(70, x, y, ["HARVEST"], ("harvest", x, y))
+                            add(70, x, y, ["HARVEST"], ("harvest", x, y),
+                                v=yu * price
+                                * _shed_factor(price, BASE_PRICE[crop]))
                     elif age >= cd["max_yield_day"] + 1 or last_day:
                         # rot emergency: one-time crops decay to a weed from
                         # hour 0 of this day, ~1 unit per 2 turns
-                        add(95, x, y, ["HARVEST"], ("harvest", x, y))
+                        add(95, x, y, ["HARVEST"], ("harvest", x, y),
+                            v=yu * price + 40, red=last_day)
                     elif age >= cd["max_yield_day"] and (
                             _get(tile, "watered_today", False) or
                             _get(obs, "hour", 0) >= 18):
-                        add(80, x, y, ["HARVEST"], ("harvest", x, y))
+                        add(80, x, y, ["HARVEST"], ("harvest", x, y),
+                            v=yu * price + 30)
             elif "animal" in tile:
-                if not stop_feed:
+                animal = _get(tile, "animal", "COW")
+                spec = ANIMALS.get(animal) or ANIMALS["COW"]
+                product = spec["product"]
+                price = _get(prices, product, BASE_PRICE[product])
+                placed = _get(tile, "placed_day", day)
+                prod_remains = _prod_evening_from(day, placed,
+                                                  spec["first_yield_day"],
+                                                  spec["interval"])
+                # r4-P4lite: an animal with no production evening left,
+                # no held yield and no escape exposure worth preventing
+                # (day 26+: an escape now cannot cost a future harvest)
+                # repays nothing for its wheat -- stop feeding it
+                terminal_idle = (day >= 26 and not prod_remains
+                                 and _get(tile, "yield_units", 0) <= 0)
+                if not stop_feed and not terminal_idle:
                     if not _get(tile, "fed_today", False):
                         animals_to_feed += 1
-                        # escape risk outranks everything: escalate by streak/hour
-                        if _get(tile, "consecutive_unfed", 0) >= 1 or \
-                                _get(obs, "hour", 0) >= 16:
+                        streak = _get(tile, "consecutive_unfed", 0) >= 1
+                        # escape risk outranks everything: escalate by
+                        # streak/hour (r3 escalation hour kept)
+                        if streak or _get(obs, "hour", 0) >= FEED_RED_HOUR:
                             w = 100
+                            v = spec["cost"] + 2.5 * price   # asset at stake
+                            red = True
                         else:
                             w = 88
-                        add(w, x, y, ["FEED"], ("feed", x, y), need="WHEAT")
+                            # feed cashes tonight's production bonus (base 1
+                            # lands regardless; fed consumes the care bonus)
+                            # and keeps every CARE option alive (P0: 0-escape
+                            # red line) -- above every water, below harvest
+                            v = price + 300
+                            red = False
+                        add(w, x, y, ["FEED"], ("feed", x, y), need="WHEAT",
+                            v=v, red=red)
                     if day <= SEASON_DAYS - 3 and not _get(tile, "cared_today", False) \
                             and _get(tile, "fed_today", False):
-                        add(56, x, y, ["CARE"], ("care", x, y))
+                        # CARE only pays when another production evening
+                        # remains to consume the bonus (else value 0: skip)
+                        if prod_remains:
+                            add(56, x, y, ["CARE"], ("care", x, y),
+                                v=price + 100)
                 yu = _get(tile, "yield_units", 0)
                 if yu >= 5:
-                    add(92, x, y, ["HARVEST"], ("harvest", x, y))   # about to cap
+                    add(92, x, y, ["HARVEST"], ("harvest", x, y),
+                        v=(yu * price + price)
+                        * _shed_factor(price, BASE_PRICE[product]))
                 elif yu >= 3 or (yu > 0 and (last_day or stop_feed)):
-                    add(70, x, y, ["HARVEST"], ("harvest", x, y))
+                    add(70, x, y, ["HARVEST"], ("harvest", x, y),
+                        v=(yu * price + (price if prod_remains else 0))
+                        * _shed_factor(price, BASE_PRICE[product]))
                 if _get(tile, "fertilizer_available", False):
-                    add(44, x, y, ["COLLECT_FERTILIZER"], ("cfert", x, y))
+                    add(44, x, y, ["COLLECT_FERTILIZER"], ("cfert", x, y),
+                        v=85)
             elif kind in ("PASTURE", "COOP") and "animal" not in tile:
                 animal = None
                 if kind == "COOP" and placeable["GOOSE"] > 0:
@@ -904,7 +1331,7 @@ def _build_tasks(obs, farm, private, day):
                     # in the shed (a 100-slot shared resource)
                     placeable[animal] -= 1
                     add(82, x, y, ["PLACE", animal], ("place", x, y),
-                        need=animal)
+                        need=animal, v=ANIMALS[animal]["cost"] + 120)
 
     board_half = board // 2
     shed_tile = (board_half - 1, board_half - 1)
@@ -923,7 +1350,8 @@ def _build_tasks(obs, farm, private, day):
             if n <= 0:
                 break
             add(96 - 8 * i, shed_tile[0], shed_tile[1], ["PICKUP", "WHEAT", n],
-                ("pickup_w", i))
+                ("pickup_w", i), v=300 - 20 * i,
+                red=(i == 0 and _get(obs, "hour", 0) >= FEED_RED_HOUR))
             shortfall -= n
             shed_available["WHEAT"] -= n
             i += 1
@@ -934,14 +1362,14 @@ def _build_tasks(obs, farm, private, day):
                         for t in tasks):
             n = min(2, shed_available[animal])
             add(94, shed_tile[0], shed_tile[1], ["PICKUP", animal, n],
-                ("pickup_a", animal))
+                ("pickup_a", animal), v=340)
             shed_available[animal] -= n
     # ---- fertilizer logistics for the rotation's fertilize tasks --------
     if any(t["key"][0] == "fert" for t in tasks) and \
             shed_available.get("FERTILIZER", 0) > 0 and fert_on_units < 3:
         n = min(4, shed_available["FERTILIZER"])
         add(40, shed_tile[0], shed_tile[1], ["PICKUP", "FERTILIZER", n],
-            ("pickup_f", 0))
+            ("pickup_f", 0), v=220)
         shed_available["FERTILIZER"] -= n
     herd_total = n_animals + sum(_get(shed, a, 0) for a in ANIMALS) \
         + sum(species_on_units.values())
@@ -956,6 +1384,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
     quads = len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"])
     shed_count = sum(v for v in shed.values() if isinstance(v, (int, float)))
     last_day = day >= SEASON_DAYS - 1
+    town_shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
     builds, crop_map, _placed, capacity = _field_alloc(farm, day, prices)
 
     orders = []
@@ -969,7 +1398,12 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
     land_pending = False
     if quads in LAND_PLAN:
         due_day, fund = LAND_PLAN[quads]
-        if day >= due_day:
+        # r4-P3: SW after day 18 cannot deploy a repaying asset (strawberry
+        # phase over, pasture ring of NW+NE already holds 17 head) -- the
+        # 2000 buys liquidity instead
+        if quads == 2 and day > LAND_LATE_CUTOFF:
+            land_fund = 0
+        elif day >= due_day:
             land_fund = fund
             if money >= fund:
                 orders.append(["BUY_LAND"])
@@ -1027,6 +1461,21 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
         reserve += land_fund
     pace = _animal_pace(day)
     target = _herd_target(day, 99)   # FM-O3: external feed releases autarky
+    # r4-P3: state-driven ceiling above the plan when the marginal NPV,
+    # market absorption and feed line all clear (cap 17 safety boundary)
+    wheat_carried_early = sum(_get(inv, "WHEAT", 0)
+                              for inv in (_get(private, "inventories", [])
+                                          or []) if inv)
+    sys_wheat_early = shed.get("WHEAT", 0) + wheat_carried_early
+    npv_ceiling = HERD_CAP
+    if herd_total >= HERD_CAP:
+        # r4-P3: the NPV ceiling EXTENDS the completed 14-head plan (never
+        # accelerates it -- the day-0 burst and the r3 deadline stand)
+        npv_ceiling = _npv_herd_ceiling(
+            day, prices, herd_total,
+            _species_counts(farm, private, herd_total),
+            _town_daily_demand(town_shops), sys_wheat_early)
+        target = max(target, npv_ceiling)
     bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0),
                        herd_total)
     opening_bought = False
@@ -1051,19 +1500,32 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
         candidates = sorted((a for a in HERD_COMPOSITION if HERD_COMPOSITION[a] > 0),
                             key=lambda a: species[a] / float(HERD_COMPOSITION[a]))
         for animal in candidates:
-            if species[animal] >= HERD_COMPOSITION[animal]:
+            comp_cap = HERD_COMPOSITION[animal]
+            if npv_ceiling > HERD_CAP:
+                # P3 NPV branch: the state-driven ceiling may push the
+                # best-margin species past its pinned composition share
+                comp_cap += HERD_CAP_NPV - HERD_CAP
+            if species[animal] >= comp_cap:
                 continue
             if day > ANIMAL_BUY_LAST_DAY[animal]:
                 continue
             product = ANIMALS[animal]["product"]
-            if day >= DEAD_PRICE_FROM_DAY and \
-                    prices.get(product, BASE_PRICE[product]) < DEAD_PRICE_FLOOR[product]:
-                continue  # dead-price freeze (m2b demand-drought generalized)
+            if day >= DEAD_PRICE_FROM_DAY:
+                # r4-P2 shop-conditional scale-up: with a shop absorbing the
+                # product the m2b 90-floor stands; with ZERO absorption (no
+                # shop, center 1/day) the herd only scales at full base
+                # price -- never into a market that cannot eat the flow
+                demand = _town_daily_demand(town_shops)
+                floor = DEAD_PRICE_FLOOR[product] \
+                    if demand.get(product, 1) >= 2 \
+                    else int(0.95 * BASE_PRICE[product])
+                if prices.get(product, BASE_PRICE[product]) < floor:
+                    continue  # dead-price freeze (demand-conditioned)
             cost = ANIMALS[animal]["cost"]
             if money < cost + reserve:
                 continue
             n = min(pace - bought, target - herd_total,
-                    HERD_COMPOSITION[animal] - species[animal],
+                    comp_cap - species[animal],
                     int((money - reserve) // cost))
             if n > 0:
                 orders.append(["BUY_ANIMAL", animal, n])
@@ -1071,8 +1533,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
                                 _get(obs, "hour", 0), n)
             break   # one species per turn
 
-    # ---- selling: selective-intervention gates --------------------------
-    orders.extend(_market_gates(day, prices, shed, herd_total))
+    # ---- selling: selective-intervention gates (P2: town-conditioned) ----
+    flow = _market_flow(_get(obs, "player", 0), day, prices)
+    orders.extend(_market_gates(day, prices, shed, herd_total,
+                                town_shops=town_shops, money=money,
+                                flow=flow))
     if last_day:
         # Goods already carried can DROP before market processing in this turn,
         # so include them in liquidation. Failed/partial quantities remain legal
@@ -1109,19 +1574,39 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
 
 
 def _schedule_units(obs, farm, private, day, tasks):
+    """r4-P1 state-value scheduler.
+
+    Two phases, replacing the r3 per-unit w/(1+dist) greedy that measurably
+    starved distant red-line tiles (29 care-lapse weeds + escapes per game
+    while every REQUESTED op succeeded):
+
+      Phase A (red-line, one-vote veto, no weighting): death-tonight
+      obligations -- FEED with streak >= 1 (or past FEED_RED_HOUR), WATER
+      with streak >= 1 or planted today, last-day DROP returns -- are
+      covered FIRST by a nearest-worker greedy in value order.  A
+      wheatless worker assigned a red FEED still walks to the shed first
+      (fetch detour priced into the distance below).
+
+      Phase B (value matching): Score_ij = V_i - TRAVEL_MU*d_ij
+      - CROSS_QUAD_PENALTY (zone stickiness) + item-carrier affinity
+      + STICKY_BONUS for yesterday's-turn target (kills oscillation).
+      Global greedy over (worker, task) pairs; each task claimed once so
+      workers never pile onto one target.
+    """
     tiles = _get(farm, "tiles", [])
     board = len(tiles)
     units = [tuple(_get(farm, "farmer", [board // 2 - 1, board // 2 - 1]))]
     for h in _get(farm, "hands", []) or []:
         units.append(tuple(h))
     inventories = _get(private, "inventories", []) or []
+    hour = _get(obs, "hour", 0)
+    sticky = _sticky_state(_get(obs, "player", 0), day, hour)["assign"]
 
     def unit_inv(i):
         while len(inventories) <= i:
             inventories.append({})
         return inventories[i]
 
-    claimed = set()
     actions = []
 
     def executable(task, ui):
@@ -1165,56 +1650,125 @@ def _schedule_units(obs, farm, private, day, tasks):
                 if isinstance(n, (int, float)))
         return True
 
-    for ui, (ux, uy) in enumerate(units):
-        chosen = None
-        # 1) act on the current tile (highest weight executable here)
-        best_here = None
-        for t in tasks:
-            if t["key"] in claimed or (t["x"], t["y"]) != (ux, uy):
-                continue
-            if not executable(t, ui):
-                continue
-            if best_here is None or t["w"] > best_here["w"]:
-                best_here = t
-        if best_here is not None:
-            chosen = best_here
-        else:
-            # 2) walk toward the best unclaimed task; prefer tasks whose
-            # carried-item requirement this unit already satisfies
-            best = None
-            for t in tasks:
-                if t["key"] in claimed or (t.get("units") is not None and
-                                             ui not in t["units"]):
-                    continue
-                score = t["w"] / (1.0 + _dist(ux, uy, t["x"], t["y"]))
-                need = t.get("need")
-                if need:
-                    if _get(unit_inv(ui), need, 0) > 0:
-                        score *= 1.8   # carriers converge on consumer tasks
-                    else:
-                        score *= 0.35  # wheatless units do not chase FEED tasks
-                if t["act"][0] == "PICKUP" and t["act"][1:2] == ["WHEAT"] \
-                        and _get(unit_inv(ui), "WHEAT", 0) >= 5:
-                    score *= 0.35     # loaded carriers leave the shed to feed
-                if best is None or score > best[0]:
-                    best = (score, t)
-            chosen = best[1] if best else None
+    def tval(t):
+        return t.get("v", t["w"])
 
-        if chosen is None:
-            actions.append(["PASS"])
+    # ---------------- phase A: red-line nearest-match first ----------------
+    claimed = set()
+    assign = {}
+    accesses = _shed_access(board)
+    reds = [t for t in tasks if t.get("red")]
+    reds.sort(key=lambda t: -tval(t))
+    for t in reds:
+        best = None
+        for ui in range(len(units)):
+            if ui in assign or (t.get("units") is not None
+                                and ui not in t["units"]):
+                continue
+            ux, uy = units[ui]
+            d = _dist(ux, uy, t["x"], t["y"])
+            # a worker missing the carried item pays the shed detour it is
+            # about to walk (route below); carriers keep their raw distance
+            # so loaded units win red consumer tasks outright
+            need = t.get("need")
+            if need and _get(unit_inv(ui), need, 0) <= 0:
+                via = min(_dist(ux, uy, ax, ay) + _dist(ax, ay, t["x"], t["y"])
+                          for ax, ay in accesses)
+                d = min(d, via) + 6
+            if best is None or d < best[0]:
+                best = (d, ui)
+        if best is not None:
+            assign[best[1]] = t
+            claimed.add(t["key"])
+
+    # ---------------- phase B: value matching with stickiness -------------
+    pairs = []
+    for ui in range(len(units)):
+        if ui in assign:
             continue
-        claimed.add(chosen["key"])
+        ux, uy = units[ui]
+        uquad = _quadrant_of(ux, uy, board)
+        for t in tasks:
+            if t["key"] in claimed:
+                continue
+            if t.get("units") is not None and ui not in t["units"]:
+                continue
+            d = _dist(ux, uy, t["x"], t["y"])
+            score = tval(t) - TRAVEL_MU * d
+            if _quadrant_of(t["x"], t["y"], board) != uquad:
+                score -= CROSS_QUAD_PENALTY
+            need = t.get("need")
+            if need:
+                if _get(unit_inv(ui), need, 0) > 0:
+                    score += 0.5 * tval(t)   # carriers converge on consumers
+                else:
+                    score -= 0.5 * tval(t)   # wheatless units de-prioritized
+            if t["act"][0] == "PICKUP" and t["act"][1:2] == ["WHEAT"] \
+                    and _get(unit_inv(ui), "WHEAT", 0) >= 5:
+                score -= 0.5 * tval(t)       # loaded carriers leave the shed
+            if sticky.get(ui) == t["key"]:
+                score += STICKY_BONUS
+            pairs.append((score, ui, t["key"]))
+    pairs.sort(key=lambda p: (-p[0], p[1], p[2]))
+    for score, ui, key in pairs:
+        if ui in assign or key in claimed:
+            continue
+        for t in tasks:
+            if t["key"] == key:
+                assign[ui] = t
+                claimed.add(key)
+                break
+
+    # ---------------- act --------------------------------------------------
+    half = board // 2
+    shed_avail = _get(private, "shed", {}) or {}
+    for ui, (ux, uy) in enumerate(units):
+        chosen = assign.get(ui)
+        if chosen is None:
+            # act on the current tile anyway when something is executable
+            # here and unclaimed (free op, zero travel)
+            best_here = None
+            for t in tasks:
+                if t["key"] in claimed or (t["x"], t["y"]) != (ux, uy):
+                    continue
+                if not executable(t, ui):
+                    continue
+                if best_here is None or tval(t) > tval(best_here):
+                    best_here = t
+            if best_here is not None:
+                claimed.add(best_here["key"])
+                sticky[ui] = None
+                actions.append(list(best_here["act"]))
+            else:
+                sticky[ui] = None
+                actions.append(["PASS"])
+            continue
+        sticky[ui] = chosen["key"]
         cx, cy = chosen["x"], chosen["y"]
+        need = chosen.get("need")
         if (ux, uy) == (cx, cy):
             if executable(chosen, ui):
                 actions.append(list(chosen["act"]))
-            else:
-                # standing on it but missing the carried item -> fetch at shed
-                half = board // 2
-                sx, sy = half - 1, half - 1
-                actions.append(_step_towards(ux, uy, sx, sy))
-        else:
+                continue
+        # missing the carried item: fetch it at the shed BEFORE walking out
+        # (r4-P1 fix for the wheatless-walker churn that collapsed feeding)
+        if need and _get(unit_inv(ui), need, 0) <= 0:
+            near = min(accesses, key=lambda p: _dist(ux, uy, p[0], p[1]))
+            if (ux, uy) != near:
+                actions.append(_step_towards(ux, uy, near[0], near[1]))
+                continue
+            chunk = {"WHEAT": 5, "FERTILIZER": 4, "COW": 2, "SHEEP": 2,
+                     "GOOSE": 2}.get(need, 1)
+            n = min(chunk, _get(shed_avail, need, 0))
+            if n > 0:
+                actions.append(["PICKUP", need, n])
+                continue
+        if (ux, uy) != (cx, cy):
             actions.append(_step_towards(ux, uy, cx, cy))
+        else:
+            # standing on it, item fetched, but the op went stale this turn
+            sx, sy = half - 1, half - 1
+            actions.append(_step_towards(ux, uy, sx, sy))
 
     # R6 guard: never request more PLANTs of a crop than seeds held
     seeds = _get(private, "seeds", {}) or {}
@@ -1262,6 +1816,11 @@ def agent(obs):
         if day < SEASON_DAYS - 1 and hour <= HIRE_HOUR_MAX:
             quads = len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"])
             hands_t = _crew_target(day, herd_total, wheat_tiles, quads)
+            # r4-P3 drawdown: past CREW_LATE_DAY the field shrinks (crops
+            # harvested, phases closed) -- the 12-hand crew's fib bill
+            # (322/day) outruns the remaining queue value
+            if day >= CREW_LATE_DAY:
+                hands_t = min(hands_t, CREW_LATE_CAP)
             hands = len(_get(farm, "hands", []) or [])
             money = _get(farm, "money", 0.0)
             spend = 0
