@@ -118,6 +118,7 @@
 | 日期 | 类型 | 新增 | 更新 | 隔离 | 成本 | 说明 |
 |---|---|---|---|---|---|---|
 <!-- 成本列=分片数/token/墙钟（T4.3 起新行必填；旧行无此列属历史格式） -->
+| 2026-08-29 | tech+comp | 赛事条目0 / 技术卡0 | 1 | 0 | 主会话直办1分片/约3min | /attack 预刷新：tech 72 拉取 0 新候选（台账去重）；comp 候选2=LA Hacks 复查（仍 JS SPA，待核维持）+MLH 聚合噪声弃置；子 agent 通道故障（Model provider not configured）降级主会话直办；CDEC 留尾继续待 browser-use 预抓；KB lint 101/101 |
 | 2026-08-28 | tech+comp | 赛事条目1 / 技术卡0 | 0 | 1 | 1分片/约14min | /attack 审计后重开预刷新：UCLA AI Hackathon 入库但章程/奖项/AI 政策待 SPA 深核；MLH 赛季日历判聚合噪声；tech 73 拉取后 0 新候选；KB lint 101/101 |
 | 2026-08-28 | refresh | 技术卡1 | 0 | 0 | 1分片/0.11M tok/2.5min | /attack 预刷新：tech 增量1条（UrbanGround 强映射入库）；comp 增量2条全噪（LA Hacks 与在队重复+锚点自指）已弃；LA Hacks 留 8-31 cron 消费 |
 | 2026-08-28 | full | 赛事23三层全量：patterns 23/23、winners 12赛15文件、深构40+篇；技术卡 76/台账 133；surveys 4 族 | 6 波次/50+分片/约 55M tokens（D11 全量） |
