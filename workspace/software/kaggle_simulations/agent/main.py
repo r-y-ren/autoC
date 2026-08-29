@@ -1,4 +1,14 @@
-"""Kaggriculture submission agent -- "rotation ranch" strategy (r3, v4).
+"""Kaggriculture submission agent -- "rotation ranch" strategy (r5, P4).
+
+r5-P4 macro-plan layer: the round-3 public ladder's next band (96-110k
+wheat-strawberry economies) is outside the r4 parameter frame, so a
+deterministic daily gate now selects between three economy modes --
+DEFENSIVE (the r4 frame, byte-identical default), VOLUME_CROP (42-tile
+strawberry ceiling + SE quadrant + crew 15) and SCALE_RANCH (NPV herd
+ceiling 18) -- from public state only (prices, shops, both farms).  The
+micro executor (red-line tasks, value matching, market gates, safety
+shield) is unchanged; the plan widens WHAT economy may be built, not how
+a turn is played.
 
 Self-contained: standard library only, no imports from the local kgenv
 package, so the file uploads as-is to
@@ -245,6 +255,43 @@ CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 14), "CARROT": (15, 26)}
 CROP_FLOOR = {"MELON": 150, "STRAWBERRY": 55, "CARROT": 28}
 CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 6, "CARROT": 4}
 PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
+
+# ---- r5-P4 macro-plan layer: strategy-space extension --------------------
+# Round-3 line: r4 is locally 142W-2L but the public ladder's next band is
+# the 96-110k wheat-strawberry economy (round3_ledger: Renji 109.7k with 42
+# strawberry tiles + 1508u wheat sold / 1501u feed bought; DevilQ 96.6k
+# with 31 strawberry + 14 cows).  The r4 frame (3 quads, strawberry cap
+# 6/quad = 18 tiles, crew 12) cannot EXPRESS that economy -- any optimizer
+# inside it plateaus near 75k.  The daily macro plan widens the space:
+#
+#   DEFENSIVE    the r4 rotation ranch VERBATIM (this dict is the r4 frame;
+#                every plan failure and every non-qualifying day uses it)
+#   VOLUME_CROP  the 96-110k band: SE quadrant becomes a buyable asset,
+#                strawberry ceiling 42 tiles, wheat money-crop scaling,
+#                crew 15; the herd stays on the 14-head plan + guardrailed
+#                external feed (the Renji line: feed bought, not grown)
+#   SCALE_RANCH  the 13-17 head winner band: NPV ceiling lifted to 18 when
+#                the animal lines outbid crop expansion
+#
+# Mode choice is a deterministic daily gate on PUBLIC state only (prices,
+# unlocked shops, both farms -- obs.farms is shared; only sheds are
+# private).  The micro executor (red-line tasks, value matching, market
+# gates, safety shield) is untouched: the plan changes WHAT economy the
+# executor is allowed to build, not how a turn is played.
+MODE_STR_QUAD_CAP = 14     # volume: strawberry tiles per unlocked quadrant
+MODE_STR_TOTAL_CAP = 42    # volume: field ceiling (Renji's 42-tile field)
+MODE_WHEAT_MONEY_QUAD = 8  # volume: wheat money tiles/quad (log glut curve)
+MODE_CREW_CAP_VOL = 15     # volume: hands ceiling (42 tiles of daily water)
+MODE_HERD_CAP_SCALE = 18   # scale: NPV ceiling (winners' 13-17 band + 1)
+SE_DUE_DAY = 10            # volume: earliest SE buy (SW settled, cash back)
+SE_BUY_LAST_DAY = 14       # later than this 25 new tiles cannot repay
+SE_FUND = 4600             # SE price 4000 + working-cash cushion
+_DEFENSIVE_PLAN = {"mode": "DEFENSIVE", "volume": False, "scale": False,
+                   "straw_quad_cap": CROP_CAP_PER_QUAD["STRAWBERRY"],
+                   "straw_total_cap": 18,
+                   "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
+                   "crew_cap": HANDS_CAP_R3,
+                   "herd_ceiling": HERD_CAP_NPV}
 
 # FM-O3 feed: guardrailed external buying (profiles: avg buy price 26-32,
 # 414-2732u/season across top-20); 85 = starvation cap (dear wheat is still
@@ -525,15 +572,23 @@ def _hands_target(day, herd, wheat_tiles, quads=3):
     return max(2, min(target, 10))
 
 
-def _crew_target(day, herd, wheat_tiles, quads=3):
+def _crew_target(day, herd, wheat_tiles, quads=3, plan=None):
     """R3-4 crew plan: the m3 ramp above stays the FLOOR, and the crew
     follows the herd up to HANDS_CAP_R3 once the ranch plan needs it
     (round-2 winners hold 12 hands from d7-11 while milking 13-17 head;
     CARE + FEED + COLLECT_FERTILIZER all scale with head count).  A bad
     season (small herd) never overhires: the ramp alone is the target.
+    r5-P4: VOLUME_CROP lifts the ceiling to MODE_CREW_CAP_VOL and adds a
+    wide-field floor (12 + 2: the 42-tile strawberry field is a second
+    daily water/harvest queue independent of the ranch ops); DEFENSIVE
+    keeps the r4 formula exactly.
     """
-    return min(HANDS_CAP_R3, max(_hands_target(day, herd, wheat_tiles, quads),
-                                 herd))
+    cap = MODE_CREW_CAP_VOL if plan is not None and plan["volume"] \
+        else HANDS_CAP_R3
+    floor = max(_hands_target(day, herd, wheat_tiles, quads), herd)
+    if plan is not None and plan["volume"]:
+        floor = max(floor, 12) + 2
+    return min(cap, floor)
 
 
 def _animal_pace(day):
@@ -546,7 +601,7 @@ def _animal_pace(day):
 
 
 def _npv_herd_ceiling(day, prices, herd_total, species_counts, daily_demand,
-                      sys_wheat):
+                      sys_wheat, plan=None):
     """r4-P3 marginal-NPV herd ceiling in [herd plan, HERD_CAP_NPV].
 
     Extra head above the pinned 14-head plan is allowed only when EVERY
@@ -558,9 +613,13 @@ def _npv_herd_ceiling(day, prices, herd_total, species_counts, daily_demand,
         scaling into an unabsorbed market crashes both sides);
       * feed: the wheat system covers the bigger mouth count;
       * liquidity/cash safety is the caller's (money-gated buy loop).
+    r5-P4: SCALE_RANCH lifts the absolute ceiling to MODE_HERD_CAP_SCALE
+    (18) under the same five conditions; DEFENSIVE keeps 17.
     Returns the effective total ceiling (14 when NPV says no).
     """
-    if herd_total >= HERD_CAP_NPV or day > HERD_NPV_LAST_DAY:
+    ceil_cap = MODE_HERD_CAP_SCALE if plan is not None and plan["scale"] \
+        else HERD_CAP_NPV
+    if herd_total >= ceil_cap or day > HERD_NPV_LAST_DAY:
         return HERD_CAP
     evenings = max(0, PROD_HORIZON_DAY - day)
     best_npv = None
@@ -583,7 +642,124 @@ def _npv_herd_ceiling(day, prices, herd_total, species_counts, daily_demand,
         return HERD_CAP
     if sys_wheat is not None and sys_wheat < herd_total + 4:
         return HERD_CAP      # feed line cannot hold one more mouth
-    return HERD_CAP_NPV
+    return ceil_cap
+
+
+# r5-P4 macro-plan memory, keyed by player id (the framework may exec one
+# copy of this file for both seats).  Recomputed on the first turn of each
+# day; a backwards clock denotes a new episode and drops persistence.
+_PLAN_MEM = {}
+
+
+def _farm_scan(farm):
+    """Public-farm economy scan: quadrants, strawberry/wheat tiles, placed
+    herd, hands, money.  obs.farms is shared state (only sheds/inventories
+    are private), so scanning the opponent's farm is legal observation."""
+    quads = len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"])
+    straw = wheat = herd = 0
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            if _get(tile, "kind", "") == "PLANT":
+                crop = _get(tile, "crop", "")
+                if crop == "STRAWBERRY":
+                    straw += 1
+                elif crop == "WHEAT":
+                    wheat += 1
+            elif "animal" in tile:
+                herd += 1
+    return {"quads": quads, "straw": straw, "wheat": wheat, "herd": herd,
+            "hands": len(_get(farm, "hands", []) or []),
+            "money": _get(farm, "money", 0.0)}
+
+
+def _decide_mode(obs, day, prev_mode):
+    """Deterministic daily mode gate (r5-P4).  Every threshold traces to
+    the round-3 ledger or the m1 corpus; nothing is learned online.
+
+    VOLUME entry (day 6-12): strongest-evidence conjunction -- premium bid
+    (>= 105), real absorption (>= 4/day draws), our line already proven
+    (>= 6 alive tiles), cash >= 800, and the opponent NOT already in the
+    line (their strawberry field < 12 tiles).  Two paired ablations
+    (r5-p4-probe/probe3 vs defensive-only, 36 cells total) measured the
+    anticipatory triggers strictly non-positive -- mirroring a contested
+    market as the late mover crashes both sides (Cournot, the P2 lesson),
+    and a wide template fired on a price snapshot without a cash-flow
+    rollout produced -62k/-93k bankruptcy spirals on cow_baron/expansionist
+    seed 101.  The widening therefore follows REALIZED evidence only;
+    activating it on anticipated strength needs the P5 rollout evaluator.
+    Hold: price >= 40 and cash >= 300 (the planted field keeps tending);
+    the P2 zero-absorption cut-loss gates handle a curve that dies under
+    later opponent supply.
+    SCALE entry (day 4-16): the 14-head plan is built (>=12 placed) and a
+    dairy/wool line clears its demand-conditioned dead-price floor --
+    the counter-market posture when the opponent floods the crop lines.
+    Hold while >=14 head stay alive.
+    """
+    prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
+    town_shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
+    demand = _town_daily_demand(town_shops)
+    farms = _get(obs, "farms", []) or []
+    player = _get(obs, "player", 0)
+    if not 0 <= player < len(farms):
+        return dict(_DEFENSIVE_PLAN)
+    mine = _farm_scan(farms[player])
+    opp = None
+    for i, f in enumerate(farms):
+        if i != player:
+            opp = _farm_scan(f)
+            break
+
+    p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
+    d_straw = demand.get("STRAWBERRY", 1)
+    opp_contesting = opp is not None and opp["straw"] >= 12
+    volume_entry = (6 <= day <= 12 and p_straw >= 105 and d_straw >= 4
+                    and mine["money"] >= 800 and not opp_contesting
+                    and mine["straw"] >= 6)
+    volume_hold = prev_mode == "VOLUME_CROP" and p_straw >= 40 \
+        and mine["money"] >= 300
+    if volume_entry or volume_hold:
+        return {"mode": "VOLUME_CROP", "volume": True, "scale": False,
+                "straw_quad_cap": MODE_STR_QUAD_CAP,
+                "straw_total_cap": MODE_STR_TOTAL_CAP,
+                "wheat_money_quad": MODE_WHEAT_MONEY_QUAD,
+                "crew_cap": MODE_CREW_CAP_VOL,
+                "herd_ceiling": HERD_CAP_NPV}
+
+    p_milk = _get(prices, "MILK", BASE_PRICE["MILK"])
+    p_wool = _get(prices, "WOOL", BASE_PRICE["WOOL"])
+    animal_ok = ((p_milk >= DEAD_PRICE_FLOOR["MILK"]
+                  and demand.get("MILK", 1) >= 2)
+                 or (p_wool >= DEAD_PRICE_FLOOR["WOOL"]
+                     and demand.get("WOOL", 1) >= 2))
+    scale_entry = 4 <= day <= 16 and mine["herd"] >= 12 and animal_ok
+    scale_hold = prev_mode == "SCALE_RANCH" and mine["herd"] >= 14
+    if scale_entry or scale_hold:
+        return {"mode": "SCALE_RANCH", "volume": False, "scale": True,
+                "straw_quad_cap": CROP_CAP_PER_QUAD["STRAWBERRY"],
+                "straw_total_cap": 18,
+                "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
+                "crew_cap": HANDS_CAP_R3,
+                "herd_ceiling": MODE_HERD_CAP_SCALE}
+    return dict(_DEFENSIVE_PLAN)
+
+
+def _macro_plan(player, obs, day):
+    """Cached daily macro plan (first turn of the day decides; the plan
+    failure path is the r4 DEFENSIVE frame, never an exception)."""
+    st = _PLAN_MEM.get(player)
+    if st is not None and st["day"] == day:
+        return st["plan"]
+    prev_mode = None
+    if st is not None and day > st["day"] >= 0:
+        prev_mode = st["plan"].get("mode")
+    try:
+        plan = _decide_mode(obs, day, prev_mode)
+    except Exception:
+        plan = dict(_DEFENSIVE_PLAN)
+    _PLAN_MEM[player] = {"day": day, "plan": plan}
+    return plan
 
 
 def _milk_gate(day):
@@ -629,7 +805,7 @@ def _llm_sell_gate(item, price, base_gate, context):
     return base_gate
 
 
-def _field_alloc(farm, day, prices):
+def _field_alloc(farm, day, prices, plan=None):
     """Deterministic structure + rotation plan (FM-O1/FM-O2).
 
     Structures: pastures (and one coop) on the manhattan ring
@@ -640,6 +816,9 @@ def _field_alloc(farm, day, prices):
     (phase, price floor, cap) gates are open -- each gate is the red-line
     freeze for that crop; wheat fills the rest up to the _wheat_cap feed
     floor; surplus tiles stay fallow (labour is the binding resource).
+    r5-P4: a VOLUME_CROP plan widens the strawberry ceiling (14/quad,
+    42 tiles) and the wheat money-crop quota; DEFENSIVE (plan=None or
+    DEFENSIVE) reproduces the r4 frame exactly.
 
     Returns (builds, crop_map, n_animals, wheat_capacity) where
       builds: {(x, y): "PASTURE"|"COOP"} to build,
@@ -647,6 +826,8 @@ def _field_alloc(farm, day, prices):
       n_animals: animals currently placed,
       wheat_capacity: wheat tiles * 1.2 (fertilized units/day).
     """
+    if plan is None:
+        plan = _DEFENSIVE_PLAN
     tiles = _get(farm, "tiles", [])
     board = len(tiles)
     quads = _get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]
@@ -715,7 +896,11 @@ def _field_alloc(farm, day, prices):
             continue
         if _get(prices, crop, BASE_PRICE[crop]) < CROP_FLOOR[crop]:
             continue  # red line: dead-price freeze for this crop
-        room = CROP_CAP_PER_QUAD[crop] * len(quads) - len(crop_map[crop])
+        if crop == "STRAWBERRY":
+            room = min(plan["straw_quad_cap"] * len(quads),
+                       plan["straw_total_cap"]) - len(crop_map[crop])
+        else:
+            room = CROP_CAP_PER_QUAD[crop] * len(quads) - len(crop_map[crop])
         taken = 0
         for pos in empties:
             if taken >= room:
@@ -727,8 +912,9 @@ def _field_alloc(farm, day, prices):
     if _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
         # log-curve wheat as a rotation money crop (rank-1 adaptive share:
         # 0.45-0.62 of the field when wheat trades 36-42+); the extra tiles
-        # also soften the wheat price against volume-farming opponents
-        wheat_room += WHEAT_MONEY_CAP_PER_QUAD * len(quads)
+        # also soften the wheat price against volume-farming opponents.
+        # r5-P4 volume: the quota widens to the plan's (Renji sold 1508u)
+        wheat_room += plan["wheat_money_quad"] * len(quads)
     taken = 0
     for pos in empties:
         if taken >= wheat_room:
@@ -1078,12 +1264,13 @@ def _market_gates(day, prices, shed, herd, town_shops=None, money=None,
     return orders
 
 
-def _build_tasks(obs, farm, private, day):
+def _build_tasks(obs, farm, private, day, plan=None):
     """Return (tasks, animals_to_feed, herd_total, wheat_tiles, capacity)."""
     tiles = _get(farm, "tiles", [])
     board = len(tiles)
     prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
-    builds, crop_map, n_animals, capacity = _field_alloc(farm, day, prices)
+    builds, crop_map, n_animals, capacity = _field_alloc(farm, day, prices,
+                                                         plan)
     seeds = _get(private, "seeds", {}) or {}
     shed = _get(private, "shed", {}) or {}
     inventories = _get(private, "inventories", []) or []
@@ -1376,7 +1563,8 @@ def _build_tasks(obs, farm, private, day):
     return tasks, animals_to_feed, herd_total, len(crop_map["WHEAT"]), capacity
 
 
-def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
+def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
+                   plan=None):
     money = _get(farm, "money", 0.0)
     shed = _get(private, "shed", {}) or {}
     seeds = _get(private, "seeds", {}) or {}
@@ -1385,7 +1573,10 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
     shed_count = sum(v for v in shed.values() if isinstance(v, (int, float)))
     last_day = day >= SEASON_DAYS - 1
     town_shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
-    builds, crop_map, _placed, capacity = _field_alloc(farm, day, prices)
+    if plan is None:
+        plan = _DEFENSIVE_PLAN
+    builds, crop_map, _placed, capacity = _field_alloc(farm, day, prices,
+                                                       plan)
 
     orders = []
 
@@ -1410,6 +1601,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
             elif day < due_day + LAND_PEND_WINDOW:
                 land_pending = True
 
+    # r5-P4 volume quadrant: while the strawberry window is open, SE
+    # (4000) becomes a buyable asset -- 25 more tiles at the 42-tile
+    # strawberry field's realized band repay it several times over
+    # (round-3 ledger: Renji's 42-tile field).  No herd-blocking fund:
+    # the 14-head plan is already built by the day this can fire.
+    if plan["volume"] and quads == 3 \
+            and SE_DUE_DAY <= day <= SE_BUY_LAST_DAY and money >= SE_FUND:
+        orders.append(["BUY_LAND"])
+
     # ---- feed security (FM-O3 + m2b phantom guard): never let the herd
     # run short of wheat, counting what carriers already hold (a shed-only
     # check sees the morning pickup as a shortfall and re-buys what we just
@@ -1423,7 +1623,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
             and sys_wheat < animals_to_feed + 3:
         cap = 85 if sys_wheat < animals_to_feed else FEED_BUY_MAX_PRICE
         if prices.get("WHEAT", 25) <= cap:
-            want = min(16, animals_to_feed + 8 - sys_wheat)
+            # r5-P4 volume: the 42-tile field leaves little room for feed
+            # wheat, so the daily guardrailed buy widens (Renji bought
+            # 1501u/season; profiles 414-2732u)
+            want = min((24 if plan["volume"] else 16),
+                       animals_to_feed + 8 - sys_wheat)
             if want > 0:
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
 
@@ -1443,9 +1647,19 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
                 continue
             if prices.get(crop, BASE_PRICE[crop]) < CROP_FLOOR[crop]:
                 continue  # red line: dead-price freeze
-            want = CROP_CAP_PER_QUAD[crop] * quads - alive[crop] - seeds.get(crop, 0)
+            cap_for_crop = CROP_CAP_PER_QUAD[crop] * quads
+            if crop == "STRAWBERRY":
+                cap_for_crop = min(plan["straw_quad_cap"] * quads,
+                                   plan["straw_total_cap"])
+            want = cap_for_crop - alive[crop] - seeds.get(crop, 0)
             batch = min(6, max(0, want))
             seed_gate = 250 if crop == "STRAWBERRY" else land_fund + 250
+            if crop == "STRAWBERRY" and plan["volume"]:
+                # wider field, money-scaled batches (10 while cash allows;
+                # a partial 2-3 batch still plants today)
+                batch = min(10, max(0, want),
+                            max(0, int((money - seed_gate)
+                                       // CROPS[crop]["seed"])))
             if batch > 0 and money >= seed_gate + CROPS[crop]["seed"] * batch:
                 orders.append(["BUY_SEED", crop, batch])
 
@@ -1474,7 +1688,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
         npv_ceiling = _npv_herd_ceiling(
             day, prices, herd_total,
             _species_counts(farm, private, herd_total),
-            _town_daily_demand(town_shops), sys_wheat_early)
+            _town_daily_demand(town_shops), sys_wheat_early, plan=plan)
         target = max(target, npv_ceiling)
     bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0),
                        herd_total)
@@ -1504,7 +1718,8 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
             if npv_ceiling > HERD_CAP:
                 # P3 NPV branch: the state-driven ceiling may push the
                 # best-margin species past its pinned composition share
-                comp_cap += HERD_CAP_NPV - HERD_CAP
+                # (r5-P4: derived from npv_ceiling so SCALE's 18 follows)
+                comp_cap += npv_ceiling - HERD_CAP
             if species[animal] >= comp_cap:
                 continue
             if day > ANIMAL_BUY_LAST_DAY[animal]:
@@ -1802,12 +2017,17 @@ def agent(obs):
         if not tiles:
             return {"farmer": ["PASS"], "hands": [], "market": []}
 
+        # r5-P4: the daily macro plan (DEFENSIVE = r4 frame verbatim) is
+        # computed once per day-hour cache and threaded through every
+        # planner; any failure inside the gate already fell back to it.
+        plan = _macro_plan(player, obs, day)
         tasks, animals_to_feed, herd_total, wheat_tiles, capacity = \
-            _build_tasks(obs, farm, private=_get(obs, "private", {}) or {}, day=day)
+            _build_tasks(obs, farm, private=_get(obs, "private", {}) or {},
+                         day=day, plan=plan)
         actions = _schedule_units(obs, farm, _get(obs, "private", {}) or {},
                                   day, tasks)
         orders = _market_orders(obs, farm, _get(obs, "private", {}) or {},
-                                day, animals_to_feed, herd_total)
+                                day, animals_to_feed, herd_total, plan=plan)
 
         # FM-O2/R3-4 labour: hire up to the plan in a dawn burst (hands reset
         # every morning; one HIRE per order; only hour <= 2 can hire -- m2b
@@ -1815,7 +2035,8 @@ def agent(obs):
         hires = []
         if day < SEASON_DAYS - 1 and hour <= HIRE_HOUR_MAX:
             quads = len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"])
-            hands_t = _crew_target(day, herd_total, wheat_tiles, quads)
+            hands_t = _crew_target(day, herd_total, wheat_tiles, quads,
+                                   plan)
             # r4-P3 drawdown: past CREW_LATE_DAY the field shrinks (crops
             # harvested, phases closed) -- the 12-hand crew's fib bill
             # (322/day) outruns the remaining queue value
