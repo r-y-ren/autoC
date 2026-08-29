@@ -1,0 +1,111 @@
+{
+  "campaign": {
+    "competition_id": "kaggle-kaggriculture",
+    "blueprint_ref": "b7664d2"
+  },
+  "checklist": [
+    {
+      "id": "m2a-test",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2a-test.log"
+    },
+    {
+      "id": "m2a-smoke",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2a-smoke.log"
+    },
+    {
+      "id": "m2a-gate-contract",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2a-gate-contract.log"
+    },
+    {
+      "id": "m2a-export-safety",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2a-export-safety.log"
+    },
+    {
+      "id": "m2b-strategy",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2b-strategy.log"
+    },
+    {
+      "id": "m2b-dev-gate",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2b-dev-gate.log"
+    },
+    {
+      "id": "m2c-holdout",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2c-holdout.log"
+    },
+    {
+      "id": "m2c-identity",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2c-identity.log"
+    },
+    {
+      "id": "m2c-metrics",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2c-metrics.log"
+    },
+    {
+      "id": "m2-ab",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2-ab-13-01.log"
+    },
+    {
+      "id": "doc-compile",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\doc-compile.log"
+    },
+    {
+      "id": "doc-consistency",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\doc-consistency.log"
+    },
+    {
+      "id": "doc-visual",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\doc-visual-13-01.log"
+    },
+    {
+      "id": "man-reg",
+      "category": "manual",
+      "status": "pending_manual",
+      "evidence": "manual（移交用户）"
+    },
+    {
+      "id": "man-submit",
+      "category": "manual",
+      "status": "pending_manual",
+      "evidence": "manual（移交用户）"
+    },
+    {
+      "id": "man-final",
+      "category": "manual",
+      "status": "pending_manual",
+      "evidence": "manual（移交用户）"
+    }
+  ],
+  "result": "pending_manual",
+  "generated_at": "2026-08-29T11:15:43",
+  "retry_state": {
+    "count": 0,
+    "max": 3,
+    "tripped": false
+  }
+}

@@ -1,0 +1,35 @@
+Acceptance ID: m2-ab
+Run: 13
+External LLM calls: none
+
+Authoritative merged metrics inspected:
+- workspace/metrics.json#/software/unmeasured/llm_ab_win_rate/value = null
+- workspace/metrics.json#/software/unmeasured/llm_ab_budget_gate_hits/value = null
+- workspace/metrics.json#/software/metrics/m2a_llm_null_effective_calls/value = 0
+- workspace/metrics.json#/software/metrics/m2a_llm_null_fallback_count/value = 662
+- workspace/metrics.json#/software/metrics/llm_ab_harness_ready/value = true
+
+Environment boundary:
+- env | rg '^KG_LLM_' returned no variables.
+- KG_LLM_PROVIDER, KG_LLM_BASE_URL, KG_LLM_API_KEY, and KG_LLM_MODEL are not fully configured.
+- Under the blueprint boundary, no real A/B is required and real A/B metrics must remain null.
+
+Focused existing tests:
+$ python -m pytest workspace/software/tests/test_eval_hardening.py::test_llm_game_context_rebuilds_provider_and_budget_per_game workspace/software/tests/test_eval_hardening.py::test_llm_provider_configuration_requires_all_real_provider_inputs -q
+..                                                                       [100%]
+2 passed in 0.38s
+
+No-network local assertion probe:
+- Asserted all REQUIRED_ENV variables absent.
+- Asserted llm_ab_win_rate and llm_ab_budget_gate_hits remain null.
+- Asserted provider_from_env() resolves to an unconfigured provider.
+- Asserted NullProvider response increments heuristic fallback and not effective calls.
+- Asserted an instrumented one-call Budget allows the first response and blocks the second.
+- Asserted an unconfigured/zero-effective-call episode cannot qualify as real A/B.
+Output:
+PASS env_unconfigured=true metrics_null=true provider_boundary=true fallback=true budget_gate=true real_ab_boundary=true
+
+Supporting full-suite evidence:
+- workspace/acceptance/evidence/m2a-test.log records 181 software tests passed and acceptance fixture 7/7 passed.
+
+Final verdict: pass

@@ -1,0 +1,34 @@
+Acceptance ID: doc-visual
+Run: 13
+Artifact: C:\Users\OSS\Desktop\autoC\workspace\docs\report.pdf
+Observed PDF SHA256: 7baa5bf1d6145db5a546a58e99e2be4dbc83b2754529096dcd456c04f9d89153
+Observed page count: 5
+
+Identity note:
+- The live PDF did not match the supplied/run-12 SHA256
+  1c43cc3a52adca7b1738d81c4f1afef5918f975b7b11de6ef68b1e8fa84074d8.
+- Therefore run-12's visual verdict was not transferred by hash identity.
+- The live PDF was rendered again at 160 DPI and all five current pages were inspected.
+
+Run-13 page evidence:
+- Page 1: workspace/acceptance/evidence/doc-visual-13-02.png
+- Page 2: workspace/acceptance/evidence/doc-visual-13-03.png
+- Page 3: workspace/acceptance/evidence/doc-visual-13-04.png
+- Page 4: workspace/acceptance/evidence/doc-visual-13-05.png
+- Page 5: workspace/acceptance/evidence/doc-visual-13-06.png
+
+Inspection result:
+- Pages 1-5 are readable and contain no observed overflow, overlap, clipped content,
+  incoherent page break, or unreadable chart/table.
+- The opponent table split between pages 3 and 4 repeats its header and remains readable.
+
+Designated visual judge verdict:
+- PDF SHA256: 7baa5bf1d6145db5a546a58e99e2be4dbc83b2754529096dcd456c04f9d89153
+- PDF page 1 -> workspace/acceptance/evidence/doc-visual-13-02.png: pass, no issues
+- PDF page 2 -> workspace/acceptance/evidence/doc-visual-13-03.png: pass, no issues
+- PDF page 3 -> workspace/acceptance/evidence/doc-visual-13-04.png: pass, no issues
+- PDF page 4 -> workspace/acceptance/evidence/doc-visual-13-05.png: pass, no issues
+- PDF page 5 -> workspace/acceptance/evidence/doc-visual-13-06.png: pass, no issues
+- Result: 5/5 pages pass with no issues.
+
+Final verdict: pass
