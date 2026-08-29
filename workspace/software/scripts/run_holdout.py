@@ -10,11 +10,16 @@ Attempt generations:
     (m3_frozen_manifest.json), full pool incl. the four online-style
     opponents, fresh one-time seeds disjoint from all 38 historical seeds;
     archived at exports/holdout/attempt-2/ with the ``m4_*`` keys.
-  * attempt 3 (campaign III r3-3 r4-holdout, THIS runner): candidate
-    9298751f (r4_frozen_manifest.json, git_ref 1644397), full 10-agent pool
-    incl. scale_ranch -- C(10,2)=45 pairs x 8 seeds x AB/BA = 720 games --
-    with fresh one-time seeds disjoint from all 46 historical seeds (38
-    prior + the 8 seeds published by attempt 2).
+  * attempt 3 (campaign III r3-3 r4-holdout): candidate 9298751f
+    (r4_frozen_manifest.json), full 10-agent pool incl. scale_ranch --
+    45 pairs x 8 seeds x AB/BA = 720 games over 46 excluded seeds;
+    published 2026-08-29 (142W-2L / 98.6%).
+  * attempt 4 (campaign III r5-P6 v6-holdout, THIS runner): candidate
+    127c277e (v6_frozen_manifest.json), full 11-agent pool incl. the
+    round-3 winner archetype wheat_straw_monster -- C(11,2)=55 pairs x
+    8 seeds x AB/BA = 880 games -- with fresh one-time seeds disjoint
+    from all 54 historical seeds (46 prior + the 8 published by
+    attempt 3).
 """
 
 from __future__ import annotations
@@ -50,7 +55,7 @@ from kgenv.eval_contract import (
     file_sha256,
 )
 from kgenv.holdout_contract import (
-    PUBLISHED_HOLDOUT_SEEDS_V2,
+    PUBLISHED_HOLDOUT_SEEDS_V3,
     attempt_metrics_prefix,
     atomic_write_json,
     candidate_confirmatory,
@@ -68,11 +73,11 @@ from kgenv.holdout_contract import (
 )
 from scripts.run_eval import _export_game, _validate_replay_bytes, build_players, elo_table
 
-ATTEMPT_INDEX = 3
-PRIOR_ATTEMPT_INDEX = 2
+ATTEMPT_INDEX = 4
+PRIOR_ATTEMPT_INDEX = 3
 EXPECTED_GAMES = holdout_expected_games(ATTEMPT_INDEX)
-FROZEN_MANIFEST = SOFTWARE_ROOT / "r4_frozen_manifest.json"
-FROZEN_SNAPSHOT = SOFTWARE_ROOT / "r4_frozen_candidate.b64"
+FROZEN_MANIFEST = SOFTWARE_ROOT / "v6_frozen_manifest.json"
+FROZEN_SNAPSHOT = SOFTWARE_ROOT / "v6_frozen_candidate.b64"
 SCHEMA_PATH = SOFTWARE_ROOT / "exports" / "holdout_schema.json"
 FORMAL_EXPORT = SOFTWARE_ROOT / "exports" / "eval_results.json"
 FORMAL_REPLAY = SOFTWARE_ROOT / "exports" / "logs" / "replay_log.jsonl"
@@ -97,8 +102,8 @@ CLOSURE_PATHS = tuple(sorted({
     "workspace/software/scripts/run_eval.py",
     "workspace/software/vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl",
     "workspace/software/exports/holdout_schema.json",
-    "workspace/software/r4_frozen_manifest.json",
-    "workspace/software/r4_frozen_candidate.b64",
+    "workspace/software/v6_frozen_manifest.json",
+    "workspace/software/v6_frozen_candidate.b64",
     *(
         path.relative_to(REPO_ROOT).as_posix()
         for path in (SOFTWARE_ROOT / "kgenv").rglob("*.py")
@@ -108,8 +113,8 @@ CLOSURE_PATHS = tuple(sorted({
 # Defensive cross-checks: the runner must refuse to start if the historical
 # exclusion registry does not match the seeds actually published by the
 # attempt-2 generation (fail-closed pool/registry verification).
-assert len(historical_seeds(ATTEMPT_INDEX)) == 46
-assert len(PUBLISHED_HOLDOUT_SEEDS_V2 & historical_seeds(PRIOR_ATTEMPT_INDEX)) == 0
+assert len(historical_seeds(ATTEMPT_INDEX)) == 54
+assert len(PUBLISHED_HOLDOUT_SEEDS_V3 & historical_seeds(PRIOR_ATTEMPT_INDEX)) == 0
 
 
 def _archive_registry() -> dict[int, Path]:
@@ -497,8 +502,9 @@ def _generation_bytes(payload: dict, public_manifest: dict,
     )
     if attempt_index == ATTEMPT_INDEX:
         milestone_note = (
-            " + r3-3 r4-holdout (one-time 720-game full-pool confirmatory "
-            "holdout for 9298751f; 46-seed exclusion; attempt-2 keys retained)"
+            " + r5-P6 v6-holdout (one-time 880-game full-11-pool confirmatory "
+            "holdout for 127c277e incl. wheat_straw_monster; 54-seed exclusion; "
+            "attempt-2/3 keys retained)"
         )
         shard["milestone"] = (
             shard.get("milestone", "") + milestone_note

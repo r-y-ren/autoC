@@ -9,6 +9,10 @@ import pytest
 
 from kgenv.eval_contract import ContractError, STANDARD_MATRIX_ORDER, canonical_sha256
 from kgenv.holdout_contract import (
+    holdout_matrix_order,
+    historical_seeds,
+    holdout_expected_seats,
+    holdout_expected_games,
     HISTORICAL_SEEDS,
     HISTORICAL_SEEDS_V2,
     HOLDOUT_V2_MATRIX_ORDER,
@@ -49,7 +53,7 @@ def _export_game(item):
 
 
 def _fixture_payload(attempt_index: int = 2):
-    order = HOLDOUT_V2_MATRIX_ORDER if attempt_index == 2 else STANDARD_MATRIX_ORDER
+    order = holdout_matrix_order(attempt_index)
     seeds = SEEDS
     games = [
         _export_game(item)
@@ -93,18 +97,20 @@ def _fixture_payload(attempt_index: int = 2):
         "candidate_source": "frozen_git_blob",
     }
     manifest = {
-        "attempt_id": "attempt2" if attempt_index == 2 else "attempt1",
+        "attempt_id": f"attempt{attempt_index}",
         "seeds": seeds,
         "sha256": canonical_sha256(seeds),
     }
-    isolation_count = len(HISTORICAL_SEEDS_V2 if attempt_index == 2 else HISTORICAL_SEEDS)
-    if attempt_index == 2:
-        protocol["historical_seed_exclusion_count"] = len(HISTORICAL_SEEDS_V2)
+    isolation_count = len(historical_seeds(attempt_index))
+    if attempt_index >= 2:
+        protocol["historical_seed_exclusion_count"] = isolation_count
         manifest.update(
-            attempt_index=2,
-            historical_seed_exclusion_count=len(HISTORICAL_SEEDS_V2),
+            attempt_index=attempt_index,
+            historical_seed_exclusion_count=isolation_count,
             overlap_with_historical=[],
         )
+    expected = holdout_expected_games(attempt_index)
+    seats = holdout_expected_seats(attempt_index)
     return {
         "schema_version": "2.0",
         "generated_at": "2026-08-28T00:00:00+00:00",
@@ -119,19 +125,19 @@ def _fixture_payload(attempt_index: int = 2):
             "matrix_order": list(order),
             "pairs": canonical_holdout_pairs(attempt_index=attempt_index),
             "seat_orders": ["AB", "BA"],
-            "expected_games": 576,
+            "expected_games": expected,
         },
         "opponent_pool_names": opponents,
         "games": games,
         "abnormal_games": 0,
-        "integrity": {"expected_games": 576, "actual_games": 576, "abnormal_games": 0, "ab_games": 288, "ba_games": 288, "missing_mirrors": 0},
+        "integrity": {"expected_games": expected, "actual_games": expected, "abnormal_games": 0, "ab_games": seats, "ba_games": seats, "missing_mirrors": 0},
         "confirmatory": confirmatory,
         "elo": {"role": "descriptive_only", "order_sensitive": True, "k": 32.0, "start": 1200.0, "table": []},
         "holdout": {
             "protocol": protocol,
             "frozen_candidate": {"path": identity["submission_path"], "sha256": identity["submission_sha256"], "git_ref": "frozenref"},
             "input_closure": {"sha256": closure["sha256"], "before": closure, "after": closure},
-            "attempt": {"index": attempt_index, "attempt_id": "attempt2" if attempt_index == 2 else "attempt1", "status": "published", "started_at": "2026-08-28T00:00:00Z", "completed_at": "2026-08-28T01:00:00Z", "published": True, "invalidated": False, "invalidation_reason": None},
+            "attempt": {"index": attempt_index, "attempt_id": f"attempt{attempt_index}", "status": "published", "started_at": "2026-08-28T00:00:00Z", "completed_at": "2026-08-28T01:00:00Z", "published": True, "invalidated": False, "invalidation_reason": None},
             "seed_manifest": manifest,
             "candidate_hash_match": {"frozen": identity["submission_sha256"], "before": identity["submission_sha256"], "after": identity["submission_sha256"], "pass": True},
             "seed_domain_isolation": {"historical_count": isolation_count, "overlap_count": 0, "pass": True},
@@ -462,10 +468,10 @@ def test_verify_published_never_runs_matches(monkeypatch, tmp_path):
     assert run_holdout.verify_published(True)["actual_games"] == 576
 
 
-def test_prior_generation_is_archived_byte_identical_before_attempt3(monkeypatch, tmp_path):
+def test_prior_generation_is_archived_byte_identical_before_attempt4(monkeypatch, tmp_path):
     published = tmp_path / "published"
-    archive = tmp_path / "attempt-2"
-    payload = _fixture_payload(attempt_index=2)
+    archive = tmp_path / "attempt-3"
+    payload = _fixture_payload(attempt_index=3)
     staged = tmp_path / "staged"
     staged.mkdir()
     metrics = tmp_path / "metrics.json"
@@ -491,10 +497,10 @@ def test_prior_generation_is_archived_byte_identical_before_attempt3(monkeypatch
     assert archive.is_dir()
     assert {p.name: p.read_bytes() for p in archive.iterdir()} == original
     archived_payload = run_holdout._validate_generation(archive)
-    assert archived_payload["holdout"]["attempt"]["index"] == 2
-    # a non-attempt-2 generation (the legacy attempt-1 layout) must never be
+    assert archived_payload["holdout"]["attempt"]["index"] == 3
+    # a non-attempt-3 generation (the attempt-2 layout) must never be
     # archived silently as the prior generation
-    legacy = _fixture_payload(attempt_index=1)
+    legacy = _fixture_payload(attempt_index=2)
     staged1 = tmp_path / "staged1"
     staged1.mkdir()
     monkeypatch.setattr(run_holdout, "STAGED_GENERATION", staged1)
@@ -502,7 +508,7 @@ def test_prior_generation_is_archived_byte_identical_before_attempt3(monkeypatch
         legacy, legacy["holdout"]["seed_manifest"], legacy["games"]
     )
     run_holdout._commit_generation(staged1)
-    with pytest.raises(ContractError, match="attempt-2"):
+    with pytest.raises(ContractError, match="attempt-3"):
         run_holdout._archive_prior_generation()
 
 

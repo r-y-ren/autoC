@@ -58,11 +58,23 @@ PUBLISHED_HOLDOUT_SEEDS_V2 = frozenset({
 })
 HISTORICAL_SEEDS_V3 = frozenset(HISTORICAL_SEEDS_V2 | PUBLISHED_HOLDOUT_SEEDS_V2)
 assert len(HISTORICAL_SEEDS_V3) == 46
+# Attempt 4 (campaign III r5-P6 v6-holdout) additionally forbids the 8
+# holdout seeds published by attempt 3, extracted verbatim from the
+# attempt-3 published generation at exports/holdout/published/seed_manifest.json
+# (attempt_id 14ffd5eb33785ae8af94cf73, published 2026-08-29).
+PUBLISHED_HOLDOUT_SEEDS_V3 = frozenset({
+    734418350, 811489468, 517522921, 787132250,
+    818029522, 313354833, 976852120, 676517797,
+})
+HISTORICAL_SEEDS_V4 = frozenset(HISTORICAL_SEEDS_V3 | PUBLISHED_HOLDOUT_SEEDS_V3)
+assert len(HISTORICAL_SEEDS_V4) == 54
 PUBLISHED_HOLDOUT_ATTEMPT_V1_ID = "41c7771a63b90d3e66cb40c7"
 PUBLISHED_HOLDOUT_ATTEMPT_V2_ID = "b75258615f75baf54275ff54"
+PUBLISHED_HOLDOUT_ATTEMPT_V3_ID = "14ffd5eb33785ae8af94cf73"
 PUBLISHED_ATTEMPT_IDS = {
     1: PUBLISHED_HOLDOUT_ATTEMPT_V1_ID,
     2: PUBLISHED_HOLDOUT_ATTEMPT_V2_ID,
+    3: PUBLISHED_HOLDOUT_ATTEMPT_V3_ID,
 }
 HOLDOUT_V2_MATRIX_ORDER = (
     "submission", "cow_baron", "melon_hoarder", "expansionist",
@@ -87,6 +99,22 @@ HOLDOUT_V3_OFFICIAL_PAIRS = tuple(
     for j in range(i + 1, len(HOLDOUT_V3_MATRIX_ORDER))
 )
 assert len(HOLDOUT_V3_OFFICIAL_PAIRS) == 45
+# Attempt 4 evaluates the v6 candidate (single variable F: strawberry
+# per-quad cap 8 under the 18-tile total) on the full 11-agent pool: the
+# attempt-3 pool plus the r5-P6 wheat_straw_monster archetype (the
+# round-3 96-110k winner band that beat r4 online).
+HOLDOUT_V4_MATRIX_ORDER = (
+    "submission", "cow_baron", "melon_hoarder", "expansionist",
+    "baseline_wheat", "crop_rotator", "template_wheat",
+    "self_feed_ranch", "near_band_diversified", "scale_ranch",
+    "wheat_straw_monster",
+)
+HOLDOUT_V4_OFFICIAL_PAIRS = tuple(
+    (HOLDOUT_V4_MATRIX_ORDER[i], HOLDOUT_V4_MATRIX_ORDER[j])
+    for i in range(len(HOLDOUT_V4_MATRIX_ORDER))
+    for j in range(i + 1, len(HOLDOUT_V4_MATRIX_ORDER))
+)
+assert len(HOLDOUT_V4_OFFICIAL_PAIRS) == 55
 
 
 def holdout_matrix_order(attempt_index: int) -> tuple[str, ...]:
@@ -97,6 +125,8 @@ def holdout_matrix_order(attempt_index: int) -> tuple[str, ...]:
         return HOLDOUT_V2_MATRIX_ORDER
     if attempt_index == 3:
         return HOLDOUT_V3_MATRIX_ORDER
+    if attempt_index == 4:
+        return HOLDOUT_V4_MATRIX_ORDER
     raise ContractError(f"unknown holdout attempt generation: {attempt_index!r}")
 
 
@@ -107,6 +137,8 @@ def holdout_official_pairs(attempt_index: int) -> tuple[tuple[str, str], ...]:
         return HOLDOUT_V2_OFFICIAL_PAIRS
     if attempt_index == 3:
         return HOLDOUT_V3_OFFICIAL_PAIRS
+    if attempt_index == 4:
+        return HOLDOUT_V4_OFFICIAL_PAIRS
     raise ContractError(f"unknown holdout attempt generation: {attempt_index!r}")
 
 
@@ -118,6 +150,8 @@ def historical_seeds(attempt_index: int) -> frozenset[int]:
         return HISTORICAL_SEEDS_V2
     if attempt_index == 3:
         return HISTORICAL_SEEDS_V3
+    if attempt_index == 4:
+        return HISTORICAL_SEEDS_V4
     raise ContractError(f"unknown holdout attempt generation: {attempt_index!r}")
 
 
@@ -148,6 +182,8 @@ def attempt_metrics_prefix(attempt_index: int) -> str:
         return "m4_"
     if attempt_index == 3:
         return "r4_"
+    if attempt_index == 4:
+        return "v6_"
     raise ContractError(f"unknown holdout attempt generation: {attempt_index!r}")
 
 
@@ -488,7 +524,7 @@ def validate_holdout_payload(payload: dict[str, Any]) -> dict[str, Any]:
     ):
         raise ContractError("holdout engine claim differs from the verified runtime closure")
     if (
-        attempt.get("index") not in (1, 2, 3)
+        attempt.get("index") not in (1, 2, 3, 4)
         or attempt.get("status") != "published"
         or attempt.get("published") is not True
         or attempt.get("invalidated") is not False

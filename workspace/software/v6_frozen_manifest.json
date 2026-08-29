@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.1",
+  "milestone": "r5-p6-v6",
+  "label": "v6-frozen",
+  "created_at": "2026-08-29T17:41:39.753319+00:00",
+  "candidate": {
+    "path": "workspace/software/kaggle_simulations/agent/main.py",
+    "sha256": "127c277e2e0f0b6b5e5cdf93a5408c24bd266164abf900c13fb86d6c1badfbad",
+    "git_ref": "e2e89dfa1d76f375f6147ebb15193da398733fe2",
+    "dirty_before_gate": false,
+    "dirty_state_note": "promotion committed before the complete gate; v6 dev tree at kaggle_simulations/agent_v6/main.py carries the iteration evidence header",
+    "delta_vs_r4": "single variable F on the r5 submission (which is r4 behavior + dormant macro-plan/rollout layers): strawberry per-quad cap 6->8 under the UNCHANGED 18-tile total cap -- a wider pre-SW field (8/16 tiles at 1/2 quads). Nine single-variable gates: A/B/D/G1/G3/G4/F2 rejected with evidence, F merged (8W-0L vs wheat_straw_monster +83.0k; full pool 38W-2L; paired vs r5 +78.8k)."
+  },
+  "frozen_snapshot": {
+    "path": "workspace/software/v6_frozen_candidate.b64",
+    "encoding": "base64",
+    "file_sha256": "f60241a57b298b78e51d89cf64e79b0c2d64e340f34a5428767b8b436216a4a6",
+    "decoded_sha256": "127c277e2e0f0b6b5e5cdf93a5408c24bd266164abf900c13fb86d6c1badfbad",
+    "reason": "Preserve exact execution bytes across Git line-ending normalization"
+  },
+  "identity_verification": {
+    "source_sha_unchanged_during_gate": true,
+    "snapshot_sha_matched_source": true,
+    "post_gate_sha256": "127c277e2e0f0b6b5e5cdf93a5408c24bd266164abf900c13fb86d6c1badfbad"
+  },
+  "gate": {
+    "label": "v6-frozen",
+    "games": 80,
+    "record": "78W-2L",
+    "per_opponent": {
+      "wheat_straw_monster": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "near_band_diversified": {
+        "wins": 6,
+        "losses": 2,
+        "ties": 0
+      }
+    },
+    "seeds": [
+      101,
+      102,
+      103,
+      104
+    ],
+    "abnormal": 0,
+    "note": "other eight opponents 8-0 each; full per-opponent record in iteration_gate_log.jsonl label v6-frozen"
+  }
+}
