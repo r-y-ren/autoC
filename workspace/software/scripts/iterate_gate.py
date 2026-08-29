@@ -20,6 +20,10 @@ from kgenv.bots.baseline import baseline_wheat_agent
 from kgenv.bots.cow_baron import cow_baron_agent
 from kgenv.bots.expansionist import expansionist_agent
 from kgenv.bots.melon_hoarder import melon_hoarder_agent
+from kgenv.bots.online_pool import (crop_rotator_agent,
+                                    near_band_diversified_agent,
+                                    self_feed_ranch_agent,
+                                    template_wheat_agent)
 from kgenv.engine import FULL_EPISODE_STEPS
 from kgenv.eval_contract import (ContractError, build_ab_ba_schedule,
                                  candidate_snapshot, validate_gate_run)
@@ -28,12 +32,24 @@ LOG_PATH = os.path.join(SOFTWARE_ROOT, "exports", "logs",
                         "iteration_gate_log.jsonl")
 GATE_OPPONENTS = ["cow_baron", "melon_hoarder"]
 GUARD_OPPONENTS = ["expansionist", "baseline_wheat"]
-REQUIRED_OPPONENTS = GATE_OPPONENTS + GUARD_OPPONENTS
+# m2 online-style opponents (campaign III): certified ladder-archetype
+# reconstructions -- required in the complete gate alongside the wave-2 set
+ONLINE_OPPONENTS = [
+    "crop_rotator",
+    "template_wheat",
+    "self_feed_ranch",
+    "near_band_diversified",
+]
+REQUIRED_OPPONENTS = GATE_OPPONENTS + GUARD_OPPONENTS + ONLINE_OPPONENTS
 OPPONENTS = {
     "cow_baron": cow_baron_agent,
     "melon_hoarder": melon_hoarder_agent,
     "expansionist": expansionist_agent,
     "baseline_wheat": baseline_wheat_agent,
+    "crop_rotator": crop_rotator_agent,
+    "template_wheat": template_wheat_agent,
+    "self_feed_ranch": self_feed_ranch_agent,
+    "near_band_diversified": near_band_diversified_agent,
 }
 
 
@@ -93,14 +109,16 @@ def gate_verdict(games, opponents, seeds, require_complete):
         games, opponents, seeds, require_complete=require_complete,
         required_opponents=REQUIRED_OPPONENTS)
     summaries = summarize_gate_games(games, opponents)
+    threshold_pool = GATE_OPPONENTS + ONLINE_OPPONENTS
     thresholds_ok = all(
         summaries[name]["win_rate"] is not None and
         summaries[name]["win_rate"] >= 0.5
-        for name in GATE_OPPONENTS if name in summaries)
+        for name in threshold_pool if name in summaries)
     guards_ok = all(summaries[name]["losses"] == 0
                     for name in GUARD_OPPONENTS if name in summaries)
     if require_complete:
-        thresholds_ok = thresholds_ok and all(name in summaries for name in GATE_OPPONENTS)
+        thresholds_ok = thresholds_ok and all(
+            name in summaries for name in threshold_pool)
         guards_ok = guards_ok and all(name in summaries for name in GUARD_OPPONENTS)
     performance_pass = thresholds_ok and guards_ok
     formal_pass = bool(contract["formal_pass"] and performance_pass)

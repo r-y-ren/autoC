@@ -1,14 +1,14 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-28T15:07:34.955116+00:00",
+  "generated_at": "2026-08-29T06:27:35.070333+00:00",
   "run_kind": "development",
   "seed_domain": "development",
   "identity": {
     "submission_path": "C:\\Users\\OSS\\Desktop\\autoC\\workspace\\software\\kaggle_simulations\\agent\\main.py",
-    "submission_sha256": "732784e5dfac73ab3e4e1b0ad2e57043332d93212329cc08a5f72e39759ebe22",
-    "git_ref": "35b8523a3426113ba17bfee75eb8c53f3ab6a501",
+    "submission_sha256": "7c482921857562e6b7cd58a3ac4bde358981c180cc233ad3913948e5fcafa66a",
+    "git_ref": "7a6057778d3ae15fa12cbb632704583117b3989a",
     "dirty": true,
-    "input_sha256": "9a776ffcad1ed1e04d4e159c0ee6652901ffb18772ac00e0ebf4c99a8ff1dbf3"
+    "input_sha256": "6cd22d80fcbe87ed46775bda01d219cf5542df184bc2f5ff10262aac1fab3bea"
   },
   "evaluation_input": {
     "pairs": [
@@ -43,6 +43,22 @@
       [
         "submission",
         "pass"
+      ],
+      [
+        "submission",
+        "crop_rotator"
+      ],
+      [
+        "submission",
+        "template_wheat"
+      ],
+      [
+        "submission",
+        "self_feed_ranch"
+      ],
+      [
+        "submission",
+        "near_band_diversified"
       ]
     ],
     "seeds": [
@@ -78,7 +94,11 @@
       "greedy_carrot",
       "cow_baron",
       "melon_hoarder",
-      "expansionist"
+      "expansionist",
+      "crop_rotator",
+      "template_wheat",
+      "self_feed_ranch",
+      "near_band_diversified"
     ],
     "matrix_order": [
       "submission",
@@ -89,7 +109,11 @@
       "greedy_carrot",
       "starter",
       "random",
-      "pass"
+      "pass",
+      "crop_rotator",
+      "template_wheat",
+      "self_feed_ranch",
+      "near_band_diversified"
     ],
     "pairs": [
       [
@@ -123,13 +147,29 @@
       [
         "submission",
         "pass"
+      ],
+      [
+        "submission",
+        "crop_rotator"
+      ],
+      [
+        "submission",
+        "template_wheat"
+      ],
+      [
+        "submission",
+        "self_feed_ranch"
+      ],
+      [
+        "submission",
+        "near_band_diversified"
       ]
     ],
     "seat_orders": [
       "AB",
       "BA"
     ],
-    "expected_games": 16
+    "expected_games": 24
   },
   "opponent_pool_names": [
     "cow_baron",
@@ -139,14 +179,22 @@
     "greedy_carrot",
     "starter",
     "random",
-    "pass"
+    "pass",
+    "crop_rotator",
+    "template_wheat",
+    "self_feed_ranch",
+    "near_band_diversified"
   ],
   "pool_max_elo": {
-    "name": "pass",
-    "rating": 1182.9
+    "name": "template_wheat",
+    "rating": 1244.6
   },
   "games": [
     {
+      "players": [
+        "submission",
+        "cow_baron"
+      ],
       "p0": "submission",
       "p1": "cow_baron",
       "seed": 101,
@@ -158,15 +206,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        37545.0,
-        33724.0
+        37480.0,
+        34379.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 1.854
+      "elapsed_seconds": 1.888
     },
     {
+      "players": [
+        "cow_baron",
+        "submission"
+      ],
       "p0": "cow_baron",
       "p1": "submission",
       "seed": 101,
@@ -178,15 +230,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        37283.0,
-        37469.0
+        37284.0,
+        39232.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 2.757
+      "elapsed_seconds": 2.829
     },
     {
+      "players": [
+        "submission",
+        "melon_hoarder"
+      ],
       "p0": "submission",
       "p1": "melon_hoarder",
       "seed": 101,
@@ -198,15 +254,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        44702.0,
-        36061.0
+        47675.0,
+        36044.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 3.131
+      "elapsed_seconds": 3.147
     },
     {
+      "players": [
+        "melon_hoarder",
+        "submission"
+      ],
       "p0": "melon_hoarder",
       "p1": "submission",
       "seed": 101,
@@ -218,15 +278,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        36063.0,
-        44186.0
+        36051.0,
+        47161.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 3.106
+      "elapsed_seconds": 3.174
     },
     {
+      "players": [
+        "submission",
+        "expansionist"
+      ],
       "p0": "submission",
       "p1": "expansionist",
       "seed": 101,
@@ -238,15 +302,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        58255.0,
-        16381.0
+        61064.0,
+        16365.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 3.514
+      "elapsed_seconds": 3.611
     },
     {
+      "players": [
+        "expansionist",
+        "submission"
+      ],
       "p0": "expansionist",
       "p1": "submission",
       "seed": 101,
@@ -258,15 +326,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        18834.0,
-        34719.0
+        18765.0,
+        34935.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 3.461
+      "elapsed_seconds": 3.509
     },
     {
+      "players": [
+        "submission",
+        "baseline_wheat"
+      ],
       "p0": "submission",
       "p1": "baseline_wheat",
       "seed": 101,
@@ -278,15 +350,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        43302.0,
+        46178.0,
         10377.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 3.216
+      "elapsed_seconds": 3.28
     },
     {
+      "players": [
+        "baseline_wheat",
+        "submission"
+      ],
       "p0": "baseline_wheat",
       "p1": "submission",
       "seed": 101,
@@ -299,14 +375,18 @@
       "contract_ok": true,
       "rewards": [
         10377.0,
-        43106.0
+        45977.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 3.292
+      "elapsed_seconds": 3.332
     },
     {
+      "players": [
+        "submission",
+        "greedy_carrot"
+      ],
       "p0": "submission",
       "p1": "greedy_carrot",
       "seed": 101,
@@ -318,15 +398,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        27364.0,
+        27631.0,
         9131.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 3.166
+      "elapsed_seconds": 3.235
     },
     {
+      "players": [
+        "greedy_carrot",
+        "submission"
+      ],
       "p0": "greedy_carrot",
       "p1": "submission",
       "seed": 101,
@@ -339,14 +423,18 @@
       "contract_ok": true,
       "rewards": [
         9131.0,
-        27364.0
+        27631.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 3.17
+      "elapsed_seconds": 3.239
     },
     {
+      "players": [
+        "submission",
+        "starter"
+      ],
       "p0": "submission",
       "p1": "starter",
       "seed": 101,
@@ -358,15 +446,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        61500.0,
+        64608.0,
         3672.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 2.637
+      "elapsed_seconds": 2.686
     },
     {
+      "players": [
+        "starter",
+        "submission"
+      ],
       "p0": "starter",
       "p1": "submission",
       "seed": 101,
@@ -379,14 +471,18 @@
       "contract_ok": true,
       "rewards": [
         3648.0,
-        53671.0
+        55155.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 2.622
+      "elapsed_seconds": 2.637
     },
     {
+      "players": [
+        "submission",
+        "random"
+      ],
       "p0": "submission",
       "p1": "random",
       "seed": 101,
@@ -398,15 +494,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        74693.0,
+        60879.0,
         0.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 2.8
+      "elapsed_seconds": 2.829
     },
     {
+      "players": [
+        "random",
+        "submission"
+      ],
       "p0": "random",
       "p1": "submission",
       "seed": 101,
@@ -419,14 +519,18 @@
       "contract_ok": true,
       "rewards": [
         0.0,
-        67508.0
+        72660.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 2.689
+      "elapsed_seconds": 2.75
     },
     {
+      "players": [
+        "submission",
+        "pass"
+      ],
       "p0": "submission",
       "p1": "pass",
       "seed": 101,
@@ -438,15 +542,19 @@
       ],
       "contract_ok": true,
       "rewards": [
-        63282.0,
+        66483.0,
         3000.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 2.639
+      "elapsed_seconds": 2.669
     },
     {
+      "players": [
+        "pass",
+        "submission"
+      ],
       "p0": "pass",
       "p1": "submission",
       "seed": 101,
@@ -459,15 +567,212 @@
       "contract_ok": true,
       "rewards": [
         3000.0,
-        62425.0
+        65416.0
       ],
       "winner": "submission",
       "winner_label": "submission",
       "turns": 720,
-      "elapsed_seconds": 2.625
+      "elapsed_seconds": 2.632
+    },
+    {
+      "players": [
+        "submission",
+        "crop_rotator"
+      ],
+      "p0": "submission",
+      "p1": "crop_rotator",
+      "seed": 101,
+      "seed_domain": "development",
+      "seat": "AB",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "contract_ok": true,
+      "rewards": [
+        61681.0,
+        59822.0
+      ],
+      "winner": "submission",
+      "winner_label": "submission",
+      "turns": 720,
+      "elapsed_seconds": 4.314
+    },
+    {
+      "players": [
+        "crop_rotator",
+        "submission"
+      ],
+      "p0": "crop_rotator",
+      "p1": "submission",
+      "seed": 101,
+      "seed_domain": "development",
+      "seat": "BA",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "contract_ok": true,
+      "rewards": [
+        62281.0,
+        61951.0
+      ],
+      "winner": "crop_rotator",
+      "winner_label": "crop_rotator",
+      "turns": 720,
+      "elapsed_seconds": 4.29
+    },
+    {
+      "players": [
+        "submission",
+        "template_wheat"
+      ],
+      "p0": "submission",
+      "p1": "template_wheat",
+      "seed": 101,
+      "seed_domain": "development",
+      "seat": "AB",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "contract_ok": true,
+      "rewards": [
+        38915.0,
+        53978.0
+      ],
+      "winner": "template_wheat",
+      "winner_label": "template_wheat",
+      "turns": 720,
+      "elapsed_seconds": 4.22
+    },
+    {
+      "players": [
+        "template_wheat",
+        "submission"
+      ],
+      "p0": "template_wheat",
+      "p1": "submission",
+      "seed": 101,
+      "seed_domain": "development",
+      "seat": "BA",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "contract_ok": true,
+      "rewards": [
+        53974.0,
+        39779.0
+      ],
+      "winner": "template_wheat",
+      "winner_label": "template_wheat",
+      "turns": 720,
+      "elapsed_seconds": 4.2
+    },
+    {
+      "players": [
+        "submission",
+        "self_feed_ranch"
+      ],
+      "p0": "submission",
+      "p1": "self_feed_ranch",
+      "seed": 101,
+      "seed_domain": "development",
+      "seat": "AB",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "contract_ok": true,
+      "rewards": [
+        66392.0,
+        67932.0
+      ],
+      "winner": "self_feed_ranch",
+      "winner_label": "self_feed_ranch",
+      "turns": 720,
+      "elapsed_seconds": 4.13
+    },
+    {
+      "players": [
+        "self_feed_ranch",
+        "submission"
+      ],
+      "p0": "self_feed_ranch",
+      "p1": "submission",
+      "seed": 101,
+      "seed_domain": "development",
+      "seat": "BA",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "contract_ok": true,
+      "rewards": [
+        67374.0,
+        66304.0
+      ],
+      "winner": "self_feed_ranch",
+      "winner_label": "self_feed_ranch",
+      "turns": 720,
+      "elapsed_seconds": 4.129
+    },
+    {
+      "players": [
+        "submission",
+        "near_band_diversified"
+      ],
+      "p0": "submission",
+      "p1": "near_band_diversified",
+      "seed": 101,
+      "seed_domain": "development",
+      "seat": "AB",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "contract_ok": true,
+      "rewards": [
+        70204.0,
+        66097.0
+      ],
+      "winner": "submission",
+      "winner_label": "submission",
+      "turns": 720,
+      "elapsed_seconds": 4.356
+    },
+    {
+      "players": [
+        "near_band_diversified",
+        "submission"
+      ],
+      "p0": "near_band_diversified",
+      "p1": "submission",
+      "seed": 101,
+      "seed_domain": "development",
+      "seat": "BA",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "contract_ok": true,
+      "rewards": [
+        65522.0,
+        70029.0
+      ],
+      "winner": "submission",
+      "winner_label": "submission",
+      "turns": 720,
+      "elapsed_seconds": 4.3
     }
   ],
   "abnormal_games": 0,
+  "integrity": {
+    "expected_games": 24,
+    "actual_games": 24,
+    "abnormal_games": 0
+  },
   "head_to_head": [
     {
       "pair": "submission vs cow_baron",
@@ -540,6 +845,42 @@
       "ties": 0,
       "win_rate": 1.0,
       "avg_turns": 720.0
+    },
+    {
+      "pair": "submission vs crop_rotator",
+      "games": 2,
+      "wins": 1,
+      "losses": 1,
+      "ties": 0,
+      "win_rate": 0.5,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "submission vs template_wheat",
+      "games": 2,
+      "wins": 0,
+      "losses": 2,
+      "ties": 0,
+      "win_rate": 0.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "submission vs self_feed_ranch",
+      "games": 2,
+      "wins": 0,
+      "losses": 2,
+      "ties": 0,
+      "win_rate": 0.0,
+      "avg_turns": 720.0
+    },
+    {
+      "pair": "submission vs near_band_diversified",
+      "games": 2,
+      "wins": 2,
+      "losses": 0,
+      "ties": 0,
+      "win_rate": 1.0,
+      "avg_turns": 720.0
     }
   ],
   "matchup_win_rates": [
@@ -551,7 +892,7 @@
       "losses_a": 0,
       "ties": 0,
       "win_rate_a": 1.0,
-      "avg_margin_a": 2003.5
+      "avg_margin_a": 2524.5
     },
     {
       "a": "submission",
@@ -561,7 +902,7 @@
       "losses_a": 0,
       "ties": 0,
       "win_rate_a": 1.0,
-      "avg_margin_a": 8382.0
+      "avg_margin_a": 11370.5
     },
     {
       "a": "submission",
@@ -571,7 +912,7 @@
       "losses_a": 0,
       "ties": 0,
       "win_rate_a": 1.0,
-      "avg_margin_a": 28879.5
+      "avg_margin_a": 30434.5
     },
     {
       "a": "submission",
@@ -581,7 +922,7 @@
       "losses_a": 0,
       "ties": 0,
       "win_rate_a": 1.0,
-      "avg_margin_a": 32827.0
+      "avg_margin_a": 35700.5
     },
     {
       "a": "submission",
@@ -591,7 +932,7 @@
       "losses_a": 0,
       "ties": 0,
       "win_rate_a": 1.0,
-      "avg_margin_a": 18233.0
+      "avg_margin_a": 18500.0
     },
     {
       "a": "submission",
@@ -601,7 +942,7 @@
       "losses_a": 0,
       "ties": 0,
       "win_rate_a": 1.0,
-      "avg_margin_a": 53925.5
+      "avg_margin_a": 56221.5
     },
     {
       "a": "submission",
@@ -611,7 +952,7 @@
       "losses_a": 0,
       "ties": 0,
       "win_rate_a": 1.0,
-      "avg_margin_a": 71100.5
+      "avg_margin_a": 66769.5
     },
     {
       "a": "submission",
@@ -621,12 +962,184 @@
       "losses_a": 0,
       "ties": 0,
       "win_rate_a": 1.0,
-      "avg_margin_a": 59853.5
+      "avg_margin_a": 62949.5
+    },
+    {
+      "a": "submission",
+      "b": "crop_rotator",
+      "games": 2,
+      "wins_a": 1,
+      "losses_a": 1,
+      "ties": 0,
+      "win_rate_a": 0.5,
+      "avg_margin_a": 764.5
+    },
+    {
+      "a": "submission",
+      "b": "template_wheat",
+      "games": 2,
+      "wins_a": 0,
+      "losses_a": 2,
+      "ties": 0,
+      "win_rate_a": 0.0,
+      "avg_margin_a": -14629.0
+    },
+    {
+      "a": "submission",
+      "b": "self_feed_ranch",
+      "games": 2,
+      "wins_a": 0,
+      "losses_a": 2,
+      "ties": 0,
+      "win_rate_a": 0.0,
+      "avg_margin_a": -1305.0
+    },
+    {
+      "a": "submission",
+      "b": "near_band_diversified",
+      "games": 2,
+      "wins_a": 2,
+      "losses_a": 0,
+      "ties": 0,
+      "win_rate_a": 1.0,
+      "avg_margin_a": 4307.0
     }
   ],
   "confirmatory": {
-    "method": "paired seat-balanced W/L/T with Wilson intervals",
-    "order_independent": true
+    "method": "aggregate seat-balanced score rate and paired W/L/T",
+    "order_independent": true,
+    "standings": [
+      {
+        "name": "self_feed_ranch",
+        "games": 2,
+        "record": {
+          "W": 2,
+          "L": 0,
+          "T": 0
+        },
+        "score_rate": 1.0
+      },
+      {
+        "name": "template_wheat",
+        "games": 2,
+        "record": {
+          "W": 2,
+          "L": 0,
+          "T": 0
+        },
+        "score_rate": 1.0
+      },
+      {
+        "name": "submission",
+        "games": 24,
+        "record": {
+          "W": 19,
+          "L": 5,
+          "T": 0
+        },
+        "score_rate": 0.791667
+      },
+      {
+        "name": "crop_rotator",
+        "games": 2,
+        "record": {
+          "W": 1,
+          "L": 1,
+          "T": 0
+        },
+        "score_rate": 0.5
+      },
+      {
+        "name": "baseline_wheat",
+        "games": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        },
+        "score_rate": 0.0
+      },
+      {
+        "name": "cow_baron",
+        "games": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        },
+        "score_rate": 0.0
+      },
+      {
+        "name": "expansionist",
+        "games": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        },
+        "score_rate": 0.0
+      },
+      {
+        "name": "greedy_carrot",
+        "games": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        },
+        "score_rate": 0.0
+      },
+      {
+        "name": "melon_hoarder",
+        "games": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        },
+        "score_rate": 0.0
+      },
+      {
+        "name": "near_band_diversified",
+        "games": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        },
+        "score_rate": 0.0
+      },
+      {
+        "name": "pass",
+        "games": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        },
+        "score_rate": 0.0
+      },
+      {
+        "name": "random",
+        "games": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        },
+        "score_rate": 0.0
+      },
+      {
+        "name": "starter",
+        "games": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        },
+        "score_rate": 0.0
+      }
+    ]
   },
   "elo": {
     "role": "descriptive_only",
@@ -636,11 +1149,41 @@
     "table": [
       {
         "name": "submission",
-        "rating": 1384.1,
-        "played": 16,
+        "rating": 1305.8,
+        "played": 24,
         "record": {
-          "W": 16,
+          "W": 19,
+          "L": 5,
+          "T": 0
+        }
+      },
+      {
+        "name": "template_wheat",
+        "rating": 1244.6,
+        "played": 2,
+        "record": {
+          "W": 2,
           "L": 0,
+          "T": 0
+        }
+      },
+      {
+        "name": "self_feed_ranch",
+        "rating": 1241.1,
+        "played": 2,
+        "record": {
+          "W": 2,
+          "L": 0,
+          "T": 0
+        }
+      },
+      {
+        "name": "crop_rotator",
+        "rating": 1216.1,
+        "played": 2,
+        "record": {
+          "W": 1,
+          "L": 1,
           "T": 0
         }
       },
@@ -695,6 +1238,16 @@
         }
       },
       {
+        "name": "near_band_diversified",
+        "rating": 1176.5,
+        "played": 2,
+        "record": {
+          "W": 0,
+          "L": 2,
+          "T": 0
+        }
+      },
+      {
         "name": "expansionist",
         "rating": 1174.5,
         "played": 2,
@@ -727,7 +1280,7 @@
     ]
   },
   "eval_variance_report": {
-    "method": "seat-balanced per-pair Wilson 95% and Student-t margin CI",
+    "method": "seat-balanced Wilson 95% and Student-t margin CI",
     "per_pair": [
       {
         "pair": "submission vs cow_baron",
@@ -746,12 +1299,12 @@
         ],
         "margin": {
           "n": 2,
-          "mean": 2003.5,
-          "std": 2570.3,
-          "ci95_lo": -21089.7,
-          "ci95_hi": 25096.7,
-          "min": 186.0,
-          "max": 3821.0
+          "mean": 2524.5,
+          "std": 815.3,
+          "ci95_lo": -4800.5,
+          "ci95_hi": 9849.5,
+          "min": 1948.0,
+          "max": 3101.0
         },
         "outcome_flips_across_seeds": false
       },
@@ -772,12 +1325,12 @@
         ],
         "margin": {
           "n": 2,
-          "mean": 8382.0,
-          "std": 366.3,
-          "ci95_lo": 5091.1,
-          "ci95_hi": 11672.9,
-          "min": 8123.0,
-          "max": 8641.0
+          "mean": 11370.5,
+          "std": 368.4,
+          "ci95_lo": 8060.6,
+          "ci95_hi": 14680.4,
+          "min": 11110.0,
+          "max": 11631.0
         },
         "outcome_flips_across_seeds": false
       },
@@ -798,12 +1351,12 @@
         ],
         "margin": {
           "n": 2,
-          "mean": 28879.5,
-          "std": 18377.0,
-          "ci95_lo": -136228.6,
-          "ci95_hi": 193987.6,
-          "min": 15885.0,
-          "max": 41874.0
+          "mean": 30434.5,
+          "std": 20173.0,
+          "ci95_lo": -150810.2,
+          "ci95_hi": 211679.2,
+          "min": 16170.0,
+          "max": 44699.0
         },
         "outcome_flips_across_seeds": false
       },
@@ -824,12 +1377,12 @@
         ],
         "margin": {
           "n": 2,
-          "mean": 32827.0,
-          "std": 138.6,
-          "ci95_lo": 31581.8,
-          "ci95_hi": 34072.2,
-          "min": 32729.0,
-          "max": 32925.0
+          "mean": 35700.5,
+          "std": 142.1,
+          "ci95_lo": 34423.5,
+          "ci95_hi": 36977.5,
+          "min": 35600.0,
+          "max": 35801.0
         },
         "outcome_flips_across_seeds": false
       },
@@ -850,12 +1403,12 @@
         ],
         "margin": {
           "n": 2,
-          "mean": 18233.0,
+          "mean": 18500.0,
           "std": 0.0,
-          "ci95_lo": 18233.0,
-          "ci95_hi": 18233.0,
-          "min": 18233.0,
-          "max": 18233.0
+          "ci95_lo": 18500.0,
+          "ci95_hi": 18500.0,
+          "min": 18500.0,
+          "max": 18500.0
         },
         "outcome_flips_across_seeds": false
       },
@@ -876,12 +1429,12 @@
         ],
         "margin": {
           "n": 2,
-          "mean": 53925.5,
-          "std": 5519.0,
-          "ci95_lo": 4340.3,
-          "ci95_hi": 103510.7,
-          "min": 50023.0,
-          "max": 57828.0
+          "mean": 56221.5,
+          "std": 6667.3,
+          "ci95_lo": -3680.9,
+          "ci95_hi": 116123.9,
+          "min": 51507.0,
+          "max": 60936.0
         },
         "outcome_flips_across_seeds": false
       },
@@ -902,12 +1455,12 @@
         ],
         "margin": {
           "n": 2,
-          "mean": 71100.5,
-          "std": 5080.6,
-          "ci95_lo": 25454.2,
-          "ci95_hi": 116746.8,
-          "min": 67508.0,
-          "max": 74693.0
+          "mean": 66769.5,
+          "std": 8330.4,
+          "ci95_lo": -8075.2,
+          "ci95_hi": 141614.2,
+          "min": 60879.0,
+          "max": 72660.0
         },
         "outcome_flips_across_seeds": false
       },
@@ -928,41 +1481,145 @@
         ],
         "margin": {
           "n": 2,
-          "mean": 59853.5,
-          "std": 606.0,
-          "ci95_lo": 54409.0,
-          "ci95_hi": 65298.0,
-          "min": 59425.0,
-          "max": 60282.0
+          "mean": 62949.5,
+          "std": 754.5,
+          "ci95_lo": 56170.8,
+          "ci95_hi": 69728.2,
+          "min": 62416.0,
+          "max": 63483.0
+        },
+        "outcome_flips_across_seeds": false
+      },
+      {
+        "pair": "submission vs crop_rotator",
+        "games": 2,
+        "seeds": [
+          101,
+          101
+        ],
+        "wins": 1,
+        "losses": 1,
+        "ties": 0,
+        "win_rate": 0.5,
+        "win_rate_ci95": [
+          0.0945,
+          0.9055
+        ],
+        "margin": {
+          "n": 2,
+          "mean": 764.5,
+          "std": 1547.9,
+          "ci95_lo": -13142.2,
+          "ci95_hi": 14671.2,
+          "min": -330.0,
+          "max": 1859.0
+        },
+        "outcome_flips_across_seeds": true
+      },
+      {
+        "pair": "submission vs template_wheat",
+        "games": 2,
+        "seeds": [
+          101,
+          101
+        ],
+        "wins": 0,
+        "losses": 2,
+        "ties": 0,
+        "win_rate": 0.0,
+        "win_rate_ci95": [
+          0.0,
+          0.6576
+        ],
+        "margin": {
+          "n": 2,
+          "mean": -14629.0,
+          "std": 613.8,
+          "ci95_lo": -20143.4,
+          "ci95_hi": -9114.6,
+          "min": -15063.0,
+          "max": -14195.0
+        },
+        "outcome_flips_across_seeds": false
+      },
+      {
+        "pair": "submission vs self_feed_ranch",
+        "games": 2,
+        "seeds": [
+          101,
+          101
+        ],
+        "wins": 0,
+        "losses": 2,
+        "ties": 0,
+        "win_rate": 0.0,
+        "win_rate_ci95": [
+          0.0,
+          0.6576
+        ],
+        "margin": {
+          "n": 2,
+          "mean": -1305.0,
+          "std": 332.3,
+          "ci95_lo": -4290.9,
+          "ci95_hi": 1680.9,
+          "min": -1540.0,
+          "max": -1070.0
+        },
+        "outcome_flips_across_seeds": false
+      },
+      {
+        "pair": "submission vs near_band_diversified",
+        "games": 2,
+        "seeds": [
+          101,
+          101
+        ],
+        "wins": 2,
+        "losses": 0,
+        "ties": 0,
+        "win_rate": 1.0,
+        "win_rate_ci95": [
+          0.3424,
+          1.0
+        ],
+        "margin": {
+          "n": 2,
+          "mean": 4307.0,
+          "std": 282.8,
+          "ci95_lo": 1765.8,
+          "ci95_hi": 6848.2,
+          "min": 4107.0,
+          "max": 4507.0
         },
         "outcome_flips_across_seeds": false
       }
     ],
     "most_volatile_pair": {
-      "pair": "submission vs expansionist",
+      "pair": "submission vs crop_rotator",
       "games": 2,
       "seeds": [
         101,
         101
       ],
-      "wins": 2,
-      "losses": 0,
+      "wins": 1,
+      "losses": 1,
       "ties": 0,
-      "win_rate": 1.0,
+      "win_rate": 0.5,
       "win_rate_ci95": [
-        0.3424,
-        1.0
+        0.0945,
+        0.9055
       ],
       "margin": {
         "n": 2,
-        "mean": 28879.5,
-        "std": 18377.0,
-        "ci95_lo": -136228.6,
-        "ci95_hi": 193987.6,
-        "min": 15885.0,
-        "max": 41874.0
+        "mean": 764.5,
+        "std": 1547.9,
+        "ci95_lo": -13142.2,
+        "ci95_hi": 14671.2,
+        "min": -330.0,
+        "max": 1859.0
       },
-      "outcome_flips_across_seeds": false
+      "outcome_flips_across_seeds": true
     }
   },
   "determinism_probes": null,
@@ -986,5 +1643,5 @@
     "final_submission_commits": null
   },
   "regression_gate": null,
-  "runtime_seconds": 47.14
+  "runtime_seconds": 82.2
 }

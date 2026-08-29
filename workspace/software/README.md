@@ -20,11 +20,14 @@ python workspace/software/smoke_boot.py
 # 3) 测试套件
 python -m pytest workspace/software/tests -q
 
-# 4) 强度门（m1 新对手须对冻结弱池 >=50% 胜率，不达标退出码 1）
+# 4) 强度门（认证池全体——m1 强对手 + m2 线上风格对手——须对冻结弱池 >=50% 胜率，不达标退出码 1）
 python workspace/software/scripts/check_opponent_strength.py --rounds 3
 
 # 5) 开发评估（所有 pair×seed 均跑 AB/BA；只写 eval_results.dev.json）
 python workspace/software/scripts/run_eval.py --rounds 4
+
+# 5b) 扩展池开发评估（--extended-pool 把 m2 线上风格对手加入矩阵；正式 export 保持冻结矩阵）
+python workspace/software/scripts/run_eval.py --quick --extended-pool
 
 # 6) 正式开发门发布（完整矩阵 + 回归门通过后才原子替换 eval_results.json）
 python workspace/software/scripts/run_eval.py --rounds 4 --assert-regression --official
@@ -36,7 +39,7 @@ python workspace/software/scripts/check_eval_contract.py --mode export
 # 8) 失败模式探针（submission 对全池多种子深记录，产出 failure_modes.md 的证据层）
 python workspace/software/scripts/analyze_failure_modes.py --rounds 8
 
-# 9) 完整迭代门（4 对手 × 4 seeds × AB/BA = 32 局；自定义子集仅 exploratory）
+# 9) 完整迭代门（8 必测对手 × 4 seeds × AB/BA = 64 局；自定义子集仅 exploratory）
 python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label candidate --rounds 4 --require-complete
 
 # 10) 校验 m2b 冻结候选 SHA（必须等于 m2b_frozen_manifest.json 的 candidate.sha256）
@@ -69,7 +72,12 @@ workspace/software/
 │   ├── replay_profile.py              回放画像提取器（纯函数：资金曲线/畜群轨迹/作物轮替/
 │   │                                  雇佣强度/外购饲料/卖出价格分布/终局抛售构成）
 │   └── bots/                          baseline_wheat / greedy_carrot / cow_baron /
-│                                       melon_hoarder / expansionist / LLM provider（默认关）
+│                                       melon_hoarder / expansionist /
+│                                       online_pool.py：crop_rotator(榜首式) /
+│                                       template_wheat(rank6-28模板式) /
+│                                       self_feed_ranch(Milan式) /
+│                                       near_band_diversified(近段带, exploratory) /
+│                                       LLM provider（默认关）
 ├── scripts/run_eval.py                全池 matchup 矩阵 + Elo + 方差报告 + 确定性探针 +
 │                                       exports 产出（schema v1.1）+ 回归门旗标
 ├── scripts/check_opponent_strength.py 强度门：新对手对冻结弱池 >=50% 胜率断言

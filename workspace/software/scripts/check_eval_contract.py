@@ -29,7 +29,14 @@ REQUIRED_OPPONENTS = [
     "melon_hoarder",
     "expansionist",
     "baseline_wheat",
+    # m2 online-style opponents (campaign III): ladder-archetype
+    # reconstructions certified by scripts/check_opponent_strength.py
+    "crop_rotator",
+    "template_wheat",
+    "self_feed_ranch",
+    "near_band_diversified",
 ]
+GATE_GAMES_PER_OPPONENT = len([101, 102, 103, 104]) * 2   # seeds x AB/BA
 M2_KEYS = [
     "llm_ab_win_rate",
     "llm_ab_games",
@@ -203,12 +210,15 @@ def _development_payload():
 def check_gate() -> None:
     games = _gate_games()
     seeds = [101, 102, 103, 104]
+    expected_total = len(REQUIRED_OPPONENTS) * GATE_GAMES_PER_OPPONENT
     report = validate_gate_run(games, REQUIRED_OPPONENTS, seeds, True, REQUIRED_OPPONENTS)
-    if not report["formal_pass"] or report["expected_games"] != 32:
+    if not report["formal_pass"] or report["expected_games"] != expected_total:
         raise ContractError("complete gate fixture did not formally pass")
     _must_reject(
         "missing opponent",
-        lambda: validate_gate_run(games[:24], REQUIRED_OPPONENTS[:3], seeds, True, REQUIRED_OPPONENTS),
+        lambda: validate_gate_run(
+            games[:3 * GATE_GAMES_PER_OPPONENT], REQUIRED_OPPONENTS[:3],
+            seeds, True, REQUIRED_OPPONENTS),
     )
     _must_reject(
         "single seat",

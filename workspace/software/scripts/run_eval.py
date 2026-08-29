@@ -22,6 +22,10 @@ from kgenv.bots.baseline import baseline_wheat_agent, greedy_carrot_agent
 from kgenv.bots.cow_baron import cow_baron_agent
 from kgenv.bots.expansionist import expansionist_agent
 from kgenv.bots.melon_hoarder import melon_hoarder_agent
+from kgenv.bots.online_pool import (crop_rotator_agent,
+                                    near_band_diversified_agent,
+                                    self_feed_ranch_agent,
+                                    template_wheat_agent)
 from kgenv.elo import EloTable
 from kgenv.engine import FULL_EPISODE_STEPS
 from kgenv.eval_contract import (
@@ -41,6 +45,17 @@ from kgenv.variance import margin_stats, most_volatile_pair, wilson_ci
 EXPORTS_DIR = os.path.join(SOFTWARE_ROOT, "exports")
 SCHEMA_VERSION = "2.0"
 MATRIX_ORDER = list(STANDARD_MATRIX_ORDER)
+# m2 online-style opponents (campaign III): certified ladder-archetype
+# reconstructions.  The canonical STANDARD_MATRIX_ORDER is FROZEN (the
+# published official_holdout export validates against it), so these join the
+# pool as a development-run extension and as gate required opponents -- never
+# inside the canonical official matrix.
+ONLINE_STYLE_POOL = [
+    "crop_rotator",
+    "template_wheat",
+    "self_feed_ranch",
+    "near_band_diversified",
+]
 M2_KEYS = [
     "llm_ab_win_rate",
     "llm_ab_games",
@@ -54,7 +69,7 @@ M2_KEYS = [
 ]
 
 
-def build_players(candidate_path: str):
+def build_players(candidate_path: str, extended_pool: bool = False):
     contenders = {
         "submission": load_submission_agent(candidate_path),
         "baseline_wheat": baseline_wheat_agent,
@@ -67,7 +82,19 @@ def build_players(candidate_path: str):
         "cow_baron": cow_baron_agent,
         "melon_hoarder": melon_hoarder_agent,
         "expansionist": expansionist_agent,
+        # m2 online-style opponents (campaign III): always part of the
+        # available pool; scheduled by default via --extended-pool
+        "crop_rotator": crop_rotator_agent,
+        "template_wheat": template_wheat_agent,
+        "self_feed_ranch": self_feed_ranch_agent,
+        "near_band_diversified": near_band_diversified_agent,
     }
+    if not extended_pool:
+        # canonical pool only: keep the historical run_eval opponent dict
+        # identical to the frozen export's config.opponents
+        frozen = {"pass", "random", "starter", "greedy_carrot", "cow_baron",
+                  "melon_hoarder", "expansionist"}
+        opponents = {k: v for k, v in opponents.items() if k in frozen}
     return contenders, opponents
 
 
@@ -243,13 +270,13 @@ def publish_evaluation(
     return target, str(replay_target)
 
 
-def _matrix_pairs(quick):
+def _matrix_pairs(quick, matrix_order):
     if quick:
-        return [("submission", name) for name in MATRIX_ORDER[1:]]
+        return [("submission", name) for name in matrix_order[1:]]
     return [
-        (MATRIX_ORDER[i], MATRIX_ORDER[j])
-        for i in range(len(MATRIX_ORDER))
-        for j in range(i + 1, len(MATRIX_ORDER))
+        (matrix_order[i], matrix_order[j])
+        for i in range(len(matrix_order))
+        for j in range(i + 1, len(matrix_order))
     ]
 
 
@@ -258,6 +285,12 @@ def main() -> int:
     parser.add_argument("--rounds", type=int, default=4)
     parser.add_argument("--quick", action="store_true")
     parser.add_argument("--assert-regression", action="store_true")
+    parser.add_argument(
+        "--extended-pool",
+        action="store_true",
+        help="development runs only: add the m2 online-style opponents to "
+             "the evaluation matrix (cannot be combined with --official)",
+    )
     parser.add_argument(
         "--official",
         action="store_true",
@@ -280,10 +313,21 @@ def main() -> int:
             file=sys.stderr,
         )
         return 2
+    if args.official and args.extended_pool:
+        print(
+            "--extended-pool is a development-run extension; the official "
+            "export must keep the canonical matrix",
+            file=sys.stderr,
+        )
+        return 2
 
-    seeds = list(range(101, 101 + rounds))
-    pairs = _matrix_pairs(args.quick)
+    matrix_order = list(MATRIX_ORDER)
+    if args.extended_pool:
+        matrix_order += [name for name in ONLINE_STYLE_POOL
+                         if name not in MATRIX_ORDER]
     run_kind = "official" if args.official else "development"
+    seeds = list(range(101, 101 + rounds))
+    pairs = _matrix_pairs(args.quick, matrix_order)
     evaluation_input = {
         "pairs": [list(pair) for pair in pairs],
         "seeds": seeds,
@@ -296,7 +340,8 @@ def main() -> int:
 
     try:
         with candidate_snapshot(REPO_ROOT, args.candidate, evaluation_input) as snapshot:
-            contenders, opponents = build_players(str(snapshot.snapshot_path))
+            contenders, opponents = build_players(
+                str(snapshot.snapshot_path), extended_pool=args.extended_pool)
             everyone = {**contenders, **opponents}
             games = []
             started = time.perf_counter()
@@ -324,7 +369,7 @@ def main() -> int:
             head_to_head = [summarize_pair(games, a, b) for a, b in pairs]
             matchup_rows = [matchup_row(games, a, b) for a, b in pairs]
             variance_rows = [variance_row(games, a, b) for a, b in pairs]
-            pool_names = [name for name in MATRIX_ORDER if name != "submission"]
+            pool_names = [name for name in matrix_order if name != "submission"]
             pool_rows = [row for row in ranked if row["name"] in pool_names]
             pool_max = pool_rows[0] if pool_rows else None
 
@@ -360,12 +405,13 @@ def main() -> int:
                     "seeds": seeds,
                     "contenders": list(contenders),
                     "opponents": list(opponents),
-                    "matrix_order": MATRIX_ORDER,
+                    "matrix_order": matrix_order,
                     "pairs": [list(pair) for pair in pairs],
                     "seat_orders": ["AB", "BA"],
                     "expected_games": len(schedule),
                 },
-                "opponent_pool_names": pool_names,
+                "opponent_pool_names": [name for name in matrix_order
+                                        if name != "submission"],
                 "pool_max_elo": (
                     {"name": pool_max["name"], "rating": pool_max["rating"]}
                     if pool_max

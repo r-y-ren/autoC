@@ -1,0 +1,34 @@
+{
+  "campaign": {
+    "competition_id": "kaggle-kaggriculture",
+    "blueprint_ref": "7a60577"
+  },
+  "checklist": [
+    {
+      "id": "m2-pool",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2-pool.log"
+    },
+    {
+      "id": "m2-gate",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace\\acceptance\\evidence\\m2-gate.log"
+    },
+    {
+      "id": "m2-ab",
+      "category": "software",
+      "status": "pending",
+      "evidence": "待 acceptor agent 核验"
+    }
+  ],
+  "result": "pending_agent",
+  "generated_at": "2026-08-29T14:35:49",
+  "retry_state": {
+    "count": 0,
+    "max": 3,
+    "tripped": false
+  },
+  "scope": "scoped run（--only，范围外项未验；终验须全量重跑）"
+}

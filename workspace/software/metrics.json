@@ -1,7 +1,7 @@
 {
  "schema": "software-metrics-shard/1.0",
  "campaign": "kaggle-kaggriculture",
- "milestone": "m1-replay-corpus (replay corpus & profile pipeline; historical keys retained)",
+ "milestone": "m1-replay-corpus + m2-online-pool (replay corpus & profile pipeline; online-style opponent pool; historical keys retained)",
  "measured_at": "2026-08-29",
  "engine": {
   "package": "kaggle-environments",
@@ -1274,6 +1274,241 @@
    "value": 21.3,
    "unit": "seconds",
    "method": "m1-replay-corpus (2026-08-29): wall clock of scripts/corpus_build.py over 60 replays (load + integrity + extract + archive write) as recorded in exports/replay_profiles/index.json build_runtime_seconds"
+  },
+  "m2_online_style_opponents": {
+   "value": [
+    {
+     "name": "crop_rotator",
+     "style": "榜首框架式：恒定雇佣/象限框架 + 价格自适应小麦占比(0.22-0.62)与轮作(西瓜早段/草莓中段/番茄晚段) + 外购饲料价格护栏 + 终局囤倾",
+     "prototype": "Crop Dusta (rank 1)",
+     "param_basis": "同选手 >=3 局一致画像：26 局（雇佣 9.7-9.9/天、3 象限、7牛4羊1鹅、小麦占比 20-69% 波动、外购饲料 506-2732u@均价34-39）",
+     "profile_archives": [
+      "ep101270384_seat1",
+      "ep101270420_seat0",
+      "ep101370699_seat1",
+      "ep101375177_seat1",
+      "ep101381902_seat0"
+     ],
+     "exploratory_params": false,
+     "implementation": "kgenv/bots/online_pool.py",
+     "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
+    },
+    {
+     "name": "template_wheat",
+     "style": "rank6-28 模板式：锁定 42% 麦田 + 每日固定外购饲料配给(15u/天) + 8牛4羊 + 倾销式低价卖出门(奶60/毛45/莓22)",
+     "prototype": "NIklitaCheporev(8局)/Multi-Head Farmers(6局)/Aashka Kapadia(3局)/Gaddam Shiva Teja(3局)/Levin(3局)/heralces(3局) 同构模板集群",
+     "param_basis": "同选手 >=3 局一致画像：外购饲料 414-436u 恒定、小麦田 42% 恒定、雇佣 9.4/天、终群 8牛4羊",
+     "profile_archives": [
+      "ep101279218_seat1",
+      "ep101882239_seat0",
+      "ep101802072_seat1",
+      "ep102000368_seat1",
+      "ep101643308_seat1",
+      "ep101678908_seat1"
+     ],
+     "exploratory_params": false,
+     "implementation": "kgenv/bots/online_pool.py",
+     "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
+    },
+    {
+     "name": "self_feed_ranch",
+     "style": "Milan 式近自给牧场：46% 麦田自供饲料 + 6牛6羊混合群 + 高价门持有(奶190/毛200) + 草莓/西瓜副业 + 小额外购肥料",
+     "prototype": "Milan Leonard (rank 2)",
+     "param_basis": "同选手 >=3 局一致画像：12 局（外购饲料仅 119-147u、小麦 43-50%、雇佣 8.9-9.3/天、奶卖价中位 200/毛 220、外购肥料 31u）",
+     "profile_archives": [
+      "ep102000368_seat0",
+      "ep102002591_seat0",
+      "ep102020456_seat0"
+     ],
+     "exploratory_params": false,
+     "implementation": "kgenv/bots/online_pool.py",
+     "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
+    },
+    {
+     "name": "near_band_diversified",
+     "style": "近段(500-900)多元化式：草莓主导轮作(上限30格)+西瓜、8牛3羊2鹅、第4象限晚开、day27 起重终局倾销",
+     "prototype": "Sooriya Senthilkumar (rank 3629) / Chirag Bhatnagar (rank 3978)",
+     "param_basis": "exploratory：仅 2 局（每选手 1 局），但两名独立选手结构收敛（草莓 51.8%/33.7% 主导 + 7-8牛混合群 + 终局卖出占比 12.6-17.7%）；按蓝图 m2 以真实线上分布代表性纳入",
+     "profile_archives": [
+      "ep102194478_seat1",
+      "ep102196708_seat0"
+     ],
+     "exploratory_params": true,
+     "implementation": "kgenv/bots/online_pool.py",
+     "implementation_sha256": "bb03c7bfbc33f26599569c88743b30c6ed36b453635624b90521df29151be4ea"
+    }
+   ],
+   "unit": "array",
+   "method": "战役 III m2-online-pool (2026-08-29)：kgenv/bots/online_pool.py 四个画像参数化重建；参数纪律=主打 bot 只用同选手 >=3 局一致发现（exports/replay_profiles/band_summary.md 跨局复核），near_band 显式 exploratory_params=true；档案 ID 指 exports/replay_profiles/profiles/"
+  },
+  "m2_opponent_pool_certification": {
+   "value": {
+    "command": "python workspace/software/scripts/check_opponent_strength.py --rounds 3",
+    "weak_pool": [
+     "pass",
+     "random",
+     "starter",
+     "greedy_carrot"
+    ],
+    "seeds": [
+     101,
+     102,
+     103
+    ],
+    "threshold": 0.5,
+    "threshold_met_by_all": true,
+    "online_style": {
+     "crop_rotator": {
+      "games": 12,
+      "W": 12,
+      "L": 0,
+      "T": 0,
+      "win_rate": 1.0,
+      "vs_greedy_carrot": {
+       "games": 3,
+       "W": 3,
+       "L": 0,
+       "T": 0,
+       "avg_margin": 57035
+      }
+     },
+     "template_wheat": {
+      "games": 12,
+      "W": 12,
+      "L": 0,
+      "T": 0,
+      "win_rate": 1.0,
+      "vs_greedy_carrot": {
+       "games": 3,
+       "W": 3,
+       "L": 0,
+       "T": 0,
+       "avg_margin": 55071
+      }
+     },
+     "self_feed_ranch": {
+      "games": 12,
+      "W": 12,
+      "L": 0,
+      "T": 0,
+      "win_rate": 1.0,
+      "vs_greedy_carrot": {
+       "games": 3,
+       "W": 3,
+       "L": 0,
+       "T": 0,
+       "avg_margin": 66649
+      }
+     },
+     "near_band_diversified": {
+      "games": 12,
+      "W": 12,
+      "L": 0,
+      "T": 0,
+      "win_rate": 1.0,
+      "vs_greedy_carrot": {
+       "games": 3,
+       "W": 3,
+       "L": 0,
+       "T": 0,
+       "avg_margin": 59625
+      }
+     }
+    },
+    "strong_family_recertified": {
+     "cow_baron": {
+      "games": 12,
+      "W": 12,
+      "L": 0,
+      "T": 0,
+      "win_rate": 1.0
+     },
+     "melon_hoarder": {
+      "games": 12,
+      "W": 12,
+      "L": 0,
+      "T": 0,
+      "win_rate": 1.0
+     },
+     "expansionist": {
+      "games": 12,
+      "W": 12,
+      "L": 0,
+      "T": 0,
+      "win_rate": 1.0
+     }
+    },
+    "exit_code": 0,
+    "log": "workspace/software/exports/logs/m2_opponent_certification.log"
+   },
+   "unit": "report",
+   "method": "实测 2026-08-29：认证脚本 7 对手 x 4 弱池 x 3 种子 = 84 局全 STRONG（每个新 bot 12W-0L-0T，>=50% 阈值全部达标）；运行 250s"
+  },
+  "m2_gate_required_opponents": {
+   "value": {
+    "before": [
+     "cow_baron",
+     "melon_hoarder",
+     "expansionist",
+     "baseline_wheat"
+    ],
+    "after": [
+     "cow_baron",
+     "melon_hoarder",
+     "expansionist",
+     "baseline_wheat",
+     "crop_rotator",
+     "template_wheat",
+     "self_feed_ranch",
+     "near_band_diversified"
+    ],
+    "old_members_retained": true,
+    "new_members_added": [
+     "crop_rotator",
+     "template_wheat",
+     "self_feed_ranch",
+     "near_band_diversified"
+    ],
+    "required_list_sha256": "14dcaea76e02cfae963d0a7299ae6f2d758f226b7af865beeed063054b76395c",
+    "gate_games_expected": 64,
+    "enforced_by": [
+     "scripts/check_eval_contract.py --mode gate (REQUIRED_OPPONENTS)",
+     "scripts/iterate_gate.py REQUIRED_OPPONENTS (complete gate)"
+    ],
+    "missing_opponent_schedule_rejected": true
+   },
+   "unit": "report",
+   "method": "实测 2026-08-29：门禁必测集合由 4 扩至 8（旧成员全保留）；check_eval_contract gate 拒绝缺对手赛程（games[:24] 切片按 3 对手构造被拒）与单座位赛程；exploratory 参数的 near_band_diversified 同样必测"
+  },
+  "m2_gate_contract_check_pass": {
+   "value": true,
+   "unit": "bool",
+   "method": "实测 2026-08-29：python workspace/software/scripts/check_eval_contract.py --mode gate -> exit 0（新必测集合 8 对手 x seeds 101-104 x AB/BA = 64 局 fixture 正式通过 + 5 类异常拒绝全过）；同轮复验 --mode official --input exports/eval_results.json -> exit 0（冻结 holdout 未失效，sha256 ac7684d8...）"
+  },
+  "m2_opponent_unit_tests_summary": {
+   "value": {
+    "file": "workspace/software/tests/test_bots_online_pool.py",
+    "file_sha256": "3cddb9b3341b76d1c983d1204d08e49d8173e474bfbb85b1f32dbe141133bc28",
+    "total": 42,
+    "passed": 42,
+    "failed": 0,
+    "full_suite_total": 246,
+    "full_suite_passed": 246,
+    "full_suite_failed": 0,
+    "coverage": [
+     "契约(合法动作/确定性/敌意obs/短局)",
+     "exploratory 标志纪律",
+     "雇佣节律(象限缩放/日斜坡)",
+     "轮作触发(价格门+相位窗)",
+     "外购饲料护栏(价格上限+晨间配给+gap模式)",
+     "卖出门(持有/释放/倾销)",
+     "终局倾销窗口(day27/28)",
+     "象限扩张时机",
+     "畜群构成"
+    ]
+   },
+   "unit": "test-run",
+   "method": "实测 2026-08-29：python -m pytest workspace/software/tests/test_bots_online_pool.py -q -> 42 passed；全量 python -m pytest workspace/software/tests -q -> 246 passed 0 failed (10.24s)"
   }
  },
  "unmeasured": {
