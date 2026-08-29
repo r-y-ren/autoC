@@ -1,10 +1,10 @@
 {
-  "_generated_at": "2026-08-29T19:05:22",
+  "_generated_at": "2026-08-29T19:31:59",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
-    "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained) + r3-1 cross-profile & next-band pool",
-    "measured_at": "2026-08-29T10:58:33.146618+00:00",
+    "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained) + r3-1 cross-profile & next-band pool + r3-2 timing redesign & freeze (d0 burst/herd14/strawberry d5/crew12; 72-0 dev gate for e21c4b5f)",
+    "measured_at": "2026-08-29T11:29:53.555447+00:00",
     "engine": {
       "package": "kaggle-environments",
       "version": "1.32.7+nodeps (vendored, engine code unmodified)",
@@ -2605,6 +2605,225 @@
         "value": 301,
         "unit": "count",
         "method": "同上"
+      },
+      "r3_capability_checks": {
+        "value": {
+          "method_ref": "workspace/software/scripts/r3_trajectory_probe.py (day-by-day snapshot at last hour of each day, vs pass opponent, development seeds 101/202/303)",
+          "comparison": "m3-frozen candidate (sha 5713c17e) vs r3-frozen candidate (sha e21c4b5f), same seeds/opponent",
+          "d0_capital_allocation": {
+            "target": "4-5 head, 1800-2200 of 3000 start, mixed species",
+            "m3_measured": "1-1 head (1 sheep)",
+            "r3_measured": "4-4 head 2C+2S (1800 spent, 3/3 seeds)",
+            "verdict": "pass"
+          },
+          "first_milk_day": {
+            "target": "d8-9",
+            "m3_measured": "10-10",
+            "r3_measured": "9-9",
+            "verdict": "pass"
+          },
+          "herd_deadline_12_by_d11": {
+            "target": ">=12 head by d11, ceiling 14-17",
+            "m3_measured": "never reached 12 (peak 11-11)",
+            "r3_measured": "12-head at d14-14, peak 13-14 (cap 14 = 8C+6S)",
+            "verdict": "partial: peak/cap met, 12-head day lands d11-14 (i1 hit d11-12; the frozen i2 prioritizes the d5 strawberry line over 1-3 days of herd build and won the gate 72-0 vs 71-1)"
+          },
+          "strawberry_cadence": {
+            "target": "6+ tiles by d5-7, 15-20 by d11-13, <=~20 labour ceiling",
+            "m3_measured": "d7=5-5, d11=5-5, d13=11-13, peak=12-15",
+            "r3_measured": "d7=6-6, d11=15-17, d13=18-18, peak=18-18",
+            "verdict": "pass"
+          },
+          "crew_12": {
+            "target": "12 hands from d7 (winners), ramp floor preserved",
+            "m3_measured": "crew@7=9-9, crew@10=9-9 (ramp caps at 10)",
+            "r3_measured": "crew@7=9-9, crew@10=9-9; 12 once herd>=12 (load-following, HANDS_CAP_R3=12)",
+            "verdict": "partial: cap 12 implemented as herd-following (reaches 12 with the herd, ~d10-14, not hard-coded d7)"
+          },
+          "midgame_money_lines": {
+            "target": "d24 >= 44k",
+            "m3_measured": "d12=173-448, d24=38002-44204",
+            "r3_measured": "d12=129-264, d24=52456-62227",
+            "verdict": "pass"
+          },
+          "final_money_band": {
+            "target": "winner band ~95-100k (round-2 winners 95-101k)",
+            "m3_measured": "73785-89439",
+            "r3_measured": "90943-115079",
+            "verdict": "pass"
+          },
+          "quadrants": {
+            "target": "3",
+            "m3_measured": "3",
+            "r3_measured": "3 (3/3 seeds)",
+            "verdict": "pass"
+          }
+        },
+        "unit": "per-day trajectory snapshot (days/money/head/tiles)",
+        "method": "python workspace/software/scripts/r3_trajectory_probe.py --seeds 101 202 303 --json .tmp-r3/probe_*.json (2026-08-29; full runs archived under workspace/software/.tmp-r3/)"
+      },
+      "r3_regression_summary": {
+        "value": {
+          "r3_tests_total": 13,
+          "r3_tests_passed": 13,
+          "r3_tests_failed": 0,
+          "r3_test_file_sha256": "cd8716f029ceab15bda72c2a836cb6f5967531f5888ae6c1b13d01a6efcaa384",
+          "m3_preserved_tests_total": 23,
+          "m3_preserved_tests_passed": 23,
+          "m2b_preserved_tests_total": 26,
+          "m2b_preserved_tests_passed": 26,
+          "complete_suite_total": 314,
+          "complete_suite_passed": 314
+        },
+        "unit": "count",
+        "method": "python -m pytest workspace/software/tests -q -> 314 passed 0 failed; targeted: test_strategy_r3.py 13, test_strategy_m3.py 23, test_strategy_m2.py 26 (2026-08-29)"
+      },
+      "r3_development_gate_summary": {
+        "value": {
+          "candidate_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+          "label": "r3-frozen",
+          "required_opponents": [
+            "cow_baron",
+            "melon_hoarder",
+            "expansionist",
+            "baseline_wheat",
+            "crop_rotator",
+            "template_wheat",
+            "self_feed_ranch",
+            "near_band_diversified",
+            "scale_ranch"
+          ],
+          "expected_games": 72,
+          "actual_games": 72,
+          "seat_split": {
+            "AB": 36,
+            "BA": 36
+          },
+          "abnormal_games": 0,
+          "seeds": [
+            101,
+            102,
+            103,
+            104
+          ],
+          "seed_domain": "development",
+          "candidate_record": {
+            "wins": 72,
+            "losses": 0,
+            "ties": 0
+          },
+          "per_opponent": {
+            "cow_baron": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 42005.8
+            },
+            "melon_hoarder": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 66985.9
+            },
+            "expansionist": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 76590.0
+            },
+            "baseline_wheat": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 85537.9
+            },
+            "crop_rotator": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 29654.8
+            },
+            "template_wheat": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 24860.4
+            },
+            "self_feed_ranch": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 27286.8
+            },
+            "near_band_diversified": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 23530.9
+            },
+            "scale_ranch": {
+              "wins": 8,
+              "losses": 0,
+              "ties": 0,
+              "win_rate": 1.0,
+              "avg_margin": 13826.6
+            }
+          },
+          "previous_best_m3_frozen_record": {
+            "wins": 57,
+            "losses": 7,
+            "ties": 0,
+            "games": 64,
+            "note": "8-opponent gate (no scale_ranch); per-opponent: self_feed 5-3, near_band 4-4"
+          },
+          "formal_pass": true,
+          "elapsed_seconds": 189.55,
+          "iteration_trajectory": [
+            {
+              "label": "r3-i1",
+              "record": "71-1",
+              "change": "r3 timing bundle (d0 2C+2S burst, herd 8C+6S=14, strawberry phase d5+ cap 6/quad, crew-follows-herd to 12)",
+              "note": "loss: crop_rotator seed 103 BA -2811"
+            },
+            {
+              "label": "r3-i2",
+              "record": "72-0",
+              "change": "single variable: strawberry seeds exempt from pending-land-fund staging",
+              "note": "crop_rotator loss fixed"
+            },
+            {
+              "label": "r3-frozen",
+              "record": "72-0",
+              "change": "freeze re-verification of r3-i2 bytes",
+              "note": "abnormal 0, complete 72/72"
+            }
+          ]
+        },
+        "unit": "summary",
+        "method": "python workspace/software/scripts/iterate_gate.py --label r3-frozen --rounds 4 --require-complete (complete dev gate, 9 opponents x 4 seeds x AB/BA = 72 games, 2026-08-29)"
+      },
+      "r3_frozen_candidate_identity": {
+        "value": {
+          "path": "workspace/software/kaggle_simulations/agent/main.py",
+          "sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+          "git_ref": "0480032282729f8c1a6eedb4ab9724aaad035c29",
+          "manifest": "workspace/software/r3_frozen_manifest.json",
+          "manifest_sha256": "b3690a4bf75dcbab228c6c1bedff9c9f8b84e5ca2641109baf17a826da7aedeb",
+          "snapshot": "workspace/software/r3_frozen_candidate.b64",
+          "snapshot_file_sha256": "dbc0ebd145758e45fc54a5682d0667dc6c17b474c7e88d4fcf661491f41e23dd",
+          "decoded_sha256": "e21c4b5f79139147cfbf3478b8223f0007d843aaa7d8833fabb1a1919388babc",
+          "supersedes": "m3-frozen 5713c17eadf1d026d2ccfbc2361bf65f457e8d11843053c74fe4ec261a7a37ee"
+        },
+        "unit": "identity",
+        "method": "sha256 of kaggle_simulations/agent/main.py at freeze; snapshot b64 round-trip verified decoded==source; manifest written 2026-08-29 after the r3-frozen complete gate PASS (72/72, abnormal 0)"
       }
     },
     "unmeasured": {

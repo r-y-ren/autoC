@@ -1,4 +1,4 @@
-"""Kaggriculture submission agent -- "rotation ranch" strategy (m3, v3).
+"""Kaggriculture submission agent -- "rotation ranch" strategy (r3, v4).
 
 Self-contained: standard library only, no imports from the local kgenv
 package, so the file uploads as-is to
@@ -6,6 +6,43 @@ package, so the file uploads as-is to
 and lives at /kaggle_simulations/agent/main.py (official kit convention).
 The last callable defined in this file is the entry point (that is how
 kaggle_environments picks the agent from a file).
+
+r3 timing redesign (campaign III round 3, sub-wave r3-2).  The round-2
+online replays (3 winners, 6 episodes, .tmp-online/round2/) crossed with
+the m1 top-20 corpus (58 episodes / 116 seat profiles) pinned the OPENING
+AND MID-GAME TIMING as the next-tier ticket, not the ranch structure the
+m3 engine already had (deep dive: exports/online/round2_winner_deep_dive.md).
+Four phase changes, each with >=3-game profile evidence:
+
+  R3-1 d0 capital allocation: 116/116 top-20 seats and 3/3 round-2 winners
+      put 1800-2200 of the 3000 start into 4-5 head ON DAY 0 (2C+2S here,
+      1800; arminhej96 5C/2000, 朝闻夕死 + Danila 3C+2S/2200), seeds from
+      the leftovers.  First milk lands d8-9 instead of d10+ (measured m3:
+      1 sheep on d0, first milk d10, d12 money ~0.4k vs winner band 1.5-8k).
+  R3-2 herd deadline: >=12 head by d11 with a 14 ceiling (8C+6S -- winners
+      peak 13-17; top-20 med 12 / p75 15).  The m3 plan (11 head, done
+      d13-15) never reached 12 at all.  Counter-example checked: Anthaus
+      hit 18 head but built d10-12 and lost -- timing, not size, is the
+      ticket, so the cap stays 14 and the deadline does the work.
+  R3-3 strawberry cadence: plant from day 5 (not day 0 -- the d0 cash
+      belongs to the herd burst), 15-20 tiles by d11-13 (cap 6/quad on 3
+      quadrants = 18; winners 16-23; top-20 peak med 36 starves the
+      feed/care labour budget, so ~20 is the ceiling, not the target).
+  R3-4 crew 12: winners hold 12 hands from d7-11 (Danila crew 12 @ d7;
+      top-20 9.4-9.9 hires/day).  The m3 ramp peaked at 10.  _crew_target
+      follows the herd (CARE/FEED/COLLECT_FERTILIZER scale with head):
+      12 once the herd plan is >=12, the pinned m3 ramp as the floor.
+      CARE discipline is unchanged full coverage (issue = head/day, no
+      oversending -- CARE on a cared animal is an engine no-op).
+  Kept from the winners' table deliberately: feed guardrail (gap-fill at
+      <=36, ~15u/day cadence; winners 102-462u @ 33-34), 3 quadrants (NE
+      d4 / SW d7 -- the m3 plan already sits inside the winner d5-11 band),
+      d28+ stop-feed/stop-plant liquidation, milk clear-through gate 105
+      and wool gate 150 (the milk/wool hoard-split is a low-confidence
+      style item -- 3 winners, 3 different splits -- and the m2
+      clear-through discipline measurably dominates the joint-dairy meta),
+      daily fertilizer collection sold promptly (61-85 realised; winners
+      9.8-18.5k/season -- an income line the m2 engine left on the table).
 
 Online-feedback redesign (campaign III m3).  The m2b dairy engine won the
 legacy pool 31W-1L but dropped the m2 online-style pool (dev eval seed 101:
@@ -124,7 +161,10 @@ SEASON_DAYS = 30
 
 # FM-O2 labour: top-20 median 9.4 hires/day (282-295/season), leader 9.7-9.9
 # (Crop Dusta land/labour series); 24 turns/day per unit, fib cost per day.
+# R3-4: _crew_target tops this ramp up to HANDS_CAP_R3 following the herd
+# (round-2 winners hold 12 hands from d7-11; top-20 9.4-9.9/day).
 HANDS_RAMP = ((0, 5), (1, 6), (3, 8), (6, 9), (12, 10))
+HANDS_CAP_R3 = 12        # r3: crew 12 once the herd plan reaches 12 head
 HIRE_BURST = 5           # HIRE orders per dawn turn (burst, m2b fix)
 HIRE_HOUR_MAX = 2        # dawn window (m2b fix: burst must fit hour <= 2)
 
@@ -134,16 +174,19 @@ HIRE_HOUR_MAX = 2        # dawn window (m2b fix: burst must fit hour <= 2)
 LAND_PLAN = {1: (4, 1700), 2: (7, 2700)}
 LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
 
-# FM-O2 herd: sheep-primary mixed ranch.  The ladder's ~12-head plans
-# (Milan 6c+6s, template 8c+4s) are self-fed on 46-50% wheat fields; our
-# rotation fields spend their tiles/labour on premium crops, so the herd
-# holds at 10 (measured: 12 head crowded out tending and the day-8 cash
-# floor -- m3-i4/i5 gates).  Cows interleave in early so they reach the
-# day-8+ premium-milk window on time; goose dropped (egg log-curve pays
-# ~2.1k vs a cow's ~5k in the observed premium-milk meta).
-HERD_CAP = 11            # total herd ceiling; m2b tests pin _herd_target
+# R3-1/R3-2 herd: the r3 opening.  Day 0 buys the mixed burst below outright
+# (1800 of the 3000 start; 116/116 top-20 seats hold 4-5 head on d0, 3/3
+# round-2 winners; the m3 engine's 1-sheep d0 is the fork the round-2
+# losses traced to).  Ceiling 14 = 8C+6S (winners peak 13-17; top-20 med
+# 12 / p75 15); with the 4+day target ramp the 12-head deadline lands
+# d8-9 (< d11).  Cows interleave in early so they reach the day-8+
+# premium-milk window on time; goose dropped (egg log-curve pays ~2.1k
+# vs a cow's ~5k in the observed premium-milk meta).
+OPENING_HERD = {"COW": 2, "SHEEP": 2}
+OPENING_RESERVE = 800    # cash kept besides the day-0 burst (m2b cushion)
+HERD_CAP = 14            # total herd ceiling; m2b tests pin _herd_target
                          # to the constant, not a literal
-HERD_COMPOSITION = {"SHEEP": 6, "COW": 5, "GOOSE": 0}
+HERD_COMPOSITION = {"SHEEP": 6, "COW": 8, "GOOSE": 0}
 ANIMAL_BUY_LAST_DAY = {"SHEEP": 20, "COW": 20, "GOOSE": 24}
 COW_BUY_RESERVE = 380    # cash kept besides an animal purchase (m2b)
 ANIMAL_PACE = ((8, 3), (4, 2))   # head/day from day: 1 before day 4, 2 to 7, 3 after
@@ -156,17 +199,21 @@ DEAD_PRICE_FLOOR = {"MILK": 90, "WOOL": 90, "EGG": 30}
 DEAD_PRICE_FROM_DAY = 10  # m2b gate: freezes apply once curves can be read
 
 # FM-O1 rotation: phase windows from the rank-1 frame (melon early /
-# strawberry 0-14 / late filler), price floors from the m2 online-pool
+# strawberry mid / late filler), price floors from the m2 online-pool
 # archetypes (crop_rotator min_price 55/150, carrot base 35 minus margin).
+# R3-3: strawberry phase opens day 5 (the d0-4 cash belongs to the herd
+# burst; winners plant d7-11 and top-20 d4-7) and the per-quad cap rises
+# to 6 (3 quads = 18 tiles by d11-13; winners 16-23, top-20 peak med 36
+# starves the feed/care labour budget -- do not chase it).
 FERT_VALUE_GATE = 70     # fert sack sold at 70+ beats a wheat/carrot boost
                          # (~60-70/unit); strawberry/melon boosts (~200-230)
                          # are always worth the sack (self_feed ledger: they
                          # never fertilize and sold 158u for +12.8k)
 WHEAT_MONEY_GATE = 30   # wheat joins the rotation as a money crop at 30+
 WHEAT_MONEY_CAP_PER_QUAD = 3
-CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (0, 14), "CARROT": (15, 26)}
+CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 14), "CARROT": (15, 26)}
 CROP_FLOOR = {"MELON": 150, "STRAWBERRY": 55, "CARROT": 28}
-CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 5, "CARROT": 4}
+CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 6, "CARROT": 4}
 PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
 
 # FM-O3 feed: guardrailed external buying (profiles: avg buy price 26-32,
@@ -322,12 +369,16 @@ def _wheat_cap(day, wheat_price=25):
 
 
 def _herd_target(day, feed_capacity):
-    """Total-animal plan (m2b formula, test-pinned): ramp early, cap by
-    HERD_CAP and by feed capacity.  In m3 the autarky feed bound is
-    normally slack (FM-O3 guardrailed external feed covers the gap), so
-    the money gate + daily pace + composition do the real limiting.
+    """Total-animal plan (m2b formula shape, test-pinned at d0/d8/d25):
+    4 head on day 0 (the r3 opening burst), the build accelerates from
+    day 5 so the 12-head deadline lands by d6-8 and the 14 ceiling by d8
+    (R3-2: winners 13-17 by d8-11; top-20 med 12 by d6; the m3 plan never
+    reached 12).  Feed capacity caps it as in m2b, though in r3 the
+    autarky bound is normally slack (FM-O3 guardrailed external feed
+    covers the gap) -- the money gate + daily pace + composition do the
+    real limiting.
     """
-    return min(HERD_CAP, 4 + day, max(4, feed_capacity))
+    return min(HERD_CAP, 4 + day + max(0, day - 4), max(4, feed_capacity))
 
 
 def _hands_target(day, herd, wheat_tiles, quads=3):
@@ -342,6 +393,17 @@ def _hands_target(day, herd, wheat_tiles, quads=3):
         if day >= from_day:
             target = hands
     return max(2, min(target, 10))
+
+
+def _crew_target(day, herd, wheat_tiles, quads=3):
+    """R3-4 crew plan: the m3 ramp above stays the FLOOR, and the crew
+    follows the herd up to HANDS_CAP_R3 once the ranch plan needs it
+    (round-2 winners hold 12 hands from d7-11 while milking 13-17 head;
+    CARE + FEED + COLLECT_FERTILIZER all scale with head count).  A bad
+    season (small herd) never overhires: the ramp alone is the target.
+    """
+    return min(HANDS_CAP_R3, max(_hands_target(day, herd, wheat_tiles, quads),
+                                 herd))
 
 
 def _animal_pace(day):
@@ -932,7 +994,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
 
     # ---- seeds: the wheat feed floor first (m2b), then rotation crops
-    # staged behind the pending land fund (FM-3 staging).
+    # staged behind the pending land fund (FM-3 staging).  R3-3 exception:
+    # strawberry is NOT staged behind the land fund once its phase opens --
+    # the winners plant 6+ tiles on d5-11 while the NE/SW purchases proceed
+    # on their own fund-gated schedule (planting d5 pays from d15 at
+    # ~200/u; the one-day land delay it can cost repays many times over).
     if seeds.get("WHEAT", 0) < 6 and day <= SEASON_DAYS - 7 and money >= 150:
         orders.append(["BUY_SEED", "WHEAT", 12])
     if not last_day:
@@ -945,12 +1011,17 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
                 continue  # red line: dead-price freeze
             want = CROP_CAP_PER_QUAD[crop] * quads - alive[crop] - seeds.get(crop, 0)
             batch = min(6, max(0, want))
-            seed_gate = land_fund + 250
+            seed_gate = 250 if crop == "STRAWBERRY" else land_fund + 250
             if batch > 0 and money >= seed_gate + CROPS[crop]["seed"] * batch:
                 orders.append(["BUY_SEED", crop, batch])
 
-    # ---- herd (FM-O2): sheep-primary composition, money-gated, paced by
-    # CONFIRMED purchases (m2b), species-level dead-price freeze (red line).
+    # ---- herd (FM-O2 + R3-1/R3-2): mixed 14-head ranch, money-gated,
+    # paced by CONFIRMED purchases (m2b), species-level dead-price freeze
+    # (red line).  Day 0 is the r3 opening: the burst buys OPENING_HERD
+    # outright (2C+2S = 1800 of the 3000 start; 116/116 top-20 seats and
+    # 3/3 round-2 winners put 4-5 head on d0 -- the m3 1-sheep opening is
+    # the fork the round-2 losses traced to), both species in one turn so
+    # cows reach the day-8 milk window AND sheep the day-6 wool window.
     reserve = 800 if day <= 3 else (550 if day <= 7 else COW_BUY_RESERVE)
     if land_pending:
         reserve += land_fund
@@ -958,7 +1029,22 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total):
     target = _herd_target(day, 99)   # FM-O3: external feed releases autarky
     bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0),
                        herd_total)
-    if not last_day and herd_total < target and shed_count < 88 and bought < pace:
+    opening_bought = False
+    if not last_day and day == 0 and herd_total == 0:
+        spend = 0
+        for animal in ("COW", "SHEEP"):
+            want = OPENING_HERD.get(animal, 0)
+            cost = ANIMALS[animal]["cost"]
+            n = min(want, int((money - spend - OPENING_RESERVE) // cost)) \
+                if money - spend > OPENING_RESERVE else 0
+            if n > 0:
+                orders.append(["BUY_ANIMAL", animal, n])
+                _note_buy_order(_get(obs, "player", 0), day,
+                                _get(obs, "hour", 0), n)
+                spend += n * cost
+                opening_bought = True
+    if not opening_bought and not last_day and herd_total < target \
+            and shed_count < 88 and bought < pace:
         species = _species_counts(farm, private, herd_total)
         # interleave species by relative deficit so cows reach their day-8+
         # premium-milk window on time instead of queueing behind the sheep
@@ -1169,13 +1255,13 @@ def agent(obs):
         orders = _market_orders(obs, farm, _get(obs, "private", {}) or {},
                                 day, animals_to_feed, herd_total)
 
-        # FM-O2 labour: hire up to the plan in a dawn burst (hands reset
+        # FM-O2/R3-4 labour: hire up to the plan in a dawn burst (hands reset
         # every morning; one HIRE per order; only hour <= 2 can hire -- m2b
         # fix).  Each emitted HIRE is affordable at its exact fib price.
         hires = []
         if day < SEASON_DAYS - 1 and hour <= HIRE_HOUR_MAX:
             quads = len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"])
-            hands_t = _hands_target(day, herd_total, wheat_tiles, quads)
+            hands_t = _crew_target(day, herd_total, wheat_tiles, quads)
             hands = len(_get(farm, "hands", []) or [])
             money = _get(farm, "money", 0.0)
             spend = 0
