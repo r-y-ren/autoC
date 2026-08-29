@@ -150,7 +150,8 @@
             "seat_orders": {"const": ["AB", "BA"]}, "one_time": {"const": true},
             "resume_exact_attempt_only": {"const": true},
             "candidate_change_invalidates": {"const": true},
-            "candidate_source": {"const": "frozen_git_blob"}
+            "candidate_source": {"const": "frozen_git_blob"},
+            "historical_seed_exclusion_count": {"type": "integer", "minimum": 1, "maximum": 38}
           }
         },
         "frozen_candidate": {"type": "object", "required": ["path", "sha256", "git_ref"]},
@@ -159,7 +160,7 @@
           "type": "object",
           "required": ["index", "attempt_id", "status", "started_at", "completed_at", "published", "invalidated", "invalidation_reason"],
           "properties": {
-            "index": {"const": 1}, "status": {"const": "published"},
+            "index": {"enum": [1, 2]}, "status": {"const": "published"},
             "published": {"const": true}, "invalidated": {"const": false},
             "invalidation_reason": {"type": "null"}
           }

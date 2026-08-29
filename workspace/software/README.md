@@ -52,6 +52,13 @@ python workspace/software/scripts/run_llm_ab.py --rounds 4
 # 12) m1 回放语料（战役 III）：重建画像档案 + 完整性校验（原始回放在 gitignored .tmp-corpus/）
 python workspace/software/scripts/corpus_build.py
 python workspace/software/scripts/corpus_integrity.py --mode official
+
+# 13) m4 holdout v2（一次性；只可验证，不可重跑/换种子）：
+#     attempt-1（战役 II 92.9%）归档于 exports/holdout/attempt-1/；
+#     attempt-2（m3 候选 5713c17e，全池 9 agent × 36 对 × 8 新种子 × AB/BA = 576 局）
+#     的权威代发布于 exports/holdout/published/，正式投影原子替换 eval_results.json
+python workspace/software/scripts/run_holdout.py --verify-published --require-frozen
+python workspace/software/scripts/check_eval_contract.py --mode official --input workspace/software/exports/eval_results.json
 ```
 
 ## 目录
@@ -92,8 +99,12 @@ workspace/software/
 │                                       新对手单测/方差统计
 ├── exports/
 │   ├── schema.json                    软件->文档接口契约（1.1 历史只读兼容；2.0 正式语义）
-│   ├── eval_results.json              仅正式门通过后原子发布的评估证据
+│   ├── holdout_schema.json            一次性 holdout 证据 schema 2.0（attempt 1/2）
+│   ├── eval_results.json              仅正式门通过后原子发布的评估证据（当前 = m4 holdout v2）
 │   ├── eval_results.dev.json          quick/dev 隔离产物，不可作为正式证据
+│   ├── holdout/                       attempt-1/（战役 II 92.9% 冻结档案）+ published/
+│   │                                  （attempt-2 权威代：export/replay/seed_manifest/
+│   │                                  software_metrics 四件套）+ 公开 seed_manifest.json 投影
 │   ├── eval_audit.md(+summary.json)   评估保真度审计清单（ABE-Ralph 式，逐项 pass/warn）
 │   ├── failure_modes.md(+summary)     失败模式清单（FM-1..4，含证据局号）
 │   ├── failure_probe_report.md        失败探针自动证据层（分差曲线/价格轨迹）
@@ -191,6 +202,23 @@ greedy_carrot 1162.2；回归门 PASS（20 局 55.49s）。
 - LLM A/B harness 就绪（`scripts/run_llm_ab.py` 一条命令）；本环境无 KG_LLM_* key，
   NullProvider 通路自检实测（4 局 / 1294 次咨询全部回退启发式 / 0 预算阻断），
   `llm_ab_win_rate` 如实置 null 待 key
+
+**m4 holdout v2（2026-08-29，一次性独立 holdout，候选 5713c17e）**：
+
+- attempt-2 `b75258615f75baf54275ff54`：9 agent 全池 C(9,2)=36 对 × 8 新种子 × AB/BA = **576 局**
+  （2250.71s），零异常局；种子 `secrets` 生成，与全部 38 个历史种子交集 0，运行后公开
+  （`exports/holdout/seed_manifest.json`）；候选哈希运行前/后与冻结值全等
+- **候选 128 局 108W-20L-0T（score_rate 0.84375，Wilson95 [0.771, 0.8965]）**；顺序无关
+  成对统计（64 个 (对手,种子) AB/BA 单元，t 95% CI）estimate 0.84375，CI [0.7551, 0.9324]
+- 逐对：cow_baron / melon_hoarder / expansionist / baseline_wheat 各 **16-0**；
+  crop_rotator 12-4、template_wheat 10-6、self_feed_ranch 14-2、near_band_diversified 8-8
+  ——20 负全部来自 m2 线上风格对手，旧池零负；与开发门 57-7-0 的偏差集中在波 3 遗留风险
+  （near_band 8 负 / template_wheat 6 负 / crop_rotator 4 负），self_feed 反而由 5-3 改善到 14-2
+- 座位分层：AB 55-9 / BA 53-11（两层 score_rate 0.859/0.828）；Elo 附录（描述性、顺序敏感）：
+  template_wheat 1535.1 全池第一，submission 1349.0 第五
+- 数字全部来自 metrics 键 `m4_*`（16 键，见 `workspace/metrics.json`）；战役 II attempt-1 的
+  92.9% 结论保留在历史键 `holdout_*`/`confirmatory_*` 与 `exports/holdout/attempt-1/` 冻结档案，
+  二者分属不同候选（7c482921 vs 5713c17e），互不外推
 
 ## 已知边界
 

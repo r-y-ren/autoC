@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""Run or verify the single frozen-candidate Kaggriculture holdout."""
+"""Run or verify the one-time frozen-candidate Kaggriculture holdout.
+
+Attempt generations:
+  * attempt 1 (campaign II m2c): candidate 7c482921, legacy pool, published
+    2026-08-28; its authoritative generation is archived at
+    exports/holdout/attempt-1/ and its 92.9% conclusion survives in the
+    legacy ``holdout_*`` / ``confirmatory_*`` metrics keys and git history.
+  * attempt 2 (campaign III m4-holdout-v2, THIS runner): candidate 5713c17e
+    (m3_frozen_manifest.json), full pool incl. the four online-style
+    opponents, fresh one-time seeds disjoint from all 38 historical seeds.
+"""
 
 from __future__ import annotations
 
@@ -30,13 +40,12 @@ from kgenv.arena import AbnormalMatchError, run_match
 from kgenv.engine import FULL_EPISODE_STEPS
 from kgenv.eval_contract import (
     ContractError,
-    STANDARD_MATRIX_ORDER,
-    candidate_snapshot,
     canonical_sha256,
     file_sha256,
 )
 from kgenv.holdout_contract import (
-    HISTORICAL_SEEDS,
+    HISTORICAL_SEEDS_V2,
+    HOLDOUT_V2_MATRIX_ORDER,
     HOLDOUT_EXPECTED_GAMES,
     HOLDOUT_EXPECTED_SEATS,
     HOLDOUT_SCHEMA_VERSION,
@@ -53,13 +62,16 @@ from kgenv.holdout_contract import (
 )
 from scripts.run_eval import _export_game, _validate_replay_bytes, build_players, elo_table
 
-FROZEN_MANIFEST = SOFTWARE_ROOT / "m2b_frozen_manifest.json"
-FROZEN_SNAPSHOT = SOFTWARE_ROOT / "m2b_frozen_candidate.b64"
+ATTEMPT_INDEX = 2
+PRIOR_ATTEMPT_INDEX = 1
+FROZEN_MANIFEST = SOFTWARE_ROOT / "m3_frozen_manifest.json"
+FROZEN_SNAPSHOT = SOFTWARE_ROOT / "m3_frozen_candidate.b64"
 SCHEMA_PATH = SOFTWARE_ROOT / "exports" / "holdout_schema.json"
 FORMAL_EXPORT = SOFTWARE_ROOT / "exports" / "eval_results.json"
 FORMAL_REPLAY = SOFTWARE_ROOT / "exports" / "logs" / "replay_log.jsonl"
 PUBLIC_MANIFEST = SOFTWARE_ROOT / "exports" / "holdout" / "seed_manifest.json"
-PRIVATE_DIR = REPO_ROOT / ".flow" / "holdout"
+HOLDOUT_ROOT = REPO_ROOT / ".flow" / "holdout"
+PRIVATE_DIR = HOLDOUT_ROOT / "attempt-2"
 ATTEMPT_PATH = PRIVATE_DIR / "private_attempt.json"
 GAMES_PATH = PRIVATE_DIR / "private_games.json"
 STAGED_GENERATION = PRIVATE_DIR / "staged_generation"
@@ -68,14 +80,16 @@ GEN_EXPORT = PUBLISHED_GENERATION / "eval_results.json"
 GEN_REPLAY = PUBLISHED_GENERATION / "replay_log.jsonl"
 GEN_MANIFEST = PUBLISHED_GENERATION / "seed_manifest.json"
 GEN_METRICS = PUBLISHED_GENERATION / "software_metrics.json"
+ARCHIVED_GENERATION = SOFTWARE_ROOT / "exports" / "holdout" / "attempt-1"
 METRICS_PATH = SOFTWARE_ROOT / "metrics.json"
+WORK_PRODUCT_BOUNDARY = "workspace/software/"
 CLOSURE_PATHS = tuple(sorted({
     "workspace/software/scripts/run_holdout.py",
     "workspace/software/scripts/run_eval.py",
     "workspace/software/vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl",
     "workspace/software/exports/holdout_schema.json",
-    "workspace/software/m2b_frozen_manifest.json",
-    "workspace/software/m2b_frozen_candidate.b64",
+    "workspace/software/m3_frozen_manifest.json",
+    "workspace/software/m3_frozen_candidate.b64",
     *(
         path.relative_to(REPO_ROOT).as_posix()
         for path in (SOFTWARE_ROOT / "kgenv").rglob("*.py")
@@ -87,7 +101,7 @@ def _git(*args: str) -> str:
     return subprocess.run(
         ["git", *args], cwd=REPO_ROOT, capture_output=True, text=True,
         check=True, timeout=30,
-    ).stdout.strip()
+    ).stdout.strip("\r\n")
 
 
 def _sha256_bytes(data: bytes) -> str:
@@ -122,7 +136,7 @@ def _load_frozen_blob(manifest: dict) -> bytes:
 def frozen_candidate_snapshot(manifest: dict, evaluation_input: dict):
     candidate = manifest["candidate"]
     data = _load_frozen_blob(manifest)
-    with tempfile.TemporaryDirectory(prefix="m2c_frozen_candidate_") as temp:
+    with tempfile.TemporaryDirectory(prefix="m4_frozen_candidate_") as temp:
         snapshot_path = Path(temp) / "main.py"
         snapshot_path.write_bytes(data)
         identity = {
@@ -220,19 +234,55 @@ def _input_closure() -> dict:
     return {**body, "sha256": canonical_sha256(body)}
 
 
+def _worktree_state() -> dict:
+    """Record the git state; tracked changes must stay in the declared boundary.
+
+    The one-time semantics are anchored on the pinned candidate SHA, the
+    hashed input closure (checked before AND after the run), and the frozen
+    attempt state -- not on git cleanliness.  The listing below is recorded
+    verbatim into the attempt state and the published export so the exact
+    worktree the run executed from is reproducible from the closure hashes.
+    """
+    git_ref = _git("rev-parse", "HEAD")
+    porcelain = _git("status", "--porcelain").splitlines()
+    outside = [
+        line for line in porcelain
+        if not line.startswith("??")
+        and not line[3:].strip('"').split(" -> ")[-1].startswith(WORK_PRODUCT_BOUNDARY)
+    ]
+    if outside:
+        raise ContractError(
+            "holdout preflight requires tracked worktree changes confined to "
+            f"{WORK_PRODUCT_BOUNDARY}: {outside}"
+        )
+    return {
+        "git_ref": git_ref,
+        "status_porcelain": porcelain,
+        "tracked_changes_outside_boundary": [],
+        "note": (
+            "run executed from a worktree containing declared m4 work products; "
+            "reproduce via recorded input-closure hashes"
+        ),
+    }
+
+
 def preflight(require_frozen: bool = True, *, require_clean: bool = True) -> dict:
     manifest, manifest_sha = _load_frozen(require_frozen)
-    if require_clean and _git("status", "--porcelain"):
-        raise ContractError("holdout preflight requires a clean tracked worktree")
+    worktree = _worktree_state() if require_clean else None
     closure = _input_closure()
     candidate = manifest["candidate"]
     return {
+        "attempt_index": ATTEMPT_INDEX,
         "candidate_path": candidate["path"],
         "candidate_sha256": candidate["sha256"],
         "frozen_git_ref": candidate["git_ref"],
         "frozen_manifest_sha256": manifest_sha,
+        "worktree": worktree,
         "evaluator_closure": closure,
         "expected_games": HOLDOUT_EXPECTED_GAMES,
+        "historical_seed_exclusion_count": len(HISTORICAL_SEEDS_V2),
+        "matrix_order": list(HOLDOUT_V2_MATRIX_ORDER),
+        "prior_generation_archived": ARCHIVED_GENERATION.is_dir(),
         "holdout_revealed": PUBLIC_MANIFEST.exists(),
         "published": FORMAL_EXPORT.exists() and _is_published_holdout(FORMAL_EXPORT),
     }
@@ -292,12 +342,13 @@ def _public_seed_manifest(state: dict) -> dict:
     return {
         "schema_version": "1.0",
         "attempt_id": state["attempt_id"],
+        "attempt_index": ATTEMPT_INDEX,
         "generated_after_freeze": True,
         "random_source": "Python secrets.randbelow (OS cryptographic entropy)",
         "revealed_at": utc_now(),
         "seeds": state["seeds"],
         "sha256": canonical_sha256(state["seeds"]),
-        "historical_seed_exclusion_count": len(HISTORICAL_SEEDS),
+        "historical_seed_exclusion_count": len(HISTORICAL_SEEDS_V2),
         "overlap_with_historical": [],
     }
 
@@ -318,7 +369,7 @@ def _build_payload(state: dict, games: list[dict], identity: dict,
         raise ContractError("candidate snapshot input hash differs from holdout schedule")
     public_manifest = _public_seed_manifest(state)
     exported_games = list(games)
-    confirmatory = candidate_confirmatory(exported_games)
+    confirmatory = candidate_confirmatory(exported_games, list(HOLDOUT_V2_MATRIX_ORDER[1:]))
     table = elo_table([
         {**game, "winner_label": game["winner"]} for game in exported_games
     ]).ranked()
@@ -339,12 +390,12 @@ def _build_payload(state: dict, games: list[dict], identity: dict,
         "config": {
             "rounds": 8,
             "seeds": seeds,
-            "matrix_order": list(STANDARD_MATRIX_ORDER),
+            "matrix_order": list(HOLDOUT_V2_MATRIX_ORDER),
             "pairs": canonical_holdout_pairs(),
             "seat_orders": ["AB", "BA"],
             "expected_games": HOLDOUT_EXPECTED_GAMES,
         },
-        "opponent_pool_names": list(STANDARD_MATRIX_ORDER[1:]),
+        "opponent_pool_names": list(HOLDOUT_V2_MATRIX_ORDER[1:]),
         "games": exported_games,
         "abnormal_games": 0,
         "integrity": {
@@ -372,11 +423,12 @@ def _build_payload(state: dict, games: list[dict], identity: dict,
                 "resume_exact_attempt_only": True,
                 "candidate_change_invalidates": True,
                 "candidate_source": "frozen_git_blob",
+                "historical_seed_exclusion_count": len(HISTORICAL_SEEDS_V2),
             },
             "frozen_candidate": {"path": frozen["path"], "sha256": frozen["sha256"], "git_ref": frozen["git_ref"]},
             "input_closure": {"sha256": closure_before["sha256"], "before": closure_before, "after": closure_after},
             "attempt": {
-                "index": 1,
+                "index": ATTEMPT_INDEX,
                 "attempt_id": state["attempt_id"],
                 "status": "published",
                 "started_at": state["started_at"],
@@ -384,6 +436,9 @@ def _build_payload(state: dict, games: list[dict], identity: dict,
                 "published": True,
                 "invalidated": False,
                 "invalidation_reason": None,
+                "prior_attempt_index": PRIOR_ATTEMPT_INDEX,
+                "prior_attempt_evidence": ARCHIVED_GENERATION.relative_to(REPO_ROOT).as_posix(),
+                "worktree_state": state.get("worktree"),
             },
             "seed_manifest": public_manifest,
             "candidate_hash_match": {
@@ -393,7 +448,7 @@ def _build_payload(state: dict, games: list[dict], identity: dict,
                 "pass": frozen["sha256"] == identity["submission_sha256"] == file_sha256(REPO_ROOT / frozen["path"]),
             },
             "seed_domain_isolation": {
-                "historical_count": len(HISTORICAL_SEEDS),
+                "historical_count": len(HISTORICAL_SEEDS_V2),
                 "overlap_count": 0,
                 "pass": True,
             },
@@ -410,9 +465,13 @@ def _generation_bytes(payload: dict, public_manifest: dict,
     replay_data = _replay_bytes(games)
     shard = json.loads(METRICS_PATH.read_text(encoding="utf-8"))
     shard.setdefault("metrics", {}).update(
-        project_holdout_metrics(payload, _sha256_bytes(export_data))
+        project_holdout_metrics(payload, _sha256_bytes(export_data), prefix="m4_")
     )
-    shard["milestone"] = "m2c-holdout-confirm (validated one-time full-matrix holdout; historical keys retained)"
+    shard["milestone"] = (
+        "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 "
+        "(replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; "
+        "one-time full-pool holdout for 5713c17e; historical keys retained)"
+    )
     metrics_data = (json.dumps(shard, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     return {
         "eval_results.json": export_data,
@@ -437,8 +496,13 @@ def _validate_generation(directory: Path) -> dict:
     public = json.loads((directory / "seed_manifest.json").read_text(encoding="utf-8"))
     if public != payload["holdout"]["seed_manifest"]:
         raise ContractError("generation seed manifest differs from formal export")
+    index = payload["holdout"]["attempt"]["index"]
+    trace_key = (
+        "confirmatory_export_traceability" if index == PRIOR_ATTEMPT_INDEX
+        else "m4_confirmatory_export_traceability"
+    )
     metrics = json.loads((directory / "software_metrics.json").read_text(encoding="utf-8"))
-    trace = metrics.get("metrics", {}).get("confirmatory_export_traceability", {}).get("value", {})
+    trace = metrics.get("metrics", {}).get(trace_key, {}).get("value", {})
     if trace.get("export_sha256") != file_sha256(directory / "eval_results.json"):
         raise ContractError("generation metrics traceability hash mismatch")
     return payload
@@ -487,16 +551,41 @@ def _project_generation() -> None:
             _atomic_project(source, target)
 
 
+def _archive_prior_generation() -> None:
+    """Move the published attempt-1 generation to its archive, byte-identical."""
+    if not PUBLISHED_GENERATION.exists():
+        return
+    payload = _validate_generation(PUBLISHED_GENERATION)
+    attempt = payload["holdout"]["attempt"]
+    if attempt.get("index") != PRIOR_ATTEMPT_INDEX:
+        raise ContractError(
+            "existing published generation is not the attempt-1 generation"
+        )
+    if attempt.get("status") != "published" or attempt.get("published") is not True:
+        raise ContractError("prior holdout generation is not published evidence")
+    if ARCHIVED_GENERATION.exists():
+        raise ContractError(
+            "attempt-1 archive already exists; published duplicate is unexpected"
+        )
+    ARCHIVED_GENERATION.parent.mkdir(parents=True, exist_ok=True)
+    os.replace(PUBLISHED_GENERATION, ARCHIVED_GENERATION)
+    archived = _validate_generation(ARCHIVED_GENERATION)
+    if archived != payload:
+        raise ContractError("archived attempt-1 generation changed during the move")
+
+
 def _reconcile_published_state() -> dict:
     manifest, _ = _load_frozen(True)
     payload = _validate_generation(PUBLISHED_GENERATION)
     expected_sha = manifest["candidate"]["sha256"]
     if payload["identity"]["submission_sha256"] != expected_sha:
         raise ContractError("published generation identity differs from frozen candidate")
+    attempt = payload["holdout"]["attempt"]
+    if attempt.get("index") != ATTEMPT_INDEX:
+        raise ContractError("published generation is not the attempt-2 holdout")
     if not ATTEMPT_PATH.exists():
         raise ContractError("published generation has no private attempt state")
     state = json.loads(ATTEMPT_PATH.read_text(encoding="utf-8"))
-    attempt = payload["holdout"]["attempt"]
     if state.get("attempt_id") != attempt.get("attempt_id"):
         raise ContractError("published generation and private attempt differ")
     if state.get("status") not in {"running", "committing", "published"}:
@@ -510,6 +599,14 @@ def _reconcile_published_state() -> dict:
     return payload
 
 
+def _verify_archived_generation() -> None:
+    if not ARCHIVED_GENERATION.is_dir():
+        return
+    payload = _validate_generation(ARCHIVED_GENERATION)
+    if payload["holdout"]["attempt"].get("index") != PRIOR_ATTEMPT_INDEX:
+        raise ContractError("archived generation is not the attempt-1 evidence")
+
+
 def verify_published(require_frozen: bool = True) -> dict:
     _load_frozen(require_frozen)
     if not PUBLISHED_GENERATION.is_dir():
@@ -519,30 +616,71 @@ def verify_published(require_frozen: bool = True) -> dict:
     current_closure = _input_closure()
     if current_closure != recorded_closure:
         raise ContractError("current evaluator input closure differs from published holdout")
+    _verify_archived_generation()
     return validate_holdout_payload(payload)
 
+
+def _rotate_invalidated_attempt() -> dict:
+    """Archive an invalidated (consumed) attempt so a fresh one may start.
+
+    An invalidated attempt's entropy is burned: its seeds are archived
+    unopened-private and never re-evaluated.  Rotation is allowed only for
+    the ``invalidated`` status -- published and running attempts are never
+    rotated, and each invalidated state is archived exactly once.
+    """
+    state = json.loads(ATTEMPT_PATH.read_text(encoding="utf-8"))
+    if state.get("status") != "invalidated":
+        raise ContractError("refusing to rotate a non-invalidated attempt")
+    suffix = state["attempt_id"]
+    archived = PRIVATE_DIR / f"private_attempt.invalidated-{suffix}.json"
+    if archived.exists():
+        raise ContractError("invalidated attempt archive already exists")
+    os.replace(ATTEMPT_PATH, archived)
+    if GAMES_PATH.exists():
+        os.replace(GAMES_PATH, PRIVATE_DIR / f"private_games.invalidated-{suffix}.json")
+    return state
 
 
 def execute(require_frozen: bool = True) -> dict:
     if PUBLISHED_GENERATION.exists():
-        _load_frozen(require_frozen)
-        return validate_holdout_payload(_reconcile_published_state())
+        payload = _validate_generation(PUBLISHED_GENERATION)
+        if payload["holdout"]["attempt"].get("index") == ATTEMPT_INDEX:
+            _load_frozen(require_frozen)
+            return validate_holdout_payload(_reconcile_published_state())
+        _archive_prior_generation()
     if ATTEMPT_PATH.exists():
         existing = json.loads(ATTEMPT_PATH.read_text(encoding="utf-8"))
         if existing.get("status") == "committing":
             _validate_generation(STAGED_GENERATION)
             _commit_generation(STAGED_GENERATION)
             return validate_holdout_payload(_reconcile_published_state())
+        if existing.get("status") == "published":
+            raise ContractError(
+                "attempt state is published without its authoritative generation"
+            )
+        if existing.get("status") == "invalidated":
+            # consumed pre-run attempt (e.g. fail-closed pool check): start a
+            # fresh attempt with fresh entropy; the archived state never
+            # re-enters evaluation
+            _rotate_invalidated_attempt()
     if _is_published_holdout(FORMAL_EXPORT) or PUBLIC_MANIFEST.exists():
-        raise ContractError("legacy holdout projection exists without authoritative generation")
+        # the only legal pre-existing projections are attempt-1's, and only
+        # after its generation has been archived byte-identically
+        if not ARCHIVED_GENERATION.is_dir():
+            raise ContractError("prior holdout projection exists without archived generation")
+        _verify_archived_generation()
     info = preflight(require_frozen, require_clean=True)
     state, _ = create_or_load_attempt(
         ATTEMPT_PATH,
         candidate_sha256=info["candidate_sha256"],
         frozen_manifest_sha256=info["frozen_manifest_sha256"],
         evaluator_closure=info["evaluator_closure"],
+        attempt_index=ATTEMPT_INDEX,
     )
-    schedule = canonical_holdout_schedule(state["seeds"])
+    if state.get("worktree") is None:
+        state.update(worktree=info["worktree"])
+        atomic_write_json(ATTEMPT_PATH, state)
+    schedule = canonical_holdout_schedule(state["seeds"], attempt_index=ATTEMPT_INDEX)
     games = _load_checkpoint(state, schedule)
     evaluation_input = {
         "pairs": canonical_holdout_pairs(), "seeds": state["seeds"],
@@ -553,8 +691,13 @@ def execute(require_frozen: bool = True) -> dict:
     manifest, _ = _load_frozen(require_frozen)
     try:
         with frozen_candidate_snapshot(manifest, evaluation_input) as snapshot:
-            contenders, opponents = build_players(str(snapshot.snapshot_path))
+            contenders, opponents = build_players(
+                str(snapshot.snapshot_path), extended_pool=True
+            )
             players = {**contenders, **opponents}
+            missing = [name for name in HOLDOUT_V2_MATRIX_ORDER if name not in players]
+            if missing:
+                raise ContractError(f"holdout pool is missing players: {missing}")
             for index, item in enumerate(schedule[len(games):], start=len(games)):
                 result = run_match(
                     players[item["p0"]], players[item["p1"]], seed=item["seed"],
@@ -603,7 +746,6 @@ def execute(require_frozen: bool = True) -> dict:
         raise ContractError(
             "holdout paused by a recoverable runner failure; resume the same attempt"
         ) from exc
-
 
 
 def main() -> int:
