@@ -44,6 +44,10 @@ python -c "import hashlib,pathlib; print(hashlib.sha256(pathlib.Path('workspace/
 
 # 11) LLM A/B（每局重建 provider/budget；无完整 KG_LLM_* 时只做 NullProvider 自检）
 python workspace/software/scripts/run_llm_ab.py --rounds 4
+
+# 12) m1 回放语料（战役 III）：重建画像档案 + 完整性校验（原始回放在 gitignored .tmp-corpus/）
+python workspace/software/scripts/corpus_build.py
+python workspace/software/scripts/corpus_integrity.py --mode official
 ```
 
 ## 目录
@@ -62,12 +66,18 @@ workspace/software/
 │   ├── regression.py                  冻结回归线断言（--assert-regression 的纯逻辑核心；
 │   │                                  m1 起只在冻结池子流上断言，强对手不改变冻结线）
 │   ├── variance.py                    种子方差统计（Wilson 胜率区间 / t 分数资金差区间）
+│   ├── replay_profile.py              回放画像提取器（纯函数：资金曲线/畜群轨迹/作物轮替/
+│   │                                  雇佣强度/外购饲料/卖出价格分布/终局抛售构成）
 │   └── bots/                          baseline_wheat / greedy_carrot / cow_baron /
 │                                       melon_hoarder / expansionist / LLM provider（默认关）
 ├── scripts/run_eval.py                全池 matchup 矩阵 + Elo + 方差报告 + 确定性探针 +
 │                                       exports 产出（schema v1.1）+ 回归门旗标
 ├── scripts/check_opponent_strength.py 强度门：新对手对冻结弱池 >=50% 胜率断言
 ├── scripts/analyze_failure_modes.py   失败模式探针（多种子深记录 + 证据报告生成）
+├── scripts/corpus_fetch.py            回放语料抓取通道（HTTP range 探针/日分片选局/下载/
+│                                       manifest 登记；只读网络，<=2 分片 & ~3GB 预算守卫）
+├── scripts/corpus_build.py            m1 画像档案构建（完整性门 -> 逐局画像 -> 分层汇总 MD）
+├── scripts/corpus_integrity.py        语料完整性校验（official 严格 / dev 宽松）
 ├── smoke_boot.py                      冒烟自检（验收命令）
 ├── tests/                             pytest：收益模型/红线/agent 契约/对局器/回归门/
 │                                       新对手单测/方差统计
@@ -78,6 +88,8 @@ workspace/software/
 │   ├── eval_audit.md(+summary.json)   评估保真度审计清单（ABE-Ralph 式，逐项 pass/warn）
 │   ├── failure_modes.md(+summary)     失败模式清单（FM-1..4，含证据局号）
 │   ├── failure_probe_report.md        失败探针自动证据层（分差曲线/价格轨迹）
+│   ├── replay_profiles/               m1 回放画像档案（profiles/*.json + index.json +
+│   │                                  exclusions.json + band_summary.md；不放原始回放）
 │   └── logs/                          replay_log.jsonl / failure_probe_log.jsonl
 │                                       （每局一行的对局记录 + 每日资金 + 共享市场价格）
 ├── metrics.json                       实测指标分片（只写实测值，禁编造）

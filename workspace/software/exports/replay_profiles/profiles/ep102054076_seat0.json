@@ -1,0 +1,745 @@
+{
+ "protocol": "replay-profile/1.0",
+ "episode_id": 102054076,
+ "seat": 0,
+ "team": "NIklitaCheporev",
+ "opponent": "Hanserong",
+ "status": "DONE",
+ "reward": 52067.0,
+ "won": true,
+ "source_url": "https://www.kaggle.com/datasets/kaggle/kaggriculture-episodes-2026-08-28/102054076.json",
+ "capture_date": "2026-08-29",
+ "integrity_issues": [],
+ "money": {
+  "opening": 3000.0,
+  "final": 52067.0,
+  "min": 14.0,
+  "curve_step_money": [
+   [
+    0,
+    3000.0
+   ],
+   [
+    24,
+    24.0
+   ],
+   [
+    48,
+    238.0
+   ],
+   [
+    72,
+    202.0
+   ],
+   [
+    96,
+    185.0
+   ],
+   [
+    120,
+    479.0
+   ],
+   [
+    144,
+    532.0
+   ],
+   [
+    168,
+    651.0
+   ],
+   [
+    192,
+    654.0
+   ],
+   [
+    216,
+    708.0
+   ],
+   [
+    240,
+    1125.0
+   ],
+   [
+    264,
+    14174.0
+   ],
+   [
+    288,
+    12127.0
+   ],
+   [
+    312,
+    16293.0
+   ],
+   [
+    336,
+    17075.0
+   ],
+   [
+    360,
+    19005.0
+   ],
+   [
+    384,
+    20993.0
+   ],
+   [
+    408,
+    23552.0
+   ],
+   [
+    432,
+    26590.0
+   ],
+   [
+    456,
+    31015.0
+   ],
+   [
+    480,
+    33366.0
+   ],
+   [
+    504,
+    35042.0
+   ],
+   [
+    528,
+    37393.0
+   ],
+   [
+    552,
+    38900.0
+   ],
+   [
+    576,
+    39296.0
+   ],
+   [
+    600,
+    40504.0
+   ],
+   [
+    624,
+    42347.0
+   ],
+   [
+    648,
+    43443.0
+   ],
+   [
+    672,
+    44955.0
+   ],
+   [
+    696,
+    47208.0
+   ]
+  ],
+  "net_cash_by_day": {
+   "0": -2976.0,
+   "1": 214.0,
+   "2": -36.0,
+   "3": -17.0,
+   "4": 208.0,
+   "5": 139.0,
+   "6": -149.0,
+   "7": 271.0,
+   "8": 126.0,
+   "9": 345.0,
+   "10": 13049.0,
+   "11": -2047.0,
+   "12": 3903.0,
+   "13": 1045.0,
+   "14": 1930.0,
+   "15": 1971.0,
+   "16": 2576.0,
+   "17": 3038.0,
+   "18": 4425.0,
+   "19": 2351.0,
+   "20": 1676.0,
+   "21": 2351.0,
+   "22": 1507.0,
+   "23": 393.0,
+   "24": 1211.0,
+   "25": 1691.0,
+   "26": 1087.0,
+   "27": 1673.0,
+   "28": 2253.0,
+   "29": 4859.0
+  }
+ },
+ "herd": {
+  "by_day": [
+   {
+    "day": 0,
+    "SHEEP": 2,
+    "COW": 2
+   },
+   {
+    "day": 1,
+    "EMPTY_STRUCTURE": 2,
+    "SHEEP": 2,
+    "COW": 2
+   },
+   {
+    "day": 2,
+    "COW": 3,
+    "SHEEP": 2,
+    "EMPTY_STRUCTURE": 1
+   },
+   {
+    "day": 3,
+    "COW": 3,
+    "SHEEP": 2,
+    "EMPTY_STRUCTURE": 1
+   },
+   {
+    "day": 4,
+    "COW": 4,
+    "SHEEP": 2
+   },
+   {
+    "day": 5,
+    "COW": 4,
+    "SHEEP": 2
+   },
+   {
+    "day": 6,
+    "COW": 6,
+    "EMPTY_STRUCTURE": 5,
+    "SHEEP": 2
+   },
+   {
+    "day": 7,
+    "COW": 7,
+    "EMPTY_STRUCTURE": 4,
+    "SHEEP": 2
+   },
+   {
+    "day": 8,
+    "COW": 7,
+    "EMPTY_STRUCTURE": 2,
+    "SHEEP": 4
+   },
+   {
+    "day": 9,
+    "COW": 8,
+    "EMPTY_STRUCTURE": 1,
+    "SHEEP": 4
+   },
+   {
+    "day": 10,
+    "EMPTY_STRUCTURE": 3,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 11,
+    "EMPTY_STRUCTURE": 3,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 12,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 13,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 14,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 15,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 16,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 17,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 18,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 19,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 20,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 21,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 22,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 23,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 24,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 25,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 26,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 27,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 28,
+    "COW": 8,
+    "SHEEP": 4
+   },
+   {
+    "day": 29,
+    "COW": 8,
+    "SHEEP": 4
+   }
+  ],
+  "final": {
+   "COW": 8,
+   "SHEEP": 4
+  },
+  "animal_buys": {
+   "COW": 8,
+   "SHEEP": 4
+  }
+ },
+ "crops": {
+  "by_day": [
+   {
+    "day": 0,
+    "WHEAT": 7,
+    "MELON": 12
+   },
+   {
+    "day": 1,
+    "WHEAT": 7,
+    "MELON": 12
+   },
+   {
+    "day": 2,
+    "WHEAT": 7,
+    "MELON": 12
+   },
+   {
+    "day": 3,
+    "WHEAT": 7,
+    "MELON": 12
+   },
+   {
+    "day": 4,
+    "WHEAT": 7,
+    "MELON": 12
+   },
+   {
+    "day": 5,
+    "WHEAT": 3,
+    "STRAWBERRY": 4,
+    "MELON": 12
+   },
+   {
+    "day": 6,
+    "WHEAT": 6,
+    "STRAWBERRY": 10,
+    "MELON": 12
+   },
+   {
+    "day": 7,
+    "WHEAT": 9,
+    "STRAWBERRY": 14,
+    "MELON": 12
+   },
+   {
+    "day": 8,
+    "WHEAT": 5,
+    "STRAWBERRY": 18,
+    "MELON": 12
+   },
+   {
+    "day": 9,
+    "WHEAT": 5,
+    "STRAWBERRY": 19,
+    "MELON": 13
+   },
+   {
+    "day": 10,
+    "WHEAT": 11,
+    "STRAWBERRY": 19,
+    "MELON": 1
+   },
+   {
+    "day": 11,
+    "STRAWBERRY": 37,
+    "WHEAT": 19,
+    "MELON": 2
+   },
+   {
+    "day": 12,
+    "WHEAT": 24,
+    "STRAWBERRY": 37,
+    "MELON": 2
+   },
+   {
+    "day": 13,
+    "WHEAT": 24,
+    "STRAWBERRY": 37,
+    "MELON": 2
+   },
+   {
+    "day": 14,
+    "WHEAT": 24,
+    "STRAWBERRY": 37,
+    "MELON": 2
+   },
+   {
+    "day": 15,
+    "WHEAT": 24,
+    "STRAWBERRY": 37,
+    "MELON": 2
+   },
+   {
+    "day": 16,
+    "WHEAT": 24,
+    "STRAWBERRY": 37,
+    "MELON": 2
+   },
+   {
+    "day": 17,
+    "WHEAT": 24,
+    "STRAWBERRY": 37,
+    "MELON": 2
+   },
+   {
+    "day": 18,
+    "WHEAT": 24,
+    "STRAWBERRY": 37,
+    "MELON": 2
+   },
+   {
+    "day": 19,
+    "WHEAT": 24,
+    "STRAWBERRY": 37,
+    "MELON": 2
+   },
+   {
+    "day": 20,
+    "WHEAT": 24,
+    "STRAWBERRY": 37,
+    "MELON": 2
+   },
+   {
+    "day": 21,
+    "WHEAT": 25,
+    "STRAWBERRY": 37,
+    "MELON": 1
+   },
+   {
+    "day": 22,
+    "WHEAT": 29,
+    "STRAWBERRY": 33,
+    "MELON": 1
+   },
+   {
+    "day": 23,
+    "WHEAT": 35,
+    "STRAWBERRY": 27
+   },
+   {
+    "day": 24,
+    "WHEAT": 39,
+    "STRAWBERRY": 23
+   },
+   {
+    "day": 25,
+    "WHEAT": 39,
+    "STRAWBERRY": 19,
+    "CARROT": 4
+   },
+   {
+    "day": 26,
+    "WHEAT": 39,
+    "CARROT": 5,
+    "STRAWBERRY": 18
+   },
+   {
+    "day": 27,
+    "WHEAT": 41,
+    "CARROT": 7,
+    "STRAWBERRY": 14
+   },
+   {
+    "day": 28,
+    "WHEAT": 25,
+    "CARROT": 5
+   },
+   {
+    "day": 29,
+    "CARROT": 1,
+    "WHEAT": 1
+   }
+  ],
+  "final": {
+   "CARROT": 1,
+   "WHEAT": 1
+  },
+  "tile_day_share": {
+   "STRAWBERRY": 0.455,
+   "WHEAT": 0.424,
+   "MELON": 0.105,
+   "CARROT": 0.016
+  },
+  "seed_buys": {
+   "WHEAT": 187,
+   "MELON": 15,
+   "CARROT": 10,
+   "STRAWBERRY": 40
+  }
+ },
+ "hires": {
+  "by_day": [
+   5,
+   4,
+   4,
+   5,
+   4,
+   5,
+   8,
+   8,
+   10,
+   9,
+   11,
+   10,
+   9,
+   10,
+   10,
+   11,
+   11,
+   12,
+   12,
+   12,
+   12,
+   12,
+   11,
+   11,
+   11,
+   11,
+   11,
+   11,
+   11,
+   11
+  ],
+  "total": 282,
+  "avg_per_day": 9.4,
+  "max_day": 12
+ },
+ "external_buys": {
+  "feed_item": "WHEAT",
+  "feed_qty": 436,
+  "feed_avg_price": 36.5,
+  "buy_product_qty_by_item": {
+   "WHEAT": {
+    "qty": 436,
+    "price_avg": 36.5
+   },
+   "FERTILIZER": {
+    "qty": 269,
+    "price_avg": 54.6
+   }
+  },
+  "fertilizer_qty": 269
+ },
+ "sells": {
+  "per_item": {
+   "WHEAT": {
+    "orders": 134,
+    "qty": 813,
+    "quoted_revenue": 31727.0,
+    "price_avg": 36.7,
+    "price_min": 28.0,
+    "price_median": 36.0,
+    "price_max": 44.0
+   },
+   "FERTILIZER": {
+    "orders": 220,
+    "qty": 636,
+    "quoted_revenue": 32799.0,
+    "price_avg": 56.2,
+    "price_min": 12.0,
+    "price_median": 57.0,
+    "price_max": 100.0
+   },
+   "WOOL": {
+    "orders": 42,
+    "qty": 184,
+    "quoted_revenue": 4932.0,
+    "price_avg": 15.4,
+    "price_min": 1.0,
+    "price_median": 1.0,
+    "price_max": 183.0
+   },
+   "MILK": {
+    "orders": 58,
+    "qty": 656,
+    "quoted_revenue": 11556.0,
+    "price_avg": 23.3,
+    "price_min": 1.0,
+    "price_median": 12.0,
+    "price_max": 145.0
+   },
+   "MELON": {
+    "orders": 13,
+    "qty": 91,
+    "quoted_revenue": 14744.0,
+    "price_avg": 135.5,
+    "price_min": 76.0,
+    "price_median": 99.0,
+    "price_max": 250.0
+   },
+   "STRAWBERRY": {
+    "orders": 36,
+    "qty": 426,
+    "quoted_revenue": 14407.0,
+    "price_avg": 41.5,
+    "price_min": 1.0,
+    "price_median": 5.0,
+    "price_max": 194.0
+   },
+   "CARROT": {
+    "orders": 5,
+    "qty": 19,
+    "quoted_revenue": 1510.0,
+    "price_avg": 78.0,
+    "price_min": 76.0,
+    "price_median": 78.0,
+    "price_max": 82.0
+   }
+  },
+  "endgame_per_item": {
+   "WHEAT": {
+    "orders": 11,
+    "qty": 148,
+    "quoted_revenue": 5560.0,
+    "price_avg": 38.0,
+    "price_min": 34.0,
+    "price_median": 38.0,
+    "price_max": 41.0
+   },
+   "MILK": {
+    "orders": 6,
+    "qty": 136,
+    "quoted_revenue": 758.0,
+    "price_avg": 3.7,
+    "price_min": 1.0,
+    "price_median": 3.0,
+    "price_max": 7.0
+   },
+   "WOOL": {
+    "orders": 2,
+    "qty": 12,
+    "quoted_revenue": 12.0,
+    "price_avg": 1.0,
+    "price_min": 1.0,
+    "price_median": 1.0,
+    "price_max": 1.0
+   },
+   "CARROT": {
+    "orders": 5,
+    "qty": 19,
+    "quoted_revenue": 1510.0,
+    "price_avg": 78.0,
+    "price_min": 76.0,
+    "price_median": 78.0,
+    "price_max": 82.0
+   },
+   "FERTILIZER": {
+    "orders": 19,
+    "qty": 46,
+    "quoted_revenue": 725.0,
+    "price_avg": 15.5,
+    "price_min": 12.0,
+    "price_median": 14.0,
+    "price_max": 20.0
+   },
+   "STRAWBERRY": {
+    "orders": 3,
+    "qty": 117,
+    "quoted_revenue": 765.0,
+    "price_avg": 3.7,
+    "price_min": 1.0,
+    "price_median": 1.0,
+    "price_max": 9.0
+   }
+  },
+  "total_quoted_revenue": 111675.0,
+  "crop_quoted_revenue": 62388.0,
+  "animal_quoted_revenue": 16488.0,
+  "fertilizer_quoted_revenue": 32799.0,
+  "endgame_quoted_revenue": 9330.0,
+  "endgame_revenue_share": 0.084,
+  "orders_total": 508
+ },
+ "endgame": {
+  "start_step": 672,
+  "money_at_start": 44955.0,
+  "money_final": 52067.0,
+  "gain": 7112.0,
+  "gain_pct_of_final": 13.7
+ },
+ "land": {
+  "quadrant_unlock_day": {
+   "NW": 0,
+   "NE": 6,
+   "SW": 11
+  },
+  "quadrants_final": 3
+ },
+ "op_counts": {
+  "BUY_PRODUCT": 235,
+  "BUY_SEED": 49,
+  "HIRE": 282,
+  "BUY_ANIMAL": 8,
+  "SELL": 508,
+  "BUY_LAND": 2
+ },
+ "bands": [
+  "top100",
+  "top20"
+ ],
+ "exploratory": true
+}
