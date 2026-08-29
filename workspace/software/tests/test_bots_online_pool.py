@@ -28,11 +28,13 @@ from kgenv.bots.online_pool import (
     SCALE_RANCH_PARAMS,
     SELF_FEED_RANCH_PARAMS,
     TEMPLATE_WHEAT_PARAMS,
+    WHEAT_STRAW_MONSTER_PARAMS,
     crop_rotator_agent,
     near_band_diversified_agent,
     scale_ranch_agent,
     self_feed_ranch_agent,
     template_wheat_agent,
+    wheat_straw_monster_agent,
 )
 from kgenv.gym_env import KaggricultureGym
 
@@ -47,6 +49,7 @@ NEW_BOTS = {
     "self_feed_ranch": self_feed_ranch_agent,
     "near_band_diversified": near_band_diversified_agent,
     "scale_ranch": scale_ranch_agent,
+    "wheat_straw_monster": wheat_straw_monster_agent,
 }
 
 
@@ -472,6 +475,7 @@ def test_scale_ranch_endgame_liquidation_day_28():
     ("self_feed_ranch", SELF_FEED_RANCH_PARAMS),
     ("near_band_diversified", NEAR_BAND_PARAMS),
     ("scale_ranch", SCALE_RANCH_PARAMS),
+    ("wheat_straw_monster", WHEAT_STRAW_MONSTER_PARAMS),
 ])
 def test_every_param_set_documents_provenance(name, params):
     assert params["name"] == name
@@ -480,3 +484,49 @@ def test_every_param_set_documents_provenance(name, params):
                 "money_crop_caps", "sell_gates", "sell_tranches",
                 "feed_gate", "endgame_start"):
         assert key in params, f"{name} missing {key}"
+
+
+# ------------------------------------------------- wheat_straw_monster (r5-P6)
+
+def test_monster_params_cite_round3_provenance():
+    assert WHEAT_STRAW_MONSTER_PARAMS["exploratory_params"] is False
+    assert "ep102549493" in WHEAT_STRAW_MONSTER_PARAMS["provenance"]
+    assert "ep102558469" in WHEAT_STRAW_MONSTER_PARAMS["provenance"]
+
+
+def test_monster_crew_10_from_day_zero():
+    # Renji hires 10 hands on day 0 itself (the field economy needs hands
+    # before land); the step-up to 12 lands with the strawberry burst
+    assert WHEAT_STRAW_MONSTER_PARAMS["hire_ramp"] == ((0, 10), (12, 12))
+
+
+def test_monster_strawberry_burst_window_and_ceiling():
+    # the burst: 42-tile ceiling planted in the d9-14 window after the
+    # second quadrant lands (Renji 7 probe tiles d1 then 32 in d10-12)
+    phase = WHEAT_STRAW_MONSTER_PARAMS["crop_phase"]["STRAWBERRY"]
+    cap = WHEAT_STRAW_MONSTER_PARAMS["money_crop_caps"]["STRAWBERRY"]
+    assert phase == (9, 14)
+    assert cap == 42
+
+
+def test_monster_day0_hire_order_fires():
+    # at hour 0 on day 0 with 3000 start, the first order is a HIRE
+    act = wheat_straw_monster_agent(synth_obs(day=0, hour=0))
+    assert act["market"][0] == ["HIRE"]
+
+
+def test_monster_wheat_is_the_volume_money_crop():
+    # Renji sold 1508u wheat (52u/day): a 25% floor share of a near-fully
+    # farmed 3-quad field plus a wide sell tranche
+    assert WHEAT_STRAW_MONSTER_PARAMS["wheat_share"] == 0.25
+    assert WHEAT_STRAW_MONSTER_PARAMS["sell_tranches"]["WHEAT"] >= 40
+
+
+def test_monster_endgame_liquidation_day_27():
+    act = wheat_straw_monster_agent(synth_obs(
+        day=27, shed={"MILK": 8, "STRAWBERRY": 12, "WHEAT": 20},
+        prices={"MILK": 5, "STRAWBERRY": 5, "WHEAT": 5}))
+    sells = {o[1]: o[2] for o in market_orders(act, "SELL")}
+    assert sells.get("MILK") == 8 and sells.get("STRAWBERRY") == 12
+    assert not [o for o in act["market"] if o[0] in
+                ("HIRE", "BUY_SEED", "BUY_ANIMAL", "BUY_PRODUCT", "BUY_LAND")]

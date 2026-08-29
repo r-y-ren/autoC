@@ -1,0 +1,4364 @@
+[
+ {
+  "protocol": "replay-deep-stats/1.0",
+  "episode_id": 102549493,
+  "teams": [
+   "renyxin",
+   "Renji Starfall"
+  ],
+  "rewards": [
+   78163.0,
+   109695.0
+  ],
+  "players": [
+   {
+    "seat": 0,
+    "team": "renyxin",
+    "reward": 78163.0,
+    "totals": {
+     "care": 276,
+     "feed_ops": 283,
+     "water": 672,
+     "harvest": 169,
+     "hires": 287,
+     "feed_buy_qty": 304,
+     "feed_buy_spend": 13068.0
+    },
+    "money": {
+     "by_day": [
+      462.0,
+      241.0,
+      221.0,
+      82.0,
+      240.0,
+      198.0,
+      161.0,
+      531.0,
+      198.0,
+      92.0,
+      383.0,
+      513.0,
+      103.0,
+      4552.0,
+      2640.0,
+      1986.0,
+      3867.0,
+      5119.0,
+      11777.0,
+      15658.0,
+      22229.0,
+      23314.0,
+      34835.0,
+      45292.0,
+      52452.0,
+      55713.0,
+      59312.0,
+      67613.0,
+      73059.0,
+      78163.0
+     ],
+     "day12": 103.0,
+     "day18": 11777.0,
+     "day24": 52452.0,
+     "ramp_d12_d24": 52349.0
+    },
+    "peak_herd": {
+     "SHEEP": 7,
+     "COW": 8
+    },
+    "peak_herd_head": 15,
+    "quadrant_unlock_day": {
+     "NW": 0,
+     "NE": 5,
+     "SW": 9
+    },
+    "table": [
+     {
+      "day": 0,
+      "money_end": 462.0,
+      "hands": 5,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 13,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 14,
+      "harvest": 0,
+      "hires": 5,
+      "plants": {
+       "MELON": 3,
+       "WHEAT": 13
+      },
+      "animal_buys": {
+       "COW": 2,
+       "SHEEP": 2
+      },
+      "feed_buy_qty": 9,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 1,
+      "money_end": 241.0,
+      "hands": 6,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 16,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 21,
+      "harvest": 0,
+      "hires": 6,
+      "plants": {
+       "WHEAT": 4
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 7,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 2,
+      "money_end": 221.0,
+      "hands": 6,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 16,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 16,
+      "harvest": 0,
+      "hires": 6,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 3,
+      "money_end": 82.0,
+      "hands": 8,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 16,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 19,
+      "harvest": 0,
+      "hires": 8,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "FERTILIZER": 1
+      },
+      "sells_revenue": {
+       "FERTILIZER": 100.0
+      }
+     },
+     {
+      "day": 4,
+      "money_end": 240.0,
+      "hands": 8,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 16,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 29,
+      "harvest": 13,
+      "hires": 8,
+      "plants": {
+       "WHEAT": 13
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 6,
+      "sells_qty": {
+       "FERTILIZER": 4
+      },
+      "sells_revenue": {
+       "FERTILIZER": 396.0
+      }
+     },
+     {
+      "day": 5,
+      "money_end": 198.0,
+      "hands": 8,
+      "herd": {
+       "SHEEP": 2,
+       "EMPTY_STRUCTURE": 6,
+       "COW": 2
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 17,
+       "STRAWBERRY": 6,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 21,
+      "harvest": 1,
+      "hires": 8,
+      "plants": {
+       "STRAWBERRY": 6,
+       "WHEAT": 2
+      },
+      "animal_buys": {
+       "COW": 2
+      },
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "FERTILIZER": 4,
+       "WHEAT": 44
+      },
+      "sells_revenue": {
+       "FERTILIZER": 392.0,
+       "WHEAT": 1232.0
+      }
+     },
+     {
+      "day": 6,
+      "money_end": 161.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "EMPTY_STRUCTURE": 6,
+       "COW": 2
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 18,
+       "STRAWBERRY": 6,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 28,
+      "harvest": 3,
+      "hires": 9,
+      "plants": {
+       "WHEAT": 3
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "WHEAT": 2
+      },
+      "sells_revenue": {
+       "WHEAT": 52.0
+      }
+     },
+     {
+      "day": 7,
+      "money_end": 531.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "EMPTY_STRUCTURE": 6,
+       "COW": 2
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 20,
+       "STRAWBERRY": 12,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 30,
+      "harvest": 0,
+      "hires": 9,
+      "plants": {
+       "STRAWBERRY": 6,
+       "WHEAT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "WOOL": 4,
+       "FERTILIZER": 2
+      },
+      "sells_revenue": {
+       "WOOL": 856.0,
+       "FERTILIZER": 194.0
+      }
+     },
+     {
+      "day": 8,
+      "money_end": 198.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "EMPTY_STRUCTURE": 6,
+       "COW": 2
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 20,
+       "STRAWBERRY": 12,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 30,
+      "harvest": 5,
+      "hires": 9,
+      "plants": {
+       "WHEAT": 3
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 9,
+      "money_end": 92.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 4,
+       "EMPTY_STRUCTURE": 7
+      },
+      "herd_head": 6,
+      "crops": {
+       "WHEAT": 11,
+       "STRAWBERRY": 12,
+       "MELON": 3
+      },
+      "care": 6,
+      "feed_ops": 6,
+      "water": 24,
+      "harvest": 6,
+      "hires": 9,
+      "plants": {
+       "WHEAT": 3
+      },
+      "animal_buys": {
+       "COW": 3
+      },
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "MILK": 12,
+       "WHEAT": 12
+      },
+      "sells_revenue": {
+       "MILK": 2364.0,
+       "WHEAT": 372.0
+      }
+     },
+     {
+      "day": 10,
+      "money_end": 383.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 4,
+       "EMPTY_STRUCTURE": 9
+      },
+      "herd_head": 6,
+      "crops": {
+       "WHEAT": 11,
+       "MELON": 9,
+       "STRAWBERRY": 18
+      },
+      "care": 4,
+      "feed_ops": 6,
+      "water": 29,
+      "harvest": 2,
+      "hires": 9,
+      "plants": {
+       "MELON": 6,
+       "STRAWBERRY": 6
+      },
+      "animal_buys": {
+       "SHEEP": 2
+      },
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "WOOL": 10
+      },
+      "sells_revenue": {
+       "WOOL": 2032.0
+      }
+     },
+     {
+      "day": 11,
+      "money_end": 513.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 3,
+       "COW": 4,
+       "EMPTY_STRUCTURE": 8
+      },
+      "herd_head": 7,
+      "crops": {
+       "WHEAT": 7,
+       "MELON": 9,
+       "STRAWBERRY": 18
+      },
+      "care": 9,
+      "feed_ops": 7,
+      "water": 27,
+      "harvest": 1,
+      "hires": 9,
+      "plants": {},
+      "animal_buys": {
+       "SHEEP": 2
+      },
+      "feed_buy_qty": 7,
+      "sells_qty": {
+       "MILK": 6,
+       "FERTILIZER": 2
+      },
+      "sells_revenue": {
+       "MILK": 1254.0,
+       "FERTILIZER": 192.0
+      }
+     },
+     {
+      "day": 12,
+      "money_end": 103.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 5,
+       "COW": 4,
+       "EMPTY_STRUCTURE": 6
+      },
+      "herd_head": 9,
+      "crops": {
+       "WHEAT": 6,
+       "MELON": 9,
+       "STRAWBERRY": 18
+      },
+      "care": 9,
+      "feed_ops": 9,
+      "water": 29,
+      "harvest": 7,
+      "hires": 10,
+      "plants": {
+       "MELON": 3
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 6,
+      "sells_qty": {
+       "FERTILIZER": 2
+      },
+      "sells_revenue": {
+       "FERTILIZER": 188.0
+      }
+     },
+     {
+      "day": 13,
+      "money_end": 4552.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 5,
+       "COW": 7,
+       "EMPTY_STRUCTURE": 3
+      },
+      "herd_head": 12,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "WHEAT": 2
+      },
+      "care": 11,
+      "feed_ops": 12,
+      "water": 30,
+      "harvest": 1,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {
+       "COW": 3
+      },
+      "feed_buy_qty": 19,
+      "sells_qty": {
+       "MILK": 6,
+       "WOOL": 6,
+       "MELON": 16,
+       "FERTILIZER": 4
+      },
+      "sells_revenue": {
+       "MILK": 1326.0,
+       "WOOL": 1188.0,
+       "MELON": 3482.0,
+       "FERTILIZER": 372.0
+      }
+     },
+     {
+      "day": 14,
+      "money_end": 2640.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "WHEAT": 1
+      },
+      "care": 16,
+      "feed_ops": 15,
+      "water": 19,
+      "harvest": 2,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 3
+      },
+      "animal_buys": {
+       "SHEEP": 2,
+       "COW": 1
+      },
+      "feed_buy_qty": 11,
+      "sells_qty": {
+       "FERTILIZER": 3
+      },
+      "sells_revenue": {
+       "FERTILIZER": 273.0
+      }
+     },
+     {
+      "day": 15,
+      "money_end": 1986.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "WHEAT": 1,
+       "CARROT": 1
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 27,
+      "harvest": 2,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 2,
+       "CARROT": 1
+      },
+      "animal_buys": {
+       "COW": 2
+      },
+      "feed_buy_qty": 16,
+      "sells_qty": {
+       "MILK": 6
+      },
+      "sells_revenue": {
+       "MILK": 1386.0
+      }
+     },
+     {
+      "day": 16,
+      "money_end": 3867.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "WHEAT": 1,
+       "CARROT": 1
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 26,
+      "harvest": 2,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 16,
+      "sells_qty": {
+       "WOOL": 10,
+       "FERTILIZER": 11
+      },
+      "sells_revenue": {
+       "WOOL": 1930.0,
+       "FERTILIZER": 946.0
+      }
+     },
+     {
+      "day": 17,
+      "money_end": 5119.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "WHEAT": 1,
+       "CARROT": 1
+      },
+      "care": 14,
+      "feed_ops": 15,
+      "water": 28,
+      "harvest": 9,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 16,
+      "sells_qty": {
+       "MILK": 6,
+       "FERTILIZER": 10
+      },
+      "sells_revenue": {
+       "MILK": 1434.0,
+       "FERTILIZER": 840.0
+      }
+     },
+     {
+      "day": 18,
+      "money_end": 11777.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "CARROT": 1
+      },
+      "care": 16,
+      "feed_ops": 15,
+      "water": 28,
+      "harvest": 7,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "WOOL": 4,
+       "STRAWBERRY": 16,
+       "FERTILIZER": 6,
+       "MILK": 12
+      },
+      "sells_revenue": {
+       "WOOL": 644.0,
+       "STRAWBERRY": 3600.0,
+       "FERTILIZER": 486.0,
+       "MILK": 2868.0
+      }
+     },
+     {
+      "day": 19,
+      "money_end": 15658.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18
+      },
+      "care": 13,
+      "feed_ops": 14,
+      "water": 27,
+      "harvest": 8,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 12,
+      "sells_qty": {
+       "MILK": 6,
+       "WOOL": 24,
+       "FERTILIZER": 7
+      },
+      "sells_revenue": {
+       "MILK": 1416.0,
+       "WOOL": 2514.0,
+       "FERTILIZER": 546.0
+      }
+     },
+     {
+      "day": 20,
+      "money_end": 22229.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "CARROT": 1
+      },
+      "care": 15,
+      "feed_ops": 16,
+      "water": 27,
+      "harvest": 5,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "MILK": 6,
+       "STRAWBERRY": 24,
+       "FERTILIZER": 7
+      },
+      "sells_revenue": {
+       "MILK": 1428.0,
+       "STRAWBERRY": 5624.0,
+       "FERTILIZER": 532.0
+      }
+     },
+     {
+      "day": 21,
+      "money_end": 23314.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "CARROT": 1
+      },
+      "care": 14,
+      "feed_ops": 15,
+      "water": 28,
+      "harvest": 11,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "MILK": 6,
+       "FERTILIZER": 7,
+       "WOOL": 6
+      },
+      "sells_revenue": {
+       "MILK": 1434.0,
+       "FERTILIZER": 511.0,
+       "WOOL": 66.0
+      }
+     },
+     {
+      "day": 22,
+      "money_end": 34835.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "STRAWBERRY": 12,
+       "MELON": 3,
+       "CARROT": 3
+      },
+      "care": 11,
+      "feed_ops": 12,
+      "water": 21,
+      "harvest": 15,
+      "hires": 12,
+      "plants": {
+       "CARROT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "MILK": 24,
+       "WOOL": 4,
+       "STRAWBERRY": 24,
+       "FERTILIZER": 8
+      },
+      "sells_revenue": {
+       "MILK": 5751.0,
+       "WOOL": 20.0,
+       "STRAWBERRY": 5852.0,
+       "FERTILIZER": 568.0
+      }
+     },
+     {
+      "day": 23,
+      "money_end": 45292.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 7,
+       "STRAWBERRY": 12,
+       "MELON": 3
+      },
+      "care": 16,
+      "feed_ops": 15,
+      "water": 19,
+      "harvest": 13,
+      "hires": 12,
+      "plants": {
+       "CARROT": 4
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 31,
+      "sells_qty": {
+       "STRAWBERRY": 24,
+       "MELON": 25,
+       "FERTILIZER": 3,
+       "MILK": 12
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 5780.0,
+       "MELON": 2100.0,
+       "FERTILIZER": 207.0,
+       "MILK": 2868.0
+      }
+     },
+     {
+      "day": 24,
+      "money_end": 52452.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 9,
+       "STRAWBERRY": 6
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 18,
+      "harvest": 11,
+      "hires": 10,
+      "plants": {
+       "CARROT": 4
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "STRAWBERRY": 16,
+       "FERTILIZER": 4,
+       "WOOL": 16,
+       "MILK": 15
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 3804.0,
+       "FERTILIZER": 272.0,
+       "WOOL": 16.0,
+       "MILK": 3630.0
+      }
+     },
+     {
+      "day": 25,
+      "money_end": 55713.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 10,
+       "STRAWBERRY": 6
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 17,
+      "harvest": 7,
+      "hires": 10,
+      "plants": {
+       "CARROT": 3
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 27,
+      "sells_qty": {
+       "MELON": 18,
+       "FERTILIZER": 17,
+       "MILK": 9
+      },
+      "sells_revenue": {
+       "MELON": 720.0,
+       "FERTILIZER": 1088.0,
+       "MILK": 2205.0
+      }
+     },
+     {
+      "day": 26,
+      "money_end": 59312.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 12,
+       "STRAWBERRY": 6
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 17,
+      "harvest": 15,
+      "hires": 10,
+      "plants": {
+       "CARROT": 6
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "WOOL": 28,
+       "FERTILIZER": 10,
+       "MILK": 15,
+       "CARROT": 4
+      },
+      "sells_revenue": {
+       "WOOL": 52.0,
+       "FERTILIZER": 610.0,
+       "MILK": 3690.0,
+       "CARROT": 180.0
+      }
+     },
+     {
+      "day": 27,
+      "money_end": 67613.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 9
+      },
+      "care": 11,
+      "feed_ops": 15,
+      "water": 12,
+      "harvest": 13,
+      "hires": 10,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "WOOL": 10,
+       "STRAWBERRY": 24,
+       "CARROT": 10,
+       "FERTILIZER": 8,
+       "MILK": 9
+      },
+      "sells_revenue": {
+       "WOOL": 34.0,
+       "STRAWBERRY": 5684.0,
+       "CARROT": 450.0,
+       "FERTILIZER": 472.0,
+       "MILK": 2241.0
+      }
+     },
+     {
+      "day": 28,
+      "money_end": 73059.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 6
+      },
+      "care": 0,
+      "feed_ops": 0,
+      "water": 11,
+      "harvest": 6,
+      "hires": 10,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "WOOL": 22,
+       "MELON": 8,
+       "CARROT": 18,
+       "FERTILIZER": 12,
+       "MILK": 15
+      },
+      "sells_revenue": {
+       "WOOL": 46.0,
+       "MELON": 200.0,
+       "CARROT": 792.0,
+       "FERTILIZER": 672.0,
+       "MILK": 3735.0
+      }
+     },
+     {
+      "day": 29,
+      "money_end": 78163.0,
+      "hands": 0,
+      "herd": {
+       "SHEEP": 7,
+       "COW": 8
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 6
+      },
+      "care": 0,
+      "feed_ops": 0,
+      "water": 0,
+      "harvest": 4,
+      "hires": 0,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "WHEAT": 2,
+       "CARROT": 12,
+       "STRAWBERRY": 6,
+       "MELON": 2,
+       "MILK": 11,
+       "FERTILIZER": 9,
+       "WOOL": 8
+      },
+      "sells_revenue": {
+       "WHEAT": 106.0,
+       "CARROT": 528.0,
+       "STRAWBERRY": 1404.0,
+       "MELON": 44.0,
+       "MILK": 2781.0,
+       "FERTILIZER": 477.0,
+       "WOOL": 16.0
+      }
+     }
+    ]
+   },
+   {
+    "seat": 1,
+    "team": "Renji Starfall",
+    "reward": 109695.0,
+    "totals": {
+     "care": 113,
+     "feed_ops": 150,
+     "water": 877,
+     "harvest": 219,
+     "hires": 334,
+     "feed_buy_qty": 1501,
+     "feed_buy_spend": 56546.0
+    },
+    "money": {
+     "by_day": [
+      2057.0,
+      466.0,
+      393.0,
+      319.0,
+      203.0,
+      526.0,
+      574.0,
+      555.0,
+      586.0,
+      719.0,
+      1409.0,
+      5492.0,
+      6052.0,
+      6195.0,
+      11298.0,
+      12267.0,
+      13425.0,
+      14476.0,
+      22178.0,
+      26792.0,
+      32507.0,
+      40992.0,
+      45897.0,
+      49460.0,
+      56055.0,
+      72810.0,
+      80594.0,
+      88954.0,
+      103357.0,
+      109695.0
+     ],
+     "day12": 6052.0,
+     "day18": 22178.0,
+     "day24": 56055.0,
+     "ramp_d12_d24": 50003.0
+    },
+    "peak_herd": {
+     "COW": 6,
+     "SHEEP": 2
+    },
+    "peak_herd_head": 8,
+    "quadrant_unlock_day": {
+     "NW": 0,
+     "NE": 10,
+     "SW": 10
+    },
+    "table": [
+     {
+      "day": 0,
+      "money_end": 2057.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 2
+      },
+      "herd_head": 0,
+      "crops": {
+       "MELON": 10
+      },
+      "care": 0,
+      "feed_ops": 0,
+      "water": 10,
+      "harvest": 0,
+      "hires": 10,
+      "plants": {
+       "MELON": 10
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 1,
+      "money_end": 466.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 1
+      },
+      "herd_head": 1,
+      "crops": {
+       "CARROT": 2,
+       "WHEAT": 4,
+       "STRAWBERRY": 7,
+       "MELON": 10
+      },
+      "care": 1,
+      "feed_ops": 1,
+      "water": 13,
+      "harvest": 0,
+      "hires": 10,
+      "plants": {
+       "STRAWBERRY": 7,
+       "WHEAT": 4,
+       "CARROT": 2
+      },
+      "animal_buys": {
+       "COW": 1
+      },
+      "feed_buy_qty": 113,
+      "sells_qty": {
+       "WHEAT": 104
+      },
+      "sells_revenue": {
+       "WHEAT": 3120.0
+      }
+     },
+     {
+      "day": 2,
+      "money_end": 393.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 1
+      },
+      "herd_head": 1,
+      "crops": {
+       "CARROT": 2,
+       "WHEAT": 4,
+       "STRAWBERRY": 7,
+       "MELON": 10
+      },
+      "care": 1,
+      "feed_ops": 1,
+      "water": 10,
+      "harvest": 0,
+      "hires": 10,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 120,
+      "sells_qty": {
+       "WHEAT": 119,
+       "FERTILIZER": 1
+      },
+      "sells_revenue": {
+       "WHEAT": 3570.0,
+       "FERTILIZER": 100.0
+      }
+     },
+     {
+      "day": 3,
+      "money_end": 319.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 1
+      },
+      "herd_head": 1,
+      "crops": {
+       "CARROT": 2,
+       "WHEAT": 4,
+       "STRAWBERRY": 7,
+       "MELON": 10
+      },
+      "care": 1,
+      "feed_ops": 1,
+      "water": 13,
+      "harvest": 0,
+      "hires": 10,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 120,
+      "sells_qty": {
+       "WHEAT": 119,
+       "FERTILIZER": 1
+      },
+      "sells_revenue": {
+       "WHEAT": 3699.0,
+       "FERTILIZER": 99.0
+      }
+     },
+     {
+      "day": 4,
+      "money_end": 203.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 1
+      },
+      "herd_head": 1,
+      "crops": {
+       "CARROT": 2,
+       "WHEAT": 4,
+       "STRAWBERRY": 7,
+       "MELON": 10
+      },
+      "care": 1,
+      "feed_ops": 1,
+      "water": 18,
+      "harvest": 2,
+      "hires": 10,
+      "plants": {
+       "CARROT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 120,
+      "sells_qty": {
+       "WHEAT": 119,
+       "FERTILIZER": 1
+      },
+      "sells_revenue": {
+       "WHEAT": 3808.0,
+       "FERTILIZER": 98.0
+      }
+     },
+     {
+      "day": 5,
+      "money_end": 526.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 1
+      },
+      "herd_head": 1,
+      "crops": {
+       "CARROT": 2,
+       "WHEAT": 4,
+       "STRAWBERRY": 7,
+       "MELON": 10
+      },
+      "care": 1,
+      "feed_ops": 1,
+      "water": 15,
+      "harvest": 4,
+      "hires": 10,
+      "plants": {
+       "WHEAT": 4
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 55,
+      "sells_qty": {
+       "WHEAT": 62,
+       "CARROT": 6,
+       "FERTILIZER": 1
+      },
+      "sells_revenue": {
+       "WHEAT": 1777.0,
+       "CARROT": 210.0,
+       "FERTILIZER": 97.0
+      }
+     },
+     {
+      "day": 6,
+      "money_end": 574.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 1
+      },
+      "herd_head": 1,
+      "crops": {
+       "CARROT": 2,
+       "WHEAT": 4,
+       "STRAWBERRY": 7,
+       "MELON": 10
+      },
+      "care": 0,
+      "feed_ops": 1,
+      "water": 12,
+      "harvest": 0,
+      "hires": 10,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 112,
+      "sells_qty": {
+       "WHEAT": 119
+      },
+      "sells_revenue": {
+       "WHEAT": 3277.0
+      }
+     },
+     {
+      "day": 7,
+      "money_end": 555.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 1
+      },
+      "herd_head": 1,
+      "crops": {
+       "CARROT": 2,
+       "WHEAT": 4,
+       "STRAWBERRY": 7,
+       "MELON": 10
+      },
+      "care": 0,
+      "feed_ops": 1,
+      "water": 25,
+      "harvest": 2,
+      "hires": 10,
+      "plants": {
+       "CARROT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 120,
+      "sells_qty": {
+       "WHEAT": 119,
+       "FERTILIZER": 2
+      },
+      "sells_revenue": {
+       "WHEAT": 3515.0,
+       "FERTILIZER": 194.0
+      }
+     },
+     {
+      "day": 8,
+      "money_end": 586.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 1
+      },
+      "herd_head": 1,
+      "crops": {
+       "CARROT": 2,
+       "WHEAT": 4,
+       "STRAWBERRY": 7,
+       "MELON": 10
+      },
+      "care": 1,
+      "feed_ops": 1,
+      "water": 14,
+      "harvest": 0,
+      "hires": 10,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 120,
+      "sells_qty": {
+       "WHEAT": 119,
+       "CARROT": 6
+      },
+      "sells_revenue": {
+       "WHEAT": 3759.0,
+       "CARROT": 198.0
+      }
+     },
+     {
+      "day": 9,
+      "money_end": 719.0,
+      "hands": 10,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 1
+      },
+      "herd_head": 1,
+      "crops": {
+       "CARROT": 2,
+       "WHEAT": 4,
+       "STRAWBERRY": 7,
+       "MELON": 10
+      },
+      "care": 1,
+      "feed_ops": 1,
+      "water": 27,
+      "harvest": 5,
+      "hires": 10,
+      "plants": {
+       "WHEAT": 4
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 55,
+      "sells_qty": {
+       "WHEAT": 62,
+       "FERTILIZER": 1
+      },
+      "sells_revenue": {
+       "WHEAT": 1951.0,
+       "FERTILIZER": 96.0
+      }
+     },
+     {
+      "day": 10,
+      "money_end": 1409.0,
+      "hands": 10,
+      "herd": {
+       "COW": 4,
+       "SHEEP": 1,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 5,
+      "crops": {
+       "WHEAT": 4,
+       "STRAWBERRY": 11,
+       "MELON": 9
+      },
+      "care": 3,
+      "feed_ops": 2,
+      "water": 29,
+      "harvest": 12,
+      "hires": 10,
+      "plants": {
+       "MELON": 9,
+       "STRAWBERRY": 4
+      },
+      "animal_buys": {
+       "SHEEP": 1,
+       "COW": 4
+      },
+      "feed_buy_qty": 31,
+      "sells_qty": {
+       "MILK": 6,
+       "WHEAT": 27,
+       "MELON": 36,
+       "FERTILIZER": 1
+      },
+      "sells_revenue": {
+       "MILK": 1218.0,
+       "WHEAT": 839.0,
+       "MELON": 8964.0,
+       "FERTILIZER": 96.0
+      }
+     },
+     {
+      "day": 11,
+      "money_end": 5492.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 10,
+       "STRAWBERRY": 39,
+       "MELON": 9,
+       "CARROT": 2
+      },
+      "care": 9,
+      "feed_ops": 9,
+      "water": 46,
+      "harvest": 1,
+      "hires": 12,
+      "plants": {
+       "STRAWBERRY": 28,
+       "WHEAT": 6,
+       "CARROT": 2
+      },
+      "animal_buys": {
+       "COW": 1,
+       "SHEEP": 1
+      },
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "MELON": 24,
+       "CARROT": 6
+      },
+      "sells_revenue": {
+       "MELON": 5448.0,
+       "CARROT": 196.0
+      }
+     },
+     {
+      "day": 12,
+      "money_end": 6052.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "CARROT": 4,
+       "WHEAT": 12,
+       "STRAWBERRY": 42,
+       "MELON": 9
+      },
+      "care": 8,
+      "feed_ops": 8,
+      "water": 34,
+      "harvest": 0,
+      "hires": 12,
+      "plants": {
+       "CARROT": 2,
+       "STRAWBERRY": 3,
+       "WHEAT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "MILK": 3,
+       "FERTILIZER": 6
+      },
+      "sells_revenue": {
+       "MILK": 648.0,
+       "FERTILIZER": 564.0
+      }
+     },
+     {
+      "day": 13,
+      "money_end": 6195.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "CARROT": 4,
+       "WHEAT": 11,
+       "STRAWBERRY": 42,
+       "MELON": 9
+      },
+      "care": 2,
+      "feed_ops": 6,
+      "water": 50,
+      "harvest": 12,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 3
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 4,
+      "sells_qty": {
+       "FERTILIZER": 2,
+       "WHEAT": 14
+      },
+      "sells_revenue": {
+       "FERTILIZER": 186.0,
+       "WHEAT": 518.0
+      }
+     },
+     {
+      "day": 14,
+      "money_end": 11298.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "CARROT": 4,
+       "WHEAT": 12,
+       "STRAWBERRY": 42,
+       "MELON": 9
+      },
+      "care": 11,
+      "feed_ops": 8,
+      "water": 38,
+      "harvest": 2,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 1,
+       "CARROT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "STRAWBERRY": 22,
+       "MILK": 3,
+       "FERTILIZER": 6
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 4532.0,
+       "MILK": 681.0,
+       "FERTILIZER": 546.0
+      }
+     },
+     {
+      "day": 15,
+      "money_end": 12267.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 7,
+       "STRAWBERRY": 42,
+       "MELON": 9,
+       "CARROT": 3
+      },
+      "care": 8,
+      "feed_ops": 9,
+      "water": 48,
+      "harvest": 9,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1,
+       "WHEAT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 5,
+      "sells_qty": {
+       "FERTILIZER": 7,
+       "CARROT": 6,
+       "WHEAT": 20
+      },
+      "sells_revenue": {
+       "FERTILIZER": 630.0,
+       "CARROT": 216.0,
+       "WHEAT": 784.0
+      }
+     },
+     {
+      "day": 16,
+      "money_end": 13425.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "CARROT": 4,
+       "WHEAT": 5,
+       "STRAWBERRY": 42,
+       "MELON": 9
+      },
+      "care": 5,
+      "feed_ops": 8,
+      "water": 33,
+      "harvest": 3,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 7,
+      "sells_qty": {
+       "FERTILIZER": 8,
+       "MILK": 3,
+       "CARROT": 6,
+       "WHEAT": 5
+      },
+      "sells_revenue": {
+       "FERTILIZER": 688.0,
+       "MILK": 708.0,
+       "CARROT": 216.0,
+       "WHEAT": 205.0
+      }
+     },
+     {
+      "day": 17,
+      "money_end": 14476.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "CARROT": 3,
+       "STRAWBERRY": 42,
+       "MELON": 9,
+       "WHEAT": 2
+      },
+      "care": 4,
+      "feed_ops": 7,
+      "water": 47,
+      "harvest": 14,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 6,
+      "sells_qty": {
+       "WOOL": 6,
+       "FERTILIZER": 2,
+       "WHEAT": 11
+      },
+      "sells_revenue": {
+       "WOOL": 1086.0,
+       "FERTILIZER": 168.0,
+       "WHEAT": 462.0
+      }
+     },
+     {
+      "day": 18,
+      "money_end": 22178.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "CARROT": 4,
+       "WHEAT": 11,
+       "STRAWBERRY": 42,
+       "MELON": 9
+      },
+      "care": 10,
+      "feed_ops": 8,
+      "water": 42,
+      "harvest": 5,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 10,
+       "STRAWBERRY": 7,
+       "CARROT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "STRAWBERRY": 28,
+       "WOOL": 5,
+       "MILK": 3,
+       "FERTILIZER": 8,
+       "CARROT": 6,
+       "WHEAT": 3
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 6300.0,
+       "WOOL": 805.0,
+       "MILK": 732.0,
+       "FERTILIZER": 648.0,
+       "CARROT": 228.0,
+       "WHEAT": 129.0
+      }
+     },
+     {
+      "day": 19,
+      "money_end": 26792.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 10,
+       "STRAWBERRY": 42,
+       "MELON": 9,
+       "CARROT": 3
+      },
+      "care": 7,
+      "feed_ops": 6,
+      "water": 44,
+      "harvest": 5,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 5,
+      "sells_qty": {
+       "MILK": 18,
+       "FERTILIZER": 8,
+       "CARROT": 3,
+       "WHEAT": 3
+      },
+      "sells_revenue": {
+       "MILK": 4248.0,
+       "FERTILIZER": 624.0,
+       "CARROT": 117.0,
+       "WHEAT": 132.0
+      }
+     },
+     {
+      "day": 20,
+      "money_end": 32507.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 10,
+       "STRAWBERRY": 42,
+       "CARROT": 2
+      },
+      "care": 4,
+      "feed_ops": 8,
+      "water": 36,
+      "harvest": 14,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "MILK": 9,
+       "FERTILIZER": 5,
+       "CARROT": 3,
+       "WOOL": 4,
+       "MELON": 17
+      },
+      "sells_revenue": {
+       "MILK": 2142.0,
+       "FERTILIZER": 379.0,
+       "CARROT": 120.0,
+       "WOOL": 208.0,
+       "MELON": 3450.0
+      }
+     },
+     {
+      "day": 21,
+      "money_end": 40992.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 10,
+       "STRAWBERRY": 42
+      },
+      "care": 7,
+      "feed_ops": 8,
+      "water": 44,
+      "harvest": 4,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "MILK": 12,
+       "MELON": 35,
+       "FERTILIZER": 4,
+       "CARROT": 3
+      },
+      "sells_revenue": {
+       "MILK": 2886.0,
+       "MELON": 5136.0,
+       "FERTILIZER": 292.0,
+       "CARROT": 120.0
+      }
+     },
+     {
+      "day": 22,
+      "money_end": 45897.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "STRAWBERRY": 42
+      },
+      "care": 3,
+      "feed_ops": 8,
+      "water": 29,
+      "harvest": 18,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 2,
+      "sells_qty": {
+       "MILK": 12,
+       "FERTILIZER": 6,
+       "CARROT": 6,
+       "WHEAT": 18,
+       "STRAWBERRY": 4
+      },
+      "sells_revenue": {
+       "MILK": 2922.0,
+       "FERTILIZER": 425.0,
+       "CARROT": 246.0,
+       "WHEAT": 864.0,
+       "STRAWBERRY": 996.0
+      }
+     },
+     {
+      "day": 23,
+      "money_end": 49460.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 7,
+       "STRAWBERRY": 42
+      },
+      "care": 7,
+      "feed_ops": 7,
+      "water": 46,
+      "harvest": 10,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 7
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 7,
+      "sells_qty": {
+       "STRAWBERRY": 12,
+       "MILK": 3,
+       "WHEAT": 9,
+       "FERTILIZER": 2,
+       "WOOL": 4
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 2892.0,
+       "MILK": 732.0,
+       "WHEAT": 432.0,
+       "FERTILIZER": 138.0,
+       "WOOL": 8.0
+      }
+     },
+     {
+      "day": 24,
+      "money_end": 56055.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 10,
+       "STRAWBERRY": 42,
+       "CARROT": 2
+      },
+      "care": 6,
+      "feed_ops": 8,
+      "water": 48,
+      "harvest": 6,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 3,
+       "CARROT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "STRAWBERRY": 26,
+       "MILK": 3,
+       "FERTILIZER": 4,
+       "WOOL": 3
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 6188.0,
+       "MILK": 747.0,
+       "FERTILIZER": 272.0,
+       "WOOL": 7.0
+      }
+     },
+     {
+      "day": 25,
+      "money_end": 72810.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 10,
+       "STRAWBERRY": 42,
+       "CARROT": 2
+      },
+      "care": 6,
+      "feed_ops": 8,
+      "water": 20,
+      "harvest": 22,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "STRAWBERRY": 55,
+       "MILK": 16,
+       "FERTILIZER": 1
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 13425.0,
+       "MILK": 3994.0,
+       "FERTILIZER": 64.0
+      }
+     },
+     {
+      "day": 26,
+      "money_end": 80594.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 10,
+       "STRAWBERRY": 42,
+       "CARROT": 2
+      },
+      "care": 5,
+      "feed_ops": 6,
+      "water": 48,
+      "harvest": 7,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 6,
+      "sells_qty": {
+       "STRAWBERRY": 26,
+       "FERTILIZER": 4,
+       "MILK": 8
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 6160.0,
+       "FERTILIZER": 244.0,
+       "MILK": 2000.0
+      }
+     },
+     {
+      "day": 27,
+      "money_end": 88954.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "WHEAT": 8,
+       "STRAWBERRY": 38,
+       "CARROT": 1
+      },
+      "care": 0,
+      "feed_ops": 9,
+      "water": 21,
+      "harvest": 38,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 9,
+      "sells_qty": {
+       "STRAWBERRY": 33,
+       "MILK": 3,
+       "FERTILIZER": 3,
+       "WHEAT": 7
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 7811.0,
+       "MILK": 756.0,
+       "FERTILIZER": 177.0,
+       "WHEAT": 371.0
+      }
+     },
+     {
+      "day": 28,
+      "money_end": 103357.0,
+      "hands": 12,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "STRAWBERRY": 10
+      },
+      "care": 1,
+      "feed_ops": 8,
+      "water": 17,
+      "harvest": 21,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 400,
+      "sells_qty": {
+       "STRAWBERRY": 38,
+       "MILK": 19,
+       "WHEAT": 412,
+       "FERTILIZER": 6,
+       "CARROT": 3,
+       "WOOL": 1
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 8702.0,
+       "MILK": 4820.0,
+       "WHEAT": 21875.0,
+       "FERTILIZER": 336.0,
+       "CARROT": 132.0,
+       "WOOL": 5.0
+      }
+     },
+     {
+      "day": 29,
+      "money_end": 109695.0,
+      "hands": 8,
+      "herd": {
+       "COW": 6,
+       "SHEEP": 2
+      },
+      "herd_head": 8,
+      "crops": {
+       "STRAWBERRY": 7
+      },
+      "care": 0,
+      "feed_ops": 0,
+      "water": 0,
+      "harvest": 3,
+      "hires": 8,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 13,
+      "sells_qty": {
+       "WHEAT": 37,
+       "STRAWBERRY": 13,
+       "FERTILIZER": 15,
+       "WOOL": 3,
+       "MILK": 5
+      },
+      "sells_revenue": {
+       "WHEAT": 1974.0,
+       "STRAWBERRY": 3042.0,
+       "FERTILIZER": 778.0,
+       "WOOL": 11.0,
+       "MILK": 1245.0
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "protocol": "replay-deep-stats/1.0",
+  "episode_id": 102558469,
+  "teams": [
+   "DevilQ",
+   "renyxin"
+  ],
+  "rewards": [
+   96629.0,
+   76463.0
+  ],
+  "players": [
+   {
+    "seat": 0,
+    "team": "DevilQ",
+    "reward": 96629.0,
+    "totals": {
+     "care": 423,
+     "feed_ops": 340,
+     "water": 1000,
+     "harvest": 303,
+     "hires": 227,
+     "feed_buy_qty": 532,
+     "feed_buy_spend": 21493.0
+    },
+    "money": {
+     "by_day": [
+      2.0,
+      0.0,
+      15.0,
+      6.0,
+      14.0,
+      96.0,
+      359.0,
+      617.0,
+      8.0,
+      1.0,
+      127.0,
+      5173.0,
+      9971.0,
+      21120.0,
+      21251.0,
+      21800.0,
+      29550.0,
+      33460.0,
+      29517.0,
+      32769.0,
+      38963.0,
+      45720.0,
+      51141.0,
+      54926.0,
+      63335.0,
+      71077.0,
+      78499.0,
+      84230.0,
+      88717.0,
+      96629.0
+     ],
+     "day12": 9971.0,
+     "day18": 29517.0,
+     "day24": 63335.0,
+     "ramp_d12_d24": 53364.0
+    },
+    "peak_herd": {
+     "COW": 14
+    },
+    "peak_herd_head": 14,
+    "quadrant_unlock_day": {
+     "NW": 0,
+     "NE": 8,
+     "SW": 18
+    },
+    "table": [
+     {
+      "day": 0,
+      "money_end": 2.0,
+      "hands": 2,
+      "herd": {
+       "COW": 3
+      },
+      "herd_head": 3,
+      "crops": {
+       "CARROT": 3,
+       "MELON": 9
+      },
+      "care": 3,
+      "feed_ops": 1,
+      "water": 12,
+      "harvest": 0,
+      "hires": 2,
+      "plants": {
+       "MELON": 9,
+       "CARROT": 3
+      },
+      "animal_buys": {
+       "COW": 4
+      },
+      "feed_buy_qty": 8,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 1,
+      "money_end": 0.0,
+      "hands": 2,
+      "herd": {
+       "COW": 4
+      },
+      "herd_head": 4,
+      "crops": {
+       "CARROT": 3,
+       "MELON": 14
+      },
+      "care": 4,
+      "feed_ops": 3,
+      "water": 17,
+      "harvest": 0,
+      "hires": 2,
+      "plants": {
+       "MELON": 5
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 2,
+      "money_end": 15.0,
+      "hands": 3,
+      "herd": {
+       "COW": 3,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 3,
+      "crops": {
+       "MELON": 16,
+       "CARROT": 3
+      },
+      "care": 3,
+      "feed_ops": 3,
+      "water": 19,
+      "harvest": 0,
+      "hires": 3,
+      "plants": {
+       "MELON": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 4,
+      "sells_qty": {
+       "FERTILIZER": 3
+      },
+      "sells_revenue": {
+       "FERTILIZER": 297.0
+      }
+     },
+     {
+      "day": 3,
+      "money_end": 6.0,
+      "hands": 3,
+      "herd": {
+       "COW": 3,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 3,
+      "crops": {
+       "MELON": 19
+      },
+      "care": 3,
+      "feed_ops": 3,
+      "water": 22,
+      "harvest": 3,
+      "hires": 3,
+      "plants": {
+       "MELON": 3
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 2,
+      "sells_qty": {
+       "FERTILIZER": 3
+      },
+      "sells_revenue": {
+       "FERTILIZER": 297.0
+      }
+     },
+     {
+      "day": 4,
+      "money_end": 14.0,
+      "hands": 3,
+      "herd": {
+       "COW": 4
+      },
+      "herd_head": 4,
+      "crops": {
+       "MELON": 19
+      },
+      "care": 5,
+      "feed_ops": 4,
+      "water": 19,
+      "harvest": 0,
+      "hires": 3,
+      "plants": {},
+      "animal_buys": {
+       "COW": 1
+      },
+      "feed_buy_qty": 6,
+      "sells_qty": {
+       "FERTILIZER": 3,
+       "CARROT": 9
+      },
+      "sells_revenue": {
+       "FERTILIZER": 291.0,
+       "CARROT": 297.0
+      }
+     },
+     {
+      "day": 5,
+      "money_end": 96.0,
+      "hands": 3,
+      "herd": {
+       "COW": 4
+      },
+      "herd_head": 4,
+      "crops": {
+       "MELON": 19
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 19,
+      "harvest": 0,
+      "hires": 3,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 7,
+      "sells_qty": {
+       "FERTILIZER": 3
+      },
+      "sells_revenue": {
+       "FERTILIZER": 288.0
+      }
+     },
+     {
+      "day": 6,
+      "money_end": 359.0,
+      "hands": 3,
+      "herd": {
+       "COW": 4
+      },
+      "herd_head": 4,
+      "crops": {
+       "MELON": 19
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 19,
+      "harvest": 0,
+      "hires": 3,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 5,
+      "sells_qty": {
+       "FERTILIZER": 4,
+       "WHEAT": 1
+      },
+      "sells_revenue": {
+       "FERTILIZER": 380.0,
+       "WHEAT": 28.0
+      }
+     },
+     {
+      "day": 7,
+      "money_end": 617.0,
+      "hands": 3,
+      "herd": {
+       "COW": 4
+      },
+      "herd_head": 4,
+      "crops": {
+       "MELON": 19
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 19,
+      "harvest": 0,
+      "hires": 3,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 5,
+      "sells_qty": {
+       "FERTILIZER": 4,
+       "WHEAT": 1
+      },
+      "sells_revenue": {
+       "FERTILIZER": 376.0,
+       "WHEAT": 29.0
+      }
+     },
+     {
+      "day": 8,
+      "money_end": 8.0,
+      "hands": 6,
+      "herd": {
+       "COW": 7
+      },
+      "herd_head": 7,
+      "crops": {
+       "MELON": 19,
+       "STRAWBERRY": 1,
+       "CARROT": 1
+      },
+      "care": 8,
+      "feed_ops": 5,
+      "water": 22,
+      "harvest": 6,
+      "hires": 6,
+      "plants": {
+       "CARROT": 1,
+       "STRAWBERRY": 1
+      },
+      "animal_buys": {
+       "COW": 5
+      },
+      "feed_buy_qty": 9,
+      "sells_qty": {
+       "FERTILIZER": 4,
+       "WHEAT": 1,
+       "MILK": 12
+      },
+      "sells_revenue": {
+       "FERTILIZER": 372.0,
+       "WHEAT": 30.0,
+       "MILK": 2514.0
+      }
+     },
+     {
+      "day": 9,
+      "money_end": 1.0,
+      "hands": 5,
+      "herd": {
+       "COW": 9
+      },
+      "herd_head": 9,
+      "crops": {
+       "MELON": 21,
+       "STRAWBERRY": 3,
+       "CARROT": 3
+      },
+      "care": 11,
+      "feed_ops": 9,
+      "water": 26,
+      "harvest": 0,
+      "hires": 5,
+      "plants": {
+       "STRAWBERRY": 2,
+       "CARROT": 2,
+       "MELON": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 3,
+      "sells_qty": {
+       "FERTILIZER": 4
+      },
+      "sells_revenue": {
+       "FERTILIZER": 368.0
+      }
+     },
+     {
+      "day": 10,
+      "money_end": 127.0,
+      "hands": 8,
+      "herd": {
+       "COW": 9
+      },
+      "herd_head": 9,
+      "crops": {
+       "MELON": 13,
+       "STRAWBERRY": 11,
+       "CARROT": 6,
+       "WHEAT": 1
+      },
+      "care": 11,
+      "feed_ops": 9,
+      "water": 29,
+      "harvest": 9,
+      "hires": 8,
+      "plants": {
+       "CARROT": 3,
+       "WHEAT": 1,
+       "STRAWBERRY": 9,
+       "MELON": 1
+      },
+      "animal_buys": {
+       "COW": 3
+      },
+      "feed_buy_qty": 22,
+      "sells_qty": {
+       "FERTILIZER": 9,
+       "MELON": 10
+      },
+      "sells_revenue": {
+       "FERTILIZER": 817.0,
+       "MELON": 2615.0
+      }
+     },
+     {
+      "day": 11,
+      "money_end": 5173.0,
+      "hands": 8,
+      "herd": {
+       "COW": 10
+      },
+      "herd_head": 10,
+      "crops": {
+       "MELON": 8,
+       "STRAWBERRY": 22,
+       "CARROT": 5,
+       "WHEAT": 1
+      },
+      "care": 13,
+      "feed_ops": 11,
+      "water": 40,
+      "harvest": 6,
+      "hires": 8,
+      "plants": {
+       "STRAWBERRY": 12
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 25,
+      "sells_qty": {
+       "MELON": 23,
+       "FERTILIZER": 7,
+       "WHEAT": 5
+      },
+      "sells_revenue": {
+       "MELON": 5692.0,
+       "FERTILIZER": 623.0,
+       "WHEAT": 155.0
+      }
+     },
+     {
+      "day": 12,
+      "money_end": 9971.0,
+      "hands": 9,
+      "herd": {
+       "COW": 12
+      },
+      "herd_head": 12,
+      "crops": {
+       "MELON": 6,
+       "STRAWBERRY": 24,
+       "CARROT": 3,
+       "WHEAT": 1
+      },
+      "care": 17,
+      "feed_ops": 13,
+      "water": 40,
+      "harvest": 7,
+      "hires": 9,
+      "plants": {
+       "STRAWBERRY": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 21,
+      "sells_qty": {
+       "MELON": 19,
+       "FERTILIZER": 9,
+       "CARROT": 3,
+       "WHEAT": 15
+      },
+      "sells_revenue": {
+       "MELON": 4465.0,
+       "FERTILIZER": 783.0,
+       "CARROT": 132.0,
+       "WHEAT": 495.0
+      }
+     },
+     {
+      "day": 13,
+      "money_end": 21120.0,
+      "hands": 8,
+      "herd": {
+       "COW": 12
+      },
+      "herd_head": 12,
+      "crops": {
+       "STRAWBERRY": 30,
+       "MELON": 5,
+       "WHEAT": 1
+      },
+      "care": 17,
+      "feed_ops": 13,
+      "water": 35,
+      "harvest": 6,
+      "hires": 8,
+      "plants": {
+       "STRAWBERRY": 6
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 22,
+      "sells_qty": {
+       "MILK": 24,
+       "MELON": 28,
+       "FERTILIZER": 11,
+       "CARROT": 6,
+       "WHEAT": 11
+      },
+      "sells_revenue": {
+       "MILK": 5028.0,
+       "MELON": 5504.0,
+       "FERTILIZER": 935.0,
+       "CARROT": 270.0,
+       "WHEAT": 363.0
+      }
+     },
+     {
+      "day": 14,
+      "money_end": 21251.0,
+      "hands": 8,
+      "herd": {
+       "COW": 10,
+       "EMPTY_STRUCTURE": 2
+      },
+      "herd_head": 10,
+      "crops": {
+       "STRAWBERRY": 33,
+       "MELON": 3
+      },
+      "care": 13,
+      "feed_ops": 13,
+      "water": 39,
+      "harvest": 3,
+      "hires": 8,
+      "plants": {
+       "STRAWBERRY": 3
+      },
+      "animal_buys": {
+       "COW": 2
+      },
+      "feed_buy_qty": 21,
+      "sells_qty": {
+       "FERTILIZER": 11,
+       "CARROT": 9,
+       "WHEAT": 14
+      },
+      "sells_revenue": {
+       "FERTILIZER": 902.0,
+       "CARROT": 423.0,
+       "WHEAT": 490.0
+      }
+     },
+     {
+      "day": 15,
+      "money_end": 21800.0,
+      "hands": 7,
+      "herd": {
+       "COW": 11,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 11,
+      "crops": {
+       "STRAWBERRY": 33,
+       "MELON": 3
+      },
+      "care": 13,
+      "feed_ops": 12,
+      "water": 36,
+      "harvest": 0,
+      "hires": 7,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 19,
+      "sells_qty": {
+       "FERTILIZER": 10,
+       "WHEAT": 13
+      },
+      "sells_revenue": {
+       "FERTILIZER": 800.0,
+       "WHEAT": 468.0
+      }
+     },
+     {
+      "day": 16,
+      "money_end": 29550.0,
+      "hands": 8,
+      "herd": {
+       "COW": 12
+      },
+      "herd_head": 12,
+      "crops": {
+       "STRAWBERRY": 33,
+       "MELON": 3
+      },
+      "care": 16,
+      "feed_ops": 14,
+      "water": 33,
+      "harvest": 8,
+      "hires": 8,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 25,
+      "sells_qty": {
+       "FERTILIZER": 15,
+       "WHEAT": 21,
+       "MILK": 30
+      },
+      "sells_revenue": {
+       "FERTILIZER": 1166.0,
+       "WHEAT": 798.0,
+       "MILK": 6744.0
+      }
+     },
+     {
+      "day": 17,
+      "money_end": 33460.0,
+      "hands": 8,
+      "herd": {
+       "COW": 12
+      },
+      "herd_head": 12,
+      "crops": {
+       "STRAWBERRY": 33,
+       "MELON": 3
+      },
+      "care": 18,
+      "feed_ops": 14,
+      "water": 35,
+      "harvest": 4,
+      "hires": 8,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 23,
+      "sells_qty": {
+       "FERTILIZER": 11,
+       "WHEAT": 2,
+       "MILK": 18
+      },
+      "sells_revenue": {
+       "FERTILIZER": 801.0,
+       "WHEAT": 79.0,
+       "MILK": 3948.0
+      }
+     },
+     {
+      "day": 18,
+      "money_end": 29517.0,
+      "hands": 9,
+      "herd": {
+       "COW": 13
+      },
+      "herd_head": 13,
+      "crops": {
+       "WHEAT": 14,
+       "STRAWBERRY": 33,
+       "MELON": 7
+      },
+      "care": 18,
+      "feed_ops": 16,
+      "water": 46,
+      "harvest": 1,
+      "hires": 9,
+      "plants": {
+       "MELON": 4,
+       "WHEAT": 14
+      },
+      "animal_buys": {
+       "COW": 3
+      },
+      "feed_buy_qty": 27,
+      "sells_qty": {
+       "FERTILIZER": 7,
+       "WHEAT": 11
+      },
+      "sells_revenue": {
+       "FERTILIZER": 490.0,
+       "WHEAT": 440.0
+      }
+     },
+     {
+      "day": 19,
+      "money_end": 32769.0,
+      "hands": 11,
+      "herd": {
+       "COW": 14
+      },
+      "herd_head": 14,
+      "crops": {
+       "WHEAT": 17,
+       "STRAWBERRY": 33,
+       "MELON": 6
+      },
+      "care": 26,
+      "feed_ops": 20,
+      "water": 48,
+      "harvest": 5,
+      "hires": 11,
+      "plants": {
+       "WHEAT": 3
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 28,
+      "sells_qty": {
+       "STRAWBERRY": 2,
+       "MELON": 16,
+       "FERTILIZER": 12,
+       "WHEAT": 13
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 470.0,
+       "MELON": 2640.0,
+       "FERTILIZER": 816.0,
+       "WHEAT": 548.0
+      }
+     },
+     {
+      "day": 20,
+      "money_end": 38963.0,
+      "hands": 12,
+      "herd": {
+       "COW": 14
+      },
+      "herd_head": 14,
+      "crops": {
+       "WHEAT": 22,
+       "STRAWBERRY": 33,
+       "MELON": 4
+      },
+      "care": 20,
+      "feed_ops": 19,
+      "water": 53,
+      "harvest": 25,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 6
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 31,
+      "sells_qty": {
+       "STRAWBERRY": 2,
+       "MILK": 18,
+       "MELON": 10,
+       "FERTILIZER": 17,
+       "WHEAT": 17
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 472.0,
+       "MILK": 3972.0,
+       "MELON": 1480.0,
+       "FERTILIZER": 1101.0,
+       "WHEAT": 732.0
+      }
+     },
+     {
+      "day": 21,
+      "money_end": 45720.0,
+      "hands": 12,
+      "herd": {
+       "COW": 14
+      },
+      "herd_head": 14,
+      "crops": {
+       "WHEAT": 21,
+       "STRAWBERRY": 32,
+       "MELON": 4
+      },
+      "care": 27,
+      "feed_ops": 18,
+      "water": 51,
+      "harvest": 17,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 28,
+      "sells_qty": {
+       "STRAWBERRY": 8,
+       "MILK": 23,
+       "FERTILIZER": 12,
+       "WHEAT": 16
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 1909.0,
+       "MILK": 4940.0,
+       "FERTILIZER": 719.0,
+       "WHEAT": 705.0
+      }
+     },
+     {
+      "day": 22,
+      "money_end": 51141.0,
+      "hands": 12,
+      "herd": {
+       "COW": 14
+      },
+      "herd_head": 14,
+      "crops": {
+       "STRAWBERRY": 32,
+       "WHEAT": 18,
+       "MELON": 4
+      },
+      "care": 24,
+      "feed_ops": 18,
+      "water": 57,
+      "harvest": 24,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 9
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 30,
+      "sells_qty": {
+       "STRAWBERRY": 12,
+       "MILK": 11,
+       "FERTILIZER": 14,
+       "WHEAT": 14,
+       "MELON": 5
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 2830.0,
+       "MILK": 2321.0,
+       "FERTILIZER": 794.0,
+       "WHEAT": 630.0,
+       "MELON": 609.0
+      }
+     },
+     {
+      "day": 23,
+      "money_end": 54926.0,
+      "hands": 12,
+      "herd": {
+       "COW": 14
+      },
+      "herd_head": 14,
+      "crops": {
+       "STRAWBERRY": 32,
+       "WHEAT": 19,
+       "MELON": 4
+      },
+      "care": 20,
+      "feed_ops": 19,
+      "water": 53,
+      "harvest": 20,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 5
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 27,
+      "sells_qty": {
+       "STRAWBERRY": 8,
+       "FERTILIZER": 13,
+       "WHEAT": 62
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 1875.0,
+       "FERTILIZER": 676.0,
+       "WHEAT": 2728.0
+      }
+     },
+     {
+      "day": 24,
+      "money_end": 63335.0,
+      "hands": 12,
+      "herd": {
+       "COW": 14
+      },
+      "herd_head": 14,
+      "crops": {
+       "STRAWBERRY": 31,
+       "WHEAT": 20,
+       "MELON": 4
+      },
+      "care": 26,
+      "feed_ops": 20,
+      "water": 45,
+      "harvest": 27,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 4
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 31,
+      "sells_qty": {
+       "STRAWBERRY": 13,
+       "MILK": 24,
+       "FERTILIZER": 17,
+       "WHEAT": 28
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 3046.0,
+       "MILK": 5010.0,
+       "FERTILIZER": 828.0,
+       "WHEAT": 1288.0
+      }
+     },
+     {
+      "day": 25,
+      "money_end": 71077.0,
+      "hands": 12,
+      "herd": {
+       "COW": 14
+      },
+      "herd_head": 14,
+      "crops": {
+       "STRAWBERRY": 27,
+       "WHEAT": 21,
+       "MELON": 4
+      },
+      "care": 27,
+      "feed_ops": 18,
+      "water": 48,
+      "harvest": 25,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 3
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 28,
+      "sells_qty": {
+       "STRAWBERRY": 9,
+       "MILK": 28,
+       "FERTILIZER": 11,
+       "WHEAT": 29
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 2151.0,
+       "MILK": 5230.0,
+       "FERTILIZER": 462.0,
+       "WHEAT": 1335.0
+      }
+     },
+     {
+      "day": 26,
+      "money_end": 78499.0,
+      "hands": 12,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 13
+      },
+      "herd_head": 13,
+      "crops": {
+       "STRAWBERRY": 24,
+       "WHEAT": 24,
+       "MELON": 4
+      },
+      "care": 17,
+      "feed_ops": 17,
+      "water": 47,
+      "harvest": 37,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 12
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 28,
+      "sells_qty": {
+       "STRAWBERRY": 15,
+       "MILK": 30,
+       "WHEAT": 17,
+       "FERTILIZER": 12
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 3600.0,
+       "MILK": 4065.0,
+       "WHEAT": 801.0,
+       "FERTILIZER": 480.0
+      }
+     },
+     {
+      "day": 27,
+      "money_end": 84230.0,
+      "hands": 12,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 13
+      },
+      "herd_head": 13,
+      "crops": {
+       "STRAWBERRY": 16,
+       "WHEAT": 16,
+       "MELON": 4
+      },
+      "care": 19,
+      "feed_ops": 19,
+      "water": 47,
+      "harvest": 29,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 26,
+      "sells_qty": {
+       "STRAWBERRY": 7,
+       "WHEAT": 46,
+       "FERTILIZER": 18,
+       "MILK": 25
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 1717.0,
+       "WHEAT": 2163.0,
+       "FERTILIZER": 595.0,
+       "MILK": 2664.0
+      }
+     },
+     {
+      "day": 28,
+      "money_end": 88717.0,
+      "hands": 8,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 13
+      },
+      "herd_head": 13,
+      "crops": {
+       "STRAWBERRY": 9,
+       "WHEAT": 8
+      },
+      "care": 17,
+      "feed_ops": 17,
+      "water": 15,
+      "harvest": 29,
+      "hires": 8,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 21,
+      "sells_qty": {
+       "STRAWBERRY": 5,
+       "MILK": 21,
+       "WHEAT": 47,
+       "FERTILIZER": 11
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 1234.0,
+       "MILK": 1560.0,
+       "WHEAT": 2216.0,
+       "FERTILIZER": 316.0
+      }
+     },
+     {
+      "day": 29,
+      "money_end": 96629.0,
+      "hands": 6,
+      "herd": {
+       "EMPTY_STRUCTURE": 1,
+       "COW": 13
+      },
+      "herd_head": 13,
+      "crops": {
+       "STRAWBERRY": 7,
+       "WHEAT": 3
+      },
+      "care": 15,
+      "feed_ops": 0,
+      "water": 9,
+      "harvest": 12,
+      "hires": 6,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "STRAWBERRY": 16,
+       "MILK": 22,
+       "WHEAT": 45,
+       "FERTILIZER": 22,
+       "MELON": 20
+      },
+      "sells_revenue": {
+       "STRAWBERRY": 3957.0,
+       "MILK": 868.0,
+       "WHEAT": 2115.0,
+       "FERTILIZER": 492.0,
+       "MELON": 80.0
+      }
+     }
+    ]
+   },
+   {
+    "seat": 1,
+    "team": "renyxin",
+    "reward": 76463.0,
+    "totals": {
+     "care": 267,
+     "feed_ops": 279,
+     "water": 659,
+     "harvest": 174,
+     "hires": 281,
+     "feed_buy_qty": 330,
+     "feed_buy_spend": 13291.0
+    },
+    "money": {
+     "by_day": [
+      450.0,
+      222.0,
+      202.0,
+      61.0,
+      247.0,
+      158.0,
+      126.0,
+      490.0,
+      162.0,
+      216.0,
+      467.0,
+      333.0,
+      29.0,
+      3416.0,
+      1438.0,
+      1123.0,
+      1072.0,
+      2641.0,
+      10591.0,
+      12970.0,
+      18286.0,
+      22773.0,
+      31945.0,
+      42283.0,
+      49389.0,
+      52597.0,
+      56433.0,
+      67601.0,
+      70786.0,
+      76463.0
+     ],
+     "day12": 29.0,
+     "day18": 10591.0,
+     "day24": 49389.0,
+     "ramp_d12_d24": 49360.0
+    },
+    "peak_herd": {
+     "SHEEP": 8,
+     "COW": 7
+    },
+    "peak_herd_head": 15,
+    "quadrant_unlock_day": {
+     "NW": 0,
+     "NE": 5,
+     "SW": 9
+    },
+    "table": [
+     {
+      "day": 0,
+      "money_end": 450.0,
+      "hands": 5,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 13,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 14,
+      "harvest": 0,
+      "hires": 5,
+      "plants": {
+       "MELON": 3,
+       "WHEAT": 13
+      },
+      "animal_buys": {
+       "COW": 2,
+       "SHEEP": 2
+      },
+      "feed_buy_qty": 9,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 1,
+      "money_end": 222.0,
+      "hands": 6,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 16,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 21,
+      "harvest": 0,
+      "hires": 6,
+      "plants": {
+       "WHEAT": 4
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 7,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 2,
+      "money_end": 202.0,
+      "hands": 6,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 16,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 16,
+      "harvest": 0,
+      "hires": 6,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 3,
+      "money_end": 61.0,
+      "hands": 8,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 16,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 19,
+      "harvest": 0,
+      "hires": 8,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "FERTILIZER": 1
+      },
+      "sells_revenue": {
+       "FERTILIZER": 99.0
+      }
+     },
+     {
+      "day": 4,
+      "money_end": 247.0,
+      "hands": 8,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 2,
+       "EMPTY_STRUCTURE": 1
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 16,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 29,
+      "harvest": 13,
+      "hires": 8,
+      "plants": {
+       "WHEAT": 13
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 6,
+      "sells_qty": {
+       "FERTILIZER": 4
+      },
+      "sells_revenue": {
+       "FERTILIZER": 388.0
+      }
+     },
+     {
+      "day": 5,
+      "money_end": 158.0,
+      "hands": 8,
+      "herd": {
+       "SHEEP": 2,
+       "EMPTY_STRUCTURE": 6,
+       "COW": 2
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 17,
+       "STRAWBERRY": 6,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 21,
+      "harvest": 1,
+      "hires": 8,
+      "plants": {
+       "STRAWBERRY": 6,
+       "WHEAT": 2
+      },
+      "animal_buys": {
+       "COW": 2
+      },
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "FERTILIZER": 4,
+       "WHEAT": 43
+      },
+      "sells_revenue": {
+       "FERTILIZER": 384.0,
+       "WHEAT": 1204.0
+      }
+     },
+     {
+      "day": 6,
+      "money_end": 126.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "EMPTY_STRUCTURE": 6,
+       "COW": 2
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 18,
+       "STRAWBERRY": 6,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 28,
+      "harvest": 3,
+      "hires": 9,
+      "plants": {
+       "WHEAT": 3
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "WHEAT": 2
+      },
+      "sells_revenue": {
+       "WHEAT": 56.0
+      }
+     },
+     {
+      "day": 7,
+      "money_end": 490.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "EMPTY_STRUCTURE": 6,
+       "COW": 2
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 19,
+       "STRAWBERRY": 12,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 31,
+      "harvest": 0,
+      "hires": 9,
+      "plants": {
+       "STRAWBERRY": 6,
+       "WHEAT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "WOOL": 4,
+       "FERTILIZER": 2
+      },
+      "sells_revenue": {
+       "WOOL": 856.0,
+       "FERTILIZER": 188.0
+      }
+     },
+     {
+      "day": 8,
+      "money_end": 162.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "EMPTY_STRUCTURE": 6,
+       "COW": 2
+      },
+      "herd_head": 4,
+      "crops": {
+       "WHEAT": 16,
+       "STRAWBERRY": 12,
+       "MELON": 3
+      },
+      "care": 4,
+      "feed_ops": 4,
+      "water": 29,
+      "harvest": 12,
+      "hires": 9,
+      "plants": {
+       "WHEAT": 8
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 8,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 9,
+      "money_end": 216.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 4,
+       "EMPTY_STRUCTURE": 7
+      },
+      "herd_head": 6,
+      "crops": {
+       "WHEAT": 11,
+       "STRAWBERRY": 12,
+       "MELON": 6
+      },
+      "care": 6,
+      "feed_ops": 6,
+      "water": 25,
+      "harvest": 4,
+      "hires": 9,
+      "plants": {
+       "WHEAT": 1,
+       "MELON": 3
+      },
+      "animal_buys": {
+       "COW": 3
+      },
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "MILK": 12,
+       "WHEAT": 28
+      },
+      "sells_revenue": {
+       "MILK": 2424.0,
+       "WHEAT": 784.0
+      }
+     },
+     {
+      "day": 10,
+      "money_end": 467.0,
+      "hands": 9,
+      "herd": {
+       "SHEEP": 2,
+       "COW": 5,
+       "EMPTY_STRUCTURE": 7
+      },
+      "herd_head": 7,
+      "crops": {
+       "WHEAT": 11,
+       "MELON": 9,
+       "STRAWBERRY": 18
+      },
+      "care": 2,
+      "feed_ops": 5,
+      "water": 29,
+      "harvest": 2,
+      "hires": 9,
+      "plants": {
+       "MELON": 3,
+       "STRAWBERRY": 6
+      },
+      "animal_buys": {
+       "SHEEP": 2,
+       "COW": 1
+      },
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "WOOL": 10
+      },
+      "sells_revenue": {
+       "WOOL": 2032.0
+      }
+     },
+     {
+      "day": 11,
+      "money_end": 333.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 5,
+       "COW": 5,
+       "EMPTY_STRUCTURE": 5
+      },
+      "herd_head": 10,
+      "crops": {
+       "WHEAT": 8,
+       "MELON": 9,
+       "STRAWBERRY": 18
+      },
+      "care": 12,
+      "feed_ops": 10,
+      "water": 27,
+      "harvest": 0,
+      "hires": 10,
+      "plants": {},
+      "animal_buys": {
+       "SHEEP": 2
+      },
+      "feed_buy_qty": 8,
+      "sells_qty": {
+       "MILK": 6
+      },
+      "sells_revenue": {
+       "MILK": 1248.0
+      }
+     },
+     {
+      "day": 12,
+      "money_end": 29.0,
+      "hands": 5,
+      "herd": {
+       "SHEEP": 5,
+       "COW": 5,
+       "EMPTY_STRUCTURE": 5
+      },
+      "herd_head": 10,
+      "crops": {
+       "WHEAT": 7,
+       "MELON": 6,
+       "STRAWBERRY": 18
+      },
+      "care": 0,
+      "feed_ops": 6,
+      "water": 15,
+      "harvest": 6,
+      "hires": 5,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 13,
+      "sells_qty": {},
+      "sells_revenue": {}
+     },
+     {
+      "day": 13,
+      "money_end": 3416.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 5,
+       "COW": 5,
+       "EMPTY_STRUCTURE": 5
+      },
+      "herd_head": 10,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18
+      },
+      "care": 6,
+      "feed_ops": 10,
+      "water": 24,
+      "harvest": 0,
+      "hires": 10,
+      "plants": {
+       "MELON": 3
+      },
+      "animal_buys": {
+       "COW": 3
+      },
+      "feed_buy_qty": 22,
+      "sells_qty": {
+       "MILK": 4,
+       "WOOL": 6,
+       "MELON": 16
+      },
+      "sells_revenue": {
+       "MILK": 832.0,
+       "WOOL": 1188.0,
+       "MELON": 3446.0
+      }
+     },
+     {
+      "day": 14,
+      "money_end": 1438.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "WHEAT": 3
+      },
+      "care": 17,
+      "feed_ops": 16,
+      "water": 26,
+      "harvest": 1,
+      "hires": 12,
+      "plants": {
+       "WHEAT": 3
+      },
+      "animal_buys": {
+       "SHEEP": 3
+      },
+      "feed_buy_qty": 10,
+      "sells_qty": {
+       "FERTILIZER": 3
+      },
+      "sells_revenue": {
+       "FERTILIZER": 246.0
+      }
+     },
+     {
+      "day": 15,
+      "money_end": 1123.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "CARROT": 5,
+       "WHEAT": 3
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 29,
+      "harvest": 2,
+      "hires": 12,
+      "plants": {
+       "CARROT": 5
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 16,
+      "sells_qty": {
+       "MILK": 4
+      },
+      "sells_revenue": {
+       "MILK": 880.0
+      }
+     },
+     {
+      "day": 16,
+      "money_end": 1072.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "CARROT": 5,
+       "WHEAT": 3
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 31,
+      "harvest": 2,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {
+       "COW": 1
+      },
+      "feed_buy_qty": 16,
+      "sells_qty": {
+       "WOOL": 6,
+       "FERTILIZER": 2
+      },
+      "sells_revenue": {
+       "WOOL": 1170.0,
+       "FERTILIZER": 156.0
+      }
+     },
+     {
+      "day": 17,
+      "money_end": 2641.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "CARROT": 5,
+       "WHEAT": 3
+      },
+      "care": 9,
+      "feed_ops": 13,
+      "water": 28,
+      "harvest": 11,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 16,
+      "sells_qty": {
+       "MILK": 8,
+       "FERTILIZER": 11
+      },
+      "sells_revenue": {
+       "MILK": 1760.0,
+       "FERTILIZER": 803.0
+      }
+     },
+     {
+      "day": 18,
+      "money_end": 10591.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "CARROT": 5,
+       "WHEAT": 3
+      },
+      "care": 17,
+      "feed_ops": 15,
+      "water": 30,
+      "harvest": 6,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "WOOL": 16,
+       "STRAWBERRY": 14,
+       "FERTILIZER": 3,
+       "MILK": 12
+      },
+      "sells_revenue": {
+       "WOOL": 2890.0,
+       "STRAWBERRY": 3136.0,
+       "FERTILIZER": 210.0,
+       "MILK": 2556.0
+      }
+     },
+     {
+      "day": 19,
+      "money_end": 12970.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "CARROT": 1
+      },
+      "care": 13,
+      "feed_ops": 14,
+      "water": 28,
+      "harvest": 8,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "MILK": 12,
+       "WOOL": 5
+      },
+      "sells_revenue": {
+       "MILK": 2616.0,
+       "WOOL": 790.0
+      }
+     },
+     {
+      "day": 20,
+      "money_end": 18286.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 9,
+       "STRAWBERRY": 18,
+       "CARROT": 2
+      },
+      "care": 16,
+      "feed_ops": 15,
+      "water": 29,
+      "harvest": 8,
+      "hires": 12,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 14,
+      "sells_qty": {
+       "MILK": 6,
+       "STRAWBERRY": 20,
+       "FERTILIZER": 4
+      },
+      "sells_revenue": {
+       "MILK": 1332.0,
+       "STRAWBERRY": 4676.0,
+       "FERTILIZER": 260.0
+      }
+     },
+     {
+      "day": 21,
+      "money_end": 22773.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "MELON": 6,
+       "STRAWBERRY": 18,
+       "CARROT": 2
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 27,
+      "harvest": 13,
+      "hires": 12,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "WOOL": 24,
+       "FERTILIZER": 10,
+       "MILK": 9
+      },
+      "sells_revenue": {
+       "WOOL": 2624.0,
+       "FERTILIZER": 600.0,
+       "MILK": 1872.0
+      }
+     },
+     {
+      "day": 22,
+      "money_end": 31945.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "STRAWBERRY": 12,
+       "MELON": 3,
+       "CARROT": 6
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 20,
+      "harvest": 14,
+      "hires": 12,
+      "plants": {
+       "CARROT": 7
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 25,
+      "sells_qty": {
+       "WOOL": 9,
+       "STRAWBERRY": 26,
+       "MELON": 10,
+       "MILK": 6,
+       "FERTILIZER": 8
+      },
+      "sells_revenue": {
+       "WOOL": 921.0,
+       "STRAWBERRY": 6106.0,
+       "MELON": 1310.0,
+       "MILK": 1236.0,
+       "FERTILIZER": 440.0
+      }
+     },
+     {
+      "day": 23,
+      "money_end": 42283.0,
+      "hands": 12,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 8,
+       "STRAWBERRY": 12,
+       "MELON": 3
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 19,
+      "harvest": 12,
+      "hires": 12,
+      "plants": {
+       "CARROT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 30,
+      "sells_qty": {
+       "MILK": 21,
+       "STRAWBERRY": 21,
+       "MELON": 18,
+       "FERTILIZER": 4
+      },
+      "sells_revenue": {
+       "MILK": 4356.0,
+       "STRAWBERRY": 4910.0,
+       "MELON": 1404.0,
+       "FERTILIZER": 208.0
+      }
+     },
+     {
+      "day": 24,
+      "money_end": 49389.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 8,
+       "MELON": 3,
+       "STRAWBERRY": 6
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 16,
+      "harvest": 8,
+      "hires": 10,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "WOOL": 24,
+       "STRAWBERRY": 13,
+       "FERTILIZER": 3,
+       "MILK": 6
+      },
+      "sells_revenue": {
+       "WOOL": 3138.0,
+       "STRAWBERRY": 3034.0,
+       "FERTILIZER": 147.0,
+       "MILK": 1260.0
+      }
+     },
+     {
+      "day": 25,
+      "money_end": 52597.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 10,
+       "STRAWBERRY": 6
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 21,
+      "harvest": 9,
+      "hires": 10,
+      "plants": {
+       "CARROT": 6
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "WOOL": 4,
+       "FERTILIZER": 17,
+       "MILK": 15
+      },
+      "sells_revenue": {
+       "WOOL": 724.0,
+       "FERTILIZER": 714.0,
+       "MILK": 2310.0
+      }
+     },
+     {
+      "day": 26,
+      "money_end": 56433.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 8,
+       "STRAWBERRY": 6
+      },
+      "care": 15,
+      "feed_ops": 15,
+      "water": 9,
+      "harvest": 19,
+      "hires": 10,
+      "plants": {
+       "CARROT": 2
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 15,
+      "sells_qty": {
+       "WOOL": 8,
+       "MELON": 18,
+       "CARROT": 11,
+       "MILK": 6,
+       "FERTILIZER": 11
+      },
+      "sells_revenue": {
+       "WOOL": 1600.0,
+       "MELON": 666.0,
+       "CARROT": 759.0,
+       "MILK": 786.0,
+       "FERTILIZER": 407.0
+      }
+     },
+     {
+      "day": 27,
+      "money_end": 67601.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 7
+      },
+      "care": 13,
+      "feed_ops": 13,
+      "water": 11,
+      "harvest": 5,
+      "hires": 10,
+      "plants": {
+       "CARROT": 1
+      },
+      "animal_buys": {},
+      "feed_buy_qty": 32,
+      "sells_qty": {
+       "WOOL": 24,
+       "STRAWBERRY": 20,
+       "CARROT": 6,
+       "FERTILIZER": 9,
+       "MILK": 12
+      },
+      "sells_revenue": {
+       "WOOL": 5064.0,
+       "STRAWBERRY": 4836.0,
+       "CARROT": 426.0,
+       "FERTILIZER": 297.0,
+       "MILK": 1068.0
+      }
+     },
+     {
+      "day": 28,
+      "money_end": 70786.0,
+      "hands": 10,
+      "herd": {
+       "SHEEP": 8,
+       "COW": 7
+      },
+      "herd_head": 15,
+      "crops": {
+       "CARROT": 1
+      },
+      "care": 0,
+      "feed_ops": 0,
+      "water": 7,
+      "harvest": 11,
+      "hires": 10,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "MILK": 6,
+       "WOOL": 8,
+       "MELON": 8,
+       "CARROT": 8,
+       "FERTILIZER": 9
+      },
+      "sells_revenue": {
+       "MILK": 456.0,
+       "WOOL": 1800.0,
+       "MELON": 152.0,
+       "CARROT": 584.0,
+       "FERTILIZER": 261.0
+      }
+     },
+     {
+      "day": 29,
+      "money_end": 76463.0,
+      "hands": 0,
+      "herd": {
+       "EMPTY_STRUCTURE": 2,
+       "COW": 7,
+       "SHEEP": 6
+      },
+      "herd_head": 13,
+      "crops": {
+       "CARROT": 1
+      },
+      "care": 0,
+      "feed_ops": 0,
+      "water": 0,
+      "harvest": 4,
+      "hires": 0,
+      "plants": {},
+      "animal_buys": {},
+      "feed_buy_qty": 0,
+      "sells_qty": {
+       "WHEAT": 8,
+       "CARROT": 24,
+       "STRAWBERRY": 6,
+       "MELON": 2,
+       "MILK": 15,
+       "FERTILIZER": 14,
+       "WOOL": 10
+      },
+      "sells_revenue": {
+       "WHEAT": 376.0,
+       "CARROT": 1752.0,
+       "STRAWBERRY": 1476.0,
+       "MELON": 8.0,
+       "MILK": 600.0,
+       "FERTILIZER": 322.0,
+       "WOOL": 2339.0
+      }
+     }
+    ]
+   }
+  ]
+ }
+]

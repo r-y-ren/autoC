@@ -345,6 +345,76 @@ SCALE_RANCH_PARAMS: Dict = {
     "endgame_start": 28,    # winners stop feeding/planting and liquidate d28-29
 }
 
+WHEAT_STRAW_MONSTER_PARAMS: Dict = {
+    "name": "wheat_straw_monster",
+    "provenance": "round-3 public-ladder winners that beat the r4 candidate "
+                  "by 20-34k (Renji Starfall ep102549493 109695: crew 10 from "
+                  "d0 / 12 from d12, NE+SW both on d10, strawberry burst 28+4 "
+                  "tiles d11-12 to a 42-tile peak, wheat money crop replanted "
+                  "all season 1508u sold @ avg 37.7, external feed 1501u, "
+                  "d12=6052 d24=56055; DevilQ ep102558469 96629: 14 cows, "
+                  "strawberry 33 peak d8-14, melon 21, wheat 429u sold, feed "
+                  "532u; replays .tmp-online/round3/, deep stats "
+                  ".tmp-online/round3/monster_deep_stats.json)",
+    "exploratory_params": False,
+    # labour: crew 10 from day 0 (Renji hires 10 on d0 itself -- the field
+    # economy needs the hands before the land does), 12 from d12 (Renji's
+    # step-up when the 42-tile field lands; DevilQ ramps 5->9->12)
+    "hire_mode": "ramp",
+    "hire_ramp": ((0, 10), (12, 12)),
+    "hire_cap": 12,
+    "hire_until_hour": 6,
+    # land: both extra quadrants on day 10 (Renji bought NE and SW the same
+    # day -- the strawberry burst needs the tiles, not an early quadrant;
+    # DevilQ NE d8 / SW d18 brackets it)
+    "target_quads": 3,
+    "quad_min_day": (8, 10, 12),
+    "quad_reserve": (400, 550, 800),
+    # herd: cow-led, 12 head (Renji 6C+2S mild, DevilQ 14 cows -- the
+    # monster band treats animals as the cash floor, not the ceiling)
+    "herd": {"COW": 10, "SHEEP": 2, "GOOSE": 0},
+    "animal_reserve": 500,
+    # field: wheat money crop base 25% of a near-fully-farmed 3-quad field
+    # (Renji replants wheat continuously -- 52u/day sold; DevilQ peak 24
+    # tiles; the log curve absorbs the volume)
+    "wheat_share_mode": "fixed",
+    "wheat_share": 0.25,
+    "wheat_share_ladder": None,
+    "tiles_per_quad": 24,
+    "tiles_per_unit": 5.5,
+    # the strawberry BURST: 42-tile ceiling planted in the d9-14 window
+    # after the second quadrant lands (Renji 7 probe tiles d1 then 32 in
+    # d10-12; DevilQ 33 across d8-14); melon 10-21 alongside
+    "money_crop_caps": {"STRAWBERRY": 42, "MELON": 12},
+    "money_crop_min_price": {"STRAWBERRY": 60, "MELON": 140},
+    "crop_phase": {"MELON": (0, 17), "STRAWBERRY": (9, 14)},
+    # feed: heavy external buying at a wide guardrail (Renji 1501u @ 37.7
+    # avg / 56.5k spend; DevilQ 532u @ 40.4 -- the wheat field sells, the
+    # herd eats from the market)
+    "feed_mode": "gap",
+    "feed_gate": 45,
+    "feed_cheap_at": 32,
+    "feed_daily_base": 30,
+    "feed_cheap_extra": 60,
+    "feed_cover_days": 1.5,
+    "wheat_sell_keep": 8,
+    # care: full coverage (DevilQ 423 issued ~= head x days; Renji keeps
+    # CARE lean because the herd is small -- the weight stays high so the
+    # cash floor never starves)
+    "care_weight": 70,
+    # seeds stay liquid behind the herd/land burst (Renji d1: 7 straw +
+    # 4 wheat + 1 cow from the 3000 start)
+    "seed_cash_floor": 900,
+    # sells: wheat is the volume line (52u/day), strawberry/melon premium
+    # tranches, milk cleared through (Renji 126 milk / DevilQ 286)
+    "sell_gates": {"MILK": 150, "WOOL": 110, "STRAWBERRY": 100, "MELON": 160,
+                   "WHEAT": 28, "EGG": 40},
+    "sell_tranches": {"MILK": 14, "WOOL": 10, "STRAWBERRY": 12, "MELON": 10,
+                      "WHEAT": 44, "EGG": 10},
+    "fert_gate": 45,
+    "endgame_start": 27,    # DevilQ still replants wheat d23-26; dump d27+
+}
+
 
 def _dist(ax: int, ay: int, bx: int, by: int) -> int:
     return abs(ax - bx) + abs(ay - by)
@@ -902,12 +972,21 @@ def scale_ranch_agent(obs: Dict) -> Dict:
     return online_style_agent(obs, SCALE_RANCH_PARAMS)
 
 
+def wheat_straw_monster_agent(obs: Dict) -> Dict:
+    """Round-3 winner archetype (r5-P6): crew-10 opening, day-10 double
+    quadrant + 42-tile strawberry burst, continuous wheat money crop at
+    log-curve volume, market-fed herd -- the 96-110k band that beat the
+    r4 candidate online."""
+    return online_style_agent(obs, WHEAT_STRAW_MONSTER_PARAMS)
+
+
 ONLINE_STYLE_OPPONENTS = {
     "crop_rotator": crop_rotator_agent,
     "template_wheat": template_wheat_agent,
     "self_feed_ranch": self_feed_ranch_agent,
     "near_band_diversified": near_band_diversified_agent,
     "scale_ranch": scale_ranch_agent,
+    "wheat_straw_monster": wheat_straw_monster_agent,
 }
 ONLINE_STYLE_PARAM_SETS = {
     "crop_rotator": CROP_ROTATOR_PARAMS,
@@ -915,4 +994,5 @@ ONLINE_STYLE_PARAM_SETS = {
     "self_feed_ranch": SELF_FEED_RANCH_PARAMS,
     "near_band_diversified": NEAR_BAND_PARAMS,
     "scale_ranch": SCALE_RANCH_PARAMS,
+    "wheat_straw_monster": WHEAT_STRAW_MONSTER_PARAMS,
 }

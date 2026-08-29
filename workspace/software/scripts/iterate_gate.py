@@ -24,7 +24,8 @@ from kgenv.bots.online_pool import (crop_rotator_agent,
                                     near_band_diversified_agent,
                                     scale_ranch_agent,
                                     self_feed_ranch_agent,
-                                    template_wheat_agent)
+                                    template_wheat_agent,
+                                    wheat_straw_monster_agent)
 from kgenv.engine import FULL_EPISODE_STEPS
 from kgenv.eval_contract import (ContractError, build_ab_ba_schedule,
                                  candidate_snapshot, validate_gate_run)
@@ -33,7 +34,8 @@ LOG_PATH = os.path.join(SOFTWARE_ROOT, "exports", "logs",
                         "iteration_gate_log.jsonl")
 GATE_OPPONENTS = ["cow_baron", "melon_hoarder"]
 GUARD_OPPONENTS = ["expansionist", "baseline_wheat"]
-# m2 online-style opponents (campaign III) + r3-1 scale_ranch: certified
+# m2 online-style opponents (campaign III) + r3-1 scale_ranch + r5-P6
+# wheat_straw_monster (the round-3 96-110k winner band): certified
 # ladder-archetype reconstructions -- required in the complete gate alongside
 # the wave-2 set
 ONLINE_OPPONENTS = [
@@ -42,6 +44,7 @@ ONLINE_OPPONENTS = [
     "self_feed_ranch",
     "near_band_diversified",
     "scale_ranch",
+    "wheat_straw_monster",
 ]
 REQUIRED_OPPONENTS = GATE_OPPONENTS + GUARD_OPPONENTS + ONLINE_OPPONENTS
 OPPONENTS = {
@@ -54,6 +57,7 @@ OPPONENTS = {
     "self_feed_ranch": self_feed_ranch_agent,
     "near_band_diversified": near_band_diversified_agent,
     "scale_ranch": scale_ranch_agent,
+    "wheat_straw_monster": wheat_straw_monster_agent,
 }
 
 
