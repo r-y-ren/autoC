@@ -59,6 +59,13 @@ python workspace/software/scripts/corpus_integrity.py --mode official
 #     的权威代发布于 exports/holdout/published/，正式投影原子替换 eval_results.json
 python workspace/software/scripts/run_holdout.py --verify-published --require-frozen
 python workspace/software/scripts/check_eval_contract.py --mode official --input workspace/software/exports/eval_results.json
+
+# 14) r3-P0 分层构建基础设施（战役 III round-3）：
+#     a) 成功口径回放分析（observation 状态差分；影子校验 0 mismatch 才可信）
+python workspace/software/scripts/replay_deep_stats.py <replay.json>... --success-json workspace/software/exports/online/<name>_success_stats.json
+#     b) 配对消融门（candidate vs 冻结 champion，同 (对手, 种子, 座位) 配对；
+#        合并门三指标：新风格池胜率 >= / 最差单风格胜率 >= / 灾难败局率 <=，产物仅入 exports/ablations/）
+python workspace/software/scripts/ablate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label <layer-label>
 ```
 
 ## 目录

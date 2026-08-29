@@ -1,8 +1,8 @@
 {
  "schema": "software-metrics-shard/1.0",
  "campaign": "kaggle-kaggriculture",
- "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained) + r3-1 cross-profile & next-band pool + r3-2 timing redesign & freeze (d0 burst/herd14/strawberry d5/crew12; 72-0 dev gate for e21c4b5f)",
- "measured_at": "2026-08-29T11:29:53.555447+00:00",
+ "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained) + r3-1 cross-profile & next-band pool + r3-2 timing redesign & freeze (d0 burst/herd14/strawberry d5/crew12; 72-0 dev gate for e21c4b5f) + r3-P0 success-caliber measurement & paired ablation harness",
+ "measured_at": "2026-08-29T20:05:00.000000+00:00",
  "engine": {
   "package": "kaggle-environments",
   "version": "1.32.7+nodeps (vendored, engine code unmodified)",
@@ -2822,6 +2822,44 @@
    },
    "unit": "identity",
    "method": "sha256 of kaggle_simulations/agent/main.py at freeze; snapshot b64 round-trip verified decoded==source; manifest written 2026-08-29 after the r3-frozen complete gate PASS (72/72, abnormal 0)"
+  },
+  "r3_p0_success_metrics_summary": {
+   "value": {
+    "attribution_valid_all_12_seats": true,
+    "attribution_method": "kgenv/replay_profile.extract_success_metrics: observation state-diff measurement; shadow interpreter port validated field-by-field against every recorded step of all 6 round-2 replays (12 seats x 720 steps, 0 mismatch)",
+    "report": "workspace/software/exports/online/round2_success_metrics.md",
+    "backing_json": "workspace/software/exports/online/round2_success_stats.json",
+    "ours_op_success_rates": {
+     "CARE": "162-197 req = 162-197 eff (100%) across 6 games",
+     "FEED": "100%",
+     "HARVEST": "100%",
+     "HIRE": "261-265 req = 261-265 eff (100%)",
+     "WATER": "99.6-99.9% (2-6 invalid unit-op turns per game total)"
+    },
+    "winners_effective_care": {
+     "arminhej96": "334/586 (252 duplicate no-op requests)",
+     "朝闻夕死": "268/268",
+     "Danila Galkin": "394/394"
+    },
+    "danila_hire_effective": "312 effective / 450 engine-visible / 573 raw (123 orders beyond the 10-orders-per-turn cap never parsed; 138 silent no-money rejects)",
+    "ours_escapes": "5 animals / 6 games (4 COW + 1 SHEEP, asset loss 2100) vs winners 0 / 3 games",
+    "ours_care_lapse_weeds": "14-29 tiles per game (143 total; CARROT 5-13 + WHEAT 7-15 heavy), days 10-26; winners 0/30/16 discarding low-value lines only",
+    "ours_shed_overflow": "0-46 units per game, all at the day-25 dump (shedCapacity=100 terminal logistics bottleneck); Anthaus counterexample 259u",
+    "per_head_harvested_yield": {
+     "ours_milk_per_cow": "15.2-21.2u",
+     "winners_milk_per_cow": "24.7-35.6u",
+     "ours_wool_per_sheep": "15.7-21.5u",
+     "winners_wool_per_sheep": "22.0-24.7u"
+    },
+    "market_quality": "our SELL fill 99.1-100% (aborts = same-turn shed races, no_stock); wool dump slippage -10.6 to -35.9/unit in 4/6 games; Danila feed-stockpile buy impact +3.03/unit (paid 36.75 vs quoted 33.72)"
+   },
+   "unit": "report",
+   "method": "r3-P0 (2026-08-29): python scripts/replay_deep_stats.py .tmp-online/round2/*.json --success-json exports/online/round2_success_stats.json over the 6 round-2 online replays; success-caliber numbers re-basing the round-2 request-caliber conclusions (report section 1-2)"
+  },
+  "r3_ablation_harness_ready": {
+   "value": true,
+   "unit": "bool",
+   "method": "scripts/ablate.py (r3-P0, 2026-08-29): paired candidate-vs-champion grid on the same (opponent, seed, seat) cell -- 9 required opponents x seeds x AB/BA x 2 sides; champion default = frozen snapshot r3_frozen_candidate.b64 sha-verified against the manifest; merge gate = new-style pool WR >= champion AND worst single-opponent WR >= champion AND disaster rate (margin < -15000) <= champion; outputs locked to exports/ablations/. Champion-vs-champion semantic smoke measured: 144 games in 453.72s, all 72 pairs exact ties (0W-0L-72T, net diff 0.0), both sides 72-0 vs pool, VERDICT MERGEABLE, exit 0 (exports/ablations/champ-vs-champ-r3p0-smoke.json). Tests: tests/test_ablate.py 11 passed (grid completeness, duplicate/foreign game rejection, pairing diff semantics, gate counterexamples incl. disaster boundary, frozen decode tamper rejection, out-path lock, real-engine champ-vs-champ tie grid)"
   }
  },
  "unmeasured": {

@@ -11,12 +11,22 @@ farmer/hand unit-op axis needed for the round-2 winner cross-profiling:
   * day-end herd composition + money + crop tiles (same sampling as
     replay_profile: last observation of each day)
 
+r3-P0 adds the SUCCESS-CALIBER axis (``--success-json``): the same counts
+re-measured from observation state transitions via
+kgenv.replay_profile.extract_success_metrics -- effective CARE/FEED/WATER/
+HARVEST (flag flips + yield moves), HIRE successes vs silent no-money
+rejects, per-order market fills with realized prices and slippage, animal
+escapes, care-lapse weed-outs, shed-capacity discards, capped-production
+tile-days and per-worker movement/effective-op economics.  The request
+tables above are kept byte-identical for continuity with the r3-1 exports.
+
 Pure: reads a replay dict, returns plain JSON-serialisable dicts.  Used by
 the r3-1 round-2 winner deep dive (exports/online/round2_winner_deep_dive.md)
 and reusable by later waves for any raw replay.
 
 Usage:
     python scripts/replay_deep_stats.py PATH [PATH ...] [--json OUT]
+                                         [--success-json OUT]
 """
 
 from __future__ import annotations
@@ -39,6 +49,7 @@ from kgenv.replay_profile import (  # noqa: E402
     _crops_from_counts,
     _herd_from_counts,
     _tile_counts,
+    extract_success_metrics,
     load_replay,
 )
 
@@ -193,16 +204,56 @@ def _finalise(pl, teams, days, quadrant_day, rewards) -> dict[str, Any]:
     }
 
 
+def _success_summary_lines(success: dict) -> list[str]:
+    """One console line per player: success caliber vs request caliber."""
+    lines = []
+    ep = success["episode"]
+    for p in success["players"]:
+        care, feed = p["ops"]["CARE"], p["ops"]["FEED"]
+        water, harvest = p["ops"]["WATER"], p["ops"]["HARVEST"]
+        hire = p["hire"]
+        sells = p["market"]["SELL"]
+        buys = p["market"]["BUY_PRODUCT"]
+        workers = p["workers"]
+        integrity = "attr_ok" if p["integrity"]["attribution_valid"] else (
+            f"attr_mismatch={p['integrity']['mismatch_steps']}")
+        lines.append(
+            f"ep{ep['episode_id']} seat{p['seat']} {p['team']}: "
+            f"CARE_eff={care['successes']}/{care['requests']} "
+            f"(dup={care['failures']['already_served']}) "
+            f"FEED_eff={feed['successes']}/{feed['requests']} "
+            f"(nores={feed['failures']['no_resource']}) "
+            f"WATER_eff={water['successes']}/{water['requests']} "
+            f"HARVEST_eff={harvest['successes']}/{harvest['requests']} "
+            f"HIRE_eff={hire['successes']}/{hire['requests']} "
+            f"(rejected={hire['no_money_rejects']}) "
+            f"SELL_fill={sells['filled_qty']}/{sells['requested_qty']} "
+            f"BUY_fill={buys['filled_qty']}/{buys['requested_qty']} "
+            f"escapes={p['escapes']['count']} "
+            f"weeds_lapse={p['weeds']['care_lapse']} "
+            f"shed_overflow={p['shed_overflow']['discarded_units']}u "
+            f"cap_tile_days={p['animal_cap_waste']['capped_tile_days']} "
+            f"move_share={workers['movement_share']} "
+            f"moves_per_op={workers['moves_per_effective_op']} [{integrity}]"
+        )
+    return lines
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("paths", nargs="+", help="replay JSON file(s)")
     parser.add_argument("--json", default="",
                         help="optional output path for the combined JSON dump")
+    parser.add_argument("--success-json", default="",
+                        help="optional output path for the success-caliber "
+                             "metrics dump (state-diff measurement)")
     args = parser.parse_args()
 
     combined = []
+    success_combined = []
     for path in args.paths:
-        stats = extract_deep_stats(load_replay(path))
+        replay = load_replay(path)
+        stats = extract_deep_stats(replay)
         combined.append(stats)
         for player in stats["players"]:
             t = player["totals"]
@@ -216,11 +267,23 @@ def main() -> int:
                 f"d12={player['money']['day12']} d24={player['money']['day24']} "
                 f"ramp={player['money']['ramp_d12_d24']}"
             )
+        if args.success_json:
+            success = extract_success_metrics(replay, strict=False)
+            success_combined.append(success)
+            for line in _success_summary_lines(success):
+                print("  [success] " + line)
     if args.json:
         target = Path(args.json)
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(
             json.dumps(combined, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"wrote {target}")
+    if args.success_json:
+        target = Path(args.success_json)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(
+            json.dumps(success_combined, ensure_ascii=False, indent=1),
+            encoding="utf-8")
         print(f"wrote {target}")
     return 0
 
