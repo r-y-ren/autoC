@@ -30,12 +30,33 @@ def test_registry_v4_seeds_match_published_attempt3_generation():
     import json
     from pathlib import Path
 
+    holdout_root = Path(__file__).resolve().parents[1] / "exports" / "holdout"
+    # The published directory now carries the attempt-4 (v6) generation:
+    # 8 fresh OS-entropy seeds, disjoint from the 54-seed V4 registry,
+    # under the attempt-4 id with the frozen v6 candidate (127c277e).
+    PUBLISHED_HOLDOUT_SEEDS_V4 = frozenset({
+        1908158035, 1035303213, 1934605933, 1094392752,
+        802628522, 14410071, 618616204, 1252513065,
+    })
     published = json.loads(
-        (Path(__file__).resolve().parents[1] / "exports" / "holdout"
-         / "published" / "seed_manifest.json").read_text(encoding="utf-8"))
-    assert set(PUBLISHED_HOLDOUT_SEEDS_V3) == set(published["seeds"])
-    assert published["attempt_index"] == 3
-    assert PUBLISHED_ATTEMPT_IDS[3] == published["attempt_id"]
+        (holdout_root / "published" / "seed_manifest.json")
+        .read_text(encoding="utf-8"))
+    assert published["attempt_index"] == 4
+    assert published["attempt_id"] == "f31da15e9d3160fcd6d4fb8b"
+    assert set(PUBLISHED_HOLDOUT_SEEDS_V4) == set(published["seeds"])
+    assert not set(PUBLISHED_HOLDOUT_SEEDS_V4) & HISTORICAL_SEEDS_V4
+    published_results = json.loads(
+        (holdout_root / "published" / "eval_results.json")
+        .read_text(encoding="utf-8"))
+    assert published_results["identity"]["submission_sha256"].startswith("127c277e")
+    # The attempt-3 generation it displaced stays byte-archived with the
+    # V3 published seeds pinned by the contract constants.
+    archived = json.loads(
+        (holdout_root / "attempt-3" / "seed_manifest.json")
+        .read_text(encoding="utf-8"))
+    assert archived["attempt_index"] == 3
+    assert set(PUBLISHED_HOLDOUT_SEEDS_V3) == set(archived["seeds"])
+    assert PUBLISHED_ATTEMPT_IDS[3] == archived["attempt_id"]
 
 
 def test_v4_matrix_has_eleven_agents_and_55_pairs():

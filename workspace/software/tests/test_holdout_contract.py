@@ -598,10 +598,14 @@ def test_archived_repository_generations_still_validate_if_present():
     m3_manifest = json.loads(
         (run_holdout.SOFTWARE_ROOT / "m3_frozen_manifest.json").read_text(encoding="utf-8")
     )
+    # attempt-3 archived the r4 layered candidate (720 games); attempts 1-2
+    # are the 576-game generations.
     expectations = {
         1: "7c482921",
         2: m3_manifest["candidate"]["sha256"][:8],
+        3: "9298751f",
     }
+    expected_games = {1: 576, 2: 576, 3: 720}
     checked = 0
     for index, directory in sorted(run_holdout._archive_registry().items()):
         if not directory.is_dir():
@@ -612,7 +616,7 @@ def test_archived_repository_generations_still_validate_if_present():
         assert payload["holdout"]["attempt"]["index"] == index
         assert payload["identity"]["submission_sha256"].startswith(expectations[index])
         report = validate_holdout_payload(payload)
-        assert report["actual_games"] == 576
+        assert report["actual_games"] == expected_games[index]
         checked += 1
     if not checked:
         pytest.skip("no archived holdout generations materialised yet")
