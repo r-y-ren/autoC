@@ -71,12 +71,129 @@ def _task(x, y, act, value=100, red=False, need=None, key=None):
     }
 
 
+def _wheat_farm_obs(mod, day=8, wheat=14, herd=12, money=1200.0,
+                    opp_wheat=0, shops=("BAKERY",)):
+    mine = _farm(quads=("NW", "NE", "SW"), money=money)
+    # Populate observable wheat and animal structures without requiring a full
+    # engine episode; the mode gate only consumes public farm geometry.
+    placed = 0
+    for y, row in enumerate(mine["tiles"]):
+        for x, tile in enumerate(row):
+            if tile is None and placed < wheat:
+                row[x] = {"kind": "PLANT", "crop": "WHEAT",
+                          "planted_day": 4, "yield_units": 1}
+                placed += 1
+    placed = 0
+    for y, row in enumerate(mine["tiles"]):
+        for x, tile in enumerate(row):
+            if tile is None and placed < herd:
+                row[x] = {"kind": "PASTURE", "animal": "COW"}
+                placed += 1
+    opp = _farm(quads=("NW",), money=900.0)
+    placed = 0
+    for y, row in enumerate(opp["tiles"]):
+        for x, tile in enumerate(row):
+            if tile is None and placed < opp_wheat:
+                row[x] = {"kind": "PLANT", "crop": "WHEAT",
+                          "planted_day": 4, "yield_units": 1}
+                placed += 1
+    return {"player": 0, "day": day, "hour": 6,
+            "farms": [mine, opp],
+            "market": {"prices": dict(mod.BASE_PRICE)},
+            "town": {"unlocked_shops": list(shops)},
+            "private": {"shed": {}, "seeds": {"WHEAT": 4},
+                        "inventories": [{}]}}
+
+
+def test_wheat_farm_gate_is_opt_in_and_fail_closed():
+    mod = _load("wheat_gate")
+    obs = _wheat_farm_obs(mod)
+    mod.V9_WHEAT_FARM_ENABLED = False
+    assert mod._macro_plan(0, copy.deepcopy(obs), 8)["mode"] != "WHEAT_FARM"
+    mod._PLAN_MEM.clear()
+    mod.V9_WHEAT_FARM_ENABLED = True
+    assert mod._decide_mode(copy.deepcopy(obs), 8, None)["mode"] == "WHEAT_FARM"
+    blocked = _wheat_farm_obs(mod, money=700.0)
+    assert mod._decide_mode(blocked, 8, None)["mode"] != "WHEAT_FARM"
+    contested = _wheat_farm_obs(mod, opp_wheat=11)
+    assert mod._decide_mode(contested, 8, None)["mode"] != "WHEAT_FARM"
+
+
+def test_wheat_farm_field_contains_only_wheat_and_small_straw_line():
+    mod = _load("wheat_field")
+    farm = _farm(quads=("NW", "NE", "SW"), money=2000.0)
+    plan = mod._wheat_farm_plan()
+    _, crop_map, _, _ = mod._field_alloc(
+        farm, 8, {**mod.BASE_PRICE, "WHEAT": 33}, plan)
+    assert not crop_map["MELON"]
+    assert not crop_map["CARROT"]
+    assert len(crop_map["STRAWBERRY"]) <= mod.WHEAT_FARM_STRAW_CAP
+    assert len(crop_map["WHEAT"]) <= mod.WHEAT_FARM_WHEAT_CAP
+
+
+def test_wheat_farm_seed_orders_follow_plan_cap_and_plant_deadline():
+    mod = _load("wheat_seed")
+    farm = _farm(quads=("NW", "NE", "SW"), money=2000.0)
+    private = {"shed": {}, "seeds": {"WHEAT": 4}, "inventories": [{}]}
+    obs = _obs(mod, day=8, farm=farm, private=private)
+    plan = {**mod._wheat_farm_plan(), "wheat_total_cap": 28}
+
+    orders = mod._market_orders(obs, farm, private, 8, 0, 12, plan)
+    wheat_seed = [order for order in orders
+                  if order[:2] == ["BUY_SEED", "WHEAT"]]
+    assert wheat_seed == [["BUY_SEED", "WHEAT", 24]]
+
+    late = mod._market_orders(obs, farm, private,
+                              mod.PLANT_LAST_DAY["WHEAT"] + 1, 0, 12, plan)
+    assert not any(order[:2] == ["BUY_SEED", "WHEAT"] for order in late)
+
+
+def test_wheat_farm_same_turn_buys_preserve_hold_cash():
+    mod = _load("wheat_cash")
+    farm = _farm(quads=("NW", "NE", "SW"), money=1200.0)
+    private = {"shed": {}, "seeds": {"WHEAT": 4}, "inventories": [{}]}
+    obs = _obs(mod, day=8, farm=farm, private=private)
+    obs["market"]["prices"]["WHEAT"] = 36
+    plan = mod._wheat_farm_plan()
+
+    orders = mod._market_orders(obs, farm, private, 8, 12, 12, plan)
+    feed = sum(order[2] for order in orders
+               if order[:2] == ["BUY_PRODUCT", "WHEAT"])
+    seeds = sum(order[2] for order in orders
+                if order[:2] == ["BUY_SEED", "WHEAT"])
+    projected = farm["money"] - feed * 86 - seeds * mod.CROPS["WHEAT"]["seed"]
+    assert projected >= mod.WHEAT_FARM_HOLD_CASH
+
+
+def test_wheat_farm_herd_ceiling_disables_npv_extension():
+    mod = _load("wheat_herd")
+    farm = _farm(quads=("NW", "NE", "SW"), money=5000.0)
+    private = {"shed": {"WHEAT": 40}, "seeds": {"WHEAT": 32},
+               "inventories": [{}]}
+    obs = _obs(mod, day=12, farm=farm, private=private)
+    obs["market"]["prices"].update({"MILK": 300, "WOOL": 300})
+    obs["town"] = {"unlocked_shops": ["PIZZA_SHOP"] * 8}
+
+    orders = mod._market_orders(
+        obs, farm, private, 12, 14, 14, mod._wheat_farm_plan())
+    assert not any(order[0] == "BUY_ANIMAL" for order in orders)
+
+
 def test_agent_v9_loads_as_independent_callable():
     mod = _load("load")
     assert callable(mod.agent)
     assert mod.__file__.replace("\\", "/").endswith("agent_v9/main.py")
     assert mod.TELEMETRY_ENABLED is True
     assert hasattr(mod, "telemetry_snapshot")
+
+
+def test_reset_telemetry_clears_sink_reference():
+    mod = _load("reset_sink")
+    events = []
+    mod.set_telemetry_sink(events.append)
+    mod.reset_telemetry()
+    mod.agent(copy.deepcopy(_obs(mod)))
+    assert not events
 
 
 def test_telemetry_is_action_transparent_and_can_be_disabled():

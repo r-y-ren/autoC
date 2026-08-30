@@ -229,8 +229,9 @@ def set_telemetry_sink(sink):
 
 def reset_telemetry():
     """Drop in-memory episode/day records and the optional sink reference."""
-    global _TELEMETRY
+    global _TELEMETRY, _TELEMETRY_SINK
     _TELEMETRY = {"players": {}}
+    _TELEMETRY_SINK = None
 
 
 def telemetry_snapshot():
@@ -516,6 +517,7 @@ HIRE_HOUR_MAX = 2        # dawn window (m2b fix: burst must fit hour <= 2)
 # (100/101 seats); the 4th quadrant is almost never bought (skip SE).
 # LAND_PLAN[quads_now] = (due_day, protected_fund); fund = price + reserve.
 LAND_PLAN = {1: (4, 1700), 2: (7, 2700)}
+LAND_PRICE = {1: 1000, 2: 2000, 3: 4000}
 LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
 
 # R3-1/R3-2 herd: the r3 opening.  Day 0 buys the mixed burst below outright
@@ -596,6 +598,20 @@ MODE_STR_TOTAL_CAP = 42    # volume: field ceiling (Renji's 42-tile field)
 MODE_WHEAT_MONEY_QUAD = 8  # volume: wheat money tiles/quad (log glut curve)
 MODE_CREW_CAP_VOL = 15     # volume: hands ceiling (42 tiles of daily water)
 MODE_HERD_CAP_SCALE = 18   # scale: NPV ceiling (winners' 13-17 band + 1)
+_DEFENSIVE_PLAN = {"mode": "DEFENSIVE", "volume": False, "scale": False,
+                   "wheat_farm": False,
+                   "straw_quad_cap": CROP_CAP_PER_QUAD["STRAWBERRY"],
+                   "straw_total_cap": 18,
+                   "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
+                   "crew_cap": HANDS_CAP_R3,
+                   "herd_ceiling": HERD_CAP_NPV}
+_VOLUME_PLAN = {"mode": "VOLUME_CROP", "volume": True, "scale": False,
+                "wheat_farm": False,
+                "straw_quad_cap": MODE_STR_QUAD_CAP,
+                "straw_total_cap": MODE_STR_TOTAL_CAP,
+                "wheat_money_quad": MODE_WHEAT_MONEY_QUAD,
+                "crew_cap": MODE_CREW_CAP_VOL,
+                "herd_ceiling": HERD_CAP_NPV}
 # v7.2-V1 herd-readiness floor for the VOLUME entry.  Seed-103 forensics
 # (both seats lost to two_quad_denser by 32-46k): the entry fired on a
 # 4-5-head ranch, then 28 strawberry tiles + the SW purchase (~4800
@@ -609,18 +625,74 @@ VOLUME_HERD_FLOOR = 10
 SE_DUE_DAY = 10            # volume: earliest SE buy (SW settled, cash back)
 SE_BUY_LAST_DAY = 14       # later than this 25 new tiles cannot repay
 SE_FUND = 4600             # SE price 4000 + working-cash cushion
-_DEFENSIVE_PLAN = {"mode": "DEFENSIVE", "volume": False, "scale": False,
-                   "straw_quad_cap": CROP_CAP_PER_QUAD["STRAWBERRY"],
-                   "straw_total_cap": 18,
-                   "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
-                   "crew_cap": HANDS_CAP_R3,
-                   "herd_ceiling": HERD_CAP_NPV}
-_VOLUME_PLAN = {"mode": "VOLUME_CROP", "volume": True, "scale": False,
-                "straw_quad_cap": MODE_STR_QUAD_CAP,
-                "straw_total_cap": MODE_STR_TOTAL_CAP,
-                "wheat_money_quad": MODE_WHEAT_MONEY_QUAD,
-                "crew_cap": MODE_CREW_CAP_VOL,
-                "herd_ceiling": HERD_CAP_NPV}
+# ---- v9 WHEAT_FARM conditional mode ---------------------------------------
+# Round-5 strategic review (2026-08-30) measured the target band as herd
+# around 12, 28-32 continuously replanted wheat tiles, about 8 strawberry
+# tiles, and no melon/carrot.  This is an opt-in experiment: the default is
+# deliberately false so v9's first-wave shadow candidate keeps its exact
+# DEFENSIVE/VOLUME/SCALE planning behavior.
+V9_WHEAT_FARM_ENABLED = False
+WHEAT_FARM_HERD_FLOOR = 12       # round5 review + JOURNAL: top-band peak herd median 12
+WHEAT_FARM_WHEAT_FLOOR = 28      # round5 review: high-band wheat field 28-35 tiles
+WHEAT_FARM_WHEAT_CAP = 32        # round5 review: target band is 28-32 for this mode
+WHEAT_FARM_STRAW_CAP = 8         # JOURNAL v7.1 Sam Scott: strawberry side line 6-8
+WHEAT_FARM_CASH_REDLINE = OPENING_RESERVE  # v7.2/VOLUME cash floor: 800 reserve
+WHEAT_FARM_FEED_MAX_PRICE = 36    # v7.2 external-feed guardrail
+WHEAT_FARM_OPP_WHEAT_MAX = 10    # v8 W3 no-contest gate: opponent wheat <=10
+# Entry reuses the proven v7.2 VOLUME day 6-12 gate; continuation lasts only
+# through the existing wheat planting deadline, so late capex/seed bets do not
+# reopen after the measured production window.
+WHEAT_FARM_ENTRY_START = 6
+WHEAT_FARM_ENTRY_END = 12
+WHEAT_FARM_ENTRY_WHEAT_MIN = 12  # v7.2 starts near 16; mode must extend a live line
+WHEAT_FARM_HOLD_CASH = 400       # hold floor; entry still keeps the proven 800
+_WHEAT_FARM_PLAN = None
+
+
+def _wheat_farm_plan():
+    """Build the opt-in plan from current module knobs for local scans."""
+    return {
+        "mode": "WHEAT_FARM", "volume": False, "scale": False,
+        "wheat_farm": True,
+        "straw_quad_cap": WHEAT_FARM_STRAW_CAP,
+        "straw_total_cap": WHEAT_FARM_STRAW_CAP,
+        "wheat_money_quad": 0,
+        "wheat_total_cap": WHEAT_FARM_WHEAT_CAP,
+        "herd_ceiling": WHEAT_FARM_HERD_FLOOR,
+        "feed_max_price": WHEAT_FARM_FEED_MAX_PRICE,
+    }
+
+
+def _wheat_farm_entry_ok(day, mine, opp, prices, demand, prev_mode=None):
+    """Fail-closed public-state gate for the opt-in wheat economy."""
+    if prev_mode == "WHEAT_FARM":
+        return (day <= PLANT_LAST_DAY["WHEAT"]
+                and mine["herd"] >= WHEAT_FARM_HERD_FLOOR
+                and mine["money"] >= WHEAT_FARM_HOLD_CASH
+                and _get(prices, "WHEAT", BASE_PRICE["WHEAT"]) <=
+                    WHEAT_FARM_FEED_MAX_PRICE)
+    if not WHEAT_FARM_ENTRY_START <= day <= WHEAT_FARM_ENTRY_END:
+        return False
+    if mine["herd"] < WHEAT_FARM_HERD_FLOOR or \
+            mine["money"] < WHEAT_FARM_CASH_REDLINE:
+        return False
+    if mine["wheat"] < WHEAT_FARM_ENTRY_WHEAT_MIN:
+        return False
+    wheat_price = _get(prices, "WHEAT", BASE_PRICE["WHEAT"])
+    if wheat_price > WHEAT_FARM_FEED_MAX_PRICE:
+        return False
+    if opp is not None and opp["wheat"] > WHEAT_FARM_OPP_WHEAT_MAX:
+        return False
+    # A wheat shop draw plus the town center is the minimum observable
+    # absorption needed before committing to the 28-32 tile line.
+    return demand.get("WHEAT", 1) >= 2
+
+
+# Keep a discoverable baseline object for local tests; selection uses the
+# factory above so a scanner can vary one WHEAT_FARM knob per fresh module.
+_WHEAT_FARM_PLAN = _wheat_farm_plan()
+
+
 
 # ---- r5-P5 rollout evaluator ----------------------------------------------
 # The P4 ablations showed WHY a static widening gate fails: a wide template
@@ -1043,7 +1115,8 @@ def _crew_target(day, herd, wheat_tiles, quads=3, plan=None):
     keeps the r4 formula exactly.
     """
     cap = MODE_CREW_CAP_VOL if plan is not None and plan["volume"] \
-        else HANDS_CAP_R3
+        else (plan.get("crew_cap", HANDS_CAP_R3)
+              if plan is not None else HANDS_CAP_R3)
     floor = max(_hands_target(day, herd, wheat_tiles, quads), herd)
     if plan is not None and plan["volume"]:
         floor = max(floor, 12) + 2
@@ -1279,6 +1352,9 @@ def _decide_mode(obs, day, prev_mode):
     p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
     d_straw = demand.get("STRAWBERRY", 1)
     opp_contesting = opp is not None and opp["straw"] >= 12
+    if V9_WHEAT_FARM_ENABLED and _wheat_farm_entry_ok(
+            day, mine, opp, prices, demand, prev_mode):
+        return _wheat_farm_plan()
     # P4's money >= 800 floor stays THE gate on the proven path: the
     # r5-p5-final ablation measured that substituting the rollout's
     # min_cash for it (money >= 300) re-opened early thin-wallet entries
@@ -1492,7 +1568,9 @@ def _field_alloc(farm, day, prices, plan=None):
         weed_field.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
         empties = empties + weed_field
     crop_map = {crop: set(existing[crop]) for crop in CROPS}
-    for crop in ("STRAWBERRY", "MELON", "CARROT"):
+    crop_sequence = ("STRAWBERRY",) if plan.get("wheat_farm") else \
+        ("STRAWBERRY", "MELON", "CARROT")
+    for crop in crop_sequence:
         lo, hi = CROP_PHASE[crop]
         if not (lo <= day <= hi):
             continue
@@ -1511,7 +1589,13 @@ def _field_alloc(farm, day, prices, plan=None):
             taken += 1
         empties = empties[taken:]
     wheat_room = _wheat_cap(day, _get(prices, "WHEAT", 25)) - len(crop_map["WHEAT"])
-    if _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
+    if plan.get("wheat_farm"):
+        # WHEAT_FARM treats wheat as the economic line, with a hard target
+        # band; the existing seed/price guards still decide execution.
+        wheat_room = max(0, min(plan["wheat_total_cap"],
+                                WHEAT_FARM_WHEAT_CAP) -
+                         len(crop_map["WHEAT"]))
+    elif _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
         # log-curve wheat as a rotation money crop (rank-1 adaptive share:
         # 0.45-0.62 of the field when wheat trades 36-42+); the extra tiles
         # also soften the wheat price against volume-farming opponents.
@@ -2214,6 +2298,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                                                        plan)
 
     orders = []
+    # WHEAT_FARM keeps a conservative projected wallet while building the
+    # same-turn queue.  The engine commits market orders sequentially, so
+    # sizing later seeds/animals from the opening wallet can cross the hold
+    # reserve after an earlier feed or land purchase succeeds.
+    projected_money = money
 
     # ---- land plan (FM-O2): NE day 4+, SW day 7+; the fund is protected --
     # (working capital -- seeds/feed -- is never blocked: it pays for the
@@ -2233,6 +2322,8 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             land_fund = fund
             if money >= fund:
                 orders.append(["BUY_LAND"])
+                if plan.get("wheat_farm"):
+                    projected_money -= LAND_PRICE[quads]
             elif day < due_day + LAND_PEND_WINDOW:
                 land_pending = True
 
@@ -2256,15 +2347,24 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     sys_wheat = shed.get("WHEAT", 0) + wheat_carried
     if animals_to_feed > 0 and not last_day \
             and sys_wheat < animals_to_feed + 3:
-        cap = 85 if sys_wheat < animals_to_feed else FEED_BUY_MAX_PRICE
+        cap = 85 if sys_wheat < animals_to_feed else \
+            plan.get("feed_max_price", FEED_BUY_MAX_PRICE)
         if prices.get("WHEAT", 25) <= cap:
             # r5-P4 volume: the 42-tile field leaves little room for feed
             # wheat, so the daily guardrailed buy widens (Renji bought
             # 1501u/season; profiles 414-2732u)
-            want = min((24 if plan["volume"] else 16),
+            want = min((24 if plan["volume"] or plan.get("wheat_farm") else 16),
                        animals_to_feed + 8 - sys_wheat)
+            if plan.get("wheat_farm"):
+                unit_budget = max(1, cap + 1)
+                affordable = max(
+                    0, int((projected_money - WHEAT_FARM_HOLD_CASH) //
+                           unit_budget))
+                want = min(want, affordable)
             if want > 0:
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
+                if plan.get("wheat_farm"):
+                    projected_money -= want * unit_budget
 
     # ---- seeds: the wheat feed floor first (m2b), then rotation crops
     # staged behind the pending land fund (FM-3 staging).  R3-3 exception:
@@ -2272,11 +2372,30 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # the winners plant 6+ tiles on d5-11 while the NE/SW purchases proceed
     # on their own fund-gated schedule (planting d5 pays from d15 at
     # ~200/u; the one-day land delay it can cost repays many times over).
-    if seeds.get("WHEAT", 0) < 6 and day <= SEASON_DAYS - 7 and money >= 150:
+    alive = _count_crops(farm)
+    if not plan.get("wheat_farm") and seeds.get("WHEAT", 0) < 6 \
+            and day <= SEASON_DAYS - 7 and money >= 150:
         orders.append(["BUY_SEED", "WHEAT", 12])
+    if plan.get("wheat_farm") and not last_day \
+            and day <= PLANT_LAST_DAY["WHEAT"]:
+        alive_wheat = alive.get("WHEAT", 0)
+        target_wheat = min(plan.get("wheat_total_cap", WHEAT_FARM_WHEAT_CAP),
+                           WHEAT_FARM_WHEAT_CAP)
+        wanted_wheat = max(0, target_wheat - alive_wheat -
+                           seeds.get("WHEAT", 0))
+        if wanted_wheat > 0 and \
+                projected_money >= WHEAT_FARM_CASH_REDLINE + 10:
+            batch = min(
+                24, wanted_wheat,
+                max(0, int((projected_money - WHEAT_FARM_CASH_REDLINE) //
+                           CROPS["WHEAT"]["seed"])))
+            if batch > 0:
+                orders.append(["BUY_SEED", "WHEAT", batch])
+                projected_money -= batch * CROPS["WHEAT"]["seed"]
     if not last_day:
-        alive = _count_crops(farm)
-        for crop in ("STRAWBERRY", "MELON", "CARROT"):
+        crop_seed_sequence = ("STRAWBERRY",) if plan.get("wheat_farm") else \
+            ("STRAWBERRY", "MELON", "CARROT")
+        for crop in crop_seed_sequence:
             lo, hi = CROP_PHASE[crop]
             if not (lo <= day <= hi):
                 continue
@@ -2289,14 +2408,22 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             want = cap_for_crop - alive[crop] - seeds.get(crop, 0)
             batch = min(6, max(0, want))
             seed_gate = 250 if crop == "STRAWBERRY" else land_fund + 250
-            if crop == "STRAWBERRY" and plan["volume"]:
-                # wider field, money-scaled batches (10 while cash allows;
-                # a partial 2-3 batch still plants today)
-                batch = min(10, max(0, want),
-                            max(0, int((money - seed_gate)
-                                       // CROPS[crop]["seed"])))
-            if batch > 0 and money >= seed_gate + CROPS[crop]["seed"] * batch:
+            wallet = projected_money if plan.get("wheat_farm") else money
+            reserve_gate = max(seed_gate, WHEAT_FARM_HOLD_CASH) \
+                if plan.get("wheat_farm") else seed_gate
+            if plan.get("wheat_farm") or \
+                    (crop == "STRAWBERRY" and plan["volume"]):
+                # Opt-in wheat mode and VOLUME use wallet-scaled batches;
+                # WHEAT_FARM also preserves its hold reserve after every
+                # earlier same-turn purchase.
+                batch = min(10 if plan["volume"] else 6, max(0, want),
+                            max(0, int((wallet - reserve_gate) //
+                                       CROPS[crop]["seed"])))
+            if batch > 0 and wallet >= reserve_gate + \
+                    CROPS[crop]["seed"] * batch:
                 orders.append(["BUY_SEED", crop, batch])
+                if plan.get("wheat_farm"):
+                    projected_money -= CROPS[crop]["seed"] * batch
 
     # ---- herd (FM-O2 + R3-1/R3-2): mixed 14-head ranch, money-gated,
     # paced by CONFIRMED purchases (m2b), species-level dead-price freeze
@@ -2310,20 +2437,28 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         reserve += land_fund
     pace = _animal_pace(day)
     target = _herd_target(day, 99)   # FM-O3: external feed releases autarky
+    if plan.get("wheat_farm"):
+        target = min(WHEAT_FARM_HERD_FLOOR, target)
     # r4-P3: state-driven ceiling above the plan when the marginal NPV,
     # market absorption and feed line all clear (cap 17 safety boundary)
     wheat_carried_early = sum(_get(inv, "WHEAT", 0)
                               for inv in (_get(private, "inventories", [])
                                           or []) if inv)
     sys_wheat_early = shed.get("WHEAT", 0) + wheat_carried_early
-    npv_ceiling = HERD_CAP
-    if herd_total >= HERD_CAP:
+    absolute_ceiling = MODE_HERD_CAP_SCALE if plan.get("scale") \
+        else HERD_CAP_NPV
+    herd_ceiling = min(plan.get("herd_ceiling", absolute_ceiling),
+                       absolute_ceiling)
+    npv_ceiling = min(HERD_CAP, herd_ceiling)
+    if herd_total >= HERD_CAP and not plan.get("wheat_farm"):
         # r4-P3: the NPV ceiling EXTENDS the completed 14-head plan (never
         # accelerates it -- the day-0 burst and the r3 deadline stand)
-        npv_ceiling = _npv_herd_ceiling(
-            day, prices, herd_total,
-            _species_counts(farm, private, herd_total),
-            _town_daily_demand(town_shops), sys_wheat_early, plan=plan)
+        npv_ceiling = min(
+            herd_ceiling,
+            _npv_herd_ceiling(
+                day, prices, herd_total,
+                _species_counts(farm, private, herd_total),
+                _town_daily_demand(town_shops), sys_wheat_early, plan=plan))
         target = max(target, npv_ceiling)
     bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0),
                        herd_total)
@@ -2372,13 +2507,16 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 if prices.get(product, BASE_PRICE[product]) < floor:
                     continue  # dead-price freeze (demand-conditioned)
             cost = ANIMALS[animal]["cost"]
-            if money < cost + reserve:
+            wallet = projected_money if plan.get("wheat_farm") else money
+            if wallet < cost + reserve:
                 continue
             n = min(pace - bought, target - herd_total,
                     comp_cap - species[animal],
-                    int((money - reserve) // cost))
+                    int((wallet - reserve) // cost))
             if n > 0:
                 orders.append(["BUY_ANIMAL", animal, n])
+                if plan.get("wheat_farm"):
+                    projected_money -= n * cost
                 _note_buy_order(_get(obs, "player", 0), day,
                                 _get(obs, "hour", 0), n)
             break   # one species per turn
