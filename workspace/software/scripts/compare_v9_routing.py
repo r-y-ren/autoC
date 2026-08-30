@@ -66,12 +66,14 @@ def parse_seeds(spec: str) -> list[int]:
     return values
 
 
-def load_module(routing_active: bool, serial: int):
+def load_module(routing_active: bool, serial: int, tour_bonus=None):
     spec = importlib.util.spec_from_file_location(f"v9_route_{serial}", CANDIDATE)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     module.V9_WHEAT_FARM_ENABLED = False   # wheat class rejected (r2)
     module.V9_SHADOW_ROUTING = not routing_active
+    if tour_bonus is not None:
+        module.V9_TOUR_BONUS = float(tour_bonus)
     module.reset_telemetry()
     return module
 
@@ -92,8 +94,8 @@ def telemetry_totals(snapshot: dict) -> dict:
 
 
 def play_cell(routing_active: bool, opponent, opponent_name: str,
-              seed: int, seat: str, serial: int) -> dict:
-    module = load_module(routing_active, serial)
+              seed: int, seat: str, serial: int, tour_bonus=None) -> dict:
+    module = load_module(routing_active, serial, tour_bonus=tour_bonus)
     if seat == "AB":
         result = run_match(module.agent, opponent, seed,
                            label_a="cand", label_b=opponent_name)
@@ -109,7 +111,8 @@ def play_cell(routing_active: bool, opponent, opponent_name: str,
     }
 
 
-def run_comparison(seeds: list[int], opponents: list[str]) -> dict:
+def run_comparison(seeds: list[int], opponents: list[str],
+                   tour_bonus=None) -> dict:
     cells = []
     serial = 0
     for name in opponents:
@@ -119,7 +122,8 @@ def run_comparison(seeds: list[int], opponents: list[str]) -> dict:
                 serial += 1
                 shadow = play_cell(False, opponent, name, seed, seat, serial)
                 serial += 1
-                active = play_cell(True, opponent, name, seed, seat, serial)
+                active = play_cell(True, opponent, name, seed, seat, serial,
+                                   tour_bonus=tour_bonus)
                 cells.append({
                     "opponent": name, "seed": seed, "seat": seat,
                     "shadow": shadow, "active": active,
@@ -145,6 +149,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--seeds", default="101,102")
     parser.add_argument("--pool", default=",".join(OPPONENTS))
+    parser.add_argument("--tour-bonus", type=float, default=None,
+                        help="override V9_TOUR_BONUS (dose-response sweep)")
     return parser
 
 
@@ -159,7 +165,8 @@ def main(argv=None) -> int:
         opponents = [n.strip() for n in args.pool.split(",") if n.strip()]
         if unknown:
             raise ValueError(f"unknown opponents: {sorted(set(unknown))}")
-        comparison = run_comparison(seeds, opponents)
+        comparison = run_comparison(seeds, opponents,
+                                    tour_bonus=args.tour_bonus)
         payload = {
             "schema_version": "v9-routing-comparison/1.0",
             "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -168,7 +175,8 @@ def main(argv=None) -> int:
                           "sha256": hashlib.sha256(
                               CANDIDATE.read_bytes()).hexdigest()},
             "config": {"seeds": seeds, "opponents": opponents,
-                       "wheat_farm": False},
+                       "wheat_farm": False,
+                       "tour_bonus": args.tour_bonus},
             "summary": {"shadow": comparison["shadow"],
                         "active": comparison["active"]},
             "cells": comparison["cells"],
