@@ -1,0 +1,30 @@
+{
+  "round": 6,
+  "submission_ref": 55895029,
+  "submitted_at_utc": "2026-08-30T16:07:57Z",
+  "candidate_sha256": "b69bf45845ae20f4fb2c8476287be1e2bfeaaa937bbb27f3f4833eee27c95269",
+  "candidate_label": "v9.1 = v7.2 + dear-wheat-gated seed refill (FM-R5-1 fix)",
+  "change": "wheat seed buy-to-cap refill ONLY when wheat price >= 35 (the ladder's own dear band, where external feed becomes the expensive survival line); below 35 byte-identical to v7.2",
+  "evidence": {
+    "online_forensics": "round5_failure_analysis.md FM-R5-1: JIlong Zhou game wheat 37-41 all season, field dead by d20, 1067u external feed @ ~39.5/u = 42.2k spend, d12 cash 4; the 117.4k best game decayed identically at cheap wheat with no damage",
+    "ungated_rejection": "v9_w1_port_dev -837.8k / disaster 0.0455 vs 0.0 / baseline_wheat 0.625 (hard bar veto, superseded)",
+    "dev_gate": "v9_w1gated_dev: pool_wr 1.0 = champ, worst 0.875 = champ, disaster 0.0 = champ, MERGEABLE (paired -38.5k within FM-E1 chaos band)",
+    "reg_gate": "v9_w1gated_reg: NOT MERGEABLE on paired checks (-110.8k, two_quad 0.5 vs 0.75, disaster 0.0455 vs 0.0227 same order); no bankruptcy class, pool_wr 1.0 held; domain-inconsistent per-opponent swing treated as chaos signature",
+    "tests": "598 green (9-assert seed-supply unit test)"
+  },
+  "authorization": "user approved online verification as arbiter (local pool measured biased against the online-winning play; FM-E1 resolution limit)",
+  "validation_status": "COMPLETE",
+  "validation_episode": 103404695,
+  "public_score_after_validation": 600.0,
+  "previous_submission": {
+    "ref": 55884001,
+    "candidate": "v7.2 c44e2b25",
+    "round5_record": "12W-10L 54.5% net +86,954",
+    "score_latest": 635.7
+  },
+  "quota_used_today_utc": 2,
+  "quota_remaining": 3,
+  "sampling_plan": "web ListEpisodes channel (submissionId=55895029 discrimination; verified working, 1 validation episode visible) once ladder games accumulate; shard-based full pass via the scheduled 08:25 run covers 08-30-dated games of BOTH active agents",
+  "stop_loss": "round-6 WR < 50% over first ~20 public games",
+  "recorded_at": "2026-08-30T16:25:00Z"
+}
