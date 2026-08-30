@@ -27,6 +27,7 @@ from kgenv.bots.online_pool import (crop_rotator_agent,
                                     scale_ranch_agent,
                                     self_feed_ranch_agent,
                                     template_wheat_agent,
+                                    two_quad_denser_agent,
                                     wheat_straw_monster_agent)
 from kgenv.elo import EloTable
 from kgenv.engine import FULL_EPISODE_STEPS
@@ -94,6 +95,7 @@ def build_players(candidate_path: str, extended_pool: bool = False):
         "near_band_diversified": near_band_diversified_agent,
         "scale_ranch": scale_ranch_agent,
         "wheat_straw_monster": wheat_straw_monster_agent,
+        "two_quad_denser": two_quad_denser_agent,
     }
     if not extended_pool:
         # canonical pool only: keep the historical run_eval opponent dict

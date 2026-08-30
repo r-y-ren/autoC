@@ -28,12 +28,14 @@ from kgenv.bots.online_pool import (
     SCALE_RANCH_PARAMS,
     SELF_FEED_RANCH_PARAMS,
     TEMPLATE_WHEAT_PARAMS,
+    TWO_QUAD_DENSER_PARAMS,
     WHEAT_STRAW_MONSTER_PARAMS,
     crop_rotator_agent,
     near_band_diversified_agent,
     scale_ranch_agent,
     self_feed_ranch_agent,
     template_wheat_agent,
+    two_quad_denser_agent,
     wheat_straw_monster_agent,
 )
 from kgenv.gym_env import KaggricultureGym
@@ -50,6 +52,7 @@ NEW_BOTS = {
     "near_band_diversified": near_band_diversified_agent,
     "scale_ranch": scale_ranch_agent,
     "wheat_straw_monster": wheat_straw_monster_agent,
+    "two_quad_denser": two_quad_denser_agent,
 }
 
 
@@ -476,6 +479,7 @@ def test_scale_ranch_endgame_liquidation_day_28():
     ("near_band_diversified", NEAR_BAND_PARAMS),
     ("scale_ranch", SCALE_RANCH_PARAMS),
     ("wheat_straw_monster", WHEAT_STRAW_MONSTER_PARAMS),
+    ("two_quad_denser", TWO_QUAD_DENSER_PARAMS),
 ])
 def test_every_param_set_documents_provenance(name, params):
     assert params["name"] == name
@@ -528,5 +532,63 @@ def test_monster_endgame_liquidation_day_27():
         prices={"MILK": 5, "STRAWBERRY": 5, "WHEAT": 5}))
     sells = {o[1]: o[2] for o in market_orders(act, "SELL")}
     assert sells.get("MILK") == 8 and sells.get("STRAWBERRY") == 12
+    assert not [o for o in act["market"] if o[0] in
+                ("HIRE", "BUY_SEED", "BUY_ANIMAL", "BUY_PRODUCT", "BUY_LAND")]
+
+
+# --------------------------------------------------- two_quad_denser (v7.1)
+
+def test_two_quad_params_cite_round4_provenance():
+    assert TWO_QUAD_DENSER_PARAMS["exploratory_params"] is False
+    assert "ep102685729" in TWO_QUAD_DENSER_PARAMS["provenance"]
+    assert "Sam Scott" in TWO_QUAD_DENSER_PARAMS["provenance"]
+
+
+def test_two_quad_exactly_two_quadrants_ne_on_d8():
+    # Sam: NW only until d8, NE on d8, SW/SE never (land money feeds the
+    # herd and wheat density instead)
+    assert TWO_QUAD_DENSER_PARAMS["target_quads"] == 2
+    assert TWO_QUAD_DENSER_PARAMS["quad_min_day"][0] == 8
+    assert TWO_QUAD_DENSER_PARAMS["quad_min_day"][1] >= 99
+
+
+def test_two_quad_herd_17_head_dairy():
+    # 9C+6S+2G = 17 head, goose egg line included
+    assert TWO_QUAD_DENSER_PARAMS["herd"] == \
+        {"COW": 9, "SHEEP": 6, "GOOSE": 2}
+
+
+def test_two_quad_wheat_is_the_economy():
+    # 17-23 tiles steady on a 2-quad field ~= 40% share; strawberry is a
+    # 6-8-tile side line with NO melon
+    assert TWO_QUAD_DENSER_PARAMS["wheat_share"] == 0.40
+    assert TWO_QUAD_DENSER_PARAMS["money_crop_caps"]["STRAWBERRY"] <= 8
+    assert TWO_QUAD_DENSER_PARAMS["money_crop_caps"]["MELON"] == 0
+
+
+def test_two_quad_hire_8_from_d0_step_12_at_d8():
+    # hands 8 on day 0 (Sam d0 end snapshot), 12 from the NE step-up day
+    assert TWO_QUAD_DENSER_PARAMS["hire_ramp"] == ((0, 8), (8, 12))
+
+
+def test_two_quad_d0_hires_before_any_buy():
+    act = two_quad_denser_agent(synth_obs(day=0, hour=0))
+    assert act["market"][0] == ["HIRE"]
+
+
+def test_two_quad_fertilizer_is_an_income_line():
+    # Sam sold all 334u fertilizer -- the gate sits in sell_gates (and the
+    # legacy fert_gate fallback stays for the other archetypes)
+    assert "FERTILIZER" in TWO_QUAD_DENSER_PARAMS["sell_gates"]
+    assert TWO_QUAD_DENSER_PARAMS["sell_gates"]["FERTILIZER"] == 40
+
+
+def test_two_quad_endgame_liquidation_day_25():
+    # straw cleared by d26, wheat harvest-only d28-29 (+38.8k d24->d29)
+    act = two_quad_denser_agent(synth_obs(
+        day=25, shed={"MILK": 9, "WHEAT": 22, "FERTILIZER": 6},
+        prices={"MILK": 5, "WHEAT": 5, "FERTILIZER": 5}))
+    sells = {o[1]: o[2] for o in market_orders(act, "SELL")}
+    assert sells.get("MILK") == 9 and sells.get("WHEAT") == 22
     assert not [o for o in act["market"] if o[0] in
                 ("HIRE", "BUY_SEED", "BUY_ANIMAL", "BUY_PRODUCT", "BUY_LAND")]

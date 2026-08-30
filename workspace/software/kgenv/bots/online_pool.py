@@ -416,6 +416,76 @@ WHEAT_STRAW_MONSTER_PARAMS: Dict = {
 }
 
 
+TWO_QUAD_DENSER_PARAMS = {
+    "name": "two_quad_denser",
+    "provenance": "round-4 public-ladder winner that beat the v6 candidate "
+                  "by 5.2k with the BEST fundamentals seen online (Sam Scott "
+                  "ep102685729 97616 vs our 92465: exactly 2 quadrants "
+                  "(NE on d8, SW/SE never), 9C+6S+2G=17 head, wheat field "
+                  "steady at 17-23 tiles ALL season, strawberries only 6-8 "
+                  "tiles, weeds 0-4 vs our 6-48, d0 hands 8 -> 12 from d8, "
+                  "d12 money 4492 vs our 50, external feed 322u, fertilizer "
+                  "334u sold as an income line, endgame d24->d29 +38.8k; "
+                  "replay .tmp-online/round4/episode-102685729-replay.json)",
+    "exploratory_params": False,
+    # labour: 8 hands from day 0 (Sam d0 end: hands 8, money 348 -- the
+    # wheat field needs the crew before the second quadrant exists), 12
+    # hands from the d8 NE step-up
+    "hire_mode": "ramp",
+    "hire_ramp": ((0, 8), (8, 12)),
+    "hire_cap": 12,
+    "hire_until_hour": 6,
+    # land: exactly TWO quadrants -- NE on day 8 once the cow ramp lands
+    # (d7 money 4792 funds it); SW/SE never: the land money feeds the herd
+    # and the wheat field density instead
+    "target_quads": 2,
+    "quad_min_day": (8, 99, 99),
+    "quad_reserve": (600, 0, 0),
+    # herd: 9C+6S+2G = 17 head (d0 opens sheep-led 3S+1C/1200; cows ramp
+    # d5-8 to 9; +3 sheep on d16 close it at 17 -- the egg line rides on
+    # 2 geese and sheep wool scales with the wheat-feed capacity)
+    "herd": {"COW": 9, "SHEEP": 6, "GOOSE": 2},
+    "animal_reserve": 450,
+    # field: the wheat line IS the economy -- 17-23 tiles steady on a
+    # 2-quad field (~40% share; feed floor + cash volume at the log curve)
+    "wheat_share_mode": "fixed",
+    "wheat_share": 0.40,
+    "wheat_share_ladder": None,
+    "tiles_per_quad": 24,
+    "tiles_per_unit": 5.5,
+    # money crops stay SMALL: strawberry 6-8 tiles from d8 (NE lands d8,
+    # first straw production d17-18), early carrot probe d4-7 (7 tiles);
+    # NO melon (Sam planted zero)
+    "money_crop_caps": {"STRAWBERRY": 8, "MELON": 0, "CARROT": 7},
+    "money_crop_min_price": {"STRAWBERRY": 60, "MELON": 140, "CARROT": 20},
+    "crop_phase": {"STRAWBERRY": (8, 16), "MELON": (0, 17), "CARROT": (3, 8)},
+    # feed: external wheat at a tight guardrail (322u over 121 orders,
+    # avg ~2.7u -- a constant drip, not the monster's bulk buying)
+    "feed_mode": "gap",
+    "feed_gate": 40,
+    "feed_cheap_at": 30,
+    "feed_daily_base": 12,
+    "feed_cheap_extra": 24,
+    "feed_cover_days": 1.5,
+    "wheat_sell_keep": 8,
+    # care: full coverage (CARE 314 ~= head x days; weeds 0-4 all season --
+    # the discipline line this archetype pins)
+    "care_weight": 70,
+    # cash-tracked from a lean opening (d0 end money 348)
+    "seed_cash_floor": 400,
+    # sells: milk/wool/egg cleared through in small tranches (20/19/16
+    # orders), fertilizer is an income line (334u sold, gate 40), wheat
+    # sold at 28+ in 16u tranches, strawberry premium (only 19u -- the
+    # 6-8 tile field is a side line, not the engine)
+    "sell_gates": {"MILK": 140, "WOOL": 120, "STRAWBERRY": 100, "MELON": 160,
+                   "WHEAT": 28, "EGG": 35, "FERTILIZER": 40},
+    "sell_tranches": {"MILK": 12, "WOOL": 8, "STRAWBERRY": 8, "MELON": 10,
+                      "WHEAT": 16, "EGG": 6, "FERTILIZER": 12},
+    "fert_gate": 40,
+    "endgame_start": 25,    # straw cleared by d26, wheat harvest-only d28-29
+}
+
+
 def _dist(ax: int, ay: int, bx: int, by: int) -> int:
     return abs(ax - bx) + abs(ay - by)
 
@@ -980,6 +1050,14 @@ def wheat_straw_monster_agent(obs: Dict) -> Dict:
     return online_style_agent(obs, WHEAT_STRAW_MONSTER_PARAMS)
 
 
+def two_quad_denser_agent(obs: Dict) -> Dict:
+    """Round-4 winner archetype (v7.1): Sam Scott ep102685729 -- exactly
+    two quadrants, 17-head dairy, a 17-23-tile wheat field as THE economy,
+    small strawberry side line, near-zero weeds, fertilizer sold as an
+    income line and a +38.8k endgame ramp."""
+    return online_style_agent(obs, TWO_QUAD_DENSER_PARAMS)
+
+
 ONLINE_STYLE_OPPONENTS = {
     "crop_rotator": crop_rotator_agent,
     "template_wheat": template_wheat_agent,
@@ -987,6 +1065,7 @@ ONLINE_STYLE_OPPONENTS = {
     "near_band_diversified": near_band_diversified_agent,
     "scale_ranch": scale_ranch_agent,
     "wheat_straw_monster": wheat_straw_monster_agent,
+    "two_quad_denser": two_quad_denser_agent,
 }
 ONLINE_STYLE_PARAM_SETS = {
     "crop_rotator": CROP_ROTATOR_PARAMS,
@@ -995,4 +1074,5 @@ ONLINE_STYLE_PARAM_SETS = {
     "near_band_diversified": NEAR_BAND_PARAMS,
     "scale_ranch": SCALE_RANCH_PARAMS,
     "wheat_straw_monster": WHEAT_STRAW_MONSTER_PARAMS,
+    "two_quad_denser": TWO_QUAD_DENSER_PARAMS,
 }

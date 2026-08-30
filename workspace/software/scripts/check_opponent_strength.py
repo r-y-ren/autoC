@@ -43,6 +43,7 @@ from kgenv.bots.online_pool import (crop_rotator_agent,  # noqa: E402
                                     scale_ranch_agent,
                                     self_feed_ranch_agent,
                                     template_wheat_agent,
+                                    two_quad_denser_agent,
                                     wheat_straw_monster_agent)
 from kgenv.engine import FULL_EPISODE_STEPS  # noqa: E402
 
@@ -58,6 +59,7 @@ ONLINE_BOTS = {
     "near_band_diversified": near_band_diversified_agent,
     "scale_ranch": scale_ranch_agent,
     "wheat_straw_monster": wheat_straw_monster_agent,
+    "two_quad_denser": two_quad_denser_agent,
 }
 WEAK_POOL = {
     "pass": "pass",
