@@ -2396,19 +2396,24 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # seeds<6->buy-12 cadence let the feed floor decay to zero by d20 in
     # every round-5 game; the spiral only detonated in DEAR-wheat seasons
     # (JIlong Zhou game: wheat 37-41 all season, field dead, 1067u external
-    # feed at ~39.5/u = 42.2k spend, d12 cash 4) while the 117.4k best game
-    # decayed the same way at cheap wheat with no damage.  An ungated
-    # buy-to-cap measured -837.8k / disaster 0.0455 / baseline_wheat 0.625
-    # on the dev gate (2026-08-31 v9_w1_port_dev): in cheap seasons the
-    # 18-tile refill burns the thin d4-12 wallet and ~27 extra ops/day
-    # crowd the strawberry/melon labour line.  So the refill is gated to
-    # the failure condition: wheat >= 35 (the ladder's own dear-wheat
-    # band, where external feed is the expensive survival line).  Below 35
-    # the legacy cadence stands byte-identical to v7.2.
+    # feed at ~39.5/u = 42.2k spend, d12 cash 4).  An ungated buy-to-cap
+    # measured -837.8k / disaster 0.0455 / baseline_wheat 0.625 on the dev
+    # gate (2026-08-31 v9_w1_port_dev): in cheap seasons the 18-tile
+    # refill burns the thin d4-12 wallet and ~27 extra ops/day crowd the
+    # strawberry/melon labour line.  So the refill is gated to the failure
+    # condition and maintains the feed floor.
+    # v9.2 (round-6 forensics 2026-08-31): wheat ramps 25 -> 50+ in EVERY
+    # game while the field decays in the d8-14 window at prices 29-34 --
+    # the >= 35 gate only opened at d14-16 with the field already dead and
+    # the wallet at 28-2000 (wallet-scaled batches bought ~0 seeds).  The
+    # maintenance gate moves down to 30 so the refill acts inside the
+    # decay window, while the genuinely cheap bands (< 30) keep the v7.2
+    # legacy cadence byte-identical (round-6 win 103422278 sat at wheat
+    # 22-24 on d8-12 and won without any refill).
     alive = _count_crops(farm)
     wheat_price_now = _get(prices, "WHEAT", 25)
     if not plan.get("wheat_farm") and day <= SEASON_DAYS - 7 \
-            and wheat_price_now >= 35:
+            and wheat_price_now >= 30:
         wheat_cap_now = _wheat_cap(day, wheat_price_now)
         want_w = wheat_cap_now - alive.get("WHEAT", 0) - seeds.get("WHEAT", 0)
         floor_w = 12 if seeds.get("WHEAT", 0) < 6 else 0

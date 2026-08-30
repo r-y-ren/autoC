@@ -224,13 +224,18 @@ def test_wheat_seed_supply_buys_to_replant_cycle():
                                  plan=dict(mod._DEFENSIVE_PLAN))
         return [o for o in out if o[:2] == ["BUY_SEED", "WHEAT"]]
 
-    # cheap wheat (<35): the v7.2 legacy cadence stands byte-identical
-    assert orders_for(farm_with(10)) == [["BUY_SEED", "WHEAT", 12]]
-    assert not orders_for(farm_with(10), seeds={"WHEAT": 6})
-    assert not orders_for(farm_with(10), seeds={"WHEAT": 17})
+    # cheap wheat (<30): the v7.2 legacy cadence stands byte-identical
+    assert orders_for(farm_with(10), wheat_price=25) == [["BUY_SEED", "WHEAT", 12]]
+    assert not orders_for(farm_with(10), wheat_price=25, seeds={"WHEAT": 6})
+    assert not orders_for(farm_with(10), wheat_price=29, seeds={"WHEAT": 17})
+    # the v9.2 maintenance band starts at 30: cap 18, 10 alive, empty
+    # pocket -> the 12 floor binds (want 8); stocked pocket sizes to want
+    assert orders_for(farm_with(10), wheat_price=30) == [["BUY_SEED", "WHEAT", 12]]
+    assert orders_for(farm_with(10), wheat_price=30, seeds={"WHEAT": 6}) == \
+        [["BUY_SEED", "WHEAT", 2]]
     # dear wheat 45 -> cap 30; empty field, rich wallet -> batch ceiling 24
     assert orders_for(farm_with(0), wheat_price=45) == [["BUY_SEED", "WHEAT", 24]]
-    # the dear band starts at 35: cap 22, 10 alive, empty pocket -> 12
+    # the 35-41 ladder bump: cap 22, 10 alive, empty pocket -> 12
     assert orders_for(farm_with(10), wheat_price=36) == [["BUY_SEED", "WHEAT", 12]]
     # the d0-2 budget belongs to the herd: at most 12
     assert orders_for(farm_with(0), day=1, wheat_price=45) == [["BUY_SEED", "WHEAT", 12]]
