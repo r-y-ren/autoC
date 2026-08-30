@@ -2392,8 +2392,37 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # the winners plant 6+ tiles on d5-11 while the NE/SW purchases proceed
     # on their own fund-gated schedule (planting d5 pays from d15 at
     # ~200/u; the one-day land delay it can cost repays many times over).
+    # v9-W1 (round-5 online forensics 2026-08-30): the legacy
+    # seeds<6->buy-12 cadence let the feed floor decay to zero by d20 in
+    # every round-5 game; the spiral only detonated in DEAR-wheat seasons
+    # (JIlong Zhou game: wheat 37-41 all season, field dead, 1067u external
+    # feed at ~39.5/u = 42.2k spend, d12 cash 4) while the 117.4k best game
+    # decayed the same way at cheap wheat with no damage.  An ungated
+    # buy-to-cap measured -837.8k / disaster 0.0455 / baseline_wheat 0.625
+    # on the dev gate (2026-08-31 v9_w1_port_dev): in cheap seasons the
+    # 18-tile refill burns the thin d4-12 wallet and ~27 extra ops/day
+    # crowd the strawberry/melon labour line.  So the refill is gated to
+    # the failure condition: wheat >= 35 (the ladder's own dear-wheat
+    # band, where external feed is the expensive survival line).  Below 35
+    # the legacy cadence stands byte-identical to v7.2.
     alive = _count_crops(farm)
-    if not plan.get("wheat_farm") and seeds.get("WHEAT", 0) < 6 \
+    wheat_price_now = _get(prices, "WHEAT", 25)
+    if not plan.get("wheat_farm") and day <= SEASON_DAYS - 7 \
+            and wheat_price_now >= 35:
+        wheat_cap_now = _wheat_cap(day, wheat_price_now)
+        want_w = wheat_cap_now - alive.get("WHEAT", 0) - seeds.get("WHEAT", 0)
+        floor_w = 12 if seeds.get("WHEAT", 0) < 6 else 0
+        batch_w = min(24, max(floor_w, want_w))
+        if day <= 2:
+            batch_w = min(batch_w, 12)   # the d0 budget belongs to the herd
+        # working-capital class (like feed): scale to the wallet instead of
+        # rejecting the whole order -- round-5 forensics showed d8-12
+        # wallets of 4-629 cash starving a 10-coin seed under a flat 150
+        # gate.
+        batch_w = min(batch_w, max(0, int((money - 20) // 10)))
+        if batch_w > 0:
+            orders.append(["BUY_SEED", "WHEAT", batch_w])
+    elif not plan.get("wheat_farm") and seeds.get("WHEAT", 0) < 6 \
             and day <= SEASON_DAYS - 7 and money >= 150:
         orders.append(["BUY_SEED", "WHEAT", 12])
     if plan.get("wheat_farm") and not last_day \

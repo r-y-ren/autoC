@@ -195,6 +195,53 @@ def test_wheat_farm_herd_ceiling_disables_npv_extension():
     assert not any(order[0] == "BUY_ANIMAL" for order in orders)
 
 
+def test_wheat_seed_supply_buys_to_replant_cycle():
+    # v9-W1 (round-5 online forensics FM-R5-1): the legacy <6->buy-12
+    # cadence let the feed floor decay to zero by d20 in every round-5
+    # game; seeds now refill to the standing DEFENSIVE cap each cycle.
+    mod = _load("wheat_supply")
+
+    def farm_with(wheat, money=5000.0):
+        farm = _farm(quads=("NW", "NE", "SW"), money=money)
+        placed = 0
+        for row in farm["tiles"]:
+            for x, tile in enumerate(row):
+                if tile is None and placed < wheat:
+                    row[x] = {"kind": "PLANT", "crop": "WHEAT",
+                              "planted_day": 8, "yield_units": 1}
+                    placed += 1
+        return farm
+
+    def orders_for(farm, day=10, wheat_price=33, seeds=None):
+        obs = {"player": 0, "day": day, "hour": 0,
+               "market": {"prices": {**mod.BASE_PRICE, "WHEAT": wheat_price}},
+               "town": {"unlocked_shops": []},
+               "farms": [farm, farm],
+               "private": {"shed": {}, "seeds": seeds or {},
+                           "inventories": [{}]}}
+        out = mod._market_orders(obs, farm, obs["private"], day,
+                                 animals_to_feed=8, herd_total=12,
+                                 plan=dict(mod._DEFENSIVE_PLAN))
+        return [o for o in out if o[:2] == ["BUY_SEED", "WHEAT"]]
+
+    # cheap wheat (<35): the v7.2 legacy cadence stands byte-identical
+    assert orders_for(farm_with(10)) == [["BUY_SEED", "WHEAT", 12]]
+    assert not orders_for(farm_with(10), seeds={"WHEAT": 6})
+    assert not orders_for(farm_with(10), seeds={"WHEAT": 17})
+    # dear wheat 45 -> cap 30; empty field, rich wallet -> batch ceiling 24
+    assert orders_for(farm_with(0), wheat_price=45) == [["BUY_SEED", "WHEAT", 24]]
+    # the dear band starts at 35: cap 22, 10 alive, empty pocket -> 12
+    assert orders_for(farm_with(10), wheat_price=36) == [["BUY_SEED", "WHEAT", 12]]
+    # the d0-2 budget belongs to the herd: at most 12
+    assert orders_for(farm_with(0), day=1, wheat_price=45) == [["BUY_SEED", "WHEAT", 12]]
+    # working capital: a 100-coin wallet still buys 8; sub-30 buys nothing
+    assert orders_for(farm_with(10, money=100.0), wheat_price=45) == \
+        [["BUY_SEED", "WHEAT", 8]]
+    assert not orders_for(farm_with(10, money=25.0), wheat_price=45)
+    # past the last productive window: no order
+    assert not orders_for(farm_with(10), day=24)
+
+
 def test_agent_v9_loads_as_independent_callable():
     mod = _load("load")
     assert callable(mod.agent)
