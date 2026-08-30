@@ -646,6 +646,17 @@ WHEAT_FARM_ENTRY_START = 6
 WHEAT_FARM_ENTRY_END = 12
 WHEAT_FARM_ENTRY_WHEAT_MIN = 12  # v7.2 starts near 16; mode must extend a live line
 WHEAT_FARM_HOLD_CASH = 400       # hold floor; entry still keeps the proven 800
+# Entry floor is NOT the 12-head profile ceiling: the champion's PLACED herd
+# completes ~d13-14 (probe 2026-08-30, 20 real games: on-tiles medians
+# d6-12 = 4/4/6/6/6/8/8), and the d7 SW purchase drains cash exactly when
+# the wheat line is still alive -- a 12-head entry gate is unreachable in
+# any window (the r1 paired ablation measured 88 byte-identical ties, zero
+# firings).  Entry instead requires the day-0 burst to be PLACED (>= 4
+# head: the dairy annuity is live, feed demand is small); the mode still
+# builds toward the 12-head ceiling.  Unlike the VOLUME bankruptcy class,
+# the capex here is 10/coin wheat seed bought in cash-gated batches under
+# the 800 redline -- no 100/coin strawberry widening, no SE 4000 buy.
+WHEAT_FARM_ENTRY_HERD_MIN = 4
 _WHEAT_FARM_PLAN = None
 
 
@@ -667,13 +678,13 @@ def _wheat_farm_entry_ok(day, mine, opp, prices, demand, prev_mode=None):
     """Fail-closed public-state gate for the opt-in wheat economy."""
     if prev_mode == "WHEAT_FARM":
         return (day <= PLANT_LAST_DAY["WHEAT"]
-                and mine["herd"] >= WHEAT_FARM_HERD_FLOOR
+                and mine["herd"] >= WHEAT_FARM_ENTRY_HERD_MIN
                 and mine["money"] >= WHEAT_FARM_HOLD_CASH
                 and _get(prices, "WHEAT", BASE_PRICE["WHEAT"]) <=
                     WHEAT_FARM_FEED_MAX_PRICE)
     if not WHEAT_FARM_ENTRY_START <= day <= WHEAT_FARM_ENTRY_END:
         return False
-    if mine["herd"] < WHEAT_FARM_HERD_FLOOR or \
+    if mine["herd"] < WHEAT_FARM_ENTRY_HERD_MIN or \
             mine["money"] < WHEAT_FARM_CASH_REDLINE:
         return False
     if mine["wheat"] < WHEAT_FARM_ENTRY_WHEAT_MIN:

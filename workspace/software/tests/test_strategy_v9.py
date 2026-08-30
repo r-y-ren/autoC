@@ -119,6 +119,22 @@ def test_wheat_farm_gate_is_opt_in_and_fail_closed():
     assert mod._decide_mode(contested, 8, None)["mode"] != "WHEAT_FARM"
 
 
+def test_wheat_farm_entry_matches_actual_build_pace():
+    # The champion's placed herd is 4 (the d0 burst) when cash and the wheat
+    # line are both alive at d6-7; the 12-head ceiling completes ~d13-14,
+    # outside every viable entry window (probe 2026-08-30).  Entry requires
+    # the burst to be placed, and the hold branch keeps the same floor so
+    # the mode cannot flap off the moment it enters.
+    mod = _load("wheat_pace")
+    mod.V9_WHEAT_FARM_ENABLED = True
+    burst = _wheat_farm_obs(mod, day=7, wheat=13, herd=4, money=900.0)
+    assert mod._decide_mode(burst, 7, None)["mode"] == "WHEAT_FARM"
+    unplaced = _wheat_farm_obs(mod, day=7, wheat=13, herd=2, money=900.0)
+    assert mod._decide_mode(unplaced, 7, None)["mode"] != "WHEAT_FARM"
+    hold = _wheat_farm_obs(mod, day=9, wheat=13, herd=4, money=500.0)
+    assert mod._decide_mode(hold, 9, "WHEAT_FARM")["mode"] == "WHEAT_FARM"
+
+
 def test_wheat_farm_field_contains_only_wheat_and_small_straw_line():
     mod = _load("wheat_field")
     farm = _farm(quads=("NW", "NE", "SW"), money=2000.0)
