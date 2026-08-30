@@ -204,7 +204,9 @@ def test_parse_seeds_and_pool_validation():
     with pytest.raises(ContractError):
         ablate.parse_seeds("101,101")     # duplicates
     pool, formal = ablate.parse_pool("required")
-    assert formal is True and len(pool) == 9
+    # v7: wheat_straw_monster joined the ablation required pool (guard
+    # opponent, outside the five new-style members) -- 10 opponents now
+    assert formal is True and len(pool) == 10
     pool, formal = ablate.parse_pool("cow_baron,scale_ranch")
     assert formal is False and pool == ["cow_baron", "scale_ranch"]
     with pytest.raises(ContractError):

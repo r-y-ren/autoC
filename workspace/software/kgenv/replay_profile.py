@@ -619,6 +619,7 @@ S_FAILS = {
     "WATER": ("already_served", "wrong_target"),
     "HARVEST": ("no_yield", "wrong_target"),
     "PLANT": ("no_resource", "wrong_target"),
+    "DIG": ("wrong_target",),   # v7: weed-reclaim calibre needs DIG visible
 }
 S_UNIT_OPS_TRACKED = ("CARE", "FEED", "WATER", "HARVEST", "PLANT", "DIG",
                       "PLACE", "BUILD_COOP", "BUILD_PASTURE", "FERTILIZE",
@@ -1542,7 +1543,7 @@ def _s_step(pre_state: dict, actions, step_index: int, cfg: dict, seed: int):
 def _s_op_row(uacc_series) -> dict:
     """Aggregate a list of per-step unit accumulators into one op table."""
     rows = {}
-    for op in ("CARE", "FEED", "WATER", "HARVEST", "PLANT"):
+    for op in ("CARE", "FEED", "WATER", "HARVEST", "PLANT", "DIG"):
         req = sum(u["requests"][op] for u in uacc_series)
         succ = sum(u["success"][op] for u in uacc_series)
         fails = Counter()

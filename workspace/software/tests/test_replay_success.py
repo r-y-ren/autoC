@@ -40,6 +40,7 @@ from kgenv.replay_profile import (  # noqa: E402
     _s_daily_refresh_animals,
     _s_daily_refresh_plants,
     _s_drop_inventories,
+    _s_op_row,
     _s_end_of_day,
     _s_market_price,
     _s_new_animal,
@@ -161,6 +162,24 @@ def test_care_success_duplicate_and_wrong_tile():
     _s_apply_unit_action(farm, _private(), 0, ["CARE"], 10, 0, 24, 100, acc)
     assert acc["requests"]["CARE"] == 3 and acc["success"]["CARE"] == 1
     assert acc["fail"]["CARE"]["wrong_target"] == 1
+
+
+def test_dig_clears_weed_and_op_row_aggregates_dig():
+    farm = _farm(tiles=[[{"kind": "WEED"}] + [None] * 9]
+                 + [[None] * 10 for _ in range(9)])
+    farm["farmer"] = [0, 0]
+    acc = _s_new_uacc()
+    _s_apply_unit_action(farm, _private(), 0, ["DIG"], 10, 0, 24, 100, acc)
+    assert acc["requests"]["DIG"] == 1 and acc["success"]["DIG"] == 1
+    assert farm["tiles"][0][0] is None
+    # v7: the success-calibre op table must expose DIG (was tracked per
+    # step but dropped by _s_op_row, hiding the v6 DIG=0 regression)
+    row = _s_op_row([acc])
+    assert row["DIG"]["requests"] == 1 and row["DIG"]["successes"] == 1
+    assert row["DIG"]["success_rate"] == 1.0
+    # DIG on an empty tile: wrong_target
+    _s_apply_unit_action(farm, _private(), 0, ["DIG"], 10, 0, 24, 100, acc)
+    assert acc["fail"]["DIG"]["wrong_target"] == 1
 
 
 def test_feed_requires_wheat_in_unit_inventory():

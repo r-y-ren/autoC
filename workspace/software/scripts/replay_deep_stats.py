@@ -138,14 +138,14 @@ def extract_deep_stats(replay: dict) -> dict:
 
 def _finalise(pl, teams, days, quadrant_day, rewards) -> dict[str, Any]:
     totals = {
-        "CARE": 0, "FEED": 0, "WATER": 0, "HARVEST": 0, "HIRE": 0,
+        "CARE": 0, "FEED": 0, "WATER": 0, "HARVEST": 0, "HIRE": 0, "DIG": 0,
         "feed_buy_qty": 0, "feed_buy_spend": 0.0,
     }
     table = []
     peak_herd = {}
     for day in sorted(days):
         rec = days[day]
-        for op in ("CARE", "FEED", "WATER", "HARVEST", "HIRE"):
+        for op in ("CARE", "FEED", "WATER", "HARVEST", "HIRE", "DIG"):
             totals[op] += rec["unit_ops"][op]
         totals["feed_buy_qty"] += rec["feed_buy_qty"]
         totals["feed_buy_spend"] += rec["feed_buy_spend"]
@@ -166,6 +166,7 @@ def _finalise(pl, teams, days, quadrant_day, rewards) -> dict[str, Any]:
             "water": rec["unit_ops"]["WATER"],
             "harvest": rec["unit_ops"]["HARVEST"],
             "hires": rec["unit_ops"]["HIRE"],
+            "digs": rec["unit_ops"]["DIG"],
             "plants": dict(rec["plants"]),
             "animal_buys": dict(rec["animal_buys"]),
             "feed_buy_qty": rec["feed_buy_qty"],

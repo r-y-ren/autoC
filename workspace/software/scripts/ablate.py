@@ -62,6 +62,7 @@ from kgenv.bots.online_pool import (  # noqa: E402
     scale_ranch_agent,
     self_feed_ranch_agent,
     template_wheat_agent,
+    wheat_straw_monster_agent,
 )
 from kgenv.engine import FULL_EPISODE_STEPS  # noqa: E402
 from kgenv.eval_contract import (  # noqa: E402
@@ -84,7 +85,11 @@ NEW_STYLE_POOL = [
     "near_band_diversified",
     "scale_ranch",
 ]
-REQUIRED_OPPONENTS = GATE_OPPONENTS + GUARD_OPPONENTS + NEW_STYLE_POOL
+# v7: wheat_straw_monster rides as a guard opponent (it is a calibrated
+# archetype, not one of the five new-style pool members behind indicator 1)
+REQUIRED_OPPONENTS = GATE_OPPONENTS + GUARD_OPPONENTS + NEW_STYLE_POOL + [
+    "wheat_straw_monster",
+]
 OPPONENTS = {
     "cow_baron": cow_baron_agent,
     "melon_hoarder": melon_hoarder_agent,
@@ -95,6 +100,7 @@ OPPONENTS = {
     "self_feed_ranch": self_feed_ranch_agent,
     "near_band_diversified": near_band_diversified_agent,
     "scale_ranch": scale_ranch_agent,
+    "wheat_straw_monster": wheat_straw_monster_agent,
 }
 DISASTER_MARGIN = -15000
 SCHEMA_VERSION = "1.0"
