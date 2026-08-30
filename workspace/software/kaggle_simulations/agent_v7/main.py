@@ -20,6 +20,13 @@
 #   C2R (THIS FILE):        pool_wr 1.0 / worst 0.875 @monster / disaster
 #                            0.0 -- best indicators of any candidate
 #   C2RH:                   identical indicators, more divergence -> H out
+# v7.2-V1 (merged): VOLUME entry herd-readiness floor (>= 10 head).
+#   Seed-103 forensics (both seats -32k/-46k vs two_quad_denser): the
+#   entry fired on a 4-5-head ranch, ~4800 of field capex met a ~200
+#   wallet, crew disbanded and animals starved (the P5 spiral class).
+#   Ablation vs C2R: 20W-5L-63T net +319k (63/88 cells byte-identical --
+#   surgical, not chaos), the 103 cells flipped to +32k/+40k; full gate
+#   87W-1L with two_quad_denser 8-0.
 # Everything else is the v6 submission byte-for-byte.
 # ---------------------------------------------------------------------------
 # v6 candidate (r5-P6 development tree, NOT the submission path).
@@ -332,6 +339,16 @@ MODE_STR_TOTAL_CAP = 42    # volume: field ceiling (Renji's 42-tile field)
 MODE_WHEAT_MONEY_QUAD = 8  # volume: wheat money tiles/quad (log glut curve)
 MODE_CREW_CAP_VOL = 15     # volume: hands ceiling (42 tiles of daily water)
 MODE_HERD_CAP_SCALE = 18   # scale: NPV ceiling (winners' 13-17 band + 1)
+# v7.2-V1 herd-readiness floor for the VOLUME entry.  Seed-103 forensics
+# (both seats lost to two_quad_denser by 32-46k): the entry fired on a
+# 4-5-head ranch, then 28 strawberry tiles + the SW purchase (~4800
+# capex) met a ~200 wallet -- crew disbanded 12->0, animals starved
+# 5->0, fields lapsed to 26-49 weeds (the bankruptcy spiral the P5
+# ablations predicted for unproven widenings).  The winner ticket list
+# (r3-1 cross-profile) puts >=12 head by d11 BEFORE the wide-field
+# economics; our frame realistically completes 10 by the d6-12 entry
+# window in live seasons, so the floor is 10.
+VOLUME_HERD_FLOOR = 10
 SE_DUE_DAY = 10            # volume: earliest SE buy (SW settled, cash back)
 SE_BUY_LAST_DAY = 14       # later than this 25 new tiles cannot repay
 SE_FUND = 4600             # SE price 4000 + working-cash cushion
@@ -940,7 +957,10 @@ def _decide_mode(obs, day, prev_mode):
     absorption (>= 4/day draws) + free line (opponent's strawberry field
     < 12 tiles -- a crop-heavy opponent is a DO-NOT-MIRROR signal: the
     paired ablation measured the mirror trigger strictly negative, joint
-    glut crashes both sides) + cash >= 300.  On top of the conjunction:
+    glut crashes both sides) + cash >= 800 + HERD READINESS (>= 10 head:
+    v7.2-V1, the seed-103 bankruptcy class -- the wide field's ~4800
+    capex may only land on a finished ranch floor, never on the 4-5-head
+    opening that still owes the herd its own build).  On top of the conjunction:
       * proven line (>= 6 alive tiles): the _plan_rollout acts as a
         SOLVENCY VETO (min_cash >= 0) -- the measured -62k/-93k spiral
         class must never fire;
@@ -978,7 +998,8 @@ def _decide_mode(obs, day, prev_mode):
     # WEAKER than the crude cash floor it tried to replace.  The rollout
     # is an ADDITIONAL veto, never a relaxation.
     base_ok = (6 <= day <= 12 and p_straw >= 105 and d_straw >= 4
-               and not opp_contesting and mine["money"] >= 800)
+               and not opp_contesting and mine["money"] >= 800
+               and mine["herd"] >= VOLUME_HERD_FLOOR)
     if base_ok:
         r_vol = _plan_rollout(day, mine, _VOLUME_PLAN, prices, demand,
                               p_straw)

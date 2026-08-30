@@ -245,3 +245,72 @@ def test_plant_guard_off_matches_v6_hours():
     tasks, *_ = mod._build_tasks(obs, farm, obs["private"], 6)
     # v6 planted at hour 23 too -- exactly the behaviour the guard removes
     assert any(t["act"][0] == "PLANT" for t in tasks)
+
+
+# --------------------------------------------------------------------------- #
+# v7.2-V1: VOLUME entry herd-readiness floor (seed-103 bankruptcy class)
+# --------------------------------------------------------------------------- #
+
+def _mk_farm_v72(quads=("NW", "NE", "SW"), money=5000.0, straw=0, herd=0):
+    tiles = [["LOCKED"] * 10 for _ in range(10)]
+    half = 5
+    for y in range(10):
+        for x in range(10):
+            q = ("N" if y < half else "S") + ("W" if x < half else "E")
+            if q in quads:
+                tiles[y][x] = None
+    for i in range(straw):
+        x, y = i % 5, i // 5
+        if tiles[y][x] is None:
+            tiles[y][x] = {"kind": "PLANT", "crop": "STRAWBERRY",
+                           "planted_day": 5, "yield_units": 0}
+    placed = 0
+    for y in range(10):
+        for x in range(10):
+            if placed >= herd:
+                break
+            if tiles[y][x] is None:
+                tiles[y][x] = {"kind": "PASTURE", "animal": "COW",
+                               "placed_day": 0, "yield_units": 0}
+                placed += 1
+    return {"tiles": tiles, "money": money,
+            "unlocked_quadrants": list(quads), "farmer": [4, 4],
+            "hands": [], "hires_today": 0}
+
+
+def _mk_obs_v72(mine, opp, prices=None, shops=("FARMERS_MARKET",)):
+    prices = prices if prices is not None else {
+        "WHEAT": 25, "CARROT": 35, "TOMATO": 60, "STRAWBERRY": 120,
+        "MELON": 250, "EGG": 50, "MILK": 160, "WOOL": 200,
+        "FERTILIZER": 100}
+    return {"player": 0, "day": 8, "hour": 0,
+            "market": {"prices": prices},
+            "town": {"unlocked_shops": list(shops)},
+            "farms": [mine, opp],
+            "private": {"shed": {}, "seeds": {}, "inventories": [{}]}}
+
+
+def test_volume_entry_requires_herd_floor():
+    mod = _load()
+    mod._PLAN_MEM.clear()
+    # all other conditions met but the ranch floor is a 4-head opening
+    # (the seed-103 bankruptcy class): stay DEFENSIVE
+    obs = _mk_obs_v72(_mk_farm_v72(money=800, straw=6, herd=4),
+                      _mk_farm_v72(straw=0, herd=10))
+    assert mod._decide_mode(obs, 8, None)["mode"] == "DEFENSIVE"
+    # herd 10 = the floor reached: the entry fires exactly as before
+    ok = _mk_obs_v72(_mk_farm_v72(money=800, straw=6, herd=10),
+                     _mk_farm_v72(straw=0, herd=10))
+    assert mod._decide_mode(ok, 8, None)["mode"] == "VOLUME_CROP"
+
+
+def test_volume_hold_survives_below_the_floor():
+    # a legitimately entered field keeps its hold semantics when the herd
+    # later dips (the floor gates ENTRY, not persistence -- liquidating a
+    # working 30-tile field over 3 lost head would be its own disaster)
+    mod = _load()
+    mod._PLAN_MEM.clear()
+    obs = _mk_obs_v72(_mk_farm_v72(money=1000, straw=30, herd=7),
+                      _mk_farm_v72(straw=0))
+    obs["market"]["prices"]["STRAWBERRY"] = 60
+    assert mod._decide_mode(obs, 16, "VOLUME_CROP")["mode"] == "VOLUME_CROP"
