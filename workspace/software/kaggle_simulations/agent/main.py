@@ -1,4 +1,34 @@
 # ---------------------------------------------------------------------------
+# v7 candidate (weed-reclaim experiment tree, NOT the submission path).
+#
+# Round-1 single-variable gates (labels v7-c1/c3/h, seeds 101-102):
+#   C1 all-day planned DIG   18W-22L -89.7k, one -92k cell where DIG
+#                            measurably starved WATER (656->579, lapse
+#                            17->34, escapes 3->6)  -> mechanism risk
+#   C3 all-weed DIG          20W-20L -109.0k        -> REJECTED
+#   H  plant-EOD guard       21W-19L -31.6k, pool_wr 1.0 but no stack gain
+#                            -> EXCLUDED (minimal-change)
+# Round-2 (seeds 101-104, 80 pairs each; paired diffs are chaos-dominated
+# -- any day-0 perturbation reshuffles both seats +-30-90k, worst-cell
+# forensics showed BETTER fundamentals with LOWER reward -- so the
+# unpaired win indicators decide):
+#   C2 late-window planned DIG (hour>=20, behind red lines):
+#                            pool_wr 0.975 / worst 0.875 / disaster 0.0125
+#   R  rotation-DIG of finished strawberries (+ stop watering/fertilizing
+#      them; _crop_future_value had no max_yield cap and paid dead tiles
+#      to the horizon):  tight +-2.5k band, indicators tie champion
+#   C2R (THIS FILE):        pool_wr 1.0 / worst 0.875 @monster / disaster
+#                            0.0 -- best indicators of any candidate
+#   C2RH:                   identical indicators, more divergence -> H out
+# v7.2-V1 (merged): VOLUME entry herd-readiness floor (>= 10 head).
+#   Seed-103 forensics (both seats -32k/-46k vs two_quad_denser): the
+#   entry fired on a 4-5-head ranch, ~4800 of field capex met a ~200
+#   wallet, crew disbanded and animals starved (the P5 spiral class).
+#   Ablation vs C2R: 20W-5L-63T net +319k (63/88 cells byte-identical --
+#   surgical, not chaos), the 103 cells flipped to +32k/+40k; full gate
+#   87W-1L with two_quad_denser 8-0.
+# Everything else is the v6 submission byte-for-byte.
+# ---------------------------------------------------------------------------
 # v6 candidate (r5-P6 development tree, NOT the submission path).
 #
 # v6-1 (single variable F): strawberry per-quad cap 6 -> 8 under the
@@ -309,6 +339,16 @@ MODE_STR_TOTAL_CAP = 42    # volume: field ceiling (Renji's 42-tile field)
 MODE_WHEAT_MONEY_QUAD = 8  # volume: wheat money tiles/quad (log glut curve)
 MODE_CREW_CAP_VOL = 15     # volume: hands ceiling (42 tiles of daily water)
 MODE_HERD_CAP_SCALE = 18   # scale: NPV ceiling (winners' 13-17 band + 1)
+# v7.2-V1 herd-readiness floor for the VOLUME entry.  Seed-103 forensics
+# (both seats lost to two_quad_denser by 32-46k): the entry fired on a
+# 4-5-head ranch, then 28 strawberry tiles + the SW purchase (~4800
+# capex) met a ~200 wallet -- crew disbanded 12->0, animals starved
+# 5->0, fields lapsed to 26-49 weeds (the bankruptcy spiral the P5
+# ablations predicted for unproven widenings).  The winner ticket list
+# (r3-1 cross-profile) puts >=12 head by d11 BEFORE the wide-field
+# economics; our frame realistically completes 10 by the d6-12 entry
+# window in live seasons, so the floor is 10.
+VOLUME_HERD_FLOOR = 10
 SE_DUE_DAY = 10            # volume: earliest SE buy (SW settled, cash back)
 SE_BUY_LAST_DAY = 14       # later than this 25 new tiles cannot repay
 SE_FUND = 4600             # SE price 4000 + working-cash cushion
@@ -413,6 +453,44 @@ STICKY_BONUS = 45.0         # continuity bonus for the previous target
 FEED_RED_HOUR = 16          # unfed-by-now escalates to red (r3 escalation)
 PROD_HORIZON_DAY = 28       # production evenings after this never cash out
 
+# ---- v7 weed-reclaim knobs ----------------------------------------------
+# v7-W.  The v6 chain is broken: _field_alloc skipped WEED tiles entirely,
+# so builds/crop_map never contained them and the planned-DIG branch in
+# _build_tasks (`pos in builds or in crop_map`) was UNREACHABLE -- every
+# weed (care-lapse, random spawn, overripe decay) permanently blocked its
+# tile (round-3/4 online replays: v6 DIG=0 in 12/12 games while 118/120
+# top-20 seats DIG 23-68 times).  Modes:
+#   "none"    reproduces v6 byte-for-byte (ablation control)
+#   "planned" reclaimable weeds enter the alloc preference lists BEHIND
+#             real empties (ring weeds after ring empties, field weeds
+#             after all field empties) -- a weed is only planned when the
+#             frame genuinely wants its tile, and the existing planned-DIG
+#             branch fires for exactly those positions
+#   "all"     "planned" plus a low-value DIG for every other unlocked
+#             weed (pressure-test variant, not a merge default)
+WEED_RECLAIM_MODE = "planned"
+# v7-C2: the C1 probe (DIG at any hour, v=50) measurably STARVED the red
+# lines in labour-scarce games (near_band s101 BA: WATER 656->579, lapse
+# 17->34, escapes 3->6, 104k->16k) -- Phase-B DIG displaced same-day
+# watering.  Round-2 admission: DIG (planned-weed AND rotation) only in
+# the late-day slack window, after the FEED (>=16) and WATER red lines
+# own Phase A; 0 reproduces the all-day C1 behaviour.
+WEED_DIG_HOUR_MIN = 20
+# v7-R rotation-DIG: top-20 replays DIG 23-68x/game concentrated d11-12
+# and d21-28, and the d20+ targets are FINISHED strawberries (yield 0, no
+# production evening left), not weeds.  v6 kept watering those tiles (the
+# planned-ongoing WATER task, futval 0) and they never re-entered the
+# alloc -- dead weight paying water and blocking the wheat rotation.
+ROTATION_DIG = True
+ROTATION_DIG_DAY = 18
+# v7-H (EXCLUDED from the frozen v7: no stack indicator gain, more
+# divergence -- kept as a knob for ablation reruns).  A fresh plant
+# enters at consecutive_unwatered=1 and turns WEED at the evening
+# refresh unless watered the same day (engine source); a PLANT issued
+# after hour 21 leaves no reliable WATER window.
+PLANT_EOD_GUARD = False
+PLANT_HOUR_MAX = 21
+
 # Module-level state keyed by player id (the framework may exec one copy of
 # this file for both seats in self-play validation episodes).  Tracks the
 # per-day animal purchase pace by confirming actual herd-count changes in
@@ -472,6 +550,33 @@ def _prod_evening_from(day, placed_day, first_yield, interval):
         step = ((day - d0 + interval - 1) // interval) * interval
         next_d = d0 + step
     return next_d <= PROD_HORIZON_DAY
+
+
+def _ongoing_evenings_left(crop, tile, day):
+    """Engine-exact production evenings an ongoing crop still owes.
+
+    The k-th production lands at the EOD refresh of day
+    planted + first_yield - 1 + (k-1)*interval (engine checks
+    next_day - planted - first_yield % interval == 0 with a
+    production_count <= max_yield cap).  _crop_future_value above is a
+    ranking-grade approximation with NO max_yield cap -- it keeps paying
+    for finished strawberries to PROD_HORIZON_DAY, which is exactly the
+    water/fertilizer waste the v7-R rotation removes; this helper is the
+    precise trigger, used only there.
+    """
+    cd = CROPS[crop]
+    planted = _get(tile, "planted_day", day)
+    interval = max(1, cd["interval"])
+    first_ev = planted + cd["first_yield_day"] - 1
+    last_ev = first_ev + (cd["max_yield"] - 1) * interval
+    if day > last_ev:
+        return 0
+    produced = 0
+    ev = first_ev
+    while ev < day:
+        produced += 1
+        ev += interval
+    return max(0, cd["max_yield"] - produced)
 
 
 def _crop_future_value(crop, tile, day):
@@ -852,7 +957,10 @@ def _decide_mode(obs, day, prev_mode):
     absorption (>= 4/day draws) + free line (opponent's strawberry field
     < 12 tiles -- a crop-heavy opponent is a DO-NOT-MIRROR signal: the
     paired ablation measured the mirror trigger strictly negative, joint
-    glut crashes both sides) + cash >= 300.  On top of the conjunction:
+    glut crashes both sides) + cash >= 800 + HERD READINESS (>= 10 head:
+    v7.2-V1, the seed-103 bankruptcy class -- the wide field's ~4800
+    capex may only land on a finished ranch floor, never on the 4-5-head
+    opening that still owes the herd its own build).  On top of the conjunction:
       * proven line (>= 6 alive tiles): the _plan_rollout acts as a
         SOLVENCY VETO (min_cash >= 0) -- the measured -62k/-93k spiral
         class must never fire;
@@ -890,7 +998,8 @@ def _decide_mode(obs, day, prev_mode):
     # WEAKER than the crude cash floor it tried to replace.  The rollout
     # is an ADDITIONAL veto, never a relaxation.
     base_ok = (6 <= day <= 12 and p_straw >= 105 and d_straw >= 4
-               and not opp_contesting and mine["money"] >= 800)
+               and not opp_contesting and mine["money"] >= 800
+               and mine["herd"] >= VOLUME_HERD_FLOOR)
     if base_ok:
         r_vol = _plan_rollout(day, mine, _VOLUME_PLAN, prices, demand,
                               p_straw)
@@ -1023,6 +1132,7 @@ def _field_alloc(farm, day, prices, plan=None):
     n_pasture = 0
     n_coop = 0
     empty_ring, empty_field = [], []
+    weed_ring, weed_field = [], []     # v7-W: reclaimable, behind empties
     for y, row in enumerate(tiles):
         for x, tile in enumerate(row):
             if tile == "LOCKED":
@@ -1041,6 +1151,18 @@ def _field_alloc(farm, day, prices, plan=None):
                 continue
             kind = _get(tile, "kind", "")
             if kind == "WEED":
+                # v7-W "none" keeps the v6 skip (tile unplannable); the
+                # other modes classify a weed exactly like an empty of the
+                # same geometry so the plan can reserve it -- the DIG fires
+                # from the planned branch in _build_tasks, never from here.
+                if WEED_RECLAIM_MODE != "none" and \
+                        _quadrant_of(x, y, board) in quads:
+                    if any(_dist(x, y, qx, qy) <= PASTURE_RING
+                           for qx, qy in _shed_access(board)) and \
+                            not _shed_adjacent(x, y, board):
+                        weed_ring.append(pos)
+                    else:
+                        weed_field.append(pos)
                 continue
             if kind == "PASTURE":
                 n_pasture += 1
@@ -1062,7 +1184,7 @@ def _field_alloc(farm, day, prices, plan=None):
     field_extra = []
     herd_t = _herd_target(day, 99)
     pasture_want = min(HERD_CAP + 1, herd_t + 2)
-    for pos in empty_ring:
+    for pos in empty_ring + weed_ring:
         if n_coop < min(HERD_COMPOSITION["GOOSE"], herd_t) and \
                 n_coop + n_pasture < pasture_want + 1:
             builds[pos] = "COOP"
@@ -1075,6 +1197,12 @@ def _field_alloc(farm, day, prices, plan=None):
 
     empties = field_extra + empty_field
     empties.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
+    if weed_field:
+        # v7-W: reclaimed field weeds sit behind EVERY real empty, so a
+        # weed is planned only when the phase wants more tiles than the
+        # free field provides (the DIG-then-PLANT chain costs one day).
+        weed_field.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
+        empties = empties + weed_field
     crop_map = {crop: set(existing[crop]) for crop in CROPS}
     for crop in ("STRAWBERRY", "MELON", "CARROT"):
         lo, hi = CROP_PHASE[crop]
@@ -1480,8 +1608,8 @@ def _build_tasks(obs, farm, private, day, plan=None):
 
     last_day = day >= SEASON_DAYS - 1
     stop_feed = day >= ENDGAME_DAY        # FM-O4: doomsday stop-feeding
+    hour = _get(obs, "hour", 0)           # v7-H: PLANT needs the EOD window
     if last_day:
-        hour = _get(obs, "hour", 0)
         positions = [tuple(_get(farm, "farmer", [board // 2 - 1, board // 2 - 1]))]
         positions.extend(tuple(hand) for hand in (_get(farm, "hands", []) or []))
         accesses = _shed_access(board)
@@ -1556,10 +1684,15 @@ def _build_tasks(obs, farm, private, day, plan=None):
                         crop = c
                         break
                 if crop is not None and seeds.get(crop, 0) > 0 \
-                        and day <= PLANT_LAST_DAY.get(crop, 24):
+                        and day <= PLANT_LAST_DAY.get(crop, 24) \
+                        and (not PLANT_EOD_GUARD
+                             or hour <= PLANT_HOUR_MAX):
                     # terminal value of planting TODAY; fresh plants must be
                     # watered the same day -- that obligation is red-flagged
-                    # in the PLANT branch below via planted_day == day
+                    # in the PLANT branch below via planted_day == day.
+                    # v7-H: a fresh plant starts at streak 1 and dies at the
+                    # evening refresh unwatered, so hour > PLANT_HOUR_MAX
+                    # just burns the seed and factories a weed.
                     cd = CROPS[crop]
                     price = _get(prices, crop, BASE_PRICE[crop])
                     ws0, we0 = _window(crop)
@@ -1572,8 +1705,20 @@ def _build_tasks(obs, farm, private, day, plan=None):
                 continue
             kind = _get(tile, "kind", "")
             if kind == "WEED":
-                if pos in builds or any(pos in s for s in crop_map.values()):
+                if (pos in builds or any(pos in s for s in crop_map.values())) \
+                        and hour >= WEED_DIG_HOUR_MIN:
+                    # v7-W: reachable again -- _field_alloc now reserves
+                    # reclaimable weeds into builds/crop_map (mode != none);
+                    # v7-C2: late-day window only (see knobs above)
                     add(22, x, y, ["DIG"], ("dig", x, y), v=50)
+                elif WEED_RECLAIM_MODE == "all" and \
+                        hour >= WEED_DIG_HOUR_MIN and \
+                        _quadrant_of(x, y, len(tiles)) in (
+                            _get(farm, "unlocked_quadrants", ["NW"])
+                            or ["NW"]):
+                    # C3 pressure-test variant only: DIG even unplanned
+                    # weeds (blocks the tile, but no downstream use yet)
+                    add(18, x, y, ["DIG"], ("dig", x, y), v=40)
                 continue
             if kind == "PLANT":
                 crop = _get(tile, "crop", "WHEAT")
@@ -1586,6 +1731,19 @@ def _build_tasks(obs, farm, private, day, plan=None):
                 ws, we = _window(crop)
                 in_window = ws <= age <= we
                 futval = _crop_future_value(crop, tile, day)
+                if ROTATION_DIG and cd["ongoing"] and planned \
+                        and _ongoing_evenings_left(crop, tile, day) <= 0 \
+                        and yu == 0 \
+                        and day >= ROTATION_DIG_DAY \
+                        and hour >= WEED_DIG_HOUR_MIN:
+                    # v7-R: a finished, fully-harvested ongoing crop is
+                    # dead weight -- stop paying water/fertilizer into it
+                    # (the two task branches below are gated on futval > 0
+                    # for ongoing crops) and free the tile back into the
+                    # alloc (top-20 d20-28 DIG pattern).  Late-day window
+                    # only: never displaces a live production task.
+                    add(23, x, y, ["DIG"], ("dig", x, y), v=45)
+                    continue
                 if not _get(tile, "watered_today", False):
                     price = _get(prices, crop, BASE_PRICE[crop])
                     if _get(tile, "consecutive_unwatered", 0) >= 1 or \
@@ -1594,23 +1752,26 @@ def _build_tasks(obs, farm, private, day, plan=None):
                         # engine starts every fresh plant at streak 1)
                         add(98, x, y, ["WATER"], ("water", x, y),
                             v=futval, red=True)
-                    elif planned and cd["ongoing"]:
+                    elif planned and cd["ongoing"] and futval > 0:
                         # ongoing crops: watering doubles fertilized output
-                        # and keeps the 2-day survival streak clear
+                        # and keeps the 2-day survival streak clear.  v7-R:
+                        # a finished crop (futval 0) is no longer watered.
                         add(40, x, y, ["WATER"], ("water", x, y),
                             v=max(0.3 * futval, price))
                     elif in_window and planned:
                         add(42, x, y, ["WATER"], ("water", x, y),
                             v=2 * price + 0.1 * futval)
-                    elif age % 2 == 1:
+                    elif age % 2 == 1 and futval > 0:
                         add(24, x, y, ["WATER"], ("water", x, y),
                             v=0.3 * futval)   # survival
                 # FM-4 generalized: animal fertilizer feeds the rotation.
                 # One-time crops at age 2 (the +2 window then lands inside
                 # the 3-day fertilizer window); strawberry refreshed
                 # whenever the 3-day window lapses (each production day
-                # pays +2 instead of +1 while watered).
-                if planned and _get(tile, "fertilized_until_day", -1) < day:
+                # pays +2 instead of +1 while watered).  v7-R: never
+                # fertilizes a finished ongoing crop.
+                if planned and (not cd["ongoing"] or futval > 0) and \
+                        _get(tile, "fertilized_until_day", -1) < day:
                     if cd["ongoing"] or age == 2:
                         premium_boost = crop in ("STRAWBERRY", "MELON")
                         fert_dear = _get(prices, "FERTILIZER",
@@ -2030,7 +2191,9 @@ def _schedule_units(obs, farm, private, day, tasks):
         if op == "PLANT":
             return tile is None
         if op == "DIG":
-            return kind == "WEED"
+            # engine DIG clears any non-animal tile; v7-R rotation-DIG
+            # targets finished PLANTs (weeds remain the other target)
+            return kind == "WEED" or kind == "PLANT"
         if op in ("BUILD_PASTURE", "BUILD_COOP"):
             return tile is None
         if op == "PLACE":

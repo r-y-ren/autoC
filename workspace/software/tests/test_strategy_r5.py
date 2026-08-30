@@ -121,7 +121,9 @@ def test_farm_scan_counts_public_state():
 
 def test_volume_entry_only_on_uncontested_proven_line():
     # premium bid + real absorption + our 6-tile line alive + free line
-    obs = _mk_obs(_mk_farm(money=800, straw=6), _mk_farm(straw=0, herd=10),
+    # (herd 12: the v7.2-V1 readiness floor on the promoted submission)
+    obs = _mk_obs(_mk_farm(money=800, straw=6, herd=12),
+                  _mk_farm(straw=0, herd=10),
                   shops=["FARMERS_MARKET"])
     plan = main._decide_mode(obs, 8, None)
     assert plan["mode"] == "VOLUME_CROP"
@@ -149,7 +151,9 @@ def test_opponent_crop_monster_is_do_not_mirror():
 
 def test_volume_entry_via_own_proven_line():
     # opponent runs no crop economy; our own 12-tile line carries the entry
-    obs = _mk_obs(_mk_farm(money=800, straw=12), _mk_farm(straw=0, herd=10),
+    # (herd 12 satisfies the v7.2-V1 floor)
+    obs = _mk_obs(_mk_farm(money=800, straw=12, herd=12),
+                  _mk_farm(straw=0, herd=10),
                   shops=["FARMERS_MARKET"])
     assert main._decide_mode(obs, 9, None)["mode"] == "VOLUME_CROP"
 
@@ -339,7 +343,7 @@ def test_rollout_solvency_veto_never_fires_a_spiral():
 # ------------------------- plan memory -----------------------------------
 
 def test_macro_plan_daily_cache_and_episode_reset():
-    obs = _mk_obs(_mk_farm(money=2000, straw=6), _mk_farm(straw=0),
+    obs = _mk_obs(_mk_farm(money=2000, straw=6, herd=12), _mk_farm(straw=0),
                   shops=["FARMERS_MARKET"])
     p1 = main._macro_plan(0, obs, 8)
     assert p1["mode"] == "VOLUME_CROP"

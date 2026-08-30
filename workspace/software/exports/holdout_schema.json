@@ -139,7 +139,7 @@
         "pairs": {
           "type": "array",
           "minItems": 36,
-          "maxItems": 55,
+          "maxItems": 66,
           "items": {
             "type": "array",
             "minItems": 2,
@@ -226,7 +226,7 @@
         "matrix_order": {
           "type": "array",
           "minItems": 9,
-          "maxItems": 11,
+          "maxItems": 12,
           "items": {
             "type": "string"
           }
@@ -234,7 +234,7 @@
         "pairs": {
           "type": "array",
           "minItems": 36,
-          "maxItems": 55
+          "maxItems": 66
         },
         "seat_orders": {
           "const": [
@@ -246,7 +246,8 @@
           "enum": [
             576,
             720,
-            880
+            880,
+            1056
           ]
         }
       }
@@ -254,7 +255,7 @@
     "opponent_pool_names": {
       "type": "array",
       "minItems": 8,
-      "maxItems": 10,
+      "maxItems": 11,
       "items": {
         "type": "string"
       }
@@ -262,7 +263,7 @@
     "games": {
       "type": "array",
       "minItems": 576,
-      "maxItems": 880,
+      "maxItems": 1056,
       "items": {
         "type": "object",
         "required": [
@@ -366,14 +367,16 @@
           "enum": [
             576,
             720,
-            880
+            880,
+            1056
           ]
         },
         "actual_games": {
           "enum": [
             576,
             720,
-            880
+            880,
+            1056
           ]
         },
         "abnormal_games": {
@@ -383,14 +386,16 @@
           "enum": [
             288,
             360,
-            440
+            440,
+            528
           ]
         },
         "ba_games": {
           "enum": [
             288,
             360,
-            440
+            440,
+            528
           ]
         },
         "missing_mirrors": {
@@ -415,7 +420,7 @@
         "pair_records": {
           "type": "array",
           "minItems": 8,
-          "maxItems": 10,
+          "maxItems": 11,
           "items": {
             "$ref": "#/$defs/record"
           }
@@ -512,7 +517,7 @@
             "historical_seed_exclusion_count": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 54
+              "maximum": 62
             }
           }
         },
@@ -550,7 +555,8 @@
                 1,
                 2,
                 3,
-                4
+                4,
+                5
               ]
             },
             "status": {

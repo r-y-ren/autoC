@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.1",
+  "milestone": "v7.2-weed-herdfloor",
+  "label": "v72-frozen",
+  "created_at": "2026-08-30T05:19:24.048275+00:00",
+  "candidate": {
+    "path": "workspace/software/kaggle_simulations/agent/main.py",
+    "sha256": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748",
+    "git_ref": "ae9354725b44e0af3ecbbc5e7ef64b876ec9bb1a",
+    "dirty_before_gate": false,
+    "dirty_state_note": "promotion of the frozen v7 dev tree (kaggle_simulations/agent_v7/main.py, gate 87W-1L) after the V2 land-sequencing rejection was reverted; dev tree carries the iteration evidence header",
+    "delta_vs_v6": "v6 + C2R weed layer (planned late-window WEED reclaim hour>=20 behind red lines; rotation-DIG of finished strawberries incl. stopping water/fertilizer on them via the engine-exact _ongoing_evenings_left; DIG ops surfaced in replay calibre) + V1 (VOLUME entry herd-readiness floor >=10 head; seed-103 bankruptcy class, ablation 20W-5L-63T +319k surgical). V2 (SW land-after-ranch) rejected -349k NOT MERGEABLE."
+  },
+  "frozen_snapshot": {
+    "path": "workspace/software/v72_frozen_candidate.b64",
+    "encoding": "base64",
+    "file_sha256": "fe7d8d9f6f9c55e624ac64b87b81ab5d7f441261e8b14d84569b25826696f868",
+    "decoded_sha256": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748",
+    "reason": "Preserve exact execution bytes across Git line-ending normalization"
+  },
+  "identity_verification": {
+    "source_sha_unchanged_during_gate": true,
+    "snapshot_sha_matched_source": true,
+    "post_gate_sha256": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748"
+  },
+  "gate": {
+    "label": "v72-v1-frozen",
+    "games": 88,
+    "record": "87W-1L",
+    "per_opponent": {
+      "baseline_wheat": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "cow_baron": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "crop_rotator": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "expansionist": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "melon_hoarder": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "near_band_diversified": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "scale_ranch": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "self_feed_ranch": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "template_wheat": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "two_quad_denser": {
+        "wins": 8,
+        "losses": 0,
+        "ties": 0
+      },
+      "wheat_straw_monster": {
+        "wins": 7,
+        "losses": 1,
+        "ties": 0
+      }
+    },
+    "abnormal": 0,
+    "elapsed_seconds": 430.5
+  }
+}

@@ -468,10 +468,10 @@ def test_verify_published_never_runs_matches(monkeypatch, tmp_path):
     assert run_holdout.verify_published(True)["actual_games"] == 576
 
 
-def test_prior_generation_is_archived_byte_identical_before_attempt4(monkeypatch, tmp_path):
+def test_prior_generation_is_archived_byte_identical_before_attempt5(monkeypatch, tmp_path):
     published = tmp_path / "published"
-    archive = tmp_path / "attempt-3"
-    payload = _fixture_payload(attempt_index=3)
+    archive = tmp_path / "attempt-4"
+    payload = _fixture_payload(attempt_index=4)
     staged = tmp_path / "staged"
     staged.mkdir()
     metrics = tmp_path / "metrics.json"
@@ -497,7 +497,7 @@ def test_prior_generation_is_archived_byte_identical_before_attempt4(monkeypatch
     assert archive.is_dir()
     assert {p.name: p.read_bytes() for p in archive.iterdir()} == original
     archived_payload = run_holdout._validate_generation(archive)
-    assert archived_payload["holdout"]["attempt"]["index"] == 3
+    assert archived_payload["holdout"]["attempt"]["index"] == 4
     # a non-attempt-3 generation (the attempt-2 layout) must never be
     # archived silently as the prior generation
     legacy = _fixture_payload(attempt_index=2)
@@ -508,7 +508,7 @@ def test_prior_generation_is_archived_byte_identical_before_attempt4(monkeypatch
         legacy, legacy["holdout"]["seed_manifest"], legacy["games"]
     )
     run_holdout._commit_generation(staged1)
-    with pytest.raises(ContractError, match="attempt-3"):
+    with pytest.raises(ContractError, match="attempt-4"):
         run_holdout._archive_prior_generation()
 
 

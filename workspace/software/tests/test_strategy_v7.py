@@ -314,3 +314,11 @@ def test_volume_hold_survives_below_the_floor():
                       _mk_farm_v72(straw=0))
     obs["market"]["prices"]["STRAWBERRY"] = 60
     assert mod._decide_mode(obs, 16, "VOLUME_CROP")["mode"] == "VOLUME_CROP"
+
+
+# --------------------------------------------------------------------------- #
+# v7.2-V2 land-after-ranch sequencing: REJECTED (ablation v72_v2_landseq:
+# 46W-42L net -349k, all three indicators worse -- deferring SW pushed the
+# third-quadrant strawberry payoff out of the phase window).  The SW
+# purchase keeps the r4 d7+ rule; no test pins the rejected knob.
+# --------------------------------------------------------------------------- #

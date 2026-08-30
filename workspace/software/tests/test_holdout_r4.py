@@ -331,12 +331,13 @@ def test_attempt3_projection_uses_r4_prefix_and_keeps_history():
     assert metrics["r4_holdout_seed_domain_isolation"]["value"]["historical_count"] == 46
 
 
-def test_staging_attempt4_generation_preserves_prior_metrics_history(tmp_path, monkeypatch):
-    payload = _fixture_payload(attempt_index=4)
+def test_staging_attempt5_generation_preserves_prior_metrics_history(tmp_path, monkeypatch):
+    payload = _fixture_payload(attempt_index=5)
     history = {
         "holdout_protocol": {"value": "attempt-1-history"},
         "m4_confirmatory_overall_record": {"value": "attempt-2-history"},
         "r4_holdout_protocol": {"value": "attempt-3-history"},
+        "v6_holdout_protocol": {"value": "attempt-4-history"},
     }
     metrics_path = tmp_path / "metrics.json"
     metrics_path.write_text(json.dumps({"metrics": history}), encoding="utf-8")
@@ -355,6 +356,7 @@ def test_staging_attempt4_generation_preserves_prior_metrics_history(tmp_path, m
     assert shard["metrics"]["holdout_protocol"] == {"value": "attempt-1-history"}
     assert shard["metrics"]["m4_confirmatory_overall_record"] == {"value": "attempt-2-history"}
     assert shard["metrics"]["r4_holdout_protocol"] == {"value": "attempt-3-history"}
-    assert "v6_holdout_protocol" in shard["metrics"]
-    assert "v6_confirmatory_export_traceability" in shard["metrics"]
-    assert "r5-P6 v6-holdout" in shard["milestone"]
+    assert shard["metrics"]["v6_holdout_protocol"] == {"value": "attempt-4-history"}
+    assert "v72_holdout_protocol" in shard["metrics"]
+    assert "v72_confirmatory_export_traceability" in shard["metrics"]
+    assert "v7 attempt-5" in shard["milestone"]
