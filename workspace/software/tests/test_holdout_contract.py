@@ -598,14 +598,15 @@ def test_archived_repository_generations_still_validate_if_present():
     m3_manifest = json.loads(
         (run_holdout.SOFTWARE_ROOT / "m3_frozen_manifest.json").read_text(encoding="utf-8")
     )
-    # attempt-3 archived the r4 layered candidate (720 games); attempts 1-2
-    # are the 576-game generations.
+    # attempt-3 archived the r4 layered candidate (720 games), attempt-4
+    # the v6 candidate (880 games); attempts 1-2 are the 576-game ones.
     expectations = {
         1: "7c482921",
         2: m3_manifest["candidate"]["sha256"][:8],
         3: "9298751f",
+        4: "127c277e",
     }
-    expected_games = {1: 576, 2: 576, 3: 720}
+    expected_games = {1: 576, 2: 576, 3: 720, 4: 880}
     checked = 0
     for index, directory in sorted(run_holdout._archive_registry().items()):
         if not directory.is_dir():

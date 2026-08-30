@@ -4633,6 +4633,787 @@
       },
       "unit": "holdout-evidence",
       "method": "workspace/software/exports/eval_results.json#/confirmatory_export_traceability"
+    },
+    "v72_holdout_protocol": {
+      "value": {
+        "full_matrix": true,
+        "seed_count": 8,
+        "seat_orders": [
+          "AB",
+          "BA"
+        ],
+        "one_time": true,
+        "resume_exact_attempt_only": true,
+        "candidate_change_invalidates": true,
+        "candidate_source": "frozen_git_blob",
+        "historical_seed_exclusion_count": 62
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
+    },
+    "v72_holdout_seed_manifest": {
+      "value": {
+        "schema_version": "1.0",
+        "attempt_id": "dada53c80d43861a04efe188",
+        "attempt_index": 5,
+        "generated_after_freeze": true,
+        "random_source": "Python secrets.randbelow (OS cryptographic entropy)",
+        "revealed_at": "2026-08-30T06:37:36.908493+00:00",
+        "seeds": [
+          1775874423,
+          917994815,
+          812877132,
+          1706664550,
+          581817403,
+          1573860236,
+          42327275,
+          1336248557
+        ],
+        "sha256": "53ae26dc8c6a4da943204029ee9eefbc0e46674188869d6ad9d062f0d083f00e",
+        "historical_seed_exclusion_count": 62,
+        "overlap_with_historical": []
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
+    },
+    "v72_holdout_candidate_hash_match": {
+      "value": {
+        "frozen": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748",
+        "before": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748",
+        "after": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748",
+        "pass": true
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
+    },
+    "v72_holdout_seed_domain_isolation": {
+      "value": {
+        "historical_count": 62,
+        "overlap_count": 0,
+        "pass": true
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
+    },
+    "v72_holdout_run_status": {
+      "value": {
+        "index": 5,
+        "attempt_id": "dada53c80d43861a04efe188",
+        "status": "published",
+        "started_at": "2026-08-30T05:26:25.563424+00:00",
+        "completed_at": "2026-08-30T06:37:36.912415+00:00",
+        "published": true,
+        "invalidated": false,
+        "invalidation_reason": null,
+        "prior_attempt_index": 4,
+        "prior_attempt_evidence": "workspace/software/exports/holdout/attempt-4",
+        "worktree_state": {
+          "git_ref": "6c4dd3cb3681e98d6b0c22fa4beb361066cf859e",
+          "status_porcelain": [
+            " D workspace/software/exports/holdout/published/eval_results.json",
+            " D workspace/software/exports/holdout/published/replay_log.jsonl",
+            " D workspace/software/exports/holdout/published/seed_manifest.json",
+            " D workspace/software/exports/holdout/published/software_metrics.json",
+            "?? .tmp-corpus/",
+            "?? .tmp-r5/",
+            "?? .tmp-v7/",
+            "?? workspace/software/exports/holdout/attempt-4/"
+          ],
+          "tracked_changes_outside_boundary": [],
+          "note": "run executed from a worktree containing declared r3-3 work products; reproduce via recorded input-closure hashes"
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
+    },
+    "v72_holdout_schedule": {
+      "value": {
+        "expected_games": 1056,
+        "actual_games": 1056
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity"
+    },
+    "v72_holdout_seat_split": {
+      "value": {
+        "ab_games": 528,
+        "ba_games": 528,
+        "missing_mirrors": 0
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity"
+    },
+    "v72_holdout_abnormal_summary": {
+      "value": {
+        "abnormal_games": 0
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity/abnormal_games"
+    },
+    "v72_holdout_integrity_pass": {
+      "value": true,
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/integrity"
+    },
+    "v72_confirmatory_overall_record": {
+      "value": {
+        "games": 176,
+        "W": 166,
+        "L": 10,
+        "T": 0,
+        "score_rate": 0.943182,
+        "wilson95": [
+          0.8986,
+          0.9688
+        ]
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/overall_record"
+    },
+    "v72_confirmatory_pair_records": {
+      "value": [
+        {
+          "opponent": "cow_baron",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "melon_hoarder",
+          "games": 16,
+          "W": 15,
+          "L": 1,
+          "T": 0,
+          "score_rate": 0.9375,
+          "wilson95": [
+            0.7167,
+            0.9889
+          ]
+        },
+        {
+          "opponent": "expansionist",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "baseline_wheat",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "crop_rotator",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "template_wheat",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "self_feed_ranch",
+          "games": 16,
+          "W": 14,
+          "L": 2,
+          "T": 0,
+          "score_rate": 0.875,
+          "wilson95": [
+            0.6398,
+            0.965
+          ]
+        },
+        {
+          "opponent": "near_band_diversified",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "scale_ranch",
+          "games": 16,
+          "W": 16,
+          "L": 0,
+          "T": 0,
+          "score_rate": 1.0,
+          "wilson95": [
+            0.8064,
+            1.0
+          ]
+        },
+        {
+          "opponent": "wheat_straw_monster",
+          "games": 16,
+          "W": 11,
+          "L": 5,
+          "T": 0,
+          "score_rate": 0.6875,
+          "wilson95": [
+            0.444,
+            0.8584
+          ]
+        },
+        {
+          "opponent": "two_quad_denser",
+          "games": 16,
+          "W": 14,
+          "L": 2,
+          "T": 0,
+          "score_rate": 0.875,
+          "wilson95": [
+            0.6398,
+            0.965
+          ]
+        }
+      ],
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/pair_records"
+    },
+    "v72_confirmatory_seat_records": {
+      "value": {
+        "AB": {
+          "games": 88,
+          "W": 83,
+          "L": 5,
+          "T": 0,
+          "score_rate": 0.943182,
+          "wilson95": [
+            0.8738,
+            0.9755
+          ],
+          "by_opponent": {
+            "cow_baron": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "melon_hoarder": {
+              "games": 8,
+              "W": 7,
+              "L": 1,
+              "T": 0,
+              "score_rate": 0.875,
+              "wilson95": [
+                0.5291,
+                0.9776
+              ]
+            },
+            "expansionist": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "baseline_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "crop_rotator": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "template_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "self_feed_ranch": {
+              "games": 8,
+              "W": 7,
+              "L": 1,
+              "T": 0,
+              "score_rate": 0.875,
+              "wilson95": [
+                0.5291,
+                0.9776
+              ]
+            },
+            "near_band_diversified": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "scale_ranch": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "wheat_straw_monster": {
+              "games": 8,
+              "W": 6,
+              "L": 2,
+              "T": 0,
+              "score_rate": 0.75,
+              "wilson95": [
+                0.4093,
+                0.9285
+              ]
+            },
+            "two_quad_denser": {
+              "games": 8,
+              "W": 7,
+              "L": 1,
+              "T": 0,
+              "score_rate": 0.875,
+              "wilson95": [
+                0.5291,
+                0.9776
+              ]
+            }
+          }
+        },
+        "BA": {
+          "games": 88,
+          "W": 83,
+          "L": 5,
+          "T": 0,
+          "score_rate": 0.943182,
+          "wilson95": [
+            0.8738,
+            0.9755
+          ],
+          "by_opponent": {
+            "cow_baron": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "melon_hoarder": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "expansionist": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "baseline_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "crop_rotator": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "template_wheat": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "self_feed_ranch": {
+              "games": 8,
+              "W": 7,
+              "L": 1,
+              "T": 0,
+              "score_rate": 0.875,
+              "wilson95": [
+                0.5291,
+                0.9776
+              ]
+            },
+            "near_band_diversified": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "scale_ranch": {
+              "games": 8,
+              "W": 8,
+              "L": 0,
+              "T": 0,
+              "score_rate": 1.0,
+              "wilson95": [
+                0.6756,
+                1.0
+              ]
+            },
+            "wheat_straw_monster": {
+              "games": 8,
+              "W": 5,
+              "L": 3,
+              "T": 0,
+              "score_rate": 0.625,
+              "wilson95": [
+                0.3057,
+                0.8632
+              ]
+            },
+            "two_quad_denser": {
+              "games": 8,
+              "W": 7,
+              "L": 1,
+              "T": 0,
+              "score_rate": 0.875,
+              "wilson95": [
+                0.5291,
+                0.9776
+              ]
+            }
+          }
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/seat_records"
+    },
+    "v72_confirmatory_wilson_intervals": {
+      "value": {
+        "confidence": 0.95,
+        "method": "Wilson score; tie=0.5",
+        "overall": [
+          0.8986,
+          0.9688
+        ],
+        "pairs": {
+          "cow_baron": [
+            0.8064,
+            1.0
+          ],
+          "melon_hoarder": [
+            0.7167,
+            0.9889
+          ],
+          "expansionist": [
+            0.8064,
+            1.0
+          ],
+          "baseline_wheat": [
+            0.8064,
+            1.0
+          ],
+          "crop_rotator": [
+            0.8064,
+            1.0
+          ],
+          "template_wheat": [
+            0.8064,
+            1.0
+          ],
+          "self_feed_ranch": [
+            0.6398,
+            0.965
+          ],
+          "near_band_diversified": [
+            0.8064,
+            1.0
+          ],
+          "scale_ranch": [
+            0.8064,
+            1.0
+          ],
+          "wheat_straw_monster": [
+            0.444,
+            0.8584
+          ],
+          "two_quad_denser": [
+            0.6398,
+            0.965
+          ]
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/wilson_intervals"
+    },
+    "v72_confirmatory_order_independent_statistics": {
+      "value": {
+        "method": "mean per-(opponent,seed) AB/BA score; Student-t 95% CI",
+        "order_independent": true,
+        "tie_policy": "tie=0.5 game score",
+        "unit_count": 88,
+        "estimate": 0.943182,
+        "ci95": [
+          0.896296,
+          0.990067
+        ],
+        "input_sha256": "d65a3336dea3225fdf74f402c4251bc39ec7bac762c2b8ead3e62070c05ac4dd",
+        "fit_status": "ok"
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory/order_independent_statistic"
+    },
+    "v72_confirmatory_elo_appendix": {
+      "value": {
+        "role": "descriptive_only",
+        "order_sensitive": true,
+        "k": 32.0,
+        "start": 1200.0,
+        "table": [
+          {
+            "name": "wheat_straw_monster",
+            "rating": 1624.7,
+            "played": 176,
+            "record": {
+              "W": 137,
+              "L": 39,
+              "T": 0
+            }
+          },
+          {
+            "name": "two_quad_denser",
+            "rating": 1586.0,
+            "played": 176,
+            "record": {
+              "W": 135,
+              "L": 41,
+              "T": 0
+            }
+          },
+          {
+            "name": "submission",
+            "rating": 1567.1,
+            "played": 176,
+            "record": {
+              "W": 166,
+              "L": 10,
+              "T": 0
+            }
+          },
+          {
+            "name": "near_band_diversified",
+            "rating": 1545.3,
+            "played": 176,
+            "record": {
+              "W": 113,
+              "L": 63,
+              "T": 0
+            }
+          },
+          {
+            "name": "scale_ranch",
+            "rating": 1298.6,
+            "played": 176,
+            "record": {
+              "W": 104,
+              "L": 72,
+              "T": 0
+            }
+          },
+          {
+            "name": "template_wheat",
+            "rating": 1267.2,
+            "played": 176,
+            "record": {
+              "W": 115,
+              "L": 61,
+              "T": 0
+            }
+          },
+          {
+            "name": "self_feed_ranch",
+            "rating": 1256.8,
+            "played": 176,
+            "record": {
+              "W": 99,
+              "L": 77,
+              "T": 0
+            }
+          },
+          {
+            "name": "crop_rotator",
+            "rating": 1182.9,
+            "played": 176,
+            "record": {
+              "W": 85,
+              "L": 91,
+              "T": 0
+            }
+          },
+          {
+            "name": "cow_baron",
+            "rating": 828.5,
+            "played": 176,
+            "record": {
+              "W": 53,
+              "L": 123,
+              "T": 0
+            }
+          },
+          {
+            "name": "melon_hoarder",
+            "rating": 783.9,
+            "played": 176,
+            "record": {
+              "W": 33,
+              "L": 143,
+              "T": 0
+            }
+          },
+          {
+            "name": "expansionist",
+            "rating": 783.7,
+            "played": 176,
+            "record": {
+              "W": 16,
+              "L": 160,
+              "T": 0
+            }
+          },
+          {
+            "name": "baseline_wheat",
+            "rating": 675.4,
+            "played": 176,
+            "record": {
+              "W": 0,
+              "L": 176,
+              "T": 0
+            }
+          }
+        ]
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/elo"
+    },
+    "v72_confirmatory_export_traceability": {
+      "value": {
+        "export_sha256": "b89c3b9e857602958ab3296ed295cdbcc71bcdbfc160e92584d7d3eb6fa330bf",
+        "source": "workspace/software/exports/eval_results.json",
+        "validated_schema": "2.0",
+        "json_pointers": {
+          "v72_holdout_protocol": "/holdout/protocol",
+          "v72_holdout_seed_manifest": "/holdout/seed_manifest",
+          "v72_holdout_candidate_hash_match": "/holdout/candidate_hash_match",
+          "v72_holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
+          "v72_holdout_run_status": "/holdout/attempt",
+          "v72_holdout_schedule": "/integrity",
+          "v72_holdout_seat_split": "/integrity",
+          "v72_holdout_abnormal_summary": "/integrity/abnormal_games",
+          "v72_holdout_integrity_pass": "/integrity",
+          "v72_confirmatory_overall_record": "/confirmatory/overall_record",
+          "v72_confirmatory_pair_records": "/confirmatory/pair_records",
+          "v72_confirmatory_seat_records": "/confirmatory/seat_records",
+          "v72_confirmatory_wilson_intervals": "/confirmatory/wilson_intervals",
+          "v72_confirmatory_order_independent_statistics": "/confirmatory/order_independent_statistic",
+          "v72_confirmatory_elo_appendix": "/elo"
+        }
+      },
+      "unit": "holdout-evidence",
+      "method": "workspace/software/exports/eval_results.json#/confirmatory_export_traceability"
     }
   },
   "unmeasured": {
