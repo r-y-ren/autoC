@@ -2904,15 +2904,20 @@ def _route_tasks(obs, farm, private, day, tasks):
     return copies, state
 
 
-# ACTIVATED 2026-08-30 by the formal gate v9_routing_distfirst_r1
-# (11 opponents x 4 seeds, AB/BA, 176 games): candidate 88-0 vs the pool
-# (worst single-opponent WR 1.0) against the champion's 87-1, disaster
-# rate 0 -- all three merge checks >= champion, VERDICT MERGEABLE.  The
-# paired net (-73.6k over 43W-45L) is chaos-dominated per the v7
-# methodology note; win rates arbitrate.  Efficiency harness (24 paired
-# cells): movement/op 2.194 -> 2.152, effective ops +3.4%, wheat harvest
-# +6.5%.  The submission path (agent/main.py) stays v7.2 and untouched.
-V9_SHADOW_ROUTING = False
+# REVERTED TO SHADOW 2026-08-30 by the confirmation gate
+# v9_routing_confirm1 (regression-domain seeds 201-204, 176 games): the
+# selection-domain result (v9_routing_distfirst_r1: 88-0 vs the pool on
+# seeds 101-104, MERGEABLE) did NOT generalize -- pool WR 0.925 (lost
+# cells, worst crop_rotator 0.75), disaster 0.0341 vs champion 0.0227,
+# paired net -258.9k.  Attribution: one matchup mega-win (two_quad_denser
+# +164.7k, seed 201 ~ +88k/seat) against broad margin losses on 8 of 11
+# opponents (template_wheat 1W-7L).  The router as-shipped is a variance
+# amplifier; the 88-0 was selection-domain luck on a margin-eroding
+# mechanism.  The efficiency harness numbers (ratio 2.194 -> 2.152, ops
+# +3.4%) remain real but do not buy win-rate generalization.  Future
+# activation attempts must pre-register BOTH seed domains (101-104 AND
+# 201-204) as the gate.
+V9_SHADOW_ROUTING = True
 
 
 def _schedule_units(obs, farm, private, day, tasks):
