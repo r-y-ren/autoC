@@ -849,6 +849,15 @@ _TARGETS = {}
 CROSS_SECTOR_VALUE_EDGE = 260.0
 CROSS_SECTOR_PENALTY_V9 = 18.0
 ROUTE_BATCH_SIZE = 6
+# Tour-following: the route head gets a continuity-magnitude bonus (the
+# same scale as STICKY_BONUS) so a worker sweeps its sector's queue
+# instead of globally re-chasing the highest-value task after every
+# completion.  The baseline comparison (2026-08-30, 24 paired cells)
+# measured the previous 0.01/rank bump as efficiency-inert: ratio
+# 2.214 active vs 2.194 shadow.  Red-line tasks are exempt (phase A
+# stays the hard safety veto) and eligibility graphs are untouched.
+V9_TOUR_BONUS = 45.0
+V9_TOUR_DECAY = 15.0
 _ROUTE_STATE = {}
 _SCHEDULER_TRACE = {}
 
@@ -2865,9 +2874,15 @@ def _route_tasks(obs, farm, private, day, tasks):
                     if not task.get("red") and
                     _task_sector(task, board) == sector and
                     (task.get("units") is None or ui in task["units"])]
-            same.sort(key=lambda task: (-float(task.get("v", task.get("w", 0))),
-                                       _dist(ux, uy, task["x"], task["y"]),
-                                       repr(task.get("key"))))
+            # Distance-first: a value-first head sent workers to far
+            # high-value sector tasks (a false sweep) and broke the nearby
+            # watering cadence -- measured as template_wheat/cow_baron seed
+            # 101 regressions of -20k..-25k on both seats with water
+            # pressure +22% (routing_tour, 2026-08-30).  Nearest-first is
+            # the actual patrol: short hops, water stays local.
+            same.sort(key=lambda task: (_dist(ux, uy, task["x"], task["y"]),
+                                        -float(task.get("v", task.get("w", 0))),
+                                        repr(task.get("key"))))
             state["routes"][ui] = [task.get("key") for task in same[:ROUTE_BATCH_SIZE]]
 
     # Route order is a deterministic tie breaker, while red lines still win
@@ -2878,15 +2893,26 @@ def _route_tasks(obs, farm, private, day, tasks):
             route_rank[(ui, key)] = rank
     for task in copies:
         task.setdefault("_v9_rank", {})
+        if task.get("red"):
+            continue
         for ui in range(len(units)):
             rank = route_rank.get((ui, task.get("key")))
-            if rank is not None and not task.get("red"):
-                task["v"] = float(task.get("v", task.get("w", 0))) \
-                    + max(0.0, ROUTE_BATCH_SIZE - rank) * 0.01
+            task["_v9_rank"][ui] = rank
+            if rank is not None:
+                task["_v9_soft"][ui] = task["_v9_soft"].get(ui, 0.0) + \
+                    max(0.0, V9_TOUR_BONUS - rank * V9_TOUR_DECAY)
     return copies, state
 
 
-V9_SHADOW_ROUTING = True
+# ACTIVATED 2026-08-30 by the formal gate v9_routing_distfirst_r1
+# (11 opponents x 4 seeds, AB/BA, 176 games): candidate 88-0 vs the pool
+# (worst single-opponent WR 1.0) against the champion's 87-1, disaster
+# rate 0 -- all three merge checks >= champion, VERDICT MERGEABLE.  The
+# paired net (-73.6k over 43W-45L) is chaos-dominated per the v7
+# methodology note; win rates arbitrate.  Efficiency harness (24 paired
+# cells): movement/op 2.194 -> 2.152, effective ops +3.4%, wheat harvest
+# +6.5%.  The submission path (agent/main.py) stays v7.2 and untouched.
+V9_SHADOW_ROUTING = False
 
 
 def _schedule_units(obs, farm, private, day, tasks):

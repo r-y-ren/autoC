@@ -255,6 +255,24 @@ def test_same_sector_eligibility_does_not_strand_other_hands():
     assert all(set(task["units"]) == {0, 1} for task in routed)
 
 
+def test_tour_bonus_favors_route_head_over_later_same_sector_tasks():
+    mod = _load("tour_bonus")
+    farm = _farm(quads=("NW",), farmer=(1, 1), hands=((2, 1),))
+    obs = _obs(mod, farm=farm)
+    head = _task(2, 2, ["WATER"], value=100, key=("t0", 2, 2))
+    tail = _task(4, 1, ["WATER"], value=100, key=("t1", 4, 1))
+    routed, _ = mod._route_tasks(obs, farm, obs["private"], 6, [head, tail])
+    soft = {task["key"]: task["_v9_soft"].get(0, 0.0) for task in routed}
+    assert soft[("t0", 2, 2)] == soft[("t1", 4, 1)] + mod.V9_TOUR_DECAY
+    red = _task(1, 1, ["FEED"], value=10, red=True, need="WHEAT",
+                key=("r", 1, 1))
+    routed_red, _ = mod._route_tasks(obs, farm, obs["private"], 7,
+                                     [head, tail, red])
+    for task in routed_red:
+        if task.get("red"):
+            assert not task.get("_v9_soft")
+
+
 def test_redline_task_still_preempts_local_value_task():
     mod = _load("red")
     farm = _farm(quads=("NW", "SE"), farmer=(1, 1))
