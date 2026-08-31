@@ -275,10 +275,17 @@ def test_herd_subordinated_to_pending_land_fund():
                                     money=1300.0, quads=["NW"])
     assert not any(o[0] == "BUY_LAND" for o in orders)
     assert not _orders_contains(orders, "BUY_ANIMAL", "SHEEP")
-    # past the pending window the block lapses (no deadlock)
+    # past the pending window the block lapses (no deadlock).  v10 M-E:
+    # the sheep must also clear the liquidity floor after this turn's
+    # seed spend (600 of strawberry), so the lean 1300 wallet defers the
+    # animal rather than take the post-purchase wallet below the dawn
+    # crew bill, and a funded 2000 wallet buys.
     orders2, _ = _market_orders_with(private, animals=0, herd=0, day=9,
                                      money=1300.0, quads=["NW"])
-    assert _orders_contains(orders2, "BUY_ANIMAL", "SHEEP")
+    assert not _orders_contains(orders2, "BUY_ANIMAL", "SHEEP")
+    orders3, _ = _market_orders_with(private, animals=0, herd=0, day=9,
+                                     money=4000.0, quads=["NW"])
+    assert _orders_contains(orders3, "BUY_ANIMAL", "SHEEP")
 
 
 # --------------------------------------------------------------------------

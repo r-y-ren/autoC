@@ -548,6 +548,14 @@ COW_BUY_RESERVE = 380    # cash kept besides an animal purchase (m2b)
                          # dev +84k -> +11.8k, reg disaster 0.0227 ->
                          # 0.0455 -- cash reached animals before the
                          # manure loop could fund them)
+LIQUIDITY_FLOOR = 350    # v10 M-E: post-purchase wallet floor on animal
+                         # buys -- covers the next dawn's fib crew bill
+                         # (~88 for 8 hands) plus a feed margin, so a
+                         # same-turn land+animals+seeds burst can never
+                         # take the wallet where the hire gate
+                         # (money - 60) starts cutting the crew (online
+                         # ep 103783585: 3256 -> 16 in one turn, hands
+                         # 8 -> 2, field rotted, herd starved, bank 8.4k)
 ANIMAL_PACE = ((8, 3), (4, 2))   # head/day from day: 1 before day 4, 2 to 7, 3 after
 PASTURE_RING = 2         # structures within manhattan dist <= 2 of shed access
 
@@ -2363,6 +2371,12 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # herd simply lapses so a slow season cannot deadlock the ranch.
     land_fund = 0
     land_pending = False
+    # v10 M-E: same-turn spend ledger.  Every BUY_* order appended below
+    # deducts here so later gates (feed, animals) price the wallet as the
+    # engine will see it after this turn's queue, not the raw dawn money
+    # (ep 103783585: land + 3 sheep + seeds in one turn drained 3256 to
+    # 16 because the animal gate read the pre-land wallet).
+    committed_spend = 0.0
     if quads in LAND_PLAN:
         due_day, fund = LAND_PLAN[quads]
         # r4-P3: SW after day 18 cannot deploy a repaying asset (strawberry
@@ -2374,6 +2388,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             land_fund = fund
             if money >= fund:
                 orders.append(["BUY_LAND"])
+                committed_spend += LAND_PRICE[quads]
                 if plan.get("wheat_farm"):
                     projected_money -= LAND_PRICE[quads]
             elif day < due_day + LAND_PEND_WINDOW:
@@ -2387,6 +2402,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     if plan["volume"] and quads == 3 \
             and SE_DUE_DAY <= day <= SE_BUY_LAST_DAY and money >= SE_FUND:
         orders.append(["BUY_LAND"])
+        committed_spend += LAND_PRICE[3]
 
     # ---- feed security (FM-O3 + m2b phantom guard): never let the herd
     # run short of wheat, counting what carriers already hold (a shed-only
@@ -2407,14 +2423,22 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             # 1501u/season; profiles 414-2732u)
             want = min((24 if plan["volume"] or plan.get("wheat_farm") else 16),
                        animals_to_feed + 8 - sys_wheat)
+            wheat_px = prices.get("WHEAT", 25)
             if plan.get("wheat_farm"):
                 unit_budget = max(1, cap + 1)
                 affordable = max(
                     0, int((projected_money - WHEAT_FARM_HOLD_CASH) //
                            unit_budget))
                 want = min(want, affordable)
+            else:
+                # v10 M-E: affordability gate -- ep 103783585 re-issued
+                # BUY_PRODUCT WHEAT 10 for 24 straight turns at money=8
+                # (all rejected); the herd still starved two days later
+                want = min(want, max(
+                    0, int((money - committed_spend - 60) // wheat_px)))
             if want > 0:
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
+                committed_spend += want * wheat_px
                 if plan.get("wheat_farm"):
                     projected_money -= want * unit_budget
 
@@ -2459,9 +2483,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         batch_w = min(batch_w, max(0, int((money - 20) // 10)))
         if batch_w > 0:
             orders.append(["BUY_SEED", "WHEAT", batch_w])
+            committed_spend += batch_w * CROPS["WHEAT"]["seed"]
     elif not plan.get("wheat_farm") and seeds.get("WHEAT", 0) < 6 \
             and day <= SEASON_DAYS - 7 and money >= 150:
         orders.append(["BUY_SEED", "WHEAT", 12])
+        committed_spend += 12 * CROPS["WHEAT"]["seed"]
     if plan.get("wheat_farm") and not last_day \
             and day <= PLANT_LAST_DAY["WHEAT"]:
         alive_wheat = alive.get("WHEAT", 0)
@@ -2508,6 +2534,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             if batch > 0 and wallet >= reserve_gate + \
                     CROPS[crop]["seed"] * batch:
                 orders.append(["BUY_SEED", crop, batch])
+                committed_spend += CROPS[crop]["seed"] * batch
                 if plan.get("wheat_farm"):
                     projected_money -= CROPS[crop]["seed"] * batch
 
@@ -2593,12 +2620,18 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 if prices.get(product, BASE_PRICE[product]) < floor:
                     continue  # dead-price freeze (demand-conditioned)
             cost = ANIMALS[animal]["cost"]
-            wallet = projected_money if plan.get("wheat_farm") else money
-            if wallet < cost + reserve:
+            # v10 M-E: price the wallet as the engine will see it after
+            # this turn's earlier buys, and keep a post-purchase floor so
+            # the dawn hire gate never loses the crew
+            wallet = (projected_money if plan.get("wheat_farm")
+                      else money) - (0.0 if plan.get("wheat_farm")
+                                     else committed_spend)
+            reserve_total = reserve + LIQUIDITY_FLOOR
+            if wallet < cost + reserve_total:
                 continue
             n = min(pace - bought, target - herd_total,
                     comp_cap - species[animal],
-                    int((wallet - reserve) // cost))
+                    int((wallet - reserve_total) // cost))
             if n > 0:
                 orders.append(["BUY_ANIMAL", animal, n])
                 if plan.get("wheat_farm"):
