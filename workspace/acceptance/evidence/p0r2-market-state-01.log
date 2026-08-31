@@ -1,0 +1,12 @@
+Loading environment cabt failed: Could not find module 'C:\Users\OSS\AppData\Roaming\Python\Python314\site-packages\kaggle_environments\envs\cabt\cg\cg.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+mixed_official={'money': 1629.0, 'hands': 5, 'quadrants': 2, 'remaining_capacity': 94}
+mixed_planner={'money': 1629.0, 'hands': 5, 'quadrants': 2, 'remaining_capacity': 94}
+buy5_official={'money': 2867.0, 'wheat_inventory': 9995, 'shed_wheat': 5, 'bought': 5}
+buy5_planner_money_spend_inventory_shed=(2867.0, 133.0, 9995, 5)
+sell30_official={'money': 3687.0, 'wheat_inventory': 10030, 'shed_wheat': 0, 'bought': -30}
+sell30_planner_money_inventory_shed=(3687.0, 10030, 0)
+five_hire_combo=([['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['HIRE'], ['BUY_LAND'], ['BUY_SEED', 'STRAWBERRY', 1], ['BUY_PRODUCT', 'WHEAT', 5], ['BUY_ANIMAL', 'COW', 1]], 1645.0, 1355.0)
+day29_accepted=[['SELL', 'MILK', 20], ['SELL', 'WOOL', 20]]
+MARKET_STATE_DIFF_PASS
+exit=0

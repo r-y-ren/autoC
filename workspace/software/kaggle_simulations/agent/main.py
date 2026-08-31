@@ -1056,12 +1056,21 @@ def _step_towards(fx, fy, tx, ty):
     return ["SOUTH"] if dy > 0 else ["NORTH"]
 
 
-def _shed_access(board_size):
+def _shed_access(board_size, unlocked_quadrants=None):
+    """Official 1.32.7 shed-access tiles (NWSE inner corners).
+
+    The engine resolves PICKUP/DROP *before* its LOCKED guard (vendored
+    kaggriculture.py: "Shed operations resolve before the LOCKED guard"),
+    so all four center tiles are always usable -- even the three that
+    start LOCKED.  The unlocked_quadrants argument is accepted for call-site
+    compatibility and deliberately ignored.
+    """
     half = board_size // 2
-    return ((half - 1, half - 1), (half, half - 1), (half - 1, half), (half, half))
+    return ((half - 1, half - 1), (half, half - 1),
+            (half - 1, half), (half, half))
 
 
-def _shed_adjacent(x, y, board_size):
+def _shed_adjacent(x, y, board_size, unlocked_quadrants=None):
     return (x, y) in _shed_access(board_size)
 
 
@@ -1089,6 +1098,208 @@ def _hire_cost(n_already_today):
     for _ in range(max(0, n_already_today)):
         a, b = b, a + b
     return a
+
+
+def _market_price_emb(item, inventory):
+    """Exact mirror of official market_price on the embedded curve table.
+
+    Official 1.32.7 (vendored kaggriculture.py): below I0 the price uses the
+    below-curve, above I0 the above-curve, floored at 1.  MARKET_PARAMS_EMB
+    is pinned to the official table (99/99 spot-check in the r4-P2 notes).
+    """
+    base, t, bf, bt, af, at = MARKET_PARAMS_EMB[item]
+    i0 = MARKET_I0_EMB
+    if inventory < i0:
+        amp = bt * base / max(_shape_val(bf, t, t), 1e-9)
+        return max(PRICE_FLOOR_EMB,
+                   int(round(base + amp * _shape_val(bf, i0 - inventory, t))))
+    amp = at * base / max(_shape_val(af, t, t), 1e-9)
+    return max(PRICE_FLOOR_EMB,
+               int(round(base - amp * _shape_val(af, inventory - i0, t))))
+
+
+def _market_order_priority(order, day):
+    """Selection priority only; accepted orders retain engine queue order."""
+    if not isinstance(order, list) or not order:
+        return -1
+    op = order[0]
+    item = order[1] if len(order) > 1 else None
+    if day >= SEASON_DAYS - 1:
+        return 100 if op == "SELL" else -1
+    if op == "BUY_PRODUCT" and item == "WHEAT":
+        return 95                 # starvation red line
+    if op == "SELL":
+        return 90                 # liquidity / terminal recovery
+    if day == 0 and op == "BUY_ANIMAL":
+        return 85                 # opening herd timing
+    if op == "BUY_LAND":
+        return 80
+    if op == "HIRE":
+        return 75
+    if op == "BUY_SEED" and item == "WHEAT":
+        return 70                 # feed rotation floor
+    if op == "BUY_ANIMAL":
+        return 60
+    if op in ("BUY_SEED", "BUY_PRODUCT"):
+        return 40
+    return -1
+
+
+def plan_market_orders(orders, money, shed_count, *, day=0, max_orders=10,
+                       shed_capacity=100, hires_today=0, hands_count=0,
+                       quadrants_owned=1, land_costs=None, prices=None,
+                       shed_stock=None, seed_stock=None, market_inventory=None):
+    """Select and budget one official-engine-compatible market queue.
+
+    Selection is priority based, but the selected indices stay in their original
+    order. Semantics mirror vendored engine 1.32.7 exactly: atomic HIRE/BUY_LAND;
+    SELL/BUY_* commit ONE unit per lockstep round with the CURRENT curve price
+    (BUY_PRODUCT is quoted at post-buy inventory; SELL revenue rises per unit,
+    frees shed capacity and only adds supply above the $1 floor); a failed unit
+    ends only its current order, and later queue columns may run.
+    """
+    max_orders = max(1, int(max_orders))
+    ranked = []
+    for index, order in enumerate(orders or []):
+        priority = _market_order_priority(order, day)
+        if priority >= 0:
+            ranked.append((-priority, index))
+    chosen = {index for _priority, index in sorted(ranked)[:max_orders]}
+    selected = [order for index, order in enumerate(orders or []) if index in chosen]
+
+    wallet = float(money)
+    occupied = max(0, int(shed_count))
+    hire_index = max(0, int(hires_today))
+    land_index = max(0, int(quadrants_owned) - 1)
+    land_costs = list(land_costs or (1000, 2000, 4000))
+    prices = prices or {}
+    stock_supplied = shed_stock is not None
+    stock = {item: 0 for item in tuple(BASE_PRICE) + tuple(ANIMALS)}
+    stock.update(shed_stock or {})
+    seeds = {crop: 0 for crop in CROPS}
+    seeds.update(seed_stock or {})
+    inv = {item: MARKET_I0_EMB for item in BASE_PRICE}
+    for item, value in (market_inventory or {}).items():
+        if item in inv:
+            inv[item] = int(value)
+    accepted = []
+    details = []
+    spend = 0.0
+    revenue = 0.0
+
+    for order in selected:
+        op = order[0]
+        if op == "HIRE":
+            cost = _hire_cost(hire_index)
+            if wallet >= cost:
+                wallet -= cost
+                spend += cost
+                hire_index += 1
+                accepted.append(["HIRE"])
+                details.append({"order": list(order), "filled": 1, "abort": None})
+            else:
+                details.append({"order": list(order), "filled": 0,
+                                "abort": "no_money"})
+            continue
+        if op == "BUY_LAND":
+            cost = land_costs[land_index] if land_index < len(land_costs) else None
+            if cost is None:
+                details.append({"order": list(order), "filled": 0,
+                                "abort": "no_land"})
+            elif wallet < cost:
+                details.append({"order": list(order), "filled": 0,
+                                "abort": "no_money"})
+            else:
+                wallet -= cost
+                spend += cost
+                land_index += 1
+                accepted.append(["BUY_LAND"])
+                details.append({"order": list(order), "filled": 1, "abort": None})
+            continue
+        if op == "SELL":
+            if len(order) < 3 or order[1] not in BASE_PRICE or \
+                    not isinstance(order[2], (int, float)) or order[2] <= 0:
+                continue
+            item = order[1]
+            available = stock.get(item, 0) if stock_supplied else int(order[2])
+            filled = 0
+            abort = None
+            for _ in range(int(order[2])):
+                if filled >= available:
+                    abort = "no_stock"
+                    break
+                price = _market_price_emb(item, inv[item])
+                wallet += price
+                revenue += price
+                filled += 1
+                occupied = max(0, occupied - 1)
+                stock[item] = stock.get(item, available) - 1
+                if price > PRICE_FLOOR_EMB:
+                    inv[item] += 1   # sales above $1 add market supply
+            if filled > 0:
+                accepted.append(["SELL", item, filled])
+            details.append({"order": list(order), "filled": filled,
+                            "abort": abort})
+            continue
+        if op not in ("BUY_SEED", "BUY_PRODUCT", "BUY_ANIMAL") or len(order) < 3:
+            continue
+        try:
+            requested = int(order[2])
+        except (TypeError, ValueError):
+            continue
+        if requested <= 0:
+            continue
+        item = order[1]
+        if op == "BUY_SEED":
+            unit_cost = CROPS.get(item, {}).get("seed")
+            uses_shed = False
+        elif op == "BUY_ANIMAL":
+            unit_cost = ANIMALS.get(item, {}).get("cost")
+            uses_shed = True
+        else:
+            if item not in ("WHEAT", "FERTILIZER"):
+                continue
+            unit_cost = None   # BUY_PRODUCT reprices every unit (official)
+            uses_shed = True
+        if op != "BUY_PRODUCT" and \
+                (not isinstance(unit_cost, (int, float)) or unit_cost <= 0):
+            continue
+        filled = 0
+        abort = None
+        for _ in range(requested):
+            if uses_shed and occupied >= shed_capacity:
+                abort = "shed_full"
+                break
+            price = unit_cost if op != "BUY_PRODUCT" else \
+                _market_price_emb(item, inv[item] - 1)  # post-buy quote
+            if wallet < price:
+                abort = "no_money"
+                break
+            wallet -= price
+            spend += price
+            filled += 1
+            if uses_shed:
+                occupied += 1
+                stock[item] = stock.get(item, 0) + 1
+            if op == "BUY_SEED":
+                seeds[item] = seeds.get(item, 0) + 1
+            if op == "BUY_PRODUCT":
+                inv[item] -= 1
+
+        if filled > 0:
+            accepted.append([op, item, filled])
+        details.append({"order": list(order), "filled": filled, "abort": abort})
+
+    return {"accepted": accepted, "orders": details,
+            "committed_spend": spend, "revenue": revenue,
+            "remaining_money": wallet,
+            "shed_count": occupied, "shed_stock": stock,
+            "seed_stock": seeds,
+            "hands_count": int(hands_count) + hire_index - max(0, int(hires_today)),
+            "quadrants_owned": land_index + 1,
+            "remaining_capacity": max(0, int(shed_capacity) - occupied),
+            "market_inventory": inv,
+            "truncated": len(selected) < len(orders or [])}
 
 
 def _wheat_cap(day, wheat_price=25):
@@ -1523,6 +1734,7 @@ def _field_alloc(farm, day, prices, plan=None):
     tiles = _get(farm, "tiles", [])
     board = len(tiles)
     quads = _get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]
+    accesses = _shed_access(board, quads)
 
     existing = {crop: set() for crop in CROPS}
     n_animals = 0
@@ -1538,8 +1750,8 @@ def _field_alloc(farm, day, prices, plan=None):
             if tile is None:
                 if _quadrant_of(x, y, board) in quads and \
                         any(_dist(x, y, qx, qy) <= PASTURE_RING
-                            for qx, qy in _shed_access(board)) and \
-                        not _shed_adjacent(x, y, board):
+                            for qx, qy in accesses) and \
+                        not _shed_adjacent(x, y, board, quads):
                     empty_ring.append(pos)
                 elif _quadrant_of(x, y, board) in quads:
                     empty_field.append(pos)
@@ -1555,8 +1767,8 @@ def _field_alloc(farm, day, prices, plan=None):
                 if WEED_RECLAIM_MODE != "none" and \
                         _quadrant_of(x, y, board) in quads:
                     if any(_dist(x, y, qx, qy) <= PASTURE_RING
-                           for qx, qy in _shed_access(board)) and \
-                            not _shed_adjacent(x, y, board):
+                           for qx, qy in accesses) and \
+                            not _shed_adjacent(x, y, board, quads):
                         weed_ring.append(pos)
                     else:
                         weed_field.append(pos)
@@ -1576,7 +1788,7 @@ def _field_alloc(farm, day, prices, plan=None):
                 if crop in existing:
                     existing[crop].add(pos)
 
-    empty_ring.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
+    empty_ring.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in accesses), p[1], p[0]))
     builds = {}
     field_extra = []
     herd_t = _herd_target(day, 99)
@@ -1593,12 +1805,12 @@ def _field_alloc(farm, day, prices, plan=None):
             field_extra.append(pos)
 
     empties = field_extra + empty_field
-    empties.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
+    empties.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in accesses), p[1], p[0]))
     if weed_field:
         # v7-W: reclaimed field weeds sit behind EVERY real empty, so a
         # weed is planned only when the phase wants more tiles than the
         # free field provides (the DIG-then-PLANT chain costs one day).
-        weed_field.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
+        weed_field.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in accesses), p[1], p[0]))
         empties = empties + weed_field
     crop_map = {crop: set(existing[crop]) for crop in CROPS}
     crop_sequence = ("STRAWBERRY",) if plan.get("wheat_farm") else \
@@ -2025,7 +2237,7 @@ def _build_tasks(obs, farm, private, day, plan=None):
     if last_day:
         positions = [tuple(_get(farm, "farmer", [board // 2 - 1, board // 2 - 1]))]
         positions.extend(tuple(hand) for hand in (_get(farm, "hands", []) or []))
-        accesses = _shed_access(board)
+        accesses = _shed_access(board, _get(farm, "unlocked_quadrants", ["NW"]))
 
         for ui, (ux, uy) in enumerate(positions):
             inv = inventories[ui] if ui < len(inventories) else {}
@@ -2707,6 +2919,7 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
         units.append(tuple(h))
     inventories = _get(private, "inventories", []) or []
     hour = _get(obs, "hour", 0)
+    quads = _get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]
     sticky = _sticky_state(_get(obs, "player", 0), day, hour)["assign"]
 
     def unit_inv(i):
@@ -2746,7 +2959,7 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
             return isinstance(tile, dict) and _get(tile, "kind", "") == structure \
                 and "animal" not in tile
         if op == "PICKUP":
-            if not _shed_adjacent(units[ui][0], units[ui][1], board):
+            if not _shed_adjacent(units[ui][0], units[ui][1], board, quads):
                 return False
             # a carrier holding a full chunk moves out to feed instead of
             # chain-grabbing every chunk at the shed (multi-carrier FEED)
@@ -2754,7 +2967,7 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
                 return False
             return True
         if op == "DROP":
-            return _shed_adjacent(units[ui][0], units[ui][1], board) and any(
+            return _shed_adjacent(units[ui][0], units[ui][1], board, quads) and any(
                 n > 0 for n in unit_inv(ui).values()
                 if isinstance(n, (int, float)))
         return True
@@ -2765,7 +2978,7 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
     # ---------------- phase A: red-line nearest-match first ----------------
     claimed = set()
     assign = {}
-    accesses = _shed_access(board)
+    accesses = _shed_access(board, quads)
     reds = [t for t in tasks if t.get("red")]
     reds.sort(key=lambda t: -tval(t))
     for t in reds:
@@ -3136,20 +3349,52 @@ def agent(obs):
         sells = [o for o in orders if o[0] == "SELL"]
         orders = hires + buys + sells
 
-        # Final defense: every quantity-bearing market order must be positive,
-        # and the terminal day is liquidation-only.
+        # Final defense and a single official-semantics budget pass. Priority
+        # chooses which original columns survive max-10; accepted columns retain
+        # their original order, so dawn HIRE/BUY_LAND and lockstep BUY/SELL stay
+        # engine-compatible.
         orders = [o for o in orders
                   if len(o) < 3 or (isinstance(o[2], (int, float)) and o[2] > 0)]
         if day >= SEASON_DAYS - 1:
             orders = [o for o in orders if o[0] == "SELL"]
+        private = _get(obs, "private", {}) or {}
+        # The official step applies unit actions before market orders.  Model
+        # only cargo that a carrier will actually DROP this turn so last-day
+        # liquidation and capacity checks see the same post-unit shed state.
+        prospective_shed = dict(_get(private, "shed", {}) or {})
+        for ui, unit_action in enumerate(actions):
+            if not unit_action or unit_action[0] != "DROP":
+                continue
+            inventories = _get(private, "inventories", []) or []
+            carried = inventories[ui] if ui < len(inventories) else {}
+            room = max(0, 100 - sum(prospective_shed.values()))
+            for item, amount in carried.items():
+                if room <= 0:
+                    break
+                if isinstance(amount, (int, float)) and amount > 0:
+                    moved = min(int(amount), room)
+                    prospective_shed[item] = prospective_shed.get(item, 0) + moved
+                    room -= moved
+        budget = plan_market_orders(
+            orders, _get(farm, "money", 0.0),
+            sum(v for v in (_get(private, "shed", {}) or {}).values()
+                if isinstance(v, (int, float))),
+            day=day, max_orders=10, shed_capacity=100,
+            hires_today=_get(farm, "hires_today", 0),
+            hands_count=len(_get(farm, "hands", []) or []),
+            quadrants_owned=len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]),
+            prices=_get(_get(obs, "market", {}) or {}, "prices", {}) or {},
+            shed_stock=prospective_shed,
+            market_inventory=_get(_get(obs, "market", {}) or {},
+                                  "inventory", None) or None)
+        orders = budget["accepted"]
 
         farmer = actions[0] if actions else ["PASS"]
         hands_actions = actions[1:]
         result = {"farmer": farmer, "hands": hands_actions,
-                  "market": orders[:10]}
-        _telemetry_record_turn(obs, farm, _get(obs, "private", {}) or {},
-                               actions, tasks,
-                               _SCHEDULER_TRACE.get(player, {}), orders[:10])
+                  "market": orders}
+        _telemetry_record_turn(obs, farm, private, actions, tasks,
+                               _SCHEDULER_TRACE.get(player, {}), orders)
         return result
     except Exception:
         # a submission must never crash: fall back to a safe legal action

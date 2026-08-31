@@ -1,0 +1,29 @@
+P0 SHED RED REPLAY
+baseline_ref=d88ae6f994b0a1b008acc57fb0d1109dbf974ae1
+============================= test session starts =============================
+platform win32 -- Python 3.14.7, pytest-9.1.1, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\OSS
+collecting ... collected 6 items
+
+..\..\AppData\Local\Temp\autoc-p0r2-shed-red.obUiFK\software\tests\test_p0_wave.py::test_shed_access_always_contains_all_official_center_tiles FAILED [ 16%]
+..\..\AppData\Local\Temp\autoc-p0r2-shed-red.obUiFK\software\tests\test_p0_wave.py::test_last_day_return_may_use_locked_official_shed_access PASSED [ 33%]
+..\..\AppData\Local\Temp\autoc-p0r2-shed-red.obUiFK\software\tests\test_p0_wave.py::test_locked_shed_pickup_and_drop_remain_executable PASSED [ 50%]
+..\..\AppData\Local\Temp\autoc-p0r2-shed-red.obUiFK\software\tests\test_p0_wave.py::test_official_engine_pickup_works_from_every_locked_center_access PASSED [ 66%]
+..\..\AppData\Local\Temp\autoc-p0r2-shed-red.obUiFK\software\tests\test_p0_wave.py::test_official_engine_nw_only_pickup_is_a_real_state_change PASSED [ 83%]
+..\..\AppData\Local\Temp\autoc-p0r2-shed-red.obUiFK\software\tests\test_p0_wave.py::test_market_planner_exposes_single_budgeted_queue PASSED [100%]
+
+================================== FAILURES ===================================
+_________ test_shed_access_always_contains_all_official_center_tiles __________
+
+    def test_shed_access_always_contains_all_official_center_tiles():
+        expected = ((4, 4), (5, 4), (4, 5), (5, 5))
+>       assert main._shed_access(10, ("NW",)) == expected
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: _shed_access() takes 1 positional argument but 2 were given
+
+..\..\AppData\Local\Temp\autoc-p0r2-shed-red.obUiFK\software\tests\test_p0_wave.py:49: TypeError
+=========================== short test summary info ===========================
+FAILED ..\..\AppData\Local\Temp\autoc-p0r2-shed-red.obUiFK\software\tests\test_p0_wave.py::test_shed_access_always_contains_all_official_center_tiles - TypeError: _shed_access() takes 1 positional argument but 2 were given
+========================= 1 failed, 5 passed in 1.04s =========================
+expected_red_exit=1

@@ -64,3 +64,4 @@
 2026-08-31 11:00 | deliver | v10.1 | M-D 草莓收割节奏修正（引擎实锤 4 事件封顶）+tranche 16：seed101 +34k，双域 +157k/+433.7k，提交 v10.1 3277f9cf（今日额余 3）；v9.2 663.3 历史最高
 2026-08-31 12:10 | deliver | v10.2 | 灾难局法证（一回合组合购买穿透储备门→雇工被砍→田烂畜亡）→ M-E committed_spend 记账+LIQUIDITY_FLOOR+喂食可负担门；dev +125k disaster→0，reg pool_wr 1.0；提交 v10.2 A/B（额度余 1）
 2026-08-31 13:20 | deliver | verify | 资料验证工程：rayk 商店表/牛奶实验(291/231 包含其266)+崩盘表、cjlcjlcjl 硬编码(REFINED 自适应层)、fukami 44-0 横扫本地池 全 VERIFIED；新发现 CARE 复利 3x 奶产量、奶业 92.5k 验证潜力、本地门池低于顶类一个 class；报告 exports/intel/verification_report.md
+| 2026-08-31 17:20 | deliver | P0 发布安全波次：建立 active/frozen/published 唯一身份契约；按 vendored 1.32.7 修正四中心 shed 访问语义与市场逐单位 lockstep dry-run（含同回合 DROP→SELL、容量和 max-10）；加入 719 决策活性门，PASS-only 与长停摆 fail-closed。首轮 622 绿仍被独立审查否决 6 项，修复后 run-25 二次波门 15/15 PASS、48 定向测试与 646 全套测试全绿、smoke PASS；working SHA 360714f1… 保持 development，未运行或消费新 holdout | P0 完成，进 P1 外部 H2H 契约与 BT 评级 |

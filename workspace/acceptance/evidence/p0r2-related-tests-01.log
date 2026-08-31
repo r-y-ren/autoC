@@ -1,0 +1,58 @@
+$ python -m pytest workspace/software/tests/test_p0_wave.py workspace/software/tests/test_market_budget.py workspace/software/tests/test_activity_gate.py workspace/software/tests/test_candidate_identity.py -vv
+============================= test session starts =============================
+platform win32 -- Python 3.14.7, pytest-9.1.1, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\OSS\Desktop\autoC
+collecting ... collected 48 items
+
+workspace/software/tests/test_p0_wave.py::test_shed_access_always_contains_all_official_center_tiles PASSED [  2%]
+workspace/software/tests/test_p0_wave.py::test_last_day_return_may_use_locked_official_shed_access PASSED [  4%]
+workspace/software/tests/test_p0_wave.py::test_locked_shed_pickup_and_drop_remain_executable PASSED [  6%]
+workspace/software/tests/test_p0_wave.py::test_official_engine_pickup_works_from_every_locked_center_access PASSED [  8%]
+workspace/software/tests/test_p0_wave.py::test_official_engine_nw_only_pickup_is_a_real_state_change PASSED [ 10%]
+workspace/software/tests/test_p0_wave.py::test_market_planner_exposes_single_budgeted_queue PASSED [ 12%]
+workspace/software/tests/test_market_budget.py::test_mixed_queue_dry_run_matches_vendored_engine_final_state PASSED [ 14%]
+workspace/software/tests/test_market_budget.py::test_planner_matches_official_engine_buy20_with_balance_500 PASSED [ 16%]
+workspace/software/tests/test_market_budget.py::test_planner_matches_official_engine_sell30_per_unit_state PASSED [ 18%]
+workspace/software/tests/test_market_budget.py::test_planner_reprices_buy_product_units_like_engine PASSED [ 20%]
+workspace/software/tests/test_market_budget.py::test_budget_planner_accounts_for_hires_land_rotation_feed_and_animals PASSED [ 22%]
+workspace/software/tests/test_market_budget.py::test_budget_planner_accounts_for_five_hires_land_rotation_feed_and_animals PASSED [ 25%]
+workspace/software/tests/test_market_budget.py::test_budget_planner_day0_opening_herd_is_not_displaced_by_seed_or_feed PASSED [ 27%]
+workspace/software/tests/test_market_budget.py::test_budget_planner_stops_current_order_on_first_unit_insufficient PASSED [ 29%]
+workspace/software/tests/test_market_budget.py::test_budget_planner_capacity_rejects_buy_product_without_spending PASSED [ 31%]
+workspace/software/tests/test_market_budget.py::test_budget_planner_max_ten_keeps_feed_and_day29_recovery_in_order PASSED [ 33%]
+workspace/software/tests/test_market_budget.py::test_agent_market_contract_stays_positive_and_at_most_ten PASSED [ 35%]
+workspace/software/tests/test_activity_gate.py::test_done_done_3000_pass_only_is_rejected PASSED [ 37%]
+workspace/software/tests/test_activity_gate.py::test_state_and_decision_boundaries_fail_closed PASSED [ 39%]
+workspace/software/tests/test_activity_gate.py::test_activity_policy_exposes_configurable_coverage_streak_and_tail PASSED [ 41%]
+workspace/software/tests/test_activity_gate.py::test_one_effective_action_then_all_pass_fails_on_coverage_and_streak PASSED [ 43%]
+workspace/software/tests/test_activity_gate.py::test_sustained_active_play_with_zero_reward_delta_is_not_a_failure PASSED [ 45%]
+workspace/software/tests/test_activity_gate.py::test_pass_only_with_zero_delta_still_hard_fails PASSED [ 47%]
+workspace/software/tests/test_activity_gate.py::test_configured_tail_gate_fails_low_reward_delta PASSED [ 50%]
+workspace/software/tests/test_activity_gate.py::test_real_engine_one_action_then_passes_fails_activity_gate PASSED [ 52%]
+workspace/software/tests/test_activity_gate.py::test_real_engine_sustained_commands_with_zero_delta_are_not_rejected PASSED [ 54%]
+workspace/software/tests/test_activity_gate.py::test_normal_agent_full_game_passes_activity_gate_both_seats PASSED [ 56%]
+workspace/software/tests/test_activity_gate.py::test_activity_diagnostics_separates_completion_from_liveness PASSED [ 58%]
+workspace/software/tests/test_candidate_identity.py::test_repository_manifest_distinguishes_working_frozen_and_published_identity PASSED [ 60%]
+workspace/software/tests/test_candidate_identity.py::test_validator_rejects_working_main_sha_drift PASSED [ 62%]
+workspace/software/tests/test_candidate_identity.py::test_validator_rejects_contradictory_candidate_roles[<lambda>-working candidate.*development] PASSED [ 64%]
+workspace/software/tests/test_candidate_identity.py::test_validator_rejects_contradictory_candidate_roles[<lambda>-published holdout.*frozen] PASSED [ 66%]
+workspace/software/tests/test_candidate_identity.py::test_validator_rejects_contradictory_candidate_roles[<lambda>-frozen manifest.*SHA] PASSED [ 68%]
+workspace/software/tests/test_candidate_identity.py::test_validator_rejects_stale_readme_machine_projection PASSED [ 70%]
+workspace/software/tests/test_candidate_identity.py::test_runtime_identity_is_pinned_and_machine_verified PASSED [ 72%]
+workspace/software/tests/test_candidate_identity.py::test_tampered_snapshot_bytes_fail_validation PASSED [ 75%]
+workspace/software/tests/test_candidate_identity.py::test_manifest_snapshot_file_hash_is_recomputed_not_trusted PASSED [ 77%]
+workspace/software/tests/test_candidate_identity.py::test_snapshot_decode_is_verified_against_frozen_sha PASSED [ 79%]
+workspace/software/tests/test_candidate_identity.py::test_missing_snapshot_file_fails_closed PASSED [ 81%]
+workspace/software/tests/test_candidate_identity.py::test_frozen_git_ref_must_match_frozen_manifest PASSED [ 83%]
+workspace/software/tests/test_candidate_identity.py::test_published_git_ref_must_agree_with_frozen_manifest PASSED [ 85%]
+workspace/software/tests/test_candidate_identity.py::test_published_attempt_index_must_match_seed_manifest PASSED [ 87%]
+workspace/software/tests/test_candidate_identity.py::test_validator_rejects_unverifiable_or_zero_git_refs PASSED [ 89%]
+workspace/software/tests/test_candidate_identity.py::test_validator_rejects_published_attempt_not_matching_authoritative_export PASSED [ 91%]
+workspace/software/tests/test_candidate_identity.py::test_validator_rejects_authoritative_readme_narrative_tamper PASSED [ 93%]
+workspace/software/tests/test_candidate_identity.py::test_repo_root_identity_command_runs_and_checks_readme PASSED [ 95%]
+workspace/software/tests/test_candidate_identity.py::test_tampered_readme_narrative_fails_validation PASSED [ 97%]
+workspace/software/tests/test_candidate_identity.py::test_readme_does_not_conflict_on_published_attempt PASSED [100%]
+
+============================= 48 passed in 13.19s =============================
+exit=0

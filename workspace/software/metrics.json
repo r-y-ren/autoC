@@ -5414,6 +5414,44 @@
       },
       "unit": "holdout-evidence",
       "method": "workspace/software/exports/eval_results.json#/confirmatory_export_traceability"
+    },
+    "p0_release_safety_working_identity": {
+      "value": {
+        "status": "development",
+        "candidate_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+        "holdout_status": "not_run",
+        "published_holdout_attempt": 5,
+        "published_candidate_sha256": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748"
+      },
+      "unit": "identity-contract",
+      "method": "workspace/software/scripts/check_candidate_identity.py + workspace/software/active_candidate.json"
+    },
+    "p0_release_safety_targeted_tests": {
+      "value": {
+        "passed": 48,
+        "failed": 0,
+        "acceptance_run": "workspace/acceptance/run-25.json"
+      },
+      "unit": "pytest-tests",
+      "method": "workspace/acceptance/evidence/p0r2-related-tests-01.log"
+    },
+    "p0_release_safety_full_tests": {
+      "value": {
+        "passed": 646,
+        "failed": 0
+      },
+      "unit": "pytest-tests",
+      "method": "workspace/acceptance/evidence/p0r2-full-tests-01.log"
+    },
+    "p0_release_safety_smoke": {
+      "value": {
+        "status": "pass",
+        "full_episode_states": 720,
+        "activity_gate": "pass",
+        "holdout_executed": false
+      },
+      "unit": "release-smoke",
+      "method": "workspace/acceptance/evidence/p0r2-smoke-01.log"
     }
   },
   "unmeasured": {

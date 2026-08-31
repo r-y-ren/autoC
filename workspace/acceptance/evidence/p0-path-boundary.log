@@ -1,0 +1,37 @@
+TRACKED_DIFF_PATHS
+warning: in the working copy of 'workspace/software/kgenv/engine.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workspace/software/smoke_boot.py', LF will be replaced by CRLF the next time Git touches it
+workspace/software/README.md
+workspace/software/kaggle_simulations/agent/main.py
+workspace/software/kgenv/engine.py
+workspace/software/smoke_boot.py
+
+UNTRACKED_SOFTWARE_PATHS
+workspace/software/active_candidate.json
+workspace/software/kgenv/candidate_identity.py
+workspace/software/tests/test_activity_gate.py
+workspace/software/tests/test_candidate_identity.py
+workspace/software/tests/test_market_budget.py
+workspace/software/tests/test_p0_wave.py
+
+BOUNDARY_ASSERTION
+warning: in the working copy of 'workspace/software/kgenv/engine.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'workspace/software/smoke_boot.py', LF will be replaced by CRLF the next time Git touches it
+PASS tracked changes confined to workspace/software
+
+PROTECTED_PATHS
+archive UNCHANGED
+.flow UNCHANGED
+kb UNCHANGED
+docs UNCHANGED
+workspace/blueprint.md UNCHANGED
+workspace/JOURNAL.md UNCHANGED
+
+EXISTING_TMP_STATUS
+?? .tmp-corpus/
+?? .tmp-dna/
+?? .tmp-intel/
+?? .tmp-r5/
+?? .tmp-v7/
+?? .tmp-v9/
+No acceptance command writes to .tmp-*; directories retained.

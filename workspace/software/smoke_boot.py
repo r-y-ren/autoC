@@ -46,28 +46,38 @@ def phase_env_boot() -> bool:
     return ok
 
 
+def release_episode_ok(result, expected_steps=720) -> bool:
+    """Smoke/release verdict: completion always, liveness for full episodes."""
+    activity = result.get("activity") or {}
+    return (
+        result.get("statuses") == ["DONE", "DONE"]
+        and result.get("turns_played") == expected_steps
+        and activity.get("completion_ok") is True
+        and (expected_steps != 720 or activity.get("activity_ok") is True)
+    )
+
+
 def phase_submission_selfplay() -> bool:
     """Submission file agent vs itself (Validation-Episode style)."""
-    from kaggle_environments import make
+    from kgenv.arena import load_submission_agent
+    from kgenv.engine import run_episode
     main_py = os.path.join(HERE, "kaggle_simulations", "agent", "main.py")
     if not os.path.isfile(main_py):
         print(f"phase_submission_selfplay: FAIL missing {main_py}")
         return False
     ok_all = True
-    # 2 short episodes + 1 full-length episode
+    agent = load_submission_agent(main_py)
+    # 2 short episodes + 1 full-length release episode.
     for seed, steps in ((7, 96), (8, 96), (9, 720)):
-        env = make("kaggriculture",
-                   configuration={"episodeSteps": steps, "seed": seed, "actTimeout": 60},
-                   debug=True)
-        env.run([main_py, main_py])
-        final = env.steps[-1]
-        statuses = [s["status"] for s in final]
-        rewards = [s["reward"] for s in final]
-        ok = statuses == ["DONE", "DONE"] and \
+        result = run_episode(agent, agent, seed=seed, episode_steps=steps)
+        statuses = result["statuses"]
+        rewards = result["rewards"]
+        ok = release_episode_ok(result, expected_steps=steps) and \
             all(isinstance(r, (int, float)) for r in rewards)
-        # no agent-side error output tolerated
+        activity = result.get("activity", {})
         print(f"phase_submission_selfplay: seed={seed} steps={steps} "
-              f"rewards={rewards} statuses={statuses} ok={ok}")
+              f"rewards={rewards} statuses={statuses} "
+              f"activity_ok={activity.get('activity_ok')} ok={ok}")
         ok_all = ok_all and ok
     return ok_all
 

@@ -42,9 +42,9 @@ python workspace/software/scripts/analyze_failure_modes.py --rounds 8
 # 9) 完整迭代门（8 必测对手 × 4 seeds × AB/BA = 64 局；自定义子集仅 exploratory）
 python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label candidate --rounds 4 --require-complete
 
-# 10) 校验冻结候选 SHA（当前活跃冻结 = 战役 III m3：必须等于 m3_frozen_manifest.json 的
-#     candidate.sha256；m2b_frozen_candidate.b64 保留战役 II 冻结字节，m4 holdout v2 只认 m3 身份）
-python -c "import hashlib,pathlib; print(hashlib.sha256(pathlib.Path('workspace/software/kaggle_simulations/agent/main.py').read_bytes()).hexdigest())"
+# 10) 只读身份自检（working/frozen/published 三类身份以 active_candidate.json 为准；
+#     校验含 README 投影，从仓库根直接运行）
+python workspace/software/scripts/check_candidate_identity.py
 
 # 11) LLM A/B（每局重建 provider/budget；无完整 KG_LLM_* 时只做 NullProvider 自检）
 python workspace/software/scripts/run_llm_ab.py --rounds 4
@@ -57,8 +57,10 @@ python workspace/software/scripts/corpus_integrity.py --mode official
 #     attempt-1（战役 II 92.9%）归档于 exports/holdout/attempt-1/；
 #     attempt-2（m3 候选 5713c17e，576 局，84.4%）归档于 exports/holdout/attempt-2/；
 #     attempt-3（r3-3 r4 候选 9298751f，全池 10 agent × C(10,2)=45 对 × 8 新种子
-#     × AB/BA = 720 局，46 种子排除）的权威代发布于 exports/holdout/published/，
-#     正式投影原子替换 eval_results.json；r4 冻结身份只认 r4_frozen_manifest.json
+#     × AB/BA = 720 局，46 种子排除）归档于 exports/holdout/attempt-3/；
+#     attempt-5（v7.2 候选 c44e2b25，11 对手全池 × 8 新种子 × AB/BA）为当前权威代，
+#     发布于 exports/holdout/published/，正式投影原子替换 eval_results.json；
+#     历史/现行身份一律以 active_candidate.json 为准
 python workspace/software/scripts/run_holdout.py --verify-published --require-frozen
 python workspace/software/scripts/check_eval_contract.py --mode official --input workspace/software/exports/eval_results.json
 
@@ -69,6 +71,23 @@ python workspace/software/scripts/replay_deep_stats.py <replay.json>... --succes
 #        合并门三指标：新风格池胜率 >= / 最差单风格胜率 >= / 灾难败局率 <=，产物仅入 exports/ablations/）
 python workspace/software/scripts/ablate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label <layer-label>
 ```
+
+<!-- ACTIVE_CANDIDATE_IDENTITY:BEGIN -->
+working_candidate_sha256=360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f
+working_candidate_status=development
+last_promoted_frozen_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
+published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
+published_holdout_attempt_index=5
+engine=kaggle-environments 1.32.7 kaggriculture
+<!-- ACTIVE_CANDIDATE_IDENTITY:END -->
+
+## Active Candidate Identity
+
+`active_candidate.json` is the machine-readable source of truth for candidate roles.
+The working candidate is development-only and must not be described as frozen or
+holdout-tested. The last promoted frozen candidate and the published holdout
+identity are historical references until a separately approved freeze; no new
+holdout seeds are generated or consumed by this software wave.
 
 ## 目录
 
@@ -109,11 +128,13 @@ workspace/software/
 ├── exports/
 │   ├── schema.json                    软件->文档接口契约（1.1 历史只读兼容；2.0 正式语义）
 │   ├── holdout_schema.json            一次性 holdout 证据 schema 2.0（attempt 1/2/3 尺寸自适应）
-│   ├── eval_results.json              仅正式门通过后原子发布的评估证据（当前 = r3-3 r4 holdout）
+│   ├── eval_results.json              仅正式门通过后原子发布的评估证据（当前 =
+│   │                                  exports/holdout/published/ attempt-5 投影）
 │   ├── eval_results.dev.json          quick/dev 隔离产物，不可作为正式证据
-│   ├── holdout/                       attempt-1/ + attempt-2/（冻结档案）+ published/
-│   │                                  （attempt-3 权威代：export/replay/seed_manifest/
-│   │                                  software_metrics 四件套）+ 公开 seed_manifest.json 投影
+│   ├── holdout/                       attempt-1/ + attempt-2/ + attempt-3/（冻结档案）
+│   │                                  + published/（attempt-5 权威代：export/replay/
+│   │                                  seed_manifest/software_metrics 四件套）
+│   │                                  + 公开 seed_manifest.json 投影
 │   ├── eval_audit.md(+summary.json)   评估保真度审计清单（ABE-Ralph 式，逐项 pass/warn）
 │   ├── failure_modes.md(+summary)     失败模式清单（FM-1..4，含证据局号）
 │   ├── failure_probe_report.md        失败探针自动证据层（分差曲线/价格轨迹）
