@@ -24,7 +24,38 @@
   },
   "quota_used_today_utc": 2,
   "quota_remaining": 3,
-  "sampling_plan": "web ListEpisodes channel (submissionId=55895029 discrimination; verified working, 1 validation episode visible) once ladder games accumulate; shard-based full pass via the scheduled 08:25 run covers 08-30-dated games of BOTH active agents",
+  "sampling_plan": "CLI `kaggle competitions episodes <subId> --format json` + replay.json URL (channel corrected 2026-08-31: CLI 2.2.4 ships the episodes/replay subcommands; the earlier web-hook channel is retired)",
   "stop_loss": "round-6 WR < 50% over first ~20 public games",
-  "recorded_at": "2026-08-30T16:25:00Z"
+  "v91_sampling": {
+    "sampled_at_utc": "2026-08-30T23:35:00Z",
+    "games_public": 21,
+    "record": "10W-11L",
+    "win_rate": 0.4762,
+    "net_margin": 29218,
+    "avg_margin": 1391.3,
+    "my_avg_reward": 68005.2,
+    "rating_path": "600 -> 501.7 -> 679.3 -> 614",
+    "stop_loss_status": "formally touched (47.6% < 50% at n=21) with positive net; forensics-first ruling per user iteration mandate",
+    "forensics": {
+      "gate_too_late": "wheat ramps 25->50+ in EVERY game; field decays d8-14 in the 29-34 band while the >=35 gate opens only d14-16 with field dead and wallet 28-2000 (wallet-scaled batches bought ~0 seeds)",
+      "fm_r6_2_milk_crash_starvation": "ep103420050 collapse (13.8k): MILK 186->15 (d8->d20) killed dairy income, cash pinned at 28, wheat field dead + dear feed -> herd starved 8->3->0 (escapes d12-16); wins (91-97k) paid the same late-dear feed with a complete 15-head herd",
+      "wins_profile": "five games >=85k in 21; 103422278 (96.8k) had wheat 22-24 on d8-12 and won with no refill need"
+    }
+  },
+  "v92_iteration": {
+    "change": "maintenance gate 35 -> 30 (refill acts inside the measured decay band; <30 byte-identical v7.2)",
+    "gates": "dev 101-104 +56.4k paired (22W-14L; worst wheat_straw 0.75, disaster 0.0114 -- NOT MERGEABLE on margins); reg 201-204 +115.5k paired MERGEABLE (worst 0.75 > champ 0.5, disaster 0.0227 < champ 0.0455); no bankruptcy class on either domain",
+    "note": "first economy-level change of the campaign measuring paired-positive on BOTH seed domains",
+    "sha256": "39862ddcc2d97decec4223d34d06e701c299273658fed9f82fdccdcda044a601"
+  },
+  "v92_submission": {
+    "ref": 55902180,
+    "submitted_at_utc": "2026-08-30T23:58:05Z",
+    "validation_status": "COMPLETE",
+    "public_score_after_validation": 600.0
+  },
+  "quota_used_today_utc": 3,
+  "quota_remaining": 2,
+  "recorded_at": "2026-08-30T16:25:00Z",
+  "updated_at": "2026-08-31T00:10:00Z"
 }
