@@ -202,264 +202,6 @@ by default, never blocks, falls back to the heuristic gate.
 """
 
 # --------------------------------------------------------------------------
-# v9 local shadow telemetry (stdlib-only, action-transparent)
-# --------------------------------------------------------------------------
-# Telemetry is deliberately a side channel.  It never mutates the observation,
-# planner inputs, or returned action.  A caller may disable it or inject a
-# process-local sink for replay tooling; a failing sink is ignored so a
-# diagnostic cannot invalidate a submission turn.
-import copy
-
-TELEMETRY_ENABLED = True
-_TELEMETRY_SINK = None
-_TELEMETRY = {"players": {}}
-
-
-def set_telemetry_enabled(enabled):
-    """Enable/disable local shadow telemetry without changing strategy output."""
-    global TELEMETRY_ENABLED
-    TELEMETRY_ENABLED = bool(enabled)
-
-
-def set_telemetry_sink(sink):
-    """Inject a callable receiving one JSON-like turn event, or clear it."""
-    global _TELEMETRY_SINK
-    _TELEMETRY_SINK = sink if callable(sink) else None
-
-
-def reset_telemetry():
-    """Drop in-memory episode/day records and the optional sink reference."""
-    global _TELEMETRY, _TELEMETRY_SINK
-    _TELEMETRY = {"players": {}}
-    _TELEMETRY_SINK = None
-
-
-def telemetry_snapshot():
-    """Return a detached snapshot suitable for local JSON serialization."""
-    return copy.deepcopy(_TELEMETRY)
-
-
-def _telemetry_day_template():
-    return {
-        "turns": 0,
-        "moving_turns": 0,
-        "effective_ops": 0,
-        "valid_operations": 0,
-        "movement_to_effective_ratio": 0.0,
-        "pass_count": 0,
-        "repeated_tasks": 0,
-        "cross_quadrant_switches": 0,
-        "cross_quadrant_choices": 0,
-        "overdue": {"WATER": 0, "FEED": 0, "CARE": 0},
-        "water_overdue": 0,
-        "feed_overdue": 0,
-        "care_overdue": 0,
-        "zone_tasks_completed": {},
-        "wheat_alive": 0,
-        "wheat_harvested": 0,
-        "external_feed_bought": 0,
-        "minimum_cash": None,
-        "shed_overflow": 0,
-        "terminal_clearout": False,
-    }
-
-
-def _telemetry_player(player, day, hour):
-    """Get a player-local telemetry state, resetting on a backwards clock."""
-    key = str(player)
-    state = _TELEMETRY["players"].get(key)
-    if state is None or day < state.get("last_day", day) or (
-            day == state.get("last_day", day) and
-            hour < state.get("last_hour", hour)):
-        state = {
-            "episode": state.get("episode", 0) + 1 if state else 1,
-            "last_day": day,
-            "last_hour": hour,
-            "last_task": {},
-            "last_sector": {},
-            "minimum_cash": None,
-            "shed_overflow": 0,
-            "wheat_harvested": 0,
-            "external_feed_bought": 0,
-            "days": {},
-        }
-        _TELEMETRY["players"][key] = state
-    state["last_day"] = day
-    state["last_hour"] = hour
-    state["days"].setdefault(str(day), _telemetry_day_template())
-    return state, state["days"][str(day)]
-
-
-_TELEMETRY_UNIT_OPS = {
-    "NORTH", "SOUTH", "EAST", "WEST", "PLANT", "WATER", "HARVEST",
-    "FERTILIZE", "DIG", "BUILD_COOP", "BUILD_PASTURE", "FEED", "CARE",
-    "COLLECT_FERTILIZER", "PICKUP", "DROP", "PLACE", "PASS",
-}
-
-
-def _telemetry_wheat_alive(farm):
-    count = 0
-    for row in _get(farm, "tiles", []) or []:
-        for tile in row:
-            if isinstance(tile, dict) and _get(tile, "kind", "") == "PLANT" \
-                    and _get(tile, "crop", "") == "WHEAT":
-                count += 1
-    return count
-
-
-def _telemetry_inventory_total(private):
-    total = 0
-    for item, amount in (_get(private, "shed", {}) or {}).items():
-        if isinstance(amount, (int, float)) and amount > 0:
-            total += amount
-    for inv in (_get(private, "inventories", []) or []):
-        for item, amount in (inv or {}).items():
-            if isinstance(amount, (int, float)) and amount > 0:
-                total += amount
-    return total
-
-
-def _telemetry_units(farm):
-    tiles = _get(farm, "tiles", []) or []
-    board = len(tiles)
-    units = [tuple(_get(farm, "farmer", [board // 2 - 1, board // 2 - 1]))]
-    units.extend(tuple(h) for h in (_get(farm, "hands", []) or []))
-    return units, board
-
-
-def _telemetry_record_turn(obs, farm, private, actions, tasks, trace, orders):
-    """Record one observed decision and its planner shadow facts.
-
-    Values are intentionally marked by the observation/action boundary: order
-    quantities and task completions are requests visible locally before the
-    engine applies them; wheat survival, cash, and shed pressure are observed
-    state values from the same observation.
-    """
-    if not TELEMETRY_ENABLED:
-        return
-    try:
-        player = _get(obs, "player", 0)
-        day = _get(obs, "day", 0)
-        hour = _get(obs, "hour", 0)
-        state, daily = _telemetry_player(player, day, hour)
-        units, board = _telemetry_units(farm)
-        operations = 0
-        moving = 0
-        passes = 0
-        completed = {}
-        wheat_harvested = 0
-        action_targets = (trace or {}).get("action_targets", {})
-        assigned = (trace or {}).get("assign", {})
-        for ui, action in enumerate(actions or []):
-            if not action:
-                continue
-            op = action[0]
-            if op in MOVES:
-                moving += 1
-            elif op == "PASS":
-                passes += 1
-            elif op in _TELEMETRY_UNIT_OPS:
-                operations += 1
-                position = action_targets.get(ui)
-                if position is None and ui < len(units):
-                    position = units[ui]
-                if position is not None and board:
-                    zone = _quadrant_of(position[0], position[1], board)
-                    completed[zone] = completed.get(zone, 0) + 1
-                    if op == "HARVEST" and 0 <= position[1] < len(
-                            _get(farm, "tiles", [])):
-                        tile = _get(farm, "tiles", [])[position[1]][position[0]]
-                        if isinstance(tile, dict) and \
-                                _get(tile, "crop", "") == "WHEAT":
-                            wheat_harvested += max(1, int(
-                                _get(tile, "yield_units", 0) or 0))
-            task_key = assigned.get(ui)
-            if task_key is not None and state["last_task"].get(str(ui)) == task_key:
-                daily["repeated_tasks"] += 1
-            if task_key is not None:
-                state["last_task"][str(ui)] = task_key
-            if ui < len(units) and board:
-                sector = _quadrant_of(units[ui][0], units[ui][1], board)
-                previous = state["last_sector"].get(str(ui))
-                if previous is not None and previous != sector:
-                    daily["cross_quadrant_switches"] += 1
-                state["last_sector"][str(ui)] = sector
-        daily["turns"] += 1
-        daily["moving_turns"] += moving
-        daily["effective_ops"] += operations
-        daily["valid_operations"] += operations
-        daily["pass_count"] += passes
-        ratio = daily["moving_turns"] / float(max(1, daily["effective_ops"]))
-        daily["movement_to_effective_ratio"] = ratio
-        cross_choices = int((trace or {}).get("cross_quadrant", 0))
-        daily["cross_quadrant_choices"] += cross_choices
-        overdue = {"WATER": 0, "FEED": 0, "CARE": 0}
-        for task in tasks or []:
-            op = (task.get("act") or [None])[0]
-            if op not in overdue:
-                continue
-            if task.get("red") or op == "CARE":
-                overdue[op] += 1
-        for op, count in overdue.items():
-            daily["overdue"][op] += count
-            daily[op.lower() + "_overdue"] += count
-        for zone, count in completed.items():
-            daily["zone_tasks_completed"][zone] = \
-                daily["zone_tasks_completed"].get(zone, 0) + count
-
-        money = _get(farm, "money", None)
-        if isinstance(money, (int, float)):
-            state["minimum_cash"] = money if state["minimum_cash"] is None \
-                else min(state["minimum_cash"], money)
-            daily["minimum_cash"] = state["minimum_cash"]
-        overflow = max(0, _telemetry_inventory_total(private) - 100)
-        state["shed_overflow"] = max(state["shed_overflow"], overflow)
-        daily["shed_overflow"] = state["shed_overflow"]
-        alive = _telemetry_wheat_alive(farm)
-        state["wheat_harvested"] += wheat_harvested
-        daily["wheat_alive"] = alive
-        daily["wheat_harvested"] = state["wheat_harvested"]
-        bought = 0
-        for order in orders or []:
-            if len(order) >= 3 and order[0] == "BUY_PRODUCT" \
-                    and order[1] == "WHEAT" and isinstance(order[2], (int, float)):
-                bought += order[2]
-        state["external_feed_bought"] += bought
-        daily["external_feed_bought"] = state["external_feed_bought"]
-        terminal = day >= SEASON_DAYS - 1 and \
-            _telemetry_inventory_total(private) <= 0 and \
-            all(order and order[0] == "SELL" for order in (orders or []))
-        daily["terminal_clearout"] = bool(terminal)
-        episode = {
-            "turns": sum(d.get("turns", 0) for d in state["days"].values()),
-            "moving_turns": sum(d.get("moving_turns", 0) for d in state["days"].values()),
-            "effective_ops": sum(d.get("effective_ops", 0) for d in state["days"].values()),
-            "pass_count": sum(d.get("pass_count", 0) for d in state["days"].values()),
-            "repeated_tasks": sum(d.get("repeated_tasks", 0) for d in state["days"].values()),
-            "cross_quadrant_switches": sum(d.get("cross_quadrant_switches", 0)
-                                             for d in state["days"].values()),
-            "wheat_alive": alive,
-            "wheat_harvested": state["wheat_harvested"],
-            "external_feed_bought": state["external_feed_bought"],
-            "minimum_cash": state["minimum_cash"],
-            "shed_overflow": state["shed_overflow"],
-            "terminal_clearout": bool(terminal),
-        }
-        event = {"kind": "turn", "player": player, "day": day,
-                 "hour": hour, "metrics": copy.deepcopy(daily),
-                 "episode": episode}
-        sink = _TELEMETRY_SINK
-        if sink is not None:
-            try:
-                sink(copy.deepcopy(event))
-            except Exception:
-                pass
-    except Exception:
-        # Diagnostics are fail-open by design.
-        return
-
-
-# --------------------------------------------------------------------------
 # Embedded game constants (mirror of kaggle-environments 1.32.7 kaggriculture)
 # --------------------------------------------------------------------------
 CROPS = {
@@ -517,7 +259,6 @@ HIRE_HOUR_MAX = 2        # dawn window (m2b fix: burst must fit hour <= 2)
 # (100/101 seats); the 4th quadrant is almost never bought (skip SE).
 # LAND_PLAN[quads_now] = (due_day, protected_fund); fund = price + reserve.
 LAND_PLAN = {1: (4, 1700), 2: (7, 2700)}
-LAND_PRICE = {1: 1000, 2: 2000, 3: 4000}
 LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
 
 # R3-1/R3-2 herd: the r3 opening.  Day 0 buys the mixed burst below outright
@@ -598,20 +339,6 @@ MODE_STR_TOTAL_CAP = 42    # volume: field ceiling (Renji's 42-tile field)
 MODE_WHEAT_MONEY_QUAD = 8  # volume: wheat money tiles/quad (log glut curve)
 MODE_CREW_CAP_VOL = 15     # volume: hands ceiling (42 tiles of daily water)
 MODE_HERD_CAP_SCALE = 18   # scale: NPV ceiling (winners' 13-17 band + 1)
-_DEFENSIVE_PLAN = {"mode": "DEFENSIVE", "volume": False, "scale": False,
-                   "wheat_farm": False,
-                   "straw_quad_cap": CROP_CAP_PER_QUAD["STRAWBERRY"],
-                   "straw_total_cap": 18,
-                   "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
-                   "crew_cap": HANDS_CAP_R3,
-                   "herd_ceiling": HERD_CAP_NPV}
-_VOLUME_PLAN = {"mode": "VOLUME_CROP", "volume": True, "scale": False,
-                "wheat_farm": False,
-                "straw_quad_cap": MODE_STR_QUAD_CAP,
-                "straw_total_cap": MODE_STR_TOTAL_CAP,
-                "wheat_money_quad": MODE_WHEAT_MONEY_QUAD,
-                "crew_cap": MODE_CREW_CAP_VOL,
-                "herd_ceiling": HERD_CAP_NPV}
 # v7.2-V1 herd-readiness floor for the VOLUME entry.  Seed-103 forensics
 # (both seats lost to two_quad_denser by 32-46k): the entry fired on a
 # 4-5-head ranch, then 28 strawberry tiles + the SW purchase (~4800
@@ -625,85 +352,18 @@ VOLUME_HERD_FLOOR = 10
 SE_DUE_DAY = 10            # volume: earliest SE buy (SW settled, cash back)
 SE_BUY_LAST_DAY = 14       # later than this 25 new tiles cannot repay
 SE_FUND = 4600             # SE price 4000 + working-cash cushion
-# ---- v9 WHEAT_FARM conditional mode ---------------------------------------
-# Round-5 strategic review (2026-08-30) measured the target band as herd
-# around 12, 28-32 continuously replanted wheat tiles, about 8 strawberry
-# tiles, and no melon/carrot.  This is an opt-in experiment: the default is
-# deliberately false so v9's first-wave shadow candidate keeps its exact
-# DEFENSIVE/VOLUME/SCALE planning behavior.
-V9_WHEAT_FARM_ENABLED = False
-WHEAT_FARM_HERD_FLOOR = 12       # round5 review + JOURNAL: top-band peak herd median 12
-WHEAT_FARM_WHEAT_FLOOR = 28      # round5 review: high-band wheat field 28-35 tiles
-WHEAT_FARM_WHEAT_CAP = 32        # round5 review: target band is 28-32 for this mode
-WHEAT_FARM_STRAW_CAP = 8         # JOURNAL v7.1 Sam Scott: strawberry side line 6-8
-WHEAT_FARM_CASH_REDLINE = OPENING_RESERVE  # v7.2/VOLUME cash floor: 800 reserve
-WHEAT_FARM_FEED_MAX_PRICE = 36    # v7.2 external-feed guardrail
-WHEAT_FARM_OPP_WHEAT_MAX = 10    # v8 W3 no-contest gate: opponent wheat <=10
-# Entry reuses the proven v7.2 VOLUME day 6-12 gate; continuation lasts only
-# through the existing wheat planting deadline, so late capex/seed bets do not
-# reopen after the measured production window.
-WHEAT_FARM_ENTRY_START = 6
-WHEAT_FARM_ENTRY_END = 12
-WHEAT_FARM_ENTRY_WHEAT_MIN = 12  # v7.2 starts near 16; mode must extend a live line
-WHEAT_FARM_HOLD_CASH = 400       # hold floor; entry still keeps the proven 800
-# Entry floor is NOT the 12-head profile ceiling: the champion's PLACED herd
-# completes ~d13-14 (probe 2026-08-30, 20 real games: on-tiles medians
-# d6-12 = 4/4/6/6/6/8/8), and the d7 SW purchase drains cash exactly when
-# the wheat line is still alive -- a 12-head entry gate is unreachable in
-# any window (the r1 paired ablation measured 88 byte-identical ties, zero
-# firings).  Entry instead requires the day-0 burst to be PLACED (>= 4
-# head: the dairy annuity is live, feed demand is small); the mode still
-# builds toward the 12-head ceiling.  Unlike the VOLUME bankruptcy class,
-# the capex here is 10/coin wheat seed bought in cash-gated batches under
-# the 800 redline -- no 100/coin strawberry widening, no SE 4000 buy.
-WHEAT_FARM_ENTRY_HERD_MIN = 4
-_WHEAT_FARM_PLAN = None
-
-
-def _wheat_farm_plan():
-    """Build the opt-in plan from current module knobs for local scans."""
-    return {
-        "mode": "WHEAT_FARM", "volume": False, "scale": False,
-        "wheat_farm": True,
-        "straw_quad_cap": WHEAT_FARM_STRAW_CAP,
-        "straw_total_cap": WHEAT_FARM_STRAW_CAP,
-        "wheat_money_quad": 0,
-        "wheat_total_cap": WHEAT_FARM_WHEAT_CAP,
-        "herd_ceiling": WHEAT_FARM_HERD_FLOOR,
-        "feed_max_price": WHEAT_FARM_FEED_MAX_PRICE,
-    }
-
-
-def _wheat_farm_entry_ok(day, mine, opp, prices, demand, prev_mode=None):
-    """Fail-closed public-state gate for the opt-in wheat economy."""
-    if prev_mode == "WHEAT_FARM":
-        return (day <= PLANT_LAST_DAY["WHEAT"]
-                and mine["herd"] >= WHEAT_FARM_ENTRY_HERD_MIN
-                and mine["money"] >= WHEAT_FARM_HOLD_CASH
-                and _get(prices, "WHEAT", BASE_PRICE["WHEAT"]) <=
-                    WHEAT_FARM_FEED_MAX_PRICE)
-    if not WHEAT_FARM_ENTRY_START <= day <= WHEAT_FARM_ENTRY_END:
-        return False
-    if mine["herd"] < WHEAT_FARM_ENTRY_HERD_MIN or \
-            mine["money"] < WHEAT_FARM_CASH_REDLINE:
-        return False
-    if mine["wheat"] < WHEAT_FARM_ENTRY_WHEAT_MIN:
-        return False
-    wheat_price = _get(prices, "WHEAT", BASE_PRICE["WHEAT"])
-    if wheat_price > WHEAT_FARM_FEED_MAX_PRICE:
-        return False
-    if opp is not None and opp["wheat"] > WHEAT_FARM_OPP_WHEAT_MAX:
-        return False
-    # A wheat shop draw plus the town center is the minimum observable
-    # absorption needed before committing to the 28-32 tile line.
-    return demand.get("WHEAT", 1) >= 2
-
-
-# Keep a discoverable baseline object for local tests; selection uses the
-# factory above so a scanner can vary one WHEAT_FARM knob per fresh module.
-_WHEAT_FARM_PLAN = _wheat_farm_plan()
-
-
+_DEFENSIVE_PLAN = {"mode": "DEFENSIVE", "volume": False, "scale": False,
+                   "straw_quad_cap": CROP_CAP_PER_QUAD["STRAWBERRY"],
+                   "straw_total_cap": 18,
+                   "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
+                   "crew_cap": HANDS_CAP_R3,
+                   "herd_ceiling": HERD_CAP_NPV}
+_VOLUME_PLAN = {"mode": "VOLUME_CROP", "volume": True, "scale": False,
+                "straw_quad_cap": MODE_STR_QUAD_CAP,
+                "straw_total_cap": MODE_STR_TOTAL_CAP,
+                "wheat_money_quad": MODE_WHEAT_MONEY_QUAD,
+                "crew_cap": MODE_CREW_CAP_VOL,
+                "herd_ceiling": HERD_CAP_NPV}
 
 # ---- r5-P5 rollout evaluator ----------------------------------------------
 # The P4 ablations showed WHY a static widening gate fails: a wide template
@@ -838,49 +498,9 @@ PLANT_HOUR_MAX = 21
 _STATE = {}
 
 # r4-P1 sticky per-worker target registry, keyed by player id and reset at
-# each day roll (hour moves backwards).  Kept for compatibility with the
-# champion task contract; v9 routes use the event-driven registry below.
+# each day roll (hour moves backwards).  Kills the r3 turn-to-turn target
+# oscillation measured as a 59% movement share with only 28% effective ops.
 _TARGETS = {}
-
-# v9 partitioned patrol state.  Home sectors are assigned from the worker's
-# first position of the day and retained while a route is valid.  A route is
-# rebuilt only when its target completes/disappears, eligibility changes, or
-# the set of red-line obligations changes.
-CROSS_SECTOR_VALUE_EDGE = 260.0
-CROSS_SECTOR_PENALTY_V9 = 18.0
-ROUTE_BATCH_SIZE = 6
-# Tour-following: the route head gets a continuity-magnitude bonus (the
-# same scale as STICKY_BONUS) so a worker sweeps its sector's queue
-# instead of globally re-chasing the highest-value task after every
-# completion.  The baseline comparison (2026-08-30, 24 paired cells)
-# measured the previous 0.01/rank bump as efficiency-inert: ratio
-# 2.214 active vs 2.194 shadow.  Red-line tasks are exempt (phase A
-# stays the hard safety veto) and eligibility graphs are untouched.
-V9_TOUR_BONUS = 45.0
-V9_TOUR_DECAY = 15.0
-_ROUTE_STATE = {}
-_SCHEDULER_TRACE = {}
-
-
-def scheduler_trace():
-    """Return the latest per-player routing decisions for local diagnostics."""
-    return copy.deepcopy(_SCHEDULER_TRACE)
-
-
-def _route_state(player, day, hour, units, board):
-    state = _ROUTE_STATE.get(player)
-    if state is None or state.get("day") != day or hour <= state.get("hour", -1):
-        state = {"day": day, "hour": hour, "home": {}, "routes": {},
-                 "targets": {}, "cargo": {}, "red_signature": (),
-                 "replans": 0}
-        _ROUTE_STATE[player] = state
-    state["hour"] = hour
-    for ui, (x, y) in enumerate(units):
-        state["home"].setdefault(ui, _quadrant_of(x, y, board))
-        state["routes"].setdefault(ui, [])
-        state["cargo"].setdefault(ui, {"phase": "idle", "item": None,
-                                       "target": None})
-    return state
 
 
 def _sticky_state(player, day, hour):
@@ -1135,8 +755,7 @@ def _crew_target(day, herd, wheat_tiles, quads=3, plan=None):
     keeps the r4 formula exactly.
     """
     cap = MODE_CREW_CAP_VOL if plan is not None and plan["volume"] \
-        else (plan.get("crew_cap", HANDS_CAP_R3)
-              if plan is not None else HANDS_CAP_R3)
+        else HANDS_CAP_R3
     floor = max(_hands_target(day, herd, wheat_tiles, quads), herd)
     if plan is not None and plan["volume"]:
         floor = max(floor, 12) + 2
@@ -1372,9 +991,6 @@ def _decide_mode(obs, day, prev_mode):
     p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
     d_straw = demand.get("STRAWBERRY", 1)
     opp_contesting = opp is not None and opp["straw"] >= 12
-    if V9_WHEAT_FARM_ENABLED and _wheat_farm_entry_ok(
-            day, mine, opp, prices, demand, prev_mode):
-        return _wheat_farm_plan()
     # P4's money >= 800 floor stays THE gate on the proven path: the
     # r5-p5-final ablation measured that substituting the rollout's
     # min_cash for it (money >= 300) re-opened early thin-wallet entries
@@ -1588,9 +1204,7 @@ def _field_alloc(farm, day, prices, plan=None):
         weed_field.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in _shed_access(board)), p[1], p[0]))
         empties = empties + weed_field
     crop_map = {crop: set(existing[crop]) for crop in CROPS}
-    crop_sequence = ("STRAWBERRY",) if plan.get("wheat_farm") else \
-        ("STRAWBERRY", "MELON", "CARROT")
-    for crop in crop_sequence:
+    for crop in ("STRAWBERRY", "MELON", "CARROT"):
         lo, hi = CROP_PHASE[crop]
         if not (lo <= day <= hi):
             continue
@@ -1609,13 +1223,7 @@ def _field_alloc(farm, day, prices, plan=None):
             taken += 1
         empties = empties[taken:]
     wheat_room = _wheat_cap(day, _get(prices, "WHEAT", 25)) - len(crop_map["WHEAT"])
-    if plan.get("wheat_farm"):
-        # WHEAT_FARM treats wheat as the economic line, with a hard target
-        # band; the existing seed/price guards still decide execution.
-        wheat_room = max(0, min(plan["wheat_total_cap"],
-                                WHEAT_FARM_WHEAT_CAP) -
-                         len(crop_map["WHEAT"]))
-    elif _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
+    if _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
         # log-curve wheat as a rotation money crop (rank-1 adaptive share:
         # 0.45-0.62 of the field when wheat trades 36-42+); the extra tiles
         # also soften the wheat price against volume-farming opponents.
@@ -2164,15 +1772,8 @@ def _build_tasks(obs, farm, private, day, plan=None):
                 # fertilizes a finished ongoing crop.
                 if planned and (not cd["ongoing"] or futval > 0) and \
                         _get(tile, "fertilized_until_day", -1) < day:
-                    # v10: the engine pays fertilizer only on WATERED days
-                    # inside the bonus window (window_start..max_yield_day);
-                    # a 3-day fert window must therefore START at the yield
-                    # window, not at age 2.  wheat/carrot windows open at
-                    # age 2 (unchanged); melon's opens at 6 -- the old
-                    # age-2 shot covered ages 2-4 and could never apply.
-                    if cd["ongoing"] or \
-                            age == (cd["max_yield_day"] + 1) // 2:
-                        premium_boost = crop == "STRAWBERRY"
+                    if cd["ongoing"] or age == 2:
+                        premium_boost = crop in ("STRAWBERRY", "MELON")
                         fert_dear = _get(prices, "FERTILIZER",
                                          BASE_PRICE["FERTILIZER"]) >= FERT_VALUE_GATE
                         if premium_boost or not fert_dear:
@@ -2325,11 +1926,6 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                                                        plan)
 
     orders = []
-    # WHEAT_FARM keeps a conservative projected wallet while building the
-    # same-turn queue.  The engine commits market orders sequentially, so
-    # sizing later seeds/animals from the opening wallet can cross the hold
-    # reserve after an earlier feed or land purchase succeeds.
-    projected_money = money
 
     # ---- land plan (FM-O2): NE day 4+, SW day 7+; the fund is protected --
     # (working capital -- seeds/feed -- is never blocked: it pays for the
@@ -2349,8 +1945,6 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             land_fund = fund
             if money >= fund:
                 orders.append(["BUY_LAND"])
-                if plan.get("wheat_farm"):
-                    projected_money -= LAND_PRICE[quads]
             elif day < due_day + LAND_PEND_WINDOW:
                 land_pending = True
 
@@ -2374,24 +1968,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     sys_wheat = shed.get("WHEAT", 0) + wheat_carried
     if animals_to_feed > 0 and not last_day \
             and sys_wheat < animals_to_feed + 3:
-        cap = 85 if sys_wheat < animals_to_feed else \
-            plan.get("feed_max_price", FEED_BUY_MAX_PRICE)
+        cap = 85 if sys_wheat < animals_to_feed else FEED_BUY_MAX_PRICE
         if prices.get("WHEAT", 25) <= cap:
             # r5-P4 volume: the 42-tile field leaves little room for feed
             # wheat, so the daily guardrailed buy widens (Renji bought
             # 1501u/season; profiles 414-2732u)
-            want = min((24 if plan["volume"] or plan.get("wheat_farm") else 16),
+            want = min((24 if plan["volume"] else 16),
                        animals_to_feed + 8 - sys_wheat)
-            if plan.get("wheat_farm"):
-                unit_budget = max(1, cap + 1)
-                affordable = max(
-                    0, int((projected_money - WHEAT_FARM_HOLD_CASH) //
-                           unit_budget))
-                want = min(want, affordable)
             if want > 0:
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
-                if plan.get("wheat_farm"):
-                    projected_money -= want * unit_budget
 
     # ---- seeds: the wheat feed floor first (m2b), then rotation crops
     # staged behind the pending land fund (FM-3 staging).  R3-3 exception:
@@ -2399,64 +1984,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # the winners plant 6+ tiles on d5-11 while the NE/SW purchases proceed
     # on their own fund-gated schedule (planting d5 pays from d15 at
     # ~200/u; the one-day land delay it can cost repays many times over).
-    # v9-W1 (round-5 online forensics 2026-08-30): the legacy
-    # seeds<6->buy-12 cadence let the feed floor decay to zero by d20 in
-    # every round-5 game; the spiral only detonated in DEAR-wheat seasons
-    # (JIlong Zhou game: wheat 37-41 all season, field dead, 1067u external
-    # feed at ~39.5/u = 42.2k spend, d12 cash 4).  An ungated buy-to-cap
-    # measured -837.8k / disaster 0.0455 / baseline_wheat 0.625 on the dev
-    # gate (2026-08-31 v9_w1_port_dev): in cheap seasons the 18-tile
-    # refill burns the thin d4-12 wallet and ~27 extra ops/day crowd the
-    # strawberry/melon labour line.  So the refill is gated to the failure
-    # condition and maintains the feed floor.
-    # v9.2 (round-6 forensics 2026-08-31): wheat ramps 25 -> 50+ in EVERY
-    # game while the field decays in the d8-14 window at prices 29-34 --
-    # the >= 35 gate only opened at d14-16 with the field already dead and
-    # the wallet at 28-2000 (wallet-scaled batches bought ~0 seeds).  The
-    # maintenance gate moves down to 30 so the refill acts inside the
-    # decay window, while the genuinely cheap bands (< 30) keep the v7.2
-    # legacy cadence byte-identical (round-6 win 103422278 sat at wheat
-    # 22-24 on d8-12 and won without any refill).
-    alive = _count_crops(farm)
-    wheat_price_now = _get(prices, "WHEAT", 25)
-    if not plan.get("wheat_farm") and day <= SEASON_DAYS - 7 \
-            and wheat_price_now >= 30:
-        wheat_cap_now = _wheat_cap(day, wheat_price_now)
-        want_w = wheat_cap_now - alive.get("WHEAT", 0) - seeds.get("WHEAT", 0)
-        floor_w = 12 if seeds.get("WHEAT", 0) < 6 else 0
-        batch_w = min(24, max(floor_w, want_w))
-        if day <= 2:
-            batch_w = min(batch_w, 12)   # the d0 budget belongs to the herd
-        # working-capital class (like feed): scale to the wallet instead of
-        # rejecting the whole order -- round-5 forensics showed d8-12
-        # wallets of 4-629 cash starving a 10-coin seed under a flat 150
-        # gate.
-        batch_w = min(batch_w, max(0, int((money - 20) // 10)))
-        if batch_w > 0:
-            orders.append(["BUY_SEED", "WHEAT", batch_w])
-    elif not plan.get("wheat_farm") and seeds.get("WHEAT", 0) < 6 \
-            and day <= SEASON_DAYS - 7 and money >= 150:
+    if seeds.get("WHEAT", 0) < 6 and day <= SEASON_DAYS - 7 and money >= 150:
         orders.append(["BUY_SEED", "WHEAT", 12])
-    if plan.get("wheat_farm") and not last_day \
-            and day <= PLANT_LAST_DAY["WHEAT"]:
-        alive_wheat = alive.get("WHEAT", 0)
-        target_wheat = min(plan.get("wheat_total_cap", WHEAT_FARM_WHEAT_CAP),
-                           WHEAT_FARM_WHEAT_CAP)
-        wanted_wheat = max(0, target_wheat - alive_wheat -
-                           seeds.get("WHEAT", 0))
-        if wanted_wheat > 0 and \
-                projected_money >= WHEAT_FARM_CASH_REDLINE + 10:
-            batch = min(
-                24, wanted_wheat,
-                max(0, int((projected_money - WHEAT_FARM_CASH_REDLINE) //
-                           CROPS["WHEAT"]["seed"])))
-            if batch > 0:
-                orders.append(["BUY_SEED", "WHEAT", batch])
-                projected_money -= batch * CROPS["WHEAT"]["seed"]
     if not last_day:
-        crop_seed_sequence = ("STRAWBERRY",) if plan.get("wheat_farm") else \
-            ("STRAWBERRY", "MELON", "CARROT")
-        for crop in crop_seed_sequence:
+        alive = _count_crops(farm)
+        for crop in ("STRAWBERRY", "MELON", "CARROT"):
             lo, hi = CROP_PHASE[crop]
             if not (lo <= day <= hi):
                 continue
@@ -2469,22 +2001,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             want = cap_for_crop - alive[crop] - seeds.get(crop, 0)
             batch = min(6, max(0, want))
             seed_gate = 250 if crop == "STRAWBERRY" else land_fund + 250
-            wallet = projected_money if plan.get("wheat_farm") else money
-            reserve_gate = max(seed_gate, WHEAT_FARM_HOLD_CASH) \
-                if plan.get("wheat_farm") else seed_gate
-            if plan.get("wheat_farm") or \
-                    (crop == "STRAWBERRY" and plan["volume"]):
-                # Opt-in wheat mode and VOLUME use wallet-scaled batches;
-                # WHEAT_FARM also preserves its hold reserve after every
-                # earlier same-turn purchase.
-                batch = min(10 if plan["volume"] else 6, max(0, want),
-                            max(0, int((wallet - reserve_gate) //
-                                       CROPS[crop]["seed"])))
-            if batch > 0 and wallet >= reserve_gate + \
-                    CROPS[crop]["seed"] * batch:
+            if crop == "STRAWBERRY" and plan["volume"]:
+                # wider field, money-scaled batches (10 while cash allows;
+                # a partial 2-3 batch still plants today)
+                batch = min(10, max(0, want),
+                            max(0, int((money - seed_gate)
+                                       // CROPS[crop]["seed"])))
+            if batch > 0 and money >= seed_gate + CROPS[crop]["seed"] * batch:
                 orders.append(["BUY_SEED", crop, batch])
-                if plan.get("wheat_farm"):
-                    projected_money -= CROPS[crop]["seed"] * batch
 
     # ---- herd (FM-O2 + R3-1/R3-2): mixed 14-head ranch, money-gated,
     # paced by CONFIRMED purchases (m2b), species-level dead-price freeze
@@ -2498,28 +2022,20 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         reserve += land_fund
     pace = _animal_pace(day)
     target = _herd_target(day, 99)   # FM-O3: external feed releases autarky
-    if plan.get("wheat_farm"):
-        target = min(WHEAT_FARM_HERD_FLOOR, target)
     # r4-P3: state-driven ceiling above the plan when the marginal NPV,
     # market absorption and feed line all clear (cap 17 safety boundary)
     wheat_carried_early = sum(_get(inv, "WHEAT", 0)
                               for inv in (_get(private, "inventories", [])
                                           or []) if inv)
     sys_wheat_early = shed.get("WHEAT", 0) + wheat_carried_early
-    absolute_ceiling = MODE_HERD_CAP_SCALE if plan.get("scale") \
-        else HERD_CAP_NPV
-    herd_ceiling = min(plan.get("herd_ceiling", absolute_ceiling),
-                       absolute_ceiling)
-    npv_ceiling = min(HERD_CAP, herd_ceiling)
-    if herd_total >= HERD_CAP and not plan.get("wheat_farm"):
+    npv_ceiling = HERD_CAP
+    if herd_total >= HERD_CAP:
         # r4-P3: the NPV ceiling EXTENDS the completed 14-head plan (never
         # accelerates it -- the day-0 burst and the r3 deadline stand)
-        npv_ceiling = min(
-            herd_ceiling,
-            _npv_herd_ceiling(
-                day, prices, herd_total,
-                _species_counts(farm, private, herd_total),
-                _town_daily_demand(town_shops), sys_wheat_early, plan=plan))
+        npv_ceiling = _npv_herd_ceiling(
+            day, prices, herd_total,
+            _species_counts(farm, private, herd_total),
+            _town_daily_demand(town_shops), sys_wheat_early, plan=plan)
         target = max(target, npv_ceiling)
     bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0),
                        herd_total)
@@ -2568,16 +2084,13 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 if prices.get(product, BASE_PRICE[product]) < floor:
                     continue  # dead-price freeze (demand-conditioned)
             cost = ANIMALS[animal]["cost"]
-            wallet = projected_money if plan.get("wheat_farm") else money
-            if wallet < cost + reserve:
+            if money < cost + reserve:
                 continue
             n = min(pace - bought, target - herd_total,
                     comp_cap - species[animal],
-                    int((wallet - reserve) // cost))
+                    int((money - reserve) // cost))
             if n > 0:
                 orders.append(["BUY_ANIMAL", animal, n])
-                if plan.get("wheat_farm"):
-                    projected_money -= n * cost
                 _note_buy_order(_get(obs, "player", 0), day,
                                 _get(obs, "hour", 0), n)
             break   # one species per turn
@@ -2622,7 +2135,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     return orders
 
 
-def _schedule_units_v72(obs, farm, private, day, tasks):
+def _schedule_units(obs, farm, private, day, tasks):
     """r4-P1 state-value scheduler.
 
     Two phases, replacing the r3 per-unit w/(1+dist) greedy that measurably
@@ -2748,7 +2261,6 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
             score = tval(t) - TRAVEL_MU * d
             if _quadrant_of(t["x"], t["y"], board) != uquad:
                 score -= CROSS_QUAD_PENALTY
-            score += float(t.get("_v9_soft", {}).get(ui, 0.0))
             need = t.get("need")
             if need:
                 if _get(unit_inv(ui), need, 0) > 0:
@@ -2840,186 +2352,6 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
     return actions
 
 
-def _task_sector(task, board):
-    try:
-        return _quadrant_of(int(task["x"]), int(task["y"]), board)
-    except (KeyError, TypeError, ValueError):
-        return None
-
-
-def _route_tasks(obs, farm, private, day, tasks):
-    """Add v9 home-sector eligibility without changing task semantics.
-
-    A worker with useful work in its home sector is not offered distant work
-    unless the distant task beats the best local value by
-    ``CROSS_SECTOR_VALUE_EDGE``.  Red-line tasks are intentionally exempt and
-    keep their original eligibility so phase A remains a hard safety veto.
-    """
-    tiles = _get(farm, "tiles", []) or []
-    board = len(tiles)
-    units, _ = _telemetry_units(farm)
-    player = _get(obs, "player", 0)
-    state = _route_state(player, day, _get(obs, "hour", 0), units, board)
-    copies = [copy.deepcopy(task) for task in tasks]
-    active = {task.get("key") for task in copies}
-    red_signature = tuple(sorted(repr(task.get("key")) for task in copies
-                                 if task.get("red")))
-    previous_red = state.get("red_signature", ())
-    target_missing = any(key is not None and key not in active
-                         for route in state["routes"].values() for key in route)
-    changed = red_signature != previous_red or target_missing
-    if changed:
-        state["replans"] += 1
-        state["routes"] = {ui: [] for ui in range(len(units))}
-    state["red_signature"] = red_signature
-
-    home = state["home"]
-    normal = [task for task in copies if not task.get("red")]
-    # Preserve the champion's full eligibility graph.  Sector routing is a
-    # soft preference in the downstream score; hard filtering here caused
-    # cross-sector high-value work to disappear and stranded the economy.
-    original_units = {
-        id(task): (set(task["units"]) if task.get("units") is not None
-                   else set(range(len(units))))
-        for task in normal
-    }
-    for task in normal:
-        task["units"] = set(original_units[id(task)])
-
-    for ui, (ux, uy) in enumerate(units):
-        sector = home.get(ui, _quadrant_of(ux, uy, board))
-        local = [task for task in normal if _task_sector(task, board) == sector
-                 and ui in original_units[id(task)]]
-        if local:
-            best_local = max(float(task.get("v", task.get("w", 0)))
-                              for task in local)
-        else:
-            best_local = 0.0
-
-        # Attach worker-local soft scores rather than narrowing task
-        # eligibility.  The legacy matcher still sees every legal task.
-        for task in normal:
-            task.setdefault("_v9_soft", {})[ui] = (
-                0.0 if _task_sector(task, board) == sector
-                else -CROSS_SECTOR_PENALTY_V9)
-            if local and task.get("v", task.get("w", 0)) <= \
-                    best_local + CROSS_SECTOR_VALUE_EDGE:
-                task["_v9_soft"][ui] -= CROSS_SECTOR_PENALTY_V9
-
-        # Retain a useful same-sector batch order in the route registry.  The
-        # active task list is updated only on a completion/invalidity signal,
-        # not rebuilt merely because the clock advanced one turn.
-        current = state["routes"].setdefault(ui, [])
-        if changed or not current:
-            same = [task for task in copies
-                    if not task.get("red") and
-                    _task_sector(task, board) == sector and
-                    (task.get("units") is None or ui in task["units"])]
-            # Distance-first: a value-first head sent workers to far
-            # high-value sector tasks (a false sweep) and broke the nearby
-            # watering cadence -- measured as template_wheat/cow_baron seed
-            # 101 regressions of -20k..-25k on both seats with water
-            # pressure +22% (routing_tour, 2026-08-30).  Nearest-first is
-            # the actual patrol: short hops, water stays local.
-            same.sort(key=lambda task: (_dist(ux, uy, task["x"], task["y"]),
-                                        -float(task.get("v", task.get("w", 0))),
-                                        repr(task.get("key"))))
-            state["routes"][ui] = [task.get("key") for task in same[:ROUTE_BATCH_SIZE]]
-
-    # Route order is a deterministic tie breaker, while red lines still win
-    # through the legacy scheduler's phase A.
-    route_rank = {}
-    for ui, route in state["routes"].items():
-        for rank, key in enumerate(route):
-            route_rank[(ui, key)] = rank
-    for task in copies:
-        task.setdefault("_v9_rank", {})
-        if task.get("red"):
-            continue
-        for ui in range(len(units)):
-            rank = route_rank.get((ui, task.get("key")))
-            task["_v9_rank"][ui] = rank
-            if rank is not None:
-                task["_v9_soft"][ui] = task["_v9_soft"].get(ui, 0.0) + \
-                    max(0.0, V9_TOUR_BONUS - rank * V9_TOUR_DECAY)
-    return copies, state
-
-
-# REVERTED TO SHADOW 2026-08-30 by the confirmation gate
-# v9_routing_confirm1 (regression-domain seeds 201-204, 176 games): the
-# selection-domain result (v9_routing_distfirst_r1: 88-0 vs the pool on
-# seeds 101-104, MERGEABLE) did NOT generalize -- pool WR 0.925 (lost
-# cells, worst crop_rotator 0.75), disaster 0.0341 vs champion 0.0227,
-# paired net -258.9k.  Attribution: one matchup mega-win (two_quad_denser
-# +164.7k, seed 201 ~ +88k/seat) against broad margin losses on 8 of 11
-# opponents (template_wheat 1W-7L).  The router as-shipped is a variance
-# amplifier; the 88-0 was selection-domain luck on a margin-eroding
-# mechanism.  The efficiency harness numbers (ratio 2.194 -> 2.152, ops
-# +3.4%) remain real but do not buy win-rate generalization.  Future
-# activation attempts must pre-register BOTH seed domains (101-104 AND
-# 201-204) as the gate.
-V9_SHADOW_ROUTING = True
-
-
-def _schedule_units(obs, farm, private, day, tasks):
-    """Keep champion actions while collecting v9 route recommendations.
-
-    The partitioned route is shadow-only until it passes outcome and efficiency
-    gates.  The frozen scheduler remains the execution authority, so telemetry
-    can be validated without risking the production behavior.
-    """
-    routed, state = _route_tasks(obs, farm, private, day, tasks)
-    if V9_SHADOW_ROUTING:
-        actions = _schedule_units_v72(obs, farm, private, day, tasks)
-    else:
-        actions = _schedule_units_v72(obs, farm, private, day, routed)
-    player = _get(obs, "player", 0)
-    tiles = _get(farm, "tiles", []) or []
-    board = len(tiles)
-    units, _ = _telemetry_units(farm)
-    sticky = _TARGETS.get(player, {}).get("assign", {})
-    by_key = {task.get("key"): task for task in routed}
-    assign = {}
-    action_targets = {}
-    cross = 0
-    for ui, task_key in sticky.items():
-        task = by_key.get(task_key)
-        if task is None:
-            continue
-        assign[ui] = task_key
-        action_targets[ui] = (task["x"], task["y"])
-        if ui < len(units) and _task_sector(task, board) != \
-                state["home"].get(ui):
-            cross += 1
-        cargo = state["cargo"].setdefault(ui, {"phase": "idle", "item": None,
-                                               "target": None})
-        need = task.get("need")
-        if need and _get((_get(private, "inventories", []) or [{}])[ui]
-                         if ui < len((_get(private, "inventories", []) or []))
-                         else {}, need, 0) <= 0:
-            cargo.update({"phase": "pickup", "item": need,
-                          "target": task_key})
-        elif need:
-            cargo.update({"phase": "deliver", "item": need,
-                          "target": task_key})
-        else:
-            cargo.update({"phase": "idle", "item": None,
-                          "target": task_key})
-    state["last_assign"] = dict(assign)
-    _SCHEDULER_TRACE[player] = {
-        "day": day,
-        "assign": dict(assign),
-        "action_targets": action_targets,
-        "home_sector": dict(state["home"]),
-        "cross_quadrant": cross,
-        "red_assignments": sum(1 for key in assign.values()
-                               if by_key.get(key, {}).get("red")),
-        "replans": state["replans"],
-        "cargo": copy.deepcopy(state["cargo"]),
-    }
-    return actions
-
-
 def agent(obs):
     """Entry point: one action dict per turn (official Quick-Start signature)."""
     try:
@@ -3087,12 +2419,7 @@ def agent(obs):
 
         farmer = actions[0] if actions else ["PASS"]
         hands_actions = actions[1:]
-        result = {"farmer": farmer, "hands": hands_actions,
-                  "market": orders[:10]}
-        _telemetry_record_turn(obs, farm, _get(obs, "private", {}) or {},
-                               actions, tasks,
-                               _SCHEDULER_TRACE.get(player, {}), orders[:10])
-        return result
+        return {"farmer": farmer, "hands": hands_actions, "market": orders[:10]}
     except Exception:
         # a submission must never crash: fall back to a safe legal action
         return {"farmer": ["PASS"], "hands": [], "market": []}
