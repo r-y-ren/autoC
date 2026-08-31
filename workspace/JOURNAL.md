@@ -60,3 +60,4 @@
 2026-08-31 09:40 | deliver | v10-wave0 | v48 入池 H2H 16-0 场均-7万；画像定位缺口=畜群满栏/粪肥货币化/草莓执行；M-A 施肥时机修正 598 绿、dev 门 +84k NOT MERGEABLE 留候选线，reg 域补跑中
 | 2026-08-31 09:05 | deliver | [cron-warn] 慢循环本轮中止（预检不满足）：phase=deliver 且 git 含在飞变更——Kaggriculture 战役另一会话正在交付态活跃作战（round-6/7 三 bot 天梯 A/B，v9.2 publicScore 起步 600）。为不破坏在飞会话的守卫契约与工作区，本轮跳过全部采集/入库/推进步骤；watch 顺延（小鹏期收官文、C4 决赛结果均已到期，下轮优先）。战役收口回 idle 后恢复 | 如实记录不静默 |
 2026-08-31 10:00 | deliver | v10-wave0 | reg 域 60W-28L +432.6k 双域双正合计+516.6k，仍 NOT MERGEABLE（pool_wr/disaster 条款）；M-A 留候选线待 fork 裁决
+2026-08-31 10:10 | deliver | v10-submit | M-B/M-C 实测稀释信号回退留档（dev +84k→+11.8k）；M-A 单项候选 d0184ce1 线上提交 55904294（余 3），v9.2 公开分爬至 663.3；M-D 草莓诊断待做

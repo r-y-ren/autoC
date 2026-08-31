@@ -544,6 +544,10 @@ CREW_LATE_CAP = 10
 HERD_COMPOSITION = {"SHEEP": 6, "COW": 8, "GOOSE": 0}
 ANIMAL_BUY_LAST_DAY = {"SHEEP": 20, "COW": 20, "GOOSE": 24}
 COW_BUY_RESERVE = 380    # cash kept besides an animal purchase (m2b)
+                         # (v10 M-B trial at 300 REVERTED: combined gate
+                         # dev +84k -> +11.8k, reg disaster 0.0227 ->
+                         # 0.0455 -- cash reached animals before the
+                         # manure loop could fund them)
 ANIMAL_PACE = ((8, 3), (4, 2))   # head/day from day: 1 before day 4, 2 to 7, 3 after
 PASTURE_RING = 2         # structures within manhattan dist <= 2 of shed access
 
@@ -750,6 +754,7 @@ WHEAT_SELL_GATE = 26     # log glut curve; hold for a real bid, but never
 
 # FM-4 fertilizer (m2b, generalized to rotation crops)
 FERT_GATE = 50           # fertilizer: hold below, release above
+FERT_SELL_FLOOR = 20     # v10 M-C: monetize surplus manure above this price
 FERT_STOCK_CAP = 6       # hoard bound: shed slots belong to the products
 FERT_FIELD_RESERVE = 4   # keep some fertilizer for the fields
 
@@ -1957,6 +1962,10 @@ def _market_gates(day, prices, shed, herd, town_shops=None, money=None,
     premium("EGG", EGG_GATE, 10, EGG_HOARD_FLOOR, 16, 30, 12)
 
     # ---- FERTILIZER: bounded hoard, gated release (m2b) ------------------
+    # (v10 M-C continuous-monetization trial REVERTED: it sold the marginal
+    # fertilizer the fields convert into strawberry/wheat units, collapsing
+    # the dev paired net from +84k to +11.8k.  Manure monetization must
+    # come from MORE COLLECTION, not from stripping the field reserve.)
     fert = shed.get("FERTILIZER", 0)
     if fert > 0:
         if day >= 25:
