@@ -1956,7 +1956,11 @@ def _market_gates(day, prices, shed, herd, town_shops=None, money=None,
                 orders.append(["SELL", item, cap(min(held - hoard_floor, 6),
                                                  item)])
 
-    premium("STRAWBERRY", STRAWBERRY_GATE, 8, STRAWBERRY_HOARD_FLOOR, 26, 70, 12)
+    # v10 M-D: tranche 8 starved the premium band -- 4 town shops absorb
+    # ~24u/day and the observed top-meta band sells 30-69u/day while still
+    # realizing 175-206; the P2 cap() bound (2*D+4) still applies on top.
+    premium("STRAWBERRY", STRAWBERRY_GATE, 16, STRAWBERRY_HOARD_FLOOR, 26,
+            70, 12)
     premium("MELON", MELON_GATE, 8, MELON_HOARD_FLOOR, 14, 120, 8)
     premium("CARROT", CARROT_GATE, 15, CARROT_HOARD_FLOOR, 30, 22, 20)
     premium("EGG", EGG_GATE, 10, EGG_HOARD_FLOOR, 16, 30, 12)
@@ -2191,7 +2195,19 @@ def _build_tasks(obs, farm, private, day, plan=None):
                 if yu > 0:
                     price = _get(prices, crop, BASE_PRICE[crop])
                     if cd["ongoing"]:
-                        if yu >= 3:
+                        # v10 M-D: an ongoing tile lives exactly
+                        # max_yield production events and accumulation
+                        # caps at max_yield (engine _daily_refresh_plants:
+                        # min(max_yield, yu + bonus)) -- every event that
+                        # lands on a full tile is +2 gone forever.  Collect
+                        # at 2+, escalating capped tiles above the one-shot
+                        # mature band (a capped strawberry tile is losing
+                        # production right now).
+                        if yu >= 4:
+                            add(85, x, y, ["HARVEST"], ("harvest", x, y),
+                                v=yu * price
+                                * _shed_factor(price, BASE_PRICE[crop]))
+                        elif yu >= 2:
                             add(70, x, y, ["HARVEST"], ("harvest", x, y),
                                 v=yu * price
                                 * _shed_factor(price, BASE_PRICE[crop]))
