@@ -63,3 +63,4 @@
 2026-08-31 10:10 | deliver | v10-submit | M-B/M-C 实测稀释信号回退留档（dev +84k→+11.8k）；M-A 单项候选 d0184ce1 线上提交 55904294（余 3），v9.2 公开分爬至 663.3；M-D 草莓诊断待做
 2026-08-31 11:00 | deliver | v10.1 | M-D 草莓收割节奏修正（引擎实锤 4 事件封顶）+tranche 16：seed101 +34k，双域 +157k/+433.7k，提交 v10.1 3277f9cf（今日额余 3）；v9.2 663.3 历史最高
 2026-08-31 12:10 | deliver | v10.2 | 灾难局法证（一回合组合购买穿透储备门→雇工被砍→田烂畜亡）→ M-E committed_spend 记账+LIQUIDITY_FLOOR+喂食可负担门；dev +125k disaster→0，reg pool_wr 1.0；提交 v10.2 A/B（额度余 1）
+2026-08-31 13:20 | deliver | verify | 资料验证工程：rayk 商店表/牛奶实验(291/231 包含其266)+崩盘表、cjlcjlcjl 硬编码(REFINED 自适应层)、fukami 44-0 横扫本地池 全 VERIFIED；新发现 CARE 复利 3x 奶产量、奶业 92.5k 验证潜力、本地门池低于顶类一个 class；报告 exports/intel/verification_report.md
