@@ -30,6 +30,7 @@
 - 改动: 一年一次性作物施肥年龄 `age == (max_yield_day+1)//2`（引擎窗口起点），premium_boost 收窄为 STRAWBERRY 专属；wheat/carrot 行为不变（窗口起点恰为 2）。
 - 测试: 598 绿（含 test_fert_value_gate_keeps_premium_boosts_only）。
 - dev 域配对门（vs r3_frozen，176 局）: **57W-31L 净 +84,028**，pool_wr 0.975 worst 0.75 disaster 0.0114 → **NOT MERGEABLE**（pool_wr 对 1.0 的单格差触发；worst/disaster 均优于或近于冠军）。
+- reg 域配对门（176 局）: **60W-28L 净 +432,555**，pool_wr 0.95 worst 0.75 disaster 0.0227 → **NOT MERGEABLE**（同 pool_wr/disaster 条款；worst 仍优于冠军 0.5）。双域配对双正合计 +516.6k。
 - 裁读: +84k 是近几波最强正净差，但按纪律与 FM-E1/v9.1 教训（本地配对正差不保证线上迁移），不升格、留候选线，reg 域数据补齐后与 fork 裁决一并定夺。
 
 ## 4. 待实施程序（按确定性排序，全部自研实现、行为引用合规）
