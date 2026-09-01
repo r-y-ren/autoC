@@ -1,3 +1,51 @@
+# ===========================================================================
+# 【中文总览】Kaggriculture 参赛作品 —— "轮作牧场"(rotation ranch) 策略
+# ===========================================================================
+# 本文件是自包含的 Kaggle 提交入口：仅用 Python 标准库，不依赖本地 kgenv
+# 包，可直接上传：
+#     kaggle competitions submit kaggriculture -f main.py
+# 上传后位于 /kaggle_simulations/agent/main.py（官方 kit 约定）；文件中
+# 最后一个可调用对象 agent(obs) 即引擎认定的入口。
+#
+# ── 策略四层架构（自上而下）───────────────────────────────────────────────
+#   1) 宏观计划层  _decide_mode / _macro_plan
+#      每天第一回合基于公开状态（价格、已解锁商铺、双方农场）做确定性门控，
+#      在三种经济模式中选一个"建设什么"的计划：
+#        DEFENSIVE   保守的 r4 轮作-牧场参数框架（默认/一切失败回退态）
+#        VOLUME_CROP 96-110k 段的大田经济（42 格草莓 + SE 象限 + 15 人雇工）
+#        SCALE_RANCH 13-17 头大家畜的扩栏经济（NPV 上限抬到 18）
+#      另有 WHEAT_FARM 小麦专精实验模式（默认关闭，V9_WHEAT_FARM_ENABLED）。
+#   2) 规划层      _field_alloc / _herd_target / _crew_target / _wheat_cap
+#      牧场贴着每个已解锁象限的仓库口"环形"布局；田地按
+#      （物候窗口, 价格红线, 每象限上限）三门控做作物轮作规划，小麦只是
+#      "饲料底仓"，其余地块流向价格最高的轮作作物。
+#   3) 任务与调度层 _build_tasks → _schedule_units(_v72)
+#      先把本回合所有可做的事生成任务表（带价值 v 与红线标记 red），再由
+#      两阶段调度器分派给农场主与雇工：
+#        Phase A 红线一票否决 —— "今晚会死"的义务（断水植物/断粮牲畜/
+#                        末日归还）由最近工人优先覆盖，不看权重；
+#        Phase B 价值匹配    —— Score = V - 行走成本 - 跨象限惩罚
+#                        + 载货亲和 + 粘滞奖励，全局贪心一对一认领。
+#   4) 市场层      _market_orders + _market_gates + plan_market_orders
+#      买地/买畜/买种/外购饲料按"资金门槛 + 确认步速 + 死价冻结"下单；
+#      卖货遵循"选择性干预"三门态：强势需求→囤到门槛价、零吸收→分析性
+#      止损、流动性压力→小批折价出清；最后经 plan_market_orders 按官方
+#      引擎语义（逐件成交、当前曲线价、单日 10 单）做预算截断。
+#
+# ── 安全哲学（四条不可逾越的红线）─────────────────────────────────────────
+#   * 生死红线：今晚不浇水就枯死/不喂食就逃走的任务永远优先于一切收益；
+#   * 死价红线：产品曲线死了（价格低于地板）绝不扩产、绝不死扛囤货；
+#   * 流动性底线：任何采购后钱包保留下一黎明雇工费 + 饲料裕量，
+#     绝不重演"一回合 3256→16"的破产螺旋（线上 ep 103783585 实测）；
+#   * 永不崩溃：入口整体 try/except，任何内部异常都返回合法 PASS 空单。
+#
+# ── 阅读指引 ──────────────────────────────────────────────────────────────
+#   文中英文注释携带每个参数的实验证据（回放画像/迭代门控的实测数字），
+#   是原始档案，请勿删改；本批中文注释是结构导览与机制解释，两者互补。
+#   建议顺序：常量区(策略旋钮) → _decide_mode → _field_alloc →
+#             _build_tasks → _market_orders/_market_gates →
+#             _schedule_units_v72 → agent。
+# ===========================================================================
 # ---------------------------------------------------------------------------
 # v7 candidate (weed-reclaim experiment tree, NOT the submission path).
 #
@@ -204,6 +252,9 @@ by default, never blocks, falls back to the heuristic gate.
 # --------------------------------------------------------------------------
 # v9 local shadow telemetry (stdlib-only, action-transparent)
 # --------------------------------------------------------------------------
+# 【中文】本地"影子遥测"：只观测、不干预的纯旁路诊断通道。调用方可关闭
+# 或注入 sink；sink 抛异常被吞掉，诊断永远不允许弄废一个提交回合。
+# 以下 _telemetry_* 系列函数均服务于此目的，与策略决策完全解耦。
 # Telemetry is deliberately a side channel.  It never mutates the observation,
 # planner inputs, or returned action.  A caller may disable it or inject a
 # process-local sink for replay tooling; a failing sink is ignored so a
@@ -462,6 +513,13 @@ def _telemetry_record_turn(obs, farm, private, actions, tasks, trace, orders):
 # --------------------------------------------------------------------------
 # Embedded game constants (mirror of kaggle-environments 1.32.7 kaggriculture)
 # --------------------------------------------------------------------------
+# 【中文】嵌入式游戏常量：官方引擎 1.32.7 的逐字段镜像（离线自主，运行
+# 时不读引擎源码）。作物字段含义——seed 种子价；first/max_yield_day 首产/
+# 满产日龄窗；interval 多次采收间隔；max_yield 一生最多采收事件数；
+# ongoing 是否连续产型作物。动物字段——cost 购入价；structure 所需畜舍
+# 类型；first_yield_day 首产日龄；interval 产仔间隔；max_held 单体累积
+# 上限；product 产品名。BASE_PRICE 为市场曲线的基准价（非成交价——成交
+# 价由下方 MARKET_PARAMS_EMB 曲线按库存偏移决定）。
 CROPS = {
     "WHEAT":      {"seed": 10, "first_yield_day": 2, "max_yield_day": 4, "interval": 0, "max_yield": 6, "ongoing": False},
     "CARROT":     {"seed": 20, "first_yield_day": 2, "max_yield_day": 3, "interval": 0, "max_yield": 4, "ongoing": False},
@@ -498,12 +556,21 @@ SHOPS = {
 SHOP_DRAWS_PER_DAY = 6      # 24 turns / townShopSellInterval 4
 CENTER_DRAWS_PER_DAY = 1    # 24 turns / townCenterSellInterval 24
 
+# 【中文】方向移动、赛季天数（30 天一季）。MOVES 是方向名到 (dx,dy) 的
+# 映射；SEASON_DAYS 用于终局清算判定（day 29 只卖不买）。
 MOVES = {"NORTH": (0, -1), "SOUTH": (0, 1), "EAST": (1, 0), "WEST": (-1, 0)}
 SEASON_DAYS = 30
 
 # ---- strategy knobs (every value carries its evidence in the comment;
 # tuning changes are logged in exports/logs/iteration_gate_log.jsonl) ----
+# 【中文】策略旋钮区：本文件所有可调参数集中在此。每个值旁的英文注释是
+# 其实验证据（来自回放画像或迭代门控实测），调参历史记录在
+# exports/logs/iteration_gate_log.jsonl；测试套件锁定多数常量，改值
+# 必须过全套回归门禁。
 
+# 【中文】劳动力旋钮：HANDS_RAMP 是"日期→雇工目标数"阶梯（tuples 按
+# from_day 匹配最后一个生效档）；HANDS_CAP_R3 为畜群驱动下的上限 12；
+# 雇工只能在一天的前 2 小时下单（引擎规则），HIRE_BURST 限单回合爆发量。
 # FM-O2 labour: top-20 median 9.4 hires/day (282-295/season), leader 9.7-9.9
 # (Crop Dusta land/labour series); 24 turns/day per unit, fib cost per day.
 # R3-4: _crew_target tops this ramp up to HANDS_CAP_R3 following the herd
@@ -513,6 +580,9 @@ HANDS_CAP_R3 = 12        # r3: crew 12 once the herd plan reaches 12 head
 HIRE_BURST = 5           # HIRE orders per dawn turn (burst, m2b fix)
 HIRE_HOUR_MAX = 2        # dawn window (m2b fix: burst must fit hour <= 2)
 
+# 【中文】土地旋钮：LAND_PLAN[当前象限数] = (最迟应购日, 保护基金额)；
+# 买第 2/3 象限的官方地价在 LAND_PRICE；基金未凑齐的宽限天数内
+# （LAND_PEND_WINDOW）畜群采购让位于买地，逾期则解除互锁防死锁。
 # FM-O2 land: leader NE day 4+ / SW day 7+; top-20 3-quadrant consensus
 # (100/101 seats); the 4th quadrant is almost never bought (skip SE).
 # LAND_PLAN[quads_now] = (due_day, protected_fund); fund = price + reserve.
@@ -520,6 +590,11 @@ LAND_PLAN = {1: (4, 1700), 2: (7, 2700)}
 LAND_PRICE = {1: 1000, 2: 2000, 3: 4000}
 LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
 
+# 【中文】畜群旋钮组：day-0 开局爆发买 2 牛 + 2 羊（OPENING_HERD，
+# 花掉 3000 启动资金的 1800，保留 OPENING_RESERVE）；HERD_CAP 是计划
+# 上限 14 = 8 牛 + 6 羊（HERD_COMPOSITION）；超出 14 的扩张走
+# _npv_herd_decision 的边际 NPV 判定，绝对安全上限 HERD_CAP_NPV = 17；
+# LIQUIDITY_FLOOR 保证买畜后钱包付得起次日黎明雇工费（见安全哲学）。
 # R3-1/R3-2 herd: the r3 opening.  Day 0 buys the mixed burst below outright
 # (1800 of the 3000 start; 116/116 top-20 seats hold 4-5 head on d0, 3/3
 # round-2 winners; the m3 engine's 1-sheep d0 is the fork the round-2
@@ -559,12 +634,21 @@ LIQUIDITY_FLOOR = 350    # v10 M-E: post-purchase wallet floor on animal
 ANIMAL_PACE = ((8, 3), (4, 2))   # head/day from day: 1 before day 4, 2 to 7, 3 after
 PASTURE_RING = 2         # structures within manhattan dist <= 2 of shed access
 
+# 【中文】死价红线：从 DEAD_PRICE_FROM_DAY 起可读曲线后，某物种产品
+# 价格跌破其地板价（奶/毛 90、蛋 30）即冻结该物种扩张——"绝不向死价
+# 曲线扩产"（对局实测：牛奶崩盘局的榜首不扩牛栏）。买畜处还叠加
+# 商铺吸收条件（见 _market_orders）。
 # RED LINE dead-price freeze (generalized m2b demand-drought rule): no
 # species scale-up when ITS product curve is dead (milk-crash leader does
 # not expand cows -> applied per species/crop by glut shape).
 DEAD_PRICE_FLOOR = {"MILK": 90, "WOOL": 90, "EGG": 30}
 DEAD_PRICE_FROM_DAY = 10  # m2b gate: freezes apply once curves can be read
 
+# 【中文】作物轮作旋钮：CROP_PHASE = 每种作物的物候窗口(起,止日)；
+# CROP_FLOOR = 价格红线（现价低于则冻结种植）；CROP_CAP_PER_QUAD =
+# 每象限种植上限；PLANT_LAST_DAY = 最晚种植日（再种无法回本）。
+# 三个门同时开才会分配地块（见 _field_alloc）。FERT_VALUE_GATE 是
+# 肥料袋"自用 vs 卖出"的分界价（高价时只留草莓/西瓜 Boost 用）。
 # FM-O1 rotation: phase windows from the rank-1 frame (melon early /
 # strawberry mid / late filler), price floors from the m2 online-pool
 # archetypes (crop_rotator min_price 55/150, carrot base 35 minus margin).
@@ -584,6 +668,13 @@ CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 8, "CARROT": 4}  # v6-F
 PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
 
 # ---- r5-P4 macro-plan layer: strategy-space extension --------------------
+# 【中文】宏观计划层（战役 III 第 5 轮 P4）：r4 框架本地 142W-2L，但公榜
+# 下一档是 96-110k 的"小麦-草莓大田经济"，r4 参数框架表达不出来（框架内
+# 任何优化都封顶 ~75k）。于是每天用确定性门控（_decide_mode）在三个计划
+# 中选一个来"拓宽可建经济的空间"，而微观执行器（红线任务/价值匹配/市场
+# 门控/安全网）完全不动——计划改变的是"允许建什么"，不是"怎么走一回合"。
+# 三个计划对象 _DEFENSIVE_PLAN / _VOLUME_PLAN / SCALE 分支携带的参数：
+# 草莓每象限与总上限、小麦金钱作物配额、雇工上限、畜群天花板。
 # Round-3 line: r4 is locally 142W-2L but the public ladder's next band is
 # the 96-110k wheat-strawberry economy (round3_ledger: Renji 109.7k with 42
 # strawberry tiles + 1508u wheat sold / 1501u feed bought; DevilQ 96.6k
@@ -638,6 +729,11 @@ SE_DUE_DAY = 10            # volume: earliest SE buy (SW settled, cash back)
 SE_BUY_LAST_DAY = 14       # later than this 25 new tiles cannot repay
 SE_FUND = 4600             # SE price 4000 + working-cash cushion
 # ---- v9 WHEAT_FARM conditional mode ---------------------------------------
+# 【中文】v9 小麦专精条件模式：第 5 轮战略评审测得目标档的形态是"12 头
+# 畜 + 28-32 格持续补种小麦 + ~8 格草莓副业"。这是可选实验（默认 False，
+# v9 首波影子候选保持 DEFENSIVE/VOLUME/SCALE 行为逐字节不变）；入口
+# 门控 _wheat_farm_entry_ok 复用 v7.2 验证过的 day 6-12 窗口，续期仅
+# 到小麦种植截止日。各阈值含义见各行英文证据注释。
 # Round-5 strategic review (2026-08-30) measured the target band as herd
 # around 12, 28-32 continuously replanted wheat tiles, about 8 strawberry
 # tiles, and no melon/carrot.  This is an opt-in experiment: the default is
@@ -718,6 +814,14 @@ _WHEAT_FARM_PLAN = _wheat_farm_plan()
 
 
 # ---- r5-P5 rollout evaluator ----------------------------------------------
+# 【中文】r5-P5 展望评估器（_plan_rollout 用）：把候选计划按引擎自身
+# 规则逐日前推，检查两件事才允许"拓宽"——
+#   * 偿付能力 SOLVENCY：资金路径永不低于饲料/雇工安全线；
+#   * 价值 VALUE：终局价值（已入账现金 + 未变现产量，按曲线投影价）
+#     必须比 DEFENSIVE 框架高出 ROLLOUT_MIN_EDGE，而非孤立地看为正。
+# 注意 VOLUME_ANTICIPATED_ENTRY = False：配对消融实测该"预判入场"
+# 36 格灾难级 -312.8k（日级模型看不见对手供给响应），已禁用——此评估
+# 器只作额外否决（veto），绝不放宽入场条件。
 # The P4 ablations showed WHY a static widening gate fails: a wide template
 # fired on a price snapshot either bankrupted the ranch line (-62k/-93k
 # spirals: capex ate the feed/hire budget) or crashed its own curve
@@ -751,6 +855,15 @@ for _i in range(1, 17):
     _FIB_CUM[_i] = _acc
     _a, _b = _b, _a + _b
 
+# 【中文】饲料/肥料/终局/卖出门槛旋钮组：
+#   * FEED_BUY_MAX_PRICE 外购饲料常规护栏价（实测档位 26-32）；85 是
+#     饥饿止损价（贵小麦仍比饿死牲畜便宜）；WHEAT_FEED_RESERVE 是
+#     出售小麦前保留的饲料天数；WHEAT_SELL_GATE 是小麦"真实出价"门槛。
+#   * FERT_* 肥料限囤/放货两档价 + 库存上限 + 田间保留量。
+#   * ENDGAME_DAY = 28 起进入 48 小时终局窗口：囤货分批倾销 + 停喂。
+#   * 各高级产品 GATE（达到才卖）/HOARD_FLOOR（低于不卖的安全库存）；
+#     曲线形状决定批量：sq 曲线崩得最快→羊毛批量最小，log 曲线抗崩
+#     →小麦/蛋最从容。WOOL_CUT_LOSS 是羊毛曲线已死时的止损线。
 # FM-O3 feed: guardrailed external buying (profiles: avg buy price 26-32,
 # 414-2732u/season across top-20); 85 = starvation cap (dear wheat is still
 # cheaper than a lost animal -- m2b).
@@ -787,6 +900,11 @@ EGG_HOARD_FLOOR = 4
 LLM_PROVIDER = None      # optional consultant, default off; local A/B only
 
 # ---- r4-P1 state-value scheduling knobs --------------------------------
+# 【中文】r4-P1 状态价值调度旋钮：任务优先级 = 终局价值 V - 行走成本
+# (TRAVEL_MU/格) - 跨象限惩罚(CROSS_QUAD_PENALTY) + 粘滞奖励
+# (STICKY_BONUS, 抑制震荡)。`red` 标记的任务走 Phase A 一票否决通道：
+# "今晚会死"的义务（断水/断粮/末日归还）由最近工人在价值阶段之前
+# 覆盖。FEED_RED_HOUR 是断粮升级为红线的小时数。
 # Priority(i) = dV_terminal - C_travel - C_setup - C_opportunity; every task
 # carries a `v` (estimated terminal value) and optional `red` (one-vote
 # veto: death-tonight obligations covered by the nearest worker BEFORE the
@@ -807,6 +925,15 @@ FEED_RED_HOUR = 16          # unfed-by-now escalates to red (r3 escalation)
 PROD_HORIZON_DAY = 28       # production evenings after this never cash out
 
 # ---- v7 weed-reclaim knobs ----------------------------------------------
+# 【中文】v7 杂草回收旋钮：v6 的缺陷是规划完全跳过 WEED 格，导致每棵
+# 杂草永久占格（线上 12/12 局 DIG=0，而 top-20 选手 DIG 23-68 次/局）。
+# WEED_RECLAIM_MODE 三态——"none" 复现 v6（消融对照）；"planned"（当前
+# 值）可回收杂草排在真空格之后进入规划，只为真正想要该格时才安排 DIG；
+# "all" 压力测试变体。WEED_DIG_HOUR_MIN=20：DIG 只在深夜闲置窗口执行
+# （白天先保 WATER/FEED 红线——C1 探针实测全天 DIG 会饿死红线任务）。
+# ROTATION_DIG：对"已收完的连续产作物"（草莓产完 yield=0）执行轮作
+# DIG，停止对死格浇水施肥并还给轮作分配。PLANT_EOD_GUARD 已排除
+# （未合并，保留旋钮供消融重跑）。
 # v7-W.  The v6 chain is broken: _field_alloc skipped WEED tiles entirely,
 # so builds/crop_map never contained them and the planned-DIG branch in
 # _build_tasks (`pos in builds or in crop_map`) was UNREACHABLE -- every
@@ -844,6 +971,10 @@ ROTATION_DIG_DAY = 18
 PLANT_EOD_GUARD = False
 PLANT_HOUR_MAX = 21
 
+# 【中文】模块级会话状态（按玩家 id 分键——自对局校验时框架可能把本文件
+# 一份实例同时充当两个座位）。时钟倒退 = 新对局开始，各状态字典在访问
+# 函数里自动重置。_STATE 跟踪"已确认"的当日买畜步速（订单只是请求，
+# 只有点数观测里畜群真的增加才消耗步速——防止被拒单浪费当日配额）。
 # Module-level state keyed by player id (the framework may exec one copy of
 # this file for both seats in self-play validation episodes).  Tracks the
 # per-day animal purchase pace by confirming actual herd-count changes in
@@ -855,6 +986,12 @@ _STATE = {}
 # champion task contract; v9 routes use the event-driven registry below.
 _TARGETS = {}
 
+# 【中文】v9 分区巡逻状态（影子路由）：工人当日首次站位决定其"主场
+# 象限"；路线只在目标完成/消失、资格变化或红线义务集合变化时重建。
+# CROSS_SECTOR_* 是跨区软惩罚与价值优势门槛；V9_TOUR_* 是路线头部的
+# 巡逻连续性奖励（让工人顺着本区队列扫过去，而不是每次全局追最高分
+# 任务）。当前 V9_SHADOW_ROUTING=True：路由仅作影子采集，执行权仍在
+# 冠军调度器 _schedule_units_v72（见文件尾部的回归证据）。
 # v9 partitioned patrol state.  Home sectors are assigned from the worker's
 # first position of the day and retained while a route is valid.  A route is
 # rebuilt only when its target completes/disappears, eligibility changes, or
@@ -905,6 +1042,11 @@ def _sticky_state(player, day, hour):
     return st
 
 
+# 【中文】城镇日吸收量模型：从观测到的已解锁商铺集合推算每件商品每天
+# 能被城镇吃掉多少单位。规则（官方引擎常量）：每家商铺每天抽 6 次货，
+# 单商品商铺每次抽 2 件、多商品商铺每件 1 件；镇中心每天对每件非肥料
+# 商品抽 1 件。零吸收的高级产品没有任何变现机制——只能越囤越多，卖出
+# 门控会把它划入止损区而非等回涨（P2 卖出三态判据的来源）。
 def _town_daily_demand(unlocked_shops):
     """Daily town absorption per item from the observed shop set (P2).
 
@@ -928,6 +1070,12 @@ def _town_daily_demand(unlocked_shops):
     return demand
 
 
+# 【中文】生产"夜晚"三件套：引擎在每日末刷新时结算产出，day 28 之后的
+# 夜晚来不及变现。_prod_evening_from 判断"从今天起是否还有一个生产夜
+# 晚落在变现地平线内"（买畜/停喂决策用）；_ongoing_evenings_left 精确
+# 计算连续产作物还欠几个夜晚（engine 精确口径，仅供 v7-R 轮作 DIG 触
+# 发用）；_crop_future_value 是排名级的剩余终局价值估计（任务价值 v 的
+# 主要来源，对连续产作物故意不含 max_yield 封顶——见其英文注释）。
 def _prod_evening_from(day, placed_day, first_yield, interval):
     """True when another production EVENING lands in [day, PROD_HORIZON_DAY].
 
@@ -998,6 +1146,10 @@ def _crop_future_value(crop, tile, day):
     return expect * price
 
 
+# 【中文】买畜"确认步速"记账：BUY_ANIMAL 只是请求，市场可能因现金/库
+# 容不足拒单；_buy_pace 只把后续观测中畜群点数的正增量记为"已确认"，防
+# 止被拒的订单白白消耗当日购买配额；_note_buy_order 只登记未确认请求。
+# 时钟倒退视为新对局并清零。
 def _buy_pace(player, day, hour, herd_total):
     """Return confirmed animal purchases for this day.
 
@@ -1037,6 +1189,12 @@ def _note_buys(player, day, hour, n):
     _note_buy_order(player, day, hour, n)
 
 
+# 【中文】基础小工具组：_get 容错取值（dict 属性皆可）；_dist 曼哈顿
+# 距离（本作唯一距离度量）；_step_towards 朝目标走一格（先横后纵）；
+# _shed_access 返回四个中心仓库口格（引擎规则：仓库操作先于 LOCKED 判
+# 定，所以四个中心格永远可用）；_quadrant_of 由坐标算象限名（NW/NE/
+# SW/SE）；_window 作物浇水增益的日龄窗口；_hire_cost 第 n 次雇工的
+# 斐波那契价格表（1,1,2,3,5,8,...）。
 def _get(obj, key, default):
     if isinstance(obj, dict):
         return obj.get(key, default)
@@ -1100,6 +1258,15 @@ def _hire_cost(n_already_today):
     return a
 
 
+# 【中文】市场语义镜像三件套（官方 1.32.7 引擎的逐字节复刻）：
+#   _market_price_emb    按嵌入曲线表精确计算"当前库存"下的成交价；
+#   _market_order_priority 订单单日优先级（终日只卖 > 买饲料 > 卖货 >
+#                          d0 买畜 > 买地 > 雇工 > 买麦种 > 买畜 > 其他）；
+#   plan_market_orders   对整张订单队列做官方语义的预算仿真：选前 10
+#                          单、逐件按当前曲线价成交、现金/库容/雇工价
+#                          全程记账，返回"会被引擎接受"的子集——入口
+#                          agent() 用它做最后一道预算截断，确保提交的
+#                          订单在真实引擎里逐单可成交。
 def _market_price_emb(item, inventory):
     """Exact mirror of official market_price on the embedded curve table.
 
@@ -1302,6 +1469,15 @@ def plan_market_orders(orders, money, shed_count, *, day=0, max_orders=10,
             "truncated": len(selected) < len(orders or [])}
 
 
+# 【中文】规划目标函数组——"建设多大规模"：
+#   _wheat_cap   小麦饲料底仓规模（开局 16 格起步、满栏 18 格；麦价
+#                35+/42+ 时按榜首自适应份额扩种——贵麦年景小麦本身
+#                就是金钱作物，log 曲线不会崩）；
+#   _herd_target 畜群总量计划（d0=4 开局爆发，d5 起加速让 12 头期限
+#                落在 d6-8、14 头封顶 d8——胜者档 13-17 头的实测形态）；
+#   _hands_target/_crew_target 雇工计划（m3 阶梯为地板，畜群 ≥12 时
+#                顶到 12 人；VOLUME 模式抬到 15 并加大田地板 12+2）；
+#   _animal_pace 当日确认购买步速（开局资本期 1/天 → 爬坡 2 → 后期 3）。
 def _wheat_cap(day, wheat_price=25):
     """Wheat FEED-FLOOR size (m2b base values, test-pinned at 25/40): 16
     tiles fund the opening, 18 the full herd (18 fertilized tiles =
@@ -1385,6 +1561,12 @@ def _new_animal_production_evenings(day, animal):
     return 1 + (PROD_HORIZON_DAY - first) // spec["interval"]
 
 
+# 【中文】NPV 扩栏决策组（r4-P3）：14 头计划完成后的额外购买必须同时
+# 满足——① 日历：剩余生产夜晚 × 每晚毛利 > 购入成本 + 饲料开销；② 市
+# 场：城镇吸收 ≥ 该物种新增流速的 2 倍（绝不向吃不掉的市场扩产）；③ 饲
+# 料：小麦系统覆盖更多牲口；④ 现金安全由调用方的资金门控兜底。绝对上
+# 限 17（SCALE 模式 18）。_npv_herd_decision 返回(有效上限, 最优物种)，
+# _npv_herd_ceiling 是其纯上限投影。
 def _npv_herd_decision(day, prices, herd_total, species_counts, daily_demand,
                        sys_wheat, plan=None):
     """Return the safe total ceiling and best profitable animal species."""
@@ -1439,6 +1621,9 @@ def _npv_herd_ceiling(day, prices, herd_total, species_counts, daily_demand,
 _PLAN_MEM = {}
 
 
+# 【中文】公开农场经济扫描：象限数、草莓/小麦格数（含草莓种植日历）、
+# 按物种的在栏牲畜、雇工数、现金。obs.farms 是共享公开状态（只有仓库/
+# 背包是私有的），扫描对手农场属于合法观察——这是模式门控的输入。
 def _farm_scan(farm):
     """Public-farm economy scan: quadrants, strawberry/wheat tiles (with
     the strawberry planting calendar), placed herd by species, hands,
@@ -1471,6 +1656,13 @@ def _farm_scan(farm):
             "money": _get(farm, "money", 0.0)}
 
 
+# 【中文】日级现金流展望仿真：花钱方式复刻执行器真实行为（资金门控、
+# 自限额——雇工按钱包走、种子按钱包批量、SE 只在保护基金之上买），
+# 清算方式复刻市场真实清算（P2 限速 2*D+4 下的逐件曲线定价、库容溢出
+# 丢弃）。输出两个数：min_cash 资金路径最低点（偿付能力否决线）与
+# terminal 终局价值。P4 实测的两类扩产灾难（-62k/-93k 破产螺旋、自崩
+# 曲线）会直接表现为这两个数字恶化。排名级模型：牧场价格平坦折价、
+# 假设对手不在草莓线上（门控本就要求该线无竞争）。
 def _plan_rollout(day, scan, plan, prices, demand, p_straw):
     """r5-P5 day-level cash-flow + labour-capacity rollout of one plan.
 
@@ -1566,6 +1758,20 @@ def _plan_rollout(day, scan, plan, prices, demand, p_straw):
             "eff": eff}
 
 
+# 【中文】═══ 每日模式门控（宏观计划层的核心）═══
+# 全部阈值追溯到 round-3 台账或 m1 语料，无任何在线学习。判定顺序：
+#   ① WHEAT_FARM（若启用）：_wheat_farm_entry_ok 门控；
+#   ② VOLUME_CROP 入场：day 6-12 ∧ 草莓价 ≥105 ∧ 城镇吸收 ≥4/天
+#      ∧ 对手草莓 <12 格（作物型对手是"禁止镜像"信号——镜像触发实测
+#      严格为负，联合过剩会双崩）∧ 现金 ≥800 ∧ 畜群就绪 ≥10 头
+#      （v7.2-V1 破产级教训：~4800 扩产 capex 只能落在已建成的牧场
+#      地板上）；已有 ≥6 格活草莓（已验证产线）时叠加展望偿付否决
+#      min_cash ≥ 0。"预判入场"分支已被 r5-P5 消融禁用（默认 False）。
+#      续期：前一日 VOLUME ∧ 价 ≥40 ∧ 现金 ≥300。
+#   ③ SCALE_RANCH 入场：day 4-16 ∧ 14 头计划已建 ≥12 ∧ 奶或毛线
+#      清过死价地板且有吸收——对手灌满作物线时的反向市场姿态。
+#      续期：前一日 SCALE ∧ 活畜 ≥14。
+#   ④ 否则/任何异常：DEFENSIVE（保守 r4 框架，永不抛异常）。
 def _decide_mode(obs, day, prev_mode):
     """Deterministic daily mode gate (r5-P4/P5).  Every threshold traces
     to the round-3 ledger or the m1 corpus; nothing is learned online.
@@ -1660,6 +1866,8 @@ def _decide_mode(obs, day, prev_mode):
     return dict(_DEFENSIVE_PLAN)
 
 
+# 【中文】每日计划缓存：每天第一回合算一次模式并缓存整天；门控内部任
+# 何异常都回退 DEFENSIVE（fail-closed）；时钟倒退=新对局自动重置。
 def _macro_plan(player, obs, day):
     """Cached daily macro plan (first turn of the day decides; the plan
     failure path is the r4 DEFENSIVE frame, never an exception)."""
@@ -1677,6 +1885,10 @@ def _macro_plan(player, obs, day):
     return plan
 
 
+# 【中文】牛奶逐日持有门槛（选择性干预）：基准 105——在双方都挤奶的
+# 联合奶市里囤更高的价带只会把销售推迟成终盘压力倾销（实测变现 ~60/
+# 件），日清 ≥105 完胜；赛季末段门槛递减（28 日 80）——第 29 天全场
+# 清算地板价在等着所有人，低但为正的门槛优于囤进联合倾销。
 def _milk_gate(day):
     """Milk hold-threshold by day (selective intervention, see _market_gates).
 
@@ -1697,6 +1909,10 @@ def _milk_gate(day):
     return 105
 
 
+# 【中文】可选 LLM 顾问钩子：默认 None（关闭）时直接返回启发式门槛。
+# 仅用于本地 A/B 实验（scripts/run_llm_ab.py）；任何失败/离谱回答都回
+# 退启发式，绝不阻塞回合（合规的 Reasonableness Standard 由提供方自
+# 律限流）。
 def _llm_sell_gate(item, price, base_gate, context):
     """Optional LLM consultation for premium sell timing; default heuristic.
 
@@ -1720,6 +1936,18 @@ def _llm_sell_gate(item, price, base_gate, context):
     return base_gate
 
 
+# 【中文】═══ 结构与轮作规划（规划层核心）═══
+# 输出四元组 (builds, crop_map, n_animals, wheat_capacity)：
+#   builds   本回合要建的畜舍 {坐标: "PASTURE"/"COOP"}——牧场贴着每个
+#            已解锁象限的仓库口成环（曼哈顿距离 ≤ PASTURE_RING），最
+#            多超前畜群计划 2 座（FM-1 环形牧场的喂料动线依据）；
+#   crop_map 各作物计划地块集合（活株 + 待种）——金钱作物按
+#            （物候窗口 ∧ 价格红线 ∧ 象限上限）三门控从最靠近仓库的
+#            空格向外 claim；小麦填满剩余至 _wheat_cap 饲料底仓；
+#            VOLUME 计划放宽草莓上限至 14/格与 42 总量并扩小麦配额；
+#   可回收杂草（v7-W "planned"）排在同类真空格之后：只有当框架真正
+#   想要那块地时才规划"先 DIG 后 PLANT"的链条；
+#   多余地保持休耕——劳动力才是稀缺资源（surplus tiles stay fallow）。
 def _field_alloc(farm, day, prices, plan=None):
     """Deterministic structure + rotation plan (FM-O1/FM-O2).
 
@@ -1923,6 +2151,15 @@ def _species_counts(farm, private, herd_total):
 
 
 # ---- r4-P2 analytic price engine (official MARKET_PARAMS mirror) --------
+# 【中文】r4-P2 解析价格引擎（官方 MARKET_PARAMS 的镜像）。官方定价：
+#     price(inv) = base ± amp * f(|inv - I0|)
+# 其中 I0 = 10000 均衡库存，T 是"一块田 24 天的产量"尺度，曲线形状 f
+# 分 linear/sq/sqrt/log/hinge 五种。季节内库存围绕 I0 摆动 ±30..400，
+# 曲线很陡——所以卖出规则可以直接从观测到的"日间价格移动"反推出净流量，
+# 再前推投影未来价格，而不需要整场仿真。每件商品的 (base, T, 下侧形状,
+# 下侧幅度, 上侧形状, 上侧幅度) 见下表：上侧=过剩压价侧（过剩越多价越
+# 低），下侧=稀缺抬价侧。例如羊毛上侧是 sq（崩得最快）、小麦上侧是
+# log（最抗崩）——卖货批量的快慢节奏就按各商品的崩盘速度排的。
 # price(inv) = base + sign * amp * f(|inv - I0|); T = one field's 24-day
 # production.  Inventory swings over a season are +-30..400 around I0, so
 # these curves are steep: the sell rule can PROJECT price from the observed
@@ -2008,6 +2245,11 @@ def _offset_from_price(item, price):
     return min(y, T)
 
 
+# 【中文】市场记忆与投影：_market_flow 把逐日价格移动经曲线反解成每件
+# 商品的净库存流 EMA（单位/天，正值=过剩在积累——已同时包含我方与对
+# 手的产销量和城镇吸收）；_project_price 给出解析的 E[R_future] =
+# 在偏移量上再推 flow×horizon 天后的曲线价。两者是止损判据"投影价低
+# 于现价 → 曲线在死"的来源。
 # per-player market memory: yesterday's prices -> observed net flow EMA
 _MARKET_MEM = {}
 
@@ -2046,6 +2288,18 @@ def _project_price(item, price_now, flow, horizon):
     return _price_at_offset(item, off + flow * horizon)
 
 
+# 【中文】═══ 选择性干预卖出门控（市场层核心）═══
+# 每回合回答"现在卖什么、卖多少"，逐商品三态规则：
+#   ① 强需求（有商铺在抽货）且价在门槛下 → 囤到门槛价再卖（城镇吸收
+#      会让曲线均值回归；实测毛线店开抽时羊毛整季 240+）；
+#   ② 零吸收（只剩镇中心 1/天）且观测到过剩流 → 止损出清，绝不把死
+#      曲线扛到第 29 天清算地板价；
+#   ③ 流动性/库容压力 → 0.5-0.6×base 的小批折价 tranche。
+# r4-P2 升级：①倾销限速 cap() = 城镇吸收的 2×D+4（卖穿吸收只会砸崩
+# 自己的下一批）；②解析投影 _project_price 参与止损判定。
+# 决策框架：SELL <=> R_now ≥ E[R_future] - C_overflow - C_liquidity
+#           - C_terminal（四项分别为：溢出成本/流动性成本/终局清算折价）。
+# 各商品门槛/批量与曲线形状的对应关系见下方英文注释（原始证据）。
 def _market_gates(day, prices, shed, herd, town_shops=None, money=None,
                   flow=None):
     """Selective-intervention sell decisions: what to SELL this turn, with
@@ -2232,6 +2486,23 @@ def _market_gates(day, prices, shed, herd, town_shops=None, money=None,
     return orders
 
 
+# 【中文】═══ 任务构建（把"本回合所有可做的事"铺成任务表）═══
+# 返回 (tasks, animals_to_feed, herd_total, wheat_tiles, capacity)。
+# 任务统一结构：w 粗权重 / v 价值估计（Phase B 评分用）/ red 红线标记
+# （Phase A 一票否决通道）/ need 需携带物品 / units 限定可执行工人。
+# 任务来源与优先级梗概（数字=典型 w/v）：
+#   末日(day29)：归还背包 DROP 120·红 + 终局收割 110；
+#   生存红线：今夜枯死的浇水 98·红、断粮/过时未喂的 FEED 88-100·红、
+#             满载工人回仓 PICKUP 96；
+#   收获：连续产 4+/2+ 件 85/70（满格 tile 正在丢产量）、一次性成熟 80/
+#             烂前抢救 95、畜产 5+/3+ 件 92/70；
+#   建设与安置：建舍 46、放置栏中牲畜 82（未安置牲畜不产且占库容）；
+#   种植：轮作作物 32 / 小麦 30（今种今浇的红线义务在浇水分支）；
+#   维护：浇水（窗口内 42 / 连续产 40 / 保命 24）、施肥 34-36、
+#             CARE 56、收粪 44；
+#   杂草/轮作 DIG 22-23（仅深夜窗口，见 v7 旋钮）；
+#   后勤：从仓库取小麦/牲畜/肥料的 PICKUP 94/40。
+# 第 29 天走独立的"只清算"分支（无 capex、先还后卖、跳过不可行收获）。
 def _build_tasks(obs, farm, private, day, plan=None):
     """Return (tasks, animals_to_feed, herd_total, wheat_tiles, capacity)."""
     tiles = _get(farm, "tiles", [])
@@ -2314,6 +2585,10 @@ def _build_tasks(obs, farm, private, day, plan=None):
     # the 100-slot shed, income stopped, no wheat, 12 escapes)
     shed_count = sum(v for v in shed.values()
                      if isinstance(v, (int, float)))
+    # 【中文】库容折扣：奶/产品价低于 0.75×base 且仓库 ≥70 格时，收获
+    # 价值打折——向卖出门全关的满仓收货只是把 100 格丢弃悬崖提前搬近
+    # （scale_ranch BA seed102 实测破产机制：毛囤满仓→收入断流→无麦
+    # →12 头逃亡）；gate 打开（真实出价）则不打折。
     def _shed_factor(item_price, item_base):
         if shed_count <= 70:
             return 1.0
@@ -2583,6 +2858,19 @@ def _build_tasks(obs, farm, private, day, plan=None):
     return tasks, animals_to_feed, herd_total, len(crop_map["WHEAT"]), capacity
 
 
+# 【中文】═══ 市场订单编排（本回合买什么、卖什么）═══
+# 下单顺序即优先级链：① 买地（NE d4+/SW d7+，保护基金互锁畜群；SW
+# 过 d18 不再买——草莓窗已关、旧栏已满，2000 只会买成流动性）；VOLUME
+# 的 SE(d10-14)；② 饲料安全垫（系统麦 < 待喂+3 就外购，护栏价 36、
+# 饥饿止损价 85；affordability 门控防"钱=8 仍连发 24 回合废单"）；
+# ③ 种子（小麦底仓优先；v9.2 维护门：麦价 ≥30 时在 d8-14 衰减窗内
+# 补种；草莓不排在买地基金后面——d5 种下 d15 起每件 ~200 回报）；
+# ④ 畜群（d0 爆发 2C+2S；此后"资金门 + 确认步速 + 物种死价冻结 +
+# NPV 吸收上限"四重门，按相对缺口交错物种让牛赶上 d8 高价奶窗）；
+# ⑤ 卖单（_market_gates 三态门控 + 小麦余量在真实出价 ≥26 时出清，
+# 现金 <1000 的现金流回退允许 ≥20 就卖——门槛绝不能饿死资本计划）。
+# v10 M-E 贯穿全程：committed_spend 同回合花费台账，让后面的门读到
+# "引擎视角"的钱包（防一回合地+畜+种三连掏空）。
 def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                    plan=None):
     money = _get(farm, "money", 0.0)
@@ -2927,6 +3215,19 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     return orders
 
 
+# 【中文】═══ r4-P1 状态价值调度器（冠军执行器）═══
+# 两阶段分派（替代 r3 的 w/(1+dist) 贪心——实测它让远端红线格饿死：
+# 每局 14-29 个 CARE 失误杂草全聚在距仓曼哈顿 6-9 格处，请求过的操作
+# 全部成功、只是没人去远处）：
+#   Phase A 红线一票否决：所有 red 任务按价值降序，逐个由"最近工人"
+#     覆盖（缺载货的工人按"先绕仓库再过去"的距离计价+6）；不看权重、
+#     每任务只认领一次；
+#   Phase B 价值匹配：Score_ij = V_i - TRAVEL_MU×d - 跨象限惩罚
+#     + 载货亲和（持有 need 物品的工人 +0.5V，缺货的 -0.5V）
+#     + 粘滞奖励（延续上回合目标，抑制震荡），全局排序贪心认领。
+# 执行段：走到目标格→执行；缺 need 物品先绕仓库取货（r4-P1 修复
+# "空手走range喂料崩溃"）；没任务的工人做脚下免费操作否则 PASS；
+# 末尾 R6 护栏：PLANT 数量永远 ≤ 手持种子数。
 def _schedule_units_v72(obs, farm, private, day, tasks):
     """r4-P1 state-value scheduler.
 
@@ -3153,6 +3454,11 @@ def _task_sector(task, board):
         return None
 
 
+# 【中文】v9 主场象限影子路由：给每个任务按工人附加 _v9_soft 软分
+# （同区 0 / 跨区 -惩罚；本区有活且远区价值未超出 CROSS_SECTOR_VALUE_EDGE
+# 时再叠加惩罚）——只调分、绝不收窄资格图（硬过滤实测会淹没跨区高价值
+# 工作、把经济困死）。路线批量按"距离优先"排序（价值优先实测是假巡逻，
+# 破坏近端浇水节奏）。红线任务完全豁免，Phase A 仍是硬安全否决。
 def _route_tasks(obs, farm, private, day, tasks):
     """Add v9 home-sector eligibility without changing task semantics.
 
@@ -3267,6 +3573,11 @@ def _route_tasks(obs, farm, private, day, tasks):
 V9_SHADOW_ROUTING = True
 
 
+# 【中文】调度入口：先跑 _route_tasks 生成影子路由推荐，但 V9_SHADOW_
+# ROUTING=True 时执行权仍交冠军调度器 _schedule_units_v72（原任务表），
+# 影子结果只进 _SCHEDULER_TRACE 供遥测对比。切换 False 才会用 routed
+# 任务表执行——见上方 V9_SHADOW_ROUTING 处的回归证据（2026-08-30 确认
+# 门禁撤销合并：88-0 属选择域运气，泛化域配对净 -258.9k）。
 def _schedule_units(obs, farm, private, day, tasks):
     """Keep champion actions while collecting v9 route recommendations.
 
@@ -3326,6 +3637,15 @@ def _schedule_units(obs, farm, private, day, tasks):
     return actions
 
 
+# 【中文】═══ 入口：每回合的动作编排 ═══
+# 流水线：取当日宏观计划（缓存）→ _build_tasks 铺任务表 →
+# _schedule_units 分派工人动作 → _market_orders 编排订单 →
+# 黎明雇工（仅 hour≤2，逐单按斐波那契实价且留 60 现金垫）→
+# 排序"雇工→买单→卖单"（丢一单卖下回合补，丢一单 HIRE/BUY 损失一整天
+# 计划）→ 末日只留 SELL → 按本回合 DROP 动作预演库容 →
+# plan_market_orders 官方语义预算截断到 10 单 → 返回
+# {"farmer":…, "hands":[…], "market":[…]}；任何异常兜底返回合法空动作
+# （提交永不崩溃）。
 def agent(obs):
     """Entry point: one action dict per turn (official Quick-Start signature)."""
     try:
