@@ -1,8 +1,8 @@
 {
   "schema": "software-metrics-shard/1.0",
   "campaign": "kaggle-kaggriculture",
-  "milestone": "P1 external black-box H2H evidence contract and batch BT/Davidson ratings; historical metrics retained",
-  "measured_at": "2026-09-01T00:00:00+00:00",
+  "milestone": "P2 offline DNA/liveness source-attested forensics contract; historical metrics retained",
+  "measured_at": "2026-09-01T03:20:00+00:00",
   "engine": {
     "package": "kaggle-environments",
     "version": "1.32.7+nodeps (vendored, engine code unmodified)",
@@ -5538,6 +5538,56 @@
       },
       "unit": "release-smoke",
       "method": "workspace/acceptance/evidence/p1-final-smoke-r4.log; 2026-09-01 smoke_boot PASS (5.8s, 4 phases); no holdout"
+    },
+    "p2_dna_forensics_tests": {
+      "value": {
+        "focused_passed": 14,
+        "focused_failed": 0,
+        "full_passed": 716,
+        "full_failed": 0,
+        "full_runtime_seconds": 34.93,
+        "verify_only_pass": true
+      },
+      "unit": "offline-validation",
+      "method": "2026-09-01 actual runs: python -m pytest workspace/software/tests/test_dna_forensics.py -q -> 14 passed; python -m pytest workspace/software/tests -q -> 716 passed in 34.93s; check_dna_forensics.py PASS"
+    },
+    "p2_dna_artifact_inventory": {
+      "value": {
+        "schema_version": "replay-dna/1.1",
+        "samples": 2479,
+        "submission_groups_both_seats": 71,
+        "supplied_consensus": 71,
+        "references": 19,
+        "comparisons": 1349,
+        "source_files": 4,
+        "report_sha256": "c388f78cc38e4fef61ad56c8066e0b0edac343329f50f02a360d16d7d592ff95",
+        "report_canonical_sha256": "70d3b6e8bf605ca315afa09f8be8723e9066efe02e80dbd3c0d2072e945e3ace"
+      },
+      "unit": "offline-source-attested-artifact",
+      "method": "workspace/software/exports/replay_dna/report.json and index.json generated from the four explicit local .tmp-dna inputs; analyzer and verify-only validator both PASS; implementation and source SHA manifests bound"
+    },
+    "p2_dna_forensics_summary": {
+      "value": {
+        "verdict_counts": {
+          "IDENTICAL / SAME SOURCE": 42,
+          "RELATED": 382,
+          "WEAK SIGNAL": 155,
+          "UNRELATED": 490,
+          "OUT OF RANGE": 280
+        },
+        "stability_below_0_6_groups": 22,
+        "stability_unassessed_comparisons": 0,
+        "grouping_policy": "submission_all_input_episodes_both_seats",
+        "extractor_status": "source_extractor_not_published",
+        "offline_exploratory": true,
+        "strength_claim": false,
+        "promotion_eligible": false,
+        "holdout_evidence": false,
+        "online_evidence": false,
+        "engine_activity_evidence": false
+      },
+      "unit": "identity-stability-forensics",
+      "method": "deterministic recomputation from source-attested 30-band rows using notebook first-seen modal tie semantics, matched-locus field RMP, strict verdict thresholds and minimum stability <0.6 OUT OF RANGE guard; not strategy strength or engine action liveness"
     }
   },
   "unmeasured": {

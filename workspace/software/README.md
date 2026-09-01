@@ -84,7 +84,21 @@ python workspace/software/scripts/replay_deep_stats.py <replay.json>... --succes
 #     b) 配对消融门（candidate vs 冻结 champion，同 (对手, 种子, 座位) 配对；
 #        合并门三指标：新风格池胜率 >= / 最差单风格胜率 >= / 灾难败局率 <=，产物仅入 exports/ablations/）
 python workspace/software/scripts/ablate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label <layer-label>
+
+# 15) P2 DNA/liveness 离线法证（仅显式本地 .tmp-dna 四件套；不运行 replay/engine/network）
+python workspace/software/scripts/analyze_dna_forensics.py \
+  --barcodes .tmp-dna/barcodes.csv \
+  --consensus .tmp-dna/consensus.csv \
+  --references .tmp-dna/reference_barcodes.csv \
+  --field-validation .tmp-dna/field_validation.json
+python workspace/software/scripts/check_dna_forensics.py
 ```
+
+### P2 DNA/liveness scope
+
+`exports/replay_dna/` is an offline exploratory identity/liveness evidence layer. It consumes only the explicit local `barcodes.csv`, `consensus.csv`, `reference_barcodes.csv`, and `field_validation.json` under `.tmp-dna`; all four inputs are source-hashed and the report is recomputed during verification. Each barcode is exactly 30 ordered lowercase 10-hex loci, with the genome accession defined as the first 8 characters of the SHA-1 of the concatenated bands. Stability is the mean per-locus modal agreement across all episodes in one submission-wide group (both seats; team must be unambiguous). RMP uses the field-specific allele frequencies and declared floor, with the notebook's exact strict thresholds.
+
+This is producer/source-attested precomputed barcode evidence, not an independent replay reconstruction: `extractor_status=source_extractor_not_published`. `IDENTICAL / SAME SOURCE` means only 30-band anchor equality; it does not prove the same agent or a real source. DNA stability is separate from engine action liveness. The artifacts are explicitly exploratory and are not strength, promotion, holdout, online, or performance evidence. DNA outputs are restricted to `workspace/software/exports/replay_dna/`, and action, observation, state, market, price, quantity, inventory, and raw trace fields are rejected recursively.
 
 <!-- ACTIVE_CANDIDATE_IDENTITY:BEGIN -->
 working_candidate_sha256=360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f

@@ -1,0 +1,44 @@
+Loading environment cabt failed: Could not find module 'C:\Users\OSS\AppData\Roaming\Python\Python314\site-packages\kaggle_environments\envs\cabt\cg\cg.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+{
+  "checks": {
+    "schema_version": true,
+    "schema_json_loaded": true,
+    "report_sha_matches": true,
+    "report_digest_matches": true,
+    "index_digest_matches": true,
+    "report_path": true,
+    "source_manifest_four_sha": true,
+    "implementation_manifest": true,
+    "scope_exact": true,
+    "forbidden_fields": true
+  },
+  "source_sha_each": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "forbidden_fields": [],
+  "summary": {
+    "sample_count": 2479,
+    "group_count": 71,
+    "supplied_consensus_count": 71,
+    "reference_count": 19,
+    "comparison_count": 1349,
+    "verdict_counts": {
+      "IDENTICAL / SAME SOURCE": 42,
+      "RELATED": 382,
+      "WEAK SIGNAL": 155,
+      "UNRELATED": 490,
+      "OUT OF RANGE": 280
+    },
+    "stability_below_0_6_groups": 22,
+    "stability_unassessed_comparisons": 0
+  },
+  "counts": {
+    "samples": 2479,
+    "groups": 71,
+    "comparisons": 1349
+  }
+}
