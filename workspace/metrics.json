@@ -1,5 +1,5 @@
 {
-  "_generated_at": "2026-09-01T13:16:49",
+  "_generated_at": "2026-09-01T13:41:10",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
@@ -5607,20 +5607,24 @@
           "validation_status": "COMPLETE",
           "validation_episode": 104498289,
           "public_score_after_validation": 600.0,
-          "public_score_latest": 755.9,
-          "public_games_at_capture": 3,
-          "public_record": "2W-1L",
+          "public_score_latest": 763.8,
+          "public_games_at_capture": 9,
+          "public_record": "6W-3L",
           "public_win_rate": 0.6667,
-          "net_margin": 34483.0,
+          "net_margin": -10728.0,
+          "first_stop_loss_gate_games": 6,
+          "first_stop_loss_gate_record": "4W-2L",
+          "first_stop_loss_gate_win_rate": 0.6667,
+          "first_stop_loss_gate_net_margin": 39484.0,
           "quota_used_today": 1,
           "quota_remaining": 4,
           "ladder_performance_evidence": true,
           "promotion_evidence": false,
-          "stop_loss_status": "not_evaluated_sample_below_6",
+          "stop_loss_status": "not_triggered_at_first_6_game_gate",
           "holdout_executed": false
         },
         "unit": "online-validation-probe",
-        "method": "2026-09-01 actual Kaggle CLI submission and readback; candidate identity PASS, 716 tests PASS, smoke_boot PASS before upload; submission 55932134 COMPLETE with validation episode 104498289; three integrity-clean public replays produced 2W-1L, net +34,483 and latest publicScore 755.9. Three games are below the >=6 stop-loss gate and do not support promotion or generalization claims; evidence workspace/software/exports/online/round7_ledger.json"
+        "method": "2026-09-01 actual Kaggle CLI submission and readback; candidate identity PASS, 716 tests PASS, smoke_boot PASS before upload; submission 55932134 COMPLETE with validation episode 104498289 excluded from ladder statistics. Nine integrity-clean public replays produced 6W-3L, net -10,728 and latest publicScore 763.8. The first >=6-game stop-loss gate was 4W-2L (66.67%, net +39,484), so <50% was not triggered. This small sample and platform score do not support promotion or generalization claims; evidence workspace/software/exports/online/round7_ledger.json"
       }
     },
     "unmeasured": {

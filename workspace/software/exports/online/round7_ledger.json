@@ -37,15 +37,23 @@
     "public_score_after_validation": 600.0
   },
   "public_sampling": {
-    "sampled_at_utc": "2026-09-01T05:13:12Z",
-    "public_games": 3,
-    "record": "2W-1L",
+    "sampled_at_utc": "2026-09-01T05:34:38Z",
+    "public_games": 9,
+    "record": "6W-3L",
     "win_rate": 0.6667,
-    "net_margin": 34483.0,
-    "average_margin": 11494.3,
-    "public_score_latest": 755.9,
-    "status": "three_game_initial_sample",
-    "replay_integrity": "3/3 PASS (720 steps, DONE/DONE, finite rewards)",
+    "net_margin": -10728.0,
+    "average_margin": -1192.0,
+    "public_score_latest": 763.8,
+    "status": "nine_game_observed_sample",
+    "replay_integrity": "9/9 PASS (720 steps, DONE/DONE, finite rewards)",
+    "stop_loss_evaluation": {
+      "gate": "first at least 6 public games with win rate < 0.5",
+      "games_at_first_gate": 6,
+      "record_at_first_gate": "4W-2L",
+      "win_rate_at_first_gate": 0.6667,
+      "net_margin_at_first_gate": 39484.0,
+      "status": "not_triggered"
+    },
     "episodes": [
       {
         "id": 104498822,
@@ -70,9 +78,57 @@
         "rewards": [99680.0, 90471.0],
         "result": "W",
         "margin": 9209.0
+      },
+      {
+        "id": 104500152,
+        "opponent": "Luka Duvanov",
+        "seat": 1,
+        "rewards": [49077.0, 60200.0],
+        "result": "W",
+        "margin": 11123.0
+      },
+      {
+        "id": 104500567,
+        "opponent": "Chiachii Liang",
+        "seat": 1,
+        "rewards": [103161.0, 81396.0],
+        "result": "L",
+        "margin": -21765.0
+      },
+      {
+        "id": 104501028,
+        "opponent": "Caleb Bredlow",
+        "seat": 0,
+        "rewards": [74335.0, 58692.0],
+        "result": "W",
+        "margin": 15643.0
+      },
+      {
+        "id": 104501454,
+        "opponent": "Leraaaa",
+        "seat": 1,
+        "rewards": [63031.0, 75770.0],
+        "result": "W",
+        "margin": 12739.0
+      },
+      {
+        "id": 104501895,
+        "opponent": "Tomeiser",
+        "seat": 1,
+        "rewards": [44062.0, 46531.0],
+        "result": "W",
+        "margin": 2469.0
+      },
+      {
+        "id": 104502337,
+        "opponent": "bsenst",
+        "seat": 1,
+        "rewards": [137168.0, 71748.0],
+        "result": "L",
+        "margin": -65420.0
       }
     ],
-    "note": "Validation episode 104498289 is excluded. Three public games are an initial online sample, not promotion or generalization evidence."
+    "note": "Validation episode 104498289 is excluded. Nine public games are a small online sample, not promotion or generalization evidence; publicScore is a platform readback, not a stable capability estimate."
   },
   "evidence_scope": {
     "online_submission_occurred": true,
@@ -82,6 +138,6 @@
     "holdout_evidence": false,
     "historical_published_holdout_reused": false
   },
-  "next_sampling_gate": "Continue to at least 6 EPISODE_TYPE_PUBLIC games before applying the <50% stop-loss rule; no second submission is authorized or required for this sampling step.",
-  "recorded_at_utc": "2026-09-01T05:13:12Z"
+  "next_sampling_gate": "The >=6-game stop-loss gate was evaluated and not triggered. No second submission or holdout run is authorized or required.",
+  "recorded_at_utc": "2026-09-01T05:34:38Z"
 }
