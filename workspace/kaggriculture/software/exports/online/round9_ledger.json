@@ -1,0 +1,30 @@
+{
+ "schema_version": "1.0",
+ "submission_ref": 55944925,
+ "candidate_sha256": "022cdd03a66d3be25fb6c850f89b984371bb783f51814f6dbaa0239c8f5c25b6",
+ "candidate_label": "v10.4-working (tetsuya-frame: V-T1 opening shift d1-3S/d2-2C + V-T2 carrot endgame rotation to d27)",
+ "git_ref": "6acb39d8d3e77f95f920520a4cef4e5378d94009",
+ "submitted_at": "2026-09-01T17:24:55.710Z",
+ "submitted_by": "main-session (user-directed online validation; local opponent-pool gate waived by user rule change 2026-09-02)",
+ "quota_after_submit": "3 remaining today (CLI readback)",
+ "prechecks": {
+  "pytest": "690 passed, 2 skipped (post variant-merge, incl. updated r3 opening anchor)",
+  "smoke_boot": "PASS (4 phases)",
+  "candidate_identity": "PASS (working=development 022cdd03, readme projection ok)"
+ },
+ "validation_episode": {
+  "episode_id": 104585743,
+  "type": "EPISODE_TYPE_VALIDATION",
+  "state": "COMPLETED",
+  "both_seats_done": true,
+  "rewards": [
+   59396,
+   59472
+  ]
+ },
+ "public_score_at_capture": 600.0,
+ "episodes_public": [],
+ "captured_at": "2026-09-01T17:27:07+00:00",
+ "source": "kaggle competitions submit/submissions/episodes CLI",
+ "notes": "round-9: tetsuya-frame probe (evidence: exports/online/tetsuya_v2_strategy_analysis.md, 08-31 shard). Predecessor v10.3 (55943264) latest observed 678.6 before this submit. Sample below 6-game gate; no promotion conclusion."
+}
