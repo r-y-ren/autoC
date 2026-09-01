@@ -978,6 +978,14 @@ ROTATION_DIG_DAY = 18
 # after hour 21 leaves no reliable WATER window.
 PLANT_EOD_GUARD = False
 PLANT_HOUR_MAX = 21
+# V-T3 watertight planting (forensics: ep 104585743 d8 -- a 10-seed NE pulse
+# planted h8-14 left 18 tiles unwatered and 16 died; tetsuya's 6 replays all
+# plant in the daytime band and never lose the batch).  Two task-generation
+# guards: (a) same-day water window -- the nearest worker must still be able
+# to walk to the tile, PLANT and WATER before hour 23; (b) a daily
+# new-planting cap so an opening cheque can never compress a land+seed+plant
+# expansion into one afternoon.
+PLANT_DAILY_CAP = 8
 
 # 【中文】模块级会话状态（按玩家 id 分键——自对局校验时框架可能把本文件
 # 一份实例同时充当两个座位）。时钟倒退 = 新对局开始，各状态字典在访问
@@ -2605,6 +2613,20 @@ def _build_tasks(obs, farm, private, day, plan=None):
             return 1.0
         return max(0.35, 1.0 - (shed_count - 70) / 50.0)
 
+    # V-T3 guard state: workers for the per-tile water-window test, and the
+    # day's confirmed new plantings (planted_day == day in the observation)
+    # for the daily cap.
+    plant_units = [tuple(_get(farm, "farmer",
+                             [board // 2 - 1, board // 2 - 1]))]
+    plant_units.extend(tuple(h) for h in (_get(farm, "hands", []) or []))
+    planted_today = 0
+    for _row in tiles:
+        for _t in _row:
+            if isinstance(_t, dict) and _get(_t, "kind", "") == "PLANT" \
+                    and _get(_t, "planted_day", -1) == day:
+                planted_today += 1
+    plant_budget = max(0, PLANT_DAILY_CAP - planted_today)
+
     for y, row in enumerate(tiles):
         for x, tile in enumerate(row):
             if tile == "LOCKED":
@@ -2623,13 +2645,19 @@ def _build_tasks(obs, farm, private, day, plan=None):
                 if crop is not None and seeds.get(crop, 0) > 0 \
                         and day <= PLANT_LAST_DAY.get(crop, 24) \
                         and (not PLANT_EOD_GUARD
-                             or hour <= PLANT_HOUR_MAX):
+                             or hour <= PLANT_HOUR_MAX) \
+                        and plant_budget > 0 \
+                        and hour + min(_dist(ux, uy, x, y)
+                                       for ux, uy in plant_units) + 2 <= 23:
                     # terminal value of planting TODAY; fresh plants must be
                     # watered the same day -- that obligation is red-flagged
                     # in the PLANT branch below via planted_day == day.
                     # v7-H: a fresh plant starts at streak 1 and dies at the
                     # evening refresh unwatered, so hour > PLANT_HOUR_MAX
                     # just burns the seed and factories a weed.
+                    # V-T3: the min-distance clause is the same-day water
+                    # window (walk + plant + water must fit before h23);
+                    # plant_budget is the daily pulse cap.
                     cd = CROPS[crop]
                     price = _get(prices, crop, BASE_PRICE[crop])
                     ws0, we0 = _window(crop)
@@ -2637,6 +2665,7 @@ def _build_tasks(obs, farm, private, day, plan=None):
                     net = expect * price - cd["seed"]
                     add(30 if crop == "WHEAT" else 32, x, y,
                         ["PLANT", crop], ("plant", x, y), v=max(30, net * 0.6))
+                    plant_budget -= 1
                 continue
             if not isinstance(tile, dict):
                 continue
@@ -3044,6 +3073,18 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     if not last_day:
         crop_seed_sequence = ("STRAWBERRY",) if plan.get("wheat_farm") else \
             ("STRAWBERRY", "MELON", "CARROT")
+        # V-T3: premium seed ORDERS stay inside the daily planting budget,
+        # derived from the OBSERVATION (tiles planted today) so the gate is
+        # idempotent -- the deterministic-agent contract forbids cross-call
+        # ledgers (d8 pulse: the first milk cheque bought 10 strawberry
+        # seeds at once and the afternoon could not water them).
+        planted_today_orders = 0
+        for _row in (_get(farm, "tiles", []) or []):
+            for _t in _row:
+                if isinstance(_t, dict) and _get(_t, "kind", "") == "PLANT" \
+                        and _get(_t, "planted_day", -1) == day:
+                    planted_today_orders += 1
+        room_budget = max(0, PLANT_DAILY_CAP - planted_today_orders)
         for crop in crop_seed_sequence:
             lo, hi = CROP_PHASE[crop]
             if not (lo <= day <= hi):
@@ -3055,7 +3096,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 cap_for_crop = min(plan["straw_quad_cap"] * quads,
                                    plan["straw_total_cap"])
             want = cap_for_crop - alive[crop] - seeds.get(crop, 0)
-            batch = min(6, max(0, want))
+            batch = min(6, max(0, want), room_budget)
             seed_gate = 250 if crop == "STRAWBERRY" else land_fund + 250
             wallet = projected_money if plan.get("wheat_farm") else money
             reserve_gate = max(seed_gate, WHEAT_FARM_HOLD_CASH) \
@@ -3066,6 +3107,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 # WHEAT_FARM also preserves its hold reserve after every
                 # earlier same-turn purchase.
                 batch = min(10 if plan["volume"] else 6, max(0, want),
+                            room_budget,
                             max(0, int((wallet - reserve_gate) //
                                        CROPS[crop]["seed"])))
             if batch > 0 and wallet >= reserve_gate + \
@@ -3334,7 +3376,27 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
     accesses = _shed_access(board, quads)
     reds = [t for t in tasks if t.get("red")]
     reds.sort(key=lambda t: -tval(t))
+    by_key = {t["key"]: t for t in reds}
+    # V-T4 red-line stickiness: re-bind the PREVIOUS turn's red assignments
+    # first (forensics: ep 104585743 d8 h16-23 -- nearest-worker re-matching
+    # every turn made nine workers oscillate between 18 red WATER tiles for
+    # eight straight hours with ZERO waterings; a held binding only breaks
+    # when its target disappears from the task list).  A held binding can
+    # cost some travel efficiency but never safety: reds are death-tonight
+    # obligations and the target itself validates the binding.
+    for ui, prev_key in list(sticky.items()):
+        if ui in assign or ui >= len(units):
+            continue
+        t = by_key.get(prev_key)
+        if t is None:
+            continue
+        if t.get("units") is not None and ui not in t["units"]:
+            continue
+        assign[ui] = t
+        claimed.add(t["key"])
     for t in reds:
+        if t["key"] in claimed:
+            continue
         best = None
         for ui in range(len(units)):
             if ui in assign or (t.get("units") is not None

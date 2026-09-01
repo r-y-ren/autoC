@@ -265,7 +265,9 @@ def test_volume_seed_batches_are_money_scaled():
     vol = [o for o in main._market_orders(obs, farm, private, 8, 0, 14,
                                           plan=VOLUME_PLAN)
            if o[0] == "BUY_SEED" and o[1] == "STRAWBERRY"]
-    assert vol and vol[0][2] == 10          # (1300-250)//100 -> full batch
+    # V-T3 (2026-09-02): the wallet scaled batch (1300-250)//100 = 10 is now
+    # also capped by the daily planting budget PLANT_DAILY_CAP = 8.
+    assert vol and vol[0][2] == 8
     # defensive keeps the pinned 6-batch at the same money
     de = [o for o in main._market_orders(obs, farm, private, 8, 0, 14,
                                          plan=None)
