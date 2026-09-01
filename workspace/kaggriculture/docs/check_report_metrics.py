@@ -10,9 +10,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-REPORT_PATH = REPO_ROOT / "workspace" / "docs" / "report.typ"
-METRICS_PATH = REPO_ROOT / "workspace" / "metrics.json"
+CAMPAIGN_ROOT = Path(__file__).resolve().parents[1]  # 2026-09-01 迁移后 docs/ 位于战役根下
+REPORT_PATH = CAMPAIGN_ROOT / "docs" / "report.typ"
+METRICS_PATH = CAMPAIGN_ROOT / "metrics.json"
 
 REQUIRED_SOFTWARE_KEYS = (
     "frozen_candidate_identity",

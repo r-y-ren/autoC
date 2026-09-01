@@ -26,7 +26,9 @@ import random
 import statistics
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve()
+while REPO_ROOT != REPO_ROOT.parent and not (REPO_ROOT / ".git").exists():
+    REPO_ROOT = REPO_ROOT.parent
 
 
 def find_engine() -> Path:

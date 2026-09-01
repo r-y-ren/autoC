@@ -52,7 +52,10 @@ def main() -> int:
     merged: dict = {"_generated_at": datetime.datetime.now().isoformat(timespec="seconds")}
     found = []
     for role in FRAGMENTS:
+        # document 分片 2026-09-01 起落 docs/（与 Document 章程一致；兼容旧 document/）
         frag = camp_root / role / "metrics.json"
+        if role == "document" and not frag.is_file():
+            frag = camp_root / "docs" / "metrics.json"
         if not frag.is_file():
             continue
         try:

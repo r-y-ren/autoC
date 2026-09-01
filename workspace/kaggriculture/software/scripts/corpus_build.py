@@ -3,7 +3,7 @@
 Walks .tmp-corpus/raw/episode-*-replay.json (registered in .tmp-corpus/manifest.json),
 runs integrity checks (both seats DONE + 720 steps + numeric rewards), extracts
 per-player profiles via kgenv.replay_profile, and writes the small profile
-archive to workspace/software/exports/replay_profiles/:
+archive to workspace/kaggriculture/software/exports/replay_profiles/:
 
   profiles/ep{eid}_seat{pl}.json   one profile per episode x player
   index.json                       episode index (bands, teams, integrity)
@@ -13,7 +13,7 @@ archive to workspace/software/exports/replay_profiles/:
                                   otherwise exploratory)
 
 Raw replays never enter the archive. Run from repo root:
-  python workspace/software/scripts/corpus_build.py
+  python workspace/kaggriculture/software/scripts/corpus_build.py
 """
 
 from __future__ import annotations
@@ -27,8 +27,11 @@ import time
 from collections import defaultdict
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "workspace" / "software"))
+REPO = Path(__file__).resolve()
+while REPO != REPO.parent and not (REPO / ".git").exists():
+    REPO = REPO.parent
+SOFTWARE = REPO / "workspace" / "kaggriculture" / "software"
+sys.path.insert(0, str(SOFTWARE))
 
 from kgenv.replay_profile import (  # noqa: E402
     IntegrityError,
@@ -39,7 +42,7 @@ from kgenv.replay_profile import (  # noqa: E402
 
 CORPUS = Path(".tmp-corpus")
 EXPORTS = (
-    REPO / "workspace" / "software" / "exports" / "replay_profiles"
+    SOFTWARE / "exports" / "replay_profiles"
 )
 BANDS = ("top20", "top100", "band_500_900", "baseline")
 BASELINE_TEAM = "renyxin"

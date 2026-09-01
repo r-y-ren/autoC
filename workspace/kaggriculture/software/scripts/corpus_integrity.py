@@ -21,7 +21,7 @@ mode ``dev`` relaxes checks 2 (capture_date optional), 5 (missing bands
 allowed) for local fixtures; everything else still applies.
 
 Usage:
-  python workspace/software/scripts/corpus_integrity.py --mode official
+  python workspace/kaggriculture/software/scripts/corpus_integrity.py --mode official
 """
 
 from __future__ import annotations
@@ -33,9 +33,12 @@ import re
 import sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve()
+while REPO != REPO.parent and not (REPO / ".git").exists():
+    REPO = REPO.parent
+SOFTWARE = REPO / "workspace" / "kaggriculture" / "software"
 CORPUS = REPO / ".tmp-corpus"
-EXPORTS = REPO / "workspace" / "software" / "exports" / "replay_profiles"
+EXPORTS = SOFTWARE / "exports" / "replay_profiles"
 REQUIRED_BANDS = ("top20", "top100", "band_500_900")
 ALL_BANDS = REQUIRED_BANDS + ("baseline",)
 MIN_GAMES_CONSISTENT = 3
@@ -90,7 +93,7 @@ def _check_raw_replay(raw: Path, label: str, failures: list[str], relaxed: bool)
     official: full JSON parse. dev: cheap head scan for statuses only.
     """
     import sys
-    sys.path.insert(0, str(REPO / "workspace" / "software"))
+    sys.path.insert(0, str(SOFTWARE))
     from kgenv.replay_profile import check_integrity
 
     if relaxed:

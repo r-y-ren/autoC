@@ -47,7 +47,7 @@ def _reject_repository_output(output: Path) -> None:
         inside_repo = str(target).startswith(str(repo_root.resolve()) + os.sep)
         inside_external = str(target).startswith(str(external_root) + os.sep)
     if inside_repo and not inside_external:
-        raise RatingError("repository output must stay under workspace/software/exports/external")
+        raise RatingError("repository output must stay under the campaign software exports/external directory")
 
 
 def main(argv=None) -> int:

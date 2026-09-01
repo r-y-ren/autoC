@@ -1,7 +1,7 @@
 # workspace/ —— 多战役容器（v2，2026-09-01）
 
 **每个战役一个子目录** `workspace/<战役id>/`；多战役可并行（各自独立阶段与熔断计数）。
-现役 legacy 战役例外：`kaggriculture` 的战役根=workspace/ 本体（历史冻结证据嵌死平铺路径，不迁移）。
+（`kaggriculture` 于 2026-09-01 从平铺布局迁入本结构，历史冻结证据的规范路径字符串经兼容层保持可验证。）
 
 ## 战役生命周期
 
@@ -30,7 +30,7 @@ init_state --campaign <cid> --phase decide    # 登记（自动建骨架）→ s
 
 | 战役 id | 战役根 | 阶段 |
 |---|---|---|
-| `kaggriculture` | `workspace/`（legacy 平铺） | 见 `python scripts/guard/init_state.py` 或 /status |
+| `kaggriculture` | `workspace/kaggriculture/` | 见 /status（当前 deliver） |
 
 守卫按**最长 root 匹配**把写入路由到所属战役的阶段策略；`workspace/<未登记id>/` 一律拒写。
 守卫策略与写入矩阵见 `scripts/guard/guard_path.py` 与 `docs/DESIGN.md` §6.2。

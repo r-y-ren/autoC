@@ -46,23 +46,58 @@ def _sha256(path: Path) -> str:
         raise ContractError(f"cannot read evidence file {path}: {exc}") from exc
 
 
+# 布局兼容（2026-09-01 战役迁移 workspace/software → workspace/kaggriculture/software）：
+# 证据 JSON 里的路径字符串是"仓库相对标识符"，历史证据存旧前缀、新证据存新前缀；
+# 解析时两种前缀都映射到当前 software 根，canonical 断言 likewise 接受两种前缀。
+CANONICAL_SOFTWARE_PREFIXES = ("workspace/kaggriculture/software/", "workspace/software/")
+
+
+def _software_root(base: Path) -> Path:
+    """Locate the software root regardless of campaign layout."""
+    candidate = base.resolve()
+    if (candidate / "kgenv").is_dir() and (candidate / "scripts").is_dir():
+        return candidate
+    for rel in CANONICAL_SOFTWARE_PREFIXES:
+        child = candidate / rel
+        if child.is_dir():
+            return child
+    raise ContractError("cannot locate software root (legacy or campaign layout)")
+
+
+def _strip_canonical_prefix(path: str) -> str | None:
+    text = str(path).replace("\\", "/")
+    for prefix in CANONICAL_SOFTWARE_PREFIXES:
+        if text.lower().startswith(prefix):
+            return text[len(prefix):]
+    return None
+
+
+def _is_canonical(path: str, suffix: str) -> bool:
+    text = str(path).replace("\\", "/")
+    return any(text == prefix + suffix for prefix in CANONICAL_SOFTWARE_PREFIXES)
+
+
 def _resolve(path: str, base: Path) -> Path:
     value = Path(path)
-    return value if value.is_absolute() else (base / value).resolve()
+    if value.is_absolute():
+        return value
+    stripped = _strip_canonical_prefix(path)
+    if stripped is not None:
+        return (_software_root(base) / stripped).resolve()
+    return (base / value).resolve()
 
 
 def _canonical_repo_root(base: Path) -> Path:
-    """Resolve the repository root used by the production contract."""
-    candidate = base.resolve()
-    if (candidate / "workspace" / "software").is_dir():
-        return candidate
-    if candidate.name == "software" and (candidate.parent.parent / "workspace" / "software").is_dir():
-        return candidate.parent.parent
-    raise ContractError("cannot locate canonical repository root")
+    """Git repository root (cwd/boundary anchor); walks up from the software root."""
+    cur = _software_root(base)
+    while cur != cur.parent:
+        if (cur / ".git").exists():
+            return cur
+        cur = cur.parent
+    raise ContractError("cannot locate git repository root")
 
 
-def _canonical_paths(repo_root: Path) -> dict[str, Path]:
-    software = repo_root / "workspace" / "software"
+def _canonical_paths(software: Path) -> dict[str, Path]:
     return {
         "active": software / "active_candidate.json",
         "wheel": software / "vendor" / "kaggle_environments-1.32.7+nodeps-py3-none-any.whl",
@@ -181,11 +216,11 @@ def _active_entry(active: dict[str, Any], role: str) -> dict[str, Any]:
 
 def _validate_active_candidate(candidate: dict[str, Any], software_root: Path, *, strict: bool = False) -> None:
     repo_root = _canonical_repo_root(software_root)
-    canonical = _canonical_paths(repo_root)
+    canonical = _canonical_paths(_software_root(software_root))
     if strict:
         contract = canonical["active"]
-        _require(candidate.get("active_candidate_contract") ==
-                 "workspace/software/active_candidate.json",
+        _require(_is_canonical(str(candidate.get("active_candidate_contract")),
+                               "active_candidate.json"),
                  "active candidate contract must use canonical relative path")
     else:
         contract = _resolve(candidate["active_candidate_contract"], software_root)
@@ -204,12 +239,12 @@ def _validate_active_candidate(candidate: dict[str, Any], software_root: Path, *
         _require(expected_status == "frozen", "frozen candidate role/status mismatch")
     entry_path = entry.get("path")
     if strict:
-        canonical_candidate = repo_root / "workspace" / "software" / "kaggle_simulations" / "agent" / "main.py"
-        actual_candidate = _resolve(str(candidate["path"]), repo_root)
+        canonical_candidate = _software_root(software_root) / "kaggle_simulations" / "agent" / "main.py"
+        actual_candidate = _resolve(str(candidate["path"]), software_root)
         _require(actual_candidate == canonical_candidate.resolve(),
                  "candidate path must be canonical active submission path")
-        _require(candidate.get("path") ==
-                 "workspace/software/kaggle_simulations/agent/main.py",
+        _require(_is_canonical(str(candidate.get("path")),
+                               "kaggle_simulations/agent/main.py"),
                  "candidate path must use canonical relative path")
         _require(candidate["id"] == candidate["role"],
                  "candidate id must match candidate role")
@@ -228,7 +263,7 @@ def _validate_opponents(opponents: Any, base: Path, *, strict: bool = False,
     _require(isinstance(opponents, list) and opponents, "opponent list is required")
     ids: set[str] = set()
     repo_root = _canonical_repo_root(base)
-    provenance_path = _canonical_paths(repo_root)["provenance"]
+    provenance_path = _canonical_paths(_software_root(base))["provenance"]
     provenance_sha = _sha256(provenance_path)
     provenance_text = provenance_path.read_text(encoding="utf-8")
     for opponent in opponents:
@@ -242,10 +277,10 @@ def _validate_opponents(opponents: Any, base: Path, *, strict: bool = False,
         _require(_sha256(path) == opponent["sha256"], f"opponent {oid} SHA drift")
         if strict:
             canonical_provenance = _provenance_entry(provenance_text, oid)
-            canonical_path = repo_root / "workspace" / "software" / "kaggle_simulations" / "opponents" / path.name
+            canonical_path = _software_root(base) / "kaggle_simulations" / "opponents" / path.name
             _require(path == canonical_path.resolve(), f"opponent {oid} path is not canonical")
-            expected_relative = f"workspace/software/kaggle_simulations/opponents/{path.name}"
-            _require(opponent["path"] == expected_relative,
+            _require(_is_canonical(str(opponent["path"]),
+                                   f"kaggle_simulations/opponents/{path.name}"),
                      f"opponent {oid} path must use canonical relative path")
             _require(canonical_provenance["SHA-256"] == opponent["sha256"],
                      f"provenance SHA missing for opponent {oid}")
@@ -429,15 +464,15 @@ def validate_external_h2h(payload: dict[str, Any], *, software_root: str | os.Pa
     base = Path(software_root or Path.cwd()).resolve()
     strict = software_root is not None
     repo_root = _canonical_repo_root(base)
-    canonical = _canonical_paths(repo_root)
+    canonical = _canonical_paths(_software_root(base))
     engine = payload.get("engine")
     _require(isinstance(engine, dict) and engine.get("name") == ENGINE_NAME and
              engine.get("version") in ENGINE_VERSIONS and engine.get("scenario") == "kaggriculture",
              "engine mismatch")
     wheel = canonical["wheel"]
     if strict:
-        _require(engine.get("wheel_path") ==
-                 "workspace/software/vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl",
+        _require(_is_canonical(str(engine.get("wheel_path")),
+                               "vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl"),
                  "engine wheel path must use canonical relative path")
         _require(_sha256(wheel) == engine.get("wheel_sha256"), "engine wheel SHA drift")
         try:

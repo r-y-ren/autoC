@@ -15,17 +15,17 @@ Network is read-only. Budget guard: refuses plans above MAX_TOTAL_FETCH_BYTES
 or touching more than MAX_SHARDS distinct daily shards.
 
 Usage examples (run from repo root):
-  python workspace/software/scripts/corpus_fetch.py probe \
+  python workspace/kaggriculture/software/scripts/corpus_fetch.py probe \
       --filelist .tmp-corpus/shard-2026-08-28-filelist.json \
       --slug kaggle/kaggriculture-episodes-2026-08-28 \
       --out .tmp-corpus/shard-2026-08-28-teams.json
-  python workspace/software/scripts/corpus_fetch.py select \
+  python workspace/kaggriculture/software/scripts/corpus_fetch.py select \
       --probes .tmp-corpus/shard-2026-08-28-teams.json[,more.json] \
       --leaderboard .tmp-online/kaggriculture.zip \
       --plan-out .tmp-corpus/download-plan.json --max-per-band-top20 14
-  python workspace/software/scripts/corpus_fetch.py fetch \
+  python workspace/kaggriculture/software/scripts/corpus_fetch.py fetch \
       --plan .tmp-corpus/download-plan.json --dest .tmp-corpus/raw
-  python workspace/software/scripts/corpus_fetch.py stage \
+  python workspace/kaggriculture/software/scripts/corpus_fetch.py stage \
       --corpus .tmp-corpus --leaderboard .tmp-online/kaggressure.zip  # see --help
 """
 
@@ -45,7 +45,10 @@ import time
 import zipfile
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve()
+while REPO != REPO.parent and not (REPO / ".git").exists():
+    REPO = REPO.parent
+SOFTWARE = REPO / "workspace" / "kaggriculture" / "software"
 CAPTURE_DATE = "2026-08-29"  # provenance date for this milestone's captures
 BAND_TOP20 = "top20"
 BAND_TOP100 = "top100"
@@ -415,7 +418,7 @@ def cmd_stage(args: argparse.Namespace) -> None:
         "files": [],
         "notes": [
             "raw replays live under .tmp-corpus/raw (gitignored); only small",
-            "profile archives are committed under workspace/software/exports/",
+            "profile archives are committed under workspace/kaggriculture/software/exports/",
         ],
     }
     for raw in sorted((corpus / "raw").glob("*.json")):

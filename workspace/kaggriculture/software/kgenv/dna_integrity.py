@@ -68,11 +68,20 @@ def _sha256(path: Path) -> str:
 
 
 def _repo_root(software_root: Path) -> Path:
+    """Git repository root; layout-agnostic (campaign dir since 2026-09-01 migration).
+
+    形状判定优先（测试夹具构造 software 根但无 .git）；真实仓库再向上找 .git。"""
     root = Path(software_root).resolve()
+    cur = root
+    while cur != cur.parent:
+        if (cur / ".git").exists():
+            return cur
+        cur = cur.parent
+    # 测试夹具兜底（无 .git）：按布局形状回推仓库根
     if root.name == "software" and root.parent.name == "workspace":
         return root.parent.parent
-    if (root / "workspace" / "software").is_dir():
-        return root
+    if root.name == "software" and root.parent.name == "kaggriculture":
+        return root.parent.parent.parent
     raise IntegrityError("cannot locate repository root from software root")
 
 

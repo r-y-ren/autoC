@@ -13,7 +13,7 @@
 | `config/` | 静态配置与契约 Schema | idle 态可改 |
 | `scripts/` | 确定性脚本（kb/guard/verify） | idle 态可改 |
 | `kb/` | 知识库（清洗后的轻量 Markdown） | collect 态经跑批写入 |
-| `workspace/` | 战役开发区（v2 多战役并行：每战役 `workspace/<cid>/` 子目录，独立阶段；legacy 平铺战役 root=workspace） | 按阶段/角色受限 |
+| `workspace/` | 多战役容器（每战役 `workspace/<cid>/` 子目录，独立阶段与熔断；kaggriculture 已于 2026-09-01 迁入标准布局） | 按各战役阶段/角色受限（最长 root 匹配） |
 | `export/` | KB 交付导出层（S-15 纯投影，D6） | 脚本生成，人读 |
 | `archive/` | 历史作品库 | **永远只读** |
 

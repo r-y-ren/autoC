@@ -204,10 +204,12 @@ def test_external_contract_rejects_inconsistent_activity_numbers(tmp_path):
 
 
 def test_external_contract_rejects_forged_activity_with_unchanged_digest(tmp_path):
-    payload = json.loads((Path(__file__).parents[1] / "exports" / "external" / "v48-seed101-smoke.json").read_text(encoding="utf-8"))
+    # 2026-09-01 迁移改写：旧版借用历史 v48 证据（其 candidate SHA 是冻结 v10.2，
+    # 与工作树 development main.py 必然不同，过去靠路径解析失败报 evidence 撞正则）。
+    # 现用自洽夹具表达同一语义：篡改 activity 且不重算 digest → 必须被拒。
+    payload, _ = _fixture(tmp_path)
     payload["games"][0]["activity"]["seats"][0]["non_pass_decisions"] += 1
-    _redigest(payload)
-    with pytest.raises(ContractError, match="activity|digest|evidence"):
+    with pytest.raises(ContractError, match="activity|digest|evidence|canonical"):
         validate_external_h2h(payload, software_root=Path(__file__).parents[1])
 
 

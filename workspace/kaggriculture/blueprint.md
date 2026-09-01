@@ -39,7 +39,7 @@ tech_stack:
 
 interface_contracts:
   - between: [software, document]
-    contract_file: workspace/software/exports/schema.json
+    contract_file: workspace/kaggriculture/software/exports/schema.json
 
 milestones:
   - id: m1-replay-corpus
@@ -66,30 +66,30 @@ milestones:
 acceptance:
   checklist:
     - {id: m1-tests, category: software, item: 全部软件测试通过，覆盖语料校验、画像提取、异常局剔除与画像档案 schema, method: 自动,
-       cmd: "python -m pytest workspace/software/tests -q && python scripts/verify/test_acceptance.py"}
+       cmd: "python -m pytest workspace/kaggriculture/software/tests -q && python scripts/verify/test_acceptance.py"}
     - {id: m1-corpus, category: software, item: 画像产物过完整性校验（每档案含数据集 URL 与抓取日期、异常局剔除留痕、分层抽样齐备、跨局复核标注）, method: 自动,
-       cmd: "python workspace/software/scripts/corpus_integrity.py --mode official"}
+       cmd: "python workspace/kaggriculture/software/scripts/corpus_integrity.py --mode official"}
     - {id: m1-smoke, category: software, item: 提交 bot 在官方引擎完成短局与 720 回合自博弈且 contract 全绿, method: 自动,
-       cmd: "python workspace/software/smoke_boot.py"}
+       cmd: "python workspace/kaggriculture/software/smoke_boot.py"}
     - {id: m2-pool, category: software, item: 新线上风格对手对冻结弱池认证强度不低于 50% 且跨局画像参数一致才入库，对手单测通过, method: 自动,
-       cmd: "python workspace/software/scripts/check_opponent_strength.py --rounds 3"}
+       cmd: "python workspace/kaggriculture/software/scripts/check_opponent_strength.py --rounds 3"}
     - {id: m2-gate, category: software, item: 完整门禁必测名单包含全部新对手，拒绝缺失必测对手、异常局与单座位赛程, method: 自动,
-       cmd: "python workspace/software/scripts/check_eval_contract.py --mode gate"}
+       cmd: "python workspace/kaggriculture/software/scripts/check_eval_contract.py --mode gate"}
     - {id: m2-ab, category: software, item: LLM 真实 A/B 仅在 KG_LLM_* 完整配置时执行且逐局预算隔离；未配置时保持 null 并通过通路自检, method: 自动}
     - {id: m3-strategy, category: software, item: 轮作、外购饲料护栏、劳动扩容、象限扩张、终局囤倾与停喂的策略回归测试通过，m2b 修复项测试不回退, method: 自动,
-       cmd: "python -m pytest workspace/software/tests/test_strategy_m3.py workspace/software/tests/test_strategy_m2.py workspace/software/tests/test_agent_contract.py -q"}
+       cmd: "python -m pytest workspace/kaggriculture/software/tests/test_strategy_m3.py workspace/kaggriculture/software/tests/test_strategy_m2.py workspace/kaggriculture/software/tests/test_agent_contract.py -q"}
     - {id: m3-dev-gate, category: software, item: 冻结候选在含线上风格对手的完整开发门通过且日志含全部 gate/guard 对手、双座位、候选哈希与零异常局, method: 自动,
-       cmd: "python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label m3-frozen --rounds 4 --require-complete"}
+       cmd: "python workspace/kaggriculture/software/scripts/iterate_gate.py --candidate workspace/kaggriculture/software/kaggle_simulations/agent/main.py --label m3-frozen --rounds 4 --require-complete"}
     - {id: m4-holdout, category: software, item: 冻结候选的一次性独立 holdout v2 已发布且通过完整性检查；验收不得重跑或换种子, method: 自动,
-       cmd: "python workspace/software/scripts/run_holdout.py --verify-published --require-frozen"}
+       cmd: "python workspace/kaggriculture/software/scripts/run_holdout.py --verify-published --require-frozen"}
     - {id: m4-identity, category: software, item: 正式 export 的候选哈希、git ref、种子域隔离、预期局数、AB/BA 对称性、零异常局与跨字段语义一致, method: 自动,
-       cmd: "python workspace/software/scripts/check_eval_contract.py --mode official --input workspace/software/exports/eval_results.json"}
+       cmd: "python workspace/kaggriculture/software/scripts/check_eval_contract.py --mode official --input workspace/kaggriculture/software/exports/eval_results.json"}
     - {id: m4-metrics, category: software, item: metrics 分片合并成功且确认性数字全部可追溯到正式 export, method: 自动,
        cmd: "python scripts/verify/merge_metrics.py"}
     - {id: doc-compile, category: document, item: 修订报告编译通过, method: 自动,
-       cmd: "typst compile --root workspace workspace/docs/report.typ workspace/docs/report.pdf"}
+       cmd: "typst compile --root workspace/kaggriculture workspace/kaggriculture/docs/report.typ workspace/kaggriculture/docs/report.pdf"}
     - {id: doc-consistency, category: document, item: 报告数字键零悬空、旧基线与旧 holdout 限制紧邻披露、无天梯或获奖外推, method: 自动,
-       cmd: "python workspace/docs/check_report_metrics.py"}
+       cmd: "python workspace/kaggriculture/docs/check_report_metrics.py"}
     - {id: doc-visual, category: document, item: 报告 PDF 渲染后逐页视觉验收通过，无溢出、重叠、断页或不可读图表, method: agent 视觉验收}
     - {id: man-submit-r2, category: manual, item: 按 SOP v4 提交新候选并回拉不少于 3 局公共天梯回放完成 round-2 复盘（每日至多 5 次、每候选至多 2 次/日、Error 即停）, method: 人工手册}
     - {id: man-final, category: manual, item: 09-30 前锁定最近 2 份最优提交并记录 commit/hash 与 Validation Episode 状态, method: 人工手册}
@@ -106,7 +106,7 @@ compliance:
   notes: >-
     单账号与团队上限纪律不变；提交 bot 保持 stdlib-only、离线自主运行，回放画像只用于离线设计不进入运行时依赖。
     竞赛数据 Apache 2.0、获奖许可 CC-BY 4.0；官方 episodes 数据集与网页 episode 下载为平台公开通道。
-    所有公开性能数字只来自 workspace/metrics.json 对应的正式、完整、身份锁定 export；本地 holdout 不等于线上天梯。
+    所有公开性能数字只来自 workspace/kaggriculture/metrics.json 对应的正式、完整、身份锁定 export；本地 holdout 不等于线上天梯。
 ---
 
 # 正文（人读）

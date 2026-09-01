@@ -9,7 +9,16 @@ from pathlib import Path
 import pytest
 
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+def _repo_root(start: Path) -> Path:
+    cur = start.resolve()
+    while cur != cur.parent:
+        if (cur / ".git").exists():
+            return cur
+        cur = cur.parent
+    return cur
+
+
+REPO_ROOT = _repo_root(Path(__file__))
 SCRIPT = REPO_ROOT / "scripts" / "verify" / "build_artifact_indexes.py"
 spec = importlib.util.spec_from_file_location("artifact_indexes", SCRIPT)
 artifact_indexes = importlib.util.module_from_spec(spec)
@@ -29,8 +38,8 @@ def test_repository_indexes_are_deterministic_and_current():
 
 def test_mf_and_mg_decisions_override_mechanical_gate_wording():
     entries = _entries("ablations")
-    mf = entries["workspace/software/exports/ablations/mf_vs_v102_dev.json"]
-    mg = entries["workspace/software/exports/ablations/mg_vs_v102_dev.json"]
+    mf = entries["workspace/kaggriculture/software/exports/ablations/mf_vs_v102_dev.json"]
+    mg = entries["workspace/kaggriculture/software/exports/ablations/mg_vs_v102_dev.json"]
 
     assert mf["decision"] == "rejected_noop"
     assert mf["candidate_sha256"].startswith("cda12555")
@@ -44,9 +53,9 @@ def test_mf_and_mg_decisions_override_mechanical_gate_wording():
 def test_v48_is_indexed_as_historical_v102_only():
     entries = _entries("external")
     smoke = entries[
-        "workspace/software/exports/external/v48-seed101-smoke.json"]
+        "workspace/kaggriculture/software/exports/external/v48-seed101-smoke.json"]
     ratings = entries[
-        "workspace/software/exports/external/v48-seed101-ratings.json"]
+        "workspace/kaggriculture/software/exports/external/v48-seed101-ratings.json"]
 
     assert smoke["decision"] == "historical_v10.2_only"
     assert smoke["candidate_sha256"].startswith("360714f1")
@@ -56,12 +65,14 @@ def test_v48_is_indexed_as_historical_v102_only():
 
 def test_acceptance_index_preserves_scope_and_untracked_status():
     entries = _entries("acceptance")
-    run_29 = entries["workspace/acceptance/run-29.json"]
-    run_30 = entries["workspace/acceptance/run-30.json"]
-    run_31 = entries["workspace/acceptance/run-31.json"]
+    run_29 = entries["workspace/kaggriculture/acceptance/run-29.json"]
+    run_30 = entries["workspace/kaggriculture/acceptance/run-30.json"]
+    run_31 = entries["workspace/kaggriculture/acceptance/run-31.json"]
 
     assert run_29["decision"] == "acceptance_fail"
-    assert run_29["repository_tracked"] is False
+    # 2026-09-01 战役迁移提交将此前刻意未跟踪的验收证据一并入库（审计留痕），
+    # repository_tracked 由 False 变 True——这是仓库事实变化，非索引缺陷。
+    assert run_29["repository_tracked"] is True
     assert run_30["decision"] == "acceptance_scoped_pass"
     assert run_30["supersedes"] == ["run-26", "run-27", "run-28"]
     assert "P1 external" in run_30["evidence_scope"]

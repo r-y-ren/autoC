@@ -46,7 +46,37 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SOFTWARE_ROOT = HERE.parent
-REPO_ROOT = SOFTWARE_ROOT.parents[1]
+
+
+def _git_repo_root(start: Path) -> Path:
+    """向上找 git 仓库根（2026-09-01 战役迁移后 parents[1] 不再是仓库根）。"""
+    cur = start.resolve()
+    while cur != cur.parent:
+        if (cur / ".git").exists():
+            return cur
+        cur = cur.parent
+    return cur
+
+
+REPO_ROOT = _git_repo_root(SOFTWARE_ROOT)
+# 布局兼容：仓库相对标识符可能带旧前缀（workspace/software/，历史证据）或
+# 新前缀（workspace/kaggriculture/software/）；解析时一律映射到当前 SOFTWARE_ROOT。
+SOFTWARE_REPO_PREFIXES = ("workspace/kaggriculture/software/", "workspace/software/")
+
+
+def _resolve_repo_relative(raw: str) -> Path:
+    """把证据/清单里的仓库相对路径解析到当前布局。"""
+    text = str(raw).replace("\\", "/")
+    for prefix in SOFTWARE_REPO_PREFIXES:
+        if text.lower().startswith(prefix):
+            return SOFTWARE_ROOT / text[len(prefix):]
+    return REPO_ROOT / text
+
+
+def _repo_relative(path: Path) -> str:
+    return path.resolve().relative_to(REPO_ROOT).as_posix()
+
+
 if str(SOFTWARE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOFTWARE_ROOT))
 
@@ -101,21 +131,20 @@ ARCHIVE_ROOT = SOFTWARE_ROOT / "exports" / "holdout"
 ARCHIVED_GENERATION = ARCHIVE_ROOT / f"attempt-{PRIOR_ATTEMPT_INDEX}"
 LEGACY_ARCHIVES = {1: ARCHIVE_ROOT / "attempt-1"}
 METRICS_PATH = SOFTWARE_ROOT / "metrics.json"
-WORK_PRODUCT_BOUNDARY = "workspace/software/"
-CLOSURE_PATHS = tuple(sorted({
-    "workspace/software/scripts/run_holdout.py",
-    "workspace/software/scripts/run_eval.py",
-    "workspace/software/vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl",
-    "workspace/software/exports/holdout_schema.json",
-    "workspace/software/v6_frozen_manifest.json",
-    "workspace/software/v6_frozen_candidate.b64",
-    "workspace/software/v72_frozen_manifest.json",
-    "workspace/software/v72_frozen_candidate.b64",
-    *(
-        path.relative_to(REPO_ROOT).as_posix()
-        for path in (SOFTWARE_ROOT / "kgenv").rglob("*.py")
-    ),
-}))
+WORK_PRODUCT_BOUNDARIES = SOFTWARE_REPO_PREFIXES  # 迁移期 git status 可能同时出现两种前缀
+CLOSURE_PATHS = tuple(sorted(
+    _repo_relative(p) for p in (
+        SOFTWARE_ROOT / "scripts" / "run_holdout.py",
+        SOFTWARE_ROOT / "scripts" / "run_eval.py",
+        SOFTWARE_ROOT / "vendor" / "kaggle_environments-1.32.7+nodeps-py3-none-any.whl",
+        SOFTWARE_ROOT / "exports" / "holdout_schema.json",
+        SOFTWARE_ROOT / "v6_frozen_manifest.json",
+        SOFTWARE_ROOT / "v6_frozen_candidate.b64",
+        SOFTWARE_ROOT / "v72_frozen_manifest.json",
+        SOFTWARE_ROOT / "v72_frozen_candidate.b64",
+        *(SOFTWARE_ROOT / "kgenv").rglob("*.py"),
+    )
+))
 
 # Defensive cross-checks: the runner must refuse to start if the historical
 # exclusion registry does not match the seeds actually published by the
@@ -203,7 +232,7 @@ def _load_frozen(require_frozen: bool = True) -> tuple[dict, str]:
     manifest = json.loads(FROZEN_MANIFEST.read_text(encoding="utf-8"))
     manifest_sha = file_sha256(FROZEN_MANIFEST)
     candidate = manifest.get("candidate") or {}
-    candidate_path = REPO_ROOT / candidate.get("path", "")
+    candidate_path = _resolve_repo_relative(candidate.get("path", ""))
     if not candidate_path.is_file():
         raise ContractError("frozen candidate path is missing")
     current_sha = file_sha256(candidate_path)
@@ -277,15 +306,18 @@ def _worktree_state() -> dict:
     """
     git_ref = _git("rev-parse", "HEAD")
     porcelain = _git("status", "--porcelain").splitlines()
+    def _inside_boundary(name: str) -> bool:
+        return any(name.startswith(b) for b in WORK_PRODUCT_BOUNDARIES)
+
     outside = [
         line for line in porcelain
         if not line.startswith("??")
-        and not line[3:].strip('"').split(" -> ")[-1].startswith(WORK_PRODUCT_BOUNDARY)
+        and not _inside_boundary(line[3:].strip('"').split(" -> ")[-1])
     ]
     if outside:
         raise ContractError(
             "holdout preflight requires tracked worktree changes confined to "
-            f"{WORK_PRODUCT_BOUNDARY}: {outside}"
+            f"{WORK_PRODUCT_BOUNDARIES}: {outside}"
         )
     return {
         "git_ref": git_ref,
@@ -482,8 +514,8 @@ def _build_payload(state: dict, games: list[dict], identity: dict,
             "candidate_hash_match": {
                 "frozen": frozen["sha256"],
                 "before": identity["submission_sha256"],
-                "after": file_sha256(REPO_ROOT / frozen["path"]),
-                "pass": frozen["sha256"] == identity["submission_sha256"] == file_sha256(REPO_ROOT / frozen["path"]),
+                "after": file_sha256(_resolve_repo_relative(frozen["path"])),
+                "pass": frozen["sha256"] == identity["submission_sha256"] == file_sha256(_resolve_repo_relative(frozen["path"])),
             },
             "seed_domain_isolation": {
                 "historical_count": len(historical_seeds(ATTEMPT_INDEX)),

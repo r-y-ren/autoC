@@ -10,26 +10,26 @@ from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-SOFTWARE_ROOT = REPO_ROOT / "workspace" / "software"
+SOFTWARE_ROOT = REPO_ROOT / "workspace" / "kaggriculture" / "software"
 INDEX_PATHS = {
     "ablations": SOFTWARE_ROOT / "exports" / "ablations" / "index.json",
     "external": SOFTWARE_ROOT / "exports" / "external" / "index.json",
     "online": SOFTWARE_ROOT / "exports" / "online" / "index.json",
-    "acceptance": REPO_ROOT / "workspace" / "acceptance" / "index.json",
+    "acceptance": SOFTWARE_ROOT.parent / "acceptance" / "index.json",
 }
 
 DECISIONS = {
-    "workspace/software/exports/ablations/mf_vs_v102_dev.json":
+    "workspace/kaggriculture/software/exports/ablations/mf_vs_v102_dev.json":
         ("rejected_noop", "development", True),
-    "workspace/software/exports/ablations/mf_vs_v102_reg.json":
+    "workspace/kaggriculture/software/exports/ablations/mf_vs_v102_reg.json":
         ("rejected_noop", "regression", True),
-    "workspace/software/exports/ablations/mg_vs_v102_dev.json":
+    "workspace/kaggriculture/software/exports/ablations/mg_vs_v102_dev.json":
         ("accepted_development", "development", False),
-    "workspace/software/exports/ablations/mg_vs_v102_reg.json":
+    "workspace/kaggriculture/software/exports/ablations/mg_vs_v102_reg.json":
         ("accepted_development", "regression", False),
-    "workspace/software/exports/external/v48-seed101-smoke.json":
+    "workspace/kaggriculture/software/exports/external/v48-seed101-smoke.json":
         ("historical_v10.2_only", "external_toolchain_smoke", True),
-    "workspace/software/exports/external/v48-seed101-ratings.json":
+    "workspace/kaggriculture/software/exports/external/v48-seed101-ratings.json":
         ("historical_v10.2_only", "descriptive_rating_smoke", True),
 }
 
@@ -94,7 +94,7 @@ def _common_entry(path: Path, root: Path) -> dict[str, Any]:
 
 
 def _ablation_entries(root: Path) -> list[dict[str, Any]]:
-    directory = root / "workspace" / "software" / "exports" / "ablations"
+    directory = root / "workspace" / "kaggriculture" / "software" / "exports" / "ablations"
     entries = []
     for path in sorted(directory.glob("*.json")):
         if path.name == "index.json":
@@ -118,7 +118,7 @@ def _ablation_entries(root: Path) -> list[dict[str, Any]]:
 
 
 def _external_entries(root: Path) -> list[dict[str, Any]]:
-    directory = root / "workspace" / "software" / "exports" / "external"
+    directory = root / "workspace" / "kaggriculture" / "software" / "exports" / "external"
     entries = []
     for path in sorted(directory.glob("*.json")):
         if path.name == "index.json":
@@ -144,7 +144,7 @@ def _external_entries(root: Path) -> list[dict[str, Any]]:
 
 
 def _online_entries(root: Path) -> list[dict[str, Any]]:
-    directory = root / "workspace" / "software" / "exports" / "online"
+    directory = root / "workspace" / "kaggriculture" / "software" / "exports" / "online"
     entries = []
     for path in sorted(p for p in directory.iterdir() if p.is_file()):
         if path.name == "index.json":
@@ -166,7 +166,7 @@ def _online_entries(root: Path) -> list[dict[str, Any]]:
 
 
 def _acceptance_entries(root: Path) -> list[dict[str, Any]]:
-    directory = root / "workspace" / "acceptance"
+    directory = root / "workspace" / "kaggriculture" / "acceptance"
     entries = []
     for path in sorted(directory.glob("run-*.json"),
                        key=lambda p: int(p.stem.split("-")[1])):

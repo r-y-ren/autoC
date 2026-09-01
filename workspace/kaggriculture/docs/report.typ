@@ -85,7 +85,7 @@
   #v(0.35em)
   #text(size: 14pt)[线上反馈重构报告（m5 成稿）]
   #v(0.35em)
-  #text(size: 10pt, fill: gray)[document m5-redocument 成稿包 | 全部性能数字经 metrics 键引用渲染 | 数据源: workspace/metrics.json]
+  #text(size: 10pt, fill: gray)[document m5-redocument 成稿包 | 全部性能数字经 metrics 键引用渲染 | 数据源: workspace/kaggriculture/metrics.json]
 ]
 
 = 摘要
@@ -106,7 +106,7 @@
 
 == 交付定位
 
-战役 III 的目标是把第一轮线上反馈转化为可验证的重构: 回放语料与画像管线、线上风格对手池、市场自适应候选引擎、一次性独立 holdout v2 与提交 SOP v4。可交付对象保持 stdlib-only、离线自包含 bot 与完整证据链; 本波（m5）交付成稿包——本报告成稿、SOP v4 完整手册（`workspace/docs/sop-v4.md`）与 document 分片 metrics。账号报名、线上提交、Validation Episode 检查、round-2 采样与最终版本选择仍由队伍人工执行, 本报告不把流程约束写成已执行事实。
+战役 III 的目标是把第一轮线上反馈转化为可验证的重构: 回放语料与画像管线、线上风格对手池、市场自适应候选引擎、一次性独立 holdout v2 与提交 SOP v4。可交付对象保持 stdlib-only、离线自包含 bot 与完整证据链; 本波（m5）交付成稿包——本报告成稿、SOP v4 完整手册（`workspace/kaggriculture/docs/sop-v4.md`）与 document 分片 metrics。账号报名、线上提交、Validation Episode 检查、round-2 采样与最终版本选择仍由队伍人工执行, 本报告不把流程约束写成已执行事实。
 
 == 证据边界
 
@@ -426,7 +426,7 @@ Wilson 方法为 #fmt(m4wilson.at("method")), confidence=#fmt(m4wilson.at("confi
 
 = 提交 SOP v4 要点
 
-本节只收录操作约束要点; 完整手册见 `workspace/docs/sop-v4.md`（V4-01..V4-44 检查项成稿）。以下均为流程约束, 不是已执行声明; 额度与阈值（每日提交 ≤5 次、每候选 ≤2 次/日、每轮回拉 ≥3 局、公共局累计 ≥6 局且胜率低于 50%）是蓝图契约常量, 不是实测数字。
+本节只收录操作约束要点; 完整手册见 `workspace/kaggriculture/docs/sop-v4.md`（V4-01..V4-44 检查项成稿）。以下均为流程约束, 不是已执行声明; 额度与阈值（每日提交 ≤5 次、每候选 ≤2 次/日、每轮回拉 ≥3 局、公共局累计 ≥6 局且胜率低于 50%）是蓝图契约常量, 不是实测数字。
 
 == 权威身份门
 
@@ -524,4 +524,4 @@ AI 辅助完成评估器加固、策略修复、测试与本地证据生成, 并
 
 战役 II 该对象角色标签为 #fmt(elo.at("role")), order_sensitive=#fmt(elo.at("order_sensitive")), k=#fmt(elo.at("k")), start=#fmt(elo.at("start"))。它只保留为复核 export 的描述性产物; 由于对局输入顺序会影响更新轨迹, 不用于候选确认、版本门槛或任何线上推断。#source("confirmatory_elo_appendix")
 
-正式证据的唯一数据入口是 `workspace/metrics.json`; 其映射同时给出两代 export SHA、schema 和各确认性对象的 JSON Pointer, 避免从日志或旧报告手工抄值。文档侧的核对入口为 `m("confirmatory_export_traceability")` 与 `m("m4_confirmatory_export_traceability")` 两个键; 战役 III 新增键的需求与回填对照见 `metrics-keys-r3.md`。
+正式证据的唯一数据入口是 `workspace/kaggriculture/metrics.json`; 其映射同时给出两代 export SHA、schema 和各确认性对象的 JSON Pointer, 避免从日志或旧报告手工抄值。文档侧的核对入口为 `m("confirmatory_export_traceability")` 与 `m("m4_confirmatory_export_traceability")` 两个键; 战役 III 新增键的需求与回填对照见 `metrics-keys-r3.md`。

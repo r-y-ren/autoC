@@ -260,9 +260,11 @@ def test_repo_root_identity_command_runs_and_checks_readme():
     import subprocess
     import sys
 
-    repo_root = SOFTWARE_ROOT.parents[1]
+    repo_root = SOFTWARE_ROOT
+    while repo_root != repo_root.parent and not (repo_root / ".git").exists():
+        repo_root = repo_root.parent
     proc = subprocess.run(
-        [sys.executable, "workspace/software/scripts/check_candidate_identity.py"],
+        [sys.executable, str(repo_root / "workspace" / "kaggriculture" / "software" / "scripts" / "check_candidate_identity.py")],
         cwd=repo_root, capture_output=True, text=True, timeout=60)
     assert proc.returncode == 0, proc.stdout + proc.stderr
     assert "readme" in proc.stdout.lower()

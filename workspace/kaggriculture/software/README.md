@@ -14,60 +14,60 @@ bot、本地评估基建、机制量化工具与增强策略 A/B。
 
 ```bash
 # 1) 依赖安装（锁定）
-python -m pip install -q -r workspace/software/requirements.txt
+python -m pip install -q -r workspace/kaggriculture/software/requirements.txt
 
 # 2) 冒烟自检（起环境 -> 自博弈 -> 契约校验 -> 退出码判定，超时看门狗 300s）
-python workspace/software/smoke_boot.py
+python workspace/kaggriculture/software/smoke_boot.py
 
 # 3) 测试套件
-python -m pytest workspace/software/tests -q
+python -m pytest workspace/kaggriculture/software/tests -q
 
 # 3b) 外部 H2H 正式证据（只读黑盒压力测试；与 promotion/holdout 隔离）
 #     v48/v72 字节留在 kaggle_simulations/opponents，输出可指定到任意用户路径
-python workspace/software/scripts/h2h_external_probe.py \
-  --out workspace/software/exports/external/v48-smoke.json \
+python workspace/kaggriculture/software/scripts/h2h_external_probe.py \
+  --out workspace/kaggriculture/software/exports/external/v48-smoke.json \
   --opponents v48 --seeds 101,102
-python workspace/software/scripts/check_external_h2h.py \
-  --input workspace/software/exports/external/v48-smoke.json
+python workspace/kaggriculture/software/scripts/check_external_h2h.py \
+  --input workspace/kaggriculture/software/exports/external/v48-smoke.json
 
 # 3c) 顺序无关 BT/Davidson 描述性评级（不证明 holdout 泛化；Elo 仍为历史附录）
-python workspace/software/scripts/fit_bradley_terry.py \
-  --input workspace/software/exports/eval_results.dev.json \
-  --output workspace/software/exports/external/ratings.dev.json \
+python workspace/kaggriculture/software/scripts/fit_bradley_terry.py \
+  --input workspace/kaggriculture/software/exports/eval_results.dev.json \
+  --output workspace/kaggriculture/software/exports/external/ratings.dev.json \
   --bootstrap 200 --bootstrap-seed 20260831
 
 # 4) 强度门（认证池全体——m1 强对手 + m2 线上风格对手——须对冻结弱池 >=50% 胜率，不达标退出码 1）
-python workspace/software/scripts/check_opponent_strength.py --rounds 3
+python workspace/kaggriculture/software/scripts/check_opponent_strength.py --rounds 3
 
 # 5) 开发评估（所有 pair×seed 均跑 AB/BA；只写 eval_results.dev.json）
-python workspace/software/scripts/run_eval.py --rounds 4
+python workspace/kaggriculture/software/scripts/run_eval.py --rounds 4
 
 # 5b) 扩展池开发评估（--extended-pool 把 m2 线上风格对手加入矩阵；正式 export 保持冻结矩阵）
-python workspace/software/scripts/run_eval.py --quick --extended-pool
+python workspace/kaggriculture/software/scripts/run_eval.py --quick --extended-pool
 
 # 6) 正式开发门发布（完整矩阵 + 回归门通过后才原子替换 eval_results.json）
-python workspace/software/scripts/run_eval.py --rounds 4 --assert-regression --official
+python workspace/kaggriculture/software/scripts/run_eval.py --rounds 4 --assert-regression --official
 
 # 7) m2a 契约自证（缺对手/单座位/异常 fail-closed；发布原子性）
-python workspace/software/scripts/check_eval_contract.py --mode gate
-python workspace/software/scripts/check_eval_contract.py --mode export
+python workspace/kaggriculture/software/scripts/check_eval_contract.py --mode gate
+python workspace/kaggriculture/software/scripts/check_eval_contract.py --mode export
 
 # 8) 失败模式探针（submission 对全池多种子深记录，产出 failure_modes.md 的证据层）
-python workspace/software/scripts/analyze_failure_modes.py --rounds 8
+python workspace/kaggriculture/software/scripts/analyze_failure_modes.py --rounds 8
 
 # 9) 完整迭代门（8 必测对手 × 4 seeds × AB/BA = 64 局；自定义子集仅 exploratory）
-python workspace/software/scripts/iterate_gate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label candidate --rounds 4 --require-complete
+python workspace/kaggriculture/software/scripts/iterate_gate.py --candidate workspace/kaggriculture/software/kaggle_simulations/agent/main.py --label candidate --rounds 4 --require-complete
 
 # 10) 只读身份自检（working/frozen/published 三类身份以 active_candidate.json 为准；
 #     校验含 README 投影，从仓库根直接运行）
-python workspace/software/scripts/check_candidate_identity.py
+python workspace/kaggriculture/software/scripts/check_candidate_identity.py
 
 # 11) LLM A/B（每局重建 provider/budget；无完整 KG_LLM_* 时只做 NullProvider 自检）
-python workspace/software/scripts/run_llm_ab.py --rounds 4
+python workspace/kaggriculture/software/scripts/run_llm_ab.py --rounds 4
 
 # 12) m1 回放语料（战役 III）：重建画像档案 + 完整性校验（原始回放在 gitignored .tmp-corpus/）
-python workspace/software/scripts/corpus_build.py
-python workspace/software/scripts/corpus_integrity.py --mode official
+python workspace/kaggriculture/software/scripts/corpus_build.py
+python workspace/kaggriculture/software/scripts/corpus_integrity.py --mode official
 
 # 13) holdout 证据链（一次性；只可验证，不可重跑/换种子）：
 #     attempt-1（战役 II 92.9%）归档于 exports/holdout/attempt-1/；
@@ -77,30 +77,30 @@ python workspace/software/scripts/corpus_integrity.py --mode official
 #     attempt-5（v7.2 候选 c44e2b25，11 对手全池 × 8 新种子 × AB/BA）为当前权威代，
 #     发布于 exports/holdout/published/，正式投影原子替换 eval_results.json；
 #     历史/现行身份一律以 active_candidate.json 为准
-python workspace/software/scripts/run_holdout.py --verify-published --require-frozen
-python workspace/software/scripts/check_eval_contract.py --mode official --input workspace/software/exports/eval_results.json
+python workspace/kaggriculture/software/scripts/run_holdout.py --verify-published --require-frozen
+python workspace/kaggriculture/software/scripts/check_eval_contract.py --mode official --input workspace/kaggriculture/software/exports/eval_results.json
 
 # 14) r3-P0 分层构建基础设施（战役 III round-3）：
 #     a) 成功口径回放分析（observation 状态差分；影子校验 0 mismatch 才可信）
-python workspace/software/scripts/replay_deep_stats.py <replay.json>... --success-json workspace/software/exports/online/<name>_success_stats.json
+python workspace/kaggriculture/software/scripts/replay_deep_stats.py <replay.json>... --success-json workspace/kaggriculture/software/exports/online/<name>_success_stats.json
 #     b) 配对消融门（candidate vs 冻结 champion，同 (对手, 种子, 座位) 配对；
 #        合并门三指标：新风格池胜率 >= / 最差单风格胜率 >= / 灾难败局率 <=，产物仅入 exports/ablations/）
-python workspace/software/scripts/ablate.py --candidate workspace/software/kaggle_simulations/agent/main.py --label <layer-label>
+python workspace/kaggriculture/software/scripts/ablate.py --candidate workspace/kaggriculture/software/kaggle_simulations/agent/main.py --label <layer-label>
 
 # 15) P2 DNA/liveness 离线法证（仅显式本地 .tmp-dna 四件套；不运行 replay/engine/network）
-python workspace/software/scripts/analyze_dna_forensics.py \
+python workspace/kaggriculture/software/scripts/analyze_dna_forensics.py \
   --barcodes .tmp-dna/barcodes.csv \
   --consensus .tmp-dna/consensus.csv \
   --references .tmp-dna/reference_barcodes.csv \
   --field-validation .tmp-dna/field_validation.json
-python workspace/software/scripts/check_dna_forensics.py
+python workspace/kaggriculture/software/scripts/check_dna_forensics.py
 ```
 
 ### P2 DNA/liveness scope
 
 `exports/replay_dna/` is an offline exploratory identity/liveness evidence layer. It consumes only the explicit local `barcodes.csv`, `consensus.csv`, `reference_barcodes.csv`, and `field_validation.json` under `.tmp-dna`; all four inputs are source-hashed and the report is recomputed during verification. Each barcode is exactly 30 ordered lowercase 10-hex loci, with the genome accession defined as the first 8 characters of the SHA-1 of the concatenated bands. Stability is the mean per-locus modal agreement across all episodes in one submission-wide group (both seats; team must be unambiguous). RMP uses the field-specific allele frequencies and declared floor, with the notebook's exact strict thresholds.
 
-This is producer/source-attested precomputed barcode evidence, not an independent replay reconstruction: `extractor_status=source_extractor_not_published`. `IDENTICAL / SAME SOURCE` means only 30-band anchor equality; it does not prove the same agent or a real source. DNA stability is separate from engine action liveness. The artifacts are explicitly exploratory and are not strength, promotion, holdout, online, or performance evidence. DNA outputs are restricted to `workspace/software/exports/replay_dna/`, and action, observation, state, market, price, quantity, inventory, and raw trace fields are rejected recursively.
+This is producer/source-attested precomputed barcode evidence, not an independent replay reconstruction: `extractor_status=source_extractor_not_published`. `IDENTICAL / SAME SOURCE` means only 30-band anchor equality; it does not prove the same agent or a real source. DNA stability is separate from engine action liveness. The artifacts are explicitly exploratory and are not strength, promotion, holdout, online, or performance evidence. DNA outputs are restricted to `workspace/kaggriculture/software/exports/replay_dna/`, and action, observation, state, market, price, quantity, inventory, and raw trace fields are rejected recursively.
 
 <!-- ACTIVE_CANDIDATE_IDENTITY:BEGIN -->
 working_candidate_sha256=1bde14b03cfc4692efebc28ec80410f4de3dd5d0e39a633c83683fe3d687a568
@@ -128,7 +128,7 @@ holdout seeds are generated or consumed by this software wave.
 ## 目录
 
 ```
-workspace/software/
+workspace/kaggriculture/software/
 ├── kaggle_simulations/agent/main.py   可提交 bot（官方 kit 结构，自包含 stdlib-only；
 │                                      上传：kaggle competitions submit kaggriculture -f main.py）
 ├── kgenv/                             本地评估包
@@ -288,7 +288,7 @@ greedy_carrot 1162.2；回归门 PASS（20 局 55.49s）。
   （near_band 8 负 / template_wheat 6 负 / crop_rotator 4 负），self_feed 反而由 5-3 改善到 14-2
 - 座位分层：AB 55-9 / BA 53-11（两层 score_rate 0.859/0.828）；Elo 附录（描述性、顺序敏感）：
   template_wheat 1535.1 全池第一，submission 1349.0 第五
-- 数字全部来自 metrics 键 `m4_*`（16 键，见 `workspace/metrics.json`）；战役 II attempt-1 的
+- 数字全部来自 metrics 键 `m4_*`（16 键，见 `workspace/kaggriculture/metrics.json`）；战役 II attempt-1 的
   92.9% 结论保留在历史键 `holdout_*`/`confirmatory_*` 与 `exports/holdout/attempt-1/` 冻结档案，
   二者分属不同候选（7c482921 vs 5713c17e），互不外推
 

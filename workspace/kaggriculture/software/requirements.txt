@@ -1,5 +1,5 @@
 # Kaggriculture software stack -- locked requirements.
-# Acceptance: python -m pip install -q -r workspace/software/requirements.txt
+# Acceptance: python -m pip install -q -r workspace/kaggriculture/software/requirements.txt
 #
 # The official engine wheel is vendored (Apache-2.0, (c) Kaggle Inc):
 #   upstream https://pypi.org/project/kaggle-environments/ (version 1.32.7)
@@ -10,9 +10,9 @@
 # unmodified; see vendor/WHEEL_PROVENANCE and README.md.
 
 # NOTE: run pip from the REPO ROOT (as the acceptance checklist does):
-#   python -m pip install -q -r workspace/software/requirements.txt
+#   python -m pip install -q -r workspace/kaggriculture/software/requirements.txt
 
-workspace/software/vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl
+workspace/kaggriculture/software/vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl
 
 # core runtime deps of kaggle_environments (headless path)
 jsonschema==4.26.0

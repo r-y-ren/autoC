@@ -29,9 +29,19 @@ from kgenv.replay_profile import (
     load_replay,
 )
 
-REPO = Path(__file__).resolve().parents[3]
+def _repo_root(start: Path) -> Path:
+    cur = start.resolve()
+    while cur != cur.parent:
+        if (cur / ".git").exists():
+            return cur
+        cur = cur.parent
+    return cur
+
+
+REPO = _repo_root(Path(__file__))
+SOFTWARE = REPO / "workspace" / "kaggriculture" / "software"
 INTEGRITY_SCRIPT = (
-    REPO / "workspace" / "software" / "scripts" / "corpus_integrity.py"
+    SOFTWARE / "scripts" / "corpus_integrity.py"
 )
 REAL_EPISODE = REPO / ".tmp-corpus" / "raw" / "episode-102201446-replay.json"
 

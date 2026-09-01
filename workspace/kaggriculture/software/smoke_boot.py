@@ -8,8 +8,8 @@ exits with a status code:
     1  any phase failed
     2  watchdog timeout exceeded
 
-Usage (from repo root or workspace/software):
-    python workspace/software/smoke_boot.py
+Usage (from repo root or workspace/kaggriculture/software):
+    python workspace/kaggriculture/software/smoke_boot.py
 """
 
 from __future__ import annotations

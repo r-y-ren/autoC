@@ -1,9 +1,9 @@
 """Read-only active-candidate identity self-check (works from repo root).
 
 Usage:
-    python workspace/software/scripts/check_candidate_identity.py
+    python workspace/kaggriculture/software/scripts/check_candidate_identity.py
 
-Loads workspace/software/active_candidate.json, re-derives every referenced
+Loads workspace/kaggriculture/software/active_candidate.json, re-derives every referenced
 identity from the artifacts (working main.py SHA, frozen snapshot decode,
 published holdout export/seed manifest, vendored engine wheel, runtime) and
 validates the README machine projection.  Exit 0 only when everything,

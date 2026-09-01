@@ -51,6 +51,16 @@ def _under_root(root: Path, relative: str) -> Path:
     return root / text
 
 
+def _git_repo_root(start: Path) -> Path:
+    """从任意内部目录向上找 git 仓库根（布局迁移后 root.parents[1] 不再是仓库根）。"""
+    cur = start.resolve()
+    while cur != cur.parent:
+        if (cur / ".git").exists():
+            return cur
+        cur = cur.parent
+    return start.resolve()
+
+
 def _require_digest(value: Any, label: str) -> str:
     if not isinstance(value, str) or len(value) != 64:
         raise CandidateIdentityError(f"{label} must be a SHA-256 digest")
@@ -124,27 +134,36 @@ def validate_active_candidate(payload: dict[str, Any], *,
         raise CandidateIdentityError("working candidate SHA does not match main.py")
     _require_git_ref(working.get("git_ref"), "working git ref", root=root,
                      require_head_ancestor=True)
-    repo_root = root.parents[1]
-    source_path = f"workspace/software/{working['path']}"
-    try:
-        blob_oid = subprocess.run(
-            ["git", "rev-parse", f"{working['git_ref']}:{source_path}"],
-            cwd=repo_root, text=True, capture_output=True, check=True,
-            timeout=10).stdout.strip()
-    except (OSError, subprocess.SubprocessError) as exc:
-        raise CandidateIdentityError("working git blob OID cannot be resolved") from exc
+    repo_root = _git_repo_root(root)
+    # git 树路径兼容（2026-09-01 战役迁移）：working git_ref 可能指向迁移前
+    # （workspace/software/…）或迁移后（workspace/kaggriculture/software/…）的提交
+    source_paths = [f"workspace/kaggriculture/software/{working['path']}",
+                    f"workspace/software/{working['path']}"]
+
+    def _git(args: list[str], *, binary: bool = False) -> bytes | str:
+        proc = subprocess.run(["git", *args], cwd=repo_root,
+                              capture_output=True, check=True, timeout=30,
+                              text=not binary)
+        return proc.stdout
+
+    blob_oid = None
+    source: bytes | None = None
+    for candidate_path in source_paths:
+        try:
+            oid = _git(["rev-parse", f"{working['git_ref']}:{candidate_path}"]).strip()
+            content = _git(["show", f"{working['git_ref']}:{candidate_path}"], binary=True)
+        except (OSError, subprocess.SubprocessError):
+            continue
+        blob_oid, source = oid, content
+        break
+    if blob_oid is None or source is None:
+        raise CandidateIdentityError("working git blob OID cannot be resolved")
     if blob_oid != working.get("git_blob_oid"):
         raise CandidateIdentityError("working git blob OID does not match source commit")
-    try:
-        source = subprocess.run(
-            ["git", "show", f"{working['git_ref']}:{source_path}"],
-            cwd=repo_root, capture_output=True, check=True, timeout=30)
-    except (OSError, subprocess.SubprocessError) as exc:
-        raise CandidateIdentityError("working source commit cannot be read") from exc
-    canonical_lf_sha = hashlib.sha256(source.stdout).hexdigest()
+    canonical_lf_sha = hashlib.sha256(source).hexdigest()
     if canonical_lf_sha != working.get("canonical_lf_sha256"):
         raise CandidateIdentityError("working canonical LF SHA does not match source commit")
-    _require_working_source_match(working_path, source.stdout,
+    _require_working_source_match(working_path, source,
                                   working.get("canonical_lf_sha256"))
 
     frozen = payload["last_promoted_frozen"]

@@ -13,7 +13,7 @@ description: 快循环波次化交付编排（D12）：按蓝图里程碑依赖�
 
 - 本技能全程作用于**单个战役** `<cid>`；其他战役可并行推进，互不干扰。
 - 战役在决策阶段已登记（`init_state --campaign <cid> --phase decide`，root=workspace/<cid>/）。
-  legacy 例外：kaggriculture 战役 root=workspace/ 本体（历史冻结证据嵌死平铺路径，不迁移）。
+  （kaggriculture 已于 2026-09-01 迁入标准布局 workspace/kaggriculture/；守卫兼容层仍支持 legacy root=workspace 的登记读取。）
 - 所有阶段流转 / 验收 / 汇总命令都带 `--campaign <cid>`；蓝图 cmd 内的路径写战役根全路径。
 
 ## 前置

@@ -193,7 +193,7 @@ def main() -> int:
         (root / ".flow" / "state.json").write_text(json.dumps(v2), encoding="utf-8")
         ws = root / "workspace"
         shutil.rmtree(ws / "acceptance")
-        (ws / "blueprint.md").unlink()
+        (ws / "blueprint.md").unlink(missing_ok=True)  # 真实仓库已是容器布局，无平铺蓝图
         (ws / "cup-a").mkdir()
         (ws / "cup-b").mkdir()
         (ws / "cup-a" / "blueprint.md").write_text(BP_HEAD +

@@ -5,8 +5,8 @@ is never holdout evidence.  External opponent bytes remain isolated under
 kaggle_simulations/opponents and never enter the submission path.
 
 Example:
-    python workspace/software/scripts/h2h_external_probe.py \
-      --out workspace/software/exports/external/v48-smoke.json \
+    python workspace/kaggriculture/software/scripts/h2h_external_probe.py \
+      --out workspace/kaggriculture/software/exports/external/v48-smoke.json \
       --opponents v48 --seeds 101
 """
 
@@ -25,7 +25,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SOFTWARE_ROOT = HERE.parent
-REPO_ROOT = SOFTWARE_ROOT.parents[1]
+REPO_ROOT = SOFTWARE_ROOT
+while REPO_ROOT != REPO_ROOT.parent and not (REPO_ROOT / ".git").exists():
+    REPO_ROOT = REPO_ROOT.parent
 if str(SOFTWARE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOFTWARE_ROOT))
 
@@ -293,7 +295,7 @@ def _reject_repository_output(output: Path) -> None:
         inside_repo = str(target).startswith(str(REPO_ROOT.resolve()) + os.sep)
         inside_external = str(target).startswith(str(external_root) + os.sep)
     if inside_repo and not inside_external:
-        raise ContractError("repository output must stay under workspace/software/exports/external")
+        raise ContractError("repository output must stay under the campaign software exports/external directory")
 
 
 def _reject_output_alias(output: Path, candidate: dict, opponents: list[dict], closure: dict) -> None:

@@ -5,7 +5,7 @@
 > .flow/state.json 升级 schema v2（全局 phase=idle|collect + campaigns 注册表，v1 平铺兼容读取）；
 > 守卫按最长 root 匹配路由（workspace/<未登记id>/ 拒写，容器 README 例外）；init_state 支持 --campaign 登记/流转/--close
 > 并自动完成 v1→v2 升级与骨架创建；run_acceptance/merge_metrics/archive_campaign 全部 --campaign 化（retry 战役级）；
-> 归档单战役化（archive 后注销该战役，其余不动）。legacy：kaggriculture root=workspace（冻结证据嵌死平铺路径，不迁移）。
+> 归档单战役化（archive 后注销该战役，其余不动）。legacy 处置：kaggriculture 起初登记为 root=workspace 的平铺战役，同日随结构迁移进 workspace/kaggriculture/（评估链兼容层接受新旧两种规范路径前缀，冻结证据字符串不变）。
 > 同轮：外部参考资料唯一归宿 <战役根>/references/（rules/data/code/digests + INDEX.md 台账）。
 > v1.0 变更：T4 内容框架轮——K-09 方向冷启动（/discover）、合规模式三分进蓝图硬校验（prep/apply/assist，D10）、
 > 正文层结构 lint（WARN 级）、跑批成本观测列、远程备份（origin 自动 push）、格式规范模板（CUMCM 论文/BP 骨架）。
@@ -167,7 +167,6 @@ autoC/
 │   │   ├── hardware/            # Hardware Agent：BOM / 引脚表 / 固件
 │   │   ├── docs/                # Document Agent：报告 + PPT 源文件（Marp/Typst）
 │   │   └── acceptance/          # 验收角色：执行记录 / 失败工单 / 分析报告
-│   └── （legacy：kaggriculture 首战役为历史平铺布局，blueprint.md 等在顶层；归档后消失）
 ├── export/                      # KB 交付导出层（D6：条目层纯投影，读者=团队自用）
 │   └── digest-<方向>-<YYYY-MM>.md  # 方向情报简报（S-15 生成；每3天刷新，当月最后一次跑批转正式版）
 ├── archive/                     # 历史作品库（交付物 3，归档后只读，带 git tag）
