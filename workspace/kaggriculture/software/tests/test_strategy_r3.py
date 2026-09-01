@@ -117,17 +117,26 @@ def _pasture_tile(animal="SHEEP", yield_units=0, consecutive_unfed=0,
 # --------------------------------------------------------------------------
 
 def test_day0_burst_buys_both_species():
-    # 3000 start, empty ranch: the opening emits COW 2 + SHEEP 2 (1800),
-    # keeping OPENING_RESERVE liquid -- both species in the same turn so
-    # the d6 wool and d8 milk windows both open on time
+    # V-T1 opening shift (tetsuya 08-31 frame, user-directed 2026-09-02):
+    # day 0 buys NO animals (the 3000 start stays with the wheat opening);
+    # day 1 stages 3 sheep and day 2 stages 2 cows, each money-gated by
+    # OPENING_RESERVE -- the wool (d1 sheep + 6) and milk (d2 cows + 8)
+    # windows still open on time.
     private = {"shed": _shed(), "seeds": {"WHEAT": 12}, "inventories": [{}]}
+    main._STATE.clear()
     orders, _ = _market_orders_with(private, animals=0, herd=0, day=0,
                                     money=3000.0, quads=["NW"])
+    assert not _orders_contains(orders, "BUY_ANIMAL", "COW")
+    assert not _orders_contains(orders, "BUY_ANIMAL", "SHEEP")
+    orders, _ = _market_orders_with(private, animals=0, herd=0, day=1,
+                                    money=2900.0, quads=["NW"])
+    assert _order_qty(orders, "BUY_ANIMAL", "SHEEP") == 3
+    assert 3 * 500 + main.OPENING_RESERVE <= 2900
+    orders, _ = _market_orders_with(private, animals=0, herd=3, day=2,
+                                    money=1700.0, quads=["NW"])
     assert _order_qty(orders, "BUY_ANIMAL", "COW") == 2
-    assert _order_qty(orders, "BUY_ANIMAL", "SHEEP") == 2
-    spent = 2 * 400 + 2 * 500
-    assert spent + main.OPENING_RESERVE <= 3000
-    assert 1800 <= spent <= 2200          # winner band for the d0 ticket
+    assert 2 * 400 + main.OPENING_RESERVE <= 1700
+    main._STATE.clear()
 
 
 def test_day0_burst_is_money_gated_with_reserve():

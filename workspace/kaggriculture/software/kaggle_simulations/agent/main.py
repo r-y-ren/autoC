@@ -605,6 +605,11 @@ LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
 # vs a cow's ~5k in the observed premium-milk meta).
 OPENING_HERD = {"COW": 2, "SHEEP": 2}
 OPENING_RESERVE = 800    # cash kept besides the day-0 burst (m2b cushion)
+# V-T1 ablation copy (tetsuya 08-31 opening shift): the day-0 herd burst is
+# replaced by a staged day1-3S / day2-2C sequence; day 0 keeps its cash for
+# the wheat opening. Labour plan and the rest of the r3 ramp unchanged.
+OPENING_SHIFT = True
+OPENING_SHIFT_SEQ = {1: {"SHEEP": 3}, 2: {"COW": 2}}
 HERD_CAP = 14            # total herd ceiling; m2b tests pin _herd_target
                          # to the constant, not a literal
 # r4-P3: STATE-DRIVEN herd ceiling.  Beyond the pinned 14-head plan,
@@ -662,10 +667,13 @@ FERT_VALUE_GATE = 70     # fert sack sold at 70+ beats a wheat/carrot boost
                          # never fertilize and sold 158u for +12.8k)
 WHEAT_MONEY_GATE = 30   # wheat joins the rotation as a money crop at 30+
 WHEAT_MONEY_CAP_PER_QUAD = 3
-CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 14), "CARROT": (15, 26)}
+# V-T2 ablation copy (tetsuya endgame rotation): carrot window extends to
+# day 27 (first_yield 2 -> a day-27 planting still produces on the evening of
+# 28 and cashes out on 29) with a wider 6/quad cap for the endgame line.
+CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 14), "CARROT": (15, 27)}
 CROP_FLOOR = {"MELON": 150, "STRAWBERRY": 55, "CARROT": 28}
-CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 8, "CARROT": 4}  # v6-F
-PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
+CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 8, "CARROT": 6}  # v6-F; V-T2
+PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 27, "MELON": 17, "STRAWBERRY": 14}
 
 # ---- r5-P4 macro-plan layer: strategy-space extension --------------------
 # 【中文】宏观计划层（战役 III 第 5 轮 P4）：r4 框架本地 142W-2L，但公榜
@@ -3105,10 +3113,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0),
                        herd_total)
     opening_bought = False
-    if not last_day and day == 0 and herd_total == 0:
+    _open_seq = OPENING_SHIFT_SEQ if OPENING_SHIFT else {0: OPENING_HERD}
+    if not last_day and day in _open_seq:
+        _species_pre = _species_counts(farm, private, herd_total)
         spend = 0
         for animal in ("COW", "SHEEP"):
-            want = OPENING_HERD.get(animal, 0)
+            want = max(0, _open_seq[day].get(animal, 0) - 0)
+            if OPENING_SHIFT:
+                want = max(0, _open_seq[day].get(animal, 0)
+                           - _species_pre.get(animal, 0))
             cost = ANIMALS[animal]["cost"]
             n = min(want, int((money - spend - OPENING_RESERVE) // cost)) \
                 if money - spend > OPENING_RESERVE else 0
@@ -3118,7 +3131,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                                 _get(obs, "hour", 0), n)
                 spend += n * cost
                 opening_bought = True
-    if not opening_bought and not last_day and herd_total < target \
+    # V-T1: under the opening shift the paced loop also stands down on
+    # day 0 -- the whole day belongs to the wheat opening, no animals.
+    _opening_shift_hold = OPENING_SHIFT and day == 0
+    if not opening_bought and not _opening_shift_hold and not last_day \
+            and herd_total < target \
             and shed_count < 88 and bought < pace:
         species = _species_counts(farm, private, herd_total)
         # interleave species by relative deficit so cows reach their day-8+
