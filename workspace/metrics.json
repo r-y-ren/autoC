@@ -1,5 +1,5 @@
 {
-  "_generated_at": "2026-09-01T18:58:55",
+  "_generated_at": "2026-09-01T19:30:36",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
@@ -5721,6 +5721,27 @@
         },
         "unit": "historical-external-evidence-closure",
         "method": "Historical v48 seed-101 smoke and ratings remain byte-preserved evidence for v10.2 only; they are not rewritten as M-G evidence. Current strict validation is expected to fail closed after the working candidate SHA changes."
+      },
+      "mh_terminal_opponent_inventory_feasibility": {
+        "value": {
+          "candidate_sha256_unchanged": "1bde14b03cfc4692efebc28ec80410f4de3dd5d0e39a633c83683fe3d687a568",
+          "implementation_status": "NO_GO",
+          "opponent_shed_online_observable": false,
+          "opponent_carrier_inventory_online_observable": false,
+          "opponent_seeds_online_observable": false,
+          "public_farms_online_observable": true,
+          "public_market_online_observable": true,
+          "round7_public_games": 21,
+          "round7_terminal_public_snapshots_available": false,
+          "target_failure_mode_calibrated": false,
+          "approved_future_direction": "separate public_liquidation_pressure development probe on day 28 only",
+          "candidate_modified": false,
+          "local_ablation_executed": false,
+          "holdout_executed": false,
+          "online_submission_occurred": false
+        },
+        "unit": "feasibility-audit",
+        "method": "2026-09-01 read-only engine/schema and structured-evidence audit. Both farms and global market are public, but each seat receives only its own private shed, carrier inventories and seeds. round7_ledger.json contains final rewards only and no day-26..29 public snapshots, so an opponent-inventory gate cannot be legally observed or calibrated. A future day-28 public liquidation-pressure probe would be a separate hypothesis, not an inventory estimate."
       }
     },
     "unmeasured": {
