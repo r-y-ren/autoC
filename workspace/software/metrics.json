@@ -5588,6 +5588,24 @@
       },
       "unit": "identity-stability-forensics",
       "method": "deterministic recomputation from source-attested 30-band rows using notebook first-seen modal tie semantics, matched-locus field RMP, strict verdict thresholds and minimum stability <0.6 OUT OF RANGE guard; not strategy strength or engine action liveness"
+    },
+    "v102_round7_online_probe": {
+      "value": {
+        "submission_ref": 55932134,
+        "candidate_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+        "candidate_status": "development",
+        "validation_status": "COMPLETE",
+        "validation_episode": 104498289,
+        "public_score_after_validation": 600.0,
+        "public_games_at_capture": 0,
+        "public_record": null,
+        "quota_used_today": 1,
+        "quota_remaining": 4,
+        "ladder_performance_evidence": false,
+        "holdout_executed": false
+      },
+      "unit": "online-validation-probe",
+      "method": "2026-09-01 actual Kaggle CLI submission and readback; candidate identity PASS, 716 tests PASS, smoke_boot PASS before upload; submission 55932134 COMPLETE with validation episode 104498289 and initial score 600.0; episodes listing contained no EPISODE_TYPE_PUBLIC games, so no win-rate or promotion claim; evidence workspace/software/exports/online/round7_ledger.json"
     }
   },
   "unmeasured": {

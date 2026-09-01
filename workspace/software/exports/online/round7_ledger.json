@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "round": 7,
+  "submission_ref": 55932134,
+  "submitted_at_utc": "2026-09-01T04:51:25.487Z",
+  "candidate_label": "v10.2-working online resampling probe",
+  "candidate_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+  "candidate_status": "development",
+  "candidate_holdout_status": "not_run",
+  "submission_file": "workspace/software/kaggle_simulations/agent/main.py",
+  "submission_message": "v10.2 current candidate 360714f1 online probe",
+  "authorization": "User explicitly requested the next tests and online submission in the current session.",
+  "pre_submit_gates": {
+    "candidate_identity": "PASS",
+    "full_software_tests": "716 passed in 35.44s",
+    "smoke_boot": "PASS (7.9s, phases=4; includes 720-step self-play)",
+    "candidate_sha_verified": true,
+    "stale_archive_rejected": {
+      "path": ".tmp-intel/submit/submission102.tar.gz",
+      "archived_main_sha256": "59b96bd974c26b9f710e9ffb310e84a171126a553a7816358d69203e05d8b53d",
+      "reason": "archive main.py did not match the active candidate SHA and was not submitted"
+    }
+  },
+  "quota": {
+    "used_today_before_submission": 0,
+    "used_today_after_submission": 1,
+    "remaining_after_submission": 4,
+    "candidate_submissions_today": 1
+  },
+  "validation": {
+    "status": "COMPLETE",
+    "episode_id": 104498289,
+    "episode_type": "EPISODE_TYPE_VALIDATION",
+    "episode_state": "COMPLETED",
+    "episode_created_at": "2026-09-01T04:51:25.893Z",
+    "episode_ended_at": "2026-09-01T04:56:45.146Z",
+    "public_score_after_validation": 600.0
+  },
+  "public_sampling": {
+    "sampled_at_utc": "2026-09-01T05:01:00Z",
+    "public_games": 0,
+    "record": null,
+    "win_rate": null,
+    "status": "pending_public_episodes",
+    "note": "The episode list contains only the validation self-play. Validation is excluded from ladder performance statistics."
+  },
+  "evidence_scope": {
+    "online_submission_occurred": true,
+    "validation_evidence": true,
+    "ladder_performance_evidence": false,
+    "promotion_evidence": false,
+    "holdout_evidence": false,
+    "historical_published_holdout_reused": false
+  },
+  "next_sampling_gate": "Pull at least 3 EPISODE_TYPE_PUBLIC games when available; evaluate the >=6-game and <50% stop-loss rule only after sufficient public games exist.",
+  "recorded_at_utc": "2026-09-01T05:01:00Z"
+}
