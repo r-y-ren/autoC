@@ -1,0 +1,2 @@
+[init_state] phase=verify by=accept-run -> .flow\state.json
+phase=verify retry={'count': 0, 'max': 3, 'tripped': False}

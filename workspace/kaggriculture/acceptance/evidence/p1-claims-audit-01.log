@@ -1,0 +1,312 @@
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:18:python workspace/software/smoke_boot.py
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:23:# 3b) 外部 H2H 正式证据（只读黑盒压力测试；与 promotion/holdout 隔离）
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:24:#     v48/v72 字节留在 kaggle_simulations/opponents，输出可指定到任意用户路径
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:26:  --out workspace/software/exports/external/v48-smoke.json \
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:27:  --opponents v48 --seeds 101,102
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:28:python workspace/software/scripts/check_external_h2h.py \
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:29:  --input workspace/software/exports/external/v48-smoke.json
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:31:# 3c) 顺序无关 BT/Davidson 描述性评级（不证明 holdout 泛化；Elo 仍为历史附录）
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:70:# 13) holdout 证据链（一次性；只可验证，不可重跑/换种子）：
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:71:#     attempt-1（战役 II 92.9%）归档于 exports/holdout/attempt-1/；
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:72:#     attempt-2（m3 候选 5713c17e，576 局，84.4%）归档于 exports/holdout/attempt-2/；
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:74:#     × AB/BA = 720 局，46 种子排除）归档于 exports/holdout/attempt-3/；
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:76:#     发布于 exports/holdout/published/，正式投影原子替换 eval_results.json；
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:78:python workspace/software/scripts/run_holdout.py --verify-published --require-frozen
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:93:published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:94:published_holdout_attempt_index=5
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:100:`h2h_external_probe.py` 生成 `external-h2h/2.0`。每局包含唯一 `game_id`、显式 seed/AB-BA 座位、720-state completion、activity diagnostics、异常原因与 rewards/margin；验证器重算赛程和 W/L/T/margin 汇总，复核候选/对手/引擎 SHA、active candidate 身份、输入闭包和 canonical digest。v48 在 `opponents/PROVENANCE.md` 中没有可验证的复用许可，因此只能作为只读黑盒压力对手，不能进入 submission 或被描述为正式胜率证据。
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:102:`fit_bradley_terry.py` 使用全批次 Bradley-Terry（无和局）或 Davidson（含和局）模型；固定 zero-sum identifiability，断连图 fail-closed，完全分离时使用已披露的 Gaussian MAP 正则。置信区间按 seed clustered bootstrap，固定 `--bootstrap-seed` 且与输入行顺序无关。BT/Davidson 评级是描述性排名，不是 holdout 泛化证明；只有 CI 完全跨越预注册 margin 才给出 tier，否则为 `same`/`uncertain`。
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:108:holdout-tested. The last promoted frozen candidate and the published holdout
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:110:holdout seeds are generated or consumed by this software wave.
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:124:│   ├── bradley_terry.py               顺序无关 BT/Davidson 批拟合、seed bootstrap CI
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:141:├── scripts/check_external_h2h.py      外部 H2H verify-only 结构/语义/SHA/闭包校验
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:142:├── scripts/fit_bradley_terry.py      BT/Davidson 描述性评级与 clustered bootstrap CI
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:149:├── smoke_boot.py                      冒烟自检（验收命令）
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:154:│   ├── holdout_schema.json            一次性 holdout 证据 schema 2.0（attempt 1/2/3 尺寸自适应）
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:155:│   ├── external_h2h_schema.json        外部黑盒 H2H 证据 schema（非 promotion/holdout）
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:158:│   │                                  exports/holdout/published/ attempt-5 投影）
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:160:│   ├── holdout/                       attempt-1/ + attempt-2/ + attempt-3/（冻结档案）
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:257:  smoke_boot PASS（3.7s）
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:262:**m4 holdout v2（2026-08-29，一次性独立 holdout，候选 5713c17e）**：
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:266:  （`exports/holdout/seed_manifest.json`）；候选哈希运行前/后与冻结值全等
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:276:  92.9% 结论保留在历史键 `holdout_*`/`confirmatory_*` 与 `exports/holdout/attempt-1/` 冻结档案，
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:279:**r3-3 r4 holdout（2026-08-29，一次性独立 holdout，候选 9298751f，git_ref 1644397）**：
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:284:  + 8 attempt-2 已公布）交集 0，运行后立即公开（`exports/holdout/seed_manifest.json`）；
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:293:- attempt-2（m4，84.4%）权威代已字节不变归档于 `exports/holdout/attempt-2/`；
+C:/Users/OSS/Desktop/autoC/workspace/software/README.md:294:  数字全部来自 metrics 键 `r4_holdout_*`/`r4_confirmatory_*`（16 键）；三代证据
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4:  "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained) + r3-1 cross-profile & next-band pool + r3-2 timing redesign & freeze (d0 burst/herd14/strawberry d5/crew12; 72-0 dev gate for e21c4b5f) + r3-P0 success-caliber measurement & paired ablation harness + r3-3 r4-holdout (one-time 720-game full-pool confirmatory holdout for 9298751f; 46-seed exclusion; attempt-2 keys retained)",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:24:    "smoke_boot_pass": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:27:      "method": "m0 session: python workspace/software/smoke_boot.py -> exit 0"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:29:    "smoke_boot_runtime_seconds": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:32:      "method": "m0 session: wall clock of the revival smoke_boot run (4 phases, 6 episodes)"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:391:    "m2_smoke_boot_pass": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:394:      "method": "python workspace/software/smoke_boot.py on the merged m2 bot -> PASS (3.7s, 4 phases incl. 720-step self-play seeds 7/8/9)"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:436:    "m2a_smoke_boot_pass": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:439:      "method": "2026-08-28 post-review run: python workspace/software/smoke_boot.py -> PASS, 4 phases"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:441:    "m2a_smoke_boot_runtime_seconds": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:444:      "method": "same post-review smoke_boot console measurement"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:484:      "method": "invalidated historical run duration; retained for audit, not performance acceptance"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:567:      "method": "clean-baseline gate manifest plus exact-byte base64 snapshot for CRLF-stable holdout execution"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:619:        "holdout_eligible": true,
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:625:    "holdout_protocol": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:638:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:639:      "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:641:    "holdout_seed_manifest": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:662:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:663:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:665:    "holdout_candidate_hash_match": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:672:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:673:      "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:675:    "holdout_seed_domain_isolation": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:681:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:682:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:684:    "holdout_run_status": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:695:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:696:      "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:698:    "holdout_schedule": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:703:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:706:    "holdout_seat_split": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:712:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:715:    "holdout_abnormal_summary": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:719:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:722:    "holdout_integrity_pass": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:724:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:739:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:841:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1049:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1095:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1112:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1214:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1223:          "holdout_protocol": "/holdout/protocol",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1224:          "holdout_seed_manifest": "/holdout/seed_manifest",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1225:          "holdout_candidate_hash_match": "/holdout/candidate_hash_match",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1226:          "holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1227:          "holdout_run_status": "/holdout/attempt",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1228:          "holdout_schedule": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1229:          "holdout_seat_split": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1230:          "holdout_abnormal_summary": "/integrity/abnormal_games",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1231:          "holdout_integrity_pass": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1240:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1486:      "method": "实测 2026-08-29：python workspace/software/scripts/check_eval_contract.py --mode gate -> exit 0（新必测集合 8 对手 x seeds 101-104 x AB/BA = 64 局 fixture 正式通过 + 5 类异常拒绝全过）；同轮复验 --mode official --input exports/eval_results.json -> exit 0（冻结 holdout 未失效，sha256 ac7684d8...）"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1680:    "m4_holdout_protocol": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1694:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1695:      "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1697:    "m4_holdout_seed_manifest": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1719:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1720:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1722:    "m4_holdout_candidate_hash_match": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1729:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1730:      "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1732:    "m4_holdout_seed_domain_isolation": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1738:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1739:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1741:    "m4_holdout_run_status": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1752:        "prior_attempt_evidence": "workspace/software/exports/holdout/attempt-1",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1756:            " D workspace/software/exports/holdout/published/eval_results.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1757:            " D workspace/software/exports/holdout/published/replay_log.jsonl",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1758:            " D workspace/software/exports/holdout/published/seed_manifest.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1759:            " D workspace/software/exports/holdout/published/software_metrics.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1760:            " M workspace/software/exports/holdout_schema.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1761:            " M workspace/software/kgenv/holdout_contract.py",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1762:            " M workspace/software/scripts/run_holdout.py",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1763:            " M workspace/software/tests/test_holdout_contract.py",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1765:            "?? workspace/software/exports/holdout/attempt-1/"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1771:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1772:      "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1774:    "m4_holdout_schedule": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1779:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1782:    "m4_holdout_seat_split": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1788:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1791:    "m4_holdout_abnormal_summary": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1795:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1798:    "m4_holdout_integrity_pass": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1800:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1815:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:1917:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2125:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2171:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2188:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2290:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2299:          "m4_holdout_protocol": "/holdout/protocol",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2300:          "m4_holdout_seed_manifest": "/holdout/seed_manifest",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2301:          "m4_holdout_candidate_hash_match": "/holdout/candidate_hash_match",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2302:          "m4_holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2303:          "m4_holdout_run_status": "/holdout/attempt",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2304:          "m4_holdout_schedule": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2305:          "m4_holdout_seat_split": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2306:          "m4_holdout_abnormal_summary": "/integrity/abnormal_games",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2307:          "m4_holdout_integrity_pass": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2316:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2564:          "holdout_export_untouched": true,
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2565:          "note": "开发门升级为更强门是预期内变更；已发布 holdout (exports/eval_results.json, exports/holdout/) 未触碰"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2590:          "smoke_boot": "PASS (4 phases, 3.9s)",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2595:      "method": "实测 2026-08-29：check_opponent_strength --rounds 3 (96 局, exit 0) / check_eval_contract --mode gate (exit 0) / smoke_boot (PASS) / pytest 全量 301 passed"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:2862:      "method": "scripts/ablate.py (r3-P0, 2026-08-29): paired candidate-vs-champion grid on the same (opponent, seed, seat) cell -- 9 required opponents x seeds x AB/BA x 2 sides; champion default = frozen snapshot r3_frozen_candidate.b64 sha-verified against the manifest; merge gate = new-style pool WR >= champion AND worst single-opponent WR >= champion AND disaster rate (margin < -15000) <= champion; outputs locked to exports/ablations/. Champion-vs-champion semantic smoke measured: 144 games in 453.72s, all 72 pairs exact ties (0W-0L-72T, net diff 0.0), both sides 72-0 vs pool, VERDICT MERGEABLE, exit 0 (exports/ablations/champ-vs-champ-r3p0-smoke.json). Tests: tests/test_ablate.py 11 passed (grid completeness, duplicate/foreign game rejection, pairing diff semantics, gate counterexamples incl. disaster boundary, frozen decode tamper rejection, out-path lock, real-engine champ-vs-champ tie grid)"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3210:        "r3_3_holdout": 58
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3215:    "r4_holdout_protocol": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3229:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3230:      "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3232:    "r4_holdout_seed_manifest": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3254:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3255:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3257:    "r4_holdout_candidate_hash_match": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3264:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3265:      "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3267:    "r4_holdout_seed_domain_isolation": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3273:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3274:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3276:    "r4_holdout_run_status": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3287:        "prior_attempt_evidence": "workspace/software/exports/holdout/attempt-2",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3291:            " D workspace/software/exports/holdout/published/eval_results.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3292:            " D workspace/software/exports/holdout/published/replay_log.jsonl",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3293:            " D workspace/software/exports/holdout/published/seed_manifest.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3294:            " D workspace/software/exports/holdout/published/software_metrics.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3295:            " M workspace/software/exports/holdout_schema.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3296:            " M workspace/software/kgenv/holdout_contract.py",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3298:            " M workspace/software/scripts/run_holdout.py",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3299:            " M workspace/software/tests/test_holdout_contract.py",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3301:            "?? workspace/software/exports/holdout/attempt-2/",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3302:            "?? workspace/software/tests/test_holdout_r4.py"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3308:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3309:      "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3311:    "r4_holdout_schedule": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3316:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3319:    "r4_holdout_seat_split": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3325:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3328:    "r4_holdout_abnormal_summary": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3332:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3335:    "r4_holdout_integrity_pass": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3337:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3352:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3466:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3696:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3746:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3763:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3875:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3884:          "r4_holdout_protocol": "/holdout/protocol",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3885:          "r4_holdout_seed_manifest": "/holdout/seed_manifest",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3886:          "r4_holdout_candidate_hash_match": "/holdout/candidate_hash_match",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3887:          "r4_holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3888:          "r4_holdout_run_status": "/holdout/attempt",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3889:          "r4_holdout_schedule": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3890:          "r4_holdout_seat_split": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3891:          "r4_holdout_abnormal_summary": "/integrity/abnormal_games",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3892:          "r4_holdout_integrity_pass": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3901:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3904:    "v6_holdout_protocol": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3918:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3919:      "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3921:    "v6_holdout_seed_manifest": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3943:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3944:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3946:    "v6_holdout_candidate_hash_match": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3953:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3954:      "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3956:    "v6_holdout_seed_domain_isolation": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3962:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3963:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3965:    "v6_holdout_run_status": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3976:        "prior_attempt_evidence": "workspace/software/exports/holdout/attempt-3",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3980:            " D workspace/software/exports/holdout/published/eval_results.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3981:            " D workspace/software/exports/holdout/published/replay_log.jsonl",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3982:            " D workspace/software/exports/holdout/published/seed_manifest.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3983:            " D workspace/software/exports/holdout/published/software_metrics.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3987:            "?? workspace/software/exports/holdout/attempt-3/"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3993:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3994:      "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:3996:    "v6_holdout_schedule": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4001:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4004:    "v6_holdout_seat_split": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4010:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4013:    "v6_holdout_abnormal_summary": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4017:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4020:    "v6_holdout_integrity_pass": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4022:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4037:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4163:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4415:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4469:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4486:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4608:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4617:          "v6_holdout_protocol": "/holdout/protocol",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4618:          "v6_holdout_seed_manifest": "/holdout/seed_manifest",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4619:          "v6_holdout_candidate_hash_match": "/holdout/candidate_hash_match",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4620:          "v6_holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4621:          "v6_holdout_run_status": "/holdout/attempt",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4622:          "v6_holdout_schedule": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4623:          "v6_holdout_seat_split": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4624:          "v6_holdout_abnormal_summary": "/integrity/abnormal_games",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4625:          "v6_holdout_integrity_pass": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4634:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4637:    "v72_holdout_protocol": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4651:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4652:      "method": "workspace/software/exports/eval_results.json#/holdout/protocol"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4654:    "v72_holdout_seed_manifest": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4676:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4677:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_manifest"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4679:    "v72_holdout_candidate_hash_match": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4686:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4687:      "method": "workspace/software/exports/eval_results.json#/holdout/candidate_hash_match"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4689:    "v72_holdout_seed_domain_isolation": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4695:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4696:      "method": "workspace/software/exports/eval_results.json#/holdout/seed_domain_isolation"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4698:    "v72_holdout_run_status": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4709:        "prior_attempt_evidence": "workspace/software/exports/holdout/attempt-4",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4713:            " D workspace/software/exports/holdout/published/eval_results.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4714:            " D workspace/software/exports/holdout/published/replay_log.jsonl",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4715:            " D workspace/software/exports/holdout/published/seed_manifest.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4716:            " D workspace/software/exports/holdout/published/software_metrics.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4720:            "?? workspace/software/exports/holdout/attempt-4/"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4726:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4727:      "method": "workspace/software/exports/eval_results.json#/holdout/attempt"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4729:    "v72_holdout_schedule": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4734:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4737:    "v72_holdout_seat_split": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4743:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4746:    "v72_holdout_abnormal_summary": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4750:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4753:    "v72_holdout_integrity_pass": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4755:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4770:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:4908:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5182:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5240:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5257:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5389:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5398:          "v72_holdout_protocol": "/holdout/protocol",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5399:          "v72_holdout_seed_manifest": "/holdout/seed_manifest",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5400:          "v72_holdout_candidate_hash_match": "/holdout/candidate_hash_match",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5401:          "v72_holdout_seed_domain_isolation": "/holdout/seed_domain_isolation",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5402:          "v72_holdout_run_status": "/holdout/attempt",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5403:          "v72_holdout_schedule": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5404:          "v72_holdout_seat_split": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5405:          "v72_holdout_abnormal_summary": "/integrity/abnormal_games",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5406:          "v72_holdout_integrity_pass": "/integrity",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5415:      "unit": "holdout-evidence",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5422:        "holdout_status": "not_run",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5423:        "published_holdout_attempt": 5,
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5446:    "p0_release_safety_smoke": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5451:        "holdout_executed": false
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5453:      "unit": "release-smoke",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5454:      "method": "workspace/acceptance/evidence/p0r2-smoke-01.log"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5456:    "p1_external_h2h_contract_tests": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5460:        "test_file": "workspace/software/tests/test_external_h2h_contract.py",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5461:        "schema": "workspace/software/exports/external_h2h_schema.json",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5462:        "verify_cli": "workspace/software/scripts/check_external_h2h.py"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5465:      "method": "2026-08-31 actual run: python -m pytest workspace/software/tests/test_external_h2h_contract.py -q; fixture schema + semantic validation, SHA drift, schedule, seat, abnormal, aggregate, closure and promotion/holdout isolation checks"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5481:      "method": "2026-08-31 actual run: python -m pytest workspace/software/tests/test_external_h2h_contract.py workspace/software/tests/test_bradley_terry.py -q; 25 passed 0 failed"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5487:        "holdout_status": "not_run"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5490:      "method": "2026-08-31 actual sha256sum of workspace/software/kaggle_simulations/agent/main.py and active_candidate.json status; no holdout seed generated or consumed"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5492:    "p1_real_external_h2h_smoke": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5496:        "opponent": "v48",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5501:        "output": "workspace/software/exports/external/v48-seed101-smoke.json"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5503:      "unit": "external-evidence-smoke",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5504:      "method": "2026-08-31 actual run of h2h_external_probe.py on vendored kaggle-environments 1.32.7+nodeps; one development seed, both seats, 720-state completion; followed by check_external_h2h.py verify-only; not a complete panel or performance claim"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5506:    "p1_bt_cli_smoke": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5513:        "output": "workspace/software/exports/external/v48-seed101-ratings.json"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5515:      "unit": "rating-tool-smoke",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5516:      "method": "2026-08-31 actual fit_bradley_terry.py run on the validated 2-game external smoke artifact; descriptive-only tool path, too few seed clusters for performance inference"
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5527:    "p1_smoke_boot": {
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5532:        "holdout_executed": false,
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5535:      "unit": "release-smoke",
+C:/Users/OSS/Desktop/autoC/workspace/software/metrics.json:5536:      "method": "2026-08-31 actual run: python workspace/software/smoke_boot.py; env boot, submission selfplay, contract replay, gym phases all pass"

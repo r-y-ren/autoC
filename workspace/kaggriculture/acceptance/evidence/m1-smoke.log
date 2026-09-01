@@ -1,0 +1,17 @@
+$ python workspace/software/smoke_boot.py
+exit=0
+
+Loading environment cabt failed: Could not find module 'C:\Users\OSS\AppData\Roaming\Python\Python314\site-packages\kaggle_environments\envs\cabt\cg\cg.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+phase_env_boot: engine boot + 24-step episode -> rewards=[2960.0, 3000.0] ok=True
+phase_submission_selfplay: seed=7 steps=96 rewards=[427.0, 427.0] statuses=['DONE', 'DONE'] activity_ok=True ok=True
+phase_submission_selfplay: seed=8 steps=96 rewards=[427.0, 427.0] statuses=['DONE', 'DONE'] activity_ok=True ok=True
+phase_submission_selfplay: seed=9 steps=720 rewards=[96830.0, 99842.0] statuses=['DONE', 'DONE'] activity_ok=True ok=True
+phase_contract: run_match contract ok=True, replay log round-trip ok=True
+phase_gym: stepped to day=1 money=[3000.0, 3000.0] ok=True
+  env_boot: PASS
+  submission_selfplay: PASS
+  contract: PASS
+  gym: PASS
+smoke_boot: PASS (5.8s, phases=4)
+

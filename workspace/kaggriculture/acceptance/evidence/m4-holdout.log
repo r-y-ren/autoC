@@ -1,0 +1,7 @@
+$ python workspace/software/scripts/run_holdout.py --verify-published --require-frozen
+exit=1
+
+Loading environment cabt failed: Could not find module 'C:\Users\OSS\AppData\Roaming\Python\Python314\site-packages\kaggle_environments\envs\cabt\cg\cg.dll' (or one of its dependencies). Try using the full path with constructor syntax.
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+
+HOLDOUT FAILED: current candidate SHA does not match frozen manifest

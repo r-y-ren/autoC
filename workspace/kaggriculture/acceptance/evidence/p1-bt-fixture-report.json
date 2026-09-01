@@ -1,0 +1,71 @@
+{
+  "abilities_are_descriptive_only": true,
+  "agents": [
+    {
+      "ability": 4.230480243407702,
+      "agent": "v48",
+      "ci95": [
+        4.230480243407702,
+        4.230480243407702
+      ],
+      "rank": 1,
+      "tier": "reference"
+    },
+    {
+      "ability": -4.230480243407702,
+      "agent": "working",
+      "ci95": [
+        -4.230480243407702,
+        -4.230480243407702
+      ],
+      "rank": 2,
+      "tier": "reference"
+    }
+  ],
+  "bootstrap": {
+    "cluster_unit": "seed",
+    "failed_disconnected": 0,
+    "samples_requested": 20,
+    "samples_used": 20,
+    "seed": 20260831
+  },
+  "converged": true,
+  "descriptive_only": true,
+  "game_count": 2,
+  "holdout_generalization_claim": false,
+  "identifiability": "zero_sum",
+  "input_path": "C:\\Users\\OSS\\Desktop\\autoC\\workspace\\software\\exports\\external\\v48-seed101-smoke.json",
+  "iterations": 12,
+  "log_likelihood": -0.0022127890820451994,
+  "method_note": "batch order-independent BT/Davidson; bootstrap clusters by seed",
+  "model": "bradley-terry",
+  "pairwise_probabilities": [
+    {
+      "a": "v48",
+      "ability_difference": 8.460960486815404,
+      "b": "working",
+      "difference_ci95": [
+        8.460960486815404,
+        8.460960486815404
+      ],
+      "p_a_win": 0.9997884759878296,
+      "p_b_win": 0.0002115240121703943,
+      "p_tie": 0.0,
+      "tier": "higher"
+    }
+  ],
+  "regularization": {
+    "disclosed_for_separation": true,
+    "lambda": 0.0001,
+    "type": "zero-mean Gaussian MAP"
+  },
+  "seat_counts": {
+    "AB": 1,
+    "BA": 1
+  },
+  "seed_count": 1,
+  "separation_detected": true,
+  "tie_parameter": null,
+  "tie_parameter_parameterization": null,
+  "tier_margin": 0.3
+}

@@ -1,0 +1,39 @@
+PASS 01 external schema pass
+PASS 02 external semantic pass
+PASS 03 external AB seat present
+PASS 04 external BA seat present
+PASS 05 external 720 episode steps
+PASS 06 external 720 states
+PASS 07 external DONE statuses
+PASS 08 external contract_ok
+PASS 09 external canonical candidate path
+PASS 10 external candidate SHA
+PASS 11 external active contract
+PASS 12 external provenance SHA
+PASS 13 external runtime closure
+PASS 14 external digest
+PASS 15 external scope development_only
+PASS 16 external holdout false
+PASS 17 external promotion false
+PASS 18 external v48 not-for-submission
+PASS 19 BT converged fixture
+PASS 20 BT insufficient_data
+PASS 21 BT agent CI null
+PASS 22 BT pair CI null
+PASS 23 BT no inferential tier
+PASS 24 BT publishable false
+PASS 25 BT holdout claim false
+PASS 26 BT nonconvergence rejects publish
+PASS 27 BT allow nonconvergence diagnostic only
+PASS 28 BT atomic previous output preserved
+PASS 29 full pytest 682 passed
+PASS 30 smoke_boot four phases pass
+PASS 31 candidate identity working SHA
+PASS 32 JSON parse pass
+PASS 33 JSON schema pass
+PASS 34 official export contract unchanged
+PASS 35 protected holdout and .tmp-intel unchanged
+PASS 36 path boundary and no new holdout
+directed_total=36
+scope=toolchain smoke only; no performance conclusion
+exit=0
