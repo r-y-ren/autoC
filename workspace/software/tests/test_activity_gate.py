@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math
+
 from kgenv.arena import load_submission_agent
 from kgenv.engine import (
     ActivityPolicy,
@@ -42,6 +44,14 @@ def test_state_and_decision_boundaries_fail_closed():
     assert episode_contract_ok(_pass_only_result(states=718)) is False
     assert episode_contract_ok(_pass_only_result(states=719)) is False
     assert episode_contract_ok(_pass_only_result(states=720)) is False
+
+
+def test_episode_contract_rejects_nonfinite_rewards():
+    result = _pass_only_result()
+    for value in (float("nan"), float("inf"), float("-inf")):
+        result["rewards"] = [value, 3000.0]
+        assert math.isfinite(result["rewards"][0]) is False
+        assert episode_contract_ok(result) is False
 
 
 def test_activity_policy_exposes_configurable_coverage_streak_and_tail():
@@ -131,6 +141,9 @@ def test_real_engine_one_action_then_passes_fails_activity_gate():
     assert episode_contract_ok(result) is False
     for seat in result["activity"]["seats"]:
         assert seat["non_pass_decisions"] == 1
+        assert len(seat["non_pass_trace"]) == 719
+        assert sum(seat["non_pass_trace"]) == seat["non_pass_decisions"]
+        assert len(seat["state_change_trace"]) == 719
         assert "low_decision_coverage" in seat["failure_reasons"]
         assert "excessive_pass_streak" in seat["failure_reasons"]
 
@@ -163,6 +176,8 @@ def test_normal_agent_full_game_passes_activity_gate_both_seats():
     for seat in result["activity"]["seats"]:
         assert seat["non_pass_decisions"] > 0
         assert seat["effective_state_changes"] > 0
+        assert len(seat["non_pass_trace"]) == 719
+        assert len(seat["state_change_trace"]) == 719
         assert seat["pass_only"] is False
         assert seat["failure_reasons"] == []
 

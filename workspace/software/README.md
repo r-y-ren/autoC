@@ -20,6 +20,20 @@ python workspace/software/smoke_boot.py
 # 3) 测试套件
 python -m pytest workspace/software/tests -q
 
+# 3b) 外部 H2H 正式证据（只读黑盒压力测试；与 promotion/holdout 隔离）
+#     v48/v72 字节留在 kaggle_simulations/opponents，输出可指定到任意用户路径
+python workspace/software/scripts/h2h_external_probe.py \
+  --out workspace/software/exports/external/v48-smoke.json \
+  --opponents v48 --seeds 101,102
+python workspace/software/scripts/check_external_h2h.py \
+  --input workspace/software/exports/external/v48-smoke.json
+
+# 3c) 顺序无关 BT/Davidson 描述性评级（不证明 holdout 泛化；Elo 仍为历史附录）
+python workspace/software/scripts/fit_bradley_terry.py \
+  --input workspace/software/exports/eval_results.dev.json \
+  --output workspace/software/exports/external/ratings.dev.json \
+  --bootstrap 200 --bootstrap-seed 20260831
+
 # 4) 强度门（认证池全体——m1 强对手 + m2 线上风格对手——须对冻结弱池 >=50% 胜率，不达标退出码 1）
 python workspace/software/scripts/check_opponent_strength.py --rounds 3
 
@@ -81,6 +95,12 @@ published_holdout_attempt_index=5
 engine=kaggle-environments 1.32.7 kaggriculture
 <!-- ACTIVE_CANDIDATE_IDENTITY:END -->
 
+## External H2H 与评级限制
+
+`h2h_external_probe.py` 生成 `external-h2h/2.0`。每局包含唯一 `game_id`、显式 seed/AB-BA 座位、720-state completion、producer-attested activity traces、异常原因与 rewards/margin；验证器从这些生产者声明的 traces 重算活性汇总并校验赛程和 W/L/T/margin，复核候选/对手 SHA、运行时 Kaggle 包关键源码与 vendored wheel 字节一致、active candidate 身份、输入闭包和 canonical digest。该契约验证内部一致性与当前工作区来源，不提供防篡改签名，也不把 traces 描述为验证器从原始引擎回放独立重建。v48 在 `opponents/PROVENANCE.md` 中没有可验证的复用许可，因此只能作为只读黑盒压力对手，不能进入 submission 或被描述为正式胜率证据。
+
+`fit_bradley_terry.py` 使用全批次 Bradley-Terry（无和局）或 Davidson（含和局）模型；固定 zero-sum identifiability，断连图 fail-closed，完全分离时使用已披露的 Gaussian MAP 正则。置信区间按 seed clustered bootstrap，固定 `--bootstrap-seed` 且与输入行顺序无关。BT/Davidson 评级是描述性排名，不是 holdout 泛化证明；只有 CI 完全跨越预注册 margin 才给出 tier，否则为 `same`/`uncertain`。
+
 ## Active Candidate Identity
 
 `active_candidate.json` is the machine-readable source of truth for candidate roles.
@@ -101,6 +121,7 @@ workspace/software/
 │   ├── economy.py                     收益模型（价格曲线/作物周期/动物产出/雇佣/地价）
 │   ├── redlines.py                    机制红线检查表（浇水/喂养/产出上限/shed/期限）
 │   ├── elo.py                         Elo 评级（只按胜负平，对齐官方天梯语义）
+│   ├── bradley_terry.py               顺序无关 BT/Davidson 批拟合、seed bootstrap CI
 │   ├── arena.py                       对局编排 + 复盘日志 + 提交 bot 加载
 │   ├── regression.py                  冻结回归线断言（--assert-regression 的纯逻辑核心；
 │   │                                  m1 起只在冻结池子流上断言，强对手不改变冻结线）
@@ -116,6 +137,9 @@ workspace/software/
 │                                       LLM provider（默认关）
 ├── scripts/run_eval.py                全池 matchup 矩阵 + Elo + 方差报告 + 确定性探针 +
 │                                       exports 产出（schema v1.1）+ 回归门旗标
+├── scripts/h2h_external_probe.py      外部黑盒 H2H 正式契约生成（development-only）
+├── scripts/check_external_h2h.py      外部 H2H verify-only 结构/语义/SHA/闭包校验
+├── scripts/fit_bradley_terry.py      BT/Davidson 描述性评级与 clustered bootstrap CI
 ├── scripts/check_opponent_strength.py 强度门：新对手对冻结弱池 >=50% 胜率断言
 ├── scripts/analyze_failure_modes.py   失败模式探针（多种子深记录 + 证据报告生成）
 ├── scripts/corpus_fetch.py            回放语料抓取通道（HTTP range 探针/日分片选局/下载/
@@ -128,6 +152,8 @@ workspace/software/
 ├── exports/
 │   ├── schema.json                    软件->文档接口契约（1.1 历史只读兼容；2.0 正式语义）
 │   ├── holdout_schema.json            一次性 holdout 证据 schema 2.0（attempt 1/2/3 尺寸自适应）
+│   ├── external_h2h_schema.json        外部黑盒 H2H 证据 schema（非 promotion/holdout）
+│   ├── external/                       用户生成的外部 H2H 与评级报告建议位置
 │   ├── eval_results.json              仅正式门通过后原子发布的评估证据（当前 =
 │   │                                  exports/holdout/published/ attempt-5 投影）
 │   ├── eval_results.dev.json          quick/dev 隔离产物，不可作为正式证据

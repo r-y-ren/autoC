@@ -1,8 +1,8 @@
 {
   "schema": "software-metrics-shard/1.0",
   "campaign": "kaggle-kaggriculture",
-  "milestone": "m1-replay-corpus + m2-online-pool + m3-adaptive-candidate + m4-holdout-v2 (replay corpus & profiles; online-style opponent pool; rotation-ranch candidate; one-time full-pool holdout for 5713c17e; historical keys retained) + r3-1 cross-profile & next-band pool + r3-2 timing redesign & freeze (d0 burst/herd14/strawberry d5/crew12; 72-0 dev gate for e21c4b5f) + r3-P0 success-caliber measurement & paired ablation harness + r3-3 r4-holdout (one-time 720-game full-pool confirmatory holdout for 9298751f; 46-seed exclusion; attempt-2 keys retained)",
-  "measured_at": "2026-08-29T20:05:00.000000+00:00",
+  "milestone": "P1 external black-box H2H evidence contract and batch BT/Davidson ratings; historical metrics retained",
+  "measured_at": "2026-09-01T00:00:00+00:00",
   "engine": {
     "package": "kaggle-environments",
     "version": "1.32.7+nodeps (vendored, engine code unmodified)",
@@ -5452,6 +5452,92 @@
       },
       "unit": "release-smoke",
       "method": "workspace/acceptance/evidence/p0r2-smoke-01.log"
+    },
+    "p1_external_h2h_contract_tests": {
+      "value": {
+        "passed": 29,
+        "failed": 0,
+        "test_file": "workspace/software/tests/test_external_h2h_contract.py",
+        "schema": "workspace/software/exports/external_h2h_schema.json",
+        "verify_cli": "workspace/software/scripts/check_external_h2h.py"
+      },
+      "unit": "pytest-tests",
+      "method": "2026-09-01 actual run: python -m pytest workspace/software/tests/test_external_h2h_contract.py -q; 29 passed; schema + semantic validation, complete runtime-wheel source attestation, provenance anchors, producer-attested trace consistency, protected outputs, finite numbers, schedule and promotion/holdout isolation"
+    },
+    "p1_bradley_terry_tests": {
+      "value": {
+        "passed": 23,
+        "failed": 0,
+        "test_file": "workspace/software/tests/test_bradley_terry.py",
+        "models": ["bradley-terry", "davidson"],
+        "bootstrap_cluster": "seed"
+      },
+      "unit": "pytest-tests",
+      "method": "2026-09-01 actual run: python -m pytest workspace/software/tests/test_bradley_terry.py -q; 23 passed; order recovery, strict row-order-independent AB/BA, finite reward-derived outcomes, clustered bootstrap, ties, disconnected graph, inference gating and non-convergence safety"
+    },
+    "p1_new_tests_total": {
+      "value": 52,
+      "unit": "pytest-tests",
+      "method": "2026-09-01 actual runs: external contract 29 passed + BT/Davidson 23 passed; 52 passed 0 failed"
+    },
+    "p1_candidate_identity_preserved": {
+      "value": {
+        "sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+        "status": "development",
+        "holdout_status": "not_run"
+      },
+      "unit": "identity-contract",
+      "method": "2026-08-31 actual sha256sum of workspace/software/kaggle_simulations/agent/main.py and active_candidate.json status; no holdout seed generated or consumed"
+    },
+    "p1_real_external_h2h_smoke": {
+      "value": {
+        "games": 2,
+        "seeds": [101],
+        "opponent": "v48",
+        "ab_games": 1,
+        "ba_games": 1,
+        "abnormal_games": 0,
+        "verify_pass": true,
+        "output": "workspace/software/exports/external/v48-seed101-smoke.json"
+      },
+      "unit": "external-evidence-smoke",
+      "method": "2026-09-01 actual h2h_external_probe.py run; installed Kaggle runtime __init__.py and kaggriculture.py hashes matched vendored 1.32.7+nodeps wheel; one development seed, both seats, 720-state completion, producer-attested traces; check_external_h2h.py PASS; not a complete panel, signed evidence, or performance claim"
+    },
+    "p1_bt_cli_smoke": {
+      "value": {
+        "model": "bradley-terry",
+        "games": 2,
+        "converged": true,
+        "inference_status": "insufficient_data",
+        "probability_status": "regularized_descriptive",
+        "ci95": [null, null],
+        "tier": "insufficient_data",
+        "bootstrap_requested": 80,
+        "bootstrap_seed": 20260831,
+        "output": "workspace/software/exports/external/v48-seed101-ratings.json"
+      },
+      "unit": "rating-tool-smoke",
+      "method": "2026-08-31 actual fit_bradley_terry.py run on the validated 2-game external smoke artifact; one seed is below the four-cluster inference gate, so probabilities are regularized descriptive only and CI/tier are unavailable"
+    },
+    "p1_full_pytest": {
+      "value": {
+        "passed": 702,
+        "failed": 0,
+        "runtime_seconds": 22.2
+      },
+      "unit": "pytest-tests",
+      "method": "workspace/acceptance/evidence/p1-final-full-pytest-r4.log; 2026-09-01 python -m pytest workspace/software/tests -q; 702 passed in 22.20s"
+    },
+    "p1_smoke_boot": {
+      "value": {
+        "status": "pass",
+        "full_episode_states": 720,
+        "activity_gate": "pass",
+        "holdout_executed": false,
+        "runtime_seconds": 5.8
+      },
+      "unit": "release-smoke",
+      "method": "workspace/acceptance/evidence/p1-final-smoke-r4.log; 2026-09-01 smoke_boot PASS (5.8s, 4 phases); no holdout"
     }
   },
   "unmeasured": {

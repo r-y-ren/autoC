@@ -9,6 +9,7 @@ resolve to the engine's built-in agents.
 
 from __future__ import annotations
 
+import math
 import time
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Union
@@ -80,8 +81,10 @@ def activity_diagnostics(*, states: int, seat_actions: List[List[Any]],
     for seat in range(2):
         actions = seat_actions[seat] if seat < len(seat_actions) else []
         changes = seat_state_changes[seat] if seat < len(seat_state_changes) else []
-        non_pass = sum(_action_is_non_pass(action) for action in actions)
-        effective = sum(bool(value) for value in changes)
+        non_pass_trace = [_action_is_non_pass(action) for action in actions]
+        state_change_trace = [bool(value) for value in changes]
+        non_pass = sum(non_pass_trace)
+        effective = sum(state_change_trace)
         reward_delta = float(rewards[seat]) - float(starting_money)
         pass_only = non_pass == 0
         ratio = non_pass / decisions if decisions else 0.0
@@ -103,10 +106,13 @@ def activity_diagnostics(*, states: int, seat_actions: List[List[Any]],
                       "non_pass_ratio": round(ratio, 4),
                       "longest_pass_streak": streak,
                       "effective_state_changes": effective,
+                      "non_pass_trace": non_pass_trace,
+                      "state_change_trace": state_change_trace,
                       "reward_delta": reward_delta, "pass_only": pass_only,
                       "failure_reasons": reasons})
     activity_ok = all(not seat["failure_reasons"] for seat in seats)
     return {"states": int(states), "decisions": decisions,
+            "starting_money": float(starting_money),
             "completion_ok": completion_ok, "activity_ok": activity_ok,
             "ok": completion_ok and activity_ok, "policy": {
                 "min_non_pass_ratio": policy.min_non_pass_ratio,
@@ -238,7 +244,8 @@ def episode_contract_ok(result: Dict[str, Any]) -> bool:
     return (
         isinstance(result.get("rewards"), list)
         and len(result["rewards"]) == 2
-        and all(isinstance(r, (int, float)) for r in result["rewards"])
+        and all(isinstance(r, (int, float)) and not isinstance(r, bool)
+                and math.isfinite(float(r)) for r in result["rewards"])
         and result.get("statuses") == ["DONE", "DONE"]
         and result.get("winner") in (0, 1, None)
         and isinstance(result.get("turns_played"), int)

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import math
 import os
 from typing import Any, Callable, Dict, List, Optional
 
@@ -28,15 +29,16 @@ def _abnormal_reason(result: Dict[str, Any]) -> Optional[str]:
         return "missing statuses"
     if result["statuses"] != ["DONE", "DONE"]:
         return f"non-DONE statuses: {result['statuses']}"
-    if result.get("contract_ok") is not True:
-        return "contract_ok is not true"
     players = result.get("players")
     rewards = result.get("rewards")
     if not isinstance(players, list) or len(players) != 2:
         return "missing or invalid players"
     if (not isinstance(rewards, list) or len(rewards) != 2 or
-            any(not isinstance(value, (int, float)) for value in rewards)):
-        return "missing or invalid rewards"
+            any(isinstance(value, bool) or not isinstance(value, (int, float)) or
+                not math.isfinite(float(value)) for value in rewards)):
+        return "missing, invalid, or non-finite rewards"
+    if result.get("contract_ok") is not True:
+        return "contract_ok is not true"
     expected = (players[0] if rewards[0] > rewards[1] else
                 players[1] if rewards[1] > rewards[0] else None)
     if "winner_label" not in result or result["winner_label"] != expected:

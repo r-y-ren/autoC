@@ -79,6 +79,20 @@ def test_summarize_games_rejects_missing_contract_fields():
         ], "a", "b")
 
 
+@pytest.mark.parametrize("reward", [float("nan"), float("inf"), float("-inf")])
+def test_arena_rejects_nonfinite_rewards(monkeypatch, reward):
+    from kgenv import arena
+
+    invalid = {
+        "rewards": [reward, 1.0], "statuses": ["DONE", "DONE"],
+        "winner": None, "turns_played": 24, "episode_steps": 24,
+        "activity": {"completion_ok": True, "activity_ok": True},
+    }
+    monkeypatch.setattr(arena, "run_episode", lambda *args, **kwargs: invalid.copy())
+    with pytest.raises(AbnormalMatchError, match="reward"):
+        run_match("starter", "pass", seed=1, episode_steps=24)
+
+
 def test_elo_math():
     assert expected_score(1200, 1200) == 0.5
     assert expected_score(1400, 1200) > 0.5
