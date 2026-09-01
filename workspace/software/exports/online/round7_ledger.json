@@ -37,21 +37,51 @@
     "public_score_after_validation": 600.0
   },
   "public_sampling": {
-    "sampled_at_utc": "2026-09-01T05:01:00Z",
-    "public_games": 0,
-    "record": null,
-    "win_rate": null,
-    "status": "pending_public_episodes",
-    "note": "The episode list contains only the validation self-play. Validation is excluded from ladder performance statistics."
+    "sampled_at_utc": "2026-09-01T05:13:12Z",
+    "public_games": 3,
+    "record": "2W-1L",
+    "win_rate": 0.6667,
+    "net_margin": 34483.0,
+    "average_margin": 11494.3,
+    "public_score_latest": 755.9,
+    "status": "three_game_initial_sample",
+    "replay_integrity": "3/3 PASS (720 steps, DONE/DONE, finite rewards)",
+    "episodes": [
+      {
+        "id": 104498822,
+        "opponent": "André-Marie BEHANZIN",
+        "seat": 0,
+        "rewards": [57194.0, 21861.0],
+        "result": "W",
+        "margin": 35333.0
+      },
+      {
+        "id": 104499234,
+        "opponent": "draven",
+        "seat": 1,
+        "rewards": [88268.0, 78209.0],
+        "result": "L",
+        "margin": -10059.0
+      },
+      {
+        "id": 104499712,
+        "opponent": "Caleb Bredlow",
+        "seat": 0,
+        "rewards": [99680.0, 90471.0],
+        "result": "W",
+        "margin": 9209.0
+      }
+    ],
+    "note": "Validation episode 104498289 is excluded. Three public games are an initial online sample, not promotion or generalization evidence."
   },
   "evidence_scope": {
     "online_submission_occurred": true,
     "validation_evidence": true,
-    "ladder_performance_evidence": false,
+    "ladder_performance_evidence": true,
     "promotion_evidence": false,
     "holdout_evidence": false,
     "historical_published_holdout_reused": false
   },
-  "next_sampling_gate": "Pull at least 3 EPISODE_TYPE_PUBLIC games when available; evaluate the >=6-game and <50% stop-loss rule only after sufficient public games exist.",
-  "recorded_at_utc": "2026-09-01T05:01:00Z"
+  "next_sampling_gate": "Continue to at least 6 EPISODE_TYPE_PUBLIC games before applying the <50% stop-loss rule; no second submission is authorized or required for this sampling step.",
+  "recorded_at_utc": "2026-09-01T05:13:12Z"
 }
