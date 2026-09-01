@@ -1,6 +1,6 @@
-"""Build the m1 replay profile corpus from .tmp-corpus raw replays.
+"""Build the m1 replay profile corpus from workspace/kaggriculture/references/data/replay-corpus raw replays.
 
-Walks .tmp-corpus/raw/episode-*-replay.json (registered in .tmp-corpus/manifest.json),
+Walks workspace/kaggriculture/references/data/replay-corpus/raw/episode-*-replay.json (registered in workspace/kaggriculture/references/data/replay-corpus/manifest.json),
 runs integrity checks (both seats DONE + 720 steps + numeric rewards), extracts
 per-player profiles via kgenv.replay_profile, and writes the small profile
 archive to workspace/kaggriculture/software/exports/replay_profiles/:
@@ -40,7 +40,7 @@ from kgenv.replay_profile import (  # noqa: E402
     load_replay,
 )
 
-CORPUS = Path(".tmp-corpus")
+CORPUS = REPO / "workspace" / "kaggriculture" / "references" / "data" / "replay-corpus"
 EXPORTS = (
     SOFTWARE / "exports" / "replay_profiles"
 )
@@ -328,11 +328,11 @@ def _load_board(path: str) -> dict:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--corpus", default=str(REPO / ".tmp-corpus"))
+    ap.add_argument("--corpus", default=str(CORPUS))
     ap.add_argument("--exports", default=str(EXPORTS))
     ap.add_argument(
         "--leaderboard",
-        default=str(REPO / ".tmp-online" / "kaggriculture.zip"),
+        default=str(REPO / "workspace" / "kaggriculture" / "references" / "data" / "online-replays" / "kaggriculture.zip"),
     )
     args = ap.parse_args(argv)
     exports_dir = Path(args.exports)

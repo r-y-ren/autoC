@@ -32,12 +32,8 @@ desktop.ini
 
 # 会话级临时数据（回放抓取/榜单解压等大文件）
 .tmp/
-.tmp-online/
-.tmp-corpus/
-.tmp-dna/
-.tmp-intel/
-.tmp-r5/
-.tmp-v7/
-.tmp-v9/
-.tmp-mf/
-.tmp-mg/
+# 2026-09-01 起语料/运行数据归位战役目录（大文件不入库；README 除外）
+workspace/kaggriculture/references/data/
+workspace/kaggriculture/software/exports/probes/*
+!workspace/kaggriculture/software/exports/probes/README.md
+

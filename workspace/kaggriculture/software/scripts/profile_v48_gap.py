@@ -4,7 +4,7 @@ Runs paired episodes with full step recording, extracts per-player profiles
 via kgenv.replay_profile, and prints a side-by-side economy comparison to
 locate WHERE the bank deficit against a top-tier public agent concentrates.
 
-Output stays under repo scratch (.tmp-intel/).
+Output stays under campaign probes/intel/.
 
 Example:
     python scripts/profile_v48_gap.py --seeds 101
@@ -97,7 +97,7 @@ def main(argv=None) -> int:
 
     cand = load_submission_agent(SUBMISSION_MAIN)
     opp = load_submission_agent(os.path.join(OPPONENTS_DIR, args.opponent))
-    scratch = Path(REPO_ROOT) / ".tmp-intel"
+    scratch = Path(REPO_ROOT) / "workspace/kaggriculture/software/exports/probes/intel"
     scratch.mkdir(exist_ok=True)
 
     for seed in (int(s) for s in args.seeds.split(",") if s.strip()):

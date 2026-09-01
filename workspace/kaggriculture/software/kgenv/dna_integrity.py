@@ -87,19 +87,20 @@ def _repo_root(software_root: Path) -> Path:
 
 def validate_input_path(path: str | os.PathLike[str], expected_name: str,
                         repo_root: str | os.PathLike[str] | None = None) -> Path:
-    """Allow only the named local file directly under the repository .tmp-dna directory."""
+    """Allow only the named local file directly under the campaign replay-dna data directory."""
     raw = str(path)
     if re.match(r"^[A-Za-z][A-Za-z0-9+.-]*://", raw):
         raise IntegrityError("DNA inputs must be local files, not URLs")
     candidate = Path(path).expanduser().resolve()
     if candidate.name != expected_name:
         raise IntegrityError(f"DNA input basename must be {expected_name}")
-    if candidate.parent.name != ".tmp-dna":
-        raise IntegrityError("DNA inputs must be directly under .tmp-dna")
+    if candidate.parent.name != "replay-dna":
+        raise IntegrityError("DNA inputs must be directly under references/data/replay-dna")
     if repo_root is not None:
-        expected_parent = Path(repo_root).resolve() / ".tmp-dna"
+        expected_parent = (Path(repo_root) / "workspace" / "kaggriculture"
+                        / "references" / "data" / "replay-dna").resolve()
         if candidate.parent != expected_parent:
-            raise IntegrityError("DNA input must be from the repository .tmp-dna directory")
+            raise IntegrityError("DNA input must be from the campaign references/data/replay-dna directory")
     if not candidate.is_file():
         raise IntegrityError(f"DNA input does not exist: {candidate}")
     if any(part.lower() in {"holdout", "online", "eval", "exports"} for part in candidate.parts):
@@ -186,7 +187,7 @@ def build_implementation_manifest(implementation_root: Path = IMPLEMENTATION_ROO
         path = software / relative
         if not path.is_file():
             raise IntegrityError(f"DNA implementation file is missing: {relative}")
-        entries.append({"path": f"workspace/software/{relative}", "sha256": _sha256(path)})
+        entries.append({"path": f"workspace/kaggriculture/software/{relative}", "sha256": _sha256(path)})
     return entries
 def _safe_json(path: Path) -> dict[str, Any]:
     try:
@@ -297,11 +298,11 @@ def validate_artifacts(index_path: str | os.PathLike[str], report_path: str | os
         if artifact.get("digests", {}).get("algorithm") != DIGEST_ALGORITHM:
             raise IntegrityError("DNA canonical digest algorithm is not supported")
     expected_command = {
-        "argv": ["python", "workspace/software/scripts/analyze_dna_forensics.py"],
+        "argv": ["python", "workspace/kaggriculture/software/scripts/analyze_dna_forensics.py"],
         "cwd": str(_repo_root(software)),
         "parameters": {
             "inputs": list(SOURCE_NAMES),
-            "output_dir": "workspace/software/exports/replay_dna",
+            "output_dir": "workspace/kaggriculture/software/exports/replay_dna",
         },
     }
     if report.get("command") != expected_command:
@@ -319,7 +320,7 @@ def validate_artifacts(index_path: str | os.PathLike[str], report_path: str | os
     _recomputed_report_fields(report, paths)
     if index.get("source_manifest") != report.get("source_manifest"):
         raise IntegrityError("index/report source manifest mismatch")
-    if index.get("report_path") != "workspace/software/exports/replay_dna/report.json":
+    if index.get("report_path") != "workspace/kaggriculture/software/exports/replay_dna/report.json":
         raise IntegrityError("report path must be canonical")
     return {"valid": True, "samples": report["summary"]["sample_count"],
             "groups": report["summary"]["group_count"],

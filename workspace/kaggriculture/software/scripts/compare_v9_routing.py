@@ -6,7 +6,7 @@ imported module (no cross-game state).  Reports per-config telemetry
 (movement/effective ratio, overdue, harvest, feed buys) plus paired
 reward deltas so the efficiency gate can be judged on measured numbers
 before any outcome ablation is spent.  Output may only land under the
-repo's .tmp-v9/ development root.
+campaign probes/v9 development output root.
 """
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 SOFTWARE_ROOT = HERE.parent
 REPO_ROOT = SOFTWARE_ROOT.parent.parent
-DEV_OUTPUT_ROOT = REPO_ROOT / ".tmp-v9"
+DEV_OUTPUT_ROOT = REPO_ROOT / "workspace/kaggriculture/software/exports/probes/v9"
 if str(SOFTWARE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOFTWARE_ROOT))
 
@@ -53,7 +53,7 @@ def validate_output(path: Path) -> Path:
     root = DEV_OUTPUT_ROOT.resolve()
     resolved = path.resolve()
     if resolved == root or root not in resolved.parents:
-        raise ValueError("routing comparisons must write under .tmp-v9")
+        raise ValueError("routing comparisons must write under probes/v9")
     if resolved.suffix.lower() != ".json":
         raise ValueError("routing comparison output must be a JSON file")
     return resolved

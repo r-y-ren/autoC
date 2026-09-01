@@ -1,7 +1,7 @@
 {
   "artifact_kind": "dna_report",
   "schema_version": "replay-dna/1.1",
-  "generated_at": "2026-09-01T03:24:28.835574+00:00",
+  "generated_at": "2026-09-01T14:50:41.395157+00:00",
   "evidence_scope": {
     "kind": "offline_dna_liveness_forensics",
     "offline_exploratory": true,
@@ -17,7 +17,7 @@
   "source_manifest": [
     {
       "name": "barcodes.csv",
-      "path": ".tmp-dna/barcodes.csv",
+      "path": "workspace/kaggriculture/references/data/replay-dna/barcodes.csv",
       "sha256": "b61407d243285ae5a62494472efcc231b243d445a4fb50083d81dc5a8ef859fa",
       "role": "episode_barcode_samples",
       "source_url": "https://www.kaggle.com/datasets/destbreso/kaggriculture-replay-genomes",
@@ -31,7 +31,7 @@
     },
     {
       "name": "consensus.csv",
-      "path": ".tmp-dna/consensus.csv",
+      "path": "workspace/kaggriculture/references/data/replay-dna/consensus.csv",
       "sha256": "8abfef279bdaf27be7bff23f3615e4f9cf4d4ca4bbdb5a5b6c532d6b1a61eec0",
       "role": "producer_attested_consensus",
       "source_url": "https://www.kaggle.com/datasets/destbreso/kaggriculture-replay-genomes",
@@ -45,7 +45,7 @@
     },
     {
       "name": "reference_barcodes.csv",
-      "path": ".tmp-dna/reference_barcodes.csv",
+      "path": "workspace/kaggriculture/references/data/replay-dna/reference_barcodes.csv",
       "sha256": "ab07a1c08d40bce03a8bdef90a440c2d553c0e3624e48ddf8e06e79f86c736d5",
       "role": "reference_barcodes",
       "source_url": "https://www.kaggle.com/datasets/destbreso/kaggriculture-replay-genomes",
@@ -53,7 +53,7 @@
     },
     {
       "name": "field_validation.json",
-      "path": ".tmp-dna/field_validation.json",
+      "path": "workspace/kaggriculture/references/data/replay-dna/field_validation.json",
       "sha256": "e39ef577e9151e1b6e9537c3256594220c88f2d96093d4ef92f3afc436a27154",
       "role": "field_specific_frequency_validation",
       "source_url": "https://www.kaggle.com/datasets/destbreso/kaggriculture-replay-genomes",
@@ -62,20 +62,20 @@
   ],
   "implementation_manifest": [
     {
-      "path": "workspace/software/kgenv/dna_forensics.py",
+      "path": "workspace/kaggriculture/software/kgenv/dna_forensics.py",
       "sha256": "c93fa9f127e61d62f2d02d3eaef0d3e605c457f9d2800fd9f5b28cfd6edcfb58"
     },
     {
-      "path": "workspace/software/kgenv/dna_integrity.py",
-      "sha256": "5e777e19e7440cf47f62c0af62b1ba5c4cd1a401546cf74d6245e7e96384045c"
+      "path": "workspace/kaggriculture/software/kgenv/dna_integrity.py",
+      "sha256": "592e1068c98573331969223c4702eb7d3c81e22cd5150cccdb23a1095a7a5f47"
     },
     {
-      "path": "workspace/software/scripts/analyze_dna_forensics.py",
-      "sha256": "44026e62f12e9cde018df4f957358feaba8ce9d2a8fa5aebbdffa0f58bc7f54d"
+      "path": "workspace/kaggriculture/software/scripts/analyze_dna_forensics.py",
+      "sha256": "c426423b85408bbb1e1f5288c3089f2edaae1ed4589c742d1411a32e01fa66bb"
     },
     {
-      "path": "workspace/software/exports/replay_dna/dna_schema.json",
-      "sha256": "fae70a64381605f0dac5c38761a10e5226efd44c5f64e5dc59e1f7c1986963b5"
+      "path": "workspace/kaggriculture/software/exports/replay_dna/dna_schema.json",
+      "sha256": "2e7c726272edce30bdc1ddf05ed9eb116562d4176b78d58642fb9dc3aebe6241"
     }
   ],
   "samples": [
@@ -144930,7 +144930,7 @@
   "command": {
     "argv": [
       "python",
-      "workspace/software/scripts/analyze_dna_forensics.py"
+      "workspace/kaggriculture/software/scripts/analyze_dna_forensics.py"
     ],
     "cwd": "C:\\Users\\OSS\\Desktop\\autoC",
     "parameters": {
@@ -144940,11 +144940,11 @@
         "reference_barcodes.csv",
         "field_validation.json"
       ],
-      "output_dir": "workspace/software/exports/replay_dna"
+      "output_dir": "workspace/kaggriculture/software/exports/replay_dna"
     }
   },
   "digests": {
     "algorithm": "canonical-json-sha256",
-    "canonical_payload_sha256": "70d3b6e8bf605ca315afa09f8be8723e9066efe02e80dbd3c0d2072e945e3ace"
+    "canonical_payload_sha256": "0da47e19bf6a9415fcbcbb0d51d4bf16d04f372d57ef258101fc10d21b080af8"
   }
 }

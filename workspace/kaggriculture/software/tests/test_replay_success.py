@@ -11,7 +11,7 @@ Three layers:
      extract_success_metrics must attribute with ZERO mismatches (the
      shadow's predicted post-state equals the recorded observation at every
      step), plus fact-anchored numbers on the round-2 online replays when
-     .tmp-online is on disk (skipif otherwise).
+     references/data/online-replays is on disk (skipif otherwise).
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ from kgenv.replay_profile import (  # noqa: E402
 )
 
 REPO = Path(__file__).resolve().parents[3]
-ROUND2_DIR = REPO / ".tmp-online" / "round2"
+ROUND2_DIR = REPO / "workspace/kaggriculture/references/data/online-replays" / "round2"
 
 kag_engine = pytest.importorskip(
     "kaggle_environments.envs.kaggriculture.kaggriculture")

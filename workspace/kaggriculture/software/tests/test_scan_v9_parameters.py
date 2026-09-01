@@ -89,7 +89,7 @@ def test_validate_output_rejects_formal_paths(tmp_path):
         scanner.SOFTWARE_ROOT.parent / "metrics.json",
     ]
     for path in forbidden:
-        with pytest.raises(ValueError, match=".tmp-v9"):
+        with pytest.raises(ValueError, match="probes/v9"):
             scanner.validate_output(path)
     assert scanner.validate_output(scanner.DEV_OUTPUT_ROOT / "scan.json") == \
         (scanner.DEV_OUTPUT_ROOT / "scan.json").resolve()

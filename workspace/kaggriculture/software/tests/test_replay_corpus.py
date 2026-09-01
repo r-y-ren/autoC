@@ -2,7 +2,7 @@
 
 Extractor tests use a synthetic 720-step fixture (deterministic, no network,
 no dependence on gitignored raw replays). If real replays exist under
-.tmp-corpus/raw, an additional fact-anchored test runs against the top-1
+references/data/replay-corpus/raw, an additional fact-anchored test runs against the top-1
 episode (hires 295 / feed 2305u / wheat 2553u verified by hand on 2026-08-29).
 
 Integrity validator tests build a minimal corpus + exports fixture in a temp
@@ -43,7 +43,7 @@ SOFTWARE = REPO / "workspace" / "kaggriculture" / "software"
 INTEGRITY_SCRIPT = (
     SOFTWARE / "scripts" / "corpus_integrity.py"
 )
-REAL_EPISODE = REPO / ".tmp-corpus" / "raw" / "episode-102201446-replay.json"
+REAL_EPISODE = REPO / "workspace/kaggriculture/references/data/replay-corpus" / "raw" / "episode-102201446-replay.json"
 
 HOURS_PER_DAY = 24
 DAYS = 30

@@ -27,6 +27,7 @@ from kgenv.dna_integrity import (  # noqa: E402
     assert_finite_numbers,
     assert_no_forbidden_fields,
     build_implementation_manifest,
+    _repo_root,
     build_source_manifest,
     canonical_artifact_digest,
     validate_input_path,
@@ -72,7 +73,7 @@ def main(argv=None, *, software_root: Path = SOFTWARE_ROOT) -> int:
     args = build_parser().parse_args(argv)
     software_root = Path(software_root).resolve()
     try:
-        repo_root = software_root.parents[1]
+        repo_root = _repo_root(software_root)  # 布局无关（2026-09-01 迁移）
         paths = {
             "barcodes.csv": validate_input_path(args.barcodes, "barcodes.csv", repo_root),
             "consensus.csv": validate_input_path(args.consensus, "consensus.csv", repo_root),
@@ -90,10 +91,10 @@ def main(argv=None, *, software_root: Path = SOFTWARE_ROOT) -> int:
         implementation_manifest = build_implementation_manifest()
         generated_at = datetime.now(timezone.utc).isoformat()
         command = {
-            "argv": ["python", "workspace/software/scripts/analyze_dna_forensics.py"],
+            "argv": ["python", "workspace/kaggriculture/software/scripts/analyze_dna_forensics.py"],
             "cwd": str(repo_root),
             "parameters": {"inputs": list(paths),
-                           "output_dir": "workspace/software/exports/replay_dna"},
+                           "output_dir": "workspace/kaggriculture/software/exports/replay_dna"},
         }
         report = {
             "artifact_kind": "dna_report", "schema_version": SCHEMA_VERSION,
@@ -113,7 +114,7 @@ def main(argv=None, *, software_root: Path = SOFTWARE_ROOT) -> int:
             "artifact_kind": "dna_index", "schema_version": SCHEMA_VERSION,
             "generated_at": generated_at, "evidence_scope": dict(EVIDENCE_SCOPE),
             "source_manifest": manifest, "implementation_manifest": implementation_manifest,
-            "report_path": "workspace/software/exports/replay_dna/report.json",
+            "report_path": "workspace/kaggriculture/software/exports/replay_dna/report.json",
             "report_sha256": _sha256_bytes(report_data),
             "counts": {"samples": derived["summary"]["sample_count"],
                        "groups": derived["summary"]["group_count"],

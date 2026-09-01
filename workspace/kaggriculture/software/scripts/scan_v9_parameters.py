@@ -20,7 +20,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 SOFTWARE_ROOT = HERE.parent
 REPO_ROOT = SOFTWARE_ROOT.parent.parent
-DEV_OUTPUT_ROOT = REPO_ROOT / ".tmp-v9"
+DEV_OUTPUT_ROOT = REPO_ROOT / "workspace/kaggriculture/software/exports/probes/v9"
 if str(SOFTWARE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOFTWARE_ROOT))
 
@@ -104,7 +104,7 @@ def validate_output(path: Path) -> Path:
     root = DEV_OUTPUT_ROOT.resolve()
     resolved = path.resolve()
     if resolved == root or root not in resolved.parents:
-        raise ValueError("v9 scans must write a JSON file under .tmp-v9")
+        raise ValueError("v9 scans must write a JSON file under probes/v9")
     if resolved.suffix.lower() != ".json":
         raise ValueError("v9 scan output must be a JSON file")
     return resolved

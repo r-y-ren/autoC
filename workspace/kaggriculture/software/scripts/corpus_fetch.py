@@ -8,7 +8,7 @@ probe    : HTTP-range-probe the first 16 KiB of every episode file listed in a
 select   : classify probed episodes against the current leaderboard CSV into
            bands (top20 / top100) and emit a download plan (episode ids).
 fetch    : download the selected episode files (single-file dataset endpoint).
-stage    : register staged raw files into .tmp-corpus/manifest.json with
+stage    : register staged raw files into workspace/kaggriculture/references/data/replay-corpus/manifest.json with
            sha256, byte size, source URL, capture date, teams and bands.
 
 Network is read-only. Budget guard: refuses plans above MAX_TOTAL_FETCH_BYTES
@@ -16,17 +16,17 @@ or touching more than MAX_SHARDS distinct daily shards.
 
 Usage examples (run from repo root):
   python workspace/kaggriculture/software/scripts/corpus_fetch.py probe \
-      --filelist .tmp-corpus/shard-2026-08-28-filelist.json \
+      --filelist workspace/kaggriculture/references/data/replay-corpus/shard-2026-08-28-filelist.json \
       --slug kaggle/kaggriculture-episodes-2026-08-28 \
-      --out .tmp-corpus/shard-2026-08-28-teams.json
+      --out workspace/kaggriculture/references/data/replay-corpus/shard-2026-08-28-teams.json
   python workspace/kaggriculture/software/scripts/corpus_fetch.py select \
-      --probes .tmp-corpus/shard-2026-08-28-teams.json[,more.json] \
-      --leaderboard .tmp-online/kaggriculture.zip \
-      --plan-out .tmp-corpus/download-plan.json --max-per-band-top20 14
+      --probes workspace/kaggriculture/references/data/replay-corpus/shard-2026-08-28-teams.json[,more.json] \
+      --leaderboard workspace/kaggriculture/references/data/online-replays/kaggriculture.zip \
+      --plan-out workspace/kaggriculture/references/data/replay-corpus/download-plan.json --max-per-band-top20 14
   python workspace/kaggriculture/software/scripts/corpus_fetch.py fetch \
-      --plan .tmp-corpus/download-plan.json --dest .tmp-corpus/raw
+      --plan workspace/kaggriculture/references/data/replay-corpus/download-plan.json --dest workspace/kaggriculture/references/data/replay-corpus/raw
   python workspace/kaggriculture/software/scripts/corpus_fetch.py stage \
-      --corpus .tmp-corpus --leaderboard .tmp-online/kaggressure.zip  # see --help
+      --corpus workspace/kaggriculture/references/data/replay-corpus --leaderboard workspace/kaggriculture/references/data/online-replays/kaggressure.zip  # see --help
 """
 
 from __future__ import annotations
@@ -417,7 +417,7 @@ def cmd_stage(args: argparse.Namespace) -> None:
         "capture_date": CAPTURE_DATE,
         "files": [],
         "notes": [
-            "raw replays live under .tmp-corpus/raw (gitignored); only small",
+            "raw replays live under workspace/kaggriculture/references/data/replay-corpus/raw (gitignored); only small",
             "profile archives are committed under workspace/kaggriculture/software/exports/",
         ],
     }
@@ -491,17 +491,17 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("fetch")
     p.add_argument("--plan", required=True)
-    p.add_argument("--dest", default=".tmp-corpus/raw")
+    p.add_argument("--dest", default="workspace/kaggriculture/references/data/replay-corpus/raw")
     p.add_argument("--workers", type=int, default=1)
     p.add_argument("--pace", type=float, default=1.0, help="seconds between fetches")
     p.set_defaults(func=cmd_fetch)
 
     p = sub.add_parser("stage")
-    p.add_argument("--corpus", default=".tmp-corpus")
+    p.add_argument("--corpus", default="workspace/kaggriculture/references/data/replay-corpus")
     p.add_argument("--leaderboard")
     p.add_argument(
         "--local-sources",
-        default=".tmp-corpus/local-sources.json",
+        default="workspace/kaggriculture/references/data/replay-corpus/local-sources.json",
         help="episode_id -> {source_url, source_slug?, bands?}",
     )
     p.set_defaults(func=cmd_stage)

@@ -263,7 +263,7 @@ SCALE_RANCH_PARAMS: Dict = {
     "name": "scale_ranch",
     "provenance": "round-2 winners cross-profile (arminhej96 ep102399852 100559, "
                   "朝闻夕死 ep102402115 95087, Danila Galkin ep102406576 98770; "
-                  "replays .tmp-online/round2/) validated against the top-20 corpus "
+                  "replays workspace/kaggriculture/references/data/online-replays/round2/) validated against the top-20 corpus "
                   "(58 episodes / 116 seats: Crop Dusta 26 g, Milan Leonard 12 g, "
                   "Ryo Hasegawa 16 g) -- r3-1 deep dive, "
                   "exports/online/round2_winner_deep_dive.md",
@@ -354,8 +354,8 @@ WHEAT_STRAW_MONSTER_PARAMS: Dict = {
                   "all season 1508u sold @ avg 37.7, external feed 1501u, "
                   "d12=6052 d24=56055; DevilQ ep102558469 96629: 14 cows, "
                   "strawberry 33 peak d8-14, melon 21, wheat 429u sold, feed "
-                  "532u; replays .tmp-online/round3/, deep stats "
-                  ".tmp-online/round3/monster_deep_stats.json)",
+                  "532u; replays workspace/kaggriculture/references/data/online-replays/round3/, deep stats "
+                  "workspace/kaggriculture/references/data/online-replays/round3/monster_deep_stats.json)",
     "exploratory_params": False,
     # labour: crew 10 from day 0 (Renji hires 10 on d0 itself -- the field
     # economy needs the hands before the land does), 12 from d12 (Renji's
@@ -426,7 +426,7 @@ TWO_QUAD_DENSER_PARAMS = {
                   "tiles, weeds 0-4 vs our 6-48, d0 hands 8 -> 12 from d8, "
                   "d12 money 4492 vs our 50, external feed 322u, fertilizer "
                   "334u sold as an income line, endgame d24->d29 +38.8k; "
-                  "replay .tmp-online/round4/episode-102685729-replay.json)",
+                  "replay workspace/kaggriculture/references/data/online-replays/round4/episode-102685729-replay.json)",
     "exploratory_params": False,
     # labour: 8 hands from day 0 (Sam d0 end: hands 8, money 348 -- the
     # wheat field needs the crew before the second quadrant exists), 12

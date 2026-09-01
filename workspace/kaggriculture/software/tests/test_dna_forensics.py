@@ -145,14 +145,14 @@ def test_forbidden_fields_and_nonfinite_numbers_fail_closed():
 
 
 def test_input_and_output_path_guards(tmp_path):
-    dna = tmp_path / ".tmp-dna"
+    dna = tmp_path / "replay-dna"
     dna.mkdir()
     allowed = dna / "barcodes.csv"
     allowed.write_text("submission,team,seat,episode_id,genome_id,dna_bands\n", encoding="utf-8")
     assert validate_input_path(allowed, "barcodes.csv") == allowed.resolve()
     for invalid in ("https://example.com/barcodes.csv", tmp_path / "barcodes.csv",
                     dna / "eval_results.json", tmp_path / "holdout" / "barcodes.csv"):
-        with pytest.raises(IntegrityError, match=r"local|\.tmp-dna|basename|holdout|input"):
+        with pytest.raises(IntegrityError, match=r"local|replay-dna|basename|holdout|input"):
             validate_input_path(invalid, "barcodes.csv")
 
     software = tmp_path / "workspace" / "software"
@@ -171,8 +171,9 @@ def _write_csv(path: Path, fields: list[str], rows: list[dict]) -> None:
 
 
 def _source_fixture(root: Path) -> dict[str, Path]:
-    dna = root / ".tmp-dna"
-    dna.mkdir()
+    # 2026-09-01 布局：DNA 输入位于 <root>/workspace/kaggriculture/references/data/replay-dna
+    dna = root / "workspace" / "kaggriculture" / "references" / "data" / "replay-dna"
+    dna.mkdir(parents=True)
     b0, b1 = _bands(), _bands()
     b1[-1] = "b00000001d"
     barcode_rows = []

@@ -14,7 +14,7 @@ Scenarios (season d0-29, shops drawn with replacement to 8 instances):
   D   8 cows, full CARE   -> 9/day
   E  wool: 4 sheep full CARE -> 2.7 wool/day vs YARN draw luck
 
-Output: .tmp-intel/milk_replication.json
+Output: workspace/kaggriculture/software/exports/probes/intel/milk_replication.json
 """
 
 from __future__ import annotations
@@ -141,7 +141,7 @@ def main():
         print(f"{label:<44} milk_px={avg_px:6.1f} rev={avg_rev:8.0f}"
               f" yarn_draw={yarn_shops:.2f} wool_px={wool_px:6.1f}",
               flush=True)
-    dest = REPO_ROOT / ".tmp-intel" / "milk_replication.json"
+    dest = REPO_ROOT / "workspace/kaggriculture/software/exports/probes/intel" / "milk_replication.json"
     dest.write_text(json.dumps(out, indent=2), encoding="utf-8")
     print(f"wrote {dest}")
 
