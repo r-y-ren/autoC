@@ -667,13 +667,15 @@ FERT_VALUE_GATE = 70     # fert sack sold at 70+ beats a wheat/carrot boost
                          # never fertilize and sold 158u for +12.8k)
 WHEAT_MONEY_GATE = 30   # wheat joins the rotation as a money crop at 30+
 WHEAT_MONEY_CAP_PER_QUAD = 3
-# V-T2 ablation copy (tetsuya endgame rotation): carrot window extends to
-# day 27 (first_yield 2 -> a day-27 planting still produces on the evening of
-# 28 and cashes out on 29) with a wider 6/quad cap for the endgame line.
-CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 14), "CARROT": (15, 27)}
+# V-T2 ablation copy (tetsuya endgame rotation): carrot endgame line with a
+# wider 6/quad cap.  V-T6: the planting deadline returns to day 26 -- the
+# d27 batches of rounds 9/10 all stranded unharvested (9-12 units/episode;
+# a day-27 planting produces on the evening of 28 and the terminal
+# feasibility check drops the far tiles on 29).
+CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 14), "CARROT": (15, 26)}
 CROP_FLOOR = {"MELON": 150, "STRAWBERRY": 55, "CARROT": 28}
 CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 8, "CARROT": 6}  # v6-F; V-T2
-PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 27, "MELON": 17, "STRAWBERRY": 14}
+PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
 
 # ---- r5-P4 macro-plan layer: strategy-space extension --------------------
 # 【中文】宏观计划层（战役 III 第 5 轮 P4）：r4 框架本地 142W-2L，但公榜
@@ -978,6 +980,20 @@ ROTATION_DIG_DAY = 18
 # after hour 21 leaves no reliable WATER window.
 PLANT_EOD_GUARD = False
 PLANT_HOUR_MAX = 21
+# V-T5 tetsuya-style spatial greed (forensics 2026-09-02: his adjacent-cell
+# operation continuity is 78% vs our 48%, his idle-PASS 13% vs our ~50% --
+# global value matching lets a distant 300-value task outrank a nearby
+# 100-value one EVERY turn, fragmenting worker trajectories; d8-d11 of the
+# crash episode ep104594916 this starved the harvest, cash flow broke and
+# all 12 hands reset to zero for 17 days).  Distance BUCKETS soften the
+# value race in phase B: near (0-1 cells), local (2-4), far (5+).  The
+# bucket charge is deliberately MODERATE (crossing one bucket costs about
+# as much as walking ~5 extra cells): a 600-point dominance measured
+# continuity 62-65% but starved distant rich harvests and cost -16k in
+# the seed-101 self-play -- tetsuya's continuity is half LAYOUT (his rich
+# crops sit beside the workers), so the scheduler must prefer near work
+# without forbidding far work.
+BUCKET_DOMINANCE = 120.0
 # V-T3 watertight planting (forensics: ep 104585743 d8 -- a 10-seed NE pulse
 # planted h8-14 left 18 tiles unwatered and 16 died; tetsuya's 6 replays all
 # plant in the daytime band and never lose the batch).  Two task-generation
@@ -2373,6 +2389,18 @@ def _market_gates(day, prices, shed, herd, town_shops=None, money=None,
     demand = _town_daily_demand(town_shops) if town_shops is not None else None
     flow = flow or {}
 
+    # V-T6 bankruptcy lifeline: a broke dawn cannot re-hire the crew that
+    # earns it back (crash forensics ep 104594916: 12 hands -> 0 on d10 and
+    # a 17-day stall while 8 wool sat in the shed behind shut gates).  Below
+    # the emergency floor every tradable shed item dumps unconditionally --
+    # hoard gates must never sit on the payroll.
+    if money is not None and money < 200 and not last_day:
+        for item in BASE_PRICE:
+            n = shed.get(item, 0)
+            if isinstance(n, (int, float)) and n > 0:
+                orders.append(["SELL", item, int(n)])
+        return orders
+
     def cap(qty, item):
         """Dump-rate limiter: town absorption 2*D + 4 (P2)."""
         if demand is None:
@@ -2775,8 +2803,11 @@ def _build_tasks(obs, farm, private, day, plan=None):
                     elif age >= cd["max_yield_day"] + 1 or last_day:
                         # rot emergency: one-time crops decay to a weed from
                         # hour 0 of this day, ~1 unit per 2 turns
+                        # V-T5: escalated to RED -- a rotting crop is as
+                        # time-critical as a thirsty one (the v10.5 crash
+                        # class: harvest starved behind red water commutes)
                         add(95, x, y, ["HARVEST"], ("harvest", x, y),
-                            v=yu * price + 40, red=last_day)
+                            v=yu * price + 40, red=True)
                     elif age >= cd["max_yield_day"] and (
                             _get(tile, "watered_today", False) or
                             _get(obs, "hour", 0) >= 18):
@@ -3377,13 +3408,16 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
     reds = [t for t in tasks if t.get("red")]
     reds.sort(key=lambda t: -tval(t))
     by_key = {t["key"]: t for t in reds}
-    # V-T4 red-line stickiness: re-bind the PREVIOUS turn's red assignments
-    # first (forensics: ep 104585743 d8 h16-23 -- nearest-worker re-matching
-    # every turn made nine workers oscillate between 18 red WATER tiles for
-    # eight straight hours with ZERO waterings; a held binding only breaks
-    # when its target disappears from the task list).  A held binding can
-    # cost some travel efficiency but never safety: reds are death-tonight
-    # obligations and the target itself validates the binding.
+    # V-T4 red-line stickiness, V-T5 near-end hold: re-bind the previous
+    # turn's red assignments first, but a held binding survives only while
+    # the target is NEAR (d <= 4).  Forensics pair: ep 104585743 d8 h16-23
+    # (no stickiness: nine workers oscillated between 18 red tiles for
+    # eight hours, zero waterings) vs ep 104594916 d8-d11 (unconditional
+    # stickiness: distant red bindings locked workers into long commutes,
+    # the harvest starved, cash broke and all hands reset to zero).  The
+    # distance cap keeps the anti-oscillation benefit without the commute
+    # lock-in; far red targets still go to the nearest free worker each
+    # turn.
     for ui, prev_key in list(sticky.items()):
         if ui in assign or ui >= len(units):
             continue
@@ -3391,6 +3425,8 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
         if t is None:
             continue
         if t.get("units") is not None and ui not in t["units"]:
+            continue
+        if _dist(units[ui][0], units[ui][1], t["x"], t["y"]) > 4:
             continue
         assign[ui] = t
         claimed.add(t["key"])
@@ -3419,21 +3455,34 @@ def _schedule_units_v72(obs, farm, private, day, tasks):
             claimed.add(t["key"])
 
     # ---------------- phase B: value matching with stickiness -------------
+    # V-T5: home-sector soft penalty (tetsuya-style patrol continuity).  The
+    # worker's first position of the day defines its home quadrant; work in
+    # the OTHER quadrants pays the soft penalty on top of the distance
+    # buckets below.  Red lines stay exempt (phase A above).
+    home_quads = _route_state(_get(obs, "player", 0), day, hour, units,
+                              board)["home"]
     pairs = []
     for ui in range(len(units)):
         if ui in assign:
             continue
         ux, uy = units[ui]
         uquad = _quadrant_of(ux, uy, board)
+        home_quad = home_quads.get(ui) or uquad
         for t in tasks:
             if t["key"] in claimed:
                 continue
             if t.get("units") is not None and ui not in t["units"]:
                 continue
             d = _dist(ux, uy, t["x"], t["y"])
-            score = tval(t) - TRAVEL_MU * d
+            # V-T5 distance buckets dominate value (see BUCKET_DOMINANCE):
+            # near (0-1) / local (2-4) / far (5+).  A nearby modest task now
+            # always beats a distant rich one; value ranks inside a bucket.
+            bucket = 0 if d <= 1 else (1 if d <= 4 else 2)
+            score = tval(t) - TRAVEL_MU * d - bucket * BUCKET_DOMINANCE
             if _quadrant_of(t["x"], t["y"], board) != uquad:
                 score -= CROSS_QUAD_PENALTY
+            if _quadrant_of(t["x"], t["y"], board) != home_quad:
+                score -= CROSS_SECTOR_PENALTY_V9
             score += float(t.get("_v9_soft", {}).get(ui, 0.0))
             need = t.get("need")
             if need:
