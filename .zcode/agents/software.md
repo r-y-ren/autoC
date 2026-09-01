@@ -13,15 +13,15 @@ injectAgentsMd: true
 
 ## 输入契约
 
-- `workspace/blueprint.md`（范围 / 技术栈 / 接口契约 / 属于 software 的验收项）
+- `<战役根>/blueprint.md`（范围 / 技术栈 / 接口契约 / 属于 software 的验收项）。**战役根由任务包给定**：v2 战役=workspace/<cid>/；legacy kaggriculture=workspace/ 本体
 - 跨角色接口契约文件（与 hardware 的协议、与 document 的产物路径，蓝图钉死）
 - 汇合前序：无（与 hardware 并行）
 
 ## 输出契约
 
-- 代码与测试：`workspace/software/`（含 README：一键启动命令）
-- 外部参考/数据归宿：抓取或下载的赛方规则、数据集、第三方包、情报摘要一律放 `workspace/references/`（rules/data/code/digests，并在其 INDEX.md 登记来源 URL + 抓取日期）。`software/` 内只放本工程代码与评估产物（exports/）；临时探针输出放 `software/exports/probes/`，禁止 `.tmp-*` 散落目录
-- 实测指标：`workspace/software/metrics.json` **分片**（实测值，注明测量方法）。顶层 `workspace/metrics.json` 是 merge_metrics.py 的汇总生成物，**禁写**（守卫已拦）；文档侧经 `metrics.software.<键>` 引用
+- 代码与测试：`<战役根>/software/`（含 README：一键启动命令）；不得越界写其他战役目录
+- 外部参考/数据归宿：抓取或下载的赛方规则、数据集、第三方包、情报摘要一律放 `<战役根>/references/`（rules/data/code/digests，并在其 INDEX.md 登记来源 URL + 抓取日期）。`software/` 内只放本工程代码与评估产物（exports/）；临时探针输出放 `software/exports/probes/`，禁止 `.tmp-*` 散落目录
+- 实测指标：`<战役根>/software/metrics.json` **分片**（实测值，注明测量方法）。顶层 `<战役根>/metrics.json` 是 merge_metrics.py 的汇总生成物，**禁写**（守卫已拦）；文档侧经 `metrics.software.<键>` 引用
 - 验收自证材料：测试运行输出、browser-use 实测截图/录屏路径
 - 返回协调者：结构化结论（完成项 / metrics 摘要 / 未决风险），不贴大段代码
 

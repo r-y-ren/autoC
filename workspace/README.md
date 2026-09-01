@@ -1,17 +1,36 @@
-# workspace/ —— 当前战役活跃开发区（v1 单战役约束）
+# workspace/ —— 多战役容器（v2，2026-09-01）
 
-**生命周期**：决策阶段生成 `strategy.md` + `blueprint.md` → 用户确认 → 交付阶段填充 `software/` `hardware/` `docs/` → 验收填充 `acceptance/` → `archive_campaign.py` 整体移入 `archive/` 并清空本目录，开启下一战役。
+**每个战役一个子目录** `workspace/<战役id>/`；多战役可并行（各自独立阶段与熔断计数）。
+现役 legacy 战役例外：`kaggriculture` 的战役根=workspace/ 本体（历史冻结证据嵌死平铺路径，不迁移）。
+
+## 战役生命周期
+
+```
+init_state --campaign <cid> --phase decide    # 登记（自动建骨架）→ strategy-gen 产出 strategy/blueprint
+  → 用户确认蓝图 → --phase deliver           # campaign-run 波次交付
+  → --phase verify                            # accept-run 验收-修复回环
+  → archive_campaign --campaign <cid>         # 归档移入 archive/ 并注销（--close）
+```
+
+## 单战役目录结构（workspace/<cid>/）
 
 | 文件/目录 | 归属角色 | 说明 |
 |---|---|---|
 | `strategy.md` | Strategy | 对比矩阵 + 一鱼多吃路线（decide 态可写） |
 | `blueprint.md` | Strategy | ★ 唯一蓝图契约，须过 blueprint.schema.json 校验 |
-| `JOURNAL.md` | 协调者 | 阶段流转日志（提交入库，可审计） |
-| `metrics.json` | merge_metrics.py | 分片汇总生成物（角色禁写；分片在 software//hardware/ 下） |
+| `JOURNAL.md` | 协调者 | 本战役阶段流转日志（提交入库，可审计） |
+| `metrics.json` | merge_metrics.py | 分片汇总生成物（角色禁写；分片在各角色目录下） |
 | `software/` | Software | 代码 + 沙箱测试 + metrics 分片 |
 | `hardware/` | Hardware | BOM / 引脚表 / 固件 + metrics 分片 |
-| `references/` | 抓取材料的角色 | ★ 外部参考资料/数据/第三方包的**唯一归宿**（rules/data/code/digests 子目录，登记见其 INDEX.md） |
 | `docs/` | Document | 报告（Typst）+ PPT（Marp）源码 |
+| `references/` | 抓取材料的角色 | ★ 外部参考资料/数据/第三方包的**唯一归宿**（rules/data/code/digests，登记见其 INDEX.md） |
 | `acceptance/` | 验收 | 执行记录 / 失败工单 / 分析报告（交付期只读） |
 
+## 现役战役
+
+| 战役 id | 战役根 | 阶段 |
+|---|---|---|
+| `kaggriculture` | `workspace/`（legacy 平铺） | 见 `python scripts/guard/init_state.py` 或 /status |
+
+守卫按**最长 root 匹配**把写入路由到所属战役的阶段策略；`workspace/<未登记id>/` 一律拒写。
 守卫策略与写入矩阵见 `scripts/guard/guard_path.py` 与 `docs/DESIGN.md` §6.2。

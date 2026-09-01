@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""S-06 战役归档（archive_campaign）。
+"""S-06 战役归档（archive_campaign，v2 多战役）。
 
-workspace/ → archive/<YYYY-MM>_<赛事名>_<主题>/（git add + tag + 复位 workspace + idle）。
+把单个战役根整体固化到 archive/<YYYY-MM>_<赛事名>_<主题>/（git add + tag），
+然后注销该战役（v2 状态移除注册条目；v1 状态复位 idle）。其余战役不受影响。
 
 安全前置（不满足即拒绝，--force 强制）：
-  - workspace/blueprint.md 存在（归档名取自其 campaign 字段）
+  - <战役根>/blueprint.md 存在（归档名取自其 campaign 字段）
   - 最新 run-*.json：result=pass 可归档；pending_manual 需 --allow-manual；fail 拒绝
 用法：
-  python scripts/verify/archive_campaign.py [--dry-run] [--allow-manual] [--force]
+  python scripts/verify/archive_campaign.py [--campaign <cid>] [--dry-run] [--allow-manual] [--force]
+
+v1/legacy 战役（root=workspace）归档后 workspace 复位为多战役容器（README 保留）；
+v2 战役（root=workspace/<cid>）归档后删除该战役目录，容器与其余战役不动。
 """
 
 from __future__ import annotations
@@ -21,22 +25,18 @@ import subprocess
 import sys
 from pathlib import Path
 
-WORKSPACE_SKELETON_README = """# workspace/ —— 当前战役活跃开发区（v1 单战役约束）
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "guard"))
+import flow_state as fs  # noqa: E402
 
-**生命周期**：决策阶段生成 `strategy.md` + `blueprint.md` → 用户确认 → 交付阶段填充 `software/` `hardware/` `docs/` → 验收填充 `acceptance/` → `archive_campaign.py` 整体移入 `archive/` 并清空本目录，开启下一战役。
+CONTAINER_README = """# workspace/ —— 多战役容器（v2）
 
-| 文件/目录 | 归属角色 | 说明 |
-|---|---|---|
-| `strategy.md` | Strategy | 对比矩阵 + 一鱼多吃路线（decide 态可写） |
-| `blueprint.md` | Strategy | ★ 唯一蓝图契约，须过 blueprint.schema.json 校验 |
-| `JOURNAL.md` | 协调者 | 阶段流转日志（提交入库，可审计） |
-| `metrics.json` | merge_metrics.py | 分片汇总生成物（角色禁写；分片在 software//hardware/ 下） |
-| `software/` | Software | 代码 + 沙箱测试 + metrics 分片 |
-| `hardware/` | Hardware | BOM / 引脚表 / 固件 + metrics 分片 |
-| `docs/` | Document | 报告（Typst）+ PPT（Marp）源码 |
-| `acceptance/` | 验收 | 执行记录 / 失败工单 / 分析报告（交付期只读） |
+每个战役一个子目录 `workspace/<战役id>/`（strategy/blueprint/JOURNAL/metrics +
+software/hardware/docs/references/acceptance）。战役登记与注销：
+  python scripts/guard/init_state.py --campaign <id> --phase decide   # 开新战役
+  python scripts/guard/init_state.py --campaign <id> --phase deliver  # 阶段流转
+  python scripts/guard/init_state.py --campaign <id> --close          # 注销
 
-守卫策略与写入矩阵见 `scripts/guard/guard_path.py` 与 `docs/DESIGN.md` §6.2。
+守卫按最长 root 匹配路由到各战役自己的阶段；写入矩阵见 docs/DESIGN.md §6.2。
 """
 
 
@@ -64,8 +64,8 @@ def sanitize(s: str) -> str:
     return "".join(out) or "unnamed"
 
 
-def load_campaign() -> dict:
-    bp = ROOT / "workspace" / "blueprint.md"
+def load_campaign(camp_root: Path) -> dict:
+    bp = camp_root / "blueprint.md"
     if not bp.is_file():
         return {}
     m = re.match(r"^---\s*\n(.*?)\n---\s*\n?", bp.read_text(encoding="utf-8"), re.S)
@@ -78,8 +78,8 @@ def load_campaign() -> dict:
         return {}
 
 
-def latest_result() -> str | None:
-    acc = ROOT / "workspace" / "acceptance"
+def latest_result(camp_root: Path) -> str | None:
+    acc = camp_root / "acceptance"
     nums = [int(m.group(1)) for f in acc.glob("run-*.json")
             if (m := re.match(r"run-(\d+)\.json$", f.name))]
     if not nums:
@@ -95,38 +95,54 @@ def git(*args: str) -> subprocess.CompletedProcess:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="战役归档")
+    ap = argparse.ArgumentParser(description="战役归档（多战役）")
+    ap.add_argument("--campaign", default=None, help="目标战役 id（缺省=唯一登记战役）")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--allow-manual", action="store_true", help="允许 pending_manual 归档")
     ap.add_argument("--force", action="store_true", help="跳过全部安全检查（危险）")
     args = ap.parse_args()
 
-    camp = load_campaign()
-    if not camp and not args.force:
-        print("[archive] workspace/blueprint.md 缺失或无 campaign 字段，拒绝归档", file=sys.stderr)
+    state = fs.load_state(ROOT)
+    cid, camp, err = fs.resolve_campaign(ROOT, state, args.campaign)
+    if err:
+        print(f"[archive] {err}", file=sys.stderr)
         return 2
-    result = latest_result()
+    camp_root = fs.campaign_dir(ROOT, camp)
+    legacy_root = str(camp.get("root")) == "workspace"
+
+    camp_meta = load_campaign(camp_root)
+    if not camp_meta and not args.force:
+        print(f"[archive] {camp_root.relative_to(ROOT)}/blueprint.md 缺失或无 campaign 字段，拒绝归档",
+              file=sys.stderr)
+        return 2
+    result = latest_result(camp_root)
     if not args.force:
         if result in ("fail", "pending_agent"):
             print(f"[archive] 最新验收 result={result}（失败或存在未完成 agent 核验项），拒绝归档"
                   f"（修复/补验后重跑，或 --force 明确强制）", file=sys.stderr)
             return 2
         if result == "pending_manual" and not args.allow_manual:
-            print("[archive] 最新验收含人工待测项（pending_manual），加 --allow-manual 确认或先完成人工项", file=sys.stderr)
+            print("[archive] 最新验收含人工待测项（pending_manual），加 --allow-manual 确认或先完成人工项",
+                  file=sys.stderr)
             return 2
         if result is None:
-            print("[archive] workspace/acceptance/ 无验收记录，拒绝归档（先跑 /accept）", file=sys.stderr)
+            print(f"[archive] {camp_root.relative_to(ROOT)}/acceptance/ 无验收记录，拒绝归档（先跑 /accept）",
+                  file=sys.stderr)
             return 2
 
     month = datetime.date.today().strftime("%Y-%m")
-    dirname = f"{month}_{sanitize(camp.get('name', ''))}_{sanitize(camp.get('theme', ''))}"
+    dirname = f"{month}_{sanitize(camp_meta.get('name', ''))}_{sanitize(camp_meta.get('theme', ''))}"
     dest = ROOT / "archive" / dirname
-    ws = ROOT / "workspace"
 
+    print(f"[archive] 战役 {cid}（root={camp_root.relative_to(ROOT)}）")
     print(f"[archive] 归档名：{dirname}")
     print(f"[archive] 最新验收：{result}")
+    entries = sorted(p for p in camp_root.iterdir() if not p.name.startswith("."))
+    if legacy_root:
+        # legacy 平铺根=workspace 本体：容器 README 留守
+        entries = [p for p in entries if p.name != "README.md"]
     if args.dry_run:
-        for p in sorted(ws.iterdir()):
+        for p in entries:
             print(f"  will move: {p.relative_to(ROOT)}")
         print(f"[archive] dry-run：目标 {dest.relative_to(ROOT)}，tag=archive/{dirname}")
         return 0
@@ -137,24 +153,20 @@ def main() -> int:
 
     dest.mkdir(parents=True)
     moved = []
-    for p in sorted(ws.iterdir()):
-        if p.name.startswith("."):
-            continue
+    for p in entries:
         shutil.move(str(p), str(dest / p.name))
         moved.append(p.name)
     print(f"[archive] 移动 {len(moved)} 项 → {dest.relative_to(ROOT)}")
 
-    # 复位 workspace 骨架
-    (ws / "JOURNAL.md").write_text("# 战役日志\n\n| 时间 | 阶段 | 动作 | 结果 |\n|---|---|---|---|\n",
-                                   encoding="utf-8")
-    (ws / "README.md").write_text(WORKSPACE_SKELETON_README, encoding="utf-8")
-    for d in ("software", "hardware", "docs", "acceptance"):
-        (ws / d).mkdir(exist_ok=True)
-        (ws / d / ".gitkeep").touch()
+    if legacy_root:
+        # workspace 复位为多战役容器（不再放单战役骨架——新战役经 init_state 登记）
+        (camp_root / "README.md").write_text(CONTAINER_README, encoding="utf-8")
+    else:
+        shutil.rmtree(camp_root, ignore_errors=True)
 
     # git：add → commit → tag（commit 必须先于 tag，否则 tag 指向归档前旧提交——T2.1 修复的 P2 缺陷）
     if git("add", "-A").returncode == 0:
-        c = git("commit", "-m", f"archive: {dirname}")
+        c = git("commit", "-m", f"archive({cid}): {dirname}")
         if c.returncode == 0:
             tag = f"archive/{dirname}"
             if git("tag", tag).returncode == 0:
@@ -166,10 +178,16 @@ def main() -> int:
     else:
         print("[archive][warn] git add 失败，仅完成文件移动（commit/tag 跳过）", file=sys.stderr)
 
+    # 状态复位：v2 注销该战役（其余战役不动）；v1 复位 idle
     init = ROOT / "scripts" / "guard" / "init_state.py"
-    subprocess.run([sys.executable, str(init), "--phase", "idle", "--reset",
-                    "--by", "archive_campaign"], capture_output=True, timeout=15)
-    print("[archive] 完成：归档已提交并打 tag，workspace 已复位，状态回 idle。")
+    if fs.is_v2(fs.load_state(ROOT)) and cid != "(legacy)":
+        subprocess.run([sys.executable, str(init), "--campaign", cid, "--close",
+                        "--by", "archive_campaign"], capture_output=True, timeout=15)
+        print(f"[archive] 完成：战役 {cid} 已注销，其余战役不受影响。")
+    else:
+        subprocess.run([sys.executable, str(init), "--phase", "idle", "--reset",
+                        "--by", "archive_campaign"], capture_output=True, timeout=15)
+        print("[archive] 完成：归档已提交并打 tag，状态复位 idle。")
     return 0
 
 

@@ -10,7 +10,8 @@
       "required": ["competition_id"],
       "properties": {
         "competition_id": { "type": "string" },
-        "blueprint_ref": { "type": "string", "description": "所依据蓝图版本（git commit）" }
+        "blueprint_ref": { "type": "string", "description": "所依据蓝图版本（git commit）" },
+        "campaign_id": { "type": "string", "description": "多战役模型下的战役 id（v2 状态注册表键）" }
       }
     },
     "checklist": {

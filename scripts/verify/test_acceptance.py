@@ -37,6 +37,11 @@ def make_root() -> Path:
                     ignore=shutil.ignore_patterns(".venv", "__pycache__", "node_modules"))
     shutil.rmtree(tmp / "workspace" / "acceptance", ignore_errors=True)
     (tmp / "workspace" / "acceptance").mkdir(parents=True, exist_ok=True)
+    # 状态钉死：retry 从 0 起数（真实库 retry.count 会漂移，断言不能依赖它）
+    (tmp / ".flow").mkdir(exist_ok=True)
+    (tmp / ".flow" / "state.json").write_text(json.dumps({
+        "schema_version": 1, "phase": "idle", "campaign": None, "extra_allow": [],
+        "retry": {"count": 0, "max": 3, "tripped": False}}), encoding="utf-8")
     return tmp
 
 
@@ -176,7 +181,40 @@ def main() -> int:
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
-    total = 7
+    # 场景 G（v2 多战役）：--campaign 路由——蓝图/记录/retry 均落该战役子树，另一战役不受影响
+    root = make_root()
+    try:
+        v2 = {"schema_version": 2, "phase": "idle", "campaigns": {
+            "cup-a": {"phase": "deliver", "root": "workspace/cup-a",
+                      "retry": {"count": 0, "max": 3, "tripped": False}, "extra_allow": []},
+            "cup-b": {"phase": "deliver", "root": "workspace/cup-b",
+                      "retry": {"count": 0, "max": 3, "tripped": False}, "extra_allow": []},
+        }}
+        (root / ".flow" / "state.json").write_text(json.dumps(v2), encoding="utf-8")
+        ws = root / "workspace"
+        shutil.rmtree(ws / "acceptance")
+        (ws / "blueprint.md").unlink()
+        (ws / "cup-a").mkdir()
+        (ws / "cup-b").mkdir()
+        (ws / "cup-a" / "blueprint.md").write_text(BP_HEAD +
+            '    - {id: g1, category: software, item: 失败, method: m, cmd: "exit 1"}\n' + BP_TAIL,
+            encoding="utf-8")
+        (ws / "cup-a" / "acceptance").mkdir()
+        p = run_acc(root, extra=["--campaign", "cup-a"])
+        st = json.loads((root / ".flow" / "state.json").read_text(encoding="utf-8"))
+        run_json = ws / "cup-a" / "acceptance" / "run-1.json"
+        ok = (p.returncode == 1 and run_json.is_file()
+              and st["campaigns"]["cup-a"]["retry"]["count"] == 1
+              and st["campaigns"]["cup-b"]["retry"]["count"] == 0
+              and json.loads(run_json.read_text(encoding="utf-8"))["campaign"]["campaign_id"] == "cup-a")
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} G v2 战役路由：记录落位={run_json.is_file()} "
+              f"cup-a.retry={st['campaigns']['cup-a']['retry']['count']}（期望1） "
+              f"cup-b.retry={st['campaigns']['cup-b']['retry']['count']}（期望0）")
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+    total = 8
     print(f"[test_acceptance] {passed}/{total} 通过")
     return 0 if passed == total else 1
 

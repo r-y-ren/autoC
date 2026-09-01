@@ -13,18 +13,18 @@
 | `config/` | 静态配置与契约 Schema | idle 态可改 |
 | `scripts/` | 确定性脚本（kb/guard/verify） | idle 态可改 |
 | `kb/` | 知识库（清洗后的轻量 Markdown） | collect 态经跑批写入 |
-| `workspace/` | 当前战役开发区（v1 单战役） | 按阶段/角色受限 |
+| `workspace/` | 战役开发区（v2 多战役并行：每战役 `workspace/<cid>/` 子目录，独立阶段；legacy 平铺战役 root=workspace） | 按阶段/角色受限 |
 | `export/` | KB 交付导出层（S-15 纯投影，D6） | 脚本生成，人读 |
 | `archive/` | 历史作品库 | **永远只读** |
 
 ## 六条铁律
 
 1. **引用纪律**：KB 中的一切分析必须基于本次实抓的文档，逐条携带 `来源 URL + 抓取日期`。禁止凭模型记忆撰写获奖分析或赛事信息。
-2. **契约纪律**：`workspace/blueprint.md`、KB 条目、验收记录必须通过 `config/templates/*.schema.json` 校验；蓝图未过校验不得请求用户确认。
-3. **写入纪律**：尊重 `scripts/guard/guard_path.py` 的**阶段级**写入策略与角色写入矩阵（DESIGN.md §6.2；角色目录级边界属 L1 软约束）。被守卫阻断时，修正自己的目标路径，不要绕道 Bash 写入来规避——Bash 写入同样会被 git 审计（L3）追责。`archive/` 与 `.flow/state.json` 对 agent 永远只读。战役中抓取/下载的外部参考资料与数据（规则、数据集、第三方包、情报摘要）**只能**放 `workspace/references/` 对应子目录并在其 INDEX.md 登记来源，禁止散落到工程目录。
-4. **数据纪律**：对外文档中的一切性能数字只能来自 `workspace/metrics.json` 的实测值，禁止编造或"合理估计"数字。
+2. **契约纪律**：`<战役根>/blueprint.md`、KB 条目、验收记录必须通过 `config/templates/*.schema.json` 校验；蓝图未过校验不得请求用户确认。
+3. **写入纪律**：尊重 `scripts/guard/guard_path.py` 的**阶段级**写入策略与角色写入矩阵（DESIGN.md §6.2；角色目录级边界属 L1 软约束；多战役按最长 root 匹配路由到所属战役的阶段）。被守卫阻断时，修正自己的目标路径，不要绕道 Bash 写入来规避——Bash 写入同样会被 git 审计（L3）追责。`archive/` 与 `.flow/state.json` 对 agent 永远只读；`workspace/<未登记id>/` 不得创建（战役登记只能经 `init_state --campaign`）。战役中抓取/下载的外部参考资料与数据（规则、数据集、第三方包、情报摘要）**只能**放该战役 `references/` 对应子目录并在其 INDEX.md 登记来源，禁止散落到工程目录。
+4. **数据纪律**：对外文档中的一切性能数字只能来自所属战役 `<战役根>/metrics.json` 的实测值，禁止编造或"合理估计"数字。
 5. **上下文纪律**：主会话是瘦协调者——只读 `kb/INDEX.md` 与各契约文件，不整读 `kb/raw/` 与条目正文；收集/分析任务按条目分片派发子 agent；子 agent 返回结构化结论而非原始转储。
-6. **阶段纪律**：每完成一个阶段在 `workspace/JOURNAL.md` 记录一行并 git commit；阶段流转只能经 `init_state.py`；验收-修复回环超过 `retry.max` 次必须熔断升级人工，不得继续重试。
+6. **阶段纪律**：每完成一个阶段在所属战役 `JOURNAL.md` 记录一行并 git commit；阶段流转只能经 `init_state.py`（战役级流转带 `--campaign <cid>`；熔断计数为战役级，各战役独立）；验收-修复回环超过 `retry.max` 次必须熔断升级人工，不得继续重试。
 
 ## 合规底线
 

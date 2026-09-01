@@ -42,7 +42,7 @@ RUN_TMPL = """{{
 """
 
 
-def make_root() -> Path:
+def make_root(v2_state: dict | None = None) -> Path:
     tmp = Path(tempfile.mkdtemp(prefix="autoc_arch_test_"))
     # 夹具与真实库隔离：排除 .venv/缓存，并把真实 archive/ 清空重建（保留 .gitkeep）——
     # 否则真实归档条目会被拷进临时根，击穿"归档区无实体"与 tag 断言（2026-08-28 实际归档后暴露）
@@ -53,10 +53,20 @@ def make_root() -> Path:
         shutil.rmtree(real_arch)
     real_arch.mkdir(parents=True)
     (real_arch / ".gitkeep").touch()
+    # 状态钉死 + workspace 清空重建（真实库的 run-*.json/blueprint 会击穿闸门断言）
+    (tmp / ".flow").mkdir(exist_ok=True)
+    (tmp / ".flow" / "state.json").write_text(json.dumps(
+        v2_state if v2_state else {"schema_version": 1, "phase": "idle", "campaign": None,
+                                   "retry": {"count": 0, "max": 3, "tripped": False}}),
+        encoding="utf-8")
     ws = tmp / "workspace"
-    (ws / "acceptance").mkdir(parents=True, exist_ok=True)
+    if ws.exists():
+        shutil.rmtree(ws)
+    ws.mkdir(parents=True)
+    (ws / "README.md").write_text("# workspace\n", encoding="utf-8")
+    (ws / "acceptance").mkdir()
     (ws / "blueprint.md").write_text(BLUEPRINT, encoding="utf-8")
-    (ws / "software").mkdir(exist_ok=True)
+    (ws / "software").mkdir()
     (ws / "software" / "app.py").write_text("print('demo')\n", encoding="utf-8")
     return tmp
 
@@ -107,13 +117,14 @@ def main() -> int:
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
-    # 闸门 3：pass 放行 → tag 快照必须包含归档内容（不只验 tag 存在）
+    # 闸门 3：pass 放行 → tag 快照必须包含归档内容（不只验 tag 存在）；
+    # v1 legacy 归档后 workspace 复位为多战役容器（只剩 README.md，无单战役骨架）
     root = make_root()
     try:
         set_result(root, "pass")
         p = run_arch(root)
         arch_dirs = real_arch_entries(root)
-        tag_ok = tree_ok = skel_ok = state_ok = False
+        tag_ok = tree_ok = cont_ok = state_ok = False
         if p.returncode == 0 and len(arch_dirs) == 1:
             tag = f"archive/{arch_dirs[0].name}"
             tag_ok = git(root, "rev-parse", tag).returncode == 0
@@ -121,13 +132,13 @@ def main() -> int:
             ls = git(root, "ls-tree", tag, "--name-only")
             tree_ok = "archive" in ls.stdout.splitlines()
             ws = root / "workspace"
-            skel_ok = all((ws / n).exists() for n in
-                          ("README.md", "JOURNAL.md", "software", "hardware", "docs", "acceptance"))
+            left = sorted(q.name for q in ws.iterdir())
+            cont_ok = left == ["README.md"] and "多战役容器" in (ws / "README.md").read_text(encoding="utf-8")
             state_ok = json.loads((root / ".flow/state.json").read_text(encoding="utf-8"))["phase"] == "idle"
-        ok = p.returncode == 0 and tag_ok and tree_ok and skel_ok and state_ok
+        ok = p.returncode == 0 and tag_ok and tree_ok and cont_ok and state_ok
         passed += ok
-        print(f"{'PASS' if ok else 'FAIL'} pass 归档：tag存在={tag_ok} tag含归档内容={tree_ok} "
-              f"骨架复位={skel_ok} 状态idle={state_ok}")
+        print(f"{'PASS' if ok else 'FAIL'} pass 归档(v1)：tag存在={tag_ok} tag含归档内容={tree_ok} "
+              f"容器复位={cont_ok} 状态idle={state_ok}")
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
@@ -144,7 +155,42 @@ def main() -> int:
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
-    total = 4
+    # 闸门 5（v2 多战役）：归档单个战役目录，其余战役与其目录不受影响，状态条目注销
+    v2_state = {
+        "schema_version": 2, "phase": "idle",
+        "campaigns": {
+            "demo": {"phase": "verify", "root": "workspace/demo",
+                     "retry": {"count": 0, "max": 3, "tripped": False}, "extra_allow": []},
+            "other": {"phase": "deliver", "root": "workspace/other",
+                      "retry": {"count": 0, "max": 3, "tripped": False}, "extra_allow": []},
+        },
+    }
+    root = make_root(v2_state=v2_state)
+    try:
+        # v2 布局：把 v1 夹具的平铺战役内容挪到 workspace/demo/，另建 other 战役占位
+        ws = root / "workspace"
+        demo = ws / "demo"
+        demo.mkdir()
+        for name in ("blueprint.md", "software", "acceptance"):
+            shutil.move(str(ws / name), str(demo / name))
+        (demo / "acceptance" / "run-1.json").write_text(
+            RUN_TMPL.format(result="pass", status="pass"), encoding="utf-8")
+        (ws / "other").mkdir()
+        (ws / "other" / "keep.txt").write_text("keep", encoding="utf-8")
+        p = run_arch(root, "--campaign", "demo")
+        st = json.loads((root / ".flow/state.json").read_text(encoding="utf-8"))
+        ok = (p.returncode == 0 and not demo.exists()
+              and (ws / "other" / "keep.txt").is_file()
+              and "demo" not in st.get("campaigns", {}) and "other" in st.get("campaigns", {})
+              and len(real_arch_entries(root)) == 1
+              and ((ws / "README.md").is_file()))  # 容器 README 仍在
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} v2 单战役归档：demo目录清除={not demo.exists()} "
+              f"other保留={(ws / 'other' / 'keep.txt').is_file()} 注册表={sorted(st.get('campaigns', {}))}")
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+    total = 5
     print(f"[test_archive] {passed}/{total} 通过")
     return 0 if passed == total else 1
 

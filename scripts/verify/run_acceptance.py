@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """S-05 验收执行器（run_acceptance）。
 
-执行 workspace/blueprint.md 验收清单：
+执行 <战役根>/blueprint.md 验收清单：
   - 带 cmd 的项：直接执行（shell），退出码判定 pass/fail，输出存证据文件
   - 不带 cmd 的项：manual 类 → pending_manual（移交用户）；其余 → pending（待 acceptor agent 核验）
   - 执行前先跑 merge_metrics.py 生成顶层 metrics.json（分片汇总）
-  - 非 pass 结果累计 retry 计数，达到 max 触发熔断标记（升级人工）
+  - 非 pass 结果累计该战役 retry 计数，达到 max 触发熔断标记（升级人工）
 
-产出：workspace/acceptance/run-<N>.json（过 acceptance.schema.json）
+多战役（2026-09-01）：--campaign <cid> 指定战役；缺省时恰有一个登记战役则自动选中，
+多战役并存则报错要求显式指定。retry 为战役级属性（写回 campaigns[cid].retry）；
+v1 状态按平铺战役根处理，retry 保持在顶层（未迁移仓库兼容）。
+
+产出：<战役根>/acceptance/run-<N>.json（过 acceptance.schema.json）
 重试语义（T2.1 裁决）：**只有 result=fail 计入 retry**——pending（等待人工/核验）不是
 "修复失败重试"，manual-heavy 战役不应因状态检查误触熔断。
 cmd 超时：捕获 TimeoutExpired 记为该条 fail（证据注明 TIMEOUT），执行器不崩溃；
@@ -26,6 +30,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "guard"))
+import flow_state as fs  # noqa: E402
+
 CMD_TIMEOUT = int(os.environ.get("AUTOC_CMD_TIMEOUT", "600"))
 
 
@@ -35,11 +42,11 @@ def project_root() -> Path:
 
 
 ROOT = project_root()
-STATE = ROOT / ".flow" / "state.json"
+STATE = fs.state_file(ROOT)
 
 
-def load_blueprint() -> dict | None:
-    bp = ROOT / "workspace" / "blueprint.md"
+def load_blueprint(camp_root: Path) -> dict | None:
+    bp = camp_root / "blueprint.md"
     if not bp.is_file():
         return None
     m = re.match(r"^---\s*\n(.*?)\n---\s*\n?", bp.read_text(encoding="utf-8"), re.S)
@@ -57,43 +64,35 @@ def git_ref() -> str:
         return "n/a"
 
 
-def default_retry_max() -> int | None:
-    """retry.max 的单一事实来源是 config/budget.yaml（circuit_breaker.repair_max_retries）。
-    budget 不可读时返回 None，由调用方兜底，不覆盖已有值。"""
-    try:
-        import yaml
-        cfg = yaml.safe_load((ROOT / "config" / "budget.yaml").read_text(encoding="utf-8"))
-        return int((((cfg or {}) or {}).get("circuit_breaker") or {}).get("repair_max_retries"))
-    except Exception:  # noqa: BLE001
-        return None
-
-
-def read_retry() -> dict:
-    try:
-        st = json.loads(STATE.read_text(encoding="utf-8"))
-        retry = st.get("retry") or {}
-    except Exception:  # noqa: BLE001
-        retry = {}
+def read_retry(cid: str, camp: dict) -> dict:
+    """读取战役级 retry（v1 状态读顶层；budget 当前值实时同步）。"""
+    if fs.is_v2(fs.load_state(ROOT)):
+        retry = dict(camp.get("retry") or {})
+    else:
+        try:
+            retry = dict(json.loads(STATE.read_text(encoding="utf-8")).get("retry") or {})
+        except Exception:  # noqa: BLE001
+            retry = {}
     retry.setdefault("count", 0)
-    # 实时同步（T-audit 备忘项闭合）：中途修改 budget 立即生效，不沿用旧快照
-    live = default_retry_max()
-    if live is not None:
-        retry["max"] = live
+    retry = fs.sync_retry(ROOT, retry)
     retry.setdefault("max", 3)
     retry.setdefault("tripped", False)
     return retry
 
 
-def write_retry(retry: dict) -> None:
-    try:
-        st = json.loads(STATE.read_text(encoding="utf-8"))
-    except Exception:  # noqa: BLE001
-        st = {}
-    st["retry"] = retry
-    st["updated_at"] = datetime.datetime.now().isoformat(timespec="seconds")
-    st["updated_by"] = "run_acceptance"
-    STATE.parent.mkdir(parents=True, exist_ok=True)
-    STATE.write_text(json.dumps(st, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+def write_retry(cid: str, retry: dict) -> None:
+    """写回 retry：v2 写 campaigns[cid].retry；v1 写顶层（保留旧字段）。"""
+    state = fs.load_state(ROOT)
+    if fs.is_v2(state) and cid in fs.campaigns(state):
+        state["campaigns"][cid]["retry"] = retry
+        state["campaigns"][cid]["updated_at"] = fs.now_iso()
+        state["campaigns"][cid]["updated_by"] = "run_acceptance"
+    else:
+        state = state if isinstance(state, dict) else {}
+        state["retry"] = retry
+    state["updated_at"] = datetime.datetime.now().isoformat(timespec="seconds")
+    state["updated_by"] = "run_acceptance"
+    fs.save_state(ROOT, state)
 
 
 def next_run_no(acc_dir: Path) -> int:
@@ -103,19 +102,28 @@ def next_run_no(acc_dir: Path) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="验收执行器")
+    ap = argparse.ArgumentParser(description="验收执行器（多战役）")
+    ap.add_argument("--campaign", default=None, help="目标战役 id（缺省=唯一登记战役）")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--only", type=str, default=None,
                     help="波次左移用：只验收 id 匹配任一逗号分隔前缀的项（如 --only m1-,sw-）。"
                          "范围不覆盖全清单时 result 封顶 pending_agent，防局部通过误开归档闸门")
     args = ap.parse_args()
 
-    bp = load_blueprint()
+    state = fs.load_state(ROOT)
+    cid, camp, err = fs.resolve_campaign(ROOT, state, args.campaign)
+    if err:
+        print(f"[run_acceptance] {err}", file=sys.stderr)
+        return 2
+    camp_root = fs.campaign_dir(ROOT, camp)
+
+    bp = load_blueprint(camp_root)
     if not bp or not (bp.get("acceptance") or {}).get("checklist"):
-        print("[run_acceptance] workspace/blueprint.md 缺失或无 acceptance.checklist", file=sys.stderr)
+        print(f"[run_acceptance] {camp_root.relative_to(ROOT)}/blueprint.md 缺失或无 acceptance.checklist",
+              file=sys.stderr)
         return 2
 
-    acc_dir = ROOT / "workspace" / "acceptance"
+    acc_dir = camp_root / "acceptance"
     checklist = bp["acceptance"]["checklist"]
     scoped = False
     if args.only:
@@ -134,13 +142,16 @@ def main() -> int:
         for it in checklist:
             mode = "CMD" if it.get("cmd") else ("MANUAL" if it.get("category") == "manual" else "AGENT")
             print(f"  [{mode:5s}] {it.get('id')}: {it.get('item')}")
-        print(f"[run_acceptance] dry-run：{len(checklist)} 项" + ("（scoped）" if scoped else ""))
+        print(f"[run_acceptance] 战役 {cid}：dry-run {len(checklist)} 项" + ("（scoped）" if scoped else ""))
         return 0
 
     # 分片汇总（失败不阻断验收本身，但会体现在证据里）
     merge = ROOT / "scripts" / "verify" / "merge_metrics.py"
     if merge.is_file():
-        subprocess.run([sys.executable, str(merge)], capture_output=True, timeout=30)
+        margs = [sys.executable, str(merge)]
+        if cid != "(legacy)":
+            margs += ["--campaign", cid]
+        subprocess.run(margs, capture_output=True, timeout=30)
 
     ev_dir = acc_dir / "evidence"
     ev_dir.mkdir(parents=True, exist_ok=True)
@@ -156,7 +167,7 @@ def main() -> int:
             proc = subprocess.Popen(cmd, shell=True, cwd=ROOT, stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE, text=True, creationflags=creationflags)
             try:
-                out, err = proc.communicate(timeout=CMD_TIMEOUT)
+                out, err_ = proc.communicate(timeout=CMD_TIMEOUT)
                 rc = proc.returncode
                 ev_head = f"$ {cmd}\nexit={rc}"
             except subprocess.TimeoutExpired:
@@ -166,12 +177,12 @@ def main() -> int:
                 else:
                     proc.kill()
                 try:
-                    out, err = proc.communicate(timeout=10)
+                    out, err_ = proc.communicate(timeout=10)
                 except subprocess.TimeoutExpired:
-                    out, err = "", ""
+                    out, err_ = "", ""
                 rc = -1
                 ev_head = f"$ {cmd}\nexit=TIMEOUT after {CMD_TIMEOUT}s"
-            ev.write_text(f"{ev_head}\n\n{out}\n{err}", encoding="utf-8")
+            ev.write_text(f"{ev_head}\n\n{out}\n{err_}", encoding="utf-8")
             status = "pass" if rc == 0 else "fail"
             results.append({"id": rid, "category": cat, "status": status,
                             "evidence": str(ev.relative_to(ROOT))})
@@ -192,7 +203,7 @@ def main() -> int:
     else:
         result = "pass"
 
-    retry = read_retry()
+    retry = read_retry(cid, camp)
     if result == "fail" and not scoped:  # 仅【全量】运行的 fail 计入重试（T2.1 裁决；D12：scoped 波门诊断不烧熔断额度）
         retry["count"] = int(retry.get("count", 0)) + 1
     retry["tripped"] = retry["count"] >= int(retry.get("max", 3))
@@ -203,12 +214,12 @@ def main() -> int:
         if result == "pass":
             result = "pending_agent"
         scope_note = f"scoped run（--only，范围外项未验；终验须全量重跑）"
-    write_retry(retry)
+    write_retry(cid, retry)
 
     n = next_run_no(acc_dir)
     record = {
         "campaign": {"competition_id": (bp.get("campaign") or {}).get("competition_id", "?"),
-                     "blueprint_ref": git_ref()},
+                     "blueprint_ref": git_ref(), "campaign_id": cid},
         "checklist": results,
         "result": result,
         "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
@@ -221,11 +232,11 @@ def main() -> int:
 
     for r in results:
         print(f"  [{r['status']:14s}] {r['id']}")
-    print(f"[run_acceptance] result={result} retry={retry['count']}/{retry['max']}"
+    print(f"[run_acceptance] 战役 {cid}：result={result} retry={retry['count']}/{retry['max']}"
           f"{' ⚠已熔断：停止自动重试，升级人工' if retry['tripped'] else ''}")
     print(f"[run_acceptance] 记录 → {out.relative_to(ROOT)}")
     if result == "fail":
-        print("[run_acceptance] 下一步：acceptor 开失败工单 → init_state --phase deliver 修复 → 重跑")
+        print(f"[run_acceptance] 下一步：acceptor 开失败工单 → init_state --campaign {cid} --phase deliver 修复 → 重跑")
     return {"pass": 0, "fail": 1}.get(result, 3)
 
 

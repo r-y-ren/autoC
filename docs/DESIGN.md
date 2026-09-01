@@ -1,6 +1,12 @@
 # autoC — 竞赛情报与作品生成 Agent 框架：结构设计
 
-> 版本 v1.0（2026-08-28）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> 版本 v1.1（2026-09-01）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> v1.1 变更：**多战役并行（v2 状态模型）**——workspace 变多战役容器（每战役 workspace/<cid>/，独立阶段/熔断/retry）；
+> .flow/state.json 升级 schema v2（全局 phase=idle|collect + campaigns 注册表，v1 平铺兼容读取）；
+> 守卫按最长 root 匹配路由（workspace/<未登记id>/ 拒写，容器 README 例外）；init_state 支持 --campaign 登记/流转/--close
+> 并自动完成 v1→v2 升级与骨架创建；run_acceptance/merge_metrics/archive_campaign 全部 --campaign 化（retry 战役级）；
+> 归档单战役化（archive 后注销该战役，其余不动）。legacy：kaggriculture root=workspace（冻结证据嵌死平铺路径，不迁移）。
+> 同轮：外部参考资料唯一归宿 <战役根>/references/（rules/data/code/digests + INDEX.md 台账）。
 > v1.0 变更：T4 内容框架轮——K-09 方向冷启动（/discover）、合规模式三分进蓝图硬校验（prep/apply/assist，D10）、
 > 正文层结构 lint（WARN 级）、跑批成本观测列、远程备份（origin 自动 push）、格式规范模板（CUMCM 论文/BP 骨架）。
 > v0.9 变更：T3-c 能力完善——S-13 ocr_pdf（扫描件解析，实测消化 cumcm 待办并升级 verified）；winners/patterns 解构管线（模板+章程契约+CUMCM 首样板）；文档链冒烟（typst/marp 模板原样编译通过）；双频慢循环（K-08 深度评估+周六 cron）；E-09…E-12 登记；D5 裁决（零新增 MCP、RSSHub 缓判、tools/ 落位纪律、S-13 编号）。
@@ -130,7 +136,7 @@ autoC/
 │   ├── skills/                  # SOP 纯函数技能（blueprint-gen / lint / marp-deck / typst-report 等）
 │   └── config.json              # hooks.events 注册（enabled:true；PreToolUse 路径守卫，M0 已实测格式）
 ├── .flow/                       # 运行时状态（gitignore；守卫/脚本动态读写）
-│   └── state.json               # 当前阶段、允许写根、重试计数与熔断状态
+│   └── state.json               # v2：全局阶段 + 战役注册表（各战役独立 phase/root/retry/熔断）
 ├── config/                      # 静态配置与契约规范中枢
 │   ├── profile.yaml             # 团队画像（技术栈、算力设备、参赛历史）
 │   ├── budget.yaml              # 跑批预算与限速策略
@@ -150,15 +156,18 @@ autoC/
 │   ├── tech/                    # KB-2：技术卡片（规范化 ID 命名）
 │   ├── quarantine/              # linter 不合格条目
 │   └── raw/                     # 原始快照与 PDF（gitignore 默认排除，需要审计留痕时切 LFS）
-├── workspace/                   # 当前战役活跃开发区（动态；v1 单战役约束）
-│   ├── strategy.md              # 决策阶段输出（对比矩阵 + 一鱼多吃路线）
-│   ├── blueprint.md             # ★ 唯一蓝图契约（schema 校验后方可确认）
-│   ├── JOURNAL.md               # 阶段流转日志（随 git 提交，状态可审计）
-│   ├── metrics.json             # 分片汇总生成物（merge_metrics.py 产出；角色禁写，分片在各角色目录）
-│   ├── software/                # Software Agent：代码 + 沙箱测试
-│   ├── hardware/                # Hardware Agent：BOM / 引脚表 / 固件
-│   ├── docs/                    # Document Agent：报告 + PPT 源码（Marp/Typst）
-│   └── acceptance/              # 验收角色：执行记录 / 失败工单 / 分析报告
+├── workspace/                   # 战役开发区（v2 多战役并行；legacy 平铺战役 root=workspace）
+│   ├── <cid>/                   # 每战役一目录（init_state --campaign <cid> 登记时建骨架）
+│   │   ├── strategy.md          # 决策阶段输出（对比矩阵 + 一鱼多吃路线）
+│   │   ├── blueprint.md         # ★ 唯一蓝图契约（schema 校验后方可确认）
+│   │   ├── JOURNAL.md           # 阶段流转日志（随 git 提交，状态可审计）
+│   │   ├── metrics.json         # 分片汇总生成物（merge_metrics.py 产出；角色禁写，分片在各角色目录）
+│   │   ├── references/          # 外部参考资料/数据唯一归宿（rules/data/code/digests + INDEX 登记）
+│   │   ├── software/            # Software Agent：代码 + 沙箱测试
+│   │   ├── hardware/            # Hardware Agent：BOM / 引脚表 / 固件
+│   │   ├── docs/                # Document Agent：报告 + PPT 源文件（Marp/Typst）
+│   │   └── acceptance/          # 验收角色：执行记录 / 失败工单 / 分析报告
+│   └── （legacy：kaggriculture 首战役为历史平铺布局，blueprint.md 等在顶层；归档后消失）
 ├── export/                      # KB 交付导出层（D6：条目层纯投影，读者=团队自用）
 │   └── digest-<方向>-<YYYY-MM>.md  # 方向情报简报（S-15 生成；每3天刷新，当月最后一次跑批转正式版）
 ├── archive/                     # 历史作品库（交付物 3，归档后只读，带 git tag）
@@ -174,12 +183,17 @@ autoC/
 | 交接 | 契约文件 |
 |---|---|
 | 慢循环 → 决策 | `kb/INDEX.md` |
-| 决策 → 交付 | `workspace/blueprint.md`（含接口契约 + 验收清单，schema 校验通过） |
-| 工程内部（角色间） | `workspace/<role>/` 产物目录 + `workspace/metrics.json` |
-| 交付 → 验收 | 蓝图验收清单 × `workspace/` 实际产物 |
-| 验收 → 归档 | `workspace/acceptance/`（全项通过记录 + 分析报告） |
+| 决策 → 交付 | `<root>/blueprint.md`（含接口契约 + 验收清单，schema 校验通过；root=战役根） |
+| 工程内部（角色间） | `<root>/<role>/` 产物目录 + `<root>/metrics.json` |
+| 交付 → 验收 | 蓝图验收清单 × `<root>/` 实际产物 |
+| 验收 → 归档 | `<root>/acceptance/`（全项通过记录 + 分析报告） |
 
-**v1 约束**：单一 workspace/ + 单一 state.json 隐含"同时只有一个活跃战役"；战役实践上串行，故接受此简化。并行战役的扩展路径：workspace/\<campaign\>/ 参数化 + state.json 携带战役 ID。
+**多战役模型（v2，2026-09-01 实装；v1 单战役约束已关闭）**：`workspace/<cid>/` 参数化 + state.json 战役注册表。核心机制：
+
+- **状态**（`scripts/guard/flow_state.py` 为共享库）：`state.phase` 只剩全局阶段（idle|collect，慢循环/工程态）；`state.campaigns[<cid>]` 各带独立 `phase/retry/root/extra_allow`。升级经 `init_state --campaign <cid>`（v1 顶层阶段与 retry 自动迁入该战役）。
+- **路由**：守卫与 verify 脚本对 workspace 子树按**最长 root 匹配**定位所属战役（legacy 平铺战役 root=workspace）；工程目录只归全局 phase。未登记的 `workspace/<id>/**` 拒写——战役目录只能经 init_state 创建。
+- **命令流**：init_state/run_acceptance/merge_metrics/archive_campaign 均支持 `--campaign`；恰有一个登记战役时可省略，多战役并存时必须显式。归档后 `--close` 注销。
+- **注意**：把 legacy 战役登记进 v2 时会继承其当前阶段；若以 idle 登记，该战役子树将全拒写，开工前需显式流转到 decide/deliver/verify。
 
 ---
 
@@ -217,28 +231,28 @@ autoC/
 
 - **L1 软边界——角色章程（.zcode/agents/）**：每角色一份（职责 / 输入输出契约 / 禁止清单）；Coordinator 按名派发。角色目录级的写入边界（如"Software 不得写 workspace/hardware/"）目前由**章程约定 + git 审计发现**保障，不是物理强制。
 - **L2 阶段级硬边界——写入路径守卫 + 契约 Schema 校验**：
-  - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制：collect 放行整个 kb/、deliver 放行 workspace/（acceptance/ 除外）、verify 仅放行 acceptance/——**不识别调用者角色**。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）。
+  - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制——**v2 多战役（2026-09-01）**：workspace 子树按**最长 root 匹配**路由到所属战役的阶段（deliver 放行该战役根（acceptance/ 与顶层 metrics.json 除外）、verify 仅放行其 acceptance/、未登记战役目录拒写、容器 README 仅全局 idle）；kb/ 与工程目录归全局阶段（collect 仅 kb/，idle 放行）——**不识别调用者角色**。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）；v1 状态按平铺兼容。
   - 契约文件（blueprint / KB 条目 / 验收清单）必须通过 `config/templates/*.schema.json` 校验：蓝图不过校验不得进入确认闸门；KB 条目不过校验进 quarantine。
   - PostToolUse 钩子对 kb/ 契约文件即时校验（仅四类目标：`<id>/meta.md`、`kb/tech/<id>.md`、`blueprint.md`、`acceptance/*.json`；winners/patterns/raw 等正文文件明确跳过）。
 - **L3 审计兜底——git**：每阶段一个 commit（阶段日志见 workspace/JOURNAL.md），越界改动必然暴露于 diff，可精确回滚（覆盖钩子未拦截的路径，如经 Bash 的写操作）；每轮跑批收尾 `git push` 至私有远程（r-y-ren/autoC）作异地备份。
 
 **流程规则：验收 agent 只开失败工单，不亲手修作品**——修复路由回责任 agent，避免裁判兼运动员。
 
-**角色写入矩阵（L1 章程依据；守卫物理执行的是其中的阶段级子集）：**
+**角色写入矩阵（L1 章程依据；守卫物理执行的是其中的阶段级子集；`<根>`=任务包给定的战役根）：**
 
 | 角色 | 允许写 | 禁止触碰 |
 |---|---|---|
 | Scraper | kb/competitions/、kb/raw/ | kb/tech/、workspace/、archive/ |
 | Hunter | kb/tech/、kb/raw/ | kb/competitions/、workspace/、archive/ |
-| Strategy | workspace/{strategy.md, blueprint.md} | kb/ 正文（只读）、workspace/ 其余子目录 |
-| Software | workspace/software/、workspace/metrics.json（工程实测） | kb/、blueprint、其他角色目录 |
-| Hardware | workspace/hardware/ | 同上 |
-| Document | workspace/docs/（性能数字仅可引 metrics.json） | 一切代码与设计文件 |
-| 验收 | workspace/acceptance/ | 不直接修任何作品文件 |
+| Strategy | <根>/{strategy.md, blueprint.md} | kb/ 正文（只读）、<根> 其余子目录、其他战役目录 |
+| Software | <根>/software/、<根>/references/ | kb/、blueprint、其他角色目录、其他战役目录 |
+| Hardware | <根>/hardware/、<根>/references/ | 同上 |
+| Document | <根>/docs/（性能数字仅可引 <根>/metrics.json） | 一切代码与设计文件、其他战役目录 |
+| 验收 | <根>/acceptance/ | 不直接修任何作品文件 |
 
-（交付阶段 kb/ 对所有角色只读；archive/ 仅 `archive_campaign.py` 可写。）
+（交付阶段 kb/ 对所有角色只读；archive/ 仅 `archive_campaign.py` 可写；**跨战役写入一律禁止**——多战役并行时各角色只在自己的战役根内活动。）
 
-**外部参考材料归宿（L1 章程，2026-09-01 增）**：交付期任何角色抓取/下载的外部材料（赛方规则快照、数据集、第三方包、情报摘要）统一写 `workspace/references/`（rules/data/code/digests 子目录，INDEX.md 登记来源 URL + 抓取日期）；各角色工程目录内只放本工程产物。历史落点 `software/vendor/`、`software/exports/intel/` 因被脚本/manifest 引用保持原位。
+**外部参考材料归宿（L1 章程，2026-09-01 增）**：交付期任何角色抓取/下载的外部材料（赛方规则快照、数据集、第三方包、情报摘要）统一写 `<根>/references/`（rules/data/code/digests 子目录，INDEX.md 登记来源 URL + 抓取日期）；各角色工程目录内只放本工程产物。legacy 战役历史落点 `software/vendor/`、`software/exports/intel/` 因被脚本/manifest 引用保持原位。
 
 **已知边界与处置记录（K-03 前置项，T2 已裁决落地）：**
 
