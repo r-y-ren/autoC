@@ -41,9 +41,9 @@ gh 已登录则 GitHub 信源自动启用；WOKWI_CLI_TOKEN 已配置则固件�
 | `/discover <方向描述>` | 想启用一个**新方向**（如"挑战杯类创新创业"） | 全自动冷启动：搜索该方向赛事名单 → 建首批条目（≤8 条）→ 回填信源锚点 → 产出方向全景报告。全程无需确认 |
 | `/kb-sync` | 想手动补一次增量（cron 之外的补偿入口） | 轻量增量：拉候选 → 分片入库 → lint → 索引 |
 | `/attack [赛事ID或方向]` | **想打比赛了**——指定比赛，或省略参数直接问建议 | 见下文快循环详解；确认蓝图后本会话即可结束 |
-| `/deliver` | 蓝图确认后，在**新会话**启动作品制作 | K-03 波次化交付：依赖图分波 → 波内并行 → 波门断点（可跨会话续跑，说"继续交付"即接续） |
-| `/accept` | 交付完成后（或 campaign 提示时） | 执行蓝图验收清单，失败自动开单修复回环 |
-| `/archive` | 验收通过后 | workspace 固化进 archive/（git tag），工作区复位 |
+| `/deliver <战役id>` | 蓝图确认后，在**新会话**启动作品制作 | K-03 波次化交付：依赖图分波 → 波内并行 → 波门断点（可跨会话续跑，说"继续交付"即接续）；多战役时须指明战役 |
+| `/accept <战役id>` | 交付完成后（或 campaign 提示时） | 执行该战役验收清单，失败自动开单修复回环（熔断计数按战役独立） |
+| `/archive <战役id>` | 验收通过后 | 该战役固化进 archive/（git tag）并注销，**其余战役不受影响** |
 
 **读知识库的正确姿势**：人不逐条读 `kb/`（那是 agent 的检索界面）——读 `export/digest-<方向>-<月>.md`
 方向情报简报（每 3 天自动刷新，月末转正式版）：赛事日历倒计时、技术雷达速览、模式库要点、合规提醒。
@@ -99,6 +99,43 @@ gh 已登录则 GitHub 信源自动启用；WOKWI_CLI_TOKEN 已配置则固件�
 
 **作品质量底线**（写进验收默认线，不达不通过）：软件"完整可实用"四标准（可运行/可验证/可维护/可交付——
 交付物逐项对齐赛方清单）；硬件编译+仿真断言过、物理项列 MANUAL_TEST 移交人工；文档数字只能引 metrics.json。
+
+### 多战役并行（v2，2026-09-01 起）
+
+`workspace/` 是多战役容器：**每个战役一个子目录 `workspace/<战役id>/`**，各自拥有独立的
+阶段（decide/deliver/verify/archive）、熔断计数、JOURNAL、metrics 与参考资料区；
+写入守卫按"最长 root 匹配"路由到所属战役的阶段策略，跨战役写入与未登记目录一律拦截。
+
+**并行操作流程**（例：`kaggriculture` 交付进行中，同时新开一场 `newcup-2026`）：
+
+```bash
+# 1. 登记新战役（自动建 workspace/newcup-2026/ 骨架；不影响进行中的 kaggriculture）
+python scripts/guard/init_state.py --campaign newcup-2026 --phase decide
+
+# 2. 新战役决策：/attack <赛事>（攻略与蓝图落 workspace/newcup-2026/）
+#    用户确认蓝图后进入交付——两条战役各自流转，命令都带 --campaign：
+python scripts/guard/init_state.py --campaign newcup-2026 --phase deliver
+python scripts/guard/init_state.py --campaign kaggriculture --phase deliver   # 各自独立
+
+# 3. 各自交付/验收（retry 与熔断按战役独立计数）
+python scripts/verify/run_acceptance.py --campaign newcup-2026
+python scripts/verify/run_acceptance.py --campaign kaggriculture
+
+# 4. 先完成的先归档：只移走该战役目录并注销注册，另一战役原封不动
+python scripts/verify/archive_campaign.py --campaign newcup-2026
+```
+
+**要点**：
+
+- **阶段流转必须带 `--campaign`**——全局阶段只有 `idle|collect`（慢循环用），不带参数的
+  `--phase deliver` 会被拒绝并提示。
+- **单战役仓库可省参数**：恰有一个登记战役时 `run_acceptance/merge_metrics/archive_campaign`
+  自动选中它；**两个及以上战役并存时必须显式指定**（省略会报错并列出可选 id）。
+- **切换很便宜**：状态全部外置在 `.flow/state.json` 注册表与各战役 JOURNAL 里，会话里
+  按战役逐条下命令即可来回切换；`/status` 一屏显示全局阶段 + 每个战役的阶段与熔断计数。
+- **慢循环随时并行**：`/kb-sync`、`/discover`（全局 collect）与任何战役阶段互不干扰。
+- **战役 id 规则**：小写字母数字连字符（如 `cumcm-2026`）；`software/hardware/docs` 等
+  legacy 保留名不可用；战役目录只能经 `init_state --campaign` 创建（agent 不能自建）。
 
 ## 五、配置速查（`config/`）
 

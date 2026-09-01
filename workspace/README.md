@@ -26,11 +26,29 @@ init_state --campaign <cid> --phase decide    # 登记（自动建骨架）→ s
 | `references/` | 抓取材料的角色 | ★ 外部参考资料/数据/第三方包的**唯一归宿**（rules/data/code/digests，登记见其 INDEX.md） |
 | `acceptance/` | 验收 | 执行记录 / 失败工单 / 分析报告（交付期只读） |
 
+## 多战役并行操作流程
+
+各战役阶段、熔断计数、JOURNAL、metrics 完全独立；所有阶段流转与 verify 命令带 `--campaign <cid>`：
+
+| 操作 | 命令 |
+|---|---|
+| 开新战役（建骨架，不影响在役战役） | `python scripts/guard/init_state.py --campaign <cid> --phase decide` |
+| 阶段流转（某战役） | `python scripts/guard/init_state.py --campaign <cid> --phase deliver\|verify\|idle` |
+| 指标汇总（某战役） | `python scripts/verify/merge_metrics.py --campaign <cid>` |
+| 验收（某战役，retry 按战役计数） | `python scripts/verify/run_acceptance.py --campaign <cid>` |
+| 归档（单战役，注销后其余不动） | `python scripts/verify/archive_campaign.py --campaign <cid>` |
+| 注销战役（归档脚本自动调用） | `python scripts/guard/init_state.py --campaign <cid> --close` |
+| 查看全局+各战役状态 | `/status`（会话启动时自动播报一行） |
+
+单战役仓库可省 `--campaign`（自动选中唯一战役）；**两战役及以上并存时必须显式指定**。
+全局阶段只有 `idle|collect`（慢循环用）；战役 id 规则 `^[a-z0-9][a-z0-9-]{0,31}$`，
+不得占用 software/hardware/docs 等保留名。慢循环（/kb-sync、/discover）可与任何战役阶段并行。
+
 ## 现役战役
 
 | 战役 id | 战役根 | 阶段 |
 |---|---|---|
-| `kaggriculture` | `workspace/kaggriculture/` | 见 /status（当前 deliver） |
+| `kaggriculture` | `workspace/kaggriculture/` | 见 /status（结构迁移后休眠于 idle） |
 
 守卫按**最长 root 匹配**把写入路由到所属战役的阶段策略；`workspace/<未登记id>/` 一律拒写。
 守卫策略与写入矩阵见 `scripts/guard/guard_path.py` 与 `docs/DESIGN.md` §6.2。
