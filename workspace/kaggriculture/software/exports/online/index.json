@@ -376,6 +376,40 @@
       "immutable": true,
       "historical_only": true,
       "repository_tracked": true
+    },
+    {
+      "path": "workspace/kaggriculture/software/exports/online/round8_ledger.json",
+      "sha256": "0f4bff41ab38586fb50ce7d6b457ee0b3157d342c3679ac83026478afcaaad29",
+      "artifact_id": "round8_ledger",
+      "milestone": "online round8_ledger",
+      "candidate_sha256": "86d9e9273ca2fff1823b746ab0ea3ca45341136ab71fa68df3b1b1087df4ce1f",
+      "baseline_sha256": null,
+      "source_commit": "262df0e73146200ee22b2e85c7aa54e8e72fa00b",
+      "git_blob_oid": "8c535453f016d14cfcd41b85ab2124abc2315fe8",
+      "decision": "online_observation",
+      "evidence_scope": "online_public",
+      "produced_at": null,
+      "supersedes": [],
+      "immutable": true,
+      "historical_only": true,
+      "repository_tracked": true
+    },
+    {
+      "path": "workspace/kaggriculture/software/exports/online/tetsuya_v2_strategy_analysis.md",
+      "sha256": "c6b9f5b0f53c06cb8c42bae595a2a3812de7a890eee82e14168528067c8038a2",
+      "artifact_id": "tetsuya_v2_strategy_analysis",
+      "milestone": "online tetsuya_v2_strategy_analysis",
+      "candidate_sha256": null,
+      "baseline_sha256": null,
+      "source_commit": "cb7bc3a498acae36248a96d128747c5c269fa794",
+      "git_blob_oid": "179bfc90003d953475029c9a340f9bf0c9787e48",
+      "decision": "derived_analysis",
+      "evidence_scope": "online_derived",
+      "produced_at": null,
+      "supersedes": [],
+      "immutable": true,
+      "historical_only": true,
+      "repository_tracked": true
     }
   ]
 }
