@@ -5597,11 +5597,12 @@
         "validation_status": "COMPLETE",
         "validation_episode": 104498289,
         "public_score_after_validation": 600.0,
-        "public_score_latest": 763.8,
-        "public_games_at_capture": 9,
-        "public_record": "6W-3L",
-        "public_win_rate": 0.6667,
-        "net_margin": -10728.0,
+        "public_score_latest": 628.7,
+        "public_games_at_capture": 21,
+        "public_record": "9W-12L",
+        "public_win_rate": 0.4286,
+        "net_margin": -155129.0,
+        "median_margin": -8549.0,
         "first_stop_loss_gate_games": 6,
         "first_stop_loss_gate_record": "4W-2L",
         "first_stop_loss_gate_win_rate": 0.6667,
@@ -5610,11 +5611,34 @@
         "quota_remaining": 4,
         "ladder_performance_evidence": true,
         "promotion_evidence": false,
-        "stop_loss_status": "not_triggered_at_first_6_game_gate",
+        "stop_loss_status": "first_6_game_gate_not_triggered_but_terminal_21_game_sample_below_50pct",
         "holdout_executed": false
       },
       "unit": "online-validation-probe",
-      "method": "2026-09-01 actual Kaggle CLI submission and readback; candidate identity PASS, 716 tests PASS, smoke_boot PASS before upload; submission 55932134 COMPLETE with validation episode 104498289 excluded from ladder statistics. Nine integrity-clean public replays produced 6W-3L, net -10,728 and latest publicScore 763.8. The first >=6-game stop-loss gate was 4W-2L (66.67%, net +39,484), so <50% was not triggered. This small sample and platform score do not support promotion or generalization claims; evidence workspace/software/exports/online/round7_ledger.json"
+      "method": "2026-09-01 actual Kaggle CLI submission and terminal readback; candidate identity PASS, 716 tests PASS, smoke_boot PASS before upload; submission 55932134 COMPLETE with validation episode 104498289 excluded from ladder statistics. Twenty-one integrity-clean public replays produced 9W-12L (42.86%), net -155,129, median -8,549 and final publicScore 628.7. The first >=6-game checkpoint was 4W-2L and did not trigger, but the complete sample finished below 50% and does not support promotion or generalization claims; evidence workspace/software/exports/online/round7_ledger.json"
+    },
+    "mf_realization_pressure_ablation": {
+      "value": {
+        "candidate_sha256": "cda125555dfffa3d7bff3d84efe4fea4effc46220a2595e448d2abe9ad383b9a",
+        "baseline_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+        "dev_seeds": [101, 102, 103, 104],
+        "reg_seeds": [201, 202, 203, 204],
+        "opponents_per_domain": 11,
+        "games_per_domain": 176,
+        "paired_cells_per_domain": 88,
+        "dev_paired_record": "0W-0L-88T",
+        "reg_paired_record": "0W-0L-88T",
+        "dev_net_pair_diff": 0.0,
+        "reg_net_pair_diff": 0.0,
+        "behaviorally_distinct_cells": 0,
+        "mechanical_gate": "MERGEABLE_NO_OP",
+        "promotion_eligible": false,
+        "candidate_reverted": true,
+        "holdout_executed": false,
+        "online_submission_occurred": false
+      },
+      "unit": "paired-local-ablation",
+      "method": "M-F day-9..11 opponent realization-pressure gate was projected over the 21 public replays, then compared against exact v10.2 bytes on the required 11-opponent pool with AB/BA pairing. Both dev and regression domains were byte-outcome identical in every paired cell, so the mechanical gate passed only as a no-op; candidate code was reverted. Evidence: exports/ablations/mf_vs_v102_dev.json (SHA-256 77b47353...) and mf_vs_v102_reg.json (SHA-256 deca6638...). No holdout or online run."
     }
   },
   "unmeasured": {

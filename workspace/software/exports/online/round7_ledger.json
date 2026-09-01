@@ -37,15 +37,16 @@
     "public_score_after_validation": 600.0
   },
   "public_sampling": {
-    "sampled_at_utc": "2026-09-01T05:34:38Z",
-    "public_games": 9,
-    "record": "6W-3L",
-    "win_rate": 0.6667,
-    "net_margin": -10728.0,
-    "average_margin": -1192.0,
-    "public_score_latest": 763.8,
-    "status": "nine_game_observed_sample",
-    "replay_integrity": "9/9 PASS (720 steps, DONE/DONE, finite rewards)",
+    "sampled_at_utc": "2026-09-01T08:19:18Z",
+    "public_games": 21,
+    "record": "9W-12L",
+    "win_rate": 0.4286,
+    "net_margin": -155129.0,
+    "average_margin": -7387.1,
+    "median_margin": -8549.0,
+    "public_score_latest": 628.7,
+    "status": "twenty_one_game_terminal_sample",
+    "replay_integrity": "21/21 PASS (720 steps, DONE/DONE, finite rewards)",
     "stop_loss_evaluation": {
       "gate": "first at least 6 public games with win rate < 0.5",
       "games_at_first_gate": 6,
@@ -126,9 +127,105 @@
         "rewards": [137168.0, 71748.0],
         "result": "L",
         "margin": -65420.0
+      },
+      {
+        "id": 104502787,
+        "opponent": "Shivam Kushwaha",
+        "seat": 1,
+        "rewards": [114199.0, 93635.0],
+        "result": "L",
+        "margin": -20564.0
+      },
+      {
+        "id": 104503241,
+        "opponent": "engin_zhou",
+        "seat": 0,
+        "rewards": [57804.0, 55325.0],
+        "result": "W",
+        "margin": 2479.0
+      },
+      {
+        "id": 104503674,
+        "opponent": "Oblivix",
+        "seat": 0,
+        "rewards": [74224.0, 96707.0],
+        "result": "L",
+        "margin": -22483.0
+      },
+      {
+        "id": 104504106,
+        "opponent": "Md.Mahfujul Karim",
+        "seat": 1,
+        "rewards": [115065.0, 93105.0],
+        "result": "L",
+        "margin": -21960.0
+      },
+      {
+        "id": 104504110,
+        "opponent": "kai",
+        "seat": 1,
+        "rewards": [48147.0, 39598.0],
+        "result": "L",
+        "margin": -8549.0
+      },
+      {
+        "id": 104504560,
+        "opponent": "Quyền Thịnh",
+        "seat": 0,
+        "rewards": [78480.0, 103720.0],
+        "result": "L",
+        "margin": -25240.0
+      },
+      {
+        "id": 104505026,
+        "opponent": "Manuel Ramos",
+        "seat": 1,
+        "rewards": [78150.0, 74902.0],
+        "result": "L",
+        "margin": -3248.0
+      },
+      {
+        "id": 104505490,
+        "opponent": "Yaroslav Tanko",
+        "seat": 0,
+        "rewards": [84535.0, 109029.0],
+        "result": "L",
+        "margin": -24494.0
+      },
+      {
+        "id": 104505769,
+        "opponent": "hoo aam",
+        "seat": 1,
+        "rewards": [76556.0, 80886.0],
+        "result": "W",
+        "margin": 4330.0
+      },
+      {
+        "id": 104506363,
+        "opponent": "Artur Sakhiullin",
+        "seat": 1,
+        "rewards": [78473.0, 51189.0],
+        "result": "L",
+        "margin": -27284.0
+      },
+      {
+        "id": 104506843,
+        "opponent": "Duong Bao Duy",
+        "seat": 1,
+        "rewards": [75869.0, 93395.0],
+        "result": "W",
+        "margin": 17526.0
+      },
+      {
+        "id": 104507243,
+        "opponent": "Ethan Benjamin Cole",
+        "seat": 0,
+        "rewards": [68293.0, 83207.0],
+        "result": "L",
+        "margin": -14914.0
       }
     ],
-    "note": "Validation episode 104498289 is excluded. Nine public games are a small online sample, not promotion or generalization evidence; publicScore is a platform readback, not a stable capability estimate."
+    "note": "Validation episode 104498289 is excluded. The complete 21-game public sample is 9W-12L with negative median and net margin; it does not support promotion or generalization claims. publicScore is a platform readback, not a stable capability estimate."
   },
   "evidence_scope": {
     "online_submission_occurred": true,
@@ -138,6 +235,6 @@
     "holdout_evidence": false,
     "historical_published_holdout_reused": false
   },
-  "next_sampling_gate": "The >=6-game stop-loss gate was evaluated and not triggered. No second submission or holdout run is authorized or required.",
-  "recorded_at_utc": "2026-09-01T05:34:38Z"
+  "next_sampling_gate": "The first >=6-game stop-loss checkpoint was not triggered, but the complete 21-game sample finished below 50% at 9W-12L. Treat round 7 as not promoted; no second submission or holdout run occurred.",
+  "recorded_at_utc": "2026-09-01T08:19:18Z"
 }
