@@ -1,0 +1,61 @@
+{
+ "schema_version": "1.0",
+ "submission_ref": 55943264,
+ "candidate_sha256": "86d9e9273ca2fff1823b746ab0ea3ca45341136ab71fa68df3b1b1087df4ce1f",
+ "candidate_label": "v10.3-working (M-G accepted logic 1bde14b0 + Chinese guide comments, AST-identical)",
+ "git_ref": "52bb63425b88a3e08fdd2680fd75b806897f3135",
+ "identity_register_commit": "fae6822",
+ "submitted_at": "2026-09-01T15:48:17.893Z",
+ "submitted_by": "main-session (user-authorized online probe)",
+ "quota_after_submit": "2/5 used today, 3 remaining (CLI readback)",
+ "prechecks": {
+  "candidate_identity": "PASS (working=development 86d9e927, readme projection ok)",
+  "smoke_boot": "PASS (4 phases)",
+  "pytest": "690 passed, 2 skipped (post-annotation full suite, this session)"
+ },
+ "validation_episode": {
+  "episode_id": 104568711,
+  "type": "EPISODE_TYPE_VALIDATION",
+  "state": "COMPLETED",
+  "both_seats_done": true,
+  "rewards": [
+   45284,
+   53693
+  ],
+  "note": "self-play validation, both seats completed 720 steps without Error"
+ },
+ "public_score_at_capture": 600.0,
+ "episodes_public": [
+  {
+   "episode_id": 104569692,
+   "state": "COMPLETED",
+   "create": "2026-09-01T15:58:24.379Z",
+   "end": "2026-09-01T16:01:37.067Z",
+   "me_reward": 79456,
+   "opp_reward": 30084,
+   "me_seat": 0,
+   "opponent": "TAN TIANYE",
+   "margin": 49372,
+   "win": true
+  },
+  {
+   "episode_id": 104569242,
+   "state": "COMPLETED",
+   "create": "2026-09-01T15:54:24.577Z",
+   "end": "2026-09-01T16:01:10.714Z",
+   "me_reward": 88814,
+   "opp_reward": 34468,
+   "me_seat": 0,
+   "opponent": "sweetlesson",
+   "margin": 54346,
+   "win": true
+  }
+ ],
+ "captured_at": "2026-09-01T16:05:05+00:00",
+ "source": "kaggle competitions submit/submissions/episodes CLI",
+ "notes": "round-8 online probe of v10.3 (Chinese-annotated, AST-identical to M-G 1bde14b0). Validation self-play both seats DONE. First 2 public games 2W-0L (net +103,718), publicScore 600.0 -> 735.6. Sample below the 6-game evaluation gate; no promotion/stop-loss conclusion; pullback reviews pending per SOP V4-32.",
+ "public_record": "2W-0L",
+ "net_margin": 103718,
+ "public_score_latest": 735.6,
+ "public_games_at_capture": 2
+}
