@@ -10,6 +10,7 @@
 | `metrics.json` | merge_metrics.py | 分片汇总生成物（角色禁写；分片在 software//hardware/ 下） |
 | `software/` | Software | 代码 + 沙箱测试 + metrics 分片 |
 | `hardware/` | Hardware | BOM / 引脚表 / 固件 + metrics 分片 |
+| `references/` | 抓取材料的角色 | ★ 外部参考资料/数据/第三方包的**唯一归宿**（rules/data/code/digests 子目录，登记见其 INDEX.md） |
 | `docs/` | Document | 报告（Typst）+ PPT（Marp）源码 |
 | `acceptance/` | 验收 | 执行记录 / 失败工单 / 分析报告（交付期只读） |
 

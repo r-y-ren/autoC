@@ -14,6 +14,7 @@ description: 快循环波次化交付编排（D12）：按蓝图里程碑依赖�
 - `workspace/blueprint.md` 已过 schema 校验**且经用户确认**（未确认先回 K-02）
 - **合规模式闸门（D10）**：`compliance.mode`——prep/apply 正常交付（apply 的申报附件强制进 document 包）；**assist 拒绝启动交付**
 - metrics 分片制照旧（角色写 `workspace/<role>/metrics.json`，S-09 汇总；顶层禁写）
+- 外部材料归宿：任何角色在交付期抓取/下载的规则、数据集、第三方包、情报摘要统一写 `workspace/references/`（子目录与登记规则见其 README/INDEX），任务包里须写明这一点，禁止散落到工程目录
 
 ## 流程
 

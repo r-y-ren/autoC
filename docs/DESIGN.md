@@ -238,6 +238,8 @@ autoC/
 
 （交付阶段 kb/ 对所有角色只读；archive/ 仅 `archive_campaign.py` 可写。）
 
+**外部参考材料归宿（L1 章程，2026-09-01 增）**：交付期任何角色抓取/下载的外部材料（赛方规则快照、数据集、第三方包、情报摘要）统一写 `workspace/references/`（rules/data/code/digests 子目录，INDEX.md 登记来源 URL + 抓取日期）；各角色工程目录内只放本工程产物。历史落点 `software/vendor/`、`software/exports/intel/` 因被脚本/manifest 引用保持原位。
+
 **已知边界与处置记录（K-03 前置项，T2 已裁决落地）：**
 
 1. **角色身份级守卫——评估后不引入（v1）**：钩子负载不含调用者身份，全局 `active_role` 又会破坏 software/hardware 的并发派发。同阶段跨角色越界的保障维持 L1 章程 + L3 git 审计；唯一存在真实写冲突的文件已由下条消除，其余目录冲突风险随分片制大幅降低。
