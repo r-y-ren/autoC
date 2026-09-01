@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import copy
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -12,6 +13,7 @@ import pytest
 
 from kgenv.candidate_identity import (
     CandidateIdentityError,
+    _require_working_source_match,
     load_active_candidate,
     render_readme_projection,
     validate_active_candidate,
@@ -20,6 +22,44 @@ from kgenv.candidate_identity import (
 
 SOFTWARE_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = SOFTWARE_ROOT / "active_candidate.json"
+
+
+def test_working_source_commit_and_blob_identity_are_verified():
+    payload = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    assert payload["working"]["git_ref"] == \
+        "1e52b0a8be88fc1088570f7024fa863cedbc1298"
+    assert len(payload["working"]["git_blob_oid"]) == 40
+    assert len(payload["working"]["canonical_lf_sha256"]) == 64
+
+    corrupted = copy.deepcopy(payload)
+    corrupted["working"]["git_blob_oid"] = "0" * 40
+    with pytest.raises(CandidateIdentityError, match="blob OID"):
+        validate_active_candidate(corrupted, software_root=SOFTWARE_ROOT)
+
+    corrupted = copy.deepcopy(payload)
+    corrupted["working"]["canonical_lf_sha256"] = "0" * 64
+    with pytest.raises(CandidateIdentityError, match="canonical LF SHA"):
+        validate_active_candidate(corrupted, software_root=SOFTWARE_ROOT)
+
+
+def test_working_bytes_must_match_declared_source_commit(tmp_path):
+    source = b"print('source')\n"
+    candidate = tmp_path / "main.py"
+    candidate.write_bytes(source + b"\n")
+    canonical_sha = hashlib.sha256(source).hexdigest()
+
+    with pytest.raises(CandidateIdentityError, match="declared source commit"):
+        _require_working_source_match(candidate, source, canonical_sha)
+
+
+def test_validator_rejects_working_source_byte_divergence(monkeypatch):
+    payload = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    monkeypatch.setattr(
+        "kgenv.candidate_identity._canonical_lf_bytes",
+        lambda path: b"divergent working bytes\n")
+
+    with pytest.raises(CandidateIdentityError, match="declared source commit"):
+        validate_active_candidate(payload, software_root=SOFTWARE_ROOT)
 
 
 def test_repository_manifest_distinguishes_working_frozen_and_published_identity():

@@ -1,0 +1,41 @@
+{
+  "schema_version": "artifact-index/1.0",
+  "collection": "external",
+  "generated_by": "scripts/verify/build_artifact_indexes.py",
+  "entries": [
+    {
+      "path": "workspace/software/exports/external/v48-seed101-ratings.json",
+      "sha256": "507b600f0bd10a98a0e7e96bc31bfd35c5f83cd545a52ffc5422193a9844a8ca",
+      "artifact_id": "v48-seed101-ratings",
+      "milestone": "P1 external H2H and BT toolchain",
+      "candidate_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+      "baseline_sha256": null,
+      "source_commit": "5048305dcb86f9fbbb11ff81503645ba26fdf93d",
+      "git_blob_oid": "76075e1c0a1fda8bbeb18caae5169a2fb38de853",
+      "decision": "historical_v10.2_only",
+      "evidence_scope": "descriptive_rating_smoke",
+      "produced_at": null,
+      "supersedes": [],
+      "immutable": true,
+      "historical_only": true,
+      "repository_tracked": true
+    },
+    {
+      "path": "workspace/software/exports/external/v48-seed101-smoke.json",
+      "sha256": "f3dcf266dab4fec14d949f5a963659986095adb06d24ab8cc48437455b9d00a0",
+      "artifact_id": "v48-seed101-smoke",
+      "milestone": "P1 external H2H and BT toolchain",
+      "candidate_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+      "baseline_sha256": null,
+      "source_commit": "5048305dcb86f9fbbb11ff81503645ba26fdf93d",
+      "git_blob_oid": "0fe4c86ad1fc194d42f3538321d3aaec581a0754",
+      "decision": "historical_v10.2_only",
+      "evidence_scope": "external_toolchain_smoke",
+      "produced_at": "2026-08-31T23:56:14.311800+00:00",
+      "supersedes": [],
+      "immutable": true,
+      "historical_only": true,
+      "repository_tracked": true
+    }
+  ]
+}

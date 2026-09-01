@@ -3,6 +3,8 @@
 Kaggle Simulation Competition **Kaggriculture**（Google/Kaggle 农场经营 720 回合博弈）的
 bot、本地评估基建、机制量化工具与增强策略 A/B。
 
+当前 working candidate `v10.3` 仅为 development，尚未针对本轮运行新的 holdout 或线上提交；下文的线上记录属于历史 v10.2/v10.3 前序提交观测，不能作为当前候选验证。
+
 **引擎边界声明**：本地对局运行在**官方引擎**上——PyPI `kaggle-environments` 1.32.7 的
 `kaggriculture` 场景（本仓 vendor 了去依赖元数据/去可视化资源的重打包 wheel，引擎代码未改动，
 见 `vendor/WHEEL_PROVENANCE.md`）。本地评估结果代表官方规则语义，但**不等价于** Kaggle 线上
@@ -310,7 +312,7 @@ greedy_carrot 1162.2；回归门 PASS（20 局 55.49s）。
 
 ## 已知边界
 
-- 未做 Kaggle 线上提交（队伍人工步骤，蓝图 man-submit）；线上指标在 metrics.json 中为 null。
+- 当前 v10.3 working candidate 未做新的 Kaggle 线上提交，且 `holdout_status=not_run`；历史线上提交与 21 局 round-7 观测属于 v10.2，详见 `exports/online/round7_ledger.json` 和 metrics 中的历史记录。
 - 引擎为官方 1.32.7；若 Kaggle 线上 kit 升级机制，需以官方页面直抓为准复核。
 - 对手池在 m1 波次 2 已强化（最强 Elo 见 metrics `opponent_pool_max_elo`），但强对手与
   submission 同属启发式家族，存在"同族变体过拟合"风险（eval_audit.md 第 7 项 warn）；天梯

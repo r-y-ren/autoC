@@ -24,6 +24,24 @@ def _sha256(path: Path) -> str:
         raise CandidateIdentityError(f"cannot read identity file {path}: {exc}") from exc
 
 
+def _canonical_lf_bytes(path: Path) -> bytes:
+    try:
+        return path.read_bytes().replace(b"\r\n", b"\n")
+    except OSError as exc:
+        raise CandidateIdentityError(f"cannot read identity file {path}: {exc}") from exc
+
+
+def _require_working_source_match(working_path: Path, source: bytes,
+                                  declared_sha: Any) -> None:
+    canonical = _canonical_lf_bytes(working_path)
+    if canonical != source:
+        raise CandidateIdentityError(
+            "working candidate bytes do not match the declared source commit")
+    if hashlib.sha256(canonical).hexdigest() != declared_sha:
+        raise CandidateIdentityError(
+            "working canonical LF SHA does not match the declared source commit")
+
+
 def _under_root(root: Path, relative: str) -> Path:
     """Resolve a manifest path that may be software-root or repo-root relative."""
     text = str(relative)
@@ -106,6 +124,28 @@ def validate_active_candidate(payload: dict[str, Any], *,
         raise CandidateIdentityError("working candidate SHA does not match main.py")
     _require_git_ref(working.get("git_ref"), "working git ref", root=root,
                      require_head_ancestor=True)
+    repo_root = root.parents[1]
+    source_path = f"workspace/software/{working['path']}"
+    try:
+        blob_oid = subprocess.run(
+            ["git", "rev-parse", f"{working['git_ref']}:{source_path}"],
+            cwd=repo_root, text=True, capture_output=True, check=True,
+            timeout=10).stdout.strip()
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise CandidateIdentityError("working git blob OID cannot be resolved") from exc
+    if blob_oid != working.get("git_blob_oid"):
+        raise CandidateIdentityError("working git blob OID does not match source commit")
+    try:
+        source = subprocess.run(
+            ["git", "show", f"{working['git_ref']}:{source_path}"],
+            cwd=repo_root, capture_output=True, check=True, timeout=30)
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise CandidateIdentityError("working source commit cannot be read") from exc
+    canonical_lf_sha = hashlib.sha256(source.stdout).hexdigest()
+    if canonical_lf_sha != working.get("canonical_lf_sha256"):
+        raise CandidateIdentityError("working canonical LF SHA does not match source commit")
+    _require_working_source_match(working_path, source.stdout,
+                                  working.get("canonical_lf_sha256"))
 
     frozen = payload["last_promoted_frozen"]
     frozen_sha = _require_digest(frozen.get("sha256"), "frozen manifest SHA")

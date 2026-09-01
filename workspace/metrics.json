@@ -1,5 +1,5 @@
 {
-  "_generated_at": "2026-09-01T19:30:36",
+  "_generated_at": "2026-09-01T21:13:02",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
@@ -5663,6 +5663,9 @@
       "mg_development_candidate_acceptance": {
         "value": {
           "candidate_sha256": "1bde14b03cfc4692efebc28ec80410f4de3dd5d0e39a633c83683fe3d687a568",
+          "source_commit": "1e52b0a8be88fc1088570f7024fa863cedbc1298",
+          "git_blob_oid": "064a75ff2d60b79cab77e339951243440ebbeab1",
+          "canonical_lf_sha256": "39c295e000b379812b9c47ddb2fc9b0bb98b37b4aa315fda715fe6a5c121b019",
           "baseline_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
           "dev_seeds": [
             101,
@@ -5742,6 +5745,70 @@
         },
         "unit": "feasibility-audit",
         "method": "2026-09-01 read-only engine/schema and structured-evidence audit. Both farms and global market are public, but each seat receives only its own private shed, carrier inventories and seeds. round7_ledger.json contains final rewards only and no day-26..29 public snapshots, so an opponent-inventory gate cannot be legally observed or calibrated. A future day-28 public liquidation-pressure probe would be a separate hypothesis, not an inventory estimate."
+      },
+      "cleanup_artifact_indexing": {
+        "value": {
+          "artifact_index_counts": {
+            "ablations": 47,
+            "external": 2,
+            "online": 22,
+            "acceptance": 31
+          },
+          "candidate_sha256": "1bde14b03cfc4692efebc28ec80410f4de3dd5d0e39a633c83683fe3d687a568",
+          "source_commit": "1e52b0a8be88fc1088570f7024fa863cedbc1298",
+          "git_blob_oid": "064a75ff2d60b79cab77e339951243440ebbeab1",
+          "canonical_lf_sha256": "39c295e000b379812b9c47ddb2fc9b0bb98b37b4aa315fda715fe6a5c121b019",
+          "deleted_untracked_html": [
+            "bing1.html",
+            "bing2.html",
+            "bing3.html",
+            "bing4.html"
+          ],
+          "deleted_zero_byte_diagnostics": [
+            ".tmp-intel/err1.txt",
+            ".tmp-intel/warn.txt"
+          ],
+          "cache_cleanup_targets": [
+            "__pycache__",
+            ".pytest_cache",
+            ".venv pip caches"
+          ],
+          "scratch_preserved": [
+            ".tmp-corpus",
+            ".tmp-dna",
+            ".tmp-intel",
+            ".tmp-r5",
+            ".tmp-v7",
+            ".tmp-v9",
+            ".tmp-mf",
+            ".tmp-mg",
+            ".tmp-online"
+          ],
+          "protected_zero_diff": [
+            "archive/",
+            ".flow/",
+            "kb/raw/"
+          ],
+          "preserved_and_excluded_existing_changes": [
+            "workspace/acceptance/evidence/**",
+            "workspace/acceptance/run-26..29.json",
+            "workspace/software/exports/logs/iteration_gate_log.jsonl",
+            ".zcode/plans/"
+          ],
+          "new_holdout_executed": false,
+          "online_submission_occurred": false,
+          "campaign_archived": false,
+          "index_validation": "PASS",
+          "relative_path_check": "PASS",
+          "metrics_projection_check": "PASS",
+          "candidate_identity_check": "PASS",
+          "dna_integrity_check": "PASS (2479 samples, 71 groups, 1349 comparisons, 4 source files)",
+          "full_software_tests": "PASS (735 passed, 0 failed)",
+          "smoke_boot": "PASS (4 phases)",
+          "final_cache_cleanup": "PASS after verification"
+        },
+        "unit": "repository-cleanup",
+        "method": "scripts/verify/build_artifact_indexes.py plus deterministic path-scoped cleanup; indexes and source identity validated after maintenance"
       }
     },
     "unmeasured": {
