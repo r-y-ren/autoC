@@ -27,7 +27,7 @@ MANIFEST = SOFTWARE_ROOT / "active_candidate.json"
 def test_working_source_commit_and_blob_identity_are_verified():
     payload = json.loads(MANIFEST.read_text(encoding="utf-8"))
     assert payload["working"]["git_ref"] == \
-        "6acb39d8d3e77f95f920520a4cef4e5378d94009"
+        "9c8e53958e5e8baedb06623a87fc340944faf002"
     assert len(payload["working"]["git_blob_oid"]) == 40
     assert len(payload["working"]["canonical_lf_sha256"]) == 64
 
