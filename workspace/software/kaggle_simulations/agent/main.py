@@ -59,7 +59,7 @@
 r5-P4 macro-plan layer: the round-3 public ladder's next band (96-110k
 wheat-strawberry economies) is outside the r4 parameter frame, so a
 deterministic daily gate now selects between three economy modes --
-DEFENSIVE (the r4 frame, byte-identical default), VOLUME_CROP (42-tile
+DEFENSIVE (the conservative r4 parameter frame), VOLUME_CROP (42-tile
 strawberry ceiling + SE quadrant + crew 15) and SCALE_RANCH (NPV herd
 ceiling 18) -- from public state only (prices, shops, both farms).  The
 micro executor (red-line tasks, value matching, market gates, safety
@@ -591,8 +591,8 @@ PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
 # 6/quad = 18 tiles, crew 12) cannot EXPRESS that economy -- any optimizer
 # inside it plateaus near 75k.  The daily macro plan widens the space:
 #
-#   DEFENSIVE    the r4 rotation ranch VERBATIM (this dict is the r4 frame;
-#                every plan failure and every non-qualifying day uses it)
+#   DEFENSIVE    the r4 rotation-ranch frame parameters (every plan failure
+#                and every non-qualifying day uses this conservative frame)
 #   VOLUME_CROP  the 96-110k band: SE quadrant becomes a buyable asset,
 #                strawberry ceiling 42 tiles, wheat money-crop scaling,
 #                crew 15; the herd stays on the 14-head plan + guardrailed
@@ -1376,6 +1376,40 @@ def _animal_pace(day):
     return 1
 
 
+def _new_animal_production_evenings(day, animal):
+    """Engine-exact production evenings for an animal placed today."""
+    spec = ANIMALS[animal]
+    first = day + spec["first_yield_day"] - 1
+    if first > PROD_HORIZON_DAY:
+        return 0
+    return 1 + (PROD_HORIZON_DAY - first) // spec["interval"]
+
+
+def _npv_herd_decision(day, prices, herd_total, species_counts, daily_demand,
+                       sys_wheat, plan=None):
+    """Return the safe total ceiling and best profitable animal species."""
+    ceil_cap = MODE_HERD_CAP_SCALE if plan is not None and plan["scale"] \
+        else HERD_CAP_NPV
+    if herd_total >= ceil_cap or day > HERD_NPV_LAST_DAY:
+        return HERD_CAP, None
+    best = None
+    for animal in ("COW", "SHEEP"):
+        spec = ANIMALS[animal]
+        product = spec["product"]
+        price = _get(prices, product, BASE_PRICE[product])
+        prod_evenings = _new_animal_production_evenings(day, animal)
+        margin = price - FEED_BUY_MAX_PRICE - TRAVEL_MU
+        npv = prod_evenings * margin - spec["cost"]
+        demand = daily_demand.get(product, 1)
+        flow = (species_counts.get(animal, 0) + 1) / float(spec["interval"])
+        if npv > 0 and margin >= HERD_NPV_MIN_MARGIN and demand >= 2 * flow:
+            if best is None or npv > best[0]:
+                best = (npv, animal)
+    if best is None or (sys_wheat is not None and sys_wheat < herd_total + 4):
+        return HERD_CAP, None
+    return ceil_cap, best[1]
+
+
 def _npv_herd_ceiling(day, prices, herd_total, species_counts, daily_demand,
                       sys_wheat, plan=None):
     """r4-P3 marginal-NPV herd ceiling in [herd plan, HERD_CAP_NPV].
@@ -1393,32 +1427,10 @@ def _npv_herd_ceiling(day, prices, herd_total, species_counts, daily_demand,
     (18) under the same five conditions; DEFENSIVE keeps 17.
     Returns the effective total ceiling (14 when NPV says no).
     """
-    ceil_cap = MODE_HERD_CAP_SCALE if plan is not None and plan["scale"] \
-        else HERD_CAP_NPV
-    if herd_total >= ceil_cap or day > HERD_NPV_LAST_DAY:
-        return HERD_CAP
-    evenings = max(0, PROD_HORIZON_DAY - day)
-    best_npv = None
-    for animal in ("COW", "SHEEP"):
-        spec = ANIMALS[animal]
-        product = spec["product"]
-        price = _get(prices, product, BASE_PRICE[product])
-        interval = spec["interval"]
-        prod_evenings = max(0, evenings // interval)
-        # feed cost: 1 wheat/day at ~FEED_BUY_MAX_PRICE; service labour
-        # charged at TRAVEL_MU per CARE+FEED op-day
-        margin = price - FEED_BUY_MAX_PRICE - TRAVEL_MU
-        npv = prod_evenings * margin - spec["cost"]
-        demand = daily_demand.get(product, 1)
-        flow = (species_counts.get(animal, 0) + 1) / float(interval)
-        if npv > 0 and margin >= HERD_NPV_MIN_MARGIN and demand >= 2 * flow:
-            if best_npv is None or npv > best_npv[0]:
-                best_npv = (npv, animal)
-    if best_npv is None:
-        return HERD_CAP
-    if sys_wheat is not None and sys_wheat < herd_total + 4:
-        return HERD_CAP      # feed line cannot hold one more mouth
-    return ceil_cap
+    ceiling, _animal = _npv_herd_decision(
+        day, prices, herd_total, species_counts, daily_demand, sys_wheat,
+        plan=plan)
+    return ceiling
 
 
 # r5-P4 macro-plan memory, keyed by player id (the framework may exec one
@@ -1721,7 +1733,7 @@ def _field_alloc(farm, day, prices, plan=None):
     floor; surplus tiles stay fallow (labour is the binding resource).
     r5-P4: a VOLUME_CROP plan widens the strawberry ceiling (14/quad,
     42 tiles) and the wheat money-crop quota; DEFENSIVE (plan=None or
-    DEFENSIVE) reproduces the r4 frame exactly.
+    DEFENSIVE) keeps the conservative r4 structure parameters.
 
     Returns (builds, crop_map, n_animals, wheat_capacity) where
       builds: {(x, y): "PASTURE"|"COOP"} to build,
@@ -1792,17 +1804,34 @@ def _field_alloc(farm, day, prices, plan=None):
     builds = {}
     field_extra = []
     herd_t = _herd_target(day, 99)
-    pasture_want = min(HERD_CAP + 1, herd_t + 2)
-    for pos in empty_ring + weed_ring:
-        if n_coop < min(HERD_COMPOSITION["GOOSE"], herd_t) and \
-                n_coop + n_pasture < pasture_want + 1:
-            builds[pos] = "COOP"
-            n_coop += 1
-        elif n_pasture < pasture_want:
+    base_pasture_want = min(HERD_CAP + 1, herd_t + 2)
+    pasture_want = plan.get("herd_ceiling", MODE_HERD_CAP_SCALE) \
+        if plan.get("scale") else base_pasture_want
+    if plan.get("scale"):
+        used_structure_slots = set()
+        for pos in empty_ring + empty_field + weed_ring + weed_field:
+            if n_pasture >= pasture_want:
+                break
             builds[pos] = "PASTURE"
             n_pasture += 1
-        else:
-            field_extra.append(pos)
+            used_structure_slots.add(pos)
+        field_extra = [pos for pos in empty_ring
+                       if pos not in used_structure_slots]
+        empty_field = [pos for pos in empty_field
+                       if pos not in used_structure_slots]
+        weed_field = [pos for pos in weed_ring + weed_field
+                      if pos not in used_structure_slots]
+    else:
+        for pos in empty_ring + weed_ring:
+            if n_coop < min(HERD_COMPOSITION["GOOSE"], herd_t) and \
+                    n_coop + n_pasture < pasture_want + 1:
+                builds[pos] = "COOP"
+                n_coop += 1
+            elif n_pasture < pasture_want:
+                builds[pos] = "PASTURE"
+                n_pasture += 1
+            else:
+                field_extra.append(pos)
 
     empties = field_extra + empty_field
     empties.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in accesses), p[1], p[0]))
@@ -2775,15 +2804,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     herd_ceiling = min(plan.get("herd_ceiling", absolute_ceiling),
                        absolute_ceiling)
     npv_ceiling = min(HERD_CAP, herd_ceiling)
+    preferred_species = None
     if herd_total >= HERD_CAP and not plan.get("wheat_farm"):
         # r4-P3: the NPV ceiling EXTENDS the completed 14-head plan (never
         # accelerates it -- the day-0 burst and the r3 deadline stand)
-        npv_ceiling = min(
-            herd_ceiling,
-            _npv_herd_ceiling(
-                day, prices, herd_total,
-                _species_counts(farm, private, herd_total),
-                _town_daily_demand(town_shops), sys_wheat_early, plan=plan))
+        decision_ceiling, preferred_species = _npv_herd_decision(
+            day, prices, herd_total,
+            _species_counts(farm, private, herd_total),
+            _town_daily_demand(town_shops), sys_wheat_early, plan=plan)
+        npv_ceiling = min(herd_ceiling, decision_ceiling)
         target = max(target, npv_ceiling)
     bought = _buy_pace(_get(obs, "player", 0), day, _get(obs, "hour", 0),
                        herd_total)
@@ -2808,13 +2837,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         # premium-milk window on time instead of queueing behind the sheep
         candidates = sorted((a for a in HERD_COMPOSITION if HERD_COMPOSITION[a] > 0),
                             key=lambda a: species[a] / float(HERD_COMPOSITION[a]))
+        if npv_ceiling > HERD_CAP and preferred_species is not None:
+            candidates = [preferred_species]
         for animal in candidates:
             comp_cap = HERD_COMPOSITION[animal]
             if npv_ceiling > HERD_CAP:
-                # P3 NPV branch: the state-driven ceiling may push the
-                # best-margin species past its pinned composition share
-                # (r5-P4: derived from npv_ceiling so SCALE's 18 follows)
-                comp_cap += npv_ceiling - HERD_CAP
+                # P3 NPV branch: extend the selected species from its current
+                # count, including composition-skewed states.
+                comp_cap = species[animal] + npv_ceiling - herd_total
             if species[animal] >= comp_cap:
                 continue
             if day > ANIMAL_BUY_LAST_DAY[animal]:
@@ -2844,6 +2874,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             n = min(pace - bought, target - herd_total,
                     comp_cap - species[animal],
                     int((wallet - reserve_total) // cost))
+            if npv_ceiling > HERD_CAP:
+                demand = _town_daily_demand(town_shops)
+                absorption_cap = int(
+                    demand.get(product, 1) * ANIMALS[animal]["interval"] // 2)
+                n = min(n, absorption_cap - species[animal])
             if n > 0:
                 orders.append(["BUY_ANIMAL", animal, n])
                 if plan.get("wheat_farm"):
@@ -3305,7 +3340,7 @@ def agent(obs):
         if not tiles:
             return {"farmer": ["PASS"], "hands": [], "market": []}
 
-        # r5-P4: the daily macro plan (DEFENSIVE = r4 frame verbatim) is
+        # r5-P4: the daily macro plan (DEFENSIVE = conservative r4 frame) is
         # computed once per day-hour cache and threaded through every
         # planner; any failure inside the gate already fell back to it.
         plan = _macro_plan(player, obs, day)

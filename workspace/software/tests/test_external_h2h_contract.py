@@ -262,12 +262,13 @@ def test_external_tools_reject_repository_outputs_outside_external_exports():
         fit_bradley_terry._reject_repository_output(protected)
 
 
-def test_fit_cli_validates_formal_external_input_and_strict_pairing(tmp_path):
+def test_fit_cli_rejects_historical_external_input_after_active_sha_changes(tmp_path):
     source = Path(__file__).parents[1] / "exports" / "external" / "v48-seed101-smoke.json"
     output = tmp_path / "ratings.json"
     from scripts import fit_bradley_terry
     assert fit_bradley_terry.main(["--input", str(source), "--output", str(output),
-                                  "--bootstrap", "0", "--require-ab-ba"]) == 0
+                                  "--bootstrap", "0", "--require-ab-ba"]) != 0
+    assert not output.exists()
 
 
 def test_fit_cli_rejects_redigested_forged_formal_input(tmp_path):

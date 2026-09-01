@@ -101,7 +101,7 @@ python workspace/software/scripts/check_dna_forensics.py
 This is producer/source-attested precomputed barcode evidence, not an independent replay reconstruction: `extractor_status=source_extractor_not_published`. `IDENTICAL / SAME SOURCE` means only 30-band anchor equality; it does not prove the same agent or a real source. DNA stability is separate from engine action liveness. The artifacts are explicitly exploratory and are not strength, promotion, holdout, online, or performance evidence. DNA outputs are restricted to `workspace/software/exports/replay_dna/`, and action, observation, state, market, price, quantity, inventory, and raw trace fields are rejected recursively.
 
 <!-- ACTIVE_CANDIDATE_IDENTITY:BEGIN -->
-working_candidate_sha256=360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f
+working_candidate_sha256=1bde14b03cfc4692efebc28ec80410f4de3dd5d0e39a633c83683fe3d687a568
 working_candidate_status=development
 last_promoted_frozen_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
 published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
@@ -111,7 +111,7 @@ engine=kaggle-environments 1.32.7 kaggriculture
 
 ## External H2H 与评级限制
 
-`h2h_external_probe.py` 生成 `external-h2h/2.0`。每局包含唯一 `game_id`、显式 seed/AB-BA 座位、720-state completion、producer-attested activity traces、异常原因与 rewards/margin；验证器从这些生产者声明的 traces 重算活性汇总并校验赛程和 W/L/T/margin，复核候选/对手 SHA、运行时 Kaggle 包关键源码与 vendored wheel 字节一致、active candidate 身份、输入闭包和 canonical digest。该契约验证内部一致性与当前工作区来源，不提供防篡改签名，也不把 traces 描述为验证器从原始引擎回放独立重建。v48 在 `opponents/PROVENANCE.md` 中没有可验证的复用许可，因此只能作为只读黑盒压力对手，不能进入 submission 或被描述为正式胜率证据。
+`h2h_external_probe.py` 生成 `external-h2h/2.0`。每局包含唯一 `game_id`、显式 seed/AB-BA 座位、720-state completion、producer-attested activity traces、异常原因与 rewards/margin；验证器从这些生产者声明的 traces 重算活性汇总并校验赛程和 W/L/T/margin，复核候选/对手 SHA、运行时 Kaggle 包关键源码与 vendored wheel 字节一致、active candidate 身份、输入闭包和 canonical digest。该契约验证内部一致性与当前工作区来源，不提供防篡改签名，也不把 traces 描述为验证器从原始引擎回放独立重建。v48 在 `opponents/PROVENANCE.md` 中没有可验证的复用许可，因此只能作为只读黑盒压力对手，不能进入 submission 或被描述为正式胜率证据。v48 历史 smoke fixture `exports/external/v48-seed101-smoke.json` 继续绑定 v10.2 SHA `360714f1…`，不是 v10.3/M-G 证据；active working SHA 变化后，strict validator 应对该历史 fixture fail-closed。
 
 `fit_bradley_terry.py` 使用全批次 Bradley-Terry（无和局）或 Davidson（含和局）模型；固定 zero-sum identifiability，断连图 fail-closed，完全分离时使用已披露的 Gaussian MAP 正则。置信区间按 seed clustered bootstrap，固定 `--bootstrap-seed` 且与输入行顺序无关。BT/Davidson 评级是描述性排名，不是 holdout 泛化证明；只有 CI 完全跨越预注册 margin 才给出 tier，否则为 `same`/`uncertain`。
 

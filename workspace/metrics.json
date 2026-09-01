@@ -1,10 +1,10 @@
 {
-  "_generated_at": "2026-09-01T16:22:55",
+  "_generated_at": "2026-09-01T18:58:55",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
-    "milestone": "P2 offline DNA/liveness source-attested forensics contract; historical metrics retained",
-    "measured_at": "2026-09-01T03:20:00+00:00",
+    "milestone": "M-G development candidate accepted after repaired dual-domain local gate; historical metrics retained",
+    "measured_at": "2026-09-01T10:14:44+00:00",
     "engine": {
       "package": "kaggle-environments",
       "version": "1.32.7+nodeps (vendored, engine code unmodified)",
@@ -5659,6 +5659,68 @@
         },
         "unit": "paired-local-ablation",
         "method": "M-F day-9..11 opponent realization-pressure gate was projected over the 21 public replays, then compared against exact v10.2 bytes on the required 11-opponent pool with AB/BA pairing. Both dev and regression domains were byte-outcome identical in every paired cell, so the mechanical gate passed only as a no-op; candidate code was reverted. Evidence: exports/ablations/mf_vs_v102_dev.json (SHA-256 77b47353...) and mf_vs_v102_reg.json (SHA-256 deca6638...). No holdout or online run."
+      },
+      "mg_development_candidate_acceptance": {
+        "value": {
+          "candidate_sha256": "1bde14b03cfc4692efebc28ec80410f4de3dd5d0e39a633c83683fe3d687a568",
+          "baseline_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+          "dev_seeds": [
+            101,
+            102,
+            103,
+            104
+          ],
+          "reg_seeds": [
+            201,
+            202,
+            203,
+            204
+          ],
+          "opponents_per_domain": 11,
+          "games_per_domain": 176,
+          "paired_cells_per_domain": 88,
+          "dev_paired_record": "31W-21L-36T",
+          "reg_paired_record": "38W-28L-22T",
+          "dev_net_pair_diff": 45965.0,
+          "reg_net_pair_diff": 69640.0,
+          "combined_net_pair_diff": 115605.0,
+          "dev_pool_win_rate": 0.975,
+          "reg_pool_win_rate": 1.0,
+          "dev_worst_opponent_win_rate": 0.875,
+          "reg_worst_opponent_win_rate": 0.75,
+          "dev_disaster_rate": 0.0,
+          "reg_disaster_rate": 0.0227,
+          "mechanical_gate": "MERGEABLE",
+          "focused_strategy_tests_passed": 37,
+          "full_tests_passed": 726,
+          "full_tests_failed": 0,
+          "smoke_status": "PASS",
+          "candidate_identity_status": "PASS",
+          "dna_verify_status": "PASS",
+          "metrics_projection_status": "PASS",
+          "working_status": "development",
+          "holdout_executed": false,
+          "online_submission_occurred": false,
+          "distribution_note": "Mechanical merge gate passes in both domains; paired net is positive in both domains and remains descriptive local evidence, not a promotion claim.",
+          "dev_artifact": "workspace/software/exports/ablations/mg_vs_v102_dev.json",
+          "reg_artifact": "workspace/software/exports/ablations/mg_vs_v102_reg.json"
+        },
+        "unit": "paired-local-ablation",
+        "method": "2026-09-01 actual repaired M-G rerun: required 11-opponent pool, 4 seeds per domain, AB/BA, 176 games and 88 paired cells per domain. Candidate SHA and exact v10.2 baseline SHA are bound in both artifacts; mechanical pool/worst/disaster checks are non-inferior. No holdout or online run."
+      },
+      "p1_external_v48_historical_closure": {
+        "value": {
+          "artifact_sha256": "f3dcf266dab4fec14d949f5a963659986095adb06d24ab8cc48437455b9d00a0",
+          "ratings_sha256": "507b600f0bd10a98a0e7e96bc31bfd35c5f83cd545a52ffc5422193a9844a8ca",
+          "bound_candidate_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+          "current_active_candidate_sha256": "1bde14b03cfc4692efebc28ec80410f4de3dd5d0e39a633c83683fe3d687a568",
+          "current_active_match": false,
+          "current_strict_verify": false,
+          "reason": "candidate_and_active_manifest_sha_drift",
+          "historical_artifact_preserved": true
+        },
+        "unit": "historical-external-evidence-closure",
+        "method": "Historical v48 seed-101 smoke and ratings remain byte-preserved evidence for v10.2 only; they are not rewritten as M-G evidence. Current strict validation is expected to fail closed after the working candidate SHA changes."
       }
     },
     "unmeasured": {
