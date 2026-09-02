@@ -18,3 +18,5 @@
 ## 历史遗留说明
 
 `software/vendor/`（wheel）与 `software/exports/intel/`（情报摘要）是本目录建立前的历史落点，已被脚本/manifest 引用，**保持原位不迁移**；此后新增的外部材料一律进本目录。
+
+`data/tetsuya-probe-0831/`（2026-09-02）是经用户指令整体迁入的**混合归档包**（外部回放为主体 + 本地探针产物 val/variant，源自根目录 `.tmp-tetsuya/` 散落清理）：作为硬性要求 3 的记名例外保持捆绑完整以存证 round-13 探针会话；此后新的内部探针输出仍放 `software/exports/probes/`。

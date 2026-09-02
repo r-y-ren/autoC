@@ -13,3 +13,4 @@
 | `references/data/intel-notebooks/` | https://www.kaggle.com/competitions/kaggriculture/code（公开 notebook 原件快照） | 2026-08 | 外部选手 notebook/情报原件（~75M） | exports/intel 摘要的上游原件 |
 
 <!-- 新条目从这里追加 -->
+| `references/data/tetsuya-probe-0831/` | https://www.kaggle.com/datasets/kaggle/kaggriculture-episodes-2026-08-31（外部回放数据集，抓取清单=包内 plan-tetsuya/plan-early.json） | 2026-09-02 | round-13 v10.9 深度匹配探针会话归档（混合包，用户指令整体迁入：raw/ 6 局 tetsuya 对局外部回放 ~185M + val/ 5 局本地验证 + variant_*.py 三开局变体 a_open_shift/ab/b_carrot + filelist/shard-0831 清单） | OPP-SUPPLY observer V0 验证语料（设计 v2 引用的"tetsuya 6 局"）；round-13 v10.9 探针复盘 |
