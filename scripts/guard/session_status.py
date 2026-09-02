@@ -36,6 +36,8 @@ def main() -> int:
                 trip = "⚠熔断" if retry.get("tripped") else ""
                 parts.append(f"{cid}={c.get('phase', '?')}"
                              f"(重试{retry.get('count', 0)}/{retry.get('max', '-')}{trip})")
+            if state.get("phase") == "idle" and fs.active_campaigns(state):
+                parts.append("工程面锁定(D14战役圈禁：战役文件只落所属战役根，根/工程目录禁写)")
             msg = f"[autoC] {' '.join(parts)}（/status 查看详情；阶段流转只能经 init_state.py）"
         else:
             retry = state.get("retry") or {}

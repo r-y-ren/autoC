@@ -1,6 +1,9 @@
 # autoC — 竞赛情报与作品生成 Agent 框架：结构设计
 
-> 版本 v1.2（2026-09-02）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> 版本 v1.3（2026-09-02）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
+> v1.3 变更：**战役圈禁（D14）**——全局 idle 且任一战役活跃（decide/deliver/verify/archive）时，工程目录与
+> 项目根对 Write/Edit 锁定（仅放行 .flow/**）：战役生成/下载的文件只许落所属战役根 workspace/<cid>/**；
+> kb 维护不受影响（collect 批次语义不变）；容器 README 例外收紧为"无活跃战役的全局 idle"；守卫回归 39/39。
 > v1.2 变更：**人工主导交付会话（D13）**——蓝图确认后新增 /self（M-08/K-11 副驾模式）与 /deliver 并列：
 > 同处 deliver 阶段（零守卫/状态模型改动），豁免瘦协调者/角色矩阵/波次编排（限战役根内），
 > 不变量（验收出口/metrics 汇总/references/数字纪律）与终验全量清单不豁免；熔断后人工接管走此出口；
@@ -237,7 +240,7 @@ autoC/
 
 - **L1 软边界——角色章程（.zcode/agents/）**：每角色一份（职责 / 输入输出契约 / 禁止清单）；Coordinator 按名派发。角色目录级的写入边界（如"Software 不得写 workspace/hardware/"）目前由**章程约定 + git 审计发现**保障，不是物理强制。
 - **L2 阶段级硬边界——写入路径守卫 + 契约 Schema 校验**：
-  - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制——**v2 多战役（2026-09-01）**：workspace 子树按**最长 root 匹配**路由到所属战役的阶段（deliver 放行该战役根（acceptance/ 与顶层 metrics.json 除外）、verify 仅放行其 acceptance/、未登记战役目录拒写、容器 README 仅全局 idle）；kb/ 与工程目录归全局阶段（collect 仅 kb/，idle 放行）——**不识别调用者角色**。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）；v1 状态按平铺兼容。
+  - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制——**v2 多战役（2026-09-01）**：workspace 子树按**最长 root 匹配**路由到所属战役的阶段（deliver 放行该战役根（acceptance/ 与顶层 metrics.json 除外）、verify 仅放行其 acceptance/、未登记战役目录拒写、容器 README 仅全局 idle）；kb/ 与工程目录归全局阶段（collect 仅 kb/，idle 放行）——**不识别调用者角色**。**D14 战役圈禁（2026-09-02）**：全局 idle 且任一战役活跃（decide/deliver/verify/archive）时，工程目录与项目根对 Write/Edit 锁定（仅放行 `.flow/**`）——战役生成/下载的文件物理圈禁在所属战役根，kb 维护走 collect 批次，容器 README 相应收紧；脚本级写入（merge_metrics/archive_campaign 等经 Bash）不在此层，由 L3 审计兜底。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）；v1 状态按平铺兼容。
   - 契约文件（blueprint / KB 条目 / 验收清单）必须通过 `config/templates/*.schema.json` 校验：蓝图不过校验不得进入确认闸门；KB 条目不过校验进 quarantine。
   - PostToolUse 钩子对 kb/ 契约文件即时校验（仅四类目标：`<id>/meta.md`、`kb/tech/<id>.md`、`blueprint.md`、`acceptance/*.json`；winners/patterns/raw 等正文文件明确跳过）。
 - **L3 审计兜底——git**：每阶段一个 commit（阶段日志见 workspace/JOURNAL.md），越界改动必然暴露于 diff，可精确回滚（覆盖钩子未拦截的路径，如经 Bash 的写操作）；每轮跑批收尾 `git push` 至私有远程（r-y-ren/autoC）作异地备份。

@@ -40,6 +40,9 @@ from pathlib import Path
 
 CAMPAIGN_PHASES = ["decide", "deliver", "verify", "archive", "idle"]
 GLOBAL_PHASES = ["idle", "collect"]
+# 战役活跃阶段（D14 圈禁判定，2026-09-02）：任一战役处于这些阶段时，
+# 全局 idle 对工程目录/项目根锁定（战役产物圈禁在所属战役根，见 guard_path.decide_v2）
+ACTIVE_CAMPAIGN_PHASES = ("decide", "deliver", "verify", "archive")
 CAMPAIGN_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,31}$")
 # legacy 平铺战役占用 workspace 顶层的名字，不得用作新战役 id
 RESERVED_CAMPAIGN_IDS = {
@@ -73,6 +76,12 @@ def is_v2(state: dict | None) -> bool:
 def campaigns(state: dict | None) -> dict:
     """v2 返回注册表；v1 返回空 dict（legacy 语义由 resolve 另行处理）。"""
     return state.get("campaigns") if is_v2(state) else {}
+
+
+def active_campaigns(state: dict | None) -> dict:
+    """处于活跃阶段（decide/deliver/verify/archive）的战役 {cid: camp}（仅 v2）。"""
+    return {cid: c for cid, c in campaigns(state).items()
+            if isinstance(c, dict) and c.get("phase") in ACTIVE_CAMPAIGN_PHASES}
 
 
 def default_retry_max(root: Path) -> int | None:

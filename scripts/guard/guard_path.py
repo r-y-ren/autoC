@@ -22,6 +22,12 @@
   - .flow/state.json 永远拒写（状态只属于脚本，见 init_state.py）
   - workspace/<未登记id>/** 拒写（战役目录只能经 init_state 登记/创建）
 
+战役圈禁（D14，2026-09-02）：全局 idle 且任一战役活跃（decide/deliver/verify/archive）时，
+  工程目录与项目根对 Write/Edit 锁定（仅放行 .flow/**，state.json 仍拒）——战役生成/下载的
+  一切文件只许落在所属战役根内；kb 维护走 collect 批次（全局 collect 语义不变，仅 kb/**）；
+  工程改动等全部战役 idle 后进行。脚本级写入（merge_metrics/archive_campaign 等经 Bash）不归本守卫管辖。
+  容器 README 例外随之收紧：仅"全局 idle 且无活跃战役"可维护。
+
 Fail-closed：state.json 缺失/损坏时仅放行 .flow/**（且不含 state.json）。
 全新克隆的引导步骤：python scripts/guard/init_state.py
 
@@ -105,13 +111,20 @@ def decide(rel: str, state: dict | None) -> tuple[bool, str]:
     return apply_policy(rel, policy, phase, extra_allow=state.get("extra_allow"))
 
 
+def active_label(state: dict) -> str:
+    """活跃战役摘要（D14 圈禁提示用）：cid=phase@root 逗号连接。"""
+    return ", ".join(f"{cid}={c.get('phase')}@{c.get('root')}"
+                     for cid, c in sorted(fs.active_campaigns(state).items()))
+
+
 def decide_v2(rel: str, state: dict) -> tuple[bool, str]:
     # 容器层例外优先于战役匹配：workspace/README.md 是容器文档而非战役产物
-    # （legacy 战役 root=workspace 会整树吞掉，须在匹配前放行；仅全局 idle 可写）
+    # （legacy 战役 root=workspace 会整树吞掉，须在匹配前放行；
+    #  D14 起收紧为"全局 idle 且无活跃战役"才可维护）
     if rel == "workspace/readme.md":
-        if state.get("phase") == "idle":
+        if state.get("phase") == "idle" and not fs.active_campaigns(state):
             return True, ""
-        return False, "容器 README 仅全局 idle 可维护（慢循环/战役期锁工程层）"
+        return False, "容器 README 仅全局 idle 且无活跃战役时可维护（慢循环/战役期锁工程层，D14）"
 
     matched = fs.match_campaign(state, rel)
     if matched is not None:
@@ -133,8 +146,18 @@ def decide_v2(rel: str, state: dict) -> tuple[bool, str]:
                        "新战役须先 python scripts/guard/init_state.py --campaign <id> --phase decide 登记"
                        "（legacy 平铺战役 root=workspace 全覆盖）")
 
-    # 工程目录：只归全局 phase 管
+    # 工程目录/项目根：只归全局 phase 管；但任一战役活跃时全局 idle 对工程面锁定（D14 圈禁）
     gphase = state.get("phase")
+    if gphase == "idle":
+        active = fs.active_campaigns(state)
+        if active:
+            for a in FAIL_CLOSED_ALLOW:  # 圈禁期仍放行 .flow/**（state.json 已被全局不变量先行拒写）
+                if fs.under(rel, a):
+                    return True, ""
+            return False, (f"工程面锁定（D14 战役圈禁）：活跃战役 [{active_label(state)}]，"
+                           "战役生成/下载的文件只许落在所属战役根（workspace/<cid>/**）；"
+                           "kb 维护走 collect 批次；工程改动等全部战役 idle 后进行。"
+                           "禁在项目根/工程目录生成或下载战役相关文件")
     gpolicy = GLOBAL_POLICY.get(gphase)
     if gpolicy is None:
         return False, f"未知全局阶段 {gphase!r}：拒绝（请用 init_state.py 修正状态）"

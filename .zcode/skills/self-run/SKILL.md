@@ -40,6 +40,7 @@ description: 人工主导交付会话（副驾模式，D13）：蓝图确认后�
 - `<战役根>/acceptance/` 只经 /accept 产生（verify 态）；"验收者不修作品"语义不变——人工修完照走 /accept 重验
 - `<战役根>/metrics.json` 顶层汇总只经 `merge_metrics --campaign <cid>`；实测数字先落角色分片（铁律 4）
 - 外部抓取/下载材料只进 `<战役根>/references/` 并登记 INDEX（铁律 3）
+- **战役圈禁（D14）**：生成/下载的一切文件（含临时试验）只落战役根内——活跃期间项目根与工程目录被守卫物理锁定（仅放行 `.flow/**`），临时试验放 `references/digests/` 或角色目录，禁止在根目录开 `.tmp-*` 散落目录
 - 蓝图等契约文件改动必须重过 schema 校验（铁律 2）
 - 每会话 JOURNAL 记行 + git commit（铁律 6 / L3 审计）
 

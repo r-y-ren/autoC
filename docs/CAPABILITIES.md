@@ -221,3 +221,13 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
      只经 merge_metrics、references/ 归宿、实测数字纪律、终验全量清单——人工主导 ≠ 绕过验收
   4. **互操作**：与 /deliver 可随时互换续跑（波门重查兜住人工改动回归）；熔断 tripped 后 /self 即人工接管
      出口（修好 --reset 再 /accept）。AGENTS.md 增设"人工主导会话（/self）"条款使其对全部会话生效
+
+- **D14 战役圈禁落地** ✅ 已裁决并落地（2026-09-02，用户指令）：任一战役活跃（decide/deliver/verify/archive）
+  且全局 idle 时，工程目录与项目根对 Write/Edit 工具锁定（仅放行 .flow/**；state.json 由全局不变量先行拒写）——
+  战役生成/下载的一切文件只许落所属战役根 workspace/<cid>/**。补的缺口：此前战役活跃期全局 phase=idle 对
+  非战役路径放行 *，根目录对战役会话完全敞开（.tmp-tetsuya/ 根目录散落即实证）。要点：
+  1. kb 维护不受影响（collect 批次语义不变，可与活跃战役并行）；工程改动等全部战役 idle 后进行
+  2. 容器 README 例外收紧为"全局 idle 且无活跃战役"（原实现与自身注释"战役期锁工程层"不符，一并修正）
+  3. 脚本级写入（merge_metrics/archive_campaign 等经 Bash）不经 Write 工具，不在此层，L3 审计兜底
+  验证：test_guard 39/39（新增圈禁 7 用例 + 无活跃战役工程自举 1 例；3 个既有用例预期翻转并注明 D14）、
+  test_init_state 5/5

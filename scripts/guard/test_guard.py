@@ -63,15 +63,22 @@ CASES = [
     (v2("demo", "deliver"), "workspace/demo/metrics.json", True, "v2 deliver 拒写本战役汇总 metrics"),
     (v2("demo", "deliver"), "workspace/demo/references/data/lb.json", False, "v2 deliver 放行本战役参考资料区"),
     (v2("demo", "deliver"), "workspace/demo2/software/app.py", True, "v2 拒写未登记战役目录（即使全局 idle）"),
-    (v2("demo", "deliver"), "kb/tech/x.md", False, "v2 全局 idle 放行工程目录（工程自举态，与 v1 一致）"),
-    (v2("demo", "deliver"), "workspace/README.md", False, "v2 容器 README 在全局 idle 可维护"),
+    (v2("demo", "deliver"), "kb/tech/x.md", True, "D14：战役活跃时全局 idle 不放行工程目录（kb 走 collect 批次）"),
+    (v2("demo", "deliver"), "workspace/README.md", True, "D14：战役活跃时容器 README 锁定（仅无活跃战役的全局 idle 可维护）"),
     (v2("demo", "deliver", gphase="collect"), "workspace/README.md", True, "v2 collect 拒写容器 README"),
+    # ---- D14 战役圈禁（2026-09-02）：活跃战役锁定工程面/项目根 ----
+    (v2("demo", "deliver"), "docs/test.md", True, "D14：战役活跃拒写工程目录"),
+    (v2("demo", "deliver"), "dataset.zip", True, "D14：战役活跃拒写项目根（含下载落盘）"),
+    (v2("demo", "deliver"), "scripts/guard/x.py", True, "D14：战役活跃拒写 scripts/"),
+    (v2("demo", "deliver"), ".flow/tmp.txt", False, "D14：圈禁期仍放行 .flow/**（state.json 另有不变量拒写）"),
+    (v2("demo", "deliver"), ".flow/state.json", True, "D14：圈禁期 state.json 仍拒写（全局不变量优先）"),
     (v2("demo", "decide"), "workspace/demo/blueprint.md", False, "v2 decide 放行蓝图"),
     (v2("demo", "decide"), "workspace/demo/software/app.py", True, "v2 decide 拒写工程区"),
     (v2("demo", "verify"), "workspace/demo/acceptance/r.json", False, "v2 verify 放行验收区"),
     (v2("demo", "verify"), "workspace/demo/software/app.py", True, "v2 verify 拒写工程区"),
     (v2("demo", "archive"), "workspace/demo/software/app.py", True, "v2 archive 态全拒"),
     (v2("demo", "idle"), "workspace/demo/software/app.py", True, "v2 已登记未开工（idle）全拒"),
+    (v2("demo", "idle"), "docs/test.md", False, "D14：无活跃战役时全局 idle 放行工程目录（工程自举态）"),
     (v2("demo", "deliver", gphase="collect"), "kb/raw/x.html", False, "v2 collect 放行 kb（与战役并行）"),
     (v2("demo", "deliver", gphase="collect"), "scripts/guard/x.py", True, "v2 collect 拒写工程目录"),
     # ---- v2 多战役并行 + legacy 最长匹配 ----
@@ -95,7 +102,7 @@ CASES = [
                     "demo": {"phase": "verify", "root": "workspace/demo",
                              "retry": {"count": 0, "max": 3, "tripped": False}, "extra_allow": []}}},
      "workspace/acceptance/run.json", True, "多战役：legacy 战役 deliver 拒写其验收区"),
-    (LEGACY_KAGGRI, "workspace/README.md", False, "legacy 注册时容器 README 仍可在全局 idle 维护"),
+    (LEGACY_KAGGRI, "workspace/README.md", True, "D14：legacy 战役活跃时容器 README 锁定（无活跃战役的全局 idle 才可维护）"),
 ]
 
 

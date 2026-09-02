@@ -10,8 +10,8 @@
 |---|---|---|
 | `.zcode/` | 客户端原生配置（钩子/技能/子agent） | 随工程演进 |
 | `.flow/` | 运行时状态（gitignore） | **仅脚本可写** |
-| `config/` | 静态配置与契约 Schema | idle 态可改 |
-| `scripts/` | 确定性脚本（kb/guard/verify） | idle 态可改 |
+| `config/` | 静态配置与契约 Schema | 全局 idle 且无活跃战役可改（D14 圈禁） |
+| `scripts/` | 确定性脚本（kb/guard/verify） | 全局 idle 且无活跃战役可改（D14 圈禁） |
 | `kb/` | 知识库（清洗后的轻量 Markdown） | collect 态经跑批写入 |
 | `workspace/` | 多战役容器（每战役 `workspace/<cid>/` 子目录，独立阶段与熔断；kaggriculture 已于 2026-09-01 迁入标准布局） | 按各战役阶段/角色受限（最长 root 匹配） |
 | `export/` | KB 交付导出层（S-15 纯投影，D6） | 脚本生成，人读 |
@@ -21,7 +21,7 @@
 
 1. **引用纪律**：KB 中的一切分析必须基于本次实抓的文档，逐条携带 `来源 URL + 抓取日期`。禁止凭模型记忆撰写获奖分析或赛事信息。
 2. **契约纪律**：`<战役根>/blueprint.md`、KB 条目、验收记录必须通过 `config/templates/*.schema.json` 校验；蓝图未过校验不得请求用户确认。
-3. **写入纪律**：尊重 `scripts/guard/guard_path.py` 的**阶段级**写入策略与角色写入矩阵（DESIGN.md §6.2；角色目录级边界属 L1 软约束；多战役按最长 root 匹配路由到所属战役的阶段）。被守卫阻断时，修正自己的目标路径，不要绕道 Bash 写入来规避——Bash 写入同样会被 git 审计（L3）追责。`archive/` 与 `.flow/state.json` 对 agent 永远只读；`workspace/<未登记id>/` 不得创建（战役登记只能经 `init_state --campaign`）。战役中抓取/下载的外部参考资料与数据（规则、数据集、第三方包、情报摘要）**只能**放该战役 `references/` 对应子目录并在其 INDEX.md 登记来源，禁止散落到工程目录。
+3. **写入纪律**：尊重 `scripts/guard/guard_path.py` 的**阶段级**写入策略与角色写入矩阵（DESIGN.md §6.2；角色目录级边界属 L1 软约束；多战役按最长 root 匹配路由到所属战役的阶段）。被守卫阻断时，修正自己的目标路径，不要绕道 Bash 写入来规避——Bash 写入同样会被 git 审计（L3）追责。`archive/` 与 `.flow/state.json` 对 agent 永远只读；`workspace/<未登记id>/` 不得创建（战役登记只能经 `init_state --campaign`）。战役中抓取/下载的外部参考资料与数据（规则、数据集、第三方包、情报摘要）**只能**放该战役 `references/` 对应子目录并在其 INDEX.md 登记来源，禁止散落到工程目录。**战役圈禁（D14）**：战役生成/下载的一切文件（代码、数据、工件、临时文件）只许落在所属战役根 `workspace/<cid>/` 内，**禁止在项目根或工程目录生成/下载战役相关文件**——任一战役活跃期间（decide/deliver/verify/archive）守卫对工程面与项目根物理锁定（仅放行 `.flow/**`），绕道 Bash 亦会被 L3 审计追责。
 4. **数据纪律**：对外文档中的一切性能数字只能来自所属战役 `<战役根>/metrics.json` 的实测值，禁止编造或"合理估计"数字。
 5. **上下文纪律**：主会话是瘦协调者——只读 `kb/INDEX.md` 与各契约文件，不整读 `kb/raw/` 与条目正文；收集/分析任务按条目分片派发子 agent；子 agent 返回结构化结论而非原始转储。
 6. **阶段纪律**：每完成一个阶段在所属战役 `JOURNAL.md` 记录一行并 git commit；阶段流转只能经 `init_state.py`（战役级流转带 `--campaign <cid>`；熔断计数为战役级，各战役独立）；验收-修复回环超过 `retry.max` 次必须熔断升级人工，不得继续重试。
