@@ -1,0 +1,19 @@
+{
+ "schema_version": "1.0",
+ "submission_ref": 55958302,
+ "candidate_sha256": "c434428ff9c6805bf91e11744b9d5d0d5d73d856ec1d11cf3db05bcb7fd13aa4",
+ "candidate_label": "v10.10-c1-working (variant C opening: d0 1C+2S tetsuya-true small burst)",
+ "git_ref": "03b99f769445d19049846dd51d14f8c752965b3d",
+ "submitted_at": "2026-09-02T08:49:23+00:00",
+ "submitted_by": "main-session (sprint plan W1, A-1 probe)",
+ "quota_after_submit": "1 remaining today",
+ "changes": [
+  "A-1 variant C: OPENING_SHIFT_SEQ {1:3S,2:2C} -> {0:2S+1C} -- herd burst back to day 0 in tetsuya-true smaller shape (~1400), single variable; paced loop owns d1+ at 1/day, _opening_shift_hold keeps d0 clean",
+  "Premise correction: raw-replay audit 6/6 (steps[1..24] direct parse) refutes the v2-analysis d0 row (zero herd zero hires ~2900); actual tetsuya d0 = 5 hires + 2S+1C + 10 wheat seeds + 2 feed buys, eod 478-483. exports/online/tetsuya_v2_strategy_analysis.md correction section + branch plan v1.3 P0 redefinition (variant A/B/C reframed; classifier gains reduced-burst class 2-3 head)"
+ ],
+ "evidence": {
+  "local_ab_selfplay": "seeds 101/102: NEW d0-end cash -1400 exactly (burst confirmed); herd d6 NEW 3 vs OLD 2; finals mixed (+10k/-8k, day-0 chaos-dominated as documented), online is the ruling axis",
+  "gates": "pytest 692 passed 0 failed (r3 opening anchors updated to V-C), smoke 4-phase PASS, identity chain re-registered, artifact indexes regenerated"
+ },
+ "online_gate": "PENDING - 6-game public sample per SOP; G1 opening-form decision at W1 end compares vs v10.9 (55952504, sampling) and variant ladder data"
+}
