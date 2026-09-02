@@ -1036,6 +1036,111 @@ def sell_plan_shadow(player):
     return (st or {}).get("plan")
 
 
+# --------------------------------------------------------------------------
+# 【中文】MK-3 LIVE（market §2.1）：黎明批次发射 + MK-5 载体 1（§3.3）。
+# 批次纪律：只在计划时点（hours[i] <= 当前 hour）发射、每批一次
+# （_SELL_BATCH_EMITTED 去重）、门控/覆盖本回合已卖该线则跳过并记已发射
+# （计划器为主、门控为有界战术覆盖）；发射量受棚仓现货与 dump-rate
+# 限速（2×吸收+4）双钳。干扰载体 1：触发确认（连续 2 天）+ 暴露闸
+# （对方顶线价值 ≥ 2× 我方同线暴露）+ 预算闸（零 capex 恒过）三闸全开
+# 才倾销；投放量 = 杀伤表反解（目标价 0.75×base 的 offset − 当前 offset），
+# 受现货钳制；日复判 = 触发消除自然收手。
+# --------------------------------------------------------------------------
+_SELL_BATCH_EMITTED = {}
+
+
+def _sell_plan_batches_due(obs, day, hour, shed, existing_orders):
+    """MK-3: emit dawn-planner batches whose planned hour has arrived."""
+    try:
+        if day >= SEASON_DAYS - 1:
+            return []               # d29 liquidation owns everything
+        player = _get(obs, "player", 0)
+        plan = sell_plan_shadow(player)
+        if plan is None or plan.get("day") != day:
+            return []
+        sold_now = {o[1] for o in existing_orders
+                    if isinstance(o, list) and o and o[0] == "SELL"}
+        shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
+        demand = _town_daily_demand(shops) if shops else {}
+        out = []
+        for item in sorted((plan.get("lines") or {})):
+            line = plan["lines"][item]
+            batches = line.get("batches") or []
+            hours = line.get("hours") or ()
+            stock = shed.get(item, 0)
+            if not isinstance(stock, (int, float)) or stock <= 0:
+                continue
+            for bi, qty in enumerate(batches):
+                key = (player, day, item, bi)
+                if key in _SELL_BATCH_EMITTED:
+                    continue
+                if bi < len(hours):
+                    due = hours[bi]
+                elif hours:
+                    due = hours[-1]
+                else:
+                    due = 24
+                if hour < due:
+                    continue
+                _SELL_BATCH_EMITTED[key] = True
+                if item in sold_now:
+                    break           # gate overlay already sold this line
+                n = max(0, min(int(qty), int(stock),
+                               2 * demand.get(item, 1) + 4))
+                if n > 0:
+                    out.append(["SELL", item, n])
+                    sold_now.add(item)
+                break               # one batch of this line per turn
+        return out
+    except Exception:
+        return []                   # fail-open: never break ordering
+
+
+def _interference_orders(obs, farm, private, day, prices, plan=None):
+    """MK-5 vehicle 1: dump OUR held stock of the opponent's top line.
+
+    Zero-cost, same-day, reversible.  Gates (§3.5): trigger confirmed by
+    the shadow (2 consecutive days), kill/exposure >= 2 on the opponent's
+    strongest line, budget trivially satisfied (no capex).  Standdown is
+    automatic: the trigger is re-evaluated daily.
+    """
+    try:
+        if day >= SEASON_DAYS - 1 or day < DEAD_PRICE_FROM_DAY:
+            _interference_shadow(obs, farm, day, prices, plan=plan)
+            return []
+        triggered = _interference_shadow(obs, farm, day, prices, plan=plan)
+        if not triggered or not _INTERFERENCE_LOG:
+            return []
+        rec = _INTERFERENCE_LOG[-1]
+        if rec.get("day") != day or not rec.get("confirmed"):
+            return []
+        item = rec.get("top_opp_line")
+        if not item or not rec.get("gate_exposure"):
+            return []
+        shed = _get(private, "shed", {}) or {}
+        stock = shed.get(item, 0)
+        if not isinstance(stock, (int, float)) or stock <= 0:
+            return []
+        # kill-table inverse: units needed to push the price to 0.75x base
+        price = _get(prices, item, BASE_PRICE.get(item, 0))
+        target = max(1, int(BASE_PRICE.get(item, 1) * 0.75))
+        if price <= target:
+            return []               # already at/below the kill level
+        offset_target = _offset_from_price(item, target)
+        offset_now = _offset_from_price(item, price)
+        dump = int(max(0, offset_target - offset_now))
+        if dump <= 0:
+            return []
+        dump = min(dump, int(stock))
+        if dump <= 0:
+            return []
+        # record the firing in the shadow log for diagnostics
+        rec["fired_vehicle1"] = {"item": item, "qty": dump}
+        return [["SELL", item, dump]]
+    except Exception:
+        return []
+
+
 def interference_shadow_log():
     """Read-only access to the MK-4 shadow log (diagnostics only)."""
     return list(_INTERFERENCE_LOG)
@@ -1554,9 +1659,26 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # P4 三档抢跑——对门控输出做有界覆盖（只增清仓、不抑制既有卖出）。
     orders.extend(_sell_overrides(obs, farm, private, day, prices, shed,
                                   town_shops, orders))
-    # 【market §3 落地】干扰触发器影子（MK-4）：只记录不发令。
-    _interference_shadow(obs, farm, day, prices, plan=plan)
+    # 【MK-3 LIVE】黎明卖出计划批次在计划时点驱动卖出（market §2.1：
+    # 计划器为主，三门态降级为战术覆盖——上面 gates/overrides 的卖出
+    # 已覆盖的线本回合跳过，批次记已发射）。
+    orders.extend(_sell_plan_batches_due(
+        obs, day, _get(obs, "hour", 0), shed, orders))
+    # 【MK-5 武装】干扰触发器（market §3）：影子记录 + 载体 1（现有
+    # 库存倾销，当天/零成本）在确认与三闸通过时发令；触发消除即收手
+    # （日复判）。载体 2-4（萝卜伏击/一次性羊群/镜像）需 capex 窗口，
+    # 留线上裁决后启用。
+    orders.extend(_interference_orders(obs, farm, private, day, prices,
+                                       plan))
     if last_day:
+        # MK-3: drain the L4 d29 DROP->SELL queue (what the executor's
+        # liquidation template actually moved into the shed this turn)
+        queued_d29 = _D29_SELL_QUEUE.pop(_get(obs, "player", 0), None) or {}
+        for item in sorted(queued_d29):
+            n = queued_d29[item]
+            shed_n = shed.get(item, 0)
+            if isinstance(shed_n, (int, float)) and shed_n > 0 and n > 0:
+                orders.append(["SELL", item, min(int(n), int(shed_n))])
         # Goods already carried can DROP before market processing in this turn,
         # so include them in liquidation. Failed/partial quantities remain legal
         # positive orders and simply commit up to actual shed availability.

@@ -92,6 +92,22 @@ def test_flag_off_equals_hooks_stubbed_off():
     real_note = main._opp_note_orders
     main._opp_observer_update = lambda *a, **k: None
     main._opp_note_orders = lambda *a, **k: None
+    # Phase-D note: MK-3/MK-5 made flow-consumers decision-relevant, so
+    # the EMA fallback state (_MARKET_MEM) must reset between runs exactly
+    # like the baseline -- otherwise day-boundary deltas differ
+    main._OPP_OBSERVER.clear()
+    main._MARKET_MEM.clear()
+    main._STATE.clear()
+    main._ROUTE_STATE.clear()
+    main._TARGETS.clear()
+    main._PLAN_MEM.clear()
+    main._STAGE_MEM.clear()
+    main._MISSION_SHADOW.clear()
+    main._SELL_PLAN_MEM.clear()
+    main._SELL_BATCH_EMITTED.clear()
+    main._INTERFERENCE_MEM.clear()
+    del main._INTERFERENCE_LOG[:]
+    main.OBSERVER_ENABLED = False
     try:
         stubbed = run_and_collect()
     finally:

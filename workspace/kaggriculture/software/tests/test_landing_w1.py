@@ -254,8 +254,10 @@ def test_interference_shadow_inert_but_logging():
            "market": {"prices": {"MILK": 160}},
            "town": {"unlocked_shops": ["SMOOTHIE_SHOP"]}}
     trig = main._interference_shadow(obs, opp, 10, {"MILK": 160})
-    assert main.INTERFERENCE_ARMED is False
-    assert trig is False                      # never armed -> inert
+    # Phase-D: MK-5 vehicle 1 is ARMED -- single-day trigger still returns
+    # False (needs 2 consecutive confirm days); the inert->armed change is
+    # pinned in test_market_w2
+    assert main.INTERFERENCE_ARMED is True
     assert main._INTERFERENCE_LOG and \
         main._INTERFERENCE_LOG[-1]["r_opp"] > 0
 

@@ -212,7 +212,10 @@ def test_interference_confirm_days_and_reset():
                               obs11["market"]["prices"])
     rec2 = main.interference_shadow_log()[-1]
     assert rec2["streak"] == 2 and rec2["confirmed"] is True
-    assert rec2["armed"] is False              # still inert (MK-5 pending)
+    # Phase-D: MK-5 vehicle 1 (inventory dump) is ARMED -- the shadow's
+    # return now means "confirmed and armed"; the fire/no-fire decision
+    # lives in _interference_orders' three gates
+    assert rec2["armed"] is True
     # a quiet day resets the streak
     obs12 = _obs(_farm(_rows10()), opp=_farm(_rows10()), day=12,
                  prices={"MILK": 160, "STRAWBERRY": 120, "WOOL": 150},

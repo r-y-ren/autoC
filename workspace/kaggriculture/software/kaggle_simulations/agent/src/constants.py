@@ -631,7 +631,10 @@ STAGE_P2_FREEZE = 14           # d14 结构冻结
 STAGE_P3_END = 21
 STAGE_P4_END = 27
 # ---- 干扰模块（market §3；MK-4 影子/MK-5 带闸，触发器先影子）----
-INTERFERENCE_ARMED = False     # MK-5 上线前恒 False（三闸+影子门先行）
+INTERFERENCE_ARMED = True      # MK-5 武装（2026-09-02 Phase-D）：载体 1
+                                # （现有库存倾销，零 capex/当天/可逆）带三闸
+                                # 上线；载体 2-4（萝卜伏击/一次性羊群/镜像
+                                # 种植）需 capex 窗口，留线上裁决后启用
 INTERFERENCE_MARGIN = 2000     # R_opp > R_us + 此值 才触发（连续 2 天）
 INTERFERENCE_CONFIRM_DAYS = 2
 INTERFERENCE_BUDGET_FRAC = 0.15   # 干扰预算 ≤ 容量 15%（§3.5 闸 2）
