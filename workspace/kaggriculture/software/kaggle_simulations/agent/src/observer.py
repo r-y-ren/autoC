@@ -99,13 +99,20 @@ _MARKET_MEM = {}
 
 
 def _market_flow(player, day, prices):
-    """EMA of the observed net inventory flow per item (units/day).
+    """Net inventory flow per item (units/day).  Positive = glut building.
 
-    The day-over-day price move, inverted through the engine curve, IS the
-    market's net supply-minus-demand (ours + the opponent's production and
-    sales, minus town consumption).  Positive flow = glut building.
+    OBS-2 seamless switch: when the observer's day account has run for
+    this player-day it publishes the Ch0-EXACT flow (ΔMarketInv − our_net
+    + absorb, integers) here under the same shape, and that is what every
+    consumer (_project_price, curve gate, sell planner, interference)
+    reads.  Legacy path (price inversion EMA, now the Ch1 cross-check
+    signal) remains as the fallback when the observer is disabled or has
+    not accounted the day yet.
     """
     st = _MARKET_MEM.get(player)
+    if st is not None and st.get("day") == day \
+            and st.get("source") == "ch0":
+        return dict(st.get("flow", {}))
     if st is None or st.get("day", -1) >= day:
         _MARKET_MEM[player] = {"day": day, "prices": dict(prices),
                                "flow": (st or {}).get("flow", {})}
@@ -127,23 +134,47 @@ def _market_flow(player, day, prices):
 
 
 # ===========================================================================
-# 【中文】OBS-1..3 四通道对手供给观测器（opp_supply_observer_design v2，2026-09-02 落地）
+# 【中文】OBS-1..3 四通道对手供给观测器（opp_supply_observer_design v2，
+# 2026-09-02 W1 落地 + W2 完善波）
 # ---------------------------------------------------------------------------
-# 工程契约（文档 §3）：
-#   * 纯旁路 _OPP_OBSERVER——fail-open，任何异常整体吞掉并置 conf=0，绝不影响决策；
-#   * 日账时序：每日首个动作回合做快照+差分+积分（与 _macro_plan 日缓存同型）；
-#   * 只读接口一律 est_ 前缀（M-H NO-GO 边界：replay 私有字段仅离线校验器可读，
-#     在线运行时只消费合法公开字段的估计值）；
-#   * Ch0 obs.market.inventory 直读（引擎 :951-956 每回合赋给双方）为主通道，
-#     Ch1 价格反解（_market_flow，上方原函数不动）降级为交叉校验；
-#   * Ch2 钱账：Δmoney+可见支出=卖货收入（对手 money/hires/land/animals 公开）；
-#   * Ch3 tile 记账：收割量/投喂量为公开整数账（yield_units/fed_today 逐 tile
-#     可读），仓库估计 opp_held = Σ(收割+外购−卖出−投喂)（E2 棚溢出高估、
-#     E5 种子跨日为已知有界误差，conf 联动下调）。
-# 消费方（文档 §4）：P4 三档出清、争议线零囤货连续化、_project_price 对手项、
-#   干扰触发器 R_opp——全部经 est_* getter，不直接读状态。
+# 工程契约（文档 §3，W2 补齐项标注）：
+#   * 纯旁路 _OPP_OBSERVER——fail-open，任何异常整体吞掉并置 conf=0；
+#     [W2] 独立开关 OBSERVER_ENABLED / reset_observer / observer_snapshot
+#     （照 telemetry 模式：OB-3.1 全席）；
+#   * 日账时序：每日首个动作回合做快照+差分+积分；
+#   * 只读接口一律 est_ 前缀（M-H NO-GO 边界：replay 私有字段仅离线校验器
+#     可读——scripts/observer_v0_validator.py，在线只消费合法公开字段）；
+#   * Ch0 obs.market.inventory 直读为主通道；[W2] Ch0 精确流写入 _MARKET_MEM
+#     （OBS-2：_market_flow 无感切换，价格反解降级为 Ch1 交叉校验+残差监控
+#     last_resid，持续非零=引擎/镜像失配或地板价饱和告警）；
+#   * [W2] E1/E6 双口径 our_net：地板价（$1）卖出只动钱不动库存——
+#     sold_floor 单列，Ch0 只记入库存的贡献件数；
+#   * Ch2 钱账：[W2] 从"只记 Δmoney"升格为支出分解（雇工 fib/买地 Δ象限×
+#     价格/新放畜 tile×cost/新种 tile×seed 上界/Ch0 负流×均价）→
+#     sell_revenue 估计，供与 Ch0 卖出件数交叉验证（R_opp 误差界定基）；
+#   * Ch3 tile 记账：收割/投喂公开整数账 → opp_held 积分（E2 棚溢出高估、
+#     E5 种子跨日为有界误差，conf 联动）；[W2] prod_horizon 缓存 →
+#     est_opp_supply_horizon 真实现（held+产期表未来产出，OB-3.4）。
+# 消费方（文档 §4）：P4 三档出清、争议线零囤货连续化、_project_price 对手项
+#   （经 Ch0 流）、干扰触发器 R_opp——全部经 est_* getter / _market_flow，
+#   不直接读状态；V2 消费以 V0 门禁（scripts/observer_v0_validator.py）+
+#   线上 A/B 为裁决轴。
 # ===========================================================================
+OBSERVER_ENABLED = True       # OB-3.1 独立开关（False=旁路全静默，flow 回退 EMA）
 _OPP_OBSERVER = {}
+
+
+def reset_observer():
+    """OB-3.1: detach both seats' observer state (local tooling)."""
+    _OPP_OBSERVER.clear()
+
+
+def observer_snapshot(player=None):
+    """OB-3.1: deep-copied observer state for diagnostics/telemetry."""
+    import copy as _copy
+    if player is None:
+        return _copy.deepcopy(_OPP_OBSERVER)
+    return _copy.deepcopy(_OPP_OBSERVER.get(player))
 
 
 def _opp_observer_state(player, day, hour):
@@ -152,34 +183,43 @@ def _opp_observer_state(player, day, hour):
     if st is None or day < st.get("day", day) or (
             day == st.get("day", day) and hour < st.get("hour", hour)):
         st = {"day": day, "hour": hour, "accounted_day": -1,
-              "inv_prev": {}, "money_prev": None,
+              "inv_prev": {}, "prices_prev": {}, "money_prev": None,
               "tile_yield_prev": {}, "held": {}, "flow_hist": {},
-              "sold_today": {}, "bought_today": {}, "conf": {},
-              "last_resid": {}}
+              "sold_today": {}, "bought_today": {}, "sold_floor": {},
+              "conf": {}, "last_resid": {}, "prod_horizon": {},
+              "quads_prev": None, "animals_prev": None}
         _OPP_OBSERVER[player] = st
     st["day"] = day
     st["hour"] = hour
     return st
 
 
-def _opp_note_orders(player, day, hour, orders):
+def _opp_note_orders(player, day, hour, orders, prices=None):
     """Bypass hook (fail-open): record OUR accepted SELL/BUY_PRODUCT units.
 
-    E6: only quoted->1 SELLs add market inventory; floor-price sells move
-    money but not inventory (both tracked here as one bucket -- the E1/E6
-    correction lands with the offline validator, V0).
+    E1/E6 dual ledger: only quoted-above-$1 SELLs add market inventory;
+    floor-price sells move money but NOT inventory, so they are bucketed
+    separately (sold_floor) and excluded from the Ch0 inventory equation.
     """
+    if not OBSERVER_ENABLED:
+        return
     try:
         st = _opp_observer_state(player, day, hour)
         for o in orders or []:
             if not isinstance(o, list) or len(o) < 3 or not o[0]:
                 continue
+            n = o[2] if isinstance(o[2], (int, float)) else 0
             if o[0] == "SELL" and o[1] in BASE_PRICE:
-                n = o[2] if isinstance(o[2], (int, float)) else 0
-                st["sold_today"][o[1]] = st["sold_today"].get(o[1], 0) + n
+                price = _get(prices or {}, o[1], 99)
+                if price <= PRICE_FLOOR_EMB:
+                    st.setdefault("sold_floor", {})[o[1]] = \
+                        st.get("sold_floor", {}).get(o[1], 0) + n
+                else:
+                    st["sold_today"][o[1]] = \
+                        st["sold_today"].get(o[1], 0) + n
             elif o[0] == "BUY_PRODUCT" and o[1] in BASE_PRICE:
-                n = o[2] if isinstance(o[2], (int, float)) else 0
-                st["bought_today"][o[1]] = st["bought_today"].get(o[1], 0) + n
+                st["bought_today"][o[1]] = \
+                    st["bought_today"].get(o[1], 0) + n
     except Exception:
         return
 
@@ -244,6 +284,8 @@ def _opp_production_night(farm, day):
 
 def _opp_observer_update(obs, own_private):
     """Day-account pass (fail-open).  Once per day, first action turn."""
+    if not OBSERVER_ENABLED:
+        return
     try:
         player = _get(obs, "player", 0)
         day = _get(obs, "day", 0)
@@ -259,11 +301,22 @@ def _opp_observer_update(obs, own_private):
                 break
         market = _get(obs, "market", {}) or {}
         inv = dict(_get(market, "inventory", {}) or {})
+        prices_now = dict(_get(market, "prices", {}) or {})
         shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
-        absorb = _town_daily_demand(shops)
+        # E3 calibration: the ΔInv window covers YESTERDAY (prev h0 -> now),
+        # and shops unlock at EOD -- so the window's absorption must use the
+        # shop set as of YESTERDAY's snapshot, not today's (unlock-day ±6/±12
+        # mis-account, V0-diagnosed).  NB: shops_prev == [] is a VALID
+        # yesterday-set -- an empty list must not fall through to today's.
+        shops_prev = st.get("shops_prev")
+        absorb = _town_daily_demand(
+            shops_prev if shops_prev is not None else shops)
         prev_inv = st["inv_prev"]
         sold = st["sold_today"]
         bought = st["bought_today"]
+        first_pass = st.get("initialized") is not True
+        ch0_flow = {}
+        ch1_implied = {}
         for item in BASE_PRICE:
             # ---- Ch0: exact integer flow (direct inventory read) ----
             opp_net = None
@@ -271,6 +324,13 @@ def _opp_observer_update(obs, own_private):
                 our_net = sold.get(item, 0) - bought.get(item, 0)
                 opp_net = (inv[item] - prev_inv[item]) - our_net \
                     + absorb.get(item, 0)
+                ch0_flow[item] = float(opp_net)
+            # ---- Ch1 cross-check: price-inversion implied delta ----
+            if item in MARKET_PARAMS_EMB and item in prices_now \
+                    and item in st.get("prices_prev", {}):
+                ch1_implied[item] = \
+                    _offset_from_price(item, prices_now[item]) - \
+                    _offset_from_price(item, st["prices_prev"][item])
             # ---- Ch3: harvest ledger from public tiles ----
             y_now = st.get("_opp_yields", {}).get(item, 0)
             y_prev = st["tile_yield_prev"].get(item, 0)
@@ -294,23 +354,77 @@ def _opp_observer_update(obs, own_private):
                     sold_units = max(0, opp_net)
                 held_delta = harvested - sold_units
             st["held"][item] = max(0, st["held"].get(item, 0) + held_delta)
-            if opp_net is not None:
+            if opp_net is not None and not first_pass:
                 hist = st["flow_hist"].setdefault(item, [])
                 hist.append(opp_net)
                 st["conf"].setdefault(item, 1.0)
-        # ---- Ch2: money cross-check (revenue plausibility bookkeeping) ----
+        # ---- OBS-2: publish the Ch0 flow under _market_flow's shape ----
+        # (seamless switch: every consumer reads the same {"item": units}
+        # dict; the legacy EMA remains the fallback when the observer is
+        # off or the day account has not run yet).  The FIRST pass is a
+        # warm-up: snapshots only, no flow/held output (the day-0 window's
+        # center-draw phase is not alignable -- E4, V0-diagnosed +1/item).
+        if first_pass:
+            st["held"] = {}
+        elif ch0_flow or prev_inv:
+            _MARKET_MEM[player] = {"day": day, "prices": dict(prices_now),
+                                   "flow": ch0_flow, "source": "ch0"}
+        # ---- Ch1 residual monitor (persistent non-zero = mirror/engine
+        # mismatch or floor-price saturation -> conf downgrade) ----
+        st["last_resid"] = {item: round(ch0_flow[item] - ch1_implied[item], 2)
+                            for item in ch0_flow if item in ch1_implied}
+        # ---- Ch2: money account with spend decomposition ----
         if opp is not None and st["money_prev"] is not None:
             dm = _get(opp, "money", 0.0) - st["money_prev"]
             hands_now = len(_get(opp, "hands", []) or [])
             hire_spend = _FIB_CUM[hands_now] if hands_now < len(_FIB_CUM) \
                 else 0
-            st["ch2"] = {"dmoney": dm, "hire_spend": hire_spend}
+            quads_now = len(_get(opp, "unlocked_quadrants", ["NW"]) or [])
+            land_spend = 0
+            if st.get("quads_prev") is not None and quads_now > \
+                    st["quads_prev"]:
+                land_spend = sum(LAND_PRICES_EMB[st["quads_prev"]:
+                                                 quads_now])
+            animals_now = 0
+            plants_today = 0
+            for row in _get(opp, "tiles", []) or []:
+                for tile in row:
+                    if not isinstance(tile, dict):
+                        continue
+                    if "animal" in tile:
+                        animals_now += 1
+                    elif _get(tile, "kind", "") == "PLANT" and \
+                            _get(tile, "planted_day", -1) == day:
+                        plants_today += 1
+            animal_spend = 0
+            if st.get("animals_prev") is not None:
+                animal_spend = max(0, animals_now - st["animals_prev"]) * \
+                    min(a["cost"] for a in ANIMALS.values())
+            seed_spend_est = plants_today * \
+                max(c["seed"] for c in CROPS.values())
+            buy_spend_est = sum(
+                max(0, -v) * _get(prices_now, k, BASE_PRICE.get(k, 0))
+                for k, v in ch0_flow.items())
+            st["ch2"] = {"dmoney": dm, "hire_spend": hire_spend,
+                         "land_spend": land_spend,
+                         "animal_spend_est": animal_spend,
+                         "seed_spend_est": seed_spend_est,
+                         "buy_spend_est": round(buy_spend_est, 1),
+                         "sell_revenue_est": round(
+                             dm + hire_spend + land_spend + animal_spend
+                             + seed_spend_est + buy_spend_est, 1)}
+            st["quads_prev"] = quads_now
+            st["animals_prev"] = animals_now
         # roll snapshots for tomorrow
         st["accounted_day"] = day
+        st["initialized"] = True
         st["inv_prev"] = inv
+        st["prices_prev"] = prices_now
+        st["shops_prev"] = list(shops)
         st["money_prev"] = _get(opp, "money", None) if opp else None
         st["sold_today"] = {}
         st["bought_today"] = {}
+        st["sold_floor"] = {}
         if opp is not None:
             yields = _opp_tile_yields(opp)
             st["_opp_yields"] = yields
@@ -318,6 +432,8 @@ def _opp_observer_update(obs, own_private):
             st["tile_yield_prev"] = {
                 k: v for k, v in yields.items() if k != "__fed__"}
             st["_opp_prod"] = _opp_production_night(opp, day)
+            st["prod_horizon"] = _opp_production_calendar(opp, day,
+                                                          horizon=7)
     except Exception:
         try:
             st = _OPP_OBSERVER.get(_get(obs, "player", 0))
@@ -351,16 +467,26 @@ def est_opp_held(item):
 
 
 def est_opp_conf(item):
-    """Confidence in [0,1] for `item` estimates (0 after any failure)."""
+    """Confidence in [0,1] for `item` estimates (0 after any failure).
+
+    Capped by OBS_HELD_CONF_CAP: the V0 offline validator's held-MAE table
+    is frozen into per-item caps (observer §6: coefficients are decided
+    OFFLINE from the corpus -- nothing is learned online)."""
     for st in _OPP_OBSERVER.values():
         if item in st.get("conf", {}):
-            return st["conf"][item]
+            return min(st["conf"][item], OBS_HELD_CONF_CAP.get(item, 1.0))
     return 0.0
 
 
 def est_opp_supply_horizon(item, horizon_days=7):
-    """Held now (production-side calendar is served by the daily snapshot)."""
-    return est_opp_held(item)
+    """Held now + the production-side calendar's next `horizon_days` days
+    (OB-3.4 real form: 在持 + 产期表未来产出，公开 tiles 缓存于日账)."""
+    held = est_opp_held(item) or 0
+    for st in _OPP_OBSERVER.values():
+        daily = (st.get("prod_horizon") or {}).get(item)
+        if daily:
+            return held + sum(daily[:max(1, int(horizon_days))])
+    return held
 
 
 # 【中文】对手上市日历（branch plan §7.4 轻量前置，纯公开信息）：

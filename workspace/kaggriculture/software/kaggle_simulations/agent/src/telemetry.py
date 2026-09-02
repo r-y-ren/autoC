@@ -105,6 +105,9 @@ def _telemetry_day_template():
         # ---- market W2: dawn sell-plan shadow (MK-2, §2) ----
         "sell_plan_lines": 0,
         "sell_plan_clear": 0,
+        # ---- observer W2 (OB-3.7): Ch1 residual + confidence ----
+        "obs_max_resid": None,
+        "obs_conf_mean": None,
     }
 
 
@@ -302,6 +305,19 @@ def _telemetry_record_turn(obs, farm, private, actions, tasks, trace, orders):
                 daily["sell_plan_lines"] = len(lines)
                 daily["sell_plan_clear"] = sum(
                     1 for v in lines.values() if v.get("verdict") == "clear")
+        except Exception:
+            pass
+        # observer W2 (OB-3.7): Ch1 residual monitor + mean confidence
+        try:
+            obs_state = observer_snapshot(_get(obs, "player", 0)) or {}
+            resid = obs_state.get("last_resid") or {}
+            if resid:
+                daily["obs_max_resid"] = max(abs(v) for v in
+                                             resid.values())
+            conf = obs_state.get("conf") or {}
+            if conf:
+                daily["obs_conf_mean"] = round(
+                    sum(conf.values()) / len(conf), 3)
         except Exception:
             pass
         cross_choices = int((trace or {}).get("cross_quadrant", 0))

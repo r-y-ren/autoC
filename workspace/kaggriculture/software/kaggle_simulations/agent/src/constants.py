@@ -648,6 +648,7 @@ P4_MID_HELD = 15               # 15-40 → d26-27 标准档；<15 从容档
 # 抛光与喂食腿/执行器断言与幂等闸）——全部只服务影子件，执行权威仍在 v72
 # ---------------------------------------------------------------------------
 SHED_CAPACITY = 100            # 引擎镜像 shedCapacity（EOD 预算不等式的界）
+LAND_PRICES_EMB = (1000, 2000, 4000)   # 引擎镜像 LAND_PRICES（Ch2 钱账分解）
 # ---- §3.1 分区与溢出 ----
 OVERFLOW_IMBALANCE_TASKS = 3   # 负载差 ≤ 此任务数即视为均衡，停止溢出搬运
 # ---- §3.2 成路与喂食腿 ----
@@ -658,3 +659,13 @@ EXECUTOR_EOD_ASSERT = True     # EOD 投影断言（棚仓+随身 > 100 → REPL
 EXECUTOR_D1_ASSERT = True      # D1 站点 ETA 断言（ETA > deadline → REPLAN）
 # ---- branch §8.2 熔断回退 ----
 FUSE_MONEY_FLOOR = 300         # 段内钱包 < 此值 → 立即降 DEFENSIVE 运转参数包
+# ---- OBS v2：est_opp_conf 的离线定死置信帽（observer §6"nothing is
+# learned online"；出典 V0 验证器 gate-3 held MAE 表，2026-09-02 线上
+# 10 局 + tetsuya 6 局双席 630+ 席日：MAE ≥3 的品帽 0.4——消费方
+# （P4 三档/horizon）对 conf≥0.5 的门自动回退门控行为）----
+OBS_HELD_CONF_CAP = {
+    "WHEAT": 0.4,        # MAE 52.3（零库存种子流/地板价段污染最重）
+    "FERTILIZER": 0.4,   # MAE 8.2（采集侧不可观，原 conf 0.5 再收紧）
+    "MILK": 0.4,         # MAE 4.5
+    "STRAWBERRY": 0.4,   # MAE 7.0
+}

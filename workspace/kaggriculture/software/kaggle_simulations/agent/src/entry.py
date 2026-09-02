@@ -139,8 +139,11 @@ def agent(obs):
                                   "inventory", None) or None)
         orders = budget["accepted"]
 
-        # OBS bypass hook: our accepted SELL/BUY_PRODUCT ledger (Ch0 input).
-        _opp_note_orders(player, day, hour, orders)
+        # OBS bypass hook: our accepted SELL/BUY_PRODUCT ledger (Ch0 input;
+        # prices let the E1/E6 dual ledger split floor-price sells).
+        _opp_note_orders(player, day, hour, orders,
+                         _get(_get(obs, "market", {}) or {}, "prices", {})
+                         or {})
 
         farmer = actions[0] if actions else ["PASS"]
         hands_actions = actions[1:]

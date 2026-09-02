@@ -182,6 +182,9 @@ def test_observer_day_account_and_est():
         "STRAWBERRY": 3, "MILK": 2}
     main._OPP_OBSERVER[0]["money_prev"] = 1000.0
     main._OPP_OBSERVER[0]["sold_today"] = {"MILK": 1}
+    # W2 note: the day account now warms up on its first pass (no
+    # flow/held output) -- the seeded state marks itself initialized
+    main._OPP_OBSERVER[0]["initialized"] = True
     # opponent sells 4 wool overnight (inventory +4) and harvests strawberry
     obs["market"]["inventory"]["WOOL"] = 10004
     for row in opp["tiles"]:
