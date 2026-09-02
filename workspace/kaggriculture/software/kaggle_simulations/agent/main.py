@@ -907,6 +907,20 @@ BUY_CHUNK_MAX_UNITS = 40       # 单回合 BUY_PRODUCT 最大件数（超出跨�
 P4_HEAVY_HELD = 40             # 对手囤货 ≥40u → d25 抢跑档
 P4_MID_HELD = 15               # 15-40 → d26-27 标准档；<15 从容档
 
+# ===========================================================================
+# 【中文】scheduler v1.3 §2-§4 实施旋钮（2026-09-02 W2：任务包全规格/求解器
+# 抛光与喂食腿/执行器断言与幂等闸）——全部只服务影子件，执行权威仍在 v72
+# ---------------------------------------------------------------------------
+SHED_CAPACITY = 100            # 引擎镜像 shedCapacity（EOD 预算不等式的界）
+# ---- §3.1 分区与溢出 ----
+OVERFLOW_IMBALANCE_TASKS = 3   # 负载差 ≤ 此任务数即视为均衡，停止溢出搬运
+# ---- §3.2 成路与喂食腿 ----
+FEED_LEG_CHUNK = 5             # 喂食腿：一次 PICKUP 携带的小麦数（拆腿粒度）
+TWO_OPT_MAX_PASSES = 16        # 同 deadline 类段 2-opt 抛光的迭代上限
+# ---- §4 执行器断言 ----
+EXECUTOR_EOD_ASSERT = True     # EOD 投影断言（棚仓+随身 > 100 → REPLAN）
+EXECUTOR_D1_ASSERT = True      # D1 站点 ETA 断言（ETA > deadline → REPLAN）
+
 # ===== src/telemetry.py =================================================
 
 # ===========================================================================
@@ -999,6 +1013,15 @@ def _telemetry_day_template():
                              "carrot": 0, "herd": 0},
         "weed_tiles": 0,
         "herd_head": 0,
+        # ---- M1/M2 scorecard: dawn mission shadow (scheduler §2/§7) ----
+        # mission_hash is the M2 golden-hash anchor; d1_count/tier_counts
+        # feed the cls-completion and D1-overdue scorecards; cap_util is
+        # the capacity-law utilization band (branch §10.2, 65%-85%).
+        "mission_hash": None,
+        "d1_count": 0,
+        "tier_counts": {},
+        "cap_util": None,
+        "cap_deficit": False,
     }
 
 
@@ -1165,6 +1188,19 @@ def _telemetry_record_turn(obs, farm, private, actions, tasks, trace, orders):
                                      + comps["melon"]
                                      + 0.5 * comps["carrot"]
                                      + 2 * comps["herd"])
+        # M1/M2 scorecard: pull the dawn mission shadow (built once per
+        # player-day by _mission_shadow_update in the entry bypass)
+        try:
+            mission = mission_shadow(_get(obs, "player", 0))
+            if mission is not None and mission.get("day") == day:
+                daily["mission_hash"] = mission.get("mission_hash")
+                daily["d1_count"] = len(mission.get("d1") or [])
+                daily["tier_counts"] = dict(mission.get("tier_counts") or {})
+                daily["cap_util"] = (mission.get("capacity") or {}).get("util")
+                daily["cap_deficit"] = \
+                    mission.get("capacity_deficit") is not None
+        except Exception:
+            pass
         cross_choices = int((trace or {}).get("cross_quadrant", 0))
         daily["cross_quadrant_choices"] += cross_choices
         overdue = {"WATER": 0, "FEED": 0, "CARE": 0}
@@ -3136,24 +3172,39 @@ def _build_tasks(obs, farm, private, day, plan=None):
 
 
 # ===========================================================================
-# 【中文】M2 任务包（scheduler 设计 §2，2026-09-02 影子落地）
+# 【中文】M2 任务包（scheduler 设计 §2，v1.3 全规格，2026-09-02 W2 实装）
 # ---------------------------------------------------------------------------
-# _build_mission：把现行 _build_tasks 的任务表（w/v/red 旧 schema）原位
-# 注解成新 schema（cls/deadline），并产出 D1 集合与容量预检——影子件：
-# agent() 不调用，黄金测试与 M3 求解器消费（scheduler §7 M2 门）。
-# capex 时点收编（§2.3 events）留 M2 切换期——当前仍由市场层管理，三重
-# 前置检查已在其位落地（market 侧）。
+# _build_mission：黎明一次的任务包。把 _build_tasks 的任务表（w/v/red 旧
+# schema）升格为全规格 schema：cls 工作类（OBLIGATION/YIELD/BONUS/LOGISTICS）
+# + tier=D1-D4 天级死线分级（§2.2：D1 今夜必死 h21/h16、D2 宽限日 streak=0、
+# D3 产钱窗口（F5 窗口浇水）、D4 收割/照料/加成/DIG）+ deps（FEED→麦 PICKUP）
+# + scenario。并产出三件黎明解：
+#   * 喂食前置（§2.3）：棚仓+随身小麦 ≥ D1∪D2 牲畜数，不足注入 h0
+#     BUY_PRODUCT WHEAT（优先级 95 语义）事件；
+#   * EOD 预算不等式（§2.4）：Σ(棚仓−计划卖出+计划收割入仓) ≤ 100——影子
+#     期保守取计划卖出=0（市场层卖出在任务包之后成形），溢出注入 log 曲线
+#     小麦优先的 h6 增卖事件；
+#   * 容量前馈（§2.6）：util > 0.85 写 capacity_deficit（超限 capex 就地
+#     缩量的标记，策略层禁增闭环的写侧）；util < 0.65 报 capacity_slack
+#     （按单位日收入降序补线的余额，兜底=小麦）。
+# 黄金纪律：mission_hash 对同一观测确定（M2 黄金哈希冻结的锚）。
+# 仍是影子件：执行权威在 _schedule_units_v72，M4 经 ROUTE_EXECUTOR_ENABLED
+# 切换；entry 每日黎明经 _mission_shadow_update 旁路构建（fail-open，
+# 仅 telemetry 与 M3 harness 消费，不碰决策路径）。
 # ===========================================================================
+import hashlib
+import json
 
 _MISSION_DEADLINE_HOURS = {"WATER": 21, "FEED": 16, "CARE": 23,
                            "HARVEST": 21, "PLANT": 16}
+_MISSION_SHADOW = {}
 
 
 def _mission_cls(task):
-    """旧任务 → 新 cls 分级（scheduler §2.2 D1-D4）。"""
+    """旧任务 → 工作类分级（与 tier 正交：cls=干什么，tier=多急）。"""
     op = (task.get("act") or [None])[0]
     if task.get("red"):
-        return "OBLIGATION"       # 现行红线标记 = D1 今夜必死
+        return "OBLIGATION"       # 现行红线标记 = 今夜必死义务
     if op == "HARVEST":
         return "YIELD"
     if op in ("CARE", "DIG", "COLLECT_FERTILIZER"):
@@ -3161,37 +3212,172 @@ def _mission_cls(task):
     return "LOGISTICS"
 
 
-def _build_mission(obs, farm, private, day, plan, tasks):
-    """Shadow M2: annotate the live task table into the mission schema.
+def _mission_tile_map(farm):
+    tiles = _get(farm, "tiles", []) or []
+    out = {}
+    for y, row in enumerate(tiles):
+        for x, tile in enumerate(row):
+            if isinstance(tile, dict):
+                out[(x, y)] = tile
+    return out
 
-    Returns {"day", "cls_counts", "d1", "tasks", "capacity"} where d1 is
-    the dies-tonight key set (scheduler §2.2) and capacity carries the
-    labor-gate verdict (branch §5.3) for the M2/M3 harness.
+
+def _mission_tier(task, tile, day):
+    """D1-D4 天级死线分级（scheduler §2.2；red 标记与引擎 streak 双源）。"""
+    op = (task.get("act") or [None])[0]
+    if task.get("red"):
+        return "D1"
+    if op == "WATER":
+        if tile is not None and (
+                _get(tile, "consecutive_unwatered", 0) >= 1
+                or _get(tile, "planted_day", -1) == day):
+            return "D1"           # 今夜枯死（F2：当日新种 streak=1 同级）
+        if tile is not None:
+            crop = _get(tile, "crop", "")
+            cd = CROPS.get(crop)
+            if cd and not cd["ongoing"]:
+                age = day - _get(tile, "planted_day", day)
+                ws, we = _window(crop)
+                if ws <= age <= we:
+                    return "D3"   # 产钱窗口（F5：漏浇=永久减产）
+        return "D2"               # 宽限日（streak=0，正常仍当日做）
+    if op == "FEED":
+        if tile is not None and _get(tile, "consecutive_unfed", 0) >= 1:
+            return "D1"           # 今夜逃亡（F3）
+        return "D2"
+    return "D4"                   # 收割/照料/加成/DIG/后勤/建设
+
+
+def _build_mission(obs, farm, private, day, plan, tasks, planned_sell=None):
+    """Dawn mission package (scheduler §2 full spec; shadow).
+
+    Returns {"day", "hour", "player", "scenario", "cls_counts",
+    "tier_counts", "d1", "tasks", "events", "eod", "capacity",
+    "capacity_deficit", "capacity_slack", "mission_hash"} -- d1 is the
+    dies-tonight key set (§2.2), events carry the §2.3/§2.4 dawn fixes,
+    and capacity_deficit is the §2.6 write-side of the feed-forward loop.
     """
     hour = _get(obs, "hour", 0)
+    player = _get(obs, "player", 0)
+    plan = plan or {}
+    tile_map = _mission_tile_map(farm)
+    wheat_pickup_keys = [t.get("key") for t in (tasks or [])
+                         if (t.get("act") or [None])[0] == "PICKUP"
+                         and len(t.get("act") or []) > 1
+                         and t["act"][1] == "WHEAT"]
+
     out_tasks = []
     d1 = []
     cls_counts = {}
+    tier_counts = {}
+    feed_d12 = 0
+    harvest_in = 0
     for task in tasks or []:
         cls = _mission_cls(task)
         op = (task.get("act") or [None])[0]
-        deadline = _MISSION_DEADLINE_HOURS.get(op)
-        if cls == "OBLIGATION":
-            deadline = _MISSION_DEADLINE_HOURS.get(op, 21)
+        tile = tile_map.get((task.get("x"), task.get("y")))
+        tier = _mission_tier(task, tile, day)
         t = dict(task)
         t["cls"] = cls
-        t["deadline"] = deadline
-        t["deps"] = []
+        t["tier"] = tier
+        t["deadline"] = _MISSION_DEADLINE_HOURS.get(op)
+        t["deps"] = list(wheat_pickup_keys) if op == "FEED" else []
+        t["scenario"] = None
         out_tasks.append(t)
         cls_counts[cls] = cls_counts.get(cls, 0) + 1
-        if cls == "OBLIGATION":
+        tier_counts[tier] = tier_counts.get(tier, 0) + 1
+        if tier == "D1":
             d1.append(task.get("key"))
-    cap_ok, util = _capacity_gate(farm, private)
+        if op == "FEED" and tier in ("D1", "D2"):
+            feed_d12 += 1
+        if op == "HARVEST" and tile is not None:
+            harvest_in += int(_get(tile, "yield_units", 0) or 0)
+
+    shed = _get(private, "shed", {}) or {}
+    inventories = _get(private, "inventories", []) or []
+    wheat_avail = int(_get(shed, "WHEAT", 0) or 0) + sum(
+        int(_get(inv, "WHEAT", 0) or 0) for inv in inventories if inv)
+
+    events = []
+    # §2.3 喂食前置：缺口注入 h0 补麦事件（市场层优先级 95 语义）
+    if feed_d12 > wheat_avail:
+        events.append({"h": 0, "op": "BUY_PRODUCT", "item": "WHEAT",
+                       "qty": feed_d12 - wheat_avail, "priority": 95,
+                       "why": "feed_precondition"})
+    # §2.4 EOD 预算：保守 planned_sell=0（影子期市场卖出晚于任务包成形）
+    shed_count = sum(int(v) for v in shed.values()
+                     if isinstance(v, (int, float)) and v > 0)
+    planned_sell = 0 if planned_sell is None else int(planned_sell)
+    eod_projected = shed_count - planned_sell + harvest_in
+    eod_overflow = max(0, eod_projected - SHED_CAPACITY)
+    if eod_overflow > 0:
+        events.append({"h": 6, "op": "SELL", "item": "WHEAT",
+                       "qty": min(eod_overflow,
+                                  int(_get(shed, "WHEAT", 0) or 0)),
+                       "why": "eod_budget"})
+
+    # §2.6 容量前馈（写侧）：>0.85 deficit、<0.65 slack（空 plan 归一为
+    # None：_crew_target 只接受完整计划 dict 或 None）
+    cap_ok, util = _capacity_gate(farm, private, day=day,
+                                  plan=(plan or None))
     units, comps = _capacity_units(farm, private)
-    return {"day": day, "hour": hour, "cls_counts": cls_counts,
-            "d1": d1, "tasks": out_tasks,
+    law = _capacity_law_max(len(_get(farm, "hands", []) or []))
+    capacity_deficit = None
+    capacity_slack = None
+    if util > CAP_USE_MAX:
+        capacity_deficit = {"type": "over", "util": round(util, 3),
+                            "units": units, "law": round(law, 1)}
+    elif util < CAP_USE_MIN:
+        capacity_slack = {"room_units": round(law * CAP_USE_MIN - units, 1),
+                          "util": round(util, 3)}
+
+    scenario = {"stage": plan.get("stage"), "opp_class": plan.get("opp_class"),
+                "c_branch": plan.get("c_branch")}
+    canon = {"day": day,
+             "tasks": [[str(t["key"]), t["cls"], t["tier"], t["deadline"],
+                        round(float(t.get("v") or 0), 3)]
+                       for t in out_tasks],
+             "events": events, "d1": [str(k) for k in d1]}
+    mission_hash = hashlib.sha256(
+        json.dumps(canon, sort_keys=True, ensure_ascii=False)
+        .encode("utf-8")).hexdigest()[:16]
+    return {"day": day, "hour": hour, "player": player,
+            "scenario": scenario, "cls_counts": cls_counts,
+            "tier_counts": tier_counts, "d1": d1, "tasks": out_tasks,
+            "events": events,
+            "eod": {"projected": eod_projected, "planned_sell": planned_sell,
+                    "harvest_in": harvest_in, "overflow": eod_overflow},
             "capacity": {"ok": cap_ok, "util": round(util, 3),
-                         "units": units, "components": comps}}
+                         "units": units, "components": comps,
+                         "law": round(law, 1)},
+            "capacity_deficit": capacity_deficit,
+            "capacity_slack": capacity_slack,
+            "mission_hash": mission_hash}
+
+
+def _mission_shadow_update(player, day, hour, obs, farm, private, plan,
+                           tasks):
+    """Dawn bypass: build the mission once per player-day (fail-open).
+
+    Consumed by telemetry and the M3 harness only; never touches the
+    decision path.  Clock rollback = new episode -> rebuild.
+    """
+    st = _MISSION_SHADOW.get(player)
+    if st is not None and st.get("day") == day \
+            and hour >= st.get("hour", 0):
+        return st.get("mission")
+    try:
+        mission = _build_mission(obs, farm, private, day, plan, tasks)
+    except Exception:
+        mission = None
+    _MISSION_SHADOW[player] = {"day": day, "hour": hour, "mission": mission}
+    return mission
+
+
+def mission_shadow(player):
+    """Read-only getter for the current dawn mission (or None)."""
+    st = _MISSION_SHADOW.get(player)
+    return (st or {}).get("mission")
 
 # ===== src/solver.py =================================================
 
@@ -3693,20 +3879,138 @@ def _schedule_units(obs, farm, private, day, tasks):
 
 
 # ===========================================================================
-# 【中文】M3 路线求解器（scheduler 设计 §3，2026-09-02 影子落地）
+# 【中文】M3 路线求解器（scheduler 设计 §3，v1.3 全规格，2026-09-02 W2 实装）
 # ---------------------------------------------------------------------------
-# _solve_routes：黎明一次求解的路线承诺——负载均衡分区（§3.1，全员自仓口
-# 出生，家区不可用首格判定）→ 簇内 EDF×价值密度排序（§3.2）→ 最近邻成路
-# → 同 deadline 类段 2-opt 抛光（换位后重验 ETA）。影子件：不改任何现行
-# 行为；M3 门 = 与 v72 的分歧统计（连续性/PASS 显著优才准 M4 切换）。
-# 确定性：全部排序键终结于 (key) 字典序（黄金测试前提）。
+# _solve_routes：黎明一次求解的路线承诺——
+#   分区（§3.1）：任务簇 =（象限 × tier）× 工作量，LPT 负载均衡指派给工人
+#     （工人黎明统一自仓口出发，前 1-3 回合转场）；溢出跨区 = 唯一跨区机制，
+#     按（密度 − 跨区行走成本）从最载工人搬给最闲工人，D1 义务永不迁移；
+#   成路（§3.2）：簇内 EDF×密度×老化最近邻 → 同 deadline 类段 2-opt 抛光
+#     （只接受严格改进，确定性）→ 喂食腿（PICKUP 仓口链，每
+#     FEED_LEG_CHUNK 麦一取拆腿；任务表自带麦 PICKUP 已覆盖时不合成）
+#     → 逐站 ETA 重验（超期非 D1 丢弃、D1 超期置 infeasible）。
+# 确定性契约：全部排序键终结于任务 key 的字符串字典序（黄金测试前提）。
+# 影子件：不改任何现行行为；M3 门 = 与 v72 的分歧统计
+# （scripts/solver_shadow_stats.py），连续性/PASS 显著优才准 M4 切换。
 # ===========================================================================
 
-def _solve_routes(farm, private, day, tasks, aging=None):
-    """Shadow M3: per-worker ordered route commitments with ETAs.
+def _seg_len(seq, start):
+    cx, cy = start
+    total = 0
+    for t in seq:
+        total += _dist(cx, cy, t["x"], t["y"])
+        cx, cy = t["x"], t["y"]
+    return total
 
-    Returns {"routes": [ {worker, sector, stops:[keys], etas:[hours]} ],
-             "feasible": bool, "dropped": [keys]}.
+
+def _two_opt_segment(seg, start):
+    """2-opt polish inside ONE deadline-class segment (§3.2).
+
+    Reverse substrings, accept strict total-distance improvements only;
+    the scan order and the strict-improvement rule make it deterministic.
+    """
+    if len(seg) < 3:
+        return list(seg)
+    best = list(seg)
+    best_len = _seg_len(best, start)
+    improved = True
+    passes = 0
+    while improved and passes < TWO_OPT_MAX_PASSES:
+        improved = False
+        passes += 1
+        for i in range(len(best)):
+            for j in range(i + 1, len(best)):
+                cand = best[:i] + best[i:j + 1][::-1] + best[j + 1:]
+                cand_len = _seg_len(cand, start)
+                if cand_len < best_len - 1e-9:
+                    best, best_len = cand, cand_len
+                    improved = True
+    return best
+
+
+def _two_opt_segments(ordered, start):
+    """Apply §3.2 polish to each contiguous same-tier run (order kept)."""
+    if len(ordered) < 3:
+        return list(ordered)
+    segments = []
+    for t in ordered:
+        if segments and segments[-1][0] == t.get("tier"):
+            segments[-1][1].append(t)
+        else:
+            segments.append((t.get("tier"), [t]))
+    out = []
+    cur = start
+    for _tier, seg in segments:
+        out.extend(_two_opt_segment(seg, cur))
+        if seg:
+            cur = (seg[-1]["x"], seg[-1]["y"])
+    return out
+
+
+def _feed_legs(ordered, start, private, worker, accesses):
+    """Shed-mouth PICKUP chains for FEED stops (§3.2, engine fact F4).
+
+    One leg carries FEED_LEG_CHUNK wheat; legs are synthesized only when
+    the task table's own WHEAT pickups plus current cargo cannot cover the
+    day's feed load.  Insertion point minimizes
+    (dist(prev,access)+dist(access,next mouth), access x, access y).
+    """
+    if not ordered or not accesses:
+        return ordered, 0
+    mouths = [t for t in ordered
+              if (t.get("act") or [None])[0] == "FEED"]
+    if not mouths:
+        return ordered, 0
+    inventories = _get(private, "inventories", []) or []
+    carried = 0
+    if worker < len(inventories) and inventories[worker]:
+        carried = int(_get(inventories[worker], "WHEAT", 0) or 0)
+    pickup_cap = 0
+    for t in ordered:
+        act = t.get("act") or []
+        if act and act[0] == "PICKUP" and len(act) > 2 \
+                and act[1] == "WHEAT":
+            try:
+                pickup_cap += int(act[2] or 0)
+            except (TypeError, ValueError):
+                pass
+    remaining_need = max(0, len(mouths) - carried - pickup_cap)
+    if remaining_need <= 0:
+        return ordered, 0
+
+    out = []
+    legs = 0
+    fed = carried
+    cx, cy = start
+    for t in ordered:
+        if (t.get("act") or [None])[0] == "FEED":
+            while fed <= 0 and remaining_need > 0:
+                sx, sy = min(accesses, key=lambda p: (
+                    _dist(cx, cy, p[0], p[1])
+                    + _dist(p[0], p[1], t["x"], t["y"]), p[0], p[1]))
+                chunk = min(FEED_LEG_CHUNK, remaining_need)
+                out.append({"key": ("feedleg", worker, legs), "op": "PICKUP",
+                            "x": sx, "y": sy,
+                            "act": ["PICKUP", "WHEAT", chunk],
+                            "v": 0, "w": 0, "cls": "LOGISTICS",
+                            "tier": None, "deadline": None, "deps": [],
+                            "synthetic": True})
+                remaining_need -= chunk
+                fed += chunk
+                legs += 1
+            fed -= 1
+        out.append(t)
+        cx, cy = t["x"], t["y"]
+    return out, legs
+
+
+def _solve_routes(farm, private, day, tasks, aging=None):
+    """Shadow M3 (scheduler §3 full spec): balanced partition -> EDF/density
+    NN -> 2-opt per tier segment -> feed legs -> ETA re-verification.
+
+    Returns {"routes": [ {worker, sector, stops:[keys], tasks:[dicts],
+    etas:[hours]} ], "feasible": bool, "dropped": [keys], "feed_legs": int}.
+    Determinism: every selection key terminates in str(task key).
     """
     tiles = _get(farm, "tiles", []) or []
     board = len(tiles)
@@ -3714,8 +4018,12 @@ def _solve_routes(farm, private, day, tasks, aging=None):
                         [board // 2 - 1, board // 2 - 1]))]
     for h in _get(farm, "hands", []) or []:
         units.append(tuple(h))
-    hour0 = 0  # dawn solve
+    quads = _get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]
+    accesses = sorted(_shed_access(board, quads)) if board else []
     aging = aging or {}
+
+    def tkey(t):
+        return str(t.get("key"))
 
     def deadline_key(t):
         d = t.get("deadline")
@@ -3725,100 +4033,233 @@ def _solve_routes(farm, private, day, tasks, aging=None):
         v = float(t.get("v") or 0) * (1.0 + 0.25 * aging.get(t.get("key"), 0))
         return v / max(1.0, float(t.get("w") or 1))
 
-    # ---- partition: quadrant buckets balanced by workload (§3.1) ----
-    buckets = {}
-    for t in tasks or []:
-        sector = _quadrant_of(t["x"], t["y"], board) if board else "?"
-        buckets.setdefault(sector, []).append(t)
-    workers = list(range(len(units)))
-    sectors = sorted(buckets, key=lambda s: (-len(buckets[s]), s))
-    assign = {w: [] for w in workers}
-    wi = 0
-    for sector in sectors:
-        for t in sorted(buckets[sector],
-                        key=lambda t: (deadline_key(t), -density(t),
-                                       str(t.get("key")))):
-            assign[workers[wi % len(workers)]].append(t)
-            wi += 1
+    def sector_of(t):
+        return _quadrant_of(t["x"], t["y"], board) if board else "?"
 
+    # ---- partition (§3.1): (sector x tier) clusters, LPT to workers ------
+    clusters = {}
+    for t in tasks or []:
+        clusters.setdefault((sector_of(t), t.get("tier") or "D4"), []).append(t)
+    load = {w: 0 for w in range(len(units))}
+    assign = {w: [] for w in range(len(units))}
+    worker_sectors = {w: set() for w in range(len(units))}
+    for ck in sorted(clusters, key=lambda c: (-len(clusters[c]), c)):
+        w = min(load, key=lambda w: (load[w], w))
+        assign[w].extend(sorted(clusters[ck],
+                                key=lambda t: (deadline_key(t),
+                                               -density(t), tkey(t))))
+        worker_sectors[w].add(ck[0])
+        load[w] += len(clusters[ck])
+
+    # overflow (§3.1): the ONLY cross-sector mechanism -- move the best
+    # (density - cross-cost) task from the most loaded to the idlest
+    # worker while imbalance exceeds tolerance; D1 obligations stay put.
+    for _ in range(len(tasks or []) + 1):
+        wmax = max(load, key=lambda w: (load[w], -w))
+        wmin = min(load, key=lambda w: (load[w], w))
+        if load[wmax] - load[wmin] <= max(1, OVERFLOW_IMBALANCE_TASKS):
+            break
+        movable = [t for t in assign[wmax] if t.get("tier") != "D1"]
+        if not movable:
+            break
+
+        def overflow_score(t, wmin=wmin):
+            cross = 0.0 if sector_of(t) in worker_sectors[wmin] \
+                else CROSS_SECTOR_PENALTY_V9
+            return density(t) - cross
+
+        pick = max(movable, key=lambda t: (overflow_score(t), tkey(t)))
+        assign[wmax].remove(pick)
+        assign[wmin].append(pick)
+        worker_sectors[wmin].add(sector_of(pick))
+        load[wmax] -= 1
+        load[wmin] += 1
+
+    # ---- per-worker route: NN -> 2-opt -> feed legs -> ETA re-verify -----
     routes = []
     dropped = []
     feasible = True
-    for w in workers:
+    feed_legs_total = 0
+    for w in range(len(units)):
         cluster = assign[w]
         if not cluster:
             routes.append({"worker": w, "sector": None, "stops": [],
-                           "etas": []})
+                           "tasks": [], "etas": []})
             continue
-        # nearest-neighbour construction seeded from the most urgent task
-        remaining = sorted(cluster,
-                           key=lambda t: (deadline_key(t), -density(t),
-                                          str(t.get("key"))))
+        remaining = sorted(cluster, key=lambda t: (deadline_key(t),
+                                                   -density(t), tkey(t)))
         ordered = []
         cx, cy = units[w]
-        clock = hour0
         while remaining:
-            # urgency FIRST (earliest deadline wins), then distance
-            best = min(remaining,
-                       key=lambda t: (
-                           t["deadline"] if t.get("deadline") is not None
-                           else 999,
-                           _dist(cx, cy, t["x"], t["y"]),
-                           str(t.get("key"))))
+            # urgency FIRST (earliest deadline wins), then distance, then key
+            best = min(remaining, key=lambda t: (
+                (t["deadline"] if t.get("deadline") is not None else 999),
+                _dist(cx, cy, t["x"], t["y"]), tkey(t)))
             ordered.append(best)
-            clock += _dist(cx, cy, best["x"], best["y"]) + 1
             cx, cy = best["x"], best["y"]
             remaining.remove(best)
-        # feasibility: deadline ETA check (§2.4 style); drop the lowest
-        # density tail when infeasible (never drop OBLIGATION silently --
-        # flag infeasible instead)
+        ordered = _two_opt_segments(ordered, units[w])
+        ordered, legs = _feed_legs(ordered, units[w], private, w, accesses)
+        feed_legs_total += legs
+
         etas = []
-        cx, cy = units[w]
-        clock = hour0
         keep = []
+        cx, cy = units[w]
+        clock = 0
         for t in ordered:
             clock += _dist(cx, cy, t["x"], t["y"]) + 1
-            etas.append(clock)
             if t.get("deadline") is not None and clock > t["deadline"]:
-                if t.get("cls") == "OBLIGATION":
-                    feasible = False
+                if t.get("tier") == "D1" or t.get("red"):
+                    feasible = False       # never drop an obligation quietly
                 dropped.append(t.get("key"))
             else:
                 keep.append(t)
+                etas.append(clock)
             cx, cy = t["x"], t["y"]
         routes.append({"worker": w,
                        "sector": _quadrant_of(cx, cy, board) if board
                        else None,
                        "stops": [t.get("key") for t in keep],
-                       "etas": etas[:len(keep)]})
-    return {"routes": routes, "feasible": feasible, "dropped": dropped}
+                       "tasks": keep, "etas": etas})
+    return {"routes": routes, "feasible": feasible, "dropped": dropped,
+            "feed_legs": feed_legs_total}
 
 # ===== src/executor.py =================================================
 
-# 【中文】L4 机械执行器脚手架（worker_route_scheduler_design.md §4，M4 启用）。
-# 本阶段仅占位：ROUTE_EXECUTOR_ENABLED=False，且没有任何模块引用
-# _execute_routes —— 构建产物与 v10.9 行为完全一致。启用前置：M3 求解器
-# 影子分歧收敛（§7 里程碑），届时 executor 接管逐回合发动作与断言，
+# 【中文】L4 机械执行器（worker_route_scheduler_design.md §4，v1.3 全规格，
+# 2026-09-02 W2 实装；仍为影子件——ROUTE_EXECUTOR_ENABLED=False，无运行时
+# 调用方，构建产物行为与现行完全一致）。
+# 职责：沿路线逐站"到站且 tile 态未完成→发动作，否则走一步"（F1 曼哈顿
+# 步进精确；F4 重复 WATER/FEED 是静默浪费，发射前查 tile 态跳过已完成站）；
+# 断言（只读，§5 proved-or-flagged）：
+#   * D1 站点 ETA ≤ deadline（EXECUTOR_D1_ASSERT）；
+#   * EOD 投影 Σ(棚仓+随身) ≤ SHED_CAPACITY（F6：随身日终自动归还、超容
+#     销毁——唯一静默损失源由 §2.4 前置消化，此处复核，EXECUTOR_EOD_ASSERT）；
+# 失败唯一出口 = REPLAN 整日重建，配幂等闸（新计划==旧计划则停止重建，
+# _replan_gate——F7 下正确实现永不触发，触发即 bug 信号）。
+# d29 模板（F10）：早收→DROP（查 room）→SELL 随身清零；卖出单进
+# _D29_SELL_QUEUE 供市场层 M4 接线。
+# M4 启用前置：M3 影子分歧收敛（scripts/solver_shadow_stats.py）；届时
 # _schedule_units_v72 退役（M5 冻结删除）。
-# Scaffold for the L4 mechanical executor (scheduler design §4, enabled at M4).
-# Disabled placeholder: zero callers reference _execute_routes in this phase,
-# so the merged main.py stays behaviour-identical to the v10.9 reference.
 ROUTE_EXECUTOR_ENABLED = False
+
+_REPLAN_MEM = {}
+_D29_SELL_QUEUE = {}
+
+
+def _replan_signature(routes):
+    parts = []
+    for r in routes or []:
+        stops = r.get("stops") or []
+        keys = tuple(str(s.get("key") if isinstance(s, dict) else s)
+                     for s in stops)
+        parts.append((r.get("worker"), keys))
+    return tuple(sorted(parts))
+
+
+def _replan_gate(player, day, routes):
+    """Idempotent REPLAN gate (§4.4): stop rebuilding when the rebuilt plan
+    equals the old one -- under F7 a repeat is a bug signal, not noise."""
+    sig = _replan_signature(routes)
+    st = _REPLAN_MEM.get(player)
+    if st is not None and st.get("day") == day and st.get("sig") == sig:
+        return False
+    _REPLAN_MEM[player] = {"day": day, "sig": sig}
+    return True
+
+
+def _executor_tiles(farm):
+    tiles = _get(farm, "tiles", []) or []
+    out = {}
+    for y, row in enumerate(tiles):
+        for x, tile in enumerate(row):
+            if isinstance(tile, dict):
+                out[(x, y)] = tile
+    return out
+
+
+def _stop_done(tile, act):
+    """F4 dedup: a repeated WATER/FEED is a silent wasted turn; skip stops
+    whose tile state shows the work already finished."""
+    if tile is None or not act:
+        return False
+    op = act[0]
+    if op == "WATER":
+        return bool(_get(tile, "watered_today", False))
+    if op == "FEED":
+        return bool(_get(tile, "fed_today", False))
+    if op == "HARVEST":
+        return _get(tile, "yield_units", 1) <= 0
+    return False
+
+
+def _d29_template(obs, farm, private):
+    """d29 liquidation template (§4.2 / F10): walk to the shed mouth, DROP
+    respecting room, queue SELL for everything dropped (carried goods
+    cannot be sold in place).  Returns (actions, sell_items)."""
+    tiles = _get(farm, "tiles", []) or []
+    board = len(tiles)
+    units = [tuple(_get(farm, "farmer",
+                        [board // 2 - 1, board // 2 - 1]))]
+    for h in _get(farm, "hands", []) or []:
+        units.append(tuple(h))
+    accesses = sorted(_shed_access(board, _get(farm, "unlocked_quadrants",
+                                               ["NW"]) or ["NW"])) \
+        if board else []
+    shed = _get(private, "shed", {}) or {}
+    shed_total = sum(int(v) for v in shed.values()
+                     if isinstance(v, (int, float)) and v > 0)
+    inventories = _get(private, "inventories", []) or []
+    actions = []
+    sell = {}
+    for ui, pos in enumerate(units):
+        inv = inventories[ui] if ui < len(inventories) else {}
+        carried = {k: int(v) for k, v in (inv or {}).items()
+                   if isinstance(v, (int, float)) and v > 0}
+        if not carried or not accesses:
+            actions.append(["PASS"])
+            continue
+        sx, sy = min(accesses, key=lambda p: (
+            _dist(pos[0], pos[1], p[0], p[1]), p[0], p[1]))
+        if pos != (sx, sy):
+            dx = 1 if sx > pos[0] else (-1 if sx < pos[0] else 0)
+            dy = 1 if sy > pos[1] else (-1 if sy < pos[1] else 0)
+            if dx:
+                actions.append(["EAST"] if dx > 0 else ["WEST"])
+            else:
+                actions.append(["SOUTH"] if dy > 0 else ["NORTH"])
+            continue
+        room = max(0, SHED_CAPACITY - shed_total)
+        for item in sorted(carried):
+            if room <= 0:
+                break
+            moved = min(carried[item], room)
+            if moved <= 0:
+                continue
+            actions.append(["DROP", item, moved])
+            sell[item] = sell.get(item, 0) + moved
+            shed_total += moved
+            room -= moved
+        if not actions or actions[-1][0] != "DROP":
+            actions.append(["PASS"])
+    return actions, sell
 
 
 def _execute_routes(obs, farm, private, day, routes):
-    """L4 mechanical executor (scheduler design §4; enabled at M4).
+    """L4 mechanical executor (scheduler §4 full spec; enabled at M4).
 
-    Walk-along-route semantics: a worker standing on its current stop whose
-    tile state is unfinished emits the stop's action, else steps one cell
-    toward it (engine fact F1: movement is unobstructed, Manhattan stepping
-    is exact).  Assertions (read-only, §5 proved-or-flagged): every D1
-    obligation is completed or its stop is still ETA-reachable; any failure
-    returns a replan request instead of micro-reassigning.
-
-    Returns (actions, replan) -- actions is a list per unit; M4 wires this
-    into agent() behind ROUTE_EXECUTOR_ENABLED.
+    Walk-along-route semantics with F4 skip, D1-ETA and EOD-projection
+    assertions, the idempotent REPLAN gate and the d29 DROP->SELL template.
+    Returns (actions, replan); M4 wires this into agent() behind
+    ROUTE_EXECUTOR_ENABLED.
     """
+    player = _get(obs, "player", 0)
+    if day >= SEASON_DAYS - 1:
+        actions, sell = _d29_template(obs, farm, private)
+        if sell:
+            _D29_SELL_QUEUE[player] = sell
+        return actions, False
+
     tiles = _get(farm, "tiles", []) or []
     board = len(tiles)
     units = [tuple(_get(farm, "farmer",
@@ -3826,18 +4267,35 @@ def _execute_routes(obs, farm, private, day, routes):
     for h in _get(farm, "hands", []) or []:
         units.append(tuple(h))
     hour = _get(obs, "hour", 0)
+    tile_map = _executor_tiles(farm)
     actions = []
     replan = False
     for ui, route in enumerate(routes or []):
-        stops = route.get("stops") or []
+        # solver routes carry full stop dicts under "tasks"; hand-built
+        # routes (tests) keep plain dicts under "stops"
+        stops = route.get("tasks") or route.get("stops") or []
         pos = units[ui] if ui < len(units) else (0, 0)
         if ui >= len(units) or not stops:
             actions.append(["PASS"])
             continue
-        target = stops[0]
+        idx = 0
+        # F4: skip at-station stops whose tile state is already finished
+        while idx < len(stops):
+            target = stops[idx]
+            tx, ty = target["x"], target["y"]
+            if pos != (tx, ty):
+                break
+            if _stop_done(tile_map.get((tx, ty)), target.get("act")):
+                idx += 1
+            else:
+                break
+        if idx >= len(stops):
+            actions.append(["PASS"])
+            continue
+        target = stops[idx]
         tx, ty = target["x"], target["y"]
         if pos == (tx, ty):
-            actions.append(list(target["act"] or ["PASS"]))
+            actions.append(list(target.get("act") or ["PASS"]))
         else:
             dx = 0 if tx == pos[0] else (1 if tx > pos[0] else -1)
             dy = 0 if ty == pos[1] else (1 if ty > pos[1] else -1)
@@ -3846,11 +4304,26 @@ def _execute_routes(obs, farm, private, day, routes):
             else:
                 actions.append(["SOUTH"] if dy > 0 else ["NORTH"])
         # assertion: D1 stop still reachable before its deadline
-        deadline = target.get("deadline")
-        if deadline is not None:
-            eta = hour + _dist(pos[0], pos[1], tx, ty) + 1
-            if eta > deadline:
-                replan = True
+        if EXECUTOR_D1_ASSERT:
+            deadline = target.get("deadline")
+            if deadline is not None:
+                eta = hour + _dist(pos[0], pos[1], tx, ty) + 1
+                if eta > deadline:
+                    replan = True
+    # assertion: EOD budget projection (F6 auto-return destroys overflow)
+    if EXECUTOR_EOD_ASSERT:
+        shed = _get(private, "shed", {}) or {}
+        inventories = _get(private, "inventories", []) or []
+        eod_total = sum(int(v) for v in shed.values()
+                        if isinstance(v, (int, float)) and v > 0)
+        for inv in inventories:
+            if inv:
+                eod_total += sum(int(v) for v in inv.values()
+                                 if isinstance(v, (int, float)) and v > 0)
+        if eod_total > SHED_CAPACITY:
+            replan = True
+    if replan and not _replan_gate(player, day, routes):
+        replan = False        # idempotent gate: same plan -> stop rebuilding
     return actions, replan
 
 # ===== src/market.py =================================================
@@ -5243,6 +5716,12 @@ def agent(obs):
         tasks, animals_to_feed, herd_total, wheat_tiles, capacity = \
             _build_tasks(obs, farm, private=_get(obs, "private", {}) or {},
                          day=day, plan=plan)
+
+        # M2 shadow bypass (fail-open, scheduler §2): build the dawn mission
+        # package once per player-day -- telemetry and the M3 harness are
+        # the only consumers; the decision path below never reads it.
+        _mission_shadow_update(player, day, hour, obs, farm,
+                               _get(obs, "private", {}) or {}, plan, tasks)
         actions = _schedule_units(obs, farm, _get(obs, "private", {}) or {},
                                   day, tasks)
         orders = _market_orders(obs, farm, _get(obs, "private", {}) or {},

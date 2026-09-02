@@ -51,6 +51,12 @@ def agent(obs):
         tasks, animals_to_feed, herd_total, wheat_tiles, capacity = \
             _build_tasks(obs, farm, private=_get(obs, "private", {}) or {},
                          day=day, plan=plan)
+
+        # M2 shadow bypass (fail-open, scheduler §2): build the dawn mission
+        # package once per player-day -- telemetry and the M3 harness are
+        # the only consumers; the decision path below never reads it.
+        _mission_shadow_update(player, day, hour, obs, farm,
+                               _get(obs, "private", {}) or {}, plan, tasks)
         actions = _schedule_units(obs, farm, _get(obs, "private", {}) or {},
                                   day, tasks)
         orders = _market_orders(obs, farm, _get(obs, "private", {}) or {},

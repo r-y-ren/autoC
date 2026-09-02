@@ -496,20 +496,138 @@ def _schedule_units(obs, farm, private, day, tasks):
 
 
 # ===========================================================================
-# 【中文】M3 路线求解器（scheduler 设计 §3，2026-09-02 影子落地）
+# 【中文】M3 路线求解器（scheduler 设计 §3，v1.3 全规格，2026-09-02 W2 实装）
 # ---------------------------------------------------------------------------
-# _solve_routes：黎明一次求解的路线承诺——负载均衡分区（§3.1，全员自仓口
-# 出生，家区不可用首格判定）→ 簇内 EDF×价值密度排序（§3.2）→ 最近邻成路
-# → 同 deadline 类段 2-opt 抛光（换位后重验 ETA）。影子件：不改任何现行
-# 行为；M3 门 = 与 v72 的分歧统计（连续性/PASS 显著优才准 M4 切换）。
-# 确定性：全部排序键终结于 (key) 字典序（黄金测试前提）。
+# _solve_routes：黎明一次求解的路线承诺——
+#   分区（§3.1）：任务簇 =（象限 × tier）× 工作量，LPT 负载均衡指派给工人
+#     （工人黎明统一自仓口出发，前 1-3 回合转场）；溢出跨区 = 唯一跨区机制，
+#     按（密度 − 跨区行走成本）从最载工人搬给最闲工人，D1 义务永不迁移；
+#   成路（§3.2）：簇内 EDF×密度×老化最近邻 → 同 deadline 类段 2-opt 抛光
+#     （只接受严格改进，确定性）→ 喂食腿（PICKUP 仓口链，每
+#     FEED_LEG_CHUNK 麦一取拆腿；任务表自带麦 PICKUP 已覆盖时不合成）
+#     → 逐站 ETA 重验（超期非 D1 丢弃、D1 超期置 infeasible）。
+# 确定性契约：全部排序键终结于任务 key 的字符串字典序（黄金测试前提）。
+# 影子件：不改任何现行行为；M3 门 = 与 v72 的分歧统计
+# （scripts/solver_shadow_stats.py），连续性/PASS 显著优才准 M4 切换。
 # ===========================================================================
 
-def _solve_routes(farm, private, day, tasks, aging=None):
-    """Shadow M3: per-worker ordered route commitments with ETAs.
+def _seg_len(seq, start):
+    cx, cy = start
+    total = 0
+    for t in seq:
+        total += _dist(cx, cy, t["x"], t["y"])
+        cx, cy = t["x"], t["y"]
+    return total
 
-    Returns {"routes": [ {worker, sector, stops:[keys], etas:[hours]} ],
-             "feasible": bool, "dropped": [keys]}.
+
+def _two_opt_segment(seg, start):
+    """2-opt polish inside ONE deadline-class segment (§3.2).
+
+    Reverse substrings, accept strict total-distance improvements only;
+    the scan order and the strict-improvement rule make it deterministic.
+    """
+    if len(seg) < 3:
+        return list(seg)
+    best = list(seg)
+    best_len = _seg_len(best, start)
+    improved = True
+    passes = 0
+    while improved and passes < TWO_OPT_MAX_PASSES:
+        improved = False
+        passes += 1
+        for i in range(len(best)):
+            for j in range(i + 1, len(best)):
+                cand = best[:i] + best[i:j + 1][::-1] + best[j + 1:]
+                cand_len = _seg_len(cand, start)
+                if cand_len < best_len - 1e-9:
+                    best, best_len = cand, cand_len
+                    improved = True
+    return best
+
+
+def _two_opt_segments(ordered, start):
+    """Apply §3.2 polish to each contiguous same-tier run (order kept)."""
+    if len(ordered) < 3:
+        return list(ordered)
+    segments = []
+    for t in ordered:
+        if segments and segments[-1][0] == t.get("tier"):
+            segments[-1][1].append(t)
+        else:
+            segments.append((t.get("tier"), [t]))
+    out = []
+    cur = start
+    for _tier, seg in segments:
+        out.extend(_two_opt_segment(seg, cur))
+        if seg:
+            cur = (seg[-1]["x"], seg[-1]["y"])
+    return out
+
+
+def _feed_legs(ordered, start, private, worker, accesses):
+    """Shed-mouth PICKUP chains for FEED stops (§3.2, engine fact F4).
+
+    One leg carries FEED_LEG_CHUNK wheat; legs are synthesized only when
+    the task table's own WHEAT pickups plus current cargo cannot cover the
+    day's feed load.  Insertion point minimizes
+    (dist(prev,access)+dist(access,next mouth), access x, access y).
+    """
+    if not ordered or not accesses:
+        return ordered, 0
+    mouths = [t for t in ordered
+              if (t.get("act") or [None])[0] == "FEED"]
+    if not mouths:
+        return ordered, 0
+    inventories = _get(private, "inventories", []) or []
+    carried = 0
+    if worker < len(inventories) and inventories[worker]:
+        carried = int(_get(inventories[worker], "WHEAT", 0) or 0)
+    pickup_cap = 0
+    for t in ordered:
+        act = t.get("act") or []
+        if act and act[0] == "PICKUP" and len(act) > 2 \
+                and act[1] == "WHEAT":
+            try:
+                pickup_cap += int(act[2] or 0)
+            except (TypeError, ValueError):
+                pass
+    remaining_need = max(0, len(mouths) - carried - pickup_cap)
+    if remaining_need <= 0:
+        return ordered, 0
+
+    out = []
+    legs = 0
+    fed = carried
+    cx, cy = start
+    for t in ordered:
+        if (t.get("act") or [None])[0] == "FEED":
+            while fed <= 0 and remaining_need > 0:
+                sx, sy = min(accesses, key=lambda p: (
+                    _dist(cx, cy, p[0], p[1])
+                    + _dist(p[0], p[1], t["x"], t["y"]), p[0], p[1]))
+                chunk = min(FEED_LEG_CHUNK, remaining_need)
+                out.append({"key": ("feedleg", worker, legs), "op": "PICKUP",
+                            "x": sx, "y": sy,
+                            "act": ["PICKUP", "WHEAT", chunk],
+                            "v": 0, "w": 0, "cls": "LOGISTICS",
+                            "tier": None, "deadline": None, "deps": [],
+                            "synthetic": True})
+                remaining_need -= chunk
+                fed += chunk
+                legs += 1
+            fed -= 1
+        out.append(t)
+        cx, cy = t["x"], t["y"]
+    return out, legs
+
+
+def _solve_routes(farm, private, day, tasks, aging=None):
+    """Shadow M3 (scheduler §3 full spec): balanced partition -> EDF/density
+    NN -> 2-opt per tier segment -> feed legs -> ETA re-verification.
+
+    Returns {"routes": [ {worker, sector, stops:[keys], tasks:[dicts],
+    etas:[hours]} ], "feasible": bool, "dropped": [keys], "feed_legs": int}.
+    Determinism: every selection key terminates in str(task key).
     """
     tiles = _get(farm, "tiles", []) or []
     board = len(tiles)
@@ -517,8 +635,12 @@ def _solve_routes(farm, private, day, tasks, aging=None):
                         [board // 2 - 1, board // 2 - 1]))]
     for h in _get(farm, "hands", []) or []:
         units.append(tuple(h))
-    hour0 = 0  # dawn solve
+    quads = _get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]
+    accesses = sorted(_shed_access(board, quads)) if board else []
     aging = aging or {}
+
+    def tkey(t):
+        return str(t.get("key"))
 
     def deadline_key(t):
         d = t.get("deadline")
@@ -528,70 +650,93 @@ def _solve_routes(farm, private, day, tasks, aging=None):
         v = float(t.get("v") or 0) * (1.0 + 0.25 * aging.get(t.get("key"), 0))
         return v / max(1.0, float(t.get("w") or 1))
 
-    # ---- partition: quadrant buckets balanced by workload (§3.1) ----
-    buckets = {}
-    for t in tasks or []:
-        sector = _quadrant_of(t["x"], t["y"], board) if board else "?"
-        buckets.setdefault(sector, []).append(t)
-    workers = list(range(len(units)))
-    sectors = sorted(buckets, key=lambda s: (-len(buckets[s]), s))
-    assign = {w: [] for w in workers}
-    wi = 0
-    for sector in sectors:
-        for t in sorted(buckets[sector],
-                        key=lambda t: (deadline_key(t), -density(t),
-                                       str(t.get("key")))):
-            assign[workers[wi % len(workers)]].append(t)
-            wi += 1
+    def sector_of(t):
+        return _quadrant_of(t["x"], t["y"], board) if board else "?"
 
+    # ---- partition (§3.1): (sector x tier) clusters, LPT to workers ------
+    clusters = {}
+    for t in tasks or []:
+        clusters.setdefault((sector_of(t), t.get("tier") or "D4"), []).append(t)
+    load = {w: 0 for w in range(len(units))}
+    assign = {w: [] for w in range(len(units))}
+    worker_sectors = {w: set() for w in range(len(units))}
+    for ck in sorted(clusters, key=lambda c: (-len(clusters[c]), c)):
+        w = min(load, key=lambda w: (load[w], w))
+        assign[w].extend(sorted(clusters[ck],
+                                key=lambda t: (deadline_key(t),
+                                               -density(t), tkey(t))))
+        worker_sectors[w].add(ck[0])
+        load[w] += len(clusters[ck])
+
+    # overflow (§3.1): the ONLY cross-sector mechanism -- move the best
+    # (density - cross-cost) task from the most loaded to the idlest
+    # worker while imbalance exceeds tolerance; D1 obligations stay put.
+    for _ in range(len(tasks or []) + 1):
+        wmax = max(load, key=lambda w: (load[w], -w))
+        wmin = min(load, key=lambda w: (load[w], w))
+        if load[wmax] - load[wmin] <= max(1, OVERFLOW_IMBALANCE_TASKS):
+            break
+        movable = [t for t in assign[wmax] if t.get("tier") != "D1"]
+        if not movable:
+            break
+
+        def overflow_score(t, wmin=wmin):
+            cross = 0.0 if sector_of(t) in worker_sectors[wmin] \
+                else CROSS_SECTOR_PENALTY_V9
+            return density(t) - cross
+
+        pick = max(movable, key=lambda t: (overflow_score(t), tkey(t)))
+        assign[wmax].remove(pick)
+        assign[wmin].append(pick)
+        worker_sectors[wmin].add(sector_of(pick))
+        load[wmax] -= 1
+        load[wmin] += 1
+
+    # ---- per-worker route: NN -> 2-opt -> feed legs -> ETA re-verify -----
     routes = []
     dropped = []
     feasible = True
-    for w in workers:
+    feed_legs_total = 0
+    for w in range(len(units)):
         cluster = assign[w]
         if not cluster:
             routes.append({"worker": w, "sector": None, "stops": [],
-                           "etas": []})
+                           "tasks": [], "etas": []})
             continue
-        # nearest-neighbour construction seeded from the most urgent task
-        remaining = sorted(cluster,
-                           key=lambda t: (deadline_key(t), -density(t),
-                                          str(t.get("key"))))
+        remaining = sorted(cluster, key=lambda t: (deadline_key(t),
+                                                   -density(t), tkey(t)))
         ordered = []
         cx, cy = units[w]
-        clock = hour0
         while remaining:
-            # urgency FIRST (earliest deadline wins), then distance
-            best = min(remaining,
-                       key=lambda t: (
-                           t["deadline"] if t.get("deadline") is not None
-                           else 999,
-                           _dist(cx, cy, t["x"], t["y"]),
-                           str(t.get("key"))))
+            # urgency FIRST (earliest deadline wins), then distance, then key
+            best = min(remaining, key=lambda t: (
+                (t["deadline"] if t.get("deadline") is not None else 999),
+                _dist(cx, cy, t["x"], t["y"]), tkey(t)))
             ordered.append(best)
-            clock += _dist(cx, cy, best["x"], best["y"]) + 1
             cx, cy = best["x"], best["y"]
             remaining.remove(best)
-        # feasibility: deadline ETA check (§2.4 style); drop the lowest
-        # density tail when infeasible (never drop OBLIGATION silently --
-        # flag infeasible instead)
+        ordered = _two_opt_segments(ordered, units[w])
+        ordered, legs = _feed_legs(ordered, units[w], private, w, accesses)
+        feed_legs_total += legs
+
         etas = []
-        cx, cy = units[w]
-        clock = hour0
         keep = []
+        cx, cy = units[w]
+        clock = 0
         for t in ordered:
             clock += _dist(cx, cy, t["x"], t["y"]) + 1
-            etas.append(clock)
             if t.get("deadline") is not None and clock > t["deadline"]:
-                if t.get("cls") == "OBLIGATION":
-                    feasible = False
+                if t.get("tier") == "D1" or t.get("red"):
+                    feasible = False       # never drop an obligation quietly
                 dropped.append(t.get("key"))
             else:
                 keep.append(t)
+                etas.append(clock)
             cx, cy = t["x"], t["y"]
         routes.append({"worker": w,
                        "sector": _quadrant_of(cx, cy, board) if board
                        else None,
                        "stops": [t.get("key") for t in keep],
-                       "etas": etas[:len(keep)]})
-    return {"routes": routes, "feasible": feasible, "dropped": dropped}
+                       "tasks": keep, "etas": etas})
+    return {"routes": routes, "feasible": feasible, "dropped": dropped,
+            "feed_legs": feed_legs_total}

@@ -642,3 +642,17 @@ BUY_CHUNK_MAX_UNITS = 40       # 单回合 BUY_PRODUCT 最大件数（超出跨�
 # ---- P4 三档出清（branch §6；观测器 est_opp_held 驱动，缺数据回退门控）----
 P4_HEAVY_HELD = 40             # 对手囤货 ≥40u → d25 抢跑档
 P4_MID_HELD = 15               # 15-40 → d26-27 标准档；<15 从容档
+
+# ===========================================================================
+# 【中文】scheduler v1.3 §2-§4 实施旋钮（2026-09-02 W2：任务包全规格/求解器
+# 抛光与喂食腿/执行器断言与幂等闸）——全部只服务影子件，执行权威仍在 v72
+# ---------------------------------------------------------------------------
+SHED_CAPACITY = 100            # 引擎镜像 shedCapacity（EOD 预算不等式的界）
+# ---- §3.1 分区与溢出 ----
+OVERFLOW_IMBALANCE_TASKS = 3   # 负载差 ≤ 此任务数即视为均衡，停止溢出搬运
+# ---- §3.2 成路与喂食腿 ----
+FEED_LEG_CHUNK = 5             # 喂食腿：一次 PICKUP 携带的小麦数（拆腿粒度）
+TWO_OPT_MAX_PASSES = 16        # 同 deadline 类段 2-opt 抛光的迭代上限
+# ---- §4 执行器断言 ----
+EXECUTOR_EOD_ASSERT = True     # EOD 投影断言（棚仓+随身 > 100 → REPLAN）
+EXECUTOR_D1_ASSERT = True      # D1 站点 ETA 断言（ETA > deadline → REPLAN）

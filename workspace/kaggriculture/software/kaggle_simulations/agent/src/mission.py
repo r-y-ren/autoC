@@ -416,24 +416,39 @@ def _build_tasks(obs, farm, private, day, plan=None):
 
 
 # ===========================================================================
-# 【中文】M2 任务包（scheduler 设计 §2，2026-09-02 影子落地）
+# 【中文】M2 任务包（scheduler 设计 §2，v1.3 全规格，2026-09-02 W2 实装）
 # ---------------------------------------------------------------------------
-# _build_mission：把现行 _build_tasks 的任务表（w/v/red 旧 schema）原位
-# 注解成新 schema（cls/deadline），并产出 D1 集合与容量预检——影子件：
-# agent() 不调用，黄金测试与 M3 求解器消费（scheduler §7 M2 门）。
-# capex 时点收编（§2.3 events）留 M2 切换期——当前仍由市场层管理，三重
-# 前置检查已在其位落地（market 侧）。
+# _build_mission：黎明一次的任务包。把 _build_tasks 的任务表（w/v/red 旧
+# schema）升格为全规格 schema：cls 工作类（OBLIGATION/YIELD/BONUS/LOGISTICS）
+# + tier=D1-D4 天级死线分级（§2.2：D1 今夜必死 h21/h16、D2 宽限日 streak=0、
+# D3 产钱窗口（F5 窗口浇水）、D4 收割/照料/加成/DIG）+ deps（FEED→麦 PICKUP）
+# + scenario。并产出三件黎明解：
+#   * 喂食前置（§2.3）：棚仓+随身小麦 ≥ D1∪D2 牲畜数，不足注入 h0
+#     BUY_PRODUCT WHEAT（优先级 95 语义）事件；
+#   * EOD 预算不等式（§2.4）：Σ(棚仓−计划卖出+计划收割入仓) ≤ 100——影子
+#     期保守取计划卖出=0（市场层卖出在任务包之后成形），溢出注入 log 曲线
+#     小麦优先的 h6 增卖事件；
+#   * 容量前馈（§2.6）：util > 0.85 写 capacity_deficit（超限 capex 就地
+#     缩量的标记，策略层禁增闭环的写侧）；util < 0.65 报 capacity_slack
+#     （按单位日收入降序补线的余额，兜底=小麦）。
+# 黄金纪律：mission_hash 对同一观测确定（M2 黄金哈希冻结的锚）。
+# 仍是影子件：执行权威在 _schedule_units_v72，M4 经 ROUTE_EXECUTOR_ENABLED
+# 切换；entry 每日黎明经 _mission_shadow_update 旁路构建（fail-open，
+# 仅 telemetry 与 M3 harness 消费，不碰决策路径）。
 # ===========================================================================
+import hashlib
+import json
 
 _MISSION_DEADLINE_HOURS = {"WATER": 21, "FEED": 16, "CARE": 23,
                            "HARVEST": 21, "PLANT": 16}
+_MISSION_SHADOW = {}
 
 
 def _mission_cls(task):
-    """旧任务 → 新 cls 分级（scheduler §2.2 D1-D4）。"""
+    """旧任务 → 工作类分级（与 tier 正交：cls=干什么，tier=多急）。"""
     op = (task.get("act") or [None])[0]
     if task.get("red"):
-        return "OBLIGATION"       # 现行红线标记 = D1 今夜必死
+        return "OBLIGATION"       # 现行红线标记 = 今夜必死义务
     if op == "HARVEST":
         return "YIELD"
     if op in ("CARE", "DIG", "COLLECT_FERTILIZER"):
@@ -441,34 +456,169 @@ def _mission_cls(task):
     return "LOGISTICS"
 
 
-def _build_mission(obs, farm, private, day, plan, tasks):
-    """Shadow M2: annotate the live task table into the mission schema.
+def _mission_tile_map(farm):
+    tiles = _get(farm, "tiles", []) or []
+    out = {}
+    for y, row in enumerate(tiles):
+        for x, tile in enumerate(row):
+            if isinstance(tile, dict):
+                out[(x, y)] = tile
+    return out
 
-    Returns {"day", "cls_counts", "d1", "tasks", "capacity"} where d1 is
-    the dies-tonight key set (scheduler §2.2) and capacity carries the
-    labor-gate verdict (branch §5.3) for the M2/M3 harness.
+
+def _mission_tier(task, tile, day):
+    """D1-D4 天级死线分级（scheduler §2.2；red 标记与引擎 streak 双源）。"""
+    op = (task.get("act") or [None])[0]
+    if task.get("red"):
+        return "D1"
+    if op == "WATER":
+        if tile is not None and (
+                _get(tile, "consecutive_unwatered", 0) >= 1
+                or _get(tile, "planted_day", -1) == day):
+            return "D1"           # 今夜枯死（F2：当日新种 streak=1 同级）
+        if tile is not None:
+            crop = _get(tile, "crop", "")
+            cd = CROPS.get(crop)
+            if cd and not cd["ongoing"]:
+                age = day - _get(tile, "planted_day", day)
+                ws, we = _window(crop)
+                if ws <= age <= we:
+                    return "D3"   # 产钱窗口（F5：漏浇=永久减产）
+        return "D2"               # 宽限日（streak=0，正常仍当日做）
+    if op == "FEED":
+        if tile is not None and _get(tile, "consecutive_unfed", 0) >= 1:
+            return "D1"           # 今夜逃亡（F3）
+        return "D2"
+    return "D4"                   # 收割/照料/加成/DIG/后勤/建设
+
+
+def _build_mission(obs, farm, private, day, plan, tasks, planned_sell=None):
+    """Dawn mission package (scheduler §2 full spec; shadow).
+
+    Returns {"day", "hour", "player", "scenario", "cls_counts",
+    "tier_counts", "d1", "tasks", "events", "eod", "capacity",
+    "capacity_deficit", "capacity_slack", "mission_hash"} -- d1 is the
+    dies-tonight key set (§2.2), events carry the §2.3/§2.4 dawn fixes,
+    and capacity_deficit is the §2.6 write-side of the feed-forward loop.
     """
     hour = _get(obs, "hour", 0)
+    player = _get(obs, "player", 0)
+    plan = plan or {}
+    tile_map = _mission_tile_map(farm)
+    wheat_pickup_keys = [t.get("key") for t in (tasks or [])
+                         if (t.get("act") or [None])[0] == "PICKUP"
+                         and len(t.get("act") or []) > 1
+                         and t["act"][1] == "WHEAT"]
+
     out_tasks = []
     d1 = []
     cls_counts = {}
+    tier_counts = {}
+    feed_d12 = 0
+    harvest_in = 0
     for task in tasks or []:
         cls = _mission_cls(task)
         op = (task.get("act") or [None])[0]
-        deadline = _MISSION_DEADLINE_HOURS.get(op)
-        if cls == "OBLIGATION":
-            deadline = _MISSION_DEADLINE_HOURS.get(op, 21)
+        tile = tile_map.get((task.get("x"), task.get("y")))
+        tier = _mission_tier(task, tile, day)
         t = dict(task)
         t["cls"] = cls
-        t["deadline"] = deadline
-        t["deps"] = []
+        t["tier"] = tier
+        t["deadline"] = _MISSION_DEADLINE_HOURS.get(op)
+        t["deps"] = list(wheat_pickup_keys) if op == "FEED" else []
+        t["scenario"] = None
         out_tasks.append(t)
         cls_counts[cls] = cls_counts.get(cls, 0) + 1
-        if cls == "OBLIGATION":
+        tier_counts[tier] = tier_counts.get(tier, 0) + 1
+        if tier == "D1":
             d1.append(task.get("key"))
-    cap_ok, util = _capacity_gate(farm, private)
+        if op == "FEED" and tier in ("D1", "D2"):
+            feed_d12 += 1
+        if op == "HARVEST" and tile is not None:
+            harvest_in += int(_get(tile, "yield_units", 0) or 0)
+
+    shed = _get(private, "shed", {}) or {}
+    inventories = _get(private, "inventories", []) or []
+    wheat_avail = int(_get(shed, "WHEAT", 0) or 0) + sum(
+        int(_get(inv, "WHEAT", 0) or 0) for inv in inventories if inv)
+
+    events = []
+    # §2.3 喂食前置：缺口注入 h0 补麦事件（市场层优先级 95 语义）
+    if feed_d12 > wheat_avail:
+        events.append({"h": 0, "op": "BUY_PRODUCT", "item": "WHEAT",
+                       "qty": feed_d12 - wheat_avail, "priority": 95,
+                       "why": "feed_precondition"})
+    # §2.4 EOD 预算：保守 planned_sell=0（影子期市场卖出晚于任务包成形）
+    shed_count = sum(int(v) for v in shed.values()
+                     if isinstance(v, (int, float)) and v > 0)
+    planned_sell = 0 if planned_sell is None else int(planned_sell)
+    eod_projected = shed_count - planned_sell + harvest_in
+    eod_overflow = max(0, eod_projected - SHED_CAPACITY)
+    if eod_overflow > 0:
+        events.append({"h": 6, "op": "SELL", "item": "WHEAT",
+                       "qty": min(eod_overflow,
+                                  int(_get(shed, "WHEAT", 0) or 0)),
+                       "why": "eod_budget"})
+
+    # §2.6 容量前馈（写侧）：>0.85 deficit、<0.65 slack（空 plan 归一为
+    # None：_crew_target 只接受完整计划 dict 或 None）
+    cap_ok, util = _capacity_gate(farm, private, day=day,
+                                  plan=(plan or None))
     units, comps = _capacity_units(farm, private)
-    return {"day": day, "hour": hour, "cls_counts": cls_counts,
-            "d1": d1, "tasks": out_tasks,
+    law = _capacity_law_max(len(_get(farm, "hands", []) or []))
+    capacity_deficit = None
+    capacity_slack = None
+    if util > CAP_USE_MAX:
+        capacity_deficit = {"type": "over", "util": round(util, 3),
+                            "units": units, "law": round(law, 1)}
+    elif util < CAP_USE_MIN:
+        capacity_slack = {"room_units": round(law * CAP_USE_MIN - units, 1),
+                          "util": round(util, 3)}
+
+    scenario = {"stage": plan.get("stage"), "opp_class": plan.get("opp_class"),
+                "c_branch": plan.get("c_branch")}
+    canon = {"day": day,
+             "tasks": [[str(t["key"]), t["cls"], t["tier"], t["deadline"],
+                        round(float(t.get("v") or 0), 3)]
+                       for t in out_tasks],
+             "events": events, "d1": [str(k) for k in d1]}
+    mission_hash = hashlib.sha256(
+        json.dumps(canon, sort_keys=True, ensure_ascii=False)
+        .encode("utf-8")).hexdigest()[:16]
+    return {"day": day, "hour": hour, "player": player,
+            "scenario": scenario, "cls_counts": cls_counts,
+            "tier_counts": tier_counts, "d1": d1, "tasks": out_tasks,
+            "events": events,
+            "eod": {"projected": eod_projected, "planned_sell": planned_sell,
+                    "harvest_in": harvest_in, "overflow": eod_overflow},
             "capacity": {"ok": cap_ok, "util": round(util, 3),
-                         "units": units, "components": comps}}
+                         "units": units, "components": comps,
+                         "law": round(law, 1)},
+            "capacity_deficit": capacity_deficit,
+            "capacity_slack": capacity_slack,
+            "mission_hash": mission_hash}
+
+
+def _mission_shadow_update(player, day, hour, obs, farm, private, plan,
+                           tasks):
+    """Dawn bypass: build the mission once per player-day (fail-open).
+
+    Consumed by telemetry and the M3 harness only; never touches the
+    decision path.  Clock rollback = new episode -> rebuild.
+    """
+    st = _MISSION_SHADOW.get(player)
+    if st is not None and st.get("day") == day \
+            and hour >= st.get("hour", 0):
+        return st.get("mission")
+    try:
+        mission = _build_mission(obs, farm, private, day, plan, tasks)
+    except Exception:
+        mission = None
+    _MISSION_SHADOW[player] = {"day": day, "hour": hour, "mission": mission}
+    return mission
+
+
+def mission_shadow(player):
+    """Read-only getter for the current dawn mission (or None)."""
+    st = _MISSION_SHADOW.get(player)
+    return (st or {}).get("mission")

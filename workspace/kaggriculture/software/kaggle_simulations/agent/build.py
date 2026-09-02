@@ -14,7 +14,7 @@ Contract (see docs/worker_route_scheduler_design.md and JOURNAL 2026-09-02):
     only import-time side effects (all verified self-contained) are the
     telemetry/state dict inits, the _FIB_CUM fill loop and
     _WHEAT_FARM_PLAN = _wheat_farm_plan() (constants-first order covers it).
-  * stdlib-only output: import whitelist {copy, math}.
+  * stdlib-only output: import whitelist {copy, math, json, hashlib}.
   * Prints sha256 + canonical LF sha256 of the artifact for identity-chain
     registration (software/active_candidate.json).
 """
@@ -38,7 +38,7 @@ MERGE_ORDER = [
     "mission", "solver", "executor", "market", "entry",
 ]
 
-ALLOWED_IMPORTS = {"copy", "math"}
+ALLOWED_IMPORTS = {"copy", "math", "json", "hashlib"}
 
 META_LINES = [
     "# " + "=" * 74,

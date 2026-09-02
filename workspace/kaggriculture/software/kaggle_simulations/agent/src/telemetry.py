@@ -88,6 +88,15 @@ def _telemetry_day_template():
                              "carrot": 0, "herd": 0},
         "weed_tiles": 0,
         "herd_head": 0,
+        # ---- M1/M2 scorecard: dawn mission shadow (scheduler §2/§7) ----
+        # mission_hash is the M2 golden-hash anchor; d1_count/tier_counts
+        # feed the cls-completion and D1-overdue scorecards; cap_util is
+        # the capacity-law utilization band (branch §10.2, 65%-85%).
+        "mission_hash": None,
+        "d1_count": 0,
+        "tier_counts": {},
+        "cap_util": None,
+        "cap_deficit": False,
     }
 
 
@@ -254,6 +263,19 @@ def _telemetry_record_turn(obs, farm, private, actions, tasks, trace, orders):
                                      + comps["melon"]
                                      + 0.5 * comps["carrot"]
                                      + 2 * comps["herd"])
+        # M1/M2 scorecard: pull the dawn mission shadow (built once per
+        # player-day by _mission_shadow_update in the entry bypass)
+        try:
+            mission = mission_shadow(_get(obs, "player", 0))
+            if mission is not None and mission.get("day") == day:
+                daily["mission_hash"] = mission.get("mission_hash")
+                daily["d1_count"] = len(mission.get("d1") or [])
+                daily["tier_counts"] = dict(mission.get("tier_counts") or {})
+                daily["cap_util"] = (mission.get("capacity") or {}).get("util")
+                daily["cap_deficit"] = \
+                    mission.get("capacity_deficit") is not None
+        except Exception:
+            pass
         cross_choices = int((trace or {}).get("cross_quadrant", 0))
         daily["cross_quadrant_choices"] += cross_choices
         overdue = {"WATER": 0, "FEED": 0, "CARE": 0}
