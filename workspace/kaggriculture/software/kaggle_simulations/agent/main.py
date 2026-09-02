@@ -994,6 +994,17 @@ PLANT_HOUR_MAX = 21
 # crops sit beside the workers), so the scheduler must prefer near work
 # without forbidding far work.
 BUCKET_DOMINANCE = 120.0
+# V-T7 functional zoning: wheat band inside the dairy home quadrant (NW)
+# before the rotation claims its cells -- tetsuya holds 10 wheat in NW
+# during the single-quadrant opening (9 leaves room for melon 3 +
+# strawberry 8 in the ~20 free NW cells) and 12-15 beside the pastures on
+# the multi-quadrant d20 snapshots (the pass-2 claim tops the band back
+# up to the full _wheat_cap once other quadrants exist).
+WHEAT_DAIRY_QUAD_BAND = 9
+# V-T7: the carrot endgame line only CLAIMS tiles from this day (tetsuya
+# plants d23-27; a d15 claim squatted the SW wheat field -- seed-102
+# forensics).  CROP_PHASE keeps the planting legality window.
+CARROT_ENDGAME_FROM = 22
 # V-T3 watertight planting (forensics: ep 104585743 d8 -- a 10-seed NE pulse
 # planted h8-14 left 18 tiles unwatered and 16 died; tetsuya's 6 replays all
 # plant in the daytime band and never lose the batch).  Two task-generation
@@ -2102,45 +2113,95 @@ def _field_alloc(farm, day, prices, plan=None):
         weed_field.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in accesses), p[1], p[0]))
         empties = empties + weed_field
     crop_map = {crop: set(existing[crop]) for crop in CROPS}
-    crop_sequence = ("STRAWBERRY",) if plan.get("wheat_farm") else \
-        ("STRAWBERRY", "MELON", "CARROT")
-    for crop in crop_sequence:
+
+    # V-T7 functional zoning (tetsuya d20 forensics, two games: NW = dairy
+    # block + wheat, NE = one contiguous strawberry field (18-20 tiles),
+    # SW = wheat + side pasture, melon parked at the FAR rim (median shed
+    # distance 7-8).  Our old nearest-first order inverted the frequency/
+    # distance law: melon sat at median 3 while wheat -- the highest-
+    # frequency line (daily water + harvest + the FEED pickup source) --
+    # was pushed to the rim at median 6, and strawberry fragmented across
+    # NW+NE.  Claim order now: WHEAT nearest-first inside the dairy-side
+    # quadrants (NW, then SW), STRAWBERRY one quadrant at a time (NE first,
+    # the dairy home quadrant last) so its crew works a contiguous block,
+    # MELON from the far rim inward (one-shot, lowest frequency), CARROT
+    # nearest-first on whatever remains.
+    def _shed_dist(p):
+        return min(_dist(p[0], p[1], *q) for q in accesses)
+
+    def _crop_open(crop):
         lo, hi = CROP_PHASE[crop]
-        if not (lo <= day <= hi):
-            continue
-        if _get(prices, crop, BASE_PRICE[crop]) < CROP_FLOOR[crop]:
-            continue  # red line: dead-price freeze for this crop
-        if crop == "STRAWBERRY":
-            room = min(plan["straw_quad_cap"] * len(quads),
-                       plan["straw_total_cap"]) - len(crop_map[crop])
-        else:
-            room = CROP_CAP_PER_QUAD[crop] * len(quads) - len(crop_map[crop])
-        taken = 0
-        for pos in empties:
-            if taken >= room:
-                break
-            crop_map[crop].add(pos)
-            taken += 1
-        empties = empties[taken:]
+        return lo <= day <= hi and \
+            _get(prices, crop, BASE_PRICE[crop]) >= CROP_FLOOR[crop]
+
+    def _quad_sorted(qn, reverse=False):
+        return sorted((p for p in empties
+                       if _quadrant_of(p[0], p[1], board) == qn),
+                      key=lambda p: ((-_shed_dist(p)) if reverse
+                                     else (_shed_dist(p), p[1], p[0])))
+
     wheat_room = _wheat_cap(day, _get(prices, "WHEAT", 25)) - len(crop_map["WHEAT"])
     if plan.get("wheat_farm"):
-        # WHEAT_FARM treats wheat as the economic line, with a hard target
-        # band; the existing seed/price guards still decide execution.
         wheat_room = max(0, min(plan["wheat_total_cap"],
                                 WHEAT_FARM_WHEAT_CAP) -
                          len(crop_map["WHEAT"]))
     elif _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
-        # log-curve wheat as a rotation money crop (rank-1 adaptive share:
-        # 0.45-0.62 of the field when wheat trades 36-42+); the extra tiles
-        # also soften the wheat price against volume-farming opponents.
-        # r5-P4 volume: the quota widens to the plan's (Renji sold 1508u)
         wheat_room += plan["wheat_money_quad"] * len(quads)
-    taken = 0
-    for pos in empties:
-        if taken >= wheat_room:
+    # wheat pass 1: the dairy home quadrant keeps a BAND of near tiles
+    # (tetsuya d20: NW holds 12-15 wheat beside the pastures) -- bounded so
+    # a single-quadrant farm still leaves the strawberry phase its near
+    # cells (the r3 winner band needs 8 strawberry tiles by d11-13).
+    wheat_nw_band = min(wheat_room, WHEAT_DAIRY_QUAD_BAND)
+    for pos in (_quad_sorted("NW") if "NW" in quads else []):
+        if wheat_nw_band <= 0:
             break
         crop_map["WHEAT"].add(pos)
-        taken += 1
+        wheat_nw_band -= 1
+        wheat_room -= 1
+        empties.remove(pos)
+
+    for crop, descending in (("MELON", True), ("CARROT", False)):
+        if not _crop_open(crop):
+            continue
+        if crop == "CARROT" and day < CARROT_ENDGAME_FROM:
+            # V-T7: carrot is the ENDGAME rotation (tetsuya plants it
+            # d23-27); claiming its 6/quad from d15 let it squat the SW
+            # wheat field for 11 days (seed-102 forensics: feed floor
+            # squeezed to 5 wheat tiles).
+            continue
+        room = CROP_CAP_PER_QUAD[crop] * len(quads) - len(crop_map[crop])
+        order = sorted(empties, key=lambda p: ((-_shed_dist(p)) if descending
+                                               else _shed_dist(p), p[1], p[0]))
+        taken = 0
+        for pos in order:
+            if taken >= room:
+                break
+            crop_map[crop].add(pos)
+            taken += 1
+            empties.remove(pos)
+
+    if _crop_open("STRAWBERRY"):
+        room = min(plan["straw_quad_cap"] * len(quads),
+                   plan["straw_total_cap"]) - len(crop_map["STRAWBERRY"])
+        for qn in (q for q in ("NE", "SW", "SE", "NW") if q in quads):
+            if room <= 0:
+                break
+            for pos in _quad_sorted(qn):
+                if room <= 0:
+                    break
+                crop_map["STRAWBERRY"].add(pos)
+                room -= 1
+                empties.remove(pos)
+
+    # wheat pass 2: whatever quota remains goes nearest-first over the rest
+    # (SW is the tetsuya side dairy field at 12-13 tiles).
+    wheat_rest = sorted(empties, key=lambda p: (_shed_dist(p), p[1], p[0]))
+    for pos in wheat_rest:
+        if wheat_room <= 0:
+            break
+        crop_map["WHEAT"].add(pos)
+        wheat_room -= 1
+        empties.remove(pos)
 
     capacity = int(len(crop_map["WHEAT"]) * 1.2)
     return builds, crop_map, n_animals, capacity

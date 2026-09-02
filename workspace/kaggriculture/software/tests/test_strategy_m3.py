@@ -118,7 +118,12 @@ def test_rotation_phase_windows():
     assert len(crops_mid["STRAWBERRY"]) == main.CROP_CAP_PER_QUAD["STRAWBERRY"]
     _, crops_late, _, _ = main._field_alloc(farm, 16, _prices())
     assert not crops_late["STRAWBERRY"]      # phase 0-14 closed
-    assert len(crops_late["CARROT"]) == main.CROP_CAP_PER_QUAD["CARROT"]
+    # V-T7 (2026-09-02): carrot is the ENDGAME rotation -- it claims no
+    # tiles at d16 (the SW wheat field keeps the mid-game) and its full
+    # per-quad cap from CARROT_ENDGAME_FROM.
+    assert not crops_late["CARROT"]
+    _, crops_end, _, _ = main._field_alloc(farm, 24, _prices())
+    assert len(crops_end["CARROT"]) == main.CROP_CAP_PER_QUAD["CARROT"]
     _, crops_early, _, _ = main._field_alloc(farm, 12, _prices())
     assert not crops_early["CARROT"]         # phase 15-26 not open
 
