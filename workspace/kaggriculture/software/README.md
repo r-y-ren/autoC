@@ -127,7 +127,11 @@ engine=kaggle-environments 1.32.7 kaggriculture
 edit agent/src/*.py  ->  python agent/build.py  ->  python -m pytest workspace/kaggriculture/software/tests -q
 ```
 
-`build.py --check` 在内存重建并与盘上 main.py 字节比对（防手改漂移；`tests/test_build_determinism.py` 常驻执行）。构建前检拦截跨模块顶层重名（扁平命名空间下的静默遮蔽），构建后检断言 import 白名单（copy/math）与末位 callable，末尾打印 sha256/canonical_lf_sha256 供身份链登记。行为等价基准为 v10.9 参照版（git 862b347，sha 67e68c3a…）：本次迁移以 AST 逐名等价 + 回放 A/B（5 种子×8 配置，逐回合动作+订单流一致）验收，语义零变化。后续实施落位：strategy=L1 阶段×分支选择、mission=L2 任务包+三重前置检查、solver=L3 路线求解器、executor=L4 执行器（`ROUTE_EXECUTOR_ENABLED`，M4 启用）、market=卖出计划器+干扰/防御、observer=OBS v2（对应 docs/ 四份设计文档）。
+`build.py --check` 在内存重建并与盘上 main.py 字节比对（防手改漂移；`tests/test_build_determinism.py` 常驻执行）。构建前检拦截跨模块顶层重名（扁平命名空间下的静默遮蔽），构建后检断言 import 白名单（copy/math）与末位 callable，末尾打印 sha256/canonical_lf_sha256 供身份链登记。
+
+头部标记契约（2026-09-02 验收更正）：`Kaggriculture submission agent` 标记要求位于产物**首 256 字节**内（`tests/test_build_determinism.py` 的断言窗口即此契约），与 v10.9 原文件行为对齐——原文件首行为 76 字符装饰线，标记同样不在首 64 字节。`test_ablate` 的首 64 字节断言只作用于冻结快照自带的头部；工具链没有任何代码消费 working main.py 的该标记（external_h2h 走 canonical SHA）。当初计划书里的"首 64 字节"约束系起草虚构，特此更正。
+
+身份链登记流程（迁移类操作规范，2026-09-02 验收固化）：改动 main.py 字节的迁移/重构必须两段式提交——①重构提交（提交信息显式标注"identity tests expected red until follow-up registration"，避免 bisect 误判）；②紧随的登记提交更新 active_candidate.json 四元组 + README 投影 + test_candidate_identity 钉死字面量 + 索引再生成。**不可**合并为单提交：登记的 git_ref 必须指向"已包含新 main.py 的提交"，存在自指（用 "HEAD" 等可变 ref 可绕过自指但破坏身份链不可变性，禁止）。行为等价基准为 v10.9 参照版（git 862b347，sha 67e68c3a…）：本次迁移以 AST 逐名等价 + 回放 A/B（5 种子×8 配置，逐回合动作+订单流一致）验收，语义零变化。后续实施落位：strategy=L1 阶段×分支选择、mission=L2 任务包+三重前置检查、solver=L3 路线求解器、executor=L4 执行器（`ROUTE_EXECUTOR_ENABLED`，M4 启用）、market=卖出计划器+干扰/防御、observer=OBS v2（对应 docs/ 四份设计文档）。
 
 ## Active Candidate Identity
 
