@@ -1,42 +1,42 @@
 {
- "schema_version": "1.0",
- "working": {
-  "label": "v10.9.1-working",
-  "status": "development",
-  "path": "kaggle_simulations/agent/main.py",
-  "sha256": "845b2a91125a99e4380dddc01a9ea938474b753976be7843f67c739a7c721acc",
-  "git_ref": "ac5e4b3e2f9468cf1659f1918c6be1c9084ef700",
-  "git_blob_oid": "e4df7102b5ce937e62d669d18adf9ec54de627d5",
-  "canonical_lf_sha256": "845b2a91125a99e4380dddc01a9ea938474b753976be7843f67c739a7c721acc",
-  "holdout_status": "not_run"
- },
- "last_promoted_frozen": {
-  "label": "v72-frozen",
-  "status": "frozen",
-  "manifest_path": "v72_frozen_manifest.json",
-  "snapshot_path": "v72_frozen_candidate.b64",
-  "sha256": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748",
-  "git_ref": "ae9354725b44e0af3ecbbc5e7ef64b876ec9bb1a"
- },
- "published_holdout": {
-  "status": "published",
-  "attempt_index": 5,
-  "candidate_sha256": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748",
-  "eval_results_path": "exports/holdout/published/eval_results.json",
-  "eval_results_sha256": "b89c3b9e857602958ab3296ed295cdbcc71bcdbfc160e92584d7d3eb6fa330bf",
-  "seed_manifest_path": "exports/holdout/published/seed_manifest.json",
-  "seed_manifest_sha256": "61c33a0b7359385eed936ef803e7fb5764256f3bc9ac64e60d1fd7280c21c7f8"
- },
- "engine": {
-  "package": "kaggle-environments",
-  "version": "1.32.7",
-  "scenario": "kaggriculture",
-  "vendored_wheel_path": "vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl",
-  "vendored_wheel_sha256": "be693e837bcb0f81bad7d6509f2737f29986fe66b12296e9990b0aa88f287465"
- },
- "runtime": {
-  "implementation": "CPython",
-  "python_version": "3.14"
- },
- "online_submission_refs": []
+  "schema_version": "1.0",
+  "working": {
+    "label": "v10.9.2-working",
+    "status": "development",
+    "path": "kaggle_simulations/agent/main.py",
+    "sha256": "8cad60ed745a8835e0141e3190ed0c248d783f86b4361164622f586bd0b97e92",
+    "git_ref": "ffd07e81c38fac780d9c356ef21dc572fc59be0e",
+    "git_blob_oid": "e9b8b18f6fa95685deccdbb08cae78809245a7f3",
+    "canonical_lf_sha256": "8cad60ed745a8835e0141e3190ed0c248d783f86b4361164622f586bd0b97e92",
+    "holdout_status": "not_run"
+  },
+  "last_promoted_frozen": {
+    "label": "v72-frozen",
+    "status": "frozen",
+    "manifest_path": "v72_frozen_manifest.json",
+    "snapshot_path": "v72_frozen_candidate.b64",
+    "sha256": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748",
+    "git_ref": "ae9354725b44e0af3ecbbc5e7ef64b876ec9bb1a"
+  },
+  "published_holdout": {
+    "status": "published",
+    "attempt_index": 5,
+    "candidate_sha256": "c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748",
+    "eval_results_path": "exports/holdout/published/eval_results.json",
+    "eval_results_sha256": "b89c3b9e857602958ab3296ed295cdbcc71bcdbfc160e92584d7d3eb6fa330bf",
+    "seed_manifest_path": "exports/holdout/published/seed_manifest.json",
+    "seed_manifest_sha256": "61c33a0b7359385eed936ef803e7fb5764256f3bc9ac64e60d1fd7280c21c7f8"
+  },
+  "engine": {
+    "package": "kaggle-environments",
+    "version": "1.32.7",
+    "scenario": "kaggriculture",
+    "vendored_wheel_path": "vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl",
+    "vendored_wheel_sha256": "be693e837bcb0f81bad7d6509f2737f29986fe66b12296e9990b0aa88f287465"
+  },
+  "runtime": {
+    "implementation": "CPython",
+    "python_version": "3.14"
+  },
+  "online_submission_refs": []
 }
