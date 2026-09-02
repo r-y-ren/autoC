@@ -15,5 +15,32 @@
   "local_ab_selfplay": "seeds 101/102: NEW d0-end cash -1400 exactly (burst confirmed); herd d6 NEW 3 vs OLD 2; finals mixed (+10k/-8k, day-0 chaos-dominated as documented), online is the ruling axis",
   "gates": "pytest 692 passed 0 failed (r3 opening anchors updated to V-C), smoke 4-phase PASS, identity chain re-registered, artifact indexes regenerated"
  },
- "online_gate": "PENDING - 6-game public sample per SOP; G1 opening-form decision at W1 end compares vs v10.9 (55952504, sampling) and variant ladder data"
+ "online_gate": {
+  "status": "SAMPLED_2026-09-02T18:20+08:00",
+  "public_score_c1": 537.1,
+  "public_score_v109_compare": 523.8,
+  "sample": {
+   "c1_episodes": 17,
+   "c1_record": "9W-8L",
+   "c1_final_mean": 55015,
+   "c1_d12cash": {
+    "min": 179,
+    "med": 464,
+    "max": 1476
+   },
+   "v109_episodes": 12,
+   "v109_record": "5W-7L",
+   "v109_final_mean": 56632,
+   "v109_d12cash": {
+    "min": 222,
+    "med": 411,
+    "max": 1022
+   }
+  },
+  "g1_verdict_preliminary": "C >= B on both axes (score +13.3, win-rate 52.9% vs 41.7%, d12 cash 464 vs 411); Elo noise +-25-50 at these game counts so directional only -- variant C RETAINED, no revert. Structural gap unchanged: d12 cash med ~0.45k vs top-20 med 15.4k belongs to the build-pace line (capacity gates + M1 + sell planner of the landing wave), not the opening.",
+  "notable": [
+   "near-tie loss ep: 49711 vs 49714 (3-coin margin)",
+   "c1 losses concentrated vs 87k-112k finals (RATriciculture 96.7k, Fabian Birringer 112.5k, Margo Kim 94.6k) -- the 96-110k band opponents still out-build us"
+  ]
+ }
 }
