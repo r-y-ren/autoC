@@ -102,6 +102,9 @@ def _telemetry_day_template():
         "fuse_events": 0,
         "backfill_room": None,
         "peak_ok": None,
+        # ---- market W2: dawn sell-plan shadow (MK-2, §2) ----
+        "sell_plan_lines": 0,
+        "sell_plan_clear": 0,
     }
 
 
@@ -289,6 +292,16 @@ def _telemetry_record_turn(obs, farm, private, actions, tasks, trace, orders):
             daily["fuse_events"] = int(stage_state.get("fuse_events", 0))
             backfill = stage_state.get("backfill") or {}
             daily["backfill_room"] = backfill.get("room_units")
+        except Exception:
+            pass
+        # market W2: dawn sell-plan shadow (MK-2, §2)
+        try:
+            sell_plan = sell_plan_shadow(_get(obs, "player", 0))
+            if sell_plan is not None and sell_plan.get("day") == day:
+                lines = sell_plan.get("lines") or {}
+                daily["sell_plan_lines"] = len(lines)
+                daily["sell_plan_clear"] = sum(
+                    1 for v in lines.values() if v.get("verdict") == "clear")
         except Exception:
             pass
         cross_choices = int((trace or {}).get("cross_quadrant", 0))

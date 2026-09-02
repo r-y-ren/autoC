@@ -60,9 +60,14 @@ def kill_table():
 
 
 def market_facts(replay_globs):
-    """Realised town draws per item per day, from replay JSON steps."""
+    """Realised town draws per item per day, from replay JSON steps.
+
+    Also counts floor sells (§3.6 prerequisite 2): SELL orders of an item
+    executed while its market price sat at the $1 floor -- they move money
+    but not inventory (engine `if price > 1`), the only Ch0 blind spot.
+    """
     facts = defaultdict(list)   # item -> list of per-day draws
-    floor_sells = 0
+    floor_sells = defaultdict(int)   # item -> units sold at the $1 floor
     files = []
     for g in replay_globs:
         files.extend(glob.glob(g))
@@ -75,9 +80,10 @@ def market_facts(replay_globs):
         steps = data.get("steps") or []
         prev_inv = {}
         for si in range(1, len(steps)):
-            day = (si - 1) // 24
             obs0 = steps[si][0].get("observation") or {}
-            inv = dict(obs0.get("market", {}).get("inventory") or {})
+            market = obs0.get("market", {}) or {}
+            prices = market.get("prices", {}) or {}
+            inv = dict(market.get("inventory") or {})
             player_units = defaultdict(float)
             for p in range(2):
                 acts = steps[si][p].get("action") or {}
@@ -87,6 +93,10 @@ def market_facts(replay_globs):
                                                                   (int, float)):
                         sign = 1 if o[0] == "SELL" else -1
                         player_units[o[1]] += sign * o[2]
+                        # floor-sell: SELL executed at the $1 floor price
+                        if o[0] == "SELL" and \
+                                prices.get(o[1], 0) <= main.PRICE_FLOOR_EMB:
+                            floor_sells[o[1]] += int(o[2])
             for item, now in inv.items():
                 if item not in prev_inv:
                     continue
@@ -102,7 +112,7 @@ def market_facts(replay_globs):
                 "min": min(draws), "max": max(draws),
                 "mean": round(sum(draws) / len(draws), 2),
             }
-    return summary, floor_sells
+    return summary, dict(floor_sells)
 
 
 def main_cli():

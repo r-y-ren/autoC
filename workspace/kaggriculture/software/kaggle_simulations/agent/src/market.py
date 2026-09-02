@@ -1,29 +1,29 @@
 # ===========================================================================
-# 【中文·模块导览】src/market.py —— 市场引擎镜像 + 订单编排（市场层现状）
+# 【中文·模块导览】src/market.py —— 市场引擎镜像 + 订单编排（market v1.1 宿主）
 # ---------------------------------------------------------------------------
-# v10.9 职责：四块——①产能/吸收模型（_town_daily_demand 确定吸收、
-#   _prod_evening_from/_ongoing_evenings_left/_crop_future_value 价值
-#   估计、_buy_pace 步速确认）；②市场引擎语义镜像（_hire_cost fib 表、
-#   _market_price_emb 逐件曲线价、_market_order_priority、
-#   plan_market_orders 官方语义预算仿真）；③曲线数学（_shape_val/
+# v10.9 保留件：①产能/吸收模型（_town_daily_demand/_prod_evening_from/
+#   _ongoing_evenings_left/_crop_future_value/_buy_pace）；②市场引擎语义
+#   镜像（_hire_cost fib 表、_market_price_emb 逐件曲线价、
+#   _market_order_priority、plan_market_orders 官方语义预算仿真——
+#   committed_spend 的唯一权威账本，MS-1.1）；③曲线数学（_shape_val/
 #   _price_at_offset/_offset_from_price 反解/_project_price 投影）；
-#   ④卖出三门态 _market_gates + 订单编排 _market_orders（含
-#   committed_spend 同回合台账与 LIQUIDITY_FLOOR 流动性底线）。
-# 新架构落位：market_strategy_design 的改造宿主（卖出计划器/干扰/防御）。
-# 文档符合性审查（market v1.1 逐项）：
-#   ✓ 保留资产五项全数在场且逐字保留（§1 表）——plan_market_orders
-#     逐件仿真、_town_daily_demand 吸收模型、曲线镜像+投影、死价冻结、
-#     LIQUIDITY_FLOOR+committed_spend；
-#   ✗ 待办——卖出计划器（MK-2/3：黎明一次计划=供给日历×吸收×投影×
-#     EOD 预算×10 单配额，三门态降级为战术覆盖、囤vs清判据替代静态
-#     门槛）；
-#   ✗ 待办——干扰模块（MK-4/5：三状态触发器 R_opp vs R_us/载体四级/
-#     杀伤表/三闸）与防御检测-响应表（按 log/linear/sq 曲线分流）；
-#   ✗ 待办——买侧两小件（机会性买入：价<26+库容+现金三条件囤饲料；
-#     买侧大单分批：BUY 抽货推高曲线）；
-#   ✗ 待办——branch §5.4 迁移：死价/流动性现为运行时门形态，待迁至
-#     任务包三重前置检查（黎明一次解）；committed_spend 记账按裁定
-#     并入 plan_market_orders 逐件仿真（现两套并存、功能等价）。
+#   ④卖出三门态 _market_gates + 订单编排 _market_orders（买点已接
+#   branch §5.4 三重前置检查：容量/曲线/现金门）。
+# market v1.1 落地件（W1 波 + W2 完善波）：
+#   §5 买侧两小件（机会性买入 <26 囤 4 天量 + BUY_CHUNK_MAX_UNITS 分批）；
+#   §2.2 判据 _sell_plan_item（囤=投影≥现价×HOLD_EDGE 且未争议）+
+#     争议线零囤货 _contested_items/_sell_overrides（只增清仓）+ P4 三档；
+#   §2.1/2.2 MK-2 黎明卖出计划器 _sell_plan_dawn（影子：供给日历×吸收×
+#     投影×EOD 预算×10 单配额→每线量/批/时点/防御姿态；MK-3 接管的门禁
+#     =回放对账偏差达标+行为回归+线上，scripts/sell_plan_reconciliation.py）；
+#   §3 MK-4 干扰影子 _interference_shadow（v1.1 修偏：R_opp=日历×
+#     min(供给,吸收)×投影、对称 R_us 流+rollout 终值入日志、连续
+#     INTERFERENCE_CONFIRM_DAYS 天确认、三闸布尔；ARMED=False 恒惰性）；
+#   §4.4 防御检测-响应表 _DEFENSE_SHAPE（log 不理会/linear 短持穿越/
+#     sq 立即止损，入计划器 defense 字段）。
+# 延后项（见 JOURNAL）：运行时门退役（LIQUIDITY_FLOOR/DEAD_PRICE_FLOOR
+#   作为纵深保留至三门有线上证据）；Ch0 投影切换（observer OBS-2/V0 门）；
+#   MK-3 计划器接管、MK-5 干扰武装（载体+闸消费）。
 # ===========================================================================
 
 # 【中文】模块级会话状态（按玩家 id 分键——自对局校验时框架可能把本文件
@@ -400,6 +400,57 @@ def plan_market_orders(orders, money, shed_count, *, day=0, max_orders=10,
             "remaining_capacity": max(0, int(shed_capacity) - occupied),
             "market_inventory": inv,
             "truncated": len(selected) < len(orders or [])}
+
+
+def buy_product_cost(item, qty, market_inventory=None):
+    """Engine-exact BUY_PRODUCT cost for qty units (market §1.1, MS-1.1).
+
+    The official semantics reprices EVERY unit at the post-buy inventory
+    (plan_market_orders's per-unit loop): buying draws market inventory
+    down unit by unit, so the price walks along the embedded curve.  This
+    helper is the single source of that cost model -- the generation-side
+    committed-spend ledger in _market_orders consumes it instead of a flat
+    spot-price guess, keeping both ledgers in agreement by construction.
+    """
+    if item not in ("WHEAT", "FERTILIZER"):
+        return 0.0
+    inv = MARKET_I0_EMB
+    if market_inventory is not None:
+        try:
+            inv = int(market_inventory.get(item, MARKET_I0_EMB))
+        except (AttributeError, TypeError, ValueError):
+            inv = MARKET_I0_EMB
+    total = 0.0
+    for _ in range(max(0, int(qty))):
+        total += _market_price_emb(item, inv - 1)
+        inv -= 1
+    return total
+
+
+def _affordable_buy_units(item, budget, obs):
+    """Per-unit affordable count under the engine-exact BUY_PRODUCT curve
+    (MS-1.1): the same cumulative walk plan_market_orders performs, used at
+    generation time so the queue's wallet view matches the simulator."""
+    if budget <= 0:
+        return 0
+    inv = MARKET_I0_EMB
+    market_inventory = _get(_get(obs, "market", {}) or {}, "inventory",
+                            None)
+    if market_inventory is not None:
+        try:
+            inv = int(market_inventory.get(item, MARKET_I0_EMB))
+        except (AttributeError, TypeError, ValueError):
+            inv = MARKET_I0_EMB
+    spend = 0.0
+    units = 0
+    while units < BUY_CHUNK_MAX_UNITS * 2:
+        price = _market_price_emb(item, inv - 1)
+        if spend + price > budget:
+            break
+        spend += price
+        units += 1
+        inv -= 1
+    return units
 
 
 # 【中文】牛奶逐日持有门槛（选择性干预）：基准 105——在双方都挤奶的
@@ -852,15 +903,183 @@ def _sell_overrides(obs, farm, private, day, prices, shed, town_shops,
         return []               # fail-open: overrides never break ordering
 
 
+# --------------------------------------------------------------------------
+# 【中文】MK-2 黎明卖出计划器（market §2.1/§2.2，影子件）。
+# 黎明一次计划：供给日历（自身公开 tiles 的 horizon=1 上市量 + 棚仓现货）
+#   × 吸收表 × 曲线投影 × EOD 预算（scheduler §2.4 联动）× 10 单配额 →
+#   每线 {verdict, qty_today, batches, hours, planned_price, defense}。
+# 五规则落点：1 囤vs清判据=_sell_plan_item（投影≥现价×HOLD_EDGE 且未
+#   争议）；2 争议线零囤；3 批量=min(当日量, 吸收, 库存+上市)；4 EOD
+#   溢出→log 曲线小麦强制清（mission eod 事件联动）；5 10 单预算——
+#   卖出行数≤SELL_PLAN_MAX_LINES、每线批数≤len(SELL_PLAN_HOURS)，
+#   HIRE/BUY 优先序在 plan_market_orders 保持。
+# 防御姿态（§4.4 检测-响应表）：flow 为负=被砸，按曲线形状分流
+#   log 不理会 / linear 短持穿越 / sq 立即止损。
+# 影子纪律：agent() 不消费（_sell_overrides/_market_gates 照旧）；
+# MK-3 接管的门禁=回放对账偏差达标（scripts/sell_plan_reconciliation.py）
+# + 行为回归 + 线上公共局。
+# --------------------------------------------------------------------------
+_SELL_PLAN_MEM = {}
+SELL_PLAN_HOURS = (6, 12, 18)
+SELL_PLAN_MAX_LINES = 4
+_DEFENSE_SHAPE = {"WHEAT": "log", "EGG": "log",
+                  "STRAWBERRY": "linear", "MILK": "linear",
+                  "WOOL": "sq", "MELON": "sq", "CARROT": "log"}
+
+
+def _sell_plan_dawn(obs, farm, private, day, plan=None):
+    """MK-2 dawn sell planner (SHADOW; market §2 full five-rule form)."""
+    prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
+    shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
+    absorb = _town_daily_demand(shops) if shops else {}
+    contested = _contested_items(obs)
+    player = _get(obs, "player", 0)
+    flow = _market_flow(player, day, prices)
+    shed = _get(private, "shed", {}) or {}
+    cal = _opp_production_calendar(farm, day, horizon=1)
+    mission = mission_shadow(player) or {}
+    eod_overflow = int((mission.get("eod") or {}).get("overflow", 0) or 0)
+
+    lines = {}
+    for item in ("STRAWBERRY", "MELON", "WOOL", "MILK", "CARROT", "EGG",
+                 "WHEAT"):
+        stock = shed.get(item, 0)
+        inflow = cal.get(item, [0])[0] if cal.get(item) else 0
+        stock = int(stock) if isinstance(stock, (int, float)) else 0
+        supply = stock + int(inflow)
+        if supply <= 0:
+            continue
+        price = _get(prices, item, BASE_PRICE.get(item, 0))
+        proj = _project_price(item, price, (flow or {}).get(item, 0.0),
+                              SELL_PLAN_LOOKAHEAD_DAYS)
+        verdict = _sell_plan_item(item, day, prices, flow, contested)
+        # P4 three-tier early clearing (same evidence as _sell_overrides)
+        if 25 <= day < ENDGAME_DAY and est_opp_conf(item) >= 0.5:
+            held = est_opp_held(item) or 0
+            if held >= P4_HEAVY_HELD or (
+                    held >= P4_MID_HELD and day >= 26):
+                verdict = "clear"
+        # rule 4: EOD overflow -> the log-curve wheat line clears first
+        eod_forced = False
+        if eod_overflow > 0 and item == "WHEAT" and stock > 0:
+            verdict = "clear"
+            eod_forced = True
+        qty_today = 0
+        batches = []
+        if verdict == "clear":
+            # rule 3: batch = min(当日量, 吸收, 库存+上市)
+            day_cap = max(1, absorb.get(item, 1)) if absorb else \
+                max(1, 2 * 1 + 4)
+            if eod_forced:
+                day_cap = max(day_cap, eod_overflow)
+            qty_today = min(supply, day_cap)
+            remaining = qty_today
+            slots = len(SELL_PLAN_HOURS)
+            base = max(1, qty_today // slots)
+            while remaining > 0 and len(batches) < slots:
+                take = min(remaining, base if remaining > base else
+                           remaining)
+                batches.append(take)
+                remaining -= take
+        # defense posture (§4.4): POSITIVE flow = glut building / under
+        # attack (EMA convention: supply piling up pushes the price down)
+        f = (flow or {}).get(item, 0.0)
+        pressure = f > 0
+        shape = _DEFENSE_SHAPE.get(item, "log")
+        if not pressure:
+            defense = "none"
+        elif shape == "log":
+            defense = "ignore"       # log 曲线砸不动（压舱石）
+        elif shape == "linear":
+            defense = "short_hold"   # 短持穿越（卖穿吸收才亏）
+        else:
+            defense = "cut"          # sq 立即止损 + 产能转移
+        if defense == "cut":
+            verdict = "clear"
+            if qty_today == 0 and supply > 0:
+                qty_today = min(supply, max(1, absorb.get(item, 1)))
+                batches = [qty_today]
+        lines[item] = {"verdict": verdict, "qty_today": qty_today,
+                       "batches": batches, "hours": SELL_PLAN_HOURS,
+                       "planned_price": round(max(proj, 0.0), 2),
+                       "spot_price": price, "defense": defense,
+                       "eod_forced": eod_forced, "stock": stock,
+                       "inflow": int(inflow)}
+    # rule 5: at most SELL_PLAN_MAX_LINES clear lines keep batches today
+    clear_items = sorted((k for k, v in lines.items()
+                          if v["verdict"] == "clear" and v["batches"]),
+                         key=lambda k: (-lines[k]["qty_today"], k))
+    for k in clear_items[SELL_PLAN_MAX_LINES:]:
+        lines[k]["batches"] = []
+        lines[k]["qty_today"] = 0
+    return {"day": day, "lines": lines,
+            "eod_overflow": eod_overflow}
+
+
+def _sell_plan_shadow_update(player, day, hour, obs, farm, private, plan):
+    """Dawn bypass for the MK-2 sell planner (fail-open, once per day)."""
+    st = _SELL_PLAN_MEM.get(player)
+    if st is not None and st.get("day") == day \
+            and hour >= st.get("hour", 0):
+        return st.get("plan")
+    try:
+        plan_out = _sell_plan_dawn(obs, farm, private, day, plan)
+    except Exception:
+        plan_out = None
+    _SELL_PLAN_MEM[player] = {"day": day, "hour": hour, "plan": plan_out}
+    return plan_out
+
+
+def sell_plan_shadow(player):
+    """Read-only getter for the dawn sell plan (or None)."""
+    st = _SELL_PLAN_MEM.get(player)
+    return (st or {}).get("plan")
+
+
 def interference_shadow_log():
     """Read-only access to the MK-4 shadow log (diagnostics only)."""
     return list(_INTERFERENCE_LOG)
 
 
-def _interference_shadow(obs, farm, day, prices):
-    """MK-4 trigger, SHADOW ONLY (INTERFERENCE_ARMED=False): compare a
-    7-day public-calendar income projection R_opp vs R_us and record the
-    verdict; never issues orders."""
+_INTERFERENCE_MEM = {}       # per-player consecutive-trigger memory
+
+
+def _calendar_flow_value(farm, day, prices, absorb, flow, horizon=7):
+    """R = Σ 日历(7d) × min(供给, 吸收) × 投影价（market §3.2 修偏版）。
+
+    变现量被城镇吸收封顶（零吸收产品贡献 0——"零吸收没有任何变现
+    机制"）；价用 SELL_PLAN_LOOKAHEAD_DAYS 投影而非现货快照。
+    """
+    if farm is None:
+        return 0.0, {}
+    cal = _opp_production_calendar(farm, day, horizon=horizon)
+    total = 0.0
+    per_item = {}
+    for item, daily in cal.items():
+        cap = absorb.get(item, 0) if absorb else 0
+        realizable = sum(min(amt, cap) for amt in daily)
+        if realizable <= 0:
+            per_item[item] = 0.0
+            continue
+        price = _get(prices, item, BASE_PRICE.get(item, 0))
+        proj = _project_price(item, price, (flow or {}).get(item, 0.0),
+                              SELL_PLAN_LOOKAHEAD_DAYS)
+        value = realizable * max(0.0, proj)
+        per_item[item] = value
+        total += value
+    return total, per_item
+
+
+def _interference_shadow(obs, farm, day, prices, plan=None):
+    """MK-4 trigger, SHADOW ONLY (INTERFERENCE_ARMED=False; v1.1 fix).
+
+    R_opp = 对手日历 × min(供给, 吸收) × 投影价（§3.2 原式）；R_us 用同式
+    对称流（可比口径；文档原文的 R_us=_plan_rollout 终值是 12 日存量口径，
+    与 7 日流量不可直接比——rollout 终值另行入日志供边际定标，解读记
+    JOURNAL）。触发需连续 INTERFERENCE_CONFIRM_DAYS 天确认（防单日噪声）；
+    三道风险闸布尔入日志（§3.5：杀伤/暴露≥2、干扰预算≤容量 15%、
+    触发消除即收手=日复判）。永不发令。
+    """
     try:
         farms = _get(obs, "farms", []) or []
         player = _get(obs, "player", 0)
@@ -871,30 +1090,63 @@ def _interference_shadow(obs, farm, day, prices):
                 break
         if opp is None:
             return False
+        shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
+        absorb = _town_daily_demand(shops) if shops else {}
+        flow = _market_flow(player, day, prices)
+        r_opp, opp_lines = _calendar_flow_value(opp, day, prices, absorb,
+                                                flow)
+        r_us, our_lines = _calendar_flow_value(farm, day, prices, absorb,
+                                               flow)
+        raw_trigger = r_opp > r_us + INTERFERENCE_MARGIN
 
-        def calendar_value(f):
-            total = 0.0
-            if f is None:
-                return 0.0
-            cal = _opp_production_calendar(f, day, horizon=7)
-            for item, daily in cal.items():
-                px = _get(prices, item, BASE_PRICE.get(item, 0))
-                total += sum(daily) * px
-            return total
+        # consecutive-day confirmation (§3.2)
+        mem = _INTERFERENCE_MEM.get(player) or {"day": -1, "streak": 0}
+        if raw_trigger:
+            streak = mem["streak"] + 1 if mem["day"] == day - 1 else 1
+        else:
+            streak = 0
+        _INTERFERENCE_MEM[player] = {"day": day, "streak": streak}
+        confirmed = raw_trigger and streak >= INTERFERENCE_CONFIRM_DAYS
 
-        r_opp = calendar_value(opp)
-        r_us = calendar_value(farm)
-        triggered = r_opp > r_us + INTERFERENCE_MARGIN
+        # gate 1: kill/exposure >= 2 on the opponent's strongest line (§3.5)
+        top_item = max(opp_lines, key=lambda k: (opp_lines[k], k)) \
+            if opp_lines else None
+        kill_value = opp_lines.get(top_item, 0.0) if top_item else 0.0
+        exposure = our_lines.get(top_item, 0.0) if top_item else 0.0
+        gate_exposure = top_item is not None and exposure > 0 and \
+            kill_value >= INTERFERENCE_EXPOSURE_RATIO * exposure
+        # gate 2: interference budget <= 15% of the capacity law (§3.5/§5.3)
+        # shadow estimate: the cheapest vehicle ladder step is the carrot
+        # ambush (6 tiles x 0.5 units); the one-shot herd is 3 head x 2.
+        law_units = _capacity_law_max(len(_get(farm, "hands", []) or []))
+        gate_budget = law_units * INTERFERENCE_BUDGET_FRAC >= 3.0
+
+        # rollout terminal for margin calibration (not the trigger term)
+        r_us_rollout = None
+        try:
+            scan = _farm_scan(farm)
+            demand = absorb or {}
+            p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
+            roll = _plan_rollout(day, scan, plan or {}, prices, demand,
+                                 p_straw)
+            r_us_rollout = round(float(roll.get("terminal", 0.0)), 1)
+        except Exception:
+            r_us_rollout = None
+
         if _INTERFERENCE_LOG:
             prev = _INTERFERENCE_LOG[-1]
             if prev.get("day") == day:
                 _INTERFERENCE_LOG.pop()   # one record per day
-        _INTERFERENCE_LOG.append({"day": day, "r_opp": r_opp, "r_us": r_us,
-                                  "trigger": triggered,
-                                  "armed": INTERFERENCE_ARMED})
+        _INTERFERENCE_LOG.append({
+            "day": day, "r_opp": round(r_opp, 1),
+            "r_us_flow": round(r_us, 1), "r_us_rollout": r_us_rollout,
+            "raw_trigger": raw_trigger, "streak": streak,
+            "confirmed": confirmed, "top_opp_line": top_item,
+            "gate_exposure": gate_exposure, "gate_budget": gate_budget,
+            "armed": INTERFERENCE_ARMED})
         if len(_INTERFERENCE_LOG) > 60:
             del _INTERFERENCE_LOG[:len(_INTERFERENCE_LOG) - 60]
-        return triggered and INTERFERENCE_ARMED
+        return confirmed and INTERFERENCE_ARMED
     except Exception:
         return False
 
@@ -1001,13 +1253,17 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 # v10 M-E: affordability gate -- ep 103783585 re-issued
                 # BUY_PRODUCT WHEAT 10 for 24 straight turns at money=8
                 # (all rejected); the herd still starved two days later
-                want = min(want, max(
-                    0, int((money - committed_spend - 60) // wheat_px)))
+                # MS-1.1: per-unit walk along the embedded curve
+                # (buy_product_cost) -- matches plan_market_orders exactly.
+                want = min(want, _affordable_buy_units(
+                    "WHEAT", money - committed_spend - 60, obs))
             if want > 0:
                 # market §5 小件 2：BUY 抽货推高曲线——大单跨回合分批。
                 want = min(want, BUY_CHUNK_MAX_UNITS)
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
-                committed_spend += want * wheat_px
+                committed_spend += buy_product_cost(
+                    "WHEAT", want,
+                    _get(_get(obs, "market", {}) or {}, "inventory", None))
                 sys_wheat += want          # the opportunity block counts it
                 if plan.get("wheat_farm"):
                     projected_money -= want * unit_budget
@@ -1022,7 +1278,10 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                                    OPPORTUNE_WHEAT_PRICE)))
             if extra > 0:
                 orders.append(["BUY_PRODUCT", "WHEAT", extra])
-                committed_spend += extra * OPPORTUNE_WHEAT_PRICE
+                committed_spend += buy_product_cost(
+                    "WHEAT", extra,
+                    _get(_get(obs, "market", {}) or {},
+                         "inventory", None))
 
     # ---- seeds: the wheat feed floor first (m2b), then rotation crops
     # staged behind the pending land fund (FM-3 staging).  R3-3 exception:
@@ -1296,7 +1555,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     orders.extend(_sell_overrides(obs, farm, private, day, prices, shed,
                                   town_shops, orders))
     # 【market §3 落地】干扰触发器影子（MK-4）：只记录不发令。
-    _interference_shadow(obs, farm, day, prices)
+    _interference_shadow(obs, farm, day, prices, plan=plan)
     if last_day:
         # Goods already carried can DROP before market processing in this turn,
         # so include them in liquidation. Failed/partial quantities remain legal

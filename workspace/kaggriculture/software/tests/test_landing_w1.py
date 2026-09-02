@@ -239,8 +239,12 @@ def test_sell_overrides_zero_hood_and_p4():
 def test_interference_shadow_inert_but_logging():
     main._INTERFERENCE_LOG.clear()
     opp = _farm([[_tile_animal("COW", 0) for _ in range(8)]])
+    # W2 fix note: the v1.1 formula caps realizable supply by town
+    # absorption (market §3.2), so the fixture now carries a MILK shop --
+    # a zero-absorption world rightly logs r_opp = 0 (no monetization).
     obs = {"player": 0, "day": 10, "farms": [_farm([[None]]), opp],
-           "market": {"prices": {"MILK": 160}}}
+           "market": {"prices": {"MILK": 160}},
+           "town": {"unlocked_shops": ["SMOOTHIE_SHOP"]}}
     trig = main._interference_shadow(obs, opp, 10, {"MILK": 160})
     assert main.INTERFERENCE_ARMED is False
     assert trig is False                      # never armed -> inert

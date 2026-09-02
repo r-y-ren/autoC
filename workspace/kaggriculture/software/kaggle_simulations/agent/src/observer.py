@@ -393,11 +393,14 @@ def _opp_production_calendar(farm, day, horizon=7):
                     continue
                 placed = _get(tile, "placed_day", day)
                 first_ev = placed + a["first_yield_day"] - 1
+                prod = a.get("product", "")
                 for k in range(a.get("max_held", 6)):
                     offset = first_ev + k * a["interval"] - day
-                    if 0 <= offset < horizon:
-                        prod = a.get("product", "")
-                        if prod in cal:
-                            cal[prod][offset] += 1
+                    # the same horizon guard the crop branch has: an
+                    # out-of-window offset must be skipped, not indexed
+                    # ( IndexError here killed whole shadow calls; the
+                    # mis-indented pre-W2 form also wrote only the LAST
+                    # event of each animal -- both silently wrong )
+                    if 0 <= offset < horizon and prod in cal:
+                        cal[prod][offset] += 1
     return cal
-    return flow

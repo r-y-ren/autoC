@@ -57,6 +57,11 @@ def agent(obs):
         # the only consumers; the decision path below never reads it.
         _mission_shadow_update(player, day, hour, obs, farm,
                                _get(obs, "private", {}) or {}, plan, tasks)
+        # MK-2 shadow bypass (fail-open, market §2): the dawn sell plan
+        # (supply x absorption x projection x EOD x quota). Consumed by
+        # telemetry and the reconciliation harness only until MK-3.
+        _sell_plan_shadow_update(player, day, hour, obs, farm,
+                                 _get(obs, "private", {}) or {}, plan)
         actions = _schedule_units(obs, farm, _get(obs, "private", {}) or {},
                                   day, tasks)
         orders = _market_orders(obs, farm, _get(obs, "private", {}) or {},
