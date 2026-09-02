@@ -332,14 +332,16 @@ def test_executor_d29_drop_then_sell_template():
     actions, replan = main._execute_routes({"hour": 1, "player": 0},
                                            farm, private, 29, [])
     assert replan is False
-    assert actions[0] == ["DROP", "MILK", 10]
+    # canonical engine form: bare DROP drops everything carried
+    assert actions[0] == ["DROP"]
     assert main._D29_SELL_QUEUE[0] == {"MILK": 10}
-    # full shed: room 0 -> nothing can be dropped or sold
+    # # full shed: bare DROP still fires (engine destroys overflow) but
+    # NOTHING enters the sell queue
     main._D29_SELL_QUEUE.clear()
     private = {"shed": {"WHEAT": 100}, "inventories": [{"MILK": 10}]}
     actions, _ = main._execute_routes({"hour": 1, "player": 0}, farm,
                                       private, 29, [])
-    assert actions[0] == ["PASS"]
+    assert actions[0] == ["DROP"]
     assert 0 not in main._D29_SELL_QUEUE
 
 

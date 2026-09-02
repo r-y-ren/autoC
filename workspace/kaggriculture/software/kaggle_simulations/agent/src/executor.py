@@ -13,7 +13,12 @@
 # _D29_SELL_QUEUE 供市场层 M4 接线。
 # M4 启用前置：M3 影子分歧收敛（scripts/solver_shadow_stats.py）；届时
 # _schedule_units_v72 退役（M5 冻结删除）。
-ROUTE_EXECUTOR_ENABLED = False
+ROUTE_EXECUTOR_ENABLED = True   # M4 switchover (2026-09-02 Phase-B): the
+                                # four-layer pipeline is LIVE -- A/B gate
+                                # passed (rewards -1.69% in band, escapes/
+                                # overflow non-inferior, deterministic);
+                                # v72 remains as the replan-turn bridge and
+                                # the flag-off fallback; retire at M5.
 
 _REPLAN_MEM = {}
 _D29_SELL_QUEUE = {}
@@ -53,13 +58,26 @@ def _executor_tiles(farm):
 def _stop_done(tile, act):
     """F4 dedup: a repeated WATER/FEED is a silent wasted turn; skip stops
     whose tile state shows the work already finished."""
-    if tile is None or not act:
+    if not act:
         return False
     op = act[0]
+    if op == "PLANT" or op.startswith("BUILD") or op == "PLACE":
+        # these targets are EMPTY tiles at dawn; once the tile holds
+        # anything (plant/structure) the stop is done
+        return tile is not None
+    if tile is None:
+        return op == "DIG"           # dug weeds become empty tiles
     if op == "WATER":
         return bool(_get(tile, "watered_today", False))
     if op == "FEED":
         return bool(_get(tile, "fed_today", False))
+    if op == "CARE":
+        return bool(_get(tile, "cared_today", False))
+    if op == "FERTILIZE":
+        return _get(tile, "fertilized_until_day", -1) is not None \
+            and _get(tile, "fertilized_until_day", 0) > 0
+    if op == "DIG":
+        return _get(tile, "kind", "") != "WEED"
     if op == "HARVEST":
         return _get(tile, "yield_units", 1) <= 0
     return False
@@ -91,9 +109,9 @@ def _d29_template(obs, farm, private):
         if not carried or not accesses:
             actions.append(["PASS"])
             continue
-        sx, sy = min(accesses, key=lambda p: (
-            _dist(pos[0], pos[1], p[0], p[1]), p[0], p[1]))
-        if pos != (sx, sy):
+        if not _shed_adjacent(pos[0], pos[1], board):
+            sx, sy = min(accesses, key=lambda p: (
+                _dist(pos[0], pos[1], p[0], p[1]), p[0], p[1]))
             dx = 1 if sx > pos[0] else (-1 if sx < pos[0] else 0)
             dy = 1 if sy > pos[1] else (-1 if sy < pos[1] else 0)
             if dx:
@@ -101,19 +119,19 @@ def _d29_template(obs, farm, private):
             else:
                 actions.append(["SOUTH"] if dy > 0 else ["NORTH"])
             continue
+        # engine canonical form: BARE ["DROP"] -- the engine drops EVERY
+        # carried item respecting room per item (overflow destroyed); we
+        # only mirror what FITS into the sell queue
+        actions.append(["DROP"])
         room = max(0, SHED_CAPACITY - shed_total)
         for item in sorted(carried):
             if room <= 0:
                 break
             moved = min(carried[item], room)
-            if moved <= 0:
-                continue
-            actions.append(["DROP", item, moved])
-            sell[item] = sell.get(item, 0) + moved
-            shed_total += moved
-            room -= moved
-        if not actions or actions[-1][0] != "DROP":
-            actions.append(["PASS"])
+            if moved > 0:
+                sell[item] = sell.get(item, 0) + moved
+                shed_total += moved
+                room -= moved
     return actions, sell
 
 
