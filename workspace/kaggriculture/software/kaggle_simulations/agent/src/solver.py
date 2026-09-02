@@ -1,3 +1,24 @@
+# ===========================================================================
+# 【中文·模块导览】src/solver.py —— v10.9 调度权威 + v9 影子路由（L3 前世）
+# ---------------------------------------------------------------------------
+# v10.9 职责：_schedule_units_v72 两阶段调度（Phase A 红线一票否决 +
+#   Phase B 价值匹配贪心 Score=V−行走−跨区+亲和+粘滞）是现执行权威；
+#   _route_tasks（v9 分区巡逻路由）仅在 V9_SHADOW_ROUTING=True 下影子
+#   采集；_schedule_units 壳层兼顾 telemetry/trace；_TARGETS/_sticky_state
+#   按消费方就近落位本模块（JOURNAL 2026-09-02 grep 裁决，偏离计划表
+#   初判 mission，豁免条款行使）。
+# 新架构落位：scheduler 设计 §3 路线求解器（分区+EDF×价值密度×老化+
+#   2-opt 同类段抛光）的替换宿主；保证定理（§5 proved-or-flagged）在
+#   本层落地后生效。
+# 文档符合性审查：
+#   ✓ 影子先行纪律已内建（V9_SHADOW_ROUTING 默认 True，执行权不动，
+#     巡游奖励/事件重建代码现成——§3.3 处置表"吸收"项）；
+#   ✗ 待办（M3）——黎明一次求解的路线承诺（含逐站 ETA/负载均衡指派）
+#     尚不存在；现行逐回合贪心正是文档诊断的病根（idle-PASS ~50% vs
+#     tetsuya 13%、连续性 47-57% vs 78%、任务无限饿死致荒草累积）；
+#   ✗ 待办（M4/M5）——executor 接管后 Phase A/B 与 STICKY/CROSS_QUAD/
+#     BUCKET 旋钮按 §3.3 处置表退役删除（结构替代参数）。
+# ===========================================================================
 # r4-P1 sticky per-worker target registry, keyed by player id and reset at
 # each day roll (hour moves backwards).  Kept for compatibility with the
 # champion task contract; v9 routes use the event-driven registry below.

@@ -1,3 +1,30 @@
+# ===========================================================================
+# 【中文·模块导览】src/market.py —— 市场引擎镜像 + 订单编排（市场层现状）
+# ---------------------------------------------------------------------------
+# v10.9 职责：四块——①产能/吸收模型（_town_daily_demand 确定吸收、
+#   _prod_evening_from/_ongoing_evenings_left/_crop_future_value 价值
+#   估计、_buy_pace 步速确认）；②市场引擎语义镜像（_hire_cost fib 表、
+#   _market_price_emb 逐件曲线价、_market_order_priority、
+#   plan_market_orders 官方语义预算仿真）；③曲线数学（_shape_val/
+#   _price_at_offset/_offset_from_price 反解/_project_price 投影）；
+#   ④卖出三门态 _market_gates + 订单编排 _market_orders（含
+#   committed_spend 同回合台账与 LIQUIDITY_FLOOR 流动性底线）。
+# 新架构落位：market_strategy_design 的改造宿主（卖出计划器/干扰/防御）。
+# 文档符合性审查（market v1.1 逐项）：
+#   ✓ 保留资产五项全数在场且逐字保留（§1 表）——plan_market_orders
+#     逐件仿真、_town_daily_demand 吸收模型、曲线镜像+投影、死价冻结、
+#     LIQUIDITY_FLOOR+committed_spend；
+#   ✗ 待办——卖出计划器（MK-2/3：黎明一次计划=供给日历×吸收×投影×
+#     EOD 预算×10 单配额，三门态降级为战术覆盖、囤vs清判据替代静态
+#     门槛）；
+#   ✗ 待办——干扰模块（MK-4/5：三状态触发器 R_opp vs R_us/载体四级/
+#     杀伤表/三闸）与防御检测-响应表（按 log/linear/sq 曲线分流）；
+#   ✗ 待办——买侧两小件（机会性买入：价<26+库容+现金三条件囤饲料；
+#     买侧大单分批：BUY 抽货推高曲线）；
+#   ✗ 待办——branch §5.4 迁移：死价/流动性现为运行时门形态，待迁至
+#     任务包三重前置检查（黎明一次解）；committed_spend 记账按裁定
+#     并入 plan_market_orders 逐件仿真（现两套并存、功能等价）。
+# ===========================================================================
 
 # 【中文】模块级会话状态（按玩家 id 分键——自对局校验时框架可能把本文件
 # 一份实例同时充当两个座位）。时钟倒退 = 新对局开始，各状态字典在访问
