@@ -119,6 +119,16 @@ engine=kaggle-environments 1.32.7 kaggriculture
 
 `fit_bradley_terry.py` 使用全批次 Bradley-Terry（无和局）或 Davidson（含和局）模型；固定 zero-sum identifiability，断连图 fail-closed，完全分离时使用已披露的 Gaussian MAP 正则。置信区间按 seed clustered bootstrap，固定 `--bootstrap-seed` 且与输入行顺序无关。BT/Davidson 评级是描述性排名，不是 holdout 泛化证明；只有 CI 完全跨越预注册 margin 才给出 tier，否则为 `same`/`uncertain`。
 
+## Agent 源码与构建环（agent/src/ + build.py）
+
+自 2026-09-02 结构重构起，提交工件 `kaggle_simulations/agent/main.py` 是**构建产物**：由 `agent/build.py` 按固定拓扑序合并 `agent/src/` 下 10 个片段（`_archive_header, constants, telemetry, observer, strategy, mission, solver, executor, market, entry`；entry 恒最后合并，保证 `agent(obs)` 是文件最后一个 callable——官方 `get_last_callable` 语义）。构建字节确定（utf-8/LF、无时间戳、固定顺序），产物保持 stdlib-only 单文件可直接提交。开发环：
+
+```
+edit agent/src/*.py  ->  python agent/build.py  ->  python -m pytest workspace/kaggriculture/software/tests -q
+```
+
+`build.py --check` 在内存重建并与盘上 main.py 字节比对（防手改漂移；`tests/test_build_determinism.py` 常驻执行）。构建前检拦截跨模块顶层重名（扁平命名空间下的静默遮蔽），构建后检断言 import 白名单（copy/math）与末位 callable，末尾打印 sha256/canonical_lf_sha256 供身份链登记。行为等价基准为 v10.9 参照版（git 862b347，sha 67e68c3a…）：本次迁移以 AST 逐名等价 + 回放 A/B（5 种子×8 配置，逐回合动作+订单流一致）验收，语义零变化。后续实施落位：strategy=L1 阶段×分支选择、mission=L2 任务包+三重前置检查、solver=L3 路线求解器、executor=L4 执行器（`ROUTE_EXECUTOR_ENABLED`，M4 启用）、market=卖出计划器+干扰/防御、observer=OBS v2（对应 docs/ 四份设计文档）。
+
 ## Active Candidate Identity
 
 `active_candidate.json` is the machine-readable source of truth for candidate roles.
