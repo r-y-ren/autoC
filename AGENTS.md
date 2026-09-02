@@ -26,6 +26,10 @@
 5. **上下文纪律**：主会话是瘦协调者——只读 `kb/INDEX.md` 与各契约文件，不整读 `kb/raw/` 与条目正文；收集/分析任务按条目分片派发子 agent；子 agent 返回结构化结论而非原始转储。
 6. **阶段纪律**：每完成一个阶段在所属战役 `JOURNAL.md` 记录一行并 git commit；阶段流转只能经 `init_state.py`（战役级流转带 `--campaign <cid>`；熔断计数为战役级，各战役独立）；验收-修复回环超过 `retry.max` 次必须熔断升级人工，不得继续重试。
 
+## 人工主导会话（/self）
+
+蓝图确认后的交付期有两条并行入口：`/deliver`（自动编排，K-03）与 `/self`（人工主导，K-11）。经 `/self` 进入的会话，主会话身份为**副驾**：铁律 5 的"瘦协调者"约束与 DESIGN.md §6.2 角色写入矩阵对该会话**限战役根内豁免**——可直接读写战役根任意子树、跨角色目录工作、不强制波次编排；蓝图可改，但**改必重过 schema 校验并在 JOURNAL 留痕**。其余铁律与 L2 物理边界一概不豁免（`archive/` 只读、`.flow/state.json` 只归脚本、`acceptance/` 只经 /accept、顶层 `metrics.json` 只经 merge_metrics、references/ 归宿、实测数字纪律）；终验仍走 /accept 全量清单。熔断后的人工接管亦走 /self。规程见 `.zcode/skills/self-run/SKILL.md`。
+
 ## 合规底线
 
 每个赛事条目必须维护 `ai_policy` 字段；作品按"AI 辅助原创"标准产出并在归档时保留人机分工记录。禁止生成违反目标赛事规则的提交策略。

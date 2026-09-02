@@ -11,5 +11,6 @@ T2 起逐个落盘，与 `docs/CAPABILITIES.md` 的 K-01…K-07 一一对应：
 | K-05 | archive-run | 归档与复位 | 归档 |
 | K-06 | marp-deck | 答辩 PPT 生成（模板 + metrics.json） | 交付·文档 |
 | K-07 | typst-report | 项目报告生成（模板 + metrics.json） | 交付·文档 |
+| K-11 | self-run | 人工主导交付会话（副驾模式，D13；/self 入口） | 交付·人工 |
 
-约束：技能只承载流程（顺序与判断要点），不承载状态；状态一律落 `.flow/` 与 `workspace/JOURNAL.md`。新增技能先在 CAPABILITIES.md 登记。
+约束：技能只承载流程（顺序与判断要点），不承载状态；状态一律落 `.flow/` 与 `workspace/JOURNAL.md`。新增技能先在 CAPABILITIES.md 登记。K-08 起的后续技能（K-08/K-09/K-10/K-11）以 `docs/CAPABILITIES.md` §3 技能表为登记主表。

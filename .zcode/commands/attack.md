@@ -14,6 +14,6 @@ description: 发起快循环：刷新 KB → 决策（矩阵/建议/攻略+蓝�
 4. **蓝图（blueprint.md）**：按 `config/templates/blueprint-template.md` 骨架——验收清单抄分类型默认线（"完整可实用"四标准）；`compliance.mode` ∈ prep/apply/assist（apply/assist 须附政策原文，schema 硬校验）
 5. `python scripts/kb/lint_kb.py --file workspace/blueprint.md` 校验，不过不得呈报
 6. **呈报（D10：矩阵+明确推荐）**：四块固定格式——六维矩阵 / 大显身手信号 / 一鱼多吃路线图 / **推荐第一名+理由+备选**——呈用户确认（全流程唯一人工闸门）；要求修改则改后重新校验呈报
-7. 确认后交由交付编排（campaign-run，K-03）接管；mode=assist 的蓝图不会启动作品构建（K-03 闸门拦截）
+7. 确认后两条交付入口任选：`/deliver`（自动编排，K-03）或 `/self`（人工主导，K-11）；mode=assist 的蓝图不会启动作品构建（两入口同闸门拦截）
 
 铁律：蓝图未过 schema 校验禁止请求确认；推荐结论须引用具体 KB 条目 ID，禁止凭印象；数据不足的维度如实降权告知，禁止硬推。
