@@ -117,25 +117,24 @@ def _pasture_tile(animal="SHEEP", yield_units=0, consecutive_unfed=0,
 # --------------------------------------------------------------------------
 
 def test_day0_burst_buys_both_species():
-    # V-T1 opening shift (tetsuya 08-31 frame, user-directed 2026-09-02):
-    # day 0 buys NO animals (the 3000 start stays with the wheat opening);
-    # day 1 stages 3 sheep and day 2 stages 2 cows, each money-gated by
-    # OPENING_RESERVE -- the wool (d1 sheep + 6) and milk (d2 cows + 8)
-    # windows still open on time.
+    # V-C opening (tetsuya-true d0 small burst, branch plan v1.3 / A-① probe,
+    # raw-replay audit 2026-09-02): day 0 buys 2 sheep + 1 cow (~1400) beside
+    # the 10-wheat opening and 5 hires, money-gated by OPENING_RESERVE -- the
+    # annuity deadlines (wool d8 / milk d11) stay reachable from a d0 burst.
+    # Days 1+ have NO opening-sequence entry: the paced loop (1/day before
+    # day 4) owns the ramp from d1 on.
     private = {"shed": _shed(), "seeds": {"WHEAT": 12}, "inventories": [{}]}
     main._STATE.clear()
     orders, _ = _market_orders_with(private, animals=0, herd=0, day=0,
                                     money=3000.0, quads=["NW"])
-    assert not _orders_contains(orders, "BUY_ANIMAL", "COW")
-    assert not _orders_contains(orders, "BUY_ANIMAL", "SHEEP")
+    assert _order_qty(orders, "BUY_ANIMAL", "SHEEP") == 2
+    assert _order_qty(orders, "BUY_ANIMAL", "COW") == 1
+    assert 2 * 500 + 1 * 400 + main.OPENING_RESERVE <= 3000
     orders, _ = _market_orders_with(private, animals=0, herd=0, day=1,
                                     money=2900.0, quads=["NW"])
-    assert _order_qty(orders, "BUY_ANIMAL", "SHEEP") == 3
-    assert 3 * 500 + main.OPENING_RESERVE <= 2900
-    orders, _ = _market_orders_with(private, animals=0, herd=3, day=2,
-                                    money=1700.0, quads=["NW"])
-    assert _order_qty(orders, "BUY_ANIMAL", "COW") == 2
-    assert 2 * 400 + main.OPENING_RESERVE <= 1700
+    day1_total = _order_qty(orders, "BUY_ANIMAL", "SHEEP") + \
+        _order_qty(orders, "BUY_ANIMAL", "COW")
+    assert day1_total <= main._animal_pace(1)  # paced loop, no d1 staging burst
     main._STATE.clear()
 
 

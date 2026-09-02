@@ -385,7 +385,16 @@ OPENING_RESERVE = 800    # cash kept besides the day-0 burst (m2b cushion)
 # replaced by a staged day1-3S / day2-2C sequence; day 0 keeps its cash for
 # the wheat opening. Labour plan and the rest of the r3 ramp unchanged.
 OPENING_SHIFT = True
-OPENING_SHIFT_SEQ = {1: {"SHEEP": 3}, 2: {"COW": 2}}
+# V-C (tetsuya-true d0 opening, branch plan v1.3 / A-① probe).  Raw-replay
+# audit 2026-09-02 (6/6 games, steps[1..24] direct parse, exports/online/
+# tetsuya_v2_strategy_analysis.md correction section): his CURRENT day 0 is a
+# SMALL burst -- 2 sheep + 1 cow (~1400) with 5 hires and 10 wheat seeds,
+# end-of-d0 cash 478-483; the earlier "zero herd zero hires ~2900" reading of
+# the v2 analysis is retracted.  This single variable moves our herd burst
+# back TO day 0 in his smaller shape (variant B below was the d1/d2 deferral;
+# the paced loop still owns d1+ at pace 1/day, and _opening_shift_hold keeps
+# day 0 free of any further paced buys).
+OPENING_SHIFT_SEQ = {0: {"SHEEP": 2, "COW": 1}}
 HERD_CAP = 14            # total herd ceiling; m2b tests pin _herd_target
                          # to the constant, not a literal
 # r4-P3: STATE-DRIVEN herd ceiling.  Beyond the pinned 14-head plan,
