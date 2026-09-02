@@ -1,0 +1,38 @@
+{
+ "schema_version": "1.0",
+ "submission_ref": 55951709,
+ "candidate_sha256": "c9f428a31654cfb1682594dc7540c2f202b572a6b0f7cc057eea421097f08ab8",
+ "candidate_label": "v10.8-working (tetsuya parameter copy on the v10.6/v10.7 frame)",
+ "git_ref": "f8df0211d5733f9f5cf0f5b68c942c817436d429",
+ "submitted_at": "2026-09-02T01:57:02+00:00",
+ "submitted_by": "main-session (user-directed tetsuya copy, control tuning deferred to next round)",
+ "quota_after_submit": "3 remaining today",
+ "changes": [
+  "V-T8 pasture zoning: NW cap 7 / NE cap 3 at the access mouth / SW chain extension; build lead 2 -> 1",
+  "V-T9 daily planting cap 8 -> 16 (tetsuya d7 batch 15-18 under the water-window guard)",
+  "V-T9 melon band 3 -> 6/quad with a season total of 12 on the UPPER-quadrant rim (yields to VOLUME and dear-wheat)",
+  "V-T9 strawberry NE block: quad cap 8 -> 20 (total 24), strawberry claims before melon",
+  "intermediate forensics inside this round: uniform rings fought the zoning (fixed); SW far-rim melon starved the feed floor to 2-4 wheat (fixed with the upper-rim preference + total 12)"
+ ],
+ "behavior_regression": {
+  "weeds_max_daily_delta": "+0..+1 (3 seeds)",
+  "hands_stall_max": "1 day",
+  "d20_layout": "NE strawberry 21-22 contiguous / NW wheat 6-10 / SW wheat 5-6 + melon 12 -- tetsuya-shaped",
+  "selfplay_rewards": "45-54k -- DISCLOSED: below v10.7's 62-93k. Diagnosis: the d7 NE purchase + 16-seed strawberry batch double-dip starves the herd build (our cash sequencing vs tetsuya's zero-inventory seed flow). This is the known copy-vs-controls conflict; the user plan is online-first evidence then control tuning.",
+  "tests": "670 passed + 20 identity/index (re-anchored); smoke 4-phase PASS; identity PASS"
+ },
+ "validation_episode": {
+  "episode_id": 104690485,
+  "state": "COMPLETED",
+  "both_seats_done": true,
+  "rewards": [
+   51895,
+   52278
+  ]
+ },
+ "public_score_at_capture": null,
+ "episodes_public": [],
+ "captured_at": "2026-09-02T01:57:02+00:00",
+ "source": "kaggle competitions submit/submissions/episodes CLI",
+ "notes": "round-12 copy probe; online is the deciding axis; holdout not run; frozen c44e2b25 unchanged"
+}
