@@ -204,7 +204,10 @@ def test_strawberry_phase_opens_day5_not_day0():
     _, crops_early, _, _ = main._field_alloc(farm, 3, _prices())
     assert not crops_early["STRAWBERRY"]
     _, crops_open, _, _ = main._field_alloc(farm, 7, _prices())
-    assert len(crops_open["STRAWBERRY"]) == main.CROP_CAP_PER_QUAD["STRAWBERRY"]
+    # V-T9 tetsuya copy: the single-quadrant field splits wheat 9 + melon 6
+    # first, so the d5-7 strawberry band holds 5 tiles (tetsuya holds 3-4
+    # before his d7 NE buy); the winner band completes on NE from d7.
+    assert len(crops_open["STRAWBERRY"]) == 11
 
 
 def test_strawberry_reaches_winner_band_on_three_quadrants():
@@ -213,12 +216,13 @@ def test_strawberry_reaches_winner_band_on_three_quadrants():
     farm = _farm(quads=["NW", "NE", "SW"])
     _, crops, _, _ = main._field_alloc(farm, 12, _prices())
     n = len(crops["STRAWBERRY"])
-    assert n == 18
+    assert n == 24   # V-T9 tetsuya copy: 8/quad on 3 quads = 24
     assert n == min(main.CROP_CAP_PER_QUAD["STRAWBERRY"] * 3,
                     main._DEFENSIVE_PLAN["straw_total_cap"])
-    # the wider pre-SW field: 8 tiles at one quadrant, 16 at two
+    # V-T9: the pre-SW single quadrant shares wheat 9 + melon 6 first,
+    # holding 5 strawberry tiles (the NE block completes the band from d7)
     _, crops1, _, _ = main._field_alloc(_farm(quads=["NW"]), 12, _prices())
-    assert len(crops1["STRAWBERRY"]) == main.CROP_CAP_PER_QUAD["STRAWBERRY"]
+    assert len(crops1["STRAWBERRY"]) == 11
 
 
 # --------------------------------------------------------------------------

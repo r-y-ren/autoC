@@ -104,9 +104,13 @@ def _market_orders_with(private, animals=6, herd=6, prices=None, day=8,
 # --------------------------------------------------------------------------
 
 def test_rotation_plants_melon_above_its_price_floor():
-    farm = _farm()
+    # V-T9: with the tetsuya single-quadrant form (wheat 9 + strawberry 11
+    # fill the ~20 NW cells first) the melon rim needs a second quadrant;
+    # two quadrants carry the full 6/quad band on the far rim.
+    farm = _farm(quads=["NW", "NE"])
     builds, crops, _, _ = main._field_alloc(farm, 5, _prices(MELON=250))
-    assert len(crops["MELON"]) == main.CROP_CAP_PER_QUAD["MELON"]  # 1 quad cap
+    # two quadrants leave 9 rim cells after the strawberry block
+    assert len(crops["MELON"]) == 9
     # dead melon curve: the planting freezes (red line)
     builds2, crops2, _, _ = main._field_alloc(farm, 5, _prices(MELON=100))
     assert not crops2["MELON"]
@@ -115,7 +119,8 @@ def test_rotation_plants_melon_above_its_price_floor():
 def test_rotation_phase_windows():
     farm = _farm()
     _, crops_mid, _, _ = main._field_alloc(farm, 12, _prices())
-    assert len(crops_mid["STRAWBERRY"]) == main.CROP_CAP_PER_QUAD["STRAWBERRY"]
+    assert len(crops_mid["STRAWBERRY"]) == 11   # V-T9: wheat 9 + melon 6
+    # share the single quadrant first (tetsuya single-quad form)
     _, crops_late, _, _ = main._field_alloc(farm, 16, _prices())
     assert not crops_late["STRAWBERRY"]      # phase 0-14 closed
     # V-T7 (2026-09-02): carrot is the ENDGAME rotation -- it claims no

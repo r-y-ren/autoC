@@ -672,9 +672,11 @@ WHEAT_MONEY_CAP_PER_QUAD = 3
 # d27 batches of rounds 9/10 all stranded unharvested (9-12 units/episode;
 # a day-27 planting produces on the evening of 28 and the terminal
 # feasibility check drops the far tiles on 29).
+# V-T9 (tetsuya copy): melon 3 -> 6/quad (his seasons plant 9-18 melon on
+# the far rim; our 3/quad = 9 total under-used the zoning).
 CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 14), "CARROT": (15, 26)}
 CROP_FLOOR = {"MELON": 150, "STRAWBERRY": 55, "CARROT": 28}
-CROP_CAP_PER_QUAD = {"MELON": 3, "STRAWBERRY": 8, "CARROT": 6}  # v6-F; V-T2
+CROP_CAP_PER_QUAD = {"MELON": 6, "STRAWBERRY": 8, "CARROT": 6}  # v6-F; V-T2/T9
 PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
 
 # ---- r5-P4 macro-plan layer: strategy-space extension --------------------
@@ -713,8 +715,8 @@ MODE_CREW_CAP_VOL = 15     # volume: hands ceiling (42 tiles of daily water)
 MODE_HERD_CAP_SCALE = 18   # scale: NPV ceiling (winners' 13-17 band + 1)
 _DEFENSIVE_PLAN = {"mode": "DEFENSIVE", "volume": False, "scale": False,
                    "wheat_farm": False,
-                   "straw_quad_cap": CROP_CAP_PER_QUAD["STRAWBERRY"],
-                   "straw_total_cap": 18,
+                   "straw_quad_cap": 20,  # V-T9: the NE block wants 18-20
+                   "straw_total_cap": 24,   # V-T9 tetsuya copy: 18 -> 24
                    "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
                    "crew_cap": HANDS_CAP_R3,
                    "herd_ceiling": HERD_CAP_NPV}
@@ -1005,14 +1007,19 @@ WHEAT_DAIRY_QUAD_BAND = 9
 # plants d23-27; a d15 claim squatted the SW wheat field -- seed-102
 # forensics).  CROP_PHASE keeps the planting legality window.
 CARROT_ENDGAME_FROM = 22
+# V-T8 pasture zoning caps (tetsuya d25 forensics: NW 7 / NE 2-3 at the
+# access mouth / SW unlimited via the outward chain).
+PASTURE_QUAD_CAP = {"NW": 7, "NE": 3}
 # V-T3 watertight planting (forensics: ep 104585743 d8 -- a 10-seed NE pulse
 # planted h8-14 left 18 tiles unwatered and 16 died; tetsuya's 6 replays all
 # plant in the daytime band and never lose the batch).  Two task-generation
 # guards: (a) same-day water window -- the nearest worker must still be able
 # to walk to the tile, PLANT and WATER before hour 23; (b) a daily
 # new-planting cap so an opening cheque can never compress a land+seed+plant
-# expansion into one afternoon.
-PLANT_DAILY_CAP = 8
+# expansion into one afternoon.  V-T9 (tetsuya copy): 8 -> 16 -- his d7
+# batch plants 15-18 in one day with zero losses because every planting
+# passes the water window; our guard (a) provides exactly that gate.
+PLANT_DAILY_CAP = 16
 
 # 【中文】模块级会话状态（按玩家 id 分键——自对局校验时框架可能把本文件
 # 一份实例同时充当两个座位）。时钟倒退 = 新对局开始，各状态字典在访问
@@ -1901,8 +1908,8 @@ def _decide_mode(obs, day, prev_mode):
     scale_hold = prev_mode == "SCALE_RANCH" and mine["herd"] >= 14
     if scale_entry or scale_hold:
         return {"mode": "SCALE_RANCH", "volume": False, "scale": True,
-                "straw_quad_cap": CROP_CAP_PER_QUAD["STRAWBERRY"],
-                "straw_total_cap": 18,
+                "straw_quad_cap": 20,  # V-T9: the NE block wants 18-20
+                "straw_total_cap": 24,   # V-T9 tetsuya copy: 18 -> 24
                 "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
                 "crew_cap": HANDS_CAP_R3,
                 "herd_ceiling": MODE_HERD_CAP_SCALE}
@@ -2023,6 +2030,7 @@ def _field_alloc(farm, day, prices, plan=None):
     n_animals = 0
     n_pasture = 0
     n_coop = 0
+    pasture_by_quad = {"NW": 0, "NE": 0, "SW": 0, "SE": 0}
     empty_ring, empty_field = [], []
     weed_ring, weed_field = [], []     # v7-W: reclaimable, behind empties
     for y, row in enumerate(tiles):
@@ -2058,11 +2066,13 @@ def _field_alloc(farm, day, prices, plan=None):
                 continue
             if kind == "PASTURE":
                 n_pasture += 1
+                pasture_by_quad[_quadrant_of(x, y, board)] += 1
                 if "animal" in tile:
                     n_animals += 1
                 continue
             if kind == "COOP":
                 n_coop += 1
+                pasture_by_quad[_quadrant_of(x, y, board)] += 1
                 if "animal" in tile:
                     n_animals += 1
                 continue
@@ -2075,7 +2085,9 @@ def _field_alloc(farm, day, prices, plan=None):
     builds = {}
     field_extra = []
     herd_t = _herd_target(day, 99)
-    base_pasture_want = min(HERD_CAP + 1, herd_t + 2)
+    # V-T8: build lead is at most ONE structure ahead of the herd plan
+    # (tetsuya builds batch-by-batch for the incoming animals).
+    base_pasture_want = min(HERD_CAP + 1, herd_t + 1)
     pasture_want = plan.get("herd_ceiling", MODE_HERD_CAP_SCALE) \
         if plan.get("scale") else base_pasture_want
     if plan.get("scale"):
@@ -2093,16 +2105,55 @@ def _field_alloc(farm, day, prices, plan=None):
         weed_field = [pos for pos in weed_ring + weed_field
                       if pos not in used_structure_slots]
     else:
+        # V-T8 pasture zoning (tetsuya d25 forensics, two games identical:
+        # NW 7 pastures hugging the shed access [0,1,1,2,2,2,3] beside the
+        # wheat band -- the dairy home; NE only 2-3 at the access mouth so
+        # the strawberry block keeps its near tiles; SW 5-6 as a CHAIN
+        # [0,1,3,4,5,6] extending outward so the SW wheat field keeps its
+        # near cells).  The old every-quadrant uniform ring fought the V-T7
+        # crop zoning (NE strawberry lost its best cells, seed-103's NW
+        # feed floor was squeezed to 2 wheat tiles by 8 pastures).  Build
+        # lead is now at most ONE structure ahead of the herd plan
+        # (tetsuya builds d0-3 for the d1-3 animals batch-by-batch; our
+        # d0 batch of 5 sat mostly empty).
+        planned_by_quad = {"NW": 0, "NE": 0, "SW": 0, "SE": 0}
         for pos in empty_ring + weed_ring:
+            pq = _quadrant_of(pos[0], pos[1], board)
             if n_coop < min(HERD_COMPOSITION["GOOSE"], herd_t) and \
                     n_coop + n_pasture < pasture_want + 1:
                 builds[pos] = "COOP"
                 n_coop += 1
-            elif n_pasture < pasture_want:
+                planned_by_quad[pq] += 1
+            elif n_pasture < pasture_want and \
+                    pasture_by_quad[pq] + planned_by_quad[pq] < \
+                    PASTURE_QUAD_CAP.get(pq, 99):
                 builds[pos] = "PASTURE"
                 n_pasture += 1
+                planned_by_quad[pq] += 1
             else:
                 field_extra.append(pos)
+        # SW chain extension: if the herd plan still wants structures and
+        # the rings are exhausted, the SIDE dairy quadrants may extend into
+        # their own field tiles nearest-first (tetsuya's SW [3,4,5,6] tail).
+        if n_pasture < pasture_want and (empty_field or weed_field):
+            chain = sorted([p for p in empty_field + weed_field
+                            if _quadrant_of(p[0], p[1], board) in ("SW", "SE")
+                            and _quadrant_of(p[0], p[1], board) in quads],
+                           key=lambda p: (min(_dist(p[0], p[1], *q)
+                                              for q in accesses), p[1], p[0]))
+            for pos in chain:
+                if n_pasture >= pasture_want:
+                    break
+                pq = _quadrant_of(pos[0], pos[1], board)
+                if pasture_by_quad[pq] + planned_by_quad[pq] >= \
+                        PASTURE_QUAD_CAP.get(pq, 99):
+                    continue
+                builds[pos] = "PASTURE"
+                n_pasture += 1
+                planned_by_quad[pq] += 1
+            field_extra += [p for p in empty_field if p not in builds]
+            empty_field = []
+            weed_field = [p for p in weed_field if p not in builds]
 
     empties = field_extra + empty_field
     empties.sort(key=lambda p: (min(_dist(p[0], p[1], *q) for q in accesses), p[1], p[0]))
@@ -2160,26 +2211,6 @@ def _field_alloc(farm, day, prices, plan=None):
         wheat_room -= 1
         empties.remove(pos)
 
-    for crop, descending in (("MELON", True), ("CARROT", False)):
-        if not _crop_open(crop):
-            continue
-        if crop == "CARROT" and day < CARROT_ENDGAME_FROM:
-            # V-T7: carrot is the ENDGAME rotation (tetsuya plants it
-            # d23-27); claiming its 6/quad from d15 let it squat the SW
-            # wheat field for 11 days (seed-102 forensics: feed floor
-            # squeezed to 5 wheat tiles).
-            continue
-        room = CROP_CAP_PER_QUAD[crop] * len(quads) - len(crop_map[crop])
-        order = sorted(empties, key=lambda p: ((-_shed_dist(p)) if descending
-                                               else _shed_dist(p), p[1], p[0]))
-        taken = 0
-        for pos in order:
-            if taken >= room:
-                break
-            crop_map[crop].add(pos)
-            taken += 1
-            empties.remove(pos)
-
     if _crop_open("STRAWBERRY"):
         room = min(plan["straw_quad_cap"] * len(quads),
                    plan["straw_total_cap"]) - len(crop_map["STRAWBERRY"])
@@ -2192,6 +2223,43 @@ def _field_alloc(farm, day, prices, plan=None):
                 crop_map["STRAWBERRY"].add(pos)
                 room -= 1
                 empties.remove(pos)
+
+    for crop, descending in (("MELON", True), ("CARROT", False)):
+        if not _crop_open(crop):
+            continue
+        if crop == "CARROT" and day < CARROT_ENDGAME_FROM:
+            # V-T7: carrot is the ENDGAME rotation (tetsuya plants it
+            # d23-27); claiming its 6/quad from d15 let it squat the SW
+            # wheat field for 11 days (seed-102 forensics: feed floor
+            # squeezed to 5 wheat tiles).
+            continue
+        # V-T9: the tetsuya melon band YIELDS -- under VOLUME_CROP the
+        # 42-tile strawberry field owns the quadrant budgets, and in a
+        # dear-wheat season the money-wheat tranche outranks the rim
+        # melon (test_wheat_is_feed_floor_and_money_crop regression).
+        crop_quad_cap = CROP_CAP_PER_QUAD[crop]
+        if crop == "MELON" and (plan.get("volume") or
+                                _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE):
+            crop_quad_cap = 3
+        room = crop_quad_cap * len(quads) - len(crop_map[crop])
+        if crop == "MELON":
+            # V-T9 fix: tetsuya's melon rim lives in the UPPER quadrants
+            # (his SW is the wheat side field -- our far-rim-first filled
+            # SW with 17-18 melon and starved the feed floor to 2-4 tiles,
+            # -30k self-play).  Cap the season band near his median (12)
+            # and prefer the NW/NE rim before the SW one.
+            room = min(room, max(0, 12 - len(crop_map[crop])))
+        order = sorted(empties, key=lambda p: (
+            (0 if crop == "MELON" and
+             _quadrant_of(p[0], p[1], board) in ("NW", "NE") else 1),
+            ((-_shed_dist(p)) if descending else _shed_dist(p)), p[1], p[0]))
+        taken = 0
+        for pos in order:
+            if taken >= room:
+                break
+            crop_map[crop].add(pos)
+            taken += 1
+            empties.remove(pos)
 
     # wheat pass 2: whatever quota remains goes nearest-first over the rest
     # (SW is the tetsuya side dairy field at 12-13 tiles).
