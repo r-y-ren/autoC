@@ -240,7 +240,7 @@ def test_crew_follows_herd_to_12():
 def test_crew_floor_is_the_pinned_m3_ramp():
     # a bad season (small herd) never overhires: the m3 ramp alone rules
     assert main._crew_target(0, 4, 16, 1) == 5
-    assert main._crew_target(2, 4, 16, 1) == 6
+    assert main._crew_target(2, 4, 16, 1) == 7   # V-T10 tetsuya d1-7
     assert main._crew_target(7, 6, 18, 3) == 9
     assert main._crew_target(14, 6, 18, 3) == 10
     assert main._hands_target(7, 10, 18) == 9          # m3 pin intact

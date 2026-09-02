@@ -575,7 +575,9 @@ SEASON_DAYS = 30
 # (Crop Dusta land/labour series); 24 turns/day per unit, fib cost per day.
 # R3-4: _crew_target tops this ramp up to HANDS_CAP_R3 following the herd
 # (round-2 winners hold 12 hands from d7-11; top-20 9.4-9.9/day).
-HANDS_RAMP = ((0, 5), (1, 6), (3, 8), (6, 9), (12, 10))
+# V-T10 tetsuya labour series (08-31 shard, 6 games): d0 5, d1 7, d3 7,
+# d4 8, d6-9 8-10, 12 by d12 -- flat-early beats our d1 6.
+HANDS_RAMP = ((0, 5), (1, 7), (4, 8), (6, 9), (10, 11), (12, 12))
 HANDS_CAP_R3 = 12        # r3: crew 12 once the herd plan reaches 12 head
 HIRE_BURST = 5           # HIRE orders per dawn turn (burst, m2b fix)
 HIRE_HOUR_MAX = 2        # dawn window (m2b fix: burst must fit hour <= 2)
@@ -3256,20 +3258,27 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 cap_for_crop = min(plan["straw_quad_cap"] * quads,
                                    plan["straw_total_cap"])
             want = cap_for_crop - alive[crop] - seeds.get(crop, 0)
-            batch = min(6, max(0, want), room_budget)
             seed_gate = 250 if crop == "STRAWBERRY" else land_fund + 250
             wallet = projected_money if plan.get("wheat_farm") else money
             reserve_gate = max(seed_gate, WHEAT_FARM_HOLD_CASH) \
                 if plan.get("wheat_farm") else seed_gate
+            # V-T10 zero-inventory seed flow (tetsuya: buy == plant the
+            # same day; his cheque never sits in seeds).  The batch SCALES
+            # TO THE DISPOSABLE wallet -- the v10.8 self-play regression
+            # (45-54k) traced to the d7 NE purchase + a full 16-seed batch
+            # double-dipping one wallet while the herd build starved.
+            wallet_for_seeds = wallet - (0.0 if plan.get("wheat_farm")
+                                         else committed_spend)
+            seed_affordable = max(0, int((wallet_for_seeds - reserve_gate) //
+                                         CROPS[crop]["seed"]))
+            batch = min(6, max(0, want), room_budget, seed_affordable)
             if plan.get("wheat_farm") or \
                     (crop == "STRAWBERRY" and plan["volume"]):
                 # Opt-in wheat mode and VOLUME use wallet-scaled batches;
                 # WHEAT_FARM also preserves its hold reserve after every
                 # earlier same-turn purchase.
                 batch = min(10 if plan["volume"] else 6, max(0, want),
-                            room_budget,
-                            max(0, int((wallet - reserve_gate) //
-                                       CROPS[crop]["seed"])))
+                            room_budget, seed_affordable)
             if batch > 0 and wallet >= reserve_gate + \
                     CROPS[crop]["seed"] * batch:
                 orders.append(["BUY_SEED", crop, batch])

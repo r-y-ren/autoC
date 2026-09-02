@@ -202,7 +202,7 @@ def test_wheat_sell_gate_has_cash_flow_fallback():
 def test_hands_ramp_reaches_profile_intensity():
     # top-20 median 9.4/day, leader 9.7-9.9 -> 10 by day 12, lean opening
     assert main._hands_target(0, 0, 0) == 5
-    assert main._hands_target(2, 0, 0) == 6
+    assert main._hands_target(2, 0, 0) == 7   # V-T10 tetsuya d1-7
     assert main._hands_target(4, 6, 12) == 8
     assert main._hands_target(7, 10, 18) == 9
     assert main._hands_target(14, 11, 18) == 10
