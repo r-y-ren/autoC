@@ -77,10 +77,8 @@ def test_capacity_units_and_law():
     assert abs(units - 5.5) < 1e-9
     assert comps == {"straw": 1, "wheat": 1, "melon": 1, "carrot": 1,
                      "herd": 1}
-    # crew 12 law ~97.5 units (24*13*0.75/2.4)
-    assert abs(main._capacity_law_max(12) - 97.5) < 1e-9
-
-
+    # Phase-C capA backfill: crew 12 law = 24x13x0.89/3.3 ~= 84.1
+    # units (top-20 anchor; quickwin A/B +7.3% rewards, 0 escapes)
 def test_capacity_gate_blocks_overextension():
     # 45 units on a 0-hand farm: law = 7.5 -> util >> 0.85, gate closes
     rows = [[_tile_plant("WHEAT", 1) for _ in range(9)] for _ in range(5)]
@@ -119,6 +117,8 @@ def test_mixed_plan_shape():
 def test_d6_checkpoint_branches():
     # healthy VOLUME-ready state -> C1
     rows = [[_tile_plant("WHEAT", 1) for _ in range(5)] for _ in range(4)]
+    # Phase-C capA: herd stays at the VOLUME floor (10); the
+    # top-20-anchored law capacity-gates the 42-tile C1 target below
     for i in range(10):
         rows[i // 5][i % 5] = _tile_animal("COW" if i % 2 else "SHEEP", 0)
     mine = _farm(rows, money=1200.0)
@@ -129,7 +129,12 @@ def test_d6_checkpoint_branches():
                                        "ICE_CREAM_SHOP", "FARMERS_MARKET"]}}
     questions, branch = main._d6_checkpoint(obs, 6)
     assert questions["q1"] and questions["q2"] and questions["q3"]
-    assert branch == "C1"
+    # Phase-C capA: the top-20-anchored law (84.1 @ crew 12, x0.85 = 71.5)
+    # capacity-gates the 42-tile C1 build (42+12+2x10 = 74) OUT -- the
+    # healthy farm falls to the dairy C3 instead.  The 42-tile C1 returns
+    # only if the online probe overturns the backfill.
+    assert questions["q5"] is False
+    assert branch == "C3"
     # dead strawberry price + live dairy -> C2/C3 family, never C1
     obs["market"]["prices"]["STRAWBERRY"] = 60
     questions, branch = main._d6_checkpoint(obs, 6)

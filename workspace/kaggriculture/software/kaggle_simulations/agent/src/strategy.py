@@ -1193,7 +1193,10 @@ def _field_alloc(farm, day, prices, plan=None):
             # SW with 17-18 melon and starved the feed floor to 2-4 tiles,
             # -30k self-play).  Cap the season band near his median (12)
             # and prefer the NW/NE rim before the SW one.
-            room = min(room, max(0, 12 - len(crop_map[crop])))
+            # Phase-C Var2: the 5.3 per-line cap binds (kill_table verified
+            # melon absorption = town center only ~1/day)
+            room = min(room, max(0, LINE_CAPS.get("MELON", 12)
+                                 - len(crop_map[crop])))
         order = sorted(empties, key=lambda p: (
             (0 if crop == "MELON" and
              _quadrant_of(p[0], p[1], board) in ("NW", "NE") else 1),

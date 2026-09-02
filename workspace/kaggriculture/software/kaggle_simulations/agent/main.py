@@ -866,8 +866,13 @@ V9_SHADOW_ROUTING = True
 # 最大资产单位(d) ≈ 24 × (1+H) × CAP_UTIL / CAP_TURNS_PER_UNIT
 # 资产单位：莓/麦/瓜格=1，萝卜格=0.5，牲畜头=2；定标锚 Renji~81/DevilQ~92/
 # tetsuya~91 单位同收敛于 crew 12（branch plan §5.3 定标锚表）。
-CAP_UTIL = 0.75                 # 有效利用率（含黎明转场/空闲损耗）
-CAP_TURNS_PER_UNIT = 2.4        # 每资产单位日耗劳动回合（M1 实测回填）
+# M1 三锚定标回填（2026-09-02 Phase-C，quickwin A/B 裁决）：top-20 语料
+# 3600 席日 tpu 中位 3.29 / eff 0.89。A/B（4 种子全季）：base(2.4/0.75)
+# → 124.0k/逃亡41/溢出1；capA(3.3/0.89) → 133.1k/逃亡0/溢出0（+7.3% 全指
+# 标胜出）；capB(4.4/0.93 本地锚) → 136.9k 但溢出 13 爆表被拒。本地为安
+# 全诊断，线上探针为最终裁决轴。
+CAP_UTIL = 0.89                 # 有效利用率（top-20 锚实测）
+CAP_TURNS_PER_UNIT = 3.3        # 每资产单位日耗劳动回合（top-20 锚实测）
 CAP_USE_MAX = 0.85              # 黎明不变式上界：>此值拒新 capex（§5.3）
 CAP_USE_MIN = 0.65              # 下界：<此值报 slack（补线，兜底=小麦）
 CAP_RESERVE_FRACTION = 0.15     # 峰值日检查的不可侵占余量（规则 4）
@@ -3062,7 +3067,10 @@ def _field_alloc(farm, day, prices, plan=None):
             # SW with 17-18 melon and starved the feed floor to 2-4 tiles,
             # -30k self-play).  Cap the season band near his median (12)
             # and prefer the NW/NE rim before the SW one.
-            room = min(room, max(0, 12 - len(crop_map[crop])))
+            # Phase-C Var2: the 5.3 per-line cap binds (kill_table verified
+            # melon absorption = town center only ~1/day)
+            room = min(room, max(0, LINE_CAPS.get("MELON", 12)
+                                 - len(crop_map[crop])))
         order = sorted(empties, key=lambda p: (
             (0 if crop == "MELON" and
              _quadrant_of(p[0], p[1], board) in ("NW", "NE") else 1),
