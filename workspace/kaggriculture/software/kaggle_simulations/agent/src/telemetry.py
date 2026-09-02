@@ -76,6 +76,18 @@ def _telemetry_day_template():
         "minimum_cash": None,
         "shed_overflow": 0,
         "terminal_clearout": False,
+        # ---- M1 scorecard (scheduler design §7 / §2.6, 2026-09-02) ----
+        # ops_by_type: per-turn unit-op counts by op -- the numerator of the
+        # per-asset-class turn coefficients that calibrate the capacity law
+        # (24x(1+H)x0.75/2.4, branch plan §5.3).
+        "ops_by_type": {},
+        # asset_units: straw/wheat/melon tile=1, carrot=0.5, head=2 (the
+        # capacity-law denominator), plus its raw components.
+        "asset_units": 0.0,
+        "asset_components": {"straw": 0, "wheat": 0, "melon": 0,
+                             "carrot": 0, "herd": 0},
+        "weed_tiles": 0,
+        "herd_head": 0,
     }
 
 
@@ -206,6 +218,42 @@ def _telemetry_record_turn(obs, farm, private, actions, tasks, trace, orders):
         daily["pass_count"] += passes
         ratio = daily["moving_turns"] / float(max(1, daily["effective_ops"]))
         daily["movement_to_effective_ratio"] = ratio
+        # M1 scorecard: ops by type + action mix (turn-coefficient numerator)
+        for action in actions or []:
+            if action and isinstance(action, list) and action[0]:
+                op = action[0]
+                if op != "PASS":
+                    daily["ops_by_type"][op] = \
+                        daily["ops_by_type"].get(op, 0) + 1
+        # M1 scorecard: asset units (capacity-law denominator) + weed count
+        comps = {"straw": 0, "wheat": 0, "melon": 0, "carrot": 0, "herd": 0}
+        weeds = 0
+        for row in _get(farm, "tiles", []) or []:
+            for tile in row:
+                if not isinstance(tile, dict):
+                    continue
+                kind = _get(tile, "kind", "")
+                if kind == "PLANT":
+                    crop = _get(tile, "crop", "")
+                    if crop == "STRAWBERRY":
+                        comps["straw"] += 1
+                    elif crop == "WHEAT":
+                        comps["wheat"] += 1
+                    elif crop == "MELON":
+                        comps["melon"] += 1
+                    elif crop == "CARROT":
+                        comps["carrot"] += 1
+                elif kind == "WEED":
+                    weeds += 1
+                elif "animal" in tile:
+                    comps["herd"] += 1
+        daily["asset_components"] = comps
+        daily["weed_tiles"] = weeds
+        daily["herd_head"] = comps["herd"]
+        daily["asset_units"] = float(comps["straw"] + comps["wheat"]
+                                     + comps["melon"]
+                                     + 0.5 * comps["carrot"]
+                                     + 2 * comps["herd"])
         cross_choices = int((trace or {}).get("cross_quadrant", 0))
         daily["cross_quadrant_choices"] += cross_choices
         overdue = {"WATER": 0, "FEED": 0, "CARE": 0}

@@ -858,6 +858,55 @@ PRICE_FLOOR_EMB = 1
 # 201-204) as the gate.
 V9_SHADOW_ROUTING = True
 
+# ===========================================================================
+# 【中文】branch plan v1.2/v1.3 落地旋钮（2026-09-02 实装：容量门 §5.3、
+# 三重前置检查 §5.4、对手开局分类器 §4.1、阶段寄存器 §2、分线封顶表）
+# ---------------------------------------------------------------------------
+# ---- 容量定律（§5.3；系数为经验初值，M1 telemetry 定标后回填）----
+# 最大资产单位(d) ≈ 24 × (1+H) × CAP_UTIL / CAP_TURNS_PER_UNIT
+# 资产单位：莓/麦/瓜格=1，萝卜格=0.5，牲畜头=2；定标锚 Renji~81/DevilQ~92/
+# tetsuya~91 单位同收敛于 crew 12（branch plan §5.3 定标锚表）。
+CAP_UTIL = 0.75                 # 有效利用率（含黎明转场/空闲损耗）
+CAP_TURNS_PER_UNIT = 2.4        # 每资产单位日耗劳动回合（M1 实测回填）
+CAP_USE_MAX = 0.85              # 黎明不变式上界：>此值拒新 capex（§5.3）
+CAP_USE_MIN = 0.65              # 下界：<此值报 slack（补线，兜底=小麦）
+CAP_RESERVE_FRACTION = 0.15     # 峰值日检查的不可侵占余量（规则 4）
+# ---- 分线封顶 = min(劳动力配额, 吸收上限)（§5.3 表）----
+LINE_CAPS = {
+    "MELON": 6,        # 吸收 ~30u/季（论坛单源待 V0 自证）+ sq 曲线自砸
+    "STRAWBERRY": 42,  # Renji 线（VOLUME 模式内另有 MODE_STR_TOTAL_CAP）
+    "CARROT": 30,      # 终盘弹性线（相位窗口另管）
+    "WHEAT": 99,       # log 抗崩+高吸收 = 剩余容量兜底（99=不限）
+    "HERD": 14,        # 年金对冲线（NPV 扩栏另走既有门）
+}
+# ---- 对手 d0 分类器（§4.1，v1.3 更正版：增"减档型"）----
+OPP_CLASS_BURST_MIN = 4        # 爆发型：d0 已放 ≥4 头（top-20 116/116）
+OPP_CLASS_REDUCED_RANGE = (2, 3)  # 减档型：2-3 头（tetsuya-true，v1.3 更正）
+OPP_CLASS_DEFERRED_WHEAT = 8   # 延后型：0 头且小麦 ≥8 格
+OPP_CLASS_MELON_MIN = 6        # 瓜先行：d1-3 瓜格 ≥6
+# ---- 阶段窗口（§2 总表；P0-P5 由 _stage_of(day) 计算，无需状态存储）----
+STAGE_P1_DUE = 6               # d6 检查点（五问）
+STAGE_P2_FREEZE = 14           # d14 结构冻结
+STAGE_P3_END = 21
+STAGE_P4_END = 27
+# ---- 干扰模块（market §3；MK-4 影子/MK-5 带闸，触发器先影子）----
+INTERFERENCE_ARMED = False     # MK-5 上线前恒 False（三闸+影子门先行）
+INTERFERENCE_MARGIN = 2000     # R_opp > R_us + 此值 才触发（连续 2 天）
+INTERFERENCE_CONFIRM_DAYS = 2
+INTERFERENCE_BUDGET_FRAC = 0.15   # 干扰预算 ≤ 容量 15%（§3.5 闸 2）
+INTERFERENCE_EXPOSURE_RATIO = 2.0  # 杀伤/暴露 ≥2（§3.5 闸 1）
+# ---- 卖出计划器（market §2；囤vs清判据替代静态门槛的参数）----
+SELL_PLAN_LOOKAHEAD_DAYS = 2   # 投影地平线（天）
+SELL_PLAN_HOLD_EDGE = 1.05     # 囤的条件：E[p_future] ≥ 现价×此值 且线未争议
+# ---- 机会性买入（market §5 小件 1；Danila 98.7k 出典 d1-2 囤 256u@低价）----
+OPPORTUNE_WHEAT_PRICE = 26     # 价 <26 且库容+现金允许 → 囤至 N 天用量
+OPPORTUNE_WHEAT_DAYS = 4       # 囤到的饲料天数上限
+# ---- 买侧大单分批（market §5 小件 2；BUY 抽货推高曲线）----
+BUY_CHUNK_MAX_UNITS = 40       # 单回合 BUY_PRODUCT 最大件数（超出跨回合分批）
+# ---- P4 三档出清（branch §6；观测器 est_opp_held 驱动，缺数据回退门控）----
+P4_HEAVY_HELD = 40             # 对手囤货 ≥40u → d25 抢跑档
+P4_MID_HELD = 15               # 15-40 → d26-27 标准档；<15 从容档
+
 # ===== src/telemetry.py =================================================
 
 # ===========================================================================
@@ -938,6 +987,18 @@ def _telemetry_day_template():
         "minimum_cash": None,
         "shed_overflow": 0,
         "terminal_clearout": False,
+        # ---- M1 scorecard (scheduler design §7 / §2.6, 2026-09-02) ----
+        # ops_by_type: per-turn unit-op counts by op -- the numerator of the
+        # per-asset-class turn coefficients that calibrate the capacity law
+        # (24x(1+H)x0.75/2.4, branch plan §5.3).
+        "ops_by_type": {},
+        # asset_units: straw/wheat/melon tile=1, carrot=0.5, head=2 (the
+        # capacity-law denominator), plus its raw components.
+        "asset_units": 0.0,
+        "asset_components": {"straw": 0, "wheat": 0, "melon": 0,
+                             "carrot": 0, "herd": 0},
+        "weed_tiles": 0,
+        "herd_head": 0,
     }
 
 
@@ -1068,6 +1129,42 @@ def _telemetry_record_turn(obs, farm, private, actions, tasks, trace, orders):
         daily["pass_count"] += passes
         ratio = daily["moving_turns"] / float(max(1, daily["effective_ops"]))
         daily["movement_to_effective_ratio"] = ratio
+        # M1 scorecard: ops by type + action mix (turn-coefficient numerator)
+        for action in actions or []:
+            if action and isinstance(action, list) and action[0]:
+                op = action[0]
+                if op != "PASS":
+                    daily["ops_by_type"][op] = \
+                        daily["ops_by_type"].get(op, 0) + 1
+        # M1 scorecard: asset units (capacity-law denominator) + weed count
+        comps = {"straw": 0, "wheat": 0, "melon": 0, "carrot": 0, "herd": 0}
+        weeds = 0
+        for row in _get(farm, "tiles", []) or []:
+            for tile in row:
+                if not isinstance(tile, dict):
+                    continue
+                kind = _get(tile, "kind", "")
+                if kind == "PLANT":
+                    crop = _get(tile, "crop", "")
+                    if crop == "STRAWBERRY":
+                        comps["straw"] += 1
+                    elif crop == "WHEAT":
+                        comps["wheat"] += 1
+                    elif crop == "MELON":
+                        comps["melon"] += 1
+                    elif crop == "CARROT":
+                        comps["carrot"] += 1
+                elif kind == "WEED":
+                    weeds += 1
+                elif "animal" in tile:
+                    comps["herd"] += 1
+        daily["asset_components"] = comps
+        daily["weed_tiles"] = weeds
+        daily["herd_head"] = comps["herd"]
+        daily["asset_units"] = float(comps["straw"] + comps["wheat"]
+                                     + comps["melon"]
+                                     + 0.5 * comps["carrot"]
+                                     + 2 * comps["herd"])
         cross_choices = int((trace or {}).get("cross_quadrant", 0))
         daily["cross_quadrant_choices"] += cross_choices
         overdue = {"WATER": 0, "FEED": 0, "CARE": 0}
@@ -1268,6 +1365,283 @@ def _market_flow(player, day, prices):
             ema = st.get("flow", {}).get(item, 0.0)
             flow[item] = 0.55 * delta + 0.45 * ema
     _MARKET_MEM[player] = {"day": day, "prices": dict(prices), "flow": flow}
+    return flow
+
+
+# ===========================================================================
+# 【中文】OBS-1..3 四通道对手供给观测器（opp_supply_observer_design v2，2026-09-02 落地）
+# ---------------------------------------------------------------------------
+# 工程契约（文档 §3）：
+#   * 纯旁路 _OPP_OBSERVER——fail-open，任何异常整体吞掉并置 conf=0，绝不影响决策；
+#   * 日账时序：每日首个动作回合做快照+差分+积分（与 _macro_plan 日缓存同型）；
+#   * 只读接口一律 est_ 前缀（M-H NO-GO 边界：replay 私有字段仅离线校验器可读，
+#     在线运行时只消费合法公开字段的估计值）；
+#   * Ch0 obs.market.inventory 直读（引擎 :951-956 每回合赋给双方）为主通道，
+#     Ch1 价格反解（_market_flow，上方原函数不动）降级为交叉校验；
+#   * Ch2 钱账：Δmoney+可见支出=卖货收入（对手 money/hires/land/animals 公开）；
+#   * Ch3 tile 记账：收割量/投喂量为公开整数账（yield_units/fed_today 逐 tile
+#     可读），仓库估计 opp_held = Σ(收割+外购−卖出−投喂)（E2 棚溢出高估、
+#     E5 种子跨日为已知有界误差，conf 联动下调）。
+# 消费方（文档 §4）：P4 三档出清、争议线零囤货连续化、_project_price 对手项、
+#   干扰触发器 R_opp——全部经 est_* getter，不直接读状态。
+# ===========================================================================
+_OPP_OBSERVER = {}
+
+
+def _opp_observer_state(player, day, hour):
+    """Get-or-create the per-player observer state; clock-back = new episode."""
+    st = _OPP_OBSERVER.get(player)
+    if st is None or day < st.get("day", day) or (
+            day == st.get("day", day) and hour < st.get("hour", hour)):
+        st = {"day": day, "hour": hour, "accounted_day": -1,
+              "inv_prev": {}, "money_prev": None,
+              "tile_yield_prev": {}, "held": {}, "flow_hist": {},
+              "sold_today": {}, "bought_today": {}, "conf": {},
+              "last_resid": {}}
+        _OPP_OBSERVER[player] = st
+    st["day"] = day
+    st["hour"] = hour
+    return st
+
+
+def _opp_note_orders(player, day, hour, orders):
+    """Bypass hook (fail-open): record OUR accepted SELL/BUY_PRODUCT units.
+
+    E6: only quoted->1 SELLs add market inventory; floor-price sells move
+    money but not inventory (both tracked here as one bucket -- the E1/E6
+    correction lands with the offline validator, V0).
+    """
+    try:
+        st = _opp_observer_state(player, day, hour)
+        for o in orders or []:
+            if not isinstance(o, list) or len(o) < 3 or not o[0]:
+                continue
+            if o[0] == "SELL" and o[1] in BASE_PRICE:
+                n = o[2] if isinstance(o[2], (int, float)) else 0
+                st["sold_today"][o[1]] = st["sold_today"].get(o[1], 0) + n
+            elif o[0] == "BUY_PRODUCT" and o[1] in BASE_PRICE:
+                n = o[2] if isinstance(o[2], (int, float)) else 0
+                st["bought_today"][o[1]] = st["bought_today"].get(o[1], 0) + n
+    except Exception:
+        return
+
+
+def _opp_tile_yields(farm):
+    """Per-item yield_units totals over a farm's tiles (Ch3 snapshot)."""
+    out = {item: 0 for item in BASE_PRICE}
+    fed = 0
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            y = _get(tile, "yield_units", 0) or 0
+            if _get(tile, "kind", "") == "PLANT":
+                crop = _get(tile, "crop", "")
+                if crop in out:
+                    out[crop] += y
+            elif "animal" in tile:
+                prod = _get(ANIMALS.get(_get(tile, "animal", ""), {}),
+                            "product", "")
+                if prod in out:
+                    out[prod] += y
+                if _get(tile, "fed_today", False):
+                    fed += 1
+    out["__fed__"] = fed
+    return out
+
+
+def _opp_production_night(farm, day):
+    """Overnight production estimate for the EOD of `day` (engine-exact for
+    base units; the fertilized+watered doubling is not reconstructable from
+    an hour-0 snapshot -- conf penalty covers it)."""
+    out = {item: 0 for item in BASE_PRICE}
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            if _get(tile, "kind", "") == "PLANT":
+                crop = _get(tile, "crop", "")
+                cd = CROPS.get(crop)
+                if not cd or not cd["ongoing"]:
+                    continue
+                planted = _get(tile, "planted_day", day)
+                interval = max(1, cd["interval"])
+                dsf = (day + 1) - planted - cd["first_yield_day"]
+                if dsf >= 0 and dsf % interval == 0 \
+                        and dsf // interval < cd["max_yield"]:
+                    if crop in out:
+                        out[crop] += 1
+            elif "animal" in tile:
+                a = ANIMALS.get(_get(tile, "animal", ""), {})
+                if not a:
+                    continue
+                placed = _get(tile, "placed_day", day)
+                dsf = (day + 1) - placed - a["first_yield_day"]
+                if dsf >= 0 and dsf % a["interval"] == 0:
+                    prod = a.get("product", "")
+                    if prod in out:
+                        out[prod] += 1
+    return out
+
+
+def _opp_observer_update(obs, own_private):
+    """Day-account pass (fail-open).  Once per day, first action turn."""
+    try:
+        player = _get(obs, "player", 0)
+        day = _get(obs, "day", 0)
+        hour = _get(obs, "hour", 0)
+        st = _opp_observer_state(player, day, hour)
+        if st["accounted_day"] >= day:
+            return  # already accounted today
+        farms = _get(obs, "farms", []) or []
+        opp = None
+        for i, f in enumerate(farms):
+            if i != player:
+                opp = f
+                break
+        market = _get(obs, "market", {}) or {}
+        inv = dict(_get(market, "inventory", {}) or {})
+        shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
+        absorb = _town_daily_demand(shops)
+        prev_inv = st["inv_prev"]
+        sold = st["sold_today"]
+        bought = st["bought_today"]
+        for item in BASE_PRICE:
+            # ---- Ch0: exact integer flow (direct inventory read) ----
+            opp_net = None
+            if item in inv and item in prev_inv:
+                our_net = sold.get(item, 0) - bought.get(item, 0)
+                opp_net = (inv[item] - prev_inv[item]) - our_net \
+                    + absorb.get(item, 0)
+            # ---- Ch3: harvest ledger from public tiles ----
+            y_now = st.get("_opp_yields", {}).get(item, 0)
+            y_prev = st["tile_yield_prev"].get(item, 0)
+            prod_est = st.get("_opp_prod", {}).get(item, 0)
+            harvested = max(0, y_prev + prod_est - y_now)
+            sold_units = sold.get(item, 0)
+            if item == "WHEAT":
+                fed_units = st.get("_opp_fed", 0)
+                bought_units = bought.get("WHEAT", 0)
+                if opp_net is not None:
+                    bought_units = max(bought_units, -opp_net)
+                    sold_units = max(0, opp_net)
+                held_delta = harvested + bought_units - sold_units - fed_units
+            elif item == "FERTILIZER":
+                if opp_net is not None:
+                    sold_units = max(0, opp_net)
+                held_delta = -sold_units  # gather side unobservable
+                st["conf"][item] = 0.5
+            else:
+                if opp_net is not None:
+                    sold_units = max(0, opp_net)
+                held_delta = harvested - sold_units
+            st["held"][item] = max(0, st["held"].get(item, 0) + held_delta)
+            if opp_net is not None:
+                hist = st["flow_hist"].setdefault(item, [])
+                hist.append(opp_net)
+                st["conf"].setdefault(item, 1.0)
+        # ---- Ch2: money cross-check (revenue plausibility bookkeeping) ----
+        if opp is not None and st["money_prev"] is not None:
+            dm = _get(opp, "money", 0.0) - st["money_prev"]
+            hands_now = len(_get(opp, "hands", []) or [])
+            hire_spend = _FIB_CUM[hands_now] if hands_now < len(_FIB_CUM) \
+                else 0
+            st["ch2"] = {"dmoney": dm, "hire_spend": hire_spend}
+        # roll snapshots for tomorrow
+        st["accounted_day"] = day
+        st["inv_prev"] = inv
+        st["money_prev"] = _get(opp, "money", None) if opp else None
+        st["sold_today"] = {}
+        st["bought_today"] = {}
+        if opp is not None:
+            yields = _opp_tile_yields(opp)
+            st["_opp_yields"] = yields
+            st["_opp_fed"] = yields.get("__fed__", 0)
+            st["tile_yield_prev"] = {
+                k: v for k, v in yields.items() if k != "__fed__"}
+            st["_opp_prod"] = _opp_production_night(opp, day)
+    except Exception:
+        try:
+            st = _OPP_OBSERVER.get(_get(obs, "player", 0))
+            if st:
+                st["conf"] = {k: 0.0 for k in BASE_PRICE}
+        except Exception:
+            pass
+
+
+# ---- est_* read-only getters（唯一公共面，M-H 边界纪律）----
+
+def est_opp_net(item, days=3):
+    """Opponent net sell flow for `item`, mean over the last `days` days."""
+    best = None
+    for st in _OPP_OBSERVER.values():
+        hist = st.get("flow_hist", {}).get(item, [])
+        if hist:
+            best = hist
+    if not best:
+        return None
+    window = best[-max(1, int(days)):]
+    return sum(window) / float(len(window))
+
+
+def est_opp_held(item):
+    """Estimated unmonetized opponent holding of `item` (decision-grade)."""
+    for st in _OPP_OBSERVER.values():
+        if item in st.get("held", {}):
+            return st["held"].get(item, 0)
+    return None
+
+
+def est_opp_conf(item):
+    """Confidence in [0,1] for `item` estimates (0 after any failure)."""
+    for st in _OPP_OBSERVER.values():
+        if item in st.get("conf", {}):
+            return st["conf"][item]
+    return 0.0
+
+
+def est_opp_supply_horizon(item, horizon_days=7):
+    """Held now (production-side calendar is served by the daily snapshot)."""
+    return est_opp_held(item)
+
+
+# 【中文】对手上市日历（branch plan §7.4 轻量前置，纯公开信息）：
+def _opp_production_calendar(farm, day, horizon=7):
+    """Daily NEW-harvestable units per item for the opponent (public tiles).
+
+    Ongoing crops: one production evening per interval while production
+    count < max_yield; animals: one per interval while within max_held.
+    """
+    cal = {item: [0] * horizon for item in BASE_PRICE}
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            if _get(tile, "kind", "") == "PLANT":
+                crop = _get(tile, "crop", "")
+                cd = CROPS.get(crop)
+                if not cd:
+                    continue
+                planted = _get(tile, "planted_day", day)
+                interval = max(1, cd["interval"])
+                first_ev = planted + cd["first_yield_day"] - 1
+                for k in range(cd["max_yield"]):
+                    offset = first_ev + k * interval - day
+                    if 0 <= offset < horizon:
+                        cal[crop][offset] += 1
+            elif "animal" in tile:
+                a = ANIMALS.get(_get(tile, "animal", ""), {})
+                if not a:
+                    continue
+                placed = _get(tile, "placed_day", day)
+                first_ev = placed + a["first_yield_day"] - 1
+                for k in range(a.get("max_held", 6)):
+                    offset = first_ev + k * a["interval"] - day
+                    if 0 <= offset < horizon:
+                        prod = a.get("product", "")
+                        if prod in cal:
+                            cal[prod][offset] += 1
+    return cal
     return flow
 
 # ===== src/strategy.py =================================================
@@ -1688,7 +2062,9 @@ def _decide_mode(obs, day, prev_mode):
 
     p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
     d_straw = demand.get("STRAWBERRY", 1)
-    opp_contesting = opp is not None and opp["straw"] >= 12
+    # branch plan §9-⑦ (user ruling 2026-09-02): opp_contesting removed from
+    # the VOLUME entry -- mirroring is ACCEPTED as a timing war (sell-ahead
+    # via the production calendar), not avoided; solvency veto stays.
     if V9_WHEAT_FARM_ENABLED and _wheat_farm_entry_ok(
             day, mine, opp, prices, demand, prev_mode):
         return _wheat_farm_plan()
@@ -1699,7 +2075,7 @@ def _decide_mode(obs, day, prev_mode):
     # WEAKER than the crude cash floor it tried to replace.  The rollout
     # is an ADDITIONAL veto, never a relaxation.
     base_ok = (6 <= day <= 12 and p_straw >= 105 and d_straw >= 4
-               and not opp_contesting and mine["money"] >= 800
+               and mine["money"] >= 800
                and mine["herd"] >= VOLUME_HERD_FLOOR)
     if base_ok:
         r_vol = _plan_rollout(day, mine, _VOLUME_PLAN, prices, demand,
@@ -1756,8 +2132,300 @@ def _macro_plan(player, obs, day):
         plan = _decide_mode(obs, day, prev_mode)
     except Exception:
         plan = dict(_DEFENSIVE_PLAN)
+    # branch plan v1.3 landing: stage register + B/C branch knobs ride on
+    # the plan dict (additive keys only; every consumer reads .get()).
+    try:
+        plan = _stage_plan(player, obs, day, plan)
+    except Exception:
+        plan = dict(plan)
+        plan["stage"] = _stage_of(day)
     _PLAN_MEM[player] = {"day": day, "plan": plan}
     return plan
+
+
+# ===========================================================================
+# 【中文】branch plan v1.3 落地层（2026-09-02 实装）
+# ---------------------------------------------------------------------------
+# 阶段寄存器 §2 / 对手开局分类器 §4.1 / d6 五问检查点 §5.1 / 容量门 §5.3 /
+# 三重前置检查 §5.4 / _MIXED_PLAN（C2 DevilQ 混合，§5.2）。
+# 设计约束：全部纯公开状态、确定性、fail-closed；行为接线经 plan dict 旋钮
+# （p1_species_pref / melon_min / straw_early_claim），执行层照旧消费。
+# ===========================================================================
+
+# ---- C2 混合计划（DevilQ 96.6k 结构 × §5.3 分线封顶）----
+_MIXED_PLAN = {"mode": "MIXED", "volume": False, "scale": True,
+               "wheat_farm": False,
+               "straw_quad_cap": 12,          # 33 格 / 3 象限
+               "straw_total_cap": 33,          # DevilQ 33 莓（<Renji 42，
+                                                # 奶年金对冲作物线）
+               "wheat_money_quad": 4,
+               "crew_cap": 11,                 # §5.3 初算 C2≈77 单位→10-11
+               "herd_ceiling": 14,             # 14 头 = 28 资产单位（对冲主体）
+               "melon_total_cap": LINE_CAPS["MELON"],  # §5.3 封顶 6（吸收
+                                                # 优先于 DevilQ 原版 21 格）
+               }
+
+_STAGE_MEM = {}
+
+
+def _stage_of(day):
+    """P0-P5 阶段判定（branch §2 总表，纯日期函数）。"""
+    if day <= 0:
+        return "P0"
+    if day <= STAGE_P1_DUE - 1:
+        return "P1"
+    if day <= STAGE_P2_FREEZE:
+        return "P2"
+    if day <= STAGE_P3_END:
+        return "P3"
+    if day <= STAGE_P4_END:
+        return "P4"
+    return "P5"
+
+
+def _classify_opponent_opening(obs):
+    """对手开局分类器（branch §4.1 v1.3 更新版，d1 晨可判，纯公开状态）。
+
+    返回 burst / reduced / deferred / melon_first / unknown。
+    """
+    farms = _get(obs, "farms", []) or []
+    player = _get(obs, "player", 0)
+    opp = None
+    for i, f in enumerate(farms):
+        if i != player:
+            opp = f
+            break
+    if opp is None:
+        return "unknown"
+    scan = _farm_scan(opp)
+    if scan["herd"] >= OPP_CLASS_BURST_MIN:
+        return "burst"
+    if scan["herd"] >= OPP_CLASS_REDUCED_RANGE[0]:
+        return "reduced"
+    melon = 0
+    for row in _get(opp, "tiles", []) or []:
+        for tile in row:
+            if isinstance(tile, dict) and _get(tile, "kind", "") == "PLANT" \
+                    and _get(tile, "crop", "") == "MELON":
+                melon += 1
+    if melon >= OPP_CLASS_MELON_MIN:
+        return "melon_first"
+    if scan["wheat"] >= OPP_CLASS_DEFERRED_WHEAT:
+        return "deferred"
+    return "unknown"
+
+
+def _capacity_units(farm, private=None):
+    """当前资产单位（容量定律分母）：莓/麦/瓜格=1，萝卜=0.5，头=2。"""
+    comps = {"straw": 0, "wheat": 0, "melon": 0, "carrot": 0, "herd": 0}
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            kind = _get(tile, "kind", "")
+            if kind == "PLANT":
+                crop = _get(tile, "crop", "")
+                if crop == "STRAWBERRY":
+                    comps["straw"] += 1
+                elif crop == "WHEAT":
+                    comps["wheat"] += 1
+                elif crop == "MELON":
+                    comps["melon"] += 1
+                elif crop == "CARROT":
+                    comps["carrot"] += 1
+            elif "animal" in tile:
+                comps["herd"] += 1
+    units = float(comps["straw"] + comps["wheat"] + comps["melon"]
+                  + 0.5 * comps["carrot"] + 2 * comps["herd"])
+    return units, comps
+
+
+def _capacity_law_max(hands):
+    """容量定律上界：24×(1+H)×CAP_UTIL÷CAP_TURNS_PER_UNIT（§5.3）。"""
+    return 24.0 * (1 + max(0, int(hands))) * CAP_UTIL / CAP_TURNS_PER_UNIT
+
+
+def _capacity_gate(farm, private=None, delta_units=0.0, day=None, plan=None):
+    """三重前置检查·劳动力维（§5.3/§5.4）。
+
+    返回 (ok, util)。ok=False 表示买后单位数超定律×CAP_USE_MAX——
+    策略层应拒绝该 capex（黎明不变式：>0.85 拒购，<0.65 报 slack 补线）。
+    劳力先行（§5.3 规则 1）：带 day 调用时按当日计划雇工评估——
+    farm.hands 是昨日快照，黎明雇工在资产采购之前落地。
+    """
+    hands = len(_get(farm, "hands", []) or [])
+    units, comps = _capacity_units(farm, private)
+    if day is not None:
+        planned = _crew_target(
+            day, comps["herd"], comps["wheat"],
+            len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]),
+            plan)
+        hands = max(hands, planned)
+    cap = _capacity_law_max(hands)
+    util = (units + delta_units) / cap if cap > 0 else 0.0
+    return (util <= CAP_USE_MAX, util)
+
+
+def _curve_gate_ok(item, player, day, prices):
+    """三重前置检查·曲线维（§5.4）：投影价 ≥ 地板（升级自运行时死价红线，
+    投影替代现货快照——"现在 95、3 天后 80"的线现在能看见）。"""
+    if day < DEAD_PRICE_FROM_DAY:
+        return True
+    floor = DEAD_PRICE_FLOOR.get(item)
+    if floor is None:
+        floor = CROP_FLOOR.get(item)
+    if floor is None:
+        return True
+    price = _get(prices, item, BASE_PRICE.get(item, 0))
+    if price < floor:
+        return False
+    st = _MARKET_MEM.get(player) or {}
+    # freshness window: yesterday-or-today EMA is the designed trend signal;
+    # anything older or from the future is cross-episode noise -> ignored.
+    flow = 0.0
+    if day - 1 <= st.get("day", -10) <= day + 1:
+        flow = (st.get("flow", {}) or {}).get(item, 0.0)
+    proj = _project_price(item, price, flow, SELL_PLAN_LOOKAHEAD_DAYS)
+    return proj >= floor
+
+
+def _cash_gate_ok(farm, projected_spend=0.0):
+    """三重前置检查·现金维（§5.4 黎明现金流不变式）：
+
+    投影日终钱包 ≥ 次日黎明 crew fib 账单 + LIQUIDITY_FLOOR（饲料裕量
+    已并入该常量语义——m2b 破产类的保险丝，v1.1 迁移裁决）。
+    """
+    money = _get(farm, "money", 0.0)
+    hands = len(_get(farm, "hands", []) or [])
+    next_bill = _FIB_CUM[hands] if hands < len(_FIB_CUM) else 0
+    return (money - float(projected_spend)) >= (next_bill + LIQUIDITY_FLOOR)
+
+
+def _first_market_day(farm, day):
+    """本农场首个草莓上市日（planted+9；无格则 None）——首市日 KPI 输入。"""
+    best = None
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if isinstance(tile, dict) and _get(tile, "kind", "") == "PLANT" \
+                    and _get(tile, "crop", "") == "STRAWBERRY":
+                ev = _get(tile, "planted_day", day) + \
+                    CROPS["STRAWBERRY"]["first_yield_day"] - 1
+                best = ev if best is None else min(best, ev)
+    return best
+
+
+def _d6_checkpoint(obs, day):
+    """d6 五问检查点（branch §5.1）。返回 (questions, c_branch)。
+
+    c_branch: "C1"（五问全过，宽田候选——仍须 _decide_mode 的价格/吸收/
+    solvency 门）/ "C2"（草莓线弱或首市日落后但奶线活 → 混合）/
+    "C3"（作物线全弱 → 畜牧）。
+    """
+    farms = _get(obs, "farms", []) or []
+    player = _get(obs, "player", 0)
+    farm = farms[player] if 0 <= player < len(farms) else None
+    opp = None
+    for i, f in enumerate(farms):
+        if i != player:
+            opp = f
+            break
+    if farm is None:
+        return {"q1": False, "q2": False, "q3": False, "q4": False,
+                "q5": False}, "C3"
+    prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
+    shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
+    demand = _town_daily_demand(shops)
+    mine = _farm_scan(farm)
+    q1 = mine["herd"] >= VOLUME_HERD_FLOOR
+    q2 = mine["money"] >= 800
+    p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
+    q3 = p_straw >= 105 and demand.get("STRAWBERRY", 1) >= 4
+    # q4 首市日 KPI：我方（含当日可种）≤ 对手（无格视为 +inf）
+    our_first = _first_market_day(farm, day)
+    if our_first is None and day <= PLANT_LAST_DAY["STRAWBERRY"]:
+        our_first = day + CROPS["STRAWBERRY"]["first_yield_day"] - 1
+    opp_first = _first_market_day(opp, day) if opp is not None else None
+    q4 = (our_first is not None) and (opp_first is None
+                                      or our_first <= opp_first)
+    # q5 容量问：VOLUME 目标单位数 ≤ 定律 × 0.85
+    hands = len(_get(farm, "hands", []) or [])
+    target_units = 42 + 12 + 2 * mine["herd"]  # 莓42+麦12+畜群（§5.3 C1 初算）
+    q5 = target_units <= _capacity_law_max(max(hands, 12)) * CAP_USE_MAX
+    questions = {"q1": q1, "q2": q2, "q3": q3, "q4": q4, "q5": q5}
+    p_milk = _get(prices, "MILK", BASE_PRICE["MILK"])
+    p_wool = _get(prices, "WOOL", BASE_PRICE["WOOL"])
+    dairy_alive = (p_milk >= DEAD_PRICE_FLOOR["MILK"]
+                   and demand.get("MILK", 1) >= 2) or \
+                  (p_wool >= DEAD_PRICE_FLOOR["WOOL"]
+                   and demand.get("WOOL", 1) >= 2)
+    if q1 and q2 and q3 and q4 and q5:
+        c_branch = "C1"
+    elif q1 and dairy_alive and q5:
+        c_branch = "C2"
+    elif q1 and dairy_alive:
+        c_branch = "C3"
+    else:
+        c_branch = "C3" if dairy_alive else "C1"
+    return questions, c_branch
+
+
+def _b_branch_adjust(plan, obs, day):
+    """P1 分支调整（branch §4.2）：按对手分类给 plan 挂旋钮，执行层消费。
+
+    B1 burst：产品分化——YARN_STORE 未解锁则羊线换牛线（p1_species_pref）；
+    B2 reduced/deferred/unknown：标准序列（现有路径，零改动）；
+    B3 melon_first：瓜线最小化（melon_min——我方瓜只 d3-5 小批抢收）。
+    """
+    cls = _classify_opponent_opening(obs)
+    plan = dict(plan)
+    plan["opp_class"] = cls
+    if cls == "burst":
+        shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
+        if "YARN_STORE" not in shops:
+            plan["p1_species_pref"] = "COW"   # 不跟死吸收的毛线挤（§4.2 B1）
+    elif cls == "melon_first":
+        plan["melon_min"] = True              # §4.2 B3：瓜 d3-5 小批抢收
+    return plan
+
+
+def _stage_plan(player, obs, day, plan):
+    """阶段×分支选择器（branch §2/§4/§5 的组装点）。
+
+    P1（d1-5）：挂 B 分支旋钮；P2 起挂 C 分支裁决（d6 检查点一次，缓存到
+    阶段寄存器）；MIXED 作为 C2 计划对象注入 _decide_mode 之外的第二路径。
+    plan dict 额外携带 stage/c_branch 供市场层与遥测消费。
+    """
+    stage = _stage_of(day)
+    out = dict(plan)
+    out["stage"] = stage
+    if stage == "P1":
+        return _b_branch_adjust(out, obs, day)
+    if stage == "P2":
+        st = _STAGE_MEM.get(player)
+        if st is None or st.get("decided_day", -1) < STAGE_P1_DUE \
+                or st.get("decided_day", 99) > STAGE_P2_FREEZE:
+            if day == STAGE_P1_DUE:
+                questions, c_branch = _d6_checkpoint(obs, day)
+                _STAGE_MEM[player] = {"decided_day": day,
+                                      "c_branch": c_branch,
+                                      "questions": questions}
+            else:
+                _STAGE_MEM[player] = {"decided_day": day,
+                                      "c_branch": None, "questions": None}
+        st = _STAGE_MEM.get(player) or {}
+        c_branch = st.get("c_branch")
+        out["c_branch"] = c_branch
+        if c_branch == "C2" and out.get("mode") == "DEFENSIVE":
+            # 草莓线弱/首市日落后 + 奶线活：注入 DevilQ 混合计划（§5.2）
+            out = dict(_MIXED_PLAN)
+            out["stage"] = stage
+            out["c_branch"] = c_branch
+        return out
+    if stage in ("P3", "P4", "P5"):
+        st = _STAGE_MEM.get(player) or {}
+        out["c_branch"] = st.get("c_branch")
+        return out
+    return out
 
 
 # 【中文】═══ 结构与轮作规划（规划层核心）═══
@@ -2466,6 +3134,65 @@ def _build_tasks(obs, farm, private, day, plan=None):
         + sum(species_on_units.values())
     return tasks, animals_to_feed, herd_total, len(crop_map["WHEAT"]), capacity
 
+
+# ===========================================================================
+# 【中文】M2 任务包（scheduler 设计 §2，2026-09-02 影子落地）
+# ---------------------------------------------------------------------------
+# _build_mission：把现行 _build_tasks 的任务表（w/v/red 旧 schema）原位
+# 注解成新 schema（cls/deadline），并产出 D1 集合与容量预检——影子件：
+# agent() 不调用，黄金测试与 M3 求解器消费（scheduler §7 M2 门）。
+# capex 时点收编（§2.3 events）留 M2 切换期——当前仍由市场层管理，三重
+# 前置检查已在其位落地（market 侧）。
+# ===========================================================================
+
+_MISSION_DEADLINE_HOURS = {"WATER": 21, "FEED": 16, "CARE": 23,
+                           "HARVEST": 21, "PLANT": 16}
+
+
+def _mission_cls(task):
+    """旧任务 → 新 cls 分级（scheduler §2.2 D1-D4）。"""
+    op = (task.get("act") or [None])[0]
+    if task.get("red"):
+        return "OBLIGATION"       # 现行红线标记 = D1 今夜必死
+    if op == "HARVEST":
+        return "YIELD"
+    if op in ("CARE", "DIG", "COLLECT_FERTILIZER"):
+        return "BONUS"
+    return "LOGISTICS"
+
+
+def _build_mission(obs, farm, private, day, plan, tasks):
+    """Shadow M2: annotate the live task table into the mission schema.
+
+    Returns {"day", "cls_counts", "d1", "tasks", "capacity"} where d1 is
+    the dies-tonight key set (scheduler §2.2) and capacity carries the
+    labor-gate verdict (branch §5.3) for the M2/M3 harness.
+    """
+    hour = _get(obs, "hour", 0)
+    out_tasks = []
+    d1 = []
+    cls_counts = {}
+    for task in tasks or []:
+        cls = _mission_cls(task)
+        op = (task.get("act") or [None])[0]
+        deadline = _MISSION_DEADLINE_HOURS.get(op)
+        if cls == "OBLIGATION":
+            deadline = _MISSION_DEADLINE_HOURS.get(op, 21)
+        t = dict(task)
+        t["cls"] = cls
+        t["deadline"] = deadline
+        t["deps"] = []
+        out_tasks.append(t)
+        cls_counts[cls] = cls_counts.get(cls, 0) + 1
+        if cls == "OBLIGATION":
+            d1.append(task.get("key"))
+    cap_ok, util = _capacity_gate(farm, private)
+    units, comps = _capacity_units(farm, private)
+    return {"day": day, "hour": hour, "cls_counts": cls_counts,
+            "d1": d1, "tasks": out_tasks,
+            "capacity": {"ok": cap_ok, "util": round(util, 3),
+                         "units": units, "components": comps}}
+
 # ===== src/solver.py =================================================
 
 # ===========================================================================
@@ -2964,6 +3691,108 @@ def _schedule_units(obs, farm, private, day, tasks):
     }
     return actions
 
+
+# ===========================================================================
+# 【中文】M3 路线求解器（scheduler 设计 §3，2026-09-02 影子落地）
+# ---------------------------------------------------------------------------
+# _solve_routes：黎明一次求解的路线承诺——负载均衡分区（§3.1，全员自仓口
+# 出生，家区不可用首格判定）→ 簇内 EDF×价值密度排序（§3.2）→ 最近邻成路
+# → 同 deadline 类段 2-opt 抛光（换位后重验 ETA）。影子件：不改任何现行
+# 行为；M3 门 = 与 v72 的分歧统计（连续性/PASS 显著优才准 M4 切换）。
+# 确定性：全部排序键终结于 (key) 字典序（黄金测试前提）。
+# ===========================================================================
+
+def _solve_routes(farm, private, day, tasks, aging=None):
+    """Shadow M3: per-worker ordered route commitments with ETAs.
+
+    Returns {"routes": [ {worker, sector, stops:[keys], etas:[hours]} ],
+             "feasible": bool, "dropped": [keys]}.
+    """
+    tiles = _get(farm, "tiles", []) or []
+    board = len(tiles)
+    units = [tuple(_get(farm, "farmer",
+                        [board // 2 - 1, board // 2 - 1]))]
+    for h in _get(farm, "hands", []) or []:
+        units.append(tuple(h))
+    hour0 = 0  # dawn solve
+    aging = aging or {}
+
+    def deadline_key(t):
+        d = t.get("deadline")
+        return (0, d) if d is not None else (1, 0)
+
+    def density(t):
+        v = float(t.get("v") or 0) * (1.0 + 0.25 * aging.get(t.get("key"), 0))
+        return v / max(1.0, float(t.get("w") or 1))
+
+    # ---- partition: quadrant buckets balanced by workload (§3.1) ----
+    buckets = {}
+    for t in tasks or []:
+        sector = _quadrant_of(t["x"], t["y"], board) if board else "?"
+        buckets.setdefault(sector, []).append(t)
+    workers = list(range(len(units)))
+    sectors = sorted(buckets, key=lambda s: (-len(buckets[s]), s))
+    assign = {w: [] for w in workers}
+    wi = 0
+    for sector in sectors:
+        for t in sorted(buckets[sector],
+                        key=lambda t: (deadline_key(t), -density(t),
+                                       str(t.get("key")))):
+            assign[workers[wi % len(workers)]].append(t)
+            wi += 1
+
+    routes = []
+    dropped = []
+    feasible = True
+    for w in workers:
+        cluster = assign[w]
+        if not cluster:
+            routes.append({"worker": w, "sector": None, "stops": [],
+                           "etas": []})
+            continue
+        # nearest-neighbour construction seeded from the most urgent task
+        remaining = sorted(cluster,
+                           key=lambda t: (deadline_key(t), -density(t),
+                                          str(t.get("key"))))
+        ordered = []
+        cx, cy = units[w]
+        clock = hour0
+        while remaining:
+            # urgency FIRST (earliest deadline wins), then distance
+            best = min(remaining,
+                       key=lambda t: (
+                           t["deadline"] if t.get("deadline") is not None
+                           else 999,
+                           _dist(cx, cy, t["x"], t["y"]),
+                           str(t.get("key"))))
+            ordered.append(best)
+            clock += _dist(cx, cy, best["x"], best["y"]) + 1
+            cx, cy = best["x"], best["y"]
+            remaining.remove(best)
+        # feasibility: deadline ETA check (§2.4 style); drop the lowest
+        # density tail when infeasible (never drop OBLIGATION silently --
+        # flag infeasible instead)
+        etas = []
+        cx, cy = units[w]
+        clock = hour0
+        keep = []
+        for t in ordered:
+            clock += _dist(cx, cy, t["x"], t["y"]) + 1
+            etas.append(clock)
+            if t.get("deadline") is not None and clock > t["deadline"]:
+                if t.get("cls") == "OBLIGATION":
+                    feasible = False
+                dropped.append(t.get("key"))
+            else:
+                keep.append(t)
+            cx, cy = t["x"], t["y"]
+        routes.append({"worker": w,
+                       "sector": _quadrant_of(cx, cy, board) if board
+                       else None,
+                       "stops": [t.get("key") for t in keep],
+                       "etas": etas[:len(keep)]})
+    return {"routes": routes, "feasible": feasible, "dropped": dropped}
+
 # ===== src/executor.py =================================================
 
 # 【中文】L4 机械执行器脚手架（worker_route_scheduler_design.md §4，M4 启用）。
@@ -2978,17 +3807,51 @@ ROUTE_EXECUTOR_ENABLED = False
 
 
 def _execute_routes(obs, farm, private, day, routes):
-    """M4 placeholder: per-turn mechanical execution + read-only assertions.
+    """L4 mechanical executor (scheduler design §4; enabled at M4).
 
-    Contract (scheduler §4): every worker standing on a station whose tile
-    state is unfinished emits its action, else steps toward the next stop
-    (no mid-season return legs, engine fact F6); d29 runs the DROP->SELL
-    template; assertions (read-only, millisecond scale) verify D1
-    completion-or-ETA and the EOD shed-budget projection; any failure
-    triggers REPLAN-for-the-day with an idempotent gate (stop rebuilding
-    when the rebuilt plan equals the old one).
+    Walk-along-route semantics: a worker standing on its current stop whose
+    tile state is unfinished emits the stop's action, else steps one cell
+    toward it (engine fact F1: movement is unobstructed, Manhattan stepping
+    is exact).  Assertions (read-only, §5 proved-or-flagged): every D1
+    obligation is completed or its stop is still ETA-reachable; any failure
+    returns a replan request instead of micro-reassigning.
+
+    Returns (actions, replan) -- actions is a list per unit; M4 wires this
+    into agent() behind ROUTE_EXECUTOR_ENABLED.
     """
-    raise NotImplementedError("L4 executor lands at M4 (scheduler design §7)")
+    tiles = _get(farm, "tiles", []) or []
+    board = len(tiles)
+    units = [tuple(_get(farm, "farmer",
+                        [board // 2 - 1, board // 2 - 1]))]
+    for h in _get(farm, "hands", []) or []:
+        units.append(tuple(h))
+    hour = _get(obs, "hour", 0)
+    actions = []
+    replan = False
+    for ui, route in enumerate(routes or []):
+        stops = route.get("stops") or []
+        pos = units[ui] if ui < len(units) else (0, 0)
+        if ui >= len(units) or not stops:
+            actions.append(["PASS"])
+            continue
+        target = stops[0]
+        tx, ty = target["x"], target["y"]
+        if pos == (tx, ty):
+            actions.append(list(target["act"] or ["PASS"]))
+        else:
+            dx = 0 if tx == pos[0] else (1 if tx > pos[0] else -1)
+            dy = 0 if ty == pos[1] else (1 if ty > pos[1] else -1)
+            if dx:
+                actions.append(["EAST"] if dx > 0 else ["WEST"])
+            else:
+                actions.append(["SOUTH"] if dy > 0 else ["NORTH"])
+        # assertion: D1 stop still reachable before its deadline
+        deadline = target.get("deadline")
+        if deadline is not None:
+            eta = hour + _dist(pos[0], pos[1], tx, ty) + 1
+            if eta > deadline:
+                replan = True
+    return actions, replan
 
 # ===== src/market.py =================================================
 
@@ -3737,6 +4600,162 @@ def _market_gates(day, prices, shed, herd, town_shops=None, money=None,
 # 现金 <1000 的现金流回退允许 ≥20 就卖——门槛绝不能饿死资本计划）。
 # v10 M-E 贯穿全程：committed_spend 同回合花费台账，让后面的门读到
 # "引擎视角"的钱包（防一回合地+畜+种三连掏空）。
+# ===========================================================================
+# 【中文】market_strategy v1.1 落地块（2026-09-02）
+# ---------------------------------------------------------------------------
+# _sell_overrides：门控输出之上的有界覆盖（branch §7.2 争议线零囤货 +
+#   market §2 卖出计划强制清 + §P4 三档抢跑）——只增清仓单、绝不抑制
+#   门控已有的卖出；tranche 一律受 dump-rate 限速（2D+4，卖穿吸收只会
+#   砸自己的下一批）。
+# _sell_plan_item：囤 vs 清的一般判据（§2.2 规则 1）——囤的条件 =
+#   投影价 ≥ 现价×SELL_PLAN_HOLD_EDGE 且线未争议；曲线在死（投影<现价）
+#   或利润边际不足 → 清。
+# _interference_shadow：干扰触发器影子（MK-4，INTERFENCE_ARMED=False 恒
+#   只记录）——R_opp vs R_us 用双方公开日历 × 现价的 7 日窗口粗估。
+# ===========================================================================
+_INTERFERENCE_LOG = []
+
+
+def _sell_plan_item(item, day, prices, flow, contested):
+    """Sell-planner verdict per item: 'hold' | 'clear' (market §2.2)."""
+    if item in (contested or set()):
+        return "clear"
+    price = _get(prices, item, BASE_PRICE.get(item, 0))
+    if price <= 1:
+        return "clear"          # floor segment: nothing to wait for
+    f = (flow or {}).get(item, 0.0)
+    proj = _project_price(item, price, f, SELL_PLAN_LOOKAHEAD_DAYS)
+    if proj < price:
+        return "clear"          # curve dying (projection below spot)
+    if proj < price * SELL_PLAN_HOLD_EDGE:
+        return "clear"          # hold-edge fails: carry risk unpaid
+    return "hold"
+
+
+def _contested_items(obs):
+    """Contested lines from PUBLIC tiles (branch §7.2: opp crop tiles >=12;
+    dairy lines contested at opp species >=8)."""
+    farms = _get(obs, "farms", []) or []
+    player = _get(obs, "player", 0)
+    opp = None
+    for i, f in enumerate(farms):
+        if i != player:
+            opp = f
+            break
+    contested = set()
+    if opp is None:
+        return contested
+    counts = {"STRAWBERRY": 0, "WHEAT": 0, "MELON": 0, "CARROT": 0}
+    cows = sheep = 0
+    for row in _get(opp, "tiles", []) or []:
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            if _get(tile, "kind", "") == "PLANT":
+                crop = _get(tile, "crop", "")
+                if crop in counts:
+                    counts[crop] += 1
+            elif "animal" in tile:
+                a = _get(tile, "animal", "")
+                if a == "COW":
+                    cows += 1
+                elif a == "SHEEP":
+                    sheep += 1
+    for crop, n in counts.items():
+        if n >= 12:
+            contested.add(crop)
+    if cows >= 8:
+        contested.add("MILK")
+    if sheep >= 8:
+        contested.add("WOOL")
+    return contested
+
+
+def _sell_overrides(obs, farm, private, day, prices, shed, town_shops,
+                    existing_orders):
+    """Bounded overrides ON TOP of the gate output (never suppress sells)."""
+    try:
+        if day >= SEASON_DAYS - 1:
+            return []           # d29 liquidation owns everything
+        demand = _town_daily_demand(town_shops) if town_shops else {}
+        contested = _contested_items(obs)
+        flow = _market_flow(_get(obs, "player", 0), day, prices)
+        sold_now = {o[1] for o in existing_orders
+                    if isinstance(o, list) and o and o[0] == "SELL"}
+        out = []
+
+        def tranche(item, stock):
+            return max(0, min(int(stock), 2 * demand.get(item, 1) + 4))
+
+        for item in ("STRAWBERRY", "MELON", "WOOL", "MILK", "CARROT", "EGG"):
+            stock = shed.get(item, 0)
+            if not isinstance(stock, (int, float)) or stock <= 0:
+                continue
+            verdict = _sell_plan_item(item, day, prices, flow, contested)
+            # P4 three-tier early clearing (branch §6 / est_opp_held driven;
+            # falls back to gate behaviour when confidence is low)
+            if 25 <= day < ENDGAME_DAY and est_opp_conf(item) >= 0.5:
+                held = est_opp_held(item) or 0
+                if held >= P4_HEAVY_HELD or (
+                        held >= P4_MID_HELD and day >= 26):
+                    verdict = "clear"
+            if verdict == "clear" and item not in sold_now:
+                n = tranche(item, stock)
+                if n > 0:
+                    out.append(["SELL", item, n])
+                    sold_now.add(item)
+        return out
+    except Exception:
+        return []               # fail-open: overrides never break ordering
+
+
+def interference_shadow_log():
+    """Read-only access to the MK-4 shadow log (diagnostics only)."""
+    return list(_INTERFERENCE_LOG)
+
+
+def _interference_shadow(obs, farm, day, prices):
+    """MK-4 trigger, SHADOW ONLY (INTERFERENCE_ARMED=False): compare a
+    7-day public-calendar income projection R_opp vs R_us and record the
+    verdict; never issues orders."""
+    try:
+        farms = _get(obs, "farms", []) or []
+        player = _get(obs, "player", 0)
+        opp = None
+        for i, f in enumerate(farms):
+            if i != player:
+                opp = f
+                break
+        if opp is None:
+            return False
+
+        def calendar_value(f):
+            total = 0.0
+            if f is None:
+                return 0.0
+            cal = _opp_production_calendar(f, day, horizon=7)
+            for item, daily in cal.items():
+                px = _get(prices, item, BASE_PRICE.get(item, 0))
+                total += sum(daily) * px
+            return total
+
+        r_opp = calendar_value(opp)
+        r_us = calendar_value(farm)
+        triggered = r_opp > r_us + INTERFERENCE_MARGIN
+        if _INTERFERENCE_LOG:
+            prev = _INTERFERENCE_LOG[-1]
+            if prev.get("day") == day:
+                _INTERFERENCE_LOG.pop()   # one record per day
+        _INTERFERENCE_LOG.append({"day": day, "r_opp": r_opp, "r_us": r_us,
+                                  "trigger": triggered,
+                                  "armed": INTERFERENCE_ARMED})
+        if len(_INTERFERENCE_LOG) > 60:
+            del _INTERFERENCE_LOG[:len(_INTERFERENCE_LOG) - 60]
+        return triggered and INTERFERENCE_ARMED
+    except Exception:
+        return False
+
+
 def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                    plan=None):
     money = _get(farm, "money", 0.0)
@@ -3781,7 +4800,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             land_fund = 0
         elif day >= due_day:
             land_fund = fund
-            if money >= fund:
+            # branch §5.4 triple gate (labor + cash dims): a quadrant is 25
+            # asset-unit tiles; the purchase may only land inside the
+            # capacity law and leave the dawn cash invariant intact.
+            cap_ok, _util = _capacity_gate(farm, None, 25.0, day, plan)
+            # cash dim: the fund already embeds price + cushion, so the
+            # invariant prices only the land COST against the floor+bill.
+            if money >= fund and cap_ok \
+                    and _cash_gate_ok(farm, LAND_PRICE[quads]):
                 orders.append(["BUY_LAND"])
                 committed_spend += LAND_PRICE[quads]
                 if plan.get("wheat_farm"):
@@ -3794,8 +4820,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # strawberry field's realized band repay it several times over
     # (round-3 ledger: Renji's 42-tile field).  No herd-blocking fund:
     # the 14-head plan is already built by the day this can fire.
+    # branch §5.4: SE passes the same labor/cash triple gate.
     if plan["volume"] and quads == 3 \
-            and SE_DUE_DAY <= day <= SE_BUY_LAST_DAY and money >= SE_FUND:
+            and SE_DUE_DAY <= day <= SE_BUY_LAST_DAY and money >= SE_FUND \
+            and _capacity_gate(farm, None, 25.0, day, plan)[0] \
+            and _cash_gate_ok(farm, LAND_PRICE[3]):
         orders.append(["BUY_LAND"])
         committed_spend += LAND_PRICE[3]
 
@@ -3832,10 +4861,25 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 want = min(want, max(
                     0, int((money - committed_spend - 60) // wheat_px)))
             if want > 0:
+                # market §5 小件 2：BUY 抽货推高曲线——大单跨回合分批。
+                want = min(want, BUY_CHUNK_MAX_UNITS)
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
                 committed_spend += want * wheat_px
+                sys_wheat += want          # the opportunity block counts it
                 if plan.get("wheat_farm"):
                     projected_money -= want * unit_budget
+        # market §5 小件 1（机会性买入，Danila 98.7k 出典 d1-2 低价囤料）：
+        # 价 <26 + 现金红线外 → 主动囤到 N 天用量；同样受分批上限。
+        if prices.get("WHEAT", 25) <= OPPORTUNE_WHEAT_PRICE \
+                and not last_day and animals_to_feed > 0:
+            hoard_target = animals_to_feed * OPPORTUNE_WHEAT_DAYS + 3
+            extra = min(hoard_target - sys_wheat,
+                        BUY_CHUNK_MAX_UNITS,
+                        max(0, int((money - committed_spend - 60) //
+                                   OPPORTUNE_WHEAT_PRICE)))
+            if extra > 0:
+                orders.append(["BUY_PRODUCT", "WHEAT", extra])
+                committed_spend += extra * OPPORTUNE_WHEAT_PRICE
 
     # ---- seeds: the wheat feed floor first (m2b), then rotation crops
     # staged behind the pending land fund (FM-3 staging).  R3-3 exception:
@@ -3920,6 +4964,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 continue
             if prices.get(crop, BASE_PRICE[crop]) < CROP_FLOOR[crop]:
                 continue  # red line: dead-price freeze
+            # branch §5.4 curve dim (projection supersedes the spot freeze
+            # above): never plant into a curve whose 2-day projection is
+            # already under the floor.
+            if not _curve_gate_ok(crop, _get(obs, "player", 0), day, prices):
+                continue
+            # branch §4.2 B3 (melon_min): against a melon-first opponent our
+            # melon line stays a small early-batch probe (d3-5 抢收).
+            if plan.get("melon_min") and crop == "MELON":
+                continue
             cap_for_crop = CROP_CAP_PER_QUAD[crop] * quads
             if crop == "STRAWBERRY":
                 cap_for_crop = min(plan["straw_quad_cap"] * quads,
@@ -3946,6 +4999,13 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 # earlier same-turn purchase.
                 batch = min(10 if plan["volume"] else 6, max(0, want),
                             room_budget, seed_affordable)
+            if batch > 0 and wallet >= reserve_gate + \
+                    CROPS[crop]["seed"] * batch:
+                # branch §5.4 labor dim: the batch's tiles count toward the
+                # capacity law at 1 unit/tile -- refuse when over the law.
+                if not _capacity_gate(farm, None, float(batch),
+                                      day, plan)[0]:
+                    batch = 0
             if batch > 0 and wallet >= reserve_gate + \
                     CROPS[crop]["seed"] * batch:
                 orders.append(["BUY_SEED", crop, batch])
@@ -4020,6 +5080,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         # premium-milk window on time instead of queueing behind the sheep
         candidates = sorted((a for a in HERD_COMPOSITION if HERD_COMPOSITION[a] > 0),
                             key=lambda a: species[a] / float(HERD_COMPOSITION[a]))
+        # branch §4.2 B1 产品分化：YARN_STORE 未解锁的爆发对手面前，羊线
+        # 换牛线（plan["p1_species_pref"]，strategy._b_branch_adjust 注入）。
+        _p1_pref = plan.get("p1_species_pref")
+        if _p1_pref in ("COW", "SHEEP") and _p1_pref in candidates:
+            candidates = [_p1_pref] + [a for a in candidates if a != _p1_pref]
+        # branch §5.3/§5.4 labor dim：畜群扩张（步速循环）不得越过容量定律
+        # ——黎明不变式 >0.85 拒购（任务包 capacity_deficit 的市场侧镜像）。
+        _herd_cap_ok = _capacity_gate(farm, None, 0.0, day, plan)[0]
         if npv_ceiling > HERD_CAP and preferred_species is not None:
             candidates = [preferred_species]
         for animal in candidates:
@@ -4044,6 +5112,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                     else int(0.95 * BASE_PRICE[product])
                 if prices.get(product, BASE_PRICE[product]) < floor:
                     continue  # dead-price freeze (demand-conditioned)
+                # branch §5.4 curve dim：投影价替代现货快照——"现在过线、
+                # 2 天后跌穿"的线现在就能看见（升级而非替换上面的地板）。
+                if not _curve_gate_ok(product, _get(obs, "player", 0),
+                                      day, prices):
+                    continue
             cost = ANIMALS[animal]["cost"]
             # v10 M-E: price the wallet as the engine will see it after
             # this turn's earlier buys, and keep a post-purchase floor so
@@ -4062,7 +5135,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 absorption_cap = int(
                     demand.get(product, 1) * ANIMALS[animal]["interval"] // 2)
                 n = min(n, absorption_cap - species[animal])
-            if n > 0:
+            if n > 0 and _herd_cap_ok:
                 orders.append(["BUY_ANIMAL", animal, n])
                 if plan.get("wheat_farm"):
                     projected_money -= n * cost
@@ -4075,6 +5148,12 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     orders.extend(_market_gates(day, prices, shed, herd_total,
                                 town_shops=town_shops, money=money,
                                 flow=flow))
+    # 【branch §7.2 / market §2 落地】争议线零囤货 + 卖出计划强制清 +
+    # P4 三档抢跑——对门控输出做有界覆盖（只增清仓、不抑制既有卖出）。
+    orders.extend(_sell_overrides(obs, farm, private, day, prices, shed,
+                                  town_shops, orders))
+    # 【market §3 落地】干扰触发器影子（MK-4）：只记录不发令。
+    _interference_shadow(obs, farm, day, prices)
     if last_day:
         # Goods already carried can DROP before market processing in this turn,
         # so include them in liquidation. Failed/partial quantities remain legal
@@ -4151,6 +5230,11 @@ def agent(obs):
         tiles = _get(farm, "tiles", [])
         if not tiles:
             return {"farmer": ["PASS"], "hands": [], "market": []}
+
+        # OBS bypass hook (fail-open, scheduler doc §3 / OBS v2 §3): the
+        # day-account pass runs on the first action turn of each day and
+        # never touches the decision path below.
+        _opp_observer_update(obs, _get(obs, "private", {}) or {})
 
         # r5-P4: the daily macro plan (DEFENSIVE = conservative r4 frame) is
         # computed once per day-hour cache and threaded through every
@@ -4235,6 +5319,9 @@ def agent(obs):
             market_inventory=_get(_get(obs, "market", {}) or {},
                                   "inventory", None) or None)
         orders = budget["accepted"]
+
+        # OBS bypass hook: our accepted SELL/BUY_PRODUCT ledger (Ch0 input).
+        _opp_note_orders(player, day, hour, orders)
 
         farmer = actions[0] if actions else ["PASS"]
         hands_actions = actions[1:]

@@ -10,14 +10,48 @@ ROUTE_EXECUTOR_ENABLED = False
 
 
 def _execute_routes(obs, farm, private, day, routes):
-    """M4 placeholder: per-turn mechanical execution + read-only assertions.
+    """L4 mechanical executor (scheduler design §4; enabled at M4).
 
-    Contract (scheduler §4): every worker standing on a station whose tile
-    state is unfinished emits its action, else steps toward the next stop
-    (no mid-season return legs, engine fact F6); d29 runs the DROP->SELL
-    template; assertions (read-only, millisecond scale) verify D1
-    completion-or-ETA and the EOD shed-budget projection; any failure
-    triggers REPLAN-for-the-day with an idempotent gate (stop rebuilding
-    when the rebuilt plan equals the old one).
+    Walk-along-route semantics: a worker standing on its current stop whose
+    tile state is unfinished emits the stop's action, else steps one cell
+    toward it (engine fact F1: movement is unobstructed, Manhattan stepping
+    is exact).  Assertions (read-only, §5 proved-or-flagged): every D1
+    obligation is completed or its stop is still ETA-reachable; any failure
+    returns a replan request instead of micro-reassigning.
+
+    Returns (actions, replan) -- actions is a list per unit; M4 wires this
+    into agent() behind ROUTE_EXECUTOR_ENABLED.
     """
-    raise NotImplementedError("L4 executor lands at M4 (scheduler design §7)")
+    tiles = _get(farm, "tiles", []) or []
+    board = len(tiles)
+    units = [tuple(_get(farm, "farmer",
+                        [board // 2 - 1, board // 2 - 1]))]
+    for h in _get(farm, "hands", []) or []:
+        units.append(tuple(h))
+    hour = _get(obs, "hour", 0)
+    actions = []
+    replan = False
+    for ui, route in enumerate(routes or []):
+        stops = route.get("stops") or []
+        pos = units[ui] if ui < len(units) else (0, 0)
+        if ui >= len(units) or not stops:
+            actions.append(["PASS"])
+            continue
+        target = stops[0]
+        tx, ty = target["x"], target["y"]
+        if pos == (tx, ty):
+            actions.append(list(target["act"] or ["PASS"]))
+        else:
+            dx = 0 if tx == pos[0] else (1 if tx > pos[0] else -1)
+            dy = 0 if ty == pos[1] else (1 if ty > pos[1] else -1)
+            if dx:
+                actions.append(["EAST"] if dx > 0 else ["WEST"])
+            else:
+                actions.append(["SOUTH"] if dy > 0 else ["NORTH"])
+        # assertion: D1 stop still reachable before its deadline
+        deadline = target.get("deadline")
+        if deadline is not None:
+            eta = hour + _dist(pos[0], pos[1], tx, ty) + 1
+            if eta > deadline:
+                replan = True
+    return actions, replan

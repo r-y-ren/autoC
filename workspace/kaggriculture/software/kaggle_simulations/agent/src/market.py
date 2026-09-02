@@ -743,6 +743,162 @@ def _market_gates(day, prices, shed, herd, town_shops=None, money=None,
 # 现金 <1000 的现金流回退允许 ≥20 就卖——门槛绝不能饿死资本计划）。
 # v10 M-E 贯穿全程：committed_spend 同回合花费台账，让后面的门读到
 # "引擎视角"的钱包（防一回合地+畜+种三连掏空）。
+# ===========================================================================
+# 【中文】market_strategy v1.1 落地块（2026-09-02）
+# ---------------------------------------------------------------------------
+# _sell_overrides：门控输出之上的有界覆盖（branch §7.2 争议线零囤货 +
+#   market §2 卖出计划强制清 + §P4 三档抢跑）——只增清仓单、绝不抑制
+#   门控已有的卖出；tranche 一律受 dump-rate 限速（2D+4，卖穿吸收只会
+#   砸自己的下一批）。
+# _sell_plan_item：囤 vs 清的一般判据（§2.2 规则 1）——囤的条件 =
+#   投影价 ≥ 现价×SELL_PLAN_HOLD_EDGE 且线未争议；曲线在死（投影<现价）
+#   或利润边际不足 → 清。
+# _interference_shadow：干扰触发器影子（MK-4，INTERFENCE_ARMED=False 恒
+#   只记录）——R_opp vs R_us 用双方公开日历 × 现价的 7 日窗口粗估。
+# ===========================================================================
+_INTERFERENCE_LOG = []
+
+
+def _sell_plan_item(item, day, prices, flow, contested):
+    """Sell-planner verdict per item: 'hold' | 'clear' (market §2.2)."""
+    if item in (contested or set()):
+        return "clear"
+    price = _get(prices, item, BASE_PRICE.get(item, 0))
+    if price <= 1:
+        return "clear"          # floor segment: nothing to wait for
+    f = (flow or {}).get(item, 0.0)
+    proj = _project_price(item, price, f, SELL_PLAN_LOOKAHEAD_DAYS)
+    if proj < price:
+        return "clear"          # curve dying (projection below spot)
+    if proj < price * SELL_PLAN_HOLD_EDGE:
+        return "clear"          # hold-edge fails: carry risk unpaid
+    return "hold"
+
+
+def _contested_items(obs):
+    """Contested lines from PUBLIC tiles (branch §7.2: opp crop tiles >=12;
+    dairy lines contested at opp species >=8)."""
+    farms = _get(obs, "farms", []) or []
+    player = _get(obs, "player", 0)
+    opp = None
+    for i, f in enumerate(farms):
+        if i != player:
+            opp = f
+            break
+    contested = set()
+    if opp is None:
+        return contested
+    counts = {"STRAWBERRY": 0, "WHEAT": 0, "MELON": 0, "CARROT": 0}
+    cows = sheep = 0
+    for row in _get(opp, "tiles", []) or []:
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            if _get(tile, "kind", "") == "PLANT":
+                crop = _get(tile, "crop", "")
+                if crop in counts:
+                    counts[crop] += 1
+            elif "animal" in tile:
+                a = _get(tile, "animal", "")
+                if a == "COW":
+                    cows += 1
+                elif a == "SHEEP":
+                    sheep += 1
+    for crop, n in counts.items():
+        if n >= 12:
+            contested.add(crop)
+    if cows >= 8:
+        contested.add("MILK")
+    if sheep >= 8:
+        contested.add("WOOL")
+    return contested
+
+
+def _sell_overrides(obs, farm, private, day, prices, shed, town_shops,
+                    existing_orders):
+    """Bounded overrides ON TOP of the gate output (never suppress sells)."""
+    try:
+        if day >= SEASON_DAYS - 1:
+            return []           # d29 liquidation owns everything
+        demand = _town_daily_demand(town_shops) if town_shops else {}
+        contested = _contested_items(obs)
+        flow = _market_flow(_get(obs, "player", 0), day, prices)
+        sold_now = {o[1] for o in existing_orders
+                    if isinstance(o, list) and o and o[0] == "SELL"}
+        out = []
+
+        def tranche(item, stock):
+            return max(0, min(int(stock), 2 * demand.get(item, 1) + 4))
+
+        for item in ("STRAWBERRY", "MELON", "WOOL", "MILK", "CARROT", "EGG"):
+            stock = shed.get(item, 0)
+            if not isinstance(stock, (int, float)) or stock <= 0:
+                continue
+            verdict = _sell_plan_item(item, day, prices, flow, contested)
+            # P4 three-tier early clearing (branch §6 / est_opp_held driven;
+            # falls back to gate behaviour when confidence is low)
+            if 25 <= day < ENDGAME_DAY and est_opp_conf(item) >= 0.5:
+                held = est_opp_held(item) or 0
+                if held >= P4_HEAVY_HELD or (
+                        held >= P4_MID_HELD and day >= 26):
+                    verdict = "clear"
+            if verdict == "clear" and item not in sold_now:
+                n = tranche(item, stock)
+                if n > 0:
+                    out.append(["SELL", item, n])
+                    sold_now.add(item)
+        return out
+    except Exception:
+        return []               # fail-open: overrides never break ordering
+
+
+def interference_shadow_log():
+    """Read-only access to the MK-4 shadow log (diagnostics only)."""
+    return list(_INTERFERENCE_LOG)
+
+
+def _interference_shadow(obs, farm, day, prices):
+    """MK-4 trigger, SHADOW ONLY (INTERFERENCE_ARMED=False): compare a
+    7-day public-calendar income projection R_opp vs R_us and record the
+    verdict; never issues orders."""
+    try:
+        farms = _get(obs, "farms", []) or []
+        player = _get(obs, "player", 0)
+        opp = None
+        for i, f in enumerate(farms):
+            if i != player:
+                opp = f
+                break
+        if opp is None:
+            return False
+
+        def calendar_value(f):
+            total = 0.0
+            if f is None:
+                return 0.0
+            cal = _opp_production_calendar(f, day, horizon=7)
+            for item, daily in cal.items():
+                px = _get(prices, item, BASE_PRICE.get(item, 0))
+                total += sum(daily) * px
+            return total
+
+        r_opp = calendar_value(opp)
+        r_us = calendar_value(farm)
+        triggered = r_opp > r_us + INTERFERENCE_MARGIN
+        if _INTERFERENCE_LOG:
+            prev = _INTERFERENCE_LOG[-1]
+            if prev.get("day") == day:
+                _INTERFERENCE_LOG.pop()   # one record per day
+        _INTERFERENCE_LOG.append({"day": day, "r_opp": r_opp, "r_us": r_us,
+                                  "trigger": triggered,
+                                  "armed": INTERFERENCE_ARMED})
+        if len(_INTERFERENCE_LOG) > 60:
+            del _INTERFERENCE_LOG[:len(_INTERFERENCE_LOG) - 60]
+        return triggered and INTERFERENCE_ARMED
+    except Exception:
+        return False
+
+
 def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                    plan=None):
     money = _get(farm, "money", 0.0)
@@ -787,7 +943,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             land_fund = 0
         elif day >= due_day:
             land_fund = fund
-            if money >= fund:
+            # branch §5.4 triple gate (labor + cash dims): a quadrant is 25
+            # asset-unit tiles; the purchase may only land inside the
+            # capacity law and leave the dawn cash invariant intact.
+            cap_ok, _util = _capacity_gate(farm, None, 25.0, day, plan)
+            # cash dim: the fund already embeds price + cushion, so the
+            # invariant prices only the land COST against the floor+bill.
+            if money >= fund and cap_ok \
+                    and _cash_gate_ok(farm, LAND_PRICE[quads]):
                 orders.append(["BUY_LAND"])
                 committed_spend += LAND_PRICE[quads]
                 if plan.get("wheat_farm"):
@@ -800,8 +963,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # strawberry field's realized band repay it several times over
     # (round-3 ledger: Renji's 42-tile field).  No herd-blocking fund:
     # the 14-head plan is already built by the day this can fire.
+    # branch §5.4: SE passes the same labor/cash triple gate.
     if plan["volume"] and quads == 3 \
-            and SE_DUE_DAY <= day <= SE_BUY_LAST_DAY and money >= SE_FUND:
+            and SE_DUE_DAY <= day <= SE_BUY_LAST_DAY and money >= SE_FUND \
+            and _capacity_gate(farm, None, 25.0, day, plan)[0] \
+            and _cash_gate_ok(farm, LAND_PRICE[3]):
         orders.append(["BUY_LAND"])
         committed_spend += LAND_PRICE[3]
 
@@ -838,10 +1004,25 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 want = min(want, max(
                     0, int((money - committed_spend - 60) // wheat_px)))
             if want > 0:
+                # market §5 小件 2：BUY 抽货推高曲线——大单跨回合分批。
+                want = min(want, BUY_CHUNK_MAX_UNITS)
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
                 committed_spend += want * wheat_px
+                sys_wheat += want          # the opportunity block counts it
                 if plan.get("wheat_farm"):
                     projected_money -= want * unit_budget
+        # market §5 小件 1（机会性买入，Danila 98.7k 出典 d1-2 低价囤料）：
+        # 价 <26 + 现金红线外 → 主动囤到 N 天用量；同样受分批上限。
+        if prices.get("WHEAT", 25) <= OPPORTUNE_WHEAT_PRICE \
+                and not last_day and animals_to_feed > 0:
+            hoard_target = animals_to_feed * OPPORTUNE_WHEAT_DAYS + 3
+            extra = min(hoard_target - sys_wheat,
+                        BUY_CHUNK_MAX_UNITS,
+                        max(0, int((money - committed_spend - 60) //
+                                   OPPORTUNE_WHEAT_PRICE)))
+            if extra > 0:
+                orders.append(["BUY_PRODUCT", "WHEAT", extra])
+                committed_spend += extra * OPPORTUNE_WHEAT_PRICE
 
     # ---- seeds: the wheat feed floor first (m2b), then rotation crops
     # staged behind the pending land fund (FM-3 staging).  R3-3 exception:
@@ -926,6 +1107,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 continue
             if prices.get(crop, BASE_PRICE[crop]) < CROP_FLOOR[crop]:
                 continue  # red line: dead-price freeze
+            # branch §5.4 curve dim (projection supersedes the spot freeze
+            # above): never plant into a curve whose 2-day projection is
+            # already under the floor.
+            if not _curve_gate_ok(crop, _get(obs, "player", 0), day, prices):
+                continue
+            # branch §4.2 B3 (melon_min): against a melon-first opponent our
+            # melon line stays a small early-batch probe (d3-5 抢收).
+            if plan.get("melon_min") and crop == "MELON":
+                continue
             cap_for_crop = CROP_CAP_PER_QUAD[crop] * quads
             if crop == "STRAWBERRY":
                 cap_for_crop = min(plan["straw_quad_cap"] * quads,
@@ -952,6 +1142,13 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 # earlier same-turn purchase.
                 batch = min(10 if plan["volume"] else 6, max(0, want),
                             room_budget, seed_affordable)
+            if batch > 0 and wallet >= reserve_gate + \
+                    CROPS[crop]["seed"] * batch:
+                # branch §5.4 labor dim: the batch's tiles count toward the
+                # capacity law at 1 unit/tile -- refuse when over the law.
+                if not _capacity_gate(farm, None, float(batch),
+                                      day, plan)[0]:
+                    batch = 0
             if batch > 0 and wallet >= reserve_gate + \
                     CROPS[crop]["seed"] * batch:
                 orders.append(["BUY_SEED", crop, batch])
@@ -1026,6 +1223,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         # premium-milk window on time instead of queueing behind the sheep
         candidates = sorted((a for a in HERD_COMPOSITION if HERD_COMPOSITION[a] > 0),
                             key=lambda a: species[a] / float(HERD_COMPOSITION[a]))
+        # branch §4.2 B1 产品分化：YARN_STORE 未解锁的爆发对手面前，羊线
+        # 换牛线（plan["p1_species_pref"]，strategy._b_branch_adjust 注入）。
+        _p1_pref = plan.get("p1_species_pref")
+        if _p1_pref in ("COW", "SHEEP") and _p1_pref in candidates:
+            candidates = [_p1_pref] + [a for a in candidates if a != _p1_pref]
+        # branch §5.3/§5.4 labor dim：畜群扩张（步速循环）不得越过容量定律
+        # ——黎明不变式 >0.85 拒购（任务包 capacity_deficit 的市场侧镜像）。
+        _herd_cap_ok = _capacity_gate(farm, None, 0.0, day, plan)[0]
         if npv_ceiling > HERD_CAP and preferred_species is not None:
             candidates = [preferred_species]
         for animal in candidates:
@@ -1050,6 +1255,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                     else int(0.95 * BASE_PRICE[product])
                 if prices.get(product, BASE_PRICE[product]) < floor:
                     continue  # dead-price freeze (demand-conditioned)
+                # branch §5.4 curve dim：投影价替代现货快照——"现在过线、
+                # 2 天后跌穿"的线现在就能看见（升级而非替换上面的地板）。
+                if not _curve_gate_ok(product, _get(obs, "player", 0),
+                                      day, prices):
+                    continue
             cost = ANIMALS[animal]["cost"]
             # v10 M-E: price the wallet as the engine will see it after
             # this turn's earlier buys, and keep a post-purchase floor so
@@ -1068,7 +1278,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 absorption_cap = int(
                     demand.get(product, 1) * ANIMALS[animal]["interval"] // 2)
                 n = min(n, absorption_cap - species[animal])
-            if n > 0:
+            if n > 0 and _herd_cap_ok:
                 orders.append(["BUY_ANIMAL", animal, n])
                 if plan.get("wheat_farm"):
                     projected_money -= n * cost
@@ -1081,6 +1291,12 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     orders.extend(_market_gates(day, prices, shed, herd_total,
                                 town_shops=town_shops, money=money,
                                 flow=flow))
+    # 【branch §7.2 / market §2 落地】争议线零囤货 + 卖出计划强制清 +
+    # P4 三档抢跑——对门控输出做有界覆盖（只增清仓、不抑制既有卖出）。
+    orders.extend(_sell_overrides(obs, farm, private, day, prices, shed,
+                                  town_shops, orders))
+    # 【market §3 落地】干扰触发器影子（MK-4）：只记录不发令。
+    _interference_shadow(obs, farm, day, prices)
     if last_day:
         # Goods already carried can DROP before market processing in this turn,
         # so include them in liquidation. Failed/partial quantities remain legal

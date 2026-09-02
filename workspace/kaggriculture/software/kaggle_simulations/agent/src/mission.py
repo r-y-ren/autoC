@@ -413,3 +413,62 @@ def _build_tasks(obs, farm, private, day, plan=None):
     herd_total = n_animals + sum(_get(shed, a, 0) for a in ANIMALS) \
         + sum(species_on_units.values())
     return tasks, animals_to_feed, herd_total, len(crop_map["WHEAT"]), capacity
+
+
+# ===========================================================================
+# 【中文】M2 任务包（scheduler 设计 §2，2026-09-02 影子落地）
+# ---------------------------------------------------------------------------
+# _build_mission：把现行 _build_tasks 的任务表（w/v/red 旧 schema）原位
+# 注解成新 schema（cls/deadline），并产出 D1 集合与容量预检——影子件：
+# agent() 不调用，黄金测试与 M3 求解器消费（scheduler §7 M2 门）。
+# capex 时点收编（§2.3 events）留 M2 切换期——当前仍由市场层管理，三重
+# 前置检查已在其位落地（market 侧）。
+# ===========================================================================
+
+_MISSION_DEADLINE_HOURS = {"WATER": 21, "FEED": 16, "CARE": 23,
+                           "HARVEST": 21, "PLANT": 16}
+
+
+def _mission_cls(task):
+    """旧任务 → 新 cls 分级（scheduler §2.2 D1-D4）。"""
+    op = (task.get("act") or [None])[0]
+    if task.get("red"):
+        return "OBLIGATION"       # 现行红线标记 = D1 今夜必死
+    if op == "HARVEST":
+        return "YIELD"
+    if op in ("CARE", "DIG", "COLLECT_FERTILIZER"):
+        return "BONUS"
+    return "LOGISTICS"
+
+
+def _build_mission(obs, farm, private, day, plan, tasks):
+    """Shadow M2: annotate the live task table into the mission schema.
+
+    Returns {"day", "cls_counts", "d1", "tasks", "capacity"} where d1 is
+    the dies-tonight key set (scheduler §2.2) and capacity carries the
+    labor-gate verdict (branch §5.3) for the M2/M3 harness.
+    """
+    hour = _get(obs, "hour", 0)
+    out_tasks = []
+    d1 = []
+    cls_counts = {}
+    for task in tasks or []:
+        cls = _mission_cls(task)
+        op = (task.get("act") or [None])[0]
+        deadline = _MISSION_DEADLINE_HOURS.get(op)
+        if cls == "OBLIGATION":
+            deadline = _MISSION_DEADLINE_HOURS.get(op, 21)
+        t = dict(task)
+        t["cls"] = cls
+        t["deadline"] = deadline
+        t["deps"] = []
+        out_tasks.append(t)
+        cls_counts[cls] = cls_counts.get(cls, 0) + 1
+        if cls == "OBLIGATION":
+            d1.append(task.get("key"))
+    cap_ok, util = _capacity_gate(farm, private)
+    units, comps = _capacity_units(farm, private)
+    return {"day": day, "hour": hour, "cls_counts": cls_counts,
+            "d1": d1, "tasks": out_tasks,
+            "capacity": {"ok": cap_ok, "util": round(util, 3),
+                         "units": units, "components": comps}}

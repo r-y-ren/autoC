@@ -39,6 +39,11 @@ def agent(obs):
         if not tiles:
             return {"farmer": ["PASS"], "hands": [], "market": []}
 
+        # OBS bypass hook (fail-open, scheduler doc §3 / OBS v2 §3): the
+        # day-account pass runs on the first action turn of each day and
+        # never touches the decision path below.
+        _opp_observer_update(obs, _get(obs, "private", {}) or {})
+
         # r5-P4: the daily macro plan (DEFENSIVE = conservative r4 frame) is
         # computed once per day-hour cache and threaded through every
         # planner; any failure inside the gate already fell back to it.
@@ -122,6 +127,9 @@ def agent(obs):
             market_inventory=_get(_get(obs, "market", {}) or {},
                                   "inventory", None) or None)
         orders = budget["accepted"]
+
+        # OBS bypass hook: our accepted SELL/BUY_PRODUCT ledger (Ch0 input).
+        _opp_note_orders(player, day, hour, orders)
 
         farmer = actions[0] if actions else ["PASS"]
         hands_actions = actions[1:]

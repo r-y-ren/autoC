@@ -493,3 +493,105 @@ def _schedule_units(obs, farm, private, day, tasks):
         "cargo": copy.deepcopy(state["cargo"]),
     }
     return actions
+
+
+# ===========================================================================
+# 【中文】M3 路线求解器（scheduler 设计 §3，2026-09-02 影子落地）
+# ---------------------------------------------------------------------------
+# _solve_routes：黎明一次求解的路线承诺——负载均衡分区（§3.1，全员自仓口
+# 出生，家区不可用首格判定）→ 簇内 EDF×价值密度排序（§3.2）→ 最近邻成路
+# → 同 deadline 类段 2-opt 抛光（换位后重验 ETA）。影子件：不改任何现行
+# 行为；M3 门 = 与 v72 的分歧统计（连续性/PASS 显著优才准 M4 切换）。
+# 确定性：全部排序键终结于 (key) 字典序（黄金测试前提）。
+# ===========================================================================
+
+def _solve_routes(farm, private, day, tasks, aging=None):
+    """Shadow M3: per-worker ordered route commitments with ETAs.
+
+    Returns {"routes": [ {worker, sector, stops:[keys], etas:[hours]} ],
+             "feasible": bool, "dropped": [keys]}.
+    """
+    tiles = _get(farm, "tiles", []) or []
+    board = len(tiles)
+    units = [tuple(_get(farm, "farmer",
+                        [board // 2 - 1, board // 2 - 1]))]
+    for h in _get(farm, "hands", []) or []:
+        units.append(tuple(h))
+    hour0 = 0  # dawn solve
+    aging = aging or {}
+
+    def deadline_key(t):
+        d = t.get("deadline")
+        return (0, d) if d is not None else (1, 0)
+
+    def density(t):
+        v = float(t.get("v") or 0) * (1.0 + 0.25 * aging.get(t.get("key"), 0))
+        return v / max(1.0, float(t.get("w") or 1))
+
+    # ---- partition: quadrant buckets balanced by workload (§3.1) ----
+    buckets = {}
+    for t in tasks or []:
+        sector = _quadrant_of(t["x"], t["y"], board) if board else "?"
+        buckets.setdefault(sector, []).append(t)
+    workers = list(range(len(units)))
+    sectors = sorted(buckets, key=lambda s: (-len(buckets[s]), s))
+    assign = {w: [] for w in workers}
+    wi = 0
+    for sector in sectors:
+        for t in sorted(buckets[sector],
+                        key=lambda t: (deadline_key(t), -density(t),
+                                       str(t.get("key")))):
+            assign[workers[wi % len(workers)]].append(t)
+            wi += 1
+
+    routes = []
+    dropped = []
+    feasible = True
+    for w in workers:
+        cluster = assign[w]
+        if not cluster:
+            routes.append({"worker": w, "sector": None, "stops": [],
+                           "etas": []})
+            continue
+        # nearest-neighbour construction seeded from the most urgent task
+        remaining = sorted(cluster,
+                           key=lambda t: (deadline_key(t), -density(t),
+                                          str(t.get("key"))))
+        ordered = []
+        cx, cy = units[w]
+        clock = hour0
+        while remaining:
+            # urgency FIRST (earliest deadline wins), then distance
+            best = min(remaining,
+                       key=lambda t: (
+                           t["deadline"] if t.get("deadline") is not None
+                           else 999,
+                           _dist(cx, cy, t["x"], t["y"]),
+                           str(t.get("key"))))
+            ordered.append(best)
+            clock += _dist(cx, cy, best["x"], best["y"]) + 1
+            cx, cy = best["x"], best["y"]
+            remaining.remove(best)
+        # feasibility: deadline ETA check (§2.4 style); drop the lowest
+        # density tail when infeasible (never drop OBLIGATION silently --
+        # flag infeasible instead)
+        etas = []
+        cx, cy = units[w]
+        clock = hour0
+        keep = []
+        for t in ordered:
+            clock += _dist(cx, cy, t["x"], t["y"]) + 1
+            etas.append(clock)
+            if t.get("deadline") is not None and clock > t["deadline"]:
+                if t.get("cls") == "OBLIGATION":
+                    feasible = False
+                dropped.append(t.get("key"))
+            else:
+                keep.append(t)
+            cx, cy = t["x"], t["y"]
+        routes.append({"worker": w,
+                       "sector": _quadrant_of(cx, cy, board) if board
+                       else None,
+                       "stops": [t.get("key") for t in keep],
+                       "etas": etas[:len(keep)]})
+    return {"routes": routes, "feasible": feasible, "dropped": dropped}

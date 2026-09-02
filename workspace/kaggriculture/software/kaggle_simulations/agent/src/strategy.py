@@ -414,7 +414,9 @@ def _decide_mode(obs, day, prev_mode):
 
     p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
     d_straw = demand.get("STRAWBERRY", 1)
-    opp_contesting = opp is not None and opp["straw"] >= 12
+    # branch plan §9-⑦ (user ruling 2026-09-02): opp_contesting removed from
+    # the VOLUME entry -- mirroring is ACCEPTED as a timing war (sell-ahead
+    # via the production calendar), not avoided; solvency veto stays.
     if V9_WHEAT_FARM_ENABLED and _wheat_farm_entry_ok(
             day, mine, opp, prices, demand, prev_mode):
         return _wheat_farm_plan()
@@ -425,7 +427,7 @@ def _decide_mode(obs, day, prev_mode):
     # WEAKER than the crude cash floor it tried to replace.  The rollout
     # is an ADDITIONAL veto, never a relaxation.
     base_ok = (6 <= day <= 12 and p_straw >= 105 and d_straw >= 4
-               and not opp_contesting and mine["money"] >= 800
+               and mine["money"] >= 800
                and mine["herd"] >= VOLUME_HERD_FLOOR)
     if base_ok:
         r_vol = _plan_rollout(day, mine, _VOLUME_PLAN, prices, demand,
@@ -482,8 +484,300 @@ def _macro_plan(player, obs, day):
         plan = _decide_mode(obs, day, prev_mode)
     except Exception:
         plan = dict(_DEFENSIVE_PLAN)
+    # branch plan v1.3 landing: stage register + B/C branch knobs ride on
+    # the plan dict (additive keys only; every consumer reads .get()).
+    try:
+        plan = _stage_plan(player, obs, day, plan)
+    except Exception:
+        plan = dict(plan)
+        plan["stage"] = _stage_of(day)
     _PLAN_MEM[player] = {"day": day, "plan": plan}
     return plan
+
+
+# ===========================================================================
+# 【中文】branch plan v1.3 落地层（2026-09-02 实装）
+# ---------------------------------------------------------------------------
+# 阶段寄存器 §2 / 对手开局分类器 §4.1 / d6 五问检查点 §5.1 / 容量门 §5.3 /
+# 三重前置检查 §5.4 / _MIXED_PLAN（C2 DevilQ 混合，§5.2）。
+# 设计约束：全部纯公开状态、确定性、fail-closed；行为接线经 plan dict 旋钮
+# （p1_species_pref / melon_min / straw_early_claim），执行层照旧消费。
+# ===========================================================================
+
+# ---- C2 混合计划（DevilQ 96.6k 结构 × §5.3 分线封顶）----
+_MIXED_PLAN = {"mode": "MIXED", "volume": False, "scale": True,
+               "wheat_farm": False,
+               "straw_quad_cap": 12,          # 33 格 / 3 象限
+               "straw_total_cap": 33,          # DevilQ 33 莓（<Renji 42，
+                                                # 奶年金对冲作物线）
+               "wheat_money_quad": 4,
+               "crew_cap": 11,                 # §5.3 初算 C2≈77 单位→10-11
+               "herd_ceiling": 14,             # 14 头 = 28 资产单位（对冲主体）
+               "melon_total_cap": LINE_CAPS["MELON"],  # §5.3 封顶 6（吸收
+                                                # 优先于 DevilQ 原版 21 格）
+               }
+
+_STAGE_MEM = {}
+
+
+def _stage_of(day):
+    """P0-P5 阶段判定（branch §2 总表，纯日期函数）。"""
+    if day <= 0:
+        return "P0"
+    if day <= STAGE_P1_DUE - 1:
+        return "P1"
+    if day <= STAGE_P2_FREEZE:
+        return "P2"
+    if day <= STAGE_P3_END:
+        return "P3"
+    if day <= STAGE_P4_END:
+        return "P4"
+    return "P5"
+
+
+def _classify_opponent_opening(obs):
+    """对手开局分类器（branch §4.1 v1.3 更新版，d1 晨可判，纯公开状态）。
+
+    返回 burst / reduced / deferred / melon_first / unknown。
+    """
+    farms = _get(obs, "farms", []) or []
+    player = _get(obs, "player", 0)
+    opp = None
+    for i, f in enumerate(farms):
+        if i != player:
+            opp = f
+            break
+    if opp is None:
+        return "unknown"
+    scan = _farm_scan(opp)
+    if scan["herd"] >= OPP_CLASS_BURST_MIN:
+        return "burst"
+    if scan["herd"] >= OPP_CLASS_REDUCED_RANGE[0]:
+        return "reduced"
+    melon = 0
+    for row in _get(opp, "tiles", []) or []:
+        for tile in row:
+            if isinstance(tile, dict) and _get(tile, "kind", "") == "PLANT" \
+                    and _get(tile, "crop", "") == "MELON":
+                melon += 1
+    if melon >= OPP_CLASS_MELON_MIN:
+        return "melon_first"
+    if scan["wheat"] >= OPP_CLASS_DEFERRED_WHEAT:
+        return "deferred"
+    return "unknown"
+
+
+def _capacity_units(farm, private=None):
+    """当前资产单位（容量定律分母）：莓/麦/瓜格=1，萝卜=0.5，头=2。"""
+    comps = {"straw": 0, "wheat": 0, "melon": 0, "carrot": 0, "herd": 0}
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            kind = _get(tile, "kind", "")
+            if kind == "PLANT":
+                crop = _get(tile, "crop", "")
+                if crop == "STRAWBERRY":
+                    comps["straw"] += 1
+                elif crop == "WHEAT":
+                    comps["wheat"] += 1
+                elif crop == "MELON":
+                    comps["melon"] += 1
+                elif crop == "CARROT":
+                    comps["carrot"] += 1
+            elif "animal" in tile:
+                comps["herd"] += 1
+    units = float(comps["straw"] + comps["wheat"] + comps["melon"]
+                  + 0.5 * comps["carrot"] + 2 * comps["herd"])
+    return units, comps
+
+
+def _capacity_law_max(hands):
+    """容量定律上界：24×(1+H)×CAP_UTIL÷CAP_TURNS_PER_UNIT（§5.3）。"""
+    return 24.0 * (1 + max(0, int(hands))) * CAP_UTIL / CAP_TURNS_PER_UNIT
+
+
+def _capacity_gate(farm, private=None, delta_units=0.0, day=None, plan=None):
+    """三重前置检查·劳动力维（§5.3/§5.4）。
+
+    返回 (ok, util)。ok=False 表示买后单位数超定律×CAP_USE_MAX——
+    策略层应拒绝该 capex（黎明不变式：>0.85 拒购，<0.65 报 slack 补线）。
+    劳力先行（§5.3 规则 1）：带 day 调用时按当日计划雇工评估——
+    farm.hands 是昨日快照，黎明雇工在资产采购之前落地。
+    """
+    hands = len(_get(farm, "hands", []) or [])
+    units, comps = _capacity_units(farm, private)
+    if day is not None:
+        planned = _crew_target(
+            day, comps["herd"], comps["wheat"],
+            len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]),
+            plan)
+        hands = max(hands, planned)
+    cap = _capacity_law_max(hands)
+    util = (units + delta_units) / cap if cap > 0 else 0.0
+    return (util <= CAP_USE_MAX, util)
+
+
+def _curve_gate_ok(item, player, day, prices):
+    """三重前置检查·曲线维（§5.4）：投影价 ≥ 地板（升级自运行时死价红线，
+    投影替代现货快照——"现在 95、3 天后 80"的线现在能看见）。"""
+    if day < DEAD_PRICE_FROM_DAY:
+        return True
+    floor = DEAD_PRICE_FLOOR.get(item)
+    if floor is None:
+        floor = CROP_FLOOR.get(item)
+    if floor is None:
+        return True
+    price = _get(prices, item, BASE_PRICE.get(item, 0))
+    if price < floor:
+        return False
+    st = _MARKET_MEM.get(player) or {}
+    # freshness window: yesterday-or-today EMA is the designed trend signal;
+    # anything older or from the future is cross-episode noise -> ignored.
+    flow = 0.0
+    if day - 1 <= st.get("day", -10) <= day + 1:
+        flow = (st.get("flow", {}) or {}).get(item, 0.0)
+    proj = _project_price(item, price, flow, SELL_PLAN_LOOKAHEAD_DAYS)
+    return proj >= floor
+
+
+def _cash_gate_ok(farm, projected_spend=0.0):
+    """三重前置检查·现金维（§5.4 黎明现金流不变式）：
+
+    投影日终钱包 ≥ 次日黎明 crew fib 账单 + LIQUIDITY_FLOOR（饲料裕量
+    已并入该常量语义——m2b 破产类的保险丝，v1.1 迁移裁决）。
+    """
+    money = _get(farm, "money", 0.0)
+    hands = len(_get(farm, "hands", []) or [])
+    next_bill = _FIB_CUM[hands] if hands < len(_FIB_CUM) else 0
+    return (money - float(projected_spend)) >= (next_bill + LIQUIDITY_FLOOR)
+
+
+def _first_market_day(farm, day):
+    """本农场首个草莓上市日（planted+9；无格则 None）——首市日 KPI 输入。"""
+    best = None
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if isinstance(tile, dict) and _get(tile, "kind", "") == "PLANT" \
+                    and _get(tile, "crop", "") == "STRAWBERRY":
+                ev = _get(tile, "planted_day", day) + \
+                    CROPS["STRAWBERRY"]["first_yield_day"] - 1
+                best = ev if best is None else min(best, ev)
+    return best
+
+
+def _d6_checkpoint(obs, day):
+    """d6 五问检查点（branch §5.1）。返回 (questions, c_branch)。
+
+    c_branch: "C1"（五问全过，宽田候选——仍须 _decide_mode 的价格/吸收/
+    solvency 门）/ "C2"（草莓线弱或首市日落后但奶线活 → 混合）/
+    "C3"（作物线全弱 → 畜牧）。
+    """
+    farms = _get(obs, "farms", []) or []
+    player = _get(obs, "player", 0)
+    farm = farms[player] if 0 <= player < len(farms) else None
+    opp = None
+    for i, f in enumerate(farms):
+        if i != player:
+            opp = f
+            break
+    if farm is None:
+        return {"q1": False, "q2": False, "q3": False, "q4": False,
+                "q5": False}, "C3"
+    prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
+    shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
+    demand = _town_daily_demand(shops)
+    mine = _farm_scan(farm)
+    q1 = mine["herd"] >= VOLUME_HERD_FLOOR
+    q2 = mine["money"] >= 800
+    p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
+    q3 = p_straw >= 105 and demand.get("STRAWBERRY", 1) >= 4
+    # q4 首市日 KPI：我方（含当日可种）≤ 对手（无格视为 +inf）
+    our_first = _first_market_day(farm, day)
+    if our_first is None and day <= PLANT_LAST_DAY["STRAWBERRY"]:
+        our_first = day + CROPS["STRAWBERRY"]["first_yield_day"] - 1
+    opp_first = _first_market_day(opp, day) if opp is not None else None
+    q4 = (our_first is not None) and (opp_first is None
+                                      or our_first <= opp_first)
+    # q5 容量问：VOLUME 目标单位数 ≤ 定律 × 0.85
+    hands = len(_get(farm, "hands", []) or [])
+    target_units = 42 + 12 + 2 * mine["herd"]  # 莓42+麦12+畜群（§5.3 C1 初算）
+    q5 = target_units <= _capacity_law_max(max(hands, 12)) * CAP_USE_MAX
+    questions = {"q1": q1, "q2": q2, "q3": q3, "q4": q4, "q5": q5}
+    p_milk = _get(prices, "MILK", BASE_PRICE["MILK"])
+    p_wool = _get(prices, "WOOL", BASE_PRICE["WOOL"])
+    dairy_alive = (p_milk >= DEAD_PRICE_FLOOR["MILK"]
+                   and demand.get("MILK", 1) >= 2) or \
+                  (p_wool >= DEAD_PRICE_FLOOR["WOOL"]
+                   and demand.get("WOOL", 1) >= 2)
+    if q1 and q2 and q3 and q4 and q5:
+        c_branch = "C1"
+    elif q1 and dairy_alive and q5:
+        c_branch = "C2"
+    elif q1 and dairy_alive:
+        c_branch = "C3"
+    else:
+        c_branch = "C3" if dairy_alive else "C1"
+    return questions, c_branch
+
+
+def _b_branch_adjust(plan, obs, day):
+    """P1 分支调整（branch §4.2）：按对手分类给 plan 挂旋钮，执行层消费。
+
+    B1 burst：产品分化——YARN_STORE 未解锁则羊线换牛线（p1_species_pref）；
+    B2 reduced/deferred/unknown：标准序列（现有路径，零改动）；
+    B3 melon_first：瓜线最小化（melon_min——我方瓜只 d3-5 小批抢收）。
+    """
+    cls = _classify_opponent_opening(obs)
+    plan = dict(plan)
+    plan["opp_class"] = cls
+    if cls == "burst":
+        shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
+        if "YARN_STORE" not in shops:
+            plan["p1_species_pref"] = "COW"   # 不跟死吸收的毛线挤（§4.2 B1）
+    elif cls == "melon_first":
+        plan["melon_min"] = True              # §4.2 B3：瓜 d3-5 小批抢收
+    return plan
+
+
+def _stage_plan(player, obs, day, plan):
+    """阶段×分支选择器（branch §2/§4/§5 的组装点）。
+
+    P1（d1-5）：挂 B 分支旋钮；P2 起挂 C 分支裁决（d6 检查点一次，缓存到
+    阶段寄存器）；MIXED 作为 C2 计划对象注入 _decide_mode 之外的第二路径。
+    plan dict 额外携带 stage/c_branch 供市场层与遥测消费。
+    """
+    stage = _stage_of(day)
+    out = dict(plan)
+    out["stage"] = stage
+    if stage == "P1":
+        return _b_branch_adjust(out, obs, day)
+    if stage == "P2":
+        st = _STAGE_MEM.get(player)
+        if st is None or st.get("decided_day", -1) < STAGE_P1_DUE \
+                or st.get("decided_day", 99) > STAGE_P2_FREEZE:
+            if day == STAGE_P1_DUE:
+                questions, c_branch = _d6_checkpoint(obs, day)
+                _STAGE_MEM[player] = {"decided_day": day,
+                                      "c_branch": c_branch,
+                                      "questions": questions}
+            else:
+                _STAGE_MEM[player] = {"decided_day": day,
+                                      "c_branch": None, "questions": None}
+        st = _STAGE_MEM.get(player) or {}
+        c_branch = st.get("c_branch")
+        out["c_branch"] = c_branch
+        if c_branch == "C2" and out.get("mode") == "DEFENSIVE":
+            # 草莓线弱/首市日落后 + 奶线活：注入 DevilQ 混合计划（§5.2）
+            out = dict(_MIXED_PLAN)
+            out["stage"] = stage
+            out["c_branch"] = c_branch
+        return out
+    if stage in ("P3", "P4", "P5"):
+        st = _STAGE_MEM.get(player) or {}
+        out["c_branch"] = st.get("c_branch")
+        return out
+    return out
 
 
 # 【中文】═══ 结构与轮作规划（规划层核心）═══

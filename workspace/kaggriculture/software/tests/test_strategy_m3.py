@@ -363,6 +363,7 @@ def test_stop_feed_from_day28_but_harvest_held_yield():
 
 def test_sheep_buy_freezes_when_wool_curve_dead():
     private = {"shed": _shed(), "seeds": {"WHEAT": 10}, "inventories": [{}]}
+    main._MARKET_MEM.clear()   # isolate from earlier wool-crash EMA state
     orders, _ = _market_orders_with(private, animals=0, herd=0, day=12,
                                     money=9000.0, prices=_prices(WOOL=60))
     assert not _orders_contains(orders, "BUY_ANIMAL", "SHEEP")
@@ -373,6 +374,7 @@ def test_sheep_buy_freezes_when_wool_curve_dead():
            "market": {"prices": _prices(WOOL=150)},
            "town": {"unlocked_shops": ["YARN_STORE"]}}
     main._STATE.clear()
+    main._MARKET_MEM.clear()   # branch §5.4 curve gate reads the EMA
     orders2 = main._market_orders(obs, farm, private, 12, 0, 0)
     assert _orders_contains(orders2, "BUY_ANIMAL", "SHEEP")
     main._STATE.clear()

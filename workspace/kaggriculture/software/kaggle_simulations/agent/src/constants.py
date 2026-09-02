@@ -593,3 +593,52 @@ PRICE_FLOOR_EMB = 1
 # activation attempts must pre-register BOTH seed domains (101-104 AND
 # 201-204) as the gate.
 V9_SHADOW_ROUTING = True
+
+# ===========================================================================
+# 【中文】branch plan v1.2/v1.3 落地旋钮（2026-09-02 实装：容量门 §5.3、
+# 三重前置检查 §5.4、对手开局分类器 §4.1、阶段寄存器 §2、分线封顶表）
+# ---------------------------------------------------------------------------
+# ---- 容量定律（§5.3；系数为经验初值，M1 telemetry 定标后回填）----
+# 最大资产单位(d) ≈ 24 × (1+H) × CAP_UTIL / CAP_TURNS_PER_UNIT
+# 资产单位：莓/麦/瓜格=1，萝卜格=0.5，牲畜头=2；定标锚 Renji~81/DevilQ~92/
+# tetsuya~91 单位同收敛于 crew 12（branch plan §5.3 定标锚表）。
+CAP_UTIL = 0.75                 # 有效利用率（含黎明转场/空闲损耗）
+CAP_TURNS_PER_UNIT = 2.4        # 每资产单位日耗劳动回合（M1 实测回填）
+CAP_USE_MAX = 0.85              # 黎明不变式上界：>此值拒新 capex（§5.3）
+CAP_USE_MIN = 0.65              # 下界：<此值报 slack（补线，兜底=小麦）
+CAP_RESERVE_FRACTION = 0.15     # 峰值日检查的不可侵占余量（规则 4）
+# ---- 分线封顶 = min(劳动力配额, 吸收上限)（§5.3 表）----
+LINE_CAPS = {
+    "MELON": 6,        # 吸收 ~30u/季（论坛单源待 V0 自证）+ sq 曲线自砸
+    "STRAWBERRY": 42,  # Renji 线（VOLUME 模式内另有 MODE_STR_TOTAL_CAP）
+    "CARROT": 30,      # 终盘弹性线（相位窗口另管）
+    "WHEAT": 99,       # log 抗崩+高吸收 = 剩余容量兜底（99=不限）
+    "HERD": 14,        # 年金对冲线（NPV 扩栏另走既有门）
+}
+# ---- 对手 d0 分类器（§4.1，v1.3 更正版：增"减档型"）----
+OPP_CLASS_BURST_MIN = 4        # 爆发型：d0 已放 ≥4 头（top-20 116/116）
+OPP_CLASS_REDUCED_RANGE = (2, 3)  # 减档型：2-3 头（tetsuya-true，v1.3 更正）
+OPP_CLASS_DEFERRED_WHEAT = 8   # 延后型：0 头且小麦 ≥8 格
+OPP_CLASS_MELON_MIN = 6        # 瓜先行：d1-3 瓜格 ≥6
+# ---- 阶段窗口（§2 总表；P0-P5 由 _stage_of(day) 计算，无需状态存储）----
+STAGE_P1_DUE = 6               # d6 检查点（五问）
+STAGE_P2_FREEZE = 14           # d14 结构冻结
+STAGE_P3_END = 21
+STAGE_P4_END = 27
+# ---- 干扰模块（market §3；MK-4 影子/MK-5 带闸，触发器先影子）----
+INTERFERENCE_ARMED = False     # MK-5 上线前恒 False（三闸+影子门先行）
+INTERFERENCE_MARGIN = 2000     # R_opp > R_us + 此值 才触发（连续 2 天）
+INTERFERENCE_CONFIRM_DAYS = 2
+INTERFERENCE_BUDGET_FRAC = 0.15   # 干扰预算 ≤ 容量 15%（§3.5 闸 2）
+INTERFERENCE_EXPOSURE_RATIO = 2.0  # 杀伤/暴露 ≥2（§3.5 闸 1）
+# ---- 卖出计划器（market §2；囤vs清判据替代静态门槛的参数）----
+SELL_PLAN_LOOKAHEAD_DAYS = 2   # 投影地平线（天）
+SELL_PLAN_HOLD_EDGE = 1.05     # 囤的条件：E[p_future] ≥ 现价×此值 且线未争议
+# ---- 机会性买入（market §5 小件 1；Danila 98.7k 出典 d1-2 囤 256u@低价）----
+OPPORTUNE_WHEAT_PRICE = 26     # 价 <26 且库容+现金允许 → 囤至 N 天用量
+OPPORTUNE_WHEAT_DAYS = 4       # 囤到的饲料天数上限
+# ---- 买侧大单分批（market §5 小件 2；BUY 抽货推高曲线）----
+BUY_CHUNK_MAX_UNITS = 40       # 单回合 BUY_PRODUCT 最大件数（超出跨回合分批）
+# ---- P4 三档出清（branch §6；观测器 est_opp_held 驱动，缺数据回退门控）----
+P4_HEAVY_HELD = 40             # 对手囤货 ≥40u → d25 抢跑档
+P4_MID_HELD = 15               # 15-40 → d26-27 标准档；<15 从容档
