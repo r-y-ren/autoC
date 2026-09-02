@@ -97,6 +97,11 @@ def _telemetry_day_template():
         "tier_counts": {},
         "cap_util": None,
         "cap_deficit": False,
+        # ---- branch W2: fuse / backfill / peak-day (§8.2/§5.3/§2.6) ----
+        "fused": False,
+        "fuse_events": 0,
+        "backfill_room": None,
+        "peak_ok": None,
     }
 
 
@@ -274,6 +279,16 @@ def _telemetry_record_turn(obs, farm, private, actions, tasks, trace, orders):
                 daily["cap_util"] = (mission.get("capacity") or {}).get("util")
                 daily["cap_deficit"] = \
                     mission.get("capacity_deficit") is not None
+                daily["peak_ok"] = (mission.get("peak") or {}).get("ok")
+        except Exception:
+            pass
+        # branch W2: fuse / backfill from the stage register (§8.2/§5.3)
+        try:
+            stage_state = stage_state_snapshot(_get(obs, "player", 0))
+            daily["fused"] = bool(stage_state.get("fused"))
+            daily["fuse_events"] = int(stage_state.get("fuse_events", 0))
+            backfill = stage_state.get("backfill") or {}
+            daily["backfill_room"] = backfill.get("room_units")
         except Exception:
             pass
         cross_choices = int((trace or {}).get("cross_quadrant", 0))

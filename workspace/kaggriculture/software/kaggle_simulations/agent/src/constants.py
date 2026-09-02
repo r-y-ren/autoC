@@ -656,3 +656,5 @@ TWO_OPT_MAX_PASSES = 16        # 同 deadline 类段 2-opt 抛光的迭代上限
 # ---- §4 执行器断言 ----
 EXECUTOR_EOD_ASSERT = True     # EOD 投影断言（棚仓+随身 > 100 → REPLAN）
 EXECUTOR_D1_ASSERT = True      # D1 站点 ETA 断言（ETA > deadline → REPLAN）
+# ---- branch §8.2 熔断回退 ----
+FUSE_MONEY_FLOOR = 300         # 段内钱包 < 此值 → 立即降 DEFENSIVE 运转参数包

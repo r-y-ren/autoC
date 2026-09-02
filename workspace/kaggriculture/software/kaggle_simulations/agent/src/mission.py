@@ -577,6 +577,15 @@ def _build_mission(obs, farm, private, day, plan, tasks, planned_sell=None):
 
     scenario = {"stage": plan.get("stage"), "opp_class": plan.get("opp_class"),
                 "c_branch": plan.get("c_branch")}
+    # §2.6 峰值日校验（shadow）：当日 D1∪D3+收割负载（≈每件 2 回合）vs
+    # 全队可用回合（24×(1+H)，留 10% 余量）——本层只验证，错峰归策略层。
+    peak_parts = sum(1 for t in out_tasks if t["tier"] in ("D1", "D3"))
+    peak_parts += sum(1 for t in out_tasks
+                      if (t.get("act") or [None])[0] == "HARVEST")
+    workers = 1 + len(_get(farm, "hands", []) or [])
+    peak_cap = int(24 * workers * 0.9)
+    peak = {"load": 2 * peak_parts, "cap_turns": peak_cap,
+            "ok": 2 * peak_parts <= peak_cap}
     canon = {"day": day,
              "tasks": [[str(t["key"]), t["cls"], t["tier"], t["deadline"],
                         round(float(t.get("v") or 0), 3)]
@@ -591,6 +600,7 @@ def _build_mission(obs, farm, private, day, plan, tasks, planned_sell=None):
             "events": events,
             "eod": {"projected": eod_projected, "planned_sell": planned_sell,
                     "harvest_in": harvest_in, "overflow": eod_overflow},
+            "peak": peak,
             "capacity": {"ok": cap_ok, "util": round(util, 3),
                          "units": units, "components": comps,
                          "law": round(law, 1)},

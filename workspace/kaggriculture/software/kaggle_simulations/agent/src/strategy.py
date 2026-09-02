@@ -1,24 +1,25 @@
 # ===========================================================================
-# 【中文·模块导览】src/strategy.py —— v10.9 宏观计划层（L1 现状）
+# 【中文·模块导览】src/strategy.py —— L1 宏观计划层（branch plan v1.3 宿主）
 # ---------------------------------------------------------------------------
-# v10.9 职责：每日缓存一次模式门控（_decide_mode：DEFENSIVE/VOLUME_CROP/
-#   SCALE_RANCH + 默认关闭的 WHEAT_FARM）、_plan_rollout 偿付能力否决、
-#   目标函数族（_wheat_cap/_herd_target/_crew_target/NPV 扩栏）、田地
-#   分配 _field_alloc、计划预设对象。
-# 新架构落位：branch plan（阶段×分支选择器）的改造宿主。
-# 文档符合性审查（branch plan v1.2 逐项）：
-#   ✓ 三模式 + rollout solvency veto 在场，语义与文档"保留"清单一致
-#     （rollout 仅作否决绝不放宽——r5-P5 实测 -312.8k 的教训）；
-#   ✓ fail-closed（门控异常回退 DEFENSIVE）与每日缓存；
-#   ✗ 待办——阶段状态机与 P0-P5 分段（现仅"每天一个模式"）；d6 五问
-#     检查点（含容量问 §5.3、首市日 KPI §5.1）；对手开局分类器
-#     （B1 全速跟进/B2 标准序列/B3 避瓜打莓）；DevilQ 混合计划成员
-#     _MIXED_PLAN（C2，round-3 台账 96.6k 结构）；
-#   ✗ 待办——branch §9-⑦：opp_contesting（对手草莓≥12 禁入 VOLUME）
-#     仍在 _decide_mode 中——用户已裁决移除（镜像接受、时序战接管），
-#     尚未实施；
-#   ✗ 待办——三重前置检查（§5.4 曲线门/现金门）迁移自 market 运行时
-#     门，当前 capex 管控仍为运行时形态（见 market.py 审查）。
+# v10.9 保留件：_decide_mode 三模式门控（DEFENSIVE/VOLUME_CROP/SCALE_RANCH
+#   + 默认关闭 WHEAT_FARM）、_plan_rollout 偿付能力否决（只否决不放宽，
+#   r5-P5 实测 -312.8k 教训）、目标函数族、_field_alloc 田地分配、fail-closed
+#   与每日缓存。opp_contesting 已按用户裁决移除（§9-⑦，W1 波）。
+# branch v1.3 落地件（W1 波 2026-09-02 + W2 完善波）：
+#   §2/§4 阶段寄存器 _stage_plan（P0-P5）+ 分类器（burst/reduced/deferred/
+#     melon_first，d1 检查点冻结）+ B1/B3 旋钮 + d6 五问检查点 + _MIXED_PLAN；
+#   §5.3 容量门 _capacity_gate（定律 24×(1+H)×0.75/2.4，>0.85 拒购）+
+#     LINE_CAPS 分线封顶包络（莓42/麦99/畜14=现值零行为差；瓜 12→6 需单
+#     变量消融另排——V-T9 回归证据仍钉 12）+ 黎明不变式下界补线
+#     _attach_backfill（util<0.65 → 兜底小麦线扩容，富线候选留后续）；
+#   §5.4 曲线门 _curve_gate_ok / 现金门 _cash_gate_ok（计算落位在市场层
+#     买点，market.py）；§8.1 d14 冻结守卫（frozen 后禁翻回宽田类）；
+#   §8.2 熔断回退 _fuse_check（钱包<300 或当日逃亡 → 段内降 DEFENSIVE
+#     运转参数包 + 计数进阶段寄存器/遥测）；
+#   §9.1 检查点全席：d1（分类冻结）/d6（五问 C 分支）/d10（SE 窗就绪）/
+#     d14（结构冻结快照）/d22（P4 est_opp_held 前置快照）。
+# 延后项（单变量纪律，见 JOURNAL）：B1 全速追平步速、B2 d1 草莓探针+NE
+#   即铺、B3 瓜 d3-5 小批、容量定律系数回填（M1 三锚定标已落盘）。
 # ===========================================================================
 _WHEAT_FARM_PLAN = None
 
@@ -721,14 +722,16 @@ def _d6_checkpoint(obs, day):
     return questions, c_branch
 
 
-def _b_branch_adjust(plan, obs, day):
+def _b_branch_adjust(plan, obs, day, st=None):
     """P1 分支调整（branch §4.2）：按对手分类给 plan 挂旋钮，执行层消费。
 
-    B1 burst：产品分化——YARN_STORE 未解锁则羊线换牛线（p1_species_pref）；
-    B2 reduced/deferred/unknown：标准序列（现有路径，零改动）；
-    B3 melon_first：瓜线最小化（melon_min——我方瓜只 d3-5 小批抢收）。
+    分类在 d1 检查点冻结（§9.1：d1 晨对手 d0 分类一次定型，防 P1 内随
+    对手施工漂移）；B1 burst：产品分化——YARN_STORE 未解锁则羊线换牛线；
+    B2 reduced/deferred/unknown：标准序列（现有路径，零改动）；B3
+    melon_first：瓜线最小化（melon_min——我方瓜只 d3-5 小批抢收）。
     """
-    cls = _classify_opponent_opening(obs)
+    cls = (st or {}).get("opp_class_frozen") \
+        or _classify_opponent_opening(obs)
     plan = dict(plan)
     plan["opp_class"] = cls
     if cls == "burst":
@@ -740,42 +743,176 @@ def _b_branch_adjust(plan, obs, day):
     return plan
 
 
-def _stage_plan(player, obs, day, plan):
-    """阶段×分支选择器（branch §2/§4/§5 的组装点）。
+def _stage_state(player, day):
+    """Per-player persistent stage register（时钟倒退=新对局→重建）。"""
+    st = _STAGE_MEM.get(player)
+    if st is None or day < st.get("day", day):
+        st = {"day": day}
+        _STAGE_MEM[player] = st
+    st["day"] = max(st["day"], day)
+    return st
 
-    P1（d1-5）：挂 B 分支旋钮；P2 起挂 C 分支裁决（d6 检查点一次，缓存到
-    阶段寄存器）；MIXED 作为 C2 计划对象注入 _decide_mode 之外的第二路径。
-    plan dict 额外携带 stage/c_branch 供市场层与遥测消费。
+
+def _d1_checkpoint(obs, st):
+    """d1 检查点（§9.1）：对手 d0 分类定型并冻结。"""
+    st["opp_class_frozen"] = _classify_opponent_opening(obs)
+    return st["opp_class_frozen"]
+
+
+def _d10_checkpoint(farm):
+    """d10 检查点（§5.1b SE 窗）：现金 ≥ SE_FUND(4600) 即 SE 就绪。"""
+    money = _get(farm, "money", 0.0)
+    return {"money": money, "se_ready": money >= SE_FUND}
+
+
+def _d14_checkpoint(out, st):
+    """d14 检查点（§5.1b/§8.1）：结构冻结——快照当前模式，此后禁翻回宽田。"""
+    frozen = {"mode": out.get("mode"), "c_branch": st.get("c_branch")}
+    st["frozen"] = frozen
+    return frozen
+
+
+def _d22_checkpoint():
+    """d22 检查点（§7.5/§4.1）：P4 三档抢跑的 est_opp_held 前置快照。"""
+    held = {}
+    for item in ("STRAWBERRY", "MILK", "WOOL", "MELON", "WHEAT"):
+        value = est_opp_held(item)
+        held[item] = None if value is None else round(float(value), 1)
+    return {"day": 22, "held": held}
+
+
+def _fuse_check(st, farm, mine, stage):
+    """§8.2 熔断回退：段内钱包 < FUSE_MONEY_FLOOR 或牲畜逃亡（畜群数只降
+    不升——引擎无卖畜，减少即逃亡）→ 本阶段余下天降 DEFENSIVE 运行参数包；
+    逐段计数（阶段切换重置 active）。"""
+    escaped = (st.get("herd_prev") is not None
+               and mine["herd"] < st["herd_prev"])
+    st["herd_prev"] = mine["herd"]
+    fuse = st.get("fuse") or {}
+    tripped = _get(farm, "money", 0.0) < FUSE_MONEY_FLOOR or escaped
+    if tripped and stage in ("P1", "P2", "P3", "P4"):
+        if not fuse.get("active") or fuse.get("stage") != stage:
+            fuse = {"count": int(fuse.get("count", 0)) + 1,
+                    "stage": stage, "active": True, "escaped": bool(escaped)}
+        else:
+            fuse["escaped"] = fuse.get("escaped") or bool(escaped)
+        st["fuse"] = fuse
+    elif fuse.get("stage") == stage:
+        fuse["active"] = False
+    return bool((st.get("fuse") or {}).get("active")), bool(escaped)
+
+
+def _attach_backfill(out, farm, day, st=None):
+    """黎明不变式下界（§5.3）：util < CAP_USE_MIN → 补线候选按单位日收入
+    降序（奶/毛 > 莓 > 瓜 > 萝卜 > 麦）；本轮只接线兜底小麦线（富线需
+    三重门+市场耦合，留后续单变量步）。记录入阶段寄存器供遥测。"""
+    if farm is None or out.get("fused"):
+        return out
+    _ok, util = _capacity_gate(farm, None, day=day, plan=out)
+    if util >= CAP_USE_MIN:
+        if st is not None:
+            st["backfill"] = None
+        return out
+    units, _comps = _capacity_units(farm)
+    law = _capacity_law_max(len(_get(farm, "hands", []) or []))
+    room = int(law * CAP_USE_MIN - units)
+    if room <= 0:
+        if st is not None:
+            st["backfill"] = None
+        return out
+    out["capacity_backfill"] = {"util": round(util, 3), "room_units": room,
+                                "line": "WHEAT",
+                                "candidates": ["DAIRY", "STRAWBERRY",
+                                               "MELON", "CARROT", "WHEAT"]}
+    if st is not None:
+        st["backfill"] = {"room_units": room, "line": "WHEAT"}
+    return out
+
+
+def stage_state_snapshot(player):
+    """Read-only stage-register getter（遥测/诊断消费）。"""
+    st = _STAGE_MEM.get(player) or {}
+    fuse = st.get("fuse") or {}
+    return {"c_branch": st.get("c_branch"),
+            "opp_class": st.get("opp_class_frozen"),
+            "fused": bool(fuse.get("active")),
+            "fuse_events": int(fuse.get("count", 0)),
+            "frozen": st.get("frozen"),
+            "backfill": st.get("backfill")}
+
+
+def _stage_plan(player, obs, day, plan):
+    """阶段×分支选择器（branch §2/§4/§5/§8 的组装点）。
+
+    P1（d1-5）：d1 检查点冻结对手分类 + B 分支旋钮；P2（d6-14）：d6 五问
+    C 分支裁决（缓存）+ d10 SE 窗就绪记录 + d14 结构冻结快照 + MIXED 注入
+    （C2）+ 黎明不变式下界补线；P3/P4：冻结守卫（§8.1，frozen 后禁翻回宽
+    田类）+ 补线 + d22 P4 前置快照；全程 §8.2 熔断回退（段内钱包<300 或
+    逃亡 → DEFENSIVE 运行参数包）。
     """
     stage = _stage_of(day)
     out = dict(plan)
     out["stage"] = stage
+    farms = _get(obs, "farms", []) or []
+    farm = farms[player] if 0 <= player < len(farms) else None
+    st = _stage_state(player, day)
+
+    fused = False
+    if farm is not None:
+        mine = _farm_scan(farm)
+        fused, _escaped = _fuse_check(st, farm, mine, stage)
+        if stage == "P1" and day == 1 and st.get("opp_class_frozen") is None:
+            _d1_checkpoint(obs, st)
+        if stage == "P2":
+            if st.get("decided_day") is None:
+                if day == STAGE_P1_DUE:
+                    questions, c_branch = _d6_checkpoint(obs, day)
+                    st["decided_day"] = day
+                    st["c_branch"] = c_branch
+                    st["questions"] = questions
+                else:
+                    st["decided_day"] = day
+                    st["c_branch"] = None
+                    st["questions"] = None
+            if day == 10 and st.get("d10") is None:
+                st["d10"] = _d10_checkpoint(farm)
+            if day == STAGE_P2_FREEZE and st.get("frozen") is None:
+                _d14_checkpoint(out, st)
+        if stage == "P4" and day == 22 and st.get("p4_snapshot") is None:
+            try:
+                st["p4_snapshot"] = _d22_checkpoint()
+            except Exception:
+                st["p4_snapshot"] = {"day": 22, "held": {}}
+
+    if fused:
+        out = dict(_DEFENSIVE_PLAN)
+        out["stage"] = stage
+        out["fused"] = True
+
     if stage == "P1":
-        return _b_branch_adjust(out, obs, day)
+        return _b_branch_adjust(out, obs, day, st)
     if stage == "P2":
-        st = _STAGE_MEM.get(player)
-        if st is None or st.get("decided_day", -1) < STAGE_P1_DUE \
-                or st.get("decided_day", 99) > STAGE_P2_FREEZE:
-            if day == STAGE_P1_DUE:
-                questions, c_branch = _d6_checkpoint(obs, day)
-                _STAGE_MEM[player] = {"decided_day": day,
-                                      "c_branch": c_branch,
-                                      "questions": questions}
-            else:
-                _STAGE_MEM[player] = {"decided_day": day,
-                                      "c_branch": None, "questions": None}
-        st = _STAGE_MEM.get(player) or {}
         c_branch = st.get("c_branch")
         out["c_branch"] = c_branch
-        if c_branch == "C2" and out.get("mode") == "DEFENSIVE":
+        if c_branch == "C2" and out.get("mode") == "DEFENSIVE" and not fused:
             # 草莓线弱/首市日落后 + 奶线活：注入 DevilQ 混合计划（§5.2）
             out = dict(_MIXED_PLAN)
             out["stage"] = stage
             out["c_branch"] = c_branch
-        return out
+        return _attach_backfill(out, farm, day, st)
     if stage in ("P3", "P4", "P5"):
-        st = _STAGE_MEM.get(player) or {}
         out["c_branch"] = st.get("c_branch")
+        frozen = st.get("frozen") or {}
+        # §8.1 冻结守卫：d14 时是 DEFENSIVE（窄类）的农场，此后禁止翻回
+        # 宽田类（VOLUME/MIXED/SCALE/WHEAT_FARM 的新入场）；退出不受限。
+        if frozen.get("mode") in ("DEFENSIVE", None) and not fused \
+                and out.get("mode") not in ("DEFENSIVE", None):
+            out = dict(_DEFENSIVE_PLAN)
+            out["stage"] = stage
+            out["c_branch"] = st.get("c_branch")
+            out["freeze_guard"] = True
+        if stage in ("P3", "P4"):
+            _attach_backfill(out, farm, day, st)
         return out
     return out
 
@@ -992,6 +1129,12 @@ def _field_alloc(farm, day, prices, plan=None):
                          len(crop_map["WHEAT"]))
     elif _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
         wheat_room += plan["wheat_money_quad"] * len(quads)
+    backfill = plan.get("capacity_backfill")
+    if backfill and backfill.get("line") == "WHEAT" \
+            and not plan.get("wheat_farm"):
+        # §5.3 黎明不变式下界：idle 容量的兜底去向=小麦（剩余劳力去处；
+        # 金钱作物两pass已在后面先 claim，补位只吃真正剩余的空格）
+        wheat_room += int(backfill.get("room_units", 0))
     # wheat pass 1: the dairy home quadrant keeps a BAND of near tiles
     # (tetsuya d20: NW holds 12-15 wheat beside the pastures) -- bounded so
     # a single-quadrant farm still leaves the strawberry phase its near
@@ -1006,8 +1149,11 @@ def _field_alloc(farm, day, prices, plan=None):
         empties.remove(pos)
 
     if _crop_open("STRAWBERRY"):
+        # §5.3 分线封顶包络：LINE_CAPS 作跨计划上限（min(计划配额, 封顶)）
         room = min(plan["straw_quad_cap"] * len(quads),
-                   plan["straw_total_cap"]) - len(crop_map["STRAWBERRY"])
+                   plan["straw_total_cap"],
+                   LINE_CAPS.get("STRAWBERRY", 99)) \
+            - len(crop_map["STRAWBERRY"])
         for qn in (q for q in ("NE", "SW", "SE", "NW") if q in quads):
             if room <= 0:
                 break
@@ -1036,6 +1182,11 @@ def _field_alloc(farm, day, prices, plan=None):
                                 _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE):
             crop_quad_cap = 3
         room = crop_quad_cap * len(quads) - len(crop_map[crop])
+        if crop == "CARROT":
+            # §5.3 分线封顶包络（萝卜终盘弹性线；瓜带收紧 12→6 需单变量
+            # 消融另排——V-T9 回归证据仍钉 12，见 JOURNAL）
+            room = min(room, max(0, LINE_CAPS.get("CARROT", 99)
+                                 - len(crop_map[crop])))
         if crop == "MELON":
             # V-T9 fix: tetsuya's melon rim lives in the UPPER quadrants
             # (his SW is the wheat side field -- our far-rim-first filled
