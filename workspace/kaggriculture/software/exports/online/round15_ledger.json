@@ -1,0 +1,31 @@
+{
+  "schema": "online-probe-ledger/1.0",
+  "round": 15,
+  "candidate": {
+    "label": "v12.2-phaseD-mk35-live-working",
+    "sha256": "e8793f196db9fefc7424be68ab492f11d96a276c1e60002db9bd8d65c2192fee",
+    "git_ref": "4c3e95b",
+    "submission_ref": 55965149,
+    "submitted_at_utc": "2026-09-02T16:35:26Z",
+    "status_at_record": "PENDING"
+  },
+  "what_this_probe_adjudicates": [
+    "four-layer architecture LIVE (M3 EDF+budget solver v2, M4 executor switchover with v72 replan bridge)",
+    "capacity-law backfill CAP_TURNS_PER_UNIT 3.3 / CAP_UTIL 0.89 (top-20 anchor; quickwin local +7.3%, escapes 41->0; the 42-tile C1 is capacity-gated OUT pending this probe)",
+    "melon band 12->6 (kill_table absorption evidence, locally neutral)",
+    "MK-3 sell-planner takeover (dawn batches at planned hours, gates demoted to bounded overlay)",
+    "MK-5 interference vehicle 1 armed (inventory dump, 2-day confirm + exposure gate)"
+  ],
+  "local_baseline_for_comparison": {
+    "quickwin_v12_1": 133077.8,
+    "quickwin_v12_2": 133991.2,
+    "v11_4_pre_fasttrack": 124029.0,
+    "reference_same_day": {
+      "v10.10-c1_55958302": "9W-8L @537.1 (17 games)",
+      "v10.9_55952504": "5W-7L @523.8 (12 games)"
+    }
+  },
+  "sampling_protocol": "public games accumulate; sample after >=10 games (prefer 15+); compare win-rate & publicScore vs same-day references; d12-cash median vs top-20 median 15.4k stays the structural KPI",
+  "quota_note": "5/5 used on UTC 2026-09-02 (this was the last); next window opens UTC midnight",
+  "produced_at": "2026-09-03T00:40+08:00"
+}
