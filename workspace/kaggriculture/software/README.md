@@ -105,7 +105,7 @@ python workspace/kaggriculture/software/scripts/check_dna_forensics.py
 This is producer/source-attested precomputed barcode evidence, not an independent replay reconstruction: `extractor_status=source_extractor_not_published`. `IDENTICAL / SAME SOURCE` means only 30-band anchor equality; it does not prove the same agent or a real source. DNA stability is separate from engine action liveness. The artifacts are explicitly exploratory and are not strength, promotion, holdout, online, or performance evidence. DNA outputs are restricted to `workspace/kaggriculture/software/exports/replay_dna/`, and action, observation, state, market, price, quantity, inventory, and raw trace fields are rejected recursively.
 
 <!-- ACTIVE_CANDIDATE_IDENTITY:BEGIN -->
-working_candidate_sha256=c434428ff9c6805bf91e11744b9d5d0d5d73d856ec1d11cf3db05bcb7fd13aa4
+working_candidate_sha256=7f76d11d9a2d2748810279f2c37a91b9df1a084e6fece0747934af3b1e5c909e
 working_candidate_status=development
 last_promoted_frozen_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
 published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
