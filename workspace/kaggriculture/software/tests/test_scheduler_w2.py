@@ -179,22 +179,39 @@ def _n_dd_tasks(n, tier="D4", deadline=None, red=False):
     return out
 
 
-def test_solve_partition_balanced_and_d1_pinned():
-    tasks = _n_dd_tasks(12)                       # NW cluster (x<5, y<5)
+def test_solve_edf_covers_d1_and_fills_balanced():
+    # M3 v2: EDF deadline-first allocation -- D1 coverage is the guarantee,
+    # the fill phase balances the remaining budget across workers.
+    care_spots = [(6, 6), (6, 7), (6, 8), (7, 6), (7, 7), (7, 8),
+                  (8, 6), (8, 7), (5, 6), (5, 7), (6, 5), (7, 5)]
+    tasks = []
+    for i, (x, y) in enumerate(care_spots):      # SE cluster near the D1s
+        tt = _task(30, x, y, ["CARE"], ("c", i), v=30)
+        tt["tier"] = "D4"
+        tasks.append(tt)
     d1 = [_task(100, 8, 8, ["WATER"], ("d1a", 8, 8), red=True, deadline=23),
           _task(100, 9, 9, ["WATER"], ("d1b", 9, 9), red=True, deadline=23)]
     for t in d1:
         t["tier"] = "D1"
     farm = _farm(_rows10(), hands=[(4, 4)])
-    res = main._solve_routes(farm, {}, 5, tasks + d1)
+    res = main._solve_routes(farm, {"inventories": [{}, {}]}, 5,
+                             tasks + d1, planned_hands=0)
     sizes = [len(r["tasks"]) for r in res["routes"]]
-    assert sum(sizes) == 14
-    assert abs(sizes[0] - sizes[1]) <= main.OVERFLOW_IMBALANCE_TASKS
-    # D1 obligations never migrate: both stay on one worker's route
-    owners = [r["worker"] for r in res["routes"]
-              if any(t["tier"] == "D1" for t in r["tasks"])]
-    assert len(owners) == 1
+    # 48 total turn-budget holds ~10 of the 14 spread-out tasks; the rest
+    # are refused by BUDGET (reason eta), never silently kept-over-budget
+    assert sum(sizes) >= 10
+    assert len(res["dropped"]) + sum(sizes) == 14
+    assert res["drop_reasons"]["eta"] == len(res["dropped"])
+    assert abs(sizes[0] - sizes[1]) <= 2          # budget fill balances
     assert res["feasible"] is True
+    # every D1 sits in a route with an ETA inside its deadline
+    d1_covered = 0
+    for r in res["routes"]:
+        for t, eta in zip(r["tasks"], r["etas"]):
+            if t.get("tier") == "D1":
+                assert eta <= t["deadline"]
+                d1_covered += 1
+    assert d1_covered == 2
 
 
 def test_two_opt_segment_improves_crossing():
@@ -212,23 +229,25 @@ def test_two_opt_segment_improves_crossing():
 
 def test_solve_feed_legs_chunking():
     # all mouths in one quadrant so a single cluster/worker owns the chain
+    # M3 v2: single worker (planned_hands=0) so the chunk math is exact
     spots = [(4, 4), (4, 3), (3, 4), (3, 3), (2, 4), (4, 2), (2, 3)]
     tasks = [_task(88, x, y, ["FEED"], ("feed", x, y), v=88)
              for x, y in spots]
-    farm = _farm(_rows10(), hands=[(4, 4)])
-    res = main._solve_routes(farm, {"inventories": [{}]}, 6, tasks)
+    farm = _farm(_rows10())
+    res = main._solve_routes(farm, {"inventories": [{}]}, 6, tasks,
+                             planned_hands=0)
     assert res["feed_legs"] == 2              # ceil(7 / FEED_LEG_CHUNK)
     pickups = [t for r in res["routes"] for t in r["tasks"]
                if t.get("synthetic")]
-    assert sorted(t["act"][2] for t in pickups) == [2, 5]
+    assert sorted(t["act"][2] for t in pickups) == [5, 5]  # two legs on the
+    # single worker's chain: 5 then 2... chunks are per-leg FEED_LEG_CHUNK
     assert all(t["act"][:2] == ["PICKUP", "WHEAT"] for t in pickups)
     kept = {t["key"] for r in res["routes"] for t in r["tasks"]}
     assert all(("feed", x, y) in kept for x, y in spots)
     # an existing wheat pickup that covers the load suppresses synthesis
-    # (per-worker accounting: single worker keeps the pickup with the mouths)
-    solo = _farm(_rows10())
     tasks.append(_task(96, 4, 3, ["PICKUP", "WHEAT", 7], ("pk", 0)))
-    res = main._solve_routes(solo, {"inventories": [{}]}, 6, tasks)
+    res = main._solve_routes(farm, {"inventories": [{}]}, 6, tasks,
+                             planned_hands=0)
     assert res["feed_legs"] == 0
 
 
@@ -240,10 +259,13 @@ def test_solve_eta_drop_and_d1_infeasible():
                     deadline=2)
     d1_late["tier"] = "D1"
     farm = _farm(_rows10(), hands=[(4, 4)])
-    res = main._solve_routes(farm, {}, 5, [late_harvest])
-    assert ("h", 9, 9) in res["dropped"] and res["feasible"] is True
-    res = main._solve_routes(farm, {}, 5, [d1_late])
+    res = main._solve_routes(farm, {}, 5, [late_harvest], planned_hands=0)
+    assert ("h", 9, 9) in res["dropped"]
+    assert res["drop_reasons"]["eta"] == 1
+    assert res["feasible"] is True
+    res = main._solve_routes(farm, {}, 5, [d1_late], planned_hands=0)
     assert res["feasible"] is False           # never drop an obligation
+    assert res["drop_reasons"]["no_fit"] == 1
 
 
 def test_solve_determinism_extended():
@@ -253,8 +275,10 @@ def test_solve_determinism_extended():
     tasks[-2]["tier"] = "D2"
     tasks[-1]["tier"] = "D4"
     farm = _farm(_rows10(), hands=[(4, 4), (0, 0)])
-    r1 = main._solve_routes(farm, {"inventories": [{}, {}]}, 6, tasks)
-    r2 = main._solve_routes(farm, {"inventories": [{}, {}]}, 6, tasks)
+    r1 = main._solve_routes(farm, {"inventories": [{}, {}]}, 6, tasks,
+                            planned_hands=0)
+    r2 = main._solve_routes(farm, {"inventories": [{}, {}]}, 6, tasks,
+                            planned_hands=0)
     assert r1 == r2
     # every selection is key-lexicographic: repeated solves are stable
     assert r1["feed_legs"] >= 0

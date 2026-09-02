@@ -52,18 +52,44 @@ def agent(obs):
             _build_tasks(obs, farm, private=_get(obs, "private", {}) or {},
                          day=day, plan=plan)
 
-        # M2 shadow bypass (fail-open, scheduler §2): build the dawn mission
-        # package once per player-day -- telemetry and the M3 harness are
-        # the only consumers; the decision path below never reads it.
-        _mission_shadow_update(player, day, hour, obs, farm,
-                               _get(obs, "private", {}) or {}, plan, tasks)
-        # MK-2 shadow bypass (fail-open, market §2): the dawn sell plan
-        # (supply x absorption x projection x EOD x quota). Consumed by
-        # telemetry and the reconciliation harness only until MK-3.
+        # M2/M4 (scheduler §2-§4, LIVE per user ruling 2026-09-02 "no local
+        # evidence gates -- deploy and validate online"): the mission package
+        # is the primary pipeline.  _schedule_units (v72) stays as a
+        # single-turn bridge for executor replan turns (assertion failed ->
+        # the old authority covers the red lines while the day rebuild
+        # lands) and remains fully in charge when the flag is off.
+        mission = _mission_shadow_update(player, day, hour, obs, farm,
+                                         _get(obs, "private", {}) or {},
+                                         plan, tasks)
+        actions = None
+        if ROUTE_EXECUTOR_ENABLED and mission is not None:
+            try:
+                routes = _solve_routes(
+                    farm, _get(obs, "private", {}) or {}, day,
+                    mission.get("tasks") or [])
+                cand, replan = _execute_routes(obs, farm,
+                                                _get(obs, "private", {}) or {},
+                                                day, routes)
+                if replan:
+                    # assertion failed (D1 ETA / EOD projection): rebuild is
+                    # the doc's answer, but this turn's red lines cannot
+                    # wait -- bridge to the proven scheduler once
+                    actions = _schedule_units(
+                        obs, farm, _get(obs, "private", {}) or {}, day,
+                        tasks)
+                else:
+                    actions = cand
+            except Exception:
+                actions = None          # fall through to v72 (fail-open)
+        if actions is None:
+            actions = _schedule_units(obs, farm,
+                                      _get(obs, "private", {}) or {},
+                                      day, tasks)
+        # MK-2/3 (market §2, LIVE per the same ruling): the dawn sell plan
+        # drives the day's sell batches at their planned hours; the gate
+        # stack remains as a bounded overlay on top.
         _sell_plan_shadow_update(player, day, hour, obs, farm,
                                  _get(obs, "private", {}) or {}, plan)
-        actions = _schedule_units(obs, farm, _get(obs, "private", {}) or {},
-                                  day, tasks)
         orders = _market_orders(obs, farm, _get(obs, "private", {}) or {},
                                 day, animals_to_feed, herd_total, plan=plan)
 

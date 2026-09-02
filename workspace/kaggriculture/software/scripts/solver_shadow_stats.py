@@ -65,10 +65,27 @@ def shadow_metrics_for_turn(module, obs):
             if t.get("key") in d1 and \
                     (t.get("deadline") is None or eta <= t["deadline"]):
                 covered.add(t["key"])
+    reasons = res.get("drop_reasons") or {}
+    # v72 context: the telemetry "overdue" counters tally the red duties
+    # PRESENT at dawn (workload, not misses) -- context for the drop counts,
+    # NOT a v72 failure metric (the real v72 comparison is Phase B's live
+    # A/B: deaths/escapes/EOD-overflow with the flag on vs off)
+    v72_red_load = 0
+    try:
+        day_state = module.telemetry_snapshot()["players"][
+            str(player)]["days"].get(str(mission["day"]))
+        if day_state:
+            v72_red_load = int(day_state.get("water_overdue", 0)) + \
+                int(day_state.get("feed_overdue", 0))
+    except Exception:
+        v72_red_load = 0
     return {"day": mission["day"], "d1_total": len(d1),
             "d1_covered": len(covered),
             "feasible": bool(res["feasible"]),
             "dropped": len(res["dropped"]),
+            "drop_no_fit": int(reasons.get("no_fit", 0)),
+            "drop_eta": int(reasons.get("eta", 0)),
+            "v72_red_task_load": v72_red_load,
             "feed_legs": int(res["feed_legs"]),
             "mission_hash": mission.get("mission_hash"),
             "workers_empty": sum(1 for r in res["routes"] if not r["tasks"]),
@@ -80,6 +97,8 @@ def summarize(episodes):
     d1_total = sum(d["d1_total"] for d in days)
     d1_covered = sum(d["d1_covered"] for d in days)
     infeasible = sum(1 for d in days if not d["feasible"])
+    red_load = sum(d.get("v72_red_task_load", 0) for d in days)
+    no_fit = sum(d.get("drop_no_fit", 0) for d in days)
     hashes = defaultdict(set)
     for e in episodes:
         for d in e["days"]:
@@ -91,6 +110,9 @@ def summarize(episodes):
         "d1_covered": d1_covered,
         "d1_coverage_rate": round(d1_covered / d1_total, 4) if d1_total else None,
         "infeasible_days": infeasible,
+        "red_task_load_total": red_load,
+        "shadow_d1_uncovered": d1_total - d1_covered,
+        "drop_no_fit_total": no_fit,
         "dropped_total": sum(d["dropped"] for d in days),
         "feed_legs_total": sum(d["feed_legs"] for d in days),
         "pass_rate_v72": round(

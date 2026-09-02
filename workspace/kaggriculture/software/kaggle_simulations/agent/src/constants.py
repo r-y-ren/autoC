@@ -649,11 +649,10 @@ P4_MID_HELD = 15               # 15-40 → d26-27 标准档；<15 从容档
 # ---------------------------------------------------------------------------
 SHED_CAPACITY = 100            # 引擎镜像 shedCapacity（EOD 预算不等式的界）
 LAND_PRICES_EMB = (1000, 2000, 4000)   # 引擎镜像 LAND_PRICES（Ch2 钱账分解）
-# ---- §3.1 分区与溢出 ----
-OVERFLOW_IMBALANCE_TASKS = 3   # 负载差 ≤ 此任务数即视为均衡，停止溢出搬运
-# ---- §3.2 成路与喂食腿 ----
+# ---- §3.2 成路与喂食腿（Phase-A v2：簇-LPT 分区/溢出已由 EDF+预算制取代，
+# OVERFLOW_IMBALANCE_TASKS 随之退役）----
 FEED_LEG_CHUNK = 5             # 喂食腿：一次 PICKUP 携带的小麦数（拆腿粒度）
-TWO_OPT_MAX_PASSES = 16        # 同 deadline 类段 2-opt 抛光的迭代上限
+TWO_OPT_MAX_PASSES = 16        # 无死线尾段 2-opt 抛光的迭代上限
 # ---- §4 执行器断言 ----
 EXECUTOR_EOD_ASSERT = True     # EOD 投影断言（棚仓+随身 > 100 → REPLAN）
 EXECUTOR_D1_ASSERT = True      # D1 站点 ETA 断言（ETA > deadline → REPLAN）

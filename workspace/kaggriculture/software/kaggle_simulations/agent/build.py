@@ -96,8 +96,9 @@ def precheck():
         if mod == "executor":
             continue
         text = (SRC / f"{mod}.py").read_text(encoding="utf-8")
-        if "_execute_routes" in text:
-            sys.exit(f"FAIL {mod}.py references _execute_routes before M4")
+        if mod != "entry" and "_execute_routes" in text:
+            sys.exit(f"FAIL {mod}.py references _execute_routes "
+                     "(only entry's flag-gated M4 wiring may)")
 
 
 def build_bytes():
