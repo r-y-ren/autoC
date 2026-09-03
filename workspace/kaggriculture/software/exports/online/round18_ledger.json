@@ -1,0 +1,33 @@
+{
+ "schema": "online-probe-ledger/1.0",
+ "round": 18,
+ "candidate": {
+  "label": "v13.4 aggressive-ideal (un-hold + planner closure + vehicles)",
+  "pkg_sha256": "f0dfdb2de651f84941f47920629cbbe937b1f570af2d15d4f25c636d773453eb",
+  "main_sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
+  "git_ref": "a85ed7b",
+  "submission_ref": 55991647,
+  "submitted_at_utc": "2026-09-04",
+  "status": "PENDING",
+  "quota_after_submit": "2 submissions remaining today",
+  "format_note": "multi-module tar.gz pkg.1"
+ },
+ "what_this_probe_adjudicates": [
+  "user ruling 2026-09-04: online score is NOT the objective; this launch only validates the aggressive-ideal bundle imports and runs in production",
+  "bundle: observer caps retired + rollout full entry authority + planner loop closure (planned_sell two-pass, true EOD projection, adaptive REPLAN) + B1 catch-up / B2 probe + interference V2 carrot ambush and V4 mirror LIVE (V3 doctrine-rejected) + full-sequence deadline-feasible 2-opt + density knobs (CAP_USE_MAX 0.95, PLANT 24, MELON 12, batches 8/16)"
+ ],
+ "local_evidence": {
+  "suite": "828 passed, 2 skipped",
+  "quickwin": "aggr 128654.2 vs fertfix 118560.5 = +8.51%; escapes 2 vs 0 (seed 101, both seats, ~51.4k/seat) DISCLOSED per aggressive ruling",
+  "build_check": "PASS (119858 bytes)",
+  "smoke_boot": "4-phase PASS",
+  "candidate_identity": "PASS"
+ },
+ "wave_commits": {
+  "A_unhold": "95f41c4",
+  "B_planner": "3e25aad",
+  "CD_vehicles_2opt": "54a4eb8",
+  "registration": "a85ed7b"
+ },
+ "verdict": "SUBMITTED (user-authorized; score non-objective). Production import validation only."
+}
