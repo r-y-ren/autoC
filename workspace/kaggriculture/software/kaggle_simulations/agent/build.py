@@ -1,64 +1,49 @@
 #!/usr/bin/env python
-"""Deterministic builder: merges the src/* fragments into main.py.
+"""Deterministic submission packager (multi-module tar.gz era, v13.1+).
 
 Usage (from anywhere):
-    python build.py           # rebuild agent/main.py in place
+    python build.py           # package submission.tar.gz next to main.py
     python build.py --check   # rebuild in memory, byte-compare with disk
 
-Contract (see docs/worker_route_scheduler_design.md and JOURNAL 2026-09-02):
-  * Flat-namespace merge in a FIXED topological order; src modules never
-    import each other -- the merged file is one namespace, exactly like the
-    pre-refactor single file. entry.py is merged last so `agent(obs)` is the
-    final callable (official kaggle_environments get_last_callable semantics).
-  * Byte-deterministic: no timestamps, fixed order, LF endings, utf-8. The
-    only import-time side effects (all verified self-contained) are the
-    telemetry/state dict inits, the _FIB_CUM fill loop and
-    _WHEAT_FARM_PLAN = _wheat_farm_plan() (constants-first order covers it).
-  * stdlib-only output: import whitelist {copy, math, json, hashlib}.
-  * Prints sha256 + canonical LF sha256 of the artifact for identity-chain
-    registration (software/active_candidate.json).
+Contract change (user ruling 2026-09-03): the submission is a MULTI-MODULE
+tar.gz archive (officially supported -- kaggle_environments.get_last_callable
+appends the extraction dir to sys.path "so that way python agents can import
+other files").  The static single-file merge is RETIRED; main.py is a thin
+entry that loads agent/src/*.py in a fixed topological order into one flat
+namespace at import time (identical semantics, merge point moved from build
+time to import time; tracebacks now point at the real module files).
+
+Determinism: fixed member order (main.py, then src modules in load order),
+zeroed mtimes/uid/gid, fixed modes, gzip mtime 0 -- byte-reproducible archives.
+Prints the archive sha256 for identity-chain registration.
 """
 import argparse
 import ast
+import gzip
 import hashlib
+import io
+import os
 import sys
+import tarfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SRC = HERE / "src"
-OUT = HERE / "main.py"
+OUT = HERE / "submission.tar.gz"
 
-# Bump when the merge LAYOUT changes (module set / order / header format).
-VERSION = "src-split.1"
+# Bump when the PACKAGE LAYOUT changes (member set / order / entry shape).
+VERSION = "pkg.1"
 
-# Topological order. _archive_header first (keeps the v10.9 archive comments
-# and the module docstring in place), entry.py ALWAYS last.
-MERGE_ORDER = [
-    "_archive_header", "constants", "telemetry", "observer", "strategy",
-    "mission", "solver", "executor", "market", "entry",
-]
-
-ALLOWED_IMPORTS = {"copy", "math", "json", "hashlib"}
-
-META_LINES = [
-    "# " + "=" * 74,
-    "# Kaggriculture submission agent -- BUILT ARTIFACT, DO NOT EDIT DIRECTLY.",
-    "# Edit src/*.py, then rebuild:  python build.py   (deterministic merge)",
-    "# layout " + VERSION + " -- merge order: " + " -> ".join(MERGE_ORDER),
-    "# " + "=" * 74,
-    "",
-]
-
-IMPORT_BLOCK = "import copy\nimport math\n"
+# Flat-namespace load order -- MUST match main.py's _MODULE_ORDER.  The
+# src-split era's _archive_header.py is retired from the package (the
+# archive comments live in git history; the 64-byte marker moved to
+# main.py's first line).
+MODULE_ORDER = ["constants", "telemetry", "observer", "strategy", "mission",
+                "solver", "executor", "market", "entry"]
 
 
 def fragment_names(path):
-    """Top-level bound names of a fragment: (module, name) pairs.
-
-    Within one module rebinding is allowed (e.g. _WHEAT_FARM_PLAN = None
-    then the real plan); the SAME name bound in two different modules would
-    silently shadow in the flat namespace and is a hard error.
-    """
+    """Top-level bound names of a fragment (cross-module shadowing guard)."""
     tree = ast.parse(path.read_text(encoding="utf-8"))
     pairs = []
     for st in tree.body:
@@ -75,10 +60,9 @@ def fragment_names(path):
 
 
 def precheck():
-    """Cross-module duplicate-name detection (silent-shadowing guard)."""
     seen = {}
     duplicates = []
-    for mod in MERGE_ORDER:
+    for mod in MODULE_ORDER:
         path = SRC / f"{mod}.py"
         if not path.is_file():
             sys.exit(f"FAIL missing fragment: {path}")
@@ -89,84 +73,74 @@ def precheck():
     if duplicates:
         for name, first, second in duplicates:
             print(f"DUPLICATE top-level name {name!r}: {first}.py vs {second}.py")
-        sys.exit("FAIL cross-module duplicate names would shadow in the merge")
-    # executor authority: _execute_routes may only be referenced by the
-    # dispatcher (solver's _solve_and_execute) and the entry wiring --
-    # no other module may grow a private execution path
-    for mod in MERGE_ORDER:
-        if mod in ("executor", "solver", "entry"):
-            continue
-        text = (SRC / f"{mod}.py").read_text(encoding="utf-8")
-        if "_execute_routes" in text:
-            sys.exit(f"FAIL {mod}.py references _execute_routes "
-                     "(only solver's dispatcher and entry may)")
+        sys.exit("FAIL cross-module duplicate names would shadow in the "
+                 "flat namespace")
+    # entry contract lives in main.py itself now
+    main_src = (HERE / "main.py").read_text(encoding="utf-8")
+    tree = ast.parse(main_src)
+    defs = [st.name for st in tree.body
+            if isinstance(st, ast.FunctionDef)]
+    if not defs or defs[-1] != "agent":
+        sys.exit("FAIL main.py's last top-level def must be `agent` "
+                 "(get_last_callable contract)")
+    if "Kaggriculture submission agent" not in main_src[:64]:
+        sys.exit("FAIL main.py must keep the 64-byte submission marker")
 
 
 def build_bytes():
-    parts = ["\n".join(META_LINES)]
-    for mod in MERGE_ORDER:
-        text = (SRC / f"{mod}.py").read_text(encoding="utf-8")
-        if not text.endswith("\n"):
-            text += "\n"
-        parts.append(f"# ===== src/{mod}.py " + "=" * 49 + "\n")
-        parts.append(text)
-        if mod == "_archive_header":
-            # hoisted stdlib imports, AFTER the archive docstring so it stays
-            # the module docstring (first statement of the file)
-            parts.append(IMPORT_BLOCK)
-    body = "\n".join(parts)
-    # single trailing newline; all fragments already end with one
-    return body.encode("utf-8")
+    """Byte-reproducible tar.gz: main.py + src modules in load order."""
+    members = [(HERE / "main.py", "main.py")]
+    for mod in MODULE_ORDER:
+        members.append((SRC / f"{mod}.py", f"src/{mod}.py"))
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w") as tar:
+        for path, arcname in members:
+            data = path.read_bytes()
+            info = tarfile.TarInfo(arcname)
+            info.size = len(data)
+            info.mtime = 0
+            info.mode = 0o644
+            info.uid = info.gid = 0
+            info.uname = info.gname = ""
+            tar.addfile(info, io.BytesIO(data))
+    raw = buf.getvalue()
+    gz = io.BytesIO()
+    with gzip.GzipFile(fileobj=gz, mode="wb", mtime=0) as z:
+        z.write(raw)
+    return gz.getvalue()
 
 
-def postcheck(data):
-    try:
-        tree = ast.parse(data.decode("utf-8"))
-    except SyntaxError as exc:
-        sys.exit(f"FAIL merged file does not parse: {exc}")
-    compile(data.decode("utf-8"), str(OUT), "exec")
-
-    imports = set()
-    for st in tree.body:
-        if isinstance(st, ast.Import):
-            imports |= {a.name for a in st.names}
-        elif isinstance(st, ast.ImportFrom):
-            sys.exit(f"FAIL non-absolute import in merged file: {ast.dump(st)}")
-    if imports != ALLOWED_IMPORTS:
-        sys.exit(f"FAIL imports must be exactly {sorted(ALLOWED_IMPORTS)}, "
-                 f"got {sorted(imports)}")
-
-    last = tree.body[-1]
-    if not (isinstance(last, ast.FunctionDef) and last.name == "agent"):
-        sys.exit("FAIL last top-level statement is not `def agent` "
-                 "(get_last_callable contract)")
+def postcheck():
+    for mod in MODULE_ORDER:
+        source = (SRC / f"{mod}.py").read_text(encoding="utf-8")
+        compile(source, str(SRC / f"{mod}.py"), "exec")
+    compile((HERE / "main.py").read_text(encoding="utf-8"),
+            str(HERE / "main.py"), "exec")
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--check", action="store_true",
-                    help="compare a rebuild against the on-disk main.py")
+                    help="compare a rebuild against the on-disk archive")
     args = ap.parse_args()
 
     precheck()
+    postcheck()
     data = build_bytes()
-    postcheck(data)
 
     if args.check:
         on_disk = OUT.read_bytes() if OUT.is_file() else b""
         if data != on_disk:
-            sys.exit("FAIL on-disk main.py differs from the deterministic "
-                     "rebuild (hand edit? run: python build.py)")
-        print(f"OK main.py matches deterministic rebuild "
+            sys.exit("FAIL on-disk submission.tar.gz differs from the "
+                     "deterministic rebuild (hand edit? run: python build.py)")
+        print(f"OK submission.tar.gz matches deterministic rebuild "
               f"({len(data)} bytes, layout {VERSION})")
         return
 
-    OUT.write_bytes(data)  # explicit bytes, LF, utf-8 (Windows-safe)
-    sha = hashlib.sha256(data).hexdigest()
-    lf = hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
-    print(f"built {OUT} ({len(data)} bytes, layout {VERSION})")
-    print(f"sha256           = {sha}")
-    print(f"canonical_lf_sha = {lf}")
+    OUT.write_bytes(data)
+    print(f"packaged {OUT} ({len(data)} bytes, layout {VERSION})")
+    print(f"sha256 = {hashlib.sha256(data).hexdigest()}")
+    print("members: main.py + " + ", ".join(MODULE_ORDER))
 
 
 if __name__ == "__main__":
