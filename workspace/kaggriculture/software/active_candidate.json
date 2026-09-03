@@ -1,13 +1,13 @@
 {
  "schema_version": "1.0",
  "working": {
-  "label": "v13.0-fourlayer-m5-delivered-working",
+  "label": "v13.1-multimodule-pkg-working",
   "status": "development",
   "path": "kaggle_simulations/agent/main.py",
-  "sha256": "ffb74323e1db03e0cec3b980aaac8afa1a44167ea39a2a37af43be003fb6dc78",
-  "git_ref": "2f9a1e4184779a1ab3a4e3b955cff010c435503d",
-  "git_blob_oid": "fd97ebaec85dfa8ac5044db435305403bbd5c7a8",
-  "canonical_lf_sha256": "ffb74323e1db03e0cec3b980aaac8afa1a44167ea39a2a37af43be003fb6dc78",
+  "sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
+  "git_ref": "e203f056769d6bb681eaf0657a814010c172dcf3",
+  "git_blob_oid": "888e8962ed18ac7b2fba19a952a6d77bc0f0c9af",
+  "canonical_lf_sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
   "holdout_status": "not_run"
  },
  "last_promoted_frozen": {
@@ -38,5 +38,11 @@
   "implementation": "CPython",
   "python_version": "3.14"
  },
- "online_submission_refs": []
+ "online_submission_refs": [],
+ "submission_package": {
+  "note": "multi-module era (v13.1+): main.py thin loader + src/ nine modules, packaged by build.py (layout pkg.1, deterministic)",
+  "path": "kaggle_simulations/agent/submission.tar.gz",
+  "sha256": "4083e32a36c80090b74a9da141cd031b2e333aa2a5f902428b699347cb813d1a",
+  "git_ref": "e203f056769d6bb681eaf0657a814010c172dcf3"
+ }
 }
