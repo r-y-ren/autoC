@@ -64,6 +64,12 @@ overflow = max(0, eod_projected - 100)
 WHEAT。市场层在计划小时消费事件、与同商品其他 SELL 合并并按实际库存封顶。执行器每回合
 复核棚仓+随身总量；当前实现不做激进 HARVEST 尾部裁剪，是否削减收益任务留给后续回放消融。
 
+**诚实边界（2026-09-03 审计定性）**：生产路径的 `planned_sell` 恒为 0——mission 在 entry
+的黎明时序里先于当日卖出计划构建（`_mission_shadow_update` → `_sell_plan_shadow_update`），
+该时刻计划卖出量不可得。投影因此系统性**高估**日终占用，方向保守（只多生成 eod_budget
+卖单、防溢出销毁，不会漏报）。接线闭环（卖出计划前移或 mission 二次更新）列为战后项，
+audit-repairs 波不改动 entry/mission 调用链。
+
 ### 2.5 卖出排程耦合（F9）
 
 计划卖出分散在固定小时段（如 h6/h12/h18），为 EOD 和 d29 清算提前腾位。市场层逐回合
@@ -151,12 +157,16 @@ EDF×密度×老化最近邻 → 2-opt 无 deadline 尾段抛光 → 逐站累�
 季中无归还腿（F6 自动）；d29：空 carrier 继续 HARVEST 路线，有货 carrier 安全回仓，
 仅在 room 足以完整接收整份背包时 DROP，并把落仓货加入同回合 SELL；
 断言（只读）：从当前 hour/位置沿全部剩余站点累计移动+动作成本，检查路线内所有后续 D1；
-EOD 同时复核棚仓+随身总量 ≤100；失败触发一次有界 REPLAN，相同路线由幂等闸停止重建。
+EOD 断言是**当前溢出快照**（只读现时棚仓+随身存量，不含路线剩余 HARVEST/PICKUP 入仓与
+计划卖出——非前瞻投影，触发=溢出已存在）。失败触发一次有界 REPLAN：重建消费同一世界
+输入（首趟执行只返回动作、不改 farm/private），重解与首解相同、幂等闸抑制重复触发；二次
+仍存活的触发以 `replan_repeat` 记入 trace（F7 持续断言信号），不追加第三次求解——有效
+修正依赖下回合现役重解。
 ```
 
-solver 的最终 `feasible`、`dropped`、`drop_reasons`、`material_deficits`、`feed_legs` 和
-`replanned` 写入 `_SCHEDULER_TRACE[player]`，供 LIVE telemetry 消费；整体 try/except 继续提供
-合法 PASS 兜底。
+solver 的最终 `feasible`、`dropped`、`drop_reasons`、`material_deficits`、`feed_legs`、
+`replanned` 与 `replan_repeat` 写入 `_SCHEDULER_TRACE[player]`，供 LIVE telemetry 消费；整体
+try/except 继续提供合法 PASS 兜底。
 
 ## 5. 保证定理（审查结论：能否保证完成任务）
 
@@ -195,13 +205,17 @@ solver 的最终 `feasible`、`dropped`、`drop_reasons`、`material_deficits`�
 | M4 执行切换 | 四层路径已成为 LIVE 唯一调度路径；旧开关和 v72 fallback 已删除 | 完成；本地回归通过 |
 | M5 冻结清理 | 删除过渡代码，保留 deterministic package、identity 和 smoke 契约 | 完成；新候选仍须线上公共局验证 |
 
-## 8. 验证状态（2026-09-03）
+## 8. 验证状态（2026-09-03，audit-repairs 波后）
 
-- 调度器聚焦回归：`test_scheduler_w2.py`，`25 passed`。
-- 全量软件回归：`python -m pytest workspace/kaggriculture/software/tests -q`，`794 passed, 2 skipped`。
+- 调度器聚焦回归：`test_scheduler_w2.py`，`29 passed`。
+- 全量软件回归：`python -m pytest workspace/kaggriculture/software/tests -q`，`821 passed, 2 skipped`。
 - 确定性提交包：`build.py --check` 通过，layout `pkg.1`；当前包 SHA-256 为
-  `3e9bf7ed9766dfbee27597f778f400cf4eb8e463ec933e97c99fb458cc7e45dd`。
+  `f4bffb0563e80b0e53f48f11a9baba7b22493b686e947d7f9d30a98423087c0d`。
 - candidate identity 检查通过；working 状态仍为 development，未据此宣称线上强度或晋级。
+- 审计修复（2026-09-03）：FERTILIZE 重施死区（`_stop_done` 判据 day 相对化——引擎字段是
+  绝对截止日且过期不重置；quickwin 4 种子 A/B +6.13%，escapes/overflow 0/0，compare
+  pass）；`replan_repeat` 遥测；`_d29_template` 死代码删除；过时注释纠偏（mission 头注/
+  MK-4 干扰/V-T3 水窗引擎语义）。
 
 ## 9. 规模与关联
 
