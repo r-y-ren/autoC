@@ -1328,6 +1328,37 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         orders.append(["BUY_LAND"])
         committed_spend += LAND_PRICE[3]
 
+    # ---- §2.3 feed precondition (scheduler design): the dawn mission
+    # computes the D1/D2 mouth deficit and injects an h0 BUY_PRODUCT WHEAT
+    # event -- an OBLIGATION, not an opportunity (stranded dawn wheat is
+    # stranded red lines; the four-layer solver pre-filters FEED tasks it
+    # cannot stock).  Consumed at hour <= 2 for the deficit not yet in the
+    # system; the feed-security block below counts it via sys_wheat so the
+    # two never double-buy.
+    precond_wheat = 0
+    if not last_day and _get(obs, "hour", 0) <= 2:
+        _mission = mission_shadow(_get(obs, "player", 0)) or {}
+        _sys_w = shed.get("WHEAT", 0) + sum(
+            _get(inv, "WHEAT", 0)
+            for inv in (_get(private, "inventories", []) or []) if inv)
+        for _ev in _mission.get("events") or []:
+            if _ev.get("why") != "feed_precondition" \
+                    or _ev.get("op") != "BUY_PRODUCT":
+                continue
+            # idempotent across the h0-h2 window: once the bought wheat
+            # has landed, system wheat covers the dawn deficit -> skip
+            if _sys_w >= max(0, int(_ev.get("qty") or 0)):
+                continue
+            _short = _affordable_buy_units(
+                "WHEAT", money - committed_spend - 60, obs)
+            _short = min(_short, max(0, int(_ev.get("qty") or 0)))
+            if _short > 0:
+                orders.append(["BUY_PRODUCT", "WHEAT", _short])
+                committed_spend += buy_product_cost(
+                    "WHEAT", _short,
+                    _get(_get(obs, "market", {}) or {}, "inventory", None))
+                precond_wheat += _short
+
     # ---- feed security (FM-O3 + m2b phantom guard): never let the herd
     # run short of wheat, counting what carriers already hold (a shed-only
     # check sees the morning pickup as a shortfall and re-buys what we just
@@ -1336,7 +1367,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # wheat is still cheaper than a lost animal).
     wheat_carried = sum(_get(inv, "WHEAT", 0)
                         for inv in (_get(private, "inventories", []) or []) if inv)
-    sys_wheat = shed.get("WHEAT", 0) + wheat_carried
+    sys_wheat = shed.get("WHEAT", 0) + wheat_carried + precond_wheat
     if animals_to_feed > 0 and not last_day \
             and sys_wheat < animals_to_feed + 3:
         cap = 85 if sys_wheat < animals_to_feed else \

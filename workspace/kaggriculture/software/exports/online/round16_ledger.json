@@ -1,0 +1,39 @@
+{
+ "schema": "online-probe-ledger/1.0",
+ "round": 16,
+ "candidate": {
+  "label": "v13.1-fourlayer-m5-delivered (multi-module tar.gz)",
+  "pkg_sha256": "4083e32a36c80090b74a9da141cd031b2e333aa2a5f902428b699347cb813d1a",
+  "main_sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
+  "git_ref": "e203f056",
+  "submission_ref": 55973564,
+  "submitted_at_utc": "2026-09-03T03:30:05Z",
+  "status": "COMPLETE",
+  "format_note": "FIRST multi-module tar.gz submission (main.py thin loader + src/ nine modules); validates the official get_last_callable multi-file import path end-to-end in production"
+ },
+ "what_this_probe_adjudicates": [
+  "four-layer scheduler as the ONLY path (M3 v3 current-roster re-solve, v72 deleted) -- economics arbitration vs the v12.2 baseline",
+  "multi-module tar.gz package format in the live pipeline"
+ ],
+ "local_baseline": {
+  "m4_ab_4seed": "B=93% of v72 (structural PASS: hard escapes 0, overflow 0, deterministic)",
+  "seeds": {
+   "7": "+4.1%",
+   "8": "+4.8%",
+   "9": "-22.7%",
+   "101": "-8.0%"
+  }
+ },
+ "sampling": {
+  "at_record_utc": "2026-09-03T04:25:00Z",
+  "publicScore": 576.2,
+  "episodes_listed": 4,
+  "same_day_references": {
+   "v12.2_55965149_current": 603.3,
+   "v12.2_at_round15_sampling": 625.1
+  },
+  "verdict_preliminary": "PASS within Elo noise: -27.1 vs v12.2 current (band ±25-50); v12.2 itself drifted -21.8 over the same window from opponent-pool movement. No collapse signature (broken-wiring class would sit at template baseline ~520-540 with structural red flags).",
+  "pending": "W/L deep sample per protocol (>=15 games); episode listing via EpisodeService shows 4 games at record time"
+ },
+ "verdict": "PRELIMINARY PASS (four-layer retained; multi-module package format validated). Final call after score convergence."
+}

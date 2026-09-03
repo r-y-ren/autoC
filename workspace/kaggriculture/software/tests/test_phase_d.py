@@ -208,3 +208,41 @@ def test_vehicle1_no_stock_no_order():
             obs, obs["farms"][0], obs["private"], d, prices)
     assert out == []                          # nothing to dump
     _reset()
+
+
+# --------------------------------------------------------------------------
+# scheduler §2.3: dawn feed-precondition BUY event consumed by the market
+# --------------------------------------------------------------------------
+
+def _feed_precond_orders(day_hour, shed_wheat, mouths=5):
+    """_market_orders with a registered feed_precondition mission event."""
+    _reset()
+    rows = _rows10()
+    for i in range(mouths):
+        rows[3 + i][3] = _tile_animal("COW", 2)
+    farm = _farm(rows, money=2000.0)
+    private = {"shed": {"WHEAT": shed_wheat}, "inventories": [{}]}
+    obs = {"player": 0, "day": 8, "hour": day_hour,
+           "farms": [farm, _farm(_rows10())],
+           "market": {"prices": {"WHEAT": 25}, "inventory": {}},
+           "town": {"unlocked_shops": []},
+           "private": private}
+    main._MISSION_SHADOW[0] = {
+        "day": 8, "hour": 0,
+        "mission": {"events": [
+            {"h": 0, "op": "BUY_PRODUCT", "item": "WHEAT", "qty": 4,
+             "priority": 95, "why": "feed_precondition"}]}}
+    return main._market_orders(obs, farm, private, 8, mouths, mouths)
+
+
+def test_feed_precondition_event_buys_the_deficit_at_dawn():
+    orders = _feed_precond_orders(0, shed_wheat=1)
+    buys = [o for o in orders if o[:2] == ["BUY_PRODUCT", "WHEAT"]]
+    assert buys and buys[0][2] >= 1    # the obligation lands at h0
+
+
+def test_feed_precondition_is_idempotent_once_wheat_lands():
+    # after the buy landed (system wheat covers the dawn deficit) the same
+    # cached event must NOT double-buy at h1/h2
+    orders = _feed_precond_orders(1, shed_wheat=10)
+    assert not [o for o in orders if o[:2] == ["BUY_PRODUCT", "WHEAT"]]

@@ -89,9 +89,13 @@ def score(samples):
         "pass": bool(normal) and len(exact) / len(normal) >= 0.95,
     }
     # turning points per (seat, item) with a meaningful true series
+    # series must be PER REPLAY: keying by (seat, item) alone merged 60
+    # episodes' same-day rows into one mashed series and the argmax
+    # turning day compared jumps across unrelated games (the W1 verdict's
+    # absurd 38-220 "day" lags were this metric bug, not observer error)
     series = {}
     for s in samples:
-        key = (s["seat"], s["item"])
+        key = (s.get("replay", ""), s["seat"], s["item"])
         series.setdefault(key, []).append(s)
     lags = []
     mag_errs = []
@@ -132,7 +136,7 @@ def score(samples):
             "overall_pass": bool(gate1["pass"] and gate2["pass"])}
 
 
-def run_replay(module, data, samples):
+def run_replay(module, data, samples, replay_id=""):
     module._OPP_OBSERVER.clear()
     module._MARKET_MEM.clear()
     last_day = {0: -1, 1: -1}
@@ -155,7 +159,8 @@ def run_replay(module, data, samples):
                 flow = st.get("flow_hist", {}).get(item) or [None]
                 price = (prev_obs[seat] or {}).get("_price", {}).get(item)
                 samples.append({
-                    "seat": seat, "day": last_day[seat], "item": item,
+                    "replay": replay_id, "seat": seat,
+                    "day": last_day[seat], "item": item,
                     "ch0_net": flow[-1] if flow[-1] is not None else None,
                     "submitted_net": opp_orders_today[seat].get(item, 0),
                     "had_buys": item in opp_buys_today[seat],
@@ -201,7 +206,7 @@ def main():
             continue
         if not data.get("steps"):
             continue
-        run_replay(module, data, samples)
+        run_replay(module, data, samples, replay_id=Path(path).stem)
         used += 1
     verdict = score(samples)
     payload = {"schema": "observer-v0/1.0", "replays": used,
