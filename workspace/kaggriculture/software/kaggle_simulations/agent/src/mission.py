@@ -654,20 +654,37 @@ def _build_mission(obs, farm, private, day, plan, tasks, planned_sell=None):
 
 
 def _mission_shadow_update(player, day, hour, obs, farm, private, plan,
-                           tasks):
+                           tasks, planned_sell=None):
     """Dawn bypass: build the mission once per player-day (fail-open).
 
-    Consumed by telemetry and the M3 harness only; never touches the
-    decision path.  Clock rollback = new episode -> rebuild.
+    Consumed by telemetry, the M3 harness and (via eod events) the market
+    layer.  Clock rollback = new episode -> rebuild.
     """
     st = _MISSION_SHADOW.get(player)
     if st is not None and st.get("day") == day \
             and hour >= st.get("hour", 0):
         return st.get("mission")
     try:
-        mission = _build_mission(obs, farm, private, day, plan, tasks)
+        mission = _build_mission(obs, farm, private, day, plan, tasks,
+                                 planned_sell=planned_sell)
     except Exception:
         mission = None
+    _MISSION_SHADOW[player] = {"day": day, "hour": hour, "mission": mission}
+    return mission
+
+
+def _mission_refresh_planned_sell(player, day, hour, obs, farm, private,
+                                  plan, tasks, planned_sell):
+    """§2.4 closure, second pass (aggressive wave B 2026-09-04): once the
+    MK-2 dawn sell plan exists, rebuild today's mission with the REAL
+    planned sell volume so eod_projected / overflow / eod_budget SELL
+    events are exact instead of the conservative planned_sell=0 dawn
+    snapshot.  Fails open to the previously cached mission."""
+    try:
+        mission = _build_mission(obs, farm, private, day, plan, tasks,
+                                 planned_sell=planned_sell)
+    except Exception:
+        return (_MISSION_SHADOW.get(player) or {}).get("mission")
     _MISSION_SHADOW[player] = {"day": day, "hour": hour, "mission": mission}
     return mission
 

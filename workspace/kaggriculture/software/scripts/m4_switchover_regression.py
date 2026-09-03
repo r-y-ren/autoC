@@ -44,7 +44,7 @@ STATE_NAMES = ("_MISSION_SHADOW", "_ROUTE_STATE", "_STATE", "_TARGETS",
                "_PLAN_MEM", "_STAGE_MEM", "_MARKET_MEM", "_OPP_OBSERVER",
                "_INTERFERENCE_MEM", "_SELL_PLAN_MEM", "_REPLAN_MEM",
                "_D29_SELL_QUEUE", "_INTERFERENCE_LOG",
-               "_SELL_BATCH_EMITTED", "_ASSIGN_MEM")
+               "_SELL_BATCH_EMITTED", "_ASSIGN_MEM", "_EXEC_DONE_MEM")
 
 
 def load_module():

@@ -102,8 +102,21 @@ def agent(obs):
         # MK-2/3 (market §2, LIVE per the same ruling): the dawn sell plan
         # drives the day's sell batches at their planned hours; the gate
         # stack remains as a bounded overlay on top.
-        _sell_plan_shadow_update(player, day, hour, obs, farm,
-                                 market_private, plan)
+        sell_plan = _sell_plan_shadow_update(player, day, hour, obs, farm,
+                                             market_private, plan)
+        # §2.4 closure (aggressive wave B): the dawn sell plan is now
+        # known -- rebuild today's mission with the real planned sell
+        # volume so the EOD projection and its eod_budget SELL events
+        # are exact, not the conservative planned_sell=0 snapshot.
+        planned_total = 0
+        for _line in ((sell_plan or {}).get("lines") or {}).values():
+            _q = _line.get("qty_today", 0) if isinstance(_line, dict) else 0
+            if isinstance(_q, (int, float)) and _q > 0:
+                planned_total += int(_q)
+        if planned_total > 0:
+            _mission_refresh_planned_sell(player, day, hour, obs, farm,
+                                          market_private, plan, tasks,
+                                          planned_total)
         orders = _market_orders(obs, farm, market_private,
                                 day, animals_to_feed, herd_total, plan=plan)
 

@@ -504,10 +504,12 @@ def _solve_and_execute(obs, farm, private, day, tasks):
 
     Per turn: fresh task table (entry's _build_tasks) -> mission-schema
     enrichment -> current-roster solve at the real hour -> mechanical
-    execution.  An assertion trip (D1 ETA / EOD overflow snapshot) rebuilds
-    once from the live world this same turn (§4 REPLAN); the next turn
-    re-solves from scratch anyway (current-roster discipline), so the
-    rebuild is bounded and cannot loop.
+    execution.  An assertion trip (D1 ETA / EOD projection) triggers one
+    bounded ADAPTIVE rebuild this turn (§4 REPLAN): the executor's F4
+    finished-stop report (_EXEC_DONE_MEM) is excluded from the task
+    table and the route re-planned for the remaining work; the next
+    turn re-solves from scratch anyway (current-roster discipline), so
+    the rebuild cannot loop.
     """
     hour = _get(obs, "hour", 0)
     player = _get(obs, "player", 0)
@@ -523,14 +525,19 @@ def _solve_and_execute(obs, farm, private, day, tasks):
                                       solved.get("routes"))
     replan_repeat = False
     if replan:
-        # §4 REPLAN: one bounded rebuild this turn from the same live world.
-        # The first _execute_routes only returns actions -- farm/private are
-        # unchanged -- so the re-solve is expected to be identical and the
-        # executor's idempotent gate suppresses the repeat trip.  A second
-        # surviving trip is a persistent assertion (F7 bug signal): surfaced
-        # as replan_repeat in the trace, never looped on; the effective
-        # remedy is the next turn's current-roster re-solve.
-        solved = _solve_routes(farm, private, day, etasks, planned_hands=0,
+        # §4 REPLAN: one bounded rebuild this turn.  Since the aggressive
+        # wave B it is genuinely adaptive: the executor reports the stops
+        # it found already finished (F4) during the pass, and the rebuild
+        # excludes those task keys -- the route is re-planned for the
+        # REMAINING work instead of being rebuilt identical.  A second
+        # surviving trip is still a persistent assertion (F7 bug
+        # signal): surfaced as replan_repeat, never looped on.
+        done = _EXEC_DONE_MEM.get(player) or {}
+        done_keys = set(done.get("keys") or []) \
+            if done.get("day") == day else set()
+        etasks2 = [t for t in etasks if t.get("key") not in done_keys] \
+            if done_keys else etasks
+        solved = _solve_routes(farm, private, day, etasks2, planned_hands=0,
                                hour=hour, unit_pos=units,
                                sticky=st["assign"])
         actions, replan2 = _execute_routes(obs, farm, private, day,

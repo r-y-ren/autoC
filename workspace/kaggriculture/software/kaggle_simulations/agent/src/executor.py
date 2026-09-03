@@ -6,12 +6,13 @@
 #   站；F8 缺 need 物品的站跳过——无麦 FEED 是静默 no-op）；
 # 断言（只读，§5 proved-or-flagged）：
 #   * D1 站点 ETA ≤ deadline（EXECUTOR_D1_ASSERT）；
-#   * EOD 当前快照 Σ(棚仓+随身) ≤ SHED_CAPACITY（F6：随身日终自动归还、
-#     超容销毁——非前瞻投影：只读现时存量，不含路线剩余入仓与计划卖出；
-#     触发=溢出已存在，修正依赖下回合现役重解，EXECUTOR_EOD_ASSERT）；
-# 断言失败 → REPLAN：派发器当回合以现世界重建一次（同输入重建，幂等闸
-#   抑制重复；每回合现役重解使重建有界不循环），_replan_gate 幂等闸保留
-#   为护栏（F7 下正确实现永不触发）。
+#   * EOD 真投影 Σ(棚仓+随身+路线剩余 HARVEST 入仓−当日计划卖出)
+#     ≤ SHED_CAPACITY（F6：随身日终自动归还、超容销毁——2026-09-04
+#     激进波 B 起为完整前瞻投影；黎明当回合卖计划未建时按 0 卖出计，
+#     误触发由幂等闸抑制、下回合自愈，EXECUTOR_EOD_ASSERT）；
+# 断言失败 → REPLAN：派发器当回合做一次有界自适应重建（执行器上报 F4
+#   已完成站集合，重建排除后按剩余工作重排路线；幂等闸 _replan_gate
+#   保留为护栏，F7 下正确实现永不触发）。
 # d29 内联清算（F10，_execute_routes is_last_day 分支）：早收→DROP（查
 #   room）→SELL 随身清零；卖出单进 _D29_SELL_QUEUE 供市场层接线。
 # M4/M5 沿革：2026-09-02 Phase-B 切换 → M5 审计发现接线缺陷（结果字典当
@@ -21,6 +22,7 @@
 #   牲畜囤在棚仓永不安置）。
 
 _REPLAN_MEM = {}
+_EXEC_DONE_MEM = {}
 _D29_SELL_QUEUE = {}
 
 
@@ -98,13 +100,47 @@ def _stop_done(tile, act, day):
     return False
 
 
+def _remaining_harvest_inflow(routes, tile_map, day):
+    """Route-remaining HARVEST inflow for the EOD projection (§4): every
+    not-yet-finished harvest stop on today's routes counts its standing
+    tile yield as projected end-of-day shed inflow."""
+    inflow = 0
+    for r in routes or []:
+        for s in (r.get("tasks") or r.get("stops") or []):
+            act = s.get("act") or [None]
+            if not act or act[0] != "HARVEST":
+                continue
+            tile = tile_map.get((s.get("x"), s.get("y")))
+            if tile is None or _stop_done(tile, s.get("act"), day):
+                continue
+            y = _get(tile, "yield_units", 0)
+            if isinstance(y, (int, float)) and y > 0:
+                inflow += int(y)
+    return inflow
+
+
+def _planned_sell_today(player, day):
+    """Today's planned sell volume from the MK-2 dawn plan (0 when the
+    plan is absent or stale -- the dawn turn runs before it is built)."""
+    plan = sell_plan_shadow(player) or {}
+    if plan.get("day") != day:
+        return 0
+    total = 0
+    for line in (plan.get("lines") or {}).values():
+        q = line.get("qty_today", 0) if isinstance(line, dict) else 0
+        if isinstance(q, (int, float)) and q > 0:
+            total += int(q)
+    return total
+
+
 def _execute_routes(obs, farm, private, day, routes):
     """L4 mechanical executor (scheduler §4 full spec; enabled at M4).
 
-    Walk-along-route semantics with F4 skip, D1-ETA and EOD-overflow-
-    snapshot assertions, the idempotent REPLAN gate and the inline d29
-    DROP->SELL liquidation.  Returns (actions, replan); the dispatcher
-    (_solve_and_execute) consumes this directly.
+    Walk-along-route semantics with F4 skip, D1-ETA and EOD-projection
+    assertions, the idempotent REPLAN gate and the inline d29 DROP->SELL
+    liquidation.  Finished stops (F4) are reported through _EXEC_DONE_MEM
+    for the dispatcher's adaptive rebuild.  Returns (actions, replan);
+    the dispatcher (_solve_and_execute) consumes this directly.
     """
     tiles = _get(farm, "tiles", []) or []
     board = len(tiles)
@@ -116,6 +152,7 @@ def _execute_routes(obs, farm, private, day, routes):
     tile_map = _executor_tiles(farm)
     inventories = _get(private, "inventories", []) or []
     actions = []
+    done_keys = []
     replan = False
     player = _get(obs, "player", 0)
     is_last_day = day >= SEASON_DAYS - 1
@@ -175,6 +212,8 @@ def _execute_routes(obs, farm, private, day, routes):
                 idx += 1
                 continue
             if _stop_done(tile_map.get((tx, ty)), target.get("act"), day):
+                if target.get("key") is not None:
+                    done_keys.append(target.get("key"))
                 idx += 1
             else:
                 break
@@ -205,13 +244,12 @@ def _execute_routes(obs, farm, private, day, routes):
                     replan = True
                     break
                 ex, ey = pending["x"], pending["y"]
-    # assertion: current-state overflow snapshot (F6 auto-return destroys
-    # overflow).  Deliberately NOT a forward projection: it sums the shed
-    # and inventories as they stand now, without future HARVEST/PICKUP
-    # inflow or planned sells.  A trip means overflow already exists; the
-    # §4 REPLAN rebuild consumes identical inputs (see _solve_and_execute),
-    # so the effective remedy is the next turn's current-roster re-solve --
-    # the flag itself is the F7 bug signal.
+    # assertion: EOD budget projection (F6 auto-return destroys overflow).
+    # True forward projection since the aggressive wave B (2026-09-04):
+    # current shed + carried + route-remaining HARVEST inflow - today's
+    # planned sell lines.  On the dawn turn the sell plan does not exist
+    # yet, so the sell term is 0 there; a premature trip is suppressed by
+    # the idempotent gate and self-heals on the next turn.
     if EXECUTOR_EOD_ASSERT:
         shed = _get(private, "shed", {}) or {}
         inventories = _get(private, "inventories", []) or []
@@ -221,8 +259,11 @@ def _execute_routes(obs, farm, private, day, routes):
             if inv:
                 eod_total += sum(int(v) for v in inv.values()
                                  if isinstance(v, (int, float)) and v > 0)
+        eod_total += _remaining_harvest_inflow(routes, tile_map, day)
+        eod_total -= _planned_sell_today(player, day)
         if eod_total > SHED_CAPACITY:
             replan = True
+    _EXEC_DONE_MEM[player] = {"day": day, "keys": done_keys}
     if replan and not _replan_gate(player, day, routes):
         replan = False        # idempotent gate: same plan -> stop rebuilding
     return actions, replan

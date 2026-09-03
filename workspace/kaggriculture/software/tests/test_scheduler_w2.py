@@ -520,6 +520,74 @@ def test_live_dispatch_flags_repeat_replan(monkeypatch):
     assert trace["replan_repeat"] is True
 
 
+def test_mission_refresh_planned_sell_overwrites_cache():
+    # §2.4 closure, second pass: after the dawn sell plan exists, the
+    # refresh rebuilds the cached mission with the real planned volume.
+    main._MISSION_SHADOW.clear()
+    rows = _rows10()
+    farm = _farm(rows)
+    obs = {"player": 0, "day": 4, "hour": 0}
+    tasks = [_task(50, 2, 2, ["WATER"], ("water", 2, 2))]
+    main._mission_shadow_update(0, 4, 0, obs, farm, {}, None, tasks)
+    assert main.mission_shadow(0)["eod"]["planned_sell"] == 0
+    refreshed = main._mission_refresh_planned_sell(0, 4, 0, obs, farm, {},
+                                                   None, tasks, 10)
+    assert refreshed["eod"]["planned_sell"] == 10
+    assert main.mission_shadow(0)["eod"]["planned_sell"] == 10
+    main._MISSION_SHADOW.clear()
+
+
+def test_live_dispatch_planned_sell_relaxes_eod_trip(monkeypatch):
+    # the EOD projection subtracts today's planned sells (§2.4 closure):
+    # the same 104-unit state trips with no plan and passes once the
+    # MK-2 plan books 8 units of sells for today.
+    main._SCHEDULER_TRACE.clear()
+    main._ASSIGN_MEM.clear()
+    main._REPLAN_MEM.clear()
+    rows = _rows10()
+    rows[2][2] = _tile_plant("WHEAT", 0, watered=False)
+    farm = _farm(rows, farmer=(2, 2))
+    task = _task(50, 2, 2, ["WATER"], ("water", 2, 2))
+    task["tier"] = "D4"
+    private = {"shed": {"WHEAT": 96}, "inventories": [{"MILK": 8}]}
+    main._solve_and_execute({"hour": 0, "player": 0}, farm, private, 5,
+                            [task])
+    assert main.scheduler_trace()[0]["replanned"] is True
+    main._SCHEDULER_TRACE.clear()
+    main._REPLAN_MEM.clear()
+    monkeypatch.setattr(main, "sell_plan_shadow",
+                        lambda p: {"day": 5,
+                                   "lines": {"MILK": {"qty_today": 8}}})
+    main._solve_and_execute({"hour": 0, "player": 0}, farm, private, 5,
+                            [task])
+    assert main.scheduler_trace()[0]["replanned"] is False
+
+
+def test_live_dispatch_replan_excludes_finished_stops():
+    # §4 REPLAN is genuinely adaptive since wave B: the F4-finished water
+    # stop is excluded from the rebuild, so the rebuilt route carries only
+    # the remaining care stop (visible through the assign memory).
+    main._SCHEDULER_TRACE.clear()
+    main._ASSIGN_MEM.clear()
+    main._REPLAN_MEM.clear()
+    main._EXEC_DONE_MEM.clear()
+    rows = _rows10()
+    rows[2][2] = _tile_plant("WHEAT", 0, watered=True)   # already watered
+    rows[2][4] = _tile_animal("COW", 1)
+    farm = _farm(rows, farmer=(2, 2))
+    w = _task(60, 2, 2, ["WATER"], ("water", 2, 2))
+    w["tier"] = "D4"
+    c = _task(50, 2, 4, ["CARE"], ("care", 2, 4))
+    c["tier"] = "D4"
+    private = {"shed": {"WHEAT": 96}, "inventories": [{"MILK": 8}]}
+    main._solve_and_execute({"hour": 0, "player": 0}, farm, private, 5,
+                            [w, c])
+    trace = main.scheduler_trace()[0]
+    assert trace["replanned"] is True
+    assign = main._ASSIGN_MEM[0]["assign"]
+    assert assign.get(0) == ("care", 2, 4)
+
+
 def test_executor_checks_later_d1_cumulative_eta():
     rows = _rows10()
     farm = _farm(rows, farmer=(0, 0))
