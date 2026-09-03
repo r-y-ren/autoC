@@ -153,12 +153,112 @@ def test_floor_sells_dual_ledger_excluded_from_ch0():
                           _prices(WHEAT=1))
     st = main._OPP_OBSERVER[0]
     assert st["sold_floor"].get("WHEAT") == 10
+    assert st["requested_floor_sell"].get("WHEAT") == 10
     assert st["sold_today"].get("WHEAT", 0) == 0
+    assert st["fill_known"] is False
     # inventory moves only by the center draw (1) -> Ch0 sees NO opp flow
     main._opp_observer_update(_obs(1, _inv(WHEAT=10000 - 1),
                                    _prices(WHEAT=1), []), {})
     flow = main._market_flow(0, 1, _prices(WHEAT=1))
     assert flow.get("WHEAT") == 0.0
+    snap = main.observer_snapshot(0)
+    assert snap["order_basis"] == "requested"
+    assert snap["account_window"]["had_floor_sell"] is True
+    assert snap["ch0_components"]["WHEAT"]["order_basis"] == "requested"
+    _reset()
+
+
+def test_reconstructed_fills_override_requested_order_quantities():
+    _reset()
+    main._opp_observer_update(_obs(0, _inv(), _prices(), []), {})
+    main._opp_note_orders(0, 0, 23, [["SELL", "WHEAT", 5]], _prices())
+    main._opp_note_fills(0, 0, 23, [{
+        "type": "SELL", "item": "WHEAT", "requested": 5,
+        "filled": 2, "abort": "no_stock"}])
+    # Inventory: our actual fill +2, opponent +4, center -1 => +5.
+    main._opp_observer_update(_obs(1, _inv(WHEAT=10005), _prices(), []), {})
+    snap = main.observer_snapshot(0)
+    assert snap["order_basis"] == "filled"
+    assert snap["ch0_components"]["WHEAT"] == {
+        "inventory_delta": 5, "our_sell": 2, "our_buy": 0,
+        "town_absorb": 1, "opponent_net": 4.0,
+        "order_basis": "filled"}
+    assert snap["account_window"]["order_basis"] == "filled"
+    assert snap["fill_diagnostics"][0]["abort"] == "no_stock"
+    _reset()
+
+
+def test_ch1_residual_uses_raw_inventory_and_degrades_after_two_days():
+    _reset()
+    main._opp_observer_update(_obs(0, _inv(), _prices(MILK=160), []), {})
+    st = main._OPP_OBSERVER[0]
+    st["conf"]["MILK"] = 1.0
+    # Flat inventory with the same price has zero residual even though town
+    # absorption makes opponent_net positive.
+    main._opp_observer_update(_obs(1, _inv(), _prices(MILK=160), []), {})
+    assert main.observer_snapshot(0)["last_resid"]["MILK"] == 0.0
+
+    # Force two qualified price/inventory mismatches; confidence decays only
+    # after persistence, not from one noisy day.
+    st = main._OPP_OBSERVER[0]
+    st["prices_prev"]["MILK"] = 160
+    main._opp_observer_update(_obs(2, _inv(MILK=10010),
+                                   _prices(MILK=160), []), {})
+    assert main._OPP_OBSERVER[0]["conf"]["MILK"] == 1.0
+    main._opp_observer_update(_obs(3, _inv(MILK=10020),
+                                   _prices(MILK=160), []), {})
+    snap = main.observer_snapshot(0)
+    assert snap["conf"]["MILK"] == 0.75
+    assert snap["confidence_reasons"]["MILK"] == "ch1_residual"
+    _reset()
+
+
+def test_harvest_events_reject_decay_and_replacement():
+    wheat = {
+        "item": "WHEAT", "identity": ("PLANT", "WHEAT", 0),
+        "kind": "PLANT", "crop": "WHEAT", "yield": 3,
+        "watered": True, "unwatered": 0, "max_lifespan_step": 10}
+    decayed = {**wheat, "yield": 2}
+    harvested, unknown = main._opp_harvest_events(
+        {(0, 0): wheat}, {(0, 0): decayed}, {}, step=10)
+    assert harvested["WHEAT"] == 0
+    assert unknown["WHEAT"] == 1
+
+    replacement = {**wheat,
+                   "identity": ("PLANT", "WHEAT", 2), "yield": 0}
+    harvested, unknown = main._opp_harvest_events(
+        {(0, 0): wheat}, {(0, 0): replacement}, {}, step=5)
+    assert harvested["WHEAT"] == 0
+    assert unknown["WHEAT"] == 3
+
+
+def test_same_day_public_snapshots_feed_next_day_event_ledger():
+    _reset()
+    obs0 = _obs(0, _inv(), _prices(), [])
+    sheep = {"kind": "PASTURE", "animal": "SHEEP", "placed_day": -5,
+             "yield_units": 2, "fed_today": False, "cared_today": False,
+             "pending_care_bonus": 2}
+    obs0["farms"][1]["tiles"][0][0] = sheep
+    main._opp_observer_update(obs0, {})
+
+    # The observer is called every turn: the last public snapshot sees care
+    # and feed, so the EOD estimate includes base + pending care bonus.
+    obs23 = _obs(0, _inv(), _prices(), [])
+    obs23["hour"] = 23
+    obs23["farms"][1]["tiles"][0][0] = dict(
+        sheep, fed_today=True, cared_today=True)
+    main._opp_observer_update(obs23, {})
+    assert main._OPP_OBSERVER[0]["_opp_fed"] == 1
+    assert main._OPP_OBSERVER[0]["_opp_prod"]["WOOL"] == 3
+
+    obs1 = _obs(1, _inv(WHEAT=9999), _prices(), [])
+    obs1["farms"][1]["tiles"][0][0] = dict(
+        sheep, yield_units=5, pending_care_bonus=1)
+    main._opp_observer_update(obs1, {})
+    event = main.observer_snapshot(0)["event_ledger"]
+    assert event["WOOL"]["production_est"] == 3
+    assert event["WOOL"]["harvest_est"] == 0
+    assert event["WHEAT"]["fed_est"] == 1
     _reset()
 
 
@@ -226,6 +326,90 @@ def test_snapshot_and_reset_api():
     _reset()
 
 
+def test_est_getters_are_player_scoped():
+    _reset()
+    left = main._opp_observer_state(0, 2, 0)
+    right = main._opp_observer_state(1, 2, 0)
+    left["held"] = {"MILK": 11}
+    left["conf"] = {"MILK": 0.6}
+    left["flow_hist"] = {"MILK": [2, 4]}
+    left["prod_horizon"] = {"MILK": [3, 0]}
+    right["held"] = {"MILK": 99}
+    right["conf"] = {"MILK": 0.2}
+    right["flow_hist"] = {"MILK": [8, 10]}
+    right["prod_horizon"] = {"MILK": [7, 0]}
+
+    assert main.est_opp_held("MILK", player=0) == 11
+    assert main.est_opp_held("MILK", player=1) == 99
+    assert main.est_opp_conf("MILK", player=0) == 0.4
+    assert main.est_opp_conf("MILK", player=1) == 0.2
+    assert main.est_opp_net("MILK", days=2, player=0) == 3
+    assert main.est_opp_net("MILK", days=2, player=1) == 9
+    assert main.est_opp_supply_horizon("MILK", 2, player=0) == 14
+    assert main.est_opp_supply_horizon("MILK", 2, player=1) == 106
+
+    # Ambiguous legacy reads fail closed instead of selecting either seat.
+    assert main.est_opp_held("MILK") is None
+    assert main.est_opp_conf("MILK") == 0.0
+    assert main.est_opp_net("MILK") is None
+    _reset()
+
+
+def test_reset_and_clock_back_clear_only_the_players_episode():
+    _reset()
+    main._opp_observer_state(0, 3, 12)["held"] = {"MILK": 11}
+    main._opp_observer_state(1, 3, 12)["held"] = {"MILK": 99}
+    main._MARKET_MEM[0] = {"day": 3, "source": "ch0",
+                           "prices": _prices(), "flow": {"MILK": 11}}
+    main._MARKET_MEM[1] = {"day": 3, "source": "ch0",
+                           "prices": _prices(), "flow": {"MILK": 99}}
+
+    main.reset_observer(0)
+    assert 0 not in main._OPP_OBSERVER and 0 not in main._MARKET_MEM
+    assert main.est_opp_held("MILK", player=1) == 99
+    assert main._MARKET_MEM[1]["flow"]["MILK"] == 99
+
+    main._opp_observer_state(0, 3, 12)
+    main._MARKET_MEM[0] = {"day": 3, "source": "ch0",
+                           "prices": _prices(), "flow": {"MILK": 11}}
+    main._opp_observer_state(0, 0, 0)
+    assert 0 not in main._MARKET_MEM
+    assert main._MARKET_MEM[1]["flow"]["MILK"] == 99
+
+    main.reset_observer()
+    assert main._OPP_OBSERVER == {}
+    assert main._MARKET_MEM == {}
+    _reset()
+
+
+def test_disabled_observer_never_reuses_cached_ch0():
+    _reset()
+    main._MARKET_MEM[0] = {"day": 4, "source": "ch0",
+                           "prices": _prices(), "flow": {"MILK": 77}}
+    main.OBSERVER_ENABLED = False
+    try:
+        assert main._market_flow(0, 4, _prices()) == {}
+        assert main._MARKET_MEM[0].get("source") != "ch0"
+    finally:
+        main.OBSERVER_ENABLED = True
+        _reset()
+
+
+def test_p4_sell_plan_reads_the_current_players_estimate():
+    _reset()
+    left = main._opp_observer_state(0, 25, 0)
+    right = main._opp_observer_state(1, 25, 0)
+    left["held"] = {"MELON": 0}
+    left["conf"] = {"MELON": 1.0}
+    right["held"] = {"MELON": main.P4_HEAVY_HELD + 1}
+    right["conf"] = {"MELON": 1.0}
+    obs = _obs(25, _inv(), _prices(MELON=200), [], player=1)
+    plan = main._sell_plan_dawn(
+        obs, obs["farms"][1], {"shed": {"MELON": 6}}, 25, plan={})
+    assert plan["lines"]["MELON"]["verdict"] == "clear"
+    _reset()
+
+
 # --------------------------------------------------------------------------
 # validator pure scoring
 # --------------------------------------------------------------------------
@@ -245,14 +429,20 @@ def test_v0_score_gates_math():
     # 19 exact + 1 off (95% exactly), buys/floor/warm-up excluded
     for day in range(2, 21):
         samples.append({"seat": 0, "day": day, "item": "MILK",
-                        "ch0_net": 4, "submitted_net": 4,
+                        "ch0_net": 4, "requested_net": 4,
+                        "submitted_net": 4, "filled_net": None,
                         "had_buys": False, "price": 160,
                         "est_held": 4, "true_held": 4})
     samples.append({"seat": 0, "day": 22, "item": "MILK", "ch0_net": 5,
-                    "submitted_net": 4, "had_buys": False, "price": 160,
+                    "requested_net": 4, "submitted_net": 4,
+                    "filled_net": None, "had_buys": False, "price": 160,
                     "est_held": 5, "true_held": 5})
     verdict = ov0.score(samples)
-    assert verdict["gate1_ch0_exact"]["share"] == 0.95
-    assert verdict["gate1_ch0_exact"]["pass"] is True
+    assert verdict["gate1_ch0_exact"]["share"] is None
+    assert verdict["gate1_ch0_exact"]["basis"] == "filled"
+    assert verdict["gate1_ch0_exact"]["fill_unavailable"] is True
+    assert verdict["gate1_requested_exact"]["share"] == 0.95
+    assert verdict["gate1_requested_exact"]["pass"] is True
+    assert verdict["gate1_filled_exact"]["normal_samples"] == 0
     assert verdict["gate2_turning"]["n_series"] == 1
-    assert verdict["overall_pass"] is True
+    assert verdict["overall_pass"] is False

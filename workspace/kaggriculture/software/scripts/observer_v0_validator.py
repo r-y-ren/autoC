@@ -6,10 +6,10 @@ per-seat observation fields, then scores the estimates against the replay
 ground truth (each seat's private.shed/inventories -- readable OFFLINE
 only, never inside the agent):
 
-  Gate 1  Ch0 integer accounting: share of (seat, day, item) samples where
-          the Ch0-exact opponent net flow equals the opponent's submitted
-          net orders, on normal-price days -- must be >= 95% (calibrates
-          the sampling hour; closes E4).
+  Gate 1  Ch0 integer accounting: report both requested and reconstructed
+          executed net orders.  The hard gate uses executed quantities only
+          when the shadow transition is fully attributable; requested is a
+          diagnostic comparison, not an execution truth.
   Gate 2  turning points: |est turning day - true turning day| <= 1 day
           (median), and magnitude error at turning days <= 30%.
   Gate 3  report: per-item final/MAE/max held error, floor-price segment
@@ -28,6 +28,10 @@ import sys
 from pathlib import Path
 
 SOFTWARE = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(SOFTWARE))
+
+from kgenv.replay_profile import _s_compare, _s_config, _s_snapshot, _s_step
+
 AGENT_MAIN = SOFTWARE / "kaggle_simulations" / "agent" / "main.py"
 
 
@@ -63,31 +67,31 @@ def true_held(private, item):
 
 
 def score(samples):
-    """Pure aggregation (unit-tested).  samples: list of dicts with keys
-    {seat, day, item, ch0_net, submitted_net, price, est_held, true_held}.
-
-    Gate-1 scope note: samples whose day saw ANY submitted BUY of the item
-    are excluded -- the engine may reject/partially fill BUY orders, so
-    submitted != the executed flow that Ch0 actually measured (executed
-    quantities are not offline-recoverable); that noise is not an
-    accounting error.  Days 0-1 are warm-up (first-window center-draw
-    phase, E4) and also excluded.  Flat est series (max < 1) never reach
-    gate 2.
-    """
+    """Aggregate Ch0 accounting and opponent-held accuracy."""
     normal = [s for s in samples if s["price"] is not None
               and s["price"] > 1 and s["day"] > 1
               and s["item"] != "FERTILIZER"
               and not s.get("had_buys")]
     floor = [s for s in samples if s["price"] is not None
              and s["price"] <= 1]
-    exact = [s for s in normal if s["ch0_net"] is not None
-             and s["ch0_net"] == s["submitted_net"]]
-    gate1 = {
-        "normal_samples": len(normal),
-        "exact": len(exact),
-        "share": round(len(exact) / len(normal), 4) if normal else None,
-        "pass": bool(normal) and len(exact) / len(normal) >= 0.95,
-    }
+
+    def exact_gate(field):
+        eligible = [s for s in normal if s.get(field) is not None]
+        exact = [s for s in eligible if s["ch0_net"] is not None
+                 and s["ch0_net"] == s[field]]
+        return {
+            "normal_samples": len(eligible),
+            "exact": len(exact),
+            "share": round(len(exact) / len(eligible), 4)
+            if eligible else None,
+            "pass": bool(eligible) and len(exact) / len(eligible) >= 0.95,
+        }
+
+    gate1_requested = exact_gate("requested_net")
+    gate1_filled = exact_gate("filled_net")
+    gate1 = dict(gate1_filled)
+    gate1["basis"] = "filled"
+    gate1["fill_unavailable"] = gate1_filled["normal_samples"] == 0
     # turning points per (seat, item) with a meaningful true series
     # series must be PER REPLAY: keying by (seat, item) alone merged 60
     # episodes' same-day rows into one mashed series and the argmax
@@ -131,60 +135,133 @@ def score(samples):
                          if v},
         "floor_segment_samples": len(floor),
     }
-    return {"gate1_ch0_exact": gate1, "gate2_turning": gate2,
+    return {"gate1_ch0_exact": gate1,
+            "gate1_requested_exact": gate1_requested,
+            "gate1_filled_exact": gate1_filled,
+            "gate2_turning": gate2,
             "gate3_held_report": gate3,
             "overall_pass": bool(gate1["pass"] and gate2["pass"])}
 
 
 def run_replay(module, data, samples, replay_id=""):
-    module._OPP_OBSERVER.clear()
-    module._MARKET_MEM.clear()
-    last_day = {0: -1, 1: -1}
-    opp_orders_today = {0: {}, 1: {}}       # seat -> item -> net units
-    opp_buys_today = {0: set(), 1: set()}   # seat -> items bought today
-    prev_obs = {0: None, 1: None}
-    for seat, obs, orders in replay_stream(data):
-        day = obs.get("day", 0)
-        prices = (obs.get("market", {}) or {}).get("prices", {}) or {}
-        day_changed = day != last_day[seat] and last_day[seat] >= 0
-        # feed the observer FIRST (legal fields only; self-deduped): at a
-        # day boundary its account covers YESTERDAY's window, so the flow
-        # and held it just produced pair with YESTERDAY's submitted orders
+    """Replay legal observer inputs and validated shadow fill attribution."""
+    module.reset_observer()
+    steps = data.get("steps") or []
+    if not steps:
+        return {"transitions": 0, "attributed": 0, "mismatches": 0}
+
+    cfg = _s_config(data)
+    seed = (data.get("info") or {}).get("seed")
+    if seed is None:
+        seed = (data.get("configuration") or {}).get("seed") or 0
+    turns_per_day = max(1, int(cfg["turnsPerDay"]))
+    initial_obs = [(steps[0][seat] or {}).get("observation") or {}
+                   for seat in (0, 1)]
+    state = _s_snapshot(initial_obs[0],
+                        [obs.get("private") for obs in initial_obs])
+    for seat, obs in enumerate(initial_obs):
         module._opp_observer_update(obs, obs.get("private") or {})
-        if day_changed:
+
+    requested = [{}, {}]
+    filled = [{}, {}]
+    buys = [set(), set()]
+    fill_window_valid = [True, True]
+    prev_obs = initial_obs
+    attributed = mismatches = 0
+
+    def add_net(bucket, seat, order, quantity_key=None):
+        op = order.get("type") if isinstance(order, dict) else order[0]
+        item = order.get("item") if isinstance(order, dict) else order[1]
+        if op not in ("SELL", "BUY_PRODUCT") or item not in module.BASE_PRICE:
+            return
+        if isinstance(order, dict):
+            n = order.get(quantity_key, 0)
+        else:
+            n = order[2] if len(order) >= 3 else 0
+        if not isinstance(n, (int, float)):
+            return
+        sign = 1 if op == "SELL" else -1
+        bucket[seat][item] = bucket[seat].get(item, 0) + sign * n
+        if op == "BUY_PRODUCT":
+            buys[seat].add(item)
+
+    for t in range(1, len(steps)):
+        entries = [steps[t][seat] or {} for seat in (0, 1)]
+        actions = [entry.get("action") or {} for entry in entries]
+        actual_obs = [entry.get("observation") or {} for entry in entries]
+        pre = prev_obs[0]
+        action_day = int(pre.get("day", 0))
+        action_hour = int(pre.get("hour", 0))
+        step_index = int(pre.get("step", t - 1))
+        post_state, attr = _s_step(state, actions, step_index, cfg, seed)
+        actual_privates = [obs.get("private") for obs in actual_obs]
+        diff = _s_compare(post_state, actual_obs[0], actual_privates)
+        fill_valid = not diff
+        if fill_valid:
+            attributed += 1
+            state = post_state
+        else:
+            mismatches += 1
+            state = _s_snapshot(actual_obs[0], actual_privates)
+
+        # steps[t].action was chosen from steps[t-1].observation and belongs
+        # to that transition/window, including the action crossing midnight.
+        for seat in (0, 1):
+            market_orders = list(actions[seat].get("market") or [])
+            module._opp_note_orders(seat, action_day, action_hour,
+                                    market_orders,
+                                    (pre.get("market") or {}).get("prices") or {})
+            opponent_view = 1 - seat
+            for order in market_orders:
+                if isinstance(order, list) and len(order) >= 3:
+                    add_net(requested, opponent_view, order)
+            if fill_valid:
+                fills = list(attr["market"][seat]["orders"])
+                module._opp_note_fills(seat, action_day, action_hour, fills)
+                for order in fills:
+                    add_net(filled, opponent_view, order, "filled")
+            else:
+                fill_window_valid[opponent_view] = False
+                module._opp_note_fills(seat, action_day, action_hour, [],
+                                       complete=False)
+
+        for seat, obs in enumerate(actual_obs):
+            previous_day = int(prev_obs[seat].get("day", 0))
+            day = int(obs.get("day", 0))
+            module._opp_observer_update(obs, obs.get("private") or {})
+            if day == previous_day:
+                continue
+            st = module._OPP_OBSERVER.get(seat) or {}
+            opponent = 1 - seat
+            opponent_private = actual_obs[opponent].get("private") or {}
+            prices = (prev_obs[seat].get("market") or {}).get("prices") or {}
             for item in module.BASE_PRICE:
                 if item not in module.MARKET_PARAMS_EMB:
                     continue
-                st = module._OPP_OBSERVER.get(seat) or {}
-                flow = st.get("flow_hist", {}).get(item) or [None]
-                price = (prev_obs[seat] or {}).get("_price", {}).get(item)
+                hist = st.get("flow_hist", {}).get(item) or [None]
+                req = requested[seat].get(item, 0)
+                fill = filled[seat].get(item, 0) \
+                    if fill_window_valid[seat] and \
+                    st.get("order_basis") == "filled" else None
                 samples.append({
                     "replay": replay_id, "seat": seat,
-                    "day": last_day[seat], "item": item,
-                    "ch0_net": flow[-1] if flow[-1] is not None else None,
-                    "submitted_net": opp_orders_today[seat].get(item, 0),
-                    "had_buys": item in opp_buys_today[seat],
-                    "price": price,
+                    "day": previous_day, "item": item,
+                    "ch0_net": hist[-1] if hist[-1] is not None else None,
+                    "requested_net": req, "submitted_net": req,
+                    "filled_net": fill,
+                    "had_buys": item in buys[seat],
+                    "price": prices.get(item),
                     "est_held": (st.get("held") or {}).get(item, 0),
-                    "true_held": true_held(
-                        (prev_obs[seat] or {}).get("_private"), item),
+                    "true_held": true_held(opponent_private, item),
                 })
-            opp_orders_today[seat] = {}
-            opp_buys_today[seat] = set()
-        module._opp_note_orders(seat, day, obs.get("hour", 0), orders,
-                                prices)
-        opp = 1 - seat
-        for o in orders:
-            if isinstance(o, list) and len(o) >= 3 and o[0] in (
-                    "SELL", "BUY_PRODUCT") and o[1] in module.BASE_PRICE:
-                sign = 1 if o[0] == "SELL" else -1
-                opp_orders_today[opp][o[1]] = \
-                    opp_orders_today[opp].get(o[1], 0) + sign * o[2]
-                if o[0] == "BUY_PRODUCT":
-                    opp_buys_today[opp].add(o[1])
-        prev_obs[seat] = {"_private": obs.get("private"),
-                          "_price": dict(prices)}
-        last_day[seat] = day
+            requested[seat] = {}
+            filled[seat] = {}
+            buys[seat] = set()
+            fill_window_valid[seat] = True
+        prev_obs = actual_obs
+
+    return {"transitions": max(0, len(steps) - 1),
+            "attributed": attributed, "mismatches": mismatches}
 
 
 def main():
@@ -199,6 +276,7 @@ def main():
     module = load_module()
     samples = []
     used = 0
+    attribution = {"transitions": 0, "attributed": 0, "mismatches": 0}
     for path in files:
         try:
             data = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -206,11 +284,14 @@ def main():
             continue
         if not data.get("steps"):
             continue
-        run_replay(module, data, samples, replay_id=Path(path).stem)
+        stats = run_replay(module, data, samples, replay_id=Path(path).stem)
+        for key in attribution:
+            attribution[key] += stats[key]
         used += 1
     verdict = score(samples)
-    payload = {"schema": "observer-v0/1.0", "replays": used,
-               "samples": len(samples), "verdict": verdict}
+    payload = {"schema": "observer-v0/2.0", "replays": used,
+               "samples": len(samples), "attribution": attribution,
+               "verdict": verdict}
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2),

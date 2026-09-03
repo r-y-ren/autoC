@@ -110,12 +110,16 @@ def _market_flow(player, day, prices):
     not accounted the day yet.
     """
     st = _MARKET_MEM.get(player)
+    if not OBSERVER_ENABLED:
+        if st is not None and st.get("source") == "ch0":
+            _MARKET_MEM.pop(player, None)
+            st = None
     if st is not None and st.get("day") == day \
             and st.get("source") == "ch0":
         return dict(st.get("flow", {}))
     if st is None or st.get("day", -1) >= day:
         _MARKET_MEM[player] = {"day": day, "prices": dict(prices),
-                               "flow": (st or {}).get("flow", {})}
+                               "flow": {}}
         return {}
     prev = st.get("prices", {})
     flow = {}
@@ -164,9 +168,14 @@ OBSERVER_ENABLED = True       # OB-3.1 独立开关（False=旁路全静默，fl
 _OPP_OBSERVER = {}
 
 
-def reset_observer():
-    """OB-3.1: detach both seats' observer state (local tooling)."""
-    _OPP_OBSERVER.clear()
+def reset_observer(player=None):
+    """Clear observer and market-flow state for one or all players."""
+    if player is None:
+        _OPP_OBSERVER.clear()
+        _MARKET_MEM.clear()
+    else:
+        _OPP_OBSERVER.pop(player, None)
+        _MARKET_MEM.pop(player, None)
 
 
 def observer_snapshot(player=None):
@@ -182,12 +191,26 @@ def _opp_observer_state(player, day, hour):
     st = _OPP_OBSERVER.get(player)
     if st is None or day < st.get("day", day) or (
             day == st.get("day", day) and hour < st.get("hour", hour)):
+        _MARKET_MEM.pop(player, None)
         st = {"day": day, "hour": hour, "accounted_day": -1,
+              "snapshot_day": None, "snapshot_hour": None,
               "inv_prev": {}, "prices_prev": {}, "money_prev": None,
               "tile_yield_prev": {}, "held": {}, "flow_hist": {},
               "sold_today": {}, "bought_today": {}, "sold_floor": {},
-              "conf": {}, "last_resid": {}, "prod_horizon": {},
-              "quads_prev": None, "animals_prev": None}
+              "requested_sell": {}, "requested_buy": {},
+              "requested_floor_sell": {}, "filled_sell": {},
+              "filled_buy": {}, "filled_floor_sell": {},
+              "fill_known": False, "fill_incomplete": False,
+              "fill_diagnostics": [],
+              "order_basis": "requested", "account_window": {},
+              "ch0_components": {}, "event_ledger": {},
+              "harvest_today": {}, "unknown_loss_today": {},
+              "eod_action_unknown": {},
+              "held_inconsistency": {}, "conf": {}, "last_resid": {},
+              "residual_hist": {}, "residual_streak": {},
+              "confidence_reasons": {},
+              "prod_horizon": {}, "quads_prev": None,
+              "animals_prev": None}
         _OPP_OBSERVER[player] = st
     st["day"] = day
     st["hour"] = hour
@@ -212,14 +235,61 @@ def _opp_note_orders(player, day, hour, orders, prices=None):
             if o[0] == "SELL" and o[1] in BASE_PRICE:
                 price = _get(prices or {}, o[1], 99)
                 if price <= PRICE_FLOOR_EMB:
+                    st.setdefault("requested_floor_sell", {})[o[1]] = \
+                        st.get("requested_floor_sell", {}).get(o[1], 0) + n
                     st.setdefault("sold_floor", {})[o[1]] = \
                         st.get("sold_floor", {}).get(o[1], 0) + n
                 else:
-                    st["sold_today"][o[1]] = \
-                        st["sold_today"].get(o[1], 0) + n
+                    st.setdefault("requested_sell", {})[o[1]] = \
+                        st.get("requested_sell", {}).get(o[1], 0) + n
+                    st.setdefault("sold_today", {})[o[1]] = \
+                        st.get("sold_today", {}).get(o[1], 0) + n
             elif o[0] == "BUY_PRODUCT" and o[1] in BASE_PRICE:
-                st["bought_today"][o[1]] = \
-                    st["bought_today"].get(o[1], 0) + n
+                st.setdefault("requested_buy", {})[o[1]] = \
+                    st.get("requested_buy", {}).get(o[1], 0) + n
+                st.setdefault("bought_today", {})[o[1]] = \
+                    st.get("bought_today", {}).get(o[1], 0) + n
+    except Exception:
+        return
+
+
+def _opp_note_fills(player, day, hour, fills, complete=True):
+    """Offline-only hook for reconstructed engine fills.
+
+    Raw Kaggle observations do not expose fill results.  Replay tooling may
+    inject shadow-attributed fills only after it has validated the transition.
+    """
+    if not OBSERVER_ENABLED:
+        return
+    try:
+        st = _opp_observer_state(player, day, hour)
+        if not complete:
+            st["fill_incomplete"] = True
+            st["fill_known"] = False
+            return
+        for row in fills or []:
+            if not isinstance(row, dict):
+                continue
+            op = row.get("type")
+            item = row.get("item")
+            n = row.get("filled", 0)
+            if item not in BASE_PRICE or not isinstance(n, (int, float)):
+                continue
+            if op == "SELL":
+                first_price = row.get("first_price")
+                is_floor = row.get("floor") or (
+                    isinstance(first_price, (int, float)) and
+                    first_price <= PRICE_FLOOR_EMB)
+                key = "filled_floor_sell" if is_floor else "filled_sell"
+                st[key][item] = st[key].get(item, 0) + n
+            elif op == "BUY_PRODUCT":
+                st["filled_buy"][item] = st["filled_buy"].get(item, 0) + n
+            if row.get("abort") or n != row.get("requested", n):
+                st["fill_diagnostics"].append({
+                    "type": op, "item": item,
+                    "requested": row.get("requested"), "filled": n,
+                    "abort": row.get("abort")})
+        st["fill_known"] = not st.get("fill_incomplete", False)
     except Exception:
         return
 
@@ -248,13 +318,80 @@ def _opp_tile_yields(farm):
     return out
 
 
-def _opp_production_night(farm, day):
-    """Overnight production estimate for the EOD of `day` (engine-exact for
-    base units; the fertilized+watered doubling is not reconstructable from
-    an hour-0 snapshot -- conf penalty covers it)."""
+def _opp_tile_state(farm):
+    """Public production state keyed by tile coordinate."""
+    out = {}
+    for y, row in enumerate(_get(farm, "tiles", []) or []):
+        for x, tile in enumerate(row):
+            if not isinstance(tile, dict):
+                continue
+            if _get(tile, "kind", "") == "PLANT":
+                item = _get(tile, "crop", "")
+                identity = ("PLANT", item, _get(tile, "planted_day", None))
+            elif "animal" in tile:
+                animal = _get(tile, "animal", "")
+                item = _get(ANIMALS.get(animal, {}), "product", "")
+                identity = ("ANIMAL", animal,
+                            _get(tile, "placed_day", None))
+            else:
+                continue
+            if item in BASE_PRICE:
+                out[(x, y)] = {
+                    "item": item, "identity": identity,
+                    "kind": identity[0], "crop": item if identity[0] == "PLANT" else None,
+                    "yield": int(_get(tile, "yield_units", 0) or 0),
+                    "watered": bool(_get(tile, "watered_today", False)),
+                    "fed": bool(_get(tile, "fed_today", False)),
+                    "cared": bool(_get(tile, "cared_today", False)),
+                    "unwatered": int(_get(tile, "consecutive_unwatered", 0) or 0),
+                    "max_lifespan_step": _get(tile, "max_lifespan_step", -1),
+                }
+    return out
+
+
+def _opp_harvest_events(previous, current, production, step=None, eod=False):
+    """Infer public harvest events between consecutive observations."""
+    harvested = {item: 0 for item in BASE_PRICE}
+    unknown_loss = {item: 0 for item in BASE_PRICE}
+    for coord, before in (previous or {}).items():
+        after = (current or {}).get(coord)
+        produced = (production or {}).get(coord, 0)
+        expected = before["yield"] + produced
+        same_identity = after is not None and \
+            after.get("identity") == before["identity"]
+        expired = isinstance(step, (int, float)) and \
+            before.get("max_lifespan_step", -1) >= 0 and \
+            step >= before.get("max_lifespan_step", -1)
+        decayed = expired and before.get("kind") == "PLANT" and \
+            not CROPS.get(before.get("crop"), {}).get("ongoing", False)
+        if same_identity:
+            delta = max(0, expected - after["yield"])
+            if decayed and after.get("yield", 0) < before.get("yield", 0):
+                unknown_loss[before["item"]] += delta
+            else:
+                harvested[before["item"]] += delta
+            continue
+        disappeared = max(0, before["yield"])
+        # A changed identity (including DIG/replant) is not evidence of
+        # harvest.  Only an empty target can be a one-shot harvest candidate.
+        one_shot = before.get("kind") == "PLANT" and \
+            not CROPS.get(before.get("crop"), {}).get("ongoing", False)
+        care_lapse = eod and before.get("unwatered", 0) >= 1 and \
+            not before.get("watered", False)
+        if after is None and one_shot and disappeared > 0 and \
+                not expired and not care_lapse:
+            harvested[before["item"]] += disappeared
+        elif expected > 0:
+            unknown_loss[before["item"]] += expected
+    return harvested, unknown_loss
+
+
+def _opp_production_night(farm, day, by_tile=False):
+    """Production added by the end-of-day refresh after `day`."""
     out = {item: 0 for item in BASE_PRICE}
-    for row in _get(farm, "tiles", []) or []:
-        for tile in row:
+    tile_out = {}
+    for y, row in enumerate(_get(farm, "tiles", []) or []):
+        for x, tile in enumerate(row):
             if not isinstance(tile, dict):
                 continue
             if _get(tile, "kind", "") == "PLANT":
@@ -265,10 +402,17 @@ def _opp_production_night(farm, day):
                 planted = _get(tile, "planted_day", day)
                 interval = max(1, cd["interval"])
                 dsf = (day + 1) - planted - cd["first_yield_day"]
+                production_count = dsf // interval + 1 if dsf >= 0 else 0
                 if dsf >= 0 and dsf % interval == 0 \
-                        and dsf // interval < cd["max_yield"]:
+                        and production_count <= cd["max_yield"]:
+                    fertilized = _get(tile, "watered_today", False) and \
+                        _get(tile, "fertilized_until_day", -1) >= day
+                    room = max(0, cd["max_yield"] -
+                               int(_get(tile, "yield_units", 0) or 0))
                     if crop in out:
-                        out[crop] += 1
+                        produced = min(room, 2 if fertilized else 1)
+                        out[crop] += produced
+                        tile_out[(x, y)] = produced
             elif "animal" in tile:
                 a = ANIMALS.get(_get(tile, "animal", ""), {})
                 if not a:
@@ -276,10 +420,17 @@ def _opp_production_night(farm, day):
                 placed = _get(tile, "placed_day", day)
                 dsf = (day + 1) - placed - a["first_yield_day"]
                 if dsf >= 0 and dsf % a["interval"] == 0:
+                    fed = bool(_get(tile, "fed_today", False))
+                    bonus = int(_get(tile, "pending_care_bonus", 0) or 0) \
+                        if fed else 0
+                    room = max(0, a["max_held"] -
+                               int(_get(tile, "yield_units", 0) or 0))
                     prod = a.get("product", "")
                     if prod in out:
-                        out[prod] += 1
-    return out
+                        produced = min(room, 1 + bonus)
+                        out[prod] += produced
+                        tile_out[(x, y)] = produced
+    return tile_out if by_tile else out
 
 
 def _opp_observer_update(obs, own_private):
@@ -292,7 +443,37 @@ def _opp_observer_update(obs, own_private):
         hour = _get(obs, "hour", 0)
         st = _opp_observer_state(player, day, hour)
         if st["accounted_day"] >= day:
-            return  # already accounted today
+            farms = _get(obs, "farms", []) or []
+            opp = next((f for i, f in enumerate(farms) if i != player), None)
+            if opp is not None:
+                tiles = _opp_tile_state(opp)
+                harvested, unknown = _opp_harvest_events(
+                    st.get("_opp_tiles", {}), tiles, {},
+                    step=_get(obs, "step", None), eod=False)
+                for item, amount in harvested.items():
+                    if amount:
+                        st.setdefault("harvest_today", {})[item] = \
+                            st.get("harvest_today", {}).get(item, 0) + amount
+                for item, amount in unknown.items():
+                    if amount:
+                        st.setdefault("unknown_loss_today", {})[item] = \
+                            st.get("unknown_loss_today", {}).get(item, 0) + amount
+                yields = _opp_tile_yields(opp)
+                st["_opp_yields"] = yields
+                st["_opp_fed"] = yields.get("__fed__", 0)
+                st["_opp_tiles"] = tiles
+                if hour >= 23:
+                    for coord, tile in tiles.items():
+                        if tile.get("kind") == "ANIMAL" and \
+                                (not tile.get("fed", False) or
+                                 not tile.get("cared", False)):
+                            st["eod_action_unknown"][tile["item"]] = \
+                                "last_turn_care_or_feed_unobserved"
+                st["_opp_prod"] = _opp_production_night(opp, day)
+                st["_opp_prod_tiles"] = _opp_production_night(
+                    opp, day, by_tile=True)
+                st["last_public_hour"] = hour
+            return
         farms = _get(obs, "farms", []) or []
         opp = None
         for i, f in enumerate(farms):
@@ -302,6 +483,20 @@ def _opp_observer_update(obs, own_private):
         market = _get(obs, "market", {}) or {}
         inv = dict(_get(market, "inventory", {}) or {})
         prices_now = dict(_get(market, "prices", {}) or {})
+        yields_now = _opp_tile_yields(opp) if opp is not None else \
+            {item: 0 for item in BASE_PRICE}
+        tiles_now = _opp_tile_state(opp) if opp is not None else {}
+        harvest_boundary, unknown_boundary = _opp_harvest_events(
+            st.get("_opp_tiles", {}), tiles_now,
+            st.get("_opp_prod_tiles", {}), step=_get(obs, "step", None),
+            eod=True)
+        harvest_by_item = dict(st.get("harvest_today", {}))
+        unknown_loss_by_item = dict(st.get("unknown_loss_today", {}))
+        for item, amount in harvest_boundary.items():
+            harvest_by_item[item] = harvest_by_item.get(item, 0) + amount
+        for item, amount in unknown_boundary.items():
+            unknown_loss_by_item[item] = \
+                unknown_loss_by_item.get(item, 0) + amount
         shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
         # E3 calibration: the ΔInv window covers YESTERDAY (prev h0 -> now),
         # and shops unlock at EOD -- so the window's absorption must use the
@@ -312,19 +507,36 @@ def _opp_observer_update(obs, own_private):
         absorb = _town_daily_demand(
             shops_prev if shops_prev is not None else shops)
         prev_inv = st["inv_prev"]
-        sold = st["sold_today"]
-        bought = st["bought_today"]
+        fill_known = bool(st.get("fill_known"))
+        sold = st.get("filled_sell", {}) if fill_known else \
+            (st.get("requested_sell") or st.get("sold_today", {}))
+        bought = st.get("filled_buy", {}) if fill_known else \
+            (st.get("requested_buy") or st.get("bought_today", {}))
+        sold_floor = st.get("filled_floor_sell", {}) if fill_known else \
+            (st.get("requested_floor_sell") or st.get("sold_floor", {}))
+        st["order_basis"] = "filled" if fill_known else "requested"
         first_pass = st.get("initialized") is not True
         ch0_flow = {}
+        ch0_components = {}
+        event_ledger = {}
         ch1_implied = {}
         for item in BASE_PRICE:
             # ---- Ch0: exact integer flow (direct inventory read) ----
             opp_net = None
             if item in inv and item in prev_inv:
+                inventory_delta = inv[item] - prev_inv[item]
                 our_net = sold.get(item, 0) - bought.get(item, 0)
-                opp_net = (inv[item] - prev_inv[item]) - our_net \
-                    + absorb.get(item, 0)
+                absorbed = absorb.get(item, 0)
+                opp_net = inventory_delta - our_net + absorbed
                 ch0_flow[item] = float(opp_net)
+                ch0_components[item] = {
+                    "inventory_delta": inventory_delta,
+                    "our_sell": sold.get(item, 0),
+                    "our_buy": bought.get(item, 0),
+                    "town_absorb": absorbed,
+                    "opponent_net": float(opp_net),
+                    "order_basis": st["order_basis"],
+                }
             # ---- Ch1 cross-check: price-inversion implied delta ----
             if item in MARKET_PARAMS_EMB and item in prices_now \
                     and item in st.get("prices_prev", {}):
@@ -332,28 +544,47 @@ def _opp_observer_update(obs, own_private):
                     _offset_from_price(item, prices_now[item]) - \
                     _offset_from_price(item, st["prices_prev"][item])
             # ---- Ch3: harvest ledger from public tiles ----
-            y_now = st.get("_opp_yields", {}).get(item, 0)
+            y_now = yields_now.get(item, 0)
             y_prev = st["tile_yield_prev"].get(item, 0)
             prod_est = st.get("_opp_prod", {}).get(item, 0)
-            harvested = max(0, y_prev + prod_est - y_now)
-            sold_units = sold.get(item, 0)
-            if item == "WHEAT":
-                fed_units = st.get("_opp_fed", 0)
-                bought_units = bought.get("WHEAT", 0)
-                if opp_net is not None:
-                    bought_units = max(bought_units, -opp_net)
-                    sold_units = max(0, opp_net)
-                held_delta = harvested + bought_units - sold_units - fed_units
-            elif item == "FERTILIZER":
-                if opp_net is not None:
-                    sold_units = max(0, opp_net)
+            raw_harvest = y_prev + prod_est - y_now
+            aggregate_harvest = max(0, raw_harvest)
+            if st.get("_opp_tiles"):
+                harvested = harvest_by_item.get(item, 0)
+                unknown_loss = unknown_loss_by_item.get(item, 0)
+            else:
+                harvested = aggregate_harvest
+                unknown_loss = 0
+            sold_units = max(0, opp_net) if opp_net is not None else 0
+            bought_units = max(0, -opp_net) if opp_net is not None else 0
+            fed_units = st.get("_opp_fed", 0) if item == "WHEAT" else 0
+            if item == "FERTILIZER":
                 held_delta = -sold_units  # gather side unobservable
                 st["conf"][item] = 0.5
+            elif opp_net is not None:
+                held_delta = harvested - opp_net - fed_units
             else:
-                if opp_net is not None:
-                    sold_units = max(0, opp_net)
-                held_delta = harvested - sold_units
-            st["held"][item] = max(0, st["held"].get(item, 0) + held_delta)
+                held_delta = harvested - fed_units
+            if item in st.get("eod_action_unknown", {}):
+                st["confidence_reasons"][item] = \
+                    st["eod_action_unknown"][item]
+                st["conf"][item] = min(st["conf"].get(item, 1.0), 0.4)
+            prior_held = st["held"].get(item, 0)
+            raw_held = prior_held + held_delta
+            if raw_harvest < 0 or raw_held < 0:
+                st["held_inconsistency"][item] = \
+                    st["held_inconsistency"].get(item, 0) + 1
+            st["held"][item] = max(0, raw_held)
+            event_ledger[item] = {
+                "yield_prev": y_prev, "yield_now": y_now,
+                "production_est": prod_est,
+                "harvest_raw": raw_harvest,
+                "harvest_aggregate": aggregate_harvest,
+                "harvest_est": harvested, "unknown_loss": unknown_loss,
+                "sold_est": sold_units, "bought_est": bought_units,
+                "fed_est": fed_units, "held_before": prior_held,
+                "held_delta": held_delta, "held_after": st["held"][item],
+            }
             if opp_net is not None and not first_pass:
                 hist = st["flow_hist"].setdefault(item, [])
                 hist.append(opp_net)
@@ -369,10 +600,27 @@ def _opp_observer_update(obs, own_private):
         elif ch0_flow or prev_inv:
             _MARKET_MEM[player] = {"day": day, "prices": dict(prices_now),
                                    "flow": ch0_flow, "source": "ch0"}
-        # ---- Ch1 residual monitor (persistent non-zero = mirror/engine
-        # mismatch or floor-price saturation -> conf downgrade) ----
-        st["last_resid"] = {item: round(ch0_flow[item] - ch1_implied[item], 2)
-                            for item in ch0_flow if item in ch1_implied}
+        # Ch1 cross-checks the price curve against raw market inventory
+        # movement; opponent_net additionally removes our flow and town demand.
+        st["last_resid"] = {
+            item: round(ch0_components[item]["inventory_delta"] -
+                        ch1_implied[item], 2)
+            for item in ch0_components if item in ch1_implied}
+        qualified_residual = not first_pass and not bought and not sold_floor
+        if qualified_residual:
+            for item, residual in st["last_resid"].items():
+                hist = st["residual_hist"].setdefault(item, [])
+                hist.append(abs(residual))
+                del hist[:-7]
+                if abs(residual) > 1.0:
+                    streak = st["residual_streak"].get(item, 0) + 1
+                    st["residual_streak"][item] = streak
+                    if streak >= 2:
+                        raw_conf = st["conf"].get(item, 1.0)
+                        st["conf"][item] = max(0.0, raw_conf * 0.75)
+                        st["confidence_reasons"][item] = "ch1_residual"
+                else:
+                    st["residual_streak"][item] = 0
         # ---- Ch2: money account with spend decomposition ----
         if opp is not None and st["money_prev"] is not None:
             dm = _get(opp, "money", 0.0) - st["money_prev"]
@@ -416,22 +664,45 @@ def _opp_observer_update(obs, own_private):
             st["quads_prev"] = quads_now
             st["animals_prev"] = animals_now
         # roll snapshots for tomorrow
+        st["account_window"] = {
+            "from_day": st.get("snapshot_day"),
+            "from_hour": st.get("snapshot_hour"),
+            "to_day": day,
+            "to_hour": hour,
+            "shops": list(shops_prev if shops_prev is not None else shops),
+            "warmup": first_pass,
+            "had_buy": bool(bought),
+            "had_floor_sell": bool(sold_floor),
+            "order_basis": st["order_basis"],
+        }
+        st["ch0_components"] = ch0_components
+        st["event_ledger"] = event_ledger
         st["accounted_day"] = day
         st["initialized"] = True
+        st["snapshot_day"] = day
+        st["snapshot_hour"] = hour
         st["inv_prev"] = inv
         st["prices_prev"] = prices_now
         st["shops_prev"] = list(shops)
         st["money_prev"] = _get(opp, "money", None) if opp else None
-        st["sold_today"] = {}
-        st["bought_today"] = {}
-        st["sold_floor"] = {}
+        for key in ("sold_today", "bought_today", "sold_floor",
+                    "requested_sell", "requested_buy",
+                    "requested_floor_sell", "filled_sell", "filled_buy",
+                    "filled_floor_sell"):
+            st[key] = {}
+        st["fill_known"] = False
+        st["fill_incomplete"] = False
+        st["harvest_today"] = {}
+        st["unknown_loss_today"] = {}
         if opp is not None:
-            yields = _opp_tile_yields(opp)
-            st["_opp_yields"] = yields
-            st["_opp_fed"] = yields.get("__fed__", 0)
+            st["_opp_yields"] = yields_now
+            st["_opp_fed"] = yields_now.get("__fed__", 0)
+            st["_opp_tiles"] = tiles_now
             st["tile_yield_prev"] = {
-                k: v for k, v in yields.items() if k != "__fed__"}
+                k: v for k, v in yields_now.items() if k != "__fed__"}
             st["_opp_prod"] = _opp_production_night(opp, day)
+            st["_opp_prod_tiles"] = _opp_production_night(
+                opp, day, by_tile=True)
             st["prod_horizon"] = _opp_production_calendar(opp, day,
                                                           horizon=7)
     except Exception:
@@ -445,47 +716,52 @@ def _opp_observer_update(obs, own_private):
 
 # ---- est_* read-only getters（唯一公共面，M-H 边界纪律）----
 
-def est_opp_net(item, days=3):
-    """Opponent net sell flow for `item`, mean over the last `days` days."""
-    best = None
-    for st in _OPP_OBSERVER.values():
-        hist = st.get("flow_hist", {}).get(item, [])
-        if hist:
-            best = hist
-    if not best:
-        return None
-    window = best[-max(1, int(days)):]
-    return sum(window) / float(len(window))
-
-
-def est_opp_held(item):
-    """Estimated unmonetized opponent holding of `item` (decision-grade)."""
-    for st in _OPP_OBSERVER.values():
-        if item in st.get("held", {}):
-            return st["held"].get(item, 0)
+def _observer_state_for(player):
+    """Resolve an observer state without guessing between multiple seats."""
+    if player is not None:
+        return _OPP_OBSERVER.get(player)
+    if len(_OPP_OBSERVER) == 1:
+        return next(iter(_OPP_OBSERVER.values()))
     return None
 
 
-def est_opp_conf(item):
+def est_opp_net(item, days=3, player=None):
+    """Opponent net sell flow for `item`, mean over the last `days` days."""
+    st = _observer_state_for(player)
+    hist = (st or {}).get("flow_hist", {}).get(item, [])
+    if not hist:
+        return None
+    window = hist[-max(1, int(days)):]
+    return sum(window) / float(len(window))
+
+
+def est_opp_held(item, player=None):
+    """Estimated unmonetized opponent holding of `item`."""
+    st = _observer_state_for(player)
+    held = (st or {}).get("held", {})
+    return held.get(item) if item in held else None
+
+
+def est_opp_conf(item, player=None):
     """Confidence in [0,1] for `item` estimates (0 after any failure).
 
     Capped by OBS_HELD_CONF_CAP: the V0 offline validator's held-MAE table
     is frozen into per-item caps (observer §6: coefficients are decided
     OFFLINE from the corpus -- nothing is learned online)."""
-    for st in _OPP_OBSERVER.values():
-        if item in st.get("conf", {}):
-            return min(st["conf"][item], OBS_HELD_CONF_CAP.get(item, 1.0))
-    return 0.0
+    st = _observer_state_for(player)
+    conf = (st or {}).get("conf", {})
+    if item not in conf:
+        return 0.0
+    return min(conf[item], OBS_HELD_CONF_CAP.get(item, 1.0))
 
 
-def est_opp_supply_horizon(item, horizon_days=7):
-    """Held now + the production-side calendar's next `horizon_days` days
-    (OB-3.4 real form: 在持 + 产期表未来产出，公开 tiles 缓存于日账)."""
-    held = est_opp_held(item) or 0
-    for st in _OPP_OBSERVER.values():
-        daily = (st.get("prod_horizon") or {}).get(item)
-        if daily:
-            return held + sum(daily[:max(1, int(horizon_days))])
+def est_opp_supply_horizon(item, horizon_days=7, player=None):
+    """Held now plus public-tile production over the requested horizon."""
+    st = _observer_state_for(player)
+    held = ((st or {}).get("held", {}) or {}).get(item, 0)
+    daily = ((st or {}).get("prod_horizon", {}) or {}).get(item)
+    if daily:
+        return held + sum(daily[:max(1, int(horizon_days))])
     return held
 
 

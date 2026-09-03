@@ -888,8 +888,9 @@ def _sell_overrides(obs, farm, private, day, prices, shed, town_shops,
             verdict = _sell_plan_item(item, day, prices, flow, contested)
             # P4 three-tier early clearing (branch §6 / est_opp_held driven;
             # falls back to gate behaviour when confidence is low)
-            if 25 <= day < ENDGAME_DAY and est_opp_conf(item) >= 0.5:
-                held = est_opp_held(item) or 0
+            if 25 <= day < ENDGAME_DAY and \
+                    est_opp_conf(item, player=_get(obs, "player", 0)) >= 0.5:
+                held = est_opp_held(item, player=_get(obs, "player", 0)) or 0
                 if held >= P4_HEAVY_HELD or (
                         held >= P4_MID_HELD and day >= 26):
                     verdict = "clear"
@@ -954,8 +955,9 @@ def _sell_plan_dawn(obs, farm, private, day, plan=None):
                               SELL_PLAN_LOOKAHEAD_DAYS)
         verdict = _sell_plan_item(item, day, prices, flow, contested)
         # P4 three-tier early clearing (same evidence as _sell_overrides)
-        if 25 <= day < ENDGAME_DAY and est_opp_conf(item) >= 0.5:
-            held = est_opp_held(item) or 0
+        if 25 <= day < ENDGAME_DAY and \
+                est_opp_conf(item, player=player) >= 0.5:
+            held = est_opp_held(item, player=player) or 0
             if held >= P4_HEAVY_HELD or (
                     held >= P4_MID_HELD and day >= 26):
                 verdict = "clear"

@@ -772,11 +772,11 @@ def _d14_checkpoint(out, st):
     return frozen
 
 
-def _d22_checkpoint():
-    """d22 检查点（§7.5/§4.1）：P4 三档抢跑的 est_opp_held 前置快照。"""
+def _d22_checkpoint(player):
+    """d22 checkpoint: snapshot the current player's opponent estimates."""
     held = {}
     for item in ("STRAWBERRY", "MILK", "WOOL", "MELON", "WHEAT"):
-        value = est_opp_held(item)
+        value = est_opp_held(item, player=player)
         held[item] = None if value is None else round(float(value), 1)
     return {"day": 22, "held": held}
 
@@ -880,7 +880,7 @@ def _stage_plan(player, obs, day, plan):
                 _d14_checkpoint(out, st)
         if stage == "P4" and day == 22 and st.get("p4_snapshot") is None:
             try:
-                st["p4_snapshot"] = _d22_checkpoint()
+                st["p4_snapshot"] = _d22_checkpoint(player)
             except Exception:
                 st["p4_snapshot"] = {"day": 22, "held": {}}
 
