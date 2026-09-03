@@ -53,9 +53,11 @@ def _executor_tiles(farm):
     return out
 
 
-def _stop_done(tile, act):
+def _stop_done(tile, act, day):
     """F4 dedup: a repeated WATER/FEED is a silent wasted turn; skip stops
-    whose tile state shows the work already finished."""
+    whose tile state shows the work already finished.  FERTILIZE dedup is
+    day-relative (see that branch: the engine field is an absolute
+    deadline that survives its own expiry)."""
     if not act:
         return False
     op = act[0]
@@ -78,8 +80,15 @@ def _stop_done(tile, act):
     if op == "CARE":
         return bool(_get(tile, "cared_today", False))
     if op == "FERTILIZE":
-        return _get(tile, "fertilized_until_day", -1) is not None \
-            and _get(tile, "fertilized_until_day", 0) > 0
+        # engine semantics: fertilized_until_day is an ABSOLUTE deadline
+        # (FERTILIZE sets max(old, day+2), vendored kaggriculture.py:481;
+        # the value is never reset when the window lapses, :769-803), and
+        # the engine's own yield checks compare it against the current day
+        # (:442, :799).  A stale positive value is an EXPIRED window that
+        # mission.py legitimately re-tasks -- testing mere positivity here
+        # silently killed every re-fertilize stop (audit 2026-09-03).
+        until = _get(tile, "fertilized_until_day", -1)
+        return until is not None and until >= day
     if op == "DIG":
         return _get(tile, "kind", "") != "WEED"
     if op == "HARVEST":
@@ -212,7 +221,7 @@ def _execute_routes(obs, farm, private, day, routes):
             if item and _get(inv, item, 0) <= 0:
                 idx += 1
                 continue
-            if _stop_done(tile_map.get((tx, ty)), target.get("act")):
+            if _stop_done(tile_map.get((tx, ty)), target.get("act"), day):
                 idx += 1
             else:
                 break

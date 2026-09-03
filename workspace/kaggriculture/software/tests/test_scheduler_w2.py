@@ -342,6 +342,51 @@ def test_executor_f4_skips_finished_tile():
     assert replan is False
 
 
+def test_executor_fertilize_expired_window_refertilizes():
+    # audit 2026-09-03: mission re-tasks expired windows (fertilized_until_day
+    # < day); the old executor predicate (>0) treated the stale deadline as
+    # "done" and silently killed every re-fertilize stop with a PASS.  The
+    # engine never resets the field, so positivity alone must mean EXPIRED.
+    rows = _rows10()
+    tile = _tile_plant("STRAWBERRY", 0, watered=True)
+    tile["fertilized_until_day"] = 2            # expired: today is day 3
+    rows[2][2] = tile
+    farm = _farm(rows, farmer=(2, 2))
+    stops = [{"key": ("fert", 2, 2), "x": 2, "y": 2,
+              "act": ["FERTILIZE"], "need": "FERTILIZER",
+              "deadline": None, "tier": "D2"}]
+    routes = [{"worker": 0, "sector": None, "stops": stops,
+               "tasks": stops, "etas": [1]}]
+    private = {"shed": {}, "inventories": [{"FERTILIZER": 1}]}
+    actions, replan = main._execute_routes({"hour": 1, "player": 0},
+                                            farm, private, 3, routes)
+    assert actions[0] == ["FERTILIZE"]
+    assert replan is False
+
+
+def test_executor_fertilize_valid_window_still_skips():
+    # within the window (until >= day) the FERTILIZE stop stays deduped:
+    # deadline day itself and the day after are both still fertilized.
+    rows = _rows10()
+    farm = _farm(rows, farmer=(2, 2))
+    private = {"shed": {}, "inventories": [{"FERTILIZER": 1}]}
+    obs = {"hour": 1, "player": 0}
+    tail = {"key": ("care", 4, 2), "x": 4, "y": 2, "act": ["CARE"],
+            "deadline": None, "tier": "D4"}
+    for until in (3, 4):
+        tile = _tile_plant("STRAWBERRY", 0, watered=True)
+        tile["fertilized_until_day"] = until
+        rows[2][2] = tile
+        stops = [{"key": ("fert", 2, 2), "x": 2, "y": 2,
+                  "act": ["FERTILIZE"], "need": "FERTILIZER",
+                  "deadline": None, "tier": "D2"}, dict(tail)]
+        routes = [{"worker": 0, "sector": None, "stops": stops,
+                   "tasks": stops, "etas": [1, 3]}]
+        actions, replan = main._execute_routes(obs, farm, private, 3, routes)
+        assert actions[0] == ["EAST"]            # window still valid -> skip
+        assert replan is False
+
+
 def test_executor_eod_projection_and_idempotent_gate():
     main._REPLAN_MEM.clear()
     rows = _rows10()
