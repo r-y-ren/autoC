@@ -32,9 +32,9 @@ def _entries(collection):
 
 def test_repository_indexes_are_deterministic_and_current():
     counts = artifact_indexes.validate_indexes(REPO_ROOT)
-    # round-16 probe ledger is present -> online 32
+    # round-16/17 probe ledgers are present -> online 33
     assert counts == {"ablations": 47, "external": 2,
-                      "online": 32, "acceptance": 31}
+                      "online": 33, "acceptance": 31}
 
 
 def test_mf_and_mg_decisions_override_mechanical_gate_wording():
