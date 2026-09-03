@@ -469,10 +469,6 @@ PLANT_DAILY_CAP = 16
 # first position of the day and retained while a route is valid.  A route is
 # rebuilt only when its target completes/disappears, eligibility changes, or
 # the set of red-line obligations changes.
-CROSS_SECTOR_VALUE_EDGE = 260.0
-CROSS_SECTOR_PENALTY_V9 = 18.0
-ROUTE_BATCH_SIZE = 6
-# Tour-following: the route head gets a continuity-magnitude bonus (the
 # same scale as STICKY_BONUS) so a worker sweeps its sector's queue
 # instead of globally re-chasing the highest-value task after every
 # completion.  The baseline comparison (2026-08-30, 24 paired cells)

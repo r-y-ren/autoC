@@ -233,8 +233,14 @@ def test_solve_feed_legs_chunking():
     spots = [(4, 4), (4, 3), (3, 4), (3, 3), (2, 4), (4, 2), (2, 3)]
     tasks = [_task(88, x, y, ["FEED"], ("feed", x, y), v=88)
              for x, y in spots]
+    for t in tasks:
+        t["need"] = "WHEAT"      # real feed tasks carry need (v3 legs key
+                                 # on the need item, not the op name)
     farm = _farm(_rows10())
-    res = main._solve_routes(farm, {"inventories": [{}]}, 6, tasks,
+    # v3: legs are synthesized only when the shed can restock (a FEED with
+    # wheat nowhere is physically undoable and excluded instead)
+    private = {"shed": {"WHEAT": 20}, "inventories": [{}]}
+    res = main._solve_routes(farm, private, 6, tasks,
                              planned_hands=0)
     assert res["feed_legs"] == 2              # ceil(7 / FEED_LEG_CHUNK)
     pickups = [t for r in res["routes"] for t in r["tasks"]
@@ -246,7 +252,7 @@ def test_solve_feed_legs_chunking():
     assert all(("feed", x, y) in kept for x, y in spots)
     # an existing wheat pickup that covers the load suppresses synthesis
     tasks.append(_task(96, 4, 3, ["PICKUP", "WHEAT", 7], ("pk", 0)))
-    res = main._solve_routes(farm, {"inventories": [{}]}, 6, tasks,
+    res = main._solve_routes(farm, private, 6, tasks,
                              planned_hands=0)
     assert res["feed_legs"] == 0
 

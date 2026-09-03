@@ -90,15 +90,16 @@ def precheck():
         for name, first, second in duplicates:
             print(f"DUPLICATE top-level name {name!r}: {first}.py vs {second}.py")
         sys.exit("FAIL cross-module duplicate names would shadow in the merge")
-    # disabled-scaffold guarantee: _execute_routes must have zero callers
-    # while ROUTE_EXECUTOR_ENABLED is False (M4 will introduce the caller)
+    # executor authority: _execute_routes may only be referenced by the
+    # dispatcher (solver's _solve_and_execute) and the entry wiring --
+    # no other module may grow a private execution path
     for mod in MERGE_ORDER:
-        if mod == "executor":
+        if mod in ("executor", "solver", "entry"):
             continue
         text = (SRC / f"{mod}.py").read_text(encoding="utf-8")
-        if mod != "entry" and "_execute_routes" in text:
+        if "_execute_routes" in text:
             sys.exit(f"FAIL {mod}.py references _execute_routes "
-                     "(only entry's flag-gated M4 wiring may)")
+                     "(only solver's dispatcher and entry may)")
 
 
 def build_bytes():

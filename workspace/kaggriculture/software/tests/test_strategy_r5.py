@@ -83,12 +83,10 @@ def _clean_module_state():
     main._PLAN_MEM.clear()
     main._STATE.clear()
     main._MARKET_MEM.clear()
-    main._TARGETS.clear()
     yield
     main._PLAN_MEM.clear()
     main._STATE.clear()
     main._MARKET_MEM.clear()
-    main._TARGETS.clear()
 
 
 VOLUME_PLAN = {"mode": "VOLUME_CROP", "volume": True, "scale": False,

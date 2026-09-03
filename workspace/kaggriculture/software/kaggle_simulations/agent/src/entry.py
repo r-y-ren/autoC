@@ -52,45 +52,18 @@ def agent(obs):
             _build_tasks(obs, farm, private=_get(obs, "private", {}) or {},
                          day=day, plan=plan)
 
-        # M2/M4 (scheduler §2-§4, LIVE per user ruling 2026-09-02 "no local
-        # evidence gates -- deploy and validate online"): the mission package
-        # is the primary pipeline.  _schedule_units (v72) stays as a
-        # single-turn bridge for executor replan turns (assertion failed ->
-        # the old authority covers the red lines while the day rebuild
-        # lands) and remains fully in charge when the flag is off.
+        # M2 (scheduler §2): the mission package stays the dawn
+        # telemetry/M2-contract artifact (market consumes its EOD events).
+        # M4/M5 (§3-§4): the four-layer dispatcher -- per-turn fresh tasks,
+        # current-roster re-solve, mechanical execution -- is the ONLY
+        # scheduling path; v72 and the execution flag were deleted with the
+        # transition code.  The never-crash net is the product-contract
+        # try/except around this whole function (safe PASS).
         mission = _mission_shadow_update(player, day, hour, obs, farm,
                                          _get(obs, "private", {}) or {},
                                          plan, tasks)
-        actions = None
-        if ROUTE_EXECUTOR_ENABLED and mission is not None:
-            try:
-                solved = _solve_routes(
-                    farm, _get(obs, "private", {}) or {}, day,
-                    mission.get("tasks") or [])
-                # M5 fix: _solve_routes returns {"routes": [...], ...} --
-                # the pre-fix wiring passed the RESULT DICT, so the
-                # executor iterated its string keys and excepted on ~97%
-                # of turns (fail-open back to v72; only the d29 template
-                # path ran -- the online 625.1 candidate was effectively
-                # v72 + strategy-layer changes)
-                cand, replan = _execute_routes(obs, farm,
-                                                _get(obs, "private", {}) or {},
-                                                day, solved.get("routes"))
-                if replan:
-                    # assertion failed (D1 ETA / EOD projection): rebuild is
-                    # the doc's answer, but this turn's red lines cannot
-                    # wait -- bridge to the proven scheduler once
-                    actions = _schedule_units(
-                        obs, farm, _get(obs, "private", {}) or {}, day,
-                        tasks)
-                else:
-                    actions = cand
-            except Exception:
-                actions = None          # fall through to v72 (fail-open)
-        if actions is None:
-            actions = _schedule_units(obs, farm,
-                                      _get(obs, "private", {}) or {},
-                                      day, tasks)
+        actions = _solve_and_execute(
+            obs, farm, _get(obs, "private", {}) or {}, day, tasks)
         # MK-2/3 (market §2, LIVE per the same ruling): the dawn sell plan
         # drives the day's sell batches at their planned hours; the gate
         # stack remains as a bounded overlay on top.

@@ -216,7 +216,9 @@ def test_wheatless_worker_fetches_at_shed_before_feeding():
 
 
 def test_sticky_target_survives_within_the_day():
-    main._TARGETS.clear()
+    # M5: v72's _sticky_state registry is gone; continuity lives in the
+    # dispatcher's _ASSIGN_MEM (previous solve's per-worker first stop)
+    main._ASSIGN_MEM.clear()
     tiles = _tiles()
     tiles[0][0] = _plant_tile("STRAWBERRY", planted_day=8, streak=1)
     farm = _farm(tiles=tiles, farmer=(3, 3), quads=["NW"])
@@ -224,11 +226,11 @@ def test_sticky_target_survives_within_the_day():
     obs1 = _obs(10, 6, farm, private)
     tasks1, *_ = main._build_tasks(obs1, farm, private, 10)
     main._schedule_units(obs1, farm, private, 10, tasks1)
-    st = main._TARGETS[0]
-    assert 0 in st["assign"] and st["assign"][0] == ("water", 0, 0)
+    st = main._ASSIGN_MEM[0]
+    assert st["day"] == 10
     farm2 = _farm(tiles=tiles, farmer=(3, 4), quads=["NW"])   # one step on
     obs2 = _obs(10, 7, farm2, private)
-    tasks2, *_ = main._build_tasks(obs2, farm, private, 10)
+    tasks2, *_ = main._build_tasks(obs2, farm2, private, 10)
     actions = main._schedule_units(obs2, farm2, private, 10, tasks2)
     # still heading for the same dying tile (no oscillation)
     if actions[0] in (["WEST"], ["NORTH"], ["SOUTH"], ["EAST"]):
@@ -238,14 +240,21 @@ def test_sticky_target_survives_within_the_day():
         assert mx * dx + my * dy > 0
 
 
-def test_sticky_state_resets_on_day_roll():
-    main._TARGETS.clear()
-    st = main._sticky_state(0, 10, 5)
-    st["assign"][0] = ("water", 0, 0)
-    st2 = main._sticky_state(0, 10, 7)
-    assert st2["assign"][0] == ("water", 0, 0)      # same day: kept
-    st3 = main._sticky_state(0, 11, 0)
-    assert st3["assign"] == {}                      # new day: reset
+def test_assign_registry_resets_on_day_roll():
+    main._ASSIGN_MEM.clear()
+    tiles = _tiles()
+    tiles[0][0] = _plant_tile("STRAWBERRY", planted_day=8, streak=1)
+    farm = _farm(tiles=tiles, farmer=(3, 3), quads=["NW"])
+    private = {"shed": _shed(), "seeds": {}, "inventories": [{}]}
+    obs = _obs(10, 6, farm, private)
+    tasks, *_ = main._build_tasks(obs, farm, private, 10)
+    main._schedule_units(obs, farm, private, 10, tasks)
+    assert main._ASSIGN_MEM[0]["day"] == 10
+    assert 0 in main._ASSIGN_MEM[0]["assign"]
+    obs11 = _obs(11, 0, farm, private)             # new day: registry rolls
+    tasks11, *_ = main._build_tasks(obs11, farm, private, 11)
+    main._schedule_units(obs11, farm, private, 11, tasks11)
+    assert main._ASSIGN_MEM[0]["day"] == 11
 
 
 def test_task_claim_prevents_pileup_on_one_target():

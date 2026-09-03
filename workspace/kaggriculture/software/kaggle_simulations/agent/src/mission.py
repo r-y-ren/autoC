@@ -440,7 +440,12 @@ import hashlib
 import json
 
 _MISSION_DEADLINE_HOURS = {"WATER": 21, "FEED": 16, "CARE": 23,
-                           "HARVEST": 21, "PLANT": 16}
+                           # HARVEST carries NO hard deadline (§2.2 D4
+                           # "当日/无"): a hard 21:00 dropped every late
+                           # harvest while v72 harvested through h23 --
+                           # ongoing tiles cap at max_held and lose the
+                           # overflow permanently (seed 9/101 gap driver)
+                           "HARVEST": None, "PLANT": 16}
 _MISSION_SHADOW = {}
 
 
@@ -492,6 +497,32 @@ def _mission_tier(task, tile, day):
     return "D4"                   # 收割/照料/加成/DIG/后勤/建设
 
 
+def _enrich_mission_tasks(tasks, tile_map, day):
+    """Per-task schema uplift (cls/tier/deadline/deps) -- the same
+    enrichment the dawn mission runs, extracted so the four-layer
+    dispatcher can re-run it EVERY turn: mid-day obligations (the red
+    WATER of a crop planted this morning, hour-based red escalations)
+    enter the solve on the turn they appear instead of waiting for the
+    next dawn (the frozen-dawn feed was one of the M5-disclosed
+    stranding sources)."""
+    wheat_pickup_keys = [t.get("key") for t in (tasks or [])
+                         if (t.get("act") or [None])[0] == "PICKUP"
+                         and len(t.get("act") or []) > 1
+                         and t["act"][1] == "WHEAT"]
+    out = []
+    for task in tasks or []:
+        op = (task.get("act") or [None])[0]
+        t = dict(task)
+        t["cls"] = _mission_cls(task)
+        t["tier"] = _mission_tier(task, tile_map.get(
+            (task.get("x"), task.get("y"))), day)
+        t["deadline"] = _MISSION_DEADLINE_HOURS.get(op)
+        t["deps"] = list(wheat_pickup_keys) if op == "FEED" else []
+        t["scenario"] = None
+        out.append(t)
+    return out
+
+
 def _build_mission(obs, farm, private, day, plan, tasks, planned_sell=None):
     """Dawn mission package (scheduler §2 full spec; shadow).
 
@@ -505,34 +536,21 @@ def _build_mission(obs, farm, private, day, plan, tasks, planned_sell=None):
     player = _get(obs, "player", 0)
     plan = plan or {}
     tile_map = _mission_tile_map(farm)
-    wheat_pickup_keys = [t.get("key") for t in (tasks or [])
-                         if (t.get("act") or [None])[0] == "PICKUP"
-                         and len(t.get("act") or []) > 1
-                         and t["act"][1] == "WHEAT"]
+    out_tasks = _enrich_mission_tasks(tasks, tile_map, day)
 
-    out_tasks = []
     d1 = []
     cls_counts = {}
     tier_counts = {}
     feed_d12 = 0
     harvest_in = 0
-    for task in tasks or []:
-        cls = _mission_cls(task)
-        op = (task.get("act") or [None])[0]
-        tile = tile_map.get((task.get("x"), task.get("y")))
-        tier = _mission_tier(task, tile, day)
-        t = dict(task)
-        t["cls"] = cls
-        t["tier"] = tier
-        t["deadline"] = _MISSION_DEADLINE_HOURS.get(op)
-        t["deps"] = list(wheat_pickup_keys) if op == "FEED" else []
-        t["scenario"] = None
-        out_tasks.append(t)
-        cls_counts[cls] = cls_counts.get(cls, 0) + 1
-        tier_counts[tier] = tier_counts.get(tier, 0) + 1
-        if tier == "D1":
-            d1.append(task.get("key"))
-        if op == "FEED" and tier in ("D1", "D2"):
+    for t in out_tasks:
+        op = (t.get("act") or [None])[0]
+        tile = tile_map.get((t.get("x"), t.get("y")))
+        cls_counts[t["cls"]] = cls_counts.get(t["cls"], 0) + 1
+        tier_counts[t["tier"]] = tier_counts.get(t["tier"], 0) + 1
+        if t["tier"] == "D1":
+            d1.append(t.get("key"))
+        if op == "FEED" and t["tier"] in ("D1", "D2"):
             feed_d12 += 1
         if op == "HARVEST" and tile is not None:
             harvest_in += int(_get(tile, "yield_units", 0) or 0)

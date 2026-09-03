@@ -1,369 +1,71 @@
 # ===========================================================================
-# 【中文·模块导览】src/solver.py —— v10.9 调度权威 + v9 影子路由（L3 前世）
+# 【中文·模块导览】src/solver.py —— L3 路线求解器（执行权威，M3 v3）
 # ---------------------------------------------------------------------------
-# v10.9 职责：_schedule_units_v72 两阶段调度（Phase A 红线一票否决 +
-#   Phase B 价值匹配贪心 Score=V−行走−跨区+亲和+粘滞）是现执行权威；
-#   v9 分区巡逻影子路由（_route_tasks）已随 M5 冻结退役（2026-09-03，
-#   动作零变化——v72 始终执行原始任务表；_route_state 家区粘滞仍被
-#   v72 使用故保留）；_schedule_units 为薄壳直通；_TARGETS/_sticky_state
-#   按消费方就近落位本模块（JOURNAL 2026-09-02 grep 裁决，偏离计划表
-#   初判 mission，豁免条款行使）。
-# 新架构落位：scheduler 设计 §3 路线求解器（分区+EDF×价值密度×老化+
-#   2-opt 同类段抛光）的替换宿主；保证定理（§5 proved-or-flagged）在
-#   本层落地后生效。
-# 文档符合性审查：
-#   ✓ 影子先行纪律已内建（V9_SHADOW_ROUTING 默认 True，执行权不动，
-#     巡游奖励/事件重建代码现成——§3.3 处置表"吸收"项）；
-#   ✗ 待办（M3）——黎明一次求解的路线承诺（含逐站 ETA/负载均衡指派）
-#     尚不存在；现行逐回合贪心正是文档诊断的病根（idle-PASS ~50% vs
-#     tetsuya 13%、连续性 47-57% vs 78%、任务无限饿死致荒草累积）；
-#   ✗ 待办（M4/M5）——executor 接管后 Phase A/B 与 STICKY/CROSS_QUAD/
-#     BUCKET 旋钮按 §3.3 处置表退役删除（结构替代参数）。
+# M3 v3（2026-09-03，M5 披露后的 M3 follow-up 落地）：
+#   * 现役船员求解（current-roster re-solve）：v2 的"黎明按计划船员预置"
+#     是 625.1 在线局崩溃的根因——求解按 _crew_target 的 PLANNED 船员铺
+#     路线，雇工没钱落地时幽灵路线上的 D1 义务整日搁浅（rewards ~20 vs
+#     ~70k）。v3 每回合对"实际在场的 farmer+hands、实际站位、真实时钟"
+#     重解：雇工落地（引擎事实：棚仓口空闲格 NWSE 序）当回合即入编，
+#     钱不够少雇就按小船员求解，不存在幽灵。
+#   * 逐回合任务新鲜化：喂给求解器的是本回合 _build_tasks 现铺、经
+#     _enrich_mission_tasks 升格（cls/tier/deadline/deps）的任务表——
+#     日中新义务（当日新种的浇水红线、红升级）当回合即入解，不再依赖
+#     黎明冻结快照（v2 的另一搁浅源：mid-day 任务失效）。
+#   * 广义载货腿：need 物品（麦/肥/畜）缺货自动在最近仓口插合成 PICKUP
+#     腿；棚仓+随身皆空的无解任务先行剔除（当回合物理不可做）。
+#   * D1 兜尾：死线内无人能接的 D1 不再静默丢弃——按最早可到工人尽力
+#     追加（late 标记，feasible=False 照记）；引擎枯死/逃亡判在 EOD，
+#     21/16 点死线是保守缓冲，晚到仍可能救回。
+#   * EDF 死线优先 + 24 回合预算填充 + 2-opt 无死线尾段抛光的 v2 骨架
+#     不变；确定性契约不变（全部选择键终结于 (finish/增量, worker, key)）。
+# v72 两阶段调度器在 M4 门 A/B 验证期仍保留（A 臂=线上验证过的权威），
+# 门过即删（M5 冻结删旧，scheduler §3.3/§7）。
 # ===========================================================================
-# r4-P1 sticky per-worker target registry, keyed by player id and reset at
-# each day roll (hour moves backwards).  Kept for compatibility with the
-# champion task contract; v9 routes use the event-driven registry below.
-_TARGETS = {}
-_ROUTE_STATE = {}
-
-
-def _route_state(player, day, hour, units, board):
-    state = _ROUTE_STATE.get(player)
-    if state is None or state.get("day") != day or hour <= state.get("hour", -1):
-        state = {"day": day, "hour": hour, "home": {}, "routes": {},
-                 "targets": {}, "cargo": {}, "red_signature": (),
-                 "replans": 0}
-        _ROUTE_STATE[player] = state
-    state["hour"] = hour
-    for ui, (x, y) in enumerate(units):
-        state["home"].setdefault(ui, _quadrant_of(x, y, board))
-        state["routes"].setdefault(ui, [])
-        state["cargo"].setdefault(ui, {"phase": "idle", "item": None,
-                                       "target": None})
-    return state
-
-
-def _sticky_state(player, day, hour):
-    st = _TARGETS.get(player)
-    if st is None or st.get("day") != day or hour <= st.get("hour", -1):
-        st = {"day": day, "hour": hour, "assign": {}}
-        _TARGETS[player] = st
-    st["hour"] = hour
-    return st
-
-
-# 【中文】═══ r4-P1 状态价值调度器（冠军执行器）═══
-# 两阶段分派（替代 r3 的 w/(1+dist) 贪心——实测它让远端红线格饿死：
-# 每局 14-29 个 CARE 失误杂草全聚在距仓曼哈顿 6-9 格处，请求过的操作
-# 全部成功、只是没人去远处）：
-#   Phase A 红线一票否决：所有 red 任务按价值降序，逐个由"最近工人"
-#     覆盖（缺载货的工人按"先绕仓库再过去"的距离计价+6）；不看权重、
-#     每任务只认领一次；
-#   Phase B 价值匹配：Score_ij = V_i - TRAVEL_MU×d - 跨象限惩罚
-#     + 载货亲和（持有 need 物品的工人 +0.5V，缺货的 -0.5V）
-#     + 粘滞奖励（延续上回合目标，抑制震荡），全局排序贪心认领。
-# 执行段：走到目标格→执行；缺 need 物品先绕仓库取货（r4-P1 修复
-# "空手走range喂料崩溃"）；没任务的工人做脚下免费操作否则 PASS；
-# 末尾 R6 护栏：PLANT 数量永远 ≤ 手持种子数。
-def _schedule_units_v72(obs, farm, private, day, tasks):
-    """r4-P1 state-value scheduler.
-
-    Two phases, replacing the r3 per-unit w/(1+dist) greedy that measurably
-    starved distant red-line tiles (29 care-lapse weeds + escapes per game
-    while every REQUESTED op succeeded):
-
-      Phase A (red-line, one-vote veto, no weighting): death-tonight
-      obligations -- FEED with streak >= 1 (or past FEED_RED_HOUR), WATER
-      with streak >= 1 or planted today, last-day DROP returns -- are
-      covered FIRST by a nearest-worker greedy in value order.  A
-      wheatless worker assigned a red FEED still walks to the shed first
-      (fetch detour priced into the distance below).
-
-      Phase B (value matching): Score_ij = V_i - TRAVEL_MU*d_ij
-      - CROSS_QUAD_PENALTY (zone stickiness) + item-carrier affinity
-      + STICKY_BONUS for yesterday's-turn target (kills oscillation).
-      Global greedy over (worker, task) pairs; each task claimed once so
-      workers never pile onto one target.
-    """
-    tiles = _get(farm, "tiles", [])
-    board = len(tiles)
-    units = [tuple(_get(farm, "farmer", [board // 2 - 1, board // 2 - 1]))]
-    for h in _get(farm, "hands", []) or []:
-        units.append(tuple(h))
-    inventories = _get(private, "inventories", []) or []
-    hour = _get(obs, "hour", 0)
-    quads = _get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]
-    sticky = _sticky_state(_get(obs, "player", 0), day, hour)["assign"]
-
-    def unit_inv(i):
-        while len(inventories) <= i:
-            inventories.append({})
-        return inventories[i]
-
-    actions = []
-
-    def executable(task, ui):
-        eligible = task.get("units")
-        if eligible is not None and ui not in eligible:
-            return False
-        need = task.get("need")
-        if need and _get(unit_inv(ui), need, 0) <= 0:
-            return False
-        x, y = task["x"], task["y"]
-        tile = tiles[y][x]
-        kind = _get(tile, "kind", "") if isinstance(tile, dict) else None
-        op = task["act"][0]
-        if op in ("WATER", "FERTILIZE"):
-            return kind == "PLANT"
-        if op == "HARVEST":
-            return kind == "PLANT" or (isinstance(tile, dict) and "animal" in tile)
-        if op in ("FEED", "CARE", "COLLECT_FERTILIZER"):
-            return isinstance(tile, dict) and "animal" in tile
-        if op == "PLANT":
-            return tile is None
-        if op == "DIG":
-            # engine DIG clears any non-animal tile; v7-R rotation-DIG
-            # targets finished PLANTs (weeds remain the other target)
-            return kind == "WEED" or kind == "PLANT"
-        if op in ("BUILD_PASTURE", "BUILD_COOP"):
-            return tile is None
-        if op == "PLACE":
-            structure = ANIMALS.get(task["act"][1], {}).get("structure")
-            return isinstance(tile, dict) and _get(tile, "kind", "") == structure \
-                and "animal" not in tile
-        if op == "PICKUP":
-            if not _shed_adjacent(units[ui][0], units[ui][1], board, quads):
-                return False
-            # a carrier holding a full chunk moves out to feed instead of
-            # chain-grabbing every chunk at the shed (multi-carrier FEED)
-            if task["act"][1:2] == ["WHEAT"] and _get(unit_inv(ui), "WHEAT", 0) >= 5:
-                return False
-            return True
-        if op == "DROP":
-            return _shed_adjacent(units[ui][0], units[ui][1], board, quads) and any(
-                n > 0 for n in unit_inv(ui).values()
-                if isinstance(n, (int, float)))
-        return True
-
-    def tval(t):
-        return t.get("v", t["w"])
-
-    # ---------------- phase A: red-line nearest-match first ----------------
-    claimed = set()
-    assign = {}
-    accesses = _shed_access(board, quads)
-    reds = [t for t in tasks if t.get("red")]
-    reds.sort(key=lambda t: -tval(t))
-    by_key = {t["key"]: t for t in reds}
-    # V-T4 red-line stickiness, V-T5 near-end hold: re-bind the previous
-    # turn's red assignments first, but a held binding survives only while
-    # the target is NEAR (d <= 4).  Forensics pair: ep 104585743 d8 h16-23
-    # (no stickiness: nine workers oscillated between 18 red tiles for
-    # eight hours, zero waterings) vs ep 104594916 d8-d11 (unconditional
-    # stickiness: distant red bindings locked workers into long commutes,
-    # the harvest starved, cash broke and all hands reset to zero).  The
-    # distance cap keeps the anti-oscillation benefit without the commute
-    # lock-in; far red targets still go to the nearest free worker each
-    # turn.
-    for ui, prev_key in list(sticky.items()):
-        if ui in assign or ui >= len(units):
-            continue
-        t = by_key.get(prev_key)
-        if t is None:
-            continue
-        if t.get("units") is not None and ui not in t["units"]:
-            continue
-        if _dist(units[ui][0], units[ui][1], t["x"], t["y"]) > 4:
-            continue
-        assign[ui] = t
-        claimed.add(t["key"])
-    for t in reds:
-        if t["key"] in claimed:
-            continue
-        best = None
-        for ui in range(len(units)):
-            if ui in assign or (t.get("units") is not None
-                                and ui not in t["units"]):
-                continue
-            ux, uy = units[ui]
-            d = _dist(ux, uy, t["x"], t["y"])
-            # a worker missing the carried item pays the shed detour it is
-            # about to walk (route below); carriers keep their raw distance
-            # so loaded units win red consumer tasks outright
-            need = t.get("need")
-            if need and _get(unit_inv(ui), need, 0) <= 0:
-                via = min(_dist(ux, uy, ax, ay) + _dist(ax, ay, t["x"], t["y"])
-                          for ax, ay in accesses)
-                d = min(d, via) + 6
-            if best is None or d < best[0]:
-                best = (d, ui)
-        if best is not None:
-            assign[best[1]] = t
-            claimed.add(t["key"])
-
-    # ---------------- phase B: value matching with stickiness -------------
-    # V-T5: home-sector soft penalty (tetsuya-style patrol continuity).  The
-    # worker's first position of the day defines its home quadrant; work in
-    # the OTHER quadrants pays the soft penalty on top of the distance
-    # buckets below.  Red lines stay exempt (phase A above).
-    home_quads = _route_state(_get(obs, "player", 0), day, hour, units,
-                              board)["home"]
-    pairs = []
-    for ui in range(len(units)):
-        if ui in assign:
-            continue
-        ux, uy = units[ui]
-        uquad = _quadrant_of(ux, uy, board)
-        home_quad = home_quads.get(ui) or uquad
-        for t in tasks:
-            if t["key"] in claimed:
-                continue
-            if t.get("units") is not None and ui not in t["units"]:
-                continue
-            d = _dist(ux, uy, t["x"], t["y"])
-            # V-T5 distance buckets dominate value (see BUCKET_DOMINANCE):
-            # near (0-1) / local (2-4) / far (5+).  A nearby modest task now
-            # always beats a distant rich one; value ranks inside a bucket.
-            bucket = 0 if d <= 1 else (1 if d <= 4 else 2)
-            score = tval(t) - TRAVEL_MU * d - bucket * BUCKET_DOMINANCE
-            if _quadrant_of(t["x"], t["y"], board) != uquad:
-                score -= CROSS_QUAD_PENALTY
-            if _quadrant_of(t["x"], t["y"], board) != home_quad:
-                score -= CROSS_SECTOR_PENALTY_V9
-            score += float(t.get("_v9_soft", {}).get(ui, 0.0))
-            need = t.get("need")
-            if need:
-                if _get(unit_inv(ui), need, 0) > 0:
-                    score += 0.5 * tval(t)   # carriers converge on consumers
-                else:
-                    score -= 0.5 * tval(t)   # wheatless units de-prioritized
-            if t["act"][0] == "PICKUP" and t["act"][1:2] == ["WHEAT"] \
-                    and _get(unit_inv(ui), "WHEAT", 0) >= 5:
-                score -= 0.5 * tval(t)       # loaded carriers leave the shed
-            if sticky.get(ui) == t["key"]:
-                score += STICKY_BONUS
-            pairs.append((score, ui, t["key"]))
-    pairs.sort(key=lambda p: (-p[0], p[1], p[2]))
-    for score, ui, key in pairs:
-        if ui in assign or key in claimed:
-            continue
-        for t in tasks:
-            if t["key"] == key:
-                assign[ui] = t
-                claimed.add(key)
-                break
-
-    # ---------------- act --------------------------------------------------
-    half = board // 2
-    shed_avail = _get(private, "shed", {}) or {}
-    for ui, (ux, uy) in enumerate(units):
-        chosen = assign.get(ui)
-        if chosen is None:
-            # act on the current tile anyway when something is executable
-            # here and unclaimed (free op, zero travel)
-            best_here = None
-            for t in tasks:
-                if t["key"] in claimed or (t["x"], t["y"]) != (ux, uy):
-                    continue
-                if not executable(t, ui):
-                    continue
-                if best_here is None or tval(t) > tval(best_here):
-                    best_here = t
-            if best_here is not None:
-                claimed.add(best_here["key"])
-                sticky[ui] = None
-                actions.append(list(best_here["act"]))
-            else:
-                sticky[ui] = None
-                actions.append(["PASS"])
-            continue
-        sticky[ui] = chosen["key"]
-        cx, cy = chosen["x"], chosen["y"]
-        need = chosen.get("need")
-        if (ux, uy) == (cx, cy):
-            if executable(chosen, ui):
-                actions.append(list(chosen["act"]))
-                continue
-        # missing the carried item: fetch it at the shed BEFORE walking out
-        # (r4-P1 fix for the wheatless-walker churn that collapsed feeding)
-        if need and _get(unit_inv(ui), need, 0) <= 0:
-            near = min(accesses, key=lambda p: _dist(ux, uy, p[0], p[1]))
-            if (ux, uy) != near:
-                actions.append(_step_towards(ux, uy, near[0], near[1]))
-                continue
-            chunk = {"WHEAT": 5, "FERTILIZER": 4, "COW": 2, "SHEEP": 2,
-                     "GOOSE": 2}.get(need, 1)
-            n = min(chunk, _get(shed_avail, need, 0))
-            if n > 0:
-                actions.append(["PICKUP", need, n])
-                continue
-        if (ux, uy) != (cx, cy):
-            actions.append(_step_towards(ux, uy, cx, cy))
-        else:
-            # standing on it, item fetched, but the op went stale this turn
-            sx, sy = half - 1, half - 1
-            actions.append(_step_towards(ux, uy, sx, sy))
-
-    # R6 guard: never request more PLANTs of a crop than seeds held
-    seeds = _get(private, "seeds", {}) or {}
-    demand = {}
-    for a in actions:
-        if a and a[0] == "PLANT":
-            demand[a[1]] = demand.get(a[1], 0) + 1
-    for crop, n in demand.items():
-        if n > seeds.get(crop, 0):
-            keep = seeds.get(crop, 0)
-            for i, a in enumerate(actions):
-                if a and a[0] == "PLANT" and a[1] == crop:
-                    if keep > 0:
-                        keep -= 1
-                    else:
-                        actions[i] = ["PASS"]
-    return actions
-
-
-def _task_sector(task, board):
-    try:
-        return _quadrant_of(int(task["x"]), int(task["y"]), board)
-    except (KeyError, TypeError, ValueError):
-        return None
-
-
-# 【中文】v9 主场象限影子路由：给每个任务按工人附加 _v9_soft 软分
-# （同区 0 / 跨区 -惩罚；本区有活且远区价值未超出 CROSS_SECTOR_VALUE_EDGE
-# 时再叠加惩罚）——只调分、绝不收窄资格图（硬过滤实测会淹没跨区高价值
-# 工作、把经济困死）。路线批量按"距离优先"排序（价值优先实测是假巡逻，
-# 破坏近端浇水节奏）。红线任务完全豁免，Phase A 仍是硬安全否决。
-def _schedule_units(obs, farm, private, day, tasks):
-    """M5 (2026-09-03): v72 is the execution authority (the
-    online-validated configuration); the v9 shadow-routing layer is
-    retired -- it duplicated every turn's routing purely for trace
-    telemetry.  Actions are identical to the shadow-on era (v72 always
-    executed the original task list); only trace telemetry fields
-    (repeated_tasks / cross_quadrant_*) went to zero.
-    """
-    return _schedule_units_v72(obs, farm, private, day, tasks)
-# ===========================================================================
-# 【中文】M3 路线求解器 v2（scheduler §3，2026-09-02 Phase-A 重做）
+# 【中文·模块导览】src/solver.py —— L3 路线求解器（唯一执行权威，M3 v3）
 # ---------------------------------------------------------------------------
-# W2 版教训（M3 分歧统计确诊）：黎明 h0 快照里雇工尚未补雇（引擎 EOD 清空
-# 全员、h0-2 才 HIRE），按快照 roster 求解=孤身 farmer 的 24 回合预算对
-# 7-33 件 D1 必然崩盘（影子 D1 覆盖 9.5% 的根因）；且簇-LPT 分区把 D1 集中
-# 到象限主、单链 ETA 累计很快越线。v2 设计：
-#   * 船员预置（§5.3 规则 1 劳力先行）：roster = farmer + 计划雇工数
-#     （_crew_target），全员按 F6 黎明重置位于 farmer 出生点；
-#   * EDF 死线优先分配：D1 按 (deadline, key) 逐件指给"完成最早"且
-#     slack≥0 的工人（喂食腿预备成本计入 finish），从根上保证覆盖；
-#   * 24 回合预算填充：非 D1 按 (deadline, 密度, key) 入"增量成本最小"
-#     且预算内的工人；带死线的填充件 ETA 超线即丢弃（记 drop_reasons）；
-#   * 喂食腿：cargo 记账（每腿 FEED_LEG_CHUNK 麦），缺货自动在最近的
-#     仓口插合成 PICKUP 腿；任务表自带麦 PICKUP 计入 cargo；
-#   * 2-opt 只抛光无死线尾段（D1 段的 EDF 序不动）；
+# v72 两阶段调度器已随 M5 冻结删除（2026-09-03，scheduler §3.3/§7"删全部
+# 过渡代码"）；其线上验证过的 pair 经济学——V−μ·d−距离桶支配−跨区惩罚+
+# STICKY_BONUS 连续性——已移植进 v3 填充阶段的工人选择（参数沿用原常量）。
+# M3 v3（2026-09-03，M5 披露后的 M3 follow-up）四要点：
+#   1. 现役船员求解：每回合对"实际在场的 farmer+hands、实际站位、真实
+#      时钟"重解——v2 按 PLANNED 船员预置的幽灵路线让未落地雇工的 D1
+#      义务整日搁浅（625.1 在线局 rewards ~20 vs ~70k 的根因）；引擎事
+#      实：雇工在棚仓口空闲格（NWSE 序）落地，当回合即入编。
+#   2. 逐回合任务新鲜化：本回合 _build_tasks 现铺 + _enrich_mission_tasks
+#      升格（cls/tier/deadline/deps）；日中新义务（当日新种的红线浇水、
+#      红升级）当回合入解（v2 冻结黎明快照的搁浅源）。
+#   3. 广义载货腿：缺 need 物品（麦/肥/畜）在最近仓口插合成 PICKUP 腿；
+#      棚仓+随身皆空的无解任务当回合剔除。D1 兜尾：死线内无人能接的
+#      D1 按"最早可到且真能服务"的工人尽力追加（引擎判死在 EOD，21/16
+#      点死线是保守缓冲，晚到仍可能救回）。
+#   4. EDF 死线优先（D1 覆盖从根保证）+ 24 回合预算填充（v72 pair 经济
+#      学选工人）+ 2-opt 无死线尾段抛光。确定性契约：全部选择键终结于
+#      (score/finish, worker, str(key))。
+# M4 门披露（4 种子 A/B 台账 exports/probes/m4_switchover_ab.json）：
+#   结构判据全过——硬逃亡 0 / EOD 溢出 0 / 确定性 / 全 DONE；经济均值
+#   93%（种子 7/8/101 分别 +4.1%/+4.8%/-8.0%，种子 9 -22.7% 为通勤开销
+#   与早局利用率的弥散差距，非机械缺陷）。按 2026-09-02 战役裁定"线上
+#   公共局为唯一裁决轴"，经济性由线上探针裁决。
+# _schedule_units 保留为公共派发入口（四层薄壳，供 entry 与历史测试）。
+# ===========================================================================
+# ===========================================================================
+# 【中文】M3 路线求解器 v3（scheduler §3，2026-09-03 现役船员版）
+# ---------------------------------------------------------------------------
+# v2 教训（M5 披露定性）：黎明快照求解的三个搁浅源——①按 PLANNED 船员铺
+# 幽灵路线（雇工未落地其 D1 整日搁浅）；②路线承诺依赖黎明冻结任务表（日
+# 中新种的红线浇水、红升级永不入解）；③全员假位 farmer 出生点+假钟 0（
+# ETA 与死线全部失真）。v3 每回合对真实世界重解：
+#   * 船员 = farmer + 实际 hands，站位 = 实际站位，时钟 = 当前 hour；
+#   * 任务 = 本回合现铺 + 全规格升格（enrich 后 schema 与任务包一致）；
+#   * EDF 死线优先（D1 按 (deadline, key) 给"完成最早"且 slack≥0 者从
+#     根上保证覆盖）+ 24 回合预算填充（增量成本最小）+ 2-opt 无死线尾段；
+#   * 广义载货腿：缺 need 物品在最近仓口插合成 PICKUP 腿（麦5/肥4/畜2），
+#     棚仓+随身皆空的任务当回合剔除；
+#   * D1 兜尾：无人能按死线接的 D1 按"最早可到"尽力追加（late 标记），
+#     引擎判死在 EOD，晚浇/晚喂仍可能救回；
 #   * D1 终验：任何 D1 站 ETA 越线 → infeasible（保留站点，绝不静默丢）。
-# 确定性契约：全部选择键终结于 (finish/增量, worker, str(key))。
-# 影子件：执行权威仍在 _schedule_units_v72；M3 门=分歧统计
-# （scripts/solver_shadow_stats.py：D1 覆盖 ≥ v72 红线零失误、PASS/连续性
-# 不劣、确定性）。
+# 确定性契约：全部选择键终结于 (finish/增量, worker, key)。
 # ===========================================================================
 
 def _seg_len(seq, start):
@@ -396,12 +98,16 @@ def _two_opt_segment(seg, start):
     return best
 
 
+# need 物品的合成腿粒度（与 v72 取货块一致；棚仓有多少取多少）
+_NEED_CHUNK = {"WHEAT": 5, "FERTILIZER": 4, "COW": 2, "SHEEP": 2, "GOOSE": 2}
+
+
 def _dawn_crew_size(farm, day):
     """Planned crew for the dawn roster (§5.3 rule 1, labour-first).
 
-    The h0 snapshot has NO hands (the engine clears them at EOD and the
-    burst hires land at h0-2), so the solve roster must provision the
-    PLANNED crew from _crew_target -- capacity that will exist by mid-morning.
+    Retired from the live path at v3: routes are solved for the crew that
+    EXISTS (phantom-worker routes stranded their D1 duties -- the M5
+    disclosure).  Kept for dawn diagnostics/tests only.
     """
     herd = 0
     wheat = 0
@@ -423,30 +129,38 @@ def _dawn_crew_size(farm, day):
 
 
 def _solve_routes(farm, private, day, tasks, aging=None,
-                  planned_hands=None):
-    """Shadow M3 v2: EDF deadline-first allocation + per-worker 24-turn
-    budget + dawn-crew provisioning + cargo-aware feed legs.
+                  planned_hands=None, hour=0, unit_pos=None, sticky=None):
+    """M3 v3: EDF deadline-first allocation + per-worker turn budget +
+    generalized cargo legs.  Current-roster by default: the crew that
+    EXISTS, at its ACTUAL positions, with the clock at the CURRENT hour
+    (dawn diagnostics may still pass planned_hands to provision a planned
+    crew from the farmer's spawn).
 
     Returns {"routes": [ {worker, sector, stops:[keys], tasks:[dicts],
     etas:[hours]} ], "feasible": bool, "dropped": [keys],
-    "drop_reasons": {"no_fit": n, "eta": m}, "feed_legs": int}.
+    "drop_reasons": {"no_fit": n, "eta": m, "late_best_effort": k},
+    "feed_legs": int}.
     Determinism: every selection key terminates in (metric, worker, key).
     """
     tiles = _get(farm, "tiles", []) or []
     board = len(tiles)
-    fx, fy = tuple(_get(farm, "farmer",
-                        [board // 2 - 1, board // 2 - 1]))
-    hands = _get(farm, "hands", []) or []
-    if planned_hands is None:
-        planned_hands = max(0, _dawn_crew_size(farm, day) - len(hands))
-    # F6: everyone resets to spawn overnight; hired hands materialize at
-    # the farmer's dawn position through the morning burst.
-    units = [(fx, fy)] * (1 + len(hands) + int(planned_hands))
+    inventories = _get(private, "inventories", []) or []
+    shed = _get(private, "shed", {}) or {}
+    hour = max(0, int(hour))
+    if unit_pos is not None:
+        # current-roster solve: real units at their real positions
+        units = [tuple(p) for p in unit_pos]
+    else:
+        fx, fy = tuple(_get(farm, "farmer",
+                            [board // 2 - 1, board // 2 - 1]))
+        hands = _get(farm, "hands", []) or []
+        if planned_hands is None:
+            planned_hands = max(0, _dawn_crew_size(farm, day) - len(hands))
+        units = [(fx, fy)] * (1 + len(hands) + int(planned_hands))
     quads = _get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]
     accesses = sorted(_shed_access(board, quads)) if board else []
     aging = aging or {}
-    horizon = 24                        # per-worker daily turn budget
-    inventories = _get(private, "inventories", []) or []
+    horizon = 24                        # absolute end-of-day (engine h23)
 
     def tkey(t):
         return str(t.get("key"))
@@ -454,9 +168,6 @@ def _solve_routes(farm, private, day, tasks, aging=None,
     def density(t):
         v = float(t.get("v") or 0) * (1.0 + 0.25 * aging.get(t.get("key"), 0))
         return v / max(1.0, float(t.get("w") or 1))
-
-    def is_feed(t):
-        return (t.get("act") or [None])[0] == "FEED"
 
     def pickup_units(t):
         act = t.get("act") or []
@@ -469,25 +180,41 @@ def _solve_routes(farm, private, day, tasks, aging=None,
 
     workers = list(range(len(units)))
     routes_seq = {w: [] for w in workers}      # ordered stop dicts
-    clock = {w: 0 for w in workers}
+    clock = {w: hour for w in workers}
     pos = {w: units[w] for w in workers}
-    cargo = {w: 0 for w in workers}            # wheat carried
+    cargo = {w: {} for w in workers}           # item -> carried count
     for w in workers:
-        # inventories[0] is the farmer's, [1..] the hands'
-        if w < len(inventories) and inventories[w]:
-            cargo[w] = int(_get(inventories[w], "WHEAT", 0) or 0)
+        inv = inventories[w] if w < len(inventories) else {}
+        for item in ("WHEAT", "FERTILIZER", "COW", "SHEEP", "GOOSE"):
+            n = _get(inv, item, 0)
+            if n:
+                cargo[w][item] = int(n)
+
+    # pre-filter: a task whose need item exists nowhere (shed + every
+    # carrier) is physically undoable this turn -- exclude it outright
+    def need_available(item):
+        total = int(_get(shed, item, 0) or 0)
+        for w in workers:
+            total += int(cargo[w].get(item, 0))
+        return total > 0
 
     dropped = []
-    drop_reasons = {"no_fit": 0, "eta": 0}
+    drop_reasons = {"no_fit": 0, "eta": 0, "late_best_effort": 0}
     feasible = True
     feed_legs_total = 0
+    late_tail = []                             # D1 obligations to best-effort
 
     def leg_plan(w, t):
-        """Feed-leg estimate for serving t from worker w's current state:
+        """Cargo-leg estimate for serving t from worker w's current state:
         (extra_cost, access) -- extra over the direct walk, plus the
-        materialized leg stop position."""
-        if not is_feed(t) or cargo[w] > 0 or not accesses:
+        materialized leg stop position.  None when w cannot serve t."""
+        item = t.get("need")
+        if not item:
             return 0, None
+        if cargo[w].get(item, 0) > 0:
+            return 0, None                     # already carrying
+        if int(_get(shed, item, 0) or 0) <= 0 or not accesses:
+            return None, None                  # nobody can restock w
         best_acc, best_total = None, None
         px, py = pos[w]
         for ax, ay in accesses:
@@ -501,38 +228,59 @@ def _solve_routes(farm, private, day, tasks, aging=None,
 
     def append_stop(w, t, leg_extra=0, acc=None):
         nonlocal feed_legs_total
+        item = t.get("need")
         if leg_extra > 0 and acc is not None:
             seq = len(routes_seq[w])
+            chunk = min(_NEED_CHUNK.get(item, 1),
+                        int(_get(shed, item, 0) or 0))
             routes_seq[w].append({
                 "key": ("feedleg", w, seq), "op": "PICKUP",
                 "x": acc[0], "y": acc[1],
-                "act": ["PICKUP", "WHEAT", FEED_LEG_CHUNK],
+                "act": ["PICKUP", item, chunk],
                 "v": 0, "w": 0, "cls": "LOGISTICS", "tier": None,
                 "deadline": None, "deps": [], "synthetic": True})
             px, py = pos[w]
             clock[w] += _dist(px, py, acc[0], acc[1]) + 1
             pos[w] = acc
-            cargo[w] += FEED_LEG_CHUNK
+            cargo[w][item] = cargo[w].get(item, 0) + chunk
             feed_legs_total += 1
         px, py = pos[w]
         clock[w] += _dist(px, py, t["x"], t["y"]) + 1
         pos[w] = (t["x"], t["y"])
         routes_seq[w].append(t)
-        cargo[w] += pickup_units(t)
-        if is_feed(t):
-            cargo[w] -= 1
+        act = t.get("act") or []
+        if act and act[0] == "PICKUP" and len(act) > 2:
+            try:
+                cargo[w][act[1]] = cargo[w].get(act[1], 0) + int(act[2] or 0)
+            except (TypeError, ValueError):
+                pass
+        if act and act[0] == "FEED" and item:
+            cargo[w][item] = max(0, cargo[w].get(item, 0) - 1)
+        if act and act[0] == "PLACE" and len(act) > 1 and item:
+            cargo[w][item] = max(0, cargo[w].get(item, 0) - 1)
 
-    all_tasks = list(tasks or [])
+    all_tasks = []
+    for t in tasks or []:
+        item = t.get("need")
+        if item and not need_available(item):
+            continue                           # physically undoable now
+        all_tasks.append(t)
     d1 = sorted((t for t in all_tasks
                  if t.get("tier") == "D1" or t.get("red")),
                 key=lambda t: ((t["deadline"] if t.get("deadline")
                                 is not None else 999), tkey(t)))
     # wheat PICKUPs lead the fill order (cargo enablers: fetch before the
-    # mouths -- otherwise legs get synthesized for wheat that was coming)
+    # mouths -- otherwise legs get synthesized for wheat that was coming);
+    # then VALUE DENSITY first (v72-parity economics): a deadline-first
+    # order let every D2/D3 WATER (deadline 21, v 24-42) outrank every
+    # undated HARVEST/PLACE (v hundreds) -- measured on seed 7 as
+    # 44 waters vs 1 harvest mid-game and a 5-day PLACE delay whose
+    # late-placed animals went terminal-idle and escaped (6 at d28 EOD)
     rest = sorted((t for t in all_tasks if t not in d1),
                   key=lambda t: (0 if pickup_units(t) > 0 else 1,
+                                 -density(t),
                                  0 if t.get("deadline") is not None else 1,
-                                 t.get("deadline") or 0, -density(t), tkey(t)))
+                                 t.get("deadline") or 0, tkey(t)))
 
     # ---- phase 1: EDF allocation of D1 obligations -----------------------
     for t in d1:
@@ -540,6 +288,8 @@ def _solve_routes(farm, private, day, tasks, aging=None,
         best = None
         for w in workers:
             leg_extra, acc = leg_plan(w, t)
+            if leg_extra is None:
+                continue                       # w cannot be restocked
             px, py = pos[w]
             finish = clock[w] + _dist(px, py, t["x"], t["y"]) + 1 + leg_extra
             if finish > horizon:
@@ -550,34 +300,91 @@ def _solve_routes(farm, private, day, tasks, aging=None,
             if best is None or cand < best[0]:
                 best = (cand, leg_extra, acc)
         if best is None:
-            dropped.append(t.get("key"))
             drop_reasons["no_fit"] += 1
-            feasible = False       # an obligation went uncovered
+            late_tail.append(t)                # best-effort below, never lost
             continue
         (_finish, w), leg_extra, acc = best
         append_stop(w, t, leg_extra, acc)
 
-    # ---- phase 2: budget fill by incremental cost -------------------------
+    # ---- phase 2: budget fill, v72-parity pair economics ------------------
+    # Sequential over tasks in value-density order; the WORKER choice ports
+    # v72's proven phase-B score (V - TRAVEL_MU*d - distance-bucket
+    # dominance - cross-quadrant penalty, the online-validated constants):
+    # near modest work beats distant riches, which kept v72 watering local
+    # tiles instead of commuting (seed 101 without this: 28 waters vs A's
+    # 48 and 3x the mid-game money gap).  Queue time counts: d_eff = the
+    # worker's finish-from-now, so a loaded worker loses to a free one.
+    def tval(t):
+        v = float(t.get("v") or 0) or float(t.get("w") or 0)
+        return v * (1.0 + 0.25 * aging.get(t.get("key"), 0))
+
     for t in rest:
         deadline = t.get("deadline")
         best = None
         for w in workers:
             leg_extra, acc = leg_plan(w, t)
+            if leg_extra is None:
+                continue
             px, py = pos[w]
             finish = clock[w] + _dist(px, py, t["x"], t["y"]) + 1 + leg_extra
             if finish > horizon:
                 continue
             if deadline is not None and finish > deadline:
                 continue
-            cand = (finish, w)
+            d_eff = finish - hour
+            bucket = 0 if d_eff <= 1 else (1 if d_eff <= 4 else 2)
+            score = tval(t) - TRAVEL_MU * d_eff \
+                - bucket * BUCKET_DOMINANCE
+            if board and _quadrant_of(t["x"], t["y"], board) != \
+                    _quadrant_of(px, py, board):
+                score -= CROSS_QUAD_PENALTY
+            # continuity: the worker already heading for this task keeps it
+            # (per-turn re-solve churn -- v72's documented failure mode:
+            # "nine workers oscillated between 18 red tiles for eight
+            # hours, zero waterings" -- cured by the same bonus)
+            if sticky is not None and sticky.get(w) == tkey(t):
+                score += STICKY_BONUS
+            cand = (-score, finish, w)
             if best is None or cand < best[0]:
                 best = (cand, leg_extra, acc)
         if best is None:
             dropped.append(t.get("key"))
             drop_reasons["eta"] += 1
             continue
-        (_finish, w), leg_extra, acc = best
+        _cand, leg_extra, acc = best
+        w = _cand[2]
         append_stop(w, t, leg_extra, acc)
+
+    # ---- D1 best-effort tail: earliest-arrival worker, deadline waived ----
+    # need-aware: a late FEED appended to a WHEATLESS worker is a silent
+    # no-op at the tile (F8) -- the animal starves anyway.  Only workers
+    # that can actually serve (carrying the item, or restockable via a
+    # leg) are eligible; the need_available pre-filter guarantees at
+    # least one exists whenever the task reached this far.
+    for t in late_tail:
+        best = None
+        fallback = None
+        for w in workers:
+            px, py = pos[w]
+            arrive = clock[w] + _dist(px, py, t["x"], t["y"]) + 1
+            if fallback is None or (arrive, w) < fallback[0]:
+                fallback = ((arrive, w), w)
+            leg_extra, acc = leg_plan(w, t)
+            if leg_extra is None:
+                continue
+            arrive += leg_extra
+            if best is None or (arrive, w) < best[0]:
+                best = ((arrive, w), w, leg_extra, acc)
+        if best is not None:
+            _a, w, leg_extra, acc = best
+            t["late"] = True
+            append_stop(w, t, leg_extra, acc)
+        elif fallback is not None:
+            w = fallback[1]
+            t["late"] = True
+            append_stop(w, t)
+        drop_reasons["late_best_effort"] += 1
+        feasible = False       # an obligation went uncovered by deadline
 
     # ---- polish the UNDATED tail of each route (D1/EDF order untouched) ---
     routes = []
@@ -602,7 +409,7 @@ def _solve_routes(farm, private, day, tasks, aging=None,
         etas = []
         keep = []
         cx, cy = units[w]
-        clock_w = 0
+        clock_w = hour
         for t in seq:
             clock_w += _dist(cx, cy, t["x"], t["y"]) + 1
             dl = t.get("deadline")
@@ -619,3 +426,61 @@ def _solve_routes(farm, private, day, tasks, aging=None,
                        "tasks": keep, "etas": etas})
     return {"routes": routes, "feasible": feasible, "dropped": dropped,
             "drop_reasons": drop_reasons, "feed_legs": feed_legs_total}
+
+
+# per-player-day registry of the previous solve's per-worker first stop
+# (continuity input for _solve_routes; day-rolled, harness-resettable)
+_ASSIGN_MEM = {}
+
+
+def _current_units(farm):
+    """The crew that exists right now: farmer + hands at their actual
+    positions (engine fact: hired hands materialize on the first free
+    shed-access tile, NWSE order -- NOT at the farmer's spawn)."""
+    tiles = _get(farm, "tiles", []) or []
+    board = len(tiles)
+    units = [tuple(_get(farm, "farmer",
+                        [board // 2 - 1, board // 2 - 1]))]
+    for h in _get(farm, "hands", []) or []:
+        units.append(tuple(h))
+    return units
+
+
+def _solve_and_execute(obs, farm, private, day, tasks):
+    """Four-layer dispatcher (scheduler §2-§4, the M4 live path).
+
+    Per turn: fresh task table (entry's _build_tasks) -> mission-schema
+    enrichment -> current-roster solve at the real hour -> mechanical
+    execution.  An assertion trip (D1 ETA / EOD projection) rebuilds once
+    from the live world this same turn (§4 REPLAN); the next turn re-solves
+    from scratch anyway (current-roster discipline), so the rebuild is
+    bounded and cannot loop.
+    """
+    hour = _get(obs, "hour", 0)
+    player = _get(obs, "player", 0)
+    st = _ASSIGN_MEM.get(player)
+    if st is None or st.get("day") != day:
+        st = {"day": day, "assign": {}}
+        _ASSIGN_MEM[player] = st
+    etasks = _enrich_mission_tasks(tasks, _mission_tile_map(farm), day)
+    units = _current_units(farm)
+    solved = _solve_routes(farm, private, day, etasks, planned_hands=0,
+                           hour=hour, unit_pos=units, sticky=st["assign"])
+    actions, replan = _execute_routes(obs, farm, private, day,
+                                      solved.get("routes"))
+    if replan:
+        solved = _solve_routes(farm, private, day, etasks, planned_hands=0,
+                               hour=hour, unit_pos=units,
+                               sticky=st["assign"])
+        actions, _ = _execute_routes(obs, farm, private, day,
+                                     solved.get("routes"))
+    st["assign"] = {r.get("worker"): (r.get("tasks") or [{}])[0].get("key")
+                    for r in solved.get("routes") or []}
+    return actions
+
+
+def _schedule_units(obs, farm, private, day, tasks):
+    """Public dispatch (name kept for entry + the historical tests): the
+    four-layer pipeline is the ONLY scheduling path since M5 -- v72 was
+    deleted with the transition code (scheduler §3.3/§7)."""
+    return _solve_and_execute(obs, farm, private, day, tasks)
