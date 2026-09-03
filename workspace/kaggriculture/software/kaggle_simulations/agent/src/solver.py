@@ -77,6 +77,54 @@ def _seg_len(seq, start):
     return total
 
 
+def _seq_deadlines_ok(seq, start_pos, hour):
+    """Same ETA accounting as the final feasibility pass (clock starts at
+    `hour`, each leg costs dist + 1): every dated leg must still meet its
+    deadline.  Deliberately stricter than the pass's D1-only flag -- a
+    polish candidate never turns a punctual dated leg late."""
+    cx, cy = start_pos
+    clock = hour
+    for t in seq:
+        clock += _dist(cx, cy, t["x"], t["y"]) + 1
+        dl = t.get("deadline")
+        if dl is not None and clock > dl:
+            return False
+        cx, cy = t["x"], t["y"]
+    return True
+
+
+def _two_opt_feasible(seg, start_pos, hour):
+    """Full-sequence 2-opt (aggressive wave D 2026-09-04): strictly
+    length-improving reversals, accepted only when every dated leg still
+    meets its deadline -- the old undated-tail-only polish left the dated
+    head length-suboptimal by construction.  Deterministic scan order;
+    bounded by TWO_OPT_MAX_PASSES; the deadline check runs only on
+    length-improving candidates (short-circuit), so the cost stays the
+    old O(n^2)-per-pass shape."""
+    if len(seg) < 3:
+        return list(seg)
+    best = list(seg)
+    best_len = _seg_len(best, start_pos)
+    improved = True
+    passes = 0
+    while improved and passes < TWO_OPT_MAX_PASSES:
+        improved = False
+        passes += 1
+        i = 0
+        while i < len(best) - 1:
+            j = i + 1
+            while j < len(best):
+                cand = best[:i] + best[i:j + 1][::-1] + best[j + 1:]
+                cand_len = _seg_len(cand, start_pos)
+                if cand_len < best_len - 1e-9 \
+                        and _seq_deadlines_ok(cand, start_pos, hour):
+                    best, best_len = cand, cand_len
+                    improved = True
+                j += 1
+            i += 1
+    return best
+
+
 def _two_opt_segment(seg, start):
     """2-opt polish (strict improvement only; deterministic scan order)."""
     if len(seg) < 3:
@@ -438,7 +486,9 @@ def _solve_routes(farm, private, day, tasks, aging=None,
         drop_reasons["late_best_effort"] += 1
         feasible = False       # an obligation went uncovered by deadline
 
-    # ---- polish the UNDATED tail of each route (D1/EDF order untouched) ---
+    # ---- polish each route (aggressive wave D: full-sequence 2-opt with
+    # deadline feasibility -- the old undated-tail-only polish left the
+    # dated head length-suboptimal by construction) ----
     routes = []
     for w in workers:
         seq = routes_seq[w]
@@ -446,17 +496,7 @@ def _solve_routes(farm, private, day, tasks, aging=None,
             routes.append({"worker": w, "sector": None, "stops": [],
                            "tasks": [], "etas": []})
             continue
-        last_dated = -1
-        for i, t in enumerate(seq):
-            if t.get("deadline") is not None:
-                last_dated = i
-        head_seq = seq[:last_dated + 1]
-        tail = seq[last_dated + 1:]
-        if len(tail) >= 3:
-            start_pos = (head_seq[-1]["x"], head_seq[-1]["y"]) \
-                if head_seq else units[w]
-            tail = _two_opt_segment(tail, start_pos)
-        seq = head_seq + tail
+        seq = _two_opt_feasible(seq, units[w], hour)
         # final ETA pass (post-polish) + D1 terminal verification
         etas = []
         keep = []

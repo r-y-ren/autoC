@@ -1262,6 +1262,45 @@ def _sell_plan_batches_due(obs, day, hour, shed, existing_orders):
         return []                   # fail-open: never break ordering
 
 
+def interference_confirmed(player, day):
+    """Read-only view of the MK-4 trigger streak for the strategy layer's
+    vehicle arming (aggressive wave C): the last INTERFERENCE_CONFIRM_DAYS
+    records strictly before `day` must all be confirmed triggers."""
+    streak = 0
+    for rec in reversed(_INTERFERENCE_LOG):
+        if rec.get("player") != player or rec.get("day", day) >= day:
+            continue
+        if rec.get("confirmed"):
+            streak += 1
+            if streak >= INTERFERENCE_CONFIRM_DAYS:
+                return True
+        else:
+            return False
+    return False
+
+
+def _interference_v2_orders(obs, farm, private, day, plan=None):
+    """MK-5 vehicle 2 (carrot ambush) dump leg (aggressive wave C): when
+    the strategy layer armed the ambush (iv2_target_day pinned in the
+    stage register) and the trigger is still confirmed, dump the whole
+    carrot stock at/after the target day.  Rides the normal budget
+    truncation; zero extra capex (the block was grown earlier)."""
+    try:
+        target = (plan or {}).get("iv2_target_day")
+        if not target or day < int(target) or day >= SEASON_DAYS - 1:
+            return []
+        player = _get(obs, "player", 0)
+        if not interference_confirmed(player, day):
+            return []
+        shed = _get(private, "shed", {}) or {}
+        stock = shed.get("CARROT", 0)
+        if not isinstance(stock, (int, float)) or stock <= 0:
+            return []
+        return [["SELL", "CARROT", int(stock)]]
+    except Exception:
+        return []
+
+
 def _interference_orders(obs, farm, private, day, prices, plan=None):
     """MK-5 vehicle 1: dump OUR held stock of the opponent's top line.
 
@@ -1500,8 +1539,9 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             requested -= 1
         return requested
 
-    if quads in LAND_PLAN:
-        due_day, fund = LAND_PLAN[quads]
+    _land_ovr = (plan or {}).get("land_plan_override") or {}
+    if quads in LAND_PLAN or quads in _land_ovr:
+        due_day, fund = _land_ovr.get(quads) or LAND_PLAN[quads]
         # r4-P3: SW after day 18 cannot deploy a repaying asset (strawberry
         # phase over, pasture ring of NW+NE already holds 17 head) -- the
         # 2000 buys liquidity instead
@@ -1862,6 +1902,16 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                        herd_total)
     opening_bought = False
     _open_seq = OPENING_SHIFT_SEQ if OPENING_SHIFT else {0: OPENING_HERD}
+    _seq_ovr = (plan or {}).get("opening_seq_override") or {}
+    if _seq_ovr:
+        # B1 catch-up stride (aggressive wave C): branch-level absolute
+        # species targets merged over the base opening sequence; the
+        # wallet (OPENING_RESERVE) and capacity gates below still bind.
+        _open_seq = {k: dict(v) for k, v in _open_seq.items()}
+        for _d, _spec in _seq_ovr.items():
+            _m = dict(_open_seq.get(_d, {}))
+            _m.update(_spec)
+            _open_seq[_d] = _m
     if not last_day and day in _open_seq:
         _species_pre = _species_counts(farm, private, herd_total)
         spend = 0
@@ -1984,10 +2034,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         obs, day, _get(obs, "hour", 0), shed, orders))
     # 【MK-5 武装】干扰触发器（market §3）：影子记录 + 载体 1（现有
     # 库存倾销，当天/零成本）在确认与三闸通过时发令；触发消除即收手
-    # （日复判）。载体 2-4（萝卜伏击/一次性羊群/镜像）需 capex 窗口，
-    # 留线上裁决后启用。
+    # （日复判）。载体 2（萝卜伏击）于 2026-09-04 激进波 C 武装：战略层
+    # 跨日钉定目标日后，到点全量倾销胡萝卜（走正常预算截断）；载体 4
+    # （镜像产线）为田地分配动作，经 plan.iv4_mirror 在 _field_alloc
+    # 落格，无需市场单；载体 3（一次性羊群）保持教义算术否决（15% 容量
+    # ≈6 头 < 其暴露闸要求的杀伤量，§6.3）。
     orders.extend(_interference_orders(obs, farm, private, day, prices,
                                        plan))
+    orders.extend(_interference_v2_orders(obs, farm, private, day,
+                                          plan=plan))
     if last_day:
         # MK-3: drain the L4 d29 DROP->SELL queue (what the executor's
         # liquidation template actually moved into the shed this turn)

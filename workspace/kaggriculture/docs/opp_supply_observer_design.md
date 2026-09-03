@@ -231,7 +231,7 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 | OBS-2 | **完成** | Ch0 精确市场流、昨日窗口、floor/BUY 分离、player 路由；请求量与执行量不混用 | 在线真实 fill 不可见时保持 fallback 标记 |
 | OBS-3 | **完成** | Ch2 对账、`est_*` getter、生产日历和 telemetry 快照 | 继续按商品拆解 held 误差 |
 | OBS-4 | **完成（口径限定）** | 60 局离线回放：validated-fill exact 0.9733，requested exact 0.9241，turn lag 0、magnitude 0；shadow mismatch=0 | 不把 offline fill PASS 宣称为线上执行量能力 |
-| OBS-5 | **部分完成** | P4 已接入 player-scoped `est_opp_held/conf`，静态置信帽仍生效；无完整线上 A/B | 逐消费方线上 A/B 后才可提升消费门；不放宽商品帽 |
+| OBS-5 | **完成（激进裁定）** | P4 已接入 player-scoped `est_opp_held/conf`；**静态置信帽于 2026-09-04 退役**（`OBS_HELD_CONF_CAP={}`，v13.3 重构 validated fill Ch0 0.9733/滞后 0/量级误差 0 使帽失去依据），WHEAT/MILK/STRAWBERRY 的 P4 三档即刻生效；requested 口径 0.9241 的残余误差由消费方 conf≥0.5 门自担 | 线上 A/B 由用户裁定豁免（成绩非目标） |
 
 ### OBS-5 剩余工作
 

@@ -440,3 +440,16 @@ def test_fert_value_gate_keeps_premium_boosts_only():
     fert_tasks = {(t["x"], t["y"]) for t in tasks if t["act"][0] == "FERTILIZE"}
     assert (4, 1) in fert_tasks        # strawberry
     assert (4, 2) not in fert_tasks    # wheat left unfertilized at 90 fert
+
+
+def test_field_alloc_carves_declared_extras():
+    # aggressive wave C: declared extras (B2 probe / V2 ambush / V4
+    # mirror) carve unclaimed empties straight into the rotation.
+    farm = _farm(quads=["NW", "NE"])
+    builds, crops, _, _ = main._field_alloc(
+        farm, 1, _prices(),
+        plan={"straw_d1_probe": 3, "iv2_carrot": 8,
+              "iv4_mirror": {"crop": "MELON", "tiles": 2}})
+    assert len(crops["STRAWBERRY"]) >= 3
+    assert len(crops["CARROT"]) >= 8
+    assert len(crops["MELON"]) >= 2

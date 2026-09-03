@@ -765,9 +765,58 @@ def _b_branch_adjust(plan, obs, day, st=None):
         shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
         if day <= 5 and "YARN_STORE" not in shops:
             plan["p1_species_pref"] = "COW"   # 不跟死吸收的毛线挤（§4.2 B1）
+        # B1 full catch-up stride (branch §4.2; aggressive wave C
+        # 2026-09-04): answer a burst opening with the declared d1 +3
+        # sheep / d2 +2 cow stride, expressed as absolute species targets
+        # (the d0 2S+1C burst included); wallet + capacity gates still bind.
+        plan["opening_seq_override"] = {1: {"SHEEP": 5}, 2: {"COW": 3}}
     elif cls == "melon_first":
         plan["melon_probe"] = True
         plan["melon_total_cap"] = 2 if 3 <= day <= 5 else 0
+    else:
+        # B2 declared extensions (branch §4.2; aggressive wave C): the
+        # d1 strawberry probe and the NE land purchase pulled forward
+        # from d4 to d1 (fund/capacity/cash gates unchanged).
+        if day <= 1:
+            plan["straw_d1_probe"] = 3
+        plan["land_plan_override"] = {1: (1, 1700)}
+    # ---- MK-5 vehicles 2/4 arming (market §6.2-§6.3; aggressive wave C).
+    # Trigger source: the market layer's 2-day confirmed streak.  V2 pins
+    # its ambush target day once (cross-day state in the stage register)
+    # and grows a bounded carrot block while inside the arm window.  V4
+    # mirrors the opponent's dominant public crop, d4-6 only (§6.3: past
+    # d7 a mirror can never win the first-sale race).  V3 (one-shot
+    # herd) stays doctrine-rejected: 15% capacity ~= 6 head is below the
+    # kill mass its own exposure gate requires -- arming it would break
+    # the doctrine's arithmetic, not merely its caution.
+    iv = (st or {}).get("iv_state") or {}
+    player = _get(obs, "player", 0)
+    _trig = interference_confirmed(player, day)
+    if 5 <= day <= 12 and _trig and "v2_armed_day" not in iv:
+        iv["v2_armed_day"] = day
+        iv["v2_target_day"] = min(SEASON_DAYS - 1, day + 10)
+    if "v2_target_day" in iv:
+        plan["iv2_target_day"] = iv["v2_target_day"]
+        if day <= (iv.get("v2_armed_day") or day) + 2:
+            plan["iv2_carrot"] = 8
+    if 4 <= day <= 6 and _trig:
+        opp = None
+        for _i, _f in enumerate(_get(obs, "farms", []) or []):
+            if _i != player:
+                opp = _f
+                break
+        counts = {}
+        for _row in _get(opp, "tiles", []) or []:
+            for _t in _row:
+                if isinstance(_t, dict) and _get(_t, "kind", "") == "PLANT":
+                    _c = _get(_t, "crop", "WHEAT")
+                    counts[_c] = counts.get(_c, 0) + 1
+        if counts:
+            _crop = max(sorted(counts), key=lambda c: counts[c])
+            plan["iv4_mirror"] = {"crop": _crop,
+                                  "tiles": min(6, counts[_c])}
+    if st is not None and iv:
+        st["iv_state"] = iv
     return plan
 
 
@@ -1275,4 +1324,30 @@ def _field_alloc(farm, day, prices, plan=None):
         empties.remove(pos)
 
     capacity = int(len(crop_map["WHEAT"]) * 1.2)
+    # aggressive wave C (2026-09-04): declared plan extras carve tiles
+    # straight into the rotation -- B2's d1 strawberry probe and the MK-5
+    # vehicle allocations (V2 ambush carrots, V4 mirror block).  Each
+    # takes only unclaimed empties; the mission layer's per-tile gates
+    # (seed budget, same-day water window, phase) still apply downstream.
+    extras = []
+    _probe = (plan or {}).get("straw_d1_probe") or 0
+    if _probe > 0 and day <= 1:
+        extras.append(("STRAWBERRY",
+                       int(_probe) - len(crop_map.get("STRAWBERRY", ()))))
+    _iv2 = (plan or {}).get("iv2_carrot") or 0
+    if _iv2 > 0:
+        extras.append(("CARROT",
+                       int(_iv2) - len(crop_map.get("CARROT", ()))))
+    _iv4 = (plan or {}).get("iv4_mirror") or {}
+    if _iv4.get("crop") in CROPS:
+        extras.append((_iv4["crop"],
+                       int(_iv4.get("tiles") or 0)
+                       - len(crop_map.get(_iv4["crop"], ()))))
+    for _crop, _want in extras:
+        while _want > 0 and empty_field:
+            _pos = empty_field.pop(0)
+            if any(_pos in _s for _s in crop_map.values()):
+                continue
+            crop_map.setdefault(_crop, set()).add(_pos)
+            _want -= 1
     return builds, crop_map, n_animals, capacity

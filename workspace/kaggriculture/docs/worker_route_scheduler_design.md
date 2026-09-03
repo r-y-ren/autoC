@@ -64,7 +64,7 @@ overflow = max(0, eod_projected - 100)
 WHEAT。市场层在计划小时消费事件、与同商品其他 SELL 合并并按实际库存封顶。执行器每回合
 复核棚仓+随身总量；当前实现不做激进 HARVEST 尾部裁剪，是否削减收益任务留给后续回放消融。
 
-**诚实边界（2026-09-03 审计定性）**：生产路径的 `planned_sell` 恒为 0——mission 在 entry
+**闭环（2026-09-04 激进波 B）**：两遍构建已接线——mission 先按 planned_sell=0 保守构建（供卖计划读 overflow），卖计划算出后 `_mission_refresh_planned_sell` 以真实 `planned_total` 重建并覆写缓存，eod_budget 事件精确化。历史注记：此前生产路径的 `planned_sell` 恒为 0——mission 在 entry
 的黎明时序里先于当日卖出计划构建（`_mission_shadow_update` → `_sell_plan_shadow_update`），
 该时刻计划卖出量不可得。投影因此系统性**高估**日终占用，方向保守（只多生成 eod_budget
 卖单、防溢出销毁，不会漏报）。接线闭环（卖出计划前移或 mission 二次更新）列为战后项，

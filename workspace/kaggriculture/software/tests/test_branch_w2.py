@@ -373,3 +373,44 @@ def test_market_capex_queue_stays_within_capacity():
         elif order[0] == "BUY_ANIMAL":
             delta += 2.0 * order[2]
     assert main._capacity_gate(farm, None, delta, 8, plan)[0]
+
+
+def test_b1_catchup_and_b2_probe_flags_aggressive():
+    # aggressive wave C: B1 carries the declared catch-up stride, B2 the
+    # d1 strawberry probe + NE land pull-forward.
+    main._INTERFERENCE_LOG.clear()
+    st = {"opp_class_frozen": "burst"}
+    plan = main._b_branch_adjust({}, {}, 1, st)
+    assert plan["b_branch"] == "B1"
+    assert plan["opening_seq_override"] == {1: {"SHEEP": 5}, 2: {"COW": 3}}
+    st2 = {"opp_class_frozen": "reduced"}
+    plan2 = main._b_branch_adjust({}, {"player": 0}, 1, st2)
+    assert plan2["b_branch"] == "B2"
+    assert plan2["straw_d1_probe"] == 3
+    assert plan2["land_plan_override"] == {1: (1, 1700)}
+    main._INTERFERENCE_LOG.clear()
+
+
+def test_vehicle_arming_on_confirmed_trigger():
+    # V2 arms once on a 2-day confirmed streak and pins its target day in
+    # the stage register (cross-day state); V4 mirrors the opponent's
+    # dominant public crop inside d4-6.
+    main._INTERFERENCE_LOG.clear()
+    for d in (2, 3, 4):
+        main._INTERFERENCE_LOG.append({"player": 0, "day": d,
+                                       "confirmed": True})
+    st = {"opp_class_frozen": "reduced", "b_branch": "B2"}
+    obs = {"player": 0, "farms": [
+        {},
+        {"tiles": [[{"kind": "PLANT", "crop": "STRAWBERRY"}] * 4]}]}
+    plan = main._b_branch_adjust({}, obs, 5, st)
+    assert plan["iv2_target_day"] == 15
+    assert plan["iv2_carrot"] == 8
+    assert st["iv_state"]["v2_armed_day"] == 5
+    plan4 = main._b_branch_adjust({}, obs, 4, st)
+    assert plan4["iv4_mirror"]["crop"] == "STRAWBERRY"
+    assert plan4["iv4_mirror"]["tiles"] == 4
+    # re-arming does not drift the pinned target day
+    plan6 = main._b_branch_adjust({}, obs, 6, st)
+    assert plan6["iv2_target_day"] == 15
+    main._INTERFERENCE_LOG.clear()

@@ -588,6 +588,53 @@ def test_live_dispatch_replan_excludes_finished_stops():
     assert assign.get(0) == ("care", 2, 4)
 
 
+def test_two_opt_feasible_never_breaks_deadlines():
+    # aggressive wave D: a strictly length-improving reversal that would
+    # push a dated leg past its deadline is rejected; undated segments
+    # polish exactly like the old tail-only pass.
+    a = {"key": "a", "x": 0, "y": 0, "act": ["WATER"], "deadline": None,
+         "tier": "D4"}
+    b = {"key": "b", "x": 4, "y": 0, "act": ["WATER"], "deadline": 1,
+         "tier": "D1"}
+    c = {"key": "c", "x": 5, "y": 0, "act": ["WATER"], "deadline": None,
+         "tier": "D4"}
+    seq = [a, b, c]
+    # [b, a, c] is shorter (6 vs 7) but reaches b at eta 2 > deadline 1
+    out = main._two_opt_feasible(seq, (2, 0), 0)
+    assert [t["key"] for t in out] == ["a", "b", "c"]
+    # all-undated segment still takes the improving reversal (the zigzag
+    # [d,e,f] costs 12 from (3,1); [d,f,e] costs 11)
+    d = {"key": "d", "x": 0, "y": 1, "act": ["WATER"], "deadline": None,
+         "tier": "D4"}
+    e = {"key": "e", "x": 5, "y": 1, "act": ["WATER"], "deadline": None,
+         "tier": "D4"}
+    f = {"key": "f", "x": 4, "y": 1, "act": ["WATER"], "deadline": None,
+         "tier": "D4"}
+    out2 = main._two_opt_feasible([d, e, f], (3, 1), 0)
+    assert main._seg_len(out2, (3, 1)) < main._seg_len([d, e, f], (3, 1))
+
+
+def test_interference_v2_dumps_carrots_at_target():
+    main._INTERFERENCE_LOG.clear()
+    for d in (3, 4):
+        main._INTERFERENCE_LOG.append({"player": 0, "day": d,
+                                       "confirmed": True})
+    plan = {"iv2_target_day": 5}
+    private = {"shed": {"CARROT": 12}, "inventories": [{}]}
+    out = main._interference_v2_orders({"player": 0}, {}, private, 5,
+                                       plan=plan)
+    assert out == [["SELL", "CARROT", 12]]
+    # before the target day: silent; trigger lost: silent
+    assert main._interference_v2_orders({"player": 0}, {}, private, 4,
+                                        plan=plan) == []
+    main._INTERFERENCE_LOG.clear()
+    main._INTERFERENCE_LOG.append({"player": 0, "day": 4,
+                                   "confirmed": False})
+    assert main._interference_v2_orders({"player": 0}, {}, private, 5,
+                                        plan=plan) == []
+    main._INTERFERENCE_LOG.clear()
+
+
 def test_executor_checks_later_d1_cumulative_eta():
     rows = _rows10()
     farm = _farm(rows, farmer=(0, 0))
