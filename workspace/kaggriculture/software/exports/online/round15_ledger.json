@@ -313,6 +313,17 @@
       "mean economy +30% over both same-day refs -- the d12-cash structural gap diagnosis (build-line starvation) confirmed directionally by the reward jump",
       "d12-cash KPI deferred to the daily episode dataset (UTC midnight)"
     ],
-    "d12_cash": null
+    "d12_cash": {
+      "channel": "official per-game seeds (internal GetEpisode) + local self-play on those seeds -- the daily episode dataset is a 660/day SAMPLE and none of our 29 games were sampled (verified by full filelist paging); opponent online play is not reproducible offline, so this is a seed-anchored proxy, NOT ground truth",
+      "median_all_seats": 789.0,
+      "min": 534.0,
+      "max": 1015.0,
+      "reference": {
+        "c1_online_d12_med": 464,
+        "v109_online_d12_med": 411,
+        "top20_online_med": 15400
+      },
+      "reading": "seed-proxy d12 med 789 vs round-14 online d12 med 464 (c1) / 411 (v10.9) -- consistent with the +30% economy jump; the gap to top-20 15.4k REMAINS structural (the top-20 build lines are reached in P2, ours still ramp)"
+    }
   }
 }
