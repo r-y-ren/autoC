@@ -64,12 +64,18 @@ def agent(obs):
         actions = None
         if ROUTE_EXECUTOR_ENABLED and mission is not None:
             try:
-                routes = _solve_routes(
+                solved = _solve_routes(
                     farm, _get(obs, "private", {}) or {}, day,
                     mission.get("tasks") or [])
+                # M5 fix: _solve_routes returns {"routes": [...], ...} --
+                # the pre-fix wiring passed the RESULT DICT, so the
+                # executor iterated its string keys and excepted on ~97%
+                # of turns (fail-open back to v72; only the d29 template
+                # path ran -- the online 625.1 candidate was effectively
+                # v72 + strategy-layer changes)
                 cand, replan = _execute_routes(obs, farm,
                                                 _get(obs, "private", {}) or {},
-                                                day, routes)
+                                                day, solved.get("routes"))
                 if replan:
                     # assertion failed (D1 ETA / EOD projection): rebuild is
                     # the doc's answer, but this turn's red lines cannot

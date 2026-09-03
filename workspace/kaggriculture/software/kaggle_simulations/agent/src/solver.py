@@ -3,8 +3,9 @@
 # ---------------------------------------------------------------------------
 # v10.9 职责：_schedule_units_v72 两阶段调度（Phase A 红线一票否决 +
 #   Phase B 价值匹配贪心 Score=V−行走−跨区+亲和+粘滞）是现执行权威；
-#   _route_tasks（v9 分区巡逻路由）仅在 V9_SHADOW_ROUTING=True 下影子
-#   采集；_schedule_units 壳层兼顾 telemetry/trace；_TARGETS/_sticky_state
+#   v9 分区巡逻影子路由（_route_tasks）已随 M5 冻结退役（2026-09-03，
+#   动作零变化——v72 始终执行原始任务表；_route_state 家区粘滞仍被
+#   v72 使用故保留）；_schedule_units 为薄壳直通；_TARGETS/_sticky_state
 #   按消费方就近落位本模块（JOURNAL 2026-09-02 grep 裁决，偏离计划表
 #   初判 mission，豁免条款行使）。
 # 新架构落位：scheduler 设计 §3 路线求解器（分区+EDF×价值密度×老化+
@@ -333,168 +334,15 @@ def _task_sector(task, board):
 # 时再叠加惩罚）——只调分、绝不收窄资格图（硬过滤实测会淹没跨区高价值
 # 工作、把经济困死）。路线批量按"距离优先"排序（价值优先实测是假巡逻，
 # 破坏近端浇水节奏）。红线任务完全豁免，Phase A 仍是硬安全否决。
-def _route_tasks(obs, farm, private, day, tasks):
-    """Add v9 home-sector eligibility without changing task semantics.
-
-    A worker with useful work in its home sector is not offered distant work
-    unless the distant task beats the best local value by
-    ``CROSS_SECTOR_VALUE_EDGE``.  Red-line tasks are intentionally exempt and
-    keep their original eligibility so phase A remains a hard safety veto.
-    """
-    tiles = _get(farm, "tiles", []) or []
-    board = len(tiles)
-    units, _ = _telemetry_units(farm)
-    player = _get(obs, "player", 0)
-    state = _route_state(player, day, _get(obs, "hour", 0), units, board)
-    copies = [copy.deepcopy(task) for task in tasks]
-    active = {task.get("key") for task in copies}
-    red_signature = tuple(sorted(repr(task.get("key")) for task in copies
-                                 if task.get("red")))
-    previous_red = state.get("red_signature", ())
-    target_missing = any(key is not None and key not in active
-                         for route in state["routes"].values() for key in route)
-    changed = red_signature != previous_red or target_missing
-    if changed:
-        state["replans"] += 1
-        state["routes"] = {ui: [] for ui in range(len(units))}
-    state["red_signature"] = red_signature
-
-    home = state["home"]
-    normal = [task for task in copies if not task.get("red")]
-    # Preserve the champion's full eligibility graph.  Sector routing is a
-    # soft preference in the downstream score; hard filtering here caused
-    # cross-sector high-value work to disappear and stranded the economy.
-    original_units = {
-        id(task): (set(task["units"]) if task.get("units") is not None
-                   else set(range(len(units))))
-        for task in normal
-    }
-    for task in normal:
-        task["units"] = set(original_units[id(task)])
-
-    for ui, (ux, uy) in enumerate(units):
-        sector = home.get(ui, _quadrant_of(ux, uy, board))
-        local = [task for task in normal if _task_sector(task, board) == sector
-                 and ui in original_units[id(task)]]
-        if local:
-            best_local = max(float(task.get("v", task.get("w", 0)))
-                              for task in local)
-        else:
-            best_local = 0.0
-
-        # Attach worker-local soft scores rather than narrowing task
-        # eligibility.  The legacy matcher still sees every legal task.
-        for task in normal:
-            task.setdefault("_v9_soft", {})[ui] = (
-                0.0 if _task_sector(task, board) == sector
-                else -CROSS_SECTOR_PENALTY_V9)
-            if local and task.get("v", task.get("w", 0)) <= \
-                    best_local + CROSS_SECTOR_VALUE_EDGE:
-                task["_v9_soft"][ui] -= CROSS_SECTOR_PENALTY_V9
-
-        # Retain a useful same-sector batch order in the route registry.  The
-        # active task list is updated only on a completion/invalidity signal,
-        # not rebuilt merely because the clock advanced one turn.
-        current = state["routes"].setdefault(ui, [])
-        if changed or not current:
-            same = [task for task in copies
-                    if not task.get("red") and
-                    _task_sector(task, board) == sector and
-                    (task.get("units") is None or ui in task["units"])]
-            # Distance-first: a value-first head sent workers to far
-            # high-value sector tasks (a false sweep) and broke the nearby
-            # watering cadence -- measured as template_wheat/cow_baron seed
-            # 101 regressions of -20k..-25k on both seats with water
-            # pressure +22% (routing_tour, 2026-08-30).  Nearest-first is
-            # the actual patrol: short hops, water stays local.
-            same.sort(key=lambda task: (_dist(ux, uy, task["x"], task["y"]),
-                                        -float(task.get("v", task.get("w", 0))),
-                                        repr(task.get("key"))))
-            state["routes"][ui] = [task.get("key") for task in same[:ROUTE_BATCH_SIZE]]
-
-    # Route order is a deterministic tie breaker, while red lines still win
-    # through the legacy scheduler's phase A.
-    route_rank = {}
-    for ui, route in state["routes"].items():
-        for rank, key in enumerate(route):
-            route_rank[(ui, key)] = rank
-    for task in copies:
-        task.setdefault("_v9_rank", {})
-        if task.get("red"):
-            continue
-        for ui in range(len(units)):
-            rank = route_rank.get((ui, task.get("key")))
-            task["_v9_rank"][ui] = rank
-            if rank is not None:
-                task["_v9_soft"][ui] = task["_v9_soft"].get(ui, 0.0) + \
-                    max(0.0, V9_TOUR_BONUS - rank * V9_TOUR_DECAY)
-    return copies, state
-
-
-# 【中文】调度入口：先跑 _route_tasks 生成影子路由推荐，但 V9_SHADOW_
-# ROUTING=True 时执行权仍交冠军调度器 _schedule_units_v72（原任务表），
-# 影子结果只进 _SCHEDULER_TRACE 供遥测对比。切换 False 才会用 routed
-# 任务表执行——见上方 V9_SHADOW_ROUTING 处的回归证据（2026-08-30 确认
-# 门禁撤销合并：88-0 属选择域运气，泛化域配对净 -258.9k）。
 def _schedule_units(obs, farm, private, day, tasks):
-    """Keep champion actions while collecting v9 route recommendations.
-
-    The partitioned route is shadow-only until it passes outcome and efficiency
-    gates.  The frozen scheduler remains the execution authority, so telemetry
-    can be validated without risking the production behavior.
+    """M5 (2026-09-03): v72 is the execution authority (the
+    online-validated configuration); the v9 shadow-routing layer is
+    retired -- it duplicated every turn's routing purely for trace
+    telemetry.  Actions are identical to the shadow-on era (v72 always
+    executed the original task list); only trace telemetry fields
+    (repeated_tasks / cross_quadrant_*) went to zero.
     """
-    routed, state = _route_tasks(obs, farm, private, day, tasks)
-    if V9_SHADOW_ROUTING:
-        actions = _schedule_units_v72(obs, farm, private, day, tasks)
-    else:
-        actions = _schedule_units_v72(obs, farm, private, day, routed)
-    player = _get(obs, "player", 0)
-    tiles = _get(farm, "tiles", []) or []
-    board = len(tiles)
-    units, _ = _telemetry_units(farm)
-    sticky = _TARGETS.get(player, {}).get("assign", {})
-    by_key = {task.get("key"): task for task in routed}
-    assign = {}
-    action_targets = {}
-    cross = 0
-    for ui, task_key in sticky.items():
-        task = by_key.get(task_key)
-        if task is None:
-            continue
-        assign[ui] = task_key
-        action_targets[ui] = (task["x"], task["y"])
-        if ui < len(units) and _task_sector(task, board) != \
-                state["home"].get(ui):
-            cross += 1
-        cargo = state["cargo"].setdefault(ui, {"phase": "idle", "item": None,
-                                               "target": None})
-        need = task.get("need")
-        if need and _get((_get(private, "inventories", []) or [{}])[ui]
-                         if ui < len((_get(private, "inventories", []) or []))
-                         else {}, need, 0) <= 0:
-            cargo.update({"phase": "pickup", "item": need,
-                          "target": task_key})
-        elif need:
-            cargo.update({"phase": "deliver", "item": need,
-                          "target": task_key})
-        else:
-            cargo.update({"phase": "idle", "item": None,
-                          "target": task_key})
-    state["last_assign"] = dict(assign)
-    _SCHEDULER_TRACE[player] = {
-        "day": day,
-        "assign": dict(assign),
-        "action_targets": action_targets,
-        "home_sector": dict(state["home"]),
-        "cross_quadrant": cross,
-        "red_assignments": sum(1 for key in assign.values()
-                               if by_key.get(key, {}).get("red")),
-        "replans": state["replans"],
-        "cargo": copy.deepcopy(state["cargo"]),
-    }
-    return actions
-
-
+    return _schedule_units_v72(obs, farm, private, day, tasks)
 # ===========================================================================
 # 【中文】M3 路线求解器 v2（scheduler §3，2026-09-02 Phase-A 重做）
 # ---------------------------------------------------------------------------

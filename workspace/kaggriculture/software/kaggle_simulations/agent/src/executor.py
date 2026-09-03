@@ -13,12 +13,20 @@
 # _D29_SELL_QUEUE 供市场层 M4 接线。
 # M4 启用前置：M3 影子分歧收敛（scripts/solver_shadow_stats.py）；届时
 # _schedule_units_v72 退役（M5 冻结删除）。
-ROUTE_EXECUTOR_ENABLED = True   # M4 switchover (2026-09-02 Phase-B): the
-                                # four-layer pipeline is LIVE -- A/B gate
-                                # passed (rewards -1.69% in band, escapes/
-                                # overflow non-inferior, deterministic);
-                                # v72 remains as the replan-turn bridge and
-                                # the flag-off fallback; retire at M5.
+ROUTE_EXECUTOR_ENABLED = False  # M5 freeze (2026-09-03): OFF.  The M5
+                                # wiring audit found the Phase-B "switchover"
+                                # passed a result DICT where the routes LIST
+                                # belongs -- the executor excepted on ~97%
+                                # of turns and v72 silently carried the
+                                # online 625.1 candidate (only the d29
+                                # template truly ran).  With the wiring FIXED
+                                # the real executor path collapses (rewards
+                                # ~20 vs ~70k: dawn routes are solved for a
+                                # PLANNED crew and phantom-worker routes
+                                # strand their D1 duties).  v72 stays the
+                                # authority = exactly the online-validated
+                                # configuration; re-enabling requires the
+                                # M3 follow-up (current-roster re-solve).
 
 _REPLAN_MEM = {}
 _D29_SELL_QUEUE = {}

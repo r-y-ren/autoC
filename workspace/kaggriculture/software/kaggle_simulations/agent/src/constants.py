@@ -592,7 +592,6 @@ PRICE_FLOOR_EMB = 1
 # +3.4%) remain real but do not buy win-rate generalization.  Future
 # activation attempts must pre-register BOTH seed domains (101-104 AND
 # 201-204) as the gate.
-V9_SHADOW_ROUTING = True
 
 # ===========================================================================
 # 【中文】branch plan v1.2/v1.3 落地旋钮（2026-09-02 实装：容量门 §5.3、
