@@ -1,0 +1,46 @@
+{
+ "schema": "online-probe-ledger/1.0",
+ "round": 17,
+ "candidate": {
+  "label": "v13.3-observer-refactor-candidate + audit-repairs (final-wave bundle)",
+  "pkg_sha256": "f4bffb0563e80b0e53f48f11a9baba7b22493b686e947d7f9d30a98423087c0d",
+  "main_sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
+  "git_ref": "0abf2d5",
+  "submission_ref": 55987245,
+  "submitted_at_utc": "2026-09-03T15:30:31Z",
+  "status": "PENDING",
+  "quota_after_submit": "3 submissions remaining today",
+  "format_note": "multi-module tar.gz (main.py thin loader + src/9, pkg.1); same package format as the validated round-16 first tar.gz submission"
+ },
+ "what_this_probe_adjudicates": [
+  "observer refactor in production (offline: 60-game validated shadow fill Ch0 exact 0.9733, requested 0.9241 disclosed; est_* consumers keep static conf caps)",
+  "audit repairs in production: FERTILIZE re-feed dead-zone fix (local quickwin 4-seed +6.13%, escapes/overflow 0/0) + replan_repeat telemetry + dead-code cleanup",
+  "market coherence wave (post-action DROP mirror + bilateral ledger reconciliation)",
+  "bundled single submission per user ruling 2026-09-03: local gates replace one-variable online probes for the final wave"
+ ],
+ "local_gates": {
+  "suite": "821 passed, 2 skipped",
+  "quickwin_fertfix_vs_base": "+6.13% mean_reward (seeds 7/8/9/101; escapes 0/0, overflow 0/0, compare pass:true; exports/probes/quickwin_base|fertfix.json)",
+  "build_check": "PASS (pkg.1, 115699 bytes)",
+  "smoke_boot": "4-phase PASS",
+  "candidate_identity": "PASS"
+ },
+ "wave_commits": {
+  "baseline": "81c039f (market coherence close-out + registration hash sync, 817 passed)",
+  "fertfix": "99eab9f (FERTILIZE day-relative _stop_done, 819 passed)",
+  "p2p3": "ecf70c8 (replan_repeat + EOD snapshot semantics + _d29_template removal, 821 passed)",
+  "docs": "68abd7f",
+  "registration": "0abf2d5"
+ },
+ "sampling": {
+  "at_submit_utc": "2026-09-03T15:30:36Z",
+  "publicScore": null,
+  "same_day_references": {
+   "v13.1_55973564_current": 561.8,
+   "v12.2_55965149_current": 603.1,
+   "note": "v13.1 drifted 576.2 -> 561.8 since round-16 sampling; v12.2 603.3 -> 603.1"
+  },
+  "pending": "publicScore convergence + W/L deep sample (>=15 games per protocol)"
+ },
+ "verdict": "SUBMITTED (user-authorized). All local gates green; online public-league arbitration pending score convergence."
+}
