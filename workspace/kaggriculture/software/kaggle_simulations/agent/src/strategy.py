@@ -7,8 +7,9 @@
 #   与每日缓存。opp_contesting 已按用户裁决移除（§9-⑦，W1 波）。
 # branch v1.3 落地件（W1 波 2026-09-02 + W2 完善波）：
 #   §2/§4 阶段寄存器 _stage_plan（P0-P5）+ 分类器（burst/reduced/deferred/
-#     melon_first，d1 检查点冻结）+ B1/B3 旋钮 + d6 五问检查点 + _MIXED_PLAN；
-#   §5.3 容量门 _capacity_gate（定律 24×(1+H)×0.75/2.4，>0.85 拒购）+
+#     melon_first，d1 检查点冻结）+ 显式 B1/B2/B3 + d6 五问检查点 +
+#     C1/C2/C3 参数包；
+#   §5.3 容量门 _capacity_gate（定律 24×(1+H)×0.89/3.3，>0.85 拒购）+
 #     LINE_CAPS 分线封顶包络（莓42/麦99/畜14=现值零行为差；瓜 12→6 需单
 #     变量消融另排——V-T9 回归证据仍钉 12）+ 黎明不变式下界补线
 #     _attach_backfill（util<0.65 → 兜底小麦线扩容，富线候选留后续）；
@@ -19,7 +20,7 @@
 #   §9.1 检查点全席：d1（分类冻结）/d6（五问 C 分支）/d10（SE 窗就绪）/
 #     d14（结构冻结快照）/d22（P4 est_opp_held 前置快照）。
 # 延后项（单变量纪律，见 JOURNAL）：B1 全速追平步速、B2 d1 草莓探针+NE
-#   即铺、B3 瓜 d3-5 小批、容量定律系数回填（M1 三锚定标已落盘）。
+#   即铺；容量定律系数已按 M1 三锚回填，B3 d3-5 小批已接线。
 # ===========================================================================
 _WHEAT_FARM_PLAN = None
 
@@ -477,22 +478,25 @@ def _macro_plan(player, obs, day):
     failure path is the r4 DEFENSIVE frame, never an exception)."""
     st = _PLAN_MEM.get(player)
     if st is not None and st["day"] == day:
-        return st["plan"]
-    prev_mode = None
-    if st is not None and day > st["day"] >= 0:
-        prev_mode = st["plan"].get("mode")
+        base_plan = dict(st.get("base_plan", st["plan"]))
+    else:
+        prev_mode = None
+        if st is not None and day > st["day"] >= 0:
+            prev_mode = st.get("base_plan", st["plan"]).get("mode")
+        try:
+            base_plan = _decide_mode(obs, day, prev_mode)
+        except Exception:
+            base_plan = dict(_DEFENSIVE_PLAN)
+    # The economic mode is daily, but safety/checkpoint overlays are per turn:
+    # money and herd can change after the first call of a day.
     try:
-        plan = _decide_mode(obs, day, prev_mode)
+        plan = _stage_plan(player, obs, day, base_plan)
     except Exception:
         plan = dict(_DEFENSIVE_PLAN)
-    # branch plan v1.3 landing: stage register + B/C branch knobs ride on
-    # the plan dict (additive keys only; every consumer reads .get()).
-    try:
-        plan = _stage_plan(player, obs, day, plan)
-    except Exception:
-        plan = dict(plan)
         plan["stage"] = _stage_of(day)
-    _PLAN_MEM[player] = {"day": day, "plan": plan}
+        plan["stage_error"] = True
+    _PLAN_MEM[player] = {"day": day, "base_plan": dict(base_plan),
+                         "plan": plan}
     return plan
 
 
@@ -502,7 +506,7 @@ def _macro_plan(player, obs, day):
 # 阶段寄存器 §2 / 对手开局分类器 §4.1 / d6 五问检查点 §5.1 / 容量门 §5.3 /
 # 三重前置检查 §5.4 / _MIXED_PLAN（C2 DevilQ 混合，§5.2）。
 # 设计约束：全部纯公开状态、确定性、fail-closed；行为接线经 plan dict 旋钮
-# （p1_species_pref / melon_min / straw_early_claim），执行层照旧消费。
+# （p1_species_pref / melon_total_cap / c_branch 参数包），执行层照旧消费。
 # ===========================================================================
 
 # ---- C2 混合计划（DevilQ 96.6k 结构 × §5.3 分线封顶）----
@@ -588,6 +592,13 @@ def _capacity_units(farm, private=None):
                     comps["carrot"] += 1
             elif "animal" in tile:
                 comps["herd"] += 1
+    private = private or {}
+    shed = _get(private, "shed", {}) or {}
+    inventories = _get(private, "inventories", []) or []
+    for animal in ANIMALS:
+        comps["herd"] += max(0, int(_get(shed, animal, 0) or 0))
+        for inv in inventories:
+            comps["herd"] += max(0, int(_get(inv, animal, 0) or 0))
     units = float(comps["straw"] + comps["wheat"] + comps["melon"]
                   + 0.5 * comps["carrot"] + 2 * comps["herd"])
     return units, comps
@@ -700,10 +711,12 @@ def _d6_checkpoint(obs, day):
     opp_first = _first_market_day(opp, day) if opp is not None else None
     q4 = (our_first is not None) and (opp_first is None
                                       or our_first <= opp_first)
-    # q5 容量问：VOLUME 目标单位数 ≤ 定律 × 0.85
-    hands = len(_get(farm, "hands", []) or [])
-    target_units = 42 + 12 + 2 * mine["herd"]  # 莓42+麦12+畜群（§5.3 C1 初算）
-    q5 = target_units <= _capacity_law_max(max(hands, 12)) * CAP_USE_MAX
+    # q5 uses the candidate package's labour budget.  The former fixed
+    # 12-hand assumption made q1 (herd >= 10) and q5 mutually exclusive.
+    target_units = 42 + 12 + 2 * mine["herd"]
+    candidate_hands = max(len(_get(farm, "hands", []) or []),
+                          int(_VOLUME_PLAN["crew_cap"]))
+    q5 = target_units <= _capacity_law_max(candidate_hands) * CAP_USE_MAX
     questions = {"q1": q1, "q2": q2, "q3": q3, "q4": q4, "q5": q5}
     p_milk = _get(prices, "MILK", BASE_PRICE["MILK"])
     p_wool = _get(prices, "WOOL", BASE_PRICE["WOOL"])
@@ -713,12 +726,10 @@ def _d6_checkpoint(obs, day):
                    and demand.get("WOOL", 1) >= 2)
     if q1 and q2 and q3 and q4 and q5:
         c_branch = "C1"
-    elif q1 and dairy_alive and q5:
+    elif q1 and q2 and dairy_alive and q5:
         c_branch = "C2"
-    elif q1 and dairy_alive:
-        c_branch = "C3"
     else:
-        c_branch = "C3" if dairy_alive else "C1"
+        c_branch = "C3"
     return questions, c_branch
 
 
@@ -727,19 +738,25 @@ def _b_branch_adjust(plan, obs, day, st=None):
 
     分类在 d1 检查点冻结（§9.1：d1 晨对手 d0 分类一次定型，防 P1 内随
     对手施工漂移）；B1 burst：产品分化——YARN_STORE 未解锁则羊线换牛线；
-    B2 reduced/deferred/unknown：标准序列（现有路径，零改动）；B3
-    melon_first：瓜线最小化（melon_min——我方瓜只 d3-5 小批抢收）。
+    B2 reduced/deferred/unknown：标准序列（现有路径）；B3 melon_first：
+    d3-5 最多两格瓜探针，P2 起释放该临时配额。
     """
     cls = (st or {}).get("opp_class_frozen") \
         or _classify_opponent_opening(obs)
     plan = dict(plan)
     plan["opp_class"] = cls
+    branch = "B1" if cls == "burst" else \
+        ("B3" if cls == "melon_first" else "B2")
+    plan["b_branch"] = branch
+    if st is not None:
+        st["b_branch"] = branch
     if cls == "burst":
         shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
-        if "YARN_STORE" not in shops:
+        if day <= 5 and "YARN_STORE" not in shops:
             plan["p1_species_pref"] = "COW"   # 不跟死吸收的毛线挤（§4.2 B1）
     elif cls == "melon_first":
-        plan["melon_min"] = True              # §4.2 B3：瓜 d3-5 小批抢收
+        plan["melon_probe"] = True
+        plan["melon_total_cap"] = 2 if 3 <= day <= 5 else 0
     return plan
 
 
@@ -773,12 +790,25 @@ def _d14_checkpoint(out, st):
 
 
 def _d22_checkpoint(player):
-    """d22 checkpoint: snapshot the current player's opponent estimates."""
+    """Snapshot opponent holdings into stable P4 clearing tiers."""
     held = {}
+    confidence = {}
+    tiers = {}
     for item in ("STRAWBERRY", "MILK", "WOOL", "MELON", "WHEAT"):
         value = est_opp_held(item, player=player)
         held[item] = None if value is None else round(float(value), 1)
-    return {"day": 22, "held": held}
+        conf = float(est_opp_conf(item, player=player) or 0.0)
+        confidence[item] = round(conf, 3)
+        if value is None or conf < 0.5:
+            tiers[item] = None
+        elif value >= P4_HEAVY_HELD:
+            tiers[item] = "heavy"
+        elif value >= P4_MID_HELD:
+            tiers[item] = "mid"
+        else:
+            tiers[item] = "low"
+    return {"day": 22, "held": held, "confidence": confidence,
+            "tiers": tiers}
 
 
 def _fuse_check(st, farm, mine, stage):
@@ -789,6 +819,8 @@ def _fuse_check(st, farm, mine, stage):
                and mine["herd"] < st["herd_prev"])
     st["herd_prev"] = mine["herd"]
     fuse = st.get("fuse") or {}
+    if fuse.get("active") and fuse.get("stage") != stage:
+        fuse["active"] = False
     tripped = _get(farm, "money", 0.0) < FUSE_MONEY_FLOOR or escaped
     if tripped and stage in ("P1", "P2", "P3", "P4"):
         if not fuse.get("active") or fuse.get("stage") != stage:
@@ -797,9 +829,10 @@ def _fuse_check(st, farm, mine, stage):
         else:
             fuse["escaped"] = fuse.get("escaped") or bool(escaped)
         st["fuse"] = fuse
-    elif fuse.get("stage") == stage:
-        fuse["active"] = False
-    return bool((st.get("fuse") or {}).get("active")), bool(escaped)
+    elif fuse:
+        st["fuse"] = fuse
+    active = bool(fuse.get("active") and fuse.get("stage") == stage)
+    return active, bool(escaped)
 
 
 def _attach_backfill(out, farm, day, st=None):
@@ -813,8 +846,12 @@ def _attach_backfill(out, farm, day, st=None):
         if st is not None:
             st["backfill"] = None
         return out
-    units, _comps = _capacity_units(farm)
-    law = _capacity_law_max(len(_get(farm, "hands", []) or []))
+    units, comps = _capacity_units(farm)
+    hands = len(_get(farm, "hands", []) or [])
+    planned = _crew_target(
+        day, comps["herd"], comps["wheat"],
+        len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]), out)
+    law = _capacity_law_max(max(hands, planned))
     room = int(law * CAP_USE_MIN - units)
     if room <= 0:
         if st is not None:
@@ -833,8 +870,12 @@ def stage_state_snapshot(player):
     """Read-only stage-register getter（遥测/诊断消费）。"""
     st = _STAGE_MEM.get(player) or {}
     fuse = st.get("fuse") or {}
-    return {"c_branch": st.get("c_branch"),
+    return {"b_branch": st.get("b_branch"),
+            "c_branch": st.get("c_branch"),
             "opp_class": st.get("opp_class_frozen"),
+            "questions": st.get("questions"),
+            "d10": st.get("d10"),
+            "p4_snapshot": st.get("p4_snapshot"),
             "fused": bool(fuse.get("active")),
             "fuse_events": int(fuse.get("count", 0)),
             "frozen": st.get("frozen"),
@@ -865,46 +906,39 @@ def _stage_plan(player, obs, day, plan):
             _d1_checkpoint(obs, st)
         if stage == "P2":
             if st.get("decided_day") is None:
-                if day == STAGE_P1_DUE:
-                    questions, c_branch = _d6_checkpoint(obs, day)
-                    st["decided_day"] = day
-                    st["c_branch"] = c_branch
-                    st["questions"] = questions
-                else:
-                    st["decided_day"] = day
-                    st["c_branch"] = None
-                    st["questions"] = None
-            if day == 10 and st.get("d10") is None:
+                questions, c_branch = _d6_checkpoint(obs, day)
+                st["decided_day"] = day
+                st["c_branch"] = c_branch
+                st["questions"] = questions
+            if day >= 10 and st.get("d10") is None:
                 st["d10"] = _d10_checkpoint(farm)
-            if day == STAGE_P2_FREEZE and st.get("frozen") is None:
-                _d14_checkpoint(out, st)
-        if stage == "P4" and day == 22 and st.get("p4_snapshot") is None:
+        if stage == "P4" and day >= 22 and st.get("p4_snapshot") is None:
             try:
                 st["p4_snapshot"] = _d22_checkpoint(player)
             except Exception:
-                st["p4_snapshot"] = {"day": 22, "held": {}}
-
-    if fused:
-        out = dict(_DEFENSIVE_PLAN)
-        out["stage"] = stage
-        out["fused"] = True
+                st["p4_snapshot"] = {"day": day, "held": {},
+                                     "confidence": {}, "tiers": {}}
 
     if stage == "P1":
-        return _b_branch_adjust(out, obs, day, st)
-    if stage == "P2":
+        out = _b_branch_adjust(out, obs, day, st)
+    elif stage == "P2":
         c_branch = st.get("c_branch")
-        out["c_branch"] = c_branch
-        if c_branch == "C2" and out.get("mode") == "DEFENSIVE" and not fused:
-            # 草莓线弱/首市日落后 + 奶线活：注入 DevilQ 混合计划（§5.2）
+        if c_branch == "C1":
+            # C1 is the wide candidate; the daily gate still vetoes unsafe
+            # price/cash/rollout states before this mapping is applied.
+            if out.get("mode") != "VOLUME_CROP":
+                out = dict(_DEFENSIVE_PLAN)
+        elif c_branch == "C2":
             out = dict(_MIXED_PLAN)
-            out["stage"] = stage
-            out["c_branch"] = c_branch
-        return _attach_backfill(out, farm, day, st)
-    if stage in ("P3", "P4", "P5"):
+        elif c_branch == "C3":
+            out = dict(_DEFENSIVE_PLAN)
+        out["stage"] = stage
+        out["c_branch"] = c_branch
+        out = _attach_backfill(out, farm, day, st)
+    elif stage in ("P3", "P4", "P5"):
         out["c_branch"] = st.get("c_branch")
         frozen = st.get("frozen") or {}
-        # §8.1 冻结守卫：d14 时是 DEFENSIVE（窄类）的农场，此后禁止翻回
-        # 宽田类（VOLUME/MIXED/SCALE/WHEAT_FARM 的新入场）；退出不受限。
+        # A narrow d14 structure cannot reopen a wide plan after the freeze.
         if frozen.get("mode") in ("DEFENSIVE", None) and not fused \
                 and out.get("mode") not in ("DEFENSIVE", None):
             out = dict(_DEFENSIVE_PLAN)
@@ -913,7 +947,23 @@ def _stage_plan(player, obs, day, plan):
             out["freeze_guard"] = True
         if stage in ("P3", "P4"):
             _attach_backfill(out, farm, day, st)
-        return out
+
+    if st.get("d10") is not None:
+        out["d10"] = dict(st["d10"])
+        out["se_ready"] = bool(st["d10"].get("se_ready"))
+    if st.get("p4_snapshot") is not None:
+        out["p4_snapshot"] = st["p4_snapshot"]
+    if fused:
+        branch_keys = {k: out.get(k) for k in
+                       ("b_branch", "c_branch", "opp_class", "d10",
+                        "se_ready", "p4_snapshot") if k in out}
+        out = dict(_DEFENSIVE_PLAN)
+        out.update(branch_keys)
+        out["stage"] = stage
+        out["fused"] = True
+    if stage == "P2" and day == STAGE_P2_FREEZE and \
+            st.get("frozen") is None:
+        _d14_checkpoint(out, st)
     return out
 
 
@@ -1188,15 +1238,9 @@ def _field_alloc(farm, day, prices, plan=None):
             room = min(room, max(0, LINE_CAPS.get("CARROT", 99)
                                  - len(crop_map[crop])))
         if crop == "MELON":
-            # V-T9 fix: tetsuya's melon rim lives in the UPPER quadrants
-            # (his SW is the wheat side field -- our far-rim-first filled
-            # SW with 17-18 melon and starved the feed floor to 2-4 tiles,
-            # -30k self-play).  Cap the season band near his median (12)
-            # and prefer the NW/NE rim before the SW one.
-            # Phase-C Var2: the 5.3 per-line cap binds (kill_table verified
-            # melon absorption = town center only ~1/day)
-            room = min(room, max(0, LINE_CAPS.get("MELON", 12)
-                                 - len(crop_map[crop])))
+            room = min(room, max(0, int(plan.get(
+                "melon_total_cap", LINE_CAPS.get("MELON", 12)))
+                - len(crop_map[crop])))
         order = sorted(empties, key=lambda p: (
             (0 if crop == "MELON" and
              _quadrant_of(p[0], p[1], board) in ("NW", "NE") else 1),

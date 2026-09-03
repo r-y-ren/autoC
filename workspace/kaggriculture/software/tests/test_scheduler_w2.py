@@ -52,6 +52,17 @@ def _task(w, x, y, act, key, v=None, red=False, deadline=None):
 # mission §2: tiers / feed precondition / EOD budget / capacity feed-forward
 # --------------------------------------------------------------------------
 
+def test_build_tasks_reserves_each_seed_once():
+    rows = _rows10()
+    farm = _farm(rows)
+    obs = {"hour": 0, "player": 0, "market": {"prices": {}}}
+    tasks, *_ = main._build_tasks(
+        obs, farm, {"seeds": {"WHEAT": 1}, "shed": {},
+                    "inventories": [{}]}, 5, None)
+    planted = [t for t in tasks if t["act"][:2] == ["PLANT", "WHEAT"]]
+    assert len(planted) <= 1
+
+
 def test_mission_tiers_d1_d2_d3_d4():
     ws, we = main._window("WHEAT")
     day = 10
@@ -116,6 +127,27 @@ def test_mission_eod_budget_event():
     mission = main._build_mission({"hour": 0}, farm, private, 8, None,
                                   tasks, planned_sell=10)
     assert mission["eod"]["overflow"] == 0
+
+
+def test_mission_eod_counts_carried_and_uses_non_wheat_stock():
+    farm = _farm(_rows10())
+    private = {"shed": {"MILK": 96}, "inventories": [{"WOOL": 8}]}
+    mission = main._build_mission({"hour": 0}, farm, private, 8, None, [])
+    assert mission["eod"]["shed"] == 96
+    assert mission["eod"]["carried"] == 8
+    assert mission["eod"]["projected"] == 104
+    assert mission["eod"]["overflow"] == 4
+    assert {"h": 6, "op": "SELL", "item": "MILK", "qty": 4,
+            "why": "eod_budget"} in mission["events"]
+
+
+def test_capacity_counts_unplaced_animals():
+    farm = _farm(_rows10())
+    private = {"shed": {"COW": 2},
+               "inventories": [{"SHEEP": 1}, {"GOOSE": 1}]}
+    units, comps = main._capacity_units(farm, private)
+    assert comps["herd"] == 4
+    assert units == 8.0
 
 
 def test_mission_capacity_deficit_and_slack():
@@ -245,8 +277,8 @@ def test_solve_feed_legs_chunking():
     assert res["feed_legs"] == 2              # ceil(7 / FEED_LEG_CHUNK)
     pickups = [t for r in res["routes"] for t in r["tasks"]
                if t.get("synthetic")]
-    assert sorted(t["act"][2] for t in pickups) == [5, 5]  # two legs on the
-    # single worker's chain: 5 then 2... chunks are per-leg FEED_LEG_CHUNK
+    assert sorted(t["act"][2] for t in pickups) == [2, 5]
+    assert sum(t["act"][2] for t in pickups) == len(spots)
     assert all(t["act"][:2] == ["PICKUP", "WHEAT"] for t in pickups)
     kept = {t["key"] for r in res["routes"] for t in r["tasks"]}
     assert all(("feed", x, y) in kept for x, y in spots)
@@ -341,19 +373,91 @@ def test_executor_d29_drop_then_sell_template():
     # canonical engine form: bare DROP drops everything carried
     assert actions[0] == ["DROP"]
     assert main._D29_SELL_QUEUE[0] == {"MILK": 10}
-    # # full shed: bare DROP still fires (engine destroys overflow) but
-    # NOTHING enters the sell queue
+    # A full shed must not receive bare DROP: the engine would destroy the
+    # overflow while clearing the carrier's inventory.
     main._D29_SELL_QUEUE.clear()
     private = {"shed": {"WHEAT": 100}, "inventories": [{"MILK": 10}]}
     actions, _ = main._execute_routes({"hour": 1, "player": 0}, farm,
                                       private, 29, [])
-    assert actions[0] == ["DROP"]
+    assert actions[0] == ["PASS"]
     assert 0 not in main._D29_SELL_QUEUE
 
 
-# --------------------------------------------------------------------------
-# M1/M2 scorecard plumbing: telemetry pulls the dawn mission shadow
-# --------------------------------------------------------------------------
+def test_solve_shared_pickup_never_exceeds_shed():
+    tasks = []
+    for i in range(7):
+        t = _task(88, 4 + (i % 2), 3 + (i // 2), ["FEED"], ("feed", i))
+        t["need"] = "WHEAT"
+        tasks.append(t)
+    farm = _farm(_rows10(), hands=[(4, 4)])
+    res = main._solve_routes(farm, {"shed": {"WHEAT": 5},
+                                    "inventories": [{}, {}]}, 6, tasks,
+                             planned_hands=0)
+    pickups = [t for r in res["routes"] for t in r["tasks"]
+               if t.get("synthetic")]
+    assert sum(t["act"][2] for t in pickups) <= 5
+    assert sorted(t["act"][2] for t in pickups) == [5]
+
+
+def test_solve_marks_d1_material_deficit():
+    task = _task(100, 2, 2, ["FEED"], ("feed", 2, 2), red=True)
+    task["need"] = "WHEAT"
+    task["tier"] = "D1"
+    res = main._solve_routes(_farm(_rows10()),
+                             {"shed": {"WHEAT": 0}, "inventories": [{}]},
+                             5, [task], planned_hands=0)
+    assert res["feasible"] is False
+    assert res["drop_reasons"]["material"] == 1
+    assert res["material_deficits"][0]["key"] == ("feed", 2, 2)
+
+
+def test_live_dispatch_records_material_deficit():
+    main._SCHEDULER_TRACE.clear()
+    main._ASSIGN_MEM.clear()
+    rows = _rows10()
+    rows[2][2] = _tile_animal("COW", 1, unfed=1)
+    farm = _farm(rows, farmer=(2, 2))
+    task = _task(100, 2, 2, ["FEED"], ("feed", 2, 2), red=True)
+    task["need"] = "WHEAT"
+    actions = main._solve_and_execute(
+        {"hour": 0, "player": 0}, farm,
+        {"shed": {"WHEAT": 0}, "inventories": [{}]}, 5, [task])
+    assert actions == [["PASS"]]
+    trace = main.scheduler_trace()[0]
+    assert trace["feasible"] is False
+    assert trace["drop_reasons"]["material"] == 1
+    assert trace["material_deficits"][0]["key"] == ("feed", 2, 2)
+
+
+def test_executor_checks_later_d1_cumulative_eta():
+    rows = _rows10()
+    farm = _farm(rows, farmer=(0, 0))
+    stops = [
+        {"key": ("care", 2, 0), "x": 2, "y": 0, "act": ["CARE"],
+         "deadline": None, "tier": "D4"},
+        {"key": ("d1", 9, 0), "x": 9, "y": 0, "act": ["WATER"],
+         "deadline": 5, "tier": "D1"},
+    ]
+    main._REPLAN_MEM.clear()
+    _, replan = main._execute_routes({"hour": 0, "player": 0}, farm, {},
+                                      5, [{"worker": 0, "tasks": stops,
+                                          "stops": stops}])
+    assert replan is True
+
+
+def test_executor_d29_empty_carrier_keeps_harvest_route():
+    rows = _rows10()
+    rows[2][2] = _tile_plant("WHEAT", 0, yield_units=3)
+    farm = _farm(rows, farmer=(2, 2))
+    harvest = {"key": ("harvest", 2, 2), "x": 2, "y": 2,
+               "act": ["HARVEST"], "deadline": None, "tier": "D4"}
+    actions, _ = main._execute_routes({"hour": 0, "player": 0}, farm,
+                                      {"shed": {}, "inventories": [{}]}, 29,
+                                      [{"worker": 0, "tasks": [harvest],
+                                        "stops": [harvest]}])
+    assert actions[0] == ["HARVEST"]
+
+
 
 def test_telemetry_records_mission_shadow_fields():
     main._MISSION_SHADOW.clear()

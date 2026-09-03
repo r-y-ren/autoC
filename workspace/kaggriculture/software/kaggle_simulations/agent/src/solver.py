@@ -146,6 +146,9 @@ def _solve_routes(farm, private, day, tasks, aging=None,
     board = len(tiles)
     inventories = _get(private, "inventories", []) or []
     shed = _get(private, "shed", {}) or {}
+    available_shed = {item: max(0, int(value or 0))
+                      for item, value in shed.items()
+                      if isinstance(value, (int, float))}
     hour = max(0, int(hour))
     if unit_pos is not None:
         # current-roster solve: real units at their real positions
@@ -193,13 +196,15 @@ def _solve_routes(farm, private, day, tasks, aging=None,
     # pre-filter: a task whose need item exists nowhere (shed + every
     # carrier) is physically undoable this turn -- exclude it outright
     def need_available(item):
-        total = int(_get(shed, item, 0) or 0)
+        total = available_shed.get(item, 0)
         for w in workers:
-            total += int(cargo[w].get(item, 0))
+            total += int(cargo[w].get(item, 0) or 0)
         return total > 0
 
     dropped = []
-    drop_reasons = {"no_fit": 0, "eta": 0, "late_best_effort": 0}
+    material_deficits = []
+    drop_reasons = {"no_fit": 0, "eta": 0, "late_best_effort": 0,
+                    "material": 0}
     feasible = True
     feed_legs_total = 0
     late_tail = []                             # D1 obligations to best-effort
@@ -213,7 +218,7 @@ def _solve_routes(farm, private, day, tasks, aging=None,
             return 0, None
         if cargo[w].get(item, 0) > 0:
             return 0, None                     # already carrying
-        if int(_get(shed, item, 0) or 0) <= 0 or not accesses:
+        if available_shed.get(item, 0) <= 0 or not accesses:
             return None, None                  # nobody can restock w
         best_acc, best_total = None, None
         px, py = pos[w]
@@ -226,13 +231,34 @@ def _solve_routes(farm, private, day, tasks, aging=None,
         direct = _dist(px, py, t["x"], t["y"])
         return max(0, best_total - direct), best_acc
 
+    remaining_need = {}
+    for task in tasks or []:
+        item = task.get("need")
+        if item:
+            remaining_need[item] = remaining_need.get(item, 0) + 1
+
     def append_stop(w, t, leg_extra=0, acc=None):
         nonlocal feed_legs_total
         item = t.get("need")
+        act = t.get("act") or []
+        if act and act[0] == "PICKUP" and len(act) > 2:
+            try:
+                amount = min(int(act[2] or 0),
+                             available_shed.get(act[1], 0))
+            except (TypeError, ValueError):
+                return False
+            if amount <= 0:
+                return False
+            t = dict(t)
+            t["act"] = list(act[:2]) + [amount]
+            act = t["act"]
         if leg_extra > 0 and acc is not None:
             seq = len(routes_seq[w])
             chunk = min(_NEED_CHUNK.get(item, 1),
-                        int(_get(shed, item, 0) or 0))
+                        remaining_need.get(item, 1),
+                        available_shed.get(item, 0))
+            if chunk <= 0:
+                return False
             routes_seq[w].append({
                 "key": ("feedleg", w, seq), "op": "PICKUP",
                 "x": acc[0], "y": acc[1],
@@ -243,28 +269,43 @@ def _solve_routes(farm, private, day, tasks, aging=None,
             clock[w] += _dist(px, py, acc[0], acc[1]) + 1
             pos[w] = acc
             cargo[w][item] = cargo[w].get(item, 0) + chunk
+            available_shed[item] -= chunk
             feed_legs_total += 1
         px, py = pos[w]
         clock[w] += _dist(px, py, t["x"], t["y"]) + 1
         pos[w] = (t["x"], t["y"])
         routes_seq[w].append(t)
-        act = t.get("act") or []
         if act and act[0] == "PICKUP" and len(act) > 2:
-            try:
-                cargo[w][act[1]] = cargo[w].get(act[1], 0) + int(act[2] or 0)
-            except (TypeError, ValueError):
-                pass
-        if act and act[0] == "FEED" and item:
+            cargo[w][act[1]] = cargo[w].get(act[1], 0) + amount
+            available_shed[act[1]] -= amount
+        if item and act and act[0] in ("FEED", "PLACE", "FERTILIZE"):
             cargo[w][item] = max(0, cargo[w].get(item, 0) - 1)
-        if act and act[0] == "PLACE" and len(act) > 1 and item:
-            cargo[w][item] = max(0, cargo[w].get(item, 0) - 1)
+            remaining_need[item] = max(0, remaining_need.get(item, 0) - 1)
+        return True
+
+    def worker_allowed(t, w):
+        allowed = t.get("units")
+        return allowed is None or w in allowed
+
+    def mark_material_deficit(t):
+        nonlocal feasible
+        key = t.get("key")
+        if key not in dropped:
+            dropped.append(key)
+            drop_reasons["material"] += 1
+            material_deficits.append({
+                "key": key, "item": t.get("need"),
+                "tier": t.get("tier"), "reason": "material"})
+        if t.get("tier") == "D1" or t.get("red"):
+            feasible = False
 
     all_tasks = []
     for t in tasks or []:
         item = t.get("need")
         if item and not need_available(item):
-            continue                           # physically undoable now
-        all_tasks.append(t)
+            mark_material_deficit(t)
+            continue
+        all_tasks.append(dict(t))
     d1 = sorted((t for t in all_tasks
                  if t.get("tier") == "D1" or t.get("red")),
                 key=lambda t: ((t["deadline"] if t.get("deadline")
@@ -284,9 +325,14 @@ def _solve_routes(farm, private, day, tasks, aging=None,
 
     # ---- phase 1: EDF allocation of D1 obligations -----------------------
     for t in d1:
+        if t.get("need") and not need_available(t["need"]):
+            mark_material_deficit(t)
+            continue
         deadline = t.get("deadline")
         best = None
         for w in workers:
+            if not worker_allowed(t, w):
+                continue
             leg_extra, acc = leg_plan(w, t)
             if leg_extra is None:
                 continue                       # w cannot be restocked
@@ -304,7 +350,8 @@ def _solve_routes(farm, private, day, tasks, aging=None,
             late_tail.append(t)                # best-effort below, never lost
             continue
         (_finish, w), leg_extra, acc = best
-        append_stop(w, t, leg_extra, acc)
+        if not append_stop(w, t, leg_extra, acc):
+            mark_material_deficit(t)
 
     # ---- phase 2: budget fill, v72-parity pair economics ------------------
     # Sequential over tasks in value-density order; the WORKER choice ports
@@ -319,9 +366,14 @@ def _solve_routes(farm, private, day, tasks, aging=None,
         return v * (1.0 + 0.25 * aging.get(t.get("key"), 0))
 
     for t in rest:
+        if t.get("need") and not need_available(t["need"]):
+            mark_material_deficit(t)
+            continue
         deadline = t.get("deadline")
         best = None
         for w in workers:
+            if not worker_allowed(t, w):
+                continue
             leg_extra, acc = leg_plan(w, t)
             if leg_extra is None:
                 continue
@@ -353,7 +405,8 @@ def _solve_routes(farm, private, day, tasks, aging=None,
             continue
         _cand, leg_extra, acc = best
         w = _cand[2]
-        append_stop(w, t, leg_extra, acc)
+        if not append_stop(w, t, leg_extra, acc):
+            mark_material_deficit(t)
 
     # ---- D1 best-effort tail: earliest-arrival worker, deadline waived ----
     # need-aware: a late FEED appended to a WHEATLESS worker is a silent
@@ -378,11 +431,10 @@ def _solve_routes(farm, private, day, tasks, aging=None,
         if best is not None:
             _a, w, leg_extra, acc = best
             t["late"] = True
-            append_stop(w, t, leg_extra, acc)
+            if not append_stop(w, t, leg_extra, acc):
+                mark_material_deficit(t)
         elif fallback is not None:
-            w = fallback[1]
-            t["late"] = True
-            append_stop(w, t)
+            mark_material_deficit(t)
         drop_reasons["late_best_effort"] += 1
         feasible = False       # an obligation went uncovered by deadline
 
@@ -425,7 +477,8 @@ def _solve_routes(farm, private, day, tasks, aging=None,
                        "stops": [t.get("key") for t in keep],
                        "tasks": keep, "etas": etas})
     return {"routes": routes, "feasible": feasible, "dropped": dropped,
-            "drop_reasons": drop_reasons, "feed_legs": feed_legs_total}
+            "drop_reasons": drop_reasons, "material_deficits": material_deficits,
+            "feed_legs": feed_legs_total}
 
 
 # per-player-day registry of the previous solve's per-worker first stop
@@ -476,6 +529,17 @@ def _solve_and_execute(obs, farm, private, day, tasks):
                                      solved.get("routes"))
     st["assign"] = {r.get("worker"): (r.get("tasks") or [{}])[0].get("key")
                     for r in solved.get("routes") or []}
+    _SCHEDULER_TRACE[player] = {
+        "day": day,
+        "hour": hour,
+        "feasible": bool(solved.get("feasible", True)),
+        "dropped": list(solved.get("dropped") or []),
+        "drop_reasons": dict(solved.get("drop_reasons") or {}),
+        "material_deficits": [dict(item) for item in
+                              (solved.get("material_deficits") or [])],
+        "feed_legs": int(solved.get("feed_legs", 0) or 0),
+        "replanned": bool(replan),
+    }
     return actions
 
 

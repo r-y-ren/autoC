@@ -265,7 +265,8 @@ def plan_market_orders(orders, money, shed_count, *, day=0, max_orders=10,
         if priority >= 0:
             ranked.append((-priority, index))
     chosen = {index for _priority, index in sorted(ranked)[:max_orders]}
-    selected = [order for index, order in enumerate(orders or []) if index in chosen]
+    selected = [(index, order) for index, order in enumerate(orders or [])
+                if index in chosen]
 
     wallet = float(money)
     occupied = max(0, int(shed_count))
@@ -287,7 +288,7 @@ def plan_market_orders(orders, money, shed_count, *, day=0, max_orders=10,
     spend = 0.0
     revenue = 0.0
 
-    for order in selected:
+    for index, order in selected:
         op = order[0]
         if op == "HIRE":
             cost = _hire_cost(hire_index)
@@ -296,25 +297,27 @@ def plan_market_orders(orders, money, shed_count, *, day=0, max_orders=10,
                 spend += cost
                 hire_index += 1
                 accepted.append(["HIRE"])
-                details.append({"order": list(order), "filled": 1, "abort": None})
+                details.append({"index": index, "order": list(order),
+                                "filled": 1, "abort": None})
             else:
-                details.append({"order": list(order), "filled": 0,
-                                "abort": "no_money"})
+                details.append({"index": index, "order": list(order),
+                                "filled": 0, "abort": "no_money"})
             continue
         if op == "BUY_LAND":
             cost = land_costs[land_index] if land_index < len(land_costs) else None
             if cost is None:
-                details.append({"order": list(order), "filled": 0,
-                                "abort": "no_land"})
+                details.append({"index": index, "order": list(order),
+                                "filled": 0, "abort": "no_land"})
             elif wallet < cost:
-                details.append({"order": list(order), "filled": 0,
-                                "abort": "no_money"})
+                details.append({"index": index, "order": list(order),
+                                "filled": 0, "abort": "no_money"})
             else:
                 wallet -= cost
                 spend += cost
                 land_index += 1
                 accepted.append(["BUY_LAND"])
-                details.append({"order": list(order), "filled": 1, "abort": None})
+                details.append({"index": index, "order": list(order),
+                                "filled": 1, "abort": None})
             continue
         if op == "SELL":
             if len(order) < 3 or order[1] not in BASE_PRICE or \
@@ -338,8 +341,8 @@ def plan_market_orders(orders, money, shed_count, *, day=0, max_orders=10,
                     inv[item] += 1   # sales above $1 add market supply
             if filled > 0:
                 accepted.append(["SELL", item, filled])
-            details.append({"order": list(order), "filled": filled,
-                            "abort": abort})
+            details.append({"index": index, "order": list(order),
+                            "filled": filled, "abort": abort})
             continue
         if op not in ("BUY_SEED", "BUY_PRODUCT", "BUY_ANIMAL") or len(order) < 3:
             continue
@@ -388,7 +391,8 @@ def plan_market_orders(orders, money, shed_count, *, day=0, max_orders=10,
 
         if filled > 0:
             accepted.append([op, item, filled])
-        details.append({"order": list(order), "filled": filled, "abort": abort})
+        details.append({"index": index, "order": list(order),
+                        "filled": filled, "abort": abort})
 
     return {"accepted": accepted, "orders": details,
             "committed_spend": spend, "revenue": revenue,
@@ -427,7 +431,7 @@ def buy_product_cost(item, qty, market_inventory=None):
     return total
 
 
-def _affordable_buy_units(item, budget, obs):
+def _affordable_buy_units(item, budget, obs, inventory_offset=0):
     """Per-unit affordable count under the engine-exact BUY_PRODUCT curve
     (MS-1.1): the same cumulative walk plan_market_orders performs, used at
     generation time so the queue's wallet view matches the simulator."""
@@ -441,6 +445,7 @@ def _affordable_buy_units(item, budget, obs):
             inv = int(market_inventory.get(item, MARKET_I0_EMB))
         except (AttributeError, TypeError, ValueError):
             inv = MARKET_I0_EMB
+    inv -= max(0, int(inventory_offset))
     spend = 0.0
     units = 0
     while units < BUY_CHUNK_MAX_UNITS * 2:
@@ -865,15 +870,48 @@ def _contested_items(obs):
     return contested
 
 
+def _p4_clear_tier(item, player, plan=None):
+    """Return the frozen d22 tier, or a live compatibility fallback."""
+    snapshot = (plan or {}).get("p4_snapshot") or {}
+    tiers = snapshot.get("tiers") or {}
+    if item in tiers:
+        return tiers[item]
+    try:
+        if est_opp_conf(item, player=player) < 0.5:
+            return None
+        held = est_opp_held(item, player=player)
+    except Exception:
+        return None
+    if held is None:
+        return None
+    if held >= P4_HEAVY_HELD:
+        return "heavy"
+    if held >= P4_MID_HELD:
+        return "mid"
+    return "low"
+
+
+def _p4_should_clear(item, day, player, plan=None):
+    if not 25 <= day < ENDGAME_DAY:
+        return False
+    tier = _p4_clear_tier(item, player, plan)
+    return tier == "heavy" or (tier == "mid" and day >= 26)
+
+
 def _sell_overrides(obs, farm, private, day, prices, shed, town_shops,
-                    existing_orders):
+                    existing_orders, plan=None):
     """Bounded overrides ON TOP of the gate output (never suppress sells)."""
     try:
         if day >= SEASON_DAYS - 1:
             return []           # d29 liquidation owns everything
-        demand = _town_daily_demand(town_shops) if town_shops else {}
+        demand = _town_daily_demand(town_shops)
+        player = _get(obs, "player", 0)
         contested = _contested_items(obs)
-        flow = _market_flow(_get(obs, "player", 0), day, prices)
+        flow = _market_flow(player, day, prices)
+        dawn_lines = ((sell_plan_shadow(player) or {}).get("lines") or {})
+        shed_count = sum(v for v in shed.values()
+                         if isinstance(v, (int, float)) and v > 0)
+        emergency = shed_count >= 78 or _get(farm, "money", 0) < 200
         sold_now = {o[1] for o in existing_orders
                     if isinstance(o, list) and o and o[0] == "SELL"}
         out = []
@@ -886,14 +924,19 @@ def _sell_overrides(obs, farm, private, day, prices, shed, town_shops,
             if not isinstance(stock, (int, float)) or stock <= 0:
                 continue
             verdict = _sell_plan_item(item, day, prices, flow, contested)
-            # P4 three-tier early clearing (branch §6 / est_opp_held driven;
-            # falls back to gate behaviour when confidence is low)
-            if 25 <= day < ENDGAME_DAY and \
-                    est_opp_conf(item, player=_get(obs, "player", 0)) >= 0.5:
-                held = est_opp_held(item, player=_get(obs, "player", 0)) or 0
-                if held >= P4_HEAVY_HELD or (
-                        held >= P4_MID_HELD and day >= 26):
-                    verdict = "clear"
+            dawn_line = dawn_lines.get(item) or {}
+            planned_hold = dawn_line.get("verdict") == "hold"
+            dawn_price = float(dawn_line.get("spot_price", prices.get(
+                item, BASE_PRICE.get(item, 1))) or 1)
+            price_crash = prices.get(item, dawn_price) < 0.8 * dawn_price
+            # P4 uses the d22 snapshot when present and falls back to the
+            # existing live estimate for direct callers without a stage plan.
+            p4_clear = _p4_should_clear(item, day, player, plan)
+            if p4_clear:
+                verdict = "clear"
+            if planned_hold and not (emergency or item in contested or
+                                     p4_clear or price_crash):
+                continue
             if verdict == "clear" and item not in sold_now:
                 n = tranche(item, stock)
                 if n > 0:
@@ -921,6 +964,8 @@ def _sell_overrides(obs, farm, private, day, prices, shed, town_shops,
 # + 行为回归 + 线上公共局。
 # --------------------------------------------------------------------------
 _SELL_PLAN_MEM = {}
+_EOD_SELL_EMITTED = {}
+_LINEAR_PRESSURE_MEM = {}
 SELL_PLAN_HOURS = (6, 12, 18)
 SELL_PLAN_MAX_LINES = 4
 _DEFENSE_SHAPE = {"WHEAT": "log", "EGG": "log",
@@ -932,35 +977,62 @@ def _sell_plan_dawn(obs, farm, private, day, plan=None):
     """MK-2 dawn sell planner (SHADOW; market §2 full five-rule form)."""
     prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
     shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
-    absorb = _town_daily_demand(shops) if shops else {}
+    absorb = _town_daily_demand(shops)
     contested = _contested_items(obs)
     player = _get(obs, "player", 0)
     flow = _market_flow(player, day, prices)
     shed = _get(private, "shed", {}) or {}
-    cal = _opp_production_calendar(farm, day, horizon=1)
+    harvestable = {item: 0 for item in BASE_PRICE}
+    for row in _get(farm, "tiles", []) or []:
+        for tile in row:
+            if not isinstance(tile, dict):
+                continue
+            amount = _get(tile, "yield_units", 0)
+            if not isinstance(amount, (int, float)) or amount <= 0:
+                continue
+            if _get(tile, "kind", "") == "PLANT":
+                item = _get(tile, "crop", "")
+            else:
+                item = ANIMALS.get(_get(tile, "animal", ""), {}).get(
+                    "product", "")
+            if item in harvestable:
+                harvestable[item] += int(amount)
     mission = mission_shadow(player) or {}
     eod_overflow = int((mission.get("eod") or {}).get("overflow", 0) or 0)
+    wheat_carried = sum(
+        _get(inv, "WHEAT", 0)
+        for inv in (_get(private, "inventories", []) or []) if inv)
+    feed_mouths = 0
+    if day < ENDGAME_DAY:
+        for row in _get(farm, "tiles", []) or []:
+            for tile in row:
+                if isinstance(tile, dict) and "animal" in tile and \
+                        not _get(tile, "fed_today", False):
+                    feed_mouths += 1
+    wheat_shed_reserve = max(0, feed_mouths + WHEAT_FEED_RESERVE
+                             - int(wheat_carried))
 
     lines = {}
     for item in ("STRAWBERRY", "MELON", "WOOL", "MILK", "CARROT", "EGG",
                  "WHEAT"):
         stock = shed.get(item, 0)
-        inflow = cal.get(item, [0])[0] if cal.get(item) else 0
+        inflow = harvestable.get(item, 0)
         stock = int(stock) if isinstance(stock, (int, float)) else 0
-        supply = stock + int(inflow)
+        # Only post-DROP shed stock is executable by this market phase.
+        # Mature tile yield remains diagnostic inflow; HARVEST cannot be paired
+        # with DROP in the same turn under the official one-action contract.
+        supply = stock
+        if item == "WHEAT" and not eod_overflow:
+            supply = max(0, supply - wheat_shed_reserve)
         if supply <= 0:
             continue
         price = _get(prices, item, BASE_PRICE.get(item, 0))
         proj = _project_price(item, price, (flow or {}).get(item, 0.0),
                               SELL_PLAN_LOOKAHEAD_DAYS)
         verdict = _sell_plan_item(item, day, prices, flow, contested)
-        # P4 three-tier early clearing (same evidence as _sell_overrides)
-        if 25 <= day < ENDGAME_DAY and \
-                est_opp_conf(item, player=player) >= 0.5:
-            held = est_opp_held(item, player=player) or 0
-            if held >= P4_HEAVY_HELD or (
-                    held >= P4_MID_HELD and day >= 26):
-                verdict = "clear"
+        # P4 uses the same stable d22 tier as the tactical override.
+        if _p4_should_clear(item, day, player, plan):
+            verdict = "clear"
         # rule 4: EOD overflow -> the log-curve wheat line clears first
         eod_forced = False
         if eod_overflow > 0 and item == "WHEAT" and stock > 0:
@@ -975,14 +1047,11 @@ def _sell_plan_dawn(obs, farm, private, day, plan=None):
             if eod_forced:
                 day_cap = max(day_cap, eod_overflow)
             qty_today = min(supply, day_cap)
-            remaining = qty_today
-            slots = len(SELL_PLAN_HOURS)
-            base = max(1, qty_today // slots)
-            while remaining > 0 and len(batches) < slots:
-                take = min(remaining, base if remaining > base else
-                           remaining)
-                batches.append(take)
-                remaining -= take
+            slots = min(len(SELL_PLAN_HOURS), qty_today)
+            if slots > 0:
+                quotient, remainder = divmod(qty_today, slots)
+                batches = [quotient + (1 if i < remainder else 0)
+                           for i in range(slots)]
         # defense posture (§4.4): POSITIVE flow = glut building / under
         # attack (EMA convention: supply piling up pushes the price down)
         f = (flow or {}).get(item, 0.0)
@@ -990,10 +1059,30 @@ def _sell_plan_dawn(obs, farm, private, day, plan=None):
         shape = _DEFENSE_SHAPE.get(item, "log")
         if not pressure:
             defense = "none"
+            _LINEAR_PRESSURE_MEM.pop((player, item), None)
         elif shape == "log":
             defense = "ignore"       # log 曲线砸不动（压舱石）
         elif shape == "linear":
-            defense = "short_hold"   # 短持穿越（卖穿吸收才亏）
+            key = (player, item)
+            previous = _LINEAR_PRESSURE_MEM.get(key) or {
+                "day": -1, "streak": 0}
+            if previous.get("day") == day:
+                consecutive = previous.get("streak", 1)
+            elif previous.get("day") == day - 1:
+                consecutive = min(2, previous.get("streak", 1) + 1)
+            else:
+                consecutive = 1
+            _LINEAR_PRESSURE_MEM[key] = {
+                "day": day, "streak": consecutive}
+            defense = "short_hold"
+            # Linear exposure gets one bounded pressure day to recover; on a
+            # second consecutive day the planner releases the stock.
+            if consecutive == 1 and item not in contested and \
+                    not eod_forced and not _p4_should_clear(item, day,
+                                                             player, plan):
+                verdict = "hold"
+                qty_today = 0
+                batches = []
         else:
             defense = "cut"          # sq 立即止损 + 产能转移
         if defense == "cut":
@@ -1049,6 +1138,73 @@ def sell_plan_shadow(player):
 # 受现货钳制；日复判 = 触发消除自然收手。
 # --------------------------------------------------------------------------
 _SELL_BATCH_EMITTED = {}
+_SELL_BATCH_ORDER_KEYS = {}
+_EOD_SELL_ORDER_KEYS = {}
+_INTERFERENCE_ORDER_KEYS = {}
+
+
+def _remap_sell_order_source(source_order, merged_order):
+    """Keep sell-source sidecars attached when same-item orders are merged."""
+    source_id = id(source_order)
+    merged_id = id(merged_order)
+    for mapping in (_SELL_BATCH_ORDER_KEYS, _EOD_SELL_ORDER_KEYS,
+                    _INTERFERENCE_ORDER_KEYS):
+        for key, order_id in list(mapping.items()):
+            if order_id == source_id:
+                mapping[key] = merged_id
+
+
+def _finalize_sell_plan_batches(player, day, source_orders, budget):
+    """Commit planner and EOD sells only for units accepted by the budget."""
+    details = (budget or {}).get("orders") or []
+    by_order_id = {}
+    for detail in details:
+        index = detail.get("index")
+        if isinstance(index, int) and 0 <= index < len(source_orders or []):
+            by_order_id[id(source_orders[index])] = detail
+    for key, state in list(_SELL_BATCH_EMITTED.items()):
+        if key[0] != player or key[1] != day or state != "pending":
+            continue
+        order_id = _SELL_BATCH_ORDER_KEYS.get(key)
+        matched = by_order_id.get(order_id)
+        filled = max(0, int((matched or {}).get("filled", 0) or 0))
+        plan = sell_plan_shadow(player) or {}
+        line = (plan.get("lines") or {}).get(key[2]) or {}
+        batches = line.get("batches") or []
+        planned = max(0, int(batches[key[3]] or 0)) \
+            if key[3] < len(batches) else 0
+        remaining = max(0, planned - filled)
+        if remaining == 0:
+            _SELL_BATCH_EMITTED[key] = "committed"
+        else:
+            if key[3] < len(batches):
+                batches[key[3]] = remaining
+            _SELL_BATCH_EMITTED.pop(key, None)
+        _SELL_BATCH_ORDER_KEYS.pop(key, None)
+    for key, state in list(_EOD_SELL_EMITTED.items()):
+        if key[0] != player or key[1] != day or state != "pending":
+            continue
+        matched = by_order_id.get(_EOD_SELL_ORDER_KEYS.get(key))
+        requested = max(0, int(key[4] or 0))
+        filled = max(0, int((matched or {}).get("filled", 0) or 0))
+        if filled >= requested and requested > 0:
+            _EOD_SELL_EMITTED[key] = "committed"
+        else:
+            _EOD_SELL_EMITTED.pop(key, None)
+        _EOD_SELL_ORDER_KEYS.pop(key, None)
+    for key, order_id in list(_INTERFERENCE_ORDER_KEYS.items()):
+        if key[0] != player or key[1] != day:
+            continue
+        matched = by_order_id.get(order_id)
+        filled = max(0, int((matched or {}).get("filled", 0) or 0))
+        requested = max(0, int(key[3] or 0))
+        if filled >= requested and requested > 0:
+            for rec in reversed(_INTERFERENCE_LOG):
+                if rec.get("day") == day:
+                    rec["fired_vehicle1"] = {
+                        "item": key[2], "qty": requested}
+                    break
+        _INTERFERENCE_ORDER_KEYS.pop(key, None)
 
 
 def _sell_plan_batches_due(obs, day, hour, shed, existing_orders):
@@ -1063,7 +1219,7 @@ def _sell_plan_batches_due(obs, day, hour, shed, existing_orders):
         sold_now = {o[1] for o in existing_orders
                     if isinstance(o, list) and o and o[0] == "SELL"}
         shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
-        demand = _town_daily_demand(shops) if shops else {}
+        demand = _town_daily_demand(shops)
         out = []
         for item in sorted((plan.get("lines") or {})):
             line = plan["lines"][item]
@@ -1084,13 +1240,21 @@ def _sell_plan_batches_due(obs, day, hour, shed, existing_orders):
                     due = 24
                 if hour < due:
                     continue
-                _SELL_BATCH_EMITTED[key] = True
                 if item in sold_now:
-                    break           # gate overlay already sold this line
+                    overlay = next((o for o in existing_orders
+                                    if isinstance(o, list) and len(o) >= 3
+                                    and o[0] == "SELL" and o[1] == item), None)
+                    if overlay is not None:
+                        _SELL_BATCH_EMITTED[key] = "pending"
+                        _SELL_BATCH_ORDER_KEYS[key] = id(overlay)
+                    break           # gate overlay owns this line this turn
                 n = max(0, min(int(qty), int(stock),
                                2 * demand.get(item, 1) + 4))
                 if n > 0:
-                    out.append(["SELL", item, n])
+                    order = ["SELL", item, n]
+                    out.append(order)
+                    _SELL_BATCH_EMITTED[key] = "pending"
+                    _SELL_BATCH_ORDER_KEYS[key] = id(order)
                     sold_now.add(item)
                 break               # one batch of this line per turn
         return out
@@ -1113,11 +1277,20 @@ def _interference_orders(obs, farm, private, day, prices, plan=None):
         triggered = _interference_shadow(obs, farm, day, prices, plan=plan)
         if not triggered or not _INTERFERENCE_LOG:
             return []
-        rec = _INTERFERENCE_LOG[-1]
-        if rec.get("day") != day or not rec.get("confirmed"):
+        player = _get(obs, "player", 0)
+        rec = next((row for row in reversed(_INTERFERENCE_LOG)
+                    if row.get("player") == player and row.get("day") == day),
+                   None)
+        if rec is None or not rec.get("confirmed"):
+            return []
+        if rec.get("fired_vehicle1"):
+            return []
+        if any(key[0] == _get(obs, "player", 0) and key[1] == day
+               for key in _INTERFERENCE_ORDER_KEYS):
             return []
         item = rec.get("top_opp_line")
-        if not item or not rec.get("gate_exposure"):
+        if not item or not rec.get("gate_exposure") \
+                or not rec.get("gate_budget"):
             return []
         shed = _get(private, "shed", {}) or {}
         stock = shed.get(item, 0)
@@ -1136,9 +1309,11 @@ def _interference_orders(obs, farm, private, day, prices, plan=None):
         dump = min(dump, int(stock))
         if dump <= 0:
             return []
-        # record the firing in the shadow log for diagnostics
-        rec["fired_vehicle1"] = {"item": item, "qty": dump}
-        return [["SELL", item, dump]]
+        # The firing lock is committed only after the final budget pass accepts
+        # the order; a rejected interference candidate must be retried.
+        order = ["SELL", item, dump]
+        _INTERFERENCE_ORDER_KEYS[(player, day, item, dump)] = id(order)
+        return [order]
     except Exception:
         return []
 
@@ -1198,7 +1373,7 @@ def _interference_shadow(obs, farm, day, prices, plan=None):
         if opp is None:
             return False
         shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
-        absorb = _town_daily_demand(shops) if shops else {}
+        absorb = _town_daily_demand(shops)
         flow = _market_flow(player, day, prices)
         r_opp, opp_lines = _calendar_flow_value(opp, day, prices, absorb,
                                                 flow)
@@ -1206,13 +1381,19 @@ def _interference_shadow(obs, farm, day, prices, plan=None):
                                                flow)
         raw_trigger = r_opp > r_us + INTERFERENCE_MARGIN
 
-        # consecutive-day confirmation (§3.2)
-        mem = _INTERFERENCE_MEM.get(player) or {"day": -1, "streak": 0}
-        if raw_trigger:
-            streak = mem["streak"] + 1 if mem["day"] == day - 1 else 1
+        # consecutive-day confirmation (§3.2); repeated turns within one day
+        # reuse that day's decision and never advance or reset the streak.
+        mem = _INTERFERENCE_MEM.get(player) or {
+            "day": -1, "streak": 0, "raw_trigger": False}
+        if mem.get("day") == day:
+            streak = mem.get("streak", 0)
+        elif raw_trigger:
+            streak = mem.get("streak", 0) + 1 \
+                if mem.get("day") == day - 1 else 1
         else:
             streak = 0
-        _INTERFERENCE_MEM[player] = {"day": day, "streak": streak}
+        _INTERFERENCE_MEM[player] = {
+            "day": day, "streak": streak, "raw_trigger": raw_trigger}
         confirmed = raw_trigger and streak >= INTERFERENCE_CONFIRM_DAYS
 
         # gate 1: kill/exposure >= 2 on the opponent's strongest line (§3.5)
@@ -1222,11 +1403,13 @@ def _interference_shadow(obs, farm, day, prices, plan=None):
         exposure = our_lines.get(top_item, 0.0) if top_item else 0.0
         gate_exposure = top_item is not None and exposure > 0 and \
             kill_value >= INTERFERENCE_EXPOSURE_RATIO * exposure
-        # gate 2: interference budget <= 15% of the capacity law (§3.5/§5.3)
-        # shadow estimate: the cheapest vehicle ladder step is the carrot
-        # ambush (6 tiles x 0.5 units); the one-shot herd is 3 head x 2.
-        law_units = _capacity_law_max(len(_get(farm, "hands", []) or []))
-        gate_budget = law_units * INTERFERENCE_BUDGET_FRAC >= 3.0
+        current_hands = len(_get(farm, "hands", []) or [])
+        scan = _farm_scan(farm)
+        planned_hands = _crew_target(
+            day, scan.get("herd", 0), scan.get("wheat", 0),
+            len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"]), plan)
+        law_units = _capacity_law_max(max(current_hands, planned_hands))
+        gate_budget = law_units * INTERFERENCE_BUDGET_FRAC >= 1.0
 
         # rollout terminal for margin calibration (not the trigger term)
         r_us_rollout = None
@@ -1240,17 +1423,24 @@ def _interference_shadow(obs, farm, day, prices, plan=None):
         except Exception:
             r_us_rollout = None
 
-        if _INTERFERENCE_LOG:
-            prev = _INTERFERENCE_LOG[-1]
-            if prev.get("day") == day:
-                _INTERFERENCE_LOG.pop()   # one record per day
-        _INTERFERENCE_LOG.append({
+        fired = None
+        for index in range(len(_INTERFERENCE_LOG) - 1, -1, -1):
+            prev = _INTERFERENCE_LOG[index]
+            if prev.get("player") == player and prev.get("day") == day:
+                fired = prev.get("fired_vehicle1")
+                del _INTERFERENCE_LOG[index]
+                break
+        record = {
             "day": day, "r_opp": round(r_opp, 1),
             "r_us_flow": round(r_us, 1), "r_us_rollout": r_us_rollout,
             "raw_trigger": raw_trigger, "streak": streak,
-            "confirmed": confirmed, "top_opp_line": top_item,
-            "gate_exposure": gate_exposure, "gate_budget": gate_budget,
-            "armed": INTERFERENCE_ARMED})
+            "player": player, "confirmed": confirmed,
+            "top_opp_line": top_item, "gate_exposure": gate_exposure,
+            "gate_budget": gate_budget, "capacity_units": law_units,
+            "armed": INTERFERENCE_ARMED}
+        if fired is not None:
+            record["fired_vehicle1"] = fired
+        _INTERFERENCE_LOG.append(record)
         if len(_INTERFERENCE_LOG) > 60:
             del _INTERFERENCE_LOG[:len(_INTERFERENCE_LOG) - 60]
         return confirmed and INTERFERENCE_ARMED
@@ -1264,6 +1454,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     shed = _get(private, "shed", {}) or {}
     seeds = _get(private, "seeds", {}) or {}
     prices = _get(_get(obs, "market", {}) or {}, "prices", {}) or {}
+    player = _get(obs, "player", 0)
     quads = len(_get(farm, "unlocked_quadrants", ["NW"]) or ["NW"])
     shed_count = sum(v for v in shed.values() if isinstance(v, (int, float)))
     last_day = day >= SEASON_DAYS - 1
@@ -1293,6 +1484,19 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # (ep 103783585: land + 3 sheep + seeds in one turn drained 3256 to
     # 16 because the animal gate read the pre-land wallet).
     committed_spend = 0.0
+    buy_product_units = 0
+    # Capacity is reserved as orders are appended.  The engine commits the
+    # queue sequentially, so every later capex gate must see earlier buys.
+    reserved_units = 0.0
+
+    def capacity_batch_limit(requested, unit_cost=1.0):
+        requested = max(0, int(requested))
+        while requested > 0 and not _capacity_gate(
+                farm, private, reserved_units + requested * unit_cost,
+                day, plan)[0]:
+            requested -= 1
+        return requested
+
     if quads in LAND_PLAN:
         due_day, fund = LAND_PLAN[quads]
         # r4-P3: SW after day 18 cannot deploy a repaying asset (strawberry
@@ -1305,13 +1509,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             # branch §5.4 triple gate (labor + cash dims): a quadrant is 25
             # asset-unit tiles; the purchase may only land inside the
             # capacity law and leave the dawn cash invariant intact.
-            cap_ok, _util = _capacity_gate(farm, None, 25.0, day, plan)
+            cap_ok, _util = _capacity_gate(
+                farm, private, reserved_units + 25.0, day, plan)
             # cash dim: the fund already embeds price + cushion, so the
             # invariant prices only the land COST against the floor+bill.
             if money >= fund and cap_ok \
                     and _cash_gate_ok(farm, LAND_PRICE[quads]):
                 orders.append(["BUY_LAND"])
                 committed_spend += LAND_PRICE[quads]
+                reserved_units += 25.0
                 if plan.get("wheat_farm"):
                     projected_money -= LAND_PRICE[quads]
             elif day < due_day + LAND_PEND_WINDOW:
@@ -1323,12 +1529,16 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # (round-3 ledger: Renji's 42-tile field).  No herd-blocking fund:
     # the 14-head plan is already built by the day this can fire.
     # branch §5.4: SE passes the same labor/cash triple gate.
+    d10_ready = plan.get("se_ready")
     if plan["volume"] and quads == 3 \
+            and (d10_ready is None or d10_ready) \
             and SE_DUE_DAY <= day <= SE_BUY_LAST_DAY and money >= SE_FUND \
-            and _capacity_gate(farm, None, 25.0, day, plan)[0] \
+            and _capacity_gate(farm, private, reserved_units + 25.0,
+                               day, plan)[0] \
             and _cash_gate_ok(farm, LAND_PRICE[3]):
         orders.append(["BUY_LAND"])
         committed_spend += LAND_PRICE[3]
+        reserved_units += 25.0
 
     # ---- §2.3 feed precondition (scheduler design): the dawn mission
     # computes the D1/D2 mouth deficit and injects an h0 BUY_PRODUCT WHEAT
@@ -1338,6 +1548,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # system; the feed-security block below counts it via sys_wheat so the
     # two never double-buy.
     precond_wheat = 0
+    precondition_covered = False
     if not last_day and _get(obs, "hour", 0) <= 2:
         _mission = mission_shadow(_get(obs, "player", 0)) or {}
         _sys_w = shed.get("WHEAT", 0) + sum(
@@ -1350,15 +1561,23 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             # idempotent across the h0-h2 window: once the bought wheat
             # has landed, system wheat covers the dawn deficit -> skip
             if _sys_w >= max(0, int(_ev.get("qty") or 0)):
+                precondition_covered = True
                 continue
             _short = _affordable_buy_units(
-                "WHEAT", money - committed_spend - 60, obs)
+                "WHEAT", money - committed_spend - 60, obs,
+                buy_product_units)
             _short = min(_short, max(0, int(_ev.get("qty") or 0)))
             if _short > 0:
                 orders.append(["BUY_PRODUCT", "WHEAT", _short])
+                market_inventory = _get(_get(obs, "market", {}) or {},
+                                        "inventory", None)
+                shifted_inventory = dict(market_inventory or {})
+                shifted_inventory["WHEAT"] = int(
+                    shifted_inventory.get("WHEAT", MARKET_I0_EMB)) - \
+                    buy_product_units
                 committed_spend += buy_product_cost(
-                    "WHEAT", _short,
-                    _get(_get(obs, "market", {}) or {}, "inventory", None))
+                    "WHEAT", _short, shifted_inventory)
+                buy_product_units += _short
                 precond_wheat += _short
 
     # ---- feed security (FM-O3 + m2b phantom guard): never let the herd
@@ -1394,32 +1613,75 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 # MS-1.1: per-unit walk along the embedded curve
                 # (buy_product_cost) -- matches plan_market_orders exactly.
                 want = min(want, _affordable_buy_units(
-                    "WHEAT", money - committed_spend - 60, obs))
+                    "WHEAT", money - committed_spend - 60, obs,
+                    buy_product_units))
             if want > 0:
                 # market §5 小件 2：BUY 抽货推高曲线——大单跨回合分批。
                 want = min(want, BUY_CHUNK_MAX_UNITS)
                 orders.append(["BUY_PRODUCT", "WHEAT", want])
+                market_inventory = _get(_get(obs, "market", {}) or {},
+                                        "inventory", None)
+                shifted_inventory = dict(market_inventory or {})
+                shifted_inventory["WHEAT"] = int(
+                    shifted_inventory.get("WHEAT", MARKET_I0_EMB)) - \
+                    buy_product_units
                 committed_spend += buy_product_cost(
-                    "WHEAT", want,
-                    _get(_get(obs, "market", {}) or {}, "inventory", None))
-                sys_wheat += want          # the opportunity block counts it
+                    "WHEAT", want, shifted_inventory)
+                buy_product_units += want
+                sys_wheat += want
                 if plan.get("wheat_farm"):
                     projected_money -= want * unit_budget
-        # market §5 小件 1（机会性买入，Danila 98.7k 出典 d1-2 低价囤料）：
-        # 价 <26 + 现金红线外 → 主动囤到 N 天用量；同样受分批上限。
-        if prices.get("WHEAT", 25) <= OPPORTUNE_WHEAT_PRICE \
-                and not last_day and animals_to_feed > 0:
-            hoard_target = animals_to_feed * OPPORTUNE_WHEAT_DAYS + 3
-            extra = min(hoard_target - sys_wheat,
-                        BUY_CHUNK_MAX_UNITS,
-                        max(0, int((money - committed_spend - 60) //
-                                   OPPORTUNE_WHEAT_PRICE)))
-            if extra > 0:
-                orders.append(["BUY_PRODUCT", "WHEAT", extra])
-                committed_spend += buy_product_cost(
-                    "WHEAT", extra,
-                    _get(_get(obs, "market", {}) or {},
-                         "inventory", None))
+
+    # Cheap wheat can widen a real feed shortfall, but carrier-held wheat is
+    # already system stock and must not trigger a phantom refill.
+    if prices.get("WHEAT", 25) < OPPORTUNE_WHEAT_PRICE \
+            and sys_wheat < animals_to_feed + 3 \
+            and not last_day and not precondition_covered:
+        hoard_target = animals_to_feed * OPPORTUNE_WHEAT_DAYS + 3
+        shed_room = max(0, SHED_CAPACITY - int(shed_count) - buy_product_units)
+        desired = min(max(0, hoard_target - sys_wheat),
+                      BUY_CHUNK_MAX_UNITS, shed_room)
+        affordable = _affordable_buy_units(
+            "WHEAT", money - committed_spend - 60, obs,
+            buy_product_units)
+        extra = min(desired, affordable)
+        if extra > 0:
+            orders.append(["BUY_PRODUCT", "WHEAT", extra])
+            market_inventory = _get(_get(obs, "market", {}) or {},
+                                    "inventory", None)
+            shifted_inventory = dict(market_inventory or {})
+            shifted_inventory["WHEAT"] = int(
+                shifted_inventory.get("WHEAT", MARKET_I0_EMB)) - \
+                buy_product_units
+            committed_spend += buy_product_cost(
+                "WHEAT", extra, shifted_inventory)
+            buy_product_units += extra
+            sys_wheat += extra
+
+    # Consume mission EOD budget events once their planned hour arrives.  The
+    # mission is cached for the day, so an explicit ledger prevents duplicate
+    # SELL orders on h7..h23 while still allowing the current shed to clamp qty.
+    mission = mission_shadow(player) or {}
+    eod_events = [event for event in (mission.get("events") or [])
+                  if event.get("why") == "eod_budget"
+                  and event.get("op") == "SELL"
+                  and int(event.get("h", 0) or 0) <= int(
+                      _get(obs, "hour", 0) or 0)]
+    for event in eod_events:
+        event_key = (player, day, str(event.get("item")),
+                     int(event.get("h", 0) or 0),
+                     int(event.get("qty", 0) or 0))
+        if event_key in _EOD_SELL_EMITTED:
+            continue
+        item = event.get("item")
+        stock = shed.get(item, 0)
+        qty = min(max(0, int(event.get("qty", 0) or 0)),
+                  int(stock) if isinstance(stock, (int, float)) else 0)
+        _EOD_SELL_EMITTED[event_key] = "pending"
+        if qty > 0:
+            order = ["SELL", item, qty]
+            orders.append(order)
+            _EOD_SELL_ORDER_KEYS[event_key] = id(order)
 
     # ---- seeds: the wheat feed floor first (m2b), then rotation crops
     # staged behind the pending land fund (FM-3 staging).  R3-3 exception:
@@ -1461,12 +1723,18 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         # gate.
         batch_w = min(batch_w, max(0, int((money - 20) // 10)))
         if batch_w > 0:
+            batch_w = capacity_batch_limit(batch_w, 1.0)
+        if batch_w > 0:
             orders.append(["BUY_SEED", "WHEAT", batch_w])
             committed_spend += batch_w * CROPS["WHEAT"]["seed"]
+            reserved_units += float(batch_w)
     elif not plan.get("wheat_farm") and seeds.get("WHEAT", 0) < 6 \
             and day <= SEASON_DAYS - 7 and money >= 150:
-        orders.append(["BUY_SEED", "WHEAT", 12])
-        committed_spend += 12 * CROPS["WHEAT"]["seed"]
+        batch_w = capacity_batch_limit(12, 1.0)
+        if batch_w > 0:
+            orders.append(["BUY_SEED", "WHEAT", batch_w])
+            committed_spend += batch_w * CROPS["WHEAT"]["seed"]
+            reserved_units += float(batch_w)
     if plan.get("wheat_farm") and not last_day \
             and day <= PLANT_LAST_DAY["WHEAT"]:
         alive_wheat = alive.get("WHEAT", 0)
@@ -1481,8 +1749,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 max(0, int((projected_money - WHEAT_FARM_CASH_REDLINE) //
                            CROPS["WHEAT"]["seed"])))
             if batch > 0:
+                batch = capacity_batch_limit(batch, 1.0)
+            if batch > 0:
                 orders.append(["BUY_SEED", "WHEAT", batch])
                 projected_money -= batch * CROPS["WHEAT"]["seed"]
+                reserved_units += float(batch)
     if not last_day:
         crop_seed_sequence = ("STRAWBERRY",) if plan.get("wheat_farm") else \
             ("STRAWBERRY", "MELON", "CARROT")
@@ -1509,14 +1780,10 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             # already under the floor.
             if not _curve_gate_ok(crop, _get(obs, "player", 0), day, prices):
                 continue
-            # branch §4.2 B3 (melon_min): against a melon-first opponent our
-            # melon line stays a small early-batch probe (d3-5 抢收).
-            if plan.get("melon_min") and crop == "MELON":
-                continue
-            cap_for_crop = CROP_CAP_PER_QUAD[crop] * quads
-            if crop == "STRAWBERRY":
-                cap_for_crop = min(plan["straw_quad_cap"] * quads,
-                                   plan["straw_total_cap"])
+            cap_for_crop = len(crop_map.get(crop, ()))
+            if crop == "MELON" and "melon_total_cap" in plan:
+                cap_for_crop = min(cap_for_crop,
+                                   int(plan.get("melon_total_cap", 0)))
             want = cap_for_crop - alive[crop] - seeds.get(crop, 0)
             seed_gate = 250 if crop == "STRAWBERRY" else land_fund + 250
             wallet = projected_money if plan.get("wheat_farm") else money
@@ -1541,15 +1808,13 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                             room_budget, seed_affordable)
             if batch > 0 and wallet >= reserve_gate + \
                     CROPS[crop]["seed"] * batch:
-                # branch §5.4 labor dim: the batch's tiles count toward the
-                # capacity law at 1 unit/tile -- refuse when over the law.
-                if not _capacity_gate(farm, None, float(batch),
-                                      day, plan)[0]:
-                    batch = 0
+                batch = capacity_batch_limit(batch, 1.0)
             if batch > 0 and wallet >= reserve_gate + \
                     CROPS[crop]["seed"] * batch:
                 orders.append(["BUY_SEED", crop, batch])
                 committed_spend += CROPS[crop]["seed"] * batch
+                reserved_units += float(batch)
+                room_budget -= batch
                 if plan.get("wheat_farm"):
                     projected_money -= CROPS[crop]["seed"] * batch
 
@@ -1604,7 +1869,10 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             n = min(want, int((money - spend - OPENING_RESERVE) // cost)) \
                 if money - spend > OPENING_RESERVE else 0
             if n > 0:
+                n = capacity_batch_limit(n, 2.0)
+            if n > 0:
                 orders.append(["BUY_ANIMAL", animal, n])
+                reserved_units += 2.0 * n
                 _note_buy_order(_get(obs, "player", 0), day,
                                 _get(obs, "hour", 0), n)
                 spend += n * cost
@@ -1627,7 +1895,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             candidates = [_p1_pref] + [a for a in candidates if a != _p1_pref]
         # branch §5.3/§5.4 labor dim：畜群扩张（步速循环）不得越过容量定律
         # ——黎明不变式 >0.85 拒购（任务包 capacity_deficit 的市场侧镜像）。
-        _herd_cap_ok = _capacity_gate(farm, None, 0.0, day, plan)[0]
+        _herd_cap_ok = _capacity_gate(farm, private, 0.0, day, plan)[0]
         if npv_ceiling > HERD_CAP and preferred_species is not None:
             candidates = [preferred_species]
         for animal in candidates:
@@ -1676,22 +1944,34 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                     demand.get(product, 1) * ANIMALS[animal]["interval"] // 2)
                 n = min(n, absorption_cap - species[animal])
             if n > 0 and _herd_cap_ok:
+                n = capacity_batch_limit(n, 2.0)
+            if n > 0:
                 orders.append(["BUY_ANIMAL", animal, n])
                 if plan.get("wheat_farm"):
                     projected_money -= n * cost
+                reserved_units += 2.0 * n
                 _note_buy_order(_get(obs, "player", 0), day,
                                 _get(obs, "hour", 0), n)
             break   # one species per turn
 
-    # ---- selling: selective-intervention gates (P2: town-conditioned) ----
+    # ---- selling: dawn plan owns normal timing; gates are tactical overlays --
     flow = _market_flow(_get(obs, "player", 0), day, prices)
-    orders.extend(_market_gates(day, prices, shed, herd_total,
+    gate_orders = _market_gates(day, prices, shed, herd_total,
                                 town_shops=town_shops, money=money,
-                                flow=flow))
+                                flow=flow)
+    dawn_plan = sell_plan_shadow(_get(obs, "player", 0)) or {}
+    plan_lines = dawn_plan.get("lines") or {}
+    protected_holds = {item for item, line in plan_lines.items()
+                       if line.get("verdict") == "hold"}
+    emergency = last_day or shed_count >= 78 or money < 200
+    if protected_holds and not emergency:
+        gate_orders = [order for order in gate_orders
+                       if order[0] != "SELL" or order[1] not in protected_holds]
+    orders.extend(gate_orders)
     # 【branch §7.2 / market §2 落地】争议线零囤货 + 卖出计划强制清 +
     # P4 三档抢跑——对门控输出做有界覆盖（只增清仓、不抑制既有卖出）。
     orders.extend(_sell_overrides(obs, farm, private, day, prices, shed,
-                                  town_shops, orders))
+                                  town_shops, orders, plan))
     # 【MK-3 LIVE】黎明卖出计划批次在计划时点驱动卖出（market §2.1：
     # 计划器为主，三门态降级为战术覆盖——上面 gates/overrides 的卖出
     # 已覆盖的线本回合跳过，批次记已发射）。
@@ -1743,4 +2023,32 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             # the land/animal capex plan (measured: 42 wheat hoarded at $516
             # while the NE purchase window lapsed)
             orders.append(["SELL", "WHEAT", surplus])
-    return orders
+    # Merge overlapping SELL overlays before the official ten-order budget.
+    # Each item is emitted once and never exceeds the currently observed shed.
+    merged = []
+    sell_index = {}
+    for order in orders:
+        if not isinstance(order, list) or not order:
+            continue
+        if order[0] != "SELL" or len(order) < 3:
+            merged.append(order)
+            continue
+        item = order[1]
+        if item not in BASE_PRICE:
+            continue
+        qty = max(0, int(order[2] or 0))
+        if item not in sell_index:
+            sell_index[item] = len(merged)
+            merged_order = ["SELL", item, qty]
+            merged.append(merged_order)
+            _remap_sell_order_source(order, merged_order)
+        else:
+            merged_order = merged[sell_index[item]]
+            merged_order[2] += qty
+            _remap_sell_order_source(order, merged_order)
+    for item, idx in sell_index.items():
+        stock = shed.get(item, 0)
+        cap = int(stock) if isinstance(stock, (int, float)) and stock > 0 else 0
+        merged[idx][2] = min(merged[idx][2], cap)
+    return [order for order in merged
+            if order[0] != "SELL" or order[2] > 0]

@@ -44,6 +44,8 @@ def _build_tasks(obs, farm, private, day, plan=None):
     builds, crop_map, n_animals, capacity = _field_alloc(farm, day, prices,
                                                          plan)
     seeds = _get(private, "seeds", {}) or {}
+    seed_budget = {crop: max(0, int(_get(seeds, crop, 0) or 0))
+                   for crop in CROPS}
     shed = _get(private, "shed", {}) or {}
     inventories = _get(private, "inventories", []) or []
     wheat_on_units = sum(_get(inv, "WHEAT", 0) for inv in inventories if inv)
@@ -159,7 +161,7 @@ def _build_tasks(obs, farm, private, day, plan=None):
                     if pos in positions:
                         crop = c
                         break
-                if crop is not None and seeds.get(crop, 0) > 0 \
+                if crop is not None and seed_budget.get(crop, 0) > 0 \
                         and day <= PLANT_LAST_DAY.get(crop, 24) \
                         and (not PLANT_EOD_GUARD
                              or hour <= PLANT_HOUR_MAX) \
@@ -182,6 +184,7 @@ def _build_tasks(obs, farm, private, day, plan=None):
                     net = expect * price - cd["seed"]
                     add(30 if crop == "WHEAT" else 32, x, y,
                         ["PLANT", crop], ("plant", x, y), v=max(30, net * 0.6))
+                    seed_budget[crop] -= 1
                     plant_budget -= 1
                 continue
             if not isinstance(tile, dict):
@@ -452,8 +455,8 @@ _MISSION_SHADOW = {}
 def _mission_cls(task):
     """旧任务 → 工作类分级（与 tier 正交：cls=干什么，tier=多急）。"""
     op = (task.get("act") or [None])[0]
-    if task.get("red"):
-        return "OBLIGATION"       # 现行红线标记 = 今夜必死义务
+    if task.get("red") and op in ("WATER", "FEED"):
+        return "OBLIGATION"       # 只有生存义务进入红线类
     if op == "HARVEST":
         return "YIELD"
     if op in ("CARE", "DIG", "COLLECT_FERTILIZER"):
@@ -474,7 +477,7 @@ def _mission_tile_map(farm):
 def _mission_tier(task, tile, day):
     """D1-D4 天级死线分级（scheduler §2.2；red 标记与引擎 streak 双源）。"""
     op = (task.get("act") or [None])[0]
-    if task.get("red"):
+    if task.get("red") and op in ("WATER", "FEED"):
         return "D1"
     if op == "WATER":
         if tile is not None and (
@@ -513,6 +516,7 @@ def _enrich_mission_tasks(tasks, tile_map, day):
     for task in tasks or []:
         op = (task.get("act") or [None])[0]
         t = dict(task)
+        t["op"] = op
         t["cls"] = _mission_cls(task)
         t["tier"] = _mission_tier(task, tile_map.get(
             (task.get("x"), task.get("y"))), day)
@@ -566,17 +570,32 @@ def _build_mission(obs, farm, private, day, plan, tasks, planned_sell=None):
         events.append({"h": 0, "op": "BUY_PRODUCT", "item": "WHEAT",
                        "qty": feed_d12 - wheat_avail, "priority": 95,
                        "why": "feed_precondition"})
-    # §2.4 EOD 预算：保守 planned_sell=0（影子期市场卖出晚于任务包成形）
+    # §2.4 EOD 预算：棚仓、随身和计划收割共同占用 100 格；planned_sell
+    # 是当日已计划的总卖出量，不能把随身库存从投影中漏掉。
     shed_count = sum(int(v) for v in shed.values()
                      if isinstance(v, (int, float)) and v > 0)
-    planned_sell = 0 if planned_sell is None else int(planned_sell)
-    eod_projected = shed_count - planned_sell + harvest_in
+    carried_count = sum(
+        int(v) for inv in inventories if inv
+        for v in inv.values() if isinstance(v, (int, float)) and v > 0)
+    planned_sell = max(0, 0 if planned_sell is None else int(planned_sell))
+    eod_projected = shed_count + carried_count - planned_sell + harvest_in
     eod_overflow = max(0, eod_projected - SHED_CAPACITY)
     if eod_overflow > 0:
-        events.append({"h": 6, "op": "SELL", "item": "WHEAT",
-                       "qty": min(eod_overflow,
-                                  int(_get(shed, "WHEAT", 0) or 0)),
-                       "why": "eod_budget"})
+        remaining = eod_overflow
+        # Prefer the currently largest tradable shed lines.  The event is a
+        # bounded SELL plan; the market layer may further clamp by absorption.
+        for item, stock in sorted(
+                ((item, int(value)) for item, value in shed.items()
+                 if item in BASE_PRICE and isinstance(value, (int, float))
+                 and value > 0),
+                key=lambda pair: (-pair[1], pair[0])):
+            if remaining <= 0:
+                break
+            qty = min(remaining, stock)
+            if qty > 0:
+                events.append({"h": 6, "op": "SELL", "item": item,
+                               "qty": qty, "why": "eod_budget"})
+                remaining -= qty
 
     # §2.6 容量前馈（写侧）：>0.85 deficit、<0.65 slack（空 plan 归一为
     # None：_crew_target 只接受完整计划 dict 或 None）
@@ -617,6 +636,7 @@ def _build_mission(obs, farm, private, day, plan, tasks, planned_sell=None):
             "tier_counts": tier_counts, "d1": d1, "tasks": out_tasks,
             "events": events,
             "eod": {"projected": eod_projected, "planned_sell": planned_sell,
+                    "shed": shed_count, "carried": carried_count,
                     "harvest_in": harvest_in, "overflow": eod_overflow},
             "peak": peak,
             "capacity": {"ok": cap_ok, "util": round(util, 3),

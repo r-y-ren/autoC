@@ -134,7 +134,7 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 | # | 误差源 | 影响 | 缓解 |
 |---|---|---|---|
 | E1 | $1 地板价卖出不入库存（§0.4） | Ch0 漏记卖压（该段对市场价也无影响，对手自己也白卖） | 钱账 Ch2 捕捉（收入仍入 money）；地板价段降置信度标记 |
-| E2 | 棚溢出丢弃（日终 DROP 超容量丢弃，量私有） | `opp_held` 高估 | 容量 100 已知 + 持有量接近上限时降置信度；超额囤货档本就稀有 |
+| E2 | 棚溢出丢弃（EOD 自动归还或显式 DROP 超容量丢弃，量私有） | `opp_held` 高估 | 容量 100 已知 + 持有量接近上限时降置信度；超额囤货档本就稀有 |
 | E3 | 商店解锁当日半日吸收 | `town_absorb` 半日 ±3 件级 | 解锁日（每 3 天）单独校准或标记低置信 |
 | E4 | 采样相位（hour 选择与 4/24 步吸收相位） | 吸收计数错位 | V0 用整账残差=0 断言经验标定固定采样 hour（§5） |
 | E5 | 买种量以实际 PLANT 数估计 | Ch2 中 `seeds(d)` 有 ±（跨日种） | 仅影响钱账交叉验证精度，不影响 Ch0/Ch3 整数账 |
@@ -164,7 +164,7 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 
 ## 4. 消费方映射（按收益排序）
 
-> 2026-09-02 12:12 `docs/phase_branch_plan.md` v1.0 对齐注记：opp_contesting 已由用户裁决
+> 2026-09-03 `docs/phase_branch_plan.md` v1.4 对齐注记：opp_contesting 已由用户裁决
 > 从 VOLUME 入场门移除（"镜像=时序战，不是避战"，见 `src/strategy.py` 的 `_decide_mode`，
 > solvency veto 保留），
 > 本模块不再服务该门；`_opp_production_calendar`（对手 tile 上市日历，纯公开信息
@@ -207,8 +207,8 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 - **边界纪律（对齐 M-H NO-GO 审计，2026-09-01 11:05）**：M-H 否决的是"在对局内
   合法观测对手库存"（在线无通道、线上台账无逐日快照可校准）——本模块不违反该结论：
   在线运行时只消费合法公开字段做**估计**（接口一律 `est_` 前缀，不得称直接观测），
-  replay 私有字段**仅离线校验器可读**、绝不进入 agent 代码路径；d29 全清硬约束不因
-  估计松动。
+  replay 私有字段**仅离线校验器可读**、绝不进入 agent 代码路径；d29 的安全变现目标不因
+  估计松动，且不得通过棚仓空间不足时的 DROP 销毁随身货物。
 
 ## 6. 风险与开放问题
 
@@ -235,8 +235,9 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 
 ### OBS-5 剩余工作
 
-1. 处理 MILK、WOOL、STRAWBERRY、FERTILIZER 等商品的 held MAE、溢出和 EOD 不确定性，
-   保留 `eod_action_unknown`/floor/BUY 诊断而不是静默猜测。
+1. 处理 MILK、WOOL、STRAWBERRY、FERTILIZER 等商品的 held MAE、对手溢出和 EOD 不确定性。
+   我方 scheduler §2.4 已把 carrier 纳入 EOD 投影并禁止 d29 不安全 DROP；此处的不确定性仅指
+   对手私有 held/归还动作，仍保留 `eod_action_unknown`/floor/BUY 诊断而不是静默猜测。
 2. 保持线上 requested 与离线 validated fill 双口径；若无法获得真实 fill，继续把 fill
    归因标为 shadow/diagnostic，不改名为 executed。
 3. 为 P4 出清、P3 卖出节奏及后续 horizon/market 注入分别做配对回归和线上 A/B；本地
@@ -246,7 +247,7 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 
 ## 8. 关联
 
-- `docs/phase_branch_plan.md` v1.0（2026-09-02 12:12）：本模块为其 P4 抢跑的"眼睛"与
+- `docs/phase_branch_plan.md` v1.4（2026-09-03）：本模块为其 P4 抢跑的"眼睛"与
   前置件，接管 P3 卖出节奏/P4 出清时点两职；其 `_opp_production_calendar` 是 Ch3 产出侧
   的轻量前置实现，`opp_contesting` 已按用户裁决移出 VOLUME 门；
 - 策略组合选择器（2026-09-02 讨论）的"状况评估"输入件（§4.4）；

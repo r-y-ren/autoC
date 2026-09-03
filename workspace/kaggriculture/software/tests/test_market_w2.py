@@ -52,6 +52,7 @@ def _reset():
     main._MARKET_MEM.clear()
     main._MISSION_SHADOW.clear()
     main._SELL_PLAN_MEM.clear()
+    main._EOD_SELL_EMITTED.clear()
     main._INTERFERENCE_MEM.clear()
     main._INTERFERENCE_LOG.clear()
     main._OPP_OBSERVER.clear()
@@ -141,6 +142,28 @@ def test_sell_plan_eod_overflow_forces_wheat():
     assert line["verdict"] == "clear" and line["eod_forced"] is True
     assert line["qty_today"] >= 12             # overflow leaves the shed
     main._MISSION_SHADOW.clear()
+
+
+def test_market_consumes_non_wheat_eod_event_once():
+    _reset()
+    farm = _farm(_rows10(), money=5000.0)
+    private = {"shed": {"MILK": 12}, "inventories": [{}]}
+    obs = _obs(farm, day=8, prices={"MILK": 160})
+    obs["hour"] = 6
+    obs["private"] = private
+    main._MISSION_SHADOW[0] = {"day": 8, "hour": 0, "mission": {
+        "events": [{"h": 6, "op": "SELL", "item": "MILK", "qty": 4,
+                    "why": "eod_budget"}]}}
+    orders = main._market_orders(obs, farm, private, 8, 0, 0,
+                                 plan=dict(main._DEFENSIVE_PLAN))
+    milk = [o for o in orders if o[:2] == ["SELL", "MILK"]]
+    assert len(milk) == 1 and 4 <= milk[0][2] <= 12
+    first_qty = milk[0][2]
+    orders = main._market_orders(obs, farm, private, 8, 0, 0,
+                                 plan=dict(main._DEFENSIVE_PLAN))
+    milk = [o for o in orders if o[:2] == ["SELL", "MILK"]]
+    second_qty = milk[0][2] if milk else 0
+    assert first_qty == min(12, second_qty + 4)
 
 
 def test_sell_plan_line_quota_cap():

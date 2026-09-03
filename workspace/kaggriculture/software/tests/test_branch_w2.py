@@ -93,6 +93,8 @@ def test_d14_freeze_guard_blocks_widening():
     assert out.get("freeze_guard") is True
     # a farm already wide at d14 is NOT restricted (exits stay free)
     _reset()
+    main._STAGE_MEM[0] = {"day": 14, "decided_day": 6,
+                          "c_branch": "C1", "questions": {}}
     main._stage_plan(0, _obs(_farm(_rows10()), day=14), 14,
                      dict(main._VOLUME_PLAN))
     out = main._stage_plan(0, _obs(_farm(_rows10()), day=15), 15,
@@ -112,12 +114,15 @@ def test_fuse_money_floor_fallback_and_counting():
     assert out["fused"] is True and out["mode"] == "DEFENSIVE"
     snap = main.stage_state_snapshot(0)
     assert snap["fused"] is True and snap["fuse_events"] == 1
-    # recovery within the same stage deactivates but keeps the count
+    # recovery within the same stage remains defensive until the stage ends
     main._stage_plan(0, _obs(_farm(_rows10(), money=3000.0), day=9), 9,
                      dict(main._VOLUME_PLAN))
     snap = main.stage_state_snapshot(0)
-    assert snap["fused"] is False and snap["fuse_events"] == 1
+    assert snap["fused"] is True and snap["fuse_events"] == 1
     # a new stage trip counts again
+    main._stage_plan(0, _obs(_farm(_rows10(), money=3000.0), day=15), 15,
+                     dict(main._VOLUME_PLAN))
+    assert main.stage_state_snapshot(0)["fused"] is False
     main._stage_plan(0, _obs(_farm(_rows10(), money=200.0), day=16), 16,
                      dict(main._VOLUME_PLAN))
     assert main.stage_state_snapshot(0)["fuse_events"] == 2
@@ -155,8 +160,8 @@ def test_backfill_attaches_under_slack():
         bf["room_units"]
     # a loaded farm (util > CAP_USE_MIN) attaches nothing
     rows = _rows10()
-    for y in range(9):
-        for x in range(5):
+    for y in range(8):
+        for x in range(8):
             rows[y][x] = _tile_plant("STRAWBERRY", 8)
     out = main._stage_plan(0, _obs(_farm(rows), day=16), 16,
                            dict(main._DEFENSIVE_PLAN))
@@ -234,3 +239,137 @@ def test_telemetry_stage_fields():
     assert day["fuse_events"] == 1
     main.reset_telemetry()
     _reset()
+
+
+# --------------------------------------------------------------------------
+# Branch decisions must reach executable plans and market orders
+# --------------------------------------------------------------------------
+
+def _healthy_d6_farm(straw_price=110):
+    rows = _rows10()
+    for i in range(10):
+        rows[i // 5][i % 5] = _tile_animal(
+            "COW" if i % 2 else "SHEEP", 0)
+    for i in range(6):
+        rows[2 + i // 5][i % 5] = _tile_plant("STRAWBERRY", 0)
+    farm = _farm(rows, money=5000.0, quads=["NW", "NE", "SW"])
+    obs = _obs(farm, day=6)
+    obs["market"]["prices"].update({
+        "STRAWBERRY": straw_price, "MILK": 160, "WOOL": 160})
+    obs["town"]["unlocked_shops"] = [
+        "SMOOTHIE_SHOP", "BRUNCH_SPOT", "ICE_CREAM_SHOP", "YARN_STORE"]
+    return obs
+
+
+def test_c_branches_drive_distinct_plans():
+    _reset()
+    c1 = main._stage_plan(0, _healthy_d6_farm(), 6,
+                          dict(main._VOLUME_PLAN))
+    assert c1["c_branch"] == "C1" and c1["mode"] == "VOLUME_CROP"
+
+    _reset()
+    c2 = main._stage_plan(0, _healthy_d6_farm(60), 6,
+                          dict(main._DEFENSIVE_PLAN))
+    assert c2["c_branch"] == "C2" and c2["mode"] == "MIXED"
+
+    _reset()
+    poor = _obs(_farm(_rows10(), money=700.0), day=6)
+    c3 = main._stage_plan(0, poor, 6, dict(main._VOLUME_PLAN))
+    assert c3["c_branch"] == "C3" and c3["mode"] == "DEFENSIVE"
+
+
+def test_missing_d6_checkpoint_is_recomputed():
+    _reset()
+    obs = _healthy_d6_farm()
+    obs["day"] = 9
+    out = main._stage_plan(0, obs, 9, dict(main._VOLUME_PLAN))
+    snap = main.stage_state_snapshot(0)
+    assert out["c_branch"] == "C1"
+    assert main._STAGE_MEM[0]["decided_day"] == 9
+    assert snap["questions"] and all(snap["questions"].values())
+
+
+def test_b_branches_are_explicit_and_b3_is_bounded():
+    _reset()
+    standard = _obs(_farm(_rows10()), _farm([[None]]), day=1)
+    out = main._stage_plan(0, standard, 1, dict(main._DEFENSIVE_PLAN))
+    assert out["b_branch"] == "B2"
+
+    _reset()
+    opp = _farm([[_tile_plant("MELON", 1) for _ in range(6)]])
+    day1 = main._stage_plan(0, _obs(_farm(_rows10()), opp, day=1), 1,
+                            dict(main._DEFENSIVE_PLAN))
+    obs3 = _obs(_farm(_rows10()), opp, day=3)
+    day3 = main._stage_plan(0, obs3, 3, dict(main._DEFENSIVE_PLAN))
+    day6 = main._stage_plan(0, _obs(_farm(_rows10()), opp, day=6), 6,
+                            dict(main._DEFENSIVE_PLAN))
+    assert day1["b_branch"] == "B3" and day1["melon_total_cap"] == 0
+    assert day3["melon_total_cap"] == 2
+    private = {"shed": {}, "seeds": {}, "inventories": []}
+    orders = main._market_orders(obs3, obs3["farms"][0], private, 3,
+                                  0, 0, day3)
+    melon_buys = [o for o in orders if o[:2] == ["BUY_SEED", "MELON"]]
+    assert melon_buys and 0 < melon_buys[0][2] <= 2
+    assert day6["c_branch"] == "C3"
+    assert "melon_total_cap" not in day6
+
+
+def test_macro_plan_rechecks_same_day_fuse():
+    _reset()
+    main._PLAN_MEM.clear()
+    healthy = _obs(_farm(_rows10(), money=3000.0), day=8)
+    first = main._macro_plan(0, healthy, 8)
+    broke = _obs(_farm(_rows10(), money=200.0), day=8)
+    second = main._macro_plan(0, broke, 8)
+    assert not first.get("fused", False)
+    assert second["fused"] is True and second["mode"] == "DEFENSIVE"
+
+
+def test_d10_readiness_and_d22_tier_are_consumed():
+    _reset()
+    main._STAGE_MEM[0] = {"day": 10, "decided_day": 6,
+                          "c_branch": "C1", "questions": {}}
+    rich = _farm(_rows10(), money=5000.0,
+                 quads=["NW", "NE", "SW"])
+    plan = main._stage_plan(0, _obs(rich, day=10), 10,
+                            dict(main._VOLUME_PLAN))
+    private = {"shed": {}, "seeds": {}, "inventories": []}
+    assert plan["se_ready"] is True
+    orders = main._market_orders(_obs(rich, day=10), rich, private, 10,
+                                  0, 0, plan)
+    assert ["BUY_LAND"] in orders
+
+    blocked = dict(plan)
+    blocked["se_ready"] = False
+    orders = main._market_orders(_obs(rich, day=10), rich, private, 10,
+                                  0, 0, blocked)
+    assert ["BUY_LAND"] not in orders
+
+    p4 = {"p4_snapshot": {"tiers": {"MILK": "heavy"}}}
+    assert main._p4_should_clear("MILK", 25, 0, p4)
+    assert not main._p4_should_clear("MILK", 24, 0, p4)
+    p4_mid = {"p4_snapshot": {"tiers": {"MILK": "mid"}}}
+    assert not main._p4_should_clear("MILK", 25, 0, p4_mid)
+    assert main._p4_should_clear("MILK", 26, 0, p4_mid)
+
+
+def test_market_capex_queue_stays_within_capacity():
+    rows = _rows10()
+    for i in range(48):
+        rows[i // 10][i % 10] = _tile_plant("WHEAT", 1)
+    farm = _farm(rows, money=10000.0, hands=[(0, 0)] * 8,
+                 quads=["NW", "NE", "SW"])
+    obs = _obs(farm, day=8)
+    obs["market"]["prices"].update({"MILK": 160, "WOOL": 160})
+    private = {"shed": {}, "seeds": {}, "inventories": []}
+    plan = dict(main._DEFENSIVE_PLAN)
+    orders = main._market_orders(obs, farm, private, 8, 0, 0, plan)
+    delta = 0.0
+    for order in orders:
+        if order[0] == "BUY_LAND":
+            delta += 25.0
+        elif order[0] == "BUY_SEED":
+            delta += float(order[2])
+        elif order[0] == "BUY_ANIMAL":
+            delta += 2.0 * order[2]
+    assert main._capacity_gate(farm, None, delta, 8, plan)[0]

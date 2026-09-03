@@ -123,19 +123,16 @@ def _d29_template(obs, farm, private):
             else:
                 actions.append(["SOUTH"] if dy > 0 else ["NORTH"])
             continue
-        # engine canonical form: BARE ["DROP"] -- the engine drops EVERY
-        # carried item respecting room per item (overflow destroyed); we
-        # only mirror what FITS into the sell queue
-        actions.append(["DROP"])
+        carried_total = sum(carried.values())
         room = max(0, SHED_CAPACITY - shed_total)
+        if room < carried_total:
+            actions.append(["PASS"])
+            continue
+        actions.append(["DROP"])
         for item in sorted(carried):
-            if room <= 0:
-                break
-            moved = min(carried[item], room)
-            if moved > 0:
-                sell[item] = sell.get(item, 0) + moved
-                shed_total += moved
-                room -= moved
+            moved = carried[item]
+            sell[item] = sell.get(item, 0) + moved
+            shed_total += moved
     return actions, sell
 
 
@@ -147,13 +144,6 @@ def _execute_routes(obs, farm, private, day, routes):
     Returns (actions, replan); the dispatcher (_solve_and_execute)
     consumes this directly.
     """
-    player = _get(obs, "player", 0)
-    if day >= SEASON_DAYS - 1:
-        actions, sell = _d29_template(obs, farm, private)
-        if sell:
-            _D29_SELL_QUEUE[player] = sell
-        return actions, False
-
     tiles = _get(farm, "tiles", []) or []
     board = len(tiles)
     units = [tuple(_get(farm, "farmer",
@@ -165,19 +155,47 @@ def _execute_routes(obs, farm, private, day, routes):
     inventories = _get(private, "inventories", []) or []
     actions = []
     replan = False
+    player = _get(obs, "player", 0)
+    is_last_day = day >= SEASON_DAYS - 1
+    shed = _get(private, "shed", {}) or {}
+    shed_total = sum(int(v) for v in shed.values()
+                     if isinstance(v, (int, float)) and v > 0)
+    accesses = sorted(_shed_access(board, _get(
+        farm, "unlocked_quadrants", ["NW"]) or ["NW"])) if board else []
     for ui in range(len(units)):
         route = routes[ui] if ui < len(routes or []) else None
+        pos = units[ui]
+        inv = inventories[ui] if ui < len(inventories) else {}
+        carried = {item: int(amount) for item, amount in (inv or {}).items()
+                   if isinstance(amount, (int, float)) and amount > 0}
+        if is_last_day and carried:
+            carried_total = sum(carried.values())
+            room = max(0, SHED_CAPACITY - shed_total)
+            if not accesses or room < carried_total:
+                actions.append(["PASS"])
+                continue
+            if not _shed_adjacent(pos[0], pos[1], board):
+                sx, sy = min(accesses, key=lambda p: (
+                    _dist(pos[0], pos[1], p[0], p[1]), p[0], p[1]))
+                dx = 1 if sx > pos[0] else (-1 if sx < pos[0] else 0)
+                dy = 1 if sy > pos[1] else (-1 if sy < pos[1] else 0)
+                actions.append(["EAST"] if dx > 0 else ["WEST"] if dx < 0
+                               else ["SOUTH"] if dy > 0 else ["NORTH"])
+                continue
+            actions.append(["DROP"])
+            queued = _D29_SELL_QUEUE.setdefault(player, {})
+            for item in sorted(carried):
+                queued[item] = queued.get(item, 0) + carried[item]
+                shed_total += carried[item]
+            continue
         # a unit beyond the solved roster (hand materialized after the
-        # solve) PASSes this turn; the next current-roster re-solve
-        # absorbs it
+        # solve) PASSes this turn; the next current-roster re-solve absorbs it
         if route is None:
             actions.append(["PASS"])
             continue
         # solver routes carry full stop dicts under "tasks"; hand-built
         # routes (tests) keep plain dicts under "stops"
         stops = route.get("tasks") or route.get("stops") or []
-        pos = units[ui]
-        inv = inventories[ui] if ui < len(inventories) else {}
         if not stops:
             actions.append(["PASS"])
             continue
@@ -212,13 +230,19 @@ def _execute_routes(obs, farm, private, day, routes):
                 actions.append(["EAST"] if dx > 0 else ["WEST"])
             else:
                 actions.append(["SOUTH"] if dy > 0 else ["NORTH"])
-        # assertion: D1 stop still reachable before its deadline
         if EXECUTOR_D1_ASSERT:
-            deadline = target.get("deadline")
-            if deadline is not None:
-                eta = hour + _dist(pos[0], pos[1], tx, ty) + 1
-                if eta > deadline:
+            eta = hour
+            ex, ey = pos
+            for pending in stops[idx:]:
+                eta += _dist(ex, ey, pending["x"], pending["y"]) + 1
+                deadline = pending.get("deadline")
+                is_d1 = pending.get("tier") == "D1" or pending.get("red")
+                if pending.get("tier") is None and deadline is not None:
+                    is_d1 = True
+                if is_d1 and deadline is not None and eta > deadline:
                     replan = True
+                    break
+                ex, ey = pending["x"], pending["y"]
     # assertion: EOD budget projection (F6 auto-return destroys overflow)
     if EXECUTOR_EOD_ASSERT:
         shed = _get(private, "shed", {}) or {}

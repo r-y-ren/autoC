@@ -77,8 +77,8 @@ def test_capacity_units_and_law():
     assert abs(units - 5.5) < 1e-9
     assert comps == {"straw": 1, "wheat": 1, "melon": 1, "carrot": 1,
                      "herd": 1}
-    # Phase-C capA backfill: crew 12 law = 24x13x0.89/3.3 ~= 84.1
-    # units (top-20 anchor; quickwin A/B +7.3% rewards, 0 escapes)
+    expected = 24.0 * 13 * main.CAP_UTIL / main.CAP_TURNS_PER_UNIT
+    assert abs(main._capacity_law_max(12) - expected) < 1e-9
 def test_capacity_gate_blocks_overextension():
     # 45 units on a 0-hand farm: law = 7.5 -> util >> 0.85, gate closes
     rows = [[_tile_plant("WHEAT", 1) for _ in range(9)] for _ in range(5)]
@@ -128,17 +128,14 @@ def test_d6_checkpoint_branches():
            "town": {"unlocked_shops": ["SMOOTHIE_SHOP", "BRUNCH_SPOT",
                                        "ICE_CREAM_SHOP", "FARMERS_MARKET"]}}
     questions, branch = main._d6_checkpoint(obs, 6)
-    assert questions["q1"] and questions["q2"] and questions["q3"]
-    # Phase-C capA: the top-20-anchored law (84.1 @ crew 12, x0.85 = 71.5)
-    # capacity-gates the 42-tile C1 build (42+12+2x10 = 74) OUT -- the
-    # healthy farm falls to the dairy C3 instead.  The 42-tile C1 returns
-    # only if the online probe overturns the backfill.
-    assert questions["q5"] is False
-    assert branch == "C3"
-    # dead strawberry price + live dairy -> C2/C3 family, never C1
+    assert all(questions.values())
+    assert branch == "C1"
+    # Dead strawberry price + live dairy selects the mixed branch exactly.
     obs["market"]["prices"]["STRAWBERRY"] = 60
     questions, branch = main._d6_checkpoint(obs, 6)
-    assert branch in ("C2", "C3")
+    assert questions["q1"] and questions["q2"] and questions["q5"]
+    assert questions["q3"] is False
+    assert branch == "C2"
 
 
 def test_stage_plan_carries_knobs():

@@ -1,160 +1,315 @@
-# 市场策略设计（MARKET STRATEGY）——卖出计划器 + 攻防对抗 v1.1
+# 市场策略设计（MARKET STRATEGY）——卖出计划器 + 攻防对抗 v1.3
 
-- **版本**：v1.1（2026-09-02 14:07 §1 保留资产表标注两项迁移——死价红线/流动性底线迁至任务包三重前置检查，branch plan §5.4 政策 / scheduler §2.7 计算；v1.0 13:58 起草）
-- **用户裁决（2026-09-02，均入档）**：
-  1. 市场策略（进攻/防御/卖出计划器）**独立成第四份设计文档**（本文）；
-  2. 小件保留两件：**机会性买入**、**买侧大单分批**；
-  3. **排除两件**（决议记录，防干扰）：反 X 光卖点抖动、无观测器版终局错位清仓
-     （终局仍按 branch plan P4 观测器三档执行，不做便宜版）；
-  4. 干扰教义（前轮裁定）：三状态条件触发——投影落后必干扰，先机/领先不动手。
-- **四层文档地图**：branch plan（建什么）｜scheduler（怎么干活）｜opp observer
-  （对手在哪）｜**本文（怎么变现+怎么对抗）**。全部骑在观测器与容量门两个地基上。
+- **版本**：v1.3（2026-09-03，按当前生产代码、官方引擎成交账本和双边差分结果更新）
+- **当前结论**：卖出计划器、买侧策略、防御响应、EOD 腾仓和干扰载体 1 已进入生产路径；载体 2-4 保持关闭。
+- **最终目标**：在官方逐件 lockstep 市场语义下，使计划卖出可执行、可重试、可对账，同时不牺牲饲料、仓容和现金安全。
 
 ---
 
-## 1. 保留资产（现状中不动的部分）
+## 1. 当前生产架构
 
-| 资产 | 现位置 | 保留理由 |
-| --- | --- | --- |
-| 引擎语义预算仿真 | `plan_market_orders` | 订单逐件成交/曲线价/单日 10 单截断，发出的单引擎必收；**v1.1 增**：同回合逐件钱包记账（committed_spend 语义）并入此仿真——多订单回合 3256→16 类的引擎语义兜底（branch plan §5.4 配套 1） |
-| 吸收模型 | `_town_daily_demand` | 商铺集公开 → 每品每日吸收是**确定量** |
-| 价格曲线镜像+投影 | `MARKET_PARAMS_EMB` / `_project_price` | 官方表 99/99 校验；E[R_future] 解析可算；**v1.1 增**：投影价同时是任务包曲线门的判据输入 |
-| 死价红线（冻结侧） | ~~`_market_gates` 运行时门~~ → **迁移**：任务包 capex 事件前置检查（branch plan §5.4 曲线门 / scheduler §2.7） | 概念保留（绝不向死曲线扩产，实测背书）；形态升级=投影价替代现货快照、黎明一次替代逐回合；运行时门随重构退役 |
-| 流动性底线 | ~~LIQUIDITY_FLOOR 每笔地板~~ → **拆两半迁移**：① 黎明现金流不变式（branch plan §5.4 现金门：投影日终钱包 ≥ 次日 crew 账单+饲料裕量）；② committed_spend 记账并入 `plan_market_orders` 逐件仿真 | 概念保留（3256→16 破产类的保险丝）；升级=整日现金流一次解替代每笔反应式地板 |
-
-**变更的是角色**：三门态门控从"主决策"降级为"战术覆盖"（§2）；死价红线与
-流动性底线自运行时门**迁移**为任务包三重前置检查（劳动力/曲线/现金，政策见
-branch plan §5.4，计算见 scheduler §2.7——用户裁决 2026-09-02："大方向由分支定，
-具体数量由那时的资金解"）。
-
-## 2. 卖出计划器（SELL PLANNER，主件）
-
-### 2.1 架构（与任务包同构：黎明一次计划 + 逐回合微调）
-
-```
-黎明：供给日历（产收夜→次日可卖量，精确） × 吸收表（当日商铺集，常量）
-      × 曲线投影（_project_price + 观测器 Ch0 对手流量分离）
-      × EOD 预算（scheduler §2.4 联动） × 10 单配额（与 HIRE/BUY 竞争）
-   → 每条产品线：今日卖多少 | 分几批 | 大致时点
-逐回合：门控降级为战术覆盖——仅计划外价格突变（对手砸盘/曲线死亡）时接管
+```text
+entry.agent(obs)
+  -> _opp_observer_update
+  -> _macro_plan
+  -> _build_tasks / _solve_and_execute
+  -> _market_private_after_actions
+       仅镜像本回合真实 DROP 后的棚仓和随身库存
+  -> _sell_plan_shadow_update
+       每玩家、每日只生成一次卖出计划
+  -> _market_orders
+       feed / opportunity BUY / EOD SELL / gates / planner / interference
+  -> 合并同商品 SELL
+  -> plan_market_orders
+       最多 10 单、逐件曲线、钱包、库存和仓容仿真
+  -> _finalize_sell_plan_batches
+       根据最终 filled 提交或回滚 planner / EOD / interference 状态
+  -> 返回官方动作
 ```
 
-### 2.2 核心规则
+运行时权威文件：
 
-1. **囤 vs 清的一般判据**（m2 奶市 31W-1L "日清 105" 的推广）：仅当
-   `下侧曲线回报 > 吸收损失 + 持有期被砸风险` 才囤，否则日清——判据可从内嵌曲线
-   精确计算，替代静态门槛数（GATE 族降级为覆盖参数）；
-2. **争议线零囤货**（branch plan §7.2 复用）：对手该品格数 ≥12 → 当日清，
-   第一批卖进最低库存；
-3. **批量 = min(当日吸收余量, 库存, 10 单配额内)**——自身供给永不砸自己的曲线
-   （42 格宽田的排空速率问题由此消化）；
-4. **排程尊重 EOD 预算**：日终 Σ(棚仓+随身) ≤ 100 的卖出腾位先行（scheduler
-   §2.5 的"何时必须有卖出"由本计划器供给）；
-5. **10 单预算排程**：黎明 HIRE 突发 + 买单 + 卖批的配额分配（延续"雇工→买→卖"
-   优先序，卖出批量按配额上限分批）。
+- `software/kaggle_simulations/agent/src/entry.py`
+- `software/kaggle_simulations/agent/src/market.py`
+- `software/kaggle_simulations/agent/src/observer.py`
+- `software/kaggle_simulations/agent/src/mission.py`
 
-### 2.3 验证闭环
+## 2. 市场执行不变量
 
-回放对账：本地局 + 参考回放（tetsuya/top-20 语料）的**已实现价格 vs 计划价格**
-偏差统计；影子期先行（不接管），偏差达标才切换（对齐 scheduler M2/M3 节奏）。
+### 2.1 官方预算镜像
 
-## 3. 进攻：条件干扰模块（INTERFERENCE）
+`plan_market_orders` 是最终订单预算权威：
 
-### 3.1 三状态教义
+1. 按市场优先级选取最多 10 个订单；
+2. 被选订单保留原队列顺序；
+3. `BUY_PRODUCT` 和 `SELL` 按官方曲线逐件重新报价；
+4. 每件成交后立即更新钱包、棚仓占用和共享市场库存；
+5. `$1` 地板价卖出增加现金，但不增加市场库存；
+6. 返回每个源订单的 index、filled 和 abort，供状态账本确认。
 
-| 状态 | 动作 |
-|---|---|
-| 先机在握 / 稳定领先 | **不干预**（领先加方差 = 给对手机会；Elo 只记 W/L） |
-| **投影落后**（R_opp > R_us + 边际） | **必干扰**（必输态的有界成本翻盘尝试，期望严格占优） |
+测试侧已有双边 lockstep 镜像，覆盖双方同时 BUY/SELL、资金中断、地板价、不同队列长度和 seat 交换。
 
-### 3.2 触发器
+### 2.2 市场可见库存
 
+官方引擎先执行单位动作，再执行市场订单。入口使用 `_market_private_after_actions` 构造市场阶段状态：
+
+- 本回合真实执行 `DROP` 的随身货进入预演棚仓；
+- 对应 carrier 的预演随身库存清空；
+- `shed_count` 和 `shed_stock` 使用同一份 post-DROP 状态；
+- `HARVEST` 后的货仍在 carrier，不能同回合再次 `DROP`，因此不得提前生成 SELL。
+
+这条约束同时适用于卖出计划、EOD 事件、市场门控和最终预算。
+
+## 3. 卖出计划器
+
+### 3.1 日计划输入
+
+黎明计划读取：
+
+- post-DROP 棚仓现货；
+- 当前已成熟但尚未收割的 `yield_units`，仅作为诊断 inflow；
+- 城镇吸收量；
+- 当前价格和 `_market_flow`；
+- 对手争议线；
+- P4 冻结档位；
+- mission EOD overflow。
+
+**当天计划数量只承诺棚仓中实际可卖库存。** 地块上的成熟产物不会计入 `qty_today`，直到后续回合真实收割并 DROP 入棚。
+
+### 3.2 Hold / Clear
+
+一般判据：
+
+```text
+hold iff projected_price >= spot_price * SELL_PLAN_HOLD_EDGE
+         and item is not contested
+otherwise clear
 ```
-每日黎明：R_opp = 对手日历（公开 tiles，Ch3）× 吸收 × 曲线投影
-          R_us  = 我方计划 rollout 终值（_plan_rollout）
-触发 ⟺ R_opp > R_us + 安全边际，连续 2 天确认（防单日噪声；R_opp 的估计误差
-       在对手卖货策略——Ch2 钱账通道反推，±1-2 天级）
+
+覆盖规则：
+
+- 对手作物格数达到争议阈值，或对手牛/羊达到对应阈值：强制 clear；
+- P4 heavy 档立即 clear，mid 档从 d26 clear；
+- EOD overflow 可强制腾仓；
+- sq 曲线受供给压力时立即 cut；
+- linear 曲线受供给压力时执行有界 `short_hold`。
+
+### 3.3 Linear short_hold
+
+`STRAWBERRY` 和 `MILK` 的 `short_hold` 已具有真实行为：
+
+1. 第一个连续压力日暂缓普通计划卖出；
+2. 第二个连续压力日恢复 clear；
+3. 同一日通过日计划缓存保持幂等；
+4. 争议线、P4、EOD、仓容危险和破产现金线可跳过短持；
+5. 旧 `_market_gates` 不得覆盖正常 hold；
+6. 只有相对黎明价明显崩盘或紧急状态时，战术 override 才可接管。
+
+因此当前所有权是：**黎明计划器决定常规节奏，旧门控只处理计划外突变。**
+
+### 3.4 数量和批次
+
+计划清仓量：
+
+```text
+qty_today = min(executable_shed_supply, daily_absorption_cap)
 ```
 
-### 3.3 载体分级（按 速度×成本，弃用"镜像种植"为默认）
+EOD 强制事件可突破普通吸收限速，以避免仓容损失。
 
-| 载体 | 见效 | 成本 | 适用 |
-|---|---|---|---|
-| 现有库存倾销 | 当天 | 零 | 我方恰持有该品（最优先） |
-| 胡萝卜伏击（首产 2 天，seed 20） | 2-4 天 | 极低 | 胡萝卜重仓型（tetsuya 终盘类） |
-| 一次性羊群（首产 6 天，500/头，可弃养） | 6-9 天 | 中 | 羊毛重仓（YARN 吸收 13/天 + sq 曲线） |
-| 镜像同产线 | 10-17 天 | 高 | 仅 d4-6 极早期识别时 |
+批次规则：
 
-### 3.4 杀伤表（方法 + 粗算示例，以脚本为准）
+- 时点为 `h6 / h12 / h18`；
+- 每条线最多 3 批；
+- 最多 4 条计划卖出线；
+- 余数均匀分配，始终满足 `sum(batches) == qty_today`；
+- 例如 10 件拆为 `[4, 3, 3]`。
 
-砸盘量不是估计：`目标价 → 反解所需库存偏移 off`（`_offset_from_price` 精确），
-再解 `总投放 = off + 吸收 × 压制天数`。粗算示例（方法演示）：
+### 3.5 Pending / Committed
 
-- **瓜**（若吸收 ~1/天属实，**需自证**）：250→180 需 off≈84u，1/天吸收排不完 →
-  15 格（90u）一次倾销 = 整季死亡；对 DevilQ 型 21 格瓜线杀伤 ~25k，成本 1200 种子；
-- **羊毛**：200→100 需 off≈42u，但吸收 13/天回排 → 杀不死只能压期，总投放
-  ~130-180u（≈15 头一次性羊群 ×10 天），压 10 天削对方 ~35% 毛收入；
-- **草莓**：线性但吸收 4-25/天 → 只能"定点爆破"：从对方日历算准其开门日，当天
-  burst ~30u 压其整批 tranche。
+planner、EOD 和 interference SELL 均遵守两阶段确认：
 
-实施件：杀伤表脚本（~30 行，对内嵌曲线），产出 品×{目标价→投放量→压制天数} 全表。
+```text
+生成候选 -> pending
+最终预算 filled == requested -> committed
+零成交或被 10 单截断 -> 清除 pending，下一回合重试
+部分成交 -> planner 扣减剩余量；EOD 保持可重试
+```
 
-### 3.5 三道风险闸
+同商品 SELL 合并时，sidecar 来源标识同步重映射到合并订单，避免对象重建后丢失确认关系。
 
-1. **杀伤/暴露比 ≥ 2**：对方该线收入 ≥ 我方同线暴露 ×2（自伤计入）；
-2. **干扰预算 ≤ 容量 15%**：干扰资产在容量门（branch plan §5.3）单列一行，
-   主经济永不弯腰；
-3. **触发消除即收手**：日复判；一次性资产（伏击羊群）直接弃养止损，2 天自然
-   清退不占容量。
+## 4. EOD 与终局
 
-### 3.6 前置验证项
+### 4.1 通用 EOD 腾仓
 
-① 瓜吸收 1/天自证（官方回放语料，勿信论坛单源）；② $1 地板价卖出不入库存的
-动力学（影响极限砸盘持仓成本，OBS v2 已标 E 项）。
+mission 可针对任意可交易商品生成 `eod_budget` SELL，不再只依赖 WHEAT：
 
-## 4. 防御：五道防线（防御比进攻便宜——防御=本来想做的事）
+- 按当前可交易棚仓库存分配腾仓量；
+- 市场层数按实际库存钳制；
+- 事件被预算拒绝后可重试；
+- 多商品事件可共同完成 overflow 释放。
 
-| # | 防线 | 机制 | 出典/接口 |
-|---|---|---|---|
-| 1 | 分散暴露 | 单线重仓=又大又慢的靶子；C2 混合经济的第三存在理由；分线封顶=暴露上限 | branch plan §5.3 |
-| 2 | 快变现 | 砸盘只能伤"仓里的未来收入"；争议线零囤+日清 | §2.2 规则 1/2 |
-| 3 | 错峰上市 | 3 批种植错峰削容量峰+价格峰（产收日历公开，我方开门日可被算） | branch plan §5.3 规则 3 |
-| 4 | 检测-响应表 | Ch0/Ch1 分离"我方流量 vs 对手动作"实时识别被砸；log 曲线（麦/蛋）不理会、linear（莓/奶）短持穿越、**sq（毛/瓜）立即止损+产能转移** | 现有零吸收止损的一般化 |
-| 5 | 小麦压舱 | log 曲线砸不动 + 吸收极大 + $1 地板 + 保证性需求 = 结构性收入下限；容量兜底去处兼压舱石 | branch plan §5.3 分线表 |
+### 4.2 WHEAT 储备
 
-## 5. 买侧两小件（用户保留决议）
+非终局 WHEAT 卖出计划必须先扣除：
 
-1. **机会性买入**：`价 < 26（WHEAT）∧ 棚仓余量 ∧ 现金红线外` → 主动囤至 N 天
-   用量（Danila 98.7k 的 d1-2 囤 256u 出典；护栏价 36 仍是缺口触发的上限）；
-2. **买侧大单分批**：BUY 从市场抽货**推高曲线**（Renji 级 1500u 外购=抬自己的
-   饲料成本+抬对手麦价）——大额买入跨回合/跨日分批，与卖出同律。
+```text
+未喂牲畜口粮 + WHEAT_FEED_RESERVE - carrier 随身小麦
+```
 
-## 6. 排除项决议（2026-09-02 用户裁决，不实施）
+只有超过系统饲料安全线的棚仓 WHEAT 可进入普通卖出计划。EOD 强制腾仓可覆盖该储备规则。
 
-- **反 X 光卖点抖动**：不引入（避免干扰；错峰种植已提供部分保护）；
-- **无观测器版终局错位清仓**：不引入；终局按 branch plan P4 观测器三档原设计执行。
+### 4.3 d29
 
-## 7. 接口表
+终局只保留 SELL：
 
-| 对端 | 接口 |
-|---|---|
-| branch plan §5.3 | 干扰预算行（≤15%）；分线封顶=防御 1；错峰=防御 3 |
-| branch plan §7/P4 | 争议线零囤（§2.2 规则 2）；终局三档仍由观测器驱动 |
-| scheduler §2.4/2.5 | EOD 预算腾位卖出；"何时必须有卖出"由本计划器供给 |
-| opp observer v2 | Ch0 库存直读（Ch1 校验）→ 曲线投影对手项；Ch2 钱账 → R_opp；Ch3 tile → 对手日历 |
+- carrier 先执行安全 DROP；
+- 只有实际能进入棚仓的数量进入市场预算；
+- 已在棚仓中的所有可交易商品参与清算；
+- 不伪造尚未入棚的 HARVEST 货物。
 
-## 8. 实施里程碑（对齐战役门禁：单变量、影子先行、线上裁决）
+## 5. 买侧策略
 
-| 步 | 内容 | 门禁 |
+### 5.1 饲料义务
+
+`feed_precondition` 是 D1/D2 生存义务：
+
+- 在 h0-h2 消费 mission BUY_PRODUCT WHEAT 事件；
+- 棚仓和所有 carrier 的 WHEAT 共同计入系统库存；
+- 已满足事件时不得重复购买；
+- 正常饲料购买受价格护栏，真实饥饿状态使用更高止损上限。
+
+### 5.2 机会性 WHEAT
+
+机会采购已与即时缺粮分支解耦：
+
+```text
+WHEAT price < OPPORTUNE_WHEAT_PRICE
+and cash remains above reserve
+and shed has room
+-> buy toward OPPORTUNE_WHEAT_DAYS target
+```
+
+即使当前没有待喂牲畜，也允许建立小额低价储备。存在已满足的同日 `feed_precondition` 时不额外扩张，防止安全垫窗口重复购买。
+
+### 5.3 多笔 BUY_PRODUCT
+
+同回合多笔 WHEAT 采购共用一个 `buy_product_units` 偏移：
+
+- 后一笔 affordability 从前一笔采购后的库存开始；
+- committed spend 使用相同偏移计算；
+- 每笔最多 `BUY_CHUNK_MAX_UNITS`；
+- 最终仍由 `plan_market_orders` 做官方逐件校验。
+
+## 6. 干扰模块
+
+### 6.1 当前触发器
+
+当前生产触发量采用双方可比的 7 日流量口径：
+
+```text
+R_opp = opponent calendar * min(supply, absorption) * projected price
+R_us_flow = our calendar * min(supply, absorption) * projected price
+raw_trigger iff R_opp > R_us_flow + INTERFERENCE_MARGIN
+```
+
+`_plan_rollout` 终值只写入日志用于校准，不直接与 7 日流量混合比较。
+
+触发要求连续 2 天确认；同日重复调用不推进或重置 streak。状态和日志按 player/day 隔离。
+
+### 6.2 三闸
+
+1. `confirmed`：连续日触发成立；
+2. `gate_exposure`：对手顶线价值至少为我方同线暴露的规定倍数；
+3. `gate_budget`：计划雇工后的容量定律允许干扰资产预算。
+
+触发消失即停止生成新干扰订单。
+
+### 6.3 载体状态
+
+| 载体 | 当前状态 | 结论 |
 |---|---|---|
-| MK-1 | 杀伤表脚本 + 瓜吸收自证 + 地板价动力学核验 | 事实表落盘 |
-| MK-2 | 卖出计划器影子（回放对账偏差统计） | 偏差达标（计划价 vs 已实现价） |
-| MK-3 | 门控降级切换（计划器接管，门控为覆盖） | 行为回归 + 线上公共局 |
-| MK-4 | 干扰触发器影子运行（只记录不发令） | 触发质量评估（误报率） |
-| MK-5 | 干扰模块带三闸上线（载体分级执行） | 线上 A/B 裁决 |
+| 现有库存倾销 | **LIVE** | 零新增 capex；按反解目标价计算数量；最终预算成功后才写 fired；拒单可重试 |
+| 胡萝卜伏击 | **NO-GO / 未实现** | 需要跨日 BUY_SEED → PLANT/WATER → HARVEST → DROP → SELL 状态机 |
+| 一次性羊群 | **NO-GO / 未实现** | 15% 容量通常只容纳约 6 只羊，低于原粗算杀伤量；弱投放可能自伤 |
+| 早期镜像产线 | **NO-GO / 未实现** | 仅 d4-6 有意义，且必须证明我方首卖不晚于对手并重新计算自身暴露 |
 
-## 9. 开放项
+载体 2-4 不得通过简单追加 BUY 单上线。它们需要独立的跨日状态、预算后确认、资产标记、收手逻辑和 A/B 验证。
 
-- R_opp 估计误差界（对手卖货策略不可观）——Ch2 上线后以回放 ground truth 定标；
-- 杀伤表脚本产出后回填 §3.4 粗算数字；
-- MK 排期与 M 系列（scheduler）及 OBS-1..5 的并行关系由主会话统筹。
+## 7. 真实成交验证
+
+### 7.1 OfficialMarketLedger
+
+`software/scripts/market_ledger.py` 包装官方 `_commit_unit`，不替换市场解析器和成交器。每个尝试记录：
+
+```text
+seed / day / hour / player / order_column /
+op / item / unit_price / success
+```
+
+context 结束后恢复官方函数，避免污染后续测试。
+
+### 7.2 Reconciliation v2
+
+`software/scripts/sell_plan_reconciliation.py`：
+
+- 只把官方 `_commit_unit` 成功的 SELL 计为真实 fill；
+- 不使用 action.market 或回合前 spot 代替成交；
+- 输出 planned qty、fill qty、未成交量、数量加权均价、价格偏差；
+- 输出 loader + 全部 `src/*.py` 的组合 SHA；
+- 输出官方引擎版本和源码 SHA；
+- 默认门禁：fill coverage ≥ 0.80 且 P90 绝对价格偏差 ≤ 15%。
+
+### 7.3 当前实测
+
+当前源码，官方完整回合，seed 7、8：
+
+```text
+planned_qty:            890
+real fill_qty:          890
+fill coverage:          1.0000
+line coverage:          1.0000
+P90 abs price deviation: 3.87%
+gate:                   PASS
+strategy source SHA256: a68e5a2300f95b262b750e83bf428fc7205dd16e1a6b04b622308d334bd49291
+```
+
+证据文件：
+
+`software/exports/probes/sell_plan_reconciliation_seed7_8_final_current.json`
+
+## 8. 测试与构建状态
+
+- 市场专项、真实 ledger、双边 lockstep：`59 passed`；
+- 完整软件测试：`817 passed, 2 skipped`；
+- 确定性提交包：`submission.tar.gz`，114955 bytes；
+- package SHA256：`1c9d74754c4da344f7c606618671925b4e2348ea9f7fa07e93734d6e4eba8dff`；
+- `build.py --check`：PASS；
+- candidate identity：PASS。
+
+新增验证文件：
+
+- `software/tests/test_market_strategy_repairs.py`
+- `software/tests/test_market_bilateral.py`
+- `software/tests/test_market_reconciliation_ledger.py`
+
+## 9. 实施里程碑
+
+| 步 | 当前状态 | 门禁结论 |
+|---|---|---|
+| MK-1 曲线/杀伤事实工具 | 部分完成 | 曲线反解和地板价已有测试；杀伤收益仍需按载体单独验证 |
+| MK-2 黎明卖出计划器 | **完成** | 真实成交 reconciliation PASS |
+| MK-3 计划器接管 | **完成** | 计划器主导，门控仅战术覆盖；全量回归 PASS |
+| MK-4 干扰触发器 | **完成基础接线** | 连续日、玩家隔离、日志和三闸已接线 |
+| MK-5 载体 1 | **LIVE** | 预算后确认、拒单重试、日内幂等 |
+| MK-5 载体 2-4 | **NO-GO** | 不满足当前最小闭环与验证要求，保持关闭 |
+
+## 10. 后续工作
+
+1. 将载体 2-4 分别作为独立实验，不共用一次大改；
+2. 先实现统一 `_INTERFERENCE_PLAN[player]` 跨日状态机，再接资产动作；
+3. 每个载体必须先证明杀伤量在 15% 容量内可达，否则直接拒绝启动；
+4. 胡萝卜载体需验证完整 BUY_SEED → PLANT/WATER → HARVEST → DROP → SELL；
+5. 羊群载体需验证 BUY_ANIMAL → PLACE → 产出 → 清仓 → 停喂退出；
+6. 镜像载体必须在 d4-6 内证明首卖时序优势，d7 后禁止新建；
+7. 新载体上线前必须重复官方真实成交对账、双边差分、完整回归和线上 A/B。

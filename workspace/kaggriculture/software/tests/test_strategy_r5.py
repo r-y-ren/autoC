@@ -360,8 +360,11 @@ def test_macro_plan_daily_cache_and_episode_reset():
                   shops=["FARMERS_MARKET"])
     p1 = main._macro_plan(0, obs, 8)
     assert p1["mode"] == "VOLUME_CROP"
-    # same day: cached (same dict object returned)
-    assert main._macro_plan(0, obs, 8) is p1
+    # same day: the base mode is cached, while the stage/safety overlay is
+    # refreshed so an intraday fuse can take effect.
+    again = main._macro_plan(0, obs, 8)
+    assert again == p1 and again is not p1
+    assert main._PLAN_MEM[0]["base_plan"]["mode"] == "VOLUME_CROP"
     # backwards clock = new episode: the plan resets, day 0 cannot enter
     p2 = main._macro_plan(0, obs, 0)
     assert p2["mode"] == "DEFENSIVE"

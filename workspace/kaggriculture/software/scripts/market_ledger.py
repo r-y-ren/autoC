@@ -1,101 +1,193 @@
-"""Precise market ledger: reimplements the engine's _process_market with
-per-(player, op, item, price) logging so iteration decisions rest on exact
-realized prices, not estimates. Dev-only tool (not part of the submission).
+"""Tracing helpers for the vendored official Kaggriculture market engine.
+
+The tracer deliberately delegates market resolution to the installed official
+engine.  It wraps only ``_commit_unit`` (and the parser for order identity), so
+prices, lockstep ordering, inventory mutations, and success/failure decisions
+remain those of the engine itself.
 """
-import sys
-sys.path.insert(0, ".")
+from __future__ import annotations
+
+from contextlib import contextmanager
+from typing import Any, Iterator
 
 
-def make_ledger_runner():
-    import kaggle_environments.envs.kaggriculture.kaggriculture as K
+def _value(value: Any, key: str, default: Any = None) -> Any:
+    if isinstance(value, dict):
+        return value.get(key, default)
+    return getattr(value, key, default)
 
-    ledger = []
 
-    def logged_process_market(state, env):
+def _requested(raw_order: Any, parsed: Any) -> int:
+    try:
+        if isinstance(parsed, dict) and "remaining" in parsed:
+            return int(parsed["remaining"])
+        return int(raw_order[2])
+    except (IndexError, TypeError, ValueError, KeyError):
+        return 1
+
+
+class OfficialMarketLedger:
+    """Capture every official ``_commit_unit`` attempt in one episode."""
+
+    def __init__(self, seed: int | None = None):
+        self.seed = seed
+        self.rows: list[dict[str, Any]] = []
+        self._engine = None
+        self._originals: dict[str, Any] = {}
+        self._context: dict[str, Any] | None = None
+
+    def _prepare_context(self, state: Any, env: Any) -> dict[str, Any]:
+        import kaggle_environments.envs.kaggriculture.kaggriculture as engine
+
         obs0 = state[0].observation
-        market = obs0.market
-        farms = obs0.farms
-        privates = [s.observation.private for s in state]
-        board_size = int(K.get(env.configuration, "boardSize", 10))
-        max_orders = max(1, int(K.get(env.configuration, "maxMarketOrdersPerTurn", 10)))
-        hire_mult = int(K.get(env.configuration, "farmHandCostMult", K.FARM_HAND_COST_MULT))
-        shed_capacity = int(K.get(env.configuration, "shedCapacity", 100))
+        day = int(_value(obs0, "day", 0))
+        hour = int(_value(obs0, "hour", 0))
+        max_orders = max(1, int(_value(env.configuration,
+                                        "maxMarketOrdersPerTurn", 10)))
+        expected: list[dict[str, Any]] = []
+        for player, seat in enumerate(state):
+            action = seat.action if isinstance(seat.action, dict) else {}
+            market = action.get("market", []) if isinstance(action, dict) else []
+            queue = list(market) if isinstance(market, list) else []
+            # _process_market parses by column, then by player.  Build the same
+            # sequence so a parsed order can retain its official column/seat.
+            expected.append({"player": player, "queue": queue[:max_orders]})
+        parse_sequence: list[dict[str, Any]] = []
+        max_len = max((len(row["queue"]) for row in expected), default=0)
+        for column in range(max_len):
+            for player, row in enumerate(expected):
+                if column < len(row["queue"]):
+                    parse_sequence.append({
+                        "player": player,
+                        "order_column": column,
+                        "raw": row["queue"][column],
+                    })
+        return {
+            "day": day,
+            "hour": hour,
+            "parse_sequence": parse_sequence,
+            "orders": [],
+            "farm_players": {id(seat.observation.farms[player]): player
+                             for player, seat in enumerate(state)
+                             for _ in [0]},
+            "farms": {id(farm): player for player, farm in
+                      enumerate(_value(obs0, "farms", []) or [])},
+            "engine": engine,
+        }
 
-        queues = []
-        for s in state:
-            action = s.action if isinstance(s.action, dict) else {}
-            m = action.get("market", []) if isinstance(action, dict) else []
-            q = list(m) if isinstance(m, list) else []
-            queues.append(q[:max_orders])
+    def _parse_order(self, raw_order: Any) -> Any:
+        parsed = self._originals["_parse_order"](raw_order)
+        ctx = self._context
+        if ctx is None:
+            return parsed
+        meta = ctx["parse_sequence"].pop(0) if ctx["parse_sequence"] else {}
+        if not isinstance(parsed, dict) or "item" not in parsed:
+            return parsed
+        ctx["orders"].append({
+            "player": meta.get("player"),
+            "order_column": meta.get("order_column"),
+            "op": parsed.get("type"),
+            "item": parsed.get("item"),
+            "requested_qty": _requested(raw_order, parsed),
+            "filled_qty": 0,
+            "failed": False,
+        })
+        return parsed
 
-        max_len = max((len(q) for q in queues), default=0)
-        for i in range(max_len):
-            order_states = []
-            for player_id, q in enumerate(queues):
-                ostate = None
-                if i < len(q):
-                    ostate = K._parse_order(q[i])
-                order_states.append(ostate)
+    def _commit_unit(self, op: Any, item: Any, price: Any, farm: Any,
+                     private: Any, market: Any, shed_capacity: Any = 100) -> bool:
+        ok = self._originals["_commit_unit"](
+            op, item, price, farm, private, market, shed_capacity)
+        ctx = self._context
+        if ctx is None or op not in ("SELL", "BUY_PRODUCT", "BUY_SEED", "BUY_ANIMAL"):
+            return ok
+        player = ctx["farms"].get(id(farm))
+        candidates = [row for row in ctx["orders"]
+                      if not row["failed"] and row["filled_qty"] < row["requested_qty"]
+                      and row["op"] == op and row["item"] == item
+                      and (player is None or row["player"] == player)]
+        row = candidates[0] if candidates else None
+        # A row should always be found for an official commit.  Keep the event
+        # visible with a null column if an upstream engine changes its parser.
+        self.rows.append({
+            "seed": self.seed,
+            "day": ctx["day"],
+            "hour": ctx["hour"],
+            "player": player,
+            "order_column": row["order_column"] if row else None,
+            "op": op,
+            "item": item,
+            "unit_price": float(price),
+            "success": bool(ok),
+        })
+        if row is not None:
+            if ok:
+                row["filled_qty"] += 1
+            else:
+                row["failed"] = True
+        return ok
 
-            for player_id, ostate in enumerate(order_states):
-                if ostate is None:
-                    continue
-                op = ostate["type"]
-                if op == "HIRE":
-                    K._do_hire(farms[player_id], privates[player_id], board_size, hire_mult)
-                    order_states[player_id] = None
-                elif op == "BUY_LAND":
-                    K._do_buy_land(farms[player_id], board_size)
-                    order_states[player_id] = None
+    @contextmanager
+    def installed(self) -> Iterator["OfficialMarketLedger"]:
+        """Install hooks for the duration of an official engine run."""
+        import kaggle_environments.envs.kaggriculture.kaggriculture as engine
 
-            idx_esc = 0
-            while True:
-                idx_esc += 1
-                if idx_esc >= 100_000:
-                    break
-                quoted = [None, None]
-                for player_id, ostate in enumerate(order_states):
-                    if ostate is None or ostate["remaining"] <= 0:
-                        continue
-                    op = ostate["type"]
-                    item = ostate["item"]
-                    if op == "SELL" and item in K.PRODUCTS:
-                        quoted[player_id] = ("SELL", item, K.market_price(item, market["inventory"][item], market.get("params")), ostate)
-                    elif op == "BUY_PRODUCT" and item in ("WHEAT", "FERTILIZER"):
-                        quoted[player_id] = ("BUY_PRODUCT", item, K.market_price(item, market["inventory"][item] - 1, market.get("params")), ostate)
-                    elif op == "BUY_SEED" and item in K.CROPS:
-                        quoted[player_id] = ("BUY_SEED", item, K.CROPS[item]["seed"], ostate)
-                    elif op == "BUY_ANIMAL" and item in K.ANIMALS:
-                        quoted[player_id] = ("BUY_ANIMAL", item, K.ANIMALS[item]["cost"], ostate)
-                    else:
-                        order_states[player_id] = None
+        self._engine = engine
+        self._originals = {
+            "_process_market": engine._process_market,
+            "_parse_order": engine._parse_order,
+            "_commit_unit": engine._commit_unit,
+        }
 
-                if all(q is None for q in quoted):
-                    break
-                committed_any = False
-                for player_id, q in enumerate(quoted):
-                    if q is None:
-                        continue
-                    op, item, price, ostate = q
-                    ok = K._commit_unit(op, item, price, farms[player_id], privates[player_id], market, shed_capacity)
-                    if ok:
-                        ledger.append((K.get(obs0, "day", 0), player_id, op, item, price))
-                        ostate["remaining"] -= 1
-                        committed_any = True
-                    else:
-                        order_states[player_id] = None
-                if not committed_any:
-                    break
-            K._refresh_prices(market)
+        def process_market(state: Any, env: Any) -> Any:
+            previous = self._context
+            self._context = self._prepare_context(state, env)
+            try:
+                return self._originals["_process_market"](state, env)
+            finally:
+                self._context = previous
 
-    return logged_process_market, ledger
+        def parse_order(raw_order: Any) -> Any:
+            return self._parse_order(raw_order)
+
+        def commit_unit(op: Any, item: Any, price: Any, farm: Any,
+                        private: Any, market: Any,
+                        shed_capacity: Any = 100) -> bool:
+            return self._commit_unit(op, item, price, farm, private, market,
+                                     shed_capacity)
+
+        engine._process_market = process_market
+        engine._parse_order = parse_order
+        engine._commit_unit = commit_unit
+        try:
+            yield self
+        finally:
+            engine._process_market = self._originals["_process_market"]
+            engine._parse_order = self._originals["_parse_order"]
+            engine._commit_unit = self._originals["_commit_unit"]
+            self._context = None
 
 
+def make_ledger_runner(seed: int | None = None) -> OfficialMarketLedger:
+    """Return a ledger context; kept as a small compatibility factory."""
+    return OfficialMarketLedger(seed=seed)
+
+
+# Legacy helper retained for callers that only need a simple aggregation.
 def summarize(ledger):
     from collections import defaultdict
+
     agg = defaultdict(lambda: [0, 0.0])
-    for day, pid, op, item, price in ledger:
-        k = (pid, op, item)
-        agg[k][0] += 1
-        agg[k][1] += price
+    for row in ledger:
+        if isinstance(row, dict):
+            if not row.get("success"):
+                continue
+            key = (row.get("player"), row.get("op"), row.get("item"))
+            agg[key][0] += 1
+            agg[key][1] += float(row.get("unit_price", 0.0))
+        else:
+            day, pid, op, item, price = row
+            key = (pid, op, item)
+            agg[key][0] += 1
+            agg[key][1] += price
     return agg

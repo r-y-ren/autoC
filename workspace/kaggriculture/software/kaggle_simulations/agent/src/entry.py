@@ -16,6 +16,33 @@
 # ===========================================================================
 
 
+def _market_private_after_actions(private, actions):
+    """Mirror unit actions that change private market-visible inventory."""
+    market_private = dict(private or {})
+    shed = dict(_get(private, "shed", {}) or {})
+    inventories = [dict(inv or {})
+                   for inv in (_get(private, "inventories", []) or [])]
+    for ui, unit_action in enumerate(actions or []):
+        if not unit_action or unit_action[0] != "DROP":
+            continue
+        carried = inventories[ui] if ui < len(inventories) else {}
+        room = max(0, SHED_CAPACITY - sum(
+            v for v in shed.values()
+            if isinstance(v, (int, float)) and v > 0))
+        for item, amount in list(carried.items()):
+            if room <= 0:
+                break
+            if isinstance(amount, (int, float)) and amount > 0:
+                moved = min(int(amount), room)
+                shed[item] = shed.get(item, 0) + moved
+                room -= moved
+        if ui < len(inventories):
+            inventories[ui] = {}
+    market_private["shed"] = shed
+    market_private["inventories"] = inventories
+    return market_private
+
+
 # 【中文】═══ 入口：每回合的动作编排 ═══
 # 流水线：取当日宏观计划（缓存）→ _build_tasks 铺任务表 →
 # _schedule_units 分派工人动作 → _market_orders 编排订单 →
@@ -62,14 +89,22 @@ def agent(obs):
         mission = _mission_shadow_update(player, day, hour, obs, farm,
                                          _get(obs, "private", {}) or {},
                                          plan, tasks)
-        actions = _solve_and_execute(
-            obs, farm, _get(obs, "private", {}) or {}, day, tasks)
+        private = _get(obs, "private", {}) or {}
+        actions = _solve_and_execute(obs, farm, private, day, tasks)
+
+        # Unit actions run before the market. Mirror successful DROP effects so
+        # every market component sees one coherent post-unit shed/inventory
+        # state. A HARVEST cannot also DROP in the same turn and is therefore
+        # intentionally not made sellable here.
+        market_private = _market_private_after_actions(private, actions)
+        prospective_shed = market_private["shed"]
+
         # MK-2/3 (market §2, LIVE per the same ruling): the dawn sell plan
         # drives the day's sell batches at their planned hours; the gate
         # stack remains as a bounded overlay on top.
         _sell_plan_shadow_update(player, day, hour, obs, farm,
-                                 _get(obs, "private", {}) or {}, plan)
-        orders = _market_orders(obs, farm, _get(obs, "private", {}) or {},
+                                 market_private, plan)
+        orders = _market_orders(obs, farm, market_private,
                                 day, animals_to_feed, herd_total, plan=plan)
 
         # FM-O2/R3-4 labour: hire up to the plan in a dawn burst (hands reset
@@ -113,26 +148,9 @@ def agent(obs):
         if day >= SEASON_DAYS - 1:
             orders = [o for o in orders if o[0] == "SELL"]
         private = _get(obs, "private", {}) or {}
-        # The official step applies unit actions before market orders.  Model
-        # only cargo that a carrier will actually DROP this turn so last-day
-        # liquidation and capacity checks see the same post-unit shed state.
-        prospective_shed = dict(_get(private, "shed", {}) or {})
-        for ui, unit_action in enumerate(actions):
-            if not unit_action or unit_action[0] != "DROP":
-                continue
-            inventories = _get(private, "inventories", []) or []
-            carried = inventories[ui] if ui < len(inventories) else {}
-            room = max(0, 100 - sum(prospective_shed.values()))
-            for item, amount in carried.items():
-                if room <= 0:
-                    break
-                if isinstance(amount, (int, float)) and amount > 0:
-                    moved = min(int(amount), room)
-                    prospective_shed[item] = prospective_shed.get(item, 0) + moved
-                    room -= moved
         budget = plan_market_orders(
             orders, _get(farm, "money", 0.0),
-            sum(v for v in (_get(private, "shed", {}) or {}).values()
+            sum(v for v in prospective_shed.values()
                 if isinstance(v, (int, float))),
             day=day, max_orders=10, shed_capacity=100,
             hires_today=_get(farm, "hires_today", 0),
@@ -142,6 +160,7 @@ def agent(obs):
             shed_stock=prospective_shed,
             market_inventory=_get(_get(obs, "market", {}) or {},
                                   "inventory", None) or None)
+        _finalize_sell_plan_batches(player, day, orders, budget)
         orders = budget["accepted"]
 
         # OBS bypass hook: our accepted SELL/BUY_PRODUCT ledger (Ch0 input;
