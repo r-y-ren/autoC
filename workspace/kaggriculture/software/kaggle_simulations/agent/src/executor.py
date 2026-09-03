@@ -6,12 +6,14 @@
 #   站；F8 缺 need 物品的站跳过——无麦 FEED 是静默 no-op）；
 # 断言（只读，§5 proved-or-flagged）：
 #   * D1 站点 ETA ≤ deadline（EXECUTOR_D1_ASSERT）；
-#   * EOD 投影 Σ(棚仓+随身) ≤ SHED_CAPACITY（F6：随身日终自动归还、超容
-#     销毁——唯一静默损失源由 §2.4 前置消化，此处复核，EXECUTOR_EOD_ASSERT）；
-# 断言失败 → REPLAN：派发器当回合以现世界重建一次（每回合现役重解使重
-#   建有界不循环），_replan_gate 幂等闸保留为护栏（F7 下正确实现永不触发）。
-# d29 模板（F10）：早收→DROP（查 room）→SELL 随身清零；卖出单进
-#   _D29_SELL_QUEUE 供市场层接线。
+#   * EOD 当前快照 Σ(棚仓+随身) ≤ SHED_CAPACITY（F6：随身日终自动归还、
+#     超容销毁——非前瞻投影：只读现时存量，不含路线剩余入仓与计划卖出；
+#     触发=溢出已存在，修正依赖下回合现役重解，EXECUTOR_EOD_ASSERT）；
+# 断言失败 → REPLAN：派发器当回合以现世界重建一次（同输入重建，幂等闸
+#   抑制重复；每回合现役重解使重建有界不循环），_replan_gate 幂等闸保留
+#   为护栏（F7 下正确实现永不触发）。
+# d29 内联清算（F10，_execute_routes is_last_day 分支）：早收→DROP（查
+#   room）→SELL 随身清零；卖出单进 _D29_SELL_QUEUE 供市场层接线。
 # M4/M5 沿革：2026-09-02 Phase-B 切换 → M5 审计发现接线缺陷（结果字典当
 #   路线表传入，~97% 回合异常）→ 2026-09-03 M3 v3（现役船员重解）修复后
 #   四层成为唯一执行路径，v72 与执行开关随 M5 冻结删除。
@@ -96,62 +98,13 @@ def _stop_done(tile, act, day):
     return False
 
 
-def _d29_template(obs, farm, private):
-    """d29 liquidation template (§4.2 / F10): walk to the shed mouth, DROP
-    respecting room, queue SELL for everything dropped (carried goods
-    cannot be sold in place).  Returns (actions, sell_items)."""
-    tiles = _get(farm, "tiles", []) or []
-    board = len(tiles)
-    units = [tuple(_get(farm, "farmer",
-                        [board // 2 - 1, board // 2 - 1]))]
-    for h in _get(farm, "hands", []) or []:
-        units.append(tuple(h))
-    accesses = sorted(_shed_access(board, _get(farm, "unlocked_quadrants",
-                                               ["NW"]) or ["NW"])) \
-        if board else []
-    shed = _get(private, "shed", {}) or {}
-    shed_total = sum(int(v) for v in shed.values()
-                     if isinstance(v, (int, float)) and v > 0)
-    inventories = _get(private, "inventories", []) or []
-    actions = []
-    sell = {}
-    for ui, pos in enumerate(units):
-        inv = inventories[ui] if ui < len(inventories) else {}
-        carried = {k: int(v) for k, v in (inv or {}).items()
-                   if isinstance(v, (int, float)) and v > 0}
-        if not carried or not accesses:
-            actions.append(["PASS"])
-            continue
-        if not _shed_adjacent(pos[0], pos[1], board):
-            sx, sy = min(accesses, key=lambda p: (
-                _dist(pos[0], pos[1], p[0], p[1]), p[0], p[1]))
-            dx = 1 if sx > pos[0] else (-1 if sx < pos[0] else 0)
-            dy = 1 if sy > pos[1] else (-1 if sy < pos[1] else 0)
-            if dx:
-                actions.append(["EAST"] if dx > 0 else ["WEST"])
-            else:
-                actions.append(["SOUTH"] if dy > 0 else ["NORTH"])
-            continue
-        carried_total = sum(carried.values())
-        room = max(0, SHED_CAPACITY - shed_total)
-        if room < carried_total:
-            actions.append(["PASS"])
-            continue
-        actions.append(["DROP"])
-        for item in sorted(carried):
-            moved = carried[item]
-            sell[item] = sell.get(item, 0) + moved
-            shed_total += moved
-    return actions, sell
-
-
 def _execute_routes(obs, farm, private, day, routes):
     """L4 mechanical executor (scheduler §4 full spec; enabled at M4).
 
-    Walk-along-route semantics with F4 skip, D1-ETA and EOD-projection
-    assertions, the idempotent REPLAN gate and the d29 DROP->SELL template.
-    Returns (actions, replan); the dispatcher (_solve_and_execute)
-    consumes this directly.
+    Walk-along-route semantics with F4 skip, D1-ETA and EOD-overflow-
+    snapshot assertions, the idempotent REPLAN gate and the inline d29
+    DROP->SELL liquidation.  Returns (actions, replan); the dispatcher
+    (_solve_and_execute) consumes this directly.
     """
     tiles = _get(farm, "tiles", []) or []
     board = len(tiles)
@@ -252,7 +205,13 @@ def _execute_routes(obs, farm, private, day, routes):
                     replan = True
                     break
                 ex, ey = pending["x"], pending["y"]
-    # assertion: EOD budget projection (F6 auto-return destroys overflow)
+    # assertion: current-state overflow snapshot (F6 auto-return destroys
+    # overflow).  Deliberately NOT a forward projection: it sums the shed
+    # and inventories as they stand now, without future HARVEST/PICKUP
+    # inflow or planned sells.  A trip means overflow already exists; the
+    # §4 REPLAN rebuild consumes identical inputs (see _solve_and_execute),
+    # so the effective remedy is the next turn's current-roster re-solve --
+    # the flag itself is the F7 bug signal.
     if EXECUTOR_EOD_ASSERT:
         shed = _get(private, "shed", {}) or {}
         inventories = _get(private, "inventories", []) or []

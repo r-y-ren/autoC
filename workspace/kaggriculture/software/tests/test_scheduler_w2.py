@@ -474,6 +474,52 @@ def test_live_dispatch_records_material_deficit():
     assert trace["material_deficits"][0]["key"] == ("feed", 2, 2)
 
 
+def test_live_dispatch_eod_overflow_replan_not_repeat():
+    # EOD snapshot overflow trips the first pass; the §4 rebuild consumes
+    # identical inputs, so the executor's idempotent gate suppresses the
+    # second trip -> replanned=True, replan_repeat=False (F7 invariant).
+    main._SCHEDULER_TRACE.clear()
+    main._ASSIGN_MEM.clear()
+    main._REPLAN_MEM.clear()
+    rows = _rows10()
+    rows[2][2] = _tile_plant("WHEAT", 0, watered=False)
+    farm = _farm(rows, farmer=(2, 2))
+    task = _task(50, 2, 2, ["WATER"], ("water", 2, 2))
+    task["tier"] = "D4"
+    private = {"shed": {"WHEAT": 96}, "inventories": [{"MILK": 8}]}
+    main._solve_and_execute({"hour": 0, "player": 0}, farm, private, 5,
+                            [task])
+    trace = main.scheduler_trace()[0]
+    assert trace["replanned"] is True            # 104 > 100 snapshot overflow
+    assert trace["replan_repeat"] is False       # identical rebuild -> gate
+
+
+def test_live_dispatch_flags_repeat_replan(monkeypatch):
+    # telemetry plumbing: a second surviving trip (F7 bug signal) is
+    # surfaced as replan_repeat and the rebuild stays bounded at one pass.
+    main._SCHEDULER_TRACE.clear()
+    main._ASSIGN_MEM.clear()
+    main._REPLAN_MEM.clear()
+    rows = _rows10()
+    rows[2][2] = _tile_plant("WHEAT", 0, watered=False)
+    farm = _farm(rows, farmer=(2, 2))
+    task = _task(50, 2, 2, ["WATER"], ("water", 2, 2))
+    task["tier"] = "D4"
+    calls = []
+
+    def always_trips(obs, farm_, private_, day_, routes_):
+        calls.append(1)
+        return [["PASS"]], True
+
+    monkeypatch.setattr(main, "_execute_routes", always_trips)
+    main._solve_and_execute({"hour": 0, "player": 0}, farm,
+                            {"shed": {}, "inventories": [{}]}, 5, [task])
+    assert len(calls) == 2                       # bounded: no third rebuild
+    trace = main.scheduler_trace()[0]
+    assert trace["replanned"] is True
+    assert trace["replan_repeat"] is True
+
+
 def test_executor_checks_later_d1_cumulative_eta():
     rows = _rows10()
     farm = _farm(rows, farmer=(0, 0))

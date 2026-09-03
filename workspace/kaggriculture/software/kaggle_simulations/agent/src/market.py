@@ -1353,14 +1353,17 @@ def _calendar_flow_value(farm, day, prices, absorb, flow, horizon=7):
 
 
 def _interference_shadow(obs, farm, day, prices, plan=None):
-    """MK-4 trigger, SHADOW ONLY (INTERFERENCE_ARMED=False; v1.1 fix).
+    """MK-4 trigger ("shadow" is a historical name: vehicle 1 has been LIVE
+    since INTERFERENCE_ARMED=True, Phase-D arming 2026-09-02; vehicles 2-4
+    stay NO-GO).  This function only evaluates and logs -- it never emits
+    orders itself; its return value gates the vehicle-1 dump orders.
 
     R_opp = 对手日历 × min(供给, 吸收) × 投影价（§3.2 原式）；R_us 用同式
     对称流（可比口径；文档原文的 R_us=_plan_rollout 终值是 12 日存量口径，
     与 7 日流量不可直接比——rollout 终值另行入日志供边际定标，解读记
     JOURNAL）。触发需连续 INTERFERENCE_CONFIRM_DAYS 天确认（防单日噪声）；
     三道风险闸布尔入日志（§3.5：杀伤/暴露≥2、干扰预算≤容量 15%、
-    触发消除即收手=日复判）。永不发令。
+    触发消除即收手=日复判）。
     """
     try:
         farms = _get(obs, "farms", []) or []

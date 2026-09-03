@@ -176,7 +176,11 @@ def _build_tasks(obs, farm, private, day, plan=None):
                     # just burns the seed and factories a weed.
                     # V-T3: the min-distance clause is the same-day water
                     # window (walk + plant + water must fit before h23);
-                    # plant_budget is the daily pulse cap.
+                    # plant_budget is the daily pulse cap.  The min runs
+                    # over ALL units including loaded ones -- correct under
+                    # engine semantics (PLANT draws from the player-level
+                    # seeds pool and WATER needs no item, so any unit can
+                    # serve regardless of what it carries).
                     cd = CROPS[crop]
                     price = _get(prices, crop, BASE_PRICE[crop])
                     ws0, we0 = _window(crop)
@@ -435,9 +439,11 @@ def _build_tasks(obs, farm, private, day, plan=None):
 #     缩量的标记，策略层禁增闭环的写侧）；util < 0.65 报 capacity_slack
 #     （按单位日收入降序补线的余额，兜底=小麦）。
 # 黄金纪律：mission_hash 对同一观测确定（M2 黄金哈希冻结的锚）。
-# 仍是影子件：执行权威在 _schedule_units_v72，M4 经 ROUTE_EXECUTOR_ENABLED
-# 切换；entry 每日黎明经 _mission_shadow_update 旁路构建（fail-open，
-# 仅 telemetry 与 M3 harness 消费，不碰决策路径）。
+# 定位（M5 后更新）：执行权威=四层调度器 _solve_and_execute（solver.py；
+# v72 与 ROUTE_EXECUTOR_ENABLED 已随 M5 删除）。本模块是黎明任务包/遥测
+# 契约源：entry 每日黎明经 _mission_shadow_update 旁路构建（fail-open），
+# mission_hash 供 M2 黄金锚，§2.4 eod_budget SELL 事件由市场层消费；
+# 工人动作不经此路径。
 # ===========================================================================
 import hashlib
 import json

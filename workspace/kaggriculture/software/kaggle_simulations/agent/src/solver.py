@@ -504,10 +504,10 @@ def _solve_and_execute(obs, farm, private, day, tasks):
 
     Per turn: fresh task table (entry's _build_tasks) -> mission-schema
     enrichment -> current-roster solve at the real hour -> mechanical
-    execution.  An assertion trip (D1 ETA / EOD projection) rebuilds once
-    from the live world this same turn (§4 REPLAN); the next turn re-solves
-    from scratch anyway (current-roster discipline), so the rebuild is
-    bounded and cannot loop.
+    execution.  An assertion trip (D1 ETA / EOD overflow snapshot) rebuilds
+    once from the live world this same turn (§4 REPLAN); the next turn
+    re-solves from scratch anyway (current-roster discipline), so the
+    rebuild is bounded and cannot loop.
     """
     hour = _get(obs, "hour", 0)
     player = _get(obs, "player", 0)
@@ -521,12 +521,21 @@ def _solve_and_execute(obs, farm, private, day, tasks):
                            hour=hour, unit_pos=units, sticky=st["assign"])
     actions, replan = _execute_routes(obs, farm, private, day,
                                       solved.get("routes"))
+    replan_repeat = False
     if replan:
+        # §4 REPLAN: one bounded rebuild this turn from the same live world.
+        # The first _execute_routes only returns actions -- farm/private are
+        # unchanged -- so the re-solve is expected to be identical and the
+        # executor's idempotent gate suppresses the repeat trip.  A second
+        # surviving trip is a persistent assertion (F7 bug signal): surfaced
+        # as replan_repeat in the trace, never looped on; the effective
+        # remedy is the next turn's current-roster re-solve.
         solved = _solve_routes(farm, private, day, etasks, planned_hands=0,
                                hour=hour, unit_pos=units,
                                sticky=st["assign"])
-        actions, _ = _execute_routes(obs, farm, private, day,
-                                     solved.get("routes"))
+        actions, replan2 = _execute_routes(obs, farm, private, day,
+                                           solved.get("routes"))
+        replan_repeat = bool(replan2)
     st["assign"] = {r.get("worker"): (r.get("tasks") or [{}])[0].get("key")
                     for r in solved.get("routes") or []}
     _SCHEDULER_TRACE[player] = {
@@ -539,6 +548,7 @@ def _solve_and_execute(obs, farm, private, day, tasks):
                               (solved.get("material_deficits") or [])],
         "feed_legs": int(solved.get("feed_legs", 0) or 0),
         "replanned": bool(replan),
+        "replan_repeat": replan_repeat,
     }
     return actions
 
