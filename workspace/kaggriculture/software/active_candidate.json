@@ -1,11 +1,11 @@
 {
  "schema_version": "1.0",
  "working": {
-  "label": "v13.2-s23-wired-candidate",
+  "label": "v13.3-observer-refactor-candidate",
   "status": "development",
   "path": "kaggle_simulations/agent/main.py",
   "sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
-  "git_ref": "73a45a63a4328810599cc0543356dd84a9cacde6",
+  "git_ref": "f85483cafb5ccbf9c6996f573d36a1ac18abef8d",
   "git_blob_oid": "888e8962ed18ac7b2fba19a952a6d77bc0f0c9af",
   "canonical_lf_sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
   "holdout_status": "not_run"
@@ -42,7 +42,7 @@
  "submission_package": {
   "note": "multi-module era (v13.1+): main.py thin loader + src/ nine modules, packaged by build.py (layout pkg.1, deterministic)",
   "path": "kaggle_simulations/agent/submission.tar.gz",
-  "sha256": "8037f4afa5175d9ec364b6ac086efe284603e7d5eddca07ffdd70cfc9ab67aa7",
-  "git_ref": "73a45a63a4328810599cc0543356dd84a9cacde6"
+  "sha256": "1bed5d4d2754a68798f12f8c90cfc4a81f65d4fcdb8b7b4e76d07f2ee3a59273",
+  "git_ref": "f85483cafb5ccbf9c6996f573d36a1ac18abef8d"
  }
 }

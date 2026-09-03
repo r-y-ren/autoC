@@ -3,7 +3,7 @@
 Kaggle Simulation Competition **Kaggriculture**（Google/Kaggle 农场经营 720 回合博弈）的
 bot、本地评估基建、机制量化工具与增强策略 A/B。
 
-当前 working candidate `v10.3` 仅为 development，尚未针对本轮运行新的 holdout 或线上提交；下文的线上记录属于历史 v10.2/v10.3 前序提交观测，不能作为当前候选验证。
+当前 working candidate `v13.3-observer-refactor-candidate` 为 development，尚未针对本轮运行新的 holdout 或线上提交；下文的线上记录属于历史候选观测，不能作为当前候选验证。
 
 **评估规则变更（2026-09-02，用户决策）**：本地对手池（同族实现的 bots）**不再作为候选强度参考与上线门禁**——同族偏移已被多轮线上实测证实（本地 holdout 94.3% 对 v10.2 线上 42.9%）。此后候选验证以**线上天梯实测**为准（线上样本仍受 ≥6 局评估门与止损线约束；提交额度/回拉复盘/止损的契约常量以 blueprint 与 JOURNAL 台账为准——旧 SOP v4 已随 2026-09-02 docs 重构退役，终交前随新候选重写）。保留仍然有效的两类检查：① 单元/契约测试与身份链校验（代码行为契约，非对手比较）；② 引擎一致性冒烟（smoke_boot）。`run_eval`/`iterate_gate`/`ablate`/`check_opponent_strength` 等本地对手评估资产保留为可选诊断工具，不再是上线前置条件。
 
@@ -112,7 +112,7 @@ published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2
 published_holdout_attempt_index=5
 engine=kaggle-environments 1.32.7 kaggriculture
 <!-- ACTIVE_CANDIDATE_IDENTITY:END -->
-submission_package_sha256=8037f4afa5175d9ec364b6ac086efe284603e7d5eddca07ffdd70cfc9ab67aa7
+submission_package_sha256=1bed5d4d2754a68798f12f8c90cfc4a81f65d4fcdb8b7b4e76d07f2ee3a59273
 
 ## External H2H 与评级限制
 
@@ -122,17 +122,27 @@ submission_package_sha256=8037f4afa5175d9ec364b6ac086efe284603e7d5eddca07ffdd70c
 
 ## Agent 源码与构建环（agent/src/ + build.py）
 
-自 2026-09-02 结构重构起，提交工件 `kaggle_simulations/agent/main.py` 是**构建产物**：由 `agent/build.py` 按固定拓扑序合并 `agent/src/` 下 10 个片段（`_archive_header, constants, telemetry, observer, strategy, mission, solver, executor, market, entry`；entry 恒最后合并，保证 `agent(obs)` 是文件最后一个 callable——官方 `get_last_callable` 语义）。构建字节确定（utf-8/LF、无时间戳、固定顺序），产物保持 stdlib-only 单文件可直接提交。开发环：
+自 2026-09-03 多模块提交重构起，`kaggle_simulations/agent/main.py` 是薄装载器：按固定拓扑序把 `agent/src/` 下 9 个模块（`constants, telemetry, observer, strategy, mission, solver, executor, market, entry`）加载到同一 globals，entry 恒最后加载，保证 `agent(obs)` 是最后一个 callable。`agent/build.py` 不再合并源码，而是生成布局固定、元数据归零的确定性 `submission.tar.gz`，作为多文件提交工件。日常开发环只需修改源码并运行相关测试：
 
 ```
-edit agent/src/*.py  ->  python agent/build.py  ->  python -m pytest workspace/kaggriculture/software/tests -q
+edit agent/src/*.py  ->  python -m pytest workspace/kaggriculture/software/tests -q
 ```
 
-`build.py --check` 在内存重建并与盘上 main.py 字节比对（防手改漂移；`tests/test_build_determinism.py` 常驻执行）。构建前检拦截跨模块顶层重名（扁平命名空间下的静默遮蔽），构建后检断言 import 白名单（copy/math）与末位 callable，末尾打印 sha256/canonical_lf_sha256 供身份链登记。
+准备线上探针、冻结或正式交付时，才运行 `python agent/build.py` 生成确定性的 `submission.tar.gz`，再执行 `build.py --check`、身份检查和必要的回归。构建器校验包成员顺序、归档元数据和官方装载契约，并打印 package sha256，供候选检查点登记使用。
+
+### 提交与候选检查点
+
+提交分为两级，不把候选登记负担施加到每次开发提交：
+
+1. **日常开发提交**：`src/`、测试、诊断脚本和文档可以合并提交。按改动风险运行针对性测试；不要求 build、不更新 `active_candidate.json`、README 身份投影或 artifact index。
+2. **候选检查点提交**：只有准备线上探针、冻结或正式交付时才登记候选。先生成并验证产物，再把 `active_candidate.json`、README 机器投影和必要索引更新到同一候选身份。登记中的 `git_ref` 必须是已经存在且包含该产物的不可变 commit SHA，不能使用 `HEAD` 等可变引用。
+
+当 `main.py` 或 `submission.tar.gz` 字节发生变化时，为避免身份自指，采用“产物实现提交 → 候选登记提交”的顺序；登记提交可以同时包含相关文档和 JOURNAL。纯源码（未重建产物）、测试、遥测或文档改动不触发身份登记。候选检查点至少保留：产物 SHA、canonical LF SHA、Git blob OID、来源 commit、`check_candidate_identity.py`；artifact index 仅在产物集合变化时重建。阶段完成仍按仓库全局纪律在 `JOURNAL.md` 留痕并提交。
+
 
 头部标记契约（2026-09-02 验收更正）：`Kaggriculture submission agent` 标记要求位于产物**首 256 字节**内（`tests/test_build_determinism.py` 的断言窗口即此契约），与 v10.9 原文件行为对齐——原文件首行为 76 字符装饰线，标记同样不在首 64 字节。`test_ablate` 的首 64 字节断言只作用于冻结快照自带的头部；工具链没有任何代码消费 working main.py 的该标记（external_h2h 走 canonical SHA）。当初计划书里的"首 64 字节"约束系起草虚构，特此更正。
 
-身份链登记流程（迁移类操作规范，2026-09-02 验收固化）：改动 main.py 字节的迁移/重构必须两段式提交——①重构提交（提交信息显式标注"identity tests expected red until follow-up registration"，避免 bisect 误判）；②紧随的登记提交更新 active_candidate.json 四元组 + README 投影 + test_candidate_identity 钉死字面量 + 索引再生成。**不可**合并为单提交：登记的 git_ref 必须指向"已包含新 main.py 的提交"，存在自指（用 "HEAD" 等可变 ref 可绕过自指但破坏身份链不可变性，禁止）。行为等价基准为 v10.9 参照版（git 862b347，sha 67e68c3a…）：本次迁移以 AST 逐名等价 + 回放 A/B（5 种子×8 配置，逐回合动作+订单流一致）验收，语义零变化。后续实施落位：strategy=L1 阶段×分支选择、mission=L2 任务包+三重前置检查、solver=L3 路线求解器、executor=L4 执行器（`ROUTE_EXECUTOR_ENABLED`，M4 启用）、market=卖出计划器+干扰/防御、observer=OBS v2（对应 docs/ 四份设计文档）。
+身份链历史说明：2026-09-02 的单文件结构迁移以 v10.9（git 862b347，sha 67e68c3a…）为等价基准，采用 AST 逐名等价与回放 A/B 验收。当前多模块形态沿用不可变来源 commit 和字节校验，但按上面的候选检查点登记，不再要求每个源码里程碑都执行完整登记。模块落位为：strategy=L1 阶段×分支选择、mission=L2 任务包+三重前置检查、solver=L3 路线求解器、executor=L4 执行器、market=卖出计划器+干扰/防御、observer=OBS v2。
 
 ## Active Candidate Identity
 
@@ -146,8 +156,8 @@ holdout seeds are generated or consumed by this software wave.
 
 ```
 workspace/kaggriculture/software/
-├── kaggle_simulations/agent/main.py   可提交 bot（官方 kit 结构，自包含 stdlib-only；
-│                                      上传：kaggle competitions submit kaggriculture -f main.py）
+├── kaggle_simulations/agent/main.py   官方多模块提交的薄入口（本地源码入口）；
+│                                      候选检查点通过 `agent/build.py` 生成并上传 `submission.tar.gz`
 ├── kgenv/                             本地评估包
 │   ├── engine.py                      官方引擎单局对局器（结构化结果/每日资金曲线）
 │   ├── gym_env.py                     gym 风格单智能体封装（可插拔对手策略）

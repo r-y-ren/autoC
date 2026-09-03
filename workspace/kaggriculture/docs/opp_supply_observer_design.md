@@ -1,16 +1,18 @@
 # 对手供给反推观测器（OPP-SUPPLY OBSERVER）——设计与实施计划
 
-- **状态**：已记录、未排期（backlog）。用户 2026-09-02 指示"先记录这个模块，保留反推对手策略另外"；
-  同轮讨论定调策略改进走"预置策略组合 + 分段选择"路线，**开局变体 A/B 实验优先级高于本模块**。
-  同日 12:12 `docs/phase_branch_plan.md` v1.0 进一步把本模块定位为 **P4 抢跑的"眼睛"/前置件**
-  （时序上仍排在 P0 开局变体之后，见 §7/§8）。
+- **状态**：OBS-1～OBS-4 已实现并完成离线复核；OBS-5 部分实现。当前观测器已具备
+  player/episode 隔离、Ch0～Ch3 旁路账本、requested/validated-fill 双口径和 fail-open 接线，
+  但 validated fill 只来自离线 shadow attribution，不能解释为线上可见执行量。P4 已接入受置信度
+  保护的 `est_opp_held` 路径，尚无完整线上 A/B 证据，静态商品置信帽保持不变。
+- **计划定位**：本模块仍服务 P4 抢跑与 P3 卖出节奏；开局变体 A/B 仍优先于本模块的新增消费方。
+  以下历史设计保留为契约与边界说明，实施状态和证据以本节及 §7 为准。
 - **动机**：现有博弈感知只有两个二值门——对手草莓 ≥12 格禁入 VOLUME_CROP
-  （`software/kaggle_simulations/agent/main.py:1868`）、对手小麦 >10 格禁入 WHEAT_FARM
-  （同文件 `:817`）。目标是把二值门升级为连续的"对手供给时间表"，服务模式选择与卖出
+  （`software/kaggle_simulations/agent/src/strategy.py` 的 `_decide_mode` 分支）、对手小麦 >10 格禁入
+  WHEAT_FARM（同文件 `_wheat_farm_entry_ok`）。目标是把二值门升级为连续的"对手供给时间表"，服务模式选择与卖出
   时序；这正是 r5-P5 anticipated entry 实测 -312.8k 时 rollout 所缺失的"对手供给响应"
-  建模（同文件 `:857-864`，`VOLUME_ANTICIPATED_ENTRY=False` 留档的原因）。
-- **本文档版本**：2026-09-02 第二版。在初版备忘基础上补引擎实锤核验、估计器重构、
-  接口草图、验证协议与任务拆解；代码锚点按 v10.9 工作树逐条复核无误。
+  建模（同文件 `VOLUME_ANTICIPATED_ENTRY=False` 留档的原因）。
+- **本文档版本**：2026-09-03 第三版。保留引擎事实和接口边界，更新实际实现、验证结论与剩余任务；
+  当前源码锚点以 `software/kaggle_simulations/agent/src/` 为准。
 
 ## 0. 引擎实锤（2026-09-02 核验）
 
@@ -20,8 +22,8 @@
 以下事实**关闭初版的两个待核对项**，并修正可见性强度的假设：
 
 1. **市场库存每回合直读**。引擎把共享 `market`（含 `inventory` 与 `prices` 两键）逐回合
-   赋给双方观测（引擎 `:951-956`；线上回放复核成立）。agent() 已留读取口
-   （`main.py:4009-4010`）。⇒ 初版"ΔMarketInv 优先直读、价格反解兜底"中**直读路径确认
+   赋给双方观测（引擎 `:951-956`；线上回放复核成立）。agent 入口读取位于
+   `software/kaggle_simulations/agent/src/entry.py`。⇒ 初版"ΔMarketInv 优先直读、价格反解兜底"中**直读路径确认
    存在**，价格反解降级为交叉校验/缺读回退（见 §1 Ch1）。
 2. **城镇吸收无下限**。`_town_consume` 无条件 `market["inventory"][item] -= n`
    （引擎 `:743-747`），库存可下穿为负、below 曲线照常抬价——**不存在"见底失效"**。
@@ -43,7 +45,9 @@
 其余引擎常量（线上配置实测）：`boardSize=10`、`shedCapacity=100`、
 `maxMarketOrdersPerTurn=10`、商店抽取间隔 4 步（=6 抽/天）、镇中心 24 步（=1/天）、
 新商店每 3 天末抽取解锁（有放回，实例上限 8）、`LAND_PRICES=[1000,2000,4000]`、
-终局 reward=money（引擎 `:960-963`）。`_town_daily_demand`（`main.py:1102`）与
+终局 reward=money（引擎 `:960-963`）。`_town_daily_demand`
+  （`software/kaggle_simulations/agent/src/market.py`）与
+
 上述口径一致，含重复店铺实例的多重计数。
 
 ## 1. 估计器设计（四通道，整账优先）
@@ -60,8 +64,9 @@ opp_net(item, d) = ΔMarketInv(item, d) − our_net(item, d) + town_absorb(item,
 - **符号约定**：`ΔMarketInv = Inv(d) − Inv(d−1)`；卖压使库存增（`opp_net > 0` 净卖出，
   外购饲料使 `opp_net < 0`）。
 - `ΔMarketInv`：直读 `obs.market.inventory`（§0.1）。
-- `our_net`：精确已知——我方逐单记账已在 `plan_market_orders` 预算仿真
-  （`main.py:1367`）与执行路径（`main.py:3999-4011`）中，旁路记录当日已提交
+- `our_net`：精确已知——我方逐单记账位于
+  `software/kaggle_simulations/agent/src/market.py` 的 `plan_market_orders` 与
+  `software/kaggle_simulations/agent/src/entry.py` 的执行入口，旁路记录当日已提交
   SELL/BUY_PRODUCT 的净件数即可（SELL 分"报价>1 件数"与"地板价件数"两口径记录，
   后者对库存无贡献，见 E6）。
 - `town_absorb`：按 §0.2 相位精确计数（已解锁店铺逐实例 ×2/×1 × 6 抽 + 镇中心 1），
@@ -71,22 +76,24 @@ opp_net(item, d) = ΔMarketInv(item, d) − our_net(item, d) + town_absorb(item,
 
 ### Ch1 价格反解（回退 + 交叉校验）
 
-`_offset_from_price`（`main.py:2378`，`MARKET_PARAMS_EMB` 官方表 99/99 校验镜像的反函数，
-`main.py:2334`）从 `Δprices` 反解 `Δoffset`。用途降级为两处：
+`_offset_from_price` 与 `MARKET_PARAMS_EMB`（均在
+`software/kaggle_simulations/agent/src/market.py`）从 `Δprices` 反解 `Δoffset`。用途降级为两处：
 ① `market.inventory` 缺读（防御式编程）时的回退；
 ② 与 Ch0 的残差监控——残差持续非零即引擎/镜像失配或地板价饱和的告警信号。
-现役 `_market_flow`（`main.py:2420-2445`，价格反解 EMA）可重构为 Ch0 的精确流版本，
-`_project_price`（`main.py:2448`）的 `flow` 参数语义不变、数值变准。
+现役 `_market_flow`（`software/kaggle_simulations/agent/src/observer.py`）已改为 Ch0
+精确流优先、价格反解 EMA 兜底；`_project_price`（`software/kaggle_simulations/agent/src/market.py`）
+的 `flow` 参数语义保持不变。
 
 ### Ch2 钱账对账（收入口径 + 外购量）
 
-对手 money 公开（`_farm_scan`，`main.py:1679`）。日账：
+对手 money 公开（`software/kaggle_simulations/agent/src/observer.py` 的 `_farm_scan`）。日账：
 
 ```
 sell_revenue(d) = Δmoney(d) + hires(d) + land(d) + animals(d) + seeds(d) + buy_product(d)
 ```
 
-- 可见支出逐项可算：雇工 fib（`_hire_cost`，`main.py:1305`；对手 `hires_today` 公开）、
+- 可见支出逐项可算：雇工 fib（`software/kaggle_simulations/agent/src/market.py` 的
+  `_hire_cost`；对手 `hires_today` 公开）、
   买地（象限数变化 × `LAND_PRICES`）、买畜（当日新放畜 tile 数 × `ANIMALS.cost`）、
   买种（按其当日新种 tile 数 × seed 价，为**估计量**——种子私有、以实际 PLANT 数为上界）、
   外购 WHEAT/FERTILIZER（=Ch0 的负流成分 × 当日均价）。
@@ -138,28 +145,28 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 
 ## 3. 工程落点
 
-- **纯旁路 `_OPP_OBSERVER`**，照 telemetry 模式（`main.py:253-389`：独立开关、
-  sink、快照、per-player 时钟倒退重置）：
-  - 状态 per-player dict：`{"day", "inv_prev", "flow_acc", "held", "conf", "money_prev",
-    "tile_yield_prev", "fed_seen"}`；对局结束/时钟倒退重置。
-  - 更新时序：每日首个动作回合做日账（快照+差分+积分），回合内不再重算
-    （与 `_macro_plan` 的日缓存同型，`main.py:1923`）；异常整体 try/except 吞掉并置
-    `conf=0`，**fail-open、不碰决策路径、字节级零侵入**（先影子后消费，见 §5）。
-  - 输出接口（只读 getter，全部 `est_` 前缀，见 §5 边界纪律）：
-    `est_opp_net(item, days)`、`est_opp_held(item)`、`est_opp_supply_horizon(item, h)`
-    （=held + 产期表未来产出）、`est_opp_conf(item)`。
+- **纯旁路 `_OPP_OBSERVER`**，现位于 `software/kaggle_simulations/agent/src/observer.py`，按
+  player 保存状态并在 episode reset/时钟回退时清理对应市场记忆；快照返回深拷贝。
+  - 状态包含市场窗口、订单口径、tile identity/event ledger、held、confidence 和诊断字段；
+    requested 只在在线入口可见，validated fill 仅由离线回放显式注入。
+  - 更新时序仍为 agent 策略前旁路更新；异常整体 fail-open，不改变合法 PASS 契约。
+  - 输出接口（只读 getter，全部 `est_` 前缀）：
+    `est_opp_net(item, player=...)`、`est_opp_held(item, player=...)`、
+    `est_opp_supply_horizon(item, h, player=...)`、`est_opp_conf(item, player=...)`。
+
 - **`_farm_scan` 扩展**：增加全作物集（carrot/melon/watermelon）、逐 tile
   `yield_units` 合计、动物 `yield_units` 按物种合计、`fed_today/cared_today` 计数。
   现签名返回 dict 可增量加键，消费方（`_decide_mode` 等）不受影响。
-- **`_market_flow` 重构**：从价格反解 EMA 改为 Ch0 精确流（保留 EMA 输出形状，
-  `_project_price` 无感切换）；价格反解留作 Ch1 校验分支。
-- **遥测对接**：日账残差、逐商品估计与（离线时的）真值差，经既有 telemetry sink
-  落 `.json`，供 §5 验证与线上回放复盘。
+- **`_market_flow` 重构（已完成）**：`software/kaggle_simulations/agent/src/observer.py` 优先使用
+  Ch0 精确流并保留价格反解 EMA 兜底；`market.py` 的 `_project_price` 保持既有 flow 形状。
+- **遥测对接（已完成基础接线）**：日账残差、逐商品估计与离线真值差经既有 telemetry
+  snapshot 落 `.json`；线上仍只暴露估计与 requested/fallback 标记。
 
 ## 4. 消费方映射（按收益排序）
 
 > 2026-09-02 12:12 `docs/phase_branch_plan.md` v1.0 对齐注记：opp_contesting 已由用户裁决
-> 从 VOLUME 入场门移除（"镜像=时序战，不是避战"，`main.py:1878`，solvency veto 保留），
+> 从 VOLUME 入场门移除（"镜像=时序战，不是避战"，见 `src/strategy.py` 的 `_decide_mode`，
+> solvency veto 保留），
 > 本模块不再服务该门；`_opp_production_calendar`（对手 tile 上市日历，纯公开信息
 > ~20 行）是 Ch3 产出侧的轻量前置实现，本模块在其上补齐"已卖/在持"侧；本模块按该
 > 计划 §7 兜底定位为 P4 抢跑的前置件，接管 P3 卖出节奏与 P4 出清时点两职。
@@ -171,12 +178,12 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 2. **争议线零囤货门的连续化**（`_market_gates` contested 分支）：触发条件从
    "对手该作物格 ≥12"的存量二值，升级为 `opp_supply_horizon` 在途供给速率连续量，
    "收获当日全量出清、第一批卖进最低库存"政策不变。
-3. **`_project_price` 注入对手供给项**（`main.py:2448`）：`flow` 从"含对手混合流"变为
+3. **`_project_price` 注入对手供给项**（`src/market.py`）：`flow` 从"含对手混合流"变为
    显式对手项 `opp_net`，投影更准；P3 卖出节奏（phase_branch_plan 指派的另一职）与
    止损三态判据直接受益。
 4. **策略组合选择器**（2026-09-02 讨论的"预置组合+分段选择"路线）：本模块是其
    "状况评估"输入件——对手供给时间表是分段（开局/中期/终局）选择的共享证据层。
-5. WHEAT_FARM 入场门（`main.py:817`）的连续化（次要，该模式默认关闭）。
+5. WHEAT_FARM 入场门（`src/strategy.py` 的 `_wheat_farm_entry_ok`）连续化（次要，该模式默认关闭）。
 
 ## 5. 验证协议（先离线后在线）
 
@@ -185,18 +192,18 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 直接用真实线上对局（`references/data/replay-corpus/` 60 局 + `online-replays/` 各轮 +
 `.tmp-tetsuya/` 6 局），不必依赖本地引擎自造对局。
 
-- **V0 离线影子（纯函数，无引擎依赖）**：observer 以"仅合法观测字段"
-  （`obs.farms/market/town` + 我方 own private）为输入，逐 replay 步进回放，
-  对双席输出 `est_opp_held` 序列，与 replay 内对手席 `private.shed+inventories`
-  真值逐日比对。**门**：① 正常价位段 Ch0 整账残差=0 的天数占比 ≥95%（标定采样
-  hour，关闭 E4）；② 拐点日误差 ≤1 天、量级误差 ≤30%（初版达标线保留）；③ 逐商品
-  终局 `held` 误差分布出报告（MAE/最大值），地板价段单列。
-- **V1 本地引擎遥测联调**：observer 接入 agent() 旁路，对既有对手池跑 telemetry，
-  断言零决策影响（动作序列与关闭时逐字节一致）+ 遥测落盘完整。
-- **V2 门控消费（分消费方逐个开）**：每接一个消费方跑配对消融——**注意 2026-09-02
-  用户裁定：本地同族对手池不再作候选强度参考与上线门禁**，消融仅作回归诊断
-  （防灾难类/防动作污染），真实效应裁决轴 = 线上 A/B（对打天梯，采样协议沿
-  SOP v4 轮次节奏）。
+- **V0 离线影子（已完成，`scripts/observer_v0_validator.py`）**：observer 只以合法观测字段
+  （`obs.farms/market/town` + 我方 own private）步进回放；对手席 private 仅作为离线真值。
+  最终复核产物 `software/exports/probes/observer_v0_refactor_final2.json` 覆盖 60 局、31,320
+  样本，shadow attribution 43,140/43,140 且 mismatch=0。validated-fill Ch0 exact=0.9733、
+  turning lag=0 天、magnitude error=0.0，达到 V0 三门；requested exact=0.9241，明确只作
+  诊断且不通过。`overall_pass=true` 仅表示 validated shadow fill 口径的离线门通过，不能
+  泛化为线上能够看到真实 fill 或 requested 口径已通过。逐商品 held 误差继续单列。
+- **V1 本地引擎遥测联调（已完成）**：observer 接入 agent() 旁路，player/episode/reset、
+  禁用回退、市场缓存清理和异常合法 PASS 均有回归覆盖。
+- **V2 门控消费（部分完成）**：`market.py` 的 P4 路径和 `strategy.py` 的快照已显式按 player
+  读取 `est_opp_held/conf`，低置信商品受静态帽保护。尚未完成逐消费方线上 A/B；本地同族
+  对手池只用于防灾难和动作污染诊断，不作为上线强度门。
 - **边界纪律（对齐 M-H NO-GO 审计，2026-09-01 11:05）**：M-H 否决的是"在对局内
   合法观测对手库存"（在线无通道、线上台账无逐日快照可校准）——本模块不违反该结论：
   在线运行时只消费合法公开字段做**估计**（接口一律 `est_` 前缀，不得称直接观测），
@@ -216,15 +223,26 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 5. **对 tetsuya 式零库存种子流**：对手 held 常近 0、供给即时变现——正是本模块想要
    捕捉的"高周转"形态，V0 语料已含其 6 局可专测。
 
-## 7. 任务拆解（排期占位，开工时再细化）
+## 7. 实施状态与后续任务
 
-| 包 | 内容 | 前置 | 量级 |
+| 包 | 当前状态 | 证据/说明 | 后续门 |
 |---|---|---|---|
-| OBS-1 | `_farm_scan` 扩展 + Ch3 tile 记账（纯函数 + 单测） | 无 | 0.5 会话 |
-| OBS-2 | Ch0/Ch1（`_market_flow` 重构 + 我方逐单记账旁路） | OBS-1 | 0.5 会话 |
-| OBS-3 | Ch2 钱账 + `est_*` getter + telemetry 日账输出 | OBS-2 | 0.5 会话 |
-| OBS-4 | V0 离线影子验证器（replay 语料 + 真值比对 + 门①②③） | OBS-1..3 | 1 会话 |
-| OBS-5 | V1 零侵入断言 + V2 首个消费方（P4 三档出清或争议线零囤货连续化）+ 线上 A/B | OBS-4 过门，且按 phase_branch_plan §9 顺序排在其 P0-P3 之后 | 1-2 会话 |
+| OBS-1 | **完成** | 公开 tile identity、产出变化和 decay/replacement 防误计账；observer W2 回归 | 仅在新字段变化时增补边界测试 |
+| OBS-2 | **完成** | Ch0 精确市场流、昨日窗口、floor/BUY 分离、player 路由；请求量与执行量不混用 | 在线真实 fill 不可见时保持 fallback 标记 |
+| OBS-3 | **完成** | Ch2 对账、`est_*` getter、生产日历和 telemetry 快照 | 继续按商品拆解 held 误差 |
+| OBS-4 | **完成（口径限定）** | 60 局离线回放：validated-fill exact 0.9733，requested exact 0.9241，turn lag 0、magnitude 0；shadow mismatch=0 | 不把 offline fill PASS 宣称为线上执行量能力 |
+| OBS-5 | **部分完成** | P4 已接入 player-scoped `est_opp_held/conf`，静态置信帽仍生效；无完整线上 A/B | 逐消费方线上 A/B 后才可提升消费门；不放宽商品帽 |
+
+### OBS-5 剩余工作
+
+1. 处理 MILK、WOOL、STRAWBERRY、FERTILIZER 等商品的 held MAE、溢出和 EOD 不确定性，
+   保留 `eod_action_unknown`/floor/BUY 诊断而不是静默猜测。
+2. 保持线上 requested 与离线 validated fill 双口径；若无法获得真实 fill，继续把 fill
+   归因标为 shadow/diagnostic，不改名为 executed。
+3. 为 P4 出清、P3 卖出节奏及后续 horizon/market 注入分别做配对回归和线上 A/B；本地
+   同族对手池只作动作污染/灾难回归，不作候选强度门。
+4. 在上述证据完成前，静态 `OBS_HELD_CONF_CAP` 不得放宽，`est_opp_supply_horizon` 不得
+   自动获得新的高风险消费者。
 
 ## 8. 关联
 
@@ -234,5 +252,6 @@ farmer/hands 每回合坐标可见：仓库↔市场往返=卖货节奏、成片
 - 策略组合选择器（2026-09-02 讨论）的"状况评估"输入件（§4.4）；
 - 开局变体 A/B 实验优先级高于本模块（用户判断：开局是当前最大变数）；
 - M-H 终盘对手库存审计 NO-GO（2026-09-01）的合规边界（§5）；
-- r5-P5 anticipated entry 失败归因（`main.py:857-864`）——对手供给项是其"完整评估器
+- r5-P5 anticipated entry 失败归因（`software/kaggle_simulations/agent/src/strategy.py` 的
+  `VOLUME_ANTICIPATED_ENTRY` 留档）——对手供给项是其"完整评估器
   + 对手情景"重开路线（P6 方向）的前置输入之一。
