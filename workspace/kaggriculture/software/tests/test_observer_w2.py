@@ -301,16 +301,21 @@ def test_supply_horizon_real_form():
     _reset()
 
 
-def test_conf_caps_frozen_from_v0():
+def test_conf_caps_retired_dynamic_conf_flows():
+    # aggressive ruling 2026-09-04: the V0 static caps are retired --
+    # the observer's own dynamic confidence (Ch1 residual decay,
+    # EOD-unknown cap, anomaly zeroing) is the calibration, and P4
+    # consumers read it unmasked.
     _reset()
     main._opp_observer_update(_obs(0, _inv(), _prices(), []), {})
     st = main._OPP_OBSERVER[0]
     st["conf"] = {item: 1.0 for item in ITEMS}
-    assert main.est_opp_conf("WHEAT") == 0.4       # V0 MAE 52 -> capped
-    assert main.est_opp_conf("MILK") == 0.4
+    assert main.OBS_HELD_CONF_CAP == {}
+    assert main.est_opp_conf("WHEAT") == 1.0
+    assert main.est_opp_conf("MILK") == 1.0
     assert main.est_opp_conf("EGG") == 1.0
-    # P4-tier consumers require conf >= 0.5 -> capped items fall back
-    assert main.est_opp_conf("WHEAT") < 0.5
+    # P4-tier consumers (conf >= 0.5) now see capped-era items directly.
+    assert main.est_opp_conf("WHEAT") >= 0.5
     _reset()
 
 
@@ -341,7 +346,7 @@ def test_est_getters_are_player_scoped():
 
     assert main.est_opp_held("MILK", player=0) == 11
     assert main.est_opp_held("MILK", player=1) == 99
-    assert main.est_opp_conf("MILK", player=0) == 0.4
+    assert main.est_opp_conf("MILK", player=0) == 0.6
     assert main.est_opp_conf("MILK", player=1) == 0.2
     assert main.est_opp_net("MILK", days=2, player=0) == 3
     assert main.est_opp_net("MILK", days=2, player=1) == 9

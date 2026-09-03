@@ -1801,13 +1801,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                                          else committed_spend)
             seed_affordable = max(0, int((wallet_for_seeds - reserve_gate) //
                                          CROPS[crop]["seed"]))
-            batch = min(6, max(0, want), room_budget, seed_affordable)
+            batch = min(8, max(0, want), room_budget, seed_affordable)
             if plan.get("wheat_farm") or \
                     (crop == "STRAWBERRY" and plan["volume"]):
                 # Opt-in wheat mode and VOLUME use wallet-scaled batches;
                 # WHEAT_FARM also preserves its hold reserve after every
-                # earlier same-turn purchase.
-                batch = min(10 if plan["volume"] else 6, max(0, want),
+                # earlier same-turn purchase.  2026-09-04 激进模式：
+                # 6/10 -> 8/16（建线密度对齐 top-20；钱包界
+                # seed_affordable 仍逐单硬约束）。
+                batch = min(16 if plan["volume"] else 8, max(0, want),
                             room_budget, seed_affordable)
             if batch > 0 and wallet >= reserve_gate + \
                     CROPS[crop]["seed"] * batch:

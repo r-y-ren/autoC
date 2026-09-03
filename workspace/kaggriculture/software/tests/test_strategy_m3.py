@@ -110,10 +110,9 @@ def test_rotation_plants_melon_above_its_price_floor():
     farm = _farm(quads=["NW", "NE"])
     builds, crops, _, _ = main._field_alloc(farm, 5, _prices(MELON=250))
     # two quadrants leave 9 rim cells after the strawberry block
-    # Phase-C Var2: the 5.3 per-line cap (6) binds before the rim
-    # runs out (kill_table verified melon absorption = town-center
-    # only ~1/day; the old 12-band V-T9 compromise retired)
-    assert len(crops["MELON"]) == 6
+    # aggressive ruling 2026-09-04: MELON line cap restored to the
+    # V-T9-evidence value 12, so the 9 rim cells bind before the cap
+    assert len(crops["MELON"]) == 9
     assert len(crops["MELON"]) <= main.LINE_CAPS["MELON"]
     # dead melon curve: the planting freezes (red line)
     builds2, crops2, _, _ = main._field_alloc(farm, 5, _prices(MELON=100))

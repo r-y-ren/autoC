@@ -264,14 +264,15 @@ def test_volume_seed_batches_are_money_scaled():
                                           plan=VOLUME_PLAN)
            if o[0] == "BUY_SEED" and o[1] == "STRAWBERRY"]
     # V-T3/V-T9 (2026-09-02): the batch is capped by wallet scale and the
-    # daily planting budget (PLANT_DAILY_CAP is 16 in the tetsuya copy, so
-    # the wallet bound (1300-250)//100 = 10 decides here).
+    # daily planting budget (PLANT_DAILY_CAP 24 since the aggressive
+    # ruling; the wallet bound (1300-250)//100 = 10 decides here).
     assert vol and vol[0][2] == 10
-    # defensive keeps the pinned 6-batch at the same money
+    # defensive raises its pinned batch 6 -> 8 at the same money
+    # (aggressive ruling 2026-09-04)
     de = [o for o in main._market_orders(obs, farm, private, 8, 0, 14,
                                          plan=None)
           if o[0] == "BUY_SEED" and o[1] == "STRAWBERRY"]
-    assert de and de[0][2] == 6
+    assert de and de[0][2] == 8
 
 
 # ------------------------- P5 rollout evaluator --------------------------
@@ -299,41 +300,29 @@ def test_rollout_math_volume_completes_field_when_solvent():
 
 
 def test_rollout_glut_rejects_anticipated_wide_field():
-    # anticipated entry (no proof yet) is DISABLED by the r5-P5 ablation
-    # verdict (-312.8k over 36 cells): thin or deep absorption alike, the
-    # default gate never widens without a proven line
+    # aggressive ruling 2026-09-04: anticipated entry is LIVE in
+    # production (the rollout evaluator is the entry authority), but the
+    # value gate still rejects the thin-absorption glut cell.
     thin = _mk_obs(_mk_farm(money=8000.0), _mk_farm(straw=0),
                    shops=["FARMERS_MARKET"])
-    assert main.VOLUME_ANTICIPATED_ENTRY is False
+    assert main.VOLUME_ANTICIPATED_ENTRY is True
     assert main._decide_mode(thin, 8, None)["mode"] == "DEFENSIVE"
-    deep = _mk_obs(_mk_farm(money=8000.0), _mk_farm(straw=0),
-                   shops=["SMOOTHIE_SHOP", "ICE_CREAM_SHOP"])
-    assert main._decide_mode(deep, 8, None)["mode"] == "DEFENSIVE"
 
 
 def test_rollout_anticipated_machinery_gates_on_value_and_solvency():
-    # the machinery itself is testable behind the flag: with the flag on,
-    # deep absorption + ranch income + a terminal edge passes, and the
-    # thin-absorption glut cell stays out (the value check vetoes it)
+    # production defaults since the aggressive ruling: the flag is live
+    # and ROLLOUT_MIN_EDGE=500 is the measured realistic threshold --
+    # deep absorption + premium bid + a thin wallet passes via the
+    # anticipated authority (no 800 floor in front of it anymore); the
+    # thin-absorption cell stays out (value veto).
     thin = _mk_obs(_mk_farm(money=8000.0), _mk_farm(straw=0),
                    shops=["FARMERS_MARKET"])
-    # V-T9: DEFENSIVE's 24-tile strawberry cap raised the rollout baseline,
-    # so the anticipated-entry cell needs a premium strawberry bid to clear
-    # the ROLLOUT_MIN_EDGE over the defensive frame
     deep = _mk_obs(_mk_farm(money=4000.0, herd=12), _mk_farm(straw=0),
                    prices={"STRAWBERRY": 160, "MELON": 250, "CARROT": 35,
                            "WHEAT": 25, "MILK": 160, "WOOL": 200},
                    shops=["SMOOTHIE_SHOP", "ICE_CREAM_SHOP"])
-    main.VOLUME_ANTICIPATED_ENTRY = True
-    saved_edge = main.ROLLOUT_MIN_EDGE
-    main.ROLLOUT_MIN_EDGE = 500   # V-T9: mechanism test -- the 24-tile
-    # defensive cap compressed the true edge below the production 2000 gate
-    try:
-        assert main._decide_mode(deep, 8, None)["mode"] == "VOLUME_CROP"
-        assert main._decide_mode(thin, 8, None)["mode"] == "DEFENSIVE"
-    finally:
-        main.VOLUME_ANTICIPATED_ENTRY = False
-        main.ROLLOUT_MIN_EDGE = saved_edge
+    assert main._decide_mode(deep, 8, None)["mode"] == "VOLUME_CROP"
+    assert main._decide_mode(thin, 8, None)["mode"] == "DEFENSIVE"
 
 
 def test_rollout_solvency_veto_never_fires_a_spiral():

@@ -457,7 +457,9 @@ PASTURE_QUAD_CAP = {"NW": 7, "NE": 3}
 # expansion into one afternoon.  V-T9 (tetsuya copy): 8 -> 16 -- his d7
 # batch plants 15-18 in one day with zero losses because every planting
 # passes the water window; our guard (a) provides exactly that gate.
-PLANT_DAILY_CAP = 16
+# 2026-09-04 激进模式：16 -> 24（tetsuya 实测 15-18/日零损失；水窗守卫
+# (a) 仍是逐格硬门，脉冲上限只封顶不放宽逐格可行性）。
+PLANT_DAILY_CAP = 24
 
 # 【中文】v9 分区巡逻状态（影子路由）：工人当日首次站位决定其"主场
 # 象限"；路线只在目标完成/消失、资格变化或红线义务集合变化时重建。
@@ -604,12 +606,15 @@ PRICE_FLOOR_EMB = 1
 # 全诊断，线上探针为最终裁决轴。
 CAP_UTIL = 0.89                 # 有效利用率（top-20 锚实测）
 CAP_TURNS_PER_UNIT = 3.3        # 每资产单位日耗劳动回合（top-20 锚实测）
-CAP_USE_MAX = 0.85              # 黎明不变式上界：>此值拒新 capex（§5.3）
+CAP_USE_MAX = 0.95              # 黎明不变式上界（2026-09-04 激进模式：
+                                # 0.85→0.95，几乎贴容量定律满界投建；定律
+                                # 系数 3.3/0.89 本身不动，§5.3 语义不变）
 CAP_USE_MIN = 0.65              # 下界：<此值报 slack（补线，兜底=小麦）
 CAP_RESERVE_FRACTION = 0.15     # 峰值日检查的不可侵占余量（规则 4）
 # ---- 分线封顶 = min(劳动力配额, 吸收上限)（§5.3 表）----
 LINE_CAPS = {
-    "MELON": 6,        # 吸收 ~30u/季（论坛单源待 V0 自证）+ sq 曲线自砸
+    "MELON": 12,       # 回归 V-T9 回归证据钉住的 12（6 的收紧从未被消融
+                       # 支持过；2026-09-04 激进模式按证据值复位）
     "STRAWBERRY": 42,  # Renji 线（VOLUME 模式内另有 MODE_STR_TOTAL_CAP）
     "CARROT": 30,      # 终盘弹性线（相位窗口另管）
     "WHEAT": 99,       # log 抗崩+高吸收 = 剩余容量兜底（99=不限）
@@ -661,13 +666,12 @@ EXECUTOR_EOD_ASSERT = True     # EOD 投影断言（棚仓+随身 > 100 → REPL
 EXECUTOR_D1_ASSERT = True      # D1 站点 ETA 断言（ETA > deadline → REPLAN）
 # ---- branch §8.2 熔断回退 ----
 FUSE_MONEY_FLOOR = 300         # 段内钱包 < 此值 → 立即降 DEFENSIVE 运转参数包
-# ---- OBS v2：est_opp_conf 的离线定死置信帽（observer §6"nothing is
-# learned online"；出典 V0 验证器 gate-3 held MAE 表，2026-09-02 线上
-# 10 局 + tetsuya 6 局双席 630+ 席日：MAE ≥3 的品帽 0.4——消费方
-# （P4 三档/horizon）对 conf≥0.5 的门自动回退门控行为）----
-OBS_HELD_CONF_CAP = {
-    "WHEAT": 0.4,        # MAE 52.3（零库存种子流/地板价段污染最重）
-    "FERTILIZER": 0.4,   # MAE 8.2（采集侧不可观，原 conf 0.5 再收紧）
-    "MILK": 0.4,         # MAE 4.5
-    "STRAWBERRY": 0.4,   # MAE 7.0
-}
+# ---- OBS 置信帽（退役，2026-09-04 激进模式裁定）----
+# V0 时代的静态帽（WHEAT/FERT/MILK/STRAW=0.4）把 P4 三档对四品类永久
+# 钉死在回退态。v13.3 观察器重构后离线实测（60 局/31,320 样本）：
+# validated fill Ch0 exact 0.9733、拐点滞后 0d、量级误差 0.0——静态帽
+# 的存在依据消失。置信度回归 observer 自身的动态降信链（Ch1 残差连续
+# 异常 ×0.75、EOD 不可归因 ≤0.4、异常归零）：那才是理想的"校准置信"。
+# requested 口径 0.9241 的残余误差由消费方 conf≥0.5 门自担，不再静态
+# 封顶（空 dict => est_opp_conf 直接返回动态 conf）。
+OBS_HELD_CONF_CAP = {}

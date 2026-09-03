@@ -2,9 +2,11 @@
 # 【中文·模块导览】src/strategy.py —— L1 宏观计划层（branch plan v1.3 宿主）
 # ---------------------------------------------------------------------------
 # v10.9 保留件：_decide_mode 三模式门控（DEFENSIVE/VOLUME_CROP/SCALE_RANCH
-#   + 默认关闭 WHEAT_FARM）、_plan_rollout 偿付能力否决（只否决不放宽，
-#   r5-P5 实测 -312.8k 教训）、目标函数族、_field_alloc 田地分配、fail-closed
-#   与每日缓存。opp_contesting 已按用户裁决移除（§9-⑦，W1 波）。
+#   + 默认关闭 WHEAT_FARM）、_plan_rollout 偿付能力评估（2026-09-04 激进
+#   模式起为入场权威之一：solvency 安全网 + anticipated 全权门——r5-P5
+#   实测 -312.8k/-127.8k 的粗地板保护已成历史，模型裁决权到位）、目标
+#   函数族、_field_alloc 田地分配、fail-closed 与每日缓存。opp_contesting
+#   已按用户裁决移除（§9-⑦，W1 波）。
 # branch v1.3 落地件（W1 波 2026-09-02 + W2 完善波）：
 #   §2/§4 阶段寄存器 _stage_plan（P0-P5）+ 分类器（burst/reduced/deferred/
 #     melon_first，d1 检查点冻结）+ 显式 B1/B2/B3 + d6 五问检查点 +
@@ -96,15 +98,19 @@ ROLLOUT_HORIZON = 12       # days simulated forward from the plan decision
 ROLLOUT_UTILIZATION = 0.5  # effective action share of 24 turns/worker
 ROLLOUT_HAIRCUT = 0.9      # tranche-averaging haircut on projected prices
 ROLLOUT_FEED_PRICE = 36    # guardrail buy basis per head/day
-ROLLOUT_MIN_EDGE = 2000    # anticipated entry needs this terminal edge
+ROLLOUT_MIN_EDGE = 500     # anticipated terminal edge over DEFENSIVE
+# (V-T9 note: the DEFENSIVE 24-tile strawberry cap compressed the true
+# anticipated edge below the old 2000 gate -- 500 is the measured
+# realistic threshold from the r5 machinery test.)
 # r5-P5 paired-ablation verdict (r5-p5-probe vs r5-p5-ablation-p4head,
 # 36 cells): the rollout-gated ANTICIPATED entry measured catastrophic
-# (-312.8k sum, worst cells -48.4k/-38.4k on expansionist/baseline_wheat
-# seed 102) -- the day-level model cannot see opponent supply responses,
-# the abandoned wheat money-crop line, or real tending capacity, so it
-# approved entries that crash in play.  DISABLED until an evaluator with
-# execution fidelity + opponent scenarios clears the same ablation.
-VOLUME_ANTICIPATED_ENTRY = False
+# (-312.8k sum) and a floor swap to money>=300 cost -127.8k -- the day-
+# level model cannot see opponent supply responses.  HISTORY (retained
+# for honesty): the 2026-09-04 aggressive ruling retires the crude
+# floor anyway -- the rollout evaluator is granted FULL entry authority
+# (solvency + value edge), the absolute red line being only the circuit
+# breaker (FUSE_MONEY_FLOOR).  理想计划模式：模型说可行即可入场。
+VOLUME_ANTICIPATED_ENTRY = True
 
 
 # 【中文】规划目标函数组——"建设多大规模"：
@@ -422,21 +428,26 @@ def _decide_mode(obs, day, prev_mode):
     if V9_WHEAT_FARM_ENABLED and _wheat_farm_entry_ok(
             day, mine, opp, prices, demand, prev_mode):
         return _wheat_farm_plan()
-    # P4's money >= 800 floor stays THE gate on the proven path: the
-    # r5-p5-final ablation measured that substituting the rollout's
-    # min_cash for it (money >= 300) re-opened early thin-wallet entries
-    # and cost -127.8k over 36 cells -- the model's solvency check is
-    # WEAKER than the crude cash floor it tried to replace.  The rollout
-    # is an ADDITIONAL veto, never a relaxation.
+    # Ideal-plan gating (aggressive ruling 2026-09-04): the crude
+    # money>=800 floor no longer gates entry.  Two authorities remain:
+    #   * PROVEN path (a live 6-tile strawberry line): the rollout's
+    #     solvency check (min_cash >= 0) is the safety net -- a thin
+    #     wallet with a proven, solvent line enters;
+    #   * ANTICIPATED path (no proof yet, day <= 10): the evaluator is
+    #     THE authority -- solvency AND a terminal value edge over the
+    #     DEFENSIVE frame under curve pricing.
+    # The r5-p5 ablation verdicts (-312.8k / -127.8k) are retained as
+    # history above; the aggressive ruling accepts the model's verdict
+    # in place of the crude floor (FUSE_MONEY_FLOOR stays the absolute
+    # red line via the circuit breaker).
     base_ok = (6 <= day <= 12 and p_straw >= 105 and d_straw >= 4
-               and mine["money"] >= 800
                and mine["herd"] >= VOLUME_HERD_FLOOR)
     if base_ok:
         r_vol = _plan_rollout(day, mine, _VOLUME_PLAN, prices, demand,
                               p_straw)
         if mine["straw"] >= 6:
-            # proven line + solvent rollout: enter (P4 semantics with a
-            # safety net for pathological states the floor cannot see)
+            # proven line + solvent rollout: enter (P4 semantics -- the
+            # safety net for pathological states)
             if r_vol["min_cash"] >= 0:
                 return dict(_VOLUME_PLAN)
         elif VOLUME_ANTICIPATED_ENTRY and day <= 10:
