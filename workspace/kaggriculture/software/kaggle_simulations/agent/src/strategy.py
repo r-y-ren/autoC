@@ -134,10 +134,13 @@ def _wheat_cap(day, wheat_price=25):
     """
     cap = 22 if day <= 2 else 26
     if day > 2 and wheat_price >= 42:
-        cap += 12
+        cap += 6          # round-19 audit: the old +12 tranche grew wheat to
+        # 33 tiles at d4-7, starved the (5,24) strawberry window to 4 tiles,
+        # then the d8-12 harvest wave collapsed the field 33 -> 3 (top keeps
+        # wheat at ~26-30 and fills berry to 25-30 instead)
     elif day > 2 and wheat_price >= 35:
         cap += 4          # dear wheat: farm more of it (feed margin + cash)
-    return min(cap, 36)
+    return min(cap, 30)
 
 
 def _herd_target(day, feed_capacity):

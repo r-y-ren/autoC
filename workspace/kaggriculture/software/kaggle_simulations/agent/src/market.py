@@ -1756,10 +1756,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             and wheat_price_now >= 30:
         wheat_cap_now = _wheat_cap(day, wheat_price_now)
         want_w = wheat_cap_now - alive.get("WHEAT", 0) - seeds.get("WHEAT", 0)
-        floor_w = 12 if seeds.get("WHEAT", 0) < 6 else 0
+        # round-19 audit: a 26-tile / 2-day-cycle field needs ~13
+        # replants/day; the old <6 -> 12 top-up oscillated into day-long
+        # replant blackouts (d9-12 plants fell to 1-2/day, field 33 -> 3)
+        floor_w = 13 if seeds.get("WHEAT", 0) < 13 else 0
         batch_w = min(24, max(floor_w, want_w))
         if day <= 2:
-            batch_w = min(batch_w, 12)   # the d0 budget belongs to the herd
+            batch_w = min(batch_w, 18)   # top plants 17.6 tiles on d0
+            # (the 4-head opening + 500 reserve leave wallet room now)
         # working-capital class (like feed): scale to the wallet instead of
         # rejecting the whole order -- round-5 forensics showed d8-12
         # wallets of 4-629 cash starving a 10-coin seed under a flat 150
