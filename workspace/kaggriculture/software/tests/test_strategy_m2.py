@@ -199,9 +199,11 @@ def test_herd_target_ramps_and_caps():
 
 
 def test_wheat_cap_grows_with_price():
-    assert main._wheat_cap(1, 25) == 16
-    assert main._wheat_cap(5, 25) == 18
-    assert main._wheat_cap(5, 40) == 22        # dear wheat -> farm more
+    # round-19 top-meta calibration (Larko's continuous wheat economy):
+    # floor 16/18 -> 22/26, dear-wheat bands unchanged, ceiling 30 -> 36
+    assert main._wheat_cap(1, 25) == 22
+    assert main._wheat_cap(5, 25) == 26
+    assert main._wheat_cap(5, 40) == 30        # dear wheat -> farm more
 
 
 # --------------------------------------------------------------------------

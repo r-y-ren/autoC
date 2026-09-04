@@ -151,10 +151,11 @@ def test_capacity_counts_unplaced_animals():
 
 
 def test_mission_capacity_deficit_and_slack():
-    # over the law at dawn d0: 40 strawberry tiles vs the crew-5 law (45)
+    # over the law at dawn d0: 64 strawberry tiles vs the crew law
+    # (round-19 tpu 2.0 recalibration doubled the law's capacity)
     rows = _rows10()
     for y in range(8):
-        for x in range(5):
+        for x in range(8):
             rows[y][x] = _tile_plant("STRAWBERRY", 0)
     farm = _farm(rows)
     mission = main._build_mission({"hour": 0}, farm, {}, 0, None, [])

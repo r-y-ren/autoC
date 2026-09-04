@@ -195,10 +195,19 @@ WHEAT_MONEY_CAP_PER_QUAD = 3
 # feasibility check drops the far tiles on 29).
 # V-T9 (tetsuya copy): melon 3 -> 6/quad (his seasons plant 9-18 melon on
 # the far rim; our 3/quad = 9 total under-used the zoning).
-CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 14), "CARROT": (15, 26)}
-CROP_FLOOR = {"MELON": 150, "STRAWBERRY": 55, "CARROT": 28}
-CROP_CAP_PER_QUAD = {"MELON": 6, "STRAWBERRY": 8, "CARROT": 6}  # v6-F; V-T2/T9
-PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
+CROP_PHASE = {"MELON": (0, 17), "STRAWBERRY": (5, 24), "CARROT": (15, 26),
+              "TOMATO": (8, 26)}
+# 2026-09-04 种植规划校准（线上 09-03 日集 22 回放/44 席实测，证据
+# planting_deep_stats.json + round19 analysis）：TOP 层（奖励 >=90k，
+# n=18）全季种植 234 株 vs 我方 96 株；草莓 33-38 株持续补种到深季——
+# 旧窗 (5,14) 在 d14 掐断是 d15-21 只种 top 28% 的直接原因；TOMATO 是
+# 头部现役作物（Crop Dusta 18 格 ongoing），补入轮作。
+CROP_FLOOR = {"MELON": 150, "STRAWBERRY": 55, "CARROT": 28, "TOMATO": 20}
+CROP_CAP_PER_QUAD = {"MELON": 6, "STRAWBERRY": 12, "CARROT": 8,
+                     "TOMATO": 4}  # 莓 8→12：top 33-38 株（3 象限）对齐
+PLANT_LAST_DAY = {"WHEAT": 26, "CARROT": 26, "MELON": 17, "STRAWBERRY": 24}
+# 小麦最晚日 24→26：top 晚季持续补麦（d22+ 层均 69.7 株），V-T6 的 d27
+# 搁浅证据只否决 27，不否决 26。
 
 # ---- r5-P4 macro-plan layer: strategy-space extension --------------------
 # 【中文】宏观计划层（战役 III 第 5 轮 P4）：r4 框架本地 142W-2L，但公榜
@@ -229,15 +238,15 @@ PLANT_LAST_DAY = {"WHEAT": 24, "CARROT": 26, "MELON": 17, "STRAWBERRY": 14}
 # private).  The micro executor (red-line tasks, value matching, market
 # gates, safety shield) is untouched: the plan changes WHAT economy the
 # executor is allowed to build, not how a turn is played.
-MODE_STR_QUAD_CAP = 14     # volume: strawberry tiles per unlocked quadrant
-MODE_STR_TOTAL_CAP = 42    # volume: field ceiling (Renji's 42-tile field)
+MODE_STR_QUAD_CAP = 16     # volume: strawberry tiles per unlocked quadrant
+MODE_STR_TOTAL_CAP = 48    # volume: field ceiling (Renji's 42-tile field)
 MODE_WHEAT_MONEY_QUAD = 8  # volume: wheat money tiles/quad (log glut curve)
 MODE_CREW_CAP_VOL = 15     # volume: hands ceiling (42 tiles of daily water)
 MODE_HERD_CAP_SCALE = 18   # scale: NPV ceiling (winners' 13-17 band + 1)
 _DEFENSIVE_PLAN = {"mode": "DEFENSIVE", "volume": False, "scale": False,
                    "wheat_farm": False,
-                   "straw_quad_cap": 20,  # V-T9: the NE block wants 18-20
-                   "straw_total_cap": 24,   # V-T9 tetsuya copy: 18 -> 24
+                   "straw_quad_cap": 28,  # top-meta 2026-09-04: top 莓 33-38 株
+                   "straw_total_cap": 36,   # 24 -> 36（0903 日集 top 实测）
                    "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
                    "crew_cap": HANDS_CAP_R3,
                    "herd_ceiling": HERD_CAP_NPV}
@@ -605,7 +614,11 @@ PRICE_FLOOR_EMB = 1
 # 标胜出）；capB(4.4/0.93 本地锚) → 136.9k 但溢出 13 爆表被拒。本地为安
 # 全诊断，线上探针为最终裁决轴。
 CAP_UTIL = 0.89                 # 有效利用率（top-20 锚实测）
-CAP_TURNS_PER_UNIT = 3.3        # 每资产单位日耗劳动回合（top-20 锚实测）
+CAP_TURNS_PER_UNIT = 2.0        # 2026-09-04 重定标：top 现实 d12 存量
+                                # 58.7 格/5 人手（≈67 单位）远超旧 3.3
+                                # 系数给出的 ~39 单位——3.3 把田地上限
+                                # 压到 top 的一半，是 d8-14 扩张断崖的
+                                # 根因；2.0 对齐 top 实测吞吐
 CAP_USE_MAX = 0.95              # 黎明不变式上界（2026-09-04 激进模式：
                                 # 0.85→0.95，几乎贴容量定律满界投建；定律
                                 # 系数 3.3/0.89 本身不动，§5.3 语义不变）
@@ -615,7 +628,7 @@ CAP_RESERVE_FRACTION = 0.15     # 峰值日检查的不可侵占余量（规则 
 LINE_CAPS = {
     "MELON": 12,       # 回归 V-T9 回归证据钉住的 12（6 的收紧从未被消融
                        # 支持过；2026-09-04 激进模式按证据值复位）
-    "STRAWBERRY": 42,  # Renji 线（VOLUME 模式内另有 MODE_STR_TOTAL_CAP）
+    "STRAWBERRY": 48,  # Renji 线；48 = 0903 日集 top 校准后的宽计划身份（VOLUME 模式内另有 MODE_STR_TOTAL_CAP）
     "CARROT": 30,      # 终盘弹性线（相位窗口另管）
     "WHEAT": 99,       # log 抗崩+高吸收 = 剩余容量兜底（99=不限）
     "HERD": 14,        # 年金对冲线（NPV 扩栏另走既有门）

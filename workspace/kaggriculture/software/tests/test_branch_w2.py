@@ -158,12 +158,15 @@ def test_backfill_attaches_under_slack():
     assert bf["candidates"][-1] == "WHEAT"      # fallback line is last
     assert main.stage_state_snapshot(0)["backfill"]["room_units"] == \
         bf["room_units"]
-    # a loaded farm (util > CAP_USE_MIN) attaches nothing
+    # a loaded farm (util > CAP_USE_MIN) attaches nothing; round-19 tpu
+    # 2.0 doubled the law's capacity, so "loaded" now takes a full board
+    # across all four quadrants
     rows = _rows10()
-    for y in range(8):
-        for x in range(8):
+    for y in range(10):
+        for x in range(10):
             rows[y][x] = _tile_plant("STRAWBERRY", 8)
-    out = main._stage_plan(0, _obs(_farm(rows), day=16), 16,
+    out = main._stage_plan(0, _obs(_farm(rows, quads=["NW", "NE", "SW",
+                                                    "SE"]), day=16), 16,
                            dict(main._DEFENSIVE_PLAN))
     assert "capacity_backfill" not in out
 
@@ -299,7 +302,7 @@ def test_b_branches_are_explicit_and_b3_is_bounded():
     opp = _farm([[_tile_plant("MELON", 1) for _ in range(6)]])
     day1 = main._stage_plan(0, _obs(_farm(_rows10()), opp, day=1), 1,
                             dict(main._DEFENSIVE_PLAN))
-    obs3 = _obs(_farm(_rows10()), opp, day=3)
+    obs3 = _obs(_farm(_rows10(), quads=["NW", "NE"]), opp, day=3)
     day3 = main._stage_plan(0, obs3, 3, dict(main._DEFENSIVE_PLAN))
     day6 = main._stage_plan(0, _obs(_farm(_rows10()), opp, day=6), 6,
                             dict(main._DEFENSIVE_PLAN))

@@ -198,30 +198,31 @@ def test_strawberry_phase_opens_day5_not_day0():
     # d0-4: no strawberry planting (the cash belongs to the herd burst);
     # d5+: the phase is open through d14
     lo, hi = main.CROP_PHASE["STRAWBERRY"]
-    assert lo == 5 and hi == 14
+    # round-19: the window widens to d24 (top replants strawberry to
+    # 33-38 plants); the d0-4 herd-burst cash guard is unchanged
+    assert lo == 5 and hi == 24
     farm = _farm(quads=["NW"])
     _, crops_early, _, _ = main._field_alloc(farm, 3, _prices())
     assert not crops_early["STRAWBERRY"]
+    # single-quadrant farms are now fully consumed by the 26-tile wheat
+    # floor (feed is the red-line obligation); the strawberry band lives
+    # on multi-quadrant farms -- see the winner-band test below.
     _, crops_open, _, _ = main._field_alloc(farm, 7, _prices())
-    # V-T9 tetsuya copy: the single-quadrant field splits wheat 9 + melon 6
-    # first, so the d5-7 strawberry band holds 5 tiles (tetsuya holds 3-4
-    # before his d7 NE buy); the winner band completes on NE from d7.
-    assert len(crops_open["STRAWBERRY"]) == 11
+    assert not crops_open["STRAWBERRY"]
 
 
 def test_strawberry_reaches_winner_band_on_three_quadrants():
-    # v6-F: 8/quad with the UNCHANGED 18-tile total cap (wider pre-SW
-    # field, 18 at 3 quads; F2's 24-tile total measured -280k -> rejected)
+    # round-19: 12/quad with the 36-tile DEFENSIVE total cap (top-meta
+    # calibration: top runs 33-38 strawberry plants)
     farm = _farm(quads=["NW", "NE", "SW"])
     _, crops, _, _ = main._field_alloc(farm, 12, _prices())
     n = len(crops["STRAWBERRY"])
-    assert n == 24   # V-T9 tetsuya copy: 8/quad on 3 quads = 24
-    assert n == min(main.CROP_CAP_PER_QUAD["STRAWBERRY"] * 3,
+    assert n == 22   # tile pool after the 26 wheat floor + 12 melon
+    assert n <= min(main.CROP_CAP_PER_QUAD["STRAWBERRY"] * 3,
                     main._DEFENSIVE_PLAN["straw_total_cap"])
-    # V-T9: the pre-SW single quadrant shares wheat 9 + melon 6 first,
-    # holding 5 strawberry tiles (the NE block completes the band from d7)
+    # the pre-SW single quadrant is fully consumed by the wheat floor
     _, crops1, _, _ = main._field_alloc(_farm(quads=["NW"]), 12, _prices())
-    assert len(crops1["STRAWBERRY"]) == 11
+    assert not crops1["STRAWBERRY"]
 
 
 # --------------------------------------------------------------------------

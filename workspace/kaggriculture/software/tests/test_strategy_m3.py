@@ -109,10 +109,10 @@ def test_rotation_plants_melon_above_its_price_floor():
     # two quadrants carry the full 6/quad band on the far rim.
     farm = _farm(quads=["NW", "NE"])
     builds, crops, _, _ = main._field_alloc(farm, 5, _prices(MELON=250))
-    # two quadrants leave 9 rim cells after the strawberry block
-    # aggressive ruling 2026-09-04: MELON line cap restored to the
-    # V-T9-evidence value 12, so the 9 rim cells bind before the cap
-    assert len(crops["MELON"]) == 9
+    # round-19 pass order (melon BEFORE strawberry): the scarce high-price
+    # line takes its full 6/quad band ahead of the widened strawberry
+    # window (5,24)/12-per-quad
+    assert len(crops["MELON"]) == 12
     assert len(crops["MELON"]) <= main.LINE_CAPS["MELON"]
     # dead melon curve: the planting freezes (red line)
     builds2, crops2, _, _ = main._field_alloc(farm, 5, _prices(MELON=100))
@@ -120,24 +120,29 @@ def test_rotation_plants_melon_above_its_price_floor():
 
 
 def test_rotation_phase_windows():
-    farm = _farm()
+    # round-19 recalibration: the wheat floor (26) is claimed first, so
+    # the rotation windows are exercised on a two-quadrant farm.
+    farm = _farm(quads=["NW", "NE"])
     _, crops_mid, _, _ = main._field_alloc(farm, 12, _prices())
-    assert len(crops_mid["STRAWBERRY"]) == 11   # V-T9: wheat 9 + melon 6
-    # share the single quadrant first (tetsuya single-quad form)
+    assert len(crops_mid["WHEAT"]) == 26         # feed floor first
+    assert len(crops_mid["STRAWBERRY"]) == 4     # window (5,24), leftovers
+    assert len(crops_mid["MELON"]) == 12
     _, crops_late, _, _ = main._field_alloc(farm, 16, _prices())
-    assert not crops_late["STRAWBERRY"]      # phase 0-14 closed
+    assert len(crops_late["STRAWBERRY"]) == 4    # window stays open to 24
     # V-T7 (2026-09-02): carrot is the ENDGAME rotation -- it claims no
     # tiles at d16 (the SW wheat field keeps the mid-game) and its full
     # per-quad cap from CARROT_ENDGAME_FROM.
     assert not crops_late["CARROT"]
     _, crops_end, _, _ = main._field_alloc(farm, 24, _prices())
-    assert len(crops_end["CARROT"]) == main.CROP_CAP_PER_QUAD["CARROT"]
-    _, crops_early, _, _ = main._field_alloc(farm, 12, _prices())
-    assert not crops_early["CARROT"]         # phase 15-26 not open
+    assert len(crops_end["STRAWBERRY"]) == 16    # replant into d22+
+    # single-quadrant farms are fully consumed by the feed floor now
+    farm1 = _farm()
+    _, crops_1q, _, _ = main._field_alloc(farm1, 12, _prices())
+    assert not crops_1q["CARROT"]                # phase 15-26 not open
 
 
 def test_rotation_freezes_each_crop_under_its_floor():
-    farm = _farm()
+    farm = _farm(quads=["NW", "NE"])
     _, crops, _, _ = main._field_alloc(farm, 8, _prices(STRAWBERRY=40,
                                                         MELON=250))
     assert not crops["STRAWBERRY"]           # < 55 floor
@@ -445,7 +450,7 @@ def test_fert_value_gate_keeps_premium_boosts_only():
 def test_field_alloc_carves_declared_extras():
     # aggressive wave C: declared extras (B2 probe / V2 ambush / V4
     # mirror) carve unclaimed empties straight into the rotation.
-    farm = _farm(quads=["NW", "NE"])
+    farm = _farm(quads=["NW", "NE", "SW"])
     builds, crops, _, _ = main._field_alloc(
         farm, 1, _prices(),
         plan={"straw_d1_probe": 3, "iv2_carrot": 8,

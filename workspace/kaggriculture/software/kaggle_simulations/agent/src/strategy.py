@@ -132,12 +132,12 @@ def _wheat_cap(day, wheat_price=25):
     the money crop.  With FM-O3 the floor never has to cover the whole
     field: rotation crops take the remaining tiles.
     """
-    cap = 16 if day <= 2 else 18
+    cap = 22 if day <= 2 else 26
     if day > 2 and wheat_price >= 42:
         cap += 12
     elif day > 2 and wheat_price >= 35:
         cap += 4          # dear wheat: farm more of it (feed margin + cash)
-    return min(cap, 30)
+    return min(cap, 36)
 
 
 def _herd_target(day, feed_capacity):
@@ -474,8 +474,8 @@ def _decide_mode(obs, day, prev_mode):
     scale_hold = prev_mode == "SCALE_RANCH" and mine["herd"] >= 14
     if scale_entry or scale_hold:
         return {"mode": "SCALE_RANCH", "volume": False, "scale": True,
-                "straw_quad_cap": 20,  # V-T9: the NE block wants 18-20
-                "straw_total_cap": 24,   # V-T9 tetsuya copy: 18 -> 24
+                "straw_quad_cap": 28,  # top-meta 2026-09-04（top 莓 33-38 株）
+                "straw_total_cap": 36,   # 24 -> 36（0903 日集 top 实测）
                 "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
                 "crew_cap": HANDS_CAP_R3,
                 "herd_ceiling": MODE_HERD_CAP_SCALE}
@@ -1245,18 +1245,41 @@ def _field_alloc(farm, day, prices, plan=None):
         # §5.3 黎明不变式下界：idle 容量的兜底去向=小麦（剩余劳力去处；
         # 金钱作物两pass已在后面先 claim，补位只吃真正剩余的空格）
         wheat_room += int(backfill.get("room_units", 0))
-    # wheat pass 1: the dairy home quadrant keeps a BAND of near tiles
-    # (tetsuya d20: NW holds 12-15 wheat beside the pastures) -- bounded so
-    # a single-quadrant farm still leaves the strawberry phase its near
-    # cells (the r3 winner band needs 8 strawberry tiles by d11-13).
-    wheat_nw_band = min(wheat_room, WHEAT_DAIRY_QUAD_BAND)
-    for pos in (_quad_sorted("NW") if "NW" in quads else []):
-        if wheat_nw_band <= 0:
+    # wheat pass 1 (round-19 recalibration): the FEED FLOOR is a red-line
+    # obligation, so it claims its full quota nearest-first BEFORE any
+    # rotation pass -- the old NW-band + last-pass shape let the widened
+    # strawberry window starve the floor to 12 tiles on tight farms
+    # (top-meta reality: Larko's standing wheat ~30-40 tiles).
+    for pos in sorted(empties, key=lambda p: (_shed_dist(p), p[1], p[0])):
+        if wheat_room <= 0:
             break
         crop_map["WHEAT"].add(pos)
-        wheat_nw_band -= 1
         wheat_room -= 1
         empties.remove(pos)
+
+    # MELON pass runs BEFORE strawberry (round-19 allocation audit
+    # 2026-09-04: with the strawberry window widened to (5,24) and 12/quad,
+    # a later melon pass starved 9 -> 0 -- melon is the scarce high-price
+    # line and its phase (0,17) opens first).
+    if _crop_open("MELON"):
+        crop_quad_cap = CROP_CAP_PER_QUAD["MELON"]
+        if plan.get("volume") or \
+                _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
+            crop_quad_cap = 3
+        room = crop_quad_cap * len(quads) - len(crop_map["MELON"])
+        room = min(room, max(0, int(plan.get(
+            "melon_total_cap", LINE_CAPS.get("MELON", 12)))
+            - len(crop_map["MELON"])))
+        order = sorted(empties, key=lambda p: (
+            (0 if _quadrant_of(p[0], p[1], board) in ("NW", "NE") else 1),
+            (-_shed_dist(p)), p[1], p[0]))
+        taken = 0
+        for pos in order:
+            if taken >= room:
+                break
+            crop_map["MELON"].add(pos)
+            taken += 1
+            empties.remove(pos)
 
     if _crop_open("STRAWBERRY"):
         # §5.3 分线封顶包络：LINE_CAPS 作跨计划上限（min(计划配额, 封顶)）
@@ -1274,7 +1297,7 @@ def _field_alloc(farm, day, prices, plan=None):
                 room -= 1
                 empties.remove(pos)
 
-    for crop, descending in (("MELON", True), ("CARROT", False)):
+    for crop, descending in (("CARROT", False),):
         if not _crop_open(crop):
             continue
         if crop == "CARROT" and day < CARROT_ENDGAME_FROM:
@@ -1283,27 +1306,14 @@ def _field_alloc(farm, day, prices, plan=None):
             # wheat field for 11 days (seed-102 forensics: feed floor
             # squeezed to 5 wheat tiles).
             continue
-        # V-T9: the tetsuya melon band YIELDS -- under VOLUME_CROP the
-        # 42-tile strawberry field owns the quadrant budgets, and in a
-        # dear-wheat season the money-wheat tranche outranks the rim
-        # melon (test_wheat_is_feed_floor_and_money_crop regression).
         crop_quad_cap = CROP_CAP_PER_QUAD[crop]
-        if crop == "MELON" and (plan.get("volume") or
-                                _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE):
-            crop_quad_cap = 3
         room = crop_quad_cap * len(quads) - len(crop_map[crop])
         if crop == "CARROT":
-            # §5.3 分线封顶包络（萝卜终盘弹性线；瓜带收紧 12→6 需单变量
-            # 消融另排——V-T9 回归证据仍钉 12，见 JOURNAL）
+            # §5.3 分线封顶包络（萝卜终盘弹性线；帽 8 = 0903 日集 top
+            # 胡萝卜 3-9 株校准）
             room = min(room, max(0, LINE_CAPS.get("CARROT", 99)
                                  - len(crop_map[crop])))
-        if crop == "MELON":
-            room = min(room, max(0, int(plan.get(
-                "melon_total_cap", LINE_CAPS.get("MELON", 12)))
-                - len(crop_map[crop])))
         order = sorted(empties, key=lambda p: (
-            (0 if crop == "MELON" and
-             _quadrant_of(p[0], p[1], board) in ("NW", "NE") else 1),
             ((-_shed_dist(p)) if descending else _shed_dist(p)), p[1], p[0]))
         taken = 0
         for pos in order:
@@ -1313,15 +1323,6 @@ def _field_alloc(farm, day, prices, plan=None):
             taken += 1
             empties.remove(pos)
 
-    # wheat pass 2: whatever quota remains goes nearest-first over the rest
-    # (SW is the tetsuya side dairy field at 12-13 tiles).
-    wheat_rest = sorted(empties, key=lambda p: (_shed_dist(p), p[1], p[0]))
-    for pos in wheat_rest:
-        if wheat_room <= 0:
-            break
-        crop_map["WHEAT"].add(pos)
-        wheat_room -= 1
-        empties.remove(pos)
 
     capacity = int(len(crop_map["WHEAT"]) * 1.2)
     # aggressive wave C (2026-09-04): declared plan extras carve tiles
