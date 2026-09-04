@@ -385,7 +385,7 @@ def test_b1_catchup_and_b2_probe_flags_aggressive():
     st = {"opp_class_frozen": "burst"}
     plan = main._b_branch_adjust({}, {}, 1, st)
     assert plan["b_branch"] == "B1"
-    assert plan["opening_seq_override"] == {1: {"SHEEP": 5}, 2: {"COW": 3}}
+    assert plan["opening_seq_override"] == {1: {"SHEEP": 5}, 2: {"COW": 4}}
     st2 = {"opp_class_frozen": "reduced"}
     plan2 = main._b_branch_adjust({}, {"player": 0}, 1, st2)
     assert plan2["b_branch"] == "B2"

@@ -216,12 +216,12 @@ def test_field_alloc_volume_widens_strawberry_ceiling():
     # round-19: VOLUME 42 -> 48, DEFENSIVE 24 -> 36 (top-meta caps); on
     # three quadrants the tile pool (after the 26-tile wheat floor and
     # melon) binds below both caps
-    assert len(crop_vol["STRAWBERRY"]) == 25
-    assert len(crop_def["STRAWBERRY"]) == 22
+    assert len(crop_vol["STRAWBERRY"]) == 23
+    assert len(crop_def["STRAWBERRY"]) == 20
     # the 48 total cap binds when a 4th quadrant is unlocked
     farm4 = _mk_farm(quads=("NW", "NE", "SW", "SE"))
     _, crop_4q, _, _ = main._field_alloc(farm4, 8, prices, VOLUME_PLAN)
-    assert len(crop_4q["STRAWBERRY"]) == 47
+    assert len(crop_4q["STRAWBERRY"]) == 45
 
 
 # ------------------------- capital: SE quadrant --------------------------

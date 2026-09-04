@@ -38,7 +38,7 @@ def _prices(**kw):
 def test_npv_ceiling_extends_on_full_conditions():
     # day 12, healthy prices, town absorbing both flows, feed stocked
     demand = {"MILK": 13, "WOOL": 13}
-    counts = {"COW": 8, "SHEEP": 6}
+    counts = {"COW": 9, "SHEEP": 7}
     assert main._npv_herd_ceiling(12, _prices(MILK=170, WOOL=210), 14,
                                   counts, demand, 40) == main.HERD_CAP_NPV
 
@@ -46,25 +46,25 @@ def test_npv_ceiling_extends_on_full_conditions():
 def test_npv_ceiling_blocks_on_weak_margin():
     # milk 120: margin 59 < 90 -> no expansion even with demand
     assert main._npv_herd_ceiling(12, _prices(MILK=120), 14,
-                                  {"COW": 8, "SHEEP": 6},
+                                  {"COW": 9, "SHEEP": 7},
                                   {"MILK": 13}, 40) == main.HERD_CAP
 
 
 def test_npv_ceiling_blocks_without_absorption():
     # zero milk demand: scaling crashes the joint curve (r4-P2 lesson)
     assert main._npv_herd_ceiling(12, _prices(MILK=170), 14,
-                                  {"COW": 8, "SHEEP": 6},
+                                  {"COW": 9, "SHEEP": 7},
                                   {"MILK": 1}, 40) == main.HERD_CAP
 
 
 def test_npv_ceiling_blocks_late_or_hungry():
     # day 17+: too few evenings repay the capex
     assert main._npv_herd_ceiling(17, _prices(MILK=200), 14,
-                                  {"COW": 8, "SHEEP": 6},
+                                  {"COW": 9, "SHEEP": 7},
                                   {"MILK": 13}, 40) == main.HERD_CAP
     # thin wheat system: the feed line cannot hold one more mouth
     assert main._npv_herd_ceiling(12, _prices(MILK=170), 14,
-                                  {"COW": 8, "SHEEP": 6},
+                                  {"COW": 9, "SHEEP": 7},
                                   {"MILK": 13}, 10) == main.HERD_CAP
 
 
@@ -72,7 +72,7 @@ def test_npv_ceiling_never_accelerates_the_base_plan():
     # the ceiling only lifts the target once the 14-head plan is DONE
     # (day-0 burst + r3 deadline semantics: _herd_target unchanged)
     assert main._herd_target(0, 99) == 4
-    assert main._herd_target(8, 99) == main.HERD_CAP == 14
+    assert main._herd_target(8, 99) == main.HERD_CAP == 16
     assert main.HERD_CAP_NPV == 17
 
 

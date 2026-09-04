@@ -128,7 +128,7 @@ def test_day0_burst_buys_both_species():
     orders, _ = _market_orders_with(private, animals=0, herd=0, day=0,
                                     money=3000.0, quads=["NW"])
     assert _order_qty(orders, "BUY_ANIMAL", "SHEEP") == 2
-    assert _order_qty(orders, "BUY_ANIMAL", "COW") == 1
+    assert _order_qty(orders, "BUY_ANIMAL", "COW") == 2
     assert 2 * 500 + 1 * 400 + main.OPENING_RESERVE <= 3000
     orders, _ = _market_orders_with(private, animals=0, herd=0, day=1,
                                     money=2900.0, quads=["NW"])
@@ -171,15 +171,15 @@ def test_herd_plan_crosses_12_by_day8_and_caps_at_14():
     assert main._herd_target(5, 99) == 10
     assert main._herd_target(6, 99) >= 12 or main._herd_target(7, 99) >= 12
     assert main._herd_target(8, 99) == main.HERD_CAP        # 12+ by d8, cap
-    assert main.HERD_CAP == 14
+    assert main.HERD_CAP == 16
     assert main.HERD_CAP <= 17                              # winner ceiling
     assert main._herd_target(8, 9) == 9                     # feed capacity binds
 
 
 def test_herd_composition_is_the_winner_mix():
-    # 8C+6S = 14 (winners peak 13-17: 5C+9S / 9C+4S / 8C+9S)
-    assert main.HERD_COMPOSITION["COW"] == 8
-    assert main.HERD_COMPOSITION["SHEEP"] == 6
+    # 9C+7S = 16 (round-19: top peak median 15.8; winners 13-17)
+    assert main.HERD_COMPOSITION["COW"] == 9
+    assert main.HERD_COMPOSITION["SHEEP"] == 7
     assert sum(main.HERD_COMPOSITION.values()) == main.HERD_CAP
 
 
@@ -217,7 +217,7 @@ def test_strawberry_reaches_winner_band_on_three_quadrants():
     farm = _farm(quads=["NW", "NE", "SW"])
     _, crops, _, _ = main._field_alloc(farm, 12, _prices())
     n = len(crops["STRAWBERRY"])
-    assert n == 22   # tile pool after the 26 wheat floor + 12 melon
+    assert n == 20   # tile pool after wheat 26 + melon 12 + 2 extra pastures
     assert n <= min(main.CROP_CAP_PER_QUAD["STRAWBERRY"] * 3,
                     main._DEFENSIVE_PLAN["straw_total_cap"])
     # the pre-SW single quadrant is fully consumed by the wheat floor

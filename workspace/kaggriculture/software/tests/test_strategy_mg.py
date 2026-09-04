@@ -60,26 +60,26 @@ def test_new_animal_production_evenings_include_first_yield_delay():
 
 
 def test_npv_decision_returns_the_best_profitable_species():
-    counts = {"COW": 8, "SHEEP": 6, "GOOSE": 0}
+    counts = {"COW": 9, "SHEEP": 7, "GOOSE": 0}
     demand = {"MILK": 20, "WOOL": 20}
 
     cow = main._npv_herd_decision(
-        12, _prices(MILK=300, WOOL=100), 14, counts, demand, 40)
+        12, _prices(MILK=300, WOOL=100), 16, counts, demand, 40)
     sheep = main._npv_herd_decision(
-        12, _prices(MILK=100, WOOL=300), 14, counts, demand, 40)
+        12, _prices(MILK=100, WOOL=300), 16, counts, demand, 40)
 
     assert cow == (main.HERD_CAP_NPV, "COW")
     assert sheep == (main.HERD_CAP_NPV, "SHEEP")
 
 
 def test_legacy_ceiling_interface_stays_integer_and_fail_closed():
-    counts = {"COW": 8, "SHEEP": 6, "GOOSE": 0}
+    counts = {"COW": 9, "SHEEP": 7, "GOOSE": 0}
     demand = {"MILK": 20, "WOOL": 20}
 
     assert main._npv_herd_ceiling(
-        12, _prices(MILK=300), 14, counts, demand, 40) == main.HERD_CAP_NPV
+        12, _prices(MILK=300), 16, counts, demand, 40) == main.HERD_CAP_NPV
     assert main._npv_herd_decision(
-        12, _prices(MILK=300), 14, counts, demand, 10) == (main.HERD_CAP, None)
+        12, _prices(MILK=300), 16, counts, demand, 10) == (main.HERD_CAP, None)
 
 
 def test_scale_plan_builds_to_its_eighteen_head_structure_ceiling():
@@ -154,7 +154,7 @@ def test_scale_structure_extension_uses_field_empty_before_ring_weed():
 
 
 def test_npv_extension_purchase_uses_selected_species():
-    animals = ["COW"] * 8 + ["SHEEP"] * 6
+    animals = ["COW"] * 9 + ["SHEEP"] * 7
     farm = _farm(animals=animals)
     private = _private(WHEAT=40)
     obs = {"player": 0, "day": 12, "hour": 0, "farms": [farm, _farm()],
@@ -166,7 +166,7 @@ def test_npv_extension_purchase_uses_selected_species():
              "herd_ceiling": main.MODE_HERD_CAP_SCALE}
     main._STATE.clear()
 
-    orders = main._market_orders(obs, farm, private, 12, 14, 14, scale)
+    orders = main._market_orders(obs, farm, private, 12, 16, 16, scale)
     animal_orders = [order for order in orders if order[0] == "BUY_ANIMAL"]
 
     assert animal_orders
@@ -174,7 +174,7 @@ def test_npv_extension_purchase_uses_selected_species():
 
 
 def test_npv_selected_species_survives_skewed_existing_composition():
-    animals = ["COW"] * 12 + ["SHEEP"] * 3
+    animals = ["COW"] * 12 + ["SHEEP"] * 4
     farm = _farm(animals=animals)
     private = _private(WHEAT=40)
     obs = {"player": 0, "day": 12, "hour": 0, "farms": [farm, _farm()],
@@ -185,13 +185,14 @@ def test_npv_selected_species_survives_skewed_existing_composition():
              "herd_ceiling": main.MODE_HERD_CAP_SCALE}
     main._STATE.clear()
 
-    orders = main._market_orders(obs, farm, private, 12, 15, 15, scale)
+    orders = main._market_orders(obs, farm, private, 12, 16, 16, scale)
 
+    # the margin-driven species choice survives the sheep deficit
     assert any(order[:2] == ["BUY_ANIMAL", "COW"] for order in orders)
 
 
 def test_npv_purchase_quantity_respects_market_absorption():
-    animals = ["COW"] * 12 + ["SHEEP"] * 2
+    animals = ["COW"] * 12 + ["SHEEP"] * 4
     farm = _farm(animals=animals)
     private = _private(WHEAT=40)
     obs = {"player": 0, "day": 12, "hour": 0, "farms": [farm, _farm()],
@@ -202,16 +203,16 @@ def test_npv_purchase_quantity_respects_market_absorption():
              "herd_ceiling": main.MODE_HERD_CAP_SCALE}
     main._STATE.clear()
 
-    orders = main._market_orders(obs, farm, private, 12, 14, 14, scale)
+    orders = main._market_orders(obs, farm, private, 12, 16, 16, scale)
     animal_orders = [order for order in orders if order[0] == "BUY_ANIMAL"]
 
     assert animal_orders == [["BUY_ANIMAL", "COW", 1]]
 
 
 def test_defensive_frame_uses_corrected_production_calendar():
-    counts = {"COW": 8, "SHEEP": 6, "GOOSE": 0}
+    counts = {"COW": 9, "SHEEP": 7, "GOOSE": 0}
     decision = main._npv_herd_decision(
-        16, _prices(MILK=161, WOOL=100), 14, counts,
+        16, _prices(MILK=161, WOOL=100), 16, counts,
         {"MILK": 20, "WOOL": 20}, 40, dict(main._DEFENSIVE_PLAN))
 
     assert main._new_animal_production_evenings(16, "COW") == 3

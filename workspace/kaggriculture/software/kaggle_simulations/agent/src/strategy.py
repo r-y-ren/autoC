@@ -769,7 +769,9 @@ def _b_branch_adjust(plan, obs, day, st=None):
         # 2026-09-04): answer a burst opening with the declared d1 +3
         # sheep / d2 +2 cow stride, expressed as absolute species targets
         # (the d0 2S+1C burst included); wallet + capacity gates still bind.
-        plan["opening_seq_override"] = {1: {"SHEEP": 5}, 2: {"COW": 3}}
+        # absolute targets over the 4-head opening (2S+2C since the
+        # herd front-load): d1 +3 sheep, d2 +2 cows
+        plan["opening_seq_override"] = {1: {"SHEEP": 5}, 2: {"COW": 4}}
     elif cls == "melon_first":
         plan["melon_probe"] = True
         plan["melon_total_cap"] = 2 if 3 <= day <= 5 else 0

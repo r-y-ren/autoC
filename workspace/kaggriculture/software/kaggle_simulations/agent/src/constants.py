@@ -104,7 +104,7 @@ LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
 
 # 【中文】畜群旋钮组：day-0 开局爆发买 2 牛 + 2 羊（OPENING_HERD，
 # 花掉 3000 启动资金的 1800，保留 OPENING_RESERVE）；HERD_CAP 是计划
-# 上限 14 = 8 牛 + 6 羊（HERD_COMPOSITION）；超出 14 的扩张走
+# 上限 16 = 9 牛 + 7 羊（HERD_COMPOSITION，2026-09-04 校准）；超出 16 的扩张走
 # _npv_herd_decision 的边际 NPV 判定，绝对安全上限 HERD_CAP_NPV = 17；
 # LIQUIDITY_FLOOR 保证买畜后钱包付得起次日黎明雇工费（见安全哲学）。
 # R3-1/R3-2 herd: the r3 opening.  Day 0 buys the mixed burst below outright
@@ -116,7 +116,7 @@ LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
 # premium-milk window on time; goose dropped (egg log-curve pays ~2.1k
 # vs a cow's ~5k in the observed premium-milk meta).
 OPENING_HERD = {"COW": 2, "SHEEP": 2}
-OPENING_RESERVE = 800    # cash kept besides the day-0 burst (m2b cushion)
+OPENING_RESERVE = 500              # 800->500（top d4 现金 128 实测；FUSE 300 不变）    # cash kept besides the day-0 burst (m2b cushion)
 # V-T1 ablation copy (tetsuya 08-31 opening shift): the day-0 herd burst is
 # replaced by a staged day1-3S / day2-2C sequence; day 0 keeps its cash for
 # the wheat opening. Labour plan and the rest of the r3 ramp unchanged.
@@ -130,8 +130,12 @@ OPENING_SHIFT = True
 # back TO day 0 in his smaller shape (variant B below was the d1/d2 deferral;
 # the paced loop still owns d1+ at pace 1/day, and _opening_shift_hold keeps
 # day 0 free of any further paced buys).
-OPENING_SHIFT_SEQ = {0: {"SHEEP": 2, "COW": 1}}
-HERD_CAP = 14            # total herd ceiling; m2b tests pin _herd_target
+# 2026-09-04 畜群前置校准（0903 日集 44 席）：top d0 4-5 头（round-2
+# 语料 116/116），d8 中位 12 头，奶/毛日收入是 d7-11 现金爆发的引擎
+# （top d11 现金 13.7k vs 我方 946 的根源）。开局回到 4 头，预备金
+# 800→500（top d4 现金 128 贴线运行；FUSE 300 仍是绝对红线）。
+OPENING_SHIFT_SEQ = {0: {"SHEEP": 2, "COW": 2}}
+HERD_CAP = 16            # 14->16（top 峰值中位 15.8，0903 日集）
                          # to the constant, not a literal
 # r4-P3: STATE-DRIVEN herd ceiling.  Beyond the pinned 14-head plan,
 # extra head is bought only on a positive marginal NPV (evenings x margin
@@ -142,7 +146,7 @@ HERD_NPV_MIN_MARGIN = 90  # per-evening product margin needed to expand
 LAND_LATE_CUTOFF = 18    # no SW purchase after this day (P3 NPV rule)
 CREW_LATE_DAY = 24       # P3 drawdown: fewer hands when the queue thins
 CREW_LATE_CAP = 10
-HERD_COMPOSITION = {"SHEEP": 6, "COW": 8, "GOOSE": 0}
+HERD_COMPOSITION = {"SHEEP": 7, "COW": 9, "GOOSE": 0}  # 16 = top 峰值 15.8 校准（胜者混样 5C+9S / 9C+4S / 8C+9S）
 ANIMAL_BUY_LAST_DAY = {"SHEEP": 20, "COW": 20, "GOOSE": 24}
 COW_BUY_RESERVE = 380    # cash kept besides an animal purchase (m2b)
                          # (v10 M-B trial at 300 REVERTED: combined gate
@@ -631,7 +635,7 @@ LINE_CAPS = {
     "STRAWBERRY": 48,  # Renji 线；48 = 0903 日集 top 校准后的宽计划身份（VOLUME 模式内另有 MODE_STR_TOTAL_CAP）
     "CARROT": 30,      # 终盘弹性线（相位窗口另管）
     "WHEAT": 99,       # log 抗崩+高吸收 = 剩余容量兜底（99=不限）
-    "HERD": 14,        # 年金对冲线（NPV 扩栏另走既有门）
+    "HERD": 16,        # 年金对冲线（14->16，top 峰值 15.8 校准）
 }
 # ---- 对手 d0 分类器（§4.1，v1.3 更正版：增"减档型"）----
 OPP_CLASS_BURST_MIN = 4        # 爆发型：d0 已放 ≥4 头（top-20 116/116）
