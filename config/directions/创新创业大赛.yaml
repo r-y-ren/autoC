@@ -1,0 +1,25 @@
+# 方向：创新创业大赛（2026-09-04 经 /discover 冷启动；触发源：用户导师安排中国国际大学生创新大赛（2026）高教主赛道项目）
+
+schema_version: 1
+
+direction: "创新创业大赛"
+
+scopes: ["学科竞赛"]
+
+keywords: [中国国际大学生创新大赛, 互联网+, 大学生创新创业, 挑战杯, 高教主赛道, 创意组, 创业组, innovation competition, college innovation and entrepreneurship]
+
+sources:
+  api: []
+  web:             # 2026-09-04 /discover 首跑实抓验证的锚点（均为政府/官方站，非 SPA，WebFetch 可直抓）
+    - {name: 中国国际大学生创新大赛服务网-大赛动态, url: "https://cy.ncss.cn/information/dsdt?typeCode=CYDS_2TH_DSDT", cadence: weekly}
+    - {name: MOE 教育部通知检索（中国国际大学生创新大赛）, url: "http://www.moe.gov.cn/srcsite/A08/s5672/", cadence: monthly}
+    - {name: 挑战杯官网, url: "https://www.tiaozhanbei.net/", cadence: monthly}
+    - {name: 全国大学生乡村振兴大赛通知栏, url: "https://www.xczxcy.com.cn/news_content/73.html", cadence: weekly}
+  rss: []
+  wechat: []       # 公众号是互联网+/挑战杯类主发布渠道之一；RSSHub 引入条件 = D5/D7 判定链（catalog 备注）
+
+tech_radar:
+  fields: ["LLM agents", "retrieval augmented generation", "时序预测应用"]   # 面向"人工智能+"/新工科选题的应用型技术雷达
+  min_signal:
+    stars: 0        # 应用型方向：不以 GitHub stars 为硬门槛
+    citations_90d: 0

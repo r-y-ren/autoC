@@ -6,7 +6,9 @@
 
 | ID | 赛事 | 方向 | 层级 | 状态 | 关键日期 | AI 政策 | 最近核验 | 条目路径 |
 |---|---|---|---|---|---|---|---|---|
+| 3chuang | 全国大学生电子商务"创新、创意及创业"挑战赛（三创赛） | 创新创业大赛 | 学科竞赛 | ended | … | 待核：本次实抓页面（官网为 JS 渲染空壳、两所高校转发通知）均未载人工智能/A | 2026-09-04 | competitions/3chuang/ |
 | cumcm | 全国大学生数学建模竞赛（高教社杯 CUMCM） | 数模与时序预测 | 学科竞赛 | active | 2026 报名开始:2026-05-01 09:00… | 《全国大学生数学建模竞赛人工智能工具使用规定（2026年试行）》：适用于大语言模 | 2026-08-27 | competitions/cumcm/ |
+| cy-innovation-2026 | 中国国际大学生创新大赛（2026） | 创新创业大赛 | 学科竞赛 | active | 报名系统开放:2026-08-10… | 2026 官方文件无 AI 专项条款（verified 口径：2026-09-0 | 2026-09-04 | competitions/cy-innovation-2026/ |
 | devpost-amazon-nova-ai-2026 | Amazon Nova AI Hackathon | 黑客松与数据竞赛 | 编程/黑客松 | ended | registration_open:2026-02-02、submission_close:2026-03-16… | 强制 Nova：'Your task is to build a generat | 2026-08-27 | competitions/devpost-amazon-nova-ai-2026/ |
 | devpost-build-with-gemini-xprize | Build with Gemini XPRIZE | 黑客松与数据竞赛 | 编程/黑客松 | active | submission_open:2026-05-19、submission_close:2026-08-17… | 强制 Gemini：含 LLM 功能的项目必须用 Gemini API 完成部署 | 2026-08-27 | competitions/devpost-build-with-gemini-xprize/ |
 | devpost-gitlab-ai-2026 | GitLab AI Hackathon（官方规则名：The GitLab Duo Agent Platform Challenge） | 黑客松与数据竞赛 | 编程/黑客松 | ended | submission_open:2026-02-09、submission_close:2026-03-25… | 平台限定而非模型限定：必须构建运行在 GitLab Duo Agent Plat | 2026-08-28 | competitions/devpost-gitlab-ai-2026/ |
@@ -30,7 +32,9 @@
 | tianchi-ijcai18-alimama-cvr | IJCAI-18 阿里妈妈搜索广告转化预测（Alimama International Advertising Algorithm Competition） | 黑客松与数据竞赛 | 编程/黑客松 | ended | 赛事周期:2018-02 至 2018-05（天池用户协议原文 "from February to May 2018"）… | 抓取材料中无 AI 工具使用条款（2018 年赛前 LLM 时代，信息页与用户协 | 2026-08-28 | competitions/tianchi-ijcai18-alimama-cvr/ |
 | tianchi-loreal-beauty-tech-hackathon-2026 | 欧莱雅第二届美妆科技黑客松——用 AI 造点美（天池·AI大模型赛） | 黑客松与数据竞赛 | 编程/黑客松 | active | … | 详情页全文未设任何 AI 工具使用限制、申报或披露条款；赛事本身即以 AI 应用 | 2026-08-27 | competitions/tianchi-loreal-beauty-tech-hackathon-2026/ |
 | tianchi-qoder-thursday | Q力星期四（Qoder码力星期四）系列赛（天池·AI大模型赛） | 黑客松与数据竞赛 | 编程/黑客松 | active | 系列赛期:2026-07-16 至 2027-07-31… | 系列由阿里 AI 编程工具 Qoder 冠名，官方推荐并鼓励使用 AI 编程工具 | 2026-08-27 | competitions/tianchi-qoder-thursday/ |
+| tiaozhanbei-chuangye | 第十五届"挑战杯"中国大学生创业计划竞赛（建设银行冠名） | 创新创业大赛 | 学科竞赛 | ended | 第十五届 校级初赛:2026-05-31 前（通知：5月底前）… | 待核：官网举办通知正文（2026-05-23，2026-09-04 直抓）未载人 | 2026-09-04 | competitions/tiaozhanbei-chuangye/ |
 | ucla-ai-hackathon-2026 | LA Hacks AI Hackathon 2026 | 黑客松与数据竞赛 | 编程/黑客松 | upcoming | event_start:2026-10-17、event_end:2026-10-18 | 2026-08-28 核对赛事官网公开响应、MLH 赛季条目与 MLH 赛事奖品 | 2026-09-04 | competitions/ucla-ai-hackathon-2026/ |
+| xczxcy-dasai | 第六届全国大学生乡村振兴大赛 | 创新创业大赛 | 学科竞赛 | active | 通知发布/报名启动:2026-08-08（通知落款日期）；发布页发布时间 2026-08-10… | 待核：通知正文（文档第 1-8 页已逐页视读，含联系方式与落款页）未载人工智能/ | 2026-09-04 | competitions/xczxcy-dasai/ |
 
 ## KB-2 科技库（交付物 2）
 
@@ -128,6 +132,7 @@
 | 日期 | 类型 | 新增 | 更新 | 隔离 | 成本 | 说明 |
 |---|---|---|---|---|---|---|
 <!-- 成本列=分片数/token/墙钟（T4.3 起新行必填；旧行无此列属历史格式） -->
+| 2026-09-04 | discover | 赛事条目4 / winners首样1 | 0 | 0 | 6分片/约5.6M tok/94min | 创新创业大赛方向冷启动（用户导师指定中国国际大学生创新大赛2026高教主赛道）：官方通知 教高函〔2026〕26号 实抓（报名截止 09-25 12时，剩21天）+评审规则+2024/2025 两届金奖全名单原件解析；主条目 cy-innovation-2026（award_levels 5级、ai_policy=无AI专项条款+十不准、2026版权重30/30/25/15）+全景3条目（挑战杯小挑 ended、乡村振兴 active 截止09-30 主办升级一手、三创 ended 弱站）；winners首样=知耘（2025金奖#41 同济 AI无人农业，四节深构+选题启示）；锚点回填4条；学生操作手册登录墙待用户侧；KB lint 115/115 |
 | 2026-09-04 | tech+comp | 赛事条目1 / 技术卡9 | 3 | 0 | 3分片/约5.0M tok/20min | kb-sync 增量（超期 6 天补跑）：SPA 预抓 3 站落 kb/raw（Kaggle 32 卡/devpost 9 卡/天池 29 入口 ID）+和鲸公开 API 直抓；comp 候选 5→新建 1（雅安 YHMFC 2026 ¥500k）+更新 3（LA Hacks 待核三连维持+MLH 精确时刻；MinerU 复核；C4-BDC active→ended 榜单 xlsx 留待 winners 分片）+拒 1（MLH 日历聚合页）；tech 51 候选→消费 10（数模 4 卡：RATL/CoSPOT/DynG-Diff/边缘在线适应评测；黑客松 5 卡全收录）+拒 1（RecKAN 映射不足）+41 留队；gh CLI 缺失致 GitHub 信源降级跳过；跑批环境改用 ~/.venvs/autoc（系统 python 3.14 缺 yaml/jsonschema）；KB lint 111/111 |
 | 2026-08-29 | tech+comp | 赛事条目0 / 技术卡0 | 1 | 0 | 主会话直办1分片/约3min | /attack 预刷新：tech 72 拉取 0 新候选（台账去重）；comp 候选2=LA Hacks 复查（仍 JS SPA，待核维持）+MLH 聚合噪声弃置；子 agent 通道故障（Model provider not configured）降级主会话直办；CDEC 留尾继续待 browser-use 预抓；KB lint 101/101 |
 | 2026-08-28 | tech+comp | 赛事条目1 / 技术卡0 | 0 | 1 | 1分片/约14min | /attack 审计后重开预刷新：UCLA AI Hackathon 入库但章程/奖项/AI 政策待 SPA 深核；MLH 赛季日历判聚合噪声；tech 73 拉取后 0 新候选；KB lint 101/101 |
