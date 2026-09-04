@@ -132,7 +132,11 @@ def _wheat_cap(day, wheat_price=25):
     the money crop.  With FM-O3 the floor never has to cover the whole
     field: rotation crops take the remaining tiles.
     """
-    cap = 22 if day <= 2 else 26
+    # v1.5 P0: day-0/1 feed floor is 10 tiles so a single unlocked
+    # quadrant still has room for the opening melon block.  The old 22
+    # claimed the whole NW 25-tile farm (minus pastures) and BUY_SEED
+    # MELON saw want=0.  From day 2 the feed floor returns to 22/26.
+    cap = 10 if day <= 1 else (22 if day <= 2 else 26)
     if day > 2 and wheat_price >= 42:
         cap += 6          # round-19 audit: the old +12 tranche grew wheat to
         # 33 tiles at d4-7, starved the (5,24) strawberry window to 4 tiles,
@@ -145,7 +149,7 @@ def _wheat_cap(day, wheat_price=25):
 
 def _herd_target(day, feed_capacity):
     """Total-animal plan (m2b formula shape, test-pinned at d0/d8/d25):
-    4 head on day 0 (the r3 opening burst), the build accelerates from
+    3 head on day 0 (v1.5 reduced burst 1C+2S), the build accelerates from
     day 5 so the 12-head deadline lands by d6-8 and the 14 ceiling by d8
     (R3-2: winners 13-17 by d8-11; top-20 med 12 by d6; the m3 plan never
     reached 12).  Feed capacity caps it as in m2b, though in r3 the
@@ -153,7 +157,7 @@ def _herd_target(day, feed_capacity):
     covers the gap) -- the money gate + daily pace + composition do the
     real limiting.
     """
-    return min(HERD_CAP, 4 + day + max(0, day - 4), max(4, feed_capacity))
+    return min(HERD_CAP, 3 + day + max(0, day - 3), max(3, feed_capacity))
 
 
 def _hands_target(day, herd, wheat_tiles, quads=3):

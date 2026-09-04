@@ -246,7 +246,7 @@ P4 出清时点——从 backlog 提级为 P4 前置件。
 | 项 | 落点 | 量级 |
 |---|---|---|
 | 阶段寄存器 + 检查点 | `_macro_plan` 缓存基础模式；`_stage_plan` 维护 per-player d1/d6/d10/d14/d22 状态，并允许 d6 在首次进入 P2 时补算 | 已实现（骨架，v1.5 不改） |
-| P0 开局 | `OPENING_SHIFT_SEQ` **改回 1C+2S**；开局瓜种门槛从 `land_fund+250` 降到钱包可付；d0 人手种+浇优先于建牧场 | **v1.5 待实现** |
+| P0 开局 | `OPENING_SHIFT_SEQ` **改回 1C+2S**；d0-1 麦底仓 10 格给瓜留空；开局瓜种门槛 80；d0 人手种+浇 w=52/55 压过建牧场 46 | **v1.5 P0 已接线**（2026-09-04） |
 | 对手开局分类器 | `_classify_opponent_opening` 基于 `_farm_scan`，d1 冻结 | 已实现（骨架） |
 | 对手上市日历 | `_opp_production_calendar` | 已实现（由市场卖出计划使用） |
 | 争议线零囤货 | `_market_gates` / `_sell_overrides` 的 contested 分支 | 已实现 |
@@ -258,8 +258,8 @@ P4 出清时点——从 backlog 提级为 P4 前置件。
 | 容量前置门 | `_capacity_gate` + `reserved_units` 同回合累计土地/种子/畜群买后单位 | 已实现 |
 | 三重前置检查 | 曲线门/现金门 + committed_spend 与市场预算模拟 | 已实现 |
 
-**v1.5 后续遗留项**（骨架已在，策略包未接线）：
-1. P0 减档畜 + 开局瓜田 + 种浇优先；
+**v1.5 后续遗留项**（P0 已接线，其余策略包未动）：
+1. ~~P0 减档畜 + 开局瓜田 + 种浇优先~~ 已于 2026-09-04 接线（`OPENING_SHIFT_SEQ` 1C+2S、`_wheat_cap` d0-1=10、MELON d0-1 seed_gate=80、d0 PLANT w>BUILD）；
 2. B1 放慢追赶、B2 草莓改 d5、B3 取消避瓜；
 3. `_field_alloc` 让出莓窗、番茄要么接线要么删除；
 4. 当前阶段状态为进程内 per-player 寄存器，时钟倒退会重建，不跨进程持久化；
