@@ -268,7 +268,8 @@ P4 出清时点——从 backlog 提级为 P4 前置件。
 - **分支回归**：`test_branch_w2.py` 与 `test_landing_w1.py` 覆盖 C1/C2/C3、B1/B2/B3、d6 补算、d10/d22 消费、熔断锁存和买后容量。
 - **本轮软件验证**：全量软件测试 `829 passed, 2 skipped`（2026-09-04 round-20 畜群前置波实测）；Python 编译检查、`git diff --check`、`build.py --check` 与 candidate identity 均通过。
 - **提交包状态**：layout `pkg.1`，当前 SHA-256 `49b7dc3feaecd1c55b47fb84eb17772a6208de810fa9c124b37f09a42095661b`；working candidate 仍为 development，不据此宣称线上强度。
-- **裁决轴**：线上公共局；本地配对消融为归因诊断。observer 估计质量由关联 observer 设计与独立验证负责。
+- **裁决轴**：线上公共局；本地配对消融与 quickwin 只做灾难诊断，不得作为下一轮提交理由。observer 估计质量由关联 observer 设计与独立验证负责。
+- **回填门**：提交后必须把官方回放写入 `exports/online/sampling/roundN_sampling.json`（`scripts/sync_online_probe.py`）。发射台账可以停在 PENDING；缺 COMPLETE 采样则禁止改下一组旋钮。规程见 `docs/online_probe_sop.md`。
 
 ## 11. 证据引用表
 

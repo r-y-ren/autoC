@@ -5,7 +5,9 @@ bot、本地评估基建、机制量化工具与增强策略 A/B。
 
 当前 working candidate `v13.3-observer-refactor-candidate` 为 development，尚未针对本轮运行新的 holdout 或线上提交；下文的线上记录属于历史候选观测，不能作为当前候选验证。
 
-**评估规则变更（2026-09-02，用户决策）**：本地对手池（同族实现的 bots）**不再作为候选强度参考与上线门禁**——同族偏移已被多轮线上实测证实（本地 holdout 94.3% 对 v10.2 线上 42.9%）。此后候选验证以**线上天梯实测**为准（线上样本仍受 ≥6 局评估门与止损线约束；提交额度/回拉复盘/止损的契约常量以 blueprint 与 JOURNAL 台账为准——旧 SOP v4 已随 2026-09-02 docs 重构退役，终交前随新候选重写）。保留仍然有效的两类检查：① 单元/契约测试与身份链校验（代码行为契约，非对手比较）；② 引擎一致性冒烟（smoke_boot）。`run_eval`/`iterate_gate`/`ablate`/`check_opponent_strength` 等本地对手评估资产保留为可选诊断工具，不再是上线前置条件。
+**评估规则变更（2026-09-02，用户决策）**：本地对手池（同族实现的 bots）**不再作为候选强度参考与上线门禁**——同族偏移已被多轮线上实测证实（本地 holdout 94.3% 对 v10.2 线上 42.9%）。此后候选验证以**线上天梯实测**为准（线上样本仍受 ≥6 局评估门与止损线约束；提交额度/回拉复盘/止损的契约常量以 blueprint 与 JOURNAL 台账为准——旧 SOP v4 已随 2026-09-02 docs 重构退役，现役步骤见 `docs/online_probe_sop.md`）。保留仍然有效的两类检查：① 单元/契约测试与身份链校验（代码行为契约，非对手比较）；② 引擎一致性冒烟（smoke_boot）。`run_eval`/`iterate_gate`/`ablate`/`check_opponent_strength`/`quickwin_probe` 等本地对手评估资产保留为可选诊断工具，**不是上线前置条件，也不能授权下一轮改参**。
+
+**线上回填门（2026-09-04）**：本地 quickwin 涨分不得作为提交理由。发射台账 `exports/online/roundN_ledger.json` 是提交当下的快照，可以停在 `PENDING`；官方完成态必须另写 `exports/online/sampling/roundN_sampling.json`。提交后固定跑 `scripts/sync_online_probe.py close --round N`（`kaggle competitions episodes` + `replay`，禁止用 vendored 自对局顶替）。下一轮改旋钮前必须 `sync_online_probe.py gate` 通过——最新一轮（≥20）缺 COMPLETE 官方采样即 fail-closed。
 
 **引擎边界声明**：本地对局运行在**官方引擎**上——PyPI `kaggle-environments` 1.32.7 的
 `kaggriculture` 场景（本仓 vendor 了去依赖元数据/去可视化资源的重打包 wheel，引擎代码未改动，
@@ -81,6 +83,10 @@ python workspace/kaggriculture/software/scripts/corpus_integrity.py --mode offic
 #     历史/现行身份一律以 active_candidate.json 为准
 python workspace/kaggriculture/software/scripts/run_holdout.py --verify-published --require-frozen
 python workspace/kaggriculture/software/scripts/check_eval_contract.py --mode official --input workspace/kaggriculture/software/exports/eval_results.json
+
+# 13b) 线上探针回填（官方 CLI，不是本地自对局）
+python workspace/kaggriculture/software/scripts/sync_online_probe.py close --round 21
+python workspace/kaggriculture/software/scripts/sync_online_probe.py gate
 
 # 14) r3-P0 分层构建基础设施（战役 III round-3）：
 #     a) 成功口径回放分析（observation 状态差分；影子校验 0 mismatch 才可信）
@@ -185,6 +191,7 @@ workspace/kaggriculture/software/
 ├── scripts/fit_bradley_terry.py      BT/Davidson 描述性评级与 clustered bootstrap CI
 ├── scripts/check_opponent_strength.py 强度门：新对手对冻结弱池 >=50% 胜率断言
 ├── scripts/analyze_failure_modes.py   失败模式探针（多种子深记录 + 证据报告生成）
+├── scripts/sync_online_probe.py       官方 CLI 拉局/回放/ingest/gate（sampling COMPLETE 台账）
 ├── scripts/corpus_fetch.py            回放语料抓取通道（HTTP range 探针/日分片选局/下载/
 │                                       manifest 登记；只读网络，<=2 分片 & ~3GB 预算守卫）
 ├── scripts/corpus_build.py            m1 画像档案构建（完整性门 -> 逐局画像 -> 分层汇总 MD）
@@ -209,6 +216,8 @@ workspace/kaggriculture/software/
 │   ├── failure_probe_report.md        失败探针自动证据层（分差曲线/价格轨迹）
 │   ├── replay_profiles/               m1 回放画像档案（profiles/*.json + index.json +
 │   │                                  exclusions.json + band_summary.md；不放原始回放）
+│   ├── online/                        发射台账 roundN_ledger.json（提交快照，可 PENDING）
+│   │                                  + sampling/roundN_sampling.json（官方回放 COMPLETE）
 │   └── logs/                          replay_log.jsonl / failure_probe_log.jsonl
 │                                       （每局一行的对局记录 + 每日资金 + 共享市场价格）
 ├── metrics.json                       实测指标分片（只写实测值，禁编造）

@@ -1,0 +1,130 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 21,
+ "submission_ref": 56006990,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-04T07:20:00Z",
+ "candidate": {
+  "label": "v13.7 replant supply fix",
+  "pkg_sha256": "49b7dc3feaecd1c55b47fb84eb17772a6208de810fa9c124b37f09a42095661b",
+  "main_sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
+  "git_ref": "4d1c2f5"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round21_ledger.json",
+  "status_at_submit": "PENDING",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 56006990",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round21",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 544.2,
+ "validation": [
+  {
+   "id": 105388192,
+   "rewards": [
+    51267.0,
+    51050.0
+   ],
+   "integrity": "PASS"
+  }
+ ],
+ "public_sampling": {
+  "public_games": 7,
+  "record": "3W-4L",
+  "wins": 3,
+  "losses": 4,
+  "win_rate": 0.4286,
+  "our_money_mean": 67850.7,
+  "opp_money_mean": 70610.3,
+  "mean_margin": -2759.6,
+  "axes": {
+   "d0_plants_ours": 6.1,
+   "d0_plants_opp": 19.4,
+   "wheat_d7_ours": 31.6,
+   "berry_d12_ours": 8.7,
+   "berry_d12_opp": 19.0,
+   "herd_d0_ours": 4.0,
+   "harvest_ours": 179.3,
+   "money_d11_ours": 573.1,
+   "money_d11_opp": 6217.6
+  },
+  "episodes": [
+   {
+    "id": 105389287,
+    "result": "W",
+    "our": 48666.0,
+    "opp": 42705.0,
+    "opp_name": "Braxton Dyer",
+    "margin": 5961.0,
+    "seat": 1
+   },
+   {
+    "id": 105390057,
+    "result": "L",
+    "our": 67776.0,
+    "opp": 84862.0,
+    "opp_name": "Victor Orihuel",
+    "margin": -17086.0,
+    "seat": 0
+   },
+   {
+    "id": 105390973,
+    "result": "W",
+    "our": 85613.0,
+    "opp": 57124.0,
+    "opp_name": "Mohamed Judi",
+    "margin": 28489.0,
+    "seat": 1
+   },
+   {
+    "id": 105391835,
+    "result": "L",
+    "our": 67999.0,
+    "opp": 113377.0,
+    "opp_name": "ashsah",
+    "margin": -45378.0,
+    "seat": 1
+   },
+   {
+    "id": 105392740,
+    "result": "L",
+    "our": 51442.0,
+    "opp": 71858.0,
+    "opp_name": "Aldibek [dsmlkz]",
+    "margin": -20416.0,
+    "seat": 1
+   },
+   {
+    "id": 105393596,
+    "result": "L",
+    "our": 79429.0,
+    "opp": 86068.0,
+    "opp_name": "John Andrei Martinez",
+    "margin": -6639.0,
+    "seat": 0
+   },
+   {
+    "id": 105394519,
+    "result": "W",
+    "our": 74030.0,
+    "opp": 38278.0,
+    "opp_name": "Likith Narakala",
+    "margin": 35752.0,
+    "seat": 1
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 3W-4L over 7 public games; local quickwin/self-play is not this verdict."
+}
