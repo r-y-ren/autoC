@@ -55,11 +55,11 @@ deliverables:
   - 其他材料（加分项：PPT、视频介绍）
 ai_policy:
   summary: >-
-    赛事本身依托开源文档解析 AI 引擎 MinerU，对 AI/开源工具持明确开放+披露立场（赛道一规则原文）："在构建数据集的过程中必须至少使用一项 MinerU 工具链，构建过程中允许使用其他开源模型或工具，但需在技术报告中明确列出所有依赖项及版本"。MinerU 工具链含 MinerU Skills、MinerU API、MinerU 开源项目（github.com/opendatalab/mineru）、MinerU 在线使用。配套红线：技术报告"禁止生成虚假科学数据、伪造实验结果以及使用未授权数据"；开源要求：参赛作品（数据集）及相关代码需在开源平台开放（OpenDataLab、GitHub 等），数据开源协议推荐 CC-BY-4.0 系列。对"AI 辅助原创"策略含义：AI 工具可自由使用，但强制披露依赖清单，且产出须真实数据+开源。
+    赛事本身依托开源文档解析 AI 引擎 MinerU，对 AI/开源工具持明确开放+披露立场（赛道一规则原文）："在构建数据集的过程中必须至少使用一项 MinerU 工具链，构建过程中允许使用其他开源模型或工具，但需在技术报告中明确列出所有依赖项及版本"。MinerU 工具链含 MinerU Skills、MinerU API、MinerU 开源项目（github.com/opendatalab/mineru）、MinerU 在线使用。配套红线：技术报告"禁止生成虚假科学数据、伪造实验结果以及使用未授权数据"；开源要求：参赛作品（数据集）及相关代码需在开源平台开放（OpenDataLab、GitHub 等），数据开源协议推荐 CC-BY-4.0 系列。对"AI 辅助原创"策略含义：AI 工具可自由使用，但强制披露依赖清单，且产出须真实数据+开源。2026-09-04 复查：落地页无规则/政策变更迹象（仍展示获奖名单公告与训练营入口），上述结论维持。
   url: https://www.heywhale.com/v2/api/competitions/69aa4f08e782130e4cb78eb9
-  checked: "2026-08-27"
+  checked: "2026-09-04"
 credibility: 交叉验证
-last_verified: "2026-08-27"
+last_verified: "2026-09-04"
 sources:
   - url: https://mineru.net/MDIC2026
     title: MDIC2026 官方落地页（赛事简介/奖金激励/三赛道赛题/组织架构）
@@ -76,6 +76,15 @@ sources:
   - url: https://www.heywhale.com/v2/api/competitions?page=1&perPage=100
     title: 和鲸平台公开 API——竞赛列表第 1 页（主条目定位与起止日期）
     accessed: "2026-08-27"
+  - url: https://www.heywhale.com/v2/api/competitions?page=1&perPage=10
+    title: 和鲸平台公开 API——竞赛列表复查（主会话预抓快照 kb/raw/heywhale-list/snapshot-20260904.json：Name/DisplayLabel ￥1,000,000 现金+￥1,000,000 算力/长窗口/LandingUrl/IsSeriesCompetition=True 均未变）
+    accessed: "2026-09-04"
+  - url: https://mineru.net/MDIC2026
+    title: MDIC2026 落地页复查（无新一期/新赛季信息，仍展示"获奖名单公布"横幅；快照 kb/raw/heywhale-mineru-mdic2026/landing-recheck-20260904.md）
+    accessed: "2026-09-04"
+  - url: https://www.heywhale.com/v2/api/competitions/69c5fac7acdef02a88761f97
+    title: 和鲸平台公开 API——主条目 RelatedCompetitions 挂载条目核查（实为 TEST 类型测试壳"测试赛不要动"，PublishStatus=0 未发布，同长窗口；非新赛期）
+    accessed: "2026-09-04"
 ---
 
 # 2026 MinerU 数据智能与前沿语料挑战赛（MDIC2026）
@@ -127,8 +136,14 @@ sources:
 
 ## 待办
 
-1. 主条目 2026-03-28~2028-05-21（北京）长窗口的用途（后续赛季/新一期赛道？）未在任何实抓材料中说明，待主办方公众号 OpenDataLab 或落地页更新核验；如确认为多期系列，需拆分届次管理。
+1. 主条目 2026-03-28~2028-05-21（北京）长窗口的用途（后续赛季/新一期赛道？）未在任何实抓材料中说明，待主办方公众号 OpenDataLab 或落地页更新核验；如确认为多期系列，需拆分届次管理。【2026-09-04 复查增补：主条目 RelatedCompetitions 现挂一个条目（69c5fac7acdef02a88761f97），经 API 直查实为 TEST 类型测试壳"测试赛不要动"（PublishStatus=0 未发布，DetailType=TEST，窗口与主条目相同 2026-03-28~2028-05-21，0 人 0 队）——该窗口机制疑似用于系列赛挂载子条目，但仍无官方说明，待办维持。（来源：https://www.heywhale.com/v2/api/competitions/69c5fac7acdef02a88761f97；抓取日期：2026-09-04）】
 2. 赛道三奖项结构两口径不一致（奖金表 3/9/6/6=24 队 vs 公示 5/5/10=20 队、无专项奖栏目），待主办方说明或后续公告核验；影响奖金总额核算（60 万口径 vs 公示结构）。
 3. 赛道二/三和鲸专区链接失效（API"比赛不存在"），其细则（提交物/评审维度/截止）本次未获平台复核，待重新定位有效专区或以官方公众号补充。
 4. 【已完成 2026-08-28】winners/2026.md 已建：名单全量 40 队 + 一等奖深构 2 篇（BioPhys-Bridge 一手开源深构——GitHub qyxu1994/Biophys-Bridge 含参赛技术报告；DrawAgent 二手降级——无公开 repo）；赛道三 5 支一等奖开源原件未获（主办方称"获奖项目相关内容后续陆续更新"），待复查补深构。快照存 kb/raw/heywhale-mineru-mdic2026/winners/。
 5. 决赛评审过程材料（答辩安排、评分公示）未见公开，待核验。
+
+## 2026-09-04 复查增量
+
+- 和鲸列表 API 快照（主会话预抓 `kb/raw/heywhale-list/snapshot-20260904.json`）复核：Name、DisplayLabel（￥1,000,000 现金+￥1,000,000 算力）、长窗口 StartDate/EndDate、LandingUrl=mineru.net/MDIC2026、IsSeriesCompetition=True 全部未变；本条关键事实维持。（来源：https://www.heywhale.com/v2/api/competitions?page=1&perPage=10；抓取日期：2026-09-04）
+- 落地页复查：无新一期/新赛季招募信息或新赛道；顶部公告仍为"获奖名单公布"；三赛道与组织架构无结构性变更。（来源：https://mineru.net/MDIC2026；抓取日期：2026-09-04；快照 landing-recheck-20260904.md）
+- 状态判断维持 `active`：主条目平台窗口仍开放至 2028-05-21（北京），首届已收官、后续赛期未公布。（来源：https://www.heywhale.com/v2/api/competitions/69c5fb0bacdef02a8876238a；抓取日期：2026-09-04）
