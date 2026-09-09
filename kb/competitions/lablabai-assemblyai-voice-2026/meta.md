@@ -4,7 +4,7 @@ name: AssemblyAI - Voice Agent Hackathon（lablab.ai × AssemblyAI，2026-09）
 tier: 编程/黑客松
 directions:
   - 黑客松与数据竞赛
-status: upcoming
+status: active
 organizer: lablab.ai（平台，运营主体 NativelyAI Inc.）× AssemblyAI（协办/API 赞助方，Voice AI 基础设施公司）
 award_levels:
   - name: Winner（获奖团队）
@@ -30,7 +30,7 @@ ai_policy:
   url: https://lablab.ai/ai-hackathons/assemblyai-voice-agent-hackathon
   checked: "2026-08-28"
 credibility: 聚合站
-last_verified: "2026-08-28"
+last_verified: "2026-09-09"
 sources:
   - url: https://lablab.ai/ai-hackathons/assemblyai-voice-agent-hackathon
     title: 赛事页（赛程/挑战路线/提交物/评审四维/奖金结构/风险条款/评委名录）
@@ -48,6 +48,8 @@ sources:
 
 - 月度线上赛（2026-09-01~09-30，完全线上、全球可参与、免费报名），lablab.ai 与 AssemblyAI 联办；AssemblyAI 为 Voice AI 基础设施公司（官网自述其模型支撑 Granola、HeyGen、Ashby、ClickUp 等产品）（来源[1]）。
 - 当前报名 385 人（2026-08-28 首页卡片显示，来源[2]）。
+
+**2026-09-09 重验**：赛站页渲染重抓（https://lablab.ai/ai-hackathons/assemblyai-voice-agent-hackathon ，webReader，抓取 2026-09-09，快照 `kb/raw/lablabai-assemblyai-voice-2026/event-page-20260909.md`）："Dates: Sep 1–30, 2026"、"Ends Sep 30, 2026"、$10,000 Prize Pool、报名全程开放条款原样（"registration stays open for the whole build window"）→ 赛程**无变化**。**状态变更**：抓取日处于赛期内（09-01 kick-off 已过、09-30 提交未截止），`status` 由 upcoming 更新为 **active**。备注：页面 og:image 引用 AMD 横幅素材（平台模板复用），不影响赛事字段，仅记录。
 
 ## 赛题（来源[1]）
 

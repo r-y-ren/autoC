@@ -31,7 +31,7 @@ ai_policy:
   url: https://github.com/MLH/mlh-hackathon-rules/blob/master/Rules.md
   checked: 2026-08-28
 credibility: 官网
-last_verified: 2026-08-28
+last_verified: 2026-09-09
 sources:
   - url: https://www.mlh.com/seasons/2027/events
     title: "MLH 2027 赛季日历（GHW: Data 条目：SEP 11-17, Worldwide, Digital）"
@@ -55,6 +55,8 @@ sources:
 - 内容主线（专题页原文）："job ready technical skills like how to program in SQL, implement a database, and build a data visualizations"——SQL/数据库/数据可视化。
 - 赛制：挑战积分制（social/technical/design 三类，含 "build a project + full demo video" 级别）+ 直播签到分；无现金奖池，积分兑 MLH 周边。
 - 方向价值：数据主题与我方方向直接对口；零成本线上参与，可作作品/技能练兵场；因积分制无获奖名单层，对 K-02"获奖模式重叠"维度贡献低。
+
+**2026-09-09 重验**：注册页重抓（https://events.mlh.com/events/14416-global-hack-week-data ，抓取 2026-09-09，快照 `kb/raw/mlh-ghw-data/2026-09-09-reverify.md`）：起止仍为 "Friday September 11, 2026 12:00PM – Sep 17, 2:00PM EDT"，报名入口仍开放（"Log In & Register"），无新增截止表述 → 日期**无变化**。页面无显式 live 状态标签，抓取日 09-09 早于开赛日，`status: upcoming` 维持；**09-11 开赛后应转 active（watch，本周六前）**。
 
 ## 数据缺口（winners 未放榜）
 
