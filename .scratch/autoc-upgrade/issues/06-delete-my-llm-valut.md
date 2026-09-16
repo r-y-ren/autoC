@@ -6,5 +6,5 @@
 
 **Status:** ready-for-agent
 
-- [ ] 删除前置校验清单 PASS（05 的三项产物检查）
-- [ ] 整目录删除后项目根无残留、git status 干净
+- [x] 删除前置校验清单 PASS（05 的三项产物检查）
+- [x] 整目录删除后项目根无残留、git status 干净

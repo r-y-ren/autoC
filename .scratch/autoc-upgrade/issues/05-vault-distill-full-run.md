@@ -6,7 +6,7 @@
 
 **Status:** ready-for-agent
 
-- [ ] batch 分支建立，双机 cron 确认暂停
-- [ ] 全量提炼完成，波次 commit 历史完整可续
-- [ ] lint 0 不合格、INDEX 收录全部新卡、拒收台账完整
-- [ ] 合并回 main 并 push，cron 恢复
+- [x] batch 分支建立，双机 cron 确认暂停
+- [x] 全量提炼完成，波次 commit 历史完整可续
+- [x] lint 0 不合格、INDEX 收录全部新卡、拒收台账完整
+- [x] 合并回 main 并 push，cron 恢复
