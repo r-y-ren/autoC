@@ -19,6 +19,7 @@ quotas:                             # 跑批配额单一事实源（K-08 与 cro
     tech_cards: 5                   # 每方向每跑批技术卡上限
     comp_entries: 3                 # 每方向每跑批赛事条目上限
     winners_shards: 1               # winners/patterns 年份分片上限（实测 8M tokens/片）
+  inbox_files_per_run: 20           # 升级票03：kb/inbox/ 每轮消费上限；剩余留存下轮（不删不拒）
 
 rate_limit:
   requests_per_second: 1           # rps 总约束（技能层执行）

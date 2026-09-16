@@ -18,10 +18,11 @@ description: 慢循环编排：按方向配置增量维护 KB-1/KB-2。当用户
 2. **紧循环脚本**（按方向执行，任一失败不阻断另一类）：
    - `python scripts/kb/sync_competitions.py`（快照 + 赛事候选）
    - `python scripts/kb/sync_tech.py`（arXiv/GitHub 增量 + 技术候选）
+   - `python scripts/kb/inbox_intake.py`（投递箱消费：kb/inbox/ 已溯源资料并入本轮候选队列 `inbox-comp-*/inbox-tech-*`，未溯源进 raw/leads 并点名催补；"与活跃战役相关"提示只在战役会话人工裁决，本跑批不改战役文件）
 3. **分片派发**（并发 ≤ budget 上限，每分片一个全新子 agent）：
-   - Scraper 分片：消费 `kb/raw/candidates/comp-*.yaml`，每分片 ≤5 个候选，按 `.zcode/agents/scraper.md` 章程执行（核实→建/更新 `kb/competitions/<id>/`；每条事实带引用）
-   - Hunter 分片：消费 `kb/raw/candidates/tech-*.yaml`，每分片 ≤5 个候选，按 `.zcode/agents/hunter.md` 章程执行（写 `kb/tech/<id>.md` 成品卡片，competition_fit 必填）
-4. **收拢**：只收各分片的结构化结论（新增/更新/隔离/待办计数），不收原文；**把已消费的候选队列文件移入 `kb/raw/candidates/processed/`**（队列生命周期：活跃队列只认顶层 tech-*/comp-*.yaml，processed/ 不参与下次去重）
+   - Scraper 分片：消费 `kb/raw/candidates/*comp-*.yaml`（含 inbox-comp-*），每分片 ≤5 个候选，按 `.zcode/agents/scraper.md` 章程执行（核实→建/更新 `kb/competitions/<id>/`；每条事实带引用）
+   - Hunter 分片：消费 `kb/raw/candidates/*tech-*.yaml`（含 inbox-tech-*），每分片 ≤5 个候选，按 `.zcode/agents/hunter.md` 章程执行（写 `kb/tech/<id>.md` 成品卡片，competition_fit 必填；inbox 来源候选无 URL 溯源不得建卡）
+4. **收拢**：只收各分片的结构化结论（新增/更新/隔离/待办计数），不收原文；**把已消费的候选队列文件移入 `kb/raw/candidates/processed/`**（队列生命周期：活跃队列只认顶层 *comp-*.yaml / *tech-*.yaml（含 inbox-* 投递队列），processed/ 不参与下次去重）
 5. **质量闸与索引**：`python scripts/kb/lint_kb.py --quarantine` → `python scripts/kb/build_index.py`
 6. **登记**：`kb/INDEX.md` 跑批记录表追加一行；`workspace/JOURNAL.md` 记一行；`git add -A && git commit`
 7. **回位**：`python scripts/guard/init_state.py --phase idle --by kb-sync`
