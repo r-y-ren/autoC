@@ -31,7 +31,7 @@ key_dates:
   final_submission_deadline:
     date: "2026-09-13"
     verified: false
-    note: "Kaggle 页搜索快照 'September 13, 2026 - Final Submission Deadline' + Reddit 二手 'write-up submissions open until September 13'；官方 API 未解析；与官方 Judging 起点 09-14 严丝合缝。Misprint 二手约数口径为 09-14"
+    note: "Kaggle 页搜索快照 'September 13, 2026 - Final Submission Deadline' + Reddit 二手 'write-up submissions open until September 13'；官方 API 未解析；与官方 Judging 起点 09-14 严丝合缝。Misprint 二手约数口径为 09-14。2026-09-16 重验：官方 Timeline 页该行仍为模板变量未解析，官方页无任何 'October 22' 日期，任务包 '10-22 截止' 口径不获官方页支持（Judging 09-14~10-11 起点未变，若 09-13 终交成立则当前已入评审期）"
   judging_period:
     date: "2026-09-14 ~ 2026-10-11"
     verified: true
@@ -56,10 +56,13 @@ ai_policy:
     Company，参赛者不获转让且不得行使人格权。④单账号、队内最多 5 人、每队仅 1 次提交（Hackathon 类）。本赛本质是"为 AI agent 写策略分析报告"：评审三权重 Model Score 70% / Deck Score 20% /
     Report Score 10%（Evaluation 页直抓）——对 AI 辅助写作无禁令，但报告有 2000 词硬限与图片许可红线。
   url: https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/rules
-  checked: "2026-08-28"
+  checked: "2026-09-16"
 credibility: 官网
-last_verified: "2026-08-28"
+last_verified: "2026-09-16"
 sources:
+  - url: https://www.kaggle.com/api/i/competitions.PageService/ListPages?competitionId=131772
+    title: "Kaggle 官方 ListPages API（competitionId=131772）2026-09-16 重验直抓：10 页内容与 2026-08-28 快照逐字节 diff 全部一致——Timeline（Judging 09-14~10-11、Results TBD）未变，entry/final-submission 两行仍为模板变量，官方页全文无 'October 22' 日期（任务包 10-22 口径不获支持）。快照存 kb/raw/2026-09-16-kaggle-pages-api.json"
+    accessed: "2026-09-16"
   - url: https://www.kaggle.com/api/i/competitions.PageService/ListPages?competitionId=131772
     title: "Kaggle 官方 ListPages API（本赛 competitionId=131772）：rules 全文（$240,000/8×$30K/MIT/队限5人/单提交）、Description、Evaluation（70/20/10）、Submission Requirements（Writeup≤2000词）、Timeline（开赛 06-16、Judging 09-14~10-11）、Data Description —— 2026-08-28 直抓，快照存 kb/raw/"
     accessed: "2026-08-28"
@@ -118,7 +121,13 @@ sources:
 - `kb/raw/kaggle-pokemon-tcg-ai-battle-challenge-strategy/2026-kaggle-simulation-pages-api.json`（姊妹赛官方 JSON）
 - `kb/raw/kaggle-pokemon-tcg-ai-battle-challenge-strategy/2026-kaggle-overview.html`、`2026-kaggle-simulation-shell.html`（SSR 壳）
 - `kb/raw/kaggle-pokemon-tcg-ai-battle-challenge-strategy/2026-pokebeach-announcement.md`、`2026-misprint-explainer.md`（二手·聚合站，降级标注）
+- `kb/raw/kaggle-pokemon-tcg-ai-battle-challenge-strategy/2026-09-16-kaggle-pages-api.json`（2026-09-16 重验快照：与 08-28 全页 diff 一致，无变更）
+- `kb/raw/kaggle-pokemon-tcg-ai-battle-challenge-strategy/2026-09-16-kaggle-overview-shell.html`（重验 SSR 壳，与旧壳一致，无日期字段）
 - 抓取通道备注：Kaggle 页面为 SPA，本次经 Kaggle 官方 ListPages API（competitions.PageService）匿名直抓取得页面正文原件，等效直抓官网。
+
+## 重验记录
+
+- **2026-09-16（老化重验·滚动批）**：官方 10 页与 08-28 快照逐字节一致，重验无变化。要点：①官方 Timeline 页 Judging Period 09-14~10-11 与 Results TBD 未变；②entry/final-submission 两行仍为模板变量（`${competition.Deadline}`），09-06 报名截止与 09-13 终交维持二手口径（verified: false）；③**任务包"10-22 截止"不获官方页支持**——Timeline 页全文及 rules/description 均无 "October 22" 字样，且 Judging 起点 09-14 未变（若终交延至 10-22 则 Judging 必然顺延，官方页未体现）；④按 09-13 终交口径，当前（09-16）赛事已入评审期、仍属在赛（未放榜），但该判定依赖二手日期，官方终交日待渲染抓取定谳。
 
 ## 待核验清单
 

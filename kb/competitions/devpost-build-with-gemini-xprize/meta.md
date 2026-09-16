@@ -56,7 +56,7 @@ ai_policy:
   url: https://www.geminixprize.com/rules
   checked: 2026-08-27
 credibility: 交叉验证
-last_verified: 2026-08-27
+last_verified: 2026-09-09
 sources:
   - url: https://xprize.devpost.com/
     title: Build with Gemini XPRIZE（Devpost 赛站首页：奖金块/提交物/AI 运营要求）
@@ -108,3 +108,9 @@ $500k×1 + $200k×1 + $100k×3 + $50k×15（Runner Up）+ $50k×5（Category）=
 - [ ] devpost /rules、/details 子页直接抓取持续 -302（超 budget 重试上限），当前依赖 geminixprize.com 全文 + 搜索快照；下轮同步时重试直接抓取以补原始快照。
 - [ ] Finalist Pitch 名单与流程细节（规则提到 top finalists 现场路演，具体名单待公布）。
 - [ ] 参赛作品数（entries/projects 数）尚无官方口径，仅有人数 26,470。
+
+## 重验记录（2026-09-09，K-08 老化重验）
+
+- 公布日期口径**无变更**：geminixprize.com/rules 重抓（https://www.geminixprize.com/rules ，webReader 渲染，抓取 2026-09-09，快照 `kb/raw/devpost-build-with-gemini-xprize/2026-09-09-rules-reverify.md`）§01 仍为 Submission "May 19 – Aug 17, 2026"、Judging "Aug 18, 10:00 AM PT — Sept 15, 2026, 5:00 PM PT"、**"Finalist Pitch & Winners Announced: On or around September 25, 2026, 2:00 PM PT"**；§04 强制 Gemini API / Google Cloud 条款原样（ai_policy 无变化）。
+- winners 页（https://xprize.devpost.com/winners ）**未上线且本窗期无法直验内容**：WebFetch 空正文、webReader 网络错误（重试 1 次仍失败）、curl HTTP 202 空响应体（Devpost bot 防护，与 08-27 直抓受限一致）——如实记录，仅可判"无提前上线证据"，9-25 前后需再核。
+- `status: active` 维持（评审期 08-18~09-15，今天 09-09 在窗内）。

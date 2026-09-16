@@ -44,7 +44,7 @@ ai_policy:
   url: https://tianchi.aliyun.com/competition/entrance/532503/introduction
   checked: "2026-08-27"
 credibility: 官网
-last_verified: "2026-08-27"
+last_verified: "2026-09-09"
 sources:
   - url: https://tianchi.aliyun.com/competition/entrance/532503/introduction
     title: 赛题1"数据共情者-消费者的AI管家"详情页（赛程/奖金/参赛须知/合规性承诺/参赛规则原文，当日两次重抓核验一致）
@@ -70,6 +70,8 @@ sources:
 ## 赛程（2026 届）
 
 来源[1]"赛程安排"原文：赛事报名 7月19日-10月20日、作品提交 7月19日-10月20日、初赛（初审阶段）10月21日-10月26日、晋级名单公布 10月27日（均 UTC+8）、黑客松训练营 10月30日-11月12日、黑客松决赛暨颁奖典礼 11月中下旬。与协调者任务包内前次快照线索逐项一致；决赛"11月中下旬"无具体日期，verified: false。
+
+**2026-09-09 重验**：详情页经 webReader 渲染重抓（https://tianchi.aliyun.com/competition/entrance/532503/introduction ，抓取 2026-09-09，摘录快照 `kb/raw/tianchi-loreal-beauty-tech-hackathon-2026/introduction-532503-20260909.md`）：赛程六节点与上文**逐字一致**（提交截止仍 10-20），侧栏徽标仍 7.17-10.20 → **重验无变化**，`status: active` 维持（报名与提交窗口开放中）。异常记录：渲染侧栏倒计时显示"报名剩 83 日"（09-09 起算对应 12-01 前后，与 10-20 不符）且团队数 181 与 08-27 相同，判定为页面倒计时/缓存组件口径异常，以赛程正文为准，未据此改动日期字段。
 
 ## 参赛资格与组队（来源[1]）
 

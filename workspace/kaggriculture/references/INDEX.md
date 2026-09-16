@@ -14,3 +14,5 @@
 
 <!-- 新条目从这里追加 -->
 | `references/data/tetsuya-probe-0831/` | https://www.kaggle.com/datasets/kaggle/kaggriculture-episodes-2026-08-31（外部回放数据集，抓取清单=包内 plan-tetsuya/plan-early.json） | 2026-09-02 | round-13 v10.9 深度匹配探针会话归档（混合包，用户指令整体迁入：raw/ 6 局 tetsuya 对局外部回放 ~185M + val/ 5 局本地验证 + variant_*.py 三开局变体 a_open_shift/ab/b_carrot + filelist/shard-0831 清单） | OPP-SUPPLY observer V0 验证语料（设计 v2 引用的"tetsuya 6 局"）；round-13 v10.9 探针复盘 |
+| `references/data/online-replays/round21/` | https://www.kaggle.com/competitions/kaggriculture（`kaggle competitions episodes 56006990` + `kaggle competitions replay <eid>` + `kaggle competitions leaderboard kaggriculture -d`） | 2026-09-04 | v13.7（ref 56006990）线上 7 公开局 + 1 验证局回放，及当日公榜 zip | 本次线上对战复盘 |
+| `references/data/online-replays/round20/` | https://www.kaggle.com/competitions/kaggriculture（`kaggle competitions episodes 56004582` + `kaggle competitions replay <eid>`） | 2026-09-04 | v13.6（ref 56004582）线上 25 公开局 + 1 验证局回放 | 与 round-21 对照的上一版生产样本 |

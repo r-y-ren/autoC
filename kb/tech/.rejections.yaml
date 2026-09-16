@@ -534,4 +534,20 @@
   reason: competition_fit不足——KAN变体红海+证据面窄（RecKAN：把KAN边函数的基从固定族（B-spline/Chebyshev/wavelet/Jacobi）换成二阶多项式递归R_{n+1}=(ax^2+bx+c)R_n+(dx+e)R_{n-1}、五系数与网络联合学习，可退化为Chebyshev/Fibonacci/Pell/Jacobsthal等经典族）：时序预测证据仅ETTh1一个基准对参数匹配KAN基线取得最低MSE、未对比SOTA预测器，其余证据在图像/文本/生物医学分类域（Tiny-ImageNet事实核查等）与数模/Kaggle时序赛题域距远；单作者、Comments仅'21 pages, 7 figures'、无代码无开源（2026-09-04 arXiv API实抓），复现需从零实现递归基；需要KAN的赛队用社区现成efficient-kan等实现即可，本文可学习基无赛期内独有差异化；六类赛种写不出有说服力映射；拒于映射非信号（arXiv候选citations门槛=0通过）
   stars: null
   decided: '2026-09-04'
+- id: arxiv-2609.11993
+  reason: competition_fit不足——FINESSE金融多模态事件流agent仿真器+四任务基准（balance forecast/欺诈检测/漏付预测/next event，跨TS/事件序列/时序图/TPP四族基线）：摘要自称'We release the FINESSE framework, including the simulator and dataset'但arXiv页无任何链接（2026-09-16实抓），GitHub四轮搜索（FINESSE financial event sequence / FINESSE simulator financial / FINESSE-Bench / finesse event stream Python）无匹配仓库——唯一同名LimexAILab/FINESSE-Bench系2026-04-20创建的LLM金融问答评测套件（FinQA/CFA-style QA，5★），早于论文提交（2026-09-09）且内容无关，非官方实现；HuggingFace数据集/模型搜索亦无（2026-09-16实抓）；无代码→复用=自实现潜状态耦合多流agent仿真器（高成本），而『合成事件流供风控类赛题造数据』的赛期价值用通用仿真即可获得，论文独有部分（多流潜状态耦合真实性）恰是不可低成本复用部分——差异化主张不可达，四任务对比协议有参考价值但不足以独立入库；拒于映射非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-09-16'
+- id: arxiv-2609.16415
+  reason: 评测基准类从严——TSFM行人客流预测跨数据集对比研究（SAIL2025+Melbourne双数据集，7法4范式：Seasonal Naive/LightGBM+CatBoost/N-HiTS+PatchTST/TimesFM+Chronos-2，逐传感器MAE/RMSE）：自评harness不可用——arXiv页comments仅'submitted to IEEE ITSC 2026'（投稿未接收）、无任何代码/数据链接（2026-09-16实抓），GitHub检索0命中，不符评测类入库门槛；且与库内TSFM评测族卡重叠——arxiv-2608.22968（成本感知实证：精度+资源双维选型矩阵）与arxiv-2608.24303（合成干预因果分析）已覆盖'TSFM是任务依赖选项而非默认替代'先验，本文增量仅人流域窄域两条（高流量传感器长程Seasonal Naive仍是强基线、FMs在季节性+数据充足+长上下文体制占优），摘要层无量化数字；拒于映射+族内去重，非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-09-16'
+- id: arxiv-2609.16760
+  reason: competition_fit不足——tlm-DRE多回合LLM agent后训练对齐方法（turn级多尺度密度比估计加权+跨回合正负空间差距的非对称token级训练，作者Zishuo Zhao等，Alibaba背景）：贡献绑定PPO/DPO/GRPO级后训练基础设施，六类赛种赛期内无自然落点——Kaggle agent赛题与黑客松均不做LLM后训练，复用=自实现密度比估计+多回合对齐管线（高成本）；证据层薄弱：arXiv页无代码无venue（comments仅'15 pages, 9 figures, 3 tables'，2026-09-16实抓），摘要无任何量化数字、评测benchmark名未披露、主张仅'performs competitively compared to traditional alignment methods'；拒于映射非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-09-16'
+- id: arxiv-2609.16436
+  reason: competition_fit不足——LLM社会模拟agent的可解释与转向研究（prompt vs SAE特征转向 vs probe方向转向三方法对比，四经典经济/创造任务上转向偏好与能力，发现SAE/probe常优于prompt但结论依赖prompting策略）：技术族与库内已收arxiv-2608.25198（表示转向调控工具调用率：免训练单线性方向+成本/精度Pareto扫描）重叠且可操作性弱于后者——本文转向需先训SAE/探针的白盒可解释性基础设施，无代码（arXiv页无链接、comments仅'70 pages, 27 figures, 3 tables'，2026-09-16实抓；GitHub检索0命中）复现成本高；产出是条件依赖的比较研究结论而非可移植组件，prompt基线调节属通行常识；社会模拟控制agent行为赛期用prompt层即可满足，SAE/probe增益溢价买不起；拒于映射+族内去重，非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-09-16'
 

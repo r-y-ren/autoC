@@ -8,7 +8,9 @@ exports/probes/quickwin_<tag>.json.  Compare two tags with --compare.
 Local A/B is a SAFETY DIAGNOSTIC only (2026-09-02 ruling: the local pool
 is not the adjudication axis) -- the verdict gates are catastrophe-class
 guards (reward collapse >5%, escapes/overflow blowup, nondeterminism),
-not strength claims.
+not strength claims. A passing compare must not authorize a Kaggle
+submit or the next retune; close the current round with
+sync_online_probe.py first.
 
 Optional --set MODULE_ATTR=VALUE pairs override module constants in-process
 (e.g. --set CAP_TURNS_PER_UNIT=3.3 --set CAP_UTIL=0.89).

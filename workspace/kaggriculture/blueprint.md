@@ -10,7 +10,7 @@ scope:
     - 线上风格对手池：依据跨局复核（同选手不少于 3 局一致）后的画像参数实现 2-4 个本地对手（如作物轮作 bot、重劳动麦作 bot、混合畜群 bot、终局囤倾 bot），对冻结弱池认证强度后纳入 run_eval 对手池与完整门禁必测名单
     - 市场自适应候选引擎：作物轮作主引擎 + 小规模混合畜群 + 常态外购饲料（带价格护栏）+ 劳动扩容 + 第三象限扩张 + 终局囤积-倾销与末日停喂；保留 m2b 全部修复（末日无 capex、购买观察确认、shed 预留、正数量订单、跨座位跨局隔离）；stdlib-only 单文件自包含
     - 一次性独立 holdout v2：系统随机全新种子（与全部历史种子 27 个开发/回归 + 8 个已公布 holdout + 3 个线上实测 seed 无交集）、全池 AB/BA 双座位、候选身份冻结、异常 fail-closed、通过语义校验后原子发布，merge_metrics 汇总
-    - 报告与提交 SOP v4 重生成：纳入线上 round-1 复盘与 round-2 天梯采样-回拉-复盘循环协议（每日至多 5 次、最近 2 次跟踪、每候选至多 2 次/日、Error 即停）；旧 92.9% holdout 结论明确标注为前代候选 sha 7c482921 的实测，不外推新候选
+    - 报告与提交 SOP：纳入线上 round-1 复盘与 round-2 天梯采样-回拉-复盘循环协议（每日至多 5 次、最近 2 次跟踪、每候选至多 2 次/日、Error 即停）；现役回填步骤见 docs/online_probe_sop.md（本地 quickwin 不得当上线理由；提交后必须用 Kaggle CLI 拉公开回放并写入 sampling COMPLETE 台账）；旧 92.9% holdout 结论明确标注为前代候选 sha 7c482921 的实测，不外推新候选
   out_of_scope:
     - 获奖、天梯名次或线上胜率承诺
     - 复用已公布 holdout 种子或在该 holdout 上继续调参
@@ -91,7 +91,7 @@ acceptance:
     - {id: doc-consistency, category: document, item: 报告数字键零悬空、旧基线与旧 holdout 限制紧邻披露、无天梯或获奖外推, method: 自动,
        cmd: "python workspace/kaggriculture/docs/check_report_metrics.py"}
     - {id: doc-visual, category: document, item: 报告 PDF 渲染后逐页视觉验收通过，无溢出、重叠、断页或不可读图表, method: agent 视觉验收}
-    - {id: man-submit-r2, category: manual, item: 按 SOP v4 提交新候选并回拉不少于 3 局公共天梯回放完成 round-2 复盘（每日至多 5 次、每候选至多 2 次/日、Error 即停）, method: 人工手册}
+    - {id: man-submit-r2, category: manual, item: 按 docs/online_probe_sop.md 提交新候选：本地 quickwin 不得当上线理由；提交后必须用 kaggle competitions episodes/replay 回拉不少于 3 局公共天梯回放，写入 exports/online/sampling COMPLETE 台账后再改下一组旋钮（每日至多 5 次、每候选至多 2 次/日、Error 即停）, method: 人工手册}
     - {id: man-final, category: manual, item: 09-30 前锁定最近 2 份最优提交并记录 commit/hash 与 Validation Episode 状态, method: 人工手册}
 
 compliance:
@@ -124,7 +124,7 @@ compliance:
 2. **m2** 对手池：画像参数 → 2-4 个显式实现的风格 bot，认证强度后进入必测名单；旧池保留防能力回退。
 3. **m3** 候选重构：只在新完整门上迭代；每项新能力（轮作/饲料/劳动/象限/终局）配回归测试；通过后冻结。
 4. **m4** holdout v2：全新种子一次性运行，结果无论好坏如实入 metrics。
-5. **m5** 文档：SOP v4 把"提交-回拉-复盘"固化为循环，并写入止损线。
+5. **m5** 文档：线上探针 SOP 把"提交-官方回拉-复盘"固化为循环，并写入止损线；本地涨分不能关闭该循环。
 
 ## 风险与缓解
 
@@ -132,6 +132,6 @@ compliance:
 2. 单局应激误读：同选手 ≥3 局一致才进对手池参数，单局结论 exploratory。
 3. 数据量：原始回放仅落 gitignored 目录，画像档案小体积入库；按需下载不全量镜像。
 4. holdout 纪律：候选变更即作废，必须全新种子；旧 8+27+3 全部排除。
-5. 同族偏移复发风险：SOP v4 每轮线上复盘滚动更新画像；本地结论不外推天梯。
+5. 同族偏移复发风险：每轮必须先看本版官方公开回放再改参；本地 quickwin/自对局结论不外推天梯，也不得用其顶替 sampling 台账。
 6. 提交预算：每日 5 次上限内每候选 ≤2 次/日；Validation Error 即停当日提交。
 7. 止损：新候选线上 ≥6 局公共局胜率 <50% 时停止本方向调参，转 RSNA 接力。
