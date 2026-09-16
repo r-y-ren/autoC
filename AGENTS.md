@@ -28,7 +28,7 @@
 
 ## 人工主导会话（/self）
 
-蓝图确认后的交付期有两条并行入口：`/deliver`（自动编排，K-03）与 `/self`（人工主导，K-11）。经 `/self` 进入的会话，主会话身份为**副驾**：铁律 5 的"瘦协调者"约束与 DESIGN.md §6.2 角色写入矩阵对该会话**限战役根内豁免**——可直接读写战役根任意子树、跨角色目录工作、不强制波次编排；蓝图可改，但**改必重过 schema 校验并在 JOURNAL 留痕**。其余铁律与 L2 物理边界一概不豁免（`archive/` 只读、`.flow/state.json` 只归脚本、`acceptance/` 只经 /accept、顶层 `metrics.json` 只经 merge_metrics、references/ 归宿、实测数字纪律）；终验仍走 /accept 全量清单。熔断后的人工接管亦走 /self。规程见 `.zcode/skills/self-run/SKILL.md`。
+蓝图确认后的交付期有两条并行入口：`/deliver`（自动编排，K-03）与 `/self`（人工主导，K-11）。经 `/self` 进入的会话，主会话身份为**副驾**：铁律 5 的"瘦协调者"约束与 DESIGN.md §6.2 角色写入矩阵对该会话**限战役根内豁免**——可直接读写战役根任意子树、跨角色目录工作、不强制波次编排；蓝图可改，但**改必重过 schema 校验并在 JOURNAL 留痕**。其余铁律与 L2 物理边界一概不豁免（`archive/` 只读、`.flow/state.json` 只归脚本、`acceptance/` 只经 /accept、顶层 `metrics.json` 只经 merge_metrics、references/ 归宿、实测数字纪律）；终验仍走 /accept 全量清单。熔断后的人工接管亦走 /self。规程见 `.zcode/skills/self-run/SKILL.md`。PPT 阶段（/accept 通过后、/archive 前）的姊妹副驾入口为 `/ppt-self`（K-13，豁免限该战役 docs 子树）；正式答辩 PPT 唯一产线为 `/ppt`（K-12，Marp 仅波内草稿）。
 
 ## 多机协作（接力纪律，2026-09-16）
 

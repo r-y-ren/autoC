@@ -64,12 +64,19 @@
               强制先拉一次 KB 增量（保证决策基于最新信息）
                     │
                     ▼
+              grilling 前置（K-02·升级票07）：以 KB 为语境完整多轮追问
+                    │  产物 strategy/grill-notes.md（决策树纪要，攻略与蓝图输入）
+                    ▼
               Strategy Agent：建议赛道对比矩阵 + "一鱼多吃"路线 + ★作品蓝图
-                    │（蓝图 = workspace/blueprint.md，须通过 blueprint.schema.json 校验）
-              [用户确认蓝图] ◄── 全流程唯一人工闸门
+                    │（蓝图 = workspace/blueprint.md，须通过 blueprint.schema.json 校验；
+                    │  呈报含交付开关行 workflow.auto_chain，缺省 true·升级票08）
+              [用户确认蓝图] ◄── 全流程唯一人工闸门（grilling 为第一次交互，此处为第二次）
                     │
                     ├──► /self 人工主导交付（K-11 副驾模式：人指挥主会话直接动手，
                     │     同处 deliver 阶段、同一套不变量与验收出口，两入口可互换续跑）
+                    ▼
+              auto_chain 开启时（升级票09）：planner 子代理 to-spec → to-tickets
+                    │  产物 <根>/specs/（ticket 只在 milestone 内细化，波次拓扑不变）
                     ▼
               Coordinator 按蓝图并发分发（文件契约为唯一交接物）：
               ├── Software Agent ─► workspace/software/ ─► 编码 + 沙箱测试 ─► metrics 分片 ─┐
@@ -78,6 +85,11 @@
                     │
               [验收节点] ──不通过──► 失败工单路由回责任 agent 修复（唯一回路边，带熔断）
                     │ 通过
+                    ▼
+              [PPT 窗口·K-12（升级票10，/accept 通过后、归档前，可选）]
+                    │  document 产 docs/ppt_brief.md（数字只出自 metrics）→ ppt-master
+                    │  双用户门（Gate1 模板 / Gate2 规格）→ <根>/docs/ppt/ 正式答辩 pptx
+                    │  （Marp/K-06 自此定位波内草稿；微调入口 /ppt-self·K-13 副驾）
                     ▼
               [交付归档] archive_campaign.py：workspace/ ─► archive/<YYYY-MM_赛事_主题>/（只读 + git tag）
 ```
@@ -100,15 +112,17 @@
 - **写入语义**：条目级增量 merge（`last_verified` + 来源记录），绝不整体重写；原始快照落 `kb/raw/`（不进 git 主干）
 - **质量闸**：lint_kb 校验 frontmatter/引用完整性（schema 在 `config/templates/`）→ 不合格进 quarantine；所有分析基于本次实抓文档、逐条带引用 URL + 抓取日期
 - **候选队列生命周期（T2.1 裁决）**：活跃队列 = `kb/raw/candidates/*.yaml`（仅顶层），K-01 消费完毕移入 `candidates/processed/`（不参与下轮去重）；Hunter 拒绝的候选记入 `kb/tech/.rejections.yaml` 台账（id/reason/stars/decided），sync_tech 对台账候选去重、**stars 达快照 ×2 自动放行重评**（科技信号随时间增长的核心场景）
+- **外来资料投递箱（升级票03，2026-09-16）**：`kb/inbox/`（gitignore 本机暂存）——任意资料零门槛投递，可选 sidecar `*.meta.yaml` 标源；K-01/K-08 跑批内 `inbox_intake.py`（S-16）消费：已溯源资料并入候选队列（`inbox-comp-*`/`inbox-tech-*`），未溯源进 `kb/raw/leads/` 线索区并报告点名催补，**永不晋级可引用条目**（铁律 1）；每轮受 budget 配额、剩余留存；涉及活跃战役仅报告提示，不自动改动战役文件
 - **产物**：KB-1（赛事信息 + 历年获奖解构 + 模式库）、KB-2（技术卡片：是什么/用途/优势/成熟度/比赛映射）、聚合索引 `kb/INDEX.md`
 - **交付形式（D6）**：源库（kb/）面向 agent 检索；人读交付物为 `export/digest-*.md` 方向情报简报——S-15 从条目层纯投影生成（只重组不新增事实），每 3 天跑批末尾刷新草稿、当月最后一次跑批（下一次跨月）自动转正式版
 
 ### 3.2 决策阶段（交互）
 
 - **输入**：用户方向 + 团队画像 `config/profile.yaml` + `kb/INDEX.md`
+- **grilling 前置（升级票07，2026-09-16）**：以 KB 索引与相关条目为语境对用户完整 grilling（多轮问到无遗漏分支，用户喊停即止），纪要落 `<根>/strategy/grill-notes.md` 作为攻略与蓝图输入；**蓝图呈报确认为第二次交互，人工闸门总数不变**
 - **输出**（Strategy Agent 产出两份待确认文档）：
-  1. `workspace/strategy.md`：建议赛道对比矩阵（时间窗 × 技术契合度 × 通吃度 × 画像匹配 × 竞争密度）+ "一鱼多吃"复投路线
-  2. `workspace/blueprint.md`：作品蓝图（范围 / 技术栈，引用 KB-2 卡片 / 跨 agent 接口契约 / 里程碑 / 验收清单 / 合规检查），**须通过 blueprint.schema.json 校验方可提交确认**
+  1. `<根>/strategy.md`：建议赛道对比矩阵（时间窗 × 技术契合度 × 通吃度 × 画像匹配 × 竞争密度）+ "一鱼多吃"复投路线
+  2. `<根>/blueprint.md`：作品蓝图（范围 / 技术栈，引用 KB-2 卡片 / 跨 agent 接口契约 / 里程碑 / 验收清单 / 合规检查 / **交付开关 workflow.auto_chain**），**须通过 blueprint.schema.json 校验方可提交确认**
 - **合规模式三分（D10，schema 硬校验）**：prep（赛前范本级，默认）/ apply（申报制参赛型，须附政策原文佐证，申报附件强制进交付）/ assist（赛中零介入，不启动作品构建）
 - **用户确认蓝图**后进入交付；不认可则改蓝图再确认（闸门可重复，但同一时刻只有一个）
 
@@ -119,6 +133,7 @@
 - 各角色在各自 `workspace/<role>/` 目录内工作，Bash 沙箱内自验（编译 / 测试 / 仿真）
 - **实测数据契约（分片制）**：各工程角色只写自己的 `workspace/<role>/metrics.json` 分片（实测值+测量方法）；`scripts/verify/merge_metrics.py` 确定性汇总为顶层 `workspace/metrics.json`（命名空间 `metrics.<role>.<键>`，角色禁写，守卫已拦）。Document Agent 引用的一切性能数字**只能来自汇总文件**，禁止自行编造
 - **人工主导入口（D13，2026-09-02）**：`/self`（M-08 → K-11 副驾模式）与自动编排同处 deliver 阶段、共用同一套 L2 边界与验收出口——主会话豁免瘦协调者约束、角色写入矩阵与波次编排（限战役根内），人定粒度与顺序、主会话直接动手；蓝图可改但改必重校验+留痕；不变量（验收记录只经 /accept、顶层 metrics.json 只经汇总脚本、references/ 归宿、实测数字纪律）与终验全量清单**不豁免**；熔断后人工接管亦走此。两入口可随时互换续跑
+- **自动规格链（升级票08/09，2026-09-16）**：蓝图 `workflow.auto_chain`（缺省 true，确认闸门处可见可改）开启时，首波派发前由 **planner 子代理**（章程 `.zcode/agents/planner.md`）跑 mattpocock to-spec → to-tickets，产物落 `<根>/specs/`——ticket 只在 milestone 内细化、按 milestone×owner_role 归组，**波次拓扑与验收项 ID 仍出自蓝图**；链直通到 implement 完成后单次汇报（无中途人工门，/accept 仍唯一人工验收闸门）。software 章程含**包级自检前置**（superpowers verification-before-completion / TDD：自检过才报波门，波门五查兜底跨包契约）
 
 ### 3.4 验收-修复节点（全自动，可升级人工）
 
@@ -128,6 +143,7 @@
   - 文档：结构完整性、数字与 metrics.json 一致性、格式校验
 - 失败项**带失败证据**生成失败工单，路由回责任 agent 修复后重跑；`.flow/state.json` 记录重试计数（**仅 fail 计数**——pending 是等待而非失败重试，T2.1 裁决；retry.max 单一事实来源为 budget.yaml），**超限熔断**升级人工
 - 通过后生成分析报告（对照该赛评审标准自评 + 历年获奖基准对比）
+- **答辩 PPT 正式产线（K-12/K-13，升级票10/11）**：/accept 通过后、/archive 前为 **PPT 窗口**（守卫对 verify 态放行 `<根>/docs/**` 与 JOURNAL.md）——document 角色产 `docs/ppt_brief.md` 内容简报（数字只出自 metrics.json，铁律 4），ppt-master 插件 Default 路线双用户门（Gate1 沟通契约+模板 / Gate2 规格锁定）生成正式答辩 pptx，项目路由 `<根>/docs/ppt/`；**Marp（K-06）自此定位波内草稿**，正式 pptx 唯一产线为 /ppt；`/ppt-self`（K-13）为该阶段 /self 同款副驾（豁免限 docs 子树，数字改动必须回 metrics 键核对）
 
 ### 3.5 归档
 
@@ -165,17 +181,20 @@ autoC/
 │   ├── competitions/            # KB-1：每赛一目录（meta / winners / patterns）
 │   ├── tech/                    # KB-2：技术卡片（规范化 ID 命名）
 │   ├── quarantine/              # linter 不合格条目
+│   ├── inbox/                   # 外来资料投递箱（升级票03：gitignore 本机暂存，跑批经 S-16 消费）
 │   └── raw/                     # 原始快照与 PDF（gitignore 默认排除，需要审计留痕时切 LFS）
 ├── workspace/                   # 战役开发区（v2 多战役并行；legacy 平铺战役 root=workspace）
 │   ├── <cid>/                   # 每战役一目录（init_state --campaign <cid> 登记时建骨架）
 │   │   ├── strategy.md          # 决策阶段输出（对比矩阵 + 一鱼多吃路线）
-│   │   ├── blueprint.md         # ★ 唯一蓝图契约（schema 校验后方可确认）
+│   │   ├── strategy/            # grilling 纪要（grill-notes.md，升级票07）
+│   │   ├── blueprint.md         # ★ 唯一蓝图契约（schema 校验后方可确认；含 workflow.auto_chain）
 │   │   ├── JOURNAL.md           # 阶段流转日志（随 git 提交，状态可审计）
 │   │   ├── metrics.json         # 分片汇总生成物（merge_metrics.py 产出；角色禁写，分片在各角色目录）
 │   │   ├── references/          # 外部参考资料/数据唯一归宿（rules/data/code/digests + INDEX 登记）
-│   │   ├── software/            # Software Agent：代码 + 沙箱测试
+│   │   ├── specs/               # planner 规格派生产物（spec/tickets，升级票09；auto_chain 开启时）
+│   │   ├── software/            # Software Agent：代码 + 沙箱测试（包级自检前置，票09）
 │   │   ├── hardware/            # Hardware Agent：BOM / 引脚表 / 固件
-│   │   ├── docs/                # Document Agent：报告 + PPT 源文件（Marp/Typst）
+│   │   ├── docs/                # Document Agent：报告 + PPT（草稿 Marp/Typst；正式答辩 pptx=docs/ppt/·K-12）
 │   │   └── acceptance/          # 验收角色：执行记录 / 失败工单 / 分析报告
 ├── export/                      # KB 交付导出层（D6：条目层纯投影，读者=团队自用）
 │   └── digest-<方向>-<YYYY-MM>.md  # 方向情报简报（S-15 生成；每3天刷新，当月最后一次跑批转正式版）
@@ -218,7 +237,9 @@ autoC/
 | Coordinator | 主 agent 把蓝图拆为任务包 |
 | Software Agent + 沙箱 | 子 agent + Bash 工作区（workspace/software/） |
 | Hardware Agent（CLI 路线，D2 裁决） | PlatformIO / kicad-cli / Wokwi（Bash 调用） |
-| Document Agent | Marp / Typst 模板（config/templates/）+ document-skills 兜底（严格 .pptx 需求） |
+| Document Agent | Marp / Typst 模板（config/templates/）+ document-skills 兜底（严格 .pptx 需求）；K-12 简报 + ppt-master 正式产线（Marp 降为波内草稿） |
+| 规格派生 planner（升级票09） | 子代理 + mattpocock to-spec/to-tickets → `<根>/specs/`（auto_chain 开启时，首波前） |
+| 答辩 PPT 正式产线（K-12/K-13） | ppt-master 插件 + `/ppt`、`/ppt-self` 命令（/accept 通过后窗口，双用户门） |
 | 验收执行器 | `scripts/verify/run_acceptance.py` + browser-use 实测取证 |
 | 归档 | `scripts/verify/archive_campaign.py` + git tag |
 | 契约校验 | `config/templates/*.schema.json` + linter |
@@ -240,7 +261,7 @@ autoC/
 
 - **L1 软边界——角色章程（.zcode/agents/）**：每角色一份（职责 / 输入输出契约 / 禁止清单）；Coordinator 按名派发。角色目录级的写入边界（如"Software 不得写 workspace/hardware/"）目前由**章程约定 + git 审计发现**保障，不是物理强制。
 - **L2 阶段级硬边界——写入路径守卫 + 契约 Schema 校验**：
-  - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制——**v2 多战役（2026-09-01）**：workspace 子树按**最长 root 匹配**路由到所属战役的阶段（deliver 放行该战役根（acceptance/ 与顶层 metrics.json 除外）、verify 仅放行其 acceptance/、未登记战役目录拒写、容器 README 仅全局 idle）；kb/ 与工程目录归全局阶段（collect 仅 kb/，idle 放行）——**不识别调用者角色**。**D14 战役圈禁（2026-09-02）**：全局 idle 且任一战役活跃（decide/deliver/verify/archive）时，工程目录与项目根对 Write/Edit 锁定（仅放行 `.flow/**`）——战役生成/下载的文件物理圈禁在所属战役根，kb 维护走 collect 批次，容器 README 相应收紧；脚本级写入（merge_metrics/archive_campaign 等经 Bash）不在此层，由 L3 审计兜底。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）；v1 状态按平铺兼容。
+  - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制——**v2 多战役（2026-09-01）**：workspace 子树按**最长 root 匹配**路由到所属战役的阶段（deliver 放行该战役根（acceptance/ 与顶层 metrics.json 除外）、verify 放行其 acceptance/、docs/（K-12 PPT 窗口，票10）与 JOURNAL.md（阶段记行）、未登记战役目录拒写、容器 README 仅全局 idle）；kb/ 与工程目录归全局阶段（collect 仅 kb/，idle 放行）——**不识别调用者角色**。**D14 战役圈禁（2026-09-02）**：全局 idle 且任一战役活跃（decide/deliver/verify/archive）时，工程目录与项目根对 Write/Edit 锁定（仅放行 `.flow/**`）——战役生成/下载的文件物理圈禁在所属战役根，kb 维护走 collect 批次，容器 README 相应收紧；脚本级写入（merge_metrics/archive_campaign 等经 Bash）不在此层，由 L3 审计兜底。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）；v1 状态按平铺兼容。
   - 契约文件（blueprint / KB 条目 / 验收清单）必须通过 `config/templates/*.schema.json` 校验：蓝图不过校验不得进入确认闸门；KB 条目不过校验进 quarantine。
   - PostToolUse 钩子对 kb/ 契约文件即时校验（仅四类目标：`<id>/meta.md`、`kb/tech/<id>.md`、`blueprint.md`、`acceptance/*.json`；winners/patterns/raw 等正文文件明确跳过）。
 - **L3 审计兜底——git**：每阶段一个 commit（阶段日志见 workspace/JOURNAL.md），越界改动必然暴露于 diff，可精确回滚（覆盖钩子未拦截的路径，如经 Bash 的写操作）；每轮跑批收尾 `git push` 至私有远程（r-y-ren/autoC）作异地备份。
@@ -253,8 +274,9 @@ autoC/
 |---|---|---|
 | Scraper | kb/competitions/、kb/raw/ | kb/tech/、workspace/、archive/ |
 | Hunter | kb/tech/、kb/raw/ | kb/competitions/、workspace/、archive/ |
-| Strategy | <根>/{strategy.md, blueprint.md} | kb/ 正文（只读）、<根> 其余子目录、其他战役目录 |
-| Software | <根>/software/、<根>/references/ | kb/、blueprint、其他角色目录、其他战役目录 |
+| Strategy | <根>/{strategy/（grill-notes）, strategy.md, blueprint.md} | kb/ 正文（只读）、<根> 其余子目录、其他战役目录 |
+| Planner（票09） | <根>/specs/（auto_chain 时） | 蓝图与验收项（只读消费）、其余一切 |
+| Software | <根>/software/、<根>/references/、<根>/interface/（契约文件） | kb/、blueprint、其他角色目录、其他战役目录 |
 | Hardware | <根>/hardware/、<根>/references/ | 同上 |
 | Document | <根>/docs/（性能数字仅可引 <根>/metrics.json） | 一切代码与设计文件、其他战役目录 |
 | 验收 | <根>/acceptance/ | 不直接修任何作品文件 |
@@ -276,7 +298,7 @@ autoC/
 |---|---|
 | AGENTS.md | 全局铁律（引用纪律 / 契约纪律 / 合规纪律） |
 | .zcode/agents/ | 角色章程（L1 软边界，见 §6.2） |
-| .zcode/skills/ | SOP 纯函数技能（blueprint-gen / lint / marp-deck 等） |
+| .zcode/skills/ | SOP 纯函数技能（strategy-gen / campaign-run / marp-deck / typst-report / ppt-run（K-12）/ ppt-self（K-13）等） |
 | .zcode/config.json → hooks | 写入路径守卫（PreToolUse，process 型；Phase 0 已注册并冒烟验证） |
 | 斜杠命令 | 阶段入口、换会话重启阶段 |
 | 子 agent | 上下文隔离与并发 |

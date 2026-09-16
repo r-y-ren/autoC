@@ -33,6 +33,16 @@
 | OpenSCAD | 2025.x（winget） | C-04 结构件；路径 `C:\Program Files\OpenSCAD\openscad.exe`，无头模式 `-o` 可用 |
 | wokwi-cli | 0.26.1（官方脚本装至 `%USERPROFILE%\.wokwi\bin`） | C-04 固件仿真；token=WOKWI_CLI_TOKEN（用户级环境变量，Community License） |
 
+### Linux 主力机（~/.venvs/autoc，2026-09-16 升级装）
+
+| 工具 | 版本 | 用途 |
+|---|---|---|
+| typst（pip 包，python API） | 0.15.0 | K-07 编译通道（`typst.compile(..., root='<战役根>')`，root 实参必带——彩排实证勘误） |
+| Flask | 3.1.3 | ppt-master 实时预览服务（svg_editor/server.py --live） |
+| python-pptx | 1.0.2 | ppt-master pptx 导出（svg_to_pptx.py） |
+
+（本节为 Linux 侧增量；上表 Windows 基线照旧，双机各管各的运行时。）
+
 ## T3-c 冒烟记录（2026-08-27）
 
 - `typst compile config/templates/report_template.typ` → PDF 25KB，exit 0，中文章节进文本层 ✓

@@ -19,7 +19,7 @@
 | **G2 快循环·作品交付** | 推荐矩阵与蓝图 | K-02；blueprint.schema.json；profile.yaml |
 | | 并发工程交付 | K-03；C-03/C-04/C-05 章程；Bash 沙箱；硬件路线（决策 D2） |
 | | 实测数据契约 | metrics.json 约定；browser-use 实测取证 |
-| | 竞赛文档生成 | K-06、K-07；marp/typst CLI（T3 装）；基线-04/05 |
+| | 竞赛文档生成 | K-06、K-07（marp=波内草稿）；正式答辩 PPT=K-12（ppt-master 双用户门，票10）；基线-04/05 |
 | | 验收-修复-熔断 | K-04；S-05；H-01 守卫；retry 状态 |
 | | 归档 | K-05；S-06；git tag |
 | **G3 治理横切** | 写入边界 | H-01（已装）、H-02；各章程禁止清单 |
@@ -80,6 +80,10 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | S-12 | test_index.py | 索引回归（跑批记录多行 append-only 保留） | ✅ T2.1 已落地 |
 | S-13 | ocr_pdf.py | PDF 解析：有文本层直取；无文本层逐页渲染 → tesseract OCR → 文本 + 置信度报告（判断仍归 Scraper） | ✅ T3-c 本轮落地 |
 | S-15 | export_digest.py | 方向情报简报导出（D6 交付层）：条目层纯投影 → export/digest-<方向>-<月>.md，每3天跑批刷新/当月最后一次跑批自动转正式版 | ✅ T3-d 落地（selftest 通过） |
+| S-16 | inbox_intake.py | kb/inbox/ 外来资料消费（票03）：三分路由/配额/未溯源线索/战役提示；test_inbox 10/10 | ✅ 2026-09-16 升级票03 |
+| S-17 | vault_bib_backfill.py | my_LLM_valut bib→citekey 映射回填（票04，一次性；DOI 覆盖 91%） | ✅ 一次性已用毕（vault 已删） |
+| S-18 | contract_check.py | 契约版本本地 vs 上游校验（票01 补全：多机错配防护） | ✅ 2026-09-16 升级票01 |
+| S-19 | test_guard_seam.py | 守卫缝回归 16 例（票10 review-fix：verify docs/JOURNAL、decide strategy/、specs/、三不变量） | ✅ 2026-09-16 升级票10 |
 
 ### 3.3 角色章程（.zcode/agents/）——能力契约本体
 
@@ -98,12 +102,12 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 
 | ID | 技能 | 职责（SOP） | 层 |
 |---|---|---|---|
-| K-01 | kb-sync | 慢循环编排：读方向配置→collect 态→分片派发 C-01/C-02→API 脚本→S-01→S-04→changelog+commit→idle | ✅ T2 已落地 |
-| K-02 | strategy-gen | 读 INDEX+profile→矩阵/一鱼多吃/蓝图草稿→schema 校验→呈报用户（唯一闸门） | ✅ T2 已落地 |
-| K-03 | campaign-run | 读蓝图→deliver 态→任务包→并发派发→merge_metrics 汇总→派发 C-05→JOURNAL | ✅ T2 已落地（前置项已按 D3 裁决） |
+| K-01 | kb-sync | 慢循环编排：读方向配置→collect 态→分片派发 C-01/C-02→API 脚本→S-01→S-04→changelog+commit→idle；inbox 投递箱消费（S-16·票03） | ✅ T2 已落地（票03 增补） |
+| K-02 | strategy-gen | grilling 前置（票07·strategy/grill-notes）→读 INDEX+profile→矩阵/一鱼多吃/蓝图草稿（含 auto_chain 开关行·票08）→schema 校验→呈报用户（唯一闸门） | ✅ T2 已落地（票07/08 增补） |
+| K-03 | campaign-run | 读蓝图→deliver 态→auto_chain 时 planner 先行规格派生（票09·specs/，拓扑不变）→任务包（票单细化）→并发派发（software 包级自检前置）→波门→merge_metrics→C-05→JOURNAL | ✅ T2 已落地（票09 增补） |
 | K-04 | accept-run | verify 态→S-05→工单路由回环（熔断）→分析报告 | ✅ T2 已落地 |
 | K-05 | archive-run | archive 态→S-06→workspace 复位→idle | ✅ T2 已落地 |
-| K-06 | marp-deck | 模板+metrics 汇总→答辩 PPT（marp-cli 导出 pptx） | ✅ T2 已落地 |
+| K-06 | marp-deck | 模板+metrics 汇总→答辩 PPT 波内草稿（票10 降级定位；正式产线=K-12 /ppt） | ✅ T2 已落地（票10 降级） |
 | K-07 | typst-report | 模板+metrics 汇总→报告 PDF（typst） | ✅ T2 已落地 |
 | K-09 | direction-discovery | 方向冷启动：信源目录驱动搜索分片→筛选建条→锚点回填→全景报告（框架泛化入口） | ✅ 批次1已落地 |
 | K-08 | kb-deep-sync | 慢循环全量深度跑批（D7 每 3 天）：增量入库+老化重验(12d)/拒绝台账复核/quarantine 清理/winners-patterns 推进/简报导出 | ✅ T3-c 落地，T3-d 按 D7 合并节奏改写 |
