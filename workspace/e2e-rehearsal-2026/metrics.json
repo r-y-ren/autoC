@@ -1,0 +1,24 @@
+{
+  "_generated_at": "2026-09-16T19:05:46",
+  "software": {
+    "_meta": {
+      "schema": "software-metrics-shard/1.0",
+      "campaign": "e2e-rehearsal-2026",
+      "milestone": "m1",
+      "measured_at": "2026-09-16T19:02:12+0800",
+      "method": "stats_cli 实测：python software/stats_cli.py --csv references/data/sample.csv --check（于战役根执行，stdout 即测量结果；本分片数字与该实测输出逐键一致，无编造/估计）",
+      "numeric_columns": [
+        "score",
+        "hours"
+      ]
+    },
+    "rows": 6,
+    "cols": 3,
+    "score_count": 6,
+    "score_mean": 88.0,
+    "score_max": 95.0,
+    "hours_count": 6,
+    "hours_mean": 5.5,
+    "hours_max": 8.0
+  }
+}

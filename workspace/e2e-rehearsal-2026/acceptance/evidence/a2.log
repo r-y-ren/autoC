@@ -1,0 +1,38 @@
+$ python -m unittest discover -s /mnt/data/Code/autoC/workspace/e2e-rehearsal-2026/software/tests -v
+exit=0
+
+
+test_bare_metrics_dot_software_prefix_is_rejected (test_check_report.TestCliProcess.test_bare_metrics_dot_software_prefix_is_rejected) ... ok
+test_hit_branch_all_good_exits_zero (test_check_report.TestCliProcess.test_hit_branch_all_good_exits_zero) ... ok
+test_metrics_corrupt_json_exits_two (test_check_report.TestCliProcess.test_metrics_corrupt_json_exits_two) ... ok
+test_metrics_file_missing_exits_two (test_check_report.TestCliProcess.test_metrics_file_missing_exits_two) ... ok
+test_miss_branch_unknown_key_exits_one (test_check_report.TestCliProcess.test_miss_branch_unknown_key_exits_one) ... ok
+test_no_metric_refs_exits_one (test_check_report.TestCliProcess.test_no_metric_refs_exits_one) ... ok
+test_pdf_missing_exits_one (test_check_report.TestCliProcess.test_pdf_missing_exits_one) ... ok
+test_typ_missing_exits_one (test_check_report.TestCliProcess.test_typ_missing_exits_one) ... ok
+test_defaults_point_to_campaign_root (test_check_report.TestDefaultPaths.test_defaults_point_to_campaign_root) ... ok
+test_both_canonical_forms_extracted_and_deduped (test_check_report.TestExtractRefs.test_both_canonical_forms_extracted_and_deduped) ... ok
+test_dotted_continuation_not_captured_as_key (test_check_report.TestExtractRefs.test_dotted_continuation_not_captured_as_key) ... ok
+test_no_refs_gives_empty_set (test_check_report.TestExtractRefs.test_no_refs_gives_empty_set) ... ok
+test_run_checks_hit (test_check_report.TestRunChecksFunction.test_run_checks_hit) ... ok
+test_run_checks_unknown_key (test_check_report.TestRunChecksFunction.test_run_checks_unknown_key) ... ok
+test_a1_check_mode_exit_zero_with_stats_json (test_stats_cli.TestCliProcess.test_a1_check_mode_exit_zero_with_stats_json) ... ok
+test_check_mode_all_text_columns_exits_nonzero (test_stats_cli.TestCliProcess.test_check_mode_all_text_columns_exits_nonzero) ... ok
+test_missing_file_exits_nonzero_with_stderr (test_stats_cli.TestCliProcess.test_missing_file_exits_nonzero_with_stderr) ... ok
+test_plain_mode_all_text_columns_still_outputs_json (test_stats_cli.TestCliProcess.test_plain_mode_all_text_columns_still_outputs_json) ... ok
+test_plain_mode_outputs_same_json (test_stats_cli.TestCliProcess.test_plain_mode_outputs_same_json) ... ok
+test_all_text_columns_yield_empty_numeric (test_stats_cli.TestComputeStats.test_all_text_columns_yield_empty_numeric) ... ok
+test_empty_file_raises_stats_error (test_stats_cli.TestComputeStats.test_empty_file_raises_stats_error) ... ok
+test_header_only_raises_stats_error (test_stats_cli.TestComputeStats.test_header_only_raises_stats_error) ... ok
+test_missing_cells_are_ignored_not_parsed (test_stats_cli.TestComputeStats.test_missing_cells_are_ignored_not_parsed) ... ok
+test_missing_file_raises_stats_error (test_stats_cli.TestComputeStats.test_missing_file_raises_stats_error) ... ok
+test_non_numeric_column_excluded_from_numeric (test_stats_cli.TestComputeStats.test_non_numeric_column_excluded_from_numeric) ... ok
+test_ragged_row_raises_stats_error (test_stats_cli.TestComputeStats.test_ragged_row_raises_stats_error) ... ok
+test_sample_csv_full_shape_and_values (test_stats_cli.TestComputeStats.test_sample_csv_full_shape_and_values) ... ok
+test_no_numeric_columns_is_a_problem (test_stats_cli.TestSanityCheck.test_no_numeric_columns_is_a_problem) ... ok
+test_sample_stats_have_no_problems (test_stats_cli.TestSanityCheck.test_sample_stats_have_no_problems) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 0.700s
+
+OK

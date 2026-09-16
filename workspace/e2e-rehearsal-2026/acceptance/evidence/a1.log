@@ -1,0 +1,30 @@
+$ python /mnt/data/Code/autoC/workspace/e2e-rehearsal-2026/software/stats_cli.py --csv /mnt/data/Code/autoC/workspace/e2e-rehearsal-2026/references/data/sample.csv --check
+exit=0
+
+{
+  "source": "sample.csv",
+  "rows": 6,
+  "cols": 3,
+  "columns": [
+    "name",
+    "score",
+    "hours"
+  ],
+  "numeric_columns": [
+    "score",
+    "hours"
+  ],
+  "numeric": {
+    "score": {
+      "count": 6,
+      "mean": 88.0,
+      "max": 95.0
+    },
+    "hours": {
+      "count": 6,
+      "mean": 5.5,
+      "max": 8.0
+    }
+  }
+}
+
