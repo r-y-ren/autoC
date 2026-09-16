@@ -41,6 +41,9 @@
 
 | ID | 名称 | 领域 | 方向 | 成熟度 | 比赛映射 | 发表 | 最近核验 |
 |---|---|---|---|---|---|---|---|
+| Symmetry-Informed_MARL_A_Decentralized_and_Cooperative_UAV_Swarm_Control_Approach_for_Communication_Coverage | 对称性增强MARL的UAV集群通信覆盖控制（SiGNN） | 多智能体强化学习、图神经网络、无人机集群控制 | 黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策 | 2025-01-01 | 已引 |
+| alam2024JointTrajectoryControl | 多UAV群网络跨层联合控制（MA-DDPG） | UAV 自组网、多智能体强化学习、跨层优化 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| alkouz2022InflightEnergydrivenComposition | 飞行中能量共享的无人机群服务组合（EaaS） | 无人机群服务计算、服务组合、能量共享 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2022-01-01 | 已引 |
 | arxiv-2608.11327 | Long-Horizon Forecasting of Complete Financial Statements with Forma | 金融时序预测、财务报表建模、机器学习 | 数模与时序预测 | paper | 数模-数据分析与决策、双创-文书与申报 | 2026-08-11 | 已引 |
 | arxiv-2608.11359 | Market-Information-Aware Gated-LoRA of Foundation Models for Transferable Day-Ahead Electricity Price Forecasting | 时序预测、电力市场、参数高效微调 | 数模与时序预测 | paper | 数模-预测与评估、黑客松-数据与算法 | 2026-08-11 | 已引 |
 | arxiv-2608.14106 | Forecast Collapse in Time-Series Foundation Models | 时序预测、金融时序、预测校准与排序 | 数模与时序预测 | paper | 数模-预测与评估、Kaggle-竞赛 | 2026-08-14 | 已引 |
@@ -122,6 +125,25 @@
 | arxiv-2609.13789 | PPDL：Weibull 物理先验×深度学习的工业用户留存率预测（ICDM 2026） | 时序预测、用户留存、机理数据混合建模 | 数模与时序预测 | paper | Kaggle-竞赛、数模-数据分析与决策 | 2026-09-12 | 已引 |
 | arxiv-2609.16309 | Agentic Search Spaces for Tabular Machine Learning | LLM agents、表格机器学习、超参数优化、AutoML | 黑客松与数据竞赛 | paper | Kaggle-竞赛、黑客松-数据与算法 | 2026-09-14 | 已引 |
 | arxiv-2609.16804 | SOTER: A Generative Time-Series Foundation Model for Wearable Human Physiological Signals | time series foundation model、可穿戴生理信号、不规则采样、时序插补 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-09-15 | 已引 |
+| bai2024DelayAwareCooperativeTask | 多UAV边云协同的时延感知任务卸载 | 移动边缘计算、任务卸载、Lyapunov 优化 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| chang2024NearoptimalUAVDeployment | 时延约束IoT采集的最少UAV部署（GPUDA） | 无人机部署、组合优化、物联网数据采集 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| chen2024AdaptiveBitrateVideo | UAV辅助MEC的码率视频鲁棒缓存（DRO） | 移动边缘计算、边缘缓存、分布鲁棒优化 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| chen2025EneOveCom | 部分参与式UAV空中计算能效优化 | UAV 辅助边缘计算、空中计算、数据聚合 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| chen2025JointTrajectoryOptimization | Lyapunov辅助DRL的UAV轨迹与资源联合优化（JTORA） | 无人机轨迹优化、资源分配、深度强化学习 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| chen2025MultiuserTaskOffloading | JULTO：UAV-LEO卫星边缘多用户博弈卸载 | 移动边缘计算、博弈论、空天地一体网络 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| chen2025TaskOffloadingResource | 博弈论驱动的UAV边缘卸载与资源定价 | 移动边缘计算、博弈论、资源定价 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| chen2025TypeFlyLowlatencyDrone | TypeFly：低时延大模型无人机规划 | 大语言模型、无人机规划、具身智能系统 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| cong2024ParallEdgeExploitingComputingMobility | ParallEdge：移动边缘服务器的计算-移动并行范式 | 移动边缘计算、路径规划、任务调度 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| cui2024DataValueBased | 数据价值驱动的UAV群异步联邦学习 | 联邦学习、UAV 集群、客户端调度 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| dabiri2025NovelMRRUAVbasedRelay | MRR-UAV光网络编码双向中继 | 自由空间光通信、UAV 中继、网络编码 | 创新创业大赛 | paper | 双创-文书与申报 | 2025-01-01 | 已引 |
+| dai2023MultiAgentDeepReinforcement | MADRL多机协同波束赋形（HATRPO-UCB） | 多智能体强化学习、协同波束赋形、UAV 通信 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| dai2024UAVAssistedTaskOffloading | Lyapunov在线UAV支援车联网过载卸载 | 移动边缘计算、Lyapunov 优化、车联网 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| dou2025SchedulingDroneMobile | 无人机-移动充电车混合动作协同调度（HaDMC） | 混合动作强化学习、充电调度、无人机持续作业 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| fu2022Energyefficient3DData | 多UAV三维节能数据采集（3DM） | 移动群智感知、三维轨迹优化、UAV 数据采集 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2022-01-01 | 已引 |
+| gao2024ServiceExperienceOriented | 服务体验比导向的缓存UAV-MEC协同计算 | 边缘计算、服务缓存、分式优化 | 创新创业大赛、数模与时序预测 | paper | 数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| gao2025CSMAACMultiagentReinforcement | CSMAAC：部分可观测多UAV群智感知的安全协同飞控 | 多智能体强化学习、无人机协同控制、安全强化学习 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| gao2025TransferLearningJoint | PTMF-MAAC：大规模UAV-MEC的策略迁移联合轨迹卸载 | 迁移学习、多智能体强化学习、移动边缘计算 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| gaydamaka2024DynamicTopologyOrganization | 虚拟坐标驱动的自主UAV蜂群拓扑组织与维护 | 无人机自组网、拓扑组织、地理路由 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2024-01-01 | 已引 |
 | gh-BraxisAI_braxis-blueprint | braxis-blueprint: 零预算免费 LLM 通道路由与自动化运维的实战脚本集 | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-23 | 已引 |
 | gh-JordyZomer_lemmalog | Lemmalog：把 LLM Agent 记忆做成可证明的演绎数据库（Rust Datalog 引擎 + MCP 共享大脑） | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-27 | 已引 |
 | gh-QwenLM_E-CommerceBench | E-CommerceBench：18 个 LLM Agent 各持 ¥10 万经营 365 天模拟网店的长程评测环境 | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法、数模-数据分析与决策 | 2026-08-26 | 已引 |
@@ -138,6 +160,157 @@
 | gh-squall01337_mixamo-llm-mocap | mixamo-llm-mocap: 视频到 Mixamo 角色动画的 agent 可操作全管线 | LLM agents、3D 动画与动作捕捉 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-17 | 已引 |
 | gh-wolfiesch_omp-best-of | omp-best-of: Best-of-N 候选 + LLM-as-a-Verifier 择优的编码 agent 编排插件 | LLM agents | 黑客松与数据竞赛 | demo | Kaggle-竞赛 | 2026-08-18 | 已引 |
 | gh-zachsaw_graphify-csharp | graphify-csharp：给 LLM 编码 agent 的编译器级 C# 语义导航（Rider 语义切片的无头导出） | LLM agents、代码智能、开发者工具 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-09-08 | 已引 |
+| gong2024Energyefficient3DUAV | 最少UAV数的三维节能地面节点接入 | 三维路径规划、能耗优化、组合优化 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、双创-文书与申报、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| gong2025JointlyOptimizingEnergy | 多UAV三维区域覆盖的能量-时间双目标优化 | 区域覆盖、多目标优化、能耗建模 | 创新创业大赛、数模与时序预测 | paper | 数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| gui2024CoverageProbabilityThroughput | mmWave与Sub-6GHz融合多UAV灾害网络的覆盖-吞吐联合优化 | 无人机通信网络、覆盖优化、深度强化学习 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| guo2024JointOptimizationTrajectory | 多UAV主动窃听的干扰功率与轨迹联合优化 | 物理层安全、协同干扰、强化学习 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| guo2025MightyLongrangeHighthroughput | Mighty：面向无人机的远距离高吞吐回散视频回传 | 反向散射通信、无人机系统、跨层协同设计 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| hamdi2025DroneasaserviceResearchChallenges | DaaS：无人机即服务研究挑战与方向综述 | 无人机服务计算、服务编排、综述方法学 | 创新创业大赛、数模与时序预测 | paper | 双创-文书与申报、数模-数据分析与决策 | 2025-01-01 | 已引 |
+| han2024CollaborativeRoutePlanning | 灾害响应UAV-工人-车辆异构协同路径规划 MANF-RL-RP | 群智感知、多智能体强化学习、路径规划 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| han2024JointAssociationDeployment | 多UAV大规模MEC关联-部署-轨迹联合优化 | UAV 辅助移动边缘计算、部署与轨迹优化 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| hao2024JointTaskOffloading | 任务优先级感知多UAV协同MEC潜空间DRL联合卸载 | UAV 辅助边缘计算、深度强化学习、资源分配 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| hao2025ReliabilityawareOptimizationTask | 可靠性感知UAV辅助边缘计算任务卸载优化 | UAV 辅助边缘计算、可靠性建模、深度强化学习 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| he2024BalancingTotalEnergy | SAGIN数据卸载的总能耗与平均工期权衡 | 空天地一体网络、多目标优化、任务调度 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| he2024OnlineJointOptimization | UAV-MEC QoE最大化的Lyapunov在线联合优化 | UAV 辅助移动边缘计算、Lyapunov 在线优化 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| hoang2024FiniteBlockLength | 有限块长NOMA多用户配对UAV系统性能分析与优化 | 无人机通信、NOMA、有限块长 URLLC | 数模与时序预测、创新创业大赛 | paper | 数模-预测与评估、双创-文书与申报 | 2024-01-01 | 已引 |
+| hoang2025Adaptive3DPlacementa | 6G空中小蜂窝多UAV基站自适应三维部署 | UAV 基站部署、深度强化学习 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| hou2025AgeInformationawareMultiobjective | AoI感知异构UAV-USV-UUV水下目标围捕多目标优化 | 异构无人系统、信息年龄 AoI、多智能体强化学习 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| huang2024DynamicTaskOffloading | UVEC 多 UAV 任务卸载（SNC+Consensus ADMM） | 移动边缘计算、任务卸载、分布式优化 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| huang2025ASSUMEOptimalAlgorithm | ASSUME：实测能耗驱动的无人机高度-速度联合调度 | UAV 能耗建模、高度-速度调度、数据采集 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| huang2025FastUAVTrajectory | FedX：RIS 辅助 UAV 轨迹规划的联邦加速学习 | RIS 辅助通信、轨迹规划、强化学习加速 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、Kaggle-竞赛、双创-文书与申报 | 2025-01-01 | 已引 |
+| ji2024DecoupledAssociationRate | RSMA 解耦关联的 UAV 蜂窝 MADRL 优化 | UAV 辅助蜂窝网络、速率分裂多址、多智能体强化学习 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| jia2024EnergyTimeTradeoff | 多 UAV IoT 数据采集时间-能量权衡（MSMOACO） | 多目标优化、UAV 数据采集、蚁群优化 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| jia2025DistributionallyRobustOptimization | UAV-HAP 分层空中 MEC 的 CVaR 分布鲁棒优化 | 空中边缘计算、分布鲁棒优化、资源分配 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| jin2025ResourceefficientContentSharing | UAV 命名数据网络的合约激励内容共享（GS 匹配） | 命名数据网络、机制设计、资源共享 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| kang2024AutonomousMultidroneRacing | Sim-to-Real 多无人机自主竞速（IPPO） | 多智能体强化学习、无人机竞速、Sim-to-Real | 黑客松与数据竞赛 | paper | Kaggle-竞赛、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| karmakar2024BlockchainBasedDistributedIntelligent | SwarmAuth：区块链+动态聚类的UAV蜂群分布式认证 | 无人机蜂群安全、区块链认证、动态聚类 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| karmakar2024NovelFederatedLearningBased | FairLearn：联邦学习驱动的安全公平UAV-MEC控制 | 联邦学习、移动边缘计算、公平性优化 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| kharjana2025SecuringAutonomousUAV | 链上阈值多签密钥管理的自主UAV集群安全 | 无人机集群安全、区块链、密钥管理 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| khochare2024ImprovedAlgorithmsCoScheduling | UAV机队航线与机载边缘分析共调度（MSP） | 任务调度、边缘计算、无人机路径规划 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| kumari2025MaximizingServiceProviders | MaDRL+图着色的多UAV 5G服务利润最大化 | 多智能体强化学习、图着色、无线资源分配 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| lee2025AdaptiveStabilizationControl | BAASC：浮力辅助四旋翼的DRL自适应稳定控制 | 深度强化学习、姿态控制、原型验证 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| li2024MultiObjectiveOptimizationUAV | 双侧虚拟天线阵列UAV辅助IoT多目标优化（EMSSA） | UAV 辅助 IoT、协作波束形成、多目标优化 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| li2024SecureOffloadingAdversarial | 对抗式MARL抗智能窃听的UAV-MEC安全卸载（ARL-MAPPO） | UAV 辅助 MEC、对抗式多智能体强化学习、物理层安全 | 黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策、Kaggle-竞赛 | 2024-01-01 | 已引 |
+| li2025AnchorNovelModeling | Anchor：Delaunay三UAV协同卸载的随机几何建模 | UAV 辅助 MEC、随机几何、协同卸载建模 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-预测与评估、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| li2025CooperativeNonorthogonalMultiple | 空地多UAV索引调制协作NOMA（MCU/MCCU-NOMA-IM） | 空地通信、索引调制、协作 NOMA | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| li2025DroneMADroneMobility | DroneMA：移动性一致性驱动的无人机AI欺骗检测 | 无人机安全、时间序列异常检测、物理层鉴别 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | Kaggle-竞赛、数模-预测与评估、双创-文书与申报 | 2025-01-01 | 已引 |
+| li2025DynamicRoutingMechanism | LAMAIC：边缘缓存UAV群网络的动态路由与负载分配 | UAV 群网络、延迟容忍网络、边缘缓存 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| li2025ExploringRobustnessHierarchical | HFL-OD：抗毁伤的UAV集群层次化联邦目标检测 | 联邦学习、UAV 集群、目标检测 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| li2025FederatedMetalearningBased | GFL-PEARL：联邦元学习驱动的UAV辅助VEC能时延权衡卸载 | 联邦元学习、计算卸载、UAV 辅助车边缘计算 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| li2025TamingEventCameras | BioDrone：仿生事件相机无人机避障系统（FPGA软硬协同） | 事件相机、无人机避障、软硬件协同设计 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| li2025UAVassistedMicroserviceMobile | 灾后医疗救援UAV微服务MEC架构（Transformer资源管理） | UAV 辅助 MEC、微服务架构、智能资源调度 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| lin2024LyapunovbasedApproachJoint | LI2：灾后 PoI 及时监测的 UAV AoI 路径优化 | 信息年龄 AoI、路径优化、深度强化学习 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| liu2025DelaysensitiveGoodsDelivery | FH-MDP：多任务无人机时敏配送与在途感知的阈值策略 | 低空物流、有限时域 MDP、在线决策 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| liu2025HybridOptimizationFramework | UaMCS 混合优化框架：信任约束下的全局 AoI 最小化 | UAV 群智感知、AoI 优化、深度强化学习 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| liu2025MultiUAVassistedMECInternet | SC-MA-TD3：抗干扰多模态语义通信的多UAV车联网MEC | 语义通信、多智能体强化学习、UAV 辅助 MEC | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| liu2025ResourceAllocationAdaptive | UAV辅助ISAC自适应波束对齐的感知-通信联合资源分配 | 一体化感知与通信、资源分配、深度强化学习 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| liu2025RobustTopologyRecovery | RTRA/CRTRA：UAV蜂群鲁棒拓扑恢复 | UAV 蜂群、拓扑恢复、代数连通度 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| liwang2021LetsTradeFuture | CoDetect：隐私保护的UAV群协同异常检测 | 协同异常检测、隐私保护、无人机集群安全 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| mao2025UAVassistedCommunicationsSAGINISAC | SAGIN-ISAC 移动用户跟踪与鲁棒波束赋形 | 空天地一体化网络、通感一体化、鲁棒波束赋形 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-预测与评估、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| mittal2024DeploymentCostawareUAV | DCE：部署成本效率驱动的空地一体UAV与BS协同 | 空地一体网络、部署优化、联盟博弈 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| nabi2025JointOffloadingDecision | JOUR：UAV与HAP层次化空中计算的匹配-卸载联合决策 | 层次化空中计算、匹配博弈、深度强化学习 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| nguyen2024DilemmaReliabilitySecurity | UAV能量采集中继的可靠性-安全性双目标优化 | UAV 通信、物理层安全、多目标优化 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| ning2024MultiAgentDeepReinforcement | MUTO：差异化服务下多UAV辅助MEC的MARL轨迹优化 | UAV 辅助边缘计算、多智能体强化学习、轨迹优化 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| ning2025JointOptimizationData | MCDRL：无线供能IoT的UAV数据采集与轨迹联合优化 | 无线供能物联网、轨迹规划、多智能体强化学习 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| pan2025CooperativeUAVmountedRISsassisted | INSGA-II-CDC：协同UAV-RIS能效通信三目标优化 | UAV-RIS 通信、多目标优化、能效设计 | 黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策 | 2025-01-01 | 已引 |
+| panahi2024ReliableEnergyEfficientUAV | 成本感知的激光与可再生能源UAV通信供能优化 | UAV 通信、能量采购优化、无线供能 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| qian2024PathPlanningAlgorithm | 固定翼农田监测无人机的节能覆盖路径规划 | 精准农业、覆盖路径规划、固定翼无人机 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 双创-文书与申报、数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| qin2022MultiagentReinforcementLearning | CTDE多智能体空中计算三层卸载 | 移动边缘计算、多智能体强化学习、空天地一体网络 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2022-01-01 | 已引 |
+| qin2025MultiagentReinforcementLearning | PFSAC：异构UAV通信的个性化联邦抗干扰策略学习 | 抗干扰通信、个性化联邦强化学习、博弈论 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| qiu2024IntegratedHostContentCentric | IHCR：UAV蜂群主机-内容中心融合路由 | FANET 路由、内容中心网络、UAV 蜂群 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| ren2024IntelligentAdaptiveGossipBased | BDGN：UAV-MEC的智能自适应Gossip广播协议 | UAV-MEC、广播协议、深度图网络 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| ren2025AeroEchoAgriculturalLowpower | AeroEcho：空中激励的农业低功耗广域回散 | 低功耗广域回散通信、农业物联网、无人机系统 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 双创-文书与申报、黑客松-数据与算法、数模-数据分析与决策 | 2025-01-01 | 已引 |
+| rizvi2025MonitoringInterdroneService | 面向韧性运行的无人机间服务干扰监测（PIS 评估） | 无人机服务系统、时空数据分析、服务韧性 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| roy2025ServHUServiceHandoff | Serv-HU：UaaS 平台服务接力与最优定价机制 | 无人机服务计算、平台机制、收益定价 | 创新创业大赛、数模与时序预测 | paper | 双创-文书与申报、数模-数据分析与决策 | 2025-01-01 | 已引 |
+| shao2024DeepReinforcementLearningbased | 抗干扰UAV辅助MEC的PER-MATD3联合资源管理 | 多智能体强化学习、移动边缘计算、抗干扰通信 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| shen2024SlicingBasedTaskOffloading | SAGIN车联网切片式任务卸载 | 网络切片、车联网、深度强化学习 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| shi2024TwoStageStrategyUAVenabled | 未知环境下UAV无线供能的搜索-补能两阶段策略 | 无线供能、路径规划、聚类 | 创新创业大赛、数模与时序预测 | paper | 双创-文书与申报、数模-数据分析与决策 | 2024-01-01 | 已引 |
+| singh2024StableMatchingBased | 稳定匹配+图着色的UAV辅助WBAN联邦学习收益最大化 | 联邦学习、稳定匹配、无线资源分配 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| song2024AoIEnergyTradeoff | 空地协同MEC中AoI-能耗权衡的Pareto策略集学习 | 多目标强化学习、信息年龄、移动边缘计算 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| song2024EnergyefficientTrajectoryOptimization | 无线充电UAV辅助MEC的多目标RL轨迹优化（MORL-TER） | 多目标强化学习、轨迹优化、无线供能 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| song2024MethodsAssignUAVs | IoT网络K覆盖与补能的UAV多时隙分配（MPC-MILP与MCTS） | 覆盖调度、能量管理、滚动优化 | 创新创业大赛、数模与时序预测 | paper | 数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| soorki2025CatchMeIf | 元强化学习驱动的LoRa无人机搜救轨迹控制 | UAV 轨迹优化、元强化学习、LoRa 搜救 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| sun2024AllskyAutonomousComputing | ASAP 无人机群全空域自主协同计算系统 | UAV 集群系统、协同推理、弹性调度 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| sun2024MultiobjectiveOptimizationMultiUAVassisted | 多UAV辅助MEC三目标联合优化（JTORATC） | UAV 辅助 MEC、多目标优化、凸优化 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| sun2024TwoTimescaleJoint | TJCCT 双时间尺度无人机辅助MEC联合优化 | UAV 辅助 MEC、双时间尺度优化、匹配与定价 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| sun2025AerialReliableCollaborative | EMOPPO-VLH：面向移动用户的空中协同可靠通信 | 无人机协同通信、多目标强化学习、协作波束赋形 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-预测与评估、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| sun2025JC5AServiceDelay | JC5A：空中MEC辅助工业CPS服务时延最小化 | 移动边缘计算、服务缓存、无人机轨迹优化 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 双创-文书与申报、数模-数据分析与决策、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| tang2025DeepGraphReinforcement | 图强化学习双层求解UAV多用户安全通信 | 物理层安全、图神经网络、分层强化学习 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| tao2024MultiagentCooperationComputing | 多UAV空中计算的多智能体协同算力调度 | 空中计算、多智能体强化学习、无人机轨迹优化 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| tian2024UAVAssistedWirelessCooperative | MA2T-DRL 应急编码缓存与功率联合优化 | 编码缓存、多智能体强化学习、应急通信 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| tlili2023NewHybridAdaptive | AHFFA 无人机故障与攻击混合检测框架 | 异常检测、时序深度学习、UAV 安全 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-预测与评估、Kaggle-竞赛、黑客松-数据与算法 | 2023-01-01 | 已引 |
+| tong2023EnergyefficientUAVNOMAAided | 能效优先的UAV-NOMA海量连接覆盖 | UAV 通信覆盖、NOMA、能效优化 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2023-01-01 | 已引 |
+| tun2025JointUAVDeployment | THz空天地网络UAV部署与资源联合优化 | 空天地一体网络、移动边缘计算、资源分配 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| wan2025MultimodalScaleNormalization | 视觉雷达融合UAV定位尺度归一化 | 多模态感知、无人机定位、小目标检测 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| wang2024BiobjectiveAntColony | 双目标蚁群优化的UAV-MEC轨迹与多阶段卸载 | UAV辅助MEC、多目标优化、蚁群算法 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| wang2024DecentralizedNavigationHeterogeneous | 异构联邦强化学习的UAV-MEC分布式导航 | 联邦强化学习、多UAV导航、移动边缘计算 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| wang2024EnsuringThresholdAoI | 阈值AoI约束的多UAV群智感知调度 | 信息年龄AoI、移动群智感知、多智能体强化学习 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-预测与评估、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| wang2024LSPSSConstructingLightweight | LSPSS空中计算轻量级隐私存储与共享 | 隐私计算、密文检索、空中计算 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| wang2024ResourceAllocationBlockchain | 区块链UAV-MEC的Stackelberg微分博弈资源定价 | 移动边缘计算、区块链、微分博弈 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| wang2024UAVassistedTargetTracking | Lyapunov空海协同目标跟踪与计算卸载 | 移动边缘计算、目标跟踪、Lyapunov 优化 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2024-01-01 | 已引 |
+| wang2024WirelessPoweredMetaverse | 无线供能多设备多UAV联合调度（MURAL） | 无线供能、移动边缘计算、多任务强化学习 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| wang2025JointOptimizationBeamforming | GNN+SD3的UAV-RIS联合波束与轨迹优化 | UAV-mounted RIS、图神经网络、强化学习 | 黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策 | 2025-01-01 | 已引 |
+| wang2025JointPositioningComputation | PPO联合优化的多UAV放置与计算卸载 | 移动边缘计算、UAV部署优化、近端策略优化 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| wang2025JointTaskOffloading | ILCTS：动态UAV-MEC卸载与迁移模仿学习 | UAV 辅助边缘计算、模仿学习、任务调度 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| wang2025OptimizingJointSpeed | 低空巡检数据采集的联合速度与高度调度（SSF-ACO） | UAV数据采集、轨迹优化、蚁群算法 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| wang2025PracticalOptimizingUAV | 充电感知绕障UAV轨迹优化（近似保证） | UAV 轨迹优化、无线充电网络、近似算法 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| wang2025SecureBeamformingDeployment | RSMA-UAV安全波束赋形与三维部署联合优化 | UAV 通信、物理层安全、凸优化 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| wang2025SmartShieldPrevent | Smart Shield：协同智能干扰反空中窃听 | 物理层安全、多智能体强化学习、友好干扰 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| wei2024HierarchicalNetworkSlicing | UAV无线网络两时间尺度分层切片 | 网络切片、UAV 通信、随机博弈 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| wu2024BeamformingPredictionBased | MRDDQN：UAV-RIS辅助THz波束预测 | THz 通信、UAV-RIS、深度强化学习 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-预测与评估、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| wu2024MACOptimizationProtocol | EC-CMAC：双感知协作UAV-MAC协议 | FANET、MAC 协议、协作传输 | 创新创业大赛、数模与时序预测 | paper | 双创-文书与申报、数模-数据分析与决策 | 2024-01-01 | 已引 |
+| wu2024MultiUAVsNetworkDesign | 多UAV计算网络联合设计（VNF+流路由） | 多 UAV 网络、网络功能虚拟化、混合整数规划 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| wu2025ReconfigurableIntelligentSurface | TRAIL：RIS辅助UAV群智感知Transformer强化学习 | 移动群智感知、UAV-RIS、Transformer 强化学习 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-预测与评估、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| wu2025SecurityawareDesignsMultiUAV | 安全感知多UAV部署卸载与服务放置（OE-MATD3） | UAV 辅助边缘计算、物理层安全、多智能体强化学习 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| wu2025TwostageDeepEnergy | IOPO：THz多UAV-MEC的IRS辅助卸载优化 | UAV 辅助边缘计算、THz 通信、智能超表面 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| xie2025BlockchainassistedLightweightCrossdomain | 双区块链轻量级跨域认证（多 UAV 网络） | 区块链认证、跨域信任、无人机网络安全 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| xu2024HolisticHybridService | H2S2：MEC无人机末端配送整体混合服务选择 | 无人机末端配送、边缘计算、服务选择 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 双创-文书与申报、数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| xu2024RewardMaximizationDisaster | 灾害监测异构UAV奖励最大化调度（常数近似算法） | 异构无人机调度、定向问题、近似算法 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| xu2024SemanticawareUAVSwarm | 元宇宙UAV蜂群语义协同与信誉激励机制 | 语义通信、激励机制、无人机蜂群 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报、数模-数据分析与决策 | 2024-01-01 | 已引 |
+| xu2025BlockchainempoweredGameTheoretical | 区块链赋能的UAV带宽分配Stackelberg博弈激励 | 区块链、博弈论、资源分配 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| xu2025TrustenhancedGameIncentive | 信任增强的量子联邦学习Stackelberg激励机制 | 联邦学习、博弈论、信任评估 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| xu2025WindawareServiceProvisioning | MW-DSP：多包裹无人机配送风感知服务供给 | 无人机物流、服务组合、不确定性优化 | 创新创业大赛、数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| xue2024MaximizingCoverageTargets | MaxCov：WRSN 多充电器目标覆盖最大化调度 | 无线可充电传感网、充电调度、目标覆盖 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| yang2023RobustTransitionTrajectory | 尾座式无人机鲁棒过渡轨迹优化（PCE不确定性传播） | 轨迹优化、鲁棒优化、不确定性量化 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2023-01-01 | 已引 |
+| yang2024EnergyEfficientTransmission | 蜂窝连接UAV巡检能效传输（加权图定序+SCA/BCD） | 蜂窝连接无人机、巡检系统、能效优化 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 双创-文书与申报、数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| yu2025HybridTransformerBased | HTransRL：空中走廊多UAV协同混合Transformer强化学习 | 多智能体强化学习、Transformer、无人机协同 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、Kaggle-竞赛、双创-文书与申报 | 2025-01-01 | 已引 |
+| yuan2024DynamicEventtriggeredFaulttolerant | 具规定性能的动态事件触发容错编队协同控制 | 无人机编队控制、容错控制、事件触发 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| yuan2025TrajectoryOptimizationPower | CATEN：多UAV空中基站轨迹与功率的通信型MARL联合优化 | UAV 通信、多智能体强化学习、资源分配 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| zema20243DTrajectoryOptimization | TRA/EDD：智慧城市多任务UAV补能设施与三维轨迹优化 | UAV 轨迹优化、MILP、智慧城市 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| zeng2024A3DAdaptiveAccurate | A3D：边缘辅助无人机的自适应高精导航服务调度 | 边缘智能、无人机导航、服务调度 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 黑客松-数据与算法、数模-预测与评估、双创-文书与申报 | 2024-01-01 | 已引 |
+| zeng2025JointSecureMechanism | CNN-LSTM多任务学习的UAV团队FDI攻击联合防护 | 无人机安全、FDI 攻击检测、多任务学习 | 黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、数模-预测与评估、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhan2024InterferenceawareOnlineOptimization | 能量约束蜂窝多UAV的干扰感知在线吞吐优化 | 蜂窝连接无人机、干扰管理、凸优化 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| zhan2024TradeoffAgeInformation | AoI与运行时间双目标的多小区蜂窝UAV感知调度 | AoI、蜂窝连接无人机、深度强化学习 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-预测与评估、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| zhan2025OnlineEnergyInterference | Lyapunov在线的蜂窝UAV动态目标跟踪能量干扰管理 | Lyapunov 优化、蜂窝连接无人机、目标跟踪 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhang2023JointTaskScheduling | 应急通信空中计算的任务调度与多UAV部署联合优化 | 空中计算、任务调度、UAV 部署优化 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2023-01-01 | 已引 |
+| zhang2023RFSearchSearchingUnconscious | 非对称双视角多光谱立体成像的UAV自适应三维重建 | 多光谱成像、三维重建、无人机遥感 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| zhang2024TaskOffloadingTrajectory | 动态用户多UAV-MEC安全卸载与轨迹优化（JDPB） | UAV-MEC、物理层安全、轨迹优化 | 黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策 | 2024-01-01 | 已引 |
+| zhang2024UAVSwarmenabledCollaborative | 时间域合谋窃听下的UAV集群协同安全中继（UVAA+IMOGOA） | 协同安全中继、协作波束形成、多目标优化 | 黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策 | 2024-01-01 | 已引 |
+| zhang2025ImprovingDataCollection | 定向性感知链路模型驱动的UAV-LoRa数据采集（annulus+PreLoRa） | UAV 辅助数据采集、LoRa、实测链路建模 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| zhang2025LargeModelsAerial | 空中边缘大模型的边云三流协同演化 | 边缘智能、大模型、边云协同 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhang2025MultiobjectiveAerialCollaborative | GDMTD3：扩散模型驱动的多目标空中协同安全通信 | 无人机集群通信、物理层安全、扩散模型强化学习 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhang2025OptimizingMonitoringUtility | 兼顾监测效用与负效应的多UAV布设优化（PEACE） | UAV 部署优化、次模优化、监测效用建模 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhang2025QuantumassistedOnlineTask | 量子辅助SATIN在线任务卸载与资源分配 | 空天地一体网络、量子优化、在线资源分配 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| zhao2024DesigningMultiUAVAided | 多UAV无线供能动态通信的分层强化学习（MAHDRL） | 无线供能通信、分层强化学习、UAV 轨迹优化 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
+| zhao2025JointContentCaching | UAV-MEC内容缓存-服务放置-任务卸载联合QoE优化 | UAV-MEC、边缘缓存、匹配博弈 | 黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策 | 2025-01-01 | 已引 |
+| zhao2025JointOptimizationTrajectory | UAV-MEC轨迹卸载缓存迁移的Lyapunov联合优化 | 移动边缘计算、在线优化、无人机轨迹 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhao2025MobileCollusiveEavesdroppers | 移动合谋窃听下UAV-MEC安全传输与计算协同优化（CSTC） | 无人机通信、物理层安全、移动边缘计算 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhao2025MultiUAVCooperativeTask | 动态环境多UAV协同任务调度（TF-PPO+MOGS） | 多无人机协同、任务调度、稳定匹配 | 黑客松与数据竞赛、数模与时序预测 | paper | 黑客松-数据与算法、数模-数据分析与决策 | 2025-01-01 | 已引 |
+| zheng2024ContentDeliveryPerformance | 缓存使能 UBS 内容交付性能解析（元宇宙用户） | 随机几何、边缘缓存、性能建模 | 数模与时序预测、创新创业大赛 | paper | 数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| zheng2024UAVSwarmAir | 迁移增强MARL的UAV蜂群空战机动决策 | 多智能体强化学习、迁移学习、无人机蜂群 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| zheng2025UAVSwarmenabledCollaborative | 低空经济灾后UAV蜂群协同通信两阶段优化 | 无人机自组网、协同波束形成、应急通信 | 数模与时序预测、创新创业大赛、黑客松与数据竞赛 | paper | 数模-数据分析与决策、双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| zhou2024FederatedDigitalTwin | 移动场景UAV联邦数字孪生框架 | 数字孪生、联邦学习、无人机协同感知 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| zhou2024JointOptimizationMobility | 可靠性保障空地通信的UAV移动性联合优化 | 空地通信、双层优化、能耗优化 | 数模与时序预测、创新创业大赛 | paper | 数模-预测与评估、双创-文书与申报 | 2024-01-01 | 已引 |
+| zhou2024SymmetryaugmentedMultiagentReinforcement | 对称性增强MADRL的大规模UAV轨迹与用户调度（SymmQMIX） | 多智能体强化学习、等变网络、无人机轨迹 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2024-01-01 | 已引 |
+| zhou2025DigitalTwinEmpowered | 数字孪生赋能的UAV辅助毫米波多跳V2X路由 | 数字孪生网络、毫米波 V2X 路由 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法 | 2025-01-01 | 已引 |
+| zhou2025HaDTHardeningDigital | HaDT：UAV 工业物流分发的加固双数字孪生框架 | 数字孪生、UAV 物流、边缘智能 | 创新创业大赛、黑客松与数据竞赛、数模与时序预测 | paper | 双创-文书与申报、黑客松-数据与算法、数模-数据分析与决策 | 2025-01-01 | 已引 |
+| zhou2025LLMQLLLMenhancedQlearning | LLM-QL：LLM增强Q学习的多无人机并行调度 | 大语言模型、强化学习、无人机调度 | 黑客松与数据竞赛、数模与时序预测、创新创业大赛 | paper | 黑客松-数据与算法、数模-数据分析与决策、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhou2025ReliabilityoptimalUAVassistedMobile | 面向可靠性的UAV辅助MEC联合资源与运动优化 | UAV 辅助边缘计算、无线可靠性建模 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhou2025UserPreferenceOriented | 用户偏好导向的UAV-MEC服务缓存与任务卸载 | 服务缓存、任务卸载、UAV 边缘计算 | 数模与时序预测、黑客松与数据竞赛、创新创业大赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2025-01-01 | 已引 |
+| zhou2025VerDTVersatileDigital | VerDT：工业 CPS UAV 物流的多功能双数字孪生框架 | 数字孪生、工业 CPS、UAV 物流 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法、Kaggle-竞赛 | 2025-01-01 | 已引 |
+| zhu2023AttitudeControlNovel | 新型倾转翼UAV悬停姿态控制 | 倾转翼无人机、飞行控制 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2023-01-01 | 已引 |
+| zhu2024CollaborativeReinforcementLearning | ZD-RL：协同强化学习的三维UAV跟踪与定位 | 多机协同强化学习、UAV 轨迹优化、无线定位 | 数模与时序预测、黑客松与数据竞赛 | paper | 数模-预测与评估、数模-数据分析与决策、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| zhu2024FissionSpectralClustering | FSC：FANET 无人机蜂群裂变谱聚类策略 | UAV 自组网、图聚类 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
 
 ## 跑批记录
 
@@ -154,3 +327,4 @@
 | 2026-08-27 | tech+comp | 技术卡6 / 赛事条目3 | 0 | 0 | 首次真实跑批（T3-a）：arXiv 收紧查询后31候选→6卡；gh未登录按设计降级 |
 | 2026-08-27 | discover | 赛事条目8 | 0 | 0 | 黑客松与数据竞赛冷启动（T4批次2）：4搜索分片→35候选→8入库+13留队列；Amazon Nova winners首样（6深构+1降级）；修正失真公告快照 |
 | 2026-08-28 | tech+comp | 技术卡9 / 赛事条目12 | 0 | 0 | 5分片/19.8M tok/33min | 增量：comp消费discover留存13→12入库+1留尾(CDEC待预抓)；tech 160候选→9卡+100台账+50留队；两脚本缺陷待修(gh行内star限定词失效/build_index注释行断表) |
+| 2026-09-16 | vault-distill | 173 | 0 | 0 | 26 hunter 分片 / ≈20.35M 子agent tokens / 墙钟约 95min | my_LLM_valut 一次性提炼（升级票05）：369 论文页→175 篇判定（173 收+2 拒入台账）；194 枢纽/概念页折叠进锚卡（4 个随拒收消亡）；bib 回填 DOI 覆盖 91%；citekey 错配 5 例实证修正；batch/vault-distill 分支合并回 deliver/kaggriculture-audit |
