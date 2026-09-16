@@ -49,6 +49,9 @@ sources:
 - 数模-数据分析与决策：功率与轨迹联合的序贯决策建模，可讲清"控制变量如何影响评估指标"。
 - 黑客松：多智能体 RL + 仿真追踪场景（如无人机围捕）现成框架。
 
+## 关联概念
+- 无人机定位
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Zhu2024_协同强化学习的三维UAV跟踪与定位`（venue_tier/evidence_tier/paper_role/reproducibility_level 自页 frontmatter 迁移）；正文性能数字均为论文自报仿真值，非本库实测。

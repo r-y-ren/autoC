@@ -49,6 +49,9 @@ sources:
 - 黑客松："命中率触发重构"的门控机制与缓存-卸载闭环是边缘计算类赛题的现成算法骨架。
 - 双创：用户偏好驱动的服务组织叙事适合农业无人机按需服务场景的方案论证。
 
+## 关联概念
+- 用户偏好服务缓存
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Zhou2025_用户偏好导向的UAV辅助MEC服务缓存与任务卸载`（venue_tier/evidence_tier/paper_role/reproducibility_level 自页 frontmatter 迁移）。

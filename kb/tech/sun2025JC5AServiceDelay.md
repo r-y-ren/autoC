@@ -49,6 +49,9 @@ sources:
 - 数模：五元耦合问题的"离散/连续/运动学"三路分解 + 交替迭代框架，可迁移到选址-配流-调度强耦合类赛题的求解组织方式。
 - 黑客松：SCA + 块坐标求解管线复现门槛较高（reuse_cost 高），但"2D 轨迹足够"的结论可直接引用以简化赛题中的无人机运动模型。
 
+## 关联概念
+- 工业网络物理系统（ICPS）
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Sun2025_JC5A空中MEC辅助工业CPS服务时延最小化`（frontmatter 4 枚举字段已迁移到本卡：venue_tier/evidence_tier/paper_role/reproducibility_level）。

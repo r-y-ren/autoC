@@ -45,6 +45,10 @@ sources:
 - 数模评估题：涉及无人机通信链路、短包可靠传输的评估类赛题，可用其闭式指标替换 Shannon 近似，建模粒度即差异化点；配套的高度/功率参数搜索可直接复用。
 - 双创申报：作为蜂群通信链路（URLLC 短包）可靠性设计的引用支撑；属通信理论，复现需通信仿真功底，标注 reuse_cost 高。
 
+## 关联概念
+- 有限块长通信
+- 信息年龄（AoI）
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Hoang2024_有限块长NOMA多用户配对UAV系统性能分析与优化`（venue_tier/evidence_tier/paper_role/reproducibility_level 承自该页 frontmatter；页自评 literature_type=theory，含理论推导+数值仿真双验证）。

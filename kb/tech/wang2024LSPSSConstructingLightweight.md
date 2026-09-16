@@ -45,6 +45,9 @@ sources:
 - 双创申报：数据安全合规是评审高频关注点；本方案提供「数据不出域仍可查可验」的完整故事线，且轻量级定位贴合农业物联网/低空平台等算力受限场景，比链上或全同态路线的代价论证更容易落地。
 - 黑客松数据算法赛：隐私保护检索/可验证查询类赛题可直接复用 ASPE 范围匹配 + Merkle 验证的组件组合；ASPE 有公开论文级构造可自行实现，Merkle tree 有成熟库。
 
+## 关联概念
+- 安全隐私共享
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Wang2024_LSPSS空中计算中的轻量级隐私存储与共享`（frontmatter 带 venue_tier/evidence_tier/paper_role/reproducibility_level，已映射到本卡 4 枚举字段）。

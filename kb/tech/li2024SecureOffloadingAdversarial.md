@@ -49,6 +49,9 @@ sources:
 - 数模：max-min 博弈建模 + 能效统一指标构造，适配攻防、定价、资源争夺类决策题。
 - Kaggle 仿真赛：策略池加权采样 = 防过拟合单一对手的实用 self-play 技巧，可直接用于 agent 对抗赛的训练管线。
 
+## 关联概念
+- 智能窃听者
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Li2024_智能窃听对抗下的UAV辅助MEC安全卸载与资源分配`（4 枚举字段自 vault 页 frontmatter 迁移）。

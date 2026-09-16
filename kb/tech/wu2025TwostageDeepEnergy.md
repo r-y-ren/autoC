@@ -50,6 +50,9 @@ sources:
 - 黑客松/算法赛：对比"单阶段联合预测"基线的能耗/质量曲线是现成的差异化论据；开源实现（PyTorch DNN）可改造为在线决策组件。
 - 双创申报：低空智联网、复杂遮挡环境（山区果园、城市峡谷）无人机边缘服务的方案支撑点。
 
+## 关联概念
+- THz-IRS辅助卸载
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Wu2025_IOPO面向THz多UAV-MEC的IRS辅助卸载优化`（4 枚举字段自 vault 页 frontmatter 迁移）。

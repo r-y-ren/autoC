@@ -49,6 +49,9 @@ sources:
 - 数模决策题：缓存约束决定合法卸载集合、安全速率约束塑造可行域的建模方式，适合多约束多目标决策题引用。
 - 双创申报：农业植保/低空巡检无人机集群的「安全边缘计算」技术卖点（协同干扰 + 服务预缓存），有 CCF-A 论文背书。
 
+## 关联概念
+- 服务放置模型
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Wu2025_安全感知的多UAV部署卸载与服务放置`（vault 页 4 枚举字段 venue_tier=CCF-A、evidence_tier=core、paper_role=anchor、reproducibility_level=medium 已迁移至本卡）。

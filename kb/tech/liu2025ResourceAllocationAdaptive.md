@@ -49,6 +49,9 @@ sources:
 - 黑客松算法题：DRL 替代 SCA 的实时化路线，适合对响应时间有要求的资源调度题，可与凸优化基线做复杂度-性能对比。
 - 双创申报：农业场景一网两用（巡田感知+通信回传）的降本方案支撑。
 
+## 关联概念
+- 一体化感知与通信（ISAC）
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Liu2025_UAV辅助ISAC自适应波束对齐的资源分配`（venue_tier/evidence_tier/paper_role/reproducibility_level 承自该页 frontmatter）。

@@ -49,6 +49,9 @@ sources:
 - 黑客松算法赛：多智能体 Q-learning 组件可替换常规贪心/最短路基线；把公平性写进奖励函数是低成本改造点。
 - 双创申报：智慧农业多机植保作业中「起降点怎么选、航线怎么飞、小农户服务怎么公平」的成套说辞支撑。
 
+## 关联概念
+- 空中算力调度
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Tao2024_空中计算系统中的多智能体协同算力调度`（frontmatter 带 venue_tier/evidence_tier/paper_role/reproducibility_level，已映射到本卡 4 枚举字段）。

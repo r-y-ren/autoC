@@ -48,6 +48,9 @@ sources:
 - 黑客松算法题：在线/流式调度赛题可直接套用"长期目标逐时隙化"管线。
 - 双创申报：QoE 指标化叙事支撑"以农户体验为中心"的平台设计论证。
 
+## 关联概念
+- 服务质量体验（QoE）
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `He2024_UAV辅助MEC服务质量体验最大化的在线联合优化`（venue_tier/evidence_tier/paper_role/reproducibility_level 承自该页 frontmatter）。

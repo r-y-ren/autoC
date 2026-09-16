@@ -45,6 +45,9 @@ sources:
 - 数模优化：服务分派+定价双阶段建模可整体迁移到"设施覆盖不足下的转包/协同调度"类赛题；KKT 定价推导是可复用的解析组件。
 - 方法对照价值：与纯任务卸载/轨迹优化论文形成对照，把"服务连续性"写成平台机制问题，适合数模论文的创新点表述。
 
+## 关联概念
+- 服务接力（Service Hand-off）
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Roy2025_Serv-HU面向UaaS的服务接力机制`（frontmatter 带 venue_tier/evidence_tier/paper_role/reproducibility_level，已映射到本卡 4 枚举字段）。

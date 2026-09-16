@@ -49,6 +49,9 @@ sources:
 - 黑客松算法题：GA+联盟博弈流水线与最优规模判据可直接迁移到组队协作、资源投放类题。
 - 双创申报：农业组网预算论证的技术依据（每架无人机的边际收益曲线）。
 
+## 关联概念
+- 部署成本效率（DCE）
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Mittal2024_面向部署成本效率的空地一体UAV与BS协同`（venue_tier/evidence_tier/paper_role/reproducibility_level 承自该页 frontmatter）。

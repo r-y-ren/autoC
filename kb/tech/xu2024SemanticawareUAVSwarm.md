@@ -49,6 +49,9 @@ sources:
 - 数模：激励相容约束下的资源配置题（谁该被选中、付多少钱）可直接套用其信誉-拍卖两层建模。
 - 双创申报：农业监测数字孪生平台的「语义同步 + 信誉激励」架构支撑，回应评审常问的「众包节点为何持续参与」。
 
+## 关联概念
+- 数字孪生元宇宙
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Xu2024_元宇宙中语义感知UAV蜂群协同激励`（vault 页 4 枚举字段 venue_tier=CCF-A、evidence_tier=core、paper_role=anchor、reproducibility_level=medium 已迁移至本卡）。

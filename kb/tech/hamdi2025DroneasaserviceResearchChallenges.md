@@ -45,6 +45,12 @@ sources:
 - 数模方法论背景：其不确定性感知 QoS 建模（飞行时长、载重、速度、环境条件进入 QoS）为数模赛题中"无人机配送/巡检+天气扰动"类问题的假设论证与指标设计提供综述级支撑。
 - 选型参考：作为总入口文献挂具体方法论文（如 Serv-HU 服务接力、缓存 UBS 内容交付），构建"总纲+方法"的引用结构。
 
+## 关联概念
+- DaaS研究挑战与应用版图
+- 服务化无人机三层架构模型
+- 无人机即服务（DaaS）与空中计算的关系
+- 无人机即服务（DaaS）
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Hamdi2025_Drone-as-a-Service研究挑战与方向综述`（frontmatter 带 venue_tier/evidence_tier/paper_role/reproducibility_level，已映射到本卡 4 枚举字段；venue_tier=Survey、paper_role=survey）。

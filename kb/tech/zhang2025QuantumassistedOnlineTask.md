@@ -45,6 +45,9 @@ sources:
 - 数模决策类：「Lyapunov 在线分解 + Benders 主从拆分」与赛题中常见的「长期约束+逐时段决策」结构同构，可作为求解章节的进阶方法论述；即便不用量子平台，分解式求解+multi-cut 加速本身就是可写进论文的算法贡献点。
 - 黑客松算法赛：量子平台的真实接入在赛题环境不现实，但其经典降级（模拟退火/启发式接管离散决策 + 求解器处理连续资源）是可落地的混合管线；若赛方环境允许，D-Wave Ocean SDK 提供退火机云访问入口可作演示亮点。
 
+## 关联概念
+- 量子辅助优化
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Zhang2025_量子辅助SATIN在线任务卸载与资源分配`（frontmatter 带 venue_tier/evidence_tier/paper_role/reproducibility_level，已映射到本卡 4 枚举字段）。

@@ -48,6 +48,9 @@ sources:
 - 黑客松算法题：NSGA-II 组件即插即用，多目标权衡场景可快速落地并可视化 Pareto 前沿作为演示亮点。
 - 双创申报：智慧农业低空网络（植保/巡检无人机中继）的通信方案叙事——可靠性提升不能以安全裸奔为代价，本文提供量化权衡依据。
 
+## 关联概念
+- 可靠性-安全性权衡
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Nguyen2024_可靠性与安全性的两难协同`（frontmatter venue_tier/evidence_tier/paper_role/reproducibility_level 已映射到本卡 4 枚举字段）。

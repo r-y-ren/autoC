@@ -46,6 +46,9 @@ sources:
 - 黑客松/算法赛：多无人机/多节点协同传输类赛题中，"把集群当可重构虚拟阵列 + 三目标 Pareto 折中"的问题定义方式是差异化论证；IMOGOA 可直接替换常用的 NSGA-II/PSO 求解位。
 - 数模多目标决策题：混合变量多目标优化的完整建模范式（目标冲突刻画 → Pareto 求解 → 折中方案选取），适合作为决策类论文的求解框架参考。
 
+## 关联概念
+- 协同安全中继通信
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Zhang2024_时间域合谋窃听下的UAV集群协同安全中继`（4 枚举字段自 vault 页 frontmatter 迁移，reproducibility_level=medium）。

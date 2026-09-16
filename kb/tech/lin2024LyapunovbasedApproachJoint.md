@@ -49,6 +49,9 @@ sources:
 - 数模：应急监测/巡检调度题的建模模板（非完全图 + 补能闭环 + 加权时效目标），insert-then-improve 求解链完整且可解释。
 - 双创申报：真实灾后数据 + 实飞验证的实证形态，是应急/农业巡检方案申报里少见的强背书。
 
+## 关联概念
+- 近端策略优化（PPO）
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Huang2024_LI2灾后PoI及时监测的UAV_AoI路径优化`（4 枚举字段自该页 frontmatter 迁移）。

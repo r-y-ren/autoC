@@ -45,6 +45,9 @@ sources:
 - 双创申报：低空经济内容服务（应急广播、近用户边缘内容分发）的商业可行性论证可引用其解析结论支撑 QoS 承诺，避免纯定性描述。
 - 方法论借鉴：把性能主张写成"概率下界 + 时延上界"的解析形式，是数模论文结果的规范化表达范式。
 
+## 关联概念
+- 元宇宙内容交付
+
 ## 溯源说明（铁律 1 受控例外：paper-distill）
 
 - 提炼来源：my_LLM_valut wiki 页 `Zheng2024_面向元宇宙用户的缓存使能UBS内容交付性能分析`（frontmatter 带 venue_tier/evidence_tier/paper_role/reproducibility_level，已映射到本卡 4 枚举字段）。
