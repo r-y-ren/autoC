@@ -51,9 +51,9 @@
 
 1. **加载**：`docs/report.typ` 中以 Typst 标准库读分片，变量名必须为 `metrics`：
    ```typst
-   #let metrics = json("../../software/metrics.json")
+   #let metrics = json("../software/metrics.json")
    ```
-   （直接读 software 分片；顶层汇总 `metrics.json` 是脚本生成物，document 勿手写。）
+   （相对 report.typ 所在的 docs/ 目录；直接读 software 分片；顶层汇总 `metrics.json` 是脚本生成物，document 勿手写。**勘误 2026-09-16 W2**：原示例 `../../` 多一级，且 typst-py 项目根默认为输入文件父目录，须配合 §5 的 `root` 实参方能编译——W2 实测定稿。）
 2. **引用**（两种规范形，`<键>` ∈ §3 键清单，`metrics.` 前缀不得用于其他对象）：
    - 取值形：`metrics.rows`、`metrics.score_mean` …（经上式变量）；
    - 规范注释/文本形：`metrics.software.rows` …（与合并后引用形一致）。
@@ -64,10 +64,10 @@
 ## 5. Typst → PDF 唯一编译通道
 
 ```bash
-~/.venvs/autoc/bin/python -c "import typst; typst.compile('docs/report.typ', output='docs/report.pdf')"
+~/.venvs/autoc/bin/python -c "import typst; typst.compile('<战役根>/docs/report.typ', output='<战役根>/docs/report.pdf', root='<战役根>')"
 ```
 
-- 仅此通道（宿主 venv 的 typst 包）；工程自身零第三方依赖（纯 Python stdlib），typst 不进工程 import 面。在战役根执行，产物落 `docs/report.pdf`。
+- 仅此通道（宿主 venv 的 typst 包）；**`root` 实参必带**（typst-py 项目根默认=输入文件父目录，不带会拒跨目录加载——W2 实测勘误）；工程自身零第三方依赖（纯 Python stdlib），typst 不进工程 import 面。产物落 `docs/report.pdf`。
 
 ## 6. a3 核验器：software/check_report.py
 
