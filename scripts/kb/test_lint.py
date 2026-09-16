@@ -134,8 +134,8 @@ CASES = [
     ("kb/tech/README.md", "说明文件", None, "README 应跳过"),
     ("kb/raw/notice.html", "<html>快照</html>", None, "raw 快照应跳过"),
     ("workspace/blueprint.md", BLUEPRINT_OK, True, "合法蓝图（无 workflow 字段=缺省 auto_chain）"),
-    ("workspace/blueprint-chain-off.md", BLUEPRINT_CHAIN_OFF, True, "auto_chain: false 合法"),
-    ("workspace/blueprint-chain-bad.md", BLUEPRINT_CHAIN_BAD, False, "auto_chain 非布尔应 FAIL"),
+    ("workspace/bp-chain-off/blueprint.md", BLUEPRINT_CHAIN_OFF, True, "auto_chain: false 合法"),
+    ("workspace/bp-chain-bad/blueprint.md", BLUEPRINT_CHAIN_BAD, False, "auto_chain 非布尔应 FAIL"),
     ("workspace/acceptance/run-1.json", ACCEPT_OK, True, "合法验收记录"),
     ("workspace/acceptance/note.md", "随手笔记", None, "acceptance 下非 json 应跳过"),
 ]
