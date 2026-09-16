@@ -55,6 +55,31 @@ sources:
 
 TECH_BAD_PUB = TECH_OK.replace("published: 2026-08-01", 'published: "2026-13-01"')
 
+# 2026-09-16 升级票02：vault-distill 溯源形态（paper-distill sources + 4 个可选枚举）
+TECH_DISTILL_OK = """---
+id: arxiv-2603-00001
+name: Distill Tech
+field: [test]
+published: 2026-03-01
+maturity: paper
+directions: [测试方向]
+venue_tier: CCF-A
+evidence_tier: core
+paper_role: anchor
+reproducibility_level: low
+competition_fit:
+  - {track: 黑客松-数据与算法, edge: "快速原型", reuse_cost: 低}
+sources:
+  - {paper_title: "Joint Task Scheduling for UAV-assisted MEC", doi: "10.0000/test.2026", distilled_from: my_LLM_valut, distilled_date: 2026-09-16}
+---
+正文
+"""
+
+TECH_DISTILL_NO_TITLE = TECH_DISTILL_OK.replace(
+    'paper_title: "Joint Task Scheduling for UAV-assisted MEC", ', "")
+
+TECH_BAD_VENUE = TECH_OK.replace("maturity: demo", "maturity: demo\nvenue_tier: SCI-Q1")
+
 BLUEPRINT_OK = """---
 campaign: {competition_id: demo-cup, name: Demo Cup, theme: t}
 scope: {deliverables: [demo], out_of_scope: []}
@@ -89,6 +114,9 @@ CASES = [
     ("kb/tech/arxiv-2501-00001.md", TECH_OK, True, "合法技术卡片（YAML 日期自动规范化）"),
     ("kb/tech/arxiv-badfit.md", TECH_NO_FIT, False, "缺 competition_fit 应 FAIL"),
     ("kb/tech/arxiv-badpub.md", TECH_BAD_PUB, False, "published 2026-13-01 应被 format 拦截"),
+    ("kb/tech/arxiv-distill-ok.md", TECH_DISTILL_OK, True, "paper-distill 溯源+4 可选枚举合法"),
+    ("kb/tech/arxiv-distill-notitle.md", TECH_DISTILL_NO_TITLE, False, "paper-distill 缺 paper_title 应 FAIL"),
+    ("kb/tech/arxiv-badvenue.md", TECH_BAD_VENUE, False, "venue_tier 非法枚举应 FAIL"),
     ("kb/tech/README.md", "说明文件", None, "README 应跳过"),
     ("kb/raw/notice.html", "<html>快照</html>", None, "raw 快照应跳过"),
     ("workspace/blueprint.md", BLUEPRINT_OK, True, "合法蓝图"),
