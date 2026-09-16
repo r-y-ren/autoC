@@ -30,6 +30,7 @@ description: 快循环波次化交付编排（D12）：按蓝图里程碑依赖�
 1. **波次计算**（协调者做，不派发）：读 milestones 的 `depends_on` 做拓扑分层——
    第 k 波 = 所有依赖均在 1..k-1 波内完成的里程碑；**检测到环 → 停止，回蓝图修依赖**。
    无任何 depends_on 的轻蓝图自然退化为单波（向后兼容，不强制分层）。
+1.5. **规格派生（auto_chain，升级票09）**：读蓝图 `workflow.auto_chain`（缺省 true）。开启且 `<战役根>/specs/` 尚不存在（存在=断点续跑，跳过）时，首波派发前派发 **planner 子 agent**（章程 `.zcode/agents/planner.md`）：跑 mattpocock to-spec → to-tickets，产物落 `<战役根>/specs/`（spec.md + tickets.md）。此后第 2 步任务包以 tickets 为细化依据（验收项 ID 前缀仍出自蓝图）；**波次拓扑不变**（ticket 只在 milestone 内细化）。auto_chain=false 则跳过本步走原编排。链语义：**直通到 implement 完成后单次汇报，无中途人工门**（/accept 仍是唯一人工验收闸门）。
 2. **逐波执行**（波内并行，波间串行）：
    - **波内派发**：该波里程碑按 owner_role 拆任务包**并行派发**（并发 ≤ budget；任务包含：输入契约、**输出目录=战役根下对应角色目录**、所属验收项 ID 前缀、接口契约文件、**返回前 lint/自测 PASS** 条款）
    - **文档双阶段**：document 角色在第 1 波只派"大纲包"（产出报告骨架 + 告知工程角色需积累哪些 metrics 键）；成稿包落在**最后一波**（此时 merge_metrics 已稳定，数字直接回填）

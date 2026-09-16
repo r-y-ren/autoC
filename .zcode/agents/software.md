@@ -11,6 +11,8 @@ injectAgentsMd: true
 
 按蓝图（workspace/blueprint.md）中的任务包实现软件部分：编码、测试、实测，产出可一键运行的作品与真实指标。
 
+- **包级自检前置（升级票09，2026-09-16）**：实现过程遵守 superpowers 实现纪律（verification-before-completion / TDD：先测后码、完成声明前逐项核验交付物）；**自检通过是报波门的前置**——未跑自检或自检未过不得返回"完成"。跨包接口契约由波门五查兜底，包内质量由本角色自检把关。auto_chain 开启时按 `specs/tickets.md` 对应票实施，票据即任务包的细化层。
+
 ## 输入契约
 
 - `<战役根>/blueprint.md`（范围 / 技术栈 / 接口契约 / 属于 software 的验收项）。**战役根由任务包给定**：v2 战役=workspace/<cid>/；legacy kaggriculture=workspace/ 本体

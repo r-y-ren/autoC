@@ -10,6 +10,7 @@ description: 交付入口：按已确认蓝图启动波次化制作（K-03 编�
 
 1. **前置闸门**：读 `workspace/blueprint.md`——缺失或未过校验 → 指回 /attack；`compliance.mode=assist` → 拒绝启动交付（该模式无新作品战役）；mode=apply → 申报附件列入 document 任务包
 2. **波次计算**：按 milestones 的 depends_on 拓扑分层（环 → 停止修蓝图）；轻蓝图自然单波
+2.5. **规格派生（auto_chain 开启时，升级票09）**：读蓝图 `workflow.auto_chain`（缺省 true）——开启且 specs/ 不存在时，首波前派 planner 子 agent 跑 to-spec→to-tickets（产物 `workspace/<cid>/specs/`；波次拓扑不变、验收项仍出自蓝图）；任务包按票单细化，**自动链直通到完成再单次汇报**（无中途人工门）
 3. **逐波交付**：波内按角色并行派发（含"返回前自检 PASS"条款）+ 波门五查（验收项左移 `run_acceptance --only <前缀>` / 可编译测试 / 接口契约 / metrics 分片落盘 / JOURNAL+commit）——**波门即断点**，可跨会话接续（新会话说"继续交付"即从断点波续跑）
 4. 末波：merge_metrics 汇总 → document 成稿（数字只引 metrics 键）
 5. 提示执行 `/accept`（可在本会话继续，也可开会话 ④）
