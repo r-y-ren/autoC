@@ -2,7 +2,7 @@
 # bump 规则：config/templates/*.schema.json、.zcode/{skills,agents,commands}、scripts/ 的行为契约
 # 发生变更时 schema_version +1，随同一 commit push；另一台机器 SessionStart 播报版本落后即先 pull 再开工。
 
-schema_version: 3
+schema_version: 4
 
 # 升级依赖的外部插件（各机 ~/.zcode/cli/plugins/cache/<vendor>/<name>/<ver>/，不随仓库走）
 # SessionStart 播报可用性（可用 ZCODE_PLUGINS_CACHE 环境变量覆盖缓存根）；缺失时对应能力在该机不可用
