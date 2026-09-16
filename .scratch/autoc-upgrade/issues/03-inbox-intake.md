@@ -6,8 +6,8 @@
 
 **Status:** ready-for-agent
 
-- [ ] `kb/inbox/` + README 就位；无 sidecar 文件不被拒收
-- [ ] fixture 三用例断言：全 meta→候选队列；缺 meta→raw 线索+报告点名；超配额→剩余保留
-- [ ] 三分路由行为正确（章程→条目增补/新候选、论文→技术卡候选、不可归类→leads+点名）
-- [ ] 与活跃战役关键词匹配的文件在报告中出现提示，战役 references/ 未被自动改动
-- [ ] K-01 与 K-08 技能文档含 inbox 检查步骤
+- [x] `kb/inbox/` + README 就位；无 sidecar 文件不被拒收
+- [x] fixture 三用例断言：全 meta→候选队列；缺 meta→raw 线索+报告点名；超配额→剩余保留
+- [x] 三分路由行为正确（章程→条目增补/新候选、论文→技术卡候选、不可归类→leads+点名）
+- [x] 与活跃战役关键词匹配的文件在报告中出现提示，战役 references/ 未被自动改动
+- [x] K-01 与 K-08 技能文档含 inbox 检查步骤

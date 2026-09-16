@@ -78,6 +78,10 @@ sources:
 TECH_DISTILL_NO_TITLE = TECH_DISTILL_OK.replace(
     'paper_title: "Joint Task Scheduling for UAV-assisted MEC", ', "")
 
+TECH_DISTILL_WITH_URL = TECH_DISTILL_OK.replace(
+    "distilled_date: 2026-09-16}",
+    'distilled_date: 2026-09-16, url: "https://ieeexplore.example", accessed: 2026-09-16}')
+
 TECH_BAD_VENUE = TECH_OK.replace("maturity: demo", "maturity: demo\nvenue_tier: SCI-Q1")
 
 BLUEPRINT_OK = """---
@@ -116,6 +120,8 @@ CASES = [
     ("kb/tech/arxiv-badpub.md", TECH_BAD_PUB, False, "published 2026-13-01 应被 format 拦截"),
     ("kb/tech/arxiv-distill-ok.md", TECH_DISTILL_OK, True, "paper-distill 溯源+4 可选枚举合法"),
     ("kb/tech/arxiv-distill-notitle.md", TECH_DISTILL_NO_TITLE, False, "paper-distill 缺 paper_title 应 FAIL"),
+    ("kb/tech/arxiv-distill-withurl.md", TECH_DISTILL_WITH_URL, True,
+     "paper-distill 携回填 url+accessed 仍合法（not-guard 消除 oneOf 双命中陷阱）"),
     ("kb/tech/arxiv-badvenue.md", TECH_BAD_VENUE, False, "venue_tier 非法枚举应 FAIL"),
     ("kb/tech/README.md", "说明文件", None, "README 应跳过"),
     ("kb/raw/notice.html", "<html>快照</html>", None, "raw 快照应跳过"),

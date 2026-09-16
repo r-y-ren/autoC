@@ -19,7 +19,7 @@
 ## 消费规则（`python scripts/kb/inbox_intake.py`）
 
 - 三分路由：**comp** → 赛事候选队列（条目增补/新条目）；**tech** → 技术卡候选队列；**无法归类或未溯源** → `kb/raw/leads/` 线索区并在报告点名催补。
-- **未溯源（无 sidecar 或缺 source_url）永远只当线索**，不晋级可引用条目（铁律 1）；补交 sidecar 后下轮自动晋级。
+- **未溯源（无 sidecar 或缺 source_url）永远只当线索**，不晋级可引用条目（铁律 1）；原件会被移入 `kb/raw/leads/`（不会被自动重扫），**补好 sidecar 后把文件放回 inbox 重新投递**即可在下轮晋级。
 - 每轮消费上限见 `config/budget.yaml → quotas.inbox_files_per_run`（默认 20），超出留存下轮，**不删不拒**。
 - 消费后的原件移 `kb/raw/inbox-processed/<时间戳>/` 留审计。
 - 文件涉及**活跃战役**时只在跑批报告提示，不会自动改动战役文件——是否引用由你在战役会话决定。

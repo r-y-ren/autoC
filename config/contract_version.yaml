@@ -1,13 +1,16 @@
 # 契约版本（多机协作错配防护，2026-09-16 升级引入）
 # bump 规则：config/templates/*.schema.json、.zcode/{skills,agents,commands}、scripts/ 的行为契约
-# 发生变更时 schema_version +1，随同一 commit push；另一台机器 SessionStart 播报版本落后即先 pull 再开工。
+# 发生变更时 schema_version +1，随同一 commit push。
+# 脚本侧校验：开工前跑 python scripts/guard/contract_check.py——本地与上游（@{u}）版本
+# 不一致即提示先 pull / push（SessionStart 播报的是本地版本）。
 
-schema_version: 4
+schema_version: 5
 
-# 升级依赖的外部插件（各机 ~/.zcode/cli/plugins/cache/<vendor>/<name>/<ver>/，不随仓库走）
-# SessionStart 播报可用性（可用 ZCODE_PLUGINS_CACHE 环境变量覆盖缓存根）；缺失时对应能力在该机不可用
+# 升级依赖的外部插件（各机 ~/.zcode/cli/plugins/cache/<vendor>/<name>/<version>/，不随仓库走）。
+# version 以插件 cache 目录名为准（缺失警示由 session_status.py 检查，目录在位即算可用，不校验版本号）；
+# 缺装时从已装机机器同步同名 cache 目录，或经客户端插件机制安装。
 plugins:
-  - {vendor: mattpocock, name: mattpocock-skills, purpose: 规格链（grilling/to-spec/to-tickets/implement）}
-  - {vendor: superpowers-dev, name: superpowers, purpose: 实现纪律（verification-before-completion/TDD）}
-  - {vendor: ppt-master, name: ppt-master, purpose: 答辩 PPT 产线（K-12 /ppt）}
-  - {vendor: zcode-plugins-official, name: document-skills, purpose: docx/pptx/pdf/xlsx 文档产线}
+  - {vendor: mattpocock, name: mattpocock-skills, version: 1.2.3, purpose: 规格链（grilling/to-spec/to-tickets/implement）}
+  - {vendor: superpowers-dev, name: superpowers, version: 6.3.0, purpose: 实现纪律（verification-before-completion/TDD）}
+  - {vendor: ppt-master, name: ppt-master, version: 0.0.0, purpose: 答辩 PPT 产线（K-12 /ppt）}
+  - {vendor: zcode-plugins-official, name: document-skills, version: 0.1.4, purpose: docx/pptx/pdf/xlsx 文档产线}

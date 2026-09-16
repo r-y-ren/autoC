@@ -9,8 +9,8 @@
   arxiv  ：arXiv Atom API（免密），按方向关键词取近 N 天新论文
   github ：gh CLI 搜索近 N 天新建、star 数达标的仓库（未登录则跳过并告警）
 
-候选队列生命周期（T2.1 裁决）：
-  - 活跃队列 = kb/raw/candidates/tech-*.yaml（仅顶层）；K-01 消费完毕后把队列文件
+候选队列生命周期（T2.1 裁决；2026-09-16 升级票03 扩容）：
+  - 活跃队列 = kb/raw/candidates/*tech-*.yaml（仅顶层，含 inbox-tech-* 投递队列）；K-01 消费完毕后把队列文件
     移入 kb/raw/candidates/processed/（防重复消费，保留痕迹）
   - Hunter 拒绝的候选写入 kb/tech/.rejections.yaml 台账（{id, reason, stars, decided}）
   - 重评规则：被拒候选若当前 stars ≥ 台账快照 ×2 则重新入队（科技信号随时间增长的核心场景）
@@ -195,10 +195,10 @@ def existing_card_ids() -> set[str]:
 
 
 def existing_candidate_ids(cand_dir: Path) -> set[str]:
-    """只扫活跃队列（顶层 tech-*.yaml）；processed/ 已消费文件不参与去重（允许信号增长后重评）。"""
+    """只扫活跃队列（顶层 *tech-*.yaml，含 inbox-tech-*）；processed/ 已消费文件不参与去重（允许信号增长后重评）。"""
     ids: set[str] = set()
     import yaml
-    for f in sorted(cand_dir.glob("tech-*.yaml")):
+    for f in sorted(cand_dir.glob("*tech-*.yaml")):
         try:
             for it in yaml.safe_load(f.read_text(encoding="utf-8")) or []:
                 if it.get("id"):

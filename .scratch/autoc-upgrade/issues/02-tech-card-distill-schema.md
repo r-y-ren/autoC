@@ -6,7 +6,7 @@
 
 **Status:** ready-for-agent
 
-- [ ] schema 含 4 个可选枚举字段，取值域受控（负例：非法枚举值被 lint 隔离）
-- [ ] sources 支持 paper-distill 形态：合法样例卡过 lint，缺论文标题被拒
-- [ ] 存量卡在未改动的情况下全部继续通过 lint（零迁移验证）
-- [ ] AGENTS.md 铁律 1 的放宽边界成文（适用范围仅限提炼跑批）
+- [x] schema 含 4 个可选枚举字段，取值域受控（负例：非法枚举值被 lint 隔离）
+- [x] sources 支持 paper-distill 形态：合法样例卡过 lint，缺论文标题被拒
+- [x] 存量卡在未改动的情况下全部继续通过 lint（零迁移验证）
+- [x] AGENTS.md 铁律 1 的放宽边界成文（适用范围仅限提炼跑批）

@@ -46,7 +46,7 @@ sources:
 - 黑客松/算法赛：无人机蜂群或移动自组网类赛题中，"带约束的动态聚类"是可移植的差异化组件（对比 K-Means/普通谱聚类基线）。
 - 双创申报：智慧农业植保无人机集群的通信组织方案支撑（多机协同作业场景）。
 
-## 关联概念（valut 概念页折叠于此，不独立成卡）
+## 关联概念（vault 概念页折叠于此，不独立成卡）
 
 - **裂变谱聚类**：谱聚类初始划分后，对不满足尺寸/结构约束的簇递归切分。
 - **FANET 聚类**：飞行自组网中划分 UAV 节点为簇，减泛洪、稳路由、改善簇内通信。
@@ -55,4 +55,4 @@ sources:
 
 - 提炼来源：my_LLM_valut wiki 页 `Zhu2024_FANET中的UAV蜂群裂变谱聚类`（frontmatter 带 venue_tier/evidence_tier/paper_role/reproducibility_level，已映射到本卡 4 枚举字段）。
 - bib 回填：citekey `zhu2024FissionSpectralClustering` → 标题/venue/DOI 来自 vault 自带 Zotero bib（`vault_bib_backfill.py`，2026-09-16）。
-- `published` 仅年份已知（2024），按年-01-01 填写；验证类信息（simulation/synthetic/复现性 medium）承自 valut 页自评，如需引用请以论文原文复核。
+- `published` 仅年份已知（2024），按年-01-01 填写；验证类信息（simulation/synthetic/复现性 medium）承自 vault 页自评，如需引用请以论文原文复核。

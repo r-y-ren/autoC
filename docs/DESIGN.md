@@ -292,7 +292,7 @@ autoC/
 - **硬件物理装配与实测为人工环节** → 验收清单显式区分"agent 可验证项"与"人工测试项"
 - **挑战杯类获奖作品正文稀缺** → KB-1 分析深度分级、标注信源等级，宁缺毋滥
 - **各赛事 AI 使用政策不一**（美赛/Kaggle 等已有明确要求）→ 每个赛事条目维护 AI 政策字段，合规检查为蓝图必含章节
-- **外部插件不随仓库走**（位于各机 `~/.zcode/cli/plugins/cache/<vendor>/<name>/<ver>/`）→ 插件契约清单落 `config/contract_version.yaml`（vendor/name/用途：mattpocock-skills 规格链、superpowers 实现纪律、ppt-master 答辩 PPT 产线、document-skills 文档产线），SessionStart 播报可用性；某插件缺失时依赖它的能力在该机不可用，开机即见
+- **外部插件不随仓库走**（位于各机 `~/.zcode/cli/plugins/cache/<vendor>/<name>/<version>/`）→ 插件清单+版本+安装方式以 `config/contract_version.yaml` 为唯一事实源（mattpocock-skills 1.2.3 规格链、superpowers 6.3.0 实现纪律、ppt-master 0.0.0 答辩 PPT 产线、document-skills 0.1.4 文档产线；缺装从装机机同步 cache 目录或经客户端插件机制安装），SessionStart 播报可用性；某插件缺失时依赖它的能力在该机不可用，开机即见
 
 ---
 

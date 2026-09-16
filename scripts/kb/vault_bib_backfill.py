@@ -30,8 +30,11 @@ def _clean(v: str) -> str:
     return re.sub(r'\s+', ' ', v).strip()
 
 
+ROOT = Path(__file__).resolve().parents[2]
+
+
 def parse_bib(text: str) -> dict:
-    """按 @ 条目切块，逐字段清洗。valut 的 bib 字段均为单行（annotation 多行但不需要）。"""
+    """按 @ 条目切块，逐字段清洗。vault 的 bib 字段均为单行（annotation 多行但不需要）。"""
     out: dict = {}
     blocks = re.split(r'\n(?=@\w+\s*\{)', text)
     for b in blocks:
@@ -91,8 +94,8 @@ def selftest() -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="my_LLM_valut bib 回填辅助")
-    ap.add_argument("--vault", default="my_LLM_valut")
-    ap.add_argument("--out", default=None, help="默认 kb/raw/vault-bib-map.yaml")
+    ap.add_argument("--vault", default=str(ROOT / "my_LLM_valut"))
+    ap.add_argument("--out", default=None, help=f"默认 {ROOT / 'kb' / 'raw' / 'vault-bib-map.yaml'}")
     ap.add_argument("--selftest", action="store_true")
     args = ap.parse_args()
 
@@ -110,7 +113,7 @@ def main() -> int:
 
     with_doi = sum(1 for v in merged.values() if v.get("doi"))
     with_url = sum(1 for v in merged.values() if v.get("url"))
-    out = Path(args.out) if args.out else Path("kb/raw/vault-bib-map.yaml")
+    out = Path(args.out) if args.out else ROOT / "kb" / "raw" / "vault-bib-map.yaml"
     out.parent.mkdir(parents=True, exist_ok=True)
     import yaml
     out.write_text(yaml.safe_dump(merged, allow_unicode=True, sort_keys=False), encoding="utf-8")

@@ -57,8 +57,8 @@ def quota(root: Path) -> int:
         return DEFAULT_QUOTA
 
 
-def classify(name: str, meta) -> tuple[str, bool]:
-    """→ (路由 comp/tech/lead, 已溯源)。晋级候选的前提 = sidecar 带 source_url（铁律 1）。"""
+def classify(name: str, meta) -> str:
+    """→ 路由 comp/tech/lead。晋级候选的前提 = sidecar 带 source_url（铁律 1）。"""
     meta = meta or {}
     kind = str(meta.get("kind", "")).lower()
     if kind in ("comp", "tech", "lead"):
@@ -71,8 +71,8 @@ def classify(name: str, meta) -> tuple[str, bool]:
         base = "lead"
     url = str(meta.get("source_url") or "").strip()
     if base in ("comp", "tech") and not url:
-        return "lead", False  # 未溯源降级线索
-    return base, bool(url)
+        return "lead"  # 未溯源降级线索
+    return base
 
 
 def active_cids(root: Path) -> list[str]:
@@ -114,7 +114,7 @@ def main() -> int:
 
     for i, f in enumerate(take):
         meta = load_yaml(inbox / (f.name + ".meta.yaml"))
-        route, provenanced = classify(f.name, meta)
+        route = classify(f.name, meta)
         m = meta or {}
         dropped = str(m.get("dropped_at") or stamp)
         blob = f.name + " " + str(m)
@@ -170,7 +170,8 @@ def main() -> int:
     print(f"[inbox_intake] 本轮：赛事候选 {len(comp_items)}｜技术候选 {len(tech_items)}｜"
           f"线索 {len(leads)}｜留存（超配额） {len(leftover)}")
     if urges:
-        print(f"[inbox_intake] ⚠ 待补源（补 sidecar 即可晋级）：{', '.join(urges)}")
+        print(f"[inbox_intake] ⚠ 待补源（补 sidecar 后把文件放回 inbox 重投即可晋级；"
+              f"leads 中的原件不会被自动重扫）：{', '.join(urges)}")
     for name, cid in hints:
         print(f"[inbox_intake] ⚠ {name} 与活跃战役 {cid} 相关——仅在战役会话人工裁决是否引用，本跑批未改动战役文件")
     return 0

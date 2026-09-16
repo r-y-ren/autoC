@@ -37,7 +37,7 @@
 - 开工前 `git pull --rebase`；每完成一个阶段 commit 后**立即 push**；`/archive` 之后 `git push --tags`。
 - 分工并行安全对：一台跑 KB 维护（collect 态写 `kb/**`）+ 一台做战役（写 `workspace/<cid>/**`）——子树不相交，允许同时开工；其余情形按接力处理。
 - `kb-deep-sync` 的 cron 全局只在一台主力机启用；换主力机时迁移，间歇期用 `/kb-sync` 手动补偿。
-- 契约变更（`config/templates/*.schema.json`、`.zcode/` 技能/子agent/命令、scripts 行为契约）时 bump `config/contract_version.yaml` 并随变更 commit+push；SessionStart 播报契约版本与插件可用性，版本落后或插件缺失时先补齐再开工。
+- 契约变更（`config/templates/*.schema.json`、`.zcode/` 技能/子agent/命令、scripts 行为契约）时 bump `config/contract_version.yaml` 并随变更 commit+push；开工前跑 `python scripts/guard/contract_check.py`（本地 vs 上游版本，不一致即先 pull/push），SessionStart 播报契约版本与插件可用性，错配开机即见。
 - `kb/inbox/` 为外来资料本机暂存区（gitignore，仅 README 入库）：消费发生在 kb-sync/kb-deep-sync 跑批内，消化产物才入库；跨机资料转移等本机跑批消化或走其他通道。
 
 ## 合规底线

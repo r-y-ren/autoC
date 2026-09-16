@@ -16,16 +16,16 @@
     "published": { "type": "string", "format": "date" },
     "maturity": { "enum": ["paper", "demo", "product"] },
     "venue_tier": {
-      "enum": ["CCF-A", "CCF-B", "CCF-C", "Survey", "arXiv", "workshop", "industry", "other"],
-      "description": "可选（2026-09-16 词表移植自 my_LLM_valut）：论文发表层级；存量卡不填合法，deep-sync 老化重验时顺补；vault-distill 提炼卡强制填写"
+      "enum": ["CCF-A", "CCF-B", "CCF-C", "Survey", "arXiv", "workshop", "industry", "other", "unknown"],
+      "description": "可选（2026-09-16 词表移植自 my_LLM_valut，枚举含 valut 实测取值 CCF-A/Unknown/Survey）：论文发表层级；存量卡不填合法，deep-sync 老化重验时顺补；vault-distill 提炼卡强制填写（valut 的 Unknown 映射为 unknown）"
     },
     "evidence_tier": {
       "enum": ["core", "supporting", "exploratory"],
       "description": "可选（词表移植）：证据分层——core=本卡主张的直接证据 / supporting=旁证 / exploratory=探索性"
     },
     "paper_role": {
-      "enum": ["anchor", "supporting", "background"],
-      "description": "可选（词表移植）：论文在其方向卡组中的角色（锚点/支撑/背景）"
+      "enum": ["anchor", "supporting", "survey", "background"],
+      "description": "可选（词表移植，valut 实测取值 anchor/supporting/survey）：论文在其方向卡组中的角色"
     },
     "reproducibility_level": {
       "enum": ["high", "medium", "low"],
@@ -74,6 +74,7 @@
     "sourceUrl": {
       "type": "object",
       "required": ["url", "accessed"],
+      "not": { "required": ["distilled_from"] },
       "properties": {
         "url": { "type": "string" },
         "title": { "type": "string" },
