@@ -175,4 +175,5 @@
 | 2026-09-04 | deliver | **v1.5 P0 接线（用户授权执行；单变量=开局）**。`OPENING_HERD`/`OPENING_SHIFT_SEQ` 2C+2S→**1C+2S**；`_herd_target` d0=3（d8 仍顶到 HERD_CAP 16）；`_wheat_cap` d0-1=10（单象限给瓜留空，d2 起 22/26 不变）；MELON d0-1 `seed_gate` 80（不再 land_fund+250）；d0-1 PLANT w=52/55 压过 BUILD_PASTURE 46。测试：`test_day0_opening_melon_fits_on_single_quadrant` 钉麦≤10 / 瓜≥6 / 买瓜种≥6；全量 **836 passed+2 skipped**，`build.py --check` PASS，包 `344c9538…`（121274B）。未登记候选、未提交。B/C 包与番茄接线未动。 | 本地灾难诊断后，若要上线须过 sampling gate；下一刀仍是 B 包/分地 |
 | 2026-09-09 22:00 | idle | 慢循环 deep 跑批完成：+5 卡（lemmalog/ALTA/timeseries-atlas/E-CommerceBench/ProgGraph）+CALA Hacks 建条+重验 7 条+小鹏期 winners 补构+C4 决赛冠军三源确认；P2 检查 +5 卡增量小、survey 刷新累积下轮 | lint 100 条目 0 不合格、结构 0 WARN |
 | 2026-09-16 08:30 | idle | 慢循环 deep 跑批完成：+4 卡拒 1、重验 6 条（含两处协调者口径纠偏）、P2 双族 survey 刷新、C4 冠军 watch 未到窗口如实记录、MLH 转活跃 | lint 107 条目 0 不合格、结构 0 WARN |
+| 2026-09-16 09:30 | idle | 慢循环小增量轮（同日重复触发）：新收 16 候选→5 判定（2 入 3 拒，TSFM 族+域专用生成式位）；MLH 翻转 ended；其余步骤距上轮 1.4h 跳过 | 显式路径提交制启用 |
 

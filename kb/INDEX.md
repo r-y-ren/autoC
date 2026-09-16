@@ -24,7 +24,7 @@
 | lablabai-assemblyai-voice-2026 | AssemblyAI - Voice Agent Hackathon（lablab.ai × AssemblyAI，2026-09） | 黑客松与数据竞赛 | 编程/黑客松 | active | … | 强制技术栈条款（赛事页原文"Every participant builds o | 2026-09-09 | competitions/lablabai-assemblyai-voice-2026/ |
 | mathorcup | MathorCup 数学应用挑战赛（原名 MathorCup 高校数学建模挑战赛） | 数模与时序预测 | 学科竞赛 | ended | … | 《MathorCup数学应用挑战赛人工智能工具使用规定（试行）》（组委会2026 | 2026-08-28 | competitions/mathorcup/ |
 | mcm-icm | MCM/ICM 美国大学生数学建模竞赛（Mathematical Contest in Modeling / Interdisciplinary Contest in Modeling） | 数模与时序预测 | 学科竞赛 | upcoming | 2027届_竞赛开始:2027-01-28 17:00 EST（美东周四下午5:00）… | COMAP 允许负责任地使用 AI（'Solving the problems  | 2026-08-28 | competitions/mcm-icm/ |
-| mlh-ghw-data | MLH Global Hack Week: Data Week 2026 | 黑客松与数据竞赛 | 编程/黑客松 | active | event_start:2026-09-11、event_end:2026-09-17… | MLH 官方 hackathon 规则全文（2026-08-28 核对）无任何  | 2026-09-09 | competitions/mlh-ghw-data/ |
+| mlh-ghw-data | MLH Global Hack Week: Data Week 2026 | 黑客松与数据竞赛 | 编程/黑客松 | ended | event_start:2026-09-11、event_end:2026-09-17… | MLH 官方 hackathon 规则全文（2026-08-28 核对）无任何  | 2026-09-09 | competitions/mlh-ghw-data/ |
 | mlh-hack-the-north | Hack the North 2026 | 黑客松与数据竞赛 | 编程/黑客松 | upcoming | event_start:2026-09-19、event_end:2026-09-21… | 官方 FAQ（2026-08-28 核对：资格/评审/项目边界/团队/费用/差旅 | 2026-08-28 | competitions/mlh-hack-the-north/ |
 | tianchi-cross-embodied-cognition-2026 | 2026-跨本体具身认知极限联合挑战赛（2026具身世界realworld挑战赛·赛道二） | 黑客松与数据竞赛 | 编程/黑客松 | active | registration_open:2026-07-30、registration_close:2026-09-21… | 未发现 AI 工具使用限制条款（参赛协议/赛程/须知核对维度：数据使用/代码分享 | 2026-09-16 | competitions/tianchi-cross-embodied-cognition-2026/ |
 | tianchi-ijcai18-alimama-cvr | IJCAI-18 阿里妈妈搜索广告转化预测（Alimama International Advertising Algorithm Competition） | 黑客松与数据竞赛 | 编程/黑客松 | ended | 赛事周期:2018-02 至 2018-05（天池用户协议原文 "from February to May 2018"）… | 抓取材料中无 AI 工具使用条款（2018 年赛前 LLM 时代，信息页与用户协 | 2026-08-28 | competitions/tianchi-ijcai18-alimama-cvr/ |
@@ -106,6 +106,8 @@
 | arxiv-2609.11135 | SolCloudLLM：天空图像×时序双向融合的 LLM 光伏/辐照度短临预测 | 时序预测、多模态融合、新能源预测 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-09-10 | 已引 |
 | arxiv-2609.13345 | Beyond Point Forecasts：概率预测方法统一版图（时序+时空综述） | 概率预测、综述、不确定性量化 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-09-11 | 已引 |
 | arxiv-2609.13789 | PPDL：Weibull 物理先验×深度学习的工业用户留存率预测（ICDM 2026） | 时序预测、用户留存、机理数据混合建模 | 数模与时序预测 | paper | Kaggle-竞赛、数模-数据分析与决策 | 2026-09-12 | 已引 |
+| arxiv-2609.16309 | Agentic Search Spaces for Tabular Machine Learning | LLM agents、表格机器学习、超参数优化、AutoML | 黑客松与数据竞赛 | paper | Kaggle-竞赛、黑客松-数据与算法 | 2026-09-14 | 已引 |
+| arxiv-2609.16804 | SOTER: A Generative Time-Series Foundation Model for Wearable Human Physiological Signals | time series foundation model、可穿戴生理信号、不规则采样、时序插补 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-09-15 | 已引 |
 | gh-agents-universe_agents-universe | Agents Universe：知识条目驱动的企业级多角色 Agent 平台（无向量检索的项目记忆） | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法、数模-数据分析与决策 | 2026-08-18 | 已引 |
 | gh-BraxisAI_braxis-blueprint | braxis-blueprint: 零预算免费 LLM 通道路由与自动化运维的实战脚本集 | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-23 | 已引 |
 | gh-dreamers-laboratory_timeseries-atlas | Time Series Atlas：现代时序预测架构活地图（每篇一个可跑最小实现 + 基线纪律） | time series forecasting | 数模与时序预测 | demo | 数模-预测与评估、Kaggle-竞赛 | 2026-09-02 | 已引 |
@@ -127,8 +129,9 @@
 
 | 日期 | 类型 | 新增 | 更新 | 隔离 | 成本 | 说明 |
 |---|---|---|---|---|---|---|
-| 2026-09-16 | deep | 技术卡+4 拒1（FINESSE 同名异物识破）/重验 6 条（Shipaton 奖金 685K→740K 修正、宝可梦口径纠偏、ARC M1 放榜新发现、Qoder 系列信源劣化降级）/MLH 转活跃/C4 冠军方案未到窗口如实记录/P2 双族 survey 刷新（时序 25 卡、agents 34 卡） | 0 | 1 | 4 分片/约 7.5M tok/40min | comp 队列 2 条为已知日历刷新，归档不建条 |
+| 2026-09-16 | deep-small | 技术卡+2 拒3（SOTER 域专用生成式 TSFM 入族；Agentic Search Spaces 入库；评测/后训练/社会模拟三拒）+MLH GHW 翻转 ended | 0 | 3 | 1 分片/0.83M tok | 同日小增量轮（手动重复触发）：C4 重查/老化滚动距上轮 1.4h 无意义跳过 |
 <!-- 成本列=分片数/token/墙钟（T4.3 起新行必填；旧行无此列属历史格式） -->
+| 2026-09-16 | deep | 技术卡+4 拒1（FINESSE 同名异物识破）/重验 6 条（Shipaton 奖金 685K→740K 修正、宝可梦口径纠偏、ARC M1 放榜新发现、Qoder 系列信源劣化降级）/MLH 转活跃/C4 冠军方案未到窗口如实记录/P2 双族 survey 刷新（时序 25 卡、agents 34 卡） | 0 | 1 | 4 分片/约 7.5M tok/40min | comp 队列 2 条为已知日历刷新，归档不建条 |
 | 2026-09-09 | deep | 技术卡+5（gh 代码型 4 张高星）/赛事+1（CALA Hacks）/重验 7 条（lablabai 转活跃、C4 转 ended+冠军三源）/小鹏期 winners 补构（名单图双视觉+1 深构） | 0 | 0 | 4 分片/约 8.3M tok/45min | 到期 watch：小鹏✅ C4✅；顺延：XPRIZE 9-25、GOAI 9-22 |
 | 2026-08-29 | tech+comp | 赛事条目0 / 技术卡0 | 1 | 0 | 主会话直办1分片/约3min | /attack 预刷新：tech 72 拉取 0 新候选（台账去重）；comp 候选2=LA Hacks 复查（仍 JS SPA，待核维持）+MLH 聚合噪声弃置；子 agent 通道故障（Model provider not configured）降级主会话直办；CDEC 留尾继续待 browser-use 预抓；KB lint 101/101 |
 | 2026-08-28 | tech+comp | 赛事条目1 / 技术卡0 | 0 | 1 | 1分片/约14min | /attack 审计后重开预刷新：UCLA AI Hackathon 入库但章程/奖项/AI 政策待 SPA 深核；MLH 赛季日历判聚合噪声；tech 73 拉取后 0 新候选；KB lint 101/101 |
