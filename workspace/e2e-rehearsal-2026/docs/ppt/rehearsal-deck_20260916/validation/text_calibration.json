@@ -1,0 +1,70 @@
+{
+  "roles": {
+    "body": {
+      "family": "'Microsoft YaHei', 'Noto Sans SC', 'PingFang SC', Arial, sans-serif",
+      "size": 30.0,
+      "weight": "normal",
+      "cjk_chars_per_100px": 3.1,
+      "latin_chars_per_100px": 6.5,
+      "caps_chars_per_100px": 6.0,
+      "digits_chars_per_100px": 5.7,
+      "citation_chars_per_100px": 6.0,
+      "script_clusters_per_100px": {},
+      "longest_planned_line": {
+        "px": 1173.4,
+        "slide": "P05",
+        "text": "复验命令 python check_report.py（退出码 0）· 人机分…"
+      }
+    },
+    "title": {
+      "family": "'Microsoft YaHei', 'Noto Sans SC', 'PingFang SC', Arial, sans-serif",
+      "size": 54.0,
+      "weight": "normal",
+      "cjk_chars_per_100px": 1.7,
+      "latin_chars_per_100px": 3.6,
+      "caps_chars_per_100px": 3.3,
+      "digits_chars_per_100px": 3.2,
+      "citation_chars_per_100px": 3.3,
+      "script_clusters_per_100px": {},
+      "longest_planned_line": {
+        "px": 1144.8,
+        "slide": "P04",
+        "text": "质量闭环：测试先行，验收左移，数字全溯源"
+      }
+    },
+    "subtitle": {
+      "family": "'Microsoft YaHei', 'Noto Sans SC', 'PingFang SC', Arial, sans-serif",
+      "size": 36.0,
+      "weight": "normal",
+      "cjk_chars_per_100px": 2.6,
+      "latin_chars_per_100px": 5.4,
+      "caps_chars_per_100px": 5.0,
+      "digits_chars_per_100px": 4.8,
+      "citation_chars_per_100px": 5.0,
+      "script_clusters_per_100px": {},
+      "longest_planned_line": {
+        "px": 1127.2,
+        "slide": "P01",
+        "text": "最小数据叙事闭环——从 CSV 到答辩 PPT，每个数字都能追溯到实测"
+      }
+    },
+    "annotation": {
+      "family": "'Microsoft YaHei', 'Noto Sans SC', 'PingFang SC', Arial, sans-serif",
+      "size": 20.0,
+      "weight": "normal",
+      "cjk_chars_per_100px": 4.7,
+      "latin_chars_per_100px": 9.7,
+      "caps_chars_per_100px": 9.0,
+      "digits_chars_per_100px": 8.6,
+      "citation_chars_per_100px": 9.0,
+      "script_clusters_per_100px": {},
+      "longest_planned_line": null
+    }
+  },
+  "script_samples": {},
+  "source": "spec_lock.md",
+  "generated_at": "2026-09-16T11:47:29Z",
+  "notes": [
+    "every role is measured at normal weight; recalibrate a role realized as bold deck-wide with --role NAME:FAMILY:SIZE:bold: bold widens Latin and digits about 7%, while the bundled advance table gives CJK one width for both weights"
+  ]
+}

@@ -6,6 +6,6 @@
 
 **Status:** ready-for-agent
 
-- [ ] 彩排战役从 grill 到 ppt 全链路走通，无中途人工门之外的停顿
-- [ ] specs/、自检记录、ppt_brief.md、pptx 产物齐备且落位正确
-- [ ] /accept 清单全 PASS；数字溯源全部命中 metrics.json
+- [x] 彩排战役从 grill 到 ppt 全链路走通，无中途人工门之外的停顿
+- [x] specs/、自检记录、ppt_brief.md、pptx 产物齐备且落位正确
+- [x] /accept 清单全 PASS；数字溯源全部命中 metrics.json

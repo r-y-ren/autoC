@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" data-pptx-page-role="content"
+     font-family="'Microsoft YaHei', 'Noto Sans SC', 'PingFang SC', Arial, sans-serif">
+  <rect id="bg-field" data-pptx-role="background" x="0" y="0" width="1280" height="720" fill="#0B1220"/>
+
+  <g id="page-title" data-pptx-bounds="80 84 1120 76">
+    <text x="80" y="140" font-size="54" font-weight="bold" fill="#E2E8F0">一条命令，把原始 CSV 变成<tspan fill="#22D3EE">可引用指标</tspan></text>
+  </g>
+
+  <g id="takeaway" data-pptx-bounds="80 178 1120 46">
+    <rect x="80" y="180" width="4" height="32" fill="#38BDF8"/>
+    <text x="100" y="206" font-size="30" fill="#94A3B8">零依赖是可信的前提——没有黑盒，任何评审机都能复跑</text>
+  </g>
+
+  <g id="terminal-card" data-pptx-bounds="80 248 660 356">
+    <rect x="80" y="248" width="660" height="356" rx="6" fill="#111A2E" stroke="#1E293B" stroke-width="1"/>
+    <use data-icon="tabler-outline/terminal-2" x="104" y="272" width="28" height="28" fill="#38BDF8" stroke-width="2"/>
+    <text x="144" y="294" font-size="20" fill="#94A3B8">stats_cli · 终端会话</text>
+    <g font-family="Consolas, 'JetBrains Mono', 'Courier New', monospace">
+      <text x="104" y="352" font-size="22" fill="#22D3EE">$ python stats_cli.py --csv sample.csv --check</text>
+      <text x="104" y="404" font-size="22" fill="#94A3B8"><tspan x="104" dy="0">{ "rows": 6, "cols": 3,</tspan><tspan x="104" dy="36">  "score": {"mean": 88.0, "max": 95.0},</tspan><tspan x="104" dy="36">  "hours": {"mean": 5.5, "max": 8.0} }</tspan></text>
+      <text x="104" y="540" font-size="22" fill="#38BDF8">exit 0 · 自检通过</text>
+    </g>
+  </g>
+
+  <g id="card-zero-dep" data-pptx-bounds="772 248 428 164">
+    <rect x="772" y="248" width="428" height="164" rx="6" fill="#111A2E" stroke="#1E293B" stroke-width="1"/>
+    <text x="804" y="312" font-size="30" font-weight="bold" fill="#E2E8F0">零第三方依赖</text>
+    <text x="804" y="360" font-size="22" fill="#94A3B8"><tspan x="804" dy="0">纯 Python 标准库——CLI、解析、统计</tspan><tspan x="804" dy="34">与自检全部原生气实现，无黑盒</tspan></text>
+  </g>
+
+  <g id="card-selfcheck" data-pptx-bounds="772 440 428 164">
+    <rect x="772" y="440" width="428" height="164" rx="6" fill="#111A2E" stroke="#1E293B" stroke-width="1"/>
+    <text x="804" y="504" font-size="30" font-weight="bold" fill="#E2E8F0">自检模式 --check</text>
+    <text x="804" y="552" font-size="22" fill="#94A3B8"><tspan x="804" dy="0">异常输入或统计不过 → 非零退出码</tspan><tspan x="804" dy="34">验收项 a1 直接消费该退出码</tspan></text>
+  </g>
+
+  <g id="page-footer" data-pptx-bounds="80 648 1120 40">
+    <text x="640" y="676" text-anchor="middle" font-size="20" fill="#94A3B8">证据 · 29 项单元测试全绿（a2）｜e2e-rehearsal-2026</text>
+  </g>
+</svg>
