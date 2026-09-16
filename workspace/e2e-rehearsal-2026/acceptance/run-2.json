@@ -1,0 +1,34 @@
+{
+  "campaign": {
+    "competition_id": "cala-hacks-ai-2026",
+    "blueprint_ref": "cac4c52",
+    "campaign_id": "e2e-rehearsal-2026"
+  },
+  "checklist": [
+    {
+      "id": "a1",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace/e2e-rehearsal-2026/acceptance/evidence/a1.log"
+    },
+    {
+      "id": "a2",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace/e2e-rehearsal-2026/acceptance/evidence/a2.log"
+    },
+    {
+      "id": "a3",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace/e2e-rehearsal-2026/acceptance/evidence/a3.log"
+    }
+  ],
+  "result": "pass",
+  "generated_at": "2026-09-16T19:12:46",
+  "retry_state": {
+    "count": 0,
+    "max": 3,
+    "tripped": false
+  }
+}

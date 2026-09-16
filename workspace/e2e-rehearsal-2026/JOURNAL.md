@@ -6,3 +6,4 @@
 | 2026-09-16 | decide | 蓝图经用户确认（唯一人工闸门通过，auto_chain=true） | 进入 /deliver |
 | 2026-09-16 | deliver | **W1 波门（m1/software，票01-03）**：左移 a1/a2 PASS（29 测试）；接口契约 interface/contract.md 冻结；metrics 分片 8 键实测落盘；TDD 红→绿留痕 | 进 W2（m2 document） |
 | 2026-09-16 | deliver | **W2 波门+末波收拢（m2/document 票04）**：report.typ→pdf 单页，8 数字全量命中 metrics 分片（a3=0，pdftotext 旁证零片外数字）；契约 §4/§5 勘误（typst-py root 实参）；merge_metrics 汇总 8 键+meta | 进入 /accept 终验 |
+| 2026-09-16 | verify | **K-12 第一环**：/accept 全量 PASS（a1-a3，run-2）；document 产 docs/ppt_brief.md（5 页简报，8 键全量引用，数字纪律声明） | 待 ppt-master Gate1 用户门 |
