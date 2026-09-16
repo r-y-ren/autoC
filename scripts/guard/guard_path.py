@@ -55,11 +55,14 @@ FAIL_CLOSED_ALLOW = [".flow"]
 
 # 战役阶段策略：allow/deny 均相对战役 root（由调用方拼接）
 CAMPAIGN_POLICY = {
-    "decide": {"allow": ["strategy.md", "blueprint.md", "JOURNAL.md"]},
+    # strategy=grilling 纪要目录（升级票07：strategy/grill-notes.md）
+    "decide": {"allow": ["strategy", "strategy.md", "blueprint.md", "JOURNAL.md"]},
     # workspace/<cid>/metrics.json 是分片汇总生成物（merge_metrics.py 产出），角色禁写：
     # 角色只写 <root>/<role>/metrics.json 分片（K-03 前置项裁决，DESIGN §6.2）
     "deliver": {"allow": ["*"], "deny": ["acceptance", "metrics.json"]},
-    "verify": {"allow": ["acceptance"]},
+    # docs 子树放行=K-12 /ppt 窗口（升级票10）：验收通过后、归档前的答辩 PPT 产线
+    # 写 docs/（ppt_brief.md + ppt-master 项目路由 docs/ppt/）；等价于"post-accept 子态"的简化实现
+    "verify": {"allow": ["acceptance", "docs"]},
     "archive": {"allow": []},
     "idle": {"allow": []},
 }

@@ -1,9 +1,11 @@
 ---
 name: marp-deck
-description: 答辩 PPT 生成：从 Marp 模板与汇总指标生成竞赛答辩演示文稿并导出 pptx。当 Document 角色需要产出 PPT、或用户要求生成演示材料时使用。
+description: 答辩 PPT 波内草稿生成（升级票10 降级定位）：从 Marp 模板与汇总指标生成快速迭代演示草稿。正式答辩 pptx 唯一产线为 K-12 /ppt（ppt-master）。当 Document 角色需要波内草稿、或用户要求快速演示材料时使用。
 ---
 
-# K-06 marp-deck：答辩 PPT 生成
+# K-06 marp-deck：答辩 PPT 波内草稿生成
+
+> **定位（升级票10，2026-09-16）**：本产线自 K-12 落地起定位为**波内草稿**——数字溯源快稿、/accept 审阅辅助、内参迭代。正式答辩 PPT 由 `/ppt`（K-12，ppt-master 双用户门）产出；归档时本线产物标注"草稿"，不得与正式 pptx 混淆。
 
 ## 前置
 
