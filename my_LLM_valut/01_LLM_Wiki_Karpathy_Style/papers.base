@@ -1,0 +1,13 @@
+views:
+  - type: table
+    name: 表格
+    filters:
+      and:
+        - file.tags.contains("论文")
+        - file.inFolder("wiki")
+    order:
+      - file.name
+      - reproducibility_level
+    sort:
+      - property: file.name
+        direction: ASC

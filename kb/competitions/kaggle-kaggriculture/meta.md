@@ -21,7 +21,7 @@ key_dates:
   entry_deadline:
     date: "unknown"
     verified: false
-    note: "官方 API Timeline 该行为模板变量（${competition.ProhibitNewEntrantsExplicitDeadline}）未解析；赛站 Overview 页为 SPA。待主会话预抓核对。当前（2026-08-28）赛事 active，报名应仍开放，但截止日无官方数值"
+    note: "官方 API Timeline 该行为模板变量（${competition.ProhibitNewEntrantsExplicitDeadline}）未解析；赛站 Overview 页为 SPA。待主会话预抓核对。2026-09-16 重验：Timeline 页终交 09-30 仍在前方、赛事在赛，报名应仍开放，但截止日无官方数值"
   final_submission_deadline:
     date: "2026-09-30"
     verified: true
@@ -45,8 +45,11 @@ ai_policy:
   url: https://www.kaggle.com/competitions/kaggriculture/rules
   checked: "2026-08-28"
 credibility: 官网
-last_verified: "2026-08-28"
+last_verified: "2026-09-16"
 sources:
+  - url: https://www.kaggle.com/api/i/competitions.PageService/ListPages?competitionId=147734
+    title: "Kaggle 官方 ListPages API（competitionId=147734）2026-09-16 重验直抓：12 页内容与 2026-08-28 快照逐字节 diff 全部一致——Timeline（开赛 07-29/终交 09-30/收敛 10-01~约10-15）、rules 全文、Prizes（10×$5,000）均无变更；entry deadline 仍为模板变量未解析。快照存 kb/raw/"
+    accessed: "2026-09-16"
   - url: https://www.kaggle.com/api/i/competitions.PageService/ListPages?competitionId=147734
     title: "Kaggle 官方 ListPages API（competitionId=147734）：rules 全文（$50,000/CC-BY 4.0/Apache 2.0）、Prizes（10×$5,000）、Timeline（开赛 07-29、终交 09-30、收敛至约 10-15）、Evaluation（天梯+Bradley-Terry）、How to Play/Foundational Rules（游戏机制全文）—— 2026-08-28 直抓"
     accessed: "2026-08-28"
@@ -88,7 +91,13 @@ sources:
 - `kb/raw/kaggle-kaggriculture/2026-kaggle-pages-api.json`（全页官方 JSON：rules/foundational-rules/how-to-play/prizes/evaluation/timeline/description/FAQ 等 12 页）
 - `kb/raw/kaggle-kaggriculture/2026-kaggle-page-*.md`（逐页导出 12 件）
 - `kb/raw/kaggle-kaggriculture/2026-kaggle-overview-shell.html`（SSR 壳）
+- `kb/raw/kaggle-kaggriculture/2026-09-16-kaggle-pages-api.json`（2026-09-16 重验快照：与 08-28 全页 diff 一致，无变更）
+- `kb/raw/kaggle-kaggriculture/2026-09-16-kaggle-overview-shell.html`（重验 SSR 壳，与旧壳一致）
 - 抓取通道备注：Kaggle SPA，正文经 Kaggle 官方 ListPages API（competitions.PageService）匿名直抓，等效直抓官网。
+
+## 重验记录
+
+- **2026-09-16（老化重验·滚动批）**：官方 12 页与 08-28 快照逐字节一致——关键日期（终交 09-30、榜单收敛至约 10-15）、规则、奖金口径（10×$5,000）均无变更；重验无变化。待核项（$50K/$60K、entry_deadline）维持原状。
 
 ## 待核验清单
 

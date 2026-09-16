@@ -530,4 +530,8 @@
   reason: competition_fit不足——神经符号逻辑推理变体（SymbolLKG：本体LKG把逻辑规则/约束作一等拓扑节点+Logic Router动态派发符号求解器+拓扑感知混合检索）：LLM+符号求解器做可验证推理的范式已成熟拥挤，本文增量（LKG拓扑建模/动态路由）无代码放出（arXiv页无链接、Comments仅'19 pages, 9 figures'，2026-08-28实抓），复现需自建本体抽取+LKG构建+路由器（高成本）且『显著超SOTA提示/RAG基线』的对比不可独立验证；RAG系同质化从严下无独有可移植组件，六类赛种写不出有说服力映射；拒于映射非信号（arXiv候选citations门槛=0通过）
   stars: null
   decided: '2026-08-28'
+- id: arxiv-2609.11993
+  reason: competition_fit不足——FINESSE金融多模态事件流agent仿真器+四任务基准（balance forecast/欺诈检测/漏付预测/next event，跨TS/事件序列/时序图/TPP四族基线）：摘要自称'We release the FINESSE framework, including the simulator and dataset'但arXiv页无任何链接（2026-09-16实抓），GitHub四轮搜索（FINESSE financial event sequence / FINESSE simulator financial / FINESSE-Bench / finesse event stream Python）无匹配仓库——唯一同名LimexAILab/FINESSE-Bench系2026-04-20创建的LLM金融问答评测套件（FinQA/CFA-style QA，5★），早于论文提交（2026-09-09）且内容无关，非官方实现；HuggingFace数据集/模型搜索亦无（2026-09-16实抓）；无代码→复用=自实现潜状态耦合多流agent仿真器（高成本），而『合成事件流供风控类赛题造数据』的赛期价值用通用仿真即可获得，论文独有部分（多流潜状态耦合真实性）恰是不可低成本复用部分——差异化主张不可达，四任务对比协议有参考价值但不足以独立入库；拒于映射非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-09-16'
 

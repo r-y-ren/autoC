@@ -1,23 +1,23 @@
 ---
 family: LLM agents
-cards: [arxiv-2608.23992, arxiv-2608.24017, arxiv-2608.24022, arxiv-2608.24087, arxiv-2608.24103, arxiv-2608.24569, arxiv-2608.24735, arxiv-2608.25039, arxiv-2608.25152, arxiv-2608.25198, arxiv-2608.25500, arxiv-2608.25992, arxiv-2608.26199, arxiv-2608.26747, arxiv-2608.26753, arxiv-2608.26899, arxiv-2608.26990, arxiv-2608.27146, arxiv-2608.27167, arxiv-2608.27182, arxiv-2608.27260, gh-BraxisAI_braxis-blueprint, gh-Vistyy_nopus, gh-UditAkhourii_cdaf, gh-Zyrexnn_Cybermes, gh-agents-universe_agents-universe, gh-joe960913_Jixu, gh-memovai_mimimodel, gh-rome-os_rome, gh-wolfiesch_omp-best-of, gh-squall01337_mixamo-llm-mocap]
-last_verified: 2026-08-28
+cards: [arxiv-2608.23992, arxiv-2608.24017, arxiv-2608.24022, arxiv-2608.24087, arxiv-2608.24103, arxiv-2608.24569, arxiv-2608.24735, arxiv-2608.25039, arxiv-2608.25152, arxiv-2608.25198, arxiv-2608.25500, arxiv-2608.25992, arxiv-2608.26199, arxiv-2608.26747, arxiv-2608.26753, arxiv-2608.26899, arxiv-2608.26990, arxiv-2608.27146, arxiv-2608.27167, arxiv-2608.27182, arxiv-2608.27260, gh-BraxisAI_braxis-blueprint, gh-Vistyy_nopus, gh-UditAkhourii_cdaf, gh-Zyrexnn_Cybermes, gh-agents-universe_agents-universe, gh-JordyZomer_lemmalog, gh-QwenLM_E-CommerceBench, gh-kyky2347_ALTA, gh-joe960913_Jixu, gh-memovai_mimimodel, gh-rome-os_rome, gh-wolfiesch_omp-best-of, gh-squall01337_mixamo-llm-mocap]
+last_verified: 2026-09-16
 confidence: 中
 ---
 
 # _surveys/LLM-agents族.md —— LLM agents 同族技术汇总（KB-2 汇总层）
 
-> 覆盖 `kb/tech/` 中 field 含 "LLM agents" 的全部卡片，2026-08-28 快照共 **31 张**（全量构建 W4 由 Hunter 逐卡读完后重组，结论均可回溯到所列卡片 ID；量化数字凡标"论文口径/README 口径"者均为作者自报，未经第三方复现，引用须守铁律 4）。
+> 覆盖 `kb/tech/` 中 field 含 "LLM agents" 的全部卡片，2026-08-28 快照 31 张、2026-09-09 增补 3 张（gh-JordyZomer_lemmalog / gh-QwenLM_E-CommerceBench / gh-kyky2347_ALTA），共 **34 张**（全量构建 W4 由 Hunter 逐卡读完后重组，结论均可回溯到所列卡片 ID；量化数字凡标"论文口径/README 口径"者均为作者自报，未经第三方复现，引用须守铁律 4）。
 >
 > 边界说明（两条排除/指针）：
 > - `gh-only-cli_oc`（oc）field 含 retrieval augmented generation，属 RAG 混合卡，归 RAG 族，本表不重复收录；
 > - `arxiv-2608.23918`（MARS）field 为 [代码生成, 多智能体系统, 竞赛编程]，不含 "LLM agents"，不属本族——仅在本文件"选型结论"末尾作跨族指针。
 >
-> 族内成熟度概况：runnable=true 共 16 张（多为 demo 级开源仓），runnable=false 共 15 张（全部为 arXiv v1 论文且无可用代码）；有 venue 信号者仅 EMNLP 2026 系（24103 Industry Track / 25992 Findings / 23918 跨族）。
+> 族内成熟度概况：runnable=true 共 19 张（多为 demo 级开源仓；含 09-09 增补 3 张），runnable=false 共 15 张（全部为 arXiv v1 论文且无可用代码）；有 venue 信号者仅 EMNLP 2026 系（24103 Industry Track / 25992 Findings / 23918 跨族）。
 
 ## 同族技术对比矩阵
 
-按功能分五组：A 可靠性与安全（5）、B 工具调用与路由（6）、C 评测与审计（7）、D 自改进与多智能体编排（7）、E 领域应用与交付底座（6）。每行一张卡。
+按功能分五组：A 可靠性与安全（6）、B 工具调用与路由（6）、C 评测与审计（8）、D 自改进与多智能体编排（8）、E 领域应用与交付底座（6）。每行一张卡。
 
 ### A. Agent 可靠性与安全
 
@@ -28,6 +28,7 @@ confidence: 中
 | arxiv-2608.27167（行动门控） | 决策/RAG agent 前置"该不该行动"知道性门控；伪造证据金丝雀压测套件（可信 AI 赛道） | 评估侧零 GPU（data/ 缓存输出可复算）；修补训练为 540 条合成案例 3B SFT 单卡小时级（训练代码不在发布仓，需自写） | 低（代码/数据/预注册全开源，答辩可现场重跑出图） | 12 模型承诺率 6.5%→54.0%、全伪造面板 36.8% vs 真数据 37.6% 统计不可区分（论文口径）——"解锁行动的是包装权威性"是有冲击力的现场实验；门控 agent 与压测套件两种作品形态均稀缺 | v1 单作者无 venue、repo star=0；门控仅在响应格式留推理空间时稳定（上下文脆弱）；效应集中于少数模型 |
 | arxiv-2608.27146（SARA） | 工具增强 agent 的运行时注入防御："工具输出=不可信命令"的攻防演示 | 无训练；自测可用 AgentDojo 公开注入子集 | 中（无代码；探针隔离+授权中间件降维版 2-3 人日） | 架构级角色分离（隔离 Action Probe + 动作出处台账 + No-History-Promotion 防历史漂白）对比"提示词加一句防注入"的普遍做法；论文口径 ASR≤0.63%（AgentDojo/AgentDyn） | runnable=false；每动作多一次模型调用、延迟成本未量化；ASR 为作者自报 v1；误拒率边界只在主设置报告 |
 | arxiv-2608.24017（WebMCP-Phalanx） | 浏览器/MCP agent 的信任边界：工具注册主体归因 + 检疫-执行双 agent 分离 | 无训练；密码学凭证层在 demo 中降级为签名/标签模拟 | 中（双 LLM 角色 + 策略校验为纯工程；浏览器原生信任锚只能模拟，W3C WebMCP 尚未落地） | 撤销/覆写攻击 100%→0%、80/80 工具描述注入被拦（论文口径）；论文的攻击三分法（归因伪造/生命周期失控/语义注入）可搬作自测 checklist；把叙事从"又做了一个 agent"升级为"有信任边界的 agent" | runnable=false；白盒自适应攻击者可借恶意工具名绕过描述过滤（需补"调用时机门"才闭环）；评测规模 80 次攻击级；AAAI2027 仅为投稿标注 |
+| gh-JordyZomer_lemmalog（可审计记忆=演绎数据库） | 长程/多日 agent 作品的共享记忆层："为什么记得这个"须机器可验证的多轮调研、运维诊断、多 agent 协作 | 无训练；Rust `cargo build --release --features mcp`（纯 Python 队伍有一道工具链门槛）；本体 schema 与规则集需自行设计 | 中（MIT 官方仓 + MCP server 12 工具 + 现成 agent skill，挂 Claude Code/Kimi CLI 半天量级；冷启动成本在规则层不在代码层） | 记忆不是向量库相似度而是演绎数据库：每条事实带溯源、`why()` 证明树、矛盾候选自动派生、双时间戳区分事实有效期与断言期——评审现场 `why()` 一条结论，是清一色向量 RAG 作品答不出的演示；"assert-as-you-verify、先查询再推理"的 skill 纪律零成本可抄 | 摄取质量取决于 LLM 抽取器（基础事实错则闭包整层错）；语义侧索引默认 HashEmbedder 玩具级；单人研究项目无生产部署案例；295 stars 但 2026-08-27 才创建 |
 
 ### B. 工具调用与路由
 
@@ -51,6 +52,7 @@ confidence: 中
 | arxiv-2608.26753（ABE-Ralph） | 科研/管线 agent 的"实验保真度"自审：方法论幻觉检测（缩水数据/oracle 替身/降资源结论） | 仓内 M1-M5 失败模式分类器、三重验证器、六框架对比 harness；需绑定 Claude Code CLI 与 OpenAI API | 中（仓库实测可达但 0 star 零社区验证；2-3 人日出 demo） | "代码能跑≠实验可信"的埋雷复现代码检测演示冲击强；Kaggle 侧降维为提交前自查单（泄漏列/降采样验证集/硬编码替换）几乎零成本 | 审计前提是存在参考可锚定（自由探索任务不适用）；93% 执行率为作者自报 v1；长程复现 API 预算未量化 |
 | arxiv-2608.26899（反事实偏见测试） | 匹配/排序系统的公平性审计器作品；涉人群决策数模题的评估章节增强 | 自建反事实样本集（LLM-agent 合成或脚本翻转受保护字段）；九指标多为标准统计量 | 中（黑客松审计器重实现）/ 低（数模降维为 3-4 指标 + bootstrap CI + BH 校正） | 多族指标抓单指标漏检是演示杀手锏：论文实证 MARC 与 nDCG@K 各揪出边界问题（含中性基线本身）；反事实矩阵 + PASS/INVESTIGATE/FAIL 自动裁决报告的完整链路 | 无代码；案例规模小（5 职位/100 候选人）；合规红线——只审自有/沙盒管线，禁对真实系统批量投递；EU AI Act 对齐仅提示词层 |
 | gh-Vistyy_nopus | coding agent 回复的可读性质量门（输出治理/可观测性赛题组件） | 无（词频/具体性数据打包、SHA-256 锁源）；自带 5,337 条真实响应标定 | 低（npm 一行装；判定库可对接自研 agent） | 确定性可复现 + 零推理成本，对比 LLM-as-judge 的又贵又抖；三档灵敏度重写率曲线（5.3%/9.9%/18.6%）评测章节素材现成 | 仅英文（中文/中英混排不适用）；度量可读性而非正确性，越界主张会被评审戳穿；2026-08-19 后停更迹象 |
+| gh-QwenLM_E-CommerceBench（365 天网店经营长程考场） | 长程 agent 作品的第三方抗注水评分环境：声称"长程自治决策"时给出可复核数字；定价/库存/现金流类数模题的现成策略沙盘 | 无训练；Python 3.10+ 环境半天可通，但 365 天 × 5 episode 的 LLM API 费用与运行时长需预算（全量榜单复跑不现实，自跑 1-3 个 episode） | 中（Apache-2.0 官方仓 clone 即用；接口面向 LLM agent，接经典优化/OR 策略需自写适配层） | 主分数资产乘数天然抗 gaming——错误在数百天复利放大、破产无法用话术掩盖；诊断维（¥/tool call、BadSpend%、回撤、破产次数）把"赚了钱"拆成"怎么赚的"，直接搬进作品评测章节；18 模型 × 5 episode 公开榜单可对表（README 自报口径，QwenLM 官方 + arXiv 2608.30730 背书） | 评测框架不提供方法只提供考场；模拟供需锚定真实数据但平台机制/竞对行为是仿真；82 stars 年轻仓库榜单口径可能漂移 |
 
 ### D. 自改进与多智能体编排
 
@@ -63,6 +65,7 @@ confidence: 中
 | arxiv-2608.25152（Belief Cascades） | 舆情/观点演化 ABM（LLM 智能体替换 SIR/Voter/deGroot）；观点动力学沙盘 demo | 公开 ego-network 拓扑数据 + LLM API（每 agent 每轮生成 + probe） | 中（无代码，testbed 按论文自建；核心开销是 API 调用） | belief probe / exposure provenance / action logs 三件套测量协议本身就是卖点——多数同类 demo 只能展示对话，无法量化说服力；数模场画出"级联传播树 + 立场时间线"论文级图，与套经典传播模型的队伍拉开档次 | runnable=false；说服结论随模型/话题组合而变（非稳定常数）；LLM 立场变化 ≠ 真实人类舆情，外推需谨慎 |
 | gh-agents-universe_agents-universe | 企业级/团队协作 agent 赛题整套底座（多角色 + 个人身份最小权限 + 双层沙箱 + 全程审计） | SQL Server + Redis + Docker 部署；项目文档语料投喂 | 中（整套部署重）/ 低（知识条目规范可零依赖单独搬用） | "不用向量库的项目记忆"（全量读 + [[slug]] 交叉引用 + knowledge_rw 回写 + [stale] 退役）在满场"向量库+聊天框"方案中身位差清晰；QA 角色产 Playwright 脚本接 CI 零 token 回归；数字溯源 + [inferred] 标注回应数据可信度追问 | 151 stars 仅 1 fork、星数真实性存疑；无任何量化基准；渗透测试角色演示须慎用（合规）；pre-1.0 |
 | gh-rome-os_rome | 需 24-48h 交付"带 UI、持久数据、定时任务的 AI 助手产品"的黑客松 | Docker 自托管 + 模型 API key；Node 24+ / pnpm 11.6 环境 | 中（Docker 一键起，需预拉镜像并验证断网可用；app.yaml 清单可脱离平台单独借鉴） | Rome App 模型（类型化 actions + 私有 agents/skills/hooks + 持久库 + 专用 UI）把聊天 demo 升级为"装得住的应用"；产物是 git 跟踪源码——"agent 自举建 App、能力复利"叙事是手工作坊拿不到的 | 平台 5 天龄 370 stars、组织化推广明显；云服务仅 preview；作底座的平台成熟度风险会被评审追问 |
+| gh-kyky2347_ALTA（自治研究型虚拟交易平台） | 金融/量化/Agent 黑客松的"负责任自治系统"参考架构；三条设计律可平移任何多 agent 决策类作品（供应链/风控/运维） | 公开市场数据源 + PostgreSQL + Redis + LLM 密钥（可选 Tiger paper 券商接入）；部署栈不轻，现场从零跑通需预案 | 中（Apache-2.0 带 CI，一天量级本地部署+演示剧本；赛前务必演练断连恢复卖点） | Scouts 找信号→Foundry 冻结可证伪机会→bull/bear 对辩→组合感知排序→独立风控一票否决→Shadow 影子账本回放归因：单 agent 无法自造证据、自批风险、自动员资金（确定性代码守所有权边界）——评审问"模型说错怎么办"的答案是系统设计本身；双语操作台路演即用 | 作者明确不宣称 Alpha、Shadow 记录非真实盘口；research-only/非投资建议定位须如实转述；248 stars 但 2026-08-27 创建迭代极快、深度文档以英文为主 |
 
 ### E. 领域应用与交付底座
 
@@ -86,6 +89,7 @@ confidence: 中
 3. 决策/建议类 agent（会面对"权威外观"的证据面板）：前置 27167 行动门控——直接用其开源数据复算演示，或用其面板构造法做"包装诱导承诺"压测套件（可信 AI 赛道稀缺品类）。
 4. 攻击后取证叙事（高级选项）：AttnLocate 只走降级路线——注意力归因代理 + 阈值 + 提供方权限表（24022）；完整训练版赛期内不做（见"不推荐"）。
 5. 可靠性底座（评委问"跑一半崩了/断网了怎么办"）：TypeScript 栈选 Jixu（gh-joe960913_Jixu，事件溯源恢复/重放/fork 即演示）；无人值守环节至少套 braxis 的 cronwrap 单实例守卫与七条故障自检表（gh-BraxisAI）。
+6. 可审计记忆（评委问"你的 agent 为什么记得这个/结论哪来的"）：lemmalog 演绎数据库记忆——每条事实带溯源、why() 证明树、矛盾候选自动派生，MCP server 12 工具挂 Claude Code/Kimi CLI 半天接入（gh-JordyZomer_lemmalog）；演示时当场展开一条结论的证明树，与满场向量 RAG 作品拉开身位；接入前先设计好本体 schema 与规则集。
 
 **二、工具与上下文管理（评委问"工具这么多/token 这么贵"）**
 
@@ -104,15 +108,16 @@ confidence: 中
 5. 输出质量门（英文作品）：nopus 确定性散文门（gh-Vistyy_nopus），标定曲线素材现成。
 6. 提交/产出择优：omp-best-of 的"N 候选 + 验证器 + 条件回写"护栏（gh-wolfiesch），验证器核心 llm-verifier 可独立复用。
 7. 自建数据的元叙事：按 (E,q,τ,v) 拆生成器、沿 ACE 三轴做消融（27260），回答"我们的数据为什么好"。
+8. 长程自治决策的抗注水证据：在 E-CommerceBench 跑 3-5 个 episode 出资产乘数与破产次数作第三方可复核数字，诊断维（¥/tool call、BadSpend%）搬进评测章节（gh-QwenLM_E-CommerceBench）。
 
 **四、整机底座与领域骨架**
 
 1. 产品形态分（要交付"可运行的应用"而非 demo）：快速出活选 Rome App 模型（gh-rome-os，平台年轻需备好"底座挂了怎么办"说辞）；企业/团队协作叙事选 agents-universe（gh-agents-universe，部署重、至少单搬知识条目规范）；可靠性优先自己写 UI 则用 Jixu 做骨架。
-2. 领域现成骨架（对号入座，勿为用而用）：安全自动化→Cybermes（授权限定）；PPT/文档自动化→ACE 三模式（24103）；行程规划→LifePlanner 打法（25039）；视频类→cdaf 边车（gh-cdaf）；动画/AIGC→mixamo 管线（gh-mixamo）；硬件离线→mimimodel（gh-mimimodel）。
+2. 领域现成骨架（对号入座，勿为用而用）：安全自动化→Cybermes（授权限定）；PPT/文档自动化→ACE 三模式（24103）；行程规划→LifePlanner 打法（25039）；金融/交易研究→ALTA 骨架与三条设计律（LLM 提判断、确定性代码握权限与记账；research-only 限定）（gh-kyky2347_ALTA）；视频类→cdaf 边车（gh-cdaf）；动画/AIGC→mixamo 管线（gh-mixamo）；硬件离线→mimimodel（gh-mimimodel）。
 
 **五、组合打法（三条参考组合）**
 
-- 可信 agent 组合：24569 交接保活 + 27146 隔离授权 + 27167 行动门控 + 26199 配置清单 + Jixu 事件史审计——安全、可靠、可审计三层齐，评审问不倒。
+- 可信 agent 组合：24569 交接保活 + 27146 隔离授权 + 27167 行动门控 + 26199 配置清单 + Jixu 事件史审计 + lemmalog 可审计记忆（why() 证明树）——安全、可靠、可审计三层齐，评审问不倒。
 - 预算内自改进组合：braxis 通道保活 + 24087/25992 路由 + 26747 失败记忆闭环 + gh-wolfiesch 择优回写——"同等预算多跑数轮且不重复踩坑"。
 - 自评闭环组合：27260 数据框架造集 + 27182/26899 针对性评测 + 26753 自审 + gh-Vistyy_nopus 输出门——"我们怎么证明自己好用"。
 

@@ -4,7 +4,7 @@ name: "MLH Global Hack Week: Data Week 2026"
 tier: 编程/黑客松
 directions:
   - 黑客松与数据竞赛
-status: upcoming
+status: active
 organizer: "Major League Hacking（MLH）"
 award_levels:
   - name: "挑战积分制（Experience Points）"
