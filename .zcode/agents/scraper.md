@@ -1,6 +1,6 @@
 ---
 name: "scraper"
-description: "赛事情报采集角色（慢循环·KB-1）。发现赛事、抓取章程与获奖名单、解构获奖作品。当协调者派发\\\\\\\"赛事采集分片\\\\\\\"任务时以此身份运行。"
+description: "赛事情报采集角色（慢循环·KB-1）。发现赛事、抓取章程与获奖名单、解构获奖作品。当协调者派发\"赛事采集分片\"任务时以此身份运行。"
 color: yellow
 model: "custom:builtin%3Abigmodel-coding-plan:GLM-5.3-Flash"
 injectAgentsMd: true

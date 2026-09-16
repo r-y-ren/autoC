@@ -11,9 +11,10 @@
   collect  慢循环收集态：仅放行 kb/**
 
 战役阶段（state.campaigns[<cid>].phase，按最长 root 匹配路由，可多战役并行）：
-  decide   决策态：仅放行 <root>/{strategy.md, blueprint.md, JOURNAL.md}
+  decide   决策态：放行 <root>/{strategy（grilling 纪要目录，票07）, strategy.md, blueprint.md, JOURNAL.md}
   deliver  工程交付态：放行 <root>/** 但 <root>/acceptance/** 与 <root>/metrics.json 只读
-  verify   验收态：仅放行 <root>/acceptance/**
+  verify   验收态：放行 <root>/acceptance/**、<root>/docs/**（K-12 /ppt 窗口，票10）、
+           <root>/JOURNAL.md（阶段纪律记行，票10 review-fix）
   archive  归档态：全拒（归档由 scripts/verify/archive_campaign.py 经 Bash 执行）
   idle     已登记未开工：该战役子树全拒
 
@@ -62,7 +63,9 @@ CAMPAIGN_POLICY = {
     "deliver": {"allow": ["*"], "deny": ["acceptance", "metrics.json"]},
     # docs 子树放行=K-12 /ppt 窗口（升级票10）：验收通过后、归档前的答辩 PPT 产线
     # 写 docs/（ppt_brief.md + ppt-master 项目路由 docs/ppt/）；等价于"post-accept 子态"的简化实现
-    "verify": {"allow": ["acceptance", "docs"]},
+    # （窗口的 accept-passed 前置由 K-12 技能闸门把关；verify 态本身只经 /accept 进入）。
+    # JOURNAL.md 放行=铁律 6 阶段记行在 verify 态的需要（票10 review-fix，与 accept-run 一致）
+    "verify": {"allow": ["acceptance", "docs", "JOURNAL.md"]},
     "archive": {"allow": []},
     "idle": {"allow": []},
 }
