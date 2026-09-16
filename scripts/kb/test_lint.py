@@ -101,6 +101,14 @@ compliance: {ai_policy_reviewed: true, mode: prep}
 正文
 """
 
+# 升级票08：workflow.auto_chain 可选开关（缺省合法，false 亦合法，非布尔应拒）
+BLUEPRINT_CHAIN_OFF = BLUEPRINT_OK.replace(
+    "compliance: {ai_policy_reviewed: true, mode: prep}",
+    "compliance: {ai_policy_reviewed: true, mode: prep}\nworkflow: {auto_chain: false}")
+BLUEPRINT_CHAIN_BAD = BLUEPRINT_OK.replace(
+    "compliance: {ai_policy_reviewed: true, mode: prep}",
+    "compliance: {ai_policy_reviewed: true, mode: prep}\nworkflow: {auto_chain: 'yes'}")
+
 ACCEPT_OK = """{
   "campaign": {"competition_id": "demo-cup"},
   "checklist": [{"id": "a1", "category": "software", "status": "pass", "evidence": "log"}],
@@ -125,7 +133,9 @@ CASES = [
     ("kb/tech/arxiv-badvenue.md", TECH_BAD_VENUE, False, "venue_tier 非法枚举应 FAIL"),
     ("kb/tech/README.md", "说明文件", None, "README 应跳过"),
     ("kb/raw/notice.html", "<html>快照</html>", None, "raw 快照应跳过"),
-    ("workspace/blueprint.md", BLUEPRINT_OK, True, "合法蓝图"),
+    ("workspace/blueprint.md", BLUEPRINT_OK, True, "合法蓝图（无 workflow 字段=缺省 auto_chain）"),
+    ("workspace/blueprint-chain-off.md", BLUEPRINT_CHAIN_OFF, True, "auto_chain: false 合法"),
+    ("workspace/blueprint-chain-bad.md", BLUEPRINT_CHAIN_BAD, False, "auto_chain 非布尔应 FAIL"),
     ("workspace/acceptance/run-1.json", ACCEPT_OK, True, "合法验收记录"),
     ("workspace/acceptance/note.md", "随手笔记", None, "acceptance 下非 json 应跳过"),
 ]

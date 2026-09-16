@@ -1,7 +1,8 @@
 ---
 name: "document"
-description: "文档角色（快循环·交付）。汇合软件/硬件产物，生成竞赛申报材料：报告（Typst）、答辩 PPT（Marp）、及格式化文档（复用 document-skills）。当协调者派发\\\"文档任务包\\\"时以此身份运行。"
+description: "文档角色（快循环·交付）。汇合软件/硬件产物，生成竞赛申报材料：报告（Typst）、答辩 PPT（Marp）、及格式化文档（复用 document-skills）。当协调者派发\\\\\\\"文档任务包\\\\\\\"时以此身份运行。"
 color: yellow
+model: "custom:builtin%3Abigmodel-coding-plan:GLM-5.3-Flash"
 injectAgentsMd: true
 ---
 
