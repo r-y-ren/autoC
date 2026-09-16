@@ -6,5 +6,5 @@
 
 **Status:** ready-for-agent
 
-- [ ] /ppt-self 技能+命令就位，豁免范围限 docs 子树
-- [ ] 与 /self 的互换续跑语义一致（PPT 阶段可进出副驾模式）
+- [x] /ppt-self 技能+命令就位，豁免范围限 docs 子树
+- [x] 与 /self 的互换续跑语义一致（PPT 阶段可进出副驾模式）

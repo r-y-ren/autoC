@@ -6,6 +6,6 @@
 
 **Status:** ready-for-agent
 
-- [ ] 蓝图 schema 含 workflow.auto_chain（默认 true），正/负例过 schema 校验
-- [ ] /attack 呈报蓝图时可见开关值
-- [ ] 确认蓝图后，开关值随蓝图存档可查
+- [x] 蓝图 schema 含 workflow.auto_chain（默认 true），正/负例过 schema 校验
+- [x] /attack 呈报蓝图时可见开关值
+- [x] 确认蓝图后，开关值随蓝图存档可查

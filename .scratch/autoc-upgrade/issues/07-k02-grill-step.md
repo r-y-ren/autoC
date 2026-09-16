@@ -6,6 +6,6 @@
 
 **Status:** ready-for-agent
 
-- [ ] strategy-gen 技能流程含完整 grilling 前置步（多轮语义，非一次性问卷）
-- [ ] grill-notes.md 产物落位于 decide 可写区并随战役归档
-- [ ] 蓝图呈报确认为第二次交互，人工闸门总数不变
+- [x] strategy-gen 技能流程含完整 grilling 前置步（多轮语义，非一次性问卷）
+- [x] grill-notes.md 产物落位于 decide 可写区并随战役归档
+- [x] 蓝图呈报确认为第二次交互，人工闸门总数不变
