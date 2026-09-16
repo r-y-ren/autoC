@@ -21,6 +21,29 @@ def project_root() -> Path:
     return Path(env).resolve() if env else Path(__file__).resolve().parents[2]
 
 
+def contract_line(root: Path) -> str:
+    """契约版本 + 插件可用性（多机协作错配防护；来源 config/contract_version.yaml）。
+
+    插件缓存根默认 ~/.zcode/cli/plugins/cache，可用 ZCODE_PLUGINS_CACHE 覆盖（测试用）。
+    任何异常都降级为提示而非报错——播报恒不阻断会话。
+    """
+    try:
+        import yaml
+        cv = yaml.safe_load((root / "config" / "contract_version.yaml").read_text(encoding="utf-8")) or {}
+        ver = cv.get("schema_version", "?")
+        plugins = cv.get("plugins") or []
+        cache = Path(os.environ.get("ZCODE_PLUGINS_CACHE",
+                                    str(Path.home() / ".zcode" / "cli" / "plugins" / "cache")))
+        missing = [f"{p.get('vendor')}/{p.get('name')}" for p in plugins
+                   if not any((cache / str(p.get("vendor")) / str(p.get("name"))).glob("*"))]
+        plug = f"插件={len(plugins) - len(missing)}/{len(plugins)}"
+        if missing:
+            plug += f"（缺:{','.join(missing)}⚠）"
+        return f"契约=v{ver} {plug}"
+    except Exception:  # noqa: BLE001
+        return "契约=?（config/contract_version.yaml 缺失或不可读）"
+
+
 def main() -> int:
     try:
         state = fs.load_state(project_root())
@@ -50,6 +73,7 @@ def main() -> int:
     except Exception:  # noqa: BLE001
         msg = "[autoC] 守卫状态缺失：运行 python scripts/guard/init_state.py 引导（在此之前写入守卫 fail-closed）"
 
+    msg = f"{msg}｜{contract_line(project_root())}"
     print(json.dumps({"additionalContext": msg}, ensure_ascii=False))
     return 0
 

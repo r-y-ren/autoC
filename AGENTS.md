@@ -30,6 +30,16 @@
 
 蓝图确认后的交付期有两条并行入口：`/deliver`（自动编排，K-03）与 `/self`（人工主导，K-11）。经 `/self` 进入的会话，主会话身份为**副驾**：铁律 5 的"瘦协调者"约束与 DESIGN.md §6.2 角色写入矩阵对该会话**限战役根内豁免**——可直接读写战役根任意子树、跨角色目录工作、不强制波次编排；蓝图可改，但**改必重过 schema 校验并在 JOURNAL 留痕**。其余铁律与 L2 物理边界一概不豁免（`archive/` 只读、`.flow/state.json` 只归脚本、`acceptance/` 只经 /accept、顶层 `metrics.json` 只经 merge_metrics、references/ 归宿、实测数字纪律）；终验仍走 /accept 全量清单。熔断后的人工接管亦走 /self。规程见 `.zcode/skills/self-run/SKILL.md`。
 
+## 多机协作（接力纪律，2026-09-16）
+
+仓库由两台电脑接力维护；`.flow/state.json` 是本机文件，两机互不同步，交接以远程为唯一事实源：
+
+- 开工前 `git pull --rebase`；每完成一个阶段 commit 后**立即 push**；`/archive` 之后 `git push --tags`。
+- 分工并行安全对：一台跑 KB 维护（collect 态写 `kb/**`）+ 一台做战役（写 `workspace/<cid>/**`）——子树不相交，允许同时开工；其余情形按接力处理。
+- `kb-deep-sync` 的 cron 全局只在一台主力机启用；换主力机时迁移，间歇期用 `/kb-sync` 手动补偿。
+- 契约变更（`config/templates/*.schema.json`、`.zcode/` 技能/子agent/命令、scripts 行为契约）时 bump `config/contract_version.yaml` 并随变更 commit+push；SessionStart 播报契约版本与插件可用性，版本落后或插件缺失时先补齐再开工。
+- `kb/inbox/` 为外来资料本机暂存区（gitignore，仅 README 入库）：消费发生在 kb-sync/kb-deep-sync 跑批内，消化产物才入库；跨机资料转移等本机跑批消化或走其他通道。
+
 ## 合规底线
 
 每个赛事条目必须维护 `ai_policy` 字段；作品按"AI 辅助原创"标准产出并在归档时保留人机分工记录。禁止生成违反目标赛事规则的提交策略。

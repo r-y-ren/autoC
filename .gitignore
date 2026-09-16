@@ -10,6 +10,10 @@ tools/
 kb/raw/*
 !kb/raw/.gitkeep
 
+# 外来资料投递暂存（本机消化，产物才入库；约定见 kb/inbox/README.md）
+kb/inbox/*
+!kb/inbox/README.md
+
 # Python
 __pycache__/
 *.py[cod]

@@ -1,0 +1,13 @@
+# 契约版本（多机协作错配防护，2026-09-16 升级引入）
+# bump 规则：config/templates/*.schema.json、.zcode/{skills,agents,commands}、scripts/ 的行为契约
+# 发生变更时 schema_version +1，随同一 commit push；另一台机器 SessionStart 播报版本落后即先 pull 再开工。
+
+schema_version: 1
+
+# 升级依赖的外部插件（各机 ~/.zcode/cli/plugins/cache/<vendor>/<name>/<ver>/，不随仓库走）
+# SessionStart 播报可用性（可用 ZCODE_PLUGINS_CACHE 环境变量覆盖缓存根）；缺失时对应能力在该机不可用
+plugins:
+  - {vendor: mattpocock, name: mattpocock-skills, purpose: 规格链（grilling/to-spec/to-tickets/implement）}
+  - {vendor: superpowers-dev, name: superpowers, purpose: 实现纪律（verification-before-completion/TDD）}
+  - {vendor: ppt-master, name: ppt-master, purpose: 答辩 PPT 产线（K-12 /ppt）}
+  - {vendor: zcode-plugins-official, name: document-skills, purpose: docx/pptx/pdf/xlsx 文档产线}
