@@ -8,3 +8,4 @@
 | 2026-09-16 | deliver | **W2 波门+末波收拢（m2/document 票04）**：report.typ→pdf 单页，8 数字全量命中 metrics 分片（a3=0，pdftotext 旁证零片外数字）；契约 §4/§5 勘误（typst-py root 实参）；merge_metrics 汇总 8 键+meta | 进入 /accept 终验 |
 | 2026-09-16 | verify | **K-12 第一环**：/accept 全量 PASS（a1-a3，run-2）；document 产 docs/ppt_brief.md（5 页简报，8 键全量引用，数字纪律声明） | 待 ppt-master Gate1 用户门 |
 | 2026-09-16 | verify | **K-12 第二环完成（ppt-master Default）**：Gate1/Gate2 用户门过（方向1金字塔+dark-tech）；spec/lock 校验 PASS；5 页 SVG 终检 0 阻塞（原生表 1+图标 6/6）；备注 5 节；导出 rehearsal-deck_20260916_195750.pptx（postflight passed-with-warnings 3 条建议级）｜彩排发现：钩子进程继承会话 CWD（需仓库根运行） | 票12 全链路贯通，待 /archive |
+| 2026-09-16 | verify | **战役终结**：K-12 正式 pptx 已导出（docs/ppt/…/exports/）；彩排目的达成，归档收档 | 终结 |
