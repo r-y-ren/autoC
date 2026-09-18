@@ -152,6 +152,26 @@ def _sha256_file(path):
     return h.hexdigest()
 
 
+def _import_scene_module(py_path):
+    """把场景解释器按受控模块名导入（指纹校验由调用方负责）。导入期
+    `from kaggle_environments.utils import resolve_episode_seed` 的 stub
+    处理与 wheel 路径一致（有真包用真包，无包临时挂最小 stub 后拆除）。"""
+    mod_name = f"_kaggriculture_twin_scene_{WHEEL_SHA256[:12]}"
+    added_modules = _ensure_scene_importable()
+    try:
+        if mod_name in sys.modules:
+            return sys.modules[mod_name]
+        spec = importlib.util.spec_from_file_location(mod_name, py_path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[mod_name] = module
+        spec.loader.exec_module(module)
+    finally:
+        for key in added_modules:
+            if key in sys.modules:
+                del sys.modules[key]
+    return sys.modules[mod_name]
+
+
 def _ensure_scene_importable():
     """场景模块 import 时会 `from kaggle_environments.utils import
     resolve_episode_seed`（仅 _initialize 用，孪生重建路径不触发）。
@@ -235,20 +255,7 @@ def load_engine(wheel_path=None, cache_dir=None, force_reload=False):
                 "extracted_at": "P1-2026-09-19",
             }, f, ensure_ascii=False, indent=1)
 
-    mod_name = f"_kaggriculture_twin_scene_{WHEEL_SHA256[:12]}"
-    added_modules = _ensure_scene_importable()
-    try:
-        if mod_name in sys.modules:
-            module = sys.modules[mod_name]
-        else:
-            spec = importlib.util.spec_from_file_location(mod_name, py_path)
-            module = importlib.util.module_from_spec(spec)
-            sys.modules[mod_name] = module
-            spec.loader.exec_module(module)
-    finally:
-        for key in added_modules:
-            if key in sys.modules:
-                del sys.modules[key]
+    module = _import_scene_module(py_path)
 
     bundle = EngineBundle(
         interpreter=module.interpreter,
@@ -256,6 +263,38 @@ def load_engine(wheel_path=None, cache_dir=None, force_reload=False):
         fingerprint={
             "wheel": os.path.basename(wheel_path),
             "wheel_sha256": wheel_sha,
+            "scene_py_sha256": SCENE_PY_SHA256,
+            "scene_json_sha256": SCENE_JSON_SHA256,
+            "module_version": "1.32.7+nodeps",
+        })
+    _BUNDLE = bundle
+    return bundle
+
+
+def load_engine_from_scene(scene_py, scene_json, source="scene"):
+    """从（提交包内置的）场景两文件直接加载解释器——零磁盘写路径。
+
+    指纹纪律与 load_engine 相同（fail-closed）：两文件 sha256 必须逐一
+    等于 P1 登记值（SCENE_PY_SHA256 / SCENE_JSON_SHA256），否则抛
+    TwinFingerprintError，绝不静默降级。提交包内 vendored wheel 不存在，
+    build.py 在打包期从 wheel 抽取并校验后以 planner/scene/ 成员入包，
+    运行期本函数绕过抽取直接加载。"""
+    global _BUNDLE
+    if _BUNDLE is not None:
+        return _BUNDLE
+    for path in (scene_py, scene_json):
+        if not os.path.isfile(path):
+            raise TwinFingerprintError(f"内置场景文件缺失: {path}")
+    if _sha256_file(scene_py) != SCENE_PY_SHA256 \
+            or _sha256_file(scene_json) != SCENE_JSON_SHA256:
+        raise TwinFingerprintError(
+            "内置场景文件 sha256 与 P1 登记值不符（打包漂移？拒绝加载）")
+    module = _import_scene_module(scene_py)
+    bundle = EngineBundle(
+        interpreter=module.interpreter,
+        module=module,
+        fingerprint={
+            "source": source,
             "scene_py_sha256": SCENE_PY_SHA256,
             "scene_json_sha256": SCENE_JSON_SHA256,
             "module_version": "1.32.7+nodeps",
@@ -393,6 +432,102 @@ def new_state_from_replay_head(replay, bundle=None):
     env = TwinEnv(_make_configuration(replay),
                   (replay.get("info") or {}).get("seed", 0), None,
                   bundle.interpreter)
+    state = TwinState(seats, env)
+    env._state = state
+    return state
+
+
+# 线上 obs 视角的孪生初态合成参数（P3 runtime 用；与
+# scripts/planner_flagoff_golden.synthetic_season_head 的合成季配置逐键
+# 同源——episodeSteps=720=官方整季、weedSpawnChance=0.005 等引擎默认值）。
+DEFAULT_TWIN_CONFIGURATION = {
+    "episodeSteps": 720, "actTimeout": 1, "boardSize": 10,
+    "startingMoney": 3000, "maxMarketOrdersPerTurn": 10, "turnsPerDay": 24,
+    "shedCapacity": 100, "weedSpawnChance": 0.005,
+    "townShopUnlockInterval": 3, "townShopSellInterval": 4,
+    "townCenterSellInterval": 24, "seed": None, "farmHandCostMult": 1,
+    "marketParams": {},
+}
+
+
+def _obs_get(obj, key, default=None):
+    if isinstance(obj, dict):
+        return obj.get(key, default)
+    return getattr(obj, key, default)
+
+
+def synth_opponent_private(module):
+    """合成对手 private（线上不可观测席的悲观口径）：
+    棚仓按产品满仓合成——对应 PessimisticFill 的登记前提"假定对手持有
+    等量倾销库存"（opponents.py 模块头），风格池的 daily_sell_cap 卖出
+    也由此供货；种子仓空、随身空。990/项 不可达棚仓帽（100）只约束
+    DEPOSIT 不约束 SELL（引擎 _commit_unit 语义），故卖出侧永不断货。"""
+    shed = {item: 990 for item in list(module.PRODUCTS) + list(module.ANIMALS)}
+    return {"shed": shed, "seeds": dict.fromkeys(module.CROPS, 0),
+            "inventories": [{}]}
+
+
+def new_state_from_obs(obs, player=0, seed=1, bundle=None,
+                       configuration=None):
+    """从线上我方席观测构造孪生状态（P3 bot 内规划入口；与
+    new_state_from_replay_head 平行的第二入口）。
+
+    可见性口径（诚实声明）：
+      * 公开区 farms/market/town 双席共享正本（框架语义同源）；
+      * 我方 private 直取（obs.private 本席可见）；
+      * 对手 private 不可观测——synth_opponent_private 的满仓合成
+        （悲观压力测试口径，非估计）。
+    seed：线上真种子对 agent 不可观测（info.seed 是环境侧），孪生内
+    杂草/商店解锁随机按伪种子（缺省 1）确定性驱动——逐局与真值可能
+    不同，但同一伪种子下规划器自身确定。"""
+    bundle = bundle or load_engine()
+    module = bundle.module
+    farms_raw = _obs_get(obs, "farms") or []
+    market_raw = _obs_get(obs, "market") or {}
+    town_raw = _obs_get(obs, "town") or {}
+    day = int(_obs_get(obs, "day", 0) or 0)
+    hour = int(_obs_get(obs, "hour", 0) or 0)
+    step = int(_obs_get(obs, "step", 0) or 0) or day * 24 + hour
+    n = max(2, len(farms_raw))
+
+    seats = []
+    for i in range(n):
+        obs_i = Observation()
+        if i == int(player):
+            obs_i.private = _copy_private(_obs_get(obs, "private") or {})
+        else:
+            obs_i.private = synth_opponent_private(module)
+        obs_i.day = day
+        obs_i.hour = hour
+        obs_i.step = step if i == 0 else None
+        obs_i.remainingOverageTime = float(
+            _obs_get(obs, "remainingOverageTime", 60) or 60)
+        seat = Seat(obs_i, i)
+        seat.status = "ACTIVE"
+        seats.append(seat)
+
+    obs0 = seats[0].observation
+    obs0.farms = [_copy_farm(f) for f in farms_raw]
+    obs0.market = {
+        "inventory": dict(market_raw.get("inventory", {})),
+        "prices": dict(market_raw.get("prices", {})),
+    }
+    if "params" in market_raw:
+        obs0.market["params"] = {
+            item: dict(p) for item, p in market_raw["params"].items()}
+    obs0.town = {"unlocked_shops": list(town_raw.get("unlocked_shops", []))}
+    for i in range(1, len(seats)):
+        o = seats[i].observation
+        o.farms = obs0.farms
+        o.market = obs0.market
+        o.town = obs0.town
+        o.day = obs0.day
+
+    cfg = dict(DEFAULT_TWIN_CONFIGURATION)
+    if configuration:
+        cfg.update(configuration)
+    cfg["seed"] = None                      # 种子只进 info（引擎事实表 §7）
+    env = TwinEnv(Struct(cfg), int(seed), None, bundle.interpreter)
     state = TwinState(seats, env)
     env._state = state
     return state

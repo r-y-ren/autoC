@@ -2264,6 +2264,103 @@
     "sha256": "638fee9c0d1c1a3edc19cc61249b0f31fc290078d119f6582a4601a3620a8f44"
    }
   },
+  "m6_p26_bench_config_selected": {
+   "method": "scripts/planner_calibration_suite.py sweep on smoke subset (round20 3 eps x d3/d10/d20, 2026-09-19); official run once with the selected config (anti-overfit discipline)",
+   "unit": "selector configuration",
+   "value": {
+    "aggregation": "trimmed_mean",
+    "pessimistic_discount": 0.75,
+    "selection_rule": "pre-registered: max smoke point-pass -> max mean delta -> grid order",
+    "trail": "software/exports/probes/planner_bench/calibration/sweep.json (12 configs x 9 smoke points: all 12 identical picks, 7/9 pass mean +4289)",
+    "trim_fraction": 0.25,
+    "weights": "none"
+   }
+  },
+  "m6_p26_c1_ablation": {
+   "method": "scripts/planner_calibration_suite.py c1-ablation (2026-09-19): all 42 official injection points, forced-C1 oracle grid quota{0.8,1.0,1.25} x timing{-2,0,+2} x discount 0.9, true-twin rollouts vs reactive; artifact software/exports/probes/planner_bench/calibration/c1_ablation.json",
+   "unit": "verdict (C1 final ruling)",
+   "value": {
+    "beats_reactive": 13,
+    "loses_reactive": 5,
+    "mean_margin": 1539.5,
+    "mean_margin_by_day": {
+     "day10": 520,
+     "day20": -688,
+     "day3": 4787
+    },
+    "median_margin": 0.0,
+    "points": 42,
+    "ties_reactive": 24,
+    "verdict": "C1 HAS real economics -> fix the projector scoring, do not remove C1 (pre-fix projector ranked C1-best at rank 105-110/120 at d10/d20 while oracle beat reactive)"
+   }
+  },
+  "m6_p26_calibration_tests": {
+   "method": "python -m pytest tests/test_planner_calibration.py -q (2026-09-19)",
+   "unit": "pytest summary (new file)",
+   "value": "16 passed (tests/test_planner_calibration.py): timing monotonicity/honest-flat, seed-window analytic identity, capacity coupling, no-cash-lottery, herd amortization window, aggregation math (trim=0=mean, worst<=trimmed, weighted monotone), tie-break not pinned to +0, bench selector-cfg plumbing"
+  },
+  "m6_p26_d10_diagnosis": {
+   "method": "scripts/planner_calibration_suite.py d10-jmat (2026-09-19): 14 d10 points, per-plan x per-model J matrix + knob-group isolation rollouts; artifact calibration/d10_jmat.json",
+   "unit": "verdict (d10 -920 root cause)",
+   "value": {
+    "coverage_identity_gap": 0.0,
+    "new_selection_mean_dtsp_vs_reactive_d10": 352,
+    "old_cause": "plan itself wrong: old projector systematically selected C3@0.80 (VOLUME gates off + caps cut) at d10",
+    "verdict": "coverage channel sound (PLANNER_ENABLED+empty overrides == reactive, 14/14 bit-exact); losses were parameter choice, fixed by projector calibration"
+   }
+  },
+  "m6_p26_official_day_profile": {
+   "method": "same official run rows",
+   "unit": "coins (mean dtsp_vs_reactive per injection day)",
+   "value": {
+    "day10": 352,
+    "day20": -2,
+    "day3": 1998,
+    "note": "expansion decisions win early, do-no-harm at closure (d20); worst single point -2614 (episode 105367844, plan_space_gap 3/3 - oracle confirms no in-space plan beats reactive there)"
+   }
+  },
+  "m6_p26_official_verdict": {
+   "method": "scripts/planner_offline_bench.py --mode official (2026-09-19 22:17 UTC, final config run exactly once): same 14 episodes x 42 injections x same thresholds as the two prior FAIL rounds; report regenerated at software/exports/probes/planner_bench/bench_report.json (round-2 report archived as bench_report_round2_20260918.json)",
+   "unit": "verdict (m7 dual criterion)",
+   "value": {
+    "episodes_median_pass": "12/14 (gate >=9)",
+    "injections": 42,
+    "pooled_mean_delta_vs_reactive": 782.6,
+    "reference_pass": "12/14 (gate >=9)",
+    "twin_noise_max": 0.0,
+    "verdict": "PASS",
+    "wall_seconds": 237.4
+   }
+  },
+  "m6_p26_projector_calibration": {
+   "method": "plans.py edits 2026-09-19, each pinned by tests/test_planner_calibration.py (16 tests); src/ nine modules and twin.py untouched",
+   "unit": "calibration set (5 fixes + 1 posture, plans.py only)",
+   "value": {
+    "evidence_artifacts": [
+     "calibration/c1_ablation.json",
+     "calibration/timing_diag.json",
+     "calibration/d10_jmat.json",
+     "calibration/sweep.json"
+    ],
+    "fixes": [
+     "seed establishment charged once in build window (was daily to season end: ~7x phantom at d10, 20x at d20 -> systematic anti-expansion bias)",
+     "planting closure at day0>=PLANT_LAST_DAY (expansion targets=现状, honest flat d20)",
+     "timing axis mirror: herd ramp start += timing_shift (executor herd_day_shift semantics; pre-fix J had ZERO variance across timing, 42/42 selections pinned to +0 by tie-break)",
+     "herd buy amortization bounded to ramp window (was charged forever -> delayed-buy arbitrage inverted timing direction vs oracle -2 preference 36/42)",
+     "land purchases scheduled doctrine-style without cash gate + capacity coupling quads*25 tiles (removes 4600 affordability lottery; was breaking monotonicity: neutral 24223 < pessimistic 27234 on C3 midgame obs)",
+     "P3 CATCHUP crew_late_day 22->24 (d20 isolation: dropCrew -> +8/+0 while dropFuse kept the full -7593/-2004 loss; lever falsified, fuse floor 600 kept)"
+    ]
+   }
+  },
+  "m6_p26_timing_variance_post_fix": {
+   "method": "scripts/planner_calibration_suite.py timing-diag over the official injection set (2026-09-19)",
+   "unit": "fraction of plan families with zero J variance across timing shifts",
+   "value": {
+    "max_j_spread": 2930.1,
+    "post_fix_zero_variance": "336/1008 (residual zeros = honest too-late states: d20 closure, dues past, herd ramp complete)",
+    "pre_fix": "100% zero variance (structural: shift only moved cash timing, no interest)"
+   }
+  },
   "m6_p2_bench_dtsp_ge_reactive_injections": {
    "method": "same official run: DTSP final money >= reactive final money (tolerance 1.0) at 28 of 42 injection points",
    "unit": "injection points",
@@ -2787,6 +2884,229 @@
     "full_passed": 716,
     "full_runtime_seconds": 34.93,
     "verify_only_pass": true
+   }
+  },
+  "p3_dtsp_dawn_budget_and_walls": {
+   "method": "probe_dawn_walls.py：seed 11 全季自博弈，黎明钩子 elapsed_s （含投影段+孪生精化段），actTimeout=1s 未触顶",
+   "value": {
+    "budget_cap_s": 0.85,
+    "budget_formula": "min(0.85s, 0.5s + pool/remaining_dawns*0.5)",
+    "measured_dawn_walls_s": {
+     "max": 0.5999,
+     "mean": 0.4747,
+     "n": 60,
+     "p50": 0.4979,
+     "p90": 0.56
+    },
+    "policies_seen": {
+     "rollout": 60
+    },
+    "rollouts_per_dawn": [
+     1,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6
+    ]
+   }
+  },
+  "p3_dtsp_e2e_selfplay": {
+   "method": "官方引擎 run_episode 720 回合双席 DTSP 自博弈（4 种子），逐回合计时 <1.0s 硬断言；对照=旗关 golden 同种子自博弈资金",
+   "value": {
+    "11": {
+     "dawns": 60,
+     "max_turn_s": 0.5954,
+     "rewards": [
+      70945.0,
+      80066.0
+     ],
+     "rollout_dawns": 60,
+     "switched": 2,
+     "vs_golden_pair": 5230.0
+    },
+    "22": {
+     "dawns": 60,
+     "max_turn_s": 0.5846,
+     "rewards": [
+      56561.0,
+      55495.0
+     ],
+     "rollout_dawns": 60,
+     "switched": 1,
+     "vs_golden_pair": -21666.0
+    },
+    "33": {
+     "dawns": 60,
+     "max_turn_s": 0.556,
+     "rewards": [
+      70681.0,
+      74580.0
+     ],
+     "rollout_dawns": 60,
+     "switched": 4,
+     "vs_golden_pair": -8566.0
+    },
+    "47": {
+     "dawns": 60,
+     "max_turn_s": 0.5539,
+     "rewards": [
+      65601.0,
+      67934.0
+     ],
+     "rollout_dawns": 60,
+     "switched": 0,
+     "vs_golden_pair": -19604.0
+    }
+   }
+  },
+  "p3_dtsp_failopen_three_gates": {
+   "method": "monkeypatch 注入（enumerate_plans 抛异常 / TwinFingerprintError）触发，断言快照恢复+粘性旗关+遥测记因",
+   "value": {
+    "after_apply_restore_pristine": true,
+    "entry_side_last_resort_net": true,
+    "exception_failopen_byte_identical_golden": true,
+    "fingerprint_mismatch_sticky_off": true
+   }
+  },
+  "p3_dtsp_flagoff_golden_check": {
+   "method": "python scripts/planner_flagoff_golden.py（默认 check 模式）",
+   "value": "6/6 seeds byte-identical to golden_v138.json after entry wiring + twin extensions"
+  },
+  "p3_dtsp_integration_tests": {
+   "method": "pytest tests/test_p3_integration.py；fail-open 黄金对比=种子11全季双席自博弈动作流 sha256 与旗关 golden 逐字节一致",
+   "value": "15 passed (test_p3_integration.py, excl. E2E) + 1 E2E (4 seeds x full season, ~3.5 min)"
+  },
+  "p3_dtsp_package": {
+   "method": "python build.py（确定性：固定成员序/零时间戳，两次构建逐字节一致；scene 从 vendored wheel 抽取并 sha256 对 P1 登记值校验）",
+   "value": {
+    "bytes": 181894,
+    "layout": "pkg.2-dtsp",
+    "limit_bytes": 104857600,
+    "members": "main.py + src/9 + planner/6 + scene pair",
+    "sha256": "ee19d2c7655a85e44434ea860a354927dfa85f9009a1ca801d95cf4c9f27d127"
+   }
+  },
+  "p3_dtsp_packaged_form_check": {
+   "method": "probe_packaged_form.py：tar 解包到临时目录 → 官方 get_last_callable 语义（sys.path 尾插）装载 → 驱动 72 回合",
+   "value": {
+    "bundled_scene_source": "bundled_scene",
+    "dawns_planned": 6,
+    "failopens": 0,
+    "max_agent_call_s": 0.762,
+    "zero_disk_write_load": true
+   }
+  },
+  "p3_dtsp_policy_probe_official": {
+   "method": "官方 42 注入点（round20/21/22+cmp-v92 × d3/10/20）：in-bot 选择策略 vs P2.6 投影器单段（基准 pooled mean Δ=+782.6），终局口径=同孪生同回放对手整季 rollout；reactive 列复用同日 bench_report.json",
+   "value": {
+    "k3h3": {
+     "mean_selection_seconds": 0.465,
+     "pooled_mean_vs_reactive": 782.6,
+     "switched_vs_p26": 2
+    },
+    "k4h2": {
+     "mean_selection_seconds": 0.469,
+     "pooled_mean_vs_reactive": 782.6,
+     "switched_vs_p26": 2
+    },
+    "k6h1": {
+     "mean_selection_seconds": 0.457,
+     "pooled_mean_vs_reactive": 782.6,
+     "switched_vs_p26": 0
+    },
+    "p26_projector": {
+     "mean_selection_seconds": 0.0,
+     "pooled_mean_vs_reactive": 782.6,
+     "switched_vs_p26": 0
+    }
+   }
+  },
+  "p3_dtsp_rollout_k_omega": {
+   "method": "实测曲线裁剪（probe_costs.py：沙盒装载 37.6ms、投影段 34.1ms、agent 逐步 1.5-2.1ms——全季 agent 驱动 rollout ≈1.2s 出不进 0.85s 预算，K≈15-25 全季先验不可行，降为短地平线阶梯）",
+   "value": {
+    "first_dawn_calibration": "1 plan x 1 model x 1 day",
+    "ladder_default": [
+     [
+      6,
+      1
+     ],
+     [
+      4,
+      2
+     ],
+     [
+      3,
+      3
+     ],
+     [
+      2,
+      4
+     ],
+     [
+      1,
+      6
+     ]
+    ],
+    "prior_rate_s_per_step": 0.0025,
+    "rollout_models": [
+     "pessimistic_fill(0.75)"
+    ],
+    "safety": "2.0 (unmeasured) -> 1.25 (in-process EWMA)"
    }
   },
   "r3_ablation_harness_ready": {
@@ -6007,106 +6327,9 @@
     ],
     "sha256": "53ae26dc8c6a4da943204029ee9eefbc0e46674188869d6ad9d062f0d083f00e"
    }
-  },
-  "m6_p26_bench_config_selected": {
-   "method": "scripts/planner_calibration_suite.py sweep on smoke subset (round20 3 eps x d3/d10/d20, 2026-09-19); official run once with the selected config (anti-overfit discipline)",
-   "unit": "selector configuration",
-   "value": {
-    "aggregation": "trimmed_mean",
-    "trim_fraction": 0.25,
-    "weights": "none",
-    "pessimistic_discount": 0.75,
-    "selection_rule": "pre-registered: max smoke point-pass -> max mean delta -> grid order",
-    "trail": "software/exports/probes/planner_bench/calibration/sweep.json (12 configs x 9 smoke points: all 12 identical picks, 7/9 pass mean +4289)"
-   }
-  },
-  "m6_p26_official_verdict": {
-   "method": "scripts/planner_offline_bench.py --mode official (2026-09-19 22:17 UTC, final config run exactly once): same 14 episodes x 42 injections x same thresholds as the two prior FAIL rounds; report regenerated at software/exports/probes/planner_bench/bench_report.json (round-2 report archived as bench_report_round2_20260918.json)",
-   "unit": "verdict (m7 dual criterion)",
-   "value": {
-    "episodes_median_pass": "12/14 (gate >=9)",
-    "pooled_mean_delta_vs_reactive": 782.6,
-    "reference_pass": "12/14 (gate >=9)",
-    "twin_noise_max": 0.0,
-    "injections": 42,
-    "wall_seconds": 237.4,
-    "verdict": "PASS"
-   }
-  },
-  "m6_p26_official_day_profile": {
-   "method": "same official run rows",
-   "unit": "coins (mean dtsp_vs_reactive per injection day)",
-   "value": {
-    "day3": 1998,
-    "day10": 352,
-    "day20": -2,
-    "note": "expansion decisions win early, do-no-harm at closure (d20); worst single point -2614 (episode 105367844, plan_space_gap 3/3 - oracle confirms no in-space plan beats reactive there)"
-   }
-  },
-  "m6_p26_c1_ablation": {
-   "method": "scripts/planner_calibration_suite.py c1-ablation (2026-09-19): all 42 official injection points, forced-C1 oracle grid quota{0.8,1.0,1.25} x timing{-2,0,+2} x discount 0.9, true-twin rollouts vs reactive; artifact software/exports/probes/planner_bench/calibration/c1_ablation.json",
-   "unit": "verdict (C1 final ruling)",
-   "value": {
-    "beats_reactive": 13,
-    "mean_margin_by_day": {
-     "day3": 4787,
-     "day10": 520,
-     "day20": -688
-    },
-    "mean_margin": 1539.5,
-    "median_margin": 0.0,
-    "points": 42,
-    "loses_reactive": 5,
-    "ties_reactive": 24,
-    "verdict": "C1 HAS real economics -> fix the projector scoring, do not remove C1 (pre-fix projector ranked C1-best at rank 105-110/120 at d10/d20 while oracle beat reactive)"
-   }
-  },
-  "m6_p26_projector_calibration": {
-   "method": "plans.py edits 2026-09-19, each pinned by tests/test_planner_calibration.py (16 tests); src/ nine modules and twin.py untouched",
-   "unit": "calibration set (5 fixes + 1 posture, plans.py only)",
-   "value": {
-    "evidence_artifacts": [
-     "calibration/c1_ablation.json",
-     "calibration/timing_diag.json",
-     "calibration/d10_jmat.json",
-     "calibration/sweep.json"
-    ],
-    "fixes": [
-     "seed establishment charged once in build window (was daily to season end: ~7x phantom at d10, 20x at d20 -> systematic anti-expansion bias)",
-     "planting closure at day0>=PLANT_LAST_DAY (expansion targets=现状, honest flat d20)",
-     "timing axis mirror: herd ramp start += timing_shift (executor herd_day_shift semantics; pre-fix J had ZERO variance across timing, 42/42 selections pinned to +0 by tie-break)",
-     "herd buy amortization bounded to ramp window (was charged forever -> delayed-buy arbitrage inverted timing direction vs oracle -2 preference 36/42)",
-     "land purchases scheduled doctrine-style without cash gate + capacity coupling quads*25 tiles (removes 4600 affordability lottery; was breaking monotonicity: neutral 24223 < pessimistic 27234 on C3 midgame obs)",
-     "P3 CATCHUP crew_late_day 22->24 (d20 isolation: dropCrew -> +8/+0 while dropFuse kept the full -7593/-2004 loss; lever falsified, fuse floor 600 kept)"
-    ]
-   }
-  },
-  "m6_p26_d10_diagnosis": {
-   "method": "scripts/planner_calibration_suite.py d10-jmat (2026-09-19): 14 d10 points, per-plan x per-model J matrix + knob-group isolation rollouts; artifact calibration/d10_jmat.json",
-   "unit": "verdict (d10 -920 root cause)",
-   "value": {
-    "coverage_identity_gap": 0.0,
-    "new_selection_mean_dtsp_vs_reactive_d10": 352,
-    "old_cause": "plan itself wrong: old projector systematically selected C3@0.80 (VOLUME gates off + caps cut) at d10",
-    "verdict": "coverage channel sound (PLANNER_ENABLED+empty overrides == reactive, 14/14 bit-exact); losses were parameter choice, fixed by projector calibration"
-   }
-  },
-  "m6_p26_timing_variance_post_fix": {
-   "method": "scripts/planner_calibration_suite.py timing-diag over the official injection set (2026-09-19)",
-   "unit": "fraction of plan families with zero J variance across timing shifts",
-   "value": {
-    "max_j_spread": 2930.1,
-    "post_fix_zero_variance": "336/1008 (residual zeros = honest too-late states: d20 closure, dues past, herd ramp complete)",
-    "pre_fix": "100% zero variance (structural: shift only moved cash timing, no interest)"
-   }
-  },
-  "m6_p26_calibration_tests": {
-   "method": "python -m pytest tests/test_planner_calibration.py -q (2026-09-19)",
-   "unit": "pytest summary (new file)",
-   "value": "16 passed (tests/test_planner_calibration.py): timing monotonicity/honest-flat, seed-window analytic identity, capacity coupling, no-cash-lottery, herd amortization window, aggregation math (trim=0=mean, worst<=trimmed, weighted monotone), tie-break not pinned to +0, bench selector-cfg plumbing"
   }
  },
- "milestone": "Track-B P2.6 投影校准终局复裁（PASS：主口径 12/14 局中位不劣 + 全集合 mean Δ=+783>0，参考口径 12/14；同 bench 同判据只跑一次 final config；C1 消融定案=投影器修评分而非剔除；旗关等价 6/6 逐字节一致；src 九模块零改动）",
+ "milestone": "Track-B P3 DTSP bot 内集成（黎明钩子进提交 bot：投影段 P2.6 钉死配置 + 预算内孪生精化段 K×Ω' 阶梯；时间治理器 min(0.85s,0.5s+池/黎明×0.5)；fail-open 三道（异常/指纹/超限→快照恢复+粘性旗关，动作流与旗关 golden 逐字节一致）；打包 pkg.2-dtsp（planner+scene 内置，确定性 181KB 级）；官方 42 注入点策略探针=精化段对 P2.6 选择中性；端到端 4 种子全季无超时无异常）",
  "schema": "software-metrics-shard/1.0",
  "unmeasured": {
   "final_submission_commits": {

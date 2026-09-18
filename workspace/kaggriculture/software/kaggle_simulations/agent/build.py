@@ -13,9 +13,15 @@ entry that loads agent/src/*.py in a fixed topological order into one flat
 namespace at import time (identical semantics, merge point moved from build
 time to import time; tracebacks now point at the real module files).
 
-Determinism: fixed member order (main.py, then src modules in load order),
-zeroed mtimes/uid/gid, fixed modes, gzip mtime 0 -- byte-reproducible archives.
-Prints the archive sha256 for identity-chain registration.
+P3 extension (DTSP in-bot runtime, 2026-09-19): the archive also carries the
+planner/ package (fixed member order) and the fingerprint-verified scene
+pair under planner/scene/ extracted from the vendored wheel at build time --
+the runtime loads it zero-write via twin.load_engine_from_scene at dawn.
+
+Determinism: fixed member order (main.py, src modules in load order,
+planner modules, scene pair), zeroed mtimes/uid/gid, fixed modes, gzip
+mtime 0 -- byte-reproducible archives.  Prints the archive sha256 for
+identity-chain registration.
 """
 import argparse
 import ast
@@ -25,14 +31,16 @@ import io
 import os
 import sys
 import tarfile
+import zipfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SRC = HERE / "src"
+PLANNER = HERE / "planner"
 OUT = HERE / "submission.tar.gz"
 
 # Bump when the PACKAGE LAYOUT changes (member set / order / entry shape).
-VERSION = "pkg.1"
+VERSION = "pkg.2-dtsp"
 
 # Flat-namespace load order -- MUST match main.py's _MODULE_ORDER.  The
 # src-split era's _archive_header.py is retired from the package (the
@@ -40,6 +48,58 @@ VERSION = "pkg.1"
 # main.py's first line).
 MODULE_ORDER = ["constants", "telemetry", "observer", "strategy", "mission",
                 "solver", "executor", "market", "entry"]
+
+# planner/ package members in fixed (dependency) order: twin <- plans /
+# opponents / select <- runtime.  Imported as a real package by the thin
+# entry at dawn; the flat src namespace never imports it at load time.
+PLANNER_ORDER = ["__init__.py", "twin.py", "plans.py", "opponents.py",
+                 "select.py", "runtime.py"]
+
+# Bundled scene pair (extracted from the vendored wheel, sha256-verified
+# against planner.twin's registered P1 fingerprints before packing).
+SCENE_MEMBERS = {"planner/scene/kaggriculture.py": "kaggriculture.py",
+                 "planner/scene/kaggriculture.json": "kaggriculture.json"}
+
+# Vendored wheel with the scene files (repo-relative to software/).
+VENDOR_RELATIVE = os.path.join("..", "..", "vendor",
+                               "kaggle_environments-1.32.7+nodeps-py3-"
+                               "none-any.whl")
+SCENE_ZIP_MEMBERS = {
+    "planner/scene/kaggriculture.py":
+        "kaggle_environments/envs/kaggriculture/kaggriculture.py",
+    "planner/scene/kaggriculture.json":
+        "kaggle_environments/envs/kaggriculture/kaggriculture.json",
+}
+
+
+def scene_bytes_and_sha():
+    """Extract + verify the scene pair from the vendored wheel.
+
+    Fail-closed: any sha256 drift against planner.twin's registered P1
+    values aborts the build (never pack an unverified engine)."""
+    sys.path.insert(0, str(HERE))
+    from planner import twin as planner_twin
+    wheel_path = os.path.abspath(os.path.join(HERE, VENDOR_RELATIVE))
+    if not os.path.isfile(wheel_path):
+        sys.exit(f"FAIL vendored wheel missing: {wheel_path}")
+    with zipfile.ZipFile(wheel_path) as zf:
+        data = {}
+        for arc, member in SCENE_ZIP_MEMBERS.items():
+            data[arc] = zf.read(member)
+    checks = (
+        ("planner/scene/kaggriculture.py", data, planner_twin.SCENE_PY_SHA256),
+        ("planner/scene/kaggriculture.json", data,
+         planner_twin.SCENE_JSON_SHA256))
+    for arc, blob, expected in checks:
+        got = hashlib.sha256(blob[arc]).hexdigest()
+        if got != expected:
+            sys.exit(f"FAIL scene fingerprint drift for {arc}: "
+                     f"{got} != {expected}")
+    if planner_twin.WHEEL_SHA256 != \
+            hashlib.sha256(Path(wheel_path).read_bytes()).hexdigest():
+        sys.exit("FAIL vendored wheel sha256 drifted from planner.twin "
+                 "registration")
+    return data
 
 
 def fragment_names(path):
@@ -85,17 +145,39 @@ def precheck():
                  "(get_last_callable contract)")
     if "Kaggriculture submission agent" not in main_src[:64]:
         sys.exit("FAIL main.py must keep the 64-byte submission marker")
+    # P3 packaging contract: the DTSP master gate must exist in main.py so
+    # the packaged bot actually plans; flag-off equivalence is orthogonal
+    # (golden suite execs src without this name).
+    if "DTSP_RUNTIME_CONFIG" not in main_src:
+        sys.exit("FAIL main.py must define DTSP_RUNTIME_CONFIG (P3 dawn "
+                 "hook gate)")
+    for rel in PLANNER_ORDER:
+        if not (PLANNER / rel).is_file():
+            sys.exit(f"FAIL missing planner member: {PLANNER / rel}")
 
 
 def build_bytes():
-    """Byte-reproducible tar.gz: main.py + src modules in load order."""
+    """Byte-reproducible tar.gz: main.py + src modules (load order)
+    + planner package (fixed order) + verified scene pair."""
     members = [(HERE / "main.py", "main.py")]
     for mod in MODULE_ORDER:
         members.append((SRC / f"{mod}.py", f"src/{mod}.py"))
+    for rel in PLANNER_ORDER:
+        members.append((PLANNER / rel, f"planner/{rel}"))
+    scene = scene_bytes_and_sha()
     buf = io.BytesIO()
     with tarfile.open(fileobj=buf, mode="w") as tar:
         for path, arcname in members:
             data = path.read_bytes()
+            info = tarfile.TarInfo(arcname)
+            info.size = len(data)
+            info.mtime = 0
+            info.mode = 0o644
+            info.uid = info.gid = 0
+            info.uname = info.gname = ""
+            tar.addfile(info, io.BytesIO(data))
+        for arcname in sorted(scene):
+            data = scene[arcname]
             info = tarfile.TarInfo(arcname)
             info.size = len(data)
             info.mtime = 0
@@ -116,6 +198,9 @@ def postcheck():
         compile(source, str(SRC / f"{mod}.py"), "exec")
     compile((HERE / "main.py").read_text(encoding="utf-8"),
             str(HERE / "main.py"), "exec")
+    for rel in PLANNER_ORDER:
+        source = (PLANNER / rel).read_text(encoding="utf-8")
+        compile(source, str(PLANNER / rel), "exec")
 
 
 def main():
@@ -140,7 +225,8 @@ def main():
     OUT.write_bytes(data)
     print(f"packaged {OUT} ({len(data)} bytes, layout {VERSION})")
     print(f"sha256 = {hashlib.sha256(data).hexdigest()}")
-    print("members: main.py + " + ", ".join(MODULE_ORDER))
+    print("members: main.py + " + ", ".join(MODULE_ORDER)
+          + " + planner(" + ", ".join(PLANNER_ORDER) + ") + scene pair")
 
 
 if __name__ == "__main__":

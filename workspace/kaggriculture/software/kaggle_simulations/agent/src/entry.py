@@ -71,6 +71,23 @@ def agent(obs):
         # never touches the decision path below.
         _opp_observer_update(obs, _get(obs, "private", {}) or {})
 
+        # DTSP 黎明钩子（P3 最小接线，2026-09-19；旗关零足迹有测试钉住）：
+        # 只在提交入口 main.py 定义了 DTSP_RUNTIME_CONFIG 的命名空间里活
+        # （旗关黄金/裸命名空间无此名字 → 死路，动作流与 v13.8 逐字节一
+        # 致）。钩子自带三道 fail-open（恢复 v13.8 快照 + PLANNER_ENABLED
+        # =False 粘性 + 遥测记因）；本 except 仅兜 runtime 模块本身不可用
+        # 的包破损情形——旗关+清寄存器，本回合照常走 v13.8 路径。
+        _dtsp_cfg = globals().get("DTSP_RUNTIME_CONFIG")
+        if _dtsp_cfg:
+            try:
+                import planner.runtime as _dtsp_runtime
+                _dtsp_runtime.dawn_hook(obs, globals(), _dtsp_cfg,
+                                        player=player, day=day, hour=hour)
+            except Exception:
+                globals()["PLANNER_ENABLED"] = False
+                if isinstance(globals().get("PLANNER_OVERRIDES"), dict):
+                    globals()["PLANNER_OVERRIDES"].clear()
+
         # r5-P4: the daily macro plan (DEFENSIVE = conservative r4 frame) is
         # computed once per day-hour cache and threaded through every
         # planner; any failure inside the gate already fell back to it.

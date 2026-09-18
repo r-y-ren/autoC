@@ -46,6 +46,22 @@ if _HERE not in sys.path:
 _MODULE_ORDER = ("constants", "telemetry", "observer", "strategy",
                  "mission", "solver", "executor", "market", "entry")
 
+# ===========================================================================
+# DTSP 运行时总闸（Track-B P3，2026-09-19）。提交形态 = DTSP 开启：src/entry
+# 的黎明钩子只在本名字存在时唤醒 planner/runtime（每天黎明孪生规划选计划
+# → PLANNER_OVERRIDES 注入当日执行）。键值语义见 planner/runtime._DEFAULTS。
+# 旗关等价不受影响：本名字不在 src 九模块内——旗关黄金（裸命名空间 exec
+# src，无本名字）与 PLANNER_ENABLED=False 路径照旧逐字节等价
+# （scripts/planner_flagoff_golden.py / tests/test_planner_flagoff_equiv.py）。
+# ===========================================================================
+DTSP_RUNTIME_CONFIG = {
+    "enabled": True,
+    "seed": 1,                     # 孪生伪种子（线上真种子不可观测）
+    "budget_cap_s": 0.85,          # 黎明规划硬帽（< actTimeout=1s）
+    "rollout_models": ("pessimistic_fill",),   # P2.6 钉死搭档：悲观 0.75
+    "ladder": ((6, 1), (4, 2), (3, 3), (2, 4), (1, 6)),
+}
+
 
 def _load_pipeline():
     """Load the src fragments straight into THIS module's globals.
