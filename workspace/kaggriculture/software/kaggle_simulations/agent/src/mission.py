@@ -186,13 +186,8 @@ def _build_tasks(obs, farm, private, day, plan=None):
                     ws0, we0 = _window(crop)
                     expect = min(cd["max_yield"], 2 * max(1, we0 - ws0 + 1))
                     net = expect * price - cd["seed"]
-                    # v1.5 P0: day-0 plant+water outranks empty-pasture
-                    # builds (w=46).  Online round-21 d0 spent the crew on
-                    # BUILD_PASTURE while planting only 6.1 wheat tiles.
-                    plant_w = 55 if day <= 1 and crop != "WHEAT" else (
-                        52 if day <= 1 else (30 if crop == "WHEAT" else 32))
-                    add(plant_w, x, y,
-                        ["PLANT", crop], ("plant", x, y), v=max(plant_w, net * 0.6))
+                    add(30 if crop == "WHEAT" else 32, x, y,
+                        ["PLANT", crop], ("plant", x, y), v=max(30, net * 0.6))
                     seed_budget[crop] -= 1
                     plant_budget -= 1
                 continue

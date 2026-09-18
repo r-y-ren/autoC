@@ -97,9 +97,9 @@ def test_scale_plan_builds_to_its_eighteen_head_structure_ceiling():
         main.MODE_HERD_CAP_SCALE
     assert sum(kind == "PASTURE" for kind in defensive_builds.values()) == \
         main.HERD_CAP + 1
-    assert sum(kind == "PASTURE" for kind in opening_builds.values()) == 4
-    # V-T8: build lead is one ahead of the herd plan; v1.5 d0 target is 3
-    # so the day-0 plan wants 4 pastures, not 5
+    assert sum(kind == "PASTURE" for kind in opening_builds.values()) == 5
+    # V-T8: build lead tightened to one ahead of the herd plan (tetsuya
+    # builds batch-by-batch), so the day-0 plan wants 5, not 6
     assert not set(scale_builds).intersection(
         set().union(*scale_crops.values()))
 

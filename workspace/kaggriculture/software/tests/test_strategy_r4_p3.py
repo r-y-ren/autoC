@@ -71,7 +71,7 @@ def test_npv_ceiling_blocks_late_or_hungry():
 def test_npv_ceiling_never_accelerates_the_base_plan():
     # the ceiling only lifts the target once the 14-head plan is DONE
     # (day-0 burst + r3 deadline semantics: _herd_target unchanged)
-    assert main._herd_target(0, 99) == 3
+    assert main._herd_target(0, 99) == 4
     assert main._herd_target(8, 99) == main.HERD_CAP == 16
     assert main.HERD_CAP_NPV == 17
 

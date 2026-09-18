@@ -1763,7 +1763,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         batch_w = min(24, max(floor_w, want_w))
         if day <= 2:
             batch_w = min(batch_w, 18)   # top plants 17.6 tiles on d0
-            # (the 3-head opening + 500 reserve leave wallet room now)
+            # (the 4-head opening + 500 reserve leave wallet room now)
         # working-capital class (like feed): scale to the wallet instead of
         # rejecting the whole order -- round-5 forensics showed d8-12
         # wallets of 4-629 cash starving a 10-coin seed under a flat 150
@@ -1832,16 +1832,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 cap_for_crop = min(cap_for_crop,
                                    int(plan.get("melon_total_cap", 0)))
             want = cap_for_crop - alive[crop] - seeds.get(crop, 0)
-            # v1.5 P0: melon on day 0 cannot wait for the land-fund+250
-            # gate (opening 1C+2S leaves ~1100 after reserve; land_fund is
-            # 0 until d4, but 250+ still ate the melon batch).  Strawberry
-            # stays at 250; other rotation crops keep the land cushion.
-            if crop == "STRAWBERRY":
-                seed_gate = 250
-            elif crop == "MELON" and day <= 1:
-                seed_gate = 80
-            else:
-                seed_gate = land_fund + 250
+            seed_gate = 250 if crop == "STRAWBERRY" else land_fund + 250
             wallet = projected_money if plan.get("wheat_farm") else money
             reserve_gate = max(seed_gate, WHEAT_FARM_HOLD_CASH) \
                 if plan.get("wheat_farm") else seed_gate
@@ -1879,9 +1870,9 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # ---- herd (FM-O2 + R3-1/R3-2): mixed 14-head ranch, money-gated,
     # paced by CONFIRMED purchases (m2b), species-level dead-price freeze
     # (red line).  Day 0 is the r3 opening: the burst buys OPENING_HERD
-    # outright (v1.5: 1C+2S = 1400 of the 3000 start so day-0 melon
-    # seeds still fit; the round-20 4-head burst is the rollback pack),
-    # both species in one turn so
+    # outright (2C+2S = 1800 of the 3000 start; 116/116 top-20 seats and
+    # 3/3 round-2 winners put 4-5 head on d0 -- the m3 1-sheep opening is
+    # the fork the round-2 losses traced to), both species in one turn so
     # cows reach the day-8 milk window AND sheep the day-6 wool window.
     reserve = 800 if day <= 3 else (550 if day <= 7 else COW_BUY_RESERVE)
     if land_pending:

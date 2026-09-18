@@ -102,8 +102,8 @@ LAND_PLAN = {1: (4, 1700), 2: (7, 2700)}
 LAND_PRICE = {1: 1000, 2: 2000, 3: 4000}
 LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
 
-# 【中文】畜群旋钮组：day-0 开局爆发买 1 牛 + 2 羊（OPENING_HERD，
-# 花掉 3000 启动资金的 1400，保留 OPENING_RESERVE）；HERD_CAP 是计划
+# 【中文】畜群旋钮组：day-0 开局爆发买 2 牛 + 2 羊（OPENING_HERD，
+# 花掉 3000 启动资金的 1800，保留 OPENING_RESERVE）；HERD_CAP 是计划
 # 上限 16 = 9 牛 + 7 羊（HERD_COMPOSITION，2026-09-04 校准）；超出 16 的扩张走
 # _npv_herd_decision 的边际 NPV 判定，绝对安全上限 HERD_CAP_NPV = 17；
 # LIQUIDITY_FLOOR 保证买畜后钱包付得起次日黎明雇工费（见安全哲学）。
@@ -115,7 +115,7 @@ LAND_PEND_WINDOW = 4     # herd unblocks if land is this many days overdue
 # d8-9 (< d11).  Cows interleave in early so they reach the day-8+
 # premium-milk window on time; goose dropped (egg log-curve pays ~2.1k
 # vs a cow's ~5k in the observed premium-milk meta).
-OPENING_HERD = {"COW": 1, "SHEEP": 2}
+OPENING_HERD = {"COW": 2, "SHEEP": 2}
 OPENING_RESERVE = 500              # 800->500（top d4 现金 128 实测；FUSE 300 不变）    # cash kept besides the day-0 burst (m2b cushion)
 # V-T1 ablation copy (tetsuya 08-31 opening shift): the day-0 herd burst is
 # replaced by a staged day1-3S / day2-2C sequence; day 0 keeps its cash for
@@ -130,11 +130,11 @@ OPENING_SHIFT = True
 # back TO day 0 in his smaller shape (variant B below was the d1/d2 deferral;
 # the paced loop still owns d1+ at pace 1/day, and _opening_shift_hold keeps
 # day 0 free of any further paced buys).
-# 2026-09-04 v1.5 P0：官方 round-20/21 回放显示 4 头开局已经做成，
-# 同档对手用开局田把 d11 现金打到 ~6k，我们还在 ~600。开局改回
-# tetsuya-true 减档 1C+2S（~1400），省下的 400 给开局瓜种；4 头
-# 爆发降为回退包。预备金 500 / FUSE 300 不变。
-OPENING_SHIFT_SEQ = {0: {"SHEEP": 2, "COW": 1}}
+# 2026-09-04 畜群前置校准（0903 日集 44 席）：top d0 4-5 头（round-2
+# 语料 116/116），d8 中位 12 头，奶/毛日收入是 d7-11 现金爆发的引擎
+# （top d11 现金 13.7k vs 我方 946 的根源）。开局回到 4 头，预备金
+# 800→500（top d4 现金 128 贴线运行；FUSE 300 仍是绝对红线）。
+OPENING_SHIFT_SEQ = {0: {"SHEEP": 2, "COW": 2}}
 HERD_CAP = 16            # 14->16（top 峰值中位 15.8，0903 日集）
                          # to the constant, not a literal
 # r4-P3: STATE-DRIVEN herd ceiling.  Beyond the pinned 14-head plan,

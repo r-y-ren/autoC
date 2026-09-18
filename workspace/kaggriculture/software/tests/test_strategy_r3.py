@@ -5,7 +5,7 @@ changes pinned by the round-2 winner x top-20 cross-profile
 (exports/online/round2_winner_deep_dive.md, >=3-game evidence each):
 
   1. d0 capital allocation: the day-0 burst buys the mixed OPENING_HERD
-     (v1.5: 1C+2S = 1400 of the 3000 start so opening melon still fits),
+     (2C+2S = 1800 of the 3000 start; 116/116 top-20 seats, 3/3 winners),
      both species in one turn, and the normal paced loop stands down for
      the rest of day 0;
   2. herd build deadline: the target plan crosses 12 head by day 8 and
@@ -117,17 +117,18 @@ def _pasture_tile(animal="SHEEP", yield_units=0, consecutive_unfed=0,
 # --------------------------------------------------------------------------
 
 def test_day0_burst_buys_both_species():
-    # v1.5 P0 (official round-20/21): day 0 buys 2 sheep + 1 cow (~1400)
-    # beside the 10-wheat feed floor, money-gated by OPENING_RESERVE --
-    # the annuity deadlines (wool d8 / milk d11) stay reachable, and the
-    # leftover cash buys opening melon.  Days 1+ have NO opening-sequence
-    # entry: the paced loop (1/day before day 4) owns the ramp from d1 on.
+    # V-C opening (tetsuya-true d0 small burst, branch plan v1.3 / A-① probe,
+    # raw-replay audit 2026-09-02): day 0 buys 2 sheep + 1 cow (~1400) beside
+    # the 10-wheat opening and 5 hires, money-gated by OPENING_RESERVE -- the
+    # annuity deadlines (wool d8 / milk d11) stay reachable from a d0 burst.
+    # Days 1+ have NO opening-sequence entry: the paced loop (1/day before
+    # day 4) owns the ramp from d1 on.
     private = {"shed": _shed(), "seeds": {"WHEAT": 12}, "inventories": [{}]}
     main._STATE.clear()
     orders, _ = _market_orders_with(private, animals=0, herd=0, day=0,
                                     money=3000.0, quads=["NW"])
     assert _order_qty(orders, "BUY_ANIMAL", "SHEEP") == 2
-    assert _order_qty(orders, "BUY_ANIMAL", "COW") == 1
+    assert _order_qty(orders, "BUY_ANIMAL", "COW") == 2
     assert 2 * 500 + 1 * 400 + main.OPENING_RESERVE <= 3000
     orders, _ = _market_orders_with(private, animals=0, herd=0, day=1,
                                     money=2900.0, quads=["NW"])
@@ -150,11 +151,11 @@ def test_day0_burst_is_money_gated_with_reserve():
 
 def test_paced_loop_stands_down_after_the_burst():
     # later on day 0 (animals confirmed into the shed): no further buys --
-    # the 3-head day-0 target is the burst itself
-    private = {"shed": _shed(COW=1, SHEEP=2), "seeds": {"WHEAT": 12},
+    # the 4-head day-0 target is the burst itself
+    private = {"shed": _shed(COW=2, SHEEP=2), "seeds": {"WHEAT": 12},
                "inventories": [{}]}
     main._STATE.clear()
-    orders, _ = _market_orders_with(private, animals=0, herd=3, day=0,
+    orders, _ = _market_orders_with(private, animals=0, herd=4, day=0,
                                     money=2500.0, quads=["NW"], hour=6)
     assert not _orders_contains(orders, "BUY_ANIMAL", "COW")
     assert not _orders_contains(orders, "BUY_ANIMAL", "SHEEP")
@@ -166,7 +167,7 @@ def test_paced_loop_stands_down_after_the_burst():
 # --------------------------------------------------------------------------
 
 def test_herd_plan_crosses_12_by_day8_and_caps_at_14():
-    assert main._herd_target(0, 99) == 3                    # d0 reduced burst
+    assert main._herd_target(0, 99) == 4                    # d0 burst size
     assert main._herd_target(5, 99) == 10
     assert main._herd_target(6, 99) >= 12 or main._herd_target(7, 99) >= 12
     assert main._herd_target(8, 99) == main.HERD_CAP        # 12+ by d8, cap
@@ -180,26 +181,6 @@ def test_herd_composition_is_the_winner_mix():
     assert main.HERD_COMPOSITION["COW"] == 9
     assert main.HERD_COMPOSITION["SHEEP"] == 7
     assert sum(main.HERD_COMPOSITION.values()) == main.HERD_CAP
-
-
-def test_day0_opening_melon_fits_on_single_quadrant():
-    # v1.5 P0: after the reduced herd burst, a single NW farm still has
-    # empty tiles for melon AND the market orders a melon seed batch
-    # (the old 22-tile wheat floor + land_fund+250 gate made want=0).
-    farm = _farm(quads=["NW"])
-    _, crops, _, _ = main._field_alloc(farm, 0, _prices())
-    assert len(crops["WHEAT"]) <= 10
-    assert len(crops["MELON"]) >= 6
-    private = {"shed": _shed(), "seeds": {"WHEAT": 12}, "inventories": [{}]}
-    main._STATE.clear()
-    orders, _ = _market_orders_with(private, animals=0, herd=0, day=0,
-                                    money=3000.0, quads=["NW"])
-    assert _order_qty(orders, "BUY_SEED", "MELON") >= 6
-    spend_animals = (_order_qty(orders, "BUY_ANIMAL", "SHEEP") * 500
-                     + _order_qty(orders, "BUY_ANIMAL", "COW") * 400)
-    spend_melon = _order_qty(orders, "BUY_SEED", "MELON") * 80
-    assert spend_animals + spend_melon + main.OPENING_RESERVE <= 3000
-    main._STATE.clear()
 
 
 def test_opening_burst_species_match_composition_track():

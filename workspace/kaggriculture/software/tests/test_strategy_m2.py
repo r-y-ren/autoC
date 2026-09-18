@@ -192,18 +192,16 @@ def test_fertilizer_releases_above_gate():
 # --------------------------------------------------------------------------
 
 def test_herd_target_ramps_and_caps():
-    assert main._herd_target(0, 99) == 3
+    assert main._herd_target(0, 99) == 4
     assert main._herd_target(8, 999) == main.HERD_CAP
     assert main._herd_target(8, 9) == 9        # feed capacity binds
     assert main._herd_target(25, 99) == main.HERD_CAP
 
 
 def test_wheat_cap_grows_with_price():
-    # v1.5 P0: d0-1 feed floor 10 so a single quadrant keeps melon room;
-    # from d2 the 22/26 floor and dear-wheat bands are unchanged.
-    assert main._wheat_cap(0, 25) == 10
-    assert main._wheat_cap(1, 25) == 10
-    assert main._wheat_cap(2, 25) == 22
+    # round-19 top-meta calibration (Larko's continuous wheat economy):
+    # floor 16/18 -> 22/26, dear-wheat bands unchanged, ceiling 30 -> 36
+    assert main._wheat_cap(1, 25) == 22
     assert main._wheat_cap(5, 25) == 26
     assert main._wheat_cap(5, 40) == 30        # dear wheat -> farm more
 
