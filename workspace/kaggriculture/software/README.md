@@ -114,6 +114,11 @@ python workspace/kaggriculture/software/scripts/planner_flagoff_golden.py
 python workspace/kaggriculture/software/scripts/planner_offline_bench.py --mode official
 #     c) 规划器契约 + 旗关等价测试
 python -m pytest workspace/kaggriculture/software/tests/test_planner_contract.py workspace/kaggriculture/software/tests/test_planner_flagoff_equiv.py -q
+#     d) P3 bot 内集成（DTSP 运行时在提交 bot 内每日黎明规划）：
+#        集成契约（预算降级/fail-open 三道/指纹不符/黎明调度/打包清单）
+python -m pytest workspace/kaggriculture/software/tests/test_p3_integration.py -q -k "not full_season"
+#        端到端 4 种子全季 DTSP 自博弈（无超时/无异常硬断言，~2 分钟）
+python -m pytest workspace/kaggriculture/software/tests/test_p3_integration.py -q -k full_season
 ```
 
 ### P2 DNA/liveness scope
@@ -123,15 +128,15 @@ python -m pytest workspace/kaggriculture/software/tests/test_planner_contract.py
 This is producer/source-attested precomputed barcode evidence, not an independent replay reconstruction: `extractor_status=source_extractor_not_published`. `IDENTICAL / SAME SOURCE` means only 30-band anchor equality; it does not prove the same agent or a real source. DNA stability is separate from engine action liveness. The artifacts are explicitly exploratory and are not strength, promotion, holdout, online, or performance evidence. DNA outputs are restricted to `workspace/kaggriculture/software/exports/replay_dna/`, and action, observation, state, market, price, quantity, inventory, and raw trace fields are rejected recursively.
 
 <!-- ACTIVE_CANDIDATE_IDENTITY:BEGIN -->
-working_candidate_sha256=94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8
+working_candidate_sha256=72eae27486166305e841c8b84b857034a9d100758896d0101f27b3fd487df994
 working_candidate_status=development
 last_promoted_frozen_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
 published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
 published_holdout_attempt_index=5
 engine=kaggle-environments 1.32.7 kaggriculture
 <!-- ACTIVE_CANDIDATE_IDENTITY:END -->
-submission_package_sha256=b987af241e51935094f1bd37713e976b1876f3915d48440e674835d74f76cecd
-package_sha_provenance=P2.5 惰性旋钮扩展后的开发包（2026-09-19，PLANNER_ENABLED=False 旗关与 v13.8 逐字节等价，黄金哈希 tests/test_planner_flagoff_equiv.py 钉住）；已登记 v13.8 线上提交包仍为 2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e（冻结 ref 8deac51）——回发 Track-A 锚必须 checkout 该 ref 重打包，不得使用本工作区包
+submission_package_sha256=ee19d2c7655a85e44434ea860a354927dfa85f9009a1ca801d95cf4c9f27d127
+package_sha_provenance=P3 DTSP bot 内集成后的开发包（2026-09-19，layout pkg.2-dtsp：main.py+src/9+planner/6+scene 对，确定性打包 181894 字节；旗关黄金 6/6 与 v13.8 逐字节一致由 tests/test_planner_flagoff_equiv.py 钉住）；已登记 v13.8 线上提交包仍为 2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e（冻结 ref 8deac51）——回发 Track-A 锚必须 checkout 该 ref 重打包，不得使用本工作区包
 
 ## External H2H 与评级限制
 
@@ -148,6 +153,8 @@ edit agent/src/*.py  ->  python -m pytest workspace/kaggriculture/software/tests
 ```
 
 准备线上探针、冻结或正式交付时，才运行 `python agent/build.py` 生成确定性的 `submission.tar.gz`，再执行 `build.py --check`、身份检查和必要的回归。构建器校验包成员顺序、归档元数据和官方装载契约，并打印 package sha256，供候选检查点登记使用。
+
+**P3 起包布局（2026-09-19，layout pkg.2-dtsp）**：包成员 = `main.py` + `src/` 9 模块 + `planner/` 6 文件（`__init__/twin/plans/opponents/select/runtime`，固定拓扑序）+ `planner/scene/` 场景两文件（打包期从 vendored wheel 抽取并对 planner.twin 的 P1 登记 sha256 校验，运行期 `twin.load_engine_from_scene` 零磁盘写装载）。`main.py` 顶部的 `DTSP_RUNTIME_CONFIG` 是 DTSP 总闸（提交形态=开）：entry 的黎明钩子只在存在该名字的命名空间激活——旗关黄金（裸命名空间）与 `PLANNER_ENABLED=False` 路径照旧与 v13.8 逐字节等价。运行时预算=每黎明 min(0.85s, 0.5s+透支池/剩余黎明×0.5)，rollout 逐时间片查 deadline；三道 fail-open（任意异常/引擎指纹不符/预算耗尽）恢复 v13.8 快照+粘性旗关，动作流与旗关 golden 逐字节一致（tests/test_p3_integration.py 注入验证）。
 
 ### 提交与候选检查点
 
