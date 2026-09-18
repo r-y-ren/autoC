@@ -247,11 +247,15 @@ MODE_STR_TOTAL_CAP = 48    # volume: field ceiling (Renji's 42-tile field)
 MODE_WHEAT_MONEY_QUAD = 8  # volume: wheat money tiles/quad (log glut curve)
 MODE_CREW_CAP_VOL = 15     # volume: hands ceiling (42 tiles of daily water)
 MODE_HERD_CAP_SCALE = 18   # scale: NPV ceiling (winners' 13-17 band + 1)
+# sprint-A 经济域复刻（sprint_forensics_0919 §2）：DEFENSIVE 与 SCALE 共用
+# 莓配额——658-663 分段赢家莓峰 18-24（v10.3 线）；28/36 系 0903 top 层
+# 外推（与 VOLUME 的 16/48 同源校准，未随本次回收——条件模式防归因混杂）。
+STRAW_QUAD_CAP_REGIME = 8
+STRAW_TOTAL_CAP_REGIME = 24
 _DEFENSIVE_PLAN = {"mode": "DEFENSIVE", "volume": False, "scale": False,
                    "wheat_farm": False,
-                   "straw_quad_cap": 8,   # sprint-A 复刻（sprint_forensics_0919）：
-                   "straw_total_cap": 24, # v10.3 档莓 18-24 是 658-663 分段赢家
-                                          # 结构；28/36 系 0903 top 层外推
+                   "straw_quad_cap": STRAW_QUAD_CAP_REGIME,
+                   "straw_total_cap": STRAW_TOTAL_CAP_REGIME,
                    "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
                    "crew_cap": HANDS_CAP_R3,
                    "herd_ceiling": HERD_CAP_NPV}

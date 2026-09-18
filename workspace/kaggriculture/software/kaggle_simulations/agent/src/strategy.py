@@ -122,6 +122,12 @@ VOLUME_ANTICIPATED_ENTRY = True
 #   _hands_target/_crew_target 雇工计划（m3 阶梯为地板，畜群 ≥12 时
 #                顶到 12 人；VOLUME 模式抬到 15 并加大田地板 12+2）；
 #   _animal_pace 当日确认购买步速（开局资本期 1/天 → 爬坡 2 → 后期 3）。
+def _WHEAT_FLOOR_CAP(day):
+    """FEED FLOOR 尺寸（m2b 基线，sprint-A 复刻）：d0-2 16 格、d3+ 18 格。
+    _wheat_cap 的基值与 _field_alloc 的底仓红线钳位共用此单一出处。"""
+    return 16 if day <= 2 else 18
+
+
 def _wheat_cap(day, wheat_price=25):
     """Wheat FEED-FLOOR size (m2b base values, test-pinned at 25/40): 16
     tiles fund the opening, 18 the full herd (18 fertilized tiles =
@@ -132,7 +138,7 @@ def _wheat_cap(day, wheat_price=25):
     the money crop.  With FM-O3 the floor never has to cover the whole
     field: rotation crops take the remaining tiles.
     """
-    cap = 16 if day <= 2 else 18
+    cap = _WHEAT_FLOOR_CAP(day)
     # sprint-A 经济域复刻（2026-09-19 forensics sprint_forensics_0919.md）：
     # 22/26 底仓是 round-19 小麦化的起点，线上把在田结构推成麦 34/莓 9/
     # 萝 0——当前分段赢家（658-663 档）麦峰 17-18。回 m2b 底仓值，贵麦
@@ -478,9 +484,9 @@ def _decide_mode(obs, day, prev_mode):
     scale_hold = prev_mode == "SCALE_RANCH" and mine["herd"] >= 14
     if scale_entry or scale_hold:
         return {"mode": "SCALE_RANCH", "volume": False, "scale": True,
-                "straw_quad_cap": 8,   # sprint-A 复刻：v10.3 档草莓 18-24
-                "straw_total_cap": 24,  # （sprint_forensics_0919：赢家莓 20-31
-                                        # 的可达带；28/36 是 0903 top 层外推）
+                # sprint-A 复刻：与 _DEFENSIVE_PLAN 共用莓配额常量（单一出处）
+                "straw_quad_cap": STRAW_QUAD_CAP_REGIME,
+                "straw_total_cap": STRAW_TOTAL_CAP_REGIME,
                 "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
                 "crew_cap": HANDS_CAP_R3,
                 "herd_ceiling": MODE_HERD_CAP_SCALE}
@@ -1246,21 +1252,24 @@ def _field_alloc(farm, day, prices, plan=None):
                          len(crop_map["WHEAT"]))
     elif _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
         wheat_room += plan["wheat_money_quad"] * len(quads)
+    # §5.3 容量补位（util<0.65 时的 idle 容量兜底）与底仓一起参与 floor
+    # claim——这是承重行为，不是文档瑕疵：review 2026-09-19 曾把补位移到
+    # 高价线之后（sprintA2 探针），quickwin 实测 escape 0→2、溢出 0→11、
+    # -3.83% 立即翻车（补位麦是饲料安全的实际载体，后移=饿逃），已回滚。
+    # 旧注释"补位只吃剩余空格"系 v1.3 起的语义漂移，以实测行为为准。
     backfill = plan.get("capacity_backfill")
     if backfill and backfill.get("line") == "WHEAT" \
             and not plan.get("wheat_farm"):
-        # §5.3 黎明不变式下界：idle 容量的兜底去向=小麦（剩余劳力去处；
-        # 补位只吃真正剩余的空格）
         wheat_room += int(backfill.get("room_units", 0))
     # sprint-A 顺序翻转（2026-09-19 forensics）：麦底仓 pass 从"最先满额"
     # （round-19 小麦化的 22/26）改为"底仓/加码分离"——16/18 的 FEED FLOOR
-    # 仍是红线优先义务（畜群不能被金钱作物挤出饲料），但超出底仓的部分
-    # （贵麦加码带、wheat_money 配额、容量补位）排在高价线之后 claim。
+    # 仍是红线优先义务（畜群不能被金钱作物挤出饲料），超出底仓的部分
+    # （贵麦加码带、wheat_money 配额）排在高价线之后 claim。
     # 这是 658-663 档赢家结构（莓 18-24+瓜 9-12+麦 17-18）的恢复条件。
     if plan.get("wheat_farm"):
         floor_room = wheat_room
     else:
-        floor_room = max(0, min(wheat_room, 16 if day <= 2 else 18))
+        floor_room = max(0, min(wheat_room, _WHEAT_FLOOR_CAP(day)))
     for pos in sorted(empties, key=lambda p: (_shed_dist(p), p[1], p[0])):
         if floor_room <= 0:
             break
@@ -1310,7 +1319,8 @@ def _field_alloc(farm, day, prices, plan=None):
                 empties.remove(pos)
 
     # wheat EXTRA pass（sprint-A 分离后的后半）：瓜/莓 claim 之后，底仓
-    # 之外的加码需求（贵麦 tranche、wheat_money 配额、容量补位）就近补足。
+    # 之外的加码需求（贵麦 tranche、wheat_money 配额）就近补足。（容量
+    # 补位不在此处——见上方 floor 段的实测留痕。）
     for pos in sorted(empties, key=lambda p: (_shed_dist(p), p[1], p[0])):
         if wheat_room <= 0:
             break
@@ -1322,10 +1332,10 @@ def _field_alloc(farm, day, prices, plan=None):
         if not _crop_open(crop):
             continue
         if crop == "CARROT" and day < CARROT_ENDGAME_FROM:
-            # V-T7: carrot is the ENDGAME rotation (tetsuya plants it
-            # d23-27); claiming its 6/quad from d15 let it squat the SW
-            # wheat field for 11 days (seed-102 forensics: feed floor
-            # squeezed to 5 wheat tiles).
+            # sprint-A（2026-09-19）：CARROT_ENDGAME_FROM 回 15（v10.3 档
+            # 萝卜峰 11-12、sprint_forensics_0919 §2）。V-T7 当年"d15 蹲死
+            # SW 麦田"（seed-102）的前提已消——底仓 16/18 在本 pass 之前
+            # 已 claim 完，萝卜吃不到饲料红线的地。
             continue
         crop_quad_cap = CROP_CAP_PER_QUAD[crop]
         room = crop_quad_cap * len(quads) - len(crop_map[crop])

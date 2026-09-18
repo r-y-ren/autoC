@@ -18,10 +18,10 @@ sys.path.insert(0, str(SOFTWARE))
 sys.path.insert(0, str(SOFTWARE / "scripts"))
 
 from kgenv.engine import run_episode  # noqa: E402
-from m4_switchover_regression import (  # noqa: E402
-    AGENT_MAIN, load_module, reset_module_state)
+from m4_switchover_regression import load_module, reset_module_state  # noqa: E402
 
 CROPS = ("WHEAT", "STRAWBERRY", "MELON", "CARROT", "TOMATO")
+_SNAP_ERRORS = {"n": 0}   # 快照失败计数（防静默丢样本：>0 时在结尾告警）
 
 
 def _get(o, k, d=None):
@@ -71,7 +71,7 @@ def run_struct(seed):
                         except (TypeError, ValueError):
                             pass
             except Exception:
-                pass
+                _SNAP_ERRORS["n"] += 1
             return act
         return agent
 
@@ -131,6 +131,8 @@ def main():
            "care": round(m(lambda s: s["ops"].get("CARE", 0))),
            "feed_buy": round(m(lambda s: s["ops"].get("feed_buy", 0))),
            "harvest": round(m(lambda s: s["ops"].get("HARVEST", 0)))})
+    if _SNAP_ERRORS["n"]:
+        print(f"WARN: {_SNAP_ERRORS['n']} snapshot turns failed (计数不可靠度∝此值)")
 
 
 if __name__ == "__main__":

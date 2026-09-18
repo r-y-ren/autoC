@@ -125,7 +125,8 @@ def test_rotation_phase_windows():
     farm = _farm(quads=["NW", "NE"])
     _, crops_mid, _, _ = main._field_alloc(farm, 12, _prices())
     assert len(crops_mid["WHEAT"]) == 18         # feed floor (red line)
-    assert len(crops_mid["STRAWBERRY"]) == 12    # window (5,24), quad cap 8x2
+    assert len(crops_mid["STRAWBERRY"]) == 12    # window (5,24)；两象限池约束
+                                                  # （quad 上限 8x2=16 未到）
     assert len(crops_mid["MELON"]) == 12
     _, crops_late, _, _ = main._field_alloc(farm, 16, _prices())
     assert len(crops_late["STRAWBERRY"]) == 12   # window stays open to 24
