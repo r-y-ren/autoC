@@ -252,16 +252,16 @@ P4 出清时点——从 backlog 提级为 P4 前置件。
 | 争议线零囤货 | `_market_gates` / `_sell_overrides` 的 contested 分支 | 已实现 |
 | B1/B2/B3 | `_b_branch_adjust` 名字不变；**B1 追赶改为 1 头/天**、**B2 取消 d1 买地提前、草莓探针改 d5 6–8 格**、**B3 取消 2 格瓜帽** | **v1.5 待实现** |
 | C1/C2/C3 参数包 | 名字不变；C3 默认混营（麦底仓+莓+12 头），禁止纯畜牧解读 | **v1.5 待实现** |
-| 地块分配 | `_field_alloc`：饲料底仓有上限 → 草莓 → 瓜 → 剩余小麦。贵麦加成不得把麦田推过 22 格 | **v1.5 待实现** |
+| 地块分配 | `_field_alloc`：饲料底仓有上限 → 草莓 → 瓜 → 剩余小麦。贵麦加成不得把麦田推过 22 格 | **sprint-A 已实现（2026-09-19，变体）**：底仓/加码分离——16/18 底仓保留 m2b 红线优先（防 VOLUME 断粮），瓜→莓随后 claim，加码麦（贵麦 tranche/金钱配额/补位）最后；`_wheat_cap` 22/26→16/18 封顶 24；DEFENSIVE/SCALE 莓配额 8/24；`CARROT_ENDGAME_FROM` 22→15。证据与裁决：`exports/online/sprint_forensics_0919.md` |
 | 番茄接线 | 买种序列补 `TOMATO`，或从 CROP_PHASE 拿掉，禁止“计划有、线上 0” | **v1.5 待实现** |
 | P4 三档出清 | d22 保存 held/confidence/tier；`_p4_clear_tier` 供两个卖出路径共享 | 已实现，observer 仅作为既有估计 API |
 | 容量前置门 | `_capacity_gate` + `reserved_units` 同回合累计土地/种子/畜群买后单位 | 已实现 |
 | 三重前置检查 | 曲线门/现金门 + committed_spend 与市场预算模拟 | 已实现 |
 
 **v1.5 后续遗留项**（骨架已在，策略包未接线）：
-1. P0 减档畜 + 开局瓜田 + 种浇优先；
-2. B1 放慢追赶、B2 草莓改 d5、B3 取消避瓜；
-3. `_field_alloc` 让出莓窗、番茄要么接线要么删除；
+1. P0 减档畜 + 开局瓜田 + 种浇优先——**已被 sprint-A 法证否决暂停**（P0 接线 quickwin -30.74%/overflow 12 NO-GO，2026-09-19；且 09-04 round-20/21 回放的小麦化解读被 09-19 跨代法证推翻）；
+2. B1 放慢追赶、B2 草莓改 d5、B3 取消避瓜——待 sprint-A 线上裁决后按新证据重估；
+3. ~~`_field_alloc` 让出莓窗~~（sprint-A 已实现变体）、番茄要么接线要么删除（**sprint-A 后仍待办**：本地自对局番茄 0 株，买种序列未接）；
 4. 当前阶段状态为进程内 per-player 寄存器，时钟倒退会重建，不跨进程持久化；
 5. P4 低置信 tier 会按既有门控退化，估值精度由 observer 模块独立负责，本计划不修改其实现；
 6. 实现后必须过 `sync_online_probe.py gate`，用官方回放而不是 quickwin 验收。

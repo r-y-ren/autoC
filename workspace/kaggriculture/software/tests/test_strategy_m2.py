@@ -199,11 +199,13 @@ def test_herd_target_ramps_and_caps():
 
 
 def test_wheat_cap_grows_with_price():
-    # round-19 top-meta calibration (Larko's continuous wheat economy):
-    # floor 16/18 -> 22/26, dear-wheat bands unchanged, ceiling 30 -> 36
-    assert main._wheat_cap(1, 25) == 22
-    assert main._wheat_cap(5, 25) == 26
-    assert main._wheat_cap(5, 40) == 30        # dear wheat -> farm more
+    # sprint-A 经济域复刻（sprint_forensics_0919）：round-19 的 22/26 底仓
+    # 把线上结构推成麦 34/莓 9——回 m2b 底仓 16/18，贵麦加码带保留、
+    # 封顶 24（赢家档麦峰 17-18）
+    assert main._wheat_cap(1, 25) == 16
+    assert main._wheat_cap(5, 25) == 18
+    assert main._wheat_cap(5, 40) == 22        # dear wheat -> farm more
+    assert main._wheat_cap(5, 45) == 24        # 42+ band, ceiling binds
 
 
 # --------------------------------------------------------------------------

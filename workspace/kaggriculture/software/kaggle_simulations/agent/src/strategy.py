@@ -132,15 +132,16 @@ def _wheat_cap(day, wheat_price=25):
     the money crop.  With FM-O3 the floor never has to cover the whole
     field: rotation crops take the remaining tiles.
     """
-    cap = 22 if day <= 2 else 26
+    cap = 16 if day <= 2 else 18
+    # sprint-A 经济域复刻（2026-09-19 forensics sprint_forensics_0919.md）：
+    # 22/26 底仓是 round-19 小麦化的起点，线上把在田结构推成麦 34/莓 9/
+    # 萝 0——当前分段赢家（658-663 档）麦峰 17-18。回 m2b 底仓值，贵麦
+    # 加码带保留但封顶 24（v1.5 §9"贵麦不得推过 22 格"的邻域）。
     if day > 2 and wheat_price >= 42:
-        cap += 6          # round-19 audit: the old +12 tranche grew wheat to
-        # 33 tiles at d4-7, starved the (5,24) strawberry window to 4 tiles,
-        # then the d8-12 harvest wave collapsed the field 33 -> 3 (top keeps
-        # wheat at ~26-30 and fills berry to 25-30 instead)
+        cap += 6          # dear-wheat money band: feed margin + cash
     elif day > 2 and wheat_price >= 35:
         cap += 4          # dear wheat: farm more of it (feed margin + cash)
-    return min(cap, 30)
+    return min(cap, 24)
 
 
 def _herd_target(day, feed_capacity):
@@ -477,8 +478,9 @@ def _decide_mode(obs, day, prev_mode):
     scale_hold = prev_mode == "SCALE_RANCH" and mine["herd"] >= 14
     if scale_entry or scale_hold:
         return {"mode": "SCALE_RANCH", "volume": False, "scale": True,
-                "straw_quad_cap": 28,  # top-meta 2026-09-04（top 莓 33-38 株）
-                "straw_total_cap": 36,   # 24 -> 36（0903 日集 top 实测）
+                "straw_quad_cap": 8,   # sprint-A 复刻：v10.3 档草莓 18-24
+                "straw_total_cap": 24,  # （sprint_forensics_0919：赢家莓 20-31
+                                        # 的可达带；28/36 是 0903 top 层外推）
                 "wheat_money_quad": WHEAT_MONEY_CAP_PER_QUAD,
                 "crew_cap": HANDS_CAP_R3,
                 "herd_ceiling": MODE_HERD_CAP_SCALE}
@@ -1248,17 +1250,22 @@ def _field_alloc(farm, day, prices, plan=None):
     if backfill and backfill.get("line") == "WHEAT" \
             and not plan.get("wheat_farm"):
         # §5.3 黎明不变式下界：idle 容量的兜底去向=小麦（剩余劳力去处；
-        # 金钱作物两pass已在后面先 claim，补位只吃真正剩余的空格）
+        # 补位只吃真正剩余的空格）
         wheat_room += int(backfill.get("room_units", 0))
-    # wheat pass 1 (round-19 recalibration): the FEED FLOOR is a red-line
-    # obligation, so it claims its full quota nearest-first BEFORE any
-    # rotation pass -- the old NW-band + last-pass shape let the widened
-    # strawberry window starve the floor to 12 tiles on tight farms
-    # (top-meta reality: Larko's standing wheat ~30-40 tiles).
+    # sprint-A 顺序翻转（2026-09-19 forensics）：麦底仓 pass 从"最先满额"
+    # （round-19 小麦化的 22/26）改为"底仓/加码分离"——16/18 的 FEED FLOOR
+    # 仍是红线优先义务（畜群不能被金钱作物挤出饲料），但超出底仓的部分
+    # （贵麦加码带、wheat_money 配额、容量补位）排在高价线之后 claim。
+    # 这是 658-663 档赢家结构（莓 18-24+瓜 9-12+麦 17-18）的恢复条件。
+    if plan.get("wheat_farm"):
+        floor_room = wheat_room
+    else:
+        floor_room = max(0, min(wheat_room, 16 if day <= 2 else 18))
     for pos in sorted(empties, key=lambda p: (_shed_dist(p), p[1], p[0])):
-        if wheat_room <= 0:
+        if floor_room <= 0:
             break
         crop_map["WHEAT"].add(pos)
+        floor_room -= 1
         wheat_room -= 1
         empties.remove(pos)
 
@@ -1301,6 +1308,15 @@ def _field_alloc(farm, day, prices, plan=None):
                 crop_map["STRAWBERRY"].add(pos)
                 room -= 1
                 empties.remove(pos)
+
+    # wheat EXTRA pass（sprint-A 分离后的后半）：瓜/莓 claim 之后，底仓
+    # 之外的加码需求（贵麦 tranche、wheat_money 配额、容量补位）就近补足。
+    for pos in sorted(empties, key=lambda p: (_shed_dist(p), p[1], p[0])):
+        if wheat_room <= 0:
+            break
+        crop_map["WHEAT"].add(pos)
+        wheat_room -= 1
+        empties.remove(pos)
 
     for crop, descending in (("CARROT", False),):
         if not _crop_open(crop):

@@ -204,20 +204,19 @@ def test_strawberry_phase_opens_day5_not_day0():
     farm = _farm(quads=["NW"])
     _, crops_early, _, _ = main._field_alloc(farm, 3, _prices())
     assert not crops_early["STRAWBERRY"]
-    # single-quadrant farms are now fully consumed by the 26-tile wheat
-    # floor (feed is the red-line obligation); the strawberry band lives
-    # on multi-quadrant farms -- see the winner-band test below.
+    # sprint-A：16/18 麦底仓仍吃满单象限（红线义务优先于高价线）；草莓
+    # 带活在多象限农场——见下方 winner-band 测试。
     _, crops_open, _, _ = main._field_alloc(farm, 7, _prices())
     assert not crops_open["STRAWBERRY"]
 
 
 def test_strawberry_reaches_winner_band_on_three_quadrants():
-    # round-19: 12/quad with the 36-tile DEFENSIVE total cap (top-meta
-    # calibration: top runs 33-38 strawberry plants)
+    # sprint-A 经济域复刻（sprint_forensics_0919）：DEFENSIVE 莓配额回
+    # 8/quad + 24 总量（658-663 档赢家莓峰 18-24，v10.3 线）
     farm = _farm(quads=["NW", "NE", "SW"])
     _, crops, _, _ = main._field_alloc(farm, 12, _prices())
     n = len(crops["STRAWBERRY"])
-    assert n == 20   # tile pool after wheat 26 + melon 12 + 2 extra pastures
+    assert n == 24   # 8/quad x 3 binds below the tile pool (wheat 18 + melon 12)
     assert n <= min(main.CROP_CAP_PER_QUAD["STRAWBERRY"] * 3,
                     main._DEFENSIVE_PLAN["straw_total_cap"])
     # the pre-SW single quadrant is fully consumed by the wheat floor

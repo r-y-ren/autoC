@@ -213,15 +213,15 @@ def test_field_alloc_volume_widens_strawberry_ceiling():
     prices = {"STRAWBERRY": 120, "MELON": 250, "CARROT": 35, "WHEAT": 25}
     _, crop_vol, _, _ = main._field_alloc(farm, 8, prices, VOLUME_PLAN)
     _, crop_def, _, _ = main._field_alloc(farm, 8, prices, None)
-    # round-19: VOLUME 42 -> 48, DEFENSIVE 24 -> 36 (top-meta caps); on
-    # three quadrants the tile pool (after the 26-tile wheat floor and
-    # melon) binds below both caps
-    assert len(crop_vol["STRAWBERRY"]) == 23
-    assert len(crop_def["STRAWBERRY"]) == 20
+    # sprint-A：底仓/加码分离后，VOLUME 莓计划（16/quad + 48 总量）与
+    # DEFENSIVE（8/quad + 24 总量）都在 18 格底仓红线之上 claim；三象限
+    # 由计划配额约束（VOLUME 31 / DEF 24）。
+    assert len(crop_vol["STRAWBERRY"]) == 31
+    assert len(crop_def["STRAWBERRY"]) == 24
     # the 48 total cap binds when a 4th quadrant is unlocked
     farm4 = _mk_farm(quads=("NW", "NE", "SW", "SE"))
     _, crop_4q, _, _ = main._field_alloc(farm4, 8, prices, VOLUME_PLAN)
-    assert len(crop_4q["STRAWBERRY"]) == 45
+    assert len(crop_4q["STRAWBERRY"]) == 48
 
 
 # ------------------------- capital: SE quadrant --------------------------
@@ -387,4 +387,4 @@ def test_macro_plan_failure_falls_back_defensive():
     broken = {"player": 0, "farms": [Boom()]}
     plan = main._macro_plan(0, broken, 8)
     assert plan["mode"] == "DEFENSIVE"
-    assert plan["straw_total_cap"] == 36   # round-19 top-meta cap
+    assert plan["straw_total_cap"] == 24   # sprint-A：v10.3 档莓配额

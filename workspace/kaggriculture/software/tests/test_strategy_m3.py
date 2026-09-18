@@ -120,21 +120,21 @@ def test_rotation_plants_melon_above_its_price_floor():
 
 
 def test_rotation_phase_windows():
-    # round-19 recalibration: the wheat floor (26) is claimed first, so
-    # the rotation windows are exercised on a two-quadrant farm.
+    # sprint-A 经济域复刻（sprint_forensics_0919）：麦底仓回 16/18 且
+    # 底仓/加码分离——底仓红线先占，瓜/莓随后按赢家结构 claim。
     farm = _farm(quads=["NW", "NE"])
     _, crops_mid, _, _ = main._field_alloc(farm, 12, _prices())
-    assert len(crops_mid["WHEAT"]) == 26         # feed floor first
-    assert len(crops_mid["STRAWBERRY"]) == 4     # window (5,24), leftovers
+    assert len(crops_mid["WHEAT"]) == 18         # feed floor (red line)
+    assert len(crops_mid["STRAWBERRY"]) == 12    # window (5,24), quad cap 8x2
     assert len(crops_mid["MELON"]) == 12
     _, crops_late, _, _ = main._field_alloc(farm, 16, _prices())
-    assert len(crops_late["STRAWBERRY"]) == 4    # window stays open to 24
-    # V-T7 (2026-09-02): carrot is the ENDGAME rotation -- it claims no
-    # tiles at d16 (the SW wheat field keeps the mid-game) and its full
-    # per-quad cap from CARROT_ENDGAME_FROM.
+    assert len(crops_late["STRAWBERRY"]) == 12   # window stays open to 24
+    # sprint-A：CARROT_ENDGAME_FROM 回 15（v10.3 档萝卜峰 11-12），但两象限
+    # 农场在底仓+瓜+莓后已无余地——中局 d16 仍无萝卜是池子约束非门控。
     assert not crops_late["CARROT"]
     _, crops_end, _, _ = main._field_alloc(farm, 24, _prices())
     assert len(crops_end["STRAWBERRY"]) == 16    # replant into d22+
+    assert len(crops_end["CARROT"]) == 8         # mid-game line alive from d15
     # single-quadrant farms are fully consumed by the feed floor now
     farm1 = _farm()
     _, crops_1q, _, _ = main._field_alloc(farm1, 12, _prices())
