@@ -1,0 +1,220 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 22,
+ "submission_ref": 56336584,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-18T19:04:49Z",
+ "candidate": {
+  "label": "v13.8-sprintA-regime-restore",
+  "pkg_sha256": "2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e",
+  "main_sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
+  "git_ref": "8deac5112b508d80b093f4d0bb46a6d25c42201c"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round22_ledger.json",
+  "status_at_submit": "COMPLETE (validation episode done, publicScore 600.0 starting baseline)",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 56336584",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round22",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 580.0,
+ "validation": [
+  {
+   "id": 110521157,
+   "rewards": [
+    64370.0,
+    59496.0
+   ],
+   "integrity": "PASS"
+  }
+ ],
+ "public_sampling": {
+  "public_games": 17,
+  "record": "9W-8L",
+  "wins": 9,
+  "losses": 8,
+  "win_rate": 0.5294,
+  "our_money_mean": 65830.2,
+  "opp_money_mean": 68745.5,
+  "mean_margin": -2915.2,
+  "axes": {
+   "d0_plants_ours": 8.9,
+   "d0_plants_opp": 16.8,
+   "wheat_d7_ours": 14.8,
+   "berry_d12_ours": 22.4,
+   "berry_d12_opp": 19.7,
+   "herd_d0_ours": 4.0,
+   "harvest_ours": 166.3,
+   "money_d11_ours": 573.2,
+   "money_d11_opp": 6465.2
+  },
+  "episodes": [
+   {
+    "id": 110522394,
+    "result": "L",
+    "our": 74444.0,
+    "opp": 83808.0,
+    "opp_name": "\u9f50\u4e50",
+    "margin": -9364.0,
+    "seat": 0
+   },
+   {
+    "id": 110523507,
+    "result": "W",
+    "our": 74281.0,
+    "opp": 63242.0,
+    "opp_name": "fakyyy",
+    "margin": 11039.0,
+    "seat": 1
+   },
+   {
+    "id": 110524583,
+    "result": "L",
+    "our": 57220.0,
+    "opp": 77309.0,
+    "opp_name": "Steve Probst",
+    "margin": -20089.0,
+    "seat": 1
+   },
+   {
+    "id": 110525659,
+    "result": "L",
+    "our": 68395.0,
+    "opp": 71801.0,
+    "opp_name": "Haoxiang Li",
+    "margin": -3406.0,
+    "seat": 1
+   },
+   {
+    "id": 110526795,
+    "result": "W",
+    "our": 86881.0,
+    "opp": 74570.0,
+    "opp_name": "HarryZ",
+    "margin": 12311.0,
+    "seat": 0
+   },
+   {
+    "id": 110527888,
+    "result": "W",
+    "our": 74062.0,
+    "opp": 69763.0,
+    "opp_name": "NoobMaster69",
+    "margin": 4299.0,
+    "seat": 0
+   },
+   {
+    "id": 110528871,
+    "result": "L",
+    "our": 53268.0,
+    "opp": 73815.0,
+    "opp_name": "KHuShIMaHajan",
+    "margin": -20547.0,
+    "seat": 0
+   },
+   {
+    "id": 110530042,
+    "result": "W",
+    "our": 63181.0,
+    "opp": 57627.0,
+    "opp_name": "phoenix_merk",
+    "margin": 5554.0,
+    "seat": 1
+   },
+   {
+    "id": 110531165,
+    "result": "L",
+    "our": 73631.0,
+    "opp": 98130.0,
+    "opp_name": "Nyasha Gandah",
+    "margin": -24499.0,
+    "seat": 1
+   },
+   {
+    "id": 110532301,
+    "result": "W",
+    "our": 80054.0,
+    "opp": 75286.0,
+    "opp_name": "xxxx333",
+    "margin": 4768.0,
+    "seat": 0
+   },
+   {
+    "id": 110533384,
+    "result": "W",
+    "our": 65458.0,
+    "opp": 24184.0,
+    "opp_name": "Sasha Sam",
+    "margin": 41274.0,
+    "seat": 1
+   },
+   {
+    "id": 110534474,
+    "result": "W",
+    "our": 46580.0,
+    "opp": 44833.0,
+    "opp_name": "Chintakrinda_Naveen",
+    "margin": 1747.0,
+    "seat": 0
+   },
+   {
+    "id": 110535599,
+    "result": "L",
+    "our": 52622.0,
+    "opp": 82660.0,
+    "opp_name": "Emerson Suarez",
+    "margin": -30038.0,
+    "seat": 0
+   },
+   {
+    "id": 110536691,
+    "result": "W",
+    "our": 61268.0,
+    "opp": 35662.0,
+    "opp_name": "Sincere Bailey",
+    "margin": 25606.0,
+    "seat": 0
+   },
+   {
+    "id": 110537780,
+    "result": "L",
+    "our": 69552.0,
+    "opp": 78581.0,
+    "opp_name": "xxxx333",
+    "margin": -9029.0,
+    "seat": 1
+   },
+   {
+    "id": 110538852,
+    "result": "L",
+    "our": 43708.0,
+    "opp": 86651.0,
+    "opp_name": "Dancing_Chaos",
+    "margin": -42943.0,
+    "seat": 1
+   },
+   {
+    "id": 110540023,
+    "result": "W",
+    "our": 74509.0,
+    "opp": 70751.0,
+    "opp_name": "Dmitriy Ershov",
+    "margin": 3758.0,
+    "seat": 1
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 9W-8L over 17 public games; local quickwin/self-play is not this verdict."
+}
