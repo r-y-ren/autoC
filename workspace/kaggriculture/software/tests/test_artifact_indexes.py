@@ -32,10 +32,12 @@ def _entries(collection):
 
 def test_repository_indexes_are_deterministic_and_current():
     counts = artifact_indexes.validate_indexes(REPO_ROOT)
-    # round-16..21 launch ledgers + probes + planting evidence
+    # round-16..21 launch ledgers + probes + planting evidence;
+    # sprint ① evidence closeout (2026-09-19) adds 7 cmp_*_deep_stats +
+    # sprint_forensics_0919.md (online 38 -> 46)
     # (sampling/ COMPLETE records live in a subdirectory and stay off this index)
     assert counts == {"ablations": 47, "external": 2,
-                      "online": 38, "acceptance": 31}
+                      "online": 46, "acceptance": 31}
 
 
 def test_mf_and_mg_decisions_override_mechanical_gate_wording():

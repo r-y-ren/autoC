@@ -118,7 +118,7 @@ published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2
 published_holdout_attempt_index=5
 engine=kaggle-environments 1.32.7 kaggriculture
 <!-- ACTIVE_CANDIDATE_IDENTITY:END -->
-submission_package_sha256=49b7dc3feaecd1c55b47fb84eb17772a6208de810fa9c124b37f09a42095661b
+submission_package_sha256=aecdd798169014d1a134bdc65d563c74c7181bcd65a5ead24e5c925fa8a971f8
 
 ## External H2H 与评级限制
 
