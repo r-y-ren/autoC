@@ -823,7 +823,10 @@ def _sell_plan_item(item, day, prices, flow, contested):
     if price <= 1:
         return "clear"          # floor segment: nothing to wait for
     f = (flow or {}).get(item, 0.0)
-    proj = _project_price(item, price, f, SELL_PLAN_LOOKAHEAD_DAYS)
+    # DTSP 惰性旋钮（P2.5，缺口 1）：卖出折扣系数——悲观成交裕度直接乘在
+    # 曲线投影上（<1 更早清、>1 更愿囤）；旗关恒 1.0，判据与 v13.8 同值。
+    proj = _project_price(item, price, f, SELL_PLAN_LOOKAHEAD_DAYS) \
+        * _plan_knob("sell_price_discount", 1.0)
     if proj < price:
         return "clear"          # curve dying (projection below spot)
     if proj < price * SELL_PLAN_HOLD_EDGE:
@@ -872,6 +875,12 @@ def _contested_items(obs):
 
 def _p4_clear_tier(item, player, plan=None):
     """Return the frozen d22 tier, or a live compatibility fallback."""
+    # DTSP 惰性旋钮（P2.5，缺口 6 P4 出清档）：计划可强制三档之一——
+    # 这是计划指令（非观测估计），越过 est_opp_conf 置信门；旗关恒 ""
+    # 走原 d22 快照/实时估计路径。
+    forced = _plan_knob("p4_force_tier", "")
+    if forced in ("low", "mid", "heavy"):
+        return forced
     snapshot = (plan or {}).get("p4_snapshot") or {}
     tiers = snapshot.get("tiers") or {}
     if item in tiers:
@@ -916,8 +925,16 @@ def _sell_overrides(obs, farm, private, day, prices, shed, town_shops,
                     if isinstance(o, list) and o and o[0] == "SELL"}
         out = []
 
+        # DTSP 惰性旋钮（P2.5，缺口 1 批量杠杆）：卖出批量 = 公式 ×
+        # 批量乘数（HEAVY 出清档放大、LOW 收缩）；旗关恒 1.0 与 v13.8
+        # 逐字节同值。
+        _batch_mult = float(_plan_knob("sell_batch_mult", 1.0))
+
         def tranche(item, stock):
-            return max(0, min(int(stock), 2 * demand.get(item, 1) + 4))
+            cap = 2 * demand.get(item, 1) + 4
+            if _batch_mult != 1.0:            # 旗关恒不走此支（保型别同值）
+                cap = int(cap * _batch_mult)
+            return max(0, min(int(stock), cap))
 
         for item in ("STRAWBERRY", "MELON", "WOOL", "MILK", "CARROT", "EGG"):
             stock = shed.get(item, 0)
@@ -1041,9 +1058,14 @@ def _sell_plan_dawn(obs, farm, private, day, plan=None):
         qty_today = 0
         batches = []
         if verdict == "clear":
-            # rule 3: batch = min(当日量, 吸收, 库存+上市)
+            # rule 3: batch = min(当日量, 吸收, 库存+上市)。DTSP 惰性旋钮
+            # （P2.5 缺口 1 批量杠杆）：吸收日帽 × sell_batch_mult——旗关
+            # 恒 1.0，帽值与 v13.8 同型同值。
+            _batch_mult = float(_plan_knob("sell_batch_mult", 1.0))
             day_cap = max(1, absorb.get(item, 1)) if absorb else \
                 max(1, 2 * 1 + 4)
+            if _batch_mult != 1.0:
+                day_cap = max(1, int(day_cap * _batch_mult))
             if eod_forced:
                 day_cap = max(day_cap, eod_overflow)
             qty_today = min(supply, day_cap)
@@ -1939,7 +1961,11 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # V-T1: under the opening shift the paced loop also stands down on
     # day 0 -- the whole day belongs to the wheat opening, no animals.
     _opening_shift_hold = OPENING_SHIFT and day == 0
+    # DTSP 惰性旋钮（P2.5，缺口 2 买畜时点）：herd_start_day 门控节奏环
+    # 起步日（计划可推迟扩栏起点）；旗关恒 0——day>=0 恒真，与 v13.8 同。
+    _herd_start_day = _plan_knob("herd_start_day", 0)
     if not opening_bought and not _opening_shift_hold and not last_day \
+            and day >= _herd_start_day \
             and herd_total < target \
             and shed_count < 88 and bought < pace:
         species = _species_counts(farm, private, herd_total)
@@ -1965,7 +1991,8 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                 comp_cap = species[animal] + npv_ceiling - herd_total
             if species[animal] >= comp_cap:
                 continue
-            if day > ANIMAL_BUY_LAST_DAY[animal]:
+            if day > ANIMAL_BUY_LAST_DAY[animal] \
+                    + _plan_knob("animal_buy_last_day_shift", 0):
                 continue
             product = ANIMALS[animal]["product"]
             if day >= DEAD_PRICE_FROM_DAY:

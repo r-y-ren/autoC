@@ -676,6 +676,57 @@ P4_HEAVY_HELD = 40             # 对手囤货 ≥40u → d25 抢跑档
 P4_MID_HELD = 15               # 15-40 → d26-27 标准档；<15 从容档
 
 # ===========================================================================
+# 【中文】DTSP 惰性旋钮层（2026-09-19 P2.5；蓝图 m7 修订，用户授权）
+# ---------------------------------------------------------------------------
+# 背景：P2 首轮 official 基准诚实 FAIL（1/14 局过线，plan_space_gap 34/42）
+#   ——根因是执行器分支激活门槛不随计划变、部分杠杆无旋钮，规划覆盖常成
+#   no-op。本块为 DTSP 规划器（planner/plans.py 的 PlanSpec）开惰性旋钮
+#   通道，改"常量默认值，可被计划覆盖"。
+# 机制：全局旗 PLANNER_ENABLED（默认 False）+ 计划覆盖寄存器
+#   PLANNER_OVERRIDES（agent 入口外可注入：离线基准在 exec 装载后写
+#   ns["PLANNER_ENABLED"]=True 并按 "PLANNER_OVERRIDES.<键>" 点路径灌入
+#   寄存器，见 scripts/planner_offline_bench.apply_knob_overrides）。
+#   读取纪律：任何计划可覆盖的门槛/杠杆读取点一律走
+#   _plan_knob(键, 默认值)——旗关时恒返回默认值。
+# 旗关等价不变式（硬约束，黄金动作哈希测试钉住）：
+#   * PLANNER_ENABLED=False（含线上提交路径——本键从不被线上代码置真）
+#     时 _plan_knob 恒返回第二参，全部读取点与现役 v13.8 逐字节等价
+#     （scripts/planner_flagoff_golden.py 6 种子全季动作流 sha256 校验）；
+#   * 本块不新增任何 I/O、随机源或时钟读取；寄存器键名即
+#     planner.plans.plan_to_knob_overrides 的点路径叶子名。
+# 键面（29 键，分组与 plans.py 轴的对应关系见其【缺口清单】）：
+#   模式激活（_decide_mode）：mode_volume_day_start/end、mode_volume_price_min、
+#     mode_volume_demand_min、mode_volume_herd_floor、mode_volume_hold_price_min、
+#     mode_volume_hold_cash_min、mode_scale_day_start/end、mode_scale_entry_herd、
+#     mode_scale_hold_herd；
+#   d6 容量分支门（_d6_checkpoint）：d6_herd_floor、d6_cash_min、
+#     d6_straw_price_min、d6_straw_demand_min；
+#   阶段窗（_stage_of）：stage_p1_due、stage_p2_freeze、stage_p3_end、
+#     stage_p4_end；
+#   P3 运行态姿态（熔断/晚季雇工）：fuse_money_floor、crew_late_day、
+#     crew_late_cap；
+#   卖出杠杆（market 卖出计划器）：sell_price_discount、sell_batch_mult、
+#     p4_force_tier；
+#   买畜时点（strategy._herd_target + market 买畜环）：herd_day_shift、
+#     herd_start_day、animal_buy_last_day_shift；
+#   P1 分支强制（_b_branch_adjust）：b_branch_force。
+# ===========================================================================
+PLANNER_ENABLED = False        # DTSP 总旗：False=与 v13.8 逐字节等价（默认）
+PLANNER_OVERRIDES = {}         # 计划覆盖寄存器（旗开时 _plan_knob 消费）
+
+
+def _plan_knob(name, default):
+    """DTSP 计划旋钮惰性读取：旗关恒回默认值（v13.8 等价路径）。
+
+    寄存器值显式 None 视为"未覆盖"回默认（plans 侧禁止发 None，此处
+    双保险防规划器 bug 把现役行为改坏）。"""
+    if not PLANNER_ENABLED:
+        return default
+    value = PLANNER_OVERRIDES.get(name, default)
+    return default if value is None else value
+
+
+# ===========================================================================
 # 【中文】scheduler v1.3 §2-§4 实施旋钮（2026-09-02 W2：任务包全规格/求解器
 # 抛光与喂食腿/执行器断言与幂等闸）——全部只服务影子件，执行权威仍在 v72
 # ---------------------------------------------------------------------------

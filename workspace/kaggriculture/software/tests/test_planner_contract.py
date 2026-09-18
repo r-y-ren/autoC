@@ -223,6 +223,124 @@ class TestKnobOverrides:
 
 
 # ===========================================================================
+# 3b) P2.5 投影校准：全名面 + 可测行为差异 + 旗关等价（惰性旋钮通道）
+# ===========================================================================
+
+AGENT_SRC = SOFTWARE / "kaggle_simulations" / "agent" / "src"
+
+
+def _knob_face(overrides):
+    """plan_to_knob_overrides 输出中的 PLANNER_OVERRIDES 寄存器子面。"""
+    return {k.split(".", 1)[1]: v for k, v in overrides.items()
+            if k.startswith("PLANNER_OVERRIDES.")}
+
+
+class TestKnobProjectionCalibration:
+
+    def _load_constants_ns(self):
+        """单独 exec constants.py 到干净命名空间（惰性旋钮层单测用）。"""
+        ns = {}
+        path = AGENT_SRC / "constants.py"
+        exec(compile(path.read_text(encoding="utf-8"), str(path), "exec"),
+             ns)
+        return ns
+
+    def test_every_emitted_knob_has_a_read_site(self):
+        """全名面静态审计：寄存器子面的每个键在 src/ 必须有
+        _plan_knob("<键>" 读取点——杜绝"规划器发键、执行器无人消费"的
+        假旋钮（首轮 official 复盘的 no-op 覆盖教训）。"""
+        face = _knob_face(plans.plan_to_knob_overrides(_spec()))
+        assert len(face) >= 20            # 29 键全名面（留演进余量）
+        corpus = ""
+        for path in sorted(AGENT_SRC.glob("*.py")):
+            corpus += path.read_text(encoding="utf-8")
+        missing = [k for k in sorted(face)
+                   if f'_plan_knob("{k}"' not in corpus
+                   and f"_plan_knob('{k}'" not in corpus]
+        assert not missing, f"src/ 无读取点的伪旋钮: {missing}"
+
+    def test_adjacent_plans_produce_distinct_overrides(self):
+        """相邻档位计划的覆盖 dict 必须不同且寄存器子面非空——投影的
+        行为可分性（P2.5 判据；首轮 34/42 no-op 覆盖的直接反义）。"""
+        base = dict(opening="C", p1_branch="B2", p3_mode="HEALTHY",
+                    p4_clear="MID", quota_scale=1.0, timing_shift=0,
+                    sell_discount=0.9)
+        pairs = [
+            (_spec(capacity_tier="C2", **base),
+             _spec(capacity_tier="C1", **base)),
+            (_spec(capacity_tier="C2", **base),
+             _spec(capacity_tier="C3", **base)),
+            (_spec(p1_branch="B2", **{k: v for k, v in base.items()
+                                      if k != "p1_branch"}),
+             _spec(p1_branch="B1", **{k: v for k, v in base.items()
+                                      if k != "p1_branch"})),
+            (_spec(p3_mode="HEALTHY", **{k: v for k, v in base.items()
+                                         if k != "p3_mode"}),
+             _spec(p3_mode="CATCHUP", **{k: v for k, v in base.items()
+                                         if k != "p3_mode"})),
+            (_spec(p4_clear="MID", **{k: v for k, v in base.items()
+                                      if k != "p4_clear"}),
+             _spec(p4_clear="HEAVY", **{k: v for k, v in base.items()
+                                        if k != "p4_clear"})),
+            (_spec(sell_discount=0.9, **{k: v for k, v in base.items()
+                                         if k != "sell_discount"}),
+             _spec(sell_discount=0.75, **{k: v for k, v in base.items()
+                                          if k != "sell_discount"})),
+            (_spec(timing_shift=0, **{k: v for k, v in base.items()
+                                      if k != "timing_shift"}),
+             _spec(timing_shift=2, **{k: v for k, v in base.items()
+                                      if k != "timing_shift"})),
+        ]
+        for a, b in pairs:
+            oa, ob = plans.plan_to_knob_overrides(a), \
+                plans.plan_to_knob_overrides(b)
+            assert oa and ob
+            assert oa != ob, f"相邻计划覆盖相同: {a.key()} vs {b.key()}"
+            face_a, face_b = _knob_face(oa), _knob_face(ob)
+            assert face_a and face_b
+            assert face_a != face_b     # 寄存器子面必异（行为差异的载体）
+            assert set(face_a) == set(face_b)   # 全名面键集恒定（值不同）
+
+    def test_flag_off_returns_default_even_with_overrides(self):
+        """旗关等价的核心语义：寄存器有覆盖但 PLANNER_ENABLED=False 时
+        _plan_knob 恒回默认值；旗开才消费覆盖；None 值视为未覆盖。"""
+        ns = self._load_constants_ns()
+        assert ns["PLANNER_ENABLED"] is False
+        ns["PLANNER_OVERRIDES"]["mode_volume_price_min"] = 999
+        ns["PLANNER_OVERRIDES"]["herd_day_shift"] = None
+        assert ns["_plan_knob"]("mode_volume_price_min", 105) == 105
+        assert ns["_plan_knob"]("herd_day_shift", 0) == 0
+        ns["PLANNER_ENABLED"] = True
+        assert ns["_plan_knob"]("mode_volume_price_min", 105) == 999
+        assert ns["_plan_knob"]("herd_day_shift", 0) == 0    # None→默认
+        assert ns["_plan_knob"]("uncovered_key", 7) == 7
+
+    def test_bench_injection_turns_flag_on(self):
+        """bench 的 apply_knob_overrides 必须把总旗与寄存器面打进命名
+        空间（覆盖生效的装载契约）。"""
+        bench = _load_bench()
+        ns = self._load_constants_ns()
+        overrides = plans.plan_to_knob_overrides(_spec())
+        applied, _skipped = bench.apply_knob_overrides(ns, overrides)
+        assert ns["PLANNER_ENABLED"] is True
+        assert ns["PLANNER_OVERRIDES"], "寄存器面为空"
+        assert "PLANNER_ENABLED" in applied
+        assert any(k.startswith("PLANNER_OVERRIDES.") for k in applied)
+
+    def test_tier_gates_coherent_with_axis_semantics(self):
+        """C1=宽田提前一拍、C2=v13.8 逐字段镜像、C3=否决宽田（VOLUME
+        日窗 99 禁入场）；safety 地板 10 全档不放宽（v7.2-V1 破产教训）。"""
+        g = plans.TIER_MODE_GATES
+        assert g["C1"]["vol_day"] == (5, 13) and g["C1"]["vol_price"] == 100
+        assert g["C2"]["vol_day"] == (6, 12) and g["C2"]["vol_price"] == 105
+        assert g["C3"]["vol_day"] == (99, 99)
+        assert all(t["vol_herd"] == 10 for t in g.values())
+        ov_c3 = _knob_face(plans.plan_to_knob_overrides(
+            _spec(capacity_tier="C3")))
+        assert ov_c3["mode_volume_day_start"] == 99
+
+
+# ===========================================================================
 # 4) project_season：相对排序性质
 # ===========================================================================
 
@@ -326,9 +444,34 @@ class TestOpponentModels:
 
     def test_default_model_set_shape(self):
         models = opponents.build_default_models(history=[])
-        assert [m.name for m in models] == ["passive_extrapolation",
-                                            "frozen_style_pool",
-                                            "pessimistic_fill"]
+        # P2.5 起内置双风格入池（赢家结构型/重小麦压制型，不再恒 no-op）
+        assert [m.name for m in models] == [
+            "passive_extrapolation",
+            "frozen_style_pool:winner_balanced",
+            "frozen_style_pool:wheat_suppressor",
+            "pessimistic_fill"]
+
+    def test_builtin_style_pool_available_and_distinct(self):
+        # 内置画像可用且两风格行为可测地不同（不再恒 no-op）
+        a = opponents.FrozenStylePool(use_builtin_pool=True, style_index=0)
+        b = opponents.FrozenStylePool(use_builtin_pool=True, style_index=1)
+        assert a.available and b.available
+        assert a.name != b.name
+        state = {"shed": {"WHEAT": 60, "STRAWBERRY": 40, "MELON": 20},
+                 "herd": 4, "money": 6000}
+        act_a = a.propose_actions(state, 5)
+        act_b = b.propose_actions(state, 5)
+        assert act_a["market"] and act_b["market"]
+        assert act_a != act_b                       # 画像驱动可测行为差异
+        # d8 前置带：day > herd_due_day 后停买（内置画像 herd_due_day=8）
+        late = a.propose_actions(dict(state, herd=6), 9)
+        assert ["BUY_ANIMAL", "COW", 1] not in late["market"]
+        early = a.propose_actions(dict(state, herd=6), 8)
+        assert ["BUY_ANIMAL", "COW", 1] in early["market"]
+        # 压价系数只对内置画像启用（文件画像不发明语义）
+        assert a.supply_pressure({})["STRAWBERRY"] < 1.0
+        assert b.supply_pressure({})["WHEAT"] < 1.0
+        assert "sprint_forensics_0919" in a.describe()
 
 
 # ===========================================================================

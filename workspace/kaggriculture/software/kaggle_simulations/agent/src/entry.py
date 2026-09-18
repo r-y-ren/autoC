@@ -130,9 +130,12 @@ def agent(obs):
                                    plan)
             # r4-P3 drawdown: past CREW_LATE_DAY the field shrinks (crops
             # harvested, phases closed) -- the 12-hand crew's fib bill
-            # (322/day) outruns the remaining queue value
-            if day >= CREW_LATE_DAY:
-                hands_t = min(hands_t, CREW_LATE_CAP)
+            # (322/day) outruns the remaining queue value.
+            # DTSP 惰性旋钮（P2.5，缺口 6 P3 运行态姿态）：CATCHUP 类计划
+            # 提前晚季降编/收紧帽，省日薪保流动性；旗关恒回冻结值。
+            if day >= _plan_knob("crew_late_day", CREW_LATE_DAY):
+                hands_t = min(hands_t, _plan_knob("crew_late_cap",
+                                                  CREW_LATE_CAP))
             hands = len(_get(farm, "hands", []) or [])
             money = _get(farm, "money", 0.0)
             spend = 0

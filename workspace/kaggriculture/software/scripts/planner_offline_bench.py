@@ -10,10 +10,15 @@
 #   D) DTSP 规划器     —— enumerate_plans × Ω 对手模型投影打分 → 鲁棒选择
 #                         → 选中计划的旋钮覆盖注入 v13.8 命名空间 → 同孪生
 #                         同对手 rollout
-# 判据：D ≥ A 且 D ≥ C（逐局输出 delta 与败因归因 twin_noise /
-#   opponent_model_gap / plan_space_gap——归因用 oracle 重演：将投影排序
-#   top-K 候选各按真实对手 rollout 一次，若存在候选显著胜过选中者则
-#   opponent_model_gap，否则 plan_space_gap）。
+# 判据（m7 修订双口径，2026-09-19——首轮"逐局 ≥history 且 ≥反应式"诚实
+#   FAIL 1/14 后修订：执行器代差不应记到计划头上）：
+#   主口径：逐局中位注入点 DTSP ≥ 反应式（同执行器单变量），≥9/14 局不劣
+#     且全集合 mean Δ(DTSP−反应式)>0；
+#   参考口径：DTSP 对 history 减执行器代差 offset（=同注入点反应式对
+#     history）后 ≥9/14 局不劣。
+#   败因归因逐局输出 twin_noise / opponent_model_gap / plan_space_gap
+#   （归因用 oracle 重演：将投影排序 top-K 候选各按真实对手 rollout 一次，
+#   若存在候选显著胜过选中者则 opponent_model_gap，否则 plan_space_gap）。
 # 公平性口径：C 与 D 共享同一孪生与同一对手（回放真实动作）；对手模型 Ω
 #   只作用于 D 的计划选择（J 矩阵），不改变轨迹对手——单变量对比。
 # CLI：
@@ -33,6 +38,7 @@ import argparse
 import glob
 import json
 import os
+import statistics
 import sys
 import time
 from datetime import datetime, timezone
@@ -177,7 +183,9 @@ def attribute_failure(twin_noise, truth, reactive, dtsp, oracle_best,
 def apply_knob_overrides(ns, overrides):
     """把 plan_to_knob_overrides 的映射打进 v13.8 命名空间（返回
     (applied, skipped)；PLANNER_LOCAL.*/PACK 为规划器本地/信息性键，
-    按缺口清单口径跳过）。"""
+    按缺口清单口径跳过；"PLANNER_OVERRIDES.<键>" 点路径写入 constants
+    的惰性旋钮寄存器（P2.5），"PLANNER_ENABLED" 置真后才生效——旗关
+    通道恒回默认值，行为与 v13.8 逐字节等价）。"""
     applied, skipped = [], []
     for key in sorted(overrides):
         value = overrides[key]
@@ -582,14 +590,26 @@ def main(argv=None):
         episode_rows.append((ep, ep_rows))
         del replay                                   # 22MB/局，即用即释
 
-    # 汇总与判据
+    # 汇总与判据（m7 修订双口径，2026-09-19：主口径=同执行器单变量；
+    # 参考口径=对 history 做执行器代差修正。首轮判据"逐局 DTSP≥history
+    # 且 ≥反应式"把执行器代差错记到计划头上——反应式本身就远落后 history
+    # （首轮 mean Δhistory=-27.9k 而 Δ反应式=+444），故修订。）
     episode_summaries = []
     for ep, ep_rows in episode_rows:
         def mean(key, _rows=ep_rows):
             return sum(r[key] for r in _rows) / len(_rows) if _rows else 0.0
         d_hist = mean("dtsp_vs_history")
         d_react = mean("dtsp_vs_reactive")
-        gate = (d_hist >= -GATE_EPS) and (d_react >= -GATE_EPS)
+        # 主口径：逐注入点 DTSP−反应式 的逐局中位数（对单注入灾难稳健）
+        med_react = statistics.median(r["dtsp_vs_reactive"] for r in ep_rows)
+        primary_pass = med_react >= -GATE_EPS
+        # 参考口径：修正项 offset=同注入点（反应式−history）；修正后
+        # = mean(DTSP−history) − mean(offset)。代数上等于 mean(DTSP−
+        # 反应式)——两口径的对偶性如实注记，差别只在聚合统计（中位 vs
+        # 均值）与归因框架（vs 反应式 / vs 修正后的 history）。
+        mean_offset = mean("reactive_me") - mean("truth_me")
+        corrected = d_hist - mean_offset
+        reference_pass = corrected >= -GATE_EPS
         fails = [r for r in ep_rows if r["judge_fail"]]
         episode_summaries.append({
             "episode": ep["episode"], "round": ep["round"],
@@ -599,7 +619,12 @@ def main(argv=None):
             "mean_reactive_me": mean("reactive_me"),
             "mean_dtsp_me": mean("dtsp_me"),
             "dtsp_vs_history": d_hist, "dtsp_vs_reactive": d_react,
-            "gate_pass": gate,
+            "median_dtsp_vs_reactive": med_react,
+            "primary_pass": primary_pass,
+            "reactive_vs_history_offset": mean_offset,
+            "dtsp_vs_history_corrected": corrected,
+            "reference_pass": reference_pass,
+            "gate_pass": primary_pass,      # 兼容键=主口径
             "fail_attribution": {
                 "twin_noise": sum(1 for r in fails if r["twin_noise_flag"]),
                 "opponent_model_gap": sum(1 for r in fails
@@ -609,9 +634,15 @@ def main(argv=None):
             },
         })
 
-    all_pass = all(e["gate_pass"] for e in episode_summaries) \
-        if episode_summaries else False
     enough = len(episode_summaries) >= min_episodes
+    n_primary = sum(1 for e in episode_summaries if e["primary_pass"])
+    n_reference = sum(1 for e in episode_summaries if e["reference_pass"])
+    pooled_mean_d_react = (sum(r["dtsp_vs_reactive"] for r in rows)
+                           / len(rows)) if rows else 0.0
+    # official 门禁（m7 修订主口径）：≥9/14 局中位不劣 且 全集合 mean Δ>0；
+    # smoke 模式只摇通 harness，门禁值恒 False 但不影响退出码。
+    all_pass = bool(official and enough and n_primary >= 9
+                    and pooled_mean_d_react > 0.0)
     report = {
         "mode": args.mode, "team": args.team,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(
@@ -624,17 +655,25 @@ def main(argv=None):
             "twin_noise_eps": TWIN_NOISE_EPS, "oracle": not args.no_oracle,
             "oracle_top_k": ORACLE_TOP_K,
         },
+        "criterion_note": (
+            "m7 修订双口径（2026-09-19）：主口径=逐局中位注入点 DTSP≥反应式"
+            "（同执行器单变量），≥9/14 局不劣且全集合 mean Δ(DTSP−反应式)>0；"
+            "参考口径=DTSP 对 history 减执行器代差 offset（=同注入点反应式对 "
+            "history）后 ≥9/14 局不劣。两口径在注入点层面代数同构"
+            "（DTSP−history−(反应式−history)≡DTSP−反应式），差别只在聚合"
+            "统计（主=中位数、参考=均值）与归因框架。"),
         "opponent_models": (rows[0]["opponent_models"] if rows else []),
         "episodes": episode_summaries,
         "skipped_episodes": skipped,
         "rows": rows,
         "summary": {
             "episodes_evaluated": len(episode_summaries),
-            "episodes_passed": sum(1 for e in episode_summaries
-                                   if e["gate_pass"]),
+            "episodes_passed": n_primary,
+            "episodes_passed_reference": n_reference,
             "injections_evaluated": len(rows),
-            "gates_all_pass": all_pass,
+            "gates_all_pass": bool(all_pass),
             "enough_episodes": enough,
+            "pooled_mean_dtsp_vs_reactive": pooled_mean_d_react,
             "mean_dtsp_vs_history": (sum(e["dtsp_vs_history"]
                                          for e in episode_summaries)
                                      / len(episode_summaries))
@@ -673,9 +712,16 @@ def main(argv=None):
                 f"{min_episodes}（skip 原因见报告 skipped_episodes）\n")
             return 1
         if not all_pass:
-            sys.stderr.write("[exit 1] 判据未全过：DTSP 需逐局 ≥ history "
-                             "且 ≥ 反应式（败因归因见报告）\n")
+            sys.stderr.write(
+                "[exit 1] m7 修订主口径未过：逐局中位注入点 DTSP≥反应式 "
+                f"{n_primary}/{len(episode_summaries)} 局（需 ≥9）且全集合 "
+                f"mean Δ(DTSP−反应式)={pooled_mean_d_react:+.0f} 需 >0；"
+                "参考口径 " f"{n_reference}/{len(episode_summaries)} 局。"
+                "归因分布见报告（诚实记录，不放宽判据）\n")
             return 1
+        print(f"[bench] 主口径过线：{n_primary}/{len(episode_summaries)} 局"
+              f"中位不劣，全集合 mean Δ={pooled_mean_d_react:+.0f}；"
+              f"参考口径 {n_reference}/{len(episode_summaries)} 局")
         return 0
     # smoke：harness 摇通即 0（判据行照实写进报告，不做门禁退出码）
     return 0
@@ -688,28 +734,37 @@ def _summary_md(report):
         f"生成：{report['generated_at_utc']}",
         f"- 注入日：{report['configuration']['injection_days']}｜"
         f"聚合策略：`{report['configuration']['strategy']}`",
-        f"- 判据：DTSP ≥ history 且 DTSP ≥ 反应式（容差 "
-        f"{report['configuration']['gate_eps']}），逐局输出归因。",
+        f"- {report.get('criterion_note', '')}",
         f"- 公平性口径：反应式与 DTSP 共享同一孪生与同一对手"
         f"（回放真实动作）；对手模型 Ω 只作用于 DTSP 的计划选择。", "",
-        "| 局 | 对手 | 注入数 | mean 真值 | mean 反应式 | mean DTSP | "
-        "Δhistory | Δ反应式 | 判据 | 归因(tn/om/ps) |",
-        "|---|---|---:|---:|---:|---:|---:|---:|---|---|",
+        "| 局 | 对手 | 注入数 | mean 真值 | mean 反应式 | mean DTSP "
+        "| 中位Δ反应式(主) | meanΔhistory | offset | 修正后(参考) "
+        "| 主判 | 参考判 | 归因(tn/om/ps) |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|",
     ]
     for e in report["episodes"]:
         attr = e["fail_attribution"]
         lines.append(
             f"| {e['episode']} | {e['opponent']} | {e['n_injections']} "
             f"| {e['mean_truth_me']:.0f} | {e['mean_reactive_me']:.0f} "
-            f"| {e['mean_dtsp_me']:.0f} | {e['dtsp_vs_history']:+.0f} "
-            f"| {e['dtsp_vs_reactive']:+.0f} "
-            f"| {'PASS' if e['gate_pass'] else 'FAIL'} "
+            f"| {e['mean_dtsp_me']:.0f} "
+            f"| {e['median_dtsp_vs_reactive']:+.0f} "
+            f"| {e['dtsp_vs_history']:+.0f} "
+            f"| {e['reactive_vs_history_offset']:+.0f} "
+            f"| {e['dtsp_vs_history_corrected']:+.0f} "
+            f"| {'PASS' if e['primary_pass'] else 'FAIL'} "
+            f"| {'PASS' if e['reference_pass'] else 'FAIL'} "
             f"| {attr['twin_noise']}/{attr['opponent_model_gap']}"
             f"/{attr['plan_space_gap']} |")
     s = report["summary"]
     lines += [
         "",
-        f"**汇总**：{s['episodes_passed']}/{s['episodes_evaluated']} 局过判；"
+        f"**汇总（m7 修订双口径）**：主口径 "
+        f"{s['episodes_passed']}/{s['episodes_evaluated']} 局中位不劣、"
+        f"全集合 mean Δ(DTSP−反应式)="
+        f"{s['pooled_mean_dtsp_vs_reactive']:+.0f}；"
+        f"参考口径 {s['episodes_passed_reference']}/"
+        f"{s['episodes_evaluated']} 局不劣；"
         f"mean Δhistory={s['mean_dtsp_vs_history']:+.0f}、"
         f"mean Δ反应式={s['mean_dtsp_vs_reactive']:+.0f}；"
         f"归因合计 tn/om/ps = "

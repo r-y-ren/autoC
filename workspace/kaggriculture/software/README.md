@@ -102,6 +102,18 @@ python workspace/kaggriculture/software/scripts/analyze_dna_forensics.py \
   --references .tmp-dna/reference_barcodes.csv \
   --field-validation .tmp-dna/field_validation.json
 python workspace/kaggriculture/software/scripts/check_dna_forensics.py
+
+# 16) DTSP 数字孪生规划器（Track-B P2.5）：
+#     a) 旗关等价黄金哈希（PLANNER_ENABLED=False 必须与 v13.8 逐字节等价；
+#        基线在 exports/probes/planner_flagoff/golden_v138.json，6 种子全季）
+python workspace/kaggriculture/software/scripts/planner_flagoff_golden.py
+#        （--emit 捕获基线 / --probe-on 验证旗开覆盖哈希必变）
+#     b) 离线基准（官方回放注入集双口径裁决；主口径=≥9/14 局中位注入点
+#        DTSP≥反应式 且全集合 mean Δ>0，参考口径=对 history 做执行器代差
+#        offset 修正后 ≥9/14 局不劣）
+python workspace/kaggriculture/software/scripts/planner_offline_bench.py --mode official
+#     c) 规划器契约 + 旗关等价测试
+python -m pytest workspace/kaggriculture/software/tests/test_planner_contract.py workspace/kaggriculture/software/tests/test_planner_flagoff_equiv.py -q
 ```
 
 ### P2 DNA/liveness scope
@@ -118,7 +130,8 @@ published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2
 published_holdout_attempt_index=5
 engine=kaggle-environments 1.32.7 kaggriculture
 <!-- ACTIVE_CANDIDATE_IDENTITY:END -->
-submission_package_sha256=2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e
+submission_package_sha256=b987af241e51935094f1bd37713e976b1876f3915d48440e674835d74f76cecd
+package_sha_provenance=P2.5 惰性旋钮扩展后的开发包（2026-09-19，PLANNER_ENABLED=False 旗关与 v13.8 逐字节等价，黄金哈希 tests/test_planner_flagoff_equiv.py 钉住）；已登记 v13.8 线上提交包仍为 2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e（冻结 ref 8deac51）——回发 Track-A 锚必须 checkout 该 ref 重打包，不得使用本工作区包
 
 ## External H2H 与评级限制
 

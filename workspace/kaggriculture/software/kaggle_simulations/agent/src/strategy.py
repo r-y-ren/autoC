@@ -159,7 +159,11 @@ def _herd_target(day, feed_capacity):
     autarky bound is normally slack (FM-O3 guardrailed external feed
     covers the gap) -- the money gate + daily pace + composition do the
     real limiting.
+
+    DTSP 惰性旋钮（P2.5，买畜时点轴）：herd_day_shift 把整条日程沿日历
+    平移（正值=放缓）；旗关恒 0，公式与 v13.8 逐字节同值。
     """
+    day = max(0, int(day) - _plan_knob("herd_day_shift", 0))
     return min(HERD_CAP, 4 + day + max(0, day - 4), max(4, feed_capacity))
 
 
@@ -450,8 +454,16 @@ def _decide_mode(obs, day, prev_mode):
     # history above; the aggressive ruling accepts the model's verdict
     # in place of the crude floor (FUSE_MONEY_FLOOR stays the absolute
     # red line via the circuit breaker).
-    base_ok = (6 <= day <= 12 and p_straw >= 105 and d_straw >= 4
-               and mine["herd"] >= VOLUME_HERD_FLOOR)
+    # DTSP 惰性旋钮（P2.5）：分支激活门槛改"常量默认值，可被计划覆盖"——
+    # 旗关（PLANNER_ENABLED=False）时 _plan_knob 恒回第二参，与 v13.8 逐
+    # 字节等价（黄金动作哈希 scripts/planner_flagoff_golden.py 钉住）。
+    vol_start = _plan_knob("mode_volume_day_start", 6)
+    vol_end = _plan_knob("mode_volume_day_end", 12)
+    vol_price = _plan_knob("mode_volume_price_min", 105)
+    vol_demand = _plan_knob("mode_volume_demand_min", 4)
+    vol_herd = _plan_knob("mode_volume_herd_floor", VOLUME_HERD_FLOOR)
+    base_ok = (vol_start <= day <= vol_end and p_straw >= vol_price
+               and d_straw >= vol_demand and mine["herd"] >= vol_herd)
     if base_ok:
         r_vol = _plan_rollout(day, mine, _VOLUME_PLAN, prices, demand,
                               p_straw)
@@ -469,8 +481,9 @@ def _decide_mode(obs, day, prev_mode):
             if r_vol["min_cash"] >= 0 and \
                     r_vol["terminal"] >= r_def["terminal"] + ROLLOUT_MIN_EDGE:
                 return dict(_VOLUME_PLAN)
-    volume_hold = prev_mode == "VOLUME_CROP" and p_straw >= 40 \
-        and mine["money"] >= 300
+    volume_hold = prev_mode == "VOLUME_CROP" \
+        and p_straw >= _plan_knob("mode_volume_hold_price_min", 40) \
+        and mine["money"] >= _plan_knob("mode_volume_hold_cash_min", 300)
     if volume_hold:
         return dict(_VOLUME_PLAN)
 
@@ -480,8 +493,12 @@ def _decide_mode(obs, day, prev_mode):
                   and demand.get("MILK", 1) >= 2)
                  or (p_wool >= DEAD_PRICE_FLOOR["WOOL"]
                      and demand.get("WOOL", 1) >= 2))
-    scale_entry = 4 <= day <= 16 and mine["herd"] >= 12 and animal_ok
-    scale_hold = prev_mode == "SCALE_RANCH" and mine["herd"] >= 14
+    scale_entry = _plan_knob("mode_scale_day_start", 4) <= day \
+        <= _plan_knob("mode_scale_day_end", 16) \
+        and mine["herd"] >= _plan_knob("mode_scale_entry_herd", 12) \
+        and animal_ok
+    scale_hold = prev_mode == "SCALE_RANCH" \
+        and mine["herd"] >= _plan_knob("mode_scale_hold_herd", 14)
     if scale_entry or scale_hold:
         return {"mode": "SCALE_RANCH", "volume": False, "scale": True,
                 # sprint-A 复刻：与 _DEFENSIVE_PLAN 共用莓配额常量（单一出处）
@@ -548,16 +565,24 @@ _STAGE_MEM = {}
 
 
 def _stage_of(day):
-    """P0-P5 阶段判定（branch §2 总表，纯日期函数）。"""
+    """P0-P5 阶段判定（branch §2 总表，纯日期函数）。
+
+    DTSP 惰性旋钮（P2.5）：四段窗口改"常量默认值，可被计划覆盖"——
+    旗关恒回 STAGE_* 冻结值（d14 冻结判定门槛随计划变的接口位）。
+    """
+    p1_due = _plan_knob("stage_p1_due", STAGE_P1_DUE)
+    freeze = _plan_knob("stage_p2_freeze", STAGE_P2_FREEZE)
+    p3_end = _plan_knob("stage_p3_end", STAGE_P3_END)
+    p4_end = _plan_knob("stage_p4_end", STAGE_P4_END)
     if day <= 0:
         return "P0"
-    if day <= STAGE_P1_DUE - 1:
+    if day <= p1_due - 1:
         return "P1"
-    if day <= STAGE_P2_FREEZE:
+    if day <= freeze:
         return "P2"
-    if day <= STAGE_P3_END:
+    if day <= p3_end:
         return "P3"
-    if day <= STAGE_P4_END:
+    if day <= p4_end:
         return "P4"
     return "P5"
 
@@ -722,10 +747,14 @@ def _d6_checkpoint(obs, day):
     shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
     demand = _town_daily_demand(shops)
     mine = _farm_scan(farm)
-    q1 = mine["herd"] >= VOLUME_HERD_FLOOR
-    q2 = mine["money"] >= 800
+    # DTSP 惰性旋钮（P2.5）：d6 五问阈值随容量分支计划覆盖（旗关恒回
+    # v13.8 冻结值）；q1/q3 与 _decide_mode 的激活门槛同源不同键——
+    # d6 门裁决的是 C 分支（容量档），mode 门裁决的是 VOLUME 激活。
+    q1 = mine["herd"] >= _plan_knob("d6_herd_floor", VOLUME_HERD_FLOOR)
+    q2 = mine["money"] >= _plan_knob("d6_cash_min", 800)
     p_straw = _get(prices, "STRAWBERRY", BASE_PRICE["STRAWBERRY"])
-    q3 = p_straw >= 105 and demand.get("STRAWBERRY", 1) >= 4
+    q3 = p_straw >= _plan_knob("d6_straw_price_min", 105) \
+        and demand.get("STRAWBERRY", 1) >= _plan_knob("d6_straw_demand_min", 4)
     # q4 首市日 KPI：我方（含当日可种）≤ 对手（无格视为 +inf）
     our_first = _first_market_day(farm, day)
     if our_first is None and day <= PLANT_LAST_DAY["STRAWBERRY"]:
@@ -767,12 +796,17 @@ def _b_branch_adjust(plan, obs, day, st=None):
         or _classify_opponent_opening(obs)
     plan = dict(plan)
     plan["opp_class"] = cls
-    branch = "B1" if cls == "burst" else \
-        ("B3" if cls == "melon_first" else "B2")
+    # DTSP 惰性旋钮（P2.5，缺口 4）：b_branch_force 允许计划强制分支
+    # （B1/B2/B3 之外的值按原分类走）；旗关恒 ""——分类→分支映射与
+    # v13.8 双射一致（burst→B1 / melon_first→B3 / 其余→B2），逐字节等价。
+    branch = _plan_knob("b_branch_force", "")
+    if branch not in ("B1", "B2", "B3"):
+        branch = "B1" if cls == "burst" else \
+            ("B3" if cls == "melon_first" else "B2")
     plan["b_branch"] = branch
     if st is not None:
         st["b_branch"] = branch
-    if cls == "burst":
+    if branch == "B1":
         shops = _get(_get(obs, "town", {}) or {}, "unlocked_shops", []) or []
         if day <= 5 and "YARN_STORE" not in shops:
             plan["p1_species_pref"] = "COW"   # 不跟死吸收的毛线挤（§4.2 B1）
@@ -783,7 +817,7 @@ def _b_branch_adjust(plan, obs, day, st=None):
         # absolute targets over the 4-head opening (2S+2C since the
         # herd front-load): d1 +3 sheep, d2 +2 cows
         plan["opening_seq_override"] = {1: {"SHEEP": 5}, 2: {"COW": 4}}
-    elif cls == "melon_first":
+    elif branch == "B3":
         plan["melon_probe"] = True
         plan["melon_total_cap"] = 2 if 3 <= day <= 5 else 0
     else:
@@ -894,7 +928,11 @@ def _fuse_check(st, farm, mine, stage):
     fuse = st.get("fuse") or {}
     if fuse.get("active") and fuse.get("stage") != stage:
         fuse["active"] = False
-    tripped = _get(farm, "money", 0.0) < FUSE_MONEY_FLOOR or escaped
+    # DTSP 惰性旋钮（P2.5，缺口 6 P3 运行态姿态）：CATCHUP 类计划抬高
+    # 熔断钱包地板（更早降 DEFENSIVE、保流动性）；旗关恒回冻结值 300。
+    tripped = _get(farm, "money", 0.0) < _plan_knob("fuse_money_floor",
+                                                    FUSE_MONEY_FLOOR) \
+        or escaped
     if tripped and stage in ("P1", "P2", "P3", "P4"):
         if not fuse.get("active") or fuse.get("stage") != stage:
             fuse = {"count": int(fuse.get("count", 0)) + 1,
@@ -1034,7 +1072,8 @@ def _stage_plan(player, obs, day, plan):
         out.update(branch_keys)
         out["stage"] = stage
         out["fused"] = True
-    if stage == "P2" and day == STAGE_P2_FREEZE and \
+    if stage == "P2" and day == _plan_knob("stage_p2_freeze",
+                                           STAGE_P2_FREEZE) and \
             st.get("frozen") is None:
         _d14_checkpoint(out, st)
     return out

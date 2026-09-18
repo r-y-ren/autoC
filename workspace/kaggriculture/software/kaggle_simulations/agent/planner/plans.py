@@ -9,8 +9,10 @@
 #        按局况粗过滤到 <=120 个候选；过滤规则 R1-R7 逐条显式可审计
 #        （返回侧带 enumerate_plans_audited 拿到逐步审计说明）。
 #     2) plan_to_knob_overrides(plan) -> dict
-#        映射到现役 v13.8 命名空间的真实旋钮名（供执行器消费；本模块
-#        禁改 src/，只读不覆盖的旋钮在【缺口清单】如实列出）。
+#        映射到现役执行器命名空间的真实旋钮名（供执行器消费；P2.5 起经
+#        PLANNER_ENABLED/PLANNER_OVERRIDES 惰性旋钮通道覆盖 src 门槛与
+#        杠杆，旗关与 v13.8 逐字节等价——不可安全参数化项在【缺口清单】
+#        如实列出并写明原因）。
 #     3) project_season(plan, obs_summary, pressure=None) -> float
 #        整季经济投影器（相对排序机器，非绝对预言——它给 J(plan,ω)
 #        矩阵打分用；绝对数字以孪生 rollout 为准）。
@@ -569,50 +571,103 @@ def enumerate_plans(obs_summary):
 # --------------------------------------------------------------------------
 # 旋钮覆盖映射（执行器消费契约）
 # --------------------------------------------------------------------------
-#
-# 【缺口清单】以下计划轴在现役 src/ 中只读不可覆盖（禁改 src/，如实列出；
-# P3 集成若需消费，须走蓝图变更增旋钮，不得先斩后奏）：
-#   1. 卖出曲线折扣系数：src/ 卖出计划器无折扣旋钮——价格由
-#      _market_price_emb 引擎镜像直算（src/market.py:203-221）。折扣仅作用于
-#      本模块投影器（PLANNER_LOCAL.sell_discount）；唯一近似杠杆是
-#      SELL_PLAN_HOLD_EDGE（囤货门槛，越高越悲观越早卖），映射见下。
-#   2. 买畜时点：src/ 无时点旋钮——畜群节奏由 _herd_target 内部日程 +
-#      NPV pacing 决定。timing_shift 只能经 LAND_PLAN/SE_DUE_DAY 作用于
-#      买地；畜群侧记 PLANNER_LOCAL.animal_buy_day_shift（投影器消费）。
-#   3. P0 开局变体：OPENING_SHIFT_SEQ 旋钮存在（src/constants.py:137，开局
-#      畜群组成），但 v1.5 P0 接线被 sprint-A 法证否决暂停
-#      （phase_branch_plan §9 遗留项 1）——覆盖仅写入该旋钮，不保证执行器
-#      激活（OPENING_SHIFT 门未开时为 no-op）。
-#   4. P1 分支 B1/B2/B3：分支调整器 _b_branch_adjust 的 v1.5 动作包未接线
-#      （§9 遗留项 2）——本映射只反映在容量档/瓜帽/雇工档的间接差异。
-#   5. 容量档激活：C1/C2/C3 → 参数包内容可覆盖（下列 _VOLUME_PLAN/
-#      _MIXED_PLAN/_DEFENSIVE_PLAN 字段 + 逐调用读取的 REGIME 常量），但
-#      _decide_mode 的激活门槛（价格/畜群/rollout veto）不随计划改变——
-#      门槛不过时覆盖为 no-op，这是"换脑不换手"边界的已知缺口。
-#   6. P3 运行态 / P4 出清档：src/ 由 d12 现金 / observer tier 自动判定，
-#      无外部旋钮——信息性记录于 PLANNER_LOCAL.*
+# 【缺口清单·P2.5 复裁版】原 v13.8 只读缺口经蓝图 m7 修订授权（2026-09-19）
+# 已在 src/ 落成惰性旋钮（PLANNER_ENABLED 总旗 + PLANNER_OVERRIDES 寄存器，
+# 旗关与现役逐字节等价，scripts/planner_flagoff_golden.py 黄金哈希钉住）。
+# 逐项处置（可参数化 6 项中 5 项 = 83%）：
+#   1. 卖出曲线折扣系数 →【已参数化】src/market._sell_plan_item 的
+#      sell_price_discount（悲观裕度乘在曲线投影上）+ sell_batch_mult
+#      （批量杠杆：_sell_overrides.tranche 与 MK-2 黎明日帽）+ 原有
+#      SELL_PLAN_HOLD_EDGE（囤货门槛）。
+#   2. 买畜时点 →【已参数化】strategy._herd_target 的 herd_day_shift
+#      （整条日程沿日历平移）+ market 买畜节奏环的 herd_start_day 起步门
+#      + animal_buy_last_day_shift（末窗平移）。
+#   3. P0 开局变体 →【不可安全参数化，保留只读】OPENING_SHIFT_SEQ 旋钮
+#      存在（src/constants.py:137），但 v1.5 P0 接线被 sprint-A 法证否决
+#      （phase_branch_plan §9 遗留项 1；sprint_forensics_0919 §4：v1.5 P0
+#      开局减档本地实测 -30.74% 灾难）——把"换开局"交给计划会在黄金季里
+#      复现已定案的破产形态。覆盖仅记 PLANNER_LOCAL.opening（信息性）。
+#   4. P1 分支 B1/B2/B3 →【已参数化】strategy._b_branch_adjust 的
+#      b_branch_force（计划强制分支动作包，越过 d1 分类冻结）。
+#   5. 容量档激活 →【已参数化】src/strategy._decide_mode 的 11 个激活
+#      门槛键（mode_volume_* / mode_scale_*）+ _d6_checkpoint 的 4 个
+#      d6_* 五问键——C 档经 TIER_MODE_GATES 表驱动门槛与参数包内容
+#      同步变；参数包 dict 内容本就可覆盖（_VOLUME_PLAN 等点路径）。
+#   6. P3 运行态 / P4 出清档 →【已参数化（姿态近似）】P3 的 HEALTHY/
+#      CATCHUP 映射到 fuse_money_floor（流动性熔断地板 300→600）与
+#      crew_late_day/crew_late_cap（晚季降编提前）——src 的运行态是涌现
+#      姿态而非单点开关，此映射为诚实近似；P4 的 LOW/MID/HEAVY 映射到
+#      p4_force_tier（强制出清档，越过观测置信门）+ sell_batch_mult。
+#      阶段窗 stage_p1_due/p2_freeze/p3_end/p4_end 已开键但本波不接线
+#      计划轴（保留轴：d14 冻结 doctrine 由执行器局况自治）。
 #
 _SELL_HOLD_EDGE_BASE = 1.05    # src/constants.py SELL_PLAN_HOLD_EDGE 默认
 _PLANNER_LOCAL_KEYS = ("sell_discount", "animal_buy_day_shift", "p3_mode",
                        "p4_clear", "opening", "p1_branch")
 
+# 容量档 → 激活门槛包（P2.5 新增；C2=v13.8 冻结值逐字段镜像，C1/C3 的
+# 偏离值出自 v1.5 §5.1/§5.3 的档位语义：C1=宽田候选提前一拍入场、
+# C3=畜牧保守档否决宽田；mode_volume_herd_floor 全档钉 10——v7.2-V1
+# seed-103 破产地板是安全不变式不是调参旋钮）。绝对数字以孪生 rollout
+# 裁决（bench 判据），此处只定义计划坐标。
+TIER_MODE_GATES = {
+    "C1": {"vol_day": (5, 13), "vol_price": 100, "vol_demand": 3,
+           "vol_herd": 10, "vol_hold_price": 35, "vol_hold_cash": 300,
+           "d6_herd": 10, "d6_cash": 600, "d6_price": 100, "d6_demand": 3},
+    "C2": {"vol_day": (6, 12), "vol_price": 105, "vol_demand": 4,
+           "vol_herd": 10, "vol_hold_price": 40, "vol_hold_cash": 300,
+           "d6_herd": 10, "d6_cash": 800, "d6_price": 105, "d6_demand": 4},
+    "C3": {"vol_day": (99, 99), "vol_price": 105, "vol_demand": 4,
+           "vol_herd": 10, "vol_hold_price": 10 ** 9, "vol_hold_cash": 300,
+           "d6_herd": 10, "d6_cash": 800, "d6_price": 105, "d6_demand": 4},
+}
+# C 档共有的 scale 门槛（v13.8 冻结值；全档同值——SCALE 激活由局况自治，
+# 计划不改写，见缺口清单第 6 条保留轴说明）。
+_SCALE_GATES_DEFAULT = {"scale_day": (4, 16), "scale_entry_herd": 12,
+                        "scale_hold_herd": 14}
+# P3 运行态 → 流动性姿态（缺口 6：HEALTHY=v13.8 冻结值；CATCHUP=熔断
+# 地板翻倍 + 晚季降编提前 2 天，省日薪保现金桥）。
+_P3_POSTURE = {
+    "HEALTHY": {"fuse_money_floor": 300, "crew_late_day": 24,
+                "crew_late_cap": 10},
+    "CATCHUP": {"fuse_money_floor": 600, "crew_late_day": 22,
+                "crew_late_cap": 10},
+}
+# P4 出清档 → 强制档 + 卖出批量乘数（缺口 6；HEAVY=抢跑倾销 2×日帽、
+# LOW=从容 0.75×）。
+_P4_CLEAR_GATES = {"LOW": {"p4_force_tier": "low", "sell_batch_mult": 0.75},
+                   "MID": {"p4_force_tier": "mid", "sell_batch_mult": 1.0},
+                   "HEAVY": {"p4_force_tier": "heavy",
+                             "sell_batch_mult": 2.0}}
+# 阶段窗保留轴（v13.8 冻结值；全名面显式发射，便于审计与未来接线）。
+_STAGE_GATES_DEFAULT = {"stage_p1_due": 6, "stage_p2_freeze": 14,
+                        "stage_p3_end": 21, "stage_p4_end": 27}
+
 
 def plan_to_knob_overrides(plan: PlanSpec) -> dict:
-    """PlanSpec → 现役 v13.8 命名空间旋钮覆盖（键=真实旋钮名/点路径）。
+    """PlanSpec → 现役命名空间旋钮覆盖（键=真实旋钮名/点路径）。
 
     返回值约定：
-      - 顶层标量键：直接 setattr 到命名空间（如 SE_DUE_DAY）。
-      - "DICT.key" 点路径：写入命名空间 dict 项（如 _VOLUME_PLAN.straw_total_cap、
-        LAND_PLAN.1 整元组覆盖）。
-      - "PLANNER_LOCAL.*"：无 src/ 旋钮对应（见【缺口清单】），执行器侧
-        跳过，规划器投影器消费。
-      - "PACK"：信息性（目标参数包模式名，不对应可写旋钮）。
+      - "PLANNER_ENABLED"：DTSP 总旗（exec 装载后置 True 才使覆盖生效；
+        旗关恒回默认值——黄金动作哈希保证 v13.8 逐字节等价）。
+      - "PLANNER_OVERRIDES.<键>"：写入 src/constants.py 的计划覆盖寄存器
+        （_plan_knob 惰性读取；键面=缺口清单 P2.5 处置的 29 键全名面）。
+      - 顶层标量键 / "DICT.key" 点路径：直接写命名空间（SE_DUE_DAY、
+        _VOLUME_PLAN.straw_total_cap、LAND_PLAN.1 整元组等，语义与测试侧
+        main.<KNOB> patch 契约一致）。
+      - "PLANNER_LOCAL.*"/"PACK"：信息性键（执行器侧跳过）。
     数值均为确定性取整；容量档镜像自 src 冻结值（见 TIER_PACKS 出处）。
     """
     t = plan_targets(plan)
     d = plan.sell_discount
+    gates = TIER_MODE_GATES[plan.capacity_tier]
+    posture = _P3_POSTURE[plan.p3_mode]
+    clear_gates = _P4_CLEAR_GATES[plan.p4_clear]
+    branch = plan.p1_branch
     overrides = {
         "PACK": PACK_MODE_NAME[t["pack"]],
+        # —— DTSP 总旗 + 计划覆盖寄存器（旗关等价性的开关面）——
+        "PLANNER_ENABLED": True,
         # —— 容量档参数包内容（目标包三字段 + 逐调用读取的 REGIME 常量）——
         f"{t['pack_dict']}.straw_quad_cap": t["straw_quad_cap"],
         f"{t['pack_dict']}.straw_total_cap": t["straw_total_cap"],
@@ -622,15 +677,57 @@ def plan_to_knob_overrides(plan: PlanSpec) -> dict:
         # —— 分线封顶（配额缩放同源；HERD/WHEAT 不缩放）——
         "LINE_CAPS.STRAWBERRY": t["straw_total_cap"],
         "LINE_CAPS.MELON": t["melon_total_cap"],
-        # —— 买地时点（R 缺口 2：买畜无旋钮，仅 PLANNER_LOCAL）——
+        # —— 买地时点（缺口 2 买地半边）——
         "LAND_PLAN.1": t["land_dues"][1],
         "LAND_PLAN.2": t["land_dues"][2],
         "SE_DUE_DAY": t["se_due"],
         "SE_BUY_LAST_DAY": SE_BUY_LAST_DAY,
-        # —— 卖出曲线（缺口 1：唯一近似杠杆 = 囤货门槛）——
+        # —— 卖出曲线（缺口 1：价格折扣 + 囤货门槛；批量在 P4 档）——
         "SELL_PLAN_HOLD_EDGE": round(
             _SELL_HOLD_EDGE_BASE + (1.0 - d) * 0.4, 3),
-        # —— 规划器本地（执行器无对应旋钮，见缺口清单）——
+        "PLANNER_OVERRIDES.sell_price_discount": float(d),
+        # —— 容量档激活门槛（缺口 5：C 档门槛随计划变）——
+        "PLANNER_OVERRIDES.mode_volume_day_start": gates["vol_day"][0],
+        "PLANNER_OVERRIDES.mode_volume_day_end": gates["vol_day"][1],
+        "PLANNER_OVERRIDES.mode_volume_price_min": gates["vol_price"],
+        "PLANNER_OVERRIDES.mode_volume_demand_min": gates["vol_demand"],
+        "PLANNER_OVERRIDES.mode_volume_herd_floor": gates["vol_herd"],
+        "PLANNER_OVERRIDES.mode_volume_hold_price_min":
+            gates["vol_hold_price"],
+        "PLANNER_OVERRIDES.mode_volume_hold_cash_min": gates["vol_hold_cash"],
+        "PLANNER_OVERRIDES.mode_scale_day_start":
+            _SCALE_GATES_DEFAULT["scale_day"][0],
+        "PLANNER_OVERRIDES.mode_scale_day_end":
+            _SCALE_GATES_DEFAULT["scale_day"][1],
+        "PLANNER_OVERRIDES.mode_scale_entry_herd":
+            _SCALE_GATES_DEFAULT["scale_entry_herd"],
+        "PLANNER_OVERRIDES.mode_scale_hold_herd":
+            _SCALE_GATES_DEFAULT["scale_hold_herd"],
+        "PLANNER_OVERRIDES.d6_herd_floor": gates["d6_herd"],
+        "PLANNER_OVERRIDES.d6_cash_min": gates["d6_cash"],
+        "PLANNER_OVERRIDES.d6_straw_price_min": gates["d6_price"],
+        "PLANNER_OVERRIDES.d6_straw_demand_min": gates["d6_demand"],
+        # —— 阶段窗（保留轴：全名面显式发射，本波不接线计划轴）——
+        "PLANNER_OVERRIDES.stage_p1_due": _STAGE_GATES_DEFAULT["stage_p1_due"],
+        "PLANNER_OVERRIDES.stage_p2_freeze":
+            _STAGE_GATES_DEFAULT["stage_p2_freeze"],
+        "PLANNER_OVERRIDES.stage_p3_end": _STAGE_GATES_DEFAULT["stage_p3_end"],
+        "PLANNER_OVERRIDES.stage_p4_end": _STAGE_GATES_DEFAULT["stage_p4_end"],
+        # —— P3 运行态姿态（缺口 6：熔断地板 + 晚季降编）——
+        "PLANNER_OVERRIDES.fuse_money_floor": posture["fuse_money_floor"],
+        "PLANNER_OVERRIDES.crew_late_day": posture["crew_late_day"],
+        "PLANNER_OVERRIDES.crew_late_cap": posture["crew_late_cap"],
+        # —— P4 出清档（缺口 6：强制档 + 批量乘数）——
+        "PLANNER_OVERRIDES.p4_force_tier": clear_gates["p4_force_tier"],
+        "PLANNER_OVERRIDES.sell_batch_mult": clear_gates["sell_batch_mult"],
+        # —— 买畜时点（缺口 2：日程平移 + 起步门 + 末窗平移）——
+        "PLANNER_OVERRIDES.herd_day_shift": int(plan.timing_shift),
+        "PLANNER_OVERRIDES.herd_start_day":
+            max(0, BRANCH_HERD_START_DAY[branch] - 1),
+        "PLANNER_OVERRIDES.animal_buy_last_day_shift": int(plan.timing_shift),
+        # —— P1 分支强制（缺口 4：计划动作包越过分类的接口位）——
+        "PLANNER_OVERRIDES.b_branch_force": branch,
+        # —— 规划器本地（信息性；执行器无对应旋钮/不安全参数化项）——
         "PLANNER_LOCAL.sell_discount": float(d),
         "PLANNER_LOCAL.animal_buy_day_shift": int(plan.timing_shift),
         "PLANNER_LOCAL.p3_mode": plan.p3_mode,
