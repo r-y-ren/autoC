@@ -1,5 +1,5 @@
 {
-  "_generated_at": "2026-09-01T22:26:32",
+  "_generated_at": "2026-09-19T03:47:27",
   "software": {
     "schema": "software-metrics-shard/1.0",
     "campaign": "kaggle-kaggriculture",
@@ -5809,6 +5809,46 @@
         },
         "unit": "repository-cleanup",
         "method": "scripts/verify/build_artifact_indexes.py plus deterministic path-scoped cleanup; indexes and source identity validated after maintenance"
+      },
+      "m6_twin_fidelity_games": {
+        "value": 184,
+        "unit": "games",
+        "method": "Track-B P1 (2026-09-19): scripts/twin_fidelity.py --mode official over references/data/online-replays/{round8,15,18,19,20,21,22,cmp-v92} + replay-corpus/raw (184 episode replays, all carry info.seed). Per game: full 719-transition walk with type-strict bit-exact comparison of farms/market/town/both privates/day/hour/step against replay truth, plus 3 mid-game snapshot rollouts to end."
+      },
+      "m6_twin_fidelity_walk_bitexact_rate": {
+        "value": 1.0,
+        "unit": "rate",
+        "method": "Share of games whose full 719-step twin walk matched the official replay bit-exact at every compared step (132,296 step comparisons total, type-strict: bool!=int, int!=float). 184/184 games."
+      },
+      "m6_twin_fidelity_rollout_bitexact_rate": {
+        "value": 1.0,
+        "unit": "rate",
+        "method": "Share of mid-game injection rollouts whose twin final money (both seats) equals replay ground-truth rewards bit-exact (float64 bit-hex recheck). 552/552 sample points (3 per game, early/mid/late windows 24-240/240-480/480-690, sampling seed 20260919)."
+      },
+      "m6_twin_rollout_full_ms": {
+        "value": 38.81,
+        "unit": "ms",
+        "method": "Median wall clock of a pure twin rollout (step 0 -> 719, no comparison) over 9 games (1 per corpus group); mean 42.74, min 35.29, max 57.77. Python 3.14.7, Win10, single process."
+      },
+      "m6_twin_step_ms": {
+        "value": 0.054,
+        "unit": "ms/step",
+        "method": "Median pure twin step cost (full_rollout_ms / 719) over the same 9 games; min 0.049, max 0.080. Framework env.step path is ~0.787 ms/step (engine-factsheet), i.e. twin is ~14x cheaper."
+      },
+      "m6_twin_compare_step_ms": {
+        "value": 0.25,
+        "unit": "ms/step",
+        "method": "Amortized cost of the type-strict per-step replay-truth comparison (walk-with-compare minus pure step), mean over the 9 bench games. Offline-only cost; not part of in-bot budget."
+      },
+      "m6_twin_rollouts_per_dawn": {
+        "value": 25,
+        "unit": "rollouts/turn",
+        "method": "1000 ms actTimeout / 38.81 ms full-season rollout (median). With the 60 s overage pool spread over 30 dawns (+2 s/dawn): 77/turn. Safety margins for unknown Kaggle eval-core speed: 12/turn at 2x, 5/turn at 5x. Updates engine-factsheet estimate (8-40/turn) with measured numbers."
+      },
+      "m6_twin_engine_fingerprint": {
+        "value": "wheel be693e83...; kaggriculture.py bc8a5487...; kaggriculture.json a82c89c1...",
+        "unit": "sha256 prefixes",
+        "method": "Fail-closed fingerprint chain enforced by planner/twin.py load_engine() (vendored wheel + extracted scene files; full hashes in exports/twin/p1_fidelity_summary.md and the module constants)."
       }
     },
     "unmeasured": {
