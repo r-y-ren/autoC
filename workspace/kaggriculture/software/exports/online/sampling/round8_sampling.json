@@ -1,0 +1,166 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 8,
+ "submission_ref": 55943264,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-18T16:45:50Z",
+ "candidate": {
+  "label": "v10.3-working (M-G accepted logic 1bde14b0 + Chinese guide comments, AST-identical)",
+  "pkg_sha256": null,
+  "main_sha256": "86d9e9273ca2fff1823b746ab0ea3ca45341136ab71fa68df3b1b1087df4ce1f",
+  "git_ref": "52bb63425b88a3e08fdd2680fd75b806897f3135"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round8_ledger.json",
+  "status_at_submit": "PENDING",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 55943264",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round8",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 658.2,
+ "validation": [],
+ "public_sampling": {
+  "public_games": 12,
+  "record": "8W-4L",
+  "wins": 8,
+  "losses": 4,
+  "win_rate": 0.6667,
+  "our_money_mean": 69009.9,
+  "opp_money_mean": 70425.5,
+  "mean_margin": -1415.6,
+  "axes": {
+   "d0_plants_ours": 16.0,
+   "d0_plants_opp": 10.5,
+   "wheat_d7_ours": 16.9,
+   "berry_d12_ours": 16.8,
+   "berry_d12_opp": 14.6,
+   "herd_d0_ours": 4.0,
+   "harvest_ours": 179.8,
+   "money_d11_ours": 779.3,
+   "money_d11_opp": 5420.2
+  },
+  "episodes": [
+   {
+    "id": 104579503,
+    "result": "W",
+    "our": 65099.0,
+    "opp": 40496.0,
+    "opp_name": "Ram\u00f3nL\u00f3pez",
+    "margin": 24603.0,
+    "seat": 0
+   },
+   {
+    "id": 104580306,
+    "result": "W",
+    "our": 62501.0,
+    "opp": 40039.0,
+    "opp_name": "Sonuaswar1",
+    "margin": 22462.0,
+    "seat": 0
+   },
+   {
+    "id": 104581137,
+    "result": "W",
+    "our": 80876.0,
+    "opp": 77294.0,
+    "opp_name": "Nir Aberman",
+    "margin": 3582.0,
+    "seat": 0
+   },
+   {
+    "id": 104581963,
+    "result": "W",
+    "our": 64490.0,
+    "opp": 64040.0,
+    "opp_name": "vasujain7",
+    "margin": 450.0,
+    "seat": 0
+   },
+   {
+    "id": 104582810,
+    "result": "W",
+    "our": 95318.0,
+    "opp": 82309.0,
+    "opp_name": "Natpaphon Nukhunthod",
+    "margin": 13009.0,
+    "seat": 0
+   },
+   {
+    "id": 104583628,
+    "result": "L",
+    "our": 99104.0,
+    "opp": 117999.0,
+    "opp_name": "huanxian chen",
+    "margin": -18895.0,
+    "seat": 0
+   },
+   {
+    "id": 104584488,
+    "result": "W",
+    "our": 73165.0,
+    "opp": 61464.0,
+    "opp_name": "Rishabh Gupta",
+    "margin": 11701.0,
+    "seat": 0
+   },
+   {
+    "id": 104585305,
+    "result": "W",
+    "our": 101497.0,
+    "opp": 90827.0,
+    "opp_name": "Ethan Pl",
+    "margin": 10670.0,
+    "seat": 0
+   },
+   {
+    "id": 104586071,
+    "result": "L",
+    "our": 67999.0,
+    "opp": 80521.0,
+    "opp_name": "Halil Akbas",
+    "margin": -12522.0,
+    "seat": 0
+   },
+   {
+    "id": 104587051,
+    "result": "L",
+    "our": 28810.0,
+    "opp": 98555.0,
+    "opp_name": "Michael van Mill",
+    "margin": -69745.0,
+    "seat": 1
+   },
+   {
+    "id": 104587823,
+    "result": "W",
+    "our": 47111.0,
+    "opp": 43643.0,
+    "opp_name": "MugaBros",
+    "margin": 3468.0,
+    "seat": 1
+   },
+   {
+    "id": 104590367,
+    "result": "L",
+    "our": 42149.0,
+    "opp": 47919.0,
+    "opp_name": "M0h4m3d-Byte",
+    "margin": -5770.0,
+    "seat": 1
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 8W-4L over 12 public games; local quickwin/self-play is not this verdict."
+}

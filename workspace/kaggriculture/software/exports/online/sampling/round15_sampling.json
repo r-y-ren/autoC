@@ -1,0 +1,130 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 15,
+ "submission_ref": 55965149,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-18T16:45:29Z",
+ "candidate": {
+  "label": "v12.2-phaseD-mk35-live-working",
+  "pkg_sha256": null,
+  "main_sha256": null,
+  "git_ref": "4c3e95b"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round15_ledger.json",
+  "status_at_submit": "PENDING",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 55965149",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round15",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 603.1,
+ "validation": [],
+ "public_sampling": {
+  "public_games": 8,
+  "record": "2W-6L",
+  "wins": 2,
+  "losses": 6,
+  "win_rate": 0.25,
+  "our_money_mean": 68271.5,
+  "opp_money_mean": 96528.2,
+  "mean_margin": -28256.8,
+  "axes": {
+   "d0_plants_ours": 16.0,
+   "d0_plants_opp": 17.2,
+   "wheat_d7_ours": 14.0,
+   "berry_d12_ours": 22.0,
+   "berry_d12_opp": 25.4,
+   "herd_d0_ours": 0.0,
+   "harvest_ours": 236.0,
+   "money_d11_ours": 2689.9,
+   "money_d11_opp": 13518.0
+  },
+  "episodes": [
+   {
+    "id": 104969166,
+    "result": "L",
+    "our": 77331.0,
+    "opp": 118748.0,
+    "opp_name": "Prince Special",
+    "margin": -41417.0,
+    "seat": 0
+   },
+   {
+    "id": 105005309,
+    "result": "L",
+    "our": 52542.0,
+    "opp": 104649.0,
+    "opp_name": "\u7267\u702c \u7d05\u8389\u6816",
+    "margin": -52107.0,
+    "seat": 1
+   },
+   {
+    "id": 105005701,
+    "result": "L",
+    "our": 56977.0,
+    "opp": 112325.0,
+    "opp_name": "Saugi Alkaf",
+    "margin": -55348.0,
+    "seat": 0
+   },
+   {
+    "id": 105046947,
+    "result": "W",
+    "our": 76141.0,
+    "opp": 31507.0,
+    "opp_name": "Non-veg plants",
+    "margin": 44634.0,
+    "seat": 1
+   },
+   {
+    "id": 105071219,
+    "result": "L",
+    "our": 64019.0,
+    "opp": 123762.0,
+    "opp_name": "Yunho Hwang",
+    "margin": -59743.0,
+    "seat": 0
+   },
+   {
+    "id": 105084350,
+    "result": "L",
+    "our": 84677.0,
+    "opp": 95722.0,
+    "opp_name": "Yeyuqing0913",
+    "margin": -11045.0,
+    "seat": 0
+   },
+   {
+    "id": 105130736,
+    "result": "W",
+    "our": 85518.0,
+    "opp": 68178.0,
+    "opp_name": "Florian Tigoulet",
+    "margin": 17340.0,
+    "seat": 0
+   },
+   {
+    "id": 105161358,
+    "result": "L",
+    "our": 48967.0,
+    "opp": 117335.0,
+    "opp_name": "c0nrad",
+    "margin": -68368.0,
+    "seat": 1
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 2W-6L over 8 public games; local quickwin/self-play is not this verdict."
+}

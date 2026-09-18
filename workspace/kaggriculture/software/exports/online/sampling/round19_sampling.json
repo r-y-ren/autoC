@@ -1,0 +1,130 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 19,
+ "submission_ref": 56003101,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-18T16:45:35Z",
+ "candidate": {
+  "label": "v13.5 planting top-meta calibration",
+  "pkg_sha256": "facd376660bcd6265ffbe6afb69969e246b027905c8749ceb3e95fe0a50f4ed1",
+  "main_sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
+  "git_ref": "47ffeaf"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round19_ledger.json",
+  "status_at_submit": "PENDING",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 56003101",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round19",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 532.2,
+ "validation": [],
+ "public_sampling": {
+  "public_games": 8,
+  "record": "4W-4L",
+  "wins": 4,
+  "losses": 4,
+  "win_rate": 0.5,
+  "our_money_mean": 56462.2,
+  "opp_money_mean": 56046.2,
+  "mean_margin": 416.0,
+  "axes": {
+   "d0_plants_ours": 6.6,
+   "d0_plants_opp": 10.4,
+   "wheat_d7_ours": 17.8,
+   "berry_d12_ours": 16.8,
+   "berry_d12_opp": 3.9,
+   "herd_d0_ours": 3.0,
+   "harvest_ours": 163.2,
+   "money_d11_ours": 689.1,
+   "money_d11_opp": 5275.4
+  },
+  "episodes": [
+   {
+    "id": 105350073,
+    "result": "L",
+    "our": 57896.0,
+    "opp": 71238.0,
+    "opp_name": "HarryZ",
+    "margin": -13342.0,
+    "seat": 1
+   },
+   {
+    "id": 105350925,
+    "result": "W",
+    "our": 57911.0,
+    "opp": 40389.0,
+    "opp_name": "Yadunandan Raman",
+    "margin": 17522.0,
+    "seat": 0
+   },
+   {
+    "id": 105351850,
+    "result": "W",
+    "our": 42133.0,
+    "opp": 40404.0,
+    "opp_name": "Shardul Gharat",
+    "margin": 1729.0,
+    "seat": 1
+   },
+   {
+    "id": 105352719,
+    "result": "L",
+    "our": 38212.0,
+    "opp": 41999.0,
+    "opp_name": "JIlong Zhou",
+    "margin": -3787.0,
+    "seat": 1
+   },
+   {
+    "id": 105369782,
+    "result": "W",
+    "our": 68265.0,
+    "opp": 27869.0,
+    "opp_name": "tanatet8",
+    "margin": 40396.0,
+    "seat": 0
+   },
+   {
+    "id": 105372957,
+    "result": "L",
+    "our": 42704.0,
+    "opp": 76191.0,
+    "opp_name": "Meticulousss",
+    "margin": -33487.0,
+    "seat": 1
+   },
+   {
+    "id": 105381067,
+    "result": "L",
+    "our": 71365.0,
+    "opp": 82188.0,
+    "opp_name": "bvgr",
+    "margin": -10823.0,
+    "seat": 1
+   },
+   {
+    "id": 105383325,
+    "result": "W",
+    "our": 73212.0,
+    "opp": 68092.0,
+    "opp_name": "ANKIT AGARWAL",
+    "margin": 5120.0,
+    "seat": 1
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 4W-4L over 8 public games; local quickwin/self-play is not this verdict."
+}

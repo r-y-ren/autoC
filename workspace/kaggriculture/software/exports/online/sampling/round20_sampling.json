@@ -4,7 +4,7 @@
  "submission_ref": 56004582,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-04T07:20:00Z",
+ "captured_at_utc": "2026-09-18T16:45:38Z",
  "candidate": {
   "label": "v13.6 herd front-load",
   "pkg_sha256": "f2f3728ee28ba8b1e39f1eb8a5da0d78cb9260499ee01530abc86f969311b190",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 565.2,
+ "public_score": 550.3,
  "validation": [
   {
    "id": 105359228,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 25,
-  "record": "11W-14L",
-  "wins": 11,
-  "losses": 14,
-  "win_rate": 0.44,
-  "our_money_mean": 70043.8,
-  "opp_money_mean": 72367.6,
-  "mean_margin": -2323.8,
+  "public_games": 37,
+  "record": "15W-22L",
+  "wins": 15,
+  "losses": 22,
+  "win_rate": 0.4054,
+  "our_money_mean": 66827.3,
+  "opp_money_mean": 76045.2,
+  "mean_margin": -9217.9,
   "axes": {
-   "d0_plants_ours": 6.4,
-   "d0_plants_opp": 14.3,
-   "wheat_d7_ours": 28.4,
-   "berry_d12_ours": 9.8,
-   "berry_d12_opp": 18.8,
+   "d0_plants_ours": 6.3,
+   "d0_plants_opp": 15.0,
+   "wheat_d7_ours": 28.8,
+   "berry_d12_ours": 8.0,
+   "berry_d12_opp": 18.5,
    "herd_d0_ours": 4.0,
-   "harvest_ours": 186.9,
-   "money_d11_ours": 654.3,
-   "money_d11_opp": 5973.2
+   "harvest_ours": 190.9,
+   "money_d11_ours": 1005.4,
+   "money_d11_opp": 6389.4
   },
   "episodes": [
    {
@@ -284,9 +284,117 @@
     "opp_name": "one",
     "margin": -9075.0,
     "seat": 0
+   },
+   {
+    "id": 109956232,
+    "result": "L",
+    "our": 67663.0,
+    "opp": 112007.0,
+    "opp_name": "Jaume Batlle i Ferrer",
+    "margin": -44344.0,
+    "seat": 0
+   },
+   {
+    "id": 110045990,
+    "result": "W",
+    "our": 50896.0,
+    "opp": 30581.0,
+    "opp_name": "HarryZ",
+    "margin": 20315.0,
+    "seat": 0
+   },
+   {
+    "id": 110082770,
+    "result": "L",
+    "our": 42284.0,
+    "opp": 142435.0,
+    "opp_name": "kwon yong deuk",
+    "margin": -100151.0,
+    "seat": 0
+   },
+   {
+    "id": 110141106,
+    "result": "L",
+    "our": 48646.0,
+    "opp": 145883.0,
+    "opp_name": "yuto083",
+    "margin": -97237.0,
+    "seat": 0
+   },
+   {
+    "id": 110144476,
+    "result": "L",
+    "our": 38423.0,
+    "opp": 55918.0,
+    "opp_name": "AgriMind",
+    "margin": -17495.0,
+    "seat": 0
+   },
+   {
+    "id": 110155817,
+    "result": "L",
+    "our": 77163.0,
+    "opp": 86796.0,
+    "opp_name": "William Lee",
+    "margin": -9633.0,
+    "seat": 1
+   },
+   {
+    "id": 110162202,
+    "result": "W",
+    "our": 68593.0,
+    "opp": 34665.0,
+    "opp_name": "Ayuroshbo",
+    "margin": 33928.0,
+    "seat": 1
+   },
+   {
+    "id": 110221901,
+    "result": "L",
+    "our": 43523.0,
+    "opp": 91099.0,
+    "opp_name": "\u6e21\u908a\u5f81\u592e",
+    "margin": -47576.0,
+    "seat": 1
+   },
+   {
+    "id": 110278703,
+    "result": "W",
+    "our": 75920.0,
+    "opp": 73584.0,
+    "opp_name": "oguzok",
+    "margin": 2336.0,
+    "seat": 0
+   },
+   {
+    "id": 110312639,
+    "result": "L",
+    "our": 84424.0,
+    "opp": 100055.0,
+    "opp_name": "Roy Lo TW",
+    "margin": -15631.0,
+    "seat": 1
+   },
+   {
+    "id": 110341017,
+    "result": "W",
+    "our": 84233.0,
+    "opp": 74889.0,
+    "opp_name": "knadithyavr",
+    "margin": 9344.0,
+    "seat": 1
+   },
+   {
+    "id": 110433011,
+    "result": "L",
+    "our": 39747.0,
+    "opp": 56569.0,
+    "opp_name": "Nika Chaduneli",
+    "margin": -16822.0,
+    "seat": 1
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 11W-14L over 25 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 15W-22L over 37 public games; local quickwin/self-play is not this verdict."
 }

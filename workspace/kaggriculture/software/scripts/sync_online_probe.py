@@ -75,7 +75,10 @@ def _parse_json_payload(text: str) -> Any:
         start = text.find("{")
     if start < 0:
         raise OnlineProbeError(f"no JSON payload in kaggle output: {text[:240]!r}")
-    return json.loads(text[start:])
+    # raw_decode：只取首个完整 JSON 值。新版 kaggle CLI 会在 JSON 后追加
+    # 使用提示行（"Use \"kaggle competitions replay ...\"），整段 loads 会报 Extra data。
+    value, _ = json.JSONDecoder().raw_decode(text[start:])
+    return value
 
 
 def _launch(root: Path, round_no: int) -> tuple[Path, dict[str, Any]]:

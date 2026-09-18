@@ -1,0 +1,130 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 18,
+ "submission_ref": 55991647,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-18T16:45:32Z",
+ "candidate": {
+  "label": "v13.4 aggressive-ideal (un-hold + planner closure + vehicles)",
+  "pkg_sha256": "f0dfdb2de651f84941f47920629cbbe937b1f570af2d15d4f25c636d773453eb",
+  "main_sha256": "94dc4bddb645400cc3ab647296d5697809ce42da0e39f604e24555a955a478b8",
+  "git_ref": "a85ed7b"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round18_ledger.json",
+  "status_at_submit": "PENDING",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 55991647",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round18",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 576.2,
+ "validation": [],
+ "public_sampling": {
+  "public_games": 8,
+  "record": "4W-4L",
+  "wins": 4,
+  "losses": 4,
+  "win_rate": 0.5,
+  "our_money_mean": 66514.9,
+  "opp_money_mean": 65623.2,
+  "mean_margin": 891.6,
+  "axes": {
+   "d0_plants_ours": 8.0,
+   "d0_plants_opp": 14.9,
+   "wheat_d7_ours": 12.2,
+   "berry_d12_ours": 23.8,
+   "berry_d12_opp": 13.5,
+   "herd_d0_ours": 0.0,
+   "harvest_ours": 169.5,
+   "money_d11_ours": 1417.8,
+   "money_d11_opp": 4741.9
+  },
+  "episodes": [
+   {
+    "id": 105204978,
+    "result": "W",
+    "our": 74221.0,
+    "opp": 31164.0,
+    "opp_name": "SHIVAJI SHAIK",
+    "margin": 43057.0,
+    "seat": 0
+   },
+   {
+    "id": 105206145,
+    "result": "W",
+    "our": 79962.0,
+    "opp": 76912.0,
+    "opp_name": "Bum_Fy_Mz",
+    "margin": 3050.0,
+    "seat": 1
+   },
+   {
+    "id": 105207370,
+    "result": "L",
+    "our": 70694.0,
+    "opp": 87064.0,
+    "opp_name": "Saugi Alkaf",
+    "margin": -16370.0,
+    "seat": 1
+   },
+   {
+    "id": 105208608,
+    "result": "L",
+    "our": 66315.0,
+    "opp": 90305.0,
+    "opp_name": "Tamizharuvi",
+    "margin": -23990.0,
+    "seat": 0
+   },
+   {
+    "id": 105237308,
+    "result": "W",
+    "our": 64660.0,
+    "opp": 42361.0,
+    "opp_name": "Ebenezer Olumeyan",
+    "margin": 22299.0,
+    "seat": 1
+   },
+   {
+    "id": 105266939,
+    "result": "W",
+    "our": 62533.0,
+    "opp": 29358.0,
+    "opp_name": "Varun Dave",
+    "margin": 33175.0,
+    "seat": 0
+   },
+   {
+    "id": 105307005,
+    "result": "L",
+    "our": 49966.0,
+    "opp": 86393.0,
+    "opp_name": "IsaacJinyu",
+    "margin": -36427.0,
+    "seat": 1
+   },
+   {
+    "id": 105347228,
+    "result": "L",
+    "our": 63768.0,
+    "opp": 81429.0,
+    "opp_name": "Samir Patel",
+    "margin": -17661.0,
+    "seat": 1
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 4W-4L over 8 public games; local quickwin/self-play is not this verdict."
+}
