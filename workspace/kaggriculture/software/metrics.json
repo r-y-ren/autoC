@@ -6007,9 +6007,106 @@
     ],
     "sha256": "53ae26dc8c6a4da943204029ee9eefbc0e46674188869d6ad9d062f0d083f00e"
    }
+  },
+  "m6_p26_bench_config_selected": {
+   "method": "scripts/planner_calibration_suite.py sweep on smoke subset (round20 3 eps x d3/d10/d20, 2026-09-19); official run once with the selected config (anti-overfit discipline)",
+   "unit": "selector configuration",
+   "value": {
+    "aggregation": "trimmed_mean",
+    "trim_fraction": 0.25,
+    "weights": "none",
+    "pessimistic_discount": 0.75,
+    "selection_rule": "pre-registered: max smoke point-pass -> max mean delta -> grid order",
+    "trail": "software/exports/probes/planner_bench/calibration/sweep.json (12 configs x 9 smoke points: all 12 identical picks, 7/9 pass mean +4289)"
+   }
+  },
+  "m6_p26_official_verdict": {
+   "method": "scripts/planner_offline_bench.py --mode official (2026-09-19 22:17 UTC, final config run exactly once): same 14 episodes x 42 injections x same thresholds as the two prior FAIL rounds; report regenerated at software/exports/probes/planner_bench/bench_report.json (round-2 report archived as bench_report_round2_20260918.json)",
+   "unit": "verdict (m7 dual criterion)",
+   "value": {
+    "episodes_median_pass": "12/14 (gate >=9)",
+    "pooled_mean_delta_vs_reactive": 782.6,
+    "reference_pass": "12/14 (gate >=9)",
+    "twin_noise_max": 0.0,
+    "injections": 42,
+    "wall_seconds": 237.4,
+    "verdict": "PASS"
+   }
+  },
+  "m6_p26_official_day_profile": {
+   "method": "same official run rows",
+   "unit": "coins (mean dtsp_vs_reactive per injection day)",
+   "value": {
+    "day3": 1998,
+    "day10": 352,
+    "day20": -2,
+    "note": "expansion decisions win early, do-no-harm at closure (d20); worst single point -2614 (episode 105367844, plan_space_gap 3/3 - oracle confirms no in-space plan beats reactive there)"
+   }
+  },
+  "m6_p26_c1_ablation": {
+   "method": "scripts/planner_calibration_suite.py c1-ablation (2026-09-19): all 42 official injection points, forced-C1 oracle grid quota{0.8,1.0,1.25} x timing{-2,0,+2} x discount 0.9, true-twin rollouts vs reactive; artifact software/exports/probes/planner_bench/calibration/c1_ablation.json",
+   "unit": "verdict (C1 final ruling)",
+   "value": {
+    "beats_reactive": 13,
+    "mean_margin_by_day": {
+     "day3": 4787,
+     "day10": 520,
+     "day20": -688
+    },
+    "mean_margin": 1539.5,
+    "median_margin": 0.0,
+    "points": 42,
+    "loses_reactive": 5,
+    "ties_reactive": 24,
+    "verdict": "C1 HAS real economics -> fix the projector scoring, do not remove C1 (pre-fix projector ranked C1-best at rank 105-110/120 at d10/d20 while oracle beat reactive)"
+   }
+  },
+  "m6_p26_projector_calibration": {
+   "method": "plans.py edits 2026-09-19, each pinned by tests/test_planner_calibration.py (16 tests); src/ nine modules and twin.py untouched",
+   "unit": "calibration set (5 fixes + 1 posture, plans.py only)",
+   "value": {
+    "evidence_artifacts": [
+     "calibration/c1_ablation.json",
+     "calibration/timing_diag.json",
+     "calibration/d10_jmat.json",
+     "calibration/sweep.json"
+    ],
+    "fixes": [
+     "seed establishment charged once in build window (was daily to season end: ~7x phantom at d10, 20x at d20 -> systematic anti-expansion bias)",
+     "planting closure at day0>=PLANT_LAST_DAY (expansion targets=现状, honest flat d20)",
+     "timing axis mirror: herd ramp start += timing_shift (executor herd_day_shift semantics; pre-fix J had ZERO variance across timing, 42/42 selections pinned to +0 by tie-break)",
+     "herd buy amortization bounded to ramp window (was charged forever -> delayed-buy arbitrage inverted timing direction vs oracle -2 preference 36/42)",
+     "land purchases scheduled doctrine-style without cash gate + capacity coupling quads*25 tiles (removes 4600 affordability lottery; was breaking monotonicity: neutral 24223 < pessimistic 27234 on C3 midgame obs)",
+     "P3 CATCHUP crew_late_day 22->24 (d20 isolation: dropCrew -> +8/+0 while dropFuse kept the full -7593/-2004 loss; lever falsified, fuse floor 600 kept)"
+    ]
+   }
+  },
+  "m6_p26_d10_diagnosis": {
+   "method": "scripts/planner_calibration_suite.py d10-jmat (2026-09-19): 14 d10 points, per-plan x per-model J matrix + knob-group isolation rollouts; artifact calibration/d10_jmat.json",
+   "unit": "verdict (d10 -920 root cause)",
+   "value": {
+    "coverage_identity_gap": 0.0,
+    "new_selection_mean_dtsp_vs_reactive_d10": 352,
+    "old_cause": "plan itself wrong: old projector systematically selected C3@0.80 (VOLUME gates off + caps cut) at d10",
+    "verdict": "coverage channel sound (PLANNER_ENABLED+empty overrides == reactive, 14/14 bit-exact); losses were parameter choice, fixed by projector calibration"
+   }
+  },
+  "m6_p26_timing_variance_post_fix": {
+   "method": "scripts/planner_calibration_suite.py timing-diag over the official injection set (2026-09-19)",
+   "unit": "fraction of plan families with zero J variance across timing shifts",
+   "value": {
+    "max_j_spread": 2930.1,
+    "post_fix_zero_variance": "336/1008 (residual zeros = honest too-late states: d20 closure, dues past, herd ramp complete)",
+    "pre_fix": "100% zero variance (structural: shift only moved cash timing, no interest)"
+   }
+  },
+  "m6_p26_calibration_tests": {
+   "method": "python -m pytest tests/test_planner_calibration.py -q (2026-09-19)",
+   "unit": "pytest summary (new file)",
+   "value": "16 passed (tests/test_planner_calibration.py): timing monotonicity/honest-flat, seed-window analytic identity, capacity coupling, no-cash-lottery, herd amortization window, aggregation math (trim=0=mean, worst<=trimmed, weighted monotone), tie-break not pinned to +0, bench selector-cfg plumbing"
   }
  },
- "milestone": "Track-B P2.5 惰性旋钮扩展 + 投影校准 + official 复裁（诚实 FAIL：主口径 10/14 过线但全集合 mean Δ=-82<0；旗关等价 6/6 逐字节一致）",
+ "milestone": "Track-B P2.6 投影校准终局复裁（PASS：主口径 12/14 局中位不劣 + 全集合 mean Δ=+783>0，参考口径 12/14；同 bench 同判据只跑一次 final config；C1 消融定案=投影器修评分而非剔除；旗关等价 6/6 逐字节一致；src 九模块零改动）",
  "schema": "software-metrics-shard/1.0",
  "unmeasured": {
   "final_submission_commits": {

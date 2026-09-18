@@ -59,6 +59,9 @@ CAP_USE_BUDGET = 0.95                 # v1.5 文档=0.85；现役 CAP_USE_MAX=0.
 # 资产单位折算（v1.5 §5.3：作物格=1，胡萝卜=0.5 短窗，牲畜每头=2）
 ANIMAL_UNITS = 2
 CARROT_UNITS = 0.5
+# 象限可种格数（factsheet：tiles[10][10]、4 象限 NE/SW/SE 顺序解锁，
+# kaggriculture.py:95-97,712-725 → 100÷4=25）。P2.6 投影器产能耦合用。
+TILES_PER_QUADRANT = 25
 
 # 地价（factsheet §5：kaggriculture.py:95-97,712-725——NE $1000/SW $2000/SE $4000，
 # 固定顺序解锁）与现役购地日程（src/constants.py:101 LAND_PLAN）。
@@ -595,7 +598,9 @@ def enumerate_plans(obs_summary):
 #      同步变；参数包 dict 内容本就可覆盖（_VOLUME_PLAN 等点路径）。
 #   6. P3 运行态 / P4 出清档 →【已参数化（姿态近似）】P3 的 HEALTHY/
 #      CATCHUP 映射到 fuse_money_floor（流动性熔断地板 300→600）与
-#      crew_late_day/crew_late_cap（晚季降编提前）——src 的运行态是涌现
+#      crew_late_day/crew_late_cap（P2.6 起钉在 v13.8 冻结值 24/10——
+#      "晚季降编提前 2 天"经 d20 隔离消融证伪，见 _P3_POSTURE 注）——
+#      src 的运行态是涌现
 #      姿态而非单点开关，此映射为诚实近似；P4 的 LOW/MID/HEAVY 映射到
 #      p4_force_tier（强制出清档，越过观测置信门）+ sell_batch_mult。
 #      阶段窗 stage_p1_due/p2_freeze/p3_end/p4_end 已开键但本波不接线
@@ -625,12 +630,15 @@ TIER_MODE_GATES = {
 # 计划不改写，见缺口清单第 6 条保留轴说明）。
 _SCALE_GATES_DEFAULT = {"scale_day": (4, 16), "scale_entry_herd": 12,
                         "scale_hold_herd": 14}
-# P3 运行态 → 流动性姿态（缺口 6：HEALTHY=v13.8 冻结值；CATCHUP=熔断
-# 地板翻倍 + 晚季降编提前 2 天，省日薪保现金桥）。
+# P3 运行态 → 流动性姿态（缺口 6）。P2.6 校准（2026-09-19）：CATCHUP 的
+# 晚季降编杆（crew_late_day 24→22）经 d20 隔离消融证伪——两局 CATCHUP 注入
+# 点全额损失（−7593/−2004）在退回该杆后归零、退回熔断杆后不变，故
+# crew_late 回到 v13.8 冻结值 24/10，CATCHUP 语义保留在熔断地板 600。
+# 证据：calibration/d20 P3 隔离（sweep 留痕同期输出）。
 _P3_POSTURE = {
     "HEALTHY": {"fuse_money_floor": 300, "crew_late_day": 24,
                 "crew_late_cap": 10},
-    "CATCHUP": {"fuse_money_floor": 600, "crew_late_day": 22,
+    "CATCHUP": {"fuse_money_floor": 600, "crew_late_day": 24,
                 "crew_late_cap": 10},
 }
 # P4 出清档 → 强制档 + 卖出批量乘数（缺口 6；HEAVY=抢跑倾销 2×日帽、
@@ -791,6 +799,16 @@ def project_season(plan: PlanSpec, obs_summary, pressure=None) -> float:
     carrot0 = int(crops.get("CARROT", 0))
     quads = int(obs_summary.get("unlocked_quadrants", 1))
 
+    # P2.6 校准（2026-09-19，证据=c1_ablation.json/timing_diag.json）：
+    #   a) 种植封笔——factsheet PLANT_LAST_DAY=14，day0 已封笔时田线目标=
+    #      现状（封笔后新格既种不下也收不成，投影只剩畜群/土地经济）；
+    #   b) 时点轴镜像——执行器 herd_day_shift=整条畜群日程沿日历平移，
+    #      投影器同尺平移爬坡起点（修正前时点轴 J 零方差、恒被字典序
+    #      tie-break 钉在 +0，42/42 注入点从不出现在选中计划）。
+    closed = day0 >= PLANT_LAST_DAY
+    herd_start = max(0, t["herd_start_day"] + int(plan.timing_shift))
+    herd_span = max(1, 11 - t["herd_start_day"])
+
     for day in range(day0, 30):
         # —— 雇工爬坡（劳力先行：领先资产 <=1 天，v1.5 §5.3 规则 1）——
         crew_target = min(t["crew_cap"], CREW_BASE + max(0, day - day0)
@@ -798,28 +816,46 @@ def project_season(plan: PlanSpec, obs_summary, pressure=None) -> float:
         crew = max(int(obs_summary.get("crew", CREW_BASE)), crew_target)
         money -= _fib_day_wage(crew)
 
-        # —— 买地（LAND 日程；SE 窗独立）——
+        # —— 买地（LAND 日程 + SE 窗；P2.6 起 doctrine 日程制、无现金门）——
+        # 购地是计划的既定日程（v1.5 §2/LAND_PLAN），投影器是相对排序机器：
+        # 现金门槛会把"谁凑得齐 fund"的彩票引入排序（实测反例：修掉种子
+        # 幻影成本后，同一 obs 下中性 24223 < 悲观 27234——富变体恰好凑齐
+        # 4600 买了对计划无产能价值的 Q4）。到期日早于注入日的按注入日
+        # 补记（既定支出、与对手模型无关）；capacity 耦合见下节。
         for quad_key, (due, fund) in t["land_dues"].items():
-            if day == due and quads < 4 and money >= fund:
+            charge_day = max(int(due), day0)
+            if day == charge_day and quads < 4:
                 money -= fund
                 quads += 1
-        if t["se_due"] <= day <= SE_BUY_LAST_DAY and quads < 4 \
-                and money >= SE_FUND_DEFAULT:
+        se_charge_day = max(int(t["se_due"]), day0)
+        if day == se_charge_day and quads < 4:
             money -= SE_FUND_DEFAULT
             quads += 1
 
-        # —— 田目标爬坡（建设期线性到 d14 冻结；草莓遵守 d13 满额死线）——
+        # —— 田目标爬坡（建设期线性到 d14 冻结；草莓遵守 d13 满额死线；
+        #     封笔后目标=现状；产能耦合：目标受已解锁象限 25 格/象限钳制
+        #     ——10×10 板 ÷ 4 象限，factsheet tiles[10][10]——买地因此有
+        #     真实收入语义，时点轴（买地提前/推后）随之可投影）——
         build_span = max(1, STRAW_DEADLINE_DAY - day0)
         frac = 1.0 if day >= PLANT_LAST_DAY else min(
             1.0, max(0.0, (day - day0) / build_span))
-        straw = straw0 + (t["straw_total_cap"] - straw0) * frac
-        melon = melon0 + (t["melon_total_cap"] - melon0) * frac
-        wheat = wheat0 + (t["wheat_floor"] - wheat0) * frac
+        straw_t = straw0 if closed else t["straw_total_cap"]
+        melon_t = melon0 if closed else t["melon_total_cap"]
+        wheat_t = wheat0 if closed else t["wheat_floor"]
+        capacity = quads * TILES_PER_QUADRANT
+        total_t = straw_t + wheat_t + melon_t
+        if total_t > capacity:
+            k = capacity / total_t
+            straw_t = max(straw0, straw_t * k)
+            wheat_t = max(wheat0, wheat_t * k)
+            melon_t = max(melon0, melon_t * k)
+        straw = straw0 + (straw_t - straw0) * frac
+        melon = melon0 + (melon_t - melon0) * frac
+        wheat = wheat0 + (wheat_t - wheat0) * frac
         carrot = carrot0  # 终盘弹性线（v1.5 §6：d23-27 才连种，投影不扩）
-        herd_target = herd if day < t["herd_start_day"] else \
+        herd_target = herd if day < herd_start else \
             herd + (t["herd_ceiling"] - herd) * min(
-                1.0, max(0.0, (day - t["herd_start_day"])
-                         / max(1, 11 - t["herd_start_day"])))
+                1.0, max(0.0, (day - herd_start) / herd_span))
 
         # —— 收入（吸收健康 × 折扣 × 对手压力）——
         money += straw * REVENUE_ANCHORS["STRAWBERRY"] \
@@ -833,19 +869,29 @@ def project_season(plan: PlanSpec, obs_summary, pressure=None) -> float:
         money += herd_target * REVENUE_ANCHORS["HERD"] * plan.sell_discount \
             * press("HERD")
 
-        # —— 畜群成本（买畜均摊 + 饲料缺口外购）——
-        if herd_target > herd and day >= t["herd_start_day"]:
-            money -= (herd_target - herd) * ANIMAL_AVG_COST \
-                / max(1, 11 - t["herd_start_day"])
+        # —— 畜群成本（买畜均摊 + 饲料缺口外购；日程=平移后起点）——
+        # P2.6 修正：买畜摊提加窗口守卫（爬坡窗内按 (顶-现)×450/span 摊提、
+        # 总额=真实买畜款；修正前无守卫、爬坡完成后仍逐日计提到季末——
+        # 幻影摊提使"推迟买畜"套利（时点轴方向被反转成 +2 最优，而 oracle
+        # 面内最优 36/42 取 -2），且高顶档被多扣。证据同上。）
+        if herd_target > herd and herd_start <= day < herd_start + herd_span:
+            money -= max(0.0, t["herd_ceiling"] - herd) * ANIMAL_AVG_COST \
+                / herd_span
         wheat_prod = wheat * WHEAT_YIELD_PER_TILE_DAY
         feed_gap = max(0.0, herd_target - wheat_prod)
         money -= feed_gap * ROLLOUT_FEED_PRICE
 
-        # —— 种子成本（小麦 2 日周期 → 5/格/日；莓/瓜建设期一次性摊入爬坡）——
+        # —— 种子成本（小麦 2 日周期 → 5/格/日 恒常；莓/瓜=建植一次性，
+        #     只在建设窗 [day0, day0+build_span) 内摊入——P2.6 修正：修正前
+        #     该项漏了窗口守卫、被逐日重复计到季末，d10 宽档幻影种子成本
+        #     ~7×（C2 计 14000 而实义 2100）、d20 达 20×，是保守偏置
+        #     （C1×0/配额 0.8 恒选）的主因；证据 c1_ablation.json：
+        #     C1 oracle 面内最优 13/42 胜反应式、mean margin +1539）——
         money -= wheat * (SEED_PRICES["WHEAT"] / 2.0)
-        money -= max(0.0, straw - straw0) * SEED_PRICES["STRAWBERRY"] \
-            / max(1, build_span)
-        money -= max(0.0, melon - melon0) * SEED_PRICES["MELON"] \
-            / max(1, build_span)
+        if day < day0 + build_span:
+            money -= max(0.0, straw - straw0) * SEED_PRICES["STRAWBERRY"] \
+                / build_span
+            money -= max(0.0, melon - melon0) * SEED_PRICES["MELON"] \
+                / build_span
 
     return float(money)

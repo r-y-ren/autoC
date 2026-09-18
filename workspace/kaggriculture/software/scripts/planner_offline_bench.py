@@ -389,7 +389,8 @@ def evaluate_injection(deps, replay, me_seat, inj_step, cfg):
     opp_seat = 1 - me_seat
     history = extract_opponent_history(replay, opp_seat, inj_step)
     models = opponents.build_default_models(
-        history=history, profile_path=cfg.get("profile_path"))
+        history=history, profile_path=cfg.get("profile_path"),
+        pessimistic=cfg.get("pessimistic"))
     model_notes = [m.describe() for m in models]
     candidate_plans = plans.enumerate_plans(obs_summary)
     if not candidate_plans:
@@ -403,7 +404,10 @@ def evaluate_injection(deps, replay, me_seat, inj_step, cfg):
                 spec, obs_summary, model.supply_pressure(obs_summary))
         j_matrix[spec.key()] = scores
     selection = select.robust_select(
-        j_matrix, strategy=cfg.get("strategy", "trimmed_mean"))
+        j_matrix, strategy=cfg.get("strategy", "trimmed_mean"),
+        weights=cfg.get("weights"),
+        trim_fraction=cfg.get("trim_fraction",
+                              select.DEFAULT_TRIM_FRACTION))
     best_key = selection["best"]
     best_spec = _spec_by_key(candidate_plans, best_key)
 
@@ -537,6 +541,16 @@ def main(argv=None):
                         help="局数上限（缺省 official=14、smoke=3）")
     parser.add_argument("--strategy", default="trimmed_mean",
                         choices=tuple(select.AGGREGATION_STRATEGIES))
+    parser.add_argument("--trim-fraction", type=float, default=None,
+                        help="trimmed_mean 裁尾比例（缺省=select.DEFAULT_"
+                             "TRIM_FRACTION；仅 trimmed_mean 消费）")
+    parser.add_argument("--pessimistic-discount", type=float, default=0.75,
+                        help="PessimisticFill 成交价折扣（0,1]；Ω 其余模型"
+                             "不受影响（P2.6 选参轴）")
+    parser.add_argument("--weights-preset", default="none",
+                        choices=("none", "pessimistic_half"),
+                        help="weighted 策略的权重预设：pessimistic_half="
+                             "悲观模型半权、其余等权（P2.6 选参轴）")
     parser.add_argument("--out-dir",
                         default=os.path.join(SOFTWARE, "exports", "probes",
                                              "planner_bench"))
@@ -545,6 +559,14 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     official = args.mode == "official"
+    trim_fraction = (args.trim_fraction if args.trim_fraction is not None
+                     else select.DEFAULT_TRIM_FRACTION)
+    weights = None
+    if args.weights_preset == "pessimistic_half":
+        weights = {"passive_extrapolation": 1.0,
+                   "frozen_style_pool:winner_balanced": 1.0,
+                   "frozen_style_pool:wheat_suppressor": 1.0,
+                   "pessimistic_fill": 0.5}
     rounds = (tuple(args.rounds.split(",")) if args.rounds
               else (OFFICIAL_ROUNDS if official else SMOKE_ROUNDS))
     days = ([int(x) for x in args.injection_days.split(",")]
@@ -578,6 +600,9 @@ def main(argv=None):
         ep_rows = []
         for inj in inj_steps:
             cfg = {"episode": ep["episode"], "strategy": args.strategy,
+                   "trim_fraction": trim_fraction, "weights": weights,
+                   "pessimistic": opponents.PessimisticFill(
+                       price_discount=args.pessimistic_discount),
                    "profile_path": None,
                    "oracle": not args.no_oracle and official,
                    "oracle_top_k": ORACLE_TOP_K}
@@ -651,7 +676,10 @@ def main(argv=None):
         "configuration": {
             "rounds": list(rounds), "injection_days": days,
             "limit": limit, "min_episodes": min_episodes,
-            "strategy": args.strategy, "gate_eps": GATE_EPS,
+            "strategy": args.strategy, "trim_fraction": trim_fraction,
+            "weights_preset": args.weights_preset,
+            "pessimistic_discount": args.pessimistic_discount,
+            "gate_eps": GATE_EPS,
             "twin_noise_eps": TWIN_NOISE_EPS, "oracle": not args.no_oracle,
             "oracle_top_k": ORACLE_TOP_K,
         },
