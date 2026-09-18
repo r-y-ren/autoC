@@ -11,7 +11,7 @@ scope:
     - 市场自适应候选引擎：作物轮作主引擎 + 小规模混合畜群 + 常态外购饲料（带价格护栏）+ 劳动扩容 + 第三象限扩张 + 终局囤积-倾销与末日停喂；保留 m2b 全部修复（末日无 capex、购买观察确认、shed 预留、正数量订单、跨座位跨局隔离）；stdlib-only 单文件自包含
     - 一次性独立 holdout v2：系统随机全新种子（与全部历史种子 27 个开发/回归 + 8 个已公布 holdout + 3 个线上实测 seed 无交集）、全池 AB/BA 双座位、候选身份冻结、异常 fail-closed、通过语义校验后原子发布，merge_metrics 汇总
     - 报告与提交 SOP：纳入线上 round-1 复盘与 round-2 天梯采样-回拉-复盘循环协议（每日至多 5 次、最近 2 次跟踪、每候选至多 2 次/日、Error 即停）；现役回填步骤见 docs/online_probe_sop.md（本地 quickwin 不得当上线理由；提交后必须用 Kaggle CLI 拉公开回放并写入 sampling COMPLETE 台账）；旧 92.9% holdout 结论明确标注为前代候选 sha 7c482921 的实测，不外推新候选
-    - Track-B 数字孪生规划器（DTSP，2026-09-19 增补，设计契约 docs/track-B-digital-twin-planner.md）：bot 内嵌官方场景副本（twin，指纹校验、写时复制克隆），黎明决策点对候选战略计划（复用 phase_branch v1.5 参数包空间）×对手模型集（被动延续/冻结画像池/悲观成交）做整季 rollout 鲁棒选择，现役四层引擎为执行器、异常 fail-open 回退反应式；含孪生保真门（≥100 官方回放 ×≥3 中间步终局资金逐位一致）、离线回放注入基准与时间治理器；src 九模块零编辑（复用=import 版本钉死）
+    - Track-B 数字孪生规划器（DTSP，2026-09-19 增补，设计契约 docs/track-B-digital-twin-planner.md）：bot 内嵌官方场景副本（twin，指纹校验、写时复制克隆），黎明决策点对候选战略计划（复用 phase_branch v1.5 参数包空间）×对手模型集（被动延续/冻结画像池/悲观成交）做整季 rollout 鲁棒选择，现役四层引擎为执行器、异常 fail-open 回退反应式；含孪生保真门（≥100 官方回放 ×≥3 中间步终局资金逐位一致）、离线回放注入基准与时间治理器；src 九模块仅允许**惰性旋钮扩展**（PLANNER_ENABLED=False 时与 v13.8 逐字节等价，黄金哈希验证；P2 首轮基准 FAIL 后 2026-09-19 修订放行）
   out_of_scope:
     - 获奖、天梯名次或线上胜率承诺
     - 复用已公布 holdout 种子或在该 holdout 上继续调参
@@ -73,7 +73,7 @@ milestones:
     owner_role: software
     depends_on: []
   - id: m7-dtsp-planner
-    task: P2+P3 规划器与集成（2026-09-19 增补）：计划空间（phase_branch v1.5 参数包+连续缩放）×对手模型集（被动延续/冻结画像池/悲观成交）在孪生内 rollout 剩余整季，鲁棒选择 argmax；黎明决策点接入现役四层执行器、时间治理器（actTimeout 1s+overage 60s、2-5× 硬件余量）与 fail-open 回退反应式；离线基准 scripts/planner_offline_bench.py --mode official（round20/21/22+cmp-v92 回放注入集）上 planner 终局资金 ≥ 原 history 且 ≥ 反应式基线；新增 tests/test_planner_contract.py（预算断言/指纹校验/fail-open 触发率）；提交包经既有 build.py 确定性打包与身份链两段式登记
+    task: P2+P3 规划器与集成（2026-09-19 增补；2026-09-19 P2 首轮 official 基准诚实 FAIL 后经用户授权修订）：计划空间（phase_branch v1.5 参数包+连续缩放）×对手模型集（被动延续/冻结画像池/悲观成交）在孪生内 rollout 剩余整季，鲁棒选择 argmax；黎明决策点接入现役四层执行器、时间治理器（actTimeout 1s+overage 60s、2-5× 硬件余量）与 fail-open 回退反应式；**src 惰性旋钮扩展**——为 DTSP 增补执行器旋钮面（分支激活门槛随计划、卖出折扣系数、买畜时点等 plans.py 缺口清单所列），PLANNER_ENABLED=False 时行为与现役 v13.8 逐字节等价（黄金动作哈希验证，沿 ROUTE_EXECUTOR 开旗先例）；离线基准 scripts/planner_offline_bench.py --mode official 双口径裁决：主口径=DTSP ≥ 反应式（同执行器单变量，≥9/14 局中位注入点不劣），参考口径=DTSP 对 history 净执行器代差修正后不劣（修正项=同注入点反应式对 history 的 offset，报告中显式分解）；新增 tests/test_planner_contract.py（预算断言/指纹校验/fail-open 触发率/旗关等价性）；提交包经既有 build.py 确定性打包与身份链两段式登记
     owner_role: software
     depends_on: [m6-dtsp-twin]
 

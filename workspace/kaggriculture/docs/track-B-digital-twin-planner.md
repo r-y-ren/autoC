@@ -79,7 +79,8 @@ sprint_forensics_0919 的跨代法证已证明"结构由代际决定、组内胜
 | **P4 线上探针** | D6-9（至 09-28 前） | 按 online_probe_sop：每候选 ≤1 发/日、Error 即停、采样 ≥10-15 公开局裁决；**裁决轴=线上**，门槛线 = 稳定超保底锚 663；不过 → 归因修复或回退（保底锚不动） |
 | **P5 终局梯队操作** | D9-11（09-28~30） | 双提交管理：终榜唯二名额 = "天梯最高 + 本地最稳"组合（prior-art 通用惯例）；**探索项（标 exploratory，需先验证）**：新鲜提交吃 K=220 爆发期，若 P4 产生强候选，安排在 09-26/27 前后首发使其在终交前完成 ~100 局收敛；09-27 冻结一切探针 |
 
-代码隔离：Track-B 全部新文件走 `software/kaggle_simulations/agent/`（新增 planner/twin 子模块）与新 scripts/tests，**不编辑现役 src/ 九模块**（复用=import，版本钉死）；提交包构建走既有 build.py 确定性打包。
+代码隔离：Track-B 全部新文件走 `software/kaggle_simulations/agent/`（新增 planner/twin 子模块）与新 scripts/tests；提交包构建走既有 build.py 确定性打包。
+> **2026-09-19 P2 首轮裁决后修订**：official 基准诚实 FAIL（1/14 局，plan_space_gap 34/42——执行器分支激活门槛不随计划变，覆盖成 no-op）。经授权放行 **src 惰性旋钮扩展**：为 DTSP 增补激活门槛随计划/卖出折扣/买畜时点等旋钮（缺口清单见 plans.py 注释），**PLANNER_ENABLED=False 时行为与 v13.8 逐字节等价**（黄金动作哈希验证，沿 ROUTE_EXECUTOR 开旗先例）；注意 src 变更会使工作区提交包 sha 偏离已登记 v13.8（2fe9a4f1）——如需回发 Track-A 锚，必须 checkout 冻结 ref 8deac51，不得用工作区包。
 
 ## 7. 与现役冲刺（Track-A）的并行协议
 

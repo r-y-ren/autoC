@@ -5847,6 +5847,66 @@
    "value": "wheel be693e83...; kaggriculture.py bc8a5487...; kaggriculture.json a82c89c1...",
    "unit": "sha256 prefixes",
    "method": "Fail-closed fingerprint chain enforced by planner/twin.py load_engine() (vendored wheel + extracted scene files; full hashes in exports/twin/p1_fidelity_summary.md and the module constants)."
+  },
+  "m6_p2_planspace_enum_size": {
+   "value": {"day0_uninformed": 120, "day12_mixed": 120, "day25_frozen": 90},
+   "unit": "PlanSpec count (hard cap 120)",
+   "method": "plans.enumerate_plans_audited on synthetic obs summaries (2026-09-19); axes = opening A/B/C x B1/B2/B3 x C1/C2/C3 x P3 mode x P4 tier x quota {0.8,1.0,1.25} x timing {-2..+2} x sell discount {0.75,0.9}; R1-R8 audit notes in-module"
+  },
+  "m6_p2_bench_offline_episodes": {
+   "value": 14,
+   "unit": "episodes (42 injections: day 3/10/20 dawns)",
+   "method": "scripts/planner_offline_bench.py --mode official (2026-09-19): round20 first 14 renyxin-seat episodes from references/data/online-replays; reactive vs DTSP share same twin and replayed opponent (single-variable)"
+  },
+  "m6_p2_bench_dtsp_ge_reactive_injections": {
+   "value": "28/42",
+   "unit": "injection points",
+   "method": "same official run: DTSP final money >= reactive final money (tolerance 1.0) at 28 of 42 injection points"
+  },
+  "m6_p2_bench_mean_delta_vs_reactive": {
+   "value": 444.0,
+   "unit": "coins (mean per-episode mean of dtsp_vs_reactive)",
+   "method": "same official run; per-injection delta = DTSP(v13.8 + selected plan knob overrides) - reactive(v13.8 default), both driven inside P1 twin vs replayed opponent"
+  },
+  "m6_p2_bench_mean_delta_vs_history": {
+   "value": -27885.0,
+   "unit": "coins (mean of dtsp_vs_history)",
+   "method": "same official run; history truth = replay rewards of the seat actually flown in round20 (v13.6-era) -- delta mixes executor generations, caliber documented in bench module header; gate FAIL is the honest P2 verdict, attribution below"
+  },
+  "m6_p2_bench_twin_noise_max": {
+   "value": 0.0,
+   "unit": "coins (max |twin resim - truth| over 42 injections)",
+   "method": "same official run: P1 twin replaying official action stream from each injection reproduces replay rewards bit-exact (weed/shop seed from replay info.seed)"
+  },
+  "m6_p2_bench_fail_attribution": {
+   "value": {"plan_space_gap": 34, "opponent_model_gap": 5, "twin_noise": 0},
+   "unit": "failing injection points",
+   "method": "same official run; oracle reruns of top-6 projector-ranked candidates on the true executor distinguish model-misled ranking (opponent_model_gap) from weak projector->override lever (plan_space_gap)"
+  },
+  "m6_p2_bench_offline_wall_seconds": {
+   "value": 266.0,
+   "unit": "s",
+   "method": "same official run wall clock (14 episodes x 3 injections x reactive+DTSP+oracle reruns, Win10 CPython 3.14)"
+  },
+  "m6_p2_bench_smoke_pass": {
+   "value": true,
+   "unit": "bool (exit 0)",
+   "method": "scripts/planner_offline_bench.py --mode smoke (2026-09-19): 3 episodes x day-10 injection, wall 7.9s, report+summary written to exports/probes/planner_bench/"
+  },
+  "m6_p2_planner_contract_tests": {
+   "value": "38 passed in 2.72s",
+   "unit": "pytest summary",
+   "method": "python -m pytest tests/test_planner_contract.py -q (2026-09-19): PlanSpec hash/serialization, enumerate filters R1-R8, knob-override map + gap keys, selector monotonicity/tie-break, opponent models, bench injection/contrast/attribution logic via deterministic mini-stub, true-twin integration (single injection, twin_noise==0)"
+  },
+  "m6_p2_full_suite_gate": {
+   "value": "896 passed, 2 skipped in 121.15s",
+   "unit": "pytest summary",
+   "method": "python -m pytest tests/ -q (2026-09-19, includes P1 test_twin_fidelity.py and this package's 38 tests)"
+  },
+  "m6_p2_bench_report_path": {
+   "value": "software/exports/probes/planner_bench/bench_report.json (+ bench_summary.md)",
+   "unit": "artifact path",
+   "method": "official-mode report written by planner_offline_bench.py; regenerate after P1/P3 merges with: python scripts/planner_offline_bench.py --mode official"
   }
  },
  "unmeasured": {
