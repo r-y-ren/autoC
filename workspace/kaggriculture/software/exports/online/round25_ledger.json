@@ -1,0 +1,20 @@
+{
+ "schema": "online-probe-ledger/1.0",
+ "round": 25,
+ "track": "B-dtsp",
+ "candidate": {
+  "label": "v14.2-dtsp-working",
+  "pkg_sha256": "2759c84958c3137a",
+  "main_sha256": "c6183b87",
+  "git_ref": "63dbca3",
+  "submission_ref": 56370649,
+  "status": "PENDING (validation episode)",
+  "submitted_at_utc": "2026-09-19T20:08:26Z",
+  "quota_after_submit": "3 remaining today"
+ },
+ "decision": {
+  "verdict": "LAUNCH after Elo net-account veto was re-examined at pair level",
+  "reasoning": "v13.8 anchor is drifting down (600->566.7) and its accumulated rating is recoverable by re-submitting the frozen package before 09-26 (3-day reconvergence); v14.2 = v14.1 + identity guard (floor insurance for endgame pool) + wallet gates + schedule axes; main.py byte-identical to engagement-proven v14.1; its online games double as the guard A/B for the 09-27 freeze",
+  "recovery_path": "if both DTSP agents converge <560 by 09-25, re-submit v13.8 package (frozen ref 8deac51) to restore anchor by 09-29"
+ }
+}
