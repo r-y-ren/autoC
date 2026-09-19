@@ -9,3 +9,4 @@
 | 2026-09-04 | discover | **创新创业大赛方向冷启动（/discover）**：3 搜索分片（官方通知/往届金奖/全景扫描）+ 3 建条分片 + 1 winners 首样。主赛事=中国国际大学生创新大赛（2026）（教高函〔2026〕26号，报名截止 **2026-09-25 12时**），条目 cy-innovation-2026 过 schema；全景条目 tiaozhanbei-chuangye / xczxcy-dasai / 3chuang；winners 首样=知耘（2025 金奖 AI 无人农业）。锚点回填 4 条，lint 115/115。后续：登记战役产出选题与计划书。 |
 | 2026-09-16 | idle | 慢循环特例跑批 vault-distill 完成：my_LLM_valut 提炼 173 卡入 kb/tech（2 拒入台账、194 枢纽页折叠）；INDEX/简报重建，lint 300 条目 0 不合格；分支合并后 my_LLM_valut 待删（升级票06 前置校验全绿） | 无（一次性源头消化完毕） |
 | 2026-09-16 | idle | **升级收尾（票13）**：.scratch/autoc-upgrade 与升级 spec 按约定清理（git 历史留档 45ce240 起）；钩子已于 38c16b1 恢复并经彩排实测（含 CWD 发现）；契约 v10 本地=上游 | 升级工作流 01-13 全票完成 |
+| 2026-09-19 09:10 | collect | [cron-warn] 慢循环本轮中止：子 agent 供应方不可用（provider-not-found，四片无法启动，60s 后探针重试仍失败）——MLH GHW 已翻转 ended（本轮唯一完成项），队列 165 条与 watch（GOAI 9-22、XPRIZE 9-25、C4 冠军系列复查）完整顺延下轮 | 供应侧故障如实记录 |
