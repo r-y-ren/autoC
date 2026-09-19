@@ -1,0 +1,157 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 23,
+ "submission_ref": 56342843,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-19T00:26:10Z",
+ "candidate": {
+  "label": "v14.0-dtsp-working",
+  "pkg_sha256": "ee19d2c7655a85e44434ea860a354927dfa85f9009a1ca801d95cf4c9f27d127",
+  "main_sha256": "72eae27486166305e841c8b84b857034a9d100758896d0101f27b3fd487df994",
+  "git_ref": "2b856ff80a6bf14c4f49d2441db2ab20e25726ac"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round23_ledger.json",
+  "status_at_submit": "PENDING (validation episode)",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 56342843",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round23",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 603.7,
+ "validation": [
+  {
+   "id": 110616242,
+   "rewards": [
+    64370.0,
+    59496.0
+   ],
+   "integrity": "PASS"
+  }
+ ],
+ "public_sampling": {
+  "public_games": 10,
+  "record": "6W-4L",
+  "wins": 6,
+  "losses": 4,
+  "win_rate": 0.6,
+  "our_money_mean": 71354.6,
+  "opp_money_mean": 67748.1,
+  "mean_margin": 3606.5,
+  "axes": {
+   "d0_plants_ours": 9.0,
+   "d0_plants_opp": 19.9,
+   "wheat_d7_ours": 15.6,
+   "berry_d12_ours": 23.2,
+   "berry_d12_opp": 14.8,
+   "herd_d0_ours": 3.8,
+   "harvest_ours": 168.5,
+   "money_d11_ours": 549.1,
+   "money_d11_opp": 6471.5
+  },
+  "episodes": [
+   {
+    "id": 110616342,
+    "result": "L",
+    "our": 75067.0,
+    "opp": 122547.0,
+    "opp_name": "D S S Kumar",
+    "margin": -47480.0,
+    "seat": 0
+   },
+   {
+    "id": 110617446,
+    "result": "W",
+    "our": 67520.0,
+    "opp": 35673.0,
+    "opp_name": "DefiAudit",
+    "margin": 31847.0,
+    "seat": 0
+   },
+   {
+    "id": 110618538,
+    "result": "W",
+    "our": 83555.0,
+    "opp": 63064.0,
+    "opp_name": "Thomas van der Meer",
+    "margin": 20491.0,
+    "seat": 1
+   },
+   {
+    "id": 110619633,
+    "result": "L",
+    "our": 85436.0,
+    "opp": 100621.0,
+    "opp_name": "Philipp k-s",
+    "margin": -15185.0,
+    "seat": 1
+   },
+   {
+    "id": 110620722,
+    "result": "L",
+    "our": 63359.0,
+    "opp": 93995.0,
+    "opp_name": "vlad101",
+    "margin": -30636.0,
+    "seat": 1
+   },
+   {
+    "id": 110621898,
+    "result": "W",
+    "our": 65805.0,
+    "opp": 56769.0,
+    "opp_name": "Seuz",
+    "margin": 9036.0,
+    "seat": 0
+   },
+   {
+    "id": 110623033,
+    "result": "L",
+    "our": 61543.0,
+    "opp": 78200.0,
+    "opp_name": "Chirag Bhatnagar",
+    "margin": -16657.0,
+    "seat": 1
+   },
+   {
+    "id": 110624175,
+    "result": "W",
+    "our": 63105.0,
+    "opp": 47289.0,
+    "opp_name": "Hampton Yeh",
+    "margin": 15816.0,
+    "seat": 1
+   },
+   {
+    "id": 110625282,
+    "result": "W",
+    "our": 70568.0,
+    "opp": 33965.0,
+    "opp_name": "Shreyash_Automation",
+    "margin": 36603.0,
+    "seat": 0
+   },
+   {
+    "id": 110626387,
+    "result": "W",
+    "our": 77588.0,
+    "opp": 45358.0,
+    "opp_name": "Aaradhy Singhvi",
+    "margin": 32230.0,
+    "seat": 0
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 6W-4L over 10 public games; local quickwin/self-play is not this verdict."
+}
