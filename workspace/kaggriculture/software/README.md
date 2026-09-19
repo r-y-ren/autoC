@@ -128,15 +128,15 @@ python -m pytest workspace/kaggriculture/software/tests/test_p3_integration.py -
 This is producer/source-attested precomputed barcode evidence, not an independent replay reconstruction: `extractor_status=source_extractor_not_published`. `IDENTICAL / SAME SOURCE` means only 30-band anchor equality; it does not prove the same agent or a real source. DNA stability is separate from engine action liveness. The artifacts are explicitly exploratory and are not strength, promotion, holdout, online, or performance evidence. DNA outputs are restricted to `workspace/kaggriculture/software/exports/replay_dna/`, and action, observation, state, market, price, quantity, inventory, and raw trace fields are rejected recursively.
 
 <!-- ACTIVE_CANDIDATE_IDENTITY:BEGIN -->
-working_candidate_sha256=72eae27486166305e841c8b84b857034a9d100758896d0101f27b3fd487df994
+working_candidate_sha256=c6183b871f4f1c320ea064f378ae61a1335187e3df409d96de4c71438eb01191
 working_candidate_status=development
 last_promoted_frozen_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
 published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
 published_holdout_attempt_index=5
 engine=kaggle-environments 1.32.7 kaggriculture
 <!-- ACTIVE_CANDIDATE_IDENTITY:END -->
-submission_package_sha256=ee19d2c7655a85e44434ea860a354927dfa85f9009a1ca801d95cf4c9f27d127
-package_sha_provenance=P3 DTSP bot 内集成后的开发包（2026-09-19，layout pkg.2-dtsp：main.py+src/9+planner/6+scene 对，确定性打包 181894 字节；旗关黄金 6/6 与 v13.8 逐字节一致由 tests/test_planner_flagoff_equiv.py 钉住）；已登记 v13.8 线上提交包仍为 2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e（冻结 ref 8deac51）——回发 Track-A 锚必须 checkout 该 ref 重打包，不得使用本工作区包
+submission_package_sha256=116b02c897cd5ac9584bfed19601d5fb22a8759ad37c3a7886eec35d88ce0d4d
+package_sha_provenance=P4.1 接合修复后的开发包（2026-09-19，layout pkg.2-dtsp，183091 字节：main.py+src/9+planner/6+scene 对，确定性打包；main.py 装载期急切导入 planner 存 DTSP_RUNTIME_MODULE——官方 get_last_callable exec 后 pop 掉解包目录，v14.0 的回合期 sys.path 导入在线上必败=round-23 零接合根因；接合证明门 tests/test_p41_engagement_gate.py：打包形态官方语义装载+灾难局 obs 驱动 engaged=true 且 d10 后动作流与纯 v13.8 分歧）。已登记 v13.8 线上提交包仍为 2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e（冻结 ref 8deac51）——回发 Track-A 锚必须 checkout 该 ref 重打包，不得使用本工作区包；round-23 发射包（v14.0，ee19d2c7，线上零接合）已由 116b02c8 取代
 
 ## External H2H 与评级限制
 

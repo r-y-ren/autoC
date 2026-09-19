@@ -1,13 +1,13 @@
 {
  "schema_version": "1.0",
  "working": {
-  "label": "v14.0-dtsp-working",
+  "label": "v14.1-dtsp-working",
   "status": "development",
   "path": "kaggle_simulations/agent/main.py",
-  "sha256": "72eae27486166305e841c8b84b857034a9d100758896d0101f27b3fd487df994",
-  "git_ref": "2b856ff80a6bf14c4f49d2441db2ab20e25726ac",
-  "git_blob_oid": "758a5b85ae9318691efb96b58f5332d35dd5e99c",
-  "canonical_lf_sha256": "72eae27486166305e841c8b84b857034a9d100758896d0101f27b3fd487df994",
+  "sha256": "c6183b871f4f1c320ea064f378ae61a1335187e3df409d96de4c71438eb01191",
+  "git_ref": "ba352f57654d47e2eb9aec4dd02fa1f8549c5c5a",
+  "git_blob_oid": "26af911c5c575216c8f638e568907dc9f147e148",
+  "canonical_lf_sha256": "c6183b871f4f1c320ea064f378ae61a1335187e3df409d96de4c71438eb01191",
   "holdout_status": "not_run"
  },
  "last_promoted_frozen": {
@@ -40,9 +40,9 @@
  },
  "online_submission_refs": [],
  "submission_package": {
-  "note": "multi-module era (v13.1+): main.py thin loader + src/ nine modules, packaged by build.py (layout pkg.1, deterministic)",
+  "note": "multi-module era (v13.1+): main.py thin loader + src/ nine modules + planner/ six-module DTSP runtime + bundled scene pair, packaged by build.py (layout pkg.2-dtsp, deterministic). P4.1: planner import decoupled from turn-time sys.path (official loader pops exec_dir); engagement gate tests/test_p41_engagement_gate.py must pass before launch",
   "path": "kaggle_simulations/agent/submission.tar.gz",
-  "sha256": "2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e",
-  "git_ref": "8deac5112b508d80b093f4d0bb46a6d25c42201c"
+  "sha256": "116b02c897cd5ac9584bfed19601d5fb22a8759ad37c3a7886eec35d88ce0d4d",
+  "git_ref": "ba352f57654d47e2eb9aec4dd02fa1f8549c5c5a"
  }
 }
