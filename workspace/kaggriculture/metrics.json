@@ -1,5 +1,5 @@
 {
-  "_generated_at": "2026-09-19T11:14:15",
+  "_generated_at": "2026-09-20T02:17:46",
   "software": {
     "campaign": "kaggle-kaggriculture",
     "engine": {
@@ -9,7 +9,7 @@
       "scenario": "kaggriculture",
       "version": "1.32.7+nodeps (vendored, engine code unmodified)"
     },
-    "measured_at": "2026-09-19T00:00:00+00:00",
+    "measured_at": "2026-09-20T00:00:00+00:00",
     "metrics": {
       "avg_episode_runtime_seconds": {
         "method": "m0 session: mean per-game elapsed across the 40 m0 eval games",
@@ -6447,6 +6447,148 @@
             1336248557
           ],
           "sha256": "53ae26dc8c6a4da943204029ee9eefbc0e46674188869d6ad9d062f0d083f00e"
+        }
+      },
+      "p4v3_readmission_gates": {
+        "method": "scripts/v3_readmission_suite.py --mode official（三判据复裁门，2026-09-20）：判据a=planner_offline_bench official 主口径（≥9/14 局中位不劣且 mean Δ>0）；判据b=round-24 九巨人败局 d0 全季 v3 planner（runtime 全管线，K=6×H=1d 不变）挽回≥10% 需≥4/9；判据c=13 胜局损伤>5% 需≤2；附投影段<60ms 断言。对照真值=线上 DTSP v2 实际",
+        "value": {
+          "criterion_a_official_bench": {
+            "episodes_passed": 12,
+            "episodes_evaluated": 14,
+            "pooled_mean_dtsp_vs_reactive": 666.8,
+            "p26_baseline": "12/14 +782.6",
+            "passed": true
+          },
+          "criterion_b_giants": {
+            "n_recovered": 5,
+            "required": ">=4",
+            "passed": true,
+            "recovered_episodes": [
+              "110687913",
+              "110684532",
+              "110694473",
+              "110702221",
+              "110699710"
+            ],
+            "failopens": 0
+          },
+          "criterion_c_wins": {
+            "n_hurt_over_5pct": 7,
+            "allowed_max": 2,
+            "passed": false,
+            "hurt_episodes": [
+              "110682284",
+              "110683437",
+              "110692292",
+              "110693383",
+              "110695554",
+              "110696787",
+              "110790899"
+            ]
+          },
+          "projector_segment_ms": 43.9,
+          "projector_budget_ms": 60.0,
+          "overall_pass": false,
+          "verdict_note": "a/b PASS；c FAIL（7/13）——3 局塌方胜局（110683437/110695554/110696787）为 K1 d0 守成默认的结构性冲突面（线上 v2 靠早期激进扩张取胜，v3 d0-d1 投影器原生锚胜出后轨迹逐位=纯 v13.8），另 4 局为小幅主动损伤；守成支点与巨人挽回面（b 5/9）同源，动支点须协调者裁决"
+        }
+      },
+      "p4v3_giants_d0_recovery": {
+        "method": "v3_readmission_suite --mode official 判据 b：d0 全季 rollout（对手=回放真实动作），v3 final vs 线上真值，挽回=(v3-truth)/truth",
+        "value": {
+          "110677576": 0.023,
+          "110684532": 0.206,
+          "110685617": 0.0644,
+          "110687913": 0.2019,
+          "110694473": 0.2045,
+          "110699710": 0.4782,
+          "110701172": -0.0326,
+          "110702221": 0.2099,
+          "110841464": -0.149
+        }
+      },
+      "p4v3_wins_d0_regression": {
+        "method": "v3_readmission_suite --mode official 判据 c：同口径 13 胜局回归，损伤阈值 -5%",
+        "value": {
+          "110681129": 0.0428,
+          "110682284": -0.0797,
+          "110683437": -0.5558,
+          "110686759": 0.3275,
+          "110690133": 0.0063,
+          "110691193": 0.04,
+          "110692292": -0.0919,
+          "110693383": -0.0908,
+          "110695554": -0.2738,
+          "110696787": -0.2545,
+          "110697778": 0.0998,
+          "110698875": 0.5932,
+          "110790899": -0.365
+        }
+      },
+      "p4v3_selection_machinery_repairs": {
+        "method": "official 复裁 run1-4 逐局溯源（selection_provenance）定位的三处选择机构缺陷修复，各有实测损伤反证",
+        "value": {
+          "rollout_compare_set": "v2 残留=投影最优+枚举序前K（键序）；v3 修复=投影排序 top-K 且 identity 恒在（模块头文档原意）",
+          "conservative_tie_break_key": "投影等值兄弟的字典序默认曾中签 LOOSE/L+4（实测 -39.8k 灾难注入与 -27.9%~-42.0% 主动损伤）→ 键编码 LQ0/L0-first：等值时默认 STANDARD 钱包档与原生日程锚",
+          "rollout_switch_tau_veto": "rollout 改判投影最优需决定性边际（>τ×|proj_best|）——1 日地平线对日程类微差不可辨，非决定性改判=支付时点伪影抖动（法证终稿 §4 '拒收'语义落地）"
+        }
+      },
+      "p4v3_identity_guardrail": {
+        "method": "K1 true-identity 守成点：plans.identity_spec()（全轴=v13.8 原生锚）恒在枚举面；select 近平 tie-break τ=0.5% 终局资金偏向 identity；tests/test_planner_contract.py TestIdentityGuardrail + flagoff golden",
+        "value": {
+          "identity_face_keys": 54,
+          "identity_face_equals_regular_keyset": true,
+          "identity_overrides_all_native": true,
+          "enumerated_day0_plans": 111,
+          "cap": 120,
+          "near_tie_tau": 0.005,
+          "flagoff_golden_after_k2_k3": "6/6 seeds byte-identical (planner_flagoff_golden.py, 2026-09-20)"
+        }
+      },
+      "p4v3_knob_face_expansion": {
+        "method": "K2 钱包门档 _plan_knob 化：strategy.py:_cash_gate_ok（liquidity_floor）+ market.py 买畜环 reserve_total（liquidity_floor）+ market.py COW_BUY_RESERVE 尾段 d8+（cow_buy_reserve）；键面 29→31 键；d0-d7 早起动日程 800/550 冻结（反事实 V_WALLET 语义=早期影响经 liquidity_floor 通道）",
+        "value": {
+          "read_sites": [
+            "strategy._cash_gate_ok",
+            "market herd reserve_total",
+            "market cow_buy_reserve tail d8+"
+          ],
+          "liquidity_tiers": {
+            "STANDARD": [
+              350,
+              380
+            ],
+            "LOOSE": [
+              150,
+              150
+            ],
+            "UNBOUNDED": [
+              0,
+              0
+            ]
+          },
+          "value_domain_source": "round24_forensics round24_d0_counterfactual.json V_WALLET/V_WALLET0"
+        }
+      },
+      "p4v3_schedule_axes_split": {
+        "method": "K3：timing_shift 一轴双驱拆为 land_due_shift（-2/-1/0/+2/+4）× herd_due_shift（-1/0）独立轴；值域依据=P2.6 官方面选中分布（timing-1/−2 共 28/42）+ round-24 V_LAND 档=+4 + V_ALL/V_PACE 零效应（27/27、18/18）；枚举帽 ≤120 保持（111=11 槽位×10 网格+identity）",
+        "value": {
+          "land_due_shifts": [
+            -2,
+            -1,
+            0,
+            2,
+            4
+          ],
+          "herd_due_shifts": [
+            -1,
+            0
+          ],
+          "sell_discounts": [
+            0.9
+          ],
+          "sell_075_cut_rationale": "K6 卖出侧挤压非杠杆 + P2.6 42 注入点零选中",
+          "day0_plan_count": 111,
+          "slot_schedule": "证据加权 11 桶（C1×1.25/C2×0.8 等官方优胜档+三钱包档）"
         }
       }
     },

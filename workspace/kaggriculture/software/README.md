@@ -142,8 +142,10 @@ published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2
 published_holdout_attempt_index=5
 engine=kaggle-environments 1.32.7 kaggriculture
 <!-- ACTIVE_CANDIDATE_IDENTITY:END -->
-submission_package_sha256=116b02c897cd5ac9584bfed19601d5fb22a8759ad37c3a7886eec35d88ce0d4d
-package_sha_provenance=P4.1 接合修复后的开发包（2026-09-19，layout pkg.2-dtsp，183091 字节：main.py+src/9+planner/6+scene 对，确定性打包；main.py 装载期急切导入 planner 存 DTSP_RUNTIME_MODULE——官方 get_last_callable exec 后 pop 掉解包目录，v14.0 的回合期 sys.path 导入在线上必败=round-23 零接合根因；接合证明门 tests/test_p41_engagement_gate.py：打包形态官方语义装载+灾难局 obs 驱动 engaged=true 且 d10 后动作流与纯 v13.8 分歧）。已登记 v13.8 线上提交包仍为 2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e（冻结 ref 8deac51）——回发 Track-A 锚必须 checkout 该 ref 重打包，不得使用本工作区包；round-23 发射包（v14.0，ee19d2c7，线上零接合）已由 116b02c8 取代
+working_candidate_label=v14.2-dtsp-working
+working_candidate_git_ref=d50e0e5e5459bdb333d2d35a2d9004f2e75636b3
+submission_package_sha256=2759c84958c3137a447616298f3afba26c800465dc14c837e2b11a3944cf97bf
+package_sha_provenance=v14.2-dtsp 开发包（2026-09-20，layout pkg.2-dtsp，188,854 字节：main.py+src/9+planner/6+scene 对，确定性打包；main.py 装载期急切导入 planner 存 DTSP_RUNTIME_MODULE——官方 get_last_callable exec 后 pop 掉解包目录的接合修复延续 v14.1）。v14.2 内容=DTSP v3：K1 true-identity 守成档（identity_spec 原生锚候选恒在枚举面 111≤120、select 近平 tie-break τ=0.5%）+ K2 钱包门档（liquidity_floor/cow_buy_reserve 经 _plan_knob 三读取点，键面 29→31）+ K3 land/herd 日程轴拆分（timing_shift 一轴双驱解除）；复裁三判据=a 12/14 +667 PASS / b 巨人 5/9 PASS / c 胜局 7/13 FAIL（结构性，见 exports/probes/planner_bench/v3_readmission_summary.md 与 metrics p4v3_*）；发射决策在协调者。已登记 v13.8 线上提交包仍为 2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e（冻结 ref 8deac51）——回发 Track-A 锚必须 checkout 该 ref 重打包，不得使用本工作区包
 
 ## External H2H 与评级限制
 
