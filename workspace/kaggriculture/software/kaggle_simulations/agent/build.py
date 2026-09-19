@@ -151,6 +151,15 @@ def precheck():
     if "DTSP_RUNTIME_CONFIG" not in main_src:
         sys.exit("FAIL main.py must define DTSP_RUNTIME_CONFIG (P3 dawn "
                  "hook gate)")
+    # P4.1 (2026-09-19): the official loader (get_last_callable) pops the
+    # extraction dir off sys.path right after exec -- a turn-time
+    # `import planner.runtime` is dead in production (v1 zero-engagement
+    # root cause).  main.py must eagerly import the runtime during exec
+    # (while the append window is open) and stash it for the entry hook.
+    if "DTSP_RUNTIME_MODULE" not in main_src:
+        sys.exit("FAIL main.py must define DTSP_RUNTIME_MODULE (P4.1 eager "
+                 "planner import; turn-time sys.path import is dead in the "
+                 "official loader)")
     for rel in PLANNER_ORDER:
         if not (PLANNER / rel).is_file():
             sys.exit(f"FAIL missing planner member: {PLANNER / rel}")

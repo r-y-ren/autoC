@@ -3109,6 +3109,125 @@
     "safety": "2.0 (unmeasured) -> 1.25 (in-process EWMA)"
    }
   },
+  "p41_engagement_gate": {
+   "method": "tests/test_p41_engagement_gate.py：打包形态+官方 get_last_callable 装载语义（干净子进程 python -I，驱动脚本在解包目录之外）+ 灾难局 episode-110634204 obs 全季驱动；断言 trace.engaged 且 d10 后动作流与纯 v13.8 分歧。登记 v2 的前置门",
+   "value": {
+    "gate_tests": "3 passed (semantics pins / packaged-engagement / v1 evidence archive)",
+    "loader_pop_applied": true,
+    "engaged": true,
+    "n_actions": 720,
+    "n_mismatch_vs_v138": 13,
+    "mismatch_after_d10": 9,
+    "first_mismatch": {
+     "step": 146,
+     "day": 6,
+     "hour": 2
+    },
+    "failopens": 0,
+    "dawns_all_rollout": 30,
+    "pkg_sha256": "116b02c897cd5ac9584bfed19601d5fb22a8759ad37c3a7886eec35d88ce0d4d"
+   }
+  },
+  "p41_official_load_root_cause": {
+   "method": "scripts/p41_official_load_probe.py 根因定位：vendored agent.py get_last_callable 在 exec 后 sys.path.pop() 移除解包目录（L50-64 锚点钉住）；v1 黎明钩子回合期 import planner.runtime 在线上每黎明 ModuleNotFoundError → entry 静默旗关 → 19 局动作流与 v13.8 逐字节一致。候选 1（配置未注入）证伪：DTSP_RUNTIME_CONFIG 在命名空间在场；候选 2（指纹）未及执行（钩子死于导入）；候选 3（预算治理）证伪：官方 remainingOverageTime 初值 60（vendored kaggriculture.json），d0 预算=min(0.85, 0.5+60/30*0.5)=0.85s 且低预算路径非粘性",
+   "value": {
+    "root_cause": "dawn-time 'import planner.runtime' depended on exec_dir staying on sys.path after get_last_callable popped it (production, absolute-path case) -- planner never importable at turn time; entry.py silent except set PLANNER_ENABLED=False from turn 0",
+    "v1_pkg_sha256": "ee19d2c7655a85e44434ea860a354927dfa85f9009a1ca801d95cf4c9f27d127",
+    "v1_reproduction": {
+     "match_rate_vs_v138": 1.0,
+     "n_mismatch": 0,
+     "planner_in_sys_modules": false,
+     "exec_dir_on_sys_path_after_load": false,
+     "PLANNER_ENABLED": false
+    },
+    "fix": [
+     "main.py: load-time eager 'import planner.runtime as DTSP_RUNTIME_MODULE' inside the loader append window (fail-soft to None) + unconditional sys.path.insert(0, _HERE) belt",
+     "src/entry.py: hook consumes DTSP_RUNTIME_MODULE first, falls back to turn-time import, records _DTSP_HOOK_ERRORS (offline-observable)",
+     "build.py precheck pins DTSP_RUNTIME_MODULE presence"
+    ]
+   }
+  },
+  "p41_packaged_bot_probe_v2": {
+   "method": "scripts/p41_official_load_probe.py --out exports/probes/p41_engagement/official_load_probe_v2.json：修复后打包件（116b02c8）官方语义装载 + 灾难局 obs 驱动 720 回合；对照基线=纯 v13.8 同 obs 流动作",
+   "value": {
+    "pkg_sha256": "116b02c897cd5ac9584bfed19601d5fb22a8759ad37c3a7886eec35d88ce0d4d",
+    "pkg_bytes": 183091,
+    "match_rate_vs_v138": 0.9819,
+    "n_mismatch": 13,
+    "mismatch_after_d10": 9,
+    "d10_selected_plan": "P|A|B1|C1|HEALTHY|LOW|1.25|-1|0.90 (C1@1.25x(-1)x0.90 接合基准吻合)",
+    "dawn_records": 30,
+    "dawn_policy_counts": {
+     "rollout": 30
+    },
+    "dawn_max_elapsed_s": 0.6672,
+    "rung_sequence_head": [
+     [
+      1,
+      1,
+      1
+     ],
+     [
+      6,
+      1,
+      1
+     ],
+     [
+      6,
+      1,
+      1
+     ],
+     [
+      6,
+      1,
+      1
+     ],
+     [
+      6,
+      1,
+      1
+     ],
+     [
+      6,
+      1,
+      1
+     ],
+     [
+      6,
+      1,
+      1
+     ],
+     [
+      6,
+      1,
+      1
+     ],
+     [
+      1,
+      6,
+      1
+     ],
+     [
+      1,
+      6,
+      1
+     ],
+     [
+      1,
+      6,
+      1
+     ],
+     [
+      1,
+      6,
+      1
+     ]
+    ],
+    "hook_errors": [],
+    "online_observability": "known limitation: 线上无 stdout/trace 回传，接合遥测仅进程内 _TRACE + 本地打包形态门；线上验证依赖下一轮 sampling 动作流比对",
+    "dawn_wall_mean_s": 0.4777
+   }
+  },
   "r3_ablation_harness_ready": {
    "method": "scripts/ablate.py (r3-P0, 2026-08-29): paired candidate-vs-champion grid on the same (opponent, seed, seat) cell -- 9 required opponents x seeds x AB/BA x 2 sides; champion default = frozen snapshot r3_frozen_candidate.b64 sha-verified against the manifest; merge gate = new-style pool WR >= champion AND worst single-opponent WR >= champion AND disaster rate (margin < -15000) <= champion; outputs locked to exports/ablations/. Champion-vs-champion semantic smoke measured: 144 games in 453.72s, all 72 pairs exact ties (0W-0L-72T, net diff 0.0), both sides 72-0 vs pool, VERDICT MERGEABLE, exit 0 (exports/ablations/champ-vs-champ-r3p0-smoke.json). Tests: tests/test_ablate.py 11 passed (grid completeness, duplicate/foreign game rejection, pairing diff semantics, gate counterexamples incl. disaster boundary, frozen decode tamper rejection, out-path lock, real-engine champ-vs-champ tie grid)",
    "unit": "bool",

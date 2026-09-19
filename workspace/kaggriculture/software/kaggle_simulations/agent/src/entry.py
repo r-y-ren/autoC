@@ -71,19 +71,30 @@ def agent(obs):
         # never touches the decision path below.
         _opp_observer_update(obs, _get(obs, "private", {}) or {})
 
-        # DTSP 黎明钩子（P3 最小接线，2026-09-19；旗关零足迹有测试钉住）：
-        # 只在提交入口 main.py 定义了 DTSP_RUNTIME_CONFIG 的命名空间里活
-        # （旗关黄金/裸命名空间无此名字 → 死路，动作流与 v13.8 逐字节一
-        # 致）。钩子自带三道 fail-open（恢复 v13.8 快照 + PLANNER_ENABLED
-        # =False 粘性 + 遥测记因）；本 except 仅兜 runtime 模块本身不可用
-        # 的包破损情形——旗关+清寄存器，本回合照常走 v13.8 路径。
+        # DTSP 黎明钩子（P3 最小接线；P4.1 导入解耦，2026-09-19；旗关零
+        # 足迹有测试钉住）：只在提交入口 main.py 定义了 DTSP_RUNTIME_CONFIG
+        # 的命名空间里活（旗关黄金/裸命名空间无此名字 → 死路，动作流与
+        # v13.8 逐字节一致）。planner 运行时优先取 main.py 装载期急切导入
+        # 的 DTSP_RUNTIME_MODULE（P4.1：官方 loader exec 后 pop 掉解包目录，
+        # 回合期 sys.path 导入在线上必败——v1 零接合根因）；dev 命名空间
+        # 无该名字时回退回合期导入。钩子自带三道 fail-open（恢复 v13.8
+        # 快照 + PLANNER_ENABLED=False 粘性 + 遥测记因）；本 except 兜
+        # runtime 模块本身不可用的包破损情形——旗关 + 清寄存器 + 记因
+        # （_DTSP_HOOK_ERRORS：接合遥测的离线可观测通道），本回合照常走
+        # v13.8 路径。
         _dtsp_cfg = globals().get("DTSP_RUNTIME_CONFIG")
         if _dtsp_cfg:
             try:
-                import planner.runtime as _dtsp_runtime
+                _dtsp_runtime = globals().get("DTSP_RUNTIME_MODULE")
+                if _dtsp_runtime is None:
+                    import planner.runtime as _dtsp_runtime
                 _dtsp_runtime.dawn_hook(obs, globals(), _dtsp_cfg,
                                         player=player, day=day, hour=hour)
-            except Exception:
+            except Exception as _dtsp_exc:
+                _dtsp_errs = globals().setdefault("_DTSP_HOOK_ERRORS", [])
+                if isinstance(_dtsp_errs, list) and len(_dtsp_errs) < 16:
+                    _dtsp_errs.append(f"{type(_dtsp_exc).__name__}: "
+                                      f"{_dtsp_exc}")
                 globals()["PLANNER_ENABLED"] = False
                 if isinstance(globals().get("PLANNER_OVERRIDES"), dict):
                     globals()["PLANNER_OVERRIDES"].clear()

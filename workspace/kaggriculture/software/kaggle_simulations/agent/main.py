@@ -40,8 +40,13 @@ def _find_root():
 
 
 _HERE = _find_root()
-if _HERE not in sys.path:
-    sys.path.insert(0, _HERE)
+# P4.1（2026-09-19，线上零接合根因修复·腰带层）：官方 loader 是
+# append(exec_dir) → exec → pop()（vendored agent.py get_last_callable）——
+# 条件插入在"exec_dir 已在 sys.path"（官方绝对路径场景）时跳过，pop 之后
+# 整个回合期包根不可导入，黎明钩子的 planner 导入必死。无条件插入把
+# "包根全程可导入"变成结构性保证（主修复 = 下方 DTSP_RUNTIME_MODULE
+# 装载期急切导入；本插入是冗余防线，见 tests/test_p41_engagement_gate.py）。
+sys.path.insert(0, _HERE)
 
 _MODULE_ORDER = ("constants", "telemetry", "observer", "strategy",
                  "mission", "solver", "executor", "market", "entry")
@@ -84,6 +89,19 @@ def _load_pipeline():
 
 _load_pipeline()
 del _MODULE_ORDER, _load_pipeline
+
+# P4.1 主修复：装载期（loader 的 append 窗口内，包根必在 sys.path）急切
+# 导入 planner 并存进本命名空间——entry 的黎明钩子优先消费本名字，不再
+# 依赖回合期的 sys.path（官方 loader 在 exec 后已 pop 掉解包目录，v1 的
+# 回合期 import 在线上每黎明 ModuleNotFoundError → 静默旗关 → 19 局动作
+# 流与 v13.8 逐字节一致）。模块对象不可 callable，不影响
+# get_last_callable 的"最后 callable"契约（agent 仍是最后定义的 callable）。
+# 失败不致命化：置 None → 入口回退回合期导入 → 再失败走既有旗关降级。
+try:
+    import planner.runtime as DTSP_RUNTIME_MODULE
+except Exception:                          # noqa: BLE001 —— 包破损降级旗关
+    DTSP_RUNTIME_MODULE = None
+
 _agent_impl = agent          # src/entry.py 的实现
 del agent                    # 下方 def agent 重绑定为本文件最后 callable
 

@@ -29,8 +29,12 @@ import pytest
 SOFTWARE = Path(__file__).resolve().parents[1]
 if str(SOFTWARE) not in sys.path:
     sys.path.insert(0, str(SOFTWARE))
-# 模拟 main.py 的生产装载语义（包根进 sys.path）——entry 钩子在 agent()
-# 内部 `import planner.runtime`，拿到的就是本测试文件用的同一顶层实例，
+# 装载语义说明（P4.1 修订，2026-09-19）：生产路径上 main.py 在装载期
+# （loader append 窗口内）急切导入 planner 存入 DTSP_RUNTIME_MODULE——
+# 官方 get_last_callable exec 后 pop 掉解包目录，回合期 sys.path 导入在
+# 线上必败（v1 零接合根因，见 tests/test_p41_engagement_gate.py）。本
+# 测试进程把 AGENT_DIR 插进 sys.path，为的是让 bench 裸命名空间的钩子
+# 走"回合期回退导入"路径拿到与本文件相同的 planner.runtime 实例，
 # monkeypatch/断言才真正咬合。
 AGENT_DIR = SOFTWARE / "kaggle_simulations" / "agent"
 if str(AGENT_DIR) not in sys.path:

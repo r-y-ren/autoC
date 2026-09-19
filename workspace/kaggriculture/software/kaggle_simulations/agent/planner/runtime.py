@@ -78,6 +78,8 @@ _STATE = {
     "ledger": {},              # player -> 记账状态
     "dawn_cache": {},          # (player, day, signature) -> {plan, overrides}
     "last_day": {},            # player -> 上次见到的 day（换局检测）
+    "last_rung": None,         # 最近一次黎明实际执行的阶梯档 [K, H, 模型数]
+    "last_rollout_wall_s": None,   # 最近一次黎明 rollout 段实耗（秒）
 }
 
 
@@ -92,13 +94,17 @@ def reset_state():
     _STATE["ledger"].clear()
     _STATE["dawn_cache"].clear()
     _STATE["last_day"].clear()
+    _STATE["last_rung"] = None
+    _STATE["last_rollout_wall_s"] = None
 
 
 def trace():
-    """遥测只读视图（不落盘；测试与 metrics 收集消费）。"""
+    """遥测只读视图（不落盘；测试与 metrics 收集消费）。engaged=本局是否
+    至少一个黎明完成过计划注入（接合判定位；P4.1 遥测通道）。"""
     return {"dawns": list(_TRACE["dawns"]),
             "failopens": list(_TRACE["failopens"]),
-            "game_resets": _TRACE["game_resets"]}
+            "game_resets": _TRACE["game_resets"],
+            "engaged": any(d.get("selected") for d in _TRACE["dawns"])}
 
 
 def _now():
@@ -536,6 +542,9 @@ def _rollout_refinement(bundle, config, deadline, dawn_state, player,
     返回 {plan_key: {model_name: score}}（只含完成的 rollout）。"""
     n_models = max(1, len(models))
     rung = _pick_rung(config, max(0.0, deadline - _now()), n_models)
+    _STATE["last_rung"] = [int(rung[0]), int(rung[1]), int(rung[2])] \
+        if rung else None                      # 遥测：本黎明实际档位
+    _STATE["last_rollout_wall_s"] = 0.0
     if rung is None:
         return {}, 0
     k_run, h_days, m_count = rung
@@ -558,6 +567,8 @@ def _rollout_refinement(bundle, config, deadline, dawn_state, player,
                 history, horizon, deadline)
             dt = max(1e-6, _now() - t0)
             steps_total += steps
+            _STATE["last_rollout_wall_s"] = \
+                _STATE["last_rollout_wall_s"] + dt
             # 逐步成本 EWMA（剔除沙盒装载项；治理器下次选阶梯用）
             rate = max(1e-6, dt - sandbox_s) / max(1, steps)
             prev = _STATE["rate_ewma_s"] or float(_cfg(config,
@@ -653,6 +664,9 @@ def dawn_hook(obs, ns, config, player=0, day=0, hour=0):
                 record["rollouts"] = sum(len(v) for v in done.values())
                 record["steps"] = steps
                 record["policy"] = "rollout" if done else "projector_only"
+                record["rung"] = _STATE.get("last_rung")
+                record["rollout_wall_s"] = round(
+                    float(_STATE.get("last_rollout_wall_s") or 0.0), 4)
                 if done:
                     aggregates = {}
                     for key, per_model in done.items():
