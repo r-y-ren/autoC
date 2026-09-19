@@ -4,7 +4,7 @@
  "submission_ref": 56347074,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-19T16:12:31Z",
+ "captured_at_utc": "2026-09-19T21:10:59Z",
  "candidate": {
   "label": "v14.1-dtsp-working",
   "pkg_sha256": "116b02c8",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 543.1,
+ "public_score": 532.5,
  "validation": [
   {
    "id": 110676351,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 27,
-  "record": "14W-13L",
+  "public_games": 28,
+  "record": "14W-14L",
   "wins": 14,
-  "losses": 13,
-  "win_rate": 0.5185,
-  "our_money_mean": 70031.8,
-  "opp_money_mean": 62179.9,
-  "mean_margin": 7851.9,
+  "losses": 14,
+  "win_rate": 0.5,
+  "our_money_mean": 69732.7,
+  "opp_money_mean": 62348.6,
+  "mean_margin": 7384.1,
   "axes": {
    "d0_plants_ours": 9.0,
-   "d0_plants_opp": 15.2,
-   "wheat_d7_ours": 19.4,
+   "d0_plants_opp": 14.8,
+   "wheat_d7_ours": 19.3,
    "berry_d12_ours": 22.6,
-   "berry_d12_opp": 10.4,
+   "berry_d12_opp": 10.0,
    "herd_d0_ours": 4.0,
-   "harvest_ours": 166.5,
-   "money_d11_ours": 682.7,
-   "money_d11_opp": 8967.3
+   "harvest_ours": 166.1,
+   "money_d11_ours": 682.2,
+   "money_d11_opp": 9098.4
   },
   "episodes": [
    {
@@ -302,9 +302,18 @@
     "opp_name": "Sandeep Vanapalli",
     "margin": 34721.0,
     "seat": 0
+   },
+   {
+    "id": 110938813,
+    "result": "L",
+    "our": 61658.0,
+    "opp": 66905.0,
+    "opp_name": "SerenaLsr",
+    "margin": -5247.0,
+    "seat": 0
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 14W-13L over 27 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 14W-14L over 28 public games; local quickwin/self-play is not this verdict."
 }

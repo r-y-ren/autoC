@@ -1,0 +1,193 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 25,
+ "submission_ref": 56370649,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-19T21:11:07Z",
+ "candidate": {
+  "label": "v14.2-dtsp-working",
+  "pkg_sha256": "2759c84958c3137a",
+  "main_sha256": "c6183b87",
+  "git_ref": "63dbca3"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round25_ledger.json",
+  "status_at_submit": "PENDING (validation episode)",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 56370649",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round25",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 521.0,
+ "validation": [
+  {
+   "id": 110951272,
+   "rewards": [
+    50130.0,
+    49000.0
+   ],
+   "integrity": "PASS"
+  }
+ ],
+ "public_sampling": {
+  "public_games": 14,
+  "record": "7W-7L",
+  "wins": 7,
+  "losses": 7,
+  "win_rate": 0.5,
+  "our_money_mean": 64396.9,
+  "opp_money_mean": 51965.1,
+  "mean_margin": 12431.8,
+  "axes": {
+   "d0_plants_ours": 9.0,
+   "d0_plants_opp": 16.8,
+   "wheat_d7_ours": 19.0,
+   "berry_d12_ours": 13.3,
+   "berry_d12_opp": 19.0,
+   "herd_d0_ours": 4.0,
+   "harvest_ours": 172.4,
+   "money_d11_ours": 818.2,
+   "money_d11_opp": 4845.9
+  },
+  "episodes": [
+   {
+    "id": 110952481,
+    "result": "W",
+    "our": 84367.0,
+    "opp": 62483.0,
+    "opp_name": "\u52a0\u9ebb\u4e0d\u52a0\u8fa3",
+    "margin": 21884.0,
+    "seat": 0
+   },
+   {
+    "id": 110953570,
+    "result": "L",
+    "our": 39581.0,
+    "opp": 47704.0,
+    "opp_name": "isxinhe",
+    "margin": -8123.0,
+    "seat": 1
+   },
+   {
+    "id": 110954680,
+    "result": "W",
+    "our": 87760.0,
+    "opp": 17667.0,
+    "opp_name": "Nafis Fuad Shahid",
+    "margin": 70093.0,
+    "seat": 0
+   },
+   {
+    "id": 110955783,
+    "result": "L",
+    "our": 53997.0,
+    "opp": 55315.0,
+    "opp_name": "John Marinton",
+    "margin": -1318.0,
+    "seat": 1
+   },
+   {
+    "id": 110956878,
+    "result": "L",
+    "our": 65719.0,
+    "opp": 84636.0,
+    "opp_name": "vedant patnala",
+    "margin": -18917.0,
+    "seat": 0
+   },
+   {
+    "id": 110958017,
+    "result": "W",
+    "our": 87966.0,
+    "opp": 1532.0,
+    "opp_name": "Mahog",
+    "margin": 86434.0,
+    "seat": 0
+   },
+   {
+    "id": 110959124,
+    "result": "W",
+    "our": 63744.0,
+    "opp": 54348.0,
+    "opp_name": "SeriouS_K",
+    "margin": 9396.0,
+    "seat": 0
+   },
+   {
+    "id": 110960216,
+    "result": "L",
+    "our": 45083.0,
+    "opp": 51570.0,
+    "opp_name": "Isaac Menard",
+    "margin": -6487.0,
+    "seat": 1
+   },
+   {
+    "id": 110961298,
+    "result": "W",
+    "our": 53160.0,
+    "opp": 46625.0,
+    "opp_name": "Invictus",
+    "margin": 6535.0,
+    "seat": 0
+   },
+   {
+    "id": 110962435,
+    "result": "L",
+    "our": 60075.0,
+    "opp": 78556.0,
+    "opp_name": "Bhupin Thapa magar",
+    "margin": -18481.0,
+    "seat": 1
+   },
+   {
+    "id": 110963567,
+    "result": "L",
+    "our": 33670.0,
+    "opp": 45305.0,
+    "opp_name": "Dominik Toric",
+    "margin": -11635.0,
+    "seat": 0
+   },
+   {
+    "id": 110964653,
+    "result": "L",
+    "our": 72109.0,
+    "opp": 72249.0,
+    "opp_name": "\u560e\u560e\u6ef4\u8fa3\u6652",
+    "margin": -140.0,
+    "seat": 0
+   },
+   {
+    "id": 110965901,
+    "result": "W",
+    "our": 74890.0,
+    "opp": 53221.0,
+    "opp_name": "DivyanshAgg",
+    "margin": 21669.0,
+    "seat": 1
+   },
+   {
+    "id": 110967006,
+    "result": "W",
+    "our": 79435.0,
+    "opp": 56300.0,
+    "opp_name": "Tong Jiakai",
+    "margin": 23135.0,
+    "seat": 1
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 7W-7L over 14 public games; local quickwin/self-play is not this verdict."
+}
