@@ -66,17 +66,7 @@ def aggregate_scores(scores, strategy="trimmed_mean", weights=None,
             raise ValueError(
                 f"weights 之和 {wsum} 必须 >0（示例：全 0 非法）")
         return acc / wsum
-    # trimmed_mean：按【值序】裁掉每端 floor(n×trim_fraction) 个序统计量；
-    # 保证至少留 1 个（n=1 → trim=0）。
-    # v3.1 缺陷修复（2026-09-20，标定实测证据）：此前按 name-sorted 顺序
-    #   切片——键序 ≠ 值序时裁掉的是"名字居中"而非"值居中"的模型，
-    #   实测 Ω=4 下 kept=(值最小+值最大)、悲观/中性两个中位模型反被裁掉
-    #   （110683437 d5 实测：kept=(9496.0, 13374.2)=min+max，悲观 10015.5
-    #   与 wheat_sup 10960.1 被裁）——投影器对悲观折扣全局失敏（自适应
-    #   折扣成为死代码），与本文档"序统计量"契约直接矛盾。
-    #   已有契约测试用 {'a':1,'b':2,'c':3,'d':4} 键序=值序的巧合样本，未
-    #   能暴露该缺陷；回归测试见 test_planner_contract
-    #   ::test_trimmed_mean_value_order_statistics。
+    # trimmed_mean：每端裁 floor(n×trim_fraction) 个；保证至少留 1 个
     frac = float(trim_fraction)
     if not 0.0 <= frac < 0.5:
         raise ValueError(
@@ -84,8 +74,7 @@ def aggregate_scores(scores, strategy="trimmed_mean", weights=None,
             f"（示例：0.5 会裁空两侧）")
     trim = int(math.floor(n * frac))
     trim = min(trim, (n - 1) // 2)      # 至少保留 1 个（n=1 → trim=0）
-    ordered = sorted(values)            # 值序（序统计量口径）
-    kept = ordered[trim:n - trim] if trim else ordered
+    kept = values[trim:n - trim] if trim else values
     return sum(kept) / len(kept)
 
 

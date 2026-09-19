@@ -12,9 +12,7 @@
 #        文件缺失时显式 no-op 并标注——不伪造画像（铁律 4 精神）。
 #     c) PessimisticFill       悲观成交：在我方卖出时段注入对手倾销单 +
 #        成交价折扣系数（对应引擎 per-unit 锁步压价，factsheet §3
-#        kaggriculture.py:544-628；强端默认 0.75 可调；v3.1 起投影器侧
-#        折扣经 plans.pressure_discount 随对手公开态自适应——弱对手→1.0、
-#        强对手→强端值，None/冷摘要回退强端常数）。
+#        kaggriculture.py:544-628；折扣默认 0.75 可调）。
 # opp_state 契约（plain dict，模型只消费声明的键，缺键走保守分支）：
 #   history: [{"day":int, "sells":{item:qty}, "animal_buys":int}, ...]
 #            对手逐日已观测动作（回放/observer 账本提取）
@@ -30,8 +28,6 @@
 import json
 import math
 import os
-
-from . import plans as _plans
 
 PASS_ACTION = {"farmer": ["PASS"], "hands": [], "market": []}
 
@@ -328,30 +324,14 @@ class PessimisticFill(OpponentModel):
         return action
 
     def supply_pressure(self, obs_summary):
-        """投影器口径：我方全部可售线按折扣计（对手可能在我任意卖出日倾销）。
-
-        v3.1 对手压力自适应：折扣从全局常数改为对手压力函数
-        plans.pressure_discount（obs_summary 携带对手公开畜群/象限/资金
-        ——弱对手→折扣→1.0 激进计划按真值评分、强对手→本模型
-        price_discount 守成端不变）。obs_summary=None（rollout 余季延续
-        段）或摘要无 day/对手键（冷摘要）→ 先验窗/回退路径 = 守旧常数
-        （保守，与 v14.2 语义一致）。"""
-        disc = self.price_discount
-        if obs_summary is not None:
-            try:
-                disc = _plans.pressure_discount(obs_summary,
-                                                strong=self.price_discount)
-            except (TypeError, ValueError):
-                disc = self.price_discount      # 非法摘要回退守旧（fail-closed）
-        return {"STRAWBERRY": disc, "MELON": disc,
-                "CARROT": disc, "WHEAT": disc,
-                "HERD": disc}
+        # 投影器口径：我方全部可售线按折扣计（对手可能在我任意卖出日倾销）
+        return {"STRAWBERRY": self.price_discount, "MELON": self.price_discount,
+                "CARROT": self.price_discount, "WHEAT": self.price_discount,
+                "HERD": self.price_discount}
 
     def describe(self):
         return (f"悲观成交：倾销比 {self.dump_ratio}×我方计划卖量、"
-                f"成交价折扣 {self.price_discount} 强端（v3.1 对手压力"
-                f"自适应：disc=1-(1-{self.price_discount})×s(对手公开态)，"
-                f"自适应={_plans.PRESSURE_ADAPTIVE}）")
+                f"成交价折扣 {self.price_discount}（per-unit 锁步压价口径）")
 
 
 def build_default_models(history=None, profile_path=None,

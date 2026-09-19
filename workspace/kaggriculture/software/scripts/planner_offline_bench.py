@@ -355,14 +355,12 @@ def build_obs_summary_from_state(deps, state, me_seat, day):
     demand = compute_town_demand(deps["shops"], unlocked,
                                  towncenter_products=deps["towncenter"])
     mine_crops, mine_herd, mine_money, quads = scan_farm(farms[me_seat])
-    opp_crops, opp_herd, opp_money, opp_quads = scan_farm(
-        farms[1 - me_seat])
+    opp_crops, opp_herd, opp_money, _ = scan_farm(farms[1 - me_seat])
     opp_class = plans.classify_opponent_opening(day, opp_herd, opp_crops)
     return plans.build_obs_summary(
         day=day, money=mine_money, herd=mine_herd, crops=mine_crops,
         unlocked_quadrants=quads, prices=prices, daily_demand=demand,
-        opponent={"herd": opp_herd, "crops": opp_crops, "money": opp_money,
-                  "quads": opp_quads},
+        opponent={"herd": opp_herd, "crops": opp_crops, "money": opp_money},
         opp_class=opp_class)
 
 

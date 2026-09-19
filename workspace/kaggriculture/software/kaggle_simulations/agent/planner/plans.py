@@ -6,9 +6,7 @@
 #   × P3 运行态 × P4 出清档；连续缩放轴 = 作物配额 ±25% × 买地日程
 #   land_due_shift × 买畜日程 herd_due_shift（K3 拆分）× 卖出曲线折扣；
 #   v3 新轴 = 钱包门档 liquidity_tier（K2）+ true-identity 守成点
-#   identity（K1）；v3.1 = 对手压力自适应悲观折扣（PRESSURE_* 函数族，
-#   opponents.PessimisticFill.supply_pressure 消费）+ 钱包档流动性风险
-#   罚分（project_season 评分项），并提供三件公开机制：
+#   identity（K1）），并提供三件公开机制：
 #     1) enumerate_plans(obs_summary) -> list[PlanSpec]
 #        按局况粗过滤到 <=120 个候选（含恒在的 identity 守成点）；过滤
 #        规则 R1-R9 逐条显式可审计（返回侧带 enumerate_plans_audited
@@ -57,55 +55,6 @@ SELL_DISCOUNTS = (0.9,)                   # 卖出曲线折扣（悲观成交裕
                                           #   非杠杆（胜局对称性 11/12 对手实
                                           #   现价更高）且 P2.6 42 注入点零选中
 MAX_PLAN_CANDIDATES = 120                 # enumerate 硬上限（任务包）
-# --------------------------------------------------------------------------
-# v3.1 对手压力自适应悲观折扣（2026-09-20，任务包 v3.1）
-# --------------------------------------------------------------------------
-# 机制：投影器的悲观成交折扣从全局常数 0.75 改为对手压力函数——
-#   disc = 1 - (1 - PRESSURE_DISC_STRONG) × s，s=对手压力强度 ∈ [0,1]。
-#   弱对手 → s→0 → disc→1.0（激进计划按真值评分）；强对手 → s→1 →
-#   disc=0.75（守成，与 v14.2 全局常数语义一致——硬约束：强端不变）。
-# 信号源（obs 全公开，纯函数、确定性）：
-#   s = max(s_herd, s_quads[, s_money])
-#     s_herd  = clamp(对手公开畜群 / PRESSURE_HERD_REF, 0, 1)
-#     s_quads = clamp((对手象限数 - 1) / (PRESSURE_QUAD_REF - 1), 0, 1)
-#     s_money = clamp((对手资金 - max(我方资金, PRESSURE_MONEY_FLOOR))
-#                     / PRESSURE_MONEY_GAP_REF, 0, 1)   （默认关：见下）
-#   先验窗：day <= PRESSURE_PRIOR_DAYS 时 s=1（开局承诺窗 d0-d1 保持
-#   v14.2 全悲观语义——d0-d2 的 identity 守成选择是判据 b 挽回结构面；
-#   该窗内对手产能基座尚不可观测，无证据可放松悲观先验）。
-# 标定证据（预登记依据，exports/probes/planner_bench/v31_pressure_calibration/）：
-#   1) 资金差信号默认关闭：22 局逐日轨迹实测，囤钱型弱对手（110683437
-#      d13 对手 8.1k/我方 0.4k、110698875 d20 28.2k/2H、110692292 27k）
-#      与巨人（6.3-40k）在相对资金上不可区分（12x-117x vs 8.8x-43x 交叠）
-#      ——资金是"未再投资"信号不是"压价能力"信号；产能基座（畜群/象限）
-#      才是对手未来倾销量的代理变量。
-#   2) 畜群/象限参考值进标定网格 {8,12}×{3}，由 smoke 子集选参后烘焙。
-PRESSURE_ADAPTIVE = True                   # False=回退 v14.2 全局常数语义
-PRESSURE_DISC_STRONG = 0.75                # 强对手端（=原全局常数；硬约束）
-# 以下三值为 v3.1 标定烘焙（exports/probes/planner_bench/
-#   v31_pressure_calibration/v31_calibration.json，预登记网格 C0a/C0b/
-#   C1-C8 × smoke 6 局选参，选中 C8_open_H12_L3；tie-break ② 方向修正
-#   记录见该 JSON reselection_note）：
-PRESSURE_HERD_REF = 12.0                   # 标定网格 {8,12} → 烘焙 12
-PRESSURE_QUAD_REF = 3                      # 象限参考（1 象限=0，3+ 象限=1）
-PRESSURE_MONEY_GAP_REF = None              # None=资金差信号关（标定证据 1）
-PRESSURE_MONEY_FLOOR = 1000.0              # 我方资金低于此按此计（防除零/防
-                                           #   双弱局名义高比值）
-PRESSURE_PRIOR_DAYS = -1                   # 标定选中"open"（无先验窗；
-                                           #   day<=-1 恒假）——smoke 实测
-                                           #   d0-d1 开窗与否零选局效应；
-                                           #   网格含 gated(PRIOR=1) 对照
-PRESSURE_LIQ_PENALTY = 0.3                 # K2 钱包档可见性（标定网格 {0,0.3}
-                                           #   → 烘焙 0.3）：非 STANDARD 档
-                                           #   计划在投影器内按"模型现金轨迹
-                                           #   跌破 STANDARD 地板的 $·日面积
-                                           #   × 系数"记流动性风险罚分——
-                                           #   v14.2 复裁实测 LOOSE 档灾难注
-                                           #   入（-39.8k）与塌方局 LQ1 选中
-                                           #   （110683437/110695554 d2-d6）
-                                           #   的评分级补丁（非结构改动）；
-                                           #   标定实测其对 smoke 巨人侧唯一
-                                           #   正效应（110841464 -14.9%→+6.2%）。
 # K2 钱包门档（round-24 反事实值域，V_WALLET/V_WALLET0 实测档）：
 #   STANDARD=v13.8 冻结值（LIQUIDITY_FLOOR=350 / COW_BUY_RESERVE=380）；
 #   LOOSE=150/150（V_WALLET：单轴最优 3/9 局）；
@@ -356,8 +305,7 @@ class PlanSpec:
 #   unlocked_quadrants: int       已解锁象限数（1-4）
 #   prices: {item: float}         现价（obs.market.prices）
 #   daily_demand: {item: float}   城镇期望日吸收（调用方由引擎 SHOPS 表算）
-#   opponent: {"herd":int,"crops":{...},"money":float,"quads":int}
-#             （v3.1 起含 quads=对手已解锁象限数——压力函数信号源；缺省 1）
+#   opponent: {"herd":int,"crops":{...},"money":float}
 #   opening_played: str|None      历史实际走过的开局变体（R1 过滤用）
 #   opp_class: str|None           对手 d0 分类（burst/reduced/deferred/
 #                                 melon_first；v1.5 §4.1 分类器口径）
@@ -382,10 +330,8 @@ def build_obs_summary(day, money, herd, crops, unlocked_quadrants,
                 f"crops 键 {k!r} 不在 {_DEFAULT_CROPS} 内"
                 f"（示例：'PUMPKIN' 应为 'MELON'）")
         crops_full[k] = int(v)
-    opp = {"herd": 0, "crops": dict(_DEFAULT_CROPS), "money": 0.0, "quads": 1}
+    opp = {"herd": 0, "crops": dict(_DEFAULT_CROPS), "money": 0.0}
     opp.update(opponent or {})
-    if "quads" not in opp:
-        opp["quads"] = 1                     # 缺省保守：单象限（弱信号）
     return {
         "day": int(day), "money": float(money), "herd": int(herd),
         "crew": int(crew), "crops": crops_full,
@@ -981,72 +927,6 @@ def plan_to_knob_overrides(plan: PlanSpec) -> dict:
 
 
 # --------------------------------------------------------------------------
-# v3.1 对手压力强度与折扣（纯函数；opponents.PessimisticFill 消费）
-# --------------------------------------------------------------------------
-
-
-def _clamp01(value):
-    return max(0.0, min(1.0, float(value)))
-
-
-def pressure_strength(obs_summary, herd_ref=None, quad_ref=None,
-                      money_gap_ref=None, prior_days=None):
-    """对手压力强度 s ∈ [0,1]（obs 全公开量、确定性纯函数）。
-
-    s=0 → 折扣=1.0（弱对手：激进计划按真值评分）；s=1 → 折扣=
-    PRESSURE_DISC_STRONG（强对手：守成，与 v14.2 全局常数一致）。
-    分量 = max(畜群, 象限[, 资金差])——单一强信号即足（悲观立场不取
-    均值稀释）。day <= prior_days（先验窗）恒 s=1：开局承诺窗对手产能
-    基座不可观测，保持全悲观先验（判据 b 挽回结构面，v3.1 标定依据）。"""
-    if not PRESSURE_ADAPTIVE:
-        return 1.0
-    day = int((obs_summary or {}).get("day", 0))
-    window = int(prior_days if prior_days is not None
-                 else PRESSURE_PRIOR_DAYS)
-    if day <= window:
-        return 1.0
-    opp = (obs_summary or {}).get("opponent") or {}
-    h_ref = float(herd_ref if herd_ref is not None else PRESSURE_HERD_REF)
-    q_ref = int(quad_ref if quad_ref is not None else PRESSURE_QUAD_REF)
-    if h_ref <= 0 or q_ref <= 1:
-        raise ValueError(
-            f"pressure_strength 参考值非法 herd_ref={h_ref!r} "
-            f"quad_ref={q_ref!r}（须 herd_ref>0 且 quad_ref>1；示例："
-            f"herd_ref=10, quad_ref=3）")
-    s_herd = _clamp01(float(opp.get("herd", 0) or 0) / h_ref)
-    s_quads = _clamp01((float(opp.get("quads", 1) or 1) - 1.0)
-                       / float(q_ref - 1))
-    strength = max(s_herd, s_quads)
-    gap_ref = money_gap_ref if money_gap_ref is not None \
-        else PRESSURE_MONEY_GAP_REF
-    if gap_ref is not None:
-        my_money = max(float((obs_summary or {}).get("money", 0.0) or 0.0),
-                       float(PRESSURE_MONEY_FLOOR))
-        opp_money = float(opp.get("money", 0.0) or 0.0)
-        s_money = _clamp01((opp_money - my_money) / float(gap_ref))
-        strength = max(strength, s_money)
-    return strength
-
-
-def pressure_discount(obs_summary, strong=None, herd_ref=None, quad_ref=None,
-                      money_gap_ref=None, prior_days=None):
-    """对手压力自适应悲观折扣 ∈ [strong, 1.0]（确定性纯函数）。
-
-    strong 缺省=PRESSURE_DISC_STRONG（0.75，v14.2 全局常数——强端硬约束
-    不变）。adaptive 关断或先验窗内 → strong（v14.2 语义回退面）。"""
-    s_strong = float(strong if strong is not None else PRESSURE_DISC_STRONG)
-    if not PRESSURE_ADAPTIVE:
-        return s_strong
-    strength = pressure_strength(obs_summary, herd_ref=herd_ref,
-                                 quad_ref=quad_ref, money_gap_ref=money_gap_ref,
-                                 prior_days=prior_days)
-    return 1.0 - (1.0 - s_strong) * strength
-
-
-
-
-
-# --------------------------------------------------------------------------
 # 整季经济投影器（相对排序机器；绝对数字以孪生 rollout 为准）
 # --------------------------------------------------------------------------
 
@@ -1077,19 +957,8 @@ def project_season(plan: PlanSpec, obs_summary, pressure=None) -> float:
             K2 钱包门档对本投影器不可见（无钱包地板建模）——liquidity
             轴的裁决完全依赖孪生 rollout 终审与 bench 口径。
     pressure: {item: factor}（对手模型供给压价系数，(0,1]；缺省全 1.0）。
-    v3.1 钱包档可见性（评分项）：liquidity_tier != STANDARD 的计划按
-      PRESSURE_LIQ_PENALTY × max(0, STANDARD 地板 - 模型逐日现金) 的
-      $·日面积记流动性风险罚分（LOOSE/UNBOUNDED 地板更低的执行风险在
-      投影器的同尺度表达；v14.2 实测 LOOSE 档 -39.8k 灾难注入与塌方局
-      LQ1 选中的评分级补丁，标定网格定系数）。0 = 关（v14.2 语义）。
     """
     pr = dict(pressure or {})
-    liq_penalty = float(PRESSURE_LIQ_PENALTY)
-    liq_floor = float(LIQUIDITY_PACKS["STANDARD"]["liquidity_floor"])
-    liq_risky = plan.liquidity_tier != "STANDARD" and liq_penalty > 0.0
-    liq_shortfall_area = 0.0     # 模型现金轨迹跌破 STANDARD 地板的 $·日面积
-                                 # （在无罚分轨迹上计量——罚分不进基线，
-                                 #   防逐日复利爆炸；季末一次性扣除）
     t = plan_targets(plan)
     day0 = int(obs_summary.get("day", 0))
     money = float(obs_summary.get("money", 0.0))
@@ -1194,10 +1063,6 @@ def project_season(plan: PlanSpec, obs_summary, pressure=None) -> float:
         feed_gap = max(0.0, herd_target - wheat_prod)
         money -= feed_gap * ROLLOUT_FEED_PRICE
 
-        # —— v3.1 钱包档流动性风险计量（无罚分轨迹上的逐日 shortfall）——
-        if liq_risky and money < liq_floor:
-            liq_shortfall_area += liq_floor - money
-
         # —— 种子成本（小麦 2 日周期 → 5/格/日 恒常；莓/瓜=建植一次性，
         #     只在建设窗 [day0, day0+build_span) 内摊入——P2.6 修正：修正前
         #     该项漏了窗口守卫、被逐日重复计到季末，d10 宽档幻影种子成本
@@ -1211,22 +1076,4 @@ def project_season(plan: PlanSpec, obs_summary, pressure=None) -> float:
             money -= max(0.0, melon - melon0) * SEED_PRICES["MELON"] \
                 / build_span
 
-    return float(money - liq_shortfall_area * liq_penalty)
-
-
-# --------------------------------------------------------------------------
-# v3.1 机制自检锚（确定性；标定报告与契约测试共用）
-# --------------------------------------------------------------------------
-
-
-def pressure_discount_note(obs_summary):
-    """审计注记：给定局况的压力折扣决策归因（不进评分路径）。"""
-    disc = pressure_discount(obs_summary)
-    s = pressure_strength(obs_summary)
-    return {"day": int((obs_summary or {}).get("day", 0)),
-            "strength": round(s, 4), "discount": round(disc, 4),
-            "adaptive": bool(PRESSURE_ADAPTIVE),
-            "herd_ref": float(PRESSURE_HERD_REF),
-            "quad_ref": int(PRESSURE_QUAD_REF),
-            "money_gap_ref": PRESSURE_MONEY_GAP_REF,
-            "prior_days": int(PRESSURE_PRIOR_DAYS)}
+    return float(money)
