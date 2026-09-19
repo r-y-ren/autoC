@@ -43,14 +43,17 @@ def norm_action(a):
 
 
 def main():
-    files = sorted(f for f in os.listdir(REPLAY_DIR)
+    # argv[1] 可覆盖回放目录、argv[2] 可覆盖输出路径（默认仍为 round23）
+    replay_dir = sys.argv[1] if len(sys.argv) > 1 else REPLAY_DIR
+    out_path = sys.argv[2] if len(sys.argv) > 2 else OUT
+    files = sorted(f for f in os.listdir(replay_dir)
                    if f.startswith("episode-") and f.endswith(".json"))
     rows = []
     for fn in files:
         # 每局全新命名空间（对齐官方每局独立进程语义；防跨局内部态污染）
         ns, _applied, _skipped = bench.build_v13_namespace(None)
         agent_fn = ns["agent"]
-        with open(os.path.join(REPLAY_DIR, fn), "r", encoding="utf-8") as h:
+        with open(os.path.join(replay_dir, fn), "r", encoding="utf-8") as h:
             replay = json.load(h)
         teams = list((replay.get("info") or {}).get("TeamNames") or [])
         if TEAM not in teams or teams[0] == teams[1]:
@@ -85,10 +88,10 @@ def main():
                      "mismatch_days": dict(mm_days)})
         print(f"{fn}: match {match}/{total} = {rate:.1%} "
               f"first_mm={first_mm} days={dict(sorted(mm_days.items())[:8])}")
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with open(OUT, "w", encoding="utf-8") as h:
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as h:
         json.dump(rows, h, ensure_ascii=False, indent=1)
-    print(f"wrote {OUT}")
+    print(f"wrote {out_path}")
     return 0
 
 

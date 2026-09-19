@@ -1,0 +1,184 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 24,
+ "submission_ref": 56347074,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-19T04:21:13Z",
+ "candidate": {
+  "label": "v14.1-dtsp-working",
+  "pkg_sha256": "116b02c8",
+  "main_sha256": "c6183b87",
+  "git_ref": "ba352f5"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round24_ledger.json",
+  "status_at_submit": "PENDING (validation episode)",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 56347074",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round24",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 508.2,
+ "validation": [
+  {
+   "id": 110676351,
+   "rewards": [
+    56998.0,
+    51600.0
+   ],
+   "integrity": "PASS"
+  }
+ ],
+ "public_sampling": {
+  "public_games": 13,
+  "record": "6W-7L",
+  "wins": 6,
+  "losses": 7,
+  "win_rate": 0.4615,
+  "our_money_mean": 69187.0,
+  "opp_money_mean": 60821.7,
+  "mean_margin": 8365.3,
+  "axes": {
+   "d0_plants_ours": 9.0,
+   "d0_plants_opp": 14.9,
+   "wheat_d7_ours": 18.8,
+   "berry_d12_ours": 22.8,
+   "berry_d12_opp": 10.6,
+   "herd_d0_ours": 4.0,
+   "harvest_ours": 164.9,
+   "money_d11_ours": 659.8,
+   "money_d11_opp": 9271.8
+  },
+  "episodes": [
+   {
+    "id": 110677576,
+    "result": "L",
+    "our": 58603.0,
+    "opp": 104670.0,
+    "opp_name": "Krishnan CS",
+    "margin": -46067.0,
+    "seat": 0
+   },
+   {
+    "id": 110678765,
+    "result": "L",
+    "our": 81143.0,
+    "opp": 81506.0,
+    "opp_name": "pwdh2026",
+    "margin": -363.0,
+    "seat": 1
+   },
+   {
+    "id": 110679941,
+    "result": "L",
+    "our": 53167.0,
+    "opp": 63782.0,
+    "opp_name": "Great Okwuma",
+    "margin": -10615.0,
+    "seat": 1
+   },
+   {
+    "id": 110681129,
+    "result": "W",
+    "our": 80250.0,
+    "opp": 26431.0,
+    "opp_name": "Fritz Adelbertus",
+    "margin": 53819.0,
+    "seat": 0
+   },
+   {
+    "id": 110682284,
+    "result": "W",
+    "our": 85899.0,
+    "opp": 53718.0,
+    "opp_name": "Lithole Munangiwa",
+    "margin": 32181.0,
+    "seat": 0
+   },
+   {
+    "id": 110683437,
+    "result": "W",
+    "our": 86358.0,
+    "opp": 39882.0,
+    "opp_name": "moo_&yuu1",
+    "margin": 46476.0,
+    "seat": 1
+   },
+   {
+    "id": 110684532,
+    "result": "L",
+    "our": 51649.0,
+    "opp": 96903.0,
+    "opp_name": "jaepyeocho",
+    "margin": -45254.0,
+    "seat": 0
+   },
+   {
+    "id": 110685617,
+    "result": "L",
+    "our": 69780.0,
+    "opp": 88857.0,
+    "opp_name": "Rockstar Farmer",
+    "margin": -19077.0,
+    "seat": 0
+   },
+   {
+    "id": 110686759,
+    "result": "W",
+    "our": 55376.0,
+    "opp": 31124.0,
+    "opp_name": "Aayush Bansal",
+    "margin": 24252.0,
+    "seat": 1
+   },
+   {
+    "id": 110687913,
+    "result": "L",
+    "our": 66014.0,
+    "opp": 115767.0,
+    "opp_name": "sowhatwillwelearn",
+    "margin": -49753.0,
+    "seat": 0
+   },
+   {
+    "id": 110689244,
+    "result": "L",
+    "our": 55663.0,
+    "opp": 56694.0,
+    "opp_name": "Katherine_2002",
+    "margin": -1031.0,
+    "seat": 0
+   },
+   {
+    "id": 110690133,
+    "result": "W",
+    "our": 76585.0,
+    "opp": 1773.0,
+    "opp_name": "yaphanqiii",
+    "margin": 74812.0,
+    "seat": 0
+   },
+   {
+    "id": 110691193,
+    "result": "W",
+    "our": 78944.0,
+    "opp": 29575.0,
+    "opp_name": "Dwi Eflatino",
+    "margin": 49369.0,
+    "seat": 0
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 6W-7L over 13 public games; local quickwin/self-play is not this verdict."
+}
