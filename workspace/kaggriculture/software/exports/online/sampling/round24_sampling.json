@@ -4,7 +4,7 @@
  "submission_ref": 56347074,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-19T14:55:23Z",
+ "captured_at_utc": "2026-09-19T16:12:31Z",
  "candidate": {
   "label": "v14.1-dtsp-working",
   "pkg_sha256": "116b02c8",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 535.2,
+ "public_score": 543.1,
  "validation": [
   {
    "id": 110676351,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 26,
-  "record": "13W-13L",
-  "wins": 13,
+  "public_games": 27,
+  "record": "14W-13L",
+  "wins": 14,
   "losses": 13,
-  "win_rate": 0.5,
-  "our_money_mean": 69962.3,
-  "opp_money_mean": 63143.8,
-  "mean_margin": 6818.5,
+  "win_rate": 0.5185,
+  "our_money_mean": 70031.8,
+  "opp_money_mean": 62179.9,
+  "mean_margin": 7851.9,
   "axes": {
    "d0_plants_ours": 9.0,
-   "d0_plants_opp": 15.5,
-   "wheat_d7_ours": 19.2,
-   "berry_d12_ours": 22.7,
-   "berry_d12_opp": 10.8,
+   "d0_plants_opp": 15.2,
+   "wheat_d7_ours": 19.4,
+   "berry_d12_ours": 22.6,
+   "berry_d12_opp": 10.4,
    "herd_d0_ours": 4.0,
-   "harvest_ours": 166.3,
-   "money_d11_ours": 677.6,
-   "money_d11_opp": 9309.7
+   "harvest_ours": 166.5,
+   "money_d11_ours": 682.7,
+   "money_d11_opp": 8967.3
   },
   "episodes": [
    {
@@ -293,9 +293,18 @@
     "opp_name": "Lazy Lagoon",
     "margin": -11626.0,
     "seat": 0
+   },
+   {
+    "id": 110880888,
+    "result": "W",
+    "our": 71838.0,
+    "opp": 37117.0,
+    "opp_name": "Sandeep Vanapalli",
+    "margin": 34721.0,
+    "seat": 0
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 13W-13L over 26 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 14W-13L over 27 public games; local quickwin/self-play is not this verdict."
 }
