@@ -4,7 +4,7 @@
  "submission_ref": 56347074,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-19T04:21:13Z",
+ "captured_at_utc": "2026-09-19T08:26:32Z",
  "candidate": {
   "label": "v14.1-dtsp-working",
   "pkg_sha256": "116b02c8",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 508.2,
+ "public_score": 533.9,
  "validation": [
   {
    "id": 110676351,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 13,
-  "record": "6W-7L",
-  "wins": 6,
-  "losses": 7,
-  "win_rate": 0.4615,
-  "our_money_mean": 69187.0,
-  "opp_money_mean": 60821.7,
-  "mean_margin": 8365.3,
+  "public_games": 24,
+  "record": "12W-12L",
+  "wins": 12,
+  "losses": 12,
+  "win_rate": 0.5,
+  "our_money_mean": 69354.3,
+  "opp_money_mean": 62067.3,
+  "mean_margin": 7287.0,
   "axes": {
    "d0_plants_ours": 9.0,
-   "d0_plants_opp": 14.9,
-   "wheat_d7_ours": 18.8,
-   "berry_d12_ours": 22.8,
-   "berry_d12_opp": 10.6,
+   "d0_plants_opp": 15.2,
+   "wheat_d7_ours": 19.1,
+   "berry_d12_ours": 22.7,
+   "berry_d12_opp": 9.8,
    "herd_d0_ours": 4.0,
-   "harvest_ours": 164.9,
-   "money_d11_ours": 659.8,
-   "money_d11_opp": 9271.8
+   "harvest_ours": 166.0,
+   "money_d11_ours": 666.7,
+   "money_d11_opp": 9559.4
   },
   "episodes": [
    {
@@ -176,9 +176,108 @@
     "opp_name": "Dwi Eflatino",
     "margin": 49369.0,
     "seat": 0
+   },
+   {
+    "id": 110692292,
+    "result": "W",
+    "our": 72323.0,
+    "opp": 56495.0,
+    "opp_name": "Marc Dakuginow",
+    "margin": 15828.0,
+    "seat": 0
+   },
+   {
+    "id": 110693383,
+    "result": "W",
+    "our": 74192.0,
+    "opp": 52270.0,
+    "opp_name": "stathis maurog",
+    "margin": 21922.0,
+    "seat": 0
+   },
+   {
+    "id": 110694473,
+    "result": "L",
+    "our": 63830.0,
+    "opp": 86258.0,
+    "opp_name": "el_dedalus",
+    "margin": -22428.0,
+    "seat": 0
+   },
+   {
+    "id": 110695554,
+    "result": "W",
+    "our": 74970.0,
+    "opp": 51297.0,
+    "opp_name": "Felipe Chiarini",
+    "margin": 23673.0,
+    "seat": 1
+   },
+   {
+    "id": 110696787,
+    "result": "W",
+    "our": 78850.0,
+    "opp": 51228.0,
+    "opp_name": "taijiu int",
+    "margin": 27622.0,
+    "seat": 1
+   },
+   {
+    "id": 110697778,
+    "result": "W",
+    "our": 68359.0,
+    "opp": 23628.0,
+    "opp_name": "Soham Dave",
+    "margin": 44731.0,
+    "seat": 1
+   },
+   {
+    "id": 110698875,
+    "result": "W",
+    "our": 50148.0,
+    "opp": 42185.0,
+    "opp_name": "2023314806_\uc774\uc2b9\ubbfc",
+    "margin": 7963.0,
+    "seat": 0
+   },
+   {
+    "id": 110699710,
+    "result": "L",
+    "our": 67069.0,
+    "opp": 86696.0,
+    "opp_name": "Umkaaa",
+    "margin": -19627.0,
+    "seat": 1
+   },
+   {
+    "id": 110701172,
+    "result": "L",
+    "our": 80541.0,
+    "opp": 88651.0,
+    "opp_name": "Pipeweed",
+    "margin": -8110.0,
+    "seat": 0
+   },
+   {
+    "id": 110702221,
+    "result": "L",
+    "our": 69913.0,
+    "opp": 92224.0,
+    "opp_name": "Dziriyin wa9il",
+    "margin": -22311.0,
+    "seat": 1
+   },
+   {
+    "id": 110741693,
+    "result": "L",
+    "our": 64877.0,
+    "opp": 68001.0,
+    "opp_name": "dvv_ram",
+    "margin": -3124.0,
+    "seat": 1
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 6W-7L over 13 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 12W-12L over 24 public games; local quickwin/self-play is not this verdict."
 }
