@@ -14,12 +14,15 @@
 #        唤醒；裸命名空间（旗关黄金/多数单测）不含该名字，钩子死路——
 #        src 九模块的旗关等价不因本文件存在而变。
 #     4) 不写日志文件：遥测进进程内 _TRACE 结构（提交包零 I/O）。
-# 选择管线（钉死默认 = P2.6 终局裁决配置 + 预算内的孪生精化段）：
-#   组装 obs 摘要 → enumerate_plans(≤120) → 现任投影器 × Ω=4 压力打分
-#   → robust_select(trimmed_mean@0.25, 悲观折扣 0.75) → 投影 top-K →
-#   孪生 rollout（K×Ω' 子集：沙盒命名空间驱动我方席 + 对手模型日计划
-#   逐回合滴灌；地平线 H 天；得分 = 地平线资金 + 投影器余季延续）→
-#   完成者中 argmax → plan_to_knob_overrides 注入。
+# 选择管线（钉死默认 = P2.6 终局裁决配置 + 预算内的孪生精化段；v3 K1
+#   近平守成：投影与 rollout 两段均带 identity tie-break，边际 <τ 不偏离
+#   v13.8——round-24 法证终稿 §5 第 0 项）：
+#   组装 obs 摘要 → enumerate_plans(≤120，含 identity) → 现任投影器 ×
+#   Ω=4 压力打分 → robust_select(trimmed_mean@0.25, 悲观折扣 0.75,
+#   identity_key) → 投影排序 top-K（identity 恒在）→ 孪生 rollout
+#   （K×Ω' 子集：沙盒命名空间驱动我方席 + 对手模型日计划逐回合滴灌；
+#   地平线 H 天；得分 = 地平线资金 + 投影器余季延续）→ 完成者中 argmax
+#   （近平守成回落 identity）→ plan_to_knob_overrides 注入。
 # K/H 由实测曲线裁剪：本机实测（exports/probes/p3_integration/）沙盒装载
 #   37.6ms、投影全段 34.1ms、agent 逐步 1.5-2.1ms——全季 agent 驱动
 #   rollout ≈1.2s 出不进 0.85s 预算，K≈15-25 全季先验按实测降为短地平线
@@ -625,11 +628,13 @@ def dawn_hook(obs, ns, config, player=0, day=0, hour=0):
                 return None
             _STATE["last_day"][player] = int(day)
 
-            # —— 投影段（P2.6 钉死配置：trimmed_mean@0.25 × 悲观 0.75）——
+            # —— 投影段（P2.6 钉死配置：trimmed_mean@0.25 × 悲观 0.75；
+            #     v3 K1：近平守成 tie-break 偏向 identity）——
             candidates = _plans.enumerate_plans(summary)
             models = _opponents.build_default_models()
             history, our_sells = update_opponent_ledger(obs, player, day,
                                                         summary)
+            identity_key = _plans.identity_spec().key()
             j_matrix = {}
             for spec in candidates:
                 scores = {}
@@ -639,18 +644,30 @@ def dawn_hook(obs, ns, config, player=0, day=0, hour=0):
                 j_matrix[spec.key()] = scores
             selection = _select.robust_select(
                 j_matrix, strategy="trimmed_mean",
-                trim_fraction=_select.DEFAULT_TRIM_FRACTION)
+                trim_fraction=_select.DEFAULT_TRIM_FRACTION,
+                identity_key=identity_key)
             proj_best = selection["best"]
             record["proj_best"] = proj_best
             record["n_plans"] = len(candidates)
+            if selection["tie_break"] and "守成" in selection["tie_break"]:
+                record["identity_tiebreak_proj"] = True
+                record["identity_tiebreak_note"] = selection["tie_break"]
 
             # —— 孪生精化段（K×Ω' 子集，deadline 治理）——
+            # v3 比较集：投影排序面（修复 v2 的键序残余——refinement 此前
+            # 取"枚举序前 K"而非"投影 top-K"，与模块头文档不符）；K1：
+            # identity 守成点恒在比较集（rollout 段同近平守成规则）。
             selected_key = proj_best
             if budget >= float(_cfg(config, "rollout_gate_budget_s")):
-                ranked = [spec for spec in candidates
-                          if spec.key() == proj_best]
-                ranked += [spec for spec in candidates
-                           if spec.key() != proj_best]
+                spec_map = {s.key(): s for s in candidates}
+                ranked = [spec_map[k] for k, _ in selection["ranking"]
+                          if k in spec_map]
+                if proj_best != identity_key:
+                    ident = spec_map.get(identity_key)
+                    if ident is not None and ident not in ranked[:1]:
+                        if ident in ranked:
+                            ranked.remove(ident)
+                        ranked.insert(1, ident)
                 roll_models = _models_for_rollout(config, models)
                 deadline = t_start + budget - float(_cfg(config,
                                                          "reserve_s"))
@@ -675,6 +692,32 @@ def dawn_hook(obs, ns, config, player=0, day=0, hour=0):
                             trim_fraction=_select.DEFAULT_TRIM_FRACTION)
                     best_key = sorted(aggregates.items(),
                                       key=lambda kv: (-kv[1], kv[0]))[0][0]
+                    # 终审 τ 闸（法证终稿 §4"拒收"语义）：rollout 改判
+                    # proj_best 需决定性证据（边际 > τ×|proj_best|）——
+                    # 1 日地平线对日程/时点类微差不可辨，非决定性边际的
+                    # 改判=支付时点伪影驱动的选择抖动（official 复裁
+                    # run2/3 实测 -27.9%/-40.9% 主动损伤的直接反义）。
+                    if best_key != proj_best and proj_best in aggregates:
+                        pv = float(aggregates[proj_best])
+                        bv = float(aggregates[best_key])
+                        if bv - pv < _select.IDENTITY_TIEBREAK_TAU * max(
+                                1.0, abs(pv)):
+                            record["rollout_switch_vetoed"] = round(
+                                bv - pv, 1)
+                            best_key = proj_best
+                    # K1 近平守成（rollout 段同规则）：rollout 最优对
+                    # identity 边际 < τ×|identity| → 回落守成点。
+                    if best_key != identity_key \
+                            and identity_key in aggregates:
+                        iv = float(aggregates[identity_key])
+                        bv = float(aggregates[best_key])
+                        gate = _select.IDENTITY_TIEBREAK_TAU * max(
+                            1.0, abs(iv))
+                        if bv - iv < gate:
+                            record["rollout_identity_tiebreak"] = round(
+                                bv - iv, 1)
+                            record["identity_tiebreak_rollout"] = True
+                            best_key = identity_key
                     record["rollout_best"] = best_key
                     if best_key != proj_best:
                         record["switched"] = True

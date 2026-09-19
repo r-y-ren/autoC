@@ -18,6 +18,11 @@ import math
 
 AGGREGATION_STRATEGIES = ("trimmed_mean", "worst_case", "weighted")
 DEFAULT_TRIM_FRACTION = 0.25
+# K1 近平守成 tie-break 阈值（round-24 法证终稿 §5 K1，2026-09-20）：最优
+# 计划相对 identity 守成点的聚合边际 < tau×|identity 值| 时恒选守成点——
+# 消除"计划微差但方差大"的误选（d0 反事实：5/9 局 base 即最优，DTSP v2
+# 反而 -3.1k~-32.1k；anchor 晚季误选 -21.7k）。0.005 = 0.5% 终局资金。
+IDENTITY_TIEBREAK_TAU = 0.005
 
 
 def aggregate_scores(scores, strategy="trimmed_mean", weights=None,
@@ -74,14 +79,18 @@ def aggregate_scores(scores, strategy="trimmed_mean", weights=None,
 
 
 def robust_select(j_matrix, strategy="trimmed_mean", weights=None,
-                  trim_fraction=DEFAULT_TRIM_FRACTION):
-    """J(plan,ω) 矩阵的鲁棒 argmax（确定性）。
+                  trim_fraction=DEFAULT_TRIM_FRACTION, identity_key=None,
+                  tau=IDENTITY_TIEBREAK_TAU):
+    """J(plan,ω) 矩阵的鲁棒 argmax（确定性；K1 近平守成 tie-break）。
 
     j_matrix: {plan_key: {model_name: score}}（两层的值均可哈希键控）。
+    identity_key: K1 守成点键（None=关闭守成 tie-break，行为与 P2.6 一致）；
+    最优计划非 identity 且其聚合边际 < tau×max(1,|identity 值|) 时改选
+    identity（ranking 保持原序，tie_break 注记守成裁决）。
     返回 {"best": plan_key, "ranking": [(plan_key, agg)...], "strategy":...,
           "tie_break": None|str, "aggregates": {plan_key: agg}}。
     ranking 按 (-agg, plan_key) 字典序——平票时 key 字典序最小者胜，
-    输入 dict 顺序不影响结果；tie_break 注记平票情形。
+    输入 dict 顺序不影响结果。
     """
     if not j_matrix:
         raise ValueError(
@@ -98,5 +107,16 @@ def robust_select(j_matrix, strategy="trimmed_mean", weights=None,
     if len(tied) > 1:
         tie_break = (f"{len(tied)} 个计划聚合值并列 {best_value!r}，"
                      f"按 key 字典序取 {best_key!r}")
+    if identity_key is not None and identity_key in aggregates \
+            and best_key != identity_key:
+        identity_value = aggregates[identity_key]
+        margin = best_value - identity_value
+        gate = tau * max(1.0, abs(identity_value))
+        if margin < gate:
+            best_key, best_value = identity_key, identity_value
+            tie_break = (
+                f"K1 近平守成：最优 {ranking[0][0]!r} 对 identity 边际 "
+                f"{margin:+.1f} < tau×|identity|={gate:.1f}（τ="
+                f"{tau}）→ 恒选守成点 {identity_key!r}")
     return {"best": best_key, "ranking": ranking, "strategy": strategy,
             "tie_break": tie_break, "aggregates": dict(aggregates)}

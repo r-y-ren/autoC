@@ -397,6 +397,7 @@ def evaluate_injection(deps, replay, me_seat, inj_step, cfg):
         raise RuntimeError(
             f"enumerate_plans 返回空集（day={day}）")
     j_matrix = {}
+    identity_key = plans.identity_spec().key()
     for spec in candidate_plans:
         scores = {}
         for model in models:
@@ -407,7 +408,8 @@ def evaluate_injection(deps, replay, me_seat, inj_step, cfg):
         j_matrix, strategy=cfg.get("strategy", "trimmed_mean"),
         weights=cfg.get("weights"),
         trim_fraction=cfg.get("trim_fraction",
-                              select.DEFAULT_TRIM_FRACTION))
+                              select.DEFAULT_TRIM_FRACTION),
+        identity_key=identity_key)
     best_key = selection["best"]
     best_spec = _spec_by_key(candidate_plans, best_key)
 

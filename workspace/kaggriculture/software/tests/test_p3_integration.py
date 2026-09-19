@@ -254,7 +254,11 @@ class TestFailOpen:
 
     def test_failopen_after_apply_restores_pristine_values(
             self, runtime, monkeypatch):
-        """三道之二：已注入后次黎明失败 → 全部 governed 键回 v13.8 原值。"""
+        """三道之二：已注入后次黎明失败 → 全部 governed 键回 v13.8 原值。
+
+        v3 K1 注：d0 注入的计划可能就是 identity 守成点（直写键=原生值，
+        无可观测偏离）——偏离前提改为人为破坏直写键（快照机制与选择的
+        计划解耦）。"""
         mod = _load_golden_module()
         ns = _fresh_ns(mod)
         obs = _synthetic_obs(mod)
@@ -262,10 +266,10 @@ class TestFailOpen:
         assert ns["PLANNER_ENABLED"] is True
         pristine = ns["_DTSP_PRISTINE_SNAPSHOT"]
         assert pristine                              # 快照在位
-        # 注入确实改了直写键
-        assert ns["SE_DUE_DAY"] != pristine["SE_DUE_DAY"] or \
-            ns["LAND_PLAN"] != pristine["LAND_PLAN"] or \
-            ns["STRAW_TOTAL_CAP_REGIME"] != pristine["STRAW_TOTAL_CAP_REGIME"]
+        # 人为偏离直写键（等同计划注入的偏离形态）
+        ns["SE_DUE_DAY"] = 3
+        ns["LAND_PLAN"] = {1: (2, 1700), 2: (5, 2700)}
+        ns["STRAW_TOTAL_CAP_REGIME"] = 99
 
         def _boom(*args, **kwargs):
             raise ValueError("second-dawn failure (test)")

@@ -119,6 +119,13 @@ python -m pytest workspace/kaggriculture/software/tests/test_planner_contract.py
 python -m pytest workspace/kaggriculture/software/tests/test_p3_integration.py -q -k "not full_season"
 #        端到端 4 种子全季 DTSP 自博弈（无超时/无异常硬断言，~2 分钟）
 python -m pytest workspace/kaggriculture/software/tests/test_p3_integration.py -q -k full_season
+#     e) v3 复裁门（Track-B P4 v3，2026-09-20）：K1 identity 守成档 +
+#        K2 钱包门档 + K3 land/herd 日程轴后的三判据准入——原官方基准
+#        （主口径 ≥9/14 且 mean Δ>0）+ 9 巨人局 d0 全季 ≥4/9 挽回 ≥10%
+#        + 13 胜局损伤 >5% 局数 ≤2，外加投影段 <60ms 耗时断言；
+#        official 全过 exit 0，报告落 exports/probes/planner_bench/
+#        v3_readmission.json
+python workspace/kaggriculture/software/scripts/v3_readmission_suite.py --mode official
 ```
 
 ### P2 DNA/liveness scope

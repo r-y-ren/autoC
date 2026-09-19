@@ -705,11 +705,15 @@ def _cash_gate_ok(farm, projected_spend=0.0):
 
     投影日终钱包 ≥ 次日黎明 crew fib 账单 + LIQUIDITY_FLOOR（饲料裕量
     已并入该常量语义——m2b 破产类的保险丝，v1.1 迁移裁决）。
+    DTSP 惰性旋钮（v3 K2 钱包门档，2026-09-20）：liquidity_floor 可被
+    计划覆盖（STANDARD=350 / LOOSE=150 / UNBOUNDED=0，round-24 反事实
+    值域）；旗关恒回 LIQUIDITY_FLOOR 冻结值，与 v13.8 逐字节等价。
     """
     money = _get(farm, "money", 0.0)
     hands = len(_get(farm, "hands", []) or [])
     next_bill = _FIB_CUM[hands] if hands < len(_FIB_CUM) else 0
-    return (money - float(projected_spend)) >= (next_bill + LIQUIDITY_FLOOR)
+    return (money - float(projected_spend)) >= \
+        (next_bill + _plan_knob("liquidity_floor", LIQUIDITY_FLOOR))
 
 
 def _first_market_day(farm, day):

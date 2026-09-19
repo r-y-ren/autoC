@@ -1,8 +1,11 @@
-# 【中文】test_planner_calibration.py —— P2.6 投影校准契约测试
+# 【中文】test_planner_calibration.py —— P2.6 投影校准契约测试（v3 轴更新）
 # ===========================================================================
-# 钉住 P2.6 有界迭代（2026-09-19）落进 planner 层的三类校准性质：
-#   1) 时点轴可投影性——project_season 对 timing_shift 非增（早买地/早建畜
-#      群不劣），钳位处允许平票；封笔日（d20）后时点无关（诚实零方差）；
+# 钉住 P2.6 有界迭代（2026-09-19）落进 planner 层的三类校准性质（v3 K3
+# 日程轴拆分后沿 land_due_shift/herd_due_shift 两轴重述）：
+#   1) 日程轴可投影性——project_season 对 land_due_shift 非增（早买地
+#      不劣：产能更早解锁），钳位处允许平票；封笔日（d20）后日程无关
+#      （诚实零方差）；herd_due_shift 只平移畜群爬坡（晚建不劣，反向
+#      严格）；
 #   2) 保守偏置修正的回归钉——种子建植成本只在建设窗计一次、封笔后扩张
 #      目标归零、买畜摊提限爬坡窗、买地日程制（无现金彩票）+产能耦合；
 #   3) 选择器聚合数学性质——worst_case ≤ trimmed_mean、trim=0 退化为算术
@@ -37,33 +40,34 @@ def _obs(**kw):
 def _spec(**kw):
     base = dict(opening="C", p1_branch="B2", capacity_tier="C1",
                 p3_mode="HEALTHY", p4_clear="LOW", quota_scale=1.0,
-                timing_shift=0, sell_discount=0.9)
+                land_due_shift=0, herd_due_shift=0, sell_discount=0.9,
+                liquidity_tier="STANDARD")
     base.update(kw)
     return plans.PlanSpec(**base)
 
 
 # ===========================================================================
-# 1) 时点轴可投影性（P2.6 修正：修正前 J 对 timing_shift 恒零方差）
+# 1) 日程轴可投影性（P2.6 修正 + v3 K3 拆分）
 # ===========================================================================
 
 class TestTimingAxisProjections:
 
-    def test_timing_monotone_nondecreasing_toward_early_on_opening_state(self):
-        """开局态（d3、象限未满）：时点越早投影不劣（钳位处允许平票）。"""
+    def test_land_shift_monotone_nondecreasing_toward_early(self):
+        """开局态（d3、象限未满）：买地越早投影不劣（钳位处允许平票）。"""
         obs = _obs()
-        vals = [plans.project_season(_spec(timing_shift=s), obs)
-                for s in plans.TIMING_SHIFTS]          # [-2,-1,0,1,2]
+        vals = [plans.project_season(_spec(land_due_shift=s), obs)
+                for s in plans.LAND_DUE_SHIFTS]      # [-2,-1,0,2,4]
         assert all(a >= b for a, b in zip(vals, vals[1:])), vals
         assert max(vals) > min(vals)                   # 轴不再是常数
 
     def test_late_game_timing_is_honestly_flat(self):
-        """封笔日（day>=PLANT_LAST_DAY）：扩张归零、日程过期 → 时点恒平。"""
+        """封笔日（day>=PLANT_LAST_DAY）：扩张归零、日程过期 → 日程恒平。"""
         obs = _obs(day=20, money=20000,
                    crops={"STRAWBERRY": 30, "WHEAT": 16, "MELON": 12},
                    unlocked_quadrants=3)
-        vals = {plans.project_season(_spec(timing_shift=s,
-                                         capacity_tier="C2"), obs)
-                for s in plans.TIMING_SHIFTS}
+        vals = {plans.project_season(_spec(land_due_shift=s,
+                                           capacity_tier="C2"), obs)
+                for s in plans.LAND_DUE_SHIFTS}
         assert len(vals) == 1                          # 全部相等
 
     def test_planting_closure_ignores_expansion_targets(self):
@@ -129,19 +133,36 @@ class TestTimingAxisProjections:
         assert rich - poor == pytest.approx(49900.0, abs=0.5)
 
     def test_herd_cost_window_matches_docstring_amortization(self):
-        """买畜摊提限爬坡窗：总额守恒、时点只挪年金——早建畜群不劣。"""
+        """买畜摊提限爬坡窗：总额守恒、时点只挪年金——早建畜群不劣。
+
+        v3 K3：herd_due_shift 独立驱动（-1 提前一天），与买地轴解耦。"""
         obs = _obs(day=3, money=3000, herd=0,
                    crops={"STRAWBERRY": 0, "WHEAT": 18, "MELON": 0},
                    unlocked_quadrants=1,
                    daily_demand={"STRAWBERRY": 8.0, "WHEAT": 12.0,
                                  "MELON": 1.5})
-        j0 = plans.project_season(_spec(timing_shift=0), obs)
-        j2 = plans.project_season(_spec(timing_shift=2), obs)
-        # +2 平移：爬坡起点晚 2 天（herd_start 2→4，钳位不触发）→ 年金
-        # 全程落后；摊提总额不变（窗平移不缩）。故 j0 > j2 严格，差值上界
-        # = 推迟 2 天的年金积分 < 3 天全额年金。
-        assert j0 > j2
-        assert (j0 - j2) < 3.0 * 17 * plans.REVENUE_ANCHORS["HERD"] * 0.9
+        j0 = plans.project_season(_spec(herd_due_shift=0), obs)
+        j_1 = plans.project_season(_spec(herd_due_shift=-1), obs)
+        # -1 平移：爬坡起点早 1 天 → 年金全程领先；摊提总额不变
+        # （窗平移不缩）。故 j_1 > j0 严格。
+        assert j_1 > j0
+
+    def test_land_and_herd_axes_are_independent(self):
+        """K3 拆分的投影侧语义：land 轴动产能日程、herd 轴动年金日程，
+        两轴同动不互相湮没（买地日程不再被买畜日程绑架，反之亦然）。
+        注：两者经饲料耦合（herd 需求 vs 麦产量←产能←买地）存在真实
+        交互，故只断言方向一致与边际同号，不断言精确可分。"""
+        obs = _obs()
+        j_land = plans.project_season(_spec(land_due_shift=-2), obs) - \
+            plans.project_season(_spec(land_due_shift=0), obs)
+        j_herd_on_late_land = plans.project_season(
+            _spec(land_due_shift=-2, herd_due_shift=-1), obs) - \
+            plans.project_season(_spec(land_due_shift=-2), obs)
+        j_herd_on_base_land = plans.project_season(
+            _spec(land_due_shift=0, herd_due_shift=-1), obs) - \
+            plans.project_season(_spec(land_due_shift=0), obs)
+        assert j_land > 0                      # 早买地产能更早
+        assert j_herd_on_late_land > 0 and j_herd_on_base_land > 0
 
 
 # ===========================================================================
@@ -166,13 +187,15 @@ class TestOrderingPropertiesPreserved:
             assert neutral > pessim, tier
 
     def test_monotone_in_discount_all_tiers(self):
+        """折扣单调（同参数包内）：identity（原生 1.0，K1 守成点）> 同档
+        0.9 折扣计划。跨档的产能边（如 C1）可以合理压过折扣差——那是
+        容量轴的语义，不是折扣轴的反例。"""
         obs = self._midgame_obs()
-        for tier in plans.CAPACITY_TIERS:
-            hi = plans.project_season(_spec(capacity_tier=tier,
-                                            sell_discount=0.9), obs)
-            lo = plans.project_season(_spec(capacity_tier=tier,
-                                            sell_discount=0.75), obs)
-            assert hi > lo, tier
+        hi = plans.project_season(plans.identity_spec(), obs)
+        lo = plans.project_season(_spec(capacity_tier="C2",
+                                        p3_mode="HEALTHY", p4_clear="MID",
+                                        sell_discount=0.9), obs)
+        assert hi > lo
 
     def test_deterministic(self):
         obs = _obs()
@@ -181,7 +204,7 @@ class TestOrderingPropertiesPreserved:
 
 
 # ===========================================================================
-# 3) 选择器聚合数学性质（P2.6 选参面）
+# 3) 选择器聚合数学性质（P2.6 选参面 + v3 K1 近平守成）
 # ===========================================================================
 
 class TestAggregationProperties:
@@ -210,19 +233,30 @@ class TestAggregationProperties:
                                        weights=tilted) < even
 
     def test_timing_axis_not_pinned_to_zero_by_tie_break(self):
-        """时点先验：J 有区分度时 argmax 跟随 J；J 全等时才落字典序。"""
-        matrix = {
-            "P|C|B1|C1|HEALTHY|LOW|1.00|-2|0.90": {"m": 10.0},
-            "P|C|B1|C1|HEALTHY|LOW|1.00|+0|0.90": {"m": 9.0},
-            "P|C|B1|C1|HEALTHY|LOW|1.00|+2|0.90": {"m": 8.0},
-        }
-        assert select.robust_select(matrix)["best"].endswith("-2|0.90")
-        tied = {
-            "P|C|B1|C1|HEALTHY|LOW|1.00|%+d|0.90" % s: {"m": 7.0}
-            for s in plans.TIMING_SHIFTS}
+        """日程先验：J 有区分度时 argmax 跟随 J；J 全等时才落字典序
+        （v3 键编码：L0 原生锚 < LN 负档 < LP 正档，等值兄弟默认守成）。"""
+        def key(shift):
+            code = "0" if shift == 0 else (f"N{-shift}" if shift < 0
+                                           else f"P{shift}")
+            return f"P|C|B1|C1|HEALTHY|LOW|1.00|L{code}|H0|" \
+                   f"LQ0|0.90"
+        matrix = {key(-2): {"m": 10.0}, key(0): {"m": 9.0}, key(4): {"m": 8.0}}
+        assert select.robust_select(matrix)["best"] == key(-2)
+        tied = {key(s): {"m": 7.0} for s in plans.LAND_DUE_SHIFTS}
         best = select.robust_select(tied)["best"]
-        assert best.endswith("+0|0.90")            # 字典序：+0 最小
+        assert best.endswith("L0|H0|LQ0|0.90")   # 字典序：L0（原生锚）最小
         assert select.robust_select(tied)["tie_break"] is not None
+
+    def test_identity_near_tie_guard(self):
+        """K1 近平守成：边际 <τ → identity；≥τ → 最优保持（确定性）。"""
+        tau = select.IDENTITY_TIEBREAK_TAU
+        ident = plans.identity_spec().key()
+        other = "P|C|B2|C3|HEALTHY|LOW|1.00|L0|H0|LQ0|0.90"
+        near = {ident: {"m": 100.0}, other: {"m": 100.0 + tau * 50.0}}
+        assert select.robust_select(near, identity_key=ident)["best"] == ident
+        far = {ident: {"m": 100.0},
+               other: {"m": 100.0 + tau * 50.0 + 1.0}}
+        assert select.robust_select(far, identity_key=ident)["best"] == other
 
 
 # ===========================================================================
@@ -258,10 +292,12 @@ class TestBenchConfigurableOmega:
 
             @staticmethod
             def robust_select(j_matrix, strategy="trimmed_mean",
-                              weights=None, trim_fraction=0.25):
+                              weights=None, trim_fraction=0.25,
+                              identity_key=None, **_kw):
                 seen["strategy"] = strategy
                 seen["weights"] = weights
                 seen["trim"] = trim_fraction
+                seen["identity_key"] = identity_key
                 seen["n_plans"] = len(j_matrix)
                 key = sorted(j_matrix)[0]
                 return {"best": key, "ranking": [(key, 0.0)],

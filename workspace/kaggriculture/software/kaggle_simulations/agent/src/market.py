@@ -1896,7 +1896,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     # 3/3 round-2 winners put 4-5 head on d0 -- the m3 1-sheep opening is
     # the fork the round-2 losses traced to), both species in one turn so
     # cows reach the day-8 milk window AND sheep the day-6 wool window.
-    reserve = 800 if day <= 3 else (550 if day <= 7 else COW_BUY_RESERVE)
+    # v3 K2 钱包门档（2026-09-20）：COW_BUY_RESERVE 尾段（d8+）可被计划
+    # 覆盖（STANDARD=380 / LOOSE=150 / UNBOUNDED=0，round-24 反事实值域
+    # V_WALLET/V_WALLET0 口径）；前段 800/550 早起动日程冻结——计划只控
+    # d8+ 尾段（与反事实语义一致：早期影响经 liquidity_floor 通道）。
+    # 旗关恒回 COW_BUY_RESERVE 冻结值，与 v13.8 逐字节等价。
+    reserve = 800 if day <= 3 else (550 if day <= 7 else
+                                    _plan_knob("cow_buy_reserve",
+                                               COW_BUY_RESERVE))
     if land_pending:
         reserve += land_fund
     pace = _animal_pace(day)
@@ -2014,11 +2021,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
             cost = ANIMALS[animal]["cost"]
             # v10 M-E: price the wallet as the engine will see it after
             # this turn's earlier buys, and keep a post-purchase floor so
-            # the dawn hire gate never loses the crew
+            # the dawn hire gate never loses the crew.
+            # v3 K2 钱包门档：liquidity_floor 可被计划覆盖（read-site 2/3；
+            # read-site 1=strategy._cash_gate_ok）。旗关恒回冻结值。
             wallet = (projected_money if plan.get("wheat_farm")
                       else money) - (0.0 if plan.get("wheat_farm")
                                      else committed_spend)
-            reserve_total = reserve + LIQUIDITY_FLOOR
+            reserve_total = reserve + _plan_knob("liquidity_floor",
+                                                 LIQUIDITY_FLOOR)
             if wallet < cost + reserve_total:
                 continue
             n = min(pace - bought, target - herd_total,

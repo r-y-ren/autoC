@@ -52,7 +52,8 @@ def _load_bench():
 def _spec(**kw):
     base = dict(opening="C", p1_branch="B2", capacity_tier="C3",
                 p3_mode="HEALTHY", p4_clear="LOW", quota_scale=1.0,
-                timing_shift=0, sell_discount=0.9)
+                land_due_shift=0, herd_due_shift=0, sell_discount=0.9,
+                liquidity_tier="STANDARD")
     base.update(kw)
     return plans.PlanSpec(**base)
 
@@ -60,15 +61,17 @@ def _spec(**kw):
 class TestPlanSpecContract:
 
     def test_hash_and_equality_stable(self):
-        a = _spec(quota_scale=1.25, timing_shift=-2)
-        b = _spec(quota_scale=1.25, timing_shift=-2)
+        a = _spec(quota_scale=1.25, land_due_shift=-2)
+        b = _spec(quota_scale=1.25, land_due_shift=-2)
         assert a == b and hash(a) == hash(b)
         assert hash(plans.PlanSpec.from_json(a.to_json())) == hash(a)
-        assert a != _spec(timing_shift=2)          # +2/-2 可区分
-        assert len({a, b, _spec()}) == 2           # 可入集合
+        assert a != _spec(land_due_shift=2)          # -2/+2 可区分
+        assert a != _spec(herd_due_shift=-1)         # K3 两轴独立可区分
+        assert a != _spec(liquidity_tier="LOOSE")    # K2 钱包档可区分
+        assert len({a, b, _spec()}) == 2             # 可入集合
 
     def test_json_roundtrip_and_stable_text(self):
-        a = _spec(p4_clear="HEAVY", sell_discount=0.75)
+        a = _spec(p4_clear="HEAVY", quota_scale=1.25, land_due_shift=4)
         text = a.to_json()
         assert text == json.dumps(a.to_dict(), sort_keys=True)
         assert plans.PlanSpec.from_json(text) == a
@@ -78,18 +81,36 @@ class TestPlanSpecContract:
         keys = sorted(_spec(quota_scale=q).key() for q in plans.QUOTA_SCALES)
         assert len(set(keys)) == 3
         assert _spec().key().startswith("P|C|B2|C3|")
+        ident = plans.identity_spec()
+        assert ident.key().startswith("P|IDENT|")
+        assert plans.identity_spec().key() == ident.key()   # 工厂确定
 
     def test_invalid_axes_raise_with_example(self):
         with pytest.raises(ValueError) as exc:
             plans.PlanSpec(opening="X", p1_branch="B2", capacity_tier="C3",
                            p3_mode="HEALTHY", p4_clear="LOW",
-                           quota_scale=1.0, timing_shift=0,
-                           sell_discount=0.9)
+                           quota_scale=1.0, land_due_shift=0,
+                           herd_due_shift=0, sell_discount=0.9)
         assert "示例" in str(exc.value)
         with pytest.raises(ValueError):
             _spec(quota_scale=1.3)                 # 25% 网格之外
         with pytest.raises(ValueError):
-            _spec(timing_shift=3)
+            _spec(land_due_shift=3)                # K3 土地日程域外
+        with pytest.raises(ValueError):
+            _spec(herd_due_shift=2)                # K3 买畜日程域外
+        with pytest.raises(ValueError):
+            _spec(liquidity_tier="TIGHT")          # K2 钱包档域外
+
+    def test_identity_anchor_validation(self):
+        """identity 守成点全轴=v13.8 原生锚：偏离任一轴显式抛错。"""
+        assert plans.identity_spec().identity is True
+        bad = dict(plans.identity_spec().to_dict(), quota_scale=0.8)
+        with pytest.raises(ValueError):
+            plans.PlanSpec.from_dict(bad)
+        bad2 = dict(plans.identity_spec().to_dict())
+        del bad2["quota_scale"]
+        with pytest.raises(ValueError):
+            plans.PlanSpec.from_dict(bad2)
 
     def test_from_dict_fail_closed(self):
         with pytest.raises(ValueError):
@@ -128,7 +149,8 @@ class TestEnumeratePlans:
             day=3, money=3000, herd=0, crops={}, unlocked_quadrants=1,
             opening_played="B", daily_demand={})
         plan_list = plans.enumerate_plans(obs)
-        assert plan_list and {p.opening for p in plan_list} == {"B"}
+        # identity 守成点恒在（K1，opening 恒 C）——断言只对网格计划
+        assert {p.opening for p in plan_list if not p.identity} == {"B"}
 
     def test_r2_branch_by_opp_class(self):
         for cls, want in (("burst", "B1"), ("reduced", "B2"),
@@ -137,7 +159,8 @@ class TestEnumeratePlans:
                 day=1, money=3000, herd=0, crops={}, unlocked_quadrants=1,
                 opp_class=cls, daily_demand={})
             plan_list = plans.enumerate_plans(obs)
-            assert plan_list and {p.p1_branch for p in plan_list} == {want}
+            assert plan_list and \
+                {p.p1_branch for p in plan_list if not p.identity} == {want}
 
     def test_r3_d6_gate(self):
         base = dict(day=6, money=9000, herd=12, unlocked_quadrants=2,
@@ -145,11 +168,13 @@ class TestEnumeratePlans:
                     daily_demand={"STRAWBERRY": 5})
         all_pass = plans.enumerate_plans(
             plans.build_obs_summary(d6_checks=[True] * 5, **base))
-        assert {p.capacity_tier for p in all_pass} >= {"C1", "C3"}
+        assert {p.capacity_tier for p in all_pass if not p.identity} >= \
+            {"C1", "C3"}
         q1_fail = plans.enumerate_plans(
             plans.build_obs_summary(d6_checks=[False, True, True, True, True],
                                     **base))
-        assert {p.capacity_tier for p in q1_fail} == {"C3"}   # q1 挂：C1/C2 皆禁
+        # q1 挂：C1/C2 皆禁（identity 守成点 C2 恒在豁免，K1）
+        assert {p.capacity_tier for p in q1_fail if not p.identity} == {"C3"}
 
     def test_r4_r5_late_game_freeze(self):
         obs = plans.build_obs_summary(
@@ -158,8 +183,9 @@ class TestEnumeratePlans:
             d6_checks=[True] * 5, p4_tier="MID", daily_demand={"STRAWBERRY": 6})
         plan_list = plans.enumerate_plans(obs)
         assert plan_list
-        assert {p.p3_mode for p in plan_list} == {"CATCHUP"}   # d12 现金 8k 分界
-        assert {p.p4_clear for p in plan_list} == {"MID"}
+        grid = [p for p in plan_list if not p.identity]
+        assert {p.p3_mode for p in grid} == {"CATCHUP"}   # d12 现金 8k 分界
+        assert {p.p4_clear for p in grid} == {"MID"}
 
     def test_r6_opening_cash_gate(self):
         obs = plans.build_obs_summary(
@@ -190,8 +216,8 @@ class TestKnobOverrides:
                                       daily_demand={"STRAWBERRY": 6})
         plan_list = plans.enumerate_plans(obs)
         base = next(p for p in plan_list if p.capacity_tier == "C1"
-                    and p.quota_scale == 1.0 and p.timing_shift == 0
-                    and p.sell_discount == 0.9)
+                    and p.quota_scale == 1.0 and p.land_due_shift == 0
+                    and p.herd_due_shift == 0 and p.sell_discount == 0.9)
         ov = plans.plan_to_knob_overrides(base)
         assert ov["PACK"] == "VOLUME_CROP"
         assert ov["_VOLUME_PLAN.straw_total_cap"] == 48
@@ -200,20 +226,58 @@ class TestKnobOverrides:
         assert ov["LAND_PLAN.1"] == (4, 1700) and ov["LAND_PLAN.2"] == (7, 2700)
         # 卖出折扣→囤货门槛耦合（缺口清单第 1 条的唯一近似杠杆）
         assert ov["SELL_PLAN_HOLD_EDGE"] == 1.09
+        # K2 钱包门档（STANDARD=v13.8 冻结值）
+        assert ov["PLANNER_OVERRIDES.liquidity_floor"] == 350
+        assert ov["PLANNER_OVERRIDES.cow_buy_reserve"] == 380
 
     def test_scaled_and_shifted(self):
-        spec = _spec(capacity_tier="C1", quota_scale=1.25, timing_shift=-2,
-                     sell_discount=0.75)
+        spec = _spec(capacity_tier="C1", quota_scale=1.25, land_due_shift=-2,
+                     herd_due_shift=-1, sell_discount=0.9)
         ov = plans.plan_to_knob_overrides(spec)
         assert ov["_VOLUME_PLAN.straw_total_cap"] == 60        # 48*1.25
         assert ov["LINE_CAPS.MELON"] == 15                     # 12*1.25
         assert ov["SE_DUE_DAY"] == 8                           # 10-2
         assert ov["LAND_PLAN.1"] == (2, 1700) and ov["LAND_PLAN.2"] == (5, 2700)
-        assert ov["SELL_PLAN_HOLD_EDGE"] == 1.15               # 悲观→早卖
+        assert ov["SELL_PLAN_HOLD_EDGE"] == 1.09
+        # K3 拆分：买畜日程独立驱动（herd_day_shift=herd_due_shift）
+        assert ov["PLANNER_OVERRIDES.herd_day_shift"] == -1
+        assert ov["PLANNER_OVERRIDES.animal_buy_last_day_shift"] == -1
+        # K2 钱包档 LOOSE（反事实 V_WALLET 值域）
+        loose = plans.plan_to_knob_overrides(_spec(liquidity_tier="LOOSE"))
+        assert loose["PLANNER_OVERRIDES.liquidity_floor"] == 150
+        assert loose["PLANNER_OVERRIDES.cow_buy_reserve"] == 150
+        unb = plans.plan_to_knob_overrides(_spec(liquidity_tier="UNBOUNDED"))
+        assert unb["PLANNER_OVERRIDES.liquidity_floor"] == 0
+        assert unb["PLANNER_OVERRIDES.cow_buy_reserve"] == 0
         # 缺口清单：规划器本地键必须显式存在（执行器侧跳过）
-        assert ov["PLANNER_LOCAL.sell_discount"] == 0.75
-        assert ov["PLANNER_LOCAL.animal_buy_day_shift"] == -2
+        assert ov["PLANNER_LOCAL.sell_discount"] == 0.9
+        assert ov["PLANNER_LOCAL.land_due_shift"] == -2
+        assert ov["PLANNER_LOCAL.herd_due_shift"] == -1
         assert ov["PLANNER_LOCAL.p3_mode"] == "HEALTHY"
+
+    def test_identity_overrides_are_native_face(self):
+        """K1：identity 守成点覆盖面与常规计划同键集、全部值=v13.8 原生
+        ——行为与旗关逐字节等价（同键集是 governed_keys 快照契约）。"""
+        ov = plans.plan_to_knob_overrides(plans.identity_spec())
+        c2 = plans.plan_to_knob_overrides(_spec(capacity_tier="C2",
+                                                p4_clear="MID"))
+        assert set(ov) == set(c2)
+        assert ov["PLANNER_ENABLED"] is True
+        # 原生锚逐键钉住（出处 src/constants.py）
+        assert ov["LINE_CAPS.STRAWBERRY"] == 48
+        assert ov["STRAW_QUAD_CAP_REGIME"] == 8
+        assert ov["STRAW_TOTAL_CAP_REGIME"] == 24
+        assert ov["SELL_PLAN_HOLD_EDGE"] == plans._SELL_HOLD_EDGE_BASE
+        assert ov["PLANNER_OVERRIDES.sell_price_discount"] == 1.0
+        assert ov["PLANNER_OVERRIDES.p4_force_tier"] == ""
+        assert ov["PLANNER_OVERRIDES.sell_batch_mult"] == 1.0
+        assert ov["PLANNER_OVERRIDES.herd_start_day"] == 0
+        assert ov["PLANNER_OVERRIDES.herd_day_shift"] == 0
+        assert ov["PLANNER_OVERRIDES.b_branch_force"] == ""
+        assert ov["PLANNER_OVERRIDES.liquidity_floor"] == 350
+        assert ov["PLANNER_OVERRIDES.cow_buy_reserve"] == 380
+        assert ov["PLANNER_OVERRIDES.fuse_money_floor"] == 300
+        assert ov["PLANNER_LOCAL.identity"] is True
 
     def test_deterministic_key_order(self):
         a = plans.plan_to_knob_overrides(_spec())
@@ -263,7 +327,8 @@ class TestKnobProjectionCalibration:
         """相邻档位计划的覆盖 dict 必须不同且寄存器子面非空——投影的
         行为可分性（P2.5 判据；首轮 34/42 no-op 覆盖的直接反义）。"""
         base = dict(opening="C", p1_branch="B2", p3_mode="HEALTHY",
-                    p4_clear="MID", quota_scale=1.0, timing_shift=0,
+                    p4_clear="MID", quota_scale=1.0, land_due_shift=0,
+                    herd_due_shift=0, liquidity_tier="STANDARD",
                     sell_discount=0.9)
         pairs = [
             (_spec(capacity_tier="C2", **base),
@@ -284,12 +349,19 @@ class TestKnobProjectionCalibration:
                                         if k != "p4_clear"})),
             (_spec(sell_discount=0.9, **{k: v for k, v in base.items()
                                          if k != "sell_discount"}),
-             _spec(sell_discount=0.75, **{k: v for k, v in base.items()
-                                          if k != "sell_discount"})),
-            (_spec(timing_shift=0, **{k: v for k, v in base.items()
-                                      if k != "timing_shift"}),
-             _spec(timing_shift=2, **{k: v for k, v in base.items()
-                                      if k != "timing_shift"})),
+             plans.identity_spec()),
+            (_spec(land_due_shift=0, **{k: v for k, v in base.items()
+                                        if k != "land_due_shift"}),
+             _spec(land_due_shift=4, **{k: v for k, v in base.items()
+                                        if k != "land_due_shift"})),
+            (_spec(herd_due_shift=0, **{k: v for k, v in base.items()
+                                        if k != "herd_due_shift"}),
+             _spec(herd_due_shift=-1, **{k: v for k, v in base.items()
+                                         if k != "herd_due_shift"})),
+            (_spec(liquidity_tier="STANDARD", **{k: v for k, v in base.items()
+                                                 if k != "liquidity_tier"}),
+             _spec(liquidity_tier="LOOSE", **{k: v for k, v in base.items()
+                                              if k != "liquidity_tier"})),
         ]
         for a, b in pairs:
             oa, ob = plans.plan_to_knob_overrides(a), \
@@ -298,8 +370,16 @@ class TestKnobProjectionCalibration:
             assert oa != ob, f"相邻计划覆盖相同: {a.key()} vs {b.key()}"
             face_a, face_b = _knob_face(oa), _knob_face(ob)
             assert face_a and face_b
-            assert face_a != face_b     # 寄存器子面必异（行为差异的载体）
             assert set(face_a) == set(face_b)   # 全名面键集恒定（值不同）
+            # 寄存器子面必异（行为差异的载体）——例外：K3 土地日程轴的
+            # 载体是直写键（LAND_PLAN.<n>/SE_DUE_DAY，缺口清单机制），
+            # 寄存器面允许相同、直写键必异。
+            if a.land_due_shift != b.land_due_shift:
+                assert any(oa[k] != ob[k] for k in oa
+                           if not k.startswith("PLANNER_OVERRIDES.")
+                           and k not in ("PLANNER_ENABLED",))
+            else:
+                assert face_a != face_b
 
     def test_flag_off_returns_default_even_with_overrides(self):
         """旗关等价的核心语义：寄存器有覆盖但 PLANNER_ENABLED=False 时
@@ -341,6 +421,137 @@ class TestKnobProjectionCalibration:
 
 
 # ===========================================================================
+# 3c) v3 K1 identity 守成档 + K3 日程轴拆分（round-24 法证终稿，2026-09-20）
+# ===========================================================================
+
+class TestIdentityGuardrail:
+
+    def test_identity_always_enumerated_within_cap(self):
+        """identity 守成点在任意局况恒在枚举面且总数 <=120（K1 第 0 项）。"""
+        for day, kw in ((0, {}), (5, {"opp_class": "burst"}),
+                        (25, {"opening_played": "C", "opp_class": "reduced",
+                              "d6_checks": [False] * 5, "p4_tier": "HEAVY"})):
+            obs = plans.build_obs_summary(
+                day=day, money=5000, herd=8, crops={"STRAWBERRY": 10,
+                                                    "WHEAT": 16},
+                unlocked_quadrants=2, daily_demand={"STRAWBERRY": 5}, **kw)
+            plan_list = plans.enumerate_plans(obs)
+            assert 0 < len(plan_list) <= plans.MAX_PLAN_CANDIDATES
+            assert sum(1 for p in plan_list if p.identity) == 1
+            assert plans.identity_spec().key() in {p.key() for p in plan_list}
+
+    def test_identity_overrides_behave_native(self):
+        """identity 注入后 _plan_knob 全部回原生值（=旗关行为等价）。"""
+        bench = _load_bench()
+        ns = {}
+        exec("import copy; import math; import json; import hashlib", ns)
+        for mod in ("constants", "strategy", "market"):
+            path = AGENT_SRC / f"{mod}.py"
+            exec(compile(path.read_text(encoding="utf-8"), str(path),
+                         "exec"), ns)
+        applied, skipped = bench.apply_knob_overrides(
+            ns, plans.plan_to_knob_overrides(plans.identity_spec()))
+        assert ns["PLANNER_ENABLED"] is True
+        assert ns["_plan_knob"]("liquidity_floor", 999) == 350
+        assert ns["_plan_knob"]("cow_buy_reserve", 999) == 380
+        assert ns["_plan_knob"]("sell_price_discount", 999) == 1.0
+        assert ns["_plan_knob"]("b_branch_force", "sentinel") == ""
+        assert ns["SE_DUE_DAY"] == plans.SE_DUE_DAY_DEFAULT
+        assert ns["LINE_CAPS"]["STRAWBERRY"] == 48
+        assert ns["SELL_PLAN_HOLD_EDGE"] == 1.05
+        # 常规计划（LOOSE 钱包档）注入后旋钮确已偏离原生（通道活性对照）
+        loose = next(p for p in plans.enumerate_plans(plans.build_obs_summary(
+            day=10, money=5000, herd=8, crops={"STRAWBERRY": 10},
+            unlocked_quadrants=2)) if p.liquidity_tier == "LOOSE")
+        bench.apply_knob_overrides(
+            ns, plans.plan_to_knob_overrides(loose))
+        assert ns["_plan_knob"]("liquidity_floor", 999) == 150
+        assert ns["_plan_knob"]("cow_buy_reserve", 999) == 150
+
+    def test_near_tie_break_prefers_identity(self):
+        """K1 近平 tie-break：最优对 identity 边际 <τ → 恒选守成点。"""
+        tau = select.IDENTITY_TIEBREAK_TAU
+        ident = plans.identity_spec().key()
+        other = _spec(quota_scale=0.8).key()
+        # 边际 0.3% < 0.5% → identity
+        near = {ident: {"m": 100000.0}, other: {"m": 100300.0}}
+        sel = select.robust_select(near, identity_key=ident)
+        assert sel["best"] == ident
+        assert sel["tie_break"] and "守成" in sel["tie_break"]
+        # 边际 2% > 0.5% → 最优保持
+        far = {ident: {"m": 100000.0}, other: {"m": 102000.0}}
+        sel2 = select.robust_select(far, identity_key=ident)
+        assert sel2["best"] == other
+        # identity 自身最优时不触发
+        top = {ident: {"m": 105000.0}, other: {"m": 100000.0}}
+        assert select.robust_select(top, identity_key=ident)["best"] == ident
+        # identity 不在矩阵（防御）→ 不触发、不异常
+        no_ident = {"a": {"m": 1.0}, "b": {"m": 2.0}}
+        assert select.robust_select(no_ident, identity_key=ident)["best"] == "b"
+        # 关闭守成（identity_key=None）→ P2.6 行为
+        assert select.robust_select(near)["best"] == other
+
+    def test_projection_tied_wallet_siblings_default_conservative(self):
+        """钱包档等值兄弟的字典序 tie-break 默认最保守档：投影器对钱包
+        不可见 → 同 (tier,quota,land,herd) 的三档兄弟 J 全等，key 序必须
+        让 STANDARD 先于 LOOSE/UNBOUNDED（钱包地板是安全不变式——
+        official 复裁首跑 -39.8k 灾难注入=C1×1.25×LOOSE 字典序中签的
+        直接反义钉）。"""
+        siblings = {lt: _spec(liquidity_tier=lt).key()
+                    for lt in plans.LIQUIDITY_TIERS}
+        assert siblings["STANDARD"] < siblings["LOOSE"] \
+            < siblings["UNBOUNDED"]
+        matrix = {k: {"m": 100.0} for k in siblings.values()}
+        assert select.robust_select(matrix)["best"] \
+            == siblings["STANDARD"]
+
+    def test_k3_split_axes_independent(self):
+        """land/herd 两轴独立可投影：land 轴动买地日程、herd 轴动买畜日程。"""
+        a = _spec(land_due_shift=4, herd_due_shift=0)
+        b = _spec(land_due_shift=0, herd_due_shift=-1)
+        oa, ob = plans.plan_to_knob_overrides(a), plans.plan_to_knob_overrides(b)
+        assert oa["LAND_PLAN.2"] == (11, 2700) and ob["LAND_PLAN.2"] == (7, 2700)
+        assert oa["PLANNER_OVERRIDES.herd_day_shift"] == 0
+        assert ob["PLANNER_OVERRIDES.herd_day_shift"] == -1
+        # 与旧 timing_shift 一轴双驱的过约束反义：4/0 与 0/-1 同时存在
+        t = plans.plan_targets(a)
+        assert t["land_dues"][2][0] == 11 and t["se_due"] == 14  # 钳到末窗
+
+
+class TestLiquidityKnobSrc:
+
+    def test_liquidity_knob_bites_at_cash_gate(self):
+        """K2 read-site 1：strategy._cash_gate_ok 的 liquidity_floor 随计划
+        变（旗开 LOOSE=150），旗关恒回冻结值 350（黄金等价根基）。"""
+        bench = _load_bench()
+        ns_on = {}
+        exec("import copy; import math; import json; import hashlib", ns_on)
+        for mod in ("constants", "strategy", "market"):
+            path = AGENT_SRC / f"{mod}.py"
+            exec(compile(path.read_text(encoding="utf-8"), str(path),
+                         "exec"), ns_on)
+        applied, _skipped = bench.apply_knob_overrides(
+            ns_on, {"PLANNER_ENABLED": True,
+                    "PLANNER_OVERRIDES.liquidity_floor": 150,
+                    "PLANNER_OVERRIDES.cow_buy_reserve": 150})
+        assert "PLANNER_ENABLED" in applied
+        bill0 = float(ns_on["_FIB_CUM"][0])
+        assert ns_on["_cash_gate_ok"]({"money": bill0 + 150.0, "hands": []})
+        assert not ns_on["_cash_gate_ok"]({"money": bill0 + 149.0,
+                                           "hands": []})
+        # 旗关（默认装载）：350 地板恒在
+        ns_off = {}
+        exec("import copy; import math; import json; import hashlib", ns_off)
+        for mod in ("constants", "strategy", "market"):
+            path = AGENT_SRC / f"{mod}.py"
+            exec(compile(path.read_text(encoding="utf-8"), str(path),
+                         "exec"), ns_off)
+        assert not ns_off["_cash_gate_ok"]({"money": bill0 + 150.0,
+                                            "hands": []})
+        assert ns_off["_cash_gate_ok"]({"money": bill0 + 350.0, "hands": []})
+
+
+# ===========================================================================
 # 4) project_season：相对排序性质
 # ===========================================================================
 
@@ -364,8 +575,10 @@ class TestProjectSeason:
                                       {"STRAWBERRY": 0.75})
         neutral = plans.project_season(spec, self._obs(), {})
         assert neutral > pessim                  # 悲观压价必然降低投影
-        hi = _spec(sell_discount=0.9)
-        lo = _spec(sell_discount=0.75)
+        # 折扣单调：identity（原生 1.0）> 0.9 折扣计划（0.75 档已按 K6
+        # 判定砍除——卖出侧挤压非杠杆）
+        hi = plans.identity_spec()
+        lo = _spec(sell_discount=0.9)
         assert plans.project_season(hi, self._obs()) > \
             plans.project_season(lo, self._obs())
 

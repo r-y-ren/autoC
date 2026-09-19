@@ -6,7 +6,7 @@
 #                （配额×时点）逐点真孪生 rollout，测 C1 真实经济性。
 #                结论二选一：C1 不经济（保守档序有据）或投影器评分看不见
 #                C1 价值（修评分）。
-#   timing-diag  定案实验②：统计投影 J 值对 timing_shift 的方差
+#   timing-diag  定案实验②：统计投影 J 值对 land_due_shift 的方差（v3 K3 轴）
 #                （修正前应为零方差——时点轴失选的根因）。
 #   d10-jmat     定案实验③：d10 注入点逐 plan×逐对手模型 J 矩阵摘要 +
 #                旋钮组隔离 rollout（定位 -920 均值差来源：覆盖没生效
@@ -166,7 +166,7 @@ def run_c1_ablation(args):
                     grid.append(plans.PlanSpec(
                         opening="C", p1_branch=branch, capacity_tier="C1",
                         p3_mode=mode, p4_clear="LOW", quota_scale=quota,
-                        timing_shift=shift,
+                        land_due_shift=shift, herd_due_shift=0,
                         sell_discount=C1_ABLATION_DISCOUNT))
             c1_results = []
             for spec in grid:
@@ -302,17 +302,17 @@ def run_timing_diag(args):
             spread_max = 0.0
             checked = 0
             for spec in cands:
-                if spec.timing_shift != 0:
+                if spec.land_due_shift != 0:
                     continue
                 base = spec
                 vals = []
-                for shift in plans.TIMING_SHIFTS:
+                for shift in plans.LAND_DUE_SHIFTS:
                     moved = plans.PlanSpec(
                         opening=base.opening, p1_branch=base.p1_branch,
                         capacity_tier=base.capacity_tier,
                         p3_mode=base.p3_mode, p4_clear=base.p4_clear,
                         quota_scale=base.quota_scale,
-                        timing_shift=shift,
+                        land_due_shift=shift, herd_due_shift=0,
                         sell_discount=base.sell_discount)
                     agg = select.aggregate_scores({
                         m.name: plans.project_season(

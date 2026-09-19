@@ -694,7 +694,7 @@ P4_MID_HELD = 15               # 15-40 → d26-27 标准档；<15 从容档
 #     （scripts/planner_flagoff_golden.py 6 种子全季动作流 sha256 校验）；
 #   * 本块不新增任何 I/O、随机源或时钟读取；寄存器键名即
 #     planner.plans.plan_to_knob_overrides 的点路径叶子名。
-# 键面（29 键，分组与 plans.py 轴的对应关系见其【缺口清单】）：
+# 键面（31 键，分组与 plans.py 轴的对应关系见其【缺口清单】）：
 #   模式激活（_decide_mode）：mode_volume_day_start/end、mode_volume_price_min、
 #     mode_volume_demand_min、mode_volume_herd_floor、mode_volume_hold_price_min、
 #     mode_volume_hold_cash_min、mode_scale_day_start/end、mode_scale_entry_herd、
@@ -707,6 +707,9 @@ P4_MID_HELD = 15               # 15-40 → d26-27 标准档；<15 从容档
 #     crew_late_cap；
 #   卖出杠杆（market 卖出计划器）：sell_price_discount、sell_batch_mult、
 #     p4_force_tier；
+#   钱包门档（v3 K2，2026-09-20；read-site：strategy._cash_gate_ok 黎明
+#     现金门 + market 买畜环 reserve_total + market COW_BUY_RESERVE 尾段
+#     d8+——前段 800/550 早起动日程冻结）：liquidity_floor、cow_buy_reserve；
 #   买畜时点（strategy._herd_target + market 买畜环）：herd_day_shift、
 #     herd_start_day、animal_buy_last_day_shift；
 #   P1 分支强制（_b_branch_adjust）：b_branch_force。

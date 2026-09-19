@@ -1,13 +1,16 @@
 # ===========================================================================
-# 【中文·模块导览】planner/plans.py —— DTSP 计划空间 Π（Track-B P2）
+# 【中文·模块导览】planner/plans.py —— DTSP 计划空间 Π（Track-B P2；v3 轴）
 # ---------------------------------------------------------------------------
 # 职责：把 phase_branch_plan v1.5 的参数包体系编码为可哈希、可序列化的
 #   PlanSpec（结构轴 = 开局变体 A/B/C × P1 分支 B1/B2/B3 × 容量档 C1/C2/C3
-#   × P3 运行态 × P4 出清档；连续缩放轴 = 作物配额 ±25% × 买地/买畜时点
-#   ±1-2 天 × 卖出曲线折扣系数），并提供三件公开机制：
+#   × P3 运行态 × P4 出清档；连续缩放轴 = 作物配额 ±25% × 买地日程
+#   land_due_shift × 买畜日程 herd_due_shift（K3 拆分）× 卖出曲线折扣；
+#   v3 新轴 = 钱包门档 liquidity_tier（K2）+ true-identity 守成点
+#   identity（K1）），并提供三件公开机制：
 #     1) enumerate_plans(obs_summary) -> list[PlanSpec]
-#        按局况粗过滤到 <=120 个候选；过滤规则 R1-R7 逐条显式可审计
-#        （返回侧带 enumerate_plans_audited 拿到逐步审计说明）。
+#        按局况粗过滤到 <=120 个候选（含恒在的 identity 守成点）；过滤
+#        规则 R1-R9 逐条显式可审计（返回侧带 enumerate_plans_audited
+#        拿到逐步审计说明）。
 #     2) plan_to_knob_overrides(plan) -> dict
 #        映射到现役执行器命名空间的真实旋钮名（供执行器消费；P2.5 起经
 #        PLANNER_ENABLED/PLANNER_OVERRIDES 惰性旋钮通道覆盖 src 门槛与
@@ -37,9 +40,37 @@ CAPACITY_TIERS = ("C1", "C2", "C3")       # v1.5 §5.1：d6 五问 → 三档
 P3_MODES = ("HEALTHY", "CATCHUP")         # v1.5 §6：d12 现金 8k 二选一
 P4_TIERS = ("LOW", "MID", "HEAVY")        # v1.5 §6：从容/标准/抢跑
 QUOTA_SCALES = (0.8, 1.0, 1.25)           # 作物配额连续缩放 ±25%（任务包）
-TIMING_SHIFTS = (-2, -1, 0, 1, 2)         # 买地/买畜时点 ±1-2 天（任务包）
-SELL_DISCOUNTS = (0.75, 0.9)              # 卖出曲线折扣系数（悲观成交裕度）
+# K3 日程轴拆分（round-24 法证终稿 §5，2026-09-20）：原 timing_shift 一轴
+# 双驱（land+herd 同平移）过约束——V_LAND 与 V_PACE 效应完全不同（V_PACE
+# 18/18 零效应、V_ALL==V_COMB 27/27），拆为两条独立轴：
+LAND_DUE_SHIFTS = (-2, -1, 0, 2, 4)       # 买地日程：-2/-1=P2.6 官方面优胜档
+                                          #   （timing-1/−2 共 28/42 注入点），
+                                          #   +2/+4=点火竞速反制（V_LAND 档=+4：
+                                          #   Q3 due 7→11，110687913 d0 组合
+                                          #   +22.4%）；+1 与 -1 微差档冗余砍除
+HERD_DUE_SHIFTS = (-1, 0)                 # 买畜日程：-1 保留 P2.6 优胜档成分；
+                                          #   ±2/V_ALL 实测零边际 → 窄轴
+SELL_DISCOUNTS = (0.9,)                   # 卖出曲线折扣（悲观成交裕度）：
+                                          #   0.75 档砍除——K6 判定卖出侧挤压
+                                          #   非杠杆（胜局对称性 11/12 对手实
+                                          #   现价更高）且 P2.6 42 注入点零选中
 MAX_PLAN_CANDIDATES = 120                 # enumerate 硬上限（任务包）
+# K2 钱包门档（round-24 反事实值域，V_WALLET/V_WALLET0 实测档）：
+#   STANDARD=v13.8 冻结值（LIQUIDITY_FLOOR=350 / COW_BUY_RESERVE=380）；
+#   LOOSE=150/150（V_WALLET：单轴最优 3/9 局）；
+#   UNBOUNDED=0/0（V_WALLET0：上限档，双向实测——+20.5% 与 -14.9k 并存，
+#   仅作枚举点不默认，由孪生 rollout 终审裁决）。
+LIQUIDITY_TIERS = ("STANDARD", "LOOSE", "UNBOUNDED")
+LIQUIDITY_PACKS = {
+    "STANDARD": {"liquidity_floor": 350, "cow_buy_reserve": 380},
+    "LOOSE": {"liquidity_floor": 150, "cow_buy_reserve": 150},
+    "UNBOUNDED": {"liquidity_floor": 0, "cow_buy_reserve": 0},
+}
+# K1 true-identity 守成档（round-24 §5 第 0 项）：枚举面恒含与 v13.8 逐字
+# 节等价的守成点（不仅参数包镜像，模式激活门槛也镜像原生默认路径）；select
+# 近平 tie-break 偏向该点。证据：d0 反事实 5/9 局 base 即最优（3 局纯
+# v13.8 比线上 DTSP v2 好 +14.7k~+32.1k）。
+IDENTITY_SELL_DISCOUNT = 1.0              # identity 的卖出折扣=v13.8 原生
 
 # 开局成本（v1.5 §3：A=2牛2羊~1800；C=1牛2羊~1400；B=d1/d2 后移，d0≈0）
 OPENING_D0_COST = {"A": 1800.0, "B": 0.0, "C": 1400.0}
@@ -130,9 +161,12 @@ BRANCH_HERD_START_DAY = {"B1": 1, "B2": 2, "B3": 3}
 
 @dataclass(frozen=True)
 class PlanSpec:
-    """一个完整季战略计划（v1.5 坐标系，可哈希/可序列化）。
+    """一个完整季战略计划（v1.5 坐标系 + v3 轴，可哈希/可序列化）。
 
     字段取值域即上方轴元组；越界值在构造期抛 ValueError（带失败示例）。
+    identity=True 为 K1 守成点：全轴钉死在 v13.8 原生锚（C2 镜像包 ×
+    配额 1.0 × 零日程偏移 × STANDARD 钱包 × 卖出折扣 1.0），发出与
+    v13.8 逐字节等价的覆盖面（见 plan_to_knob_overrides）。
     """
 
     opening: str            # P0 开局变体 A/B/C
@@ -141,8 +175,11 @@ class PlanSpec:
     p3_mode: str            # P3 运行态 HEALTHY/CATCHUP
     p4_clear: str           # P4 出清档 LOW/MID/HEAVY
     quota_scale: float      # 作物配额缩放 ∈ QUOTA_SCALES
-    timing_shift: int       # 买地/买畜时点偏移 ∈ TIMING_SHIFTS
-    sell_discount: float    # 卖出曲线折扣系数 ∈ SELL_DISCOUNTS
+    land_due_shift: int     # K3 买地日程偏移 ∈ LAND_DUE_SHIFTS
+    herd_due_shift: int     # K3 买畜日程偏移 ∈ HERD_DUE_SHIFTS
+    sell_discount: float    # 卖出曲线折扣系数 ∈ SELL_DISCOUNTS（identity=1.0）
+    liquidity_tier: str = "STANDARD"   # K2 钱包门档 ∈ LIQUIDITY_TIERS
+    identity: bool = False  # K1 true-identity 守成点（全轴=原生锚）
 
     def __post_init__(self):
         axes = (("opening", OPENING_VARIANTS, self.opening),
@@ -159,21 +196,64 @@ class PlanSpec:
             raise ValueError(
                 f"PlanSpec.quota_scale={self.quota_scale!r} 不在 {QUOTA_SCALES}"
                 f" 内（示例：quota_scale=1.3 应改取 {QUOTA_SCALES[-1]}）")
-        if self.timing_shift not in TIMING_SHIFTS:
+        if self.land_due_shift not in LAND_DUE_SHIFTS:
             raise ValueError(
-                f"PlanSpec.timing_shift={self.timing_shift!r} 不在 "
-                f"{TIMING_SHIFTS} 内（示例：timing_shift=3 应改取 2）")
-        if self.sell_discount not in SELL_DISCOUNTS:
+                f"PlanSpec.land_due_shift={self.land_due_shift!r} 不在 "
+                f"{LAND_DUE_SHIFTS} 内（示例：land_due_shift=3 应改取 2 或 4）")
+        if self.herd_due_shift not in HERD_DUE_SHIFTS:
+            raise ValueError(
+                f"PlanSpec.herd_due_shift={self.herd_due_shift!r} 不在 "
+                f"{HERD_DUE_SHIFTS} 内（示例：herd_due_shift=2 应改取 -1 或 0）")
+        if self.liquidity_tier not in LIQUIDITY_TIERS:
+            raise ValueError(
+                f"PlanSpec.liquidity_tier={self.liquidity_tier!r} 不在 "
+                f"{LIQUIDITY_TIERS} 内（示例：'TIGHT' 应改取 'STANDARD'）")
+        if self.identity:
+            anchor = (("opening", "C"), ("p1_branch", "B2"),
+                      ("capacity_tier", "C2"), ("p3_mode", "HEALTHY"),
+                      ("p4_clear", "MID"), ("quota_scale", 1.0),
+                      ("land_due_shift", 0), ("herd_due_shift", 0),
+                      ("liquidity_tier", "STANDARD"))
+            for name, want in anchor:
+                if getattr(self, name) != want:
+                    raise ValueError(
+                        f"identity=True 时 PlanSpec.{name} 必须为原生锚 "
+                        f"{want!r}（收到 {getattr(self, name)!r}；identity "
+                        f"守成点全轴=v13.8 原生，示例：identity_spec()）")
+            if self.sell_discount != IDENTITY_SELL_DISCOUNT:
+                raise ValueError(
+                    f"identity=True 时 sell_discount 必须为 "
+                    f"{IDENTITY_SELL_DISCOUNT}（v13.8 原生无折扣；示例："
+                    f"identity_spec()）")
+        elif self.sell_discount not in SELL_DISCOUNTS:
             raise ValueError(
                 f"PlanSpec.sell_discount={self.sell_discount!r} 不在 "
-                f"{SELL_DISCOUNTS} 内（示例：0.5 应改取 {SELL_DISCOUNTS[0]}）")
+                f"{SELL_DISCOUNTS} 内（示例：0.5 应改取 {SELL_DISCOUNTS[0]}；"
+                f"v13.8 原生 1.0 只经 identity=True 守成点表达）")
 
     def key(self) -> str:
-        """规范键（字典序 tie-break 与排序用；浮点两位定格，跨进程稳定）。"""
+        """规范键（字典序 tie-break 与排序用；浮点两位定格，跨进程稳定）。
+
+        tie-break 保守默认编码（投影器等值兄弟的取舍不得默认落在高风险
+        档——official 复裁实测：钱包档与日程档的 J 等值兄弟按 ASCII 序
+        中签 LOOSE/L+4 造成 -27.9%~-42.0% 主动损伤）：
+          - 钱包门档段 LQ0/LQ1/LQ2（=LIQUIDITY_TIERS 序，STANDARD 先）；
+          - 日程段 L/H 后跟偏移编码：0=原生锚、N<k>=负偏、P<k>=正偏
+            ——字典序 L0 < LN1 < LN2 < LP2 < LP4，等值时先守成锚、再
+            P2.6 优胜负档、最后未证正档。
+        档名/数值经 PLANNER_LOCAL.liquidity_tier 与 to_dict 保留（审计）。"""
+        head = "P|IDENT" if self.identity else "P"
+        liq_code = f"LQ{LIQUIDITY_TIERS.index(self.liquidity_tier)}"
+
+        def shift_code(value):
+            return "0" if value == 0 else (f"N{-value}" if value < 0
+                                           else f"P{value}")
+
         return "|".join((
-            "P", self.opening, self.p1_branch, self.capacity_tier,
+            head, self.opening, self.p1_branch, self.capacity_tier,
             self.p3_mode, self.p4_clear,
-            f"{self.quota_scale:.2f}", f"{self.timing_shift:+d}",
+            f"{self.quota_scale:.2f}", f"L{shift_code(self.land_due_shift)}",
+            f"H{shift_code(self.herd_due_shift)}", liq_code,
             f"{self.sell_discount:.2f}"))
 
     def to_dict(self) -> dict:
@@ -182,15 +262,22 @@ class PlanSpec:
                 "capacity_tier": self.capacity_tier, "p3_mode": self.p3_mode,
                 "p4_clear": self.p4_clear,
                 "quota_scale": float(self.quota_scale),
-                "timing_shift": int(self.timing_shift),
-                "sell_discount": float(self.sell_discount)}
+                "land_due_shift": int(self.land_due_shift),
+                "herd_due_shift": int(self.herd_due_shift),
+                "sell_discount": float(self.sell_discount),
+                "liquidity_tier": self.liquidity_tier,
+                "identity": bool(self.identity)}
 
     @classmethod
     def from_dict(cls, d):
         """反序列化（未知键抛错——fail-closed，防静默漂移）。"""
         known = {"opening", "p1_branch", "capacity_tier", "p3_mode",
-                 "p4_clear", "quota_scale", "timing_shift", "sell_discount"}
-        missing = known - set(d)
+                 "p4_clear", "quota_scale", "land_due_shift",
+                 "herd_due_shift", "sell_discount", "liquidity_tier",
+                 "identity"}
+        missing = {"opening", "p1_branch", "capacity_tier", "p3_mode",
+                   "p4_clear", "quota_scale", "land_due_shift",
+                   "herd_due_shift", "sell_discount"} - set(d)
         extra = set(d) - known
         if missing:
             raise ValueError(f"PlanSpec.from_dict 缺字段 {sorted(missing)}"
@@ -324,14 +411,16 @@ def plan_targets(plan: PlanSpec) -> dict:
                                 BRANCH_MELON_CAP[plan.p1_branch]))
     wheat_floor = 18 if plan.p1_branch == "B2" else 16   # v1.5 §4.2：麦底仓 12-18
     herd_target = int(pack["herd_ceiling"])
+    # K3 拆分：买地日程只随 land_due_shift 平移（买畜日程独立在
+    # herd_due_shift / overrides.herd_day_shift，两者不再同驱）。
     land_dues = {
-        1: (max(1, LAND_PLAN_DEFAULT[1][0] + plan.timing_shift),
+        1: (max(1, LAND_PLAN_DEFAULT[1][0] + plan.land_due_shift),
             LAND_PLAN_DEFAULT[1][1]),
-        2: (max(1, LAND_PLAN_DEFAULT[2][0] + plan.timing_shift),
+        2: (max(1, LAND_PLAN_DEFAULT[2][0] + plan.land_due_shift),
             LAND_PLAN_DEFAULT[2][1]),
     }
     se_due = max(1, min(SE_BUY_LAST_DAY,
-                        SE_DUE_DAY_DEFAULT + plan.timing_shift))
+                        SE_DUE_DAY_DEFAULT + plan.land_due_shift))
     return {
         "pack": pack["pack"], "pack_dict": pack["pack_dict"],
         "straw_quad_cap": scale_cap(pack["straw_quad_cap"]),
@@ -353,16 +442,27 @@ def pack_asset_units(plan: PlanSpec) -> float:
             + ANIMAL_UNITS * t["herd_ceiling"])
 
 
+def identity_spec() -> PlanSpec:
+    """K1 true-identity 守成点工厂（唯一原生锚坐标；逐黎明恒在枚举面）。"""
+    return PlanSpec(opening="C", p1_branch="B2", capacity_tier="C2",
+                    p3_mode="HEALTHY", p4_clear="MID", quota_scale=1.0,
+                    land_due_shift=0, herd_due_shift=0, sell_discount=1.0,
+                    liquidity_tier="STANDARD", identity=True)
+
+
 # --------------------------------------------------------------------------
 # 过滤规则（显式可审计：R1-R7 逐条；返回 (plans, audit_notes)）
 # --------------------------------------------------------------------------
 
 # 预算分配：离散组合先粗过滤，再与连续网格交叉。连续网格（每离散组合）
-# = TIMING_SHIFTS × SELL_DISCOUNTS；离散保留配额 = 120 // 该格大小，
-# 多样性序 = 轴序号和升序（保守优先），并按 (tier,quota) 分组轮转插值，
-# 保证 C1/C2/C3 各档在预算内均有代表（不因保守序塌缩到单档）。
-CONTINUOUS_GRID = tuple((s, d) for s in TIMING_SHIFTS for d in SELL_DISCOUNTS)
-DISCRETE_BUDGET = max(1, MAX_PLAN_CANDIDATES // len(CONTINUOUS_GRID))
+# = LAND_DUE_SHIFTS × HERD_DUE_SHIFTS × SELL_DISCOUNTS（K3 拆分后 5×2×1）；
+# 离散保留配额 = (120-1) // 该格大小（-1 = identity 守成点恒占一席，K1）。
+# 桶序 = 证据加权槽位排程（_V3_SLOT_SCHEDULE，出处逐条内嵌），排程未覆盖
+# 的桶按通用优先序回填；分支沿 branches 轮转（day0 三分支轮转覆盖，
+# day>=1 R2 定格后全槽取定格分支）。
+CONTINUOUS_GRID = tuple((ls, hs, d) for ls in LAND_DUE_SHIFTS
+                        for hs in HERD_DUE_SHIFTS for d in SELL_DISCOUNTS)
+DISCRETE_BUDGET = max(1, (MAX_PLAN_CANDIDATES - 1) // len(CONTINUOUS_GRID))
 
 _AXIS_PRIORITY = {
     "opening": {"C": 0, "A": 1, "B": 2},       # v1.5 默认优先
@@ -371,6 +471,49 @@ _AXIS_PRIORITY = {
     "p3_mode": {"HEALTHY": 0, "CATCHUP": 1},
     "p4_clear": {"LOW": 0, "MID": 1, "HEAVY": 2},
 }
+_LIQUIDITY_PRIORITY = {"STANDARD": 0, "LOOSE": 1, "UNBOUNDED": 2}
+
+# v3 槽位排程（round-24 法证终稿 §5 K1/K2/K3 + P2.6 官方面选中分布，
+# 2026-09-20）：每项=(capacity_tier, quota_scale, liquidity_tier)。预算
+# 11 槽 × 网格 10 + identity = 111 ≤ 120。排程依据：
+#   1-3  配额 1.0 × 三档 × STANDARD（守成→镜像→扩张全谱，R3/R7 门兼容）；
+#   4    C2×0.8×STANDARD —— P2.6 官方面次优档（10/42 注入点选中）；
+#   5    C1×1.25×STANDARD —— P2.6 官方面最优档（28/42 注入点选中）；
+#   6-8  钱包门 LOOSE × 镜像/扩张/保守（K2：V_WALLET 单轴最优 3/9 局）；
+#   9-10 钱包门 UNBOUNDED × 镜像/扩张（K2 上限档：仅枚举点，rollout 终审）；
+#   11   C1×0.8×STANDARD —— P2.6 第三档（4/42）。
+_V3_SLOT_SCHEDULE = (
+    ("C3", 1.0, "STANDARD"), ("C2", 1.0, "STANDARD"),
+    ("C1", 1.0, "STANDARD"), ("C2", 0.8, "STANDARD"),
+    ("C1", 1.25, "STANDARD"), ("C2", 1.0, "LOOSE"),
+    ("C1", 1.25, "LOOSE"), ("C3", 1.0, "LOOSE"),
+    ("C2", 1.0, "UNBOUNDED"), ("C1", 1.0, "UNBOUNDED"),
+    ("C1", 0.8, "STANDARD"),
+)
+
+
+def _v3_slot_keys(tier_quota, budget):
+    """可用 (tier,quota) 桶 × 钱包档的槽位键序（确定性；排程优先、通用序
+    回填；budget 截断）。通用回填序 = (quota_dist, liquidity, tier) 优先序。"""
+    available = {(t, q) for (t, q) in tier_quota}
+    order = list(_V3_SLOT_SCHEDULE)
+    scheduled = {(t, q) for (t, q, _l) in _V3_SLOT_SCHEDULE}
+    for q in sorted(QUOTA_SCALES, key=lambda v: abs(v - 1.0)):
+        for liq in LIQUIDITY_TIERS:
+            for t in sorted(CAPACITY_TIERS,
+                            key=lambda name:
+                            _AXIS_PRIORITY["capacity_tier"][name]):
+                if (t, q) in available and (t, q) not in scheduled:
+                    order.append((t, q, liq))
+    seen = set()
+    keys = []
+    for (t, q, liq) in order:
+        if (t, q) in available and (t, q, liq) not in seen:
+            seen.add((t, q, liq))
+            keys.append((t, q, liq))
+        if len(keys) >= budget:
+            break
+    return keys
 
 
 def _discrete_axis_priority(opening, branch, tier, mode, clear):
@@ -399,10 +542,13 @@ def enumerate_plans_audited(obs_summary):
       R7 容量定律剪枝：quota × 档位满配资产单位 > 容量定律(档位 crew)
          × CAP_USE_BUDGET 的 (tier,quota) 组合剔除（v1.5 §5.3 规则 5；
          系数取现役执行器重定标值，见容量定律常数注释）。
-      R8 预算分配：离散组合按 (tier,quota) 分组，组内按多样性序
-         （轴序号和升序，同和按 key 字典序）排列，组间轮转插值取前
-         DISCRETE_BUDGET 个；与连续网格（时点×折扣）交叉后仍超 120 时按
-         (|quota_scale-1|, |timing_shift|, sell_discount 降序, key) 截断。
+      R8 预算分配（v3 槽位排程）：离散组合按 (tier,quota,liq) 编桶，槽位
+         序 = _V3_SLOT_SCHEDULE 证据加权排程（通用优先序回填），分支沿
+         branches 轮转（day0 覆盖三分支、R2 定格后全槽同分支）；组内按
+         多样性序（轴序号和升序，同和按 key 字典序）。与连续网格
+         （land×herd 时点×折扣）交叉后仍超帽时按贴近基线序截断。
+      R9 identity 守成点（K1）：identity_spec() 恒追加进枚举面（不占网格
+         预算、不参与截断；select 近平 tie-break 偏向该点）。
     """
     notes = []
     day = int(obs_summary.get("day", 0))
@@ -481,7 +627,8 @@ def enumerate_plans_audited(obs_summary):
         for q in QUOTA_SCALES:
             probe = PlanSpec(opening="C", p1_branch="B2", capacity_tier=tier,
                              p3_mode="HEALTHY", p4_clear="LOW",
-                             quota_scale=q, timing_shift=0, sell_discount=0.9)
+                             quota_scale=q, land_due_shift=0,
+                             herd_due_shift=0, sell_discount=0.9)
             if pack_asset_units(probe) <= cap_units:
                 tier_quota.append((tier, q))
             else:
@@ -494,73 +641,72 @@ def enumerate_plans_audited(obs_summary):
         notes.append("R7 全部 (tier,quota) 被剪，回退保底 C3×0.8")
         tier_quota = [("C3", 0.8)]
 
-    # R8 预算分配：离散组合按 (tier,quota) 分组轮转插值（组内多样性序）
+    # R8 预算分配（v3 槽位排程）：离散组合按 (tier,quota,liq) 编桶，
+    # 槽位序 = _v3_slot_keys（排程优先），分支沿 branches 轮转。
     discrete = []
     for op in openings:
         for br in branches:
             for (tier, q) in tier_quota:
                 for mo in modes:
                     for cl in clears:
-                        discrete.append((op, br, tier, mo, cl, q))
+                        for liq in LIQUIDITY_TIERS:
+                            discrete.append((op, br, tier, mo, cl, q, liq))
 
     def _combo_rank(combo):
         return (_discrete_axis_priority(combo[0], combo[1], combo[2],
                                         combo[3], combo[4]),
+                _LIQUIDITY_PRIORITY[combo[6]],
                 PlanSpec(opening=combo[0], p1_branch=combo[1],
                          capacity_tier=combo[2], p3_mode=combo[3],
                          p4_clear=combo[4], quota_scale=combo[5],
-                         timing_shift=0, sell_discount=0.9).key())
+                         land_due_shift=0, herd_due_shift=0,
+                         sell_discount=SELL_DISCOUNTS[0],
+                         liquidity_tier=combo[6]).key())
 
-    groups = {}
+    buckets = {}
     for combo in discrete:
-        groups.setdefault((combo[2], combo[5]), []).append(combo)
-    for gkey in groups:
-        groups[gkey].sort(key=_combo_rank)
-    # 组间轮转：第 r 轮优先取分支 P1_BRANCHES[r % 3]（B2 默认 → B1 burst
-    # 应答 → B3），保证预算内分支均有代表；组内取该分支多样性序最优的
-    # 未选成员，无该分支成员则按序补位。
+        buckets.setdefault((combo[2], combo[5], combo[6]), []).append(combo)
+    for gkey in buckets:
+        buckets[gkey].sort(key=_combo_rank)
     selected = []
     chosen = set()
-    for round_i in range(len(P1_BRANCHES)):
-        if len(selected) >= DISCRETE_BUDGET:
-            break
-        want_branch = P1_BRANCHES[round_i % len(P1_BRANCHES)]
-        for gkey in sorted(groups):
-            if len(selected) >= DISCRETE_BUDGET:
-                break
-            pick = None
-            for member in groups[gkey]:
-                if member[1] == want_branch and member not in chosen:
-                    pick = member
-                    break
-            if pick is None:
-                for member in groups[gkey]:
-                    if member not in chosen:
-                        pick = member
-                        break
-            if pick is not None:
-                selected.append(pick)
-                chosen.add(pick)
+    for slot_i, (tier, q, liq) in enumerate(
+            _v3_slot_keys(tier_quota, DISCRETE_BUDGET)):
+        members = buckets.get((tier, q, liq)) or []
+        want_branch = branches[slot_i % len(branches)]
+        pick = next((m for m in members
+                     if m[1] == want_branch and m not in chosen), None)
+        if pick is None:
+            pick = next((m for m in members if m not in chosen), None)
+        if pick is not None:
+            selected.append(pick)
+            chosen.add(pick)
     if len(discrete) > len(selected):
         notes.append(f"R8 离散组合 {len(discrete)} > 预算 {DISCRETE_BUDGET}"
-                     f"（(tier,quota) 组间轮转插值截断）")
+                     f"（v3 槽位排程截断）")
     discrete = selected
 
     plans = []
-    for (op, br, tier, mo, cl, q) in discrete:
-        for (s, d) in CONTINUOUS_GRID:
+    for (op, br, tier, mo, cl, q, liq) in discrete:
+        for (ls, hs, d) in CONTINUOUS_GRID:
             plans.append(PlanSpec(opening=op, p1_branch=br,
                                   capacity_tier=tier, p3_mode=mo,
                                   p4_clear=cl, quota_scale=q,
-                                  timing_shift=s, sell_discount=d))
-    # 最终 120 上限截断（确定性优先序：贴近基线的连续旋钮优先）
+                                  land_due_shift=ls, herd_due_shift=hs,
+                                  sell_discount=d, liquidity_tier=liq))
+    # R9 identity 守成点恒在（K1；网格预算已按 120-1 预留，不参与截断）
+    plans.append(identity_spec())
+    # 最终 120 上限截断（确定性优先序：贴近基线的连续旋钮优先；identity
+    # 守成点豁免——K1 恒在）
     if len(plans) > MAX_PLAN_CANDIDATES:
-        plans.sort(key=lambda p: (
-            abs(p.quota_scale - 1.0), abs(p.timing_shift),
-            -p.sell_discount, p.key()))
-        notes.append(f"R8 连续交叉 {len(plans)} > {MAX_PLAN_CANDIDATES}，"
-                     f"按贴近基线序截断")
-        plans = plans[:MAX_PLAN_CANDIDATES]
+        grid_plans = [p for p in plans if not p.identity]
+        overflow = len(plans) - MAX_PLAN_CANDIDATES
+        grid_plans.sort(key=lambda p: (
+            abs(p.quota_scale - 1.0), abs(p.land_due_shift),
+            abs(p.herd_due_shift), -p.sell_discount, p.key()))
+        plans = grid_plans[:len(grid_plans) - overflow] + [identity_spec()]
+        notes.append(f"R8 连续交叉超 {MAX_PLAN_CANDIDATES}，"
+                     f"按贴近基线序截断（identity 豁免）")
     plans.sort(key=lambda p: p.key())     # 输出稳定序
     return plans, notes
 
@@ -607,8 +753,14 @@ def enumerate_plans(obs_summary):
 #      计划轴（保留轴：d14 冻结 doctrine 由执行器局况自治）。
 #
 _SELL_HOLD_EDGE_BASE = 1.05    # src/constants.py SELL_PLAN_HOLD_EDGE 默认
-_PLANNER_LOCAL_KEYS = ("sell_discount", "animal_buy_day_shift", "p3_mode",
-                       "p4_clear", "opening", "p1_branch")
+# v13.8 原生值镜像（identity 守成点专用；C 档计划会把这些键写偏离值，
+# identity 必须写回原生——出处 src/constants.py 逐键内嵌）。
+_NATIVE_LINE_CAPS_STRAWBERRY = 48     # LINE_CAPS["STRAWBERRY"]（Renji 线）
+_NATIVE_STRAW_QUAD_CAP_REGIME = 8     # STRAW_QUAD_CAP_REGIME（SCALE 模式读）
+_NATIVE_STRAW_TOTAL_CAP_REGIME = 24   # STRAW_TOTAL_CAP_REGIME（SCALE 模式读）
+_PLANNER_LOCAL_KEYS = ("sell_discount", "land_due_shift", "herd_due_shift",
+                       "liquidity_tier", "p3_mode", "p4_clear", "opening",
+                       "p1_branch", "identity")
 
 # 容量档 → 激活门槛包（P2.5 新增；C2=v13.8 冻结值逐字段镜像，C1/C3 的
 # 偏离值出自 v1.5 §5.1/§5.3 的档位语义：C1=宽田候选提前一拍入场、
@@ -659,11 +811,13 @@ def plan_to_knob_overrides(plan: PlanSpec) -> dict:
       - "PLANNER_ENABLED"：DTSP 总旗（exec 装载后置 True 才使覆盖生效；
         旗关恒回默认值——黄金动作哈希保证 v13.8 逐字节等价）。
       - "PLANNER_OVERRIDES.<键>"：写入 src/constants.py 的计划覆盖寄存器
-        （_plan_knob 惰性读取；键面=缺口清单 P2.5 处置的 29 键全名面）。
+        （_plan_knob 惰性读取；键面=缺口清单 P2.5+K2 处置的 31 键全名面）。
       - 顶层标量键 / "DICT.key" 点路径：直接写命名空间（SE_DUE_DAY、
         _VOLUME_PLAN.straw_total_cap、LAND_PLAN.1 整元组等，语义与测试侧
         main.<KNOB> patch 契约一致）。
       - "PLANNER_LOCAL.*"/"PACK"：信息性键（执行器侧跳过）。
+    identity=True（K1 守成点）：全名面同构、全部值=v13.8 原生（参数包/
+    门槛/钱包门/卖出/日程/分支强制一律回原生）——行为与旗关逐字节等价。
     数值均为确定性取整；容量档镜像自 src 冻结值（见 TIER_PACKS 出处）。
     """
     t = plan_targets(plan)
@@ -672,6 +826,7 @@ def plan_to_knob_overrides(plan: PlanSpec) -> dict:
     posture = _P3_POSTURE[plan.p3_mode]
     clear_gates = _P4_CLEAR_GATES[plan.p4_clear]
     branch = plan.p1_branch
+    liquidity = LIQUIDITY_PACKS[plan.liquidity_tier]
     overrides = {
         "PACK": PACK_MODE_NAME[t["pack"]],
         # —— DTSP 总旗 + 计划覆盖寄存器（旗关等价性的开关面）——
@@ -685,7 +840,7 @@ def plan_to_knob_overrides(plan: PlanSpec) -> dict:
         # —— 分线封顶（配额缩放同源；HERD/WHEAT 不缩放）——
         "LINE_CAPS.STRAWBERRY": t["straw_total_cap"],
         "LINE_CAPS.MELON": t["melon_total_cap"],
-        # —— 买地时点（缺口 2 买地半边）——
+        # —— 买地时点（缺口 2 买地半边；K3 起 land_due_shift 独立驱动）——
         "LAND_PLAN.1": t["land_dues"][1],
         "LAND_PLAN.2": t["land_dues"][2],
         "SE_DUE_DAY": t["se_due"],
@@ -728,21 +883,46 @@ def plan_to_knob_overrides(plan: PlanSpec) -> dict:
         # —— P4 出清档（缺口 6：强制档 + 批量乘数）——
         "PLANNER_OVERRIDES.p4_force_tier": clear_gates["p4_force_tier"],
         "PLANNER_OVERRIDES.sell_batch_mult": clear_gates["sell_batch_mult"],
-        # —— 买畜时点（缺口 2：日程平移 + 起步门 + 末窗平移）——
-        "PLANNER_OVERRIDES.herd_day_shift": int(plan.timing_shift),
+        # —— K2 钱包门档（round-24 反事实值域；三读取点：
+        #     strategy._cash_gate_ok / market 买畜环 reserve_total /
+        #     market COW_BUY_RESERVE 尾段 d8+，前段 800/550 日程冻结）——
+        "PLANNER_OVERRIDES.liquidity_floor":
+            int(liquidity["liquidity_floor"]),
+        "PLANNER_OVERRIDES.cow_buy_reserve":
+            int(liquidity["cow_buy_reserve"]),
+        # —— 买畜时点（缺口 2：日程平移 + 起步门 + 末窗平移；K3 起
+        #     herd_due_shift 独立驱动，与买地轴解耦）——
+        "PLANNER_OVERRIDES.herd_day_shift": int(plan.herd_due_shift),
         "PLANNER_OVERRIDES.herd_start_day":
             max(0, BRANCH_HERD_START_DAY[branch] - 1),
-        "PLANNER_OVERRIDES.animal_buy_last_day_shift": int(plan.timing_shift),
+        "PLANNER_OVERRIDES.animal_buy_last_day_shift":
+            int(plan.herd_due_shift),
         # —— P1 分支强制（缺口 4：计划动作包越过分类的接口位）——
         "PLANNER_OVERRIDES.b_branch_force": branch,
         # —— 规划器本地（信息性；执行器无对应旋钮/不安全参数化项）——
         "PLANNER_LOCAL.sell_discount": float(d),
-        "PLANNER_LOCAL.animal_buy_day_shift": int(plan.timing_shift),
+        "PLANNER_LOCAL.land_due_shift": int(plan.land_due_shift),
+        "PLANNER_LOCAL.herd_due_shift": int(plan.herd_due_shift),
+        "PLANNER_LOCAL.liquidity_tier": plan.liquidity_tier,
         "PLANNER_LOCAL.p3_mode": plan.p3_mode,
         "PLANNER_LOCAL.p4_clear": plan.p4_clear,
         "PLANNER_LOCAL.opening": plan.opening,
         "PLANNER_LOCAL.p1_branch": plan.p1_branch,
+        "PLANNER_LOCAL.identity": bool(plan.identity),
     }
+    if plan.identity:
+        # K1 true-identity：偏离键全部写回 v13.8 原生值（键面不变——
+        # governed_keys 快照/恢复契约依赖全名面恒定）。
+        overrides["STRAW_QUAD_CAP_REGIME"] = _NATIVE_STRAW_QUAD_CAP_REGIME
+        overrides["STRAW_TOTAL_CAP_REGIME"] = _NATIVE_STRAW_TOTAL_CAP_REGIME
+        overrides["LINE_CAPS.STRAWBERRY"] = _NATIVE_LINE_CAPS_STRAWBERRY
+        overrides["SELL_PLAN_HOLD_EDGE"] = _SELL_HOLD_EDGE_BASE
+        overrides["PLANNER_OVERRIDES.sell_price_discount"] = \
+            IDENTITY_SELL_DISCOUNT
+        overrides["PLANNER_OVERRIDES.p4_force_tier"] = ""    # 原生不强制
+        overrides["PLANNER_OVERRIDES.sell_batch_mult"] = 1.0
+        overrides["PLANNER_OVERRIDES.herd_start_day"] = 0    # 原生 0
+        overrides["PLANNER_OVERRIDES.b_branch_force"] = ""   # 原生不强制
     return dict(sorted(overrides.items()))
 
 
@@ -770,10 +950,12 @@ def project_season(plan: PlanSpec, obs_summary, pressure=None) -> float:
       吸收健康：clamp(daily_demand[item]/REF_DEMAND[item], 0.3, 1.2)
               （锚条件=v1.5 §5.3 表的健康商铺集）。
       成本：雇工 fib 日薪、外购饲料（产量不足头数×1麦/日，价 36）、
-            买地（LAND 日程 + timing_shift）、买畜（目标爬坡期均摊 450/头）、
-            种子（草莓/瓜一次性；小麦 2 日周期折 5/格/日）。
+            买地（LAND 日程 + land_due_shift）、买畜（目标爬坡期均摊
+            450/头）、种子（草莓/瓜一次性；小麦 2 日周期折 5/格/日）。
       简化（诚实声明）：不建模棚仓物流/日内外/对手逐回合压价的库存反馈、
             终局存货残值；两者都由 bench 的孪生 rollout 口径兜底。
+            K2 钱包门档对本投影器不可见（无钱包地板建模）——liquidity
+            轴的裁决完全依赖孪生 rollout 终审与 bench 口径。
     pressure: {item: factor}（对手模型供给压价系数，(0,1]；缺省全 1.0）。
     """
     pr = dict(pressure or {})
@@ -806,7 +988,7 @@ def project_season(plan: PlanSpec, obs_summary, pressure=None) -> float:
     #      投影器同尺平移爬坡起点（修正前时点轴 J 零方差、恒被字典序
     #      tie-break 钉在 +0，42/42 注入点从不出现在选中计划）。
     closed = day0 >= PLANT_LAST_DAY
-    herd_start = max(0, t["herd_start_day"] + int(plan.timing_shift))
+    herd_start = max(0, t["herd_start_day"] + int(plan.herd_due_shift))
     herd_span = max(1, 11 - t["herd_start_day"])
 
     for day in range(day0, 30):
