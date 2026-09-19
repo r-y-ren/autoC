@@ -4,7 +4,7 @@
  "submission_ref": 56342843,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-19T00:26:10Z",
+ "captured_at_utc": "2026-09-19T01:43:26Z",
  "candidate": {
   "label": "v14.0-dtsp-working",
   "pkg_sha256": "ee19d2c7655a85e44434ea860a354927dfa85f9009a1ca801d95cf4c9f27d127",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 603.7,
+ "public_score": 500.9,
  "validation": [
   {
    "id": 110616242,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 10,
-  "record": "6W-4L",
-  "wins": 6,
-  "losses": 4,
-  "win_rate": 0.6,
-  "our_money_mean": 71354.6,
-  "opp_money_mean": 67748.1,
-  "mean_margin": 3606.5,
+  "public_games": 19,
+  "record": "8W-11L",
+  "wins": 8,
+  "losses": 11,
+  "win_rate": 0.4211,
+  "our_money_mean": 66590.5,
+  "opp_money_mean": 71045.3,
+  "mean_margin": -4454.8,
   "axes": {
    "d0_plants_ours": 9.0,
-   "d0_plants_opp": 19.9,
-   "wheat_d7_ours": 15.6,
-   "berry_d12_ours": 23.2,
-   "berry_d12_opp": 14.8,
-   "herd_d0_ours": 3.8,
-   "harvest_ours": 168.5,
-   "money_d11_ours": 549.1,
-   "money_d11_opp": 6471.5
+   "d0_plants_opp": 15.7,
+   "wheat_d7_ours": 14.4,
+   "berry_d12_ours": 22.3,
+   "berry_d12_opp": 16.7,
+   "herd_d0_ours": 3.9,
+   "harvest_ours": 165.8,
+   "money_d11_ours": 471.3,
+   "money_d11_opp": 6471.2
   },
   "episodes": [
    {
@@ -149,9 +149,90 @@
     "opp_name": "Aaradhy Singhvi",
     "margin": 32230.0,
     "seat": 0
+   },
+   {
+    "id": 110627506,
+    "result": "L",
+    "our": 62986.0,
+    "opp": 84958.0,
+    "opp_name": "Kushpreet Singh",
+    "margin": -21972.0,
+    "seat": 1
+   },
+   {
+    "id": 110628635,
+    "result": "L",
+    "our": 73364.0,
+    "opp": 99746.0,
+    "opp_name": "Yan Slabodich",
+    "margin": -26382.0,
+    "seat": 1
+   },
+   {
+    "id": 110629738,
+    "result": "L",
+    "our": 46686.0,
+    "opp": 69937.0,
+    "opp_name": "Giovanni Marco Dall'Olio",
+    "margin": -23251.0,
+    "seat": 0
+   },
+   {
+    "id": 110630917,
+    "result": "L",
+    "our": 77740.0,
+    "opp": 89536.0,
+    "opp_name": "Lebansty Valan",
+    "margin": -11796.0,
+    "seat": 1
+   },
+   {
+    "id": 110631970,
+    "result": "W",
+    "our": 76303.0,
+    "opp": 69218.0,
+    "opp_name": "Eduardo2c",
+    "margin": 7085.0,
+    "seat": 0
+   },
+   {
+    "id": 110633089,
+    "result": "L",
+    "our": 62606.0,
+    "opp": 108098.0,
+    "opp_name": "lixinglong ye",
+    "margin": -45492.0,
+    "seat": 0
+   },
+   {
+    "id": 110634204,
+    "result": "L",
+    "our": 28806.0,
+    "opp": 53523.0,
+    "opp_name": "Hiroyuki Fujimaki",
+    "margin": -24717.0,
+    "seat": 0
+   },
+   {
+    "id": 110635317,
+    "result": "L",
+    "our": 53839.0,
+    "opp": 59518.0,
+    "opp_name": "S Aishvarya",
+    "margin": -5679.0,
+    "seat": 1
+   },
+   {
+    "id": 110636414,
+    "result": "W",
+    "our": 69343.0,
+    "opp": 37845.0,
+    "opp_name": "Sneha Bhargava4",
+    "margin": 31498.0,
+    "seat": 0
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 6W-4L over 10 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 8W-11L over 19 public games; local quickwin/self-play is not this verdict."
 }
