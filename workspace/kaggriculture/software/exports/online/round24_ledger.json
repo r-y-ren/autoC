@@ -1,0 +1,21 @@
+{
+ "schema": "online-probe-ledger/1.0",
+ "round": 24,
+ "track": "B-dtsp",
+ "candidate": {
+  "label": "v14.1-dtsp-working",
+  "pkg_sha256": "116b02c8",
+  "main_sha256": "c6183b87",
+  "git_ref": "ba352f5",
+  "submission_ref": 56347074,
+  "submitted_at_utc": "2026-09-19T03:24:59Z",
+  "status": "PENDING (validation episode)",
+  "quota_after_submit": "4 remaining today"
+ },
+ "evidence_base": {
+  "root_cause": "official loader sys.path.pop() after exec killed turn-time planner import (ModuleNotFoundError silently caught -> PLANNER_ENABLED=False); proven via scripts/p41_official_load_probe.py on byte-copy of v1 package (match_rate=100.0% == online signature)",
+  "fix": "eager import planner.runtime in loader append window + sys.path belt; engagement telemetry; tests/test_p41_engagement_gate.py (disaster-game replay: engaged=true, 13 divergent steps, plan C1@1.25x-1x0.90 matches forensics)",
+  "adjudication_axis": "online; engagement proof = round23_dtsp_stepdiff_probe.py on 3-5 sampled games must show match_rate<100%"
+ },
+ "tracked_pair_note": "submit evicts v1-dtsp (56342843, byte-identical v13.8 behavior) from tracking; pair now = v13.8 (56336584) + v14.1-dtsp (56347074)"
+}
