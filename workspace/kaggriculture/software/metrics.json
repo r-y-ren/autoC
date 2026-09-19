@@ -6588,6 +6588,66 @@
     "day0_plan_count": 111,
     "slot_schedule": "证据加权 11 桶（C1×1.25/C2×0.8 等官方优胜档+三钱包档）"
    }
+  },
+  "p4v31_pressure_adaptive_discount": {
+   "method": "v3.1 投影器悲观折扣×对手压力双重建模（任务包 v3.1）：disc=1-(1-0.75)*s，s=max(畜群/12, (象限-1)/2)（obs 全公开产能基座；资金差信号预登记关闭——22 局逐日轨迹囤钱型弱对手与巨人相对资金 8.8x-117x 交叠）；rollout 余季延续段守 None→0.75。标定=预登记网格 C0a/C0b/C1-C8 × smoke 6 局选参（scripts/v31_pressure_calibration.py，选中 C8_open_H12_L3，tie-break ②方向修正留痕于 v31_calibration.json reselection_note）→ official 一次终裁",
+   "value": {
+    "disc_strong_end": 0.75,
+    "herd_ref": 12.0,
+    "quad_ref": 3,
+    "money_gap_ref": null,
+    "prior_days_open": -1,
+    "liq_penalty": 0.3,
+    "wallet_visibility_scoring": "非 STANDARD 档按模型现金轨迹跌破 STANDARD 地板的 $*日面积*0.3 罚分（无罚分轨迹计量，无复利）",
+    "smoke_grid_all_score": 3,
+    "smoke_note": "10 配置 score 并列=基线水平；自适应折扣与 trim 修复在 smoke 零选局效应；LIQ 罚分为唯一真杠杆（110841464 -14.9%->+6.2%）"
+   }
+  },
+  "p4v31_select_trim_defect_fix": {
+   "method": "select.aggregate_scores trimmed_mean 缺陷修复（v3.1 标定期发现）：原按 name-sorted 顺序切片，键序≠值序时裁掉名字居中而非值居中模型；Ω=4 实测（110683437 d5）kept=(值min 9496.0+值max 13374.2)，悲观 10015.5 与 wheat_sup 10960.1 两个值中位被裁——悲观折扣对投影器全局失敏（机制死代码）。修复=值序排序后裁切 + 回归测试 test_trimmed_mean_value_order_statistics（键序值序反相样例）",
+   "value": {
+    "defect": "name-sorted positional trim",
+    "fixed": "value-sorted order statistics",
+    "impact_without_fix": "v3.1 折扣机制不可达（投影聚合不含悲观模型）"
+   }
+  },
+  "p4v31_official_readmission": {
+   "method": "scripts/v3_readmission_suite.py --mode official 一次终裁（2026-09-20，C8 配置=值序裁切修复+自适应 open/H12+LIQ 0.3；报告 exports/probes/planner_bench/v31_official_readmission.json，摘要 v31_pressure_calibration_summary.md）",
+   "value": {
+    "criterion_a": "12/14 mean +667 PASS（与 v14.2 持平，bench 对本改动不敏感）",
+    "criterion_b_giants_recovered": "3/9 FAIL（需>=4）：110687913 +20.2 / 110702221 +21.0 / 110699710 +47.8；回退=110684532 +20.6->-19.4、110694473 +20.4->+4.2（LIQ 罚分移除 LOOSE 档出 rollout 比较集，110684532 挽回机制正是钱包档：其 d0 反事实 V_WALLET 单轴最优 +11.3）",
+    "criterion_c_wins_hurt": "7/13 FAIL（需<=2）：塌方三局 110683437 -55.6 / 110695554 -27.4 / 110696787 -25.5 全网格 10 配置+official 逐位不变（选择轨迹对投影器评分不变量，rollout 仲裁钉死）；110692292 -9.2->-14.3、110693383 -9.1->-14.7（LIQ 同源回退）",
+    "sentinel_110699710_beats_opp": true,
+    "projector_segment_ms": 42.2,
+    "gains_giants": {
+     "110687913": 0.202,
+     "110677576": -0.024,
+     "110684532": -0.194,
+     "110694473": 0.042,
+     "110702221": 0.21,
+     "110699710": 0.4782,
+     "110685617": -0.075,
+     "110841464": 0.062,
+     "110701172": -0.033
+    },
+    "gains_wins": {
+     "110681129": 0.16,
+     "110682284": -0.069,
+     "110683437": -0.5558,
+     "110686759": 0.3275,
+     "110690133": 0.104,
+     "110691193": 0.077,
+     "110692292": -0.143,
+     "110693383": -0.147,
+     "110695554": -0.274,
+     "110696787": -0.254,
+     "110697778": 0.1,
+     "110698875": 0.143,
+     "110790899": -0.42
+    },
+    "overall": false,
+    "disposition": "三判据未全过 -> 不登记 v14.3；代码回滚 v14.2 语义（v3.1 实验代码以实验 commit 系留档），塌方局行为差异面在执行器/计划空间坐标非投影器评分——救 c 须蓝图级变更（K1 d0-d2 开窗豁免 / sell 折扣轴扩 1.0 / C1 模式门控放宽），留给协调者终裁"
+   }
   }
  },
  "milestone": "Track-B P3 DTSP bot 内集成（黎明钩子进提交 bot：投影段 P2.6 钉死配置 + 预算内孪生精化段 K×Ω' 阶梯；时间治理器 min(0.85s,0.5s+池/黎明×0.5)；fail-open 三道（异常/指纹/超限→快照恢复+粘性旗关，动作流与旗关 golden 逐字节一致）；打包 pkg.2-dtsp（planner+scene 内置，确定性 181KB 级）；官方 42 注入点策略探针=精化段对 P2.6 选择中性；端到端 4 种子全季无超时无异常）",

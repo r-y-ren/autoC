@@ -18,11 +18,13 @@
 #   近平守成：投影与 rollout 两段均带 identity tie-break，边际 <τ 不偏离
 #   v13.8——round-24 法证终稿 §5 第 0 项）：
 #   组装 obs 摘要 → enumerate_plans(≤120，含 identity) → 现任投影器 ×
-#   Ω=4 压力打分 → robust_select(trimmed_mean@0.25, 悲观折扣 0.75,
-#   identity_key) → 投影排序 top-K（identity 恒在）→ 孪生 rollout
-#   （K×Ω' 子集：沙盒命名空间驱动我方席 + 对手模型日计划逐回合滴灌；
-#   地平线 H 天；得分 = 地平线资金 + 投影器余季延续）→ 完成者中 argmax
-#   （近平守成回落 identity）→ plan_to_knob_overrides 注入。
+#   Ω=4 压力打分（v3.1：悲观折扣=对手压力自适应 plans.pressure_discount
+#   ——弱对手→1.0、强对手→0.75；rollout 余季延续段守 None→强端常数）→
+#   robust_select(trimmed_mean@0.25, identity_key) → 投影排序 top-K
+#   （identity 恒在）→ 孪生 rollout（K×Ω' 子集：沙盒命名空间驱动我方席 +
+#   对手模型日计划逐回合滴灌；地平线 H 天；得分 = 地平线资金 + 投影器
+#   余季延续）→ 完成者中 argmax（近平守成回落 identity）→
+#   plan_to_knob_overrides 注入。
 # K/H 由实测曲线裁剪：本机实测（exports/probes/p3_integration/）沙盒装载
 #   37.6ms、投影全段 34.1ms、agent 逐步 1.5-2.1ms——全季 agent 驱动
 #   rollout ≈1.2s 出不进 0.85s 预算，K≈15-25 全季先验按实测降为短地平线
@@ -203,12 +205,13 @@ def build_obs_summary(module, obs, player, day):
     demand = compute_town_demand(module, unlocked)
     my_crops, my_herd, my_money, quads = scan_farm(farms[player])
     opp = farms[1 - player] if len(farms) > 1 else None
-    opp_crops, opp_herd, opp_money, _ = scan_farm(opp)
+    opp_crops, opp_herd, opp_money, opp_quads = scan_farm(opp)
     opp_class = _plans.classify_opponent_opening(day, opp_herd, opp_crops)
     return _plans.build_obs_summary(
         day=day, money=my_money, herd=my_herd, crops=my_crops,
         unlocked_quadrants=quads, prices=prices, daily_demand=demand,
-        opponent={"herd": opp_herd, "crops": opp_crops, "money": opp_money},
+        opponent={"herd": opp_herd, "crops": opp_crops, "money": opp_money,
+                  "quads": opp_quads},
         opp_class=opp_class)
 
 
@@ -369,12 +372,13 @@ def build_rollout_tail_summary(module, state, player):
     demand = compute_town_demand(module, unlocked)
     my_crops, my_herd, my_money, quads = scan_farm(farms[player])
     opp = farms[1 - player] if len(farms) > 1 else None
-    opp_crops, opp_herd, opp_money, _ = scan_farm(opp)
+    opp_crops, opp_herd, opp_money, opp_quads = scan_farm(opp)
     day = int(state.seats[0].observation.day)
     return _plans.build_obs_summary(
         day=day, money=my_money, herd=my_herd, crops=my_crops,
         unlocked_quadrants=quads, prices=prices, daily_demand=demand,
-        opponent={"herd": opp_herd, "crops": opp_crops, "money": opp_money},
+        opponent={"herd": opp_herd, "crops": opp_crops, "money": opp_money,
+                  "quads": opp_quads},
         opp_class=None)
 
 
@@ -496,6 +500,11 @@ def _signature(day, player, summary, obs):
         "quads": int(summary.get("unlocked_quadrants", 1)),
         "crops": summary.get("crops") or {},
         "opp_herd": int((summary.get("opponent") or {}).get("herd", 0)),
+        # v3.1：对手资金/象限进缓存键（压力折扣依赖这两个公开量——同
+        #   day 同签名不同对手态的 obs 不得共享决策缓存）
+        "opp_money": round(float((summary.get("opponent") or {})
+                                 .get("money", 0.0) or 0.0), 3),
+        "opp_quads": int((summary.get("opponent") or {}).get("quads", 1)),
         "prices": {k: round(float(v), 3)
                    for k, v in sorted((summary.get("prices") or {}).items())
                    if isinstance(v, (int, float))},

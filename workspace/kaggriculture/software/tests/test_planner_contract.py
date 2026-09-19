@@ -645,7 +645,10 @@ class TestOpponentModels:
         assert action["market"] == [["SELL", "MELON", 3],
                                     ["SELL", "STRAWBERRY", 8]]
         pressure = model.supply_pressure({})
-        assert pressure["STRAWBERRY"] == 0.75 and pressure["WHEAT"] == 0.75
+        # v3.1 标定语义：冷摘要（无对手证据）→ 信号 s=0 → 折扣=1.0
+        # （弱/无证据对手 → 激进计划按真值评分）；None（rollout 余季
+        # 延续段）显式走守旧常数路径（见 test_pessimistic_fill_wiring）
+        assert pressure["STRAWBERRY"] == 1.0 and pressure["WHEAT"] == 1.0
         # 我方无卖单 → 无倾销
         assert model.propose_actions({"our_sell_plan": {}}, 11)["market"] == []
 
@@ -703,6 +706,23 @@ class TestRobustSelect:
         assert select.aggregate_scores(scores, "trimmed_mean") == 2.5
         assert select.aggregate_scores({"only": 7.0}, "trimmed_mean") == 7.0
 
+    def test_trimmed_mean_value_order_statistics(self):
+        # v3.1 回归（2026-09-20 标定实测）：trimmed_mean 必须按【值序】
+        # 裁切序统计量，不得按 name-sorted 顺序切片——键序≠值序时旧实现
+        # kept=(值min+值max)、两个值中位反被裁（Ω=4 下悲观模型全局失敏，
+        # 悲观折扣成死代码）。本样例刻意让键序与值序相反。
+        scores = {"a": 4.0, "b": 1.0, "c": 3.0, "d": 2.0}
+        # 值序 [1,2,3,4] → 裁两端 → (2+3)/2 = 2.5（旧实现按键序 a,b,c,d
+        # 切 [1:3] 得 (1+3)/2 = 2.0）
+        assert select.aggregate_scores(scores, "trimmed_mean") == 2.5
+        # Ω=4 实测形态：悲观模型分值居中时必须进入聚合
+        omega4 = {"frozen_style_pool:wheat_suppressor": 10960.13,
+                  "frozen_style_pool:winner_balanced": 9495.99,
+                  "passive_extrapolation": 13374.23,
+                  "pessimistic_fill": 10015.45}
+        assert select.aggregate_scores(omega4, "trimmed_mean") == \
+            (10015.45 + 10960.13) / 2
+
     def test_monotonicity_property(self):
         base = {"m1": 10.0, "m2": 20.0, "m3": 30.0, "m4": 40.0}
         for strategy in ("trimmed_mean", "worst_case", "weighted"):
@@ -742,6 +762,142 @@ class TestRobustSelect:
         with pytest.raises(ValueError):
             select.aggregate_scores({"a": 1.0}, "trimmed_mean",
                                     trim_fraction=0.5)
+
+
+# ===========================================================================
+# 6.5) v3.1 对手压力自适应折扣（plans.pressure_* + PessimisticFill 接线）
+# ===========================================================================
+
+class TestPressureAdaptiveDiscount:
+
+    @staticmethod
+    def _obs(day, *, opp_herd=0, opp_quads=1, opp_money=0.0, my_money=2000.0):
+        return plans.build_obs_summary(
+            day=day, money=my_money, herd=3, crops={}, unlocked_quadrants=1,
+            opponent={"herd": opp_herd, "crops": {}, "money": opp_money,
+                      "quads": opp_quads})
+
+    def test_prior_window_semantics_parameterized(self):
+        # 先验窗语义（参数化）：PRIOR_DAYS=1 时 d0-d1 恒全悲观（v14.2
+        # 回退面）；标定烘焙默认为 open（PRIOR_DAYS=-1，无先验窗）——
+        # smoke 实测开窗与否零选局效应，两档均入预登记网格。
+        for day in (0, 1, 5):
+            obs = self._obs(day, opp_herd=12, opp_quads=3)
+            assert plans.pressure_strength(obs, prior_days=1) == 1.0
+        gated_weak = self._obs(1, opp_herd=0, opp_quads=1)
+        assert plans.pressure_strength(gated_weak, prior_days=1) == 1.0
+        assert plans.pressure_strength(gated_weak, prior_days=-1) == 0.0
+        # 烘焙默认 = open：无先验窗，d0 即信号接管
+        assert plans.PRESSURE_PRIOR_DAYS == -1
+        assert plans.pressure_strength(self._obs(0)) == 0.0
+
+    def test_baked_calibration_defaults(self):
+        # 预登记标定选中 C8_open_H12_L3（v31_calibration.json）：
+        # 值序裁切修复 + 自适应开 + H12 + LIQ 0.3；强端恒 0.75
+        assert plans.PRESSURE_HERD_REF == 12.0
+        assert plans.PRESSURE_QUAD_REF == 3
+        assert plans.PRESSURE_MONEY_GAP_REF is None
+        assert plans.PRESSURE_LIQ_PENALTY == 0.3
+        assert plans.PRESSURE_ADAPTIVE is True
+        assert plans.PRESSURE_DISC_STRONG == 0.75
+
+    def test_monotone_in_opponent_assets(self):
+        # 畜群/象限任一增强 → s 非降、折扣非增（悲观随对手增强）
+        prev_s, prev_d = -1.0, 2.0
+        for herd, quads in ((0, 1), (4, 1), (8, 1), (8, 2), (12, 3)):
+            obs = self._obs(10, opp_herd=herd, opp_quads=quads)
+            s, d = plans.pressure_strength(obs), plans.pressure_discount(obs)
+            assert s >= prev_s and d <= prev_d
+            prev_s, prev_d = s, d
+        obs = self._obs(10, opp_herd=12, opp_quads=3)
+        assert plans.pressure_strength(obs) == 1.0
+        assert plans.pressure_discount(obs) == 0.75
+
+    def test_weak_opponent_relaxes_to_face_value(self):
+        # 弱对手（低畜群单象限）→ 折扣 → 1.0（激进计划按真值评分）
+        obs = self._obs(5, opp_herd=0, opp_quads=1)
+        assert plans.pressure_discount(obs) == 1.0
+        # 资金差信号默认关（预登记标定依据）：囤钱型弱对手不触发悲观
+        obs_rich = self._obs(13, opp_herd=0, opp_quads=1, opp_money=24000.0,
+                             my_money=300.0)
+        assert plans.PRESSURE_MONEY_GAP_REF is None
+        assert plans.pressure_discount(obs_rich) == 1.0
+
+    def test_adaptive_off_restores_constant(self):
+        obs = self._obs(5, opp_herd=12, opp_quads=3)
+        try:
+            plans.PRESSURE_ADAPTIVE = False
+            assert plans.pressure_discount(obs) == 0.75
+            assert plans.pressure_strength(obs) == 1.0
+        finally:
+            plans.PRESSURE_ADAPTIVE = True
+
+    def test_strong_end_is_the_v142_constant(self):
+        # 硬约束：强端=0.75（v14.2 全局常数语义不变）
+        assert plans.PRESSURE_DISC_STRONG == 0.75
+
+    def test_pessimistic_fill_wiring(self):
+        model = opponents.PessimisticFill()
+        # 冷摘要（无对手证据）→ 信号 s=0 → 1.0（v3.1 标定语义）
+        assert model.supply_pressure({})["STRAWBERRY"] == 1.0
+        # None（rollout 余季延续段）→ 显式守旧常数路径
+        assert model.supply_pressure(None)["HERD"] == 0.75
+        # 弱对手 → 1.0；强对手 → 强端 0.75
+        weak = self._obs(5, opp_herd=0, opp_quads=1)
+        strong = self._obs(13, opp_herd=12, opp_quads=3)
+        assert model.supply_pressure(weak) == {
+            k: 1.0 for k in
+            ("STRAWBERRY", "MELON", "CARROT", "WHEAT", "HERD")}
+        assert model.supply_pressure(strong)["WHEAT"] == 0.75
+        # 自适应只影响投影器评分，不改倾销动作
+        action = model.propose_actions(
+            {"our_sell_plan": {"STRAWBERRY": 8}}, 10)
+        assert action["market"] == [["SELL", "STRAWBERRY", 8]]
+
+    def test_pessimistic_fill_describe_mentions_adaptive(self):
+        text = opponents.PessimisticFill().describe()
+        assert "自适应" in text and "0.75" in text
+
+    def test_liq_penalty_scores_wallet_tiers(self):
+        # 钱包档可见性（评分项）：LOOSE/UNBOUNDED 在模型现金跌破 STANDARD
+        # 地板时记罚分；STANDARD 恒无罚分；系数 0 = 关（v14.2 语义）
+        obs = plans.build_obs_summary(
+            day=5, money=300.0, herd=3, crops={"STRAWBERRY": 10},
+            unlocked_quadrants=1)
+
+        def _spec(tier):
+            return plans.PlanSpec(opening="C", p1_branch="B1",
+                                  capacity_tier="C1", p3_mode="HEALTHY",
+                                  p4_clear="LOW", quota_scale=1.25,
+                                  land_due_shift=0, herd_due_shift=0,
+                                  sell_discount=0.9, liquidity_tier=tier)
+        loose, std = _spec("LOOSE"), _spec("STANDARD")
+        try:
+            plans.PRESSURE_LIQ_PENALTY = 0.0
+            assert plans.project_season(loose, obs, {}) == \
+                plans.project_season(std, obs, {})
+            plans.PRESSURE_LIQ_PENALTY = 0.3
+            assert plans.project_season(loose, obs, {}) < \
+                plans.project_season(std, obs, {})
+            assert plans.project_season(std, obs, {}) == \
+                plans.project_season(std, obs, {})      # 确定性
+        finally:
+            plans.PRESSURE_LIQ_PENALTY = 0.0
+
+    def test_pressure_note_is_audit_shaped(self):
+        note = plans.pressure_discount_note(self._obs(13, opp_herd=12,
+                                                     opp_quads=3))
+        assert note["strength"] == 1.0 and note["discount"] == 0.75
+        assert note["adaptive"] is True and note["prior_days"] == -1
+
+    def test_invalid_reference_values_rejected(self):
+        obs = self._obs(5)
+        with pytest.raises(ValueError):
+            plans.pressure_strength(obs, herd_ref=0)
+        with pytest.raises(ValueError):
+            plans.pressure_strength(obs, quad_ref=1)
+
+
 
 
 # ===========================================================================
