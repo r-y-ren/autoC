@@ -35,10 +35,11 @@ def test_repository_indexes_are_deterministic_and_current():
     # round-16..21 launch ledgers + probes + planting evidence;
     # sprint ① evidence closeout (2026-09-19) adds 7 cmp_*_deep_stats +
     # sprint_forensics_0919.md (online 38 -> 46);
-    # round-22 verdict session adds round22_ledger.json (online 46 -> 47)
+    # round-22 verdict session adds round22_ledger.json (online 46 -> 47);
+    # round-23 launch adds round23_ledger.json (online 47 -> 48, ea94ddc)
     # (sampling/ COMPLETE records live in a subdirectory and stay off this index)
     assert counts == {"ablations": 47, "external": 2,
-                      "online": 47, "acceptance": 31}
+                      "online": 48, "acceptance": 31}
 
 
 def test_mf_and_mg_decisions_override_mechanical_gate_wording():
