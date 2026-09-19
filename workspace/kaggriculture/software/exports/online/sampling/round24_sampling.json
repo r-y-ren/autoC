@@ -4,7 +4,7 @@
  "submission_ref": 56347074,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-19T08:26:32Z",
+ "captured_at_utc": "2026-09-19T14:55:23Z",
  "candidate": {
   "label": "v14.1-dtsp-working",
   "pkg_sha256": "116b02c8",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 533.9,
+ "public_score": 535.2,
  "validation": [
   {
    "id": 110676351,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 24,
-  "record": "12W-12L",
-  "wins": 12,
-  "losses": 12,
+  "public_games": 26,
+  "record": "13W-13L",
+  "wins": 13,
+  "losses": 13,
   "win_rate": 0.5,
-  "our_money_mean": 69354.3,
-  "opp_money_mean": 62067.3,
-  "mean_margin": 7287.0,
+  "our_money_mean": 69962.3,
+  "opp_money_mean": 63143.8,
+  "mean_margin": 6818.5,
   "axes": {
    "d0_plants_ours": 9.0,
-   "d0_plants_opp": 15.2,
-   "wheat_d7_ours": 19.1,
+   "d0_plants_opp": 15.5,
+   "wheat_d7_ours": 19.2,
    "berry_d12_ours": 22.7,
-   "berry_d12_opp": 9.8,
+   "berry_d12_opp": 10.8,
    "herd_d0_ours": 4.0,
-   "harvest_ours": 166.0,
-   "money_d11_ours": 666.7,
-   "money_d11_opp": 9559.4
+   "harvest_ours": 166.3,
+   "money_d11_ours": 677.6,
+   "money_d11_opp": 9309.7
   },
   "episodes": [
    {
@@ -275,9 +275,27 @@
     "opp_name": "dvv_ram",
     "margin": -3124.0,
     "seat": 1
+   },
+   {
+    "id": 110790899,
+    "result": "W",
+    "our": 80441.0,
+    "opp": 66423.0,
+    "opp_name": "SEREENA JERRY",
+    "margin": 14018.0,
+    "seat": 0
+   },
+   {
+    "id": 110841464,
+    "result": "L",
+    "our": 74076.0,
+    "opp": 85702.0,
+    "opp_name": "Lazy Lagoon",
+    "margin": -11626.0,
+    "seat": 0
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 12W-12L over 24 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 13W-13L over 26 public games; local quickwin/self-play is not this verdict."
 }
