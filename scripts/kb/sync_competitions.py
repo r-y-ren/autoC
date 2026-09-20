@@ -102,7 +102,8 @@ def selftest() -> int:
     ok = len(cands) == 2 and cands[0]["url"].startswith("https://edu.example.edu.cn/")
     side = extract_main_text('<html><head><title>通知</title></head><body>'
                              '<main><h1>2026年挑战杯通知</h1><p>赛程正文。</p></main></body></html>')
-    side_ok = side is None or "挑战杯" in side
+    # trafilatura 在场必须抽出正文（集成损坏可见）；缺席则必须干净降级为 None
+    side_ok = ("挑战杯" in side) if trafilatura is not None else (side is None)
     print(f"[sync_comp][selftest] {'PASS' if ok and side_ok else 'FAIL'} 提取 {len(cands)} 条（期望 2，含相对链接补全）；"
           f"sidecar 抽取={'trafilatura' if trafilatura else '缺席降级'}/{side_ok}")
     return 0 if ok and side_ok else 1

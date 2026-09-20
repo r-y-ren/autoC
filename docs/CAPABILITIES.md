@@ -154,7 +154,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | E-17 | trafilatura（autoc venv） | 静态页正文降噪：S-02 快照旁 `.extract.md` sidecar（try-import 降级）+ scraper 分片首选 | ✅ 2026-09-20 已装（D15） | T3 |
 | E-18 | bwrap 0.12（系统包）+ wrapper 技能 ~/.zcode/skills/bwrap-run | 不可信第三方代码执行隔离（根只读+默认断网；仅点名场景强制，日常编译测试不套） | ✅ 2026-09-20 登记封装（D15） | T3 |
 | E-19 | 本地轻量 VL（Ollama/qwen2.5-vl） | 4.5v 远程视觉分流兜底 | watch：限流实证 ≥2 次再评（本机无独显+RAM 紧张，D15） | T3 |
-| — | Docling | 表格/公式结构化第二主力候选 | watch：MinerU standard 档出现表格还原系统性缺陷实证再评（D15；S-13 无环境兜底语义不动） | T3 |
+| E-20 | Docling | 表格/公式结构化第二主力候选 | watch：MinerU standard 档出现表格还原系统性缺陷实证再评（D15；S-13 无环境兜底语义不动） | T3 |
 
 ---
 
@@ -247,4 +247,4 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
   验证：test_guard 39/39（新增圈禁 7 用例 + 无活跃战役工程自举 1 例；3 个既有用例预期翻转并注明 D14）、
   test_init_state 5/5
 
-- **D15 工具链升级质询轮** ✅ 已裁决（2026-09-20，grill-me 会话）：采纳 **E-15 ast-grep / E-16 DuckDB**（交互式工具位，S-02/S-03 脚本保持 stdlib 不接线）、**E-17 trafilatura**（S-02 快照旁 `.extract.md` 正文 sidecar，try-import 无环境降级；scraper 静态页正文首选）、**E-18 bwrap wrapper**（全局技能 bwrap-run；仅"执行不可信第三方代码"场景强制，默认 --unshare-net，依赖装外执行在内；日常编译测试不套）；**否决 Docling**（破坏 S-13"无 MinerU 环境"兜底语义，且 MinerU standard 档表格还原实证已够——登记 watch：表格系统性缺陷实证再评）；**暂缓 E-19 本地 VL**（无独显 + RAM 紧张 + 4.5v 限流无实证——watch：限流实证 ≥2 次再评）；pdfplumber 收拢为"脚本内部依赖"措辞（不卸载，agent 交互式探索首选 duckdb/MinerU）；image-search 维持原样（用户裁定）。安装路线：本机 sudo 无免密通道 → ast-grep/duckdb 走 GitHub 静态二进制 `~/.local/bin`。两战役活跃期施工经用户显式授权（援引 D14 授权先例），契约 v13→v14。
+- **D15 工具链升级质询轮** ✅ 已裁决（2026-09-20，grill-me 会话）：采纳 **E-15 ast-grep / E-16 DuckDB**（交互式工具位，S-02/S-03 脚本保持 stdlib 不接线）、**E-17 trafilatura**（S-02 快照旁 `.extract.md` 正文 sidecar，try-import 无环境降级；scraper 静态页正文首选）、**E-18 bwrap wrapper**（全局技能 bwrap-run；仅"执行不可信第三方代码"场景强制，默认 --unshare-net，依赖装外执行在内；日常编译测试不套）；**否决 Docling**（破坏 S-13"无 MinerU 环境"兜底语义，且 MinerU standard 档表格还原实证已够——登记 watch：表格系统性缺陷实证再评）；**暂缓 E-19 本地 VL**（无独显 + RAM 紧张 + 4.5v 限流无实证——watch：限流实证 ≥2 次再评）；pdfplumber 收拢为"脚本内部依赖"措辞（不卸载，agent 交互式探索首选 duckdb/MinerU）；image-search 维持原样（用户裁定）。安装路线：本机 sudo 无免密通道 → ast-grep/duckdb 走 GitHub 静态二进制 `~/.local/bin`（静态二进制/venv 形态沿 E-14 先例，非 D5 clone 型工具）。两战役活跃期施工经用户显式授权（援引 D14 授权先例），契约 v13→v14。
