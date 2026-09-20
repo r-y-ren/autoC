@@ -7064,6 +7064,69 @@
     "pytest": "971 passed + 2 skipped + 19 failed（全部 candidate-identity 链=登记前预期态；登记后应 990+2 绿）",
     "new_tests": "tests/test_sellrace.py 14 项（town demand 镜像/闸栈/零吸收帽/肥料底仓/day-11 窗口算术/main 开关默认关）"
    }
+  },
+  "bc_corpus_v1": {
+   "method": "bc_track/scripts/harvest_top_replays.py（kaggle CLI：team-submissions→episodes→replay，top-30 队每队最新 3 公开局）+ extract_samples.py（--include-rounds，本机语料 ≥80k 高分席兜底；克隆过滤=1-51 步动作签名 ≥3 队判量产家族，非 top 席剔除）",
+   "value": {
+    "top_games_fetched": 78,
+    "top_teams_covered": 29,
+    "fetch_failures": 0,
+    "games_total": 161,
+    "seats_total": 189,
+    "unit_samples": 1330985,
+    "market_turns": 60329,
+    "clone_families_detected": 1,
+    "clone_seats_dropped": 0,
+    "clone_family_note": "唯一家族=top25-28 队共享开局签名（meta 家族，作为 top 席保留）；本机语料 ≥80k 门后无量产克隆席存活",
+    "schema": "bc-schema/1.1",
+    "measured": "2026-09-20"
+   }
+  },
+  "bc_train_v1": {
+   "method": "bc_track/scripts/train_bc.py：unit-net/market-net 两解耦 MLP（167+14+1→128→64 tanh 三头 / 167+10→128→64 三头，Adam lr=1e-3 batch 8192 epochs 15，条件掩码 CE+市场 NONE 槽 0.15 降权；numpy 训练侧，导出 int8 量化纯 Python 前向 207,386B；纯 Python vs numpy 前向逐头 maxdiff ≤8.5e-14）",
+   "value": {
+    "train_unit_samples": 1232836,
+    "heldout_games": 12,
+    "unit_op_acc_train": 0.355,
+    "unit_op_majority": 0.1448,
+    "unit_arg_acc": 0.718,
+    "unit_qty_acc": 0.482,
+    "market_op_acc_all": 0.911,
+    "market_op_acc_nonnone": 0.308,
+    "market_op_nonnone_majority": 0.397,
+    "heldout_unit_op_acc": 0.343,
+    "heldout_market_op_nonnone": 0.308,
+    "cpu_wall_seconds": 146.2,
+    "measured": "2026-09-20"
+   }
+  },
+  "bc_eval_v1": {
+   "method": "bc_track/scripts/bc_eval.py：孪生 d0 全季注入（twin.build_state_from_replay(replay,0) 起 720 步），BC 席 vs 对手席=回放真实动作，对照 v14.2 基线（build_v13_namespace src/ 九模块）同局同席单变量；8 局 held-out（md5 game-key %100<8，两席专家样本均不进训练）；行为诊断对照 X-ray 榜首带",
+   "value": {
+    "games": 8,
+    "h2h_bc_vs_v142": "0-8",
+    "bc_median_money": 2975.0,
+    "v142_median_money": 64238.5,
+    "h2h_median_diff": -39431.5,
+    "h2h_mean_diff": -46584.4,
+    "collapse_lt45k_bc": 6,
+    "collapse_lt45k_v142": 3,
+    "bc_move_rate": 0.3184,
+    "bc_pass_rate": 0.5137,
+    "bc_care_mean": 99.9,
+    "v142_move_rate": 0.6544,
+    "v142_pass_rate": 0.1199,
+    "v142_care_mean": 114.0,
+    "xray_top_reference": {
+     "move": 0.538,
+     "pass": 0.038,
+     "care": 348
+    },
+    "bc_agent_errors": 0,
+    "forward_ms_per_turn": 12.8,
+    "attribution": "冻死吸引子 6/8（开局市场头不发订单→资金冻结在 2975≈起始值）；2/8 市场头偶然触发买畜→FEED/CARE 动物经济自持到 132-157k（高于该席专家真值 89.7k/111.7k）；单位头开环健康（回放 obs 上 WATER 45.7%）但无经济可执行——下一迭代最该修开局订单头（剧本先验或条件化解码），非模型容量",
+    "measured": "2026-09-20"
+   }
   }
  },
  "milestone": "Track-B v15「点火重构」M-A..M-F（波次日历剧本引擎 src/wave.py + planner/wave_script.py 剧本候选 + market/entry 结构 + DTSP dawn 三选一；M-E 诚实判定：旗关/冒烟/打包/单测全绿，E1 v48 h2h 0-16 未过、E2 反事实 G2 过 G1/G3 未过、E3 注入字面门未过（base 配对非回归）——不作为发射候选，v14.2 仍为注册基线）",

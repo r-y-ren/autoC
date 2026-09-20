@@ -1,0 +1,544 @@
+{
+ "protocol": "twin-d0-fullseason / opponent=replay-actions / baseline=build_v13_namespace (v14.2 src/)",
+ "model": "C:\\Users\\OSS\\Desktop\\autoC\\workspace\\kaggriculture\\software\\bc_track\\models\\bc_model_v1.py",
+ "schema": "bc-schema/1.1",
+ "generated_at": "2026-09-20T14:30:59Z",
+ "summary": {
+  "n_games": 8,
+  "bc_wins_vs_replay_opp": 2,
+  "baseline_wins_vs_replay_opp": 2,
+  "bc_median_money": 2975.0,
+  "baseline_median_money": 64238.5,
+  "bc_mean_money": 38427.875,
+  "baseline_mean_money": 85012.25,
+  "h2h_bc_wins": 0,
+  "h2h_baseline_wins": 8,
+  "h2h_ties": 0,
+  "h2h_median_diff": -39431.5,
+  "h2h_mean_diff": -46584.375,
+  "collapse_lt_45k_bc": 6,
+  "collapse_lt_45k_baseline": 3,
+  "bc_move_rate_mean": 0.3184375,
+  "bc_pass_rate_mean": 0.5137125,
+  "bc_care_mean": 99.875,
+  "base_move_rate_mean": 0.6543625,
+  "base_pass_rate_mean": 0.11985,
+  "base_care_mean": 114,
+  "bc_errors_total": 0
+ },
+ "games": [
+  {
+   "game": "bc-top:0b20d72e-b4f9-11f1-b047-0242ac130203",
+   "teams": [
+    "lingxiaojun",
+    "pensukesan"
+   ],
+   "me_seat": 0,
+   "truth": [
+    97175.0,
+    93084.0
+   ],
+   "episode": 111240316,
+   "bc": {
+    "final_me": 2975.0,
+    "final_opp": 170880.0,
+    "win": false,
+    "wall_s": 5.4,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3138,
+     "unit_pass_rate": 0.67,
+     "care_total": 0,
+     "water_total": 0,
+     "harvest_total": 0,
+     "unit_total": 1294,
+     "mkt_orders": 71,
+     "mkt_sell": 46,
+     "mkt_hire": 25,
+     "mkt_buy_seed": 0,
+     "mkt_buy_animal": 0,
+     "mkt_buy_product": 0,
+     "mkt_buy_land": 0,
+     "hires_total": 25,
+     "hire_days_active": 15,
+     "errors": 0,
+     "last_error": ""
+    }
+   },
+   "baseline": {
+    "final_me": 31129.0,
+    "final_opp": 103642.0,
+    "win": false,
+    "wall_s": 1.5,
+    "diag": {
+     "unit_move_rate": 0.6307,
+     "unit_pass_rate": 0.1292,
+     "care_total": 125,
+     "water_total": 733,
+     "harvest_total": 151,
+     "unit_total": 6988,
+     "mkt_orders": 457,
+     "mkt_sell": 119,
+     "mkt_hire": 279,
+     "mkt_buy_seed": 24,
+     "mkt_buy_animal": 6,
+     "mkt_buy_product": 27,
+     "mkt_buy_land": 2,
+     "hires_total": 279,
+     "hire_days_active": 29,
+     "errors": 0,
+     "last_error": ""
+    }
+   }
+  },
+  {
+   "game": "bc-top:6a30a0ce-b4f3-11f1-8e33-0242ac130202",
+   "teams": [
+    "Artem The Farmer 🍅",
+    "QQ"
+   ],
+   "me_seat": 0,
+   "truth": [
+    90159.0,
+    87709.0
+   ],
+   "episode": 111229455,
+   "bc": {
+    "final_me": 2967.0,
+    "final_opp": 121853.0,
+    "win": false,
+    "wall_s": 5.5,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3045,
+     "unit_pass_rate": 0.6785,
+     "care_total": 0,
+     "water_total": 0,
+     "harvest_total": 0,
+     "unit_total": 1409,
+     "mkt_orders": 85,
+     "mkt_sell": 55,
+     "mkt_hire": 30,
+     "mkt_buy_seed": 0,
+     "mkt_buy_animal": 0,
+     "mkt_buy_product": 0,
+     "mkt_buy_land": 0,
+     "hires_total": 30,
+     "hire_days_active": 17,
+     "errors": 0,
+     "last_error": ""
+    }
+   },
+   "baseline": {
+    "final_me": 48554.0,
+    "final_opp": 130564.0,
+    "win": false,
+    "wall_s": 1.5,
+    "diag": {
+     "unit_move_rate": 0.6235,
+     "unit_pass_rate": 0.1439,
+     "care_total": 101,
+     "water_total": 699,
+     "harvest_total": 166,
+     "unit_total": 6760,
+     "mkt_orders": 404,
+     "mkt_sell": 96,
+     "mkt_hire": 268,
+     "mkt_buy_seed": 20,
+     "mkt_buy_animal": 5,
+     "mkt_buy_product": 13,
+     "mkt_buy_land": 2,
+     "hires_total": 268,
+     "hire_days_active": 29,
+     "errors": 0,
+     "last_error": ""
+    }
+   }
+  },
+  {
+   "game": "bc-top:951e3540-b4f7-11f1-8510-0242ac130204",
+   "teams": [
+    "kanno",
+    "mikelou1"
+   ],
+   "me_seat": 1,
+   "truth": [
+    88870.0,
+    89692.0
+   ],
+   "episode": 111237827,
+   "bc": {
+    "final_me": 156829.0,
+    "final_opp": 1307.0,
+    "win": true,
+    "wall_s": 9.3,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3642,
+     "unit_pass_rate": 0.0384,
+     "care_total": 391,
+     "water_total": 2309,
+     "harvest_total": 27,
+     "unit_total": 6847,
+     "mkt_orders": 324,
+     "mkt_sell": 118,
+     "mkt_hire": 206,
+     "mkt_buy_seed": 0,
+     "mkt_buy_animal": 0,
+     "mkt_buy_product": 0,
+     "mkt_buy_land": 0,
+     "hires_total": 206,
+     "hire_days_active": 28,
+     "errors": 0,
+     "last_error": ""
+    }
+   },
+   "baseline": {
+    "final_me": 187724.0,
+    "final_opp": 0.0,
+    "win": true,
+    "wall_s": 1.4,
+    "diag": {
+     "unit_move_rate": 0.7635,
+     "unit_pass_rate": 0.066,
+     "care_total": 53,
+     "water_total": 464,
+     "harvest_total": 166,
+     "unit_total": 6847,
+     "mkt_orders": 1744,
+     "mkt_sell": 765,
+     "mkt_hire": 273,
+     "mkt_buy_seed": 599,
+     "mkt_buy_animal": 24,
+     "mkt_buy_product": 50,
+     "mkt_buy_land": 33,
+     "hires_total": 273,
+     "hire_days_active": 28,
+     "errors": 0,
+     "last_error": ""
+    }
+   }
+  },
+  {
+   "game": "bc-top:bca76844-b4f1-11f1-8dac-0242ac130203",
+   "teams": [
+    "吃白饭的大肥鱼",
+    "Orbital Terraformer"
+   ],
+   "me_seat": 0,
+   "truth": [
+    84190.0,
+    85448.0
+   ],
+   "episode": 111226109,
+   "bc": {
+    "final_me": 2965.0,
+    "final_opp": 116793.0,
+    "win": false,
+    "wall_s": 5.5,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3214,
+     "unit_pass_rate": 0.6563,
+     "care_total": 0,
+     "water_total": 0,
+     "harvest_total": 0,
+     "unit_total": 1478,
+     "mkt_orders": 82,
+     "mkt_sell": 49,
+     "mkt_hire": 33,
+     "mkt_buy_seed": 0,
+     "mkt_buy_animal": 0,
+     "mkt_buy_product": 0,
+     "mkt_buy_land": 0,
+     "hires_total": 33,
+     "hire_days_active": 21,
+     "errors": 0,
+     "last_error": ""
+    }
+   },
+   "baseline": {
+    "final_me": 79923.0,
+    "final_opp": 127184.0,
+    "win": false,
+    "wall_s": 1.5,
+    "diag": {
+     "unit_move_rate": 0.6102,
+     "unit_pass_rate": 0.1432,
+     "care_total": 157,
+     "water_total": 667,
+     "harvest_total": 168,
+     "unit_total": 7157,
+     "mkt_orders": 438,
+     "mkt_sell": 101,
+     "mkt_hire": 287,
+     "mkt_buy_seed": 24,
+     "mkt_buy_animal": 8,
+     "mkt_buy_product": 16,
+     "mkt_buy_land": 2,
+     "hires_total": 287,
+     "hire_days_active": 29,
+     "errors": 0,
+     "last_error": ""
+    }
+   }
+  },
+  {
+   "game": "bc-top:e80cc5fe-b4f8-11f1-9054-0242ac130204",
+   "teams": [
+    "THIRD FARM CLUB",
+    "Dhavan Shah"
+   ],
+   "me_seat": 0,
+   "truth": [
+    158953.0,
+    55226.0
+   ],
+   "episode": 111239559,
+   "bc": {
+    "final_me": 2967.0,
+    "final_opp": 147782.0,
+    "win": false,
+    "wall_s": 5.4,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.2652,
+     "unit_pass_rate": 0.6969,
+     "care_total": 0,
+     "water_total": 0,
+     "harvest_total": 0,
+     "unit_total": 1478,
+     "mkt_orders": 73,
+     "mkt_sell": 40,
+     "mkt_hire": 33,
+     "mkt_buy_seed": 0,
+     "mkt_buy_animal": 0,
+     "mkt_buy_product": 0,
+     "mkt_buy_land": 0,
+     "hires_total": 33,
+     "hire_days_active": 19,
+     "errors": 0,
+     "last_error": ""
+    }
+   },
+   "baseline": {
+    "final_me": 37550.0,
+    "final_opp": 79482.0,
+    "win": false,
+    "wall_s": 1.5,
+    "diag": {
+     "unit_move_rate": 0.6115,
+     "unit_pass_rate": 0.1424,
+     "care_total": 118,
+     "water_total": 724,
+     "harvest_total": 154,
+     "unit_total": 6754,
+     "mkt_orders": 405,
+     "mkt_sell": 95,
+     "mkt_hire": 268,
+     "mkt_buy_seed": 21,
+     "mkt_buy_animal": 5,
+     "mkt_buy_product": 14,
+     "mkt_buy_land": 2,
+     "hires_total": 268,
+     "hire_days_active": 29,
+     "errors": 0,
+     "last_error": ""
+    }
+   }
+  },
+  {
+   "game": "bc-top:f010fe7c-b4f9-11f1-92c9-0242ac130202",
+   "teams": [
+    "matcha110",
+    "jojo"
+   ],
+   "me_seat": 1,
+   "truth": [
+    110905.0,
+    111679.0
+   ],
+   "episode": 111242464,
+   "bc": {
+    "final_me": 132769.0,
+    "final_opp": 1273.0,
+    "win": true,
+    "wall_s": 9.0,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3483,
+     "unit_pass_rate": 0.0467,
+     "care_total": 408,
+     "water_total": 2243,
+     "harvest_total": 77,
+     "unit_total": 6788,
+     "mkt_orders": 330,
+     "mkt_sell": 126,
+     "mkt_hire": 204,
+     "mkt_buy_seed": 0,
+     "mkt_buy_animal": 0,
+     "mkt_buy_product": 0,
+     "mkt_buy_land": 0,
+     "hires_total": 204,
+     "hire_days_active": 27,
+     "errors": 0,
+     "last_error": ""
+    }
+   },
+   "baseline": {
+    "final_me": 177049.0,
+    "final_opp": 0.0,
+    "win": true,
+    "wall_s": 1.3,
+    "diag": {
+     "unit_move_rate": 0.7655,
+     "unit_pass_rate": 0.0663,
+     "care_total": 48,
+     "water_total": 438,
+     "harvest_total": 188,
+     "unit_total": 6788,
+     "mkt_orders": 1617,
+     "mkt_sell": 619,
+     "mkt_hire": 273,
+     "mkt_buy_seed": 609,
+     "mkt_buy_animal": 24,
+     "mkt_buy_product": 58,
+     "mkt_buy_land": 34,
+     "hires_total": 273,
+     "hire_days_active": 28,
+     "errors": 0,
+     "last_error": ""
+    }
+   }
+  },
+  {
+   "game": "bc-top:f1edb0ee-b4f6-11f1-b843-0242ac130203",
+   "teams": [
+    "keiz",
+    "God Se7en"
+   ],
+   "me_seat": 0,
+   "truth": [
+    88750.0,
+    89440.0
+   ],
+   "episode": 111237068,
+   "bc": {
+    "final_me": 2975.0,
+    "final_opp": 165569.0,
+    "win": false,
+    "wall_s": 5.2,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3083,
+     "unit_pass_rate": 0.677,
+     "care_total": 0,
+     "water_total": 0,
+     "harvest_total": 0,
+     "unit_total": 1294,
+     "mkt_orders": 71,
+     "mkt_sell": 46,
+     "mkt_hire": 25,
+     "mkt_buy_seed": 0,
+     "mkt_buy_animal": 0,
+     "mkt_buy_product": 0,
+     "mkt_buy_land": 0,
+     "hires_total": 25,
+     "hire_days_active": 15,
+     "errors": 0,
+     "last_error": ""
+    }
+   },
+   "baseline": {
+    "final_me": 37436.0,
+    "final_opp": 107633.0,
+    "win": false,
+    "wall_s": 1.5,
+    "diag": {
+     "unit_move_rate": 0.6212,
+     "unit_pass_rate": 0.1242,
+     "care_total": 133,
+     "water_total": 727,
+     "harvest_total": 168,
+     "unit_total": 7222,
+     "mkt_orders": 428,
+     "mkt_sell": 93,
+     "mkt_hire": 290,
+     "mkt_buy_seed": 22,
+     "mkt_buy_animal": 7,
+     "mkt_buy_product": 14,
+     "mkt_buy_land": 2,
+     "hires_total": 290,
+     "hire_days_active": 29,
+     "errors": 0,
+     "last_error": ""
+    }
+   }
+  },
+  {
+   "game": "local:21926220-b2a6-11f1-97f0-0242ac130202",
+   "teams": [
+    "renyxin",
+    "kwon yong deuk"
+   ],
+   "me_seat": 0,
+   "truth": [
+    42284.0,
+    142435.0
+   ],
+   "episode": 110082770,
+   "bc": {
+    "final_me": 2976.0,
+    "final_opp": 142435.0,
+    "win": false,
+    "wall_s": 5.2,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3218,
+     "unit_pass_rate": 0.6459,
+     "care_total": 0,
+     "water_total": 0,
+     "harvest_total": 0,
+     "unit_total": 1271,
+     "mkt_orders": 59,
+     "mkt_sell": 35,
+     "mkt_hire": 24,
+     "mkt_buy_seed": 0,
+     "mkt_buy_animal": 0,
+     "mkt_buy_product": 0,
+     "mkt_buy_land": 0,
+     "hires_total": 24,
+     "hire_days_active": 14,
+     "errors": 0,
+     "last_error": ""
+    }
+   },
+   "baseline": {
+    "final_me": 80733.0,
+    "final_opp": 183818.0,
+    "win": false,
+    "wall_s": 1.5,
+    "diag": {
+     "unit_move_rate": 0.6088,
+     "unit_pass_rate": 0.1436,
+     "care_total": 177,
+     "water_total": 633,
+     "harvest_total": 178,
+     "unit_total": 7154,
+     "mkt_orders": 437,
+     "mkt_sell": 102,
+     "mkt_hire": 287,
+     "mkt_buy_seed": 19,
+     "mkt_buy_animal": 8,
+     "mkt_buy_product": 19,
+     "mkt_buy_land": 2,
+     "hires_total": 287,
+     "hire_days_active": 29,
+     "errors": 0,
+     "last_error": ""
+    }
+   }
+  }
+ ],
+ "wall_seconds": 114.1
+}

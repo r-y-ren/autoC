@@ -1,0 +1,43 @@
+{
+ "schema": "bc-schema/1.1",
+ "seed": 20260920,
+ "epochs": 15,
+ "batch": 8192,
+ "lr": 0.001,
+ "hidden": {
+  "unit": [
+   128,
+   64
+  ],
+  "market": [
+   128,
+   64
+  ]
+ },
+ "none_weight": 0.15,
+ "counts": {
+  "unit_samples": 1232836,
+  "market_slots": 1258250,
+  "train_games": 149,
+  "heldout_games": 12
+ },
+ "majority_baseline": {
+  "unit_op": 0.14476702497331356,
+  "market_op_nonnone": 0.3972353364807554
+ },
+ "train_acc": {
+  "unit_op": 0.354795,
+  "unit_arg": 0.7180590144140064,
+  "unit_qty": 0.4818265319511875,
+  "market_op": 0.910935,
+  "market_item": 0.40912537917087965
+ },
+ "heldout_acc": {
+  "unit_op": 0.34270344068711855,
+  "market_op_all": 0.9211206040135108,
+  "market_op_nonnone": 0.308324304803178
+ },
+ "model_file": "bc_track\\models\\bc_model_v1.py",
+ "model_bytes": 207386,
+ "wall_seconds": 146.2
+}
