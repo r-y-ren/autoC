@@ -71,7 +71,7 @@
 
 - standard 档（onnx 全家 + 1.2B VLM GGUF，纯 CPU）：17 页中文评审规则全量 **11s**，评审表格完整还原 markdown；basic 档 13.5s
 - 扫描件（合成无文本层 PDF，basic 档 OCR）：6.6s/页，中文与表格基本无损（仅引号全半角微差）；PNG 图片输入直接可解析
-- 部署要点：`parse` 不自动拉服务（先 `mineru server start`）；档位切换须 `mineru config set parse_server.local.managed_tier <档>` + `mineru server restart`（`parse --tier` 不能跨已加载档）；模型下载用 **modelscope 源**（HuggingFace 大文件在本机网络会卡死）；4.0.4 自带 GGUF 运行时，无需 llama-cpp-python；**parse 会在 cwd 生成 `blobs/` 内容缓存——先 cd 到 /tmp 工作目录再跑，勿在仓库根执行**
+- 部署要点：`parse` 不自动拉服务（先 `mineru server start`）；档位切换须 `mineru config set parse_server.local.managed_tier <档>` + `mineru server restart`（`parse --tier` 不能跨已加载档）；模型下载用 **modelscope 源**（HuggingFace 大文件在本机网络会卡死）；4.0.4 自带 GGUF 运行时，无需 llama-cpp-python；**`blobs/` 内容缓存写在 MinerU 服务进程的 cwd（非 parse 客户端 cwd）——`server start/restart` 与 parse 一律先 cd 到 /tmp 工作目录执行，勿在仓库根拉服务**
 - 同日修复：~/.tessdata 用户级 chi_sim+eng（此前本机 tesseract 仅 afr/osd，S-13 中文 OCR 断链）；pdfplumber 装入 autoc venv（表格机读验证通过）
 
 ## 说明
