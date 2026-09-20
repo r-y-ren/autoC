@@ -90,6 +90,20 @@ def _load_pipeline():
 _load_pipeline()
 del _MODULE_ORDER, _load_pipeline
 
+# ===========================================================================
+# v14.3-sellrace 发射开关（2026-09-20「最后一刀」；门禁裁决位）。
+# False=与 v14.2 行为逐字节等价（旗关黄金 6/6 钉住——本开关旗关路径零足迹，
+# 黄金套件 exec src 不经 main.py，本名字不可见）。置 True 的语义（round-26
+# 发射态，须协调者裁决+门禁全过）：把 sellrace 旋钮预置进 PLANNER 寄存器
+# ——键不在 DTSP 计划 governed 全名面内（不加新轴进计划空间），逐黎明
+# apply_overrides 不触碰预置值，DTSP 每黎明仍按 v14.2 守成逻辑选计划；
+# fail-open restore_pristine 清寄存器=自动安全回落 v14.2。
+# ===========================================================================
+_SELLRACE_SHIP = False
+if _SELLRACE_SHIP:
+    PLANNER_ENABLED = True
+    PLANNER_OVERRIDES.update({"sellrace_mode": True, "d11_sheep_commit": 1})
+
 # P4.1 主修复：装载期（loader 的 append 窗口内，包根必在 sys.path）急切
 # 导入 planner 并存进本命名空间——entry 的黎明钩子优先消费本名字，不再
 # 依赖回合期的 sys.path（官方 loader 在 exec 后已 pop 掉解包目录，v1 的

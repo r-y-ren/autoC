@@ -734,6 +734,38 @@ PLANNER_OVERRIDES = {}         # 计划覆盖寄存器（旗开时 _plan_knob �
 WAVE_ENABLED = False
 
 
+# ===========================================================================
+# 【中文】v14.3-sellrace 售卖竞速旋钮（2026-09-20「最后一刀」；round-24 近
+# 失带直击）。全部默认值=旗关，与 v14.2 逐字节等价（旗关黄金钉住）；离线
+# 实验/发射态经 "PLANNER_OVERRIDES.sellrace_mode" 等键开启。**不加新轴进
+# DTSP 计划空间**（plans.py 键面不动——这些键不在 governed 全名面内，逐黎
+# 明 apply_overrides 不触碰预置值，fail-open restore_pristine 清寄存器即
+# 安全回落）。
+# 校准出处（references/digests/ 已登记原件）：
+#   * V16-RC5 premium-market-lead（meta-notebook-mining-20260920.md §3.3）：
+#     对 MELON/MILK/STRAWBERRY/WOOL 在"本回合无匹配城镇需求"时把下回合
+#     计划卖单的一部分前移一回合（两回合总量守恒）；notebook 实证本地
+#     60/60、对 Kaito V27 24-0（+18,993）。本回合城镇需求=引擎逐字镜像
+#     （商店每 4 步抽、单产品店 2 件；镇中心每 24 步每非肥料品 1 件）。
+#   * Z2M c94/c95：fertilizer-only 前插 cap 10（held-out 900 局 96.7%
+#     WR）；一回合肥料预售 ≈5,300-5,700 币翻转近镜像。WHEAT 明确不前插
+#     （对手会买）。
+#   * 2945 Farm VE1（fresh-sweep-20260920.md §2.1）：day-11 放羊=5 次剪毛
+#     （17/20/23/26/29）而非 day-12+ 的 4 次。CARE 攒量（牛 3 奶/羊 4 毛）
+#     经核对为我方 v14.2 在役语义（mission.py 对每头已喂且有剩余生产夜晚
+#     的牲畜逐日 CARE——引擎 pending_care_bonus 自动攒 1/天、生产夜晚
+#     1+bonus 兑现，牛 interval2→3 奶、羊 interval3→4 毛），不另改码。
+# 消费点（全部走 _plan_knob，旗关恒回默认值）：
+#   market._sellrace_leads      售卖前移（premium 四品 ≤50%/批 + 肥料 cap10）
+#   market._market_orders 买畜环 day-11 放羊承诺（仅加快慢季羊日程）
+# ===========================================================================
+SELLRACE_MODE = False         # v14.3 总闸：False=与 v14.2 逐字节等价
+SELLRACE_LEAD_FRAC = 0.5      # 前移量上限 = 当回合已计划卖量 × 此值（≤50%/批）
+SELLRACE_ZERO_DEMAND_CAP = 18  # 零吸收线当日出清帽（件/回合；melon 类校日界）
+SELLRACE_FERT_CAP = 10        # 肥料预售单回合上限（Z2M c94 口径）
+D11_SHEEP_COMMIT = 0          # day-11 放羊承诺头数（0=旗关；值域 0-2）
+
+
 
 def _plan_knob(name, default):
     """DTSP 计划旋钮惰性读取：旗关恒回默认值（v13.8 等价路径）。

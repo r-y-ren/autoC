@@ -1,6 +1,13 @@
 # ===========================================================================
 # 【中文·模块导览】src/market.py —— 市场引擎镜像 + 订单编排（market v1.1 宿主）
 # ---------------------------------------------------------------------------
+# v14.3-sellrace（2026-09-20「最后一刀」，旗关零足迹）：_town_demand_now
+#   （引擎逐回合城镇抽货镜像）+ _sellrace_leads（premium-market-lead 售卖
+#   前移最小版——无匹配城镇需求的回合把卖出节奏批量的 ≤50% 前移并入本回合
+#   卖单，两回合总量由棚仓算术守恒；肥料预售 cap10 不动田用底仓；WHEAT 不
+#   前插）+ 买畜环 day-11 放羊承诺（2945 VE1 五剪毛窗，慢季补栏环优先序）。
+#   全部经 _plan_knob("sellrace_mode")/"d11_sheep_commit" 旗关（默认=与
+#   v14.2 逐字节等价，旗关黄金钉住；不加新轴进 DTSP 计划空间）。
 # v10.9 保留件：①产能/吸收模型（_town_daily_demand/_prod_evening_from/
 #   _ongoing_evenings_left/_crop_future_value/_buy_pace）；②市场引擎语义
 #   镜像（_hire_cost fib 表、_market_price_emb 逐件曲线价、
@@ -63,6 +70,32 @@ def _town_daily_demand(unlocked_shops):
     for item in BASE_PRICE:
         if item != "FERTILIZER":
             demand[item] = demand.get(item, 0) + CENTER_DRAWS_PER_DAY
+    return demand
+
+
+# 【中文】本回合城镇抽货量（v14.3 sellrace 的"匹配城镇需求"判据；引擎
+# _town_consumption 逐字镜像，kaggriculture.py:736-747——商店每
+# townShopSellInterval=4 步抽一次（单产品店抽 2 件、多产品店每件 1 件，
+# unlocked_shops 可重复列出同一家店=有放回抽取每实例独立消费）、镇中心每
+# 24 步对每件非肥料品抽 1 件。与 V16-RC5 premium-market-lead 的
+# _town_demand_now 同口径：仅当本回合抽货为 0 时才允许售卖前移。
+def _town_demand_now(unlocked_shops, item, step):
+    """Units the town draws of `item` on THIS step (engine-exact mirror).
+
+    Shop draws land on step % 4 == 0 (2 units for a single-product shop,
+    1 per product otherwise; duplicate shop instances each consume), the
+    town center draws 1 of every non-fertilizer product on step % 24 == 0.
+    """
+    step = int(step)
+    demand = 0
+    if step % 4 == 0:
+        for shop in unlocked_shops or []:
+            products = SHOPS.get(shop)
+            if not products or item not in products:
+                continue
+            demand += 2 if len(products) == 1 else 1
+    if step % 24 == 0 and item != "FERTILIZER":
+        demand += 1
     return demand
 
 
@@ -1512,6 +1545,105 @@ def _interference_shadow(obs, farm, day, prices, plan=None):
         return False
 
 
+# --------------------------------------------------------------------------
+# 【中文】v14.3 sellrace 售卖前移（premium-market-lead 最小版，2026-09-20）。
+# V16-RC5 语义（meta-notebook §3.3）：对 MELON/MILK/STRAWBERRY/WOOL，当
+# 本回合无匹配城镇抽货（_town_demand_now==0）且棚仓有货时，把"下回合计划
+# 卖单"的一部分前移到本回合执行——共享市场按队列结算、SELL 入场即压价，
+# 同节奏下先动作者拿好价（notebook 实证本地 60/60、对 V27 24-0）。
+# 动态规划器适配（诚实口径）：我方无固定"下回合卖单"——以**当回合已计划
+# 卖量**（门控/计划器/覆盖合并后的 merged 批量）为下回合节奏的代理，前移
+# 量 ≤ SELLRACE_LEAD_FRAC(50%)×当批，且两回合总量由棚仓算术守恒（前移后
+# 次日库存等量减少，门控自动少卖；不新增卖出总量，只提前执行时点）。
+# 闸（全过才前移，逐条防搬起石头）：
+#   1. _plan_knob("sellrace_mode") 旗（旗关恒 {}——与 v14.2 逐字节等价）；
+#   2. 非终日（d29 清算归现役全量通道）；
+#   3. 本回合无匹配城镇抽货（notebook 原闸）；
+#   4. flow ≥ 0（曲线在跌/平才前移；EMA<0=城镇吸收在抬价，等更好的价）；
+#   5. 黎明计划 verdict=="hold" 的守囤线不动（囤价论题不因竞速破坏）；
+#   6. 量上限：premium 有吸收线 ≤50%×当批；**零吸收线（melon 类：当日
+#      城镇吸收=镇中心 1/天）放宽到 SELLRACE_ZERO_DEMAND_CAP(18)/回合**
+#      ——引擎数学：零消费窗口内同日起卖批次重排是收入中性的（同一库存
+#      水位逐件出清，逐件价格只随水位走），价值只在校日界（今晚对手供给
+#      /自家入库把水位抬高，早卖=高位出清；v48 flush 纪律"分批反而喂低
+#      自己的下一批"，digest fresh-sweep §2.3）；50%×小批量(6)=3 件完成
+#      不了当日出清，故零吸收线给独立帽。有吸收线（奶/毛/莓有店抽）隔夜
+#      吸收会抬价、囤等论题有效，保持 ≤50% 小步前移。肥料另受
+#      FERT_FIELD_RESERVE 田用底仓保护的 cap10（Z2M c94 口径；WHEAT 明确
+#      不前插——对手会买，前插=给对手抬价）。
+# 返回 {item: advance_qty}（纯函数；调用方并入 merged 同物品卖单）。
+# --------------------------------------------------------------------------
+_SELLRACE_PREMIUM = ("MELON", "MILK", "STRAWBERRY", "WOOL")
+# 【中文】发射统计（零行为足迹：只读遥测，测试/门禁探针消费；旗关恒不增）。
+_SELLRACE_STATS = {"turns_with_leads": 0, "qty": 0}
+
+
+def _sellrace_leads(obs, day, prices, shed, merged, flow):
+    """Premium-market-lead: advance part of the sell rhythm one turn.
+
+    Returns {item: qty} to add to this turn's already-merged SELL orders.
+    Fail-closed by construction: the flag-off path returns {} before any
+    other logic runs, and every per-item gate must pass."""
+    if not _plan_knob("sellrace_mode", SELLRACE_MODE):
+        return {}
+    if int(day) >= SEASON_DAYS - 1:
+        return {}
+    try:
+        player = _get(obs, "player", 0)
+        step = int(day) * 24 + int(_get(obs, "hour", 0) or 0)
+        shops = _get(_get(obs, "town", {}) or {},
+                     "unlocked_shops", []) or []
+        demand_day = _town_daily_demand(shops)
+        planned = {}
+        for order in merged or []:
+            if isinstance(order, list) and len(order) >= 3 \
+                    and order[0] == "SELL" and order[1] in BASE_PRICE:
+                planned[order[1]] = planned.get(order[1], 0) + \
+                    max(0, int(order[2] or 0))
+        dawn_lines = ((sell_plan_shadow(player) or {}).get("lines") or {})
+        out = {}
+        for item in _SELLRACE_PREMIUM + ("FERTILIZER",):
+            q_today = int(planned.get(item, 0) or 0)
+            if q_today <= 0:
+                continue                     # 本回合无计划卖单 → 无可前移
+            if _town_demand_now(shops, item, step) > 0:
+                continue                     # 闸 3：本回合有匹配城镇抽货
+            if float((flow or {}).get(item, 0.0) or 0.0) < 0.0:
+                continue                     # 闸 4：曲线在回升，等更好价
+            if (dawn_lines.get(item) or {}).get("verdict") == "hold":
+                continue                     # 闸 5：守囤线不动
+            stock = _get(shed, item, 0)
+            stock = int(stock) if isinstance(stock, (int, float)) else 0
+            left = stock - q_today
+            if left <= 0:
+                continue                     # 棚仓已全部排上，无可前移
+            if item == "FERTILIZER":
+                left = min(left, stock - FERT_FIELD_RESERVE - q_today)
+                if left <= 0:
+                    continue                 # 闸 6：不动田用底仓
+                cap = max(0, int(_plan_knob("sellrace_fert_cap",
+                                            SELLRACE_FERT_CAP)))
+            else:
+                frac = float(_plan_knob("sellrace_lead_frac",
+                                        SELLRACE_LEAD_FRAC))
+                cap = max(1, int(q_today * max(0.0, min(frac, 1.0))))
+                if demand_day is not None and \
+                        demand_day.get(item, 1) <= 1:
+                    # 零吸收线：当日出清帽（校日界前移的唯一有值面，见上）
+                    zd = max(0, int(_plan_knob("sellrace_zero_demand_cap",
+                                               SELLRACE_ZERO_DEMAND_CAP)))
+                    cap = max(cap, zd)
+            advance = min(left, cap)
+            if advance > 0:
+                out[item] = advance
+        if out:
+            _SELLRACE_STATS["turns_with_leads"] += 1
+            _SELLRACE_STATS["qty"] += sum(int(v) for v in out.values())
+        return out
+    except Exception:
+        return {}                            # fail-open：绝不断排序链
+
+
 def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                    plan=None):
     money = _get(farm, "money", 0.0)
@@ -1924,6 +2056,19 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     if land_pending:
         reserve += land_fund
     pace = _animal_pace(day)
+    # 【v14.3 sellrace】day-11 放羊承诺（2945 Farm VE1 课：day-11 放羊=5 次
+    # 剪毛窗 17/20/23/26/29，day-12+ 起只有 4 次；_new_animal_production_
+    # evenings 为引擎精确口径）。仅 day==11 且承诺>0 时生效：羊提为首选 +
+    # 步速放开 commit 头——钱包/库容/死价/曲线/组成帽全部照走（承诺只改
+    # 优先序与允许量，不改任何安全门；且只作用于慢季 herd<target 补栏环，
+    # 满栏季归 NPV 通道原生裁决）。旗关恒 0：不进此支，与 v14.2 逐字节等价。
+    _d11_commit = 0
+    if int(day) == 11:
+        _d11_commit = max(0, min(2, int(_plan_knob("d11_sheep_commit",
+                                                   D11_SHEEP_COMMIT))))
+        if _d11_commit > 0 and \
+                _new_animal_production_evenings(day, "SHEEP") < 5:
+            _d11_commit = 0            # 引擎日历不在此窗（day==11 恒 5；防御）
     target = _herd_target(day, 99)   # FM-O3: external feed releases autarky
     if plan.get("wheat_farm"):
         target = min(WHEAT_FARM_HERD_FLOOR, target)
@@ -2007,7 +2152,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
     if not opening_bought and not _opening_shift_hold and not last_day \
             and day >= _herd_start_day \
             and herd_total < target \
-            and shed_count < 88 and bought < pace:
+            and shed_count < 88 and bought < pace + _d11_commit:
         species = _species_counts(farm, private, herd_total)
         # interleave species by relative deficit so cows reach their day-8+
         # premium-milk window on time instead of queueing behind the sheep
@@ -2018,6 +2163,9 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         _p1_pref = plan.get("p1_species_pref")
         if _p1_pref in ("COW", "SHEEP") and _p1_pref in candidates:
             candidates = [_p1_pref] + [a for a in candidates if a != _p1_pref]
+        # 【v14.3 sellrace】day-11 承诺：羊提为首选（仅当日本身处在 5 剪毛窗）
+        if _d11_commit > 0 and "SHEEP" in candidates:
+            candidates = ["SHEEP"] + [a for a in candidates if a != "SHEEP"]
         # branch §5.3/§5.4 labor dim：畜群扩张（步速循环）不得越过容量定律
         # ——黎明不变式 >0.85 拒购（任务包 capacity_deficit 的市场侧镜像）。
         _herd_cap_ok = _capacity_gate(farm, private, 0.0, day, plan)[0]
@@ -2064,7 +2212,7 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                                                  LIQUIDITY_FLOOR)
             if wallet < cost + reserve_total:
                 continue
-            n = min(pace - bought, target - herd_total,
+            n = min(pace + _d11_commit - bought, target - herd_total,
                     comp_cap - species[animal],
                     int((wallet - reserve_total) // cost))
             if npv_ceiling > HERD_CAP:
@@ -2184,6 +2332,14 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         stock = shed.get(item, 0)
         cap = int(stock) if isinstance(stock, (int, float)) and stock > 0 else 0
         merged[idx][2] = min(merged[idx][2], cap)
+    # 【v14.3 sellrace】售卖前移（premium-market-lead 最小版）：并入本回合
+    # 同物品卖单（不加新单不占 10 单预算；advance ≤ 棚仓余量，总量守恒）。
+    # 旗关恒 {}——merged 原样，与 v14.2 逐字节等价。
+    for _lead_item, _lead_qty in sorted(_sellrace_leads(
+            obs, day, prices, shed, merged, flow).items()):
+        _lead_idx = sell_index.get(_lead_item)
+        if _lead_idx is not None:
+            merged[_lead_idx][2] += int(_lead_qty)
     # v15 波次剧本卖单排序（M-B）：非终日=同回合 SELL 影响分降序重排
     # （先卖跌得最快的）；终日=718 语义 glut×对手exposure×价×log(q) 全量
     # 排序替换。plan_market_orders 保持接受列的原序，重排真实生效。
