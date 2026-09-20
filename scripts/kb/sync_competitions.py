@@ -24,6 +24,11 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+try:  # E-17 trafilatura（D15）：autoc venv 运行时启用，无环境自动降级
+    import trafilatura
+except ImportError:
+    trafilatura = None
+
 
 def project_root() -> Path:
     env = os.environ.get("ZCODE_PROJECT_DIR")
@@ -78,14 +83,29 @@ def extract_candidates(page_html: str, base_url: str, keywords: list[str]) -> li
     return out
 
 
+def extract_main_text(page_html: str) -> str | None:
+    """trafilatura 正文降噪（E-17，D15）：产出快照旁的 .extract.md sidecar；缺席/失败返回 None。"""
+    if trafilatura is None:
+        return None
+    try:
+        return trafilatura.extract(page_html, output_format="markdown",
+                                   include_links=True) or None
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def selftest() -> int:
     page = ('<a href="/notice/1">关于举办2026年挑战杯的通知</a>'
             '<a href="https://other.com/c">Kaggle Competition X</a>'
             '<a href="/food">食堂菜单</a>')
     cands = extract_candidates(page, "https://edu.example.edu.cn/", DEFAULT_KEYWORDS)
     ok = len(cands) == 2 and cands[0]["url"].startswith("https://edu.example.edu.cn/")
-    print(f"[sync_comp][selftest] {'PASS' if ok else 'FAIL'} 提取 {len(cands)} 条（期望 2，含相对链接补全）")
-    return 0 if ok else 1
+    side = extract_main_text('<html><head><title>通知</title></head><body>'
+                             '<main><h1>2026年挑战杯通知</h1><p>赛程正文。</p></main></body></html>')
+    side_ok = side is None or "挑战杯" in side
+    print(f"[sync_comp][selftest] {'PASS' if ok and side_ok else 'FAIL'} 提取 {len(cands)} 条（期望 2，含相对链接补全）；"
+          f"sidecar 抽取={'trafilatura' if trafilatura else '缺席降级'}/{side_ok}")
+    return 0 if ok and side_ok else 1
 
 
 def same_host_interval() -> float:
@@ -118,6 +138,7 @@ def main() -> int:
     candidates: list[dict] = []
     warnings: list[str] = []
     seen_urls: set[str] = set()
+    extracted = 0
 
     interval = same_host_interval()
     last_hit: dict[str, float] = {}
@@ -149,7 +170,12 @@ def main() -> int:
             digest = hashlib.md5(url.encode()).hexdigest()[:8]
             if not args.dry_run:
                 snap_dir.mkdir(parents=True, exist_ok=True)
-                (snap_dir / f"{today}_{host_file}_{digest}.html").write_text(page, encoding="utf-8")
+                snap = snap_dir / f"{today}_{host_file}_{digest}.html"
+                snap.write_text(page, encoding="utf-8")
+                main_text = extract_main_text(page)
+                if main_text:
+                    snap.with_suffix(".extract.md").write_text(main_text, encoding="utf-8")
+                    extracted += 1
             for c in extract_candidates(page, url, keywords):
                 if c["url"] in seen_urls:
                     continue
@@ -158,7 +184,9 @@ def main() -> int:
 
     for w in warnings:
         print(f"[sync_comp][warn] {w}", file=sys.stderr)
-    print(f"[sync_comp] 信源抓取完成 | 候选 {len(candidates)} | 快照目录 kb/raw/snapshots/")
+    tail = f"正文 sidecar {extracted} 页（trafilatura）" if extracted else \
+        "正文 sidecar 0（trafilatura 缺席，正则链路不受影响）"
+    print(f"[sync_comp] 信源抓取完成 | 候选 {len(candidates)} | 快照目录 kb/raw/snapshots/ | {tail}")
 
     if args.dry_run or not candidates:
         return 0

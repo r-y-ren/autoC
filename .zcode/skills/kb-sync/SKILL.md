@@ -16,7 +16,7 @@ description: 慢循环编排：按方向配置增量维护 KB-1/KB-2。当用户
 0.5. **SPA 预抓（P1 规则）**：核对本方向 `sources.web` 锚点与 `config/sources/catalog.md` 的 SPA 清单——命中 SPA 站点的待抓页面，先由主会话用 browser-use 抓快照落 `kb/raw/<id>/`，再把快照路径写进分片任务包（分片消费本地快照，不上网）
 1. **切阶段**：`python scripts/guard/init_state.py --phase collect --by kb-sync`
 2. **紧循环脚本**（按方向执行，任一失败不阻断另一类）：
-   - `python scripts/kb/sync_competitions.py`（快照 + 赛事候选）
+   - `python scripts/kb/sync_competitions.py`（快照 + 赛事候选；Linux 主力机用 `~/.venvs/autoc/bin/python` 跑——E-17 trafilatura 生成 `.extract.md` 正文 sidecar 供 Scraper 消费，无环境自动降级）
    - `python scripts/kb/sync_tech.py`（arXiv/GitHub 增量 + 技术候选）
    - `python scripts/kb/inbox_intake.py`（投递箱消费：kb/inbox/ 已溯源资料并入本轮候选队列 `inbox-comp-*/inbox-tech-*`，未溯源进 raw/leads 并点名催补；"与活跃战役相关"提示只在战役会话人工裁决，本跑批不改战役文件）
 3. **分片派发**（并发 ≤ budget 上限，每分片一个全新子 agent）：

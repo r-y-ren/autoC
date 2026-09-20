@@ -26,6 +26,7 @@ injectAgentsMd: true
   - `directions` 从候选的 directions 继承（候选未带时填当前采集方向）——简报按此过滤
   - `competition_fit` 是灵魂字段：**写不出至少一条有说服力的比赛映射就不入库**
   - PDF 阅读（E-14 链，2026-09-20 起）：文本层清晰 → pdf 技能直读；扫描件/图表密集版面 → MinerU 本地解析（命令与纪律同 scraper 章程"难读文档标准流程"，**禁 --remote**），无环境回退 `scripts/kb/ocr_pdf.py`
+  - 大表聚合（E-16，2026-09-20 起）：候选集/名单等数千行以上 CSV·Parquet·JSON 的交互式统计用 `~/.local/bin/duckdb -c "SELECT … LIMIT 5"` 本地聚合，先 `count(*)` 摸底——**禁止全量 cat/整读灌上下文**
 - 返回协调者：结构化结论（新增卡片数 / 更新数 / 因信号不足被拒者及理由摘要）
 
 - **返回前自检**：落盘后跑 `python scripts/kb/lint_kb.py --file <路径>` 确认 PASS（含结构 WARN 检查）才能返回结论——Kaggle 闭合符事故的教训：分片内部自校验曾绕过 frontmatter 闭合层

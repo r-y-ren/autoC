@@ -42,8 +42,11 @@
 | python-pptx | 1.0.2 | ppt-master pptx 导出（svg_to_pptx.py） |
 | MinerU 4.0.4（~/.venvs/mineru：py3.12 + torch 2.14 CPU；模型 ~/.mineru/models ≈2G） | E-14 PDF/图片→md 本地解析主力（C-01/C-02 难读文档）；`~/.venvs/mineru/bin/mineru parse <pdf> -p all --tier standard -o <out>.md`，前置 `mineru server start`，**禁 --remote** |
 | tesseract（系统 5.x）+ ~/.tessdata 用户包（chi_sim/eng=tessdata_fast + afr/osd + configs/） | S-13 OCR 兜底链（2026-09-20 修复本机断链并端到端验证） |
-| pdfplumber 0.11.10 / pypdfium2 5.13 / pillow 12.3（autoc venv，2026-09-20 补装） | E-10 表格机读 / S-13 页面渲染 |
+| pdfplumber 0.11.10 / pypdfium2 5.13 / pillow 12.3（autoc venv，2026-09-20 补装） | E-10 表格机读 / S-13 页面渲染（D15：脚本内部依赖定位，agent 交互式表格探索首选 duckdb/MinerU） |
 | poppler（pdftotext/pdftoppm）、soffice、ffmpeg、rg（系统自带） | 文本层快检 / Office→PDF 后备转换（MinerU 原生失败时）/ 媒体处理 / 快速检索 |
+| ast-grep 0.45.3 / duckdb 1.5.5（~/.local/bin 静态二进制，2026-09-20 装） | E-15 AST 结构化代码检索 / E-16 大表本地聚合（交互式工具位，脚本不依赖） |
+| trafilatura 2.2.0（autoc venv，2026-09-20 装） | E-17 静态页正文降噪：S-02 快照旁 `.extract.md` sidecar（try-import 降级，正则链路保留） |
+| bwrap 0.12.0（系统包；wrapper=全局技能 ~/.zcode/skills/bwrap-run） | E-18 不可信第三方代码执行隔离（根只读+仅工作目录与 /tmp 可写+默认断网） |
 
 （本节为 Linux 侧增量；上表 Windows 基线照旧，双机各管各的运行时。）
 
@@ -74,6 +77,13 @@
 - 原生格式面（同日晚实测）：docx/pptx/html/webp 原生直通（`search --type` 全表 22 类后缀）；**原生 Office 解析质量优于 soffice→PDF 中转**（pptx 箭头符号对照），soffice 降为后备链；doclib 查阅循环（`list docs` → `read doc:<id>/tier:<档>/page:N`，tier 段必填）与 `search` 实测通过；全局技能 `~/.zcode/skills/mineru/`（wrapper v3 + 查阅循环 SOP）
 - 部署要点：`parse` 不自动拉服务（先 `mineru server start`）；档位切换须 `mineru config set parse_server.local.managed_tier <档>` + `mineru server restart`（`parse --tier` 不能跨已加载档）；模型下载用 **modelscope 源**（HuggingFace 大文件在本机网络会卡死）；4.0.4 自带 GGUF 运行时，无需 llama-cpp-python；**`blobs/` 内容缓存写在 MinerU 服务进程的 cwd（非 parse 客户端 cwd）——`server start/restart` 与 parse 一律先 cd 到 /tmp 工作目录执行，勿在仓库根拉服务**
 - 同日修复：~/.tessdata 用户级 chi_sim+eng（此前本机 tesseract 仅 afr/osd，S-13 中文 OCR 断链）；pdfplumber 装入 autoc venv（表格机读验证通过）
+
+## D15 工具链升级冒烟（2026-09-20，Linux 主力机）
+
+- duckdb 1.5.5：CSV `GROUP BY` 聚合直出表 ✓（安装路线：本机 sudo 无免密，pacman 不可用即 GitHub releases 静态二进制 → `~/.local/bin`，PATH 已含）
+- ast-grep 0.45.3：JS `class $N extends $B` 结构匹配报行号 ✓；python `def $F($$$) -> $R: $$$` 全函数定位 ✓——**坑：模式必须贴合源码结构**（目标带返回注解而模式不带则零匹配，属模式写法问题非工具缺陷）
+- trafilatura 2.2.0（autoc venv）：正文 markdown 抽取 ✓（无 title 的微型文档会保守保留噪声，真实页面降噪显著）
+- bwrap 0.12.0：`--ro-bind / /`（根写测拒）+ `--bind /tmp /tmp`（scratch 可写）+ `--unshare-net`（外联拒）三隔离 ✓；**坑：ro-bind 下 /dev 只读致 /dev/null 不可写**——wrapper 模板必带 `--dev /dev --proc /proc`（已固化进 bwrap-run 技能）
 
 ## 说明
 

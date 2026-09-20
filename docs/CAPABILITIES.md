@@ -10,14 +10,14 @@
 
 | 业务目标 | 阶段任务 | 所需能力（ID 见下文） |
 |---|---|---|
-| **G1 慢循环·KB 维护** | 赛事发现与网页抓取 | 基线-01/02/03（内建检索、browser-use、CUA）；RSSHub（T3 决策） |
-| | API 结构化拉取 | S-02、S-03 脚本；gh / curl（已装）；kaggle CLI（T3+密钥） |
-| | 获奖作品逐篇解构 | 基线-04（pdf 技能）；E-14 MinerU；C-01 章程；S-01 校验 |
+| **G1 慢循环·KB 维护** | 赛事发现与网页抓取 | 基线-01/02/03（内建检索、browser-use、CUA）；E-17 Trafilatura（静态页正文降噪）；RSSHub（T3 决策） |
+| | API 结构化拉取 | S-02、S-03 脚本；gh / curl（已装）；E-16 DuckDB（大表聚合）；kaggle CLI（T3+密钥） |
+| | 获奖作品逐篇解构 | 基线-04（pdf 技能）；E-14 MinerU；E-15 ast-grep（陌生库 AST 检索）；C-01 章程；S-01 校验 |
 | | 科技雷达评分入库 | S-03；C-02 章程；min_signal 门槛（directions 配置） |
 | | 质量闸与索引重建 | S-01、H-02、S-04；quarantine 流程 |
 | | 定时调度与断点续跑 | Cron（内建）；budget.yaml 硬约束 |
 | **G2 快循环·作品交付** | 推荐矩阵与蓝图 | K-02；blueprint.schema.json；profile.yaml |
-| | 并发工程交付 | K-03；C-03/C-04/C-05 章程；Bash 沙箱；硬件路线（决策 D2） |
+| | 并发工程交付 | K-03；C-03/C-04/C-05 章程；Bash 沙箱；E-15 ast-grep；E-18 bwrap（不可信代码隔离）；硬件路线（决策 D2） |
 | | 实测数据契约 | metrics.json 约定；browser-use 实测取证 |
 | | 竞赛文档生成 | K-06、K-07（marp=波内草稿）；正式答辩 PPT=K-12（ppt-master 双用户门，票10）；基线-04/05 |
 | | 验收-修复-熔断 | K-04；S-05；H-01 守卫；retry 状态 |
@@ -48,7 +48,7 @@
 | 基线-09 | diagram-maker | 论文/BP 架构图与配图 |
 
 ### 本地 CLI（已安装）
-git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.12
+git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.12｜ast-grep 0.45｜duckdb 1.5（Linux 主力机 ~/.local/bin 静态二进制）
 
 ---
 
@@ -149,6 +149,12 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | E-13 | MPLAB XC8 | PIC18F 固件编译（PlatformIO 不支持 PIC；profile 设备含 pic18f） | 按需：首个用到 PIC 的蓝图出现时先评估再装 | T3 |
 | E-12 | Wokwi CLI | 固件仿真自测（--expect-text 断言式验收） | ✅ T3-e 已装并断言冒烟通过（0.26.1；官方件+自建 Arduino ESP32 双验证；Community License=公开/开源项目口径） | T3 |
 | E-14 | MinerU 4（pip·专用 venv `~/.venvs/mineru`，py3.12+torch 2.14 CPU） | 文档→Markdown 本地解析与查阅（版面/表格/公式/OCR；**原生直通 22 类输入**：pdf/图片/Office/ODF/html/epub/csv/ofd 等，soffice 后备；doclib 定位符 read/search 按页查阅）——C-01/C-02 难读文档主力，S-13 降为无环境兜底；全局技能 `~/.zcode/skills/mineru/`（wrapper+查阅循环 SOP） | ✅ 2026-09-20 已装并验证（standard 档 VLM；文本层 17页/11s 表格完整还原、扫描件 OCR、原生 docx/pptx/html、locator 查阅循环均通过；**--remote 云解析按合规禁用**；Linux 主力机） | T3 |
+| E-15 | ast-grep（静态二进制 ~/.local/bin） | AST 结构化代码检索/重构（software 解构陌生开源库；与 rg 互补） | ✅ 2026-09-20 已装（D15） | T3 |
+| E-16 | DuckDB CLI（静态二进制 ~/.local/bin） | 本地 CSV/Parquet/JSON 大表聚合（hunter/software 交互式探索；脚本保持 stdlib 不接线） | ✅ 2026-09-20 已装（D15） | T3 |
+| E-17 | trafilatura（autoc venv） | 静态页正文降噪：S-02 快照旁 `.extract.md` sidecar（try-import 降级）+ scraper 分片首选 | ✅ 2026-09-20 已装（D15） | T3 |
+| E-18 | bwrap 0.12（系统包）+ wrapper 技能 ~/.zcode/skills/bwrap-run | 不可信第三方代码执行隔离（根只读+默认断网；仅点名场景强制，日常编译测试不套） | ✅ 2026-09-20 登记封装（D15） | T3 |
+| E-19 | 本地轻量 VL（Ollama/qwen2.5-vl） | 4.5v 远程视觉分流兜底 | watch：限流实证 ≥2 次再评（本机无独显+RAM 紧张，D15） | T3 |
+| — | Docling | 表格/公式结构化第二主力候选 | watch：MinerU standard 档出现表格还原系统性缺陷实证再评（D15；S-13 无环境兜底语义不动） | T3 |
 
 ---
 
@@ -240,3 +246,5 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
   3. 脚本级写入（merge_metrics/archive_campaign 等经 Bash）不经 Write 工具，不在此层，L3 审计兜底
   验证：test_guard 39/39（新增圈禁 7 用例 + 无活跃战役工程自举 1 例；3 个既有用例预期翻转并注明 D14）、
   test_init_state 5/5
+
+- **D15 工具链升级质询轮** ✅ 已裁决（2026-09-20，grill-me 会话）：采纳 **E-15 ast-grep / E-16 DuckDB**（交互式工具位，S-02/S-03 脚本保持 stdlib 不接线）、**E-17 trafilatura**（S-02 快照旁 `.extract.md` 正文 sidecar，try-import 无环境降级；scraper 静态页正文首选）、**E-18 bwrap wrapper**（全局技能 bwrap-run；仅"执行不可信第三方代码"场景强制，默认 --unshare-net，依赖装外执行在内；日常编译测试不套）；**否决 Docling**（破坏 S-13"无 MinerU 环境"兜底语义，且 MinerU standard 档表格还原实证已够——登记 watch：表格系统性缺陷实证再评）；**暂缓 E-19 本地 VL**（无独显 + RAM 紧张 + 4.5v 限流无实证——watch：限流实证 ≥2 次再评）；pdfplumber 收拢为"脚本内部依赖"措辞（不卸载，agent 交互式探索首选 duckdb/MinerU）；image-search 维持原样（用户裁定）。安装路线：本机 sudo 无免密通道 → ast-grep/duckdb 走 GitHub 静态二进制 `~/.local/bin`。两战役活跃期施工经用户显式授权（援引 D14 授权先例），契约 v13→v14。
