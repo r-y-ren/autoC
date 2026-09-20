@@ -3,7 +3,7 @@
 Kaggle Simulation Competition **Kaggriculture**（Google/Kaggle 农场经营 720 回合博弈）的
 bot、本地评估基建、机制量化工具与增强策略 A/B。
 
-当前 working candidate `v15.0-ignition-working` 为 development（v15「点火重构」：波次日历剧本引擎 + DTSP 三选一，M-E 门禁诚实判定未过、不作为发射候选，见 metrics `p15v15_*` 与 `exports/probes/v15_ignition/v15_ignition_summary.md`）；尚未针对本轮运行新的 holdout 或线上提交；下文的线上记录属于历史候选观测，不能作为当前候选验证。
+当前 working candidate `v14.3-sellrace-working` 为 development（「最后一刀」售卖竞速最小版：premium-market-lead 前移 + day-11 放羊承诺 + main.py 发射开关，旗关=与 v14.2 行为逐字节；四道门双臂归因后**建议 round-26 冻结 v14.2 不发射**，见 metrics `p14v3_*` 与 `exports/probes/v143_sellrace/v143_sellrace_summary.md`）；尚未针对本轮运行新的 holdout 或线上提交；下文的线上记录属于历史候选观测，不能作为当前候选验证。
 
 **评估规则变更（2026-09-02，用户决策）**：本地对手池（同族实现的 bots）**不再作为候选强度参考与上线门禁**——同族偏移已被多轮线上实测证实（本地 holdout 94.3% 对 v10.2 线上 42.9%）。此后候选验证以**线上天梯实测**为准（线上样本仍受 ≥6 局评估门与止损线约束；提交额度/回拉复盘/止损的契约常量以 blueprint 与 JOURNAL 台账为准——旧 SOP v4 已随 2026-09-02 docs 重构退役，现役步骤见 `docs/online_probe_sop.md`）。保留仍然有效的两类检查：① 单元/契约测试与身份链校验（代码行为契约，非对手比较）；② 引擎一致性冒烟（smoke_boot）。`run_eval`/`iterate_gate`/`ablate`/`check_opponent_strength`/`quickwin_probe` 等本地对手评估资产保留为可选诊断工具，**不是上线前置条件，也不能授权下一轮改参**。
 
@@ -135,17 +135,17 @@ python workspace/kaggriculture/software/scripts/v3_readmission_suite.py --mode o
 This is producer/source-attested precomputed barcode evidence, not an independent replay reconstruction: `extractor_status=source_extractor_not_published`. `IDENTICAL / SAME SOURCE` means only 30-band anchor equality; it does not prove the same agent or a real source. DNA stability is separate from engine action liveness. The artifacts are explicitly exploratory and are not strength, promotion, holdout, online, or performance evidence. DNA outputs are restricted to `workspace/kaggriculture/software/exports/replay_dna/`, and action, observation, state, market, price, quantity, inventory, and raw trace fields are rejected recursively.
 
 <!-- ACTIVE_CANDIDATE_IDENTITY:BEGIN -->
-working_candidate_sha256=f595f4eadbedc5df446068a686ae94a8ee157c1de0e8d964ae256bf49b3edff6
+working_candidate_sha256=f1f46638b8b747b46282065f5e37f584a42d5f155a7b428b16d7be7625d185f7
 working_candidate_status=development
 last_promoted_frozen_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
 published_holdout_candidate_sha256=c44e2b254686fc34ebfd055f51519f2aaac4a09bc68e2ac1f959f35b7ac90748
 published_holdout_attempt_index=5
 engine=kaggle-environments 1.32.7 kaggriculture
 <!-- ACTIVE_CANDIDATE_IDENTITY:END -->
-working_candidate_label=v15.0-ignition-working
-working_candidate_git_ref=7811014ef6edd11df5be18a323c791a912da8620
-submission_package_sha256=8bc419dcc8424895b2b5190154aca42e070c80d09af34a9e6b8793c0514aaa74
-package_sha_provenance=v15.0-ignition 开发包（2026-09-20，layout pkg.3-wave，199,575 字节：main.py+src/10（+wave.py 波次剧本引擎）+planner/7（+wave_script.py 剧本候选）+scene 对，确定性打包）。v15 内容=点火重构 M-A/B/C/D：波次日历剧本为脑（d0 2C+2S+瓜 7+麦 9+BUY_WHEAT×5 保险花到 ≤$600；d6 五牛/d11 yarn 六羊 feed+cash+棚位三闸；crew 只抬不缩 d10/11=12/13；首店身份路由 YARN/FARMERS/BAKERY；flush 变现窗毛 d6-8/瓜 d10-11/奶 d8+；终局 (1+对手exposure)×glut×价×log(q) 排序；同回合 SELL 影响分排序 + flush 日 SELL 先于 BUY）+ DTSP dawn 三选一 {剧本段, identity, 旋钮变体}（τ 闸沿用；实测 shipped=forced 逐局一致=选择器实际每黎明选中剧本）；全部新行为关进 PLANNER_OVERRIDES.wave_mode（WAVE_ENABLED=False 默认，flagoff golden 6/6 逐字节）。**M-E 诚实判定：E1 v48 h2h 0-16（wave -84.7k vs 基线 -88.0k）、E2 反事实 G2 5/9 挽回过/G1 点火 2/9 与 G3 1 翻盘未过、E3 注入塌方 4/26（base 5/26）字面未过——不作为发射候选**（exports/probes/v15_ignition/v15_ignition_summary.md + metrics p15v15_*）。已登记 v13.8 线上提交包仍为 2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e（冻结 ref 8deac51）——回发 Track-A 锚必须 checkout 该 ref 重打包，不得使用本工作区包
+working_candidate_label=v14.3-sellrace-working
+working_candidate_git_ref=4bc4bee301cff034558a9ea432763c8cd8bb6cc4
+submission_package_sha256=b1f582ff39a1521b16b93a65d09da05373e587e0df047f54960ef9879ab47735
+package_sha_provenance=v14.3-sellrace 开发包（2026-09-20，layout pkg.3-wave，204,897 字节：main.py+src/10+planner/7+scene 对，确定性打包）。v14.3 内容=「最后一刀」售卖竞速最小版：_town_demand_now（引擎逐回合城镇抽货镜像）+ _sellrace_leads（premium 四品 ≤50%×当批前移；零吸收线当日出清帽 18/回合；肥料预售 cap10 不动 FERT_FIELD_RESERVE 底仓；WHEAT 不前插；flow<0、黎明 hold 线、终日不前移）+ day-11 放羊承诺（2945 VE1 五剪毛窗，慢季补栏环优先序，安全门全保留）+ main.py _SELLRACE_SHIP 发射开关（默认 False=与 v14.2 行为逐字节等价；置 True 预置寄存器，键不在 DTSP governed 全名面，fail-open 自动回落）。CARE 攒量（牛 3 奶/羊 4 毛）经逐行核对=现役在役语义，未改码。**四道门双臂归因：a 近失带 3/4 翻盘（base 臂同翻=孪生基线差主导，杠杆增量 +0/+3,909/0/+117）；b 巨人 2/9、c 胜局 5/13（记录 5/9、7/13 出自席位错位通道，席位修正后 v14.2 本征同为 2/9、5/13→零回退）；d v48 h2h 8 局 -77,755.9 ≥ -84.7k PASS**。机制发现：零消费窗口内同日起卖批次重排收入中性（逐件价只随共享库存水位走），我方 stock-follower 门控本就当日出清→杠杆结构性≈0；**发射建议：round-26 冻结 v14.2，不发射 v14.3**（exports/probes/v143_sellrace/v143_sellrace_summary.md + metrics p14v3_*）。附带发现：bench 反事实通道 me_seat=1 席位错位（v3 复裁记录 5/9、7/13 出自该通道；修正后 v14.2 本征 2/9、5/13），历史台账未改写、留协调者复核。已登记 v13.8 线上提交包仍为 2fe9a4f1488c30ade4df15a66af76e8e3757a5d9e5de392e50b22c8c3617e14e（冻结 ref 8deac51）——回发 Track-A 锚必须 checkout 该 ref 重打包，不得使用本工作区包
 
 ## External H2H 与评级限制
 

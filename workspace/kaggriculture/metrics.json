@@ -1,5 +1,5 @@
 {
-  "_generated_at": "2026-09-20T12:37:56",
+  "_generated_at": "2026-09-20T14:56:06",
   "software": {
     "campaign": "kaggle-kaggriculture",
     "engine": {
@@ -9,7 +9,7 @@
       "scenario": "kaggriculture",
       "version": "1.32.7+nodeps (vendored, engine code unmodified)"
     },
-    "measured_at": "2026-09-20T00:00:00+00:00",
+    "measured_at": "2026-09-20",
     "metrics": {
       "avg_episode_runtime_seconds": {
         "method": "m0 session: mean per-game elapsed across the 40 m0 eval games",
@@ -6838,6 +6838,233 @@
           "pytest": "955 passed + 2 skipped（唯一红=登记前身份链 20 项预期态；登记提交后复验）",
           "wave_unit_tests": "29 passed（含旗关零足迹/日历锚/校准互检/三闸）",
           "candidate_identity": "v15.0-ignition-working 登记（working.sha256=f595f4ea…，ref=7811014，blob=316d1c73…）"
+        }
+      },
+      "p14v3_sellrace_gates": {
+        "method": "scripts/v143_sellrace_gates.py 四道验证门（2026-09-20）：a=近失带 4 局 d0 孪生反事实翻盘≥2（席位修正通道）；b=巨人 9 局挽回≥10% 需≥5（v3 记录基线）；c=13 胜局损伤>5% 需≤1；d=v48 h2h 8 局均值≥-84.7k。双臂归因：v143=DTSP runtime+sellrace 预置，base=纯 v14.2 runtime",
+        "value": {
+          "gate_a_near_miss": {
+            "n_flips": 3,
+            "n": 4,
+            "min_flips": 2,
+            "numeric": "PASS",
+            "attribution": "3 翻盘局 base 臂同样翻盘（孪生基线差主导）；v143 对 base 增量 +0/+3,909/+117/0"
+          },
+          "gate_b_giants": {
+            "v143": "2/9",
+            "base": "2/9",
+            "recorded_baseline": "5/9（v3 复裁，席位错位通道）",
+            "numeric_vs_recorded": "FAIL",
+            "attribution": "席位修正后 v14.2 本征挽回面=2/9，v143 与 base 逐局等值（4 局有 +15~+12,599 / -4,491 摆动）→ 不回退"
+          },
+          "gate_c_wins": {
+            "v143": "5/13",
+            "base": "5/13",
+            "recorded_baseline": "7/13（v3 复裁席位错位通道）",
+            "numeric": "FAIL",
+            "attribution": "v143 与 base 同为 5/13 → 不回退"
+          },
+          "gate_d_v48_h2h": {
+            "mean_margin": -77754.8,
+            "floor": -84700.0,
+            "games": 8,
+            "numeric": "PASS",
+            "attribution": "对 v48 无感（v15 16 局口径 -84.7k，本 8 局子集噪声内略优）"
+          },
+          "verdict": "数值 a PASS / b FAIL / c FAIL / d PASS；双臂归因后 v14.3 对 v14.2 零回退、增量噪声级（22 局净 +1.8k）"
+        }
+      },
+      "p14v3_near_miss_band": {
+        "method": "gate a：d0 全季孪生 rollout（对手=回放真实动作、真值=线上实际），席位修正通道（mine→seats[me]）；翻盘=final>对手线上真值",
+        "value": {
+          "110741693": {
+            "truth_me": 64877,
+            "truth_opp": 68001,
+            "base": 76337,
+            "v143": 76337,
+            "flip": true,
+            "delta_v143_vs_base": 0
+          },
+          "110689244": {
+            "truth_me": 55663,
+            "truth_opp": 56694,
+            "base": 61496,
+            "v143": 65405,
+            "flip": true,
+            "delta_v143_vs_base": 3909
+          },
+          "110678765": {
+            "truth_me": 81143,
+            "truth_opp": 81506,
+            "base": 77752,
+            "v143": 77752,
+            "flip": false,
+            "delta_v143_vs_base": 0
+          },
+          "110679941": {
+            "truth_me": 53167,
+            "truth_opp": 63782,
+            "base": 79920,
+            "v143": 80037,
+            "flip": true,
+            "delta_v143_vs_base": 117
+          }
+        }
+      },
+      "p14v3_giants_matrix_base_vs_v143": {
+        "method": "gate b 双臂：DTSP runtime（K=6×H=1d 不变）d0 全季，席位修正通道；挽回=final≥truth×1.10；v3 记录 5/9 出自席位错位通道不可比",
+        "value": {
+          "base_recover_hits": 2,
+          "v143_recover_hits": 2,
+          "n": 9,
+          "per_episode_gain_pct": {
+            "110687913": {
+              "base": -0.118,
+              "v143": -0.118
+            },
+            "110677576": {
+              "base": -0.292,
+              "v143": -0.292
+            },
+            "110684532": {
+              "base": -0.232,
+              "v143": -0.232
+            },
+            "110694473": {
+              "base": 0.195,
+              "v143": 0.195
+            },
+            "110702221": {
+              "base": 0.014,
+              "v143": 0.014
+            },
+            "110699710": {
+              "base": 0.335,
+              "v143": 0.268
+            },
+            "110685617": {
+              "base": -0.119,
+              "v143": 0.062
+            },
+            "110841464": {
+              "base": -0.318,
+              "v143": -0.318
+            },
+            "110701172": {
+              "base": -0.049,
+              "v143": -0.016
+            }
+          }
+        }
+      },
+      "p14v3_wins_regression_base_vs_v143": {
+        "method": "gate c 双臂：同通道 13 胜局全量（≥8 抽样线之上不挑样本），损伤=gain<-5%",
+        "value": {
+          "base_hurt": 5,
+          "v143_hurt": 5,
+          "n": 13,
+          "threshold": 1,
+          "per_episode_gain_pct": {
+            "110681129": {
+              "base": 0.297,
+              "v143": 0.297
+            },
+            "110682284": {
+              "base": 0.051,
+              "v143": -0.044
+            },
+            "110683437": {
+              "base": -0.173,
+              "v143": -0.164
+            },
+            "110686759": {
+              "base": -0.059,
+              "v143": -0.059
+            },
+            "110690133": {
+              "base": 0.215,
+              "v143": 0.156
+            },
+            "110691193": {
+              "base": -0.036,
+              "v143": -0.036
+            },
+            "110692292": {
+              "base": -0.091,
+              "v143": -0.091
+            },
+            "110693383": {
+              "base": -0.415,
+              "v143": -0.415
+            },
+            "110695554": {
+              "base": -0.18,
+              "v143": -0.181
+            },
+            "110696787": {
+              "base": 0.044,
+              "v143": 0.044
+            },
+            "110697778": {
+              "base": 0.098,
+              "v143": 0.098
+            },
+            "110698875": {
+              "base": 0.176,
+              "v143": 0.249
+            },
+            "110790899": {
+              "base": 0.081,
+              "v143": 0.081
+            }
+          }
+        }
+      },
+      "p14v3_v48_h2h_sanity": {
+        "method": "gate d：main.py 命名空间+sellrace 预置 vs 解码 v48build/main.py，seeds 101-104×双席位 8 局（kgenv.arena 官方引擎）",
+        "value": {
+          "mean_margin": -77755.9,
+          "floor": -84700.0,
+          "passed": true,
+          "per_game_margin": {
+            "seed101_seat0": -72194,
+            "seed101_seat1": -82054,
+            "seed102_seat0": -104338,
+            "seed102_seat1": -104329,
+            "seed103_seat0": -74969,
+            "seed103_seat1": -81481,
+            "seed104_seat0": -49618,
+            "seed104_seat1": -53055
+          }
+        }
+      },
+      "p14v3_sellrace_mechanism_finding": {
+        "method": "孪生内发射统计（_SELLRACE_STATS 零行为足迹计数器）+ 提交/成交逐水位对账（episode-110741693 深挖）",
+        "value": {
+          "firing": "5 发射回合 / 14 件（无 wrapper 污染口径）",
+          "final_impact": "base 与 v143 终局逐位一致（76,337）",
+          "mechanism": "引擎数学：零消费窗口内同日起卖批次重排是收入中性的——逐件成交价只随共享库存水位走，同日起卖总量相同则水位集合相同（d13 实测 base[6,6,6,4,2] vs v143[6,9,7,2] 终局逐位同）；价值只在校日界（隔夜供给抬水位），而我方现役门控本就当日出清（stock-follower），跨日前移的存量只剩 hold 线（闸 5 明确不碰）→ V16 lead 的边际对 tape 架构成立、对我方 stock-follower 架构结构性≈0"
+        }
+      },
+      "p14v3_seat_alignment_finding": {
+        "method": "门禁期发现：bench.rollout_with_replay_opponent 恒把 mine 放 seat0——me_seat=1 局我方 agent 动作落在对手农场，final[me] 实为对手磁带钱（ep110741693 实证 final=[0.0, 88526]）；v143_sellrace_gates.py 以席位修正通道重测双臂",
+        "value": {
+          "affected": "round24_d0_counterfactual.py / v3_readmission_suite.py 等所有 me_seat=1 局的历史反事实数（v3 复裁 b=5/9、c=7/13 记录值出自该通道）",
+          "corrected_v142_baseline": {
+            "giants_recover": "2/9",
+            "wins_hurt": "5/13"
+          },
+          "disposition": "v14.3 门禁以修正通道双臂归因；历史记录值未改写，留协调者裁决是否复核 round-24 反事实台账"
+        }
+      },
+      "p14v3_engineering_gates": {
+        "method": "门禁 e：旗关黄金（scripts/planner_flagoff_golden.py 6 种子全季动作流 sha256）、smoke 四相（smoke_boot.py）、确定性打包（build.py --check）、全量 pytest、新测试",
+        "value": {
+          "flagoff_golden": "6/6 逐字节（sellrace/day-11 全部默认关）",
+          "smoke": "4 相 PASS 46.9s",
+          "build": "pkg.3-wave 204,897B sha256 b1f582ff39a1521b16b93a65d09da05373e587e0df047f54960ef9879ab47735",
+          "pytest": "971 passed + 2 skipped + 19 failed（全部 candidate-identity 链=登记前预期态；登记后应 990+2 绿）",
+          "new_tests": "tests/test_sellrace.py 14 项（town demand 镜像/闸栈/零吸收帽/肥料底仓/day-11 窗口算术/main 开关默认关）"
         }
       }
     },
