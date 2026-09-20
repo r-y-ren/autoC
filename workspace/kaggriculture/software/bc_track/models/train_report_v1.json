@@ -1,5 +1,5 @@
 {
- "schema": "bc-schema/1.2",
+ "schema": "bc-schema/1.1",
  "seed": 20260920,
  "epochs": 15,
  "batch": 8192,
@@ -26,18 +26,18 @@
   "market_op_nonnone": 0.3972353364807554
  },
  "train_acc": {
-  "unit_op": 0.491015,
-  "unit_arg": 0.7126254622292657,
-  "unit_qty": 0.482482613830206,
+  "unit_op": 0.354795,
+  "unit_arg": 0.7180590144140064,
+  "unit_qty": 0.4818265319511875,
   "market_op": 0.910935,
   "market_item": 0.40912537917087965
  },
  "heldout_acc": {
-  "unit_op": 0.490325933020204,
+  "unit_op": 0.34270344068711855,
   "market_op_all": 0.9211206040135108,
   "market_op_nonnone": 0.308324304803178
  },
- "model_file": "bc_track\\models\\bc_model_v2.py",
- "model_bytes": 209776,
- "wall_seconds": 243.0
+ "model_file": "bc_track\\models\\bc_model_v1.py",
+ "model_bytes": 207386,
+ "wall_seconds": 146.2
 }

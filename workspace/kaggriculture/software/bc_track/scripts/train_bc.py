@@ -343,6 +343,8 @@ def main(argv=None) -> int:
     ap.add_argument("--epochs", type=int, default=15)
     ap.add_argument("--batch", type=int, default=8192)
     ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--model-name", default="bc_model_v1.py",
+                    help="导出模型文件名（models/ 下；schema 改版必须换名）")
     args = ap.parse_args(argv)
 
     t0 = time.time()
@@ -441,7 +443,7 @@ def main(argv=None) -> int:
     meta = {"seed": SEED, "epochs": args.epochs,
             "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ",
                                           time.gmtime())}
-    out_path = MODELS / "bc_model_v1.py"
+    out_path = MODELS / args.model_name
     size = export_model(out_path, unit_model, market_model, meta)
     report["model_file"] = str(out_path.relative_to(SOFTWARE))
     report["model_bytes"] = size

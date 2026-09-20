@@ -1,0 +1,2819 @@
+{
+ "protocol": "twin-d0-fullseason / opponent=replay-actions / baseline=build_v13_namespace (v14.2 src/)",
+ "model": "bc_track/models/bc_model_v2.py",
+ "schema": "bc-schema/1.2",
+ "opening_script_steps": 96,
+ "generated_at": "2026-09-20T15:30:46Z",
+ "summary": {
+  "n_games": 12,
+  "bc_wins_vs_replay_opp": 0,
+  "baseline_wins_vs_replay_opp": 0,
+  "bc_median_money": 1747.5,
+  "baseline_median_money": null,
+  "bc_mean_money": 1797.3333333333333,
+  "baseline_mean_money": null,
+  "h2h_bc_wins": 0,
+  "h2h_baseline_wins": 0,
+  "h2h_ties": 0,
+  "h2h_median_diff": null,
+  "h2h_mean_diff": null,
+  "collapse_lt_45k_bc": 12,
+  "collapse_lt_45k_baseline": 0,
+  "bc_move_rate_mean": 0.3098416666666667,
+  "bc_pass_rate_mean": 0.23048333333333332,
+  "bc_care_mean": 23.833333333333332,
+  "base_move_rate_mean": null,
+  "base_pass_rate_mean": null,
+  "base_care_mean": null,
+  "bc_errors_total": 0
+ },
+ "games": [
+  {
+   "game": "bc-top:0b20d72e-b4f9-11f1-b047-0242ac130203",
+   "teams": [
+    "lingxiaojun",
+    "pensukesan"
+   ],
+   "me_seat": 0,
+   "truth": [
+    97175.0,
+    93084.0
+   ],
+   "episode": 111240316,
+   "bc": {
+    "final_me": 2065.0,
+    "final_opp": 169807.0,
+    "win": false,
+    "wall_s": 4.5,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.353,
+     "unit_pass_rate": 0.2732,
+     "care_total": 25,
+     "water_total": 44,
+     "harvest_total": 5,
+     "unit_total": 1153,
+     "mkt_orders": 52,
+     "mkt_sell": 25,
+     "mkt_hire": 12,
+     "mkt_buy_seed": 6,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 12,
+     "hire_days_active": 12,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "bc-top:6a30a0ce-b4f3-11f1-8e33-0242ac130202",
+   "teams": [
+    "Artem The Farmer 🍅",
+    "QQ"
+   ],
+   "me_seat": 0,
+   "truth": [
+    90159.0,
+    87709.0
+   ],
+   "episode": 111229455,
+   "bc": {
+    "final_me": 2114.0,
+    "final_opp": 8179.0,
+    "win": false,
+    "wall_s": 5.9,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3144,
+     "unit_pass_rate": 0.1012,
+     "care_total": 27,
+     "water_total": 43,
+     "harvest_total": 4,
+     "unit_total": 1107,
+     "mkt_orders": 47,
+     "mkt_sell": 21,
+     "mkt_hire": 10,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 10,
+     "hire_days_active": 10,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "bc-top:951e3540-b4f7-11f1-8510-0242ac130204",
+   "teams": [
+    "kanno",
+    "mikelou1"
+   ],
+   "me_seat": 1,
+   "truth": [
+    88870.0,
+    89692.0
+   ],
+   "episode": 111237827,
+   "bc": {
+    "final_me": 1065.0,
+    "final_opp": 161765.0,
+    "win": false,
+    "wall_s": 8.4,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3333,
+     "unit_pass_rate": 0.2646,
+     "care_total": 21,
+     "water_total": 44,
+     "harvest_total": 4,
+     "unit_total": 1383,
+     "mkt_orders": 72,
+     "mkt_sell": 34,
+     "mkt_hire": 22,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 22,
+     "hire_days_active": 22,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "bc-top:bca76844-b4f1-11f1-8dac-0242ac130203",
+   "teams": [
+    "吃白饭的大肥鱼",
+    "Orbital Terraformer"
+   ],
+   "me_seat": 0,
+   "truth": [
+    84190.0,
+    85448.0
+   ],
+   "episode": 111226109,
+   "bc": {
+    "final_me": 2782.0,
+    "final_opp": 116524.0,
+    "win": false,
+    "wall_s": 8.3,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.2732,
+     "unit_pass_rate": 0.1578,
+     "care_total": 28,
+     "water_total": 44,
+     "harvest_total": 6,
+     "unit_total": 1153,
+     "mkt_orders": 47,
+     "mkt_sell": 19,
+     "mkt_hire": 12,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 12,
+     "hire_days_active": 12,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "bc-top:e80cc5fe-b4f8-11f1-9054-0242ac130204",
+   "teams": [
+    "THIRD FARM CLUB",
+    "Dhavan Shah"
+   ],
+   "me_seat": 0,
+   "truth": [
+    158953.0,
+    55226.0
+   ],
+   "episode": 111239559,
+   "bc": {
+    "final_me": 901.0,
+    "final_opp": 169898.0,
+    "win": false,
+    "wall_s": 8.3,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.277,
+     "unit_pass_rate": 0.2976,
+     "care_total": 22,
+     "water_total": 44,
+     "harvest_total": 4,
+     "unit_total": 1314,
+     "mkt_orders": 71,
+     "mkt_sell": 36,
+     "mkt_hire": 19,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 19,
+     "hire_days_active": 19,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "bc-top:f010fe7c-b4f9-11f1-92c9-0242ac130202",
+   "teams": [
+    "matcha110",
+    "jojo"
+   ],
+   "me_seat": 1,
+   "truth": [
+    110905.0,
+    111679.0
+   ],
+   "episode": 111242464,
+   "bc": {
+    "final_me": 2774.0,
+    "final_opp": 92323.0,
+    "win": false,
+    "wall_s": 8.6,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3314,
+     "unit_pass_rate": 0.4508,
+     "care_total": 27,
+     "water_total": 44,
+     "harvest_total": 5,
+     "unit_total": 1566,
+     "mkt_orders": 75,
+     "mkt_sell": 29,
+     "mkt_hire": 30,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 30,
+     "hire_days_active": 30,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "bc-top:f1edb0ee-b4f6-11f1-b843-0242ac130203",
+   "teams": [
+    "keiz",
+    "God Se7en"
+   ],
+   "me_seat": 0,
+   "truth": [
+    88750.0,
+    89440.0
+   ],
+   "episode": 111237068,
+   "bc": {
+    "final_me": 1925.0,
+    "final_opp": 160071.0,
+    "win": false,
+    "wall_s": 7.7,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.4018,
+     "unit_pass_rate": 0.2593,
+     "care_total": 26,
+     "water_total": 44,
+     "harvest_total": 5,
+     "unit_total": 1130,
+     "mkt_orders": 52,
+     "mkt_sell": 25,
+     "mkt_hire": 11,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 11,
+     "hire_days_active": 11,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "local:21926220-b2a6-11f1-97f0-0242ac130202",
+   "teams": [
+    "renyxin",
+    "kwon yong deuk"
+   ],
+   "me_seat": 0,
+   "truth": [
+    42284.0,
+    142435.0
+   ],
+   "episode": 110082770,
+   "bc": {
+    "final_me": 1054.0,
+    "final_opp": 149533.0,
+    "win": false,
+    "wall_s": 8.1,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.2635,
+     "unit_pass_rate": 0.2856,
+     "care_total": 20,
+     "water_total": 44,
+     "harvest_total": 4,
+     "unit_total": 1222,
+     "mkt_orders": 61,
+     "mkt_sell": 31,
+     "mkt_hire": 15,
+     "mkt_buy_seed": 6,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 15,
+     "hire_days_active": 15,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "local:53282276-b471-11f1-84b4-0242ac130202",
+   "teams": [
+    "Toni Blanco",
+    "renyxin"
+   ],
+   "me_seat": 0,
+   "truth": [
+    127641.0,
+    75349.0
+   ],
+   "episode": 110973598,
+   "bc": {
+    "final_me": 3298.0,
+    "final_opp": 89143.0,
+    "win": false,
+    "wall_s": 8.0,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3011,
+     "unit_pass_rate": 0.1301,
+     "care_total": 25,
+     "water_total": 44,
+     "harvest_total": 5,
+     "unit_total": 1222,
+     "mkt_orders": 60,
+     "mkt_sell": 29,
+     "mkt_hire": 15,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 15,
+     "hire_days_active": 15,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "local:788f5cba-b3da-11f1-9ac9-0242ac130202",
+   "teams": [
+    "renyxin",
+    "Krishnan CS"
+   ],
+   "me_seat": 0,
+   "truth": [
+    58603.0,
+    104670.0
+   ],
+   "episode": 110677576,
+   "bc": {
+    "final_me": 1570.0,
+    "final_opp": 111926.0,
+    "win": false,
+    "wall_s": 8.1,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.2969,
+     "unit_pass_rate": 0.2319,
+     "care_total": 24,
+     "water_total": 45,
+     "harvest_total": 4,
+     "unit_total": 1199,
+     "mkt_orders": 72,
+     "mkt_sell": 42,
+     "mkt_hire": 14,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 14,
+     "hire_days_active": 14,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "local:e1d184be-b376-11f1-9467-0242ac130202",
+   "teams": [
+    "el_dedalus",
+    "renyxin"
+   ],
+   "me_seat": 0,
+   "truth": [
+    94088.0,
+    63451.0
+   ],
+   "episode": 110485312,
+   "bc": {
+    "final_me": 991.0,
+    "final_opp": 77859.0,
+    "win": false,
+    "wall_s": 7.2,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.2,
+     "unit_pass_rate": 0.1054,
+     "care_total": 21,
+     "water_total": 44,
+     "harvest_total": 3,
+     "unit_total": 1015,
+     "mkt_orders": 42,
+     "mkt_sell": 20,
+     "mkt_hire": 6,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 6,
+     "hire_days_active": 6,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "game": "local:ecaeae34-a3b8-11f1-bde5-0242ac130202",
+   "teams": [
+    "DevilQ",
+    "renyxin"
+   ],
+   "me_seat": 0,
+   "truth": [
+    96629.0,
+    76463.0
+   ],
+   "episode": 102558469,
+   "bc": {
+    "final_me": 1029.0,
+    "final_opp": 66291.0,
+    "win": false,
+    "wall_s": 4.8,
+    "steps": 719,
+    "diag": {
+     "unit_move_rate": 0.3725,
+     "unit_pass_rate": 0.2083,
+     "care_total": 20,
+     "water_total": 44,
+     "harvest_total": 4,
+     "unit_total": 1498,
+     "mkt_orders": 85,
+     "mkt_sell": 42,
+     "mkt_hire": 27,
+     "mkt_buy_seed": 7,
+     "mkt_buy_animal": 1,
+     "mkt_buy_product": 8,
+     "mkt_buy_land": 0,
+     "hires_total": 27,
+     "hire_days_active": 27,
+     "errors": 0,
+     "last_error": ""
+    },
+    "market_trace_d0d3": [
+     [
+      0,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "MELON",
+        7
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        5
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        4
+       ]
+      ]
+     ],
+     [
+      2,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ]
+      ]
+     ],
+     [
+      24,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        4
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      25,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      41,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ],
+       [
+        "BUY_SEED",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      44,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        3
+       ]
+      ]
+     ],
+     [
+      45,
+      [
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      48,
+      [
+       [
+        "HIRE"
+       ]
+      ]
+     ],
+     [
+      52,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        2
+       ]
+      ]
+     ],
+     [
+      68,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      70,
+      [
+       [
+        "SELL",
+        "FERTILIZER",
+        4
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ]
+      ]
+     ],
+     [
+      72,
+      [
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_SEED",
+        "STRAWBERRY",
+        1
+       ]
+      ]
+     ],
+     [
+      88,
+      [
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        3
+       ],
+       [
+        "BUY_PRODUCT",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      92,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        1
+       ]
+      ]
+     ],
+     [
+      93,
+      [
+       [
+        "SELL",
+        "WHEAT",
+        3
+       ]
+      ]
+     ]
+    ]
+   }
+  }
+ ],
+ "wall_seconds": 148.0
+}

@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import math
 
-SCHEMA_VERSION = "bc-schema/1.1"
+SCHEMA_VERSION = "bc-schema/1.2"
 G_SCALE = 12.0            # 全局特征尺度归一（v1.1）
 
 # ---- 引擎枚举（与 vendored kaggriculture.py 常数对齐，factsheet §3-§5）----
@@ -338,7 +338,7 @@ N_GLOBAL_FEATURES = 167          # 实测布局长度（见上）；与 assert �
 
 
 def extract_unit_features(obs_seat: dict, seat: int, unit_pos) -> list[float]:
-    """单位局部特征 U（14 维）：站位/邻格/到棚距离/随身。
+    """单位局部特征 U（19 维，v1.2）：站位/邻格/到棚距离/随身/本格维护状态.
 
     棚几何（引擎 _shed_access_tiles 实测）：访问格 = 中心 2×2
     (4,4),(5,4),(4,5),(5,5)；站在其上才能 DROP/PICKUP/PLACE 入棚。
@@ -349,6 +349,12 @@ def extract_unit_features(obs_seat: dict, seat: int, unit_pos) -> list[float]:
       [6:8]  随身 wheat log、随身 fertilizer log
       [8:12] 四邻 tile kind 码 /6（N E S W 序，越界=0）
       [12:14] 邻格我方单位数 clip /4；我方单位总数 log
+      [14:19] v1.2 新增——本格维护状态（票 03 第 2 轮：泊车缺陷归因于
+              "已浇/已喂/可收"信号缺失——专家在已维护完的格子上会移走，
+              v1.1 特征区分不了"待浇水作物"与"已浇过作物"，闭环即泊车）：
+              watered_today(0/1) / consecutive_unwatered clip3 /3 /
+              yield_units clip6 /6 / fed_today(0/1) / cared_today(0/1)
+              （非作物/非动物格相应位 = 0）
     """
     farms = obs_seat.get("farms") or []
     me = farms[seat] if seat < len(farms) else {}
@@ -387,7 +393,18 @@ def extract_unit_features(obs_seat: dict, seat: int, unit_pos) -> list[float]:
     near = sum(1 for u in units
                if u and abs(int(u[0]) - x) + abs(int(u[1]) - y) == 1)
     out += [min(4.0, float(near)) / 4.0, _l(len(units))]
+    # v1.2：本格维护状态（tile dict 字段经回放实测，见 _scan_farm 注释）
+    if isinstance(tile, dict):
+        out += [
+            1.0 if tile.get("watered_today") else 0.0,
+            min(3.0, float(tile.get("consecutive_unwatered") or 0)) / 3.0,
+            min(6.0, float(tile.get("yield_units") or 0)) / 6.0,
+            1.0 if tile.get("fed_today") else 0.0,
+            1.0 if tile.get("cared_today") else 0.0,
+        ]
+    else:
+        out += [0.0, 0.0, 0.0, 0.0, 0.0]
     return out
 
 
-N_UNIT_FEATURES = 14
+N_UNIT_FEATURES = 19

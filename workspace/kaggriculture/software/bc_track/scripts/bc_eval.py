@@ -119,10 +119,14 @@ class Recorder:
         self.last_error = ""
         self.hires_per_day: dict[int, int] = {}
         self._day = -1
+        self.market_trace_d0d3: list = []   # (step, orders)，取证用
 
     def __call__(self, obs):
         plain = to_plain_obs(obs)
         day = int(plain.get("day") or 0)
+        step = plain.get("step")
+        if step is None:
+            step = day * 24 + int(plain.get("hour") or 0)
         try:
             action = self.agent_fn(obs)
         except Exception as exc:                           # noqa: BLE001
@@ -131,6 +135,9 @@ class Recorder:
             action = {"farmer": ["PASS"], "hands": [], "market": []}
         if day != self._day:
             self._day = day
+        if int(step) < 96:
+            self.market_trace_d0d3.append(
+                (int(step), [list(o) for o in action.get("market") or []]))
         for k, v in tally_action(action).items():
             self.tally[k] += v
         self.hires_per_day[day] = self.hires_per_day.get(day, 0) + sum(
@@ -164,15 +171,26 @@ class Recorder:
 
 def rollout(state, me_seat, agent_fn, opp_actions):
     """整季 rollout（planner_offline_bench.rollout_with_replay_opponent
-    同构，本地展开以便异常兜底在 Recorder 内做）。"""
+    同构，本地展开以便异常兜底在 Recorder 内做）。
+
+    席位修正（票 03，2026-09-20）：动作必须按席位索引提交——me_seat=1 时
+    BC 动作给 seats[1]、回放对手动作给 seats[0]。M1 版本恒以
+    [mine, theirs] 提交，me_seat=1 的 2 局（951e3540/f010fe7c）实为
+    "BC 动作进了 seat0、顶级回放动作进了 seat1"，其 132-157k 是回放动作
+    流的产物（harness 伪影），已判定为无效对照。
+    """
     taken = 0
     max_steps = 720
+    me_seat = int(me_seat)
     while not state.env.done and taken < len(opp_actions) \
             and taken < max_steps:
-        obs = state.seats[int(me_seat)].observation
+        obs = state.seats[me_seat].observation
         mine = agent_fn(obs)
-        theirs = opp_actions[taken][1 - int(me_seat)]
-        twin.step(state, [mine, theirs])
+        theirs = opp_actions[taken][1 - me_seat]
+        actions = [None, None]
+        actions[me_seat] = mine
+        actions[1 - me_seat] = theirs
+        twin.step(state, actions)
         taken += 1
     return twin.final_money(state), taken
 
@@ -186,6 +204,15 @@ def main(argv=None) -> int:
     ap.add_argument("--model", default=None)
     ap.add_argument("--skip-baseline", action="store_true")
     ap.add_argument("--out", default="eval_v1")
+    ap.add_argument("--opening", type=int, default=0,
+                    help=">0 = 前 N 步市场订单走 v48 剧本先验"
+                         "（bc_opening.OpeningScriptPolicy；0=关）")
+    ap.add_argument("--opening-units", action="store_true",
+                    help="开局剧本连单位动作一起注入（A2 全剧本模式；"
+                         "需 --opening >0）")
+    ap.add_argument("--decode", action="store_true",
+                    help="市场头 state-grounded 解码约束（bc_decode："
+                         "SELL 锚定棚存/HIRE 去重/BUY 预算掩码）")
     args = ap.parse_args(argv)
 
     t0 = time.time()
@@ -212,6 +239,14 @@ def main(argv=None) -> int:
 
     twin.load_engine()
     policy = BCPolicy(args.model, collect_stats=False)
+    if args.opening > 0:
+        from bc_opening import OpeningScriptPolicy
+        policy = OpeningScriptPolicy(policy, until_step=args.opening,
+                                     collect_stats=False,
+                                     units=args.opening_units)
+    if args.decode:
+        from bc_decode import MarketDecodePolicy
+        policy = MarketDecodePolicy(policy, collect_stats=False)
 
     rows = []
     for gkey in games:
@@ -239,6 +274,8 @@ def main(argv=None) -> int:
             "win": finals[me_seat] > finals[1 - me_seat],
             "wall_s": round(time.time() - t_g, 1), "steps": taken,
             "diag": bc_rec.diagnostics(),
+            "market_trace_d0d3": [
+                (s, o) for s, o in bc_rec.market_trace_d0d3 if o],
         }
         # --- v14.2 基线（同局同席同对手流） ---
         if not args.skip_baseline:
@@ -318,6 +355,7 @@ def main(argv=None) -> int:
         "model": args.model or str(SOFTWARE / "bc_track" / "models"
                                    / "bc_model_v1.py"),
         "schema": S.SCHEMA_VERSION,
+        "opening_script_steps": args.opening,
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "summary": summary,
         "games": rows,

@@ -7,7 +7,7 @@
   "scenario": "kaggriculture",
   "version": "1.32.7+nodeps (vendored, engine code unmodified)"
  },
- "measured_at": "2026-09-20",
+ "measured_at": "2026-09-20T15:33:24Z",
  "metrics": {
   "avg_episode_runtime_seconds": {
    "method": "m0 session: mean per-game elapsed across the 40 m0 eval games",
@@ -7127,6 +7127,158 @@
     "attribution": "冻死吸引子 6/8（开局市场头不发订单→资金冻结在 2975≈起始值）；2/8 市场头偶然触发买畜→FEED/CARE 动物经济自持到 132-157k（高于该席专家真值 89.7k/111.7k）；单位头开环健康（回放 obs 上 WATER 45.7%）但无经济可执行——下一迭代最该修开局订单头（剧本先验或条件化解码），非模型容量",
     "measured": "2026-09-20"
    }
+  },
+  "bc_iter2_seatfix": {
+   "method": "bc_track/scripts/bc_eval.py（票 03 席位修正版：动作按席位索引提交，修复 M1 me_seat=1 时 [mine,theirs] 恒序错位）；孪生 d0 全季注入、对手=回放真实动作、v14.2=build_v13_namespace 同局同席单变量；8 局 held-out（7 bc-top + 1 local）零泄漏；被评=bc_model_v1（schema 1.1，M1 原模型）不注入",
+   "value": {
+    "h2h_bc_vs_v142": "0-8",
+    "bc_median_money": 2967.0,
+    "bc_mean_money": 2969.1,
+    "v142_median_money": 55935.0,
+    "collapse_lt45k_bc": 8,
+    "collapse_lt45k_v142": 3,
+    "bc_move_rate": 0.2785,
+    "bc_pass_rate": 0.7008,
+    "bc_care_total": 0.0,
+    "bc_errors": 0,
+    "m1_artifact_corrected": "M1 的 2/8 赢局（951e3540/f010fe7c，132-157k）经查为席位错位伪影：BC 动作被喂给 seat0、顶级回放动作被喂给seat1，'BC final' 实为回放动作流产出；修复后该 2 局 BC=2963/2965。M1 结论中'市场头偶然触发买畜后执行头自持复利'不成立（8/8 局 buy_seed/animal/product/land 全 0）",
+    "wall_s": 187.9
+   },
+   "note": "票 03 前对照（诚实基线）：冻死吸引子在全部 8 局成立"
+  },
+  "bc_iter2_openA1": {
+   "method": "bc_track/scripts/bc_eval.py（票 03 席位修正版：动作按席位索引提交，修复 M1 me_seat=1 时 [mine,theirs] 恒序错位）；孪生 d0 全季注入、对手=回放真实动作、v14.2=build_v13_namespace 同局同席单变量；8 局 held-out（7 bc-top + 1 local）零泄漏；被评=bc_model_v1 + bc_opening.OpeningScriptPolicy(units=False)：steps 0-95 市场订单强制走 v48 'default' 路由解码剧本（AST 提取 _V48_ROUTES zlib+b85 payload，前 88 步为全路由共享前缀），单位动作全季归 BC",
+   "value": {
+    "h2h_bc_vs_v142": "0-8",
+    "bc_median_money": 338.5,
+    "bc_mean_money": 301.25,
+    "collapse_lt45k_bc": 8,
+    "bc_move_rate": 0.4599,
+    "bc_pass_rate": 0.1507,
+    "bc_care_total": 0.0,
+    "d0_script_exec_exact": true,
+    "post_d3_market_active": "逐局 diag：订单 53-330/局，含 buy_seed/buy_product/hire/sell——市场头在分布内 obs 上恢复发出非 NONE 订单",
+    "farm_deployment": "4 SHEEP+13 种子入棚但全季 0 次 PLANT/PLACE/BUILD_PASTURE——资产烂在棚里（单位头闭环不部署）",
+    "wall_s": 190.6
+   },
+   "note": "单变量 1：市场剧本注入。冻死吸引子修复（资金流动），暴露部署缺失"
+  },
+  "bc_iter2_openA2": {
+   "method": "bc_track/scripts/bc_eval.py（票 03 席位修正版：动作按席位索引提交，修复 M1 me_seat=1 时 [mine,theirs] 恒序错位）；孪生 d0 全季注入、对手=回放真实动作、v14.2=build_v13_namespace 同局同席单变量；8 局 held-out（7 bc-top + 1 local）零泄漏；被评=bc_model_v1 + OpeningScriptPolicy(units=True)：steps 0-95 farmer/hands/market 全走 v48 剧本（data/v48_default_d0d3_actions.json，7.7KB 解码表），d4 起交还 BC",
+   "value": {
+    "h2h_bc_vs_v142": "0-8",
+    "bc_median_money": 604.5,
+    "bc_mean_money": 587.75,
+    "collapse_lt45k_bc": 8,
+    "bc_move_rate": 0.1852,
+    "bc_pass_rate": 0.3976,
+    "bc_care_total": 54.4,
+    "d0_deployment": "step23 快照：12 PLANT(5 麦+7 瓜)+4 PASTURE+4 SHEEP placed+money 156——剧本部署逐字复现",
+    "takeover_decay": "d4 交还后：作物 d5 起变草（不浇水）、羊 d6 逃光（不喂）、d6 羊毛 flush（~24 毛）未卖；step240 农场全灭，资金冻结 533",
+    "conditional_op_head_works": "d4-d10 探针：站作物格 87.8% 发 WATER（36/41）、站牧场发 FEED×60——条件 op 头正常，缺陷=泊车（钉死单格重复无效操作，不轮换工作面）",
+    "wall_s": 168.8
+   },
+   "note": "单变量 2：全剧本注入。部署问题由剧本兜底，暴露维护触发特征缺失"
+  },
+  "bc_iter2_schema12": {
+   "method": "bc-schema/1.2（单位特征 14→19 维：+watered_today/consecutive_unwatered/yield_units/fed_today/cared_today 本格维护状态——泊车缺陷归因于'已浇/已喂'信号缺失）；extract_samples --include-rounds 重抽（161 局/189 席/1,330,985 单位样本，与 v1 同语料）+ train_bc 重训（同超参 15ep/Adam/128-64）→ models/bc_model_v2.py 209,776B",
+   "value": {
+    "heldout_unit_op_acc_v11": 0.3427,
+    "heldout_unit_op_acc_v12": 0.4903,
+    "majority_baseline_unit_op": 0.1448,
+    "market_accs_unchanged": {
+     "op_all": 0.9211,
+     "op_nonnone": 0.3083
+    },
+    "eval_with_openA2": {
+     "h2h_bc_vs_v142": "0-8",
+     "bc_median_money": 910.0,
+     "collapse_lt45k_bc": 8,
+     "bc_move_rate": 0.3284,
+     "bc_pass_rate": 0.4675,
+     "bc_care_total": 31.1
+    },
+    "takeover_effect": "羊存活 d6→d8-10（产毛 16 入棚）、出现 HARVEST（MELON 6 入棚）——维护特征起效但覆盖不足",
+    "residual_blocker": "WOOL 16+MELON 6 囤积整季不卖：市场头 item 头 argmax 死咬 WHEAT（SELL WHEAT×45 还把喂羊口粮卖光）",
+    "extract_wall_s": 363.7,
+    "train_wall_s": 243.0,
+    "eval_wall_s": 99.0
+   },
+   "note": "票 2 轮条款'CARE/FEED 触发条件特征是否缺失'——确实缺失，补齐后 op 准确率+14.8pp"
+  },
+  "bc_iter2_decode": {
+   "method": "bc_track/scripts/bc_eval.py（票 03 席位修正版：动作按席位索引提交，修复 M1 me_seat=1 时 [mine,theirs] 恒序错位）；孪生 d0 全季注入、对手=回放真实动作、v14.2=build_v13_namespace 同局同席单变量；8 局 held-out（7 bc-top + 1 local）零泄漏；被评=bc_model_v2 + openA2 + bc_decode.MarketDecodePolicy（SELL 锚定棚存最大项/数量 clip 棚存、HIRE 槽间去重、BUY 预算掩码降量）",
+   "value": {
+    "h2h_bc_vs_v142": "0-8",
+    "bc_median_money": 1995.0,
+    "bc_mean_money": 1835.0,
+    "collapse_lt45k_bc": 8,
+    "bc_move_rate": 0.3185,
+    "bc_pass_rate": 0.2613,
+    "bc_care_total": 24.5,
+    "sell_grounded": "SELL WOOL×6+SELL FERTILIZER×9（0b20d72e 局）——卖单锚定生效",
+    "hire_dedup_relax_noop": "HIRE 去重从'每日一次'修正为'槽间去重'后数字不变（中位 1995）——BC 每回合本就至多 1 HIRE，劳力爬坡是市场计划自身不足",
+    "final_failure_mode": "羊 4→2→1→0（d15 前逃光，单农民喂不动 4 牧场）、作物d6 全草化、HIRE 全季 12 次（专家 d13 起 12 手/日）——季中后零生产，资金冻结 ~2k",
+    "wall_s": 97.4
+   },
+   "note": "最好 BC 候选 = openA2 + schema1.2 + decode。中位 1995，为门 A 要求的 6.2%"
+  },
+  "bc_iter2_stability": {
+   "method": "三面取证：①种子稳定性=bc_seed_stability.py 合成季（synthetic_season_head 同构：NW/$3000/零棚零种/I0-base 全品表）×4 种子（11/23/47/101），BC 坐 seat0、陪练=v48 'default' 719 步路由开环回放坐 seat1（只变引擎种子：杂草/商店解锁/城镇消费随机源）；②覆盖补全=12 局全 held-out（7 bc-top+5 local，M1 遗留 4 local 局入样）；③双席 A/B=2 局×双席",
+   "value": {
+    "seed_stability": {
+     "seeds": [
+      11,
+      23,
+      47,
+      101
+     ],
+     "bc_finals": [
+      1596,
+      1440,
+      1299,
+      1631
+     ],
+     "bc_median": 1518.0,
+     "collapse_lt45k": 4,
+     "v48route_opp_finals": [
+      120586,
+      77467,
+      180861,
+      132068
+     ],
+     "bc_wins_vs_v48route": 0,
+     "verdict": "max/min=1.26 紧带——塌方结构性、与种子无关"
+    },
+    "games12": {
+     "bc_median_money": 1747.5,
+     "bc_mean_money": 1797.3,
+     "collapse_lt45k": 12,
+     "band": [
+      901,
+      3298
+     ]
+    },
+    "dual_seat_ab": {
+     "0b20d72e": {
+      "seat0": 2065,
+      "seat1": 1399
+     },
+     "951e3540": {
+      "seat0": 3054,
+      "seat1": 1065
+     },
+     "verdict": "双席对称塌方，席位伪影已清除"
+    },
+    "gate_distance": {
+     "gate_a_median_required": 32000,
+     "best_median": 1995.0,
+     "pct_of_gate": 0.0623,
+     "gate_b_collapse_required_max": 2,
+     "best_collapse_of_12": 12
+    }
+   },
+   "note": "票 03 完成判据（塌方归零且中位≥32k）远未达成→按票面收刀弃牌"
   }
  },
  "milestone": "Track-B v15「点火重构」M-A..M-F（波次日历剧本引擎 src/wave.py + planner/wave_script.py 剧本候选 + market/entry 结构 + DTSP dawn 三选一；M-E 诚实判定：旗关/冒烟/打包/单测全绿，E1 v48 h2h 0-16 未过、E2 反事实 G2 过 G1/G3 未过、E3 注入字面门未过（base 配对非回归）——不作为发射候选，v14.2 仍为注册基线）",
