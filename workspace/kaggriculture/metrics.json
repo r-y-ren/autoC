@@ -1,5 +1,5 @@
 {
-  "_generated_at": "2026-09-20T02:17:46",
+  "_generated_at": "2026-09-20T12:37:56",
   "software": {
     "campaign": "kaggle-kaggriculture",
     "engine": {
@@ -6590,9 +6590,258 @@
           "day0_plan_count": 111,
           "slot_schedule": "证据加权 11 桶（C1×1.25/C2×0.8 等官方优胜档+三钱包档）"
         }
+      },
+      "p4v31_pressure_adaptive_discount": {
+        "method": "v3.1 投影器悲观折扣×对手压力双重建模（任务包 v3.1）：disc=1-(1-0.75)*s，s=max(畜群/12, (象限-1)/2)（obs 全公开产能基座；资金差信号预登记关闭——22 局逐日轨迹囤钱型弱对手与巨人相对资金 8.8x-117x 交叠）；rollout 余季延续段守 None→0.75。标定=预登记网格 C0a/C0b/C1-C8 × smoke 6 局选参（scripts/v31_pressure_calibration.py，选中 C8_open_H12_L3，tie-break ②方向修正留痕于 v31_calibration.json reselection_note）→ official 一次终裁",
+        "value": {
+          "disc_strong_end": 0.75,
+          "herd_ref": 12.0,
+          "quad_ref": 3,
+          "money_gap_ref": null,
+          "prior_days_open": -1,
+          "liq_penalty": 0.3,
+          "wallet_visibility_scoring": "非 STANDARD 档按模型现金轨迹跌破 STANDARD 地板的 $*日面积*0.3 罚分（无罚分轨迹计量，无复利）",
+          "smoke_grid_all_score": 3,
+          "smoke_note": "10 配置 score 并列=基线水平；自适应折扣与 trim 修复在 smoke 零选局效应；LIQ 罚分为唯一真杠杆（110841464 -14.9%->+6.2%）"
+        }
+      },
+      "p4v31_select_trim_defect_fix": {
+        "method": "select.aggregate_scores trimmed_mean 缺陷修复（v3.1 标定期发现）：原按 name-sorted 顺序切片，键序≠值序时裁掉名字居中而非值居中模型；Ω=4 实测（110683437 d5）kept=(值min 9496.0+值max 13374.2)，悲观 10015.5 与 wheat_sup 10960.1 两个值中位被裁——悲观折扣对投影器全局失敏（机制死代码）。修复=值序排序后裁切 + 回归测试 test_trimmed_mean_value_order_statistics（键序值序反相样例）",
+        "value": {
+          "defect": "name-sorted positional trim",
+          "fixed": "value-sorted order statistics",
+          "impact_without_fix": "v3.1 折扣机制不可达（投影聚合不含悲观模型）"
+        }
+      },
+      "p4v31_official_readmission": {
+        "method": "scripts/v3_readmission_suite.py --mode official 一次终裁（2026-09-20，C8 配置=值序裁切修复+自适应 open/H12+LIQ 0.3；报告 exports/probes/planner_bench/v31_official_readmission.json，摘要 v31_pressure_calibration_summary.md）",
+        "value": {
+          "criterion_a": "12/14 mean +667 PASS（与 v14.2 持平，bench 对本改动不敏感）",
+          "criterion_b_giants_recovered": "3/9 FAIL（需>=4）：110687913 +20.2 / 110702221 +21.0 / 110699710 +47.8；回退=110684532 +20.6->-19.4、110694473 +20.4->+4.2（LIQ 罚分移除 LOOSE 档出 rollout 比较集，110684532 挽回机制正是钱包档：其 d0 反事实 V_WALLET 单轴最优 +11.3）",
+          "criterion_c_wins_hurt": "7/13 FAIL（需<=2）：塌方三局 110683437 -55.6 / 110695554 -27.4 / 110696787 -25.5 全网格 10 配置+official 逐位不变（选择轨迹对投影器评分不变量，rollout 仲裁钉死）；110692292 -9.2->-14.3、110693383 -9.1->-14.7（LIQ 同源回退）",
+          "sentinel_110699710_beats_opp": true,
+          "projector_segment_ms": 42.2,
+          "gains_giants": {
+            "110687913": 0.202,
+            "110677576": -0.024,
+            "110684532": -0.194,
+            "110694473": 0.042,
+            "110702221": 0.21,
+            "110699710": 0.4782,
+            "110685617": -0.075,
+            "110841464": 0.062,
+            "110701172": -0.033
+          },
+          "gains_wins": {
+            "110681129": 0.16,
+            "110682284": -0.069,
+            "110683437": -0.5558,
+            "110686759": 0.3275,
+            "110690133": 0.104,
+            "110691193": 0.077,
+            "110692292": -0.143,
+            "110693383": -0.147,
+            "110695554": -0.274,
+            "110696787": -0.254,
+            "110697778": 0.1,
+            "110698875": 0.143,
+            "110790899": -0.42
+          },
+          "overall": false,
+          "disposition": "三判据未全过 -> 不登记 v14.3；代码回滚 v14.2 语义（v3.1 实验代码以实验 commit 系留档），塌方局行为差异面在执行器/计划空间坐标非投影器评分——救 c 须蓝图级变更（K1 d0-d2 开窗豁免 / sell 折扣轴扩 1.0 / C1 模式门控放宽），留给协调者终裁"
+        }
+      },
+      "p15v15_wave_engine": {
+        "method": "v15 点火重构 M-A/B/C/D 实现（2026-09-20）：src/wave.py 波次日历剧本引擎（旗关零足迹：PLANNER_OVERRIDES.wave_mode 总闸 + globals().get 钩子死路）+ planner/wave_script.py 剧本候选（WAVE|v15|ignition，rollout 比较集首位，τ 闸沿用）+ market/entry 结构（同回合 SELL 影响分 q×Δp 排序、d29 终局 (1+对手exposure)×glut×价×log(1+q) 全量排序、flush 日 SELL 先于 BUY 融资）；消费点 strategy._macro_plan/_crew_target/_field_alloc + market._market_orders + entry.agent；校准=island-ga envelope 基因组（d0 COW×2+SHEEP×2/NE d6/SW d10/SE 不开/平台 12）+kaggri 一行开局（麦种 9、现金周转优先）+v48 日历（瓜 7/crew 6-8-12-13/d6 五牛/d11 六羊 5 次剪毛）+gytdrop 终局；包 layout pkg.3-wave 199,575B sha 8bc419dc…14aaa74",
+        "value": {
+          "calendar": {
+            "d0": "2C+2S+瓜7+麦9+WHEAT保险5, 过夜≤600",
+            "d6": "五牛波(feed+cash+shed88三闸)",
+            "d11_yarn": "六羊(5次剪毛)",
+            "crew": "阶梯只抬不缩 d10/11=12/13",
+            "flush": {
+              "WOOL": [
+                6,
+                7,
+                8
+              ],
+              "MELON": [
+                10,
+                11
+              ],
+              "MILK_from": 8
+            }
+          },
+          "consumers": [
+            "strategy._macro_plan",
+            "strategy._crew_target",
+            "strategy._field_alloc",
+            "market._market_orders",
+            "entry.agent"
+          ],
+          "package": "pkg.3-wave/199575B/8bc419dc"
+        }
+      },
+      "p15v15_flagoff_equivalence": {
+        "method": "scripts/planner_flagoff_golden.py：旗关（PLANNER_ENABLED=False + 裸 src 命名空间含 wave.py）全季双席自博弈动作流 sha256 vs v13.8 冻结黄金基线，6 种子（11..69）",
+        "value": {
+          "result": "6/6 逐字节一致",
+          "probe_on_channel_bites": true,
+          "measured": "2026-09-20"
+        }
+      },
+      "p15v15_h2h_v48": {
+        "method": "scripts/v15_h2h_v48.py：解码 v48（references/data/intel-notebooks/v48build/main.py，sha256 dadee25a…2664a 与官方包字节一致）为对手，官方 vendored 1.32.7 引擎，seeds 101-104/201-204 × 双席位 = 16 局/口径；判据=场均差距自 -68k 收窄至 ≤-20k 或出现胜局、0-16 不许复现",
+        "value": {
+          "v15_shipped": {
+            "w-l-t": "0-16-0",
+            "avg_margin": -84742.7,
+            "our_ignition_median_day": 13,
+            "v48_ignition_median_day": 10
+          },
+          "v15_forced_wave": {
+            "w-l-t": "0-16-0",
+            "avg_margin": -83580.1,
+            "our_ignition_median_day": 16
+          },
+          "flagoff_v138_baseline": {
+            "w-l-t": "0-16-0",
+            "avg_margin": -88043.4,
+            "our_ignition_median_day": 13
+          },
+          "shipped_vs_forced": "16 局逐字节一致（黎明三选一实测每黎明选中 WAVE 候选）",
+          "verdict": "FAIL——0-16 复现；wave 对基线 +3.3k（噪声内），点火中位差 v48 3 天；主导项=day-11 后经济规模（v48 终局 110-176k vs 我方 31-77k）；历史 -68.4k 参照系为 v7.2 旧候选",
+          "gate": {
+            "no_0_16_repeat": false,
+            "avg_margin_le_minus20k_or_win": false
+          }
+        }
+      },
+      "p15v15_giants_d0_counterfactual": {
+        "method": "scripts/v15_d0_counterfactual_giants.py：round-24 TARGET9 九巨人局 d0 全季孪生 rollout（对手=回放真实动作），wave（wave_mode 开）vs base（旗关 v13.8 语义）双变体；点火双口径=m5k 现金（日终≥5000 首日）与资产（placed herd≥11 且 quads≥2 首日）",
+        "value": {
+          "G1_ignition_m5k": {
+            "wave_days": [
+              13,
+              17,
+              18,
+              13,
+              10,
+              10,
+              13,
+              13,
+              19
+            ],
+            "base_days": [
+              16,
+              13,
+              16,
+              13,
+              10,
+              10,
+              19,
+              13,
+              18
+            ],
+            "medians": "wave 13 / base 13",
+            "n_le12_not_worse": 2,
+            "passed": false,
+            "note": "剧本把 d6/d10 现金即刻换成地/畜（v48 教义），m5k 现金穿越被设计性推迟；v48 全季贴地现金在该口径下同样'不点火'"
+          },
+          "G1b_ignition_asset": {
+            "wave_days": [
+              15,
+              14,
+              13,
+              14,
+              12,
+              12,
+              15,
+              14,
+              14
+            ],
+            "base_days": [
+              14,
+              14,
+              99,
+              14,
+              12,
+              12,
+              15,
+              14,
+              14
+            ],
+            "medians": "wave 14 / base 14",
+            "n_le12_not_worse": 2,
+            "passed": false
+          },
+          "G2_recover_10pct": {
+            "n": 5,
+            "passed": true,
+            "episodes": [
+              "110687913",
+              "110694473",
+              "110702221",
+              "110699710",
+              "110841464"
+            ]
+          },
+          "G3_flip": {
+            "n": 1,
+            "needed": 2,
+            "passed": false,
+            "base_flips": 1
+          },
+          "gain_pcts_wave": [
+            0.137,
+            0.04,
+            0.093,
+            0.202,
+            0.21,
+            0.478,
+            -0.066,
+            0.108,
+            0.028
+          ],
+          "verdict": "FAIL（G2 单项过；G1 双口径 2/9、G3 1/2）"
+        }
+      },
+      "p15v15_regression_gate": {
+        "method": "scripts/v15_regression_gate.py：A 本地池哨兵（cow_baron/melon_hoarder/expansionist/baseline_wheat × seeds 101-104 × 双席位，wave-forced，官方引擎 arena）+ B rounds20-24 注入 26 局孪生 d0 rollout（wave vs base 配对）；塌方线 45k",
+        "value": {
+          "pool": {
+            "games": 32,
+            "losses": 0,
+            "contract_fail": 0
+          },
+          "injections": {
+            "n": 26,
+            "collapse_wave": 4,
+            "collapse_base": 5,
+            "wave_worse_than_base": 14,
+            "net_delta_sum": -38359,
+            "escape_wave": 77,
+            "escape_base": 104,
+            "shed_danger_wave": 24,
+            "shed_danger_base": 17
+          },
+          "verdict": "字面门 FAIL（塌方>2/26、escape>0）——但 base 配对同塌 5/26、同逃 104：注入协议（固定对手动作）下该门对任一变体均不可达；wave 对 base 非回归（塌方更少、逃亡更少），净差 -1.5k/局（12/26 更好）",
+          "mechanism_finding": "105375966 型塌方机制=一次 5 头买畜 +10 棚位 → EOD 满棚销毁；已加棚位 ≤88 闸"
+        }
+      },
+      "p15v15_gates": {
+        "method": "v15 门禁汇总（2026-09-20 终验）",
+        "value": {
+          "flagoff_golden": "6/6 PASS",
+          "smoke_4phase": "PASS 47.8s",
+          "build_check": "pkg.3-wave 199575B PASS",
+          "pytest": "955 passed + 2 skipped（唯一红=登记前身份链 20 项预期态；登记提交后复验）",
+          "wave_unit_tests": "29 passed（含旗关零足迹/日历锚/校准互检/三闸）",
+          "candidate_identity": "v15.0-ignition-working 登记（working.sha256=f595f4ea…，ref=7811014，blob=316d1c73…）"
+        }
       }
     },
-    "milestone": "Track-B P3 DTSP bot 内集成（黎明钩子进提交 bot：投影段 P2.6 钉死配置 + 预算内孪生精化段 K×Ω' 阶梯；时间治理器 min(0.85s,0.5s+池/黎明×0.5)；fail-open 三道（异常/指纹/超限→快照恢复+粘性旗关，动作流与旗关 golden 逐字节一致）；打包 pkg.2-dtsp（planner+scene 内置，确定性 181KB 级）；官方 42 注入点策略探针=精化段对 P2.6 选择中性；端到端 4 种子全季无超时无异常）",
+    "milestone": "Track-B v15「点火重构」M-A..M-F（波次日历剧本引擎 src/wave.py + planner/wave_script.py 剧本候选 + market/entry 结构 + DTSP dawn 三选一；M-E 诚实判定：旗关/冒烟/打包/单测全绿，E1 v48 h2h 0-16 未过、E2 反事实 G2 过 G1/G3 未过、E3 注入字面门未过（base 配对非回归）——不作为发射候选，v14.2 仍为注册基线）",
     "schema": "software-metrics-shard/1.0",
     "unmeasured": {
       "final_submission_commits": {
