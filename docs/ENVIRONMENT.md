@@ -40,6 +40,10 @@
 | typst（pip 包，python API） | 0.15.0 | K-07 编译通道（`typst.compile(..., root='<战役根>')`，root 实参必带——彩排实证勘误） |
 | Flask | 3.1.3 | ppt-master 实时预览服务（svg_editor/server.py --live） |
 | python-pptx | 1.0.2 | ppt-master pptx 导出（svg_to_pptx.py） |
+| MinerU 4.0.4（~/.venvs/mineru：py3.12 + torch 2.14 CPU；模型 ~/.mineru/models ≈2G） | E-14 PDF/图片→md 本地解析主力（C-01/C-02 难读文档）；`~/.venvs/mineru/bin/mineru parse <pdf> -p all --tier standard -o <out>.md`，前置 `mineru server start`，**禁 --remote** |
+| tesseract（系统 5.x）+ ~/.tessdata 用户包（chi_sim/eng=tessdata_fast + afr/osd + configs/） | S-13 OCR 兜底链（2026-09-20 修复本机断链并端到端验证） |
+| pdfplumber 0.11.10 / pypdfium2 5.13 / pillow 12.3（autoc venv，2026-09-20 补装） | E-10 表格机读 / S-13 页面渲染 |
+| poppler（pdftotext/pdftoppm）、soffice、ffmpeg、rg（系统自带） | 文本层快检 / Office→PDF 前置转换（接 MinerU）/ 媒体处理 / 快速检索 |
 
 （本节为 Linux 侧增量；上表 Windows 基线照旧，双机各管各的运行时。）
 
@@ -62,6 +66,13 @@
 - 踩坑实录（已固化进 acceptance-cmds.md 模板）：wokwi.toml 须同时有 `elf`+`firmware` 键；diagram 板类型名 `wokwi-esp32-devkit-v1`；串口监视器须显式接线 `esp:TX0→$serialMonitor:RX`——缺任一项仿真静默无输出（连 ROM 启动横幅都没有），CLI 不报错只超时
 - `wokwi-cli init` 需要交互终端（无 TTY 报 uv_tty_init）；diagram/toml 建议手写（模板见 acceptance-cmds.md）
 - 附注：wokwi-cli 自带实验性 MCP server（`wokwi-cli mcp`）——D8 维持不启用，CLI 断言已覆盖验收需求
+
+## E-14 MinerU 冒烟记录（2026-09-20，Linux 主力机）
+
+- standard 档（onnx 全家 + 1.2B VLM GGUF，纯 CPU）：17 页中文评审规则全量 **11s**，评审表格完整还原 markdown；basic 档 13.5s
+- 扫描件（合成无文本层 PDF，basic 档 OCR）：6.6s/页，中文与表格基本无损（仅引号全半角微差）；PNG 图片输入直接可解析
+- 部署要点：`parse` 不自动拉服务（先 `mineru server start`）；档位切换须 `mineru config set parse_server.local.managed_tier <档>` + `mineru server restart`（`parse --tier` 不能跨已加载档）；模型下载用 **modelscope 源**（HuggingFace 大文件在本机网络会卡死）；4.0.4 自带 GGUF 运行时，无需 llama-cpp-python；**parse 会在 cwd 生成 `blobs/` 内容缓存——先 cd 到 /tmp 工作目录再跑，勿在仓库根执行**
+- 同日修复：~/.tessdata 用户级 chi_sim+eng（此前本机 tesseract 仅 afr/osd，S-13 中文 OCR 断链）；pdfplumber 装入 autoc venv（表格机读验证通过）
 
 ## 说明
 

@@ -22,7 +22,7 @@ description: 慢循环全量深度跑批（每 3 天，D7 合并原每日轻量+
 3. **老化重验**：`last_verified` 超 **12 天**的条目派 scraper 分片重验（重点关键日期/AI 政策；阈值对齐 3 天节奏）
 4. **拒绝台账复核**：`kb/tech/.rejections.yaml` 拒绝理由质量抽查，明显误拒的标记下轮重评（stars×2 自动重评由 sync_tech 处理）
 5. **quarantine 清理**：逐条处置 `kb/quarantine/`（修复重写或删除），处理记录进 INDEX 跑批表
-6. **winners/patterns 推进**：选 1 个赛事推进历年获奖解构（每分片一个年份；扫描件先过 `scripts/kb/ocr_pdf.py`；模板 `config/templates/patterns-template.md`）
+6. **winners/patterns 推进**：选 1 个赛事推进历年获奖解构（每分片一个年份；扫描件/复杂版面 PDF 先过 MinerU（E-14 链，命令见 scraper 章程"难读文档标准流程"），无环境回退 `scripts/kb/ocr_pdf.py`；模板 `config/templates/patterns-template.md`）
 6.5. **`_surveys` 汇总层必查（P2）**：扫描 `kb/tech/` 各技术族——**卡片数 ≥3 且无对应 `tech/_surveys/<族>.md`，或已有 survey 的 `last_verified` 超 30 天 / 族内出现 maturity 变化** → 派 Hunter 分片按 `config/templates/survey-template.md` 建立或刷新（当前欠账：时序预测族 6 卡无 survey）
 7. **质量闸与索引**：`python scripts/kb/lint_kb.py --quarantine` → `python scripts/kb/build_index.py`
 8. **登记收尾**：INDEX 跑批记录追加（类型=deep；**成本列必填：分片数/token 估算/墙钟**——铁律 4 精神：成本也是实测数字）、JOURNAL 记行、git commit、`init_state --phase idle --by kb-deep-sync`

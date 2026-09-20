@@ -12,7 +12,7 @@
 |---|---|---|
 | **G1 慢循环·KB 维护** | 赛事发现与网页抓取 | 基线-01/02/03（内建检索、browser-use、CUA）；RSSHub（T3 决策） |
 | | API 结构化拉取 | S-02、S-03 脚本；gh / curl（已装）；kaggle CLI（T3+密钥） |
-| | 获奖作品逐篇解构 | 基线-04（pdf 技能）；C-01 章程；S-01 校验 |
+| | 获奖作品逐篇解构 | 基线-04（pdf 技能）；E-14 MinerU；C-01 章程；S-01 校验 |
 | | 科技雷达评分入库 | S-03；C-02 章程；min_signal 门槛（directions 配置） |
 | | 质量闸与索引重建 | S-01、H-02、S-04；quarantine 流程 |
 | | 定时调度与断点续跑 | Cron（内建）；budget.yaml 硬约束 |
@@ -148,6 +148,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | E-11 | OpenSCAD | 结构件代码化生成 → STL（hardware 章程已引用） | ✅ T3-d 已装（无头 STL 冒烟通过） | T3 |
 | E-13 | MPLAB XC8 | PIC18F 固件编译（PlatformIO 不支持 PIC；profile 设备含 pic18f） | 按需：首个用到 PIC 的蓝图出现时先评估再装 | T3 |
 | E-12 | Wokwi CLI | 固件仿真自测（--expect-text 断言式验收） | ✅ T3-e 已装并断言冒烟通过（0.26.1；官方件+自建 Arduino ESP32 双验证；Community License=公开/开源项目口径） | T3 |
+| E-14 | MinerU 4（pip·专用 venv `~/.venvs/mineru`，py3.12+torch 2.14 CPU） | PDF/图片→Markdown 本地解析（版面/表格/公式/OCR；soffice 前置转换可吃 Office 文档）——C-01/C-02 难读文档主力，S-13 降为无环境兜底 | ✅ 2026-09-20 已装并验证（standard 档 VLM；文本层 17页/11s 表格完整还原、扫描件 OCR 通过；**--remote 云解析按合规禁用**；Linux 主力机） | T3 |
 
 ---
 
