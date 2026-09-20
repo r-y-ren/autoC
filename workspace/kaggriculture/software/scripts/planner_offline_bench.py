@@ -70,7 +70,8 @@ ORACLE_TOP_K = 6            # 败因归因 oracle 重演的候选数（含选中
 GATE_EPS = 1.0              # 终局资金比较容差（float 噪声）
 TWIN_NOISE_EPS = 1.0        # 孪生重演 vs 真值的逐位一致容差
 V13_MODULE_ORDER = ("constants", "telemetry", "observer", "strategy",
-                    "mission", "solver", "executor", "market", "entry")
+                    "mission", "solver", "executor", "market", "wave",
+                    "entry")
 CROP_NAMES = ("STRAWBERRY", "WHEAT", "MELON", "CARROT", "TOMATO")
 ANIMAL_NAMES = ("GOOSE", "COW", "SHEEP")
 

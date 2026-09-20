@@ -179,9 +179,16 @@ def agent(obs):
         # buys before sells (a dropped sell tranche simply repeats next
         # turn, while a dropped HIRE/BUY loses a whole day of the plan);
         # dawn hires lead the queue.
+        # v15 波次剧本例外（M-B）：flush 日（d6 羊毛/d10 瓜）同回合 SELL
+        # 先于 BUY 入队——同序号 slot 锁步下先卖回血、当日 flush 现金直接
+        # 融资买地/买畜（v48 资本波次的成交顺序语义）。旗关恒走原序。
         buys = [o for o in orders if o[0] != "SELL"]
         sells = [o for o in orders if o[0] == "SELL"]
-        orders = hires + buys + sells
+        _wave_first_hook = globals().get("_wave_sell_first")
+        if _wave_first_hook is not None and _wave_first_hook(day):
+            orders = hires + sells + buys
+        else:
+            orders = hires + buys + sells
 
         # Final defense and a single official-semantics budget pass. Priority
         # chooses which original columns survive max-10; accepted columns retain

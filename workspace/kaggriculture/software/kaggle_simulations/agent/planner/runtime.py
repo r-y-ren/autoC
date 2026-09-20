@@ -48,6 +48,7 @@ from . import opponents as _opponents
 from . import plans as _plans
 from . import select as _select
 from . import twin as _twin
+from . import wave_script as _wave
 
 SEASON_DAYS = 30            # 引擎整季天数（plans.project_season 同口径）
 DAWN_TURNS_PER_DAY = 24     # turnsPerDay（引擎默认配置）
@@ -275,7 +276,8 @@ def dawn_budget(obs, day, config):
 # 基准 build_v13_namespace 同语义；沙盒内无 DTSP_RUNTIME_CONFIG，钩子死路）
 # --------------------------------------------------------------------------
 _SRC_MODULE_ORDER = ("constants", "telemetry", "observer", "strategy",
-                     "mission", "solver", "executor", "market", "entry")
+                     "mission", "solver", "executor", "market", "wave",
+                     "entry")
 
 
 def build_sandbox_agent(overrides, agent_dir):
@@ -378,12 +380,29 @@ def build_rollout_tail_summary(module, state, player):
         opp_class=None)
 
 
+def _spec_knob_overrides(spec):
+    """候选 → 沙盒覆盖（剧本候选分派 wave_script.knob_overrides，
+    PlanSpec 走 plans.plan_to_knob_overrides——M-C 三选一的分派点）。"""
+    if getattr(spec, "wave", False):
+        return spec.knob_overrides()
+    return _plans.plan_to_knob_overrides(spec)
+
+
+def _spec_tail_score(spec, tail, pressure):
+    """候选 → 尾段延续分（剧本候选走其日历镜像投影；PlanSpec 走
+    project_season）。"""
+    if getattr(spec, "wave", False):
+        return spec.tail_score(tail) if tail is not None else 0.0
+    return _plans.project_season(spec, tail, pressure) \
+        if tail is not None else 0.0
+
+
 def _rollout_once(bundle, dawn_state, player, spec, model, our_sell_plan,
                   history, horizon_steps, deadline):
     """单次孪生 rollout：我方席 = 计划覆盖的沙盒 agent，对手席 = 模型
     日计划滴灌。地平线 horizon_steps 步（天数×24，钳到季末）。
     返回 (money_me, tail_summary, steps_done)。"""
-    overrides = _plans.plan_to_knob_overrides(spec)
+    overrides = _spec_knob_overrides(spec)
     agent = build_sandbox_agent(overrides, agent_dir())
     state = _twin.clone_state(dawn_state)
     opp = 1 - player
@@ -422,7 +441,12 @@ def _seat_scan(state, seat):
 # 覆盖注入 / 快照恢复（fail-open 的逐字节等价根基）
 # --------------------------------------------------------------------------
 def governed_keys(sample_spec):
-    """governed 键面（计划无关：plan_to_knob_overrides 全名面发射）。"""
+    """governed 键面（计划无关：plan_to_knob_overrides 全名面发射）。
+    v15 M-C：剧本候选没有 PlanSpec 轴面——用 identity 守成点发射同一
+    全名面（快照/恢复契约依赖键面恒定；剧本覆盖只写 PLANNER_OVERRIDES
+    寄存器，restore_pristine 清寄存器即覆盖）。"""
+    if getattr(sample_spec, "wave", False):
+        sample_spec = _plans.identity_spec()
     return sorted(_plans.plan_to_knob_overrides(sample_spec))
 
 
@@ -578,8 +602,7 @@ def _rollout_refinement(bundle, config, deadline, dawn_state, player,
                                                        "rate_prior_s"))
             _STATE["rate_ewma_s"] = 0.7 * prev + 0.3 * rate
             pressure = model.supply_pressure(None)
-            tail_score = _plans.project_season(spec, tail, pressure) \
-                if tail is not None else 0.0
+            tail_score = _spec_tail_score(spec, tail, pressure)
             done.setdefault(spec.key(), {})[model.name] = \
                 float(money) + float(tail_score)
     return done, steps_total
@@ -657,6 +680,9 @@ def dawn_hook(obs, ns, config, player=0, day=0, hour=0):
             # v3 比较集：投影排序面（修复 v2 的键序残余——refinement 此前
             # 取"枚举序前 K"而非"投影 top-K"，与模块头文档不符）；K1：
             # identity 守成点恒在比较集（rollout 段同近平守成规则）。
+            # v15 M-C 三选一：{wave-script 当前段, identity 守成, 旋钮变体}
+            # ——剧本候选排比较集首位（预算内恒被 rollout；剧本自身不进
+            # rollout 重规划，沙盒侧照读 src/wave.py 日历行为）。
             selected_key = proj_best
             if budget >= float(_cfg(config, "rollout_gate_budget_s")):
                 spec_map = {s.key(): s for s in candidates}
@@ -668,6 +694,7 @@ def dawn_hook(obs, ns, config, player=0, day=0, hour=0):
                         if ident in ranked:
                             ranked.remove(ident)
                         ranked.insert(1, ident)
+                roll_specs = [_wave.wave_candidate()] + ranked
                 roll_models = _models_for_rollout(config, models)
                 deadline = t_start + budget - float(_cfg(config,
                                                          "reserve_s"))
@@ -676,7 +703,7 @@ def dawn_hook(obs, ns, config, player=0, day=0, hour=0):
                 dawn_state = _twin.new_state_from_obs(
                     obs, player=player, seed=seed, bundle=bundle)
                 done, steps = _rollout_refinement(
-                    bundle, config, deadline, dawn_state, player, ranked,
+                    bundle, config, deadline, dawn_state, player, roll_specs,
                     roll_models, our_sells, history)
                 record["rollouts"] = sum(len(v) for v in done.values())
                 record["steps"] = steps
@@ -726,9 +753,14 @@ def dawn_hook(obs, ns, config, player=0, day=0, hour=0):
                 record["policy"] = "projector_only"
 
             # —— 注入（快照先行；幂等绝对值写入）——
+            # v15 M-C：剧本候选不在枚举面（candidates 只含 PlanSpec）——
+            # 选中键为 WAVE 时分派剧本候选与其旋钮面。
             spec_by_key = {s.key(): s for s in candidates}
-            chosen = spec_by_key[selected_key]
-            chosen_overrides = _plans.plan_to_knob_overrides(chosen)
+            if selected_key == _wave.WAVE_KEY:
+                chosen = _wave.wave_candidate()
+            else:
+                chosen = spec_by_key[selected_key]
+            chosen_overrides = _spec_knob_overrides(chosen)
             keys = governed_keys(chosen)
             if "_DTSP_PRISTINE_SNAPSHOT" not in ns:
                 ns["_DTSP_PRISTINE_SNAPSHOT"] = take_pristine_snapshot(

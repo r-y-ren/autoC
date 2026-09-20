@@ -114,10 +114,11 @@ def season_action_hash(agent_fn, seed):
 
 
 def build_v138_namespace():
-    """按 main.py 同语义把现工作树 src/ 九模块 exec 进扁平命名空间。"""
+    """按 main.py 同语义把现工作树 src/ 十模块 exec 进扁平命名空间
+    （v15 起 +wave.py——旗关等价面必须包含全部命名空间成员）。"""
     agent_dir = os.path.join(SOFTWARE, "kaggle_simulations", "agent")
     order = ("constants", "telemetry", "observer", "strategy", "mission",
-             "solver", "executor", "market", "entry")
+             "solver", "executor", "market", "wave", "entry")
     ns = {}
     exec("; ".join(("import copy", "import math", "import json",
                     "import hashlib")), ns)

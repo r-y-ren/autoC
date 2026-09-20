@@ -30,12 +30,13 @@ def test_built_artifact_keeps_submission_marker():
     assert b"Kaggriculture submission agent" in head
 
 
-def test_package_members_are_exactly_entry_nine_modules_and_planner():
-    """P3 (2026-09-19, layout pkg.2-dtsp): members = main.py + src/ nine
-    modules + planner/ six files (fixed order) + the fingerprint-verified
-    planner/scene/ pair.  Packaging contract details (scene sha256 against
-    the P1 registration, size cap, determinism) are pinned by
-    tests/test_p3_integration.py::TestPackaging."""
+def test_package_members_are_exactly_entry_modules_and_planner():
+    """v15 (2026-09-20, layout pkg.3-wave): members = main.py + src/ ten
+    modules (+wave.py, M-A wave-script engine) + planner/ seven files
+    (+wave_script.py, M-C script candidate; fixed order) + the
+    fingerprint-verified planner/scene/ pair.  Packaging contract details
+    (scene sha256 against the P1 registration, size cap, determinism) are
+    pinned by tests/test_p3_integration.py::TestPackaging."""
     import tarfile
     archive = SOFTWARE / "kaggle_simulations" / "agent" / "submission.tar.gz"
     with tarfile.open(archive) as tf:
@@ -43,9 +44,9 @@ def test_package_members_are_exactly_entry_nine_modules_and_planner():
     assert names == sorted(
         ["main.py"] + [f"src/{m}.py" for m in (
             "constants", "telemetry", "observer", "strategy", "mission",
-            "solver", "executor", "market", "entry")]
+            "solver", "executor", "market", "wave", "entry")]
         + [f"planner/{p}" for p in (
             "__init__.py", "twin.py", "plans.py", "opponents.py",
-            "select.py", "runtime.py")]
+            "select.py", "wave_script.py", "runtime.py")]
         + ["planner/scene/kaggriculture.py",
            "planner/scene/kaggriculture.json"])

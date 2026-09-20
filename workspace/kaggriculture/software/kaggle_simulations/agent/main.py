@@ -49,7 +49,7 @@ _HERE = _find_root()
 sys.path.insert(0, _HERE)
 
 _MODULE_ORDER = ("constants", "telemetry", "observer", "strategy",
-                 "mission", "solver", "executor", "market", "entry")
+                 "mission", "solver", "executor", "market", "wave", "entry")
 
 # ===========================================================================
 # DTSP 运行时总闸（Track-B P3，2026-09-19）。提交形态 = DTSP 开启：src/entry

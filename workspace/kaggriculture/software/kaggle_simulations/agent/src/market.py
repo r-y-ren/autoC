@@ -1529,6 +1529,23 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
                                                        plan)
 
     orders = []
+    # v15 波次剧本事件（M-A/M-B）：d0 饲料保险（slot 0）+ flush 变现窗
+    # （羊毛 d6-8/瓜 d10-11/奶 d8+）。队列最前=同序号 slot 锁步下的成交
+    # 顺序（保险先买在 I0 书上；flush 卖最先落袋）。旗关恒零事件。
+    _wave_events_hook = globals().get("_wave_market_events")
+    if _wave_events_hook is not None:
+        try:
+            orders.extend(_wave_events_hook(
+                obs, farm, private, day, _get(obs, "hour", 0), shed, prices))
+        except Exception:
+            pass
+    _wave_opp_supply = {}
+    _wave_supply_hook = globals().get("_wave_opp_supply")
+    if _wave_supply_hook is not None:
+        try:
+            _wave_opp_supply = _wave_supply_hook(obs) or {}
+        except Exception:
+            _wave_opp_supply = {}
     # WHEAT_FARM keeps a conservative projected wallet while building the
     # same-turn queue.  The engine commits market orders sequentially, so
     # sizing later seeds/animals from the opening wallet can cross the hold
@@ -2151,5 +2168,15 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         stock = shed.get(item, 0)
         cap = int(stock) if isinstance(stock, (int, float)) and stock > 0 else 0
         merged[idx][2] = min(merged[idx][2], cap)
+    # v15 波次剧本卖单排序（M-B）：非终日=同回合 SELL 影响分降序重排
+    # （先卖跌得最快的）；终日=718 语义 glut×对手exposure×价×log(q) 全量
+    # 排序替换。plan_market_orders 保持接受列的原序，重排真实生效。
+    _wave_merge_hook = globals().get("_wave_merge_sells")
+    if _wave_merge_hook is not None:
+        try:
+            merged = _wave_merge_hook(merged, prices, day, last_day,
+                                      _wave_opp_supply)
+        except Exception:
+            pass
     return [order for order in merged
             if order[0] != "SELL" or order[2] > 0]

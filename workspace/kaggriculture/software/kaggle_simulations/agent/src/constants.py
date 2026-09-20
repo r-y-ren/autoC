@@ -718,6 +718,23 @@ PLANNER_ENABLED = False        # DTSP 总旗：False=与 v13.8 逐字节等价�
 PLANNER_OVERRIDES = {}         # 计划覆盖寄存器（旗开时 _plan_knob 消费）
 
 
+# ===========================================================================
+# 【中文】v15 波次剧本模式旋钮（2026-09-20「点火重构」M-A）
+# ---------------------------------------------------------------------------
+# 波次剧本引擎（src/wave.py）的总闸：默认 False=全部消费点与现役
+#   v13.8/v14.2 逐字节等价（旗关黄金动作哈希钉住）；DTSP 计划经
+#   "PLANNER_OVERRIDES.wave_mode" 键开启（planner/wave_script.py 发射）。
+# 消费点清单（全部走 _plan_knob / globals().get 钩子，wave.py 缺席时死路）：
+#   strategy._macro_plan  计划补丁（地/畜/crew/瓜波日历）
+#   strategy._crew_target crew 阶梯（d5=6/d8=8/d10=12/d11=13）
+#   strategy._field_alloc 瓜每象限帽（开局 7 株）
+#   market._market_orders 波次市场事件 + SELL 影响分/终局 glut 排序
+#   entry.agent           flush 日 SELL 先于 BUY（同回合变现融资）
+# ===========================================================================
+WAVE_ENABLED = False
+
+
+
 def _plan_knob(name, default):
     """DTSP 计划旋钮惰性读取：旗关恒回默认值（v13.8 等价路径）。
 

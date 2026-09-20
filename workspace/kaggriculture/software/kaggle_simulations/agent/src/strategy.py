@@ -198,7 +198,13 @@ def _crew_target(day, herd, wheat_tiles, quads=3, plan=None):
     floor = max(_hands_target(day, herd, wheat_tiles, quads), herd)
     if plan is not None and plan["volume"]:
         floor = max(floor, 12) + 2
-    return min(cap, floor)
+    native = min(cap, floor)
+    # v15 波次剧本钩子（M-A）：剧本模式 crew 走日历阶梯（wave._wave_
+    # crew_target）；旗关/模块缺席恒回 native（v13.8 逐字节等价）。
+    _wave_hook = globals().get("_wave_crew_target")
+    if _wave_hook is not None:
+        return _wave_hook(day, herd, cap, native)
+    return native
 
 
 def _animal_pace(day):
@@ -534,6 +540,15 @@ def _macro_plan(player, obs, day):
         plan = dict(_DEFENSIVE_PLAN)
         plan["stage"] = _stage_of(day)
         plan["stage_error"] = True
+    # v15 波次剧本钩子（M-A）：剧本为脑——当日计划补丁（地/畜/crew/瓜波
+    # 日历 + 首店身份路由）。钩子经 globals().get 死路模式（wave.py 不在
+    # 命名空间/旗关时零足迹，v13.8 逐字节等价）；剧本异常不绊倒计划层。
+    _wave_hook = globals().get("_wave_overlay")
+    if _wave_hook is not None:
+        try:
+            plan = _wave_hook(player, obs, day, plan)
+        except Exception:
+            pass
     _PLAN_MEM[player] = {"day": day, "base_plan": dict(base_plan),
                          "plan": plan}
     return plan
@@ -1327,6 +1342,11 @@ def _field_alloc(farm, day, prices, plan=None):
     # line and its phase (0,17) opens first).
     if _crop_open("MELON"):
         crop_quad_cap = CROP_CAP_PER_QUAD["MELON"]
+        # v15 波次剧本钩子（M-A）：开局瓜波 7 株全在首象限（v48 default）——
+        # 剧本模式放开每象限帽；旗关恒回 v13.8 冻结值。
+        _wave_melon = globals().get("_wave_melon_quad_cap")
+        if _wave_melon is not None:
+            crop_quad_cap = _wave_melon(crop_quad_cap)
         if plan.get("volume") or \
                 _get(prices, "WHEAT", 25) >= WHEAT_MONEY_GATE:
             crop_quad_cap = 3

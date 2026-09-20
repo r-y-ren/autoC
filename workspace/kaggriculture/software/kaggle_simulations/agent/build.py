@@ -40,20 +40,24 @@ PLANNER = HERE / "planner"
 OUT = HERE / "submission.tar.gz"
 
 # Bump when the PACKAGE LAYOUT changes (member set / order / entry shape).
-VERSION = "pkg.2-dtsp"
+# pkg.3-wave (v15 点火重构, 2026-09-20): + src/wave.py (M-A wave-script
+# engine, flat-namespace member; flag-off footprint zero -- WAVE_ENABLED
+# default False, all consumers gated via _plan_knob/globals().get hooks).
+VERSION = "pkg.3-wave"
 
 # Flat-namespace load order -- MUST match main.py's _MODULE_ORDER.  The
 # src-split era's _archive_header.py is retired from the package (the
 # archive comments live in git history; the 64-byte marker moved to
 # main.py's first line).
 MODULE_ORDER = ["constants", "telemetry", "observer", "strategy", "mission",
-                "solver", "executor", "market", "entry"]
+                "solver", "executor", "market", "wave", "entry"]
 
 # planner/ package members in fixed (dependency) order: twin <- plans /
-# opponents / select <- runtime.  Imported as a real package by the thin
-# entry at dawn; the flat src namespace never imports it at load time.
+# opponents / select <- wave_script <- runtime.  Imported as a real package
+# by the thin entry at dawn; the flat src namespace never imports it at
+# load time.
 PLANNER_ORDER = ["__init__.py", "twin.py", "plans.py", "opponents.py",
-                 "select.py", "runtime.py"]
+                 "select.py", "wave_script.py", "runtime.py"]
 
 # Bundled scene pair (extracted from the vendored wheel, sha256-verified
 # against planner.twin's registered P1 fingerprints before packing).
