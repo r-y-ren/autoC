@@ -107,14 +107,40 @@ class TestWaveOverlay:
         ns = build_ns(wave_mode=True)
         out = ns["_wave_overlay"](0, obs_min(day=0), 0, dict(BASE_PLAN))
         assert out["opening_seq_override"][0] == {"COW": 2, "SHEEP": 2}
-        assert out["land_plan_override"] == {1: (6, 1300), 2: (10, 2300)}
-        assert out["melon_total_cap"] == 7
         assert out["crew_cap"] >= 13
+        # 【反事实教训】剧本不缩瓜帽（melon flush 是资本事件）
+        assert "melon_total_cap" not in out
+        # 【反事实教训】买地不接管（native B2 本就 d1 起步，v48 的 d6/d10
+        # 地日程对我方是推迟——WAVE_LAND_WAVES 只作参照常数）
+        assert "land_plan_override" not in out
 
     def test_d6_capital_wave_adds_five_cows(self):
         ns = build_ns(wave_mode=True)
         out = ns["_wave_overlay"](0, obs_min(day=6), 6, dict(BASE_PLAN))
         assert out["opening_seq_override"][6] == {"COW": 5}
+
+    def test_burst_gate_blocks_unfeedable_unaffordable(self):
+        ns = build_ns(wave_mode=True)
+        # feed：系统麦 < herd+新增 → 拒发（饿逃死损）
+        assert ns["_wave_burst_gate_ok"](6, 99999.0, 8, 6,
+                                         {"COW": 5}) is False
+        # cash：money < 采购+600 → 拒发
+        assert ns["_wave_burst_gate_ok"](6, 2000.0, 99, 4,
+                                         {"COW": 5}) is False
+        # 都够 → 放行
+        assert ns["_wave_burst_gate_ok"](6, 3000.0, 12, 4,
+                                         {"COW": 5}) is True
+        # 棚位余量：shed 80 + 2×5=90 > 88 → 拒发（满棚压力防护）
+        assert ns["_wave_burst_gate_ok"](6, 3000.0, 12, 4, {"COW": 5},
+                                         shed_count=80) is False
+        assert ns["_wave_burst_gate_ok"](6, 3000.0, 12, 4, {"COW": 5},
+                                         shed_count=60) is True
+        # d0 开局波次与旗关恒放行
+        assert ns["_wave_burst_gate_ok"](0, 0.0, 0, 0,
+                                         {"COW": 2, "SHEEP": 2}) is True
+        ns_off = build_ns(wave_mode=False)
+        assert ns_off["_wave_burst_gate_ok"](6, 0.0, 0, 0,
+                                             {"COW": 5}) is True
 
     def test_yarn_route_latches_six_sheep_d11(self):
         ns = build_ns(wave_mode=True)
@@ -130,17 +156,20 @@ class TestWaveOverlay:
         obs2 = obs_min(day=6, shops=["BAKERY", "YARN_STORE"])
         assert ns["_wave_route"](0, obs2) == "CAPITAL"
 
-    def test_crew_ladder_calendar(self):
+    def test_crew_ladder_lift_only(self):
+        """阶梯只抬升不缩减（反事实首跑教训：v48 crew 值压我方 native
+        d1-9 的 7-9 人 → 浇水饿荒瓜 flush 全灭）。"""
         ns = build_ns(wave_mode=True)
-        assert ns["_wave_crew_target"](0, 4, 13, 0) == 5
-        assert ns["_wave_crew_target"](5, 4, 13, 0) == 6
-        assert ns["_wave_crew_target"](8, 6, 13, 0) == 8
-        assert ns["_wave_crew_target"](10, 9, 13, 0) == 12
-        assert ns["_wave_crew_target"](11, 9, 13, 0) == 13
+        # native 慢的档位被抬到阶梯值（d10=12 / d11=13）
+        assert ns["_wave_crew_target"](10, 9, 13, 9) == 12
+        assert ns["_wave_crew_target"](11, 9, 13, 9) == 13
+        # native 快的档位保留 native（阶梯 d5=6 不压 native 8）
+        assert ns["_wave_crew_target"](5, 4, 13, 8) == 8
+        assert ns["_wave_crew_target"](8, 6, 13, 9) == 9
         # 畜群地板保留（CARE 攒量靠 crew 覆盖）
-        assert ns["_wave_crew_target"](2, 9, 13, 0) == 9
+        assert ns["_wave_crew_target"](2, 9, 13, 5) == 9
         # 帽约束
-        assert ns["_wave_crew_target"](11, 4, 12, 0) == 12
+        assert ns["_wave_crew_target"](11, 4, 12, 9) == 12
 
     def test_melon_quad_cap_widened_only_in_wave(self):
         ns = build_ns(wave_mode=True)

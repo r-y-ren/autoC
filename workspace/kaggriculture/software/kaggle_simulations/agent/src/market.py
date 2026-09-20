@@ -1957,6 +1957,22 @@ def _market_orders(obs, farm, private, day, animals_to_feed, herd_total,
         # B1 catch-up stride (aggressive wave C): branch-level absolute
         # species targets merged over the base opening sequence; the
         # wallet (OPENING_RESERVE) and capacity gates below still bind.
+        # v15 波次闸（M-A）：d>0 的剧本波次（d6 五牛/d11 六羊）消费前过
+        # feed+cash 闸（买得起喂不起=牲畜饿逃死损，非零成本静默失败）；
+        # 旗关钩子恒 True 不过滤，B1 native 步速语义不变。
+        _wave_burst = globals().get("_wave_burst_gate_ok")
+        if _wave_burst is not None:
+            _sys_w_burst = shed.get("WHEAT", 0) + sum(
+                _get(inv, "WHEAT", 0)
+                for inv in (_get(private, "inventories", []) or []) if inv)
+            for _d in list(_seq_ovr):
+                if int(_d) <= 0:
+                    continue
+                if not _wave_burst(int(_d), _get(farm, "money", 0.0),
+                                   _sys_w_burst, herd_total, _seq_ovr[_d],
+                                   shed_count=shed_count):
+                    _seq_ovr = {k: v for k, v in _seq_ovr.items()
+                                if k != _d}
         _open_seq = {k: dict(v) for k, v in _open_seq.items()}
         for _d, _spec in _seq_ovr.items():
             _m = dict(_open_seq.get(_d, {}))

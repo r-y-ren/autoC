@@ -132,7 +132,12 @@ def _wave_overlay(player, obs, day, plan):
     out = dict(plan)
     route = _wave_route(player, obs)
     out["wave_route"] = route
-    out["land_plan_override"] = dict(WAVE_LAND_WAVES)
+    # 【v15 反事实二跑教训】买地不接管：native B2 的 land_plan_override
+    # 已经 d1 起步（_b_branch_adjust {1:(1,1700)}），v48 的 d6/d10 地日程
+    # 是它自家小农场的时间线——剧本若把 due 推迟到 d6/d10 反而比 native
+    # 晚、少长地。WAVE_LAND_WAVES 保留为 v48 参照常数（校准互检用），
+    # 不再写进计划补丁。剧本的资本波次 = 畜群波次（d6 五牛/d11 六羊，
+    # 带 feed+cash 闸）+ flush 变现 + 卖单排序。
     herd_seq = {k: dict(v) for k, v in WAVE_OPENING_HERD.items()}
     for k, v in WAVE_HERD_WAVES.items():
         merged = dict(herd_seq.get(k, {}))
@@ -144,9 +149,46 @@ def _wave_overlay(player, obs, day, plan):
             merged.update(v)
             herd_seq[k] = merged
     out["opening_seq_override"] = herd_seq
-    out["melon_total_cap"] = WAVE_OPENING_SEEDS.get("MELON", 7)
+    # 【v15 反事实教训】瓜帽不缩：剧本不再写 melon_total_cap（首跑把
+    # native 12 缩到 7 → 瓜 flush 资本事件减半）。_wave_melon_quad_cap
+    # 只放开每象限帽，总量归 native 计划面。
     out["crew_cap"] = max(13, int(out.get("crew_cap") or 0))
     return out
+
+
+def _wave_burst_gate_ok(day, money, sys_wheat, herd_total, spec,
+                        shed_count=None):
+    """剧本畜群波次闸（d>0 的 opening_seq 波次消费前过滤）：
+      * feed：系统小麦 ≥ 现 herd + 新增头数（买得起喂不起=逃亡死损，
+        不是 island-ga 说的零成本静默失败——牲畜会饿逃）；
+      * cash：money ≥ 采购额 + 600 过夜垫；
+      * shed：棚位 + 2×新增 ≤ 88（买入的牲畜先落棚等 PLACE，一次 5 头
+        =+10 棚位；满棚压力是 v15 注入回归 105375966 塌方的机制——
+        EOD 满仓销毁静默吃库存）。
+    d0 开局波次不过此闸（native OPENING_RESERVE 语义照旧）。
+    旗关恒 True（不过滤——B1 native 步速语义不受影响）。"""
+    if not _wave_enabled():
+        return True
+    if int(day) <= 0:
+        return True                  # d0 开局波次走 native OPENING_RESERVE 语义
+    spend = 0
+    new_heads = 0
+    for animal, n in (spec or {}).items():
+        spec_meta = ANIMALS.get(animal)
+        if spec_meta is None or n <= 0:
+            continue
+        spend += int(n) * int(spec_meta["cost"])
+        new_heads += int(n)
+    if new_heads <= 0:
+        return True
+    if int(sys_wheat) < int(herd_total) + new_heads:
+        return False
+    if float(money) < spend + 600.0:
+        return False
+    if shed_count is not None and \
+            int(shed_count) + 2 * new_heads > 88:
+        return False
+    return True
 
 
 def _wave_melon_quad_cap(native_cap):
@@ -158,16 +200,20 @@ def _wave_melon_quad_cap(native_cap):
 
 
 def _wave_crew_target(day, herd, cap, native_target):
-    """_crew_target 钩子：剧本 crew 阶梯（日历触发，非 herd 触发）。
-    畜群地板保留（CARE 攒量靠 crew 覆盖——2945 微机制：CARE 是动物产出
-    大头）；旗关恒回 native_target。"""
+    """_crew_target 钩子：剧本 crew 阶梯只【抬升】不缩减——
+    target = max(阶梯(day), native_target) 再受帽约束。
+    教训（v15 反事实首跑 2026-09-20）：v48 的 crew 数值是它自家小田的
+    量（d0=2）；我方 native d1-4 已爬 7-8，剧本若把 d5-9 压到 6-8 会
+    浇水饿荒、瓜 flush 全灭（melon 70/96 教科书复现）。阶梯的定位 =
+    d10/d11 的 12/13 满编提前钉死 + CARE 覆盖地板。旗关恒回 native。"""
     if not _wave_enabled():
         return native_target
-    target = 2
+    ladder_target = 2
     for from_day, hands in WAVE_CREW_LADDER:
         if day >= from_day:
-            target = hands
-    return min(int(cap), max(target, int(herd)))
+            ladder_target = hands
+    target = max(ladder_target, int(native_target), int(herd))
+    return min(int(cap), target)
 
 
 # ---- 市场事件（_market_orders 消费；走现役预算闸/committed_spend 台账）----
