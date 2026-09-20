@@ -7,7 +7,7 @@
   "scenario": "kaggriculture",
   "version": "1.32.7+nodeps (vendored, engine code unmodified)"
  },
- "measured_at": "2026-09-20T15:33:24Z",
+ "measured_at": "2026-09-21",
  "metrics": {
   "avg_episode_runtime_seconds": {
    "method": "m0 session: mean per-game elapsed across the 40 m0 eval games",
@@ -7279,6 +7279,74 @@
     }
    },
    "note": "票 03 完成判据（塌方归零且中位≥32k）远未达成→按票面收刀弃牌"
+  },
+  "v48_derivative_launch": {
+   "method": "v48 公开衍生版发射验证（scripts/v48_derivative_launch_check.py，2026-09-21，官方 vendored 引擎 1.32.7+nodeps 本地实测）：门1 官方装载语义=干净 -I 子进程复刻 kaggle_environments.agent.get_last_callable（append(exec_dir)→exec(src,env)→pop→env 最后 callable），用 seed101 局 719 个真实引擎 obs 驱动；门2 完整局=v48 双席位自打 seeds 101/102 各 720 turns_played（719 agent 动作步），statuses/rewards/每步 agent 耗时（perf_counter 包装逐调用计量）；门3 确定性=同 seed 同席重跑双席 720 步动作流规范化哈希比对；门4 包体=tar.gz 字节数。包=references/data/intel-notebooks/v48build/main.py（解码真源码）逐字复制 + 确定性 tar（mtime=0/uid=gid=0/mode0644/gzip mtime=0，双次构建字节一致）",
+   "value": {
+    "all_gates_pass": true,
+    "package": {
+     "main_sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+     "main_bytes": 107008,
+     "tar_sha256": "01de7c27ace9fc55d8c7204f6e67b83752336b41411ff14771958851883519f3",
+     "tar_bytes": 81856,
+     "tar_mb": 0.078,
+     "tar_members": [
+      "main.py"
+     ],
+     "tar_rebuild_reproducible": true,
+     "byte_identical_to_original_public_artifact": true,
+     "note": "tar 与 v48build/submission.tar.gz（原作者公开提交件）逐字节一致；main.py 零修改（deriv=verbatim，无装载壳）"
+    },
+    "gate1_official_load": {
+     "ok": true,
+     "last_callable": "_kaggle_submission_entrypoint",
+     "native_official_form": "v48 源码原生结尾即 agent + _kaggle_submission_entrypoint（后者=env 最后 callable，委托 agent，未加任何壳）",
+     "n_obs_replayed": 719,
+     "action_errors": 0,
+     "isolated_vs_local_action_mismatches": 0,
+     "non_stdlib_imports": 0,
+     "loader_pop_applied": true
+    },
+    "gate2_full_episodes": {
+     "ok": true,
+     "seeds": [
+      101,
+      102
+     ],
+     "seating": "v48 seat0 vs v48 seat1 (self-play)",
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "turns_played": 720,
+     "rewards_seed101": [
+      92750.0,
+      92750.0
+     ],
+     "rewards_seed102": [
+      86550.0,
+      86550.0
+     ],
+     "max_step_ms_seed101": 1.48,
+     "max_step_ms_seed102": 1.82,
+     "p99_step_ms": 1.12,
+     "mean_step_ms": 0.24,
+     "step_budget_ms": 1000.0,
+     "suspicious_log_lines": 0,
+     "wall_s_per_episode": 3.5
+    },
+    "gate3_determinism": {
+     "ok": true,
+     "seed": 101,
+     "action_stream_sha256_run1": "a009ad5e6fb46d874b24102259d9df5c14148e56c7117654b1fe630bb8f411d8",
+     "identical_on_rerun": true
+    },
+    "gate4_size": {
+     "ok": true,
+     "tar_bytes": 81856,
+     "cap_bytes": 104857600
+    }
+   }
   }
  },
  "milestone": "Track-B v15「点火重构」M-A..M-F（波次日历剧本引擎 src/wave.py + planner/wave_script.py 剧本候选 + market/entry 结构 + DTSP dawn 三选一；M-E 诚实判定：旗关/冒烟/打包/单测全绿，E1 v48 h2h 0-16 未过、E2 反事实 G2 过 G1/G3 未过、E3 注入字面门未过（base 配对非回归）——不作为发射候选，v14.2 仍为注册基线）",
