@@ -78,7 +78,7 @@ ai_policy:
   url: https://cdn.kesci.com/admin/tcdtsumyq/BDC2026_大赛通知（盖章）.pdf
   checked: "2026-09-09"
 credibility: 交叉验证
-last_verified: "2026-09-09"
+last_verified: "2026-09-20"
 sources:
   - url: https://www.heywhale.com/v2/api/competitions/69c0dfa34f302f8f0122e1bb
     title: 和鲸平台公开 API——2026 大数据挑战赛详情（阶段/报名截止/参与数/各 Tab 正文；2026-09-09 复抓快照含 08-29 正式名单公告全文）
@@ -119,6 +119,15 @@ sources:
   - url: https://www.heywhale.com/v2/api/competitions?page=1&perPage=10
     title: 和鲸平台公开 API——竞赛列表复查（主会话预抓快照 kb/raw/heywhale-list/snapshot-20260904.json：Name/DisplayLabel/EndDate/规模字段未变）
     accessed: "2026-09-04"
+  - url: https://www.heywhale.com/v2/api/competitions?page=1&perPage=100
+    title: 和鲸平台公开 API——竞赛列表复查（快照 kb/raw/report-2026-compcs/c4bdc-heywhale-list-20260920.json：2026 届规模字段未变 5457/3393/4052；平台仅有 2025/2026 两届 BDC 条目，无 2027 届/第十二届新条目）
+    accessed: "2026-09-20"
+  - url: https://www.heywhale.com/v2/api/competitions/69c0dfa34f302f8f0122e1bb
+    title: 和鲸平台公开 API——2026 大数据挑战赛详情复查（快照 kb/raw/report-2026-compcs/c4bdc-api-detail-20260920.json：最新公告仍为 08-29 获奖名单公布及证书申领通知，FinalRanking 仍 false，无第十二届预告）
+    accessed: "2026-09-20"
+  - url: https://nercbds.tsinghua.edu.cn/bdc.html
+    title: 大数据系统软件国家工程研究中心官网赛事简介页复查（快照 kb/raw/report-2026-compcs/c4bdc-nercbds-20260920.html：仍为第十一届（2026）内容，无第十二届（2027）预告；"榜单内竞赛项目/五星级赛事"表述在页）
+    accessed: "2026-09-20"
 ---
 
 # 2026年中国高校计算机大赛—大数据挑战赛（第十一届 C4-BDC）
@@ -167,6 +176,14 @@ sources:
 - 综上，本届赛事过程已终结、最终获奖名单已公布 → `status` 由 active 改为 **ended**（2026-09-04）。
 - 最终名单 xlsx 为单表 275 行（含表头，≈274 条获奖记录），决赛名次/全国奖/赛区奖构成未解析，留待 winners 分片。
 
+## 2026-09-20 复核增量（报告专用分片：下一周期 watch）
+
+- 最终结果公布时间复核：平台"通知公告"最新公告仍为 2026-08-29《第十一届大数据挑战赛获奖名单公布及获奖证书申领通知》（08-19 拟获奖公示 → 08-29 正式名单），08-29 之后无新公告（来源：https://www.heywhale.com/v2/api/competitions/69c0dfa34f302f8f0122e1bb 快照 c4bdc-api-detail-20260920.json；抓取日期：2026-09-20）。
+- 决赛名次字段 `FinalRanking` 仍为 `false`，决赛第 2-6 名仍未公布（同上来源，2026-09-20）。
+- 下一周期（第十二届，2027）预告：截至 2026-09-20 **未见任何官方预告**——和鲸竞赛列表仅有 2025/2026 两届 BDC 条目（2026 届 EndDate 2026-09-29T16:00Z、规模字段未变），平台详情无第十二届内容，清华官网赛事简介页仍为第十一届内容（来源：上方新增三条 2026-09-20 sources）。
+- 2027 届节奏预期（推断，非官方口径，勿作事实引用）：按 2025 届 StartDate 2025-05-20、2026 届报名 2026-03-26/结果 2026-08-29 的历届节奏，预计 2027 届 2027 年春启动、2027-08 公布结果，即结果公布**晚于** 2027-07-01；待官方通知后回填核验。
+
+
 ## AI 政策核查
 
 核查范围：竞赛规程全文（盖章 PDF，5532 字）、平台"参赛须知"Tab、清华云盘《参赛协议》PDF（3368 字）——均未出现"AI/人工智能/大模型/生成式"相关使用条款，详见 frontmatter `ai_policy`。最接近的约束是"机器学习算法贡献"审查与 7-18"结果必须由模型预测产生"提醒（来源[1][2]）。2026-09-09 复核：新增实抓的 8-29《获奖名单公布及获奖证书申领通知》与三篇决赛新闻亦无 AI 使用条款，原结论不变。C4 体系层面亦未在其他实抓材料中发现统一 AI 政策原文。
@@ -181,7 +198,7 @@ sources:
 
 1. ~~决赛具体答辩日期与地点~~ 已核验：2026-08-29 上午清华 FIT 楼（三源，frontmatter key_dates）。
 2. ~~拟获奖名单 xlsx 解析~~ 已完成（winners/2026.md 第 3 节含 08-19 拟获奖→08-29 正式名单逐行 diff；正式名单原件快照 `kb/raw/heywhale-c4-bigdata-2026/final-winners-20260829.xlsx`，单表 275 行含表头）。
-3. **决赛第 2-6 名仍未公布**（平台 `FinalRanking=false`，新闻仅报冠军）：待平台/c4best.cn 公布后补全 winners 前两级覆盖并深构冠军方案（社区"获奖经验+PPT"系列发布后）。
+3. **决赛第 2-6 名仍未公布**（平台 `FinalRanking=false`，2026-09-20 复核未变，新闻仅报冠军）：待平台/c4best.cn 公布后补全 winners 前两级覆盖并深构冠军方案（社区"获奖经验+PPT"系列发布后）。
 4. 往届（2018-2025）获奖作品与模式解构未做，建议下轮以官网"往期回顾"为线索分片派发。
 5. ~~B 阶段提交节点与公示期单源~~ 已由 08-29 正式名单公告间接确认（公示+申诉复核流程按公告执行）。
 6. 决赛奖金（第 1-4-6 名）发放与名次对应关系未见公开说明，随待办 3 一并核验。

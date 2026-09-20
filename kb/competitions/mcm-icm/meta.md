@@ -29,15 +29,19 @@ key_dates:
   2027届_报名截止:
     date: "2027-01-28 15:00 EST 前"
     verified: false
-    note: 单源（官方 instructions 页）；register.php 于 2026-08-27 抓取时显示报名尚未开放，待开放后第二源核验
+    note: 单源（官方 instructions 页，2026-08-27 与 2026-09-20 两次实抓一致）；register.php 于 2026-08-27 抓取时显示报名尚未开放，待开放后第二源核验
   2027届_解决方案提交截止:
     date: "2027-02-01 21:00 EST"
     verified: false
-    note: 单源（官方 instructions 页）
+    note: 单源（官方 instructions 页，两次实抓一致）
   2027届_成绩公布:
     date: "2027-05-08"
     verified: false
-    note: 单源（官方 instructions 页）；另赛事总览页称奖学金奖每年"5月30日前"公布
+    note: 单源（官方 instructions 页，2026-08-27 与 2026-09-20 两次实抓一致）；旁证：赛事总览页称奖学金奖每年"5月30日前"公布、COMAP 官网主页（2026-09-20 抓取）slider 已显示 2026 届 MCM/ICM 结果发布——"年度 5 月上旬公布"规律与该日相容，但 2027-05-08 具体日仍为官方单源
+  2027届_奖学金奖公布:
+    date: "2027-05-30 前（每年）"
+    verified: true
+    note: 官方总览页原文 "announced on or before May 30th each year"（2026-09-20 复抓存快照 mcm-icm-overview.html）
 deliverables:
   - "单一 Adobe PDF 解决方案报告：英文、正文字号不低于 12pt，全文（摘要页+正文+参考文献+目录+注释+附录+代码）合计上限 25 页"
   - "首页必须为 Summary Sheet（摘要页）；每页页眉含队号与页码（如 Team # 0000000, Page 6 of 25）"
@@ -49,23 +53,23 @@ ai_policy:
   url: "https://www.contest.comap.com/undergraduate/contests/mcm/instructions.php"
   checked: "2026-08-27"
 credibility: 官网
-last_verified: "2026-08-28"
+last_verified: "2026-09-20"
 sources:
   - url: "https://www.contest.comap.com/undergraduate/contests/mcm/instructions.php"
-    title: "MCM/ICM 2027 官方竞赛说明（Contest Instructions，COMAP contest.comap.com；2026-08-28 复抓存快照 kb/raw/mcm-icm/2027-instructions.html，award_levels 依据其 IX 节 designation 描述）"
-    accessed: "2026-08-28"
+    title: "MCM/ICM 2027 官方竞赛说明（Contest Instructions，COMAP contest.comap.com；2026-08-28 与 2026-09-20 两次直抓，后者存快照 kb/raw/mcm-icm/2027-instructions.html，award_levels 依据其 IX 节 designation 描述）"
+    accessed: "2026-09-20"
   - url: "https://www.comap.org/contests/mcm-icm"
-    title: "COMAP 官网 MCM/ICM 赛事总览页"
-    accessed: "2026-08-27"
+    title: "COMAP 官网 MCM/ICM 赛事总览页（2026-09-20 复抓存快照 kb/raw/mcm-icm/mcm-icm-overview.html；页头仍标 Jan. 2026 版）"
+    accessed: "2026-09-20"
   - url: "https://www.contest.comap.com/undergraduate/contests/"
-    title: "COMAP 本科生赛事中心（Contests 列表页）"
-    accessed: "2026-08-27"
+    title: "COMAP 本科生赛事中心（Contests 列表页；2026-09-20 复抓存快照 kb/raw/mcm-icm/2027-contests-hub.html，列 2027 届竞赛窗口与奖学金 5 月 30 日前公布条款）"
+    accessed: "2026-09-20"
   - url: "https://www.contest.comap.com/undergraduate/contests/mcm/register.php"
     title: "MCM/ICM 注册入口页（2026-08-27 抓取时显示报名未开放）"
     accessed: "2026-08-27"
   - url: "https://www.comap.org/"
-    title: "COMAP 组织主页（主办方全称与性质核实）"
-    accessed: "2026-08-27"
+    title: "COMAP 组织主页（主办方全称与性质核实；2026-09-20 复抓确认主页 slider 已显示 2026 届结果发布）"
+    accessed: "2026-09-20"
 ---
 
 # MCM/ICM（美赛）条目笔记
@@ -100,7 +104,13 @@ COMAP 全称 **Consortium for Mathematics and its Applications**，自我描述�
 - **报名尚未开放**：注册入口页当前显示 "We're sorry, but registration for MCM/ICM is not available at this time."。[REG, 2026-08-27]
 - 报名截止：**2027-01-28 15:00 EST 前**（逾期一律不受理）；报名费 **每队 $100**、不可退、仅信用卡在线支付；流程为先"导师注册"再"队伍注册"，取得 control number 即为报名成功（不发邮件确认）。[INS, 2026-08-27]
 - 解决方案提交截止：**2027-02-01 21:00 EST**（20:00 后不可再修改）。[INS, 2026-08-27]
-- 成绩公布：**2027-05-08**；评审于 4–6 月完成。[INS, 2026-08-27]
+- 成绩公布：**2027-05-08**；评审于 4–6 月完成。[INS, 2026-08-27；2026-09-20 复核一致]
+- **2026-09-20 复核**：三页官方源（INS/OVR/HUB）全部复抓，2027 届竞赛窗口与结果日表述无变化；总览页页头仍标 "Jan. 2026"（页面为 2026 届版本，2027 窗口以 INS 与 HUB 为准）；COMAP 主页 slider 已显示 2026 届结果发布，佐证"竞赛次年 5 月上旬公布成绩"的年度规律。快照见 `kb/raw/mcm-icm/`（2027-instructions.html / 2027-contests-hub.html / mcm-icm-overview.html，均 2026-09-20）。本周期（2027-07-01 前）含金量窗口结论：**2027 届成绩 2027-05-08 公布，落在窗口内**。
+
+## 含金量证据（高教学会竞赛目录，2026-09-20）
+
+- 中国高等教育学会《全国普通高校大学生竞赛分析报告》竞赛目录（84 项，《2023 分析报告》版，2024-03-22 发布）中**未见 MCM/ICM（美赛）**——该目录数学建模类仅"全国大学生数学建模竞赛"（第 5 项）与"全国大学生统计建模大赛"（第 68 项）。依据：中山大学国际合作与交流处转载 PDF《2025年教育部认可的全国大学生学科竞赛目录清单》（全文机读核验，快照存 `kb/raw/snapshots/2026-09-20_ifcen.sysu.edu.cn_2025-84项学科竞赛目录清单.pdf`）。
+- 信源等级：**二手机构转载**（高校教务/外事部门转引学会目录），学会官网原文未直接抓到 → 结论标注为"不在列（据二手转载核验，待学会官网原文复核）"。该目录口径为国内赛事榜单，美赛历来不在目录内，与本次核验一致。
 
 ## 参赛规则要点
 
@@ -129,5 +139,6 @@ COMAP 全称 **Consortium for Mathematics and its Applications**，自我描述�
 
 - [ ] 2027 届报名开放后：第二源核验报名截止时间与费用（当前单源 [INS]）。
 - [ ] 成绩公布节点（2027-05-08）目前单源，待官方日历/FAQ 页二次核验。
+- [ ] 高教学会竞赛目录不在列结论：待学会官网（cahe.edu.cn）原文页直接核验（当前据高校二手转载 PDF，已降级标注）。
 - [ ] 历年 Outstanding Winner（O 奖）论文深度解构（本分片未做，待协调者另行派发 winners 分片）。
-- [x] 原始页面快照归档至 `kb/raw/`（2026-08-28 部分关闭：instructions.php 已直抓存 `kb/raw/mcm-icm/2027-instructions.html`；其余来源页快照仍缺，待后续补齐）。
+- [x] 原始页面快照归档至 `kb/raw/`（2026-08-28 部分关闭；2026-09-20 复核：instructions.php、contests-hub、赛事总览三页快照已直抓存 `kb/raw/mcm-icm/`）。

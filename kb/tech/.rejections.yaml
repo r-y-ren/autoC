@@ -559,3 +559,55 @@
   reason: "交集不足——光学RIS提升HAP-UAV场景FSO量子密钥率为纯物理层量子密钥率理论（extended Huygens-Fresnel传播建模+Monte Carlo验证+decoy-state有限密钥分析），贡献是相位轮廓解析对比而非可迁移算法或数据管线；六赛种均无承接点（量子链路物理层理论学生竞赛不可复现、无算法组件可复用）；按「纯通信理论无算法组件」条款拒收（vault-distill W3/s12 判定）"
   stars: null
   decided: '2026-09-16'
+- id: arxiv-2609.19754
+  reason: competition_fit不足——AutoData把预训练数据选择做成agentic搜索（代理模型验证反馈+过夜搜索出超人工管线的选择算法），收益绑定LLM预训练尺度与数据管线基建，六类赛种赛期内无自然落点；arXiv页无代码无Comments（2026-09-20 export API实抓），runnable=false；拒于映射非信号（arXiv候选citations门槛=0通过）
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2609.19705
+  reason: 评测型SoK从严——FARSIGHT对15个学术金融LLM交易方案做鲁棒性/安全双轴评测（80%至少一项鲁棒性失败、100%存在安全漏洞），警示价值真实但无代码（Comments仅"24 pages...SoK paper"，2026-09-20实抓），harness不可复用；可迁移部分（鲁棒性+三类攻击taxonomy）作答辩风险管理叙述单薄，与已拒arxiv-2608.25717评测型负面结果同类；拒于映射非信号
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2609.18248
+  reason: runnable无法核实+RAG系同质化从严——Quanta摘要自称"open-source Python library"（4bit量化稠密+BM25+KG遍历统一API、加权RRF、图作候选扩展器），但arXiv页无Comments无任何代码链接（2026-09-20 export API实抓），GitHub检索（quanta retrieval等）仅命中0-1星无关仓库，官方实现不可达；统一混合检索API属工程整合而非独有组件；拒于映射+runnable不可达
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2609.18099
+  reason: RAG系同质化从严——EffiRAG用图定位相关段落+原文生成答案降本（vs LightRAG-hybrid偏好93:7、总成本-57%），但证据面为UltraDomain 120题自评偏好比较、无统计口径，arXiv页无代码无Comments（2026-09-20实抓）；"结构定价"（质量-成本双维评测Graph RAG）视角单薄撑不起卡片；拒于映射非信号
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2609.16155
+  reason: competition_fit不足——LLM微调+RAG生成制造业合成时序（对比ARIMA/LSTM，下游仅异常检测任务自报占优），发表在ICICML 2024弱会（Comments+JREF实抓）；方法重（需微调预训练LLM）而赛场合成数据增强用经典增广/现成TS生成器即可获得，六赛种无自然落点；拒于映射
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2609.19871
+  reason: competition_fit不足——PIRNN把Gardenia水文模型物理方程嵌入RNN、在历史数据与预测目标上同时估计不可观测中间物理变量，属地下水领域特化：12个真实数据集仅5胜、优势域窄；"物理知识放历史数据侧优于约束预测端"属PINN常识延伸；arXiv页无代码无Comments（2026-09-20实抓）；数模物理类题映射弱；拒于映射非信号
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2608.29579
+  reason: competition_fit不足——PAC-LLM做LLM混沌系统长程预测（相空间特征辅助模块+门控加权融合多变量耦合），混沌系统场景在数模/Kaggle赛题罕见，LLM时序预测赛道同质化红海（库内已有多张LLM4TS卡）；无代码无Comments（2026-09-20实抓）；拒于映射非信号
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2608.30502
+  reason: 负面结果论文从严——4页预设定案例研究：conformal test martingale门控在真实预测流上135/135误触发（可交换性前提被部署流本身破坏、门控滤波器放大其欲防暂态），保留下来的Huber式更新门控属常识级组件；在线监控/运行中修正场景六赛种无自然落点；无代码（Comments仅"4 pages, 2 figures"，2026-09-20实抓）；拒于映射非信号
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2609.15087
+  reason: 评测基准类从严——MUSE-Bench多模态时序预测基准（14数据集×6类上下文；TSFM主导排名/上下文错配降级/通用LLM直forecasting弱三结论有参考价值），但arXiv页Comments仅"preprint"无代码链接（2026-09-20实抓），GitHub检索（muse-bench forecasting、MUSE multimodal time series forecasting）0命中官方仓，harness不可用不符评测类入库门槛；TSFM选型先验与库内arxiv-2608.22968重叠；拒于映射+runnable不可达
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2609.18588
+  reason: 评测类从严+族内去重——IEEE PES ISGT Europe 2026接收的峰值感知短期负荷预测应用研究（Chronos-2高需求时段HD-NMAE较GBDT降约20-51%、聚合级分位数选点是实操洞见、英国/瑞士开放数据集），但"TSFM任务依赖选型"先验已由库内arxiv-2608.22968覆盖，增量仅峰值域窄角度；无harness发布（Comments仅会议接收信息，2026-09-20实抓）；拒于族内重叠非信号
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2609.20744
+  reason: competition_fit不足——Video DeltaNet直播视频生成的帧级线性记忆混合注意力（8×B200上6.70s完成14.3s 768p去噪、较50步稠密基线14.5x加速），六类赛种词表（数模/双创/黑客松/Kaggle/ACM）无视频生成落点，且复现绑定8×B200算力与MiniMax H3底模；HF upvotes 34达标，拒于映射非信号
+  stars: null
+  decided: '2026-09-20'
+- id: arxiv-2609.15810
+  reason: competition_fit不足——VC-Attention视频扩散Transformer的低比特注意力内核（Value平滑+softmax概率FP8 cast，较BF16 FlashAttention-4加速1.46-3.6x），部署级量化基建，六赛种无视频生成落点且需B200/B300/H200级硬件实测；HF upvotes 37达标，拒于映射非信号
+  stars: null
+  decided: '2026-09-20'
+- id: gh-Laprovittera_Awesome-AI-for-Hacking-Cybersecurity
+  reason: 无组件价值——8个社区awesome list融合策展的AI安全/渗透agent链接集（CC0，11 stars，2026-09-20 API实抓），内容为公开资源的策展组织，"抄清单"不构成可复用技术组件；创新创业方向stars门槛0（信号达标）但按组件价值拒，与已拒gh-elie222_botdirectory.ai同类；且赛种词表无安全/CTF向落点
+  stars: 11
+  decided: '2026-09-20'
