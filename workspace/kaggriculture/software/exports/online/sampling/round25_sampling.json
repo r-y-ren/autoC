@@ -4,7 +4,7 @@
  "submission_ref": 56370649,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-19T21:11:07Z",
+ "captured_at_utc": "2026-09-20T04:51:46Z",
  "candidate": {
   "label": "v14.2-dtsp-working",
   "pkg_sha256": "2759c84958c3137a",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 521.0,
+ "public_score": 543.7,
  "validation": [
   {
    "id": 110951272,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 14,
-  "record": "7W-7L",
-  "wins": 7,
-  "losses": 7,
-  "win_rate": 0.5,
-  "our_money_mean": 64396.9,
-  "opp_money_mean": 51965.1,
-  "mean_margin": 12431.8,
+  "public_games": 25,
+  "record": "13W-12L",
+  "wins": 13,
+  "losses": 12,
+  "win_rate": 0.52,
+  "our_money_mean": 65914.0,
+  "opp_money_mean": 59783.8,
+  "mean_margin": 6130.2,
   "axes": {
    "d0_plants_ours": 9.0,
-   "d0_plants_opp": 16.8,
-   "wheat_d7_ours": 19.0,
-   "berry_d12_ours": 13.3,
-   "berry_d12_opp": 19.0,
+   "d0_plants_opp": 17.8,
+   "wheat_d7_ours": 18.4,
+   "berry_d12_ours": 14.0,
+   "berry_d12_opp": 17.4,
    "herd_d0_ours": 4.0,
-   "harvest_ours": 172.4,
-   "money_d11_ours": 818.2,
-   "money_d11_opp": 4845.9
+   "harvest_ours": 173.8,
+   "money_d11_ours": 709.0,
+   "money_d11_opp": 6466.2
   },
   "episodes": [
    {
@@ -185,9 +185,108 @@
     "opp_name": "Tong Jiakai",
     "margin": 23135.0,
     "seat": 1
+   },
+   {
+    "id": 110968109,
+    "result": "W",
+    "our": 84542.0,
+    "opp": 69213.0,
+    "opp_name": "duckypants",
+    "margin": 15329.0,
+    "seat": 0
+   },
+   {
+    "id": 110969213,
+    "result": "W",
+    "our": 66810.0,
+    "opp": 34481.0,
+    "opp_name": "hr15de",
+    "margin": 32329.0,
+    "seat": 0
+   },
+   {
+    "id": 110970308,
+    "result": "W",
+    "our": 83680.0,
+    "opp": 74061.0,
+    "opp_name": "jignesh13",
+    "margin": 9619.0,
+    "seat": 0
+   },
+   {
+    "id": 110971402,
+    "result": "W",
+    "our": 73923.0,
+    "opp": 64255.0,
+    "opp_name": "Krupa Vardhan",
+    "margin": 9668.0,
+    "seat": 0
+   },
+   {
+    "id": 110972495,
+    "result": "L",
+    "our": 51725.0,
+    "opp": 69675.0,
+    "opp_name": "ryan panda",
+    "margin": -17950.0,
+    "seat": 0
+   },
+   {
+    "id": 110973598,
+    "result": "L",
+    "our": 75349.0,
+    "opp": 127641.0,
+    "opp_name": "Toni Blanco",
+    "margin": -52292.0,
+    "seat": 1
+   },
+   {
+    "id": 110974741,
+    "result": "L",
+    "our": 70806.0,
+    "opp": 84423.0,
+    "opp_name": "Muzhi11",
+    "margin": -13617.0,
+    "seat": 0
+   },
+   {
+    "id": 110975827,
+    "result": "W",
+    "our": 63495.0,
+    "opp": 60782.0,
+    "opp_name": "Nathaniel Shou",
+    "margin": 2713.0,
+    "seat": 0
+   },
+   {
+    "id": 111003233,
+    "result": "L",
+    "our": 62068.0,
+    "opp": 85284.0,
+    "opp_name": "Efthimios",
+    "margin": -23216.0,
+    "seat": 0
+   },
+   {
+    "id": 111022933,
+    "result": "L",
+    "our": 52920.0,
+    "opp": 63420.0,
+    "opp_name": "jslee_homeofson",
+    "margin": -10500.0,
+    "seat": 0
+   },
+   {
+    "id": 111072532,
+    "result": "W",
+    "our": 60976.0,
+    "opp": 33848.0,
+    "opp_name": "Mahamane Lawaly",
+    "margin": 27128.0,
+    "seat": 0
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 7W-7L over 14 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 13W-12L over 25 public games; local quickwin/self-play is not this verdict."
 }
