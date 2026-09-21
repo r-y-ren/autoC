@@ -39,11 +39,13 @@ def test_repository_indexes_are_deterministic_and_current():
     # round-23 launch adds round23_ledger.json (online 47 -> 48, ea94ddc)
     # round-24 sampling/ledger session adds round24_ledger.json
     # (online 48 -> 49, v14.2-dtsp registration index refresh);
-    # round-25 launch adds round25_ledger.json (online 49 -> 50, 7W-7L@521
+    # round-26 derivative launch adds round26_ledger.json (online 50 -> 51,
+    # v48 public derivative verbatim, ref 56400478); pins follow registration per README
+    # (history: round-25 launch 49 -> 50, 7W-7L@521
     # guard A/B evidence, 4793cc3)
     # (sampling/ COMPLETE records live in a subdirectory and stay off this index)
     assert counts == {"ablations": 47, "external": 2,
-                      "online": 50, "acceptance": 31}
+                      "online": 51, "acceptance": 31}
 
 
 def test_mf_and_mg_decisions_override_mechanical_gate_wording():
