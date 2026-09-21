@@ -18,6 +18,7 @@
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |
 |---|---|---|
+| 2026-09-21 | B6 体积修正（协调者） | artifacts 全量镜像（100 文件/54 万行）属可再生成派生数据，违反体积纪律——撤出 git 只留报告×2+LF 索引×5+锚例 1；机制保留按需重建（regenerate_artifacts_lf 随时可重放） |
 | 2026-09-21 | B5 评审文档同步 | responsibility.md migrate 块"反例 XPASS"字面与实现"转常规 PASSED+零 xfail 残留"口径差——实现自洽（旧套件 README 迁移时转正规定），裁决键 xpassed_counterexamples 名遗留待下次契约触及改名 |
 | 2026-09-21 | B3 签名登记（评审补登） | evaluate_plan_portfolio 实参扩为 +replay/+me_seat/+聚合四参+plan_cap（模块 docstring 已载，补表）；gate_eps/twin_noise_eps 为解析未接线死旋钮（语义同旧码常量 1.0，W1 不动留档） |
 | 2026-09-21 | 快照套件口径修正（B3 期发现） | 根因=planner-on 整局含时间治理器（0.85s 帽读真实墙钟）→负载抖动跨决策边界即漂移（实测两跑 [81108,70273]/[78199,63920]）；整局逐位冻结改旗关面（三遍逐字节一致 [59730.0,59835.0]），planner-on 改 DONE/零异常/engaged 冒烟；旧 planner-on 冻结值文件头留档已废；门默认口径 62P+4xf 不变（commit dfcf476） |
