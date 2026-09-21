@@ -70,6 +70,8 @@ def test_orchestrates_real_leaves_on_fake_tree(tmp_path):
     dep_text = dep.read_text(encoding="utf-8")
     assert "golden_v138.json" in dep_text and "重跑" in dep_text
     assert verdict["declaration"]["written"] is True
+    # B7 修正：manifest_written 自指字段仅存返回值（写盘成功后回填 true）
+    assert verdict["checks"]["manifest_written"] is True
     # collected 件物理到位
     dest_root = root / "fn_work/minimal_repro_set"
     copied = [p for p in dest_root.rglob("*") if p.is_file()
@@ -151,10 +153,16 @@ def test_category_subset_and_unknown_propagates(tmp_path):
 def test_manifest_deterministic_byte_identical(tmp_path):
     root = _fake_campaign(tmp_path)
     package_minimal_repro_set(campaign_root=root)
-    first = (root / "fn_work/minimal_repro_set/MANIFEST.json").read_bytes()
+    manifest_raw = (root / "fn_work/minimal_repro_set/MANIFEST.json").read_text(
+        encoding="utf-8")
+    first = manifest_raw.encode("utf-8")
     package_minimal_repro_set(campaign_root=root)     # 二跑覆盖
     second = (root / "fn_work/minimal_repro_set/MANIFEST.json").read_bytes()
     assert first == second                            # 无时钟字段，逐字节一致
+    # B7 修正：盘上 manifest 无绝对路径（跨机重跑逐字节一致）
+    assert "/mnt/" not in manifest_raw
+    # B7 修正：manifest_written 自指字段不落盘（写盘前序列化故恒 false、误导）
+    assert "manifest_written" not in manifest_raw
 
 
 def test_real_leaf_importable_and_stub_replaced():

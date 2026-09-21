@@ -7,7 +7,11 @@
   → ②enforce_size_budget（仅对 collected 件，定桩 单件 2 MiB/总量 10 MiB；
   超标 fail-closed=ok=false 且绝不截断）→ ③declare_local_corpus_dependencies
   （以 registry 的 missing 件+fn_docs 扫描渲染声明）→ ④MANIFEST.json 落盘
-  （确定性内容：无时钟字段，时间由 JOURNAL/git 记账）。
+  （确定性内容：无时钟字段，时间由 JOURNAL/git 记账；path 字段一律战役根
+  相对——B7 评审修正：内嵌绝对路径破坏跨机重跑逐字节一致）。
+- 盘上 manifest 的 checks 不含 manifest_written 自指字段（B7 评审修正：写盘
+  前序列化故恒 false、误导 fresh clone 读者）；该字段仅在返回值裁决 dict
+  写盘成功后回填 true。
 - 裁决 dict：ok = 收集完成 AND 预算通过 AND manifest/声明落盘；complete =
   missing==0（R19 fresh-clone 口径——本机缺 gitignored 语料时 complete=false
   但 ok=true，缺失逐件带 backfill，主力机重跑本函数即补齐）。
@@ -38,6 +42,21 @@ __all__ = ["package_minimal_repro_set"]
 
 MANIFEST_SCHEMA = "minimal-repro-set/1.0"
 MANIFEST_NAME = "MANIFEST.json"
+
+
+def _campaign_rel(path_value, campaign_root: Path):
+    """path 字段战役根相对化（B7 评审修正）：跨机重跑逐字节一致。
+
+    None 透传；战役根内的绝对/相对路径转 str(Path(...).relative_to(campaign_root))；
+    根外路径（异常注入等）原样保留，不冒充相对。
+    """
+    if path_value is None:
+        return None
+    path = Path(path_value)
+    try:
+        return str(path.relative_to(campaign_root))
+    except ValueError:
+        return str(path)
 
 
 def package_minimal_repro_set(minimal_set_manifest=None, budget=None, *,
@@ -96,13 +115,14 @@ def package_minimal_repro_set(minimal_set_manifest=None, budget=None, *,
         campaign_root=campaign_root,
         output_path=output_root / "LOCAL_CORPUS_DEPENDENCIES.md")
 
-    # ④ MANIFEST 落盘（确定性：固定序、无时钟字段）
+    # ④ MANIFEST 落盘（确定性：固定序、无时钟字段、path 字段战役根相对）
     manifest_path = output_root / MANIFEST_NAME
     checks = {
         "collect": {"ok": True, "collected": collected_n, "missing": len(missing)},
         "size_budget": {"ok": budget_ok, "total_bytes": total_bytes,
                         "violations": budget_violations},
-        "manifest_written": False,
+        # manifest_written 为自指字段（写盘前序列化故恒 false、误导 fresh clone
+        # 读者）——不入盘上 checks，仅在返回值裁决 dict 写盘成功后回填 true。
         "declaration_written": bool(declaration.get("written")),
     }
     verdict = {
@@ -113,7 +133,8 @@ def package_minimal_repro_set(minimal_set_manifest=None, budget=None, *,
                    "total_bytes": total_bytes},
         "budget": {**DEFAULT_BUDGET, **(budget or {})},
         "verdict": {},
-        "declaration": {"path": declaration.get("output_path"),
+        "declaration": {"path": _campaign_rel(declaration.get("output_path"),
+                                              campaign_root),
                         "written": bool(declaration.get("written"))},
         "registry": registry,
     }
@@ -129,6 +150,8 @@ def package_minimal_repro_set(minimal_set_manifest=None, budget=None, *,
         manifest_path.write_text(
             json.dumps(verdict, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8")
+        # 写盘后回填：checks 已随 verdict 序列化落盘，此处仅改内存对象——
+        # 返回值裁决 dict 见 manifest_written=true，盘上 manifest 恒无该键。
         checks["manifest_written"] = True
     except OSError:
         checks["manifest_written"] = False
