@@ -15,3 +15,4 @@
 | 2026-09-22 | B10 | scan_for_library_misplacement, relocate_library_modules | 7 passed+实跑 PASS（检出恰 1 件；R15 注册落地） |
 | 2026-09-22 | B11 | prune_mainline_import_graph, downgrade_dormant_assets | 14 passed+实跑 PASS（R13/R14 分区注册；W3 全收口） |
 | 2026-09-22 | B12 | observe/decide/build_mission/solve/execute 五迁移件（+B11 注册表路径补丁 p1） | 41 passed；R10 剥离落地（solver 三件/mission all 支/stage 显式化/R20 注释修正）；sha 登记测试兼旧树冻结哨兵 |
+| 2026-09-22 | B13 | load_agent_modules, plan_market_orders, run_dawn_planner, record_shadow_telemetry, run_submission_agent（+链基座 _exec_chain 七件+planner 四件迁移） | 73 passed+snapshot 71 双目标+等价门 pass——R1 主体收口：fn_work 链旗关整局逐字节复现旧冻结口径 |

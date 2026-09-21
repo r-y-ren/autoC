@@ -42,11 +42,11 @@
 | build_mission_pack | B12 | wired 2026-09-22 | 41 passed 之一（迁移副本 sha 登记+等值抽查；详见 B12 报告） | 7d68322 |
 | solve_worker_routes | B12 | wired 2026-09-22 | 41 passed 之一（迁移副本 sha 登记+等值抽查；详见 B12 报告） | 7d68322 |
 | execute_along_route | B12 | wired 2026-09-22 | 41 passed 之一（迁移副本 sha 登记+等值抽查；详见 B12 报告） | 7d68322 |
-| load_agent_modules | B13 | stub 2026-09-21 | — | — |
-| plan_market_orders | B13 | stub 2026-09-21 | — | — |
-| run_dawn_planner | B13 | stub 2026-09-21 | — | — |
-| record_shadow_telemetry | B13 | stub 2026-09-21 | — | — |
-| run_submission_agent | B13 | stub 2026-09-21 | — | — |
+| load_agent_modules | B13 | wired 2026-09-22 | 73 passed 之一（_MODULE_ORDER 逐字 ast 钉住+装载窗急切导入+sys.path 腰带） | 3820855 |
+| plan_market_orders | B13 | wired 2026-09-22 | 73 passed 之一（market 迁移剥 _note_buys） | 3820855 |
+| run_dawn_planner | B13 | wired 2026-09-22 | 73 passed 之一（runtime 迁移 4 处适配登记；select 提供者=robust_selection 值序版） | 3820855 |
+| record_shadow_telemetry | B13 | wired 2026-09-22 | 73 passed 之一（零剥离逐字节） | 3820855 |
+| run_submission_agent | B13 | wired 2026-09-22 | 顶层：等价门 overall=pass；旗关整局逐字节复现；snapshot 双目标 71 passed | 3820855 |
 | fix_bc_track_records | B14 | stub 2026-09-21 | — | — |
 | retire_codemap_with_errata | B14 | stub 2026-09-21 | — | — |
 | codify_probes_policy | B14 | stub 2026-09-21 | — | — |

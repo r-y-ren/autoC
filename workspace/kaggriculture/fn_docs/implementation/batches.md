@@ -6,8 +6,7 @@
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
 | B11 | downgrade_dormant_assets 子树: prune_mainline_import_graph, downgrade_dormant_assets | 主线 import 图断言绿 | W3；R13/R14 |
-| ▶ B13 | run_submission_agent 上半: load_agent_modules, plan_market_orders, run_dawn_planner, record_shadow_telemetry, run_submission_agent | 顶层 wired=agent 整链实跑 + run_equivalence_gate 全 pass（快照整局冻结值+黄金哈希） | W4 收口；R1 主体 |
-| B14 | sync_documentation 子树: fix_bc_track_records, retire_codemap_with_errata, codify_probes_policy, sync_documentation | 顶层 wired + gap_table §一清单对账清零 | W4；R7/R16/R18 |
+| ▶ B14 | sync_documentation 子树: fix_bc_track_records, retire_codemap_with_errata, codify_probes_policy, sync_documentation | 顶层 wired + gap_table §一清单对账清零 | W4；R7/R16/R18 |
 | B15 | record_governance_dispositions 子树: write_dual_source_provenance, declare_blueprint_cmd_invalidation, demote_active_candidate_ledger, record_governance_dispositions | 顶层 wired + 处置记录键完整 | W4；R4/R17/R21（R21 物理动作留时点闸） |
 
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
