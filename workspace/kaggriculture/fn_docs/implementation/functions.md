@@ -25,14 +25,14 @@
 | collect_gate_golden_files | B7 | wired 2026-09-21 | 25 passed 之一（四类收集/缺失登记回填/未知类 fail-closed） | 5adfd38 |
 | enforce_size_budget | B7 | wired 2026-09-21 | 25 passed 之一（预算 2MiB/10MiB 定桩，超标逐件拒） | 56db9e2 |
 | declare_local_corpus_dependencies | B7 | wired 2026-09-21 | 25 passed 之一（G23+skip 清单源，逐条带来源+日期） | 179b5a1 |
-| package_minimal_repro_set | B7 | wired 2026-09-21 | 实跑 ok=True complete=False（6 收集/4 缺失登记回填，总量 84,570B） | 46257f2 |
+| package_minimal_repro_set | B7 | wired 2026-09-21；补丁 2026-09-22 | 实跑 ok=True complete=False（6/4，84,570B）；补丁=去自指字段+战役相对路径，双跑逐字节一致（06e4f32） | 46257f2+06e4f32 |
 | merge_abnormal_reason | B8 | wired 2026-09-21 | 33 passed 之一（arena/eval 并集语义单源+24 例 battery） | 636f5fe |
 | single_opponent_roster | B8 | wired 2026-09-21 | 33 passed 之一（11 对手池+网格真值，8 站点等值断言） | 766840f |
 | assert_bots_constants_match_wheel | B8 | wired 2026-09-21 | 33 passed 之一（五文件常量对 wheel 逐条目全等，漂移抛） | 9223fed |
 | unify_contract_sources | B8 | wired 2026-09-21 | 顶层实跑 ok=True（三叶+等值断言集，strict 缺省 fail） | a96e6a4 |
-| partition_script_tiers | B9 | stub 2026-09-21 | — | — |
-| archive_bc_models | B9 | stub 2026-09-21 | — | — |
-| archive_forensic_assets | B9 | stub 2026-09-21 | — | — |
+| partition_script_tiers | B9 | wired 2026-09-22 | 14 passed 之一（26 件具名三档+未分类 fail-closed） | 3f8a87c |
+| archive_bc_models | B9 | wired 2026-09-22 | 14 passed 之一（models 5 件 419,149B 登记，registry-only） | 7a6b137 |
+| archive_forensic_assets | B9 | wired 2026-09-22 | 顶层实跑 PASS（三档 5/3/18、探针 5/5、import 面零命中、v143 前置满足、out_of_scope 30 登记） | dcfc0e6 |
 | scan_for_library_misplacement | B10 | stub 2026-09-21 | — | — |
 | relocate_library_modules | B10 | stub 2026-09-21 | — | — |
 | prune_mainline_import_graph | B11 | stub 2026-09-21 | — | — |

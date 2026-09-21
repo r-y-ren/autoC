@@ -5,8 +5,7 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B9 | archive_forensic_assets 子树: partition_script_tiers, archive_bc_models, archive_forensic_assets | 归档区落位 + 主线 import 断言 + 保留档可跑 | W3；R11/R12；前置 B3 |
-| B10 | relocate_library_modules 子树: scan_for_library_misplacement, relocate_library_modules | 顶层 wired + 库件误置扫描绿 | W3；R15 |
+| ▶ B10 | relocate_library_modules 子树: scan_for_library_misplacement, relocate_library_modules | 顶层 wired + 库件误置扫描绿 | W3；R15 |
 | B11 | downgrade_dormant_assets 子树: prune_mainline_import_graph, downgrade_dormant_assets | 主线 import 图断言绿 | W3；R13/R14 |
 | B12 | run_submission_agent 下半（迁移核心 5 件）: observe_opponent_state, decide_macro_mode, build_mission_pack, solve_worker_routes, execute_along_route | 五件 implemented+tested（对旧模块语义随迁测试绿） | W4；子树 10 函数超 8 上限切半；死码不迁（R10） |
 | B13 | run_submission_agent 上半: load_agent_modules, plan_market_orders, run_dawn_planner, record_shadow_telemetry, run_submission_agent | 顶层 wired=agent 整链实跑 + run_equivalence_gate 全 pass（快照整局冻结值+黄金哈希） | W4 收口；R1 主体 |
