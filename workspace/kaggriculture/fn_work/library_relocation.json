@@ -1,0 +1,111 @@
+{
+  "contract": "R15 relocate_library_modules（fn_docs/responsibility.md）",
+  "generated_at": "2026-09-21T17:21:53+00:00",
+  "frozen_tree": true,
+  "library": {
+    "module": "market_ledger.py",
+    "source": "software/scripts/market_ledger.py",
+    "dest": "fn_work/src/relocate_library_modules/market_ledger.py",
+    "sha256_source": "f6e8d823530c1ff52b8c7c77d4595a8c6b6ae793f666d20b46d50d590215812e",
+    "sha256_copy": "f6e8d823530c1ff52b8c7c77d4595a8c6b6ae793f666d20b46d50d590215812e",
+    "byte_equal": true,
+    "new_import_module": "relocate_library_modules.market_ledger",
+    "public_names": [
+      "OfficialMarketLedger",
+      "make_ledger_runner",
+      "summarize"
+    ],
+    "import_ok": true,
+    "import_detail": "装载成功，公开名全在场: OfficialMarketLedger, make_ledger_runner, summarize"
+  },
+  "rewiring": {
+    "new_import_module": "relocate_library_modules.market_ledger",
+    "old_import_forms": [
+      "from scripts.market_ledger import",
+      "\"market_ledger.py\""
+    ]
+  },
+  "consumers": [
+    {
+      "file": "software/scripts/sell_plan_reconciliation.py",
+      "line": 30,
+      "kind": "import语句",
+      "snippet": "from scripts.market_ledger import"
+    },
+    {
+      "file": "software/tests/test_market_reconciliation_ledger.py",
+      "line": 22,
+      "kind": "文件名引用",
+      "snippet": "\"market_ledger.py\""
+    }
+  ],
+  "scan": {
+    "scanned": 56,
+    "misplaced": [
+      {
+        "file": "market_ledger.py",
+        "importers": [
+          "sell_plan_reconciliation.py"
+        ]
+      }
+    ]
+  },
+  "additional_misplaced": [],
+  "postwar_execution": {
+    "when": "fn-close 期（战后收口，旧树冻结解除后）",
+    "registry_only": true,
+    "steps": [
+      "rm fn_work/src/relocate_library_modules/market_ledger.py && git mv software/scripts/market_ledger.py fn_work/src/relocate_library_modules/market_ledger.py（副本与源逐字节等价，git mv 承接文件历史至库位）",
+      "consumers 2 条逐件改线：import 语句改 `from relocate_library_modules.market_ledger import …`（fn_work/src 需在 sys.path）；带引号文件名引用（importlib path 装载）改指向 fn_work/src/relocate_library_modules/market_ledger.py",
+      "旧件移出后跑 R15 验收：scripts/ 无无入口库件扫描断言（scan_for_library_misplacement 返回空）+全量测试绿"
+    ],
+    "note": "additional_misplaced 若非空，其余无入口库件战后另行裁决（本注册表不辖），未裁决前不搬移。"
+  },
+  "verdict": {
+    "overall": true,
+    "market_ledger_detected": true,
+    "scan": {
+      "scanned": 56,
+      "misplaced": [
+        {
+          "file": "market_ledger.py",
+          "importers": [
+            "sell_plan_reconciliation.py"
+          ]
+        }
+      ]
+    },
+    "additional_misplaced": [],
+    "library": {
+      "module": "market_ledger.py",
+      "source": "software/scripts/market_ledger.py",
+      "dest": "fn_work/src/relocate_library_modules/market_ledger.py",
+      "sha256_source": "f6e8d823530c1ff52b8c7c77d4595a8c6b6ae793f666d20b46d50d590215812e",
+      "sha256_copy": "f6e8d823530c1ff52b8c7c77d4595a8c6b6ae793f666d20b46d50d590215812e",
+      "byte_equal": true,
+      "new_import_module": "relocate_library_modules.market_ledger",
+      "public_names": [
+        "OfficialMarketLedger",
+        "make_ledger_runner",
+        "summarize"
+      ],
+      "import_ok": true,
+      "import_detail": "装载成功，公开名全在场: OfficialMarketLedger, make_ledger_runner, summarize"
+    },
+    "consumers": [
+      {
+        "file": "software/scripts/sell_plan_reconciliation.py",
+        "line": 30,
+        "kind": "import语句",
+        "snippet": "from scripts.market_ledger import"
+      },
+      {
+        "file": "software/tests/test_market_reconciliation_ledger.py",
+        "line": 22,
+        "kind": "文件名引用",
+        "snippet": "\"market_ledger.py\""
+      }
+    ],
+    "summary": "扫描 56 件检出无入口库件 1 件（G17 件 market_ledger.py 在列，消费方 2 条）；库位 fn_work/src/relocate_library_modules/market_ledger.py 逐字节副本 sha256 等价+import 回探链通；注册表落盘——PASS"
+  }
+}
