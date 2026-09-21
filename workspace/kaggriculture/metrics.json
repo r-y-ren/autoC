@@ -1,5 +1,5 @@
 {
-  "_generated_at": "2026-09-20T14:56:06",
+  "_generated_at": "2026-09-21T19:48:44",
   "software": {
     "campaign": "kaggle-kaggriculture",
     "engine": {
@@ -9,7 +9,7 @@
       "scenario": "kaggriculture",
       "version": "1.32.7+nodeps (vendored, engine code unmodified)"
     },
-    "measured_at": "2026-09-20",
+    "measured_at": "2026-09-21",
     "metrics": {
       "avg_episode_runtime_seconds": {
         "method": "m0 session: mean per-game elapsed across the 40 m0 eval games",
@@ -7065,6 +7065,506 @@
           "build": "pkg.3-wave 204,897B sha256 b1f582ff39a1521b16b93a65d09da05373e587e0df047f54960ef9879ab47735",
           "pytest": "971 passed + 2 skipped + 19 failed（全部 candidate-identity 链=登记前预期态；登记后应 990+2 绿）",
           "new_tests": "tests/test_sellrace.py 14 项（town demand 镜像/闸栈/零吸收帽/肥料底仓/day-11 窗口算术/main 开关默认关）"
+        }
+      },
+      "bc_corpus_v1": {
+        "method": "bc_track/scripts/harvest_top_replays.py（kaggle CLI：team-submissions→episodes→replay，top-30 队每队最新 3 公开局）+ extract_samples.py（--include-rounds，本机语料 ≥80k 高分席兜底；克隆过滤=1-51 步动作签名 ≥3 队判量产家族，非 top 席剔除）",
+        "value": {
+          "top_games_fetched": 78,
+          "top_teams_covered": 29,
+          "fetch_failures": 0,
+          "games_total": 161,
+          "seats_total": 189,
+          "unit_samples": 1330985,
+          "market_turns": 60329,
+          "clone_families_detected": 1,
+          "clone_seats_dropped": 0,
+          "clone_family_note": "唯一家族=top25-28 队共享开局签名（meta 家族，作为 top 席保留）；本机语料 ≥80k 门后无量产克隆席存活",
+          "schema": "bc-schema/1.1",
+          "measured": "2026-09-20"
+        }
+      },
+      "bc_train_v1": {
+        "method": "bc_track/scripts/train_bc.py：unit-net/market-net 两解耦 MLP（167+14+1→128→64 tanh 三头 / 167+10→128→64 三头，Adam lr=1e-3 batch 8192 epochs 15，条件掩码 CE+市场 NONE 槽 0.15 降权；numpy 训练侧，导出 int8 量化纯 Python 前向 207,386B；纯 Python vs numpy 前向逐头 maxdiff ≤8.5e-14）",
+        "value": {
+          "train_unit_samples": 1232836,
+          "heldout_games": 12,
+          "unit_op_acc_train": 0.355,
+          "unit_op_majority": 0.1448,
+          "unit_arg_acc": 0.718,
+          "unit_qty_acc": 0.482,
+          "market_op_acc_all": 0.911,
+          "market_op_acc_nonnone": 0.308,
+          "market_op_nonnone_majority": 0.397,
+          "heldout_unit_op_acc": 0.343,
+          "heldout_market_op_nonnone": 0.308,
+          "cpu_wall_seconds": 146.2,
+          "measured": "2026-09-20"
+        }
+      },
+      "bc_eval_v1": {
+        "method": "bc_track/scripts/bc_eval.py：孪生 d0 全季注入（twin.build_state_from_replay(replay,0) 起 720 步），BC 席 vs 对手席=回放真实动作，对照 v14.2 基线（build_v13_namespace src/ 九模块）同局同席单变量；8 局 held-out（md5 game-key %100<8，两席专家样本均不进训练）；行为诊断对照 X-ray 榜首带",
+        "value": {
+          "games": 8,
+          "h2h_bc_vs_v142": "0-8",
+          "bc_median_money": 2975.0,
+          "v142_median_money": 64238.5,
+          "h2h_median_diff": -39431.5,
+          "h2h_mean_diff": -46584.4,
+          "collapse_lt45k_bc": 6,
+          "collapse_lt45k_v142": 3,
+          "bc_move_rate": 0.3184,
+          "bc_pass_rate": 0.5137,
+          "bc_care_mean": 99.9,
+          "v142_move_rate": 0.6544,
+          "v142_pass_rate": 0.1199,
+          "v142_care_mean": 114.0,
+          "xray_top_reference": {
+            "move": 0.538,
+            "pass": 0.038,
+            "care": 348
+          },
+          "bc_agent_errors": 0,
+          "forward_ms_per_turn": 12.8,
+          "attribution": "冻死吸引子 6/8（开局市场头不发订单→资金冻结在 2975≈起始值）；2/8 市场头偶然触发买畜→FEED/CARE 动物经济自持到 132-157k（高于该席专家真值 89.7k/111.7k）；单位头开环健康（回放 obs 上 WATER 45.7%）但无经济可执行——下一迭代最该修开局订单头（剧本先验或条件化解码），非模型容量",
+          "measured": "2026-09-20"
+        }
+      },
+      "bc_iter2_seatfix": {
+        "method": "bc_track/scripts/bc_eval.py（票 03 席位修正版：动作按席位索引提交，修复 M1 me_seat=1 时 [mine,theirs] 恒序错位）；孪生 d0 全季注入、对手=回放真实动作、v14.2=build_v13_namespace 同局同席单变量；8 局 held-out（7 bc-top + 1 local）零泄漏；被评=bc_model_v1（schema 1.1，M1 原模型）不注入",
+        "value": {
+          "h2h_bc_vs_v142": "0-8",
+          "bc_median_money": 2967.0,
+          "bc_mean_money": 2969.1,
+          "v142_median_money": 55935.0,
+          "collapse_lt45k_bc": 8,
+          "collapse_lt45k_v142": 3,
+          "bc_move_rate": 0.2785,
+          "bc_pass_rate": 0.7008,
+          "bc_care_total": 0.0,
+          "bc_errors": 0,
+          "m1_artifact_corrected": "M1 的 2/8 赢局（951e3540/f010fe7c，132-157k）经查为席位错位伪影：BC 动作被喂给 seat0、顶级回放动作被喂给seat1，'BC final' 实为回放动作流产出；修复后该 2 局 BC=2963/2965。M1 结论中'市场头偶然触发买畜后执行头自持复利'不成立（8/8 局 buy_seed/animal/product/land 全 0）",
+          "wall_s": 187.9
+        },
+        "note": "票 03 前对照（诚实基线）：冻死吸引子在全部 8 局成立"
+      },
+      "bc_iter2_openA1": {
+        "method": "bc_track/scripts/bc_eval.py（票 03 席位修正版：动作按席位索引提交，修复 M1 me_seat=1 时 [mine,theirs] 恒序错位）；孪生 d0 全季注入、对手=回放真实动作、v14.2=build_v13_namespace 同局同席单变量；8 局 held-out（7 bc-top + 1 local）零泄漏；被评=bc_model_v1 + bc_opening.OpeningScriptPolicy(units=False)：steps 0-95 市场订单强制走 v48 'default' 路由解码剧本（AST 提取 _V48_ROUTES zlib+b85 payload，前 88 步为全路由共享前缀），单位动作全季归 BC",
+        "value": {
+          "h2h_bc_vs_v142": "0-8",
+          "bc_median_money": 338.5,
+          "bc_mean_money": 301.25,
+          "collapse_lt45k_bc": 8,
+          "bc_move_rate": 0.4599,
+          "bc_pass_rate": 0.1507,
+          "bc_care_total": 0.0,
+          "d0_script_exec_exact": true,
+          "post_d3_market_active": "逐局 diag：订单 53-330/局，含 buy_seed/buy_product/hire/sell——市场头在分布内 obs 上恢复发出非 NONE 订单",
+          "farm_deployment": "4 SHEEP+13 种子入棚但全季 0 次 PLANT/PLACE/BUILD_PASTURE——资产烂在棚里（单位头闭环不部署）",
+          "wall_s": 190.6
+        },
+        "note": "单变量 1：市场剧本注入。冻死吸引子修复（资金流动），暴露部署缺失"
+      },
+      "bc_iter2_openA2": {
+        "method": "bc_track/scripts/bc_eval.py（票 03 席位修正版：动作按席位索引提交，修复 M1 me_seat=1 时 [mine,theirs] 恒序错位）；孪生 d0 全季注入、对手=回放真实动作、v14.2=build_v13_namespace 同局同席单变量；8 局 held-out（7 bc-top + 1 local）零泄漏；被评=bc_model_v1 + OpeningScriptPolicy(units=True)：steps 0-95 farmer/hands/market 全走 v48 剧本（data/v48_default_d0d3_actions.json，7.7KB 解码表），d4 起交还 BC",
+        "value": {
+          "h2h_bc_vs_v142": "0-8",
+          "bc_median_money": 604.5,
+          "bc_mean_money": 587.75,
+          "collapse_lt45k_bc": 8,
+          "bc_move_rate": 0.1852,
+          "bc_pass_rate": 0.3976,
+          "bc_care_total": 54.4,
+          "d0_deployment": "step23 快照：12 PLANT(5 麦+7 瓜)+4 PASTURE+4 SHEEP placed+money 156——剧本部署逐字复现",
+          "takeover_decay": "d4 交还后：作物 d5 起变草（不浇水）、羊 d6 逃光（不喂）、d6 羊毛 flush（~24 毛）未卖；step240 农场全灭，资金冻结 533",
+          "conditional_op_head_works": "d4-d10 探针：站作物格 87.8% 发 WATER（36/41）、站牧场发 FEED×60——条件 op 头正常，缺陷=泊车（钉死单格重复无效操作，不轮换工作面）",
+          "wall_s": 168.8
+        },
+        "note": "单变量 2：全剧本注入。部署问题由剧本兜底，暴露维护触发特征缺失"
+      },
+      "bc_iter2_schema12": {
+        "method": "bc-schema/1.2（单位特征 14→19 维：+watered_today/consecutive_unwatered/yield_units/fed_today/cared_today 本格维护状态——泊车缺陷归因于'已浇/已喂'信号缺失）；extract_samples --include-rounds 重抽（161 局/189 席/1,330,985 单位样本，与 v1 同语料）+ train_bc 重训（同超参 15ep/Adam/128-64）→ models/bc_model_v2.py 209,776B",
+        "value": {
+          "heldout_unit_op_acc_v11": 0.3427,
+          "heldout_unit_op_acc_v12": 0.4903,
+          "majority_baseline_unit_op": 0.1448,
+          "market_accs_unchanged": {
+            "op_all": 0.9211,
+            "op_nonnone": 0.3083
+          },
+          "eval_with_openA2": {
+            "h2h_bc_vs_v142": "0-8",
+            "bc_median_money": 910.0,
+            "collapse_lt45k_bc": 8,
+            "bc_move_rate": 0.3284,
+            "bc_pass_rate": 0.4675,
+            "bc_care_total": 31.1
+          },
+          "takeover_effect": "羊存活 d6→d8-10（产毛 16 入棚）、出现 HARVEST（MELON 6 入棚）——维护特征起效但覆盖不足",
+          "residual_blocker": "WOOL 16+MELON 6 囤积整季不卖：市场头 item 头 argmax 死咬 WHEAT（SELL WHEAT×45 还把喂羊口粮卖光）",
+          "extract_wall_s": 363.7,
+          "train_wall_s": 243.0,
+          "eval_wall_s": 99.0
+        },
+        "note": "票 2 轮条款'CARE/FEED 触发条件特征是否缺失'——确实缺失，补齐后 op 准确率+14.8pp"
+      },
+      "bc_iter2_decode": {
+        "method": "bc_track/scripts/bc_eval.py（票 03 席位修正版：动作按席位索引提交，修复 M1 me_seat=1 时 [mine,theirs] 恒序错位）；孪生 d0 全季注入、对手=回放真实动作、v14.2=build_v13_namespace 同局同席单变量；8 局 held-out（7 bc-top + 1 local）零泄漏；被评=bc_model_v2 + openA2 + bc_decode.MarketDecodePolicy（SELL 锚定棚存最大项/数量 clip 棚存、HIRE 槽间去重、BUY 预算掩码降量）",
+        "value": {
+          "h2h_bc_vs_v142": "0-8",
+          "bc_median_money": 1995.0,
+          "bc_mean_money": 1835.0,
+          "collapse_lt45k_bc": 8,
+          "bc_move_rate": 0.3185,
+          "bc_pass_rate": 0.2613,
+          "bc_care_total": 24.5,
+          "sell_grounded": "SELL WOOL×6+SELL FERTILIZER×9（0b20d72e 局）——卖单锚定生效",
+          "hire_dedup_relax_noop": "HIRE 去重从'每日一次'修正为'槽间去重'后数字不变（中位 1995）——BC 每回合本就至多 1 HIRE，劳力爬坡是市场计划自身不足",
+          "final_failure_mode": "羊 4→2→1→0（d15 前逃光，单农民喂不动 4 牧场）、作物d6 全草化、HIRE 全季 12 次（专家 d13 起 12 手/日）——季中后零生产，资金冻结 ~2k",
+          "wall_s": 97.4
+        },
+        "note": "最好 BC 候选 = openA2 + schema1.2 + decode。中位 1995，为门 A 要求的 6.2%"
+      },
+      "bc_iter2_stability": {
+        "method": "三面取证：①种子稳定性=bc_seed_stability.py 合成季（synthetic_season_head 同构：NW/$3000/零棚零种/I0-base 全品表）×4 种子（11/23/47/101），BC 坐 seat0、陪练=v48 'default' 719 步路由开环回放坐 seat1（只变引擎种子：杂草/商店解锁/城镇消费随机源）；②覆盖补全=12 局全 held-out（7 bc-top+5 local，M1 遗留 4 local 局入样）；③双席 A/B=2 局×双席",
+        "value": {
+          "seed_stability": {
+            "seeds": [
+              11,
+              23,
+              47,
+              101
+            ],
+            "bc_finals": [
+              1596,
+              1440,
+              1299,
+              1631
+            ],
+            "bc_median": 1518.0,
+            "collapse_lt45k": 4,
+            "v48route_opp_finals": [
+              120586,
+              77467,
+              180861,
+              132068
+            ],
+            "bc_wins_vs_v48route": 0,
+            "verdict": "max/min=1.26 紧带——塌方结构性、与种子无关"
+          },
+          "games12": {
+            "bc_median_money": 1747.5,
+            "bc_mean_money": 1797.3,
+            "collapse_lt45k": 12,
+            "band": [
+              901,
+              3298
+            ]
+          },
+          "dual_seat_ab": {
+            "0b20d72e": {
+              "seat0": 2065,
+              "seat1": 1399
+            },
+            "951e3540": {
+              "seat0": 3054,
+              "seat1": 1065
+            },
+            "verdict": "双席对称塌方，席位伪影已清除"
+          },
+          "gate_distance": {
+            "gate_a_median_required": 32000,
+            "best_median": 1995.0,
+            "pct_of_gate": 0.0623,
+            "gate_b_collapse_required_max": 2,
+            "best_collapse_of_12": 12
+          }
+        },
+        "note": "票 03 完成判据（塌方归零且中位≥32k）远未达成→按票面收刀弃牌"
+      },
+      "v48_derivative_launch": {
+        "method": "v48 公开衍生版发射验证（scripts/v48_derivative_launch_check.py，2026-09-21，官方 vendored 引擎 1.32.7+nodeps 本地实测）：门1 官方装载语义=干净 -I 子进程复刻 kaggle_environments.agent.get_last_callable（append(exec_dir)→exec(src,env)→pop→env 最后 callable），用 seed101 局 719 个真实引擎 obs 驱动；门2 完整局=v48 双席位自打 seeds 101/102 各 720 turns_played（719 agent 动作步），statuses/rewards/每步 agent 耗时（perf_counter 包装逐调用计量）；门3 确定性=同 seed 同席重跑双席 720 步动作流规范化哈希比对；门4 包体=tar.gz 字节数。包=references/data/intel-notebooks/v48build/main.py（解码真源码）逐字复制 + 确定性 tar（mtime=0/uid=gid=0/mode0644/gzip mtime=0，双次构建字节一致）",
+        "value": {
+          "all_gates_pass": true,
+          "package": {
+            "main_sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+            "main_bytes": 107008,
+            "tar_sha256": "01de7c27ace9fc55d8c7204f6e67b83752336b41411ff14771958851883519f3",
+            "tar_bytes": 81856,
+            "tar_mb": 0.078,
+            "tar_members": [
+              "main.py"
+            ],
+            "tar_rebuild_reproducible": true,
+            "byte_identical_to_original_public_artifact": true,
+            "note": "tar 与 v48build/submission.tar.gz（原作者公开提交件）逐字节一致；main.py 零修改（deriv=verbatim，无装载壳）"
+          },
+          "gate1_official_load": {
+            "ok": true,
+            "last_callable": "_kaggle_submission_entrypoint",
+            "native_official_form": "v48 源码原生结尾即 agent + _kaggle_submission_entrypoint（后者=env 最后 callable，委托 agent，未加任何壳）",
+            "n_obs_replayed": 719,
+            "action_errors": 0,
+            "isolated_vs_local_action_mismatches": 0,
+            "non_stdlib_imports": 0,
+            "loader_pop_applied": true
+          },
+          "gate2_full_episodes": {
+            "ok": true,
+            "seeds": [
+              101,
+              102
+            ],
+            "seating": "v48 seat0 vs v48 seat1 (self-play)",
+            "statuses": [
+              "DONE",
+              "DONE"
+            ],
+            "turns_played": 720,
+            "rewards_seed101": [
+              92750.0,
+              92750.0
+            ],
+            "rewards_seed102": [
+              86550.0,
+              86550.0
+            ],
+            "max_step_ms_seed101": 1.48,
+            "max_step_ms_seed102": 1.82,
+            "p99_step_ms": 1.12,
+            "mean_step_ms": 0.24,
+            "step_budget_ms": 1000.0,
+            "suspicious_log_lines": 0,
+            "wall_s_per_episode": 3.5
+          },
+          "gate3_determinism": {
+            "ok": true,
+            "seed": 101,
+            "action_stream_sha256_run1": "a009ad5e6fb46d874b24102259d9df5c14148e56c7117654b1fe630bb8f411d8",
+            "identical_on_rerun": true
+          },
+          "gate4_size": {
+            "ok": true,
+            "tar_bytes": 81856,
+            "cap_bytes": 104857600
+          }
+        }
+      },
+      "v48plus_build": {
+        "method": "v48plus 确定性构建（software/kaggle_simulations/v48plus/build_v48plus.py，2026-09-21）：base=references/data/intel-notebooks/v48build/main.py（sha256 dadee25a…，与在跑 v48_derivative/main.py 逐字节一致）逐字前缀 + v48plus_layers.py（V49/V50 经济层手工移植 COURIER+SHEDROOM，纯追加零改动 base）逐字后缀；双次构建/双次确定性 tar（mtime=0/uid=gid=0/mode0644/gzip mtime=0）字节一致自证；stdlib-only",
+        "value": {
+          "base_sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+          "layers_sha256": "c175ecb1ab4ea945b477dfe760b689016e37fec83813aafcbc35544c15a3c869",
+          "main_sha256": "eca5dea29013e37749e1e7cdecb350f8b74bd05783d8cd0750f0417e4f4fbc21",
+          "main_bytes": 122558,
+          "tar_sha256": "b5fc0ed7885196a7987acd305dd23f8f7732115405631a8b9052c76b5855e8e3",
+          "tar_bytes": 87318,
+          "base_verbatim_prefix_ok": true,
+          "layers_verbatim_suffix_ok": true,
+          "deterministic_build_ok": true,
+          "stdlib_only_ok": true,
+          "gate4_size_ok": true
+        }
+      },
+      "v48plus_layer_selection": {
+        "method": "层选择证据（scripts/v48plus_layer_ablation.py，seeds 101/102 × 双席 × starter/v14.2 = 8 局/变体）：COURIER(C)/CAPHARV(CH)/SHEDROOM(SR) 八组合消融；结论=CAPHARV 在本底座六路线全部跟踪局 0 次触发（磁带已在 cap 前收割，死代码）移出 shipping build；CH 孤立切片存在跨段符号依赖（_V48P_COURIER_MOVES）属消融 harness 伪影已注明；starter 面板（无状态对手，干净口径）base 0 / C +1228 / SR +3752 / C_SR +3340；v14.2 列受其跨局模块态漂移混淆（消融面板内 base 两次等价装载差 >1k）仅作参考；全量判定以 ab_gate 面板（v14.2 每局 fresh 装载）为准",
+        "value": {
+          "variants_starter_delta": {
+            "ALL": 3340.0,
+            "C": 1227.5,
+            "CH": 0.0,
+            "CH_SR": 3752.5,
+            "C_CH": 1227.5,
+            "C_SR": 3340.0,
+            "SR": 3752.5,
+            "base": 0.0
+          },
+          "capharv_swaps_all_tracked_games": 0,
+          "shipping_layers": [
+            "COURIER",
+            "SHEDROOM"
+          ],
+          "probe": "exports/probes/v48plus/v48plus_layer_ablation.json"
+        }
+      },
+      "v48plus_ab_gate": {
+        "method": "孪生 A/B 门（scripts/v48plus_ab_gate.py，官方 vendored 1.32.7 引擎，2026-09-21）：判据①=同种子 v48(dadee25a) vs v48+ 直接 h2h 16 局（seeds 101-104/201-204 × 双席位）v48+ 得分（胜+0.5平）≥45%；判据②=多样对手面板同种子同席对照（starter 基线 8 seeds×双席、我方 v14.2 每局 fresh 装载、2 巨人回放对手流原种子逐动作回放）总体 mean(v48+)/mean(v48) ≥0.97；判据③=全部 statuses 双 DONE + contract ok + 每步 agent 耗时 <1000ms；附 9 巨人局 d0 反事实（round24 TARGET9，twin 引擎，对手=回放真实动作）方向核对",
+        "value": {
+          "plus_main_sha256": "eca5dea29013e37749e1e7cdecb350f8b74bd05783d8cd0750f0417e4f4fbc21",
+          "h2h": {
+            "games": 16,
+            "plus_wins": 11,
+            "v48_wins": 5,
+            "ties": 0,
+            "plus_score": 0.6875,
+            "pass_45pct": true
+          },
+          "panel_overall": {
+            "plus_mean": 140122.4,
+            "ratio": 0.9855,
+            "v48_mean": 142190.6
+          },
+          "panel_by_opponent": {
+            "our_v14_2": {
+              "v48_mean": 126921.5,
+              "plus_mean": 122505.2,
+              "ratio": 0.9652
+            },
+            "replay_110687913": {
+              "v48_mean": 133146.0,
+              "plus_mean": 132649.0,
+              "ratio": 0.9963
+            },
+            "replay_110702221": {
+              "v48_mean": 134005.0,
+              "plus_mean": 134119.0,
+              "ratio": 1.0009
+            },
+            "starter": {
+              "v48_mean": 158536.6,
+              "plus_mean": 158581.8,
+              "ratio": 1.0003
+            }
+          },
+          "anomalies": {
+            "agent_step_ms": {
+              "v48": 174.7,
+              "v48plus": 171.0
+            },
+            "bad_contract_games": 0,
+            "non_done_games": 0
+          },
+          "layer_telemetry": {
+            "courier_errors": 0,
+            "courier_trips": 26,
+            "courier_units": 127,
+            "sr_errors": 0,
+            "sr_turns": 4,
+            "sr_units": 46
+          },
+          "giants_d0_counterfactual": {
+            "summary": {
+              "flat": 2,
+              "improved": 2,
+              "mean_delta": -533.8,
+              "worse": 5
+            },
+            "direction_ok": false,
+            "episodes": {
+              "110677576": {
+                "beats_truth_opp": true,
+                "direction_ok": false,
+                "opponent": "Krishnan CS",
+                "plus_final": 119347.0,
+                "plus_minus_v48": -2798.0,
+                "truth_me": 58603.0,
+                "truth_opp": 104670.0,
+                "v48_final": 122145.0
+              },
+              "110684532": {
+                "beats_truth_opp": false,
+                "direction_ok": false,
+                "opponent": "jaepyeocho",
+                "plus_final": 43377.0,
+                "plus_minus_v48": -146.0,
+                "truth_me": 51649.0,
+                "truth_opp": 96903.0,
+                "v48_final": 43523.0
+              },
+              "110685617": {
+                "beats_truth_opp": true,
+                "direction_ok": true,
+                "opponent": "Rockstar Farmer",
+                "plus_final": 154326.0,
+                "plus_minus_v48": 347.0,
+                "truth_me": 69780.0,
+                "truth_opp": 88857.0,
+                "v48_final": 153979.0
+              },
+              "110687913": {
+                "beats_truth_opp": true,
+                "direction_ok": false,
+                "opponent": "sowhatwillwelearn",
+                "plus_final": 128005.0,
+                "plus_minus_v48": -422.0,
+                "truth_me": 66014.0,
+                "truth_opp": 115767.0,
+                "v48_final": 128427.0
+              },
+              "110694473": {
+                "beats_truth_opp": true,
+                "direction_ok": false,
+                "opponent": "el_dedalus",
+                "plus_final": 114513.0,
+                "plus_minus_v48": -1630.0,
+                "truth_me": 63830.0,
+                "truth_opp": 86258.0,
+                "v48_final": 116143.0
+              },
+              "110699710": {
+                "beats_truth_opp": true,
+                "direction_ok": true,
+                "opponent": "Umkaaa",
+                "plus_final": 95378.0,
+                "plus_minus_v48": 0.0,
+                "truth_me": 67069.0,
+                "truth_opp": 86696.0,
+                "v48_final": 95378.0
+              },
+              "110701172": {
+                "beats_truth_opp": true,
+                "direction_ok": true,
+                "opponent": "Pipeweed",
+                "plus_final": 113789.0,
+                "plus_minus_v48": 1312.0,
+                "truth_me": 80541.0,
+                "truth_opp": 88651.0,
+                "v48_final": 112477.0
+              },
+              "110702221": {
+                "beats_truth_opp": false,
+                "direction_ok": true,
+                "opponent": "Dziriyin wa9il",
+                "plus_final": 84492.0,
+                "plus_minus_v48": 0.0,
+                "truth_me": 69913.0,
+                "truth_opp": 92224.0,
+                "v48_final": 84492.0
+              },
+              "110841464": {
+                "beats_truth_opp": true,
+                "direction_ok": false,
+                "opponent": "Lazy Lagoon",
+                "plus_final": 147265.0,
+                "plus_minus_v48": -1467.0,
+                "truth_me": 74076.0,
+                "truth_opp": 85702.0,
+                "v48_final": 148732.0
+              }
+            }
+          },
+          "verdict": {
+            "c1_win_rate": true,
+            "c2_cash_mean": true,
+            "c3_no_new_anomaly": true,
+            "giants_direction": false,
+            "overall": false
+          },
+          "probe": "exports/probes/v48plus/v48plus_ab_gate.json"
+        }
+      },
+      "v48plus_launch_check": {
+        "method": "发射四件套预检（scripts/v48plus_launch_check.py 复用 v48_derivative_launch_check 四门实现，包路径重定向 v48plus，2026-09-21）：门1=干净 -I 子进程复刻官方 get_last_callable（append→exec→pop→最后 callable），seed101 局 719 真实 obs 驱动并与主进程 fresh 装载逐字节比对；门2=双席自打完整局 seeds 101/102 各 720 turns，statuses/每步耗时；门3=同 seed 重跑双席动作流规范化哈希一致；门4=tar.gz ≤100MB；另断言 base 逐字前缀 + layers 逐字后缀",
+        "value": {
+          "all_gates_pass": true,
+          "gate1_official_load_ok": true,
+          "last_callable": "_v48plus_entrypoint",
+          "gate2_full_episodes_ok": true,
+          "gate3_determinism_ok": true,
+          "gate4_size_ok": true,
+          "max_step_ms": 269.48,
+          "tar_bytes": 87318,
+          "probe": "exports/probes/v48plus/v48plus_launch_check.json"
         }
       }
     },
