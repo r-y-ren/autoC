@@ -5,8 +5,7 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B3 | run_official_bench 子树: rollout_with_replay_opponent, evaluate_plan_portfolio, recalculate_affected_history, run_official_bench | 顶层 wired + 合成回放 me_seat=1 通道=[3000.0,1570.0] + 重算台账落盘 | W1；R2 修复；台账=fn_docs/recalculation_ledger.md |
-| B4 | guard_replay_profile_engine 子树: fingerprint_engine_constants, guard_replay_profile_engine | 顶层 wired + 篡改常量红/正常绿 | W1；R5 |
+| ▶ B4 | guard_replay_profile_engine 子树: fingerprint_engine_constants, guard_replay_profile_engine | 顶层 wired + 篡改常量红/正常绿 | W1；R5 |
 | B5 | migrate_snapshot_suite 子树: refresh_frozen_values, migrate_snapshot_suite | 快照套件迁入 fn_work/tests 全绿 + R2/R3 反例 XPASS | W1 收口；R1 判据中枢 |
 | B6 | portable_test_baseline 子树: regenerate_artifacts_lf, relax_platform_assertions, declare_machine_context, portable_test_baseline | 顶层 wired + fresh 语义验证（本 Linux 机 0 环境性失败） | W2；R6 |
 | B7 | package_minimal_repro_set 子树: collect_gate_golden_files, enforce_size_budget, declare_local_corpus_dependencies, package_minimal_repro_set | 顶层 wired + 最小集清单+预算断言实跑 | W2；R19；体积预算定桩随批 |

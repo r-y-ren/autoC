@@ -13,7 +13,7 @@
 | rollout_with_replay_opponent | B3 | wired 2026-09-21 | pytest test_rollout… → 10 passed（R2 反例 me_seat=1→[3000.0,1570.0]、me_seat=0 双通道一致、指纹 fail-closed） | bf61656 |
 | evaluate_plan_portfolio | B3 | wired 2026-09-21 | pytest test_evaluate… → 6 passed（seated 透传/聚合委托 robust_selection/枚举帽/真引擎 me_seat=1 端到端） | bf3995a |
 | recalculate_affected_history | B3 | wired 2026-09-21 | pytest test_recalculate… → 3 passed；真实台账已落盘（G1 五条全 SKIP=replay_data_missing，主力机回填前提已注明） | 9dd79b7 |
-| run_official_bench | B3 | stub 2026-09-21 | — | — |
+| run_official_bench | B3 | wired 2026-09-21 | pytest tests/run_official_bench → 32 passed（双口径裁决结构+offset 分解+异常局 fail-closed+oracle 归因；全套件 110P） | ba686fd |
 | fingerprint_engine_constants | B4 | stub 2026-09-21 | — | — |
 | guard_replay_profile_engine | B4 | stub 2026-09-21 | — | — |
 | refresh_frozen_values | B5 | stub 2026-09-21 | — | — |
