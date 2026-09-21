@@ -36,12 +36,12 @@
 | scan_for_library_misplacement | B10 | wired 2026-09-22 | 7 passed 之一（无入口库件检出，容忍点前缀/动态装载形态） | f741948 |
 | relocate_library_modules | B10 | wired 2026-09-22 | 顶层实跑 PASS（旧树扫描 56 件检出恰 market_ledger；库位副本 sha 等价+回探链通；注册表含战后 git mv 方案） | f8676c2 |
 | prune_mainline_import_graph | B11 | wired 2026-09-22 | 14 passed 之一（AST 构图+相对导入解析+违例清单） | 0ce39db |
-| downgrade_dormant_assets | B11 | wired 2026-09-22 | 顶层实跑 PASS（dormant_lab 2/test_asset 2 注册；fn_work/src 直接消费 0；旧树消费面实测入表） | 736138b |
-| observe_opponent_state | B12 | stub 2026-09-21 | — | — |
-| decide_macro_mode | B12 | stub 2026-09-21 | — | — |
-| build_mission_pack | B12 | stub 2026-09-21 | — | — |
-| solve_worker_routes | B12 | stub 2026-09-21 | — | — |
-| execute_along_route | B12 | stub 2026-09-21 | — | — |
+| downgrade_dormant_assets | B11 | wired 2026-09-22；补丁同日 | 顶层实跑 PASS（…）；补丁=注册表路径战役相对化（c5c89e3） | 736138b+c5c89e3 |
+| observe_opponent_state | B12 | wired 2026-09-22 | 41 passed 之一（迁移副本 sha 登记+等值抽查；详见 B12 报告） | 7d68322 |
+| decide_macro_mode | B12 | wired 2026-09-22 | 41 passed 之一（迁移副本 sha 登记+等值抽查；详见 B12 报告） | 7d68322 |
+| build_mission_pack | B12 | wired 2026-09-22 | 41 passed 之一（迁移副本 sha 登记+等值抽查；详见 B12 报告） | 7d68322 |
+| solve_worker_routes | B12 | wired 2026-09-22 | 41 passed 之一（迁移副本 sha 登记+等值抽查；详见 B12 报告） | 7d68322 |
+| execute_along_route | B12 | wired 2026-09-22 | 41 passed 之一（迁移副本 sha 登记+等值抽查；详见 B12 报告） | 7d68322 |
 | load_agent_modules | B13 | stub 2026-09-21 | — | — |
 | plan_market_orders | B13 | stub 2026-09-21 | — | — |
 | run_dawn_planner | B13 | stub 2026-09-21 | — | — |

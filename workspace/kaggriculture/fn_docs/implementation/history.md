@@ -14,3 +14,4 @@
 | 2026-09-22 | B9 | partition_script_tiers, archive_bc_models, archive_forensic_assets（+B7 应修补丁 p1） | 14 passed+顶层 PASS；R11/R12 注册表落地（物理搬移=战后执行清单） |
 | 2026-09-22 | B10 | scan_for_library_misplacement, relocate_library_modules | 7 passed+实跑 PASS（检出恰 1 件；R15 注册落地） |
 | 2026-09-22 | B11 | prune_mainline_import_graph, downgrade_dormant_assets | 14 passed+实跑 PASS（R13/R14 分区注册；W3 全收口） |
+| 2026-09-22 | B12 | observe/decide/build_mission/solve/execute 五迁移件（+B11 注册表路径补丁 p1） | 41 passed；R10 剥离落地（solver 三件/mission all 支/stage 显式化/R20 注释修正）；sha 登记测试兼旧树冻结哨兵 |
