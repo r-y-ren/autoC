@@ -5,8 +5,7 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B4 | guard_replay_profile_engine 子树: fingerprint_engine_constants, guard_replay_profile_engine | 顶层 wired + 篡改常量红/正常绿 | W1；R5 |
-| B5 | migrate_snapshot_suite 子树: refresh_frozen_values, migrate_snapshot_suite | 快照套件迁入 fn_work/tests 全绿 + R2/R3 反例 XPASS | W1 收口；R1 判据中枢 |
+| ▶ B5 | migrate_snapshot_suite 子树: refresh_frozen_values, migrate_snapshot_suite | 快照套件迁入 fn_work/tests 全绿 + R2/R3 反例 XPASS | W1 收口；R1 判据中枢 |
 | B6 | portable_test_baseline 子树: regenerate_artifacts_lf, relax_platform_assertions, declare_machine_context, portable_test_baseline | 顶层 wired + fresh 语义验证（本 Linux 机 0 环境性失败） | W2；R6 |
 | B7 | package_minimal_repro_set 子树: collect_gate_golden_files, enforce_size_budget, declare_local_corpus_dependencies, package_minimal_repro_set | 顶层 wired + 最小集清单+预算断言实跑 | W2；R19；体积预算定桩随批 |
 | B8 | unify_contract_sources 子树: merge_abnormal_reason, single_opponent_roster, assert_bots_constants_match_wheel, unify_contract_sources | 顶层 wired + 单点 grep 断言 + 篡改红测试 | W3；R8/R9 |
@@ -21,6 +20,7 @@
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |
 |---|---|---|
+| 2026-09-21 | B3 签名登记（评审补登） | evaluate_plan_portfolio 实参扩为 +replay/+me_seat/+聚合四参+plan_cap（模块 docstring 已载，补表）；gate_eps/twin_noise_eps 为解析未接线死旋钮（语义同旧码常量 1.0，W1 不动留档） |
 | 2026-09-21 | 快照套件口径修正（B3 期发现） | 根因=planner-on 整局含时间治理器（0.85s 帽读真实墙钟）→负载抖动跨决策边界即漂移（实测两跑 [81108,70273]/[78199,63920]）；整局逐位冻结改旗关面（三遍逐字节一致 [59730.0,59835.0]），planner-on 改 DONE/零异常/engaged 冒烟；旧 planner-on 冻结值文件头留档已废；门默认口径 62P+4xf 不变（commit dfcf476） |
 | 2026-09-21 | B2 签名登记 | robust_select→robust_selection（对齐责任文档命名）；返回结构 dict{best,ranking,strategy,tie_break,aggregates}（旧码同构） |
 | 2026-09-21 | 批次计划建立 | 15 批（B1 共享基座 → B15 治理层）；波序对齐 responsibility.md 四波；run_submission_agent 因 10 函数超 8 切 B12/B13 两批 |

@@ -14,8 +14,8 @@
 | evaluate_plan_portfolio | B3 | wired 2026-09-21 | pytest test_evaluate… → 6 passed（seated 透传/聚合委托 robust_selection/枚举帽/真引擎 me_seat=1 端到端） | bf3995a |
 | recalculate_affected_history | B3 | wired 2026-09-21 | pytest test_recalculate… → 3 passed；真实台账已落盘（G1 五条全 SKIP=replay_data_missing，主力机回填前提已注明） | 9dd79b7 |
 | run_official_bench | B3 | wired 2026-09-21 | pytest tests/run_official_bench → 32 passed（双口径裁决结构+offset 分解+异常局 fail-closed+oracle 归因；全套件 110P） | ba686fd |
-| fingerprint_engine_constants | B4 | stub 2026-09-21 | — | — |
-| guard_replay_profile_engine | B4 | stub 2026-09-21 | — | — |
+| fingerprint_engine_constants | B4 | wired 2026-09-21 | pytest test_fingerprint… → 17 passed 之一（16 键集提取/确定性/三类篡改变指纹/wheel 交叉 14 键/登记 roundtrip） | 192b310 |
+| guard_replay_profile_engine | B4 | wired 2026-09-21 | pytest tests/guard_replay_profile_engine → 17 passed（双重门：登记指纹+wheel 真值，绕过式改动仍红；skip 仅测试注入） | 0f07e98 |
 | refresh_frozen_values | B5 | stub 2026-09-21 | — | — |
 | migrate_snapshot_suite | B5 | stub 2026-09-21 | — | — |
 | regenerate_artifacts_lf | B6 | stub 2026-09-21 | — | — |
