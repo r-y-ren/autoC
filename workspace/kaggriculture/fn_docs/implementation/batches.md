@@ -10,6 +10,7 @@
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |
 |---|---|---|
+| 2026-09-22 | 终评补登 | B4：guard 返回 None→dict+测试 kwargs（docstring 已载）；B12：R10 第 9 项 HANDS 死档（(10,11)/(12,12) 档）以保留轴登记于 constants 迁移头（为保最小分叉未剥，战后可剥）；B13：发现并还原一次"快照测试退单目标"的未提交工作区改动（评审警报，git checkout HEAD 处置） |
 | 2026-09-22 | B6/B7 评审登记 | B6：Windows 断言语义收窄为"工具+扫描器 0 命中"（旧树冻结不可改，fn_work 从未含此模式）；生成文档内嵌绝对路径属实跑记录（可接受，报告 output_root 同机幂等）。B7：spec"任一类缺失即失败"实改为"missing 登记回填+ok/complete 分离"（本机 gitignored 语料缺失常态）；两处应修（manifest 自指字段/声明绝对路径）随补丁批处理 |
 | 2026-09-21 | B6 体积修正（协调者） | artifacts 全量镜像（100 文件/54 万行）属可再生成派生数据，违反体积纪律——撤出 git 只留报告×2+LF 索引×5+锚例 1；机制保留按需重建（regenerate_artifacts_lf 随时可重放） |
 | 2026-09-21 | B5 评审文档同步 | responsibility.md migrate 块"反例 XPASS"字面与实现"转常规 PASSED+零 xfail 残留"口径差——实现自洽（旧套件 README 迁移时转正规定），裁决键 xpassed_counterexamples 名遗留待下次契约触及改名 |
