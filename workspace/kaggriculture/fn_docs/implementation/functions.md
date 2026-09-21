@@ -33,10 +33,10 @@
 | partition_script_tiers | B9 | wired 2026-09-22 | 14 passed 之一（26 件具名三档+未分类 fail-closed） | 3f8a87c |
 | archive_bc_models | B9 | wired 2026-09-22 | 14 passed 之一（models 5 件 419,149B 登记，registry-only） | 7a6b137 |
 | archive_forensic_assets | B9 | wired 2026-09-22 | 顶层实跑 PASS（三档 5/3/18、探针 5/5、import 面零命中、v143 前置满足、out_of_scope 30 登记） | dcfc0e6 |
-| scan_for_library_misplacement | B10 | stub 2026-09-21 | — | — |
-| relocate_library_modules | B10 | stub 2026-09-21 | — | — |
-| prune_mainline_import_graph | B11 | stub 2026-09-21 | — | — |
-| downgrade_dormant_assets | B11 | stub 2026-09-21 | — | — |
+| scan_for_library_misplacement | B10 | wired 2026-09-22 | 7 passed 之一（无入口库件检出，容忍点前缀/动态装载形态） | f741948 |
+| relocate_library_modules | B10 | wired 2026-09-22 | 顶层实跑 PASS（旧树扫描 56 件检出恰 market_ledger；库位副本 sha 等价+回探链通；注册表含战后 git mv 方案） | f8676c2 |
+| prune_mainline_import_graph | B11 | wired 2026-09-22 | 14 passed 之一（AST 构图+相对导入解析+违例清单） | 0ce39db |
+| downgrade_dormant_assets | B11 | wired 2026-09-22 | 顶层实跑 PASS（dormant_lab 2/test_asset 2 注册；fn_work/src 直接消费 0；旧树消费面实测入表） | 736138b |
 | observe_opponent_state | B12 | stub 2026-09-21 | — | — |
 | decide_macro_mode | B12 | stub 2026-09-21 | — | — |
 | build_mission_pack | B12 | stub 2026-09-21 | — | — |

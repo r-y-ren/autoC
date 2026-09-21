@@ -12,3 +12,5 @@
 | 2026-09-21 | B7（W2 收口） | collect_gate_golden_files, enforce_size_budget, declare_local_corpus_dependencies, package_minimal_repro_set | 25 passed+实跑 ok（6 收集/4 缺失登记，预算 2M/10M，总量 84KB）；W2 全收口 |
 | 2026-09-22 | B8 | merge_abnormal_reason（并集单源）, single_opponent_roster（8 站点等值）, assert_bots_constants_match_wheel（wheel 全等）, unify_contract_sources | 33 passed+顶层实跑 ok；R8/R9 修复落地（旧树物理改线战后） |
 | 2026-09-22 | B9 | partition_script_tiers, archive_bc_models, archive_forensic_assets（+B7 应修补丁 p1） | 14 passed+顶层 PASS；R11/R12 注册表落地（物理搬移=战后执行清单） |
+| 2026-09-22 | B10 | scan_for_library_misplacement, relocate_library_modules | 7 passed+实跑 PASS（检出恰 1 件；R15 注册落地） |
+| 2026-09-22 | B11 | prune_mainline_import_graph, downgrade_dormant_assets | 14 passed+实跑 PASS（R13/R14 分区注册；W3 全收口） |
