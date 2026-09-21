@@ -4,7 +4,7 @@
  "submission_ref": 56400478,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-21T00:03:17Z",
+ "captured_at_utc": "2026-09-21T07:47:11Z",
  "candidate": {
   "label": "v48-public-derivative-verbatim",
   "pkg_sha256": "01de7c27ace9fc55d8c7204f6e67b83752336b41411ff14771958851883519f3",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 1139.8,
+ "public_score": 1146.0,
  "validation": [
   {
    "id": 111278140,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 50,
-  "record": "32W-18L",
-  "wins": 32,
-  "losses": 18,
-  "win_rate": 0.64,
-  "our_money_mean": 100393.0,
-  "opp_money_mean": 90113.5,
-  "mean_margin": 10279.5,
+  "public_games": 57,
+  "record": "36W-21L",
+  "wins": 36,
+  "losses": 21,
+  "win_rate": 0.6316,
+  "our_money_mean": 97555.4,
+  "opp_money_mean": 88860.5,
+  "mean_margin": 8694.9,
   "axes": {
    "d0_plants_ours": 12.0,
-   "d0_plants_opp": 15.3,
+   "d0_plants_opp": 15.6,
    "wheat_d7_ours": 9.9,
-   "berry_d12_ours": 37.9,
-   "berry_d12_opp": 32.0,
+   "berry_d12_ours": 37.7,
+   "berry_d12_opp": 32.4,
    "herd_d0_ours": 4.0,
-   "harvest_ours": 413.1,
-   "money_d11_ours": 7637.2,
-   "money_d11_opp": 9320.3
+   "harvest_ours": 412.5,
+   "money_d11_ours": 7630.3,
+   "money_d11_opp": 9787.9
   },
   "episodes": [
    {
@@ -509,9 +509,72 @@
     "opp_name": "Anna Pakhaliuk",
     "margin": -987.0,
     "seat": 0
+   },
+   {
+    "id": 111421048,
+    "result": "L",
+    "our": 93597.0,
+    "opp": 104888.0,
+    "opp_name": "VynoDePal",
+    "margin": -11291.0,
+    "seat": 0
+   },
+   {
+    "id": 111452441,
+    "result": "W",
+    "our": 42684.0,
+    "opp": 40768.0,
+    "opp_name": "xmkevin2004",
+    "margin": 1916.0,
+    "seat": 1
+   },
+   {
+    "id": 111454133,
+    "result": "L",
+    "our": 46446.0,
+    "opp": 75550.0,
+    "opp_name": "JinboWang",
+    "margin": -29104.0,
+    "seat": 0
+   },
+   {
+    "id": 111465796,
+    "result": "L",
+    "our": 51446.0,
+    "opp": 64395.0,
+    "opp_name": "Janus",
+    "margin": -12949.0,
+    "seat": 1
+   },
+   {
+    "id": 111501275,
+    "result": "W",
+    "our": 78139.0,
+    "opp": 70216.0,
+    "opp_name": "Ani",
+    "margin": 7923.0,
+    "seat": 0
+   },
+   {
+    "id": 111511018,
+    "result": "W",
+    "our": 129278.0,
+    "opp": 119498.0,
+    "opp_name": "Guilherme Zanini de S\u00e1",
+    "margin": 9780.0,
+    "seat": 1
+   },
+   {
+    "id": 111512019,
+    "result": "W",
+    "our": 99417.0,
+    "opp": 84056.0,
+    "opp_name": "Sarah Ng",
+    "margin": 15361.0,
+    "seat": 0
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 32W-18L over 50 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 36W-21L over 57 public games; local quickwin/self-play is not this verdict."
 }

@@ -4,7 +4,7 @@
  "submission_ref": 56370649,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-21T00:01:52Z",
+ "captured_at_utc": "2026-09-21T07:46:44Z",
  "candidate": {
   "label": "v14.2-dtsp-working",
   "pkg_sha256": "2759c84958c3137a",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 523.5,
+ "public_score": 533.3,
  "validation": [
   {
    "id": 110951272,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 33,
-  "record": "16W-17L",
-  "wins": 16,
+  "public_games": 34,
+  "record": "17W-17L",
+  "wins": 17,
   "losses": 17,
-  "win_rate": 0.4848,
-  "our_money_mean": 65511.4,
-  "opp_money_mean": 62229.1,
-  "mean_margin": 3282.3,
+  "win_rate": 0.5,
+  "our_money_mean": 66098.1,
+  "opp_money_mean": 62759.3,
+  "mean_margin": 3338.9,
   "axes": {
    "d0_plants_ours": 9.0,
    "d0_plants_opp": 17.4,
-   "wheat_d7_ours": 17.7,
+   "wheat_d7_ours": 17.9,
    "berry_d12_ours": 14.8,
-   "berry_d12_opp": 18.0,
+   "berry_d12_opp": 18.4,
    "herd_d0_ours": 4.0,
-   "harvest_ours": 172.0,
-   "money_d11_ours": 643.5,
-   "money_d11_opp": 6782.3
+   "harvest_ours": 171.9,
+   "money_d11_ours": 650.8,
+   "money_d11_opp": 6897.2
   },
   "episodes": [
    {
@@ -356,9 +356,18 @@
     "opp_name": "Warriors",
     "margin": 19798.0,
     "seat": 1
+   },
+   {
+    "id": 111472439,
+    "result": "W",
+    "our": 85461.0,
+    "opp": 80256.0,
+    "opp_name": "Mohammed Mukthar",
+    "margin": 5205.0,
+    "seat": 1
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 16W-17L over 33 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 17W-17L over 34 public games; local quickwin/self-play is not this verdict."
 }
