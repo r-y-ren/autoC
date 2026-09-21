@@ -7,9 +7,9 @@
 |---|---|---|---|---|
 | discover_campaign_roots | B1 | wired 2026-09-21 | pytest tests/shared/test_discover_campaign_roots.py → 8 passed（真实树三根/CWD 无关/四类 fail-closed/零字面路径）；全套件 57P | 16c9ebd |
 | run_equivalence_gate | B1 | wired 2026-09-21 | pytest tests/shared/test_run_equivalence_gate.py → 3 passed in 36.79s（旧树默认判据 62P+4xf 实跑 pass；未知判据 fail-closed；裁决键完整） | 19ce465 |
-| aggregate_scores | B2 | stub 2026-09-21 | — | — |
-| break_ties_by_identity | B2 | stub 2026-09-21 | — | — |
-| robust_selection | B2 | stub 2026-09-21 | — | — |
+| aggregate_scores | B2 | wired 2026-09-21 | pytest test_aggregate_scores → 12 passed（值序反例 65.0/22.5/55.0/62.5、对照旧名序值失效、trim 边界、旗面不变） | f64015a |
+| break_ties_by_identity | B2 | wired 2026-09-21 | pytest test_break_ties_by_identity → 9 passed（0.4%切/0.6%不切/边界==gate 不切；对旧 robust_select 32 点网格差分零不匹配） | 3366285 |
+| robust_selection | B2 | wired 2026-09-21 | pytest tests/robust_selection → 26 passed（端到端值序修复生效+K1 守成+注记结构；对旧码差分=仅 R3 修复增量） | 43258a4 |
 | rollout_with_replay_opponent | B3 | stub 2026-09-21 | — | — |
 | evaluate_plan_portfolio | B3 | stub 2026-09-21 | — | — |
 | recalculate_affected_history | B3 | stub 2026-09-21 | — | — |
