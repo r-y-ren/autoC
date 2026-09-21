@@ -1,0 +1,517 @@
+{
+ "schema": "online-probe-sampling/1.0",
+ "round": 26,
+ "submission_ref": 56400478,
+ "our_team": "renyxin",
+ "status": "COMPLETE",
+ "captured_at_utc": "2026-09-21T00:03:17Z",
+ "candidate": {
+  "label": "v48-public-derivative-verbatim",
+  "pkg_sha256": "01de7c27ace9fc55d8c7204f6e67b83752336b41411ff14771958851883519f3",
+  "main_sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+  "git_ref": "1dcae99a2ad80a0d8eb26f7fb853e6906873068b"
+ },
+ "launch_snapshot": {
+  "path": "exports/online/round26_ledger.json",
+  "status_at_submit": "PENDING (validation episode)",
+  "note": "launch ledger is a submit-time snapshot and is left unchanged"
+ },
+ "source": {
+  "channel": "kaggle-cli",
+  "competition": "kaggriculture",
+  "commands": [
+   "kaggle competitions episodes 56400478",
+   "kaggle competitions replay <episode_id>"
+  ],
+  "replay_dir": "references/data/online-replays/round26",
+  "replays_are_local_selfplay": false,
+  "local_quickwin_not_adjudication": true
+ },
+ "local_quickwin_not_adjudication": true,
+ "public_score": 1139.8,
+ "validation": [
+  {
+   "id": 111278140,
+   "rewards": [
+    64149.0,
+    64149.0
+   ],
+   "integrity": "PASS"
+  }
+ ],
+ "public_sampling": {
+  "public_games": 50,
+  "record": "32W-18L",
+  "wins": 32,
+  "losses": 18,
+  "win_rate": 0.64,
+  "our_money_mean": 100393.0,
+  "opp_money_mean": 90113.5,
+  "mean_margin": 10279.5,
+  "axes": {
+   "d0_plants_ours": 12.0,
+   "d0_plants_opp": 15.3,
+   "wheat_d7_ours": 9.9,
+   "berry_d12_ours": 37.9,
+   "berry_d12_opp": 32.0,
+   "herd_d0_ours": 4.0,
+   "harvest_ours": 413.1,
+   "money_d11_ours": 7637.2,
+   "money_d11_opp": 9320.3
+  },
+  "episodes": [
+   {
+    "id": 111279442,
+    "result": "W",
+    "our": 148734.0,
+    "opp": 89298.0,
+    "opp_name": "Nguy\u1ec5n Tr\u1ea7n Thanh B\u00ecnh",
+    "margin": 59436.0,
+    "seat": 1
+   },
+   {
+    "id": 111280538,
+    "result": "W",
+    "our": 126337.0,
+    "opp": 102888.0,
+    "opp_name": "Alexey Stepanov",
+    "margin": 23449.0,
+    "seat": 0
+   },
+   {
+    "id": 111281641,
+    "result": "L",
+    "our": 64172.0,
+    "opp": 84347.0,
+    "opp_name": "aaaaLiu123",
+    "margin": -20175.0,
+    "seat": 0
+   },
+   {
+    "id": 111281647,
+    "result": "W",
+    "our": 141647.0,
+    "opp": 84923.0,
+    "opp_name": "jwboost",
+    "margin": 56724.0,
+    "seat": 0
+   },
+   {
+    "id": 111282733,
+    "result": "W",
+    "our": 72792.0,
+    "opp": 64386.0,
+    "opp_name": "Mutoy Choi",
+    "margin": 8406.0,
+    "seat": 0
+   },
+   {
+    "id": 111283896,
+    "result": "W",
+    "our": 123448.0,
+    "opp": 108102.0,
+    "opp_name": "Ali Ramazanov",
+    "margin": 15346.0,
+    "seat": 0
+   },
+   {
+    "id": 111285031,
+    "result": "W",
+    "our": 94522.0,
+    "opp": 59838.0,
+    "opp_name": "Auxileon",
+    "margin": 34684.0,
+    "seat": 0
+   },
+   {
+    "id": 111286146,
+    "result": "L",
+    "our": 47192.0,
+    "opp": 52075.0,
+    "opp_name": "Kamal Das",
+    "margin": -4883.0,
+    "seat": 1
+   },
+   {
+    "id": 111287283,
+    "result": "L",
+    "our": 55032.0,
+    "opp": 55336.0,
+    "opp_name": "Ronald K Wilson ",
+    "margin": -304.0,
+    "seat": 0
+   },
+   {
+    "id": 111288393,
+    "result": "W",
+    "our": 156214.0,
+    "opp": 130681.0,
+    "opp_name": "Trip Meiners",
+    "margin": 25533.0,
+    "seat": 1
+   },
+   {
+    "id": 111289536,
+    "result": "L",
+    "our": 83212.0,
+    "opp": 84488.0,
+    "opp_name": "Alexandru Sitaru",
+    "margin": -1276.0,
+    "seat": 0
+   },
+   {
+    "id": 111290649,
+    "result": "W",
+    "our": 99534.0,
+    "opp": 97669.0,
+    "opp_name": "ayman elamin",
+    "margin": 1865.0,
+    "seat": 1
+   },
+   {
+    "id": 111291760,
+    "result": "W",
+    "our": 128148.0,
+    "opp": 121593.0,
+    "opp_name": "Prashanth Reddy Biyyani",
+    "margin": 6555.0,
+    "seat": 0
+   },
+   {
+    "id": 111292884,
+    "result": "W",
+    "our": 85757.0,
+    "opp": 68053.0,
+    "opp_name": "YUYA",
+    "margin": 17704.0,
+    "seat": 1
+   },
+   {
+    "id": 111293996,
+    "result": "W",
+    "our": 96831.0,
+    "opp": 82373.0,
+    "opp_name": "HechtJP",
+    "margin": 14458.0,
+    "seat": 0
+   },
+   {
+    "id": 111295115,
+    "result": "W",
+    "our": 134534.0,
+    "opp": 123371.0,
+    "opp_name": "Abhiram 9803",
+    "margin": 11163.0,
+    "seat": 1
+   },
+   {
+    "id": 111296247,
+    "result": "W",
+    "our": 72514.0,
+    "opp": 65743.0,
+    "opp_name": "UnknownRobi",
+    "margin": 6771.0,
+    "seat": 0
+   },
+   {
+    "id": 111297358,
+    "result": "L",
+    "our": 68954.0,
+    "opp": 72240.0,
+    "opp_name": "Emir Can",
+    "margin": -3286.0,
+    "seat": 0
+   },
+   {
+    "id": 111298489,
+    "result": "L",
+    "our": 90106.0,
+    "opp": 92193.0,
+    "opp_name": "Anton Tikhonov",
+    "margin": -2087.0,
+    "seat": 0
+   },
+   {
+    "id": 111299616,
+    "result": "W",
+    "our": 112413.0,
+    "opp": 110858.0,
+    "opp_name": "xerkey",
+    "margin": 1555.0,
+    "seat": 1
+   },
+   {
+    "id": 111300740,
+    "result": "W",
+    "our": 117243.0,
+    "opp": 106483.0,
+    "opp_name": "Kam",
+    "margin": 10760.0,
+    "seat": 1
+   },
+   {
+    "id": 111301867,
+    "result": "W",
+    "our": 132050.0,
+    "opp": 117447.0,
+    "opp_name": "sieradni",
+    "margin": 14603.0,
+    "seat": 1
+   },
+   {
+    "id": 111302976,
+    "result": "W",
+    "our": 37382.0,
+    "opp": 37336.0,
+    "opp_name": "Aashka Kapadia",
+    "margin": 46.0,
+    "seat": 0
+   },
+   {
+    "id": 111304098,
+    "result": "W",
+    "our": 94797.0,
+    "opp": 89118.0,
+    "opp_name": "ichnixhelle",
+    "margin": 5679.0,
+    "seat": 0
+   },
+   {
+    "id": 111305211,
+    "result": "W",
+    "our": 112106.0,
+    "opp": 104401.0,
+    "opp_name": "Yosif EL-Rammaal",
+    "margin": 7705.0,
+    "seat": 0
+   },
+   {
+    "id": 111306349,
+    "result": "L",
+    "our": 69854.0,
+    "opp": 91150.0,
+    "opp_name": "Raiden.B",
+    "margin": -21296.0,
+    "seat": 0
+   },
+   {
+    "id": 111307477,
+    "result": "L",
+    "our": 79898.0,
+    "opp": 80026.0,
+    "opp_name": "EdwardHwang@123",
+    "margin": -128.0,
+    "seat": 0
+   },
+   {
+    "id": 111308593,
+    "result": "W",
+    "our": 64672.0,
+    "opp": 55820.0,
+    "opp_name": "Spintronic",
+    "margin": 8852.0,
+    "seat": 0
+   },
+   {
+    "id": 111309710,
+    "result": "W",
+    "our": 82696.0,
+    "opp": 72194.0,
+    "opp_name": "Jinx JK",
+    "margin": 10502.0,
+    "seat": 1
+   },
+   {
+    "id": 111310884,
+    "result": "W",
+    "our": 99228.0,
+    "opp": 78475.0,
+    "opp_name": "Mactorr",
+    "margin": 20753.0,
+    "seat": 1
+   },
+   {
+    "id": 111311920,
+    "result": "W",
+    "our": 143272.0,
+    "opp": 133540.0,
+    "opp_name": "Bharat Kumar0925",
+    "margin": 9732.0,
+    "seat": 0
+   },
+   {
+    "id": 111313034,
+    "result": "L",
+    "our": 65893.0,
+    "opp": 65893.0,
+    "opp_name": "Rishabh Roy",
+    "margin": 0.0,
+    "seat": 1
+   },
+   {
+    "id": 111314125,
+    "result": "L",
+    "our": 85253.0,
+    "opp": 96719.0,
+    "opp_name": "Kevin Cao",
+    "margin": -11466.0,
+    "seat": 1
+   },
+   {
+    "id": 111315244,
+    "result": "W",
+    "our": 105065.0,
+    "opp": 68786.0,
+    "opp_name": "Tanmay",
+    "margin": 36279.0,
+    "seat": 1
+   },
+   {
+    "id": 111316347,
+    "result": "W",
+    "our": 130633.0,
+    "opp": 71114.0,
+    "opp_name": "\u3042\u306a\u307e\u304b",
+    "margin": 59519.0,
+    "seat": 1
+   },
+   {
+    "id": 111317320,
+    "result": "W",
+    "our": 99126.0,
+    "opp": 76443.0,
+    "opp_name": "MAGGR",
+    "margin": 22683.0,
+    "seat": 1
+   },
+   {
+    "id": 111317476,
+    "result": "W",
+    "our": 107003.0,
+    "opp": 95081.0,
+    "opp_name": "Abdulatif Mahgoub",
+    "margin": 11922.0,
+    "seat": 1
+   },
+   {
+    "id": 111318595,
+    "result": "L",
+    "our": 80832.0,
+    "opp": 86070.0,
+    "opp_name": "Jan Bartos",
+    "margin": -5238.0,
+    "seat": 0
+   },
+   {
+    "id": 111319719,
+    "result": "W",
+    "our": 142372.0,
+    "opp": 133264.0,
+    "opp_name": "Vincent Debout",
+    "margin": 9108.0,
+    "seat": 0
+   },
+   {
+    "id": 111320833,
+    "result": "L",
+    "our": 77537.0,
+    "opp": 83905.0,
+    "opp_name": "MinerUNLEASHED",
+    "margin": -6368.0,
+    "seat": 0
+   },
+   {
+    "id": 111321951,
+    "result": "W",
+    "our": 130248.0,
+    "opp": 126330.0,
+    "opp_name": "\u30b7\u30e5\u30fc\u30af\u30ea\u30fc\u30e0",
+    "margin": 3918.0,
+    "seat": 0
+   },
+   {
+    "id": 111323075,
+    "result": "L",
+    "our": 88196.0,
+    "opp": 108845.0,
+    "opp_name": "NoName",
+    "margin": -20649.0,
+    "seat": 0
+   },
+   {
+    "id": 111324195,
+    "result": "W",
+    "our": 150950.0,
+    "opp": 148980.0,
+    "opp_name": "SiVitr2fDrXS.2N",
+    "margin": 1970.0,
+    "seat": 0
+   },
+   {
+    "id": 111325325,
+    "result": "L",
+    "our": 116261.0,
+    "opp": 117909.0,
+    "opp_name": "Rudransh Singh Rathore",
+    "margin": -1648.0,
+    "seat": 0
+   },
+   {
+    "id": 111326426,
+    "result": "W",
+    "our": 113383.0,
+    "opp": 92286.0,
+    "opp_name": "sneaky6767",
+    "margin": 21097.0,
+    "seat": 0
+   },
+   {
+    "id": 111336733,
+    "result": "L",
+    "our": 100136.0,
+    "opp": 101875.0,
+    "opp_name": "Markura",
+    "margin": -1739.0,
+    "seat": 1
+   },
+   {
+    "id": 111350659,
+    "result": "W",
+    "our": 155197.0,
+    "opp": 64194.0,
+    "opp_name": "Randynho",
+    "margin": 91003.0,
+    "seat": 1
+   },
+   {
+    "id": 111370910,
+    "result": "L",
+    "our": 91443.0,
+    "opp": 94598.0,
+    "opp_name": "gchauhan",
+    "margin": -3155.0,
+    "seat": 1
+   },
+   {
+    "id": 111393589,
+    "result": "L",
+    "our": 52448.0,
+    "opp": 63569.0,
+    "opp_name": "Riki Uchida",
+    "margin": -11121.0,
+    "seat": 1
+   },
+   {
+    "id": 111405339,
+    "result": "L",
+    "our": 92383.0,
+    "opp": 93370.0,
+    "opp_name": "Anna Pakhaliuk",
+    "margin": -987.0,
+    "seat": 0
+   }
+  ]
+ },
+ "integrity_failures": [],
+ "verdict": "OFFICIAL SAMPLE 32W-18L over 50 public games; local quickwin/self-play is not this verdict."
+}

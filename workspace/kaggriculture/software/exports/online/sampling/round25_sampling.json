@@ -4,7 +4,7 @@
  "submission_ref": 56370649,
  "our_team": "renyxin",
  "status": "COMPLETE",
- "captured_at_utc": "2026-09-20T04:51:46Z",
+ "captured_at_utc": "2026-09-21T00:01:52Z",
  "candidate": {
   "label": "v14.2-dtsp-working",
   "pkg_sha256": "2759c84958c3137a",
@@ -28,7 +28,7 @@
   "local_quickwin_not_adjudication": true
  },
  "local_quickwin_not_adjudication": true,
- "public_score": 543.7,
+ "public_score": 523.5,
  "validation": [
   {
    "id": 110951272,
@@ -40,24 +40,24 @@
   }
  ],
  "public_sampling": {
-  "public_games": 25,
-  "record": "13W-12L",
-  "wins": 13,
-  "losses": 12,
-  "win_rate": 0.52,
-  "our_money_mean": 65914.0,
-  "opp_money_mean": 59783.8,
-  "mean_margin": 6130.2,
+  "public_games": 33,
+  "record": "16W-17L",
+  "wins": 16,
+  "losses": 17,
+  "win_rate": 0.4848,
+  "our_money_mean": 65511.4,
+  "opp_money_mean": 62229.1,
+  "mean_margin": 3282.3,
   "axes": {
    "d0_plants_ours": 9.0,
-   "d0_plants_opp": 17.8,
-   "wheat_d7_ours": 18.4,
-   "berry_d12_ours": 14.0,
-   "berry_d12_opp": 17.4,
+   "d0_plants_opp": 17.4,
+   "wheat_d7_ours": 17.7,
+   "berry_d12_ours": 14.8,
+   "berry_d12_opp": 18.0,
    "herd_d0_ours": 4.0,
-   "harvest_ours": 173.8,
-   "money_d11_ours": 709.0,
-   "money_d11_opp": 6466.2
+   "harvest_ours": 172.0,
+   "money_d11_ours": 643.5,
+   "money_d11_opp": 6782.3
   },
   "episodes": [
    {
@@ -284,9 +284,81 @@
     "opp_name": "Mahamane Lawaly",
     "margin": 27128.0,
     "seat": 0
+   },
+   {
+    "id": 111102237,
+    "result": "W",
+    "our": 84022.0,
+    "opp": 48387.0,
+    "opp_name": "PRERIT MAURYA",
+    "margin": 35635.0,
+    "seat": 1
+   },
+   {
+    "id": 111149213,
+    "result": "L",
+    "our": 64309.0,
+    "opp": 68796.0,
+    "opp_name": "robikscube",
+    "margin": -4487.0,
+    "seat": 0
+   },
+   {
+    "id": 111208137,
+    "result": "L",
+    "our": 73346.0,
+    "opp": 87707.0,
+    "opp_name": "maker2026",
+    "margin": -14361.0,
+    "seat": 1
+   },
+   {
+    "id": 111217550,
+    "result": "L",
+    "our": 43787.0,
+    "opp": 111464.0,
+    "opp_name": "\u5c0f\u5a03\u5a03\u4e4b\u529b",
+    "margin": -67677.0,
+    "seat": 1
+   },
+   {
+    "id": 111239092,
+    "result": "L",
+    "our": 59119.0,
+    "opp": 59533.0,
+    "opp_name": "_@HimShukla23",
+    "margin": -414.0,
+    "seat": 1
+   },
+   {
+    "id": 111310168,
+    "result": "W",
+    "our": 53042.0,
+    "opp": 38055.0,
+    "opp_name": "plong2101",
+    "margin": 14987.0,
+    "seat": 1
+   },
+   {
+    "id": 111323093,
+    "result": "L",
+    "our": 60578.0,
+    "opp": 88998.0,
+    "opp_name": "Gaurav Vyas",
+    "margin": -28420.0,
+    "seat": 0
+   },
+   {
+    "id": 111396856,
+    "result": "W",
+    "our": 75823.0,
+    "opp": 56025.0,
+    "opp_name": "Warriors",
+    "margin": 19798.0,
+    "seat": 1
    }
   ]
  },
  "integrity_failures": [],
- "verdict": "OFFICIAL SAMPLE 13W-12L over 25 public games; local quickwin/self-play is not this verdict."
+ "verdict": "OFFICIAL SAMPLE 16W-17L over 33 public games; local quickwin/self-play is not this verdict."
 }
