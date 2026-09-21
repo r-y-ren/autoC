@@ -18,11 +18,15 @@
 - 旧树零写入、零物理移动；注册表即战后搬移执行清单（postwar_dest 逐件）。
   路径全由调用方传入或经 shared.discover_campaign_roots 发现（R20：模块内
   零字面战役路径）。
+- 注册表可移植性：落盘前把 build_import_graph 产出的 mainline root 绝对
+  路径（str(root.resolve())）对战役根相对化（如 "fn_work/src"），注册表
+  全文零机器绝对路径（跨机可 commit、diff 可复现）。
 """
 
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -93,6 +97,21 @@ DESIGNATION_TABLE: dict[str, dict] = {
 _REGISTRY_CONTRACT = "R13+R14 downgrade_dormant_assets（fn_docs/responsibility.md）"
 
 
+def _campaign_rel_posix(path, campaign_root: Path) -> str:
+    """绝对路径 → 战役根相对 posix（注册表可移植：零机器绝对路径）。
+
+    build_import_graph 的 root 为 str(root.resolve()) 机器绝对路径，落盘前
+    对战役根相对化（如 "fn_work/src"）；路径不在战役根内时以 relpath 兜底
+    （可能含 ".."，但仍为相对形态，不落绝对路径）。
+    """
+    resolved = Path(path).resolve()
+    base = campaign_root.resolve()
+    try:
+        return resolved.relative_to(base).as_posix()
+    except ValueError:
+        return Path(os.path.relpath(resolved, base)).as_posix()
+
+
 def _postwar_execution(zone_counts: dict) -> dict:
     return {
         "when": "fn-close 期（战后收口，旧树冻结解除后）",
@@ -156,6 +175,8 @@ def downgrade_dormant_assets(*, software_root=None, mainline_root=None,
         legacy_consumers, mainline: {root, files, declared_imports, violations,
         transitive_exposure}, schema_valid, schema_errors, registry_path,
         frozen_tree, summary}
+        mainline.root 为战役根相对 posix（如 "fn_work/src"，注册表零绝对路径）；
+        registry_path 为落盘绝对路径（仅进程内返回，不入注册表）。
         overall ⇔ 四件全在场 + fn_work/src 主线 import 图不含四件 + 注册 schema 完整。
 
     Raises:
@@ -232,7 +253,8 @@ def downgrade_dormant_assets(*, software_root=None, mainline_root=None,
     schema_valid = not schema_errors
 
     mainline_block = {
-        "root": mainline_graph["root"],
+        # 落盘前相对化：graph root 的机器绝对路径 → 战役根相对（如 "fn_work/src"）
+        "root": _campaign_rel_posix(mainline_graph["root"], campaign_root),
         "files": mainline_graph["counts"]["files"],
         "declared_imports": mainline_graph["counts"]["declared_imports"],
         "violations": violations,

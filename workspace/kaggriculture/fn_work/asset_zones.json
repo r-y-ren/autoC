@@ -1,6 +1,6 @@
 {
   "contract": "R13+R14 downgrade_dormant_assets（fn_docs/responsibility.md）",
-  "generated_at": "2026-09-21T17:23:49+00:00",
+  "generated_at": "2026-09-21T17:33:55+00:00",
   "frozen_tree": true,
   "postwar_execution": {
     "when": "fn-close 期（战后收口，旧树冻结解除后）",
@@ -2909,9 +2909,9 @@
     }
   ],
   "mainline_check": {
-    "root": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/src",
+    "root": "fn_work/src",
     "files": 51,
-    "declared_imports": 158,
+    "declared_imports": 159,
     "violations": [],
     "transitive_exposure": [
       {
@@ -8723,9 +8723,9 @@
       }
     },
     "mainline": {
-      "root": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/src",
+      "root": "fn_work/src",
       "files": 51,
-      "declared_imports": 158,
+      "declared_imports": 159,
       "violations": [],
       "transitive_exposure": [
         {
@@ -8824,6 +8824,6 @@
     "schema_errors": [],
     "frozen_tree": true,
     "postwar_only": true,
-    "summary": "四件登记（dormant_lab 2/test_asset 2）；旧树 direct 消费面 gym_env=8/llm_provider=3/economy=3/redlines=2；主线（fn_work/src 51 件/158 边）直接消费四件 0 处（B13 前预期 0），传递面 15 处经 kgenv/__init__（战后随 eager import 剔除消解，不判负）；schema完整——PASS"
+    "summary": "四件登记（dormant_lab 2/test_asset 2）；旧树 direct 消费面 gym_env=8/llm_provider=3/economy=3/redlines=2；主线（fn_work/src 51 件/159 边）直接消费四件 0 处（B13 前预期 0），传递面 15 处经 kgenv/__init__（战后随 eager import 剔除消解，不判负）；schema完整——PASS"
   }
 }

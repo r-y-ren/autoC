@@ -73,6 +73,23 @@ def test_orchestration_pass_registry_schema_and_no_move(fake_campaign):
     assert registry["postwar_execution"]["registry_only"] is True
     assert len(registry["entries"]) == 4
 
+    # 注册表零绝对路径（可移植，跨机可 commit）：root 相对战役根
+    assert registry["mainline_check"]["root"] == "fn_work/src"
+    assert registry["verdict"]["mainline"]["root"] == "fn_work/src"
+
+    def _strings(obj):
+        if isinstance(obj, str):
+            yield obj
+        elif isinstance(obj, dict):
+            for v in obj.values():
+                yield from _strings(v)
+        elif isinstance(obj, list):
+            for v in obj:
+                yield from _strings(v)
+
+    assert not [s for s in _strings(registry) if s.startswith("/")], \
+        "注册表全文不得含绝对路径（root 等须为战役根相对形态）"
+
     by_file = {e["file"]: e for e in registry["entries"]}
     assert set(by_file) == set(DESIGNATION_TABLE)
     for entry in registry["entries"]:
