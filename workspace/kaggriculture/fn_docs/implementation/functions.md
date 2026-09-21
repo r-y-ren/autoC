@@ -26,10 +26,10 @@
 | enforce_size_budget | B7 | wired 2026-09-21 | 25 passed 之一（预算 2MiB/10MiB 定桩，超标逐件拒） | 56db9e2 |
 | declare_local_corpus_dependencies | B7 | wired 2026-09-21 | 25 passed 之一（G23+skip 清单源，逐条带来源+日期） | 179b5a1 |
 | package_minimal_repro_set | B7 | wired 2026-09-21 | 实跑 ok=True complete=False（6 收集/4 缺失登记回填，总量 84,570B） | 46257f2 |
-| merge_abnormal_reason | B8 | stub 2026-09-21 | — | — |
-| single_opponent_roster | B8 | stub 2026-09-21 | — | — |
-| assert_bots_constants_match_wheel | B8 | stub 2026-09-21 | — | — |
-| unify_contract_sources | B8 | stub 2026-09-21 | — | — |
+| merge_abnormal_reason | B8 | wired 2026-09-21 | 33 passed 之一（arena/eval 并集语义单源+24 例 battery） | 636f5fe |
+| single_opponent_roster | B8 | wired 2026-09-21 | 33 passed 之一（11 对手池+网格真值，8 站点等值断言） | 766840f |
+| assert_bots_constants_match_wheel | B8 | wired 2026-09-21 | 33 passed 之一（五文件常量对 wheel 逐条目全等，漂移抛） | 9223fed |
+| unify_contract_sources | B8 | wired 2026-09-21 | 顶层实跑 ok=True（三叶+等值断言集，strict 缺省 fail） | a96e6a4 |
 | partition_script_tiers | B9 | stub 2026-09-21 | — | — |
 | archive_bc_models | B9 | stub 2026-09-21 | — | — |
 | archive_forensic_assets | B9 | stub 2026-09-21 | — | — |
