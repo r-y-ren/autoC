@@ -1,0 +1,21 @@
+{
+  "base": {
+    "path": "references/data/intel-notebooks/v48build/main.py",
+    "sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a"
+  },
+  "deterministic_double_build": true,
+  "layers": {
+    "path": "software/kaggle_simulations/v48plus/v48plus_layers.py",
+    "sha256": "c175ecb1ab4ea945b477dfe760b689016e37fec83813aafcbc35544c15a3c869"
+  },
+  "main_py": {
+    "bytes": 122558,
+    "sha256": "eca5dea29013e37749e1e7cdecb350f8b74bd05783d8cd0750f0417e4f4fbc21"
+  },
+  "stdlib_only": true,
+  "submission_tar_gz": {
+    "bytes": 87318,
+    "deterministic_double_pack": true,
+    "sha256": "b5fc0ed7885196a7987acd305dd23f8f7732115405631a8b9052c76b5855e8e3"
+  }
+}

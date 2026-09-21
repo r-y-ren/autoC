@@ -7347,6 +7347,223 @@
      "cap_bytes": 104857600
     }
    }
+  },
+  "v48plus_build": {
+   "method": "v48plus 确定性构建（software/kaggle_simulations/v48plus/build_v48plus.py，2026-09-21）：base=references/data/intel-notebooks/v48build/main.py（sha256 dadee25a…，与在跑 v48_derivative/main.py 逐字节一致）逐字前缀 + v48plus_layers.py（V49/V50 经济层手工移植 COURIER+SHEDROOM，纯追加零改动 base）逐字后缀；双次构建/双次确定性 tar（mtime=0/uid=gid=0/mode0644/gzip mtime=0）字节一致自证；stdlib-only",
+   "value": {
+    "base_sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+    "layers_sha256": "c175ecb1ab4ea945b477dfe760b689016e37fec83813aafcbc35544c15a3c869",
+    "main_sha256": "eca5dea29013e37749e1e7cdecb350f8b74bd05783d8cd0750f0417e4f4fbc21",
+    "main_bytes": 122558,
+    "tar_sha256": "b5fc0ed7885196a7987acd305dd23f8f7732115405631a8b9052c76b5855e8e3",
+    "tar_bytes": 87318,
+    "base_verbatim_prefix_ok": true,
+    "layers_verbatim_suffix_ok": true,
+    "deterministic_build_ok": true,
+    "stdlib_only_ok": true,
+    "gate4_size_ok": true
+   }
+  },
+  "v48plus_layer_selection": {
+   "method": "层选择证据（scripts/v48plus_layer_ablation.py，seeds 101/102 × 双席 × starter/v14.2 = 8 局/变体）：COURIER(C)/CAPHARV(CH)/SHEDROOM(SR) 八组合消融；结论=CAPHARV 在本底座六路线全部跟踪局 0 次触发（磁带已在 cap 前收割，死代码）移出 shipping build；CH 孤立切片存在跨段符号依赖（_V48P_COURIER_MOVES）属消融 harness 伪影已注明；starter 面板（无状态对手，干净口径）base 0 / C +1228 / SR +3752 / C_SR +3340；v14.2 列受其跨局模块态漂移混淆（消融面板内 base 两次等价装载差 >1k）仅作参考；全量判定以 ab_gate 面板（v14.2 每局 fresh 装载）为准",
+   "value": {
+    "variants_starter_delta": {
+     "ALL": 3340.0,
+     "C": 1227.5,
+     "CH": 0.0,
+     "CH_SR": 3752.5,
+     "C_CH": 1227.5,
+     "C_SR": 3340.0,
+     "SR": 3752.5,
+     "base": 0.0
+    },
+    "capharv_swaps_all_tracked_games": 0,
+    "shipping_layers": [
+     "COURIER",
+     "SHEDROOM"
+    ],
+    "probe": "exports/probes/v48plus/v48plus_layer_ablation.json"
+   }
+  },
+  "v48plus_ab_gate": {
+   "method": "孪生 A/B 门（scripts/v48plus_ab_gate.py，官方 vendored 1.32.7 引擎，2026-09-21）：判据①=同种子 v48(dadee25a) vs v48+ 直接 h2h 16 局（seeds 101-104/201-204 × 双席位）v48+ 得分（胜+0.5平）≥45%；判据②=多样对手面板同种子同席对照（starter 基线 8 seeds×双席、我方 v14.2 每局 fresh 装载、2 巨人回放对手流原种子逐动作回放）总体 mean(v48+)/mean(v48) ≥0.97；判据③=全部 statuses 双 DONE + contract ok + 每步 agent 耗时 <1000ms；附 9 巨人局 d0 反事实（round24 TARGET9，twin 引擎，对手=回放真实动作）方向核对",
+   "value": {
+    "plus_main_sha256": "eca5dea29013e37749e1e7cdecb350f8b74bd05783d8cd0750f0417e4f4fbc21",
+    "h2h": {
+     "games": 16,
+     "plus_wins": 11,
+     "v48_wins": 5,
+     "ties": 0,
+     "plus_score": 0.6875,
+     "pass_45pct": true
+    },
+    "panel_overall": {
+     "plus_mean": 140122.4,
+     "ratio": 0.9855,
+     "v48_mean": 142190.6
+    },
+    "panel_by_opponent": {
+     "our_v14_2": {
+      "v48_mean": 126921.5,
+      "plus_mean": 122505.2,
+      "ratio": 0.9652
+     },
+     "replay_110687913": {
+      "v48_mean": 133146.0,
+      "plus_mean": 132649.0,
+      "ratio": 0.9963
+     },
+     "replay_110702221": {
+      "v48_mean": 134005.0,
+      "plus_mean": 134119.0,
+      "ratio": 1.0009
+     },
+     "starter": {
+      "v48_mean": 158536.6,
+      "plus_mean": 158581.8,
+      "ratio": 1.0003
+     }
+    },
+    "anomalies": {
+     "agent_step_ms": {
+      "v48": 174.7,
+      "v48plus": 171.0
+     },
+     "bad_contract_games": 0,
+     "non_done_games": 0
+    },
+    "layer_telemetry": {
+     "courier_errors": 0,
+     "courier_trips": 26,
+     "courier_units": 127,
+     "sr_errors": 0,
+     "sr_turns": 4,
+     "sr_units": 46
+    },
+    "giants_d0_counterfactual": {
+     "summary": {
+      "flat": 2,
+      "improved": 2,
+      "mean_delta": -533.8,
+      "worse": 5
+     },
+     "direction_ok": false,
+     "episodes": {
+      "110677576": {
+       "beats_truth_opp": true,
+       "direction_ok": false,
+       "opponent": "Krishnan CS",
+       "plus_final": 119347.0,
+       "plus_minus_v48": -2798.0,
+       "truth_me": 58603.0,
+       "truth_opp": 104670.0,
+       "v48_final": 122145.0
+      },
+      "110684532": {
+       "beats_truth_opp": false,
+       "direction_ok": false,
+       "opponent": "jaepyeocho",
+       "plus_final": 43377.0,
+       "plus_minus_v48": -146.0,
+       "truth_me": 51649.0,
+       "truth_opp": 96903.0,
+       "v48_final": 43523.0
+      },
+      "110685617": {
+       "beats_truth_opp": true,
+       "direction_ok": true,
+       "opponent": "Rockstar Farmer",
+       "plus_final": 154326.0,
+       "plus_minus_v48": 347.0,
+       "truth_me": 69780.0,
+       "truth_opp": 88857.0,
+       "v48_final": 153979.0
+      },
+      "110687913": {
+       "beats_truth_opp": true,
+       "direction_ok": false,
+       "opponent": "sowhatwillwelearn",
+       "plus_final": 128005.0,
+       "plus_minus_v48": -422.0,
+       "truth_me": 66014.0,
+       "truth_opp": 115767.0,
+       "v48_final": 128427.0
+      },
+      "110694473": {
+       "beats_truth_opp": true,
+       "direction_ok": false,
+       "opponent": "el_dedalus",
+       "plus_final": 114513.0,
+       "plus_minus_v48": -1630.0,
+       "truth_me": 63830.0,
+       "truth_opp": 86258.0,
+       "v48_final": 116143.0
+      },
+      "110699710": {
+       "beats_truth_opp": true,
+       "direction_ok": true,
+       "opponent": "Umkaaa",
+       "plus_final": 95378.0,
+       "plus_minus_v48": 0.0,
+       "truth_me": 67069.0,
+       "truth_opp": 86696.0,
+       "v48_final": 95378.0
+      },
+      "110701172": {
+       "beats_truth_opp": true,
+       "direction_ok": true,
+       "opponent": "Pipeweed",
+       "plus_final": 113789.0,
+       "plus_minus_v48": 1312.0,
+       "truth_me": 80541.0,
+       "truth_opp": 88651.0,
+       "v48_final": 112477.0
+      },
+      "110702221": {
+       "beats_truth_opp": false,
+       "direction_ok": true,
+       "opponent": "Dziriyin wa9il",
+       "plus_final": 84492.0,
+       "plus_minus_v48": 0.0,
+       "truth_me": 69913.0,
+       "truth_opp": 92224.0,
+       "v48_final": 84492.0
+      },
+      "110841464": {
+       "beats_truth_opp": true,
+       "direction_ok": false,
+       "opponent": "Lazy Lagoon",
+       "plus_final": 147265.0,
+       "plus_minus_v48": -1467.0,
+       "truth_me": 74076.0,
+       "truth_opp": 85702.0,
+       "v48_final": 148732.0
+      }
+     }
+    },
+    "verdict": {
+     "c1_win_rate": true,
+     "c2_cash_mean": true,
+     "c3_no_new_anomaly": true,
+     "giants_direction": false,
+     "overall": false
+    },
+    "probe": "exports/probes/v48plus/v48plus_ab_gate.json"
+   }
+  },
+  "v48plus_launch_check": {
+   "method": "发射四件套预检（scripts/v48plus_launch_check.py 复用 v48_derivative_launch_check 四门实现，包路径重定向 v48plus，2026-09-21）：门1=干净 -I 子进程复刻官方 get_last_callable（append→exec→pop→最后 callable），seed101 局 719 真实 obs 驱动并与主进程 fresh 装载逐字节比对；门2=双席自打完整局 seeds 101/102 各 720 turns，statuses/每步耗时；门3=同 seed 重跑双席动作流规范化哈希一致；门4=tar.gz ≤100MB；另断言 base 逐字前缀 + layers 逐字后缀",
+   "value": {
+    "all_gates_pass": true,
+    "gate1_official_load_ok": true,
+    "last_callable": "_v48plus_entrypoint",
+    "gate2_full_episodes_ok": true,
+    "gate3_determinism_ok": true,
+    "gate4_size_ok": true,
+    "max_step_ms": 269.48,
+    "tar_bytes": 87318,
+    "probe": "exports/probes/v48plus/v48plus_launch_check.json"
+   }
   }
  },
  "milestone": "Track-B v15「点火重构」M-A..M-F（波次日历剧本引擎 src/wave.py + planner/wave_script.py 剧本候选 + market/entry 结构 + DTSP dawn 三选一；M-E 诚实判定：旗关/冒烟/打包/单测全绿，E1 v48 h2h 0-16 未过、E2 反事实 G2 过 G1/G3 未过、E3 注入字面门未过（base 配对非回归）——不作为发射候选，v14.2 仍为注册基线）",
