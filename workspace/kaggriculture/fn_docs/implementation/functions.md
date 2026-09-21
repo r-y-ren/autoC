@@ -22,10 +22,10 @@
 | relax_platform_assertions | B6 | wired 2026-09-21 | 28 passed 之一（双平台断言工具+三类检出器；fn_work/tests 59 文件 0 命中） | 1deed88 |
 | declare_machine_context | B6 | wired 2026-09-21 | 28 passed 之一（machine_context.md 渲染：历史口径/本机实测/skip 清单/双兼容策略） | 19154ce |
 | portable_test_baseline | B6 | wired 2026-09-21 | 顶层实跑 verdict=pass：fn_work 全套件 226 passed/148.78s+checks 全真 | 2c9a677 |
-| collect_gate_golden_files | B7 | stub 2026-09-21 | — | — |
-| enforce_size_budget | B7 | stub 2026-09-21 | — | — |
-| declare_local_corpus_dependencies | B7 | stub 2026-09-21 | — | — |
-| package_minimal_repro_set | B7 | stub 2026-09-21 | — | — |
+| collect_gate_golden_files | B7 | wired 2026-09-21 | 25 passed 之一（四类收集/缺失登记回填/未知类 fail-closed） | 5adfd38 |
+| enforce_size_budget | B7 | wired 2026-09-21 | 25 passed 之一（预算 2MiB/10MiB 定桩，超标逐件拒） | 56db9e2 |
+| declare_local_corpus_dependencies | B7 | wired 2026-09-21 | 25 passed 之一（G23+skip 清单源，逐条带来源+日期） | 179b5a1 |
+| package_minimal_repro_set | B7 | wired 2026-09-21 | 实跑 ok=True complete=False（6 收集/4 缺失登记回填，总量 84,570B） | 46257f2 |
 | merge_abnormal_reason | B8 | stub 2026-09-21 | — | — |
 | single_opponent_roster | B8 | stub 2026-09-21 | — | — |
 | assert_bots_constants_match_wheel | B8 | stub 2026-09-21 | — | — |

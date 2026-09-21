@@ -9,3 +9,4 @@
 | 2026-09-21 | B4 | fingerprint_engine_constants（16 键集+wheel 交叉 14 键）, guard_replay_profile_engine（双重 fail-closed 门） | 17 passed；R5 修复落地 |
 | 2026-09-21 | B5（W1 收口） | refresh_frozen_values（22 锚白名单+13 双口径注记）, migrate_snapshot_suite（迁移 66P 反例转常规） | W1 全收口：R2/R3 修复经安全网验证；旧套件原样 |
 | 2026-09-21 | B6 | regenerate_artifacts_lf, relax_platform_assertions, declare_machine_context, portable_test_baseline | 28 passed+顶层实跑 pass（全套件 226P）；R6 修复落地（Windows 复检留边界登记） |
+| 2026-09-21 | B7（W2 收口） | collect_gate_golden_files, enforce_size_budget, declare_local_corpus_dependencies, package_minimal_repro_set | 25 passed+实跑 ok（6 收集/4 缺失登记，预算 2M/10M，总量 84KB）；W2 全收口 |
