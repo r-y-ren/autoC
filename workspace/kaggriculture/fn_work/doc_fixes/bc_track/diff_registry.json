@@ -1,0 +1,113 @@
+{
+  "contract": "R7 fix_bc_track_records（fn_docs/responsibility.md）——旧树冻结：修正以修正副本+diff 注册交付，战后套用",
+  "generated_at": "2026-09-22T02:35:35+08:00",
+  "frozen_tree": true,
+  "source_tree": "software/bc_track/（本批只读，零字节改动）",
+  "corrected_copy_root": "fn_work/doc_fixes/bc_track/",
+  "postwar_execution": {
+    "when": "fn-close 期（战后收口，旧树冻结解除后）",
+    "registry_only": true,
+    "steps": [
+      "按 entries 逐条把 old→new 套用至旧树对应文件（README 三处行替换；issues/03-08 的 **Status:** 行替换）",
+      "套用后跑 R7 验收：README 复现命令逐条可 cd（cd workspace/kaggriculture/software 成立）",
+      "票账一致复核：issues 03/08/04-07 Status 与 JOURNAL 2026-09-20/2026-09-21 BC 收口行对读一致"
+    ]
+  },
+  "ledger_basis": {
+    "journal": "JOURNAL.md",
+    "formal_row_date": "2026-09-21",
+    "formal_row_commit": "379b41e",
+    "row_count": 3,
+    "row_snippets": [
+      "| 2026-09-20 | deliver | **BC M0/M1 交付（d44a9a6）：管线全通/首跑诚实 FAIL/归因藏金矿**：①语料超规格——kaggle CLI 三级取证 top-30 队 78 公开局+本机 ≥80k 高",
+      "| 2026-09-20 | deliver | **Track-C 票 03 交付（BC 迭代修复轮：判定=弃牌收刀，归因写死）**：①前置修正——bc_eval rollout() 席位错位 bug（动作恒 [mine,theirs] ",
+      "| 2026-09-21 | deliver | **Track-C 票 03 判定：弃牌收刀（379b41e）+ M1 结论正式勘误 + 票 08 关账**：①**勘误（必须置顶）**：M1 报告的\"执行头把动物经济复利到 132-157"
+    ]
+  },
+  "entries": [
+    {
+      "file": "software/bc_track/README.md",
+      "copy": "fn_work/doc_fixes/bc_track/README.md",
+      "line": 10,
+      "old": "cd workspace/kaggressure/software",
+      "new": "cd workspace/kaggriculture/software",
+      "reason": "复现命令路径拼写：kaggressure→kaggriculture（R7 复现命令逐条可 cd）",
+      "evidence": "workspace/ 目录实测：kaggriculture 在册，kaggressure 不存在"
+    },
+    {
+      "file": "software/bc_track/README.md",
+      "copy": "fn_work/doc_fixes/bc_track/README.md",
+      "line": 5,
+      "old": "不改 src//planner/",
+      "new": "不改 src/、planner/",
+      "reason": "路径写法：双斜杠笔误→并列两目录",
+      "evidence": "目录实测：src/ 与 planner/ 为两个并列目录"
+    },
+    {
+      "file": "software/bc_track/README.md",
+      "copy": "fn_work/doc_fixes/bc_track/README.md",
+      "line": 50,
+      "old": "## 票 03 迭代结果（2026-09-20，判定=弃牌）",
+      "new": "## 票 03 迭代结果（2026-09-20 迭代、2026-09-21 正式裁决=弃牌收刀 379b41e）",
+      "reason": "README 票 03 节标题与 JOURNAL 正式裁决行对齐（09-21 收口+commit）",
+      "evidence": "JOURNAL 2026-09-21 收口行: | 2026-09-21 | deliver | **Track-C 票 03 判定：弃牌收刀（379b41e）+ M1 结论正式勘误 + 票 08 关账**：①**勘误（必须置顶）**：M1 报告的\"执行头把动物经济复利到 132-157"
+    },
+    {
+      "file": "software/bc_track/issues/03-iterate-best-candidate.md",
+      "copy": "fn_work/doc_fixes/bc_track/issues/03-iterate-best-candidate.md",
+      "line": 7,
+      "old": "**Status:** done（2026-09-20，判定=**弃牌**：最好候选中位 1,995 = 门 A 的 6.2%，塌方 12/12 ≠ 0；差距归因见下，收刀）",
+      "new": "**Status:** closed-done（2026-09-21 正式裁决=弃牌收刀，commit 379b41e——JOURNAL 收口行『票 03 判定：弃牌收刀』+ M1 结论正式勘误置顶；最好候选中位 1,995 = 门 A 的 6.2%，塌方 12/12 ≠ 0；差距归因见下，收刀）",
+      "reason": "票面 09-20 done 态补正式裁决口径（09-21 收口行+379b41e+勘误置顶）",
+      "evidence": "JOURNAL 2026-09-21 收口行（⑤票 04/05/06/07 按\"过门才继续\"不触发（GPU 未租用零成本）；保留资产：席位修正版 bc_eval、v48…）"
+    },
+    {
+      "file": "software/bc_track/issues/04-pure-python-package.md",
+      "copy": "fn_work/doc_fixes/bc_track/issues/04-pure-python-package.md",
+      "line": 7,
+      "old": "**Status:** ready-for-agent",
+      "new": "**Status:** closed-not-triggered（2026-09-21 未触发关闭：前置 03 未过门，按『过门才继续』不触发——JOURNAL 收口行⑤；零执行零成本）",
+      "reason": "ready-for-agent 态过期：03 弃牌后按票链门条件不触发",
+      "evidence": "JOURNAL 2026-09-21 收口行（⑤票 04/05/06/07 按\"过门才继续\"不触发（GPU 未租用零成本）；保留资产：席位修正版 bc_eval、v48…）"
+    },
+    {
+      "file": "software/bc_track/issues/05-hard-gates-launch.md",
+      "copy": "fn_work/doc_fixes/bc_track/issues/05-hard-gates-launch.md",
+      "line": 7,
+      "old": "**Status:** ready-for-agent",
+      "new": "**Status:** closed-not-triggered（2026-09-21 未触发关闭：前置 04 未执行，『任一不过则出具书面弃牌结论』条款由 03 收口行承担——JOURNAL 收口行⑤；零执行零成本）",
+      "reason": "ready-for-agent 态过期：弃牌结论已由 03 收口，05 硬门链不触发",
+      "evidence": "JOURNAL 2026-09-21 收口行（⑤票 04/05/06/07 按\"过门才继续\"不触发（GPU 未租用零成本）；保留资产：席位修正版 bc_eval、v48…）"
+    },
+    {
+      "file": "software/bc_track/issues/06-gpu-rental-decision.md",
+      "copy": "fn_work/doc_fixes/bc_track/issues/06-gpu-rental-decision.md",
+      "line": 7,
+      "old": "**Status:** ready-for-agent",
+      "new": "**Status:** closed-not-triggered（2026-09-21 未触发关闭：02/03 证据未表明算力是瓶颈，GPU 未租用零成本——JOURNAL 收口行⑤）",
+      "reason": "条件票未触发：GPU 未租用（台账明示零成本）",
+      "evidence": "JOURNAL 2026-09-21 收口行（⑤票 04/05/06/07 按\"过门才继续\"不触发（GPU 未租用零成本）；保留资产：席位修正版 bc_eval、v48…）"
+    },
+    {
+      "file": "software/bc_track/issues/07-rl-finetune-stretch.md",
+      "copy": "fn_work/doc_fixes/bc_track/issues/07-rl-finetune-stretch.md",
+      "line": 7,
+      "old": "**Status:** ready-for-agent",
+      "new": "**Status:** closed-not-triggered（2026-09-21 永久关闭：BC 未过门不解锁 RL 微调——票面条款『BC 未过门则本票永久关闭』+ JOURNAL 收口行⑤）",
+      "reason": "stretch 票永久关闭：解锁条件（03 过门）未达成",
+      "evidence": "JOURNAL 2026-09-21 收口行（⑤票 04/05/06/07 按\"过门才继续\"不触发（GPU 未租用零成本）；保留资产：席位修正版 bc_eval、v48…）"
+    },
+    {
+      "file": "software/bc_track/issues/08-endgame-closeout.md",
+      "copy": "fn_work/doc_fixes/bc_track/issues/08-endgame-closeout.md",
+      "line": 7,
+      "old": "**Status:** ready-for-agent",
+      "new": "**Status:** closed（2026-09-21 已关账：03 弃牌直接触发——JOURNAL 收口行『票 08 关账』；保留资产与终局程序状态复核见该行⑤及尾段：24h 复采样在飞→09-25 对结构决策→09-27 冻结→09-30 终交）",
+      "reason": "ready-for-agent 态过期：已按 03 弃牌路径关账",
+      "evidence": "JOURNAL 2026-09-21 收口行（⑤票 04/05/06/07 按\"过门才继续\"不触发（GPU 未租用零成本）；保留资产：席位修正版 bc_eval、v48…）"
+    }
+  ],
+  "out_of_scope_notes": [
+    "issues/01/02 Status 行未在本批修正面（responsibility 范围=03/08/04-07）；其 checkbox 已全勾，完成态以 JOURNAL 2026-09-20 M0/M1 交付行为准"
+  ]
+}
