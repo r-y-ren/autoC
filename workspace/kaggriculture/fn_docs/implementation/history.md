@@ -8,3 +8,4 @@
 | 2026-09-21 | B3 | rollout_with_replay_opponent（seated 通道，v143 骨架+twin 指纹链）, evaluate_plan_portfolio（聚合委托 robust_selection）, recalculate_affected_history（台账 5 条 SKIP=语料缺机，主力机回填）, run_official_bench（双口径裁决顶层） | 目录 32 passed；R2 反例 [3000.0,1570.0] 全链贯通；期间发现并修正快照套件整局冻结口径（时间治理器墙钟敏感→旗关面冻结） |
 | 2026-09-21 | B4 | fingerprint_engine_constants（16 键集+wheel 交叉 14 键）, guard_replay_profile_engine（双重 fail-closed 门） | 17 passed；R5 修复落地 |
 | 2026-09-21 | B5（W1 收口） | refresh_frozen_values（22 锚白名单+13 双口径注记）, migrate_snapshot_suite（迁移 66P 反例转常规） | W1 全收口：R2/R3 修复经安全网验证；旧套件原样 |
+| 2026-09-21 | B6 | regenerate_artifacts_lf, relax_platform_assertions, declare_machine_context, portable_test_baseline | 28 passed+顶层实跑 pass（全套件 226P）；R6 修复落地（Windows 复检留边界登记） |

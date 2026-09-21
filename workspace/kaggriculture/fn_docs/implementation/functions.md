@@ -18,10 +18,10 @@
 | guard_replay_profile_engine | B4 | wired 2026-09-21 | pytest tests/guard_replay_profile_engine → 17 passed（双重门：登记指纹+wheel 真值，绕过式改动仍红；skip 仅测试注入） | 0f07e98 |
 | refresh_frozen_values | B5 | wired 2026-09-21 | pytest test_refresh_frozen… → 13 passed 之一（22 条锚定编辑表白名单、越界零写入、双口径注记 13 处） | cfd9a25 |
 | migrate_snapshot_suite | B5 | wired 2026-09-21 | fn_work/tests/snapshot → 66 passed（R2/R3 反例全转常规 PASSED+零 xfail 残留+其余冻结值逐字节不变）；旧套件 62P+4xf 不动 | 1e0821a |
-| regenerate_artifacts_lf | B6 | stub 2026-09-21 | — | — |
-| relax_platform_assertions | B6 | stub 2026-09-21 | — | — |
-| declare_machine_context | B6 | stub 2026-09-21 | — | — |
-| portable_test_baseline | B6 | stub 2026-09-21 | — | — |
+| regenerate_artifacts_lf | B6 | wired 2026-09-21 | 28 passed 之一（5 集合 100 条目 LF 重建+79 双 sha 登记+打包件 3 不重建登记） | 0b9dab2 |
+| relax_platform_assertions | B6 | wired 2026-09-21 | 28 passed 之一（双平台断言工具+三类检出器；fn_work/tests 59 文件 0 命中） | 1deed88 |
+| declare_machine_context | B6 | wired 2026-09-21 | 28 passed 之一（machine_context.md 渲染：历史口径/本机实测/skip 清单/双兼容策略） | 19154ce |
+| portable_test_baseline | B6 | wired 2026-09-21 | 顶层实跑 verdict=pass：fn_work 全套件 226 passed/148.78s+checks 全真 | 2c9a677 |
 | collect_gate_golden_files | B7 | stub 2026-09-21 | — | — |
 | enforce_size_budget | B7 | stub 2026-09-21 | — | — |
 | declare_local_corpus_dependencies | B7 | stub 2026-09-21 | — | — |
