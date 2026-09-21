@@ -1,6 +1,6 @@
 # P1 孪生保真台账（twin_fidelity）
 
-- 生成：2026-09-20T15:03:20+0800  模式：`smoke`  门墙钟：926 ms
+- 生成：2026-09-21T18:50:07+0800  模式：`smoke`  门墙钟：890 ms
 - 指纹链：wheel `kaggle_environments-1.32.7+nodeps-py3-none-any.whl`
   - wheel sha256 `be693e837bcb0f81bad7d6509f2737f29986fe66b12296e9990b0aa88f287465`
   - kaggriculture.py sha256 `bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e`
