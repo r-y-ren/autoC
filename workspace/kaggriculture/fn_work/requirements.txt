@@ -1,0 +1,3 @@
+# 环境决策见 fn_docs/requirements.md（用户裁决 2026-09-21：Python 3.14 钉死，与线上提交/active_candidate 一致；
+# 提交 bot 侧 stdlib-only 不变；评估/脚本侧依赖 vendored wheel + 本锁定文件）。pytest 锁 9.1.1（requirements.txt 锁定）。
+pytest==9.1.1
