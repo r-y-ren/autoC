@@ -1,0 +1,114 @@
+{
+  "artifact_kind": "dna_index",
+  "schema_version": "replay-dna/1.1",
+  "generated_at": "2026-09-01T14:50:41.395157+00:00",
+  "evidence_scope": {
+    "kind": "offline_dna_liveness_forensics",
+    "offline_exploratory": true,
+    "strength_claim": false,
+    "promotion_eligible": false,
+    "holdout_evidence": false,
+    "online_evidence": false,
+    "engine_activity_evidence": false,
+    "extractor_status": "source_extractor_not_published",
+    "identity_interpretation": "IDENTICAL / SAME SOURCE means 30-band anchor equality only; it does not prove same agent or real source",
+    "grouping_policy": "submission_all_input_episodes_both_seats"
+  },
+  "source_manifest": [
+    {
+      "name": "barcodes.csv",
+      "path": "workspace/kaggriculture/references/data/replay-dna/barcodes.csv",
+      "sha256": "b61407d243285ae5a62494472efcc231b243d445a4fb50083d81dc5a8ef859fa",
+      "role": "episode_barcode_samples",
+      "source_url": "https://www.kaggle.com/datasets/destbreso/kaggriculture-replay-genomes",
+      "capture_dates": [
+        "2026-08-15",
+        "2026-08-17",
+        "2026-08-18",
+        "2026-08-19",
+        "2026-08-23"
+      ]
+    },
+    {
+      "name": "consensus.csv",
+      "path": "workspace/kaggriculture/references/data/replay-dna/consensus.csv",
+      "sha256": "8abfef279bdaf27be7bff23f3615e4f9cf4d4ca4bbdb5a5b6c532d6b1a61eec0",
+      "role": "producer_attested_consensus",
+      "source_url": "https://www.kaggle.com/datasets/destbreso/kaggriculture-replay-genomes",
+      "capture_dates": [
+        "2026-08-15",
+        "2026-08-17",
+        "2026-08-18",
+        "2026-08-19",
+        "2026-08-23"
+      ]
+    },
+    {
+      "name": "reference_barcodes.csv",
+      "path": "workspace/kaggriculture/references/data/replay-dna/reference_barcodes.csv",
+      "sha256": "ab07a1c08d40bce03a8bdef90a440c2d553c0e3624e48ddf8e06e79f86c736d5",
+      "role": "reference_barcodes",
+      "source_url": "https://www.kaggle.com/datasets/destbreso/kaggriculture-replay-genomes",
+      "capture_dates": []
+    },
+    {
+      "name": "field_validation.json",
+      "path": "workspace/kaggriculture/references/data/replay-dna/field_validation.json",
+      "sha256": "e39ef577e9151e1b6e9537c3256594220c88f2d96093d4ef92f3afc436a27154",
+      "role": "field_specific_frequency_validation",
+      "source_url": "https://www.kaggle.com/datasets/destbreso/kaggriculture-replay-genomes",
+      "capture_dates": []
+    }
+  ],
+  "implementation_manifest": [
+    {
+      "path": "workspace/kaggriculture/software/kgenv/dna_forensics.py",
+      "sha256": "c93fa9f127e61d62f2d02d3eaef0d3e605c457f9d2800fd9f5b28cfd6edcfb58"
+    },
+    {
+      "path": "workspace/kaggriculture/software/kgenv/dna_integrity.py",
+      "sha256": "592e1068c98573331969223c4702eb7d3c81e22cd5150cccdb23a1095a7a5f47"
+    },
+    {
+      "path": "workspace/kaggriculture/software/scripts/analyze_dna_forensics.py",
+      "sha256": "c426423b85408bbb1e1f5288c3089f2edaae1ed4589c742d1411a32e01fa66bb"
+    },
+    {
+      "path": "workspace/kaggriculture/software/exports/replay_dna/dna_schema.json",
+      "sha256": "2e7c726272edce30bdc1ddf05ed9eb116562d4176b78d58642fb9dc3aebe6241"
+    }
+  ],
+  "report_path": "workspace/kaggriculture/software/exports/replay_dna/report.json",
+  "report_sha256": "4a5ac6279929e30f3129e0c583e0243c93532f40eaa9f7529415b2bc85b0d2e1",
+  "counts": {
+    "samples": 2479,
+    "groups": 71,
+    "comparisons": 1349
+  },
+  "command": {
+    "argv": [
+      "python",
+      "workspace/kaggriculture/software/scripts/analyze_dna_forensics.py"
+    ],
+    "cwd": "C:\\Users\\OSS\\Desktop\\autoC",
+    "parameters": {
+      "inputs": [
+        "barcodes.csv",
+        "consensus.csv",
+        "reference_barcodes.csv",
+        "field_validation.json"
+      ],
+      "output_dir": "workspace/kaggriculture/software/exports/replay_dna"
+    }
+  },
+  "digests": {
+    "algorithm": "canonical-json-sha256",
+    "canonical_payload_sha256": "ef9c55fc687134a42fb9f3bd1d1c3ef114ef440a3ed4bfe205bba639dfb7ad65"
+  },
+  "entries": [],
+  "lf_rebuild": {
+    "schema": "lf-rebuild/1.0",
+    "policy": "CRLF->LF normalized rebuild; sha256 = LF-byte digest",
+    "legacy_sha256_meaning": "index 原登记值（Windows autocrlf 机口径，多为 CRLF 值）"
+  }
+}

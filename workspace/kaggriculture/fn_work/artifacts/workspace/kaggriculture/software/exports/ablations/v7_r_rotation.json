@@ -1,0 +1,4523 @@
+{
+ "schema_version": "1.0",
+ "generated_at": "2026-08-30T03:46:35.208718+00:00",
+ "kind": "paired-ablation",
+ "label": "v7-r-rotation",
+ "pairing": {
+  "design": "same (opponent, seed, seat) cell played by both the candidate and the champion; engine + pool are deterministic, so the paired difference isolates the candidate",
+  "episode_steps": 720
+ },
+ "identity": {
+  "candidate": {
+   "path": "C:\\Users\\OSS\\Desktop\\autoC\\.tmp-v7\\v7-r.py",
+   "sha256": "948b91b858ea3ca3882de8ecb2064cc3d0b814bb807bcacdca38ad7dde6af6ca",
+   "label": "v7-r.py"
+  },
+  "champion": {
+   "path": "C:\\Users\\OSS\\Desktop\\autoC\\workspace\\software\\kaggle_simulations\\agent\\main.py",
+   "sha256": "127c277e2e0f0b6b5e5cdf93a5408c24bd266164abf900c13fb86d6c1badfbad",
+   "label": "main.py",
+   "manifest": null
+  },
+  "identical_bytes": false
+ },
+ "config": {
+  "opponents": [
+   "cow_baron",
+   "melon_hoarder",
+   "expansionist",
+   "baseline_wheat",
+   "crop_rotator",
+   "template_wheat",
+   "self_feed_ranch",
+   "near_band_diversified",
+   "scale_ranch",
+   "wheat_straw_monster"
+  ],
+  "seeds": [
+   101,
+   102,
+   103,
+   104
+  ],
+  "formal": true,
+  "expected_games": 160
+ },
+ "games": [
+  {
+   "side": "cand",
+   "opponent": "cow_baron",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "cow_baron"
+   ],
+   "rewards": [
+    70765.0,
+    35158.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 35607.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "cow_baron",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "cow_baron"
+   ],
+   "rewards": [
+    71683.0,
+    35225.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 36458.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "cow_baron",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "cow_baron",
+    "cand"
+   ],
+   "rewards": [
+    36226.0,
+    72524.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 36298.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "cow_baron",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "cow_baron",
+    "champ"
+   ],
+   "rewards": [
+    36228.0,
+    72470.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 36242.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "cow_baron",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "cow_baron"
+   ],
+   "rewards": [
+    64500.0,
+    41260.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 23240.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "cow_baron",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "cow_baron"
+   ],
+   "rewards": [
+    64317.0,
+    41271.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 23046.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "cow_baron",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "cow_baron",
+    "cand"
+   ],
+   "rewards": [
+    41260.0,
+    64500.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 23240.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "cow_baron",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "cow_baron",
+    "champ"
+   ],
+   "rewards": [
+    41271.0,
+    64317.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 23046.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "cow_baron",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "cow_baron"
+   ],
+   "rewards": [
+    63432.0,
+    23209.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 40223.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "cow_baron",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "cow_baron"
+   ],
+   "rewards": [
+    63203.0,
+    23074.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 40129.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "cow_baron",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "cow_baron",
+    "cand"
+   ],
+   "rewards": [
+    34423.0,
+    79709.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 45286.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "cow_baron",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "cow_baron",
+    "champ"
+   ],
+   "rewards": [
+    33965.0,
+    80465.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 46500.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "cow_baron",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "cow_baron"
+   ],
+   "rewards": [
+    71845.0,
+    45822.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 26023.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "cow_baron",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "cow_baron"
+   ],
+   "rewards": [
+    72577.0,
+    45854.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 26723.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "cow_baron",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "cow_baron",
+    "cand"
+   ],
+   "rewards": [
+    40333.0,
+    65270.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 24937.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "cow_baron",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "cow_baron",
+    "champ"
+   ],
+   "rewards": [
+    39752.0,
+    66782.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 27030.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "melon_hoarder",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "melon_hoarder"
+   ],
+   "rewards": [
+    94912.0,
+    28004.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 66908.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "melon_hoarder",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "melon_hoarder"
+   ],
+   "rewards": [
+    94923.0,
+    28004.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 66919.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "melon_hoarder",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "melon_hoarder",
+    "cand"
+   ],
+   "rewards": [
+    27473.0,
+    95624.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 68151.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "melon_hoarder",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "melon_hoarder",
+    "champ"
+   ],
+   "rewards": [
+    27475.0,
+    95194.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 67719.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "melon_hoarder",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "melon_hoarder"
+   ],
+   "rewards": [
+    72511.0,
+    27132.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 45379.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "melon_hoarder",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "melon_hoarder"
+   ],
+   "rewards": [
+    72517.0,
+    27132.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 45385.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "melon_hoarder",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "melon_hoarder",
+    "cand"
+   ],
+   "rewards": [
+    27132.0,
+    72511.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 45379.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "melon_hoarder",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "melon_hoarder",
+    "champ"
+   ],
+   "rewards": [
+    27132.0,
+    72517.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 45385.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "melon_hoarder",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "melon_hoarder"
+   ],
+   "rewards": [
+    84926.0,
+    29059.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 55867.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "melon_hoarder",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "melon_hoarder"
+   ],
+   "rewards": [
+    84842.0,
+    29059.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 55783.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "melon_hoarder",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "melon_hoarder",
+    "cand"
+   ],
+   "rewards": [
+    29059.0,
+    84926.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 55867.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "melon_hoarder",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "melon_hoarder",
+    "champ"
+   ],
+   "rewards": [
+    29059.0,
+    84842.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 55783.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "melon_hoarder",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "melon_hoarder"
+   ],
+   "rewards": [
+    113947.0,
+    27818.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 86129.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "melon_hoarder",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "melon_hoarder"
+   ],
+   "rewards": [
+    114411.0,
+    28168.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 86243.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "melon_hoarder",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "melon_hoarder",
+    "cand"
+   ],
+   "rewards": [
+    27592.0,
+    112747.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 85155.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "melon_hoarder",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "melon_hoarder",
+    "champ"
+   ],
+   "rewards": [
+    27277.0,
+    110947.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 83670.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "expansionist",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "expansionist"
+   ],
+   "rewards": [
+    100132.0,
+    20081.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 80051.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "expansionist",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "expansionist"
+   ],
+   "rewards": [
+    101161.0,
+    20085.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 81076.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "expansionist",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "expansionist",
+    "cand"
+   ],
+   "rewards": [
+    21780.0,
+    78236.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 56456.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "expansionist",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "expansionist",
+    "champ"
+   ],
+   "rewards": [
+    21780.0,
+    78236.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 56456.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "expansionist",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "expansionist"
+   ],
+   "rewards": [
+    79652.0,
+    22211.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 57441.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "expansionist",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "expansionist"
+   ],
+   "rewards": [
+    77631.0,
+    22152.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 55479.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "expansionist",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "expansionist",
+    "cand"
+   ],
+   "rewards": [
+    22043.0,
+    79648.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 57605.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "expansionist",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "expansionist",
+    "champ"
+   ],
+   "rewards": [
+    22152.0,
+    77631.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 55479.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "expansionist",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "expansionist"
+   ],
+   "rewards": [
+    109776.0,
+    21018.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 88758.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "expansionist",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "expansionist"
+   ],
+   "rewards": [
+    109786.0,
+    21069.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 88717.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "expansionist",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "expansionist",
+    "cand"
+   ],
+   "rewards": [
+    16900.0,
+    109410.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 92510.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "expansionist",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "expansionist",
+    "champ"
+   ],
+   "rewards": [
+    16878.0,
+    107404.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 90526.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "expansionist",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "expansionist"
+   ],
+   "rewards": [
+    100233.0,
+    19445.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 80788.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "expansionist",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "expansionist"
+   ],
+   "rewards": [
+    100044.0,
+    19446.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 80598.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "expansionist",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "expansionist",
+    "cand"
+   ],
+   "rewards": [
+    19965.0,
+    113344.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 93379.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "expansionist",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "expansionist",
+    "champ"
+   ],
+   "rewards": [
+    19944.0,
+    113678.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 93734.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "baseline_wheat",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "baseline_wheat"
+   ],
+   "rewards": [
+    98631.0,
+    14276.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 84355.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "baseline_wheat",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "baseline_wheat"
+   ],
+   "rewards": [
+    97829.0,
+    14292.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 83537.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "baseline_wheat",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "baseline_wheat",
+    "cand"
+   ],
+   "rewards": [
+    13685.0,
+    96364.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 82679.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "baseline_wheat",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "baseline_wheat",
+    "champ"
+   ],
+   "rewards": [
+    13594.0,
+    98757.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 85163.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "baseline_wheat",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "baseline_wheat"
+   ],
+   "rewards": [
+    122945.0,
+    14169.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 108776.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "baseline_wheat",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "baseline_wheat"
+   ],
+   "rewards": [
+    122060.0,
+    14173.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 107887.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "baseline_wheat",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "baseline_wheat",
+    "cand"
+   ],
+   "rewards": [
+    14169.0,
+    122945.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 108776.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "baseline_wheat",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "baseline_wheat",
+    "champ"
+   ],
+   "rewards": [
+    14173.0,
+    122060.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 107887.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "baseline_wheat",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "baseline_wheat"
+   ],
+   "rewards": [
+    90961.0,
+    14197.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 76764.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "baseline_wheat",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "baseline_wheat"
+   ],
+   "rewards": [
+    90961.0,
+    14197.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 76764.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "baseline_wheat",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "baseline_wheat",
+    "cand"
+   ],
+   "rewards": [
+    14197.0,
+    90961.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 76764.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "baseline_wheat",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "baseline_wheat",
+    "champ"
+   ],
+   "rewards": [
+    14197.0,
+    90961.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 76764.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "baseline_wheat",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "baseline_wheat"
+   ],
+   "rewards": [
+    80528.0,
+    15716.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 64812.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "baseline_wheat",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "baseline_wheat"
+   ],
+   "rewards": [
+    80527.0,
+    15716.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 64811.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "baseline_wheat",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "baseline_wheat",
+    "cand"
+   ],
+   "rewards": [
+    15716.0,
+    80528.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 64812.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "baseline_wheat",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "baseline_wheat",
+    "champ"
+   ],
+   "rewards": [
+    15716.0,
+    80527.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 64811.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "crop_rotator",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "crop_rotator"
+   ],
+   "rewards": [
+    103368.0,
+    56257.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 47111.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "crop_rotator",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "crop_rotator"
+   ],
+   "rewards": [
+    103309.0,
+    56525.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 46784.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "crop_rotator",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "crop_rotator",
+    "cand"
+   ],
+   "rewards": [
+    53866.0,
+    100595.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 46729.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "crop_rotator",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "crop_rotator",
+    "champ"
+   ],
+   "rewards": [
+    53867.0,
+    101006.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 47139.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "crop_rotator",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "crop_rotator"
+   ],
+   "rewards": [
+    58635.0,
+    47189.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11446.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "crop_rotator",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "crop_rotator"
+   ],
+   "rewards": [
+    57380.0,
+    47336.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 10044.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "crop_rotator",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "crop_rotator",
+    "cand"
+   ],
+   "rewards": [
+    47189.0,
+    58635.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11446.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "crop_rotator",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "crop_rotator",
+    "champ"
+   ],
+   "rewards": [
+    47336.0,
+    57380.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 10044.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "crop_rotator",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "crop_rotator"
+   ],
+   "rewards": [
+    74334.0,
+    49232.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 25102.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "crop_rotator",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "crop_rotator"
+   ],
+   "rewards": [
+    73593.0,
+    47573.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 26020.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "crop_rotator",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "crop_rotator",
+    "cand"
+   ],
+   "rewards": [
+    54638.0,
+    82403.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 27765.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "crop_rotator",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "crop_rotator",
+    "champ"
+   ],
+   "rewards": [
+    54460.0,
+    81951.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 27491.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "crop_rotator",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "crop_rotator"
+   ],
+   "rewards": [
+    74746.0,
+    53035.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 21711.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "crop_rotator",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "crop_rotator"
+   ],
+   "rewards": [
+    73960.0,
+    53042.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 20918.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "crop_rotator",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "crop_rotator",
+    "cand"
+   ],
+   "rewards": [
+    53035.0,
+    74746.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 21711.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "crop_rotator",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "crop_rotator",
+    "champ"
+   ],
+   "rewards": [
+    53042.0,
+    73960.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 20918.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "template_wheat",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "template_wheat"
+   ],
+   "rewards": [
+    72239.0,
+    57760.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 14479.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "template_wheat",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "template_wheat"
+   ],
+   "rewards": [
+    75239.0,
+    59038.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 16201.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "template_wheat",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "template_wheat",
+    "cand"
+   ],
+   "rewards": [
+    60668.0,
+    89667.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 28999.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "template_wheat",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "template_wheat",
+    "champ"
+   ],
+   "rewards": [
+    61479.0,
+    90906.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 29427.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "template_wheat",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "template_wheat"
+   ],
+   "rewards": [
+    104512.0,
+    65919.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 38593.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "template_wheat",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "template_wheat"
+   ],
+   "rewards": [
+    105408.0,
+    65916.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 39492.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "template_wheat",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "template_wheat",
+    "cand"
+   ],
+   "rewards": [
+    65919.0,
+    104512.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 38593.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "template_wheat",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "template_wheat",
+    "champ"
+   ],
+   "rewards": [
+    65916.0,
+    105408.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 39492.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "template_wheat",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "template_wheat"
+   ],
+   "rewards": [
+    73086.0,
+    46329.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 26757.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "template_wheat",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "template_wheat"
+   ],
+   "rewards": [
+    72194.0,
+    46154.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 26040.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "template_wheat",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "template_wheat",
+    "cand"
+   ],
+   "rewards": [
+    64527.0,
+    88550.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 24023.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "template_wheat",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "template_wheat",
+    "champ"
+   ],
+   "rewards": [
+    64582.0,
+    88224.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 23642.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "template_wheat",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "template_wheat"
+   ],
+   "rewards": [
+    74853.0,
+    53081.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 21772.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "template_wheat",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "template_wheat"
+   ],
+   "rewards": [
+    75852.0,
+    52880.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 22972.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "template_wheat",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "template_wheat",
+    "cand"
+   ],
+   "rewards": [
+    53216.0,
+    72474.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 19258.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "template_wheat",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "template_wheat",
+    "champ"
+   ],
+   "rewards": [
+    53227.0,
+    72314.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 19087.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "self_feed_ranch",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "self_feed_ranch"
+   ],
+   "rewards": [
+    102315.0,
+    66617.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 35698.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "self_feed_ranch",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "self_feed_ranch"
+   ],
+   "rewards": [
+    103422.0,
+    66622.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 36800.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "self_feed_ranch",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "self_feed_ranch",
+    "cand"
+   ],
+   "rewards": [
+    71020.0,
+    97959.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 26939.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "self_feed_ranch",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "self_feed_ranch",
+    "champ"
+   ],
+   "rewards": [
+    70734.0,
+    97288.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 26554.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "self_feed_ranch",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "self_feed_ranch"
+   ],
+   "rewards": [
+    55077.0,
+    33194.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 21883.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "self_feed_ranch",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "self_feed_ranch"
+   ],
+   "rewards": [
+    54402.0,
+    33224.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 21178.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "self_feed_ranch",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "self_feed_ranch",
+    "cand"
+   ],
+   "rewards": [
+    33194.0,
+    55077.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 21883.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "self_feed_ranch",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "self_feed_ranch",
+    "champ"
+   ],
+   "rewards": [
+    33224.0,
+    54402.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 21178.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "self_feed_ranch",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "self_feed_ranch"
+   ],
+   "rewards": [
+    63433.0,
+    41846.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 21587.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "self_feed_ranch",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "self_feed_ranch"
+   ],
+   "rewards": [
+    64398.0,
+    41864.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 22534.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "self_feed_ranch",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "self_feed_ranch",
+    "cand"
+   ],
+   "rewards": [
+    42900.0,
+    65031.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 22131.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "self_feed_ranch",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "self_feed_ranch",
+    "champ"
+   ],
+   "rewards": [
+    42869.0,
+    67668.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 24799.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "self_feed_ranch",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "self_feed_ranch"
+   ],
+   "rewards": [
+    100646.0,
+    67653.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 32993.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "self_feed_ranch",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "self_feed_ranch"
+   ],
+   "rewards": [
+    102092.0,
+    67603.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 34489.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "self_feed_ranch",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "self_feed_ranch",
+    "cand"
+   ],
+   "rewards": [
+    66129.0,
+    95864.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 29735.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "self_feed_ranch",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "self_feed_ranch",
+    "champ"
+   ],
+   "rewards": [
+    66115.0,
+    96700.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 30585.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "near_band_diversified",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "near_band_diversified"
+   ],
+   "rewards": [
+    90857.0,
+    59639.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 31218.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "near_band_diversified",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "near_band_diversified"
+   ],
+   "rewards": [
+    91043.0,
+    59771.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 31272.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "near_band_diversified",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "near_band_diversified",
+    "cand"
+   ],
+   "rewards": [
+    57792.0,
+    103401.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 45609.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "near_band_diversified",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "near_band_diversified",
+    "champ"
+   ],
+   "rewards": [
+    58053.0,
+    104196.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 46143.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "near_band_diversified",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "near_band_diversified"
+   ],
+   "rewards": [
+    42021.0,
+    57549.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": -15528.0,
+   "outcome": "L",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "near_band_diversified",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "near_band_diversified"
+   ],
+   "rewards": [
+    41911.0,
+    57562.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": -15651.0,
+   "outcome": "L",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "near_band_diversified",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "near_band_diversified",
+    "cand"
+   ],
+   "rewards": [
+    57549.0,
+    42021.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": -15528.0,
+   "outcome": "L",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "near_band_diversified",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "near_band_diversified",
+    "champ"
+   ],
+   "rewards": [
+    57562.0,
+    41911.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": -15651.0,
+   "outcome": "L",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "near_band_diversified",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "near_band_diversified"
+   ],
+   "rewards": [
+    92048.0,
+    47383.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 44665.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "near_band_diversified",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "near_band_diversified"
+   ],
+   "rewards": [
+    92948.0,
+    47382.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 45566.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "near_band_diversified",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "near_band_diversified",
+    "cand"
+   ],
+   "rewards": [
+    48122.0,
+    91453.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 43331.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "near_band_diversified",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "near_band_diversified",
+    "champ"
+   ],
+   "rewards": [
+    48043.0,
+    93509.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 45466.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "near_band_diversified",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "near_band_diversified"
+   ],
+   "rewards": [
+    106297.0,
+    68036.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 38261.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "near_band_diversified",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "near_band_diversified"
+   ],
+   "rewards": [
+    107544.0,
+    68053.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 39491.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "near_band_diversified",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "near_band_diversified",
+    "cand"
+   ],
+   "rewards": [
+    71614.0,
+    105914.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 34300.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "near_band_diversified",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "near_band_diversified",
+    "champ"
+   ],
+   "rewards": [
+    71975.0,
+    105983.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 34008.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "scale_ranch",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "scale_ranch"
+   ],
+   "rewards": [
+    79980.0,
+    62219.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 17761.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "scale_ranch",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "scale_ranch"
+   ],
+   "rewards": [
+    79078.0,
+    62145.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 16933.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "scale_ranch",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "scale_ranch",
+    "cand"
+   ],
+   "rewards": [
+    54664.0,
+    75172.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 20508.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "scale_ranch",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "scale_ranch",
+    "champ"
+   ],
+   "rewards": [
+    55015.0,
+    73088.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 18073.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "scale_ranch",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "scale_ranch"
+   ],
+   "rewards": [
+    66993.0,
+    51739.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 15254.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "scale_ranch",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "scale_ranch"
+   ],
+   "rewards": [
+    66767.0,
+    51752.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 15015.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "scale_ranch",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "scale_ranch",
+    "cand"
+   ],
+   "rewards": [
+    68715.0,
+    84220.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 15505.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "scale_ranch",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "scale_ranch",
+    "champ"
+   ],
+   "rewards": [
+    68686.0,
+    83856.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 15170.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "scale_ranch",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "scale_ranch"
+   ],
+   "rewards": [
+    92024.0,
+    70873.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 21151.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "scale_ranch",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "scale_ranch"
+   ],
+   "rewards": [
+    90950.0,
+    70937.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 20013.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "scale_ranch",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "scale_ranch",
+    "cand"
+   ],
+   "rewards": [
+    70765.0,
+    81077.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 10312.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "scale_ranch",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "scale_ranch",
+    "champ"
+   ],
+   "rewards": [
+    70734.0,
+    81267.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 10533.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "scale_ranch",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "scale_ranch"
+   ],
+   "rewards": [
+    94143.0,
+    68591.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 25552.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "scale_ranch",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "scale_ranch"
+   ],
+   "rewards": [
+    94146.0,
+    68582.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 25564.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "scale_ranch",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "scale_ranch",
+    "cand"
+   ],
+   "rewards": [
+    67611.0,
+    88320.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 20709.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "scale_ranch",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "scale_ranch",
+    "champ"
+   ],
+   "rewards": [
+    67588.0,
+    87474.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 19886.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "wheat_straw_monster",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "wheat_straw_monster"
+   ],
+   "rewards": [
+    58359.0,
+    52669.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 5690.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "wheat_straw_monster",
+   "seed": 101,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "wheat_straw_monster"
+   ],
+   "rewards": [
+    60446.0,
+    52628.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 7818.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "wheat_straw_monster",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "wheat_straw_monster",
+    "cand"
+   ],
+   "rewards": [
+    56251.0,
+    61946.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 5695.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "wheat_straw_monster",
+   "seed": 101,
+   "seat": "BA",
+   "players": [
+    "wheat_straw_monster",
+    "champ"
+   ],
+   "rewards": [
+    56252.0,
+    61819.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 5567.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "wheat_straw_monster",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "wheat_straw_monster"
+   ],
+   "rewards": [
+    63958.0,
+    52326.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11632.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "wheat_straw_monster",
+   "seed": 102,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "wheat_straw_monster"
+   ],
+   "rewards": [
+    63625.0,
+    52616.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11009.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "wheat_straw_monster",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "wheat_straw_monster",
+    "cand"
+   ],
+   "rewards": [
+    52326.0,
+    63958.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11632.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "wheat_straw_monster",
+   "seed": 102,
+   "seat": "BA",
+   "players": [
+    "wheat_straw_monster",
+    "champ"
+   ],
+   "rewards": [
+    52616.0,
+    63625.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11009.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "wheat_straw_monster",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "wheat_straw_monster"
+   ],
+   "rewards": [
+    54547.0,
+    41523.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 13024.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "wheat_straw_monster",
+   "seed": 103,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "wheat_straw_monster"
+   ],
+   "rewards": [
+    54883.0,
+    41541.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 13342.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "wheat_straw_monster",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "wheat_straw_monster",
+    "cand"
+   ],
+   "rewards": [
+    47126.0,
+    58630.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11504.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "wheat_straw_monster",
+   "seed": 103,
+   "seat": "BA",
+   "players": [
+    "wheat_straw_monster",
+    "champ"
+   ],
+   "rewards": [
+    47078.0,
+    58072.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 10994.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "wheat_straw_monster",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "cand",
+    "wheat_straw_monster"
+   ],
+   "rewards": [
+    78821.0,
+    67510.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11311.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "wheat_straw_monster",
+   "seed": 104,
+   "seat": "AB",
+   "players": [
+    "champ",
+    "wheat_straw_monster"
+   ],
+   "rewards": [
+    78976.0,
+    67504.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11472.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "cand",
+   "opponent": "wheat_straw_monster",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "wheat_straw_monster",
+    "cand"
+   ],
+   "rewards": [
+    65772.0,
+    78084.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 12312.0,
+   "outcome": "W",
+   "contract_ok": true
+  },
+  {
+   "side": "champion",
+   "opponent": "wheat_straw_monster",
+   "seed": 104,
+   "seat": "BA",
+   "players": [
+    "wheat_straw_monster",
+    "champ"
+   ],
+   "rewards": [
+    65850.0,
+    77681.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "margin": 11831.0,
+   "outcome": "W",
+   "contract_ok": true
+  }
+ ],
+ "pairs": [
+  {
+   "opponent": "baseline_wheat",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 84355.0,
+   "champ_margin": 83537.0,
+   "pair_diff": 818.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "baseline_wheat",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 82679.0,
+   "champ_margin": 85163.0,
+   "pair_diff": -2484.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "baseline_wheat",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": 108776.0,
+   "champ_margin": 107887.0,
+   "pair_diff": 889.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "baseline_wheat",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": 108776.0,
+   "champ_margin": 107887.0,
+   "pair_diff": 889.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "baseline_wheat",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 76764.0,
+   "champ_margin": 76764.0,
+   "pair_diff": 0.0,
+   "outcome": "T"
+  },
+  {
+   "opponent": "baseline_wheat",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 76764.0,
+   "champ_margin": 76764.0,
+   "pair_diff": 0.0,
+   "outcome": "T"
+  },
+  {
+   "opponent": "baseline_wheat",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 64812.0,
+   "champ_margin": 64811.0,
+   "pair_diff": 1.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "baseline_wheat",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 64812.0,
+   "champ_margin": 64811.0,
+   "pair_diff": 1.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "cow_baron",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 35607.0,
+   "champ_margin": 36458.0,
+   "pair_diff": -851.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "cow_baron",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 36298.0,
+   "champ_margin": 36242.0,
+   "pair_diff": 56.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "cow_baron",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": 23240.0,
+   "champ_margin": 23046.0,
+   "pair_diff": 194.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "cow_baron",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": 23240.0,
+   "champ_margin": 23046.0,
+   "pair_diff": 194.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "cow_baron",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 40223.0,
+   "champ_margin": 40129.0,
+   "pair_diff": 94.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "cow_baron",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 45286.0,
+   "champ_margin": 46500.0,
+   "pair_diff": -1214.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "cow_baron",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 26023.0,
+   "champ_margin": 26723.0,
+   "pair_diff": -700.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "cow_baron",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 24937.0,
+   "champ_margin": 27030.0,
+   "pair_diff": -2093.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "crop_rotator",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 47111.0,
+   "champ_margin": 46784.0,
+   "pair_diff": 327.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "crop_rotator",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 46729.0,
+   "champ_margin": 47139.0,
+   "pair_diff": -410.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "crop_rotator",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": 11446.0,
+   "champ_margin": 10044.0,
+   "pair_diff": 1402.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "crop_rotator",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": 11446.0,
+   "champ_margin": 10044.0,
+   "pair_diff": 1402.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "crop_rotator",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 25102.0,
+   "champ_margin": 26020.0,
+   "pair_diff": -918.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "crop_rotator",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 27765.0,
+   "champ_margin": 27491.0,
+   "pair_diff": 274.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "crop_rotator",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 21711.0,
+   "champ_margin": 20918.0,
+   "pair_diff": 793.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "crop_rotator",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 21711.0,
+   "champ_margin": 20918.0,
+   "pair_diff": 793.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "expansionist",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 80051.0,
+   "champ_margin": 81076.0,
+   "pair_diff": -1025.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "expansionist",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 56456.0,
+   "champ_margin": 56456.0,
+   "pair_diff": 0.0,
+   "outcome": "T"
+  },
+  {
+   "opponent": "expansionist",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": 57441.0,
+   "champ_margin": 55479.0,
+   "pair_diff": 1962.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "expansionist",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": 57605.0,
+   "champ_margin": 55479.0,
+   "pair_diff": 2126.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "expansionist",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 88758.0,
+   "champ_margin": 88717.0,
+   "pair_diff": 41.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "expansionist",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 92510.0,
+   "champ_margin": 90526.0,
+   "pair_diff": 1984.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "expansionist",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 80788.0,
+   "champ_margin": 80598.0,
+   "pair_diff": 190.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "expansionist",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 93379.0,
+   "champ_margin": 93734.0,
+   "pair_diff": -355.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "melon_hoarder",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 66908.0,
+   "champ_margin": 66919.0,
+   "pair_diff": -11.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "melon_hoarder",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 68151.0,
+   "champ_margin": 67719.0,
+   "pair_diff": 432.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "melon_hoarder",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": 45379.0,
+   "champ_margin": 45385.0,
+   "pair_diff": -6.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "melon_hoarder",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": 45379.0,
+   "champ_margin": 45385.0,
+   "pair_diff": -6.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "melon_hoarder",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 55867.0,
+   "champ_margin": 55783.0,
+   "pair_diff": 84.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "melon_hoarder",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 55867.0,
+   "champ_margin": 55783.0,
+   "pair_diff": 84.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "melon_hoarder",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 86129.0,
+   "champ_margin": 86243.0,
+   "pair_diff": -114.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "melon_hoarder",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 85155.0,
+   "champ_margin": 83670.0,
+   "pair_diff": 1485.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "near_band_diversified",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 31218.0,
+   "champ_margin": 31272.0,
+   "pair_diff": -54.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "near_band_diversified",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 45609.0,
+   "champ_margin": 46143.0,
+   "pair_diff": -534.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "near_band_diversified",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": -15528.0,
+   "champ_margin": -15651.0,
+   "pair_diff": 123.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "near_band_diversified",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": -15528.0,
+   "champ_margin": -15651.0,
+   "pair_diff": 123.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "near_band_diversified",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 44665.0,
+   "champ_margin": 45566.0,
+   "pair_diff": -901.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "near_band_diversified",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 43331.0,
+   "champ_margin": 45466.0,
+   "pair_diff": -2135.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "near_band_diversified",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 38261.0,
+   "champ_margin": 39491.0,
+   "pair_diff": -1230.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "near_band_diversified",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 34300.0,
+   "champ_margin": 34008.0,
+   "pair_diff": 292.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "scale_ranch",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 17761.0,
+   "champ_margin": 16933.0,
+   "pair_diff": 828.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "scale_ranch",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 20508.0,
+   "champ_margin": 18073.0,
+   "pair_diff": 2435.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "scale_ranch",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": 15254.0,
+   "champ_margin": 15015.0,
+   "pair_diff": 239.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "scale_ranch",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": 15505.0,
+   "champ_margin": 15170.0,
+   "pair_diff": 335.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "scale_ranch",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 21151.0,
+   "champ_margin": 20013.0,
+   "pair_diff": 1138.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "scale_ranch",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 10312.0,
+   "champ_margin": 10533.0,
+   "pair_diff": -221.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "scale_ranch",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 25552.0,
+   "champ_margin": 25564.0,
+   "pair_diff": -12.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "scale_ranch",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 20709.0,
+   "champ_margin": 19886.0,
+   "pair_diff": 823.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "self_feed_ranch",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 35698.0,
+   "champ_margin": 36800.0,
+   "pair_diff": -1102.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "self_feed_ranch",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 26939.0,
+   "champ_margin": 26554.0,
+   "pair_diff": 385.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "self_feed_ranch",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": 21883.0,
+   "champ_margin": 21178.0,
+   "pair_diff": 705.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "self_feed_ranch",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": 21883.0,
+   "champ_margin": 21178.0,
+   "pair_diff": 705.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "self_feed_ranch",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 21587.0,
+   "champ_margin": 22534.0,
+   "pair_diff": -947.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "self_feed_ranch",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 22131.0,
+   "champ_margin": 24799.0,
+   "pair_diff": -2668.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "self_feed_ranch",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 32993.0,
+   "champ_margin": 34489.0,
+   "pair_diff": -1496.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "self_feed_ranch",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 29735.0,
+   "champ_margin": 30585.0,
+   "pair_diff": -850.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "template_wheat",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 14479.0,
+   "champ_margin": 16201.0,
+   "pair_diff": -1722.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "template_wheat",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 28999.0,
+   "champ_margin": 29427.0,
+   "pair_diff": -428.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "template_wheat",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": 38593.0,
+   "champ_margin": 39492.0,
+   "pair_diff": -899.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "template_wheat",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": 38593.0,
+   "champ_margin": 39492.0,
+   "pair_diff": -899.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "template_wheat",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 26757.0,
+   "champ_margin": 26040.0,
+   "pair_diff": 717.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "template_wheat",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 24023.0,
+   "champ_margin": 23642.0,
+   "pair_diff": 381.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "template_wheat",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 21772.0,
+   "champ_margin": 22972.0,
+   "pair_diff": -1200.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "template_wheat",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 19258.0,
+   "champ_margin": 19087.0,
+   "pair_diff": 171.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "wheat_straw_monster",
+   "seed": 101,
+   "seat": "AB",
+   "cand_margin": 5690.0,
+   "champ_margin": 7818.0,
+   "pair_diff": -2128.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "wheat_straw_monster",
+   "seed": 101,
+   "seat": "BA",
+   "cand_margin": 5695.0,
+   "champ_margin": 5567.0,
+   "pair_diff": 128.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "wheat_straw_monster",
+   "seed": 102,
+   "seat": "AB",
+   "cand_margin": 11632.0,
+   "champ_margin": 11009.0,
+   "pair_diff": 623.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "wheat_straw_monster",
+   "seed": 102,
+   "seat": "BA",
+   "cand_margin": 11632.0,
+   "champ_margin": 11009.0,
+   "pair_diff": 623.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "wheat_straw_monster",
+   "seed": 103,
+   "seat": "AB",
+   "cand_margin": 13024.0,
+   "champ_margin": 13342.0,
+   "pair_diff": -318.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "wheat_straw_monster",
+   "seed": 103,
+   "seat": "BA",
+   "cand_margin": 11504.0,
+   "champ_margin": 10994.0,
+   "pair_diff": 510.0,
+   "outcome": "W"
+  },
+  {
+   "opponent": "wheat_straw_monster",
+   "seed": 104,
+   "seat": "AB",
+   "cand_margin": 11311.0,
+   "champ_margin": 11472.0,
+   "pair_diff": -161.0,
+   "outcome": "L"
+  },
+  {
+   "opponent": "wheat_straw_monster",
+   "seed": 104,
+   "seat": "BA",
+   "cand_margin": 12312.0,
+   "champ_margin": 11831.0,
+   "pair_diff": 481.0,
+   "outcome": "W"
+  }
+ ],
+ "paired_summary": {
+  "pairs": 80,
+  "W": 44,
+  "L": 33,
+  "T": 3,
+  "net_pair_diff": -1812.0
+ },
+ "gate": {
+  "candidate": {
+   "games": 80,
+   "record": {
+    "W": 78,
+    "L": 2,
+    "T": 0
+   },
+   "new_style_pool_win_rate": 0.95,
+   "new_style_pool_games": 40,
+   "worst_opponent_win_rate": 0.75,
+   "worst_opponent": "near_band_diversified",
+   "disaster_rate": 0.025,
+   "disaster_games": 2,
+   "disaster_threshold": -15000,
+   "per_opponent": {
+    "cow_baron": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 31856.8,
+     "worst_margin": 23240.0
+    },
+    "melon_hoarder": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 63604.4,
+     "worst_margin": 45379.0
+    },
+    "expansionist": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 75873.5,
+     "worst_margin": 56456.0
+    },
+    "baseline_wheat": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 83467.2,
+     "worst_margin": 64812.0
+    },
+    "crop_rotator": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 26627.6,
+     "worst_margin": 11446.0
+    },
+    "template_wheat": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 26559.2,
+     "worst_margin": 14479.0
+    },
+    "self_feed_ranch": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 26606.1,
+     "worst_margin": 21587.0
+    },
+    "near_band_diversified": {
+     "games": 8,
+     "W": 6,
+     "L": 2,
+     "T": 0,
+     "win_rate": 0.75,
+     "avg_margin": 25791.0,
+     "worst_margin": -15528.0
+    },
+    "scale_ranch": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 18344.0,
+     "worst_margin": 10312.0
+    },
+    "wheat_straw_monster": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 10350.0,
+     "worst_margin": 5690.0
+    }
+   }
+  },
+  "champion": {
+   "games": 80,
+   "record": {
+    "W": 78,
+    "L": 2,
+    "T": 0
+   },
+   "new_style_pool_win_rate": 0.95,
+   "new_style_pool_games": 40,
+   "worst_opponent_win_rate": 0.75,
+   "worst_opponent": "near_band_diversified",
+   "disaster_rate": 0.025,
+   "disaster_games": 2,
+   "disaster_threshold": -15000,
+   "per_opponent": {
+    "cow_baron": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 32396.8,
+     "worst_margin": 23046.0
+    },
+    "melon_hoarder": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 63360.9,
+     "worst_margin": 45385.0
+    },
+    "expansionist": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 75258.1,
+     "worst_margin": 55479.0
+    },
+    "baseline_wheat": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 83453.0,
+     "worst_margin": 64811.0
+    },
+    "crop_rotator": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 26169.8,
+     "worst_margin": 10044.0
+    },
+    "template_wheat": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 27044.1,
+     "worst_margin": 16201.0
+    },
+    "self_feed_ranch": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 27264.6,
+     "worst_margin": 21178.0
+    },
+    "near_band_diversified": {
+     "games": 8,
+     "W": 6,
+     "L": 2,
+     "T": 0,
+     "win_rate": 0.75,
+     "avg_margin": 26330.5,
+     "worst_margin": -15651.0
+    },
+    "scale_ranch": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 17648.4,
+     "worst_margin": 10533.0
+    },
+    "wheat_straw_monster": {
+     "games": 8,
+     "W": 8,
+     "L": 0,
+     "T": 0,
+     "win_rate": 1.0,
+     "avg_margin": 10380.2,
+     "worst_margin": 5567.0
+    }
+   }
+  },
+  "verdict": {
+   "mergeable": true,
+   "checks": {
+    "new_style_pool_win_rate": true,
+    "worst_opponent_win_rate": true,
+    "disaster_rate": true
+   },
+   "rule": "candidate merges only if new-style pool WR >= champion, worst single-opponent WR >= champion, and disaster loss rate (margin < -15000) <= champion"
+  }
+ },
+ "runtime_seconds": 767.75
+}

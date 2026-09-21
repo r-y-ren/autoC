@@ -1,0 +1,79 @@
+{
+  "model": "bradley-terry",
+  "identifiability": "zero_sum",
+  "converged": true,
+  "inference_status": "insufficient_data",
+  "inference_reasons": [
+    "requires_4_independent_seed_clusters",
+    "complete_separation_is_regularized_diagnostic"
+  ],
+  "iterations": 12,
+  "log_likelihood": -0.0022127890820451994,
+  "abilities_are_descriptive_only": true,
+  "tie_parameter": null,
+  "tie_parameter_parameterization": null,
+  "separation_detected": true,
+  "regularization": {
+    "type": "zero-mean Gaussian MAP",
+    "lambda": 0.0001,
+    "disclosed_for_separation": true
+  },
+  "agents": [
+    {
+      "agent": "v48",
+      "ability": 4.230480243407702,
+      "rank": 1,
+      "ci95": [
+        null,
+        null
+      ],
+      "tier": "insufficient_data"
+    },
+    {
+      "agent": "working",
+      "ability": -4.230480243407702,
+      "rank": 2,
+      "ci95": [
+        null,
+        null
+      ],
+      "tier": "insufficient_data"
+    }
+  ],
+  "pairwise_probabilities": [
+    {
+      "a": "v48",
+      "b": "working",
+      "p_a_win": 0.9997884759878296,
+      "p_tie": 0.0,
+      "p_b_win": 0.0002115240121703943,
+      "ability_difference": 8.460960486815404,
+      "probability_status": "regularized_descriptive",
+      "difference_ci95": [
+        null,
+        null
+      ],
+      "tier": "insufficient_data"
+    }
+  ],
+  "seat_counts": {
+    "AB": 1,
+    "BA": 1
+  },
+  "game_count": 2,
+  "seed_count": 1,
+  "bootstrap": {
+    "samples_requested": 80,
+    "samples_used": 80,
+    "seed": 20260831,
+    "cluster_unit": "seed",
+    "failed_disconnected": 0
+  },
+  "tier_margin": 0.3,
+  "descriptive_only": true,
+  "holdout_generalization_claim": false,
+  "publishable": false,
+  "publication_status": "descriptive_only",
+  "input_path": "workspace\\software\\exports\\external\\v48-seed101-smoke.json",
+  "method_note": "batch order-independent BT/Davidson; bootstrap clusters by seed"
+}

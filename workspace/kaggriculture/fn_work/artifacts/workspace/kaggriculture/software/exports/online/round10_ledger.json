@@ -1,0 +1,37 @@
+{
+ "schema_version": "1.0",
+ "submission_ref": 55945425,
+ "candidate_sha256": "e8a33aae2ba686837ef0e509edb20447369b19e52c91e47fa6a40eb85b794016",
+ "candidate_label": "v10.5-working (watertight planting fix on the v10.4 tetsuya frame)",
+ "git_ref": "9c8e53958e5e8baedb06623a87fc340944faf002",
+ "submitted_at": "2026-09-01T18:04:16+00:00",
+ "submitted_by": "main-session (user-approved fix batch)",
+ "quota_after_submit": "1 remaining today (CLI readback)",
+ "fixes": [
+  "V-T3a per-tile same-day water window: PLANT only when hour + min-worker-dist + 2 <= 23",
+  "V-T3b daily new-planting cap PLANT_DAILY_CAP=8 (task-generation side, observation-derived)",
+  "V-T3c premium seed orders capped by the same observation-derived daily budget (idempotent; deterministic-agent contract preserved)",
+  "V-T4 phase-A red-line stickiness: previous-turn red bindings re-bound first (d8 h16-23 oscillation class eliminated)"
+ ],
+ "behavior_regression": {
+  "v10.4 same-seed control": "seed101 d9 weeds +15 / seed102 d9 +16 (reproduces online ep 104585743)",
+  "v10.5": "seed101/102 d5-14 max daily weed delta +2; rewards 76-84k (v10.4 control 74-79k)",
+  "local selfplay rewards": "v10.5 seed101 83359/84141, seed102 83855/83708"
+ },
+ "validation_episode": {
+  "episode_id": 104593163,
+  "type": "EPISODE_TYPE_VALIDATION",
+  "state": "COMPLETED",
+  "both_seats_done": true,
+  "rewards": [
+   68165,
+   68229
+  ],
+  "comparison": "v10.3 45284/53693 -> v10.4 59396/59472 -> v10.5 68165/68229"
+ },
+ "public_score_at_capture": 600.0,
+ "episodes_public": [],
+ "captured_at": "2026-09-01T18:04:16+00:00",
+ "source": "kaggle competitions submit/submissions/episodes CLI",
+ "notes": "round-10 fix probe; sample below 6-game gate, no promotion conclusion; holdout not run; frozen c44e2b25 unchanged"
+}

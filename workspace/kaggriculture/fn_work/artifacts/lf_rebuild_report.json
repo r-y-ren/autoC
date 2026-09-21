@@ -1,0 +1,991 @@
+{
+  "artifact_sources": [
+    "workspace/kaggriculture/software/exports/ablations/index.json",
+    "workspace/kaggriculture/software/exports/external/index.json",
+    "workspace/kaggriculture/software/exports/online/index.json",
+    "workspace/kaggriculture/software/exports/replay_dna/index.json",
+    "workspace/kaggriculture/software/exports/replay_profiles/index.json"
+  ],
+  "output_root": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/artifacts",
+  "collections": {
+    "ablations": {
+      "index_source": "workspace/kaggriculture/software/exports/ablations/index.json",
+      "entries_total": 47,
+      "rebuilt_lf": 47,
+      "skipped_binary": 0,
+      "missing": 0,
+      "legacy_matches_disk": 0,
+      "legacy_is_crlf_variant": 47
+    },
+    "external": {
+      "index_source": "workspace/kaggriculture/software/exports/external/index.json",
+      "entries_total": 2,
+      "rebuilt_lf": 2,
+      "skipped_binary": 0,
+      "missing": 0,
+      "legacy_matches_disk": 2,
+      "legacy_is_crlf_variant": 0
+    },
+    "online": {
+      "index_source": "workspace/kaggriculture/software/exports/online/index.json",
+      "entries_total": 51,
+      "rebuilt_lf": 51,
+      "skipped_binary": 0,
+      "missing": 0,
+      "legacy_matches_disk": 19,
+      "legacy_is_crlf_variant": 32
+    },
+    "replay_dna": {
+      "index_source": "workspace/kaggriculture/software/exports/replay_dna/index.json",
+      "entries_total": 0,
+      "rebuilt_lf": 0,
+      "skipped_binary": 0,
+      "missing": 0,
+      "legacy_matches_disk": 0,
+      "legacy_is_crlf_variant": 0
+    },
+    "replay_profiles": {
+      "index_source": "workspace/kaggriculture/software/exports/replay_profiles/index.json",
+      "entries_total": 0,
+      "rebuilt_lf": 0,
+      "skipped_binary": 0,
+      "missing": 0,
+      "legacy_matches_disk": 0,
+      "legacy_is_crlf_variant": 0
+    }
+  },
+  "dual_sha_table": [
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/champ-vs-champ-r3p0-smoke.json",
+      "legacy_registered_sha256": "c8a17920b075fe40efa6fa5839b70b88e9dc1b71840179d39e0dd892dd7ba814",
+      "disk_sha256": "39ebe38bc841f880e0e2a30b9d8762b1a227baaec72bfc50e2574961d2f63d04",
+      "lf_sha256": "39ebe38bc841f880e0e2a30b9d8762b1a227baaec72bfc50e2574961d2f63d04",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/mf_vs_v102_dev.json",
+      "legacy_registered_sha256": "77b47353bbc8b5e5f3312e553f9025cc99ec1e94971bd6249952b6501d02b2b9",
+      "disk_sha256": "bf96fe9e04021cf105e7bd3862b0d7221f3de1d5edd5081df96a3476c16dcbef",
+      "lf_sha256": "bf96fe9e04021cf105e7bd3862b0d7221f3de1d5edd5081df96a3476c16dcbef",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/mf_vs_v102_reg.json",
+      "legacy_registered_sha256": "deca6638afaeb055589368a284b19f3941fc17fecbab97de0c5cad1c37bdabe9",
+      "disk_sha256": "1c9fc66aed603532ab2d0865eaabf5febd56347709d2c0252847454b26ec66f9",
+      "lf_sha256": "1c9fc66aed603532ab2d0865eaabf5febd56347709d2c0252847454b26ec66f9",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/mg_vs_v102_dev.json",
+      "legacy_registered_sha256": "19606b9b33bdad5032d734f14c78adf04f8804ca33cc0a24d0f40396cbd894e9",
+      "disk_sha256": "b031a823e7b7aa586305f921b7519207319494718feaa0f6cbb7ed5ddca15b9b",
+      "lf_sha256": "b031a823e7b7aa586305f921b7519207319494718feaa0f6cbb7ed5ddca15b9b",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/mg_vs_v102_reg.json",
+      "legacy_registered_sha256": "23f08e3e9aed92de3f7cba1d8507694923bf4d34fc07727feb8110a3bee49076",
+      "disk_sha256": "ca2c586a5ec256f847ba73a3e8c4a0486e66ec5798f1b72b85a1f428414e708a",
+      "lf_sha256": "ca2c586a5ec256f847ba73a3e8c4a0486e66ec5798f1b72b85a1f428414e708a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r3_champ_baseline_success.json",
+      "legacy_registered_sha256": "633c8dc250d4f9e6088a3df6266c45abfaa2e3e03e02c5d2baed083870417054",
+      "disk_sha256": "37181ca708cb74dca15f0024f74f1d60c106f0cb04a71153257af5d1b28a1fc7",
+      "lf_sha256": "37181ca708cb74dca15f0024f74f1d60c106f0cb04a71153257af5d1b28a1fc7",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r3_champ_baseline_v2_success.json",
+      "legacy_registered_sha256": "f7dd839d9a60da5c860ec79b66378f3603949f43752c6a76b15a1934a5cfb266",
+      "disk_sha256": "140cc27f7a9cc76b99193bf6c7343679c5546f3b1d45aa47f26bc44b5a1044dd",
+      "lf_sha256": "140cc27f7a9cc76b99193bf6c7343679c5546f3b1d45aa47f26bc44b5a1044dd",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r4-p1-value-scheduler-fix1.json",
+      "legacy_registered_sha256": "22407489d72444bb1b0c29fdb604da59ca6346f7824340f7b0717f613c9601b4",
+      "disk_sha256": "df0f91fd7ce5751322bdd64508a54067b75204b1b89038e4a0d3ad4f789de1cd",
+      "lf_sha256": "df0f91fd7ce5751322bdd64508a54067b75204b1b89038e4a0d3ad4f789de1cd",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r4-p1-value-scheduler.json",
+      "legacy_registered_sha256": "ac58214ba27dd963cd04268a2488cc3076ea594a710c157941c9b4aace24ca6a",
+      "disk_sha256": "9f44e4ed4f98b14bad0a2d7ac9d6bb0db199dde273b16efc2484ffbcafedf1b0",
+      "lf_sha256": "9f44e4ed4f98b14bad0a2d7ac9d6bb0db199dde273b16efc2484ffbcafedf1b0",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r4-p1p2-market-control.json",
+      "legacy_registered_sha256": "38a85aa4abb895079631d62e98b9428d56ec2203e818702011735fe54201604a",
+      "disk_sha256": "90e4d61d0779012c5a98339fff7e5d8fde6fdb8bdc4e7953e6d4f9b4289a3ac2",
+      "lf_sha256": "90e4d61d0779012c5a98339fff7e5d8fde6fdb8bdc4e7953e6d4f9b4289a3ac2",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r4-p3-npv-capital.json",
+      "legacy_registered_sha256": "4654e55f69fde8cca0f64db43a744c147417d98fa6c8a33859c6880f80473632",
+      "disk_sha256": "41526b93d7402cf60c8257b096f301c8f275bfa37b71c12516a865acc7f03469",
+      "lf_sha256": "41526b93d7402cf60c8257b096f301c8f275bfa37b71c12516a865acc7f03469",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r4_p1_v1_success.json",
+      "legacy_registered_sha256": "5274367673da3c9e92c82c41c70f1d2f71f60a26374c27dfd31201d6bd12a616",
+      "disk_sha256": "3bfd55df60b2b738eca0bf0c416c9bf7d214f3edec0e76aa2ef0f0c99098efb4",
+      "lf_sha256": "3bfd55df60b2b738eca0bf0c416c9bf7d214f3edec0e76aa2ef0f0c99098efb4",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r4_p1_v2_success.json",
+      "legacy_registered_sha256": "e37c11a07bf4a0e1e5124a7c4b73c18da5a199e146667da002c3d7f605a9335d",
+      "disk_sha256": "43978cbaae088aac23ce20c7a9da8eb824f8dcc66e881c92c2babe34a4255b98",
+      "lf_sha256": "43978cbaae088aac23ce20c7a9da8eb824f8dcc66e881c92c2babe34a4255b98",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r4_p1_v3_success.json",
+      "legacy_registered_sha256": "fe36eea48002e05de75c0cda0a8f0453c53e3fc29a1e722304c35e22c9ac2084",
+      "disk_sha256": "1465f7707f8280b7544c3dc630ed86823e23d4be6ee57524287bbbd8d42539ea",
+      "lf_sha256": "1465f7707f8280b7544c3dc630ed86823e23d4be6ee57524287bbbd8d42539ea",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/r4_three_layer_success.json",
+      "legacy_registered_sha256": "7a49ef51671cb3089b65f1f48373dfd46693285ae8f4c0994402dac1afd66d42",
+      "disk_sha256": "d81335ac1849aff49672811df99285e1f3ffafdc623e6e23c49b0e813b679226",
+      "lf_sha256": "d81335ac1849aff49672811df99285e1f3ffafdc623e6e23c49b0e813b679226",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v10_combined_dev.json",
+      "legacy_registered_sha256": "81fc342df4e5e816fb4261cbc23f332765bb93fd6823611df6605a86fe173ee1",
+      "disk_sha256": "f533ee6abe3b6b2b163832556835a6a752deea6ee8acde739ea0719e8a58e261",
+      "lf_sha256": "f533ee6abe3b6b2b163832556835a6a752deea6ee8acde739ea0719e8a58e261",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v10_combined_reg.json",
+      "legacy_registered_sha256": "b930939011aba4a793929cb5954e418e8491b4b6c9f8d921d088ad665ce7652a",
+      "disk_sha256": "cd31ccc7e49a8006eb7bdef02ee8418629996a4cff0b18a5f2373c110bb0f15b",
+      "lf_sha256": "cd31ccc7e49a8006eb7bdef02ee8418629996a4cff0b18a5f2373c110bb0f15b",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v10_md_dev.json",
+      "legacy_registered_sha256": "6a124d76bc1a619b2866cd4c80c451cd29f50d790ee732d5bd08a109bae42b6b",
+      "disk_sha256": "eaeddb3218fc84fd804e970ded10f982ef23ef95f2f2700e85091e7f228d0976",
+      "lf_sha256": "eaeddb3218fc84fd804e970ded10f982ef23ef95f2f2700e85091e7f228d0976",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v10_md_reg.json",
+      "legacy_registered_sha256": "ff6b91557725bb9db3f2864502f677d2aabb02b90b03690c0d278c094cc04f63",
+      "disk_sha256": "5a3a41ec10a2576474aa7f388d61869dd1ba14477498a9ddf2dc4e378d16b941",
+      "lf_sha256": "5a3a41ec10a2576474aa7f388d61869dd1ba14477498a9ddf2dc4e378d16b941",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v10_me_dev.json",
+      "legacy_registered_sha256": "47ab7708e2290a1b86d57de529e2ebd60b02d2e73f427b6cbc6b19923e80c0d1",
+      "disk_sha256": "acd216984bd7b28254e674a5cfb867847a28152be84ee36a5513848b8fa47d9a",
+      "lf_sha256": "acd216984bd7b28254e674a5cfb867847a28152be84ee36a5513848b8fa47d9a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v10_me_reg.json",
+      "legacy_registered_sha256": "4db6c69ef4ef38ff516c72d55dbddebcf94262756dff622218aecf028c6651a8",
+      "disk_sha256": "20e0a79a5c7e450e492b1527123f6c4b5e1530faa3d95fe78050072f32e91be3",
+      "lf_sha256": "20e0a79a5c7e450e492b1527123f6c4b5e1530faa3d95fe78050072f32e91be3",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v10_melontiming_dev.json",
+      "legacy_registered_sha256": "355acc4ae570f086876697aa852b5f71da3ab27700163f5c0b31485aab1d5e21",
+      "disk_sha256": "feecf4cc68bae45858dc6b5760081177fd5d92f8803f80bf1dbac7a1ccd88ccf",
+      "lf_sha256": "feecf4cc68bae45858dc6b5760081177fd5d92f8803f80bf1dbac7a1ccd88ccf",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v10_melontiming_reg.json",
+      "legacy_registered_sha256": "3bc2496d177a66df28b2c1e9a27237837c350b4350911827830d12c80c22a933",
+      "disk_sha256": "91482698cf67260101eace96091b880eb7ae60c3034fe113a6ad8fc828e9274e",
+      "lf_sha256": "91482698cf67260101eace96091b880eb7ae60c3034fe113a6ad8fc828e9274e",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v72_v1_herdfloor.json",
+      "legacy_registered_sha256": "5f19a81bdf9ac2450fe02401f55199ef126ae11025b8fcda7b90eec732dc1b0d",
+      "disk_sha256": "5ab2d0097a110666db2c445f3981d546a2d0c466ccedd5e0c41d525824d5f90c",
+      "lf_sha256": "5ab2d0097a110666db2c445f3981d546a2d0c466ccedd5e0c41d525824d5f90c",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v72_v2_landseq.json",
+      "legacy_registered_sha256": "c45b0d085044ef1cd0856d8dea939487bab9de59dc4deafa97585d961d4418a4",
+      "disk_sha256": "dba18a4aec02198522f16e9d4849ac4110ebc7b259cb9ee8ff77a0982e0d9a56",
+      "lf_sha256": "dba18a4aec02198522f16e9d4849ac4110ebc7b259cb9ee8ff77a0982e0d9a56",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v7_c1_planned.json",
+      "legacy_registered_sha256": "4a2d8ca32cd55e5df56c6f87a9d67bdf4e2ebe62975db136ed181f9971f7dd82",
+      "disk_sha256": "682de636b8dc014ceefdf25a6a81ab0f5a0f5f71482c93354c3f082354c910b2",
+      "lf_sha256": "682de636b8dc014ceefdf25a6a81ab0f5a0f5f71482c93354c3f082354c910b2",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v7_c2_hourwin.json",
+      "legacy_registered_sha256": "34ef9ed5a2d114f7021256c8ddedb357e765c39f4136c7ed67f77679b9488f82",
+      "disk_sha256": "a1ededc2976ba63482066c79bfc97223034b65c93e82d5d2d60758336a2199b1",
+      "lf_sha256": "a1ededc2976ba63482066c79bfc97223034b65c93e82d5d2d60758336a2199b1",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v7_c2r_combined.json",
+      "legacy_registered_sha256": "96120e77b93d133a1ffe0b3c1ea1082ec65e40b2b39c9127b2b5151cf210e163",
+      "disk_sha256": "3768559054c0db14c481aba41c3d834d79c96dbdaa98c00a0f61f4d7272aecb1",
+      "lf_sha256": "3768559054c0db14c481aba41c3d834d79c96dbdaa98c00a0f61f4d7272aecb1",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v7_c2rh_fullstack.json",
+      "legacy_registered_sha256": "55c0c4fa653ff5bbd343e5b92977acd7878dfbe0ca345622c15f725568126532",
+      "disk_sha256": "d29be048707c45dc12740ef5955b26e7588667527d6bf7c7c3a155f479d1d3ca",
+      "lf_sha256": "d29be048707c45dc12740ef5955b26e7588667527d6bf7c7c3a155f479d1d3ca",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v7_c3_all.json",
+      "legacy_registered_sha256": "44d4679bf0aa1515f7895023068d2b33e71060314f05dda0dbea27c13243abe2",
+      "disk_sha256": "769e5315262275497e906d313e4c97c4bb9c46a81489bbb4bb4722c49d597d8a",
+      "lf_sha256": "769e5315262275497e906d313e4c97c4bb9c46a81489bbb4bb4722c49d597d8a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v7_h_guard.json",
+      "legacy_registered_sha256": "2398fff38ec2bf884a5a76aab067c7784528226ea3a0a2850a950e772b2ed176",
+      "disk_sha256": "b6ab27693219b30c5bfe3e588301594ac7c614250a50b884279ee8679240449a",
+      "lf_sha256": "b6ab27693219b30c5bfe3e588301594ac7c614250a50b884279ee8679240449a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v7_r_rotation.json",
+      "legacy_registered_sha256": "735ed469da2799f5865cfd6de6e604dd302b65ca37f610aaa81d6bb2df518de0",
+      "disk_sha256": "ce752c580c4730ccb84cf952b37079a9ab02f05c459d6f33610644a10d3d2779",
+      "lf_sha256": "ce752c580c4730ccb84cf952b37079a9ab02f05c459d6f33610644a10d3d2779",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v8_w12_wheat_volume.json",
+      "legacy_registered_sha256": "2e1e316fe91cbb29c61070226ff8b3de7351a3c461f82d0b9e9f7d0260ed370b",
+      "disk_sha256": "81148b6cab3875b2998c8d571d058523229980650467b1a34793eec0e5f0b338",
+      "lf_sha256": "81148b6cab3875b2998c8d571d058523229980650467b1a34793eec0e5f0b338",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v8_w3_gated_wheat.json",
+      "legacy_registered_sha256": "ae11e7e0bba1d4d8c7aa75d90dcfcdd56a17bf6be9d7ad71961d1a731ee19d63",
+      "disk_sha256": "0bab164e79c3b9397d5c5960879c3402ff724c396a17f43b21ceca97735713a1",
+      "lf_sha256": "0bab164e79c3b9397d5c5960879c3402ff724c396a17f43b21ceca97735713a1",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9-sector-scheduler-smoke.json",
+      "legacy_registered_sha256": "8e4c7b592800cf7f17642dbb8222e1b40c9d5e7f8009c9a59f7561c8ab2a9f80",
+      "disk_sha256": "6b5acc1b03a6c06535e7513943fb199dd2fff9dfb16df10b25512515b9bc2953",
+      "lf_sha256": "6b5acc1b03a6c06535e7513943fb199dd2fff9dfb16df10b25512515b9bc2953",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9-shadow-routing-smoke.json",
+      "legacy_registered_sha256": "13e9ab258e8c43aefeb357fd78b9d2a264e28a1fd211d50a4fb0aad2e5e73e1f",
+      "disk_sha256": "ad8e1aac7942d0aef4d37f1411613674643fa65a165be2f61417671c218749b3",
+      "lf_sha256": "ad8e1aac7942d0aef4d37f1411613674643fa65a165be2f61417671c218749b3",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9-soft-sector-smoke.json",
+      "legacy_registered_sha256": "008341a47dcda41eb93e3ffa7b2354bb7238ff8b287dbffbf723e1587509a121",
+      "disk_sha256": "05cacbece73dc31df451ebd2c5d4b136ac3edb8dd8a7dc80d7882176b1e2d6c0",
+      "lf_sha256": "05cacbece73dc31df451ebd2c5d4b136ac3edb8dd8a7dc80d7882176b1e2d6c0",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_gate30_dev.json",
+      "legacy_registered_sha256": "ffa5489907cd983e81b010b19853a23358dffc1e5f7439decd5b2d6f3e4d16f9",
+      "disk_sha256": "ce133b85c2705ea09356ce48dc137e99f184fd992b96a79f0e76e877072ea676",
+      "lf_sha256": "ce133b85c2705ea09356ce48dc137e99f184fd992b96a79f0e76e877072ea676",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_gate30_reg.json",
+      "legacy_registered_sha256": "df8f00047a88c0a8703017c8cb5c2b7ea433ee119a263f378541fb1161c4325b",
+      "disk_sha256": "9ddccd5ffe43d13db3c069200148feab3eeb3c0a6df53bdbcdf32f9312d11cef",
+      "lf_sha256": "9ddccd5ffe43d13db3c069200148feab3eeb3c0a6df53bdbcdf32f9312d11cef",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_routing_confirm1.json",
+      "legacy_registered_sha256": "befb1f475000743697471a3a0aec64946694ca29b948e2a4be26e1171701de6b",
+      "disk_sha256": "c9c97024a2731b9806b7f0a7e37aee1993834eb79eedbbb4925ffb5fb607e429",
+      "lf_sha256": "c9c97024a2731b9806b7f0a7e37aee1993834eb79eedbbb4925ffb5fb607e429",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_routing_distfirst_r1.json",
+      "legacy_registered_sha256": "06d0980a615f92790c98a7fd89a81c7f8c451ff0269b87ea805731490a397358",
+      "disk_sha256": "2bcec3f21ee1a6a7e7bb82b3c30a96796364cfb4f5930b5eefabbf13004e7fc2",
+      "lf_sha256": "2bcec3f21ee1a6a7e7bb82b3c30a96796364cfb4f5930b5eefabbf13004e7fc2",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_w1_port_dev.json",
+      "legacy_registered_sha256": "9767a052c297aa454124cbd38ddab29e0e13cfb5e145a54d0dba16c00eaccfc1",
+      "disk_sha256": "faa4ada89ad64cbe02ada7f6fd56e535dd992ebb37f9495895d4b3d14fb90016",
+      "lf_sha256": "faa4ada89ad64cbe02ada7f6fd56e535dd992ebb37f9495895d4b3d14fb90016",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_w1_port_reg.json",
+      "legacy_registered_sha256": "6252988167b75cb4de609474d1360d9aa2504f6c3cfe572cfe85d39f28232098",
+      "disk_sha256": "f212f6ea8e912a38edd473344b640c0c978cc51e515c5d2bd5d8615d218ba759",
+      "lf_sha256": "f212f6ea8e912a38edd473344b640c0c978cc51e515c5d2bd5d8615d218ba759",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_w1gated_dev.json",
+      "legacy_registered_sha256": "cce562f0f268c78f49e7773e26fae85b0831aa26d9fa37ea7b650929558291b2",
+      "disk_sha256": "be0f43d2326a17d5464796e3a4d97fb3f943f4a0781591caad4306d641d3de62",
+      "lf_sha256": "be0f43d2326a17d5464796e3a4d97fb3f943f4a0781591caad4306d641d3de62",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_w1gated_reg.json",
+      "legacy_registered_sha256": "50cefc1605a6fe1ea4645d50b114836a38b0d81cbf0346901752dfb57bf51fe4",
+      "disk_sha256": "405cbb0c693c26efcbf2230dde222599e76889a4d059205755d3dbe124f9a7d8",
+      "lf_sha256": "405cbb0c693c26efcbf2230dde222599e76889a4d059205755d3dbe124f9a7d8",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_wheatfarm_r1.json",
+      "legacy_registered_sha256": "c45ffbfbc249d4d5a62f16ed135b8171fb97f2015eb4dc37d9589946cce5f12a",
+      "disk_sha256": "18a92a94216072a031e7576127d32874874daf9a3565f3825a9855365cf2041a",
+      "lf_sha256": "18a92a94216072a031e7576127d32874874daf9a3565f3825a9855365cf2041a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "ablations",
+      "path": "workspace/kaggriculture/software/exports/ablations/v9_wheatfarm_r2.json",
+      "legacy_registered_sha256": "3e25d7d3f09d26b22742402e719a51b1b2242787fbea1dcaa96eadb175e7bc79",
+      "disk_sha256": "85be468d13b2604a9e1f09e3b0480f2ffb0b9a7807fe481aa020c0ac070241e7",
+      "lf_sha256": "85be468d13b2604a9e1f09e3b0480f2ffb0b9a7807fe481aa020c0ac070241e7",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "external",
+      "path": "workspace/kaggriculture/software/exports/external/v48-seed101-ratings.json",
+      "legacy_registered_sha256": "507b600f0bd10a98a0e7e96bc31bfd35c5f83cd545a52ffc5422193a9844a8ca",
+      "disk_sha256": "507b600f0bd10a98a0e7e96bc31bfd35c5f83cd545a52ffc5422193a9844a8ca",
+      "lf_sha256": "507b600f0bd10a98a0e7e96bc31bfd35c5f83cd545a52ffc5422193a9844a8ca",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "external",
+      "path": "workspace/kaggriculture/software/exports/external/v48-seed101-smoke.json",
+      "legacy_registered_sha256": "f3dcf266dab4fec14d949f5a963659986095adb06d24ab8cc48437455b9d00a0",
+      "disk_sha256": "f3dcf266dab4fec14d949f5a963659986095adb06d24ab8cc48437455b9d00a0",
+      "lf_sha256": "f3dcf266dab4fec14d949f5a963659986095adb06d24ab8cc48437455b9d00a0",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/cmp_cmp-v92_deep_stats.json",
+      "legacy_registered_sha256": "9d66f0465102979cc393e77de270ed097c61c3f80cd2f6d09b7e2269c4f5001a",
+      "disk_sha256": "6dd38137b4fdb62a7981acafab1491646db623a99790b8cac54a868eed6dac6a",
+      "lf_sha256": "6dd38137b4fdb62a7981acafab1491646db623a99790b8cac54a868eed6dac6a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/cmp_round15_deep_stats.json",
+      "legacy_registered_sha256": "fae676594819cdb8e4098fdbc94878fa607914a2144b408a664d053ce40e04e2",
+      "disk_sha256": "69f9322a4621bfada31cf85b8d39c77252f40a2c6153ed2c2dafe0a67656d3fc",
+      "lf_sha256": "69f9322a4621bfada31cf85b8d39c77252f40a2c6153ed2c2dafe0a67656d3fc",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/cmp_round18_deep_stats.json",
+      "legacy_registered_sha256": "6c9a7c2a020794517613fe0c2ef8f928bd567a0017d35f9c36e45331f193af96",
+      "disk_sha256": "efe3ac5b3bd63185a8639d36f401141c9cc4a21eb6bd5c0d147fa3f63894744e",
+      "lf_sha256": "efe3ac5b3bd63185a8639d36f401141c9cc4a21eb6bd5c0d147fa3f63894744e",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/cmp_round19_deep_stats.json",
+      "legacy_registered_sha256": "13e9b838f3e72388e11bac4916702f10b9543932edb22c29dee7de9a5081a846",
+      "disk_sha256": "67275cfd773beeef7d22cd94feb87c995bf0de1762b398376218c0da0fee9eaf",
+      "lf_sha256": "67275cfd773beeef7d22cd94feb87c995bf0de1762b398376218c0da0fee9eaf",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/cmp_round20_deep_stats.json",
+      "legacy_registered_sha256": "839348c015f83fb7537c7a5b3db9f72007772e7b066cdd76a231fb19b4388fb7",
+      "disk_sha256": "e2807d4a8d6a1afd1c9b9a3a121d0a36c003db0c3e366113d33f422cc30ad8a1",
+      "lf_sha256": "e2807d4a8d6a1afd1c9b9a3a121d0a36c003db0c3e366113d33f422cc30ad8a1",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/cmp_round21_deep_stats.json",
+      "legacy_registered_sha256": "bbb1eaaaa77b3c2cb1181acb2e214c00efe0624403ac374a81e18b8daa53dc4c",
+      "disk_sha256": "8fa4fe374a98ee4f3535be27cafcdeee4fa7cfd33bfed7187e19e2d5b397d4e7",
+      "lf_sha256": "8fa4fe374a98ee4f3535be27cafcdeee4fa7cfd33bfed7187e19e2d5b397d4e7",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/cmp_round8_deep_stats.json",
+      "legacy_registered_sha256": "36efa64e0226339d476b0686dd1fa4b4f5a154d3cb58bf6ebb83af56539c5d2b",
+      "disk_sha256": "d775f80c2486d9c9d59b236ba2f6cf4bd9057d68ed5819328294b3040c6c0563",
+      "lf_sha256": "d775f80c2486d9c9d59b236ba2f6cf4bd9057d68ed5819328294b3040c6c0563",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/corpus_deep_stats.json",
+      "legacy_registered_sha256": "f1126d0edd6b116ad0938c44ef175af4ab86153e1fd7d1e5e7df1d02c1e1331a",
+      "disk_sha256": "f1126d0edd6b116ad0938c44ef175af4ab86153e1fd7d1e5e7df1d02c1e1331a",
+      "lf_sha256": "f1126d0edd6b116ad0938c44ef175af4ab86153e1fd7d1e5e7df1d02c1e1331a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round10_ledger.json",
+      "legacy_registered_sha256": "ac58ecc4b66ff3fc94fd48db7b84a6d5712da8f916203eabcb31ab5edf1aa4d7",
+      "disk_sha256": "68f692e279a7d85f55f2e05a8db7dac281d3d6399290454a35601d6a18ec5dfa",
+      "lf_sha256": "68f692e279a7d85f55f2e05a8db7dac281d3d6399290454a35601d6a18ec5dfa",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round11_ledger.json",
+      "legacy_registered_sha256": "0e4a9fc862b3371987fd9f630d65699dba4da1e4de393c27e0e6ecbb604fc040",
+      "disk_sha256": "a3e3ade3ed0cbb0310b791dca2e384d8955f02b5abf28a59dfbba9e91a3ab58b",
+      "lf_sha256": "a3e3ade3ed0cbb0310b791dca2e384d8955f02b5abf28a59dfbba9e91a3ab58b",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round12_ledger.json",
+      "legacy_registered_sha256": "9f960a533fdd0fe133a6c161c18f9fb2666a57a1becbf4db3b78d2ac876a45f7",
+      "disk_sha256": "cae663aa194dbc0de1aa03a439e8e944ba67676e65a054eff257fb3429182335",
+      "lf_sha256": "cae663aa194dbc0de1aa03a439e8e944ba67676e65a054eff257fb3429182335",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round13_ledger.json",
+      "legacy_registered_sha256": "ac3c061107bc10272c1570201076e1c07706a86b72f496a7a7c979ab9793a8b4",
+      "disk_sha256": "efc5a81d67bbfac47c664eb2b4bdcf1a224b3f97c0be6e996f7e92359d5e7304",
+      "lf_sha256": "efc5a81d67bbfac47c664eb2b4bdcf1a224b3f97c0be6e996f7e92359d5e7304",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round14_ledger.json",
+      "legacy_registered_sha256": "db5851132042005c5fbc4e019531632a5a9f22332e5f923273b6dfe76460660c",
+      "disk_sha256": "27750d788f291ddda1a06911000f93408b0d096c3b686b294a9d8d65a42e9ca9",
+      "lf_sha256": "27750d788f291ddda1a06911000f93408b0d096c3b686b294a9d8d65a42e9ca9",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round15_ledger.json",
+      "legacy_registered_sha256": "2782ae9f95ff34ecf8dbbad9016138f4d3bab33609fc706757f5c0148aa118a5",
+      "disk_sha256": "2e80336bf2b395784bd0ec3e2341b41f1d60c1e19481ff0a60f3f45a23ed26eb",
+      "lf_sha256": "2e80336bf2b395784bd0ec3e2341b41f1d60c1e19481ff0a60f3f45a23ed26eb",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round16_ledger.json",
+      "legacy_registered_sha256": "bf84497944673c2eaefe1de57864e2431b71d7ef6332ec3b20286ac2dd22dc5e",
+      "disk_sha256": "bf84497944673c2eaefe1de57864e2431b71d7ef6332ec3b20286ac2dd22dc5e",
+      "lf_sha256": "bf84497944673c2eaefe1de57864e2431b71d7ef6332ec3b20286ac2dd22dc5e",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round17_ledger.json",
+      "legacy_registered_sha256": "cd2df7b65daa4f89fe6f8023b47fcea7ede1970ab89b621ec81f1315d7eb6e0a",
+      "disk_sha256": "cd2df7b65daa4f89fe6f8023b47fcea7ede1970ab89b621ec81f1315d7eb6e0a",
+      "lf_sha256": "cd2df7b65daa4f89fe6f8023b47fcea7ede1970ab89b621ec81f1315d7eb6e0a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round18_ledger.json",
+      "legacy_registered_sha256": "88962312bb43332297f37c7657aaee6c447ed8eccefea792d85f1a71f7f126da",
+      "disk_sha256": "88962312bb43332297f37c7657aaee6c447ed8eccefea792d85f1a71f7f126da",
+      "lf_sha256": "88962312bb43332297f37c7657aaee6c447ed8eccefea792d85f1a71f7f126da",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round19_ledger.json",
+      "legacy_registered_sha256": "035234c5518ecd1383194cb9b157c9d143ca786195dbf8681500d31311070f07",
+      "disk_sha256": "035234c5518ecd1383194cb9b157c9d143ca786195dbf8681500d31311070f07",
+      "lf_sha256": "035234c5518ecd1383194cb9b157c9d143ca786195dbf8681500d31311070f07",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round19_planting_deep_stats.json",
+      "legacy_registered_sha256": "378f55cd8ae2725a517defb341be649eb4c5dcf384507a40997f419d7d37a785",
+      "disk_sha256": "732f70105f9c4e77f5b63d1f2e691c18363a766dd8c7310c404f78c0d1c2e1a9",
+      "lf_sha256": "732f70105f9c4e77f5b63d1f2e691c18363a766dd8c7310c404f78c0d1c2e1a9",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round1_failure_analysis.md",
+      "legacy_registered_sha256": "43811cc5376de8af2f8301927d70e300522d143e9e777fc13d6dea04275d10a3",
+      "disk_sha256": "43811cc5376de8af2f8301927d70e300522d143e9e777fc13d6dea04275d10a3",
+      "lf_sha256": "43811cc5376de8af2f8301927d70e300522d143e9e777fc13d6dea04275d10a3",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round1_ledger.json",
+      "legacy_registered_sha256": "ab45a86799eeb8d7915e86f906905ecb4739c34cb99eff06ec29d3569834cd07",
+      "disk_sha256": "ab45a86799eeb8d7915e86f906905ecb4739c34cb99eff06ec29d3569834cd07",
+      "lf_sha256": "ab45a86799eeb8d7915e86f906905ecb4739c34cb99eff06ec29d3569834cd07",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round20_ledger.json",
+      "legacy_registered_sha256": "a8c0e4032892dd74ce19b45e1c259924bf01b2fcc298d855ce1a713d8c1bb824",
+      "disk_sha256": "a8c0e4032892dd74ce19b45e1c259924bf01b2fcc298d855ce1a713d8c1bb824",
+      "lf_sha256": "a8c0e4032892dd74ce19b45e1c259924bf01b2fcc298d855ce1a713d8c1bb824",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round21_ledger.json",
+      "legacy_registered_sha256": "4a0720763d1a9dc37de847b7884e9f326c22285aa1a25d98d8cd2d4456b8ee15",
+      "disk_sha256": "4a0720763d1a9dc37de847b7884e9f326c22285aa1a25d98d8cd2d4456b8ee15",
+      "lf_sha256": "4a0720763d1a9dc37de847b7884e9f326c22285aa1a25d98d8cd2d4456b8ee15",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round22_ledger.json",
+      "legacy_registered_sha256": "c9e07dd251560ef767ecb417b964d67a380c09329f9ff275d5d07a0635475ade",
+      "disk_sha256": "12e1dddcc1ed4568c37541611eb74cff8c954abb5863972a1bcc33648beb47f1",
+      "lf_sha256": "12e1dddcc1ed4568c37541611eb74cff8c954abb5863972a1bcc33648beb47f1",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round23_ledger.json",
+      "legacy_registered_sha256": "a03106784d56f630fa1f7405f0f79154c3958740741f67d9eaa491569dd5f2b8",
+      "disk_sha256": "198b7b9cb3c1c5dc446e894f783300749dbe4824cf6857eafa2b455ca1701289",
+      "lf_sha256": "198b7b9cb3c1c5dc446e894f783300749dbe4824cf6857eafa2b455ca1701289",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round24_ledger.json",
+      "legacy_registered_sha256": "76c3bb7376d46e3c892366acd578b218e7859cdc8bf65380f2daf80726e5f7bf",
+      "disk_sha256": "92ce96f544a7b09e9ca70ef28b14e5479604ea41bffed3e62ba052b94628d369",
+      "lf_sha256": "92ce96f544a7b09e9ca70ef28b14e5479604ea41bffed3e62ba052b94628d369",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round25_ledger.json",
+      "legacy_registered_sha256": "c5b84ed9c3852c65d69f910452e3a4072a7d5f813b832de42fda97ec6e727152",
+      "disk_sha256": "f2351f4072482fcd0cfbdf048191d77dc2aa39565d96dce415a68c3f2de626ca",
+      "lf_sha256": "f2351f4072482fcd0cfbdf048191d77dc2aa39565d96dce415a68c3f2de626ca",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round26_ledger.json",
+      "legacy_registered_sha256": "ca4d65412861d1c73030338eb6a34ea0f0c812a44cd02e94754268f241b3f7d0",
+      "disk_sha256": "bbf53d10ca4f8247210c19072c331f3e78e230dfb27fb5f47c71e57f5c7d6d84",
+      "lf_sha256": "bbf53d10ca4f8247210c19072c331f3e78e230dfb27fb5f47c71e57f5c7d6d84",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round2_deep_stats.json",
+      "legacy_registered_sha256": "20e55105bcf6e123517cb01df0ebc06fa2ff0b724575bbd5bb92791929c46733",
+      "disk_sha256": "9e8b229e400684c80984003b7545679cf0f25871bd827286e5d82ea5e005dee1",
+      "lf_sha256": "9e8b229e400684c80984003b7545679cf0f25871bd827286e5d82ea5e005dee1",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round2_failure_analysis.md",
+      "legacy_registered_sha256": "f789cbd61c46a1f34f9c283ca20cfbeef41fbef9757684385566ee0eb7bc1cac",
+      "disk_sha256": "f789cbd61c46a1f34f9c283ca20cfbeef41fbef9757684385566ee0eb7bc1cac",
+      "lf_sha256": "f789cbd61c46a1f34f9c283ca20cfbeef41fbef9757684385566ee0eb7bc1cac",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round2_ledger.json",
+      "legacy_registered_sha256": "20e6f1f291a8783a3ed2395b428d1bd43b3375df10c9988955966dc75c2a947e",
+      "disk_sha256": "20e6f1f291a8783a3ed2395b428d1bd43b3375df10c9988955966dc75c2a947e",
+      "lf_sha256": "20e6f1f291a8783a3ed2395b428d1bd43b3375df10c9988955966dc75c2a947e",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round2_success_metrics.md",
+      "legacy_registered_sha256": "20ab041096442103bac3e23219b301c944d71b664e3c3dd95522c392143200a8",
+      "disk_sha256": "20ab041096442103bac3e23219b301c944d71b664e3c3dd95522c392143200a8",
+      "lf_sha256": "20ab041096442103bac3e23219b301c944d71b664e3c3dd95522c392143200a8",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round2_success_stats.json",
+      "legacy_registered_sha256": "e1bb27fbb190b6569da6b01d2e0648942516da2f06f53879df6a0e7a35625fd7",
+      "disk_sha256": "1a2c9967c0c288e5de1655b4521dcc63ff66351b11a0da6942852312385c1b84",
+      "lf_sha256": "1a2c9967c0c288e5de1655b4521dcc63ff66351b11a0da6942852312385c1b84",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round2_winner_deep_dive.md",
+      "legacy_registered_sha256": "fdbf5f6cea0ee405d63d360e692dc7e928111789129696e7032b678301893545",
+      "disk_sha256": "fdbf5f6cea0ee405d63d360e692dc7e928111789129696e7032b678301893545",
+      "lf_sha256": "fdbf5f6cea0ee405d63d360e692dc7e928111789129696e7032b678301893545",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round3_ledger.json",
+      "legacy_registered_sha256": "754ddd5b0ab536c24ee1c6a6c21399ed14173108e2722f193b47adc617c91a71",
+      "disk_sha256": "754ddd5b0ab536c24ee1c6a6c21399ed14173108e2722f193b47adc617c91a71",
+      "lf_sha256": "754ddd5b0ab536c24ee1c6a6c21399ed14173108e2722f193b47adc617c91a71",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round3_monster_deep_stats.json",
+      "legacy_registered_sha256": "e00aa0e64522028090a7c269d038ca82bdca2fb08354c1820fabc1df5c576914",
+      "disk_sha256": "93443b6f4dc8914be35bdde96421c74de70a5303a9d3e432cd8dfe7093a43e7a",
+      "lf_sha256": "93443b6f4dc8914be35bdde96421c74de70a5303a9d3e432cd8dfe7093a43e7a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round4_deep_stats.json",
+      "legacy_registered_sha256": "8e35ed744c00760d0b6f71ccc04f35a53005065ade18c175bde79fe2fcf9c9cd",
+      "disk_sha256": "89de7810a3781c683675f996b5d687b0dcf211fd50acb773391034ab1264f02d",
+      "lf_sha256": "89de7810a3781c683675f996b5d687b0dcf211fd50acb773391034ab1264f02d",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round4_failure_analysis.md",
+      "legacy_registered_sha256": "e544f778745ca3642f8e1deb132f16e849076d3adcc335a29342abbb4c4d6584",
+      "disk_sha256": "da41e6707e72be8494dc187b7629eb74bccbe1468c9b5dd8ab07fb4afd1def38",
+      "lf_sha256": "da41e6707e72be8494dc187b7629eb74bccbe1468c9b5dd8ab07fb4afd1def38",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round4_ledger.json",
+      "legacy_registered_sha256": "8fe6fab7398b29a69e54f93867f2c65cc75867a79d5487eb43671ad889e8019b",
+      "disk_sha256": "38cac5d39c6931b194a27e057263837db3c88af4a895191286a113dc4886d832",
+      "lf_sha256": "38cac5d39c6931b194a27e057263837db3c88af4a895191286a113dc4886d832",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round5_episodes.json",
+      "legacy_registered_sha256": "e4c558e8e8e7b768ee934452a189a9c84b471210580836fd61d830d00176f7e2",
+      "disk_sha256": "a2b96ae35a4ad06ccea3848d8890fb4efd3b257f67d4d0982855c98f6116d74a",
+      "lf_sha256": "a2b96ae35a4ad06ccea3848d8890fb4efd3b257f67d4d0982855c98f6116d74a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round5_failure_analysis.md",
+      "legacy_registered_sha256": "88a30db55a052c1fa40ea628e88f1390d78ba5d042774eb1595e3dbf4d0b30da",
+      "disk_sha256": "88a30db55a052c1fa40ea628e88f1390d78ba5d042774eb1595e3dbf4d0b30da",
+      "lf_sha256": "88a30db55a052c1fa40ea628e88f1390d78ba5d042774eb1595e3dbf4d0b30da",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round5_keygames_deep_stats.json",
+      "legacy_registered_sha256": "d0b9234e01c5ed080ef8f5e54885469bf5a652c586686f745001b1c14aca6a98",
+      "disk_sha256": "b9a9483b53ccfb4c206e7efd8d21e22add5a33110bbb04d0f1cbde97920da4a8",
+      "lf_sha256": "b9a9483b53ccfb4c206e7efd8d21e22add5a33110bbb04d0f1cbde97920da4a8",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round5_ledger.json",
+      "legacy_registered_sha256": "6a49098dd0bc9f017004cf081bc59b2492aa3f8b71aea85356cdea447cd3b120",
+      "disk_sha256": "d959b9800cb1b6a479ceb5940bec2d5593154711c7bd022cc02e80ad18d7190d",
+      "lf_sha256": "d959b9800cb1b6a479ceb5940bec2d5593154711c7bd022cc02e80ad18d7190d",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round5_strategic_review.md",
+      "legacy_registered_sha256": "affd71f816de870dcb8509f15016bd3eb9a5e72fcd0a71fbdabb713c62648068",
+      "disk_sha256": "affd71f816de870dcb8509f15016bd3eb9a5e72fcd0a71fbdabb713c62648068",
+      "lf_sha256": "affd71f816de870dcb8509f15016bd3eb9a5e72fcd0a71fbdabb713c62648068",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round6_keygames_deep_stats.json",
+      "legacy_registered_sha256": "2d42fae434b8b7a3e87d62820aba1453f412c2495f0c2f063cd022445fd3c937",
+      "disk_sha256": "d85d8fd0b87edd3adfe6f6a1105f709d104c9598b9a573c6f9eb5729143ac16b",
+      "lf_sha256": "d85d8fd0b87edd3adfe6f6a1105f709d104c9598b9a573c6f9eb5729143ac16b",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round6_ledger.json",
+      "legacy_registered_sha256": "222806ad3c2aa0feddc2286cd8f8bf651a495c896411f104a68e3a3124ec0ef4",
+      "disk_sha256": "222806ad3c2aa0feddc2286cd8f8bf651a495c896411f104a68e3a3124ec0ef4",
+      "lf_sha256": "222806ad3c2aa0feddc2286cd8f8bf651a495c896411f104a68e3a3124ec0ef4",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round7_ledger.json",
+      "legacy_registered_sha256": "4d2e656c3c70fcdda3da5277fc7a4e436a1f14c57ef4728b23d44c83d4f66336",
+      "disk_sha256": "4d2e656c3c70fcdda3da5277fc7a4e436a1f14c57ef4728b23d44c83d4f66336",
+      "lf_sha256": "4d2e656c3c70fcdda3da5277fc7a4e436a1f14c57ef4728b23d44c83d4f66336",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round8_ledger.json",
+      "legacy_registered_sha256": "0f4bff41ab38586fb50ce7d6b457ee0b3157d342c3679ac83026478afcaaad29",
+      "disk_sha256": "c68b25fd8f303b1337b446fd8a5bc738db67c5f517e2b381fb29a31135e0e1a9",
+      "lf_sha256": "c68b25fd8f303b1337b446fd8a5bc738db67c5f517e2b381fb29a31135e0e1a9",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/round9_ledger.json",
+      "legacy_registered_sha256": "1246eff3ca3a88e81112f62573c599add0190b797481df2325eab818a818b0e9",
+      "disk_sha256": "22009481966b8059341d22e046ddf42fc947212374c000848e6e7ffd5c44e518",
+      "lf_sha256": "22009481966b8059341d22e046ddf42fc947212374c000848e6e7ffd5c44e518",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/sprint_forensics_0919.md",
+      "legacy_registered_sha256": "3ce64412f647fe5aacdb501a2155dad9cb31361a78aaeb8e51a7ebf77e74c1aa",
+      "disk_sha256": "0b27392a2ffdb4105287f0e7f38d46291f02777bcb5b6f933639d20390ae095a",
+      "lf_sha256": "0b27392a2ffdb4105287f0e7f38d46291f02777bcb5b6f933639d20390ae095a",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    },
+    {
+      "collection": "online",
+      "path": "workspace/kaggriculture/software/exports/online/tetsuya_v2_strategy_analysis.md",
+      "legacy_registered_sha256": "0c24e2dcbec99a047918c86d95b70f4fe967f79282219747454f91361cacfe6e",
+      "disk_sha256": "0c24e2dcbec99a047918c86d95b70f4fe967f79282219747454f91361cacfe6e",
+      "lf_sha256": "0c24e2dcbec99a047918c86d95b70f4fe967f79282219747454f91361cacfe6e",
+      "disk_line_endings": "LF",
+      "status": "rebuilt_lf"
+    }
+  ],
+  "packaging_artifacts_not_rebuilt": [
+    {
+      "path": "workspace/kaggriculture/software/kaggle_simulations/agent/submission.tar.gz",
+      "sha256": "b1f582ff39a1521b16b93a65d09da05373e587e0df047f54960ef9879ab47735",
+      "size_bytes": 204897,
+      "rebuilt": false,
+      "reason": "二进制打包件与 CRLF 无关（旧树挂因=登记 sha 口径，非 tar 内容），不重建，原样登记"
+    },
+    {
+      "path": "workspace/kaggriculture/software/kaggle_simulations/v48_derivative/submission.tar.gz",
+      "sha256": "01de7c27ace9fc55d8c7204f6e67b83752336b41411ff14771958851883519f3",
+      "size_bytes": 81856,
+      "rebuilt": false,
+      "reason": "二进制打包件与 CRLF 无关（旧树挂因=登记 sha 口径，非 tar 内容），不重建，原样登记"
+    },
+    {
+      "path": "workspace/kaggriculture/software/kaggle_simulations/v48plus/submission.tar.gz",
+      "sha256": "b5fc0ed7885196a7987acd305dd23f8f7732115405631a8b9052c76b5855e8e3",
+      "size_bytes": 87318,
+      "rebuilt": false,
+      "reason": "二进制打包件与 CRLF 无关（旧树挂因=登记 sha 口径，非 tar 内容），不重建，原样登记"
+    }
+  ],
+  "totals": {
+    "collections": 5,
+    "entries": 100,
+    "rebuilt_lf": 100,
+    "skipped_binary": 0,
+    "missing": 0,
+    "legacy_is_crlf_variant": 79,
+    "packaging_not_rebuilt": 3
+  }
+}

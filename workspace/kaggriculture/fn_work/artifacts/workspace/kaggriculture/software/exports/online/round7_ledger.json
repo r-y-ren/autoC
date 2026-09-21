@@ -1,0 +1,240 @@
+{
+  "schema_version": "1.0",
+  "round": 7,
+  "submission_ref": 55932134,
+  "submitted_at_utc": "2026-09-01T04:51:25.487Z",
+  "candidate_label": "v10.2-working online resampling probe",
+  "candidate_sha256": "360714f1c175c81c75ad53a60782512077c237d963780227c4544a0b5d7cc93f",
+  "candidate_status": "development",
+  "candidate_holdout_status": "not_run",
+  "submission_file": "workspace/software/kaggle_simulations/agent/main.py",
+  "submission_message": "v10.2 current candidate 360714f1 online probe",
+  "authorization": "User explicitly requested the next tests and online submission in the current session.",
+  "pre_submit_gates": {
+    "candidate_identity": "PASS",
+    "full_software_tests": "716 passed in 35.44s",
+    "smoke_boot": "PASS (7.9s, phases=4; includes 720-step self-play)",
+    "candidate_sha_verified": true,
+    "stale_archive_rejected": {
+      "path": ".tmp-intel/submit/submission102.tar.gz",
+      "archived_main_sha256": "59b96bd974c26b9f710e9ffb310e84a171126a553a7816358d69203e05d8b53d",
+      "reason": "archive main.py did not match the active candidate SHA and was not submitted"
+    }
+  },
+  "quota": {
+    "used_today_before_submission": 0,
+    "used_today_after_submission": 1,
+    "remaining_after_submission": 4,
+    "candidate_submissions_today": 1
+  },
+  "validation": {
+    "status": "COMPLETE",
+    "episode_id": 104498289,
+    "episode_type": "EPISODE_TYPE_VALIDATION",
+    "episode_state": "COMPLETED",
+    "episode_created_at": "2026-09-01T04:51:25.893Z",
+    "episode_ended_at": "2026-09-01T04:56:45.146Z",
+    "public_score_after_validation": 600.0
+  },
+  "public_sampling": {
+    "sampled_at_utc": "2026-09-01T08:19:18Z",
+    "public_games": 21,
+    "record": "9W-12L",
+    "win_rate": 0.4286,
+    "net_margin": -155129.0,
+    "average_margin": -7387.1,
+    "median_margin": -8549.0,
+    "public_score_latest": 628.7,
+    "status": "twenty_one_game_terminal_sample",
+    "replay_integrity": "21/21 PASS (720 steps, DONE/DONE, finite rewards)",
+    "stop_loss_evaluation": {
+      "gate": "first at least 6 public games with win rate < 0.5",
+      "games_at_first_gate": 6,
+      "record_at_first_gate": "4W-2L",
+      "win_rate_at_first_gate": 0.6667,
+      "net_margin_at_first_gate": 39484.0,
+      "status": "not_triggered"
+    },
+    "episodes": [
+      {
+        "id": 104498822,
+        "opponent": "André-Marie BEHANZIN",
+        "seat": 0,
+        "rewards": [57194.0, 21861.0],
+        "result": "W",
+        "margin": 35333.0
+      },
+      {
+        "id": 104499234,
+        "opponent": "draven",
+        "seat": 1,
+        "rewards": [88268.0, 78209.0],
+        "result": "L",
+        "margin": -10059.0
+      },
+      {
+        "id": 104499712,
+        "opponent": "Caleb Bredlow",
+        "seat": 0,
+        "rewards": [99680.0, 90471.0],
+        "result": "W",
+        "margin": 9209.0
+      },
+      {
+        "id": 104500152,
+        "opponent": "Luka Duvanov",
+        "seat": 1,
+        "rewards": [49077.0, 60200.0],
+        "result": "W",
+        "margin": 11123.0
+      },
+      {
+        "id": 104500567,
+        "opponent": "Chiachii Liang",
+        "seat": 1,
+        "rewards": [103161.0, 81396.0],
+        "result": "L",
+        "margin": -21765.0
+      },
+      {
+        "id": 104501028,
+        "opponent": "Caleb Bredlow",
+        "seat": 0,
+        "rewards": [74335.0, 58692.0],
+        "result": "W",
+        "margin": 15643.0
+      },
+      {
+        "id": 104501454,
+        "opponent": "Leraaaa",
+        "seat": 1,
+        "rewards": [63031.0, 75770.0],
+        "result": "W",
+        "margin": 12739.0
+      },
+      {
+        "id": 104501895,
+        "opponent": "Tomeiser",
+        "seat": 1,
+        "rewards": [44062.0, 46531.0],
+        "result": "W",
+        "margin": 2469.0
+      },
+      {
+        "id": 104502337,
+        "opponent": "bsenst",
+        "seat": 1,
+        "rewards": [137168.0, 71748.0],
+        "result": "L",
+        "margin": -65420.0
+      },
+      {
+        "id": 104502787,
+        "opponent": "Shivam Kushwaha",
+        "seat": 1,
+        "rewards": [114199.0, 93635.0],
+        "result": "L",
+        "margin": -20564.0
+      },
+      {
+        "id": 104503241,
+        "opponent": "engin_zhou",
+        "seat": 0,
+        "rewards": [57804.0, 55325.0],
+        "result": "W",
+        "margin": 2479.0
+      },
+      {
+        "id": 104503674,
+        "opponent": "Oblivix",
+        "seat": 0,
+        "rewards": [74224.0, 96707.0],
+        "result": "L",
+        "margin": -22483.0
+      },
+      {
+        "id": 104504106,
+        "opponent": "Md.Mahfujul Karim",
+        "seat": 1,
+        "rewards": [115065.0, 93105.0],
+        "result": "L",
+        "margin": -21960.0
+      },
+      {
+        "id": 104504110,
+        "opponent": "kai",
+        "seat": 1,
+        "rewards": [48147.0, 39598.0],
+        "result": "L",
+        "margin": -8549.0
+      },
+      {
+        "id": 104504560,
+        "opponent": "Quyền Thịnh",
+        "seat": 0,
+        "rewards": [78480.0, 103720.0],
+        "result": "L",
+        "margin": -25240.0
+      },
+      {
+        "id": 104505026,
+        "opponent": "Manuel Ramos",
+        "seat": 1,
+        "rewards": [78150.0, 74902.0],
+        "result": "L",
+        "margin": -3248.0
+      },
+      {
+        "id": 104505490,
+        "opponent": "Yaroslav Tanko",
+        "seat": 0,
+        "rewards": [84535.0, 109029.0],
+        "result": "L",
+        "margin": -24494.0
+      },
+      {
+        "id": 104505769,
+        "opponent": "hoo aam",
+        "seat": 1,
+        "rewards": [76556.0, 80886.0],
+        "result": "W",
+        "margin": 4330.0
+      },
+      {
+        "id": 104506363,
+        "opponent": "Artur Sakhiullin",
+        "seat": 1,
+        "rewards": [78473.0, 51189.0],
+        "result": "L",
+        "margin": -27284.0
+      },
+      {
+        "id": 104506843,
+        "opponent": "Duong Bao Duy",
+        "seat": 1,
+        "rewards": [75869.0, 93395.0],
+        "result": "W",
+        "margin": 17526.0
+      },
+      {
+        "id": 104507243,
+        "opponent": "Ethan Benjamin Cole",
+        "seat": 0,
+        "rewards": [68293.0, 83207.0],
+        "result": "L",
+        "margin": -14914.0
+      }
+    ],
+    "note": "Validation episode 104498289 is excluded. The complete 21-game public sample is 9W-12L with negative median and net margin; it does not support promotion or generalization claims. publicScore is a platform readback, not a stable capability estimate."
+  },
+  "evidence_scope": {
+    "online_submission_occurred": true,
+    "validation_evidence": true,
+    "ladder_performance_evidence": true,
+    "promotion_evidence": false,
+    "holdout_evidence": false,
+    "historical_published_holdout_reused": false
+  },
+  "next_sampling_gate": "The first >=6-game stop-loss checkpoint was not triggered, but the complete 21-game sample finished below 50% at 9W-12L. Treat round 7 as not promoted; no second submission or holdout run occurred.",
+  "recorded_at_utc": "2026-09-01T08:19:18Z"
+}

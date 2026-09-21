@@ -1,0 +1,53 @@
+{
+  "round": 5,
+  "submission_ref": 55884001,
+  "submitted_at_utc": "2026-08-30T06:45:39Z",
+  "candidate_sha256": "c44e2b254686fc34",
+  "candidate_label": "v7.2 (C2R weed reclaim + rotation DIG + V1 herd floor)",
+  "holdout": "attempt-5 dada53c8: 176 games 166W-10L 94.3% Wilson95 [0.899, 0.969]; 12-agent pool",
+  "gate": "87W-1L complete gate; ablations v7_c2* + v72_v1 (+319k surgical) / v72_v2 (-349k rejected)",
+  "validation_status": "COMPLETE",
+  "public_score_after_validation": 718.6,
+  "previous_submission": {
+    "ref": 55873168,
+    "candidate": "v6 127c277e",
+    "score": 621.8
+  },
+  "quota_used_today_utc": 1,
+  "quota_remaining": 4,
+  "sampling": {
+    "channel": "web Game-History ListEpisodes (session-hooked) + per-episode replay.json head via plain HTTP; full replays for 3 key games",
+    "sampled_at_utc": "2026-08-30T19:50:00Z",
+    "note": "sampled same-day ahead of the 08-30 episodes shard (publishes 2026-08-31 ~00:12 UTC); shard-based full-replay pass follows via the scheduled run",
+    "games_total": 23,
+    "games_public": 22,
+    "games_validation": 1,
+    "record": "12W-10L",
+    "win_rate": 0.5455,
+    "net_margin": 86954,
+    "avg_margin": 3952.5,
+    "my_avg_reward": 68897.7,
+    "opp_avg_reward": 64945.2,
+    "rating_path": "600 -> 718.7 (peak, game 3) -> 521 (trough, game 6) -> 624.9 final",
+    "public_score_latest": 624.8,
+    "stop_loss": "not triggered (54.5% > 50% floor)",
+    "best_game": {
+      "episode_id": 103100630,
+      "opponent": "yqz",
+      "rewards": [117375, 37678],
+      "margin": 79697,
+      "note": "our all-time online high score 117.4k (monster band entry); full dairy engine online: MILK 53.1k + WOOL 35.0k + STRAW 26.9k, peak herd 15 (7S+8C), external feed only 310u@10.0k"
+    },
+    "worst_game": {
+      "episode_id": 103252482,
+      "opponent": "Suda",
+      "rewards": [40079, 103334],
+      "margin": -63255,
+      "note": "wheat-economy opponent: 187 wheat planted vs our 69, d12 cash 23484 vs our 285, FERTILIZER line 23.0k; our herd composition stalled (2 sheep peak)"
+    }
+  },
+  "episodes_sampled": 23,
+  "episodes_note": "full list in round5_episodes.json (same-day web channel); replays archived at .tmp-online/round5/",
+  "recorded_at": "2026-08-30T06:54:09.314206+00:00",
+  "updated_at": "2026-08-30T19:55:00Z"
+}
