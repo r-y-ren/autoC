@@ -5,8 +5,8 @@
 
 | 函数 | 批次 | 状态(日期) | 核验命令+摘要 | commit |
 |---|---|---|---|---|
-| discover_campaign_roots | B1 | wired 2026-09-21 | pytest tests/shared/test_discover_campaign_roots.py → 8 passed（真实树三根/CWD 无关/四类 fail-closed/零字面路径）；全套件 57P | (本批commit) |
-| run_equivalence_gate | B1 | wired 2026-09-21 | pytest tests/shared/test_run_equivalence_gate.py → 3 passed in 36.79s（旧树默认判据 62P+4xf 实跑 pass；未知判据 fail-closed；裁决键完整） | (本批commit) |
+| discover_campaign_roots | B1 | wired 2026-09-21 | pytest tests/shared/test_discover_campaign_roots.py → 8 passed（真实树三根/CWD 无关/四类 fail-closed/零字面路径）；全套件 57P | 16c9ebd |
+| run_equivalence_gate | B1 | wired 2026-09-21 | pytest tests/shared/test_run_equivalence_gate.py → 3 passed in 36.79s（旧树默认判据 62P+4xf 实跑 pass；未知判据 fail-closed；裁决键完整） | 19ce465 |
 | aggregate_scores | B2 | stub 2026-09-21 | — | — |
 | break_ties_by_identity | B2 | stub 2026-09-21 | — | — |
 | robust_selection | B2 | stub 2026-09-21 | — | — |
