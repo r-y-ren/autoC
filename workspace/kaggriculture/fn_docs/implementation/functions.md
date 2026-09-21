@@ -10,9 +10,9 @@
 | aggregate_scores | B2 | wired 2026-09-21 | pytest test_aggregate_scores → 12 passed（值序反例 65.0/22.5/55.0/62.5、对照旧名序值失效、trim 边界、旗面不变） | f64015a |
 | break_ties_by_identity | B2 | wired 2026-09-21 | pytest test_break_ties_by_identity → 9 passed（0.4%切/0.6%不切/边界==gate 不切；对旧 robust_select 32 点网格差分零不匹配） | 3366285 |
 | robust_selection | B2 | wired 2026-09-21 | pytest tests/robust_selection → 26 passed（端到端值序修复生效+K1 守成+注记结构；对旧码差分=仅 R3 修复增量） | 43258a4 |
-| rollout_with_replay_opponent | B3 | stub 2026-09-21 | — | — |
-| evaluate_plan_portfolio | B3 | stub 2026-09-21 | — | — |
-| recalculate_affected_history | B3 | stub 2026-09-21 | — | — |
+| rollout_with_replay_opponent | B3 | wired 2026-09-21 | pytest test_rollout… → 10 passed（R2 反例 me_seat=1→[3000.0,1570.0]、me_seat=0 双通道一致、指纹 fail-closed） | bf61656 |
+| evaluate_plan_portfolio | B3 | wired 2026-09-21 | pytest test_evaluate… → 6 passed（seated 透传/聚合委托 robust_selection/枚举帽/真引擎 me_seat=1 端到端） | bf3995a |
+| recalculate_affected_history | B3 | wired 2026-09-21 | pytest test_recalculate… → 3 passed；真实台账已落盘（G1 五条全 SKIP=replay_data_missing，主力机回填前提已注明） | 9dd79b7 |
 | run_official_bench | B3 | stub 2026-09-21 | — | — |
 | fingerprint_engine_constants | B4 | stub 2026-09-21 | — | — |
 | guard_replay_profile_engine | B4 | stub 2026-09-21 | — | — |

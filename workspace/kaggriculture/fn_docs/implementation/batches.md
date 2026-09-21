@@ -22,5 +22,6 @@
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |
 |---|---|---|
+| 2026-09-21 | 快照套件口径修正（B3 期发现） | 根因=planner-on 整局含时间治理器（0.85s 帽读真实墙钟）→负载抖动跨决策边界即漂移（实测两跑 [81108,70273]/[78199,63920]）；整局逐位冻结改旗关面（三遍逐字节一致 [59730.0,59835.0]），planner-on 改 DONE/零异常/engaged 冒烟；旧 planner-on 冻结值文件头留档已废；门默认口径 62P+4xf 不变（commit dfcf476） |
 | 2026-09-21 | B2 签名登记 | robust_select→robust_selection（对齐责任文档命名）；返回结构 dict{best,ranking,strategy,tie_break,aggregates}（旧码同构） |
 | 2026-09-21 | 批次计划建立 | 15 批（B1 共享基座 → B15 治理层）；波序对齐 responsibility.md 四波；run_submission_agent 因 10 函数超 8 切 B12/B13 两批 |
