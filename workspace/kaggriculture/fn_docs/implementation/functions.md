@@ -47,11 +47,11 @@
 | run_dawn_planner | B13 | wired 2026-09-22 | 73 passed 之一（runtime 迁移 4 处适配登记；select 提供者=robust_selection 值序版） | 3820855 |
 | record_shadow_telemetry | B13 | wired 2026-09-22 | 73 passed 之一（零剥离逐字节） | 3820855 |
 | run_submission_agent | B13 | wired 2026-09-22 | 顶层：等价门 overall=pass；旗关整局逐字节复现；snapshot 双目标 71 passed | 3820855 |
-| fix_bc_track_records | B14 | stub 2026-09-21 | — | — |
-| retire_codemap_with_errata | B14 | stub 2026-09-21 | — | — |
-| codify_probes_policy | B14 | stub 2026-09-21 | — | — |
-| sync_documentation | B14 | stub 2026-09-21 | — | — |
-| write_dual_source_provenance | B15 | stub 2026-09-21 | — | — |
-| declare_blueprint_cmd_invalidation | B15 | stub 2026-09-21 | — | — |
-| demote_active_candidate_ledger | B15 | stub 2026-09-21 | — | — |
-| record_governance_dispositions | B15 | stub 2026-09-21 | — | — |
+| fix_bc_track_records | B14 | wired 2026-09-22 | 21 passed 之一（9 处修正副本+diff 注册，台账锚定 fail-closed） | edcb993 |
+| retire_codemap_with_errata | B14 | wired 2026-09-22 | 21 passed 之一（4 勘误实证+退役标记） | edcb993 |
+| codify_probes_policy | B14 | wired 2026-09-22 | 21 passed 之一（6 摘要核对全过；不一致 1=.gitignore 白名单缺口入 postwar） | edcb993 |
+| sync_documentation | B14 | wired 2026-09-22 | 顶层实跑 PASS（8/8 对账：#1-7 锚 README v1+#8 锚勘误） | edcb993 |
+| write_dual_source_provenance | B15 | wired 2026-09-22 | 18 passed 之一（双源记录+单源断言扫描：11 目标/残留 2=旧树两记录文件战后统一） | 83880f2 |
+| declare_blueprint_cmd_invalidation | B15 | wired 2026-09-22 | 18 passed 之一（失效判据反向校验） | 83880f2 |
+| demote_active_candidate_ledger | B15 | wired 2026-09-22 | 18 passed 之一（时点闸：≤09-30 只记录，物理降级拒绝） | 83880f2 |
+| record_governance_dispositions | B15 | wired 2026-09-22 | 顶层实跑 schema_valid=True（三叶汇编落盘） | 83880f2 |

@@ -1,13 +1,11 @@
 # batches.md —— 批次表（待办导航）
-> fn-implement 独占更新。▶ = 下一批要完成的任务；未经批间门批准不得增删批次内容。
+> fn-implement 独占更新。**全部 15 批完成（2026-09-22）——批表清空，待 fn-close。**
 > 波序对齐 responsibility.md 四波（W1 评估修复 → W2 基线数据 → W3 契约结构 → W4 文档治理+bot 整体迁移）；唯一波间依赖：B9 的 v143 归档前置 B3（bench 吸收 seated 完成）。
 > 旧树冻结纪律：一切实现只落 fn_work/ 与 fn_docs/implementation/；[改造] 件的修复发生在 fn_work 副本，旧树零字节变更直至战后 fn-close。
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
 | B11 | downgrade_dormant_assets 子树: prune_mainline_import_graph, downgrade_dormant_assets | 主线 import 图断言绿 | W3；R13/R14 |
-| ▶ B14 | sync_documentation 子树: fix_bc_track_records, retire_codemap_with_errata, codify_probes_policy, sync_documentation | 顶层 wired + gap_table §一清单对账清零 | W4；R7/R16/R18 |
-| B15 | record_governance_dispositions 子树: write_dual_source_provenance, declare_blueprint_cmd_invalidation, demote_active_candidate_ledger, record_governance_dispositions | 顶层 wired + 处置记录键完整 | W4；R4/R17/R21（R21 物理动作留时点闸） |
 
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |

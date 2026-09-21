@@ -16,3 +16,5 @@
 | 2026-09-22 | B11 | prune_mainline_import_graph, downgrade_dormant_assets | 14 passed+实跑 PASS（R13/R14 分区注册；W3 全收口） |
 | 2026-09-22 | B12 | observe/decide/build_mission/solve/execute 五迁移件（+B11 注册表路径补丁 p1） | 41 passed；R10 剥离落地（solver 三件/mission all 支/stage 显式化/R20 注释修正）；sha 登记测试兼旧树冻结哨兵 |
 | 2026-09-22 | B13 | load_agent_modules, plan_market_orders, run_dawn_planner, record_shadow_telemetry, run_submission_agent（+链基座 _exec_chain 七件+planner 四件迁移） | 73 passed+snapshot 71 双目标+等价门 pass——R1 主体收口：fn_work 链旗关整局逐字节复现旧冻结口径 |
+| 2026-09-22 | B14 | fix_bc_track_records, retire_codemap_with_errata, codify_probes_policy, sync_documentation | 21 passed+对账 8/8 PASS；R7/R16/R18 修正副本落地 |
+| 2026-09-22 | B15 | write_dual_source_provenance, declare_blueprint_cmd_invalidation, demote_active_candidate_ledger, record_governance_dispositions | 18 passed+实跑 schema_valid；R4/R17/R21 处置记录落地（物理动作战后）——**15/15 批全部完成，50/50 函数 wired** |
