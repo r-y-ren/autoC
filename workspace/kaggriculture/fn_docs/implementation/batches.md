@@ -5,8 +5,7 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B5 | migrate_snapshot_suite 子树: refresh_frozen_values, migrate_snapshot_suite | 快照套件迁入 fn_work/tests 全绿 + R2/R3 反例 XPASS | W1 收口；R1 判据中枢 |
-| B6 | portable_test_baseline 子树: regenerate_artifacts_lf, relax_platform_assertions, declare_machine_context, portable_test_baseline | 顶层 wired + fresh 语义验证（本 Linux 机 0 环境性失败） | W2；R6 |
+| ▶ B6 | portable_test_baseline 子树: regenerate_artifacts_lf, relax_platform_assertions, declare_machine_context, portable_test_baseline | 顶层 wired + fresh 语义验证（本 Linux 机 0 环境性失败） | W2；R6 |
 | B7 | package_minimal_repro_set 子树: collect_gate_golden_files, enforce_size_budget, declare_local_corpus_dependencies, package_minimal_repro_set | 顶层 wired + 最小集清单+预算断言实跑 | W2；R19；体积预算定桩随批 |
 | B8 | unify_contract_sources 子树: merge_abnormal_reason, single_opponent_roster, assert_bots_constants_match_wheel, unify_contract_sources | 顶层 wired + 单点 grep 断言 + 篡改红测试 | W3；R8/R9 |
 | B9 | archive_forensic_assets 子树: partition_script_tiers, archive_bc_models, archive_forensic_assets | 归档区落位 + 主线 import 断言 + 保留档可跑 | W3；R11/R12；前置 B3 |

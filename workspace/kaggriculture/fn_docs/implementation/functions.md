@@ -16,8 +16,8 @@
 | run_official_bench | B3 | wired 2026-09-21 | pytest tests/run_official_bench → 32 passed（双口径裁决结构+offset 分解+异常局 fail-closed+oracle 归因；全套件 110P） | ba686fd |
 | fingerprint_engine_constants | B4 | wired 2026-09-21 | pytest test_fingerprint… → 17 passed 之一（16 键集提取/确定性/三类篡改变指纹/wheel 交叉 14 键/登记 roundtrip） | 192b310 |
 | guard_replay_profile_engine | B4 | wired 2026-09-21 | pytest tests/guard_replay_profile_engine → 17 passed（双重门：登记指纹+wheel 真值，绕过式改动仍红；skip 仅测试注入） | 0f07e98 |
-| refresh_frozen_values | B5 | stub 2026-09-21 | — | — |
-| migrate_snapshot_suite | B5 | stub 2026-09-21 | — | — |
+| refresh_frozen_values | B5 | wired 2026-09-21 | pytest test_refresh_frozen… → 13 passed 之一（22 条锚定编辑表白名单、越界零写入、双口径注记 13 处） | cfd9a25 |
+| migrate_snapshot_suite | B5 | wired 2026-09-21 | fn_work/tests/snapshot → 66 passed（R2/R3 反例全转常规 PASSED+零 xfail 残留+其余冻结值逐字节不变）；旧套件 62P+4xf 不动 | 1e0821a |
 | regenerate_artifacts_lf | B6 | stub 2026-09-21 | — | — |
 | relax_platform_assertions | B6 | stub 2026-09-21 | — | — |
 | declare_machine_context | B6 | stub 2026-09-21 | — | — |
