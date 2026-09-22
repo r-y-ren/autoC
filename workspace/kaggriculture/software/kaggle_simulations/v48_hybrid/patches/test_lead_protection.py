@@ -337,6 +337,165 @@ def test_build_triggered_does_not_mutate_input():
     assert out[:1] == tape and out[1] == ["SELL", "MELON", 4]
 
 
+# ===========================================================================
+# D. plan armed 用例组（R8-v2）
+# ===========================================================================
+def test_plan_armed_bypasses_lead_gate():
+    # armed=True：lead=1600<3000 仍发射（触发已由编排入口并集判定）
+    out = lp.plan_protective_sells({"MELON": 30}, FALLING, [], 1600.0,
+                                   step=582, armed=True)
+    assert out == [["SELL", "MELON", 4]]
+
+
+def test_plan_armed_none_lead_still_deferred():
+    sells = [["SELL", "MELON", 10]]
+    assert lp.plan_protective_sells({"MELON": 30}, FALLING, sells, None,
+                                    step=582, armed=True) is sells
+
+
+def test_plan_unarmed_default_keeps_v1_gate():
+    # armed=False（缺省）：lead<3000 不发（v1 防御门保持）
+    assert lp.plan_protective_sells({"MELON": 30}, FALLING, [], 2999.99,
+                                    step=582) == []
+
+
+# ===========================================================================
+# E. build v2 用例组（回撤臂 + 峰寄存器 + 并集）
+# ===========================================================================
+def _drawdown_obs(day, me, opp, glut=True):
+    step = day * 24 + 6
+    inv = {"MELON": 15000, "WHEAT": 10000} if glut else \
+        {"MELON": 10000, "WHEAT": 10000}
+    return make_obs(step=step, me_money=me, opp_money=opp, inventory=inv)
+
+
+def test_build_drawdown_arm_triggers():
+    # d15 峰 5000 → d16 回撤至 2900（peak-lead=2100>=2000 且 lead>=1500）
+    reg = {}
+    obs_peak = _drawdown_obs(15, 58000.0, 53000.0)          # lead=5000 新峰
+    assert lp.build_lead_protection(obs_peak, 15, TAPE, register=reg) is TAPE
+    assert reg == {"peak_lead": 5000.0}
+    obs_drop = _drawdown_obs(16, 55900.0, 53000.0)          # lead=2900
+    out = lp.build_lead_protection(obs_drop, 16, TAPE, register=reg)
+    assert out is not TAPE and ["SELL", "MELON", 4] in out
+
+
+def test_build_drawdown_boundary_equality_triggers():
+    reg = {"peak_lead": 5000.0}
+    obs = _drawdown_obs(15, 53000.0, 50000.0)               # lead=3000, dd=2000
+    out = lp.build_lead_protection(obs, 15, TAPE, register=reg)
+    assert ["SELL", "MELON", 4] in out
+
+
+def test_build_drawdown_just_below_threshold_identity():
+    reg = {"peak_lead": 5000.0}
+    obs = _drawdown_obs(15, 53001.0, 50000.0)               # lead=3001, dd=1999
+    assert lp.build_lead_protection(obs, 15, TAPE, register=reg) is TAPE
+
+
+def test_build_drawdown_lead_gate_identity():
+    # 回撤 3500>=2000 但 lead=1400<1500（仍领先不足）→ 不触发
+    reg = {"peak_lead": 5000.0}
+    obs = _drawdown_obs(15, 51400.0, 50000.0)
+    assert lp.build_lead_protection(obs, 15, TAPE, register=reg) is TAPE
+
+
+def test_build_drawdown_day_gate_identity_but_peak_tracked():
+    # d14（<15）回撤形态在场 → 不触发；但峰值仍并入寄存器
+    reg = {}
+    obs = _drawdown_obs(14, 55000.0, 50000.0)               # lead=5000
+    assert lp.build_lead_protection(obs, 14, TAPE, register=reg) is TAPE
+    assert reg == {"peak_lead": 5000.0}
+    obs_drop = _drawdown_obs(14, 52500.0, 50000.0)          # dd=2500, d14
+    assert lp.build_lead_protection(obs_drop, 14, TAPE,
+                                    register=reg) is TAPE
+
+
+def test_build_peak_register_tracks_monotone_max():
+    reg = {}
+    for me, opp in ((52000.0, 50000.0), (56000.0, 50000.0),
+                    (54000.0, 50000.0), (60000.0, 50000.0)):
+        lp.build_lead_protection(_drawdown_obs(15, me, opp), 15, TAPE,
+                                 register=reg)
+    assert reg == {"peak_lead": 10000.0}
+    # 新峰帧回撤=0 → 臂 A 不触发（峰值帧零回撤语义）
+    assert lp.build_lead_protection(_drawdown_obs(15, 60000.0, 50000.0),
+                                    15, TAPE, register=reg) is TAPE
+
+
+def test_build_union_d24_arm_independent_of_register():
+    # 臂 B 不依赖寄存器：register=None、day=24、lead=3000 → 触发（v1 路径）
+    obs = make_obs(step=582, me_money=7000.0, opp_money=4000.0,
+                   inventory={"MELON": 15000, "WHEAT": 10000})
+    out = lp.build_lead_protection(obs, 24, TAPE)
+    assert ["SELL", "MELON", 4] in out
+
+
+def test_build_union_both_arms_same_frame():
+    # 同帧双臂同时满足（d24、lead 3200、dd 2500）→ 触发一次（并集语义）
+    reg = {"peak_lead": 5700.0}
+    obs = _drawdown_obs(24, 53200.0, 50000.0)
+    out = lp.build_lead_protection(obs, 24, TAPE, register=reg)
+    assert out is not TAPE and ["SELL", "MELON", 4] in out
+
+
+def test_build_register_none_drawdown_inert():
+    # register=None：每帧临时寄存器 → 回撤恒 0 → 臂 A 退化，仅臂 B 可触发
+    obs = _drawdown_obs(16, 55900.0, 53000.0)               # lead=2900<3000
+    assert lp.build_lead_protection(obs, 16, TAPE) is TAPE
+    assert lp.build_lead_protection(obs, 16, TAPE, register=None) is TAPE
+
+
+def test_build_register_garbage_treated_as_none():
+    # 非法寄存器类型 → 当 None 处理（fail-safe，臂 A 退化）
+    obs = _drawdown_obs(16, 55900.0, 53000.0)
+    assert lp.build_lead_protection(obs, 16, TAPE,
+                                    register="garbage") is TAPE
+
+
+def test_build_register_not_mutated_on_nonmeasurable_frame():
+    # lead 不可估帧（unobservable：无 money 无 shed 无动物）→ 寄存器原样不动
+    reg = {"peak_lead": 5000.0}
+    obs = {"step": 16 * 24 + 6, "player": 0, "farms": [],
+           "market": {"prices": {}, "inventory": {}}, "town": {}}
+    lp.build_lead_protection(obs, 16, TAPE, register=reg)
+    assert reg == {"peak_lead": 5000.0}
+
+
+def test_build_register_survives_error_frame():
+    # 抛异常观测帧 → 原单返回；寄存器不被破坏（跨帧续用）
+    reg = {"peak_lead": 5000.0}
+
+    class RaisingObs(dict):
+        def get(self, key, default=None):
+            raise RuntimeError("boom")
+
+    assert lp.build_lead_protection(RaisingObs(), 16, TAPE,
+                                    register=reg) is TAPE
+    assert reg == {"peak_lead": 5000.0}
+    obs_drop = _drawdown_obs(16, 55900.0, 53000.0)
+    out = lp.build_lead_protection(obs_drop, 16, TAPE, register=reg)
+    assert ["SELL", "MELON", 4] in out
+
+
+def test_build_drawdown_terminal_window_identity():
+    reg = {"peak_lead": 20000.0}
+    obs = make_obs(step=717, me_money=15000.0, opp_money=5000.0)
+    assert lp.build_lead_protection(obs, 29, TAPE, register=reg) is TAPE
+
+
+def test_build_v2_config_override():
+    # config 经参数传入（模块纯函数）：收紧回撤槛至 2500 → 2100 回撤不触发
+    reg = {"peak_lead": 5000.0}
+    obs = _drawdown_obs(16, 55900.0, 53000.0)               # dd=2100
+    out = lp.build_lead_protection(obs, 16, TAPE, register=reg)
+    assert ["SELL", "MELON", 4] in out
+    reg2 = {"peak_lead": 5000.0}
+    assert lp.build_lead_protection(obs, 16, TAPE,
+                                    config={"trigger_drawdown_min": 2500.0},
+                                    register=reg2) is TAPE
+
+
 def test_build_deterministic():
     obs = make_obs(step=582, inventory={"MELON": 15000, "WHEAT": 10000})
     a = lp.build_lead_protection(obs, 24, TAPE)

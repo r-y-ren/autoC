@@ -1,10 +1,10 @@
 {
  "protocol": "v5-launch-fourgate/1.0",
  "package": {
-  "main_sha256": "3cfb1e0c0829137465f1624d36d0a14c052b4627f1bef09daa05e27b69b8daab",
-  "main_bytes": 127157,
-  "tar_sha256": "20421986c4d616caf8d25ddb28080d25cb66e3bff8e70f374280086d90ce4ecb",
-  "tar_bytes": 95489,
+  "main_sha256": "042f84f090fde48c4d51a0f7aa8ca9fe2f4bce5aef993f3001b747ad4e12e8b1",
+  "main_bytes": 130088,
+  "tar_sha256": "ad698d0189d859f28ca378720add264073198d115f0f1788319b2bb7c32f2e68",
+  "tar_bytes": 97655,
   "gate4_size_ok": true
  },
  "gate1_official_load": {
@@ -48,8 +48,8 @@
     "suspicious_log_lines": [],
     "wall_s": 3.4,
     "agent_calls": 1438,
-    "max_step_ms": 3.04,
-    "p99_step_ms": 1.14,
+    "max_step_ms": 2.77,
+    "p99_step_ms": 1.2,
     "mean_step_ms": 0.24,
     "action_stream_sha256": "a009ad5e6fb46d874b24102259d9df5c14148e56c7117654b1fe630bb8f411d8",
     "obs_count": 719
@@ -70,9 +70,9 @@
     "suspicious_log_lines": [],
     "wall_s": 3.6,
     "agent_calls": 1438,
-    "max_step_ms": 4.63,
-    "p99_step_ms": 1.07,
-    "mean_step_ms": 0.23,
+    "max_step_ms": 3.98,
+    "p99_step_ms": 1.09,
+    "mean_step_ms": 0.24,
     "action_stream_sha256": "7d4823eede4dca0bad5673adf1f5816b195ea67664891f93498e2d9ea6a7721b",
     "obs_count": 719
    }
@@ -109,6 +109,6 @@
   },
   "note": "informational：v5 含 P4 终局保果层（d24+ lead>=3000 形态改流），等/不等均为合法结果，非门判据"
  },
- "wall_total_s": 15.3,
+ "wall_total_s": 15.2,
  "all_gates_pass": true
 }

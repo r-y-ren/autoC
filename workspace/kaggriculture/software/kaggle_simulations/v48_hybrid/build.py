@@ -34,6 +34,14 @@
 #   根提交件 P1-P3 全开亦同）。副作用登记：P4 默认 off 后，无参 CLI 恒
 #   走诊断件路径（tmp/main_p1110.py），根提交件不再被无参调用再生；
 #   --p4 on 全开会以含 P4 内容覆盖根提交件（冻结期 ba1b44c 禁用）。
+# 变更记录（R8-v2 F5，2026-09-22，结构性增补）：
+#   P4 触发面升级双条件并集【day>=15 且峰回撤 peak-lead>=2000 且
+#   lead>=1500】∪【day>=24 且 lead>=3000】（v1 判决 FAIL 0/14 尸检：触发
+#   过晚，9/14 局峰值日在 d17 前，6 局重演 P4 形态从未在场）；接线增峰
+#   值运行寄存器 _V48H_P4_REGISTER（模块级 dict，P4 on 时发射、off 零痕
+#   迹，token 集增 _V48H_P4_REGISTER 入零接线验证）；调用签名改
+#   _v48h_p4_build(..., register=_V48H_P4_REGISTER)。P4 off 构建的无扰动
+#   自证口径不变（P4 全发射位整体不发射）。
 # ===========================================================================
 from __future__ import annotations
 
@@ -100,9 +108,9 @@ PATCHES = {
     "P4": {
         "module": "v48h.lead_protection",
         "source": "lead_protection.py",
-        "role": "lead-protection conservative sell timing (R8 post-war)",
+        "role": "lead-protection conservative sell timing (R8-v2 post-war)",
         "tokens": ("v48h.lead_protection", "_v48h_p4_build",
-                   "build_lead_protection"),
+                   "build_lead_protection", "_V48H_P4_REGISTER"),
     },
 }
 PATCH_ORDER = ("P1", "P2", "P3", "P4")
@@ -195,15 +203,22 @@ def build_block(flags: dict, base_text: str, patch_sources: dict,
                           f"{PATCHES[key]['role']}")
     if on["P4"]:
         # P4 专属头注（P4 off 时不发射——无扰动自证，见文件头变更记录）。
+        # R8-v2（F5，2026-09-22）：触发面改双条件并集【day>=15 且峰回撤
+        # peak-lead>=2000 且 lead>=1500】∪【day>=24 且 lead>=3000】；峰值经
+        # 运行峰寄存器跟踪（编排处持有 _V48H_P4_REGISTER，跨回合注入）。
         header += [
-            "# P4 lead-protection (R8 post-war asset): runs last on the sell",
-            "# side, after P1/P3; self-gated stack (day>=24 & lead>=3000 &",
-            "# protective hour 6/12/18 & step<717 terminal stand-down; no",
-            "# trigger / any error -> original sell list untouched) -- it is",
-            "# NOT gated by the P1 defer probe: its working window (d24+,",
-            "# eve of the endgame dump) overlaps the probe's endgame-dump",
-            "# stand-down by design (front-loaded price-lock selling is",
-            "# precisely for that window).",
+            "# P4 lead-protection (R8-v2 post-war asset): runs last on the",
+            "# sell side, after P1/P3; self-gated trigger union [day>=15 &",
+            "# drawdown peak-lead>=2000 & lead>=1500] OR [day>=24 &",
+            "# lead>=3000], running peak held in the orchestrator-owned",
+            "# register _V48H_P4_REGISTER (injected per call; patch module",
+            "# stays stateless); protective hour 6/12/18 & step<717 terminal",
+            "# stand-down; no trigger / any error -> original sell list",
+            "# untouched -- it is NOT gated by the P1 defer probe: its",
+            "# working window (d15+ lead-collapse in progress, eve of the",
+            "# endgame dump) overlaps the probe's endgame-dump stand-down",
+            "# by design (front-loaded price-lock selling is precisely for",
+            "# that window).",
         ]
     header += [
         "# Unified arbitration: terminal liquidation > anti-clone preemptive",
@@ -225,6 +240,11 @@ def build_block(flags: dict, base_text: str, patch_sources: dict,
     # 逐字节一致（无扰动自证），故 off 不留任何 P4 痕迹。
     flag_lines = [f"_V48H_{k}_ON = {on[k]!r}"
                   for k in PATCH_ORDER if k != "P4" or on["P4"]]
+    if on["P4"]:
+        # R8-v2：P4 峰值运行寄存器（编排处持有的跨回合状态；模块级 dict，
+        # 每席每局独立装载天然隔离——P2 模块级 streak 先例；补丁模块自身
+        # 保持纯函数，寄存器经参数注入）。
+        flag_lines.append("_V48H_P4_REGISTER = {}")
 
     modules = {PATCHES[k]["module"]: patch_sources[k]
                for k in PATCH_ORDER if on[k]}
@@ -367,14 +387,17 @@ def build_block(flags: dict, base_text: str, patch_sources: dict,
         "                pass",
         ]
     if on["P4"]:
-        # P4 卖单面接线（R8 F4b）：day=step//24（_v48_get 可观口径，P1/P3
-        # 先例）；P4 自带门栈（day/lead/保护时点/717 让位），不经 defer 探针。
+        # P4 卖单面接线（R8-v2 F5）：day=step//24（_v48_get 可观口径，P1/P3
+        # 先例）；峰值寄存器 _V48H_P4_REGISTER 跨回合注入（R8-v2 签名变更：
+        # build_lead_protection(obs, day, sells, config=None, register=None)）。
+        # P4 自带门栈（双条件并集触发/保护时点/717 让位），不经 defer 探针。
         agent_body += [
         "        if _V48H_P4_ON:",
         "            try:",
         "                _policy_out[\"market\"] = _v48h_p4_build(",
         "                    obs, int(_v48_get(obs, \"step\", 0) or 0) // 24,",
-        "                    _policy_out[\"market\"])",
+        "                    _policy_out[\"market\"],",
+        "                    register=_V48H_P4_REGISTER)",
         "            except Exception:",
         "                pass",
         ]

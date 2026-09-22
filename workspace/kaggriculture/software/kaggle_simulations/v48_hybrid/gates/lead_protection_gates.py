@@ -1,30 +1,40 @@
 # -*- coding: utf-8 -*-
-"""R8 验收编排：重演门（14 局领先崩塌局，>=7/14）+ 等价面（>=8 局逐字节）+ 发射复检。
-上游: R8 验收方式（fn_docs/requirements.md）；fail-closed。
+"""R8-v2 验收编排：双臂对照重演门（14 局 ×2 臂，>=7/14）+ 等价面（>=8 局
+逐字节）+ 发射复检。上游: R8-v2 验收方式（fn_docs/requirements.md /
+responsibility.md R8 增补段 v2 修订）；fail-closed。
 
 F4c 实装（占位→真实，2026-09-22）。口径登记：
 
-* 重演门 run_replay_gate(corpus_dir, v5_callable)
+* 重演门 run_replay_gate(corpus_dir, v5_callable, v4b_callable)【R8-v2 F5
+  改双臂对照】
   - 语料 = 归档目录（fn_docs/results/replays-lead-collapse/，14 件最小投影
     + CORPUS.md 清单）；清单行/回放件缺失即 ValueError（fail-closed）。
   - 注入点口径 = 领先峰值日 d 的起始步 d*24（"从该日 step 起接管"：该日
-    hour0 起我席由 v5 决策，此前按回放真值重演；峰值日资本口径 =
+    hour0 起我席由被测 agent 决策，此前按回放真值重演；峰值日资本口径 =
     loss-timelines 端日 hour23 资金差，即 CORPUS.md"峰值日"列）。
+  - 双臂对照（v2）：每局两臂**同点注入**——P4 臂（v5=v4b+P4v2）与对照臂
+    （v4b=P4 off 同旗面基底）；对照臂给出"同注入点、无 P4"的基线终局，
+    Δ=margin(P4)−margin(对照) 即 P4 的因果杠杆（符号直测，剥离 v1 的
+    "注入机制本身是否改流"混杂）。
   - 对手侧 = 回放真值动作流（seated 通道 fn_work
     rollout_with_replay_opponent 同语义：theirs 注入对席）。
-  - 成功 = 重演终局 margin>0；判据 wins>=7/14（REPLAY_WIN_MIN）。
+  - 成功 = P4 臂重演终局 margin>0（=翻正，orig 均为败局）；判据
+    wins>=7/14（REPLAY_WIN_MIN）；Δ 分布（正/负/零局数）随裁决落盘。
   - 我席来源 = CORPUS.md"我席"列，与回放 info.TeamNames(renyxin) 交叉，
     不一致即 ValueError；orig_margin 以回放 rewards 实测为准并与清单行
-    交叉。逐局附 P4 触发形态遥测（patches/lead_protection 同口径镜像：
-    day>=24 且 est.lead>=3000 才算形态在场）。
+    交叉。逐局附 P4 触发形态遥测（patches/lead_protection v2 同口径镜像：
+    【day>=15 且峰回撤 peak−lead>=2000 且 lead>=1500】∪【day>=24 且
+    lead>=3000】，峰=运行峰寄存器逐步跟踪，仅计注入后可观帧）。
 
 * 等价面 run_equivalence_face(game_set, v5_callable, v4b_callable)
-  - 非触发局 = 全程无 d24+ 领先>=3000 形态（v5 侧遥测 form==0）。
+  - 非触发局 = 全程无 v2 触发形态（v5 侧遥测 form==0；v2 触发面比 v1 大，
+    非触发集重新选取：回撤臂需 lead>=1500，故候选仍取 tape max_lead
+    <1000 局（对双臂皆不可达）+ 镜像自打构造局（对称局资金差恒 0）。
   - 构造局（kind=constructed）：合成季头（gate_common.synthetic_season_head
     同构）双席驱动；默认 4 局 = v5 对席 v4b 镜像自打（对称局资金差恒 0，
-    天然无 d24+ 领先形态），候补种子池在触发形态误入时顺延。
-  - 真实回放采样（kind=replay）：默认自 /tmp/r26full 取"无领先崩塌形态"
-    局（loss-timelines 中 max_lead_day_amount<1000 或 None、且不属于语料
+    天然无任何领先形态），候补种子池在触发形态误入时顺延。
+  - 真实回放采样（kind=replay）：默认自 /tmp/r26full 取"无领先形态"局
+    （loss-timelines 中 max_lead_day_amount<1000 或 None、且不属于语料
     14 局），全季注入（inject 0）对回放真值对手，v5 与 v4b 动作流比对。
   - 判据：可用局 >=8 且 n_identical==n（任一分叉即 fail）。
 
@@ -33,12 +43,13 @@ F4c 实装（占位→真实，2026-09-22）。口径登记：
     v48_derivative_launch_check.py 后仅重定向路径，与 tmp/fourgate_v5.py
     同法，不做回填）：装载/自打/确定性/体积。
   - patches 单测真复跑（子进程 pytest patches -q）。
-  - 与 F4b 既有冒烟产物（tmp/probes_v5/v5_smoke.json）身份一致性交叉。
+  - 与 F5 重建后冒烟产物（tmp/probes_v5/v5_smoke.json）身份一致性交叉。
 
 * 裁决 verify_lead_protection(v5_package, corpus_dir)
   - 三门汇总 {overall, replay_gate, equivalence, launch}；任一门不可执行
     = 整体 FAIL（fail-closed 不抛，错误入 dict）。
-  - 产物：gates/out/lead_protection_verdict.json（+ 三门分项 json）。
+  - 产物：gates/out/lead_protection_v2_verdict.json（+ 三门分项 _v2 json；
+    v1 四件 FAIL 记录原地保留=负结果存档）。
 
 产物纪律：除本文件与其测试外不改任何现存文件；临时件落 v48_hybrid/tmp/；
 gates/out/ 仅本编排产物。CLI：python gates/lead_protection_gates.py。
@@ -79,13 +90,19 @@ REPLAY_N_EXPECTED = 14
 EQUIV_MIN = 8
 EQUIV_CONSTRUCTED_MIN = 4
 EQUIV_REPLAY_MIN = 4
-VERDICT_PATH = os.path.join(_HERE, "out", "lead_protection_verdict.json")
+VERDICT_PATH = os.path.join(_HERE, "out", "lead_protection_v2_verdict.json")
+REPLAY_OUT_PATH = os.path.join(_HERE, "out",
+                               "lead_protection_v2_replay_gate.json")
+EQUIV_OUT_PATH = os.path.join(_HERE, "out",
+                              "lead_protection_v2_equivalence.json")
+LAUNCH_OUT_PATH = os.path.join(_HERE, "out",
+                               "lead_protection_v2_launch_recheck.json")
 
 _LP_PATCH = None
 
 
 # ---------------------------------------------------------------------------
-# P4 触发形态遥测（patches/lead_protection.py 只读镜像，不改它）
+# P4 触发形态遥测（patches/lead_protection.py v2 只读镜像，不改它）
 # ---------------------------------------------------------------------------
 def _load_lp_patch():
     global _LP_PATCH
@@ -99,17 +116,23 @@ def _load_lp_patch():
 
 
 def _new_meter() -> dict:
-    return {"steps_seen": 0, "day_ge_24_calls": 0, "form_present_calls": 0,
-            "max_lead": None, "first_form_step": None,
-            "lead_at_first_form": None}
+    return {"steps_seen": 0, "day_ge_15_calls": 0, "day_ge_24_calls": 0,
+            "form_present_calls": 0, "max_lead": None, "peak_lead": None,
+            "first_form_step": None, "lead_at_first_form": None,
+            "drawdown_at_first_form": None}
 
 
 def _instrument(raw_fn, meter: dict):
-    """包装决策 callable（吃 dict+attr 结构化 obs）：逐步镜像 P4 触发形态。"""
+    """包装决策 callable（吃 dict+attr 结构化 obs）：逐步镜像 P4 v2 触发
+    形态（双条件并集；峰=本运行内 lead 运行峰值，与 v5 装配内
+    _V48H_P4_REGISTER 寄存器同语义——注入后可观帧起跟踪）。"""
     patch = _load_lp_patch()
     cfg = patch.DEFAULT_CONFIG
-    day_min = int(cfg["trigger_day_min"])
-    lead_min = float(cfg["trigger_lead_min"])
+    day_min_a = int(cfg["trigger_day_min_drawdown"])
+    dd_min = float(cfg["trigger_drawdown_min"])
+    lead_min_a = float(cfg["trigger_lead_min_drawdown"])
+    day_min_b = int(cfg["trigger_day_min"])
+    lead_min_b = float(cfg["trigger_lead_min"])
     spd = int(cfg["steps_per_day"])
 
     def wrapped(obs):
@@ -121,18 +144,31 @@ def _instrument(raw_fn, meter: dict):
         day = None
         if isinstance(step, (int, float)) and not isinstance(step, bool):
             day = int(step) // spd
-        if day is not None and day >= day_min:
+        if day is not None and day >= day_min_a:
+            meter["day_ge_15_calls"] += 1
+        if day is not None and day >= day_min_b:
             meter["day_ge_24_calls"] += 1
+        if day is not None:
             est = patch.estimate_lead_margin(obs, day)
             lead = est.get("lead") if isinstance(est, dict) else None
             if lead is not None:
+                peak = meter["peak_lead"]
+                if peak is None or lead > peak:
+                    peak = float(lead)
+                    meter["peak_lead"] = peak
                 if meter["max_lead"] is None or lead > meter["max_lead"]:
                     meter["max_lead"] = float(lead)
-                if float(lead) >= lead_min:
+                drawdown = peak - float(lead)
+                form_a = (day >= day_min_a and float(lead) >= lead_min_a
+                          and drawdown >= dd_min)
+                form_b = (day >= day_min_b and float(lead) >= lead_min_b)
+                if form_a or form_b:
                     meter["form_present_calls"] += 1
                     if meter["first_form_step"] is None:
                         meter["first_form_step"] = int(step)
                         meter["lead_at_first_form"] = float(lead)
+                        meter["drawdown_at_first_form"] = round(
+                            float(drawdown), 2)
         return raw_fn(obs)
 
     wrapped.__name__ = getattr(raw_fn, "__name__", "agent")
@@ -232,12 +268,17 @@ def _fresh_v4b():
 
 
 # ---------------------------------------------------------------------------
-# 门一：14 局重演
+# 门一：14 局双臂对照重演（R8-v2：P4 臂 vs 对照臂，同点注入）
 # ---------------------------------------------------------------------------
-def run_replay_gate(corpus_dir, v5_callable=None):
-    """14 局重演门：seated 通道，注入点=领先峰值日（口径登记义务）；成功=重演终局 margin>0。
+def run_replay_gate(corpus_dir, v5_callable=None, v4b_callable=None):
+    """14 局双臂对照重演门（R8-v2）：seated 通道，注入点=领先峰值日（口径
+    登记义务）；每局两臂=P4 臂（v5）与对照臂（v4b）同点注入，Δ=
+    margin(P4)−margin(对照)（P4 因果杠杆符号直测）；成功=P4 臂重演终局
+    margin>0（翻正）；判据 wins>=7/14。
 
-    输入: 归档语料目录（fn_docs/results/replays-lead-collapse/）+ v5 callable / 输出: {wins,n,per_game} / 错误: 语料缺失 fail-closed。
+    输入: 归档语料目录（fn_docs/results/replays-lead-collapse/）+ v5/v4b
+    callable / 输出: {wins,n,delta_distribution,per_game} / 错误: 语料缺失
+    fail-closed。
     """
     t0 = time.perf_counter()
     corpus_dir = corpus_dir or CORPUS_DEFAULT
@@ -259,35 +300,57 @@ def run_replay_gate(corpus_dir, v5_callable=None):
         if abs(orig - float(row["orig_margin"])) > 1e-6:
             raise ValueError(f"ep{row['ep']} orig_margin 不一致: "
                              f"rewards={orig} CORPUS.md={row['orig_margin']}")
-        agent = v5_callable if v5_callable is not None else _fresh_v5()
+        p4_agent = v5_callable if v5_callable is not None else _fresh_v5()
+        ctl_agent = v4b_callable if v4b_callable is not None else _fresh_v4b()
         meter = _new_meter()
         inject_step = int(row["peak_day"]) * STEPS_PER_DAY
-        run = _replay_stream_run(
-            replay, inject_step, _instrument(agent, meter), me)
-        replay_margin = float(run["finals"][me]) - float(run["finals"][1 - me])
-        win = replay_margin > 0.0
+        run_p4 = _replay_stream_run(
+            replay, inject_step, _instrument(p4_agent, meter), me)
+        run_ctl = _replay_stream_run(replay, inject_step, ctl_agent, me)
+        p4_margin = float(run_p4["finals"][me]) - float(
+            run_p4["finals"][1 - me])
+        ctl_margin = float(run_ctl["finals"][me]) - float(
+            run_ctl["finals"][1 - me])
+        delta = p4_margin - ctl_margin
+        win = p4_margin > 0.0
         wins += int(win)
         per_game.append({
             "ep": row["ep"], "me_seat": me, "opp": _opp_name(replay, 1 - me),
             "peak_day": row["peak_day"], "peak_amount": row["peak_amount"],
             "injection_step": inject_step,
             "orig_margin": round(orig, 2),
-            "replay_margin": round(replay_margin, 2),
-            "replay_finals": [round(float(x), 2) for x in run["finals"]],
+            "p4_margin": round(p4_margin, 2),
+            "control_margin": round(ctl_margin, 2),
+            "delta": round(delta, 2),
+            "replay_margin": round(p4_margin, 2),   # v1 键名兼容（=P4 臂）
+            "p4_finals": [round(float(x), 2) for x in run_p4["finals"]],
+            "control_finals": [round(float(x), 2) for x in run_ctl["finals"]],
             "win": win,
-            "flipped": bool(orig <= 0.0 and replay_margin > 0.0),
-            "steps_taken": run["steps"],
-            "my_stream_sha256": run["stream_sha256"],
+            "flipped": bool(orig <= 0.0 and p4_margin > 0.0),
+            "steps_taken": run_p4["steps"],
+            "my_stream_sha256_p4": run_p4["stream_sha256"],
+            "my_stream_sha256_control": run_ctl["stream_sha256"],
+            "streams_diverge": run_p4["stream_sha256"] !=
+                               run_ctl["stream_sha256"],
             "p4_trigger_meter": _meter_public(meter),
         })
     n = len(table)
+    deltas = [g["delta"] for g in per_game]
     return {
-        "protocol": "lead-protection-replay-gate/1.0",
+        "protocol": "lead-protection-replay-gate/2.0",
         "injection_convention": ("领先峰值日 d 起始步 d*24（该日 hour0 起 "
-                                 "v5 接管我席，此前按回放真值；对手侧恒为"
-                                 "回放真值动作流）"),
-        "criterion": f"wins >= {REPLAY_WIN_MIN}/{REPLAY_N_EXPECTED}",
+                                 "被测 agent 接管我席，此前按回放真值；双臂"
+                                 "同点注入；对手侧恒为回放真值动作流）"),
+        "arm_convention": ("P4 臂=v5（P4 v2 on），对照臂=v4b（P4 off 同旗面"
+                           "基底）；Δ=margin(P4)−margin(对照)"),
+        "criterion": f"P4 臂重演终局 margin>0 局数 wins >= "
+                     f"{REPLAY_WIN_MIN}/{REPLAY_N_EXPECTED}",
         "wins": wins, "n": n,
+        "delta_distribution": {
+            "pos": sum(1 for d in deltas if d > 0),
+            "neg": sum(1 for d in deltas if d < 0),
+            "zero": sum(1 for d in deltas if d == 0),
+        },
         "passed": bool(wins >= REPLAY_WIN_MIN and n == REPLAY_N_EXPECTED),
         "per_game": per_game,
         "wall_s": round(time.perf_counter() - t0, 1),
@@ -335,7 +398,8 @@ def _default_replay_candidates(limit=8):
         if e.get("ep") in corpus_eps:
             continue                      # 语料 14 局（领先崩塌形态）排除
         if amt is not None and float(amt) >= 1000.0:
-            continue                      # 有实质领先形态，排除
+            continue    # v2 非触发集重选：回撤臂需 lead>=1500（更严于本槛），
+                        # 取 tape max_lead<1000 局对双臂（回撤/终局）皆不可达
         path = os.path.join(R26FULL_DIR,
                             f"episode-{e.get('ep')}-replay.json")
         if not os.path.isfile(path):
@@ -486,7 +550,7 @@ def run_equivalence_face(game_set, v5_callable=None, v4b_callable=None):
     usable_games = [g for g in per_game if g["usable_as_non_trigger"]]
     n_identical = sum(1 for g in usable_games if g["identical"])
     return {
-        "protocol": "lead-protection-equivalence/1.0",
+        "protocol": "lead-protection-equivalence/2.0",
         "criterion": (f"非触发局 >= {EQUIV_MIN} 且 v5/v4b 动作流逐字节一致"
                       f"（构造>={EQUIV_CONSTRUCTED_MIN}+真实回放采样"
                       f">={EQUIV_REPLAY_MIN}；触发形态误入=该局不可用）"),
@@ -602,7 +666,7 @@ def run_launch_recheck(v5_package):
     }
     patches_ok = bool(proc.returncode == 0 and m is not None)
     return {
-        "protocol": "lead-protection-launch-recheck/1.0",
+        "protocol": "lead-protection-launch-recheck/2.0",
         "v5_identity": {"package": v5_package, "main_sha256": main_sha,
                         "tar_sha256": tar_sha,
                         "tar_bytes": os.path.getsize(v5_tar)},
@@ -632,7 +696,7 @@ def _assemble_verdict(replay_res, equiv_res, launch_res, runnable, errors,
     equiv_pass = runnable["equivalence"] and _gate_pass(equiv_res)
     launch_pass = runnable["launch_recheck"] and _gate_pass(launch_res)
     verdict = {
-        "protocol": "lead-protection-verdict/1.0",
+        "protocol": "lead-protection-verdict/2.0",
         "generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "v5_identity": v5_identity,
         "replay_gate": {
@@ -640,7 +704,10 @@ def _assemble_verdict(replay_res, equiv_res, launch_res, runnable, errors,
             "error": errors.get("replay_gate"),
             "wins": replay_res.get("wins") if runnable["replay_gate"] else None,
             "n": replay_res.get("n") if runnable["replay_gate"] else None,
-            "criterion": f"wins >= {REPLAY_WIN_MIN}/{REPLAY_N_EXPECTED}",
+            "delta_distribution": replay_res.get("delta_distribution")
+            if runnable["replay_gate"] else None,
+            "criterion": f"P4 臂翻正 wins >= {REPLAY_WIN_MIN}/"
+                         f"{REPLAY_N_EXPECTED}（重演终局 margin>0）",
             "passed": replay_pass,
             "per_game": replay_res.get("per_game")
             if runnable["replay_gate"] else None},
@@ -706,17 +773,11 @@ def verify_lead_protection(v5_package=None, corpus_dir=None):
         time.perf_counter() - t0)
 
     if runnable["replay_gate"]:
-        gc.write_json(os.path.join(_HERE, "out",
-                                   "lead_protection_replay_gate.json"),
-                      results["replay_gate"])
+        gc.write_json(REPLAY_OUT_PATH, results["replay_gate"])
     if runnable["equivalence"]:
-        gc.write_json(os.path.join(_HERE, "out",
-                                   "lead_protection_equivalence.json"),
-                      results["equivalence"])
+        gc.write_json(EQUIV_OUT_PATH, results["equivalence"])
     if runnable["launch_recheck"]:
-        gc.write_json(os.path.join(_HERE, "out",
-                                   "lead_protection_launch_recheck.json"),
-                      results["launch_recheck"])
+        gc.write_json(LAUNCH_OUT_PATH, results["launch_recheck"])
     gc.write_json(VERDICT_PATH, verdict)
     verdict["_out_path"] = VERDICT_PATH
     return verdict
@@ -728,7 +789,8 @@ def _cli() -> int:
         "overall": verdict["overall"],
         "replay_gate": {k: verdict["replay_gate"][k]
                         for k in ("runnable", "error", "wins", "n",
-                                  "criterion", "passed")},
+                                  "delta_distribution", "criterion",
+                                  "passed")},
         "equivalence": {k: verdict["equivalence"][k]
                         for k in ("runnable", "error", "n_identical", "n",
                                   "criterion", "passed")},

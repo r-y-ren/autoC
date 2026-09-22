@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-"""终局保果层（lead-protection，R8，P4 家族）——d24+ 且领先差>=3k 形态启用保守卖时锁胜。
+"""终局保果层（lead-protection，R8-v2，P4 家族）——双条件并集触发启用保守卖时锁胜：
+【day>=15 且峰回撤 peak-lead>=2000 且 lead>=1500】 ∪ 【day>=24 且 lead>=3000】（v1 原条件）。
 不触发形态与 v4b 逐字节一致（未触发=原对象返回）；注入缝=卖单干预（P1 先例）；基底五区零改动
 （717-718 清仓脚本本体不动，只在 step<717 内调整卖时/卖量）；fail-safe：任何异常回退原卖单。
 战后资产：只构建+离线验证，不上线（零提交冻结 ba1b44c）。
-上游: R8（详见 fn_docs/responsibility.md 增补段）。
+上游: R8-v2（详见 fn_docs/responsibility.md 增补段，2026-09-22 F5 修订）。
 
 ── 实现期口径登记（2026-09-22，F4a）──────────────────────────────────────
 0. 前置事实一（对手资金可见性；引擎探针 tmp/probe_r8_obs_keys.py：
@@ -69,6 +70,39 @@
    keyword 参 step（717 让位判定）与 config；estimate_lead_margin 的
    day 参与降级代理剩余天数（主口径不使用）；build_lead_protection 的
    day 允许 None（缺省按 obs.step//24 回推）；其余形参不变。
+
+── R8-v2 修订登记（2026-09-22，F5——判决实验：触发设计修订+双臂对照）────
+0. 修订动机（v1 判决 FAIL 0/14 的尸检，gates/out/lead_protection_verdict.json）：
+   语料 14 局峰值日分布 d6-d26，其中 9 局峰值日在 d17 以前——v1 触发面
+   （day≥24 且 lead≥3000）在崩塌已完成后才可能在场，6 局重演遥测
+   form_present_calls==0（P4 从未触发，重演 margin 与原局几乎逐位相同）。
+   结论：触发过晚=杠杆未上膛。v2 把触发前移到"仍在领先但已从峰值回撤"
+   的形态，并以双臂对照门直测杠杆符号。
+1. 触发形态 v2（双条件并集，任一满足即 armed）：
+   * 臂 A（回撤臂，新）：day≥15 且 峰回撤 peak−lead≥2000 且 lead≥1500
+     （三槛等值即触发）——语义="仍领先 ≥1500 但已从运行峰值跌落 ≥2000"，
+     即领先崩塌进行时（语料各局峰值日后的典型形态）。
+   * 臂 B（原 v1 条件，保留）：day≥24 且 lead≥3000。
+2. 峰值运行寄存器（臂 A 的跨回合状态）：dict {"peak_lead": float|None}，
+   **编排处持有、经入参注入**（build 侧 register= 装配接线
+   _V48H_P4_REGISTER，模块级 dict，每席每局独立装载天然隔离——P2 模块级
+   streak 先例）；本模块保持纯函数：无模块级可变状态、无全局，寄存器与
+   config 一律经参数传入。更新规则：lead 可估帧（不分早晚日）先并入寄存器
+   peak=max(peak, lead) 再算回撤（新峰帧回撤=0，臂 A 不触发——语义正确：
+   峰值帧无回撤）；寄存器 dict 原位更新（调用方引用即可跨回合续读）。
+   register=None（缺省）→ 每次调用新建局部临时寄存器 → 峰=当前 lead →
+   回撤恒 0 → 臂 A 恒不触发 → 并集退化为臂 B（v1 行为逐位保持，未传
+   寄存器的既有调用零破坏——fail-safe 缺省）。
+3. 签名变更登记（v2，对责任文档"签名意图"）：
+   * build_lead_protection(observation, day, current_sells, config=None,
+     register=None)——增补 keyword 参 config 与 register（峰值寄存器）。
+   * plan_protective_sells(..., armed=False)——增补 keyword 参 armed：
+     armed=True 时跳过 plan 内 lead≥trigger_lead_min 防御门（触发判定已由
+     编排入口的并集完成；臂 A 触发时 lead 可低至 1500<3000）；armed=False
+     （缺省）保持 v1 防御门（独立调用 plan 的既有用法零破坏）。
+4. 逐帧成本登记：v2 的 estimate 在全部可观帧执行（峰跟踪不分早晚日），
+   v1 仅 day≥24 帧调用——直接口径（双席 money 直读）为 O(1) 字段访问，
+   无实质成本；plan 仍仅在 armed 帧后的保护时点（6/12/18）发射。
 """
 
 import math
@@ -97,8 +131,13 @@ ANIMAL_PRODUCT_INTERVAL = {"GOOSE": ("EGG", 1), "COW": ("MILK", 2),
 
 DEFAULT_CONFIG = {
     "steps_per_day": 24,
-    "trigger_day_min": 24,        # R8：day>=24 触发
-    "trigger_lead_min": 3000.0,   # R8：lead>=3000 触发（等值即触发）
+    # -- R8-v2 触发面（双条件并集，任一满足即 armed）------------------------
+    "trigger_day_min": 24,        # 臂 B（v1 原条件）：day>=24 触发
+    "trigger_lead_min": 3000.0,   # 臂 B：lead>=3000 触发（等值即触发）
+    "trigger_day_min_drawdown": 15,     # 臂 A（回撤臂）：day>=15 触发
+    "trigger_drawdown_min": 2000.0,     # 臂 A：峰回撤 peak-lead>=2000
+    "trigger_lead_min_drawdown": 1500.0,   # 臂 A：lead>=1500（仍领先）
+    # ----------------------------------------------------------------------
     "terminal_step_start": 717,   # v19_terminal 717-718 两步清仓机（让位）
     "protective_hours": (6, 12, 18),   # P1 SELL_PLAN_HOURS 同款
     "last_protective_hour": 18,   # 稳定线只发当日末保护时点
@@ -281,13 +320,16 @@ def _order_is_sell(order, item):
 
 
 def plan_protective_sells(inventory, price_projection, current_sells, lead,
-                          step=None, config=None):
+                          step=None, config=None, armed=False):
     """保守卖时生成：透传现有卖单 + 保护时点分批前移补发（投影在跌尽早
     卖、稳定线当日末卖）；step>=717 清仓窗让位（不动任何单，原对象返回）；
-    异常回退原单。
+    异常回退原单。armed=True 跳过 lead 防御门（R8-v2：触发判定已由编排
+    入口的并集完成，臂 A 触发时 lead 可低至 1500<3000）；armed=False
+    （缺省）保持 v1 防御门 lead>=trigger_lead_min。
 
     输入: inventory={item:qty} / price_projection={item:(p_now,p_future)} /
     current_sells=当帧卖单 / lead=领先差 / step=当前步（缺省=不可知，让位）
+    / armed=触发已由上游判定
     输出: 调整后卖单（无补发=原对象；有补发=新列表，原单引用透传不改动）
     错误: 异常→原对象。
     """
@@ -302,7 +344,7 @@ def plan_protective_sells(inventory, price_projection, current_sells, lead,
         if lead is None:
             return current_sells
         lead_f = float(lead)
-        if lead_f < float(cfg["trigger_lead_min"]):
+        if not armed and lead_f < float(cfg["trigger_lead_min"]):
             return current_sells                      # 非触发形态（防御位）
 
         hour = step_i % int(cfg["steps_per_day"])
@@ -374,39 +416,66 @@ def _build_price_projection(obs, cfg):
     return out
 
 
-def build_lead_protection(observation, day, current_sells):
-    """编排入口：estimate → 触发形态判定（day>=24 且 lead>=3000）→
-    plan_protective_sells → 返回；未触发/异常/无补发=原对象原样返回。
+def build_lead_protection(observation, day, current_sells, config=None,
+                          register=None):
+    """编排入口（R8-v2）：estimate → 峰寄存器更新 → 双条件并集触发判定
+    【day>=15 且 peak-lead>=2000 且 lead>=1500】∪【day>=24 且 lead>=3000】
+    → plan_protective_sells(armed=True) → 返回；未触发/异常/无补发=原对象
+    原样返回。register=编排处持有的峰寄存器 dict（{"peak_lead": float|None}），
+    lead 可估帧原位并入 peak=max(peak, lead)；register=None → 局部临时
+    寄存器（回撤臂退化，等价 v1 行为）——签名变更登记见模块头 v2 修订段 3.。
 
     输入: 回合观测（价格/库存/资金/市场库存）+ day（None 则按 obs.step//24
-    回推）+ 当日卖单计划 / 输出: 调整后卖单（未触发=原对象）/
+    回推）+ 当日卖单计划 + config（缺省 DEFAULT_CONFIG）+ register（峰寄存器）
+    输出: 调整后卖单（未触发=原对象）
     错误: 内部异常吞掉并回退原单。
     """
     try:
         obs = observation if isinstance(observation, dict) else {}
         cfg = dict(DEFAULT_CONFIG)
+        cfg.update(config or {})
         step = _get(obs, "step", None)
         if day is None:
             day = step // int(cfg["steps_per_day"]) if isinstance(
                 step, (int, float)) and not isinstance(step, bool) else None
-        if day is None or int(day) < int(cfg["trigger_day_min"]):
-            return current_sells                      # day 门（含步不可知）
+        if day is None:
+            return current_sells                  # 步不可知（v1 语义保持）
+        day_i = int(day)
 
-        est = estimate_lead_margin(obs, day)
+        est = estimate_lead_margin(obs, day_i)    # v2：全帧估计（峰跟踪）
         lead = est.get("lead") if isinstance(est, dict) else None
-        if lead is None or float(lead) < float(cfg["trigger_lead_min"]):
-            return current_sells                      # lead 门（lead=None 未触发）
+        lead_f = float(lead) if lead is not None else None
+
+        # 峰值运行寄存器（编排处持有；不分早晚日并入，先并峰值再算回撤）
+        reg = register if isinstance(register, dict) else {}
+        peak = _num(reg.get("peak_lead", None))
+        if lead_f is not None:
+            peak = lead_f if peak is None or lead_f > peak else peak
+            reg["peak_lead"] = peak
+        drawdown = (peak - lead_f) if (peak is not None
+                                       and lead_f is not None) else None
+
+        arm_drawdown = (day_i >= int(cfg["trigger_day_min_drawdown"])
+                        and lead_f is not None
+                        and lead_f >= float(cfg["trigger_lead_min_drawdown"])
+                        and drawdown is not None
+                        and drawdown >= float(cfg["trigger_drawdown_min"]))
+        arm_d24 = (day_i >= int(cfg["trigger_day_min"])
+                   and lead_f is not None
+                   and lead_f >= float(cfg["trigger_lead_min"]))
+        if not (arm_drawdown or arm_d24):
+            return current_sells                  # 未触发=零足迹原对象
         if step is not None and int(step) >= int(cfg["terminal_step_start"]):
-            return current_sells                      # 717-718 清仓窗让位
+            return current_sells                  # 717-718 清仓窗让位
 
         private = _get(obs, "private", {}) or {}
         shed = _get(obs, "shed", None)
         if not isinstance(shed, dict):
             shed = _get(private, "shed", None)
         if not isinstance(shed, dict):
-            return current_sells                      # 无库存视图零足迹
+            return current_sells                  # 无库存视图零足迹
         projection = _build_price_projection(obs, cfg)
         return plan_protective_sells(shed, projection, current_sells, lead,
-                                     step=step, config=cfg)
+                                     step=step, config=cfg, armed=True)
     except Exception:
         return current_sells

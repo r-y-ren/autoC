@@ -8,8 +8,8 @@
   "blob_identity": {
     "detail": {
       "v48h.lead_protection": {
-        "disk_sha256": "5172338d8abd6ee4abf7f8d3bb44c295bb9ba337eb7399a16272b2578e94864e",
-        "embedded_sha256": "5172338d8abd6ee4abf7f8d3bb44c295bb9ba337eb7399a16272b2578e94864e",
+        "disk_sha256": "edb7100fed82f8dd5541f0fb0c8be67217b2ab951c31bced61fa09291e8953bb",
+        "embedded_sha256": "edb7100fed82f8dd5541f0fb0c8be67217b2ab951c31bced61fa09291e8953bb",
         "identical": true,
         "source": "patches/lead_protection.py"
       },
@@ -29,9 +29,9 @@
     "p3_module_absent": true
   },
   "cli_diagnostic_build": {
-    "bytes": 127157,
+    "bytes": 130088,
     "path": "/mnt/data/Code/autoC/workspace/kaggriculture/software/kaggle_simulations/v48_hybrid/tmp/main_p0101.py",
-    "sha256": "3cfb1e0c0829137465f1624d36d0a14c052b4627f1bef09daa05e27b69b8daab",
+    "sha256": "042f84f090fde48c4d51a0f7aa8ca9fe2f4bce5aef993f3001b747ad4e12e8b1",
     "sha_match_in_process": true
   },
   "competition_slug": {
@@ -62,7 +62,7 @@
         "v48h.p3_milestone_monitor": 0
       }
     },
-    "verified": "v5 文本中 P1+P3 接线 token（module/imports/helper/seam 符号）计数全零；P2+P4 token 在场=接线真实"
+    "verified": "v5 文本中 P1+P3 接线 token 计数全零；P2+P4 token 在场=接线真实（P4 token 集 v2 增 _V48H_P4_REGISTER）"
   },
   "flags": {
     "P1_ON": false,
@@ -74,18 +74,18 @@
     "launch_fourgate": {
       "artifact": "tmp/probes_v5/v5_smoke.json",
       "gate1_official_load": "干净 -I 子进程 get_last_callable 复刻，named==last（_v48hybrid_entrypoint），isolated vs local 动作流 mismatch=0，stdlib 扫描空",
-      "gate2_full_episodes": "seeds 101/102 双席自打双 DONE 720 回合，seed101 statuses=['DONE', 'DONE'] rewards=[92750,92750] 720回合 max 3.04ms p99 1.14ms; seed102 statuses=['DONE', 'DONE'] rewards=[86550,86550] 720回合 max 4.63ms p99 1.07ms",
+      "gate2_full_episodes": "seeds 101/102 双席自打双 DONE 720 回合，seed101 statuses=['DONE', 'DONE'] rewards=[92750,92750] 720回合 max 2.77ms p99 1.2ms; seed102 statuses=['DONE', 'DONE'] rewards=[86550,86550] 720回合 max 3.98ms p99 1.09ms",
       "gate3_determinism": "seed101 重跑动作流哈希逐字节一致（a009ad5e6fb4…）",
-      "gate4_size": "95,489B ≤ 100MB",
+      "gate4_size": "97,655B ≤ 100MB",
       "passed": true
     },
-    "note": "F4b 发射冒烟四门回填（tmp/fourgate_v5.py → tmp/probes_v5/v5_smoke.json）；h2h/panel 战后资产不适用（零提交冻结 ba1b44c）",
+    "note": "R8-v2 F5 发射冒烟四门回填（tmp/fourgate_v5.py → tmp/probes_v5/v5_smoke.json）；双臂对照判决 gates/out/lead_protection_v2_verdict.json；h2h/panel 战后资产不适用（零提交冻结 ba1b44c）",
     "status": "SMOKE_ONLY_PASS"
   },
   "main_py": {
     "base_prefix_bytes": 107008,
-    "bytes": 127157,
-    "sha256": "3cfb1e0c0829137465f1624d36d0a14c052b4627f1bef09daa05e27b69b8daab"
+    "bytes": 130088,
+    "sha256": "042f84f090fde48c4d51a0f7aa8ca9fe2f4bce5aef993f3001b747ad4e12e8b1"
   },
   "p4_off_no_disturbance": {
     "all_on_p123_p4_off_matches_root_main": true,
@@ -119,28 +119,29 @@
       "source": "patches/milestone_monitor.py"
     },
     "P4": {
-      "bytes": 20233,
+      "bytes": 25454,
       "embedded": true,
       "module": "v48h.lead_protection",
-      "role": "lead-protection conservative sell timing (R8 post-war)",
-      "sha256": "5172338d8abd6ee4abf7f8d3bb44c295bb9ba337eb7399a16272b2578e94864e",
+      "role": "lead-protection conservative sell timing (R8-v2 post-war)",
+      "sha256": "edb7100fed82f8dd5541f0fb0c8be67217b2ab951c31bced61fa09291e8953bb",
       "source": "patches/lead_protection.py"
     }
   },
   "stdlib_only": true,
   "submission_tar_gz": {
-    "bytes": 95489,
+    "bytes": 97655,
     "deterministic_double_pack": true,
     "members": [
       "main.py"
     ],
-    "sha256": "20421986c4d616caf8d25ddb28080d25cb66e3bff8e70f374280086d90ce4ecb"
+    "sha256": "ad698d0189d859f28ca378720add264073198d115f0f1788319b2bb7c32f2e68"
   },
   "submit_message": "public derivative with economic-guard + lead-protection layers (post-war build, not for current competition)",
   "variant": {
     "cli": "python build.py --p4 on --p1 off --p3 off",
     "name": "v5",
-    "rationale": "R8 F4b 战后资产：v4b 形态（P1/P3 双旗关，行为级≡纯 v48 + P2 死价保险）之上叠加 P4 终局保果层（lead_protection，d24+ 且 lead>=3000 保守卖时锁胜；未触发形态零足迹）；只构建+离线验证，不上线（零提交冻结 ba1b44c）"
+    "rationale": "R8-v2 F5 判决实验重建：v4b 形态（P1/P3 双旗关，行为级≡纯 v48 + P2 死价保险）之上叠加 P4 终局保果层 v2——触发=双条件并集【day≥15 且峰回撤 peak−lead≥2000 且 lead≥1500】∪【day≥24 且 lead≥3000】，峰值经运行峰寄存器（编排处持有 _V48H_P4_REGISTER）跟踪；未触发形态零足迹；只构建+离线验证，不上线（零提交冻结 ba1b44c）。v1 尸检：触发过晚（9/14 局峰值日 d17 前，6 局重演 P4 形态从未在场）致 v1 判决 FAIL 0/14",
+    "revision": "R8-v2 (F5, 2026-09-22)"
   },
   "wiring_check_detail": {
     "P1": {
@@ -176,6 +177,7 @@
     "P4": {
       "ok": true,
       "v5_token_hits": {
+        "_V48H_P4_REGISTER": 3,
         "_v48h_p4_build": 2,
         "build_lead_protection": 1,
         "v48h.lead_protection": 3

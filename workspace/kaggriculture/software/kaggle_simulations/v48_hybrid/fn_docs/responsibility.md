@@ -71,7 +71,7 @@
 （块引言：终局保果补丁（P4 家族）——d24+ 且领先差 ≥3k 形态启用保守卖时锁胜；不触发形态与 v4b 逐字节一致；注入缝=卖单干预（P1 先例），基底五区零改动；fail-safe 任何异常回退 v4b 行为。产出为独立纯函数补丁模块 + 旗面构建，战后资产不上线。）
 
 - **build_lead_protection** [L0|新增]
-  - 职责：保果补丁的编排入口——逐回合：estimate_lead_margin 算领先 → 触发形态判定（day≥24 且 lead≥3000）→ plan_protective_sells 调整卖单 → 返回；未触发/异常→原卖单原样返回（同对象）。
+  - 职责：保果补丁的编排入口——逐回合：estimate_lead_margin 算领先 → 触发形态判定【R8-v2：day≥15 且峰回撤 peak−lead≥2000 且 lead≥1500；或 day≥24 且 lead≥3000（原条件保留为并集）；峰值经运行峰寄存器跟踪】→ plan_protective_sells 调整卖单 → 返回；未触发/异常→原卖单原样返回（同对象）。
   - 签名意图：输入: 回合观测（价格/库存/资金/当日卖单计划）+ day / 输出: 调整后卖单（未触发=原对象） / 错误: 内部异常吞掉并回退原单。
   - 调用方：装配后的混合 agent（v5 构建形态）。
   - tested 策略：自有单测。
@@ -103,7 +103,7 @@
   - tested 策略：自有单测。
   - 核验命令：测试: gates/test_lead_protection_gates.py（继承 R8 验收①②③）。
   - **run_replay_gate** [L1|新增]
-    - 职责：14 局领先崩塌局孪生重演（seated 通道，v5 注入我席 step0 或崩塌前锁定点——取"领先峰值日"为注入点更贴保果语义，口径实现期定并登记）；成功=重演终局 margin>0；≥7/14 PASS。语料=14 局回放归档入 fn_docs/results/replays-lead-collapse/（体积预算沿最小集先例）。
+    - 职责：14 局领先崩塌局孪生重演**双臂对照**（seated 通道；注入点=领先峰值日；每局两臂=P4 臂（v5）与对照臂（v4b）同点注入）；逐局 Δ=margin(P4)−margin(对照)（杠杆符号直测）；成功=重演终局 margin>0；≥7/14 PASS；Δ 分布随裁决 JSON 落盘。语料=14 局回放归档入 fn_docs/results/replays-lead-collapse/（体积预算沿最小集先例）。
     - 签名意图：输入: 归档语料+v5 callable / 输出: {wins, n, per_game} / 错误: 语料缺失 fail-closed。
     - 调用方：verify_lead_protection。
     - tested 策略：自有单测（tmp 语料）。

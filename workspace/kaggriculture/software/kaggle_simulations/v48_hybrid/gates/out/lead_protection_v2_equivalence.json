@@ -1,0 +1,274 @@
+{
+ "protocol": "lead-protection-equivalence/2.0",
+ "criterion": "非触发局 >= 8 且 v5/v4b 动作流逐字节一致（构造>=4+真实回放采样>=4；触发形态误入=该局不可用）",
+ "n": 8,
+ "n_identical": 8,
+ "n_seen": 8,
+ "n_excluded_by_trigger": 0,
+ "n_constructed": 4,
+ "n_replay": 4,
+ "passed": true,
+ "per_game": [
+  {
+   "kind": "constructed",
+   "seed": 4101,
+   "me_seat": 0,
+   "episode_steps": 720,
+   "opp_kind": "v4b-mirror",
+   "stream_sha256_v5": "6b14abb730ca131dcc13364cb8f1e3825fa7f24ec21efd0fedc4996ed86c095b",
+   "stream_sha256_v4b": "6b14abb730ca131dcc13364cb8f1e3825fa7f24ec21efd0fedc4996ed86c095b",
+   "identical": true,
+   "first_diffs": [],
+   "finals_v5": [
+    43675.0,
+    43675.0
+   ],
+   "finals_v4b": [
+    43675.0,
+    43675.0
+   ],
+   "trigger_form_present": false,
+   "p4_trigger_meter_v5": {
+    "steps_seen": 719,
+    "day_ge_15_calls": 359,
+    "day_ge_24_calls": 143,
+    "form_present_calls": 0,
+    "max_lead": 0.0,
+    "peak_lead": 0.0,
+    "first_form_step": null,
+    "lead_at_first_form": null,
+    "drawdown_at_first_form": null
+   },
+   "usable_as_non_trigger": true
+  },
+  {
+   "kind": "constructed",
+   "seed": 4202,
+   "me_seat": 1,
+   "episode_steps": 720,
+   "opp_kind": "v4b-mirror",
+   "stream_sha256_v5": "195144029f7c0f6b4abebc29354b421032d91fa9e96bf3b3831d65a22953c230",
+   "stream_sha256_v4b": "195144029f7c0f6b4abebc29354b421032d91fa9e96bf3b3831d65a22953c230",
+   "identical": true,
+   "first_diffs": [],
+   "finals_v5": [
+    54936.0,
+    54936.0
+   ],
+   "finals_v4b": [
+    54936.0,
+    54936.0
+   ],
+   "trigger_form_present": false,
+   "p4_trigger_meter_v5": {
+    "steps_seen": 719,
+    "day_ge_15_calls": 359,
+    "day_ge_24_calls": 143,
+    "form_present_calls": 0,
+    "max_lead": 0.0,
+    "peak_lead": 0.0,
+    "first_form_step": null,
+    "lead_at_first_form": null,
+    "drawdown_at_first_form": null
+   },
+   "usable_as_non_trigger": true
+  },
+  {
+   "kind": "constructed",
+   "seed": 4303,
+   "me_seat": 0,
+   "episode_steps": 720,
+   "opp_kind": "v4b-mirror",
+   "stream_sha256_v5": "b92cf99decdfa8d2dbf0e0dbed35cd642e7d146d36fa1ba4beecceb7a487c400",
+   "stream_sha256_v4b": "b92cf99decdfa8d2dbf0e0dbed35cd642e7d146d36fa1ba4beecceb7a487c400",
+   "identical": true,
+   "first_diffs": [],
+   "finals_v5": [
+    62402.0,
+    62402.0
+   ],
+   "finals_v4b": [
+    62402.0,
+    62402.0
+   ],
+   "trigger_form_present": false,
+   "p4_trigger_meter_v5": {
+    "steps_seen": 719,
+    "day_ge_15_calls": 359,
+    "day_ge_24_calls": 143,
+    "form_present_calls": 0,
+    "max_lead": 0.0,
+    "peak_lead": 0.0,
+    "first_form_step": null,
+    "lead_at_first_form": null,
+    "drawdown_at_first_form": null
+   },
+   "usable_as_non_trigger": true
+  },
+  {
+   "kind": "constructed",
+   "seed": 4404,
+   "me_seat": 1,
+   "episode_steps": 720,
+   "opp_kind": "v4b-mirror",
+   "stream_sha256_v5": "06178936e7d905391150bd51a95dbb6ee89b104ee4e74306007540464372b86c",
+   "stream_sha256_v4b": "06178936e7d905391150bd51a95dbb6ee89b104ee4e74306007540464372b86c",
+   "identical": true,
+   "first_diffs": [],
+   "finals_v5": [
+    81332.0,
+    81332.0
+   ],
+   "finals_v4b": [
+    81332.0,
+    81332.0
+   ],
+   "trigger_form_present": false,
+   "p4_trigger_meter_v5": {
+    "steps_seen": 719,
+    "day_ge_15_calls": 359,
+    "day_ge_24_calls": 143,
+    "form_present_calls": 0,
+    "max_lead": 0.0,
+    "peak_lead": 0.0,
+    "first_form_step": null,
+    "lead_at_first_form": null,
+    "drawdown_at_first_form": null
+   },
+   "usable_as_non_trigger": true
+  },
+  {
+   "kind": "replay",
+   "ep": 111281641,
+   "me_seat": 0,
+   "inject_step": 0,
+   "tape_max_lead": 154.0,
+   "replay_path": "/tmp/r26full/episode-111281641-replay.json",
+   "stream_sha256_v5": "9c4d234c8241a6308ee0423d59f42f77e8dc3fbb861f3033d5f078b4d05017fe",
+   "stream_sha256_v4b": "9c4d234c8241a6308ee0423d59f42f77e8dc3fbb861f3033d5f078b4d05017fe",
+   "identical": true,
+   "first_diffs": [],
+   "finals_v5": [
+    64172.0,
+    84347.0
+   ],
+   "finals_v4b": [
+    64172.0,
+    84347.0
+   ],
+   "trigger_form_present": false,
+   "p4_trigger_meter_v5": {
+    "steps_seen": 719,
+    "day_ge_15_calls": 359,
+    "day_ge_24_calls": 143,
+    "form_present_calls": 0,
+    "max_lead": 1284.0,
+    "peak_lead": 1284.0,
+    "first_form_step": null,
+    "lead_at_first_form": null,
+    "drawdown_at_first_form": null
+   },
+   "usable_as_non_trigger": true
+  },
+  {
+   "kind": "replay",
+   "ep": 111298489,
+   "me_seat": 0,
+   "inject_step": 0,
+   "tape_max_lead": 661.0,
+   "replay_path": "/tmp/r26full/episode-111298489-replay.json",
+   "stream_sha256_v5": "16a57c8c8ebbbc259535cea084063a559ddfdd841a0163bd0c2e85de99da150f",
+   "stream_sha256_v4b": "16a57c8c8ebbbc259535cea084063a559ddfdd841a0163bd0c2e85de99da150f",
+   "identical": true,
+   "first_diffs": [],
+   "finals_v5": [
+    90106.0,
+    92193.0
+   ],
+   "finals_v4b": [
+    90106.0,
+    92193.0
+   ],
+   "trigger_form_present": false,
+   "p4_trigger_meter_v5": {
+    "steps_seen": 719,
+    "day_ge_15_calls": 359,
+    "day_ge_24_calls": 143,
+    "form_present_calls": 0,
+    "max_lead": 2292.0,
+    "peak_lead": 2292.0,
+    "first_form_step": null,
+    "lead_at_first_form": null,
+    "drawdown_at_first_form": null
+   },
+   "usable_as_non_trigger": true
+  },
+  {
+   "kind": "replay",
+   "ep": 111307477,
+   "me_seat": 0,
+   "inject_step": 0,
+   "tape_max_lead": null,
+   "replay_path": "/tmp/r26full/episode-111307477-replay.json",
+   "stream_sha256_v5": "6aa48be41d77854a500a758067cf49c4cd7c334f1ece36236a83f77c1881a04e",
+   "stream_sha256_v4b": "6aa48be41d77854a500a758067cf49c4cd7c334f1ece36236a83f77c1881a04e",
+   "identical": true,
+   "first_diffs": [],
+   "finals_v5": [
+    79896.0,
+    80027.0
+   ],
+   "finals_v4b": [
+    79896.0,
+    80027.0
+   ],
+   "trigger_form_present": false,
+   "p4_trigger_meter_v5": {
+    "steps_seen": 719,
+    "day_ge_15_calls": 359,
+    "day_ge_24_calls": 143,
+    "form_present_calls": 0,
+    "max_lead": 0.0,
+    "peak_lead": 0.0,
+    "first_form_step": null,
+    "lead_at_first_form": null,
+    "drawdown_at_first_form": null
+   },
+   "usable_as_non_trigger": true
+  },
+  {
+   "kind": "replay",
+   "ep": 111314125,
+   "me_seat": 1,
+   "inject_step": 0,
+   "tape_max_lead": 306.0,
+   "replay_path": "/tmp/r26full/episode-111314125-replay.json",
+   "stream_sha256_v5": "1aa53e5f7cc4b627d760c4c9b1a13a20e0d18523083ab0c95fa8399fe7403d0a",
+   "stream_sha256_v4b": "1aa53e5f7cc4b627d760c4c9b1a13a20e0d18523083ab0c95fa8399fe7403d0a",
+   "identical": true,
+   "first_diffs": [],
+   "finals_v5": [
+    96720.0,
+    85252.0
+   ],
+   "finals_v4b": [
+    96720.0,
+    85252.0
+   ],
+   "trigger_form_present": false,
+   "p4_trigger_meter_v5": {
+    "steps_seen": 719,
+    "day_ge_15_calls": 359,
+    "day_ge_24_calls": 143,
+    "form_present_calls": 0,
+    "max_lead": 633.0,
+    "peak_lead": 633.0,
+    "first_form_step": null,
+    "lead_at_first_form": null,
+    "drawdown_at_first_form": null
+   },
+   "usable_as_non_trigger": true
+  }
+ ],
+ "wall_s": 14.8
+}

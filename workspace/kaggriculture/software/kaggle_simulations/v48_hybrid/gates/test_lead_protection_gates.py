@@ -102,10 +102,11 @@ def _tape_follower(tapes_by_ep_seat):
 
 
 # ---------------------------------------------------------------------------
-# 1) 重演计算管线
+# 1) 重演计算管线（R8-v2：双臂对照）
 # ---------------------------------------------------------------------------
 def test_replay_gate_pipeline_roundtrip(tmp_path):
-    """磁带跟随注入 → 重演终局 == 回放 rewards（管线正确性金标准）。"""
+    """双臂磁带跟随注入 → 两臂重演终局均 == 回放 rewards 且 Δ=0（管线
+    正确性金标准：同 callable 两臂必逐位一致）。"""
     replay1, tapes1, finals1 = _tapes_and_replay(
         7001, [_buy_agent, _pass_agent])       # 我席(0)=买入 → 败局
     replay2, tapes2, finals2 = _tapes_and_replay(
@@ -114,7 +115,8 @@ def test_replay_gate_pipeline_roundtrip(tmp_path):
         (990001, 0, 1, replay1, finals1),
         (990002, 1, 1, replay2, finals2)])
     follower = _tape_follower({0: tapes1[0], 1: tapes2[1]})
-    res = lpg.run_replay_gate(corpus, v5_callable=follower)
+    res = lpg.run_replay_gate(corpus, v5_callable=follower,
+                              v4b_callable=follower)
     assert res["n"] == 2
     assert res["wins"] == 1          # 990002 我席(1)赢（对席买入变穷）
     g1, g2 = res["per_game"]
@@ -122,26 +124,35 @@ def test_replay_gate_pipeline_roundtrip(tmp_path):
     assert g1["injection_step"] == 1 * lpg.STEPS_PER_DAY   # 峰值日起始步
     assert g1["orig_margin"] == pytest.approx(
         replay1["rewards"][0] - replay1["rewards"][1])
-    assert g1["replay_margin"] == pytest.approx(g1["orig_margin"])
-    assert g1["replay_finals"] == pytest.approx(replay1["rewards"])
+    assert g1["p4_margin"] == pytest.approx(g1["orig_margin"])
+    assert g1["control_margin"] == pytest.approx(g1["orig_margin"])
+    assert g1["delta"] == pytest.approx(0.0)
+    assert g1["p4_finals"] == pytest.approx(replay1["rewards"])
     assert g1["win"] is False and g1["flipped"] is False
+    assert g1["streams_diverge"] is False
     assert g2["ep"] == 990002 and g2["win"] is True
-    assert g2["replay_margin"] == pytest.approx(g2["orig_margin"])
-    # 短季无 d24+：P4 形态遥测恒零
+    assert g2["p4_margin"] == pytest.approx(g2["orig_margin"])
+    # 短季无 d15+/d24+：P4 v2 形态遥测恒零
     assert g1["p4_trigger_meter"]["form_present_calls"] == 0
+    assert res["delta_distribution"] == {"pos": 0, "neg": 0, "zero": 2}
     # 判据固定 >=7/14：小样 n=2 必然不过
     assert res["passed"] is False
 
 
 def test_replay_gate_pipeline_divergence(tmp_path):
-    """换分叉动作（恒 PASS vs 磁带含买入）→ 终局改变（注入真实生效）。"""
+    """双臂异 callable（P4 臂恒 PASS vs 对照臂磁带含买入）→ Δ 非零（注入
+    与杠杆计量真实生效）。"""
     replay, tapes, finals = _tapes_and_replay(
         7003, [lambda o: json.loads(json.dumps(BUY_ACT)), _pass_agent])
     corpus = _write_tiny_corpus(str(tmp_path),
                                 [(990003, 0, 1, replay, finals)])
-    res = lpg.run_replay_gate(corpus, v5_callable=_pass_agent)
+    res = lpg.run_replay_gate(corpus, v5_callable=_pass_agent,
+                              v4b_callable=_tape_follower({0: tapes[0]}))
     g = res["per_game"][0]
-    assert g["replay_margin"] != pytest.approx(g["orig_margin"])
+    assert g["p4_margin"] != pytest.approx(g["control_margin"])
+    assert g["delta"] == pytest.approx(g["p4_margin"] - g["control_margin"])
+    assert g["streams_diverge"] is True
+    assert res["delta_distribution"]["zero"] == 0
 
 
 def test_replay_gate_fail_closed(tmp_path):
@@ -206,6 +217,7 @@ def test_equivalence_comparator_detects_fork(tmp_path):
 # ---------------------------------------------------------------------------
 def _fake_replay(wins, n):
     return {"wins": wins, "n": n, "per_game": [],
+            "delta_distribution": {"pos": wins, "neg": n - wins, "zero": 0},
             "passed": wins >= lpg.REPLAY_WIN_MIN
             and n == lpg.REPLAY_N_EXPECTED}
 
@@ -234,6 +246,8 @@ def test_verdict_schema_all_pass():
             "wall_s"} <= set(v)
     assert v["replay_gate"]["wins"] == 7 and v["replay_gate"]["n"] == 14
     assert v["replay_gate"]["passed"] is True
+    assert v["replay_gate"]["delta_distribution"] == {"pos": 7, "neg": 7,
+                                                      "zero": 0}
     assert v["equivalence"]["n_identical"] == 8 and v["equivalence"]["n"] == 8
     assert v["equivalence"]["passed"] is True
     assert v["launch_recheck"]["passed"] is True
