@@ -1,0 +1,1330 @@
+{
+ "generated_utc": "2026-09-22T11:47:50Z",
+ "method": {
+  "capital": "farms[seat].money at end-of-day step (hour 23), 24 steps/day, days 0-29",
+  "cede_day": "first day margin<0 and never positive again after",
+  "lock_day": "first day |margin| >= 50% of |final margin|",
+  "milestones": [
+   "d6",
+   "d10",
+   "d13",
+   "d16",
+   "d20",
+   "d24",
+   "d29"
+  ],
+  "team": "renyxin"
+ },
+ "corpus": {
+  "derivative": {
+   "n_games": 74,
+   "wlt": {
+    "T": 2,
+    "W": 40,
+    "L": 32
+   },
+   "losses": [
+    {
+     "ep": 111281641,
+     "opp": "aaaaLiu123",
+     "seat": 0,
+     "final_margin": -20175.0,
+     "opp_final": 84347.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 4,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": -271.0,
+      "d10": -10332.0,
+      "d13": -13415.0,
+      "d16": -15686.0,
+      "d20": -14219.0,
+      "d24": -19448.0,
+      "d29": -20175.0
+     },
+     "max_lead_day_amount": {
+      "day": 0,
+      "amount": 154.0
+     }
+    },
+    {
+     "ep": 111286146,
+     "opp": "Kamal Das",
+     "seat": 1,
+     "final_margin": -4883.0,
+     "opp_final": 52075.0,
+     "opp_band": "low<60k",
+     "cede_day": 20,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 1232.0,
+      "d10": 4610.0,
+      "d13": 3326.0,
+      "d16": 4416.0,
+      "d20": -3280.0,
+      "d24": -4734.0,
+      "d29": -4883.0
+     },
+     "max_lead_day_amount": {
+      "day": 17,
+      "amount": 7991.0
+     }
+    },
+    {
+     "ep": 111287283,
+     "opp": "Ronald K Wilson ",
+     "seat": 0,
+     "final_margin": -304.0,
+     "opp_final": 55336.0,
+     "opp_band": "low<60k",
+     "cede_day": 14,
+     "lock_day": 2,
+     "milestone_margins": {
+      "d6": 919.0,
+      "d10": 5535.0,
+      "d13": 2688.0,
+      "d16": -2117.0,
+      "d20": -3732.0,
+      "d24": -4548.0,
+      "d29": -304.0
+     },
+     "max_lead_day_amount": {
+      "day": 10,
+      "amount": 5535.0
+     }
+    },
+    {
+     "ep": 111289536,
+     "opp": "Alexandru Sitaru",
+     "seat": 0,
+     "final_margin": -1276.0,
+     "opp_final": 84488.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 26,
+     "lock_day": 6,
+     "milestone_margins": {
+      "d6": 2453.0,
+      "d10": 4189.0,
+      "d13": 5814.0,
+      "d16": 2832.0,
+      "d20": -926.0,
+      "d24": -193.0,
+      "d29": -1276.0
+     },
+     "max_lead_day_amount": {
+      "day": 17,
+      "amount": 8696.0
+     }
+    },
+    {
+     "ep": 111297358,
+     "opp": "Emir Can",
+     "seat": 0,
+     "final_margin": -3286.0,
+     "opp_final": 72240.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 28,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": -419.0,
+      "d10": -7594.0,
+      "d13": -5888.0,
+      "d16": -4213.0,
+      "d20": 2034.0,
+      "d24": 3813.0,
+      "d29": -3286.0
+     },
+     "max_lead_day_amount": {
+      "day": 26,
+      "amount": 8749.0
+     }
+    },
+    {
+     "ep": 111298489,
+     "opp": "Anton Tikhonov",
+     "seat": 0,
+     "final_margin": -2087.0,
+     "opp_final": 92193.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 22,
+     "lock_day": 8,
+     "milestone_margins": {
+      "d6": 204.0,
+      "d10": -7845.0,
+      "d13": -6739.0,
+      "d16": -7899.0,
+      "d20": -4330.0,
+      "d24": -6559.0,
+      "d29": -2087.0
+     },
+     "max_lead_day_amount": {
+      "day": 21,
+      "amount": 661.0
+     }
+    },
+    {
+     "ep": 111306349,
+     "opp": "Raiden.B",
+     "seat": 0,
+     "final_margin": -21296.0,
+     "opp_final": 91150.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 11,
+     "lock_day": 21,
+     "milestone_margins": {
+      "d6": 1224.0,
+      "d10": 4904.0,
+      "d13": -5535.0,
+      "d16": -4600.0,
+      "d20": -8678.0,
+      "d24": -16413.0,
+      "d29": -21296.0
+     },
+     "max_lead_day_amount": {
+      "day": 10,
+      "amount": 4904.0
+     }
+    },
+    {
+     "ep": 111307477,
+     "opp": "EdwardHwang@123",
+     "seat": 0,
+     "final_margin": -128.0,
+     "opp_final": 80026.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 17,
+     "lock_day": 18,
+     "milestone_margins": {
+      "d6": 0.0,
+      "d10": 0.0,
+      "d13": 0.0,
+      "d16": 0.0,
+      "d20": -128.0,
+      "d24": -128.0,
+      "d29": -128.0
+     },
+     "max_lead_day_amount": null
+    },
+    {
+     "ep": 111314125,
+     "opp": "Kevin Cao",
+     "seat": 1,
+     "final_margin": -11466.0,
+     "opp_final": 96719.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 10,
+     "lock_day": 16,
+     "milestone_margins": {
+      "d6": -182.0,
+      "d10": -492.0,
+      "d13": -2689.0,
+      "d16": -6729.0,
+      "d20": -11786.0,
+      "d24": -11560.0,
+      "d29": -11466.0
+     },
+     "max_lead_day_amount": {
+      "day": 9,
+      "amount": 306.0
+     }
+    },
+    {
+     "ep": 111318595,
+     "opp": "Jan Bartos",
+     "seat": 0,
+     "final_margin": -5238.0,
+     "opp_final": 86070.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 8,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 1385.0,
+      "d10": -5821.0,
+      "d13": -7378.0,
+      "d16": -7259.0,
+      "d20": -6913.0,
+      "d24": -2861.0,
+      "d29": -5238.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 1385.0
+     }
+    },
+    {
+     "ep": 111320833,
+     "opp": "MinerUNLEASHED",
+     "seat": 0,
+     "final_margin": -6368.0,
+     "opp_final": 83905.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 18,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 1159.0,
+      "d10": -4331.0,
+      "d13": -5517.0,
+      "d16": -6118.0,
+      "d20": -7842.0,
+      "d24": -9849.0,
+      "d29": -6368.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 1159.0
+     }
+    },
+    {
+     "ep": 111323075,
+     "opp": "NoName",
+     "seat": 0,
+     "final_margin": -20649.0,
+     "opp_final": 108845.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 12,
+     "lock_day": 22,
+     "milestone_margins": {
+      "d6": -186.0,
+      "d10": -2738.0,
+      "d13": -1189.0,
+      "d16": -2437.0,
+      "d20": -9532.0,
+      "d24": -14420.0,
+      "d29": -20649.0
+     },
+     "max_lead_day_amount": {
+      "day": 9,
+      "amount": 1363.0
+     }
+    },
+    {
+     "ep": 111325325,
+     "opp": "Rudransh Singh Rathore",
+     "seat": 0,
+     "final_margin": -1648.0,
+     "opp_final": 117909.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 17,
+     "lock_day": 21,
+     "milestone_margins": {
+      "d6": 0.0,
+      "d10": 0.0,
+      "d13": 0.0,
+      "d16": 0.0,
+      "d20": -428.0,
+      "d24": -1670.0,
+      "d29": -1648.0
+     },
+     "max_lead_day_amount": null
+    },
+    {
+     "ep": 111336733,
+     "opp": "Markura",
+     "seat": 1,
+     "final_margin": -1739.0,
+     "opp_final": 101875.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 29,
+     "lock_day": 8,
+     "milestone_margins": {
+      "d6": -557.0,
+      "d10": -8642.0,
+      "d13": -6597.0,
+      "d16": -4145.0,
+      "d20": 8572.0,
+      "d24": 12654.0,
+      "d29": -1739.0
+     },
+     "max_lead_day_amount": {
+      "day": 21,
+      "amount": 13781.0
+     }
+    },
+    {
+     "ep": 111370910,
+     "opp": "gchauhan",
+     "seat": 1,
+     "final_margin": -3155.0,
+     "opp_final": 94598.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 8,
+     "lock_day": 6,
+     "milestone_margins": {
+      "d6": 1590.0,
+      "d10": -4989.0,
+      "d13": -5999.0,
+      "d16": -10954.0,
+      "d20": -8785.0,
+      "d24": -8337.0,
+      "d29": -3155.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 1590.0
+     }
+    },
+    {
+     "ep": 111393589,
+     "opp": "Riki Uchida",
+     "seat": 1,
+     "final_margin": -11121.0,
+     "opp_final": 63569.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 10,
+     "lock_day": 14,
+     "milestone_margins": {
+      "d6": 1132.0,
+      "d10": -2510.0,
+      "d13": -5239.0,
+      "d16": -4997.0,
+      "d20": -6484.0,
+      "d24": -8432.0,
+      "d29": -11121.0
+     },
+     "max_lead_day_amount": {
+      "day": 9,
+      "amount": 1430.0
+     }
+    },
+    {
+     "ep": 111405339,
+     "opp": "Anna Pakhaliuk",
+     "seat": 0,
+     "final_margin": -987.0,
+     "opp_final": 93370.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 29,
+     "lock_day": 4,
+     "milestone_margins": {
+      "d6": 855.0,
+      "d10": -9584.0,
+      "d13": -7811.0,
+      "d16": -11196.0,
+      "d20": -4095.0,
+      "d24": 2946.0,
+      "d29": -987.0
+     },
+     "max_lead_day_amount": {
+      "day": 22,
+      "amount": 4199.0
+     }
+    },
+    {
+     "ep": 111421048,
+     "opp": "VynoDePal",
+     "seat": 0,
+     "final_margin": -11291.0,
+     "opp_final": 104888.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 18,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 1790.0,
+      "d10": -7217.0,
+      "d13": 1235.0,
+      "d16": -191.0,
+      "d20": -4889.0,
+      "d24": -8262.0,
+      "d29": -11291.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 1790.0
+     }
+    },
+    {
+     "ep": 111454133,
+     "opp": "JinboWang",
+     "seat": 0,
+     "final_margin": -29104.0,
+     "opp_final": 75550.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 7,
+     "lock_day": 14,
+     "milestone_margins": {
+      "d6": 391.0,
+      "d10": -10628.0,
+      "d13": -13858.0,
+      "d16": -19060.0,
+      "d20": -19801.0,
+      "d24": -24310.0,
+      "d29": -29104.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 391.0
+     }
+    },
+    {
+     "ep": 111465796,
+     "opp": "Janus",
+     "seat": 1,
+     "final_margin": -12949.0,
+     "opp_final": 64395.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 8,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 784.0,
+      "d10": -11091.0,
+      "d13": -12855.0,
+      "d16": -16032.0,
+      "d20": -14496.0,
+      "d24": -13815.0,
+      "d29": -12949.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 784.0
+     }
+    },
+    {
+     "ep": 111550297,
+     "opp": "Davide Andreolli",
+     "seat": 0,
+     "final_margin": -3300.0,
+     "opp_final": 83870.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 10,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": -410.0,
+      "d10": -7263.0,
+      "d13": -4807.0,
+      "d16": -6238.0,
+      "d20": -293.0,
+      "d24": -6950.0,
+      "d29": -3300.0
+     },
+     "max_lead_day_amount": {
+      "day": 9,
+      "amount": 756.0
+     }
+    },
+    {
+     "ep": 111568039,
+     "opp": "rongkai bao",
+     "seat": 0,
+     "final_margin": -15154.0,
+     "opp_final": 54227.0,
+     "opp_band": "low<60k",
+     "cede_day": 8,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 730.0,
+      "d10": -9160.0,
+      "d13": -10891.0,
+      "d16": -14396.0,
+      "d20": -13821.0,
+      "d24": -15259.0,
+      "d29": -15154.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 730.0
+     }
+    },
+    {
+     "ep": 111609223,
+     "opp": "ouga",
+     "seat": 1,
+     "final_margin": -17184.0,
+     "opp_final": 79449.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 8,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 809.0,
+      "d10": -11288.0,
+      "d13": -13321.0,
+      "d16": -17137.0,
+      "d20": -14467.0,
+      "d24": -16929.0,
+      "d29": -17184.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 809.0
+     }
+    },
+    {
+     "ep": 111651704,
+     "opp": "Jithendra Maddala",
+     "seat": 1,
+     "final_margin": -12601.0,
+     "opp_final": 42271.0,
+     "opp_band": "low<60k",
+     "cede_day": 8,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 728.0,
+      "d10": -10009.0,
+      "d13": -10400.0,
+      "d16": -12894.0,
+      "d20": -11821.0,
+      "d24": -13055.0,
+      "d29": -12601.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 728.0
+     }
+    },
+    {
+     "ep": 111653327,
+     "opp": "statma",
+     "seat": 1,
+     "final_margin": -36154.0,
+     "opp_final": 149814.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 17,
+     "lock_day": 23,
+     "milestone_margins": {
+      "d6": 1505.0,
+      "d10": -8958.0,
+      "d13": -390.0,
+      "d16": 924.0,
+      "d20": -18039.0,
+      "d24": -21990.0,
+      "d29": -36154.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 1505.0
+     }
+    },
+    {
+     "ep": 111671458,
+     "opp": "YASH JAIN",
+     "seat": 0,
+     "final_margin": -44523.0,
+     "opp_final": 105568.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 7,
+     "lock_day": 27,
+     "milestone_margins": {
+      "d6": 130.0,
+      "d10": -10259.0,
+      "d13": -13240.0,
+      "d16": -18298.0,
+      "d20": -12059.0,
+      "d24": -12181.0,
+      "d29": -44523.0
+     },
+     "max_lead_day_amount": {
+      "day": 3,
+      "amount": 188.0
+     }
+    },
+    {
+     "ep": 111700287,
+     "opp": "syouya tobita",
+     "seat": 1,
+     "final_margin": -29957.0,
+     "opp_final": 76540.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 7,
+     "lock_day": 14,
+     "milestone_margins": {
+      "d6": 346.0,
+      "d10": -11109.0,
+      "d13": -14474.0,
+      "d16": -19596.0,
+      "d20": -19168.0,
+      "d24": -22514.0,
+      "d29": -29957.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 346.0
+     }
+    },
+    {
+     "ep": 111713082,
+     "opp": "WLYYYo",
+     "seat": 1,
+     "final_margin": -34186.0,
+     "opp_final": 83530.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 11,
+     "lock_day": 16,
+     "milestone_margins": {
+      "d6": 836.0,
+      "d10": 719.0,
+      "d13": -8844.0,
+      "d16": -17916.0,
+      "d20": -25911.0,
+      "d24": -29797.0,
+      "d29": -34186.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 836.0
+     }
+    },
+    {
+     "ep": 111779236,
+     "opp": "habe.sq",
+     "seat": 0,
+     "final_margin": -72.0,
+     "opp_final": 78261.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 11,
+     "lock_day": 19,
+     "milestone_margins": {
+      "d6": 0.0,
+      "d10": 0.0,
+      "d13": -15.0,
+      "d16": -27.0,
+      "d20": -46.0,
+      "d24": -63.0,
+      "d29": -72.0
+     },
+     "max_lead_day_amount": null
+    },
+    {
+     "ep": 111794066,
+     "opp": "jorge fabian avila",
+     "seat": 1,
+     "final_margin": -22067.0,
+     "opp_final": 108478.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 7,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 355.0,
+      "d10": -11430.0,
+      "d13": -15149.0,
+      "d16": -19672.0,
+      "d20": -12552.0,
+      "d24": -10242.0,
+      "d29": -22067.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 355.0
+     }
+    },
+    {
+     "ep": 111813156,
+     "opp": "george-nigmatulin",
+     "seat": 0,
+     "final_margin": -8948.0,
+     "opp_final": 101577.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 8,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 627.0,
+      "d10": -9392.0,
+      "d13": -13477.0,
+      "d16": -18123.0,
+      "d20": -13571.0,
+      "d24": -9391.0,
+      "d29": -8948.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 627.0
+     }
+    },
+    {
+     "ep": 111863245,
+     "opp": "Mostafa H",
+     "seat": 0,
+     "final_margin": -13299.0,
+     "opp_final": 51114.0,
+     "opp_band": "low<60k",
+     "cede_day": 8,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 728.0,
+      "d10": -10002.0,
+      "d13": -10401.0,
+      "d16": -13359.0,
+      "d20": -12352.0,
+      "d24": -13415.0,
+      "d29": -13299.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 728.0
+     }
+    }
+   ],
+   "aggregate": {
+    "cede_day_hist": {
+     "d4": 1,
+     "d7": 4,
+     "d8": 8,
+     "d10": 3,
+     "d11": 3,
+     "d12": 1,
+     "d14": 1,
+     "d17": 3,
+     "d18": 2,
+     "d20": 1,
+     "d22": 1,
+     "d26": 1,
+     "d28": 1,
+     "d29": 2
+    },
+    "lock_day_hist": {
+     "d2": 1,
+     "d4": 1,
+     "d6": 2,
+     "d8": 2,
+     "d10": 14,
+     "d14": 3,
+     "d16": 2,
+     "d18": 1,
+     "d19": 1,
+     "d21": 2,
+     "d22": 1,
+     "d23": 1,
+     "d27": 1
+    },
+    "lead_then_collapse": {
+     "any_lead": 29,
+     "peak_ge_1000": 14,
+     "strong_cases": [
+      {
+       "ep": 111286146,
+       "opp": "Kamal Das",
+       "peak": 7991.0,
+       "peak_day": 17,
+       "cede_day": 20
+      },
+      {
+       "ep": 111287283,
+       "opp": "Ronald K Wilson ",
+       "peak": 5535.0,
+       "peak_day": 10,
+       "cede_day": 14
+      },
+      {
+       "ep": 111289536,
+       "opp": "Alexandru Sitaru",
+       "peak": 8696.0,
+       "peak_day": 17,
+       "cede_day": 26
+      },
+      {
+       "ep": 111297358,
+       "opp": "Emir Can",
+       "peak": 8749.0,
+       "peak_day": 26,
+       "cede_day": 28
+      },
+      {
+       "ep": 111306349,
+       "opp": "Raiden.B",
+       "peak": 4904.0,
+       "peak_day": 10,
+       "cede_day": 11
+      },
+      {
+       "ep": 111318595,
+       "opp": "Jan Bartos",
+       "peak": 1385.0,
+       "peak_day": 6,
+       "cede_day": 8
+      },
+      {
+       "ep": 111320833,
+       "opp": "MinerUNLEASHED",
+       "peak": 1159.0,
+       "peak_day": 6,
+       "cede_day": 18
+      },
+      {
+       "ep": 111323075,
+       "opp": "NoName",
+       "peak": 1363.0,
+       "peak_day": 9,
+       "cede_day": 12
+      },
+      {
+       "ep": 111336733,
+       "opp": "Markura",
+       "peak": 13781.0,
+       "peak_day": 21,
+       "cede_day": 29
+      },
+      {
+       "ep": 111370910,
+       "opp": "gchauhan",
+       "peak": 1590.0,
+       "peak_day": 6,
+       "cede_day": 8
+      },
+      {
+       "ep": 111393589,
+       "opp": "Riki Uchida",
+       "peak": 1430.0,
+       "peak_day": 9,
+       "cede_day": 10
+      },
+      {
+       "ep": 111405339,
+       "opp": "Anna Pakhaliuk",
+       "peak": 4199.0,
+       "peak_day": 22,
+       "cede_day": 29
+      },
+      {
+       "ep": 111421048,
+       "opp": "VynoDePal",
+       "peak": 1790.0,
+       "peak_day": 6,
+       "cede_day": 18
+      },
+      {
+       "ep": 111653327,
+       "opp": "statma",
+       "peak": 1505.0,
+       "peak_day": 6,
+       "cede_day": 17
+      }
+     ]
+    },
+    "opp_bands": {
+     "giant>=85k": {
+      "n": 14,
+      "median_cede_day": 12,
+      "median_lock_day": 10,
+      "led_then_lost": 13,
+      "mean_final_margin": -13660.6
+     },
+     "mid60-85k": {
+      "n": 13,
+      "median_cede_day": 10,
+      "median_lock_day": 10,
+      "led_then_lost": 11,
+      "mean_final_margin": -13008.2
+     },
+     "low<60k": {
+      "n": 5,
+      "median_cede_day": 8,
+      "median_lock_day": 10,
+      "led_then_lost": 5,
+      "mean_final_margin": -9248.2
+     }
+    },
+    "day11_wall": {
+     "cede_in_d9_d13": 7,
+     "eps": [
+      111306349,
+      111314125,
+      111323075,
+      111393589,
+      111550297,
+      111713082,
+      111779236
+     ],
+     "cede_in_d7_d8": 12,
+     "eps_d7_d8": [
+      111318595,
+      111370910,
+      111454133,
+      111465796,
+      111568039,
+      111609223,
+      111651704,
+      111671458,
+      111700287,
+      111794066,
+      111813156,
+      111863245
+     ],
+     "lock_at_d10": 14
+    },
+    "near_tie_losses": [
+     {
+      "ep": 111307477,
+      "opp": "EdwardHwang@123",
+      "final_margin": -128.0
+     },
+     {
+      "ep": 111779236,
+      "opp": "habe.sq",
+      "final_margin": -72.0
+     }
+    ]
+   }
+  },
+  "hybrid_v2_delta": {
+   "n_games_total": 51,
+   "old_losses_predissected": 11,
+   "new_losses": [
+    {
+     "ep": 111920371,
+     "opp": "10pi",
+     "seat": 1,
+     "final_margin": -7033.0,
+     "opp_final": 90418.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 8,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": 979.0,
+      "d10": -10817.0,
+      "d13": -11850.0,
+      "d16": -13752.0,
+      "d20": -9557.0,
+      "d24": -8316.0,
+      "d29": -7033.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 979.0
+     }
+    },
+    {
+     "ep": 111921503,
+     "opp": "kaka",
+     "seat": 0,
+     "final_margin": -30202.0,
+     "opp_final": 109256.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 10,
+     "lock_day": 19,
+     "milestone_margins": {
+      "d6": 444.0,
+      "d10": -7347.0,
+      "d13": -8824.0,
+      "d16": -13446.0,
+      "d20": -17966.0,
+      "d24": -20154.0,
+      "d29": -30202.0
+     },
+     "max_lead_day_amount": {
+      "day": 9,
+      "amount": 860.0
+     }
+    },
+    {
+     "ep": 111939953,
+     "opp": "MC1127",
+     "seat": 0,
+     "final_margin": -19278.0,
+     "opp_final": 81484.0,
+     "opp_band": "mid60-85k",
+     "cede_day": 8,
+     "lock_day": 12,
+     "milestone_margins": {
+      "d6": 808.0,
+      "d10": -7885.0,
+      "d13": -8990.0,
+      "d16": -12185.0,
+      "d20": -15322.0,
+      "d24": -14594.0,
+      "d29": -19278.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 808.0
+     }
+    },
+    {
+     "ep": 111950309,
+     "opp": "Igor V",
+     "seat": 0,
+     "final_margin": -41531.0,
+     "opp_final": 125237.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 4,
+     "lock_day": 16,
+     "milestone_margins": {
+      "d6": -138.0,
+      "d10": -10340.0,
+      "d13": -14215.0,
+      "d16": -21861.0,
+      "d20": -25820.0,
+      "d24": -32923.0,
+      "d29": -41531.0
+     },
+     "max_lead_day_amount": {
+      "day": 0,
+      "amount": 154.0
+     }
+    },
+    {
+     "ep": 111953455,
+     "opp": "yiyu0716",
+     "seat": 0,
+     "final_margin": -31713.0,
+     "opp_final": 99727.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 7,
+     "lock_day": 14,
+     "milestone_margins": {
+      "d6": 444.0,
+      "d10": -10007.0,
+      "d13": -14843.0,
+      "d16": -21440.0,
+      "d20": -20005.0,
+      "d24": -23498.0,
+      "d29": -31713.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 444.0
+     }
+    },
+    {
+     "ep": 111955711,
+     "opp": "weense",
+     "seat": 1,
+     "final_margin": -19272.0,
+     "opp_final": 103004.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 4,
+     "lock_day": 10,
+     "milestone_margins": {
+      "d6": -13.0,
+      "d10": -11135.0,
+      "d13": -14398.0,
+      "d16": -19173.0,
+      "d20": -16928.0,
+      "d24": -14127.0,
+      "d29": -19272.0
+     },
+     "max_lead_day_amount": {
+      "day": 3,
+      "amount": 199.0
+     }
+    },
+    {
+     "ep": 111977124,
+     "opp": "YOUNG CHOW",
+     "seat": 0,
+     "final_margin": -18016.0,
+     "opp_final": 94001.0,
+     "opp_band": "giant>=85k",
+     "cede_day": 10,
+     "lock_day": 15,
+     "milestone_margins": {
+      "d6": 1590.0,
+      "d10": -8055.0,
+      "d13": -6015.0,
+      "d16": -8009.0,
+      "d20": -14209.0,
+      "d24": -10511.0,
+      "d29": -18016.0
+     },
+     "max_lead_day_amount": {
+      "day": 6,
+      "amount": 1590.0
+     }
+    }
+   ],
+   "aggregate": {
+    "cede_day_hist": {
+     "d4": 2,
+     "d7": 1,
+     "d8": 2,
+     "d10": 2
+    },
+    "lock_day_hist": {
+     "d10": 2,
+     "d12": 1,
+     "d14": 1,
+     "d15": 1,
+     "d16": 1,
+     "d19": 1
+    },
+    "lead_then_collapse": {
+     "any_lead": 7,
+     "peak_ge_1000": 1,
+     "strong_cases": [
+      {
+       "ep": 111977124,
+       "opp": "YOUNG CHOW",
+       "peak": 1590.0,
+       "peak_day": 6,
+       "cede_day": 10
+      }
+     ]
+    },
+    "opp_bands": {
+     "giant>=85k": {
+      "n": 6,
+      "median_cede_day": 8,
+      "median_lock_day": 15,
+      "led_then_lost": 6,
+      "mean_final_margin": -24627.8
+     },
+     "mid60-85k": {
+      "n": 1,
+      "median_cede_day": 8,
+      "median_lock_day": 12,
+      "led_then_lost": 1,
+      "mean_final_margin": -19278.0
+     }
+    },
+    "day11_wall": {
+     "cede_in_d9_d13": 2,
+     "eps": [
+      111921503,
+      111977124
+     ],
+     "cede_in_d7_d8": 3,
+     "eps_d7_d8": [
+      111920371,
+      111939953,
+      111953455
+     ],
+     "lock_at_d10": 2
+    },
+    "near_tie_losses": []
+   }
+  },
+  "v4b": {
+   "n": 23,
+   "W": 13,
+   "L": 10,
+   "T": 0,
+   "games": [
+    {
+     "ep": 111980574,
+     "opp": "[Deleted] 05e6ae2c-c72f-4044-b02f-dc74277e34ab",
+     "res": "W",
+     "margin": 100888.0
+    },
+    {
+     "ep": 111981704,
+     "opp": "DeokJin",
+     "res": "W",
+     "margin": 126287.0
+    },
+    {
+     "ep": 111982776,
+     "opp": "oguzok",
+     "res": "W",
+     "margin": 25019.0
+    },
+    {
+     "ep": 111983903,
+     "opp": "Benny Joseph",
+     "res": "W",
+     "margin": 11640.0
+    },
+    {
+     "ep": 111985011,
+     "opp": "Goober",
+     "res": "W",
+     "margin": 6132.0
+    },
+    {
+     "ep": 111986116,
+     "opp": "Rob C",
+     "res": "W",
+     "margin": 31731.0
+    },
+    {
+     "ep": 111987240,
+     "opp": "d0gied",
+     "res": "W",
+     "margin": 9928.0
+    },
+    {
+     "ep": 111988332,
+     "opp": " SonSheungmin",
+     "res": "W",
+     "margin": 3796.0
+    },
+    {
+     "ep": 111989453,
+     "opp": "Shuiys",
+     "res": "L",
+     "margin": -17265.0
+    },
+    {
+     "ep": 111990561,
+     "opp": "Roshan S. Chauhan",
+     "res": "L",
+     "margin": -21237.0
+    },
+    {
+     "ep": 111991711,
+     "opp": "Arvin",
+     "res": "W",
+     "margin": 6367.0
+    },
+    {
+     "ep": 111992856,
+     "opp": "VelloNChiru",
+     "res": "W",
+     "margin": 3317.0
+    },
+    {
+     "ep": 111994000,
+     "opp": "dong & shen",
+     "res": "L",
+     "margin": -149.0
+    },
+    {
+     "ep": 111995162,
+     "opp": "Dinesh Makireddy 7389",
+     "res": "L",
+     "margin": -19036.0
+    },
+    {
+     "ep": 111996313,
+     "opp": "SeaGoat",
+     "res": "L",
+     "margin": -17220.0
+    },
+    {
+     "ep": 111997446,
+     "opp": "JovanaLab",
+     "res": "L",
+     "margin": -19.0
+    },
+    {
+     "ep": 111998583,
+     "opp": "Thái Văn Tài",
+     "res": "L",
+     "margin": -2150.0
+    },
+    {
+     "ep": 111999720,
+     "opp": "tenfish",
+     "res": "W",
+     "margin": 12022.0
+    },
+    {
+     "ep": 112000837,
+     "opp": "Viet-Tien",
+     "res": "W",
+     "margin": 9032.0
+    },
+    {
+     "ep": 112001974,
+     "opp": "Jin Niu",
+     "res": "L",
+     "margin": -130.0
+    },
+    {
+     "ep": 112003105,
+     "opp": "Rio Nakamura",
+     "res": "L",
+     "margin": -17255.0
+    },
+    {
+     "ep": 112004265,
+     "opp": "Mark Grayson",
+     "res": "L",
+     "margin": -2238.0
+    },
+    {
+     "ep": 112004608,
+     "opp": "Paul Nassiri",
+     "res": "W",
+     "margin": 14348.0
+    }
+   ]
+  }
+ }
+}

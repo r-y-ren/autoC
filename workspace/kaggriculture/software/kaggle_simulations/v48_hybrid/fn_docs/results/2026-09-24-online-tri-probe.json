@@ -1,0 +1,112 @@
+{
+ "pulled_at": "2026-09-22T10:32:52Z",
+ "source": {
+  "competition": "kaggriculture",
+  "cli": "/home/renyxin/.local/bin/kaggle",
+  "slug_from": "software/scripts/sync_online_probe.py L151",
+  "replay_dir": "/tmp/fna",
+  "replay_eps": [
+   111982776,
+   111981704,
+   111980574,
+   111979240
+  ]
+ },
+ "submissions": [
+  {
+   "ref": 56461336,
+   "score": "868.9",
+   "status": "COMPLETE",
+   "date": "2026-09-22T10:08:55.783000",
+   "desc": "public derivative with economic-guard layer (v4b: market/milestone layers off pe"
+  },
+  {
+   "ref": 56452187,
+   "score": "1080.8",
+   "status": "COMPLETE",
+   "date": "2026-09-22T03:53:46.293000",
+   "desc": "public derivative with modifications (market/economic-guard layers) v2: tape-pro"
+  },
+  {
+   "ref": 56400478,
+   "score": "1113.5",
+   "status": "COMPLETE",
+   "date": "2026-09-20T15:56:48.637000",
+   "desc": "public derivative: kaitofukami v48 public-notebook build (verbatim, byte-identic"
+  }
+ ],
+ "episodes_count": {
+  "56400478": {
+   "label": "v48-derivative",
+   "total": 74,
+   "public": 73,
+   "validation": 1,
+   "all_completed": true
+  },
+  "56452187": {
+   "label": "hybrid-v2",
+   "total": 50,
+   "public": 49,
+   "validation": 1,
+   "all_completed": true
+  },
+  "56461336": {
+   "label": "v4b",
+   "total": 4,
+   "public": 3,
+   "validation": 1,
+   "all_completed": true
+  }
+ },
+ "derivative_increment": {
+  "baseline": "software/exports/online/sampling/round26_sampling.json @2026-09-21T07:47:11Z: 57 public + 1 validation = 58",
+  "delta_total": 16,
+  "delta_public": 16,
+  "score_then": 1146.0,
+  "score_now": 1113.5
+ },
+ "v4b": {
+  "n_parsed": 4,
+  "W": 3,
+  "L": 0,
+  "T": 1,
+  "games": [
+   {
+    "ep": 111982776,
+    "opp": "oguzok",
+    "my": 82196.0,
+    "ot": 57177.0,
+    "margin": 25019.0,
+    "res": "W",
+    "seat": 0
+   },
+   {
+    "ep": 111981704,
+    "opp": "DeokJin",
+    "my": 156186.0,
+    "ot": 29899.0,
+    "margin": 126287.0,
+    "res": "W",
+    "seat": 1
+   },
+   {
+    "ep": 111980574,
+    "opp": "[Deleted] 05e6ae2c-c72f-4044-b02f-dc74277e34ab",
+    "my": 110970.0,
+    "ot": 10082.0,
+    "margin": 100888.0,
+    "res": "W",
+    "seat": 1
+   },
+   {
+    "ep": 111979240,
+    "opp": "renyxin",
+    "my": 64149.0,
+    "ot": 64149.0,
+    "margin": 0.0,
+    "res": "T",
+    "seat": 0
+   }
+  ]
+ }
+}
