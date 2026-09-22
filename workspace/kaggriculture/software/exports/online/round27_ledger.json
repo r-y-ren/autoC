@@ -1,0 +1,19 @@
+{
+ "schema": "online-probe-ledger/1.0",
+ "round": 27,
+ "track": "hybrid-probe",
+ "candidate": {
+  "label": "v48-hybrid-v2",
+  "pkg_sha256": "ad14c9e668a9e6dc62ed178aa3059d016b0d6d28aa0b4754b5bc2a2b93415772",
+  "main_sha256": "1d6cdb26d2f379402b069ec517de7bf3c6712df6a658a31875a26e2a951235c1",
+  "base_sha256": "dadee25a…",
+  "submission_ref": 56452187,
+  "status": "SubmissionStatus.PENDING",
+  "submitted_at_utc": "2026-09-22T03:53:46.293000"
+ },
+ "decision": {
+  "user_verdict": "AskUserQuestion approved: v2 直接探针（离线 h2h 0.25<0.65 门经用户裁决放宽；探针采信息，09-29 收口位另议）",
+  "offline_gates": "launch_fourgate PASS / panel 0.9994 PASS / zero-new-anomalies PASS / patch_safety PASS / h2h 0.25 FAIL (waived)",
+  "convergence_note": "user-observed ~2h convergence; read at +2h; slot decision (v2 vs v14.1) deferred to 09-29"
+ }
+}
