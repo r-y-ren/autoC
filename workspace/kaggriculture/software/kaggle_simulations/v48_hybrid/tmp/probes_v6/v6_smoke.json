@@ -1,0 +1,89 @@
+{
+ "protocol": "v6-launch-fourgate/1.0",
+ "package": {
+  "main_sha256": "f1decea4473d3a375805615ec0b3af5caf7822013f0e1eb7134e8515ed736c5e",
+  "main_bytes": 117247,
+  "tar_sha256": "da84461918d0d57bbf31e2b80d554fdd334a519c210eb96479c3c4e6b48ac304",
+  "tar_bytes": 88219,
+  "gate4_size_ok": true
+ },
+ "gate1_official_load": {
+  "gate1_official_load_ok": true,
+  "agent_py_checked": "/home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/agent.py",
+  "driver_wall_s": 0.6,
+  "n_obs_replayed": 719,
+  "obs_subsampled": true,
+  "isolated_vs_local_action_mismatches": 0,
+  "evidence": {
+   "n_callables": 11,
+   "last_callable_name": "_v48hybrid_entrypoint",
+   "has_named_agent": true,
+   "named_agent_same_output_as_last": true,
+   "loader_pop_applied": true,
+   "exec_dir_on_sys_path_after_load": false,
+   "n_new_sys_modules": 49,
+   "non_stdlib_imports": [],
+   "action_errors": [],
+   "n_obs": 719,
+   "n_actions": 719
+  }
+ },
+ "gate2_full_episodes": {
+  "gate2_full_episodes_ok": true,
+  "gate2_step_budget_ms": 1000.0,
+  "gate2_episodes": [
+   {
+    "seed": 101,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     15127.0,
+     15127.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 1.9,
+    "agent_calls": 1438,
+    "max_step_ms": 97.65,
+    "p99_step_ms": 0.51,
+    "mean_step_ms": 0.22,
+    "action_stream_sha256": "b55cb9b6d875446f742e6b88e90a156feb3632ad096c0a2cc28edebfe36a05d8",
+    "obs_count": 719
+   },
+   {
+    "seed": 102,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     33870.0,
+     33870.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 2.0,
+    "agent_calls": 1438,
+    "max_step_ms": 2.92,
+    "p99_step_ms": 0.37,
+    "mean_step_ms": 0.14,
+    "action_stream_sha256": "62b994943078174708a4611d549c7098424c678eee29e8f07f5e00d833124c09",
+    "obs_count": 719
+   }
+  ],
+  "gate3_determinism_ok": true,
+  "gate3_rerun_seed": 101,
+  "gate3_hashes": {
+   "run1": "b55cb9b6d875446f742e6b88e90a156feb3632ad096c0a2cc28edebfe36a05d8",
+   "run2": "b55cb9b6d875446f742e6b88e90a156feb3632ad096c0a2cc28edebfe36a05d8"
+  }
+ },
+ "wall_total_s": 9.6,
+ "all_gates_pass": true
+}

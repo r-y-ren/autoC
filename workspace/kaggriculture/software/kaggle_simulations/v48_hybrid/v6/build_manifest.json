@@ -1,0 +1,197 @@
+{
+  "base": {
+    "bytes": 107008,
+    "note": "前缀非逐字：_V48_ROUTES blob 区间被手术路由替换，区间外逐字节一致（build_v6.py 自证）",
+    "path": "software/kaggle_simulations/v48_derivative/main.py",
+    "sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+    "verbatim_prefix": false
+  },
+  "blob_identity": {
+    "detail": {
+      "v48h.p2_economic_guard": {
+        "disk_sha256": "e7206b734451cb08a5d9cbbba5f4cf16a88f17dfcf8a3b34cd1f99201ad98713",
+        "embedded_sha256": "e7206b734451cb08a5d9cbbba5f4cf16a88f17dfcf8a3b34cd1f99201ad98713",
+        "identical": true
+      }
+    },
+    "embedded_modules": [
+      "v48h.p2_economic_guard"
+    ],
+    "ok": true
+  },
+  "deterministic_double_build": true,
+  "flag_off_zero_wiring": {
+    "P1": true,
+    "P3": true,
+    "P4": true
+  },
+  "flags": {
+    "P1_ON": false,
+    "P2_ON": true,
+    "P3_ON": false,
+    "P4_ON": false
+  },
+  "gate_results": {
+    "income_selfcheck_r9g2": {
+      "artifacts": [
+        "tmp/probes_v6/v6_income_selfcheck.json",
+        "tmp/probes_v6/v6_income_yarn_branch.json"
+      ],
+      "constructed_yarn1": {
+        "seed14": {
+          "final": 36663,
+          "peak": 3269.0
+        },
+        "seed24": {
+          "final": 22156,
+          "peak": 3050.0
+        }
+      },
+      "constructed_yarn2_seed28": {
+        "branch": "yarn2 (YARN,YARN)",
+        "final": 36812,
+        "peak_d14_17": 3331.0,
+        "peak_day": 16
+      },
+      "gate": "max daily income d14-17 >= 12700 (twin favorable projection 13634)",
+      "root_causes": [
+        "frozen tape SELL cadence caps wool/milk realization vs twin free-form selling",
+        "23-animal herd exceeds frozen-walk tending capacity: on-time placement 13-16/23 per route (7-10 sheep deferred/unplaced)",
+        "cash self-limiting: engine no-ops unaffordable buys/hires (tape cash < twin cash projection)"
+      ],
+      "selfplay_101": {
+        "branch": "farm (FARMERS_MARKET@88)",
+        "final": 15127,
+        "peak_d14_17": 947.0,
+        "peak_day": 15
+      },
+      "selfplay_102": {
+        "branch": "yarn1 (YARN_STORE@88)",
+        "final": 33870,
+        "peak_d14_17": 3203.0,
+        "peak_day": 16
+      },
+      "verdict": "FAIL vs 12700 on all measured branches (peak 0.9k-3.3k, d15-16); yarn-branch finals 22-37k"
+    },
+    "launch_fourgate": {
+      "artifact": "tmp/probes_v6/v6_smoke.json",
+      "gate1_official_load": "干净 -I 子进程 get_last_callable 复刻，named==last（_v48hybrid_entrypoint），isolated vs local 动作流 mismatch=0，stdlib 扫描空",
+      "gate2_full_episodes": "seeds 101/102 双席自打双 DONE 720 回合，seed101 statuses=['DONE', 'DONE'] rewards=[15127,15127] 720回合 max 97.65ms p99 0.51ms; seed102 statuses=['DONE', 'DONE'] rewards=[33870,33870] 720回合 max 2.92ms p99 0.37ms",
+      "gate3_determinism": "seed101 重跑动作流哈希逐字节一致（b55cb9b6d875…）",
+      "gate4_size": "88,219B ≤ 100MB",
+      "passed": true
+    },
+    "note": "四门冒烟由 giant_route/fourgate_v6.py 回填；结构五线属 R9-G4",
+    "status": "SMOKE_ONLY_PASS"
+  },
+  "main_py": {
+    "bytes": 117247,
+    "sha256": "f1decea4473d3a375805615ec0b3af5caf7822013f0e1eb7134e8515ed736c5e",
+    "surgered_base_prefix_bytes": 107756
+  },
+  "patches": {
+    "P1": {
+      "embedded": false,
+      "module": "v48h.p1_midgame_sell_layer",
+      "role": "midgame sell takeover (three-gate planner)",
+      "sha256": "1b9f235e9824c6b0c38c362ca53133869be1dcd126fe6bf7fd33dcfcd4de9f94",
+      "source": "patches/midgame_sell_layer.py"
+    },
+    "P2": {
+      "embedded": true,
+      "module": "v48h.p2_economic_guard",
+      "role": "dead-pair economic guard (production veto)",
+      "sha256": "e7206b734451cb08a5d9cbbba5f4cf16a88f17dfcf8a3b34cd1f99201ad98713",
+      "source": "patches/economic_guard.py"
+    },
+    "P3": {
+      "embedded": false,
+      "module": "v48h.p3_milestone_monitor",
+      "role": "milestone sell-timing monitor",
+      "sha256": "b0ef3c90380d9de079a6efb0d90462546336e196bd12732ddbb7287f5b0d6caf",
+      "source": "patches/milestone_monitor.py"
+    },
+    "P4": {
+      "embedded": false,
+      "module": "v48h.lead_protection",
+      "role": "lead-protection conservative sell timing (R8-v2 post-war)",
+      "sha256": "edb7100fed82f8dd5541f0fb0c8be67217b2ab951c31bced61fa09291e8953bb",
+      "source": "patches/lead_protection.py"
+    }
+  },
+  "stdlib_only": true,
+  "submission_tar_gz": {
+    "bytes": 88219,
+    "deterministic_double_pack": true,
+    "members": [
+      "main.py"
+    ],
+    "sha256": "da84461918d0d57bbf31e2b80d554fdd334a519c210eb96479c3c4e6b48ac304"
+  },
+  "submit_message": "giant-route tape surgery: production-line events rescheduled to sheep-heavy giant plan (sell face byte-frozen; economic-guard retained)",
+  "tape_surgery": {
+    "diff_entries": 499,
+    "edits": 2610,
+    "preserved": [
+      "SELL orders (byte-identical per route)",
+      "movement verbs (farmer+hands, byte-identical)",
+      "route switch points 88/120/153/216 + router modules (byte-identical)",
+      "reaction layers: anti-clone preemptive sell / sell-slot reorder / terminal liquidation / weed repair (byte-identical)"
+    ],
+    "report": "giant_route/surgery_report.json",
+    "routes_blob_span": [
+      35766,
+      105550
+    ],
+    "routes_json_sha256": "4fb124b0ec9e6b69c6cd82287c82c1910f2fa7934e799540539113c0bb8d0381",
+    "schedule": "giant_route/target_schedule.json",
+    "surgered_base_sha256": "4e89b09ca187b86de5192867c90e1cbca6b6501f25d8c90b645156defb63d891",
+    "tool": "giant_route/tape_surgery.py"
+  },
+  "variant": {
+    "assembler": "giant_route/build_v6.py",
+    "name": "v6",
+    "rationale": "R9 giant-route 结构梯：磁带产线事件手术（sheep-heavy 排程）+ P2 死价保险（v4b 旗面形态）；卖单面/反应层/事件点切换结构逐字节保留"
+  },
+  "wiring_check_detail": {
+    "P1": {
+      "ok": true,
+      "v6_token_hits": {
+        "_v48h_p1_apply": 0,
+        "_v48h_p1_defer": 0,
+        "apply_to_market_orders": 0,
+        "should_defer_to_tape": 0,
+        "v48h.p1_midgame_sell_layer": 0
+      }
+    },
+    "P2": {
+      "ok": true,
+      "v6_token_hits": {
+        "_v48h_p2_vetoe": 2,
+        "v48h.p2_economic_guard": 3,
+        "vetoe_animal_and_shed_steps": 1
+      }
+    },
+    "P3": {
+      "ok": true,
+      "v6_token_hits": {
+        "_V48H_TURNS_PER_DAY": 0,
+        "_v48h_p3_adjust_timing": 0,
+        "_v48h_p3_assess": 0,
+        "_v48h_p3_sell_timing": 0,
+        "adjust_sell_timing": 0,
+        "assess_milestone_deviation": 0,
+        "v48h.p3_milestone_monitor": 0
+      }
+    },
+    "P4": {
+      "ok": true,
+      "v6_token_hits": {
+        "_V48H_P4_REGISTER": 0,
+        "_v48h_p4_build": 0,
+        "build_lead_protection": 0,
+        "v48h.lead_protection": 0
+      }
+    }
+  }
+}

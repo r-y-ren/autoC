@@ -1,0 +1,165 @@
+{
+ "protocol": "structure-giant-seated-gate/1.0",
+ "criterion": "对 statma/fuxi/42 回放流各 ≥3 局，逐局打平或更好（margin≥0，宽限 margin≥-1000）",
+ "corpus_rule": "三巨人各自其他对局优先（本语料均无）→ 锚局本身 + r26full 强对手扩展集（败局 margin≤-20000，按严重度轮转每巨人 2 局）",
+ "per_giant": {
+  "statma": {
+   "games": 3,
+   "all_ok": false,
+   "best_margin": -111526.0,
+   "records": [
+    {
+     "ep": 111653327,
+     "opp": "statma",
+     "me_seat": 1,
+     "role": "anchor",
+     "orig_margin": -36154.0,
+     "v6b_margin": -111526.0,
+     "v6b_finals": [
+      114832.0,
+      3306.0
+     ],
+     "delta_vs_orig": -75372.0,
+     "steps": 719,
+     "ok": false
+    },
+    {
+     "ep": 111671458,
+     "opp": "YASH JAIN",
+     "me_seat": 0,
+     "role": "strong_ext",
+     "orig_margin": -44523.0,
+     "v6b_margin": -147406.0,
+     "v6b_finals": [
+      5789.0,
+      153195.0
+     ],
+     "delta_vs_orig": -102883.0,
+     "steps": 719,
+     "ok": false
+    },
+    {
+     "ep": 111713082,
+     "opp": "WLYYYo",
+     "me_seat": 1,
+     "role": "strong_ext",
+     "orig_margin": -34186.0,
+     "v6b_margin": -162072.0,
+     "v6b_finals": [
+      165693.0,
+      3621.0
+     ],
+     "delta_vs_orig": -127886.0,
+     "steps": 719,
+     "ok": false
+    }
+   ]
+  },
+  "fuxi": {
+   "games": 3,
+   "all_ok": false,
+   "best_margin": -119122.0,
+   "records": [
+    {
+     "ep": 111877080,
+     "opp": "fuxi",
+     "me_seat": 0,
+     "role": "anchor",
+     "orig_margin": -27083.0,
+     "v6b_margin": -119122.0,
+     "v6b_finals": [
+      6488.0,
+      125610.0
+     ],
+     "delta_vs_orig": -92039.0,
+     "steps": 719,
+     "ok": false
+    },
+    {
+     "ep": 111700287,
+     "opp": "syouya tobita",
+     "me_seat": 1,
+     "role": "strong_ext",
+     "orig_margin": -29957.0,
+     "v6b_margin": -133174.0,
+     "v6b_finals": [
+      145819.0,
+      12645.0
+     ],
+     "delta_vs_orig": -103217.0,
+     "steps": 719,
+     "ok": false
+    },
+    {
+     "ep": 111454133,
+     "opp": "JinboWang",
+     "me_seat": 0,
+     "role": "strong_ext",
+     "orig_margin": -29104.0,
+     "v6b_margin": -142147.0,
+     "v6b_finals": [
+      6507.0,
+      148654.0
+     ],
+     "delta_vs_orig": -113043.0,
+     "steps": 719,
+     "ok": false
+    }
+   ]
+  },
+  "42": {
+   "games": 3,
+   "all_ok": false,
+   "best_margin": -68386.0,
+   "records": [
+    {
+     "ep": 111898825,
+     "opp": "42",
+     "me_seat": 0,
+     "role": "anchor",
+     "orig_margin": -25075.0,
+     "v6b_margin": -92110.0,
+     "v6b_finals": [
+      9554.0,
+      101664.0
+     ],
+     "delta_vs_orig": -67035.0,
+     "steps": 719,
+     "ok": false
+    },
+    {
+     "ep": 111794066,
+     "opp": "jorge fabian avila",
+     "me_seat": 1,
+     "role": "strong_ext",
+     "orig_margin": -22067.0,
+     "v6b_margin": -147088.0,
+     "v6b_finals": [
+      175471.0,
+      28383.0
+     ],
+     "delta_vs_orig": -125021.0,
+     "steps": 719,
+     "ok": false
+    },
+    {
+     "ep": 111306349,
+     "opp": "Raiden.B",
+     "me_seat": 0,
+     "role": "strong_ext",
+     "orig_margin": -21296.0,
+     "v6b_margin": -68386.0,
+     "v6b_finals": [
+      4983.0,
+      73369.0
+     ],
+     "delta_vs_orig": -47090.0,
+     "steps": 719,
+     "ok": false
+    }
+   ]
+  }
+ },
+ "passed": false,
+ "wall_s": 6.4
+}

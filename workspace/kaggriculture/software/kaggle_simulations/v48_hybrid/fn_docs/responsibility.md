@@ -120,3 +120,44 @@
     - 调用方：verify_lead_protection。
     - tested 策略：上游覆盖。
     - 核验命令：上游覆盖: verify_lead_protection。
+
+
+---
+
+## 【R9 增补·2026-09-23】结构重构梯（G 批次）
+## 结构概览（增补）
+- generate_giant_schedule ← R9
+  - validate_schedule_feasibility
+- perform_tape_surgery ← R9
+  - map_events_to_tape
+  - rebuild_tape_routes
+- assemble_v6_build ← R9
+- verify_structure_gates ← R9
+  - run_h2h_v48_gate
+  - run_giant_seated_gate
+  - run_win_regression_gate
+  - run_economic_face
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R9 | generate_giant_schedule；perform_tape_surgery；assemble_v6_build；verify_structure_gates |
+
+## 功能块 generate_giant_schedule ← R9
+（块引言：从 M0 经济模型+M4 巨人画像生成羊重仓目标产线排程——逐日买/建/雇/种计划+现金流预算；画像锚=statma 卡。）
+- **generate_giant_schedule** [L0|新增]：排程生成（目标：羊~17/羊毛占比~0.52/SE@d11/收入峰 d14-17≥17k 级）；输入 M0 模型+画像 / 输出 逐日计划 JSON / 错误：不可行约束即报。
+  - **validate_schedule_feasibility** [L1|新增]：孪生空跑可行性（劳动 op/现金/棚容/停时约束逐日校验）；不可行日逐条报。
+## 功能块 perform_tape_surgery ← R9
+- **perform_tape_surgery** [L0|新增]：把目标排程映射为 v48 磁带产线事件手术（解码路由的 BUY/BUILD/HIRE 事件改写；反应层/市场层/终局清仓不动）。
+  - **derive_sell_schedule** [L1|新增]：按 M1 吸收节律最优（卖速≈吸收率+末日清仓）从新产线推导逐日卖序（羊毛/奶/麦/西瓜线各排程）。
+  - **allocate_labor_plan** [L1|新增]：op 容量可行性分配（CARE/FEED/收割/种植 op 预算逐日；畜群规模受照护容量约束回传排程）。
+  - **map_events_to_tape** [L1|修订]：排程+卖序+劳动 → 磁带全事件差分集（产线/卖/移动三面）。
+  - **rebuild_tape_routes** [L1|新增]：重编码受影响路由段并保一致性（事件点/路由切换结构不变）。
+## 功能块 assemble_v6_build ← R9
+- **assemble_v6_build** [L0|新增]：v6 构建（手术磁带+P2 保险沿 v4b 旗面形态；四门冒烟；产物 v6/）。
+## 功能块 verify_structure_gates ← R9
+- **verify_structure_gates** [L0|新增]：五线编排裁决。
+  - **run_h2h_v48_gate** [L1|新增]：v6 vs 纯 v48 ≥16 局互胜 ≥0.65。
+  - **run_giant_seated_gate** [L1|新增]：对 statma/fuxi/42 回放流各 ≥3 局 seated 对照（打平或更好）。
+  - **run_win_regression_gate** [L1|新增]：胜局回归 ≥8 局不翻负。
+  - **run_economic_face** [L1|新增]：收入峰 ≥12.7k 级@d14-17（孪生计量）。

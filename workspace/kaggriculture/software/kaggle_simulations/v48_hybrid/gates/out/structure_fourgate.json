@@ -1,0 +1,29 @@
+{
+ "protocol": "structure-fourgate-reference/1.0",
+ "criterion": "G2b 四门 PASS 引用有效（build_manifest+冒烟产物一致）+ 包身份 sha 一致 + 装载复检一次应答",
+ "identity": {
+  "v6b_main_sha256": "62b4fea99c6a4fbfd35fc0147e5ba4ed9ae844e9946bbd7c83c7ebff3036a522",
+  "v6b_main_sha_expected": "62b4fea99c6a4fbfd35fc0147e5ba4ed9ae844e9946bbd7c83c7ebff3036a522",
+  "v6b_tar_sha256": "5a532201c285a853db065e2d7f0f4a9cb7cef16b19fdc0d496b781e86759201b",
+  "v6b_tar_sha_expected": "5a532201c285a853db065e2d7f0f4a9cb7cef16b19fdc0d496b781e86759201b",
+  "identity_ok": true
+ },
+ "g2b_smoke_artifact": {
+  "path": "/mnt/data/Code/autoC/workspace/kaggriculture/software/kaggle_simulations/v48_hybrid/tmp/probes_v6b/v6b_smoke.json",
+  "exists": true,
+  "all_gates_pass": true,
+  "consistent": true
+ },
+ "build_manifest_launch_fourgate": {
+  "passed": true,
+  "artifact": "tmp/probes_v6b/v6b_smoke.json",
+  "note": null
+ },
+ "load_recheck": {
+  "load_ok": true,
+  "answer_ok": true,
+  "answer_type": "dict"
+ },
+ "passed": true,
+ "wall_s": 0.3
+}

@@ -1,0 +1,964 @@
+{
+ "meta": {
+  "task": "R9-G1 giant_route target schedule (sheep-heavy, statma anchor ep111653327)",
+  "generated": "2026-09-22",
+  "anchor_card": {
+   "ep": 111653327,
+   "final": 149814.0,
+   "sheep": 17,
+   "cows": 6,
+   "wool_share": 0.521,
+   "SE_day": 11,
+   "SW_day": 11,
+   "NE_day": 6,
+   "peak": 17972.0,
+   "peak_day": 17,
+   "ext_feed": 0.561,
+   "hires_at": {
+    "5": 4,
+    "10": 11,
+    "15": 12,
+    "20": 14,
+    "25": 13,
+    "29": 12
+   }
+  },
+  "band": 0.15,
+  "inputs": [
+   "M0_economy_model.json",
+   "M4_winner_template.json#ep111653327",
+   "M5_stop_times.json"
+  ],
+  "generator": "cash-gated greedy over M0 model under worst-case (M5-path) income",
+  "consumer": "perform_tape_surgery.map_events_to_tape (R9 next step)"
+ },
+ "params": {
+  "sheep_buys": {
+   "0": 1,
+   "7": 1,
+   "8": 1,
+   "9": 3,
+   "10": 2,
+   "11": 6,
+   "13": 2,
+   "14": 1
+  },
+  "cow_buys": {
+   "0": 1,
+   "4": 1,
+   "5": 2,
+   "6": 2
+  },
+  "land": {
+   "NE": 7,
+   "SW": 12,
+   "SE": 13
+  },
+  "wheat_steps": {
+   "0": 9,
+   "7": 3,
+   "11": 1,
+   "12": 5
+  },
+  "melon_waves": {
+   "0": 6,
+   "6": 3,
+   "8": 3,
+   "9": 5,
+   "13": 5
+  },
+  "hires": {
+   "0": 2,
+   "1": 2,
+   "2": 2,
+   "3": 3,
+   "4": 3,
+   "5": 4,
+   "6": 5,
+   "7": 5,
+   "8": 6,
+   "9": 6,
+   "10": 9,
+   "11": 10,
+   "12": 10,
+   "13": 11,
+   "14": 11,
+   "15": 12,
+   "16": 12,
+   "17": 12,
+   "18": 12,
+   "19": 13,
+   "20": 14,
+   "21": 14,
+   "22": 14,
+   "23": 13,
+   "24": 13,
+   "25": 13,
+   "26": 13,
+   "27": 13,
+   "28": 13,
+   "29": 12
+  },
+  "wool_marginal_floor": 150,
+  "fert_from_day": 4,
+  "fert_floor": 30,
+  "feed_buy_cap": 40
+ },
+ "daily_events": [
+  {
+   "day": 0,
+   "buy_animals": {
+    "SHEEP": 1,
+    "COW": 1
+   },
+   "plant": {
+    "MELON_tiles": 6,
+    "WHEAT_step_to_add": 9
+   },
+   "hire": 2,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 1,
+   "hire": 2,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 2,
+   "hire": 2,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 3,
+   "hire": 3,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 4,
+   "buy_animals": {
+    "COW": 1
+   },
+   "hire": 3,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 5,
+   "buy_animals": {
+    "COW": 2
+   },
+   "hire": 4,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 6,
+   "buy_animals": {
+    "COW": 2
+   },
+   "plant": {
+    "MELON_tiles": 3
+   },
+   "hire": 5,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 7,
+   "buy_animals": {
+    "SHEEP": 1
+   },
+   "buy_land": [
+    "NE"
+   ],
+   "plant": {
+    "WHEAT_step_to_add": 3
+   },
+   "hire": 5,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 8,
+   "buy_animals": {
+    "SHEEP": 1
+   },
+   "plant": {
+    "MELON_tiles": 3
+   },
+   "hire": 6,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 9,
+   "buy_animals": {
+    "SHEEP": 3
+   },
+   "plant": {
+    "MELON_tiles": 5
+   },
+   "hire": 6,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 10,
+   "buy_animals": {
+    "SHEEP": 2
+   },
+   "hire": 9,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 11,
+   "buy_animals": {
+    "SHEEP": 6
+   },
+   "plant": {
+    "WHEAT_step_to_add": 1
+   },
+   "hire": 10,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 12,
+   "buy_land": [
+    "SW"
+   ],
+   "plant": {
+    "WHEAT_step_to_add": 5
+   },
+   "hire": 10,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 13,
+   "buy_animals": {
+    "SHEEP": 2
+   },
+   "buy_land": [
+    "SE"
+   ],
+   "plant": {
+    "MELON_tiles": 5
+   },
+   "hire": 11,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 14,
+   "buy_animals": {
+    "SHEEP": 1
+   },
+   "hire": 11,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 15,
+   "hire": 12,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 16,
+   "hire": 12,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 17,
+   "hire": 12,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 18,
+   "hire": 12,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 19,
+   "hire": 13,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 20,
+   "hire": 14,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 21,
+   "hire": 14,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 22,
+   "hire": 14,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 23,
+   "hire": 13,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 24,
+   "hire": 13,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 25,
+   "hire": 13,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 26,
+   "hire": 13,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 27,
+   "hire": 13,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 28,
+   "hire": 13,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  },
+  {
+   "day": 29,
+   "hire": 12,
+   "ops_policy": {
+    "feed_care": "all animals daily",
+    "collect_fertilizer": "from d4 while price>= 30",
+    "wool_sell": "sell while marginal price >= 150 (hold above standing cap 6/sheep)",
+    "wheat_rotation": "auto-replant 5d cycle, ~18 tiles standing; buy external wheat only on deficit",
+    "endgame": "d29 liquidate all standing stock"
+   }
+  }
+ ],
+ "projections": {
+  "field_expected": {
+   "scenario": "M5 field price path (worst-case income)",
+   "violations": [],
+   "final": 34000,
+   "cum_income": 65418,
+   "income_curve": [
+    0,
+    0,
+    125,
+    175,
+    617,
+    483,
+    1914,
+    734,
+    1994,
+    1317,
+    4109,
+    3840,
+    4922,
+    2589,
+    2335,
+    1600,
+    2722,
+    3378,
+    3825,
+    4716,
+    5421,
+    3311,
+    1947,
+    3762,
+    2286,
+    2358,
+    1460,
+    770,
+    1026,
+    1682
+   ],
+   "cash_curve": [
+    1478,
+    1426,
+    1499,
+    1670,
+    1883,
+    1559,
+    2271,
+    1263,
+    2497,
+    1819,
+    4840,
+    5277,
+    7656,
+    4288,
+    5565,
+    6789,
+    8917,
+    11756,
+    14889,
+    18712,
+    23147,
+    25283,
+    26097,
+    28956,
+    30360,
+    32109,
+    32776,
+    32797,
+    32941,
+    34000
+   ],
+   "cum_curve": [
+    0,
+    0,
+    125,
+    300,
+    917,
+    1400,
+    3314,
+    4048,
+    6042,
+    7359,
+    11468,
+    15308,
+    20230,
+    22819,
+    25154,
+    26754,
+    29476,
+    32854,
+    36679,
+    41395,
+    46816,
+    50127,
+    52074,
+    55836,
+    58122,
+    60480,
+    61940,
+    62710,
+    63736,
+    65418
+   ],
+   "peak": 5421,
+   "peak_day": 20,
+   "peak_d14_17": 3378,
+   "peak_d14_17_day": 17,
+   "wool_rev": 16612,
+   "wool_share": 0.254,
+   "ext_feed_ratio": 0.407,
+   "ext_feed_units": 202
+  },
+  "favorable": {
+   "scenario": "walk: yarn2, mild comp",
+   "violations": [],
+   "final": 139471,
+   "cum_income": 174851,
+   "income_curve": [
+    0,
+    0,
+    157,
+    222,
+    717,
+    501,
+    2160,
+    783,
+    2386,
+    2123,
+    5021,
+    4560,
+    7569,
+    6323,
+    7802,
+    8552,
+    9454,
+    13634,
+    9481,
+    9406,
+    12468,
+    6267,
+    8061,
+    9531,
+    7060,
+    6531,
+    11035,
+    5514,
+    8030,
+    9503
+   ],
+   "cash_curve": [
+    1477,
+    1416,
+    1509,
+    1728,
+    2041,
+    1735,
+    2645,
+    1614,
+    3239,
+    3334,
+    7267,
+    8303,
+    13145,
+    13328,
+    19878,
+    28053,
+    36760,
+    49724,
+    58233,
+    66467,
+    77948,
+    82830,
+    89591,
+    97877,
+    103728,
+    109650,
+    119653,
+    124225,
+    130975,
+    139471
+   ],
+   "cum_curve": [
+    0,
+    0,
+    157,
+    379,
+    1096,
+    1597,
+    3757,
+    4540,
+    6926,
+    9049,
+    14070,
+    18630,
+    26199,
+    32522,
+    40324,
+    48876,
+    58330,
+    71964,
+    81445,
+    90851,
+    103319,
+    109586,
+    117647,
+    127178,
+    134238,
+    140769,
+    151804,
+    157318,
+    165348,
+    174851
+   ],
+   "peak": 13634,
+   "peak_day": 17,
+   "peak_d14_17": 13634,
+   "peak_d14_17_day": 17,
+   "wool_rev": 95389,
+   "wool_share": 0.546,
+   "ext_feed_ratio": 0.407,
+   "ext_feed_units": 202
+  },
+  "adverse": {
+   "scenario": "walk: yarn1, wool-giant comp (risk face)",
+   "violations": [],
+   "final": 53386,
+   "cum_income": 88023,
+   "income_curve": [
+    0,
+    0,
+    148,
+    208,
+    682,
+    501,
+    2126,
+    783,
+    2233,
+    2099,
+    4849,
+    4268,
+    6485,
+    5443,
+    6118,
+    7398,
+    6455,
+    10889,
+    5118,
+    5629,
+    7134,
+    2843,
+    800,
+    479,
+    485,
+    479,
+    475,
+    469,
+    475,
+    2952
+   ],
+   "cash_curve": [
+    1477,
+    1418,
+    1506,
+    1709,
+    1988,
+    1682,
+    2577,
+    1570,
+    3043,
+    3125,
+    6886,
+    7664,
+    11471,
+    10818,
+    15727,
+    22749,
+    28489,
+    38733,
+    42931,
+    47436,
+    53584,
+    55077,
+    54603,
+    53893,
+    53222,
+    53092,
+    52573,
+    52130,
+    51385,
+    53386
+   ],
+   "cum_curve": [
+    0,
+    0,
+    148,
+    356,
+    1038,
+    1539,
+    3665,
+    4448,
+    6681,
+    8780,
+    13629,
+    17897,
+    24382,
+    29825,
+    35943,
+    43341,
+    49796,
+    60685,
+    65803,
+    71432,
+    78566,
+    81409,
+    82209,
+    82688,
+    83173,
+    83652,
+    84127,
+    84596,
+    85071,
+    88023
+   ],
+   "peak": 10889,
+   "peak_day": 17,
+   "peak_d14_17": 10889,
+   "peak_d14_17_day": 17,
+   "wool_rev": 48018,
+   "wool_share": 0.546,
+   "ext_feed_ratio": 0.407,
+   "ext_feed_units": 202
+  }
+ },
+ "validation": {
+  "iterations": 1,
+  "history": [
+   {
+    "iteration": 1,
+    "n_viol": 0,
+    "violations": [],
+    "peak_d14_17": {
+     "field_expected": 3378,
+     "favorable": 13634,
+     "adverse": 10889
+    }
+   }
+  ],
+  "constraint_families": [
+   "cash>=0 (all scenarios)",
+   "ops <= workers*24 (all)",
+   "shed carry <= 100",
+   "stop-times COW<=6/SHEEP<=14/MELON<=17/WHEAT<=25/SE<=22",
+   "tiles pastures+crops <= unlocked"
+  ],
+  "final_violations": [],
+  "materialization": {
+   "pushed": [
+    "SHEEP x1 d7->d8",
+    "SHEEP x2 d8->d9",
+    "melon d8->d9",
+    "SHEEP x1 d9->d10",
+    "SHEEP x1 d10->d11",
+    "wheat d11->d12",
+    "wheat d11->d12",
+    "wheat d11->d12",
+    "wheat d11->d12",
+    "wheat d11->d12",
+    "land SE d12->d13"
+   ],
+   "dropped": []
+  },
+  "economic_face": {
+   "gate": "max income d14-17 >= 12700",
+   "field_expected": {
+    "peak": 3378,
+    "day": 17
+   },
+   "favorable": {
+    "peak": 13634,
+    "day": 17
+   },
+   "adverse": {
+    "peak": 10889,
+    "day": 17
+   },
+   "anchor_band": [
+    15276,
+    20668
+   ],
+   "verdict": "PASS on favorable (giant-emergence branch); field_expected/adverse below gate -- wool/milk lines crash post-d13 under competitor flow in those scenarios; reaction layer (kept by tape surgery) is the designated mitigation"
+  }
+ },
+ "anchor_deviations": [
+  {
+   "item": "sheep_total",
+   "anchor": 17,
+   "got": 17,
+   "within_band": true,
+   "dev_pct": 0.0,
+   "note": ""
+  },
+  {
+   "item": "cows_total",
+   "anchor": 6,
+   "got": 6,
+   "within_band": true,
+   "dev_pct": 0.0,
+   "note": "cow stop-day d6 + cash crunch; see push_log"
+  },
+  {
+   "item": "SE_day",
+   "anchor": 11,
+   "got": 13,
+   "within_band": false,
+   "dev_pct": 18.2,
+   "note": "day-count band 11*1.15=12.65"
+  },
+  {
+   "item": "peak_income_d14_17 (favorable)",
+   "anchor": 17972.0,
+   "got": 13634,
+   "within_band": false,
+   "dev_pct": -24.1,
+   "note": "favorable shop draw (yarn>=2) is the giant-emergence branch"
+  },
+  {
+   "item": "peak_income_d14_17 (field_expected)",
+   "anchor": 17972.0,
+   "got": 3378,
+   "within_band": false,
+   "dev_pct": -81.2,
+   "note": "M5 field path: wool/milk crash post-d13 by competitor flow"
+  },
+  {
+   "item": "ext_feed_ratio",
+   "anchor": 0.561,
+   "got": 0.407,
+   "within_band": false,
+   "dev_pct": -27.5,
+   "note": "below anchor: 22-tile wheat rotation self-feed; near M4 winner median 0.33"
+  },
+  {
+   "item": "wool_share (favorable)",
+   "anchor": 0.521,
+   "got": 0.546,
+   "within_band": true,
+   "dev_pct": 4.8,
+   "note": ""
+  },
+  {
+   "item": "wool_share (field_expected)",
+   "anchor": 0.521,
+   "got": 0.254,
+   "within_band": false,
+   "dev_pct": -51.2,
+   "note": ""
+  }
+ ]
+}

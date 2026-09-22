@@ -1,0 +1,280 @@
+{
+ "protocol": "structure-h2h-v48-gate/1.0",
+ "criterion": "vs pure_v48 严格互胜 wins/n >= 0.65；局数 >= 16（8 种子 AB/BA）",
+ "baseline_pure_v48": {
+  "path": "/mnt/data/Code/autoC/workspace/kaggriculture/software/kaggle_simulations/v48_derivative/main.py",
+  "sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a"
+ },
+ "games": 16,
+ "wins": 0,
+ "losses": 16,
+ "ties": 0,
+ "win_fraction_strict": 0.0,
+ "win_rate_half_ties": 0.0,
+ "avg_margin": -150305.7,
+ "margin_distribution": {
+  "pos": 0,
+  "neg": 16,
+  "zero": 0
+ },
+ "by_seat": {
+  "0": {
+   "games": 8,
+   "wins": 0,
+   "losses": 8,
+   "ties": 0
+  },
+  "1": {
+   "games": 8,
+   "wins": 0,
+   "losses": 8,
+   "ties": 0
+  }
+ },
+ "all_done": true,
+ "anomaly_kinds_seen": [],
+ "records": [
+  {
+   "seed": 101,
+   "me_seat": 0,
+   "me_money": 12032.0,
+   "opp_money": 171453.0,
+   "margin": -159421.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 3.6
+  },
+  {
+   "seed": 101,
+   "me_seat": 1,
+   "me_money": 12174.0,
+   "opp_money": 167618.0,
+   "margin": -155444.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 3.9
+  },
+  {
+   "seed": 102,
+   "me_seat": 0,
+   "me_money": 7983.0,
+   "opp_money": 154095.0,
+   "margin": -146112.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.2
+  },
+  {
+   "seed": 102,
+   "me_seat": 1,
+   "me_money": 7983.0,
+   "opp_money": 154095.0,
+   "margin": -146112.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.1
+  },
+  {
+   "seed": 103,
+   "me_seat": 0,
+   "me_money": 5062.0,
+   "opp_money": 163789.0,
+   "margin": -158727.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.3
+  },
+  {
+   "seed": 103,
+   "me_seat": 1,
+   "me_money": 9813.0,
+   "opp_money": 176622.0,
+   "margin": -166809.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.2
+  },
+  {
+   "seed": 104,
+   "me_seat": 0,
+   "me_money": 12224.0,
+   "opp_money": 165800.0,
+   "margin": -153576.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.3
+  },
+  {
+   "seed": 104,
+   "me_seat": 1,
+   "me_money": 11343.0,
+   "opp_money": 156391.0,
+   "margin": -145048.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.1
+  },
+  {
+   "seed": 201,
+   "me_seat": 0,
+   "me_money": 8225.0,
+   "opp_money": 179286.0,
+   "margin": -171061.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.3
+  },
+  {
+   "seed": 201,
+   "me_seat": 1,
+   "me_money": 8149.0,
+   "opp_money": 172027.0,
+   "margin": -163878.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.0
+  },
+  {
+   "seed": 202,
+   "me_seat": 0,
+   "me_money": 12497.0,
+   "opp_money": 153482.0,
+   "margin": -140985.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.1
+  },
+  {
+   "seed": 202,
+   "me_seat": 1,
+   "me_money": 12497.0,
+   "opp_money": 151543.0,
+   "margin": -139046.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 3.9
+  },
+  {
+   "seed": 203,
+   "me_seat": 0,
+   "me_money": 4505.0,
+   "opp_money": 147683.0,
+   "margin": -143178.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.2
+  },
+  {
+   "seed": 203,
+   "me_seat": 1,
+   "me_money": 4505.0,
+   "opp_money": 147683.0,
+   "margin": -143178.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 3.9
+  },
+  {
+   "seed": 204,
+   "me_seat": 0,
+   "me_money": 4644.0,
+   "opp_money": 140802.0,
+   "margin": -136158.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.3
+  },
+  {
+   "seed": 204,
+   "me_seat": 1,
+   "me_money": 4644.0,
+   "opp_money": 140802.0,
+   "margin": -136158.0,
+   "result": "LOSS",
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "turns": 720,
+   "anomaly_kinds": [],
+   "wall_s": 4.0
+  }
+ ],
+ "passed": false,
+ "wall_s": 65.4
+}
