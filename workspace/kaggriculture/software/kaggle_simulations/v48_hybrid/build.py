@@ -15,9 +15,25 @@
 # 确定性：零时间戳/固定序/纯函数拼接；双次构建与双次打包逐字节一致由本
 #   脚本自证。打包与 v48_derivative 同口径：单成员 main.py，mtime=0/
 #   uid=gid=0/mode 0644，gzip mtime=0。
-# CLI：python build.py [--p1 on|off] [--p2 on|off] [--p3 on|off]
+# CLI：python build.py [--p1 on|off] [--p2 on|off] [--p3 on|off] [--p4 on|off]
 #   全开 → 写本目录 main.py/submission.tar.gz/build_manifest.json/README.md；
 #   任一旗关 → 仅写 tmp/main_<flags>.py（诊断用，不产包不覆盖提交件）。
+# ---------------------------------------------------------------------------
+# 变更记录（R8 F4b，2026-09-22，结构性增补——漂移登记三则之一）：
+#   增 P4 旗（默认 off，--p4 on 开；战后资产，不进当前提交件）：blob 内嵌
+#   v48h.lead_protection（patches/lead_protection.py，F4a 产物）+ 装载注册
+#   + 卖单面接线——agent() 返回前、P1/P3 之后调用
+#   build_lead_protection(obs, day, sells)，day=step//24（_v48_get 可观
+#   口径，P1/P3 先例）。P4 自带门栈（day>=24 且 lead>=3000、保护时点
+#   6/12/18、step>=717 清仓窗让位；未触发/异常=原对象零足迹），不经 P1
+#   defer 探针门控——其工作窗（d24+ 终局前夜）与 defer 的终局倾倒让位窗
+#   重叠属设计本意（前移锁价正是要在该窗动作）。无扰动自证（旗面增量
+#   不改变既有构建）：P4 off 时其全部发射位（旗行/头注/导入/接线/身份
+#   尾注；blob 项与模块序本就按 on 过滤）整体不发射，任一 P1-P3 旗面
+#   组合的构建与增补前逐字节一致（v4b 对照 = tmp/build_v5.py ④ 自证；
+#   根提交件 P1-P3 全开亦同）。副作用登记：P4 默认 off 后，无参 CLI 恒
+#   走诊断件路径（tmp/main_p1110.py），根提交件不再被无参调用再生；
+#   --p4 on 全开会以含 P4 内容覆盖根提交件（冻结期 ba1b44c 禁用）。
 # ===========================================================================
 from __future__ import annotations
 
@@ -81,8 +97,15 @@ PATCHES = {
                    "assess_milestone_deviation", "adjust_sell_timing",
                    "_V48H_TURNS_PER_DAY"),
     },
+    "P4": {
+        "module": "v48h.lead_protection",
+        "source": "lead_protection.py",
+        "role": "lead-protection conservative sell timing (R8 post-war)",
+        "tokens": ("v48h.lead_protection", "_v48h_p4_build",
+                   "build_lead_protection"),
+    },
 }
-PATCH_ORDER = ("P1", "P2", "P3")
+PATCH_ORDER = ("P1", "P2", "P3", "P4")
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -170,6 +193,18 @@ def build_block(flags: dict, base_text: str, patch_sources: dict,
             header.append(f"#   {key} {PATCHES[key]['module']}  "
                           f"sha256 {patch_shas[key]}  "
                           f"{PATCHES[key]['role']}")
+    if on["P4"]:
+        # P4 专属头注（P4 off 时不发射——无扰动自证，见文件头变更记录）。
+        header += [
+            "# P4 lead-protection (R8 post-war asset): runs last on the sell",
+            "# side, after P1/P3; self-gated stack (day>=24 & lead>=3000 &",
+            "# protective hour 6/12/18 & step<717 terminal stand-down; no",
+            "# trigger / any error -> original sell list untouched) -- it is",
+            "# NOT gated by the P1 defer probe: its working window (d24+,",
+            "# eve of the endgame dump) overlaps the probe's endgame-dump",
+            "# stand-down by design (front-loaded price-lock selling is",
+            "# precisely for that window).",
+        ]
     header += [
         "# Unified arbitration: terminal liquidation > anti-clone preemptive",
         "# sell > P3 sell-timing adjust > P1 midgame takeover > tape default.",
@@ -186,7 +221,10 @@ def build_block(flags: dict, base_text: str, patch_sources: dict,
         "# submission build = all on; a flag-off rebuild carries zero wiring",
         "# for that patch (byte-verifiable, see build_manifest.json).",
     ]
-    flag_lines = [f"_V48H_{k}_ON = {on[k]!r}" for k in PATCH_ORDER]
+    # P4 旗行仅 on 时发射（P1-P3 先例是恒发射）：P4 off 构建须与增补前
+    # 逐字节一致（无扰动自证），故 off 不留任何 P4 痕迹。
+    flag_lines = [f"_V48H_{k}_ON = {on[k]!r}"
+                  for k in PATCH_ORDER if k != "P4" or on["P4"]]
 
     modules = {PATCHES[k]["module"]: patch_sources[k]
                for k in PATCH_ORDER if on[k]}
@@ -230,6 +268,12 @@ def build_block(flags: dict, base_text: str, patch_sources: dict,
             "assess_milestone_deviation as _v48h_p3_assess",
             "from v48h.p3_milestone_monitor import "
             "adjust_sell_timing as _v48h_p3_adjust_timing",
+            "",
+        ]
+    if on["P4"]:
+        imports += [
+            "from v48h.lead_protection import "
+            "build_lead_protection as _v48h_p4_build",
             "",
         ]
 
@@ -322,6 +366,18 @@ def build_block(flags: dict, base_text: str, patch_sources: dict,
         "            except Exception:",
         "                pass",
         ]
+    if on["P4"]:
+        # P4 卖单面接线（R8 F4b）：day=step//24（_v48_get 可观口径，P1/P3
+        # 先例）；P4 自带门栈（day/lead/保护时点/717 让位），不经 defer 探针。
+        agent_body += [
+        "        if _V48H_P4_ON:",
+        "            try:",
+        "                _policy_out[\"market\"] = _v48h_p4_build(",
+        "                    obs, int(_v48_get(obs, \"step\", 0) or 0) // 24,",
+        "                    _policy_out[\"market\"])",
+        "            except Exception:",
+        "                pass",
+        ]
     agent_body += ["        return _policy_out"]
     agent_body += b_except.split("\n")   # 基底 except 兜底逐字（同缩进级）
 
@@ -337,11 +393,14 @@ def build_block(flags: dict, base_text: str, patch_sources: dict,
         "    \"patches\": {",
     ]
     for key in PATCH_ORDER:
+        if key == "P4" and not on["P4"]:
+            continue          # P4 off：身份尾注零 P4 痕迹（无扰动自证）
         tail.append(f"        {key!r}: {patch_shas[key]!r},")
+    flag_items = [f'"{k}_ON": {on[k]!r}'
+                  for k in PATCH_ORDER if k != "P4" or on["P4"]]
     tail += [
         "    },",
-        '    "flags": {' + ", ".join(f'"{k}_ON": {on[k]!r}'
-                                  for k in PATCH_ORDER) + "},",
+        '    "flags": {' + ", ".join(flag_items) + "},",
         "}",
         "",
     ]
@@ -424,8 +483,8 @@ def build_readme(slug: str, slug_src: str, main_sha: str, main_bytes: int,
     a(f"| `submission.tar.gz`（单成员 main.py，确定性 tar） | `{tar_sha}` | "
       f"{tar_bytes} |")
     a("")
-    a(f"开关状态：`P1_ON={flags['P1']} P2_ON={flags['P2']} "
-      f"P3_ON={flags['P3']}`（提交构建全开；旗关重建=对应补丁零接线，"
+    flag_txt = " ".join(f"{k}_ON={flags[k]}" for k in PATCH_ORDER)
+    a(f"开关状态：`{flag_txt}`（提交构建全开；旗关重建=对应补丁零接线，"
       "字节级验证见 `build_manifest.json` 的 `flag_off_zero_wiring`）")
     a("")
     a("## 仲裁次序（追加块内统一实现）")
@@ -482,9 +541,10 @@ def main() -> int:
     ap.add_argument("--p1", choices=("on", "off"), default="on")
     ap.add_argument("--p2", choices=("on", "off"), default="on")
     ap.add_argument("--p3", choices=("on", "off"), default="on")
+    ap.add_argument("--p4", choices=("on", "off"), default="off")   # R8 F4b
     args = ap.parse_args()
     flags = {"P1": args.p1 == "on", "P2": args.p2 == "on",
-             "P3": args.p3 == "on"}
+             "P3": args.p3 == "on", "P4": args.p4 == "on"}
     all_on = all(flags.values())
 
     first = build_once(flags)
