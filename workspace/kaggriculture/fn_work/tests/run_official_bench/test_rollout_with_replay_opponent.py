@@ -174,9 +174,14 @@ def _vendored_wheel():
 
     here = Path(__file__).resolve()
     for candidate in (here, *here.parents):
-        if all((candidate / name).exists()
-               for name in ("blueprint.md", "software", "fn_docs")):
-            wheels = sorted((candidate / "software" / "vendor").glob("*.whl"))
+        new = all((candidate / name).exists() for name in ("fn_docs", "fn_work"))
+        legacy = all((candidate / name).exists()
+                     for name in ("blueprint.md", "software", "fn_docs"))
+        if new or legacy:
+            software = candidate / "software"
+            if not software.is_dir():
+                software = candidate / "fn_work" / "legacy_software"
+            wheels = sorted((software / "vendor").glob("*.whl"))
             assert len(wheels) == 1, f"期望唯一 vendored wheel, got {wheels}"
             return wheels[0]
-    raise AssertionError("未找到战役根（blueprint.md+software+fn_docs）")
+    raise AssertionError("未找到战役根（fn_docs+fn_work 或 blueprint.md+software+fn_docs）")

@@ -40,7 +40,8 @@ __all__ = ["rollout_with_replay_opponent", "make_twin_deps",
            "TwinFingerprintError"]
 
 # 战役根目录特征（三件齐备才算；与仓库布局约定一致，不写字面战役路径）
-_CAMPAIGN_FEATURES = ("blueprint.md", "software", "fn_docs")
+_CAMPAIGN_FEATURES = ("fn_docs", "fn_work")
+_CAMPAIGN_FEATURES_LEGACY = ("blueprint.md", "software", "fn_docs")
 
 _twin = None
 
@@ -54,18 +55,18 @@ def __getattr__(name):
 
 
 def _campaign_software_root() -> Path:
-    """自本模块 __file__ 上溯发现战役根，返回其 software/ 子目录。
-
-    fail-closed：上溯链上找不到特征齐备的战役根即抛 RuntimeError
-    （不猜路径、不做 CWD 假设）。
-    """
+    """自本模块 __file__ 上溯发现战役根（新布局 fn_docs+fn_work 或旧布局三特征），
+    返回其 software/（旧）或 fn_work/legacy_software（新）。fail-closed。"""
     here = Path(__file__).resolve()
     for candidate in (here, *here.parents):
-        if all((candidate / name).exists() for name in _CAMPAIGN_FEATURES):
-            return candidate / "software"
+        new = all((candidate / n).exists() for n in _CAMPAIGN_FEATURES)
+        legacy = all((candidate / n).exists() for n in _CAMPAIGN_FEATURES_LEGACY)
+        if new or legacy:
+            sw = candidate / "software"
+            return sw if sw.is_dir() else candidate / "fn_work" / "legacy_software"
     raise RuntimeError(
-        "未找到战役根（特征=" + "+".join(_CAMPAIGN_FEATURES) + "），"
-        f"上溯起点: {here}")
+        "未找到战役根（特征=" + "+".join(_CAMPAIGN_FEATURES) + " 或 "
+        + "+".join(_CAMPAIGN_FEATURES_LEGACY) + "），上溯起点: " + str(here))
 
 
 def _load_twin():

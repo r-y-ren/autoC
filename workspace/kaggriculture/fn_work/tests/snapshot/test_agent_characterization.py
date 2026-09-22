@@ -2,13 +2,6 @@
 # ===========================================================================
 # 【口径修正 2026-09-21】整局 characterization 从 planner-on 装载改为
 #   旗关面装载；planner-on 降级为冒烟测试。
-# 【B13 双目标化 2026-09-21】同一冻结口径参数化双目标：旧树 agent（main.py）
-#   与 fn_work agent（fn_work/src/run_submission_agent/run_submission_agent.py，
-#   exec 链迁移版）各跑一遍同冻结值——R1 收口判据"fn_work 链对同一冻结口径
-#   逐字节复现"。两目标装载同一 kgenv.load_submission_agent 机制（官方
-#   get_last_callable 语义镜像），旗关动作面（DTSP_RUNTIME_CONFIG.enabled=
-#   False 配置级关旗）对两目标同构；B13 交接实测：双目标整局 719 回合动作
-#   流逐字节一致（rewards/winner/non_pass/日哈希全冻结值复现）。
 # 根因：planner-on 面的黎明规划器时间治理器读真实墙钟
 #   （planner/runtime.py dawn_budget/_now()：0.85s 帽 + 速率 EWMA 选阶梯，
 #   deadline 逐时间片），机器负载抖动跨过决策边界即换计划——实测连跑
@@ -24,9 +17,7 @@
 #   agent.__globals__["DTSP_RUNTIME_CONFIG"]["enabled"] 置 False 即配置级
 #   关旗（runtime._DEFAULTS 同键）；PLANNER_ENABLED 由 src/constants.py
 #   默认 False 且无人再置真。钩子短路于任何状态写入之前 → 零足迹，
-#   动作流与 v13.8 旗关黄金同一决定性面。fn_work 目标同一机制面：装载器
-#   把共享命名空间 exec 进入口模块 globals，agent.__globals__ 即链命名空间
-#   （B13 迁移登记，见 fn_work/src/run_submission_agent/run_submission_agent.py）。
+#   动作流与 v13.8 旗关黄金同一决定性面。
 # 旗关面新冻结值三遍记录（2026-09-21，Linux/Python 3.14.7，三遍独立
 #   进程，PYTHONHASHSEED=默认/1/2，全部逐字节一致；单局墙钟
 #   6.6s / 6.6s / 6.6s）：
@@ -43,12 +34,11 @@
 #     d10s1 56ecfe093b93b228ecf20345de5f0dafd49f08fd970ad3049c6d04c8a291dfa1
 #     d24s0 c7ec21fd5ad617c88abc61134dfeef723310df5c99f0481694aaecee34c5591f
 #     d24s1 4139fdc98d14d1b50f75635c761906a6ae753dc31136c18d661b0b71b471da93
-# 装载口径：双席各自独立装载（两目标同构：旧树=main.py，fn_work=顶层入口
-#   文件；共享进程内 planner 运行态的 per-player 状态键——旧树经
-#   sys.modules 缓存共享、fn_work 按装载隔离，键面同构行为等价，B13 登记）。
-#   种子 20260921（写死）。actTimeout=60（run_episode 显式传参冻结语义）。
+# 装载口径：双席各自独立装载 main.py（共享进程内 planner.runtime 的
+#   per-player 状态键，与既有测试套件一致）。种子 20260921（写死）。
+#   actTimeout=60（run_episode 显式传参冻结语义）。
 # 时长：旗关面单局 ~7s；planner-on 冒烟整局 ~35-40s（时间治理器在帽内
-#   规划，本机实测未超时）。双目标下时长×2。
+#   规划，本机实测未超时）。
 # ===========================================================================
 
 import hashlib
@@ -57,23 +47,9 @@ import pytest
 
 from kgenv.arena import SUBMISSION_MAIN, load_submission_agent
 from kgenv.engine import FULL_EPISODE_STEPS, run_episode
-from shared.discover_campaign_roots import discover_campaign_roots
 
 SEED = 20260921
 SAMPLE_DAYS = (0, 6, 10, 24)
-
-# ---- 双目标面（B13）——旧树真值实现 vs fn_work exec 链迁移实现 ----------
-TARGETS = ("old", "fn_work")
-_ROOTS = discover_campaign_roots()
-FNWORK_MAIN = (_ROOTS["campaign_root"] / "fn_work" / "src" /
-               "run_submission_agent" / "run_submission_agent.py")
-
-
-def _load_target_agent(target):
-    """按目标装载 agent（同 kgenv.load_submission_agent 官方装载语义）。"""
-    path = SUBMISSION_MAIN if target == "old" else FNWORK_MAIN
-    return load_submission_agent(path)
-
 
 # ---- 旗关面冻结值（2026-09-21 三遍逐字节一致后写入，记录见文件头）----
 FROZEN_REWARDS = [59730.0, 59835.0]
@@ -92,9 +68,9 @@ FROZEN_DAY_ACTION_SHA256 = {
 }
 
 
-def _load_flagoff_agent(target):
-    """装载目标 agent 后配置级关旗（机制见文件头）。"""
-    agent = _load_target_agent(target)
+def _load_flagoff_agent():
+    """装载现役 main.py 后配置级关旗（机制见文件头）。"""
+    agent = load_submission_agent(SUBMISSION_MAIN)
     agent.__globals__["DTSP_RUNTIME_CONFIG"]["enabled"] = False
     return agent
 
@@ -104,13 +80,13 @@ def _day_action_sha256(recorded, day):
     return hashlib.sha256(str(actions).encode()).hexdigest()
 
 
-@pytest.fixture(scope="module", params=TARGETS)
-def flagoff_episode(request):
-    """旗关面自博弈一局（双席独立装载目标 agent 后各自关旗），wrapper 逐回
-    合记录 (day, action)。每目标只跑一次，module 级共享给全部旗关断言（~7s）。
+@pytest.fixture(scope="module")
+def flagoff_episode():
+    """旗关面自博弈一局（双席独立装载 main.py 后各自关旗），wrapper 逐回
+    合记录 (day, action)。只跑一次，module 级共享给全部旗关断言（~7s）。
     """
-    agent0 = _load_flagoff_agent(request.param)
-    agent1 = _load_flagoff_agent(request.param)
+    agent0 = _load_flagoff_agent()
+    agent1 = _load_flagoff_agent()
     rec0, rec1 = [], []
 
     def wrapped0(obs):
@@ -127,13 +103,13 @@ def flagoff_episode(request):
     return result, rec0, rec1, agent0, agent1
 
 
-@pytest.fixture(scope="module", params=TARGETS)
-def planner_on_episode(request):
+@pytest.fixture(scope="module")
+def planner_on_episode():
     """planner-on 冒烟面自博弈一局（默认装载，DTSP 黎明钩子活跃），
     module 级共享（~35-40s）。不冻结任何值——见冒烟测试旁注。
     """
-    agent0 = _load_target_agent(request.param)
-    agent1 = _load_target_agent(request.param)
+    agent0 = load_submission_agent(SUBMISSION_MAIN)
+    agent1 = load_submission_agent(SUBMISSION_MAIN)
     result = run_episode(agent0, agent1, SEED, act_timeout=60.0)
     return result, agent0, agent1
 

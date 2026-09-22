@@ -25,7 +25,16 @@ MODULE_FILE = Path(dcr_module.__file__).resolve()
 TESTS_SHARED_DIR = Path(__file__).resolve().parent
 # tests/shared → tests → fn_work → 战役根（独立于被测实现推导期望值）
 EXPECTED_CAMPAIGN_ROOT = TESTS_SHARED_DIR.parents[2]
-CAMPAIGN_FEATURES = ("blueprint.md", "software", "fn_docs")
+# 战役根特征（2026-09-23 大整合后新布局；software 根移至 fn_work/legacy_software）
+CAMPAIGN_FEATURES = ("fn_docs", "fn_work")
+
+
+def _expected_software_root() -> Path:
+    """software 锚双分支：战役根/software（旧布局）或 fn_work/legacy_software（新布局）。"""
+    legacy = EXPECTED_CAMPAIGN_ROOT / "software"
+    if legacy.is_dir():
+        return legacy
+    return EXPECTED_CAMPAIGN_ROOT / "fn_work" / "legacy_software"
 
 
 def _expected_repo_root() -> Path:
@@ -40,7 +49,7 @@ def test_real_repo_three_roots():
     assert set(roots) == {"campaign_root", "repo_root", "software_root"}
     assert roots["campaign_root"] == EXPECTED_CAMPAIGN_ROOT
     assert roots["repo_root"] == _expected_repo_root()
-    assert roots["software_root"] == EXPECTED_CAMPAIGN_ROOT / "software"
+    assert roots["software_root"] == _expected_software_root()
     # 特征完备性独立复核（非仅信返回值）
     for feat in CAMPAIGN_FEATURES:
         assert (EXPECTED_CAMPAIGN_ROOT / feat).exists(), feat

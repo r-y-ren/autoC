@@ -4,7 +4,7 @@
 
 实现要点：
 - 仓根特征 = .git 与 AGENTS.md 并存（.git 文件形态——worktree——亦认）；战役根特征 =
-  blueprint.md+software+fn_docs 三件齐备（缺一即不算，宁缺毋滥）；software_root=战役根/software。
+  新布局=fn_docs+fn_work 两件齐备（2026-09-23 大整合后唯一形态）；兼容旧布局 blueprint.md+software+fn_docs；software_root=战役根/software（旧）或 fn_work/legacy_software（新）。
 - 默认起点按本模块 __file__ 上溯，与进程 CWD 完全无关（取代"仓根 CWD 假设"）。
 - 起点位于战役树外（如仓根）时，回落扫描仓内标准多战役容器（布局约定 workspace/<cid>/，
   AGENTS.md）的直接子目录：特征完备者恰一个才采纳；多个=歧义、零个=未找到，均 fail-closed。
@@ -16,12 +16,12 @@ from pathlib import Path
 __all__ = ["RootDiscoveryError", "discover_campaign_roots"]
 
 # 战役根目录特征（三者齐备才算；缺任一即不算，宁缺毋滥）
-_CAMPAIGN_FEATURES = ("blueprint.md", "software", "fn_docs")
-# 仓根目录特征（须并存）
+_CAMPAIGN_FEATURES = ("fn_docs", "fn_work")
 _REPO_FEATURES = (".git", "AGENTS.md")
 # 仓内标准多战役容器名（仓库布局约定，非战役名）；仅作战役树外起点的回落扫描范围
 _WORKSPACE_DIRNAME = "workspace"
 
+_LEGACY_CAMPAIGN_FEATURES = ("blueprint.md", "software", "fn_docs")
 _FEATURE_LIST_TEXT = "+".join(_CAMPAIGN_FEATURES)
 _REPO_FEATURE_LIST_TEXT = "+".join(_REPO_FEATURES)
 
@@ -49,7 +49,7 @@ def _campaign_candidates(repo_root: Path) -> list[Path]:
         return []
     return sorted(
         p for p in container.iterdir()
-        if p.is_dir() and _has_features(p, _CAMPAIGN_FEATURES)
+        if p.is_dir() and ((_has_features(p, _CAMPAIGN_FEATURES) or _has_features(p, _LEGACY_CAMPAIGN_FEATURES)) or _has_features(p, _LEGACY_CAMPAIGN_FEATURES))
     )
 
 
@@ -82,7 +82,9 @@ def discover_campaign_roots(start_path=None) -> dict:
         search = search.resolve()
 
     repo_root = _walk_up(search, _REPO_FEATURES)
-    campaign_root = _walk_up(search, _CAMPAIGN_FEATURES)
+    campaign_root = _walk_up(search, _CAMPAIGN_FEATURES) or _walk_up(
+        search, _LEGACY_CAMPAIGN_FEATURES
+    )
 
     if campaign_root is None and repo_root is not None:
         # 起点在战役树外（如仓根本身）：回落扫描标准容器，恰一命中才采纳
@@ -100,7 +102,7 @@ def discover_campaign_roots(start_path=None) -> dict:
     if campaign_root is None:
         raise RootDiscoveryError(
             f"未找到战役根（特征={_FEATURE_LIST_TEXT}），上溯起点: {search}\n"
-            f"排查: ①确认起点位于战役树内（战役根=上述三特征齐备的目录）；"
+            f"排查: ①确认起点位于战役树内（战役根=fn_docs+fn_work（新布局）或 blueprint.md+software+fn_docs（旧布局））；"
             f"②自仓内战役树外调用时仅回落扫描 {_WORKSPACE_DIRNAME}/ 直接子目录，"
             f"确认容器下存在特征完备目录；③三特征件缺一不可，检查是否被改名或移动。"
         )
@@ -123,5 +125,5 @@ def discover_campaign_roots(start_path=None) -> dict:
     return {
         "campaign_root": campaign_root,
         "repo_root": repo_root,
-        "software_root": campaign_root / "software",
+        "software_root": (campaign_root / "software") if (campaign_root / "software").is_dir() else (campaign_root / "fn_work" / "legacy_software"),
     }

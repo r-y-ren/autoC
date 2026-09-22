@@ -51,11 +51,23 @@ def sampling_dir(root: Path) -> Path:
 
 
 def replay_dir(campaign_root: Path, round_no: int) -> Path:
-    return campaign_root / "references" / "data" / "online-replays" / f"round{round_no}"
+    # 2026-09-23 大整合：references 已并入 fn_docs/（新布局优先，旧布局兼容）
+    for prefix in ("fn_docs/references", "references"):
+        d = campaign_root / prefix / "data" / "online-replays" / f"round{round_no}"
+        if (campaign_root / prefix / "data").is_dir() or prefix == "references":
+            return d
+    raise FileNotFoundError("references/data 不可定位（新旧布局均未找到）")
 
 
 def campaign_root_from_software(root: Path) -> Path:
-    return root.parent
+    # 2026-09-23 大整合：software 可位于 <campaign>/software（旧）或
+    # <campaign>/fn_work/legacy_software（新）——按特征上溯定战役根，不猜层级。
+    for cand in (root.parent, *root.parents):
+        if (cand / "fn_docs").is_dir() and (cand / "fn_work").is_dir():
+            return cand
+        if (cand / "blueprint.md").exists() and (cand / "software").is_dir():
+            return cand
+    raise FileNotFoundError(f"campaign root 不可定位（自 {root} 上溯无新旧布局特征）")
 
 
 def list_launch_rounds(root: Path) -> dict[int, Path]:

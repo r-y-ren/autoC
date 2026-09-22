@@ -51,8 +51,11 @@ BOTS_CONSTANT_MODULES: tuple[str, ...] = (
     "baseline", "cow_baron", "melon_hoarder", "expansionist", "online_pool",
 )
 
-# 战役根目录特征（三件齐备才算；与仓库布局约定一致，不写字面战役路径）
-_CAMPAIGN_FEATURES = ("blueprint.md", "software", "fn_docs")
+# 战役根目录特征（与仓库布局约定一致，不写字面战役路径）：新布局=fn_docs+
+# fn_work 两件齐备（2026-09-23 大整合后唯一形态）；兼容旧布局三特征。
+# software 锚=战役根/software（旧）或 fn_work/legacy_software（新）。
+_CAMPAIGN_FEATURES = ("fn_docs", "fn_work")
+_CAMPAIGN_FEATURES_LEGACY = ("blueprint.md", "software", "fn_docs")
 
 _BOTS_TABLES = (("CROPS_INFO", "CROPS"), ("ANIMALS_INFO", "ANIMALS"))
 
@@ -66,14 +69,18 @@ class WheelChannelUnavailable(RuntimeError):
 
 
 def _campaign_software_root() -> Path:
-    """自本模块 __file__ 上溯发现战役根，返回其 software/ 子目录（fail-closed）。"""
+    """自本模块 __file__ 上溯发现战役根（新布局 fn_docs+fn_work 或旧布局三特征），
+    返回其 software/（旧）或 fn_work/legacy_software（新）。fail-closed。"""
     here = Path(__file__).resolve()
     for candidate in (here, *here.parents):
-        if all((candidate / name).exists() for name in _CAMPAIGN_FEATURES):
-            return candidate / "software"
+        new = all((candidate / name).exists() for name in _CAMPAIGN_FEATURES)
+        legacy = all((candidate / name).exists() for name in _CAMPAIGN_FEATURES_LEGACY)
+        if new or legacy:
+            sw = candidate / "software"
+            return sw if sw.is_dir() else candidate / "fn_work" / "legacy_software"
     raise RuntimeError(
-        "未找到战役根（特征=" + "+".join(_CAMPAIGN_FEATURES) + "），"
-        f"上溯起点: {here}")
+        "未找到战役根（特征=" + "+".join(_CAMPAIGN_FEATURES) + " 或 "
+        + "+".join(_CAMPAIGN_FEATURES_LEGACY) + "），上溯起点: " + str(here))
 
 
 def load_bots_constants_module(short_name: str):

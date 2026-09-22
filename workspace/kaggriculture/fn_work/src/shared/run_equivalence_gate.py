@@ -76,6 +76,9 @@ def _criterion_snapshot_suite(campaign_root, options):
     expect.update(options.get("expect") or {})
     timeout_s = int(options.get("timeout_s") or _SNAPSHOT_TIMEOUT_S)
     suite_dir = campaign_root / "snapshot_tests"
+    if not suite_dir.is_dir():
+        suite_dir = campaign_root / "fn_work" / "snapshot_tests"  # 2026-09-23 大整合新位
+    suite_dir = campaign_root / "fn_work" / "snapshot_tests"  # 2026-09-23 大整合新位
     values = {"suite": str(suite_dir)}
     if not suite_dir.is_dir():
         return "fail", values, "判据不可执行：快照套件目录缺失（fail-closed）"

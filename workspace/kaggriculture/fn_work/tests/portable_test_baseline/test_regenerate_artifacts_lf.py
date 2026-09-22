@@ -194,7 +194,8 @@ def test_real_tree_anchor_dual_sha(tmp_path):
     assert anchor["disk_line_endings"] == "LF"  # POSIX fresh clone 口径
     assert report["collections"]["ablations"]["entries_total"] == 47
     assert report["collections"]["ablations"]["legacy_is_crlf_variant"] >= 1
-    # 打包工件类登记（真实 submission.tar.gz ×3，不重建）
-    assert report["totals"]["packaging_not_rebuilt"] == 3
+    # 打包工件类登记（真实 submission.tar.gz，不重建）：398P 基线时 ×3；
+    # R8/R9 交付（80b68e2/1046215）在旧树新增 v48_hybrid 族 6 包 → 现值 ×9
+    assert report["totals"]["packaging_not_rebuilt"] == 9
     rebuilt_file = tmp_path / "real" / anchor["path"]
     assert b"\r" not in rebuilt_file.read_bytes()

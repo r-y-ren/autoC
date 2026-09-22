@@ -116,6 +116,27 @@ def discover_export_indexes() -> list[Path]:
     return sorted(p for p in exports.glob("*/index.json") if p.is_file())
 
 
+def _resolve_entry_source(root_base: Path, rel: str, campaign_root: Path,
+                          software_root: Path) -> Path:
+    """路径锚（2026-09-23 大整合）：index 条目登记的是旧布局 repo 相对路径
+    （…/software/exports/…）。旧布局下按原路径直取；新布局（software 树已迁
+    fn_work/legacy_software）下，原路径缺失且条目位于本战役 software/ 子树时
+    改指迁移新位。其余情形保持原路径（由调用方 missing 分支 fail-closed）。"""
+    src = root_base / rel
+    if src.is_file():
+        return src
+    try:
+        campaign_rel = src.resolve().relative_to(campaign_root.resolve())
+    except ValueError:
+        return src
+    parts = campaign_rel.parts
+    if parts and parts[0] == "software":
+        relocated = software_root.joinpath(*parts[1:])
+        if relocated.is_file():
+            return relocated
+    return src
+
+
 def _resolve_index_paths(artifact_sources) -> list[Path]:
     if artifact_sources is None:
         index_paths = discover_export_indexes()
@@ -137,10 +158,10 @@ def _resolve_index_paths(artifact_sources) -> list[Path]:
     return index_paths
 
 
-def _register_packaging_artifacts(campaign_root: Path, display) -> list[dict]:
+def _register_packaging_artifacts(software_root: Path, display) -> list[dict]:
     """打包工件类登记（不重建）：二进制 tar 与 CRLF 无关，原样登记+说明。"""
     out = []
-    sims = campaign_root / "software" / "kaggle_simulations"
+    sims = software_root / "kaggle_simulations"
     for tar in sorted(sims.glob("**/submission.tar.gz")) if sims.is_dir() else []:
         out.append({
             "path": display(tar),
@@ -176,6 +197,7 @@ def regenerate_artifacts_lf(artifact_sources=None, output_root=None, *,
     """
     discovered = discover_campaign_roots()
     campaign_root = discovered["campaign_root"]
+    software_root = discovered["software_root"]
     root_base = Path(repo_root) if repo_root is not None else discovered["repo_root"]
     boundary = Path(campaign_boundary) if campaign_boundary is not None else campaign_root
 
@@ -213,7 +235,8 @@ def regenerate_artifacts_lf(artifact_sources=None, output_root=None, *,
         for entry in entries:
             rel = entry.get("path", "")
             legacy_sha = entry.get("sha256")
-            src = root_base / rel
+            src = _resolve_entry_source(root_base, rel, campaign_root,
+                                        software_root)
             if not src.is_file():
                 stats["missing"] += 1
                 dual_table.append({
@@ -280,7 +303,7 @@ def regenerate_artifacts_lf(artifact_sources=None, output_root=None, *,
         _write_bytes_deterministic(index_out, index_bytes, _sha256_hex(index_bytes))
         collections[collection] = stats
 
-    packaging = _register_packaging_artifacts(campaign_root, _display)
+    packaging = _register_packaging_artifacts(software_root, _display)
     totals = {
         "collections": len(collections),
         "entries": sum(s["entries_total"] for s in collections.values()),

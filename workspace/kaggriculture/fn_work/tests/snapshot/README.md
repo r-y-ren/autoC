@@ -10,7 +10,7 @@
 ## 运行
 
 ```bash
-# 从仓库根（<仓根>）
+# 从仓库根（/mnt/data/Code/autoC）
 python -m pytest workspace/kaggriculture/snapshot_tests -q
 ```
 

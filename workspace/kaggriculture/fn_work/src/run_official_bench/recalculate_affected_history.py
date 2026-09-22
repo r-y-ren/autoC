@@ -42,8 +42,10 @@ from run_official_bench.rollout_with_replay_opponent import (
 __all__ = ["recalculate_affected_history", "default_affected_conclusions",
            "LEDGER_COLUMNS", "LEDGER_ENTRY_KEYS"]
 
-# 战役根目录特征（与 rollout 下层同款三特征判据，不写字面战役路径）
-_CAMPAIGN_FEATURES = ("blueprint.md", "software", "fn_docs")
+# 战役根目录特征（与 rollout 下层同款判据，不写字面战役路径）：新布局=
+# fn_docs+fn_work 两件齐备（2026-09-23 大整合后唯一形态）；兼容旧布局三特征。
+_CAMPAIGN_FEATURES = ("fn_docs", "fn_work")
+_CAMPAIGN_FEATURES_LEGACY = ("blueprint.md", "software", "fn_docs")
 _TEAM_DEFAULT = "renyxin"
 
 # 台账 schema（列序即 Markdown 表列序；条目键为返回值/台账行结构）
@@ -64,14 +66,17 @@ _WINS13 = (110681129, 110682284, 110683437, 110686759, 110690133,
 
 
 def _campaign_root() -> Path:
-    """自本模块 __file__ 上溯发现战役根（三特征齐备），fail-closed。"""
+    """自本模块 __file__ 上溯发现战役根（新布局 fn_docs+fn_work 或旧布局三特征），
+    fail-closed。"""
     here = Path(__file__).resolve()
     for candidate in (here, *here.parents):
-        if all((candidate / name).exists() for name in _CAMPAIGN_FEATURES):
+        new = all((candidate / name).exists() for name in _CAMPAIGN_FEATURES)
+        legacy = all((candidate / name).exists() for name in _CAMPAIGN_FEATURES_LEGACY)
+        if new or legacy:
             return candidate
     raise RuntimeError(
-        "未找到战役根（特征=" + "+".join(_CAMPAIGN_FEATURES) + f"），"
-        f"上溯起点: {here}")
+        "未找到战役根（特征=" + "+".join(_CAMPAIGN_FEATURES) + " 或 "
+        + "+".join(_CAMPAIGN_FEATURES_LEGACY) + "），上溯起点: " + str(here))
 
 
 def _resolve(path, root: Path) -> Path:
