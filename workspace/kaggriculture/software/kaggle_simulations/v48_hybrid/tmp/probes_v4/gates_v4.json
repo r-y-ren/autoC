@@ -1,0 +1,793 @@
+{
+ "protocol": "v4-gates-light/1.0",
+ "variant_main": "/mnt/data/Code/autoC/workspace/kaggriculture/software/kaggle_simulations/v48_hybrid/v4/main.py",
+ "sha256": "6266e765b5a4ce46bb8b3aa8404dfbd7df55e20ef3c9284fca06e95fd5b241d5",
+ "bytes": 126668,
+ "h2h_vs_pure_v48": {
+  "games": [
+   {
+    "seed": 101,
+    "me_seat": 0,
+    "me_money": 92282.0,
+    "opp_money": 96185.0,
+    "margin": -3903.0,
+    "result": "LOSS",
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "turns": 720,
+    "anomaly_kinds": [],
+    "action_stream_sha256": "1e8cc00d55a7d512",
+    "wall_s": 5.0
+   },
+   {
+    "seed": 101,
+    "me_seat": 1,
+    "me_money": 92282.0,
+    "opp_money": 96185.0,
+    "margin": -3903.0,
+    "result": "LOSS",
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "turns": 720,
+    "anomaly_kinds": [],
+    "action_stream_sha256": "36ac19de9ac29992",
+    "wall_s": 5.2
+   },
+   {
+    "seed": 102,
+    "me_seat": 0,
+    "me_money": 86065.0,
+    "opp_money": 87109.0,
+    "margin": -1044.0,
+    "result": "LOSS",
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "turns": 720,
+    "anomaly_kinds": [],
+    "action_stream_sha256": "05b8667339ae60b9",
+    "wall_s": 5.3
+   },
+   {
+    "seed": 102,
+    "me_seat": 1,
+    "me_money": 86065.0,
+    "opp_money": 87109.0,
+    "margin": -1044.0,
+    "result": "LOSS",
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "turns": 720,
+    "anomaly_kinds": [],
+    "action_stream_sha256": "bf3fa7dc8d295465",
+    "wall_s": 5.3
+   },
+   {
+    "seed": 202,
+    "me_seat": 0,
+    "me_money": 124710.0,
+    "opp_money": 133156.0,
+    "margin": -8446.0,
+    "result": "LOSS",
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "turns": 720,
+    "anomaly_kinds": [],
+    "action_stream_sha256": "bfa1c1a1be7fe077",
+    "wall_s": 5.7
+   },
+   {
+    "seed": 202,
+    "me_seat": 1,
+    "me_money": 124710.0,
+    "opp_money": 133156.0,
+    "margin": -8446.0,
+    "result": "LOSS",
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "turns": 720,
+    "anomaly_kinds": [],
+    "action_stream_sha256": "3e0b96221c739ad9",
+    "wall_s": 5.5
+   },
+   {
+    "seed": 203,
+    "me_seat": 0,
+    "me_money": 109107.0,
+    "opp_money": 138658.0,
+    "margin": -29551.0,
+    "result": "LOSS",
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "turns": 720,
+    "anomaly_kinds": [],
+    "action_stream_sha256": "f4ed9c980a9c6a3c",
+    "wall_s": 5.3
+   },
+   {
+    "seed": 203,
+    "me_seat": 1,
+    "me_money": 109107.0,
+    "opp_money": 138658.0,
+    "margin": -29551.0,
+    "result": "LOSS",
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "turns": 720,
+    "anomaly_kinds": [],
+    "action_stream_sha256": "56ec1fedcf4fe2b6",
+    "wall_s": 5.3
+   }
+  ],
+  "n": 8,
+  "ties": 0,
+  "all_done": true,
+  "criterion": "8 局全部平局（两确定性同行为 bot 按构造）；非平局=行为不≡纯 v48",
+  "anomaly_kinds_seen": [],
+  "passed": false
+ },
+ "patch_safety_equivalence": {
+  "real_engine": [
+   {
+    "seed": 11,
+    "a": {
+     "sha": "f91066ceee43c9172bc6a543bd5a921a5ffaa2cf9c045b7c4b356f5005caad5c",
+     "rewards": [
+      49840.0,
+      49840.0
+     ],
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "anoms": []
+    },
+    "b": {
+     "sha": "91f57b47dc6066cc176deb16b09279db7996521a93b0cde10f5329c77be3df28",
+     "rewards": [
+      50022.0,
+      50022.0
+     ],
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "anoms": []
+    },
+    "streams_byte_equal": false,
+    "rewards_equal": false,
+    "both_done": true,
+    "differing_action_steps": 24,
+    "first_diffs": [
+     {
+      "seat": 0,
+      "step": 252,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"BUY_LAND\"]]}",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_LAND"
+     },
+     {
+      "seat": 0,
+      "step": 257,
+      "a": "{farmer:[\"COLLECT_FERTILIZER\"],hands:[[\"FEED\"],[\"EAST\"],[\"HARVEST\"],[\"EAST\"],[\"FEED\"],[\"WEST\"],[\"SOUTH\"],[\"WEST\"],[\"WATER\"],[\"DROP\"]],market:[[\"SELL\",\"FERTILIZE",
+      "b": "{farmer:[\"COLLECT_FERTILIZER\"],hands:[[\"FEED\"],[\"EAST\"],[\"HARVEST\"],[\"EAST\"],[\"FEED\"],[\"WEST\"],[\"SOUTH\"],[\"WEST\"],[\"WATER\"],[\"DROP\"]],market:[[\"SELL\",\"MELON\",6]"
+     },
+     {
+      "seat": 0,
+      "step": 258,
+      "a": "{farmer:[\"WEST\"],hands:[[\"CARE\"],[\"NORTH\"],[\"SOUTH\"],[\"DROP\"],[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"NORTH\"],[\"SOUTH\"],[\"SOUTH\"]],market:[[\"BUY_PRODUCT\",\"WHEAT\",2]]}",
+      "b": "{farmer:[\"WEST\"],hands:[[\"CARE\"],[\"NORTH\"],[\"SOUTH\"],[\"DROP\"],[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"NORTH\"],[\"SOUTH\"],[\"SOUTH\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_PRODUC"
+     }
+    ],
+    "wall_s": 8.1
+   },
+   {
+    "seed": 22,
+    "a": {
+     "sha": "acb0c30f3eee37090e97d6d9e7cc88b55e68c591b13d6488088dd7838c29fc0c",
+     "rewards": [
+      117413.0,
+      117413.0
+     ],
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "anoms": []
+    },
+    "b": {
+     "sha": "5cfb4f6c11084977eb20cb5d4a260056dc21c4c2b5fd56d4dc1979b47e518399",
+     "rewards": [
+      113663.0,
+      113663.0
+     ],
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "anoms": []
+    },
+    "streams_byte_equal": false,
+    "rewards_equal": false,
+    "both_done": true,
+    "differing_action_steps": 126,
+    "first_diffs": [
+     {
+      "seat": 0,
+      "step": 252,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"],[\"SOUTH\"]],market:[[\"BUY_LAND\"]]}",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"],[\"SOUTH\"]],market:[[\"SELL\",\"MELON\",6],"
+     },
+     {
+      "seat": 0,
+      "step": 253,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"COLLECT_FERTILIZER\"],[\"FEED\"],[\"WEST\"],[\"PLANT\",\"STRAWBERRY\"],[\"SOUTH\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"],[\"WATER\"]],mark",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"COLLECT_FERTILIZER\"],[\"FEED\"],[\"WEST\"],[\"PLANT\",\"STRAWBERRY\"],[\"SOUTH\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"],[\"WATER\"]],mark"
+     },
+     {
+      "seat": 0,
+      "step": 255,
+      "a": "{farmer:[\"FEED\"],hands:[[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"WEST\"],[\"EAST\"],[\"BUILD_PASTURE\"],[\"PLANT\",\"STRAWBERRY\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"],[\"SOUTH\"",
+      "b": "{farmer:[\"FEED\"],hands:[[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"WEST\"],[\"EAST\"],[\"BUILD_PASTURE\"],[\"PLANT\",\"STRAWBERRY\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"],[\"SOUTH\""
+     }
+    ],
+    "wall_s": 8.1
+   },
+   {
+    "seed": 33,
+    "a": {
+     "sha": "446da70993ff258d1a485010254304deedfb1ed42460bebf86448c071d7e35d8",
+     "rewards": [
+      41905.0,
+      41905.0
+     ],
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "anoms": []
+    },
+    "b": {
+     "sha": "af5ac7f3ab9ad92095fa3434b5fb8e4b543ffb801265531ad1c7e1fbabc80bea",
+     "rewards": [
+      41431.0,
+      41431.0
+     ],
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "anoms": []
+    },
+    "streams_byte_equal": false,
+    "rewards_equal": false,
+    "both_done": true,
+    "differing_action_steps": 38,
+    "first_diffs": [
+     {
+      "seat": 0,
+      "step": 252,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"BUY_LAND\"]]}",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_LAND"
+     },
+     {
+      "seat": 0,
+      "step": 257,
+      "a": "{farmer:[\"COLLECT_FERTILIZER\"],hands:[[\"FEED\"],[\"EAST\"],[\"HARVEST\"],[\"EAST\"],[\"FEED\"],[\"WEST\"],[\"SOUTH\"],[\"WEST\"],[\"WATER\"],[\"DROP\"]],market:[[\"SELL\",\"FERTILIZE",
+      "b": "{farmer:[\"COLLECT_FERTILIZER\"],hands:[[\"FEED\"],[\"EAST\"],[\"HARVEST\"],[\"EAST\"],[\"FEED\"],[\"WEST\"],[\"SOUTH\"],[\"WEST\"],[\"WATER\"],[\"DROP\"]],market:[[\"SELL\",\"MELON\",6]"
+     },
+     {
+      "seat": 0,
+      "step": 258,
+      "a": "{farmer:[\"WEST\"],hands:[[\"CARE\"],[\"NORTH\"],[\"SOUTH\"],[\"DROP\"],[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"NORTH\"],[\"SOUTH\"],[\"SOUTH\"]],market:[[\"BUY_PRODUCT\",\"WHEAT\",2]]}",
+      "b": "{farmer:[\"WEST\"],hands:[[\"CARE\"],[\"NORTH\"],[\"SOUTH\"],[\"DROP\"],[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"NORTH\"],[\"SOUTH\"],[\"SOUTH\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_PRODUC"
+     }
+    ],
+    "wall_s": 7.9
+   },
+   {
+    "seed": 47,
+    "a": {
+     "sha": "dbd3a513b2cd10a0b1d598c60aff11699ed018eeb079b5fead4e834ba8d16c69",
+     "rewards": [
+      45652.0,
+      25764.0
+     ],
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "anoms": []
+    },
+    "b": {
+     "sha": "c893b8a93f641170dc30ea566e500b07eeaa302b6c6e803e35ee31a2aa1c9c23",
+     "rewards": [
+      41649.0,
+      35257.0
+     ],
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "anoms": []
+    },
+    "streams_byte_equal": false,
+    "rewards_equal": false,
+    "both_done": true,
+    "differing_action_steps": 175,
+    "first_diffs": [
+     {
+      "seat": 0,
+      "step": 252,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"BUY_LAND\"]]}",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_LAND"
+     },
+     {
+      "seat": 0,
+      "step": 253,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"COLLECT_FERTILIZER\"],[\"FEED\"],[\"WEST\"],[\"PLANT\",\"STRAWBERRY\"],[\"SOUTH\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"]],market:[[\"BUY_",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"COLLECT_FERTILIZER\"],[\"FEED\"],[\"WEST\"],[\"PLANT\",\"STRAWBERRY\"],[\"SOUTH\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"]],market:[[\"BUY_"
+     },
+     {
+      "seat": 0,
+      "step": 255,
+      "a": "{farmer:[\"FEED\"],hands:[[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"WEST\"],[\"EAST\"],[\"BUILD_PASTURE\"],[\"PLANT\",\"STRAWBERRY\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"]],market:",
+      "b": "{farmer:[\"FEED\"],hands:[[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"WEST\"],[\"EAST\"],[\"BUILD_PASTURE\"],[\"PLANT\",\"STRAWBERRY\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"]],market:"
+     }
+    ],
+    "wall_s": 7.7
+   }
+  ],
+  "twin": [
+   {
+    "seed": 11,
+    "a": {
+     "sha": "e51fb0bc98ee61e376e62883a2ff4ab3b234ad31471234fa0c6a3ab08355796d",
+     "finals": [
+      49840.0,
+      49840.0
+     ]
+    },
+    "b": {
+     "sha": "86c05fefc55403fdb47187dc047ceb803f564e2dcd92fdad938f957c8bab0a9f",
+     "finals": [
+      50022.0,
+      50022.0
+     ]
+    },
+    "streams_byte_equal": false,
+    "finals_equal": false,
+    "differing_action_steps": 24,
+    "first_diffs": [
+     {
+      "seat": 0,
+      "step": 252,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"BUY_LAND\"]]}",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_LAND"
+     },
+     {
+      "seat": 0,
+      "step": 257,
+      "a": "{farmer:[\"COLLECT_FERTILIZER\"],hands:[[\"FEED\"],[\"EAST\"],[\"HARVEST\"],[\"EAST\"],[\"FEED\"],[\"WEST\"],[\"SOUTH\"],[\"WEST\"],[\"WATER\"],[\"DROP\"]],market:[[\"SELL\",\"FERTILIZE",
+      "b": "{farmer:[\"COLLECT_FERTILIZER\"],hands:[[\"FEED\"],[\"EAST\"],[\"HARVEST\"],[\"EAST\"],[\"FEED\"],[\"WEST\"],[\"SOUTH\"],[\"WEST\"],[\"WATER\"],[\"DROP\"]],market:[[\"SELL\",\"MELON\",6]"
+     },
+     {
+      "seat": 0,
+      "step": 258,
+      "a": "{farmer:[\"WEST\"],hands:[[\"CARE\"],[\"NORTH\"],[\"SOUTH\"],[\"DROP\"],[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"NORTH\"],[\"SOUTH\"],[\"SOUTH\"]],market:[[\"BUY_PRODUCT\",\"WHEAT\",2]]}",
+      "b": "{farmer:[\"WEST\"],hands:[[\"CARE\"],[\"NORTH\"],[\"SOUTH\"],[\"DROP\"],[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"NORTH\"],[\"SOUTH\"],[\"SOUTH\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_PRODUC"
+     }
+    ]
+   },
+   {
+    "seed": 22,
+    "a": {
+     "sha": "c7c409450725a8cf66a7ff96950256849d52adb7a9a85037d1916a5ac9907b87",
+     "finals": [
+      117413.0,
+      117413.0
+     ]
+    },
+    "b": {
+     "sha": "52dc263997c703d79419801888c0ed1c9e4cc3b345b94bc30a6e1dc0bcc6126e",
+     "finals": [
+      113663.0,
+      113663.0
+     ]
+    },
+    "streams_byte_equal": false,
+    "finals_equal": false,
+    "differing_action_steps": 124,
+    "first_diffs": [
+     {
+      "seat": 0,
+      "step": 252,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"],[\"SOUTH\"]],market:[[\"BUY_LAND\"]]}",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"],[\"SOUTH\"]],market:[[\"SELL\",\"MELON\",6],"
+     },
+     {
+      "seat": 0,
+      "step": 253,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"COLLECT_FERTILIZER\"],[\"FEED\"],[\"WEST\"],[\"PLANT\",\"STRAWBERRY\"],[\"SOUTH\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"],[\"WATER\"]],mark",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"COLLECT_FERTILIZER\"],[\"FEED\"],[\"WEST\"],[\"PLANT\",\"STRAWBERRY\"],[\"SOUTH\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"],[\"WATER\"]],mark"
+     },
+     {
+      "seat": 0,
+      "step": 255,
+      "a": "{farmer:[\"FEED\"],hands:[[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"WEST\"],[\"EAST\"],[\"BUILD_PASTURE\"],[\"PLANT\",\"STRAWBERRY\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"],[\"SOUTH\"",
+      "b": "{farmer:[\"FEED\"],hands:[[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"WEST\"],[\"EAST\"],[\"BUILD_PASTURE\"],[\"PLANT\",\"STRAWBERRY\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"],[\"SOUTH\""
+     }
+    ]
+   },
+   {
+    "seed": 33,
+    "a": {
+     "sha": "8d9b713e62332b617dd5ae64e2ca4ef189ebfba5c1cfe988bc8ff2c209052e10",
+     "finals": [
+      41905.0,
+      41905.0
+     ]
+    },
+    "b": {
+     "sha": "82287fa9420738f21644798290807b31ac3f1915b6ba787e23d6153e9fed02ac",
+     "finals": [
+      41431.0,
+      41431.0
+     ]
+    },
+    "streams_byte_equal": false,
+    "finals_equal": false,
+    "differing_action_steps": 38,
+    "first_diffs": [
+     {
+      "seat": 0,
+      "step": 252,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"BUY_LAND\"]]}",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_LAND"
+     },
+     {
+      "seat": 0,
+      "step": 257,
+      "a": "{farmer:[\"COLLECT_FERTILIZER\"],hands:[[\"FEED\"],[\"EAST\"],[\"HARVEST\"],[\"EAST\"],[\"FEED\"],[\"WEST\"],[\"SOUTH\"],[\"WEST\"],[\"WATER\"],[\"DROP\"]],market:[[\"SELL\",\"FERTILIZE",
+      "b": "{farmer:[\"COLLECT_FERTILIZER\"],hands:[[\"FEED\"],[\"EAST\"],[\"HARVEST\"],[\"EAST\"],[\"FEED\"],[\"WEST\"],[\"SOUTH\"],[\"WEST\"],[\"WATER\"],[\"DROP\"]],market:[[\"SELL\",\"MELON\",6]"
+     },
+     {
+      "seat": 0,
+      "step": 258,
+      "a": "{farmer:[\"WEST\"],hands:[[\"CARE\"],[\"NORTH\"],[\"SOUTH\"],[\"DROP\"],[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"NORTH\"],[\"SOUTH\"],[\"SOUTH\"]],market:[[\"BUY_PRODUCT\",\"WHEAT\",2]]}",
+      "b": "{farmer:[\"WEST\"],hands:[[\"CARE\"],[\"NORTH\"],[\"SOUTH\"],[\"DROP\"],[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"NORTH\"],[\"SOUTH\"],[\"SOUTH\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_PRODUC"
+     }
+    ]
+   },
+   {
+    "seed": 47,
+    "a": {
+     "sha": "5f042ee9730cac8618bdf7c13ed60d24b626f45ff5561f423a940f95421fd743",
+     "finals": [
+      45652.0,
+      25764.0
+     ]
+    },
+    "b": {
+     "sha": "55deb7254275d0bec72cb18d89b8dd2f2ec8e41a687b757163eaaa9ebc25bd62",
+     "finals": [
+      41649.0,
+      35257.0
+     ]
+    },
+    "streams_byte_equal": false,
+    "finals_equal": false,
+    "differing_action_steps": 175,
+    "first_diffs": [
+     {
+      "seat": 0,
+      "step": 252,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"BUY_LAND\"]]}",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"CARE\"],[\"SOUTH\"],[\"WEST\"],[\"HARVEST\"],[\"NORTH\"],[\"DROP\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"WATER\"]],market:[[\"SELL\",\"MELON\",6],[\"BUY_LAND"
+     },
+     {
+      "seat": 0,
+      "step": 253,
+      "a": "{farmer:[\"NORTH\"],hands:[[\"COLLECT_FERTILIZER\"],[\"FEED\"],[\"WEST\"],[\"PLANT\",\"STRAWBERRY\"],[\"SOUTH\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"]],market:[[\"BUY_",
+      "b": "{farmer:[\"NORTH\"],hands:[[\"COLLECT_FERTILIZER\"],[\"FEED\"],[\"WEST\"],[\"PLANT\",\"STRAWBERRY\"],[\"SOUTH\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"]],market:[[\"BUY_"
+     },
+     {
+      "seat": 0,
+      "step": 255,
+      "a": "{farmer:[\"FEED\"],hands:[[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"WEST\"],[\"EAST\"],[\"BUILD_PASTURE\"],[\"PLANT\",\"STRAWBERRY\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"]],market:",
+      "b": "{farmer:[\"FEED\"],hands:[[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"WEST\"],[\"EAST\"],[\"BUILD_PASTURE\"],[\"PLANT\",\"STRAWBERRY\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"SOUTH\"]],market:"
+     }
+    ]
+   }
+  ],
+  "attribution": [
+   {
+    "p1_module_registered": false,
+    "p2_veto_count": 0,
+    "p2_veto_events": [],
+    "p3_deviated_step_count": 26,
+    "p3_effective_adjust_count": 4,
+    "p3_adjust_events": [
+     {
+      "seat": 0,
+      "step": 252,
+      "n_sells": 2,
+      "kept": 0
+     },
+     {
+      "seat": 1,
+      "step": 252,
+      "n_sells": 2,
+      "kept": 0
+     },
+     {
+      "seat": 0,
+      "step": 309,
+      "n_sells": 1,
+      "kept": 0
+     },
+     {
+      "seat": 1,
+      "step": 309,
+      "n_sells": 1,
+      "kept": 0
+     }
+    ],
+    "first_deviation": {
+     "seat": 0,
+     "step": 252,
+     "day": 10,
+     "failed_checks": [
+      "money"
+     ]
+    },
+    "seed": 11,
+    "base_finals": [
+     50022.0,
+     50022.0
+    ]
+   },
+   {
+    "p1_module_registered": false,
+    "p2_veto_count": 0,
+    "p2_veto_events": [],
+    "p3_deviated_step_count": 26,
+    "p3_effective_adjust_count": 4,
+    "p3_adjust_events": [
+     {
+      "seat": 0,
+      "step": 252,
+      "n_sells": 2,
+      "kept": 0
+     },
+     {
+      "seat": 1,
+      "step": 252,
+      "n_sells": 2,
+      "kept": 0
+     },
+     {
+      "seat": 0,
+      "step": 309,
+      "n_sells": 2,
+      "kept": 1
+     },
+     {
+      "seat": 1,
+      "step": 309,
+      "n_sells": 2,
+      "kept": 1
+     }
+    ],
+    "first_deviation": {
+     "seat": 0,
+     "step": 252,
+     "day": 10,
+     "failed_checks": [
+      "money"
+     ]
+    },
+    "seed": 22,
+    "base_finals": [
+     113663.0,
+     113663.0
+    ]
+   },
+   {
+    "p1_module_registered": false,
+    "p2_veto_count": 0,
+    "p2_veto_events": [],
+    "p3_deviated_step_count": 26,
+    "p3_effective_adjust_count": 4,
+    "p3_adjust_events": [
+     {
+      "seat": 0,
+      "step": 252,
+      "n_sells": 2,
+      "kept": 0
+     },
+     {
+      "seat": 1,
+      "step": 252,
+      "n_sells": 2,
+      "kept": 0
+     },
+     {
+      "seat": 0,
+      "step": 309,
+      "n_sells": 1,
+      "kept": 0
+     },
+     {
+      "seat": 1,
+      "step": 309,
+      "n_sells": 1,
+      "kept": 0
+     }
+    ],
+    "first_deviation": {
+     "seat": 0,
+     "step": 252,
+     "day": 10,
+     "failed_checks": [
+      "money"
+     ]
+    },
+    "seed": 33,
+    "base_finals": [
+     41431.0,
+     41431.0
+    ]
+   },
+   {
+    "p1_module_registered": false,
+    "p2_veto_count": 0,
+    "p2_veto_events": [],
+    "p3_deviated_step_count": 47,
+    "p3_effective_adjust_count": 9,
+    "p3_adjust_events": [
+     {
+      "seat": 1,
+      "step": 248,
+      "n_sells": 1,
+      "kept": 0
+     },
+     {
+      "seat": 0,
+      "step": 252,
+      "n_sells": 2,
+      "kept": 0
+     },
+     {
+      "seat": 1,
+      "step": 252,
+      "n_sells": 2,
+      "kept": 0
+     },
+     {
+      "seat": 1,
+      "step": 255,
+      "n_sells": 1,
+      "kept": 0
+     },
+     {
+      "seat": 1,
+      "step": 257,
+      "n_sells": 3,
+      "kept": 2
+     },
+     {
+      "seat": 1,
+      "step": 258,
+      "n_sells": 1,
+      "kept": 0
+     },
+     {
+      "seat": 1,
+      "step": 261,
+      "n_sells": 1,
+      "kept": 0
+     },
+     {
+      "seat": 0,
+      "step": 309,
+      "n_sells": 2,
+      "kept": 1
+     }
+    ],
+    "first_deviation": {
+     "seat": 1,
+     "step": 240,
+     "day": 10,
+     "failed_checks": [
+      "cow_herd"
+     ]
+    },
+    "seed": 47,
+    "base_finals": [
+     41649.0,
+     35257.0
+    ]
+   }
+  ],
+  "per_seed_classification": {
+   "11": "trigger_evidence",
+   "22": "trigger_evidence",
+   "33": "trigger_evidence",
+   "47": "trigger_evidence"
+  },
+  "summary": {
+   "n_seeds": 4,
+   "floor": 4,
+   "n_equivalent_zero_trigger": 0,
+   "n_trigger_evidence": 4,
+   "n_unexpected_divergence": 0
+  }
+ },
+ "patch_safety_insurance": {
+  "live_fire": {
+   "channel": "v4-loaded v48h.p2_economic_guard（提交字节内注册实例）",
+   "dead_persist_steps": 4,
+   "detect_series": [
+    false,
+    false,
+    false,
+    true,
+    true,
+    true
+   ],
+   "activated_after_persist": true,
+   "veto_buy_animal_removed": true,
+   "veto_build_pasture_to_pass": true,
+   "other_orders_kept_verbatim": true,
+   "healthy_market_noop_same_object": true,
+   "passed": true
+  },
+  "blob_identity": {
+   "ok": true,
+   "embedded_modules": [
+    "v48h.p2_economic_guard",
+    "v48h.p3_milestone_monitor"
+   ],
+   "p1_module_absent": true,
+   "detail": {
+    "v48h.p2_economic_guard": {
+     "embedded_sha256": "e7206b734451cb08a5d9cbbba5f4cf16a88f17dfcf8a3b34cd1f99201ad98713",
+     "disk_sha256": "e7206b734451cb08a5d9cbbba5f4cf16a88f17dfcf8a3b34cd1f99201ad98713",
+     "identical": true
+    },
+    "v48h.p3_milestone_monitor": {
+     "embedded_sha256": "b0ef3c90380d9de079a6efb0d90462546336e196bd12732ddbb7287f5b0d6caf",
+     "disk_sha256": "b0ef3c90380d9de079a6efb0d90462546336e196bd12732ddbb7287f5b0d6caf",
+     "identical": true
+    }
+   }
+  },
+  "patches_pytest": {
+   "returncode": 0,
+   "tail": "14 passed in 0.01s"
+  },
+  "passed": true
+ },
+ "gate": {
+  "h2h_all_ties_passed": false,
+  "equivalence_passed": false,
+  "insurance_passed": true,
+  "passed": false
+ },
+ "wall_s": 95.1
+}

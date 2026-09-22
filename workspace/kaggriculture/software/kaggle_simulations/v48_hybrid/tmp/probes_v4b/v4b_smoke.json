@@ -1,0 +1,113 @@
+{
+ "protocol": "v4b-launch-fourgate/1.0",
+ "package": {
+  "main_sha256": "8bbd25467b4c0fc40c20996ed703a498b1a575bc4a2cfa524fe92ce1236c7e1a",
+  "main_bytes": 116499,
+  "tar_sha256": "b5141af72a9da368b34815a2bac1bc462a9e3a62b7ea31d36c048bd68e74d198",
+  "tar_bytes": 87657,
+  "gate4_size_ok": true
+ },
+ "gate1_official_load": {
+  "gate1_official_load_ok": true,
+  "agent_py_checked": "/home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/agent.py",
+  "driver_wall_s": 0.9,
+  "n_obs_replayed": 719,
+  "obs_subsampled": true,
+  "isolated_vs_local_action_mismatches": 0,
+  "evidence": {
+   "n_callables": 11,
+   "last_callable_name": "_v48hybrid_entrypoint",
+   "has_named_agent": true,
+   "named_agent_same_output_as_last": true,
+   "loader_pop_applied": true,
+   "exec_dir_on_sys_path_after_load": false,
+   "n_new_sys_modules": 49,
+   "non_stdlib_imports": [],
+   "action_errors": [],
+   "n_obs": 719,
+   "n_actions": 719
+  }
+ },
+ "gate2_full_episodes": {
+  "gate2_full_episodes_ok": true,
+  "gate2_step_budget_ms": 1000.0,
+  "gate2_episodes": [
+   {
+    "seed": 101,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     92750.0,
+     92750.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 4.0,
+    "agent_calls": 1438,
+    "max_step_ms": 2.43,
+    "p99_step_ms": 1.23,
+    "mean_step_ms": 0.27,
+    "action_stream_sha256": "a009ad5e6fb46d874b24102259d9df5c14148e56c7117654b1fe630bb8f411d8",
+    "obs_count": 719
+   },
+   {
+    "seed": 102,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     86550.0,
+     86550.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 4.4,
+    "agent_calls": 1438,
+    "max_step_ms": 3.34,
+    "p99_step_ms": 1.33,
+    "mean_step_ms": 0.28,
+    "action_stream_sha256": "7d4823eede4dca0bad5673adf1f5816b195ea67664891f93498e2d9ea6a7721b",
+    "obs_count": 719
+   }
+  ],
+  "gate3_determinism_ok": true,
+  "gate3_rerun_seed": 101,
+  "gate3_hashes": {
+   "run1": "a009ad5e6fb46d874b24102259d9df5c14148e56c7117654b1fe630bb8f411d8",
+   "run2": "a009ad5e6fb46d874b24102259d9df5c14148e56c7117654b1fe630bb8f411d8"
+  }
+ },
+ "crosscheck_v4b_selfplay_vs_pure_v48_baseline": {
+  "101": {
+   "v4b_rewards": [
+    92750.0,
+    92750.0
+   ],
+   "pure_v48_selfplay_rewards": [
+    92750.0,
+    92750.0
+   ],
+   "equal": true
+  },
+  "102": {
+   "v4b_rewards": [
+    86550.0,
+    86550.0
+   ],
+   "pure_v48_selfplay_rewards": [
+    86550.0,
+    86550.0
+   ],
+   "equal": true
+  }
+ },
+ "wall_total_s": 17.9,
+ "all_gates_pass": true
+}
