@@ -611,3 +611,55 @@
   reason: 无组件价值——8个社区awesome list融合策展的AI安全/渗透agent链接集（CC0，11 stars，2026-09-20 API实抓），内容为公开资源的策展组织，"抄清单"不构成可复用技术组件；创新创业方向stars门槛0（信号达标）但按组件价值拒，与已拒gh-elie222_botdirectory.ai同类；且赛种词表无安全/CTF向落点
   stars: 11
   decided: '2026-09-20'
+- id: arxiv-2609.24156
+  reason: 族内去重从严——TAC-Time把文本转成额外时序通道与数值序列共享时序主干（区别于静态特征/LLM骨干），但多模态时序融合库内已有3卡（arxiv-2608.17164 ScenarioDiff场景引导ICDM 2026录用、arxiv-2608.25128上下文路由系统性实证、arxiv-2609.11135 SolCloudLLM），增量仅架构模式且摘要自述文本信号仅带来partial forecasting improvements；无代码无官方仓（Comments仅页图表数，GitHub检索0命中，2026-09-22实抓）；拒于族内重叠非信号
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.23701
+  reason: 实证不足从严——TEMPER单变量概率预测（时序自编码+可微软掩码神经决策森林+CRPS训练+高斯混合后处理）仅在三个合成序列上评测96次滚动原点，聚合CRPS 2.824%输给naive persistence bootstrap的2.763%，90%名义区间经验覆盖仅68.8%需二倍膨胀才到91.7%；无真实数据验证、无Comments、代码仅为arXiv ancillary的R脚本（2026-09-22实抓）；输给朴素基线的合成数据方法撑不起比赛映射
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.21425
+  reason: 立场论文从严——5页vision论文（ACM AI Summit 2026 Visionary track录用）提出zero-shot时序预测的证据来源分类学（冻结LLM先验/参数化预训练/检索增强外部记忆）与4个审计问题，主张榜单应报告证据边界；无实验无代码（2026-09-22实抓）；"zero-shot选型需看证据来源"的先验已被库内TSFM选型卡（arxiv-2608.22968）与TabPFN-TS零样本卡（arxiv-2608.20024）覆盖，榜单可审计性在六赛种无自然落点；拒于映射非信号
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.21044
+  reason: 零结果论文从严——预编码器协变量准入门控（sigmoid打分+usage惩罚变体）插件于TimeXer/iTransformer/PatchTST，零调参协议下摘要自述结论仅为"与对应基线competitive"（持平非超越），usage penalty只降低平均准入分；无Comments无代码（CC BY-NC-SA，2026-09-22实抓）；误差持平的接口研究无法形成差异化比赛映射，VIF-PFI诊断案例单薄；拒于映射非信号
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.24289
+  reason: 族内重叠+无实现——TTSE 双轨在线自进化（FACT 环境事实/TIP 任务条件化操作技巧分轨积累+决策论超额风险分解），可迁移核心只是"事实/技巧分轨记忆"设计模式，与库内 arxiv-2609.09153（Procedural Graphs 给 agent 装显式"怎么做"知识）及 MetaCaster/CastClaw harness 工程族重叠；主体贡献是风险界理论（20页18表纯预印本无 venue），无代码（2026-09-22实抓 arXiv 页无仓库链接），基准全为 ALFWorld/ScienceWorld/SOPBench 等研究环境，六赛种无自然落点；拒于族内重叠非信号
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.23808
+  reason: 复现不可达——FLARE 长程编码 agent 全生命周期稠密监督（RADAR 因果断回溯诊断蒸馏生成式奖励模型 GRM，推理期拦截高危步断点重执行+训练期 SFT 重排/步级 RL 奖励；FLARE N=1 胜 Global Rollout N=5 且省 5x token 的数字亮眼），但主体是需训 GRM+RL 基建的训练范式，比赛尺度无法复现，推理期 active scaffold 也依赖已训 GRM；无代码无 venue（2026-09-22实抓 arXiv 页无仓库链接）；拒于映射+runnable 不可达
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.23466
+  reason: runnable 不可达——RPMem 跨会话循环参数化记忆（会话编译为模型无关潜记忆+任务训练循环门控合并+映射到 LoRA 参数实现换骨干可迁移；PERMA/Qwen3-8B 85.52% 超最强参数/文本基线 5.32/12.98pt），但官方代码链接实为空仓：Quark-Medical/rpmem 仅 14 字节 README（0 stars，无语言，2026-09-22 API 实查），无可用实现时两阶段训练 pipeline 复现成本过高，赛题级 agent 记忆需求用文本记忆方案即可低门槛覆盖；代码落地后可人工重评；拒于 runnable 不可达
+  stars: 0
+  decided: '2026-09-22'
+- id: arxiv-2609.24446
+  reason: 族内重叠+无代码——ActGov 运行时策略约束验证（ActGov-Policy 从工具规格/良性任务/失败轨迹合成策略集+SMT 反例校验，ActGov-Runtime 任务域授权边界；AgentDojo/AgentDyn 自报降注入 ASR 保效用）与库内 SARA（arxiv-2608.27146 动作诱导/运行时授权分离）及 WebMCP-Phalanx（arxiv-2608.24017 信任边界）同主题同层，增量仅"策略集自动合成用 SMT 反例检查"；无代码（2026-09-22 实抓 arXiv 页无 Comments/仓库，GitHub 检索 0 命中），SMT 合成基建比赛尺度复现不可达；拒于族内重叠非信号
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.22818
+  reason: 实证不足——单作者测量研究（固定记忆后端/检索/裁判流水线，每条件 3 次重复×5 会话），核心发现"读时重排器降 4.4 点核心准确率、33.6% 误隔离、2.7% token 开销"的 95% CI [-9.0,-0.05] 勉强不含零且 McNemar p=0.064 未过 0.05 显著线；"写时防御无可测代价"属小样本零结果（欠功效无法区分真零与没测出来）；无代码无 venue（2026-09-22 实抓）；"防御放在流水线哪一层决定良性代价"的问题意识有价值，但当前证据强度撑不起卡片
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.24246
+  reason: competition_fit 不足——Taramandal-GPT 在 Qwen3-8B 骨干上叠 RAG 管线+fallback 机制应对天体动力学多步推理（APBench 299 题基准，数值边际+语义相似双评测），架构为领域 RAG 标准套路无独有组件；venue 仅 All India Hindi Technical Conference（区域性会议，信号可忽略），abs 页无代码链接（2026-09-22 实抓），runnable=false；库内 33 张 RAG 相关卡已覆盖领域问答助手模式，六赛种词表无天文/航天落点，双创"科普助手"映射相对现有卡无增量；拒于映射非信号
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.21849
+  reason: runnable 不可达+映射单薄——The Weight Is Over 端侧扩散三贡献（小文本编码器经 embedding translator 对齐大编码器空间省显存时延/速度-质量-显存三角扫描配方/亚秒 TTFI 交互式图像生成编辑器）止步工程报告层，无代码无官方仓（2026-09-22 实抓 abs 页无链接，Comments 为空）；页面所挂 ACM DOI 10.1145/3829339.3847852 在 doi.org（404）与 Crossref（未收录）均不可解析，venue 无法核实；端侧图像生成的黑客松需求已有大量可跑现成工具覆盖，摘要层无可迁移硬细节，复现=从零自建全管线（高成本）；若代码释出或 venue 可查可人工重评
+  stars: null
+  decided: '2026-09-22'
+- id: arxiv-2609.23686
+  reason: 竞赛映射弱+runnable不可达——One Patch Three Roles 研究自回归 patch 预测中"表示/转移/执行"三角色与 patch 长度解耦：轨迹蒸馏 ATD-8 提速 5.54x 但论文自述轨迹保真度 21/21 种子改善而预测精度仅 15/21 改善（更少调用不消除父模型误差），Spectrum Tangent 仅在 h=720 降 MSE 2.54%；数模/Kaggle 赛的模型小、horizon 短，自回归推理速度非痛点，精度增益边际；arXiv 页所附代码链接 github.com/RowanFFF/ATD-Spectrum-Tangent 实查 404、检索 0 命中（2026-09-22 API）；无 Comments 无 venue；拒于映射+runnable 双不足
+  stars: null
+  decided: '2026-09-22'
+- id: gh-SII-fkchen_SOTER
+  reason: 同一工件去重——SOTER 论文已入库（arxiv-2609.16804 卡，2026-09-16 建）；本轮实抓确认官方开源落地（GitHub SII-fkchen/SOTER 73 stars MIT 推理代码+HF 权重，2026-09-22 API），已按"更新"消化进论文卡（maturity paper→demo、runnable=true、复用成本高→中、补 2 条来源），gh- ID 不另建卡避免同工件双 ID 碎片化；stars 快照 73（0 forks，2026-09-22 API）
+  stars: 73
+  decided: '2026-09-22'

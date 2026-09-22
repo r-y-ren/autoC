@@ -8,7 +8,6 @@
 |---|---|---|---|---|---|---|---|---|
 | 3chuang | 全国大学生电子商务"创新、创意及创业"挑战赛（三创赛） | 创新创业大赛 | 学科竞赛 | ended | … | 待核：本次实抓页面（官网为 JS 渲染空壳、两所高校转发通知）均未载人工智能/A | 2026-09-20 | competitions/3chuang/ |
 | apmcm | APMCM 亚太地区大学生数学建模竞赛 | 数模与时序预测 | 学科竞赛 | upcoming | 2026主赛_报名截止:2026-11-25… | 实抓页面（官网首页、2026 主赛与中文赛项报名通知、2020 修订版章程全文） | 2026-09-20 | competitions/apmcm/ |
-| cala-hacks-ai-2026 | LA Hacks AI Hackathon 2026 | 黑客松与数据竞赛 | 编程/黑客松 | upcoming | … | 未发现 AI 政策条款：官网为 React SPA 单页落地页，实抓 HTML  | 2026-09-20 | competitions/cala-hacks-ai-2026/ |
 | cumcm | 全国大学生数学建模竞赛（高教社杯 CUMCM） | 数模与时序预测 | 学科竞赛 | active | 2026 报名开始:2026-05-01 09:00… | 《全国大学生数学建模竞赛人工智能工具使用规定（2026年试行）》：适用于大语言模 | 2026-09-09 | competitions/cumcm/ |
 | cy-innovation-2026 | 中国国际大学生创新大赛（2026） | 创新创业大赛 | 学科竞赛 | active | 报名系统开放:2026-08-10… | 2026 官方文件无 AI 专项条款（verified 口径：2026-09-0 | 2026-09-20 | competitions/cy-innovation-2026/ |
 | devpost-amazon-nova-ai-2026 | Amazon Nova AI Hackathon | 黑客松与数据竞赛 | 编程/黑客松 | ended | registration_open:2026-02-02、submission_close:2026-03-16… | 强制 Nova：'Your task is to build a generat | 2026-08-27 | competitions/devpost-amazon-nova-ai-2026/ |
@@ -35,8 +34,8 @@
 | tianchi-ijcai18-alimama-cvr | IJCAI-18 阿里妈妈搜索广告转化预测（Alimama International Advertising Algorithm Competition） | 黑客松与数据竞赛 | 编程/黑客松 | ended | 赛事周期:2018-02 至 2018-05（天池用户协议原文 "from February to May 2018"）… | 抓取材料中无 AI 工具使用条款（2018 年赛前 LLM 时代，信息页与用户协 | 2026-08-28 | competitions/tianchi-ijcai18-alimama-cvr/ |
 | tianchi-loreal-beauty-tech-hackathon-2026 | 欧莱雅第二届美妆科技黑客松——用 AI 造点美（天池·AI大模型赛） | 黑客松与数据竞赛 | 编程/黑客松 | active | … | 详情页全文未设任何 AI 工具使用限制、申报或披露条款；赛事本身即以 AI 应用 | 2026-09-09 | competitions/tianchi-loreal-beauty-tech-hackathon-2026/ |
 | tianchi-qoder-thursday | Q力星期四（Qoder码力星期四）系列赛（天池·AI大模型赛） | 黑客松与数据竞赛 | 编程/黑客松 | active | 系列赛期:2026-07-16 至 2027-07-31… | 系列由阿里 AI 编程工具 Qoder 冠名，官方推荐并鼓励使用 AI 编程工具 | 2026-09-16 | competitions/tianchi-qoder-thursday/ |
-| tiaozhanbei-chuangye | 第十五届"挑战杯"中国大学生创业计划竞赛（建设银行冠名） | 创新创业大赛 | 学科竞赛 | ended | 第十五届 校级初赛:2026-05-31 前（通知：5月底前）… | 待核：官网举办通知正文（2026-05-23，2026-09-04 直抓）未载人 | 2026-09-04 | competitions/tiaozhanbei-chuangye/ |
-| ucla-ai-hackathon-2026 | LA Hacks AI Hackathon 2026 | 黑客松与数据竞赛 | 编程/黑客松 | upcoming | event_start:2026-10-17、event_end:2026-10-18 | 2026-08-28 核对赛事官网公开响应、MLH 赛季条目与 MLH 赛事奖品 | 2026-09-20 | competitions/ucla-ai-hackathon-2026/ |
+| tiaozhanbei-chuangye | 第十五届"挑战杯"中国大学生创业计划竞赛（建设银行冠名） | 创新创业大赛 | 学科竞赛 | ended | 第十五届 校级初赛:2026-05-31 前（通知：5月底前）… | 待核：官网举办通知正文（2026-05-23，2026-09-04 直抓）未载人 | 2026-09-22 | competitions/tiaozhanbei-chuangye/ |
+| ucla-ai-hackathon-2026 | LA Hacks AI Hackathon 2026 | 黑客松与数据竞赛 | 编程/黑客松 | upcoming | event_start:2026-10-17、event_end:2026-10-18… | 2026-08-28 核对赛事官网公开响应、MLH 赛季条目与 MLH 赛事奖品 | 2026-09-22 | competitions/ucla-ai-hackathon-2026/ |
 | wuyi-mcm | 五一数学建模竞赛 | 数模与时序预测 | 学科竞赛 | ended | 2026第二十三届_报名:2026-04-02 08:00 至 2026-04-30 24:00（北京时间）… | 实抓页面（官网首页、本届竞赛列表、第二十三届参赛邀请函、评选结果公示）均未发现  | 2026-09-20 | competitions/wuyi-mcm/ |
 | xczxcy-dasai | 第六届全国大学生乡村振兴大赛 | 创新创业大赛 | 学科竞赛 | active | 通知发布/报名启动:2026-08-08（通知落款日期）；发布页发布时间 2026-08-10… | 待核：通知正文（文档第 1-8 页已逐页视读，含联系方式与落款页）未载人工智能/ | 2026-09-20 | competitions/xczxcy-dasai/ |
 
@@ -132,9 +131,20 @@
 | arxiv-2609.13789 | PPDL：Weibull 物理先验×深度学习的工业用户留存率预测（ICDM 2026） | 时序预测、用户留存、机理数据混合建模 | 数模与时序预测 | paper | Kaggle-竞赛、数模-数据分析与决策 | 2026-09-12 | 已引 |
 | arxiv-2609.13956 | Tabby：全开源配方时序基础模型（145M 三合一骨干+冻结prompt-tuning） | 时序基础模型、概率预测、开源配方 | 数模与时序预测 | demo | 数模-预测与评估、Kaggle-竞赛 | 2026-09-12 | 已引 |
 | arxiv-2609.16309 | Agentic Search Spaces for Tabular Machine Learning | LLM agents、表格机器学习、超参数优化、AutoML | 黑客松与数据竞赛 | paper | Kaggle-竞赛、黑客松-数据与算法 | 2026-09-14 | 已引 |
-| arxiv-2609.16804 | SOTER: A Generative Time-Series Foundation Model for Wearable Human Physiological Signals | time series foundation model、可穿戴生理信号、不规则采样、时序插补 | 数模与时序预测 | paper | 数模-预测与评估、数模-数据分析与决策 | 2026-09-15 | 已引 |
+| arxiv-2609.16804 | SOTER: A Generative Time-Series Foundation Model for Wearable Human Physiological Signals | time series foundation model、可穿戴生理信号、不规则采样、时序插补 | 数模与时序预测 | demo | 数模-预测与评估、数模-数据分析与决策 | 2026-09-15 | 已引 |
 | arxiv-2609.17895 | TabPFN-3.5：表格基础模型新旗舰（时序/非i.i.d./多模态列全面扩张） | 表格基础模型、时序预测、AutoML | 数模与时序预测 | product | 数模-预测与评估、Kaggle-竞赛 | 2026-09-15 | 已引 |
 | arxiv-2609.20625 | Chronicle：agent 失败的 cut-point 回放回归测试（零模型调用进 CI） | LLM agent、回归测试、record-replay | 创新创业大赛、黑客松与数据竞赛 | demo | 黑客松-数据与算法、双创-文书与申报 | 2026-09-17 | 已引 |
+| arxiv-2609.21381 | KG-Chronos-2：冻结 TSFM 做水利仿真代理——知识图谱检索+残差解码降 14% RMSE | 时序基础模型、物理仿真代理、知识图谱检索、水文预测 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-09-18 | 已引 |
+| arxiv-2609.21573 | Micro-Collaborative Poisoning: A Distributed Attack on RAG Systems | retrieval augmented generation、RAG 安全、对抗攻击 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2026-09-18 | 已引 |
+| arxiv-2609.21666 | Samsone：99M/134M/356M 三档开源小型音频语言模型（Interspeech 2026，checkpoint 可下载 + ExecuTorch 移动端 + Android 应用） | on-device inference、音频理解、audio language model | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-09-18 | 已引 |
+| arxiv-2609.22573 | Zero-Trust Authorization and Discovery for Enterprise MCP | LLM agents、MCP 安全、零信任授权 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2026-09-18 | 已引 |
+| arxiv-2609.22836 | Time-aware Patch 混合注意力：不规则多变量时序的零样本预测（附 30B 观测 VersaTSA 语料） | 时序预测、时序基础模型、不规则采样 | 数模与时序预测 | paper | 数模-预测与评估 | 2026-09-19 | 已引 |
+| arxiv-2609.22977 | CASP-LLM：覆盖感知的提示选择——usage 正则替代相似度 top-K 检索（官方代码已放） | 时序预测、检索增强、提示选择、LLM | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | demo | 数模-预测与评估、黑客松-数据与算法 | 2026-09-19 | 已引 |
+| arxiv-2609.23257 | CTRL：LLM 只做控制器的时序预测——误差分解控制信号+残差解码+免标签测试时自适应 | 时序预测、LLM 控制器、测试时自适应、非平稳 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 数模-预测与评估 | 2026-09-20 | 已引 |
+| arxiv-2609.24115 | EDGEGEN: Improving Tool-Calling Agents Beyond Happy Paths with Synthetic Edge Case Generation | LLM agents、数据合成与评估 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2026-09-21 | 已引 |
+| arxiv-2609.24165 | APEXA: Execution-Integrity Enforcement for Multi-Agent LLM Automation of Synchrotron Data Reduction | LLM agents、执行完整性、科学数据自动化 | 创新创业大赛、黑客松与数据竞赛 | demo | 黑客松-数据与算法、双创-文书与申报 | 2026-09-21 | 已引 |
+| arxiv-2609.24967 | Emergent Collusion in Long-Horizon LLM Agent Interaction | LLM agents、多智能体安全、涌现合谋 | 创新创业大赛、黑客松与数据竞赛 | demo | 黑客松-数据与算法、双创-文书与申报 | 2026-09-21 | 已引 |
+| arxiv-2609.24972 | RRSI: Regularized Recursive Self-Improvement of Agent Harnesses | LLM agents、智能体自我改进、agent harness 工程 | 创新创业大赛、黑客松与数据竞赛 | demo | 黑客松-数据与算法、双创-文书与申报 | 2026-09-21 | 已引 |
 | bai2024DelayAwareCooperativeTask | 多UAV边云协同的时延感知任务卸载 | 移动边缘计算、任务卸载、Lyapunov 优化 | 创新创业大赛、黑客松与数据竞赛 | paper | 黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
 | chang2024NearoptimalUAVDeployment | 时延约束IoT采集的最少UAV部署（GPUDA） | 无人机部署、组合优化、物联网数据采集 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
 | chen2024AdaptiveBitrateVideo | UAV辅助MEC的码率视频鲁棒缓存（DRO） | 移动边缘计算、边缘缓存、分布鲁棒优化 | 创新创业大赛、数模与时序预测、黑客松与数据竞赛 | paper | 数模-数据分析与决策、黑客松-数据与算法、双创-文书与申报 | 2024-01-01 | 已引 |
@@ -154,6 +164,7 @@
 | gao2025CSMAACMultiagentReinforcement | CSMAAC：部分可观测多UAV群智感知的安全协同飞控 | 多智能体强化学习、无人机协同控制、安全强化学习 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
 | gao2025TransferLearningJoint | PTMF-MAAC：大规模UAV-MEC的策略迁移联合轨迹卸载 | 迁移学习、多智能体强化学习、移动边缘计算 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2025-01-01 | 已引 |
 | gaydamaka2024DynamicTopologyOrganization | 虚拟坐标驱动的自主UAV蜂群拓扑组织与维护 | 无人机自组网、拓扑组织、地理路由 | 创新创业大赛、黑客松与数据竞赛 | paper | 双创-文书与申报、黑客松-数据与算法 | 2024-01-01 | 已引 |
+| gh-1173591564_Dynamics-memory | Dynamics-memory：值动力学 + 矛盾裁决的 LLM Agent 有界长期记忆层（含因果回放评测与负结果消融） | LLM agents、agent memory | 创新创业大赛 | demo | 双创-文书与申报、黑客松-数据与算法 | 2026-09-15 | 已引 |
 | gh-BraxisAI_braxis-blueprint | braxis-blueprint: 零预算免费 LLM 通道路由与自动化运维的实战脚本集 | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-23 | 已引 |
 | gh-JordyZomer_lemmalog | Lemmalog：把 LLM Agent 记忆做成可证明的演绎数据库（Rust Datalog 引擎 + MCP 共享大脑） | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-27 | 已引 |
 | gh-QwenLM_E-CommerceBench | E-CommerceBench：18 个 LLM Agent 各持 ¥10 万经营 365 天模拟网店的长程评测环境 | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法、数模-数据分析与决策 | 2026-08-26 | 已引 |
@@ -161,6 +172,7 @@
 | gh-Vistyy_nopus | nopus: 编码 agent 回复的确定性散文质量门 | LLM agents、输出质量评测 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-15 | 已引 |
 | gh-Zyrexnn_Cybermes | Cybermes: 自主进攻安全/赏金自动化 Agent 框架 | LLM agents、网络安全自动化 | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-19 | 已引 |
 | gh-agents-universe_agents-universe | Agents Universe：知识条目驱动的企业级多角色 Agent 平台（无向量检索的项目记忆） | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法、数模-数据分析与决策 | 2026-08-18 | 已引 |
+| gh-buddy_minesweeper | Minesweeper：九模型同盘同时钟同工具层的 LLM Agent 扫雷竞速基准 | LLM agents、agent 评测基准 | 创新创业大赛 | demo | 黑客松-数据与算法、双创-文书与申报 | 2026-09-21 | 已引 |
 | gh-dreamers-laboratory_timeseries-atlas | Time Series Atlas：现代时序预测架构活地图（每篇一个可跑最小实现 + 基线纪律） | time series forecasting | 数模与时序预测 | demo | 数模-预测与评估、Kaggle-竞赛 | 2026-09-02 | 已引 |
 | gh-hoplogic_hop3 | hoplogic/HOP 3.0：HopSpec 任务规约语言 + HopJIT 引擎强制的受控 agent 执行 | LLM agent、任务规约语言、执行引擎 | 创新创业大赛 | demo | 双创-文书与申报 | 2026-09-11 | 已引 |
 | gh-joe960913_Jixu | Jixu：TypeScript 持久化单 Agent Harness（事件溯源 Thread，可恢复/重放/分叉） | LLM agents | 黑客松与数据竞赛 | demo | 黑客松-数据与算法 | 2026-08-18 | 已引 |
@@ -340,3 +352,4 @@
 | 2026-08-28 | tech+comp | 技术卡9 / 赛事条目12 | 0 | 0 | 5分片/19.8M tok/33min | 增量：comp消费discover留存13→12入库+1留尾(CDEC待预抓)；tech 160候选→9卡+100台账+50留队；两脚本缺陷待修(gh行内star限定词失效/build_index注释行断表) |
 | 2026-09-16 | vault-distill | 173 | 0 | 0 | 26 hunter 分片 / ≈20.35M 子agent tokens / 墙钟约 95min | my_LLM_valut 一次性提炼（升级票05）：369 论文页→175 篇判定（173 收+2 拒入台账）；194 枢纽/概念页折叠进锚卡（4 个随拒收消亡）；bib 回填 DOI 覆盖 91%；citekey 错配 5 例实证修正；batch/vault-distill 分支合并回 deliver/kaggriculture-audit |
 | 2026-09-20 | tech+comp | 赛事条目3 / 技术卡8 | 6 | 0 | 4分片/约36.6M子agent tokens/约39min | /kb-sync 主题跑批（用户任务：搜寻 2027-07 前出结果赛事+含金量证据）：数模分片（mcm-icm/mathorcup 更新+apmcm/wuyi-mcm/huashubei 新建；成绩日 MCM 2027-05-08 官方、MathorCup 推断 06 下旬、APMCM 推断 2027-01/02）；计算机类报告分片（蓝桥杯/GPLT/4C/服创/C4-BDC 时间线核验，仅 heywhale-c4 更新入条，其余 KB 外仅回结论：蓝桥杯与 GPLT 满足窗口、4C/服创/C4-BDC 不满足）；双创分片消费 comp 队列 10 条（ucla/cala/xczxcy 更新、7 归档）+cy-innovation/三创/大挑核验（大挑届数修正 2027=第二十届；仅 cy-innovation 满足窗口 2027-02~04）；hunter 8 卡+13 拒（台账 153）；tech 队列 103→84 留下轮；CAHE 目录核验为二手转载级（学会官网原文未直抓，待办）；lint 311/0；9-19 cron 中止顺延队列部分消化；⚠ workspace/JOURNAL.md 记行被守卫拦截（多战役标准布局下该路径无战役 root 覆盖、全局 collect 仅放行 kb/**，技能规程步骤5与之冲突——契约缺口上报用户，改由本行留痕） |
+| 2026-09-22 | tech+comp | 技术卡13 | 赛事条目2 / 技术卡1 | 0 | 9分片/约8.8M子agent tokens/约35min | /kb-sync 增量跑批：comp 10 候选全消费——tiaozhanbei-chuangye 通知双源补全（8 赛道/揭榜挂帅/配套活动）+黑新浙三省赛实况并入+届次修正 2028（verified:false）；ucla-ai-hackathon-2026 复核无实质变化；同赛伪影条目合并 cala→ucla canonical 唯一化（8 快照迁移，id 防复发规则入条目）。tech 47 候选消费 26（hunter 5 片）：13 新卡（数模线 IMTS 零样本/CTRL 闭环控制/CASP-LLM 覆盖检索/KG-Chronos-2 水力代理；agents 线 RRSI/EDGEGEN/Emergent Collusion/APEXA/MicroPoisoning/ZeroTrustMCP；混合 buddy-minesweeper 基准/Dynamics-memory/Samsone）+SOTER 卡开源落地升级（paper→demo，stars=73）+13 拒（台账 166 无重复）；21 留队。SPA 锚点（Kaggle/devpost/天池）增量发现本轮未做（消化存量优先）留下轮；MLH 2027 季 74 pending 线索提取（3 数据语义赛★）供下轮候选；mlh-hack-the-north 状态出入（ended 09-18~20 vs 条目 upcoming 09-19~21）留下轮老化重验。lint 323/0；JOURNAL 记行沿 09-20 先例由本行留痕（collect 态 L2 仅放行 kb/** 契约缺口未修）。hunter-4 任务包 id 转录错位 1 处（22573/21573）子 agent 两篇均评估建卡，良性 |
