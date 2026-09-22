@@ -1,0 +1,794 @@
+{
+ "meta": {
+  "task": "M0 engine economy full model extraction",
+  "game": "Kaggle Kaggressure env on kaggle-environments 1.32.7+nodeps",
+  "engine_source": {
+   "installed": "/home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/envs/kaggriculture/kaggriculture.py",
+   "vendored_wheel": "/mnt/data/Code/autoC/workspace/kaggriculture/software/vendor/kaggle_environments-1.32.7+nodeps-py3-none-any.whl",
+   "md5_match": "c10720bcc8fe4fa9881db3979c034fb4 installed==wheel (verified 2026-09-22)",
+   "lines": 1086,
+   "spec_json": "kaggriculture.json in same dir"
+  },
+  "anchor_convention": "kaggriculture.py:NN = line in the md5-verified engine file; json:NN = kaggriculture.json",
+  "cross_validation": "all constants match references/digests/engine-factsheet-2026-09-19.md (same wheel, anchors agree)",
+  "extraction_date": "2026-09-22",
+  "units": "money=$; time=days d0..d29, 24 turns/day; area=tile (board 10x10); p=planting/placement day"
+ },
+ "config_defaults": {
+  "episodeSteps": 720,
+  "turnsPerDay": 24,
+  "days_total": 30,
+  "boardSize": 10,
+  "startingMoney": 3000,
+  "maxMarketOrdersPerTurn": 10,
+  "shedCapacity": 100,
+  "weedSpawnChance": 0.005,
+  "townShopUnlockInterval": 3,
+  "townShopSellInterval": 4,
+  "townCenterSellInterval": 24,
+  "farmHandCostMult": 1,
+  "actTimeout_s": 1,
+  "remainingOverageTime_s": 60,
+  "source_anchor": "kaggriculture.json:6-127"
+ },
+ "crops": {
+  "WHEAT": {
+   "seed_cost_$": 10,
+   "first_yield_day": 2,
+   "max_yield_day": 4,
+   "interval_days": 0,
+   "max_yield_units": 6,
+   "ongoing": false,
+   "source_anchor": "kaggriculture.py:11-17",
+   "water_window_days_after_planting": [
+    2,
+    4
+   ],
+   "water_window_len_days": 3,
+   "base_yield_before_water_units": 1,
+   "yield_units_no_fertilizer": 4,
+   "yield_units_with_fertilizer": 6,
+   "water_rule": "+1 per watered day in window, +2 if fertilized_until_day>=day, cap max_yield (L431-443)",
+   "harvest_rule": "day-planted >= first_yield_day and yield>0; harvest clears tile for replant (L446-468)",
+   "harvest_deadline": "p+4 (decay starts p+5; L224,752-766)",
+   "death_rule": "2 consecutive unwatered days -> WEED; planting day counts as unwatered, so water on planting day (L223,783-785)",
+   "cycle_days": 5,
+   "derived": {
+    "rev_per_tile_cycle_base_nofert_$": 100,
+    "rev_per_tile_cycle_base_fert_$": 150,
+    "net_per_tile_day_base_nofert_$": 18.0,
+    "net_per_tile_day_base_fert_freeF_$": 28.0,
+    "labor_ops_per_cycle_per_tile": 5,
+    "latest_full_plant_day": 25
+   }
+  },
+  "CARROT": {
+   "seed_cost_$": 20,
+   "first_yield_day": 2,
+   "max_yield_day": 3,
+   "interval_days": 0,
+   "max_yield_units": 4,
+   "ongoing": false,
+   "source_anchor": "kaggriculture.py:11-17",
+   "water_window_days_after_planting": [
+    2,
+    3
+   ],
+   "water_window_len_days": 2,
+   "base_yield_before_water_units": 1,
+   "yield_units_no_fertilizer": 3,
+   "yield_units_with_fertilizer": 4,
+   "water_rule": "+1 per watered day in window, +2 if fertilized_until_day>=day, cap max_yield (L431-443)",
+   "harvest_rule": "day-planted >= first_yield_day and yield>0; harvest clears tile for replant (L446-468)",
+   "harvest_deadline": "p+3 (decay starts p+4; L224,752-766)",
+   "death_rule": "2 consecutive unwatered days -> WEED; planting day counts as unwatered, so water on planting day (L223,783-785)",
+   "cycle_days": 4,
+   "derived": {
+    "rev_per_tile_cycle_base_nofert_$": 105,
+    "rev_per_tile_cycle_base_fert_$": 140,
+    "net_per_tile_day_base_nofert_$": 21.25,
+    "net_per_tile_day_base_fert_freeF_$": 30.0,
+    "labor_ops_per_cycle_per_tile": 4,
+    "latest_full_plant_day": 26
+   }
+  },
+  "TOMATO": {
+   "seed_cost_$": 50,
+   "first_yield_day": 8,
+   "max_yield_day": 8,
+   "interval_days": 1,
+   "max_yield_units": 4,
+   "ongoing": true,
+   "source_anchor": "kaggriculture.py:11-17",
+   "production_events_eod_day_after_planting": [
+    7,
+    8,
+    9,
+    10
+   ],
+   "harvest_days_after_planting": [
+    8,
+    11
+   ],
+   "production_events_total": 4,
+   "per_event_units": 1,
+   "per_event_units_fert_and_watered_same_day": 2,
+   "standing_yield_cap_units": 4,
+   "fert_bonus_rule": "+2 only if watered ON the event day AND fertilized (L799-800)",
+   "lifetime_units_nofert": 4,
+   "lifetime_units_fert": 8,
+   "harvest_rule": "repeatable; does not reset production count (L446-473)",
+   "post_last_event_decay": "from p+12 every 2 steps -1 unit (L752-766,801-802)",
+   "cycle_days": 12,
+   "derived": {
+    "rev_per_tile_lifetime_base_nofert_$": 240,
+    "rev_per_tile_lifetime_base_fert_$": 480,
+    "net_per_tile_day_base_nofert_$": 15.83,
+    "net_per_tile_day_base_fert_freeF_$": 35.83,
+    "latest_full_plant_day": 18
+   }
+  },
+  "STRAWBERRY": {
+   "seed_cost_$": 100,
+   "first_yield_day": 10,
+   "max_yield_day": 10,
+   "interval_days": 2,
+   "max_yield_units": 4,
+   "ongoing": true,
+   "source_anchor": "kaggriculture.py:11-17",
+   "production_events_eod_day_after_planting": [
+    9,
+    11,
+    13,
+    15
+   ],
+   "harvest_days_after_planting": [
+    10,
+    16
+   ],
+   "production_events_total": 4,
+   "per_event_units": 1,
+   "per_event_units_fert_and_watered_same_day": 2,
+   "standing_yield_cap_units": 4,
+   "fert_bonus_rule": "+2 only if watered ON the event day AND fertilized (L799-800)",
+   "lifetime_units_nofert": 4,
+   "lifetime_units_fert": 8,
+   "harvest_rule": "repeatable; does not reset production count (L446-473)",
+   "post_last_event_decay": "from p+17 every 2 steps -1 unit (L752-766,801-802)",
+   "cycle_days": 17,
+   "derived": {
+    "rev_per_tile_lifetime_base_nofert_$": 480,
+    "rev_per_tile_lifetime_base_fert_$": 960,
+    "net_per_tile_day_base_nofert_$": 22.35,
+    "net_per_tile_day_base_fert_freeF_$": 50.59,
+    "latest_full_plant_day": 13
+   }
+  },
+  "MELON": {
+   "seed_cost_$": 80,
+   "first_yield_day": 10,
+   "max_yield_day": 12,
+   "interval_days": 0,
+   "max_yield_units": 6,
+   "ongoing": false,
+   "source_anchor": "kaggriculture.py:11-17",
+   "water_window_days_after_planting": [
+    6,
+    12
+   ],
+   "water_window_len_days": 7,
+   "base_yield_before_water_units": 1,
+   "yield_units_no_fertilizer": 6,
+   "yield_units_with_fertilizer": 6,
+   "water_rule": "+1 per watered day in window, +2 if fertilized_until_day>=day, cap max_yield (L431-443)",
+   "harvest_rule": "day-planted >= first_yield_day and yield>0; harvest clears tile for replant (L446-468)",
+   "harvest_deadline": "p+12 (decay starts p+13; L224,752-766)",
+   "death_rule": "2 consecutive unwatered days -> WEED; planting day counts as unwatered, so water on planting day (L223,783-785)",
+   "cycle_days": 13,
+   "derived": {
+    "rev_per_tile_cycle_base_nofert_$": 1500,
+    "rev_per_tile_cycle_base_fert_$": 1500,
+    "net_per_tile_day_base_nofert_$": 109.23,
+    "net_per_tile_day_base_fert_freeF_$": 109.23,
+    "labor_ops_per_cycle_per_tile": 9,
+    "latest_full_plant_day": 17,
+    "fast_variant": {
+     "note": "window opens p+6: 5 waters p+6..p+10 give 6 units by p+10 (11d cycle); with fertilizer p+6..p+8 (1 bag) 6 units by p+8 (9d cycle, 6 ops)",
+     "net_per_tile_day_fast_nofert_$": 129.09,
+     "net_per_tile_day_fast_fert_freeF_$": 157.78
+    }
+   }
+  }
+ },
+ "animals": {
+  "GOOSE": {
+   "cost_$": 300,
+   "structure": "COOP",
+   "first_harvest_day_after_placement": 4,
+   "production_interval_days": 1,
+   "standing_yield_cap_units": 4,
+   "product": "EGG",
+   "feed_rule": "1 WHEAT/day from farmer inventory standing on tile (L505-513)",
+   "escape_rule": "2 consecutive unfed days -> animal gone, structure remains (L813-819)",
+   "care_rule": "CARE+FEED same day accumulates +1 for next production event (L821-830)",
+   "fertilizer_rule": "1 FERTILIZER/day collectable per animal regardless of feeding (L515-522,831)",
+   "structure_cost_$": 0,
+   "structure_cost_note": "BUILD_COOP/BUILD_PASTURE free, no money check (L493-503)",
+   "source_anchor": "kaggriculture.py:19-23",
+   "derived": {
+    "units_per_day_no_care": 1.0,
+    "units_per_day_full_care": 2.0,
+    "net_per_day_base_nocare_$": 25.0,
+    "net_per_day_base_care_$": 75.0,
+    "roi_pct_per_day_nocare": 8.3,
+    "roi_pct_per_day_care": 25.0,
+    "payback_days_nocare": 12.0,
+    "payback_days_care": 4.0,
+    "latest_buy_day_care_approx": 21,
+    "note": "feed wheat at $25 opportunity cost; excludes FERTILIZER credit (+$100/day value if used/sold)"
+   }
+  },
+  "COW": {
+   "cost_$": 400,
+   "structure": "PASTURE",
+   "first_harvest_day_after_placement": 8,
+   "production_interval_days": 2,
+   "standing_yield_cap_units": 6,
+   "product": "MILK",
+   "feed_rule": "1 WHEAT/day from farmer inventory standing on tile (L505-513)",
+   "escape_rule": "2 consecutive unfed days -> animal gone, structure remains (L813-819)",
+   "care_rule": "CARE+FEED same day accumulates +1 for next production event (L821-830)",
+   "fertilizer_rule": "1 FERTILIZER/day collectable per animal regardless of feeding (L515-522,831)",
+   "structure_cost_$": 0,
+   "structure_cost_note": "BUILD_COOP/BUILD_PASTURE free, no money check (L493-503)",
+   "source_anchor": "kaggriculture.py:19-23",
+   "derived": {
+    "units_per_day_no_care": 0.5,
+    "units_per_day_full_care": 1.5,
+    "net_per_day_base_nocare_$": 55.0,
+    "net_per_day_base_care_$": 215.0,
+    "roi_pct_per_day_nocare": 13.8,
+    "roi_pct_per_day_care": 53.8,
+    "payback_days_nocare": 7.3,
+    "payback_days_care": 1.9,
+    "latest_buy_day_care_approx": 19,
+    "note": "feed wheat at $25 opportunity cost; excludes FERTILIZER credit (+$100/day value if used/sold)"
+   }
+  },
+  "SHEEP": {
+   "cost_$": 500,
+   "structure": "PASTURE",
+   "first_harvest_day_after_placement": 6,
+   "production_interval_days": 3,
+   "standing_yield_cap_units": 6,
+   "product": "WOOL",
+   "feed_rule": "1 WHEAT/day from farmer inventory standing on tile (L505-513)",
+   "escape_rule": "2 consecutive unfed days -> animal gone, structure remains (L813-819)",
+   "care_rule": "CARE+FEED same day accumulates +1 for next production event (L821-830)",
+   "fertilizer_rule": "1 FERTILIZER/day collectable per animal regardless of feeding (L515-522,831)",
+   "structure_cost_$": 0,
+   "structure_cost_note": "BUILD_COOP/BUILD_PASTURE free, no money check (L493-503)",
+   "source_anchor": "kaggriculture.py:19-23",
+   "derived": {
+    "units_per_day_no_care": 0.3333,
+    "units_per_day_full_care": 1.3333,
+    "net_per_day_base_nocare_$": 41.7,
+    "net_per_day_base_care_$": 241.7,
+    "roi_pct_per_day_nocare": 8.3,
+    "roi_pct_per_day_care": 48.3,
+    "payback_days_nocare": 12.0,
+    "payback_days_care": 2.1,
+    "latest_buy_day_care_approx": 20,
+    "note": "feed wheat at $25 opportunity cost; excludes FERTILIZER credit (+$100/day value if used/sold)"
+   }
+  }
+ },
+ "labor": {
+  "turns_per_worker_per_day": 24,
+  "ops_per_turn": "1 op or 1 move (1 tile) per worker per turn (L88-93,323-331)",
+  "tile_op_types": [
+   "PLANT",
+   "WATER",
+   "HARVEST",
+   "FERTILIZE",
+   "DIG",
+   "FEED",
+   "CARE",
+   "COLLECT_FERTILIZER",
+   "BUILD_COOP",
+   "BUILD_PASTURE"
+  ],
+  "hire_cost_formula": "nth hire of day = farmHandCostMult*fib(n); fib: 1,1,2,3,5,8,13,... (L99-101,690-699)",
+  "hire_cost_table": [
+   {
+    "nth_hire_of_day": 1,
+    "cost_$": 1,
+    "cumulative_cost_$": 1
+   },
+   {
+    "nth_hire_of_day": 2,
+    "cost_$": 1,
+    "cumulative_cost_$": 2
+   },
+   {
+    "nth_hire_of_day": 3,
+    "cost_$": 2,
+    "cumulative_cost_$": 4
+   },
+   {
+    "nth_hire_of_day": 4,
+    "cost_$": 3,
+    "cumulative_cost_$": 7
+   },
+   {
+    "nth_hire_of_day": 5,
+    "cost_$": 5,
+    "cumulative_cost_$": 12
+   },
+   {
+    "nth_hire_of_day": 6,
+    "cost_$": 8,
+    "cumulative_cost_$": 20
+   },
+   {
+    "nth_hire_of_day": 7,
+    "cost_$": 13,
+    "cumulative_cost_$": 33
+   },
+   {
+    "nth_hire_of_day": 8,
+    "cost_$": 21,
+    "cumulative_cost_$": 54
+   },
+   {
+    "nth_hire_of_day": 9,
+    "cost_$": 34,
+    "cumulative_cost_$": 88
+   },
+   {
+    "nth_hire_of_day": 10,
+    "cost_$": 55,
+    "cumulative_cost_$": 143
+   }
+  ],
+  "daily_total_for_k_hands_$": "fib-sum = _fib(k+1)-1; 5 hands=$12, 10 hands=$143",
+  "eod_reset": "hands dismissed daily, farmer to spawn, hires_today=0, inventories auto-dropped to shed, overflow discarded (L879-882,843-857)",
+  "hand_spawn": "shed access tiles (4 center tiles), min occupancy (L533-541)",
+  "shed_ops_position": "DROP/PICKUP/PLACE need standing on 1 of 4 shed-access tiles (L132-139,343-410)",
+  "wage_note": "no recurring wage; hire price is the only labor cost; no cap on hands besides money",
+  "practical_capacity_ops_per_worker_day": "~20-23 after movement overhead"
+ },
+ "land": {
+  "board": "10x10 = four 5x5 quadrants; NW free at start (L95-97,142-154)",
+  "unlock_order_fixed": true,
+  "unlock_order_prices_$": {
+   "NE": 1000,
+   "SW": 2000,
+   "SE": 4000
+  },
+  "tiles_per_quadrant": 25,
+  "max_tiles": 100,
+  "total_full_expansion_cost_$": 7000,
+  "per_tile_capacity": "1 plant or 1 structure/animal; no upgrades",
+  "source_anchor": "kaggriculture.py:95-97,712-725"
+ },
+ "market": {
+  "price_formula": "price(inv)= base + amp*f(I0-inv) if inv<I0 else base - amp*f(inv-I0); amp=target*base/f(T); floor $1, int(round) (L192-206)",
+  "shape_functions": {
+   "linear": "x",
+   "sq": "x^2",
+   "sqrt": "sqrt(x)",
+   "log": "ln(1+x)",
+   "log10": "log10(1+x)",
+   "hinge": "u=x/T; u+8*max(0,u-1)^2 (f(T)=1) (L54-74)"
+  },
+  "I0": 10000,
+  "PRICE_FLOOR_$": 1,
+  "HINGE_GAIN": 8.0,
+  "initial_condition": "inventory=I0 all products -> price=base at start (L178-185)",
+  "products": {
+   "WHEAT": {
+    "base_$": 25,
+    "I0": 10000,
+    "T": 400,
+    "below": {
+     "func": "sqrt",
+     "target": 0.8
+    },
+    "above": {
+     "func": "log",
+     "target": 0.2
+    },
+    "derived_marginal_price_at_cumulative_sale_$": {
+     "25": 22,
+     "50": 22,
+     "100": 21,
+     "200": 21,
+     "400": 20
+    },
+    "derived_revenue_Rq_from_I0_$": {
+     "50": 1127,
+     "100": 2193,
+     "200": 4293,
+     "400": 8313
+    },
+    "derived_glut_cliff_cum_sale_to_floor1": null,
+    "derived_deep_glut_marginal_plus10000_$": 17
+   },
+   "CARROT": {
+    "base_$": 35,
+    "I0": 10000,
+    "T": 450,
+    "below": {
+     "func": "hinge",
+     "target": 1.0
+    },
+    "above": {
+     "func": "sqrt",
+     "target": 0.7
+    },
+    "derived_marginal_price_at_cumulative_sale_$": {
+     "25": 29,
+     "50": 27,
+     "100": 23,
+     "200": 19,
+     "400": 12
+    },
+    "derived_revenue_Rq_from_I0_$": {
+     "50": 1482,
+     "100": 2738,
+     "200": 4832,
+     "400": 7853
+    },
+    "derived_glut_cliff_cum_sale_to_floor1": 842,
+    "derived_deep_glut_marginal_plus10000_$": 1
+   },
+   "TOMATO": {
+    "base_$": 60,
+    "I0": 10000,
+    "T": 200,
+    "below": {
+     "func": "hinge",
+     "target": 0.4
+    },
+    "above": {
+     "func": "sqrt",
+     "target": 0.6
+    },
+    "derived_marginal_price_at_cumulative_sale_$": {
+     "25": 47,
+     "50": 42,
+     "100": 35,
+     "200": 24,
+     "400": 9
+    },
+    "derived_revenue_Rq_from_I0_$": {
+     "50": 2411,
+     "100": 4318,
+     "200": 7221,
+     "400": 10453
+    },
+    "derived_glut_cliff_cum_sale_to_floor1": 529,
+    "derived_deep_glut_marginal_plus10000_$": 1
+   },
+   "STRAWBERRY": {
+    "base_$": 120,
+    "I0": 10000,
+    "T": 100,
+    "below": {
+     "func": "sqrt",
+     "target": 0.7
+    },
+    "above": {
+     "func": "linear",
+     "target": 1.6
+    },
+    "derived_marginal_price_at_cumulative_sale_$": {
+     "25": 72,
+     "50": 24,
+     "100": 1,
+     "200": 1,
+     "400": 1
+    },
+    "derived_revenue_Rq_from_I0_$": {
+     "50": 3648,
+     "100": 3847,
+     "200": 3947,
+     "400": 4147
+    },
+    "derived_glut_cliff_cum_sale_to_floor1": 62,
+    "derived_deep_glut_marginal_plus10000_$": 1
+   },
+   "MELON": {
+    "base_$": 250,
+    "I0": 10000,
+    "T": 300,
+    "below": {
+     "func": "log",
+     "target": 0.2
+    },
+    "above": {
+     "func": "sq",
+     "target": 3.6
+    },
+    "derived_marginal_price_at_cumulative_sale_$": {
+     "25": 244,
+     "50": 225,
+     "100": 150,
+     "200": 1,
+     "400": 1
+    },
+    "derived_revenue_Rq_from_I0_$": {
+     "50": 12098,
+     "100": 21721,
+     "200": 26527,
+     "400": 26727
+    },
+    "derived_glut_cliff_cum_sale_to_floor1": 158,
+    "derived_deep_glut_marginal_plus10000_$": 1
+   },
+   "EGG": {
+    "base_$": 50,
+    "I0": 10000,
+    "T": 332,
+    "below": {
+     "func": "hinge",
+     "target": 0.4
+    },
+    "above": {
+     "func": "log",
+     "target": 0.2
+    },
+    "derived_marginal_price_at_cumulative_sale_$": {
+     "25": 44,
+     "50": 43,
+     "100": 42,
+     "200": 41,
+     "400": 40
+    },
+    "derived_revenue_Rq_from_I0_$": {
+     "50": 2244,
+     "100": 4371,
+     "200": 8510,
+     "400": 16559
+    },
+    "derived_glut_cliff_cum_sale_to_floor1": null,
+    "derived_deep_glut_marginal_plus10000_$": 34
+   },
+   "MILK": {
+    "base_$": 160,
+    "I0": 10000,
+    "T": 122,
+    "below": {
+     "func": "sqrt",
+     "target": 0.6
+    },
+    "above": {
+     "func": "linear",
+     "target": 1.6
+    },
+    "derived_marginal_price_at_cumulative_sale_$": {
+     "25": 108,
+     "50": 55,
+     "100": 1,
+     "200": 1,
+     "400": 1
+    },
+    "derived_revenue_Rq_from_I0_$": {
+     "50": 5430,
+     "100": 6205,
+     "200": 6305,
+     "400": 6505
+    },
+    "derived_glut_cliff_cum_sale_to_floor1": 76,
+    "derived_deep_glut_marginal_plus10000_$": 1
+   },
+   "WOOL": {
+    "base_$": 200,
+    "I0": 10000,
+    "T": 105,
+    "below": {
+     "func": "log",
+     "target": 0.2
+    },
+    "above": {
+     "func": "sq",
+     "target": 3.2
+    },
+    "derived_marginal_price_at_cumulative_sale_$": {
+     "25": 164,
+     "50": 55,
+     "100": 1,
+     "200": 1,
+     "400": 1
+    },
+    "derived_revenue_Rq_from_I0_$": {
+     "50": 7655,
+     "100": 7969,
+     "200": 8069,
+     "400": 8269
+    },
+    "derived_glut_cliff_cum_sale_to_floor1": 59,
+    "derived_deep_glut_marginal_plus10000_$": 1
+   },
+   "FERTILIZER": {
+    "base_$": 100,
+    "I0": 10000,
+    "T": 200,
+    "below": {
+     "func": "linear",
+     "target": 0.4
+    },
+    "above": {
+     "func": "linear",
+     "target": 0.4
+    },
+    "derived_marginal_price_at_cumulative_sale_$": {
+     "25": 95,
+     "50": 90,
+     "100": 80,
+     "200": 60,
+     "400": 20
+    },
+    "derived_revenue_Rq_from_I0_$": {
+     "50": 4755,
+     "100": 9010,
+     "200": 16020,
+     "400": 24040
+    },
+    "derived_glut_cliff_cum_sale_to_floor1": 493,
+    "derived_deep_glut_marginal_plus10000_$": 1
+   }
+  },
+  "order_rules": {
+   "max_orders_per_turn_per_player": 10,
+   "sell": "from shed only; per-unit lockstep quote at CURRENT inventory (each unit sold lowers next quote); no position needed (L551,583-626,653-661)",
+   "buy_product": "ONLY WHEAT,FERTILIZER; quoted at post-buy inventory (inv-1) -> round-trip vs sell nets ~0 (L598-601,662-672)",
+   "buy_seed": "fixed price = CROPS[c].seed, unlimited, goes to seeds store not shed (L602-603,673-678)",
+   "buy_animal": "fixed price = ANIMALS[a].cost; lands in shed, obeys shedCapacity (L604-605,679-686)",
+   "lockstep_interleave": "both players' per-unit orders quote on same pre-commit inventory in player order (L583-626): opponent same-turn sells depress your fills",
+   "dollar_dump_rule": "fills at $1 add no supply (L656-660)"
+  },
+  "absorption_expected_full_8_shops": {
+   "WHEAT": {
+    "expected_units_per_day_full_8_shops": 31,
+    "base_price_daily_revenue_cap_$": 775,
+    "shop_weight": 5
+   },
+   "CARROT": {
+    "expected_units_per_day_full_8_shops": 19,
+    "base_price_daily_revenue_cap_$": 665,
+    "shop_weight": 3
+   },
+   "TOMATO": {
+    "expected_units_per_day_full_8_shops": 13,
+    "base_price_daily_revenue_cap_$": 780,
+    "shop_weight": 2
+   },
+   "STRAWBERRY": {
+    "expected_units_per_day_full_8_shops": 25,
+    "base_price_daily_revenue_cap_$": 3000,
+    "shop_weight": 4
+   },
+   "MELON": {
+    "expected_units_per_day_full_8_shops": 1,
+    "base_price_daily_revenue_cap_$": 250,
+    "shop_weight": 0,
+    "note": "NO shop lists MELON: absorption = town center 1/day only"
+   },
+   "EGG": {
+    "expected_units_per_day_full_8_shops": 13,
+    "base_price_daily_revenue_cap_$": 650,
+    "shop_weight": 2
+   },
+   "MILK": {
+    "expected_units_per_day_full_8_shops": 19,
+    "base_price_daily_revenue_cap_$": 3040,
+    "shop_weight": 3
+   },
+   "WOOL": {
+    "expected_units_per_day_full_8_shops": 13,
+    "base_price_daily_revenue_cap_$": 2600,
+    "shop_weight": 2
+   },
+   "FERTILIZER": {
+    "expected_units_per_day_full_8_shops": 0,
+    "base_price_daily_revenue_cap_$": 0,
+    "shop_weight": 0,
+    "note": "zero absorption: only player BUY_PRODUCT removes FERTILIZER from market"
+   }
+  },
+  "spread_example_WHEAT": {
+   "sell_unit_1_at_I0_$": 25,
+   "buy_unit_1_at_I0_$": 26
+  }
+ },
+ "town_shops": {
+  "shop_types": {
+   "BAKERY": {
+    "products": [
+     "EGG",
+     "WHEAT"
+    ],
+    "pull_per_tick_per_product": 1
+   },
+   "PIZZA_SHOP": {
+    "products": [
+     "MILK",
+     "TOMATO",
+     "WHEAT"
+    ],
+    "pull_per_tick_per_product": 1
+   },
+   "BRUNCH_SPOT": {
+    "products": [
+     "EGG",
+     "WHEAT",
+     "STRAWBERRY"
+    ],
+    "pull_per_tick_per_product": 1
+   },
+   "YARN_STORE": {
+    "products": [
+     "WOOL"
+    ],
+    "pull_per_tick_per_product": 2
+   },
+   "ICE_CREAM_SHOP": {
+    "products": [
+     "STRAWBERRY",
+     "MILK",
+     "WHEAT"
+    ],
+    "pull_per_tick_per_product": 1
+   },
+   "PET_CAFE": {
+    "products": [
+     "CARROT"
+    ],
+    "pull_per_tick_per_product": 2
+   },
+   "SMOOTHIE_SHOP": {
+    "products": [
+     "STRAWBERRY",
+     "MILK"
+    ],
+    "pull_per_tick_per_product": 1
+   },
+   "FARMERS_MARKET": {
+    "products": [
+     "WHEAT",
+     "CARROT",
+     "TOMATO",
+     "STRAWBERRY"
+    ],
+    "pull_per_tick_per_product": 1
+   }
+  },
+  "unlock_cadence": "1 instance per 3 days at EOD (after days 2,5,8,...,23), uniform draw WITH replacement, cap 8 instances (L118,884-891)",
+  "consume_cadence": "each instance: every 4 turns (6 ticks/day) pulls its products; town center: every 24 turns (once/day, hour 0, incl step 0) pulls 1 of each non-FERTILIZER (L728-749)",
+  "rng": "random.Random((seed*1000003)^day) day-keyed; seed not agent-visible (L869-871)",
+  "secondary_products": "NONE: shops are demand sinks only; no PIZZA/BAKERY conversion mechanic exists",
+  "source_anchor": "kaggriculture.py:103-118,728-749,884-891"
+ },
+ "endgame": {
+  "termination": "DONE at step>=718; last agent decision = step 718 = day 29 hour 22; 719 decisions total (L958-964)",
+  "reward": "final money only, no intermediate reward (L963)",
+  "residual_value_$": {
+   "shed_inventory": 0,
+   "farmer_inventory": 0,
+   "crops": 0,
+   "animals": 0,
+   "seeds": 0,
+   "land": 0
+  },
+  "implication": "liquidate by day29 h22; EOD of day 29 never runs; no bankruptcy rule (only TIMEOUT/ERROR remove a player)",
+  "source_anchor": "kaggriculture.py:958-964"
+ },
+ "weeds": {
+  "spawn_chance_per_empty_unlocked_tile_per_day": 0.005,
+  "effect": "blocks tile until DIG (1 op)",
+  "rng": "same day-keyed rng as shops (L836-840)",
+  "source_anchor": "kaggriculture.py:836-840"
+ }
+}
