@@ -1232,9 +1232,12 @@ def _kaggle_submission_entrypoint(obs, configuration=None):
 # Patch modules embedded verbatim below (blob decode == patches/*.py):
 # Unified arbitration: terminal liquidation > anti-clone preemptive
 # sell > P3 sell-timing adjust > P1 midgame takeover > tape default.
-# The defer probe is P1's arbitration predicate (terminal frame /
-# endgame dump day>=26 / near-clone active frame / d0 -> every
-# sell-side patch stands down that step; v48 native wins).
+# v3 defer probes (split): the full probe (terminal frame / endgame
+# dump day>=26 / near-clone active frame / d0) gates P3; P1's own
+# gate drops only the near-clone component -- on near-clone active
+# frames P1 passes every tape sell through verbatim AND may
+# supplement free-window clear lines (the v3 mirror lever: clear
+# before the mirror opponent, tape orders never touched).
 # P2 vetoes production steps (market BUY_ANIMAL removal, farmer/hands
 # BUILD_PASTURE -> PASS) on the policy step before it is returned --
 # the only patch touching the production line.
@@ -1281,7 +1284,7 @@ def _v48hybrid_entrypoint(obs, configuration=None):
 agent.v48hybrid = {
     "base_sha256": 'dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a',
     "patches": {
-        'P1': '1b9f235e9824c6b0c38c362ca53133869be1dcd126fe6bf7fd33dcfcd4de9f94',
+        'P1': '9a09b8bbdcbe8e05080adf2086c9b6112da427a2054a193942b7851079e9079d',
         'P2': 'e7206b734451cb08a5d9cbbba5f4cf16a88f17dfcf8a3b34cd1f99201ad98713',
         'P3': 'b0ef3c90380d9de079a6efb0d90462546336e196bd12732ddbb7287f5b0d6caf',
     },

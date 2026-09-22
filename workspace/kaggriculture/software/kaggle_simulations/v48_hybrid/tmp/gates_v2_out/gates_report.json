@@ -1,0 +1,194 @@
+{
+ "protocol": "v48h-gates-report/1.0",
+ "generated_at": "2026-09-22",
+ "identity": {
+  "hybrid_main_sha256": "1d6cdb26d2f379402b069ec517de7bf3c6712df6a658a31875a26e2a951235c1",
+  "hybrid_main_bytes": 139494,
+  "base_sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+  "submission_tar_gz_sha256": "ad14c9e668a9e6dc62ed178aa3059d016b0d6d28aa0b4754b5bc2a2b93415772",
+  "flags": {
+   "P1_ON": true,
+   "P2_ON": true,
+   "P3_ON": true
+  }
+ },
+ "gates": {
+  "h2h": {
+   "status": "FAIL",
+   "vs_v48": "W4-L4-T8 / 16 局，互胜=0.25（判据≥0.65）",
+   "vs_others": {
+    "v72": "W8-L0-T0 / 8 局",
+    "pool_bot:scale_ranch": "W8-L0-T0 / 8 局",
+    "pool_bot:wheat_straw_monster": "W8-L0-T0 / 8 局"
+   },
+   "detail": {
+    "criterion": "vs pure_v48 win_fraction_strict (wins/n) >= 0.65; games >= 16; all DONE; zero new anomaly kinds",
+    "win_fraction_vs_v48": 0.25,
+    "win_rate_half_ties_vs_v48": 0.5,
+    "games_vs_v48": 16,
+    "games_floor_ok_all": true,
+    "all_done": true,
+    "zero_new_anomalies": true,
+    "passed": false
+   }
+  },
+  "panel": {
+   "status": "PASS",
+   "numbers": "全局 ratio=0.999407，逐局={'11': 1.0, '22': 1.0, '33': 1.0, '47': 1.000702, '58': 1.0, '69': 0.996149}（判据≥0.98，语料=合成 6 局）",
+   "corpus_kind": "engine-synthesized",
+   "detail": {
+    "criterion": "per-game and global money ratio >= 0.98 (hybrid injected vs pure-v48 injected, same seat, synthetic corpus)",
+    "n_games": 6,
+    "n_games_floor_ok": true,
+    "per_game_ratios": {
+     "11": 1.0,
+     "22": 1.0,
+     "33": 1.0,
+     "47": 1.000702,
+     "58": 1.0,
+     "69": 0.996149
+    },
+    "per_game_ok": true,
+    "global_ratio": 0.999407,
+    "global_ok": true,
+    "self_consistency_ok": true,
+    "passed": true
+   }
+  },
+  "zero_new_anomalies": {
+   "status": "PASS",
+   "numbers": "基线自打 kinds=[]，混合局 kinds=[]，新增=[]，全 DONE=True",
+   "detail": {
+    "hybrid_games_kinds": [],
+    "new_kinds": [],
+    "all_games_done": true,
+    "passed": true
+   }
+  },
+  "patch_safety": {
+   "status": "PASS",
+   "neutral_injection": {
+    "n_seeds": 4,
+    "floor": 4,
+    "all_streams_byte_equal": true,
+    "n_seeds_floor_ok": true,
+    "interpretation": "装载/接线框架本身零扰动（旗关变体≡纯基底）",
+    "passed": true
+   },
+   "p23_zero_impact": {
+    "n_seeds": 4,
+    "floor": 4,
+    "n_equivalent_zero_trigger": 4,
+    "n_trigger_evidence": 0,
+    "n_unexpected_divergence": 0,
+    "effective_trigger_events": {
+     "11": {
+      "p2_vetoes": 0,
+      "p3_adjusts": 0,
+      "p3_armed_deferred": 4
+     },
+     "22": {
+      "p2_vetoes": 0,
+      "p3_adjusts": 0,
+      "p3_armed_deferred": 4
+     },
+     "33": {
+      "p2_vetoes": 0,
+      "p3_adjusts": 0,
+      "p3_armed_deferred": 4
+     },
+     "47": {
+      "p2_vetoes": 0,
+      "p3_adjusts": 0,
+      "p3_armed_deferred": 9
+     }
+    },
+    "passed": true
+   },
+   "detail": {
+    "criterion": "① p000≡纯基底（≥4 种子动作流逐字节一致，真引擎+孪生）；② 全开≡p100（≥4 种子，零触发局动作流逐字节一致；触发局如实分列为触发证据；无触发而分叉=FAIL）",
+    "neutral_injection_passed": true,
+    "p23_zero_impact_passed": true,
+    "passed": true
+   }
+  },
+  "launch_fourgate": {
+   "source": "tmp/probes/v48_hybrid_smoke.json（F2 批次，引用不重跑）",
+   "available": true,
+   "status": "PASS",
+   "gate1_official_load_ok": true,
+   "gate2_full_episodes_ok": true,
+   "gate3_determinism_ok": true,
+   "gate4_size_ok": true
+  }
+ },
+ "overall": {
+  "status": "FAIL",
+  "failed_gates": [
+   "h2h"
+  ],
+  "note": "判据=h2h 对 v48 互胜≥0.65 / panel ratio≥0.98 / 零新异常 / patch safety 双证明；launch_fourgate 引用 F2 冒烟。panel 语料=引擎合成（官方语料面板为主力机补测项）。"
+ },
+ "p1_attribution": {
+  "note": "P1=中期卖单接管（常开层）；与基底分叉属预期，非安全判据；数字用于 h2h/panel FAIL 的归因与修复建议",
+  "twin_differing_steps": {
+   "11": 0,
+   "22": 0,
+   "33": 0,
+   "47": 30
+  },
+  "real_differing_steps": {
+   "11": 0,
+   "22": 0,
+   "33": 0,
+   "47": 30
+  },
+  "real_rewards": {
+   "11": {
+    "p100": [
+     50022.0,
+     50022.0
+    ],
+    "base": [
+     50022.0,
+     50022.0
+    ]
+   },
+   "22": {
+    "p100": [
+     113663.0,
+     113663.0
+    ],
+    "base": [
+     113663.0,
+     113663.0
+    ]
+   },
+   "33": {
+    "p100": [
+     41431.0,
+     41431.0
+    ],
+    "base": [
+     41431.0,
+     41431.0
+    ]
+   },
+   "47": {
+    "p100": [
+     41635.0,
+     36108.0
+    ],
+    "base": [
+     41649.0,
+     35257.0
+    ]
+   }
+  }
+ },
+ "artifact_paths": {
+  "h2h": "gates/out/h2h_gate.json",
+  "panel": "gates/out/panel_gate.json",
+  "patch_safety": "gates/out/patch_safety.json"
+ }
+}
