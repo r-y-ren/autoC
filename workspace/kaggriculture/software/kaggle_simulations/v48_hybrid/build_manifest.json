@@ -1,0 +1,124 @@
+{
+  "base": {
+    "bytes": 107008,
+    "path": "software/kaggle_simulations/v48_derivative/main.py",
+    "sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+    "verbatim_prefix": true
+  },
+  "competition_slug": {
+    "extracted_from": "software/scripts/sync_online_probe.py",
+    "value": "kaggriculture"
+  },
+  "deterministic_double_build": true,
+  "flag_off_zero_wiring": {
+    "P1": true,
+    "P2": true,
+    "P3": true
+  },
+  "flags": {
+    "P1_ON": true,
+    "P2_ON": true,
+    "P3_ON": true
+  },
+  "gate_results": {
+    "failed_gates": [
+      "h2h"
+    ],
+    "h2h": {
+      "criterion": ">=0.65 over >=16 seated games",
+      "games_vs_v48": 16,
+      "status": "FAIL",
+      "win_fraction_vs_v48": 0.25
+    },
+    "launch_fourgate": {
+      "source": "tmp/probes/v48_hybrid_smoke.json\uff08F2 \u6279\u6b21\uff0c\u5f15\u7528\u4e0d\u91cd\u8dd1\uff09",
+      "status": "PASS"
+    },
+    "note": "F3 verify_offline_gates + verify_patch_safety \u56de\u586b\uff1b\u7ec6\u8282 gates/gates_report.json\uff0c\u9010\u95e8 JSON \u5728 gates/out/",
+    "panel": {
+      "corpus": "engine-synthesized",
+      "criterion": ">=0.98 per-game and global",
+      "global_ratio": 0.999407,
+      "per_game_ratios": {
+        "11": 1.0,
+        "22": 1.0,
+        "33": 1.0,
+        "47": 1.000702,
+        "58": 1.0,
+        "69": 0.996149
+      },
+      "status": "PASS"
+    },
+    "patch_safety": {
+      "neutral_injection_equivalent": true,
+      "p23_effective_triggers": {
+        "11": {
+          "p2_vetoes": 0,
+          "p3_adjusts": 0,
+          "p3_armed_deferred": 4
+        },
+        "22": {
+          "p2_vetoes": 0,
+          "p3_adjusts": 0,
+          "p3_armed_deferred": 4
+        },
+        "33": {
+          "p2_vetoes": 0,
+          "p3_adjusts": 0,
+          "p3_armed_deferred": 4
+        },
+        "47": {
+          "p2_vetoes": 0,
+          "p3_adjusts": 0,
+          "p3_armed_deferred": 9
+        }
+      },
+      "p23_unexpected_divergence": 0,
+      "status": "PASS"
+    },
+    "status": "FAIL",
+    "zero_new_anomalies": {
+      "all_games_done": true,
+      "new_kinds": [],
+      "status": "PASS"
+    }
+  },
+  "main_py": {
+    "base_prefix_bytes": 107008,
+    "bytes": 139494,
+    "sha256": "1d6cdb26d2f379402b069ec517de7bf3c6712df6a658a31875a26e2a951235c1"
+  },
+  "patches": {
+    "P1": {
+      "bytes": 23676,
+      "module": "v48h.p1_midgame_sell_layer",
+      "role": "midgame sell takeover (three-gate planner)",
+      "sha256": "1b9f235e9824c6b0c38c362ca53133869be1dcd126fe6bf7fd33dcfcd4de9f94",
+      "source": "patches/midgame_sell_layer.py"
+    },
+    "P2": {
+      "bytes": 10168,
+      "module": "v48h.p2_economic_guard",
+      "role": "dead-pair economic guard (production veto)",
+      "sha256": "e7206b734451cb08a5d9cbbba5f4cf16a88f17dfcf8a3b34cd1f99201ad98713",
+      "source": "patches/economic_guard.py"
+    },
+    "P3": {
+      "bytes": 16760,
+      "module": "v48h.p3_milestone_monitor",
+      "role": "milestone sell-timing monitor",
+      "sha256": "b0ef3c90380d9de079a6efb0d90462546336e196bd12732ddbb7287f5b0d6caf",
+      "source": "patches/milestone_monitor.py"
+    }
+  },
+  "stdlib_only": true,
+  "submission_tar_gz": {
+    "bytes": 103997,
+    "deterministic_double_pack": true,
+    "members": [
+      "main.py"
+    ],
+    "sha256": "ad14c9e668a9e6dc62ed178aa3059d016b0d6d28aa0b4754b5bc2a2b93415772"
+  },
+  "submit_message": "public derivative with modifications (market/economic-guard layers)"
+}
