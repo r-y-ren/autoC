@@ -12,3 +12,4 @@
 | 2026-09-25 | F5 | R8-v2 判决实验（触发并集+峰寄存器+双臂对照门） | **二次 FAIL 确证负结果**：wins 0/14；Δ 正1/负4/零9（前移倾倒自压卖价=机制性负效应）；9 未触发局崩塌完成于 d15 前；138 passed；R8 收档——后续若再立项转产线侧（崩塌根源=产出差非卖时） |
 | 2026-09-23 | G1-G3 | R9 结构重构全链（排程生成→修订版三面一致手术→五线终审） | **FAIL 1/5 收档**：v6b 镜像自打校准产物对真实对手流结构性塌方（0-16/-150k 级；胜局回归 8/8 翻负）——固定磁带不可从外部复刻巨人（结构↔卖序↔劳动↔市场深度一体，缺适应层）；方法论教训=镜像自打/计划级 sim 是假阳源，seated 口径必须构建期硬前置 |
 | 2026-09-23 | S1 | 运行时纯函数层五函数+plan_view 适配器（_cxs_agent/_cxs_seed_truncate/_cxs_seed_surplus/_cxs_completable_plant_demand/_cxs_harvest_completable）；FIRST_HARVEST_STEPS 转录+交叉校验；plan_view 契约经基座法证侦察定形（day27 路由换算 routes[2 if t>=648]） | test_layer_s+crosscheck 37 passed 全绿；三构造用例过；桩标记清零；零误杀方向四层落地（None/True 定向） |
+| 2026-09-23 | S2 | 构建面两函数（append_layer_s_block 四校验+三防线；build_layer_s_candidate 六步编排）+P1×2 修复（719 天粒度+current_plants 扣减，评审例 allowed 5→0，41 passed） | test_build 8 passed；候选包三产物落盘（main 1047670B/tar 636025B）；配方对 round-30 基座重打包逐字节复现=配方真值验证 |
