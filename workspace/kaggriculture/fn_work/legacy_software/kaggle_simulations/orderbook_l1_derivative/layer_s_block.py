@@ -8,6 +8,13 @@ orderbook_l1_derivative/test_layer_s.py 单测（测试代码=上发代码，零
 _CXS_FROM = 648
 _CXS_SEASON_END = 718
 
+# PLANT 完成期限和（评审 2026-09-23 off-by-one 修正，误杀向）：引擎收获合法条件为
+# 天粒度 day - planted_day >= first_yield_day（kaggressure.py L453），day=step//24，
+# 718=day29 内最后有效动作步=最后可收获步 ⇒ PLANT@s 可完成种+收 ⇔
+# s + first_harvest_steps(crop) <= 719（⟺ s//24 + fh//24 <= 29，引擎天粒度规则）。
+# 旧右界 718 把 s=671（fh=48：27+2=29 恰可完成）误判不可完成。
+_CXS_PLANT_DEADLINE_SUM = 719
+
 # 首收步数表（R9/bots 常数看护先例；wheel 现值交叉校验见 test_consts_crosscheck.py）
 # 来源（2026-09-23 实读转录）：本机 vendored wheel kaggle_environments 1.32.7+nodeps，
 #   模块 kaggle_environments/envs/kaggriculture/kaggriculture.py 模块级 CROPS 表的
@@ -90,12 +97,18 @@ def _cxs_seed_truncate(observation, action, plan_view):
     main.py L4680/L4694）。
     慢道：按品项分组（BUY_SEED 出现序去重），对每品项以 kept_orders=本回合
     全部订单（先按"全保留"算额度：删除对象只可能是本回合订单）调
-    _cxs_seed_surplus；None（不确定）或 0（确证无额度）→ 该品项零截断。
+    _cxs_seed_surplus，并传当前步该品项 PLANT 数（引擎结算序：同 step 单位
+    动作 PLANT 消耗 private.seeds 先于市场买单入账，故当前步种植消耗不属于
+    未来供给——从本 action 的 farmer+hands 统计，["PLANT", crop] 解析与
+    _cxs_plan_view 同款；解析失败（action 结构畸形）→ 逐品项传 None →
+    surplus 返回 None → 零截断）；None（不确定）或 0（确证无额度）→
+    该品项零截断。
     删除策略：按订单出现序从后往前逐单判定——删该单若累计删除+qty≤allowed
     则整单删除，否则跳过该单继续向前（只删整单、不减量改单：改单=加法面，
     违反纯减法纪律）；非 BUY_SEED 订单与其余槽位顺序原样保留（删除=列表
     移除，无插入/无重排；有删除才建新表，零删除仍返回原对象）。
-    本函数不做 try 吞噬：任何异常向上抛，由 _cxs_agent 兜底回退基座动作
+    本函数不做 try 吞噬（唯一例外：当前步 PLANT 计数解析按契约吞异常转
+    None）：任何其余异常向上抛，由 _cxs_agent 兜底回退基座动作
     （契约：错误处理在上层入口统一兜底）。
     """
     market = action.get("market")
@@ -112,6 +125,20 @@ def _cxs_seed_truncate(observation, action, plan_view):
             return False
         return crop is None or order[1] == crop
 
+    def _current_plants(act):
+        # 当前步各品项 PLANT 计数（与 _cxs_plan_view 同款解析：farmer+hands
+        # 指令、["PLANT", crop] 且品项在 FIRST_HARVEST_STEPS 逐品计数，缺省
+        # PASS/空 hands 不视为畸形）；任何异常 → None（action 结构畸形=当前步
+        # 消耗未知=逐品项 None → surplus None → 零截断，零误杀纪律）。
+        counts = {}
+        try:
+            for cmd in [act.get("farmer") or ["PASS"], *(act.get("hands") or [])]:
+                if cmd and len(cmd) > 1 and cmd[0] == "PLANT" and cmd[1] in FIRST_HARVEST_STEPS:
+                    counts[cmd[1]] = counts.get(cmd[1], 0) + 1
+        except Exception:
+            return None
+        return counts
+
     crops = []
     for order in market:
         if _is_seed_order(order, None) and order[1] not in crops:
@@ -119,9 +146,16 @@ def _cxs_seed_truncate(observation, action, plan_view):
     if not crops:
         return market
 
+    plants_now = _current_plants(action)
     keep = [True] * len(market)
     for crop in crops:
-        allowed = _cxs_seed_surplus(crop, observation, market, plan_view)
+        allowed = _cxs_seed_surplus(
+            crop,
+            observation,
+            market,
+            plan_view,
+            None if plants_now is None else plants_now.get(crop, 0),
+        )
         if allowed is None or allowed <= 0:
             continue  # None=不确定 / 0=确证无额度：该品项零截断
         deleted = 0
@@ -137,21 +171,27 @@ def _cxs_seed_truncate(observation, action, plan_view):
     return [order for i, order in enumerate(market) if keep[i]]
 
 
-def _cxs_seed_surplus(crop, observation, kept_orders, plan_view):
-    """零误杀核心：surplus=库存+保留单+磁带未来购买−可完成需求；解析失败→None。
+def _cxs_seed_surplus(crop, observation, kept_orders, plan_view, current_plants: int | None = None):
+    """零误杀核心：surplus=max(0,库存−当前步PLANT消耗)+保留单+磁带未来购买−可完成需求；解析失败→None。
 
+    current_plants=当前步该品项 PLANT 消耗数：None=未知 → 本函数直接返回 None
+    （零误杀纪律：引擎结算序同 step 单位动作 PLANT 消耗 private.seeds 先于市场
+    买单入账，当前步种植消耗不属于未来供给，消耗未知即供给不确定）；0=确证
+    当前步无该品种植。非负整数校验（bool/str/半值 float/负数 → None）。
     返回 int=允许删除的本品项 BUY_SEED 数量 = min(max(0, 供给−需求),
     kept_orders 本品项购买量)（删除对象只可能是本回合订单）；None=不确定=
     上游对该品项零截断；0=确证无剩余（与 None 异义）。
     demand = _cxs_completable_plant_demand(crop, observation, plan_view)，
-    其 None → 本函数 None。供给三路相加：
-      1) 库存种子 observation["private"]["seeds"].get(crop, 0)。字段路径取基座
-         同款（orderbook_derivative/main.py）：tomato 门 L6775
-         obs['private']['seeds'].get('TOMATO', 0)；CARROT2 层 L4607
-         priv = observation["private"] 后 L4693 int(priv["seeds"].get("CARROT", 0))；
-         观测 schema 注记 L244 observation["private"]={"shed","seeds":{crop:n},
-         "inventories"}。基座的 int() 宽 coercion 在此收紧为严格数型（bool/
-         字符串数字/半值 float 均视为类型异常）；字段缺失/类型异常 → None。
+    其 None → 本函数 None。供给三路相加（held_effective = max(0, 库存 −
+    current_plants)，超扣钳 0 不为负）：
+      1) 有效库存种子 observation["private"]["seeds"].get(crop, 0) 减当前步
+         PLANT 消耗。字段路径取基座同款（orderbook_derivative/main.py）：
+         tomato 门 L6775 obs['private']['seeds'].get('TOMATO', 0)；CARROT2 层
+         L4607 priv = observation["private"] 后 L4693 int(priv["seeds"].get(
+         "CARROT", 0))；观测 schema 注记 L244 observation["private"]={"shed",
+         "seeds":{crop:n},"inventories"}。基座的 int() 宽 coercion 在此收紧为
+         严格数型（bool/字符串数字/半值 float 均视为类型异常）；字段缺失/
+         类型异常 → None。
       2) kept_orders 中 ["BUY_SEED", crop, qty] 之和，订单匹配对齐基座式
          len(o)>=3 and o[:2]==["BUY_SEED", crop]（main.py L4680/L4694）。
          kept_orders 非 list/tuple，或任一订单非 list/tuple、长度<3（无论操作
@@ -164,6 +204,8 @@ def _cxs_seed_surplus(crop, observation, kept_orders, plan_view):
     demand 完全相同的求和语义从新结果重算需求，与 demand 返回值不等（两次调用
     结果不一致=非确定性 plan_view）→ None。其余任何读取/解析异常 → None。
     """
+    if current_plants is None:
+        return None  # 当前步 PLANT 消耗未知=供给不确定=零误杀纪律→None
 
     def _strict_count(value):
         # 数量解析纪律（同 _cxs_completable_plant_demand）：int（非 bool）原样，
@@ -177,6 +219,12 @@ def _cxs_seed_surplus(crop, observation, kept_orders, plan_view):
         return value
 
     try:
+        # 当前步 PLANT 消耗：非负整数（bool/str/半值 float → _strict_count 抛；
+        # 负数 → 显式 None）
+        plants_now = _strict_count(current_plants)
+        if plants_now < 0:
+            return None
+
         demand = _cxs_completable_plant_demand(crop, observation, plan_view)
         if demand is None:
             return None
@@ -233,7 +281,10 @@ def _cxs_seed_surplus(crop, observation, kept_orders, plan_view):
             if order[0] == "BUY_SEED" and order[1] == crop:
                 kept_buy += _strict_count(order[2])
 
-        supply = held + kept_buy + tape_buy
+        held_effective = held - plants_now  # 当前步 PLANT 先于买单入账：扣减
+        if held_effective < 0:
+            held_effective = 0  # 超扣钳 0（plants>held 不得产生负供给）
+        supply = held_effective + kept_buy + tape_buy
         allow = supply - demand
         if allow < 0:
             allow = 0
@@ -283,16 +334,18 @@ def _cxs_completable_plant_demand(crop, observation, plan_view):
 
 
 def _cxs_harvest_completable(step, crop, first_harvest_steps=None):
-    """纯时间测试：step+first_harvest(crop)≤718；常数缺失/异常→True（保守不截）。
+    """纯时间测试：step+first_harvest(crop)≤719；常数缺失/异常→True（保守不截）。
 
     step s 的 crop PLANT 可完成"种+收" ⇔ s + first_harvest_steps(crop) ≤
-    _CXS_SEASON_END(718)。first_harvest_steps=None 时用模块级
+    _CXS_PLANT_DEADLINE_SUM(719)（引擎天粒度收获规则 day - planted_day >=
+    first_yield_day（L453）+ 最后动作步 718 的推导见常数注释；评审 2026-09-23
+    修正，旧界 718 为 off-by-one 误杀）。first_harvest_steps=None 时用模块级
     FIRST_HARVEST_STEPS；表缺失/作物不在表/任何类型或运行异常 → True
     （零误杀：不确定=来得及=不构成截断理由）。
     """
     try:
         table = FIRST_HARVEST_STEPS if first_harvest_steps is None else first_harvest_steps
-        return step + table[crop] <= _CXS_SEASON_END
+        return step + table[crop] <= _CXS_PLANT_DEADLINE_SUM
     except Exception:
         return True
 

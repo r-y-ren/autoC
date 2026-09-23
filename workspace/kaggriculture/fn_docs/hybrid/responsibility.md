@@ -217,7 +217,7 @@
       - tested 策略：自有单测（三构造用例经 constructed_invariant_cases 复用）。
       - 核验命令：测试: orderbook_l1_derivative/test_layer_s.py（继承 R10 验收③(c)）。
       - **_cxs_seed_surplus** [L3|新增]
-        - 职责：零误杀核心——surplus(crop)=库存种子(crop)+本回合保留 BUY_SEED(crop)+磁带未来 BUY_SEED(crop)−可完成种收需求(crop)；允许删除量=max(0, surplus) 且不超过本回合该品项购买量；需求经 _cxs_completable_plant_demand；磁带/库存任一读取失败→返回 None（不确定=不截）。种子↔格子换算按引擎 crop 常数（麦/萝卜 1 种/格）。
+        - 职责：零误杀核心——surplus(crop)=max(0, 库存种子(crop)−当前步 PLANT 消耗(crop))+本回合保留 BUY_SEED(crop)+磁带未来 BUY_SEED(crop)−可完成种收需求(crop)（−当前步 PLANT 消耗（current_plants 未知→None）：引擎结算序 PLANT 先于买单入账，评审 2026-09-23 修正）；允许删除量=max(0, surplus) 且不超过本回合该品项购买量；需求经 _cxs_completable_plant_demand；磁带/库存任一读取失败→返回 None（不确定=不截）。种子↔格子换算按引擎 crop 常数（麦/萝卜 1 种/格）。
         - 签名意图：输入: crop, observation, 本回合保留订单集 / 输出: 允许删除量（int）或 None / 错误: 解析失败→None。
         - 调用方：_cxs_seed_truncate。
         - tested 策略：自有单测。
@@ -229,7 +229,7 @@
           - tested 策略：自有单测。
           - 核验命令：测试: orderbook_l1_derivative/test_layer_s.py（demand 用例组）。
           - **_cxs_harvest_completable** [L5|新增]
-            - 职责：纯时间测试——step s 的 crop PLANT 可完成种+收 ⇔ s+first_harvest_steps(crop) ≤ 718；first_harvest_steps 取 vendored 引擎 crop 常数（麦/萝卜≈48 步）；常数缺失/异常→True（保守：不构成截断理由）。
+            - 职责：纯时间测试——step s 的 crop PLANT 可完成种+收 ⇔ s+first_harvest_steps(crop) ≤ 719（引擎天粒度，评审 2026-09-23 修正）；first_harvest_steps 取 vendored 引擎 crop 常数（麦/萝卜≈48 步）；常数缺失/异常→True（保守：不构成截断理由）。
             - 签名意图：输入: step, crop / 输出: bool / 错误: 无（异常→True）。
             - 调用方：_cxs_completable_plant_demand。
             - tested 策略：自有单测。

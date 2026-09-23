@@ -11,7 +11,7 @@ def test_invariant_cases():
     # ①未来仍有可完成 PLANT 机会的 BUY_SEED 不截；②确无未来机会且供给超需求
     # 的截；③s671 边界：CARROT BUY_SEED@672 时刻（当前 step=671）仅当磁带
     # 确无后续可完成种植机会才截。假 plan_view 构造（两次调用同值→确定性）。
-    # ① 磁带有可完成机会（670+48=718≤718）→ 需求 5 全额保护：供给=库存0+
+    # ① 磁带有可完成机会（670+48=718≤719）→ 需求 5 全额保护：供给=库存0+
     #    保留单5+磁带未来买0=5=需求 → allowed=0 → 一张不删（含非种子单原样）。
     plans_a = {670: {"plants": {"CARROT": 5}, "buy_seed": {}}}
     obs_a = _obs_with_seeds({"CARROT": 0}, step=650)
@@ -19,16 +19,16 @@ def test_invariant_cases():
     got_a = layer_s_block._cxs_seed_truncate(obs_a, {"market": market_a}, _make_plan_view(plans_a))
     assert got_a == [["SELL", "WHEAT", 2], ["BUY_SEED", "CARROT", 5]]
 
-    # ② 确无可完成机会（磁带唯一 plants 在 671：671+48=719>718 不构成需求）且
+    # ② 确无可完成机会（磁带唯一 plants 在 672：672+48=720>719 不构成需求）且
     #    供给超需求（库存0+买单6>需求0）→ allowed=6 → 两张 CARROT 买单整单
     #    全删，非 BUY_SEED 订单原样保留。
-    plans_b = {671: {"plants": {"CARROT": 5}, "buy_seed": {}}}
+    plans_b = {672: {"plants": {"CARROT": 5}, "buy_seed": {}}}
     obs_b = _obs_with_seeds({"CARROT": 0}, step=650)
     market_b = [["BUY_SEED", "CARROT", 4], ["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 3]]
     got_b = layer_s_block._cxs_seed_truncate(obs_b, {"market": market_b}, _make_plan_view(plans_b))
     assert got_b == [["SELL", "WHEAT", 3]]
 
-    # ③ s671 边界双面：672+48=720>718 → 672 步 plants 永不构成需求。
+    # ③ s671 边界双面：672+48=720>719 → 672 步 plants 永不构成需求。
     #    截面：磁带确无后续可完成种植机会（672 plants 全不计入）且库存已有
     #    富余（held 2 → 供给 2+3+0=5 > 需求 0）→ allowed=3 全删。
     plans_c1 = {672: {"plants": {"CARROT": 5}, "buy_seed": {}}}
@@ -37,7 +37,7 @@ def test_invariant_cases():
     got_c1 = layer_s_block._cxs_seed_truncate(obs_c1, {"market": market_c1}, _make_plan_view(plans_c1))
     assert got_c1 == []
     #    不截面：库存无富余（held 0）且 kept 内即全部供给（磁带无 t>671 买单），
-    #    670 步（670+48=718≤718 恰可完成）plants 3 构成需求 → 供给=需求=3 →
+    #    670 步（670+48=718≤719 可完成）plants 3 构成需求 → 供给=需求=3 →
     #    allowed=0 不截。
     plans_c2 = {670: {"plants": {"CARROT": 3}, "buy_seed": {}},
                 672: {"plants": {"CARROT": 9}, "buy_seed": {}}}
@@ -50,23 +50,25 @@ def test_invariant_cases():
 def test_surplus_uncertain_returns_none():
     # 零误杀验收（_cxs_seed_surplus 的 None 路径全组）：③demand None ④两次
     # plan_view 结果不一致 ⑤kept_orders 畸形 ⑥observation 种子字段缺失/异常。
-    plans = {650: {"plants": {"CARROT": 4}, "buy_seed": {}}}  # 650+48=698≤718 → demand=4
+    # 全组传 current_plants=0（确证当前步无该品种植——隔离所测失败面；None
+    # 入口语义另见 test_surplus_current_plants_unknown_returns_none）。
+    plans = {650: {"plants": {"CARROT": 4}, "buy_seed": {}}}  # 650+48=698≤719 → demand=4
     obs = {"step": 650, "private": {"seeds": {"CARROT": 2}}}
     kept = [["BUY_SEED", "CARROT", 3]]
 
     # ③ demand 不确定：plan_view 返回 None / 调用抛异常 / 形参不可调用 → None。
-    assert layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(None)) is None
+    assert layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(None), 0) is None
     assert layer_s_block._cxs_seed_surplus(
-        "CARROT", obs, kept, _make_plan_view(RuntimeError("tape parse boom"))
+        "CARROT", obs, kept, _make_plan_view(RuntimeError("tape parse boom")), 0
     ) is None
-    assert layer_s_block._cxs_seed_surplus("CARROT", obs, kept, None) is None
+    assert layer_s_block._cxs_seed_surplus("CARROT", obs, kept, None, 0) is None
 
     # ④ 两次 plan_view 结果不一致（非确定性）：demand 调用取 a、本函数再调取 b，
     # 重算需求 5 ≠ 4 被交叉核对捕获 → None；第二次返回非 dict 同样 None。
     a = {650: {"plants": {"CARROT": 4}, "buy_seed": {}}}
     b = {650: {"plants": {"CARROT": 5}, "buy_seed": {}}}
-    assert layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_seq_plan_view([a, b])) is None
-    assert layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_seq_plan_view([a, None])) is None
+    assert layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_seq_plan_view([a, b]), 0) is None
+    assert layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_seq_plan_view([a, None]), 0) is None
 
     # ⑤ kept_orders 畸形 → None：容器非 list/tuple / 短订单（无论操作类型）/
     # 订单非序列 / 本品项 BUY_SEED qty 非整数（str/None/bool/半值 float）。
@@ -85,7 +87,7 @@ def test_surplus_uncertain_returns_none():
         [["BUY_SEED", "CARROT", 2.5]],               # 半粒种子
     ]
     for bad in bad_kept:
-        got = layer_s_block._cxs_seed_surplus("CARROT", obs, bad, _make_plan_view(plans))
+        got = layer_s_block._cxs_seed_surplus("CARROT", obs, bad, _make_plan_view(plans), 0)
         assert got is None, bad
 
     # ⑥ observation 种子字段缺失/类型异常 / step 缺失或非整数 → None。
@@ -101,25 +103,26 @@ def test_surplus_uncertain_returns_none():
         {"step": "650", "private": {"seeds": {"CARROT": 2}}},  # step 非整数
     ]
     for bad in bad_obs:
-        got = layer_s_block._cxs_seed_surplus("CARROT", bad, kept, _make_plan_view(plans))
+        got = layer_s_block._cxs_seed_surplus("CARROT", bad, kept, _make_plan_view(plans), 0)
         assert got is None, bad
 
 
 def test_harvest_boundary_s671():
     # 契约锚点用例（责任文档 harvest 边界组）：CARROT/WHEAT 首收 48 步级。
-    # 671+48=719 > 718 → False（来不及=构成截断理由）；670+48=718 ≤ 718 → True。
-    assert layer_s_block._cxs_harvest_completable(671, "CARROT") is False
-    assert layer_s_block._cxs_harvest_completable(670, "CARROT") is True
-    assert layer_s_block._cxs_harvest_completable(671, "WHEAT") is False
-    assert layer_s_block._cxs_harvest_completable(670, "WHEAT") is True
+    # 671+48=719 ≤ 719 → True（day27+2=29 恰可完成：引擎天粒度，评审
+    # 2026-09-23 修正 off-by-one，旧界 718 误杀此步）；672+48=720 > 719 → False。
+    assert layer_s_block._cxs_harvest_completable(671, "CARROT") is True
+    assert layer_s_block._cxs_harvest_completable(672, "CARROT") is False
+    assert layer_s_block._cxs_harvest_completable(671, "WHEAT") is True
+    assert layer_s_block._cxs_harvest_completable(672, "WHEAT") is False
 
 
 def test_harvest_per_crop_boundaries():
-    # 每种作物两端边界各一：s = 718-fh → True（恰可完成）；s = 718-fh+1 → False。
-    end = layer_s_block._CXS_SEASON_END
+    # 每种作物两端边界各一：s = 719-fh → True（恰可完成）；s = 720-fh → False。
+    deadline = layer_s_block._CXS_PLANT_DEADLINE_SUM
     for crop, fh in layer_s_block.FIRST_HARVEST_STEPS.items():
-        assert layer_s_block._cxs_harvest_completable(end - fh, crop) is True, (crop, fh)
-        assert layer_s_block._cxs_harvest_completable(end - fh + 1, crop) is False, (crop, fh)
+        assert layer_s_block._cxs_harvest_completable(deadline - fh, crop) is True, (crop, fh)
+        assert layer_s_block._cxs_harvest_completable(deadline - fh + 1, crop) is False, (crop, fh)
 
 
 def test_harvest_conservative_true_on_missing_or_bad_input():
@@ -136,10 +139,12 @@ def test_harvest_conservative_true_on_missing_or_bad_input():
 
 
 def test_harvest_explicit_table_override():
-    # first_harvest_steps 形参：显式表生效；None=回退模块级表（671+48>718→False）。
-    assert layer_s_block._cxs_harvest_completable(671, "CARROT", {"CARROT": 47}) is True
-    assert layer_s_block._cxs_harvest_completable(671, "CARROT", {"CARROT": 48}) is False
-    assert layer_s_block._cxs_harvest_completable(671, "CARROT", None) is False
+    # first_harvest_steps 形参：显式表生效；None=回退模块级表（672+48=720>719→False）。
+    assert layer_s_block._cxs_harvest_completable(671, "CARROT", {"CARROT": 47}) is True  # 718≤719
+    assert layer_s_block._cxs_harvest_completable(671, "CARROT", {"CARROT": 48}) is True  # 719≤719 恰边界
+    assert layer_s_block._cxs_harvest_completable(672, "CARROT", {"CARROT": 48}) is False  # 720>719
+    assert layer_s_block._cxs_harvest_completable(671, "CARROT", None) is True  # 模块表：719≤719
+    assert layer_s_block._cxs_harvest_completable(672, "CARROT", None) is False
 
 
 # ---- _cxs_completable_plant_demand 用例组（demand：逐品项可完成种+收的 PLANT 种子需求）----
@@ -157,12 +162,12 @@ def _make_plan_view(retval):
 
 
 def test_demand_mixed_steps_sum_only_completable():
-    # ① 混合步号求和：CARROT(fh=48) 600/670 可完成计入（670+48=718≤718），
-    # 671 超期不计（671+48=719>718）；同条目 buy_seed 数量不入 demand。
+    # ① 混合步号求和：CARROT(fh=48) 600/670 可完成计入（670+48=718≤719），
+    # 672 超期不计（672+48=720>719）；同条目 buy_seed 数量不入 demand。
     plans = {
         600: {"plants": {"CARROT": 1}, "buy_seed": {}},
         670: {"plants": {"CARROT": 3}, "buy_seed": {"CARROT": 2}},
-        671: {"plants": {"CARROT": 2}, "buy_seed": {}},
+        672: {"plants": {"CARROT": 2}, "buy_seed": {}},
     }
     got = layer_s_block._cxs_completable_plant_demand("CARROT", _OBS, _make_plan_view(plans))
     assert got == 4
@@ -250,12 +255,12 @@ def _obs_with_seeds(seeds, step=650):
 
 
 def test_surplus_positive_returns_supply_minus_demand():
-    # ① surplus 为正：允许删除量 = 供给(库存+保留单+磁带未来) − 需求，未触钳制。
-    # demand=4（650+48=698≤718）；供给=1+10+0=11 → 允许 7（< 本回合购买 10，未钳）。
+    # ① surplus 为正：允许删除量 = 供给(有效库存+保留单+磁带未来) − 需求，未触钳制。
+    # demand=4（650+48=698≤719）；供给=1-0+10+0=11 → 允许 7（< 本回合购买 10，未钳）。
     plans = {650: {"plants": {"CARROT": 4}, "buy_seed": {}}}
     obs = _obs_with_seeds({"CARROT": 1})
     kept = [["BUY_SEED", "CARROT", 10], ["SELL", "WHEAT", 2]]  # 他品项订单不影响本品项
-    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans))
+    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans), 0)
     assert got == 7 == (1 + 10 + 0) - 4
 
 
@@ -263,8 +268,8 @@ def test_surplus_supply_below_demand_returns_zero():
     # ② 供给 ≤ 需求 → 0（确证无剩余），不是 None。
     plans = {650: {"plants": {"CARROT": 4}, "buy_seed": {}}}  # demand=4
     obs = _obs_with_seeds({"CARROT": 1})
-    kept = [["BUY_SEED", "CARROT", 1]]  # 供给=1+1+0=2 ≤ 4
-    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans))
+    kept = [["BUY_SEED", "CARROT", 1]]  # 供给=1-0+1+0=2 ≤ 4
+    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans), 0)
     assert got == 0 and got is not None
 
 
@@ -273,13 +278,13 @@ def test_surplus_clamped_to_kept_purchase():
     plans = {650: {"plants": {}, "buy_seed": {}}}  # demand=0
     obs = _obs_with_seeds({"CARROT": 10})
     kept = [["BUY_SEED", "CARROT", 2]]
-    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans))
-    assert got == 2  # min(max(0, 12-0), 2)：原始剩余 12 被钳到本回合购买量 2
+    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans), 0)
+    assert got == 2  # min(max(0, 10-0+2-0), 2)：原始剩余 12 被钳到本回合购买量 2
 
 
 def test_surplus_tape_future_buy_counts_and_past_excluded():
     # ⑧ 磁带未来 BUY_SEED 计入供给且只累 t>当前步（650）：651 的 4 计入、649 的 7 不计。
-    # demand=6（650 步 plants）；库存 0、保留单 8：有未来单 → 供给 0+8+4=12 → 允许 6；
+    # demand=6（650 步 plants）；库存 0、保留单 8：有未来单 → 供给 0-0+8+4=12 → 允许 6；
     # 无未来单（过去单不计）→ 供给 8 → 允许 2。若 649 的 7 被误计入则得 8，两断言皆破。
     future = {
         649: {"plants": {}, "buy_seed": {"CARROT": 7}},   # 过去买单不计（649<650）
@@ -288,14 +293,49 @@ def test_surplus_tape_future_buy_counts_and_past_excluded():
     }
     obs = _obs_with_seeds({"CARROT": 0}, step=650)
     kept = [["BUY_SEED", "CARROT", 8]]
-    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(future))
+    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(future), 0)
     assert got == 6 == (0 + 8 + 4) - 6
     past_only = {
         649: {"plants": {}, "buy_seed": {"CARROT": 7}},
         650: {"plants": {"CARROT": 6}, "buy_seed": {}},
     }
-    got2 = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(past_only))
+    got2 = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(past_only), 0)
     assert got2 == 2 == (0 + 8 + 0) - 6
+
+
+def test_surplus_current_plants_deducted_tight_balance_no_overdelete():
+    # ⑨（评审例 2026-09-23）当前步 PLANT 消耗扣减后紧平衡不超删：held=10、
+    # plants=8 → 有效库存 2；kept 单 5、磁带未来买 5、demand=12 → 供给
+    # 2+5+5=12=需求 → 允许删 0（不扣减则 10+5+5−12=3 → 钳 5 → 超删至多 5，误杀向）。
+    plans = {
+        650: {"plants": {"CARROT": 12}, "buy_seed": {}},  # 650+48=698≤719 → demand=12
+        660: {"plants": {}, "buy_seed": {"CARROT": 5}},   # 660>650 → 磁带未来买 5
+    }
+    obs = _obs_with_seeds({"CARROT": 10}, step=650)
+    kept = [["BUY_SEED", "CARROT", 5]]
+    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans), 8)
+    assert got == 0 and got is not None
+
+
+def test_surplus_current_plants_unknown_returns_none():
+    # ⑩ current_plants=None（当前步消耗未知）→ 直接 None（零误杀：不确定=不截），
+    # 即便其余输入完全可解析；参数校验：负数 / bool / 字符串 / 半值 float → None。
+    plans = {650: {"plants": {"CARROT": 4}, "buy_seed": {}}}
+    obs = _obs_with_seeds({"CARROT": 1})
+    kept = [["BUY_SEED", "CARROT", 3]]
+    assert layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans)) is None
+    for bad in (-1, -8, True, "8", 2.5, 1.5):
+        got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans), bad)
+        assert got is None, bad
+
+
+def test_surplus_current_plants_above_held_clamps_to_zero():
+    # ⑪ plants > held：有效库存钳 0（不为负、不污染供给式）——3−8 → 0 而非 −5。
+    plans = {}
+    obs = _obs_with_seeds({"CARROT": 3}, step=650)
+    kept = [["BUY_SEED", "CARROT", 2]]
+    got = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(plans), 8)
+    assert got == 2  # min(max(0, 0+2+0−0), 2)：钳 0 后正常放行
 
 
 # ---- _cxs_seed_truncate 用例组（truncate：纯减法过滤主函数）----
@@ -359,7 +399,7 @@ def test_truncate_back_to_front_whole_order_deletion_keeps_slots():
     # ③ 从后往前整单删除 + 槽位顺序保持：allowed=min(max(0, 0+7−3), 7)=4 →
     # 末单 qty2 删（累计2）、中单 qty3 超额跳过（2+3>4 继续向前）、首单 qty2
     # 删（2+2≤4）；SELL 原位保留，无重排无插入。
-    plans = {660: {"plants": {"CARROT": 3}, "buy_seed": {}}}  # 660+48=708≤718
+    plans = {660: {"plants": {"CARROT": 3}, "buy_seed": {}}}  # 660+48=708≤719
     obs = _obs_with_seeds({"CARROT": 0}, step=650)
     market = [["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 1],
               ["BUY_SEED", "CARROT", 3], ["BUY_SEED", "CARROT", 2]]
@@ -380,7 +420,7 @@ def test_truncate_partial_allowed_deletes_latest_only():
 
 def test_truncate_mixed_crops_independent():
     # ⑤ 混合多品项互不干扰：CARROT 无可完成需求（plants 无该键）→ 全删；
-    # WHEAT 有可完成需求 5（660+48=708≤718）且供给=需求 → 全额保护；
+    # WHEAT 有可完成需求 5（660+48=708≤719）且供给=需求 → 全额保护；
     # CARROT 的截断不触碰 WHEAT 单。
     plans = {660: {"plants": {"WHEAT": 5}, "buy_seed": {}}}
     obs = _obs_with_seeds({}, step=650)
@@ -397,6 +437,36 @@ def test_truncate_never_drops_non_seed_orders():
               ["PLANT", "CARROT", 4], ["SELL", "MELON", 1]]
     got = layer_s_block._cxs_seed_truncate(obs, {"market": market}, _make_plan_view({}))
     assert got == [["SELL", "WHEAT", 2], ["PLANT", "CARROT", 4], ["SELL", "MELON", 1]]
+
+
+def test_truncate_current_step_plants_counted_and_malformed_action_zero_truncation():
+    # ⑦ truncate 传参链路（评审 2026-09-23 修正②）：action farmer+hands 的当前步
+    # PLANT 被正确统计并扣减库存（held=10/plants=8 → 有效 2；demand=12、kept 5、
+    # 磁带未来买 5 → 供给 2+5+5=12=需求 → allowed=0 不截）；对照无 PLANT 则
+    # 供给 20 → allowed=5 → 整单删；畸形 action（farmer 非 list）→ 计数解析失败
+    # → 逐品项 current_plants=None → surplus None → 零截断（原对象）。
+    plans = {
+        650: {"plants": {"CARROT": 12}, "buy_seed": {}},  # demand=12（698≤719）
+        660: {"plants": {}, "buy_seed": {"CARROT": 5}},   # 磁带未来买 5
+    }
+    obs = _obs_with_seeds({"CARROT": 10}, step=650)
+    pv = _make_plan_view(plans)
+
+    market = [["BUY_SEED", "CARROT", 5]]
+    action = {"market": market, "farmer": ["PLANT", "CARROT"],
+              "hands": [["PLANT", "CARROT"]] * 7}  # farmer 1 + hands 7 = 当前步 8×PLANT
+    got = layer_s_block._cxs_seed_truncate(obs, action, pv)
+    assert got is market  # allowed=0 → 零截断零足迹
+
+    market2 = [["BUY_SEED", "CARROT", 5]]
+    action2 = {"market": market2, "farmer": ["PASS"]}  # 对照：当前步无 PLANT
+    got2 = layer_s_block._cxs_seed_truncate(obs, action2, pv)
+    assert got2 == []  # 供给 10+5+5=20 → allowed=min(8,5)=5 → 整单删
+
+    market3 = [["BUY_SEED", "CARROT", 5]]
+    action3 = {"market": market3, "farmer": 7}  # 畸形：farmer 非 list → 解析失败
+    got3 = layer_s_block._cxs_seed_truncate(obs, action3, pv)
+    assert got3 is market3  # current_plants=None → surplus None → 零截断
 
 
 # ---- _cxs_agent 用例组（运行时入口：六条路径 + 独立导入态结构不变式）----
@@ -474,13 +544,13 @@ def test_agent_no_seed_orders_same_object_zero_footprint(monkeypatch):
 
 def test_agent_truncates_via_full_chain_with_fakes(monkeypatch):
     # ③ 有 BUY_SEED → dict(action, market=…) 且被过滤单恰为截断层判定量
-    # （假宿主+真截断层+假 plan_view 全链路）：磁带唯一 plants 在 671
-    # （671+48=719>718 不构成需求）且无磁带未来买 → 供给=0+6+0=6 > 需求 0 →
+    # （假宿主+真截断层+假 plan_view 全链路）：磁带唯一 plants 在 672
+    # （672+48=720>719 不构成需求）且无磁带未来买 → 供给=0+6+0=6 > 需求 0 →
     # allowed=6 → 两张 CARROT 买单整单删、SELL 原位保留。
     market = [["BUY_SEED", "CARROT", 4], ["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 3]]
     action = {"market": market, "farmer": ["PASS"]}
     _patch_host(monkeypatch, action)
-    pv = _spy_plan_view({671: {"plants": {"CARROT": 5}, "buy_seed": {}}})
+    pv = _spy_plan_view({672: {"plants": {"CARROT": 5}, "buy_seed": {}}})
     monkeypatch.setattr(layer_s_block, "_cxs_plan_view", pv)
     obs = _obs_with_seeds({"CARROT": 0}, step=650)
     got = layer_s_block._cxs_agent(obs)
@@ -527,9 +597,9 @@ def test_agent_host_exception_propagates(monkeypatch):
 
 def test_agent_full_stack_with_fake_impl_and_real_plan_view(monkeypatch):
     # 全栈集成：假宿主 + 真 _cxs_plan_view（假 _IMPL 双路磁带）+ 真截断层。
-    # 2 号路 671 步 CARROT PLANT（671+48=719>718 → 不构成需求）且磁带无未来
+    # 2 号路 672 步 CARROT PLANT（672+48=720>719 → 不构成需求）且磁带无未来
     # CARROT 买单 → 供给=库存0+保留单6+磁带0=6 → allowed=6 → 两张 CARROT 买单全删。
-    route2 = _tape({671: {"farmer": ["PLANT", "CARROT"]}})
+    route2 = _tape({672: {"farmer": ["PLANT", "CARROT"]}})
     _patch_impl(monkeypatch, {0: {"route": 1}}, {1: _tape({}), 2: route2})
     market = [["BUY_SEED", "CARROT", 4], ["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 3]]
     action = {"market": market, "farmer": ["PASS"]}

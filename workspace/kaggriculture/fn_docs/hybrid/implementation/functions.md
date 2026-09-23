@@ -34,7 +34,7 @@
 | _cxs_completable_plant_demand | S1 | wired 09-23 | pytest test_layer_s → 11 passed（demand 组 7+harvest 组 4；2 红为他批桩预期） | (本批) |
 | _cxs_seed_surplus | S1 | wired 09-23 | pytest test_layer_s → 16 passed（供给三路+None 矩阵 8 组；库存字段=private.seeds 依 L6775/L4693） | (本批) |
 | _cxs_seed_truncate | S1 | wired 09-23 | pytest test_layer_s → 23 passed 全绿（含三构造用例；快道同对象零足迹） | (本批) |
-| _cxs_agent | S1 | tested 09-23（wired 待 S2 注入） | pytest 全家 37 passed；注入模拟链路过；_CXS_HOST 块首捕获+独立态 None | (本批) |
+| _cxs_agent | S1 | tested 09-23（wired 待 S2 注入；P1 修复后复验） | pytest 全家 37 passed；注入模拟链路过；_CXS_HOST 块首捕获+独立态 None | (本批) |
 | append_layer_s_block | S2 | stub 09-23 | — | — |
 | build_layer_s_candidate | S2 | stub 09-23 | — | — |
 | replay_action_diff | S3 | stub 09-23 | — | — |
