@@ -23,7 +23,8 @@ named agent 是作者内层（层 D/S 之前）——发射门按官方语义一
 
 evidence：orderbook_l1_derivative/evidence/launch_check_evidence.json（格式沿
 round-30 launch_check_evidence.json：gate1_official_load / gate2_full_episodes /
-package 身份链）。任一门红或身份链不匹配 → passed=False（fail-closed；身份链
+package 身份链；run 的 evidence_path 参数可覆写落点——门③ 同款口径，测试 tmp
+隔离）。任一门红或身份链不匹配 → passed=False（fail-closed；身份链
 不匹配时早退，不对身份不明的包驱动长局）。"""
 
 from __future__ import annotations
@@ -241,17 +242,21 @@ def _truncation_only_diff(check, obs_series) -> dict:
     }
 
 
-def run(pkg_path=None) -> dict:
+def run(pkg_path=None, evidence_path=None) -> dict:
     """门④主入口：四门+附加断言；返回四门结果+证据路径。
 
     pkg_path=包目录（默认本目录）；从其 build_manifest.json 读期望 sha 做身份
     链核对。任一门红或身份链不匹配 → passed=False（fail-closed；身份链不匹配
-    时早退，四门标记未驱动）。
+    时早退，四门标记未驱动）。evidence_path 缺省 <pkg>/evidence/
+    launch_check_evidence.json，可覆写（门③ run 同款口径，测试传 tmp 路径
+    防覆写真台账；门内 -I 驱动/tmp 中间件仍走 pkg evidence 子目录并自清理）。
     """
     t0 = time.perf_counter()
     pkg_path = os.path.abspath(pkg_path) if pkg_path is not None else HERE
     evidence_dir = os.path.join(pkg_path, "evidence")
-    evidence_path = os.path.join(evidence_dir, "launch_check_evidence.json")
+    evidence_path = (os.path.abspath(evidence_path) if evidence_path is not None
+                     else os.path.join(evidence_dir,
+                                       "launch_check_evidence.json"))
     gates = {"load": False, "full_episodes": False, "determinism": False,
              "package": False}
     truncation = {"ok": False, "divergent_steps": []}

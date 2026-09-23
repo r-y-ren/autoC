@@ -2,8 +2,9 @@
 
 三组：
 ①真跑组（module 级 fixture 恰一次，~1 分钟）：全四门（整包装载+双席自打
-  2 局+确定性重跑）+ 附加断言全绿；evidence 落 evidence/launch_check_evidence.json
-  且四门结果/附加断言/身份链（对 build_manifest 核对）三段齐、与返回值一致；
+  2 局+确定性重跑）+ 附加断言全绿；evidence 经 evidence_path 落 tmp（不写
+  真 evidence/，评审 P1 测试隔离）且四门结果/附加断言/身份链（对
+  build_manifest 核对）三段齐、与返回值一致；
 ②身份链破坏组：临时目录拷贝包件+篡改 manifest 期望 main sha → passed=False
   （fail-closed 早退不驱动长局；不碰真 manifest）；
 ③差异步组：附加断言的 divergent_steps（719 真实 obs 驱动 L1 vs verbatim 的
@@ -23,9 +24,15 @@ _MANIFEST = _PKG / "build_manifest.json"
 
 
 @pytest.fixture(scope="module")
-def launch_result():
-    """真跑全四门一次（module 级共享：三组断言同一次产物，防重复 1 分钟级跑批）。"""
-    return gate.run(str(_PKG))
+def launch_result(tmp_path_factory):
+    """真跑全四门一次（module 级共享：三组断言同一次产物，防重复 1 分钟级跑批）。
+
+    evidence_path 指 tmp（评审 P1：测试不覆写真 evidence/launch_check_
+    evidence.json——真台账只归 verify_layer_s_gates 全量编排落）。
+    """
+    ev_file = (tmp_path_factory.mktemp("launch_ev")
+               / "launch_check_evidence.json")
+    return gate.run(str(_PKG), evidence_path=str(ev_file))
 
 
 def test_four_gates_all_pass(launch_result):
@@ -40,7 +47,9 @@ def test_four_gates_all_pass(launch_result):
 
 def test_evidence_file_fields(launch_result):
     ev_path = Path(launch_result["evidence_path"])
-    assert ev_path == _PKG / "evidence" / "launch_check_evidence.json"
+    # 评审 P1：台账落 tmp（evidence_path 覆写），绝不在真 evidence/ 落盘
+    assert ev_path.name == "launch_check_evidence.json"
+    assert not ev_path.is_relative_to(_PKG)
     assert ev_path.is_file()
     verdict = json.loads(ev_path.read_text(encoding="utf-8"))
     assert verdict["passed"] is True

@@ -1,7 +1,9 @@
-"""test_gate_h2h（R10 门①）：互胜率口径、fail-closed 与真跑（2 seeds×双席位）。
+"""test_gate_h2h（R10 门①）：互胜率口径、fail-closed、装载身份断言与真跑。
 
-真跑只覆盖 4 局（seeds (101,201) 双席位）控制耗时；16 局全量留给门编排
-verify_layer_s_gates。不断言胜负，只断言结构/DONE/数值型与裁决逻辑一致性。
+真跑只覆盖 4 局（seeds (101,201) 双席位）控制耗时且台账落 tmp（evidence_path
+覆写，不写真 evidence/）；16 局全量留给门编排 verify_layer_s_gates。真跑不断言
+胜负，只断言结构/DONE/数值型与裁决逻辑一致性。装载身份断言（评审 P0 修复面）：
+末 callable 名不符即 GateH2HError"装载身份不符"，绝不开打。
 """
 
 import json
@@ -83,10 +85,41 @@ def test_empty_leads_fail_closed():
     assert s["n"] == 0 and s["rate"] == 0.0 and s["passed"] is False
 
 
-# ---- ① 真跑 2 seeds × 双席位（4 局，~15s） ----
+# ---- ④ 装载身份断言（评审 P0 修复面；合成假 main，不跑引擎） ----
 
-def test_run_real_seeds_101_201_both_seats():
-    result = gate.run(L1_MAIN, VERBATIM_MAIN, seeds=(101, 201))
+@pytest.mark.parametrize("slot", ["l1", "verbatim"])
+def test_loader_identity_mismatch_fails_closed(tmp_path, slot):
+    # 假 main 文件末尾 callable 名不符（l1 想要 _cxs_agent / verbatim 想要
+    # _cxd_agent）→ GateH2HError"装载身份不符"，fail-closed 不开打。
+    bad = tmp_path / "bad_main.py"
+    bad.write_text("def _wrong_name_agent(obs):\n    return {}\n",
+                   encoding="utf-8")
+    good_l1 = tmp_path / "good_l1.py"
+    good_l1.write_text("def _cxs_agent(obs):\n    return {}\n",
+                       encoding="utf-8")
+    good_vb = tmp_path / "good_vb.py"
+    good_vb.write_text("def _cxd_agent(obs):\n    return {}\n",
+                       encoding="utf-8")
+    args = ((str(bad), str(good_vb)) if slot == "l1"
+            else (str(good_l1), str(bad)))
+    with pytest.raises(gate.GateH2HError, match="装载身份不符"):
+        gate.run(args[0], args[1], seeds=(101,),
+                 evidence_path=str(tmp_path / "h2h_ev.json"))
+    assert not (tmp_path / "h2h_ev.json").exists()   # 未开打即未落台账
+
+
+def test_loader_missing_file_fails_closed(tmp_path):
+    with pytest.raises(gate.GateH2HError, match="装载失败"):
+        gate.run(str(tmp_path / "nope.py"), VERBATIM_MAIN, seeds=(101,),
+                 evidence_path=str(tmp_path / "h2h_ev.json"))
+
+
+# ---- ① 真跑 2 seeds × 双席位（4 局，~15s；台账落 tmp） ----
+
+def test_run_real_seeds_101_201_both_seats(tmp_path):
+    ev_file = tmp_path / "h2h_evidence.json"
+    result = gate.run(L1_MAIN, VERBATIM_MAIN, seeds=(101, 201),
+                      evidence_path=str(ev_file))
     assert set(result) == {"n", "wins", "losses", "ties", "rate", "passed",
                            "per_game", "evidence_path"}
     assert result["n"] == 4 == len(result["per_game"])
@@ -112,9 +145,10 @@ def test_run_real_seeds_101_201_both_seats():
     assert result["rate"] == expected_rate
     assert result["passed"] is (expected_rate >= gate.WIN_RATE_THRESHOLD)
 
-    # 台账：落点契约 + 汇总字段与返回一致（round-30 字段名沿用的 ofN=每席位局数）
-    assert result["evidence_path"] == os.path.join(
-        HERE, "evidence", "h2h_evidence.json")
+    # 台账：落点契约（tmp 覆写，不写真 evidence/）+ 汇总字段与返回一致
+    # （round-30 字段名沿用的 ofN=每席位局数）+ 装载身份留痕
+    assert result["evidence_path"] == str(ev_file)
+    assert ev_file.is_file()
     with open(result["evidence_path"], encoding="utf-8") as fh:
         ev = json.load(fh)
     assert ev["n_games"] == 4 and len(ev["games"]) == 4
@@ -125,6 +159,9 @@ def test_run_real_seeds_101_201_both_seats():
     assert ev["rate"] == result["rate"]
     assert ev["passed"] == result["passed"]
     assert ev["win_rate_threshold"] == gate.WIN_RATE_THRESHOLD
+    assert ev["loader"] == {"semantics": "official-last-callable",
+                            "l1_callable": "_cxs_agent",
+                            "verbatim_callable": "_cxd_agent"}
     assert (ev["cand_wins_seatA(of2)"] + ev["cand_wins_seatB(of2)"]
             == result["wins"])
     assert ev["mean_margin"] == pytest.approx(

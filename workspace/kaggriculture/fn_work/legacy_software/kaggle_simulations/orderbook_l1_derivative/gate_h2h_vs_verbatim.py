@@ -1,5 +1,14 @@
 """gate_h2h_vs_verbatim（R10 门①）：seated 双席位 ≥16 局对 orderbook verbatim 互胜 ≥0.55。
 
+装载语义（2026-09-24 评审 P0 修复，重要）：官方 last-callable 桌面复刻——直接
+import 复用门② gate_lineage_strength._load_entry（同款实现，不制第四份复制），
+装载后加身份断言（门④ L1_LAST_CALLABLE/BASELINE_LAST_CALLABLE 同款先例）：
+L1 侧 callable.__name__ 必须 = _cxs_agent、verbatim 侧必须 = _cxd_agent，断言
+失败抛 GateH2HError"装载身份不符"（fail-closed）。此前误用
+kgenv.arena.load_submission_agent：其具名 `agent` 优先分支对两 main 均取到
+层链中途的内层 agent（L1 漏掉层 S），两席实为同一基座互打 → 16 局全 tie 的
+证据无效（原"截断在该种子域不触发"定性系装载缺陷误定性，评审 P0 纠正）。
+
 裁决口径（汇总字段沿用 round-30 先例 ../orderbook_derivative/h2h_evidence.json）：
 - 局序 = seeds 顺序 × 席位 (0, 1)：每 seed 我方（L1 候选）坐 seat0/seat1 各一
   局；seeds 缺省 (101,102,103,104,201,202,203,204) → 16 局。
@@ -14,11 +23,12 @@
   all_done=False → passed=False，无论互胜率；单局 Python 级异常同样按非
   DONE 局入账（statuses 记 ["ERROR","ERROR"]、note 留痕），不让门抛异常逃逸。
 - PASS 判据：n>0 且 all_done 且 rate ≥ 0.55（WIN_RATE_THRESHOLD）。
-- 台账：本文件同目录 evidence/h2h_evidence.json（mkdir -p）；汇总字段沿
+- 台账：本文件同目录 evidence/h2h_evidence.json（mkdir -p，evidence_path 可
+  覆写——门③ run 同款口径，供测试 tmp 隔离防覆写真台账）；汇总字段沿
   round-30（n_games/cand_wins/opp_wins/ties/cand_wins_seatA(ofN)/
   cand_wins_seatB(ofN)/mean_margin/all_done/games），seatA/seatB 的 ofN 按
   实际每席位局数写（缺省 8），另加 rate/win_rate_threshold/passed 三键作门
-  裁决留痕。
+  裁决留痕，并记 loader 双席装载身份（l1_callable/verbatim_callable）。
 """
 
 from __future__ import annotations
@@ -27,11 +37,39 @@ import json
 import math
 import os
 import sys
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, FrozenSet, List, Optional, Sequence
+
+from gate_lineage_strength import GateLineageError, _load_entry
+from gate_launch_fourgate_l1 import BASELINE_LAST_CALLABLE, L1_LAST_CALLABLE
 
 DEFAULT_SEEDS = (101, 102, 103, 104, 201, 202, 203, 204)
 WIN_RATE_THRESHOLD = 0.55
 EVIDENCE_NAME = "h2h_evidence.json"
+L1_EXPECTED_CALLABLES = frozenset({L1_LAST_CALLABLE})        # {"_cxs_agent"}
+VERBATIM_EXPECTED_CALLABLES = frozenset({BASELINE_LAST_CALLABLE})  # {"_cxd_agent"}
+
+
+class GateH2HError(RuntimeError):
+    """门① fail-closed：装载失败/装载身份不符（不可执行=门红，由编排承载）。"""
+
+
+def _load_verified(main_path: Any, expected_names: FrozenSet[str], role: str):
+    """官方 last-callable 装载（复用门② _load_entry）+ 身份断言（门④同款先例）。
+
+    callable.__name__ 必须在 expected_names 白名单内；装载异常（转译
+    GateLineageError）或身份不符抛 GateH2HError——没验证装的是谁就开打=门①
+    证据无效（评审 P0 教训），绝不静默开跑。
+    """
+    try:
+        fn = _load_entry(main_path, role)
+    except GateLineageError as exc:
+        raise GateH2HError(str(exc)) from exc
+    name = getattr(fn, "__name__", None)
+    if name not in expected_names:
+        raise GateH2HError(
+            f"{role} 装载身份不符：last-callable={name!r} 不在期望集 "
+            f"{sorted(expected_names)}（{main_path}）")
+    return fn
 
 
 def _software_root() -> str:
@@ -110,22 +148,32 @@ def _play_one(run_episode: Any, episode_steps: int, cand_agent: Any,
 
 
 def run(l1_main: str, verbatim_main: str,
-        seeds: Optional[Sequence[int]] = None) -> Dict[str, Any]:
+        seeds: Optional[Sequence[int]] = None,
+        evidence_path: Optional[str] = None,
+        l1_expected_names: FrozenSet[str] = L1_EXPECTED_CALLABLES,
+        verbatim_expected_names: FrozenSet[str] = VERBATIM_EXPECTED_CALLABLES,
+        ) -> Dict[str, Any]:
     """{n, wins, losses, ties, rate, passed, per_game, evidence_path}。
 
     任一局非 DONE 即门红（fail-closed）；对局走官方引擎 kgenv.engine.run_episode
-    （episode_steps=720），装载走 kgenv.arena.load_submission_agent（last-callable）。
+    （episode_steps=720）。装载走官方 last-callable 桌面复刻（复用门②
+    _load_entry）+ 身份断言：l1_main 末 callable 必须 = _cxs_agent（层 S 运行时
+    入口）、verbatim_main 必须 = _cxd_agent——不符即抛 GateH2HError"装载身份
+    不符"（fail-closed，不开打；评审 P0 修复，此前 kgenv.arena
+    load_submission_agent 的具名 agent 优先分支对两 main 均装到内层基座，
+    16 局实为基座互打全 tie，证据无效）。evidence_path 缺省本目录
+    evidence/h2h_evidence.json，可覆写（测试 tmp 隔离）。
     """
     if seeds is None:
         seeds = DEFAULT_SEEDS
     root = _software_root()
     if root not in sys.path:
         sys.path.insert(0, root)
-    from kgenv.arena import load_submission_agent
     from kgenv.engine import FULL_EPISODE_STEPS, run_episode
 
-    cand_agent = load_submission_agent(l1_main)
-    opp_agent = load_submission_agent(verbatim_main)
+    cand_agent = _load_verified(l1_main, l1_expected_names, "l1_main")
+    opp_agent = _load_verified(verbatim_main, verbatim_expected_names,
+                               "verbatim_main")
 
     per_game: List[Dict[str, Any]] = []
     for seed in seeds:
@@ -149,13 +197,17 @@ def run(l1_main: str, verbatim_main: str,
         "rate": summary["rate"],
         "win_rate_threshold": WIN_RATE_THRESHOLD,
         "passed": summary["passed"],
+        "loader": {
+            "semantics": "official-last-callable",
+            "l1_callable": getattr(cand_agent, "__name__", None),
+            "verbatim_callable": getattr(opp_agent, "__name__", None),
+        },
         "games": per_game,
     }
-    evidence_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "evidence")
-    os.makedirs(evidence_dir, exist_ok=True)
-    evidence_path = os.path.join(evidence_dir, EVIDENCE_NAME)
-    with open(evidence_path, "w", encoding="utf-8") as fh:
+    target = os.path.abspath(evidence_path) if evidence_path else os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "evidence", EVIDENCE_NAME)
+    os.makedirs(os.path.dirname(target), exist_ok=True)
+    with open(target, "w", encoding="utf-8") as fh:
         json.dump(evidence, fh, ensure_ascii=False, indent=1)
         fh.write("\n")
 
@@ -163,5 +215,5 @@ def run(l1_main: str, verbatim_main: str,
         "n": summary["n"], "wins": summary["wins"],
         "losses": summary["losses"], "ties": summary["ties"],
         "rate": summary["rate"], "passed": summary["passed"],
-        "per_game": per_game, "evidence_path": evidence_path,
+        "per_game": per_game, "evidence_path": target,
     }

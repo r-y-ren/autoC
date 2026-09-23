@@ -41,7 +41,7 @@
 | precision_subset_check | S3 | wired 09-24 | 26/26 all_ok 0 violation（WHEAT 21≤84/CARROT 94≤128）；模式甲金丝雀绿 | (本批) |
 | constructed_invariant_cases | S3 | wired 09-24 | c3 夹具形态修正为真实链路（决策步 670+plants@671）；复用 test_layer_s 夹具零复制 | (本批) |
 | gate_equivalence_precision | S3 | wired 09-24 | 全量 run 46.8s：equiv=False/subset=True/cases=True——严格契约如实红 | (本批) |
-| gate_h2h_vs_verbatim | S3 | wired 09-24 | 16 局全量 0-0-16 全 tie（截断在该种子域不触发→逐字节同局）→rate 0 红（fail-closed 口径） | (本批) |
+| gate_h2h_vs_verbatim | S3 | wired 09-24；P0 修复重跑 09-24 | 16 局全量 14-0-2 绿（rate 1.0≥0.55：seeds 101-104/201-203 双席全胜 margin +10、204 双席 tie）；装载=官方 last-callable（import 复用门② _load_entry）+身份断言 _cxs_agent/_cxd_agent。初跑 0-0-16 全 tie 系装载缺陷误定性（评审 P0 纠正） | (本批) |
 | gate_lineage_strength | S3 | wired 09-24 | 24 局 24-0-0 三对手零负——48-0 谱系强度保持 | (本批) |
 | gate_launch_fourgate_l1 | S3 | wired 09-24 | 四门全绿 22.2s；truncation_only_diff 差异步=1（step 653）全 ≥648 | (本批) |
-| verify_layer_s_gates | S3 | wired 09-24 | 全量编排 4.5 分钟 overall=FAIL（门①③红/门②④绿）——两红均规格口径问题非缺陷，批间门裁决 | (本批) |
+| verify_layer_s_gates | S3 | wired 09-24 | 全量编排 overall=FAIL（门①②④绿/门③红）——门③红系规格口径裁决项；门①初跑红系装载缺陷（评审 P0 已修复重跑转绿：14-0-2 rate 1.0），批间门裁决 | (本批) |
