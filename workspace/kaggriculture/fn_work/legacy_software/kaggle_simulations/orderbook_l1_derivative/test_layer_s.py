@@ -1,5 +1,7 @@
 """test_layer_s（继承 R10 验收③(c)）：运行时五函数 + invariant/surplus/demand/harvest 用例组。"""
 
+import pytest
+
 import layer_s_block
 
 
@@ -395,3 +397,226 @@ def test_truncate_never_drops_non_seed_orders():
               ["PLANT", "CARROT", 4], ["SELL", "MELON", 1]]
     got = layer_s_block._cxs_seed_truncate(obs, {"market": market}, _make_plan_view({}))
     assert got == [["SELL", "WHEAT", 2], ["PLANT", "CARROT", 4], ["SELL", "MELON", 1]]
+
+
+# ---- _cxs_agent 用例组（运行时入口：六条路径 + 独立导入态结构不变式）----
+
+
+class _RecordingHost:
+    """假宿主：固定返回 action，记录 (observation, configuration) 调用序列。"""
+
+    def __init__(self, action):
+        self.action = action
+        self.calls = []
+
+    def __call__(self, observation, configuration=None):
+        self.calls.append((observation, configuration))
+        return self.action
+
+
+def _patch_host(monkeypatch, action):
+    host = _RecordingHost(action)
+    monkeypatch.setattr(layer_s_block, "_CXS_HOST", host)
+    return host
+
+
+def test_agent_standalone_host_absent_and_is_last_callable():
+    # 独立导入态结构不变式：宿主不存在（模块首部无可捕获 callable → _CXS_HOST=None，
+    # 测试注入通道=monkeypatch 模块级 _CXS_HOST）；_cxs_agent 是本模块最后 callable
+    # （注入态"末 callable=_cxs_agent"官方入口语义在测试态的同构投影）。
+    assert layer_s_block._CXS_HOST is None
+    last = [v for v in list(vars(layer_s_block).values()) if callable(v)][-1]
+    assert last is layer_s_block._cxs_agent
+
+
+def test_agent_step_below_from_same_object_and_plan_view_unused(monkeypatch):
+    # ① step<648 → 返回宿主动作同对象且 plan_view 零调用；宿主按
+    # (observation, configuration) 原样收参（configuration 透传）。
+    market = [["BUY_SEED", "CARROT", 5]]
+    action = {"market": market, "farmer": ["PASS"]}
+    host = _patch_host(monkeypatch, action)
+    pv = _spy_plan_view({660: {"plants": {}, "buy_seed": {}}})
+    monkeypatch.setattr(layer_s_block, "_cxs_plan_view", pv)
+    obs = {"step": 600, "player": 0}
+    cfg = {"sentinel": True}
+    got = layer_s_block._cxs_agent(obs, cfg)
+    assert got is action  # 同对象零足迹
+    assert pv.calls == 0  # plan_view 零调用（快道早于截断层）
+    assert host.calls == [(obs, cfg)]  # 宿主调用在 try 外，参数原样透传
+    got2 = layer_s_block._cxs_agent(obs)
+    assert got2 is action and host.calls[-1] == (obs, None)  # configuration 缺省 None
+
+
+def test_agent_no_seed_orders_same_object_zero_footprint(monkeypatch):
+    # ② step≥648 无 BUY_SEED → 同对象零足迹；market 缺失 / action 非 dict /
+    # observation 非 dict（解析异常）同样原样返回宿主产物。
+    action = {"market": [["SELL", "WHEAT", 2], ["HIRE", 1, 0]], "farmer": ["PASS"]}
+    pv = _spy_plan_view(None)
+    _patch_host(monkeypatch, action)
+    monkeypatch.setattr(layer_s_block, "_cxs_plan_view", pv)
+    assert layer_s_block._cxs_agent({"step": 700}) is action  # 无 BUY_SEED
+    assert pv.calls == 0
+
+    action2 = {"farmer": ["PASS"]}  # market 键缺失
+    _patch_host(monkeypatch, action2)
+    assert layer_s_block._cxs_agent({"step": 700}) is action2
+    assert pv.calls == 0
+
+    action3 = ["not", "a", "dict"]  # 宿主动作非 dict
+    _patch_host(monkeypatch, action3)
+    assert layer_s_block._cxs_agent({"step": 700}) is action3
+
+    action4 = {"market": [["BUY_SEED", "CARROT", 5]]}  # observation 非 dict → 解析异常
+    _patch_host(monkeypatch, action4)
+    assert layer_s_block._cxs_agent(None) is action4  # fail-safe：原样返回
+    assert pv.calls == 0  # 全程未触 plan_view
+
+
+def test_agent_truncates_via_full_chain_with_fakes(monkeypatch):
+    # ③ 有 BUY_SEED → dict(action, market=…) 且被过滤单恰为截断层判定量
+    # （假宿主+真截断层+假 plan_view 全链路）：磁带唯一 plants 在 671
+    # （671+48=719>718 不构成需求）且无磁带未来买 → 供给=0+6+0=6 > 需求 0 →
+    # allowed=6 → 两张 CARROT 买单整单删、SELL 原位保留。
+    market = [["BUY_SEED", "CARROT", 4], ["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 3]]
+    action = {"market": market, "farmer": ["PASS"]}
+    _patch_host(monkeypatch, action)
+    pv = _spy_plan_view({671: {"plants": {"CARROT": 5}, "buy_seed": {}}})
+    monkeypatch.setattr(layer_s_block, "_cxs_plan_view", pv)
+    obs = _obs_with_seeds({"CARROT": 0}, step=650)
+    got = layer_s_block._cxs_agent(obs)
+    assert got == {"market": [["SELL", "WHEAT", 3]], "farmer": ["PASS"]}
+    assert got is not action  # 慢道按契约建新 action dict（dict(action, market=…)）
+    assert got["farmer"] is action["farmer"]  # 浅拷贝：其余键值仍原对象
+    assert pv.calls >= 1  # 截断层确实消费了 plan_view（全链路非空转）
+
+
+def test_agent_plan_view_none_zero_truncation(monkeypatch):
+    # ④ 宿主正常但 plan_view None → 品项 None→零截断链路：内容原样相等，
+    # market 仍零删除原对象（慢道新 action dict 载原 market）。
+    market = [["BUY_SEED", "CARROT", 5], ["SELL", "WHEAT", 1]]
+    action = {"market": market, "farmer": ["PASS"]}
+    _patch_host(monkeypatch, action)
+    monkeypatch.setattr(layer_s_block, "_cxs_plan_view", _make_plan_view(None))
+    got = layer_s_block._cxs_agent(_obs_with_seeds({}, step=650))
+    assert got == action and got["market"] is market
+
+
+def test_agent_truncate_exception_falls_back_to_host_action(monkeypatch):
+    # ⑤ 截断层抛异常 → 返回基座 action 原样（fail-safe，同对象，绝不崩）。
+    action = {"market": [["BUY_SEED", "CARROT", 5]]}
+    _patch_host(monkeypatch, action)
+
+    def _boom(observation, action, plan_view):
+        raise RuntimeError("truncate boom")
+
+    monkeypatch.setattr(layer_s_block, "_cxs_seed_truncate", _boom)
+    monkeypatch.setattr(layer_s_block, "_cxs_plan_view", _spy_plan_view(None))
+    assert layer_s_block._cxs_agent(_obs_with_seeds({}, step=650)) is action
+
+
+def test_agent_host_exception_propagates(monkeypatch):
+    # ⑥ 宿主调用在 try 之外：宿主抛异常 → 向上传播，不被 fail-safe 吞噬
+    # （宿主坏了不是本层责任——与 ⑤ 的边界）。
+    def _boom_host(observation, configuration=None):
+        raise RuntimeError("host boom")
+
+    monkeypatch.setattr(layer_s_block, "_CXS_HOST", _boom_host)
+    with pytest.raises(RuntimeError):
+        layer_s_block._cxs_agent({"step": 650})
+
+
+def test_agent_full_stack_with_fake_impl_and_real_plan_view(monkeypatch):
+    # 全栈集成：假宿主 + 真 _cxs_plan_view（假 _IMPL 双路磁带）+ 真截断层。
+    # 2 号路 671 步 CARROT PLANT（671+48=719>718 → 不构成需求）且磁带无未来
+    # CARROT 买单 → 供给=库存0+保留单6+磁带0=6 → allowed=6 → 两张 CARROT 买单全删。
+    route2 = _tape({671: {"farmer": ["PLANT", "CARROT"]}})
+    _patch_impl(monkeypatch, {0: {"route": 1}}, {1: _tape({}), 2: route2})
+    market = [["BUY_SEED", "CARROT", 4], ["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 3]]
+    action = {"market": market, "farmer": ["PASS"]}
+    _patch_host(monkeypatch, action)
+    obs = {"step": 650, "player": 0, "private": {"seeds": {"CARROT": 0}}}
+    got = layer_s_block._cxs_agent(obs)
+    assert got == {"market": [["SELL", "WHEAT", 3]], "farmer": ["PASS"]}
+
+
+# ---- _cxs_plan_view 用例组（内联适配器：基座磁带折叠 → 截断层只读视图）----
+
+
+class _FakeChassis:
+    def __init__(self, players, routes):
+        self.players = players
+        self.routes = routes
+
+
+class _FakeImpl:
+    def __init__(self, chassis):
+        self.chassis = chassis
+
+
+def _tape(entries):
+    """720 槽磁带假件：entries={t: 步字典}，其余步 None（越界/非 dict=空步）。"""
+    tape = [None] * 720
+    for t, entry in entries.items():
+        tape[t] = entry
+    return tape
+
+
+def _patch_impl(monkeypatch, players, routes):
+    impl = _FakeImpl(_FakeChassis(players, routes))
+    monkeypatch.setattr(layer_s_block, "_IMPL", impl, raising=False)
+    return impl
+
+
+def test_plan_view_standalone_without_impl_returns_none():
+    # 独立导入测试态：基座 _IMPL 单例不存在 → None（不确定=零截断）。
+    assert layer_s_block._cxs_plan_view({"step": 650, "player": 0}) is None
+
+
+def test_plan_view_folds_tapes_with_day27_route_switch(monkeypatch):
+    # 折叠契约：plants=farmer+hands 的 PLANT 逐品计数；buy_seed=market 中
+    # BUY_SEED qty（max(0,int) 钳非负）；t≥648 走 2 号路（day27 路由换算，
+    # 侦察行号 2168/2342/2583/4888）；未知作物不入表；空步不入表。
+    route1 = _tape({647: {"farmer": ["PLANT", "CARROT"],
+                          "hands": [["PLANT", "WHEAT"], ["PASS"]],
+                          "market": [["BUY_SEED", "CARROT", 3]]}})
+    route2 = _tape({
+        648: {"farmer": ["PASS"],
+              "market": [["BUY_SEED", "MELON", 2], ["SELL", "WHEAT", 1]]},
+        660: {"farmer": ["PLANT", "CARROT"], "hands": [["PLANT", "CARROT"]]},
+        670: {"farmer": ["PLANT", "BAMBOO"],
+              "market": [["BUY_SEED", "BAMBOO", 5], ["BUY_SEED", "WHEAT", -4]]},
+    })
+    _patch_impl(monkeypatch, {0: {"route": 1}}, {1: route1, 2: route2})
+    got = layer_s_block._cxs_plan_view({"step": 646, "player": 0})
+    assert got == {
+        647: {"plants": {"CARROT": 1, "WHEAT": 1}, "buy_seed": {"CARROT": 3}},
+        648: {"plants": {}, "buy_seed": {"MELON": 2}},  # 648 起切 2 号路；SELL 不入
+        660: {"plants": {"CARROT": 2}, "buy_seed": {}},
+        670: {"plants": {}, "buy_seed": {"WHEAT": 0}},  # BAMBOO 不在表；负 qty 钳 0
+    }
+
+
+def test_plan_view_all_empty_steps_returns_none(monkeypatch):
+    # 整卷无 plants/buys → out 为空 → None（磁带步全空 / 越界 None 均为空步）。
+    _patch_impl(monkeypatch, {0: {"route": 1}}, {1: _tape({}), 2: _tape({})})
+    assert layer_s_block._cxs_plan_view({"step": 646, "player": 0}) is None
+
+
+def test_plan_view_guard_paths_return_none(monkeypatch):
+    # 守卫面：席位无路由（players 缺席）/route 不在 routes/step<0（缺省 -1）/
+    # observation 非 dict / 磁带读取抛异常 → 一律 None（适配器不抛）。
+    _patch_impl(monkeypatch, {}, {1: _tape({})})
+    assert layer_s_block._cxs_plan_view({"step": 650, "player": 0}) is None
+    _patch_impl(monkeypatch, {0: {"route": 9}}, {1: _tape({})})
+    assert layer_s_block._cxs_plan_view({"step": 650, "player": 0}) is None
+    _patch_impl(monkeypatch, {0: {"route": 1}}, {1: _tape({})})
+    assert layer_s_block._cxs_plan_view({"player": 0}) is None  # 缺 step → -1
+    assert layer_s_block._cxs_plan_view(None) is None  # observation 非 dict
+
+    class _Boom:
+        @property
+        def chassis(self):
+            raise RuntimeError("chassis boom")
+
+    monkeypatch.setattr(layer_s_block, "_IMPL", _Boom(), raising=False)
+    assert layer_s_block._cxs_plan_view({"step": 650, "player": 0}) is None

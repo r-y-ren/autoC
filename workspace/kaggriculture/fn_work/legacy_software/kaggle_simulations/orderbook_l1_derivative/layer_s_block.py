@@ -26,9 +26,59 @@ FIRST_HARVEST_STEPS: dict = {
 }
 
 
-def _cxs_agent(observation, configuration=None):
-    """运行时入口：捕获 last-callable 基座→取动作→step≥648 交截断；异常回退基座动作。"""
-    raise NotImplementedError("unimplemented:fn:_cxs_agent")
+# 宿主捕获（层 D 先例 main.py L6835 _CXD_HOST 同款 last-callable 捕获）：注入态本语句
+# 在追加块首部执行——globals 最后 callable=基座尾部的 orderbook 版 _cxd_agent，即本层
+# 宿主；它必须在 _cxs_agent（乃至本块任何 def）定义之前执行，否则捕获到本层自身函数。
+# 双下划线名排除：模块样板 callable（如 PEP 649 的 __annotate__，Python 3.14 起随模块
+# 首位插入 globals）不是宿主面——注入态它们先于一切用户 def 插入、本就不在末位，排除
+# 无影响；独立导入态排除后无可捕获 callable → _CXS_HOST=None（宿主不存在），测试经
+# monkeypatch 本模块级 _CXS_HOST 注入假宿主（_cxs_agent 的测试注入通道）。
+_cxs_last_callable = [
+    v for k, v in list(globals().items())
+    if callable(v) and not (k.startswith("__") and k.endswith("__"))
+]
+_CXS_HOST = _cxs_last_callable[-1] if _cxs_last_callable else None
+
+
+def _cxs_plan_view(observation):
+    """内联 plan_view 适配器（_cxs_agent 职责面的内部实现，非独立职责函数）。
+
+    把基座双路磁带折叠为截断层只读视图 {t: {"plants": {crop: n}, "buy_seed": {crop: n}}}：
+    磁带取 _IMPL.chassis.routes，day27 起（t≥_CXS_FROM）走 2 号路——基座同款路由换算
+    （侦察行号 2168/2342/2583/4888：routes[2 if t>=648 else route]）；步条目越界或非
+    dict 视为空步。plants=farmer+hands 指令中 PLANT 且品项在 FIRST_HARVEST_STEPS 的
+    逐品计数；buy_seed=market 中 BUY_SEED 订单 qty（max(0,int) 钳非负）逐品累加；
+    空步不入表，整卷为空 → None。_IMPL 为基座模块级单例（注入态与本块同名空间）；
+    独立导入测试态经 globals().get("_IMPL") 取得 None → 返回 None（不确定=零截断）。
+    seat/step 解析失败、step<0、route 缺失或不在 routes、任何异常 → None。
+    """
+    try:
+        impl = globals().get("_IMPL")  # 注入态=基座单例；独立导入态不存在
+        if impl is None:
+            return None
+        ch = impl.chassis
+        seat = int(observation.get("player", 0))
+        step = int(observation.get("step", -1))
+        native = ch.players.get(seat) or {}
+        route = native.get("route")
+        if step < 0 or route is None or route not in ch.routes:
+            return None
+        out = {}
+        for t in range(step + 1, _CXS_SEASON_END + 1):
+            tape = ch.routes[2 if t >= _CXS_FROM else route]
+            a = tape[t] if t < len(tape) and isinstance(tape[t], dict) else {}
+            plants, buys = {}, {}
+            for c in [a.get("farmer") or ["PASS"], *(a.get("hands") or [])]:
+                if c and len(c) > 1 and c[0] == "PLANT" and c[1] in FIRST_HARVEST_STEPS:
+                    plants[c[1]] = plants.get(c[1], 0) + 1
+            for o in (a.get("market") or []):
+                if o and len(o) >= 3 and o[0] == "BUY_SEED" and o[1] in FIRST_HARVEST_STEPS:
+                    buys[o[1]] = buys.get(o[1], 0) + max(0, int(o[2]))
+            if plants or buys:
+                out[t] = {"plants": plants, "buy_seed": buys}
+        return out or None
+    except Exception:
+        return None
 
 
 def _cxs_seed_truncate(observation, action, plan_view):
@@ -245,3 +295,38 @@ def _cxs_harvest_completable(step, crop, first_harvest_steps=None):
         return step + table[crop] <= _CXS_SEASON_END
     except Exception:
         return True
+
+
+def _cxs_agent(observation, configuration=None):
+    """运行时入口（注入后为 main.py 最后 callable=官方入口）：宿主取动作→step≥648 交截断层。
+
+    先例=层 D main.py L6909：宿主调用在 try 之外——`action = _CXS_HOST(observation,
+    configuration)`（_CXS_HOST=注入时基座最后 callable=orderbook 版 _cxd_agent）；宿主
+    异常向上传播，宿主坏了不是本层责任。try 内三步（fail-safe：任何异常→原样返回
+    宿主 action，绝不崩）：
+      1) step==0 复位层内缓存（本层当前无跨步缓存，留复位钩子注释）；
+      2) step≥_CXS_FROM 且 action 是 dict 且 action["market"] 含 BUY_SEED（订单匹配
+         对齐截断层/基座 L4680/L4694：list/tuple、len≥3、首元 "BUY_SEED"）→
+         _cxs_seed_truncate(observation, action, _cxs_plan_view)，返回
+         dict(action, market=filtered)（内联 plan_view 适配器见上）；
+      3) 其余一切情况（step<648 / action 非 dict / market 缺失·非 list / 无 BUY_SEED /
+         截断链异常）→ 原样返回宿主 action（同对象零足迹）。
+    独立测试态 _CXS_HOST=None（宿主不存在）：测试经 monkeypatch 本模块 _CXS_HOST /
+    _cxs_plan_view / _cxs_seed_truncate 注入假件（_cxs_agent 按名取模块全局，补丁即生效）。
+    """
+    action = _CXS_HOST(observation, configuration)  # 宿主调用在 try 之外（层 D L6909 先例）
+    try:
+        step = int(observation.get("step", 0))
+        if step == 0:
+            pass  # 复位钩子：本层当前无跨步缓存；未来引入跨步状态时在此复位
+        if step >= _CXS_FROM and isinstance(action, dict):
+            market = action.get("market")
+            if isinstance(market, list) and any(
+                isinstance(order, (list, tuple)) and len(order) >= 3 and order[0] == "BUY_SEED"
+                for order in market
+            ):
+                filtered = _cxs_seed_truncate(observation, action, _cxs_plan_view)
+                return dict(action, market=filtered)
+        return action
+    except Exception:
+        return action
