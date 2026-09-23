@@ -1,7 +1,27 @@
-"""evaluate_ablation_tree（L1，R4）。职责与验收详见 fn_work/tape_gen/fn_docs/responsibility.md。
+"""evaluate_ablation_tree（L1，R4，**v2 分阶段混合适应度**）。职责与验收
+详见 fn_work/tape_gen/fn_docs/responsibility.md。
 
-消融树评估：候选（库件 × 反射层配置）→ **预算分级** seated 适应度 +
-稀疏惩罚评分（score = winrate − λ×启用模块数）。
+消融树评估：候选（库件 × 反射层配置）→ 分阶段混合适应度 +
+稀疏惩罚（λ×启用模块数计入代价）。
+
+**v2（2026-09-23 用户裁决，R5 适应度 v2）**：动机 = T4 M1 0/16 市场
+耦合假说——v1 适应度（仅真实对手回放流）对普通对手 0.47 但对同级产者
+（纯 v48）0.0，适应度必须含同级产者维度。分阶段：
+
+* **粗筛 = 留出流 seated 不变**（每候选 ≤coarse_games 局种子化子样本，
+  320 候选保预算；不混 h2h）；支持注入 v1 预评粗筛底表（payload
+  ["coarse_rows"]——复用时跳过粗筛评估并登记 coarse_reused）。
+* **精评 = top-K（K ≤ FINE_TOP_K_CAP=12）混入 h2h 臂**：每候选
+  ① fine_games（v2 = 留出局集，payload["fine_games"]；缺省退化=games）
+  seated 评估 + ② 对纯 v48 引擎对打 h2h_games（缺省 4 局 = 2 种子×
+  AB/BA 席，≥4 契约下限；与 T4 M1 同通道：官方真引擎、席位显式、
+  逐局全新装载）。
+* **混合分 = 0.5×留出胜率 + 0.5×h2h 互胜 − λ×启用模块数**（两臂平局
+  都计 0.5；h2h 臂缺行时退化为 v1 语义并留痕 h2h_missing——预算截断
+  如实分档，不编数）。
+* 精化（阈值微轴邻域）与 finalists 排序同用混合分；墙钟硬帽
+  tiers["wall_clock_budget_s"]（v2 跑批登记 9000s=2.5h）——分级控预算，
+  超帽截断留痕（R4 错误语义）。
 
 * 反射层真值 = v48 深读档模块（fn_docs/hybrid/results/2026-09-23-v48-
   coordination-deepread/modules/，只读 import）：clone_preempt=
@@ -24,8 +44,9 @@
   契约见 SeatedEvaluator.__call__）；缺省真实评估器 **batch 游戏主序**
   （每回放文件仅解析一次——单件 >30MB，候选主序不可承受）。
 * 预算分级：粗筛（训练集子样本，每候选 ≤coarse_games 局，种子化）→ 精评
-  （top-K 全训练集）→ 阈值微轴精化（最佳配置邻域，可选）→ finalists
-  （top-N 交留出裁决）。墙钟预算耗尽 → 取已评最优并标注（R4 错误语义）。
+  （top-K：fine_games seated + h2h 臂）→ 阈值微轴精化（最佳配置邻域，
+  可选）→ finalists（top-N）。墙钟预算耗尽 → 取已评最优并标注
+  （R4 错误语义；h2h 臂截断候选留痕 h2h_missing）。
 * 稀疏惩罚：score = winrate − λ×enabled_modules（λ 默认 0.02 登记可调）；
   同适应度取更稀疏枝（排序键 (-score, enabled_modules, candidate_id)）。
 
@@ -82,6 +103,14 @@ V48_GOLD_PARAMS = {
 GUARD_ACTIVE_STOP = 700
 #: 每回合市单项数上限（引擎 maxMarketOrdersPerTurn）。
 MAX_ORDERS_PER_TURN = 10
+
+#: v2 精评 top-K 帽（契约：K ≤ 12）。
+FINE_TOP_K_CAP = 12
+#: v2 h2h 臂缺省局规格（seed×seat）：M1 通道种子域（run_m1_m2_gates.
+#: H2H_SEEDS）两块各 1 种子 × AB/BA 席 = 4 局/候选（≥4 契约下限）。
+DEFAULT_H2H_GAMES = ((101, 0), (101, 1), (201, 0), (201, 1))
+#: v2 混合分两臂权重（用户裁决 0.5/0.5）。
+MIXED_WEIGHTS = (0.5, 0.5)
 
 _modules_ready = False
 
@@ -456,13 +485,96 @@ def score_row(entry, candidate, lambda_sparse):
     return entry["winrate"] - lambda_sparse * candidate["enabled_modules"]
 
 
-def _rank_rows(rows_by_id, candidates_by_id, lambda_sparse):
-    """排序键 (-score, enabled_modules, candidate_id)：同分取更稀疏枝。"""
+def mixed_score(seated_entry, h2h_entry, candidate, lambda_sparse):
+    """v2 混合适应度：0.5×留出（seated）胜率 + 0.5×h2h 互胜 − λ×模块数。
+
+    h2h_entry=None → v1 语义退化（seated 胜率 − λ×模块数；无 h2h 臂/
+    截断留痕候选的同源账本分）。两臂 winrate 均平局计 0.5。"""
+    seated = float(seated_entry["winrate"]) if seated_entry else 0.0
+    if h2h_entry is None:
+        return seated - lambda_sparse * candidate["enabled_modules"]
+    return (MIXED_WEIGHTS[0] * seated + MIXED_WEIGHTS[1]
+            * float(h2h_entry["winrate"])
+            - lambda_sparse * candidate["enabled_modules"])
+
+
+class H2HEvaluator:
+    """真实 h2h 臂评估器（官方真引擎；与 T4 M1 同通道）。
+
+    __call__(candidate, games)：games = [(seed, seat), ...]。每局：候选
+    callable（build_candidate_agent **逐局新建**——步计数器/反射层状态
+    归零）落 seat 席、纯 v48（load_submission_agent **逐局全新装载**，
+    M1 _play_h2h_series 同纪律）落对席 → engine_game 整季 → margin =
+    rewards[seat] − rewards[1−seat]。行集与 SeatedEvaluator 同形
+    （winrate 平局 0.5；明细 seed/me_seat/margin/finals/statuses/turns
+    ——**无墙钟字段**，账本确定性面）。
+
+    stats 记录引擎局数（供 runtime_stats；不进账本）。
+    """
+
+    def __init__(self, library_dir=None, modules_path=None, base_main=None):
+        self.tapes = load_library_tapes(library_dir)
+        self.modules_path = modules_path
+        self.base_main = base_main
+        self.stats = {"engine_games": 0, "h2h_candidates": 0}
+
+    def __call__(self, candidate, games):
+        import sys
+        src_root = str(_TAPE_GEN_ROOT / "src")
+        if src_root not in sys.path:
+            sys.path.insert(0, src_root)
+        from assemble_and_gate.run_m1_m2_gates import (
+            PURE_V48_MAIN,
+            engine_game,
+            load_submission_agent,
+        )
+        tape = self.tapes.get(candidate["piece"])
+        if tape is None:
+            raise ValueError(f"unknown library piece (fail-closed): "
+                             f"{candidate['piece']}")
+        base_main = str(self.base_main) if self.base_main \
+            else str(PURE_V48_MAIN)
+        rows = []
+        for seed, seat in games:
+            me = int(seat)
+            agent = build_candidate_agent(tape, candidate,
+                                          self.modules_path)
+            pair = [load_submission_agent(base_main),
+                    load_submission_agent(base_main)]
+            pair[me] = agent          # 候选显式落 me 席（M1 同语义）
+            rec = engine_game(pair[0], pair[1], int(seed))
+            self.stats["engine_games"] += 1
+            rewards = [float(r) for r in rec["rewards"]]
+            margin = rewards[me] - rewards[1 - me]
+            rows.append({
+                "seed": int(seed),
+                "opponent": "pure_v48",
+                "me_seat": me,
+                "win": margin > 0,
+                "draw": margin == 0,
+                "margin": margin,
+                "finals": rewards,
+                "statuses": rec["statuses"],
+                "turns": rec["turns_played"],
+            })
+        self.stats["h2h_candidates"] += 1
+        summary = SeatedEvaluator._summarize(candidate, rows)
+        summary["all_done"] = all(r["statuses"] == ["DONE", "DONE"]
+                                  for r in rows)
+        return summary
+
+
+def _rank_rows(rows_by_id, candidates_by_id, lambda_sparse, h2h_by_id=None):
+    """排序键 (-score, enabled_modules, candidate_id)：同分取更稀疏枝。
+
+    v2：h2h_by_id 给出该候选 h2h 行（None=无）时用混合分
+    （mixed_score），否则 v1 稀疏惩罚分（score_row）——粗筛恒为后者。"""
     decorated = []
     for cid, entry in rows_by_id.items():
         candidate = candidates_by_id[cid]
+        h2h = (h2h_by_id or {}).get(cid)
         decorated.append((
-            -score_row(entry, candidate, lambda_sparse),
+            -mixed_score(entry, h2h, candidate, lambda_sparse),
             int(candidate["enabled_modules"]),
             cid,
         ))
@@ -473,14 +585,21 @@ def _rank_rows(rows_by_id, candidates_by_id, lambda_sparse):
 def evaluate_ablation_tree(payload=None):
     """意图级签名；真值在责任文档。
 
-    payload：{candidates（define_config_space 产物）, games（训练局）,
-    evaluator（可注入；缺省 SeatedEvaluator）, lambda_sparse=0.02,
-    tiers: {coarse_games=8, coarse_subsample_seed, fine_top_k=6,
-    refinement=true, finalists_n=3, wall_clock_budget_s=7200}}。
+    payload：{candidates（define_config_space 产物）, games（粗筛局集/
+    v1 兼容精评局集）, fine_games（v2 精评 seated 局集=留出局；缺省=
+    games）, coarse_rows（可注入预评粗筛底表 {cid: 行}——复用登记）,
+    evaluator（可注入；缺省 SeatedEvaluator）, h2h_runner（可注入；
+    v2 h2h 臂——缺省 None=无该臂，混合分退化为 v1）, h2h_games
+    （[(seed, seat)] 缺省 DEFAULT_H2H_GAMES）, lambda_sparse=0.02,
+    tiers: {coarse_games=8, coarse_subsample_seed, fine_top_k=6（帽
+    FINE_TOP_K_CAP）, refinement=true, finalists_n=3,
+    wall_clock_budget_s=7200}}。
     返回 {coarse, fine, refinement, finalists, finalist_rows, budget,
-    lambda_sparse, subsample}；行含 score（稀疏惩罚后）与 per-game 明细。
+    lambda_sparse, subsample, h2h_games}；行含 score（v2 有 h2h 行的
+    候选=混合分）与 per-game 明细（seated+h2h 双臂）。
     预算耗尽：停止评估，取已评最优（粗筛表序）并标注
-    budget.budget_exhausted=true（R4）。
+    budget.budget_exhausted=true（R4）；h2h 臂被截断的候选留痕
+    budget.h2h_missing（其分退化 v1 语义——如实截断不编数）。
     """
     payload = dict(payload or {})
     candidates = payload.get("candidates") or []
@@ -492,6 +611,15 @@ def evaluate_ablation_tree(payload=None):
     tiers = dict(payload.get("tiers") or {})
     coarse_games = int(tiers.get("coarse_games", 8))
     fine_top_k = int(tiers.get("fine_top_k", 6))
+    if fine_top_k > FINE_TOP_K_CAP:
+        raise ValueError(f"fine_top_k={fine_top_k} 超 v2 契约帽 "
+                         f"{FINE_TOP_K_CAP} (fail-closed)")
+    fine_games = payload.get("fine_games") or games
+    h2h_games = [(int(g[0]), int(g[1]))
+                 for g in (payload.get("h2h_games")
+                           or DEFAULT_H2H_GAMES)]
+    h2h_runner = payload.get("h2h_runner")
+    coarse_prefetched = payload.get("coarse_rows")
     finalists_n = int(tiers.get("finalists_n", 3))
     do_refinement = bool(tiers.get("refinement", True))
     budget_s = float(tiers.get("wall_clock_budget_s", 7200.0))
@@ -508,37 +636,54 @@ def evaluate_ablation_tree(payload=None):
     def _elapsed():
         return time.monotonic() - started
 
-    def _attach(candidate, entry):
+    def _attach(candidate, entry, h2h_entry=None):
         row = dict(entry)
-        row["score"] = score_row(entry, candidate, lambda_sparse)
+        row["h2h"] = h2h_entry
+        row["score"] = mixed_score(entry, h2h_entry, candidate,
+                                   lambda_sparse)
         row["enabled_modules"] = candidate["enabled_modules"]
         row["piece"] = candidate["piece"]
         row["switches"] = candidate["switches"]
         row["thresholds"] = candidate.get("thresholds")
         return row
 
-    # ---- 粗筛：训练集子样本（每候选 ≤coarse_games 局）----
-    subsample = _coarse_subsample(games, coarse_games, subsample_seed)
-    coarse_rows, budget_exhausted = {}, False
-    pending = list(candidates)
-    index = 0
-    while index < len(pending):
-        chunk = pending[index:index + 16]
-        if _elapsed() > budget_s:
-            budget_exhausted = True
-            break
-        coarse_rows.update(_call_evaluator(evaluator, chunk, subsample))
-        index += 16
-    if budget_exhausted and not coarse_rows:
-        raise ValueError("预算耗尽且无已评候选——无法取已评最优 "
-                         "(fail-closed)")
+    # ---- 粗筛：训练集子样本（每候选 ≤coarse_games 局；不混 h2h）----
+    coarse_reused = coarse_prefetched is not None
+    if coarse_reused:
+        missing = [c["id"] for c in candidates
+                   if c["id"] not in coarse_prefetched]
+        if missing:
+            raise ValueError(f"coarse_rows 底表缺候选 (fail-closed): "
+                             f"{missing[:3]} …共 {len(missing)}")
+        coarse_rows = {c["id"]: coarse_prefetched[c["id"]]
+                       for c in candidates}
+        first_row = next(iter(coarse_rows.values()), None)
+        subsample = [g["episode_id"]
+                     for g in ((first_row or {}).get("games") or [])]
+        budget_exhausted = False
+    else:
+        subsample = _coarse_subsample(games, coarse_games, subsample_seed)
+        coarse_rows, budget_exhausted = {}, False
+        pending = list(candidates)
+        index = 0
+        while index < len(pending):
+            chunk = pending[index:index + 16]
+            if _elapsed() > budget_s:
+                budget_exhausted = True
+                break
+            coarse_rows.update(_call_evaluator(evaluator, chunk,
+                                               subsample))
+            index += 16
+        if budget_exhausted and not coarse_rows:
+            raise ValueError("预算耗尽且无已评候选——无法取已评最优 "
+                             "(fail-closed)")
     coarse_table = [_attach(candidates_by_id[cid], coarse_rows[cid])
                     for cid in _rank_rows(coarse_rows, candidates_by_id,
                                           lambda_sparse)]
     coarse_order = [row["candidate_id"] for row in coarse_table]
 
-    # ---- 精评：top-K（全训练局）----
-    fine_rows = {}
+    # ---- 精评：top-K seated(fine_games=v2 留出局) + h2h 臂 ----
+    fine_rows, fine_h2h = {}, {}
     top_k = [cid for cid in coarse_order[:fine_top_k]]
     if not budget_exhausted:
         top_candidates = [candidates_by_id[cid] for cid in top_k]
@@ -547,16 +692,29 @@ def evaluate_ablation_tree(payload=None):
                 budget_exhausted = True
                 break
             fine_rows.update(_call_evaluator(
-                evaluator, top_candidates[i:i + 4], games))
+                evaluator, top_candidates[i:i + 4], fine_games))
+        if h2h_runner is not None:
+            for cid in top_k:
+                if cid not in fine_rows:
+                    continue        # seated 臂已截断——h2h 无从混合
+                if _elapsed() > budget_s:
+                    budget_exhausted = True
+                    break
+                fine_h2h[cid] = h2h_runner(candidates_by_id[cid],
+                                           h2h_games)
     for cid in top_k:
         if cid not in fine_rows:  # 预算截断：沿用粗筛行（局少，如实标注）
             fine_rows[cid] = coarse_rows[cid]
+    h2h_missing = [cid for cid in top_k
+                   if h2h_runner is not None and cid in fine_rows
+                   and cid not in fine_h2h]
 
-    # ---- 阈值微轴精化（最佳配置邻域，可选）----
-    refinement_rows = {}
+    # ---- 阈值微轴精化（最佳配置邻域，可选；同混 h2h）----
+    refinement_rows, refinement_h2h = {}, {}
     refinement_variants = []
     if do_refinement and not budget_exhausted and fine_rows:
-        best_id = _rank_rows(fine_rows, candidates_by_id, lambda_sparse)[0]
+        best_id = _rank_rows(fine_rows, candidates_by_id, lambda_sparse,
+                             fine_h2h)[0]
         best = candidates_by_id[best_id]
         for axis, values, gate in (
                 ("clone_streak_required", (16,), "clone_preempt"),
@@ -576,40 +734,70 @@ def evaluate_ablation_tree(payload=None):
                 budget_exhausted = True
                 break
             refinement_rows.update(_call_evaluator(
-                evaluator, refinement_variants[i:i + 4], games))
+                evaluator, refinement_variants[i:i + 4], fine_games))
+        if h2h_runner is not None:
+            for variant in refinement_variants:
+                if variant["id"] not in refinement_rows:
+                    continue
+                if _elapsed() > budget_s:
+                    budget_exhausted = True
+                    break
+                refinement_h2h[variant["id"]] = h2h_runner(
+                    variant, h2h_games)
+    h2h_missing += [vid for vid in (v["id"] for v in
+                                    refinement_variants)
+                    if h2h_runner is not None
+                    and vid in refinement_rows
+                    and vid not in refinement_h2h]
 
     merged = dict(fine_rows)
     merged.update(refinement_rows)
+    merged_h2h = dict(fine_h2h)
+    merged_h2h.update(refinement_h2h)
     merged_by_id = {cid: candidates_by_id.get(cid) or
                     next(c for c in refinement_variants if c["id"] == cid)
                     for cid in merged}
-    final_order = _rank_rows(merged, merged_by_id, lambda_sparse)
+    final_order = _rank_rows(merged, merged_by_id, lambda_sparse,
+                             merged_h2h)
     finalists = [cid for cid in final_order[:finalists_n]]
 
-    fine_table = [_attach(candidates_by_id[cid], fine_rows[cid])
+    fine_table = [_attach(candidates_by_id[cid], fine_rows[cid],
+                          fine_h2h.get(cid))
                   for cid in _rank_rows(fine_rows, candidates_by_id,
-                                        lambda_sparse)]
-    refinement_table = [_attach(merged_by_id[cid], refinement_rows[cid])
+                                        lambda_sparse, fine_h2h)]
+    refinement_table = [_attach(merged_by_id[cid], refinement_rows[cid],
+                                refinement_h2h.get(cid))
                         for cid in _rank_rows(refinement_rows, merged_by_id,
-                                              lambda_sparse)]
+                                              lambda_sparse,
+                                              refinement_h2h)]
 
     return {
         "lambda_sparse": lambda_sparse,
-        "subsample": [g["episode_id"] for g in subsample],
+        "mixed_weights": list(MIXED_WEIGHTS),
+        "subsample": [g["episode_id"] if isinstance(g, dict) else g
+                      for g in subsample],
+        "h2h_games": [list(g) for g in h2h_games],
         "coarse": coarse_table,
         "fine": fine_table,
         "refinement": refinement_table,
         "finalists": finalists,
-        "finalist_rows": [_attach(merged_by_id[cid], merged[cid])
+        "finalist_rows": [_attach(merged_by_id[cid], merged[cid],
+                                  merged_h2h.get(cid))
                           for cid in finalists],
         "budget": {
             "wall_clock_budget_s": budget_s,
             "wall_clock_used_s": round(_elapsed(), 3),
             "budget_exhausted": budget_exhausted,
+            "coarse_reused": coarse_reused,
+            "coarse_source": payload.get("coarse_source"),
             "n_coarse_candidates": len(coarse_rows),
             "n_coarse_games": len(subsample),
             "n_fine_candidates": len(fine_rows),
-            "n_fine_games": len(games),
+            "n_fine_games": len(fine_games),
             "n_refinement_candidates": len(refinement_rows),
+            "h2h_arm": h2h_runner is not None,
+            "n_h2h_games_per_candidate": len(h2h_games),
+            "n_h2h_candidates": len(fine_h2h) + len(refinement_h2h),
+            "h2h_missing": h2h_missing,
         },
     }
