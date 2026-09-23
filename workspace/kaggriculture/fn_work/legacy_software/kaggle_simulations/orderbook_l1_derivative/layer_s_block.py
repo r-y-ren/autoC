@@ -42,8 +42,41 @@ def _cxs_seed_surplus(crop, observation, kept_orders, plan_view):
 
 
 def _cxs_completable_plant_demand(crop, observation, plan_view):
-    """逐品项未来可完成种+收的 PLANT 种子需求；plan_view 解析失败→None。"""
-    raise NotImplementedError("unimplemented:fn:_cxs_completable_plant_demand")
+    """逐品项未来可完成种+收的 PLANT 种子需求；plan_view 解析失败→None。
+
+    demand(crop) = Σ_t plans[t]["plants"].get(crop, 0)，仅计入
+    _cxs_harvest_completable(t, crop) 为 True 的步 t（种+收来得及才保护
+    种子；来不及的步不计需求=允许截断超额供给）。零误杀纪律：plan_view
+    不可调用 / 调用抛任何异常 / 返回 None / 结构不合法（外层非 dict、
+    条目非 dict、plants 非 dict、本品项计数非数）→ None（不确定=上游
+    零截断）。0=确证无未来需求，与 None 异义。buy_seed 不入本函数。
+    """
+    try:
+        if not callable(plan_view):
+            return None
+        plans = plan_view(observation)
+        if not isinstance(plans, dict):
+            return None
+        demand = 0
+        for step, entry in plans.items():
+            if not isinstance(entry, dict):
+                return None
+            plants = entry.get("plants", {})
+            if not isinstance(plants, dict):
+                return None
+            units = plants.get(crop, 0)
+            if isinstance(units, bool) or not isinstance(units, (int, float)):
+                return None  # 计数非数=结构不合法=不确定
+            if isinstance(units, float):
+                if not units.is_integer():
+                    return None
+                units = int(units)
+            if not _cxs_harvest_completable(step, crop):
+                continue
+            demand += units
+        return demand
+    except Exception:
+        return None
 
 
 def _cxs_harvest_completable(step, crop, first_harvest_steps=None):

@@ -31,7 +31,7 @@
 | assemble_v6_build | G2/G2b | wired 09-23 | v6 da844619（中间产物）/v6b 5a532201 | (本批) |
 | verify_structure_gates | G3 | FAIL 09-23 | 五线 1/5：h2h 0-16（-150k 级）/巨人 0-9/回归 8/8 翻负/四门过/经济面 16-37% | (本批) |
 | _cxs_harvest_completable | S1 | tested 09-23 | pytest -k harvest + crosscheck → 6 passed；常数转录 WHEAT/CARROT=48,TOMATO=192,STRAW/MELON=240 | (本批) |
-| _cxs_completable_plant_demand | S1 | stub 09-23 | — | — |
+| _cxs_completable_plant_demand | S1 | tested 09-23 | pytest test_layer_s → 11 passed（demand 组 7+harvest 组 4；2 红为他批桩预期） | (本批) |
 | _cxs_seed_surplus | S1 | stub 09-23 | — | — |
 | _cxs_seed_truncate | S1 | stub 09-23 | — | — |
 | _cxs_agent | S1 | stub 09-23 | — | — |
