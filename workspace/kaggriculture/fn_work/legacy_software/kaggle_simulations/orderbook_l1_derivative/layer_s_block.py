@@ -32,8 +32,59 @@ def _cxs_agent(observation, configuration=None):
 
 
 def _cxs_seed_truncate(observation, action, plan_view):
-    """纯减法过滤：逐品项按允许删除量删超额 BUY_SEED；品项不确定(None)→零截断。"""
-    raise NotImplementedError("unimplemented:fn:_cxs_seed_truncate")
+    """纯减法过滤主函数：step≥648 起逐品项按允许删除量删超额 BUY_SEED。
+
+    零足迹快道（原 market 对象原样返回，不复制、不调 plan_view）三者居一即返：
+    observation["step"] < _CXS_FROM；market 缺失（→None）/非 list/为空；market
+    无 BUY_SEED（订单匹配对齐 surplus 式：list/tuple、len≥3、首元 "BUY_SEED"，
+    main.py L4680/L4694）。
+    慢道：按品项分组（BUY_SEED 出现序去重），对每品项以 kept_orders=本回合
+    全部订单（先按"全保留"算额度：删除对象只可能是本回合订单）调
+    _cxs_seed_surplus；None（不确定）或 0（确证无额度）→ 该品项零截断。
+    删除策略：按订单出现序从后往前逐单判定——删该单若累计删除+qty≤allowed
+    则整单删除，否则跳过该单继续向前（只删整单、不减量改单：改单=加法面，
+    违反纯减法纪律）；非 BUY_SEED 订单与其余槽位顺序原样保留（删除=列表
+    移除，无插入/无重排；有删除才建新表，零删除仍返回原对象）。
+    本函数不做 try 吞噬：任何异常向上抛，由 _cxs_agent 兜底回退基座动作
+    （契约：错误处理在上层入口统一兜底）。
+    """
+    market = action.get("market")
+    if observation["step"] < _CXS_FROM:
+        return market
+    if not isinstance(market, list) or not market:
+        return market
+
+    def _is_seed_order(order, crop):
+        # 订单匹配对齐 surplus 式（main.py L4680/L4694）；crop=None 表任意品项。
+        if not isinstance(order, (list, tuple)) or len(order) < 3:
+            return False
+        if order[0] != "BUY_SEED":
+            return False
+        return crop is None or order[1] == crop
+
+    crops = []
+    for order in market:
+        if _is_seed_order(order, None) and order[1] not in crops:
+            crops.append(order[1])
+    if not crops:
+        return market
+
+    keep = [True] * len(market)
+    for crop in crops:
+        allowed = _cxs_seed_surplus(crop, observation, market, plan_view)
+        if allowed is None or allowed <= 0:
+            continue  # None=不确定 / 0=确证无额度：该品项零截断
+        deleted = 0
+        for i in range(len(market) - 1, -1, -1):  # 出现序从后往前逐单判定
+            if not _is_seed_order(market[i], crop):
+                continue
+            qty = market[i][2]  # surplus 返回 int 时该品项全单 qty 已过严格数校验
+            if deleted + qty <= allowed:
+                keep[i] = False
+                deleted += qty
+    if all(keep):
+        return market  # 零删除：仍零足迹
+    return [order for i, order in enumerate(market) if keep[i]]
 
 
 def _cxs_seed_surplus(crop, observation, kept_orders, plan_view):

@@ -4,7 +4,45 @@ import layer_s_block
 
 
 def test_invariant_cases():
-    raise NotImplementedError("unimplemented:fn:test_invariant_cases")
+    # 构造三用例（R10 验收③(c)，责任文档 constructed_invariant_cases 契约在
+    # test_layer_s 的接线面——gate_equivalence_precision 复用同构夹具）：
+    # ①未来仍有可完成 PLANT 机会的 BUY_SEED 不截；②确无未来机会且供给超需求
+    # 的截；③s671 边界：CARROT BUY_SEED@672 时刻（当前 step=671）仅当磁带
+    # 确无后续可完成种植机会才截。假 plan_view 构造（两次调用同值→确定性）。
+    # ① 磁带有可完成机会（670+48=718≤718）→ 需求 5 全额保护：供给=库存0+
+    #    保留单5+磁带未来买0=5=需求 → allowed=0 → 一张不删（含非种子单原样）。
+    plans_a = {670: {"plants": {"CARROT": 5}, "buy_seed": {}}}
+    obs_a = _obs_with_seeds({"CARROT": 0}, step=650)
+    market_a = [["SELL", "WHEAT", 2], ["BUY_SEED", "CARROT", 5]]
+    got_a = layer_s_block._cxs_seed_truncate(obs_a, {"market": market_a}, _make_plan_view(plans_a))
+    assert got_a == [["SELL", "WHEAT", 2], ["BUY_SEED", "CARROT", 5]]
+
+    # ② 确无可完成机会（磁带唯一 plants 在 671：671+48=719>718 不构成需求）且
+    #    供给超需求（库存0+买单6>需求0）→ allowed=6 → 两张 CARROT 买单整单
+    #    全删，非 BUY_SEED 订单原样保留。
+    plans_b = {671: {"plants": {"CARROT": 5}, "buy_seed": {}}}
+    obs_b = _obs_with_seeds({"CARROT": 0}, step=650)
+    market_b = [["BUY_SEED", "CARROT", 4], ["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 3]]
+    got_b = layer_s_block._cxs_seed_truncate(obs_b, {"market": market_b}, _make_plan_view(plans_b))
+    assert got_b == [["SELL", "WHEAT", 3]]
+
+    # ③ s671 边界双面：672+48=720>718 → 672 步 plants 永不构成需求。
+    #    截面：磁带确无后续可完成种植机会（672 plants 全不计入）且库存已有
+    #    富余（held 2 → 供给 2+3+0=5 > 需求 0）→ allowed=3 全删。
+    plans_c1 = {672: {"plants": {"CARROT": 5}, "buy_seed": {}}}
+    obs_c1 = _obs_with_seeds({"CARROT": 2}, step=671)
+    market_c1 = [["BUY_SEED", "CARROT", 3]]
+    got_c1 = layer_s_block._cxs_seed_truncate(obs_c1, {"market": market_c1}, _make_plan_view(plans_c1))
+    assert got_c1 == []
+    #    不截面：库存无富余（held 0）且 kept 内即全部供给（磁带无 t>671 买单），
+    #    670 步（670+48=718≤718 恰可完成）plants 3 构成需求 → 供给=需求=3 →
+    #    allowed=0 不截。
+    plans_c2 = {670: {"plants": {"CARROT": 3}, "buy_seed": {}},
+                672: {"plants": {"CARROT": 9}, "buy_seed": {}}}
+    obs_c2 = _obs_with_seeds({"CARROT": 0}, step=671)
+    market_c2 = [["BUY_SEED", "CARROT", 3]]
+    got_c2 = layer_s_block._cxs_seed_truncate(obs_c2, {"market": market_c2}, _make_plan_view(plans_c2))
+    assert got_c2 == [["BUY_SEED", "CARROT", 3]]
 
 
 def test_surplus_uncertain_returns_none():
@@ -256,3 +294,104 @@ def test_surplus_tape_future_buy_counts_and_past_excluded():
     }
     got2 = layer_s_block._cxs_seed_surplus("CARROT", obs, kept, _make_plan_view(past_only))
     assert got2 == 2 == (0 + 8 + 0) - 6
+
+
+# ---- _cxs_seed_truncate 用例组（truncate：纯减法过滤主函数）----
+
+
+def _spy_plan_view(retval):
+    """快道零足迹用假件：返回 retval 并计数调用（快道断言 plan_view 零调用）。"""
+    def view(obs):
+        view.calls += 1
+        return retval
+    view.calls = 0
+    return view
+
+
+def test_truncate_fast_paths_return_original_object():
+    # ① 零足迹快道（原对象 is 断言 + plan_view 零调用）：
+    # step<648 / market 为空表 / 无 BUY_SEED / market 键缺失（→None 原样）。
+    m1 = [["BUY_SEED", "CARROT", 5]]
+    pv1 = _spy_plan_view({660: {"plants": {}, "buy_seed": {}}})
+    got1 = layer_s_block._cxs_seed_truncate(
+        _obs_with_seeds({}, step=600), {"market": m1}, pv1)
+    assert got1 is m1 and pv1.calls == 0  # step=600<648
+
+    m2 = []
+    pv2 = _spy_plan_view(None)
+    got2 = layer_s_block._cxs_seed_truncate(
+        _obs_with_seeds({}, step=650), {"market": m2}, pv2)
+    assert got2 is m2 and pv2.calls == 0  # 无 market 订单（空表）
+
+    m3 = [["SELL", "WHEAT", 2], ["HIRE", 1, 0]]
+    pv3 = _spy_plan_view(None)
+    got3 = layer_s_block._cxs_seed_truncate(
+        _obs_with_seeds({}, step=700), {"market": m3}, pv3)
+    assert got3 is m3 and pv3.calls == 0  # 无 BUY_SEED
+
+    pv4 = _spy_plan_view(None)
+    got4 = layer_s_block._cxs_seed_truncate(_obs_with_seeds({}, step=700), {}, pv4)
+    assert got4 is None and pv4.calls == 0  # market 键缺失 → 原样（None）
+
+
+def test_truncate_crop_uncertain_means_zero_truncation():
+    # ② 品项 None→零截断：plan_view 整卷 None → 全体品项零截断（内容原样）；
+    # 单品项 None（该品项 plants 计数畸形）→ 仅该品项保留、他品项照常截；
+    # kept 含 len<3 短单 → surplus 不可解析 → 同样零截断。
+    obs = _obs_with_seeds({}, step=650)
+    m = [["BUY_SEED", "CARROT", 5], ["BUY_SEED", "WHEAT", 5]]
+    got = layer_s_block._cxs_seed_truncate(obs, {"market": m}, _make_plan_view(None))
+    assert got == m
+
+    weird = {660: {"plants": {"WEIRD": "x"}, "buy_seed": {}}}  # WEIRD 计数畸形
+    m2 = [["BUY_SEED", "WEIRD", 2], ["BUY_SEED", "CARROT", 5]]
+    got2 = layer_s_block._cxs_seed_truncate(obs, {"market": m2}, _make_plan_view(weird))
+    assert got2 == [["BUY_SEED", "WEIRD", 2]]  # CARROT 需求0→全删；WEIRD None→保留
+
+    m3 = [["BUY_SEED", "CARROT", 5], ["SELL", "WHEAT"]]  # len<3 短单 → kept 不可解析
+    got3 = layer_s_block._cxs_seed_truncate(obs, {"market": m3}, _make_plan_view({}))
+    assert got3 == m3
+
+
+def test_truncate_back_to_front_whole_order_deletion_keeps_slots():
+    # ③ 从后往前整单删除 + 槽位顺序保持：allowed=min(max(0, 0+7−3), 7)=4 →
+    # 末单 qty2 删（累计2）、中单 qty3 超额跳过（2+3>4 继续向前）、首单 qty2
+    # 删（2+2≤4）；SELL 原位保留，无重排无插入。
+    plans = {660: {"plants": {"CARROT": 3}, "buy_seed": {}}}  # 660+48=708≤718
+    obs = _obs_with_seeds({"CARROT": 0}, step=650)
+    market = [["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 1],
+              ["BUY_SEED", "CARROT", 3], ["BUY_SEED", "CARROT", 2]]
+    got = layer_s_block._cxs_seed_truncate(obs, {"market": market}, _make_plan_view(plans))
+    assert got == [["SELL", "WHEAT", 1], ["BUY_SEED", "CARROT", 3]]
+
+
+def test_truncate_partial_allowed_deletes_latest_only():
+    # ④ 部分 allowed：allowed=min(max(0, 0+7−5), 7)=2 → 从后往前仅末单 qty2
+    # 可整删（0+2≤2），中单/首单（2+3>2、2+2>2）保留——删后面的单、保留前面的单。
+    plans = {660: {"plants": {"CARROT": 5}, "buy_seed": {}}}
+    obs = _obs_with_seeds({"CARROT": 0}, step=650)
+    market = [["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 1],
+              ["BUY_SEED", "CARROT", 3], ["BUY_SEED", "CARROT", 2]]
+    got = layer_s_block._cxs_seed_truncate(obs, {"market": market}, _make_plan_view(plans))
+    assert got == [["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 1], ["BUY_SEED", "CARROT", 3]]
+
+
+def test_truncate_mixed_crops_independent():
+    # ⑤ 混合多品项互不干扰：CARROT 无可完成需求（plants 无该键）→ 全删；
+    # WHEAT 有可完成需求 5（660+48=708≤718）且供给=需求 → 全额保护；
+    # CARROT 的截断不触碰 WHEAT 单。
+    plans = {660: {"plants": {"WHEAT": 5}, "buy_seed": {}}}
+    obs = _obs_with_seeds({}, step=650)
+    market = [["BUY_SEED", "CARROT", 5], ["BUY_SEED", "WHEAT", 5]]
+    got = layer_s_block._cxs_seed_truncate(obs, {"market": market}, _make_plan_view(plans))
+    assert got == [["BUY_SEED", "WHEAT", 5]]
+
+
+def test_truncate_never_drops_non_seed_orders():
+    # ⑥ 非 BUY_SEED 订单永不被删：allowed 覆盖全部 CARROT 买单（需求0、
+    # 供给0+9 → allowed=9）时也只删 BUY_SEED，SELL/PLANT 等原样原位保留。
+    obs = _obs_with_seeds({}, step=650)
+    market = [["SELL", "WHEAT", 2], ["BUY_SEED", "CARROT", 9],
+              ["PLANT", "CARROT", 4], ["SELL", "MELON", 1]]
+    got = layer_s_block._cxs_seed_truncate(obs, {"market": market}, _make_plan_view({}))
+    assert got == [["SELL", "WHEAT", 2], ["PLANT", "CARROT", 4], ["SELL", "MELON", 1]]
