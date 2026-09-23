@@ -1,0 +1,15 @@
+{
+ "schema": "online-probe-ledger/1.0",
+ "round": 29,
+ "track": "derivative-relaunch",
+ "candidate": {
+  "label": "v48-derivative-relaunch",
+  "pkg_sha256": "01de7c27ace9fc55d8c7204f6e67b83752336b41411ff14771958851883519f3",
+  "submission_ref": 56487449,
+  "status": "SubmissionStatus.PENDING"
+ },
+ "decision": {
+  "user_verdict": "P2 重抽调度彩票（推翻零提交冻结 ba1b44c）；动机=分析06 调度方差实证",
+  "expectation": "EV 1100±70 vs 持有 1040；+2h 读数；09-28 后不再新发"
+ }
+}
