@@ -30,3 +30,18 @@
 | perform_tape_surgery | G2/G2b | wired 09-23 | 三面重生成（产线 858+卖 723+移动 180 路由日）；v6b 5a532201 四门绿 | (本批) |
 | assemble_v6_build | G2/G2b | wired 09-23 | v6 da844619（中间产物）/v6b 5a532201 | (本批) |
 | verify_structure_gates | G3 | FAIL 09-23 | 五线 1/5：h2h 0-16（-150k 级）/巨人 0-9/回归 8/8 翻负/四门过/经济面 16-37% | (本批) |
+| _cxs_harvest_completable | S1 | stub 09-23 | — | — |
+| _cxs_completable_plant_demand | S1 | stub 09-23 | — | — |
+| _cxs_seed_surplus | S1 | stub 09-23 | — | — |
+| _cxs_seed_truncate | S1 | stub 09-23 | — | — |
+| _cxs_agent | S1 | stub 09-23 | — | — |
+| append_layer_s_block | S2 | stub 09-23 | — | — |
+| build_layer_s_candidate | S2 | stub 09-23 | — | — |
+| replay_action_diff | S3 | stub 09-23 | — | — |
+| precision_subset_check | S3 | stub 09-23 | — | — |
+| constructed_invariant_cases | S3 | stub 09-23 | — | — |
+| gate_equivalence_precision | S3 | stub 09-23 | — | — |
+| gate_h2h_vs_verbatim | S3 | stub 09-23 | — | — |
+| gate_lineage_strength | S3 | stub 09-23 | — | — |
+| gate_launch_fourgate_l1 | S3 | stub 09-23 | — | — |
+| verify_layer_s_gates | S3 | stub 09-23 | — | — |
