@@ -19,7 +19,7 @@
 | split_train_holdout | T3 | done 2026-09-23 | `python -m pytest tests -q`（97 passed 之一）；157 对手→训练 109/留出 48（30.6%≥30%）局 111/51 不相交证明；挖掘源 Anton Tikhonov+Yuzu 圈禁训练侧 | (本批) |
 | rank_candidates_seated | T3 | done 2026-09-23 | `python -m pytest tests -q`（97 passed 之一）；seated 表（winrate 平局 0.5+逐局明细）；排序 (-score, modules, id) 同分取稀疏；评估器可注入 | (本批) |
 | select_on_holdout | T3 | done 2026-09-23 | `python -m pytest tests -q`（97 passed 之一）；裁决只在留出（训练成绩仅入报告）；fail-closed 留出<30%；final_selection.json+holdout_margin_table.csv 落盘 | (本批) |
-| build_candidate_package | T4 | stub 2026-09-23 | — | — |
-| run_m1_m2_gates | T4 | stub 2026-09-23 | — | — |
-| assemble_and_gate | T4 | stub 2026-09-23 | — | — |
-| run_pipeline | T4 | stub 2026-09-23 | — | — |
+| build_candidate_package | T4 | wired 2026-09-23 | 127 passed 之一；只换 _V48_ROUTES blob（span 前后缀逐字节自证）；6 槽别名填充语义登记；包 e8e8fbdf/79,569B | (本批) |
+| run_m1_m2_gates | T4 | wired 2026-09-23 | 127 passed 之一；M1=0/16 互胜 0.0<0.45 FAIL（均 -13,022）；M2：四门 PASS+巨人 seated 部分+，余四线 FAIL | (本批) |
+| assemble_and_gate | T4 | wired 2026-09-23 | 127 passed 之一；分档 BELOW_LINE（管线通/结构线未到）；双跑计时遥测剥离修复+回归测试 | (本批) |
+| run_pipeline | T4 | wired 2026-09-23 | 127 passed 之一；全管线 1309s+1362s 双跑逐字节；链哈希 db9c1476（T1 7a77a51a→T2 85e76389→T3 67007777 咬合） | (本批) |

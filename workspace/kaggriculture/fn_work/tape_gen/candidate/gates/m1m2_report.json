@@ -1,0 +1,867 @@
+{
+ "counts": {
+  "econ_n": 6,
+  "giant_per_name_min": 3,
+  "h2h_min_games": 16,
+  "reg_n": 8,
+  "strong_ext_per_giant": 2
+ },
+ "grading": {
+  "failed_lines": [
+   "h2h",
+   "giants",
+   "regression",
+   "econ",
+   "m1"
+  ],
+  "m1": "FAIL",
+  "m2": "FAIL",
+  "overall": "BELOW_LINE"
+ },
+ "m1": {
+  "all_done": true,
+  "avg_margin": -13022.5,
+  "by_seat": {
+   "0": {
+    "games": 8,
+    "losses": 8,
+    "ties": 0,
+    "wins": 0
+   },
+   "1": {
+    "games": 8,
+    "losses": 8,
+    "ties": 0,
+    "wins": 0
+   }
+  },
+  "criterion": "候选包 vs 纯 v48 官方引擎整局对打 ≥16 局（种子×AB/BA 席），互胜率（平局 0.5）≥ 0.45",
+  "games": 16,
+  "losses": 16,
+  "margin_distribution": {
+   "neg": 16,
+   "pos": 0,
+   "zero": 0
+  },
+  "opponent": {
+   "kind": "pure_v48",
+   "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py"
+  },
+  "passed": false,
+  "protocol": "m1-h2h-v48/1.0",
+  "records": [
+   {
+    "margin": -7600.0,
+    "me_money": 99583.0,
+    "me_seat": 0,
+    "opp_money": 107183.0,
+    "result": "LOSS",
+    "seed": 101,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -7600.0,
+    "me_money": 99583.0,
+    "me_seat": 1,
+    "opp_money": 107183.0,
+    "result": "LOSS",
+    "seed": 101,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -24135.0,
+    "me_money": 97751.0,
+    "me_seat": 0,
+    "opp_money": 121886.0,
+    "result": "LOSS",
+    "seed": 102,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -24135.0,
+    "me_money": 97751.0,
+    "me_seat": 1,
+    "opp_money": 121886.0,
+    "result": "LOSS",
+    "seed": 102,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -9776.0,
+    "me_money": 121508.0,
+    "me_seat": 0,
+    "opp_money": 131284.0,
+    "result": "LOSS",
+    "seed": 103,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -7848.0,
+    "me_money": 140549.0,
+    "me_seat": 1,
+    "opp_money": 148397.0,
+    "result": "LOSS",
+    "seed": 103,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -7588.0,
+    "me_money": 78518.0,
+    "me_seat": 0,
+    "opp_money": 86106.0,
+    "result": "LOSS",
+    "seed": 104,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -7588.0,
+    "me_money": 78518.0,
+    "me_seat": 1,
+    "opp_money": 86106.0,
+    "result": "LOSS",
+    "seed": 104,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -9553.0,
+    "me_money": 112665.0,
+    "me_seat": 0,
+    "opp_money": 122218.0,
+    "result": "LOSS",
+    "seed": 201,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -12739.0,
+    "me_money": 70111.0,
+    "me_seat": 1,
+    "opp_money": 82850.0,
+    "result": "LOSS",
+    "seed": 201,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -9373.0,
+    "me_money": 104714.0,
+    "me_seat": 0,
+    "opp_money": 114087.0,
+    "result": "LOSS",
+    "seed": 202,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -9373.0,
+    "me_money": 104714.0,
+    "me_seat": 1,
+    "opp_money": 114087.0,
+    "result": "LOSS",
+    "seed": 202,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -7220.0,
+    "me_money": 56505.0,
+    "me_seat": 0,
+    "opp_money": 63725.0,
+    "result": "LOSS",
+    "seed": 203,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -7220.0,
+    "me_money": 56505.0,
+    "me_seat": 1,
+    "opp_money": 63725.0,
+    "result": "LOSS",
+    "seed": 203,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -28306.0,
+    "me_money": 76634.0,
+    "me_seat": 0,
+    "opp_money": 104940.0,
+    "result": "LOSS",
+    "seed": 204,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   },
+   {
+    "margin": -28306.0,
+    "me_money": 76634.0,
+    "me_seat": 1,
+    "opp_money": 104940.0,
+    "result": "LOSS",
+    "seed": 204,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "suspicious_log_lines": [],
+    "turns": 720
+   }
+  ],
+  "ties": 0,
+  "win_fraction_strict": 0.0,
+  "win_rate_half_ties": 0.0,
+  "wins": 0
+ },
+ "m2": {
+  "lines": {
+   "econ": {
+    "error": null,
+    "passed": false,
+    "result": {
+     "best_peak_d14_17": 9709.0,
+     "criterion": "≥6 局 seated 普通对手回放流，日收入峰 ≥12700 且落 d14-d17",
+     "games": 6,
+     "measurement": "资金序列=我席决策步 obs.farms[me].money+终局；日收入=日内步级正增量求和；峰=max(d14..d17)",
+     "passed": false,
+     "per_game": [
+      {
+       "cand_margin": 54413.0,
+       "ep": 111279442,
+       "final_money": 177240.0,
+       "me_seat": 1,
+       "ok": false,
+       "opp": "Nguyễn Trần Thanh Bình",
+       "orig_margin": 59436.0,
+       "peak_d14_17": 9543.0,
+       "peak_day": 17,
+       "season_peak": 16540.0,
+       "season_peak_day": 22
+      },
+      {
+       "cand_margin": 44664.0,
+       "ep": 111280538,
+       "final_money": 111402.0,
+       "me_seat": 0,
+       "ok": false,
+       "opp": "Alexey Stepanov",
+       "orig_margin": 23449.0,
+       "peak_d14_17": 9653.0,
+       "peak_day": 17,
+       "season_peak": 15199.0,
+       "season_peak_day": 10
+      },
+      {
+       "cand_margin": 60067.0,
+       "ep": 111281647,
+       "final_money": 125527.0,
+       "me_seat": 0,
+       "ok": false,
+       "opp": "jwboost",
+       "orig_margin": 56724.0,
+       "peak_d14_17": 6746.0,
+       "peak_day": 17,
+       "season_peak": 15732.0,
+       "season_peak_day": 10
+      },
+      {
+       "cand_margin": 3254.0,
+       "ep": 111282733,
+       "final_money": 65651.0,
+       "me_seat": 0,
+       "ok": false,
+       "opp": "Mutoy Choi",
+       "orig_margin": 8406.0,
+       "peak_d14_17": 6484.0,
+       "peak_day": 14,
+       "season_peak": 14084.0,
+       "season_peak_day": 10
+      },
+      {
+       "cand_margin": 29704.0,
+       "ep": 111283896,
+       "final_money": 128859.0,
+       "me_seat": 0,
+       "ok": false,
+       "opp": "Ali Ramazanov",
+       "orig_margin": 15346.0,
+       "peak_d14_17": 6123.0,
+       "peak_day": 15,
+       "season_peak": 14699.0,
+       "season_peak_day": 10
+      },
+      {
+       "cand_margin": 18701.0,
+       "ep": 111285031,
+       "final_money": 81287.0,
+       "me_seat": 0,
+       "ok": false,
+       "opp": "Auxileon",
+       "orig_margin": 34684.0,
+       "peak_d14_17": 9709.0,
+       "peak_day": 17,
+       "season_peak": 15034.0,
+       "season_peak_day": 10
+      }
+     ],
+     "protocol": "m2-economic-face/1.0",
+     "selection_rule": "普通对手局（剔巨人/强扩展/镜像/回归集）ep 升序"
+    },
+    "runnable": true,
+    "title": "economic_face"
+   },
+   "fourgate": {
+    "error": null,
+    "passed": true,
+    "result": {
+     "all_gates_pass": true,
+     "criterion": "官方装载语义（干净 -I 子进程）/ 双席自打整局 DONE/ 确定性重跑一致 / tar ≤ 100MB",
+     "gate1_official_load": {
+      "agent_py_checked": "/home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/agent.py",
+      "evidence": {
+       "action_errors": [],
+       "exec_dir_on_sys_path_after_load": false,
+       "has_named_agent": true,
+       "last_callable_name": "_kaggle_submission_entrypoint",
+       "loader_pop_applied": true,
+       "n_actions": 719,
+       "n_callables": 9,
+       "n_new_sys_modules": 47,
+       "n_obs": 719,
+       "named_agent_same_output_as_last": true,
+       "non_stdlib_imports": []
+      },
+      "gate1_official_load_ok": true,
+      "isolated_vs_local_action_mismatches": 0,
+      "n_obs_replayed": 719,
+      "obs_subsampled": true
+     },
+     "gate2_gate3": {
+      "gate2_episodes": [
+       {
+        "action_stream_sha256": "f0d93a5081f4d797b34f10f23b19064ee873efdcd1df8f564aadffe097f8fa95",
+        "agent_action_steps": 719,
+        "agent_calls": 1438,
+        "n_engine_log_lines": 719,
+        "obs_count": 719,
+        "rewards": [
+         140099.0,
+         140099.0
+        ],
+        "seed": 101,
+        "statuses": [
+         "DONE",
+         "DONE"
+        ],
+        "suspicious_log_lines": [],
+        "turns_played": 720
+       },
+       {
+        "action_stream_sha256": "decb89193af7e334af58079d578b85701f0805e00ef2a2cbf3a1a8c1146dce96",
+        "agent_action_steps": 719,
+        "agent_calls": 1438,
+        "n_engine_log_lines": 719,
+        "obs_count": 719,
+        "rewards": [
+         114784.0,
+         114784.0
+        ],
+        "seed": 102,
+        "statuses": [
+         "DONE",
+         "DONE"
+        ],
+        "suspicious_log_lines": [],
+        "turns_played": 720
+       }
+      ],
+      "gate2_full_episodes_ok": true,
+      "gate2_step_budget_ms": 1000.0,
+      "gate3_determinism_ok": true,
+      "gate3_hashes": {
+       "run1": "f0d93a5081f4d797b34f10f23b19064ee873efdcd1df8f564aadffe097f8fa95",
+       "run2": "f0d93a5081f4d797b34f10f23b19064ee873efdcd1df8f564aadffe097f8fa95"
+      },
+      "gate3_rerun_seed": 101
+     },
+     "gate4_size": {
+      "ok": true,
+      "tar_bytes": 79569
+     },
+     "package": {
+      "main_sha256": "1d89c22125e2316d77882849d3b848f596c5b4fc66ef71386bda0b1d990910e1",
+      "tar_sha256": "e8e8fbdf4a798b9458fd048e4dd98ca23060a72e540084c9e8add7b9a81c6516"
+     },
+     "passed": true,
+     "protocol": "m2-launch-fourgate/1.0"
+    },
+    "runnable": true,
+    "title": "launch_fourgate"
+   },
+   "giants": {
+    "error": null,
+    "passed": false,
+    "result": {
+     "corpus_rule": "三巨人各自其他对局优先（语料实测均无）→ 锚局 + round26 强对手扩展集（败局 margin≤-20000 按严重度轮转每巨人 2 局）",
+     "criterion": "对 statma/fuxi/42 回放真值流各 ≥3 局打平或更好（margin≥0 宽限 ≥-1000）",
+     "passed": false,
+     "per_giant": {
+      "42": {
+       "all_ok": false,
+       "best_margin": 13457.0,
+       "games": 3,
+       "records": [
+        {
+         "cand_finals": [
+          94702.0,
+          82707.0
+         ],
+         "cand_margin": 11995.0,
+         "delta_vs_orig": 37070.0,
+         "ep": 111898825,
+         "me_seat": 0,
+         "ok": true,
+         "opp": "42",
+         "orig_margin": -25075.0,
+         "role": "anchor",
+         "steps": 719
+        },
+        {
+         "cand_finals": [
+          128588.0,
+          104395.0
+         ],
+         "cand_margin": -24193.0,
+         "delta_vs_orig": -2126.0,
+         "ep": 111794066,
+         "me_seat": 1,
+         "ok": false,
+         "opp": "jorge fabian avila",
+         "orig_margin": -22067.0,
+         "role": "strong_ext",
+         "steps": 719
+        },
+        {
+         "cand_finals": [
+          102974.0,
+          89517.0
+         ],
+         "cand_margin": 13457.0,
+         "delta_vs_orig": 34753.0,
+         "ep": 111306349,
+         "me_seat": 0,
+         "ok": true,
+         "opp": "Raiden.B",
+         "orig_margin": -21296.0,
+         "role": "strong_ext",
+         "steps": 719
+        }
+       ]
+      },
+      "fuxi": {
+       "all_ok": false,
+       "best_margin": 26722.0,
+       "games": 3,
+       "records": [
+        {
+         "cand_finals": [
+          119713.0,
+          92991.0
+         ],
+         "cand_margin": 26722.0,
+         "delta_vs_orig": 53805.0,
+         "ep": 111877080,
+         "me_seat": 0,
+         "ok": true,
+         "opp": "fuxi",
+         "orig_margin": -27083.0,
+         "role": "anchor",
+         "steps": 719
+        },
+        {
+         "cand_finals": [
+          72499.0,
+          41942.0
+         ],
+         "cand_margin": -30557.0,
+         "delta_vs_orig": -600.0,
+         "ep": 111700287,
+         "me_seat": 1,
+         "ok": false,
+         "opp": "syouya tobita",
+         "orig_margin": -29957.0,
+         "role": "strong_ext",
+         "steps": 719
+        },
+        {
+         "cand_finals": [
+          81040.0,
+          113052.0
+         ],
+         "cand_margin": -32012.0,
+         "delta_vs_orig": -2908.0,
+         "ep": 111454133,
+         "me_seat": 0,
+         "ok": false,
+         "opp": "JinboWang",
+         "orig_margin": -29104.0,
+         "role": "strong_ext",
+         "steps": 719
+        }
+       ]
+      },
+      "statma": {
+       "all_ok": false,
+       "best_margin": -7662.0,
+       "games": 3,
+       "records": [
+        {
+         "cand_finals": [
+          82852.0,
+          75190.0
+         ],
+         "cand_margin": -7662.0,
+         "delta_vs_orig": 28492.0,
+         "ep": 111653327,
+         "me_seat": 1,
+         "ok": false,
+         "opp": "statma",
+         "orig_margin": -36154.0,
+         "role": "anchor",
+         "steps": 719
+        },
+        {
+         "cand_finals": [
+          46572.0,
+          103289.0
+         ],
+         "cand_margin": -56717.0,
+         "delta_vs_orig": -12194.0,
+         "ep": 111671458,
+         "me_seat": 0,
+         "ok": false,
+         "opp": "YASH JAIN",
+         "orig_margin": -44523.0,
+         "role": "strong_ext",
+         "steps": 719
+        },
+        {
+         "cand_finals": [
+          88264.0,
+          56875.0
+         ],
+         "cand_margin": -31389.0,
+         "delta_vs_orig": 2797.0,
+         "ep": 111713082,
+         "me_seat": 1,
+         "ok": false,
+         "opp": "WLYYYo",
+         "orig_margin": -34186.0,
+         "role": "strong_ext",
+         "steps": 719
+        }
+       ]
+      }
+     },
+     "protocol": "m2-giant-seated-gate/1.0"
+    },
+    "runnable": true,
+    "title": "giant_seated"
+   },
+   "h2h": {
+    "error": null,
+    "passed": false,
+    "result": {
+     "all_done": true,
+     "avg_margin": -13022.5,
+     "by_seat": {
+      "0": {
+       "games": 8,
+       "losses": 8,
+       "ties": 0,
+       "wins": 0
+      },
+      "1": {
+       "games": 8,
+       "losses": 8,
+       "ties": 0,
+       "wins": 0
+      }
+     },
+     "criterion": "同局集严格互胜 wins/n ≥ 0.65（先例线一同口径）",
+     "games": 16,
+     "losses": 16,
+     "margin_distribution": {
+      "neg": 16,
+      "pos": 0,
+      "zero": 0
+     },
+     "passed": false,
+     "protocol": "m2-h2h-v48-gate/1.0",
+     "ties": 0,
+     "win_fraction_strict": 0.0,
+     "win_rate_half_ties": 0.0,
+     "wins": 0
+    },
+    "runnable": true,
+    "title": "h2h_v48_gate"
+   },
+   "regression": {
+    "error": null,
+    "passed": false,
+    "result": {
+     "criterion": "胜局回归 ≥8 局（原 margin 最窄选取）双臂对照，逐局 margin(候选) ≥ margin(v48) − 1000",
+     "flipped_negative_games": [
+      111302976,
+      111919250,
+      111299616,
+      111914682,
+      111324195
+     ],
+     "games": 8,
+     "n_ok": 3,
+     "passed": false,
+     "per_game": [
+      {
+       "cand_finals": [
+        64369.0,
+        72308.0
+       ],
+       "delta": -7982.0,
+       "ep": 111302976,
+       "flipped_negative": true,
+       "margin_cand_arm": -7939.0,
+       "margin_v48_arm": 43.0,
+       "me_seat": 0,
+       "ok": false,
+       "opp": "Aashka Kapadia",
+       "orig_margin": 46.0,
+       "v48_finals": [
+        37380.0,
+        37337.0
+       ]
+      },
+      {
+       "cand_finals": [
+        126589.0,
+        131213.0
+       ],
+       "delta": -4970.0,
+       "ep": 111919250,
+       "flipped_negative": true,
+       "margin_cand_arm": -4624.0,
+       "margin_v48_arm": 346.0,
+       "me_seat": 0,
+       "ok": false,
+       "opp": "ZotAZaw3",
+       "orig_margin": 346.0,
+       "v48_finals": [
+        97999.0,
+        97653.0
+       ]
+      },
+      {
+       "cand_finals": [
+        88637.0,
+        92422.0
+       ],
+       "delta": 3310.0,
+       "ep": 111888461,
+       "flipped_negative": false,
+       "margin_cand_arm": 3785.0,
+       "margin_v48_arm": 475.0,
+       "me_seat": 1,
+       "ok": true,
+       "opp": "Abdillah Sagif",
+       "orig_margin": 552.0,
+       "v48_finals": [
+        114945.0,
+        115420.0
+       ]
+      },
+      {
+       "cand_finals": [
+        91939.0,
+        69331.0
+       ],
+       "delta": -24163.0,
+       "ep": 111299616,
+       "flipped_negative": true,
+       "margin_cand_arm": -22608.0,
+       "margin_v48_arm": 1555.0,
+       "me_seat": 1,
+       "ok": false,
+       "opp": "xerkey",
+       "orig_margin": 1555.0,
+       "v48_finals": [
+        110858.0,
+        112413.0
+       ]
+      },
+      {
+       "cand_finals": [
+        64879.0,
+        56043.0
+       ],
+       "delta": -11881.0,
+       "ep": 111914682,
+       "flipped_negative": true,
+       "margin_cand_arm": -8836.0,
+       "margin_v48_arm": 3045.0,
+       "me_seat": 1,
+       "ok": false,
+       "opp": "BHackers",
+       "orig_margin": 1813.0,
+       "v48_finals": [
+        49682.0,
+        52727.0
+       ]
+      },
+      {
+       "cand_finals": [
+        65816.0,
+        70454.0
+       ],
+       "delta": 2773.0,
+       "ep": 111290649,
+       "flipped_negative": false,
+       "margin_cand_arm": 4638.0,
+       "margin_v48_arm": 1865.0,
+       "me_seat": 1,
+       "ok": true,
+       "opp": "ayman elamin",
+       "orig_margin": 1865.0,
+       "v48_finals": [
+        97669.0,
+        99534.0
+       ]
+      },
+      {
+       "cand_finals": [
+        58851.0,
+        63385.0
+       ],
+       "delta": 2626.0,
+       "ep": 111452441,
+       "flipped_negative": false,
+       "margin_cand_arm": 4534.0,
+       "margin_v48_arm": 1908.0,
+       "me_seat": 1,
+       "ok": true,
+       "opp": "xmkevin2004",
+       "orig_margin": 1916.0,
+       "v48_finals": [
+        40772.0,
+        42680.0
+       ]
+      },
+      {
+       "cand_finals": [
+        85023.0,
+        95354.0
+       ],
+       "delta": -12301.0,
+       "ep": 111324195,
+       "flipped_negative": true,
+       "margin_cand_arm": -10331.0,
+       "margin_v48_arm": 1970.0,
+       "me_seat": 0,
+       "ok": false,
+       "opp": "SiVitr2fDrXS.2N",
+       "orig_margin": 1970.0,
+       "v48_finals": [
+        150950.0,
+        148980.0
+       ]
+      }
+     ],
+     "protocol": "m2-win-regression-gate/1.0",
+     "selection_rule": "全语料我方 W 局按原 margin 升序取最窄 8 局"
+    },
+    "runnable": true,
+    "title": "win_regression"
+   }
+  },
+  "passed": false
+ },
+ "protocol": "m1m2-gates/1.0",
+ "thresholds": {
+  "econ_gate": 12700.0,
+  "giant_ok_margin": -1000.0,
+  "m1_min": 0.45,
+  "m2_h2h_min": 0.65,
+  "reg_tolerance": 1000.0
+ },
+ "under_test": {
+  "baseline_pure_v48": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+  "package_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/tape_gen/candidate/main.py",
+  "package_tar": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/tape_gen/candidate/submission.tar.gz"
+ }
+}

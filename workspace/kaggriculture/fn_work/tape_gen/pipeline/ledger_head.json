@@ -1,0 +1,13 @@
+{
+  "chain_sha256": "db9c1476d0d864b7585d7c31b175846cfdb482ac35c159748955e2b2402a0af6",
+  "grading": "BELOW_LINE",
+  "n_lines": 5,
+  "protocol": "tape_gen-pipeline-ledger/1.0",
+  "stage_order": [
+    "mine_trajectories",
+    "build_route_library",
+    "derive_market_variants",
+    "search_reflector_configs",
+    "assemble_and_gate"
+  ]
+}
