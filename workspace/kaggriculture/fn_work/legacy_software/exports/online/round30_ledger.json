@@ -1,0 +1,17 @@
+{
+ "schema": "online-probe-ledger/1.0",
+ "round": 30,
+ "track": "orderbook-derivative",
+ "candidate": {
+  "label": "shiiin9-orderbook-V55",
+  "pkg_sha256": "2838cc66e5d3f719569108fa553c9cf9acf8190d0662f8d991856560e6e9641c",
+  "main_sha256": "a16e0e9b…",
+  "submission_ref": 56491673,
+  "status": "SubmissionStatus.PENDING"
+ },
+ "decision": {
+  "user_verdict": "AskUserQuestion 立即发射（四轴核查全过：公开 09-21<锁/Apache-2.0/fair use 在案；四门绿含官方 last-callable 语义修正；强度 sanity 48-0 对我方全谱）",
+  "offline_gates": "四门 PASS；h2h 16-0×3（vs v48/v4b/hybrid-v2，场均 +24k）",
+  "expectation": "作者天梯录像 78-30；挤掉 hybrid-v2（1072.9）→终榜对={v48 新衍生 ~1042, orderbook 衍生}；+2h 读数；09-28 后不新发"
+ }
+}

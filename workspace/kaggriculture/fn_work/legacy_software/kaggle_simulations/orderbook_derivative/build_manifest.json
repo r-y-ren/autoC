@@ -1,0 +1,30 @@
+{
+ "schema": "orderbook_derivative_manifest/1.0",
+ "candidate": "shiiin9/your-market-list-is-an-order-book (public derivative, Apache-2.0)",
+ "generated": "2026-09-23",
+ "main_sha256": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab",
+ "main_bytes": 1026965,
+ "tar_sha256": "2838cc66e5d3f719569108fa553c9cf9acf8190d0662f8d991856560e6e9641c",
+ "tar_bytes": 628544,
+ "provenance_chain": [
+  "notebook kaggle kernels pull 2026-09-23 (sha256 bcd3503d92b1685b8bbf0ea04f4430334693cde716aaf151b92b1d6dc1f3a468) == in-repo fresh-20260923 copy byte-identical",
+  "cell2 payload base85+zlib decode -> main.py sha256 a16e0e9b... == author EXPECTED_SHA256 self-assert (author: byte-for-byte the file I submitted)",
+  "base V55 (ahmedberatozer/kaggriculture-v55-one-turn-market-race-edge, pulled fresh 2026-09-23, self-assert sha f09034624844da49...) diff = exactly 4 constants + 2 appended blocks (matches author cell-1 claim)",
+  "tar built deterministically (v48_derivative recipe: tarfile mtime0 uid/gid0 mode644, gzip mtime0), double-build byte-identical"
+ ],
+ "four_gates": "ALL PASS 2026-09-23 via official last-callable (_cxd_agent) semantics",
+ "gate_note": "kgenv.arena.load_submission_agent prefers named agent() (v55 core, no layer D) - diverges 203/719 steps from last callable; gates+h2h all use kaggle_environments.agent.get_last_callable (official submission entry = last callable, author-stated)",
+ "h2h_2026_09_23": {
+  "vs v48-pure": "16-0 (A 8/8 B 8/8) mean margin +24158",
+  "vs v4b": "16-0 (A 8/8 B 8/8) mean +24158 (rewards identical to v48-pure games; P2 patch dormant in matchup)",
+  "vs hybrid-v2": "16-0 (A 8/8 B 8/8) mean +24190",
+  "all_statuses": "DONE x48"
+ },
+ "compliance": {
+  "public_since": "2026-09-21 (API v1 lastRunTime 2026-09-21T23:16:29.983Z; in-repo digest fresh-sweep-20260923: 09-21 first version; byte-clones lastRun 09-22)",
+  "license": "Apache-2.0 declared in-notebook (layer D + notebook); base V55 Apache-2.0; upstream notices retained in main.py",
+  "fair_use": "host Addison Howard quote in case via round26_ledger.json legal_basis"
+ },
+ "author_consistency": "4 constants in-file (_V92_P_EVERY=2,_CA_MARGIN=-15.0,V9_RACE_DEFAULT=44,_OR2_SLOT_MARGIN=8.0; in-file comment 'round 2'); entry _cxd_agent wraps _CXD_HOST=v55 agent()",
+ "use": "disclosure-labelled public derivative submission; not merged into our original track"
+}
