@@ -13,12 +13,12 @@
 | apply_market_edit_operators | T2 | wired 2026-09-23 | 74 passed 之一；3 算子（shift±1/2 天 502 单守恒/scale 426/日帽 277） | (本批) |
 | assert_farmer_stream_identity | T2 | wired 2026-09-23 | 74 passed 之一；8 变体 farmer 流恒等全过+差分账本 | (本批) |
 | derive_market_variants | T2 | wired 2026-09-23 | 74 passed 之一；8/8 变体（≤8 稀疏上限）market_variants.json+ledger | (本批) |
-| define_config_space | T3 | stub 2026-09-23 | — | — |
-| evaluate_ablation_tree | T3 | stub 2026-09-23 | — | — |
-| search_reflector_configs | T3 | stub 2026-09-23 | — | — |
-| split_train_holdout | T3 | stub 2026-09-23 | — | — |
-| rank_candidates_seated | T3 | stub 2026-09-23 | — | — |
-| select_on_holdout | T3 | stub 2026-09-23 | — | — |
+| define_config_space | T3 | done 2026-09-23 | `python -m pytest tests -q`（97 passed 之一）；空间=10 件×2^5=320 全枚举+微轴扇出 2 登记；config_space.json/md 落 search/；同库面同输出 | (本批) |
+| evaluate_ablation_tree | T3 | done 2026-09-23 | `python -m pytest tests -q`（97 passed 之一）；反射层真值=深读档 modules 只读组装（含 seat1 obs.step=None 计数器补步修复）；粗筛 320×8→精评 top6×111→微轴 1；score=winrate−0.02×模块数 | (本批) |
+| search_reflector_configs | T3 | done 2026-09-23 | `python -m pytest tests -q`（97 passed 之一）；真实搜索 852s/3490 rollouts 预算未耗尽；账本 22 行 JSONL content_sha256 自证；最终件 route:default+clone_preempt 留出 0.4706/+440 | (本批) |
+| split_train_holdout | T3 | done 2026-09-23 | `python -m pytest tests -q`（97 passed 之一）；157 对手→训练 109/留出 48（30.6%≥30%）局 111/51 不相交证明；挖掘源 Anton Tikhonov+Yuzu 圈禁训练侧 | (本批) |
+| rank_candidates_seated | T3 | done 2026-09-23 | `python -m pytest tests -q`（97 passed 之一）；seated 表（winrate 平局 0.5+逐局明细）；排序 (-score, modules, id) 同分取稀疏；评估器可注入 | (本批) |
+| select_on_holdout | T3 | done 2026-09-23 | `python -m pytest tests -q`（97 passed 之一）；裁决只在留出（训练成绩仅入报告）；fail-closed 留出<30%；final_selection.json+holdout_margin_table.csv 落盘 | (本批) |
 | build_candidate_package | T4 | stub 2026-09-23 | — | — |
 | run_m1_m2_gates | T4 | stub 2026-09-23 | — | — |
 | assemble_and_gate | T4 | stub 2026-09-23 | — | — |
