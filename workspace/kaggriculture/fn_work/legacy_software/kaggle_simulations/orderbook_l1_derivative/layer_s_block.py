@@ -8,8 +8,22 @@ orderbook_l1_derivative/test_layer_s.py 单测（测试代码=上发代码，零
 _CXS_FROM = 648
 _CXS_SEASON_END = 718
 
-# 首收步数表：实现期从 vendored wheel CROPS_INFO 转录并加交叉校验测试（R9/bots 常数看护先例）
-FIRST_HARVEST_STEPS: dict = {}  # unimplemented:const:FIRST_HARVEST_STEPS
+# 首收步数表（R9/bots 常数看护先例；wheel 现值交叉校验见 test_consts_crosscheck.py）
+# 来源（2026-09-23 实读转录）：本机 vendored wheel kaggle_environments 1.32.7+nodeps，
+#   模块 kaggle_environments/envs/kaggriculture/kaggriculture.py 模块级 CROPS 表的
+#   first_yield_day 字段（单位=天）。换算式（1 天 = turnsPerDay 默认 24 步；719 步/30 天）：
+#   FIRST_HARVEST_STEPS[crop] = CROPS[crop]["first_yield_day"] * 24
+# 口径：从 PLANT 那步起到第一次 HARVEST 可得那步的步数差。引擎 day = step // 24，
+#   PLANT 记 planted_day=当日，HARVEST 合法条件 day - planted_day >= first_yield_day
+#   （kaggriculture.py L453），故"种下→首收"相隔 first_yield_day 整天 = *24 步级；
+#   WHEAT/CARROT = 2 天 = 48 步，与契约预期一致。
+FIRST_HARVEST_STEPS: dict = {
+    "WHEAT": 48,        # first_yield_day=2  → 2*24
+    "CARROT": 48,       # first_yield_day=2  → 2*24
+    "TOMATO": 192,      # first_yield_day=8  → 8*24
+    "STRAWBERRY": 240,  # first_yield_day=10 → 10*24
+    "MELON": 240,       # first_yield_day=10 → 10*24
+}
 
 
 def _cxs_agent(observation, configuration=None):
@@ -33,5 +47,15 @@ def _cxs_completable_plant_demand(crop, observation, plan_view):
 
 
 def _cxs_harvest_completable(step, crop, first_harvest_steps=None):
-    """纯时间测试：step+first_harvest(crop)≤718；常数缺失/异常→True（保守不截）。"""
-    raise NotImplementedError("unimplemented:fn:_cxs_harvest_completable")
+    """纯时间测试：step+first_harvest(crop)≤718；常数缺失/异常→True（保守不截）。
+
+    step s 的 crop PLANT 可完成"种+收" ⇔ s + first_harvest_steps(crop) ≤
+    _CXS_SEASON_END(718)。first_harvest_steps=None 时用模块级
+    FIRST_HARVEST_STEPS；表缺失/作物不在表/任何类型或运行异常 → True
+    （零误杀：不确定=来得及=不构成截断理由）。
+    """
+    try:
+        table = FIRST_HARVEST_STEPS if first_harvest_steps is None else first_harvest_steps
+        return step + table[crop] <= _CXS_SEASON_END
+    except Exception:
+        return True
