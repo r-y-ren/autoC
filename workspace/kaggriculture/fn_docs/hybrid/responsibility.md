@@ -161,3 +161,112 @@
   - **run_giant_seated_gate** [L1|新增]：对 statma/fuxi/42 回放流各 ≥3 局 seated 对照（打平或更好）。
   - **run_win_regression_gate** [L1|新增]：胜局回归 ≥8 局不翻负。
   - **run_economic_face** [L1|新增]：收入峰 ≥12.7k 级@d14-17（孪生计量）。
+
+
+---
+
+## 【R10 增补·2026-09-23】种子迟购截断层（layer S，orderbook-L1）
+
+## 结构概览（增补）
+- build_layer_s_candidate ← R10
+  - append_layer_s_block
+  - _cxs_agent（运行时，注入包内）
+    - _cxs_seed_truncate
+      - _cxs_seed_surplus
+        - _cxs_completable_plant_demand
+          - _cxs_harvest_completable
+- verify_layer_s_gates ← R10
+  - gate_h2h_vs_verbatim
+  - gate_lineage_strength
+  - gate_equivalence_precision
+    - replay_action_diff
+    - precision_subset_check
+    - constructed_invariant_cases
+  - gate_launch_fourgate_l1
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R10 | build_layer_s_candidate；verify_layer_s_gates |
+
+## 功能块 build_layer_s_candidate ← R10
+（块引言：layer S 是加在 round-30 orderbook 衍生版（main sha a16e0e9b / pkg sha 2838cc66）尾部的纯减法过滤层：step≥648 起对基座动作里的 BUY_SEED 订单做零误杀截断——删除充要条件=删除后"库存种子+保留订单+磁带未来购买"仍覆盖全部可完成种+收的 PLANT 机会（逐品项）；不确定即保留（宁买勿漏）。异常一律回退基座动作。产物全落 orderbook_l1_derivative/，orderbook_derivative/ 原件零改动。）
+
+- **build_layer_s_candidate** [L0|新增]
+  - 职责：构建编排——复制 orderbook_derivative/main.py 为 L1 副本 → append_layer_s_block 注入 layer S 尾块 → 确定性打包（round-30 配方：tarfile mtime0/uid0/gid0/mode644、gzip mtime0、双跑逐字节一致）→ 生成 manifest（基底 sha 链 a16e0e9b→2838cc66、layer S 块 sha、双跑哈希、描述文案 "public derivative with seed-truncation layer"）。
+  - 签名意图：输入: 无（CLI） / 输出: orderbook_l1_derivative/{main.py, submission.tar.gz, build_manifest.json} / 错误: 注入校验或打包不确定即构建失败（fail-closed）。
+  - 调用方：操作者（构建期）。
+  - tested 策略：上游覆盖: verify_layer_s_gates。
+  - 核验命令：上游覆盖: gate_launch_fourgate_l1。
+  - **append_layer_s_block** [L1|新增]
+    - 职责：生成 layer S 源码块（下述五运行时函数）文本追加到副本尾部；注入校验四条——py_compile 通过、AST 可解析、装载后 globals 最后 callable=_cxs_agent、对原版 diff 仅尾部追加（无既有行改动）。
+    - 签名意图：输入: L1 main.py 路径 / 输出: 注入后源文件+diff 审计记录 / 错误: 任一校验红即失败。
+    - 调用方：build_layer_s_candidate。
+    - tested 策略：自有单测。
+    - 核验命令：测试: orderbook_l1_derivative/test_build.py（注入校验组；继承 R10 验收④装载门）。
+  - **_cxs_agent** [L1|新增]（运行时入口，注入包内）
+    - 职责：尾块捕获最后 callable（=orderbook 版 _cxd_agent）→ 取基座动作 → step<648 或动作无 BUY_SEED → 原样返回（同对象，零足迹）；否则交 _cxs_seed_truncate 过滤后返回 dict(action, market=filtered)；任何异常→基座动作原样返回（fail-safe）；step==0 复位层内缓存（磁带解析缓存等）。
+    - 签名意图：输入: observation, configuration / 输出: 基座格式 action / 错误: 一切内部异常吞掉并回退基座动作。
+    - 调用方：Kaggle 官方装载（最后 callable）。
+    - tested 策略：上游覆盖: verify_layer_s_gates。
+    - 核验命令：上游覆盖: gate_launch_fourgate_l1。
+    - **_cxs_seed_truncate** [L2|新增]
+      - 职责：过滤主函数——对 action['market'] 中 step≥648 的 BUY_SEED 逐单裁决：逐品项调用 _cxs_seed_surplus 得允许删除量，只删超出部分（按订单出现序删后单），其余订单与槽位顺序原样保留；任何品项 surplus 计算返回不确定（None）→ 该品项零截断。
+      - 签名意图：输入: observation, action / 输出: 过滤后 market 订单表（纯减法） / 错误: 异常向上抛（由 _cxs_agent 兜底回退）。
+      - 调用方：_cxs_agent。
+      - tested 策略：自有单测（三构造用例经 constructed_invariant_cases 复用）。
+      - 核验命令：测试: orderbook_l1_derivative/test_layer_s.py（继承 R10 验收③(c)）。
+      - **_cxs_seed_surplus** [L3|新增]
+        - 职责：零误杀核心——surplus(crop)=库存种子(crop)+本回合保留 BUY_SEED(crop)+磁带未来 BUY_SEED(crop)−可完成种收需求(crop)；允许删除量=max(0, surplus) 且不超过本回合该品项购买量；需求经 _cxs_completable_plant_demand；磁带/库存任一读取失败→返回 None（不确定=不截）。种子↔格子换算按引擎 crop 常数（麦/萝卜 1 种/格）。
+        - 签名意图：输入: crop, observation, 本回合保留订单集 / 输出: 允许删除量（int）或 None / 错误: 解析失败→None。
+        - 调用方：_cxs_seed_truncate。
+        - tested 策略：自有单测。
+        - 核验命令：测试: orderbook_l1_derivative/test_layer_s.py（surplus 用例组）。
+        - **_cxs_completable_plant_demand** [L4|新增]
+          - 职责：逐品项统计未来 PLANT 种子需求——读选中磁带/计划未来 farmer PLANT 事件（经基座既有未来计划通道，同 RACE 扫描 tape 未来卖单的先例，只读不改），只计经 _cxs_harvest_completable 判定可完成的机会；输出需求量；通道解析失败→None。
+          - 签名意图：输入: crop, observation / 输出: 需求种子数（int）或 None / 错误: 解析失败→None。
+          - 调用方：_cxs_seed_surplus。
+          - tested 策略：自有单测。
+          - 核验命令：测试: orderbook_l1_derivative/test_layer_s.py（demand 用例组）。
+          - **_cxs_harvest_completable** [L5|新增]
+            - 职责：纯时间测试——step s 的 crop PLANT 可完成种+收 ⇔ s+first_harvest_steps(crop) ≤ 718；first_harvest_steps 取 vendored 引擎 crop 常数（麦/萝卜≈48 步）；常数缺失/异常→True（保守：不构成截断理由）。
+            - 签名意图：输入: step, crop / 输出: bool / 错误: 无（异常→True）。
+            - 调用方：_cxs_completable_plant_demand。
+            - tested 策略：自有单测。
+            - 核验命令：测试: orderbook_l1_derivative/test_layer_s.py（harvest 边界组：s671 用例）。
+
+## 功能块 verify_layer_s_gates ← R10
+- **verify_layer_s_gates** [L0|新增]
+  - 职责：四门编排与台账——顺序执行 gate_h2h_vs_verbatim → gate_lineage_strength → gate_equivalence_precision → gate_launch_fourgate_l1，evidence 四件套落 orderbook_l1_derivative/（h2h/lineage/equivalence/launch JSON，格式沿 round-30）；任一门不可执行=整体 fail（fail-closed）；全绿输出 overall PASS（发射前置）。
+  - 签名意图：输入: L1 包路径+26 局局集清单 / 输出: {overall, h2h, lineage, equivalence, launch} / 错误: fail-closed。
+  - 调用方：操作者。
+  - tested 策略：自有单测。
+  - 核验命令：测试: orderbook_l1_derivative/test_gates.py（继承 R10 验收①②③④）。
+  - **gate_h2h_vs_verbatim** [L1|新增]
+    - 职责：门①——seated 通道双席位对 orderbook verbatim ≥16 局，互胜 ≥0.55；h2h_evidence.json 同格式台账（seed/seat/rewards/statuses/margin）。
+    - 签名意图：输入: 两 callable+种子集 / 输出: {n, wins, rate, per_game} / 错误: 任一局非 DONE 即门红。
+    - 调用方：verify_layer_s_gates。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_gates.py（h2h 组；继承 R10 验收①）。
+  - **gate_lineage_strength** [L1|新增]
+    - 职责：门②——对 v48 纯件/v4b/hybrid-v2 各 ≥8 局（seated 双席位），无翻负（允许平）；对照 48-0 基线台账。
+    - 签名意图：输入: L1 callable+三对手 callable / 输出: 三对手 {n, losses} / 错误: 任一负局即门红。
+    - 调用方：verify_layer_s_gates。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_gates.py（lineage 组；继承 R10 验收②）。
+  - **gate_equivalence_precision** [L1|新增]
+    - 职责：门③——三合一裁决：(a) 26 局线上局集 seated 重演动作流等价（replay_action_diff：除被截断 BUY_SEED 消失外逐字节一致）；(b) 子集判据（precision_subset_check：逐局逐品项被截断量 ≤ 原版终局未种下量；模式甲类局截断额 ≈0）；(c) 构造用例三件（constructed_invariant_cases）。任一红即门红。
+    - 签名意图：输入: 26 局回放集+L1/verbatim 两 callable / 输出: {equiv, subset, cases} / 错误: fail-closed。
+    - 调用方：verify_layer_s_gates。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_gates.py（equivalence 组；继承 R10 验收③）。
+    - **replay_action_diff** [L2|新增]
+      - 职责：逐局重演 diff——L1 与 verbatim 各驱动同一局，动作流逐字节对比；差异仅允许"BUY_SEED 订单消失"形态，出现任何其他差异（含下游 PLANT/HIRE 漂移）即报告首个异类差异位置。
+      - 签名意图：输入: 单局回放+两 callable / 输出: {identical_mod_seed_drop, first_divergence} / 错误: 重演失败=该局 fail。
+      - 调用方：gate_equivalence_precision。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_gates.py（diff 组）。
+    - **precision_subset_check** [L2|新增]
+      - 职责：零误杀的可观察裁决——逐局逐品项统计"被截断购种量 vs 原版该局终局未种下量"，截断量 ≤ 未种下量（子集性质）；输出逐局明细与汇总（模式甲类局截断额应 ≈0；有效采购 $1,350 级保留）。
+      - 签名意图：输入: 26 局重演产物+原版终局库存 / 输出: {per_game, per_crop, violations} / 错误: 任一 violation 即门红。
+      - 调用方：gate_equivalence_precision。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_gates.py（subset 组）。
+    - **constructed_invariant_cases** [L2|新增]
+      - 职责：构造三用例直测不变量——未来仍有 PLANT 机会的 BUY_SEED 不截；确无机会的截；s671 边界单仅当磁带确无后续种植机会才截。
+      - 签名意图：输入: 构造 obs/action 夹具 / 输出: 三例 pass/fail / 错误: 夹具异常=失败。
+      - 调用方：gate_equivalence_precision（并供 test_layer_s 复用）。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_layer_s.py（invariant 组；继承 R10 验收③(c)）。
+  - **gate_launch_fourgate_l1** [L1|新增]
+    - 职责：门④——发射四门：官方 last-callable 装载（末 callable=_cxs_agent；与 _cxd_agent 基线的完整序列差异仅来自截断层）；双席自打 DONE+max 单步 <1s；确定性双跑动作流 sha256 一致；体积 <100MB 与 sha 身份链登记（manifest 同 round-30 格式）。
+    - 签名意图：输入: L1 包 / 输出: 四门结果 / 错误: 任一门红。
+    - 调用方：verify_layer_s_gates。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_gates.py（launch 组；继承 R10 验收④）。
