@@ -1,0 +1,622 @@
+{
+ "pulled_at": "2026-09-23T07:52:13Z",
+ "submissions_top5": [
+  {
+   "ref": 56461336,
+   "publicScore": 1040.8,
+   "status": "COMPLETE",
+   "date": "2026-09-22T10:08:55.783000",
+   "desc": "public derivative with economic-guard layer (v4b: market/mil"
+  },
+  {
+   "ref": 56452187,
+   "publicScore": 1072.9,
+   "status": "COMPLETE",
+   "date": "2026-09-22T03:53:46.293000",
+   "desc": "public derivative with modifications (market/economic-guard "
+  },
+  {
+   "ref": 56400478,
+   "publicScore": 1113.5,
+   "status": "COMPLETE",
+   "date": "2026-09-20T15:56:48.637000",
+   "desc": "public derivative: kaitofukami v48 public-notebook build (ve"
+  },
+  {
+   "ref": 56370649,
+   "publicScore": 534.2,
+   "status": "COMPLETE",
+   "date": "2026-09-19T20:08:26.483000",
+   "desc": "v14.2-dtsp: identity guard tier + wallet gates + schedule ax"
+  },
+  {
+   "ref": 56347074,
+   "publicScore": 543.6,
+   "status": "COMPLETE",
+   "date": "2026-09-19T03:24:59.423000",
+   "desc": "v14.1-dtsp: engagement fix (official loader sys.path.pop kil"
+  }
+ ],
+ "pair": {
+  "hybrid_v2": {
+   "ref": 56452187,
+   "score": 1072.9,
+   "status": "COMPLETE",
+   "episodes": {
+    "total": 70,
+    "public": 69,
+    "validation_or_other": 1,
+    "all_completed": true
+   },
+   "baseline": {
+    "source": "analyses/02-2026-09-24.md: 1084.6 @51 public",
+    "public_then": 51
+   },
+   "increment_public": 18,
+   "new_public_ids": [
+    112351318,
+    112346568,
+    112341963,
+    112333474,
+    112333447,
+    112308173,
+    112295986,
+    112279620,
+    112228916,
+    112190190,
+    112145663,
+    112131462,
+    112114330,
+    112109994,
+    112106516,
+    112070179,
+    112034545,
+    112028544
+   ],
+   "wlt_new": {
+    "n_parsed": 18,
+    "W": 6,
+    "L": 12,
+    "T": 0,
+    "win_rate": 0.333,
+    "margin_min": -62646.0,
+    "margin_median": -6744.0,
+    "margin_max": 21819.0,
+    "games": [
+     {
+      "ep": 112351318,
+      "opp": "codezzzsleep",
+      "my": 114929.0,
+      "ot": 122994.0,
+      "margin": -8065.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112346568,
+      "opp": "jjamppongmandu",
+      "my": 37221.0,
+      "ot": 67449.0,
+      "margin": -30228.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112341963,
+      "opp": "Nikouo",
+      "my": 67860.0,
+      "ot": 82317.0,
+      "margin": -14457.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112333474,
+      "opp": "dharana77",
+      "my": 77105.0,
+      "ot": 104432.0,
+      "margin": -27327.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112333447,
+      "opp": "uns.t",
+      "my": 76105.0,
+      "ot": 93999.0,
+      "margin": -17894.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112308173,
+      "opp": "ka4869",
+      "my": 108188.0,
+      "ot": 114892.0,
+      "margin": -6704.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112295986,
+      "opp": "Takauchi Suguru",
+      "my": 68847.0,
+      "ot": 104214.0,
+      "margin": -35367.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112279620,
+      "opp": "VAIBHAV RASTOGI 90",
+      "my": 76251.0,
+      "ot": 75275.0,
+      "margin": 976.0,
+      "res": "W",
+      "seat": 1
+     },
+     {
+      "ep": 112228916,
+      "opp": "栗ご飯",
+      "my": 47655.0,
+      "ot": 91055.0,
+      "margin": -43400.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112190190,
+      "opp": "Ethereal49",
+      "my": 66258.0,
+      "ot": 55487.0,
+      "margin": 10771.0,
+      "res": "W",
+      "seat": 1
+     },
+     {
+      "ep": 112145663,
+      "opp": "Nianhua1",
+      "my": 78468.0,
+      "ot": 81067.0,
+      "margin": -2599.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112131462,
+      "opp": "Bala Murugan AIML",
+      "my": 141988.0,
+      "ot": 148772.0,
+      "margin": -6784.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112114330,
+      "opp": "Arhaan Aggarwal",
+      "my": 59112.0,
+      "ot": 63548.0,
+      "margin": -4436.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112109994,
+      "opp": "Mositaku",
+      "my": 57963.0,
+      "ot": 120609.0,
+      "margin": -62646.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112106516,
+      "opp": "Richard",
+      "my": 81944.0,
+      "ot": 60125.0,
+      "margin": 21819.0,
+      "res": "W",
+      "seat": 1
+     },
+     {
+      "ep": 112070179,
+      "opp": "EdwardHwang@123",
+      "my": 94368.0,
+      "ot": 94290.0,
+      "margin": 78.0,
+      "res": "W",
+      "seat": 0
+     },
+     {
+      "ep": 112034545,
+      "opp": "williamrawling",
+      "my": 87733.0,
+      "ot": 72462.0,
+      "margin": 15271.0,
+      "res": "W",
+      "seat": 1
+     },
+     {
+      "ep": 112028544,
+      "opp": "Tmaxxer",
+      "my": 96902.0,
+      "ot": 84743.0,
+      "margin": 12159.0,
+      "res": "W",
+      "seat": 1
+     }
+    ]
+   }
+  },
+  "v4b": {
+   "ref": 56461336,
+   "score": 1040.8,
+   "status": "COMPLETE",
+   "episodes": {
+    "total": 67,
+    "public": 66,
+    "validation_or_other": 1,
+    "all_completed": true
+   },
+   "baseline": {
+    "source": "analyses/02-2026-09-24.md: 1049.8 @23 public (13W-10L)",
+    "public_then": 23,
+    "score_then": 1049.8
+   },
+   "increment_public": 43,
+   "new_public_ids": [
+    112337106,
+    112328550,
+    112308188,
+    112289139,
+    112241300,
+    112201576,
+    112174306,
+    112162873,
+    112162681,
+    112150415,
+    112113403,
+    112107249,
+    112073943,
+    112073962,
+    112068799,
+    112063721,
+    112048507,
+    112046640,
+    112032808,
+    112031593,
+    112030436,
+    112029300,
+    112028163,
+    112027017,
+    112025865,
+    112024735,
+    112023595,
+    112022483,
+    112021348,
+    112020208,
+    112019086,
+    112017946,
+    112016811,
+    112015669,
+    112014526,
+    112013382,
+    112012246,
+    112011100,
+    112009964,
+    112008842,
+    112007699,
+    112006565,
+    112005430
+   ],
+   "wlt_new": {
+    "n_parsed": 30,
+    "W": 10,
+    "L": 20,
+    "T": 0,
+    "win_rate": 0.333,
+    "margin_min": -36795.0,
+    "margin_median": -7139.0,
+    "margin_max": 60102.0,
+    "games": [
+     {
+      "ep": 112337106,
+      "opp": "wen chong yu",
+      "my": 141902.0,
+      "ot": 149011.0,
+      "margin": -7109.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112328550,
+      "opp": "dharana77",
+      "my": 56805.0,
+      "ot": 66788.0,
+      "margin": -9983.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112308188,
+      "opp": "Son Hoang",
+      "my": 82618.0,
+      "ot": 101331.0,
+      "margin": -18713.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112289139,
+      "opp": "Daksh Bhalala",
+      "my": 130451.0,
+      "ot": 125902.0,
+      "margin": 4549.0,
+      "res": "W",
+      "seat": 1
+     },
+     {
+      "ep": 112241300,
+      "opp": "GPT-5.6 Sol🏆",
+      "my": 83835.0,
+      "ot": 104958.0,
+      "margin": -21123.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112201576,
+      "opp": "katya barzova",
+      "my": 70436.0,
+      "ot": 58902.0,
+      "margin": 11534.0,
+      "res": "W",
+      "seat": 0
+     },
+     {
+      "ep": 112174306,
+      "opp": "tizawa3",
+      "my": 116746.0,
+      "ot": 137444.0,
+      "margin": -20698.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112162873,
+      "opp": "Just a moroccan",
+      "my": 133826.0,
+      "ot": 73724.0,
+      "margin": 60102.0,
+      "res": "W",
+      "seat": 0
+     },
+     {
+      "ep": 112162681,
+      "opp": "abozten",
+      "my": 89739.0,
+      "ot": 105061.0,
+      "margin": -15322.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112150415,
+      "opp": "Abhiram 9803",
+      "my": 80578.0,
+      "ot": 78666.0,
+      "margin": 1912.0,
+      "res": "W",
+      "seat": 1
+     },
+     {
+      "ep": 112113403,
+      "opp": "yjshyfy",
+      "my": 105548.0,
+      "ot": 140217.0,
+      "margin": -34669.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112107249,
+      "opp": "Halapeño Farms",
+      "my": 114546.0,
+      "ot": 121715.0,
+      "margin": -7169.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112073962,
+      "opp": "Nezihe Sözen",
+      "my": 85373.0,
+      "ot": 109311.0,
+      "margin": -23938.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112073943,
+      "opp": "@Suzumaru_1666",
+      "my": 97303.0,
+      "ot": 120014.0,
+      "margin": -22711.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112068799,
+      "opp": "AltriaE",
+      "my": 65684.0,
+      "ot": 67286.0,
+      "margin": -1602.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112063721,
+      "opp": "LoveLetter",
+      "my": 138981.0,
+      "ot": 154829.0,
+      "margin": -15848.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112048507,
+      "opp": "Kronki",
+      "my": 56607.0,
+      "ot": 57254.0,
+      "margin": -647.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112046640,
+      "opp": "K.nosaka",
+      "my": 130127.0,
+      "ot": 126307.0,
+      "margin": 3820.0,
+      "res": "W",
+      "seat": 0
+     },
+     {
+      "ep": 112032808,
+      "opp": "-Beterraba",
+      "my": 67898.0,
+      "ot": 77593.0,
+      "margin": -9695.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112031593,
+      "opp": "Rishit Aggarwal",
+      "my": 112520.0,
+      "ot": 142936.0,
+      "margin": -30416.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112030436,
+      "opp": "LE4VES",
+      "my": 144421.0,
+      "ot": 145421.0,
+      "margin": -1000.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112029300,
+      "opp": "small fry in the underworld",
+      "my": 77297.0,
+      "ot": 68178.0,
+      "margin": 9119.0,
+      "res": "W",
+      "seat": 0
+     },
+     {
+      "ep": 112028163,
+      "opp": "Yuzu",
+      "my": 63789.0,
+      "ot": 73810.0,
+      "margin": -10021.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112027017,
+      "opp": "Siva Kumar",
+      "my": 31822.0,
+      "ot": 43288.0,
+      "margin": -11466.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112025865,
+      "opp": "N_Matsumoto24",
+      "my": 97492.0,
+      "ot": 95455.0,
+      "margin": 2037.0,
+      "res": "W",
+      "seat": 0
+     },
+     {
+      "ep": 112024735,
+      "opp": "Busya PRIME",
+      "my": 88221.0,
+      "ot": 91152.0,
+      "margin": -2931.0,
+      "res": "L",
+      "seat": 1
+     },
+     {
+      "ep": 112023595,
+      "opp": "Ezra",
+      "my": 73225.0,
+      "ot": 70703.0,
+      "margin": 2522.0,
+      "res": "W",
+      "seat": 1
+     },
+     {
+      "ep": 112022483,
+      "opp": "Kaggria",
+      "my": 40026.0,
+      "ot": 76821.0,
+      "margin": -36795.0,
+      "res": "L",
+      "seat": 0
+     },
+     {
+      "ep": 112021348,
+      "opp": "Berkay Hasret",
+      "my": 106303.0,
+      "ot": 91349.0,
+      "margin": 14954.0,
+      "res": "W",
+      "seat": 1
+     },
+     {
+      "ep": 112020208,
+      "opp": "ong bee",
+      "my": 68742.0,
+      "ot": 62344.0,
+      "margin": 6398.0,
+      "res": "W",
+      "seat": 0
+     }
+    ]
+   },
+   "parse_note": "increment=43>30, parsed most recent 30 (ids in wlt_new.games)",
+   "convergence_check": {
+    "rule": ">=1050 at >=40 public episodes",
+    "public_now": 66,
+    "score_now": 1040.8,
+    "verdict": "FAIL (1040.8 < 1050 at 66 public)",
+    "slope": "1049.8@23 -> 1040.8@66: -9.0 over 43 eps (-0.21/ep), flat-to-declining after peak ~23"
+   }
+  }
+ },
+ "source": {
+  "competition": "kaggriculture",
+  "slug_from": "fn_work/legacy_software/scripts/sync_online_probe.py L151 ('competitions','submissions','kaggressure'->kaggriculture literal)",
+  "cli": "/home/renyxin/.local/bin/kaggle (2.2.4)",
+  "auth_note": "CLI needs KAGGLE_API_TOKEN env; token via 'kaggle auth print-access-token' (OAuth credentials.json auto-refresh)",
+  "commands": [
+   "KAGGLE_API_TOKEN=$(kaggle auth print-access-token) kaggle competitions submissions kaggriculture --format json",
+   "KAGGLE_API_TOKEN=$T kaggle competitions episodes 56452187 --format json",
+   "KAGGLE_API_TOKEN=$T kaggle competitions episodes 56461336 --format json",
+   "for eid in <new ids>; KAGGLE_API_TOKEN=$T kaggle competitions replay $eid -p /tmp/pairsnap -q"
+  ],
+  "episodes_cmd_note": "episode list output has trailing usage line; parse with raw_decode",
+  "replay_dir": "/tmp/pairsnap",
+  "parse_logic": "info.TeamNames/rewards, team=renyxin, margin=my-opp (cf. kgenv/online_probe.py classify_replay)"
+ },
+ "anomalies": [
+  "none: both submissions COMPLETE, all 137 episode states EpisodeState.COMPLETED, replay statuses all DONE, no validation/self games among new"
+ ]
+}
