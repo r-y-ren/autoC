@@ -1,4 +1,13 @@
-"""gate_equivalence_precision（R10 门③）：等价面+精准性三合一裁决。"""
+"""gate_equivalence_precision（R10 门③）：等价面+精准性三合一裁决。
+
+(a) 反应面+结果面双判据（2026-09-24 R10 验收③(a) 口径修订，用户裁决 A）：
+    replay_action_diff 全量差异枚举（不首异即停）+逐形态分类——允许形态 =
+    {BUY_SEED 消失（截断直接效应）/BUY_SEED 出现（基座回买反应）/SELL 单
+    序列变化（基座少卖/改卖反应）}，全部差异步 ≥ layer_s_block._CXS_FROM
+    同源阈值，且逐局终局资金 l1_final ≥ verbatim_final；原严格逐字节口径
+    废止、留档为 identical_mod_seed_drop（(a') RED 诊断面）。
+(b) precision_subset_check 子集判据（原样，零误杀可观察裁决）；
+(c) constructed_invariant_cases 构造用例三件（原样）。"""
 import gzip
 import json
 import os
@@ -31,6 +40,23 @@ SEED_PRICE = {
 # ≤ 未种下额 ≤ 带，故 mode_a_games_near_zero 旗标是防漂移金丝雀（若旗标
 # 翻红=模式识别或价值聚合与逐品项判据不自洽，fail-closed 拒绿）。
 MODE_A_VALUE_BAND = 30
+
+# ---------------------------------------------------------------------------
+# 门③(a) 常数（2026-09-24 口径修订：反应面+结果面双判据）
+# ---------------------------------------------------------------------------
+# 允许差异形态（反应面）：layer S 纯减法截断的直接效应 + 基座闭环经济反应
+# （回买/少卖/改卖）的可观察形态全集；任何其他差异形态（farmer/hands 单位
+# 动作变化、非 BUY_SEED 非 SELL 的 market 单变化、动作结构异常、BUY_SEED
+# 槽位重排）= violation。步界（全部差异步 ≥ _CXS_FROM 同源阈值）与结果面
+# （逐局 l1_final ≥ verbatim_final）在 _adjudicate_game 局级裁决。
+ALLOWED_DIVERGENCE_KINDS = (
+    "buy_seed_disappear",  # verbatim 有 L1 无（截断直接效应）
+    "buy_seed_appear",     # L1 有 verbatim 无（基座回买反应）
+    "sell_order_change",   # SELL 单序列（品+量+序）变化（基座少卖/改卖反应）
+)
+
+# 步界阈值缓存（layer_s_block._CXS_FROM 同源；None=未装载）
+_CXS_FROM_CACHE = None
 
 # strip 语料默认目录（S3 门③ seated 重演最小输入；INDEX.md 登记来源与形态）。
 _STRIP_DIR_DEFAULT = os.path.normpath(os.path.join(
@@ -111,8 +137,10 @@ def precision_subset_check(replay_products, strip_dir=None) -> dict:
     """逐局逐品项：被截断购种量 ≤ 原版终局未种下量；violation 非空即门红。
 
     输入 replay_products = replay_action_diff 产物列表（同包接口，逐局
-    {episode, seat, identical_mod_seed_drop, dropped:[{step,crop,qty}…],
-    l1_final, verbatim_final, replay 路径或 episode 号, …}）。子集语义（零误杀
+    {episode, seat, game_pass, divergences, identical_mod_seed_drop,
+    dropped:[{step,crop,qty}…], l1_final, verbatim_final, replay 路径或
+    episode 号, …}——本判据消费面=dropped/episode/seat/error/replay 定位，
+    2026-09-24 口径修订只增键不删改）。子集语义（零误杀
     的可观察裁决）：layer S 只删"原局终局也没种下"的 BUY_SEED 单——逐局逐
     品项 dropped 汇总 ≤ 原局该品项终局未种下数；多删一颗=误杀=violation。
     原局终局未种下量取 strip 语料终局态（_strip_unplanted_seeds；产物内
@@ -207,6 +235,20 @@ def precision_subset_check(replay_products, strip_dir=None) -> dict:
 _EPISODE_NAME_RE = re.compile(r"episode-(\d+)-strip\.json\.gz")
 
 
+def _cxs_from() -> int:
+    """步界阈值：与 layer_s_block._CXS_FROM 同源（gate_launch_fourgate_l1
+    ._truncation_only_diff 同款 import），不手拼 648 防两处漂移。进程内缓存；
+    装载失败向上抛（→ 该局 error，fail-closed：步界是契约级判据，缺源即红）。"""
+    global _CXS_FROM_CACHE
+    if _CXS_FROM_CACHE is None:
+        here = os.path.dirname(os.path.abspath(__file__))
+        if here not in sys.path:
+            sys.path.append(here)
+        import layer_s_block
+        _CXS_FROM_CACHE = int(layer_s_block._CXS_FROM)
+    return _CXS_FROM_CACHE
+
+
 def _episode_from_path(path):
     """文件名 → 局号（int；非语料命名回退 basename 字符串）。"""
     match = _EPISODE_NAME_RE.fullmatch(os.path.basename(path))
@@ -236,22 +278,26 @@ def _discover_replays(episodes_dir, limit=None):
 def _aggregate_verdict(products, subset_result, cases_result) -> dict:
     """(a)(b)(c) 三面汇总裁决（纯函数；合成产物裁决矩阵单测直接喂）。
 
-    equiv = 全部局 identical_mod_seed_drop 真且无任一 error（error 局
-    identical 记 False 并计 n_errors——fail-closed 不放宽，契约严格裁决）；
-    subset = subset_result.all_ok；cases = cases_result.all_pass；
-    passed = 三者全真。per_game_summary 逐局一行：episode/seat/error/
-    identical_mod_seed_drop/first_divergence/n_dropped/dropped_value_est/
-    l1_final/verbatim_final/final_delta（error 局数值面记 None）。"""
+    equiv = 全部局 game_pass 真且无任一 error（2026-09-24 双判据口径：局级
+    裁决由 _adjudicate_game(divergences, l1_final, verbatim_final) 从产物面
+    重算——单一真值源，与 replay_action_diff 产物自带 game_pass 同源一致；
+    error 局 game_pass 记 False 并计 n_errors——fail-closed 不放宽，语料
+    缺失/装载失败/重演异常同进 error 面，按契约严格裁决）；subset =
+    subset_result.all_ok；
+    cases = cases_result.all_pass；passed = 三者全真。per_game_summary 逐局
+    一行：episode/seat/error/game_pass/identical_mod_seed_drop（(a') RED 诊断
+    面，原样留档）/n_divergences/kind_counts/n_violations/first_divergence/
+    n_dropped/dropped_value_est/l1_final/verbatim_final/final_delta/
+    min_divergence_step/steps_boundary_ok/result_face_ok（error 局数值面记
+    None/0）。"""
     products = list(products or [])
-    per_game_summary, n_errors, n_identical = [], 0, 0
+    per_game_summary, n_errors, n_game_pass = [], 0, 0
     for product in products:
         error = product.get("error")
         error = None if error is None else str(error)
-        identical = error is None and product.get(
-            "identical_mod_seed_drop") is True
-        if identical:
-            n_identical += 1
         dropped = (product.get("dropped") or []) if error is None else []
+        divergences = ((product.get("divergences") or [])
+                       if error is None else [])
         try:
             dropped_value = sum(int(entry["qty"]) * SEED_PRICE[entry["crop"]]
                                 for entry in dropped)
@@ -264,19 +310,40 @@ def _aggregate_verdict(products, subset_result, cases_result) -> dict:
             and isinstance(vb_final, (int, float))) else None
         if error is not None:
             n_errors += 1
+            verdict = {"game_pass": False, "first_divergence": None,
+                       "n_violations": 0, "steps_boundary_ok": None,
+                       "result_face_ok": None, "min_divergence_step": None}
+            kind_counts = {}
+        else:
+            verdict = _adjudicate_game(divergences, l1_final, vb_final)
+            kind_counts = {}
+            for entry in divergences:
+                kind_counts[entry.get("kind")] = (
+                    kind_counts.get(entry.get("kind"), 0) + 1)
+        if verdict["game_pass"]:
+            n_game_pass += 1
         per_game_summary.append({
             "episode": product.get("episode"),
             "seat": product.get("seat"),
             "error": error,
-            "identical_mod_seed_drop": identical,
-            "first_divergence": product.get("first_divergence"),
+            "game_pass": verdict["game_pass"],
+            "identical_mod_seed_drop": (
+                False if error is not None else product.get(
+                    "identical_mod_seed_drop")),
+            "n_divergences": len(divergences),
+            "kind_counts": kind_counts,
+            "n_violations": verdict["n_violations"],
+            "first_divergence": verdict["first_divergence"],
             "n_dropped": len(dropped),
             "dropped_value_est": dropped_value,
             "l1_final": l1_final,
             "verbatim_final": vb_final,
             "final_delta": final_delta,
+            "min_divergence_step": verdict["min_divergence_step"],
+            "steps_boundary_ok": verdict["steps_boundary_ok"],
+            "result_face_ok": verdict["result_face_ok"],
         })
-    equiv = bool(products) and n_errors == 0 and n_identical == len(products)
+    equiv = bool(products) and n_errors == 0 and n_game_pass == len(products)
     subset = bool(subset_result.get("all_ok"))
     cases = bool(cases_result.get("all_pass"))
     return {
@@ -291,22 +358,25 @@ def _aggregate_verdict(products, subset_result, cases_result) -> dict:
 
 def run(episodes_dir, l1_main, verbatim_main, limit=None,
         evidence_path=None) -> dict:
-    """(a)重演逐字节 (b)子集判据 (c)构造用例 →{equiv, subset, cases}；任一红即门红。
+    """(a)重演双判据 (b)子集判据 (c)构造用例 →{equiv, subset, cases}；任一红即门红。
 
     编排（门③ L1）：① episodes_dir 内 episode-<num>-strip.json.gz 按局号
     升序逐局 replay_action_diff（limit 截前 N 局供小子集冒烟，全量局数不
     硬编码；两 callable 装载一次跨局复用，不逐局重装载——1MB 级 main 每
     局重装载会把 26 局拖到分钟级）；② 全产物喂 precision_subset_check；
     ③ constructed_invariant_cases()；④ _aggregate_verdict 汇总：equiv =
-    全部局 identical_mod_seed_drop 且无任一 error（任一局 error →
-    equiv=False 并计 n_errors——fail-closed，语料缺失/装载失败/重演异常
-    同进 error 面，按契约严格裁决不放宽）；门③ passed = equiv ∧ subset
-    （precision_subset_check.all_ok）∧ cases（all_pass）。
+    全部局 game_pass（2026-09-24 反应面+结果面双判据：无 violation 形态 ∧
+    全部差异步 ≥ _CXS_FROM 同源阈值 ∧ 逐局 l1_final ≥ verbatim_final）且
+    无任一 error（任一局 error → equiv=False 并计 n_errors——fail-closed，
+    语料缺失/装载失败/重演异常同进 error 面，按契约严格裁决不放宽）；门③
+    passed = equiv ∧ subset（precision_subset_check.all_ok）∧ cases
+    （all_pass）。
 
     evidence 落 <本包>/evidence/equivalence_evidence.json（evidence_path
-    可覆写，供测试 tmp 隔离防覆写真台账）：per_game 逐局全产物（不截断）+
-    subset/cases 全结果 + verdict + 输入登记 + 耗时。语料目录空/坏 → 单条
-    全局面 error 产物（equiv/subset 俱红，防空转绿灯）。
+    可覆写，供测试 tmp 隔离防覆写真台账）：per_game 逐局全产物（不截断，
+    含 divergences 全量差异枚举与 game_pass 局裁决）+ subset/cases 全结果 +
+    verdict + 输入登记 + 耗时。语料目录空/坏 → 单条全局面 error 产物
+    （equiv/subset 俱红，防空转绿灯）。
     返回 {equiv, subset, cases, passed, per_game_summary, n_errors,
     evidence_path}。"""
     t0 = time.perf_counter()
@@ -352,7 +422,9 @@ def run(episodes_dir, l1_main, verbatim_main, limit=None,
     summary_rows = aggregate["per_game_summary"]
     evidence = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
-        "protocol": "orderbook-l1-equivalence-precision/1.0",
+        # 1.1（2026-09-24）：③(a) 双判据口径——per_game 增 divergences 全量
+        # 枚举/game_pass 局裁决；equiv_detail 改 n_game_pass/n_violation_games。
+        "protocol": "orderbook-l1-equivalence-precision/1.1",
         "inputs": {
             "episodes_dir": os.path.abspath(episodes_dir),
             "n_replays": len(replays),
@@ -364,11 +436,19 @@ def run(episodes_dir, l1_main, verbatim_main, limit=None,
         },
         "equiv_detail": {
             "n_games": len(products),
-            "n_identical": sum(1 for row in summary_rows
-                               if row["identical_mod_seed_drop"]),
-            "n_divergent": sum(1 for row in summary_rows
-                               if row["first_divergence"] is not None),
+            "n_game_pass": sum(1 for row in summary_rows
+                               if row["game_pass"]),
+            "n_divergent_games": sum(1 for row in summary_rows
+                                     if row["n_divergences"] > 0),
+            "n_violation_games": sum(1 for row in summary_rows
+                                     if row["n_violations"] > 0),
             "n_errors": aggregate["n_errors"],
+            "criteria": {
+                "allowed_kinds": list(ALLOWED_DIVERGENCE_KINDS),
+                "step_boundary": {"threshold": _cxs_from(),
+                                  "source": "layer_s_block._CXS_FROM"},
+                "result_face": "l1_final >= verbatim_final per game",
+            },
         },
         "subset": subset_result,
         "cases": cases_result,
@@ -378,7 +458,7 @@ def run(episodes_dir, l1_main, verbatim_main, limit=None,
             "cases": aggregate["cases"],
             "passed": aggregate["passed"],
         },
-        "per_game": products,  # 逐局全产物，保留不截断
+        "per_game": products,  # 逐局全产物（divergences 全量），保留不截断
         "wall_total_s": round(time.perf_counter() - t0, 1),
     }
     with open(target, "w", encoding="utf-8") as fh:
@@ -522,78 +602,205 @@ def _is_buy_seed(order):
             and order[0] == "BUY_SEED")
 
 
+def _is_sell(order):
+    return (isinstance(order, (list, tuple)) and order
+            and order[0] == "SELL")
+
+
 def _trunc(text, limit=200):
     text = str(text)
     return text if len(text) <= limit else text[:limit] + "..."
 
 
-def _classify_divergence(expected, got):
-    """裁决一步差异的形态。
+def _market_partition(market):
+    """market 订单表（list）→ (buy_seed, sell, other) 三保序分卷。
 
-    返回 (drops, kind, detail)：
-      - (drops, None, None)：纯"BUY_SEED 整单消失"形态——两动作 dict 键集
-        相同、farmer/hands 等非 market 字段逐字节一致、market 为 expected
-        去掉若干 BUY_SEED 订单后的保序子序列；drops=[{crop, qty}…]。
-      - (None, kind, detail)：其他任何差异（action 形态/键集/farmer/hands
-        漂移、market 增改删非种子单、BUY_SEED 改量而非整单消失等）。
-    不为"过门"放宽：任何非纯消失的差异一律判异类。"""
+    语料实测（2026-09-23 26 局统计）：market 单型 = BUY_SEED/SELL/HIRE/
+    BUY_ANIMAL/BUY_PRODUCT/BUY_LAND/空槽；前两型入专属卷做形态判定，其余
+    一律入 other 卷（任何增删改=violation，2026-09-24 口径：非 BUY_SEED 非
+    SELL 的 market 单变化不在允许形态内）。"""
+    buy_seed, sells, others = [], [], []
+    for order in market:
+        if _is_buy_seed(order):
+            buy_seed.append(order)
+        elif _is_sell(order):
+            sells.append(order)
+        else:
+            others.append(order)
+    return buy_seed, sells, others
+
+
+def _multiset_minus(left, right):
+    """left 侧有而 right 侧匹配不上的订单（canonical 多重集差，保 left 序；
+    right 同名单逐个消耗）。BUY_SEED 改量单自然分解为 消失+出现 两形态。"""
+    remaining = [_canonical(order) for order in right]
+    unmatched = []
+    for order in left:
+        key = _canonical(order)
+        try:
+            remaining.remove(key)
+        except ValueError:
+            unmatched.append(order)
+    return unmatched
+
+
+def _seed_order_meta(order):
+    """BUY_SEED 订单 → (crop, qty)；结构异常（qty 非可整数化等）→ None
+    （调用方按 violation 市场结构异常处置，fail-closed）。"""
+    try:
+        return str(order[1]), int(order[2])
+    except (TypeError, ValueError, IndexError):
+        return None
+
+
+def _classify_divergence(expected, got):
+    """一步差异的全量形态分类（2026-09-24 反应面口径；不再首异即停）。
+
+    返回该步全部差异记录列表 [{kind, detail, crop?, qty?}]（BUY_SEED 形态
+    附结构化 crop/qty）：
+    - 允许形态（ALLOWED_DIVERGENCE_KINDS）：buy_seed_disappear（verbatim
+      有 L1 无，截断直接效应）/buy_seed_appear（L1 有 verbatim 无，基座
+      回买反应）——多重集差逐单一条，改量单自然分解为消失+出现两条；
+      sell_order_change（该步双方 market 里 SELL 单序列——品+量+序——任何
+      差，基座少卖/改卖反应）——一步至多一条。BUY_SEED 差异与 SELL 差异
+      同步出现拆多条 kind。
+    - violation 形态（其他一切，不为过门放宽）：action_shape（非 dict）/
+      action_keys（键集差）/<非 market 字段名>（farmer/hands 等单位动作
+      变化）/market（非 BUY_SEED 非 SELL 订单增删改、market 非订单表、
+      BUY_SEED 订单结构异常、BUY_SEED 槽位重排等不可归因差异）。
+    本函数仅在两动作 canonical 不等时被调；分类零记录（如纯 BUY_SEED 重排
+    ——多重集同而序变）→ fail-closed 记 violation market，不放过不可归因差。"""
     if not isinstance(expected, dict) or not isinstance(got, dict):
-        return None, "action_shape", (
-            f"exp={_trunc(_canonical(expected))} got={_trunc(_canonical(got))}")
+        return [{"kind": "action_shape", "detail": (
+            f"exp={_trunc(_canonical(expected))} got={_trunc(_canonical(got))}")}]
     if set(expected) != set(got):
-        return None, "action_keys", (
-            f"exp_keys={sorted(expected)} got_keys={sorted(got)}")
+        return [{"kind": "action_keys", "detail": (
+            f"exp_keys={sorted(expected)} got_keys={sorted(got)}")}]
+    records = []
     for key in sorted(expected):
         if key == "market":
             continue
         if _canonical(expected[key]) != _canonical(got[key]):
-            return None, key, (
+            records.append({"kind": key, "detail": (
                 f"exp={_trunc(_canonical(expected[key]))} "
-                f"got={_trunc(_canonical(got[key]))}")
+                f"got={_trunc(_canonical(got[key]))}")})
     em, gm = expected.get("market"), got.get("market")
-    if _canonical(em) == _canonical(gm):
-        return [], None, None
-    if not isinstance(em, list) or not isinstance(gm, list):
-        return None, "market", (
-            f"exp={_trunc(_canonical(em))} got={_trunc(_canonical(gm))}")
-    drops, cursor = [], 0
-    for order in em:
-        if cursor < len(gm) and _canonical(order) == _canonical(gm[cursor]):
-            cursor += 1
-        elif _is_buy_seed(order):
-            drops.append({"crop": str(order[1]), "qty": int(order[2])})
+    if _canonical(em) != _canonical(gm):
+        if not isinstance(em, list) or not isinstance(gm, list):
+            records.append({"kind": "market", "detail": (
+                f"market 非订单表: exp={_trunc(_canonical(em))} "
+                f"got={_trunc(_canonical(gm))}")})
         else:
-            return None, "market", (
-                f"非 BUY_SEED 订单消失/改序: exp={_trunc(_canonical(order), 120)}")
-    if cursor != len(gm):
-        extra = ", ".join(_trunc(_canonical(o), 80)
-                          for o in gm[cursor:cursor + 3])
-        return None, "market", f"L1 market 多出/改动了订单: [{extra}]"
-    return drops, None, None
+            e_bs, e_sell, e_other = _market_partition(em)
+            g_bs, g_sell, g_other = _market_partition(gm)
+            if _canonical(e_other) != _canonical(g_other):
+                records.append({"kind": "market", "detail": (
+                    "非 BUY_SEED/SELL 订单差异: "
+                    f"exp={_trunc(_canonical(e_other), 120)} "
+                    f"got={_trunc(_canonical(g_other), 120)}")})
+            for order in _multiset_minus(e_bs, g_bs):
+                meta = _seed_order_meta(order)
+                if meta is None:
+                    records.append({"kind": "market", "detail": (
+                        "BUY_SEED 订单结构异常: "
+                        f"{_trunc(_canonical(order), 120)}")})
+                    continue
+                records.append({
+                    "kind": "buy_seed_disappear",
+                    "crop": meta[0], "qty": meta[1],
+                    "detail": f"{_trunc(_canonical(order), 120)}"
+                              "（verbatim 有 L1 无）"})
+            for order in _multiset_minus(g_bs, e_bs):
+                meta = _seed_order_meta(order)
+                if meta is None:
+                    records.append({"kind": "market", "detail": (
+                        "BUY_SEED 订单结构异常: "
+                        f"{_trunc(_canonical(order), 120)}")})
+                    continue
+                records.append({
+                    "kind": "buy_seed_appear",
+                    "crop": meta[0], "qty": meta[1],
+                    "detail": f"{_trunc(_canonical(order), 120)}"
+                              "（L1 有 verbatim 无，基座回买反应）"})
+            if _canonical(e_sell) != _canonical(g_sell):
+                records.append({"kind": "sell_order_change", "detail": (
+                    f"exp={_trunc(_canonical(e_sell), 160)} "
+                    f"got={_trunc(_canonical(g_sell), 160)}")})
+    if not records:
+        records.append({"kind": "market", "detail": (
+            "差异不可归入允许形态（如 BUY_SEED 槽位重排）: "
+            f"exp={_trunc(_canonical(em), 120)} "
+            f"got={_trunc(_canonical(gm), 120)}")})
+    return records
+
+
+def _adjudicate_game(divergences, l1_final, verbatim_final):
+    """局级双判据裁决（纯函数，2026-09-24 口径）：
+
+    game_pass = 反应面（无 violation 形态差异记录）∧ 步界（全部差异步 ≥
+    layer_s_block._CXS_FROM 同源阈值）∧ 结果面（l1_final ≥ verbatim_final，
+    1e-9 容差吸收浮点噪声）。first_divergence = 首个取消格差异（violation
+    形态，或步界破缺的早差异——定位用；纯结果面破缺无步可指，记 None，
+    final_delta 面自见）。返回 {game_pass, first_divergence, n_violations,
+    n_divergences, steps_boundary_ok, result_face_ok, min_divergence_step,
+    threshold}。l1/verbatim final 缺失或不可数值化 → 结果面 False
+    （fail-closed）。"""
+    threshold = _cxs_from()
+    divergences = list(divergences or [])
+    n_violations = sum(1 for entry in divergences
+                       if entry.get("kind") not in ALLOWED_DIVERGENCE_KINDS)
+    steps = [int(entry["step"]) for entry in divergences]
+    steps_boundary_ok = all(step >= threshold for step in steps)
+    try:
+        result_face_ok = (float(l1_final) - float(verbatim_final)) >= -1e-9
+    except (TypeError, ValueError):
+        result_face_ok = False
+    first = next((entry for entry in divergences
+                  if entry.get("kind") not in ALLOWED_DIVERGENCE_KINDS
+                  or int(entry["step"]) < threshold), None)
+    return {
+        "game_pass": (n_violations == 0 and steps_boundary_ok
+                      and result_face_ok),
+        "first_divergence": first,
+        "n_violations": n_violations,
+        "n_divergences": len(divergences),
+        "steps_boundary_ok": steps_boundary_ok,
+        "result_face_ok": result_face_ok,
+        "min_divergence_step": min(steps) if steps else None,
+        "threshold": threshold,
+    }
 
 
 def replay_action_diff(replay_path, l1_main, verbatim_main) -> dict:
-    """单局 seated 重演 diff：差异仅允许 BUY_SEED 消失形态；其他差异报首个位置。
+    """单局 seated 重演 diff：全量差异枚举+形态分类+双判据局裁决。
 
     语义：按局内我方席位（strip teams/info.TeamNames 判，勿假设 seat0），
     对手席逐字重放原动作流，我席由 L1 callable 实驱（twin 逐步喂我席
     观测）；L1 实发动作流 vs 原局 verbatim 记录动作流（strip 我席 action
-    流）逐字节对齐比较。verbatim callable 同局自重演作保真对照——不自
+    流）逐步对齐比较。verbatim callable 同局自重演作保真对照——不自
     逐字节复现即孪生保真破、L1 差异不可归因 → error（fail-closed）。
-    裁决：(a) 差异仅允许"BUY_SEED 整单消失"形态（某步 market 里少了原
-    verbatim 有且 L1 没有的 BUY_SEED 单，其余逐字节一致），dropped=
-    [{step, crop, qty}…]；(b) 其他任何差异（含下游 PLANT/HIRE/SELL 漂移、
-    观测漂移导致的基座行为变化、agent 异常）→ identical_mod_seed_drop
-    =False 且 first_divergence={step, kind, detail}，并停在该步（后续
-    级联漂移无比较意义）；(c) 装载/语料/状态构建/重演异常 → {error: …}
+    裁决（2026-09-24 R10 验收③(a) 口径修订，反应面+结果面双判据）：
+    (a1) 全量枚举——不首异即停，逐差异步收集全部差异记录 divergences=
+         [{step, kind, detail, crop?, qty?}…]（kind 见 _classify_divergence：
+         允许={buy_seed_disappear, buy_seed_appear, sell_order_change}，
+         其他=violation）；
+    (a2) 步界——全部差异步 ≥ layer_s_block._CXS_FROM 同源阈值；
+    (a3) 结果面——l1_final ≥ verbatim_final；
+    game_pass = (a1)无 violation ∧ (a2) ∧ (a3)。first_divergence=首个
+    取消格差异（violation 形态或步界破缺，定位用；纯结果面破缺记 None）。
+    dropped=[{step, crop, qty}…] 语义不变（BUY_SEED 消失逐单汇总，
+    precision_subset_check 消费面兼容）；identical_mod_seed_drop=(a')
+    原严格逐字节口径留档的 RED 诊断面（全部差异恰为纯 BUY_SEED 消失才
+    真，门禁不消费）。(c) 装载/语料/状态构建/重演异常 → {error: …}
     （上游 fail-closed 处置）。
     l1_main/verbatim_main 接受 main.py 路径或已装载 callable（路径按
     官方 last-callable 语义装载）。
-    返回 {episode, seat, identical_mod_seed_drop, dropped,
-    first_divergence, l1_final, verbatim_final, steps_compared,
-    replay_path}（steps_compared=已比较步数含判异类那步；l1/verbatim_
-    final=各自重演终局我席资金；replay_path 供 precision_subset_check
-    回定位语料件）。"""
+    返回 {episode, seat, game_pass, divergences, n_divergences,
+    n_violations, steps_boundary_ok, result_face_ok, min_divergence_step,
+    identical_mod_seed_drop, dropped, first_divergence, l1_final,
+    verbatim_final, steps_compared, replay_path}（steps_compared=已比较
+    步数=全流长，全量枚举不提前停；l1/verbatim_final=各自重演终局我席
+    资金；replay_path 供 precision_subset_check 回定位语料件）。"""
     try:
         replay = _load_strip_replay(replay_path)
         me = _my_seat(replay)
@@ -620,34 +827,49 @@ def replay_action_diff(replay_path, l1_main, verbatim_main) -> dict:
         l1 = _seated_replay(replay, me, l1_fn, recorded)
     except Exception as exc:
         return {"error": f"L1 重演失败: {type(exc).__name__}: {exc}"}
-    dropped, first_divergence, steps_compared = [], None, 0
-    for t, got in enumerate(l1["stream"]):
-        steps_compared = t + 1
+    divergences, dropped = [], []
+    for t, got_action in enumerate(l1["stream"]):
         expected = recorded[t][me]
-        if _canonical(got) == _canonical(expected):
+        if _canonical(got_action) == _canonical(expected):
             continue
-        drops, kind, detail = _classify_divergence(expected, got)
-        if drops is None:
-            first_divergence = {"step": t, "kind": kind, "detail": detail}
-            break
-        dropped.extend({"step": t, "crop": d["crop"], "qty": d["qty"]}
-                       for d in drops)
-    if first_divergence is None and l1["first_exception"] is not None:
+        for record in _classify_divergence(expected, got_action):
+            entry = {"step": t, "kind": record["kind"],
+                     "detail": record["detail"]}
+            if "crop" in record:
+                entry["crop"] = record["crop"]
+            if "qty" in record:
+                entry["qty"] = record["qty"]
+            divergences.append(entry)
+            if record["kind"] == "buy_seed_disappear":
+                dropped.append({"step": t, "crop": record["crop"],
+                                "qty": record["qty"]})
+    if l1["first_exception"] is not None:  # agent 异常=行为面 violation
         step, detail = l1["first_exception"]
-        first_divergence = {"step": step, "kind": "agent_exception",
-                            "detail": detail}
+        divergences.append({"step": step, "kind": "agent_exception",
+                            "detail": detail})
+    verdict = _adjudicate_game(divergences, l1["final"][me],
+                               control["final"][me])
     episode = (replay.get("episode_id")
                or (replay.get("info") or {}).get("EpisodeId")
                or os.path.splitext(os.path.basename(replay_path))[0])
     return {
         "episode": episode,
         "seat": me,
-        "identical_mod_seed_drop": first_divergence is None,
+        "game_pass": verdict["game_pass"],
+        "divergences": divergences,
+        "n_divergences": verdict["n_divergences"],
+        "n_violations": verdict["n_violations"],
+        "steps_boundary_ok": verdict["steps_boundary_ok"],
+        "result_face_ok": verdict["result_face_ok"],
+        "min_divergence_step": verdict["min_divergence_step"],
+        "identical_mod_seed_drop": all(
+            entry["kind"] == "buy_seed_disappear"
+            for entry in divergences),  # (a') 原严格口径留档（RED 诊断面）
         "dropped": dropped,
-        "first_divergence": first_divergence,
+        "first_divergence": verdict["first_divergence"],
         "l1_final": l1["final"][me],
         "verbatim_final": control["final"][me],
-        "steps_compared": steps_compared,
+        "steps_compared": len(l1["stream"]),
         "replay_path": os.path.abspath(replay_path),
     }
 

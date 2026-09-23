@@ -1,10 +1,10 @@
 {
- "overall": false,
+ "overall": true,
  "h2h": {
   "passed": true,
   "executed": true,
   "error": null,
-  "wall_s": 87.5,
+  "wall_s": 85.8,
   "n": 16,
   "wins": 14,
   "losses": 0,
@@ -16,7 +16,7 @@
   "passed": true,
   "executed": true,
   "error": null,
-  "wall_s": 114.5,
+  "wall_s": 111.1,
   "per_opponent": {
    "v48-pure": {
     "n": 8,
@@ -43,11 +43,11 @@
   "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/evidence/lineage_evidence.json"
  },
  "equivalence": {
-  "passed": false,
+  "passed": true,
   "executed": true,
   "error": null,
-  "wall_s": 49.0,
-  "equiv": false,
+  "wall_s": 48.8,
+  "equiv": true,
   "subset": true,
   "cases": true,
   "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/evidence/equivalence_evidence.json"
@@ -56,7 +56,7 @@
   "passed": true,
   "executed": true,
   "error": null,
-  "wall_s": 23.8,
+  "wall_s": 23.4,
   "gates": {
    "load": true,
    "full_episodes": true,
@@ -74,15 +74,15 @@
   "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/evidence/launch_check_evidence.json"
  },
  "evidence_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/evidence",
- "started": "2026-09-24T01:18:44",
- "finished": "2026-09-24T01:23:19",
+ "started": "2026-09-24T05:49:20",
+ "finished": "2026-09-24T05:53:49",
  "protocol": "verify-layer-s-gates/1.0",
  "pkg_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative",
  "episodes_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26",
  "gates_passed": {
   "h2h": true,
   "lineage": true,
-  "equivalence": false,
+  "equivalence": true,
   "launch": true
  },
  "environment": {

@@ -251,7 +251,7 @@
     - 签名意图：输入: L1 callable+三对手 callable / 输出: 三对手 {n, losses} / 错误: 任一负局即门红。
     - 调用方：verify_layer_s_gates。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_gates.py（lineage 组；继承 R10 验收②）。
   - **gate_equivalence_precision** [L1|新增]
-    - 职责：门③——三合一裁决：(a) 26 局线上局集 seated 重演动作流等价（replay_action_diff：除被截断 BUY_SEED 消失外逐字节一致）；(b) 子集判据（precision_subset_check：逐局逐品项被截断量 ≤ 原版终局未种下量；模式甲类局截断额 ≈0）；(c) 构造用例三件（constructed_invariant_cases）。任一红即门红。
+    - 职责：门③——三合一裁决：(a 反应面+结果面，2026-09-24 口径修订) 26 局线上局集 seated 重演：全部差异步 ≥648 且差异形态限于 {BUY_SEED 增/删、SELL 单集合变化}（基座对截断的自身经济反应），且逐局终局资金 l1 ≥ verbatim（replay_action_diff 全量差异枚举+逐形态分类裁决；原严格逐字节口径废止留档）；(b) 子集判据（precision_subset_check：逐局逐品项被截断量 ≤ 原版终局未种下量；模式甲类局截断额 ≈0）；(c) 构造用例三件（constructed_invariant_cases）。任一红即门红。
     - 签名意图：输入: 26 局回放集+L1/verbatim 两 callable / 输出: {equiv, subset, cases} / 错误: fail-closed。
     - 调用方：verify_layer_s_gates。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_gates.py（equivalence 组；继承 R10 验收③）。
     - **replay_action_diff** [L2|新增]

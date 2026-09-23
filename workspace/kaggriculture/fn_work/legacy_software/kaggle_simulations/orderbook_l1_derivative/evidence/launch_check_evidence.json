@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-24T01:23:19",
+ "generated_at": "2026-09-24T05:53:49",
  "protocol": "orderbook-l1-launch-fourgate/1.0",
  "candidate": "shiiin9/your-market-list-is-an-order-book + layer S (public derivative with seed-truncation layer, Apache-2.0)",
  "package": {
@@ -78,10 +78,10 @@
     "agent_action_steps": 719,
     "n_engine_log_lines": 719,
     "suspicious_log_lines": [],
-    "wall_s": 5.7,
+    "wall_s": 5.6,
     "agent_calls": 1438,
-    "max_step_ms": 187.16,
-    "p99_step_ms": 5.88,
+    "max_step_ms": 192.32,
+    "p99_step_ms": 6.18,
     "mean_step_ms": 1.86,
     "action_stream_sha256": "a97c91324d3a7c1b3c539d45d6e0eb48bbb538c93e5c0d6a80c7d9b038f56039",
     "obs_count": 719
@@ -102,9 +102,9 @@
     "suspicious_log_lines": [],
     "wall_s": 5.8,
     "agent_calls": 1438,
-    "max_step_ms": 337.18,
-    "p99_step_ms": 5.78,
-    "mean_step_ms": 1.96,
+    "max_step_ms": 324.73,
+    "p99_step_ms": 5.75,
+    "mean_step_ms": 1.97,
     "action_stream_sha256": "aac9ac39fad1789755320a8286529b4ce717697672b7773349634157e93b447e",
     "obs_count": 719
    }
@@ -148,5 +148,5 @@
  "fail_closed_early_exit": false,
  "errors": [],
  "passed": true,
- "wall_total_s": 23.7
+ "wall_total_s": 23.4
 }
