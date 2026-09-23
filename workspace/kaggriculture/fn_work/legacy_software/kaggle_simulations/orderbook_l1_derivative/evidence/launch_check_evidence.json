@@ -1,0 +1,152 @@
+{
+ "generated_at": "2026-09-24T01:00:19",
+ "protocol": "orderbook-l1-launch-fourgate/1.0",
+ "candidate": "shiiin9/your-market-list-is-an-order-book + layer S (public derivative with seed-truncation layer, Apache-2.0)",
+ "package": {
+  "manifest_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/build_manifest.json",
+  "main_sha256": {
+   "disk": "dc6412f52aa242e173c47069b7a97b96e35343c9e82fc2a9b4d51a07f530ff33",
+   "manifest": "dc6412f52aa242e173c47069b7a97b96e35343c9e82fc2a9b4d51a07f530ff33",
+   "match": true
+  },
+  "main_bytes": {
+   "disk": 1047670,
+   "manifest": 1047670,
+   "match": true
+  },
+  "tar_sha256": {
+   "disk": "1dd87d7d3e04ec7cb3ac0d9d644a873081047dbd7f52d84fbe58d3b406a768ee",
+   "manifest": "1dd87d7d3e04ec7cb3ac0d9d644a873081047dbd7f52d84fbe58d3b406a768ee",
+   "match": true
+  },
+  "tar_bytes": {
+   "disk": 636025,
+   "manifest": 636025,
+   "match": true
+  },
+  "tar_members": [
+   "main.py"
+  ],
+  "tar_members_ok": true,
+  "tar_inner_main_matches_disk": true,
+  "tar_size_ok": true,
+  "tar_size_mb": 0.607,
+  "block_sha256": {
+   "disk": "2f3553fe4b2df6213cdc1377b2fa9299ece92506291f4ed8f547640c4e2bbfcd",
+   "manifest": "2f3553fe4b2df6213cdc1377b2fa9299ece92506291f4ed8f547640c4e2bbfcd",
+   "match": true
+  },
+  "candidate": "shiiin9/your-market-list-is-an-order-book + layer S (public derivative with seed-truncation layer, Apache-2.0)",
+  "match": true
+ },
+ "gate1_official_load": {
+  "gate1_official_load_ok": true,
+  "agent_py_checked": "/home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/agent.py",
+  "driver_wall_s": 1.2,
+  "n_obs_replayed": 719,
+  "obs_subsampled": true,
+  "isolated_vs_local_action_mismatches": 0,
+  "evidence": {
+   "n_callables": 232,
+   "last_callable_name": "_cxs_agent",
+   "has_named_agent": true,
+   "named_agent_same_output_as_last": true,
+   "loader_pop_applied": true,
+   "exec_dir_on_sys_path_after_load": false,
+   "n_new_sys_modules": 10,
+   "non_stdlib_imports": [],
+   "action_errors": [],
+   "n_obs": 719,
+   "n_actions": 719
+  }
+ },
+ "gate2_full_episodes": {
+  "gate2_full_episodes_ok": true,
+  "gate2_step_budget_ms": 1000.0,
+  "gate2_episodes": [
+   {
+    "seed": 101,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     96289.0,
+     96289.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 5.2,
+    "agent_calls": 1438,
+    "max_step_ms": 165.48,
+    "p99_step_ms": 5.28,
+    "mean_step_ms": 1.54,
+    "action_stream_sha256": "a97c91324d3a7c1b3c539d45d6e0eb48bbb538c93e5c0d6a80c7d9b038f56039",
+    "obs_count": 719
+   },
+   {
+    "seed": 102,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     104068.0,
+     104068.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 6.1,
+    "agent_calls": 1438,
+    "max_step_ms": 261.63,
+    "p99_step_ms": 6.2,
+    "mean_step_ms": 1.9,
+    "action_stream_sha256": "aac9ac39fad1789755320a8286529b4ce717697672b7773349634157e93b447e",
+    "obs_count": 719
+   }
+  ],
+  "gate3_determinism_ok": true,
+  "gate3_rerun_seed": 101,
+  "gate3_hashes": {
+   "run1": "a97c91324d3a7c1b3c539d45d6e0eb48bbb538c93e5c0d6a80c7d9b038f56039",
+   "run2": "a97c91324d3a7c1b3c539d45d6e0eb48bbb538c93e5c0d6a80c7d9b038f56039"
+  }
+ },
+ "gates": {
+  "load": true,
+  "full_episodes": true,
+  "determinism": true,
+  "package": true
+ },
+ "last_callable_expected": "_cxs_agent",
+ "truncation_only_diff": {
+  "ok": true,
+  "threshold": 648,
+  "n_obs": 719,
+  "l1_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/main.py",
+  "l1_callable": "_cxs_agent",
+  "baseline_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+  "baseline_callable": "_cxd_agent",
+  "divergent_steps": [
+   653
+  ],
+  "n_divergent": 1,
+  "min_divergent_step": 653,
+  "all_divergent_steps_ge_threshold": true,
+  "form_violations": [],
+  "dropped_detail": [
+   {
+    "step": 653,
+    "form": "BUY_SEED 整单消失 x1"
+   }
+  ]
+ },
+ "fail_closed_early_exit": false,
+ "errors": [],
+ "passed": true,
+ "wall_total_s": 22.5
+}

@@ -1,0 +1,1753 @@
+{
+ "generated_at": "2026-09-24T00:55:44",
+ "protocol": "orderbook-l1-equivalence-precision/1.0",
+ "inputs": {
+  "episodes_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26",
+  "n_replays": 26,
+  "replays": [
+   "episode-112429867-strip.json.gz",
+   "episode-112431033-strip.json.gz",
+   "episode-112432199-strip.json.gz",
+   "episode-112433355-strip.json.gz",
+   "episode-112434475-strip.json.gz",
+   "episode-112435662-strip.json.gz",
+   "episode-112436859-strip.json.gz",
+   "episode-112438060-strip.json.gz",
+   "episode-112439305-strip.json.gz",
+   "episode-112440436-strip.json.gz",
+   "episode-112440493-strip.json.gz",
+   "episode-112441644-strip.json.gz",
+   "episode-112442810-strip.json.gz",
+   "episode-112443969-strip.json.gz",
+   "episode-112445139-strip.json.gz",
+   "episode-112446302-strip.json.gz",
+   "episode-112447520-strip.json.gz",
+   "episode-112448710-strip.json.gz",
+   "episode-112449890-strip.json.gz",
+   "episode-112451110-strip.json.gz",
+   "episode-112452290-strip.json.gz",
+   "episode-112453461-strip.json.gz",
+   "episode-112454627-strip.json.gz",
+   "episode-112455881-strip.json.gz",
+   "episode-112457053-strip.json.gz",
+   "episode-112457102-strip.json.gz"
+  ],
+  "limit": null,
+  "l1_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/main.py",
+  "verbatim_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py"
+ },
+ "equiv_detail": {
+  "n_games": 26,
+  "n_identical": 10,
+  "n_divergent": 16,
+  "n_errors": 0
+ },
+ "subset": {
+  "all_ok": true,
+  "per_game": [
+   {
+    "episode": 112429867,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 0,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112431033,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 7,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 150,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112432199,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 5,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 110,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112433355,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112434475,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 10,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 7,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 150,
+    "unplanted_value": 260,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112435662,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 5,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 110,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112436859,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112438060,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 7,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 150,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112439305,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112440436,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 5,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 100,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112440493,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 5,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 100,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112441644,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 5,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 110,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112442810,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112443969,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 7,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 150,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112445139,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 0,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112446302,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 3,
+      "unplanted": 3,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 30,
+    "unplanted_value": 30,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112447520,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 5,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 100,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112448710,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 5,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 100,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112449890,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 7,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 150,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112451110,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 7,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 150,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112452290,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 0,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112453461,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 7,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 150,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112454627,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112455881,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 5,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 110,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112457053,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112457102,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 5,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 110,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   }
+  ],
+  "per_crop": {
+   "WHEAT": {
+    "dropped": 21,
+    "unplanted": 84,
+    "ok": true
+   },
+   "CARROT": {
+    "dropped": 94,
+    "unplanted": 128,
+    "ok": true
+   },
+   "TOMATO": {
+    "dropped": 0,
+    "unplanted": 0,
+    "ok": true
+   },
+   "STRAWBERRY": {
+    "dropped": 0,
+    "unplanted": 0,
+    "ok": true
+   },
+   "MELON": {
+    "dropped": 0,
+    "unplanted": 0,
+    "ok": true
+   }
+  },
+  "violations": [],
+  "errors": [],
+  "summary": {
+   "total_dropped_value_est": 2090,
+   "mode_a_games_near_zero": true,
+   "n_games": 26,
+   "n_mode_a": 10,
+   "mode_a_episodes": [
+    112429867,
+    112433355,
+    112436859,
+    112439305,
+    112442810,
+    112445139,
+    112446302,
+    112452290,
+    112454627,
+    112457053
+   ],
+   "n_violations": 0,
+   "n_errors": 0
+  }
+ },
+ "cases": {
+  "c1_no_trunc_when_future_plant": {
+   "pass": true,
+   "evidence": "step=650 tape plants@670 completable (670+48=718<=719): demand 5 = supply (0+5+0) -> allowed 0, BUY_SEED kept"
+  },
+  "c2_trunc_when_no_opportunity": {
+   "pass": true,
+   "evidence": "step=650 tape plants@672 not completable (672+48=720>719): demand 0 < supply (0+6+0) -> allowed 6, both CARROT orders dropped"
+  },
+  "c3_s671_boundary": {
+   "truncate_side": {
+    "pass": true,
+    "evidence": "step=671 tape only t>=672: no completable opportunity -> demand 0 < supply (2+3+0) -> allowed 3, order dropped"
+   },
+   "keep_side": {
+    "pass": true,
+    "evidence": "step=670 tape plants@671 exactly completable (671+48=719<=719): demand 3 = supply (0+3+0) -> allowed 0, order kept"
+   },
+   "pass": true
+  },
+  "all_pass": true
+ },
+ "verdict": {
+  "equiv": false,
+  "subset": true,
+  "cases": true,
+  "passed": false
+ },
+ "per_game": [
+  {
+   "episode": 112429867,
+   "seat": 1,
+   "identical_mod_seed_drop": true,
+   "dropped": [],
+   "first_divergence": null,
+   "l1_final": 124905.0,
+   "verbatim_final": 124905.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112429867-strip.json.gz"
+  },
+  {
+   "episode": 112431033,
+   "seat": 0,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 654,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 662,
+     "crop": "CARROT",
+     "qty": 3
+    }
+   ],
+   "first_divergence": {
+    "step": 669,
+    "kind": "market",
+    "detail": "非 BUY_SEED 订单消失/改序: exp=[\"SELL\",\"EGG\",4]"
+   },
+   "l1_final": 103411.0,
+   "verbatim_final": 103401.0,
+   "steps_compared": 670,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112431033-strip.json.gz"
+  },
+  {
+   "episode": 112432199,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 656,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": {
+    "step": 662,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",8]]"
+   },
+   "l1_final": 103617.0,
+   "verbatim_final": 103607.0,
+   "steps_compared": 663,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112432199-strip.json.gz"
+  },
+  {
+   "episode": 112433355,
+   "seat": 0,
+   "identical_mod_seed_drop": true,
+   "dropped": [
+    {
+     "step": 653,
+     "crop": "WHEAT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": null,
+   "l1_final": 127404.0,
+   "verbatim_final": 127394.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112433355-strip.json.gz"
+  },
+  {
+   "episode": 112434475,
+   "seat": 0,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 654,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 662,
+     "crop": "CARROT",
+     "qty": 3
+    }
+   ],
+   "first_divergence": {
+    "step": 669,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",7]]"
+   },
+   "l1_final": 82807.0,
+   "verbatim_final": 82797.0,
+   "steps_compared": 670,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112434475-strip.json.gz"
+  },
+  {
+   "episode": 112435662,
+   "seat": 0,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 656,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": {
+    "step": 662,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",8]]"
+   },
+   "l1_final": 115794.0,
+   "verbatim_final": 115784.0,
+   "steps_compared": 663,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112435662-strip.json.gz"
+  },
+  {
+   "episode": 112436859,
+   "seat": 0,
+   "identical_mod_seed_drop": true,
+   "dropped": [
+    {
+     "step": 653,
+     "crop": "WHEAT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": null,
+   "l1_final": 90289.0,
+   "verbatim_final": 90279.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112436859-strip.json.gz"
+  },
+  {
+   "episode": 112438060,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 662,
+     "crop": "CARROT",
+     "qty": 3
+    }
+   ],
+   "first_divergence": {
+    "step": 669,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",7]]"
+   },
+   "l1_final": 108767.0,
+   "verbatim_final": 108757.0,
+   "steps_compared": 670,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112438060-strip.json.gz"
+  },
+  {
+   "episode": 112439305,
+   "seat": 1,
+   "identical_mod_seed_drop": true,
+   "dropped": [
+    {
+     "step": 653,
+     "crop": "WHEAT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": null,
+   "l1_final": 125352.0,
+   "verbatim_final": 125342.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112439305-strip.json.gz"
+  },
+  {
+   "episode": 112440436,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 656,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": {
+    "step": 662,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",8]]"
+   },
+   "l1_final": 112000.0,
+   "verbatim_final": 112000.0,
+   "steps_compared": 663,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112440436-strip.json.gz"
+  },
+  {
+   "episode": 112440493,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 656,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": {
+    "step": 662,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",8]]"
+   },
+   "l1_final": 101522.0,
+   "verbatim_final": 101522.0,
+   "steps_compared": 663,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112440493-strip.json.gz"
+  },
+  {
+   "episode": 112441644,
+   "seat": 0,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 653,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 656,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": {
+    "step": 662,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",8]]"
+   },
+   "l1_final": 118292.0,
+   "verbatim_final": 118282.0,
+   "steps_compared": 663,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112441644-strip.json.gz"
+  },
+  {
+   "episode": 112442810,
+   "seat": 0,
+   "identical_mod_seed_drop": true,
+   "dropped": [
+    {
+     "step": 653,
+     "crop": "WHEAT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": null,
+   "l1_final": 142197.0,
+   "verbatim_final": 142187.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112442810-strip.json.gz"
+  },
+  {
+   "episode": 112443969,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 662,
+     "crop": "CARROT",
+     "qty": 3
+    }
+   ],
+   "first_divergence": {
+    "step": 669,
+    "kind": "market",
+    "detail": "非 BUY_SEED 订单消失/改序: exp=[\"SELL\",\"EGG\",4]"
+   },
+   "l1_final": 103556.0,
+   "verbatim_final": 103546.0,
+   "steps_compared": 670,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112443969-strip.json.gz"
+  },
+  {
+   "episode": 112445139,
+   "seat": 0,
+   "identical_mod_seed_drop": true,
+   "dropped": [],
+   "first_divergence": null,
+   "l1_final": 88158.0,
+   "verbatim_final": 88158.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112445139-strip.json.gz"
+  },
+  {
+   "episode": 112446302,
+   "seat": 1,
+   "identical_mod_seed_drop": true,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 2
+    },
+    {
+     "step": 653,
+     "crop": "WHEAT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": null,
+   "l1_final": 79330.0,
+   "verbatim_final": 79300.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112446302-strip.json.gz"
+  },
+  {
+   "episode": 112447520,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 656,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": {
+    "step": 662,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",8]]"
+   },
+   "l1_final": 125203.0,
+   "verbatim_final": 125203.0,
+   "steps_compared": 663,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112447520-strip.json.gz"
+  },
+  {
+   "episode": 112448710,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 656,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": {
+    "step": 662,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",8]]"
+   },
+   "l1_final": 102918.0,
+   "verbatim_final": 102918.0,
+   "steps_compared": 663,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112448710-strip.json.gz"
+  },
+  {
+   "episode": 112449890,
+   "seat": 0,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 662,
+     "crop": "CARROT",
+     "qty": 3
+    }
+   ],
+   "first_divergence": {
+    "step": 669,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",7]]"
+   },
+   "l1_final": 95958.0,
+   "verbatim_final": 95948.0,
+   "steps_compared": 670,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112449890-strip.json.gz"
+  },
+  {
+   "episode": 112451110,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 662,
+     "crop": "CARROT",
+     "qty": 3
+    }
+   ],
+   "first_divergence": {
+    "step": 669,
+    "kind": "market",
+    "detail": "非 BUY_SEED 订单消失/改序: exp=[\"SELL\",\"EGG\",4]"
+   },
+   "l1_final": 92801.0,
+   "verbatim_final": 92791.0,
+   "steps_compared": 670,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112451110-strip.json.gz"
+  },
+  {
+   "episode": 112452290,
+   "seat": 1,
+   "identical_mod_seed_drop": true,
+   "dropped": [],
+   "first_divergence": null,
+   "l1_final": 135583.0,
+   "verbatim_final": 135583.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112452290-strip.json.gz"
+  },
+  {
+   "episode": 112453461,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 662,
+     "crop": "CARROT",
+     "qty": 3
+    }
+   ],
+   "first_divergence": {
+    "step": 669,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",7]]"
+   },
+   "l1_final": 101532.0,
+   "verbatim_final": 101522.0,
+   "steps_compared": 670,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112453461-strip.json.gz"
+  },
+  {
+   "episode": 112454627,
+   "seat": 1,
+   "identical_mod_seed_drop": true,
+   "dropped": [
+    {
+     "step": 653,
+     "crop": "WHEAT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": null,
+   "l1_final": 103064.0,
+   "verbatim_final": 103054.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112454627-strip.json.gz"
+  },
+  {
+   "episode": 112455881,
+   "seat": 1,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 656,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": {
+    "step": 662,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",8]]"
+   },
+   "l1_final": 101196.0,
+   "verbatim_final": 101186.0,
+   "steps_compared": 663,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112455881-strip.json.gz"
+  },
+  {
+   "episode": 112457053,
+   "seat": 0,
+   "identical_mod_seed_drop": true,
+   "dropped": [
+    {
+     "step": 653,
+     "crop": "WHEAT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": null,
+   "l1_final": 111587.0,
+   "verbatim_final": 111577.0,
+   "steps_compared": 719,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112457053-strip.json.gz"
+  },
+  {
+   "episode": 112457102,
+   "seat": 0,
+   "identical_mod_seed_drop": false,
+   "dropped": [
+    {
+     "step": 652,
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    {
+     "step": 656,
+     "crop": "CARROT",
+     "qty": 1
+    },
+    {
+     "step": 657,
+     "crop": "CARROT",
+     "qty": 3
+    },
+    {
+     "step": 658,
+     "crop": "CARROT",
+     "qty": 1
+    }
+   ],
+   "first_divergence": {
+    "step": 662,
+    "kind": "market",
+    "detail": "L1 market 多出/改动了订单: [[\"BUY_SEED\",\"CARROT\",8]]"
+   },
+   "l1_final": 60685.0,
+   "verbatim_final": 60675.0,
+   "steps_compared": 663,
+   "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112457102-strip.json.gz"
+  }
+ ],
+ "wall_total_s": 47.7
+}

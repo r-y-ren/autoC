@@ -1,0 +1,75 @@
+{
+ "n_games": 4,
+ "cand_wins": 0,
+ "opp_wins": 0,
+ "ties": 4,
+ "cand_wins_seatA(of2)": 0,
+ "cand_wins_seatB(of2)": 0,
+ "mean_margin": 0.0,
+ "all_done": true,
+ "rate": 0.0,
+ "win_rate_threshold": 0.55,
+ "passed": false,
+ "games": [
+  {
+   "seed": 101,
+   "cand_seat": 0,
+   "rewards": [
+    96273.0,
+    96273.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.944
+  },
+  {
+   "seed": 101,
+   "cand_seat": 1,
+   "rewards": [
+    96273.0,
+    96273.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.889
+  },
+  {
+   "seed": 201,
+   "cand_seat": 0,
+   "rewards": [
+    97496.0,
+    97496.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 5.178
+  },
+  {
+   "seed": 201,
+   "cand_seat": 1,
+   "rewards": [
+    97496.0,
+    97496.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 5.29
+  }
+ ]
+}

@@ -1,0 +1,102 @@
+{
+ "overall": false,
+ "h2h": {
+  "passed": false,
+  "executed": true,
+  "error": null,
+  "wall_s": 85.3,
+  "n": 16,
+  "wins": 0,
+  "losses": 0,
+  "ties": 16,
+  "rate": 0.0,
+  "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/evidence/h2h_evidence.json"
+ },
+ "lineage": {
+  "passed": true,
+  "executed": true,
+  "error": null,
+  "wall_s": 111.9,
+  "per_opponent": {
+   "v48-pure": {
+    "n": 8,
+    "wins": 8,
+    "losses": 0,
+    "ties": 0,
+    "all_done": true
+   },
+   "v4b": {
+    "n": 8,
+    "wins": 8,
+    "losses": 0,
+    "ties": 0,
+    "all_done": true
+   },
+   "hybrid-v2": {
+    "n": 8,
+    "wins": 8,
+    "losses": 0,
+    "ties": 0,
+    "all_done": true
+   }
+  },
+  "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/evidence/lineage_evidence.json"
+ },
+ "equivalence": {
+  "passed": false,
+  "executed": true,
+  "error": null,
+  "wall_s": 47.7,
+  "equiv": false,
+  "subset": true,
+  "cases": true,
+  "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/evidence/equivalence_evidence.json"
+ },
+ "launch": {
+  "passed": true,
+  "executed": true,
+  "error": null,
+  "wall_s": 23.5,
+  "gates": {
+   "load": true,
+   "full_episodes": true,
+   "determinism": true,
+   "package": true
+  },
+  "truncation_only_diff": {
+   "ok": true,
+   "n_divergent": 1,
+   "min_divergent_step": 653,
+   "divergent_steps": [
+    653
+   ]
+  },
+  "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/evidence/launch_check_evidence.json"
+ },
+ "evidence_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/evidence",
+ "started": "2026-09-24T00:51:39",
+ "finished": "2026-09-24T00:56:07",
+ "protocol": "verify-layer-s-gates/1.0",
+ "pkg_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative",
+ "episodes_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26",
+ "gates_passed": {
+  "h2h": false,
+  "lineage": true,
+  "equivalence": false,
+  "launch": true
+ },
+ "environment": {
+  "python_version": "3.14.7",
+  "python_implementation": "CPython",
+  "platform": "Linux-7.2.6-arch2-1-x86_64-with-glibc2.44",
+  "python_full": "3.14.7 (main, Aug 10 2026, 07:46:56) [GCC 16.1.1 20260728]"
+ },
+ "mains": {
+  "l1_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/main.py",
+  "verbatim_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+  "sha256": {
+   "l1_main": "dc6412f52aa242e173c47069b7a97b96e35343c9e82fc2a9b4d51a07f530ff33",
+   "verbatim_main": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab"
+  }
+ }
+}

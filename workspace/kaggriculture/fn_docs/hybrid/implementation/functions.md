@@ -37,11 +37,11 @@
 | _cxs_agent | S1 | tested 09-23（wired 待 S2 注入；P1 修复后复验） | pytest 全家 37 passed；注入模拟链路过；_CXS_HOST 块首捕获+独立态 None | (本批) |
 | append_layer_s_block | S2 | wired 09-23 | pytest test_build → 4 passed；末callable=_cxs_agent 真exec 0.09s；三道写入前防线（拒原件/判重/纯净副本） | (本批) |
 | build_layer_s_candidate | S2 | wired 09-23 | build 实跑三产物（main dc6412f5/tar 1dd87d7d/manifest）；配方复刻 round-30 重打包复现 2838cc66；test_build 8 passed | (本批) |
-| replay_action_diff | S3 | stub 09-23 | — | — |
-| precision_subset_check | S3 | stub 09-23 | — | — |
-| constructed_invariant_cases | S3 | stub 09-23 | — | — |
-| gate_equivalence_precision | S3 | stub 09-23 | — | — |
-| gate_h2h_vs_verbatim | S3 | stub 09-23 | — | — |
-| gate_lineage_strength | S3 | stub 09-23 | — | — |
-| gate_launch_fourgate_l1 | S3 | stub 09-23 | — | — |
-| verify_layer_s_gates | S3 | stub 09-23 | — | — |
+| replay_action_diff | S3 | wired 09-24 | 26 局全量：10 identical/16 RED（基座回买@662×12+少卖 EGG@669×4）；final_delta 26 局无负值 | (本批) |
+| precision_subset_check | S3 | wired 09-24 | 26/26 all_ok 0 violation（WHEAT 21≤84/CARROT 94≤128）；模式甲金丝雀绿 | (本批) |
+| constructed_invariant_cases | S3 | wired 09-24 | c3 夹具形态修正为真实链路（决策步 670+plants@671）；复用 test_layer_s 夹具零复制 | (本批) |
+| gate_equivalence_precision | S3 | wired 09-24 | 全量 run 46.8s：equiv=False/subset=True/cases=True——严格契约如实红 | (本批) |
+| gate_h2h_vs_verbatim | S3 | wired 09-24 | 16 局全量 0-0-16 全 tie（截断在该种子域不触发→逐字节同局）→rate 0 红（fail-closed 口径） | (本批) |
+| gate_lineage_strength | S3 | wired 09-24 | 24 局 24-0-0 三对手零负——48-0 谱系强度保持 | (本批) |
+| gate_launch_fourgate_l1 | S3 | wired 09-24 | 四门全绿 22.2s；truncation_only_diff 差异步=1（step 653）全 ≥648 | (本批) |
+| verify_layer_s_gates | S3 | wired 09-24 | 全量编排 4.5 分钟 overall=FAIL（门①③红/门②④绿）——两红均规格口径问题非缺陷，批间门裁决 | (本批) |

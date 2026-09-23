@@ -5,46 +5,104 @@ import pytest
 import layer_s_block
 
 
+# ---- 构造三用例（R10 验收③(c)）：夹具+真值在本组，gate_equivalence_precision 复用 ----
+# 每用例函数返回 {"expected", "got", "evidence"}（c3 双面为 {"truncate_side",
+# "keep_side"}，各含同款三键）；test_invariant_cases 断言真值（测试真值在此不
+# 搬家），gate_equivalence_precision.constructed_invariant_cases 调用同一批夹具
+# 函数作门级裁决（import 复用不复制，防漂移）。夹具均为真实链路形态：假
+# plan_view 的步键只含 t>当前 step 的未来步（真 _cxs_plan_view 折叠区间
+# [step+1, 718]），两次调用同值 → 确定性（surplus 交叉核对不触发）。
+
+
+def _invariant_case_c1_no_trunc_when_future_plant():
+    """用例①（不截）：未来步 t∈[649,671] 有可完成 plants 的 BUY_SEED 不截。
+
+    决策步 650（≥648 截断层生效），磁带未来步 670 plants 5（670+48=718≤719
+    可完成）→ 需求 5 全额保护：供给=库存0+保留单5+磁带未来买0=5=需求 →
+    allowed=0 → 一张不删（含非种子单原样）。
+    """
+    plans = {670: {"plants": {"CARROT": 5}, "buy_seed": {}}}
+    obs = _obs_with_seeds({"CARROT": 0}, step=650)
+    market = [["SELL", "WHEAT", 2], ["BUY_SEED", "CARROT", 5]]
+    got = layer_s_block._cxs_seed_truncate(obs, {"market": market}, _make_plan_view(plans))
+    return {
+        "expected": [["SELL", "WHEAT", 2], ["BUY_SEED", "CARROT", 5]],
+        "got": got,
+        "evidence": "step=650 tape plants@670 completable (670+48=718<=719): "
+                    "demand 5 = supply (0+5+0) -> allowed 0, BUY_SEED kept",
+    }
+
+
+def _invariant_case_c2_trunc_when_no_opportunity():
+    """用例②（截）：磁带唯一 plants 在 672（不可完成）不构成需求，供给超需求即截。
+
+    决策步 650，磁带未来步 672 plants 5（672+48=720>719 不可完成，永不构成
+    需求）且供给超需求（库存0+买单6>需求0）→ allowed=6 → 两张 CARROT 买单
+    整单全删，非 BUY_SEED 订单原样保留。
+    """
+    plans = {672: {"plants": {"CARROT": 5}, "buy_seed": {}}}
+    obs = _obs_with_seeds({"CARROT": 0}, step=650)
+    market = [["BUY_SEED", "CARROT", 4], ["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 3]]
+    got = layer_s_block._cxs_seed_truncate(obs, {"market": market}, _make_plan_view(plans))
+    return {
+        "expected": [["SELL", "WHEAT", 3]],
+        "got": got,
+        "evidence": "step=650 tape plants@672 not completable (672+48=720>719): "
+                    "demand 0 < supply (0+6+0) -> allowed 6, both CARROT orders dropped",
+    }
+
+
+def _invariant_case_c3_s671_boundary():
+    """用例③（s671 边界双面）：671+48=719≤719 恰可完成、672 起永不。
+
+    截面：决策步 671（磁带真实形态仅含 t≥672）确无后续可完成种植机会，库存
+    已有富余（held 2 → 供给 2+3+0=5 > 需求 0）→ allowed=3 全删。
+    不截面（P2 复审修正 2026-09-23：旧夹具在 step=671 的磁带里放 670 过去步
+    plants——真 _cxs_plan_view 只折叠 t>step，属真实链路不可能形态）：决策步
+    670，磁带未来步 671 plants 3（671+48=719≤719 恰好可完成）构成需求 →
+    供给=0+3+0=3=需求 → allowed=0 不截；同磁带 672 plants 9 不计入。
+    """
+    # 截面：s671 的 BUY_SEED——磁带（t≥672）确无后续可完成种植机会才截。
+    plans_trunc = {672: {"plants": {"CARROT": 5}, "buy_seed": {}}}
+    obs_trunc = _obs_with_seeds({"CARROT": 2}, step=671)
+    market_trunc = [["BUY_SEED", "CARROT", 3]]
+    got_trunc = layer_s_block._cxs_seed_truncate(
+        obs_trunc, {"market": market_trunc}, _make_plan_view(plans_trunc))
+    # 不截面：决策步 670 的 BUY_SEED 被 671（最后可完成步）plants 保护。
+    plans_keep = {671: {"plants": {"CARROT": 3}, "buy_seed": {}},
+                  672: {"plants": {"CARROT": 9}, "buy_seed": {}}}
+    obs_keep = _obs_with_seeds({"CARROT": 0}, step=670)
+    market_keep = [["BUY_SEED", "CARROT", 3]]
+    got_keep = layer_s_block._cxs_seed_truncate(
+        obs_keep, {"market": market_keep}, _make_plan_view(plans_keep))
+    return {
+        "truncate_side": {
+            "expected": [],
+            "got": got_trunc,
+            "evidence": "step=671 tape only t>=672: no completable opportunity "
+                        "-> demand 0 < supply (2+3+0) -> allowed 3, order dropped",
+        },
+        "keep_side": {
+            "expected": [["BUY_SEED", "CARROT", 3]],
+            "got": got_keep,
+            "evidence": "step=670 tape plants@671 exactly completable (671+48=719<=719): "
+                        "demand 3 = supply (0+3+0) -> allowed 0, order kept",
+        },
+    }
+
+
 def test_invariant_cases():
-    # 构造三用例（R10 验收③(c)，责任文档 constructed_invariant_cases 契约在
-    # test_layer_s 的接线面——gate_equivalence_precision 复用同构夹具）：
-    # ①未来仍有可完成 PLANT 机会的 BUY_SEED 不截；②确无未来机会且供给超需求
-    # 的截；③s671 边界：CARROT BUY_SEED@672 时刻（当前 step=671）仅当磁带
-    # 确无后续可完成种植机会才截。假 plan_view 构造（两次调用同值→确定性）。
-    # ① 磁带有可完成机会（670+48=718≤719）→ 需求 5 全额保护：供给=库存0+
-    #    保留单5+磁带未来买0=5=需求 → allowed=0 → 一张不删（含非种子单原样）。
-    plans_a = {670: {"plants": {"CARROT": 5}, "buy_seed": {}}}
-    obs_a = _obs_with_seeds({"CARROT": 0}, step=650)
-    market_a = [["SELL", "WHEAT", 2], ["BUY_SEED", "CARROT", 5]]
-    got_a = layer_s_block._cxs_seed_truncate(obs_a, {"market": market_a}, _make_plan_view(plans_a))
-    assert got_a == [["SELL", "WHEAT", 2], ["BUY_SEED", "CARROT", 5]]
+    # 构造三用例真值断言（R10 验收③(c)；夹具函数同被
+    # gate_equivalence_precision.constructed_invariant_cases 复用）。
+    c1 = _invariant_case_c1_no_trunc_when_future_plant()
+    assert c1["got"] == c1["expected"]
 
-    # ② 确无可完成机会（磁带唯一 plants 在 672：672+48=720>719 不构成需求）且
-    #    供给超需求（库存0+买单6>需求0）→ allowed=6 → 两张 CARROT 买单整单
-    #    全删，非 BUY_SEED 订单原样保留。
-    plans_b = {672: {"plants": {"CARROT": 5}, "buy_seed": {}}}
-    obs_b = _obs_with_seeds({"CARROT": 0}, step=650)
-    market_b = [["BUY_SEED", "CARROT", 4], ["BUY_SEED", "CARROT", 2], ["SELL", "WHEAT", 3]]
-    got_b = layer_s_block._cxs_seed_truncate(obs_b, {"market": market_b}, _make_plan_view(plans_b))
-    assert got_b == [["SELL", "WHEAT", 3]]
+    c2 = _invariant_case_c2_trunc_when_no_opportunity()
+    assert c2["got"] == c2["expected"]
 
-    # ③ s671 边界双面：672+48=720>719 → 672 步 plants 永不构成需求。
-    #    截面：磁带确无后续可完成种植机会（672 plants 全不计入）且库存已有
-    #    富余（held 2 → 供给 2+3+0=5 > 需求 0）→ allowed=3 全删。
-    plans_c1 = {672: {"plants": {"CARROT": 5}, "buy_seed": {}}}
-    obs_c1 = _obs_with_seeds({"CARROT": 2}, step=671)
-    market_c1 = [["BUY_SEED", "CARROT", 3]]
-    got_c1 = layer_s_block._cxs_seed_truncate(obs_c1, {"market": market_c1}, _make_plan_view(plans_c1))
-    assert got_c1 == []
-    #    不截面：库存无富余（held 0）且 kept 内即全部供给（磁带无 t>671 买单），
-    #    670 步（670+48=718≤719 可完成）plants 3 构成需求 → 供给=需求=3 →
-    #    allowed=0 不截。
-    plans_c2 = {670: {"plants": {"CARROT": 3}, "buy_seed": {}},
-                672: {"plants": {"CARROT": 9}, "buy_seed": {}}}
-    obs_c2 = _obs_with_seeds({"CARROT": 0}, step=671)
-    market_c2 = [["BUY_SEED", "CARROT", 3]]
-    got_c2 = layer_s_block._cxs_seed_truncate(obs_c2, {"market": market_c2}, _make_plan_view(plans_c2))
-    assert got_c2 == [["BUY_SEED", "CARROT", 3]]
+    c3 = _invariant_case_c3_s671_boundary()
+    assert c3["truncate_side"]["got"] == c3["truncate_side"]["expected"]
+    assert c3["keep_side"]["got"] == c3["keep_side"]["expected"]
 
 
 def test_surplus_uncertain_returns_none():
