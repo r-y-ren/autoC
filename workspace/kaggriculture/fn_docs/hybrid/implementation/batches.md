@@ -11,4 +11,5 @@
 ## 变更记录（计划层事件）
 | 日期 | 事件 | 说明 |
 |---|---|---|
+| 2026-09-23 | S1 批间评审 FAIL（两阻断） | ①P0：c63f5eb 误夹带会话前已存在的本地改动（.zcode/config.json 三钩子 enabled→false——按 D14 授权边界记忆系用户有意关闭勿恢复；.gitignore 两行路径迁移——对应 09-23 大整合后的正确新路径）；处置=补留痕不回滚，主会话此后弃用 git add -u 改显式路径。②P1×2（误杀向公式缺口，S2 注入前必须修）：_cxs_harvest_completable off-by-one（引擎天粒度 day-planted>=fyd 且 718 为最后动作步 ⇒ 边界应为 s+fh≤719/天粒度 s//24+fyd≤29，现式把 s=671 判不可完成）；_cxs_seed_surplus 缺当前步 PLANT 消耗扣减（同步单位先于市场结算，紧平衡时可超删至多 p 量）；修复方案=公式改天粒度+demand 纳入当前步 plants（签名加 current_plants 参数=微调级） |
 | 2026-09-23 | S1-S3 批次计划立表 | R10 周期开启；语料备制入 S3（实测 /tmp/r30 全量 1.3GB 不可入库，strip 后归档） |
