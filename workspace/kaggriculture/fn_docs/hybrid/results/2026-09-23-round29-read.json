@@ -1,0 +1,217 @@
+{
+ "pulled_at": "2026-09-23T08:48:49Z (local 2026-09-23 16:48:49 CST)",
+ "submissions_top3": [
+  {
+   "ref": 56487449,
+   "date": "2026-09-23T07:55:12.017000",
+   "description": "public derivative: kaitofukami v48 public-notebook build (verbatim, byte-identical rebuild)",
+   "status": "SubmissionStatus.COMPLETE",
+   "publicScore": "966.4"
+  },
+  {
+   "ref": 56461336,
+   "date": "2026-09-22T10:08:55.783000",
+   "description": "public derivative with economic-guard layer (v4b: market/milestone layers off per online forensics; dead-price guard retained)",
+   "status": "SubmissionStatus.COMPLETE",
+   "publicScore": "1044.8"
+  },
+  {
+   "ref": 56452187,
+   "date": "2026-09-22T03:53:46.293000",
+   "description": "public derivative with modifications (market/economic-guard layers) v2: tape-protected midgame sell layer + dead-price economic guard + milestone monitor",
+   "status": "SubmissionStatus.COMPLETE",
+   "publicScore": "1072.9"
+  }
+ ],
+ "round29": {
+  "ref": 56487449,
+  "desc": "public derivative: kaitofukami v48 public-notebook build (verbatim, byte-identical rebuild)",
+  "publicScore": "966.4",
+  "status": "COMPLETE",
+  "episodes": {
+   "total": 13,
+   "public": 12,
+   "validation": 1,
+   "all_completed": true
+  },
+  "wlt": {
+   "n_parsed": 13,
+   "W": 8,
+   "L": 4,
+   "T": 1,
+   "win_rate": 0.615,
+   "public_only_WLT": "8-4-0 (n=12; the 1 T is the validation self-mirror ep 112366815)",
+   "games": [
+    {
+     "ep": 112380320,
+     "opp": "1417",
+     "my": 114849.0,
+     "ot": 94610.0,
+     "margin": 20239.0,
+     "res": "W",
+     "seat": 0
+    },
+    {
+     "ep": 112379141,
+     "opp": "rohith vinice",
+     "my": 101628.0,
+     "ot": 78148.0,
+     "margin": 23480.0,
+     "res": "W",
+     "seat": 1
+    },
+    {
+     "ep": 112377928,
+     "opp": "Alexandre008",
+     "my": 103099.0,
+     "ot": 82600.0,
+     "margin": 20499.0,
+     "res": "W",
+     "seat": 1
+    },
+    {
+     "ep": 112376689,
+     "opp": "Tapiwa Makandigona - Zimbabwe21",
+     "my": 79032.0,
+     "ot": 60914.0,
+     "margin": 18118.0,
+     "res": "W",
+     "seat": 0
+    },
+    {
+     "ep": 112375491,
+     "opp": "Vijay athithya ",
+     "my": 44422.0,
+     "ot": 53600.0,
+     "margin": -9178.0,
+     "res": "L",
+     "seat": 0
+    },
+    {
+     "ep": 112374238,
+     "opp": "ROGER REN",
+     "my": 74854.0,
+     "ot": 108449.0,
+     "margin": -33595.0,
+     "res": "L",
+     "seat": 1
+    },
+    {
+     "ep": 112373002,
+     "opp": "ANUJPUROHIT18",
+     "my": 59420.0,
+     "ot": 66132.0,
+     "margin": -6712.0,
+     "res": "L",
+     "seat": 0
+    },
+    {
+     "ep": 112371768,
+     "opp": "Nadeem Ishikawa",
+     "my": 76989.0,
+     "ot": 87057.0,
+     "margin": -10068.0,
+     "res": "L",
+     "seat": 1
+    },
+    {
+     "ep": 112370634,
+     "opp": "Quân Trần",
+     "my": 73389.0,
+     "ot": 67090.0,
+     "margin": 6299.0,
+     "res": "W",
+     "seat": 0
+    },
+    {
+     "ep": 112369432,
+     "opp": "waHAHA",
+     "my": 102610.0,
+     "ot": 73753.0,
+     "margin": 28857.0,
+     "res": "W",
+     "seat": 0
+    },
+    {
+     "ep": 112368200,
+     "opp": "Dennis Gioche",
+     "my": 60485.0,
+     "ot": 41972.0,
+     "margin": 18513.0,
+     "res": "W",
+     "seat": 1
+    },
+    {
+     "ep": 112367079,
+     "opp": "Alexis Selorm Gbeckor - Kove",
+     "my": 103600.0,
+     "ot": 39856.0,
+     "margin": 63744.0,
+     "res": "W",
+     "seat": 0
+    },
+    {
+     "ep": 112366815,
+     "opp": "renyxin",
+     "my": 64149.0,
+     "ot": 64149.0,
+     "margin": 0.0,
+     "res": "T",
+     "seat": 0
+    }
+   ]
+  },
+  "margins": {
+   "min": -33595.0,
+   "med": 18118.0,
+   "max": 63744.0,
+   "note": "my_money - opp_money at final step, per-replay rewards"
+  }
+ },
+ "hybrid_v2": {
+  "ref": 56452187,
+  "score": 1072.9,
+  "status": "COMPLETE",
+  "episodes": {
+   "total": 70,
+   "public": 69,
+   "validation": 1,
+   "all_completed": true
+  },
+  "increment_public_vs_69_baseline": 0,
+  "note": "identical to prior pull (2026-09-23-online-pair: total 70 / public 69); 0 new public episodes, score frozen"
+ },
+ "comparison": {
+  "v4b_baseline": {
+   "ref": 56461336,
+   "current_publicScore": "1044.8",
+   "round29_delta": "966.4 - 1044.8 = -78.4 vs v4b current; task baseline cited 1040 -> -73.6"
+  },
+  "ev_band_1100pm70": {
+   "range": [
+    1030,
+    1170
+   ],
+   "round29": 966.4,
+   "verdict": "below band floor by 63.6; NOT in EV band"
+  },
+  "caveat": "only 12 public episodes (submitted 2026-09-23T07:55Z, ~53min before pull); rating unconverged. W-L-T 8-4-0 (0.667 pub win rate) vs v4b prior 10-20-0 (0.333) and v2 6-12-0 (0.333) at same young age is directionally positive, but n too small to project."
+ },
+ "anomalies": [
+  "ep 112366815 is VALIDATION self-mirror (renyxin vs renyxin, rewards equal -> T); counted in total W-L-T, excluded from public_only",
+  "hybrid-v2 public count frozen at 69 (0 increment) since prior pull; online career appears paired-out",
+  "v4b publicScore drifted 1040 -> 1044.8 since baseline citation"
+ ],
+ "source": {
+  "cli": "/home/renyxin/.local/bin/kaggle",
+  "auth": "KAGGLE_API_TOKEN=$(kaggle auth print-access-token) injected into env; direct call 401s (precedent: 2026-09-23-online-pair.json auth_note)",
+  "commands": [
+   "kaggle competitions submissions kaggriculture --format json",
+   "kaggle competitions episodes 56487449 --format json",
+   "kaggle competitions episodes 56452187 --format json",
+   "kaggle competitions replay <episode_id>  # writes episode-<id>-replay.json to cwd /tmp/r29"
+  ],
+  "replay_dir": "/tmp/r29/ (13 episode-*-replay.json retained)",
+  "episodes_parse_note": "episode list output has trailing usage line; parse with raw_decode up to last ']'"
+ }
+}
