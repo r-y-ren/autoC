@@ -390,3 +390,58 @@
       - 职责：九件构造用例——R10 三件（减量语义重校）+c4/c5（重校）+新四件：8→1 减量恰留真需求+安全边；反应层超种安全边兜住；[] 空槽单可忽略不误 None；600 窗滴灌局回收。
       - 签名意图：输入: 无（夹具内置） / 输出: 九例 pass/fail / 错误: 夹具异常=失败。
       - 调用方：gate_equivalence_v3。tested：自有单测。核验：测试: orderbook_l2_derivative/test_layer_s_v3.py（invariant v3 组）。
+
+
+---
+
+## 【R13 增补·2026-09-24】CARROT2 源头钳制（L3）
+
+## 结构概览（增补）
+- build_l13_candidate ← R13
+  - inject_controller_clamp
+    - _ca_future_plant_demand [新增·注入]
+  - （复用 L1 append：layer S 尾块逐字节继承）
+- verify_l13_gates ← R13
+  - gate_launch_l3
+  - gate_equivalence_l3
+    - constructed_cases_l3
+  - （复用不改）：gate_h2h_vs_l1 / gate_lineage_strength / replay_action_diff / precision_subset_check
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R13 | build_l13_candidate；verify_l13_gates |
+
+## 功能块 build_l13_candidate ← R13
+（块引言：双注入构建=中部受控手术（CARROT2 §3b 行 4695 目标项）+ 尾部 layer S 追加（L1 逐字节继承）。**Divide 级精化（登记 batches 变更记录）**：钳制激活窗 step≥648（day≥27）——实测浪费带全在 652-671、day26 无观测浪费，且与门③形态步界 ≥648 对齐；day<27 目标保持原 8。R13-b 粗粒度变体=同管线 mode="coarse"（day≥27 目标 2，一常数）。diff 审计=受控变更集两层：中部恰{一 helper def 插入+一表达式替换+激活条件}、尾部恰 layer S 块追加。）
+
+- **build_l13_candidate** [L0|新增]
+  - 职责：编排——复制基座 → inject_controller_clamp（mode=fine|coarse）→ 追加 layer S 尾块（复用 L1 append 四校验）→ 确定性打包（双跑）→ manifest（schema orderbook_l3_derivative_manifest/1.0；provenance=基座链→钳制变更集→layer S 块 sha→双跑；mode 登记）。
+  - 签名意图：输入: mode（CLI） / 输出: orderbook_l3_derivative/{main.py, submission.tar.gz, build_manifest.json} / 错误: 任一步不确定即抛。
+  - 调用方：操作者。tested：上游覆盖。核验：上游覆盖: verify_l13_gates。
+  - **inject_controller_clamp** [L1|新增]
+    - 职责：中部受控注入——AST 定位 CARROT2 §3b 的 q 计算行（4695 目标项），fine 模式替换为 `q = (min(_CA_BUFFER, _ca_future_plant_demand(<上下文>)+2) if step>=648 else _CA_BUFFER) - have - buying` 语义（异常回退原式：包 try 或需求 None→原值）；coarse 模式替换目标项为 `(2 if step>=648 else _CA_BUFFER)`；在 CARROT2 层函数前插入 helper def；校验：AST 可解析、变更集恰{一 def 插入+一表达式替换}、五区零改动断言（磁带/路由/反克隆/清仓/重排区文本恒等）。
+    - 签名意图：输入: 基座 main 副本路径+mode / 输出: 注入后源+变更集审计 / 错误: 定位失败/变更超界即抛。
+    - 调用方：build_l13_candidate。tested：自有单测。核验：测试: orderbook_l3_derivative/test_build_l4.py。
+    - **_ca_future_plant_demand** [L2|新增·注入]（helper，随钳制注入基座）
+      - 职责：route2 磁带后缀（≥当前 step）PLANT,CARROT 计数 + day≤28 可 swap 小麦槽保守计数（复用基座 _ca_tape/_ca_visits 机制与命名空间；读不到/异常→返回 None→钳制回退原目标）。
+      - 签名意图：输入: 基座 CARROT2 层上下文（seat/step/st） / 输出: 需求 int 或 None / 错误: 异常→None。
+      - 调用方：钳制表达式。tested：自有单测。核验：测试: orderbook_l3_derivative/test_layer_l4.py。
+
+## 功能块 verify_l13_gates ← R13
+- **verify_l13_gates** [L0|新增]
+  - 职责：四门编排（fail-closed 全跑）：①复用 gate_h2h_vs_l1（cand=L3，**预期真胜局**）②复用 gate_lineage_strength ③gate_equivalence_l3 ④gate_launch_l3；evidence 落 L3 目录+verify_summary。
+  - 签名意图：输入: L3 包路径 / 输出: {overall, h2h, lineage, equivalence, launch} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验：测试: orderbook_l3_derivative/test_verify_l4.py。
+  - **gate_launch_l3** [L1|新增]
+    - 职责：发射四门（复用 v48_derivative_launch_check 重定向）+ **形态检查扩展**：truncation_only_diff 接受 {BUY_SEED 整单消失、BUY_SEED 减量对（同品项 disappear≥appear）、SELL 变化} 且差异步 ≥648（修 R12 留档的门禁形态缺口）。
+    - 签名意图：输入: L3 包 / 输出: 四门+扩展形态裁决 / 错误: 任一门红。
+    - 调用方：verify_l13_gates。tested：自有单测。核验：测试: orderbook_l3_derivative/test_verify_l4.py。
+  - **gate_equivalence_l3** [L1|新增]
+    - 职责：26 局重演四面（沿 v3 骨架，窗口界 648）：形态（扩展集含减量对）；结果面=逐局 ≥L1+死种 ≤$900+饿死零容忍+子集重验；构造用例。
+    - 签名意图：输入: episodes_dir, l3_main, l1_main, verbatim_main / 输出: {forms, result_face, cases, passed} / 错误: fail-closed。
+    - 调用方：verify_l13_gates。tested：自有单测。核验：测试: orderbook_l3_derivative/test_gate_equiv_l4.py。
+    - **constructed_cases_l3** [L2|新增]
+      - 职责：R10 三件 + 新四件（钳制触发局需求+2 恰好/day28 swap 不饿死/钳计算异常回退原 q/mode-A 休眠局零足迹）。
+      - 签名意图：输入: 无 / 输出: 七例 pass/fail / 错误: 夹具异常=失败。
+      - 调用方：gate_equivalence_l3。tested：自有单测。核验：测试: orderbook_l3_derivative/test_layer_l4.py。
