@@ -270,3 +270,57 @@
     - 职责：门④——发射四门：官方 last-callable 装载（末 callable=_cxs_agent；与 _cxd_agent 基线的完整序列差异仅来自截断层）；双席自打 DONE+max 单步 <1s；确定性双跑动作流 sha256 一致；体积 <100MB 与 sha 身份链登记（manifest 同 round-30 格式）。
     - 签名意图：输入: L1 包 / 输出: 四门结果 / 错误: 任一门红。
     - 调用方：verify_layer_s_gates。tested 策略：自有单测。核验命令：测试: orderbook_l1_derivative/test_gates.py（launch 组；继承 R10 验收④）。
+
+
+---
+
+## 【R11 增补·2026-09-24】供给核算修正·净需求覆盖（L1.1）
+
+## 结构概览（增补）
+- build_l11_candidate ← R11
+  - make_layer_s_v2_block
+    - _cxs_seed_surplus [改造·v2]
+- verify_l11_gates ← R11
+  - gate_h2h_vs_l1
+  - gate_equivalence_v2
+    - constructed_cases_v2
+  - （复用不改）：gate_lineage_strength / gate_launch_fourgate_l1 / replay_action_diff / precision_subset_check——由编排重定向参数复用 L1 实现
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R11 | build_l11_candidate；verify_l11_gates |
+
+## 功能块 build_l11_candidate ← R11
+（块引言：R11 只改造一个运行时函数——_cxs_seed_surplus 供给口径改净需求覆盖式；其余四个运行时函数与常数沿 R10 逐字节继承（v2 块=L1 块源+该函数替换，AST 校验差异恰为一函数体）。产物落 orderbook_l1_1_derivative/；L1 目录零改动；打包配方与 manifest 链沿 round-30/L1 先例。）
+
+- **build_l11_candidate** [L0|新增]
+  - 职责：编排——make_layer_s_v2_block 生成 v2 块 → 复制基座原件注入（L1 append 四校验管线复用）→ 确定性打包（双跑逐字节）→ manifest（基座 a16e0e9b/2838cc66 链+L1 块 sha+v2 块 sha+双跑声明；schema orderbook_l1_1_derivative_manifest/1.0）。
+  - 签名意图：输入: 无（CLI） / 输出: orderbook_l1_1_derivative/{main.py, submission.tar.gz, build_manifest.json} / 错误: 任一步不确定即抛。
+  - 调用方：操作者。tested 策略：上游覆盖: verify_l11_gates。核验命令：上游覆盖: verify_l11_gates。
+  - **make_layer_s_v2_block** [L1|新增]
+    - 职责：从 L1 的 layer_s_block.py 源生成 v2 块——定位 `_cxs_seed_surplus` 函数体替换为净需求覆盖实现，其余文本逐字节不变；校验：AST 可解析、与 L1 块的 diff 恰为一处函数体、v2 末 callable 仍 _cxs_agent。
+    - 签名意图：输入: L1 块路径 / 输出: v2 块文件+diff 审计 / 错误: 定位失败或 diff 超界即抛。
+    - 调用方：build_l11_candidate。tested：自有单测。核验：测试: orderbook_l1_1_derivative/test_build_v2.py。
+    - **_cxs_seed_surplus** [L2|改造·v2]
+      - 职责：净需求覆盖口径——供给=库存种子−当前步 PLANT 消耗（钳 0）+本回合保留 BUY_SEED；**磁带未来 BUY_SEED 不再计入供给**；允许删除量=max(0, 供给−可完成种收需求) 且 ≤ 本回合该品项购买量；判定对窗口内全部 BUY_SEED 统一适用（磁带单/回买单不分）；plan_view 仍用于需求统计（可完成 PLANT）；任何解析失败/不确定 → None（零误杀不变）。
+      - 签名意图：输入: crop, observation, kept_orders, plan_view, current_plants / 输出: 允许删除量或 None / 错误: 不确定→None。
+      - 调用方：_cxs_seed_truncate（v2 块内，沿 R10 调用形）。tested：自有单测。核验：测试: orderbook_l1_1_derivative/test_layer_s_v2.py（净口径矩阵+两件新构造用例）。
+
+## 功能块 verify_l11_gates ← R11
+- **verify_l11_gates** [L0|新增]
+  - 职责：四门编排（沿 L1 verify 形制，evidence 落 v2 目录 evidence/）：①gate_h2h_vs_l1；②gate_lineage_strength（**复用 L1 模块重定向**：run(v2_main, 三对手, 8)）；③gate_equivalence_v2；④gate_launch_fourgate_l1（**复用重定向**：run(v2_pkg)）。任一门不可执行=整体 fail；全绿=发射前置。
+  - 签名意图：输入: v2 包路径 / 输出: {overall, h2h, lineage, equivalence, launch} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验：测试: orderbook_l1_1_derivative/test_verify_v2.py。
+  - **gate_h2h_vs_l1** [L1|新增]
+    - 职责：seated 双席位 ≥16 局 vs **L1（在飞件同字节）**互胜 ≥0.55（直量增量）；另附 vs verbatim 8 局参考面（记账不设阈）；装载身份断言沿 L1（v2 末 callable=_cxs_agent）；per_game 沿 h2h 台账格式。
+    - 签名意图：输入: v2_main, l1_main, verbatim_main, seeds / 输出: {n, wins, rate, passed, ref_face} / 错误: fail-closed。
+    - 调用方：verify_l11_gates。tested：自有单测。核验：测试: orderbook_l1_1_derivative/test_gate_h2h_v2.py。
+  - **gate_equivalence_v2** [L1|新增]
+    - 职责：26 局重演三面——(a) v2 vs verbatim 差异（沿 R10 修订口径：步界/形态有界）+ **buy_seed_appear ≤2**；(b) 结果面：逐局 v2 终局资金 ≥ L1 终局资金 + **终局死种合计 ≤$900**；净截断（dropped 含拦下回买）子集判据重验（复用 precision_subset_check 口径）；(c) constructed_cases_v2 五件（R10 三件+新增两件：净口径下回买单被拦/真需求回买单保留）。
+    - 签名意图：输入: episodes_dir, v2_main, l1_main, verbatim_main / 输出: {forms, appear_count, result_face, dead_seeds_total, subset, cases, passed} / 错误: fail-closed。
+    - 调用方：verify_l11_gates。tested：自有单测。核验：测试: orderbook_l1_1_derivative/test_gate_equiv_v2.py。
+    - **constructed_cases_v2** [L2|新增]
+      - 职责：R10 三件沿 import 复用 + 新增两件净口径用例（窗口内非磁带回买单且净供给已覆盖→删；净供给<需求（真未来种植）→保留）。
+      - 签名意图：输入: 无（夹具内置） / 输出: 五例 pass/fail / 错误: 夹具异常=失败。
+      - 调用方：gate_equivalence_v2。tested：自有单测。核验：测试: orderbook_l1_1_derivative/test_layer_s_v2.py（invariant v2 组）。
