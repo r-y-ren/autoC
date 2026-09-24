@@ -61,10 +61,10 @@
 | gate_equivalence_v3 | S5 | wired 09-24 | 形态面绿/结果面红：死种 3190=L1（控制器补偿）；饿死零容忍绿；子集绿 | (本批) |
 | constructed_cases_v3 | S5 | wired 09-24 | 九件全过 | (本批) |
 | verify_l2_gates | S5 | wired 09-24 | 两窗 overall=FAIL recommended=None——闭环控制器实证否决 R12 价值前提 | (本批) |
-| inject_controller_clamp | S6 | stub 09-24 | — | — |
-| _ca_future_plant_demand | S6 | stub 09-24 | — | — |
-| build_l13_candidate | S6 | stub 09-24 | — | — |
-| gate_launch_l3 | S6 | stub 09-24 | — | — |
-| gate_equivalence_l3 | S6 | stub 09-24 | — | — |
-| constructed_cases_l3 | S6 | stub 09-24 | — | — |
-| verify_l13_gates | S6 | stub 09-24 | — | — |
+| inject_controller_clamp | S6 | wired 09-24 | fine 中间件 95382180（恰 45 行受控变更+六校验+五区恒定） | (本批) |
+| _ca_future_plant_demand | S6 | wired 09-24 | route2 后缀胡萝卜+保守小麦槽；None→回退原目标 | (本批) |
+| build_l13_candidate | S6 | wired 09-24 | 双注入产物 main 340229db/tar f624222c/manifest | (本批) |
+| gate_launch_l3 | S6 | wired 09-24 | 形态扩展过；差异步 653 | (本批) |
+| gate_equivalence_l3 | S6 | wired 09-24 | form 红=空槽占位伪差异×9；死种 2090>900 帽；starve/subset/cases 全绿 | (本批) |
+| constructed_cases_l3 | S6 | wired 09-24 | 七件全过 | (本批) |
+| verify_l13_gates | S6 | wired 09-24 | overall=FAIL 仅门③两因：空槽分类器缺口+死种帽未达 | (本批) |

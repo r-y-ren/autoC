@@ -1,0 +1,140 @@
+{
+ "n_games": 8,
+ "cand_wins": 8,
+ "opp_wins": 0,
+ "ties": 0,
+ "cand_wins_seatA(of4)": 4,
+ "cand_wins_seatB(of4)": 4,
+ "mean_margin": 40.0,
+ "all_done": true,
+ "rate": 1.0,
+ "win_rate_threshold": 0.55,
+ "passed": true,
+ "loader": {
+  "semantics": "official-last-callable",
+  "l1_callable": "_cxs_agent",
+  "verbatim_callable": "_cxd_agent"
+ },
+ "games": [
+  {
+   "seed": 101,
+   "cand_seat": 0,
+   "rewards": [
+    96289.0,
+    96279.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 10.0,
+   "elapsed_s": 5.041
+  },
+  {
+   "seed": 101,
+   "cand_seat": 1,
+   "rewards": [
+    96279.0,
+    96289.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 10.0,
+   "elapsed_s": 4.883
+  },
+  {
+   "seed": 102,
+   "cand_seat": 0,
+   "rewards": [
+    104068.0,
+    104058.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 10.0,
+   "elapsed_s": 4.821
+  },
+  {
+   "seed": 102,
+   "cand_seat": 1,
+   "rewards": [
+    104058.0,
+    104068.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 10.0,
+   "elapsed_s": 4.886
+  },
+  {
+   "seed": 103,
+   "cand_seat": 0,
+   "rewards": [
+    100594.0,
+    100524.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 70.0,
+   "elapsed_s": 5.659
+  },
+  {
+   "seed": 103,
+   "cand_seat": 1,
+   "rewards": [
+    100524.0,
+    100594.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 70.0,
+   "elapsed_s": 5.534
+  },
+  {
+   "seed": 104,
+   "cand_seat": 0,
+   "rewards": [
+    112380.0,
+    112310.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 70.0,
+   "elapsed_s": 4.978
+  },
+  {
+   "seed": 104,
+   "cand_seat": 1,
+   "rewards": [
+    112310.0,
+    112380.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 70.0,
+   "elapsed_s": 5.07
+  }
+ ]
+}

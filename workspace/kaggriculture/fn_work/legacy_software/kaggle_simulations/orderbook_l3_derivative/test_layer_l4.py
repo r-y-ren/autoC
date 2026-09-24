@@ -1,9 +1,102 @@
-"""test_layer_l4：_ca_future_plant_demand 语义矩阵 + 七件构造用例（helper 源经 exec 独立可测）。"""
+"""test_layer_l4：_ca_future_plant_demand 语义矩阵 + 七件构造用例（helper 源经 exec 独立可测）。
+
+① test_demand_and_clamp_matrix：gate_equivalence_l3._clamp_ns/_clamp_tape 伪
+上下文（inject_controller_clamp.CLAMP_HELPER_SRC 独立 exec）——k 胡萝卜+m
+小麦 → demand=k+m、target=min(8, k+m+2)（+2 安全边封顶 8）；后缀边界（t≥step
+计、t<step 不计）；天窗边界（小麦限 day≤_CA_TO=28、胡萝卜不限天）；磁带读不到
+/异常/非 dict → demand None → target 8；day<27 防御性直回 8 且磁带零查询。
+② test_invariant_cases_l3：gate_equivalence_l3.constructed_cases_l3 真跑
+（无引擎，夹具直驱——R10 三件走 test_layer_s 真链路 layer_s_block，新四件走
+helper exec）：七件全过。"""
+
+import pytest
+
+import gate_equivalence_l3 as g  # noqa: E402  (自带 L1/L2/HERE sys.path 自举)
 
 
-def test_demand_and_clamp_matrix():
-    raise NotImplementedError("unimplemented:fn:test_demand_and_clamp_matrix")
+# ---------------------------------------------------------------------------
+# ① 钳制 helper 语义矩阵（伪磁带 exec 级）
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("k,m", [
+    (0, 0), (1, 0), (0, 1), (3, 2), (6, 3), (10, 0), (2, 7), (0, 8),
+])
+def test_demand_and_clamp_matrix(k, m):
+    # route2 后缀 k 个 PLANT,CARROT + day28 窗内 m 个 PLANT,WHEAT
+    # → demand=k+m、target=min(8, k+m+2)（day27 激活窗内）。
+    ns = g._clamp_ns(g._clamp_tape(k, m))
+    assert ns["_ca_future_plant_demand"](0, 650) == k + m
+    assert ns["_ca_clamped_target"](27, 0, 650) == min(8, k + m + 2)
 
 
+def test_demand_suffix_and_day_window_boundaries():
+    # 后缀边界：PLANT,CARROT@t<step 不计、@t=step 计（≥当前步）；可读性锚
+    # （PASS 步）保后缀可读使 k=m=0 语义="可读零需求"。
+    ns = g._clamp_ns({649: {"farmer": ["PLANT", "CARROT"], "hands": []},
+                      655: {"farmer": ["PASS"], "hands": []}})
+    assert ns["_ca_future_plant_demand"](0, 650) == 0
+    assert ns["_ca_clamped_target"](27, 0, 650) == 2
+    ns = g._clamp_ns({650: {"farmer": ["PLANT", "CARROT"], "hands": []}})
+    assert ns["_ca_future_plant_demand"](0, 650) == 1
+    assert ns["_ca_clamped_target"](27, 0, 650) == 3
+    # 天窗边界：PLANT,WHEAT@day29（t=700）不计；PLANT,CARROT@day29 仍计
+    # （磁带自己的胡萝卜种植不限天）。
+    ns = g._clamp_ns({700: {"farmer": ["PLANT", "WHEAT"], "hands": []}})
+    assert ns["_ca_clamped_target"](27, 0, 650) == 2
+    ns = g._clamp_ns({700: {"farmer": ["PLANT", "CARROT"], "hands": []}})
+    assert ns["_ca_clamped_target"](27, 0, 650) == 3
+    # hands 单元同计（farmer+hands 合并遍历）。
+    ns = g._clamp_ns({651: {"farmer": ["PASS"],
+                            "hands": [["PLANT", "CARROT"], ["PLANT", "WHEAT"]]}})
+    assert ns["_ca_future_plant_demand"](0, 650) == 2
+
+
+def test_clamp_fallbacks_never_raise():
+    # 磁带读不到（后缀无可读步条目）/返回非 dict/抛异常 → demand None /
+    # 捕获 → target=_CA_BUFFER(8)（fail-safe：回退 q 原公式行为，永不抛）。
+    def _boom(seat, t):
+        raise RuntimeError("tape down")
+
+    for tape in ({}, _boom, lambda seat, t: "not-a-dict"):
+        ns = g._clamp_ns(tape)
+        assert ns["_ca_clamped_target"](27, 0, 650) == 8
+    empty = g._clamp_ns({})
+    assert empty["_ca_future_plant_demand"](0, 650) is None
+    # 步条目在但均为空 dict（无可读单元）→ 同 None 语义。
+    blank = g._clamp_ns({700: {}})
+    assert blank["_ca_future_plant_demand"](0, 650) is None
+
+
+def test_mode_a_dormant_zero_footprint():
+    # day<27 表达式走原 _CA_BUFFER：helper 防御性直回且磁带零查询（mode-A
+    # 休眠局零足迹）；day27 起同 tape 确被查询（门控在 day 而非桩）。
+    calls = []
+    tape = g._clamp_tape(2, 1)
+    ns = g._clamp_ns(lambda seat, t: calls.append((seat, t)) or tape.get(t, {}))
+    assert ns["_ca_clamped_target"](26, 0, 620) == 8
+    assert calls == []                                # 休眠：磁带零查询
+    assert ns["_ca_clamped_target"](27, 0, 650) == min(8, 3 + 2)
+    assert calls and all(t >= 650 for _seat, t in calls)   # 激活：查询后缀
+
+
+# ---------------------------------------------------------------------------
+# ② 七件构造用例真跑（constructed_cases_l3：R10 三件+新四件）
+# ---------------------------------------------------------------------------
 def test_invariant_cases_l3():
-    raise NotImplementedError("unimplemented:fn:test_invariant_cases_l3")
+    got = g.constructed_cases_l3()
+    assert set(got) == {
+        "c1_no_trunc_when_future_plant", "c2_trunc_when_no_opportunity",
+        "c3_s671_boundary", "c4_clamp_trigger_demand_plus_two",
+        "c5_day28_swap_no_starve", "c6_clamp_fallback_returns_buffer",
+        "c7_mode_a_dormant_zero_footprint", "all_pass"}
+    for name in ("c1_no_trunc_when_future_plant", "c2_trunc_when_no_opportunity",
+                 "c4_clamp_trigger_demand_plus_two", "c5_day28_swap_no_starve",
+                 "c6_clamp_fallback_returns_buffer",
+                 "c7_mode_a_dormant_zero_footprint"):
+        assert set(got[name]) == {"pass", "evidence"}, name
+        assert got[name]["pass"] is True, (name, got[name]["evidence"])
+        assert isinstance(got[name]["evidence"], str) and got[name]["evidence"]
+    c3 = got["c3_s671_boundary"]
+    assert set(c3) == {"truncate_side", "keep_side", "pass"}
+    assert c3["pass"] is True
+    assert c3["truncate_side"]["pass"] is True and c3["keep_side"]["pass"] is True
+    assert got["all_pass"] is True

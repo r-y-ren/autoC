@@ -1,0 +1,162 @@
+{
+ "generated_at": "2026-09-24T16:27:43",
+ "protocol": "orderbook-l3-launch-fourgate/1.0",
+ "candidate": "shiiin9/your-market-list-is-an-order-book + layer S + carrot2 clamp (public derivative with seed-truncation layer + late-window carrot demand clamp [fine], Apache-2.0)",
+ "package": {
+  "manifest_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/build_manifest.json",
+  "main_sha256": {
+   "disk": "340229db2a8ec7e182fc32e11a8c7e287840905c9bd91e7766dfa48a189569fa",
+   "manifest": "340229db2a8ec7e182fc32e11a8c7e287840905c9bd91e7766dfa48a189569fa",
+   "match": true
+  },
+  "main_bytes": {
+   "disk": 1049954,
+   "manifest": 1049954,
+   "match": true
+  },
+  "tar_sha256": {
+   "disk": "f624222c595200343682128c30da2496e283de45b2f55448a84e10bf723794b9",
+   "manifest": "f624222c595200343682128c30da2496e283de45b2f55448a84e10bf723794b9",
+   "match": true
+  },
+  "tar_bytes": {
+   "disk": 637304,
+   "manifest": 637304,
+   "match": true
+  },
+  "tar_members": [
+   "main.py"
+  ],
+  "tar_members_ok": true,
+  "tar_inner_main_matches_disk": true,
+  "tar_size_ok": true,
+  "tar_size_mb": 0.608,
+  "candidate": "shiiin9/your-market-list-is-an-order-book + layer S + carrot2 clamp (public derivative with seed-truncation layer + late-window carrot demand clamp [fine], Apache-2.0)",
+  "match": true
+ },
+ "gate1_official_load": {
+  "gate1_official_load_ok": true,
+  "agent_py_checked": "/home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/agent.py",
+  "driver_wall_s": 1.2,
+  "n_obs_replayed": 719,
+  "obs_subsampled": true,
+  "isolated_vs_local_action_mismatches": 0,
+  "evidence": {
+   "n_callables": 234,
+   "last_callable_name": "_cxs_agent",
+   "has_named_agent": true,
+   "named_agent_same_output_as_last": true,
+   "loader_pop_applied": true,
+   "exec_dir_on_sys_path_after_load": false,
+   "n_new_sys_modules": 10,
+   "non_stdlib_imports": [],
+   "action_errors": [],
+   "n_obs": 719,
+   "n_actions": 719
+  }
+ },
+ "gate2_full_episodes": {
+  "gate2_full_episodes_ok": true,
+  "gate2_step_budget_ms": 1000.0,
+  "gate2_episodes": [
+   {
+    "seed": 101,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     96289.0,
+     96289.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 5.2,
+    "agent_calls": 1438,
+    "max_step_ms": 257.75,
+    "p99_step_ms": 5.65,
+    "mean_step_ms": 1.66,
+    "action_stream_sha256": "a97c91324d3a7c1b3c539d45d6e0eb48bbb538c93e5c0d6a80c7d9b038f56039",
+    "obs_count": 719
+   },
+   {
+    "seed": 102,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     104068.0,
+     104068.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 5.8,
+    "agent_calls": 1438,
+    "max_step_ms": 298.18,
+    "p99_step_ms": 6.05,
+    "mean_step_ms": 2.05,
+    "action_stream_sha256": "aac9ac39fad1789755320a8286529b4ce717697672b7773349634157e93b447e",
+    "obs_count": 719
+   }
+  ],
+  "gate3_determinism_ok": true,
+  "gate3_rerun_seed": 101,
+  "gate3_hashes": {
+   "run1": "a97c91324d3a7c1b3c539d45d6e0eb48bbb538c93e5c0d6a80c7d9b038f56039",
+   "run2": "a97c91324d3a7c1b3c539d45d6e0eb48bbb538c93e5c0d6a80c7d9b038f56039"
+  }
+ },
+ "gates": {
+  "load": true,
+  "full_episodes": true,
+  "determinism": true,
+  "package": true
+ },
+ "last_callable_expected": "_cxs_agent",
+ "truncation_only_diff": {
+  "ok": true,
+  "threshold": 648,
+  "n_obs": 719,
+  "l1_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/main.py",
+  "l1_callable": "_cxs_agent",
+  "baseline_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+  "baseline_callable": "_cxd_agent",
+  "divergent_steps": [
+   653
+  ],
+  "n_divergent": 1,
+  "min_divergent_step": 653,
+  "all_divergent_steps_ge_threshold": true,
+  "form_violations": [],
+  "dropped_detail": [
+   {
+    "step": 653,
+    "form": "BUY_SEED 整单消失 WHEATx1"
+   }
+  ]
+ },
+ "fail_closed_early_exit": false,
+ "errors": [],
+ "passed": true,
+ "wall_total_s": 22.0,
+ "l3_form_extension": {
+  "kinds": [
+   "buy_seed_whole_disappear",
+   "buy_seed_reduce_pair",
+   "sell_order_change"
+  ],
+  "step_boundary": {
+   "threshold": 648,
+   "source": "L1 门内 layer_s_block._CXS_FROM 实判（同源）"
+  },
+  "candidate_callable": "_cxs_agent",
+  "baseline_callable": "_cxd_agent",
+  "note": "R12 留档缺口修复：减量对（同品项 disappear≥appear 同步）与 SELL 变化入合法形态集；净增单/跨品项顶替/槽位重排仍红",
+  "wall_s": 22.0
+ }
+}

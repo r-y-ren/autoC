@@ -1,0 +1,269 @@
+{
+ "n_games": 16,
+ "cand_wins": 8,
+ "opp_wins": 0,
+ "ties": 8,
+ "cand_wins_seatA(of8)": 4,
+ "cand_wins_seatB(of8)": 4,
+ "mean_margin": 32.5,
+ "all_done": true,
+ "rate": 1.0,
+ "win_rate_threshold": 0.55,
+ "passed": true,
+ "loader": {
+  "semantics": "official-last-callable",
+  "l1_callable": "_cxs_agent",
+  "verbatim_callable": "_cxs_agent"
+ },
+ "games": [
+  {
+   "seed": 101,
+   "cand_seat": 0,
+   "rewards": [
+    96289.0,
+    96289.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.975
+  },
+  {
+   "seed": 101,
+   "cand_seat": 1,
+   "rewards": [
+    96289.0,
+    96289.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.36
+  },
+  {
+   "seed": 102,
+   "cand_seat": 0,
+   "rewards": [
+    104068.0,
+    104068.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.398
+  },
+  {
+   "seed": 102,
+   "cand_seat": 1,
+   "rewards": [
+    104068.0,
+    104068.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.441
+  },
+  {
+   "seed": 103,
+   "cand_seat": 0,
+   "rewards": [
+    100594.0,
+    100534.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 60.0,
+   "elapsed_s": 4.691
+  },
+  {
+   "seed": 103,
+   "cand_seat": 1,
+   "rewards": [
+    100534.0,
+    100594.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 60.0,
+   "elapsed_s": 4.763
+  },
+  {
+   "seed": 104,
+   "cand_seat": 0,
+   "rewards": [
+    112380.0,
+    112320.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 60.0,
+   "elapsed_s": 4.609
+  },
+  {
+   "seed": 104,
+   "cand_seat": 1,
+   "rewards": [
+    112320.0,
+    112380.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 60.0,
+   "elapsed_s": 4.374
+  },
+  {
+   "seed": 201,
+   "cand_seat": 0,
+   "rewards": [
+    97517.0,
+    97517.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.385
+  },
+  {
+   "seed": 201,
+   "cand_seat": 1,
+   "rewards": [
+    97517.0,
+    97517.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.476
+  },
+  {
+   "seed": 202,
+   "cand_seat": 0,
+   "rewards": [
+    126349.0,
+    126349.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.663
+  },
+  {
+   "seed": 202,
+   "cand_seat": 1,
+   "rewards": [
+    126349.0,
+    126349.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "tie",
+   "margin": 0.0,
+   "elapsed_s": 4.78
+  },
+  {
+   "seed": 203,
+   "cand_seat": 0,
+   "rewards": [
+    70732.0,
+    70652.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 80.0,
+   "elapsed_s": 5.262
+  },
+  {
+   "seed": 203,
+   "cand_seat": 1,
+   "rewards": [
+    70652.0,
+    70732.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 80.0,
+   "elapsed_s": 5.248
+  },
+  {
+   "seed": 204,
+   "cand_seat": 0,
+   "rewards": [
+    80412.0,
+    80352.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 60.0,
+   "elapsed_s": 5.027
+  },
+  {
+   "seed": 204,
+   "cand_seat": 1,
+   "rewards": [
+    80352.0,
+    80412.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "winner": "cand",
+   "margin": 60.0,
+   "elapsed_s": 5.205
+  }
+ ],
+ "ref_face": {
+  "n": 8,
+  "wins": 8,
+  "losses": 0,
+  "ties": 0,
+  "rate": 1.0,
+  "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/evidence/h2h_ref_evidence.json",
+  "gating": false
+ }
+}
