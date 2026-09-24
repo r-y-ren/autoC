@@ -8,11 +8,12 @@
   "main_sha256": "dc6412f52aa242e173c47069b7a97b96e35343c9e82fc2a9b4d51a07f530ff33",
   "tar_sha256": "1dd87d7d3e04ec7cb3ac0d9d644a873081047dbd7f52d84fbe58d3b406a768ee",
   "tar_bytes": 636025,
-  "submission_ref": null,
-  "status": "pre-launch（人工执行）"
+  "submission_ref": 56508268,
+  "status": "SubmissionStatus.PENDING",
+  "submitted_at": "2026-09-24T01:27:14Z"
  },
  "decision": {
-  "user_verdict": "R10 立项四裁决（2026-09-23）+门③口径 A 裁决（2026-09-24）；门全绿即发",
+  "user_verdict": "R10 立项四裁决（2026-09-23）+门③口径 A 裁决（2026-09-24）；门全绿即发；2026-09-24 用户明示授权主会话代执行提交（偏离既往人工执行惯例，本行留痕）",
   "offline_gates": "四门 overall=PASS（verify_layer_s_gates 全量：h2h 14-0-2 rate1.0/lineage 24-0/equivalence 26-26/launch 四门+差异步 653）；139 passed",
   "expectation": "终榜对换代={round-29 v48 衍生, round-31 orderbook-L1}（挤掉 round-30 verbatim）；预期效果=触发局 +$10 级微增益+逐字节平局翻小胜；+2h 读数；每候选≤2 次、09-28 后不新发"
  },
@@ -20,5 +21,10 @@
   "command": "kaggle competitions submit kaggriculture -f fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/submission.tar.gz -C \"public derivative with seed-truncation layer\"",
   "pkg_path": "fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative",
   "note": "kaggriculture 用本机 CLI 既往命令的竞赛 slug；提交后回填 submission_ref/status"
+ },
+ "context_at_submit": {
+  "round30_verbatim_score": "2139.5 (COMPLETE, still climbing)",
+  "round29_v48_derivative": "1044.9",
+  "daily_budget_left": "4 submissions remaining today"
  }
 }
