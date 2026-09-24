@@ -1,27 +1,27 @@
 {
- "generated_at": "2026-09-24T16:27:43",
- "protocol": "orderbook-l3-launch-fourgate/1.0",
+ "generated_at": "2026-09-24T17:19:09",
+ "protocol": "orderbook-l3-launch-fourgate/1.1",
  "candidate": "shiiin9/your-market-list-is-an-order-book + layer S + carrot2 clamp (public derivative with seed-truncation layer + late-window carrot demand clamp [fine], Apache-2.0)",
  "package": {
   "manifest_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/build_manifest.json",
   "main_sha256": {
-   "disk": "340229db2a8ec7e182fc32e11a8c7e287840905c9bd91e7766dfa48a189569fa",
-   "manifest": "340229db2a8ec7e182fc32e11a8c7e287840905c9bd91e7766dfa48a189569fa",
+   "disk": "88f9a82fb2ff37b9d6e56d1504515d71e97a4bb37c558c35052ffde133ca036b",
+   "manifest": "88f9a82fb2ff37b9d6e56d1504515d71e97a4bb37c558c35052ffde133ca036b",
    "match": true
   },
   "main_bytes": {
-   "disk": 1049954,
-   "manifest": 1049954,
+   "disk": 1050144,
+   "manifest": 1050144,
    "match": true
   },
   "tar_sha256": {
-   "disk": "f624222c595200343682128c30da2496e283de45b2f55448a84e10bf723794b9",
-   "manifest": "f624222c595200343682128c30da2496e283de45b2f55448a84e10bf723794b9",
+   "disk": "e072a87723d83220aa3f8c40442ef7aac4f8c8203f9604a35238bd95b591ff58",
+   "manifest": "e072a87723d83220aa3f8c40442ef7aac4f8c8203f9604a35238bd95b591ff58",
    "match": true
   },
   "tar_bytes": {
-   "disk": 637304,
-   "manifest": 637304,
+   "disk": 637502,
+   "manifest": 637502,
    "match": true
   },
   "tar_members": [
@@ -73,11 +73,11 @@
     "agent_action_steps": 719,
     "n_engine_log_lines": 719,
     "suspicious_log_lines": [],
-    "wall_s": 5.2,
+    "wall_s": 5.5,
     "agent_calls": 1438,
-    "max_step_ms": 257.75,
-    "p99_step_ms": 5.65,
-    "mean_step_ms": 1.66,
+    "max_step_ms": 259.28,
+    "p99_step_ms": 5.75,
+    "mean_step_ms": 1.76,
     "action_stream_sha256": "a97c91324d3a7c1b3c539d45d6e0eb48bbb538c93e5c0d6a80c7d9b038f56039",
     "obs_count": 719
    },
@@ -95,11 +95,11 @@
     "agent_action_steps": 719,
     "n_engine_log_lines": 719,
     "suspicious_log_lines": [],
-    "wall_s": 5.8,
+    "wall_s": 6.0,
     "agent_calls": 1438,
-    "max_step_ms": 298.18,
-    "p99_step_ms": 6.05,
-    "mean_step_ms": 2.05,
+    "max_step_ms": 279.5,
+    "p99_step_ms": 6.54,
+    "mean_step_ms": 2.11,
     "action_stream_sha256": "aac9ac39fad1789755320a8286529b4ce717697672b7773349634157e93b447e",
     "obs_count": 719
    }
@@ -120,7 +120,7 @@
  "last_callable_expected": "_cxs_agent",
  "truncation_only_diff": {
   "ok": true,
-  "threshold": 648,
+  "threshold": 576,
   "n_obs": 719,
   "l1_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/main.py",
   "l1_callable": "_cxs_agent",
@@ -143,7 +143,7 @@
  "fail_closed_early_exit": false,
  "errors": [],
  "passed": true,
- "wall_total_s": 22.0,
+ "wall_total_s": 22.9,
  "l3_form_extension": {
   "kinds": [
    "buy_seed_whole_disappear",
@@ -151,12 +151,16 @@
    "sell_order_change"
   ],
   "step_boundary": {
-   "threshold": 648,
-   "source": "L1 门内 layer_s_block._CXS_FROM 实判（同源）"
+   "threshold": 576,
+   "source": "R13 修订一轮：day24 包络——_extended_form 期间进程内参数化 layer_s_block._CXS_FROM 改指 576（try/finally 还原 L1 原值 648；layer S 截断窗本体仍 648）"
+  },
+  "empty_slot_normalization": {
+   "applied": true,
+   "note": "market 单比较前剔除 []/None 空槽占位（两侧归一）；归一后恒等=绿（伪差异）；非空 len<3 畸形单仍 violation"
   },
   "candidate_callable": "_cxs_agent",
   "baseline_callable": "_cxd_agent",
-  "note": "R12 留档缺口修复：减量对（同品项 disappear≥appear 同步）与 SELL 变化入合法形态集；净增单/跨品项顶替/槽位重排仍红",
-  "wall_s": 22.0
+  "note": "R12 留档缺口修复：减量对（同品项 disappear≥appear 同步）与 SELL 变化入合法形态集；净增单/跨品项顶替/槽位重排仍红；R13 修订一轮：空槽归一+步界 576 包络",
+  "wall_s": 22.9
  }
 }

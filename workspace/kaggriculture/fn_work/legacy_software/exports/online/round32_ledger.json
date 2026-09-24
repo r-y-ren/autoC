@@ -1,0 +1,24 @@
+{
+ "schema": "online-probe-ledger/1.0",
+ "round": 32,
+ "track": "orderbook-l3-seed-clamp",
+ "candidate": {
+  "label": "orderbook-L3（L1 layer S + CARROT2 行4695 源头钳制：目标=min(8,磁带需求+2)）",
+  "main_sha256": "88f9a82fb2ff…",
+  "tar_sha256": "e072a87723d8…",
+  "tar_bytes": 637502,
+  "submission_ref": 56517593,
+  "status": "SubmissionStatus.PENDING",
+  "submitted_at": "2026-09-24 CST 午后"
+ },
+ "decision": {
+  "user_verdict": "R13 立项（允许修改控制器本体+P1）→S6 门禁 FAIL（一真一假）→修订一轮（form 绿+需求相对证伪）→帽重定 $2,100+发射+二次调参并行（2026-09-24）",
+  "offline_gates": "四门 overall=PASS：h2h 16局 8-0-8 rate1.0（首次真胜局）；lineage 24-0；equivalence form/result/starve/subset/cases 全绿（死种 3190→2090）；launch 四门+形态扩展（77 测试绿）",
+  "expectation": "触发局 +$42-69/局级确定性增益；终榜对候选池+1（{r30,r31,r32} 择优，挂起）；每候选≤2 次（调参变体占第 2 格待裁决）"
+ },
+ "context_at_submit": {
+  "r31_L1": "2017.2 COMPLETE 爬升中",
+  "r30_verbatim": "2071.4",
+  "daily_budget_left": "3 submissions remaining"
+ }
+}

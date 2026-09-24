@@ -9,8 +9,8 @@
 - 门② gate_lineage_strength（L1 复用）：l3 对三对手各 8 局无翻负——L1 门
   无 evidence_path 参数（落点为 L1 包内模块级常量），编排以 try/finally 临时
   改指本包 evidence/lineage_evidence.json 并还原，防复用跑批覆写 L1 包真台账；
-- 门③ gate_equivalence_l3（本包）：两路重演四面裁决（形态扩展集+步界 648/
-  逐局 ≥L1/死种≤$900/饿死零容忍/净回收子集/七件构造用例）；
+- 门③ gate_equivalence_l3（本包）：两路重演四面裁决（形态扩展集+步界 576
+  day24 包络+空槽归一/逐局 ≥L1/死种≤$900/饿死零容忍/净回收子集/七件构造用例）；
 - 门④ gate_launch_l3（本包）：发射四门（L1 门④重定向）+L3 形态扩展
   （减量对/SELL 变化合法，净增单/槽位重排红）。
 - 全跑不短路：任一门红也继续跑完其余门；任一门不可执行（抛异常）→ 该门记
@@ -188,8 +188,8 @@ def verify(pkg_path=None, episodes_dir=None) -> dict:
             for name, summ in (res.get("per_opponent") or {}).items()}
         lineage["evidence_path"] = res.get("evidence_path")
 
-    # 门③ equivalence l3（两路重演：形态扩展集+步界 648/逐局 ≥L1/死种≤$900/
-    # 饿死零容忍/净回收子集/七件用例）。
+    # 门③ equivalence l3（两路重演：形态扩展集+步界 576 包络+空槽归一/逐局
+    # ≥L1/死种≤$900/饿死零容忍/净回收子集/七件用例）。
     equivalence, res = _run_gate(
         "gate3 equivalence l3",
         lambda: gate_equivalence_l3.run(episodes_dir, l3_main, L1_MAIN,

@@ -1,15 +1,22 @@
-"""gate_equivalence_l3（R13 门③）：四面（形态扩展集/死种≤$900/饿死零容忍/子集）+七件构造用例。
+"""gate_equivalence_l3（R13 门③）：四面（形态扩展集/死种≤$2,100[重定]/饿死零容忍/子集）+七件构造用例。
 
 骨架沿 gate_equivalence_v3（R12 门③，**import 复用**其 _seated_terminal/
 _starve_verdict/净回收净算/_record_error 部件，零改动不制第二份）：
   (a) 形态面——diff(l3 vs verbatim)：_l1.replay_action_diff(path, l3_fn,
       verbatim_fn)，全部差异形态限于 ALLOWED_DIVERGENCE_KINDS={BUY_SEED 增/
       删（减量单自然分解为 消失+出现 一对，均在允许集）, SELL 变化}、全部差
-      异步 ≥ **648**（R13 硬指标；layer_s_block._CXS_FROM 同源值，L3 单窗
+      异步 ≥ **576**（R13 修订一轮：day24 包络——需求相对激活使 day24-26 即
+      可有合法差异；layer S 截断窗本体仍 648，此处为门禁包络界；L3 单窗
       非 v3 双窗参数）；appear 只记账不设阈（减量保单天然成对增删）。
+      **空槽归一（2026-09-24 修订一轮）**：市场单比较前把 []/None 空槽占位
+      两侧归一剔除（S6 实证 9 处 form 红全为空槽数量差伪差异——L1 分类器把
+      空槽入 other 卷致 "非 BUY_SEED/SELL 订单差异" 红）；归一收在本门
+      _classify_divergence_l3 替身（进程内换装 _l1._classify_divergence，
+      try/finally 还原，L1 文件零改动），非空但 len<3 畸形单仍走 violation
+      （fail-closed 语义不变）。
   (b) 结果面——①逐局 l3_final ≥ l1_final（1e-9；l3_final 取 (a) 路 cand 槽、
       l1_final 取 (b) 路 diff(L1 vs verbatim) 的 cand 槽）②死种合计=l3 重演
-      终态我方 private.seeds×票价 ≤**$900**（R13 放宽自 v3 的 $500——钳制
+      终态我方 private.seeds×票价 ≤**$2,100**（2026-09-24 重定；原 $900——钳制
       保底买入面下的死种预算重标；票价=_l1.SEED_PRICE）③饿死零容忍（v3 同款
       _starve_verdict：l3 vs L1 终态 plants/shed/inventories 逐品项不减，
       1e-9 容差）④净回收子集重验（v3 同款 _netted_recovery_products：净回收
@@ -18,15 +25,16 @@ _starve_verdict/净回收净算/_record_error 部件，零改动不制第二份�
   (c) constructed_cases_l3()：七件——R10 三件（import test_layer_s 夹具，
       L3 尾块 layer S 截断语义不变式）+ 新四件（本目录 inject 的
       CLAMP_HELPER_SRC 独立 exec 伪上下文：钳制触发 demand+2 恰好/day28 swap
-      不饿死/钳计算异常回退原 q/mode-A 休眠局零足迹）。
+      与 day24 激活不饿死/钳计算异常回退原 q/需求充足局零足迹）。
 
 裁决 passed=(a)∧(b)①②③④∧(c)（fail-closed：任一局任一路 error/死种值或
 终态不可读 → 对应面红；语料空 → 单条全局面 error 防空转绿灯）。evidence 落
-evidence/equivalence_evidence.json（**协议 4.0**：per_game 双路+终态产物 +
+evidence/equivalence_evidence.json（**协议 4.1**：per_game 双路+终态产物 +
 form/result/subset/cases 四面指标；evidence_path 可覆写供测试 tmp 隔离）。"""
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import sys
@@ -46,13 +54,15 @@ import gate_equivalence_v3 as _v3         # noqa: E402  v3 骨架部件（import
 import inject_controller_clamp as _inj    # noqa: E402  CLAMP_HELPER_SRC 消费面（本目录）
 
 # R13 验收硬指标（kaggressure 战役 R13 责任契约）：
-DEAD_SEEDS_VALUE_CAP = 900     # l3 重演终局死种合计 ≤$900（票价估值同 _l1.SEED_PRICE）
+DEAD_SEEDS_VALUE_CAP = 2100   # 2026-09-24 用户裁决重定（保险费结构：胡萝卜$1460+麦$630；原 900 未计铁律保险费）
 STARVE_TOL = _v3.STARVE_TOL    # 饿死零容忍：终态产量面逐品项不减的浮点容差（1e-9）
 ALLOWED_DIVERGENCE_KINDS = _l1.ALLOWED_DIVERGENCE_KINDS  # {BUY_SEED 增/删, SELL 变化}
 FINAL_FACE_TOL = _v3.FINAL_FACE_TOL   # l3_final ≥ l1_final 的浮点容差（1e-9）
-STEP_BOUNDARY = 648            # 全部差异步 ≥648（layer_s_block._CXS_FROM 同源；L3 单窗）
+STEP_BOUNDARY = 576            # 全部差异步 ≥576（R13 修订一轮：day24 包络——需求
+                               # 相对激活使 day24-26 即可有合法差异；layer S 截断
+                               # 窗本体仍 648，此为门禁包络界；L3 单窗）
 EVIDENCE_NAME = "equivalence_evidence.json"
-PROTOCOL = "orderbook-l3-equivalence/4.0"
+PROTOCOL = "orderbook-l3-equivalence/4.1"
 
 # v3 部件 import 复用（本模块全局别名，保测试 monkeypatch 面）：
 _seated_terminal = _v3._seated_terminal          # seated 重演终态提取（死种+饿死面）
@@ -63,13 +73,77 @@ _record_error = _v3._record_error                # record 级 error 归并
 
 
 # ---------------------------------------------------------------------------
-# 汇总裁决（纯函数；合成裁决矩阵单测直喂；v3 同款+死种帽 900+单窗 648）
+# 空槽归一（R13 修订一轮）：市场单比较前剔除 []/None 空槽占位
+# ---------------------------------------------------------------------------
+def _is_empty_slot(order) -> bool:
+    """空槽占位判定：None / 空 list / 空 tuple（() 与 [] canonical 同形）。
+
+    非空但 len<3 的畸形单（如 ["BUY_SEED"]、["BUY_SEED","CARROT"]）**不是**
+    空槽——不剔除，留给 L1 分类器按 other 卷差异 → violation（fail-closed
+    语义不变）。"""
+    return order is None or (isinstance(order, (list, tuple)) and len(order) == 0)
+
+
+def _strip_market_empty_slots(market):
+    """market 订单表 → 剔除空槽占位后的新表（保序；原表不动）。"""
+    return [order for order in market if not _is_empty_slot(order)]
+
+
+def _strip_action_empty_slots(action):
+    """action 的 market 卷空槽归一（其余键/非 market 槽位一字不动）。
+
+    非 dict 或 market 非 list → 原对象透传（形态异常交给 L1 分类器记
+    action_shape/market violation，fail-closed）。"""
+    if (isinstance(action, dict) and isinstance(action.get("market"), list)):
+        normalized = dict(action)
+        normalized["market"] = _strip_market_empty_slots(action["market"])
+        return normalized
+    return action
+
+
+_L1_CLASSIFY_ORIGINAL = _l1._classify_divergence   # 换装前 L1 原件快照（模块 import 期）
+
+
+def _classify_divergence_l3(expected, got):
+    """L1 分类器的空槽归一替身（_l1._classify_divergence 同签名）。
+
+    两侧各删 market 空槽占位后再比：归一后 canonical 恒等 → []（纯空槽
+    数量差=伪差异，S6 的 9 处 form 红全为此形态）；否则透传归一后动作给
+    L1 原分类器（允许形态/violation 判据零改动——非空畸形仍红）。
+
+    注意委托走 _L1_CLASSIFY_ORIGINAL（import 期快照）而非 _l1._classify_divergence
+    属性——_normalized_classify 换装期间该属性即本替身，按属性查会自引用
+    无限递归（26 局重演 23 局 RecursionError 的实测教训）。"""
+    expected_n = _strip_action_empty_slots(expected)
+    got_n = _strip_action_empty_slots(got)
+    if _l1._canonical(expected_n) == _l1._canonical(got_n):
+        return []
+    return _L1_CLASSIFY_ORIGINAL(expected_n, got_n)
+
+
+@contextlib.contextmanager
+def _normalized_classify():
+    """进程内把 L1 分类器换为空槽归一替身（try/finally 还原）。
+
+    replay_action_diff 按模块全局名查 _classify_divergence，属性替换即生效；
+    只动进程内 gate_equivalence_precision 属性，不触盘上 L1 目录（门④
+    _extended_form 换装 _seed_drop_form 同款纪律）。"""
+    original = _l1._classify_divergence
+    _l1._classify_divergence = _classify_divergence_l3
+    try:
+        yield
+    finally:
+        _l1._classify_divergence = original
+
+
+# ---------------------------------------------------------------------------
+# 汇总裁决（纯函数；合成裁决矩阵单测直喂；v3 同款+死种帽 2100[重定]+单窗 576）
 # ---------------------------------------------------------------------------
 def _aggregate_verdict_l3(records, subset_result, cases_result) -> Dict[str, Any]:
     """(a)形态面+(b)结果面（终局/死种/饿死）+subset+cases 汇总（纯函数）。
 
     form_face.ok = 无任一 error ∧ 逐局（无 violation 形态 ∧ 全部差异步 ≥
-    STEP_BOUNDARY=648）∧ 非空记录集；result_face.ok = 无任一 error ∧
+    STEP_BOUNDARY=576）∧ 非空记录集；result_face.ok = 无任一 error ∧
     finals_ok（逐局 l3_final ≥ l1_final−1e-9）∧ 死种合计 ≤
     DEAD_SEEDS_VALUE_CAP=$900 ∧ starve_free（l3 vs L1 终态三桶逐品项不减）；
     passed = form ∧ result ∧ subset（净回收子集 all_ok）∧ cases
@@ -188,8 +262,9 @@ def _aggregate_verdict_l3(records, subset_result, cases_result) -> Dict[str, Any
         "criteria": {
             "allowed_kinds": list(ALLOWED_DIVERGENCE_KINDS),
             "step_boundary": {"threshold": STEP_BOUNDARY,
-                              "source": "R13 硬指标：差异步 ≥648"
-                                        "（layer_s_block._CXS_FROM 同源；L3 单窗）"},
+                              "source": "R13 修订一轮：差异步 ≥576（day24 包络——"
+                                        "需求相对激活；layer S 截断窗本体仍 648；"
+                                        "L3 单窗）"},
         },
     }
     result_face = {
@@ -269,9 +344,11 @@ def _case_clamp_trigger_demand_plus_two() -> Dict[str, Any]:
 
 
 def _case_day28_swap_no_starve() -> Dict[str, Any]:
-    """新④-2 day28 swap 不饿死：demand 含小麦槽（day≤28 窗内 PLANT,WHEAT 全
-    计入）时 target ≥ 需求（安全边 +2 覆盖 swap 换种消耗；demand≤8 物理上界
-    内恒成立）；且小麦确计入 demand（同 k 下 m>0 抬需求）。"""
+    """新④-2 day28 swap 与 day24 激活不饿死：demand 含小麦槽（day≤28 窗内
+    PLANT,WHEAT 全计入）时 target ≥ 需求（安全边 +2 覆盖 swap 换种消耗；
+    demand≤8 物理上界内恒成立）；且小麦确计入 demand（同 k 下 m>0 抬需求）；
+    day24 收敛期（需求相对激活修订）同式成立——target=min(8, 需求+2) 不以
+    day 键控，day24/26/27 三点同磁带同值。"""
     points, evid = [], []
     for k, m in ((0, 1), (1, 2), (2, 6), (4, 4), (6, 2), (0, 8), (3, 3)):
         ns = _clamp_ns(_clamp_tape(k, m))
@@ -284,6 +361,15 @@ def _case_day28_swap_no_starve() -> Dict[str, Any]:
     without_wheat = _clamp_ns(_clamp_tape(2, 0))["_ca_future_plant_demand"](0, 650)
     points.append(with_wheat == 4 and without_wheat == 2)   # 小麦槽确计入
     evid.append(f"wheat counted: with={with_wheat} without={without_wheat}")
+    # day24-26 收敛期激活面（修订一轮重点盯防）：day 键控已删，day24/26 与
+    # day27 同磁带同 target（饿死零容忍的构造面锚点——需求估计与安全边不因
+    # 提前激活而变形）。
+    day24_tape = _clamp_tape(3, 2, carrot_start=600, wheat_start=580, anchor=576)
+    ns24 = _clamp_ns(day24_tape)
+    for day in (24, 26, 27):
+        target = ns24["_ca_clamped_target"](day, 0, 576)
+        points.append(target == min(8, 5 + 2))
+        evid.append(f"day{day} target={target} (expect {min(8, 5 + 2)})")
     ok = all(points)
     return {"expected": True, "got": ok,
             "evidence": "; ".join(evid) + (" ; ALL OK"
@@ -314,29 +400,32 @@ def _case_clamp_fallback_returns_buffer() -> Dict[str, Any]:
                                            if ok else " ; FAIL")}
 
 
-def _case_mode_a_dormant_zero_footprint() -> Dict[str, Any]:
-    """新④-4 mode-A 休眠局零足迹：day<27 表达式走原 _CA_BUFFER——helper 防御
-    性直回且**磁带零查询**（记录型 tape 断言 day26 求值零调用；day27 同
-    tape 查询非空，证门控在 day 而非桩）。"""
+def _case_high_demand_zero_footprint() -> Dict[str, Any]:
+    """新④-4 需求充足局零足迹（需求相对激活修订版）：demand+2≥8 时 target==
+    _CA_BUFFER（min 自然封顶=原目标，表达式仍写但行为与原式恒等=零足迹）；
+    且 helper **确被调用**（记录型 tape 断言 day6/24/27 三点查询非空——门控
+    已不在 day 而在需求，mode-A 语义=demand≥6 即原行为）。"""
     calls: List[Any] = []
-    tape = _clamp_tape(2, 1)
+    tape = _clamp_tape(6, 4)          # demand=10 → +2=12 ≥ 8 → 零足迹
     ns = _clamp_ns(lambda seat, t: calls.append((seat, t)) or tape.get(t, {}))
-    dormant = ns["_ca_clamped_target"](26, 0, 620)
-    dormant_calls = len(calls)
-    active = ns["_ca_clamped_target"](27, 0, 650)
-    active_calls = len(calls) - dormant_calls
-    ok = (dormant == 8 and dormant_calls == 0          # 休眠：原目标+磁带零足迹
-          and active == min(8, 3 + 2) and active_calls > 0)  # 激活：确走磁带
+    before = len(calls)
+    steps = {6: 144, 24: 576, 27: 650}                 # 各天代表步（后缀均含全磁带）
+    targets = {day: ns["_ca_clamped_target"](day, 0, step)
+               for day, step in steps.items()}
+    queried = len(calls) - before
+    ok = (all(v == 8 for v in targets.values())    # 三点全=原目标（零足迹）
+          and queried > 0)                          # 且确走磁带（无条件语义）
     return {"expected": True, "got": ok,
-            "evidence": f"day26 target={dormant} tape_calls={dormant_calls} "
-                        f"(expect 8/0); day27 target={active} "
-                        f"tape_calls={active_calls} (expect 5/>0)"}
+            "evidence": f"targets day6/24/27 = {targets[6]}/{targets[24]}/"
+                        f"{targets[27]} (expect 8/8/8); tape_calls={queried} "
+                        f"(expect >0——需求相对激活：门控在需求不在 day)"}
 
 
 def constructed_cases_l3() -> dict:
     """七构造用例：R10 三件（import test_layer_s 夹具——L3 尾块 layer S 截断
     语义不变式，真值仍在 test_layer_s 防漂移）+新四件（CLAMP_HELPER_SRC 独立
-    exec 伪上下文：钳制触发/day28 swap 不饿死/异常回退/mode-A 零足迹）。
+    exec 伪上下文：钳制触发/day28 swap 与 day24 激活不饿死/异常回退/需求充足
+    零足迹）。
 
     夹具异常=该例失败（不向上传播，门级红由 all_pass=False 承载）。返回
     {c1…c7 各例 {pass, evidence}, c3 双面, all_pass}。"""
@@ -369,7 +458,7 @@ def constructed_cases_l3() -> dict:
     c4 = _adjudicate(_case_clamp_trigger_demand_plus_two)
     c5 = _adjudicate(_case_day28_swap_no_starve)
     c6 = _adjudicate(_case_clamp_fallback_returns_buffer)
-    c7 = _adjudicate(_case_mode_a_dormant_zero_footprint)
+    c7 = _adjudicate(_case_high_demand_zero_footprint)
     return {
         "c1_no_trunc_when_future_plant": c1,
         "c2_trunc_when_no_opportunity": c2,
@@ -380,7 +469,7 @@ def constructed_cases_l3() -> dict:
         "c4_clamp_trigger_demand_plus_two": c4,
         "c5_day28_swap_no_starve": c5,
         "c6_clamp_fallback_returns_buffer": c6,
-        "c7_mode_a_dormant_zero_footprint": c7,
+        "c7_high_demand_zero_footprint": c7,
         "all_pass": bool(c1["pass"] and c2["pass"] and c3_trunc["pass"]
                          and c3_keep["pass"] and c4["pass"] and c5["pass"]
                          and c6["pass"] and c7["pass"]),
@@ -395,16 +484,18 @@ def run(episodes_dir, l3_main, l1_main, verbatim_main, limit=None,
     """两路重演+终态提取+四面裁决 → {passed, form_face, result_face, subset,
     cases, per_game_summary, n_errors, evidence_path}。
 
-    编排（v3 同款）：① _l1._discover_replays 按局号升序发现语料（limit 截前
-    N 局）；② 三 callable 装载一次跨局复用（_l1._as_callable，接受路径/
-    callable）；③ 逐局两路 _l1.replay_action_diff——(a) 路 cand=l3/control=
-    verbatim（形态面+净回收消费面），(b) 路 cand=L1/control=verbatim（结果面
-    finals 来源）；(a) 路无 error 再做终态提取（_seated_terminal 两遍：l3
-    死种+饿死面、L1 饿死对照面）；④ (a) 路产物经净回收净算
-    （_netted_recovery_products）喂 _l1.precision_subset_check；⑤
-    constructed_cases_l3()；⑥ _aggregate_verdict_l3 汇总（步界 648/死种帽
+    编排（v3 同款+空槽归一）：① _l1._discover_replays 按局号升序发现语料
+    （limit 截前 N 局）；② 三 callable 装载一次跨局复用（_l1._as_callable，
+    接受路径/callable）；③ 逐局两路 _l1.replay_action_diff——(a) 路
+    cand=l3/control=verbatim（形态面+净回收消费面），(b) 路 cand=L1/
+    control=verbatim（结果面 finals 来源）——**全程在 _normalized_classify()
+    换装内跑**（差异分类入口先滤 []/None 空槽占位，纯空槽数量差=零差异记录；
+    进程内 try/finally 还原，L1 文件零改动）；(a) 路无 error 再做终态提取
+    （_seated_terminal 两遍：l3 死种+饿死面、L1 饿死对照面）；④ (a) 路产物
+    经净回收净算（_netted_recovery_products）喂 _l1.precision_subset_check；
+    ⑤ constructed_cases_l3()；⑥ _aggregate_verdict_l3 汇总（步界 576/死种帽
     900）。evidence 落 <本包>/evidence/equivalence_evidence.json（可覆写），
-    协议 4.0：per_game 双路+终态产物 + 四面指标。语料目录空/坏 → 单条全局面
+    协议 4.1：per_game 双路+终态产物 + 四面指标。语料目录空/坏 → 单条全局面
     error 记录（四面俱红，防空转绿灯）。"""
     t0 = time.perf_counter()
     replays: List[str] = []
@@ -435,14 +526,15 @@ def run(episodes_dir, l3_main, l1_main, verbatim_main, limit=None,
             records.append({"episode": ep, "seat": None, "error": load_error,
                             "form": None, "result": None, "terminal": None})
             continue
-        try:
-            form = _l1.replay_action_diff(path, l3_fn, vb_fn)
-        except Exception as exc:  # 叶内已自包 error；此处兜底防编排面逃逸
-            form = {"error": f"{type(exc).__name__}: {exc}"}
-        try:
-            result = _l1.replay_action_diff(path, l1_fn, vb_fn)
-        except Exception as exc:
-            result = {"error": f"{type(exc).__name__}: {exc}"}
+        with _normalized_classify():   # 差异分类入口先滤空槽（伪差异归一；try/finally 还原）
+            try:
+                form = _l1.replay_action_diff(path, l3_fn, vb_fn)
+            except Exception as exc:  # 叶内已自包 error；此处兜底防编排面逃逸
+                form = {"error": f"{type(exc).__name__}: {exc}"}
+            try:
+                result = _l1.replay_action_diff(path, l1_fn, vb_fn)
+            except Exception as exc:
+                result = {"error": f"{type(exc).__name__}: {exc}"}
         terminal = None
         if form.get("error") is None:  # (a) 路成形才取终态；否则该局已红
             try:

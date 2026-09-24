@@ -2,10 +2,13 @@
 
 不真跑重演（26 局全量两路重演+终态提取留给 verify 编排正式跑批）：
 ① 裁决矩阵——_aggregate_verdict_l3 纯函数直喂合成双路+终态产物：全过→绿；
-   死种合计 $500+$500=$1000（>$900）→结果面红（边界 $450+$450=$900 恰过）；
+   死种合计 $1250+$1250=$2500（>$2100 重定帽）→结果面红（边界 $1050+$1050=$2100 恰过）；
    某局 l3 终局 < L1→结果面红；在田株数减产→结果面红（饿死零容忍面）；
-   差异步 647<648→形态面红（L3 单窗硬界，无 v3 双窗参数）；error 局→两面俱
-   红（fail-closed）；subset/cases 红→各自拉红门；空记录集→四面俱红。
+   差异步 575<576→形态面红（L3 单窗硬界·day24 包络，无 v3 双窗参数）；error
+   局→两面俱红（fail-closed）；subset/cases 红→各自拉红门；空记录集→四面俱
+   红。①b 空槽归一——_classify_divergence_l3 直测：[]/None 空槽数量差→零差异
+   记录（绿）；剔空槽后实质差异照常分类；非空 len<3 畸形→仍 violation；
+   _normalized_classify 换装-还原接线。
 ② run 接线——monkeypatch L1 叶（replay_action_diff/precision_subset_check）
    + 本门终态提取与构造用例假件 + 合成语料目录：逐局两路重演（cand=l3 与
    cand=L1、control 均 verbatim）、终态提取仅在 (a) 路成形局做（l3+L1 两遍）、
@@ -107,7 +110,7 @@ def _cases_ok_l3():
     cases = {name: {"pass": True, "evidence": "ok"} for name in (
         "c1_no_trunc_when_future_plant", "c2_trunc_when_no_opportunity",
         "c4_clamp_trigger_demand_plus_two", "c5_day28_swap_no_starve",
-        "c6_clamp_fallback_returns_buffer", "c7_mode_a_dormant_zero_footprint")}
+        "c6_clamp_fallback_returns_buffer", "c7_high_demand_zero_footprint")}
     cases["c3_s671_boundary"] = {
         "truncate_side": {"pass": True, "evidence": "ok"},
         "keep_side": {"pass": True, "evidence": "ok"}, "pass": True}
@@ -141,17 +144,17 @@ def test_gate_equiv_l3_matrix():
     assert row["l3_final"] == 1000.0 and row["l1_final"] == 990.0
 
     # 死种合计 $500+$500=$1000 > $900 → 结果面红（形态面不串红）；
-    # 边界单局 CARROT×45=$900 恰过帽（≤ 含端）。
-    red = g._aggregate_verdict_l3([_record(1, dead_value=500),
-                                   _record(2, dead_value=500)],
+    # 边界单局恰过重定帽 $2100（≤ 含端）。
+    red = g._aggregate_verdict_l3([_record(1, dead_value=1250),
+                                   _record(2, dead_value=1250)],
                                   _subset_ok(), _cases_ok_l3())
     assert red["result_face"]["ok"] is False and red["passed"] is False
-    assert red["result_face"]["dead_seeds_total_value"] == 1000
-    assert red["result_face"]["dead_seeds_cap"] == g.DEAD_SEEDS_VALUE_CAP == 900
+    assert red["result_face"]["dead_seeds_total_value"] == 2480  # 夹具每局 −10 修正后 1240×2
+    assert red["result_face"]["dead_seeds_cap"] == g.DEAD_SEEDS_VALUE_CAP == 2100
     assert red["form_face"]["ok"] is True
-    edge = g._aggregate_verdict_l3([_record(1, dead_value=900)],
+    edge = g._aggregate_verdict_l3([_record(1, dead_value=2100)],
                                    _subset_ok(), _cases_ok_l3())
-    assert edge["result_face"]["dead_seeds_total_value"] == 900
+    assert edge["result_face"]["dead_seeds_total_value"] == 2100
     assert edge["result_face"]["ok"] is True and edge["passed"] is True
 
     # 逐局 l3 终局 < L1 → 结果面红（final_delta<0 定位行）。
@@ -188,18 +191,20 @@ def test_gate_equiv_l3_matrix():
         _subset_ok(), _cases_ok_l3())
     assert ok["result_face"]["starve_free"] is True
 
-    # 步界：差异步 647 < 648 → 形态面红（L3 单窗硬界；结果面不串红）。
+    # 步界（修订一轮 576=day24 包络）：差异步 575 < 576 → 形态面红（L3 单窗
+    # 硬界；结果面不串红）。
     breach = g._aggregate_verdict_l3(
-        [_record(1, appear=[{"step": 647, "crop": "CARROT", "qty": 1}])],
+        [_record(1, appear=[{"step": 575, "crop": "CARROT", "qty": 1}])],
         _subset_ok(), _cases_ok_l3())
     assert breach["form_face"]["ok"] is False
     assert breach["form_face"]["n_boundary_breach_games"] == 1
-    assert breach["form_face"]["criteria"]["step_boundary"]["threshold"] == 648
-    assert breach["per_game_summary"][0]["min_divergence_step"] == 647
+    assert breach["form_face"]["criteria"]["step_boundary"]["threshold"] == 576
+    assert breach["per_game_summary"][0]["min_divergence_step"] == 575
     assert breach["result_face"]["ok"] is True
-    # 648 恰在界内（≥648 含端）。
+    # 576 恰在界内（≥576 含端；648 起=layer S 截断窗内差异亦绿）。
     edge_step = g._aggregate_verdict_l3(
-        [_record(1, appear=[{"step": 648, "crop": "CARROT", "qty": 1}])],
+        [_record(1, appear=[{"step": 576, "crop": "CARROT", "qty": 1}]),
+         _record(2, appear=[{"step": 648, "crop": "CARROT", "qty": 1}])],
         _subset_ok(), _cases_ok_l3())
     assert edge_step["form_face"]["ok"] is True
 
@@ -273,6 +278,72 @@ def test_net_recovery_netting_pairs_reused_from_v3():
     assert netted[0]["dropped"] == [
         {"step": 700, "crop": "CARROT", "qty": 7},    # step 取该品项最小消失步
         {"step": 705, "crop": "WHEAT", "qty": 2}]
+
+
+# ---------------------------------------------------------------------------
+# ①b 空槽归一（R13 修订一轮：[]/None 占位在市场单比较前剔除）
+# ---------------------------------------------------------------------------
+def test_empty_slot_normalization_classify():
+    # 绿：空槽数量差（S6 实证形态 exp=[[],[]] got=[[],[],[]]）→ 归一后零差异记录
+    base = {"farmer": ["PASS"], "hands": [],
+            "market": [["SELL", "CARROT", 1], [], []]}
+    cand = {"farmer": ["PASS"], "hands": [],
+            "market": [["SELL", "CARROT", 1], [], [], []]}
+    assert g._classify_divergence_l3(base, cand) == []
+    # 回归对照：L1 原分类器（未归一）把同差异记 market violation——伪差异来源
+    assert [r["kind"] for r in g._l1._classify_divergence(base, cand)] == ["market"]
+    # 绿：None 占位与 [] 占位跨形（canonical 同为空槽）
+    assert g._classify_divergence_l3(
+        {"market": [["BUY_SEED", "CARROT", 2], None]},
+        {"market": [["BUY_SEED", "CARROT", 2], []]}) == []
+    # 绿：两侧空槽并不同侧不对称（一侧全占位、一侧全空表）
+    assert g._classify_divergence_l3({"market": [None, []]}, {"market": []}) == []
+    # 剔空槽后实质差异照常分类：BUY_SEED 消失=允许形态
+    recs = g._classify_divergence_l3(
+        {"market": [["BUY_SEED", "CARROT", 2], []]}, {"market": [[], []]})
+    assert [(r["kind"], r["crop"], r["qty"]) for r in recs] == [
+        ("buy_seed_disappear", "CARROT", 2)]
+    # 红（语义不变）：非空但 len<3 畸形单（["BUY_SEED"]/["BUY_SEED","CARROT"]）
+    # 不是空槽——入 other 卷不对称 → market violation（fail-closed）
+    for malformed in (["BUY_SEED"], ["BUY_SEED", "CARROT"], "x", 0):
+        recs = g._classify_divergence_l3({"market": [malformed]},
+                                         {"market": []})
+        assert recs and recs[0]["kind"] == "market", malformed
+    # 红：len≥3 但 qty 非可整数化 → BUY_SEED 结构异常 violation
+    recs = g._classify_divergence_l3({"market": [["BUY_SEED", "CARROT", "x"]]},
+                                     {"market": []})
+    assert [r["kind"] for r in recs] == ["market"]
+    # 红：非 dict action（互异）透传 L1 分类器（action_shape）；market 非 list
+    # 同理；完全相等的非 dict 动作=零差异（与 replay_action_diff 顶层跳过同源）。
+    assert [r["kind"] for r in g._classify_divergence_l3([], 0)] == ["action_shape"]
+    assert g._classify_divergence_l3([], []) == []
+    assert g._classify_divergence_l3({"market": "not-list"},
+                                     {"market": "not-list"}) == []
+    recs = g._classify_divergence_l3({"market": "not-list"},
+                                     {"market": "other"})
+    assert recs and recs[0]["kind"] == "market"
+
+
+def test_normalized_classify_installs_and_restores():
+    original = g._l1._classify_divergence
+    base = {"market": [["SELL", "CARROT", 1], []]}
+    cand = {"market": [["SELL", "CARROT", 1], [], []]}
+    with g._normalized_classify():
+        assert g._l1._classify_divergence is g._classify_divergence_l3
+        # 换装内：L1 名下分类器走归一替身（伪差异零记录）
+        assert g._l1._classify_divergence(base, cand) == []
+        # 回归（26 局重演 23 局 RecursionError 教训）：换装内实质差异必须
+        # 透传 L1 原分类器（import 期快照）正常分类——不得自引用递归。
+        real = {"market": [["BUY_SEED", "CARROT", 2], []]}
+        assert [(r["kind"], r["crop"], r["qty"])
+                for r in g._l1._classify_divergence(real, {"market": [[], []]})] == [
+            ("buy_seed_disappear", "CARROT", 2)]
+        # 换装内非空畸形仍 violation（fail-closed 不变）
+        assert [r["kind"] for r in g._l1._classify_divergence(
+            {"market": [["BUY_SEED"]]}, {"market": []})] == ["market"]
+    assert g._l1._classify_divergence is original     # try/finally 还原
+    # 还原后：L1 分类器恢复原口径（空槽数差=market violation）
+    assert [r["kind"] for r in g._l1._classify_divergence(base, cand)] == ["market"]
 
 
 # ---------------------------------------------------------------------------
@@ -373,13 +444,13 @@ def test_run_wiring_two_routes_terminal_and_evidence(tmp_path, monkeypatch):
         {"step": 700, "crop": "CARROT", "qty": 7}]
     assert subset_seen[0][0]["dropped"] == []
 
-    # evidence 协议 4.0：per_game 双路+终态产物 + 四面指标 + 步界登记
+    # evidence 协议 4.1：per_game 双路+终态产物 + 四面指标 + 步界登记
     assert got["evidence_path"] == str(ev) and os.path.isfile(ev)
     with open(ev, encoding="utf-8") as fh:
         evd = json.load(fh)
-    assert evd["protocol"] == "orderbook-l3-equivalence/4.0"
+    assert evd["protocol"] == "orderbook-l3-equivalence/4.1"
     assert evd["inputs"]["n_replays"] == 2
-    assert evd["inputs"]["step_boundary"] == 648
+    assert evd["inputs"]["step_boundary"] == 576
     assert evd["inputs"]["l3_main"] == "<callable>"
     assert [r["episode"] for r in evd["per_game"]] == [112400001, 112400002]
     assert evd["per_game"][0]["form"] == form[112400001]
@@ -388,26 +459,26 @@ def test_run_wiring_two_routes_terminal_and_evidence(tmp_path, monkeypatch):
     assert evd["per_game"][1]["terminal"]["l1"]["plants"] == {"CARROT": 3}
     assert evd["verdict"] == {"form_face": True, "result_face": True,
                               "subset": True, "cases": True, "passed": True}
-    assert evd["form_face"]["criteria"]["step_boundary"]["threshold"] == 648
+    assert evd["form_face"]["criteria"]["step_boundary"]["threshold"] == 576
     assert evd["result_face"]["dead_seeds_total_value"] == 40
-    assert evd["result_face"]["dead_seeds_cap"] == 900
+    assert evd["result_face"]["dead_seeds_cap"] == 2100
     assert evd["result_face"]["starve_free"] is True
     assert evd["cases"]["all_pass"] is True
     assert evd["subset"]["all_ok"] is True
     assert evd["subset_netting"]["note"]
 
 
-def test_run_dead_seeds_cap_900_wiring(tmp_path, monkeypatch):
+def test_run_dead_seeds_cap_rebaselined_wiring(tmp_path, monkeypatch):
     # 死种帽 900 接线：两局各死种 $500（CARROT×25）→ 合计 $1000 → 结果面红。
     corpus = _fake_corpus(tmp_path, [112400001, 112400002])
     form = {ep: _form_product(ep) for ep in (112400001, 112400002)}
     result = {ep: _result_product(ep) for ep in (112400001, 112400002)}
     _patch_leaves(monkeypatch, form, result,
-                  l3_term_by_ep={ep: _term(seeds={"CARROT": 25})
+                  l3_term_by_ep={ep: _term(seeds={"CARROT": 60})
                                  for ep in (112400001, 112400002)})
     got = g.run(corpus, _L3, _L1, _VB,
                 evidence_path=str(tmp_path / "ev.json"))
-    assert got["result_face"]["dead_seeds_total_value"] == 1000
+    assert got["result_face"]["dead_seeds_total_value"] == 2400
     assert got["result_face"]["ok"] is False and got["passed"] is False
     assert got["form_face"]["ok"] is True              # 面间不串红
 
@@ -503,13 +574,15 @@ def test_constructed_cases_l3_seven_cases():
         "c1_no_trunc_when_future_plant", "c2_trunc_when_no_opportunity",
         "c3_s671_boundary", "c4_clamp_trigger_demand_plus_two",
         "c5_day28_swap_no_starve", "c6_clamp_fallback_returns_buffer",
-        "c7_mode_a_dormant_zero_footprint", "all_pass"}
+        "c7_high_demand_zero_footprint", "all_pass"}
     assert got["all_pass"] is True
     for name in ("c1_no_trunc_when_future_plant", "c2_trunc_when_no_opportunity",
                  "c4_clamp_trigger_demand_plus_two", "c5_day28_swap_no_starve",
                  "c6_clamp_fallback_returns_buffer",
-                 "c7_mode_a_dormant_zero_footprint"):
+                 "c7_high_demand_zero_footprint"):
         assert got[name]["pass"] is True, (name, got[name]["evidence"])
     assert got["c3_s671_boundary"]["pass"] is True
     assert got["c3_s671_boundary"]["truncate_side"]["pass"] is True
     assert got["c3_s671_boundary"]["keep_side"]["pass"] is True
+    # c5 修订一轮增面：day24/26/27 收敛期激活同式（构造用例②补 day24 激活场景）
+    assert "day24 target=" in got["c5_day28_swap_no_starve"]["evidence"]

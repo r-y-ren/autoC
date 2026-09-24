@@ -5,8 +5,9 @@
 ① 门④形态扩展——gate_launch_l3._l3_truncation_form 直测（L1 严格口径红、
    L3 扩展集绿）+ 经 _extended_form 换装驱动 L1 门 _truncation_only_diff
    （monkeypatch 装载器/verbatim 路径，合成 719-obs 序列）：减量对绿/整单
-   消失+SELL 变化绿/步界 640<648 红/净增单与非 market 槽位漂移红；run 的
-   换装-还原接线（monkeypatch L1 门 run 为探针）。
+   消失+SELL 变化绿/空槽归一步绿（S6 伪差异形态）/步界 570<576 红/净增单与
+   非 market 槽位漂移红；run 的换装-还原接线（形态判定+layer_s_block
+   _CXS_FROM 步界进程内参数化 576/还原，monkeypatch L1 门 run 为探针）。
 ② 编排矩阵——verify_l13_gates 四门全 monkeypatch 假件：全绿→overall 真；
    任一门红→overall 假但四门全跑不短路；任一门抛异常→executed=False 门红
    其余门照跑；门② evidence 落点改指本包（复用不覆写 L1 包真台账）且跑后
@@ -84,6 +85,31 @@ def test_l3_form_extends_l1_strict_form():
         [], {"market": []}, _norm)[0] is False
 
 
+def test_l3_form_empty_slot_normalization():
+    # 空槽归一（R13 修订一轮）：[]/None 占位数量差=伪差异 → 归一后恒等绿；
+    # 剔空槽后实质差异照常分类；非空 len<3 畸形单仍红（fail-closed 不变）。
+    ok, detail = gate_launch_l3._l3_truncation_form(
+        {"market": [["SELL", "CARROT", 1], [], []]},
+        {"market": [["SELL", "CARROT", 1], [], [], []]}, _norm)
+    assert ok is True and "空槽" in detail
+    # None 与 [] 跨形占位
+    assert gate_launch_l3._l3_truncation_form(
+        {"market": [["BUY_SEED", "CARROT", 2], None]},
+        {"market": [["BUY_SEED", "CARROT", 2], []]}, _norm)[0] is True
+    # 空槽剔除后实质差异（减量对）照常判绿并携带形态摘要
+    ok, detail = gate_launch_l3._l3_truncation_form(
+        {"market": [["BUY_SEED", "CARROT", 8], []]},
+        {"market": [["BUY_SEED", "CARROT", 3], []]}, _norm)
+    assert ok is True and "CARROT 8->3" in detail
+    # 非空 len<3 畸形单不是空槽 → 红（other 卷不对称 / 结构异常）
+    for malformed in (["BUY_SEED"], ["BUY_SEED", "CARROT"]):
+        assert gate_launch_l3._l3_truncation_form(
+            {"market": [malformed]}, {"market": []}, _norm)[0] is False
+    assert gate_launch_l3._l3_truncation_form(
+        {"market": [["BUY_SEED", "CARROT", "x"]]},
+        {"market": []}, _norm)[0] is False
+
+
 class _FakeCheck:
     """L1 门 _truncation_only_diff 的 check 假件（norm_action 同源口径）。"""
 
@@ -131,28 +157,43 @@ def test_truncation_diff_reduce_pair_green(monkeypatch):
 
 
 def test_truncation_diff_whole_disappear_and_sell_change_green(monkeypatch):
-    # 整单消失 + SELL 变化同局绿（步 648 恰在界内：≥648 含端）。
+    # 整单消失 + SELL 变化同局绿（步 576 恰在界内：≥576 含端=day24 包络界）。
     base = {t: {"market": []} for t in range(719)}
     cand = {t: dict(base[t]) for t in range(719)}
-    base[648] = {"market": [["BUY_SEED", "WHEAT", 2], ["SELL", "CARROT", 5]]}
-    cand[648] = {"market": [["SELL", "CARROT", 4]]}
+    base[576] = {"market": [["BUY_SEED", "WHEAT", 2], ["SELL", "CARROT", 5]]}
+    cand[576] = {"market": [["SELL", "CARROT", 4]]}
     got = _run_truncation(monkeypatch, base, cand)
     assert got["ok"] is True
-    assert got["divergent_steps"] == [648]
+    assert got["divergent_steps"] == [576]
     assert got["all_divergent_steps_ge_threshold"] is True
+    assert got["threshold"] == 576                      # day24 包络（进程内参数化）
     assert got["dropped_detail"][0]["form"].startswith("BUY_SEED 整单消失")
 
 
+def test_truncation_diff_empty_slot_only_step_green(monkeypatch):
+    # 空槽归一接线：纯空槽数量差步（S6 伪差异形态）→ 步计入 divergent 但
+    # 形态绿（归一后恒等）、零 form_violations。
+    base = {t: {"market": []} for t in range(719)}
+    cand = {t: dict(base[t]) for t in range(719)}
+    base[670] = {"market": [["SELL", "CARROT", 1], [], []]}
+    cand[670] = {"market": [["SELL", "CARROT", 1], [], [], []]}
+    got = _run_truncation(monkeypatch, base, cand)
+    assert got["ok"] is True
+    assert got["divergent_steps"] == [670]
+    assert got["form_violations"] == []
+    assert "空槽" in got["dropped_detail"][0]["form"]
+
+
 def test_truncation_diff_step_boundary_red(monkeypatch):
-    # 步界红：差异步 640 < 648 → ok 假（all_divergent_steps_ge_threshold 假；
+    # 步界红：差异步 570 < 576 → ok 假（all_divergent_steps_ge_threshold 假；
     # 形态本身合法——红在步界面非形态面）。
     base = {t: {"market": []} for t in range(719)}
     cand = {t: dict(base[t]) for t in range(719)}
-    base[640] = {"market": [["BUY_SEED", "CARROT", 8]]}
-    cand[640] = {"market": [["BUY_SEED", "CARROT", 3]]}
+    base[570] = {"market": [["BUY_SEED", "CARROT", 8]]}
+    cand[570] = {"market": [["BUY_SEED", "CARROT", 3]]}
     got = _run_truncation(monkeypatch, base, cand)
     assert got["ok"] is False
-    assert got["min_divergent_step"] == 640
+    assert got["min_divergent_step"] == 570
     assert got["all_divergent_steps_ge_threshold"] is False
     assert got["form_violations"] == []               # 形态面无 violation
 
@@ -179,11 +220,14 @@ def test_truncation_diff_abnormal_form_red(base_step, cand_step, monkeypatch):
 
 
 def test_launch_run_installs_and_restores_form(tmp_path, monkeypatch):
-    # run 接线：调用期间 L1 门模块形态判定已换为 L3 扩展件（进程内），返回后
-    # 原样还原；返回契约沿 L1 门+form_extension 摘要（evidence 增记面不触假件
+    # run 接线：调用期间 L1 门模块形态判定已换为 L3 扩展件（进程内），且
+    # layer_s_block._CXS_FROM 参数化改指 576（day24 包络）；返回后原样还原；
+    # 返回契约沿 L1 门+form_extension 摘要（evidence 增记面不触假件
     # evidence_path=None 的路径分支）。
+    import layer_s_block
     seen = {}
     original = _l1g._seed_drop_form
+    original_from = layer_s_block._CXS_FROM
     payload = {"gates": {"load": True, "full_episodes": True,
                          "determinism": True, "package": True},
                "truncation_only_diff": {"ok": True,
@@ -193,24 +237,28 @@ def test_launch_run_installs_and_restores_form(tmp_path, monkeypatch):
     def probe_run(pkg_path=None, evidence_path=None):
         seen["form_is_l3"] = (_l1g._seed_drop_form
                               is gate_launch_l3._l3_truncation_form)
+        seen["cxs_from"] = layer_s_block._CXS_FROM
         seen["evidence_path"] = evidence_path
         return dict(payload)
 
     monkeypatch.setattr(_l1g, "run", probe_run)
     result = gate_launch_l3.run(str(tmp_path))
     assert seen["form_is_l3"] is True
+    assert seen["cxs_from"] == 576                     # 步界进程内参数化生效
     assert _l1g._seed_drop_form is original            # try/finally 还原
+    assert layer_s_block._CXS_FROM == original_from    # L1 原值还原（648）
     assert result["passed"] is True
     assert result["gates"] == payload["gates"]
     ext = result["form_extension"]
-    assert ext["step_boundary"]["threshold"] == 648
+    assert ext["step_boundary"]["threshold"] == 576
     assert set(ext["kinds"]) == {"buy_seed_whole_disappear",
                                  "buy_seed_reduce_pair", "sell_order_change"}
+    assert ext["empty_slot_normalization"]["applied"] is True
 
 
 def test_launch_run_augments_evidence_protocol(tmp_path, monkeypatch):
     # evidence 增记面：L1 门真写 evidence 后 run 增记 l3_form_extension 并升
-    # 协议 orderbook-l3-launch-fourgate/1.0（只增键不删四门字段）。
+    # 协议 orderbook-l3-launch-fourgate/1.1（只增键不删四门字段）。
     ev = tmp_path / "launch_check_evidence.json"
     ev.write_text(json.dumps({"protocol": "orderbook-l1-launch-fourgate/1.0",
                               "gates": {"load": True}}), encoding="utf-8")
@@ -221,9 +269,9 @@ def test_launch_run_augments_evidence_protocol(tmp_path, monkeypatch):
     result = gate_launch_l3.run(str(tmp_path))
     with open(ev, encoding="utf-8") as fh:
         evidence = json.load(fh)
-    assert evidence["protocol"] == "orderbook-l3-launch-fourgate/1.0"
+    assert evidence["protocol"] == "orderbook-l3-launch-fourgate/1.1"
     assert evidence["gates"] == {"load": True}        # 原字段不删改
-    assert evidence["l3_form_extension"]["step_boundary"]["threshold"] == 648
+    assert evidence["l3_form_extension"]["step_boundary"]["threshold"] == 576
     assert result["form_extension"]["kinds"] == evidence[
         "l3_form_extension"]["kinds"]
 
@@ -260,10 +308,10 @@ _EQUIV_PAYLOAD = {"form_face": {"ok": True, "appear_total": 1},
 _LAUNCH_PAYLOAD = {
     "gates": {"load": True, "full_episodes": True,
               "determinism": True, "package": True},
-    "truncation_only_diff": {"ok": True, "divergent_steps": [648, 700]},
+    "truncation_only_diff": {"ok": True, "divergent_steps": [576, 700]},
     "form_extension": {"kinds": ["buy_seed_whole_disappear",
                                  "buy_seed_reduce_pair", "sell_order_change"],
-                       "step_boundary": {"threshold": 648}},
+                       "step_boundary": {"threshold": 576}},
     "evidence_path": "/fake/launch_check_evidence.json",
 }
 _PAYLOADS = {"h2h": _H2H_PAYLOAD, "lineage": _LINEAGE_PAYLOAD,
@@ -338,7 +386,7 @@ def test_verify_l3_orchestration(pkg, monkeypatch):
     assert result["equivalence"]["dead_seeds_total_value"] == 120
     assert result["equivalence"]["starve_free"] is True
     assert result["launch"]["truncation_only_diff"]["n_divergent"] == 2
-    assert result["launch"]["form_extension"]["step_boundary"]["threshold"] == 648
+    assert result["launch"]["form_extension"]["step_boundary"]["threshold"] == 576
     assert result["evidence_dir"] == str(pkg / "evidence")
     assert re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}",
                         result["started"])

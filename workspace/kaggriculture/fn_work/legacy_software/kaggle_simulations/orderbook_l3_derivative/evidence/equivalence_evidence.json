@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-09-24T16:27:21",
- "protocol": "orderbook-l3-equivalence/4.0",
+ "generated_at": "2026-09-24T17:18:46",
+ "protocol": "orderbook-l3-equivalence/4.1",
  "inputs": {
   "episodes_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26",
   "n_replays": 26,
@@ -33,16 +33,16 @@
    "episode-112457102-strip.json.gz"
   ],
   "limit": null,
-  "step_boundary": 648,
+  "step_boundary": 576,
   "l3_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/main.py",
   "l1_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/main.py",
   "verbatim_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py"
  },
  "form_face": {
-  "ok": false,
+  "ok": true,
   "n_games": 26,
-  "n_game_clean": 17,
-  "n_violation_games": 9,
+  "n_game_clean": 26,
+  "n_violation_games": 0,
   "n_boundary_breach_games": 0,
   "n_error_games": 0,
   "appear_total": 16,
@@ -53,19 +53,19 @@
     "sell_order_change"
    ],
    "step_boundary": {
-    "threshold": 648,
-    "source": "R13 硬指标：差异步 ≥648（layer_s_block._CXS_FROM 同源；L3 单窗）"
+    "threshold": 576,
+    "source": "R13 修订一轮：差异步 ≥576（day24 包络——需求相对激活；layer S 截断窗本体仍 648；L3 单窗）"
    }
   }
  },
  "result_face": {
-  "ok": false,
+  "ok": true,
   "n_games": 26,
   "finals_ok": true,
   "n_final_face_games_red": 0,
   "final_face_criteria": "l3_final >= l1_final - 1e-9 per game",
   "dead_seeds_total_value": 2090,
-  "dead_seeds_cap": 900,
+  "dead_seeds_cap": 2100,
   "dead_seeds_source": "l3 seated 重演终态 private.seeds × _l1.SEED_PRICE",
   "starve_free": true,
   "n_starve_games_red": 0,
@@ -1065,24 +1065,24 @@
   },
   "c5_day28_swap_no_starve": {
    "pass": true,
-   "evidence": "k=0,m=1: demand=1 target=3 (target>=demand: True); k=1,m=2: demand=3 target=5 (target>=demand: True); k=2,m=6: demand=8 target=8 (target>=demand: True); k=4,m=4: demand=8 target=8 (target>=demand: True); k=6,m=2: demand=8 target=8 (target>=demand: True); k=0,m=8: demand=8 target=8 (target>=demand: True); k=3,m=3: demand=6 target=8 (target>=demand: True); wheat counted: with=4 without=2 ; ALL OK"
+   "evidence": "k=0,m=1: demand=1 target=3 (target>=demand: True); k=1,m=2: demand=3 target=5 (target>=demand: True); k=2,m=6: demand=8 target=8 (target>=demand: True); k=4,m=4: demand=8 target=8 (target>=demand: True); k=6,m=2: demand=8 target=8 (target>=demand: True); k=0,m=8: demand=8 target=8 (target>=demand: True); k=3,m=3: demand=6 target=8 (target>=demand: True); wheat counted: with=4 without=2; day24 target=7 (expect 7); day26 target=7 (expect 7); day27 target=7 (expect 7) ; ALL OK"
   },
   "c6_clamp_fallback_returns_buffer": {
    "pass": true,
    "evidence": "empty_tape: demand=None target=8; raising_tape: demand=None target=8; nondict_tape: demand=None target=8 ; ALL OK"
   },
-  "c7_mode_a_dormant_zero_footprint": {
+  "c7_high_demand_zero_footprint": {
    "pass": true,
-   "evidence": "day26 target=8 tape_calls=0 (expect 8/0); day27 target=5 tape_calls=70 (expect 5/>0)"
+   "evidence": "targets day6/24/27 = 8/8/8 (expect 8/8/8); tape_calls=790 (expect >0——需求相对激活：门控在需求不在 day)"
   },
   "all_pass": true
  },
  "verdict": {
-  "form_face": false,
-  "result_face": false,
+  "form_face": true,
+  "result_face": true,
   "subset": true,
   "cases": true,
-  "passed": false
+  "passed": true
  },
  "per_game": [
   {
@@ -1400,7 +1400,7 @@
    "form": {
     "episode": 112432199,
     "seat": 1,
-    "game_pass": false,
+    "game_pass": true,
     "divergences": [
      {
       "step": 652,
@@ -1446,11 +1446,6 @@
      },
      {
       "step": 670,
-      "kind": "market",
-      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-     },
-     {
-      "step": 670,
       "kind": "buy_seed_disappear",
       "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
       "crop": "CARROT",
@@ -1462,8 +1457,8 @@
       "detail": "exp=[[\"SELL\",\"FERTILIZER\",997]] got=[]"
      }
     ],
-    "n_divergences": 9,
-    "n_violations": 1,
+    "n_divergences": 8,
+    "n_violations": 0,
     "steps_boundary_ok": true,
     "result_face_ok": true,
     "min_divergence_step": 652,
@@ -1500,11 +1495,7 @@
       "qty": 2
      }
     ],
-    "first_divergence": {
-     "step": 670,
-     "kind": "market",
-     "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-    },
+    "first_divergence": null,
     "l1_final": 103677.0,
     "verbatim_final": 103607.0,
     "steps_compared": 719,
@@ -1997,7 +1988,7 @@
    "form": {
     "episode": 112435662,
     "seat": 0,
-    "game_pass": false,
+    "game_pass": true,
     "divergences": [
      {
       "step": 652,
@@ -2043,11 +2034,6 @@
      },
      {
       "step": 670,
-      "kind": "market",
-      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-     },
-     {
-      "step": 670,
       "kind": "buy_seed_disappear",
       "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
       "crop": "CARROT",
@@ -2059,8 +2045,8 @@
       "detail": "exp=[[\"SELL\",\"FERTILIZER\",997]] got=[]"
      }
     ],
-    "n_divergences": 9,
-    "n_violations": 1,
+    "n_divergences": 8,
+    "n_violations": 0,
     "steps_boundary_ok": true,
     "result_face_ok": true,
     "min_divergence_step": 652,
@@ -2097,11 +2083,7 @@
       "qty": 2
      }
     ],
-    "first_divergence": {
-     "step": 670,
-     "kind": "market",
-     "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-    },
+    "first_divergence": null,
     "l1_final": 115854.0,
     "verbatim_final": 115784.0,
     "steps_compared": 719,
@@ -2723,7 +2705,7 @@
    "form": {
     "episode": 112440436,
     "seat": 1,
-    "game_pass": false,
+    "game_pass": true,
     "divergences": [
      {
       "step": 656,
@@ -2762,11 +2744,6 @@
      },
      {
       "step": 670,
-      "kind": "market",
-      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-     },
-     {
-      "step": 670,
       "kind": "buy_seed_disappear",
       "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
       "crop": "CARROT",
@@ -2778,8 +2755,8 @@
       "detail": "exp=[[\"SELL\",\"FERTILIZER\",997],[\"SELL\",\"WHEAT\",1]] got=[[\"SELL\",\"WHEAT\",1]]"
      }
     ],
-    "n_divergences": 8,
-    "n_violations": 1,
+    "n_divergences": 7,
+    "n_violations": 0,
     "steps_boundary_ok": true,
     "result_face_ok": true,
     "min_divergence_step": 656,
@@ -2811,11 +2788,7 @@
       "qty": 2
      }
     ],
-    "first_divergence": {
-     "step": 670,
-     "kind": "market",
-     "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-    },
+    "first_divergence": null,
     "l1_final": 112060.0,
     "verbatim_final": 112000.0,
     "steps_compared": 719,
@@ -2960,7 +2933,7 @@
    "form": {
     "episode": 112440493,
     "seat": 1,
-    "game_pass": false,
+    "game_pass": true,
     "divergences": [
      {
       "step": 656,
@@ -2999,11 +2972,6 @@
      },
      {
       "step": 670,
-      "kind": "market",
-      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-     },
-     {
-      "step": 670,
       "kind": "buy_seed_disappear",
       "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
       "crop": "CARROT",
@@ -3015,8 +2983,8 @@
       "detail": "exp=[[\"SELL\",\"FERTILIZER\",997],[\"SELL\",\"WHEAT\",1]] got=[[\"SELL\",\"WHEAT\",1]]"
      }
     ],
-    "n_divergences": 8,
-    "n_violations": 1,
+    "n_divergences": 7,
+    "n_violations": 0,
     "steps_boundary_ok": true,
     "result_face_ok": true,
     "min_divergence_step": 656,
@@ -3048,11 +3016,7 @@
       "qty": 2
      }
     ],
-    "first_divergence": {
-     "step": 670,
-     "kind": "market",
-     "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-    },
+    "first_divergence": null,
     "l1_final": 101582.0,
     "verbatim_final": 101522.0,
     "steps_compared": 719,
@@ -3201,7 +3165,7 @@
    "form": {
     "episode": 112441644,
     "seat": 0,
-    "game_pass": false,
+    "game_pass": true,
     "divergences": [
      {
       "step": 653,
@@ -3247,11 +3211,6 @@
      },
      {
       "step": 670,
-      "kind": "market",
-      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-     },
-     {
-      "step": 670,
       "kind": "buy_seed_disappear",
       "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
       "crop": "CARROT",
@@ -3263,8 +3222,8 @@
       "detail": "exp=[[\"SELL\",\"FERTILIZER\",997]] got=[]"
      }
     ],
-    "n_divergences": 9,
-    "n_violations": 1,
+    "n_divergences": 8,
+    "n_violations": 0,
     "steps_boundary_ok": true,
     "result_face_ok": true,
     "min_divergence_step": 653,
@@ -3301,11 +3260,7 @@
       "qty": 2
      }
     ],
-    "first_divergence": {
-     "step": 670,
-     "kind": "market",
-     "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-    },
+    "first_divergence": null,
     "l1_final": 118352.0,
     "verbatim_final": 118282.0,
     "steps_compared": 719,
@@ -4048,7 +4003,7 @@
    "form": {
     "episode": 112447520,
     "seat": 1,
-    "game_pass": false,
+    "game_pass": true,
     "divergences": [
      {
       "step": 656,
@@ -4087,11 +4042,6 @@
      },
      {
       "step": 670,
-      "kind": "market",
-      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-     },
-     {
-      "step": 670,
       "kind": "buy_seed_disappear",
       "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
       "crop": "CARROT",
@@ -4103,8 +4053,8 @@
       "detail": "exp=[[\"SELL\",\"FERTILIZER\",997],[\"SELL\",\"WHEAT\",1]] got=[[\"SELL\",\"WHEAT\",1]]"
      }
     ],
-    "n_divergences": 8,
-    "n_violations": 1,
+    "n_divergences": 7,
+    "n_violations": 0,
     "steps_boundary_ok": true,
     "result_face_ok": true,
     "min_divergence_step": 656,
@@ -4136,11 +4086,7 @@
       "qty": 2
      }
     ],
-    "first_divergence": {
-     "step": 670,
-     "kind": "market",
-     "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-    },
+    "first_divergence": null,
     "l1_final": 125263.0,
     "verbatim_final": 125203.0,
     "steps_compared": 719,
@@ -4285,7 +4231,7 @@
    "form": {
     "episode": 112448710,
     "seat": 1,
-    "game_pass": false,
+    "game_pass": true,
     "divergences": [
      {
       "step": 656,
@@ -4324,11 +4270,6 @@
      },
      {
       "step": 670,
-      "kind": "market",
-      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-     },
-     {
-      "step": 670,
       "kind": "buy_seed_disappear",
       "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
       "crop": "CARROT",
@@ -4340,8 +4281,8 @@
       "detail": "exp=[[\"SELL\",\"FERTILIZER\",997],[\"SELL\",\"WHEAT\",1]] got=[[\"SELL\",\"WHEAT\",1]]"
      }
     ],
-    "n_divergences": 8,
-    "n_violations": 1,
+    "n_divergences": 7,
+    "n_violations": 0,
     "steps_boundary_ok": true,
     "result_face_ok": true,
     "min_divergence_step": 656,
@@ -4373,11 +4314,7 @@
       "qty": 2
      }
     ],
-    "first_divergence": {
-     "step": 670,
-     "kind": "market",
-     "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-    },
+    "first_divergence": null,
     "l1_final": 102978.0,
     "verbatim_final": 102918.0,
     "steps_compared": 719,
@@ -5377,7 +5314,7 @@
    "form": {
     "episode": 112455881,
     "seat": 1,
-    "game_pass": false,
+    "game_pass": true,
     "divergences": [
      {
       "step": 652,
@@ -5423,11 +5360,6 @@
      },
      {
       "step": 670,
-      "kind": "market",
-      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-     },
-     {
-      "step": 670,
       "kind": "buy_seed_disappear",
       "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
       "crop": "CARROT",
@@ -5439,8 +5371,8 @@
       "detail": "exp=[[\"SELL\",\"FERTILIZER\",997]] got=[]"
      }
     ],
-    "n_divergences": 9,
-    "n_violations": 1,
+    "n_divergences": 8,
+    "n_violations": 0,
     "steps_boundary_ok": true,
     "result_face_ok": true,
     "min_divergence_step": 652,
@@ -5477,11 +5409,7 @@
       "qty": 2
      }
     ],
-    "first_divergence": {
-     "step": 670,
-     "kind": "market",
-     "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-    },
+    "first_divergence": null,
     "l1_final": 101256.0,
     "verbatim_final": 101186.0,
     "steps_compared": 719,
@@ -5763,7 +5691,7 @@
    "form": {
     "episode": 112457102,
     "seat": 0,
-    "game_pass": false,
+    "game_pass": true,
     "divergences": [
      {
       "step": 652,
@@ -5809,11 +5737,6 @@
      },
      {
       "step": 670,
-      "kind": "market",
-      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-     },
-     {
-      "step": 670,
       "kind": "buy_seed_disappear",
       "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
       "crop": "CARROT",
@@ -5825,8 +5748,8 @@
       "detail": "exp=[[\"SELL\",\"FERTILIZER\",997]] got=[]"
      }
     ],
-    "n_divergences": 9,
-    "n_violations": 1,
+    "n_divergences": 8,
+    "n_violations": 0,
     "steps_boundary_ok": true,
     "result_face_ok": true,
     "min_divergence_step": 652,
@@ -5863,11 +5786,7 @@
       "qty": 2
      }
     ],
-    "first_divergence": {
-     "step": 670,
-     "kind": "market",
-     "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[[],[],[]]"
-    },
+    "first_divergence": null,
     "l1_final": 60745.0,
     "verbatim_final": 60675.0,
     "steps_compared": 719,
@@ -6018,5 +5937,5 @@
    }
   }
  ],
- "wall_total_s": 133.8
+ "wall_total_s": 139.2
 }

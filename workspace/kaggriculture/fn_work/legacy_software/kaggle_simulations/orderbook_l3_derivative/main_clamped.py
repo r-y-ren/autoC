@@ -4613,15 +4613,17 @@ def _ca_future_plant_demand(seat, step):
 
 
 def _ca_clamped_target(day, seat, step):
-    """R13 fine 钳制目标项（激活窗 day>=27 内替换 _CA_BUFFER 的值，永不抛）。
+    """R13 fine 钳制目标项（无条件替换 _CA_BUFFER 的值，永不抛）。
 
-    需求 None（读不到/异常）-> _CA_BUFFER（回退原目标=q 原公式行为，fail-safe）；否则
-    min(8, 需求+2)（+2 安全边：day28 仍可 swap 的小麦槽保消耗不饿种，分析12 耦合清单②）。
-    day<27 防御性直回 _CA_BUFFER（激活窗双保险；表达式侧 IfExp 已门控）。day/seat/step
-    为行内作用域实参（responsibility.md `_ca_future_plant_demand(<上下文>)` 占位落地）。"""
+    需求 None（读不到/异常）-> _CA_BUFFER（回退原目标=q 原公式行为，fail-safe）；
+    否则 min(8, 需求+2)（+2 安全边：day28 仍可 swap 的小麦槽保消耗不饿种，
+    分析12 耦合清单②）。**需求相对激活（2026-09-24 修订一轮）**：任何 day 都按
+    min 取值——需求+2>=8 时 min 自然等于原目标 _CA_BUFFER（零足迹），需求走低的
+    天（含 day24-26 收敛期）即早于旧 day>=27 硬窗收敛囤积（旧防御分支已删，
+    无条件调用）。day/seat/step 为行内作用域实参（responsibility.md
+    `_ca_future_plant_demand(<上下文>)` 占位落地；day 现仅保持注入位契约签名，
+    激活不再以 day 键控）。"""
     try:
-        if int(day) < 27:
-            return _CA_BUFFER
         demand = _ca_future_plant_demand(seat, step)
         if demand is None:
             return _CA_BUFFER
@@ -4736,7 +4738,7 @@ def agent(observation, configuration=None):
         if _CA_FROM <= day <= _CA_TO - 1 and pays_now and len(market) < 10:
             have = int(priv["seeds"].get("CARROT", 0)) - sum(1 for c in units if c[:2] == ["PLANT", "CARROT"])
             buying = sum(int(o[2]) for o in market if len(o) >= 3 and o[:2] == ["BUY_SEED", "CARROT"])
-            q = (min(_CA_BUFFER, _ca_clamped_target(day, seat, step)) if day >= 27 else _CA_BUFFER) - have - buying
+            q = min(_CA_BUFFER, _ca_clamped_target(day, seat, step)) - have - buying
             if q > 0 and int(farm.get("money", 0)) >= _CA_CASH + 20 * q:
                 market.append(["BUY_SEED", "CARROT", q])
                 st["spare_carrot"] += q

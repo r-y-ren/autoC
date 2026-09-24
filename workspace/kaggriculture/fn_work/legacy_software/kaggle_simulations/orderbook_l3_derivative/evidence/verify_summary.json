@@ -1,10 +1,10 @@
 {
- "overall": false,
+ "overall": true,
  "h2h": {
   "passed": true,
   "executed": true,
   "error": null,
-  "wall_s": 118.4,
+  "wall_s": 128.0,
   "n": 16,
   "wins": 8,
   "rate": 1.0,
@@ -23,7 +23,7 @@
   "passed": true,
   "executed": true,
   "error": null,
-  "wall_s": 106.7,
+  "wall_s": 112.5,
   "per_opponent": {
    "v48-pure": {
     "n": 8,
@@ -50,12 +50,12 @@
   "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/evidence/lineage_evidence.json"
  },
  "equivalence": {
-  "passed": false,
+  "passed": true,
   "executed": true,
   "error": null,
-  "wall_s": 133.8,
-  "form_face": false,
-  "result_face": false,
+  "wall_s": 139.2,
+  "form_face": true,
+  "result_face": true,
   "dead_seeds_total_value": 2090,
   "starve_free": true,
   "subset": true,
@@ -67,7 +67,7 @@
   "passed": true,
   "executed": true,
   "error": null,
-  "wall_s": 22.0,
+  "wall_s": 22.9,
   "gates": {
    "load": true,
    "full_episodes": true,
@@ -89,19 +89,23 @@
     "sell_order_change"
    ],
    "step_boundary": {
-    "threshold": 648,
-    "source": "L1 门内 layer_s_block._CXS_FROM 实判（同源）"
+    "threshold": 576,
+    "source": "R13 修订一轮：day24 包络——_extended_form 期间进程内参数化 layer_s_block._CXS_FROM 改指 576（try/finally 还原 L1 原值 648；layer S 截断窗本体仍 648）"
+   },
+   "empty_slot_normalization": {
+    "applied": true,
+    "note": "market 单比较前剔除 []/None 空槽占位（两侧归一）；归一后恒等=绿（伪差异）；非空 len<3 畸形单仍 violation"
    },
    "candidate_callable": "_cxs_agent",
    "baseline_callable": "_cxd_agent",
-   "note": "R12 留档缺口修复：减量对（同品项 disappear≥appear 同步）与 SELL 变化入合法形态集；净增单/跨品项顶替/槽位重排仍红",
-   "wall_s": 22.0
+   "note": "R12 留档缺口修复：减量对（同品项 disappear≥appear 同步）与 SELL 变化入合法形态集；净增单/跨品项顶替/槽位重排仍红；R13 修订一轮：空槽归一+步界 576 包络",
+   "wall_s": 22.9
   },
   "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/evidence/launch_check_evidence.json"
  },
  "evidence_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/evidence",
- "started": "2026-09-24T16:21:22",
- "finished": "2026-09-24T16:27:43",
+ "started": "2026-09-24T17:12:26",
+ "finished": "2026-09-24T17:19:09",
  "protocol": "verify-l13-gates/1.0",
  "pkg_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative",
  "episodes_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26",
@@ -109,7 +113,7 @@
  "gates_passed": {
   "h2h": true,
   "lineage": true,
-  "equivalence": false,
+  "equivalence": true,
   "launch": true
  },
  "evidence_files": {
@@ -130,7 +134,7 @@
   "l1_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/main.py",
   "verbatim_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
   "sha256": {
-   "l3_main": "340229db2a8ec7e182fc32e11a8c7e287840905c9bd91e7766dfa48a189569fa",
+   "l3_main": "88f9a82fb2ff37b9d6e56d1504515d71e97a4bb37c558c35052ffde133ca036b",
    "l1_main": "dc6412f52aa242e173c47069b7a97b96e35343c9e82fc2a9b4d51a07f530ff33",
    "verbatim_main": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab"
   }

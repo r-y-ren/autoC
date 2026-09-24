@@ -8,15 +8,19 @@
    CLAMP_HELPER_SRC 独立 exec（伪上下文注入 _ca_tape/_CA_BUFFER/_CA_TO）：
    route2 后缀 k 个 PLANT,CARROT + day≤28 小麦槽 m → min(8, k+m+2)；磁带读不到/异常 → 8；
    后缀边界（≥step）与天窗边界（小麦限 day≤28、胡萝卜不限天）；
-   test_fine_expression_wiring：fine 产物真替换行 exec——day27 走 min(...) 分支、
-   day26 走原 _CA_BUFFER 分支（helper 不被调用）。
+   test_fine_expression_wiring：fine 产物真替换行 exec——目标项**无条件** min
+   （day27/day26 都调 helper，实参直传；helper=8 时 q 与基座行恒等=零足迹）。
 ③ test_coarse_targets_day26_27：coarse 产物真替换行 exec：day26→q=8-have-buying、
    day27→q=2-have-buying（目标 8/2）。
 ④ test_five_zones_constant：两模式 diff 全落授权区段 [4469,4734]；区锚函数源段恒等；
    基座原件零改动。
-⑤ test_day_lt_27_ifexp_else_is_buffer：AST 断言——IfExp.test=day>=27、orelse=Name
-   _CA_BUFFER（day<27 走原目标）；fine body=min(_CA_BUFFER,_ca_clamped_target(day,seat,step))、
-   coarse body=Constant 2；全卷 q 赋值计数与基座一致（仅一处在形态上变为 IfExp 目标项）。
+⑤ test_q_target_ast_shape_per_mode：AST 断言——fine 目标项=无条件 Call
+   min(_CA_BUFFER,_ca_clamped_target(day,seat,step))（无 IfExp；需求相对激活）；
+   coarse 目标项=IfExp(day>=27, 2, Name _CA_BUFFER)（R13-b 硬窗不变）；全卷 q
+   赋值计数与基座一致（仅一处在形态上变为 mode 分形目标项）。
+⑤b test_demand_scan_runtime_budget：无条件 min 的 day<24 磁带扫描实测耗时
+   （真产物 exec + 生产态 _ca_tape，最坏 step=144）<10ms/步——不加廉价门的
+   取舍留档（实测 ~0.5ms 级）。
 ⑥ test_build_fine_full_chain_products + test_build_fine_dual_injection_diff_audit：
    build("fine") 全链真跑一次（隔离 out_dir；inject 六校验+append 四校验+双跑打包全在
    链内）——三产物+中间产物+manifest 契约（schema/描述文案/mode/占位 pending S6）与盘上
@@ -34,6 +38,7 @@ import hashlib
 import json
 import tarfile
 import textwrap
+import time
 from pathlib import Path
 
 import pytest
@@ -150,7 +155,8 @@ def test_fine_helper_semantics_pseudo_tape(k, m, expected):
 
 
 def test_fine_helper_fallbacks():
-    # ② 磁带读不到→8（回退原目标）；异常→8；后缀/天窗边界；day<27 防御性回退。
+    # ② 磁带读不到→8（回退原目标）；异常→8；后缀/天窗边界；day<27 需求相对取值
+    # （修订一轮：防御分支已删，任何 day 都走 min(8, 需求+2)）。
     empty = _pseudo_ns({})
     assert empty["_ca_future_plant_demand"](0, 650) is None  # 后缀无可读步条目
     assert empty["_ca_clamped_target"](27, 0, 650) == 8
@@ -169,13 +175,18 @@ def test_fine_helper_fallbacks():
     assert ns["_ca_clamped_target"](27, 0, 650) == 2
     ns = _pseudo_ns({700: {"farmer": ["PLANT", "CARROT"], "hands": []}})
     assert ns["_ca_clamped_target"](27, 0, 650) == 3
-    # day<27：helper 防御性直回 _CA_BUFFER（激活窗双保险）
+    # day<27：需求相对取值（min 恒走，无 day 键控）——k=5 → min(8,7)=7；
+    # 需求充足（k≥6）→ 8=原目标（零足迹）
     ns = _pseudo_ns(_tape_with(k_carrot=5))
-    assert ns["_ca_clamped_target"](26, 0, 648) == 8
+    assert ns["_ca_clamped_target"](26, 0, 648) == 7
+    assert ns["_ca_clamped_target"](6, 0, 144) == 7
+    ns = _pseudo_ns(_tape_with(k_carrot=6))
+    assert ns["_ca_clamped_target"](24, 0, 576) == 8
 
 
 def test_fine_expression_wiring(products):
-    # ②b fine 产物真替换行 exec：day27 走 min(...) 分支；day26 走原 _CA_BUFFER 且 helper 不被调用。
+    # ②b fine 产物真替换行 exec：目标项**无条件** min（day27/day26 都走 helper）；
+    # helper 回 8（需求充足）时 q 与基座行恒等（零足迹）。
     path, report = products["fine"]
     out_lines = _lines(path)
     new_q = out_lines[report["change_set"]["audit"]["replaced_line_span_out"][0] - 1]
@@ -192,13 +203,19 @@ def test_fine_expression_wiring(products):
     exec(compile(textwrap.dedent(new_q), "<fine_q>", "exec"), g)
     assert called == [(27, 3, 660)]
     assert g["q"] == 2
-    # day26：IfExp 走 orelse=原 _CA_BUFFER → q = 8 - 3 = 5；helper 零调用（行为与基座行恒等）
+    # day26：需求相对激活（修订一轮）——helper 同样被调用 → q = 5 - 2 - 1 = 2
     called.clear()
     g = {"day": 26, "seat": 3, "step": 26 * 24 + 12, "have": 2, "buying": 1,
          "_CA_BUFFER": 8, "_ca_clamped_target": fake_target}
     exec(compile(textwrap.dedent(new_q), "<fine_q>", "exec"), g)
-    assert called == []
-    assert g["q"] == 5
+    assert called == [(26, 3, 26 * 24 + 12)]
+    assert g["q"] == 2
+    # 需求充足（helper=8）：min(8,8)=8 → q 与基座行为恒等（零足迹），helper 仍被调用
+    called.clear()
+    g = {"day": 24, "seat": 0, "step": 576, "have": 3, "buying": 1,
+         "_CA_BUFFER": 8, "_ca_clamped_target": lambda *a: called.append(a) or 8}
+    exec(compile(textwrap.dedent(new_q), "<fine_q>", "exec"), g)
+    assert g["q"] == 4 and called  # 8-3-1=4；表达式仍写但行为同原式
 
 
 def test_coarse_targets_day26_27(products):
@@ -235,8 +252,10 @@ def test_five_zones_constant(products):
     assert hashlib.sha256(_BASE.read_bytes()).hexdigest() == _BASE_SHA256  # 基座原件零改动
 
 
-def test_day_lt_27_ifexp_else_is_buffer(products):
-    # ⑤ day<27 表达式走原 _CA_BUFFER：AST 断言 IfExp 分支。
+def test_q_target_ast_shape_per_mode(products):
+    # ⑤ 目标项 AST 分形（修订一轮）：fine=无条件 Call min(_CA_BUFFER,
+    # _ca_clamped_target(day, seat, step))（无 IfExp 门控）；coarse=IfExp(day>=27,
+    # 2, Name _CA_BUFFER)（R13-b 硬窗不变）。
     for mode, (path, _report) in products.items():
         tree = ast.parse(path.read_text(encoding="utf-8"))
         hits = []
@@ -244,28 +263,57 @@ def test_day_lt_27_ifexp_else_is_buffer(products):
             v = node.value
             if (isinstance(v, ast.BinOp) and isinstance(v.op, ast.Sub)
                     and isinstance(v.left, ast.BinOp) and isinstance(v.left.op, ast.Sub)
-                    and isinstance(v.left.left, ast.IfExp)):
+                    and isinstance(v.left.right, ast.Name) and v.left.right.id == "have"
+                    and isinstance(v.right, ast.Name) and v.right.id == "buying"):
                 hits.append((node, v))
-        assert len(hits) == 1  # 全卷恰一处 IfExp 目标项
+        assert len(hits) == 1  # 全卷恰一处 <目标项> - have - buying
         node, v = hits[0]
         assert node.lineno == 4695 + len(_HELPER_LINES) + 2  # 替换行产物行号（4695+插入块位移）
-        assert isinstance(v.left.right, ast.Name) and v.left.right.id == "have"
-        assert isinstance(v.right, ast.Name) and v.right.id == "buying"
-        ifexp = v.left.left
-        assert (isinstance(ifexp.test, ast.Compare) and isinstance(ifexp.test.left, ast.Name)
-                and ifexp.test.left.id == "day" and isinstance(ifexp.test.ops[0], ast.GtE)
-                and ifexp.test.comparators[0].value == 27)
-        assert isinstance(ifexp.orelse, ast.Name) and ifexp.orelse.id == "_CA_BUFFER"  # day<27→原目标
+        target = v.left.left
         if mode == "fine":
-            body = ifexp.body
-            assert (isinstance(body, ast.Call) and body.func.id == "min" and len(body.args) == 2
-                    and isinstance(body.args[0], ast.Name) and body.args[0].id == "_CA_BUFFER"
-                    and body.args[1].func.id == "_ca_clamped_target"
-                    and [a.id for a in body.args[1].args] == ["day", "seat", "step"])
+            # 无条件 min：Call(min, [_CA_BUFFER, _ca_clamped_target(day, seat, step)])
+            assert (isinstance(target, ast.Call) and target.func.id == "min"
+                    and len(target.args) == 2
+                    and isinstance(target.args[0], ast.Name)
+                    and target.args[0].id == "_CA_BUFFER"
+                    and isinstance(target.args[1], ast.Call)
+                    and target.args[1].func.id == "_ca_clamped_target"
+                    and [a.id for a in target.args[1].args] == ["day", "seat", "step"])
+            assert not any(isinstance(n, ast.IfExp) for n in ast.walk(v)), \
+                "fine 目标项不应再含 IfExp 门控（需求相对激活）"
         else:
-            assert isinstance(ifexp.body, ast.Constant) and ifexp.body.value == 2
-        # 全卷 q 赋值计数与基座一致（18）：手术只改形态，不增删语句
+            # coarse：IfExp(day>=27, 2, _CA_BUFFER)——硬窗不变
+            assert (isinstance(target, ast.IfExp)
+                    and isinstance(target.test, ast.Compare)
+                    and target.test.left.id == "day"
+                    and isinstance(target.test.ops[0], ast.GtE)
+                    and target.test.comparators[0].value == 27
+                    and isinstance(target.body, ast.Constant) and target.body.value == 2
+                    and isinstance(target.orelse, ast.Name)
+                    and target.orelse.id == "_CA_BUFFER")
+        # 全卷 q 赋值计数与基座一致：手术只改形态，不增删语句
         assert len(_q_assigns(tree)) == len(_q_assigns(ast.parse(_BASE.read_text(encoding="utf-8"))))
+
+
+def test_demand_scan_runtime_budget(products):
+    # 修订一轮取舍实测：无条件 min 使 day<24 也调 _ca_future_plant_demand（磁带
+    # 扫描）——对真产物整卷 exec 后用生产态 _ca_tape/_IMPL 实测最坏长度扫描
+    # （step=144，576 步后缀）耗时，须 <10ms/步（廉价门阈值）；实测 ~0.5ms 级
+    # → 不加 day 门（报告见 evidence/verify_summary.json 环境）。
+    path, _report = products["fine"]
+    ns = {}
+    exec(compile(path.read_bytes(), str(path), "exec"), ns)
+    # 生产态：chassis 已在 import 期解码；players 填一个席位使 _ca_tape 走真路径
+    ns["_IMPL"].chassis.players.setdefault(0, {"route": 0})
+    fpd = ns["_ca_future_plant_demand"]
+    best = None
+    for _ in range(7):
+        t0 = time.perf_counter()
+        for _ in range(20):
+            fpd(0, 144)          # 最坏：day6 起后缀全长 576 步
+        dt = (time.perf_counter() - t0) / 20
+        best = dt if best is None or dt < best else best
+    assert best < 0.010, f"磁带扫描 {best * 1000:.3f} ms/步 ≥ 10ms 预算（需加廉价门）"
 
 
 # ---------------- ⑥⑦⑧ build_l13_candidate 双注入构建全链（R13 L0；不动上方既有组） ----------------
