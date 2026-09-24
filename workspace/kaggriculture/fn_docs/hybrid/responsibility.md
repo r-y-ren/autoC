@@ -547,3 +547,105 @@
   - 调用方：见上。
   - tested 策略：自有单测（抽样种子可复现）。
   - 核验命令：测试: orderbook_surge_lab/test_corpus.py。
+
+
+---
+
+## 【R15 增补·2026-09-24】反周期产线 mix 判决实验（参数扫描+双层）
+
+## 结构概览（增补）
+- run_mix_judgment ← R15
+  - phase_m_market_map
+    - item_price_percentile
+    - rank_swap_pairs
+  - generate_mix_variants
+    - build_variant_schedule
+    - check_variant_feasibility
+    - build_variant_main
+  - openloop_replay_variants
+  - closedloop_probe
+  - judge_mix_verdicts
+- select_corpus_r15（共享，编排/重演共用）
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R15 | run_mix_judgment |
+
+## 功能块 run_mix_judgment ← R15
+（块引言：反周期 mix 判决实验编排——Phase M 市场地图法证（86 局品项价格分位×全家族供给密度全景，无合格置换对即 KILLED 短路）→ generate_mix_variants 参数扫描变体生成（≤16 个，复用 R9 giant_route 排程/可行性/磁带手术工具，产物落 orderbook_mix_lab/variants/，零改动既有目录）→ openloop_replay_variants 开环重演主判据（26 败局双席位+10 胜局无害臂，对手席=录像开环重放；重演执行复用 R14 实验室 replay_dual_seat，只调用不重写）→ closedloop_probe 闭环副证（开环 POSITIVE 变体 vs 原版 L3 对镜像近亲 5 局双席位直接对打——R9 市场耦合补丁）→ judge_mix_verdicts 三出口判据 → evidence JSON（orderbook_mix_lab/evidence/mix_judgment.json）。fail-closed：任一组件不可执行=整体 fail。不上线不提交。）
+
+- **run_mix_judgment** [L0|新增]
+  - 职责：编排裁决——select_corpus_r15 定语料 → phase_m_market_map 出市场地图与置换对排序（零合格对→KILLED 短路出 evidence）→ generate_mix_variants 扫描生成变体（全部不可行→KILLED）→ openloop_replay_variants 跑开环主判据 → closedloop_probe 对开环 POSITIVE 变体跑闭环副证 → judge_mix_verdicts 三出口 → evidence JSON（source 可复跑/市场地图/逐变体构建与可行性/开环逐局 Δ/闭环副证/verdict）。
+  - 签名意图：输入: 无（CLI，参数=语料目录/幅度档/变体上限） / 输出: evidence JSON+控制台摘要 / 错误: 任一组件 fail-closed 即整体 fail。
+  - 调用方：操作者。
+  - tested 策略：上游覆盖: 各组件。
+  - 核验命令：测试: orderbook_mix_lab/test_run_mix_judgment.py（编排+短路+evidence schema 组）。
+  - **phase_m_market_map** [L1|新增]
+    - 职责：市场地图——复用 R14 daily_netflow_decompose（只调用）重算 86 局逐日品项价/量/双席供给 → item_price_percentile 逐品项全程价格轨迹与分位 → rank_swap_pairs 置换对排序+产能窗图谱；输出 Phase M 报告 JSON。
+    - 签名意图：输入: 回放目录 / 输出: {items:{price_pct_series, supply_density}, swap_pairs_ranked, capacity_windows} / 错误: 单局失败记录不中断。
+    - 调用方：run_mix_judgment。
+    - tested 策略：自有单测。
+    - 核验命令：测试: orderbook_mix_lab/test_phase_m.py。
+    - **item_price_percentile** [L2|新增]
+      - 职责：单品项统计——该品在语料全_season 的逐日价格→全程分位轨迹（滚动分位窗口参数化）、崩价/稀缺判定阈值（低分位+高供给密度=崩价品；高分位=稀缺品）。
+      - 签名意图：输入: 逐日品项价量表 / 输出: {pct_series, structural_low:bool, structural_high:bool} / 错误: 数据缺→None。
+      - 调用方：phase_m_market_map。
+      - tested 策略：自有单测（构造崩价/稀缺/中性三态）。
+      - 核验命令：测试: orderbook_mix_lab/test_phase_m.py（percentile 组）。
+    - **rank_swap_pairs** [L2|新增]
+      - 职责：置换对排序——崩价品×稀缺品全组合按（价格分位差×可置换产能）排序，输出 top 对与产能窗（哪些天的哪些品项窗口可迁）；空集=KILLED 依据。
+      - 签名意图：输入: 市场地图品项统计 / 输出: [{from,to,expected_gain, windows}] / 错误: 无（空集即结果）。
+      - 调用方：phase_m_market_map。
+      - tested 策略：自有单测（有对/无对两例）。
+      - 核验命令：测试: orderbook_mix_lab/test_phase_m.py（swap 组）。
+  - **generate_mix_variants** [L1|新增]
+    - 职责：变体生成编排——置换对×幅度档（{10%,20%,30%}）展开参数点（上限 16）→ build_variant_schedule 逐点排程 → check_variant_feasibility 逐个校验（不可行弃并记录）→ build_variant_main 磁带手术产变体 main.py；输出变体清单与构建审计。
+    - 签名意图：输入: 置换对排序+幅度档 / 输出: {variants:[{id, pair, scale, schedule, main_path, feasible}]} / 错误: 全不可行→KILLED 依据。
+    - 调用方：run_mix_judgment。
+    - tested 策略：自有单测。
+    - 核验命令：测试: orderbook_mix_lab/test_variant_gen.py。
+    - **build_variant_schedule** [L2|新增]
+      - 职责：单变体排程——复用 giant_route gen_schedule（只读调用/取材）：按置换对把 from 品产能窗的 X% 迁给 to 品，产逐日买/建/雇/种计划；保持劳动/现金/棚容约束在排程层可满足。
+      - 签名意图：输入: 置换对+幅度+原排程基线 / 输出: 变体逐日排程 JSON / 错误: gen_schedule 失败→该变体弃。
+      - 调用方：generate_mix_variants。
+      - tested 策略：自有单测（构造小排程）。
+      - 核验命令：测试: orderbook_mix_lab/test_variant_gen.py（schedule 组）。
+    - **check_variant_feasibility** [L2|新增]
+      - 职责：可行性校验——变体排程孪生空跑（劳动 op/现金/棚容/停时逐日校验，沿 giant_route feasibility 口径），不可行日逐条报。
+      - 签名意图：输入: 变体排程 / 输出: {feasible:bool, violations:[...]} / 错误: 空跑崩溃→不可行。
+      - 调用方：generate_mix_variants。
+      - tested 策略：自有单测（可行/不可行夹具）。
+      - 核验命令：测试: orderbook_mix_lab/test_variant_gen.py（feasibility 组）。
+    - **build_variant_main** [L2|新增]
+      - 职责：变体 main 构建——按变体排程做磁带产线事件手术（沿 giant_route build_v6 受控变更集方法）：L3 基座副本上改写对应 BUY_SEED/PLANT 事件并保留路由/反应层/清仓结构，装载链与确定性自检；产物落 variants/（基座与在飞件零改动）。
+      - 签名意图：输入: 变体排程+L3 基座路径 / 输出: 变体 main.py+diff 审计 / 错误: 手术超界即弃。
+      - 调用方：generate_mix_variants。
+      - tested 策略：自有单测（小磁带夹具）。
+      - 核验命令：测试: orderbook_mix_lab/test_variant_gen.py（build 组）。
+  - **openloop_replay_variants** [L1|新增]
+    - 职责：开环重演编排——语料 26 败局×双席位+10 胜局原席位，对照臂=原版 L3（与 R14 重合局可复用其对照数据并复算抽验）；逐变体逐局逐席位调 R14 replay_dual_seat（只调用）重演，Δ=同局同席 margin(变体)−margin(对照)；异常重跑一次仍败=红。
+    - 签名意图：输入: 变体清单+语料 / 输出: {per_variant:{per_game:{seats, margin, delta}}} / 错误: 单局红=该变体 fail-closed。
+    - 调用方：run_mix_judgment。
+    - tested 策略：自有单测（mock replay）。
+    - 核验命令：测试: orderbook_mix_lab/test_openloop.py。
+  - **closedloop_probe** [L1|新增]
+    - 职责：闭环副证——对每个开环 POSITIVE 变体：镜像近亲 5 局做 变体 vs 原版 L3 双席位直接对打（twin 引擎，对手可反应），统计互胜与 margin 分布。
+    - 签名意图：输入: POSITIVE 变体清单+镜像局集 / 输出: {per_variant:{games, wins, rate, margins}} / 错误: 引擎异常→该局重跑一次。
+    - 调用方：run_mix_judgment。
+    - tested 策略：自有单测（mock 引擎）。
+    - 核验命令：测试: orderbook_mix_lab/test_closedloop.py。
+  - **judge_mix_verdicts** [L1|新增]
+    - 职责：三出口判据——逐变体：败局 ≥2/3 翻正+胜局重损违例 ≤2（Δ<−100）+败局 Δ 中位>0 → 开环 POSITIVE；开环 POSITIVE 且闭环互胜 ≥0.5 无系统性负 → 变体 POSITIVE；任一变体 POSITIVE→R15=POSITIVE（记胜出变体）；全败→NEGATIVE；KILLED 由编排短路给定。附判据敏感度（2/3 vs 3/5；中位>0 vs 均值>0）。
+    - 签名意图：输入: 开环结果+闭环副证 / 输出: {per_variant, overall, winning_variant, sensitivity} / 错误: 语料缺失=fail。
+    - 调用方：run_mix_judgment。
+    - tested 策略：自有单测（正/负/KILLED 判例）。
+    - 核验命令：测试: orderbook_mix_lab/test_judge_mix.py。
+
+## 共享函数（增补）
+- **select_corpus_r15**（调用方：run_mix_judgment, openloop_replay_variants, closedloop_probe）
+  - 职责：语料选择——26 败局（29 排 3 早崩[112844424/112846785/112847952 由 d10 margin 判定]）+10 抽样胜局（r32/r33 各 5，rng.Random(20260925r15)）+5 镜像近亲局（闭环用，|margin|<400 且资金差<2% 的 r33 败局/平局池抽取，rng 同种子独立抽样）；缺回放=fail-closed 列出。
+  - 签名意图：输入: 回放目录+audit 数据 / 输出: {losses26:[...], wins10:[...], mirror5:[...]} / 错误: 语料缺失=fail。
+  - 调用方：见上。
+  - tested 策略：自有单测（抽样可复现）。
+  - 核验命令：测试: orderbook_mix_lab/test_corpus_r15.py。
