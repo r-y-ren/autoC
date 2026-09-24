@@ -30,7 +30,10 @@
 ⑦ test_build_coarse_isolated_mode_diff：coarse 隔离 out_dir 构建真跑——产物齐、
    manifest mode=coarse；两模式终产物 diff 恰一 replace 单行（q 目标项原位差异）。
 ⑧ test_build_identity_chain_base_zero_change：身份链（基座 main/tar、L1 块、盘上
-   产物 sha 全数钉住）与基座零改动。"""
+   产物 sha 全数钉住）与基座零改动。
+⑨ 变体组（R13 第二次调参）：tuned/lean=小麦槽权重 0.5/0.0——helper 源加权语义
+   矩阵（demand=k+m×weight）/fail-safe 与天窗不变/变更集同构+audit 权重/build
+   全链产物+manifest wheat_slot_weight+q 行无条件 min AST+主产物发射态 sha 绊网。"""
 
 import ast
 import difflib
@@ -54,6 +57,9 @@ _HELPER_LINES = inject_controller_clamp.CLAMP_HELPER_SRC.splitlines(keepends=Tru
 _L3_BLOCK = _HERE.parent / "orderbook_l1_derivative" / "layer_s_block.py"
 _L3_BLOCK_SHA256 = "2f3553fe4b2df6213cdc1377b2fa9299ece92506291f4ed8f547640c4e2bbfcd"
 _BASE_TAR_SHA256 = "2838cc66e5d3f719569108fa553c9cf9acf8190d0662f8d991856560e6e9641c"
+# 发射态主产物指纹（R13 第二次调参变体构建的零改动绊网；build_manifest.json 同源）
+_MAIN_SHA256 = "88f9a82fb2ff37b9d6e56d1504515d71e97a4bb37c558c35052ffde133ca036b"
+_TAR_SHA256 = "e072a87723d83220aa3f8c40442ef7aac4f8c8203f9604a35238bd95b591ff58"
 
 
 @pytest.fixture(scope="module")
@@ -451,3 +457,127 @@ def test_build_identity_chain_base_zero_change(l3_built):
              if "build_l13" in p.name or "inject_controller_clamp" in p.name
              or p.name == "main_clamped.py"]
     assert _leak == []
+
+
+# ---------------- ⑨ R13 第二次调参变体（tuned/lean：小麦槽权重 0.5/0.0） ----------------
+
+
+@pytest.fixture(scope="module")
+def variant_products(tmp_path_factory):
+    """一次性两变体真注入（inject 内部六校验全跑，含整卷 exec）。"""
+    out = {}
+    for mode in ("tuned", "lean"):
+        path = tmp_path_factory.mktemp(f"l4_{mode}") / "main_clamped.py"
+        out[mode] = (path, inject_controller_clamp.inject(_BASE, mode, out_path=path))
+    return out
+
+
+def _variant_ns(mode, tape_map, ca_buffer=8, ca_to=28):
+    """伪上下文独立 exec 变体加权 helper 源（clamp_helper_src(mode)）。"""
+    ns = {"_CA_BUFFER": ca_buffer, "_CA_TO": ca_to,
+          "_ca_tape": lambda seat, t: tape_map.get(t, {})}
+    exec(compile(inject_controller_clamp.clamp_helper_src(mode),
+                 f"<clamp_helper_{mode}>", "exec"), ns)
+    return ns
+
+
+@pytest.mark.parametrize("mode,weight", [("tuned", 0.5), ("lean", 0.0)])
+@pytest.mark.parametrize("k,m", [(0, 0), (2, 4), (5, 6), (6, 4), (10, 0), (1, 9)])
+def test_variant_demand_weight_semantics(mode, weight, k, m):
+    # ⑨-1 变体需求口径：demand = k 胡萝卜 + m 小麦槽×weight（float 精确）；
+    # target=min(8, int(demand)+2)——day24/26/27 同式（表达式与 fine 同形，
+    # 需求相对激活在变体同样成立）。
+    ns = _variant_ns(mode, _tape_with(k, m))
+    want = k + m * weight
+    assert ns["_ca_future_plant_demand"](0, 650) == want
+    for day, step in ((24, 576), (26, 624), (27, 650)):
+        assert ns["_ca_clamped_target"](day, 0, step) == min(8, int(want) + 2)
+
+
+@pytest.mark.parametrize("mode", ["tuned", "lean"])
+def test_variant_fallbacks_and_windows(mode):
+    # ⑨-2 fail-safe 与天窗在变体口径下不变：读不到→None→8（回退原目标）；
+    # 小麦@day29 不计（无论权重）；胡萝卜@day29 仍计（备种不限天）。
+    empty = _variant_ns(mode, {})
+    assert empty["_ca_future_plant_demand"](0, 650) is None
+    assert empty["_ca_clamped_target"](27, 0, 650) == 8
+    ns = _variant_ns(mode, {700: {"farmer": ["PLANT", "WHEAT"], "hands": []}})
+    assert ns["_ca_clamped_target"](27, 0, 650) == 2
+    ns = _variant_ns(mode, {700: {"farmer": ["PLANT", "CARROT"], "hands": []}})
+    assert ns["_ca_clamped_target"](27, 0, 650) == 3
+
+
+def test_variant_change_set_structure(variant_products, products):
+    # ⑨-3 变体变更集：opcode 同构（insert@4588 + replace@4694），插入块=加权
+    # helper+两分隔行；diff 全落授权区段；q 表达式与 fine 同形；audit 携带
+    # 权重；fine/coarse 产物零权重名（主口径字节零漂移）。
+    base_lines = _lines(_BASE)
+    for mode, weight in (("tuned", 0.5), ("lean", 0.0)):
+        path, report = variant_products[mode]
+        out_lines = _lines(path)
+        ops = _opcodes(base_lines, out_lines)
+        assert [op[0] for op in ops] == ["equal", "insert", "equal", "replace", "equal"]
+        _, pi1, pi2, pj1, pj2 = ops[1]
+        _, ri1, ri2, _rj1, _rj2 = ops[3]
+        assert (pi1, pi2) == (4588, 4588)
+        helper_lines = inject_controller_clamp.clamp_helper_src(mode).splitlines(keepends=True)
+        assert out_lines[pj1:pj2] == helper_lines + ["\n", "\n"]
+        assert (ri1, ri2) == (4694, 4695)
+        for tag, i1, i2, j1, j2 in ops:
+            if tag == "equal":
+                continue
+            pos = i1 + 1 if tag != "insert" else i1
+            assert _REGION[0] - (1 if tag == "insert" else 0) <= pos <= _REGION[1], (mode, tag, pos)
+        assert report["change_set"]["mode"] == mode
+        assert report["change_set"]["audit"]["wheat_slot_weight"] == weight
+        assert inject_controller_clamp._MODE_EXPRS[mode] == inject_controller_clamp._MODE_EXPRS["fine"]
+        text = path.read_text(encoding="utf-8")
+        assert text.count(f"_CA_WHEAT_SLOT_WEIGHT = {weight!r}") == 1
+        assert "total += _CA_WHEAT_SLOT_WEIGHT" in text
+    for mode in ("fine", "coarse"):
+        assert "_CA_WHEAT_SLOT_WEIGHT" not in products[mode][0].read_text(encoding="utf-8")
+
+
+def test_variant_ast_shape_and_build_products(tmp_path):
+    # ⑨-4 build 全链真跑（tuned/lean）：manifest mode+wheat_slot_weight+产物件+
+    # tar 成员；终产物=钳制件+两空行+layer S 块；q 行 AST=无条件 min（fine 族
+    # 同形）；构建后主产物发射态零漂移（sha 绊网）。
+    for mode, weight in (("tuned", 0.5), ("lean", 0.0)):
+        out_dir = tmp_path / f"l3_build_{mode}"
+        manifest = build_l13_candidate.build(mode, out_dir=out_dir)
+        assert manifest["mode"] == mode
+        assert manifest["wheat_slot_weight"] == weight
+        assert manifest["clamp_change_set"]["audit"]["wheat_slot_weight"] == weight
+        assert manifest["four_gates"] == "pending S6 (verify_l13_gates)"
+        for name in ("main_clamped.py", "main.py", "submission.tar.gz", "build_manifest.json"):
+            assert (out_dir / name).is_file(), (mode, name)
+        main_bytes = (out_dir / "main.py").read_bytes()
+        block_bytes = _L3_BLOCK.read_bytes()
+        assert main_bytes == (out_dir / "main_clamped.py").read_bytes() + b"\n\n" + block_bytes
+        with tarfile.open(out_dir / "submission.tar.gz", "r:gz") as tf:
+            assert tf.getnames() == ["main.py"]
+            assert tf.extractfile("main.py").read() == main_bytes
+        # AST：全卷恰一处 <目标项>-have-buying，目标项=无条件 min（fine 族同形）
+        tree = ast.parse(main_bytes)
+        hits = []
+        for node in _q_assigns(tree):
+            v = node.value
+            if (isinstance(v, ast.BinOp) and isinstance(v.op, ast.Sub)
+                    and isinstance(v.left, ast.BinOp) and isinstance(v.left.op, ast.Sub)
+                    and isinstance(v.left.right, ast.Name) and v.left.right.id == "have"
+                    and isinstance(v.right, ast.Name) and v.right.id == "buying"):
+                hits.append((node, v))
+        assert len(hits) == 1
+        target = hits[0][1].left.left
+        assert (isinstance(target, ast.Call) and isinstance(target.func, ast.Name)
+                and target.func.id == "min" and len(target.args) == 2
+                and isinstance(target.args[0], ast.Name)
+                and target.args[0].id == "_CA_BUFFER"
+                and isinstance(target.args[1], ast.Call)
+                and isinstance(target.args[1].func, ast.Name)
+                and target.args[1].func.id == "_ca_clamped_target"
+                and [a.id for a in target.args[1].args] == ["day", "seat", "step"])
+        assert not any(isinstance(n, ast.IfExp) for n in ast.walk(hits[0][1]))
+    # 主产物发射态零漂移绊网（变体构建只写隔离目录）
+    assert hashlib.sha256((_HERE / "main.py").read_bytes()).hexdigest() == _MAIN_SHA256
+    assert hashlib.sha256((_HERE / "submission.tar.gz").read_bytes()).hexdigest() == _TAR_SHA256

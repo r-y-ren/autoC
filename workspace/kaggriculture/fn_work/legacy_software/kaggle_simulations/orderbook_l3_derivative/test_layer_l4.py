@@ -9,12 +9,16 @@
 ② test_high_demand_zero_footprint：需求充足局（demand+2≥8）target==8=原目标
 （表达式仍写但行为同原式=零足迹）且 helper 确被调用（门控在需求不在 day）。
 ③ test_invariant_cases_l3：gate_equivalence_l3.constructed_cases_l3 真跑
-（无引擎，夹具直驱——R10 三件走 test_layer_s 真链路 layer_s_block，新四件走
-helper exec）：七件全过。"""
+   （无引擎，夹具直驱——R10 三件走 test_layer_s 真链路 layer_s_block，新四件走
+   helper exec）：七件全过。
+④ 变体组（R13 第二次调参）：tuned/lean=小麦槽权重 0.5/0.0——变体加权 helper
+   源（inject_controller_clamp.clamp_helper_src）伪上下文 exec：demand=k+m×weight
+   语义矩阵（day24/26/27 同式）/需求充足局零足迹与 fail-safe 永不抛不变。"""
 
 import pytest
 
 import gate_equivalence_l3 as g  # noqa: E402  (自带 L1/L2/HERE sys.path 自举)
+import inject_controller_clamp  # noqa: E402  (HERE 已由上行走入 sys.path)
 
 
 # ---------------------------------------------------------------------------
@@ -108,3 +112,52 @@ def test_invariant_cases_l3():
     assert c3["pass"] is True
     assert c3["truncate_side"]["pass"] is True and c3["keep_side"]["pass"] is True
     assert got["all_pass"] is True
+
+
+# ---------------------------------------------------------------------------
+# ④ R13 第二次调参变体（tuned/lean）：加权口径 helper 语义（变体源独立 exec）
+# ---------------------------------------------------------------------------
+def _variant_ns(mode, tape):
+    """伪上下文 exec 变体加权 helper 源（gate_equivalence_l3._clamp_ns 的变体版）。
+
+    tape 可为 dict（t→act；缺省步 {}）或 callable(seat, t)→act；注入
+    _ca_tape/_CA_BUFFER/_CA_TO 三依赖（与 fine 装载面同构）。"""
+    if callable(tape):
+        tape_fn = tape
+    else:
+        mapping = dict(tape or {})
+        tape_fn = lambda seat, t: mapping.get(t, {})  # noqa: E731
+    ns = {"_CA_BUFFER": 8, "_CA_TO": 28, "_ca_tape": tape_fn}
+    exec(compile(inject_controller_clamp.clamp_helper_src(mode),
+                 f"<clamp_helper_{mode}>", "exec"), ns)
+    return ns
+
+
+@pytest.mark.parametrize("mode,weight", [("tuned", 0.5), ("lean", 0.0)])
+@pytest.mark.parametrize("k,m", [(0, 0), (2, 4), (5, 6), (6, 4), (10, 0), (1, 9)])
+def test_variant_demand_weight_matrix(mode, weight, k, m):
+    # 变体需求口径=胡萝卜全计+day≤28 小麦槽×weight（int 截断收在 clamp 侧）；
+    # day24/26/27 同式（表达式与 fine 同形——需求相对激活不因权重变形）。
+    ns = _variant_ns(mode, g._clamp_tape(k, m))
+    want = k + m * weight
+    assert ns["_ca_future_plant_demand"](0, 650) == want
+    for day, step in ((24, 576), (26, 624), (27, 650)):
+        assert ns["_ca_clamped_target"](day, 0, step) == min(8, int(want) + 2)
+
+
+@pytest.mark.parametrize("mode", ["tuned", "lean"])
+def test_variant_zero_footprint_and_fallback(mode):
+    # 需求充足局零足迹不变（demand+2≥8 → min 封顶 8=原目标）；fail-safe
+    # 永不抛（读不到/非 dict/异常 → 8）——starve 零容忍门的构造面锚。
+    ns = _variant_ns(mode, g._clamp_tape(6, 4))
+    assert ns["_ca_clamped_target"](27, 0, 650) == 8
+    assert ns["_ca_clamped_target"](24, 0, 576) == 8
+    for tape in ({}, lambda seat, t: "not-a-dict",
+                 lambda seat, t: (_ for _ in ()).throw(RuntimeError("tape down"))):
+        bad = _variant_ns(mode, tape)
+        assert bad["_ca_clamped_target"](27, 0, 650) == 8
+    # 权重口径对照：同 k 下 m>0 抬需求幅度=weight（tuned 半计/lean 不计）
+    weight = inject_controller_clamp._WHEAT_SLOT_WEIGHTS[mode]
+    with_w = _variant_ns(mode, g._clamp_tape(2, 4))["_ca_future_plant_demand"](0, 650)
+    without_w = _variant_ns(mode, g._clamp_tape(2, 0))["_ca_future_plant_demand"](0, 650)
+    assert with_w - without_w == 4 * weight

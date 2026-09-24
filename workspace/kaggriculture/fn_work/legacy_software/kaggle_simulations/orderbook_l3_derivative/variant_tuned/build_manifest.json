@@ -1,0 +1,184 @@
+{
+ "schema": "orderbook_l3_derivative_manifest/1.0",
+ "candidate": "shiiin9/your-market-list-is-an-order-book + layer S + carrot2 clamp (public derivative with seed-truncation layer + late-window carrot demand clamp [tuned], Apache-2.0)",
+ "generated": "2026-09-24",
+ "description": "public derivative with seed-truncation layer + late-window carrot demand clamp",
+ "mode": "tuned",
+ "main_sha256": "765f3f3de19c2fc97b86174c5057942b8789813aff9990aad31f29389da3495e",
+ "main_bytes": 1050290,
+ "tar_sha256": "acebc3367fea56b0573626839d0a100733424f55c25eff9df07b5e52f6681a3d",
+ "tar_bytes": 637598,
+ "block_sha256": "2f3553fe4b2df6213cdc1377b2fa9299ece92506291f4ed8f547640c4e2bbfcd",
+ "block_bytes": 20703,
+ "l1_block_sha256": "2f3553fe4b2df6213cdc1377b2fa9299ece92506291f4ed8f547640c4e2bbfcd",
+ "clamped_sha256": "1f559be71409e2763909f579a9ed40b86188a9e73ddc15749fc9be87029da24a",
+ "clamped_bytes": 1029585,
+ "clamp_change_set": {
+  "mode": "tuned",
+  "replaced_line_span": [
+   4695,
+   4695
+  ],
+  "helper_span": [
+   4589,
+   4635
+  ],
+  "audit": {
+   "base_sha256": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab",
+   "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "expr": "min(_CA_BUFFER, _ca_clamped_target(day, seat, step))",
+   "wheat_slot_weight": 0.5,
+   "activation_window": "unconditional demand-relative ×wheat-slot weight 0.5（R13 第二次调参变体：需求=胡萝卜全计+day≤28 小麦槽×0.5，int 截断；clamp 口径更早咬合，starve 零容忍门为硬绊网）",
+   "replaced_line_span_out": [
+    4744,
+    4744
+   ],
+   "inserted_line_count": 49,
+   "helper_line_count": 47,
+   "insert_separator_lines": 2,
+   "region": [
+    4469,
+    4734
+   ],
+   "zone_anchors": {
+    "_ca_tape": {
+     "base_span": [
+      4489,
+      4494
+     ],
+     "identical": true
+    },
+    "_ca_visits": {
+     "base_span": [
+      4507,
+      4532
+     ],
+     "identical": true
+    },
+    "final_price_guard": {
+     "base_span": [
+      6642,
+      6652
+     ],
+     "identical": true
+    },
+    "_cxtb_agent": {
+     "base_span": [
+      6814,
+      6815
+     ],
+     "identical": true
+    },
+    "_cxd_candidates": {
+     "base_span": [
+      6850,
+      6859
+     ],
+     "identical": true
+    },
+    "_cxd_reorder": {
+     "base_span": [
+      6862,
+      6905
+     ],
+     "identical": true
+    },
+    "_cxd_agent": {
+     "base_span": [
+      6908,
+      6917
+     ],
+     "identical": true
+    },
+    "Chassis": {
+     "base_span": [
+      406,
+      906
+     ],
+     "identical": true
+    }
+   },
+   "zone_list_source": "行区间回退制为主（授权：清单源实查缺位）；锚函数清单=基座结构另行取（磁带访问/终局清仓/槽位重排/路由）",
+   "last_callable": "_cxd_agent",
+   "opcodes": [
+    [
+     "equal",
+     0,
+     4588,
+     0,
+     4588
+    ],
+    [
+     "insert",
+     4588,
+     4588,
+     4588,
+     4637
+    ],
+    [
+     "equal",
+     4588,
+     4694,
+     4637,
+     4743
+    ],
+    [
+     "replace",
+     4694,
+     4695,
+     4743,
+     4744
+    ],
+    [
+     "equal",
+     4695,
+     6917,
+     4744,
+     6966
+    ]
+   ],
+   "validations": [
+    {
+     "check": "ast_parse",
+     "ok": true,
+     "detail": "ast.parse passed (1029585 bytes)"
+    },
+    {
+     "check": "change_set_splice",
+     "ok": true,
+     "detail": "insert 49 行 @基座行 4589 前（helper 47 行+分隔 2 行）；replace 1 行 @基座行 4695；前缀 4588 行/中缀 106 行/后缀 2222 行逐字节恒等"
+    },
+    {
+     "check": "assign_shape",
+     "ok": true,
+     "detail": "q = min(_CA_BUFFER, _ca_clamped_target(day, seat, step)) - have - buying（目标项无条件 min·需求相对激活；None→_CA_BUFFER 回退在 helper 内；需求+2≥8 时 min=原目标=零足迹)；helper 需求口径小麦槽×_CA_WHEAT_SLOT_WEIGHT=0.5（R13 第二次调参变体）"
+    },
+    {
+     "check": "five_zones_zero_change",
+     "ok": true,
+     "detail": "diff 全部落授权区段 [4469, 4734]（授权行区间回退制：清单源=实查无 L1 尾块docstring 函数清单/逆向 digest，按任务契约回退行区间断言）；另 8 个代表性区锚函数（磁带访问/终局清仓/槽位重排/路由 chassis）源段逐字节恒等"
+    },
+    {
+     "check": "last_callable_exec",
+     "ok": true,
+     "detail": "exec 0.09s；globals 末 callable=_cxd_agent；两 helper 已装载"
+    },
+    {
+     "check": "py_compile_and_write",
+     "ok": true,
+     "detail": "py_compile passed；落盘 /mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/variant_tuned/main_clamped.py（回读逐字节一致）"
+    }
+   ]
+  }
+ },
+ "provenance_chain": [
+  "base main.py sha256 a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab == round-30 orderbook_derivative/build_manifest.json main_sha256（盘上真值三方核对）",
+  "base submission.tar.gz sha256 2838cc66e5d3f719569108fa553c9cf9acf8190d0662f8d991856560e6e9641c == round-30 tar_sha256（member set ['main.py']）",
+  "inject_controller_clamp.inject(mode=tuned) → main_clamped.py sha256 1f559be71409e2763909f579a9ed40b86188a9e73ddc15749fc9be87029da24a（中部受控手术：钳制 helper 插入@基座行 4589 前 + CARROT2 §3b q 目标项替换@基座行 4695（激活窗 unconditional demand-relative ×wheat-slot weight 0.5（R13 第二次调参变体：需求=胡萝卜全计+day≤28 小麦槽×0.5，int 截断；clamp 口径更早咬合，starve 零容忍门为硬绊网）；表达式 min(_CA_BUFFER, _ca_clamped_target(day, seat, step))）；六校验全绿，变更集审计见 clamp_change_set）",
+  "layer S block = orderbook_l1_derivative/layer_s_block.py sha256 2f3553fe4b2df6213cdc1377b2fa9299ece92506291f4ed8f547640c4e2bbfcd 注入（append-only：钳制件全文+两空行分隔+块文本；四校验+三防线全绿，末 callable=_cxs_agent）",
+  "tar built deterministically (v48_derivative recipe: tarfile mtime0 uid/gid0 mode644, gzip mtime0), double-build byte-identical"
+ ],
+ "four_gates": "pending S6 (verify_l13_gates)",
+ "h2h_vs_l1": "pending S6 (verify_l13_gates)",
+ "wheat_slot_weight": 0.5
+}

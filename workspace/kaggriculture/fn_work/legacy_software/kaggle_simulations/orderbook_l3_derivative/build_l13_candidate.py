@@ -22,7 +22,8 @@ build_l11_candidate/build_l2_candidate 配方）：
      基座链→钳制变更集审计[mode/sha]→layer S 块 sha→双跑声明；four_gates/h2h
      占位 pending S6=verify_l13_gates）并返回 dict。
 
-CLI：python build_l13_candidate.py [--mode {fine,coarse}] [--out DIR]（默认本目录）。
+CLI：python build_l13_candidate.py [--mode {fine,coarse,tuned,lean}] [--out DIR]（默认本目录；
+tuned/lean 为 R13 第二次调参变体，产物应落隔离变体目录 variant_tuned//variant_lean/）。
 产物三件：main.py、submission.tar.gz、build_manifest.json（另中间产物 main_clamped.py）。
 """
 
@@ -69,7 +70,7 @@ _SEPARATOR = b"\n\n"
 # （L1.1 _inject_v2 的 v2 专属 sentinel 在此换回 L1 块自身的 sentinel）。
 _BLOCK_SENTINEL_BYTES = '"""layer S 尾块模板'.encode("utf-8")
 
-_MODES = ("fine", "coarse")
+_MODES = ("fine", "coarse", "tuned", "lean")  # tuned/lean=R13 第二次调参变体（小麦槽权重 0.5/0.0）
 
 
 def _sha256(blob: bytes) -> str:
@@ -222,11 +223,13 @@ def _inject_layer_s(main_path, clamped_bytes) -> dict:
 def build(mode="fine", out_dir=None) -> dict:
     """双注入构建编排：钳制手术→copy→追加 layer S→打包（双跑）→manifest；任一步不确定即抛。
 
-    mode ∈ {'fine','coarse'}（缺省 fine）；out_dir 为产物目录（缺省本目录），产物三件
+    mode ∈ {'fine','coarse','tuned','lean'}（缺省 fine；tuned/lean=R13 第二次调参
+    变体——helper 需求口径小麦槽×0.5/×0.0，manifest 标 wheat_slot_weight）；
+    out_dir 为产物目录（缺省本目录），产物三件
     main.py/submission.tar.gz/build_manifest.json（另中间产物 main_clamped.py）。
     """
     if mode not in _MODES:
-        raise ValueError(f"mode 须为 fine|coarse，实得 {mode!r}")
+        raise ValueError(f"mode 须为 fine|coarse|tuned|lean，实得 {mode!r}")
     out_dir = Path(out_dir).resolve() if out_dir is not None else _HERE
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -346,6 +349,11 @@ def build(mode="fine", out_dir=None) -> dict:
         "four_gates": "pending S6 (verify_l13_gates)",
         "h2h_vs_l1": "pending S6 (verify_l13_gates)",
     }
+    # R13 第二次调参变体：manifest 显式标小麦槽权重（fine/coarse 不加键——
+    # 发射态 manifest 字节面零漂移；变体权重另在 clamp_change_set.audit 留痕）。
+    wheat_weight = inject_controller_clamp._WHEAT_SLOT_WEIGHTS[mode]
+    if wheat_weight is not None:
+        manifest["wheat_slot_weight"] = wheat_weight
     (out_dir / "build_manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=1) + "\n", encoding="utf-8"
     )
@@ -356,7 +364,8 @@ if __name__ == "__main__":  # CLI：python build_l13_candidate.py [--mode …] [
     _ap = argparse.ArgumentParser(
         description="构建 L3 双注入候选包（中部钳制+layer S 尾块：main.py+submission.tar.gz+manifest）")
     _ap.add_argument("--mode", default="fine", choices=list(_MODES),
-                     help="钳制模式（默认 fine=需求钳制 min(8,需求+2)；coarse=day>=27 目标 2）")
+                     help="钳制模式（默认 fine=需求钳制 min(8,需求+2)；coarse=day>=27 目标 2；"
+                          "tuned/lean=R13 第二次调参变体：小麦槽计数权重 0.5/0.0）")
     _ap.add_argument("--out", default=None, help="输出目录（默认：脚本所在目录）")
     _args = _ap.parse_args()
     _manifest = build(mode=_args.mode, out_dir=_args.out)

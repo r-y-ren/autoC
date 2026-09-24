@@ -311,7 +311,10 @@ def inject(base_main_path, mode="fine", out_path=None) -> dict:
 
     base_main_path：基座原件路径（只读；sha 须等于 round-30 身份链，漂移即抛）。
     mode：fine=需求钳制（无条件 min(8, 磁带需求+2)，None/异常回退 _CA_BUFFER——
-    需求相对激活）；coarse=R13-b 粗粒度（day>=27 目标 2，硬窗不变）。
+    需求相对激活）；coarse=R13-b 粗粒度（day>=27 目标 2，硬窗不变）；
+    tuned/lean=R13 第二次调参变体（表达式同 fine，helper 需求口径小麦槽计数乘
+    _CA_WHEAT_SLOT_WEIGHT=0.5/0.0——口径放宽探索，starve 零容忍门为硬绊网；
+    fine/coarse 产物字节零漂移）。
     out_path：产物路径（默认本目录 main_clamped.py 中间产物；测试可指定隔离路径）。
     """
     base_path = Path(base_main_path)
