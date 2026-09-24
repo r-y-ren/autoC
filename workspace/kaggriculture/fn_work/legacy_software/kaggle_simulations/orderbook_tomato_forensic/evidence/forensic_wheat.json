@@ -1,0 +1,448 @@
+{
+ "probe": "wheat_step91_scan",
+ "baseline_threshold": 31,
+ "corpus": {
+  "games": [
+   {
+    "episode": 112832752,
+    "seat": 0,
+    "res": "L",
+    "margin": -55.0
+   },
+   {
+    "episode": 112835052,
+    "seat": 0,
+    "res": "L",
+    "margin": -527.0
+   },
+   {
+    "episode": 112835136,
+    "seat": 0,
+    "res": "L",
+    "margin": -640.0
+   },
+   {
+    "episode": 112838302,
+    "seat": 0,
+    "res": "L",
+    "margin": -1268.0
+   },
+   {
+    "episode": 112840958,
+    "seat": 0,
+    "res": "L",
+    "margin": -8.0
+   },
+   {
+    "episode": 112843277,
+    "seat": 0,
+    "res": "L",
+    "margin": -7922.0
+   },
+   {
+    "episode": 112844429,
+    "seat": 1,
+    "res": "L",
+    "margin": -285.0
+   },
+   {
+    "episode": 112846774,
+    "seat": 0,
+    "res": "L",
+    "margin": -474.0
+   },
+   {
+    "episode": 112849110,
+    "seat": 0,
+    "res": "L",
+    "margin": -455.0
+   },
+   {
+    "episode": 112853781,
+    "seat": 1,
+    "res": "L",
+    "margin": -382.0
+   },
+   {
+    "episode": 112856307,
+    "seat": 1,
+    "res": "L",
+    "margin": -503.0
+   },
+   {
+    "episode": 112858579,
+    "seat": 1,
+    "res": "L",
+    "margin": -928.0
+   },
+   {
+    "episode": 112828048,
+    "seat": 1,
+    "res": "W",
+    "margin": 11330.0
+   },
+   {
+    "episode": 112839832,
+    "seat": 1,
+    "res": "W",
+    "margin": 10.0
+   },
+   {
+    "episode": 112842735,
+    "seat": 0,
+    "res": "W",
+    "margin": 1703.0
+   },
+   {
+    "episode": 112845604,
+    "seat": 0,
+    "res": "W",
+    "margin": 746.0
+   },
+   {
+    "episode": 112849099,
+    "seat": 0,
+    "res": "W",
+    "margin": 1039.0
+   },
+   {
+    "episode": 112853391,
+    "seat": 1,
+    "res": "W",
+    "margin": 110.0
+   }
+  ],
+  "sampling": {
+   "seed_material": "20260925r18",
+   "seed_derivation": "int(sha256(material).hexdigest()[:16], 16)",
+   "losses_pool": [
+    112831515,
+    112831575,
+    112832752,
+    112835052,
+    112835136,
+    112835161,
+    112837488,
+    112838302,
+    112840958,
+    112843266,
+    112843277,
+    112844429,
+    112845601,
+    112846774,
+    112849110,
+    112850273,
+    112851433,
+    112851436,
+    112852596,
+    112853781,
+    112855005,
+    112856202,
+    112856307,
+    112857426,
+    112858579,
+    112858692
+   ],
+   "wins_pool": [
+    112811974,
+    112813113,
+    112814254,
+    112815438,
+    112816559,
+    112817709,
+    112817799,
+    112818872,
+    112818930,
+    112820019,
+    112820070,
+    112821155,
+    112821236,
+    112822309,
+    112822367,
+    112823438,
+    112823464,
+    112824591,
+    112824627,
+    112825732,
+    112825764,
+    112826868,
+    112826909,
+    112828011,
+    112828048,
+    112829156,
+    112829186,
+    112830330,
+    112830352,
+    112832703,
+    112833942,
+    112833949,
+    112836273,
+    112836317,
+    112837481,
+    112838623,
+    112838673,
+    112839789,
+    112839832,
+    112840925,
+    112842083,
+    112842159,
+    112842735,
+    112843272,
+    112845604,
+    112847954,
+    112849099,
+    112850267,
+    112852621,
+    112853391,
+    112853771,
+    112854164,
+    112855003,
+    112856217,
+    112857412,
+    112858576,
+    112859092
+   ],
+   "note": "败局池沿 R17 先例排 3 早崩局（step-91 面不受早崩影响，口径一致性优先，记偏差）"
+  }
+ },
+ "baseline_replay": [
+  {
+   "episode": 112832752,
+   "res": "L",
+   "seat": 0,
+   "margin": -515.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112835052,
+   "res": "L",
+   "seat": 0,
+   "margin": -322.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112835136,
+   "res": "L",
+   "seat": 0,
+   "margin": -640.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112838302,
+   "res": "L",
+   "seat": 0,
+   "margin": -1268.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112840958,
+   "res": "L",
+   "seat": 0,
+   "margin": -9.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112843277,
+   "res": "L",
+   "seat": 0,
+   "margin": -7904.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112844429,
+   "res": "L",
+   "seat": 1,
+   "margin": -86.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112846774,
+   "res": "L",
+   "seat": 0,
+   "margin": 0.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112849110,
+   "res": "L",
+   "seat": 0,
+   "margin": -4.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112853781,
+   "res": "L",
+   "seat": 1,
+   "margin": 0.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112856307,
+   "res": "L",
+   "seat": 1,
+   "margin": -503.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112858579,
+   "res": "L",
+   "seat": 1,
+   "margin": -862.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112828048,
+   "res": "W",
+   "seat": 1,
+   "margin": 11748.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112839832,
+   "res": "W",
+   "seat": 1,
+   "margin": -32.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112842735,
+   "res": "W",
+   "seat": 0,
+   "margin": 2152.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112845604,
+   "res": "W",
+   "seat": 0,
+   "margin": 749.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112849099,
+   "res": "W",
+   "seat": 0,
+   "margin": 1106.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  },
+  {
+   "episode": 112853391,
+   "res": "W",
+   "seat": 1,
+   "margin": 519.0,
+   "status": "DONE",
+   "step91_wheat_sells": 0,
+   "step91_wheat_sell_qty": 0
+  }
+ ],
+ "price91": {
+  "112828048": 29.0,
+  "112832752": 29.0,
+  "112835052": 29.0,
+  "112835136": 29.0,
+  "112838302": 29.0,
+  "112839832": 30.0,
+  "112840958": 29.0,
+  "112842735": 29.0,
+  "112843277": 30.0,
+  "112844429": 30.0,
+  "112845604": 30.0,
+  "112846774": 30.0,
+  "112849099": 29.0,
+  "112849110": 30.0,
+  "112853391": 30.0,
+  "112853781": 30.0,
+  "112856307": 30.0,
+  "112858579": 29.0
+ },
+ "points": [
+  {
+   "threshold": 25,
+   "delta_median": -27.0,
+   "delta_mean": 22.17,
+   "win_flips_negative": [
+    112839832
+   ],
+   "trigger_rate": 0.0,
+   "n_triggered": 0
+  },
+  {
+   "threshold": 28,
+   "delta_median": -27.0,
+   "delta_mean": 22.17,
+   "win_flips_negative": [
+    112839832
+   ],
+   "trigger_rate": 0.0,
+   "n_triggered": 0
+  },
+  {
+   "threshold": 31,
+   "delta_median": 0.0,
+   "delta_mean": 0.0,
+   "win_flips_negative": [
+    112839832
+   ],
+   "trigger_rate": 1.0,
+   "n_triggered": 18
+  },
+  {
+   "threshold": 34,
+   "delta_median": 0.0,
+   "delta_mean": 0.0,
+   "win_flips_negative": [
+    112839832
+   ],
+   "trigger_rate": 1.0,
+   "n_triggered": 18
+  },
+  {
+   "threshold": 38,
+   "delta_median": 0.0,
+   "delta_mean": 0.0,
+   "win_flips_negative": [
+    112839832
+   ],
+   "trigger_rate": 1.0,
+   "n_triggered": 18
+  }
+ ],
+ "best": null,
+ "adopt": false,
+ "params": null,
+ "wall_s": 90.9
+}

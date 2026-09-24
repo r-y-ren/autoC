@@ -93,3 +93,9 @@
 | build_r35 | B9,B11 | wired 09-25 | pytest 8 件（HR 块抽取+遥测拒斥/改1-only/全并入/只加表项纪律/杂散 diff 拒斥/归因/真基座集成）→ 8 passed；实跑两形态（702bbe1e 全并集/3e5d7340 改1-only）+tar 双跑逐字节 | (本批) |
 | verify_r35_gates | B9,B11 | wired 09-25 | pytest 5 件（全绿/fail-closed 全跑/身份链红传导 h2h/未构建红/h2h 重定向装载身份集）→ 5 passed；实跑×2：launch·lineage·diff 绿+h2h 0.50+subset 红 → overall FAIL×2 | (本批) |
 | run_r35_iteration | B9 | wired 09-25 | pytest 3 件（全流 launch_ready/失败留痕 run_summary/--skip-phase-v 复用）→ 3 passed | (本批) |
+| forensic_cxtb_trigger | B13-B14 | wired 09-25 | pytest 4 件（触发/面死/结局差分组/锚幂等）→4 passed；实跑 86/86 clean 105s：call_rate 1.0 face 活、fire 9/86、触发局轨迹=BUY_SEED 10@432+SELL 26-29 天窗 | (本批) |
+| scan_wheat_step91 | B13-B14 | wired 09-25 | pytest 3 件（胜者规则/全负保基线/skip 条款）→3 passed；实跑 91s：五点表全负或零（31 饱和触发送走一切麦卖）→adopt False | (本批) |
+| adjudicate_cxtb_variants | B13-B15 | wired 09-25 | 阶梯化两变体均 Δ 中位 0/均 −2848；三常数 OAT 8 点×主语料+敏感带全中位 0——无胜点（内置函数，责任矩阵外辅助件） | (本批) |
+| build_r36_conditional | B13,B15 | wired 09-25 | pytest 6 件（锚唯一/幂等/阶梯形态/无 adopt 拒斥/白名单归因/尾块防混入）→6 passed；判决全负→未实跑构建（B15 出口） | (本批) |
+| verify_r36_gates | B13,B15 | wired 09-25 | pytest 5 件（全绿/fail-closed 全跑/身份链/未构建红/阶梯入口）→5 passed；r36 未构建→未实跑门禁（B15 出口） | (本批) |
+| run_r18_iteration | B13-B16 | wired 09-25 | pytest 5 件（POSITIVE 全流/KILLED_T/惰性 NEGATIVE/门禁红 NEGATIVE/失败留痕）→5 passed；实跑 260s verdict=NEGATIVE launch_ready=false | (本批) |

@@ -1,0 +1,3458 @@
+{
+ "probe": "cxtb_trigger_forensic",
+ "n_games": 86,
+ "n_clean": 86,
+ "errors": [],
+ "fire_rate": 0.1047,
+ "fired_games": [
+  112824627,
+  112829186,
+  112831515,
+  112832752,
+  112838623,
+  112843277,
+  112846774,
+  112849110,
+  112855003
+ ],
+ "call_rate": 1.0,
+ "face_alive": true,
+ "face_alive_rule": "n_called >= 0.5*n_clean",
+ "revenue_profile": {
+  "n_features": 86,
+  "revenue_min": 2652,
+  "revenue_median": 5734.0,
+  "revenue_max": 36527,
+  "n_revenue_ge_9000": 9,
+  "n_opened_with_rev": 9,
+  "n_sensitive_band_2k": 13,
+  "base_face_would_commit": 11
+ },
+ "outcome_diff": {
+  "fired": {
+   "n": 9,
+   "twin_margin_mean": 3222.1,
+   "twin_margin_median": 0.0,
+   "res_counts": {
+    "W": 4,
+    "L": 5
+   }
+  },
+  "called_not_fired": {
+   "n": 77,
+   "twin_margin_mean": 7971.1,
+   "twin_margin_median": 894.0,
+   "res_counts": {
+    "W": 53,
+    "L": 24
+   }
+  },
+  "never_called": {
+   "n": 0
+  }
+ },
+ "per_game": [
+  {
+   "episode": 112811974,
+   "res": "W",
+   "audit_margin": 74886.0,
+   "seat": 0,
+   "twin_margin": 75105.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112813113,
+   "res": "W",
+   "audit_margin": 38728.0,
+   "seat": 1,
+   "twin_margin": 39261.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5906,
+     "shops": 1,
+     "price": 71,
+     "inventory": 9910,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112814254,
+   "res": "W",
+   "audit_margin": 82478.0,
+   "seat": 0,
+   "twin_margin": 82503.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5215,
+     "shops": 1,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112815438,
+   "res": "W",
+   "audit_margin": 47235.0,
+   "seat": 0,
+   "twin_margin": 47415.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112816559,
+   "res": "W",
+   "audit_margin": 41313.0,
+   "seat": 0,
+   "twin_margin": 41645.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5389,
+     "shops": 1,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112817709,
+   "res": "W",
+   "audit_margin": 27029.0,
+   "seat": 1,
+   "twin_margin": 27141.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5215,
+     "shops": 1,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112817799,
+   "res": "W",
+   "audit_margin": 67211.0,
+   "seat": 0,
+   "twin_margin": 67530.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": true,
+     "revenue": 8993,
+     "shops": 3,
+     "price": 74,
+     "inventory": 9886,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112818872,
+   "res": "W",
+   "audit_margin": 41644.0,
+   "seat": 0,
+   "twin_margin": 41604.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 2652,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 23
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112818930,
+   "res": "W",
+   "audit_margin": 39388.0,
+   "seat": 1,
+   "twin_margin": 39461.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112820019,
+   "res": "W",
+   "audit_margin": 11397.0,
+   "seat": 0,
+   "twin_margin": 11696.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6080,
+     "shops": 1,
+     "price": 73,
+     "inventory": 9892,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112820070,
+   "res": "W",
+   "audit_margin": 24145.0,
+   "seat": 0,
+   "twin_margin": 24214.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 8202,
+     "shops": 2,
+     "price": 79,
+     "inventory": 9838,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112821155,
+   "res": "W",
+   "audit_margin": 8488.0,
+   "seat": 0,
+   "twin_margin": 8531.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6511,
+     "shops": 2,
+     "price": 71,
+     "inventory": 9910,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112821236,
+   "res": "W",
+   "audit_margin": 22629.0,
+   "seat": 0,
+   "twin_margin": 22947.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5215,
+     "shops": 1,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112822309,
+   "res": "W",
+   "audit_margin": 4221.0,
+   "seat": 0,
+   "twin_margin": 4221.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112822367,
+   "res": "W",
+   "audit_margin": 27523.0,
+   "seat": 1,
+   "twin_margin": 27862.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112823438,
+   "res": "W",
+   "audit_margin": 9129.0,
+   "seat": 0,
+   "twin_margin": 9305.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6338,
+     "shops": 2,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112823464,
+   "res": "W",
+   "audit_margin": 34091.0,
+   "seat": 0,
+   "twin_margin": 34091.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112824591,
+   "res": "W",
+   "audit_margin": 8650.0,
+   "seat": 0,
+   "twin_margin": 9164.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5389,
+     "shops": 1,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112824627,
+   "res": "W",
+   "audit_margin": 28571.0,
+   "seat": 0,
+   "twin_margin": 28646.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 1,
+    "cxtb_blocked": 0,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": true,
+     "base": true,
+     "revenue": 12748,
+     "shops": 3,
+     "price": 79,
+     "inventory": 9838,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": true,
+   "tomato_orders": [
+    {
+     "step": 433,
+     "order": [
+      "BUY_SEED",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 638,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 641,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 649,
+     "order": [
+      "SELL",
+      "TOMATO",
+      8
+     ]
+    },
+    {
+     "step": 668,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 671,
+     "order": [
+      "SELL",
+      "TOMATO",
+      14
+     ]
+    },
+    {
+     "step": 694,
+     "order": [
+      "SELL",
+      "TOMATO",
+      20
+     ]
+    },
+    {
+     "step": 711,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 715,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    }
+   ],
+   "tomato_sell_qty": 80,
+   "tomato_seed_buys": 10,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112825732,
+   "res": "W",
+   "audit_margin": 4143.0,
+   "seat": 0,
+   "twin_margin": 4178.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5993,
+     "shops": 2,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112825764,
+   "res": "W",
+   "audit_margin": 13710.0,
+   "seat": 1,
+   "twin_margin": 13785.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6184,
+     "shops": 2,
+     "price": 71,
+     "inventory": 9910,
+     "their_tomatoes": 7
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112826868,
+   "res": "W",
+   "audit_margin": 4.0,
+   "seat": 1,
+   "twin_margin": 4.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112826909,
+   "res": "W",
+   "audit_margin": 4382.0,
+   "seat": 1,
+   "twin_margin": 4456.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 8202,
+     "shops": 2,
+     "price": 79,
+     "inventory": 9838,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112828011,
+   "res": "W",
+   "audit_margin": 412.0,
+   "seat": 0,
+   "twin_margin": 892.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6966,
+     "shops": 2,
+     "price": 75,
+     "inventory": 9874,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112828048,
+   "res": "W",
+   "audit_margin": 11330.0,
+   "seat": 1,
+   "twin_margin": 11748.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5734,
+     "shops": 1,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112829156,
+   "res": "W",
+   "audit_margin": 1062.0,
+   "seat": 1,
+   "twin_margin": 1368.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112829186,
+   "res": "W",
+   "audit_margin": 5674.0,
+   "seat": 1,
+   "twin_margin": 6109.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 1,
+    "cxtb_blocked": 0,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": true,
+     "base": false,
+     "revenue": 9195,
+     "shops": 2,
+     "price": 82,
+     "inventory": 9820,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": true,
+   "tomato_orders": [
+    {
+     "step": 434,
+     "order": [
+      "BUY_SEED",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 642,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 645,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 649,
+     "order": [
+      "SELL",
+      "TOMATO",
+      8
+     ]
+    },
+    {
+     "step": 668,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 671,
+     "order": [
+      "SELL",
+      "TOMATO",
+      14
+     ]
+    },
+    {
+     "step": 694,
+     "order": [
+      "SELL",
+      "TOMATO",
+      20
+     ]
+    },
+    {
+     "step": 711,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 715,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    }
+   ],
+   "tomato_sell_qty": 80,
+   "tomato_seed_buys": 10,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112830330,
+   "res": "W",
+   "audit_margin": 3691.0,
+   "seat": 0,
+   "twin_margin": 3752.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5993,
+     "shops": 2,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112830352,
+   "res": "W",
+   "audit_margin": 108.0,
+   "seat": 0,
+   "twin_margin": 292.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 7463,
+     "shops": 2,
+     "price": 77,
+     "inventory": 9856,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112831515,
+   "res": "L",
+   "audit_margin": -301.0,
+   "seat": 0,
+   "twin_margin": -270.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 1,
+    "cxtb_blocked": 0,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": true,
+     "base": true,
+     "revenue": 11143,
+     "shops": 3,
+     "price": 77,
+     "inventory": 9856,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": true,
+   "tomato_orders": [
+    {
+     "step": 433,
+     "order": [
+      "BUY_SEED",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 638,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 641,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 649,
+     "order": [
+      "SELL",
+      "TOMATO",
+      8
+     ]
+    },
+    {
+     "step": 668,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 671,
+     "order": [
+      "SELL",
+      "TOMATO",
+      14
+     ]
+    },
+    {
+     "step": 694,
+     "order": [
+      "SELL",
+      "TOMATO",
+      20
+     ]
+    },
+    {
+     "step": 711,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 715,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    }
+   ],
+   "tomato_sell_qty": 80,
+   "tomato_seed_buys": 10,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112831575,
+   "res": "L",
+   "audit_margin": -2602.0,
+   "seat": 0,
+   "twin_margin": -2511.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112832703,
+   "res": "W",
+   "audit_margin": 5051.0,
+   "seat": 1,
+   "twin_margin": 5111.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5215,
+     "shops": 1,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112832752,
+   "res": "L",
+   "audit_margin": -55.0,
+   "seat": 0,
+   "twin_margin": -515.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 1,
+    "cxtb_blocked": 0,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": true,
+     "base": true,
+     "revenue": 14605,
+     "shops": 3,
+     "price": 82,
+     "inventory": 9820,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": true,
+   "tomato_orders": [
+    {
+     "step": 433,
+     "order": [
+      "BUY_SEED",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 638,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 641,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 649,
+     "order": [
+      "SELL",
+      "TOMATO",
+      8
+     ]
+    },
+    {
+     "step": 668,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 671,
+     "order": [
+      "SELL",
+      "TOMATO",
+      14
+     ]
+    },
+    {
+     "step": 694,
+     "order": [
+      "SELL",
+      "TOMATO",
+      20
+     ]
+    },
+    {
+     "step": 711,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 715,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    }
+   ],
+   "tomato_sell_qty": 80,
+   "tomato_seed_buys": 10,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112833942,
+   "res": "W",
+   "audit_margin": 11871.0,
+   "seat": 1,
+   "twin_margin": 12015.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": true,
+     "revenue": 7785,
+     "shops": 3,
+     "price": 71,
+     "inventory": 9910,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112833949,
+   "res": "W",
+   "audit_margin": 609.0,
+   "seat": 0,
+   "twin_margin": 994.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112835052,
+   "res": "L",
+   "audit_margin": -527.0,
+   "seat": 0,
+   "twin_margin": -322.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5389,
+     "shops": 1,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112835136,
+   "res": "L",
+   "audit_margin": -640.0,
+   "seat": 0,
+   "twin_margin": -640.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112835161,
+   "res": "L",
+   "audit_margin": -345.0,
+   "seat": 1,
+   "twin_margin": 182.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6166,
+     "shops": 2,
+     "price": 66,
+     "inventory": 9946,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112836273,
+   "res": "W",
+   "audit_margin": 2505.0,
+   "seat": 1,
+   "twin_margin": 2561.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6080,
+     "shops": 1,
+     "price": 73,
+     "inventory": 9892,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112836317,
+   "res": "W",
+   "audit_margin": 3.0,
+   "seat": 1,
+   "twin_margin": 88.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112837481,
+   "res": "W",
+   "audit_margin": 923.0,
+   "seat": 1,
+   "twin_margin": 914.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 7463,
+     "shops": 2,
+     "price": 77,
+     "inventory": 9856,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112837488,
+   "res": "L",
+   "audit_margin": -177.0,
+   "seat": 0,
+   "twin_margin": -177.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5389,
+     "shops": 1,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112838302,
+   "res": "L",
+   "audit_margin": -1268.0,
+   "seat": 0,
+   "twin_margin": -1268.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6691,
+     "shops": 2,
+     "price": 73,
+     "inventory": 9892,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112838623,
+   "res": "W",
+   "audit_margin": 2897.0,
+   "seat": 1,
+   "twin_margin": 2842.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 1,
+    "cxtb_blocked": 0,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": true,
+     "base": true,
+     "revenue": 9767,
+     "shops": 3,
+     "price": 75,
+     "inventory": 9874,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": true,
+   "tomato_orders": [
+    {
+     "step": 433,
+     "order": [
+      "BUY_SEED",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 646,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 647,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 668,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 671,
+     "order": [
+      "SELL",
+      "TOMATO",
+      14
+     ]
+    },
+    {
+     "step": 694,
+     "order": [
+      "SELL",
+      "TOMATO",
+      20
+     ]
+    },
+    {
+     "step": 711,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 715,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    }
+   ],
+   "tomato_sell_qty": 80,
+   "tomato_seed_buys": 10,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112838673,
+   "res": "W",
+   "audit_margin": 845.0,
+   "seat": 1,
+   "twin_margin": 1085.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6511,
+     "shops": 2,
+     "price": 71,
+     "inventory": 9910,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112839789,
+   "res": "W",
+   "audit_margin": 1207.0,
+   "seat": 1,
+   "twin_margin": 1522.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5734,
+     "shops": 1,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112839832,
+   "res": "W",
+   "audit_margin": 10.0,
+   "seat": 1,
+   "twin_margin": -32.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112840925,
+   "res": "W",
+   "audit_margin": 2283.0,
+   "seat": 1,
+   "twin_margin": 2355.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5906,
+     "shops": 1,
+     "price": 71,
+     "inventory": 9910,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112840958,
+   "res": "L",
+   "audit_margin": -8.0,
+   "seat": 0,
+   "twin_margin": -9.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112842083,
+   "res": "W",
+   "audit_margin": 3277.0,
+   "seat": 1,
+   "twin_margin": 3277.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112842159,
+   "res": "W",
+   "audit_margin": 401.0,
+   "seat": 1,
+   "twin_margin": 401.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5734,
+     "shops": 1,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112842735,
+   "res": "W",
+   "audit_margin": 1703.0,
+   "seat": 0,
+   "twin_margin": 2152.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 7165,
+     "shops": 3,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112843266,
+   "res": "L",
+   "audit_margin": -3153.0,
+   "seat": 1,
+   "twin_margin": -3069.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112843272,
+   "res": "W",
+   "audit_margin": 176.0,
+   "seat": 0,
+   "twin_margin": 519.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5389,
+     "shops": 1,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112843277,
+   "res": "L",
+   "audit_margin": -7922.0,
+   "seat": 0,
+   "twin_margin": -7904.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 1,
+    "cxtb_blocked": 0,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": true,
+     "base": true,
+     "revenue": 29319,
+     "shops": 4,
+     "price": 87,
+     "inventory": 9784,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": true,
+   "tomato_orders": [
+    {
+     "step": 433,
+     "order": [
+      "BUY_SEED",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 638,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 641,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 649,
+     "order": [
+      "SELL",
+      "TOMATO",
+      8
+     ]
+    },
+    {
+     "step": 668,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 671,
+     "order": [
+      "SELL",
+      "TOMATO",
+      14
+     ]
+    },
+    {
+     "step": 694,
+     "order": [
+      "SELL",
+      "TOMATO",
+      20
+     ]
+    },
+    {
+     "step": 711,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 715,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    }
+   ],
+   "tomato_sell_qty": 80,
+   "tomato_seed_buys": 10,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112844424,
+   "res": "L",
+   "audit_margin": -24066.0,
+   "seat": 0,
+   "twin_margin": -24062.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6338,
+     "shops": 2,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112844429,
+   "res": "L",
+   "audit_margin": -285.0,
+   "seat": 1,
+   "twin_margin": -86.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": true,
+     "revenue": 8646,
+     "shops": 3,
+     "price": 73,
+     "inventory": 9892,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112845601,
+   "res": "L",
+   "audit_margin": -876.0,
+   "seat": 0,
+   "twin_margin": -816.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 7165,
+     "shops": 3,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112845604,
+   "res": "W",
+   "audit_margin": 746.0,
+   "seat": 0,
+   "twin_margin": 749.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5215,
+     "shops": 1,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112846774,
+   "res": "L",
+   "audit_margin": -474.0,
+   "seat": 0,
+   "twin_margin": 0.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 1,
+    "cxtb_blocked": 0,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": true,
+     "base": true,
+     "revenue": 9767,
+     "shops": 3,
+     "price": 75,
+     "inventory": 9874,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": true,
+   "tomato_orders": [
+    {
+     "step": 433,
+     "order": [
+      "BUY_SEED",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 638,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 641,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 649,
+     "order": [
+      "SELL",
+      "TOMATO",
+      8
+     ]
+    },
+    {
+     "step": 668,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 671,
+     "order": [
+      "SELL",
+      "TOMATO",
+      14
+     ]
+    },
+    {
+     "step": 694,
+     "order": [
+      "SELL",
+      "TOMATO",
+      20
+     ]
+    },
+    {
+     "step": 711,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 715,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    }
+   ],
+   "tomato_sell_qty": 80,
+   "tomato_seed_buys": 10,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112846785,
+   "res": "L",
+   "audit_margin": -22289.0,
+   "seat": 0,
+   "twin_margin": -22194.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112847952,
+   "res": "L",
+   "audit_margin": -20983.0,
+   "seat": 1,
+   "twin_margin": -20759.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6966,
+     "shops": 2,
+     "price": 75,
+     "inventory": 9874,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112847954,
+   "res": "W",
+   "audit_margin": 794.0,
+   "seat": 0,
+   "twin_margin": 894.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6691,
+     "shops": 2,
+     "price": 73,
+     "inventory": 9892,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112849099,
+   "res": "W",
+   "audit_margin": 1039.0,
+   "seat": 0,
+   "twin_margin": 1106.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5734,
+     "shops": 1,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112849110,
+   "res": "L",
+   "audit_margin": -455.0,
+   "seat": 0,
+   "twin_margin": -4.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 1,
+    "cxtb_blocked": 0,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": true,
+     "base": true,
+     "revenue": 14605,
+     "shops": 3,
+     "price": 82,
+     "inventory": 9820,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": true,
+   "tomato_orders": [
+    {
+     "step": 433,
+     "order": [
+      "BUY_SEED",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 642,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 645,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 649,
+     "order": [
+      "SELL",
+      "TOMATO",
+      8
+     ]
+    },
+    {
+     "step": 668,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 671,
+     "order": [
+      "SELL",
+      "TOMATO",
+      14
+     ]
+    },
+    {
+     "step": 694,
+     "order": [
+      "SELL",
+      "TOMATO",
+      20
+     ]
+    },
+    {
+     "step": 711,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 715,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    }
+   ],
+   "tomato_sell_qty": 80,
+   "tomato_seed_buys": 10,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112850267,
+   "res": "W",
+   "audit_margin": 891.0,
+   "seat": 0,
+   "twin_margin": 891.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112850273,
+   "res": "L",
+   "audit_margin": -2971.0,
+   "seat": 0,
+   "twin_margin": -2805.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112851433,
+   "res": "L",
+   "audit_margin": -353.0,
+   "seat": 1,
+   "twin_margin": -235.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112851436,
+   "res": "L",
+   "audit_margin": -712.0,
+   "seat": 0,
+   "twin_margin": -585.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5389,
+     "shops": 1,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112852596,
+   "res": "L",
+   "audit_margin": -238.0,
+   "seat": 1,
+   "twin_margin": -238.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5560,
+     "shops": 1,
+     "price": 66,
+     "inventory": 9946,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112852621,
+   "res": "W",
+   "audit_margin": 476.0,
+   "seat": 1,
+   "twin_margin": 493.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6691,
+     "shops": 2,
+     "price": 73,
+     "inventory": 9892,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112853391,
+   "res": "W",
+   "audit_margin": 110.0,
+   "seat": 1,
+   "twin_margin": 519.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112853771,
+   "res": "W",
+   "audit_margin": 1925.0,
+   "seat": 1,
+   "twin_margin": 2018.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5215,
+     "shops": 1,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112853781,
+   "res": "L",
+   "audit_margin": -382.0,
+   "seat": 1,
+   "twin_margin": 0.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5215,
+     "shops": 1,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112854164,
+   "res": "W",
+   "audit_margin": 175.0,
+   "seat": 1,
+   "twin_margin": 191.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5734,
+     "shops": 1,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112855003,
+   "res": "W",
+   "audit_margin": 81.0,
+   "seat": 0,
+   "twin_margin": 95.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 1,
+    "cxtb_blocked": 0,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": true,
+     "base": true,
+     "revenue": 36527,
+     "shops": 4,
+     "price": 103,
+     "inventory": 9748,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": true,
+   "tomato_orders": [
+    {
+     "step": 433,
+     "order": [
+      "BUY_SEED",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 638,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 641,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 649,
+     "order": [
+      "SELL",
+      "TOMATO",
+      8
+     ]
+    },
+    {
+     "step": 668,
+     "order": [
+      "SELL",
+      "TOMATO",
+      6
+     ]
+    },
+    {
+     "step": 671,
+     "order": [
+      "SELL",
+      "TOMATO",
+      14
+     ]
+    },
+    {
+     "step": 694,
+     "order": [
+      "SELL",
+      "TOMATO",
+      20
+     ]
+    },
+    {
+     "step": 711,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    },
+    {
+     "step": 715,
+     "order": [
+      "SELL",
+      "TOMATO",
+      10
+     ]
+    }
+   ],
+   "tomato_sell_qty": 80,
+   "tomato_seed_buys": 10,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112855005,
+   "res": "L",
+   "audit_margin": -1591.0,
+   "seat": 0,
+   "twin_margin": -1775.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6691,
+     "shops": 2,
+     "price": 73,
+     "inventory": 9892,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112856202,
+   "res": "L",
+   "audit_margin": -1711.0,
+   "seat": 0,
+   "twin_margin": -1651.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5215,
+     "shops": 1,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112856217,
+   "res": "W",
+   "audit_margin": 2573.0,
+   "seat": 0,
+   "twin_margin": 2661.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5734,
+     "shops": 1,
+     "price": 69,
+     "inventory": 9928,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112856307,
+   "res": "L",
+   "audit_margin": -503.0,
+   "seat": 1,
+   "twin_margin": -503.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 6080,
+     "shops": 1,
+     "price": 73,
+     "inventory": 9892,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112857412,
+   "res": "W",
+   "audit_margin": 231.0,
+   "seat": 0,
+   "twin_margin": 310.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5560,
+     "shops": 1,
+     "price": 66,
+     "inventory": 9946,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112857426,
+   "res": "L",
+   "audit_margin": -113.0,
+   "seat": 1,
+   "twin_margin": 597.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 8202,
+     "shops": 2,
+     "price": 79,
+     "inventory": 9838,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112858576,
+   "res": "W",
+   "audit_margin": 763.0,
+   "seat": 0,
+   "twin_margin": 887.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5993,
+     "shops": 2,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112858579,
+   "res": "L",
+   "audit_margin": -928.0,
+   "seat": 1,
+   "twin_margin": -862.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5215,
+     "shops": 1,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112858692,
+   "res": "L",
+   "audit_margin": -1796.0,
+   "seat": 0,
+   "twin_margin": -1646.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 4035,
+     "shops": 0,
+     "price": 62,
+     "inventory": 9982,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  },
+  {
+   "episode": 112859092,
+   "res": "W",
+   "audit_margin": 1154.0,
+   "seat": 0,
+   "twin_margin": 1360.0,
+   "status": "DONE",
+   "counters": {
+    "cxtb_calls": 1,
+    "cxtb_opened": 0,
+    "cxtb_blocked": 1,
+    "cxtb_errors": 0
+   },
+   "features": [
+    {
+     "opened": false,
+     "base": false,
+     "revenue": 5389,
+     "shops": 1,
+     "price": 64,
+     "inventory": 9964,
+     "their_tomatoes": 0
+    }
+   ],
+   "fired": false,
+   "tomato_orders": [],
+   "tomato_sell_qty": 0,
+   "tomato_seed_buys": 0,
+   "trigger_steps": [
+    432
+   ]
+  }
+ ],
+ "wall_s": 105.0
+}

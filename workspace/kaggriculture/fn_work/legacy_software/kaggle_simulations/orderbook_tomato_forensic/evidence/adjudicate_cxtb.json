@@ -1,0 +1,2688 @@
+{
+ "probe": "cxtb_variant_adjudication",
+ "corpus": {
+  "games": [
+   {
+    "episode": 112832752,
+    "seat": 0,
+    "res": "L",
+    "margin": -55.0
+   },
+   {
+    "episode": 112835052,
+    "seat": 0,
+    "res": "L",
+    "margin": -527.0
+   },
+   {
+    "episode": 112835136,
+    "seat": 0,
+    "res": "L",
+    "margin": -640.0
+   },
+   {
+    "episode": 112838302,
+    "seat": 0,
+    "res": "L",
+    "margin": -1268.0
+   },
+   {
+    "episode": 112840958,
+    "seat": 0,
+    "res": "L",
+    "margin": -8.0
+   },
+   {
+    "episode": 112843277,
+    "seat": 0,
+    "res": "L",
+    "margin": -7922.0
+   },
+   {
+    "episode": 112844429,
+    "seat": 1,
+    "res": "L",
+    "margin": -285.0
+   },
+   {
+    "episode": 112846774,
+    "seat": 0,
+    "res": "L",
+    "margin": -474.0
+   },
+   {
+    "episode": 112849110,
+    "seat": 0,
+    "res": "L",
+    "margin": -455.0
+   },
+   {
+    "episode": 112853781,
+    "seat": 1,
+    "res": "L",
+    "margin": -382.0
+   },
+   {
+    "episode": 112856307,
+    "seat": 1,
+    "res": "L",
+    "margin": -503.0
+   },
+   {
+    "episode": 112858579,
+    "seat": 1,
+    "res": "L",
+    "margin": -928.0
+   },
+   {
+    "episode": 112828048,
+    "seat": 1,
+    "res": "W",
+    "margin": 11330.0
+   },
+   {
+    "episode": 112839832,
+    "seat": 1,
+    "res": "W",
+    "margin": 10.0
+   },
+   {
+    "episode": 112842735,
+    "seat": 0,
+    "res": "W",
+    "margin": 1703.0
+   },
+   {
+    "episode": 112845604,
+    "seat": 0,
+    "res": "W",
+    "margin": 746.0
+   },
+   {
+    "episode": 112849099,
+    "seat": 0,
+    "res": "W",
+    "margin": 1039.0
+   },
+   {
+    "episode": 112853391,
+    "seat": 1,
+    "res": "W",
+    "margin": 110.0
+   }
+  ],
+  "sampling": {
+   "seed_material": "20260925r18",
+   "seed_derivation": "int(sha256(material).hexdigest()[:16], 16)",
+   "losses_pool": [
+    112831515,
+    112831575,
+    112832752,
+    112835052,
+    112835136,
+    112835161,
+    112837488,
+    112838302,
+    112840958,
+    112843266,
+    112843277,
+    112844429,
+    112845601,
+    112846774,
+    112849110,
+    112850273,
+    112851433,
+    112851436,
+    112852596,
+    112853781,
+    112855005,
+    112856202,
+    112856307,
+    112857426,
+    112858579,
+    112858692
+   ],
+   "wins_pool": [
+    112811974,
+    112813113,
+    112814254,
+    112815438,
+    112816559,
+    112817709,
+    112817799,
+    112818872,
+    112818930,
+    112820019,
+    112820070,
+    112821155,
+    112821236,
+    112822309,
+    112822367,
+    112823438,
+    112823464,
+    112824591,
+    112824627,
+    112825732,
+    112825764,
+    112826868,
+    112826909,
+    112828011,
+    112828048,
+    112829156,
+    112829186,
+    112830330,
+    112830352,
+    112832703,
+    112833942,
+    112833949,
+    112836273,
+    112836317,
+    112837481,
+    112838623,
+    112838673,
+    112839789,
+    112839832,
+    112840925,
+    112842083,
+    112842159,
+    112842735,
+    112843272,
+    112845604,
+    112847954,
+    112849099,
+    112850267,
+    112852621,
+    112853391,
+    112853771,
+    112854164,
+    112855003,
+    112856217,
+    112857412,
+    112858576,
+    112859092
+   ],
+   "note": "败局池沿 R17 先例排 3 早崩局（step-91 面不受早崩影响，口径一致性优先，记偏差）"
+  }
+ },
+ "stepped": {
+  "variants": [
+   {
+    "batches": [
+     5,
+     5
+    ],
+    "delta_median": 0.0,
+    "delta_mean": -2847.61,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 4
+   },
+   {
+    "batches": [
+     4,
+     3,
+     3
+    ],
+    "delta_median": 0.0,
+    "delta_mean": -2847.61,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 4
+   }
+  ],
+  "best": null
+ },
+ "adopt_stepped": false,
+ "params_stepped": null,
+ "constants": {
+  "r18_points": [
+   {
+    "axis": "min_revenue",
+    "value": 7000,
+    "delta_median": 0.0,
+    "delta_mean": 234.5,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 2
+   },
+   {
+    "axis": "min_revenue",
+    "value": 8000,
+    "delta_median": 0.0,
+    "delta_mean": 34.83,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 1
+   },
+   {
+    "axis": "min_revenue",
+    "value": 10000,
+    "delta_median": 0.0,
+    "delta_mean": -98.22,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 1
+   },
+   {
+    "axis": "min_revenue",
+    "value": 11000,
+    "delta_median": 0.0,
+    "delta_mean": -98.22,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 1
+   },
+   {
+    "axis": "their_units",
+    "value": 0.6,
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "their_units",
+    "value": 0.9,
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "drain_slack",
+    "value": 2.0,
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "drain_slack",
+    "value": 2.8,
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 0
+   }
+  ],
+  "sensitive_band_episodes": [
+   {
+    "episode": 112817799,
+    "seat": 0,
+    "res": "W",
+    "margin": 67211.0
+   },
+   {
+    "episode": 112820070,
+    "seat": 0,
+    "res": "W",
+    "margin": 24145.0
+   },
+   {
+    "episode": 112826909,
+    "seat": 1,
+    "res": "W",
+    "margin": 4382.0
+   },
+   {
+    "episode": 112829186,
+    "seat": 1,
+    "res": "W",
+    "margin": 5674.0
+   },
+   {
+    "episode": 112830352,
+    "seat": 0,
+    "res": "W",
+    "margin": 108.0
+   },
+   {
+    "episode": 112833942,
+    "seat": 1,
+    "res": "W",
+    "margin": 11871.0
+   },
+   {
+    "episode": 112837481,
+    "seat": 1,
+    "res": "W",
+    "margin": 923.0
+   },
+   {
+    "episode": 112838623,
+    "seat": 1,
+    "res": "W",
+    "margin": 2897.0
+   },
+   {
+    "episode": 112842735,
+    "seat": 0,
+    "res": "W",
+    "margin": 1703.0
+   },
+   {
+    "episode": 112844429,
+    "seat": 1,
+    "res": "L",
+    "margin": -285.0
+   },
+   {
+    "episode": 112845601,
+    "seat": 0,
+    "res": "L",
+    "margin": -876.0
+   },
+   {
+    "episode": 112846774,
+    "seat": 0,
+    "res": "L",
+    "margin": -474.0
+   },
+   {
+    "episode": 112857426,
+    "seat": 1,
+    "res": "L",
+    "margin": -113.0
+   }
+  ],
+  "band_points": [
+   {
+    "axis": "min_revenue",
+    "value": 7000,
+    "delta_median": 0.0,
+    "delta_mean": 1127.38,
+    "win_flips_negative": [
+     112837481
+    ],
+    "n_nonzero": 10
+   },
+   {
+    "axis": "min_revenue",
+    "value": 8000,
+    "delta_median": 0.0,
+    "delta_mean": 1033.23,
+    "win_flips_negative": [],
+    "n_nonzero": 5
+   },
+   {
+    "axis": "min_revenue",
+    "value": 10000,
+    "delta_median": 0.0,
+    "delta_mean": -752.38,
+    "win_flips_negative": [
+     112838623
+    ],
+    "n_nonzero": 3
+   },
+   {
+    "axis": "min_revenue",
+    "value": 11000,
+    "delta_median": 0.0,
+    "delta_mean": -752.38,
+    "win_flips_negative": [
+     112838623
+    ],
+    "n_nonzero": 3
+   },
+   {
+    "axis": "their_units",
+    "value": 0.6,
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "their_units",
+    "value": 0.9,
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "drain_slack",
+    "value": 2.0,
+    "delta_median": 0.0,
+    "delta_mean": 691.08,
+    "win_flips_negative": [],
+    "n_nonzero": 1
+   },
+   {
+    "axis": "drain_slack",
+    "value": 2.8,
+    "delta_median": 0.0,
+    "delta_mean": -280.0,
+    "win_flips_negative": [],
+    "n_nonzero": 1
+   }
+  ],
+  "best": null
+ },
+ "adopt_constants": false,
+ "params_constants": null,
+ "stepped_detail": [
+  {
+   "batches": [
+    5,
+    5
+   ],
+   "density": 112.5,
+   "per_game": [
+    {
+     "episode": 112832752,
+     "res": "L",
+     "base_margin": -515.0,
+     "margin": -9613.0,
+     "delta": -9098.0
+    },
+    {
+     "episode": 112835052,
+     "res": "L",
+     "base_margin": -322.0,
+     "margin": -322.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112835136,
+     "res": "L",
+     "base_margin": -640.0,
+     "margin": -640.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112838302,
+     "res": "L",
+     "base_margin": -1268.0,
+     "margin": -1268.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112840958,
+     "res": "L",
+     "base_margin": -9.0,
+     "margin": -9.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112843277,
+     "res": "L",
+     "base_margin": -7904.0,
+     "margin": -31637.0,
+     "delta": -23733.0
+    },
+    {
+     "episode": 112844429,
+     "res": "L",
+     "base_margin": -86.0,
+     "margin": -86.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112846774,
+     "res": "L",
+     "base_margin": 0.0,
+     "margin": -6150.0,
+     "delta": -6150.0
+    },
+    {
+     "episode": 112849110,
+     "res": "L",
+     "base_margin": -4.0,
+     "margin": -12280.0,
+     "delta": -12276.0
+    },
+    {
+     "episode": 112853781,
+     "res": "L",
+     "base_margin": 0.0,
+     "margin": 0.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112856307,
+     "res": "L",
+     "base_margin": -503.0,
+     "margin": -503.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112858579,
+     "res": "L",
+     "base_margin": -862.0,
+     "margin": -862.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112828048,
+     "res": "W",
+     "base_margin": 11748.0,
+     "margin": 11748.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112839832,
+     "res": "W",
+     "base_margin": -32.0,
+     "margin": -32.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112842735,
+     "res": "W",
+     "base_margin": 2152.0,
+     "margin": 2152.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112845604,
+     "res": "W",
+     "base_margin": 749.0,
+     "margin": 749.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112849099,
+     "res": "W",
+     "base_margin": 1106.0,
+     "margin": 1106.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112853391,
+     "res": "W",
+     "base_margin": 519.0,
+     "margin": 519.0,
+     "delta": 0.0
+    }
+   ],
+   "delta_median": 0.0,
+   "delta_mean": -2847.61,
+   "win_flips_negative": [
+    112839832
+   ],
+   "n_nonzero": 4
+  },
+  {
+   "batches": [
+    4,
+    3,
+    3
+   ],
+   "density": 112.5,
+   "per_game": [
+    {
+     "episode": 112832752,
+     "res": "L",
+     "base_margin": -515.0,
+     "margin": -9613.0,
+     "delta": -9098.0
+    },
+    {
+     "episode": 112835052,
+     "res": "L",
+     "base_margin": -322.0,
+     "margin": -322.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112835136,
+     "res": "L",
+     "base_margin": -640.0,
+     "margin": -640.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112838302,
+     "res": "L",
+     "base_margin": -1268.0,
+     "margin": -1268.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112840958,
+     "res": "L",
+     "base_margin": -9.0,
+     "margin": -9.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112843277,
+     "res": "L",
+     "base_margin": -7904.0,
+     "margin": -31637.0,
+     "delta": -23733.0
+    },
+    {
+     "episode": 112844429,
+     "res": "L",
+     "base_margin": -86.0,
+     "margin": -86.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112846774,
+     "res": "L",
+     "base_margin": 0.0,
+     "margin": -6150.0,
+     "delta": -6150.0
+    },
+    {
+     "episode": 112849110,
+     "res": "L",
+     "base_margin": -4.0,
+     "margin": -12280.0,
+     "delta": -12276.0
+    },
+    {
+     "episode": 112853781,
+     "res": "L",
+     "base_margin": 0.0,
+     "margin": 0.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112856307,
+     "res": "L",
+     "base_margin": -503.0,
+     "margin": -503.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112858579,
+     "res": "L",
+     "base_margin": -862.0,
+     "margin": -862.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112828048,
+     "res": "W",
+     "base_margin": 11748.0,
+     "margin": 11748.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112839832,
+     "res": "W",
+     "base_margin": -32.0,
+     "margin": -32.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112842735,
+     "res": "W",
+     "base_margin": 2152.0,
+     "margin": 2152.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112845604,
+     "res": "W",
+     "base_margin": 749.0,
+     "margin": 749.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112849099,
+     "res": "W",
+     "base_margin": 1106.0,
+     "margin": 1106.0,
+     "delta": 0.0
+    },
+    {
+     "episode": 112853391,
+     "res": "W",
+     "base_margin": 519.0,
+     "margin": 519.0,
+     "delta": 0.0
+    }
+   ],
+   "delta_median": 0.0,
+   "delta_mean": -2847.61,
+   "win_flips_negative": [
+    112839832
+   ],
+   "n_nonzero": 4
+  }
+ ],
+ "constants_detail": {
+  "r18": [
+   {
+    "axis": "min_revenue",
+    "value": 7000,
+    "per_game": [
+     {
+      "episode": 112832752,
+      "res": "L",
+      "base_margin": -515.0,
+      "margin": -515.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835052,
+      "res": "L",
+      "base_margin": -322.0,
+      "margin": -322.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835136,
+      "res": "L",
+      "base_margin": -640.0,
+      "margin": -640.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838302,
+      "res": "L",
+      "base_margin": -1268.0,
+      "margin": -1268.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112840958,
+      "res": "L",
+      "base_margin": -9.0,
+      "margin": -9.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112843277,
+      "res": "L",
+      "base_margin": -7904.0,
+      "margin": -7904.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": 541.0,
+      "delta": 627.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849110,
+      "res": "L",
+      "base_margin": -4.0,
+      "margin": -4.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853781,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112856307,
+      "res": "L",
+      "base_margin": -503.0,
+      "margin": -503.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112858579,
+      "res": "L",
+      "base_margin": -862.0,
+      "margin": -862.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112828048,
+      "res": "W",
+      "base_margin": 11748.0,
+      "margin": 11748.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112839832,
+      "res": "W",
+      "base_margin": -32.0,
+      "margin": -32.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 5746.0,
+      "delta": 3594.0
+     },
+     {
+      "episode": 112845604,
+      "res": "W",
+      "base_margin": 749.0,
+      "margin": 749.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849099,
+      "res": "W",
+      "base_margin": 1106.0,
+      "margin": 1106.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853391,
+      "res": "W",
+      "base_margin": 519.0,
+      "margin": 519.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 234.5,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 2
+   },
+   {
+    "axis": "min_revenue",
+    "value": 8000,
+    "per_game": [
+     {
+      "episode": 112832752,
+      "res": "L",
+      "base_margin": -515.0,
+      "margin": -515.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835052,
+      "res": "L",
+      "base_margin": -322.0,
+      "margin": -322.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835136,
+      "res": "L",
+      "base_margin": -640.0,
+      "margin": -640.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838302,
+      "res": "L",
+      "base_margin": -1268.0,
+      "margin": -1268.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112840958,
+      "res": "L",
+      "base_margin": -9.0,
+      "margin": -9.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112843277,
+      "res": "L",
+      "base_margin": -7904.0,
+      "margin": -7904.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": 541.0,
+      "delta": 627.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849110,
+      "res": "L",
+      "base_margin": -4.0,
+      "margin": -4.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853781,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112856307,
+      "res": "L",
+      "base_margin": -503.0,
+      "margin": -503.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112858579,
+      "res": "L",
+      "base_margin": -862.0,
+      "margin": -862.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112828048,
+      "res": "W",
+      "base_margin": 11748.0,
+      "margin": 11748.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112839832,
+      "res": "W",
+      "base_margin": -32.0,
+      "margin": -32.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845604,
+      "res": "W",
+      "base_margin": 749.0,
+      "margin": 749.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849099,
+      "res": "W",
+      "base_margin": 1106.0,
+      "margin": 1106.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853391,
+      "res": "W",
+      "base_margin": 519.0,
+      "margin": 519.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 34.83,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 1
+   },
+   {
+    "axis": "min_revenue",
+    "value": 10000,
+    "per_game": [
+     {
+      "episode": 112832752,
+      "res": "L",
+      "base_margin": -515.0,
+      "margin": -515.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835052,
+      "res": "L",
+      "base_margin": -322.0,
+      "margin": -322.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835136,
+      "res": "L",
+      "base_margin": -640.0,
+      "margin": -640.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838302,
+      "res": "L",
+      "base_margin": -1268.0,
+      "margin": -1268.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112840958,
+      "res": "L",
+      "base_margin": -9.0,
+      "margin": -9.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112843277,
+      "res": "L",
+      "base_margin": -7904.0,
+      "margin": -7904.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": -1768.0,
+      "delta": -1768.0
+     },
+     {
+      "episode": 112849110,
+      "res": "L",
+      "base_margin": -4.0,
+      "margin": -4.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853781,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112856307,
+      "res": "L",
+      "base_margin": -503.0,
+      "margin": -503.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112858579,
+      "res": "L",
+      "base_margin": -862.0,
+      "margin": -862.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112828048,
+      "res": "W",
+      "base_margin": 11748.0,
+      "margin": 11748.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112839832,
+      "res": "W",
+      "base_margin": -32.0,
+      "margin": -32.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845604,
+      "res": "W",
+      "base_margin": 749.0,
+      "margin": 749.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849099,
+      "res": "W",
+      "base_margin": 1106.0,
+      "margin": 1106.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853391,
+      "res": "W",
+      "base_margin": 519.0,
+      "margin": 519.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": -98.22,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 1
+   },
+   {
+    "axis": "min_revenue",
+    "value": 11000,
+    "per_game": [
+     {
+      "episode": 112832752,
+      "res": "L",
+      "base_margin": -515.0,
+      "margin": -515.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835052,
+      "res": "L",
+      "base_margin": -322.0,
+      "margin": -322.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835136,
+      "res": "L",
+      "base_margin": -640.0,
+      "margin": -640.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838302,
+      "res": "L",
+      "base_margin": -1268.0,
+      "margin": -1268.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112840958,
+      "res": "L",
+      "base_margin": -9.0,
+      "margin": -9.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112843277,
+      "res": "L",
+      "base_margin": -7904.0,
+      "margin": -7904.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": -1768.0,
+      "delta": -1768.0
+     },
+     {
+      "episode": 112849110,
+      "res": "L",
+      "base_margin": -4.0,
+      "margin": -4.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853781,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112856307,
+      "res": "L",
+      "base_margin": -503.0,
+      "margin": -503.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112858579,
+      "res": "L",
+      "base_margin": -862.0,
+      "margin": -862.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112828048,
+      "res": "W",
+      "base_margin": 11748.0,
+      "margin": 11748.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112839832,
+      "res": "W",
+      "base_margin": -32.0,
+      "margin": -32.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845604,
+      "res": "W",
+      "base_margin": 749.0,
+      "margin": 749.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849099,
+      "res": "W",
+      "base_margin": 1106.0,
+      "margin": 1106.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853391,
+      "res": "W",
+      "base_margin": 519.0,
+      "margin": 519.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": -98.22,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 1
+   },
+   {
+    "axis": "their_units",
+    "value": 0.6,
+    "per_game": [
+     {
+      "episode": 112832752,
+      "res": "L",
+      "base_margin": -515.0,
+      "margin": -515.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835052,
+      "res": "L",
+      "base_margin": -322.0,
+      "margin": -322.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835136,
+      "res": "L",
+      "base_margin": -640.0,
+      "margin": -640.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838302,
+      "res": "L",
+      "base_margin": -1268.0,
+      "margin": -1268.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112840958,
+      "res": "L",
+      "base_margin": -9.0,
+      "margin": -9.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112843277,
+      "res": "L",
+      "base_margin": -7904.0,
+      "margin": -7904.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849110,
+      "res": "L",
+      "base_margin": -4.0,
+      "margin": -4.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853781,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112856307,
+      "res": "L",
+      "base_margin": -503.0,
+      "margin": -503.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112858579,
+      "res": "L",
+      "base_margin": -862.0,
+      "margin": -862.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112828048,
+      "res": "W",
+      "base_margin": 11748.0,
+      "margin": 11748.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112839832,
+      "res": "W",
+      "base_margin": -32.0,
+      "margin": -32.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845604,
+      "res": "W",
+      "base_margin": 749.0,
+      "margin": 749.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849099,
+      "res": "W",
+      "base_margin": 1106.0,
+      "margin": 1106.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853391,
+      "res": "W",
+      "base_margin": 519.0,
+      "margin": 519.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "their_units",
+    "value": 0.9,
+    "per_game": [
+     {
+      "episode": 112832752,
+      "res": "L",
+      "base_margin": -515.0,
+      "margin": -515.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835052,
+      "res": "L",
+      "base_margin": -322.0,
+      "margin": -322.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835136,
+      "res": "L",
+      "base_margin": -640.0,
+      "margin": -640.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838302,
+      "res": "L",
+      "base_margin": -1268.0,
+      "margin": -1268.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112840958,
+      "res": "L",
+      "base_margin": -9.0,
+      "margin": -9.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112843277,
+      "res": "L",
+      "base_margin": -7904.0,
+      "margin": -7904.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849110,
+      "res": "L",
+      "base_margin": -4.0,
+      "margin": -4.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853781,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112856307,
+      "res": "L",
+      "base_margin": -503.0,
+      "margin": -503.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112858579,
+      "res": "L",
+      "base_margin": -862.0,
+      "margin": -862.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112828048,
+      "res": "W",
+      "base_margin": 11748.0,
+      "margin": 11748.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112839832,
+      "res": "W",
+      "base_margin": -32.0,
+      "margin": -32.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845604,
+      "res": "W",
+      "base_margin": 749.0,
+      "margin": 749.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849099,
+      "res": "W",
+      "base_margin": 1106.0,
+      "margin": 1106.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853391,
+      "res": "W",
+      "base_margin": 519.0,
+      "margin": 519.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "drain_slack",
+    "value": 2.0,
+    "per_game": [
+     {
+      "episode": 112832752,
+      "res": "L",
+      "base_margin": -515.0,
+      "margin": -515.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835052,
+      "res": "L",
+      "base_margin": -322.0,
+      "margin": -322.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835136,
+      "res": "L",
+      "base_margin": -640.0,
+      "margin": -640.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838302,
+      "res": "L",
+      "base_margin": -1268.0,
+      "margin": -1268.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112840958,
+      "res": "L",
+      "base_margin": -9.0,
+      "margin": -9.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112843277,
+      "res": "L",
+      "base_margin": -7904.0,
+      "margin": -7904.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849110,
+      "res": "L",
+      "base_margin": -4.0,
+      "margin": -4.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853781,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112856307,
+      "res": "L",
+      "base_margin": -503.0,
+      "margin": -503.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112858579,
+      "res": "L",
+      "base_margin": -862.0,
+      "margin": -862.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112828048,
+      "res": "W",
+      "base_margin": 11748.0,
+      "margin": 11748.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112839832,
+      "res": "W",
+      "base_margin": -32.0,
+      "margin": -32.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845604,
+      "res": "W",
+      "base_margin": 749.0,
+      "margin": 749.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849099,
+      "res": "W",
+      "base_margin": 1106.0,
+      "margin": 1106.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853391,
+      "res": "W",
+      "base_margin": 519.0,
+      "margin": 519.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "drain_slack",
+    "value": 2.8,
+    "per_game": [
+     {
+      "episode": 112832752,
+      "res": "L",
+      "base_margin": -515.0,
+      "margin": -515.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835052,
+      "res": "L",
+      "base_margin": -322.0,
+      "margin": -322.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112835136,
+      "res": "L",
+      "base_margin": -640.0,
+      "margin": -640.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838302,
+      "res": "L",
+      "base_margin": -1268.0,
+      "margin": -1268.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112840958,
+      "res": "L",
+      "base_margin": -9.0,
+      "margin": -9.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112843277,
+      "res": "L",
+      "base_margin": -7904.0,
+      "margin": -7904.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849110,
+      "res": "L",
+      "base_margin": -4.0,
+      "margin": -4.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853781,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112856307,
+      "res": "L",
+      "base_margin": -503.0,
+      "margin": -503.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112858579,
+      "res": "L",
+      "base_margin": -862.0,
+      "margin": -862.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112828048,
+      "res": "W",
+      "base_margin": 11748.0,
+      "margin": 11748.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112839832,
+      "res": "W",
+      "base_margin": -32.0,
+      "margin": -32.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845604,
+      "res": "W",
+      "base_margin": 749.0,
+      "margin": 749.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112849099,
+      "res": "W",
+      "base_margin": 1106.0,
+      "margin": 1106.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112853391,
+      "res": "W",
+      "base_margin": 519.0,
+      "margin": 519.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [
+     112839832
+    ],
+    "n_nonzero": 0
+   }
+  ],
+  "band": [
+   {
+    "axis": "min_revenue",
+    "value": 7000,
+    "per_game": [
+     {
+      "episode": 112817799,
+      "res": "W",
+      "base_margin": 67530.0,
+      "margin": 76514.0,
+      "delta": 8984.0
+     },
+     {
+      "episode": 112820070,
+      "res": "W",
+      "base_margin": 24214.0,
+      "margin": 25257.0,
+      "delta": 1043.0
+     },
+     {
+      "episode": 112826909,
+      "res": "W",
+      "base_margin": 4456.0,
+      "margin": 7780.0,
+      "delta": 3324.0
+     },
+     {
+      "episode": 112829186,
+      "res": "W",
+      "base_margin": 6109.0,
+      "margin": 6109.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112830352,
+      "res": "W",
+      "base_margin": 292.0,
+      "margin": 1084.0,
+      "delta": 792.0
+     },
+     {
+      "episode": 112833942,
+      "res": "W",
+      "base_margin": 12015.0,
+      "margin": 11291.0,
+      "delta": -724.0
+     },
+     {
+      "episode": 112837481,
+      "res": "W",
+      "base_margin": 914.0,
+      "margin": -455.0,
+      "delta": -1369.0
+     },
+     {
+      "episode": 112838623,
+      "res": "W",
+      "base_margin": 2842.0,
+      "margin": 2842.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 5746.0,
+      "delta": 3594.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": 541.0,
+      "delta": 627.0
+     },
+     {
+      "episode": 112845601,
+      "res": "L",
+      "base_margin": -816.0,
+      "margin": -1885.0,
+      "delta": -1069.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112857426,
+      "res": "L",
+      "base_margin": 597.0,
+      "margin": 51.0,
+      "delta": -546.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 1127.38,
+    "win_flips_negative": [
+     112837481
+    ],
+    "n_nonzero": 10
+   },
+   {
+    "axis": "min_revenue",
+    "value": 8000,
+    "per_game": [
+     {
+      "episode": 112817799,
+      "res": "W",
+      "base_margin": 67530.0,
+      "margin": 76514.0,
+      "delta": 8984.0
+     },
+     {
+      "episode": 112820070,
+      "res": "W",
+      "base_margin": 24214.0,
+      "margin": 25257.0,
+      "delta": 1043.0
+     },
+     {
+      "episode": 112826909,
+      "res": "W",
+      "base_margin": 4456.0,
+      "margin": 7780.0,
+      "delta": 3324.0
+     },
+     {
+      "episode": 112829186,
+      "res": "W",
+      "base_margin": 6109.0,
+      "margin": 6109.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112830352,
+      "res": "W",
+      "base_margin": 292.0,
+      "margin": 292.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112833942,
+      "res": "W",
+      "base_margin": 12015.0,
+      "margin": 12015.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112837481,
+      "res": "W",
+      "base_margin": 914.0,
+      "margin": 914.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838623,
+      "res": "W",
+      "base_margin": 2842.0,
+      "margin": 2842.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": 541.0,
+      "delta": 627.0
+     },
+     {
+      "episode": 112845601,
+      "res": "L",
+      "base_margin": -816.0,
+      "margin": -816.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112857426,
+      "res": "L",
+      "base_margin": 597.0,
+      "margin": 51.0,
+      "delta": -546.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 1033.23,
+    "win_flips_negative": [],
+    "n_nonzero": 5
+   },
+   {
+    "axis": "min_revenue",
+    "value": 10000,
+    "per_game": [
+     {
+      "episode": 112817799,
+      "res": "W",
+      "base_margin": 67530.0,
+      "margin": 67530.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112820070,
+      "res": "W",
+      "base_margin": 24214.0,
+      "margin": 24214.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112826909,
+      "res": "W",
+      "base_margin": 4456.0,
+      "margin": 4456.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112829186,
+      "res": "W",
+      "base_margin": 6109.0,
+      "margin": 2469.0,
+      "delta": -3640.0
+     },
+     {
+      "episode": 112830352,
+      "res": "W",
+      "base_margin": 292.0,
+      "margin": 292.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112833942,
+      "res": "W",
+      "base_margin": 12015.0,
+      "margin": 12015.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112837481,
+      "res": "W",
+      "base_margin": 914.0,
+      "margin": 914.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838623,
+      "res": "W",
+      "base_margin": 2842.0,
+      "margin": -1531.0,
+      "delta": -4373.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845601,
+      "res": "L",
+      "base_margin": -816.0,
+      "margin": -816.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": -1768.0,
+      "delta": -1768.0
+     },
+     {
+      "episode": 112857426,
+      "res": "L",
+      "base_margin": 597.0,
+      "margin": 597.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": -752.38,
+    "win_flips_negative": [
+     112838623
+    ],
+    "n_nonzero": 3
+   },
+   {
+    "axis": "min_revenue",
+    "value": 11000,
+    "per_game": [
+     {
+      "episode": 112817799,
+      "res": "W",
+      "base_margin": 67530.0,
+      "margin": 67530.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112820070,
+      "res": "W",
+      "base_margin": 24214.0,
+      "margin": 24214.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112826909,
+      "res": "W",
+      "base_margin": 4456.0,
+      "margin": 4456.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112829186,
+      "res": "W",
+      "base_margin": 6109.0,
+      "margin": 2469.0,
+      "delta": -3640.0
+     },
+     {
+      "episode": 112830352,
+      "res": "W",
+      "base_margin": 292.0,
+      "margin": 292.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112833942,
+      "res": "W",
+      "base_margin": 12015.0,
+      "margin": 12015.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112837481,
+      "res": "W",
+      "base_margin": 914.0,
+      "margin": 914.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838623,
+      "res": "W",
+      "base_margin": 2842.0,
+      "margin": -1531.0,
+      "delta": -4373.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845601,
+      "res": "L",
+      "base_margin": -816.0,
+      "margin": -816.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": -1768.0,
+      "delta": -1768.0
+     },
+     {
+      "episode": 112857426,
+      "res": "L",
+      "base_margin": 597.0,
+      "margin": 597.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": -752.38,
+    "win_flips_negative": [
+     112838623
+    ],
+    "n_nonzero": 3
+   },
+   {
+    "axis": "their_units",
+    "value": 0.6,
+    "per_game": [
+     {
+      "episode": 112817799,
+      "res": "W",
+      "base_margin": 67530.0,
+      "margin": 67530.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112820070,
+      "res": "W",
+      "base_margin": 24214.0,
+      "margin": 24214.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112826909,
+      "res": "W",
+      "base_margin": 4456.0,
+      "margin": 4456.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112829186,
+      "res": "W",
+      "base_margin": 6109.0,
+      "margin": 6109.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112830352,
+      "res": "W",
+      "base_margin": 292.0,
+      "margin": 292.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112833942,
+      "res": "W",
+      "base_margin": 12015.0,
+      "margin": 12015.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112837481,
+      "res": "W",
+      "base_margin": 914.0,
+      "margin": 914.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838623,
+      "res": "W",
+      "base_margin": 2842.0,
+      "margin": 2842.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845601,
+      "res": "L",
+      "base_margin": -816.0,
+      "margin": -816.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112857426,
+      "res": "L",
+      "base_margin": 597.0,
+      "margin": 597.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "their_units",
+    "value": 0.9,
+    "per_game": [
+     {
+      "episode": 112817799,
+      "res": "W",
+      "base_margin": 67530.0,
+      "margin": 67530.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112820070,
+      "res": "W",
+      "base_margin": 24214.0,
+      "margin": 24214.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112826909,
+      "res": "W",
+      "base_margin": 4456.0,
+      "margin": 4456.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112829186,
+      "res": "W",
+      "base_margin": 6109.0,
+      "margin": 6109.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112830352,
+      "res": "W",
+      "base_margin": 292.0,
+      "margin": 292.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112833942,
+      "res": "W",
+      "base_margin": 12015.0,
+      "margin": 12015.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112837481,
+      "res": "W",
+      "base_margin": 914.0,
+      "margin": 914.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838623,
+      "res": "W",
+      "base_margin": 2842.0,
+      "margin": 2842.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845601,
+      "res": "L",
+      "base_margin": -816.0,
+      "margin": -816.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112857426,
+      "res": "L",
+      "base_margin": 597.0,
+      "margin": 597.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 0.0,
+    "win_flips_negative": [],
+    "n_nonzero": 0
+   },
+   {
+    "axis": "drain_slack",
+    "value": 2.0,
+    "per_game": [
+     {
+      "episode": 112817799,
+      "res": "W",
+      "base_margin": 67530.0,
+      "margin": 76514.0,
+      "delta": 8984.0
+     },
+     {
+      "episode": 112820070,
+      "res": "W",
+      "base_margin": 24214.0,
+      "margin": 24214.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112826909,
+      "res": "W",
+      "base_margin": 4456.0,
+      "margin": 4456.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112829186,
+      "res": "W",
+      "base_margin": 6109.0,
+      "margin": 6109.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112830352,
+      "res": "W",
+      "base_margin": 292.0,
+      "margin": 292.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112833942,
+      "res": "W",
+      "base_margin": 12015.0,
+      "margin": 12015.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112837481,
+      "res": "W",
+      "base_margin": 914.0,
+      "margin": 914.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838623,
+      "res": "W",
+      "base_margin": 2842.0,
+      "margin": 2842.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845601,
+      "res": "L",
+      "base_margin": -816.0,
+      "margin": -816.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112857426,
+      "res": "L",
+      "base_margin": 597.0,
+      "margin": 597.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": 691.08,
+    "win_flips_negative": [],
+    "n_nonzero": 1
+   },
+   {
+    "axis": "drain_slack",
+    "value": 2.8,
+    "per_game": [
+     {
+      "episode": 112817799,
+      "res": "W",
+      "base_margin": 67530.0,
+      "margin": 67530.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112820070,
+      "res": "W",
+      "base_margin": 24214.0,
+      "margin": 24214.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112826909,
+      "res": "W",
+      "base_margin": 4456.0,
+      "margin": 4456.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112829186,
+      "res": "W",
+      "base_margin": 6109.0,
+      "margin": 2469.0,
+      "delta": -3640.0
+     },
+     {
+      "episode": 112830352,
+      "res": "W",
+      "base_margin": 292.0,
+      "margin": 292.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112833942,
+      "res": "W",
+      "base_margin": 12015.0,
+      "margin": 12015.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112837481,
+      "res": "W",
+      "base_margin": 914.0,
+      "margin": 914.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112838623,
+      "res": "W",
+      "base_margin": 2842.0,
+      "margin": 2842.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112842735,
+      "res": "W",
+      "base_margin": 2152.0,
+      "margin": 2152.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112844429,
+      "res": "L",
+      "base_margin": -86.0,
+      "margin": -86.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112845601,
+      "res": "L",
+      "base_margin": -816.0,
+      "margin": -816.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112846774,
+      "res": "L",
+      "base_margin": 0.0,
+      "margin": 0.0,
+      "delta": 0.0
+     },
+     {
+      "episode": 112857426,
+      "res": "L",
+      "base_margin": 597.0,
+      "margin": 597.0,
+      "delta": 0.0
+     }
+    ],
+    "delta_median": 0.0,
+    "delta_mean": -280.0,
+    "win_flips_negative": [],
+    "n_nonzero": 1
+   }
+  ]
+ },
+ "wall_s": 258.6
+}
