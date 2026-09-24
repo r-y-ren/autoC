@@ -1,0 +1,126 @@
+{
+ "protocol": "verify-2965-adopt/1.0",
+ "variant": "r34b",
+ "overall": false,
+ "gates_passed": {
+  "launch": true,
+  "h2h_vs_r33": false,
+  "lineage": true,
+  "starve_subset": false,
+  "diff_audit": true
+ },
+ "gates": {
+  "launch": {
+   "passed": true,
+   "executed": true,
+   "error": null,
+   "wall_s": 21.1,
+   "four": {
+    "package": true,
+    "full_episodes": true,
+    "determinism": true,
+    "load": true
+   }
+  },
+  "h2h_vs_r33": {
+   "passed": false,
+   "executed": true,
+   "error": null,
+   "wall_s": 90.5,
+   "n": 16,
+   "wins": 8,
+   "losses": 8,
+   "ties": 0,
+   "rate": 0.5
+  },
+  "lineage": {
+   "passed": true,
+   "executed": true,
+   "error": null,
+   "wall_s": 75.8,
+   "per_opponent": {
+    "v48-pure": {
+     "n": 8,
+     "wins": 8,
+     "losses": 0,
+     "ties": 0,
+     "all_done": true
+    },
+    "v4b": {
+     "n": 8,
+     "wins": 8,
+     "losses": 0,
+     "ties": 0,
+     "all_done": true
+    }
+   }
+  },
+  "starve_subset": {
+   "passed": false,
+   "executed": true,
+   "error": null,
+   "wall_s": 123.4,
+   "starve_free": true,
+   "n_games": 26,
+   "n_errors": 0,
+   "n_starve_red_games": 0,
+   "subset": false
+  },
+  "diff_audit": {
+   "passed": true,
+   "executed": true,
+   "error": null,
+   "wall_s": 0.1,
+   "attribution": {
+    "a": {
+     "comment_or_blank_cosmetic": 3,
+     "constants_delta(r34a_keeps_ours)": 3,
+     "our_carrot2_clamp": 2,
+     "race_delta(ours_44_vs_2965_41_midfile)": 1,
+     "our_tb_tomato_gate": 1,
+     "counter_d_host_idiom(ours_last_callable)": 1,
+     "counter_d_fixed_movable_variant(ours)": 1,
+     "2965_tail_not_adopted(ledger/new/constants-override/_HR)": 1
+    },
+    "b": {
+     "comment_or_blank_cosmetic": 3,
+     "our_carrot2_clamp": 2,
+     "race_delta(ours_44_vs_2965_41_midfile)": 1,
+     "our_tb_tomato_gate": 1,
+     "counter_d_host_idiom(ours_last_callable)": 1,
+     "counter_d_fixed_movable_variant(ours)": 1,
+     "2965_tail_not_adopted(ledger/new/constants-override/_HR)": 1
+    }
+   }
+  }
+ },
+ "pkg_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/b",
+ "started": "2026-09-25T00:04:01",
+ "finished": "2026-09-25T00:09:12",
+ "environment": {
+  "python_version": "3.14.7",
+  "platform": "Linux-7.2.6-arch2-1-x86_64-with-glibc2.44"
+ },
+ "references": {
+  "r33_inflight": {
+   "what": "r33 在飞件",
+   "pkg": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/variant_tuned",
+   "main_sha256": "765f3f3de19c2fc97b86174c5057942b8789813aff9990aad31f29389da3495e",
+   "tar_sha256": "acebc3367fea56b0573626839d0a100733424f55c25eff9df07b5e52f6681a3d",
+   "match": true
+  },
+  "r32_starve_baseline": {
+   "main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/main.py",
+   "sha256": "88f9a82fb2ff37b9d6e56d1504515d71e97a4bb37c558c35052ffde133ca036b"
+  },
+  "verbatim": {
+   "main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "sha256": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab"
+  },
+  "episodes_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26"
+ },
+ "mains": {
+  "r34": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/b/main.py",
+  "sha256": "15fafc6db2d9f104fd47b0ea60725bfe0e68b392bdafb4478bd8e17785512740"
+ }
+}

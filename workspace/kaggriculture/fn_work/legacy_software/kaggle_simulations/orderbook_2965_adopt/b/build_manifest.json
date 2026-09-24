@@ -1,0 +1,40 @@
+{
+ "schema": "orderbook_2965_adopt_manifest/1.0",
+ "generated": "2026-09-24",
+ "main_sha256": "15fafc6db2d9f104fd47b0ea60725bfe0e68b392bdafb4478bd8e17785512740",
+ "main_bytes": 1038506,
+ "tar_sha256": "f9c3b20678819e4211d806b9eb820c03c5ae42b07f89e2823772858d6ca59d28",
+ "tar_bytes": 632368,
+ "tar_members": [
+  "main.py"
+ ],
+ "tar_rebuild_reproducible": true,
+ "tar_size_ok": true,
+ "variant": "r34b",
+ "mode": "increments_2965_constants",
+ "description": "public derivative, adopted increments (EXP402/402/IG) + constants",
+ "candidate": "haideptry/the-2965-master-hybrid-engine 三增量采纳（EXP402/EXP410/_IG；r34b）——我 L3 钳制基座移植件，Apache-2.0",
+ "source_2965": {
+  "kernel_slug": "haideptry/the-2965-master-hybrid-engine",
+  "sha256": "bc8f84641d8e5ae8e083089c79572ed873b0f32dd071572f5efdcf342ec1143f",
+  "fetched_via": "cache",
+  "license": "Apache-2.0（embedded notices）"
+ },
+ "constants": {
+  "P_EVERY": 3,
+  "CA_MARGIN": -5.0,
+  "OR2_SLOT": 20.0,
+  "RACE": [
+   40,
+   44
+  ]
+ },
+ "provenance": {
+  "base_l3_main": "88f9a82fb2ff37b9d6e56d1504515d71e97a4bb37c558c35052ffde133ca036b",
+  "layer_s_block": "2f3553fe4b2df6213cdc1377b2fa9299ece92506291f4ed8f547640c4e2bbfcd",
+  "clamped_prefix": "dbc1a8d4d276540549cadcb815111d250730f83263557c32bded95add7615e0a",
+  "layer_s_removed": true,
+  "increments": "EXP402+EXP410+_IG（2965 锚行抽取，字节保持）",
+  "not_adopted": "2965 尾部块：_LEDGER/_NEW 遥测包装、尾部常数重指(2/44/8/-25)、_HR 群饲 PICKUP 增广——不在三增量授权面"
+ }
+}

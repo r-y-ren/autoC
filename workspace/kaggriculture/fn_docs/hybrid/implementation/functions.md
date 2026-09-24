@@ -80,3 +80,9 @@
 | closedloop_probe | B3 | tested 09-24（NEGATIVE 下未触发实跑） | pytest（mock 引擎）→ 3 passed（互胜率/中位/重跑一次/红定向）；mirror 池 4 局已备 | (本批) |
 | judge_mix_verdicts | B3 | wired 09-24 | pytest → 5 passed（正/负三路/KILLED 透传+敏感度/红 fail-closed）；实跑三变体全 NEGATIVE（敏感度四门全 False） | (本批) |
 | run_mix_judgment | B4 | wired 09-24 | pytest（编排 mock）→ 5 passed（全流/KILLED 双短路/S1 fail-closed/闭环触发）；实跑 322.6s → evidence/mix_judgment.json overall=NEGATIVE | (本批) |
+| fetch_2965_source | B5 | wired 09-24 | gzip 载荷解码+sha 钉死（bc8f8464 双源核实）；缓存命中/失败重试 | (本批) |
+| merge_increments | B5 | wired 09-24 | 真跑：三增量 222 行移植+layer S 20705B 逐字节拆解；前/后缀恒等；末 callable=_cxd_agent；_cxs_* 零残留 | (本批) |
+| apply_2965_constants | B5 | wired 09-24 | 真跑：恰三处（2→3/−15→−5/8→20）+RACE [40,44] 不动断言 | (本批) |
+| audit_diff_vs_2965 | B5 | wired 09-24 | 真跑：a/b 白名单归因全绿零 UNATTRIBUTED；篡改注入试验红 | (本批) |
+| build_2965_adopt | B6 | wired 09-24 | 双件构建：r34a 51fc19db/r34b 15fafc6d；tar 双跑逐字节；manifest sha 链 | (本批) |
+| verify_2965_gates | B7 | wired 09-25 | 真跑合计约 603s（a 291.7s+b 310.9s）：r34a overall=PASS（五门全绿）/r34b overall=FAIL（h2h 0.50+subset 红）；evidence 落 a/b 子目录+提交记录 a/evidence/submission_record.json | (本批) |
