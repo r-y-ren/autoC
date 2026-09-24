@@ -1,0 +1,140 @@
+{
+ "ok": true,
+ "n_hunks": 8,
+ "attribution": {
+  "sheep_6to8(day-11 arm)": 6,
+  "ca_margin_true_value(-25, 2965 tail)": 1,
+  "hr_tail_append(_HR group-feeding, _LEDGER excluded)": 1
+ },
+ "unattributed": [],
+ "hunks": [
+  {
+   "tag": "replace",
+   "class": "sheep_6to8(day-11 arm)",
+   "r34a_span": [
+    1968,
+    1968
+   ],
+   "r35_span": [
+    1968,
+    1968
+   ],
+   "r34a_lines": 1,
+   "r35_lines": 1,
+   "sample_r34a": "    if any(farm['tiles'][y][x]!='LOCKED' for y in (5,6) for x in range(5,8)):return False",
+   "sample_r35": "    if any(farm['tiles'][y][x]!='LOCKED' for y in (5,6) for x in range(5,9)):return False"
+  },
+  {
+   "tag": "replace",
+   "class": "sheep_6to8(day-11 arm)",
+   "r34a_span": [
+    1994,
+    1994
+   ],
+   "r35_span": [
+    1994,
+    1994
+   ],
+   "r34a_lines": 1,
+   "r35_lines": 1,
+   "sample_r34a": "    extra=([['BUY_LAND'],['BUY_ANIMAL','SHEEP',6]] if initial else [])+[['BUY_PRODUCT','WH",
+   "sample_r35": "    extra=([['BUY_LAND'],['BUY_ANIMAL','SHEEP',8]] if initial else [])+[['BUY_PRODUCT','WH"
+  },
+  {
+   "tag": "replace",
+   "class": "sheep_6to8(day-11 arm)",
+   "r34a_span": [
+    1997,
+    1998
+   ],
+   "r35_span": [
+    1997,
+    1998
+   ],
+   "r34a_lines": 2,
+   "r35_lines": 2,
+   "sample_r34a": "    incoming=6+6*initial",
+   "sample_r35": "    incoming=8+8*initial"
+  },
+  {
+   "tag": "replace",
+   "class": "sheep_6to8(day-11 arm)",
+   "r34a_span": [
+    2066,
+    2066
+   ],
+   "r35_span": [
+    2066,
+    2066
+   ],
+   "r34a_lines": 1,
+   "r35_lines": 1,
+   "sample_r34a": "    if not 0<shortage<=6 or state.get('rescue_today',0)+shortage>6:return action",
+   "sample_r35": "    if not 0<shortage<=8 or state.get('rescue_today',0)+shortage>8:return action"
+  },
+  {
+   "tag": "replace",
+   "class": "sheep_6to8(day-11 arm)",
+   "r34a_span": [
+    2096,
+    2096
+   ],
+   "r35_span": [
+    2096,
+    2096
+   ],
+   "r34a_lines": 1,
+   "r35_lines": 1,
+   "sample_r34a": "        funded='SE' in farm['unlocked_quadrants'] and (not pending['initial'] or private['",
+   "sample_r35": "        funded='SE' in farm['unlocked_quadrants'] and (not pending['initial'] or private['"
+  },
+  {
+   "tag": "replace",
+   "class": "sheep_6to8(day-11 arm)",
+   "r34a_span": [
+    2104,
+    2104
+   ],
+   "r35_span": [
+    2104,
+    2104
+   ],
+   "r34a_lines": 1,
+   "r35_lines": 1,
+   "sample_r34a": "                for i in range(2):state['workers'][pending['first']+i]=[(x,5+i) for x in r",
+   "sample_r35": "                for i in range(2):state['workers'][pending['first']+i]=[(x,5+i) for x in r"
+  },
+  {
+   "tag": "replace",
+   "class": "ca_margin_true_value(-25, 2965 tail)",
+   "r34a_span": [
+    4475,
+    4475
+   ],
+   "r35_span": [
+    4475,
+    4475
+   ],
+   "r34a_lines": 1,
+   "r35_lines": 1,
+   "sample_r34a": "_CA_MARGIN = -15.0",
+   "sample_r35": "_CA_MARGIN = -25.0"
+  },
+  {
+   "tag": "insert",
+   "class": "hr_tail_append(_HR group-feeding, _LEDGER excluded)",
+   "r34a_span": [
+    7186,
+    7185
+   ],
+   "r35_span": [
+    7186,
+    7230
+   ],
+   "r34a_lines": 0,
+   "r35_lines": 45,
+   "sample_r34a": null,
+   "sample_r35": ""
+  }
+ ]
+}

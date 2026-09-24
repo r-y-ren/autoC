@@ -86,3 +86,10 @@
 | audit_diff_vs_2965 | B5 | wired 09-24 | 真跑：a/b 白名单归因全绿零 UNATTRIBUTED；篡改注入试验红 | (本批) |
 | build_2965_adopt | B6 | wired 09-24 | 双件构建：r34a 51fc19db/r34b 15fafc6d；tar 双跑逐字节；manifest sha 链 | (本批) |
 | verify_2965_gates | B7 | wired 09-25 | 真跑合计约 603s（a 291.7s+b 310.9s）：r34a overall=PASS（五门全绿）/r34b overall=FAIL（h2h 0.50+subset 红）；evidence 落 a/b 子目录+提交记录 a/evidence/submission_record.json | (本批) |
+| phase_v_adjudicate | B9 | wired 09-25 | pytest（汇总/单件失败不阻断）→ 2 passed；实跑三件汇总（羊 adopt/番茄·路由否决）evidence/phase_v_summary.json | (本批) |
+| probe_sheep_fertilizer_loop | B9-B10 | wired 09-25 | pytest 3 件（闭环解剖/断链/注入语料不足 3）→ 3 passed；实跑 8 高羊败局 8/8 闭环 adopt（收肥 367-435/麦施 15-37/增产 +1.77~2.60/经济性 4/4） | (本批) |
+| scan_tomato_gate | B9-B10 | wired 09-25 | pytest 4 件（两行变体唯一性/网格编排+胜者/全负不并入/胜局翻负否决）→ 4 passed；实跑 14.3min：42 粗+top-3 邻域×18 局全零 Δ → NEGATIVE 保 70/12000 | (本批) |
+| expand_route_table | B9-B10 | wired 09-25 | pytest 3 件（指纹+路由复算/正流并入/回归剔除）→ 3 passed；实跑唯一候选 (1042.0,9989)→116 重演翻负（−10,161/−1,789）剔除→空集 NEGATIVE | (本批) |
+| build_r35 | B9,B11 | wired 09-25 | pytest 8 件（HR 块抽取+遥测拒斥/改1-only/全并入/只加表项纪律/杂散 diff 拒斥/归因/真基座集成）→ 8 passed；实跑两形态（702bbe1e 全并集/3e5d7340 改1-only）+tar 双跑逐字节 | (本批) |
+| verify_r35_gates | B9,B11 | wired 09-25 | pytest 5 件（全绿/fail-closed 全跑/身份链红传导 h2h/未构建红/h2h 重定向装载身份集）→ 5 passed；实跑×2：launch·lineage·diff 绿+h2h 0.50+subset 红 → overall FAIL×2 | (本批) |
+| run_r35_iteration | B9 | wired 09-25 | pytest 3 件（全流 launch_ready/失败留痕 run_summary/--skip-phase-v 复用）→ 3 passed | (本批) |

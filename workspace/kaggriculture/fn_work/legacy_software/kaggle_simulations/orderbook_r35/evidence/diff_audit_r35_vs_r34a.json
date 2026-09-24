@@ -1,0 +1,43 @@
+{
+ "ok": true,
+ "n_hunks": 2,
+ "attribution": {
+  "ca_margin_true_value(-25, 2965 tail)": 1,
+  "hr_tail_append(_HR group-feeding, _LEDGER excluded)": 1
+ },
+ "unattributed": [],
+ "hunks": [
+  {
+   "tag": "replace",
+   "class": "ca_margin_true_value(-25, 2965 tail)",
+   "r34a_span": [
+    4475,
+    4475
+   ],
+   "r35_span": [
+    4475,
+    4475
+   ],
+   "r34a_lines": 1,
+   "r35_lines": 1,
+   "sample_r34a": "_CA_MARGIN = -15.0",
+   "sample_r35": "_CA_MARGIN = -25.0"
+  },
+  {
+   "tag": "insert",
+   "class": "hr_tail_append(_HR group-feeding, _LEDGER excluded)",
+   "r34a_span": [
+    7186,
+    7185
+   ],
+   "r35_span": [
+    7186,
+    7230
+   ],
+   "r34a_lines": 0,
+   "r35_lines": 45,
+   "sample_r34a": null,
+   "sample_r35": ""
+  }
+ ]
+}

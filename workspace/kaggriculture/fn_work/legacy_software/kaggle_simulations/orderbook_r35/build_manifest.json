@@ -1,0 +1,129 @@
+{
+ "schema": "orderbook_r35_manifest/1.0",
+ "generated": "2026-09-25",
+ "variant": "r35",
+ "description": "public derivative, merged iteration (tail constants + HR + adjudicated increments)",
+ "main_sha256": "3e5d7340a73f77720662f362c05b1de1051fb16c8f87f3f6f4092bf721709564",
+ "main_bytes": 1040666,
+ "tar_sha256": "88a4faba2f68ec29f405d69ce8453291e3b6722f2230285b023818e91595a38c",
+ "tar_bytes": 632876,
+ "tar_members": [
+  "main.py"
+ ],
+ "tar_rebuild_reproducible": true,
+ "tar_size_ok": true,
+ "mode": "r34a + merged iteration (whitelist)",
+ "adopted": {
+  "ca_margin": true,
+  "hr_tail": true
+ },
+ "adopt_manifest": {
+  "sheep": {
+   "adopt": false,
+   "params": null
+  },
+  "tomato": {
+   "adopt": false,
+   "params": null
+  },
+  "route": {
+   "adopt": false,
+   "params": null
+  },
+  "fallback_note": "sheep arm dropped by gates (merged run h2h 0.50+subset red) — requirement R17 fallback: change-1-only if h2h >= 0.55"
+ },
+ "provenance": {
+  "base_r34a_main": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
+  "base_r34a_pkg": "orderbook_2965_adopt/a（在飞件 ref 56526029 同字节）",
+  "source_2965": {
+   "kernel_slug": "haideptry/the-2965-master-hybrid-engine",
+   "sha256": "bc8f84641d8e5ae8e083089c79572ed873b0f32dd071572f5efdcf342ec1143f",
+   "fetched_via": "cache",
+   "license": "Apache-2.0（embedded notices）"
+  },
+  "change_audit": {
+   "change_1": {
+    "ca_margin": {
+     "old": "_CA_MARGIN = -15.0",
+     "new": "_CA_MARGIN = -25.0"
+    },
+    "hr_block": {
+     "src2965_sha256": "bc8f84641d8e5ae8e083089c79572ed873b0f32dd071572f5efdcf342ec1143f",
+     "src_span": [
+      7017,
+      7058
+     ],
+     "lines": 42,
+     "telemetry_excluded": [
+      "_LEDGER",
+      "_NEW_PARENT",
+      "submission_v57",
+      "submission_v59"
+     ],
+     "entry_anchor": {
+      "key": "_r35_agent",
+      "fn_name": "agent"
+     },
+     "_adapted_lines": [
+      "_HR_PARENT = _cxd_agent",
+      "_HR_REPORT = {'changed': 0, 'extra_units': 0, 'errors': 0}",
+      "",
+      "def agent(observation, configuration=None):",
+      "    action = _HR_PARENT(observation, configuration)",
+      "    step = int(observation['step']); seat = int(observation['player'])",
+      "    if step == 0: _HR_REPORT.update(changed=0, extra_units=0, errors=0)",
+      "    if not 192 <= step < 696: return action",
+      "    command = action.get('farmer') or ['PASS']",
+      "    if command[:2] != ['PICKUP', 'WHEAT']: return action",
+      "    try:",
+      "        farm = observation['farms'][seat]",
+      "        if tuple(farm['farmer']) not in ((4,4),(5,4),(4,5),(5,5)): return action",
+      "        native = _IMPL.chassis.players[seat]",
+      "        count = 0; needed = 0",
+      "        pos = tuple(farm['farmer'])",
+      "        for t in range(step + 1, min((step//24+1)*24, 719)):",
+      "            a = _IMPL.chassis.routes[2 if t >= 648 else native['route']][t]",
+      "            c = a.get('farmer') or ['PASS']",
+      "            if c[0] == 'DROP' or c[:2] in (['PICKUP','WHEAT'], ['PLACE','WHEAT']): break",
+      "            if c[0] in MOVES:",
+      "                dx,dy=MOVES[c[0]]",
+      "                pos=(max(0,min(9,pos[0]+dx)),max(0,min(9,pos[1]+dy)))",
+      "            if c == ['FEED']:",
+      "                tile=farm['tiles'][pos[1]][pos[0]]",
+      "                if isinstance(tile,dict) and tile.get('animal') and not tile.get('fed_today'):",
+      "                    count += 1",
+      "                    if int(tile.get('consecutive_unfed',0)) >= 1:",
+      "                        needed=count",
+      "        requested = int(command[2]) if len(command) >= 3 else 1",
+      "        carried = int(observation['private']['inventories'][0].get('WHEAT',0))",
+      "        extra = min(2, max(0, needed-carried-requested))",
+      "        others = sum(max(0,int(c[2]) if len(c)>2 else 1) for c in action.get('hands',[]) if c[:2]==['PICKUP','WHEAT'])",
+      "        spare = max(0,int(observation['private']['shed'].get('WHEAT',0))-requested-others-2)",
+      "        extra = min(extra,spare)",
+      "        if extra:",
+      "            _HR_REPORT['changed'] += 1; _HR_REPORT['extra_units'] += extra",
+      "            return dict(action,farmer=['PICKUP','WHEAT',requested+extra])",
+      "    except Exception: _HR_REPORT['errors'] += 1",
+      "    return action",
+      "",
+      "kaggle_submission_agent = agent",
+      "_r35_agent = agent"
+     ],
+     "adapted_first_line": {
+      "old": "_HR_PARENT = agent",
+      "new": "_HR_PARENT = _cxd_agent"
+     },
+     "block_sha256": "f37a4a293097a30fb34cac214ce7628366ef629727910c55506fd921aa6cca57"
+    }
+   }
+  }
+ },
+ "diff_audit": {
+  "path": "./evidence/diff_audit_r35_vs_r34a.json",
+  "attribution": {
+   "ca_margin_true_value(-25, 2965 tail)": 1,
+   "hr_tail_append(_HR group-feeding, _LEDGER excluded)": 1
+  },
+  "ok": true
+ }
+}
