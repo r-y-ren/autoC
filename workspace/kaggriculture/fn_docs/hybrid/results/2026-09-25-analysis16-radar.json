@@ -1,0 +1,361 @@
+{
+ "snapshot_utc": "2026-09-24T15:15Z (CSV) / kernels 23:16 local",
+ "leaderboard": {
+  "teams": 9971,
+  "top30": [
+   [
+    "1",
+    "DSM",
+    "3133.1"
+   ],
+   [
+    "2",
+    "DECEM",
+    "3052.5"
+   ],
+   [
+    "3",
+    "Vadim Vasilenko",
+    "3028.0"
+   ],
+   [
+    "4",
+    "Unknown Mother-Goose",
+    "2986.3"
+   ],
+   [
+    "5",
+    "Majkel1337",
+    "2983.6"
+   ],
+   [
+    "6",
+    "吃白饭的大肥鱼",
+    "2982.6"
+   ],
+   [
+    "7",
+    "Kaggledew Valley 🏆",
+    "2967.5"
+   ],
+   [
+    "8",
+    "Azat Akhtyamov",
+    "2950.5"
+   ],
+   [
+    "9",
+    "mtmr_s1",
+    "2940.3"
+   ],
+   [
+    "10",
+    "akmr",
+    "2926.3"
+   ],
+   [
+    "11",
+    "TheEggman",
+    "2918.8"
+   ],
+   [
+    "12",
+    "Arda Ceylan",
+    "2918.5"
+   ],
+   [
+    "13",
+    "Smackaveli",
+    "2901.0"
+   ],
+   [
+    "14",
+    "THIRD FARM CLUB",
+    "2901.0"
+   ],
+   [
+    "15",
+    "ymg_aq",
+    "2896.2"
+   ],
+   [
+    "16",
+    "SpaTaro",
+    "2891.0"
+   ],
+   [
+    "17",
+    "🐚seek inspiration🐚",
+    "2888.9"
+   ],
+   [
+    "18",
+    "Densike",
+    "2883.4"
+   ],
+   [
+    "19",
+    "Otter Vibe",
+    "2869.3"
+   ],
+   [
+    "20",
+    "marwar22",
+    "2867.3"
+   ],
+   [
+    "21",
+    "YumeNeko",
+    "2864.4"
+   ],
+   [
+    "22",
+    "KawattaTaido",
+    "2859.9"
+   ],
+   [
+    "23",
+    "摆烂小分队 🏆",
+    "2855.8"
+   ],
+   [
+    "24",
+    "Excluding",
+    "2854.9"
+   ],
+   [
+    "25",
+    "Artem The Farmer 🍅",
+    "2850.5"
+   ],
+   [
+    "26",
+    "Yannik Schiffner",
+    "2849.0"
+   ],
+   [
+    "27",
+    "HowardLeeTW",
+    "2847.1"
+   ],
+   [
+    "28",
+    "Orbital Terraformer",
+    "2844.9"
+   ],
+   [
+    "29",
+    "THUNDER THUNDER",
+    "2840.9"
+   ],
+   [
+    "30",
+    "Sida Zuo",
+    "2832.4"
+   ]
+  ],
+  "ours": {
+   "rank": 1634,
+   "score_shown": 2012.6,
+   "note": "brief said 1629/9968@r30 2071.4; LB drifts, r33 2017.4 in flight"
+  },
+  "top_band": "#1 DSM 3133.1; #30 Sida Zuo 2832.4; gap to ours ~1045"
+ },
+ "kernels_new": {
+  "note": "no new non-orderbook structure found Sep19-24; public face = one family fork-merging",
+  "items": [
+   {
+    "ref": "haideptry/the-2965-master-hybrid-engine",
+    "date": "2026-09-24",
+    "votes": 10,
+    "what": "V59.2 Harvest Ledger = OUR EXACT lineage (all our EXPs incl EXP389) + EXP402 late-seed-purchase cap + EXP410 fertilizer no-improvement skip + _IG opening/queue closure + retune P_EVERY 3 / CA_MARGIN -5 / OR2_SLOT_MARGIN 20 (RACE stays 40). 7058 lines vs our 6917, 455 diff lines",
+    "license": "Apache-2.0 (embedded notices)",
+    "claim": "title 2965 (historical/unverified; author not in top30)",
+    "adopt": "YES - top candidate: port EXP402+EXP410+_IG as r34, A/B the 3 constants"
+   },
+   {
+    "ref": "haodou092/kaggriculture-harvest-ledger",
+    "date": "2026-09-24",
+    "votes": 73,
+    "what": "same V59.2 Harvest Ledger family",
+    "license": "Apache-2.0",
+    "adopt": "same as above"
+   },
+   {
+    "ref": "haideptry/the-2950-peak-farm",
+    "date": "2026-09-21",
+    "votes": 12,
+    "what": "earlier 2950 snapshot of same line"
+   },
+   {
+    "ref": "flexonafft/kaggriculture-multi-route-farming-agent + abhinav0370/cha22-agent",
+    "date": "2026-09-24",
+    "votes": 2.255813953488372,
+    "what": "cha22 frozen route-replay + runtime router + reactive safety; local 1368-game pool 97.7%W",
+    "license": "Apache-2.0",
+    "adopt": "mine tapes/router tables only, no new structure"
+   },
+   {
+    "ref": "thomastschinkel/the-2945-farm-96-vs-the-top-10-public-bots",
+    "date": "2026-09-19",
+    "votes": 152,
+    "what": "benchmark: 9 distinct bots in top-10 public; 2945 farm source embedded (our ancestor)"
+   },
+   {
+    "ref": "dmitriigluzdov/...7-turn-rescue-historical-lb-2800",
+    "date": "2026-09-22",
+    "votes": 66,
+    "what": "E182-family terminal planner (already integrated in our base)"
+   },
+   {
+    "ref": "arsgorynich/herd-safe-v3-experimental-risk-aware-feed",
+    "date": "2026-09-23",
+    "votes": 66,
+    "what": "herd-safe feed-risk family (different branch, feed economics)"
+   },
+   {
+    "ref": "tetsutani/demand-preserving-turn-sale-timing",
+    "date": "2026-09-23",
+    "votes": 84,
+    "what": "sale-timing vs demand preservation"
+   },
+   {
+    "ref": "guruprasaathas111/kaggriculture-master-engine-v3",
+    "date": "2026-09-24",
+    "votes": 89,
+    "what": "verbatim v9/3 (= our r30 ancestor), not newer than us"
+   },
+   {
+    "ref": "ashok205/top10-replay-dataset-archive",
+    "date": "2026-09-23",
+    "votes": 15,
+    "what": "top-10 replay dataset for benchmarking"
+   },
+   {
+    "ref": "shiiin9/your-market-list-is-an-order-book",
+    "date": "2026-09-21",
+    "votes": 46,
+    "what": "our r30 verbatim base; no newer version found"
+   }
+  ]
+ },
+ "opponent_facts": {
+  "audit_rows": "86 games (57W/29L), r32/r33",
+  "per_game": {
+   "ours": {
+    "seed_buys": 243.9,
+    "animal_buys": 17.5,
+    "sells": 328.9,
+    "land": 2.2,
+    "build": 17.9,
+    "hire": 274.3,
+    "buy_product": 71.4,
+    "animals_end": {
+     "COW": 7.5,
+     "SHEEP": 7.9,
+     "GOOSE": 2.1
+    }
+   },
+   "opp": {
+    "seed_buys": 233.5,
+    "animal_buys": 17.1,
+    "sells": 342.7,
+    "land": 2.2,
+    "build": 15.3,
+    "hire": 273.6,
+    "buy_product": 78.6,
+    "animals_end": {
+     "COW": 7.8,
+     "SHEEP": 7.7,
+     "GOOSE": 1.7
+    }
+   }
+  },
+  "DATA_QUALITY": "audit_rows.json opp land/hire=0 is a counter bug; direct replay recount gives opp land 2.2 hire 273.6 per game",
+  "losses": "29; strong>=90k band dominates; 6/12 sampled losses had opp SHEEP 11-17 (six-sheep expansion) vs our 7.9 avg; many razor margins (-8/-55/-177/-455) = mirror coinflips; two big fades -24.1k/-22.3k"
+ },
+ "decision_surfaces": [
+  {
+   "face": "herd species/k/trigger",
+   "lines": "main.py 5246 _HD2_MIN_GAIN=600, 5249 _HD2_CARE=0.8, 5367 _hd2_decide, 5559 _cs_plan, 1964-2073 v233/VE day-11 six-sheep",
+   "size": "MILK160/WOOL200 base x units; k=6 sheep = ~36 wool units + price impact; loss opps ran SHEEP 11-17",
+   "opp_diff": "yes: sheep depth 11-17 vs our 7.9 in 6/12 sampled losses",
+   "experiment": "YES (moderate): k 6->8, species, trigger day"
+  },
+  {
+   "face": "land/hire schedule (tape)",
+   "lines": "tape day0-10: BUY_LAND=1, HIRE 55-60; game total hire 274; tomato 3rd quadrant 4000 @v219 1265",
+   "size": "labor = physical throughput ceiling; hire cadence +/-day",
+   "opp_diff": "NO (2.2 vs 2.2 land, 274 vs 274 hire)",
+   "experiment": "low priority"
+  },
+  {
+   "face": "tomato gate",
+   "lines": "1240 CROP_MIN_PRICE=70, 1265 _v219_qualifies (money>=12000, >=3 pizza/farmers shops, SE locked), 6669-6719 T-B projection, constants 9000/0.75/2.4",
+   "size": "code-quantified: 80 units worth 18355 @inv9600 vs 3599 @inv10000 vs ~80 @inv10600 -> up to +/-18k/game",
+   "opp_diff": "unmeasured (tomato tiles per opp not in audit; measurable from replays)",
+   "experiment": "YES (moderate): _CXTB_MIN_REVENUE sweep 7000/9000/11000; we uniquely hold T-B, 2965 lacks it"
+  },
+  {
+   "face": "RACE reservation window",
+   "lines": "3773-3778 (DEFAULT40 MAX48 MARGIN12 GAP3 WINDOW30), start step192; embedded evidence 44/12 beats 40 H2H but weaker vs shallow",
+   "size": "premium race depth",
+   "opp_diff": "mirror-critical",
+   "experiment": "r33 (variant_tuned line6706 patches 44) ALREADY testing; wait read"
+  },
+  {
+   "face": "reaction-layer constants",
+   "lines": "1750 _R37_MARKET_PARAMS (9 items x 8 fields), 6837 _CXD_BUDGET=800, 6843 rival model set, 6044 lockstep",
+   "size": "prices every premium race; model error = systematic mispricing",
+   "opp_diff": "opp sells more orders 342.7 vs 328.9",
+   "experiment": "YES (aggressive): rival-model set expansion from replay fingerprints"
+  },
+  {
+   "face": "layer-D 4 constants",
+   "lines": "3411 _V92_P_EVERY=2, 4475 _CA_MARGIN=-15.0, 3773 V9_RACE_DEFAULT=40, 4734 _OR2_SLOT_MARGIN=8.0",
+   "size": "public 2965 retuned to 3/-5.0/40/20",
+   "opp_diff": "n/a (family constants)",
+   "experiment": "YES (cheap A/B, orthogonal to r33's RACE=44); NOTE base comment says round2=44 but code ships 40"
+  },
+  {
+   "face": "6-route selection",
+   "lines": "961-987 _router: rkey fingerprint @step2, day-6 shop tables _R108/_V92_TABLE/_V93_ROUTE_BY_RIVAL, day-27->route2; 40 tapes",
+   "size": "wrong route = whole-tape mismatch",
+   "opp_diff": "V93 rival-specific overrides exist; we hold 86 fresh rkey->outcome pairs unused",
+   "experiment": "YES (moderate): extend _V93_ROUTE_BY_RIVAL from /tmp/r33audit"
+  },
+  {
+   "face": "day0 opening crops + wheat wash",
+   "lines": "all 40 routes: MELON12+WHEAT31+STRAWBERRY20 day0-10; step0 market BUY WHEAT 13+30 / SELL 30 (982)",
+   "size": "melon 6units x250base x12 tiles = early cash core",
+   "opp_diff": "all public family identical",
+   "experiment": "aggressive only: re-tape crop mix (prvsiyan 'Moon Counts Melons' = prior art)"
+  },
+  {
+   "face": "BUY_PRODUCT face",
+   "lines": "739 allowlist (WHEAT/FERTILIZER only), 982 wash, 1331 fert topup, 1994 feed-wheat 6",
+   "size": "feed/fert purchase timing vs R86/R88 (2640/2678) feed-bonus",
+   "opp_diff": "opp 78.6 vs ours 71.4 buy-product orders/game",
+   "experiment": "YES (moderate): feed-wheat purchase timing"
+  },
+  {
+   "face": "mid-game inventory / warehouse close",
+   "lines": "2308 _r51_close_warehouse, 2921-3015 courier, 3056 carrot-switch, 879 dead_stock",
+   "size": "dead stock / close timing",
+   "opp_diff": "unmeasured",
+   "experiment": "low-mid"
+  },
+  {
+   "face": "K=220 entry scheduling (meta)",
+   "lines": "not code: new sub starts rating 220, burst ~16 games/h, ~100 games/3d; P5 freeze 09-27",
+   "size": "rating capture timing",
+   "opp_diff": "n/a",
+   "experiment": "YES zero-risk: schedule r34 burst to converge before 09-27 freeze"
+  }
+ ],
+ "ev_rank": [
+  "1. port 2965 deltas (EXP402+EXP410+_IG) as r34; A/B 3 retuned constants (P_EVERY3/CA-5/OR2_20) - our exact lineage, 455 diff lines, Apache-2.0, family title-claims 2965",
+  "2. V93 rival-fingerprint route extension from 86-replay cache (unique data; day-6 lock decides whole tape)",
+  "3. herd expansion arm k/species (6/12 sampled losses: opp sheep 11-17 vs our 7.9) + tomato threshold sweep (code-quantified 18k swing)"
+ ]
+}
