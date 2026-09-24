@@ -748,3 +748,44 @@
     - 职责：复用 R16 管线重定向——四门+h2h vs **r34a 在飞件** ≥0.55+谱系（v48/v4b 各 8）+饿死零容忍；fail-closed 全跑。
     - 签名意图：输入: r35 包 / 输出: 各门结果+overall / 错误: fail-closed。
     - 调用方：run_r35_iteration。tested：自有单测。核验：测试: orderbook_r35/test_gates_r35.py。
+
+
+---
+
+## 【R18 增补·2026-09-25】番茄承诺块×step-91 麦簇法证·条件优化（r36 候选）
+
+## 结构概览（增补）
+- run_r18_iteration ← R18
+  - forensic_cxtb_trigger
+  - scan_wheat_step91
+  - build_r36_conditional
+  - verify_r36_gates
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R18 | run_r18_iteration |
+
+## 功能块 run_r18_iteration ← R18
+（块引言：±18k 真凶面裁决——Phase T 两件法证无条件跑（_CXTB 触发实测/麦簇阈值五点重演）→任一判决正才条件构建 r36（阶梯化承诺+胜点常数，白名单合并）→门禁沿 R16/R17 管线重定向（h2h vs r34a）→POSITIVE 才交发射；两面惰性/负→收档额度保留。产物 orderbook_tomato_forensic/。）
+
+- **run_r18_iteration** [L0|新增]
+  - 职责：编排——法证两件并行→判决汇总→条件构建与门禁→出口三预绑定裁决（KILLED_T/NEGATIVE/POSITIVE）+evidence 台账。
+  - 签名意图：输入: 无（CLI） / 输出: {forensics, build, gates, verdict} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验：测试: orderbook_tomato_forensic/test_run_r18.py。
+  - **forensic_cxtb_trigger** [L1|新增]
+    - 职责：86 局回放统计 _CXTB 块触发率（80 单位番茄承诺出现的局/步）、触发局番茄持仓与卖单轨迹、触发 vs 未触发结局差归因；判定"我方谱系是否实际使用该面"。
+    - 签名意图：输入: 回放目录 / 输出: {fire_rate, fired_games, trajectories, outcome_diff, face_alive} / 错误: 单局失败记录不阻断。
+    - 调用方：run_r18_iteration。tested：自有单测。核验：测试: orderbook_tomato_forensic/test_forensic.py（cxtb 组）。
+  - **scan_wheat_step91** [L1|新增]
+    - 职责：麦簇阈值五点 {25,28,31,34,38} 重演判决（语料=12 败局+6 胜局，rng 20260925r18）+触发率统计；胜出=子集 Δ 中位>0+胜局不翻负。
+    - 签名意图：输入: 语料+r34a main / 输出: {points, best, adopt} / 错误: 单点异常重跑一次。
+    - 调用方：run_r18_iteration。tested：自有单测。核验：测试: orderbook_tomato_forensic/test_forensic.py（wheat 组）。
+  - **build_r36_conditional** [L1|新增]
+    - 职责：白名单合并构建——仅当 face_alive 且阶梯化判决正：_CXTB 阶梯化（80 单位拆 2-3 批逐批过边际线）+9000/0.75/2.4 胜点；麦簇胜点阈值；diff 审计恰=并入项；打包沿 R16 配方。
+    - 签名意图：输入: 判决清单+r34a main / 输出: r36 三产物+变更集审计 / 错误: 超白名单即抛。
+    - 调用方：run_r18_iteration。tested：自有单测。核验：测试: orderbook_tomato_forensic/test_build_r36.py。
+  - **verify_r36_gates** [L1|新增]
+    - 职责：复用 R16/R17 管线重定向——四门+h2h vs r34a 在飞件 ≥0.55+谱系+饿死零容忍；fail-closed 全跑。
+    - 签名意图：输入: r36 包 / 输出: 各门结果+overall / 错误: fail-closed。
+    - 调用方：run_r18_iteration。tested：自有单测。核验：测试: orderbook_tomato_forensic/test_gates_r36.py。
