@@ -1,0 +1,147 @@
+{
+ "generated_at": "2026-09-24T14:59:27",
+ "protocol": "orderbook-l1-launch-fourgate/1.0",
+ "candidate": "shiiin9/your-market-list-is-an-order-book + layer S v3 (public derivative with seed-truncation layer v3 w648, Apache-2.0)",
+ "package": {
+  "manifest_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l2_derivative/w648/build_manifest.json",
+  "main_sha256": {
+   "disk": "9fe2a45a100ac01d573238782202cd460943c93c172872017d3cd6fc2f36b506",
+   "manifest": "9fe2a45a100ac01d573238782202cd460943c93c172872017d3cd6fc2f36b506",
+   "match": true
+  },
+  "main_bytes": {
+   "disk": 1054159,
+   "manifest": 1054159,
+   "match": true
+  },
+  "tar_sha256": {
+   "disk": "44aaa824de33652168d1ba3fb53126fc28c83e4fe8876fe9999e12d2223e95b9",
+   "manifest": "44aaa824de33652168d1ba3fb53126fc28c83e4fe8876fe9999e12d2223e95b9",
+   "match": true
+  },
+  "tar_bytes": {
+   "disk": 637885,
+   "manifest": 637885,
+   "match": true
+  },
+  "tar_members": [
+   "main.py"
+  ],
+  "tar_members_ok": true,
+  "tar_inner_main_matches_disk": true,
+  "tar_size_ok": true,
+  "tar_size_mb": 0.608,
+  "candidate": "shiiin9/your-market-list-is-an-order-book + layer S v3 (public derivative with seed-truncation layer v3 w648, Apache-2.0)",
+  "match": true
+ },
+ "gate1_official_load": {
+  "gate1_official_load_ok": true,
+  "agent_py_checked": "/home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/agent.py",
+  "driver_wall_s": 1.4,
+  "n_obs_replayed": 719,
+  "obs_subsampled": true,
+  "isolated_vs_local_action_mismatches": 0,
+  "evidence": {
+   "n_callables": 233,
+   "last_callable_name": "_cxs_agent",
+   "has_named_agent": true,
+   "named_agent_same_output_as_last": true,
+   "loader_pop_applied": true,
+   "exec_dir_on_sys_path_after_load": false,
+   "n_new_sys_modules": 10,
+   "non_stdlib_imports": [],
+   "action_errors": [],
+   "n_obs": 719,
+   "n_actions": 719
+  }
+ },
+ "gate2_full_episodes": {
+  "gate2_full_episodes_ok": true,
+  "gate2_step_budget_ms": 1000.0,
+  "gate2_episodes": [
+   {
+    "seed": 101,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     96289.0,
+     96289.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 6.9,
+    "agent_calls": 1438,
+    "max_step_ms": 187.5,
+    "p99_step_ms": 6.96,
+    "mean_step_ms": 1.96,
+    "action_stream_sha256": "13467bd138818790ee27f125dbf6e60faa5d3cf9310b26c40fde189a5d97361d",
+    "obs_count": 719
+   },
+   {
+    "seed": 102,
+    "statuses": [
+     "DONE",
+     "DONE"
+    ],
+    "rewards": [
+     104068.0,
+     104068.0
+    ],
+    "turns_played": 720,
+    "agent_action_steps": 719,
+    "n_engine_log_lines": 719,
+    "suspicious_log_lines": [],
+    "wall_s": 7.4,
+    "agent_calls": 1438,
+    "max_step_ms": 261.9,
+    "p99_step_ms": 7.68,
+    "mean_step_ms": 2.06,
+    "action_stream_sha256": "690296e8b3e3f96726d09afed1beb44405034dcd6859990e3382578d6ea1afdd",
+    "obs_count": 719
+   }
+  ],
+  "gate3_determinism_ok": true,
+  "gate3_rerun_seed": 101,
+  "gate3_hashes": {
+   "run1": "13467bd138818790ee27f125dbf6e60faa5d3cf9310b26c40fde189a5d97361d",
+   "run2": "13467bd138818790ee27f125dbf6e60faa5d3cf9310b26c40fde189a5d97361d"
+  }
+ },
+ "gates": {
+  "load": true,
+  "full_episodes": true,
+  "determinism": true,
+  "package": true
+ },
+ "last_callable_expected": "_cxs_agent",
+ "truncation_only_diff": {
+  "ok": false,
+  "threshold": 648,
+  "n_obs": 719,
+  "l1_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l2_derivative/w648/main.py",
+  "l1_callable": "_cxs_agent",
+  "baseline_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+  "baseline_callable": "_cxd_agent",
+  "divergent_steps": [
+   652
+  ],
+  "n_divergent": 1,
+  "min_divergent_step": 652,
+  "all_divergent_steps_ge_threshold": true,
+  "form_violations": [
+   {
+    "step": 652,
+    "detail": "market 非保序子序列（含新增/改单）"
+   }
+  ],
+  "dropped_detail": []
+ },
+ "fail_closed_early_exit": false,
+ "errors": [],
+ "passed": false,
+ "wall_total_s": 28.1
+}

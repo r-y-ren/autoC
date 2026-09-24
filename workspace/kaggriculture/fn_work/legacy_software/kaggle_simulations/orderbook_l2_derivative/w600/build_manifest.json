@@ -1,0 +1,54 @@
+{
+ "schema": "orderbook_l2_derivative_manifest/1.0",
+ "candidate": "shiiin9/your-market-list-is-an-order-book + layer S v3 (public derivative with seed-truncation layer v3 w600, Apache-2.0)",
+ "generated": "2026-09-24",
+ "description": "public derivative with seed-truncation layer v3 (quantity-balanced)",
+ "window": 600,
+ "route_boundary": 648,
+ "main_sha256": "117ba351371ffc7a60979c1dade5fd095ad6f8f1bedced142fc2b5bf5077a2b5",
+ "main_bytes": 1054159,
+ "tar_sha256": "b5f3c5226d06584bef6e46ff36157407d60bb32e1d10099f637b24abaea3d14c",
+ "tar_bytes": 637887,
+ "block_sha256": "c308ff2630ffd9f14ba14c268a21e1ef3b1c3ce86f4c5628050006b0f771c48c",
+ "block_bytes": 27192,
+ "l1_block_sha256": "2f3553fe4b2df6213cdc1377b2fa9299ece92506291f4ed8f547640c4e2bbfcd",
+ "change_set_audit": {
+  "window": 600,
+  "route_boundary": 648,
+  "deleted_functions": [
+   "_cxs_seed_surplus",
+   "_cxs_seed_truncate"
+  ],
+  "added_functions": [
+   "_cxs_observed_plant_rate",
+   "_cxs_reduce_orders",
+   "_cxs_seed_balance"
+  ],
+  "added_constants": [
+   "_CXS_ROUTE_BOUNDARY",
+   "_CXS_SAFETY_LOOKBACK_STEPS",
+   "_CXS_SAFETY_MIN_MARGIN"
+  ],
+  "modified_functions": [
+   "_cxs_agent",
+   "_cxs_plan_view"
+  ],
+  "modified_constants": {
+   "_CXS_FROM": [
+    648,
+    600
+   ]
+  },
+  "unchanged_top_level": 8,
+  "last_def": "_cxs_agent"
+ },
+ "provenance_chain": [
+  "base main.py sha256 a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab == round-30 orderbook_derivative/build_manifest.json main_sha256（盘上真值三方核对）",
+  "base submission.tar.gz sha256 2838cc66e5d3f719569108fa553c9cf9acf8190d0662f8d991856560e6e9641c == round-30 tar_sha256（member set ['main.py']）",
+  "L1 layer_s_block.py sha256 2f3553fe4b2df6213cdc1377b2fa9299ece92506291f4ed8f547640c4e2bbfcd → make_layer_s_v3_block.make(window=600) 受控变更集（删 truncate/surplus；增 reduce_orders/seed_balance/observed_plant_rate+安全边常数组+_CXS_ROUTE_BOUNDARY=648；改 agent/plan_view/_CXS_FROM 648→窗口值）→ layer_s_block_v3_w600.py sha256 c308ff2630ffd9f14ba14c268a21e1ef3b1c3ce86f4c5628050006b0f771c48c（change-set audit 全绿；路由边界 648 与窗口解耦）",
+  "layer S v3 block = layer_s_block_v3_w600.py sha256 c308ff2630ffd9f14ba14c268a21e1ef3b1c3ce86f4c5628050006b0f771c48c 注入（window=600；append-only：基座全文+两空行分隔+块文本；inject 四校验全绿）",
+  "tar built deterministically (v48_derivative recipe: tarfile mtime0 uid/gid0 mode644, gzip mtime0), double-build byte-identical"
+ ],
+ "four_gates": "pending S4 (verify_l2_gates)",
+ "h2h_vs_l1": "pending S4 (verify_l2_gates)"
+}

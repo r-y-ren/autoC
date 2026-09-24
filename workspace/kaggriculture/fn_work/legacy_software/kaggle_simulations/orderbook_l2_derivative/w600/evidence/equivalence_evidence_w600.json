@@ -1,0 +1,7785 @@
+{
+ "generated_at": "2026-09-24T15:07:24",
+ "protocol": "orderbook-l2-equivalence/3.0",
+ "inputs": {
+  "episodes_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26",
+  "n_replays": 26,
+  "replays": [
+   "episode-112429867-strip.json.gz",
+   "episode-112431033-strip.json.gz",
+   "episode-112432199-strip.json.gz",
+   "episode-112433355-strip.json.gz",
+   "episode-112434475-strip.json.gz",
+   "episode-112435662-strip.json.gz",
+   "episode-112436859-strip.json.gz",
+   "episode-112438060-strip.json.gz",
+   "episode-112439305-strip.json.gz",
+   "episode-112440436-strip.json.gz",
+   "episode-112440493-strip.json.gz",
+   "episode-112441644-strip.json.gz",
+   "episode-112442810-strip.json.gz",
+   "episode-112443969-strip.json.gz",
+   "episode-112445139-strip.json.gz",
+   "episode-112446302-strip.json.gz",
+   "episode-112447520-strip.json.gz",
+   "episode-112448710-strip.json.gz",
+   "episode-112449890-strip.json.gz",
+   "episode-112451110-strip.json.gz",
+   "episode-112452290-strip.json.gz",
+   "episode-112453461-strip.json.gz",
+   "episode-112454627-strip.json.gz",
+   "episode-112455881-strip.json.gz",
+   "episode-112457053-strip.json.gz",
+   "episode-112457102-strip.json.gz"
+  ],
+  "limit": null,
+  "window": 600,
+  "v3_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l2_derivative/w600/main.py",
+  "l1_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l1_derivative/main.py",
+  "verbatim_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py"
+ },
+ "form_face": {
+  "ok": false,
+  "n_games": 26,
+  "n_game_clean": 20,
+  "n_violation_games": 6,
+  "n_boundary_breach_games": 0,
+  "n_error_games": 0,
+  "appear_total": 154,
+  "criteria": {
+   "allowed_kinds": [
+    "buy_seed_disappear",
+    "buy_seed_appear",
+    "sell_order_change"
+   ],
+   "step_boundary": {
+    "threshold": 600,
+    "source": "run(window)（v3 双窗参数：w648 主跑/w600 附加跑）"
+   }
+  }
+ },
+ "result_face": {
+  "ok": false,
+  "n_games": 26,
+  "finals_ok": true,
+  "n_final_face_games_red": 0,
+  "final_face_criteria": "v3_final >= l1_final - 1e-9 per game",
+  "dead_seeds_total_value": 3190,
+  "dead_seeds_cap": 500,
+  "dead_seeds_source": "v3 seated 重演终态 private.seeds × _l1.SEED_PRICE",
+  "starve_free": true,
+  "n_starve_games_red": 0,
+  "starve_criteria": "v3 vs L1 终态 plants/shed/inventories 逐品项不减（-1e-9 容差；任一减产=红）",
+  "starve_violations": []
+ },
+ "subset": {
+  "all_ok": true,
+  "per_game": [
+   {
+    "episode": 112429867,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 0,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112431033,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112432199,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112433355,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112434475,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 10,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 260,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112435662,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112436859,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112438060,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112439305,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112440436,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112440493,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112441644,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112442810,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112443969,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112445139,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 0,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112446302,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 3,
+      "unplanted": 3,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 30,
+    "unplanted_value": 30,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112447520,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112448710,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112449890,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112451110,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112452290,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 0,
+    "unplanted_value": 0,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112453461,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 4,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 200,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112454627,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112455881,
+    "seat": 1,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   },
+   {
+    "episode": 112457053,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 1,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 10,
+    "mode_a": true,
+    "ok": true
+   },
+   {
+    "episode": 112457102,
+    "seat": 0,
+    "crops": {
+     "WHEAT": {
+      "dropped": 1,
+      "unplanted": 5,
+      "ok": true
+     },
+     "CARROT": {
+      "dropped": 0,
+      "unplanted": 8,
+      "ok": true
+     },
+     "TOMATO": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "STRAWBERRY": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     },
+     "MELON": {
+      "dropped": 0,
+      "unplanted": 0,
+      "ok": true
+     }
+    },
+    "dropped_value": 10,
+    "unplanted_value": 210,
+    "mode_a": false,
+    "ok": true
+   }
+  ],
+  "per_crop": {
+   "WHEAT": {
+    "dropped": 21,
+    "unplanted": 84,
+    "ok": true
+   },
+   "CARROT": {
+    "dropped": 0,
+    "unplanted": 128,
+    "ok": true
+   },
+   "TOMATO": {
+    "dropped": 0,
+    "unplanted": 0,
+    "ok": true
+   },
+   "STRAWBERRY": {
+    "dropped": 0,
+    "unplanted": 0,
+    "ok": true
+   },
+   "MELON": {
+    "dropped": 0,
+    "unplanted": 0,
+    "ok": true
+   }
+  },
+  "violations": [],
+  "errors": [],
+  "summary": {
+   "total_dropped_value_est": 210,
+   "mode_a_games_near_zero": true,
+   "n_games": 26,
+   "n_mode_a": 10,
+   "mode_a_episodes": [
+    112429867,
+    112433355,
+    112436859,
+    112439305,
+    112442810,
+    112445139,
+    112446302,
+    112452290,
+    112454627,
+    112457053
+   ],
+   "n_violations": 0,
+   "n_errors": 0
+  }
+ },
+ "subset_netting": {
+  "note": "净回收=逐品项 ΣBUY_SEED 消失−ΣBUY_SEED 出现（减量单自然分解对；appear 是 v3 实际持有的购买不入回收）；净额>0 才进 precision_subset_check 的 dropped 面，判据 净回收 ≤ 原局未种下量"
+ },
+ "cases": {
+  "c1_no_trunc_when_future_plant": {
+   "pass": true,
+   "evidence": "step=650 tape plants@670 completable: demand 5, R=5 (deficit 5, margin 0) == purchase 5 -> excess 0, all kept"
+  },
+  "c2_trunc_when_no_opportunity": {
+   "pass": true,
+   "evidence": "step=650 tape plants@672 not completable: demand 0, R=0 -> excess 6, both CARROT orders reduced to zero (vanish), SELL kept"
+  },
+  "c3_s671_boundary": {
+   "truncate_side": {
+    "pass": true,
+    "evidence": "step=671 tape only t>=672: demand 0, held 2 -> R=0, order reduced to zero (vanish)"
+   },
+   "keep_side": {
+    "pass": true,
+    "evidence": "step=670 tape plants@671 exactly completable: demand 3, R=3 == purchase 3 -> kept"
+   },
+   "pass": true
+  },
+  "c4_covered_buyback_reduced_to_zero": {
+   "pass": true,
+   "evidence": "step=650 held 4 covers demand 4: deficit 0, margin 0 -> R=0, buy-back reduced to zero, SELL kept"
+  },
+  "c5_short_true_future_plant_kept": {
+   "pass": true,
+   "evidence": "step=650 three-path supply (held 2) < demand 6: R=4 >= purchase 3 -> order kept"
+  },
+  "c6_8to1_forensic": {
+   "pass": true,
+   "evidence": "step=662 forensic (held 0/kept 8/tf 0/demand 1): R=1 -> 8 reduced to 1 (L1 whole-order rule kept all 8)"
+  },
+  "c7_margin_backstop_reactive_overshoot": {
+   "pass": true,
+   "evidence": "step=670 reactive overshoot (observed 2 > planned 1): R=1+margin 1 =2 -> 8 reduced to 2, no starvation"
+  },
+  "c8_empty_slot_ignored": {
+   "pass": true,
+   "evidence": "step=650 empty-slot pads [] / None ignored (not malformed): real order R=0 reduced to zero, pads kept in place"
+  },
+  "c9_window600_drip": {
+   "pass": true,
+   "evidence": "step=620 in [600,648): w600 window active (R=2 -> 5 reduced to 2); w648/L1 fast-path keep 5"
+  },
+  "all_pass": true
+ },
+ "verdict": {
+  "form_face": false,
+  "result_face": false,
+  "subset": true,
+  "cases": true,
+  "passed": false
+ },
+ "per_game": [
+  {
+   "episode": 112429867,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112429867,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [],
+    "n_divergences": 0,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": null,
+    "identical_mod_seed_drop": true,
+    "dropped": [],
+    "first_divergence": null,
+    "l1_final": 124905.0,
+    "verbatim_final": 124905.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112429867-strip.json.gz"
+   },
+   "result": {
+    "episode": 112429867,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [],
+    "n_divergences": 0,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": null,
+    "identical_mod_seed_drop": true,
+    "dropped": [],
+    "first_divergence": null,
+    "l1_final": 124905.0,
+    "verbatim_final": 124905.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112429867-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 124905.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 124905.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112431033,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112431033,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 610,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "market",
+      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[]"
+     },
+     {
+      "step": 617,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "sell_order_change",
+      "detail": "exp=[] got=[[\"SELL\",\"FERTILIZER\",1],[\"SELL\",\"MILK\",2]]"
+     },
+     {
+      "step": 618,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",4]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 4
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 654,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 20,
+    "n_violations": 1,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 610,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 610,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 618,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 654,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 610,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 103411.0,
+    "verbatim_final": 103401.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112431033-strip.json.gz"
+   },
+   "result": {
+    "episode": 112431033,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 654,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 669,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",7]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 7
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 654,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 654,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 103411.0,
+    "verbatim_final": 103401.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112431033-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 103411.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 103411.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112432199,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112432199,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 11,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 645,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 645,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    "l1_final": 103617.0,
+    "verbatim_final": 103607.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112432199-strip.json.gz"
+   },
+   "result": {
+    "episode": 112432199,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 8
+     }
+    ],
+    "n_divergences": 6,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 103617.0,
+    "verbatim_final": 103607.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112432199-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 103617.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 103617.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112433355,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112433355,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 645,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": {
+     "step": 645,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    "l1_final": 127404.0,
+    "verbatim_final": 127394.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112433355-strip.json.gz"
+   },
+   "result": {
+    "episode": 112433355,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 653,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 653,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 653,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 127404.0,
+    "verbatim_final": 127394.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112433355-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 127404.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 127404.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112434475,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112434475,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 610,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "market",
+      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[]] got=[]"
+     },
+     {
+      "step": 617,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "sell_order_change",
+      "detail": "exp=[[\"SELL\",\"FERTILIZER\",1]] got=[[\"SELL\",\"FERTILIZER\",1],[\"SELL\",\"MILK\",2]]"
+     },
+     {
+      "step": 618,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 619,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 654,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 21,
+    "n_violations": 1,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 610,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 610,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 618,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 654,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 610,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 82807.0,
+    "verbatim_final": 82797.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112434475-strip.json.gz"
+   },
+   "result": {
+    "episode": 112434475,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 654,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 669,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",7]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 7
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 654,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 654,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 82807.0,
+    "verbatim_final": 82797.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112434475-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 82807.0,
+     "seeds": {
+      "WHEAT": 9,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 250,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 82807.0,
+     "seeds": {
+      "WHEAT": 9,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 250,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112435662,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112435662,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 645,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",4]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 4
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 649,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 14,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 645,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 645,
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 645,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    "l1_final": 115794.0,
+    "verbatim_final": 115784.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112435662-strip.json.gz"
+   },
+   "result": {
+    "episode": 112435662,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 8
+     }
+    ],
+    "n_divergences": 6,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 115794.0,
+    "verbatim_final": 115784.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112435662-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 115794.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 115794.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112436859,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112436859,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 645,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": {
+     "step": 645,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    "l1_final": 90289.0,
+    "verbatim_final": 90279.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112436859-strip.json.gz"
+   },
+   "result": {
+    "episode": 112436859,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 653,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 653,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 653,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 90289.0,
+    "verbatim_final": 90279.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112436859-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 90289.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 90289.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112438060,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112438060,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 610,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 618,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 23,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 610,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 610,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 618,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 610,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 108767.0,
+    "verbatim_final": 108757.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112438060-strip.json.gz"
+   },
+   "result": {
+    "episode": 112438060,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 669,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",7]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 7
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 108767.0,
+    "verbatim_final": 108757.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112438060-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 108767.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 108767.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112439305,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112439305,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 645,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": {
+     "step": 645,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    "l1_final": 125352.0,
+    "verbatim_final": 125342.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112439305-strip.json.gz"
+   },
+   "result": {
+    "episode": 112439305,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 653,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 653,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 653,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 125352.0,
+    "verbatim_final": 125342.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112439305-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 125352.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {
+      "TOMATO": 10
+     },
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 125352.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {
+      "TOMATO": 10
+     },
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112440436,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112440436,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 606,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 613,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 619,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",4]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 4
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 18,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 606,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 606,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 613,
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 606,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 112000.0,
+    "verbatim_final": 112000.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112440436-strip.json.gz"
+   },
+   "result": {
+    "episode": 112440436,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 656,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 8
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 656,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 656,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 112000.0,
+    "verbatim_final": 112000.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112440436-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 112000.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 112000.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112440493,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112440493,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 606,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 613,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 619,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",4]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 4
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 18,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 606,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 606,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 613,
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 606,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 101522.0,
+    "verbatim_final": 101522.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112440493-strip.json.gz"
+   },
+   "result": {
+    "episode": 112440493,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 656,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 8
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 656,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 656,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 101522.0,
+    "verbatim_final": 101522.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112440493-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 101522.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {
+      "TOMATO": 10
+     },
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 101522.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {
+      "TOMATO": 10
+     },
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112441644,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112441644,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 606,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 609,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 610,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 611,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 612,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 613,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 619,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",4]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 4
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",2]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 2
+     },
+     {
+      "step": 652,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 24,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 606,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 606,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 609,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 610,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 611,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 612,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 613,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 2
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 606,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 118292.0,
+    "verbatim_final": 118282.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112441644-strip.json.gz"
+   },
+   "result": {
+    "episode": 112441644,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 653,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 8
+     }
+    ],
+    "n_divergences": 6,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 653,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 653,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 118292.0,
+    "verbatim_final": 118282.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112441644-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 118292.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 118292.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112442810,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112442810,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 645,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": {
+     "step": 645,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    "l1_final": 142197.0,
+    "verbatim_final": 142187.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112442810-strip.json.gz"
+   },
+   "result": {
+    "episode": 112442810,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 653,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 653,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 653,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 142197.0,
+    "verbatim_final": 142187.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112442810-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 142197.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 142197.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112443969,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112443969,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 610,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",5]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 5
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 623,
+      "kind": "market",
+      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[]"
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",5]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 5
+     },
+     {
+      "step": 623,
+      "kind": "sell_order_change",
+      "detail": "exp=[] got=[[\"SELL\",\"MILK\",1],[\"SELL\",\"WHEAT\",14]]"
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "market",
+      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[]"
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 647,
+      "kind": "sell_order_change",
+      "detail": "exp=[[\"SELL\",\"FERTILIZER\",1]] got=[[\"SELL\",\"FERTILIZER\",3],[\"SELL\",\"WHEAT\",3],[\"SELL\",\"WHEAT\",10]]"
+     },
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 26,
+    "n_violations": 2,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 610,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 610,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 620,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 621,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 5
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 610,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 103556.0,
+    "verbatim_final": 103546.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112443969-strip.json.gz"
+   },
+   "result": {
+    "episode": 112443969,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 669,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",7]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 7
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 103556.0,
+    "verbatim_final": 103546.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112443969-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 103556.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {
+      "TOMATO": 10
+     },
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 103556.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {
+      "TOMATO": 10
+     },
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112445139,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112445139,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [],
+    "n_divergences": 0,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": null,
+    "identical_mod_seed_drop": true,
+    "dropped": [],
+    "first_divergence": null,
+    "l1_final": 88158.0,
+    "verbatim_final": 88158.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112445139-strip.json.gz"
+   },
+   "result": {
+    "episode": 112445139,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [],
+    "n_divergences": 0,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": null,
+    "identical_mod_seed_drop": true,
+    "dropped": [],
+    "first_divergence": null,
+    "l1_final": 88158.0,
+    "verbatim_final": 88158.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112445139-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 88158.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 88158.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112446302,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112446302,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",2]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 2
+     }
+    ],
+    "n_divergences": 2,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 645,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 2
+     }
+    ],
+    "first_divergence": {
+     "step": 645,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    "l1_final": 79330.0,
+    "verbatim_final": 79300.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112446302-strip.json.gz"
+   },
+   "result": {
+    "episode": 112446302,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",2]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 2
+     },
+     {
+      "step": 653,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 2,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 2
+     },
+     {
+      "step": 653,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 79330.0,
+    "verbatim_final": 79300.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112446302-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 79330.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 79330.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112447520,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112447520,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 8
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 625,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 10,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 622,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 8
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 622,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",8]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 8
+    },
+    "l1_final": 125203.0,
+    "verbatim_final": 125203.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112447520-strip.json.gz"
+   },
+   "result": {
+    "episode": 112447520,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 656,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 8
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 656,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 656,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 125203.0,
+    "verbatim_final": 125203.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112447520-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 125203.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 125203.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112448710,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112448710,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 7,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 657,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 102918.0,
+    "verbatim_final": 102918.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112448710-strip.json.gz"
+   },
+   "result": {
+    "episode": 112448710,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 656,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 8
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 656,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 656,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 102918.0,
+    "verbatim_final": 102918.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112448710-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 102918.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 102918.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112449890,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112449890,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 610,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 618,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 23,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 610,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 610,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 618,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 610,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 95958.0,
+    "verbatim_final": 95948.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112449890-strip.json.gz"
+   },
+   "result": {
+    "episode": 112449890,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 669,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",7]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 7
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 95958.0,
+    "verbatim_final": 95948.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112449890-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 95958.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 95958.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112451110,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112451110,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 610,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "market",
+      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[]] got=[]"
+     },
+     {
+      "step": 617,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "sell_order_change",
+      "detail": "exp=[[\"SELL\",\"FERTILIZER\",1]] got=[[\"SELL\",\"FERTILIZER\",1],[\"SELL\",\"MILK\",2]]"
+     },
+     {
+      "step": 618,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 621,
+      "kind": "sell_order_change",
+      "detail": "exp=[[\"SELL\",\"EGG\",13],[\"SELL\",\"CARROT\",13]] got=[[\"SELL\",\"CARROT\",13],[\"SELL\",\"EGG\",13]]"
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 26,
+    "n_violations": 1,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 610,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 610,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 618,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 610,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 92801.0,
+    "verbatim_final": 92791.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112451110-strip.json.gz"
+   },
+   "result": {
+    "episode": 112451110,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 669,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",7]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 7
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 92801.0,
+    "verbatim_final": 92791.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112451110-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 92801.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 92801.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112452290,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112452290,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [],
+    "n_divergences": 0,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": null,
+    "identical_mod_seed_drop": true,
+    "dropped": [],
+    "first_divergence": null,
+    "l1_final": 135583.0,
+    "verbatim_final": 135583.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112452290-strip.json.gz"
+   },
+   "result": {
+    "episode": 112452290,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [],
+    "n_divergences": 0,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": null,
+    "identical_mod_seed_drop": true,
+    "dropped": [],
+    "first_divergence": null,
+    "l1_final": 135583.0,
+    "verbatim_final": 135583.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112452290-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 135583.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 135583.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112453461,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112453461,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 610,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",5]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 5
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",5]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 5
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "market",
+      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[],[]] got=[]"
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 647,
+      "kind": "sell_order_change",
+      "detail": "exp=[[\"SELL\",\"FERTILIZER\",1]] got=[[\"SELL\",\"FERTILIZER\",2],[\"SELL\",\"STRAWBERRY\",15],[\"SELL\",\"WHEAT\",3]]"
+     },
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 24,
+    "n_violations": 1,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 610,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 610,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 620,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 621,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 5
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 610,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 1
+    },
+    "l1_final": 101532.0,
+    "verbatim_final": 101522.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112453461-strip.json.gz"
+   },
+   "result": {
+    "episode": 112453461,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 669,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",7]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 7
+     }
+    ],
+    "n_divergences": 5,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 101532.0,
+    "verbatim_final": 101522.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112453461-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 101532.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 101532.0,
+     "seeds": {
+      "WHEAT": 3,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 190,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112454627,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112454627,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 645,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": {
+     "step": 645,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    "l1_final": 103064.0,
+    "verbatim_final": 103054.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112454627-strip.json.gz"
+   },
+   "result": {
+    "episode": 112454627,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 653,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 653,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 653,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 103064.0,
+    "verbatim_final": 103054.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112454627-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 103064.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 103064.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112455881,
+   "seat": 1,
+   "error": null,
+   "form": {
+    "episode": 112455881,
+    "seat": 1,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 612,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 614,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "market",
+      "detail": "非 BUY_SEED/SELL 订单差异: exp=[[]] got=[]"
+     },
+     {
+      "step": 617,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 617,
+      "kind": "sell_order_change",
+      "detail": "exp=[[\"SELL\",\"FERTILIZER\",1]] got=[[\"SELL\",\"FERTILIZER\",1],[\"SELL\",\"MILK\",2]]"
+     },
+     {
+      "step": 618,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 620,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 621,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",6]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 622,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 623,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",7]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 7
+     },
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 26,
+    "n_violations": 1,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 612,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 612,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 614,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 616,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 618,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 620,
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 622,
+      "crop": "CARROT",
+      "qty": 6
+     },
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 612,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",2]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 2
+    },
+    "l1_final": 101196.0,
+    "verbatim_final": 101186.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112455881-strip.json.gz"
+   },
+   "result": {
+    "episode": 112455881,
+    "seat": 1,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 8
+     }
+    ],
+    "n_divergences": 6,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 101196.0,
+    "verbatim_final": 101186.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112455881-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 101196.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 101196.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112457053,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112457053,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 645,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": {
+     "step": 645,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+     "crop": "WHEAT",
+     "qty": 1
+    },
+    "l1_final": 111587.0,
+    "verbatim_final": 111577.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112457053-strip.json.gz"
+   },
+   "result": {
+    "episode": 112457053,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 653,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 1,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 653,
+    "identical_mod_seed_drop": true,
+    "dropped": [
+     {
+      "step": 653,
+      "crop": "WHEAT",
+      "qty": 1
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 111587.0,
+    "verbatim_final": 111577.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112457053-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 111587.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 111587.0,
+     "seeds": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 0,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  },
+  {
+   "episode": 112457102,
+   "seat": 0,
+   "error": null,
+   "form": {
+    "episode": 112457102,
+    "seat": 0,
+    "game_pass": false,
+    "divergences": [
+     {
+      "step": 629,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 8
+     },
+     {
+      "step": 629,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 630,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 631,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 645,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 646,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 647,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",2]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 2
+     },
+     {
+      "step": 663,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 1
+     }
+    ],
+    "n_divergences": 15,
+    "n_violations": 0,
+    "steps_boundary_ok": false,
+    "result_face_ok": true,
+    "min_divergence_step": 629,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 629,
+      "crop": "CARROT",
+      "qty": 8
+     },
+     {
+      "step": 645,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 646,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": {
+     "step": 629,
+     "kind": "buy_seed_disappear",
+     "detail": "[\"BUY_SEED\",\"CARROT\",8]（verbatim 有 L1 无）",
+     "crop": "CARROT",
+     "qty": 8
+    },
+    "l1_final": 60685.0,
+    "verbatim_final": 60675.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112457102-strip.json.gz"
+   },
+   "result": {
+    "episode": 112457102,
+    "seat": 0,
+    "game_pass": true,
+    "divergences": [
+     {
+      "step": 652,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"WHEAT\",1]（verbatim 有 L1 无）",
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",1]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_disappear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",3]（verbatim 有 L1 无）",
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 662,
+      "kind": "buy_seed_appear",
+      "detail": "[\"BUY_SEED\",\"CARROT\",8]（L1 有 verbatim 无，基座回买反应）",
+      "crop": "CARROT",
+      "qty": 8
+     }
+    ],
+    "n_divergences": 6,
+    "n_violations": 0,
+    "steps_boundary_ok": true,
+    "result_face_ok": true,
+    "min_divergence_step": 652,
+    "identical_mod_seed_drop": false,
+    "dropped": [
+     {
+      "step": 652,
+      "crop": "WHEAT",
+      "qty": 1
+     },
+     {
+      "step": 656,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 657,
+      "crop": "CARROT",
+      "qty": 3
+     },
+     {
+      "step": 658,
+      "crop": "CARROT",
+      "qty": 1
+     },
+     {
+      "step": 662,
+      "crop": "CARROT",
+      "qty": 3
+     }
+    ],
+    "first_divergence": null,
+    "l1_final": 60685.0,
+    "verbatim_final": 60675.0,
+    "steps_compared": 719,
+    "replay_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26/episode-112457102-strip.json.gz"
+   },
+   "terminal": {
+    "v3": {
+     "final_money": 60685.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    },
+    "l1": {
+     "final_money": 60685.0,
+     "seeds": {
+      "WHEAT": 4,
+      "CARROT": 8,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0
+     },
+     "seeds_value": 200,
+     "plants": {},
+     "shed": {
+      "CARROT": 0,
+      "COW": 0,
+      "EGG": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "MELON": 0,
+      "MILK": 0,
+      "SHEEP": 0,
+      "STRAWBERRY": 0,
+      "TOMATO": 0,
+      "WHEAT": 0,
+      "WOOL": 0
+     },
+     "inventories": {}
+    }
+   }
+  }
+ ],
+ "wall_total_s": 177.6
+}

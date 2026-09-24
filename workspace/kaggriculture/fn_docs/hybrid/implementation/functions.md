@@ -52,12 +52,12 @@
 | gate_equivalence_v2 | S4 | wired 09-24 | appear_total=16>2（零拦截）；死种 $3,310>$900 且劣于 L1 $3,190 | (本批) |
 | constructed_cases_v2 | S4 | wired 09-24 | 五件全过（单测面） | (本批) |
 | verify_l11_gates | S4 | wired 09-24 | overall=FAIL（门①③红②④绿）——设计级否决，批间门裁决 | (本批) |
-| make_layer_s_v3_block | S5 | stub 09-24 | — | — |
-| _cxs_agent | S5 | stub 09-24 | — | — |
-| _cxs_reduce_orders | S5 | stub 09-24 | — | — |
-| _cxs_seed_balance | S5 | stub 09-24 | — | — |
-| _cxs_observed_plant_rate | S5 | stub 09-24 | — | — |
-| build_l2_candidate | S5 | stub 09-24 | — | — |
-| gate_equivalence_v3 | S5 | stub 09-24 | — | — |
-| constructed_cases_v3 | S5 | stub 09-24 | — | — |
-| verify_l2_gates | S5 | stub 09-24 | — | — |
+| make_layer_s_v3_block | S5 | wired 09-24 | 双窗块 w648 5fc4c53c/w600 c308ff26；路由边界解耦修正（_CXS_ROUTE_BOUNDARY=648 恒定+审计不变式） | (本批) |
+| _cxs_agent | S5 | wired 09-24 | S5·v3 wired；h2h 16 局全平局=行为≡L1 | (本批) |
+| _cxs_reduce_orders | S5 | wired 09-24 | S5·v3 wired；减量按设计精确触发（112432199：3→2@657/662）——但被基座逐步补偿 | (本批) |
+| _cxs_seed_balance | S5 | wired 09-24 | S5·v3 wired；R=赤字+安全边矩阵全绿 | (本批) |
+| _cxs_observed_plant_rate | S5 | wired 09-24 | S5·v3 wired；planted_day 观测源 | (本批) |
+| build_l2_candidate | S5 | wired 09-24 | 两窗六产物（w648 44aaa824/w600 b5f3c522） | (本批) |
+| gate_equivalence_v3 | S5 | wired 09-24 | 形态面绿/结果面红：死种 3190=L1（控制器补偿）；饿死零容忍绿；子集绿 | (本批) |
+| constructed_cases_v3 | S5 | wired 09-24 | 九件全过 | (本批) |
+| verify_l2_gates | S5 | wired 09-24 | 两窗 overall=FAIL recommended=None——闭环控制器实证否决 R12 价值前提 | (本批) |
