@@ -52,3 +52,12 @@
 | gate_equivalence_v2 | S4 | wired 09-24 | appear_total=16>2（零拦截）；死种 $3,310>$900 且劣于 L1 $3,190 | (本批) |
 | constructed_cases_v2 | S4 | wired 09-24 | 五件全过（单测面） | (本批) |
 | verify_l11_gates | S4 | wired 09-24 | overall=FAIL（门①③红②④绿）——设计级否决，批间门裁决 | (本批) |
+| make_layer_s_v3_block | S5 | stub 09-24 | — | — |
+| _cxs_agent | S5 | stub 09-24 | — | — |
+| _cxs_reduce_orders | S5 | stub 09-24 | — | — |
+| _cxs_seed_balance | S5 | stub 09-24 | — | — |
+| _cxs_observed_plant_rate | S5 | stub 09-24 | — | — |
+| build_l2_candidate | S5 | stub 09-24 | — | — |
+| gate_equivalence_v3 | S5 | stub 09-24 | — | — |
+| constructed_cases_v3 | S5 | stub 09-24 | — | — |
+| verify_l2_gates | S5 | stub 09-24 | — | — |
