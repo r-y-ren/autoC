@@ -303,7 +303,7 @@
     - 签名意图：输入: L1 块路径 / 输出: v2 块文件+diff 审计 / 错误: 定位失败或 diff 超界即抛。
     - 调用方：build_l11_candidate。tested：自有单测。核验：测试: orderbook_l1_1_derivative/test_build_v2.py。
     - **_cxs_seed_surplus** [L2|改造·v2]
-      - 职责：净需求覆盖口径——供给=库存种子−当前步 PLANT 消耗（钳 0）+本回合保留 BUY_SEED；**磁带未来 BUY_SEED 不再计入供给**；允许删除量=max(0, 供给−可完成种收需求) 且 ≤ 本回合该品项购买量；判定对窗口内全部 BUY_SEED 统一适用（磁带单/回买单不分）；plan_view 仍用于需求统计（可完成 PLANT）；任何解析失败/不确定 → None（零误杀不变）。
+      - 职责：[2026-09-24 修订一轮]删除台账式累计口径——供给=库存−当前步 PLANT 消耗（钳 0）+本回合保留单+磁带未来购买（按实存计，台账扣已删）；删除充要条件=删后剩余累计供给 ≥ 剩余累计可完成需求（品项级）；磁带单/回买单统一授权；整单删除；不确定→None（零误杀不变）；实现前置法证=mode-B 真局 s662-663 五数实测（held/kept/tape_future/demand/allowed）。
       - 签名意图：输入: crop, observation, kept_orders, plan_view, current_plants / 输出: 允许删除量或 None / 错误: 不确定→None。
       - 调用方：_cxs_seed_truncate（v2 块内，沿 R10 调用形）。tested：自有单测。核验：测试: orderbook_l1_1_derivative/test_layer_s_v2.py（净口径矩阵+两件新构造用例）。
 
