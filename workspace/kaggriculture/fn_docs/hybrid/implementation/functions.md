@@ -45,3 +45,10 @@
 | gate_lineage_strength | S3 | wired 09-24 | 24 局 24-0-0 三对手零负——48-0 谱系强度保持 | (本批) |
 | gate_launch_fourgate_l1 | S3 | wired 09-24 | 四门全绿 22.2s；truncation_only_diff 差异步=1（step 653）全 ≥648 | (本批) |
 | verify_layer_s_gates | S3 | wired 09-24 | 全量编排 overall=PASS（四门全绿：①14-0-2 ②24-0 ③26/26 ④全绿+差异步 653）；发射前置达成 | (本批) | (本批) |
+| make_layer_s_v2_block | S4 | stub 09-24 | — | — |
+| _cxs_seed_surplus | S4·v2 | stub 09-24 | — | — |
+| build_l11_candidate | S4 | stub 09-24 | — | — |
+| gate_h2h_vs_l1 | S4 | stub 09-24 | — | — |
+| gate_equivalence_v2 | S4 | stub 09-24 | — | — |
+| constructed_cases_v2 | S4 | stub 09-24 | — | — |
+| verify_l11_gates | S4 | stub 09-24 | — | — |
