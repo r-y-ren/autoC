@@ -45,10 +45,10 @@
 | gate_lineage_strength | S3 | wired 09-24 | 24 局 24-0-0 三对手零负——48-0 谱系强度保持 | (本批) |
 | gate_launch_fourgate_l1 | S3 | wired 09-24 | 四门全绿 22.2s；truncation_only_diff 差异步=1（step 653）全 ≥648 | (本批) |
 | verify_layer_s_gates | S3 | wired 09-24 | 全量编排 overall=PASS（四门全绿：①14-0-2 ②24-0 ③26/26 ④全绿+差异步 653）；发射前置达成 | (本批) | (本批) |
-| make_layer_s_v2_block | S4 | stub 09-24 | — | — |
-| _cxs_seed_surplus | S4·v2 | stub 09-24 | — | — |
-| build_l11_candidate | S4 | stub 09-24 | — | — |
-| gate_h2h_vs_l1 | S4 | stub 09-24 | — | — |
-| gate_equivalence_v2 | S4 | stub 09-24 | — | — |
-| constructed_cases_v2 | S4 | stub 09-24 | — | — |
-| verify_l11_gates | S4 | stub 09-24 | — | — |
+| make_layer_s_v2_block | S4 | wired 09-24 | v2 块 sha 0c130d68；diff 恰一函数体校验过 | (本批) |
+| _cxs_seed_surplus | S4 | wired 09-24 | S4·v2 净需求覆盖落地+全矩阵过——但口径被门①③实证否决（见下） | (本批) |
+| build_l11_candidate | S4 | wired 09-24 | 三产物 main 60b6f283/tar ae186747/manifest | (本批) |
+| gate_h2h_vs_l1 | S4 | wired 09-24 | 全量 16 局 0-6-10：六败全恰 -10（seeds 103/104/203）——L1 的 +10 在净口径下丢失 | (本批) |
+| gate_equivalence_v2 | S4 | wired 09-24 | appear_total=16>2（零拦截）；死种 $3,310>$900 且劣于 L1 $3,190 | (本批) |
+| constructed_cases_v2 | S4 | wired 09-24 | 五件全过（单测面） | (本批) |
+| verify_l11_gates | S4 | wired 09-24 | overall=FAIL（门①③红②④绿）——设计级否决，批间门裁决 | (本批) |
