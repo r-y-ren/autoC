@@ -697,3 +697,54 @@
   - 职责：双件各自全量门禁（fail-closed 全跑不短路）——复用重定向：四门沿 r30 管线（合规四轴在案/装载 last-callable/双席 DONE+<1s/确定性双跑/体积身份链）、h2h 门 vs r33 在飞件 ≥0.55（seated 双席位 ≥16 局）、谱系门（v48/v4b 各 8 局无负）、饿死零容忍+子集判据（沿 L3 口径，EXP402 替换 layer S 后重验）；evidence 落各子目录。
   - 签名意图：输入: 双件包路径 / 输出: {a:{overall...}, b:{overall...}} / 错误: fail-closed。
   - 调用方：操作者。tested：自有单测。核验：测试: orderbook_2965_adopt/test_gates_adopt.py。
+
+
+---
+
+## 【R17 增补·2026-09-25】合并迭代四改合一（r35）
+
+## 结构概览（增补）
+- run_r35_iteration ← R17
+  - phase_v_adjudicate
+    - probe_sheep_fertilizer_loop
+    - scan_tomato_gate
+    - expand_route_table
+  - build_r35
+  - verify_r35_gates
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R17 | run_r35_iteration |
+
+## 功能块 run_r35_iteration ← R17
+（块引言：r34a 之上合并迭代——Phase V 三件离线判决（羊链路判读/番茄门 42 点粗扫+top-3 细化/V93 指纹表）→ build_r35 白名单合并（改 1 无条件+胜者项）→ 门禁沿 R16 管线重定向（h2h 基线 r34a）→ 全绿发射本族第 2/2 次。产物 orderbook_r35/，零改动既有目录。）
+
+- **run_r35_iteration** [L0|新增]
+  - 职责：编排——phase_v_adjudicate 三件并行判决出并入清单 → build_r35 构建打包 → verify_r35_gates fail-closed 全跑 → overall PASS 即交发射（standing 代执行）；evidence 三件+门禁台账。
+  - 签名意图：输入: 无（CLI） / 输出: {phase_v, build, gates, launch_ready} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验：测试: orderbook_r35/test_run_r35.py。
+  - **phase_v_adjudicate** [L1|新增]
+    - 职责：三件判决编排与汇总（每件出 verdict+evidence JSON）。
+    - 签名意图：输入: 语料+r34a 路径 / 输出: {sheep, tomato, route: {adopt:bool, params}} / 错误: 单件失败不阻断其余，记录。
+    - 调用方：run_r35_iteration。tested：自有单测。核验：测试: orderbook_r35/test_phase_v.py。
+    - **probe_sheep_fertilizer_loop** [L2|新增]
+      - 职责：≥3 个高羊败局（对手羊 ≥11）解剖羊→COLLECT_FERTILIZER→FERTILIZE→麦产→FEED 链路计数与资金贡献；闭环成立（肥料自给率与麦增产可归因）→ adopt 羊 6→8。
+      - 签名意图：输入: 回放子集 / 输出: {games, chain_evidence, adopt} / 错误: 解析失败记录不阻断。
+      - 调用方：phase_v_adjudicate。tested：自有单测。核验：测试: orderbook_r35/test_phase_v.py（sheep 组）。
+    - **scan_tomato_gate** [L2|新增]
+      - 职责：42 点粗网格（价格 {50..110 步10}×资金 {7000..18000 六档}）重演判决（语料=败局+胜局抽样子集）→ top-3 邻域细化（±5/±1000）；胜出条件：子集 Δ 中位>0 且胜局不翻负；输出最优点或 adopt=false。
+      - 签名意图：输入: 语料+r34a / 输出: {grid_results, best, adopt} / 错误: 单点引擎异常重跑一次。
+      - 调用方：phase_v_adjudicate。tested：自有单测。核验：测试: orderbook_r35/test_phase_v.py（tomato 组）。
+    - **expand_route_table** [L2|新增]
+      - 职责：86 局指纹→结局映射填密 `_V93_ROUTE_BY_RIVAL` 稀疏表（只加表项不改路由机制）；26 败局重演不翻负→ adopt。
+      - 签名意图：输入: 语料+表 / 输出: {new_entries, replay_result, adopt} / 错误: 表解析失败=fail。
+      - 调用方：phase_v_adjudicate。tested：自有单测。核验：测试: orderbook_r35/test_phase_v.py（route 组）。
+  - **build_r35** [L1|新增]
+    - 职责：白名单合并构建——改 1（CA_MARGIN −25+_HR 块）+Phase V 胜者项；diff 审计恰=并入项；确定性打包+manifest（沿 R16 配方）。
+    - 签名意图：输入: 并入清单+r34a main / 输出: r35 三产物+变更集审计 / 错误: 超白名单即抛。
+    - 调用方：run_r35_iteration。tested：自有单测。核验：测试: orderbook_r35/test_build_r35.py。
+  - **verify_r35_gates** [L1|新增]
+    - 职责：复用 R16 管线重定向——四门+h2h vs **r34a 在飞件** ≥0.55+谱系（v48/v4b 各 8）+饿死零容忍；fail-closed 全跑。
+    - 签名意图：输入: r35 包 / 输出: 各门结果+overall / 错误: fail-closed。
+    - 调用方：run_r35_iteration。tested：自有单测。核验：测试: orderbook_r35/test_gates_r35.py。
