@@ -1,0 +1,50 @@
+{
+ "source": {
+  "pulled_at": "2026-09-24T13:42:03.726045Z",
+  "commands": [
+   "KAGGLE_API_TOKEN=$(kaggle auth print-access-token) python3 pull_meta.py <ROOT>",
+   "kaggle competitions list -s kaggriculture --csv (rank check)"
+  ],
+  "note": "token injection required; direct CLI auth expired"
+ },
+ "refs": {
+  "r30": {
+   "publicScore": 2071.4,
+   "n_public": 162,
+   "new_vs_analysis14": 0
+  },
+  "r31": {
+   "publicScore": 2012.1,
+   "n_public": 86,
+   "new_vs_analysis14": 0
+  },
+  "r32": {
+   "publicScore": 1999.2,
+   "n_public": 71,
+   "new_vs_analysis14": 27,
+   "delta": -19.8
+  },
+  "r33": {
+   "publicScore": 2017.4,
+   "n_public": 65,
+   "new_vs_analysis14": 23,
+   "delta": 51.5
+  }
+ },
+ "leaderboard": {
+  "teamCount": 9968,
+  "ourRank": 1629,
+  "deadline": "2026-09-30T23:59:00"
+ },
+ "pairing": {
+  "r32_r33_games_per_90min": [
+   27,
+   23
+  ],
+  "r30_r31_games": [
+   0,
+   0
+  ],
+  "reading": "scheduler concentrates on fresh submissions; r30/r31 pairing frozen"
+ }
+}
