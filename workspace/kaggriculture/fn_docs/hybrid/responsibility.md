@@ -445,3 +445,105 @@
       - 职责：R10 三件 + 新四件（钳制触发局需求+2 恰好/day28 swap 不饿死/钳计算异常回退原 q/mode-A 休眠局零足迹）。
       - 签名意图：输入: 无 / 输出: 七例 pass/fail / 错误: 夹具异常=失败。
       - 调用方：gate_equivalence_l3。tested：自有单测。核验：测试: orderbook_l3_derivative/test_layer_l4.py。
+
+
+---
+
+## 【R14 增补·2026-09-24】surge 日卖时判决实验（全量版）
+
+## 结构概览（增补）
+- run_judgment ← R14
+  - phase_a_attribution
+    - daily_netflow_decompose
+    - mark_surge_days
+    - classify_surge_composition
+  - phase_b_four_arm_replay
+    - build_treatment_arm
+      - apply_surge_day_sells
+    - replay_dual_seat
+    - compare_action_stream
+  - judge_verdicts
+- corpus_select（共享，Phase A/B 共用）
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R14 | run_judgment |
+
+## 功能块 run_judgment ← R14
+（块引言：两阶段判决实验编排——Phase A 全量 86 局回放归因（surge 日全景测绘+构成分解+不可处置分层标注）→ Phase B 四臂双席位 seated 重演（对照=L3 在飞件同字节；A1 卖空率对齐/A2 高价优先/A3 组合；对手席=回放录像动作开环重放，两臂共用同一对手脚本——判决实验口径，对手反应性损失记入解读注记）→ 逐臂独立判据（可处置显著局 ≥2/3 Δ>0+全语料无害带 Δ≥−100）+敏感度报告 → evidence JSON（orderbook_surge_lab/evidence/judgment.json）。fail-closed：任一环节不可执行=整体 fail。产物全落 orderbook_surge_lab/，零改动既有目录与在飞件，不上线。）
+
+- **run_judgment** [L0|新增]
+  - 职责：编排裁决——corpus_select 定语料 → phase_a_attribution 全量归因（若全语料零可处置 surge 日→verdict=KILLED_A 短路出 evidence）→ phase_b_four_arm_replay 四臂×双席位重演 → judge_verdicts 逐臂判据+敏感度 → 汇总 evidence JSON（source 可复跑命令/逐局逐臂双席 margin 与 Δ/surge 标注/归因表/逐臂 verdict）；两阶段产物均落盘供单独复跑。
+  - 签名意图：输入: 无（CLI，参数=语料目录/阈值档） / 输出: evidence JSON+控制台摘要 / 错误: 任一环节 fail-closed 即整体 fail。
+  - 调用方：操作者。
+  - tested 策略：上游覆盖: phase_a_attribution/phase_b_four_arm_replay/judge_verdicts。
+  - 核验命令：测试: orderbook_surge_lab/test_run_judgment.py（编排+短路+evidence schema 组）。
+  - **phase_a_attribution** [L1|新增]
+    - 职责：全量回放逐日归因——对语料局集逐局调 daily_netflow_decompose 得双席逐日净收入/量/价/品类表 → mark_surge_days 标注（默认 1500/1.5×，附 1000/1500/2000 三档敏感度）→ classify_surge_composition 分解每个 surge 日差距构成（量差/mix 差/价差/结构性库存差+同品类覆盖能力+不可处置标注+价格可识别性[当日品项价 vs 滚动分位]）；输出 Phase A 报告 JSON（全景分布+8 局深描集标注）。
+    - 签名意图：输入: 回放目录+语料清单 / 输出: {per_game:{per_day,surge_days,composition}, panorama, sensitivity} / 错误: 单局解析失败=该局 fail 记录不中断全量。
+    - 调用方：run_judgment。
+    - tested 策略：自有单测。
+    - 核验命令：测试: orderbook_surge_lab/test_phase_a.py。
+    - **daily_netflow_decompose** [L2|新增]
+      - 职责：单局逐日双席分解——每日（day d 末=step d*24+23 口径）双席 money 净收入（money_delta+seed+BUY_PRODUCT 支出）、卖出量（按品项，成交量口径=库存背书部分）、隐含均价、可卖库存（shed+当日可收）；JSON 字符串字段 json.loads、提交量≠成交量修正沿 volume_price_decomp 方法注记。
+      - 签名意图：输入: 单局回放 dict / 输出: {days:[{d,my:{net,vol_by_item,avgpx,sellable},opp:{...}}]} / 错误: 解析异常→该局 fail。
+      - 调用方：phase_a_attribution。
+      - tested 策略：自有单测（构造小回放夹具）。
+      - 核验命令：测试: orderbook_surge_lab/test_phase_a.py（decompose 组）。
+    - **mark_surge_days** [L2|新增]
+      - 职责：surge 日标注——净日差=对手日净收入−我方日净收入 ≥阈值 且对手当日收入≥其全程日收入中位数 ×中位倍数（默认 1500/1.5×，参数化）；输出逐局 surge 日列表+三档阈值（1000/1500/2000）对照。
+      - 签名意图：输入: 单局逐日分解+阈值参数 / 输出: {surge_days:[d], sensitivity:{th1000:[...],th1500:[...],th2000:[...]}} / 错误: 无（缺数据日跳过）。
+      - 调用方：phase_a_attribution。
+      - tested 策略：自有单测（边界日构造）。
+      - 核验命令：测试: orderbook_surge_lab/test_phase_a.py（mark 组）。
+    - **classify_surge_composition** [L2|新增]
+      - 职责：单 surge 日构成分解——对手当日多赚部分拆为量差（同品类量差×我方均价）/品类 mix 差（对手品类结构高价值差）/价差（同品类价差×量）/结构性库存差（对手多卖品类在我方当日可卖库存中覆盖不了的部分）；覆盖能力=我方可卖同品类量/对手品类量；不可处置标注=结构性占比 ≥70% 或覆盖 <30%；价格可识别性=surge 日各品项价在该品项全程价的分位。
+      - 签名意图：输入: 该日双席分解 / 输出: {quant_gap, mix_gap, px_gap, structural_gap, coverage, treatable:bool, price_percentile} / 错误: 分解失败→记 None 不中断。
+      - 调用方：phase_a_attribution。
+      - tested 策略：自有单测（构造四形态各一）。
+      - 核验命令：测试: orderbook_surge_lab/test_phase_a.py（composition 组）。
+  - **phase_b_four_arm_replay** [L1|新增]
+    - 职责：四臂×双席位重演编排——corpus_select 的 Phase B 语料（可处置败局全集+8 胜局）逐局：双席位各跑对照臂（L3 在飞件同字节）与 A1/A2/A3 处置臂（build_treatment_arm）；对手席=该局回放录像动作开环重放（R8 先例）；compare_action_stream 校验非 surge 日零足迹；replay_dual_seat 执行单局单臂单席位重演（fail 重跑一次）；输出逐局逐臂双席 margin 与动作流摘要。
+    - 签名意图：输入: Phase A 报告+语料+L3 main 路径 / 输出: {per_game:{per_arm:{seat0:{margin},seat1:{margin},delta}}} / 错误: 单臂单席 fail 两次=该局该臂红、整体 fail-closed。
+    - 调用方：run_judgment。
+    - tested 策略：自有单测。
+    - 核验命令：测试: orderbook_surge_lab/test_phase_b.py。
+    - **build_treatment_arm** [L2|新增]
+      - 职责：构造处置 callable——包装 L3 agent：读该局 oracle surge 日集合与对应处置参数（A1=对手当日卖空率/A2=价格×库存价值序/A3=组合）；surge 日回合交 apply_surge_day_sells 改卖单，非 surge 日原样透传（同对象）；任何异常→原 action 返回（fail-safe）；step==0 复位。
+      - 签名意图：输入: L3 callable+surge 配置+arm 类型 / 输出: 包装 callable / 错误: 包装层异常吞掉回退原 action。
+      - 调用方：phase_b_four_arm_replay。
+      - tested 策略：自有单测。
+      - 核验命令：测试: orderbook_surge_lab/test_phase_b.py（arm 组）。
+      - **apply_surge_day_sells** [L3|新增]
+        - 职责：surge 日卖单改造（单一功能转变）——输入基座 action 与当日处置参数：A1 卖空率对齐=把该日卖出总量提至"我方可卖库存×对手当日卖空率"（品类按我方自然卖序放量）；A2 高价优先=按当日品项价×可卖量排序重排卖单顺序与品类优先；A3=两者叠加；硬约束=只卖有的（逐品项不超过可卖量）、其余动作与槽位原样保留。
+        - 签名意图：输入: action, observation, 处置参数 / 输出: 改造后 action / 错误: 异常上抛（build_treatment_arm 兜底）。
+        - 调用方：build_treatment_arm。
+        - tested 策略：自有单测（三臂各一+库存上限+空卖单）。
+        - 核验命令：测试: orderbook_surge_lab/test_phase_b.py（sells 组）。
+    - **replay_dual_seat** [L2|新增]
+      - 职责：单局单臂单席位 seated 重演——twin 引擎装载我方 callable 于指定席、对手席按录像动作重放，跑全程（720 步）取终局 margin；非 DONE/超时=异常；驱动实现取材 v48_hybrid/gates 重演管线与 L3 等价面管线（只读取材不改其源）。
+      - 签名意图：输入: 回放, our_callable, seat / 输出: {margin, status, steps_n} / 错误: 异常→raise 由编排层重跑一次。
+      - 调用方：phase_b_four_arm_replay。
+      - tested 策略：自有单测（构造小局）。
+      - 核验命令：测试: orderbook_surge_lab/test_phase_b.py（replay 组）。
+    - **compare_action_stream** [L2|新增]
+      - 职责：零足迹校验——同局同席位对照臂与处置臂的逐回合动作流对比：非 surge 日必须逐字节一致；surge 日差异必须限于卖单集合（SELL 增/删/序变），出现其他形态即报首个异类位置。
+      - 签名意图：输入: 两动作流+surge 日集合 / 输出: {identical_off_surge, first_alien_diff} / 错误: 无（结果即裁决）。
+      - 调用方：phase_b_four_arm_replay。
+      - tested 策略：自有单测。
+      - 核验命令：测试: orderbook_surge_lab/test_phase_b.py（zerofootprint 组）。
+  - **judge_verdicts** [L1|新增]
+    - 职责：逐臂独立判据——每臂：可处置显著局中 Δmargin>0 的局数 ≥2/3 且全语料（含胜局）Δ≥−100 → 该臂 POSITIVE；附敏感度（Δ>0 vs Δ>50；2/3 vs 3/4）与逐臂对比表；整体 verdict=任一臂 POSITIVE→POSITIVE（记胜出臂）/全 NEGATIVE→NEGATIVE/KILLED_A 由 run_judgment 短路给定。
+    - 签名意图：输入: Phase B 结果+Phase A 分层标注 / 输出: {per_arm:{positive, n_sig, n_pos, harm_violations}, overall, winning_arm, sensitivity} / 错误: 语料缺失局=fail。
+    - 调用方：run_judgment。
+    - tested 策略：自有单测（构造正/负/边界判例）。
+    - 核验命令：测试: orderbook_surge_lab/test_judge.py。
+
+## 共享函数（增补）
+- **corpus_select**（调用方：run_judgment, phase_a_attribution, phase_b_four_arm_replay）
+  - 职责：语料选择——Phase A=全量回放目录；Phase B=Phase A 检出"含可处置 surge 日"败局全集+8 抽样胜局（r32/r33 各 4，rng.Random(20260924r14)）；输出逐局清单（episode/tag/seat 归属/胜负标签）；缺回放的局=fail-closed 列出。
+  - 签名意图：输入: 回放目录+Phase A 报告（Phase B 时） / 输出: {phase_a:[...], phase_b:{losses:[...], wins:[...]}} / 错误: 语料缺失=fail。
+  - 调用方：见上。
+  - tested 策略：自有单测（抽样种子可复现）。
+  - 核验命令：测试: orderbook_surge_lab/test_corpus.py。
