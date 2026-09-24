@@ -346,3 +346,4 @@
 | 2026-09-25 | deliver | **fn-analyze 分析17 v2 修订（用户裁定 v1 草率）**：三次采纳机制级解剖——v48=整季开环排程+三窄反应层；order-book=layer D 操作共享订单簿（行 3411/4475/4733/4872，机制差距横扫）；2965=EXP402 种子截断内置版（含 pending 口径+源头位置，R11→R13→EXP402 三级复证『越近引擎结算杠杆越大』）+EXP410 肥料边际双算+_IG+死值陷阱；playbook 五步细化触发条件 | 方法论资产 v2 |
 | 2026-09-25 | deliver | **fn-grill R17 立项：合并迭代四改合一（r35，本族 2/2 额度）**——改1 无条件（CA_MARGIN −25 尾部真值+_HR 群饲块）；改2/3/4 条件（羊=肥料工厂判读/番茄门六点扫描/V93 指纹表扩充，Phase V 离线判决负者不并入）；h2h 基线 r34a ≥0.55；时间线 Phase V 09-25→构建门禁 09-26→发射 09-26/27 | 停在门口待 /fn-divide |
 | 2026-09-25 | deliver | **fn-divide R17 责任块追加（含改 3 扩域修订：42 点粗扫+top-3 邻域细化）**：run_r35_iteration→phase_v_adjudicate（probe_sheep_fertilizer_loop 链路判读/scan_tomato_gate 扩域扫描/expand_route_table 指纹表）→build_r35 白名单合并→verify_r35_gates 复用 R16 管线（h2h vs r34a）；7 函数；矩阵/自检双向过 | 停在门口待 /fn-scaffold |
+| 2026-09-25 | deliver | **fn-scaffold R17 骨架落位**：orderbook_r35/ 9 文件（7 函数桩+4 测试桩统一标记+evidence/）；py_compile 9/9 过 | 停在签名审查门口待 /fn-implement |
