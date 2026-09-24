@@ -1,0 +1,219 @@
+{
+ "variant": "v_MELON2WHEAT_10pct",
+ "base_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/main.py",
+ "base_sha256": "88f9a82fb2ff37b9d6e56d1504515d71e97a4bb37c558c35052ffde133ca036b",
+ "main_sha256": "4de93f6fa3fd179f659c98e8da7cbef8a49327ce9186ae805383e866c687cc36",
+ "main_bytes": 1050146,
+ "blob_span": [
+  48446,
+  142938
+ ],
+ "base_blob_len": 94490,
+ "new_blob_len": 94492,
+ "diff_entries": 2,
+ "edits": [
+  {
+   "ai": 7,
+   "step": 7,
+   "kind": "buy",
+   "before": [
+    "BUY_SEED",
+    "MELON",
+    1
+   ],
+   "after": [
+    "BUY_SEED",
+    "WHEAT",
+    1
+   ]
+  },
+  {
+   "ai": 8,
+   "step": 8,
+   "kind": "plant",
+   "before": [
+    "PLANT",
+    "MELON"
+   ],
+   "after": [
+    "PLANT",
+    "WHEAT"
+   ]
+  }
+ ],
+ "day_plan": {
+  "0": {
+   "buys_to": 1,
+   "plants_to": 1
+  }
+ },
+ "route_audit": {
+  "0": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "1": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "2": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "3": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "4": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "5": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "6": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "7": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "8": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "9": {
+   "plants_from": 11,
+   "plants_to": 166
+  },
+  "10": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "11": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "12": {
+   "plants_from": 11,
+   "plants_to": 166
+  },
+  "100": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "101": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "103": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "104": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "105": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "106": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "107": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "108": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "109": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "110": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "111": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "112": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "113": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "114": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "115": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "116": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "117": {
+   "plants_from": 11,
+   "plants_to": 163
+  },
+  "118": {
+   "plants_from": 11,
+   "plants_to": 157
+  },
+  "119": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "120": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "121": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "122": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "123": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "124": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "125": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "126": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "127": {
+   "plants_from": 11,
+   "plants_to": 164
+  },
+  "128": {
+   "plants_from": 11,
+   "plants_to": 164
+  }
+ },
+ "outside_blob_byte_identical": true,
+ "compile_ok": true,
+ "deterministic_double_encode": true
+}

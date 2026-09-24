@@ -68,3 +68,15 @@
 | gate_equivalence_l3 | S6 | wired 09-24 | form 红=空槽占位伪差异×9；死种 2090>900 帽；starve/subset/cases 全绿 | (本批) |
 | constructed_cases_l3 | S6 | wired 09-24 | 七件全过 | (本批) |
 | verify_l13_gates | S6 | wired 09-24 | overall=FAIL 仅门③两因：空槽分类器缺口+死种帽未达 | (本批) |
+| select_corpus_r15 | B1 | wired 09-24 | pytest test_corpus_r15 → 5 passed（抽样可复现/早崩排除/镜像池边界两例/缺回放 fail-closed）；实跑 losses26=26+wins10（r32/r33 各 5）+mirror 4（池<5 取全池记 note） | (本批) |
+| item_price_percentile | B1 | wired 09-24 | pytest（percentile 组）→ 3 passed（崩价/稀缺/中性三态+窗口≥8+空表）；双面分位（own-pool 趋势+Markup 截面结构），判据面偏差登记 evidence.method_notes | (本批) |
+| rank_swap_pairs | B1 | wired 09-24 | pytest（swap 组）→ 2 passed（score 排序+空集）；实跑单对 MELON→WHEAT（分位差 74.7×产能 39.0=score 29.13，产能窗∩停时窗） | (本批) |
+| phase_m_market_map | B1 | wired 09-24 | 实跑 86/86 ok 零 error（50s，复用 R14 daily_netflow_decompose）；crash=[MELON] scarce=[WHEAT]→非 KILLED；单局失败记录不中断面有测 | (本批) |
+| build_variant_schedule | B2 | wired 09-24 | pytest（schedule 组）→ 4 passed（迁移+种子同步严格更早步+停时窗过滤）；实跑 moved=1/2/4=target（选点位移重试后零 skip） | (本批) |
+| check_variant_feasibility | B2 | wired 09-24 | pytest（feasibility 组）→ 3 passed（ok/cash 击穿/停时越界）；实跑 3 变体全可行（棚容峰值 4-22≤100，现金地板=26 败局日末资金逐日最小值） | (本批) |
+| build_variant_main | B2 | wired 09-24 | pytest（build 组）→ 3 passed（splice 区间外一致+拒绝覆盖基座+装载回路）；实跑 3 变体 main.py+build_audit.json（blob 重编码与原编码参数逐字节同构） | (本批) |
+| generate_mix_variants | B2 | wired 09-24 | pytest end_to_end → 2 passed；实跑 3 参数点全构建零弃（sha 4e1ec1c5/c18374f6/4de93f6f） | (本批) |
+| openloop_replay_variants | B3 | wired 09-24 | pytest（mock replay）→ 4 passed（Δ/复用+抽验/红/预算截断）；实跑 239 重演无红：对照复用 11 席+抽验 2 局 drift=0.0+fresh 51 | (本批) |
+| closedloop_probe | B3 | tested 09-24（NEGATIVE 下未触发实跑） | pytest（mock 引擎）→ 3 passed（互胜率/中位/重跑一次/红定向）；mirror 池 4 局已备 | (本批) |
+| judge_mix_verdicts | B3 | wired 09-24 | pytest → 5 passed（正/负三路/KILLED 透传+敏感度/红 fail-closed）；实跑三变体全 NEGATIVE（敏感度四门全 False） | (本批) |
+| run_mix_judgment | B4 | wired 09-24 | pytest（编排 mock）→ 5 passed（全流/KILLED 双短路/S1 fail-closed/闭环触发）；实跑 322.6s → evidence/mix_judgment.json overall=NEGATIVE | (本批) |
