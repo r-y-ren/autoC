@@ -324,3 +324,69 @@
       - 职责：R10 三件沿 import 复用 + 新增两件净口径用例（窗口内非磁带回买单且净供给已覆盖→删；净供给<需求（真未来种植）→保留）。
       - 签名意图：输入: 无（夹具内置） / 输出: 五例 pass/fail / 错误: 夹具异常=失败。
       - 调用方：gate_equivalence_v2。tested：自有单测。核验：测试: orderbook_l1_1_derivative/test_layer_s_v2.py（invariant v2 组）。
+
+
+---
+
+## 【R12 增补·2026-09-24】减量改单·种子回收极限（L2）
+
+## 结构概览（增补）
+- build_l2_candidate ← R12
+  - make_layer_s_v3_block
+    - _cxs_agent [改造·v3]
+      - _cxs_reduce_orders [改造·v3]
+        - _cxs_seed_balance [改造·v3]
+          - _cxs_observed_plant_rate [新增]
+          - _cxs_completable_plant_demand [沿 R10]
+            - _cxs_harvest_completable [沿 R10]
+- verify_l2_gates ← R12
+  - gate_equivalence_v3
+    - constructed_cases_v3
+  - （复用不改）：gate_h2h_vs_l1（基线仍 L1）/ gate_lineage_strength / gate_launch_fourgate_l1 / replay_action_diff / precision_subset_check
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R12 | build_l2_candidate；verify_l2_gates |
+
+## 功能块 build_l2_candidate ← R12
+（块引言：v3 块=L1 块+受控多处改造：_cxs_seed_surplus/_cxs_seed_truncate 重写为 balance/reduce、新增 _cxs_observed_plant_rate、_cxs_agent 复位钩子挂台账、[] 空槽解析归类、窗口常数参数化（648/600 双产物）。diff 纪律从"恰一函数体"泛化为"受控变更集"（AST 级：允许的函数替换/新增/常数改动白名单，白名单外任何差异即构建失败）。打包/manifest 沿先例，窗口参数入 manifest。）
+
+- **build_l2_candidate** [L0|新增]
+  - 职责：编排 make_layer_s_v3_block（两窗各一）→ 注入基座副本（四校验+三防线沿 L1 管线）→ 确定性打包（双跑）→ manifest×2（schema orderbook_l2_derivative_manifest/1.0；含 window 参数与变更集审计）。CLI：`--window 648|600|both`。
+  - 签名意图：输入: 无（CLI，window 参数） / 输出: orderbook_l2_derivative/w{648,600}/{main.py, submission.tar.gz, build_manifest.json} / 错误: 任一步不确定即抛。
+  - 调用方：操作者。tested：上游覆盖: verify_l2_gates。核验：上游覆盖。
+  - **make_layer_s_v3_block** [L1|新增]
+    - 职责：从 L1 块源生成 v3 块——受控变更集=白名单 AST 操作：重写 _cxs_seed_surplus→_cxs_seed_balance、_cxs_seed_truncate→_cxs_reduce_orders（减量语义：BUY_SEED 订单可减量至目标保有 R，只减不加，从后往前逐单减）、新增 _cxs_observed_plant_rate、_cxs_agent 复位钩子挂台账复位+窗口常数引用、解析守卫 [] 空槽归类可忽略、_CXS_FROM 参数化注入；校验：AST 可解析、变更恰落白名单、末 callable 仍 _cxs_agent。
+    - 签名意图：输入: L1 块路径+window / 输出: v3 块文件+变更集审计 / 错误: 白名单外差异即抛。
+    - 调用方：build_l2_candidate。tested：自有单测。核验：测试: orderbook_l2_derivative/test_build_v3.py。
+    - **_cxs_agent** [改造·v3]（运行时入口）
+      - 职责：沿 R10 职责面；差异=过滤调用改 _cxs_reduce_orders；step==0 复位钩子挂台账；窗口界读常数（构建期定 648/600）。
+      - 签名意图：输入: observation, configuration / 输出: action / 错误: 一切异常回退基座动作。
+      - 调用方：官方装载。tested：上游覆盖。核验：上游覆盖: verify_l2_gates。
+      - **_cxs_reduce_orders** [改造·v3]
+        - 职责：纯减法过滤升级为减量过滤——对窗口内 BUY_SEED 逐品项计算目标保有 R（_cxs_seed_balance），从后往前把该品项购买量减至 R（逐单减量、可减至 0=整单消失；订单位置与其他订单不动；R≥现有量→全保留原样[同对象零足迹]）；品项不确定→该品项原样。
+        - 签名意图：输入: observation, action, plan_view / 输出: 过滤后 market 表 / 错误: 异常上抛（_cxs_agent 兜底）。
+        - 调用方：_cxs_agent。tested：自有单测。核验：测试: orderbook_l2_derivative/test_layer_s_v3.py。
+        - **_cxs_seed_balance** [改造·v3]
+          - 职责：减量目标 R=max(0, 需求赤字)+反应层安全边；需求赤字=剩余累计可完成需求−（held−当前步消耗+本回合保留+磁带未来按实存[台账扣已减]）；安全边=观测实种速率（_cxs_observed_plant_rate）×外推窗；台账跨步累计防重复计入；任何不确定→None（该品项原样，宁多买）。
+          - 签名意图：输入: crop, observation, kept_orders, plan_view, current_plants / 输出: 目标保有 R 或 None / 错误: 不确定→None。
+          - 调用方：_cxs_reduce_orders。tested：自有单测。核验：测试: orderbook_l2_derivative/test_layer_s_v3.py。
+          - **_cxs_observed_plant_rate** [L4|新增]
+            - 职责：从 observation 的我方 farms 地块 planted_day 统计该品项近 N 步（定桩实现期，5-10）实际种植速率（法证：反应层种植磁带视不可见，670 实种 2 vs 视 1——观测边数据源）；解析失败→None（上游按不确定处理）。
+            - 签名意图：输入: observation, crop, lookback / 输出: 速率或 None / 错误: 异常→None。
+            - 调用方：_cxs_seed_balance。tested：自有单测。核验：测试: orderbook_l2_derivative/test_layer_s_v3.py。
+
+## 功能块 verify_l2_gates ← R12
+- **verify_l2_gates** [L0|新增]
+  - 职责：**两窗各跑全套四门**（w648/w600 分别：①复用 gate_h2h_vs_l1（cand=该窗 v3，对手仍 L1）②复用 gate_lineage_strength ③gate_equivalence_v3 ④复用 gate_launch_fourgate_l1），取全绿最宽窗为 recommended；fail-closed 全跑不短路；evidence 落各窗 evidence/ + 顶层 verify_summary（两窗对比+推荐窗）。
+  - 签名意图：输入: 包根目录 / 输出: {windows:{w648:{overall…}, w600:{…}}, recommended} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验：测试: orderbook_l2_derivative/test_verify_v3.py。
+  - **gate_equivalence_v3** [L1|新增]
+    - 职责：26 局重演四面——(a) 形态面（复用 replay_action_diff，减量自然分解为 BUY_SEED 增/删对均在允许集；步界=该窗参数）；(b) 结果面：逐局终局资金 ≥ L1 + 死种合计 ≤$500 + **饿死零容忍**（重演终态产量/在田株数逐局对比 L1——减产迹象即红）+ 子集重验（净回收 ≤ 原局未种下）；(c) constructed_cases_v3 九件。
+    - 签名意图：输入: episodes_dir, v3_main, l1_main, verbatim_main, window / 输出: {forms, result_face{finals_ok, dead_seeds_total, starve_free, subset}, cases, passed} / 错误: fail-closed。
+    - 调用方：verify_l2_gates。tested：自有单测。核验：测试: orderbook_l2_derivative/test_gate_equiv_v3.py。
+    - **constructed_cases_v3** [L2|新增]
+      - 职责：九件构造用例——R10 三件（减量语义重校）+c4/c5（重校）+新四件：8→1 减量恰留真需求+安全边；反应层超种安全边兜住；[] 空槽单可忽略不误 None；600 窗滴灌局回收。
+      - 签名意图：输入: 无（夹具内置） / 输出: 九例 pass/fail / 错误: 夹具异常=失败。
+      - 调用方：gate_equivalence_v3。tested：自有单测。核验：测试: orderbook_l2_derivative/test_layer_s_v3.py（invariant v3 组）。
