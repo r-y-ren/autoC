@@ -649,3 +649,51 @@
   - 调用方：见上。
   - tested 策略：自有单测（抽样可复现）。
   - 核验命令：测试: orderbook_mix_lab/test_corpus_r15.py。
+
+
+---
+
+## 【R16 增补·2026-09-25】2965 三增量采纳·双件移植（r34a/b）
+
+## 结构概览（增补）
+- build_2965_adopt ← R16
+  - fetch_2965_source
+  - merge_increments
+  - apply_2965_constants
+  - audit_diff_vs_2965
+- verify_2965_gates ← R16（复用既有四门/h2h/装载管线重定向）
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R16 | build_2965_adopt；verify_2965_gates |
+
+## 功能块 build_2965_adopt ← R16
+（块引言：第三次外部结构采纳——2965 同源件三增量（EXP402/EXP410/_IG）移植到我方 L3 基座：r34a=三增量+我方常数+EXP402 替代 layer S 尾块（饿死门不减数）；r34b=同三增量+2965 常数（P_EVERY 3/CA_MARGIN −5/OR2_SLOT 20）。产物 orderbook_2965_adopt/{a,b}/，基座/在飞件/2965 原件零改动。）
+
+- **build_2965_adopt** [L0|新增]
+  - 职责：编排——fetch_2965_source 取公开件源（gzip 载荷解码，可复跑）→ merge_increments 三增量受控移植到 L3 基座副本+移除 layer S 尾块（EXP402 替代）产 r34a → apply_2965_constants 产 r34b → audit_diff_vs_2965 双件审计 → 确定性打包双产物+manifest（sha 链沿 r30 格式）。
+  - 签名意图：输入: 无（CLI） / 输出: orderbook_2965_adopt/{a,b}/{main.py,submission.tar.gz,build_manifest.json} / 错误: 任一步不确定即抛（fail-closed）。
+  - 调用方：操作者。tested：自有单测。核验：测试: orderbook_2965_adopt/test_build_adopt.py。
+  - **fetch_2965_source** [L1|新增]
+    - 职责：下载/解码 2965 公开件源码（kaggle kernels pull 或既有缓存），sha 登记；失败重试。
+    - 签名意图：输入: kernel slug / 输出: 源文件路径+sha / 错误: 拉取失败即抛。
+    - 调用方：build_2965_adopt。tested：自有单测。核验：测试: orderbook_2965_adopt/test_build_adopt.py（fetch 组）。
+  - **merge_increments** [L1|新增]
+    - 职责：三增量受控移植——以 L3 main 为底，按 2965 源定位 EXP402/EXP410/_IG 三块搬移（AST 级受控变更集审计）；移除我方 layer S 尾块（_cxs_agent 链由 _cxd_agent 直出）；py_compile+装载链校验。
+    - 签名意图：输入: L3 main+2965 源 / 输出: r34a main+变更集审计 / 错误: 变更超白名单即抛。
+    - 调用方：build_2965_adopt。tested：自有单测。核验：测试: orderbook_2965_adopt/test_build_adopt.py（merge 组）。
+  - **apply_2965_constants** [L1|新增]
+    - 职责：r34b 常数面——在 r34a 之上改 layer-D 三常数为我方版（P_EVERY 3/CA_MARGIN −5/OR2_SLOT 20；RACE 40 不变），AST 定位替换+校验恰三处。
+    - 签名意图：输入: r34a main / 输出: r34b main+diff 审计 / 错误: 定位数≠3 即抛。
+    - 调用方：build_2965_adopt。tested：自有单测。核验：测试: orderbook_2965_adopt/test_build_adopt.py（constants 组）。
+  - **audit_diff_vs_2965** [L1|新增]
+    - 职责：双件对 2965 原件逐字节 diff 审计——r34b 与原件差异应恰为我方层（L3 CARROT2 钳制叠加+移除 layer S 后的残留差异）；r34a 差异=增量外我方常数面；输出差异归因表。
+    - 签名意图：输入: 双件 main+2965 源 / 输出: {a_diff_attribution, b_diff_attribution} / 错误: 出现白名单外差异即红。
+    - 调用方：build_2965_adopt。tested：自有单测。核验：测试: orderbook_2965_adopt/test_build_adopt.py（audit 组）。
+
+## 功能块 verify_2965_gates ← R16
+- **verify_2965_gates** [L0|新增]
+  - 职责：双件各自全量门禁（fail-closed 全跑不短路）——复用重定向：四门沿 r30 管线（合规四轴在案/装载 last-callable/双席 DONE+<1s/确定性双跑/体积身份链）、h2h 门 vs r33 在飞件 ≥0.55（seated 双席位 ≥16 局）、谱系门（v48/v4b 各 8 局无负）、饿死零容忍+子集判据（沿 L3 口径，EXP402 替换 layer S 后重验）；evidence 落各子目录。
+  - 签名意图：输入: 双件包路径 / 输出: {a:{overall...}, b:{overall...}} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验：测试: orderbook_2965_adopt/test_gates_adopt.py。
