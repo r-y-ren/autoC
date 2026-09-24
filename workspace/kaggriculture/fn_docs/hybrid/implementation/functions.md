@@ -61,3 +61,10 @@
 | gate_equivalence_v3 | S5 | wired 09-24 | 形态面绿/结果面红：死种 3190=L1（控制器补偿）；饿死零容忍绿；子集绿 | (本批) |
 | constructed_cases_v3 | S5 | wired 09-24 | 九件全过 | (本批) |
 | verify_l2_gates | S5 | wired 09-24 | 两窗 overall=FAIL recommended=None——闭环控制器实证否决 R12 价值前提 | (本批) |
+| inject_controller_clamp | S6 | stub 09-24 | — | — |
+| _ca_future_plant_demand | S6 | stub 09-24 | — | — |
+| build_l13_candidate | S6 | stub 09-24 | — | — |
+| gate_launch_l3 | S6 | stub 09-24 | — | — |
+| gate_equivalence_l3 | S6 | stub 09-24 | — | — |
+| constructed_cases_l3 | S6 | stub 09-24 | — | — |
+| verify_l13_gates | S6 | stub 09-24 | — | — |

@@ -9,6 +9,7 @@
 | S3(完成 09-24) | 验证面：replay_action_diff → precision_subset_check → constructed_invariant_cases → gate_equivalence_precision → gate_h2h_vs_verbatim → gate_lineage_strength → gate_launch_fourgate_l1 → verify_layer_s_gates；+语料备制：strip 26 局 /tmp/r30 回放→最小重演形态归档 fn_docs/hybrid/results/replays-r30-26/（体积预算 <10MB，R8 先例） | verify_layer_s_gates 实跑四门 evidence 四件套全绿（=发射前置达成） | 8 函数=单批上限；语料是门③输入 |
 | S4(完成 09-24) | R11：make_layer_s_v2_block（净需求覆盖 v2 块生成+AST 校验）→ build_l11_candidate → gate_h2h_vs_l1 → gate_equivalence_v2(+constructed_cases_v2) → verify_l11_gates；全量四门真跑 | verify_l11_gates 实跑 overall（门绿=round-32 发射前置） | R10 管线复用重定向；L1 目录零改动 |
 | S5(完成 09-24) | R12：make_layer_s_v3_block（受控变更集+减量/安全边/观测速率实现+矩阵）→ build_l2_candidate（双窗）→ gate_equivalence_v3(+九件) → verify_l2_gates；两窗全量真跑 | 两窗 overall+recommended 最宽绿窗 | 运行时无台账设计若成立则登记偏差（逐步自洽）；L1/L1.1 目录零改动 |
+| ▶ S6 | R13：inject_controller_clamp（中部手术+需求 helper+矩阵）→ build_l13_candidate → gate_launch_l3/gate_equivalence_l3(+七件) → verify_l13_gates；全量四门真跑 | verify overall=发射前置（预期 h2h 真胜局/死种≤$900） | R13-b=coarse 同管线；L1/L1.1/L2 目录零改动 |
 
 ## 变更记录（计划层事件）
 | 日期 | 事件 | 说明 |
