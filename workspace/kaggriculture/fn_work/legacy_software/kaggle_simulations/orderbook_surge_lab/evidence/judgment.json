@@ -1,0 +1,3551 @@
+{
+ "generated_at": "2026-09-24T21:23:10",
+ "protocol": "orderbook-surge-lab-judgment/1.0",
+ "source": {
+  "rerun_command": "cd /mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations && python3 orderbook_surge_lab/run_judgment.py --replay-dir /tmp/r33audit --l3-main /mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/main.py --threshold 1500.0 --median-mult 1.5",
+  "replay_dir": "/tmp/r33audit",
+  "corpus_phase_a": [
+   112811974,
+   112813113,
+   112814254,
+   112815438,
+   112816559,
+   112817709,
+   112817799,
+   112818872,
+   112818930,
+   112820019,
+   112820070,
+   112821155,
+   112821236,
+   112822309,
+   112822367,
+   112823438,
+   112823464,
+   112824591,
+   112824627,
+   112825732,
+   112825764,
+   112826868,
+   112826909,
+   112828011,
+   112828048,
+   112829156,
+   112829186,
+   112830330,
+   112830352,
+   112831515,
+   112831575,
+   112832703,
+   112832752,
+   112833942,
+   112833949,
+   112835052,
+   112835136,
+   112835161,
+   112836273,
+   112836317,
+   112837481,
+   112837488,
+   112838302,
+   112838623,
+   112838673,
+   112839789,
+   112839832,
+   112840925,
+   112840958,
+   112842083,
+   112842159,
+   112842735,
+   112843266,
+   112843272,
+   112843277,
+   112844424,
+   112844429,
+   112845601,
+   112845604,
+   112846774,
+   112846785,
+   112847952,
+   112847954,
+   112849099,
+   112849110,
+   112850267,
+   112850273,
+   112851433,
+   112851436,
+   112852596,
+   112852621,
+   112853391,
+   112853771,
+   112853781,
+   112854164,
+   112855003,
+   112855005,
+   112856202,
+   112856217,
+   112856307,
+   112857412,
+   112857426,
+   112858576,
+   112858579,
+   112858692,
+   112859092
+  ],
+  "corpus_phase_b": {
+   "losses": [
+    112831515,
+    112843277,
+    112844424,
+    112846785,
+    112847952,
+    112855005,
+    112856307
+   ],
+   "wins": [
+    112816559,
+    112824627,
+    112828011,
+    112830330,
+    112830352,
+    112836273,
+    112847954,
+    112859092
+   ]
+  },
+  "win_sampling": {
+   "seed_material": "20260924r14",
+   "seed_derivation": "int(sha256(material).hexdigest()[:16], 16)",
+   "per_tag": {
+    "r32": {
+     "pool": [
+      112811974,
+      112813113,
+      112814254,
+      112815438,
+      112816559,
+      112817709,
+      112818872,
+      112820019,
+      112821155,
+      112822309,
+      112823438,
+      112824591,
+      112825732,
+      112826868,
+      112828011,
+      112829156,
+      112830352,
+      112833949,
+      112836317,
+      112838673,
+      112839832,
+      112842159,
+      112845604,
+      112847954,
+      112853391,
+      112854164,
+      112856217
+     ],
+     "picked": [
+      112847954,
+      112828011,
+      112830352,
+      112816559
+     ]
+    },
+    "r33": {
+     "pool": [
+      112817799,
+      112818930,
+      112820070,
+      112821236,
+      112822367,
+      112823464,
+      112824627,
+      112825764,
+      112826909,
+      112828048,
+      112829186,
+      112830330,
+      112832703,
+      112833942,
+      112836273,
+      112837481,
+      112838623,
+      112839789,
+      112840925,
+      112842083,
+      112842735,
+      112843272,
+      112849099,
+      112850267,
+      112852621,
+      112853771,
+      112855003,
+      112857412,
+      112858576,
+      112859092
+     ],
+     "picked": [
+      112824627,
+      112859092,
+      112836273,
+      112830330
+     ]
+    }
+   }
+  },
+  "phase_a_full_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_surge_lab/evidence/phase_a_full.json",
+  "method_notes": [
+   "净收入=money_delta+seed+BUY_PRODUCT 支出（audit/decomp 口径扩展）",
+   "成交量=库存背书口径（提交量≠成交量修正；产出/消耗小污染沿 decomp 注记）",
+   "day_end=step d*24+23（audit 口径）；转移 t 驱动 t-1→t",
+   "sellable=当日成交+日末持有（=期初+产出-消耗+买入 恒等近似，涵盖当日可收）",
+   "构成分解价基：品项实现均价（该席该品项 dropval/vol；未卖回退当日均价）；价差项捕捉日内时点差",
+   "结构性占比分母=dropval_gap（对手多卖收入差）",
+   "对手卖空率=成交/(成交+日末持有)（A1 处置参数同源定义）",
+   "Phase B 对手席=录像开环重放（R8 先例）：对手不反应，反应性损失记注记",
+   "零足迹双层口径：包装层（同观测非 surge 日 wrapped==base，判据绑定面）+流层（首 surge 日前逐字节一致；其后市场态因果发散（含 surge 日内基座后续反应）记 first_alien_diff/aftermath 报告面不判红）",
+   "A1 目标=rate×当日累计可卖（期初+日内到货自适应，剩余量逐步 re-quote）",
+   "A2=卖单按 当日价×shed库存 价值降序重排+空槽补单（引擎品项市场独立→重排为二阶效应，补单为主效应）",
+   "L3 对照臂=官方 last-callable 全新装载（每局次），零改动在飞件"
+  ]
+ },
+ "phase_a": {
+  "panorama": {
+   "n_games": 86,
+   "n_ok": 86,
+   "n_errors": 0,
+   "res_counts": {
+    "W": 57,
+    "L": 29,
+    "T": 0
+   },
+   "n_games_with_surge": 30,
+   "n_games_treatable": 22,
+   "n_treatable_losses": 7,
+   "n_surge_days_total": 60,
+   "n_treatable_surge_days": 31,
+   "surge_day_histogram": {
+    "10": 4,
+    "11": 3,
+    "13": 2,
+    "14": 1,
+    "15": 8,
+    "16": 2,
+    "17": 3,
+    "18": 3,
+    "19": 2,
+    "20": 5,
+    "21": 3,
+    "23": 3,
+    "24": 3,
+    "26": 3,
+    "27": 5,
+    "28": 3,
+    "29": 7
+   },
+   "composition_means": {
+    "quant_gap": 2327.1,
+    "mix_gap": 777.2,
+    "px_gap": 51.5,
+    "structural_gap": 2172.5,
+    "structural_share": 0.7,
+    "coverage_mean": 0.721,
+    "n": 60
+   },
+   "price_identifiability": {
+    "n_items_scored": 311,
+    "mean_percentile": 49.7,
+    "frac_ge_70pct": 0.283
+   }
+  },
+  "deep_dive": [
+   {
+    "episode": 112831515,
+    "tag": "r33",
+    "res": "L",
+    "margin": -301.0,
+    "surge_days": [
+     26
+    ],
+    "composition": {
+     "26": {
+      "quant_gap": 1022.0,
+      "mix_gap": 808.1,
+      "px_gap": 151.9,
+      "structural_gap": 0.0,
+      "structural_share": 0.0,
+      "coverage": 1.0,
+      "treatable": true,
+      "price_percentile": {
+       "FERTILIZER": 13.3,
+       "WOOL": 30.0,
+       "WHEAT": 76.7,
+       "STRAWBERRY": 30.0,
+       "MILK": 10.0,
+       "TOMATO": 100.0
+      },
+      "opp_short_rate": 0.562,
+      "net_gap": 1945.0,
+      "dropval_gap": 1982.0,
+      "my_vol": 89,
+      "opp_vol": 104
+     }
+    },
+    "treatable_surge_days": [
+     26
+    ]
+   },
+   {
+    "episode": 112835052,
+    "tag": "r33",
+    "res": "L",
+    "margin": -527.0,
+    "surge_days": [],
+    "composition": {},
+    "treatable_surge_days": []
+   },
+   {
+    "episode": 112835161,
+    "tag": "r33",
+    "res": "L",
+    "margin": -345.0,
+    "surge_days": [],
+    "composition": {},
+    "treatable_surge_days": []
+   },
+   {
+    "episode": 112843266,
+    "tag": "r33",
+    "res": "L",
+    "margin": -3153.0,
+    "surge_days": [],
+    "composition": {},
+    "treatable_surge_days": []
+   },
+   {
+    "episode": 112843277,
+    "tag": "r32",
+    "res": "L",
+    "margin": -7922.0,
+    "surge_days": [
+     27,
+     29
+    ],
+    "composition": {
+     "27": {
+      "quant_gap": 3208.5,
+      "mix_gap": 8222.2,
+      "px_gap": -838.7,
+      "structural_gap": 6202.3,
+      "structural_share": 0.586,
+      "coverage": 0.773,
+      "treatable": true,
+      "price_percentile": {
+       "WHEAT": 63.3,
+       "CARROT": 93.3,
+       "WOOL": 33.3,
+       "FERTILIZER": 10.0,
+       "EGG": 13.3,
+       "MILK": 36.7,
+       "STRAWBERRY": 30.0,
+       "TOMATO": 100.0
+      },
+      "opp_short_rate": 0.539,
+      "net_gap": 9870.0,
+      "dropval_gap": 10592.0,
+      "my_vol": 98,
+      "opp_vol": 132
+     },
+     "29": {
+      "quant_gap": 3771.7,
+      "mix_gap": 4546.1,
+      "px_gap": -1365.8,
+      "structural_gap": 8717.1,
+      "structural_share": 1.254,
+      "coverage": 0.587,
+      "treatable": false,
+      "price_percentile": {
+       "MILK": 33.3,
+       "WHEAT": 40.0,
+       "STRAWBERRY": 26.7,
+       "FERTILIZER": 3.3,
+       "EGG": 3.3,
+       "CARROT": 80.0,
+       "WOOL": 3.3,
+       "TOMATO": 83.3
+      },
+      "opp_short_rate": 1.0,
+      "net_gap": 5293.0,
+      "dropval_gap": 6952.0,
+      "my_vol": 183,
+      "opp_vol": 236
+     }
+    },
+    "treatable_surge_days": [
+     27
+    ]
+   },
+   {
+    "episode": 112844429,
+    "tag": "r33",
+    "res": "L",
+    "margin": -285.0,
+    "surge_days": [],
+    "composition": {},
+    "treatable_surge_days": []
+   },
+   {
+    "episode": 112851433,
+    "tag": "r33",
+    "res": "L",
+    "margin": -353.0,
+    "surge_days": [],
+    "composition": {},
+    "treatable_surge_days": []
+   },
+   {
+    "episode": 112856307,
+    "tag": "r33",
+    "res": "L",
+    "margin": -503.0,
+    "surge_days": [
+     15
+    ],
+    "composition": {
+     "15": {
+      "quant_gap": 2775.8,
+      "mix_gap": 2700.4,
+      "px_gap": 236.8,
+      "structural_gap": 2056.5,
+      "structural_share": 0.36,
+      "coverage": 0.8,
+      "treatable": true,
+      "price_percentile": {
+       "FERTILIZER": 50.0,
+       "WOOL": 83.3,
+       "MILK": 53.3,
+       "STRAWBERRY": 100.0
+      },
+      "opp_short_rate": 0.552,
+      "net_gap": 3713.0,
+      "dropval_gap": 5713.0,
+      "my_vol": 35,
+      "opp_vol": 58
+     }
+    },
+    "treatable_surge_days": [
+     15
+    ]
+   }
+  ],
+  "threshold": 1500.0,
+  "median_mult": 1.5,
+  "errors": []
+ },
+ "phase_b": {
+  "per_game": [
+   {
+    "episode": 112831515,
+    "tag": "r33",
+    "res": "L",
+    "margin": -301.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [
+       26
+      ],
+      "control": {
+       "margin": -301.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -656.0,
+       "delta": -355.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 14
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 626,
+         "day": 26,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"FEED\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\"],[\"PICKUP\",\"WHEAT\",4],[\"WEST\"]],\"market\":[[\"SELL\",\"FERTILIZER\",2],[\"SELL\",\"FERTILIZER\",1",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"FEED\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\"],[\"PICKUP\",\"WHEAT\",4],[\"WEST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",2],[\"SELL\",\"FERTILIZER\""
+        },
+        "first_divergence": 624,
+        "n_off_surge_diffs": 9,
+        "n_causal_aftermath": 9,
+        "n_surge_diffs": 19
+       },
+       "n_modified_steps": 14,
+       "red": false
+      },
+      "A2": {
+       "margin": -717.0,
+       "delta": -416.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 7
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 626,
+         "day": 26,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"FEED\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\"],[\"PICKUP\",\"WHEAT\",4],[\"WEST\"]],\"market\":[[\"SELL\",\"FERTILIZER\",2],[\"SELL\",\"FERTILIZER\",1",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"FEED\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\"],[\"PICKUP\",\"WHEAT\",4],[\"WEST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",2],[\"SELL\",\"FERTILIZER\""
+        },
+        "first_divergence": 624,
+        "n_off_surge_diffs": 12,
+        "n_causal_aftermath": 12,
+        "n_surge_diffs": 14
+       },
+       "n_modified_steps": 7,
+       "red": false
+      },
+      "A3": {
+       "margin": -697.0,
+       "delta": -396.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 7
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 625,
+         "day": 26,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"PICKUP\",\"WHEAT\"],\"hands\":[[\"SOUTH\"],[\"WATER\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\",4],[\"PICKUP\",\"WHEAT\",4],[\"PICKUP\",\"FERTILIZER\",2],[\"PASS\"]],\"market\":[[\"HIRE\"],[\"HIRE\"],[\"HIRE\"],[\"BUY_PRODUCT\",\"F",
+         "treatment": "{\"farmer\":[\"PICKUP\",\"WHEAT\"],\"hands\":[[\"SOUTH\"],[\"WATER\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\",4],[\"PICKUP\",\"WHEAT\",4],[\"PICKUP\",\"FERTILIZER\",2],[\"PASS\"]],\"market\":[[\"HIRE\"],[\"HIRE\"],[\"HIRE\"],[\"BUY_PRODUCT\",\"F"
+        },
+        "first_divergence": 624,
+        "n_off_surge_diffs": 14,
+        "n_causal_aftermath": 14,
+        "n_surge_diffs": 15
+       },
+       "n_modified_steps": 7,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [],
+      "control": {
+       "margin": 825.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 825.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": 825.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": 825.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112843277,
+    "tag": "r32",
+    "res": "L",
+    "margin": -7922.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [
+       27,
+       29
+      ],
+      "control": {
+       "margin": -7922.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -11194.0,
+       "delta": -3272.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 14
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 659,
+         "day": 27,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"SOUTH\"],\"hands\":[[\"SOUTH\"],[\"CARE\"],[\"CARE\"],[\"WEST\"],[\"EAST\"],[\"HARVEST\"],[\"CARE\"],[\"WEST\"],[\"WATER\"],[\"NORTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"FERTILIZE\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"SOUTH\"],\"hands\":[[\"SOUTH\"],[\"CARE\"],[\"CARE\"],[\"WEST\"],[\"EAST\"],[\"HARVEST\"],[\"CARE\"],[\"WEST\"],[\"WATER\"],[\"NORTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"HARVEST\"]],\"market\":[]}"
+        },
+        "first_divergence": 649,
+        "n_off_surge_diffs": 1,
+        "n_causal_aftermath": 1,
+        "n_surge_diffs": 23
+       },
+       "n_modified_steps": 14,
+       "red": false
+      },
+      "A2": {
+       "margin": -11128.0,
+       "delta": -3206.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 14
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 659,
+         "day": 27,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"SOUTH\"],\"hands\":[[\"SOUTH\"],[\"CARE\"],[\"CARE\"],[\"WEST\"],[\"EAST\"],[\"HARVEST\"],[\"CARE\"],[\"WEST\"],[\"WATER\"],[\"NORTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"FERTILIZE\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"SOUTH\"],\"hands\":[[\"SOUTH\"],[\"CARE\"],[\"CARE\"],[\"WEST\"],[\"EAST\"],[\"HARVEST\"],[\"CARE\"],[\"WEST\"],[\"WATER\"],[\"NORTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"HARVEST\"]],\"market\":[]}"
+        },
+        "first_divergence": 649,
+        "n_off_surge_diffs": 4,
+        "n_causal_aftermath": 4,
+        "n_surge_diffs": 26
+       },
+       "n_modified_steps": 14,
+       "red": false
+      },
+      "A3": {
+       "margin": -10955.0,
+       "delta": -3033.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 14
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 659,
+         "day": 27,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"SOUTH\"],\"hands\":[[\"SOUTH\"],[\"CARE\"],[\"CARE\"],[\"WEST\"],[\"EAST\"],[\"HARVEST\"],[\"CARE\"],[\"WEST\"],[\"WATER\"],[\"NORTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"FERTILIZE\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"SOUTH\"],\"hands\":[[\"SOUTH\"],[\"CARE\"],[\"CARE\"],[\"WEST\"],[\"EAST\"],[\"HARVEST\"],[\"CARE\"],[\"WEST\"],[\"WATER\"],[\"NORTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"HARVEST\"]],\"market\":[]}"
+        },
+        "first_divergence": 649,
+        "n_off_surge_diffs": 4,
+        "n_causal_aftermath": 4,
+        "n_surge_diffs": 26
+       },
+       "n_modified_steps": 14,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [
+       26
+      ],
+      "control": {
+       "margin": 959.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 833.0,
+       "delta": -126.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 10
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 626,
+         "day": 26,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"PASS\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\"],[\"PICKUP\",\"WHEAT\",4],[\"WEST\"]],\"market\":[[\"SELL\",\"FERTILIZER\",2],[\"SELL\",\"FERTILIZER\",1",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"PASS\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\"],[\"PICKUP\",\"WHEAT\",4],[\"WEST\"]],\"market\":[[],[],[\"SELL\",\"WHEAT\",1]]}"
+        },
+        "first_divergence": 624,
+        "n_off_surge_diffs": 1,
+        "n_causal_aftermath": 1,
+        "n_surge_diffs": 12
+       },
+       "n_modified_steps": 10,
+       "red": false
+      },
+      "A2": {
+       "margin": 331.0,
+       "delta": -628.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 6
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 626,
+         "day": 26,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"PASS\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\"],[\"PICKUP\",\"WHEAT\",4],[\"WEST\"]],\"market\":[[\"SELL\",\"FERTILIZER\",2],[\"SELL\",\"FERTILIZER\",1",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"PASS\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\"],[\"PICKUP\",\"WHEAT\",4],[\"WEST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",2],[\"SELL\",\"FERTILIZER\""
+        },
+        "first_divergence": 624,
+        "n_off_surge_diffs": 7,
+        "n_causal_aftermath": 7,
+        "n_surge_diffs": 13
+       },
+       "n_modified_steps": 6,
+       "red": false
+      },
+      "A3": {
+       "margin": 345.0,
+       "delta": -614.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 6
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 625,
+         "day": 26,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"PICKUP\",\"WHEAT\"],\"hands\":[[\"SOUTH\"],[\"WATER\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\",4],[\"PICKUP\",\"WHEAT\",4],[\"PICKUP\",\"FERTILIZER\",2],[\"PASS\"]],\"market\":[[\"SELL\",\"MILK\",6],[\"SELL\",\"CARROT\",12],[\"SEL",
+         "treatment": "{\"farmer\":[\"PICKUP\",\"WHEAT\"],\"hands\":[[\"SOUTH\"],[\"WATER\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\",4],[\"PICKUP\",\"WHEAT\",4],[\"PICKUP\",\"FERTILIZER\",2],[\"PASS\"]],\"market\":[[\"HIRE\"],[\"HIRE\"],[\"HIRE\"],[\"BUY_PRODUCT\",\"F"
+        },
+        "first_divergence": 624,
+        "n_off_surge_diffs": 10,
+        "n_causal_aftermath": 10,
+        "n_surge_diffs": 10
+       },
+       "n_modified_steps": 6,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112844424,
+    "tag": "r32",
+    "res": "L",
+    "margin": -24066.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [
+       10,
+       16,
+       17,
+       29
+      ],
+      "control": {
+       "margin": -24066.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -35291.0,
+       "delta": -11225.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 36
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 243,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",4],[\"SELL\",\"WHEAT\",1]]}"
+        },
+        "first_divergence": 241,
+        "n_off_surge_diffs": 66,
+        "n_causal_aftermath": 66,
+        "n_surge_diffs": 46
+       },
+       "n_modified_steps": 36,
+       "red": false
+      },
+      "A2": {
+       "margin": -43403.0,
+       "delta": -19337.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 27
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 243,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",4],[\"SELL\",\"WHEAT\",1]]}"
+        },
+        "first_divergence": 241,
+        "n_off_surge_diffs": 124,
+        "n_causal_aftermath": 124,
+        "n_surge_diffs": 39
+       },
+       "n_modified_steps": 27,
+       "red": false
+      },
+      "A3": {
+       "margin": -35325.0,
+       "delta": -11259.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 27
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 243,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",4],[\"SELL\",\"WHEAT\",1]]}"
+        },
+        "first_divergence": 241,
+        "n_off_surge_diffs": 71,
+        "n_causal_aftermath": 71,
+        "n_surge_diffs": 40
+       },
+       "n_modified_steps": 27,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [
+       22
+      ],
+      "control": {
+       "margin": 27352.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 27182.0,
+       "delta": -170.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 4
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 528,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 5
+       },
+       "n_modified_steps": 4,
+       "red": false
+      },
+      "A2": {
+       "margin": 27182.0,
+       "delta": -170.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 3
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 528,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 6
+       },
+       "n_modified_steps": 3,
+       "red": false
+      },
+      "A3": {
+       "margin": 27182.0,
+       "delta": -170.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 3
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 528,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 6
+       },
+       "n_modified_steps": 3,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112846785,
+    "tag": "r32",
+    "res": "L",
+    "margin": -22289.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [
+       10,
+       15,
+       16,
+       18,
+       20
+      ],
+      "control": {
+       "margin": -22289.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -24357.0,
+       "delta": -2068.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 40
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 250,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"PLACE\",\"MELON\",6],\"hands\":[[\"EAST\"],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"PLACE\",\"MELON\",6],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"PICKUP\",\"WHEAT\",3],[\"CARE\"],[\"SOUTH\"]],\"market\":[[\"S",
+         "treatment": "{\"farmer\":[\"PLACE\",\"MELON\",6],\"hands\":[[\"EAST\"],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"PLACE\",\"MELON\",6],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"PICKUP\",\"WHEAT\",3],[\"CARE\"],[\"SOUTH\"]],\"market\":[[\"B"
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 33,
+        "n_causal_aftermath": 33,
+        "n_surge_diffs": 51
+       },
+       "n_modified_steps": 40,
+       "red": false
+      },
+      "A2": {
+       "margin": -44276.0,
+       "delta": -21987.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 37
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 250,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"PLACE\",\"MELON\",6],\"hands\":[[\"EAST\"],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"PLACE\",\"MELON\",6],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"PICKUP\",\"WHEAT\",3],[\"CARE\"],[\"SOUTH\"]],\"market\":[[\"S",
+         "treatment": "{\"farmer\":[\"PLACE\",\"MELON\",6],\"hands\":[[\"EAST\"],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"PLACE\",\"MELON\",6],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"PICKUP\",\"WHEAT\",3],[\"CARE\"],[\"SOUTH\"]],\"market\":[[\"B"
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 111,
+        "n_causal_aftermath": 111,
+        "n_surge_diffs": 57
+       },
+       "n_modified_steps": 37,
+       "red": false
+      },
+      "A3": {
+       "margin": -23695.0,
+       "delta": -1406.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 39
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 250,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"PLACE\",\"MELON\",6],\"hands\":[[\"EAST\"],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"PLACE\",\"MELON\",6],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"PICKUP\",\"WHEAT\",3],[\"CARE\"],[\"SOUTH\"]],\"market\":[[\"S",
+         "treatment": "{\"farmer\":[\"PLACE\",\"MELON\",6],\"hands\":[[\"EAST\"],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"PLACE\",\"MELON\",6],[\"PLACE\",\"MELON\",6],[\"EAST\"],[\"PICKUP\",\"WHEAT\",3],[\"CARE\"],[\"SOUTH\"]],\"market\":[[\"B"
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 36,
+        "n_causal_aftermath": 36,
+        "n_surge_diffs": 55
+       },
+       "n_modified_steps": 39,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [],
+      "control": {
+       "margin": 22406.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 22406.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": 22406.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": 22406.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112847952,
+    "tag": "r33",
+    "res": "L",
+    "margin": -20983.0,
+    "seat": 1,
+    "arms": {
+     "seat0": {
+      "surge_days": [],
+      "control": {
+       "margin": 21211.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 21211.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": 21211.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": 21211.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [
+       10,
+       15,
+       18,
+       19
+      ],
+      "control": {
+       "margin": -21003.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -23524.0,
+       "delta": -2521.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 36
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 249,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"EAST\"],\"hands\":[[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"EAST\"],[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"PLACE\",\"MELON\",6],[\"FEED\"],[\"SOUTH\"]],\"market\":[[\"SELL\",\"MELON\",6],[\"BUY_PRODU",
+         "treatment": "{\"farmer\":[\"EAST\"],\"hands\":[[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"EAST\"],[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"PLACE\",\"MELON\",6],[\"FEED\"],[\"SOUTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",14],[\"B"
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 20,
+        "n_causal_aftermath": 20,
+        "n_surge_diffs": 40
+       },
+       "n_modified_steps": 36,
+       "red": false
+      },
+      "A2": {
+       "margin": -56657.0,
+       "delta": -35654.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 35
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 249,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"EAST\"],\"hands\":[[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"EAST\"],[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"PLACE\",\"MELON\",6],[\"FEED\"],[\"SOUTH\"]],\"market\":[[\"SELL\",\"MELON\",6],[\"BUY_PRODU",
+         "treatment": "{\"farmer\":[\"EAST\"],\"hands\":[[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"EAST\"],[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"PLACE\",\"MELON\",6],[\"FEED\"],[\"SOUTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",14],[\"B"
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 95,
+        "n_causal_aftermath": 95,
+        "n_surge_diffs": 53
+       },
+       "n_modified_steps": 35,
+       "red": false
+      },
+      "A3": {
+       "margin": -27440.0,
+       "delta": -6437.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 34
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 249,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"EAST\"],\"hands\":[[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"EAST\"],[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"PLACE\",\"MELON\",6],[\"FEED\"],[\"SOUTH\"]],\"market\":[[\"SELL\",\"MELON\",6],[\"BUY_PRODU",
+         "treatment": "{\"farmer\":[\"EAST\"],\"hands\":[[\"EAST\"],[\"SOUTH\"],[\"SOUTH\"],[\"HARVEST\"],[\"SOUTH\"],[\"EAST\"],[\"EAST\"],[\"COLLECT_FERTILIZER\"],[\"PLACE\",\"MELON\",6],[\"FEED\"],[\"SOUTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",14],[\"B"
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 64,
+        "n_causal_aftermath": 64,
+        "n_surge_diffs": 50
+       },
+       "n_modified_steps": 34,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112855005,
+    "tag": "r32",
+    "res": "L",
+    "margin": -1591.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [
+       17,
+       29
+      ],
+      "control": {
+       "margin": -1591.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -2208.0,
+       "delta": -617.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 19
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 710,
+         "day": 29,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"EAST\"],\"hands\":[[\"WEST\"],[\"WATER\"],[\"EAST\"],[\"EAST\"],[\"EAST\"],[\"SOUTH\"],[\"EAST\"],[\"DROP\"],[\"DROP\"],[\"NORTH\"],[\"WEST\"]],\"market\":[[\"SELL\",\"WOOL\",4],[\"SELL\",\"CARROT\",2],[],[]]}",
+         "treatment": "{\"farmer\":[\"EAST\"],\"hands\":[[\"WEST\"],[\"WATER\"],[\"EAST\"],[\"EAST\"],[\"EAST\"],[\"SOUTH\"],[\"EAST\"],[\"DROP\"],[\"DROP\"],[\"NORTH\"],[\"WEST\"]],\"market\":[[],[],[],[\"SELL\",\"WOOL\",4],[\"SELL\",\"CARROT\",2]]}"
+        },
+        "first_divergence": 408,
+        "n_off_surge_diffs": 3,
+        "n_causal_aftermath": 3,
+        "n_surge_diffs": 22
+       },
+       "n_modified_steps": 19,
+       "red": false
+      },
+      "A2": {
+       "margin": -3418.0,
+       "delta": -1827.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 15
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 410,
+         "day": 17,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\",2],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"EAST\"],[\"NORTH\"],[\"SOUTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\",2],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"EAST\"],[\"NORTH\"],[\"SOUTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5]]}"
+        },
+        "first_divergence": 408,
+        "n_off_surge_diffs": 40,
+        "n_causal_aftermath": 40,
+        "n_surge_diffs": 24
+       },
+       "n_modified_steps": 15,
+       "red": false
+      },
+      "A3": {
+       "margin": -2040.0,
+       "delta": -449.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 16
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 697,
+         "day": 29,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WEST\"],\"hands\":[[\"NORTH\"],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"]],\"market\":[[\"SELL\",\"CARROT\",31],[\"SELL\",\"WOOL\",3],[],[],[\"HIRE\"],[\"HIRE\"],[\"BUY_PRODUCT\",\"",
+         "treatment": "{\"farmer\":[\"WEST\"],\"hands\":[[\"NORTH\"],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"]],\"market\":[[],[],[],[\"HIRE\"],[\"HIRE\"],[\"BUY_PRODUCT\",\"FERTILIZER\",2],[\"SELL\",\"WHEAT\",40],["
+        },
+        "first_divergence": 408,
+        "n_off_surge_diffs": 5,
+        "n_causal_aftermath": 5,
+        "n_surge_diffs": 19
+       },
+       "n_modified_steps": 16,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [],
+      "control": {
+       "margin": -1411.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -1411.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": -1411.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": -1411.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112856307,
+    "tag": "r33",
+    "res": "L",
+    "margin": -503.0,
+    "seat": 1,
+    "arms": {
+     "seat0": {
+      "surge_days": [
+       12
+      ],
+      "control": {
+       "margin": 1240.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 1181.0,
+       "delta": -59.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 3
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 288,
+        "n_off_surge_diffs": 1,
+        "n_causal_aftermath": 1,
+        "n_surge_diffs": 3
+       },
+       "n_modified_steps": 3,
+       "red": false
+      },
+      "A2": {
+       "margin": -2852.0,
+       "delta": -4092.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 5
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 290,
+         "day": 12,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"FEED\"],\"hands\":[[\"PLACE\",\"WOOL\",6],[\"HARVEST\"],[\"PICKUP\",\"WHEAT\",2],[\"FEED\"],[\"EAST\"],[\"NORTH\"],[\"WEST\"],[\"HARVEST\"],[\"HARVEST\"]],\"market\":[[\"SELL\",\"WOOL\",5]]}",
+         "treatment": "{\"farmer\":[\"FEED\"],\"hands\":[[\"PLACE\",\"WOOL\",6],[\"HARVEST\"],[\"PICKUP\",\"WHEAT\",2],[\"FEED\"],[\"EAST\"],[\"NORTH\"],[\"WEST\"],[\"HARVEST\"],[\"HARVEST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5],[\"SELL\",\"WOOL\",5]]}"
+        },
+        "first_divergence": 288,
+        "n_off_surge_diffs": 72,
+        "n_causal_aftermath": 72,
+        "n_surge_diffs": 6
+       },
+       "n_modified_steps": 5,
+       "red": false
+      },
+      "A3": {
+       "margin": 1153.0,
+       "delta": -87.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 4
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 288,
+        "n_off_surge_diffs": 2,
+        "n_causal_aftermath": 2,
+        "n_surge_diffs": 5
+       },
+       "n_modified_steps": 4,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [
+       15
+      ],
+      "control": {
+       "margin": -503.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -1672.0,
+       "delta": -1169.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 9
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 360,
+        "n_off_surge_diffs": 61,
+        "n_causal_aftermath": 61,
+        "n_surge_diffs": 9
+       },
+       "n_modified_steps": 9,
+       "red": false
+      },
+      "A2": {
+       "margin": -3504.0,
+       "delta": -3001.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 6
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 360,
+        "n_off_surge_diffs": 15,
+        "n_causal_aftermath": 15,
+        "n_surge_diffs": 6
+       },
+       "n_modified_steps": 6,
+       "red": false
+      },
+      "A3": {
+       "margin": -851.0,
+       "delta": -348.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 6
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 362,
+         "day": 15,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"FERTILIZER\",3],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"HARVEST\"],[\"NORTH\"],[\"SOUTH\"],[\"NORTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"PICKUP\",\"FERTILIZER\",3],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"HARVEST\"],[\"NORTH\"],[\"SOUTH\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5]]}"
+        },
+        "first_divergence": 360,
+        "n_off_surge_diffs": 6,
+        "n_causal_aftermath": 6,
+        "n_surge_diffs": 7
+       },
+       "n_modified_steps": 6,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112816559,
+    "tag": "r32",
+    "res": "W",
+    "margin": 41313.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [
+       17,
+       23
+      ],
+      "control": {
+       "margin": 41313.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 41559.0,
+       "delta": 246.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 20
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 561,
+         "day": 23,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"HARVEST\"],\"hands\":[[\"FEED\"],[\"DIG\"],[\"HARVEST\"],[\"CARE\"],[\"EAST\"],[\"DIG\"],[\"SOUTH\"],[\"COLLECT_FERTILIZER\"],[\"NORTH\"],[\"NORTH\"],[\"SOUTH\"]],\"market\":[[\"SELL\",\"MILK\",1],[],[\"BUY_SEED\",\"WHEAT\"",
+         "treatment": "{\"farmer\":[\"HARVEST\"],\"hands\":[[\"FEED\"],[\"DIG\"],[\"HARVEST\"],[\"CARE\"],[\"EAST\"],[\"DIG\"],[\"SOUTH\"],[\"COLLECT_FERTILIZER\"],[\"NORTH\"],[\"NORTH\"],[\"SOUTH\"]],\"market\":[[],[],[\"BUY_SEED\",\"WHEAT\",1],[\"SELL\",\"WO"
+        },
+        "first_divergence": 408,
+        "n_off_surge_diffs": 9,
+        "n_causal_aftermath": 9,
+        "n_surge_diffs": 23
+       },
+       "n_modified_steps": 20,
+       "red": false
+      },
+      "A2": {
+       "margin": 41644.0,
+       "delta": 331.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 15
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 410,
+         "day": 17,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\",2],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"EAST\"],[\"NORTH\"],[\"SOUTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"PICKUP\",\"WHEAT\",2],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"EAST\"],[\"NORTH\"],[\"SOUTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5]]}"
+        },
+        "first_divergence": 408,
+        "n_off_surge_diffs": 17,
+        "n_causal_aftermath": 17,
+        "n_surge_diffs": 21
+       },
+       "n_modified_steps": 15,
+       "red": false
+      },
+      "A3": {
+       "margin": 39895.0,
+       "delta": -1418.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 16
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 409,
+         "day": 17,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WEST\"],\"hands\":[[\"PICKUP\",\"WHEAT\",5],[\"EAST\"],[\"WEST\"],[\"NORTH\"],[\"EAST\"],[\"PICKUP\",\"FERTILIZER\",4],[\"WEST\"],[\"WEST\"],[\"PICKUP\",\"WHEAT\",5]],\"market\":[[\"SELL\",\"FERTILIZER\",8],[\"SELL\",\"EGG\",",
+         "treatment": "{\"farmer\":[\"WEST\"],\"hands\":[[\"PICKUP\",\"WHEAT\",5],[\"EAST\"],[\"WEST\"],[\"NORTH\"],[\"EAST\"],[\"PICKUP\",\"FERTILIZER\",4],[\"WEST\"],[\"WEST\"],[\"PICKUP\",\"WHEAT\",5]],\"market\":[[],[\"HIRE\"],[\"HIRE\"],[\"BUY_PRODUCT\",\"W"
+        },
+        "first_divergence": 408,
+        "n_off_surge_diffs": 58,
+        "n_causal_aftermath": 58,
+        "n_surge_diffs": 22
+       },
+       "n_modified_steps": 16,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [
+       10,
+       16,
+       18,
+       28,
+       29
+      ],
+      "control": {
+       "margin": 15889.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 13562.0,
+       "delta": -2327.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 51
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 252,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"PICKUP\",\"SHEEP\"],[\"NORTH\"],[\"PLACE\",\"MELON\",6],[\"SOUTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"CARE\"],[\"FEED\"],[\"NORTH\"],[\"EAST\"]],\"market\":[[\"SELL\",\"MELON\",6],[\"BUY_PRODUCT\",\"",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"PICKUP\",\"SHEEP\"],[\"NORTH\"],[\"PLACE\",\"MELON\",6],[\"SOUTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"CARE\"],[\"FEED\"],[\"NORTH\"],[\"EAST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5],[\"SELL\",\""
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 27,
+        "n_causal_aftermath": 27,
+        "n_surge_diffs": 60
+       },
+       "n_modified_steps": 51,
+       "red": false
+      },
+      "A2": {
+       "margin": -10327.0,
+       "delta": -26216.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 43
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 252,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"PICKUP\",\"SHEEP\"],[\"NORTH\"],[\"PLACE\",\"MELON\",6],[\"SOUTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"CARE\"],[\"FEED\"],[\"NORTH\"],[\"EAST\"]],\"market\":[[\"SELL\",\"MELON\",6],[\"BUY_PRODUCT\",\"",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"PICKUP\",\"SHEEP\"],[\"NORTH\"],[\"PLACE\",\"MELON\",6],[\"SOUTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"CARE\"],[\"FEED\"],[\"NORTH\"],[\"EAST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5],[\"SELL\",\""
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 131,
+        "n_causal_aftermath": 131,
+        "n_surge_diffs": 65
+       },
+       "n_modified_steps": 43,
+       "red": false
+      },
+      "A3": {
+       "margin": 13151.0,
+       "delta": -2738.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 43
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 243,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WEST\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"FEED\"],[\"WEST\"],[\"WEST\"],[\"NORTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"WEST\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"FEED\"],[\"WEST\"],[\"WEST\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5]]}"
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 29,
+        "n_causal_aftermath": 29,
+        "n_surge_diffs": 61
+       },
+       "n_modified_steps": 43,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112824627,
+    "tag": "r33",
+    "res": "W",
+    "margin": 28571.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [],
+      "control": {
+       "margin": 28531.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 28531.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": 28531.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": 28531.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [
+       10,
+       15,
+       25,
+       26,
+       27,
+       28,
+       29
+      ],
+      "control": {
+       "margin": 1333.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -2266.0,
+       "delta": -3599.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 70
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 252,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"PICKUP\",\"SHEEP\"],[\"NORTH\"],[\"PLACE\",\"MELON\",6],[\"SOUTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"CARE\"],[\"FEED\"],[\"NORTH\"],[\"EAST\"]],\"market\":[[\"SELL\",\"MELON\",6],[\"BUY_PRODUCT\",\"",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"PICKUP\",\"SHEEP\"],[\"NORTH\"],[\"PLACE\",\"MELON\",6],[\"SOUTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"CARE\"],[\"FEED\"],[\"NORTH\"],[\"EAST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5],[\"SELL\",\""
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 25,
+        "n_causal_aftermath": 25,
+        "n_surge_diffs": 94
+       },
+       "n_modified_steps": 70,
+       "red": false
+      },
+      "A2": {
+       "margin": -24202.0,
+       "delta": -25535.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 57
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 252,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"PICKUP\",\"SHEEP\"],[\"NORTH\"],[\"PLACE\",\"MELON\",6],[\"SOUTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"CARE\"],[\"FEED\"],[\"NORTH\"],[\"EAST\"]],\"market\":[[\"SELL\",\"MELON\",6],[\"BUY_PRODUCT\",\"",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"PICKUP\",\"SHEEP\"],[\"NORTH\"],[\"PLACE\",\"MELON\",6],[\"SOUTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"CARE\"],[\"FEED\"],[\"NORTH\"],[\"EAST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5],[\"SELL\",\""
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 108,
+        "n_causal_aftermath": 108,
+        "n_surge_diffs": 105
+       },
+       "n_modified_steps": 57,
+       "red": false
+      },
+      "A3": {
+       "margin": -3390.0,
+       "delta": -4723.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 55
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 243,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WEST\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"FEED\"],[\"WEST\"],[\"WEST\"],[\"NORTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"WEST\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"FEED\"],[\"WEST\"],[\"WEST\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5]]}"
+        },
+        "first_divergence": 240,
+        "n_off_surge_diffs": 50,
+        "n_causal_aftermath": 50,
+        "n_surge_diffs": 100
+       },
+       "n_modified_steps": 55,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112828011,
+    "tag": "r32",
+    "res": "W",
+    "margin": 412.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [],
+      "control": {
+       "margin": 412.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 412.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": 412.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": 412.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [],
+      "control": {
+       "margin": 7.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 7.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": 7.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": 7.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112830330,
+    "tag": "r33",
+    "res": "W",
+    "margin": 3691.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [
+       29
+      ],
+      "control": {
+       "margin": 3671.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 3398.0,
+       "delta": -273.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 7
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 696,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 9
+       },
+       "n_modified_steps": 7,
+       "red": false
+      },
+      "A2": {
+       "margin": 3389.0,
+       "delta": -282.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 8
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 696,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 10
+       },
+       "n_modified_steps": 8,
+       "red": false
+      },
+      "A3": {
+       "margin": 3603.0,
+       "delta": -68.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 7
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 697,
+         "day": 29,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WEST\"],\"hands\":[[\"NORTH\"],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"]],\"market\":[[\"SELL\",\"CARROT\",33],[\"SELL\",\"WOOL\",3],[\"SELL\",\"MILK\",1],[\"SELL\",\"EGG\",2],[\"HIR",
+         "treatment": "{\"farmer\":[\"WEST\"],\"hands\":[[\"NORTH\"],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"]],\"market\":[[],[\"HIRE\"],[\"HIRE\"],[\"BUY_PRODUCT\",\"FERTILIZER\",2],[\"SELL\",\"WHEAT\",36],[\"SELL\""
+        },
+        "first_divergence": 696,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 9
+       },
+       "n_modified_steps": 7,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [
+       28
+      ],
+      "control": {
+       "margin": -595.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -504.0,
+       "delta": 91.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 13
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 675,
+         "day": 28,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"HARVEST\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"WEST\"],[\"CARE\"],[\"SOUTH\"],[\"DIG\"],[\"FEED\"],[\"NORTH\"],[\"NORTH\"],[\"FEED\"],[\"PICKUP\",\"FERTILIZER\",6]],\"market\":[[\"SELL\",\"WHEAT\",8]]}",
+         "treatment": "{\"farmer\":[\"HARVEST\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"WEST\"],[\"CARE\"],[\"SOUTH\"],[\"DIG\"],[\"FEED\"],[\"NORTH\"],[\"NORTH\"],[\"FEED\"],[\"PICKUP\",\"FERTILIZER\",5]],\"market\":[[\"SELL\",\"WHEAT\",8]]}"
+        },
+        "first_divergence": 672,
+        "n_off_surge_diffs": 3,
+        "n_causal_aftermath": 3,
+        "n_surge_diffs": 14
+       },
+       "n_modified_steps": 13,
+       "red": false
+      },
+      "A2": {
+       "margin": -387.0,
+       "delta": 208.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 10
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 675,
+         "day": 28,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"HARVEST\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"WEST\"],[\"CARE\"],[\"SOUTH\"],[\"DIG\"],[\"FEED\"],[\"NORTH\"],[\"NORTH\"],[\"FEED\"],[\"PICKUP\",\"FERTILIZER\",6]],\"market\":[[\"SELL\",\"WHEAT\",8]]}",
+         "treatment": "{\"farmer\":[\"HARVEST\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"EAST\"],[\"WEST\"],[\"CARE\"],[\"SOUTH\"],[\"DIG\"],[\"FEED\"],[\"NORTH\"],[\"NORTH\"],[\"FEED\"],[\"PICKUP\",\"FERTILIZER\",5]],\"market\":[]}"
+        },
+        "first_divergence": 672,
+        "n_off_surge_diffs": 3,
+        "n_causal_aftermath": 3,
+        "n_surge_diffs": 11
+       },
+       "n_modified_steps": 10,
+       "red": false
+      },
+      "A3": {
+       "margin": -768.0,
+       "delta": -173.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 9
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 673,
+         "day": 28,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"PICKUP\",\"WHEAT\",6],[\"WEST\"],[\"WEST\"],[\"PICKUP\",\"WHEAT\",5],[\"NORTH\"]],\"market\":[[\"SELL\",\"MILK\",3],[\"SELL\",\"CARROT\",9],[\"SELL\",\"FERTILI",
+         "treatment": "{\"farmer\":[\"NORTH\"],\"hands\":[[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"WEST\"],[\"PICKUP\",\"WHEAT\",6],[\"WEST\"],[\"WEST\"],[\"PICKUP\",\"WHEAT\",5],[\"NORTH\"]],\"market\":[[\"HIRE\"],[\"HIRE\"],[\"BUY_PRODUCT\",\"WHEAT\",6],[\"SELL\",\"C"
+        },
+        "first_divergence": 672,
+        "n_off_surge_diffs": 8,
+        "n_causal_aftermath": 8,
+        "n_surge_diffs": 11
+       },
+       "n_modified_steps": 9,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112830352,
+    "tag": "r32",
+    "res": "W",
+    "margin": 108.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [],
+      "control": {
+       "margin": 108.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 108.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": 108.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": 108.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [],
+      "control": {
+       "margin": -1283.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -1283.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": -1283.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": -1283.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112836273,
+    "tag": "r33",
+    "res": "W",
+    "margin": 2505.0,
+    "seat": 1,
+    "arms": {
+     "seat0": {
+      "surge_days": [],
+      "control": {
+       "margin": -509.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -509.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": -509.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": -509.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [],
+      "control": {
+       "margin": 2465.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 2465.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": 2465.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": 2465.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112847954,
+    "tag": "r32",
+    "res": "W",
+    "margin": 794.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [
+       10,
+       15
+      ],
+      "control": {
+       "margin": 794.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -2589.0,
+       "delta": -3383.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 20
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 243,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",4],[\"SELL\",\"WHEAT\",1]]}"
+        },
+        "first_divergence": 241,
+        "n_off_surge_diffs": 128,
+        "n_causal_aftermath": 128,
+        "n_surge_diffs": 20
+       },
+       "n_modified_steps": 20,
+       "red": false
+      },
+      "A2": {
+       "margin": -6587.0,
+       "delta": -7381.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 15
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 243,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",4],[\"SELL\",\"WHEAT\",1]]}"
+        },
+        "first_divergence": 241,
+        "n_off_surge_diffs": 131,
+        "n_causal_aftermath": 131,
+        "n_surge_diffs": 20
+       },
+       "n_modified_steps": 15,
+       "red": false
+      },
+      "A3": {
+       "margin": -2216.0,
+       "delta": -3010.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 16
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 243,
+         "day": 10,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[]}",
+         "treatment": "{\"farmer\":[\"WATER\"],\"hands\":[[\"WEST\"],[\"NORTH\"],[\"NORTH\"],[\"NORTH\"],[\"WEST\"],[\"NORTH\"],[\"WEST\"],[\"FEED\"],[\"WEST\"],[\"NORTH\"],[\"NORTH\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",4],[\"SELL\",\"WHEAT\",1]]}"
+        },
+        "first_divergence": 241,
+        "n_off_surge_diffs": 58,
+        "n_causal_aftermath": 58,
+        "n_surge_diffs": 18
+       },
+       "n_modified_steps": 16,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [
+       12
+      ],
+      "control": {
+       "margin": 1692.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 1641.0,
+       "delta": -51.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 1
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": 288,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 1
+       },
+       "n_modified_steps": 1,
+       "red": false
+      },
+      "A2": {
+       "margin": 680.0,
+       "delta": -1012.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 6
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 290,
+         "day": 12,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"FEED\"],\"hands\":[[\"PLACE\",\"WOOL\",6],[\"HARVEST\"],[\"PICKUP\",\"WHEAT\",2],[\"FEED\"],[\"EAST\"],[\"NORTH\"],[\"WEST\"],[\"HARVEST\"],[\"HARVEST\"]],\"market\":[[\"SELL\",\"WOOL\",5]]}",
+         "treatment": "{\"farmer\":[\"FEED\"],\"hands\":[[\"PLACE\",\"WOOL\",6],[\"HARVEST\"],[\"PICKUP\",\"WHEAT\",2],[\"FEED\"],[\"EAST\"],[\"NORTH\"],[\"WEST\"],[\"HARVEST\"],[\"HARVEST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5],[\"SELL\",\"WOOL\",5]]}"
+        },
+        "first_divergence": 288,
+        "n_off_surge_diffs": 76,
+        "n_causal_aftermath": 76,
+        "n_surge_diffs": 6
+       },
+       "n_modified_steps": 6,
+       "red": false
+      },
+      "A3": {
+       "margin": 680.0,
+       "delta": -1012.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 6
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": false,
+        "binding_ok": true,
+        "first_alien_diff": {
+         "step": 290,
+         "day": 12,
+         "kind": "surge_alien",
+         "control": "{\"farmer\":[\"FEED\"],\"hands\":[[\"PLACE\",\"WOOL\",6],[\"HARVEST\"],[\"PICKUP\",\"WHEAT\",2],[\"FEED\"],[\"EAST\"],[\"NORTH\"],[\"WEST\"],[\"HARVEST\"],[\"HARVEST\"]],\"market\":[[\"SELL\",\"WOOL\",5]]}",
+         "treatment": "{\"farmer\":[\"FEED\"],\"hands\":[[\"PLACE\",\"WOOL\",6],[\"HARVEST\"],[\"PICKUP\",\"WHEAT\",2],[\"FEED\"],[\"EAST\"],[\"NORTH\"],[\"WEST\"],[\"HARVEST\"],[\"HARVEST\"]],\"market\":[[\"BUY_PRODUCT\",\"WHEAT\",5],[\"SELL\",\"WOOL\",5]]}"
+        },
+        "first_divergence": 288,
+        "n_off_surge_diffs": 76,
+        "n_causal_aftermath": 76,
+        "n_surge_diffs": 6
+       },
+       "n_modified_steps": 6,
+       "red": false
+      }
+     }
+    }
+   },
+   {
+    "episode": 112859092,
+    "tag": "r33",
+    "res": "W",
+    "margin": 1154.0,
+    "seat": 0,
+    "arms": {
+     "seat0": {
+      "surge_days": [],
+      "control": {
+       "margin": 1154.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": 1154.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": 1154.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": 1154.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     },
+     "seat1": {
+      "surge_days": [],
+      "control": {
+       "margin": -195.0,
+       "status": "DONE",
+       "steps_n": 719
+      },
+      "A1": {
+       "margin": -195.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A2": {
+       "margin": -195.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      },
+      "A3": {
+       "margin": -195.0,
+       "delta": 0.0,
+       "status": "DONE",
+       "steps_n": 719,
+       "zerofootprint_wrapper": {
+        "ok": true,
+        "violations": [],
+        "n_violations": 0,
+        "n_modified_steps": 0
+       },
+       "zerofootprint_stream": {
+        "identical_off_surge": true,
+        "binding_ok": true,
+        "first_alien_diff": null,
+        "first_divergence": null,
+        "n_off_surge_diffs": 0,
+        "n_causal_aftermath": 0,
+        "n_surge_diffs": 0
+       },
+       "n_modified_steps": 0,
+       "red": false
+      }
+     }
+    }
+   }
+  ],
+  "summary": {
+   "n_games": 15,
+   "n_replays": 120,
+   "n_red": 0,
+   "wall_s": 118.3,
+   "budget_stopped": false
+  }
+ },
+ "control_fidelity": [
+  {
+   "episode": 112831515,
+   "recorded": -301.0,
+   "control": -301.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112843277,
+   "recorded": -7922.0,
+   "control": -7922.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112844424,
+   "recorded": -24066.0,
+   "control": -24066.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112846785,
+   "recorded": -22289.0,
+   "control": -22289.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112847952,
+   "recorded": -20983.0,
+   "control": -21003.0,
+   "drift": -20.0
+  },
+  {
+   "episode": 112855005,
+   "recorded": -1591.0,
+   "control": -1591.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112856307,
+   "recorded": -503.0,
+   "control": -503.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112816559,
+   "recorded": 41313.0,
+   "control": 41313.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112824627,
+   "recorded": 28571.0,
+   "control": 28531.0,
+   "drift": -40.0
+  },
+  {
+   "episode": 112828011,
+   "recorded": 412.0,
+   "control": 412.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112830330,
+   "recorded": 3691.0,
+   "control": 3671.0,
+   "drift": -20.0
+  },
+  {
+   "episode": 112830352,
+   "recorded": 108.0,
+   "control": 108.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112836273,
+   "recorded": 2505.0,
+   "control": 2465.0,
+   "drift": -40.0
+  },
+  {
+   "episode": 112847954,
+   "recorded": 794.0,
+   "control": 794.0,
+   "drift": 0.0
+  },
+  {
+   "episode": 112859092,
+   "recorded": 1154.0,
+   "control": 1154.0,
+   "drift": 0.0
+  }
+ ],
+ "judge": {
+  "per_arm": {
+   "A1": {
+    "positive": false,
+    "n_sig": 7,
+    "n_pos": 0,
+    "n_harm_violations": 11,
+    "harm_violations": [
+     {
+      "episode": 112831515,
+      "delta": -355.0
+     },
+     {
+      "episode": 112843277,
+      "delta": -3272.0
+     },
+     {
+      "episode": 112844424,
+      "delta": -11225.0
+     },
+     {
+      "episode": 112846785,
+      "delta": -2068.0
+     },
+     {
+      "episode": 112847952,
+      "delta": -2521.0
+     },
+     {
+      "episode": 112855005,
+      "delta": -617.0
+     },
+     {
+      "episode": 112856307,
+      "delta": -1169.0
+     },
+     {
+      "episode": 112816559,
+      "delta": -2327.0
+     },
+     {
+      "episode": 112824627,
+      "delta": -3599.0
+     },
+     {
+      "episode": 112830330,
+      "delta": -273.0
+     },
+     {
+      "episode": 112847954,
+      "delta": -3383.0
+     }
+    ],
+    "red_games": [],
+    "sig_delta_min_seat": [
+     -355.0,
+     -3272.0,
+     -11225.0,
+     -2068.0,
+     -2521.0,
+     -617.0,
+     -1169.0
+    ],
+    "sig_delta_median": -2068.0,
+    "all_delta_min": -11225.0,
+    "all_delta_max": 0.0
+   },
+   "A2": {
+    "positive": false,
+    "n_sig": 7,
+    "n_pos": 0,
+    "n_harm_violations": 11,
+    "harm_violations": [
+     {
+      "episode": 112831515,
+      "delta": -416.0
+     },
+     {
+      "episode": 112843277,
+      "delta": -3206.0
+     },
+     {
+      "episode": 112844424,
+      "delta": -19337.0
+     },
+     {
+      "episode": 112846785,
+      "delta": -21987.0
+     },
+     {
+      "episode": 112847952,
+      "delta": -35654.0
+     },
+     {
+      "episode": 112855005,
+      "delta": -1827.0
+     },
+     {
+      "episode": 112856307,
+      "delta": -4092.0
+     },
+     {
+      "episode": 112816559,
+      "delta": -26216.0
+     },
+     {
+      "episode": 112824627,
+      "delta": -25535.0
+     },
+     {
+      "episode": 112830330,
+      "delta": -282.0
+     },
+     {
+      "episode": 112847954,
+      "delta": -7381.0
+     }
+    ],
+    "red_games": [],
+    "sig_delta_min_seat": [
+     -416.0,
+     -3206.0,
+     -19337.0,
+     -21987.0,
+     -35654.0,
+     -1827.0,
+     -4092.0
+    ],
+    "sig_delta_median": -4092.0,
+    "all_delta_min": -35654.0,
+    "all_delta_max": 0.0
+   },
+   "A3": {
+    "positive": false,
+    "n_sig": 7,
+    "n_pos": 0,
+    "n_harm_violations": 11,
+    "harm_violations": [
+     {
+      "episode": 112831515,
+      "delta": -396.0
+     },
+     {
+      "episode": 112843277,
+      "delta": -3033.0
+     },
+     {
+      "episode": 112844424,
+      "delta": -11259.0
+     },
+     {
+      "episode": 112846785,
+      "delta": -1406.0
+     },
+     {
+      "episode": 112847952,
+      "delta": -6437.0
+     },
+     {
+      "episode": 112855005,
+      "delta": -449.0
+     },
+     {
+      "episode": 112856307,
+      "delta": -348.0
+     },
+     {
+      "episode": 112816559,
+      "delta": -2738.0
+     },
+     {
+      "episode": 112824627,
+      "delta": -4723.0
+     },
+     {
+      "episode": 112830330,
+      "delta": -173.0
+     },
+     {
+      "episode": 112847954,
+      "delta": -3010.0
+     }
+    ],
+    "red_games": [],
+    "sig_delta_min_seat": [
+     -396.0,
+     -3033.0,
+     -11259.0,
+     -1406.0,
+     -6437.0,
+     -449.0,
+     -348.0
+    ],
+    "sig_delta_median": -1406.0,
+    "all_delta_min": -11259.0,
+    "all_delta_max": 0.0
+   }
+  },
+  "overall": "NEGATIVE",
+  "winning_arm": null,
+  "sensitivity": {
+   "A1": {
+    "min_seat": {
+     "d0_f23": false,
+     "d0_f34": false,
+     "d50_f23": false,
+     "d50_f34": false
+    },
+    "mean_seat": {
+     "d0_f23": false,
+     "d0_f34": false,
+     "d50_f23": false,
+     "d50_f34": false
+    }
+   },
+   "A2": {
+    "min_seat": {
+     "d0_f23": false,
+     "d0_f34": false,
+     "d50_f23": false,
+     "d50_f34": false
+    },
+    "mean_seat": {
+     "d0_f23": false,
+     "d0_f34": false,
+     "d50_f23": false,
+     "d50_f34": false
+    }
+   },
+   "A3": {
+    "min_seat": {
+     "d0_f23": false,
+     "d0_f34": false,
+     "d50_f23": false,
+     "d50_f34": false
+    },
+    "mean_seat": {
+     "d0_f23": false,
+     "d0_f34": false,
+     "d50_f23": false,
+     "d50_f34": false
+    }
+   }
+  },
+  "missing_games": [],
+  "fail_closed": false,
+  "harm_floor": -100.0,
+  "criteria": "可处置显著局 ≥2/3 局 Δmargin>0（局级 Δ=双席位 min，保守主口径）且全语料 Δ≥−100 → 该臂 POSITIVE"
+ },
+ "overall": "NEGATIVE",
+ "wall_s": 141.0
+}
