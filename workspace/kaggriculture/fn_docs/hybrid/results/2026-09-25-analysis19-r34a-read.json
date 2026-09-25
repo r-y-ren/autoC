@@ -1,0 +1,38 @@
+{
+ "source": {
+  "pulled_at": "2026-09-25T02:24:16.711949+00:00",
+  "commands": [
+   "KAGGLE_API_TOKEN=$(kaggle auth print-access-token) python3 pull_meta.py <ROOT>",
+   "kaggle competitions episodes 56526029 --format json"
+  ]
+ },
+ "refs": {
+  "r30": {
+   "score": 2071.4,
+   "n": 162,
+   "d": 0
+  },
+  "r31": {
+   "score": 2012.1,
+   "n": 86,
+   "d": 0
+  },
+  "r32": {
+   "score": 1975.3,
+   "n": 86,
+   "d": -23.9
+  },
+  "r33": {
+   "score": 2008.2,
+   "n": 122,
+   "d": -9.2
+  },
+  "r34a": {
+   "score": 1868.5,
+   "n": 95,
+   "d": "first substantial read",
+   "submitted": "2026-09-24T16:13Z"
+  }
+ },
+ "note": "r34a same-stage vs r33 (2017.4@65): ~-150 below family band"
+}
