@@ -789,3 +789,100 @@
     - 职责：复用 R16/R17 管线重定向——四门+h2h vs r34a 在飞件 ≥0.55+谱系+饿死零容忍；fail-closed 全跑。
     - 签名意图：输入: r36 包 / 输出: 各门结果+overall / 错误: fail-closed。
     - 调用方：run_r18_iteration。tested：自有单测。核验：测试: orderbook_tomato_forensic/test_gates_r36.py。
+
+---
+
+## 【R19/R20 增补·2026-09-25】现金保底守卫+赶早买羊（r37 合一构建件）
+
+## 结构概览（增补）
+- run_r37_iteration ← R19,R20
+  - build_r37
+    - inject_cash_guard_block
+      - _r37_agent
+        - _r37_cash_guard
+          - _r37_defer_low_priority
+    - retape_sheep_timing
+    - retape_tail_savings
+    - audit_diff_vs_r34a
+    - pack_r37
+  - judge_cash_guard_replay
+    - replay_guard_verdict
+  - judge_sheep_league
+    - count_shearings
+  - verify_r37_gates
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R19 | run_r37_iteration（判决线：judge_cash_guard_replay→replay_guard_verdict） |
+| R20 | run_r37_iteration（判决线：judge_sheep_league→count_shearings） |
+
+## 共享函数（增补）
+- **parse_episode_states**（调用方：replay_guard_verdict, count_shearings）
+  - 职责：对局状态序列解析——replay JSON → 逐步双席规范行 {step, seat, action, money, hands, animals_grid, tiles}；解析口径经分析22 考古实测校准（磁带 step X ↔ replay si X+1；steps[t][seat].observation 为该步执行后值；action 由前一拍观测算出）。
+  - 签名意图：输入: replay JSON 路径 / 输出: 逐步状态行数组 / 错误: 格式不符/缺字段即抛。
+  - tested 策略：自有单测。核验命令：测试: orderbook_r37/test_parse_states.py。
+
+## 功能块 run_r37_iteration ← R19,R20
+（块引言：分析22 惨败法证+代码考古定形的两条优化合一构建 r37。R19 现金保底守卫：灾难败 5/6 同链——d0 日终 1 金→d1 三张 HIRE 实价 4 金（1+1+2）只成 1 张→`_hand_align` 截断 FEED→d2 死牛→群 13 vs 17（3 张 BUY_ANIMAL 静默丢弃同一根子）；守卫层放购买链源头（EXP402 位置哲学），触线顺延低优先级购买，fail-safe 回退。R20 赶早买羊：route 9（YARN→6牛+11羊）机制已在、缺"d11 窗早买=剪毛 4→5 刀"；羊时序前移+照顾全程（尾盘负空间：d28 停 CARE、d29 停饲料/闲工，V50 实证）。构建合一 r37（判决层各自归因，不烧双件额度）；产物 orderbook_r37/。）
+
+- **run_r37_iteration** [L0|新增]
+  - 职责：编排——build_r37 产 r37 合一件（白名单三件：守卫块/羊时序/尾盘修剪）→ 判决两件（judge_cash_guard_replay、judge_sheep_league）→ verify_r37_gates fail-closed 全跑 → 判决+门禁全绿交发射（standing 代执行+台账留痕，Error 即停）；任一红即停不发射。evidence 三件（build 审计/replay 判决/联赛判决）+门禁台账。
+  - 签名意图：输入: 无（CLI） / 输出: {build, judgments, gates, verdict} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验命令：测试: orderbook_r37/test_run_r37.py（判据继承 R19/R20 ②判据级，不许放松）。
+  - **build_r37** [L1|新增]
+    - 职责：构建编排——以 orderbook_2965_adopt/a/main.py（r34a 在飞件字节）为底复制 → inject_cash_guard_block + retape_sheep_timing + retape_tail_savings 三白名单改造 → audit_diff_vs_r34a → pack_r37；产物落 orderbook_r37/，r34a/在飞件零改动。
+    - 签名意图：输入: r34a main 路径 / 输出: r37 main+manifest+变更集审计 / 错误: 超白名单即抛。
+    - 调用方：run_r37_iteration。tested：自有单测。核验命令：测试: orderbook_r37/test_build_r37.py。
+    - **inject_cash_guard_block** [L2|新增]
+      - 职责：生成现金保底守卫源码块（_r37_agent 三函数链文本）追加到副本尾部；注入校验四条——py_compile 通过、AST 可解析、装载后 globals 最后 callable=_r37_agent、对底版 diff 仅尾部追加（无既有行改动）。
+      - 签名意图：输入: r34a main 文本 / 输出: 注入后 main+块 sha / 错误: 校验任一不过即抛。
+      - 调用方：build_r37。tested：自有单测。核验命令：测试: orderbook_r37/test_inject_guard.py。
+      - **_r37_agent** [L3|新增]（运行时，注入包内）
+        - 职责：尾块捕获最后 callable（=基座出口）→ 取基座动作 → 交 _r37_cash_guard 调整 → 返回 dict 同构 action；**动作集合不变量：只顺延/删减购买类单，不新增动作、不动物格 HARVEST 与卖单**；任何异常→基座动作原样返回（fail-safe）；step==0 复位层内缓存（顺延账）。
+        - 签名意图：输入: observation, base_action / 输出: 调整后 action / 错误: 异常→入口兜底回退基座动作。
+        - 调用方：装载链（last-callable）。tested：自有单测。核验命令：测试: orderbook_r37/test_runtime_guard.py。
+        - **_r37_cash_guard** [L4|新增]（运行时）
+          - 职责：现金下限判定——识别当前步适用下限：①d0 日终窗（step 23 前最后动作）≥12 金（硬底线 4=d1 三张 HIRE 价 1+1+2，引擎 _do_hire 钱不够静默丢）；②BUY_ANIMAL 单提交前 ≥500 金（引擎丢单线 400/400/500）；触线→交 _r37_defer_low_priority，不触线原样放行；下限为可配置常数（判决标定，硬底线 4 不可破）。
+          - 签名意图：输入: observation, base_action, floors / 输出: {hit_floor, adjusted_action} / 错误: 状态读取失败→不干预原样返回。
+          - 调用方：_r37_agent。tested：自有单测。核验命令：测试: orderbook_r37/test_runtime_guard.py（floor 组）。
+          - **_r37_defer_low_priority** [L5|新增]（运行时）
+            - 职责：触线处置——按低优先级顺延：先缓 BUY_SEED（MELON 80 金/粒优先，按订单尾序删缓），BUY_ANIMAL 现金不足 500 整单顺延至现金达标步重试（保留意图入顺延账，不永久删除）；HIRE（4 金硬开销）与 FEED/CARE/卖单/动物格 HARVEST 序一律不动；处置后须满足触发下限，一次顺延不够→继续顺延直至达标；异常→不干预。
+            - 签名意图：输入: observation, action, hit_floor / 输出: 顺延后 action+顺延账更新 / 错误: 异常→原动作。
+            - 调用方：_r37_cash_guard。tested：自有单测。核验命令：测试: orderbook_r37/test_runtime_guard.py（defer 组）。
+    - **retape_sheep_timing** [L2|新增]
+      - 职责：磁带手术·羊时序前移——把各路由磁带 BUY_ANIMAL SHEEP 各批步点前移至判决标定的 d11 窗，使每只羊首产剪毛后一季刀次 ≥5（d17/20/23/26/29 型）；保持购买总量与 route 9 结构（6牛+11羊目标）不变、订单槽位与资金序不变量（HIRE/BUY 不得挪到供资卖单前，V57 先例）；步点参数=判决实验输出（judge_sheep_league 标定）。
+      - 签名意图：输入: 磁带路由表 / 输出: 手术后磁带+步点变更表 / 错误: 手术后静态刀次核算不达标即抛。
+      - 调用方：build_r37。tested：自有单测。核验命令：测试: orderbook_r37/test_retape_sheep.py（刀次核算组）。
+    - **retape_tail_savings** [L2|新增]
+      - 职责：磁带手术·尾盘负空间——d28（step 672）起删除 CARE 指令、d29（step 696）起删除 FEED 与闲置 HIRE 指令（省人工/饲料）；**动物格 HARVEST（剪毛/收奶/收蛋）与卖单照旧**（存量资产变现不砍）；输出删除清单入变更表。
+      - 签名意图：输入: 磁带 / 输出: 修剪后磁带+删除清单 / 错误: 误删 HARVEST/卖单/FEED-CARE 在 d28 前的指令即抛。
+      - 调用方：build_r37。tested：自有单测。核验命令：测试: orderbook_r37/test_retape_tail.py。
+    - **audit_diff_vs_r34a** [L2|新增]
+      - 职责：对底版逐字节 diff 审计——r37 对 r34a 差异恰=白名单三件（尾部追加守卫块/羊步点变更表/尾盘删除清单），出现白名单外差异即红；输出差异归因表。
+      - 签名意图：输入: r37 main+r34a main / 输出: 归因表 / 错误: 白名单外差异即抛。
+      - 调用方：build_r37。tested：自有单测。核验命令：测试: orderbook_r37/test_build_r37.py（audit 组）。
+    - **pack_r37** [L2|新增]
+      - 职责：确定性打包+manifest——沿 R16 配方（tarfile mtime0/uid0/gid0/mode644、gzip mtime0、双跑逐字节一致）；manifest=基底 sha 链（a16e0e9b→r34a→r37）、三白名单件 sha、双跑哈希、描述文案 "public derivative with cash-floor guard and earlier flock schedule"。
+      - 签名意图：输入: r37 main / 输出: submission.tar.gz+manifest / 错误: 双跑不一致即抛。
+      - 调用方：build_r37。tested：自有单测。核验命令：测试: orderbook_r37/test_build_r37.py（pack 组）。
+  - **judge_cash_guard_replay** [L1|新增]
+    - 职责：R19 判决重演——本地官方引擎重放 6 局灾难局（112938600/112968467/112976582/113002280/113094793/113099386）+10 胜局对照（同窗抽样），r37 件对原局实况逐局双席位各演一遍（排除座位效应）；聚合三指标+对照资金差出 evidence JSON。
+    - 签名意图：输入: r37 包+语料局单 / 输出: evidence JSON（逐局三指标+对照终局资金差） / 错误: 单局重放失败标红计入，不短路全跑。
+    - 调用方：run_r37_iteration。tested：自有单测。核验命令：测试: orderbook_r37/test_judge_replay.py（判据=R19 ②判据级原文）。
+    - **replay_guard_verdict** [L2|新增]
+      - 职责：单局三指标核算——从状态序列统计：d2 前牲畜逃走计数（格上牲畜消失+consecutive_unfed 轨迹吻合）、BUY_ANIMAL 失败计数（提交后未成交）、d1 h0 现金值；对照局加终局资金差（r37−实况）。逐局出 {metrics, verdict}。
+      - 签名意图：输入: parse_episode_states 输出 / 输出: {died_before_d2, buy_failed, cash_d1h0, final_delta, verdict} / 错误: 缺字段→verdict=UNKNOWN。
+      - 调用方：judge_cash_guard_replay。tested：自有单测。核验命令：测试: orderbook_r37/test_judge_replay.py（verdict 组）。
+  - **judge_sheep_league** [L1|新增]
+    - 职责：R20 判决联赛——离线真交易联赛 300-500 局（配置局数）：r37 vs r34a 主对双席位+强对手样本（分析22 败局对手谱系）+mirror 对；逐局 WL+剪毛刀次+照顾覆盖率；聚合判据出 evidence JSON。
+    - 签名意图：输入: r37 包+r34a 包+对手清单+局数配置 / 输出: evidence JSON（逐局 WL/刀次/分组胜率） / 错误: fail-closed。
+    - 调用方：run_r37_iteration。tested：自有单测。核验命令：测试: orderbook_r37/test_judge_league.py（判据=R20 ②判据级原文）。
+    - **count_shearings** [L2|新增]
+      - 职责：剪毛刀次统计——数对羊格的动物格 HARVEST（product=WOOL）事件数，按局/按只聚合；同出 CARE/FEED 覆盖率（照顾全程观测指标，不进门槛）。
+      - 签名意图：输入: parse_episode_states 输出 / 输出: {shearings, care_rate, feed_rate} / 错误: 缺字段→UNKNOWN。
+      - 调用方：judge_sheep_league。tested：自有单测。核验命令：测试: orderbook_r37/test_judge_league.py（count 组）。
+  - **verify_r37_gates** [L1|新增]
+    - 职责：全量门禁 fail-closed 全跑不短路——四门沿 r30 管线（合规四轴核查/装载 last-callable=_r37_agent/双席 DONE+单步<1s/确定性双跑/体积身份链）+h2h vs r34a 在飞件 ≥0.55（seated 双席位、独立局数 n 报，席位翻转不双计）+饿死零容忍+谱系（v48/v4b 各 8 局无负）；evidence 落 evidence/。
+    - 签名意图：输入: r37 包 / 输出: 各门结果+overall / 错误: fail-closed。
+    - 调用方：run_r37_iteration。tested：自有单测。核验命令：测试: orderbook_r37/test_gates_r37.py。
