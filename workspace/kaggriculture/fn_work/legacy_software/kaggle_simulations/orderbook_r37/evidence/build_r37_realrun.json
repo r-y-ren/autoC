@@ -1,0 +1,58 @@
+{
+ "source": "orderbook_2965_adopt/a/main.py",
+ "source_sha256_before": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
+ "source_sha256_after": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
+ "source_unchanged": true,
+ "generated_by": "orderbook_r37/build_r37.py::build_r37（真 r34a 构建验收实跑）",
+ "out_dir": "orderbook_r37/build",
+ "artifacts": [
+  "main.py",
+  "submission.tar.gz",
+  "build_manifest.json"
+ ],
+ "main_sha256": "430a702d73cc684de440616e2e1a8497f483ec24505b70a29d899089cf9fe838",
+ "tar_sha256": "dcbdcf9743d292dfa121eb435f94a764dabe2f4d6da255c88e8f1bc59c8d1ab0",
+ "manifest_whitelist_shas_complete": true,
+ "diff_attribution_summary": {
+  "ok": true,
+  "unattributed": 0,
+  "tail_guard_block": {
+   "present": true,
+   "bytes": 229858,
+   "sha256": "9fec1502ee28ca816df3a0da60cf7f035500608396b1c7a8629f73b6f03107c4"
+  },
+  "sheep_retiming": {
+   "present": true,
+   "n_moves": 1,
+   "buy_moves": [
+    [
+     "115",
+     "buy_move",
+     265,
+     264
+    ]
+   ],
+   "skips": [
+    [
+     "12",
+     265
+    ]
+   ],
+   "no_ops": 229
+  },
+  "tail_savings": {
+   "present": true,
+   "n_removed": 779,
+   "by_kind": {
+    "CARE": 779
+   }
+  }
+ },
+ "double_run": {
+  "run1_main_sha256": "430a702d73cc684de440616e2e1a8497f483ec24505b70a29d899089cf9fe838",
+  "run2_main_sha256": "430a702d73cc684de440616e2e1a8497f483ec24505b70a29d899089cf9fe838",
+  "run1_tar_sha256": "dcbdcf9743d292dfa121eb435f94a764dabe2f4d6da255c88e8f1bc59c8d1ab0",
+  "run2_tar_sha256": "dcbdcf9743d292dfa121eb435f94a764dabe2f4d6da255c88e8f1bc59c8d1ab0",
+  "identical": true
+ }
+}

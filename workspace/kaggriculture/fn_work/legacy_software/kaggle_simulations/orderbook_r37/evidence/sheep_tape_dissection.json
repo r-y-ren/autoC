@@ -1,0 +1,5173 @@
+{
+ "engine_basis": {
+  "animal": "SHEEP",
+  "cuts_formula": "#{k>=0: buy_day+6+3k <= 29}",
+  "first_yield_day": 6,
+  "interval": 3,
+  "last_day": 29,
+  "shear_id": "same-unit same-day HARVEST linked to later PLACE WOOL",
+  "shear_round_days": [
+   17,
+   20,
+   23,
+   26,
+   29
+  ],
+  "turns_per_day": 24,
+  "window_end": 264
+ },
+ "generated_by": "orderbook_r37/retape_sheep.py::_dissection_snapshot",
+ "routes": {
+  "0": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "1": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 10
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    27,
+    28
+   ],
+   "shear_steps": [
+    148,
+    224,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    649,
+    658,
+    690
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 6,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 10
+  },
+  "10": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    218,
+    219,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 195,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 2,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 241,
+     "potential_cuts": 5,
+     "qty": 2,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "100": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 195,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "101": {
+   "animal_totals": {
+    "COW": 6,
+    "GOOSE": 5,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "103": {
+   "animal_totals": {
+    "COW": 6,
+    "GOOSE": 5,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "104": {
+   "animal_totals": {
+    "COW": 6,
+    "GOOSE": 5,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "105": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "106": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "107": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "108": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "109": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    224,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 4
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "11": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    224,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 195,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 4
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "110": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 5,
+    "SHEEP": 4
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    }
+   ],
+   "sheep_total": 4
+  },
+  "111": {
+   "animal_totals": {
+    "COW": 7,
+    "GOOSE": 4,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 2
+    }
+   ],
+   "sheep_total": 6
+  },
+  "112": {
+   "animal_totals": {
+    "COW": 6,
+    "GOOSE": 5,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "113": {
+   "animal_totals": {
+    "COW": 6,
+    "GOOSE": 5,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "114": {
+   "animal_totals": {
+    "COW": 7,
+    "GOOSE": 2,
+    "SHEEP": 8
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 241,
+     "potential_cuts": 5,
+     "qty": 2,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    }
+   ],
+   "sheep_total": 8
+  },
+  "115": {
+   "animal_totals": {
+    "COW": 8,
+    "SHEEP": 9
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 10,
+     "from_step": 241,
+     "potential_cuts": 5,
+     "qty": 2,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 265,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 7
+    }
+   ],
+   "sheep_total": 9
+  },
+  "116": {
+   "animal_totals": {
+    "COW": 6,
+    "GOOSE": 5,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "117": {
+   "animal_totals": {
+    "COW": 6,
+    "GOOSE": 5,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "118": {
+   "animal_totals": {
+    "COW": 6,
+    "GOOSE": 5,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "119": {
+   "animal_totals": {
+    "COW": 6,
+    "GOOSE": 5,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "12": {
+   "animal_totals": {
+    "COW": 4,
+    "SHEEP": 14
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    18,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    218,
+    219,
+    289,
+    290,
+    291,
+    340,
+    341,
+    362,
+    363,
+    364,
+    365,
+    402,
+    415,
+    433,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 6,
+     "slot": 8
+    },
+    {
+     "day": 6,
+     "from_step": 150,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 4
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 3
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 195,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 3
+    },
+    {
+     "day": 8,
+     "from_step": 195,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 4
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 2,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 241,
+     "potential_cuts": 5,
+     "qty": 2,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 11,
+     "from_step": 265,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 7
+    }
+   ],
+   "sheep_total": 14
+  },
+  "120": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "121": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "122": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "123": {
+   "animal_totals": {
+    "COW": 9,
+    "GOOSE": 3,
+    "SHEEP": 5
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 2
+    }
+   ],
+   "sheep_total": 5
+  },
+  "124": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "125": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "126": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    224,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 4
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "127": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    224,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 4
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "128": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    224,
+    290,
+    291,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 4
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "2": {
+   "animal_totals": {
+    "COW": 8,
+    "GOOSE": 3,
+    "SHEEP": 6
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    16,
+    17,
+    22,
+    24,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    390,
+    415,
+    534,
+    589,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 8
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 2,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 1,
+     "slot": 1
+    }
+   ],
+   "sheep_total": 6
+  },
+  "3": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    224,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 241,
+     "potential_cuts": 5,
+     "qty": 2,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "4": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 10
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    218,
+    219,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 0
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 10
+  },
+  "5": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 10
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    224,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 1
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 10
+  },
+  "6": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    224,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "7": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 1
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 1
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "8": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    222,
+    290,
+    291,
+    339,
+    340,
+    371,
+    396,
+    415,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 5,
+     "slot": 8
+    },
+    {
+     "day": 7,
+     "from_step": 169,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 7,
+     "from_step": 176,
+     "potential_cuts": 6,
+     "qty": 1,
+     "rhythm_days": [
+      13,
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 3
+    },
+    {
+     "day": 9,
+     "from_step": 217,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 226,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 2,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 10,
+     "from_step": 252,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    }
+   ],
+   "sheep_total": 11
+  },
+  "9": {
+   "animal_totals": {
+    "COW": 6,
+    "SHEEP": 11
+   },
+   "shear_rounds": [
+    6,
+    9,
+    12,
+    14,
+    15,
+    16,
+    17,
+    18,
+    24,
+    25,
+    26,
+    28,
+    29
+   ],
+   "shear_steps": [
+    148,
+    218,
+    219,
+    289,
+    290,
+    291,
+    340,
+    341,
+    362,
+    363,
+    364,
+    365,
+    402,
+    415,
+    433,
+    585,
+    614,
+    639,
+    684,
+    715,
+    713
+   ],
+   "sheep_batches": [
+    {
+     "day": 0,
+     "from_step": 1,
+     "potential_cuts": 8,
+     "qty": 2,
+     "rhythm_days": [
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 6,
+     "slot": 8
+    },
+    {
+     "day": 6,
+     "from_step": 150,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      12,
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 4,
+     "slot": 2
+    },
+    {
+     "day": 8,
+     "from_step": 196,
+     "potential_cuts": 6,
+     "qty": 2,
+     "rhythm_days": [
+      14,
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 4,
+     "slot": 0
+    },
+    {
+     "day": 9,
+     "from_step": 216,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      15,
+      18,
+      21,
+      24,
+      27
+     ],
+     "scheduled_cuts": 3,
+     "slot": 9
+    },
+    {
+     "day": 10,
+     "from_step": 250,
+     "potential_cuts": 5,
+     "qty": 2,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 1
+    },
+    {
+     "day": 10,
+     "from_step": 251,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      16,
+      19,
+      22,
+      25,
+      28
+     ],
+     "scheduled_cuts": 3,
+     "slot": 2
+    },
+    {
+     "day": 11,
+     "from_step": 264,
+     "potential_cuts": 5,
+     "qty": 1,
+     "rhythm_days": [
+      17,
+      20,
+      23,
+      26,
+      29
+     ],
+     "scheduled_cuts": 3,
+     "slot": 8
+    }
+   ],
+   "sheep_total": 11
+  }
+ },
+ "source": "orderbook_2965_adopt/a/main.py",
+ "source_sha256": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b"
+}
