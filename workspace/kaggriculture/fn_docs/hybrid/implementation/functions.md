@@ -68,13 +68,13 @@
 | gate_equivalence_l3 | S6 | wired 09-24 | form 红=空槽占位伪差异×9；死种 2090>900 帽；starve/subset/cases 全绿 | (本批) |
 | constructed_cases_l3 | S6 | wired 09-24 | 七件全过 | (本批) |
 | verify_l13_gates | S6 | wired 09-24 | overall=FAIL 仅门③两因：空槽分类器缺口+死种帽未达 | (本批) |
-| select_corpus_r15 | B1 | wired 09-24 | pytest test_corpus_r15 → 5 passed（抽样可复现/早崩排除/镜像池边界两例/缺回放 fail-closed）；实跑 losses26=26+wins10（r32/r33 各 5）+mirror 4（池<5 取全池记 note） | (本批) |
+| select_corpus_r15 | B1 | wired 09-24 | pytest test_corpus_r15 → 3 passed（13c82ea 收口合并+test_seed_derivation；对账 09-25 重跑复核 3 绿——原记 5 passed 为收口前口径）；实跑 losses26=26+wins10（r32/r33 各 5）+mirror 4（池<5 取全池记 note） | (本批) |
 | item_price_percentile | B1 | wired 09-24 | pytest（percentile 组）→ 3 passed（崩价/稀缺/中性三态+窗口≥8+空表）；双面分位（own-pool 趋势+Markup 截面结构），判据面偏差登记 evidence.method_notes | (本批) |
 | rank_swap_pairs | B1 | wired 09-24 | pytest（swap 组）→ 2 passed（score 排序+空集）；实跑单对 MELON→WHEAT（分位差 74.7×产能 39.0=score 29.13，产能窗∩停时窗） | (本批) |
 | phase_m_market_map | B1 | wired 09-24 | 实跑 86/86 ok 零 error（50s，复用 R14 daily_netflow_decompose）；crash=[MELON] scarce=[WHEAT]→非 KILLED；单局失败记录不中断面有测 | (本批) |
-| build_variant_schedule | B2 | wired 09-24 | pytest（schedule 组）→ 4 passed（迁移+种子同步严格更早步+停时窗过滤）；实跑 moved=1/2/4=target（选点位移重试后零 skip） | (本批) |
+| build_variant_schedule | B2 | wired 09-24 | pytest（schedule 组）→ 3 passed（迁移+种子同步严格更早步+停时窗过滤；对账 09-25 重跑 3 绿——原记 4 为合并前口径）；实跑 moved=1/2/4=target（选点位移重试后零 skip） | (本批) |
 | check_variant_feasibility | B2 | wired 09-24 | pytest（feasibility 组）→ 3 passed（ok/cash 击穿/停时越界）；实跑 3 变体全可行（棚容峰值 4-22≤100，现金地板=26 败局日末资金逐日最小值） | (本批) |
-| build_variant_main | B2 | wired 09-24 | pytest（build 组）→ 3 passed（splice 区间外一致+拒绝覆盖基座+装载回路）；实跑 3 变体 main.py+build_audit.json（blob 重编码与原编码参数逐字节同构） | (本批) |
+| build_variant_main | B2 | wired 09-24 | pytest（build 组）→ 2 passed（splice 区间外一致+拒绝覆盖基座+装载回路；对账 09-25 重跑 2 绿——原记 3 为合并前口径）；实跑 3 变体 main.py+build_audit.json（blob 重编码与原编码参数逐字节同构） | (本批) |
 | generate_mix_variants | B2 | wired 09-24 | pytest end_to_end → 2 passed；实跑 3 参数点全构建零弃（sha 4e1ec1c5/c18374f6/4de93f6f） | (本批) |
 | openloop_replay_variants | B3 | wired 09-24 | pytest（mock replay）→ 4 passed（Δ/复用+抽验/红/预算截断）；实跑 239 重演无红：对照复用 11 席+抽验 2 局 drift=0.0+fresh 51 | (本批) |
 | closedloop_probe | B3 | tested 09-24（NEGATIVE 下未触发实跑） | pytest（mock 引擎）→ 3 passed（互胜率/中位/重跑一次/红定向）；mirror 池 4 局已备 | (本批) |
@@ -99,3 +99,19 @@
 | build_r36_conditional | B13,B15 | wired 09-25 | pytest 6 件（锚唯一/幂等/阶梯形态/无 adopt 拒斥/白名单归因/尾块防混入）→6 passed；判决全负→未实跑构建（B15 出口） | (本批) |
 | verify_r36_gates | B13,B15 | wired 09-25 | pytest 5 件（全绿/fail-closed 全跑/身份链/未构建红/阶梯入口）→5 passed；r36 未构建→未实跑门禁（B15 出口） | (本批) |
 | run_r18_iteration | B13-B16 | wired 09-25 | pytest 5 件（POSITIVE 全流/KILLED_T/惰性 NEGATIVE/门禁红 NEGATIVE/失败留痕）→5 passed；实跑 260s verdict=NEGATIVE launch_ready=false | (本批) |
+| parse_episode_states | B19 | stub 09-25 | 测试: test_parse_states.py（逐步双席规范行/step↔si 口径） | — |
+| replay_guard_verdict | B19 | stub 09-25 | 测试: test_judge_replay.py（verdict 组三指标） | — |
+| judge_cash_guard_replay | B19 | stub 09-25 | 测试: test_judge_replay.py；判据=R19 ②（死牛 0/买牲畜失败 0/d1 h0 现金≥4/对照资金 l1 非负） | — |
+| count_shearings | B20 | stub 09-25 | 测试: test_judge_league.py（count 组） | — |
+| judge_sheep_league | B20 | stub 09-25 | 测试: test_judge_league.py；判据=R20 ②（5 刀/h2h≥0.55/胜局不翻负） | — |
+| _r37_defer_low_priority | B17 | stub 09-25 | 测试: test_runtime_guard.py（defer 组） | — |
+| _r37_cash_guard | B17 | stub 09-25 | 测试: test_runtime_guard.py（floor 组） | — |
+| _r37_agent | B17 | stub 09-25 | 测试: test_runtime_guard.py（入口 fail-safe/动作集合不变量） | — |
+| inject_cash_guard_block | B17 | stub 09-25 | 测试: test_inject_guard.py（注入校验四条） | — |
+| retape_sheep_timing | B18 | stub 09-25 | 测试: test_retape_sheep.py（刀次核算组/资金序不变量） | — |
+| retape_tail_savings | B18 | stub 09-25 | 测试: test_retape_tail.py（不误删 HARVEST/卖单） | — |
+| audit_diff_vs_r34a | B18 | stub 09-25 | 测试: test_build_r37.py（audit 组；r35/r36/r37 三包共用名，对账注记） | — |
+| pack_r37 | B18 | stub 09-25 | 测试: test_build_r37.py（pack 组） | — |
+| build_r37 | B18 | stub 09-25 | 测试: test_build_r37.py（构建编排） | — |
+| verify_r37_gates | B21 | stub 09-25 | 测试: test_gates_r37.py（五门面 fail-closed） | — |
+| run_r37_iteration | B21 | stub 09-25 | 测试: test_run_r37.py（编排/任一红即停） | — |
