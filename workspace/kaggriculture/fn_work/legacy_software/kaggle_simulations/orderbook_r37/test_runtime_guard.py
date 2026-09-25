@@ -10,7 +10,16 @@ defer 组 = _r37_defer_low_priority 真测试（合成 obs/action 用例①-⑦�
 ⑤异常→原动作（状态缺 money / hit_floor 畸形 / action 非 dict，且同型正常态确会顺延）；
 ⑥多单连续缓到达标（MELON 尾序→下一 MELON→其余种子，一次不够继续缓）；
 ⑦无单可缓→尽力返回不抛（只剩 HIRE/卖单、market 缺失）。
-test_r37_agent/test_r37_cash_guard_floor 为 L3/L4 未实现桩（红=预期，不许动）。
+floor 组 = _r37_cash_guard 真测试（合成 obs/floors 用例①-⑦）：
+①d0 日终窗（step 20..23）触线（动作后现金<12）→ hit_floor 非 None+动作被顺延，
+  窗定义边界钉住（step 19/24 不适用、step 20/23 适用）；
+②含 BUY_ANIMAL 且执行点现金<500 → 保护性顺延（执行点口径钉住：提交前 ≥500 不触）；
+③未触线零足迹（同对象返回+defer 不被调用，monkeypatch 计数）；
+④floors 可配置生效（改 d0_end/buy_animal 值判定随之变）；
+⑤hard_min 不可破（数值 <4 夹到 4；hard_min 更严生效）；
+⑥畸形 obs/floors/action → 原动作不干预（同型正常态确会触线）；
+⑦双命中取更严（默认取 buy_animal 500；d0_end 更严随 d0_end；等值取 d0_end）。
+test_r37_agent 为 L3 未实现桩（红=预期，不许动）。
 """
 import pytest  # noqa: F401
 
@@ -24,8 +33,119 @@ def test_r37_agent():
     raise NotImplementedError("unimplemented:fn:_r37_agent")
 
 
-def test_r37_cash_guard_floor():
-    raise NotImplementedError("unimplemented:fn:_r37_cash_guard")
+def test_r37_cash_guard_floor(monkeypatch):
+    def F(d0=12, ba=500, hard=4):
+        return {"d0_end": d0, "buy_animal": ba, "hard_min": hard}
+
+    # ①d0 日终窗触线：50−80−10=−40 < 12 → hit_floor 非 None+MELON 被顺延。
+    act = _act([["BUY_SEED", "MELON", 1], ["BUY_SEED", "WHEAT", 1]])
+    out = cash_guard_block._r37_cash_guard(_obs(50), act, F())
+    assert out["hit_floor"] == {"floor": 12, "kind": "d0_end"}
+    assert out["adjusted_action"] is not act
+    assert out["adjusted_action"]["market"] == [[], ["BUY_SEED", "WHEAT", 1]]
+    # 窗定义钉住（step 20..23 含）：窗外 step 19/24 同状态不适用 d0_end。
+    for step_out in (19, 24):
+        out2 = cash_guard_block._r37_cash_guard(dict(_obs(50), step=step_out), act, F())
+        assert out2["hit_floor"] is None and out2["adjusted_action"] is act
+    for step_in in (20, 23):
+        out3 = cash_guard_block._r37_cash_guard(dict(_obs(50), step=step_in), act, F())
+        assert out3["hit_floor"] == {"floor": 12, "kind": "d0_end"}
+
+    # ②BUY_ANIMAL 执行点现金<500 → 保护性顺延（整单入账）。
+    act_b = _act([["BUY_ANIMAL", "COW", 1]])
+    out_b = cash_guard_block._r37_cash_guard(dict(_obs(450), step=10), act_b, F())
+    assert out_b["hit_floor"] == {"floor": 500, "kind": "buy_animal"}
+    assert out_b["adjusted_action"]["market"] == [[]]
+    # 执行点口径钉住：提交前 850 ≥ 500 不触（动作后 450<500 不作触发）。
+    out_b2 = cash_guard_block._r37_cash_guard(dict(_obs(850), step=10), act_b, F())
+    assert out_b2["hit_floor"] is None and out_b2["adjusted_action"] is act_b
+
+    # ③未触线零足迹（monkeypatch 计数 defer 未被调用）；换桩后 undo 保后续用例真 defer。
+    calls = []
+
+    def _counting(observation, action, hit_floor):
+        calls.append(hit_floor)
+        return {"action": action, "deferred": []}
+
+    monkeypatch.setattr(cash_guard_block, "_r37_defer_low_priority", _counting)
+    act_c = _act([["BUY_SEED", "WHEAT", 1]])
+    out_c = cash_guard_block._r37_cash_guard(_obs(22), act_c, F())  # 22−10=12 恰达标
+    assert out_c["hit_floor"] is None
+    assert out_c["adjusted_action"] is act_c
+    assert calls == []
+    monkeypatch.undo()
+
+    # ④floors 可配置生效：end=20（30−10）在 d0_end=12 下放行、d0_end=30 下触线。
+    out_d = cash_guard_block._r37_cash_guard(_obs(30), act_c, F(d0=12))
+    assert out_d["hit_floor"] is None and out_d["adjusted_action"] is act_c
+    out_d2 = cash_guard_block._r37_cash_guard(_obs(30), act_c, F(d0=30))
+    assert out_d2["hit_floor"] == {"floor": 30, "kind": "d0_end"}
+    assert out_d2["adjusted_action"]["market"] == [[]]
+    # buy_animal 同理可配置：GOOSE 提交前 550 在 500 线下放行、600 线上触线。
+    act_g = _act([["BUY_ANIMAL", "GOOSE", 1]])
+    out_g = cash_guard_block._r37_cash_guard(dict(_obs(550), step=10), act_g, F())
+    assert out_g["hit_floor"] is None and out_g["adjusted_action"] is act_g
+    out_g2 = cash_guard_block._r37_cash_guard(dict(_obs(550), step=10), act_g, F(ba=600))
+    assert out_g2["hit_floor"] == {"floor": 600, "kind": "buy_animal"}
+    assert out_g2["adjusted_action"]["market"] == [[]]
+
+    # ⑤hard_min 不可破（夹持制钉住）：d0_end=2/hard=1 夹到 4——end=3（13−10）本应
+    # 在配置 2 之下放行，硬底线 4 必触（若未夹持→红）；负值同夹到 4。
+    out_e = cash_guard_block._r37_cash_guard(_obs(13), act_c, F(d0=2, hard=1))
+    assert out_e["hit_floor"] == {"floor": 4, "kind": "d0_end"}
+    assert out_e["adjusted_action"]["market"] == [[]]
+    out_e2 = cash_guard_block._r37_cash_guard(_obs(13), act_c, F(d0=-100))
+    assert out_e2["hit_floor"] == {"floor": 4, "kind": "d0_end"}
+    # hard_min 配高更严：d0_end=12 夹到 20——end=19（29−10）触线于 20。
+    out_e3 = cash_guard_block._r37_cash_guard(_obs(29), act_c, F(d0=12, hard=20))
+    assert out_e3["hit_floor"] == {"floor": 20, "kind": "d0_end"}
+    assert out_e3["adjusted_action"]["market"] == [[]]
+
+    # ⑥畸形 obs/floors/action → 原动作不干预。同型正常态确会触线（50−80<12），
+    # 证 fail-safe 不是本来就没得判定。
+    act_m = _act([["BUY_SEED", "MELON", 1]])
+    ok = cash_guard_block._r37_cash_guard(_obs(50), act_m, F())
+    assert ok["hit_floor"] == {"floor": 12, "kind": "d0_end"}
+    assert ok["adjusted_action"] is not act_m
+
+    for bad_obs in ({"player": 0, "step": 23, "farms": [{}]},           # 缺 money
+                    {"player": 0, "farms": [{"money": 50}]},            # 缺 step
+                    {"player": 0, "step": "23", "farms": [{"money": 50}]},   # step 非数
+                    {"player": 0, "step": 23, "farms": [{"money": "50"}]},   # money 非数
+                    {"player": 0, "step": 23, "farms": [{"money": 50,
+                                                         "hires_today": -1}]}):  # hires 畸形
+        out_m = cash_guard_block._r37_cash_guard(bad_obs, act_m, F())
+        assert out_m["hit_floor"] is None and out_m["adjusted_action"] is act_m, bad_obs
+
+    for bad_floor in (None, [], "floors", {},                       # 非 dict/缺三键
+                      {"d0_end": 12, "buy_animal": 500},            # 缺 hard_min
+                      {"d0_end": "12", "buy_animal": 500, "hard_min": 4},    # 非数
+                      {"d0_end": 12, "buy_animal": 500, "hard_min": None},  # 非数
+                      {"d0_end": True, "buy_animal": 500, "hard_min": 4},   # bool 不作数
+                      {"d0_end": float("nan"), "buy_animal": 500, "hard_min": 4},
+                      {"d0_end": 12, "buy_animal": float("inf"), "hard_min": 4}):
+        out_m = cash_guard_block._r37_cash_guard(_obs(50), act_m, bad_floor)
+        assert out_m["hit_floor"] is None and out_m["adjusted_action"] is act_m, bad_floor
+
+    weird = ["BUY_SEED", "MELON", 1]  # action 非 dict
+    out_m = cash_guard_block._r37_cash_guard(_obs(50), weird, F())
+    assert out_m["hit_floor"] is None and out_m["adjusted_action"] is weird
+
+    # ⑦双命中取更严：d0 窗内 + BUY_ANIMAL 执行点 300<500 + 动作后 −100<12 两线同触
+    # → 默认取 buy_animal 500。
+    act_h = _act([["BUY_ANIMAL", "COW", 1]])
+    out_h = cash_guard_block._r37_cash_guard(dict(_obs(300), step=23), act_h, F())
+    assert out_h["hit_floor"] == {"floor": 500, "kind": "buy_animal"}
+    assert out_h["adjusted_action"]["market"] == [[]]
+    # 反向更严：d0_end=600 > buy_animal 500 → kind 随更严线（end=170、GOOSE 执行点
+    # 470 两线同触），顺延直至 600（MELON→GOOSE 全缓仍 550<600 尽力返回）。
+    act_h2 = _act([["BUY_SEED", "MELON", 1], ["BUY_ANIMAL", "GOOSE", 1]])
+    out_h2 = cash_guard_block._r37_cash_guard(dict(_obs(550), step=23), act_h2, F(d0=600))
+    assert out_h2["hit_floor"] == {"floor": 600, "kind": "d0_end"}
+    assert out_h2["adjusted_action"]["market"] == [[], []]
+    # 等值取 d0_end。
+    out_h3 = cash_guard_block._r37_cash_guard(dict(_obs(300), step=23), act_h, F(d0=500))
+    assert out_h3["hit_floor"] == {"floor": 500, "kind": "d0_end"}
 
 
 def _obs(money, hires_today=0):

@@ -33,8 +33,143 @@ def _r37_cash_guard(observation: Dict[str, Any], base_action: Dict[str, Any],
 
     签名意图：输入: observation, base_action, floors /
     输出: {hit_floor, adjusted_action} / 错误: 状态读取失败→不干预原样返回。
+
+    结构定义（本层定形，向下游 _r37_defer_low_priority 对齐）：
+    - floors = {"d0_end": 12, "buy_animal": 500, "hard_min": 4}（三键皆必填）：
+      d0_end=日终窗下限、buy_animal=BUY_ANIMAL 提交前下限、hard_min=硬底线。
+      硬底线 4（=d1 三张 HIRE 价 1+1+2）不可破，处置策略=夹持制：数值型（含
+      负数）但 <4 一律夹到 4——effective hard_min=max(4, hard_min)，两下限再与
+      之取 max（故 d0_end/buy_animal/hard_min 配 2 或 −100 均按 4 生效，hard_min
+      配 20 则两下限至少 20）；类型非法（bool/str/None/list…）或非有限
+      （NaN/±inf）→ 视为配置错误→fail-safe 不干预。
+    - d0 日终窗 = step 20..23（含）：step 读法沿主干 int(observation["step"])，
+      turnsPerDay=24、d0=step//24==0（step 0..23），日终窗=d0 最后 4 拍
+      （hour 20..23）；窗外不适用 d0_end。
+    - 适用下限：①step 在 d0 日终窗 → d0_end；②base_action 含可核价 BUY_ANIMAL
+      单（item∈GOOSE/COW/SHEEP 且 qty 合法，与下游核价口径一致）→ buy_animal；
+      同命中取更严（floor 大者，等值取 d0_end）。
+    - 现金核算口径与下游一致：当前资金 − HIRE fib 硬开销 − 保留购买单全价，
+      卖单收入不计。触线：d0_end=动作后现金 end < floor；buy_animal=任一
+      BUY_ANIMAL 单执行点现金 at[i] < floor（单提交前口径）。触线→调下游并折返
+      {"hit_floor": <命中的 {"floor","kind"}>, "adjusted_action": 顺延后 action}；
+      未触线零足迹 {"hit_floor": None, "adjusted_action": base_action 原对象}
+      （下游不被调用）。
+    - 异常（obs 缺字段/类型不对、floors 畸形、action 非 dict…）→ 不干预：
+      {"hit_floor": None, "adjusted_action": base_action 原对象}。
     """
-    raise NotImplementedError("unimplemented:fn:_r37_cash_guard")
+    try:
+        # ---- 0. floors 配置校验+硬底线夹持（非法→抛，由尾兜底 fail-safe） ----
+        if not isinstance(floors, dict):
+            raise TypeError("floors must be a dict")
+        cfg = {}
+        for key in ("d0_end", "buy_animal", "hard_min"):
+            value = floors[key]
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise TypeError("floors[%s] must be a number" % key)
+            value = float(value)
+            if value != value or value == float("inf") or value == float("-inf"):
+                raise ValueError("floors[%s] must be finite" % key)
+            cfg[key] = value
+        hard = max(cfg["hard_min"], 4.0)   # 硬底线 4 不可破
+        floor_d0 = max(cfg["d0_end"], hard)
+        floor_ba = max(cfg["buy_animal"], hard)
+
+        # ---- 1. 状态读取（obs 读法沿 _ig_guard_opening：player/farms[seat]） ----
+        raw_step = observation["step"]
+        if isinstance(raw_step, bool) or not isinstance(raw_step, (int, float)):
+            raise TypeError("observation[step] must be a number")
+        if raw_step != raw_step or raw_step == float("inf") \
+                or raw_step == float("-inf"):
+            raise ValueError("observation[step] must be finite")
+        step = float(raw_step)
+        if step != int(step):
+            raise ValueError("observation[step] must be a whole number")
+        step = int(step)
+
+        seat = int(observation["player"])
+        farm = observation["farms"][seat]
+        money_raw = farm["money"]
+        if isinstance(money_raw, bool) or not isinstance(money_raw, (int, float)):
+            raise TypeError("farm[money] must be a number")
+        money = float(money_raw)
+        hires_raw = farm.get("hires_today", 0)
+        if hires_raw is None:
+            hires_raw = 0
+        if isinstance(hires_raw, bool) or not isinstance(hires_raw, int) or hires_raw < 0:
+            raise TypeError("farm[hires_today] must be a non-negative int")
+        hires_today = hires_raw
+
+        # ---- 2. 订单核价+执行点/动作后现金核算（与下游 _project 同口径） ----
+        market = base_action.get("market")
+        if market is None:
+            market = []
+        if not isinstance(market, list):
+            raise TypeError("base_action[market] must be a list")
+        seed_price = {"WHEAT": 10, "CARROT": 20, "TOMATO": 50,
+                      "STRAWBERRY": 100, "MELON": 80}
+        animal_cost = {"GOOSE": 300, "COW": 400, "SHEEP": 500}
+
+        def _strict_qty(value):
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                return None
+            if isinstance(value, float):
+                if not value.is_integer():
+                    return None
+                value = int(value)
+            return value if value >= 1 else None
+
+        parsed = []
+        for raw in market:
+            entry = None
+            if isinstance(raw, (list, tuple)) and raw:
+                op = raw[0]
+                if op == "HIRE":
+                    entry = {"op": "HIRE", "cost": None}
+                elif len(raw) >= 3 and isinstance(raw[1], str):
+                    qty = _strict_qty(raw[2])
+                    if qty is not None and op == "BUY_SEED" and raw[1] in seed_price:
+                        entry = {"op": "BUY_SEED", "cost": qty * seed_price[raw[1]]}
+                    elif qty is not None and op == "BUY_ANIMAL" and raw[1] in animal_cost:
+                        entry = {"op": "BUY_ANIMAL", "cost": qty * animal_cost[raw[1]]}
+            parsed.append(entry)
+
+        def _hire_cost(n):
+            a, b = 1, 1
+            for _ in range(n):
+                a, b = b, a + b
+            return a
+
+        cash = money
+        at = [cash] * len(parsed)
+        hire_idx = 0
+        for i, entry in enumerate(parsed):
+            at[i] = cash
+            if entry is None:
+                continue
+            if entry["op"] == "HIRE":
+                cash -= _hire_cost(hires_today + hire_idx)
+                hire_idx += 1
+            else:
+                cash -= entry["cost"]
+        end = cash
+
+        # ---- 3. 适用下限识别+触线判定（双命中取更严，等值取 d0_end） ----
+        tripped = []
+        if 20 <= step <= 23 and end < floor_d0:
+            tripped.append({"floor": floor_d0, "kind": "d0_end"})
+        for i, entry in enumerate(parsed):
+            if entry is not None and entry["op"] == "BUY_ANIMAL" and at[i] < floor_ba:
+                tripped.append({"floor": floor_ba, "kind": "buy_animal"})
+                break
+        if not tripped:
+            return {"hit_floor": None, "adjusted_action": base_action}
+        hit_floor = max(tripped, key=lambda h: (h["floor"], h["kind"] == "d0_end"))
+
+        # ---- 4. 委派处置并折返（只判定+委派，本层不改单） ----
+        out = _r37_defer_low_priority(observation, base_action, hit_floor)
+        return {"hit_floor": hit_floor, "adjusted_action": out["action"]}
+    except Exception:
+        return {"hit_floor": None, "adjusted_action": base_action}
 
 
 def _r37_defer_low_priority(observation: Dict[str, Any], action: Dict[str, Any],
