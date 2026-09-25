@@ -1,0 +1,1340 @@
+{
+ "generated_at": "2026-09-25T17:54:46.926001+00:00",
+ "pkg_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+ "pkg_sha256": "430a702d73cc684de440616e2e1a8497f483ec24505b70a29d899089cf9fe838",
+ "method": {
+  "semantics": "r37 活件 vs 原局对手录像动作（开环）；逐局双席位各演一遍（r37 坐我方席/对手席互换各一局，排除座位效应）",
+  "loader": "官方 last-callable 内存 exec 每局全新命名空间（R18 method note）",
+  "engine": "agent.planner.twin 前向走子（保真实测：全录像动作流逐拍与 replay 逐位一致、终局资金=rewards）",
+  "baseline": "对照局 baseline_final=原局实况该席终局资金（replay 原始记录末拍 farms[seat].money），逐席自比；灾难局不传基线",
+  "l1": "对照资金 l1 非负=l1（被测件终局资金差 r37−实况）逐局逐席 min≥0（不劣于原版/胜局不翻负口径）；合计口径 sum 作敏感度入账",
+  "rows": "rerun 行=parse_episode_states 同构双席行（step=原生 si、money=执行后值、action=该拍执行动作），verdict=同文件 L2"
+ },
+ "corpus": {
+  "entries": [
+   {
+    "entry": "112938600",
+    "entry_kind": "episode",
+    "episode": 112938600,
+    "replay_path": "/tmp/kagr22/episode-112938600-replay.json",
+    "replay_source": "cache",
+    "kind": "disaster",
+    "baseline_final": {
+     "0": 86518.0,
+     "1": 67608.0
+    },
+    "rewards": [
+     86518.0,
+     67608.0
+    ]
+   },
+   {
+    "entry": "112968467",
+    "entry_kind": "episode",
+    "episode": 112968467,
+    "replay_path": "/tmp/kagr22/episode-112968467-replay.json",
+    "replay_source": "cache",
+    "kind": "disaster",
+    "baseline_final": {
+     "0": 102623.0,
+     "1": 88606.0
+    },
+    "rewards": [
+     102623.0,
+     88606.0
+    ]
+   },
+   {
+    "entry": "112976582",
+    "entry_kind": "episode",
+    "episode": 112976582,
+    "replay_path": "/tmp/kagr22/episode-112976582-replay.json",
+    "replay_source": "cache",
+    "kind": "disaster",
+    "baseline_final": {
+     "0": 140115.0,
+     "1": 129087.0
+    },
+    "rewards": [
+     140115.0,
+     129087.0
+    ]
+   },
+   {
+    "entry": "113002280",
+    "entry_kind": "episode",
+    "episode": 113002280,
+    "replay_path": "/tmp/kagr22/episode-113002280-replay.json",
+    "replay_source": "cache",
+    "kind": "disaster",
+    "baseline_final": {
+     "0": 108523.0,
+     "1": 131187.0
+    },
+    "rewards": [
+     108523.0,
+     131187.0
+    ]
+   },
+   {
+    "entry": "113094793",
+    "entry_kind": "episode",
+    "episode": 113094793,
+    "replay_path": "/tmp/kagr22/episode-113094793-replay.json",
+    "replay_source": "cache",
+    "kind": "disaster",
+    "baseline_final": {
+     "0": 78240.0,
+     "1": 97672.0
+    },
+    "rewards": [
+     78240.0,
+     97672.0
+    ]
+   },
+   {
+    "entry": "113099386",
+    "entry_kind": "episode",
+    "episode": 113099386,
+    "replay_path": "/tmp/kagr22/episode-113099386-replay.json",
+    "replay_source": "cache",
+    "kind": "disaster",
+    "baseline_final": {
+     "0": 138688.0,
+     "1": 111714.0
+    },
+    "rewards": [
+     138688.0,
+     111714.0
+    ]
+   },
+   {
+    "entry": "112937338",
+    "entry_kind": "episode",
+    "episode": 112937338,
+    "replay_path": "/tmp/kagr22/episode-112937338-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 118718.0,
+     "1": 75673.0
+    },
+    "rewards": [
+     118718.0,
+     75673.0
+    ]
+   },
+   {
+    "entry": "112943297",
+    "entry_kind": "episode",
+    "episode": 112943297,
+    "replay_path": "/tmp/kagr22/episode-112943297-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 76301.0,
+     "1": 73686.0
+    },
+    "rewards": [
+     76301.0,
+     73686.0
+    ]
+   },
+   {
+    "entry": "112969611",
+    "entry_kind": "episode",
+    "episode": 112969611,
+    "replay_path": "/tmp/kagr22/episode-112969611-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 80305.0,
+     "1": 83997.0
+    },
+    "rewards": [
+     80305.0,
+     83997.0
+    ]
+   },
+   {
+    "entry": "112971928",
+    "entry_kind": "episode",
+    "episode": 112971928,
+    "replay_path": "/tmp/kagr22/episode-112971928-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 86313.0,
+     "1": 88635.0
+    },
+    "rewards": [
+     86313.0,
+     88635.0
+    ]
+   },
+   {
+    "entry": "112973096",
+    "entry_kind": "episode",
+    "episode": 112973096,
+    "replay_path": "/tmp/kagr22/episode-112973096-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 75479.0,
+     "1": 91559.0
+    },
+    "rewards": [
+     75479.0,
+     91559.0
+    ]
+   },
+   {
+    "entry": "112983518",
+    "entry_kind": "episode",
+    "episode": 112983518,
+    "replay_path": "/tmp/kagr22/episode-112983518-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 76697.0,
+     "1": 78776.0
+    },
+    "rewards": [
+     76697.0,
+     78776.0
+    ]
+   },
+   {
+    "entry": "112984665",
+    "entry_kind": "episode",
+    "episode": 112984665,
+    "replay_path": "/tmp/kagr22/episode-112984665-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 86676.0,
+     "1": 95098.0
+    },
+    "rewards": [
+     86676.0,
+     95098.0
+    ]
+   },
+   {
+    "entry": "112986874",
+    "entry_kind": "episode",
+    "episode": 112986874,
+    "replay_path": "/tmp/kagr22/episode-112986874-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 109642.0,
+     "1": 109924.0
+    },
+    "rewards": [
+     109642.0,
+     109924.0
+    ]
+   },
+   {
+    "entry": "112992971",
+    "entry_kind": "episode",
+    "episode": 112992971,
+    "replay_path": "/tmp/kagr22/episode-112992971-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 84301.0,
+     "1": 82752.0
+    },
+    "rewards": [
+     84301.0,
+     82752.0
+    ]
+   },
+   {
+    "entry": "113064702",
+    "entry_kind": "episode",
+    "episode": 113064702,
+    "replay_path": "/tmp/kagr22/episode-113064702-replay.json",
+    "replay_source": "cache",
+    "kind": "control",
+    "baseline_final": {
+     "0": 97259.0,
+     "1": 98457.0
+    },
+    "rewards": [
+     97259.0,
+     98457.0
+    ]
+   }
+  ],
+  "disaster_ids": [
+   112938600,
+   112968467,
+   112976582,
+   113002280,
+   113094793,
+   113099386
+  ],
+  "n_disaster": 6,
+  "n_control": 10
+ },
+ "games": [
+  {
+   "episode": 112938600,
+   "kind": "disaster",
+   "teams": [
+    "techtech69",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112938600-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "techtech69",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 3,
+     "cash_d1h0": 12.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "techtech69",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 3,
+     "cash_d1h0": 21.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112968467,
+   "kind": "disaster",
+   "teams": [
+    "Umataro Tenma",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112968467-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "Umataro Tenma",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "Umataro Tenma",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 21.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112976582,
+   "kind": "disaster",
+   "teams": [
+    "Kazuta MIZUTA",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112976582-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "Kazuta MIZUTA",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 0,
+     "cash_d1h0": 12.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": true
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "Kazuta MIZUTA",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 0,
+     "cash_d1h0": 12.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": true
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 113002280,
+   "kind": "disaster",
+   "teams": [
+    "renyxin",
+    "Danieler"
+   ],
+   "replay_path": "/tmp/kagr22/episode-113002280-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "renyxin",
+      "Danieler"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 21.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "renyxin",
+      "Danieler"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 0,
+     "cash_d1h0": 12.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": true
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 113094793,
+   "kind": "disaster",
+   "teams": [
+    "renyxin",
+    "Gordeev Max"
+   ],
+   "replay_path": "/tmp/kagr22/episode-113094793-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "renyxin",
+      "Gordeev Max"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 21.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "renyxin",
+      "Gordeev Max"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 113099386,
+   "kind": "disaster",
+   "teams": [
+    "Mositaku",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-113099386-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "Mositaku",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 3,
+     "cash_d1h0": 12.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "Mositaku",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 3,
+     "cash_d1h0": 21.0,
+     "final_delta": null,
+     "baseline_final": null,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112937338,
+   "kind": "control",
+   "teams": [
+    "renyxin",
+    "Lobato MBA IA Big Data"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112937338-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "renyxin",
+      "Lobato MBA IA Big Data"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 15.0,
+     "final_delta": -2587.0,
+     "baseline_final": 118718.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "renyxin",
+      "Lobato MBA IA Big Data"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": 7797.0,
+     "baseline_final": 75673.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112943297,
+   "kind": "control",
+   "teams": [
+    "renyxin",
+    "tine.sh agent"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112943297-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "renyxin",
+      "tine.sh agent"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 15.0,
+     "final_delta": 66567.0,
+     "baseline_final": 76301.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "renyxin",
+      "tine.sh agent"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": 14496.0,
+     "baseline_final": 73686.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112969611,
+   "kind": "control",
+   "teams": [
+    "Ryota-Di",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112969611-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "Ryota-Di",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 3,
+     "cash_d1h0": 12.0,
+     "final_delta": 24783.0,
+     "baseline_final": 80305.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "Ryota-Di",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 3,
+     "cash_d1h0": 24.0,
+     "final_delta": 21818.0,
+     "baseline_final": 83997.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112971928,
+   "kind": "control",
+   "teams": [
+    "mou mou",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112971928-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "mou mou",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": 7915.0,
+     "baseline_final": 86313.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "mou mou",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 29.0,
+     "final_delta": 4428.0,
+     "baseline_final": 88635.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112973096,
+   "kind": "control",
+   "teams": [
+    "mxt1022",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112973096-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "mxt1022",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": 8003.0,
+     "baseline_final": 75479.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "mxt1022",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 27.0,
+     "final_delta": -7866.0,
+     "baseline_final": 91559.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112983518,
+   "kind": "control",
+   "teams": [
+    "Lazyman",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112983518-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "Lazyman",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": -12087.0,
+     "baseline_final": 76697.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "Lazyman",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": -12808.0,
+     "baseline_final": 78776.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112984665,
+   "kind": "control",
+   "teams": [
+    "Zhenrui.Weng",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112984665-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "Zhenrui.Weng",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 3,
+     "cash_d1h0": 12.0,
+     "final_delta": -6982.0,
+     "baseline_final": 86676.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "Zhenrui.Weng",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 3,
+     "cash_d1h0": 29.0,
+     "final_delta": -1778.0,
+     "baseline_final": 95098.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112986874,
+   "kind": "control",
+   "teams": [
+    "Forrest",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112986874-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "Forrest",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": 26622.0,
+     "baseline_final": 109642.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "Forrest",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": 26444.0,
+     "baseline_final": 109924.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 112992971,
+   "kind": "control",
+   "teams": [
+    "renyxin",
+    "YUE WU"
+   ],
+   "replay_path": "/tmp/kagr22/episode-112992971-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "renyxin",
+      "YUE WU"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 29.0,
+     "final_delta": -25433.0,
+     "baseline_final": 84301.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "renyxin",
+      "YUE WU"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 0,
+     "cash_d1h0": 12.0,
+     "final_delta": -304.0,
+     "baseline_final": 82752.0,
+     "verdict": {
+      "pass": true
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  },
+  {
+   "episode": 113064702,
+   "kind": "control",
+   "teams": [
+    "Andrey Chankin",
+    "renyxin"
+   ],
+   "replay_path": "/tmp/kagr22/episode-113064702-replay.json",
+   "replay_source": "cache",
+   "runs": {
+    "seat0": {
+     "r37_seat": 0,
+     "our_seat": 0,
+     "teams": [
+      "Andrey Chankin",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": -4020.0,
+     "baseline_final": 97259.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    },
+    "seat1": {
+     "r37_seat": 1,
+     "our_seat": 1,
+     "teams": [
+      "Andrey Chankin",
+      "renyxin"
+     ],
+     "died_before_d2": 0,
+     "buy_failed": 1,
+     "cash_d1h0": 12.0,
+     "final_delta": -4880.0,
+     "baseline_final": 98457.0,
+     "verdict": {
+      "pass": false
+     },
+     "red": false,
+     "n_rows": 1440
+    }
+   },
+   "red": false,
+   "error": null
+  }
+ ],
+ "aggregate": {
+  "disaster": {
+   "n_games": 6,
+   "n_runs": 12,
+   "died_before_d2_sum": 0,
+   "buy_failed_sum": 17,
+   "cash_d1h0_min": 12.0,
+   "cash_d1h0_values": [
+    12.0,
+    21.0,
+    12.0,
+    21.0,
+    12.0,
+    12.0,
+    21.0,
+    12.0,
+    21.0,
+    12.0,
+    12.0,
+    21.0
+   ]
+  },
+  "control": {
+   "n_games": 10,
+   "n_runs": 20,
+   "final_delta_l1_min": -25433.0,
+   "final_delta_sum_sensitivity": 130128.0,
+   "final_delta_per_run": [
+    {
+     "episode": 112937338,
+     "seat": "seat0",
+     "final_delta": -2587.0
+    },
+    {
+     "episode": 112937338,
+     "seat": "seat1",
+     "final_delta": 7797.0
+    },
+    {
+     "episode": 112943297,
+     "seat": "seat0",
+     "final_delta": 66567.0
+    },
+    {
+     "episode": 112943297,
+     "seat": "seat1",
+     "final_delta": 14496.0
+    },
+    {
+     "episode": 112969611,
+     "seat": "seat0",
+     "final_delta": 24783.0
+    },
+    {
+     "episode": 112969611,
+     "seat": "seat1",
+     "final_delta": 21818.0
+    },
+    {
+     "episode": 112971928,
+     "seat": "seat0",
+     "final_delta": 7915.0
+    },
+    {
+     "episode": 112971928,
+     "seat": "seat1",
+     "final_delta": 4428.0
+    },
+    {
+     "episode": 112973096,
+     "seat": "seat0",
+     "final_delta": 8003.0
+    },
+    {
+     "episode": 112973096,
+     "seat": "seat1",
+     "final_delta": -7866.0
+    },
+    {
+     "episode": 112983518,
+     "seat": "seat0",
+     "final_delta": -12087.0
+    },
+    {
+     "episode": 112983518,
+     "seat": "seat1",
+     "final_delta": -12808.0
+    },
+    {
+     "episode": 112984665,
+     "seat": "seat0",
+     "final_delta": -6982.0
+    },
+    {
+     "episode": 112984665,
+     "seat": "seat1",
+     "final_delta": -1778.0
+    },
+    {
+     "episode": 112986874,
+     "seat": "seat0",
+     "final_delta": 26622.0
+    },
+    {
+     "episode": 112986874,
+     "seat": "seat1",
+     "final_delta": 26444.0
+    },
+    {
+     "episode": 112992971,
+     "seat": "seat0",
+     "final_delta": -25433.0
+    },
+    {
+     "episode": 112992971,
+     "seat": "seat1",
+     "final_delta": -304.0
+    },
+    {
+     "episode": 113064702,
+     "seat": "seat0",
+     "final_delta": -4020.0
+    },
+    {
+     "episode": 113064702,
+     "seat": "seat1",
+     "final_delta": -4880.0
+    }
+   ],
+   "n_negative": 10
+  }
+ },
+ "overall": {
+  "pass": false,
+  "criteria": {
+   "died_before_d2_zero": true,
+   "buy_failed_zero": false,
+   "cash_d1h0_ge_4": true,
+   "control_final_delta_nonneg": false
+  },
+  "n_red_games": 0,
+  "n_errors": 0
+ },
+ "errors": [],
+ "source": {
+  "rerun_command": "cd /mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations && python3 -m pytest orderbook_r37/test_judge_replay.py -q && python3 -c \"from orderbook_r37.judge_replay import judge_cash_guard_replay; import json; print(json.dumps(judge_cash_guard_replay('orderbook_r37/build/main.py', CORPUS), ensure_ascii=False))\"",
+  "replay_pull_command": "KAGGLE_API_TOKEN=$(/home/renyxin/.local/bin/kaggle auth print-access-token 2>/dev/null) /home/renyxin/.local/bin/kaggle competitions replay <episode_id> -p /tmp/kagr22",
+  "replay_cache_dirs": [
+   "/tmp/r33audit",
+   "/tmp/kagr22"
+  ],
+  "replay_pull_dir": "/tmp/kagr22",
+  "method_notes": [
+   "对照局=analysis20_rows.json r34a 胜局同窗抽样（固定 rng 记 evidence 的 sampling 块，实跑编排写台账时随附）",
+   "evidence dict 由本函数返回、不落盘；台账文件归实跑编排写入"
+  ],
+  "wall_s": 68.8,
+  "sampling_rerun": "random.Random(int(sha256('20260925r19').hexdigest()[:16],16)).sample(sorted(r34a_wins_from_/tmp/kagr_root/analysis20_rows.json), 10) → sorted"
+ },
+ "sampling": {
+  "seed_material": "20260925r19",
+  "seed_derivation": "int(sha256(material).hexdigest()[:16], 16)",
+  "seed": 10908657016646095392,
+  "pool_kind": "analysis20_rows.json tag==r34a res==W (a_r34a_full 窗, submission 56526029)",
+  "pool_size": 75,
+  "pool": [
+   112931605,
+   112932743,
+   112933894,
+   112935007,
+   112936168,
+   112937338,
+   112938518,
+   112939722,
+   112940897,
+   112942113,
+   112943297,
+   112944495,
+   112945697,
+   112946854,
+   112948018,
+   112950319,
+   112950809,
+   112952817,
+   112954077,
+   112955343,
+   112956586,
+   112957829,
+   112960186,
+   112961384,
+   112962594,
+   112963765,
+   112966137,
+   112969611,
+   112970234,
+   112970781,
+   112971928,
+   112973096,
+   112974249,
+   112975405,
+   112977750,
+   112978803,
+   112981188,
+   112982352,
+   112983518,
+   112984665,
+   112985814,
+   112986874,
+   112989446,
+   112991796,
+   112992971,
+   112994147,
+   112994148,
+   112995300,
+   112996453,
+   112997617,
+   112999124,
+   112999965,
+   113001127,
+   113003432,
+   113007649,
+   113013013,
+   113019543,
+   113025685,
+   113030024,
+   113035757,
+   113040775,
+   113046262,
+   113048535,
+   113051021,
+   113056380,
+   113061491,
+   113062388,
+   113064702,
+   113069934,
+   113073228,
+   113079155,
+   113090696,
+   113094257,
+   113096397,
+   113098820
+  ],
+  "picked": [
+   112937338,
+   112943297,
+   112969611,
+   112971928,
+   112973096,
+   112983518,
+   112984665,
+   112986874,
+   112992971,
+   113064702
+  ]
+ }
+}

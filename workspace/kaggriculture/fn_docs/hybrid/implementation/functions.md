@@ -99,9 +99,9 @@
 | build_r36_conditional | B13,B15 | wired 09-25 | pytest 6 件（锚唯一/幂等/阶梯形态/无 adopt 拒斥/白名单归因/尾块防混入）→6 passed；判决全负→未实跑构建（B15 出口） | (本批) |
 | verify_r36_gates | B13,B15 | wired 09-25 | pytest 5 件（全绿/fail-closed 全跑/身份链/未构建红/阶梯入口）→5 passed；r36 未构建→未实跑门禁（B15 出口） | (本批) |
 | run_r18_iteration | B13-B16 | wired 09-25 | pytest 5 件（POSITIVE 全流/KILLED_T/惰性 NEGATIVE/门禁红 NEGATIVE/失败留痕）→5 passed；实跑 260s verdict=NEGATIVE launch_ready=false | (本批) |
-| parse_episode_states | B19 | stub 09-25 | 测试: test_parse_states.py（逐步双席规范行/step↔si 口径） | — |
-| replay_guard_verdict | B19 | stub 09-25 | 测试: test_judge_replay.py（verdict 组三指标） | — |
-| judge_cash_guard_replay | B19 | stub 09-25 | 测试: test_judge_replay.py；判据=R19 ②（死牛 0/买牲畜失败 0/d1 h0 现金≥4/对照资金 l1 非负） | — |
+| parse_episode_states | B19 | wired 09-25 | pytest test_parse_states.py → 29 passed（真 replay 结构 1440 行/双席/字段+最小件全等+缺字段 25 例+坏 JSON/缺文件+口径钉）；口径裁定：行 step=replay 原生 si（磁带 step X 动作在 X+1 行）、money=farms[seat].money 执行后值、animals_grid/tiles 从 tiles[y][x] 提取；6 局全过解析 | (本批) |
+| replay_guard_verdict | B19 | wired 09-25 | pytest test_judge_replay.py verdict 组 → 6 passed（三指标主判据含诱饵/全绿 pass/UNKNOWN/对手席隔离换席复算/终局差两分支/FEED 退化推断）；口径：死逃=相邻拍消失+饿逃轨迹（末见/首缺拍任一 day<2）、buy_failed=前后并集成交窗、cash_d1h0=step24 拍、verdict 三与门（死牛0∧买失败0∧现金≥4）；签名微调=+baseline_final=None/+our_seat="renyxin"（登记） | (本批) |
+| judge_cash_guard_replay | B19 | wired 09-25 | pytest test_judge_replay.py judge 组 → 4 passed（全流程/红局不短路/聚合判据/语料缺失）+verdict 6；**真跑 6+10 局×2 席=32 重演 68.9s 零红局**：死牛 0 ✓、d1 现金 min 12.0 ✓、**BUY_ANIMAL 失败 17 ✗**、对照 l1 逐席 min −25,433 ✗（合计 +130,128）→ overall=FAIL（如实入账 evidence/replay_judgment.json，判据=R19 ②） | (本批) |
 | count_shearings | B20 | stub 09-25 | 测试: test_judge_league.py（count 组） | — |
 | judge_sheep_league | B20 | stub 09-25 | 测试: test_judge_league.py；判据=R20 ②（5 刀/h2h≥0.55/胜局不翻负） | — |
 | _r37_defer_low_priority | B17 | wired 09-25 | pytest test_runtime_guard.py → 13 passed 全绿（defer 组①-⑦：MELON 腾现金/BUY_ANIMAL<500 整单入账+槽置[]/HIRE·FEED·CARE·SELL·HARVEST 逐类不动/槽位数不变/异常→原动作/多单连续缓/无单尽力返回）；hit_floor={floor,kind}、顺延账={op,item,qty,cost,slot}、顺延=置 [] 保槽位（防撮合配对改变）；调用点=_r37_cash_guard 真实链 | (本批) |
