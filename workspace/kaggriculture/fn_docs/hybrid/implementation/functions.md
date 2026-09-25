@@ -106,7 +106,7 @@
 | judge_sheep_league | B20 | stub 09-25 | 测试: test_judge_league.py；判据=R20 ②（5 刀/h2h≥0.55/胜局不翻负） | — |
 | _r37_defer_low_priority | B17 | tested 09-25 | pytest test_runtime_guard.py → 7 passed（defer 组①-⑦：MELON 腾现金/BUY_ANIMAL<500 整单入账+槽置[]/HIRE·FEED·CARE·SELL·HARVEST 逐类不动/槽位数不变/异常→原动作/多单连续缓/无单尽力返回）；2 failed=未动之桩（预期）；hit_floor={floor,kind}、顺延账={op,item,qty,cost,slot}、顺延=置 [] 保槽位（防撮合配对改变） | (本批) |
 | _r37_cash_guard | B17 | tested 09-25 | pytest test_runtime_guard.py → 8 passed（floor 组 7 条：d0 窗[step20-23]触线+顺延含边界/BUY_ANIMAL 执行点<500 保护[850 反例]/零足迹+defer 零调用/floors 可配/hard_min 夹持制 max(4,x)/畸形不干预/双命中取更严）+defer 组 7 绿；1 failed=仅 test_r37_agent 桩（预期）；floors={d0_end:12,buy_animal:500,hard_min:4} | (本批) |
-| _r37_agent | B17 | stub 09-25 | 测试: test_runtime_guard.py（入口 fail-safe/动作集合不变量） | — |
+| _r37_agent | B17 | tested 09-25 | pytest test_runtime_guard.py → **13 passed 全绿无红**（入口组 5 测：guard 透传+零足迹同对象/guard 抛异常→原动作/step0 复位账[携带意图不回填]/顺延账 FIFO 回填空槽[现金≥500 同口径]含无槽留账与不达标留账/动作集合不变量双路径）+floor 8+defer 7 维持；账=函数属性 _defer_ledger（注入自包含），回填 first-fit 空槽、守卫终裁、diff 重建入账 | (本批) |
 | inject_cash_guard_block | B17 | stub 09-25 | 测试: test_inject_guard.py（注入校验四条） | — |
 | retape_sheep_timing | B18 | stub 09-25 | 测试: test_retape_sheep.py（刀次核算组/资金序不变量） | — |
 | retape_tail_savings | B18 | stub 09-25 | 测试: test_retape_tail.py（不误删 HARVEST/卖单） | — |

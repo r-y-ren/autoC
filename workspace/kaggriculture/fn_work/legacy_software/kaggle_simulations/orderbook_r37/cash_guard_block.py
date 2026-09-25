@@ -21,8 +21,187 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
 
     签名意图：输入: observation, base_action / 输出: 调整后 action /
     错误: 异常→入口兜底回退基座动作。
+
+    结构定义（本层定形，_r37_cash_guard 对齐；R19 核心增量=顺延账跨步重试，
+    顺延不是删除、是择机重发——修「3 张 BUY_ANIMAL 被引擎静默丢弃」）：
+    - 顺延账缓存 = 本函数属性 _r37_agent._defer_ledger（list；条目同
+      _r37_defer_low_priority 顺延账 {"op","item","qty","cost","slot"}，条目
+      序=顺延序）。函数属性自包含、随源码注入不丢、不与注入底版 globals 撞名。
+      step==0 复位（清空携带意图）；复位/出账/入账统一在流程成功后原子提交，
+      任何异常→账保持调用前状态（账读写自身 try 包裹，可静默、不许抛）。
+    - 每步流程：(a) step==0 复位账（先于重试，携带意图不再回填）；(b) 重试
+      阶段——账中 BUY_ANIMAL 意图按顺延序，若本步执行点现金达标（≥buy_animal
+      线 500，与 _r37_cash_guard 同口径：当前资金−HIRE fib 硬开销−保留购买单
+      全价，卖单收入不计）→ 重发进 market 空 [] 槽（market 序首个空槽起步，
+      执行点现金随槽序单调不增故首空槽=最优执行点；不改槽位数、不挤掉任何
+      既有单；无空槽或现金不达标→本步不重试、意图留账）；(c) 守卫阶段——把
+      （含回填的）action 交 _r37_cash_guard（floors={"d0_end":12,
+      "buy_animal":500,"hard_min":4}）调整；(d) 合并顺延账——回填成功的出账、
+      守卫新顺延入账（交守卫动作 vs adjusted_action 逐槽 diff，被置 [] 的核价
+      购买单按 {"op","item","qty","cost","slot"} 重建，defer 同口径）；
+      (e) 返回 adjusted_action。
+    - 回填判据与守卫 buy_animal 判据同口径同线（at≥500 ⟺ 守卫不触 buy_animal
+      ）→ 回填单不会被 buy_animal 支误伤；若 d0_end 等更严下限仍要求顺延，回填
+      单随 diff 回流入账、意图不灭。「不新增动作」=不引入账外新意图：回填只
+      重发账内既有购买意图、只落空 [] 槽；farmer/hands（动物格 HARVEST/FEED/
+      CARE/移动）与 HIRE/卖单一字节不动、槽位数恒定。
+    - fail-safe：任何异常→返回 base_action 原对象（连同不动的账）。
     """
-    raise NotImplementedError("unimplemented:fn:_r37_agent")
+    try:
+        # ---- 0. 顺延账读取（函数属性缓存；账操作静默） ----
+        try:
+            cache = _r37_agent._defer_ledger
+        except Exception:
+            cache = None
+        if not isinstance(cache, list):
+            cache = []
+
+        # ---- 1. step 读取（口径同 _r37_cash_guard）+ step==0 复位 ----
+        raw_step = observation["step"]
+        if isinstance(raw_step, bool) or not isinstance(raw_step, (int, float)):
+            raise TypeError("observation[step] must be a number")
+        if raw_step != raw_step or raw_step == float("inf") \
+                or raw_step == float("-inf"):
+            raise ValueError("observation[step] must be finite")
+        step_f = float(raw_step)
+        if step_f != int(step_f):
+            raise ValueError("observation[step] must be a whole number")
+        step = int(step_f)
+        working = [] if step == 0 else list(cache)
+
+        # ---- 2. 状态读取（player/farms[seat]，口径同 _r37_cash_guard） ----
+        seat = int(observation["player"])
+        farm = observation["farms"][seat]
+        money_raw = farm["money"]
+        if isinstance(money_raw, bool) or not isinstance(money_raw, (int, float)):
+            raise TypeError("farm[money] must be a number")
+        money = float(money_raw)
+        hires_raw = farm.get("hires_today", 0)
+        if hires_raw is None:
+            hires_raw = 0
+        if isinstance(hires_raw, bool) or not isinstance(hires_raw, int) or hires_raw < 0:
+            raise TypeError("farm[hires_today] must be a non-negative int")
+        hires_today = hires_raw
+
+        # ---- 3. 核价/执行点现金（口径同 _r37_cash_guard） ----
+        floors = {"d0_end": 12, "buy_animal": 500, "hard_min": 4}
+        hard = max(float(floors["hard_min"]), 4.0)   # 硬底线 4 不可破
+        buy_line = max(float(floors["buy_animal"]), hard)
+        seed_price = {"WHEAT": 10, "CARROT": 20, "TOMATO": 50,
+                      "STRAWBERRY": 100, "MELON": 80}
+        animal_cost = {"GOOSE": 300, "COW": 400, "SHEEP": 500}
+
+        def _strict_qty(value):
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                return None
+            if isinstance(value, float):
+                if not value.is_integer():
+                    return None
+                value = int(value)
+            return value if value >= 1 else None
+
+        def _price_of(op, item, qty):
+            if op == "BUY_SEED" and item in seed_price:
+                return qty * seed_price[item]
+            if op == "BUY_ANIMAL" and item in animal_cost:
+                return qty * animal_cost[item]
+            return None
+
+        def _hire_cost(n):
+            a, b = 1, 1
+            for _ in range(n):
+                a, b = b, a + b
+            return a
+
+        def _at_slots(mkt):
+            # 逐槽执行点现金 at[]：只扣 HIRE fib 硬开销与保留购买单全价，
+            # 卖单收入不计（_project 同口径）。
+            cash = money
+            at = [cash] * len(mkt)
+            hire_idx = 0
+            for i, raw in enumerate(mkt):
+                at[i] = cash
+                if isinstance(raw, (list, tuple)) and raw:
+                    op = raw[0]
+                    if op == "HIRE":
+                        cash -= _hire_cost(hires_today + hire_idx)
+                        hire_idx += 1
+                    elif len(raw) >= 3 and isinstance(raw[1], str):
+                        qty = _strict_qty(raw[2])
+                        if qty is not None:
+                            cost = _price_of(op, raw[1], qty)
+                            if cost is not None:
+                                cash -= cost
+            return at
+
+        def _is_empty(slot):
+            return isinstance(slot, (list, tuple)) and len(slot) == 0
+
+        market = base_action.get("market")
+        if market is None:
+            market = []
+        if not isinstance(market, list):
+            raise TypeError("base_action[market] must be a list")
+
+        # ---- 4. 重试阶段：账中 BUY_ANIMAL 择机重发（回填空 [] 槽） ----
+        passed = base_action
+        refilled_ids = set()
+        if working:
+            new_market = list(market)   # 回填只出新表，输入动作不被原地改动
+            for entry in working:
+                if not isinstance(entry, dict) or entry.get("op") != "BUY_ANIMAL":
+                    continue            # 重试范围只 BUY_ANIMAL；其余留账不动
+                item = entry.get("item")
+                qty = _strict_qty(entry.get("qty"))
+                if qty is None or item not in animal_cost:
+                    continue            # 账目不可核价→留账不动
+                free = None
+                for i in range(len(new_market)):
+                    if _is_empty(new_market[i]):
+                        free = i
+                        break
+                if free is None:
+                    break               # 无空槽→本步不重试，意图留账
+                if _at_slots(new_market)[free] < buy_line:
+                    break               # 现金不达标→留账（后续空槽现金只更少）
+                new_market[free] = ["BUY_ANIMAL", item, qty]
+                refilled_ids.add(id(entry))
+            if refilled_ids:
+                passed = dict(base_action, market=new_market)
+
+        # ---- 5. 守卫阶段：（含回填的）动作交 _r37_cash_guard 终裁 ----
+        out = _r37_cash_guard(observation, passed, floors)
+        guarded = out["adjusted_action"]
+        if not isinstance(guarded, dict):
+            raise TypeError("adjusted_action must be a dict")
+
+        # ---- 6. 合并顺延账：回填出账+守卫新顺延入账（diff 重建） ----
+        try:
+            merged = [e for e in working if id(e) not in refilled_ids]
+            in_m = passed.get("market")
+            out_m = guarded.get("market")
+            if isinstance(in_m, list) and isinstance(out_m, list) \
+                    and len(in_m) == len(out_m):
+                for i, raw in enumerate(in_m):
+                    if not _is_empty(out_m[i]):
+                        continue
+                    if not (isinstance(raw, (list, tuple)) and len(raw) >= 3
+                            and isinstance(raw[1], str)):
+                        continue
+                    qty = _strict_qty(raw[2])
+                    cost = _price_of(raw[0], raw[1], qty) if qty is not None else None
+                    if cost is None:
+                        continue        # 只收核价购买单（defer 同口径）
+                    merged.append({"op": raw[0], "item": raw[1], "qty": qty,
+                                   "cost": cost, "slot": i})
+            _r37_agent._defer_ledger = merged
+        except Exception:
+            pass                        # 账操作失败可静默，不许抛
+
+        # ---- 7. 出口：返回守卫 adjusted_action（同构 action） ----
+        return guarded
+    except Exception:
+        return base_action
 
 
 def _r37_cash_guard(observation: Dict[str, Any], base_action: Dict[str, Any],

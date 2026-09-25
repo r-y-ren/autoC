@@ -19,7 +19,16 @@ floor 组 = _r37_cash_guard 真测试（合成 obs/floors 用例①-⑦）：
 ⑤hard_min 不可破（数值 <4 夹到 4；hard_min 更严生效）；
 ⑥畸形 obs/floors/action → 原动作不干预（同型正常态确会触线）；
 ⑦双命中取更严（默认取 buy_animal 500；d0_end 更严随 d0_end；等值取 d0_end）。
-test_r37_agent 为 L3 未实现桩（红=预期，不许动）。
+入口组 = _r37_agent 真测试（合成 obs/action 用例①-⑧）：
+①正常路径：guard 被调用（floors 三键常数钉住）且返回其 adjusted_action；
+②guard 抛异常/返回畸形 adjusted_action → base_action 原样（fail-safe+账不动）；
+③step==0 复位顺延账（预置账后 step0 调用→账清，且复位先于重试不回填）；
+④重试回填：账中 BUY_ANIMAL+现金达标→回填空槽成功出账（真守卫不误伤）；
+⑤无空槽→留账不回填且不挤占既有单（槽位对象逐一原样）；
+⑥现金不达标→留账不回填；
+⑦动作集合不变量：HARVEST/卖单/HIRE/既有单一字节不动、槽位数不变
+  （回填路径+守卫顺延路径两调用，顺延路径兼钉新顺延入账）；
+⑧零干预路径同对象返回。
 """
 import pytest  # noqa: F401
 
@@ -29,8 +38,141 @@ except ImportError:  # 兜底：直接以 orderbook_r37/ 为 sys.path 根跑测
     import cash_guard_block
 
 
-def test_r37_agent():
-    raise NotImplementedError("unimplemented:fn:_r37_agent")
+def test_r37_agent(monkeypatch):
+    # ①正常路径：guard 被调用（floors 三键常数钉住）且返回其 adjusted_action。
+    cash_guard_block._r37_agent._defer_ledger = []
+    calls = []
+    sentinel = _act([["SELL", "WOOL", 1]])
+
+    def _stub(observation, action, floors):
+        calls.append((observation, action, floors))
+        return {"hit_floor": None, "adjusted_action": sentinel}
+
+    monkeypatch.setattr(cash_guard_block, "_r37_cash_guard", _stub)
+    base = _act([["BUY_SEED", "WHEAT", 1], []])
+    obs = dict(_obs(500), step=10)
+    out = cash_guard_block._r37_agent(obs, base)
+    assert out is sentinel
+    assert len(calls) == 1
+    obs_g, act_g, floors = calls[0]
+    assert obs_g is obs
+    assert act_g is base  # 空账零回填→基座动作原对象交守卫
+    assert floors == {"d0_end": 12, "buy_animal": 500, "hard_min": 4}
+    assert cash_guard_block._r37_agent._defer_ledger == []
+
+    # ⑧零干预路径同对象返回（真守卫：step 10 窗外+动作无 BUY_ANIMAL→零足迹）。
+    monkeypatch.undo()
+    cash_guard_block._r37_agent._defer_ledger = []
+    base8 = _act([["BUY_SEED", "WHEAT", 1], [], ["SELL", "WOOL", 2]])
+    out8 = cash_guard_block._r37_agent(dict(_obs(500), step=10), base8)
+    assert out8 is base8
+    assert cash_guard_block._r37_agent._defer_ledger == []
+
+
+def test_r37_agent_fail_safe(monkeypatch):
+    # ②guard 抛异常→base_action 原样（fail-safe）+账不动（回填出账不提交，
+    # 顺延不是删除）；guard 返回畸形 adjusted_action 同兜底。
+    entry = {"op": "BUY_ANIMAL", "item": "GOOSE", "qty": 1, "cost": 300, "slot": 0}
+    cash_guard_block._r37_agent._defer_ledger = [entry]
+    base = _act([[], ["SELL", "WOOL", 1]])  # 空槽+520 现金→重试会先回填再交守卫
+
+    def _boom(observation, action, floors):
+        raise RuntimeError("guard down")
+
+    monkeypatch.setattr(cash_guard_block, "_r37_cash_guard", _boom)
+    out = cash_guard_block._r37_agent(dict(_obs(520), step=10), base)
+    assert out is base
+    assert base["market"][0] == []  # 输入不被原地改动
+    assert cash_guard_block._r37_agent._defer_ledger == [entry]  # 账不动
+
+    def _weird(observation, action, floors):
+        return {"hit_floor": None, "adjusted_action": "oops"}
+
+    monkeypatch.setattr(cash_guard_block, "_r37_cash_guard", _weird)
+    out2 = cash_guard_block._r37_agent(dict(_obs(520), step=10), base)
+    assert out2 is base
+    assert cash_guard_block._r37_agent._defer_ledger == [entry]
+
+
+def test_r37_agent_step0_reset():
+    # ③step==0 复位顺延账：预置账后 step0 调用→账清；复位先于重试（预置
+    # BUY_ANIMAL 意图即便现金达标也不回填）。
+    cash_guard_block._r37_agent._defer_ledger = [
+        {"op": "BUY_ANIMAL", "item": "GOOSE", "qty": 1, "cost": 300, "slot": 0},
+        {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80, "slot": 1}]
+    base = _act([[], ["SELL", "WOOL", 1]])
+    out = cash_guard_block._r37_agent(dict(_obs(520), step=0), base)
+    assert out is base  # step 0 窗外且动作无购买单→零干预
+    assert base["market"][0] == []  # 携带意图未被回填
+    assert cash_guard_block._r37_agent._defer_ledger == []
+
+
+def test_r37_agent_retry_refill():
+    # ④账中 BUY_ANIMAL+现金达标→回填空槽成功出账（真守卫同口径同线不误伤：
+    # at 520≥500→零足迹放行，回填单留存）。
+    cash_guard_block._r37_agent._defer_ledger = [
+        {"op": "BUY_ANIMAL", "item": "GOOSE", "qty": 1, "cost": 300, "slot": 3}]
+    base = _act([[], ["SELL", "WOOL", 1]])
+    out = cash_guard_block._r37_agent(dict(_obs(520), step=10), base)
+    assert out is not base
+    assert out["market"][0] == ["BUY_ANIMAL", "GOOSE", 1]
+    assert out["market"][1] is base["market"][1]
+    assert base["market"][0] == []  # 输入不被原地改动
+    assert cash_guard_block._r37_agent._defer_ledger == []  # 回填成功→出账
+
+    # ⑤无空槽→留账不回填且不挤占既有单（槽位对象逐一原样）。
+    entry5 = {"op": "BUY_ANIMAL", "item": "SHEEP", "qty": 1, "cost": 500, "slot": 0}
+    cash_guard_block._r37_agent._defer_ledger = [entry5]
+    base5 = _act([["SELL", "WOOL", 1], ["BUY_SEED", "WHEAT", 1], ["HIRE"]])
+    out5 = cash_guard_block._r37_agent(dict(_obs(900), step=10), base5)
+    assert out5 is base5
+    assert out5["market"] == [["SELL", "WOOL", 1], ["BUY_SEED", "WHEAT", 1], ["HIRE"]]
+    assert all(out5["market"][i] is base5["market"][i] for i in range(3))
+    assert cash_guard_block._r37_agent._defer_ledger == [entry5]  # 留账
+
+    # ⑥现金不达标（执行点 450<500）→留账不回填。
+    entry6 = {"op": "BUY_ANIMAL", "item": "COW", "qty": 1, "cost": 400, "slot": 1}
+    cash_guard_block._r37_agent._defer_ledger = [entry6]
+    base6 = _act([[], ["SELL", "WOOL", 1]])
+    out6 = cash_guard_block._r37_agent(dict(_obs(450), step=10), base6)
+    assert out6 is base6
+    assert base6["market"][0] == []  # 空槽未被回填
+    assert cash_guard_block._r37_agent._defer_ledger == [entry6]
+
+
+def test_r37_agent_action_invariants():
+    # ⑦动作集合不变量（回填路径）：HARVEST/卖单/HIRE/既有单一字节不动、
+    # 槽位数不变、回填只落空 [] 槽。
+    cash_guard_block._r37_agent._defer_ledger = [
+        {"op": "BUY_ANIMAL", "item": "GOOSE", "qty": 1, "cost": 300, "slot": 9}]
+    base = _act([["SELL", "WOOL", 3], ["BUY_SEED", "MELON", 1], [], ["HIRE"]],
+                farmer=["HARVEST"], hands=[["FEED"], ["CARE"], ["NORTH"]])
+    out = cash_guard_block._r37_agent(dict(_obs(600), step=10), base)
+    assert out["market"][2] == ["BUY_ANIMAL", "GOOSE", 1]  # 回填空槽（at 520≥500）
+    assert out["farmer"] is base["farmer"] and out["farmer"] == ["HARVEST"]
+    assert out["hands"] is base["hands"]
+    assert out["hands"] == [["FEED"], ["CARE"], ["NORTH"]]
+    assert out["market"][0] is base["market"][0]
+    assert out["market"][1] is base["market"][1]
+    assert out["market"][3] is base["market"][3]
+    assert len(out["market"]) == len(base["market"]) == 4
+    assert base["market"][2] == []
+    assert cash_guard_block._r37_agent._defer_ledger == []  # 回填出账
+
+    # ⑦（守卫顺延路径）：MELON 被顺延时卖单/HIRE/槽位数不动，新顺延入账。
+    cash_guard_block._r37_agent._defer_ledger = []
+    base2 = _act([["SELL", "WOOL", 1], ["BUY_SEED", "MELON", 1], ["HIRE"]],
+                 farmer=["HARVEST"], hands=[["FEED"], ["CARE"]])
+    out2 = cash_guard_block._r37_agent(dict(_obs(50), step=23), base2)
+    assert out2["market"] == [["SELL", "WOOL", 1], [], ["HIRE"]]
+    assert out2["farmer"] is base2["farmer"]
+    assert out2["hands"] is base2["hands"]
+    assert out2["market"][0] is base2["market"][0]
+    assert out2["market"][2] is base2["market"][2]
+    assert len(out2["market"]) == 3
+    assert base2["market"][1] == ["BUY_SEED", "MELON", 1]  # 输入不被原地改动
+    assert cash_guard_block._r37_agent._defer_ledger == [
+        {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80, "slot": 1}]
 
 
 def test_r37_cash_guard_floor(monkeypatch):
