@@ -29,7 +29,6 @@
 | B17(完成 09-25) | 现金守卫运行时+注入（R19 核心）：_r37_defer_low_priority → _r37_cash_guard → _r37_agent → inject_cash_guard_block；**+新增改动（已批）**：snapshot_tests 与 tests/snapshot 七撞名清债 | pytest orderbook_r37（runtime/inject 组）19 绿桩清零；inject 实跑注入 r34a 文本+四条校验全过 | 评审 PASS-with-notes（P2 簿记补回本行；P3 三条见变更记录）；清债=双 __init__.py 零删除，收集 2190+7err→2271 零 error |
 | B18(完成 09-25) | 构建面：retape_sheep_timing → retape_tail_savings → audit_diff_vs_r34a → pack_r37 → build_r37 | build_r37 实跑产出 r37 main(430a702d73cc…)+tar(dcbdcf9743d2…)+manifest；diff 审计 ok 零 UNATTRIBUTED；确定性双跑逐字节一致 | 真 r34a 手术实况：羊=1 前移+1 skip+229 no-op（231 批本就 ≥5 刀）、尾盘 CARE 779 删；锚行天然兼容零缝合；签名微调 out_dir=None×2+测试 str 键裁定（登记） |
 | ▶ B19 | 重演判决线（R19 判据）：parse_episode_states → replay_guard_verdict → judge_cash_guard_replay | pytest test_parse_states+test_judge_replay 全绿；6 灾难+10 对照实跑产出 evidence（三指标+对照资金差） | 解析口径=考古校准（磁带 step X↔replay si X+1） |
-| B19 | 重演判决线（R19 判据）：parse_episode_states → replay_guard_verdict → judge_cash_guard_replay | pytest test_parse_states+test_judge_replay 全绿；6 灾难+10 对照实跑产出 evidence（三指标+对照资金差） | 解析口径=考古校准（磁带 step X↔replay si X+1） |
 | B20 | 联赛判决线（R20 判据）：count_shearings → judge_sheep_league | pytest test_judge_league 全绿；300-500 局联赛实跑产出 evidence（逐局 WL/刀次/分组胜率） | 判据=R20 ②（5 刀/h2h≥0.55/胜局不翻负）；care_rate 观测不进门槛 |
 | B21 | 门禁+总指挥：verify_r37_gates → run_r37_iteration wired | verify_r37_gates 实跑五门面 evidence（四门+h2h≥0.55 独立 n 报+饿死+谱系）；run_r37_iteration 全链实跑一次出裁决 | 发射裁决呈用户批间门；standing 代执行授权沿惯例 |
 
