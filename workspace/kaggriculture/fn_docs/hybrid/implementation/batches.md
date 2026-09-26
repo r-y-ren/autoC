@@ -31,7 +31,9 @@
 | B19(完成 09-25；修订 09-26) | 重演判决线（R19 判据）：parse_episode_states → replay_guard_verdict → judge_cash_guard_replay | pytest 全绿（29+11）；6 灾难+10 对照实跑产出 evidence | **修订后 overall=PASS**：死牛 0✓/真丢单 0✓/d1 现金 12✓（原 17 张失败单=判定器假阳性——买畜进棚不上格+钱被卖货掩蔽，逐张复核全额成交）；对照 l1 降观测（用户裁决：min −25,433/sum +130,128 留档，"不伤胜局"交 B20 胜率判） |
 | ▶ B20 | 联赛判决线（R20 判据）：count_shearings → judge_sheep_league | pytest test_judge_league 全绿；300-500 局联赛实跑产出 evidence（逐局 WL/刀次/分组胜率） | 判据=R20 ②（5 刀/h2h≥0.55/胜局不翻负）；care_rate 观测不进门槛 |
 | B21(完成 09-26) | 门禁+总指挥：verify_r37_gates → run_r37_iteration wired | 五门实跑 **overall=PASS**（合规 4/4、launch 四门、h2h 0.5625 n=8 独立、谱系 16-0、饿死 26/26+净经济 +73,824 金）；判决 A 复跑全绿（对照 l1_min 0.0） | **r37 已发射** ref 56580761 PENDING（standing 代执行+台账 launch_ledger.json；每日 1/5、候选 1/2）；饿死门四轮攻坚+判据重裁见变更记录 |
-| ▶ （本表止） | R19/R20 全批次 B17-B21 完结；后续=发射读数 SOP 监控至 09-29 终榜定案 | — | 战后 /fn-close 待 09-30 收口 |
+| ▶ B22 | R21-S1 卖流库+预测运行时六件：build_sellflow_library → infer_rival_sells → match_sellflow → extrapolate_sells → apply_dodge → _predict_agent | pytest test_sellflow+test_predict_runtime 全绿桩清零；卖流库真建（86 局）+预测链钉住（置信门/fail-safe/$1 下界） | 库键=（首二店，step-2 指纹）；opponent_plan 容器契约 plan[step]["market"] |
+| B23 | R21-S2 构建面四件：inject_predict_block → audit_diff_vs_r37 → pack_r38 → build_r38 | build_r38 真跑产出 r38 main+tar+manifest；审计白名单一类（尾部预测块）零 UNATTRIBUTED；确定性双跑逐字节 | 底=r37 在飞件字节；注入校验四条+库 sha 对账 |
+| B24 | R21-S3 判决线+门禁+总指挥：flip_stats → judge_predict_replay → verify_r38_gates → run_r38_iteration wired | 判决真跑（26 败局[晚崩 15 重点]+10 对照重演+闭环副证 vs r37）出 evidence；判据=胜局不翻负∧晚崩翻正≥1/3∧h2h≥0.55→判正才五门→发射裁决呈批间门 | 判负→收档不建发射版（R21 出口预绑定） |
 
 ## 变更记录（计划层事件）
 | 日期 | 事件 | 说明 |
@@ -53,3 +55,4 @@
 | 2026-09-25 | B18 签名微调+断言裁定登记 | ①pack_r37/build_r37 加可选 out_dir=None（首参/返回形态不变）；②audit 测试断言路由键改 str（代码即真值：JSON 往返 str 键，与 retape 兄弟测试惯例一致）；③audit 测试夹具 _mk_audit_pair 补齐（前任代理断线遗留半成品，实现侧零改动）；④锚行核对=pack 正则 `# =+ … =+$` 天然匹配 inject 真实 `====` 块头，零缝合 |
 | 2026-09-25 | B19 签名微调+判决口径登记 | ①replay_guard_verdict +baseline_final=None/+our_seat="renyxin"；②judge_cash_guard_replay 口径=逐局逐席 l1≥原版（R10 同源用语；合计口径 +130k 作敏感度并列入账）；③parse step 口径=replay 原生 si（磁带 X↔行 X+1）；④tmpfs 配额曾耗尽（孤儿 pyc 101M 清理后补拉 2 局） |
 | 2026-09-26 | B20+守卫三修收口（用户裁决：修正版守卫+判决/小联赛双验） | 400 局全量联赛 0-200 确诊守卫过度扣单（微探针：一局扣 16/17 买畜单顺延 25-57 步+种子永久丢）→三修（逐单价丢单保护/投影计卖单收入/种子入重发）+重建 efa7b195f189…→双验：判决三指标全绿保持、小联赛 60 局 **h2h 0.6136≥0.55** 全谱零负；R20 剪毛=轮次达标（8-12 轮/局）但每羊 4 次（目标 5 未达）呈批间门 |
+| 2026-09-26 | R21 批次计划立表（B22-B24）+轻量对账 | 对账判定**对得上**（28 桩全落 orderbook_predict 零外溢、r37 133 绿、49 绿基线持平、抽查命令全绿）；**环境清理**：/tmp usrquota 曾耗尽（Errno 122）——清孤儿缓存 pairsnap/v4bfull/r31b/r31/r29b 约 3.9G，写入恢复；判决语料 r33audit（卖流库源）/kagr22/r30 保留 |
