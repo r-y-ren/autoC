@@ -1,0 +1,597 @@
+{
+ "probe": "r37 跨批修订④动作差异归因探针（seed=1000，我方 seat0，对手 r34a 在飞件）",
+ "tail_removal_kinds": {
+  "CARE": 779
+ },
+ "guard_io": {
+  "steps_logged": 719,
+  "interventions": 0,
+  "diff_cats": {},
+  "examples": [],
+  "guard_touches_sell_hands_farmer": false
+ },
+ "tape_vs_emitted_r34a": {
+  "diff_cats": {
+   "market:BUY_PRODUCT->BUY_PRODUCT": 1,
+   "market:BUY_PRODUCT->SELL": 1,
+   "market:SELL->BUY_SEED": 2,
+   "market:BUY_SEED->EMPTY": 24,
+   "market:SELL->HIRE": 5,
+   "market:BUY_PRODUCT->HIRE": 2,
+   "market:HIRE->BUY_ANIMAL": 2,
+   "market:BUY_ANIMAL->EMPTY": 2,
+   "market:EMPTY->SELL": 49,
+   "market:SELL->SELL": 63,
+   "market:BUY_SEED->SELL": 3,
+   "market:EMPTY->BUY_SEED": 30,
+   "market:HIRE->SELL": 12,
+   "market:EMPTY->HIRE": 16,
+   "market:EMPTY->EMPTY": 7,
+   "market:BUY_SEED->BUY_SEED": 20,
+   "hands:PLANT->PLANT": 29,
+   "market:EMPTY->BUY_PRODUCT": 7,
+   "hands:PASS->EAST": 12,
+   "hands:PASS->NORTH": 3,
+   "hands:PASS->DROP": 11,
+   "market:SELL->EMPTY": 107,
+   "market:HIRE->EMPTY": 4,
+   "hands:FEED->PASS": 41,
+   "hands:WATER->FERTILIZE": 6,
+   "hands:PASS->WEST": 8,
+   "hands:PASS->SOUTH": 4,
+   "farmer": 11,
+   "hands:EMPTY->PICKUP": 5,
+   "hands:EMPTY->WEST": 20,
+   "hands:EMPTY->FERTILIZE": 32,
+   "hands:EMPTY->NORTH": 19,
+   "hands:EMPTY->EAST": 13,
+   "hands:EMPTY->PASS": 10,
+   "hands:EMPTY->SOUTH": 7,
+   "hands:PASS->HARVEST": 4,
+   "market:SELL->BUY_PRODUCT": 2,
+   "hands:EAST->COLLECT_FERTILIZER": 1,
+   "hands:PASS->COLLECT_FERTILIZER": 4,
+   "hands:SOUTH->COLLECT_FERTILIZER": 1,
+   "hands:DROP->EAST": 1,
+   "hands:CARE->SOUTH": 1,
+   "hands:PLACE->DROP": 1,
+   "hands:PLACE->PASS": 1
+  },
+  "examples": [
+   {
+    "step": 0,
+    "slot": 0,
+    "a": [
+     "BUY_PRODUCT",
+     "WHEAT",
+     13
+    ],
+    "b": [
+     "BUY_PRODUCT",
+     "WHEAT",
+     20
+    ],
+    "kind": "market:BUY_PRODUCT->BUY_PRODUCT"
+   },
+   {
+    "step": 0,
+    "slot": 1,
+    "a": [
+     "BUY_PRODUCT",
+     "WHEAT",
+     30
+    ],
+    "b": [
+     "SELL",
+     "WHEAT",
+     15
+    ],
+    "kind": "market:BUY_PRODUCT->SELL"
+   },
+   {
+    "step": 0,
+    "slot": 2,
+    "a": [
+     "SELL",
+     "WHEAT",
+     30
+    ],
+    "b": [
+     "BUY_SEED",
+     "WHEAT",
+     1
+    ],
+    "kind": "market:SELL->BUY_SEED"
+   },
+   {
+    "step": 0,
+    "slot": 3,
+    "a": [
+     "BUY_SEED",
+     "WHEAT",
+     1
+    ],
+    "b": null,
+    "kind": "market:BUY_SEED->EMPTY"
+   },
+   {
+    "step": 1,
+    "slot": 0,
+    "a": [
+     "SELL",
+     "WHEAT",
+     13
+    ],
+    "b": [
+     "HIRE"
+    ],
+    "kind": "market:SELL->HIRE"
+   },
+   {
+    "step": 1,
+    "slot": 1,
+    "a": [
+     "BUY_PRODUCT",
+     "WHEAT",
+     5
+    ],
+    "b": [
+     "HIRE"
+    ],
+    "kind": "market:BUY_PRODUCT->HIRE"
+   },
+   {
+    "step": 1,
+    "slot": 5,
+    "a": [
+     "HIRE"
+    ],
+    "b": [
+     "BUY_ANIMAL",
+     "COW",
+     2
+    ],
+    "kind": "market:HIRE->BUY_ANIMAL"
+   },
+   {
+    "step": 1,
+    "slot": 6,
+    "a": [
+     "HIRE"
+    ],
+    "b": [
+     "BUY_ANIMAL",
+     "SHEEP",
+     2
+    ],
+    "kind": "market:HIRE->BUY_ANIMAL"
+   },
+   {
+    "step": 1,
+    "slot": 7,
+    "a": [
+     "BUY_ANIMAL",
+     "COW",
+     2
+    ],
+    "b": null,
+    "kind": "market:BUY_ANIMAL->EMPTY"
+   },
+   {
+    "step": 1,
+    "slot": 8,
+    "a": [
+     "BUY_ANIMAL",
+     "SHEEP",
+     2
+    ],
+    "b": null,
+    "kind": "market:BUY_ANIMAL->EMPTY"
+   }
+  ],
+  "note": "纯净 r34a 跑（无 r37 三手术）磁带 vs 实发差异=底盘反应层（hand_align/weed_repair/sell_lead/clamp_sells/dead_stock/terminal_liquidation/_cxd_reorder）原生改写"
+ },
+ "tape_vs_emitted_r37": {
+  "diff_cats": {
+   "market:BUY_PRODUCT->BUY_PRODUCT": 1,
+   "market:BUY_PRODUCT->SELL": 1,
+   "market:SELL->BUY_SEED": 2,
+   "market:BUY_SEED->EMPTY": 24,
+   "market:SELL->HIRE": 5,
+   "market:BUY_PRODUCT->HIRE": 2,
+   "market:HIRE->BUY_ANIMAL": 2,
+   "market:BUY_ANIMAL->EMPTY": 2,
+   "market:EMPTY->SELL": 49,
+   "market:SELL->SELL": 62,
+   "market:BUY_SEED->SELL": 3,
+   "market:EMPTY->BUY_SEED": 30,
+   "market:HIRE->SELL": 12,
+   "market:EMPTY->HIRE": 16,
+   "market:EMPTY->EMPTY": 7,
+   "market:BUY_SEED->BUY_SEED": 20,
+   "hands:PLANT->PLANT": 29,
+   "market:EMPTY->BUY_PRODUCT": 7,
+   "hands:PASS->EAST": 12,
+   "hands:PASS->NORTH": 3,
+   "hands:PASS->DROP": 11,
+   "market:SELL->EMPTY": 108,
+   "market:HIRE->EMPTY": 4,
+   "hands:FEED->PASS": 41,
+   "hands:WATER->FERTILIZE": 6,
+   "hands:PASS->WEST": 8,
+   "hands:PASS->SOUTH": 5,
+   "farmer": 11,
+   "hands:EMPTY->PICKUP": 5,
+   "hands:EMPTY->WEST": 20,
+   "hands:EMPTY->FERTILIZE": 32,
+   "hands:EMPTY->NORTH": 19,
+   "hands:EMPTY->EAST": 13,
+   "hands:EMPTY->PASS": 10,
+   "hands:EMPTY->SOUTH": 7,
+   "hands:PASS->HARVEST": 4,
+   "market:SELL->BUY_PRODUCT": 2,
+   "hands:EAST->COLLECT_FERTILIZER": 1,
+   "hands:PASS->COLLECT_FERTILIZER": 4,
+   "hands:SOUTH->COLLECT_FERTILIZER": 1,
+   "hands:DROP->EAST": 1,
+   "hands:PLACE->DROP": 1,
+   "hands:PLACE->PASS": 1
+  },
+  "examples": [
+   {
+    "step": 0,
+    "slot": 0,
+    "a": [
+     "BUY_PRODUCT",
+     "WHEAT",
+     13
+    ],
+    "b": [
+     "BUY_PRODUCT",
+     "WHEAT",
+     20
+    ],
+    "kind": "market:BUY_PRODUCT->BUY_PRODUCT"
+   },
+   {
+    "step": 0,
+    "slot": 1,
+    "a": [
+     "BUY_PRODUCT",
+     "WHEAT",
+     30
+    ],
+    "b": [
+     "SELL",
+     "WHEAT",
+     15
+    ],
+    "kind": "market:BUY_PRODUCT->SELL"
+   },
+   {
+    "step": 0,
+    "slot": 2,
+    "a": [
+     "SELL",
+     "WHEAT",
+     30
+    ],
+    "b": [
+     "BUY_SEED",
+     "WHEAT",
+     1
+    ],
+    "kind": "market:SELL->BUY_SEED"
+   },
+   {
+    "step": 0,
+    "slot": 3,
+    "a": [
+     "BUY_SEED",
+     "WHEAT",
+     1
+    ],
+    "b": null,
+    "kind": "market:BUY_SEED->EMPTY"
+   },
+   {
+    "step": 1,
+    "slot": 0,
+    "a": [
+     "SELL",
+     "WHEAT",
+     13
+    ],
+    "b": [
+     "HIRE"
+    ],
+    "kind": "market:SELL->HIRE"
+   },
+   {
+    "step": 1,
+    "slot": 1,
+    "a": [
+     "BUY_PRODUCT",
+     "WHEAT",
+     5
+    ],
+    "b": [
+     "HIRE"
+    ],
+    "kind": "market:BUY_PRODUCT->HIRE"
+   },
+   {
+    "step": 1,
+    "slot": 5,
+    "a": [
+     "HIRE"
+    ],
+    "b": [
+     "BUY_ANIMAL",
+     "COW",
+     2
+    ],
+    "kind": "market:HIRE->BUY_ANIMAL"
+   },
+   {
+    "step": 1,
+    "slot": 6,
+    "a": [
+     "HIRE"
+    ],
+    "b": [
+     "BUY_ANIMAL",
+     "SHEEP",
+     2
+    ],
+    "kind": "market:HIRE->BUY_ANIMAL"
+   },
+   {
+    "step": 1,
+    "slot": 7,
+    "a": [
+     "BUY_ANIMAL",
+     "COW",
+     2
+    ],
+    "b": null,
+    "kind": "market:BUY_ANIMAL->EMPTY"
+   },
+   {
+    "step": 1,
+    "slot": 8,
+    "a": [
+     "BUY_ANIMAL",
+     "SHEEP",
+     2
+    ],
+    "b": null,
+    "kind": "market:BUY_ANIMAL->EMPTY"
+   }
+  ]
+ },
+ "crossrun_r37_vs_r34a": {
+  "diff_cats": {
+   "hands:PASS->CARE": 16,
+   "farmer": 2,
+   "market:SELL->SELL": 1,
+   "market:EMPTY->SELL": 1
+  },
+  "sell_steps": [
+   710,
+   711
+  ],
+  "drop_steps": [],
+  "place_steps": [],
+  "examples": [
+   {
+    "step": 675,
+    "unit": 4,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 676,
+    "unit": 4,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 676,
+    "unit": 7,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 676,
+    "unit": 10,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 676,
+    "kind": "farmer",
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ]
+   },
+   {
+    "step": 679,
+    "unit": 4,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 680,
+    "unit": 4,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 680,
+    "unit": 10,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 683,
+    "unit": 7,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 687,
+    "unit": 7,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 687,
+    "unit": 10,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 688,
+    "kind": "farmer",
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ]
+   },
+   {
+    "step": 690,
+    "unit": 10,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 694,
+    "unit": 10,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   },
+   {
+    "step": 695,
+    "unit": 3,
+    "a": [
+     "PASS"
+    ],
+    "b": [
+     "CARE"
+    ],
+    "kind": "hands:PASS->CARE"
+   }
+  ]
+ },
+ "guard_io_disaster_corpus": {
+  "note": "6 灾难局×2 席录制逐步 (observation, action) 共 8628 步喂守卫纯核（旧版正是此类状态一局扣 16/17 张买畜单）",
+  "steps": 8628,
+  "interventions": 36,
+  "buy_defers": 20,
+  "buy_refills_net": 17,
+  "diff_cats": {
+   "market:BUY_ANIMAL->EMPTY": 13,
+   "market:BUY_SEED->EMPTY": 7,
+   "market:EMPTY->BUY_SEED": 6,
+   "market:EMPTY->BUY_ANIMAL": 11
+  },
+  "examples": [
+   {
+    "replay": "episode-112938600-replay.json",
+    "seat": 0,
+    "slot": 7,
+    "a": [
+     "BUY_ANIMAL",
+     "SHEEP",
+     2
+    ],
+    "b": [],
+    "kind": "market:BUY_ANIMAL->EMPTY"
+   },
+   {
+    "replay": "episode-112968467-replay.json",
+    "seat": 0,
+    "slot": 2,
+    "a": [],
+    "b": [
+     "BUY_SEED",
+     "WHEAT",
+     2
+    ],
+    "kind": "market:EMPTY->BUY_SEED"
+   }
+  ],
+  "guard_touches_sell_hands_farmer": false
+ },
+ "attribution": {
+  "guard_touches_sell_drop_place": false,
+  "conclusion": "SELL/DROP/PLACE 动作差异非守卫/手术越权：①守卫纯核 I/O 在灾难语料 8628 步与真局上零卖单/单元/放置改动（改动仅 BUY_SEED/BUY_ANIMAL 槽→[] 与 []→购买单回填；修订③种子回填实证 6 次）；②尾盘手术实删仅 CARE 779 条（d28 窗内），FEED/HIRE 在该磁带无可删项，卖单/放置在其「误删即抛」对账之外；③差异本体=底版底盘反应层（hand_align/weed_repair/sell_lead/front_run/clamp_sells/dead_stock/terminal_liquidation/_cxd_reorder）对磁带的原生改写——纯净 r34a 跑磁带 vs 实发即有 SELL 重排/增删与 hands PASS→DROP/PLACE 改写（两跑对照合计 SELL 槽 200+ 处、DROP/PLACE 类 13+ 处）；④r37 vs r34a 实发差（seed1000 探针）=尾盘 CARE 删除（675 起 PASS 替换）与羊时序/尾盘状态差经反应层放大后的卖单微差（710/711 两槽）——属守卫现金轨迹/尾盘手术的合理副作用（闭环节奏下任何状态差都会改写反应层输出），非越权、无需修复；处置=evidence 留档。",
+  "fix_applied": "none（排查结论=非守卫侧越权；①②③修复后守卫 I/O 面反而收窄：灾难语料 36 处干预全部限于购买槽）"
+ }
+}

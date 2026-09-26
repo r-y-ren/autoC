@@ -1,34 +1,52 @@
 # -*- coding: utf-8 -*-
 """R19 测试面：cash_guard_block（入口/floor 组/defer 组）。
 
-defer 组 = _r37_defer_low_priority 真测试（合成 obs/action 用例①-⑦）：
+2026-09-26 跨批修订钉（用户裁决：现金守卫三处过度扣单根因修复）：
+①逐单价丢单线（BUY_ANIMAL=该单实际成本 qty×单价，付得起不拦）；
+②执行点现金计入同列表位序在前 SELL 单预期收入（卖价=observation 市场价，
+  读不到回退不计）；③BUY_SEED 入顺延账重发范围（FIFO 回填）。
+
+defer 组 = _r37_defer_low_priority 真测试（合成 obs/action 用例①-⑨）：
 ①缓 MELON 种子腾现金到下限（MELON 优先于价更高的 STRAWBERRY）；
-②现金不足 500 时 BUY_ANIMAL 整单入顺延账+槽置 []（卖单不动；下限已满足仍入账）；
+②BUY_ANIMAL 逐单价丢单保护（修订①）：实际成本不足整单入账+槽置 []
+  （卖单不动），付得起的单不拦（COW 450 反例）+ qty×单价 为线；
 ③HIRE/FEED/CARE/SELL/动物格 HARVEST/移动类一字节不动（逐类断言）+ HIRE 硬开销
   1+1+2=4 金核算（双面包夹恰=4）；
 ④槽位数不变（[] 空槽保位置语义，含既有空槽，防塌缩）；
-⑤异常→原动作（状态缺 money / hit_floor 畸形 / action 非 dict，且同型正常态确会顺延）；
+⑤异常→原动作（状态缺 money / hit_floor 畸形[含 kind 枚举] / prices 畸形 /
+  action 非 dict，且同型正常态确会顺延）；
 ⑥多单连续缓到达标（MELON 尾序→下一 MELON→其余种子，一次不够继续缓）；
-⑦无单可缓→尽力返回不抛（只剩 HIRE/卖单、market 缺失）。
-floor 组 = _r37_cash_guard 真测试（合成 obs/floors 用例①-⑦）：
+⑦无单可缓→尽力返回不抛（只剩 HIRE/卖单、market 缺失）；
+⑧卖单收入计入 end（修订②）：同列表卖单收入使下限达标→零顺延（反例=价读
+  不到回退不计仍顺延），卖单本体一字节不动；
+⑨kind=buy_animal 不施加 end 下限（平线连坐废止）：end 低于 floor 但无
+  丢单→零顺延。
+floor 组 = _r37_cash_guard 真测试（合成 obs/floors 用例①-⑧）：
 ①d0 日终窗（step 20..23）触线（动作后现金<12）→ hit_floor 非 None+动作被顺延，
   窗定义边界钉住（step 19/24 不适用、step 20/23 适用）；
-②含 BUY_ANIMAL 且执行点现金<500 → 保护性顺延（执行点口径钉住：提交前 ≥500 不触）；
+②BUY_ANIMAL 逐单价丢单线（修订①）：执行点现金<该单实际成本才触（450 分界：
+  COW 400 放行/羊 500 拦；qty×单价 为线）；提交前付得起不触（850 反例）；
 ③未触线零足迹（同对象返回+defer 不被调用，monkeypatch 计数）；
-④floors 可配置生效（改 d0_end/buy_animal 值判定随之变）；
+④floors 可配置生效（改 d0_end 判定随之变；buy_animal 经 prices 覆盖表标定）；
 ⑤hard_min 不可破（数值 <4 夹到 4；hard_min 更严生效）；
-⑥畸形 obs/floors/action → 原动作不干预（同型正常态确会触线）；
-⑦双命中取更严（默认取 buy_animal 500；d0_end 更严随 d0_end；等值取 d0_end）。
-入口组 = _r37_agent 真测试（合成 obs/action 用例①-⑧）：
+⑥畸形 obs/floors/action → 原动作不干预（含旧版平线数值 buy_animal、prices
+  畸形；同型正常态确会触线）；
+⑦双命中取 d0_end（修订①：其处置覆盖逐单丢单保护；等值/大值皆随 d0_end）；
+⑧卖单收入计入（修订②）：位序在前 SELL 收入使 BUY_ANIMAL 执行点达标→放行；
+  位序在后不计→仍拦；卖价读不到→回退不计=保守；卖单本体不动（反例钉住）。
+入口组 = _r37_agent 真测试（合成 obs/action 用例①-⑨）：
 ①正常路径：guard 被调用（floors 三键常数钉住）且返回其 adjusted_action；
 ②guard 抛异常/返回畸形 adjusted_action → base_action 原样（fail-safe+账不动）；
 ③step==0 复位顺延账（预置账后 step0 调用→账清，且复位先于重试不回填）；
 ④重试回填：账中 BUY_ANIMAL+现金达标→回填空槽成功出账（真守卫不误伤）；
 ⑤无空槽→留账不回填且不挤占既有单（槽位对象逐一原样）；
-⑥现金不达标→留账不回填；
+⑥现金不达标→留账不回填（逐单价线：COW 350<400 留账；450 分界=COW 回填/
+  SHEEP 留账）；
 ⑦动作集合不变量：HARVEST/卖单/HIRE/既有单一字节不动、槽位数不变
   （回填路径+守卫顺延路径两调用，顺延路径兼钉新顺延入账）；
-⑧零干预路径同对象返回。
+⑧零干预路径同对象返回；
+⑨BUY_SEED 入重发范围（修订③）：账中种子达标即回填（FIFO）；高价意图
+  不饿死低价意图（SHEEP 留账 MELON 回填），种子回填账序=顺延序。
 """
 import pytest  # noqa: F401
 
@@ -57,7 +75,7 @@ def test_r37_agent(monkeypatch):
     obs_g, act_g, floors = calls[0]
     assert obs_g is obs
     assert act_g is base  # 空账零回填→基座动作原对象交守卫
-    assert floors == {"d0_end": 12, "buy_animal": 500, "hard_min": 4}
+    assert floors == {"d0_end": 12, "buy_animal": "exact_cost", "hard_min": 4}
     assert cash_guard_block._r37_agent._defer_ledger == []
 
     # ⑧零干预路径同对象返回（真守卫：step 10 窗外+动作无 BUY_ANIMAL→零足迹）。
@@ -109,7 +127,7 @@ def test_r37_agent_step0_reset():
 
 def test_r37_agent_retry_refill():
     # ④账中 BUY_ANIMAL+现金达标→回填空槽成功出账（真守卫同口径同线不误伤：
-    # at 520≥500→零足迹放行，回填单留存）。
+    # at 520≥300[GOOSE 实际成本]→零足迹放行，回填单留存）。
     cash_guard_block._r37_agent._defer_ledger = [
         {"op": "BUY_ANIMAL", "item": "GOOSE", "qty": 1, "cost": 300, "slot": 3}]
     base = _act([[], ["SELL", "WOOL", 1]])
@@ -130,14 +148,64 @@ def test_r37_agent_retry_refill():
     assert all(out5["market"][i] is base5["market"][i] for i in range(3))
     assert cash_guard_block._r37_agent._defer_ledger == [entry5]  # 留账
 
-    # ⑥现金不达标（执行点 450<500）→留账不回填。
+    # ⑥逐单价线（修订①）：350<400（COW 成本）→留账不回填；450 分界=
+    # COW（400）回填/SHEEP（500）留账（付得起的不再被平线 500 连坐）。
     entry6 = {"op": "BUY_ANIMAL", "item": "COW", "qty": 1, "cost": 400, "slot": 1}
     cash_guard_block._r37_agent._defer_ledger = [entry6]
     base6 = _act([[], ["SELL", "WOOL", 1]])
-    out6 = cash_guard_block._r37_agent(dict(_obs(450), step=10), base6)
+    out6 = cash_guard_block._r37_agent(dict(_obs(350), step=10), base6)
     assert out6 is base6
     assert base6["market"][0] == []  # 空槽未被回填
     assert cash_guard_block._r37_agent._defer_ledger == [entry6]
+
+    cash_guard_block._r37_agent._defer_ledger = [dict(entry6)]
+    out6b = cash_guard_block._r37_agent(dict(_obs(450), step=10),
+                                        _act([[], ["SELL", "WOOL", 1]]))
+    assert out6b["market"][0] == ["BUY_ANIMAL", "COW", 1]   # 450≥400 回填
+    assert cash_guard_block._r37_agent._defer_ledger == []
+
+    entry6c = {"op": "BUY_ANIMAL", "item": "SHEEP", "qty": 1, "cost": 500, "slot": 1}
+    cash_guard_block._r37_agent._defer_ledger = [dict(entry6c)]
+    out6c = cash_guard_block._r37_agent(dict(_obs(450), step=10),
+                                        _act([[], ["SELL", "WOOL", 1]]))
+    assert out6c["market"][0] == []                          # 450<500 留账
+    assert cash_guard_block._r37_agent._defer_ledger == [entry6c]
+
+
+def test_r37_agent_seed_refill():
+    # ⑨BUY_SEED 入重发范围（修订③）：账中种子现金达标即回填空 [] 槽（FIFO）。
+    cash_guard_block._r37_agent._defer_ledger = [
+        {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80, "slot": 1}]
+    base = _act([[], ["SELL", "WOOL", 1]])
+    out = cash_guard_block._r37_agent(dict(_obs(100), step=10), base)
+    assert out is not base
+    assert out["market"][0] == ["BUY_SEED", "MELON", 1]
+    assert out["market"][1] is base["market"][1]  # 卖单原对象不动
+    assert base["market"][0] == []
+    assert cash_guard_block._r37_agent._defer_ledger == []  # 回填成功→出账
+
+    # FIFO+高价意图不饿死低价意图：SHEEP（500>450）无可负担空槽→留账，
+    # 后续 MELON 照常回填（旧版 break 连坐=种子永久丢弃根因③）。
+    sheep = {"op": "BUY_ANIMAL", "item": "SHEEP", "qty": 1, "cost": 500, "slot": 0}
+    melon = {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80, "slot": 1}
+    cash_guard_block._r37_agent._defer_ledger = [sheep, melon]
+    out2 = cash_guard_block._r37_agent(dict(_obs(450), step=10),
+                                       _act([[], [], ["HIRE"]]))
+    assert out2["market"][0] == ["BUY_SEED", "MELON", 1]   # 低价意图先补上
+    assert out2["market"][1] == []
+    assert out2["market"][2] is not None
+    assert cash_guard_block._r37_agent._defer_ledger == [sheep]  # 高价意图留账
+
+    # 账序=顺延序（FIFO）：两条均可负担→按账序落先后空槽。
+    cash_guard_block._r37_agent._defer_ledger = [
+        {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80, "slot": 5},
+        {"op": "BUY_ANIMAL", "item": "GOOSE", "qty": 1, "cost": 300, "slot": 6}]
+    base3 = _act([[], [], ["SELL", "WOOL", 1]])
+    out3 = cash_guard_block._r37_agent(dict(_obs(600), step=10), base3)
+    assert out3["market"][0] == ["BUY_SEED", "MELON", 1]     # 先顺延先回填
+    assert out3["market"][1] == ["BUY_ANIMAL", "GOOSE", 1]
+    assert out3["market"][2] is base3["market"][2]           # 卖单原对象不动
+    assert cash_guard_block._r37_agent._defer_ledger == []
 
 
 def test_r37_agent_action_invariants():
@@ -148,7 +216,7 @@ def test_r37_agent_action_invariants():
     base = _act([["SELL", "WOOL", 3], ["BUY_SEED", "MELON", 1], [], ["HIRE"]],
                 farmer=["HARVEST"], hands=[["FEED"], ["CARE"], ["NORTH"]])
     out = cash_guard_block._r37_agent(dict(_obs(600), step=10), base)
-    assert out["market"][2] == ["BUY_ANIMAL", "GOOSE", 1]  # 回填空槽（at 520≥500）
+    assert out["market"][2] == ["BUY_ANIMAL", "GOOSE", 1]  # 回填空槽（at 520≥300）
     assert out["farmer"] is base["farmer"] and out["farmer"] == ["HARVEST"]
     assert out["hands"] is base["hands"]
     assert out["hands"] == [["FEED"], ["CARE"], ["NORTH"]]
@@ -176,8 +244,11 @@ def test_r37_agent_action_invariants():
 
 
 def test_r37_cash_guard_floor(monkeypatch):
-    def F(d0=12, ba=500, hard=4):
-        return {"d0_end": d0, "buy_animal": ba, "hard_min": hard}
+    def F(d0=12, ba="exact_cost", hard=4, prices=None):
+        f = {"d0_end": d0, "buy_animal": ba, "hard_min": hard}
+        if prices is not None:
+            f["prices"] = prices
+        return f
 
     # ①d0 日终窗触线：50−80−10=−40 < 12 → hit_floor 非 None+MELON 被顺延。
     act = _act([["BUY_SEED", "MELON", 1], ["BUY_SEED", "WHEAT", 1]])
@@ -193,19 +264,27 @@ def test_r37_cash_guard_floor(monkeypatch):
         out3 = cash_guard_block._r37_cash_guard(dict(_obs(50), step=step_in), act, F())
         assert out3["hit_floor"] == {"floor": 12, "kind": "d0_end"}
 
-    # ②BUY_ANIMAL 执行点现金<500 → 保护性顺延（整单入账）。
-    act_b = _act([["BUY_ANIMAL", "COW", 1]])
-    out_b = cash_guard_block._r37_cash_guard(dict(_obs(450), step=10), act_b, F())
-    assert out_b["hit_floor"] == {"floor": 500, "kind": "buy_animal"}
-    assert out_b["adjusted_action"]["market"] == [[]]
-    # 执行点口径钉住：提交前 850 ≥ 500 不触（动作后 450<500 不作触发）。
-    out_b2 = cash_guard_block._r37_cash_guard(dict(_obs(850), step=10), act_b, F())
-    assert out_b2["hit_floor"] is None and out_b2["adjusted_action"] is act_b
+    # ②逐单价丢单线（修订①）：450 分界——COW（400）放行/羊（500）拦。
+    act_cow = _act([["BUY_ANIMAL", "COW", 1]])
+    out_cow = cash_guard_block._r37_cash_guard(dict(_obs(450), step=10), act_cow, F())
+    assert out_cow["hit_floor"] is None and out_cow["adjusted_action"] is act_cow
+    act_sheep = _act([["BUY_ANIMAL", "SHEEP", 1]])
+    out_sheep = cash_guard_block._r37_cash_guard(dict(_obs(450), step=10), act_sheep, F())
+    assert out_sheep["hit_floor"] == {"floor": 500, "kind": "buy_animal"}
+    assert out_sheep["adjusted_action"]["market"] == [[]]
+    # 线=qty×单价：COW×2 成本 800，450 执行点不足→整单顺延。
+    out_qty = cash_guard_block._r37_cash_guard(dict(_obs(450), step=10),
+                                               _act([["BUY_ANIMAL", "COW", 2]]), F())
+    assert out_qty["hit_floor"] == {"floor": 800, "kind": "buy_animal"}
+    assert out_qty["adjusted_action"]["market"] == [[]]
+    # 执行点口径钉住：提交前 850 ≥ 400 不触（动作后 450<500 不作触发）。
+    out_b2 = cash_guard_block._r37_cash_guard(dict(_obs(850), step=10), act_cow, F())
+    assert out_b2["hit_floor"] is None and out_b2["adjusted_action"] is act_cow
 
     # ③未触线零足迹（monkeypatch 计数 defer 未被调用）；换桩后 undo 保后续用例真 defer。
     calls = []
 
-    def _counting(observation, action, hit_floor):
+    def _counting(observation, action, hit_floor, prices=None):
         calls.append(hit_floor)
         return {"action": action, "deferred": []}
 
@@ -223,11 +302,13 @@ def test_r37_cash_guard_floor(monkeypatch):
     out_d2 = cash_guard_block._r37_cash_guard(_obs(30), act_c, F(d0=30))
     assert out_d2["hit_floor"] == {"floor": 30, "kind": "d0_end"}
     assert out_d2["adjusted_action"]["market"] == [[]]
-    # buy_animal 同理可配置：GOOSE 提交前 550 在 500 线下放行、600 线上触线。
+    # buy_animal 经 prices 覆盖表标定：GOOSE 提交前 550 缺省（300）放行、
+    # 覆盖价 600 下触线（逐单价线随之移动）。
     act_g = _act([["BUY_ANIMAL", "GOOSE", 1]])
     out_g = cash_guard_block._r37_cash_guard(dict(_obs(550), step=10), act_g, F())
     assert out_g["hit_floor"] is None and out_g["adjusted_action"] is act_g
-    out_g2 = cash_guard_block._r37_cash_guard(dict(_obs(550), step=10), act_g, F(ba=600))
+    out_g2 = cash_guard_block._r37_cash_guard(dict(_obs(550), step=10), act_g,
+                                              F(prices={"GOOSE": 600}))
     assert out_g2["hit_floor"] == {"floor": 600, "kind": "buy_animal"}
     assert out_g2["adjusted_action"]["market"] == [[]]
 
@@ -260,12 +341,25 @@ def test_r37_cash_guard_floor(monkeypatch):
         assert out_m["hit_floor"] is None and out_m["adjusted_action"] is act_m, bad_obs
 
     for bad_floor in (None, [], "floors", {},                       # 非 dict/缺三键
-                      {"d0_end": 12, "buy_animal": 500},            # 缺 hard_min
-                      {"d0_end": "12", "buy_animal": 500, "hard_min": 4},    # 非数
-                      {"d0_end": 12, "buy_animal": 500, "hard_min": None},  # 非数
-                      {"d0_end": True, "buy_animal": 500, "hard_min": 4},   # bool 不作数
-                      {"d0_end": float("nan"), "buy_animal": 500, "hard_min": 4},
-                      {"d0_end": 12, "buy_animal": float("inf"), "hard_min": 4}):
+                      {"d0_end": 12, "buy_animal": "exact_cost"},   # 缺 hard_min
+                      {"d0_end": "12", "buy_animal": "exact_cost",
+                       "hard_min": 4},                              # 非数
+                      {"d0_end": 12, "buy_animal": "exact_cost",
+                       "hard_min": None},                           # 非数
+                      {"d0_end": True, "buy_animal": "exact_cost",
+                       "hard_min": 4},                              # bool 不作数
+                      {"d0_end": float("nan"), "buy_animal": "exact_cost",
+                       "hard_min": 4},
+                      {"d0_end": 12, "buy_animal": "exact_cost",
+                       "hard_min": float("inf")},
+                      {"d0_end": 12, "buy_animal": 500,              # 旧版平线数值废止
+                       "hard_min": 4},
+                      {"d0_end": 12, "buy_animal": "exact_cost", "hard_min": 4,
+                       "prices": "x"},                              # prices 非 dict
+                      {"d0_end": 12, "buy_animal": "exact_cost", "hard_min": 4,
+                       "prices": {"COW": -1}},                      # 非正价
+                      {"d0_end": 12, "buy_animal": "exact_cost", "hard_min": 4,
+                       "prices": {"COW": "400"}}):                  # 非数价
         out_m = cash_guard_block._r37_cash_guard(_obs(50), act_m, bad_floor)
         assert out_m["hit_floor"] is None and out_m["adjusted_action"] is act_m, bad_floor
 
@@ -273,14 +367,14 @@ def test_r37_cash_guard_floor(monkeypatch):
     out_m = cash_guard_block._r37_cash_guard(_obs(50), weird, F())
     assert out_m["hit_floor"] is None and out_m["adjusted_action"] is weird
 
-    # ⑦双命中取更严：d0 窗内 + BUY_ANIMAL 执行点 300<500 + 动作后 −100<12 两线同触
-    # → 默认取 buy_animal 500。
+    # ⑦双命中取 d0_end（修订①：其处置覆盖逐单丢单保护）：d0 窗内 + BUY_ANIMAL
+    # 执行点 300<400 + 动作后 −100<12 两线同触 → 随 d0_end（floor 12）。
     act_h = _act([["BUY_ANIMAL", "COW", 1]])
     out_h = cash_guard_block._r37_cash_guard(dict(_obs(300), step=23), act_h, F())
-    assert out_h["hit_floor"] == {"floor": 500, "kind": "buy_animal"}
+    assert out_h["hit_floor"] == {"floor": 12, "kind": "d0_end"}
     assert out_h["adjusted_action"]["market"] == [[]]
-    # 反向更严：d0_end=600 > buy_animal 500 → kind 随更严线（end=170、GOOSE 执行点
-    # 470 两线同触），顺延直至 600（MELON→GOOSE 全缓仍 550<600 尽力返回）。
+    # d0_end 配高更严同随 d0_end（end=170、GOOSE 执行点 470 付得起 300 不触
+    # 丢单线），顺延直至 600（MELON→GOOSE 全缓仍 550<600 尽力返回）。
     act_h2 = _act([["BUY_SEED", "MELON", 1], ["BUY_ANIMAL", "GOOSE", 1]])
     out_h2 = cash_guard_block._r37_cash_guard(dict(_obs(550), step=23), act_h2, F(d0=600))
     assert out_h2["hit_floor"] == {"floor": 600, "kind": "d0_end"}
@@ -288,13 +382,52 @@ def test_r37_cash_guard_floor(monkeypatch):
     # 等值取 d0_end。
     out_h3 = cash_guard_block._r37_cash_guard(dict(_obs(300), step=23), act_h, F(d0=500))
     assert out_h3["hit_floor"] == {"floor": 500, "kind": "d0_end"}
+    # 窗外纯丢单→kind=buy_animal（触发线=被拦单成本）。
+    out_h4 = cash_guard_block._r37_cash_guard(dict(_obs(300), step=10), act_h, F())
+    assert out_h4["hit_floor"] == {"floor": 400, "kind": "buy_animal"}
+    assert out_h4["adjusted_action"]["market"] == [[]]
 
 
-def _obs(money, hires_today=0):
+def test_r37_cash_guard_sell_income():
+    # ⑧卖单收入计入（修订②）：位序在前 SELL 收入（2×60=120）使 COW 执行点
+    # 320+120=440 ≥ 400 放行（旧口径 320<500 连坐=过度扣单根因②）；卖价
+    # 估计=observation 市场价（_obs prices → market.prices）。
+    F = {"d0_end": 12, "buy_animal": "exact_cost", "hard_min": 4}
+    act = _act([["SELL", "WOOL", 2], ["BUY_ANIMAL", "COW", 1]])
+    out = cash_guard_block._r37_cash_guard(
+        dict(_obs(320, prices={"WOOL": 60}), step=10), act, F)
+    assert out["hit_floor"] is None and out["adjusted_action"] is act
+    assert out["adjusted_action"]["market"][0] is act["market"][0]  # 卖单不动
+
+    # 位序在后的卖单不计（引擎先序单位先成交：BUY 先结算，收入救不了它）。
+    act2 = _act([["BUY_ANIMAL", "COW", 1], ["SELL", "WOOL", 2]])
+    out2 = cash_guard_block._r37_cash_guard(
+        dict(_obs(320, prices={"WOOL": 60}), step=10), act2, F)
+    assert out2["hit_floor"] == {"floor": 400, "kind": "buy_animal"}
+    assert out2["adjusted_action"]["market"] == [[], ["SELL", "WOOL", 2]]
+    assert out2["adjusted_action"]["market"][1] is act2["market"][1]  # 卖单不动
+
+    # 卖价读不到→回退不计=保守：同型同现金仍拦（上例放行不是本来就不拦）。
+    out3 = cash_guard_block._r37_cash_guard(dict(_obs(320), step=10), act, F)
+    assert out3["hit_floor"] == {"floor": 400, "kind": "buy_animal"}
+    assert out3["adjusted_action"]["market"] == [["SELL", "WOOL", 2], []]
+
+    # d0 end 同计卖单收入：30+120−10=140 ≥ 12 不触 d0_end（卖单不动）。
+    act4 = _act([["SELL", "WOOL", 2], ["BUY_SEED", "WHEAT", 1]])
+    out4 = cash_guard_block._r37_cash_guard(
+        _obs(30, prices={"WOOL": 60}), act4, F)
+    assert out4["hit_floor"] is None and out4["adjusted_action"] is act4
+
+
+def _obs(money, hires_today=0, prices=None):
     """合成 observation：cash_guard_block 只读 player / farms[seat] 的 money、
-    hires_today（引擎 farm 字段名，kaggriculture.py _new_farm）。"""
-    return {"player": 0, "step": 23, "day": 0, "hour": 23,
-            "farms": [{"money": money, "hires_today": hires_today}]}
+    hires_today（引擎 farm 字段名，kaggriculture.py _new_farm）；prices 非
+    None 时补 observation["market"]["prices"]（卖价估计口径，修订②）。"""
+    obs = {"player": 0, "step": 23, "day": 0, "hour": 23,
+           "farms": [{"money": money, "hires_today": hires_today}]}
+    if prices is not None:
+        obs["market"] = {"prices": prices}
+    return obs
 
 
 def _act(market, farmer=None, hands=None):
@@ -319,9 +452,9 @@ def test_r37_defer_low_priority():
     assert act["market"] == [["BUY_SEED", "MELON", 1], ["BUY_SEED", "STRAWBERRY", 1]]
 
 
-def test_r37_defer_low_priority_buy_animal_below_500():
-    # ②a 现金不足 500：BUY_ANIMAL 整单入顺延账+槽置 []，卖单不动；320<500 无单
-    # 可缓→尽力返回不抛。
+def test_r37_defer_low_priority_buy_animal_exact_cost():
+    # ②a 逐单价丢单保护（修订①）：SHEEP×2 成本 1000>320 整单入顺延账+槽置 []，
+    # 卖单不动；320<1000 无单可缓→尽力返回不抛。
     act = _act([["BUY_ANIMAL", "SHEEP", 2], ["SELL", "WOOL", 3]])
     out = cash_guard_block._r37_defer_low_priority(
         _obs(320), act, {"floor": 500, "kind": "buy_animal"})
@@ -331,14 +464,52 @@ def test_r37_defer_low_priority_buy_animal_below_500():
     assert out["deferred"] == [{"op": "BUY_ANIMAL", "item": "SHEEP", "qty": 2,
                                 "cost": 1000, "slot": 0}]
 
-    # ②b 触线处置期间现金不足 500 的 BUY_ANIMAL 一律整单入账：此处下限 12 已
-    # 满足（450−400=50≥12），仍顺延——保意图防引擎静默丢（丢单线 400/400/500）。
+    # ②b 付得起的单不拦（旧版平线 500 连坐废止）：COW 成本 400≤450 执行点
+    # 付得起→零顺延零足迹（哪怕下限 12 已满足旧版仍顺延→红即回退）。
     act_b = _act([["BUY_ANIMAL", "COW", 1]])
     out_b = cash_guard_block._r37_defer_low_priority(
         _obs(450), act_b, {"floor": 12, "kind": "d0_end"})
-    assert out_b["action"]["market"] == [[]]
-    assert out_b["deferred"] == [{"op": "BUY_ANIMAL", "item": "COW", "qty": 1,
-                                  "cost": 400, "slot": 0}]
+    assert out_b["action"] is act_b and out_b["deferred"] == []
+    # 450 分界另一半：SHEEP 成本 500>450 → 整单入账。
+    act_c = _act([["BUY_ANIMAL", "SHEEP", 1]])
+    out_c = cash_guard_block._r37_defer_low_priority(
+        _obs(450), act_c, {"floor": 12, "kind": "d0_end"})
+    assert out_c["action"]["market"] == [[]]
+    assert out_c["deferred"] == [{"op": "BUY_ANIMAL", "item": "SHEEP", "qty": 1,
+                                  "cost": 500, "slot": 0}]
+    # 线=qty×单价：COW×2 成本 800>450 → 整单入账（cost 记 800）。
+    act_d = _act([["BUY_ANIMAL", "COW", 2]])
+    out_d = cash_guard_block._r37_defer_low_priority(
+        _obs(450), act_d, {"floor": 12, "kind": "d0_end"})
+    assert out_d["action"]["market"] == [[]]
+    assert out_d["deferred"] == [{"op": "BUY_ANIMAL", "item": "COW", "qty": 2,
+                                  "cost": 800, "slot": 0}]
+
+
+def test_r37_defer_low_priority_no_end_floor_for_buy_animal():
+    # ⑨kind=buy_animal 不施加 end 下限（平线连坐废止）：现金 450、动作后 0，
+    # COW 执行点付得起→零顺延（旧版按 end<500 连坐全缓→红即回退）。
+    act = _act([["BUY_ANIMAL", "COW", 1]])
+    out = cash_guard_block._r37_defer_low_priority(
+        _obs(450), act, {"floor": 500, "kind": "buy_animal"})
+    assert out["action"] is act and out["deferred"] == []
+
+
+def test_r37_defer_low_priority_sell_income():
+    # ⑧卖单收入计入 end（修订②）：30+2×60−80=70 ≥ 12 → 零顺延，卖单不动；
+    # 卖价估计=observation 市场价（_obs prices → market.prices）。
+    act = _act([["SELL", "WOOL", 2], ["BUY_SEED", "MELON", 1]])
+    out = cash_guard_block._r37_defer_low_priority(
+        _obs(30, prices={"WOOL": 60}), act, {"floor": 12, "kind": "d0_end"})
+    assert out["action"] is act and out["deferred"] == []
+    assert act["market"][0] == ["SELL", "WOOL", 2]  # 卖单不动（反例）
+    # 卖价读不到→回退不计=保守：30−80=−50 < 12 仍缓 MELON（卖单依旧不动）。
+    out2 = cash_guard_block._r37_defer_low_priority(
+        _obs(30), act, {"floor": 12, "kind": "d0_end"})
+    assert out2["action"]["market"] == [["SELL", "WOOL", 2], []]
+    assert out2["action"]["market"][0] is act["market"][0]
+    assert out2["deferred"] == [{"op": "BUY_SEED", "item": "MELON", "qty": 1,
+                                 "cost": 80, "slot": 1}]
 
 
 def test_r37_defer_low_priority_keeps_protected_ops():
@@ -407,9 +578,16 @@ def test_r37_defer_low_priority_fail_safe():
                       {"floor": -1, "kind": "d0_end"},  # 负下限
                       {"floor": 12},                    # 缺 kind
                       {"floor": "12", "kind": "d0_end"},  # 非数
+                      {"floor": 12, "kind": "weird"},   # kind 枚举外
+                      {"floor": 12, "kind": 500},       # kind 非 str
                       None):                            # 非 dict
         out = cash_guard_block._r37_defer_low_priority(_obs(50), act, bad_floor)
         assert out["action"] is act and out["deferred"] == [], bad_floor
+
+    for bad_prices in ("x", {"COW": 0}, {"COW": -1}, {"COW": "400"}, [1]):
+        out = cash_guard_block._r37_defer_low_priority(
+            _obs(50), act, {"floor": 12, "kind": "d0_end"}, bad_prices)
+        assert out["action"] is act and out["deferred"] == [], bad_prices
 
     weird = ["BUY_SEED", "MELON", 1]  # action 非 dict
     out = cash_guard_block._r37_defer_low_priority(

@@ -1,44 +1,31 @@
 {
+ "generated_at": "2026-09-26T05:57:03.143075+00:00",
  "source": "orderbook_2965_adopt/a/main.py",
  "source_sha256_before": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
  "source_sha256_after": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
  "source_unchanged": true,
- "generated_by": "orderbook_r37/build_r37.py::build_r37（真 r34a 构建验收实跑）",
+ "generated_by": "orderbook_r37/build_r37.py::build_r37（跨批修订真跑：cash_guard_block ①逐单价丢单线②卖单收入投影③BUY_SEED 重发）",
  "out_dir": "orderbook_r37/build",
  "artifacts": [
   "main.py",
   "submission.tar.gz",
   "build_manifest.json"
  ],
- "main_sha256": "430a702d73cc684de440616e2e1a8497f483ec24505b70a29d899089cf9fe838",
- "tar_sha256": "dcbdcf9743d292dfa121eb435f94a764dabe2f4d6da255c88e8f1bc59c8d1ab0",
+ "main_sha256": "efa7b195f1892284e473c0de5a2c28b1c76e37071080967aea808f200569169d",
+ "tar_sha256": "bd606c444273b117f1bf0c877e4f0d5aaa39897d8f58d1ceef12ab06d4e301cb",
+ "block_sha": "1e35de1643ccbc9e01e4d50e0ce3451b3a124d0743995e35cc315170692db24a",
  "manifest_whitelist_shas_complete": true,
  "diff_attribution_summary": {
   "ok": true,
-  "unattributed": 0,
+  "unattributed": [],
   "tail_guard_block": {
    "present": true,
-   "bytes": 229858,
-   "sha256": "9fec1502ee28ca816df3a0da60cf7f035500608396b1c7a8629f73b6f03107c4"
+   "bytes": 238452,
+   "sha256": "5bd406908f25a0afc9492d7daa08036d9ac9d076cd44e47afcbf129864fa634b"
   },
   "sheep_retiming": {
    "present": true,
-   "n_moves": 1,
-   "buy_moves": [
-    [
-     "115",
-     "buy_move",
-     265,
-     264
-    ]
-   ],
-   "skips": [
-    [
-     "12",
-     265
-    ]
-   ],
-   "no_ops": 229
+   "n_moves": 1
   },
   "tail_savings": {
    "present": true,
@@ -49,10 +36,15 @@
   }
  },
  "double_run": {
-  "run1_main_sha256": "430a702d73cc684de440616e2e1a8497f483ec24505b70a29d899089cf9fe838",
-  "run2_main_sha256": "430a702d73cc684de440616e2e1a8497f483ec24505b70a29d899089cf9fe838",
-  "run1_tar_sha256": "dcbdcf9743d292dfa121eb435f94a764dabe2f4d6da255c88e8f1bc59c8d1ab0",
-  "run2_tar_sha256": "dcbdcf9743d292dfa121eb435f94a764dabe2f4d6da255c88e8f1bc59c8d1ab0",
+  "method": "build_r37 全构建两跑（run2 落临时目录后清理）+ pack_r37 内置 tar 双跑",
+  "run1_main_sha256": "efa7b195f1892284e473c0de5a2c28b1c76e37071080967aea808f200569169d",
+  "run2_main_sha256": "efa7b195f1892284e473c0de5a2c28b1c76e37071080967aea808f200569169d",
+  "run1_tar_sha256": "bd606c444273b117f1bf0c877e4f0d5aaa39897d8f58d1ceef12ab06d4e301cb",
+  "run2_tar_sha256": "bd606c444273b117f1bf0c877e4f0d5aaa39897d8f58d1ceef12ab06d4e301cb",
+  "pack_tar_double_run": {
+   "run1": "bd606c444273b117f1bf0c877e4f0d5aaa39897d8f58d1ceef12ab06d4e301cb",
+   "run2": "bd606c444273b117f1bf0c877e4f0d5aaa39897d8f58d1ceef12ab06d4e301cb"
+  },
   "identical": true
  }
 }

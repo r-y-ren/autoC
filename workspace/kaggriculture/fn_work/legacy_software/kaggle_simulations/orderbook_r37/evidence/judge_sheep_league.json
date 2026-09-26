@@ -1,0 +1,1861 @@
+{
+ "generated_at": "2026-09-26T06:05:43.600236+00:00",
+ "pkg_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+ "pkg_sha256": "efa7b195f1892284e473c0de5a2c28b1c76e37071080967aea808f200569169d",
+ "r34a_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+ "r34a_sha256": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
+ "opponents": [
+  {
+   "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "sha256": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b"
+  }
+ ],
+ "method": {
+  "semantics": "离线真交易联赛（双席活件对打，非录像开环）：主对 r37 vs r34a 在飞件+强对手样本+mirror（r37 vs r37）；每独立 seed 双席位各一局，席位翻转不双计——统计按独立 seed n 报，h2h 按独立 seed 算",
+  "engine": "官方 kaggle_environments kaggriculture 场景，seed 显式逐局传入（kgenv.engine.run_episode 同参同语义；为捕获逐局状态行内联等价循环读 env.steps）",
+  "loader": "官方 last-callable 内存 exec 每局全新命名空间（R18 method note，phase_b.load_l3_callable 只调用不重写）",
+  "rows": "对打过程逐步状态行=parse_episode_states 同构双席行（env.steps[t][seat]→parse_states._parse_entry），逐局喂 count_shearings 我方席（r37）行",
+  "shearings": "count_shearings→{shearings:{total,rounds,round_count,per_sheep,…},care_rate,feed_rate}；逐局双指标=shearings_rounds（刀轮）+shearings_per_sheep_min（每羊 min，per_sheep None=不可归属→判据臂 fail-closed）；判据=刀轮 min≥5 ∧ 每羊 min≥5（对齐 retape_sheep 静态核算①②；达标率=rounds≥5 口径）",
+  "h2h": "主对 seed 级：胜=两席局皆胜、平=席位分歧或皆平、负=皆负；rate=(胜+0.5平)/独立局；判据 ≥0.55；无决胜 seed rate=0.0 fail-closed",
+  "win_games_not_flipped": "胜局不翻负=胜率判承载（用户批准口径）：由 h2h_vs_r34a_ge_055 同源判定，不另设门槛",
+  "strong_proxy": "分析22 败局对手谱系公开代码不可得，强对手样本以本仓最强可得件代理（r33 variant_tuned/r30 orderbook_derivative/v48_derivative）；+5pp 观测基线=分析20/22 r34a 强带胜率 69.8%",
+  "care_feed": "care_rate/feed_rate 为观测指标，不进门槛"
+ },
+ "config": {
+  "n_games_requested": 60,
+  "n_games_executed": 60,
+  "n_independent_planned": 30,
+  "seats_per_seed": 2,
+  "acceptance_range": [
+   300,
+   500
+  ],
+  "in_acceptance_range": false,
+  "arms": {
+   "main": {
+    "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+    "n_seeds": 22,
+    "seeds": [
+     1000,
+     1001,
+     1002,
+     1003,
+     1004,
+     1005,
+     1006,
+     1007,
+     1008,
+     1009,
+     1010,
+     1011,
+     1012,
+     1013,
+     1014,
+     1015,
+     1016,
+     1017,
+     1018,
+     1019,
+     1020,
+     1021
+    ]
+   },
+   "strong": [
+    {
+     "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+     "n_seeds": 4,
+     "seeds": [
+      2000,
+      2001,
+      2002,
+      2003
+     ]
+    }
+   ],
+   "mirror": {
+    "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+    "n_seeds": 4,
+    "seeds": [
+     9000,
+     9001,
+     9002,
+     9003
+    ]
+   }
+  }
+ },
+ "games": [
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1000,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    74442.0,
+    74442.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3875,
+   "feed_rate": 0.35,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 5.916
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1000,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    74442.0,
+    74442.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3875,
+   "feed_rate": 0.35,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.183
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1001,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    98991.0,
+    98991.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.4537037037037037,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.274
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1001,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    98991.0,
+    98991.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.4537037037037037,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.829
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1002,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    108298.0,
+    108298.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.4660493827160494,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.345
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1002,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    108298.0,
+    108298.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.4660493827160494,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.286
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1003,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    117778.0,
+    117778.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.48148148148148145,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.876
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1003,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    117778.0,
+    117778.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.48148148148148145,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.145
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1004,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    84966.0,
+    84868.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 98.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3887147335423197,
+   "feed_rate": 0.34796238244514105,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 6.871
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1004,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    84868.0,
+    84966.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 98.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3887147335423197,
+   "feed_rate": 0.34796238244514105,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 6.24
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1005,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    84392.0,
+    84392.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5131578947368421,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.821
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1005,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    84392.0,
+    84392.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5131578947368421,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.018
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1006,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    67422.0,
+    67422.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.4901315789473684,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.801
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1006,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    67422.0,
+    67422.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.4901315789473684,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.212
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1007,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    68825.0,
+    68825.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5099337748344371,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 7.075
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1007,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    68825.0,
+    68825.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5099337748344371,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.332
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1008,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    109807.0,
+    109807.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5298013245033113,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.578
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1008,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    109807.0,
+    109807.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5298013245033113,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.031
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1009,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    81473.0,
+    81473.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5164473684210527,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.69
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1009,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    81473.0,
+    81473.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5164473684210527,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.191
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1010,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    97745.0,
+    97745.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5197368421052632,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.977
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1010,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    97745.0,
+    97745.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5197368421052632,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.071
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1011,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    55367.0,
+    55367.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.4901315789473684,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.831
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1011,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    55367.0,
+    55367.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.4901315789473684,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.6
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1012,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    64591.0,
+    64591.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.4769736842105263,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.28
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1012,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    64591.0,
+    64591.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.4769736842105263,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.081
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1013,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    86048.0,
+    85985.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 63.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3875,
+   "feed_rate": 0.346875,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 6.666
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1013,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    85985.0,
+    86048.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 63.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3875,
+   "feed_rate": 0.346875,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 5.95
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1014,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    94992.0,
+    94892.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 100.0,
+   "n_rows": 720,
+   "shearings_rounds": 20.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5684523809523809,
+   "feed_rate": 0.5505952380952381,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 7.0
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1014,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    94892.0,
+    94992.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 100.0,
+   "n_rows": 720,
+   "shearings_rounds": 20.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5684523809523809,
+   "feed_rate": 0.5505952380952381,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 6.62
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1015,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    78735.0,
+    78735.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.4868421052631579,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.27
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1015,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    78735.0,
+    78735.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.4868421052631579,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.703
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1016,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    66904.0,
+    66904.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.4934210526315789,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.13
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1016,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    66904.0,
+    66904.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.4934210526315789,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 7.019
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1017,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    135706.0,
+    135650.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 56.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5328947368421053,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 6.315
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1017,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    135650.0,
+    135706.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 56.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5328947368421053,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 7.047
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1018,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    107031.0,
+    107031.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.4868421052631579,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.143
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1018,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    107031.0,
+    107031.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.4868421052631579,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.518
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1019,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    88216.0,
+    88182.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 34.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3862928348909657,
+   "feed_rate": 0.34579439252336447,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 6.059
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1019,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    88182.0,
+    88216.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 34.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3862928348909657,
+   "feed_rate": 0.34579439252336447,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 6.874
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1020,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    76108.0,
+    76108.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.49382716049382713,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.702
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1020,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    76108.0,
+    76108.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.49382716049382713,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 7.122
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1021,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    86061.0,
+    86061.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.4845679012345679,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.298
+  },
+  {
+   "group": "main",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 1021,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    86061.0,
+    86061.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.4845679012345679,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.168
+  },
+  {
+   "group": "strong",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 2000,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    96942.0,
+    96942.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5264900662251656,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.646
+  },
+  {
+   "group": "strong",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 2000,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    96942.0,
+    96942.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5264900662251656,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.612
+  },
+  {
+   "group": "strong",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 2001,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    128781.0,
+    128750.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 31.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.38509316770186336,
+   "feed_rate": 0.3416149068322981,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 6.986
+  },
+  {
+   "group": "strong",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 2001,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    128750.0,
+    128781.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 31.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.38509316770186336,
+   "feed_rate": 0.3416149068322981,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 6.27
+  },
+  {
+   "group": "strong",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 2002,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    109408.0,
+    109403.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 5.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5132450331125827,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 6.686
+  },
+  {
+   "group": "strong",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 2002,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    109403.0,
+    109408.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 5.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5132450331125827,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 6.137
+  },
+  {
+   "group": "strong",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 2003,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    102271.0,
+    102271.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5298013245033113,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.733
+  },
+  {
+   "group": "strong",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "seed": 2003,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    102271.0,
+    102271.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5298013245033113,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.102
+  },
+  {
+   "group": "mirror",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "seed": 9000,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    110458.0,
+    110458.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5033112582781457,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.434
+  },
+  {
+   "group": "mirror",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "seed": 9000,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    110458.0,
+    110458.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5033112582781457,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.177
+  },
+  {
+   "group": "mirror",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "seed": 9001,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    107782.0,
+    107782.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.48148148148148145,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 7.077
+  },
+  {
+   "group": "mirror",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "seed": 9001,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    107782.0,
+    107782.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.48148148148148145,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.424
+  },
+  {
+   "group": "mirror",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "seed": 9002,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    74314.0,
+    74314.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.48355263157894735,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.916
+  },
+  {
+   "group": "mirror",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "seed": 9002,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    74314.0,
+    74314.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.48355263157894735,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.299
+  },
+  {
+   "group": "mirror",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "seed": 9003,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    70629.0,
+    70629.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.5098684210526315,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 7.038
+  },
+  {
+   "group": "mirror",
+   "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "seed": 9003,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    70629.0,
+    70629.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 0.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5460526315789473,
+   "feed_rate": 0.5098684210526315,
+   "winner_seat": null,
+   "winner": "tie",
+   "elapsed_s": 6.254
+  }
+ ],
+ "aggregate": {
+  "main": {
+   "n_games": 44,
+   "n_independent": 22,
+   "seeds": [
+    1000,
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010,
+    1011,
+    1012,
+    1013,
+    1014,
+    1015,
+    1016,
+    1017,
+    1018,
+    1019,
+    1020,
+    1021
+   ],
+   "run_scores": {
+    "wins": 10,
+    "ties": 34,
+    "losses": 0
+   },
+   "run_rate": 0.6136,
+   "seed_outcomes": {
+    "win": 5,
+    "draw": 17,
+    "loss": 0,
+    "incomplete": 0
+   },
+   "rate": 0.6136,
+   "h2h_rate": 0.6136,
+   "h2h_threshold": 0.55
+  },
+  "strong": {
+   "n_games": 8,
+   "n_independent": 4,
+   "seeds": [
+    2000,
+    2001,
+    2002,
+    2003
+   ],
+   "run_scores": {
+    "wins": 4,
+    "ties": 4,
+    "losses": 0
+   },
+   "run_rate": 0.75,
+   "seed_outcomes": {
+    "win": 2,
+    "draw": 2,
+    "loss": 0,
+    "incomplete": 0
+   },
+   "rate": 0.75,
+   "per_opponent": [
+    {
+     "opponent": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+     "n_games": 8,
+     "n_independent": 4,
+     "seeds": [
+      2000,
+      2001,
+      2002,
+      2003
+     ],
+     "run_scores": {
+      "wins": 4,
+      "ties": 4,
+      "losses": 0
+     },
+     "run_rate": 0.75,
+     "seed_outcomes": {
+      "win": 2,
+      "draw": 2,
+      "loss": 0,
+      "incomplete": 0
+     },
+     "rate": 0.75
+    }
+   ],
+   "observation": {
+    "observation_only": true,
+    "rate": 0.75,
+    "baseline_rate": 0.698,
+    "baseline_source": "分析20/22 r34a 强带（≥90k）胜率 37-16=69.8%（败局对手谱系代理臂对比，仅观测不进门槛）",
+    "delta_pp": 5.2,
+    "target_pp": 5.0,
+    "meets_target": true
+   }
+  },
+  "mirror": {
+   "n_games": 8,
+   "n_independent": 4,
+   "seeds": [
+    9000,
+    9001,
+    9002,
+    9003
+   ],
+   "run_scores": {
+    "wins": 0,
+    "ties": 8,
+    "losses": 0
+   },
+   "run_rate": 0.5,
+   "seed_outcomes": {
+    "win": 0,
+    "draw": 4,
+    "loss": 0,
+    "incomplete": 0
+   },
+   "rate": 0.5
+  },
+  "shearings": {
+   "threshold": 5.0,
+   "rounds": {
+    "n": 60,
+    "min": 18.0,
+    "median": 18.0,
+    "achieve_rate": 1.0
+   },
+   "per_sheep_min": {
+    "n": 60,
+    "min": 4.0,
+    "median": 4.0,
+    "achieve_rate": 0.1667
+   },
+   "by_group": {
+    "main": {
+     "rounds": {
+      "n": 44,
+      "min": 18.0,
+      "median": 18.0,
+      "achieve_rate": 1.0
+     },
+     "per_sheep_min": {
+      "n": 44,
+      "min": 4.0,
+      "median": 4.0,
+      "achieve_rate": 0.1364
+     }
+    },
+    "strong": {
+     "rounds": {
+      "n": 8,
+      "min": 18.0,
+      "median": 18.0,
+      "achieve_rate": 1.0
+     },
+     "per_sheep_min": {
+      "n": 8,
+      "min": 4.0,
+      "median": 4.0,
+      "achieve_rate": 0.0
+     }
+    },
+    "mirror": {
+     "rounds": {
+      "n": 8,
+      "min": 18.0,
+      "median": 18.0,
+      "achieve_rate": 1.0
+     },
+     "per_sheep_min": {
+      "n": 8,
+      "min": 4.0,
+      "median": 4.5,
+      "achieve_rate": 0.5
+     }
+    }
+   },
+   "arms": {
+    "rounds_min_ge_5": true,
+    "per_sheep_min_ge_5": false
+   }
+  },
+  "care_rate": {
+   "mean": 0.5122,
+   "by_group": {
+    "main": 0.5089,
+    "strong": 0.506,
+    "mirror": 0.5369
+   }
+  },
+  "feed_rate": {
+   "mean": 0.4752,
+   "by_group": {
+    "main": 0.4712,
+    "strong": 0.4778,
+    "mirror": 0.4946
+   }
+  }
+ },
+ "overall": {
+  "criteria": {
+   "shearings_5_achieved": false,
+   "h2h_vs_r34a_ge_055": true,
+   "win_games_not_flipped": true
+  },
+  "criteria_notes": {
+   "win_games_not_flipped": "胜局不翻负=胜率判承载：与 h2h_vs_r34a_ge_055 同源判定（用户批准口径），不另设门槛"
+  },
+  "pass": false,
+  "n_red_games": 0,
+  "n_errors": 0,
+  "observations": {
+   "care_rate_mean": 0.5122,
+   "feed_rate_mean": 0.4752,
+   "strong_delta_pp": 5.2
+  }
+ },
+ "errors": [],
+ "source": {
+  "rerun_command": "cd /tmp/kagr_root/fn_work/legacy_software/kaggle_simulations && python3 -m pytest orderbook_r37/test_judge_league.py -q && python3 -c \"import json; from orderbook_r37.judge_league import judge_sheep_league; ev = judge_sheep_league('orderbook_r37/build/main.py', 'orderbook_2965_adopt/a/main.py', ['orderbook_2965_adopt/a/main.py'], n_games=60); open('orderbook_r37/evidence/judge_sheep_league.json', 'w', encoding='utf-8').write(json.dumps(ev, ensure_ascii=False, indent=1))\"",
+  "seeds": {
+   "main": [
+    1000,
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010,
+    1011,
+    1012,
+    1013,
+    1014,
+    1015,
+    1016,
+    1017,
+    1018,
+    1019,
+    1020,
+    1021
+   ],
+   "strong": {
+    "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py": [
+     2000,
+     2001,
+     2002,
+     2003
+    ]
+   },
+   "mirror": [
+    9000,
+    9001,
+    9002,
+    9003
+   ]
+  },
+  "wall_s": 394.2,
+  "method_notes": [
+   "evidence dict 由本函数返回、不落盘；台账文件归实跑编排写入",
+   "seed 集显式固定（config.arms），逐局可复跑"
+  ]
+ }
+}
