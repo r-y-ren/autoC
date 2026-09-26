@@ -25,21 +25,33 @@ inject_cash_guard_block 按函数 ast 抽取追加进包内——三函数须自
 ③顺延账重发范围扩到 BUY_SEED：账中 BUY_ANIMAL/BUY_SEED 意图按顺延序
   （FIFO）重发进首个「可负担」空 [] 槽（执行点现金 ≥该单实际成本），
   种子缓买不再永久丢弃；无可负担空槽→留账随后续步重试，不阻塞后续意图。
+④BUY_SEED 回填种活时限（2026-09-26 用户裁决；根因=守卫顺延的 BUY_SEED
+  经顺延账回填得太晚，买回来时地里已种不完一茬→买了就是死种，回填此前
+  无时限）：BUY_SEED 意图只在还种得活时回填——当前步 ≤ 种植截止线才
+  重发；过截止线意图出账作废（记 reason=plant_deadline，成活时限正常
+  出清、不算重发失败）。截止线口径=沿 EXP402/layer S 先例「季末前
+  完不成一茬即不可种」：全局保守线 step 624（d26，EXP402 截断阈同源），
+  更精细的逐作物线可经 plant_deadline 参数传入（缺省 624）。BUY_ANIMAL
+  回填不变（棚仓无成活时限）。硬底线/逐单价丢单保护/卖单收入投影等
+  既有语义零改动；本修订在 _r37_agent 回填阶段实现（备选的
+  _r37_defer_low_priority 入账策略不动，过期意图由回填阶段出清）。
 """
 from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
 
-def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict[str, Any]:
+def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any],
+               plant_deadline: Any = None) -> Dict[str, Any]:
     """尾块捕获入口：取基座动作→交 _r37_cash_guard 调整→返回同构 action。
 
     动作集合不变量：只顺延/删减购买类单，不新增意图、不动 HARVEST/FEED/
     CARE/移动/DROP/PLACE 单元与卖单；任何异常→基座动作原样返回（fail-safe）；
-    step==0 复位层内缓存（顺延账）。
+    step==0 复位层内缓存（顺延账+作废记录）。
 
-    签名意图：输入: observation, base_action / 输出: 调整后 action /
-    错误: 异常→入口兜底回退基座动作。
+    签名意图：输入: observation, base_action[, plant_deadline] / 输出: 调整后
+    action / 错误: 异常→入口兜底回退基座动作（plant_deadline 畸形不抛、
+    回退全局保守线 624）。
 
     结构定义（本层定形，_r37_cash_guard 对齐；R19 核心增量=顺延账跨步重试，
     顺延不是删除、是择机重发）：
@@ -50,20 +62,32 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
       序=顺延序）。函数属性自包含、随源码注入不丢、不与注入底版 globals 撞名。
       step==0 复位（清空携带意图）；复位/出账/入账统一在流程成功后原子提交，
       任何异常→账保持调用前状态（账读写自身 try 包裹，可静默、不许抛）。
+    - 种活时限（跨批修订④；实现位置=本层回填阶段，_r37_defer_low_priority
+      入账策略零改动、过期意图由回填阶段出清）：BUY_SEED 意图只在还种得活
+      时回填——当前步 ≤ 种植截止线才重发；过截止线意图出账作废，记
+      reason=plant_deadline（成活时限正常出清、不算重发失败，是「意图不灭」
+      的唯一受控例外）。作废记录=本函数属性 _r37_agent._void_ledger（list；
+      条目={"op","item","qty","cost","slot","reason":"plant_deadline",
+      "step"}），复位/原子提交同顺延账口径。截止线口径=沿 EXP402/layer S
+      先例「季末前完不成一茬即不可种」：全局保守线 step 624（d26，EXP402
+      截断阈同源）；plant_deadline 参数可传更精细逐作物线（int/float=
+      全局线；dict=逐作物线，缺项回退 dict["default"] 再回退 624），
+      缺省/畸形=624。BUY_ANIMAL 回填不受时限（棚仓无成活时限）。
     - 执行点现金口径（跨批修订②，_r37_cash_guard/_project 同口径）：逐槽
       at[i]=当前资金−前序 HIRE fib 硬开销−前序保留购买单全价＋前序 SELL
       单预期收入（同列表位序在前、引擎 per-unit lockstep 先序单位先成交）；
       卖价=observation 市场价 market.prices[item]（读不到/非有限/非正→
       该单不计=保守）。
     - 每步流程：(a) step==0 复位账（先于重试，携带意图不再回填）；(b) 重试
-      阶段（跨批修订③：范围=账中 BUY_ANIMAL 与 BUY_SEED）——按顺延序（FIFO）
+      阶段（跨批修订③：范围=账中 BUY_ANIMAL 与 BUY_SEED）——BUY_SEED 先过
+      种活时限（修订④：过截止线→出账作废，不重发）；存活意图按顺延序（FIFO）
       逐条重发进空 [] 槽：落首个「可负担」空槽（该槽执行点现金 ≥该单实际
       成本 qty×单价；修订②后 at 随槽序非单调，逐槽扫描不提前 break）；
       无空槽或无可负担空槽→该条留账、继续处理后续账条（低价意图
       不被高价意图饿死），意图不灭；不改槽位数、不挤掉任何既有单；(c) 守卫
       阶段——把（含回填的）action 交 _r37_cash_guard（floors 同上常数）；
-      (d) 合并顺延账——回填成功的出账、守卫新顺延入账（交守卫动作 vs
-      adjusted_action 逐槽 diff，被置 [] 的核价购买单按
+      (d) 合并顺延账——回填成功与过期作废的出账、守卫新顺延入账（交守卫
+      动作 vs adjusted_action 逐槽 diff，被置 [] 的核价购买单按
       {"op","item","qty","cost","slot"} 重建，defer 同口径）；(e) 返回
       adjusted_action。
     - 回填判据与守卫逐单价丢单判据同口径同线（at[i] ≥该单成本 ⟺ 守卫不触
@@ -71,16 +95,22 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
       下限仍要求顺延，回填单随 diff 回流入账、意图不灭。「不新增意图」=
       只重发账内既有购买意图、只落空 [] 槽；farmer/hands 与 HIRE/卖单
       一字节不动、槽位数恒定。
-    - fail-safe：任何异常→返回 base_action 原对象（连同不动的账）。
+    - fail-safe：任何异常→返回 base_action 原对象（连同不动的账与作废记录）。
     """
     try:
-        # ---- 0. 顺延账读取（函数属性缓存；账操作静默） ----
+        # ---- 0. 顺延账/作废记录读取（函数属性缓存；账操作静默） ----
         try:
             cache = _r37_agent._defer_ledger
         except Exception:
             cache = None
         if not isinstance(cache, list):
             cache = []
+        try:
+            vcache = _r37_agent._void_ledger
+        except Exception:
+            vcache = None
+        if not isinstance(vcache, list):
+            vcache = []
 
         # ---- 1. step 读取（口径同 _r37_cash_guard）+ step==0 复位 ----
         raw_step = observation["step"]
@@ -94,6 +124,7 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
             raise ValueError("observation[step] must be a whole number")
         step = int(step_f)
         working = [] if step == 0 else list(cache)
+        working_voids = [] if step == 0 else list(vcache)
 
         # ---- 2. 状态读取（player/farms[seat]，口径同 _r37_cash_guard） ----
         seat = int(observation["player"])
@@ -130,6 +161,30 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
             if op == "BUY_ANIMAL" and item in animal_cost:
                 return qty * animal_cost[item]
             return None
+
+        # 种活截止线（修订④）：全局保守线 624（d26，EXP402 截断阈同源，
+        # 「季末前完不成一茬即不可种」）；plant_deadline 参数可传逐作物
+        # 精细线（数值=全局线；dict=逐作物线，缺项回退 "default" 键再
+        # 回退 624）；畸形一律回退 624（fail-safe，不许抛）。
+        plant_default = 624
+
+        def _plant_line(item):
+            try:
+                cfg = plant_deadline
+                if isinstance(cfg, dict):
+                    v = cfg[item] if (isinstance(item, str) and item in cfg) \
+                        else cfg.get("default", plant_default)
+                else:
+                    v = cfg
+                if isinstance(v, bool) or not isinstance(v, (int, float)):
+                    return plant_default
+                f = float(v)
+                if f != f or f == float("inf") or f == float("-inf") \
+                        or f < 0 or f != int(f):
+                    return plant_default
+                return int(f)
+            except Exception:
+                return plant_default
 
         def _sell_price(item):
             # 卖价估计=observation 市场价（修订②）；读不到/非有限/非正→0=保守。
@@ -194,9 +249,12 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
         if not isinstance(market, list):
             raise TypeError("base_action[market] must be a list")
 
-        # ---- 4. 重试阶段：账中 BUY_ANIMAL/BUY_SEED 择机重发（修订③） ----
+        # ---- 4. 重试阶段：账中 BUY_ANIMAL/BUY_SEED 择机重发（修订③）；
+        #      BUY_SEED 另过种活时限（修订④）：过截止线不重发、出账作废 ----
         passed = base_action
         refilled_ids = set()
+        voided_ids = set()
+        voids = []
         if working:
             new_market = list(market)   # 回填只出新表，输入动作不被原地改动
             for entry in working:
@@ -207,9 +265,17 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
                     continue            # 重发范围=购买类两族（修订③）；其余留账
                 item = entry.get("item")
                 qty = _strict_qty(entry.get("qty"))
+                cost = _price_of(op, item, qty) if qty is not None else None
+                if op == "BUY_SEED" and step > _plant_line(item):
+                    # 种活时限（修订④）：过截止线种不活→意图出账作废，
+                    # 记 reason=plant_deadline（正常出清、不算重发失败）。
+                    voided_ids.add(id(entry))
+                    voids.append({"op": op, "item": item, "qty": qty,
+                                  "cost": cost, "slot": entry.get("slot"),
+                                  "reason": "plant_deadline", "step": step})
+                    continue
                 if qty is None:
                     continue            # 账目数量不可核价→留账不动
-                cost = _price_of(op, item, qty)
                 if cost is None:
                     continue            # 账目不可核价→留账不动
                 at = _at_slots(new_market)
@@ -219,7 +285,17 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
                         free = i        # 首个可负担空槽（at 非单调，不 break 早停）
                         break
                 if free is None:
-                    continue            # 无可负担空槽→留账（不阻塞后续账条）
+                    # 尾部追加回填（09-26 修订⑤）：磁带市场单实测普遍 0-5 槽
+                    # 远未满，尾部追加当步落位——消"等空槽 101 步"的计划漂移
+                    # 蝴蝶（门禁死种超标确诊根因）；cap=10 满则留账换步。
+                    # 空槽位次语义不受影响（不删不移既有槽，仅尾部新下标）。
+                    cand = [op, item, qty]
+                    if len(new_market) < 10:
+                        at_ext = _at_slots(new_market + [cand])
+                        if at_ext[len(new_market)] >= cost:
+                            new_market.append(cand)
+                            refilled_ids.add(id(entry))
+                    continue            # 尾部也不可行→留账（不阻塞后续账条）
                 new_market[free] = [op, item, qty]
                 refilled_ids.add(id(entry))
             if refilled_ids:
@@ -231,9 +307,10 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
         if not isinstance(guarded, dict):
             raise TypeError("adjusted_action must be a dict")
 
-        # ---- 6. 合并顺延账：回填出账+守卫新顺延入账（diff 重建） ----
+        # ---- 6. 合并顺延账：回填/作废出账+守卫新顺延入账（diff 重建） ----
         try:
-            merged = [e for e in working if id(e) not in refilled_ids]
+            merged = [e for e in working
+                      if id(e) not in refilled_ids and id(e) not in voided_ids]
             in_m = passed.get("market")
             out_m = guarded.get("market")
             if isinstance(in_m, list) and isinstance(out_m, list) \
@@ -251,6 +328,7 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any]) -> Dict
                     merged.append({"op": raw[0], "item": raw[1], "qty": qty,
                                    "cost": cost, "slot": i})
             _r37_agent._defer_ledger = merged
+            _r37_agent._void_ledger = working_voids + voids
         except Exception:
             pass                        # 账操作失败可静默，不许抛
 

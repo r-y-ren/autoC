@@ -34,7 +34,7 @@ floor 组 = _r37_cash_guard 真测试（合成 obs/floors 用例①-⑧）：
 ⑦双命中取 d0_end（修订①：其处置覆盖逐单丢单保护；等值/大值皆随 d0_end）；
 ⑧卖单收入计入（修订②）：位序在前 SELL 收入使 BUY_ANIMAL 执行点达标→放行；
   位序在后不计→仍拦；卖价读不到→回退不计=保守；卖单本体不动（反例钉住）。
-入口组 = _r37_agent 真测试（合成 obs/action 用例①-⑨）：
+入口组 = _r37_agent 真测试（合成 obs/action 用例①-⑩）：
 ①正常路径：guard 被调用（floors 三键常数钉住）且返回其 adjusted_action；
 ②guard 抛异常/返回畸形 adjusted_action → base_action 原样（fail-safe+账不动）；
 ③step==0 复位顺延账（预置账后 step0 调用→账清，且复位先于重试不回填）；
@@ -46,7 +46,12 @@ floor 组 = _r37_cash_guard 真测试（合成 obs/floors 用例①-⑧）：
   （回填路径+守卫顺延路径两调用，顺延路径兼钉新顺延入账）；
 ⑧零干预路径同对象返回；
 ⑨BUY_SEED 入重发范围（修订③）：账中种子达标即回填（FIFO）；高价意图
-  不饿死低价意图（SHEEP 留账 MELON 回填），种子回填账序=顺延序。
+  不饿死低价意图（SHEEP 留账 MELON 回填），种子回填账序=顺延序；
+⑩种活时限（修订④）：截止线前回填✓（step 624=全局保守线，≤ 截止线才
+  重发）；截止线后不出账重发✓；出账作废记 reason=plant_deadline✓（正常
+  出清不算失败；作废记录原子提交/fail-safe/step0 复位同顺延账）；BUY_ANIMAL
+  不受时限✓（棚仓无成活时限）；逐作物精细线可经 plant_deadline 参数传入
+  （缺省 624）。
 """
 import pytest  # noqa: F401
 
@@ -138,15 +143,27 @@ def test_r37_agent_retry_refill():
     assert base["market"][0] == []  # 输入不被原地改动
     assert cash_guard_block._r37_agent._defer_ledger == []  # 回填成功→出账
 
-    # ⑤无空槽→留账不回填且不挤占既有单（槽位对象逐一原样）。
+    # ⑤满 10 槽（cap）→留账不回填且不挤占既有单（槽位对象逐一原样）。
     entry5 = {"op": "BUY_ANIMAL", "item": "SHEEP", "qty": 1, "cost": 500, "slot": 0}
     cash_guard_block._r37_agent._defer_ledger = [entry5]
-    base5 = _act([["SELL", "WOOL", 1], ["BUY_SEED", "WHEAT", 1], ["HIRE"]])
+    base5 = _act([["SELL", "WOOL", 1]] + [["BUY_SEED", "WHEAT", 1]] * 9)
     out5 = cash_guard_block._r37_agent(dict(_obs(900), step=10), base5)
     assert out5 is base5
-    assert out5["market"] == [["SELL", "WOOL", 1], ["BUY_SEED", "WHEAT", 1], ["HIRE"]]
-    assert all(out5["market"][i] is base5["market"][i] for i in range(3))
-    assert cash_guard_block._r37_agent._defer_ledger == [entry5]  # 留账
+    assert all(out5["market"][i] is base5["market"][i] for i in range(10))
+    assert cash_guard_block._r37_agent._defer_ledger == [entry5]  # 满 10 留账
+
+    # ⑤b 无空槽但有余量（<10 槽）→尾部追加当步落位（09-26 修订⑤：消
+    # "等空槽 101 步"的计划漂移蝴蝶——门禁死种超标确诊根因）；既有槽不动。
+    entry5b = {"op": "BUY_ANIMAL", "item": "SHEEP", "qty": 1, "cost": 500, "slot": 0}
+    cash_guard_block._r37_agent._defer_ledger = [entry5b]
+    base5b = _act([["SELL", "WOOL", 1], ["BUY_SEED", "WHEAT", 1], ["HIRE"]])
+    out5b = cash_guard_block._r37_agent(dict(_obs(900), step=10), base5b)
+    assert out5b is not base5b
+    assert out5b["market"][:3] == [["SELL", "WOOL", 1],
+                                   ["BUY_SEED", "WHEAT", 1], ["HIRE"]]
+    assert out5b["market"][3] == ["BUY_ANIMAL", "SHEEP", 1]
+    assert all(out5b["market"][i] is base5b["market"][i] for i in range(3))
+    assert cash_guard_block._r37_agent._defer_ledger == []  # 尾部落位→出账
 
     # ⑥逐单价线（修订①）：350<400（COW 成本）→留账不回填；450 分界=
     # COW（400）回填/SHEEP（500）留账（付得起的不再被平线 500 连坐）。
@@ -241,6 +258,94 @@ def test_r37_agent_action_invariants():
     assert base2["market"][1] == ["BUY_SEED", "MELON", 1]  # 输入不被原地改动
     assert cash_guard_block._r37_agent._defer_ledger == [
         {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80, "slot": 1}]
+
+
+def test_r37_agent_seed_plant_deadline(monkeypatch):
+    # ⑩种活时限（修订④）：截止线前回填✓ / 截止线后不出账重发✓ /
+    # 出账作废记 reason=plant_deadline✓ / BUY_ANIMAL 不受时限✓。
+    # (1) 截止线前（step 624 恰=全局保守线，≤ 截止线才重发）回填照旧出账，
+    # 无作废记录。
+    cash_guard_block._r37_agent._defer_ledger = [
+        {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80, "slot": 1}]
+    cash_guard_block._r37_agent._void_ledger = []
+    out = cash_guard_block._r37_agent(dict(_obs(100), step=624),
+                                      _act([[], ["SELL", "WOOL", 1]]))
+    assert out["market"][0] == ["BUY_SEED", "MELON", 1]
+    assert out["market"][1] == ["SELL", "WOOL", 1]     # 卖单不动
+    assert cash_guard_block._r37_agent._defer_ledger == []   # 回填成功→出账
+    assert cash_guard_block._r37_agent._void_ledger == []
+
+    # (2)(3) 过截止线（step 625）：空槽不回填（不出账重发）、意图出账作废
+    # 记 reason=plant_deadline（成活时限正常出清、不算重发失败）；输入动作
+    # 不被原地改动。
+    entry = {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80, "slot": 1}
+    cash_guard_block._r37_agent._defer_ledger = [entry]
+    cash_guard_block._r37_agent._void_ledger = []
+    base2 = _act([[], ["SELL", "WOOL", 1]])
+    out2 = cash_guard_block._r37_agent(dict(_obs(100), step=625), base2)
+    assert out2["market"][0] == []                     # 空槽未被回填
+    assert base2["market"][0] == []                    # 输入不被原地改动
+    assert cash_guard_block._r37_agent._defer_ledger == []   # 意图出账
+    assert cash_guard_block._r37_agent._void_ledger == [
+        {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80,
+         "slot": 1, "reason": "plant_deadline", "step": 625}]
+
+    # 作废出账同顺延账 fail-safe 原子提交：guard 抛异常→账与作废记录皆不动。
+    entry_f = {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80,
+               "slot": 1}
+    cash_guard_block._r37_agent._defer_ledger = [entry_f]
+    cash_guard_block._r37_agent._void_ledger = []
+
+    def _boom(observation, action, floors):
+        raise RuntimeError("guard down")
+
+    monkeypatch.setattr(cash_guard_block, "_r37_cash_guard", _boom)
+    out_f = cash_guard_block._r37_agent(dict(_obs(100), step=700),
+                                        _act([[], ["SELL", "WOOL", 1]]))
+    assert out_f["market"][0] == []
+    assert cash_guard_block._r37_agent._defer_ledger == [entry_f]  # 账不动
+    assert cash_guard_block._r37_agent._void_ledger == []          # 记录不动
+    monkeypatch.undo()
+
+    # step==0 复位同清作废记录（复位先于重试）。
+    cash_guard_block._r37_agent._defer_ledger = []
+    cash_guard_block._r37_agent._void_ledger = [
+        {"op": "BUY_SEED", "item": "MELON", "qty": 1, "cost": 80,
+         "slot": 1, "reason": "plant_deadline", "step": 700}]
+    out_r = cash_guard_block._r37_agent(dict(_obs(100), step=0),
+                                        _act([[], ["SELL", "WOOL", 1]]))
+    assert out_r["market"][0] == []                    # 携带作废意图不回填
+    assert cash_guard_block._r37_agent._void_ledger == []
+
+    # (4) BUY_ANIMAL 不受时限（棚仓无成活时限）：过线步（step 700）现金
+    # 达标照常回填出账，不产生作废记录。
+    goose = {"op": "BUY_ANIMAL", "item": "GOOSE", "qty": 1, "cost": 300,
+             "slot": 3}
+    cash_guard_block._r37_agent._defer_ledger = [goose]
+    cash_guard_block._r37_agent._void_ledger = []
+    out3 = cash_guard_block._r37_agent(dict(_obs(520), step=700),
+                                       _act([[], ["SELL", "WOOL", 1]]))
+    assert out3["market"][0] == ["BUY_ANIMAL", "GOOSE", 1]
+    assert cash_guard_block._r37_agent._defer_ledger == []
+    assert cash_guard_block._r37_agent._void_ledger == []
+
+    # 逐作物精细线（plant_deadline 参数，缺省 624）：{"CARROT": 600}→step
+    # 601 时 CARROT 出账作废、WHEAT（缺项回退 624）照常回填。
+    carrot = {"op": "BUY_SEED", "item": "CARROT", "qty": 1, "cost": 20,
+              "slot": 4}
+    wheat = {"op": "BUY_SEED", "item": "WHEAT", "qty": 1, "cost": 10,
+             "slot": 5}
+    cash_guard_block._r37_agent._defer_ledger = [carrot, wheat]
+    cash_guard_block._r37_agent._void_ledger = []
+    out4 = cash_guard_block._r37_agent(dict(_obs(100), step=601),
+                                       _act([[], [], ["SELL", "WOOL", 1]]),
+                                       plant_deadline={"CARROT": 600})
+    assert out4["market"][0] == ["BUY_SEED", "WHEAT", 1]   # 低价意图先补上
+    assert out4["market"][1] == []
+    assert cash_guard_block._r37_agent._defer_ledger == []
+    assert cash_guard_block._r37_agent._void_ledger == [
+        {"op": "BUY_SEED", "item": "CARROT", "qty": 1, "cost": 20,
+         "slot": 4, "reason": "plant_deadline", "step": 601}]
 
 
 def test_r37_cash_guard_floor(monkeypatch):
