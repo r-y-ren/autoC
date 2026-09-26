@@ -188,6 +188,7 @@ def test_build_r37(tmp_path, monkeypatch):
     "keys_stable",          # ⑤归因表键稳定
     "in_blob_unclassified", # 白名单外差异（blob 内非白名单改动）即抛
     "decode_failure",       # blob 解码失败按无法归因红
+    "harvest_retiming",     # HARVEST 挪/补+配套走位归因进 sheep_retiming
 ])
 def test_audit_diff_vs_r34a(case, tmp_path):
     # 真测试：构造文本+真编解码（retape_sheep._encode_routes）+真守卫块
@@ -260,6 +261,35 @@ def test_audit_diff_vs_r34a(case, tmp_path):
         assert bad != base34
         with pytest.raises(ValueError, match="blob_decode_failure"):
             B.audit_diff_vs_r34a(_w("bad.py", bad), _w("r34a.py", base34))
+    elif case == "harvest_retiming":
+        # HARVEST 变更归因进 sheep_retiming（R20 剪毛覆盖扩类）：route "0"
+        # h1 HARVEST@3 挪到 F@2（harvest_move 形态）+route "1" h0 走位
+        # PASS→NORTH（配套走位）→ 归因 sheep_retiming 零 UNATTRIBUTED；
+        # 白名单外（别类指令替换）仍即抛（对照 in_blob_unclassified）。
+        try:
+            from orderbook_r37 import retape_sheep
+        except ImportError:
+            import retape_sheep
+        pkg = retape_sheep._decode_routes(base34)
+        pkg["actions"][2]["farmer"] = ["HARVEST"]   # []/PASS→HARVEST（补/落点）
+        pkg["actions"][3]["hands"][1] = ["PASS"]    # HARVEST→PASS（挪/源）
+        pkg["actions"][5]["hands"][0] = ["NORTH"]   # 配套走位
+        good = retape_sheep._encode_routes(base34, pkg)
+        assert good != base34
+        m = B.audit_diff_vs_r34a(_w("r37h.py", good), _w("r34a.py", base34))
+        assert m["ok"] is True and m["unattributed"] == []
+        sh = m["whitelist"]["sheep_retiming"]
+        assert sh["present"] is True and sh["n_moves"] == len(sh["moves"])
+        assert sh["moves"] == [
+            {"order": ["HARVEST"], "from": [["0", 3, "h1"]],
+             "to": [["0", 2, "F"]]},
+            {"order": ["NORTH"], "from": [], "to": [["1", 1, "h0"]]}]
+        # 反例：HARVEST 净删除（无 harvest_add 配对）无白名单类即抛。
+        pkg2 = retape_sheep._decode_routes(base34)
+        pkg2["actions"][3]["hands"][1] = ["PASS"]
+        bad2 = retape_sheep._encode_routes(base34, pkg2)
+        with pytest.raises(ValueError, match="harvest_unmatched_removal"):
+            B.audit_diff_vs_r34a(_w("bad2.py", bad2), _w("r34a.py", base34))
 
 
 def test_pack_r37(tmp_path):

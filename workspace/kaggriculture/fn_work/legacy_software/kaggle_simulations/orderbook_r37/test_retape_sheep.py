@@ -15,7 +15,13 @@ responsibility.md【R19/R20 增补】retape_sheep_timing 行）：
   早于卖单位序（对照无卖单件落最早可行步），越窗界且被锁死记 skip 存活；
 ⑦实跑真 r34a 解剖快照——evidence/sheep_tape_dissection.json 一次性解剖
   产物，测试断言可复算（同源重算深等）+ 真磁带手术语义（route 115 批
-  265→264 前移、route 12 批被供资卖单/槽位上限锁死记 skip、其余 no-op）。
+  265→264 前移、route 12 批被供资卖单/槽位上限锁死记 skip、其余 no-op）；
+⑧剪毛覆盖·短板格补齐（R20 格位口径）——构造 4 刀格→5 刀：优先挪用离型
+  HARVEST（harvest_move），术后每格实际剪毛 ≥5 即绿、潜在刀次仅报不判
+  （d12 买点潜在 4 刀仍达标），市场单/输入零改动；
+⑨剪毛覆盖·不可达断链标注——首选落点走位链断（相邻拍曼哈顿 >1）→换单元拍
+  补进（harvest_add）且 change_table 标注断链；全不可达→④格刀红即抛
+  （消息含潜在刀次仅报不判）。
 """
 import base64
 import copy
@@ -337,3 +343,87 @@ def test_real_r34a_surgery_semantics():
         before["routes"]["115"][265]]["market"][:7]
     tgt = out["routes"]["actions"][out["routes"]["routes"]["115"][264]]["market"]
     assert tgt[-1] == ["BUY_ANIMAL", "SHEEP", 1] and len(tgt) == 7
+
+
+# ---------------------------------------------------------------------------
+# ⑧⑨ 剪毛覆盖（R20 格位口径：per-格实际刀次补齐）
+# ---------------------------------------------------------------------------
+def test_shear_cell_shortfall_padded():
+    # ⑧ 短板格补齐：构造 4 刀格→5 刀——优先挪用离型 HARVEST（产毛前空刀）
+    # kind=harvest_move；术后每格实际剪毛 ≥5 即绿（d12 买点潜在刀次 4 仅报
+    # 不判=④判据），市场单不动、输入零改动（写时复制）。
+    steps = 720
+    C = (3, 2)
+    fm = {s: ["PASS"] for s in range(steps)}
+    mk = {s: [] for s in range(steps)}
+    mk[200].append(["SELL", "WOOL", 3])           # 市场单（手术不动）
+    for d in (18, 21, 24, 27):                    # 4 刀：产毛窗槽造访
+        fm[d * 24 + 5] = ["HARVEST"]
+    fm[5 * 24 + 3] = ["HARVEST"]                  # 离型素材：产毛前空刀
+    actions = [{"farmer": fm[s], "hands": [], "market": mk[s]}
+               for s in range(steps)]
+    pkg = {"actions": actions, "routes": {"0": list(range(steps))}, "shops": []}
+    pos = {(d * 24 + 5, "F"): C for d in (18, 21, 24, 27)}
+    pos[(5 * 24 + 3, "F")] = C
+    pos[(28 * 24 + 5, "F")] = C                   # d28 存量收割空闲拍（落点）
+    grid = {"0": {"cells": {C: {"buy_day": 12}}, "unit_pos": pos}}
+    before = copy.deepcopy(pkg)
+    out = retape_sheep.retape_sheep_timing(pkg, grid_info=grid)
+
+    rows = out["change_table"]
+    assert [(r["route"], r["kind"], r["from_step"], r["to_step"], r["item"],
+             r["qty"]) for r in rows] \
+        == [("0", "harvest_move", 5 * 24 + 3, 28 * 24 + 5, "WOOL", 1)]
+    assert "挪用离型" in rows[0]["reason"] and "产毛前空刀" in rows[0]["reason"]
+
+    # 术后每格实际刀次 5（4 窗槽+d28 存量收割）；潜在刀次 4 仅报不判。
+    routes = out["routes"]
+    seq = [routes["actions"][i] for i in routes["routes"]["0"]]
+    cells = retape_sheep._shear_cells(seq, grid["0"])
+    assert cells[C]["window_slots"] == [18, 21, 24, 27]
+    assert cells[C]["n_cuts"] == 5
+    assert seq[5 * 24 + 3]["farmer"] == ["PASS"]      # 离型源让刀
+    assert seq[28 * 24 + 5]["farmer"] == ["HARVEST"]  # 落点补进
+    assert seq[200]["market"] == [["SELL", "WOOL", 3]]  # 市场单零触碰
+    assert pkg == before                               # 输入零改动
+
+
+def test_shear_cell_unreachable_chain_annotated():
+    # ⑨ 不可达断链标注：首选落点走位链断（前一拍远格曼哈顿 >1）→换单元拍
+    # 补进（kind=harvest_add）且 reason 标注断链；首选拍不被覆盖；全不可达
+    # →④格刀红即抛（消息含潜在刀次仅报不判）。
+    steps = 720
+    C = (3, 2)
+    fm = {s: ["PASS"] for s in range(steps)}
+    for d in (17, 20, 23, 26):                    # 4 刀：产毛窗槽造访
+        fm[d * 24 + 5] = ["HARVEST"]
+    actions = [{"farmer": fm[s],
+                "hands": [["PASS"]] if s == 29 * 24 + 8 else [],
+                "market": []}
+               for s in range(steps)]
+    pkg = {"actions": actions, "routes": {"0": list(range(steps))}, "shops": []}
+    pos = {(d * 24 + 5, "F"): C for d in (17, 20, 23, 26)}
+    pos[(29 * 24 + 4, "F")] = (9, 9)              # 断链：首选拍前一拍远格
+    pos[(29 * 24 + 5, "F")] = C                   # 首选落点（走位链不可达）
+    pos[(29 * 24 + 8, "h0")] = C                  # 换单元拍落点（可达）
+    grid = {"0": {"cells": {C: {"buy_day": 11}}, "unit_pos": pos}}
+
+    out = retape_sheep.retape_sheep_timing(pkg, grid_info=grid)
+    adds = _by_kind(out["change_table"], "harvest_add")
+    assert len(adds) == 1
+    row = adds[0]
+    assert row["from_step"] == row["to_step"] == 29 * 24 + 8
+    assert "断链" in row["reason"] and "换单元拍" in row["reason"]
+    seq = [out["routes"]["actions"][i] for i in out["routes"]["routes"]["0"]]
+    assert seq[29 * 24 + 5]["farmer"] == ["PASS"]       # 首选拍不被覆盖
+    assert seq[29 * 24 + 8]["hands"][0] == ["HARVEST"]  # 换单元拍补进
+    cells = retape_sheep._shear_cells(seq, grid["0"])
+    assert cells[C]["n_cuts"] == 5
+
+    # 全不可达（无换单元拍素材）→ 短板存活④格刀红即抛，潜在刀次仅报。
+    grid2 = {"0": {"cells": {C: {"buy_day": 11}},
+                   "unit_pos": {k: v for k, v in pos.items()
+                                if k != (29 * 24 + 8, "h0")}}}
+    with pytest.raises(RuntimeError,
+                       match=r"④格刀红.*实际剪毛=4<5.*潜在刀次=5 仅报不判"):
+        retape_sheep.retape_sheep_timing(pkg, grid_info=grid2)

@@ -156,8 +156,12 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
       变更经 retape_sheep._decode_routes 解码两侧、按解码后动作集合差异归因
       （动作对按内容去重、路由下标共享按引用步聚合）：SHEEP 买单步点/槽位移动
       （移出=换 []/移入=尾部追加或空槽，内容多重集守恒）→ sheep_retiming；
-      CARE/FEED 单元指令删除与闲置 HIRE 市场单删除→ tail_savings；其余（路由
-      结构/shops/别类动作差/解码失败）→ unattributed。
+      羊相关变更类（change_table kind∈{buy_move, harvest_move, harvest_add,
+      skip, no-op}——skip/no-op 不留 diff）：HARVEST 挪（HARVEST↔[]/PASS 净
+      守恒）/补（[]/PASS→HARVEST 净增补）与配套走位（NORTH/SOUTH/EAST/WEST
+      ↔ PASS/走位互换）→ sheep_retiming（R20 剪毛覆盖扩类；HARVEST 净删除
+      无白名单类即红）；CARE/FEED 单元指令删除与闲置 HIRE 市场单删除→
+      tail_savings；其余（路由结构/shops/别类动作差/解码失败）→ unattributed。
     - 只抛不改；返回可直接进 manifest（全 JSON 可序列化）。
     """
     import hashlib
@@ -221,6 +225,8 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
 
     def _is_hire(o: Any) -> bool:
         return isinstance(o, list) and len(o) >= 1 and o[0] == "HIRE"
+
+    _WALK = ("NORTH", "SOUTH", "EAST", "WEST")   # 配套走位指令（R20 扩类）
 
     def _j(o: Any) -> str:
         return json.dumps(o, sort_keys=True, ensure_ascii=False)
@@ -300,6 +306,10 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                     rem: list = []
                     add: list = []
                     tail_hits: list = []
+                    harv_rem: list = []
+                    harv_add: list = []
+                    walk_rem: list = []
+                    walk_add: list = []
                     for rid in sorted(r_a, key=str):
                         for t, (ia, ib) in enumerate(zip(r_a[rid], r_b[rid])):
                             o = pkg34["actions"][ia]
@@ -314,7 +324,7 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                                 continue
                             bad = None
                             got = {"rem": [], "add": [], "hire": [],
-                                   "del": []}
+                                   "del": [], "harv": [], "walk": []}
                             om, cm = o["market"], c["market"]
                             for j in range(max(len(om), len(cm))):
                                 x = om[j] if j < len(om) else None
@@ -345,10 +355,29 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                                     for name, ou, nu in slots:
                                         if ou == nu:
                                             continue
+                                        ou0 = (ou[0] if isinstance(ou, list)
+                                               and ou else None)
+                                        nu0 = (nu[0] if isinstance(nu, list)
+                                               and nu else None)
+                                        idle_o = ou in ([], ["PASS"])
+                                        idle_n = nu in ([], ["PASS"])
                                         if (isinstance(ou, list) and ou
                                                 and ou[0] in ("CARE", "FEED")
-                                                and nu in ([], ["PASS"])):
+                                                and idle_n):
                                             got["del"].append((ou, name))
+                                        elif ou0 == "HARVEST" and idle_n:
+                                            got["harv"].append(("rem", ou, name))
+                                        elif nu0 == "HARVEST" and idle_o:
+                                            got["harv"].append(("add", nu, name))
+                                        elif ((ou0 in _WALK or nu0 in _WALK)
+                                              and (idle_o or ou0 in _WALK)
+                                              and (idle_n or nu0 in _WALK)):
+                                            if not idle_o:
+                                                got["walk"].append(
+                                                    ("rem", ou, name))
+                                            if not idle_n:
+                                                got["walk"].append(
+                                                    ("add", nu, name))
                                         else:
                                             bad = "unit %s %r→%r" % (
                                                 name, ou, nu)
@@ -366,7 +395,12 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                             for ou, name in got["del"]:
                                 tail_hits.append({"kind": ou[0], "item": ou,
                                                   "at": [rid, t, name]})
-                    n_moves = len(rem)
+                            for side, op, name in got["harv"]:
+                                (harv_rem if side == "rem" else harv_add) \
+                                    .append({"order": op, "at": [rid, t, name]})
+                            for side, op, name in got["walk"]:
+                                (walk_rem if side == "rem" else walk_add) \
+                                    .append({"order": op, "at": [rid, t, name]})
                     n_removed = len(tail_hits)
                     # SHEEP 买单移动=内容多重集守恒；不守恒即非"移动"
                     bal: Dict[str, int] = {}
@@ -386,6 +420,29 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                         for e in add:
                             by_o[_j(e["order"])]["to"].append(e["at"])
                         sheep_moves = [by_o[k] for k in sorted(by_o)]
+                    # HARVEST 挪/补：harvest_move 净守恒、harvest_add 净增补
+                    # 允许；净删除无白名单类（无 harvest_del）即红。
+                    hbal: Dict[str, int] = {}
+                    for e in harv_rem:
+                        hbal[_j(e["order"])] = hbal.get(_j(e["order"]), 0) - 1
+                    for e in harv_add:
+                        hbal[_j(e["order"])] = hbal.get(_j(e["order"]), 0) + 1
+                    if any(v < 0 for v in hbal.values()):
+                        _note("harvest_unmatched_removal", "HARVEST 挪/补",
+                              "移除%d 补进%d" % (len(harv_rem), len(harv_add)))
+                    else:
+                        extra: Dict[str, Any] = {}
+                        for e in harv_rem + walk_rem:
+                            extra.setdefault(_j(e["order"]), {
+                                "order": e["order"], "from": [],
+                                "to": []})["from"].append(e["at"])
+                        for e in harv_add + walk_add:
+                            extra.setdefault(_j(e["order"]), {
+                                "order": e["order"], "from": [],
+                                "to": []})["to"].append(e["at"])
+                        sheep_moves = sheep_moves + [extra[k]
+                                                     for k in sorted(extra)]
+                    n_moves = len(sheep_moves)
                     by_r: Dict[Any, Any] = {}
                     for e in tail_hits:
                         k = (e["kind"], _j(e["item"]))

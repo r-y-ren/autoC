@@ -39,6 +39,27 @@
   只改动物格 HARVEST 指令不动市场单；落点单元指令须为 ['PASS']（不覆盖
   别的指令）；跟随的 PICKUP/PLACE 配套不随行→change_table 标注断链风险。
 
+剪毛覆盖扩展（2026-09-25，R20 剪毛判据落实方式澄清：「每只羊刀次 ≥5」以
+实际剪毛排程为准，缺口在剪毛排程非买点——count_shearings 真样本 112938600
+per_sheep 20 格 5-8 刀、唯 (3,2) 型短板格 4 刀）：
+- 格位信息（grid_info，签名微调第二参可选缺省 None）= 逐路由
+  {rid: {"cells": {格: {"buy_day": b}}, "unit_pos": {(step,unit): 格}}}；
+  unit_pos=单元逐步格位（执行后位置口径，同 count_shearings），缺该路由块
+  或缺参=沿旧口径（①②③红绿不变，既有测试/构建零扰动）。
+- 解剖（_shear_cells）：每格羊产毛日可剪窗=首产日 b+6 起每 3 天（≤29）；
+  现有 HARVEST 造访日=格位归属的动物格 HARVEST 拍；实际刀次=造访日落在
+  可剪窗开启后（day≥b+6，羊毛在产才成刀）的造访数——count_shearings 对羊格
+  HARVEST 计刀口径的静态对齐（存量收割可超潜在刀次，故潜在刀次仅报不判）。
+- 手术（_fill_cell_shears）：实际刀次 <5 的羊格补齐至 ≥5——优先「挪用离型
+  HARVEST」（产毛前空刀/盈余格让刀），其次「补进既有剪毛轮的空闲单元拍」
+  （落点=['PASS'] 单元拍）；变更条目 kind=harvest_move/harvest_add。不动
+  市场单、不动 FEED/CARE 序（尾盘地盘）、不动物格以外的作物 HARVEST。
+  配套走位指令链须可达（格位轨迹相邻拍曼哈顿距离 ≤1）；不可达→换单元拍或
+  换轮内别的羊格先剪（盈余格让刀），change_table reason 标注断链。
+- 术后静态核算（格位在场时）：判据=每格羊实际剪毛 ≥5（④格刀红，不达标
+  即抛）；潜在刀次/剪毛轮次仅报不作红绿；③窗界与全部不变量沿旧。无格位
+  信息=①②③沿旧（潜在刀次红绿维持，兼容既有契约面）。
+
 编解码私有助手（leading-underscore 内部件，供 retape_tail_savings/build_r37
 复用）：_decode_routes(main_text) → 磁带路由包 {actions, routes, shops}（=
 _R108_DATA 原形）；_encode_routes(main_text, routes) → 手术后 main 文本。
@@ -399,36 +420,248 @@ def _set_unit(action: Dict[str, Any], u: str, op: List[str]) -> None:
 
 
 # ---------------------------------------------------------------------------
+# 剪毛覆盖扩展（格位信息版；契约见模块 docstring 剪毛覆盖扩展段）
+# ---------------------------------------------------------------------------
+def _check_grid(rid: Any, grid: Any) -> Tuple[Dict[Any, Dict[str, Any]],
+                                              Dict[Tuple[int, str], Any]]:
+    """格位信息块形态校验（fail-closed）→ (cells, unit_pos)。"""
+    if not isinstance(grid, dict):
+        raise ValueError("grid_info[%r] 须为 dict，得到 %s"
+                         % (rid, type(grid).__name__))
+    cells = grid.get("cells")
+    pos = grid.get("unit_pos")
+    if not isinstance(cells, dict) or not isinstance(pos, dict):
+        raise ValueError("grid_info[%r] 须含 cells/unit_pos 两 dict" % (rid,))
+    for c, meta in cells.items():
+        if (not isinstance(meta, dict)
+                or isinstance(meta.get("buy_day"), bool)
+                or not isinstance(meta.get("buy_day"), int)):
+            raise ValueError("grid_info[%r].cells[%r] 须含整型 buy_day"
+                             % (rid, c))
+    for k in pos:
+        if not (isinstance(k, tuple) and len(k) == 2
+                and isinstance(k[0], int) and isinstance(k[1], str)):
+            raise ValueError("grid_info[%r].unit_pos 键须为 (step,unit)，得到 %r"
+                             % (rid, k))
+    return cells, pos
+
+
+def _shear_cells(seq: List[Dict[str, Any]], grid: Dict[str, Any],
+                 window: Optional[Dict[str, Any]] = None
+                 ) -> Dict[Any, Dict[str, Any]]:
+    """路由磁带+格位信息 → 每格羊解剖（per-格实际刀次）。
+
+    每格：{buy_day, window_slots（产毛日可剪窗 b+6 起每 3 天）, visits（现有
+    HARVEST 造访日）, cuts（可剪窗开启后的造访=实际刀次）, n_cuts}。
+    格位归属=unit_pos 执行后位置口径（count_shearings 同款）；对羊格 HARVEST
+    计刀，非羊格 HARVEST（作物收割）不属任何羊格。
+    """
+    w = TARGET_WINDOW if window is None else window
+    cells, pos = _check_grid("?", grid)
+    first = int(w["first_yield_day"])
+    interval = int(w["interval"])
+    last = int(w["last_day"])
+    visits: Dict[Any, List[int]] = {c: [] for c in cells}
+    for s, a in enumerate(seq):
+        for u, op in _units(a):
+            if not (isinstance(op, list) and op and op[0] == "HARVEST"):
+                continue
+            c = pos.get((s, u))
+            if c in visits:
+                visits[c].append(s)
+    out: Dict[Any, Dict[str, Any]] = {}
+    for c in sorted(cells, key=repr):
+        b = int(cells[c]["buy_day"])
+        slots = []
+        k = 0
+        while True:
+            d = b + first + interval * k
+            if d > last:
+                break
+            slots.append(d)
+            k += 1
+        cuts = [s for s in visits[c] if b + first <= s // 24 <= last]
+        out[c] = {"buy_day": b, "window_slots": slots, "visits": visits[c],
+                  "cuts": cuts, "n_cuts": len(cuts)}
+    return out
+
+
+def _chain_ok(pos: Dict[Tuple[int, str], Any], t: int, u: str) -> bool:
+    """配套走位指令链可达：格位轨迹相邻拍曼哈顿距离 ≤1（边界缺拍按可达）。"""
+    cur = pos.get((t, u))
+    if cur is None:
+        return False
+
+    def _man(a: Any, b: Any) -> int:
+        return abs(int(a[0]) - int(b[0])) + abs(int(a[1]) - int(b[1]))
+
+    prev = max((s for (s, u2) in pos if u2 == u and s < t), default=None)
+    nxt = min((s for (s, u2) in pos if u2 == u and s > t), default=None)
+    if prev is not None and _man(pos[(prev, u)], cur) > t - prev:
+        return False
+    if nxt is not None and _man(cur, pos[(nxt, u)]) > nxt - t:
+        return False
+    return True
+
+
+def _offpattern_harvests(seq: List[Dict[str, Any]],
+                         grid: Dict[str, Any],
+                         cells: Dict[Any, Dict[str, Any]],
+                         min_cuts: int) -> List[Tuple[int, str, Any, str]]:
+    """离型 HARVEST 清单（挪用素材）：产毛前空刀/盈余格让刀的羊格 HARVEST。
+
+    非羊格 HARVEST（作物收割）与恰达标格（挪走即跌破下限）不动。
+    """
+    first = int(TARGET_WINDOW["first_yield_day"])
+    _, pos = _check_grid("?", grid)
+    out: List[Tuple[int, str, Any, str]] = []
+    for h, a in enumerate(seq):
+        for u, op in _units(a):
+            if not (isinstance(op, list) and op and op[0] == "HARVEST"):
+                continue
+            c = pos.get((h, u))
+            if c not in cells:
+                continue
+            day = h // 24
+            if day < int(cells[c]["buy_day"]) + first:
+                out.append((h, u, c, "产毛前空刀"))
+            elif cells[c]["n_cuts"] > min_cuts:
+                out.append((h, u, c, "盈余格让刀"))
+    out.sort(key=lambda e: (0 if e[3] == "产毛前空刀" else 1, e[0], e[1]))
+    return out
+
+
+def _fill_cell_shears(pkg: Dict[str, Any], rid: Any, grid: Dict[str, Any],
+                      window: Dict[str, Any],
+                      change_table: List[Dict[str, Any]]) -> None:
+    """每格实际刀次 <5 的羊格补齐至 ≥5（手术扩展；只动羊格 HARVEST/空闲拍）。
+
+    逐格循环（每次手术后重解剖防陈旧视图）：优先挪用离型 HARVEST
+    （kind=harvest_move），其次补进既有剪毛轮的空闲单元拍（kind=harvest_add）；
+    落点=格位恰在该羊格的 ['PASS'] 单元拍（不动市场单/FEED/CARE/作物 HARVEST）。
+    配套走位指令链不可达的落点弃用并留痕；换拍/让刀成功后 reason 标注断链。
+    """
+    idxs = pkg["routes"][rid]
+    min_cuts = int(window["min_cuts"])
+    guard = 0
+    while True:
+        guard += 1
+        if guard > 64:
+            break
+        seq = [pkg["actions"][i] for i in idxs]
+        cells = _shear_cells(seq, grid, window)
+        short = sorted((c for c, v in cells.items() if v["n_cuts"] < min_cuts),
+                       key=lambda c: (cells[c]["n_cuts"], repr(c)))
+        if not short:
+            return
+        cell = short[0]
+        b = cells[cell]["buy_day"]
+        first = int(window["first_yield_day"])
+        last = int(window["last_day"])
+        cut_days = {s // 24 for s in cells[cell]["cuts"]}
+        uncut = [d for d in cells[cell]["window_slots"] if d not in cut_days]
+        rounds = _shear_rounds(seq)
+        _, pos = _check_grid(rid, grid)
+        cands = []
+        for (t, u), c in pos.items():
+            if c != cell or not (0 <= t < len(idxs)):
+                continue
+            cur = dict(_units(pkg["actions"][idxs[t]])).get(u)
+            if cur != ["PASS"]:
+                continue
+            day = t // 24
+            if not (b + first <= day <= last):
+                continue
+            cands.append((t, u, day))
+        cands.sort(key=lambda x: (0 if x[2] in uncut else 1,
+                                  0 if x[2] in rounds else 1, x[0], x[1]))
+        srcs = _offpattern_harvests(seq, grid, cells, min_cuts)
+        rejected: List[str] = []
+        for t, u, day in cands:
+            if not _chain_ok(pos, t, u):
+                rejected.append("(%d,%s)" % (t, u))
+                continue
+            note = ""
+            if rejected:
+                note = ("；断链标注：候选 %s 走位链不可达（相邻拍曼哈顿 >1）→"
+                        "换单元拍/换轮内别的羊格先剪" % ",".join(rejected))
+            if srcs:
+                h, u2, c2, why = srcs[0]
+                _, _, src = _cow_action(pkg, rid, h)
+                _set_unit(src, u2, ["PASS"])
+                _commit_action(pkg, idxs, h, src)
+                _, _, tgt = _cow_action(pkg, rid, t)
+                _set_unit(tgt, u, ["HARVEST"])
+                _commit_action(pkg, idxs, t, tgt)
+                change_table.append({
+                    "route": str(rid), "kind": "harvest_move", "from_step": h,
+                    "to_step": t, "item": "WOOL", "qty": 1,
+                    "reason": ("shear_cell_pad: cell=%r cuts %d->%d（挪用离型"
+                               " HARVEST：%s；源 %s@%d 让刀至 %s@%d）%s"
+                               % (cell, cells[cell]["n_cuts"],
+                                  cells[cell]["n_cuts"] + 1, why, u2, h, u, t,
+                                  note)),
+                })
+            else:
+                _, _, tgt = _cow_action(pkg, rid, t)
+                _set_unit(tgt, u, ["HARVEST"])
+                _commit_action(pkg, idxs, t, tgt)
+                change_table.append({
+                    "route": str(rid), "kind": "harvest_add", "from_step": t,
+                    "to_step": t, "item": "WOOL", "qty": 1,
+                    "reason": ("shear_cell_pad: cell=%r cuts %d->%d（补进剪毛"
+                               "轮空闲单元拍 %s@%d，产毛窗日 %d）%s"
+                               % (cell, cells[cell]["n_cuts"],
+                                  cells[cell]["n_cuts"] + 1, u, t, day, note)),
+                })
+            return
+        return
+
+
+# ---------------------------------------------------------------------------
 # 主契约函数
 # ---------------------------------------------------------------------------
-def retape_sheep_timing(tape_routes: Dict[str, Any]) -> Dict[str, Any]:
-    """羊购买步点前移手术+静态刀次核算。
+def retape_sheep_timing(tape_routes: Dict[str, Any],
+                        grid_info: Optional[Dict[str, Any]] = None
+                        ) -> Dict[str, Any]:
+    """羊购买步点前移手术+剪毛覆盖补齐+静态刀次核算。
 
-    签名意图：输入: 磁带路由表 / 输出: {routes, change_table}（手术后磁带+
-    步点变更表） / 错误: 手术后静态刀次核算不达标即抛。
+    签名意图：输入: 磁带路由表（+可选格位信息） / 输出: {routes, change_table}
+    （手术后磁带+变更表） / 错误: 手术后静态核算不达标即抛。
 
     输入形态（=_decode_routes 产物，磁带路由包）：
     {"actions": [动作...], "routes": {路由id: [动作池下标×719]}, "shops": [...]}；
     动作={"farmer": 单元指令, "hands": [单元指令...], "market": 订单槽位列表}。
     输出 {"routes": 手术后同形路由包（写时复制，输入零改动）, "change_table":
     逐变更行 {route, kind, from_step, to_step, item, qty, reason}}；kind∈
-    {buy_move, harvest_move, no-op, skip}，达标批记 no-op、被不变量锁死批记
-    skip（存活进输出供审计，见模块 docstring 歧义处理）。
+    {buy_move, harvest_move, harvest_add, no-op, skip}，达标批记 no-op、被
+    不变量锁死批记 skip（存活进输出供审计，见模块 docstring 歧义处理）。
+
+    签名微调登记（2026-09-25 剪毛覆盖扩展）：新增第二参
+    grid_info: Optional[dict]=None——逐路由格位块
+    {rid: {"cells": {格: {"buy_day": b}}, "unit_pos": {(step,unit): 格}}}；
+    缺省/缺路由块=该路由沿旧口径，首参与返回形态不变。
 
     步点参数=TARGET_WINDOW（可配置；B20 judge_sheep_league 标定 target_step）。
     不变量（术后核算，破即抛）：羊/牛/鹅购买总量逐路由不变；订单槽位数
     （订单计数）守恒——移动=源槽换 [] + 目标步市场列表尾部追加（742943 空槽
     位次语义：既有槽位含故意空槽不删不移不填，删槽/填槽改撮合配对；尾部新
-    下标不扰动既有锁步配对）；资金序不变量——BUY 不得挪到供资卖单成交前。
+    下标不扰动既有锁步配对）；资金序不变量——BUY 不得挪到供资卖单成交前；
+    剪毛覆盖手术只动羊格 HARVEST 与 ['PASS'] 空闲拍（市场单/FEED/CARE/
+    作物 HARVEST 不动），买点只提前不推后沿旧。
 
-    错误：①每羊潜在刀次 <5、②羊群剪毛轮次 <5 → RuntimeError（刀次核算不
-    达标，无论是否 skip）；③买点越窗 → RuntimeError 除非该批已记 skip（被
-    不变量锁死，契约明文「换步或记 skip」）；不变量破 → RuntimeError。
+    错误：格位在场（R20 剪毛覆盖口径）——④每格羊实际剪毛 <5 → RuntimeError
+    （潜在刀次/剪毛轮次仅报不作红绿，见模块 docstring）；③买点越窗 →
+    RuntimeError 除非该批已记 skip。无格位信息——①每羊潜在刀次 <5、②羊群
+    剪毛轮次 <5 → RuntimeError；③同上；不变量破 → RuntimeError。
     """
     # ---- 0. 输入预检（fail-closed）----
     if not isinstance(tape_routes, dict):
         raise TypeError("tape_routes must be dict, got %s"
                         % type(tape_routes).__name__)
+    if grid_info is not None and not isinstance(grid_info, dict):
+        raise TypeError("grid_info must be dict or None, got %s"
+                        % type(grid_info).__name__)
     _check_package(tape_routes)
     window = dict(TARGET_WINDOW)
     pkg = copy.deepcopy(tape_routes)      # 输入零改动（写时复制手术）
@@ -501,6 +734,13 @@ def retape_sheep_timing(tape_routes: Dict[str, Any]) -> Dict[str, Any]:
         if len(_shear_rounds(seq)) < int(window["min_rounds"]):
             _align_shear_rounds(pkg, rid, window, change_table)
 
+    # ---- 2.5 剪毛覆盖补齐（格位在场：每格实际刀次 <5 → 挪用离型/补空闲拍）----
+    for rid in sorted(pkg["routes"], key=lambda k: int(k)):
+        block = (grid_info or {}).get(rid)
+        if block is not None:
+            _check_grid(rid, block)
+            _fill_cell_shears(pkg, rid, block, window, change_table)
+
     # ---- 3. 不变量核算（破即抛；逐步对照术前基线）----
     totals_after = {rid: _animal_totals([pkg["actions"][i] for i in ids])
                     for rid, ids in pkg["routes"].items()}
@@ -538,23 +778,37 @@ def retape_sheep_timing(tape_routes: Dict[str, Any]) -> Dict[str, Any]:
                 raise RuntimeError("不变量红：尾部追加单与移动单不匹配 %s@%d"
                                    % (rid, s))
 
-    # ---- 4. 术后静态刀次核算（①②必抛；③仅 skip 残差豁免）----
+    # ---- 4. 术后静态核算（格位在场：④每格实际剪毛必抛、①②仅报；无格位：
+    #      ①②沿旧必抛；③两径同抛仅 skip 残差豁免）----
     problems = []
     for rid in sorted(pkg["routes"], key=lambda k: int(k)):
         idxs = pkg["routes"][rid]
         seq = [pkg["actions"][i] for i in idxs]
         for step, slot, qty in _sheep_batches(seq):
-            cuts = _potential_shears(step, window)
-            if cuts < int(window["min_cuts"]):
-                problems.append("①刀次红：%s 羊批 step=%d 潜在刀次=%d<%d"
-                                % (rid, step, cuts, int(window["min_cuts"])))
             if step > int(window["window_end"]) and (rid, step, slot) not in skip_keys:
                 problems.append("③窗界红：%s 羊批 step=%d>window_end=%d 且未记 skip"
                                 % (rid, step, int(window["window_end"])))
-        rounds = _shear_rounds(seq)
-        if len(rounds) < int(window["min_rounds"]):
-            problems.append("②轮次红：%s 剪毛轮次=%s<%d 轮"
-                            % (rid, rounds, int(window["min_rounds"])))
+        block = (grid_info or {}).get(rid)
+        if block is not None:
+            cells = _shear_cells(seq, block, window)
+            for cell in sorted(cells, key=repr):
+                v = cells[cell]
+                if v["n_cuts"] < int(window["min_cuts"]):
+                    problems.append(
+                        "④格刀红：%s 羊格 %r 实际剪毛=%d<%d（潜在刀次=%d"
+                        " 仅报不判）" % (rid, cell, v["n_cuts"],
+                                        int(window["min_cuts"]),
+                                        len(v["window_slots"])))
+        else:
+            for step, slot, qty in _sheep_batches(seq):
+                cuts = _potential_shears(step, window)
+                if cuts < int(window["min_cuts"]):
+                    problems.append("①刀次红：%s 羊批 step=%d 潜在刀次=%d<%d"
+                                    % (rid, step, cuts, int(window["min_cuts"])))
+            rounds = _shear_rounds(seq)
+            if len(rounds) < int(window["min_rounds"]):
+                problems.append("②轮次红：%s 剪毛轮次=%s<%d 轮"
+                                % (rid, rounds, int(window["min_rounds"])))
     if problems:
         raise RuntimeError("手术后静态刀次核算不达标：%s；change_table=%r"
                            % ("；".join(problems), change_table))
