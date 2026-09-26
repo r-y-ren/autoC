@@ -1,13 +1,21 @@
 {
- "generated_at": "2026-09-26T09:02:17.364858+00:00",
+ "generated_at": "2026-09-26T13:53:28.985044+00:00",
  "pkg_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
- "pkg_sha256": "f9b8030b0b3be4d1027b520c686f9ad763044c4c7f6e12d83b89ec698e28dabd",
+ "pkg_sha256": "4b237e412d5101937ad66aa0751454721dec2d5a73fa2743d65768b286a2cb3f",
  "r34a_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
  "r34a_sha256": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
  "opponents": [
   {
    "path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/variant_tuned/main.py",
    "sha256": "765f3f3de19c2fc97b86174c5057942b8789813aff9990aad31f29389da3495e"
+  },
+  {
+   "path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "sha256": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab"
+  },
+  {
+   "path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+   "sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a"
   }
  ],
  "method": {
@@ -34,7 +42,7 @@
   "arms": {
    "main": {
     "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-    "n_seeds": 22,
+    "n_seeds": 14,
     "seeds": [
      1000,
      1001,
@@ -49,15 +57,7 @@
      1010,
      1011,
      1012,
-     1013,
-     1014,
-     1015,
-     1016,
-     1017,
-     1018,
-     1019,
-     1020,
-     1021
+     1013
     ]
    },
    "strong": [
@@ -69,6 +69,26 @@
       2001,
       2002,
       2003
+     ]
+    },
+    {
+     "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+     "n_seeds": 4,
+     "seeds": [
+      2100,
+      2101,
+      2102,
+      2103
+     ]
+    },
+    {
+     "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+     "n_seeds": 4,
+     "seeds": [
+      2200,
+      2201,
+      2202,
+      2203
      ]
     }
    ],
@@ -108,7 +128,7 @@
    "feed_rate": 0.35,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.777
+   "elapsed_s": 7.214
   },
   {
    "group": "main",
@@ -133,7 +153,7 @@
    "feed_rate": 0.35,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.648
+   "elapsed_s": 6.313
   },
   {
    "group": "main",
@@ -158,7 +178,7 @@
    "feed_rate": 0.4537037037037037,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.211
+   "elapsed_s": 7.325
   },
   {
    "group": "main",
@@ -183,7 +203,7 @@
    "feed_rate": 0.4537037037037037,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.683
+   "elapsed_s": 6.791
   },
   {
    "group": "main",
@@ -208,7 +228,7 @@
    "feed_rate": 0.4660493827160494,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.086
+   "elapsed_s": 6.531
   },
   {
    "group": "main",
@@ -233,7 +253,7 @@
    "feed_rate": 0.4660493827160494,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.966
+   "elapsed_s": 6.847
   },
   {
    "group": "main",
@@ -258,7 +278,7 @@
    "feed_rate": 0.48148148148148145,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.547
+   "elapsed_s": 6.415
   },
   {
    "group": "main",
@@ -283,7 +303,7 @@
    "feed_rate": 0.48148148148148145,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.891
+   "elapsed_s": 6.899
   },
   {
    "group": "main",
@@ -308,7 +328,7 @@
    "feed_rate": 0.34796238244514105,
    "winner_seat": 0,
    "winner": "ours",
-   "elapsed_s": 6.649
+   "elapsed_s": 6.574
   },
   {
    "group": "main",
@@ -333,7 +353,7 @@
    "feed_rate": 0.34796238244514105,
    "winner_seat": 1,
    "winner": "ours",
-   "elapsed_s": 5.831
+   "elapsed_s": 6.339
   },
   {
    "group": "main",
@@ -358,7 +378,7 @@
    "feed_rate": 0.5131578947368421,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.334
+   "elapsed_s": 6.261
   },
   {
    "group": "main",
@@ -383,7 +403,7 @@
    "feed_rate": 0.5131578947368421,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.631
+   "elapsed_s": 6.156
   },
   {
    "group": "main",
@@ -408,7 +428,7 @@
    "feed_rate": 0.4901315789473684,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.404
+   "elapsed_s": 6.013
   },
   {
    "group": "main",
@@ -433,7 +453,7 @@
    "feed_rate": 0.4901315789473684,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.72
+   "elapsed_s": 6.355
   },
   {
    "group": "main",
@@ -458,7 +478,7 @@
    "feed_rate": 0.5099337748344371,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.723
+   "elapsed_s": 5.06
   },
   {
    "group": "main",
@@ -483,7 +503,7 @@
    "feed_rate": 0.5099337748344371,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.921
+   "elapsed_s": 5.207
   },
   {
    "group": "main",
@@ -508,7 +528,7 @@
    "feed_rate": 0.5298013245033113,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.147
+   "elapsed_s": 4.931
   },
   {
    "group": "main",
@@ -533,7 +553,7 @@
    "feed_rate": 0.5298013245033113,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.577
+   "elapsed_s": 4.869
   },
   {
    "group": "main",
@@ -558,7 +578,7 @@
    "feed_rate": 0.5164473684210527,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.33
+   "elapsed_s": 4.928
   },
   {
    "group": "main",
@@ -583,7 +603,7 @@
    "feed_rate": 0.5164473684210527,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.774
+   "elapsed_s": 5.035
   },
   {
    "group": "main",
@@ -608,7 +628,7 @@
    "feed_rate": 0.5197368421052632,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.31
+   "elapsed_s": 4.843
   },
   {
    "group": "main",
@@ -633,7 +653,7 @@
    "feed_rate": 0.5197368421052632,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.687
+   "elapsed_s": 5.001
   },
   {
    "group": "main",
@@ -658,7 +678,7 @@
    "feed_rate": 0.4901315789473684,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.482
+   "elapsed_s": 5.062
   },
   {
    "group": "main",
@@ -683,7 +703,7 @@
    "feed_rate": 0.4901315789473684,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.154
+   "elapsed_s": 5.21
   },
   {
    "group": "main",
@@ -708,7 +728,7 @@
    "feed_rate": 0.4769736842105263,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.733
+   "elapsed_s": 4.825
   },
   {
    "group": "main",
@@ -733,7 +753,7 @@
    "feed_rate": 0.4769736842105263,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.718
+   "elapsed_s": 5.374
   },
   {
    "group": "main",
@@ -758,7 +778,7 @@
    "feed_rate": 0.346875,
    "winner_seat": 0,
    "winner": "ours",
-   "elapsed_s": 6.038
+   "elapsed_s": 4.781
   },
   {
    "group": "main",
@@ -783,407 +803,7 @@
    "feed_rate": 0.346875,
    "winner_seat": 1,
    "winner": "ours",
-   "elapsed_s": 5.633
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1014,
-   "our_seat": 0,
-   "red": false,
-   "error": null,
-   "rewards": [
-    94992.0,
-    94892.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 100.0,
-   "n_rows": 720,
-   "shearings_rounds": 20.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5684523809523809,
-   "feed_rate": 0.5505952380952381,
-   "winner_seat": 0,
-   "winner": "ours",
-   "elapsed_s": 6.539
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1014,
-   "our_seat": 1,
-   "red": false,
-   "error": null,
-   "rewards": [
-    94892.0,
-    94992.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 100.0,
-   "n_rows": 720,
-   "shearings_rounds": 20.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5684523809523809,
-   "feed_rate": 0.5505952380952381,
-   "winner_seat": 1,
-   "winner": "ours",
-   "elapsed_s": 6.211
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1015,
-   "our_seat": 0,
-   "red": false,
-   "error": null,
-   "rewards": [
-    78735.0,
-    78735.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5427631578947368,
-   "feed_rate": 0.4868421052631579,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 5.908
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1015,
-   "our_seat": 1,
-   "red": false,
-   "error": null,
-   "rewards": [
-    78735.0,
-    78735.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5427631578947368,
-   "feed_rate": 0.4868421052631579,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 6.428
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1016,
-   "our_seat": 0,
-   "red": false,
-   "error": null,
-   "rewards": [
-    66904.0,
-    66904.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5460526315789473,
-   "feed_rate": 0.4934210526315789,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 5.938
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1016,
-   "our_seat": 1,
-   "red": false,
-   "error": null,
-   "rewards": [
-    66904.0,
-    66904.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5460526315789473,
-   "feed_rate": 0.4934210526315789,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 6.559
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1017,
-   "our_seat": 0,
-   "red": false,
-   "error": null,
-   "rewards": [
-    135706.0,
-    135650.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 56.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5427631578947368,
-   "feed_rate": 0.5328947368421053,
-   "winner_seat": 0,
-   "winner": "ours",
-   "elapsed_s": 5.782
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1017,
-   "our_seat": 1,
-   "red": false,
-   "error": null,
-   "rewards": [
-    135650.0,
-    135706.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 56.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5427631578947368,
-   "feed_rate": 0.5328947368421053,
-   "winner_seat": 1,
-   "winner": "ours",
-   "elapsed_s": 6.42
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1018,
-   "our_seat": 0,
-   "red": false,
-   "error": null,
-   "rewards": [
-    107031.0,
-    107031.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5427631578947368,
-   "feed_rate": 0.4868421052631579,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 5.575
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1018,
-   "our_seat": 1,
-   "red": false,
-   "error": null,
-   "rewards": [
-    107031.0,
-    107031.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5427631578947368,
-   "feed_rate": 0.4868421052631579,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 5.993
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1019,
-   "our_seat": 0,
-   "red": false,
-   "error": null,
-   "rewards": [
-    88216.0,
-    88182.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 34.0,
-   "n_rows": 720,
-   "shearings_rounds": 19.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.3862928348909657,
-   "feed_rate": 0.34579439252336447,
-   "winner_seat": 0,
-   "winner": "ours",
-   "elapsed_s": 5.712
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1019,
-   "our_seat": 1,
-   "red": false,
-   "error": null,
-   "rewards": [
-    88182.0,
-    88216.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 34.0,
-   "n_rows": 720,
-   "shearings_rounds": 19.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.3862928348909657,
-   "feed_rate": 0.34579439252336447,
-   "winner_seat": 1,
-   "winner": "ours",
-   "elapsed_s": 6.475
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1020,
-   "our_seat": 0,
-   "red": false,
-   "error": null,
-   "rewards": [
-    76108.0,
-    76108.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5092592592592593,
-   "feed_rate": 0.49382716049382713,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 6.171
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1020,
-   "our_seat": 1,
-   "red": false,
-   "error": null,
-   "rewards": [
-    76108.0,
-    76108.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 4.0,
-   "care_rate": 0.5092592592592593,
-   "feed_rate": 0.49382716049382713,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 6.645
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1021,
-   "our_seat": 0,
-   "red": false,
-   "error": null,
-   "rewards": [
-    86061.0,
-    86061.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 5.0,
-   "care_rate": 0.5092592592592593,
-   "feed_rate": 0.4845679012345679,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 5.929
-  },
-  {
-   "group": "main",
-   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
-   "seed": 1021,
-   "our_seat": 1,
-   "red": false,
-   "error": null,
-   "rewards": [
-    86061.0,
-    86061.0
-   ],
-   "statuses": [
-    "DONE",
-    "DONE"
-   ],
-   "margin": 0.0,
-   "n_rows": 720,
-   "shearings_rounds": 18.0,
-   "shearings_per_sheep_min": 5.0,
-   "care_rate": 0.5092592592592593,
-   "feed_rate": 0.4845679012345679,
-   "winner_seat": null,
-   "winner": "tie",
-   "elapsed_s": 5.968
+   "elapsed_s": 4.867
   },
   {
    "group": "strong",
@@ -1208,7 +828,7 @@
    "feed_rate": 0.5231788079470199,
    "winner_seat": 0,
    "winner": "ours",
-   "elapsed_s": 6.202
+   "elapsed_s": 4.882
   },
   {
    "group": "strong",
@@ -1233,7 +853,7 @@
    "feed_rate": 0.5231788079470199,
    "winner_seat": 1,
    "winner": "ours",
-   "elapsed_s": 5.694
+   "elapsed_s": 5.0
   },
   {
    "group": "strong",
@@ -1258,7 +878,7 @@
    "feed_rate": 0.3416149068322981,
    "winner_seat": 0,
    "winner": "ours",
-   "elapsed_s": 6.419
+   "elapsed_s": 4.866
   },
   {
    "group": "strong",
@@ -1283,7 +903,7 @@
    "feed_rate": 0.3416149068322981,
    "winner_seat": 1,
    "winner": "ours",
-   "elapsed_s": 5.681
+   "elapsed_s": 5.071
   },
   {
    "group": "strong",
@@ -1308,7 +928,7 @@
    "feed_rate": 0.5132450331125827,
    "winner_seat": 0,
    "winner": "ours",
-   "elapsed_s": 6.195
+   "elapsed_s": 4.829
   },
   {
    "group": "strong",
@@ -1333,7 +953,7 @@
    "feed_rate": 0.5132450331125827,
    "winner_seat": 1,
    "winner": "ours",
-   "elapsed_s": 5.699
+   "elapsed_s": 4.984
   },
   {
    "group": "strong",
@@ -1358,7 +978,7 @@
    "feed_rate": 0.5298013245033113,
    "winner_seat": 0,
    "winner": "ours",
-   "elapsed_s": 6.408
+   "elapsed_s": 4.887
   },
   {
    "group": "strong",
@@ -1383,7 +1003,407 @@
    "feed_rate": 0.5298013245033113,
    "winner_seat": 1,
    "winner": "ours",
-   "elapsed_s": 5.82
+   "elapsed_s": 5.027
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "seed": 2100,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    109417.0,
+    109170.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 247.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5198675496688742,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 4.847
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "seed": 2100,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    109170.0,
+    109417.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 247.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5198675496688742,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 5.042
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "seed": 2101,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    89808.0,
+    89570.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 238.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3862928348909657,
+   "feed_rate": 0.34579439252336447,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 4.804
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "seed": 2101,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    89570.0,
+    89808.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 238.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.3862928348909657,
+   "feed_rate": 0.34579439252336447,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 4.959
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "seed": 2102,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    108246.0,
+    108191.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 55.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.4306784660766962,
+   "feed_rate": 0.39233038348082594,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 5.094
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "seed": 2102,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    108191.0,
+    108246.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 55.0,
+   "n_rows": 720,
+   "shearings_rounds": 19.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.4306784660766962,
+   "feed_rate": 0.39233038348082594,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 5.186
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "seed": 2103,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    90214.0,
+    90010.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 204.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.49382716049382713,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 5.348
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+   "seed": 2103,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    90010.0,
+    90214.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 204.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.49382716049382713,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 5.375
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+   "seed": 2200,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    76971.0,
+    49363.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 27608.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.4967105263157895,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 4.495
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+   "seed": 2200,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    100781.0,
+    118049.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 17268.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5463576158940397,
+   "feed_rate": 0.5298013245033113,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 4.617
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+   "seed": 2201,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    94490.0,
+    61870.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 32620.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5197368421052632,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 4.468
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+   "seed": 2201,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    73947.0,
+    105756.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 31809.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 4.0,
+   "care_rate": 0.5092592592592593,
+   "feed_rate": 0.46296296296296297,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 4.729
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+   "seed": 2202,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    105662.0,
+    61983.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 43679.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": null,
+   "care_rate": 0.5392156862745098,
+   "feed_rate": 0.49673202614379086,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 4.602
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+   "seed": 2202,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    61983.0,
+    105662.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 43679.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": null,
+   "care_rate": 0.5392156862745098,
+   "feed_rate": 0.49673202614379086,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 4.718
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+   "seed": 2203,
+   "our_seat": 0,
+   "red": false,
+   "error": null,
+   "rewards": [
+    139559.0,
+    129925.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 9634.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5098684210526315,
+   "winner_seat": 0,
+   "winner": "ours",
+   "elapsed_s": 4.526
+  },
+  {
+   "group": "strong",
+   "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+   "seed": 2203,
+   "our_seat": 1,
+   "red": false,
+   "error": null,
+   "rewards": [
+    129925.0,
+    139559.0
+   ],
+   "statuses": [
+    "DONE",
+    "DONE"
+   ],
+   "margin": 9634.0,
+   "n_rows": 720,
+   "shearings_rounds": 18.0,
+   "shearings_per_sheep_min": 5.0,
+   "care_rate": 0.5427631578947368,
+   "feed_rate": 0.5098684210526315,
+   "winner_seat": 1,
+   "winner": "ours",
+   "elapsed_s": 4.674
   },
   {
    "group": "mirror",
@@ -1408,7 +1428,7 @@
    "feed_rate": 0.5033112582781457,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.076
+   "elapsed_s": 5.276
   },
   {
    "group": "mirror",
@@ -1433,7 +1453,7 @@
    "feed_rate": 0.5033112582781457,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.596
+   "elapsed_s": 4.829
   },
   {
    "group": "mirror",
@@ -1458,7 +1478,7 @@
    "feed_rate": 0.48148148148148145,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.485
+   "elapsed_s": 5.43
   },
   {
    "group": "mirror",
@@ -1483,7 +1503,7 @@
    "feed_rate": 0.48148148148148145,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.849
+   "elapsed_s": 5.539
   },
   {
    "group": "mirror",
@@ -1508,7 +1528,7 @@
    "feed_rate": 0.48355263157894735,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.286
+   "elapsed_s": 5.184
   },
   {
    "group": "mirror",
@@ -1533,7 +1553,7 @@
    "feed_rate": 0.48355263157894735,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.796
+   "elapsed_s": 5.013
   },
   {
    "group": "mirror",
@@ -1558,7 +1578,7 @@
    "feed_rate": 0.5098684210526315,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 6.491
+   "elapsed_s": 5.468
   },
   {
    "group": "mirror",
@@ -1583,13 +1603,13 @@
    "feed_rate": 0.5098684210526315,
    "winner_seat": null,
    "winner": "tie",
-   "elapsed_s": 5.848
+   "elapsed_s": 4.99
   }
  ],
  "aggregate": {
   "main": {
-   "n_games": 44,
-   "n_independent": 22,
+   "n_games": 28,
+   "n_independent": 14,
    "seeds": [
     1000,
     1001,
@@ -1604,49 +1624,49 @@
     1010,
     1011,
     1012,
-    1013,
-    1014,
-    1015,
-    1016,
-    1017,
-    1018,
-    1019,
-    1020,
-    1021
+    1013
    ],
    "run_scores": {
-    "wins": 10,
-    "ties": 34,
+    "wins": 4,
+    "ties": 24,
     "losses": 0
    },
-   "run_rate": 0.6136,
+   "run_rate": 0.5714,
    "seed_outcomes": {
-    "win": 5,
-    "draw": 17,
+    "win": 2,
+    "draw": 12,
     "loss": 0,
     "incomplete": 0
    },
-   "rate": 0.6136,
-   "h2h_rate": 0.6136,
+   "rate": 0.5714,
+   "h2h_rate": 0.5714,
    "h2h_threshold": 0.55
   },
   "strong": {
-   "n_games": 8,
-   "n_independent": 4,
+   "n_games": 24,
+   "n_independent": 12,
    "seeds": [
     2000,
     2001,
     2002,
-    2003
+    2003,
+    2100,
+    2101,
+    2102,
+    2103,
+    2200,
+    2201,
+    2202,
+    2203
    ],
    "run_scores": {
-    "wins": 8,
+    "wins": 24,
     "ties": 0,
     "losses": 0
    },
    "run_rate": 1.0,
    "seed_outcomes": {
-    "win": 4,
+    "win": 12,
     "draw": 0,
     "loss": 0,
     "incomplete": 0
@@ -1662,6 +1682,54 @@
       2001,
       2002,
       2003
+     ],
+     "run_scores": {
+      "wins": 8,
+      "ties": 0,
+      "losses": 0
+     },
+     "run_rate": 1.0,
+     "seed_outcomes": {
+      "win": 4,
+      "draw": 0,
+      "loss": 0,
+      "incomplete": 0
+     },
+     "rate": 1.0
+    },
+    {
+     "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py",
+     "n_games": 8,
+     "n_independent": 4,
+     "seeds": [
+      2100,
+      2101,
+      2102,
+      2103
+     ],
+     "run_scores": {
+      "wins": 8,
+      "ties": 0,
+      "losses": 0
+     },
+     "run_rate": 1.0,
+     "seed_outcomes": {
+      "win": 4,
+      "draw": 0,
+      "loss": 0,
+      "incomplete": 0
+     },
+     "rate": 1.0
+    },
+    {
+     "opponent": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py",
+     "n_games": 8,
+     "n_independent": 4,
+     "seeds": [
+      2200,
+      2201,
+      2202,
+      2203
      ],
      "run_scores": {
       "wins": 8,
@@ -1720,38 +1788,38 @@
     "achieve_rate": 1.0
    },
    "per_sheep_min": {
-    "n": 60,
+    "n": 58,
     "min": 4.0,
     "median": 4.0,
-    "achieve_rate": 0.1667
+    "achieve_rate": 0.2069
    },
    "by_group": {
     "main": {
      "rounds": {
-      "n": 44,
+      "n": 28,
       "min": 18.0,
       "median": 18.0,
       "achieve_rate": 1.0
      },
      "per_sheep_min": {
-      "n": 44,
+      "n": 28,
       "min": 4.0,
       "median": 4.0,
-      "achieve_rate": 0.1364
+      "achieve_rate": 0.1429
      }
     },
     "strong": {
      "rounds": {
-      "n": 8,
+      "n": 24,
       "min": 18.0,
       "median": 18.0,
       "achieve_rate": 1.0
      },
      "per_sheep_min": {
-      "n": 8,
+      "n": 22,
       "min": 4.0,
       "median": 4.0,
-      "achieve_rate": 0.0
+      "achieve_rate": 0.1818
      }
     },
     "mirror": {
@@ -1775,18 +1843,18 @@
    }
   },
   "care_rate": {
-   "mean": 0.5122,
+   "mean": 0.5081,
    "by_group": {
-    "main": 0.5089,
-    "strong": 0.506,
+    "main": 0.5034,
+    "strong": 0.5041,
     "mirror": 0.5369
    }
   },
   "feed_rate": {
-   "mean": 0.4751,
+   "mean": 0.4714,
    "by_group": {
-    "main": 0.4712,
-    "strong": 0.477,
+    "main": 0.4637,
+    "strong": 0.4726,
     "mirror": 0.4946
    }
   }
@@ -1804,14 +1872,14 @@
   "n_red_games": 0,
   "n_errors": 0,
   "observations": {
-   "care_rate_mean": 0.5122,
-   "feed_rate_mean": 0.4751,
+   "care_rate_mean": 0.5081,
+   "feed_rate_mean": 0.4714,
    "strong_delta_pp": 30.2
   }
  },
  "errors": [],
  "source": {
-  "rerun_command": "cd /tmp/kagr_root/fn_work/legacy_software/kaggle_simulations && python3 -m pytest orderbook_r37/test_judge_league.py -q && python3 -c \"import json; from orderbook_r37.judge_league import judge_sheep_league; ev = judge_sheep_league('/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py', '/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py', ['/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/variant_tuned/main.py'], n_games=60); open('orderbook_r37/evidence/judge_sheep_league.json', 'w', encoding='utf-8').write(json.dumps(ev, ensure_ascii=False, indent=1))\"",
+  "rerun_command": "cd /tmp/kagr_root/fn_work/legacy_software/kaggle_simulations && python3 -m pytest orderbook_r37/test_judge_league.py -q && python3 -c \"import json; from orderbook_r37.judge_league import judge_sheep_league; ev = judge_sheep_league('/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py', '/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py', ['/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/variant_tuned/main.py', '/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py', '/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py'], n_games=60); open('orderbook_r37/evidence/judge_sheep_league.json', 'w', encoding='utf-8').write(json.dumps(ev, ensure_ascii=False, indent=1))\"",
   "seeds": {
    "main": [
     1000,
@@ -1827,15 +1895,7 @@
     1010,
     1011,
     1012,
-    1013,
-    1014,
-    1015,
-    1016,
-    1017,
-    1018,
-    1019,
-    1020,
-    1021
+    1013
    ],
    "strong": {
     "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_l3_derivative/variant_tuned/main.py": [
@@ -1843,6 +1903,18 @@
      2001,
      2002,
      2003
+    ],
+    "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_derivative/main.py": [
+     2100,
+     2101,
+     2102,
+     2103
+    ],
+    "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py": [
+     2200,
+     2201,
+     2202,
+     2203
     ]
    },
    "mirror": [
@@ -1852,7 +1924,7 @@
     9003
    ]
   },
-  "wall_s": 370.4,
+  "wall_s": 324.6,
   "method_notes": [
    "evidence dict 由本函数返回、不落盘；台账文件归实跑编排写入",
    "seed 集显式固定（config.arms），逐局可复跑"
