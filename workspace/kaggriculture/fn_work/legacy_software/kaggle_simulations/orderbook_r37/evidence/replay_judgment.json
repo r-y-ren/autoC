@@ -1,7 +1,7 @@
 {
- "generated_at": "2026-09-26T05:58:48.054217+00:00",
- "pkg_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
- "pkg_sha256": "efa7b195f1892284e473c0de5a2c28b1c76e37071080967aea808f200569169d",
+ "generated_at": "2026-09-26T08:56:06.850500+00:00",
+ "pkg_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+ "pkg_sha256": "f9b8030b0b3be4d1027b520c686f9ad763044c4c7f6e12d83b89ec698e28dabd",
  "method": {
   "semantics": "r37 活件 vs 原局对手录像动作（开环）；逐局双席位各演一遍（r37 坐我方席/对手席互换各一局，排除座位效应）",
   "loader": "官方 last-callable 内存 exec 每局全新命名空间（R18 method note）",
@@ -1246,6 +1246,6 @@
    "对照局=analysis20_rows.json r34a 胜局同窗抽样（固定 rng 记 evidence 的 sampling 块，实跑编排写台账时随附）",
    "evidence dict 由本函数返回、不落盘；台账文件归实跑编排写入"
   ],
-  "wall_s": 73.2
+  "wall_s": 68.7
  }
 }
