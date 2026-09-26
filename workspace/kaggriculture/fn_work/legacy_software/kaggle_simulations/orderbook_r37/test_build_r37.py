@@ -96,8 +96,8 @@ def test_build_r37(tmp_path, monkeypatch):
         assert (out / name).is_file()
     assert set(res) == {"main_path", "main_sha256", "tar_sha256", "manifest",
                         "diff_attribution", "block_sha", "sheep_change_table",
-                        "tail_removal_list", "grid_info_note",
-                        "r34a_main_path", "r34a_sha256"}
+                        "cash_change_table", "tail_removal_list",
+                        "grid_info_note", "r34a_main_path", "r34a_sha256"}
     # 格位推导标注：迷你带无 PLACE SHEEP→无格位块可推导→降级旧口径（不抛）
     assert res["grid_info_note"] == "degraded to legacy accounting: 无格位块可推导"
     assert res["main_path"] == str(out / "main.py")
@@ -132,10 +132,15 @@ def test_build_r37(tmp_path, monkeypatch):
         sheep_rows)
     assert manifest["whitelist_shas"]["tail_removal_list"] == _table_sha(
         tail_rows)
-    # 五组件真跑语义钉：羊批 264 no-op + 288→200 前移；尾盘 CARE/FEED/HIRE 删
+    # 五组件真跑语义钉：羊批 264 no-op + 288→200 前移；现金手术（迷你带 d0
+    # 窗无种子单）记 no-op 留档并入羊表；尾盘 CARE/FEED/HIRE 删
     assert [(r["route"], r["kind"], r["from_step"], r["to_step"])
             for r in sheep_rows] \
-        == [("0", "no-op", 264, 264), ("0", "buy_move", 288, 200)]
+        == [("0", "no-op", 264, 264), ("0", "buy_move", 288, 200),
+            ("0", "no-op", 0, 0)]
+    assert res["cash_change_table"] == sheep_rows[2:]      # 并入表=羊行+现金行
+    assert sheep_rows[2]["kind"] == "no-op"
+    assert "窗内种子单 0 张" in sheep_rows[2]["reason"]
     assert [(e["step"], e["kind"], e["unit"], e["slot"]) for e in tail_rows] \
         == [(672, "CARE", "F", None), (696, "FEED", "F", None),
             (700, "HIRE", None, 0)]
@@ -148,6 +153,8 @@ def test_build_r37(tmp_path, monkeypatch):
         and wl["tail_guard_block"]["bytes"] > 0
     assert wl["sheep_retiming"]["present"] is True \
         and wl["sheep_retiming"]["n_moves"] == 1
+    assert wl["cash_reserve"]["present"] is False \
+        and wl["cash_reserve"]["n_moves"] == 0   # 迷你带现金手术 no-op 零 diff
     assert wl["tail_savings"]["present"] is True \
         and wl["tail_savings"]["n_removed"] == 3
     assert json.loads(json.dumps(att, ensure_ascii=False)) == att
@@ -188,10 +195,11 @@ def test_build_r37(tmp_path, monkeypatch):
     "outside_blob_line",    # ②白名单外差异（blob 区外一行）即抛
     "broken_prefix",        # ③前缀破坏（改原文字节）即抛
     "identical",            # ④同文本=零归因 ok
-    "keys_stable",          # ⑤归因表键稳定
+    "keys_stable",          # ⑤归因表键稳定（2026-09-26 扩 cash_reserve）
     "in_blob_unclassified", # 白名单外差异（blob 内非白名单改动）即抛
     "decode_failure",       # blob 解码失败按无法归因红
     "harvest_retiming",     # HARVEST 挪/补+配套走位归因进 sheep_retiming
+    "cash_reserve_move",    # ⑤audit 新类：cash_reserve diff 不再 UNATTRIBUTED
 ])
 def test_audit_diff_vs_r34a(case, tmp_path):
     # 真测试：构造文本+真编解码（retape_sheep._encode_routes）+真守卫块
@@ -236,10 +244,12 @@ def test_audit_diff_vs_r34a(case, tmp_path):
         m = B.audit_diff_vs_r34a(_w("r37.py", r37), _w("r34a.py", base34))
         assert set(m) == {"ok", "whitelist", "unattributed"}
         assert set(m["whitelist"]) == {"tail_guard_block", "sheep_retiming",
-                                       "tail_savings"}
+                                       "cash_reserve", "tail_savings"}
         assert set(m["whitelist"]["tail_guard_block"]) == {
             "present", "bytes", "sha256"}
         assert set(m["whitelist"]["sheep_retiming"]) == {
+            "present", "n_moves", "moves"}
+        assert set(m["whitelist"]["cash_reserve"]) == {
             "present", "n_moves", "moves"}
         assert set(m["whitelist"]["tail_savings"]) == {
             "present", "n_removed", "removed"}
@@ -292,6 +302,36 @@ def test_audit_diff_vs_r34a(case, tmp_path):
         pkg2["actions"][3]["hands"][1] = ["PASS"]
         bad2 = retape_sheep._encode_routes(base34, pkg2)
         with pytest.raises(ValueError, match="harvest_unmatched_removal"):
+            B.audit_diff_vs_r34a(_w("bad2.py", bad2), _w("r34a.py", base34))
+    elif case == "cash_reserve_move":
+        # ⑤audit 新类（2026-09-26 白名单扩第 4 类 cash_reserve）：route "1"
+        # step1 的 BUY_SEED MELON 槽换 []（移出）+ step0 market 尾部追加同单
+        # （移入）= cash_reserve_buy_move 移动算子形态 → 归因 cash_reserve
+        # 零 UNATTRIBUTED；反例：BUY_SEED 净删除（无配对移入）非「移动」→
+        # seed_buy_not_conserved 即抛（白名单只认移动）。
+        try:
+            from orderbook_r37 import retape_sheep
+        except ImportError:
+            import retape_sheep
+        pkg = retape_sheep._decode_routes(base34)
+        assert pkg["actions"][5]["market"][0] == ["BUY_SEED", "MELON", 1]
+        pkg["actions"][5]["market"][0] = []          # 源槽换 []（配套占位）
+        pkg["actions"][4]["market"].append(
+            ["BUY_SEED", "MELON", 1])                # 目标步尾部追加（配套）
+        good = retape_sheep._encode_routes(base34, pkg)
+        assert good != base34
+        m = B.audit_diff_vs_r34a(_w("r37c.py", good), _w("r34a.py", base34))
+        assert m["ok"] is True and m["unattributed"] == []
+        cr = m["whitelist"]["cash_reserve"]
+        assert cr["present"] is True and cr["n_moves"] == 1
+        assert cr["moves"] == [
+            {"order": ["BUY_SEED", "MELON", 1],
+             "from": [["1", 1, 0]], "to": [["1", 0, 1]]}]
+        assert m["whitelist"]["sheep_retiming"]["present"] is False
+        pkg2 = retape_sheep._decode_routes(base34)
+        pkg2["actions"][5]["market"][0] = []
+        bad2 = retape_sheep._encode_routes(base34, pkg2)
+        with pytest.raises(ValueError, match="seed_buy_not_conserved"):
             B.audit_diff_vs_r34a(_w("bad2.py", bad2), _w("r34a.py", base34))
 
 

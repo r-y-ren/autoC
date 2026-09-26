@@ -856,8 +856,12 @@
       - 调用方：build_r37。tested：自有单测。核验命令：测试: orderbook_r37/test_retape_sheep.py（刀次核算组）。
     - **retape_tail_savings** [L2|新增]
       - 职责：磁带手术·尾盘负空间——d28（step 672）起删除 CARE 指令、d29（step 696）起删除 FEED 与闲置 HIRE 指令（省人工/饲料）；**动物格 HARVEST（剪毛/收奶/收蛋）与卖单照旧**（存量资产变现不砍）；输出删除清单入变更表。
-      - 签名意图：输入: 磁带 / 输出: 修剪后磁带+删除清单 / 错误: 误删 HARVEST/卖单/FEED-CARE 在 d28 前的指令即抛。
+      - 签名意图：输入: 磁带 / 输出: {routes, removed}（修剪后磁带+删除清单） / 错误: 误删 HARVEST/卖单/d28 前 FEED-CARE 指令即抛。
       - 调用方：build_r37。tested：自有单测。核验命令：测试: orderbook_r37/test_retape_tail.py。
+    - **retape_cash_reserve** [L2|新增]（2026-09-26 快速通道结构性增补·用户裁决"源头补丁"）
+      - 职责：磁带手术·d0 现金留存——把 d0 窗（step 0-23）内一笔**非紧迫种子买点**（其依赖消费[PICKUP/PLANT 供种链]在足够后方者）的 BUY_SEED 步点后移到依赖消费之前最近可行位，使 d0 日终现金 ≥5（考古实证过夜 4-5 金即可满编 d1 三手+首日喂养）；**计划自洽不变量**：移后买点仍先于其供种消费（种子到达不晚于 PICKUP/PLANT 需要），PICKUP/PLANT/收成链不移不动；后移上限=仍种得活（≤种植截止线 step 624 前）；无可行候选（依赖消费过近/窗内无种子单）→零改动记 no-op 并留档，交运行时守卫兜底。输出变更表（kind=cash_reserve_buy_move）。
+      - 签名意图：输入: 磁带路由表 / 输出: {routes, change_table}（手术后磁带+变更表） / 错误: 移后买点晚于依赖消费（断供种链）或越种植截止线即抛。
+      - 调用方：build_r37。tested：自有单测。核验命令：测试: orderbook_r37/test_retape_cash.py。
     - **audit_diff_vs_r34a** [L2|新增]
       - 职责：对底版逐字节 diff 审计——r37 对 r34a 差异恰=白名单三件（尾部追加守卫块/羊步点变更表/尾盘删除清单），出现白名单外差异即红；输出差异归因表。
       - 签名意图：输入: r37 main+r34a main / 输出: 归因表 / 错误: 白名单外差异即抛。

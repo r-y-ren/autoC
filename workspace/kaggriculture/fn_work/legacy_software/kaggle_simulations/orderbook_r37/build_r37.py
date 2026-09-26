@@ -3,8 +3,9 @@
 
 责任契约（fn_docs/hybrid/responsibility.md【R19/R20 增补】）：
 以 orderbook_2965_adopt/a/main.py（r34a 在飞件字节）为底复制 →
-inject_cash_guard_block + retape_sheep_timing + retape_tail_savings
-三白名单改造 → audit_diff_vs_r34a → pack_r37；产物落 orderbook_r37/，
+inject_cash_guard_block + retape_sheep_timing + retape_cash_reserve
+（2026-09-26 快速通道结构性增补·d0 现金留存）+ retape_tail_savings
+白名单改造 → audit_diff_vs_r34a → pack_r37；产物落 orderbook_r37/，
 r34a/在飞件零改动。
 """
 from __future__ import annotations
@@ -27,25 +28,33 @@ def build_r37(r34a_main_path: str,
     - 编排流（责任契约 R19/R20）：读 r34a 文本→retape_sheep._decode_routes→
       _derive_grid_info（格位块静态推导，R20 剪毛覆盖；失败→降级单参旧口径
       并在返回 grid_info_note 标注，不抛）→retape_sheep_timing→
-      retape_tail_savings→_pool_residue_sweep（无主池槽归一=写时复制残件，
-      同拍多刀/多阶段中间件不入 audit 池闭合红）→_encode_routes→尾块前写两行
-      变更表注释→inject_cash_guard_block→audit_diff_vs_r34a→pack_r37。
+      retape_cash_reserve（d0 现金留存·2026-09-26 快速通道增补，羊手术后
+      跑；无可行候选记 no-op 留档）→retape_tail_savings→
+      _pool_residue_sweep（无主池槽归一=写时复制残件，同拍多刀/多阶段手术
+      中间件不入 audit 池闭合红）→_encode_routes→尾块前写两行变更表注释→
+      inject_cash_guard_block→audit_diff_vs_r34a→pack_r37。
       r34a 输入只读打开、全程零写回（测试钉字节不变）。
     - 变更表注释（pack 自证口径）：恰两行单行注释
-      「# R37_SHEEP_CHANGE_TABLE: <json>」（retape_sheep_timing.change_table）
-      与「# R37_TAIL_REMOVAL_LIST: <json>」（retape_tail_savings.removed），
-      JSON=canonical（json.dumps sort_keys=True/ensure_ascii=False/紧凑分隔符
-      →键序稳定），落位=尾块前（注释行随尾部追加块进 diff 归因区，行文本区
-      口径 r37=r34a+恰一尾块成立）。
+      「# R37_SHEEP_CHANGE_TABLE: <json>」（retape_sheep_timing.change_table
+      **并入** retape_cash_reserve.change_table 逐行——用户裁决「并入
+      R37_SHEEP_CHANGE_TABLE」；pack canonical sha 自证口径自动覆盖现金行，
+      pack_r37 零改动）与「# R37_TAIL_REMOVAL_LIST: <json>」
+      （retape_tail_savings.removed），JSON=canonical（json.dumps
+      sort_keys=True/ensure_ascii=False/紧凑分隔符→键序稳定），落位=尾块前
+      （注释行随尾部追加块进 diff 归因区，行文本区口径 r37=r34a+恰一尾块
+      成立）。
     - 失败面（不落半成品）：产物落盘前一切红（缺文件/解码红/手术红/注入红/
       审计红）只经 tempfile 暂存件中转，out 目录零触碰（不建目录不落文件）；
       审计过后才写 out/main.py 并 pack，写盘段任一异常即清本次三件产物
       （main.py/submission.tar.gz/build_manifest.json）再抛。
     - 返回：{"main_path", "main_sha256", "tar_sha256", "manifest",
       "diff_attribution", "block_sha", "sheep_change_table",
-      "tail_removal_list", "grid_info_note", "r34a_main_path",
-      "r34a_sha256"}（全 JSON 可序列化；grid_info_note=格位推导标注
-      「derived: N routes/M sheep cells」或「degraded to legacy accounting: …」）。
+      "cash_change_table", "tail_removal_list", "grid_info_note",
+      "r34a_main_path", "r34a_sha256"}（全 JSON 可序列化；2026-09-26 增补
+      cash_change_table=retape_cash_reserve.change_table（内嵌表子集），
+      sheep_change_table=内嵌 R37_SHEEP_CHANGE_TABLE 全表（羊行+现金行并入）；
+      grid_info_note=格位推导标注「derived: N routes/M sheep cells」或
+      「degraded to legacy accounting: …」）。
     """
     import hashlib
     import os
@@ -54,6 +63,7 @@ def build_r37(r34a_main_path: str,
 
     try:
         from orderbook_r37 import inject_guard as _ig
+        from orderbook_r37 import retape_cash as _rc
         from orderbook_r37 import retape_sheep as _rs
         from orderbook_r37 import retape_tail as _rt
     except ImportError:                      # 脚本态兜底（audit 组同款）
@@ -61,6 +71,7 @@ def build_r37(r34a_main_path: str,
         if _here not in sys.path:
             sys.path.insert(0, _here)
         import inject_guard as _ig           # type: ignore
+        import retape_cash as _rc            # type: ignore
         import retape_sheep as _rs           # type: ignore
         import retape_tail as _rt            # type: ignore
 
@@ -98,13 +109,16 @@ def build_r37(r34a_main_path: str,
         grid_note = "degraded to legacy accounting: %s: %s" % (
             type(exc).__name__, exc)
     sheep = _rs.retape_sheep_timing(pkg0, grid_info=grid_info)
-    tail = _rt.retape_tail_savings(sheep["routes"])
+    cash = _rc.retape_cash_reserve(sheep["routes"])   # d0 现金留存（羊手术后）
+    tail = _rt.retape_tail_savings(cash["routes"])
     _rs._pool_residue_sweep(tail["routes"])   # 无主池槽归一（写时复制残件）
     mid = _rs._encode_routes(t34, tail["routes"])
 
     # ---- 2. 变更表注释（canonical 单行 JSON，尾块前落位） ----
     import json
-    sheep_table = sheep["change_table"]
+    # R37_SHEEP_CHANGE_TABLE=羊行并入现金行（用户裁决「并入」；pack canonical
+    # sha 自证口径自动覆盖现金行，pack_r37 零改动）
+    sheep_table = list(sheep["change_table"]) + list(cash["change_table"])
     tail_list = tail["removed"]
 
     def _canon(o: Any) -> str:
@@ -152,6 +166,7 @@ def build_r37(r34a_main_path: str,
         "diff_attribution": attribution,
         "block_sha": inj["block_sha"],
         "sheep_change_table": sheep_table,
+        "cash_change_table": list(cash["change_table"]),
         "tail_removal_list": tail_list,
         "grid_info_note": grid_note,
         "r34a_main_path": r34a_main_path,
@@ -160,30 +175,38 @@ def build_r37(r34a_main_path: str,
 
 
 def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
-    """对底版逐字节 diff 审计——差异恰=白名单三件（尾部追加守卫块/羊步点
-    变更表/尾盘删除清单），出现白名单外差异即红；输出差异归因表。
+    """对底版逐字节 diff 审计——差异恰=白名单四件（尾部追加守卫块/羊步点
+    变更表/现金留存移动/尾盘删除清单），出现白名单外差异即红；输出差异归因表。
 
     签名意图：输入: r37 main+r34a main / 输出: 归因表 /
     错误: 白名单外差异即抛。
 
     【实现方案留档（audit 组测试钉住）】
     - 归因表：{"ok", "whitelist": {"tail_guard_block"/"sheep_retiming"/
-      "tail_savings"}, "unattributed"}；unattributed 非空→ValueError（消息含
-      首条未归因定位）。tail_guard_block={"present","bytes","sha256"}（追加块
-      =r37 相对 r34a 的尾部多出字节，sha256 与 inject block_sha 同口径）；
-      sheep_retiming={"present","n_moves","moves":[{"order","from","to"}]}；
-      tail_savings={"present","n_removed","removed":[{"kind","item","at"}]}。
+      "cash_reserve"/"tail_savings"}, "unattributed"}；unattributed 非空→
+      ValueError（消息含首条未归因定位）。tail_guard_block={"present",
+      "bytes","sha256"}（追加块=r37 相对 r34a 的尾部多出字节，sha256 与
+      inject block_sha 同口径）；sheep_retiming={"present","n_moves",
+      "moves":[{"order","from","to"}]}；cash_reserve（2026-09-26 白名单扩
+      第 4 类）={"present","n_moves","moves":[{"order","from","to"}]}——
+      认领 change_table 里 cash_reserve_buy_move 的 diff+配套影响（BUY_SEED
+      买单步点/槽位移动：移出=换 []/移入=尾部追加或空槽，内容多重集守恒；
+      配套=空槽占位与尾部追加槽位，同一移动算子形态）；tail_savings=
+      {"present","n_removed","removed":[{"kind","item","at"}]}。
     - 判定：mask blob payload 后 r37 须=r34a+仅尾部一块（块含守卫锚行恰一次+
       单参入口行、r34a 无锚行），块外行文本零差异（首差定位进消息）；payload
       变更经 retape_sheep._decode_routes 解码两侧、按解码后动作集合差异归因
       （动作对按内容去重、路由下标共享按引用步聚合）：SHEEP 买单步点/槽位移动
       （移出=换 []/移入=尾部追加或空槽，内容多重集守恒）→ sheep_retiming；
-      羊相关变更类（change_table kind∈{buy_move, harvest_move, harvest_add,
-      skip, no-op}——skip/no-op 不留 diff）：HARVEST 挪（HARVEST↔[]/PASS 净
-      守恒）/补（[]/PASS→HARVEST 净增补）与配套走位（NORTH/SOUTH/EAST/WEST
-      ↔ PASS/走位互换）→ sheep_retiming（R20 剪毛覆盖扩类；HARVEST 净删除
-      无白名单类即红）；CARE/FEED 单元指令删除与闲置 HIRE 市场单删除→
-      tail_savings；其余（路由结构/shops/别类动作差/解码失败）→ unattributed。
+      BUY_SEED 买单移动（同移动算子、内容多重集守恒）→ cash_reserve
+      （retape_cash_reserve 的 cash_reserve_buy_move；净删除/净增补不守恒=
+      白名单外即红）；羊相关变更类（change_table kind∈{buy_move,
+      harvest_move, harvest_add, skip, no-op}——skip/no-op 不留 diff）：
+      HARVEST 挪（HARVEST↔[]/PASS 净守恒）/补（[]/PASS→HARVEST 净增补）
+      与配套走位（NORTH/SOUTH/EAST/WEST ↔ PASS/走位互换）→ sheep_retiming
+      （R20 剪毛覆盖扩类；HARVEST 净删除无白名单类即红）；CARE/FEED 单元
+      指令删除与闲置 HIRE 市场单删除→ tail_savings；其余（路由结构/shops/
+      别类动作差/解码失败）→ unattributed。
     - 只抛不改；返回可直接进 manifest（全 JSON 可序列化）。
     """
     import hashlib
@@ -245,6 +268,9 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
         return (isinstance(o, list) and len(o) >= 3 and o[0] == "BUY_ANIMAL"
                 and o[1] == "SHEEP")
 
+    def _is_seed_buy(o: Any) -> bool:
+        return (isinstance(o, list) and len(o) >= 3 and o[0] == "BUY_SEED")
+
     def _is_hire(o: Any) -> bool:
         return isinstance(o, list) and len(o) >= 1 and o[0] == "HIRE"
 
@@ -298,8 +324,10 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
 
     # ---- 3. blob payload 语义归因（解码后动作集合差异分类） ----
     sheep_moves: list = []
+    cash_moves: list = []
     tail_removed: list = []
     n_moves = 0
+    n_cash = 0
     n_removed = 0
     if masked37 is not None and pay37 != pay34:
         try:
@@ -327,6 +355,8 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                     # 同一池件被多路由引用时按引用步各计一次）
                     rem: list = []
                     add: list = []
+                    seed_rem: list = []
+                    seed_add: list = []
                     tail_hits: list = []
                     harv_rem: list = []
                     harv_add: list = []
@@ -346,7 +376,8 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                                 continue
                             bad = None
                             got = {"rem": [], "add": [], "hire": [],
-                                   "del": [], "harv": [], "walk": []}
+                                   "del": [], "harv": [], "walk": [],
+                                   "srem": [], "sadd": []}
                             om, cm = o["market"], c["market"]
                             for j in range(max(len(om), len(cm))):
                                 x = om[j] if j < len(om) else None
@@ -361,6 +392,10 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                                     got["hire"].append((x, j))
                                 elif xe and _is_sheep_buy(y):
                                     got["add"].append((y, j))
+                                elif ye and _is_seed_buy(x):
+                                    got["srem"].append((x, j))
+                                elif xe and _is_seed_buy(y):
+                                    got["sadd"].append((y, j))
                                 else:
                                     bad = "market[%d] %r→%r" % (j, x, y)
                                     break
@@ -411,6 +446,12 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                                 rem.append({"order": x, "at": [rid, t, j]})
                             for y, j in got["add"]:
                                 add.append({"order": y, "at": [rid, t, j]})
+                            for x, j in got["srem"]:
+                                seed_rem.append({"order": x,
+                                                 "at": [rid, t, j]})
+                            for y, j in got["sadd"]:
+                                seed_add.append({"order": y,
+                                                 "at": [rid, t, j]})
                             for x, slot in got["hire"]:
                                 tail_hits.append({"kind": "HIRE", "item": x,
                                                   "at": [rid, t, slot]})
@@ -442,6 +483,28 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
                         for e in add:
                             by_o[_j(e["order"])]["to"].append(e["at"])
                         sheep_moves = [by_o[k] for k in sorted(by_o)]
+                    # BUY_SEED 买单移动（cash_reserve_buy_move）=内容多重集
+                    # 守恒；不守恒（净删除/净增补）非「移动」=白名单外即红
+                    sbal: Dict[str, int] = {}
+                    for e in seed_rem:
+                        sbal[_j(e["order"])] = sbal.get(_j(e["order"]), 0) - 1
+                    for e in seed_add:
+                        sbal[_j(e["order"])] = sbal.get(_j(e["order"]), 0) + 1
+                    if any(v != 0 for v in sbal.values()):
+                        _note("seed_buy_not_conserved", "BUY_SEED 买单移动",
+                              "移出%d 移入%d" % (len(seed_rem), len(seed_add)))
+                    else:
+                        by_s: Dict[str, Any] = {}
+                        for e in seed_rem:
+                            by_s.setdefault(_j(e["order"]), {
+                                "order": e["order"], "from": [],
+                                "to": []})["from"].append(e["at"])
+                        for e in seed_add:
+                            by_s.setdefault(_j(e["order"]), {
+                                "order": e["order"], "from": [],
+                                "to": []})["to"].append(e["at"])
+                        cash_moves = [by_s[k] for k in sorted(by_s)]
+                    n_cash = len(cash_moves)
                     # HARVEST 挪/补：harvest_move 净守恒、harvest_add 净增补
                     # 允许；净删除无白名单类（无 harvest_del）即红。
                     hbal: Dict[str, int] = {}
@@ -491,6 +554,8 @@ def audit_diff_vs_r34a(r37_main: str, r34a_main: str) -> Dict[str, Any]:
             "tail_guard_block": tail_block,
             "sheep_retiming": {"present": bool(sheep_moves),
                                "n_moves": n_moves, "moves": sheep_moves},
+            "cash_reserve": {"present": bool(cash_moves),
+                             "n_moves": n_cash, "moves": cash_moves},
             "tail_savings": {"present": bool(tail_removed),
                              "n_removed": n_removed, "removed": tail_removed},
         },
