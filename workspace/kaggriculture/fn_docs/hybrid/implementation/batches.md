@@ -30,7 +30,8 @@
 | B18(完成 09-25) | 构建面：retape_sheep_timing → retape_tail_savings → audit_diff_vs_r34a → pack_r37 → build_r37 | build_r37 实跑产出 r37 main(430a702d73cc…)+tar(dcbdcf9743d2…)+manifest；diff 审计 ok 零 UNATTRIBUTED；确定性双跑逐字节一致 | 真 r34a 手术实况：羊=1 前移+1 skip+229 no-op（231 批本就 ≥5 刀）、尾盘 CARE 779 删；锚行天然兼容零缝合；签名微调 out_dir=None×2+测试 str 键裁定（登记） |
 | B19(完成 09-25；修订 09-26) | 重演判决线（R19 判据）：parse_episode_states → replay_guard_verdict → judge_cash_guard_replay | pytest 全绿（29+11）；6 灾难+10 对照实跑产出 evidence | **修订后 overall=PASS**：死牛 0✓/真丢单 0✓/d1 现金 12✓（原 17 张失败单=判定器假阳性——买畜进棚不上格+钱被卖货掩蔽，逐张复核全额成交）；对照 l1 降观测（用户裁决：min −25,433/sum +130,128 留档，"不伤胜局"交 B20 胜率判） |
 | ▶ B20 | 联赛判决线（R20 判据）：count_shearings → judge_sheep_league | pytest test_judge_league 全绿；300-500 局联赛实跑产出 evidence（逐局 WL/刀次/分组胜率） | 判据=R20 ②（5 刀/h2h≥0.55/胜局不翻负）；care_rate 观测不进门槛 |
-| B21 | 门禁+总指挥：verify_r37_gates → run_r37_iteration wired | verify_r37_gates 实跑五门面 evidence（四门+h2h≥0.55 独立 n 报+饿死+谱系）；run_r37_iteration 全链实跑一次出裁决 | 发射裁决呈用户批间门；standing 代执行授权沿惯例 |
+| B21(完成 09-26) | 门禁+总指挥：verify_r37_gates → run_r37_iteration wired | 五门实跑 **overall=PASS**（合规 4/4、launch 四门、h2h 0.5625 n=8 独立、谱系 16-0、饿死 26/26+净经济 +73,824 金）；判决 A 复跑全绿（对照 l1_min 0.0） | **r37 已发射** ref 56580761 PENDING（standing 代执行+台账 launch_ledger.json；每日 1/5、候选 1/2）；饿死门四轮攻坚+判据重裁见变更记录 |
+| ▶ （本表止） | R19/R20 全批次 B17-B21 完结；后续=发射读数 SOP 监控至 09-29 终榜定案 | — | 战后 /fn-close 待 09-30 收口 |
 
 ## 变更记录（计划层事件）
 | 日期 | 事件 | 说明 |

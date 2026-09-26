@@ -1,0 +1,16 @@
+{
+ "launch_ledger": "r37/family-orderbook",
+ "entry": {
+  "date": "2026-09-26T13:45:53",
+  "ref": 56580761,
+  "status": "PENDING",
+  "description": "public derivative with cash-floor guard and earlier flock schedule",
+  "main_sha256": "4b237e412d510193",
+  "tar_sha256": "676462ac168132cd",
+  "auth": "standing 代执行（用户授权 2026-09-24 起，台账留痕）",
+  "gates": "overall=PASS 五门全绿（compliance/launch/h2h 0.5625 n=8/lineage 16-0/starve 净经济 +73,824 金 26 局）",
+  "judgment": "R19 三指标全绿（死牛 0/真丢单 0/d1 h0 现金≥4；对照 l1_min 0.0）",
+  "quota": "每日≤5（今 1/5）、每候选≤2（r37 候选 1/2）；今日余量 4"
+ },
+ "written_at": "2026-09-26T13:46:45Z"
+}
