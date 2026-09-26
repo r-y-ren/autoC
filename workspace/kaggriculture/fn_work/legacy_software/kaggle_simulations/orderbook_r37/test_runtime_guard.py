@@ -80,7 +80,7 @@ def test_r37_agent(monkeypatch):
     obs_g, act_g, floors = calls[0]
     assert obs_g is obs
     assert act_g is base  # 空账零回填→基座动作原对象交守卫
-    assert floors == {"d0_end": 12, "buy_animal": "exact_cost", "hard_min": 4}
+    assert floors == {"d0_end": 5, "buy_animal": "exact_cost", "hard_min": 4}  # 09-26 标定 12→5
     assert cash_guard_block._r37_agent._defer_ledger == []
 
     # ⑧零干预路径同对象返回（真守卫：step 10 窗外+动作无 BUY_ANIMAL→零足迹）。

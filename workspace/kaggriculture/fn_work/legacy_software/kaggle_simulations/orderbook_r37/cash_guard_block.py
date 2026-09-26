@@ -12,11 +12,11 @@ inject_cash_guard_block 按函数 ast 抽取追加进包内——三函数须自
 跨批修订口径（2026-09-26 用户裁决；现金守卫三处过度扣单根因修复）：
 ①逐单价丢单保护：BUY_ANIMAL 顺延线=该单实际成本（qty×引擎单价），只拦
   引擎真会静默丢的（执行点现金 at[i] < 该单成本；引擎 _commit_unit 逐单位
-  money<price 即中止该单、余量静默丢弃）。floors 形态={"d0_end": 12,
+  money<price 即中止该单、余量静默丢弃）。floors 形态={"d0_end": 5,
   "buy_animal": "exact_cost", "hard_min": 4, "prices": <可选核价表>}：
   buy_animal 恒为字符串 "exact_cost"（逐单价模式），prices=item→单价
   覆盖表（缺省=引擎价目转录 CROPS["seed"]/ANIMALS["cost"]）；d0 日终窗
-  ≥12 与硬底线 4（夹持制）不变。
+  ≥5（09-26 标定自 12）与硬底线 4（夹持制）不变。
 ②执行点现金投影计入同列表卖单收入：at[i] 与动作后现金 end 计入同 market
   列表中位序在前（j<i）SELL 单预期收入（引擎 per-unit lockstep 结算：
   同列表先序单位先成交，slot j 整单先于 slot i 结算）；卖价估计=
@@ -55,7 +55,7 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any],
 
     结构定义（本层定形，_r37_cash_guard 对齐；R19 核心增量=顺延账跨步重试，
     顺延不是删除、是择机重发）：
-    - floors 常数 = {"d0_end": 12, "buy_animal": "exact_cost", "hard_min": 4}
+    - floors 常数 = {"d0_end": 5, "buy_animal": "exact_cost", "hard_min": 4}
       （跨批修订①：buy_animal 逐单价模式取代旧版平线 500；三键常数钉住）。
     - 顺延账缓存 = 本函数属性 _r37_agent._defer_ledger（list；条目同
       _r37_defer_low_priority 顺延账 {"op","item","qty","cost","slot"}，条目
@@ -141,7 +141,7 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any],
         hires_today = hires_raw
 
         # ---- 3. 核价/执行点现金（口径同 _r37_cash_guard；修订①②） ----
-        floors = {"d0_end": 12, "buy_animal": "exact_cost", "hard_min": 4}
+        floors = {"d0_end": 5, "buy_animal": "exact_cost", "hard_min": 4}
         seed_price = {"WHEAT": 10, "CARROT": 20, "TOMATO": 50,
                       "STRAWBERRY": 100, "MELON": 80}
         animal_cost = {"GOOSE": 300, "COW": 400, "SHEEP": 500}
@@ -340,7 +340,7 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any],
 
 def _r37_cash_guard(observation: Dict[str, Any], base_action: Dict[str, Any],
                     floors: Dict[str, Any]) -> Dict[str, Any]:
-    """现金下限判定：识别当前步适用下限（①d0 日终窗 step23 前最后动作 ≥12；
+    """现金下限判定：识别当前步适用下限（①d0 日终窗 step23 前最后动作 ≥5（09-26 标定：考古实证过夜 4-5 金即可满编 d1 三手+首日喂养；12→5 使顺延从 2 颗种子减为 1 颗，降低计划漂移）；
     ②BUY_ANIMAL 逐单价丢单线=该单实际成本[修订①，引擎真会静默丢的
     at[i]<qty×单价 才触]）；触线→交 _r37_defer_low_priority，不触线原样
     放行；下限为可配置常数（判决标定，硬底线 4 不可破）。
@@ -349,7 +349,7 @@ def _r37_cash_guard(observation: Dict[str, Any], base_action: Dict[str, Any],
     输出: {hit_floor, adjusted_action} / 错误: 状态读取失败→不干预原样返回。
 
     结构定义（本层定形，向下游 _r37_defer_low_priority 对齐）：
-    - floors = {"d0_end": 12, "buy_animal": "exact_cost", "hard_min": 4,
+    - floors = {"d0_end": 5, "buy_animal": "exact_cost", "hard_min": 4,
       "prices": <可选核价表>}（前三键皆必填）：
       d0_end=日终窗下限、buy_animal=BUY_ANIMAL 顺延线模式（恒为字符串
       "exact_cost"=逐单价模式[修订①]：顺延线=该单实际成本 qty×单价，只拦
