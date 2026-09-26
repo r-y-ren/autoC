@@ -234,7 +234,8 @@ def build_sellflow_library(replay_dir: str, labels: Any = None) -> Dict[str, Any
         "global": {"n_episodes": n_used, "hist": global_hist},
     }
 
-    lib_json = json.dumps(library, sort_keys=True, separators=(",", ":"))
+    lib_json = json.dumps(library, sort_keys=True, separators=(",", ":"),
+                             ensure_ascii=False)  # 与 pack AST 重算口径统一（评审 P3）
     sha256 = hashlib.sha256(lib_json.encode("utf-8")).hexdigest()
 
     build_audit: Dict[str, Any] = {

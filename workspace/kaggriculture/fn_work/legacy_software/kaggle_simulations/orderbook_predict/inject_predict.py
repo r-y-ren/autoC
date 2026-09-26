@@ -74,7 +74,8 @@ def _module_bound_names(tree):
 
 def _canonical_lib_sha(obj: Any) -> str:
     """canonical json sha256（与 sellflow 建库件同口径：sort_keys+紧凑分隔）。"""
-    blob = json.dumps(obj, sort_keys=True, separators=(",", ":"))
+    blob = json.dumps(obj, sort_keys=True, separators=(",", ":"),
+                      ensure_ascii=False)  # 与 pack AST 重算口径统一（评审 P3）
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
 
