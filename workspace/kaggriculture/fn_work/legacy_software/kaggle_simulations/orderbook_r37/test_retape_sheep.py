@@ -21,7 +21,9 @@ responsibility.md【R19/R20 增补】retape_sheep_timing 行）：
   （d12 买点潜在 4 刀仍达标），市场单/输入零改动；
 ⑨剪毛覆盖·不可达断链标注——首选落点走位链断（相邻拍曼哈顿 >1）→换单元拍
   补进（harvest_add）且 change_table 标注断链；全不可达→④格刀红即抛
-  （消息含潜在刀次仅报不判）。
+  （消息含潜在刀次仅报不判）；
+⑩格位信息静态推导——_derive_grid_info 从磁带逐路由模拟走位链（出生位/
+  日界重生/棚边破并序）+PLACE SHEEP 上栏拍出格位块；坏磁带→路由缺省降级。
 """
 import base64
 import copy
@@ -427,3 +429,46 @@ def test_shear_cell_unreachable_chain_annotated():
     with pytest.raises(RuntimeError,
                        match=r"④格刀红.*实际剪毛=4<5.*潜在刀次=5 仅报不判"):
         retape_sheep.retape_sheep_timing(pkg, grid_info=grid2)
+
+
+# ---------------------------------------------------------------------------
+# ⑩ 格位信息静态推导（_derive_grid_info；build 接线源）
+# ---------------------------------------------------------------------------
+def test_derive_grid_info():
+    # ⑩ 走位链+PLACE SHEEP→格位块正确：固定出生位 (4,4)、N/S/E/W 逐拍、
+    # 日界重生（farmer 回出生位/hands 清零）、新手棚边四格占用最小 NWSE 破并、
+    # 上栏拍=buy_day；坏磁带（指令形态不符/hands 日内缩水）→该路由缺省降级。
+    steps = 48
+    fm = {s: ["PASS"] for s in range(steps)}
+    hm = {s: [["PASS"]] if 2 <= s <= 23 or s >= 25 else [] for s in range(steps)}
+    fm[1] = ["WEST"]                        # (4,4)→(3,4)
+    hm[3] = [["NORTH"]]                     # h0 (4,4)→(4,3)（step2 出生 (4,4)）
+    fm[4] = ["PLACE", "SHEEP"]              # F 上栏 (3,4)
+    hm[4] = [["PLACE", "SHEEP"]]            # h0 上栏 (4,3)
+    hm[26] = [["WEST"]]                     # d1 h0 重生 (5,4)→(4,4)
+    hm[27] = [["PLACE", "SHEEP"]]           # d1 上栏 (4,4)
+    actions = [{"farmer": fm[s], "hands": hm[s], "market": []}
+               for s in range(steps)]
+    pkg = {"actions": actions, "routes": {"0": list(range(steps))}, "shops": []}
+    gi = retape_sheep._derive_grid_info(pkg)
+    assert set(gi) == {"0"}
+    block = gi["0"]
+    assert block["cells"] == {(3, 4): {"buy_day": 0}, (4, 3): {"buy_day": 0},
+                              (4, 4): {"buy_day": 1}}
+    pos = block["unit_pos"]
+    assert pos[(0, "F")] == (4, 4) and pos[(1, "F")] == (3, 4)    # 出生位+走位
+    assert pos[(2, "h0")] == (4, 4) and pos[(3, "h0")] == (4, 3)  # 棚边破并序
+    assert pos[(4, "F")] == (3, 4) and pos[(4, "h0")] == (4, 3)   # 上栏=收割格位
+    assert pos[(24, "F")] == (4, 4)                               # 日界重生
+    assert pos[(25, "h0")] == (5, 4) and pos[(26, "h0")] == (4, 4)  # d1 新生
+
+    # 坏磁带→缺省降级（该路由块缺失=旧口径 fail-safe；不抛内容错）。
+    bad = copy.deepcopy(pkg)
+    bad["actions"][3]["farmer"] = 5            # 指令形态不符
+    assert retape_sheep._derive_grid_info(bad) == {}
+    bad2 = copy.deepcopy(pkg)
+    bad2["actions"][10]["hands"] = []          # hands 日内缩水
+    assert retape_sheep._derive_grid_info(bad2) == {}
+    assert retape_sheep._derive_grid_info({"actions": [], "routes": {}}) == {}
+    with pytest.raises(TypeError):
+        retape_sheep._derive_grid_info(None)

@@ -59,6 +59,9 @@ per_sheep 20 格 5-8 刀、唯 (3,2) 型短板格 4 刀）：
 - 术后静态核算（格位在场时）：判据=每格羊实际剪毛 ≥5（④格刀红，不达标
   即抛）；潜在刀次/剪毛轮次仅报不作红绿；③窗界与全部不变量沿旧。无格位
   信息=①②③沿旧（潜在刀次红绿维持，兼容既有契约面）。
+- 格位信息静态推导（_derive_grid_info，build 接线用）：从磁带逐路由模拟
+  单元走位链推出格位块（引擎实据见其 docstring）；推不出的路由缺省=旧口径
+  fail-safe，build 侧推导失败降级单参旧口径并在返回标注（不抛）。
 
 编解码私有助手（leading-underscore 内部件，供 retape_tail_savings/build_r37
 复用）：_decode_routes(main_text) → 磁带路由包 {actions, routes, shops}（=
@@ -346,6 +349,25 @@ def _commit_action(pkg: Dict[str, Any], idxs: List[int], step: int,
     idxs[step] = len(pkg["actions"]) - 1
 
 
+def _pool_residue_sweep(pkg: Dict[str, Any]) -> None:
+    """无主池槽就地还原为旧池件内容（=写时复制残件；池闭合归一）。
+
+    同拍多刀/多阶段手术的中间件被顶替后成为无主池件（内容=半成品）——
+    还原为 actions[0]（原件，append 语义下永不被改写）内容，使 audit
+    unreferenced_pool_addition 口径（无主池件须为旧池件既有内容）成立；
+    索引零变动（池增长=手术步数不变），被引用池件零扰动。
+    """
+    if not pkg["actions"]:
+        return
+    refd: set = set()
+    for ids in pkg["routes"].values():
+        refd.update(ids)
+    base = copy.deepcopy(pkg["actions"][0])
+    for i in range(len(pkg["actions"])):
+        if i not in refd:
+            pkg["actions"][i] = copy.deepcopy(base)
+
+
 def _align_shear_rounds(pkg: Dict[str, Any], rid: str,
                         window: Dict[str, Any],
                         change_table: List[Dict[str, Any]]) -> None:
@@ -422,6 +444,112 @@ def _set_unit(action: Dict[str, Any], u: str, op: List[str]) -> None:
 # ---------------------------------------------------------------------------
 # 剪毛覆盖扩展（格位信息版；契约见模块 docstring 剪毛覆盖扩展段）
 # ---------------------------------------------------------------------------
+# 引擎走位常数（exports/probes/twin_fidelity/engine_cache/kaggriculture.py
+# 实据：boardSize=10/turnsPerDay=24/y 向下、_end_of_day 日界清手回出生位、
+# _spawn_hand 棚边四格占用最小 NWSE；replay 112938600 头两日逐拍复核吻合）。
+_BOARD_SIZE = 10
+_SHED_TILES = ((4, 4), (5, 4), (4, 5), (5, 5))   # _shed_access_tiles NWSE
+_SPAWN = (4, 4)                                   # _default_spawn 首个 NW 格
+_MOVES = {"NORTH": (0, -1), "SOUTH": (0, 1),
+          "EAST": (1, 0), "WEST": (-1, 0)}
+
+
+def _derive_route_block(seq: List[Dict[str, Any]]
+                        ) -> Optional[Dict[str, Any]]:
+    """单路由走位链静态模拟 → 格位块 {cells, unit_pos}；推不出→None。
+
+    日界（step%24==0）farmer 回出生位、hands 清零；hands 当日首见下标=出生
+    （棚边四格占用最小、NWSE 破并——占用含 farmer 与已生 hands 当前位）；
+    N/S/E/W 逐拍移 1 格（出界=引擎静默不动）；unit_pos 记执行后位置（HARVEST
+    不移位=收割格位）；PLACE SHEEP 执行后位置=羊格，buy_day=该拍日。
+    推不出（动作/指令形态不符、hands 日内缩水）→ None（fail-safe）。
+    """
+    pos: Dict[Tuple[int, str], Any] = {}
+    cells: Dict[Any, Dict[str, Any]] = {}
+    cur: Dict[str, Any] = {"F": _SPAWN}
+    n_hands = 0
+    for s, a in enumerate(seq):
+        if not isinstance(a, dict):
+            return None
+        if s % 24 == 0:
+            cur = {"F": _SPAWN}
+            n_hands = 0
+        fu = a.get("farmer")
+        hu = a.get("hands") or []
+        if not isinstance(hu, list):
+            return None
+        if fu is not None and not (isinstance(fu, list)
+                                   and (not fu or isinstance(fu[0], str))):
+            return None
+        for h in hu:
+            if not (isinstance(h, list)
+                    and (not h or isinstance(h[0], str))):
+                return None
+        if len(hu) < n_hands:
+            return None      # hands 日内缩水（引擎无此形态）→推不出
+        if len(hu) > n_hands:
+            occ: Dict[Any, int] = {}
+            for p in list(cur.values()):
+                occ[p] = occ.get(p, 0) + 1
+            for i in range(n_hands, len(hu)):
+                tile = min(_SHED_TILES,
+                           key=lambda t: (occ.get(t, 0), _SHED_TILES.index(t)))
+                occ[tile] = occ.get(tile, 0) + 1
+                cur["h%d" % i] = tile
+        n_hands = len(hu)
+        for i, op in enumerate([fu] + list(hu)):
+            u = "F" if i == 0 else "h%d" % (i - 1)
+            p = cur.get(u, _SPAWN)
+            if isinstance(op, list) and op and op[0] in _MOVES:
+                dx, dy = _MOVES[op[0]]
+                nx, ny = p[0] + dx, p[1] + dy
+                if 0 <= nx < _BOARD_SIZE and 0 <= ny < _BOARD_SIZE:
+                    p = (nx, ny)
+            cur[u] = p
+            pos[(s, u)] = p
+            if (isinstance(op, list) and len(op) > 1 and op[0] == "PLACE"
+                    and op[1] == "SHEEP" and p not in cells):
+                cells[p] = {"buy_day": s // 24}
+    return {"cells": cells, "unit_pos": pos}
+
+
+def _derive_grid_info(routes: Dict[str, Any]) -> Dict[str, Any]:
+    """磁带路由包 → 逐路由格位块（静态模拟推导；推不出的路由缺省）。
+
+    签名意图（leading-underscore 内部件，沿「仅契约函数登记」惯例不入函数
+    大表）：输入: 磁带路由包（=retape_sheep_timing 首参同形） /
+    输出: {rid: {"cells": {格: {"buy_day": b}}, "unit_pos": {(step,unit): 格}}}
+    / 错误: 输入非 dict→TypeError；内容坏（形态不符/缺块）不抛——该路由块缺
+    失即该路由走旧口径（fail-safe 缺省降级），整包不可解则返回 {}。
+
+    推导口径（kaggriculture 引擎缓存实据+replay 112938600 复核）：
+    - 单元走位链=N/S/E/W 逐拍推位置，起点=固定出生位（farmer 日界回 (4,4)、
+      hands 当日首见拍出生棚边四格占用最小 NWSE；引擎 _end_of_day 日清手、
+      _spawn_hand 破并序——replay 头两日出生位逐拍吻合）。
+    - 羊格 buy_day=该格被 PLACE SHEEP 的拍（BUY_ANIMAL 进棚、PLACE 上格，
+      与 count_shearings 行数据口径对齐）；同格重复上栏取首拍。
+    - cells 为空的路由不出块（无格位可核→旧口径）。
+    """
+    if not isinstance(routes, dict):
+        raise TypeError("routes must be dict, got %s"
+                        % type(routes).__name__)
+    acts = routes.get("actions")
+    rmap = routes.get("routes")
+    if not isinstance(acts, list) or not isinstance(rmap, dict):
+        return {}
+    out: Dict[str, Any] = {}
+    for rid in sorted(rmap, key=lambda k: int(k)):
+        ids = rmap[rid]
+        if not isinstance(ids, list) or not ids:
+            continue
+        try:
+            seq = [acts[i] for i in ids]
+        except (IndexError, TypeError):
+            continue
+        block = _derive_route_block(seq)
+        if block is not None and block["cells"]:
+            out[rid] = block
+    return out
 def _check_grid(rid: Any, grid: Any) -> Tuple[Dict[Any, Dict[str, Any]],
                                               Dict[Tuple[int, str], Any]]:
     """格位信息块形态校验（fail-closed）→ (cells, unit_pos)。"""
@@ -486,8 +614,13 @@ def _shear_cells(seq: List[Dict[str, Any]], grid: Dict[str, Any],
     return out
 
 
-def _chain_ok(pos: Dict[Tuple[int, str], Any], t: int, u: str) -> bool:
-    """配套走位指令链可达：格位轨迹相邻拍曼哈顿距离 ≤1（边界缺拍按可达）。"""
+def _chain_ok(pos: Dict[Tuple[int, str], Any], t: int, u: str,
+              index: Optional[Dict[str, List[int]]] = None) -> bool:
+    """配套走位指令链可达：同日内相邻拍曼哈顿距离 ≤1（边界缺拍按可达）。
+
+    日界=引擎日界重生（farmer 回出生位/hands 清零），跨日拍不比；index=
+    {unit: 升序拍表} 预建加速（缺省现扫）。
+    """
     cur = pos.get((t, u))
     if cur is None:
         return False
@@ -495,8 +628,22 @@ def _chain_ok(pos: Dict[Tuple[int, str], Any], t: int, u: str) -> bool:
     def _man(a: Any, b: Any) -> int:
         return abs(int(a[0]) - int(b[0])) + abs(int(a[1]) - int(b[1]))
 
-    prev = max((s for (s, u2) in pos if u2 == u and s < t), default=None)
-    nxt = min((s for (s, u2) in pos if u2 == u and s > t), default=None)
+    day = t // 24
+    if index is None:
+        prev = max((s for (s, u2) in pos
+                    if u2 == u and s < t and s // 24 == day), default=None)
+        nxt = min((s for (s, u2) in pos
+                   if u2 == u and s > t and s // 24 == day), default=None)
+    else:
+        import bisect
+        lst = [s for s in index.get(u, []) if s // 24 == day]
+        k = bisect.bisect_left(lst, t)
+        if k < len(lst) and lst[k] == t:
+            prev = lst[k - 1] if k > 0 else None
+            nxt = lst[k + 1] if k + 1 < len(lst) else None
+        else:
+            prev = lst[k - 1] if k > 0 else None
+            nxt = lst[k] if k < len(lst) else None
     if prev is not None and _man(pos[(prev, u)], cur) > t - prev:
         return False
     if nxt is not None and _man(cur, pos[(nxt, u)]) > nxt - t:
@@ -531,23 +678,86 @@ def _offpattern_harvests(seq: List[Dict[str, Any]],
     return out
 
 
+def _walk_path(p: Any, c: Any) -> List[Tuple[str, Any]]:
+    """p→c 走位指令链（1 拍 1 格，x 轴先 y 轴后，确定性）→ [(指令, 逐步位)]。"""
+    x, y = int(p[0]), int(p[1])
+    cx, cy = int(c[0]), int(c[1])
+    out: List[Tuple[str, Any]] = []
+    while x != cx:
+        dx = 1 if cx > x else -1
+        x += dx
+        out.append(("EAST" if dx > 0 else "WEST", (x, y)))
+    while y != cy:
+        dy = 1 if cy > y else -1
+        y += dy
+        out.append(("SOUTH" if dy > 0 else "NORTH", (x, y)))
+    return out
+
+
+def _idle_runs(seq: List[Dict[str, Any]],
+               pos: Dict[Tuple[int, str], Any], u: str, day: int
+               ) -> List[Tuple[int, int, Any, int, bool]]:
+    """单元当（日,unit）空闲跑：连续空闲拍段 [(t0, t1, 起点位, 末忙拍, 断链)]。
+
+    PASS 不移位——跑内格位应恒定；出现跳变=走位链断（轨迹不自洽），标断链
+    供手术留痕弃用。
+    """
+    lst = sorted((t, p) for (t, u2), p in pos.items()
+                 if u2 == u and t // 24 == day)
+
+    def _idle(t: int) -> bool:
+        cur = dict(_units(seq[t])).get(u)
+        return cur is None or cur == [] or cur == ["PASS"]
+
+    busy = [t for t, _ in lst if not _idle(t)]
+    last_busy = max(busy) if busy else -1
+    out: List[Tuple[int, int, Any, int, bool]] = []
+    run: List[Tuple[int, Any]] = []
+
+    def _flush() -> None:
+        if not run:
+            return
+        p0 = run[0][1]
+        broken = any(p != p0 for _, p in run)
+        out.append((run[0][0], run[-1][0], p0, last_busy, broken))
+
+    for t, p in lst:
+        if _idle(t):
+            if run and t == run[-1][0] + 1:
+                run.append((t, p))
+            else:
+                _flush()
+                run = [(t, p)]
+        else:
+            _flush()
+            run = []
+    _flush()
+    return out
+
+
 def _fill_cell_shears(pkg: Dict[str, Any], rid: Any, grid: Dict[str, Any],
                       window: Dict[str, Any],
                       change_table: List[Dict[str, Any]]) -> None:
     """每格实际刀次 <5 的羊格补齐至 ≥5（手术扩展；只动羊格 HARVEST/空闲拍）。
 
-    逐格循环（每次手术后重解剖防陈旧视图）：优先挪用离型 HARVEST
-    （kind=harvest_move），其次补进既有剪毛轮的空闲单元拍（kind=harvest_add）；
-    落点=格位恰在该羊格的 ['PASS'] 单元拍（不动市场单/FEED/CARE/作物 HARVEST）。
-    配套走位指令链不可达的落点弃用并留痕；换拍/让刀成功后 reason 标注断链。
+    逐格逐刀循环（每次手术后重解剖防陈旧视图）：落点=单元空闲跑（连续
+    ['PASS'] 拍段）上的收割拍——配套走位指令链把单元带到羊格（1 拍 1 格
+    往返；日界=引擎日界重生，跑尾段到当日末忙拍后可单程免返），链不可达
+    （相邻拍曼哈顿 >1/预算 2M+1 超跑长/单程条件不满足）→换单元拍或换轮内
+    别的羊格先剪（盈余格让刀），断链留痕进 reason。优先挪用离型 HARVEST
+    （产毛前空刀/盈余格让刀，kind=harvest_move），其次补进既有剪毛轮的
+    空闲单元拍（kind=harvest_add）；不动市场单/FEED/CARE 序/作物 HARVEST。
+    走位链与收割拍逐拍写回格位轨迹（手术后核算同源）。
     """
     idxs = pkg["routes"][rid]
     min_cuts = int(window["min_cuts"])
+    first = int(window["first_yield_day"])
+    last = int(window["last_day"])
     guard = 0
     while True:
         guard += 1
         if guard > 64:
-            break
+            return
         seq = [pkg["actions"][i] for i in idxs]
         cells = _shear_cells(seq, grid, window)
         short = sorted((c for c, v in cells.items() if v["n_cuts"] < min_cuts),
@@ -556,66 +766,106 @@ def _fill_cell_shears(pkg: Dict[str, Any], rid: Any, grid: Dict[str, Any],
             return
         cell = short[0]
         b = cells[cell]["buy_day"]
-        first = int(window["first_yield_day"])
-        last = int(window["last_day"])
         cut_days = {s // 24 for s in cells[cell]["cuts"]}
         uncut = [d for d in cells[cell]["window_slots"] if d not in cut_days]
         rounds = _shear_rounds(seq)
-        _, pos = _check_grid(rid, grid)
-        cands = []
-        for (t, u), c in pos.items():
-            if c != cell or not (0 <= t < len(idxs)):
-                continue
-            cur = dict(_units(pkg["actions"][idxs[t]])).get(u)
-            if cur != ["PASS"]:
-                continue
-            day = t // 24
-            if not (b + first <= day <= last):
-                continue
-            cands.append((t, u, day))
-        cands.sort(key=lambda x: (0 if x[2] in uncut else 1,
-                                  0 if x[2] in rounds else 1, x[0], x[1]))
-        srcs = _offpattern_harvests(seq, grid, cells, min_cuts)
+        pos = grid["unit_pos"]
+        units = sorted({u for (_, u) in pos})
+        cands: List[Dict[str, Any]] = []
         rejected: List[str] = []
-        for t, u, day in cands:
-            if not _chain_ok(pos, t, u):
-                rejected.append("(%d,%s)" % (t, u))
+        for u in units:
+            for day in range(b + first, last + 1):
+                for t0, t1, p0, last_busy, broken in _idle_runs(seq, pos, u,
+                                                               day):
+                    if broken:
+                        rejected.append("(%d,%s)" % (t0, u))
+                        continue
+                    m = abs(int(p0[0]) - int(cell[0])) \
+                        + abs(int(p0[1]) - int(cell[1]))
+                    span = t1 - t0 + 1
+                    forms: List[str] = []
+                    if 2 * m + 1 <= span:
+                        forms.append("round")
+                    if t1 > last_busy and m + 1 <= span and "round" not in forms:
+                        forms.append("trail")
+                    if not forms:
+                        continue
+                    for form in forms:
+                        cands.append({
+                            "form": form, "u": u, "day": day, "t0": t0,
+                            "t1": t1, "p0": p0, "m": m,
+                            "t_h": t0 + m,
+                        })
+        cands.sort(key=lambda x: (0 if x["day"] in uncut else 1,
+                                  0 if x["day"] in rounds else 1,
+                                  x["t_h"], x["u"],
+                                  0 if x["form"] == "round" else 1))
+        steps_of: Dict[str, List[int]] = {}
+        for s2, u2 in pos:
+            steps_of.setdefault(u2, []).append(s2)
+        for lst in steps_of.values():
+            lst.sort()
+        srcs = _offpattern_harvests(seq, grid, cells, min_cuts)
+        progressed = False
+        for cand in cands:
+            t0, t1, u, m = cand["t0"], cand["t1"], cand["u"], cand["m"]
+            t_h = cand["t_h"]
+            if not _chain_ok(pos, t0, u, steps_of):
+                rejected.append("(%d,%s)" % (t0, u))
                 continue
             note = ""
             if rejected:
-                note = ("；断链标注：候选 %s 走位链不可达（相邻拍曼哈顿 >1）→"
-                        "换单元拍/换轮内别的羊格先剪" % ",".join(rejected))
+                note = ("；断链标注：候选 %s 走位链不可达→换单元拍/换轮内别的"
+                        "羊格先剪" % ",".join(rejected[:3]))
+            path = _walk_path(cand["p0"], cell)
+            for i, (op, p) in enumerate(path):
+                _, _, act = _cow_action(pkg, rid, t0 + i)
+                _set_unit(act, u, [op])
+                _commit_action(pkg, idxs, t0 + i, act)
+                pos[(t0 + i, u)] = p
+            _, _, hact = _cow_action(pkg, rid, t_h)
+            _set_unit(hact, u, ["HARVEST"])
+            _commit_action(pkg, idxs, t_h, hact)
+            pos[(t_h, u)] = cell
+            if cand["form"] == "round":
+                for i, (op, p) in enumerate(_walk_path(cell, cand["p0"])):
+                    _, _, act = _cow_action(pkg, rid, t_h + 1 + i)
+                    _set_unit(act, u, [op])
+                    _commit_action(pkg, idxs, t_h + 1 + i, act)
+                    pos[(t_h + 1 + i, u)] = p
+            else:
+                for t in range(t_h + 1, t1 + 1):
+                    pos[(t, u)] = cell     # 跑尾段驻留（日界重生免返）
             if srcs:
                 h, u2, c2, why = srcs[0]
-                _, _, src = _cow_action(pkg, rid, h)
-                _set_unit(src, u2, ["PASS"])
-                _commit_action(pkg, idxs, h, src)
-                _, _, tgt = _cow_action(pkg, rid, t)
-                _set_unit(tgt, u, ["HARVEST"])
-                _commit_action(pkg, idxs, t, tgt)
+                _, _, sact = _cow_action(pkg, rid, h)
+                _set_unit(sact, u2, ["PASS"])
+                _commit_action(pkg, idxs, h, sact)
                 change_table.append({
                     "route": str(rid), "kind": "harvest_move", "from_step": h,
-                    "to_step": t, "item": "WOOL", "qty": 1,
+                    "to_step": t_h, "item": "WOOL", "qty": 1,
                     "reason": ("shear_cell_pad: cell=%r cuts %d->%d（挪用离型"
-                               " HARVEST：%s；源 %s@%d 让刀至 %s@%d）%s"
+                               " HARVEST：%s；源 %s@%d 让刀；配套走位链 %s"
+                               " %d 步 %s@%d→%r）%s"
                                % (cell, cells[cell]["n_cuts"],
-                                  cells[cell]["n_cuts"] + 1, why, u2, h, u, t,
-                                  note)),
+                                  cells[cell]["n_cuts"] + 1, why, u2, h,
+                                  cand["form"], m, u, t_h, cell, note)),
                 })
             else:
-                _, _, tgt = _cow_action(pkg, rid, t)
-                _set_unit(tgt, u, ["HARVEST"])
-                _commit_action(pkg, idxs, t, tgt)
                 change_table.append({
-                    "route": str(rid), "kind": "harvest_add", "from_step": t,
-                    "to_step": t, "item": "WOOL", "qty": 1,
+                    "route": str(rid), "kind": "harvest_add", "from_step": t_h,
+                    "to_step": t_h, "item": "WOOL", "qty": 1,
                     "reason": ("shear_cell_pad: cell=%r cuts %d->%d（补进剪毛"
-                               "轮空闲单元拍 %s@%d，产毛窗日 %d）%s"
+                               "轮空闲单元拍 %s@%d，配套走位链 %s %d 步，"
+                               "产毛窗日 %d）%s"
                                % (cell, cells[cell]["n_cuts"],
-                                  cells[cell]["n_cuts"] + 1, u, t, day, note)),
+                                  cells[cell]["n_cuts"] + 1, u, t_h,
+                                  cand["form"], m, cand["day"], note)),
                 })
+            progressed = True
+            break
+        if not progressed:
             return
-        return
 
 
 # ---------------------------------------------------------------------------
@@ -665,6 +915,8 @@ def retape_sheep_timing(tape_routes: Dict[str, Any],
     _check_package(tape_routes)
     window = dict(TARGET_WINDOW)
     pkg = copy.deepcopy(tape_routes)      # 输入零改动（写时复制手术）
+    if grid_info is not None:
+        grid_info = copy.deepcopy(grid_info)   # 格位轨迹随手术写回（副本）
     change_table: List[Dict[str, Any]] = []
 
     # 术前留底（不变量核算基线；按路由逐步计，池级共享件不入账）

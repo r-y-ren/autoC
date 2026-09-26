@@ -96,7 +96,10 @@ def test_build_r37(tmp_path, monkeypatch):
         assert (out / name).is_file()
     assert set(res) == {"main_path", "main_sha256", "tar_sha256", "manifest",
                         "diff_attribution", "block_sha", "sheep_change_table",
-                        "tail_removal_list", "r34a_main_path", "r34a_sha256"}
+                        "tail_removal_list", "grid_info_note",
+                        "r34a_main_path", "r34a_sha256"}
+    # 格位推导标注：迷你带无 PLACE SHEEP→无格位块可推导→降级旧口径（不抛）
+    assert res["grid_info_note"] == "degraded to legacy accounting: 无格位块可推导"
     assert res["main_path"] == str(out / "main.py")
     assert res["main_sha256"] == hashlib.sha256(
         (out / "main.py").read_bytes()).hexdigest()
@@ -565,3 +568,40 @@ def _mk_audit_pair():
         "actions": [a0, b1, b2, b3, a4, a5], "routes": routes, "shops": []})
     inj = inject_guard.inject_cash_guard_block(mid)
     return base34, inj["main_text"], inj["block_sha"]
+
+
+def test_build_r37_derived_grid_smoke(tmp_path):
+    # R20 剪毛覆盖集成冒烟（真 r34a）：_derive_grid_info 从真磁带推导格位块→
+    # retape_sheep_timing 启用新判据（术后每格实际剪毛 ≥5）→diff 审计归因绿。
+    from pathlib import Path
+
+    try:
+        from orderbook_r37 import retape_sheep as _rs
+    except ImportError:
+        import retape_sheep as _rs
+
+    r34a = (Path(__file__).resolve().parent.parent
+            / "orderbook_2965_adopt" / "a" / "main.py")
+    out = tmp_path / "out"
+    res = B.build_r37(str(r34a), out_dir=str(out))
+    for name in ("main.py", "submission.tar.gz", "build_manifest.json"):
+        assert (out / name).is_file()
+
+    # ① 真磁带推导出格位块（钉死实测数：34 路由块/283 羊格）。
+    assert res["grid_info_note"] == "derived: 34 routes/283 sheep cells"
+
+    # ② 手术启用新判据：术后按真磁带推导块重算，每格实际剪毛 ≥5（④口径）。
+    pkg = _rs._decode_routes((out / "main.py").read_text(encoding="utf-8"))
+    gi = _rs._derive_grid_info(pkg)
+    assert len(gi) == 34
+    cuts = []
+    for rid, g in gi.items():
+        seq = [pkg["actions"][i] for i in pkg["routes"][rid]]
+        cuts.extend(v["n_cuts"] for v in _rs._shear_cells(seq, g).values())
+    assert len(cuts) == 283 and min(cuts) >= 5
+
+    # ③ diff 审计归因仍绿（白名单三件零 UNATTRIBUTED）。
+    att = res["diff_attribution"]
+    assert att["ok"] is True and att["unattributed"] == []
+    assert att["whitelist"]["sheep_retiming"]["present"] is True
+    assert att["whitelist"]["tail_savings"]["present"] is True

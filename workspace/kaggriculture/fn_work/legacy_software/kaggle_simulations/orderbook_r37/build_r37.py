@@ -25,7 +25,10 @@ def build_r37(r34a_main_path: str,
       测试以 tmp_path 覆盖；首参与返回主键不变（返回含 main_path/
       main_sha256/manifest/diff_attribution）。
     - 编排流（责任契约 R19/R20）：读 r34a 文本→retape_sheep._decode_routes→
-      retape_sheep_timing→retape_tail_savings→_encode_routes→尾块前写两行
+      _derive_grid_info（格位块静态推导，R20 剪毛覆盖；失败→降级单参旧口径
+      并在返回 grid_info_note 标注，不抛）→retape_sheep_timing→
+      retape_tail_savings→_pool_residue_sweep（无主池槽归一=写时复制残件，
+      同拍多刀/多阶段中间件不入 audit 池闭合红）→_encode_routes→尾块前写两行
       变更表注释→inject_cash_guard_block→audit_diff_vs_r34a→pack_r37。
       r34a 输入只读打开、全程零写回（测试钉字节不变）。
     - 变更表注释（pack 自证口径）：恰两行单行注释
@@ -40,7 +43,9 @@ def build_r37(r34a_main_path: str,
       （main.py/submission.tar.gz/build_manifest.json）再抛。
     - 返回：{"main_path", "main_sha256", "tar_sha256", "manifest",
       "diff_attribution", "block_sha", "sheep_change_table",
-      "tail_removal_list", "r34a_main_path", "r34a_sha256"}（全 JSON 可序列化）。
+      "tail_removal_list", "grid_info_note", "r34a_main_path",
+      "r34a_sha256"}（全 JSON 可序列化；grid_info_note=格位推导标注
+      「derived: N routes/M sheep cells」或「degraded to legacy accounting: …」）。
     """
     import hashlib
     import os
@@ -77,8 +82,24 @@ def build_r37(r34a_main_path: str,
 
     # ---- 1. 三白名单改造（写时复制链：输入包零改动） ----
     pkg0 = _rs._decode_routes(t34)
-    sheep = _rs.retape_sheep_timing(pkg0)
+    # 格位信息静态推导（R20 剪毛覆盖）：推导失败→降级单参旧口径并在返回标注
+    # （不抛）；推不出的路由块缺失→该路由旧口径（retape_sheep fail-safe）。
+    grid_info = None
+    try:
+        grid_info = _rs._derive_grid_info(pkg0)
+        n_cells = sum(len(b["cells"]) for b in grid_info.values())
+        grid_note = "derived: %d routes/%d sheep cells" % (len(grid_info),
+                                                           n_cells)
+        if not grid_info:
+            grid_note = "degraded to legacy accounting: 无格位块可推导"
+            grid_info = None
+    except Exception as exc:                       # noqa: BLE001（降级不抛）
+        grid_info = None
+        grid_note = "degraded to legacy accounting: %s: %s" % (
+            type(exc).__name__, exc)
+    sheep = _rs.retape_sheep_timing(pkg0, grid_info=grid_info)
     tail = _rt.retape_tail_savings(sheep["routes"])
+    _rs._pool_residue_sweep(tail["routes"])   # 无主池槽归一（写时复制残件）
     mid = _rs._encode_routes(t34, tail["routes"])
 
     # ---- 2. 变更表注释（canonical 单行 JSON，尾块前落位） ----
@@ -132,6 +153,7 @@ def build_r37(r34a_main_path: str,
         "block_sha": inj["block_sha"],
         "sheep_change_table": sheep_table,
         "tail_removal_list": tail_list,
+        "grid_info_note": grid_note,
         "r34a_main_path": r34a_main_path,
         "r34a_sha256": hashlib.sha256(b34).hexdigest(),
     }
