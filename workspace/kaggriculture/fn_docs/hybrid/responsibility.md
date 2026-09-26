@@ -890,3 +890,88 @@
     - 职责：全量门禁 fail-closed 全跑不短路——四门沿 r30 管线（合规四轴核查/装载 last-callable=_r37_agent/双席 DONE+单步<1s/确定性双跑/体积身份链）+h2h vs r34a 在飞件 ≥0.55（seated 双席位、独立局数 n 报，席位翻转不双计）+饿死零容忍+谱系（v48/v4b 各 8 局无负）；evidence 落 evidence/。
     - 签名意图：输入: r37 包 / 输出: 各门结果+overall / 错误: fail-closed。
     - 调用方：run_r37_iteration。tested：自有单测。核验命令：测试: orderbook_r37/test_gates_r37.py。
+
+---
+
+## 【R21 增补·2026-09-26】对手成交预判·抢跑与避让（PREDICT，r38 候选）
+
+## 结构概览（增补）
+- run_r38_iteration ← R21
+  - build_r38
+    - build_sellflow_library
+    - inject_predict_block
+      - _predict_agent
+        - infer_rival_sells
+        - match_sellflow
+        - extrapolate_sells
+        - apply_dodge
+    - audit_diff_vs_r37
+    - pack_r38
+  - judge_predict_replay
+    - flip_stats
+  - verify_r38_gates
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R21 | run_r38_iteration（判决线：judge_predict_replay→flip_stats） |
+
+## 功能块 run_r38_iteration ← R21
+（块引言：对手建模族第一件。预测=规则式三件套（净卖反推[公开库存差分−自家成交−确定性城镇消费，$1 地板为下界]+卖流库匹配[86 局逐动作，按首二店+step-2 身份指纹]+差分外推 1-2 步）；执行=攻（把预测卖流按 opponent_plan 契约喂基座 `_front_run` 抢跑钩子——plan[step]["market"] 单形状，品项 MILK/WOOL/STRAWBERRY/MELON，钩子自带防重复记账）+防（apply_dodge 预测倾销→我方该品卖单错峰/减量）；置信不足→不动作 fail-safe；只动卖单时点/量，不碰买种养/槽位出口/防重复链/layer D。构建底=r37 在飞件字节（orderbook_r37/build/main.py）；h2h 主对=r37（R21 ②文本 r34a 系立项旧称，变更记录补登）；产物 orderbook_predict/。）
+
+- **run_r38_iteration** [L0|新增]
+  - 职责：编排——build_sellflow_library 建库 → build_r38 产 r38 件 → judge_predict_replay 判决（26 败局[晚崩 15 局重点]+10 胜局对照+闭环副证）→ 判正才 verify_r38_gates 五门 → 全绿交发射（standing 台账）；判负→收档不建发射版。evidence 四件+台账。
+  - 签名意图：输入: 无（CLI） / 输出: {library, build, judgment, gates, verdict} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验命令：测试: orderbook_predict/test_run_r38.py（判据继承 R21 ②判据级）。
+  - **build_r38** [L1|新增]
+    - 职责：构建编排——以 r37 在飞件字节为底 → build_sellflow_library 建库 → inject_predict_block 注入预测块（库数据随块内嵌）→ audit_diff_vs_r37 → pack_r38；r37/在飞件零改动。
+    - 签名意图：输入: r37 main 路径 / 输出: r38 main+manifest+变更集审计 / 错误: 超白名单即抛。
+    - 调用方：run_r38_iteration。tested：自有单测。核验命令：测试: orderbook_predict/test_build_r38.py。
+    - **build_sellflow_library** [L2|新增]
+      - 职责：卖流库构建——从 86 局逐动作 replay（/tmp/r33audit）提取对手 SELL 事件（步/品类/量），聚合为按（首二店组合，step-2 身份指纹）键的分布库（步窗-品类-量直方）；analysis20/22 分层标签作注记；输出可内嵌紧凑数据结构+构建审计（来源 sha/覆盖局数）。
+      - 签名意图：输入: replay 目录+分层标签 / 输出: {library, build_audit} / 错误: 语料缺失/解析失败即抛（fail-closed）。
+      - 调用方：build_r38。tested：自有单测。核验命令：测试: orderbook_predict/test_sellflow.py。
+    - **inject_predict_block** [L2|新增]
+      - 职责：生成预测块源码（_predict_agent 四函数链+内嵌卖流库数据）追加到副本尾部；注入校验四条沿 B17（py_compile/AST/装载后 globals 末 callable=_predict_agent 单参可调/逐字节尾部追加零改行）+库数据完整性校验（库 sha 对账）；捕获行命名避底版撞名（先例 _R37_GUARD_PARENT）。
+      - 签名意图：输入: r37 main 文本+库数据 / 输出: {main_text, block_sha} / 错误: 校验任一不过即抛。
+      - 调用方：build_r38。tested：自有单测。核验命令：测试: orderbook_predict/test_inject_predict.py。
+      - **_predict_agent** [L3|新增]（运行时，注入包内；单参官方入口）
+        - 职责：入口包装——父层（=_r37_agent 链）取动作 → infer_rival_sells 维护对手净卖推断账 → extrapolate_sells 把未来 1-2 步预测 SELL 写入 opponent_plan 容器（plan[step]["market"] 契约，钩子自动抢先卖）→ apply_dodge 对本步卖单做错峰/减量 → 返回；任何异常→父层动作原样（fail-safe）；step==0 复位推断账与计划容器。
+        - 签名意图：输入: observation / 输出: 调整后 action / 错误: 异常→父层动作原样。
+        - 调用方：装载链（last-callable）。tested：自有单测。核验命令：测试: orderbook_predict/test_predict_runtime.py。
+        - **infer_rival_sells** [L4|新增]（运行时）
+          - 职责：净卖反推——逐步记录公开面（market.inventory 差分−自家成交−确定性城镇消费 shop_interval=4/center_interval=24）得对手上一步净卖量/品类；$1 地板成交不入库存→结果记下界标志；跨步账本供外推。
+          - 签名意图：输入: observation（逐步调用）+自有成交账 / 输出: {item: {net_qty, lower_bound}} / 错误: 字段缺失→空账不抛。
+          - 调用方：_predict_agent。tested：自有单测。核验命令：测试: orderbook_predict/test_predict_runtime.py（infer 组）。
+        - **match_sellflow** [L4|新增]（运行时）
+          - 职责：卖流库检索——键=（unlocked_shops[:2] 组合，step-2 身份指纹[对手 money,WHEAT inv]）；取该键下当前步窗 ±w 的对手 SELL 分布（品类/量/步位）；无键→回退全局分布；置信=样本数与分布集中度。
+          - 签名意图：输入: observation+库 / 输出: {matches, confidence} / 错误: 库缺失→confidence=0。
+          - 调用方：_predict_agent。tested：自有单测。核验命令：测试: orderbook_predict/test_predict_runtime.py（match 组）。
+        - **extrapolate_sells** [L4|新增]（运行时）
+          - 职责：差分外推——净卖推断+卖流匹配合成对手未来 1-2 步预期 SELL 单（品类+量+步位），写入 opponent_plan 容器对应步位（market 单形状 ["SELL",item,qty]）；置信低于阈值→不写（fail-safe 不动作）。
+          - 签名意图：输入: 推断账+匹配结果+plan 容器 / 输出: {written, skipped} / 错误: 容器畸形→不写不抛。
+          - 调用方：_predict_agent。tested：自有单测。核验命令：测试: orderbook_predict/test_predict_runtime.py（extrapolate 组）。
+        - **apply_dodge** [L4|新增]（运行时）
+          - 职责：避让——预测对手 1-2 步内集中抛售某品（置信足）→我方本步该品 SELL 单顺延至其抛售后（保槽位置 [] 或减量改单）或减量；预测未达标/置信不足→零动作；不碰买种养单、不动 HARVEST/FEED/CARE、不改槽位出口截断。
+          - 签名意图：输入: observation, action, 预测结果 / 输出: 调整后 action+避让账 / 错误: 异常→原动作。
+          - 调用方：_predict_agent。tested：自有单测。核验命令：测试: orderbook_predict/test_predict_runtime.py（dodge 组）。
+    - **audit_diff_vs_r37** [L2|新增]
+      - 职责：对底版逐字节 diff 审计——r38 对 r37 差异恰=白名单一类（尾部追加预测块含库数据；磁带区零改动），白名单外差异即抛；输出归因表。
+      - 签名意图：输入: r38 main+r37 main / 输出: 归因表 / 错误: 白名单外差异即抛。
+      - 调用方：build_r38。tested：自有单测。核验命令：测试: orderbook_predict/test_build_r38.py（audit 组）。
+    - **pack_r38** [L2|新增]
+      - 职责：确定性打包+manifest——沿 R16 配方（mtime0/uid0/gid0/mode644/gzip mtime0/双跑逐字节）；manifest=sha 链（…→r37→r38）+预测块 sha+库 sha+描述文案 "public derivative with opponent sell prediction (front-run + dodge)"。
+      - 签名意图：输入: r38 main / 输出: submission.tar.gz+manifest / 错误: 双跑不一致即抛。
+      - 调用方：build_r38。tested：自有单测。核验命令：测试: orderbook_predict/test_build_r38.py（pack 组）。
+  - **judge_predict_replay** [L1|新增]
+    - 职责：判决 harness——重放 26 败局（starve strip 语料；晚段崩 15 局为重点）+10 胜局对照，r38 件对原局实况逐局双席位各演一遍；聚合判据出 evidence；另跑闭环副证（h2h vs r37 主对+r34a 辅对，独立 seed n、席位翻转不双计）。
+    - 签名意图：输入: r38 包+语料局单+副证配置 / 输出: evidence JSON（逐局翻转/realized 价/避让次数/副证 h2h） / 错误: 单局失败标红计入不短路。
+    - 调用方：run_r38_iteration。tested：自有单测。核验命令：测试: orderbook_predict/test_judge_predict.py（判据=R21 ②判据级原文）。
+    - **flip_stats** [L2|新增]
+      - 职责：逐局统计——晚崩翻转判定（原局后半程被翻 vs r38 重演结局）、撞车品项 realized 价差（如草莓局我方实现价 vs 对手）、避让/抢跑次数；胜局对照终局资金差（不翻负判据）。
+      - 签名意图：输入: 对局状态序列+原局基线 / 输出: {flip, realized, dodges, front_runs, final_delta, verdict} / 错误: 缺字段→UNKNOWN。
+      - 调用方：judge_predict_replay。tested：自有单测。核验命令：测试: orderbook_predict/test_judge_predict.py（flip 组）。
+  - **verify_r38_gates** [L1|新增]
+    - 职责：五门全量 fail-closed 沿 R37 管线重定向（合规四轴/装载 last-callable=_predict_agent/双席 DONE+单步<1s/确定性双跑/体积身份链+h2h ≥0.55 独立 n 报+谱系 v48/v4b+饿死零容忍+净经济非负）；evidence 落 evidence/。
+    - 签名意图：输入: r38 包 / 输出: 各门结果+overall / 错误: fail-closed。
+    - 调用方：run_r38_iteration。tested：自有单测。核验命令：测试: orderbook_predict/test_gates_r38.py。
