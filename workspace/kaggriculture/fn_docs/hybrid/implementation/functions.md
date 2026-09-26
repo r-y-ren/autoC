@@ -129,3 +129,20 @@
 | build_r37 | B18 | wired 09-25 | pytest test_build_r37.py build 组+全包 → 53 passed（B17+B18 全绿；7 红=后续批次桩）；**真 r34a 构建验收实跑**：源 sha 51fc19db… 前后不变、r37 main 430a702d73cc…、tar dcbdcf9743d2…（648,327B）、归因 ok 零 UNATTRIBUTED、确定性双跑全同、manifest complete=True；流程=decode→羊手术→尾盘手术→encode→变更表注释→注入守卫块→审计→打包（tempfile 中转，失败不落半成品）；evidence/build_r37_realrun.json | (本批) |
 | verify_r37_gates | B21 | wired 09-26 | pytest test_gates_r37 → 6 passed；**五门实跑 overall=PASS**：合规四轴 4/4、launch 四门（last-callable=_r37_agent/719 obs 零分歧/双席 DONE/确定性/身份链）、h2h vs r34a **0.5625≥0.55**（n=8 独立 seed）、谱系 v48/v4b 各 8-0、饿死 26/26+**净经济 +73,824 金**（09-26 判据重裁：死种降观测——L3 纯减法口径不适配经济守卫层，三轮运行时实验+源头补丁勘察证实死种差不可消）；evidence/gates_r37_realrun.json | (本批) |
 | run_r37_iteration | B21 | wired 09-26 | pytest test_run_r37 → 5 passed；**全链整合实跑 6.7min**：build 确定性同 sha（4b237e412d51）、判决 A pass=true（死牛 0/真丢单 0/d1 现金 min 11）、verdict=**HOLD**——judgments_green=false 只因 judge_sheep_league 的"每羊 5 刀"未达（**已知项·用户裁决"接受现状"**：计划面每格 ≥5 达标、真局执行漂移留档），gates 段按"判决红不进门禁"短路（五门独立实跑 overall=PASS 在案）；发射已按"通过即上线"授权+已接受判决态执行（run_summary.json 留痕） | (本批) |
+| detect_clone | B25 | stub 09-27 | 测试: test_predict_runtime.py（clone 组） | — |
+| infer_rival_sells | B25 | 改造待做 09-27（v2 删失处理） | 测试: test_predict_runtime.py（infer v2 组） | — |
+| match_sellflow | B25 | 改造待做 09-27（v2 TOP-1+历史门） | 测试: test_predict_runtime.py（match v2 组） | — |
+| extrapolate_sells | B25 | 改造待做 09-27（v2 限频+量级+credit） | 测试: test_predict_runtime.py（extrapolate v2 组） | — |
+| apply_dodge | B25 | 改造待做 09-27（v2 避让改门） | 测试: test_predict_runtime.py（dodge v2 组） | — |
+| _predict_agent | B25 | 改造待做 09-27（v2 克隆门+全链） | 测试: test_predict_runtime.py（v2 组） | — |
+| build_sellflow_library | B26 | 改造待做 09-27（v2 top-30+命中率字段） | 测试: test_sellflow.py（v2 组） | — |
+| retape_shear_phase | B26 | stub 09-27 | 测试: test_shear_phase.py | — |
+| inject_predict_block | B26 | 改造待做 09-27（v2 块） | 测试: test_inject_predict.py（v2 组） | — |
+| audit_diff_vs_r37 | B26 | 改造待做 09-27（两类白名单） | 测试: test_build_r39.py（audit 组） | — |
+| pack_r39 | B26 | stub 09-27 | 测试: test_build_r39.py（pack 组） | — |
+| build_r39 | B26 | stub 09-27 | 测试: test_build_r39.py（构建编排） | — |
+| make_counter_opponent | B27 | stub 09-27 | 测试: test_judge_predict.py（counter 组） | — |
+| flip_stats | B27 | 改造待做 09-27（v2 动作降量面） | 测试: test_judge_predict.py（flip v2 组） | — |
+| judge_predict_replay | B27 | 改造待做 09-27（v2 六判据+反制臂） | 测试: test_judge_predict.py（v2 组） | — |
+| verify_r39_gates | B28 | stub 09-27 | 测试: test_gates_r39.py | — |
+| run_r39_iteration | B28 | stub 09-27 | 测试: test_run_r39.py | — |

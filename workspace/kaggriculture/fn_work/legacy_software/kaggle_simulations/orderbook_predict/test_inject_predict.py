@@ -89,8 +89,8 @@ def test_inject_four_checks_and_source_sync():
     for node in ast.parse(src).body:
         if isinstance(node, ast.FunctionDef):
             segs[node.name] = ast.get_source_segment(src, node)
-    assert set(segs) == {"infer_rival_sells", "match_sellflow", "extrapolate_sells",
-                         "apply_dodge", "_predict_agent"}
+    assert set(segs) == {"detect_clone", "infer_rival_sells", "match_sellflow",
+                         "extrapolate_sells", "apply_dodge", "_predict_agent"}
     for seg in segs.values():
         assert seg in payload
     # ---- 块结构：捕获行先于一切 def；_predict_agent 钉尾；库行恰一行 ----

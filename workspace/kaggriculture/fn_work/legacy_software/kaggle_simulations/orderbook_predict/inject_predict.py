@@ -15,7 +15,7 @@ import json
 from typing import Any, Dict
 
 # 五函数单一真源抽取序（_predict_agent 钉尾=装载后 last-callable）。
-_BLOCK_FUNCS = ("infer_rival_sells", "match_sellflow", "extrapolate_sells",
+_BLOCK_FUNCS = ("detect_clone", "infer_rival_sells", "match_sellflow", "extrapolate_sells",
                 "apply_dodge", "_predict_agent")
 
 # 块绑定名全集（撞名预检用；Any/Dict 为条件缺省填充不入集，不覆盖底版既有绑定）。
