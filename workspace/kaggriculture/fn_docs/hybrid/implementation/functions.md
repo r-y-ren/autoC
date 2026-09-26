@@ -110,12 +110,12 @@
 | inject_cash_guard_block | B17 | wired 09-25 | pytest test_inject_guard.py → 6 passed（四条校验复核/尾部追加不变量/委托冒烟/sha 确定性/失败即抛/源同步）；**r34a 实跑**：1,038,506→1,066,974B（块 28,468B，block_sha 30dedaefe44d…），四条校验全过，evidence/inject_r34a_smoke.json；命名=纯核块内改名 _r37_guard_core+单参入口 _r37_agent+捕获行 _R37_GUARD_PARENT（避开底版 _R37_PARENT 撞名） | (本批) |
 | retape_sheep_timing | B18 | wired 09-25 | pytest test_retape_sheep.py → 9 passed（解码回路/刀次公式 d11=5·d12=4 抛/只提前+target_step 标定/no-op/总量不变/资金序 V57/解剖快照可复算）；真 r34a 解剖：41 路由 231 批羊单全 ≥5 刀、仅 route 12/115 各 1 批越窗——手术=115 前移 265→264、12 供资锁 skip、229 no-op；编解码 `_decode_routes/_encode_routes` 私有真源（blob=base85(zlib(json)) 池共享写时复制+四条自检链）；evidence/sheep_tape_dissection.json | (本批) |
 | retape_tail_savings | B18 | wired 09-25 | pytest test_retape_tail.py → 9 passed（窗口外不动/违抛/删净/闲置 HIRE 判据[当日 HIRE 序 m→hands[m]]/HARVEST·卖单逐类不动/池共享 CoW/饿死边界 d29 停喂≤1/真跑可复算）；真 r34a：CARE 779 删（d28 613+d29 166）、FEED 0（r34a 本就 d29 停喂）、HIRE 0（451 张全有役）——真跑结论非空转；evidence/tail_savings_realrun.json | (本批) |
-| build_sellflow_library | B22 | stub 09-26 | 测试: orderbook_predict/test_sellflow.py（库构建/键检索形态） | — |
-| infer_rival_sells | B22 | stub 09-26 | 测试: test_predict_runtime.py（infer 组） | — |
-| match_sellflow | B22 | stub 09-26 | 测试: test_predict_runtime.py（match 组） | — |
-| extrapolate_sells | B22 | stub 09-26 | 测试: test_predict_runtime.py（extrapolate 组） | — |
-| apply_dodge | B22 | stub 09-26 | 测试: test_predict_runtime.py（dodge 组） | — |
-| _predict_agent | B22 | stub 09-26 | 测试: test_predict_runtime.py（入口 fail-safe/step0 复位） | — |
+| build_sellflow_library | B22 | wired 09-26 | pytest test_sellflow → 4 passed（迷你建库/无 renyxin 跳过/坏文件抛/真跑可复算）；**真跑 86 局建库**：n_used=86、SELL 事件 29,470、键数 158、库 sha acb76cfc…；键=「店对\|m钱_w麦」（OPEN1:/EARLY 档）；evidence/sellflow_library_realrun.json | (本批) |
+| infer_rival_sells | B22 | tested 09-26 | pytest test_predict_runtime → 5 passed（五组全绿）；逆推=库存差分+城镇消费−自家净卖（_town_consume 口径）、$1 地板记 lower_bound、跨步账本 _ledger | (本批) |
+| match_sellflow | B22 | tested 09-26 | pytest 5 passed；键命中真库集成探针 source=key（规范键=建库口径对齐，容错候选同查）；置信=min(1,n/10)×集中度，门槛 0.5 | (本批) |
+| extrapolate_sells | B22 | tested 09-26 | pytest 5 passed；净卖∪库均量合成 1-2 步预测 SELL 写 plan[step]（同槽同品取 max 合并）；低置信跳过 | (本批) |
+| apply_dodge | B22 | tested 09-26 | pytest 5 passed；预测集中抛售 Q≥3 且置信足→整单顺延置 []/减量改单；只动 SELL 槽；避让账带 due_step（跨步重发待裁决留档） | (本批) |
+| _predict_agent | B22 | tested 09-26 | pytest 5 passed（全链串通/异常 fail-safe/step0 复位/假父层注入）；链=父层→infer→match→extrapolate→dodge；_PREDICT_PARENT/_PREDICT_LIBRARY 捕获变量注入面 | (本批) |
 | inject_predict_block | B23 | stub 09-26 | 测试: test_inject_predict.py（注入校验四条+库 sha 对账） | — |
 | audit_diff_vs_r37 | B23 | stub 09-26 | 测试: test_build_r38.py（audit 组；白名单一类尾部块） | — |
 | pack_r38 | B23 | stub 09-26 | 测试: test_build_r38.py（pack 组） | — |
