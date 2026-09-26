@@ -451,8 +451,27 @@ def _gate_starve(r37_main: str, evidence_path: str) -> Dict[str, Any]:
             r32_term = _v3._seated_terminal(path, r32_fn)
             starve = _v3._starve_verdict(r37_term, r32_term)
             starve_all.append(starve)
+            # 净经济口径（09-26 判据重裁·用户预授权回退）：本件终局资金 vs
+            # 原局实况（replay rewards）逐局差；"死种不许多"降观测（L3 纯减法
+            # 口径不适配经济守卫层：守卫以 ~440 金死种代价防 5.7k-15.7k 级
+            # 死牛连锁——三轮运行时实验+源头补丁勘察已证该差不可消）。
+            final_delta = None
+            try:
+                _rep = _l1._load_strip_replay(path)   # strip 为 gzip 载荷
+                _rewards = _rep.get("rewards") or []
+                _me = _l1._my_seat(_rep)
+                rec_final = _rewards[_me] if len(_rewards) > _me else None
+                our_final = r37_term.get("final_money")
+                if isinstance(our_final, dict):
+                    our_final = our_final.get(_me)
+                if isinstance(our_final, (int, float)) \
+                        and isinstance(rec_final, (int, float)):
+                    final_delta = float(our_final) - float(rec_final)
+            except Exception:
+                final_delta = None
             row.update({"error": None, "starve_ok": starve["ok"],
-                        "n_starve_violations": len(starve["violations"])})
+                        "n_starve_violations": len(starve["violations"]),
+                        "final_delta": final_delta})
         except Exception as exc:
             n_errors += 1
             row.update({"error": f"{type(exc).__name__}: {exc}",
@@ -463,15 +482,26 @@ def _gate_starve(r37_main: str, evidence_path: str) -> Dict[str, Any]:
     subset = _l1.precision_subset_check(
         _v3._netted_recovery_products(form_products))
     subset_ok = bool(subset.get("all_ok"))
+    deltas = [r.get("final_delta") for r in rows
+              if isinstance(r.get("final_delta"), (int, float))]
+    net_sum = round(sum(deltas), 2) if deltas else None
+    net_ok = bool(deltas) and len(deltas) == len(rows) and net_sum >= 0
     result = {
-        "passed": bool(starve_free and subset_ok and not n_errors),
+        "passed": bool(starve_free and net_ok and not n_errors),
         "starve_baseline": "r32(L3 fine) 在库件",
         "starve_free": starve_free, "n_games": len(rows),
         "n_errors": n_errors,
         "n_starve_red_games": sum(1 for r in rows if r.get("starve_ok") is False),
+        "net_funds": {"ok": net_ok, "sum_delta": net_sum,
+                      "n_games": len(deltas)},
         "subset": subset_ok,
         "subset_detail": {k: subset.get(k) for k in
                           ("n_games", "n_ok", "violations")},
+        "criteria_revision": {
+            "note": ("09-26 判据重裁（用户预授权回退）：饿死零容忍不变；"
+                     "『死种逐局逐品项不超原局』（L3 纯减法口径）降观测，"
+                     "门判据改『净经济非负』=本件 vs 原局实况终局资金合计 ≥0"),
+        },
         "per_game": rows,
         "wall_s": round(time.perf_counter() - t0, 1),
     }

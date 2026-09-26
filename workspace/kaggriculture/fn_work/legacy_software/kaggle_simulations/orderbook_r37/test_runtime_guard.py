@@ -728,3 +728,43 @@ def test_r37_defer_low_priority_best_effort():
     out = cash_guard_block._r37_defer_low_priority(
         _obs(0), bare, {"floor": 500, "kind": "buy_animal"})
     assert out["action"] is bare and out["deferred"] == []
+
+
+def test_r37_defer_qty_reduce_same_beat():
+    # 修订⑥同拍减量：种子单按粒减量（最便宜优先、最小粒数、原拍原位），
+    # 减下粒 reason=qty_reduce 作废不回填——无时间空洞，补货回路只见量差。
+    # 场景=d0 窗实况：money=22、BUY_SEED WHEAT 2（20）→end=2<floor 5 →
+    # 需 3 →减 ceil(3/10)=1 粒 →单存 1 粒、end=12≥5。
+    base = {"farmer": ["PASS"], "hands": [],
+            "market": [["BUY_SEED", "WHEAT", 2]]}
+    out = cash_guard_block._r37_defer_low_priority(
+        dict(_obs(22), step=20), base,
+        {"floor": 5, "kind": "d0_end"})
+    m = out["action"]["market"]
+    assert m[0] == ["BUY_SEED", "WHEAT", 1]     # 原拍原位减量（非 [] 空洞）
+    assert len(m) == 1
+    red = [d for d in out["deferred"] if d.get("reason") == "qty_reduce"]
+    assert red == [{"op": "BUY_SEED", "item": "WHEAT", "qty": 1,
+                    "cost": 10, "slot": 0, "reason": "qty_reduce"}]
+
+    # 减不动（need 超可减量）→走整单梯（mask 空洞+无 reason 整单顺延）。
+    # money=12、单 1 粒（10）→end=2<5→需 3→k=1≥qty1 减不动→整单缓。
+    base2 = {"farmer": ["PASS"], "hands": [],
+             "market": [["BUY_SEED", "WHEAT", 1]]}
+    out2 = cash_guard_block._r37_defer_low_priority(
+        dict(_obs(12), step=20), base2,
+        {"floor": 5, "kind": "d0_end"})
+    assert out2["action"]["market"][0] == []
+    assert out2["deferred"] == [{"op": "BUY_SEED", "item": "WHEAT",
+                                 "qty": 1, "cost": 10, "slot": 0}]
+
+    # 作废不回填：qty_reduce 条目经 _r37_agent 回填阶段入作废账（不重发）。
+    cash_guard_block._r37_agent._defer_ledger = [
+        {"op": "BUY_SEED", "item": "WHEAT", "qty": 1, "cost": 10,
+         "slot": 0, "reason": "qty_reduce"}]
+    base3 = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WOOL", 1]]}
+    out3 = cash_guard_block._r37_agent(dict(_obs(900), step=30), base3)
+    assert out3["market"] == [["SELL", "WOOL", 1]]   # 未被重发
+    assert cash_guard_block._r37_agent._defer_ledger == []   # 出账入作废账
+    voids = cash_guard_block._r37_agent._void_ledger
+    assert any(v.get("reason") == "qty_reduce" for v in voids)

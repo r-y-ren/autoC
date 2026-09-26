@@ -260,6 +260,11 @@ def _r37_agent(observation: Dict[str, Any], base_action: Dict[str, Any],
             for entry in working:
                 if not isinstance(entry, dict):
                     continue            # 账目形态不符→留账不动
+                if entry.get("reason") == "qty_reduce":
+                    # 修订⑥：同拍减量的粒=作废不回填（无重发语义），入作废账。
+                    voided_ids.add(id(entry))
+                    voids.append({**entry, "reason": "qty_reduce", "step": step})
+                    continue
                 op = entry.get("op")
                 if op not in ("BUY_ANIMAL", "BUY_SEED"):
                     continue            # 重发范围=购买类两族（修订③）；其余留账
@@ -730,12 +735,16 @@ def _r37_defer_low_priority(observation: Dict[str, Any], action: Dict[str, Any],
                     cash -= entry["cost"]
             return at, cash
 
-        # ---- 2. 顺延循环：kind=d0_end 先按 end 下限缓（MELON 尾序→其余种子
-        # 尾序→BUY_ANIMAL 整单）；随后 BUY_ANIMAL 逐单价丢单保护（修订①：
-        # at[i] < 该单实际成本 才整单入账——引擎 _commit_unit 逐单位
-        # money<price 即中止该单、余量静默丢弃，付得起的单不拦）。
+        # ---- 2. 顺延循环：kind=d0_end 先按 end 下限缓（修订⑥：种子单优先
+        # 同拍减量——最便宜单位优先、最小粒数、原拍原位改量，无时间空洞、
+        # 补货回路只见量差；减下粒记 reason=qty_reduce 作废不回填）→减不动
+        # 才走旧梯（MELON 尾序→其余种子尾序→BUY_ANIMAL 整单）；随后
+        # BUY_ANIMAL 逐单价丢单保护（修订①：at[i] < 该单实际成本 才整单
+        # 入账——引擎 _commit_unit 逐单位 money<price 即中止该单、余量
+        # 静默丢弃，付得起的单不拦）。
         mask = [False] * len(parsed)
         deferred = []
+        reduced = {}            # 修订⑥：slot → 减量后新单（出口替换原单）
 
         def _defer(slot):
             mask[slot] = True
@@ -744,10 +753,38 @@ def _r37_defer_low_priority(observation: Dict[str, Any], action: Dict[str, Any],
                              "qty": entry["qty"], "cost": entry["cost"],
                              "slot": slot})
 
+        def _try_seed_reduce(need):
+            # 修订⑥同拍减量：挑单位价最低的 BUY_SEED 单减 ceil(need/unit)
+            # 粒；不足整单量才减量，否则交回整单梯。
+            best = None
+            for i, entry in enumerate(parsed):
+                if mask[i] or entry is None or entry["op"] != "BUY_SEED":
+                    continue
+                unit = seed_price.get(entry["item"])
+                if unit is None:
+                    continue
+                if best is None or unit < best[1]:
+                    best = (i, unit, entry)
+            if best is None:
+                return False
+            i, unit, entry = best
+            k = -(-need // unit)
+            if k >= entry["qty"]:
+                return False
+            entry["qty"] -= k
+            entry["cost"] = entry["qty"] * unit
+            reduced[i] = [entry["op"], entry["item"], entry["qty"]]
+            deferred.append({"op": "BUY_SEED", "item": entry["item"],
+                             "qty": k, "cost": k * unit, "slot": i,
+                             "reason": "qty_reduce"})
+            return True
+
         while True:
             at, end = _project(mask)
             pick = None
             if kind == "d0_end" and end < floor:
+                if _try_seed_reduce(floor - end):
+                    continue
                 for rung in ("melon", "seed", "animal"):
                     for i in range(len(parsed) - 1, -1, -1):
                         entry = parsed[i]
@@ -776,10 +813,12 @@ def _r37_defer_low_priority(observation: Dict[str, Any], action: Dict[str, Any],
                 break
             _defer(pick)
 
-        # ---- 3. 出口：零顺延=原对象零足迹；有顺延=仅被缓槽置 []，其余原对象 ----
+        # ---- 3. 出口：零顺延=原对象零足迹；有顺延=被缓槽置 []、减量槽换
+        #      新单（修订⑥），其余原对象 ----
         if not deferred:
             return {"action": action, "deferred": []}
-        new_market = [[] if mask[i] else raw for i, raw in enumerate(market)]
+        new_market = [([] if mask[i] else reduced.get(i, raw))
+                      for i, raw in enumerate(market)]
         return {"action": dict(action, market=new_market), "deferred": deferred}
     except Exception:
         return {"action": action, "deferred": []}
