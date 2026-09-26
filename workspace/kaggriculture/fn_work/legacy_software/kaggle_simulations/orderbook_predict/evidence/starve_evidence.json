@@ -1,0 +1,274 @@
+{
+ "passed": false,
+ "starve_baseline": "r32(L3 fine) 在库件",
+ "starve_free": false,
+ "n_games": 26,
+ "n_errors": 0,
+ "n_starve_red_games": 1,
+ "net_funds": {
+  "ok": false,
+  "sum_delta": -621148.0,
+  "n_games": 26
+ },
+ "subset": false,
+ "subset_detail": {
+  "n_games": null,
+  "n_ok": null,
+  "violations": [
+   {
+    "episode": 112432199,
+    "crop": "CARROT",
+    "dropped": 22,
+    "unplanted": 8
+   },
+   {
+    "episode": 112440493,
+    "crop": "CARROT",
+    "dropped": 19,
+    "unplanted": 8
+   },
+   {
+    "episode": 112440493,
+    "crop": "TOMATO",
+    "dropped": 10,
+    "unplanted": 0
+   },
+   {
+    "episode": 112442810,
+    "crop": "WHEAT",
+    "dropped": 2,
+    "unplanted": 1
+   },
+   {
+    "episode": 112445139,
+    "crop": "WHEAT",
+    "dropped": 12,
+    "unplanted": 0
+   },
+   {
+    "episode": 112446302,
+    "crop": "WHEAT",
+    "dropped": 31,
+    "unplanted": 3
+   },
+   {
+    "episode": 112449890,
+    "crop": "WHEAT",
+    "dropped": 7,
+    "unplanted": 4
+   },
+   {
+    "episode": 112451110,
+    "crop": "CARROT",
+    "dropped": 41,
+    "unplanted": 8
+   },
+   {
+    "episode": 112453461,
+    "crop": "CARROT",
+    "dropped": 10,
+    "unplanted": 8
+   },
+   {
+    "episode": 112455881,
+    "crop": "CARROT",
+    "dropped": 19,
+    "unplanted": 8
+   },
+   {
+    "episode": 112457102,
+    "crop": "WHEAT",
+    "dropped": 20,
+    "unplanted": 5
+   }
+  ]
+ },
+ "criteria_revision": {
+  "note": "09-26 判据重裁（用户预授权回退）：饿死零容忍不变；『死种逐局逐品项不超原局』（L3 纯减法口径）降观测，门判据改『净经济非负』=本件 vs 原局实况终局资金合计 ≥0"
+ },
+ "per_game": [
+  {
+   "episode": 112429867,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 0.0
+  },
+  {
+   "episode": 112431033,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 52.0
+  },
+  {
+   "episode": 112432199,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -68660.0
+  },
+  {
+   "episode": 112433355,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 252.0
+  },
+  {
+   "episode": 112434475,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 135.0
+  },
+  {
+   "episode": 112435662,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 176.0
+  },
+  {
+   "episode": 112436859,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 8.0
+  },
+  {
+   "episode": 112438060,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -30695.0
+  },
+  {
+   "episode": 112439305,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -3.0
+  },
+  {
+   "episode": 112440436,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 160.0
+  },
+  {
+   "episode": 112440493,
+   "error": null,
+   "starve_ok": false,
+   "n_starve_violations": 1,
+   "final_delta": -77519.0
+  },
+  {
+   "episode": 112441644,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 165.0
+  },
+  {
+   "episode": 112442810,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 2492.0
+  },
+  {
+   "episode": 112443969,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 186.0
+  },
+  {
+   "episode": 112445139,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -50109.0
+  },
+  {
+   "episode": 112446302,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -38585.0
+  },
+  {
+   "episode": 112447520,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 160.0
+  },
+  {
+   "episode": 112448710,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 160.0
+  },
+  {
+   "episode": 112449890,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -62019.0
+  },
+  {
+   "episode": 112451110,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -83167.0
+  },
+  {
+   "episode": 112452290,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 3.0
+  },
+  {
+   "episode": 112453461,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -61332.0
+  },
+  {
+   "episode": 112454627,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": 297.0
+  },
+  {
+   "episode": 112455881,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -69196.0
+  },
+  {
+   "episode": 112457053,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -52521.0
+  },
+  {
+   "episode": 112457102,
+   "error": null,
+   "starve_ok": true,
+   "n_starve_violations": 0,
+   "final_delta": -31588.0
+  }
+ ],
+ "wall_s": 130.5
+}

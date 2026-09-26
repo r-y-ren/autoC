@@ -120,10 +120,10 @@
 | audit_diff_vs_r37 | B23 | wired 09-26 | pytest audit 组 8/8（正路/前缀破坏/锚行缺失或双现/同文本/键稳定/装饰兼容/块外垃圾/JSON 往返）；核心短语「r38 对手预测尾块」识别；归因={ok,whitelist{predict_block},unattributed} | (本批) |
 | pack_r38 | B23 | wired 09-26 | pytest pack 组 6/6（字段齐/双跑同 sha/tar 形态/区分度/坏输入/缺件 null 不造假）；manifest orderbook_r38_manifest/1.0（14 键：base_sha_chain 四节点/predict_block/library_sha AST 主链+伴生行兜底）；真源复用 build_tar_bytes；签名微调 out_dir=None | (本批) |
 | build_r38 | B23 | wired 09-26 | pytest build 组 5/5+全包 37 绿（4 桩=B24）；**真跑**：main 1e07f0f2d69a/tar 51b388e5d9b3/块 292,740B（含真库）；库 sha acb76cfc…三口径对账恒等；审计零 UNATTRIBUTED；双跑恒等；r37 零改动；evidence/build_r38_realrun.json | (本批) |
-| flip_stats | B24 | stub 09-26 | 测试: test_judge_predict.py（flip 组） | — |
-| judge_predict_replay | B24 | stub 09-26 | 测试: test_judge_predict.py；判据=R21 ②（胜局不翻负∧晚崩翻正≥1/3∧h2h≥0.55） | — |
-| verify_r38_gates | B24 | stub 09-26 | 测试: test_gates_r38.py（五门 R37 管线重定向） | — |
-| run_r38_iteration | B24 | stub 09-26 | 测试: test_run_r38.py（编排/判负收档） | — |
+| flip_stats | B24 | wired 09-26 | pytest flip 组 6 passed（晚崩判定[loss_phase 三段最负主导=晚崩，15/20 复现]/非晚崩不计/realized 价差/UNKNOWN/对照资金差/避让抢跑差分）；真跑口径=重演差分 vs 原局逐席自比 | (本批) |
+| judge_predict_replay | B24 | wired 09-26 | pytest judge 组 4 passed；**真跑 36 条目/30 局 258.6s overall=NEGATIVE（如实）**：晚崩翻正 0/15、对照 final_delta min −82,919（10/10 负）、h2h vs r37 0.000（8 seed 全负 mean −146.6k）、realized 草莓 delta_px −1.75（未升反跌）、避让 3329/预测写入 9975；可信度证=r37 件重演精确复刻原局；evidence/judge_predict_realrun.json | (本批) |
+| verify_r38_gates | B24 | wired 09-26 | pytest 4 passed（全绿路/红不短路/fail-closed/独立 n 不双计）；真跑 5m27s overall=FAIL（如实）：合规✓/launch✓/谱系 16-0✓、h2h 0.0<0.55✗、饿死 1/26 违例+净经济 −621,148✗；evidence/gates_r38_realrun.json 四件 | (本批) |
+| run_r38_iteration | B24 | wired 09-26 | pytest 5 passed（全链 mock POSITIVE/判决红 NEGATIVE 收档不进门禁/门禁红不发射/Error 留痕/收档台账形态）；verdict 逻辑=判正才门禁+发射台账、判负收档台账（archive_note 判负留赛后）；真跑整合=收档链 | (本批) |
 | audit_diff_vs_r34a | B18 | wired 09-25 | pytest test_build_r37.py audit 组 → 7 passed（三类全归因/白名单外即抛/前缀破坏即抛/同文本零归因/键稳定/blob 解码失败定罪/in_blob 未分类定罪）；归因表 {ok,whitelist{tail_guard_block,sheep_retiming,tail_savings},unattributed}；真跑 ok=True UNATTRIBUTED 0（guard 229,858B/1 move/779 removed）；断言 str 路由键裁定=代码即真值（JSON 往返 str 键） | (本批) |
 | pack_r37 | B18 | wired 09-25 | pytest test_build_r37.py pack 组 → 8 passed（字段齐+文案原文/确定性双跑/tar 形态 mtime0·mode644/区分度/坏输入抛/双跑不等抛/whitelist 尽力自证/签名意图）；manifest schema orderbook_r37_manifest/1.0（base_sha_chain a16e0e9b→51fc19db→r37、三件 sha 内嵌注释自证、double_run）；单一真源复用 build_adopt.build_tar_bytes；签名微调=可选 out_dir=None（登记） | (本批) |
 | build_r37 | B18 | wired 09-25 | pytest test_build_r37.py build 组+全包 → 53 passed（B17+B18 全绿；7 红=后续批次桩）；**真 r34a 构建验收实跑**：源 sha 51fc19db… 前后不变、r37 main 430a702d73cc…、tar dcbdcf9743d2…（648,327B）、归因 ok 零 UNATTRIBUTED、确定性双跑全同、manifest complete=True；流程=decode→羊手术→尾盘手术→encode→变更表注释→注入守卫块→审计→打包（tempfile 中转，失败不落半成品）；evidence/build_r37_realrun.json | (本批) |

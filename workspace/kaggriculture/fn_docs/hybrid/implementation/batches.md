@@ -33,7 +33,7 @@
 | B21(完成 09-26) | 门禁+总指挥：verify_r37_gates → run_r37_iteration wired | 五门实跑 **overall=PASS**（合规 4/4、launch 四门、h2h 0.5625 n=8 独立、谱系 16-0、饿死 26/26+净经济 +73,824 金）；判决 A 复跑全绿（对照 l1_min 0.0） | **r37 已发射** ref 56580761 PENDING（standing 代执行+台账 launch_ledger.json；每日 1/5、候选 1/2）；饿死门四轮攻坚+判据重裁见变更记录 |
 | B22(完成 09-26) | R21-S1 卖流库+预测运行时六件 | pytest 9 绿桩清零（sellflow 4+runtime 5）；**真跑 86 局建库**（29,470 事件/158 键/库 sha acb76cfc…）+键集成探针命中真库 | 库键规范=「店对\|m钱_w麦」两件对齐（并行开发键缝当场缝合）；dodge 避让账 due_step 留档待裁决 |
 | B23(完成 09-26) | R21-S2 构建面四件 | 37 测绿桩清零（inject 7/audit 8/pack 6/build 5+既有）；真跑产出 r38（main 1e07f0f2d69a/块 292,740B 含真库）；库 sha 三口径对账恒等；审计零越界；双跑恒等 | 签名微调登记：pack_r38/build_r38 +out_dir=None；变更集=纯尾块（manifest 自证，无 SHEEP 式内嵌行） |
-| ▶ B24 | R21-S3 判决线+门禁+总指挥：flip_stats → judge_predict_replay → verify_r38_gates → run_r38_iteration wired | 判决真跑（26 败局[晚崩 15 重点]+10 对照重演+闭环副证 vs r37）出 evidence；判据=胜局不翻负∧晚崩翻正≥1/3∧h2h≥0.55→判正才五门→发射裁决呈批间门 | 判负→收档不建发射版（R21 出口预绑定） |
+| B24(完成 09-26) | R21-S3 判决线+门禁+总指挥 | 56 测全绿桩清零；判决真跑 overall=**NEGATIVE（判负·如实）**：晚崩 0/15、对照 10/10 负、h2h 0.0；五门真跑 FAIL（h2h/饿死红）；**按预绑定判负→收档不建发射版** | 真因=预测块摧毁现金流（预测写入 9975/避让 3329、每局 −146.6k）；r37 件复刻对照证测量无误；收档台账+run_summary 落档 |
 
 ## 变更记录（计划层事件）
 | 日期 | 事件 | 说明 |
@@ -55,4 +55,5 @@
 | 2026-09-25 | B18 签名微调+断言裁定登记 | ①pack_r37/build_r37 加可选 out_dir=None（首参/返回形态不变）；②audit 测试断言路由键改 str（代码即真值：JSON 往返 str 键，与 retape 兄弟测试惯例一致）；③audit 测试夹具 _mk_audit_pair 补齐（前任代理断线遗留半成品，实现侧零改动）；④锚行核对=pack 正则 `# =+ … =+$` 天然匹配 inject 真实 `====` 块头，零缝合 |
 | 2026-09-25 | B19 签名微调+判决口径登记 | ①replay_guard_verdict +baseline_final=None/+our_seat="renyxin"；②judge_cash_guard_replay 口径=逐局逐席 l1≥原版（R10 同源用语；合计口径 +130k 作敏感度并列入账）；③parse step 口径=replay 原生 si（磁带 X↔行 X+1）；④tmpfs 配额曾耗尽（孤儿 pyc 101M 清理后补拉 2 局） |
 | 2026-09-26 | B20+守卫三修收口（用户裁决：修正版守卫+判决/小联赛双验） | 400 局全量联赛 0-200 确诊守卫过度扣单（微探针：一局扣 16/17 买畜单顺延 25-57 步+种子永久丢）→三修（逐单价丢单保护/投影计卖单收入/种子入重发）+重建 efa7b195f189…→双验：判决三指标全绿保持、小联赛 60 局 **h2h 0.6136≥0.55** 全谱零负；R20 剪毛=轮次达标（8-12 轮/局）但每羊 4 次（目标 5 未达）呈批间门 |
+| 2026-09-26 | B23 签名微调登记 | pack_r38/build_r38 +out_dir=None；变更集=纯尾块（manifest 自证）；库 sha 口径统一 ensure_ascii=False（评审 P3） |
 | 2026-09-26 | R21 批次计划立表（B22-B24）+轻量对账 | 对账判定**对得上**（28 桩全落 orderbook_predict 零外溢、r37 133 绿、49 绿基线持平、抽查命令全绿）；**环境清理**：/tmp usrquota 曾耗尽（Errno 122）——清孤儿缓存 pairsnap/v4bfull/r31b/r31/r29b 约 3.9G，写入恢复；判决语料 r33audit（卖流库源）/kagr22/r30 保留 |
