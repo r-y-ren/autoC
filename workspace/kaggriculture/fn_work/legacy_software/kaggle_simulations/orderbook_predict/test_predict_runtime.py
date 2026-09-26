@@ -318,3 +318,22 @@ def test_predict_agent(monkeypatch):
     assert predict_block._predict_agent._own_fills == {"sell": {}, "buy": {},
                                                        "floor_sells": {}}
     assert predict_block.match_sellflow._identity["step"] == 0
+
+
+def test_match_sellflow_canonical_key():
+    """规范键路径钉住（评审 P2）：店对|m钱_w麦 形式直接命中 keys[source="key"]，
+    与 sellflow.py 建库口径同构；非整 money 按 int(round()) 量化（P3a 对齐）。"""
+    lib = {"version": "sellflow/1.0",
+           "keys": {"BAKERY|YARN_STORE||m230_w9989": {
+               "n_episodes": 3,
+               "hist": {"1": {"WOOL": {"qty_sum": 12, "count": 3, "qty_max": 6}}}}},
+           "global": {"n_episodes": 0, "hist": {}}}
+    obs = {"step": 50, "player": 0,
+           "farms": [{"money": 1.0}, {"money": 229.7, "tiles": []}],
+           "market": {"inventory": {"WHEAT": 9989.0}, "prices": {"WOOL": 5}},
+           "town": {"unlocked_shops": ["BAKERY", "YARN_STORE"]}}
+    obs["step"] = 2   # 身份指纹抓拍点
+    from orderbook_predict import predict_block as _pb
+    out = _pb.match_sellflow(obs, lib)
+    assert out["matches"].get("source") == "key"
+    assert (out["matches"].get("key") or "").startswith("BAKERY|YARN_STORE||m230_w")

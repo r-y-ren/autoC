@@ -222,7 +222,7 @@ def match_sellflow(observation: Dict[str, Any], library: Any) -> Dict[str, Any]:
             sp_canon = f"OPEN1:{shops[0]}"
         else:
             sp_canon = "EARLY"
-        fp_canon = f"m{int(fp_money)}_w{int(fp_wheat)}"
+        fp_canon = f"m{int(round(float(fp_money)))}_w{int(fp_wheat)}"  # 与建库 int(round()) 对齐
         cand = [f"{sp_canon}||{fp_canon}"]
         shop_pair = ",".join(str(s) for s in shops[:2])
         for sp in (shop_pair, str(tuple(str(s) for s in shops[:2]))):

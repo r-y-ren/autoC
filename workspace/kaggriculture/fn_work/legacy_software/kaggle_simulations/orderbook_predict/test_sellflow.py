@@ -213,3 +213,17 @@ def test_realrun_build_86(tmp_path):
     # 可复算 4：落盘 evidence 重载与实测一致
     with open(_EVIDENCE, "r", encoding="utf-8") as fh:
         assert json.load(fh) == evidence
+
+
+def test_sellflow_realrun_constants():
+    """真跑证据常量钉死（评审 P3b）：86 局/29,470 事件/158 键/库 sha 可复算。"""
+    import json as _json, hashlib as _hl
+    ev = _json.load(open(os.path.join(os.path.dirname(__file__), "evidence",
+                                "sellflow_library_realrun.json"), encoding="utf-8"))
+    assert ev["n_used"] == 86 and ev["total_events"] == 29470
+    assert ev["n_keys"] == 158
+    from orderbook_predict import sellflow as _sf
+    out = _sf.build_sellflow_library("/tmp/r33audit")
+    blob = _json.dumps(out["library"], sort_keys=True,
+                       ensure_ascii=False, separators=(",", ":")).encode()
+    assert _hl.sha256(blob).hexdigest() == ev["sha256_of_library"]
