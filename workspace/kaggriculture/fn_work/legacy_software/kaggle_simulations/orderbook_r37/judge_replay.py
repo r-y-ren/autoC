@@ -152,12 +152,25 @@ def judge_cash_guard_replay(pkg_path: str, corpus: Sequence[str]) -> Dict[str, A
             farm = farms[i]
             animals, tiles = parse_states._extract_grids(
                 f"farms[{i}].tiles", farm.get("tiles"))
+            priv = None
+            obs_i = state.seats[i].observation
+            if hasattr(obs_i, "private"):
+                priv = obs_i.private
+            elif isinstance(obs_i, dict):
+                priv = obs_i.get("private")
+            inv = None
+            if isinstance(priv, dict):
+                try:
+                    inv = parse_states._inventory(f"farms[{i}].private", priv)
+                except Exception:            # 棚仓臂尽力，缺→None 回退旧口径
+                    inv = None
             rows.append({"step": actions[0], "seat": i,
                          "action": actions[1][i],
                          "money": farm.get("money"),
                          "hands": farm.get("hands"),
                          "farmer": farm.get("farmer"),
                          "animals_grid": animals, "tiles": tiles,
+                         "inventory": inv,
                          "_label": our_labels[i]})
         return rows
 
@@ -290,8 +303,13 @@ def judge_cash_guard_replay(pkg_path: str, corpus: Sequence[str]) -> Dict[str, A
         "died_before_d2_zero": died_sum == 0,
         "buy_failed_zero": buy_sum == 0,
         "cash_d1h0_ge_4": (cash_min is not None and cash_min >= 4),
-        "control_final_delta_nonneg": (delta_min is not None
-                                       and delta_min >= 0),
+    }
+    # 对照 l1 降为观测（用户裁决 09-25）：不进红绿；"不伤胜局"归 B20 联赛
+    # 对现役件胜率 ≥0.55 判据承载（=立项批准的原始信号）。
+    control_observation = {
+        "observation_only": True,
+        "final_delta_l1_min": delta_min,
+        "final_delta_sum_sensitivity": delta_sum,
     }
     overall_pass = bool(all(crit.values()) and not n_red and not errors)
 
@@ -316,8 +334,9 @@ def judge_cash_guard_replay(pkg_path: str, corpus: Sequence[str]) -> Dict[str, A
                        "与 replay 逐位一致、终局资金=rewards）"),
             "baseline": ("对照局 baseline_final=原局实况该席终局资金（replay 原始"
                          "记录末拍 farms[seat].money），逐席自比；灾难局不传基线"),
-            "l1": ("对照资金 l1 非负=l1（被测件终局资金差 r37−实况）逐局逐席 "
-                   "min≥0（不劣于原版/胜局不翻负口径）；合计口径 sum 作敏感度入账"),
+            "l1": ("对照资金 l1=观测指标（09-25 用户裁决降观测，不进红绿）："
+                   "逐局逐席 min 与合计 sum 双口径入账；'不伤胜局'归 B20 联赛"
+                   "对现役件胜率 ≥0.55 承载"),
             "rows": ("rerun 行=parse_episode_states 同构双席行（step=原生 si、"
                      "money=执行后值、action=该拍执行动作），verdict=同文件 L2"),
         },
@@ -347,7 +366,15 @@ def judge_cash_guard_replay(pkg_path: str, corpus: Sequence[str]) -> Dict[str, A
                         "n_negative": sum(1 for _, _, d in deltas if d < 0)},
         },
         "overall": {"pass": overall_pass, "criteria": crit,
+                    "control_observation": control_observation,
                     "n_red_games": n_red, "n_errors": len(errors)},
+        "criteria_revision": {
+            "verdict_revised": True,
+            "note": ("buy_failed 加棚仓臂（inventory 增=成交；引擎买畜进 "
+                     "private.shed 不上格、钱扣被同拍卖单收入掩蔽——17 张真成交"
+                     "误报驱动）+对照 l1 降观测不进红绿（用户裁决 09-25）；"
+                     "'不伤胜局'归 B20 联赛胜率 ≥0.55 承载"),
+        },
         "errors": errors,
         "source": {
             "rerun_command": ("cd " + os.path.dirname(os.path.dirname(
@@ -398,9 +425,12 @@ def replay_guard_verdict(
       d2 前窗口=末见拍/首缺拍任一 day<2（日界穿越计入——analysis22 死亡戳
       day2,h0 为观测拍，事件在 d1 日结，灾难死牛恰此形）。
     - buy_failed：我方动作含 BUY_ANIMAL 单（逐单计）。成交判据=对照前后
-      money+animals_grid：前=提交拍的前一拍（动作观测源拍），后=提交拍与
-      下一拍（兼容动作生效拍口径）；钱扣（money 下降）或该牲畜上格
-      （animals_grid 该牲畜头数增加）任一出现=成交，全程皆无=静默丢弃计入。
+      money+animals_grid+inventory（**棚仓臂，09-25 修订**：引擎买畜先进
+      private.shed 不上格、钱扣被同拍卖单收入掩蔽——17 张真成交误报驱动）：
+      前=提交拍的前一拍（动作观测源拍），后=提交拍与下一拍（兼容动作生效拍
+      口径）；钱扣（money 下降）或该牲畜上格（animals_grid 该牲畜头数增加）
+      或 inventory 增任一出现=成交，全程皆无=静默丢弃计入。行缺 inventory
+      子键则棚仓臂不参与（回退旧口径）。
     - cash_d1h0：step==24 拍（d1 hour0）我方 money（该拍执行后值）。
     - final_delta：终局资金差=r37 终局 money−实况基线；基线取可选第二参
       baseline_final（签名微调登记；裁定弃「行首携带 baseline 元数据」选项，
@@ -469,10 +499,14 @@ def replay_guard_verdict(
         if not _is_num(money):
             unknown = True
             money = None
+        inv = row.get("inventory")
+        if not (_is_num(inv) or isinstance(inv, dict)):
+            inv = None
         beats.append({
             "step": row["step"],
             "day": row["step"] // turns_per_day,
             "money": money,
+            "inv": inv,
             "grid": _grid_map(row.get("animals_grid")),
             "ops": list(_iter_ops(row.get("action"))),
         })
@@ -514,7 +548,8 @@ def replay_guard_verdict(
                 info["max_cu"] = max(info["max_cu"], int(cu))
                 info["last_cu"] = int(cu)
 
-    # 2) BUY_ANIMAL 失败：逐单对照前后 money+animals_grid，全程无成交痕迹=丢单。
+    # 2) BUY_ANIMAL 失败：逐单对照前后 money+animals_grid+inventory（棚仓臂），
+    #    全程无成交痕迹=丢单。
     buy_failed = 0
     for idx, beat in enumerate(beats):
         buys = [op for op in beat["ops"] if op[0] == "BUY_ANIMAL"]
@@ -532,7 +567,31 @@ def replay_guard_verdict(
             c_pre = _count_animals(prev["grid"], item)
             on_grid = (_count_animals(beat["grid"], item) > c_pre
                        or _count_animals(nxt["grid"], item) > c_pre)
-            if not (money_dropped or on_grid):
+
+            def _inv_val(v: Any) -> Any:
+                # inventory=分物品字典（shed+seeds+随身合计）；按 item 计数，
+                # 无 item 取合计；兼容标量（测试/旧口径）。
+                if _is_num(v):
+                    return v
+                if isinstance(v, dict):
+                    if item and _is_num(v.get(item)):
+                        return v.get(item)
+                    tot, seen = 0, False
+                    for vv in v.values():
+                        if _is_num(vv):
+                            tot += vv
+                            seen = True
+                    return tot if seen else None
+                return None
+
+            pre_inv = _inv_val(prev.get("inv"))
+            now_inv = _inv_val(beat.get("inv"))
+            next_inv = _inv_val(nxt.get("inv"))
+            inv_rise = ((now_inv is not None and pre_inv is not None
+                         and now_inv > pre_inv)
+                        or (next_inv is not None and pre_inv is not None
+                            and next_inv > pre_inv))
+            if not (money_dropped or on_grid or inv_rise):
                 buy_failed += 1
 
     # 3) d1 h0 现金（step 24 拍执行后值）。

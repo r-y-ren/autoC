@@ -47,11 +47,14 @@ def _act(*market):
     return {"farmer": ["PASS"], "hands": [], "market": [list(o) for o in market]}
 
 
-def _row(step, money, grid=None, action=None, seat=_OUR):
-    return {"step": step, "seat": seat,
-            "action": action if action is not None else _act(),
-            "money": money, "hands": [], "tiles": {},
-            "animals_grid": dict(grid) if grid else {}}
+def _row(step, money, grid=None, action=None, seat=_OUR, inv=None):
+    out = {"step": step, "seat": seat,
+           "action": action if action is not None else _act(),
+           "money": money, "hands": [], "tiles": {},
+           "animals_grid": dict(grid) if grid else {}}
+    if inv is not None:
+        out["inventory"] = inv
+    return out
 
 
 def _entry(name, cu=None, fed=None):
@@ -111,6 +114,31 @@ def test_replay_guard_verdict():
     assert out["cash_d1h0"] == 1.0           # step 24 拍（d1 hour0）
     assert out["final_delta"] is None        # 无基线
     assert out["verdict"] == {"pass": False}  # 现金 1 < 4
+
+
+# ---------------------------------------------------------------------------
+# ①b 棚仓臂（09-25 修订）：买畜进棚不上格、钱扣被同拍卖单收入掩蔽——
+#    inventory 增=成交（17 张真成交误报的最小复现）；inventory 平=仍判失败。
+# ---------------------------------------------------------------------------
+def test_replay_guard_verdict_inventory_arm():
+    g = {}
+    rows = [
+        _row(24, 10.0, g, inv=5),
+        _row(48, 10.0, g, inv=5),
+        # 掩蔽成交单：钱 100→150（同拍卖货+150、买羊−100 净 +50）、棚仓 5→7
+        # （标量形态=合计口径）
+        _row(49, 150.0, g, _act(["BUY_ANIMAL", "SHEEP", 2]), inv=7),
+        _row(50, 150.0, g, inv=7),
+        # 掩蔽失败单：钱 150→200（卖货掩蔽）、棚仓字典形态（真 parse 形状）
+        # {"SHEEP":7}→{"SHEEP":7} 该 item 不动 → 仍判丢单
+        _row(51, 200.0, g, _act(["BUY_ANIMAL", "COW", 1]), inv={"SHEEP": 7}),
+        _row(52, 200.0, g, inv={"SHEEP": 7}),
+        _row(72, 200.0, g, inv={"SHEEP": 7}),
+    ]
+    out = replay_guard_verdict(rows)
+    assert out["buy_failed"] == 1        # 仅棚仓平的 COW 单判失败
+    assert out["died_before_d2"] == 0
+    assert out["cash_d1h0"] == 10.0
 
 
 # ---------------------------------------------------------------------------
@@ -404,7 +432,8 @@ def test_judge_cash_guard_replay_orchestration(tmp_path, monkeypatch):
     assert out["overall"]["pass"] is True
     assert out["overall"]["criteria"] == {
         "died_before_d2_zero": True, "buy_failed_zero": True,
-        "cash_d1h0_ge_4": True, "control_final_delta_nonneg": True}
+        "cash_d1h0_ge_4": True}
+    assert out["overall"]["control_observation"]["observation_only"] is True
     assert out["errors"] == []
 
 
@@ -463,7 +492,9 @@ def test_judge_cash_guard_replay_aggregate_red(tmp_path, monkeypatch):
     assert agg["control"]["final_delta_l1_min"] == 150.0   # 对照臂不翻负
     assert out["overall"]["criteria"] == {
         "died_before_d2_zero": False, "buy_failed_zero": False,
-        "cash_d1h0_ge_4": False, "control_final_delta_nonneg": True}
+        "cash_d1h0_ge_4": False}
+    assert out["overall"]["control_observation"]["observation_only"] is True
+    assert out["criteria_revision"]["verdict_revised"] is True
     assert out["overall"]["pass"] is False
     assert out["errors"] == [] and out["overall"]["n_red_games"] == 0
 
