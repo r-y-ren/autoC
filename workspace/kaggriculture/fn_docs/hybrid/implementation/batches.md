@@ -32,8 +32,8 @@
 | ▶ B20 | 联赛判决线（R20 判据）：count_shearings → judge_sheep_league | pytest test_judge_league 全绿；300-500 局联赛实跑产出 evidence（逐局 WL/刀次/分组胜率） | 判据=R20 ②（5 刀/h2h≥0.55/胜局不翻负）；care_rate 观测不进门槛 |
 | B21(完成 09-26) | 门禁+总指挥：verify_r37_gates → run_r37_iteration wired | 五门实跑 **overall=PASS**（合规 4/4、launch 四门、h2h 0.5625 n=8 独立、谱系 16-0、饿死 26/26+净经济 +73,824 金）；判决 A 复跑全绿（对照 l1_min 0.0） | **r37 已发射** ref 56580761 PENDING（standing 代执行+台账 launch_ledger.json；每日 1/5、候选 1/2）；饿死门四轮攻坚+判据重裁见变更记录 |
 | B22(完成 09-26) | R21-S1 卖流库+预测运行时六件 | pytest 9 绿桩清零（sellflow 4+runtime 5）；**真跑 86 局建库**（29,470 事件/158 键/库 sha acb76cfc…）+键集成探针命中真库 | 库键规范=「店对\|m钱_w麦」两件对齐（并行开发键缝当场缝合）；dodge 避让账 due_step 留档待裁决 |
-| ▶ B23 | R21-S2 构建面四件：inject_predict_block → audit_diff_vs_r37 → pack_r38 → build_r38 | build_r38 真跑产出 r38 main+tar+manifest；审计白名单一类（尾部预测块）零 UNATTRIBUTED；确定性双跑逐字节 | 底=r37 在飞件字节；注入校验四条+库 sha 对账 |
-| B24 | R21-S3 判决线+门禁+总指挥：flip_stats → judge_predict_replay → verify_r38_gates → run_r38_iteration wired | 判决真跑（26 败局[晚崩 15 重点]+10 对照重演+闭环副证 vs r37）出 evidence；判据=胜局不翻负∧晚崩翻正≥1/3∧h2h≥0.55→判正才五门→发射裁决呈批间门 | 判负→收档不建发射版（R21 出口预绑定） |
+| B23(完成 09-26) | R21-S2 构建面四件 | 37 测绿桩清零（inject 7/audit 8/pack 6/build 5+既有）；真跑产出 r38（main 1e07f0f2d69a/块 292,740B 含真库）；库 sha 三口径对账恒等；审计零越界；双跑恒等 | 签名微调登记：pack_r38/build_r38 +out_dir=None；变更集=纯尾块（manifest 自证，无 SHEEP 式内嵌行） |
+| ▶ B24 | R21-S3 判决线+门禁+总指挥：flip_stats → judge_predict_replay → verify_r38_gates → run_r38_iteration wired | 判决真跑（26 败局[晚崩 15 重点]+10 对照重演+闭环副证 vs r37）出 evidence；判据=胜局不翻负∧晚崩翻正≥1/3∧h2h≥0.55→判正才五门→发射裁决呈批间门 | 判负→收档不建发射版（R21 出口预绑定） |
 
 ## 变更记录（计划层事件）
 | 日期 | 事件 | 说明 |

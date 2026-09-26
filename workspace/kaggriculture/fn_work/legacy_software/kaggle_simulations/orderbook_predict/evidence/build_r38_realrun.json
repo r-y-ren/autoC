@@ -1,0 +1,37 @@
+{
+  "block_sha256": "ed11bf1f77f4b22aa8fcf0ca8458bd59ea890aea2f51bef5e7eb16cf30dce742",
+  "build_audit": {
+    "n_files": 86,
+    "n_skipped": 0,
+    "n_used": 86,
+    "replay_dir": "/tmp/r33audit",
+    "total_events": 29470
+  },
+  "diff_attribution": {
+    "n_unattributed": 0,
+    "ok": true,
+    "predict_block": {
+      "bytes": 292740,
+      "present": true,
+      "sha256": "ed11bf1f77f4b22aa8fcf0ca8458bd59ea890aea2f51bef5e7eb16cf30dce742"
+    }
+  },
+  "double_run": {
+    "main_identical": true,
+    "run1": {
+      "main_sha256_12": "1e07f0f2d69a",
+      "tar_sha256_12": "51b388e5d9b3"
+    },
+    "run2": {
+      "main_sha256_12": "1e07f0f2d69a",
+      "tar_sha256_12": "51b388e5d9b3"
+    },
+    "tar_identical": true
+  },
+  "library_sha256": "acb76cfca109f0a54a0b869dd3866db672a3fe4e6205d4af232505fbaef9d05e",
+  "main_sha256_12": "1e07f0f2d69a",
+  "r37_input_unchanged": true,
+  "r37_main_path": "orderbook_r37/build/main.py",
+  "r37_main_sha256": "4b237e412d5101937ad66aa0751454721dec2d5a73fa2743d65768b286a2cb3f",
+  "tar_sha256_12": "51b388e5d9b3"
+}

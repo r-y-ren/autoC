@@ -116,10 +116,10 @@
 | extrapolate_sells | B22 | tested 09-26 | pytest 5 passed；净卖∪库均量合成 1-2 步预测 SELL 写 plan[step]（同槽同品取 max 合并）；低置信跳过 | (本批) |
 | apply_dodge | B22 | tested 09-26 | pytest 5 passed；预测集中抛售 Q≥3 且置信足→整单顺延置 []/减量改单；只动 SELL 槽；避让账带 due_step（跨步重发待裁决留档） | (本批) |
 | _predict_agent | B22 | tested 09-26 | pytest 5 passed（全链串通/异常 fail-safe/step0 复位/假父层注入）；链=父层→infer→match→extrapolate→dodge；_PREDICT_PARENT/_PREDICT_LIBRARY 捕获变量注入面 | (本批) |
-| inject_predict_block | B23 | stub 09-26 | 测试: test_inject_predict.py（注入校验四条+库 sha 对账） | — |
-| audit_diff_vs_r37 | B23 | stub 09-26 | 测试: test_build_r38.py（audit 组；白名单一类尾部块） | — |
-| pack_r38 | B23 | stub 09-26 | 测试: test_build_r38.py（pack 组） | — |
-| build_r38 | B23 | stub 09-26 | 测试: test_build_r38.py（构建编排） | — |
+| inject_predict_block | B23 | wired 09-26 | pytest 7 passed（四条校验/尾部不变量/单参冒烟/sha 确定/失败即抛/库对账双向/真 r37 实跑）；真烟 1,296,398→1,324,745B（块 28,347B）；捕获 _PREDICT_PARENT=_r37_agent 真链、末 callable=_predict_agent；五函数 ast 抽取零手抄+typing 填充（B17 同款） | (本批) |
+| audit_diff_vs_r37 | B23 | wired 09-26 | pytest audit 组 8/8（正路/前缀破坏/锚行缺失或双现/同文本/键稳定/装饰兼容/块外垃圾/JSON 往返）；核心短语「r38 对手预测尾块」识别；归因={ok,whitelist{predict_block},unattributed} | (本批) |
+| pack_r38 | B23 | wired 09-26 | pytest pack 组 6/6（字段齐/双跑同 sha/tar 形态/区分度/坏输入/缺件 null 不造假）；manifest orderbook_r38_manifest/1.0（14 键：base_sha_chain 四节点/predict_block/library_sha AST 主链+伴生行兜底）；真源复用 build_tar_bytes；签名微调 out_dir=None | (本批) |
+| build_r38 | B23 | wired 09-26 | pytest build 组 5/5+全包 37 绿（4 桩=B24）；**真跑**：main 1e07f0f2d69a/tar 51b388e5d9b3/块 292,740B（含真库）；库 sha acb76cfc…三口径对账恒等；审计零 UNATTRIBUTED；双跑恒等；r37 零改动；evidence/build_r38_realrun.json | (本批) |
 | flip_stats | B24 | stub 09-26 | 测试: test_judge_predict.py（flip 组） | — |
 | judge_predict_replay | B24 | stub 09-26 | 测试: test_judge_predict.py；判据=R21 ②（胜局不翻负∧晚崩翻正≥1/3∧h2h≥0.55） | — |
 | verify_r38_gates | B24 | stub 09-26 | 测试: test_gates_r38.py（五门 R37 管线重定向） | — |
