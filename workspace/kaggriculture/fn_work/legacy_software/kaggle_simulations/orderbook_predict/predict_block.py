@@ -608,3 +608,14 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
     except Exception:
         return base_action if base_action is not None \
             else {"farmer": ["PASS"], "hands": [], "market": []}
+
+
+def detect_clone(observation: Dict[str, Any]) -> Dict[str, Any]:
+    """克隆/强匹配判定（R22 改4/改3 门）：step1 现金差<$0.5 或行为相似度
+    ≥0.95（近 N 步动作流一致率）判克隆；任一字段缺失/边界值→保守返回
+    非克隆（不 fire）；跨步快照自包含。
+
+    签名意图：输入: observation（逐步调用） / 输出: {is_clone, similarity,
+    evidence} / 错误: 异常→非克隆。
+    """
+    raise NotImplementedError("unimplemented:fn:detect_clone")

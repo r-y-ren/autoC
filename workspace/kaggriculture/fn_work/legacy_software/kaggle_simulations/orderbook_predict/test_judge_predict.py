@@ -541,3 +541,7 @@ def test_judge_predict_replay_corpus_missing_raises(tmp_path):
     ok = _scripted_replay(tmp_path, 1001, -50.0, -300.0, -3000.0)
     with pytest.raises(ValueError, match="语料缺失"):
         judge_predict_replay(str(pkg), [ok, ok])     # 重复条目
+
+
+def test_make_counter_opponent():
+    raise NotImplementedError("unimplemented:fn:make_counter_opponent")

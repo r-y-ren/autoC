@@ -1217,3 +1217,14 @@ def flip_stats(states: Any, baseline: Any) -> Dict[str, Any]:
     return {"flip": flip, "realized": realized, "dodges": dodges,
             "front_runs": front_runs, "final_delta": final_delta,
             "verdict": verdict}
+
+
+def make_counter_opponent(config: Any) -> Any:
+    """反制对手生成（R22 改4）：Wool Front-Runner 型——嗅探对手羊提交/剪毛窗
+    →提前 1-2 回合集中倒毛 + Anti-Shock 吸收 step-1 麦冲击；输出可装载
+    对手件（脚本文本或 callable 工厂）+特征说明。
+
+    签名意图：输入: 配置（嗅探窗/倒毛量） / 输出: 对手件路径或工厂 /
+    错误: 配置畸形即抛。
+    """
+    raise NotImplementedError("unimplemented:fn:make_counter_opponent")

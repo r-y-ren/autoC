@@ -337,3 +337,7 @@ def test_match_sellflow_canonical_key():
     out = _pb.match_sellflow(obs, lib)
     assert out["matches"].get("source") == "key"
     assert (out["matches"].get("key") or "").startswith("BAKERY|YARN_STORE||m230_w")
+
+
+def test_detect_clone():
+    raise NotImplementedError("unimplemented:fn:detect_clone")
