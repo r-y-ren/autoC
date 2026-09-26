@@ -1,37 +1,63 @@
 {
-  "block_sha256": "ed11bf1f77f4b22aa8fcf0ca8458bd59ea890aea2f51bef5e7eb16cf30dce742",
-  "build_audit": {
-    "n_files": 86,
-    "n_skipped": 0,
-    "n_used": 86,
-    "replay_dir": "/tmp/r33audit",
-    "total_events": 29470
+ "generated_at": "2026-09-27T02:56:53",
+ "generated_by": "run_r38_iteration",
+ "r37_main_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+ "build": {
+  "main_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_predict/build/main.py",
+  "main_sha256": "1e07f0f2d69a832f2a06e31d530fb00251591bccb581edde60fc96994ca4a4b1",
+  "tar_sha256": "51b388e5d9b38634bef9b89eb6675b0a07f229c01450bdb651a164921e98edf2",
+  "manifest": {
+   "schema": "orderbook_r38_manifest/1.0",
+   "generated": "2026-09-27",
+   "variant": "r38",
+   "description": "public derivative with opponent sell prediction (front-run + dodge)",
+   "main_sha256": "1e07f0f2d69a832f2a06e31d530fb00251591bccb581edde60fc96994ca4a4b1",
+   "main_bytes": 1589138,
+   "tar_sha256": "51b388e5d9b38634bef9b89eb6675b0a07f229c01450bdb651a164921e98edf2",
+   "tar_bytes": 682173,
+   "tar_members": [
+    "main.py"
+   ],
+   "double_run_sha256": {
+    "run1": "51b388e5d9b38634bef9b89eb6675b0a07f229c01450bdb651a164921e98edf2",
+    "run2": "51b388e5d9b38634bef9b89eb6675b0a07f229c01450bdb651a164921e98edf2"
+   },
+   "base_sha_chain": {
+    "a16e0e9b": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab",
+    "r34a": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
+    "r37": "4b237e412d5101937ad66aa0751454721dec2d5a73fa2743d65768b286a2cb3f",
+    "r38": "1e07f0f2d69a832f2a06e31d530fb00251591bccb581edde60fc96994ca4a4b1"
+   },
+   "predict_block": {
+    "present": true,
+    "bytes": 292740,
+    "sha256": "ed11bf1f77f4b22aa8fcf0ca8458bd59ea890aea2f51bef5e7eb16cf30dce742"
+   },
+   "library_sha256": "acb76cfca109f0a54a0b869dd3866db672a3fe4e6205d4af232505fbaef9d05e",
+   "complete": true
   },
   "diff_attribution": {
-    "n_unattributed": 0,
-    "ok": true,
+   "ok": true,
+   "whitelist": {
     "predict_block": {
-      "bytes": 292740,
-      "present": true,
-      "sha256": "ed11bf1f77f4b22aa8fcf0ca8458bd59ea890aea2f51bef5e7eb16cf30dce742"
+     "present": true,
+     "bytes": 292740,
+     "sha256": "ed11bf1f77f4b22aa8fcf0ca8458bd59ea890aea2f51bef5e7eb16cf30dce742"
     }
+   },
+   "unattributed": []
   },
-  "double_run": {
-    "main_identical": true,
-    "run1": {
-      "main_sha256_12": "1e07f0f2d69a",
-      "tar_sha256_12": "51b388e5d9b3"
-    },
-    "run2": {
-      "main_sha256_12": "1e07f0f2d69a",
-      "tar_sha256_12": "51b388e5d9b3"
-    },
-    "tar_identical": true
-  },
+  "block_sha": "ed11bf1f77f4b22aa8fcf0ca8458bd59ea890aea2f51bef5e7eb16cf30dce742",
   "library_sha256": "acb76cfca109f0a54a0b869dd3866db672a3fe4e6205d4af232505fbaef9d05e",
-  "main_sha256_12": "1e07f0f2d69a",
-  "r37_input_unchanged": true,
-  "r37_main_path": "orderbook_r37/build/main.py",
-  "r37_main_sha256": "4b237e412d5101937ad66aa0751454721dec2d5a73fa2743d65768b286a2cb3f",
-  "tar_sha256_12": "51b388e5d9b3"
+  "build_audit": {
+   "replay_dir": "/tmp/r33audit",
+   "n_files": 86,
+   "n_used": 86,
+   "n_skipped": 0,
+   "total_events": 29470,
+   "sha256_of_library": "acb76cfca109f0a54a0b869dd3866db672a3fe4e6205d4af232505fbaef9d05e"
+  },
+  "r37_main_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+  "r37_sha256": "4b237e412d5101937ad66aa0751454721dec2d5a73fa2743d65768b286a2cb3f"
+ }
 }
