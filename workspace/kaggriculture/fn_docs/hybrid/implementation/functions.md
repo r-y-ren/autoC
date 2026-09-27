@@ -146,8 +146,8 @@
 | judge_predict_replay | B27 | 改造 wired 09-27 | pytest judge v2 组 5 passed；**真跑 371.9s overall=NEGATIVE（如实）**：①对照 1 局负 min −2101 ✗②晚崩 1/15 ✗③h2h 0.375（0W6T2L）✗④动作降量 fire 0·postpone 0 ✓⑤反制臂 1.0≥1.0 ✓⑥草莓 −1.6 ✗；evidence/judge_predict_v2_realrun.json | (本批) |
 | verify_r39_gates | B28 | wired 09-27 | pytest 4 passed（全绿路/红不短路/fail-closed 含剥块坏锚/独立 n）；五门 R37/R38 同款重定向（last-callable=_predict_agent/血统链四节点对账）；签名微调 evidence_dir | (本批) |
 | run_r39_iteration | B28 | wired 09-27 | pytest 5 passed；**全链真跑 463.8s verdict=NEGATIVE 收档落定**（六判据 2 绿 4 红未改判；archive_ledger run-r39-archive/1.0 件身份 main 1d4f459fe9b3/tar cd2e92e44ec1）；判红不进门禁（B24 语义留档） | (本批) |
-| build_route_library | B29 | stub 09-27 | 测试: orderbook_r40/test_route_library.py | — |
-| _route40_select | B29 | stub 09-27 | 测试: orderbook_r40/test_runtime_r40.py（route 组） | — |
+| build_route_library | B29 | wired 09-27 | pytest 5 passed（聚类/族键稳定/败局世界审计/语料不足抛/真跑）；真跑 77 局 49 族覆盖 85.7%（42 有 best_route/7 uncovered）；败局世界 milk/wool/goose 全 covered=False=补路由缺口如实；evidence/route_library_realrun.json | (本批) |
+| _route40_select | B29 | wired 09-27 | pytest route 组 5 passed（指纹累计/step144 命中锁定/无族回退/step0 复位/异常回退）；族键与 build 跨件同键钉住；route=None=回退现行店对逻辑 | (本批) |
 | retape_sell_lots | B30 | stub 09-27 | 测试: orderbook_r40/test_retape_lots.py | — |
 | apply_race_slots | B30 | stub 09-27 | 测试: orderbook_r40/test_runtime_r40.py（race 组） | — |
 | apply_slot_hygiene | B30 | stub 09-27 | 测试: orderbook_r40/test_runtime_r40.py（hygiene 组） | — |

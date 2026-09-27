@@ -1,0 +1,2103 @@
+{
+ "corpus": {
+  "sources": [
+   "/tmp/kagr23",
+   "/tmp/kagr22",
+   "analysis24 败局 12 局"
+  ],
+  "n_games": 77,
+  "loss_ids": [
+   113735225,
+   113817068,
+   113754147,
+   113852533,
+   113962831,
+   113724375,
+   113837634,
+   113873625,
+   114064544,
+   113838925,
+   113764768,
+   113738419
+  ],
+  "route_known_games": 77,
+  "win_games": 59
+ },
+ "build_audit": {
+  "n_games": 77,
+  "n_families": 49,
+  "coverage": 0.8571428571428571,
+  "uncovered_families": [
+   "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+FARMERS_MARKET",
+   "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE",
+   "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+BAKERY",
+   "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE",
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PET_CAFE",
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+ICE_CREAM_SHOP"
+  ],
+  "library_sha": "0236c30e4e728166c8a8751535517a75c5c133092f2e8f14f2b197baa193ed68"
+ },
+ "defeat_worlds": {
+  "milk_flow": {
+   "families": [
+    "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+YARN_STORE",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BAKERY",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+BRUNCH_SPOT"
+   ],
+   "covered": false
+  },
+  "wool_flow": {
+   "families": [
+    "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE",
+    "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+ICE_CREAM_SHOP",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+YARN_STORE"
+   ],
+   "covered": false
+  },
+  "goose_flow": {
+   "families": [
+    "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+FARMERS_MARKET",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+FARMERS_MARKET",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+BRUNCH_SPOT",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PET_CAFE"
+   ],
+   "covered": false
+  }
+ },
+ "families": {
+  "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+FARMERS_MARKET": {
+   "n_games": 1,
+   "win_rate": 0.0,
+   "best_route": null,
+   "margin_mean": -22664.0,
+   "segments": {
+    "110": {
+     "n": 1,
+     "win_rate": 0.0,
+     "margin_mean": -22397.0
+    }
+   }
+  },
+  "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE": {
+   "n_games": 1,
+   "win_rate": 0.0,
+   "best_route": null,
+   "margin_mean": -26974.0,
+   "segments": {
+    "9": {
+     "n": 1,
+     "win_rate": 0.0,
+     "margin_mean": -26761.0
+    }
+   }
+  },
+  "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+BAKERY": {
+   "n_games": 1,
+   "win_rate": 0.0,
+   "best_route": null,
+   "margin_mean": -14017.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 0.0,
+     "margin_mean": -13804.0
+    }
+   }
+  },
+  "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE": {
+   "n_games": 1,
+   "win_rate": 0.0,
+   "best_route": null,
+   "margin_mean": -18910.0,
+   "segments": {
+    "9": {
+     "n": 1,
+     "win_rate": 0.0,
+     "margin_mean": -18698.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+FARMERS_MARKET": {
+   "n_games": 3,
+   "win_rate": 0.3333333333333333,
+   "best_route": 104,
+   "margin_mean": 1423.6666666666667,
+   "segments": {
+    "104": {
+     "n": 3,
+     "win_rate": 0.3333333333333333,
+     "margin_mean": 1417.6666666666667
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+PIZZA_SHOP": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 107,
+   "margin_mean": 2615.0,
+   "segments": {
+    "107": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 2178.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+SMOOTHIE_SHOP": {
+   "n_games": 2,
+   "win_rate": 1.0,
+   "best_route": 108,
+   "margin_mean": 46997.0,
+   "segments": {
+    "108": {
+     "n": 2,
+     "win_rate": 1.0,
+     "margin_mean": 46661.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+YARN_STORE": {
+   "n_games": 2,
+   "win_rate": 1.0,
+   "best_route": 9,
+   "margin_mean": 12053.5,
+   "segments": {
+    "9": {
+     "n": 2,
+     "win_rate": 1.0,
+     "margin_mean": 12072.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+ICE_CREAM_SHOP": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 52391.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 51744.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+PET_CAFE": {
+   "n_games": 2,
+   "win_rate": 1.0,
+   "best_route": 101,
+   "margin_mean": 8559.0,
+   "segments": {
+    "101": {
+     "n": 2,
+     "win_rate": 1.0,
+     "margin_mean": 8305.5
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 9,
+   "margin_mean": 22496.0,
+   "segments": {
+    "9": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 21650.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+BAKERY": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 111,
+   "margin_mean": 30091.0,
+   "segments": {
+    "111": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 29340.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+BRUNCH_SPOT": {
+   "n_games": 2,
+   "win_rate": 0.5,
+   "best_route": 112,
+   "margin_mean": 4249.0,
+   "segments": {
+    "112": {
+     "n": 2,
+     "win_rate": 0.5,
+     "margin_mean": 4256.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+FARMERS_MARKET": {
+   "n_games": 4,
+   "win_rate": 1.0,
+   "best_route": 104,
+   "margin_mean": 26648.5,
+   "segments": {
+    "104": {
+     "n": 4,
+     "win_rate": 1.0,
+     "margin_mean": 26422.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+ICE_CREAM_SHOP": {
+   "n_games": 3,
+   "win_rate": 1.0,
+   "best_route": 107,
+   "margin_mean": 13149.333333333334,
+   "segments": {
+    "107": {
+     "n": 3,
+     "win_rate": 1.0,
+     "margin_mean": 12898.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+PET_CAFE": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 113,
+   "margin_mean": 27494.0,
+   "segments": {
+    "113": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 26839.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+PIZZA_SHOP": {
+   "n_games": 2,
+   "win_rate": 0.5,
+   "best_route": 105,
+   "margin_mean": 18321.0,
+   "segments": {
+    "105": {
+     "n": 2,
+     "win_rate": 0.5,
+     "margin_mean": 18326.5
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+YARN_STORE": {
+   "n_games": 3,
+   "win_rate": 1.0,
+   "best_route": 9,
+   "margin_mean": 42828.0,
+   "segments": {
+    "9": {
+     "n": 3,
+     "win_rate": 1.0,
+     "margin_mean": 42606.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+BRUNCH_SPOT": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 1549.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 1566.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+FARMERS_MARKET": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 6030.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 6051.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+ICE_CREAM_SHOP": {
+   "n_games": 1,
+   "win_rate": 0.0,
+   "best_route": null,
+   "margin_mean": -18060.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 0.0,
+     "margin_mean": -18088.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+PET_CAFE": {
+   "n_games": 2,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 16331.0,
+   "segments": {
+    "105": {
+     "n": 2,
+     "win_rate": 1.0,
+     "margin_mean": 16034.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+PIZZA_SHOP": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 108,
+   "margin_mean": 15313.0,
+   "segments": {
+    "108": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 15303.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+SMOOTHIE_SHOP": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 15313.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 14979.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+YARN_STORE": {
+   "n_games": 2,
+   "win_rate": 0.5,
+   "best_route": 9,
+   "margin_mean": -2214.5,
+   "segments": {
+    "9": {
+     "n": 2,
+     "win_rate": 0.5,
+     "margin_mean": -2587.5
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+BRUNCH_SPOT": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 116,
+   "margin_mean": 1198.0,
+   "segments": {
+    "116": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 1208.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+FARMERS_MARKET": {
+   "n_games": 3,
+   "win_rate": 1.0,
+   "best_route": 117,
+   "margin_mean": 22373.0,
+   "segments": {
+    "117": {
+     "n": 3,
+     "win_rate": 1.0,
+     "margin_mean": 22224.333333333332
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+ICE_CREAM_SHOP": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 2915.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 2887.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PET_CAFE": {
+   "n_games": 1,
+   "win_rate": 0.0,
+   "best_route": null,
+   "margin_mean": -7232.0,
+   "segments": {
+    "118": {
+     "n": 1,
+     "win_rate": 0.0,
+     "margin_mean": -7887.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PIZZA_SHOP": {
+   "n_games": 2,
+   "win_rate": 0.5,
+   "best_route": 107,
+   "margin_mean": 3058.0,
+   "segments": {
+    "107": {
+     "n": 2,
+     "win_rate": 0.5,
+     "margin_mean": 2706.5
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+SMOOTHIE_SHOP": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 25231.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 25067.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BAKERY": {
+   "n_games": 3,
+   "win_rate": 0.6666666666666666,
+   "best_route": 120,
+   "margin_mean": 15767.666666666666,
+   "segments": {
+    "120": {
+     "n": 3,
+     "win_rate": 0.6666666666666666,
+     "margin_mean": 15624.666666666666
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BRUNCH_SPOT": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 52502.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 51920.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+FARMERS_MARKET": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 121,
+   "margin_mean": 53469.0,
+   "segments": {
+    "121": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 54266.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+PET_CAFE": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 18021.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 18067.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+PIZZA_SHOP": {
+   "n_games": 2,
+   "win_rate": 0.5,
+   "best_route": 123,
+   "margin_mean": -9375.5,
+   "segments": {
+    "123": {
+     "n": 2,
+     "win_rate": 0.5,
+     "margin_mean": -9309.5
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 9,
+   "margin_mean": 5281.0,
+   "segments": {
+    "9": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 5302.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+BAKERY": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 12659.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 12138.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+BRUNCH_SPOT": {
+   "n_games": 2,
+   "win_rate": 0.5,
+   "best_route": 121,
+   "margin_mean": 4995.5,
+   "segments": {
+    "121": {
+     "n": 2,
+     "win_rate": 0.5,
+     "margin_mean": 4805.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+FARMERS_MARKET": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 6776.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 6748.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+ICE_CREAM_SHOP": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 105,
+   "margin_mean": 17816.0,
+   "segments": {
+    "105": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 17835.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+SMOOTHIE_SHOP": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 107,
+   "margin_mean": 18896.0,
+   "segments": {
+    "107": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 18374.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+YARN_STORE": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 9,
+   "margin_mean": 48291.0,
+   "segments": {
+    "9": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 47880.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+BAKERY": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 9,
+   "margin_mean": 2079.0,
+   "segments": {
+    "9": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 2089.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+FARMERS_MARKET": {
+   "n_games": 2,
+   "win_rate": 0.5,
+   "best_route": 9,
+   "margin_mean": 18872.5,
+   "segments": {
+    "9": {
+     "n": 2,
+     "win_rate": 0.5,
+     "margin_mean": 18766.5
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+ICE_CREAM_SHOP": {
+   "n_games": 1,
+   "win_rate": 0.0,
+   "best_route": null,
+   "margin_mean": -1106.0,
+   "segments": {
+    "9": {
+     "n": 1,
+     "win_rate": 0.0,
+     "margin_mean": -1019.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+PIZZA_SHOP": {
+   "n_games": 1,
+   "win_rate": 1.0,
+   "best_route": 9,
+   "margin_mean": 10321.0,
+   "segments": {
+    "9": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 10339.0
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+SMOOTHIE_SHOP": {
+   "n_games": 2,
+   "win_rate": 1.0,
+   "best_route": 9,
+   "margin_mean": 11274.5,
+   "segments": {
+    "9": {
+     "n": 2,
+     "win_rate": 1.0,
+     "margin_mean": 10996.5
+    }
+   }
+  },
+  "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+YARN_STORE": {
+   "n_games": 4,
+   "win_rate": 0.75,
+   "best_route": 9,
+   "margin_mean": 12996.5,
+   "segments": {
+    "9": {
+     "n": 4,
+     "win_rate": 0.75,
+     "margin_mean": 13010.75
+    }
+   }
+  }
+ },
+ "games": [
+  {
+   "episode": 112937338,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+FARMERS_MARKET",
+   "win": true,
+   "margin": 43045.0,
+   "seg_margin": 42392.0,
+   "route": 104
+  },
+  {
+   "episode": 112938600,
+   "family_key": "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE",
+   "win": false,
+   "margin": -18910.0,
+   "seg_margin": -18698.0,
+   "route": 9
+  },
+  {
+   "episode": 112943297,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+PIZZA_SHOP",
+   "win": true,
+   "margin": 2615.0,
+   "seg_margin": 2178.0,
+   "route": 107
+  },
+  {
+   "episode": 112968467,
+   "family_key": "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+BAKERY",
+   "win": false,
+   "margin": -14017.0,
+   "seg_margin": -13804.0,
+   "route": 105
+  },
+  {
+   "episode": 112969611,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+PET_CAFE",
+   "win": true,
+   "margin": 3692.0,
+   "seg_margin": 3676.0,
+   "route": 101
+  },
+  {
+   "episode": 112971928,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+ICE_CREAM_SHOP",
+   "win": true,
+   "margin": 2322.0,
+   "seg_margin": 2339.0,
+   "route": 107
+  },
+  {
+   "episode": 112973096,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+FARMERS_MARKET",
+   "win": true,
+   "margin": 16080.0,
+   "seg_margin": 16056.0,
+   "route": 117
+  },
+  {
+   "episode": 112976582,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+BRUNCH_SPOT",
+   "win": false,
+   "margin": -11028.0,
+   "seg_margin": -10827.0,
+   "route": 121
+  },
+  {
+   "episode": 112983518,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+BAKERY",
+   "win": true,
+   "margin": 2079.0,
+   "seg_margin": 2089.0,
+   "route": 9
+  },
+  {
+   "episode": 112984665,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+YARN_STORE",
+   "win": true,
+   "margin": 8422.0,
+   "seg_margin": 8437.0,
+   "route": 9
+  },
+  {
+   "episode": 112986874,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+ICE_CREAM_SHOP",
+   "win": true,
+   "margin": 282.0,
+   "seg_margin": 372.0,
+   "route": 107
+  },
+  {
+   "episode": 112992971,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+BRUNCH_SPOT",
+   "win": true,
+   "margin": 1549.0,
+   "seg_margin": 1566.0,
+   "route": 105
+  },
+  {
+   "episode": 113002280,
+   "family_key": "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+FARMERS_MARKET",
+   "win": false,
+   "margin": -22664.0,
+   "seg_margin": -22397.0,
+   "route": 110
+  },
+  {
+   "episode": 113064702,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+BRUNCH_SPOT",
+   "win": true,
+   "margin": 1198.0,
+   "seg_margin": 1208.0,
+   "route": 116
+  },
+  {
+   "episode": 113094793,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+PIZZA_SHOP",
+   "win": false,
+   "margin": -19432.0,
+   "seg_margin": -19390.0,
+   "route": 123
+  },
+  {
+   "episode": 113099386,
+   "family_key": "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE",
+   "win": false,
+   "margin": -26974.0,
+   "seg_margin": -26761.0,
+   "route": 9
+  },
+  {
+   "episode": 113724375,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+FARMERS_MARKET",
+   "win": false,
+   "margin": -1944.0,
+   "seg_margin": -1944.0,
+   "route": 104
+  },
+  {
+   "episode": 113725577,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+YARN_STORE",
+   "win": true,
+   "margin": 103636.0,
+   "seg_margin": 103028.0,
+   "route": 9
+  },
+  {
+   "episode": 113726789,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+ICE_CREAM_SHOP",
+   "win": true,
+   "margin": 52391.0,
+   "seg_margin": 51744.0,
+   "route": 105
+  },
+  {
+   "episode": 113727962,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+SMOOTHIE_SHOP",
+   "win": true,
+   "margin": 46355.0,
+   "seg_margin": 46419.0,
+   "route": 108
+  },
+  {
+   "episode": 113729168,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+YARN_STORE",
+   "win": true,
+   "margin": 48291.0,
+   "seg_margin": 47880.0,
+   "route": 9
+  },
+  {
+   "episode": 113730341,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+FARMERS_MARKET",
+   "win": true,
+   "margin": 53469.0,
+   "seg_margin": 54266.0,
+   "route": 121
+  },
+  {
+   "episode": 113731548,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BAKERY",
+   "win": true,
+   "margin": 39986.0,
+   "seg_margin": 39475.0,
+   "route": 120
+  },
+  {
+   "episode": 113732747,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+ICE_CREAM_SHOP",
+   "win": true,
+   "margin": 36844.0,
+   "seg_margin": 35983.0,
+   "route": 107
+  },
+  {
+   "episode": 113733935,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+BAKERY",
+   "win": true,
+   "margin": 30091.0,
+   "seg_margin": 29340.0,
+   "route": 111
+  },
+  {
+   "episode": 113735225,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+   "win": false,
+   "margin": -18060.0,
+   "seg_margin": -18088.0,
+   "route": 105
+  },
+  {
+   "episode": 113736325,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+BAKERY",
+   "win": true,
+   "margin": 12659.0,
+   "seg_margin": 12138.0,
+   "route": 105
+  },
+  {
+   "episode": 113737654,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE",
+   "win": true,
+   "margin": 22496.0,
+   "seg_margin": 21650.0,
+   "route": 9
+  },
+  {
+   "episode": 113738419,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+PIZZA_SHOP",
+   "win": false,
+   "margin": -285.0,
+   "seg_margin": -277.0,
+   "route": 105
+  },
+  {
+   "episode": 113738685,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+SMOOTHIE_SHOP",
+   "win": true,
+   "margin": 18896.0,
+   "seg_margin": 18374.0,
+   "route": 107
+  },
+  {
+   "episode": 113739898,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+SMOOTHIE_SHOP",
+   "win": true,
+   "margin": 15313.0,
+   "seg_margin": 14979.0,
+   "route": 105
+  },
+  {
+   "episode": 113740979,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+SMOOTHIE_SHOP",
+   "win": true,
+   "margin": 25231.0,
+   "seg_margin": 25067.0,
+   "route": 105
+  },
+  {
+   "episode": 113742167,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BRUNCH_SPOT",
+   "win": true,
+   "margin": 52502.0,
+   "seg_margin": 51920.0,
+   "route": 105
+  },
+  {
+   "episode": 113743436,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+FARMERS_MARKET",
+   "win": true,
+   "margin": 51356.0,
+   "seg_margin": 51376.0,
+   "route": 104
+  },
+  {
+   "episode": 113744645,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+SMOOTHIE_SHOP",
+   "win": true,
+   "margin": 12663.0,
+   "seg_margin": 12088.0,
+   "route": 9
+  },
+  {
+   "episode": 113745827,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+FARMERS_MARKET",
+   "win": true,
+   "margin": 11349.0,
+   "seg_margin": 11065.0,
+   "route": 104
+  },
+  {
+   "episode": 113747030,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+BRUNCH_SPOT",
+   "win": true,
+   "margin": 21019.0,
+   "seg_margin": 20437.0,
+   "route": 121
+  },
+  {
+   "episode": 113747375,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+PIZZA_SHOP",
+   "win": true,
+   "margin": 36927.0,
+   "seg_margin": 36930.0,
+   "route": 105
+  },
+  {
+   "episode": 113748516,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+PET_CAFE",
+   "win": true,
+   "margin": 27494.0,
+   "seg_margin": 26839.0,
+   "route": 113
+  },
+  {
+   "episode": 113749523,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+PET_CAFE",
+   "win": true,
+   "margin": 18021.0,
+   "seg_margin": 18067.0,
+   "route": 105
+  },
+  {
+   "episode": 113750599,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PIZZA_SHOP",
+   "win": true,
+   "margin": 7430.0,
+   "seg_margin": 6640.0,
+   "route": 107
+  },
+  {
+   "episode": 113751332,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+FARMERS_MARKET",
+   "win": true,
+   "margin": 717.0,
+   "seg_margin": 717.0,
+   "route": 117
+  },
+  {
+   "episode": 113752049,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+YARN_STORE",
+   "win": true,
+   "margin": 21264.0,
+   "seg_margin": 21285.0,
+   "route": 9
+  },
+  {
+   "episode": 113752959,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+YARN_STORE",
+   "win": true,
+   "margin": 18600.0,
+   "seg_margin": 18619.0,
+   "route": 9
+  },
+  {
+   "episode": 113754147,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PET_CAFE",
+   "win": false,
+   "margin": -7232.0,
+   "seg_margin": -7887.0,
+   "route": 118
+  },
+  {
+   "episode": 113755375,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+PET_CAFE",
+   "win": true,
+   "margin": 13426.0,
+   "seg_margin": 12935.0,
+   "route": 101
+  },
+  {
+   "episode": 113756550,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+YARN_STORE",
+   "win": true,
+   "margin": 16097.0,
+   "seg_margin": 16118.0,
+   "route": 9
+  },
+  {
+   "episode": 113757725,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BAKERY",
+   "win": true,
+   "margin": 7859.0,
+   "seg_margin": 7941.0,
+   "route": 120
+  },
+  {
+   "episode": 113758911,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+YARN_STORE",
+   "win": true,
+   "margin": 27099.0,
+   "seg_margin": 27118.0,
+   "route": 9
+  },
+  {
+   "episode": 113760120,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+SMOOTHIE_SHOP",
+   "win": true,
+   "margin": 47639.0,
+   "seg_margin": 46903.0,
+   "route": 108
+  },
+  {
+   "episode": 113761502,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+ICE_CREAM_SHOP",
+   "win": true,
+   "margin": 17816.0,
+   "seg_margin": 17835.0,
+   "route": 105
+  },
+  {
+   "episode": 113762515,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+SMOOTHIE_SHOP",
+   "win": true,
+   "margin": 9886.0,
+   "seg_margin": 9905.0,
+   "route": 9
+  },
+  {
+   "episode": 113763695,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+PIZZA_SHOP",
+   "win": true,
+   "margin": 10321.0,
+   "seg_margin": 10339.0,
+   "route": 9
+  },
+  {
+   "episode": 113764768,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BAKERY",
+   "win": false,
+   "margin": -542.0,
+   "seg_margin": -542.0,
+   "route": 120
+  },
+  {
+   "episode": 113764898,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+FARMERS_MARKET",
+   "win": true,
+   "margin": 6030.0,
+   "seg_margin": 6051.0,
+   "route": 105
+  },
+  {
+   "episode": 113766102,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+FARMERS_MARKET",
+   "win": true,
+   "margin": 40331.0,
+   "seg_margin": 40119.0,
+   "route": 9
+  },
+  {
+   "episode": 113767291,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+YARN_STORE",
+   "win": true,
+   "margin": 2843.0,
+   "seg_margin": 2859.0,
+   "route": 9
+  },
+  {
+   "episode": 113768464,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE",
+   "win": true,
+   "margin": 5281.0,
+   "seg_margin": 5302.0,
+   "route": 9
+  },
+  {
+   "episode": 113769658,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+FARMERS_MARKET",
+   "win": true,
+   "margin": 6776.0,
+   "seg_margin": 6748.0,
+   "route": 105
+  },
+  {
+   "episode": 113770831,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+FARMERS_MARKET",
+   "win": true,
+   "margin": 50322.0,
+   "seg_margin": 49900.0,
+   "route": 117
+  },
+  {
+   "episode": 113772019,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+PIZZA_SHOP",
+   "win": true,
+   "margin": 15313.0,
+   "seg_margin": 15303.0,
+   "route": 108
+  },
+  {
+   "episode": 113773275,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+YARN_STORE",
+   "win": true,
+   "margin": 8751.0,
+   "seg_margin": 8672.0,
+   "route": 9
+  },
+  {
+   "episode": 113774370,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+PET_CAFE",
+   "win": true,
+   "margin": 5407.0,
+   "seg_margin": 5381.0,
+   "route": 105
+  },
+  {
+   "episode": 113775554,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+PET_CAFE",
+   "win": true,
+   "margin": 27255.0,
+   "seg_margin": 26687.0,
+   "route": 105
+  },
+  {
+   "episode": 113776966,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+BRUNCH_SPOT",
+   "win": true,
+   "margin": 9827.0,
+   "seg_margin": 9804.0,
+   "route": 112
+  },
+  {
+   "episode": 113777344,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+FARMERS_MARKET",
+   "win": true,
+   "margin": 844.0,
+   "seg_margin": 855.0,
+   "route": 104
+  },
+  {
+   "episode": 113778223,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+ICE_CREAM_SHOP",
+   "win": true,
+   "margin": 2915.0,
+   "seg_margin": 2887.0,
+   "route": 105
+  },
+  {
+   "episode": 113785736,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+PIZZA_SHOP",
+   "win": true,
+   "margin": 681.0,
+   "seg_margin": 771.0,
+   "route": 123
+  },
+  {
+   "episode": 113801484,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+YARN_STORE",
+   "win": true,
+   "margin": 4936.0,
+   "seg_margin": 4939.0,
+   "route": 9
+  },
+  {
+   "episode": 113803535,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+FARMERS_MARKET",
+   "win": true,
+   "margin": 8055.0,
+   "seg_margin": 8029.0,
+   "route": 104
+  },
+  {
+   "episode": 113817068,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+YARN_STORE",
+   "win": false,
+   "margin": -9365.0,
+   "seg_margin": -10114.0,
+   "route": 9
+  },
+  {
+   "episode": 113837634,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+FARMERS_MARKET",
+   "win": false,
+   "margin": -1840.0,
+   "seg_margin": -1832.0,
+   "route": 104
+  },
+  {
+   "episode": 113838925,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+ICE_CREAM_SHOP",
+   "win": false,
+   "margin": -1106.0,
+   "seg_margin": -1019.0,
+   "route": 9
+  },
+  {
+   "episode": 113852533,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+FARMERS_MARKET",
+   "win": false,
+   "margin": -2586.0,
+   "seg_margin": -2586.0,
+   "route": 9
+  },
+  {
+   "episode": 113873625,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+BRUNCH_SPOT",
+   "win": false,
+   "margin": -1329.0,
+   "seg_margin": -1292.0,
+   "route": 112
+  },
+  {
+   "episode": 113962831,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+YARN_STORE",
+   "win": false,
+   "margin": -2135.0,
+   "seg_margin": -2131.0,
+   "route": 9
+  },
+  {
+   "episode": 114064544,
+   "family_key": "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PIZZA_SHOP",
+   "win": false,
+   "margin": -1314.0,
+   "seg_margin": -1227.0,
+   "route": 107
+  }
+ ],
+ "library": {
+  "version": "routelib/1.0",
+  "families": {
+   "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+FARMERS_MARKET": {
+    "n_games": 1,
+    "win_rate": 0.0,
+    "best_route": null,
+    "margin_mean": -22664.0,
+    "segments": {
+     "110": {
+      "n": 1,
+      "win_rate": 0.0,
+      "margin_mean": -22397.0
+     }
+    }
+   },
+   "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE": {
+    "n_games": 1,
+    "win_rate": 0.0,
+    "best_route": null,
+    "margin_mean": -26974.0,
+    "segments": {
+     "9": {
+      "n": 1,
+      "win_rate": 0.0,
+      "margin_mean": -26761.0
+     }
+    }
+   },
+   "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+BAKERY": {
+    "n_games": 1,
+    "win_rate": 0.0,
+    "best_route": null,
+    "margin_mean": -14017.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 0.0,
+      "margin_mean": -13804.0
+     }
+    }
+   },
+   "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE": {
+    "n_games": 1,
+    "win_rate": 0.0,
+    "best_route": null,
+    "margin_mean": -18910.0,
+    "segments": {
+     "9": {
+      "n": 1,
+      "win_rate": 0.0,
+      "margin_mean": -18698.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+FARMERS_MARKET": {
+    "n_games": 3,
+    "win_rate": 0.3333333333333333,
+    "best_route": 104,
+    "margin_mean": 1423.6666666666667,
+    "segments": {
+     "104": {
+      "n": 3,
+      "win_rate": 0.3333333333333333,
+      "margin_mean": 1417.6666666666667
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+PIZZA_SHOP": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 107,
+    "margin_mean": 2615.0,
+    "segments": {
+     "107": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 2178.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+SMOOTHIE_SHOP": {
+    "n_games": 2,
+    "win_rate": 1.0,
+    "best_route": 108,
+    "margin_mean": 46997.0,
+    "segments": {
+     "108": {
+      "n": 2,
+      "win_rate": 1.0,
+      "margin_mean": 46661.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+YARN_STORE": {
+    "n_games": 2,
+    "win_rate": 1.0,
+    "best_route": 9,
+    "margin_mean": 12053.5,
+    "segments": {
+     "9": {
+      "n": 2,
+      "win_rate": 1.0,
+      "margin_mean": 12072.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+ICE_CREAM_SHOP": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 52391.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 51744.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+PET_CAFE": {
+    "n_games": 2,
+    "win_rate": 1.0,
+    "best_route": 101,
+    "margin_mean": 8559.0,
+    "segments": {
+     "101": {
+      "n": 2,
+      "win_rate": 1.0,
+      "margin_mean": 8305.5
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 9,
+    "margin_mean": 22496.0,
+    "segments": {
+     "9": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 21650.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+BAKERY": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 111,
+    "margin_mean": 30091.0,
+    "segments": {
+     "111": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 29340.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+BRUNCH_SPOT": {
+    "n_games": 2,
+    "win_rate": 0.5,
+    "best_route": 112,
+    "margin_mean": 4249.0,
+    "segments": {
+     "112": {
+      "n": 2,
+      "win_rate": 0.5,
+      "margin_mean": 4256.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+FARMERS_MARKET": {
+    "n_games": 4,
+    "win_rate": 1.0,
+    "best_route": 104,
+    "margin_mean": 26648.5,
+    "segments": {
+     "104": {
+      "n": 4,
+      "win_rate": 1.0,
+      "margin_mean": 26422.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+ICE_CREAM_SHOP": {
+    "n_games": 3,
+    "win_rate": 1.0,
+    "best_route": 107,
+    "margin_mean": 13149.333333333334,
+    "segments": {
+     "107": {
+      "n": 3,
+      "win_rate": 1.0,
+      "margin_mean": 12898.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+PET_CAFE": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 113,
+    "margin_mean": 27494.0,
+    "segments": {
+     "113": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 26839.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+PIZZA_SHOP": {
+    "n_games": 2,
+    "win_rate": 0.5,
+    "best_route": 105,
+    "margin_mean": 18321.0,
+    "segments": {
+     "105": {
+      "n": 2,
+      "win_rate": 0.5,
+      "margin_mean": 18326.5
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+YARN_STORE": {
+    "n_games": 3,
+    "win_rate": 1.0,
+    "best_route": 9,
+    "margin_mean": 42828.0,
+    "segments": {
+     "9": {
+      "n": 3,
+      "win_rate": 1.0,
+      "margin_mean": 42606.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+BRUNCH_SPOT": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 1549.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 1566.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+FARMERS_MARKET": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 6030.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 6051.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+ICE_CREAM_SHOP": {
+    "n_games": 1,
+    "win_rate": 0.0,
+    "best_route": null,
+    "margin_mean": -18060.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 0.0,
+      "margin_mean": -18088.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+PET_CAFE": {
+    "n_games": 2,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 16331.0,
+    "segments": {
+     "105": {
+      "n": 2,
+      "win_rate": 1.0,
+      "margin_mean": 16034.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+PIZZA_SHOP": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 108,
+    "margin_mean": 15313.0,
+    "segments": {
+     "108": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 15303.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+SMOOTHIE_SHOP": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 15313.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 14979.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+YARN_STORE": {
+    "n_games": 2,
+    "win_rate": 0.5,
+    "best_route": 9,
+    "margin_mean": -2214.5,
+    "segments": {
+     "9": {
+      "n": 2,
+      "win_rate": 0.5,
+      "margin_mean": -2587.5
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+BRUNCH_SPOT": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 116,
+    "margin_mean": 1198.0,
+    "segments": {
+     "116": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 1208.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+FARMERS_MARKET": {
+    "n_games": 3,
+    "win_rate": 1.0,
+    "best_route": 117,
+    "margin_mean": 22373.0,
+    "segments": {
+     "117": {
+      "n": 3,
+      "win_rate": 1.0,
+      "margin_mean": 22224.333333333332
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+ICE_CREAM_SHOP": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 2915.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 2887.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PET_CAFE": {
+    "n_games": 1,
+    "win_rate": 0.0,
+    "best_route": null,
+    "margin_mean": -7232.0,
+    "segments": {
+     "118": {
+      "n": 1,
+      "win_rate": 0.0,
+      "margin_mean": -7887.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PIZZA_SHOP": {
+    "n_games": 2,
+    "win_rate": 0.5,
+    "best_route": 107,
+    "margin_mean": 3058.0,
+    "segments": {
+     "107": {
+      "n": 2,
+      "win_rate": 0.5,
+      "margin_mean": 2706.5
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+SMOOTHIE_SHOP": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 25231.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 25067.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BAKERY": {
+    "n_games": 3,
+    "win_rate": 0.6666666666666666,
+    "best_route": 120,
+    "margin_mean": 15767.666666666666,
+    "segments": {
+     "120": {
+      "n": 3,
+      "win_rate": 0.6666666666666666,
+      "margin_mean": 15624.666666666666
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BRUNCH_SPOT": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 52502.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 51920.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+FARMERS_MARKET": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 121,
+    "margin_mean": 53469.0,
+    "segments": {
+     "121": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 54266.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+PET_CAFE": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 18021.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 18067.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+PIZZA_SHOP": {
+    "n_games": 2,
+    "win_rate": 0.5,
+    "best_route": 123,
+    "margin_mean": -9375.5,
+    "segments": {
+     "123": {
+      "n": 2,
+      "win_rate": 0.5,
+      "margin_mean": -9309.5
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 9,
+    "margin_mean": 5281.0,
+    "segments": {
+     "9": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 5302.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+BAKERY": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 12659.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 12138.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+BRUNCH_SPOT": {
+    "n_games": 2,
+    "win_rate": 0.5,
+    "best_route": 121,
+    "margin_mean": 4995.5,
+    "segments": {
+     "121": {
+      "n": 2,
+      "win_rate": 0.5,
+      "margin_mean": 4805.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+FARMERS_MARKET": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 6776.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 6748.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+ICE_CREAM_SHOP": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 105,
+    "margin_mean": 17816.0,
+    "segments": {
+     "105": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 17835.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+SMOOTHIE_SHOP": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 107,
+    "margin_mean": 18896.0,
+    "segments": {
+     "107": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 18374.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+YARN_STORE": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 9,
+    "margin_mean": 48291.0,
+    "segments": {
+     "9": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 47880.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+BAKERY": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 9,
+    "margin_mean": 2079.0,
+    "segments": {
+     "9": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 2089.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+FARMERS_MARKET": {
+    "n_games": 2,
+    "win_rate": 0.5,
+    "best_route": 9,
+    "margin_mean": 18872.5,
+    "segments": {
+     "9": {
+      "n": 2,
+      "win_rate": 0.5,
+      "margin_mean": 18766.5
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+ICE_CREAM_SHOP": {
+    "n_games": 1,
+    "win_rate": 0.0,
+    "best_route": null,
+    "margin_mean": -1106.0,
+    "segments": {
+     "9": {
+      "n": 1,
+      "win_rate": 0.0,
+      "margin_mean": -1019.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+PIZZA_SHOP": {
+    "n_games": 1,
+    "win_rate": 1.0,
+    "best_route": 9,
+    "margin_mean": 10321.0,
+    "segments": {
+     "9": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 10339.0
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+SMOOTHIE_SHOP": {
+    "n_games": 2,
+    "win_rate": 1.0,
+    "best_route": 9,
+    "margin_mean": 11274.5,
+    "segments": {
+     "9": {
+      "n": 2,
+      "win_rate": 1.0,
+      "margin_mean": 10996.5
+     }
+    }
+   },
+   "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+YARN_STORE": {
+    "n_games": 4,
+    "win_rate": 0.75,
+    "best_route": 9,
+    "margin_mean": 12996.5,
+    "segments": {
+     "9": {
+      "n": 4,
+      "win_rate": 0.75,
+      "margin_mean": 13010.75
+     }
+    }
+   }
+  },
+  "default": {
+   "n_games": 77,
+   "win_rate": 0.7662337662337663,
+   "best_route": 121,
+   "margin_mean": 13652.35064935065,
+   "segments": {
+    "101": {
+     "n": 2,
+     "win_rate": 1.0,
+     "margin_mean": 8305.5
+    },
+    "104": {
+     "n": 7,
+     "win_rate": 0.7142857142857143,
+     "margin_mean": 15705.857142857143
+    },
+    "105": {
+     "n": 17,
+     "win_rate": 0.8235294117647058,
+     "margin_mean": 14460.64705882353
+    },
+    "107": {
+     "n": 7,
+     "win_rate": 0.8571428571428571,
+     "margin_mean": 9237.0
+    },
+    "108": {
+     "n": 3,
+     "win_rate": 1.0,
+     "margin_mean": 36208.333333333336
+    },
+    "110": {
+     "n": 1,
+     "win_rate": 0.0,
+     "margin_mean": -22397.0
+    },
+    "111": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 29340.0
+    },
+    "112": {
+     "n": 2,
+     "win_rate": 0.5,
+     "margin_mean": 4256.0
+    },
+    "113": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 26839.0
+    },
+    "116": {
+     "n": 1,
+     "win_rate": 1.0,
+     "margin_mean": 1208.0
+    },
+    "117": {
+     "n": 3,
+     "win_rate": 1.0,
+     "margin_mean": 22224.333333333332
+    },
+    "118": {
+     "n": 1,
+     "win_rate": 0.0,
+     "margin_mean": -7887.0
+    },
+    "120": {
+     "n": 3,
+     "win_rate": 0.6666666666666666,
+     "margin_mean": 15624.666666666666
+    },
+    "121": {
+     "n": 3,
+     "win_rate": 0.6666666666666666,
+     "margin_mean": 21292.0
+    },
+    "123": {
+     "n": 2,
+     "win_rate": 0.5,
+     "margin_mean": -9309.5
+    },
+    "9": {
+     "n": 23,
+     "win_rate": 0.7391304347826086,
+     "margin_mean": 13006.0
+    }
+   }
+  },
+  "defeat_worlds": {
+   "milk_flow": {
+    "families": [
+     "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE",
+     "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+     "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+YARN_STORE",
+     "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+BAKERY",
+     "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|SMOOTHIE_SHOP+BRUNCH_SPOT"
+    ],
+    "covered": false
+   },
+   "wool_flow": {
+    "families": [
+     "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE",
+     "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE",
+     "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+ICE_CREAM_SHOP",
+     "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+YARN_STORE"
+    ],
+    "covered": false
+   },
+   "goose_flow": {
+    "families": [
+     "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+FARMERS_MARKET",
+     "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|BAKERY+FARMERS_MARKET",
+     "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|FARMERS_MARKET+BRUNCH_SPOT",
+     "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PET_CAFE"
+    ],
+    "covered": false
+   }
+  },
+  "build_audit": {
+   "n_games": 77,
+   "n_families": 49,
+   "coverage": 0.8571428571428571,
+   "uncovered_families": [
+    "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+FARMERS_MARKET",
+    "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|BRUNCH_SPOT+YARN_STORE",
+    "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+BAKERY",
+    "23|0|MELON:12,STRAWBERRY:4,WHEAT:3|PIZZA_SHOP+YARN_STORE",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|PET_CAFE+PET_CAFE",
+    "25|0|MELON:12,STRAWBERRY:4,WHEAT:3|YARN_STORE+ICE_CREAM_SHOP"
+   ],
+   "library_sha": "0236c30e4e728166c8a8751535517a75c5c133092f2e8f14f2b197baa193ed68"
+  }
+ }
+}
