@@ -1,0 +1,993 @@
+{
+ "judge": "judge_r23",
+ "version": "judge-r23/1.0",
+ "generated_at": "2026-09-27T15:30:53Z",
+ "pkg": {
+  "main": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
+  "sha256": "227f0de52e828256617e45dc78992c9621e2deeecf54375b2dad5af6742559fc"
+ },
+ "config": {
+  "corpus": [
+   113735225,
+   113817068,
+   113754147,
+   113852533,
+   113962831,
+   113724375,
+   113837634,
+   113873625,
+   114064544,
+   113838925,
+   113764768,
+   113738419
+  ],
+  "corpus_paths": [
+   "/tmp/kagr23/episode-113735225-replay.json",
+   "/tmp/kagr23/episode-113817068-replay.json",
+   "/tmp/kagr23/episode-113754147-replay.json",
+   "/tmp/kagr24/episode-113852533-replay.json",
+   "/tmp/kagr24/episode-113962831-replay.json",
+   "/tmp/kagr23/episode-113724375-replay.json",
+   "/tmp/kagr24/episode-113837634-replay.json",
+   "/tmp/kagr24/episode-113873625-replay.json",
+   "/tmp/kagr24/episode-114064544-replay.json",
+   "/tmp/kagr24/episode-113838925-replay.json",
+   "/tmp/kagr23/episode-113764768-replay.json",
+   "/tmp/kagr23/episode-113738419-replay.json"
+  ],
+  "bench": {
+   "n_games": 350,
+   "opponents": [
+    "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+    "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+    "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/b/main.py",
+    "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py"
+   ],
+   "workers": 16,
+   "engine": "auto",
+   "n_bridge_games": 30,
+   "speed_probe_games": 32,
+   "seed_bases": {
+    "h2h": 510000,
+    "strong": 520000,
+    "mirror": 530000,
+    "speed": 540000
+   },
+   "bridge_config": {},
+   "pull_missing": true
+  },
+  "engine": "sim",
+  "workers": 16
+ },
+ "counts": {
+  "directed_games": 24,
+  "directed_red": 0,
+  "league_games": 350,
+  "league_seeds": 175,
+  "h2h_seeds": 70,
+  "top550_seeds": 140,
+  "mirror_seeds": 35
+ },
+ "readings": {
+  "directed": {
+   "seg_delta_median": -1968.5,
+   "seg_delta_values": [
+    -13845.0,
+    -13845.0,
+    -5006.0,
+    -5006.0,
+    -8212.0,
+    -8212.0,
+    -2264.0,
+    -2264.0,
+    -2084.0,
+    -2084.0,
+    -1542.0,
+    -1542.0,
+    -1853.0,
+    -1853.0,
+    -5174.0,
+    -5174.0,
+    -1666.0,
+    -1666.0,
+    -1325.0,
+    -1325.0,
+    -107.0,
+    -107.0,
+    -1071.0,
+    -1071.0
+   ],
+   "realized_px_up_pct_median": 0.0,
+   "fill_rate_median": 0.92,
+   "lot_size_median": 17.98,
+   "per_game": [
+    {
+     "game_id": "dir-113735225-s0",
+     "seed": 1239535421,
+     "our_seat": 0,
+     "red": false,
+     "margin": -18109.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -13845.0,
+      "realized_px": 65.96,
+      "fill_rate": 0.9579,
+      "lot_size": 9.65
+     },
+     "up_pct": 0.69,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113735225-s1",
+     "seed": 1239535421,
+     "our_seat": 1,
+     "red": false,
+     "margin": -18109.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -13845.0,
+      "realized_px": 65.96,
+      "fill_rate": 0.9579,
+      "lot_size": 9.65
+     },
+     "up_pct": -30.48,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113817068-s0",
+     "seed": 1297688042,
+     "our_seat": 0,
+     "red": false,
+     "margin": -9583.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -5006.0,
+      "realized_px": 58.11,
+      "fill_rate": 0.875,
+      "lot_size": 33.71
+     },
+     "up_pct": 0.0,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113817068-s1",
+     "seed": 1297688042,
+     "our_seat": 1,
+     "red": false,
+     "margin": -9583.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -5006.0,
+      "realized_px": 58.11,
+      "fill_rate": 0.875,
+      "lot_size": 33.71
+     },
+     "up_pct": 65.98,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113754147-s0",
+     "seed": 1968760284,
+     "our_seat": 0,
+     "red": false,
+     "margin": -7344.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -8212.0,
+      "realized_px": 43.58,
+      "fill_rate": 0.8807,
+      "lot_size": 26.3
+     },
+     "up_pct": -0.18,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113754147-s1",
+     "seed": 1968760284,
+     "our_seat": 1,
+     "red": false,
+     "margin": -7344.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -8212.0,
+      "realized_px": 43.58,
+      "fill_rate": 0.8807,
+      "lot_size": 26.3
+     },
+     "up_pct": -36.44,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113852533-s0",
+     "seed": 5485064,
+     "our_seat": 0,
+     "red": false,
+     "margin": -2613.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -2264.0,
+      "realized_px": 26.46,
+      "fill_rate": 0.9167,
+      "lot_size": 9.13
+     },
+     "up_pct": -14.12,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113852533-s1",
+     "seed": 5485064,
+     "our_seat": 1,
+     "red": false,
+     "margin": -2613.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -2264.0,
+      "realized_px": 26.46,
+      "fill_rate": 0.9167,
+      "lot_size": 9.13
+     },
+     "up_pct": 0.0,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113962831-s0",
+     "seed": 1097466072,
+     "our_seat": 0,
+     "red": false,
+     "margin": -2171.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -2084.0,
+      "realized_px": 40.17,
+      "fill_rate": 0.949,
+      "lot_size": 8.59
+     },
+     "up_pct": -6.25,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113962831-s1",
+     "seed": 1097466072,
+     "our_seat": 1,
+     "red": false,
+     "margin": -2171.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -2084.0,
+      "realized_px": 40.17,
+      "fill_rate": 0.949,
+      "lot_size": 8.59
+     },
+     "up_pct": 0.0,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113724375-s0",
+     "seed": 1801396460,
+     "our_seat": 0,
+     "red": false,
+     "margin": -1900.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1542.0,
+      "realized_px": 42.32,
+      "fill_rate": 0.9072,
+      "lot_size": 29.74
+     },
+     "up_pct": -4.9,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113724375-s1",
+     "seed": 1801396460,
+     "our_seat": 1,
+     "red": false,
+     "margin": -1900.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1542.0,
+      "realized_px": 42.32,
+      "fill_rate": 0.9072,
+      "lot_size": 29.74
+     },
+     "up_pct": 0.62,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113837634-s0",
+     "seed": 215335553,
+     "our_seat": 0,
+     "red": false,
+     "margin": -1908.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1853.0,
+      "realized_px": 51.15,
+      "fill_rate": 0.9167,
+      "lot_size": 9.57
+     },
+     "up_pct": -3.22,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113837634-s1",
+     "seed": 215335553,
+     "our_seat": 1,
+     "red": false,
+     "margin": -1908.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1853.0,
+      "realized_px": 51.15,
+      "fill_rate": 0.9167,
+      "lot_size": 9.57
+     },
+     "up_pct": 1.95,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113873625-s0",
+     "seed": 780721666,
+     "our_seat": 0,
+     "red": false,
+     "margin": -1467.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -5174.0,
+      "realized_px": 81.21,
+      "fill_rate": 0.9341,
+      "lot_size": 53.93
+     },
+     "up_pct": -18.81,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113873625-s1",
+     "seed": 780721666,
+     "our_seat": 1,
+     "red": false,
+     "margin": -1467.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -5174.0,
+      "realized_px": 81.21,
+      "fill_rate": 0.9341,
+      "lot_size": 53.93
+     },
+     "up_pct": 1.2,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-114064544-s0",
+     "seed": 87742808,
+     "our_seat": 0,
+     "red": false,
+     "margin": -1209.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1666.0,
+      "realized_px": 51.36,
+      "fill_rate": 0.8725,
+      "lot_size": 28.06
+     },
+     "up_pct": -5.19,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-114064544-s1",
+     "seed": 87742808,
+     "our_seat": 1,
+     "red": false,
+     "margin": -1209.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1666.0,
+      "realized_px": 51.36,
+      "fill_rate": 0.8725,
+      "lot_size": 28.06
+     },
+     "up_pct": 0.69,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113838925-s0",
+     "seed": 802339333,
+     "our_seat": 0,
+     "red": false,
+     "margin": -1139.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1325.0,
+      "realized_px": 63.06,
+      "fill_rate": 0.9175,
+      "lot_size": 8.67
+     },
+     "up_pct": 0.0,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113838925-s1",
+     "seed": 802339333,
+     "our_seat": 1,
+     "red": false,
+     "margin": -1139.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1325.0,
+      "realized_px": 63.06,
+      "fill_rate": 0.9175,
+      "lot_size": 8.67
+     },
+     "up_pct": -4.64,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113764768-s0",
+     "seed": 772153014,
+     "our_seat": 0,
+     "red": false,
+     "margin": -444.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -107.0,
+      "realized_px": 57.94,
+      "fill_rate": 0.94,
+      "lot_size": 9.56
+     },
+     "up_pct": 0.05,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113764768-s1",
+     "seed": 772153014,
+     "our_seat": 1,
+     "red": false,
+     "margin": -444.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -107.0,
+      "realized_px": 57.94,
+      "fill_rate": 0.94,
+      "lot_size": 9.56
+     },
+     "up_pct": 0.5,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113738419-s0",
+     "seed": 1463516237,
+     "our_seat": 0,
+     "red": false,
+     "margin": -1409.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1071.0,
+      "realized_px": 81.22,
+      "fill_rate": 0.9238,
+      "lot_size": 27.82
+     },
+     "up_pct": 2.41,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    },
+    {
+     "game_id": "dir-113738419-s1",
+     "seed": 1463516237,
+     "our_seat": 1,
+     "red": false,
+     "margin": -1409.0,
+     "win": false,
+     "readings": {
+      "seg_delta": -1071.0,
+      "realized_px": 81.22,
+      "fill_rate": 0.9238,
+      "lot_size": 27.82
+     },
+     "up_pct": 2.54,
+     "attribution": {
+      "attribution_mismatches": 0,
+      "attribution_used": true,
+      "steps": 719
+     }
+    }
+   ]
+  },
+  "league": {
+   "arms": {
+    "h2h_r37": {
+     "n_seeds": 70,
+     "n_games": 140,
+     "seed_W": 10,
+     "seed_D": 5,
+     "seed_L": 55,
+     "decisive_seeds": 70,
+     "rate": 0.1786,
+     "game_wins": 25,
+     "game_win_rate": 0.1786
+    },
+    "mirror": {
+     "n_seeds": 35,
+     "n_games": 70,
+     "seed_W": 0,
+     "seed_D": 35,
+     "seed_L": 0,
+     "decisive_seeds": 2,
+     "rate": 0.5,
+     "game_wins": 2,
+     "game_win_rate": 0.0286
+    },
+    "strong_a_0": {
+     "n_seeds": 24,
+     "n_games": 48,
+     "seed_W": 4,
+     "seed_D": 0,
+     "seed_L": 20,
+     "decisive_seeds": 24,
+     "rate": 0.1667,
+     "game_wins": 8,
+     "game_win_rate": 0.1667
+    },
+    "strong_b_1": {
+     "n_seeds": 23,
+     "n_games": 46,
+     "seed_W": 6,
+     "seed_D": 0,
+     "seed_L": 17,
+     "decisive_seeds": 23,
+     "rate": 0.2609,
+     "game_wins": 12,
+     "game_win_rate": 0.2609
+    },
+    "strong_v48_derivative_2": {
+     "n_seeds": 23,
+     "n_games": 46,
+     "seed_W": 23,
+     "seed_D": 0,
+     "seed_L": 0,
+     "decisive_seeds": 23,
+     "rate": 1.0,
+     "game_wins": 46,
+     "game_win_rate": 1.0
+    }
+   },
+   "top550_winrate": 0.325,
+   "top550_detail": {
+    "n_seeds": 140,
+    "n_games": 280,
+    "seed_W": 43,
+    "seed_D": 5,
+    "seed_L": 92,
+    "decisive_seeds": 140,
+    "rate": 0.325,
+    "game_wins": 91,
+    "game_win_rate": 0.325
+   },
+   "league_winrate": 0.36,
+   "league_detail": {
+    "n_seeds": 175,
+    "n_games": 350,
+    "seed_W": 43,
+    "seed_D": 40,
+    "seed_L": 92,
+    "decisive_seeds": 142,
+    "rate": 0.36,
+    "game_wins": 93,
+    "game_win_rate": 0.2657
+   },
+   "h2h_rate": 0.1786,
+   "h2h_detail": {
+    "n_seeds": 70,
+    "n_games": 140,
+    "seed_W": 10,
+    "seed_D": 5,
+    "seed_L": 55,
+    "decisive_seeds": 70,
+    "rate": 0.1786,
+    "game_wins": 25,
+    "game_win_rate": 0.1786
+   }
+  },
+  "speed": {
+   "speedup": 13.603,
+   "speedup_parallel": 7.054,
+   "speedup_engine": 1.928,
+   "official_wall_s": 224.263,
+   "serial_wall_s": 116.3,
+   "parallel_wall_s": 16.487,
+   "n_games": 32,
+   "workers": 16,
+   "sec_per_game_official": 7.0082,
+   "sec_per_game_serial": 3.6344,
+   "baseline": "official 串行判决（改4 前口径）→本判决（仿真器+workers 并行跑口）"
+  },
+  "bridge": {
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "engine": "sim",
+   "wall_speedup": 5.778,
+   "degraded": false,
+   "degraded_reason": null
+  }
+ },
+ "criteria": {
+  "c1_rebuild_route": {
+   "label": "改1（条件路由/同开拼接）",
+   "threshold": "榜前550段胜率≥30%（基线0/5）∧ d21-28段资金差转正",
+   "readings": {
+    "top550_winrate": 0.325,
+    "top550_baseline": "0/5（分析24 榜前550对手基线）",
+    "seg_delta_median": -1968.5
+   },
+   "pass": false
+  },
+  "c2_sell_exec": {
+   "label": "改2（卖货执行/批量化）",
+   "threshold": "d21-28段资金差中位≥+3,600（胜局基线半）∧ 实现单价+3%",
+   "readings": {
+    "seg_delta_median": -1968.5,
+    "realized_px_up_pct": 0.0,
+    "n_games": 24,
+    "n_red": 0
+   },
+   "pass": false
+  },
+  "c3_queue_hygiene": {
+   "label": "改3（队列补洞）",
+   "threshold": "有效挂单占比≥90% ∧ 单价+2%",
+   "readings": {
+    "fill_rate": 0.92,
+    "realized_px_up_pct": 0.0,
+    "n_games": 24,
+    "n_red": 0
+   },
+   "pass": false
+  },
+  "c4_sim_judge": {
+   "label": "改4（Rust 仿真器判决基建）",
+   "threshold": "判决提速≥10x（official串行判决→本判决并行跑口）∧ 仿真器对照一致100%",
+   "readings": {
+    "speedup": 13.603,
+    "speedup_parallel": 7.054,
+    "speedup_engine": 1.928,
+    "consistency_rate": 1.0,
+    "n_checked": 30,
+    "consistency_ok": true,
+    "bridge_engine": "sim"
+   },
+   "pass": true
+  },
+  "c5_h2h_r37": {
+   "label": "总判·h2h vs r37",
+   "threshold": "h2h vs r37（独立seed n）≥0.55",
+   "readings": {
+    "h2h_rate": 0.1786,
+    "n_seeds": 70
+   },
+   "pass": false
+  },
+  "c6_league_winrate": {
+   "label": "总判·联赛总胜率",
+   "threshold": "联赛总胜率≥85%",
+   "readings": {
+    "league_winrate": 0.36,
+    "n_seeds": 175,
+    "n_games": 350
+   },
+   "pass": false
+  }
+ },
+ "overall": {
+  "pass": false,
+  "n_pass": 1,
+  "failed": [
+   "c1_rebuild_route",
+   "c2_sell_exec",
+   "c3_queue_hygiene",
+   "c5_h2h_r37",
+   "c6_league_winrate"
+  ]
+ },
+ "errors": [],
+ "source": {
+  "rerun_command": "python3 -c \"from orderbook_r40.judge_r23 import judge_r23; judge_r23('<pkg>', <corpus>, <bench>)\"",
+  "seeds": {
+   "directed": [
+    1239535421,
+    1297688042,
+    1968760284,
+    5485064,
+    1097466072,
+    1801396460,
+    215335553,
+    780721666,
+    87742808,
+    802339333,
+    772153014,
+    1463516237
+   ],
+   "league": {
+    "h2h_r37": [
+     510000,
+     510001,
+     510002,
+     510003,
+     510004,
+     510005,
+     510006,
+     510007,
+     510008,
+     510009,
+     510010,
+     510011,
+     510012,
+     510013,
+     510014,
+     510015,
+     510016,
+     510017,
+     510018,
+     510019,
+     510020,
+     510021,
+     510022,
+     510023,
+     510024,
+     510025,
+     510026,
+     510027,
+     510028,
+     510029,
+     510030,
+     510031,
+     510032,
+     510033,
+     510034,
+     510035,
+     510036,
+     510037,
+     510038,
+     510039,
+     510040,
+     510041,
+     510042,
+     510043,
+     510044,
+     510045,
+     510046,
+     510047,
+     510048,
+     510049,
+     510050,
+     510051,
+     510052,
+     510053,
+     510054,
+     510055,
+     510056,
+     510057,
+     510058,
+     510059,
+     510060,
+     510061,
+     510062,
+     510063,
+     510064,
+     510065,
+     510066,
+     510067,
+     510068,
+     510069
+    ],
+    "strong_a_0": [
+     520000,
+     520001,
+     520002,
+     520003,
+     520004,
+     520005,
+     520006,
+     520007,
+     520008,
+     520009,
+     520010,
+     520011,
+     520012,
+     520013,
+     520014,
+     520015,
+     520016,
+     520017,
+     520018,
+     520019,
+     520020,
+     520021,
+     520022,
+     520023
+    ],
+    "strong_b_1": [
+     521000,
+     521001,
+     521002,
+     521003,
+     521004,
+     521005,
+     521006,
+     521007,
+     521008,
+     521009,
+     521010,
+     521011,
+     521012,
+     521013,
+     521014,
+     521015,
+     521016,
+     521017,
+     521018,
+     521019,
+     521020,
+     521021,
+     521022
+    ],
+    "strong_v48_derivative_2": [
+     522000,
+     522001,
+     522002,
+     522003,
+     522004,
+     522005,
+     522006,
+     522007,
+     522008,
+     522009,
+     522010,
+     522011,
+     522012,
+     522013,
+     522014,
+     522015,
+     522016,
+     522017,
+     522018,
+     522019,
+     522020,
+     522021,
+     522022
+    ],
+    "mirror": [
+     530000,
+     530001,
+     530002,
+     530003,
+     530004,
+     530005,
+     530006,
+     530007,
+     530008,
+     530009,
+     530010,
+     530011,
+     530012,
+     530013,
+     530014,
+     530015,
+     530016,
+     530017,
+     530018,
+     530019,
+     530020,
+     530021,
+     530022,
+     530023,
+     530024,
+     530025,
+     530026,
+     530027,
+     530028,
+     530029,
+     530030,
+     530031,
+     530032,
+     530033,
+     530034
+    ]
+   }
+  }
+ },
+ "elapsed_s": 616.828
+}

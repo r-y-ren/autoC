@@ -156,7 +156,7 @@
 | pack_r40 | B31 | wired 09-27 | pytest pack 组绿（字段/双跑/tar 形态/文案/缺件 null）；manifest orderbook_r40_manifest/1.0（链四节点+库/块/变更表三 sha 自证）；build_tar_bytes 真源复用 | (本批) |
 | build_r40 | B31 | wired 09-27 | pytest build 组绿；**真跑构建**：main 227f0de52e82（1,699,873B）/tar ae8431c69de3 双跑恒等/块 4b1b0a4999d7/库 0236c30e…一致/sell_lots 2020 行；归因 ok 零越界；r37 零改动；evidence/build_r40_realrun.json | (本批) |
 | sim_bridge | B31 | wired 09-27 | pytest 6 passed（降级/对照口径/降级留档/真跑）；**真装真验**：Rust 二进制本机编译+认证桥 consistency 30/30=100%；speedup 单线程实测 5.41x（调研 16x=并行口径——B32 判决用并行跑法达标）；装不上→降级不抛留档 | (本批) |
-| segment_stats | B32 | stub 09-27 | 测试: orderbook_r40/test_judge_r23.py（segment 组） | — |
-| judge_r23 | B32 | stub 09-27 | 测试: orderbook_r40/test_judge_r23.py；判据=R23 ②分项+总判 | — |
-| verify_r40_gates | B32 | stub 09-27 | 测试: orderbook_r40/test_gates_r40.py | — |
-| run_r40_iteration | B32 | stub 09-27 | 测试: orderbook_r40/test_run_r40.py | — |
+| segment_stats | B32 | wired 09-27 | pytest segment 组 3 passed（四指标/UNKNOWN/缺字段）；d21-28 段差/实现单价/有效挂单率/批量化率 | (本批) |
+| judge_r23 | B32 | wired 09-27 | pytest judge 组 4 passed；**真跑（24 定向+350 联赛+对照 30）overall=1/6 NEGATIVE（如实）**：c1 榜前 550 段 0.325✓∧d21-28 −1968.5✗/c2 段差✗+单价+0.0%✗/c3 挂单 0.92✓+单价✗/c4 提速 13.6x✓+对照 30/30✓/c5 h2h 0.179✗/c6 总胜率 0.36✗；管线可信度=基线逐局精确一致；evidence/judge_r23_realrun.json | (本批) |
+| verify_r40_gates | B32 | wired 09-27 | pytest 4 passed（全绿路/红不短路/fail-closed/独立 n）；五门 R37-R39 重定向（last-callable=_route40_agent/血统链四节点） | (本批) |
+| run_r40_iteration | B32 | wired 09-27 | pytest 5 passed（全链 POSITIVE/判红收档不进门禁/门禁红不发射/Error 留痕/收档台账形态）；判决红→NEGATIVE 收档预绑定；全链整合待批间门裁决后收口 | (本批) |
