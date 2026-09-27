@@ -607,12 +607,13 @@ def test_build_r40_realrun():
     rb = att["whitelist"]["runtime_block"]
     sl = att["whitelist"]["sell_lots"]
     assert rb["present"] is True and rb["sha256"] == res["block_sha"]
-    # 真跑数字钉（真库 77 局 49 族 + 卖单手术 2020 行）
+    # 真跑数字钉（真库 77 局 49 族 + 卖单手术 529 行——B32 修订
+    # cross_step=False 只同拍并单零时序移动[合并合没时机机制修正]）
     assert res["library_sha256"] == _REAL_LIB_SHA
     ev_lib = json.loads((_HERE / "evidence" / "route_library_realrun.json")
                         .read_text(encoding="utf-8"))
     assert res["library_sha256"] == ev_lib["build_audit"]["library_sha"]
-    assert sl["present"] is True and sl["rows"] == 2020
+    assert sl["present"] is True and sl["rows"] == 529
     assert sl["sha256"] == res["sell_lots_change_sha256"] \
         == m["sell_lots_change_sha256"]
     assert m["double_run_sha256"]["run1"] == m["double_run_sha256"]["run2"] \

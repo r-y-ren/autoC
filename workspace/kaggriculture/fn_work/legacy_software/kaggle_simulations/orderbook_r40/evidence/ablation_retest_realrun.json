@@ -1,0 +1,365 @@
+{
+ "ablation": "ablation_r40_retest",
+ "version": "r40-ablation/1.0",
+ "generated_at": "2026-09-27T16:44:33Z",
+ "fixes": {
+  "V2f": "retape_sell_lots cross_step=False（合并合没时机机制修正：只同拍并单，零时序移动）",
+  "V4f": "apply_slot_hygiene 清坑只清 qty==0 真占坑单（站立限价单误杀机制修正）"
+ },
+ "probe_paths": {
+  "V2f": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/ablation/probe_v2f.py",
+  "V4f": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/ablation/probe_v4f.py"
+ },
+ "probe_sha256": {
+  "V2f": "80342f581b9e931e1d85e5921e0bd7cd5a6c7ee62516bc5fa7d75390c3323df6",
+  "V4f": "591f8294cc68916947e8c4122bbb935ac54727dfd8dc348b5365f5397c4e1f58"
+ },
+ "config": {
+  "n_h2h": 60,
+  "n_strong": 30,
+  "workers": 16,
+  "engine": "sim",
+  "strong_opponents": [
+   "orderbook_2965_adopt/a/main.py",
+   "orderbook_2965_adopt/b/main.py",
+   "v48_derivative/main.py"
+  ],
+  "corpus": [
+   113735225,
+   113817068,
+   113754147,
+   113852533,
+   113962831,
+   113724375,
+   113837634,
+   113873625,
+   114064544,
+   113838925,
+   113764768,
+   113738419
+  ]
+ },
+ "faces": {
+  "V2f": {
+   "variant": "V2f",
+   "h2h_rate": 0.875,
+   "h2h_seeds": 60,
+   "h2h_detail": {
+    "n_seeds": 60,
+    "n_games": 120,
+    "seed_W": 47,
+    "seed_D": 11,
+    "seed_L": 2,
+    "decisive_seeds": 58,
+    "rate": 0.875,
+    "game_wins": 103,
+    "game_win_rate": 0.8583
+   },
+   "strong_rate": 0.7833,
+   "strong_seeds": 30,
+   "strong_detail": {
+    "n_seeds": 30,
+    "n_games": 60,
+    "seed_W": 23,
+    "seed_D": 1,
+    "seed_L": 6,
+    "decisive_seeds": 30,
+    "rate": 0.7833,
+    "game_wins": 47,
+    "game_win_rate": 0.7833
+   },
+   "strong_by_opp": {
+    "V2f_strong_kaggle_simulations_v48_derivative": {
+     "n_seeds": 10,
+     "n_games": 20,
+     "seed_W": 10,
+     "seed_D": 0,
+     "seed_L": 0,
+     "decisive_seeds": 10,
+     "rate": 1.0,
+     "game_wins": 20,
+     "game_win_rate": 1.0
+    },
+    "V2f_strong_orderbook_2965_adopt_a": {
+     "n_seeds": 10,
+     "n_games": 20,
+     "seed_W": 8,
+     "seed_D": 1,
+     "seed_L": 1,
+     "decisive_seeds": 10,
+     "rate": 0.85,
+     "game_wins": 17,
+     "game_win_rate": 0.85
+    },
+    "V2f_strong_orderbook_2965_adopt_b": {
+     "n_seeds": 10,
+     "n_games": 20,
+     "seed_W": 5,
+     "seed_D": 0,
+     "seed_L": 5,
+     "decisive_seeds": 10,
+     "rate": 0.5,
+     "game_wins": 10,
+     "game_win_rate": 0.5
+    }
+   },
+   "seg": {
+    "seg_delta_median": -1956.0,
+    "seg_delta_values": [
+     -1828.0,
+     -1828.0,
+     -5058.0,
+     -5058.0,
+     -1803.0,
+     -1803.0,
+     -1325.0,
+     -1325.0,
+     -170.0,
+     -170.0,
+     100.0,
+     100.0,
+     -13363.0,
+     -13363.0,
+     -5038.0,
+     -5038.0,
+     -8089.0,
+     -8089.0,
+     -2268.0,
+     -2268.0,
+     -2084.0,
+     -2084.0,
+     -1702.0,
+     -1702.0
+    ],
+    "realized_px_up_pct_median": -0.04,
+    "fill_rate_median": 0.9,
+    "n_games": 24,
+    "n_red": 0
+   }
+  },
+  "V4f": {
+   "variant": "V4f",
+   "h2h_rate": 0.5,
+   "h2h_seeds": 60,
+   "h2h_detail": {
+    "n_seeds": 60,
+    "n_games": 120,
+    "seed_W": 0,
+    "seed_D": 60,
+    "seed_L": 0,
+    "decisive_seeds": 10,
+    "rate": 0.5,
+    "game_wins": 10,
+    "game_win_rate": 0.0833
+   },
+   "strong_rate": 0.7,
+   "strong_seeds": 30,
+   "strong_detail": {
+    "n_seeds": 30,
+    "n_games": 60,
+    "seed_W": 18,
+    "seed_D": 6,
+    "seed_L": 6,
+    "decisive_seeds": 25,
+    "rate": 0.7,
+    "game_wins": 37,
+    "game_win_rate": 0.6167
+   },
+   "strong_by_opp": {
+    "V4f_strong_kaggle_simulations_v48_derivative": {
+     "n_seeds": 10,
+     "n_games": 20,
+     "seed_W": 10,
+     "seed_D": 0,
+     "seed_L": 0,
+     "decisive_seeds": 10,
+     "rate": 1.0,
+     "game_wins": 20,
+     "game_win_rate": 1.0
+    },
+    "V4f_strong_orderbook_2965_adopt_a": {
+     "n_seeds": 10,
+     "n_games": 20,
+     "seed_W": 4,
+     "seed_D": 6,
+     "seed_L": 0,
+     "decisive_seeds": 5,
+     "rate": 0.7,
+     "game_wins": 9,
+     "game_win_rate": 0.45
+    },
+    "V4f_strong_orderbook_2965_adopt_b": {
+     "n_seeds": 10,
+     "n_games": 20,
+     "seed_W": 4,
+     "seed_D": 0,
+     "seed_L": 6,
+     "decisive_seeds": 10,
+     "rate": 0.4,
+     "game_wins": 8,
+     "game_win_rate": 0.4
+    }
+   },
+   "seg": {
+    "seg_delta_median": -1958.0,
+    "seg_delta_values": [
+     -1832.0,
+     -1832.0,
+     -5058.0,
+     -5058.0,
+     -1823.0,
+     -1823.0,
+     -1329.0,
+     -1329.0,
+     -227.0,
+     -227.0,
+     76.0,
+     76.0,
+     -13363.0,
+     -13363.0,
+     -5038.0,
+     -5038.0,
+     -8089.0,
+     -8089.0,
+     -2274.0,
+     -2274.0,
+     -2084.0,
+     -2084.0,
+     -1703.0,
+     -1703.0
+    ],
+    "realized_px_up_pct_median": 0.0,
+    "fill_rate_median": 0.9,
+    "n_games": 24,
+    "n_red": 0
+   }
+  }
+ },
+ "v0_baseline": {
+  "variant": "V0",
+  "h2h_rate": null,
+  "h2h_seeds": 0,
+  "h2h_detail": {
+   "rate": null,
+   "n_seeds": 0
+  },
+  "strong_rate": 0.7,
+  "strong_seeds": 30,
+  "strong_detail": {
+   "n_seeds": 30,
+   "n_games": 60,
+   "seed_W": 18,
+   "seed_D": 6,
+   "seed_L": 6,
+   "decisive_seeds": 25,
+   "rate": 0.7,
+   "game_wins": 37,
+   "game_win_rate": 0.6167
+  },
+  "strong_by_opp": {
+   "V0_strong_kaggle_simulations_v48_derivative": {
+    "n_seeds": 10,
+    "n_games": 20,
+    "seed_W": 10,
+    "seed_D": 0,
+    "seed_L": 0,
+    "decisive_seeds": 10,
+    "rate": 1.0,
+    "game_wins": 20,
+    "game_win_rate": 1.0
+   },
+   "V0_strong_orderbook_2965_adopt_a": {
+    "n_seeds": 10,
+    "n_games": 20,
+    "seed_W": 4,
+    "seed_D": 6,
+    "seed_L": 0,
+    "decisive_seeds": 5,
+    "rate": 0.7,
+    "game_wins": 9,
+    "game_win_rate": 0.45
+   },
+   "V0_strong_orderbook_2965_adopt_b": {
+    "n_seeds": 10,
+    "n_games": 20,
+    "seed_W": 4,
+    "seed_D": 0,
+    "seed_L": 6,
+    "decisive_seeds": 10,
+    "rate": 0.4,
+    "game_wins": 8,
+    "game_win_rate": 0.4
+   }
+  },
+  "seg": {
+   "seg_delta_median": -1958.0,
+   "seg_delta_values": [
+    -8089.0,
+    -8089.0,
+    -2274.0,
+    -2274.0,
+    -2084.0,
+    -2084.0,
+    -1703.0,
+    -1703.0,
+    -1832.0,
+    -1832.0,
+    -5058.0,
+    -5058.0,
+    -1823.0,
+    -1823.0,
+    -1329.0,
+    -1329.0,
+    -227.0,
+    -227.0,
+    76.0,
+    76.0,
+    -13363.0,
+    -13363.0,
+    -5038.0,
+    -5038.0
+   ],
+   "realized_px_up_pct_median": 0.0,
+   "fill_rate_median": 0.9,
+   "n_games": 24,
+   "n_red": 0
+  }
+ },
+ "disposition": [
+  {
+   "component": "sell_lots",
+   "variant": "V2f",
+   "h2h_rate": 0.875,
+   "strong_rate": 0.7833,
+   "strong_delta_vs_v0": 0.0833,
+   "seg_delta_median": -1956.0,
+   "seg_delta_delta_vs_v0": 2.0,
+   "decision": "keep",
+   "why": "h2h≥0.55 或强臂显著升（+0.0833）",
+   "retested": true
+  },
+  {
+   "component": "slot_hygiene",
+   "variant": "V4f",
+   "h2h_rate": 0.5,
+   "strong_rate": 0.7,
+   "strong_delta_vs_v0": 0.0,
+   "seg_delta_median": -1958.0,
+   "seg_delta_delta_vs_v0": 0.0,
+   "decision": "keep_annotated",
+   "why": "中间面（0.45<h2h<0.55 且强臂未显著升）→保留标注",
+   "retested": true
+  }
+ ],
+ "decision_rules": {
+  "keep": "h2h≥0.55 或 强臂差分≥+0.05（显著升）",
+  "poison": "h2h≤0.45→砍或修（修=机制层最小修正+单件复测）",
+  "middle": "中间→保留标注",
+  "route_priority": "①route_select 优先保：毒也只修切换逻辑（保守阈值/无族不切）不全砍"
+ },
+ "errors": [],
+ "counts": {
+  "games": 408,
+  "red": 0
+ }
+}

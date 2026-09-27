@@ -14,6 +14,13 @@ from typing import Any, Dict
 # 三件单一真源抽取序（_route40_agent 单参包装钉尾=装载后 last-callable）。
 _BLOCK_FUNCS = ("_route40_select", "apply_race_slots", "apply_slot_hygiene")
 
+# 组件名→运行时件源函数名（B32 修订：build_r40 components 开关；抽取序同上）。
+_COMPONENT_FUNCS: Dict[str, str] = {
+    "route_select": "_route40_select",
+    "race_slots": "apply_race_slots",
+    "slot_hygiene": "apply_slot_hygiene",
+}
+
 # 块绑定名全集（撞名预检用；Any/Dict 为条件缺省填充不入集，不覆盖底版既有绑定）。
 _BLOCK_BOUND = {"_route40_select", "apply_race_slots", "apply_slot_hygiene",
                 "_route40_agent", "_R40_CALLABLES", "_R40_PARENT",
@@ -22,12 +29,34 @@ _BLOCK_BOUND = {"_route40_select", "apply_race_slots", "apply_slot_hygiene",
 # 块锚行核心短语（与 audit_diff_r40_vs_r37/pack_r40 识别口径一致；全文恰一次）。
 _BLOCK_CORE = "r40 运行时尾块"
 
-# 单参官方入口包装（运行时三件链转调；形态按 runtime_r40 现约定定形，docstring
+# 单参官方入口包装（运行时件链转调；形态按 runtime_r40 现约定定形，docstring
 # 留档——三件签名/语义见 runtime_r40.py：_route40_select(observation, library=None)
 # 只读续段选择（latched/异常回退）、apply_race_slots(observation, action)→调整后
 # action、apply_slot_hygiene(observation, action)→{"action","cleared","filled"}）。
-_AGENT_SRC = '''def _route40_agent(observation):
-    """单参数入口适配（官方 runner 语义：action = last_callable(observation)）。
+# 包装文本=_agent_src(件集) 单一真源生成：全三件=历史 _AGENT_SRC 形态（B32 前
+# 字节稳）；子集（B32 修订 components 开关）=同骨架只链所选件。
+_STEP_SRC: Dict[str, str] = {
+    "_route40_select": (
+        "    try:\n"
+        "        _route40_agent._last_select = _route40_select(\n"
+        "            observation, globals().get(\"_R40_LIBRARY\"))\n"
+        "    except Exception:\n"
+        "        pass\n"),
+    "apply_race_slots": (
+        "    try:\n"
+        "        action = apply_race_slots(observation, action)\n"
+        "    except Exception:\n"
+        "        pass\n"),
+    "apply_slot_hygiene": (
+        "    try:\n"
+        "        out = apply_slot_hygiene(observation, action)\n"
+        "        if isinstance(out, dict) and isinstance(out.get(\"action\"), dict):\n"
+        "            action = out[\"action\"]\n"
+        "    except Exception:\n"
+        "        pass\n"),
+}
+
+_FULL_DOC = '''单参数入口适配（官方 runner 语义：action = last_callable(observation)）。
 
     转调三件链（runtime_r40 现约定定形，docstring 留档）：
     - _route40_select(observation, 库)：step144 续段选择——只读、跨步 latched、
@@ -41,33 +70,56 @@ _AGENT_SRC = '''def _route40_agent(observation):
     _R40_LIBRARY，均经 globals() 查找（测试可注入假父层/假库）。
     任何异常→父层动作原样（fail-safe）；父层缺失/父层抛/父层非 dict 动作→
     PASS 兜底 {"farmer": ["PASS"], "hands": [], "market": []}。
-    本函数必须保持为模块 globals 最后一个 callable（注入校验③钉住）。
-    """
-    parent = globals().get("_R40_PARENT")
-    if not callable(parent):
-        return {"farmer": ["PASS"], "hands": [], "market": []}
-    try:
-        action = parent(observation)
-    except Exception:
-        return {"farmer": ["PASS"], "hands": [], "market": []}
-    if not isinstance(action, dict):
-        return {"farmer": ["PASS"], "hands": [], "market": []}
-    try:
-        _route40_agent._last_select = _route40_select(
-            observation, globals().get("_R40_LIBRARY"))
-    except Exception:
-        pass
-    try:
-        action = apply_race_slots(observation, action)
-    except Exception:
-        pass
-    try:
-        out = apply_slot_hygiene(observation, action)
-        if isinstance(out, dict) and isinstance(out.get("action"), dict):
-            action = out["action"]
-    except Exception:
-        pass
-    return action'''
+    本函数必须保持为模块 globals 最后一个 callable（注入校验③钉住）。'''
+
+_AGENT_PROLOGUE = (
+    "    parent = globals().get(\"_R40_PARENT\")\n"
+    "    if not callable(parent):\n"
+    "        return {\"farmer\": [\"PASS\"], \"hands\": [], \"market\": []}\n"
+    "    try:\n"
+    "        action = parent(observation)\n"
+    "    except Exception:\n"
+    "        return {\"farmer\": [\"PASS\"], \"hands\": [], \"market\": []}\n"
+    "    if not isinstance(action, dict):\n"
+    "        return {\"farmer\": [\"PASS\"], \"hands\": [], \"market\": []}\n")
+
+
+def _agent_src(funcs: Sequence[str]) -> str:
+    """单参包装文本（单一真源生成）：funcs=启用运行时件（_BLOCK_FUNCS 序）。"""
+    funcs = tuple(funcs)
+    if funcs == _BLOCK_FUNCS:
+        doc = _FULL_DOC
+    else:
+        doc = ("单参数入口适配（B32 修订 components 子集件链）：只转调 %s"
+               "；fail-safe 语义与全件形态同款（异常→父层动作原样）。"
+               "本函数必须保持为模块 globals 最后一个 callable。"
+               % ", ".join(funcs))
+    steps = "".join(_STEP_SRC[f] for f in funcs)
+    return ("def _route40_agent(observation):\n    \"\"\"%s\n    \"\"\"\n%s%s"
+            "    return action" % (doc, _AGENT_PROLOGUE, steps))
+
+
+_AGENT_SRC = _agent_src(_BLOCK_FUNCS)
+
+
+def _resolve_components(components: Any) -> Tuple[str, ...]:
+    """components→启用运行时件名（_BLOCK_FUNCS 序）；None=全三件；非法即抛。"""
+    if components is None:
+        return _BLOCK_FUNCS
+    if isinstance(components, (str, bytes)) or not isinstance(
+            components, (list, tuple, set, frozenset)):
+        raise ValueError("components 须为组件名序列或 None，得到 %r"
+                         % (components,))
+    want = set()
+    for c in components:
+        if c not in _COMPONENT_FUNCS:
+            raise ValueError("components 未知组件 %r（仅 %s）"
+                             % (c, sorted(_COMPONENT_FUNCS)))
+        want.add(_COMPONENT_FUNCS[c])
+    out = tuple(f for f in _BLOCK_FUNCS if f in want)
+    if not out:
+        raise ValueError("components 至少启用一件运行时件")
+    return out
 
 
 def _module_bound_names(tree):
@@ -167,11 +219,17 @@ def _split_library(library: Any):
     return core, recorded
 
 
-def inject_r40_block(main_text: str, library: Any) -> Dict[str, Any]:
+def inject_r40_block(main_text: str, library: Any,
+                     components: Any = None) -> Dict[str, Any]:
     """生成 r40 运行时块（三件+库）追加尾部，跑校验四条+库 sha 对账。
 
     签名意图：输入: r37 main 文本+库数据 / 输出: {main_text, block_sha} /
     错误: 校验不过即抛。
+
+    【签名微调登记（B32 修订批间）】第三参 components: Any=None——缺省
+    None=全三件（历史形态字节稳）；组件名序列（"route_select"/"race_slots"/
+    "slot_hygiene" 子集）只抽取+链化所选件（_agent_src 单一真源生成包装，
+    校验四条/库 sha 对账全同）；空集/未知组件名→ValueError。
 
     命名方案（docstring 留档；捕获行 _R40_* 避底版 _PREDICT_*/_R37_GUARD_* 系
     撞名，注入前撞名预检、撞名即抛，先例 inject_predict.py）：
@@ -227,18 +285,20 @@ def inject_r40_block(main_text: str, library: Any) -> Dict[str, Any]:
         raise ValueError("坏库：库数据不可作 Python 字面量内嵌/不可 canonical sha: %r"
                          % exc) from exc
 
-    # ---- 1. 块文本生成（runtime_r40.py 三件源 ast 整段抽取，禁手抄第二份） ----
+    # ---- 1. 块文本生成（runtime_r40.py 件源 ast 整段抽取，禁手抄第二份） ----
+    funcs = _resolve_components(components)
     src_path = Path(__file__).resolve().with_name("runtime_r40.py")
     src = src_path.read_text(encoding="utf-8")
     src_tree = ast.parse(src, filename=str(src_path))
     segs: Dict[str, str] = {}
+    want = set(funcs)
     for node in src_tree.body:
-        if isinstance(node, ast.FunctionDef) and node.name in _BLOCK_FUNCS:
+        if isinstance(node, ast.FunctionDef) and node.name in want:
             seg = ast.get_source_segment(src, node)
             if not seg:
                 raise RuntimeError("block source extraction failed: %s" % node.name)
             segs[node.name] = seg
-    missing = [name for name in _BLOCK_FUNCS if name not in segs]
+    missing = [name for name in funcs if name not in segs]
     if missing:
         raise RuntimeError("runtime_r40.py 缺函数定义: %s" % missing)
 
@@ -257,8 +317,8 @@ def inject_r40_block(main_text: str, library: Any) -> Dict[str, Any]:
         "if \"Dict\" not in globals():\n"
         "    Dict = _R40_TYPING.Dict\n"
     )
-    body = "\n\n\n".join(segs[name] for name in _BLOCK_FUNCS) + "\n\n\n" \
-        + _AGENT_SRC + "\n"
+    body = "\n\n\n".join(segs[name] for name in funcs) + "\n\n\n" \
+        + _agent_src(funcs) + "\n"
     block_text = "\n\n" + header + "\n\n" + body
 
     # ---- 1b. 撞名预检：块绑定名不得与底版模块级绑定重名（防静默覆写） ----

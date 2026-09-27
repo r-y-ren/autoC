@@ -269,7 +269,8 @@ def _post_check(pkg: Dict[str, Any], src: Dict[str, Any],
 
 
 def retape_sell_lots(tape_routes: Dict[str, Any],
-                     params: Any = None) -> Dict[str, Any]:
+                     params: Any = None,
+                     cross_step: bool = True) -> Dict[str, Any]:
     """卖单批量化手术+卖出守恒核算。
 
     签名意图：输入: 磁带路由表+批量化参数 / 输出: {routes, change_table} /
@@ -282,7 +283,14 @@ def retape_sell_lots(tape_routes: Dict[str, Any],
     {route, kind:"sell_lots", item, from_steps, to_step, qty, reason}。
     错误：参数越型/越界（window 越出磁带步界）→ValueError；术后对账破
     （卖出守恒/越窗/误动非卖单或单元指令）→RuntimeError。
+
+    【签名微调登记（B32 修订批间）】第三参 cross_step: bool=True——缺省
+    True=历史形态（①同拍并单+②跨拍批量化全量）；False=只做①同拍并单
+    （消融诊断「合并合没时机」机制修正：跨拍 run 合并落点=更早步点=提前
+    抛售，改零时序移动的同拍并单；B32 修订单件复测面）。
     """
+    if not isinstance(cross_step, bool):
+        raise ValueError("cross_step 须为 bool，得到 %r" % (cross_step,))
     target, (w0, w1) = _resolve_params(params)
     _rs._check_package(tape_routes)
     min_len = min(len(ids) for ids in tape_routes["routes"].values())
@@ -304,6 +312,9 @@ def retape_sell_lots(tape_routes: Dict[str, Any],
                          "同拍并单 k=%d→1（d21-28 窗内，只提前不推后）"
                          % len(members))
         # ②跨拍批量化（目标驱动）：窗内留存 budget=目标−窗外单数（钳位）。
+        # cross_step=False（B32 修订机制修正）：跳过②，只做①同拍并单。
+        if not cross_step:
+            continue
         seq = _seq(pkg, rid)
         lots = _sell_scan(seq, w0, w1)
         n_win = len(lots)

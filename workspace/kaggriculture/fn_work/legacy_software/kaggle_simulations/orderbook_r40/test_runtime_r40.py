@@ -194,10 +194,11 @@ def test_apply_race_slots_exception_original():
 
 
 def test_apply_slot_hygiene_clear_and_fill():
-    """零执行占坑单清坑+补洞：同槽同单+成交对账零变化→置 [] 清坑，
-    后位有效单链式前移填坑（空槽原地不动、保槽不删）；只动市场单。"""
+    """qty==0 真占坑单清坑+补洞（B32 机制修正后口径）：同槽同单+成交对账
+    零变化+qty==0→置 [] 清坑，后位有效单链式前移填坑（空槽原地不动、保槽
+    不删）；只动市场单。"""
     _reset()
-    squatter = ["SELL", "WHEAT", 5]
+    squatter = ["SELL", "WHEAT", 0]
     buy = ["BUY_PRODUCT", "SEED", 2]
     wool = ["SELL", "WOOL", 3]
     a1 = {"farmer": ["PASS"], "hands": [], "market": [squatter, [], [], []]}
@@ -206,7 +207,7 @@ def test_apply_slot_hygiene_clear_and_fill():
     a2 = {"farmer": ["PASS"], "hands": [],
           "market": [squatter, buy, [], wool]}
     r2 = apply_slot_hygiene(_hobs(101, money=500.0, inv={"WHEAT": 10}), a2)
-    assert r2["cleared"] == [{"slot": 0, "order": ["SELL", "WHEAT", 5]}]
+    assert r2["cleared"] == [{"slot": 0, "order": ["SELL", "WHEAT", 0]}]
     assert r2["filled"] == [
         {"to": 0, "from": 1, "order": ["BUY_PRODUCT", "SEED", 2]},
         {"to": 1, "from": 3, "order": ["SELL", "WOOL", 3]}]
@@ -216,10 +217,24 @@ def test_apply_slot_hygiene_clear_and_fill():
     assert a2["market"] == [squatter, buy, [], wool]   # 输入不被改
 
 
+def test_apply_slot_hygiene_qty_gt0_standing_never_cleared():
+    """B32 机制修正钉：qty>0 站立单=排队限价单（上一拍未成交≠占坑）——
+    即使其余对账全真也一概不清（清=丢队列位次，单件 h2h 实测崩 0.075）。"""
+    _reset()
+    standing = ["SELL", "WHEAT", 5]
+    a1 = {"farmer": ["PASS"], "hands": [], "market": [standing, [], [], []]}
+    apply_slot_hygiene(_hobs(400, money=500.0, inv={"WHEAT": 10}), a1)
+    a2 = {"farmer": ["PASS"], "hands": [],
+          "market": [standing, ["SELL", "WOOL", 3], [], []]}
+    r = apply_slot_hygiene(_hobs(401, money=500.0, inv={"WHEAT": 10}), a2)
+    assert r["cleared"] == [] and r["filled"] == []
+    assert r["action"] is a2                        # 原样返回不补洞
+
+
 def test_apply_slot_hygiene_unsure_keeps():
     """拿不准不清（保守）：对账有变化/账本缺拍/单形变动→一概不清坑。"""
     _reset()
-    squatter = ["SELL", "WHEAT", 5]
+    squatter = ["SELL", "WHEAT", 0]
     a1 = {"farmer": ["PASS"], "hands": [], "market": [squatter, []]}
     # ①无账本（首拍）不与历史对账→不清
     r = apply_slot_hygiene(_hobs(200, money=500.0), a1)
@@ -227,10 +242,10 @@ def test_apply_slot_hygiene_unsure_keeps():
     # ②money 变化（可能已成交）→不清
     _reset()
     apply_slot_hygiene(_hobs(200, money=500.0), a1)
-    a2 = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 5], []]}
+    a2 = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 0], []]}
     r = apply_slot_hygiene(_hobs(201, money=520.0), a2)
     assert r["cleared"] == [] and r["filled"] == [] and r["action"] is a2
-    # ③同槽单形变动（qty 5→3）→不清
+    # ③同槽单形变动（qty 0→3）→不清
     _reset()
     apply_slot_hygiene(_hobs(300, money=500.0), a1)
     a3 = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 3], []]}
@@ -248,7 +263,7 @@ def test_apply_slot_hygiene_exception_and_step0_reset():
     r = apply_slot_hygiene(_hobs(1), bad)
     assert r["action"] is bad and r["cleared"] == []
     _reset()
-    squatter = ["SELL", "WHEAT", 5]
+    squatter = ["SELL", "WHEAT", 0]
     a1 = {"farmer": ["PASS"], "hands": [], "market": [squatter, []]}
     apply_slot_hygiene(_hobs(50, money=500.0), a1)          # 建账
     a2 = {"farmer": ["PASS"], "hands": [], "market": [squatter, []]}
@@ -256,5 +271,5 @@ def test_apply_slot_hygiene_exception_and_step0_reset():
     assert r["cleared"] == [] and r["action"] is a2         # 不带旧账清坑
     a3 = {"farmer": ["PASS"], "hands": [], "market": [squatter, []]}
     r = apply_slot_hygiene(_hobs(1, money=500.0), a3)       # 复位后重新对账
-    assert r["cleared"] == [{"slot": 0, "order": ["SELL", "WHEAT", 5]}]
+    assert r["cleared"] == [{"slot": 0, "order": ["SELL", "WHEAT", 0]}]
     assert r["filled"] == [] and r["action"]["market"] == [[], []]

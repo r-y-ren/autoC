@@ -166,11 +166,13 @@ def apply_slot_hygiene(observation: Dict[str, Any], action: Dict[str, Any]) -> D
       {last_step, orders{槽: tuple(单)}, money, inv}，记当拍调整前（注入链
       收到）的 market 意图快照+对账快照；step==0 或步标回退=新局复位
       （只重建账本，不清坑）；步标非严格 +1 连续→拿不准不清。
-    - 零执行占坑单判定（四条全真才清，拿不准→不清）：①上一拍同槽挂出的
+    - 零执行占坑单判定（五条全真才清，拿不准→不清）：①上一拍同槽挂出的
       单本拍仍原样在（逐元素相等）；②该拍成交对账无变化——farm money 与
       该单物品的 market.inventory 跨拍零变化且键俱在（精确相等）；③单形
       SELL/BUY*（BUY/BUY_PRODUCT/BUY_ANIMAL 带物品字段；HIRE/BUY_LAND
-      原子单拿不准不清）；④步标连续。
+      原子单拿不准不清）；④步标连续；⑤qty==0 真占坑单（B32 消融机制修正：
+      qty>0 站立单=排队限价单，上一拍未成交不=占坑——清之丢队列位次，实测
+      单件 h2h 崩至 0.075；qty 非 int 0 一概不清）。
     - 清坑=置 [] 保位次（不删槽）；补洞=后位有效单链式前移填坑——每坑取
       其后最近的自家有效单（有效单=非空且未判为占坑）前移入坑，原槽置 []
       成新坑续填直至其后无有效单；空槽原地不动（只前移有效单），槽总数
@@ -233,6 +235,10 @@ def apply_slot_hygiene(observation: Dict[str, Any], action: Dict[str, Any]) -> D
                                                 "BUY_ANIMAL"))):
                     continue
                 if len(order) < 2 or not isinstance(order[1], str):
+                    continue
+                # ⑤qty==0 真占坑单才清（B32 机制修正，见 docstring）。
+                if len(order) != 3 or not isinstance(order[2], int) \
+                        or isinstance(order[2], bool) or order[2] != 0:
                     continue
                 item = order[1]
                 prev_inv = st.get("inv")

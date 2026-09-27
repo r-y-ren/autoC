@@ -33,9 +33,42 @@ LOSS_IDS = (113735225, 113817068, 113754147, 113852533, 113962831, 113724375,
             113837634, 113873625, 114064544, 113838925, 113764768, 113738419)
 LOSS_SEARCH_DIRS = ("/tmp/kagr23", "/tmp/kagr22", "/tmp/kagr24")
 
+# 四组件全集（①路由切换 ②卖单批量化 ③抢价 ④清坑）；components 配置参可选
+# 子集（B32 修订批间登记）：缺省 None=全四件（历史字节稳）。
+COMPONENTS = ("route_select", "sell_lots", "race_slots", "slot_hygiene")
+
+
+def _resolve_components(components: Any) -> tuple:
+    """components→启用组件元组（COMPONENTS 序）；None=全四件；非法即抛。
+
+    至少启用一件运行时件（route_select/race_slots/slot_hygiene）——纯磁带件
+    形态（sell_lots 单件）不在本管线（探针件 ablation_r40 自行组装）。
+    """
+    if components is None:
+        return COMPONENTS
+    if isinstance(components, (str, bytes)) or not isinstance(
+            components, (list, tuple, set, frozenset)):
+        raise ValueError("components 须为组件名序列或 None，得到 %r"
+                         % (components,))
+    want = set()
+    for c in components:
+        if c not in COMPONENTS:
+            raise ValueError("components 未知组件 %r（仅 %s）"
+                             % (c, sorted(COMPONENTS)))
+        want.add(c)
+    out = tuple(c for c in COMPONENTS if c in want)
+    if not out:
+        raise ValueError("components 不得为空")
+    if not any(c in want for c in ("route_select", "race_slots",
+                                   "slot_hygiene")):
+        raise ValueError("components 至少启用一件运行时件"
+                         "（route_select/race_slots/slot_hygiene）")
+    return out
+
 
 def build_r40(r37_main_path: str,
-              out_dir: Optional[str] = None) -> Dict[str, Any]:
+              out_dir: Optional[str] = None,
+              components: Any = None) -> Dict[str, Any]:
     """构建编排：建续段库→卖单手术→注入运行时三件→审计→打包。
 
     签名意图：输入: r37 main 路径 / 输出: r40 main+manifest+变更集审计 /
@@ -45,6 +78,12 @@ def build_r40(r37_main_path: str,
     - 签名微调登记（批间）：新增第二参 out_dir: Optional[str]=None——默认
       None 落本包 build/ 目录（orderbook_r40/build/，与 pack_r40 缺省同址），
       测试以 tmp_path 覆盖；首参与返回主键不变。
+    - 签名微调登记（B32 修订批间）：新增第三参 components: Any=None——四组件
+      （COMPONENTS=route_select/sell_lots/race_slots/slot_hygiene）开关，缺省
+      None=全四件（历史字节稳，测试钉形态不变）；子集=只做所选件手术/注入
+      （sell_lots 关=磁带零改动+变更表空登记注释行照落，manifest 三 sha 对账
+      面不变；运行时件关=inject_r40_block 只抽所选件）；纯磁带件形态不在本
+      管线（_resolve_components 拦）。
     - 编排流（责任契约 R23）：读 r37 文本（只读打开、全程零写回，测试钉字节
       不变）→ retape_sheep._decode_routes 解码磁带路由包 →
       retape_sell_lots 卖单批量化手术（写时复制、输入零改动；缺省参数
@@ -100,6 +139,7 @@ def build_r40(r37_main_path: str,
                         % type(out_dir).__name__)
     if not r37_main_path.strip():
         raise ValueError("r37_main_path must not be empty/whitespace-only")
+    comps = _resolve_components(components)
 
     with open(r37_main_path, "rb") as fh:
         b37 = fh.read()                      # 缺文件→FileNotFoundError（落盘前）
@@ -108,10 +148,18 @@ def build_r40(r37_main_path: str,
     t37 = b37.decode("utf-8")   # 非法 utf-8→UnicodeDecodeError（ValueError 子类）
 
     # ---- 1. 卖单批量化手术（写时复制，r37 零改动）→变更表注释内嵌单行 ----
-    pkg = _rs._decode_routes(t37)
-    lot = _rt.retape_sell_lots(pkg)
-    change_table = lot["change_table"]
-    t40 = _rs._encode_routes(t37, lot["routes"])
+    # components 关 sell_lots→磁带零改动、变更表空登记（注释行照落=manifest
+    # 三 sha 对账面不变）。
+    if "sell_lots" in comps:
+        pkg = _rs._decode_routes(t37)
+        # cross_step=False（B32 消融机制修正）：只同拍并单零时序移动——
+        # 跨拍 run 合并落点=更早步点=提前抛售，单件 h2h 0.3667→0.875 实证。
+        lot = _rt.retape_sell_lots(pkg, cross_step=False)
+        change_table = lot["change_table"]
+        t40 = _rs._encode_routes(t37, lot["routes"])
+    else:
+        change_table = []
+        t40 = t37
     canon = json.dumps(change_table, sort_keys=True, separators=(",", ":"),
                        ensure_ascii=False)   # 变更表 canonical json（单行）
     comment = _LOT_MARKER + " " + canon + "\n"
@@ -119,9 +167,10 @@ def build_r40(r37_main_path: str,
     base_text = base_text + comment
     lot_sha = hashlib.sha256(canon.encode("utf-8")).hexdigest()
 
-    # ---- 2. 建续段库→注入运行时尾块（库数据随块内嵌） ----
+    # ---- 2. 建续段库→注入运行时尾块（库数据随块内嵌；件集=components） ----
     built = _rl.build_route_library(_corpus_files(), None)   # 真库语料（契约钉）
-    inj = _ij.inject_r40_block(base_text, built)
+    runtime_comps = tuple(c for c in comps if c != "sell_lots")
+    inj = _ij.inject_r40_block(base_text, built, components=runtime_comps)
     r40_bytes = inj["main_text"].encode("utf-8")
     block_sha = inj["block_sha"]
 
