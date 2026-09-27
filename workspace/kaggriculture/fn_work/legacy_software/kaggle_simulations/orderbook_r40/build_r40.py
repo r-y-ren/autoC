@@ -2,7 +2,8 @@
 """build_r40 + audit_diff_r40_vs_r37 + pack_r40（R23 L1/L2）。
 
 责任契约：r37 字节为底 → build_route_library 建续段库 → retape_sell_lots
-卖单批量化手术 → inject_r40_block 注入运行时三件（续段选择器/竞速/补洞）→
+卖单批量化手术 → inject_r40_block 注入运行时件链（续段选择器/选路接线/
+竞速/补洞）→
 audit → pack_r40；r37 零改动。
 """
 from __future__ import annotations
@@ -69,7 +70,7 @@ def _resolve_components(components: Any) -> tuple:
 def build_r40(r37_main_path: str,
               out_dir: Optional[str] = None,
               components: Any = None) -> Dict[str, Any]:
-    """构建编排：建续段库→卖单手术→注入运行时三件→审计→打包。
+    """构建编排：建续段库→卖单手术→注入运行时件链→审计→打包。
 
     签名意图：输入: r37 main 路径 / 输出: r40 main+manifest+变更集审计 /
     错误: 超白名单即抛。
@@ -93,7 +94,7 @@ def build_r40(r37_main_path: str,
       sell_lots_change_sha256=该 JSON utf-8 字节 sha256）→
       build_route_library 建续段库（语料=CORPUS_DIRS 回放+LOSS_IDS 败局 12 局
       =77 局真库，记录 sha=build_audit.library_sha）→ inject_r40_block 注入
-      运行时尾块（三件+内嵌库）→ audit_diff_r40_vs_r37（带 change_table，
+      运行时尾块（件链+内嵌库）→ audit_diff_r40_vs_r37（带 change_table，
       两类白名单）→ pack_r40。
     - 失败面（不落半成品，B18/B26 build 同款）：落盘前一切红（缺文件/解码红/
       手术红/建库红/注入红/审计红）只经 tempfile 暂存件中转，out 目录零触碰

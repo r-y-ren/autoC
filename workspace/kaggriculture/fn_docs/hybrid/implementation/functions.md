@@ -147,11 +147,12 @@
 | verify_r39_gates | B28 | wired 09-27 | pytest 4 passed（全绿路/红不短路/fail-closed 含剥块坏锚/独立 n）；五门 R37/R38 同款重定向（last-callable=_predict_agent/血统链四节点对账）；签名微调 evidence_dir | (本批) |
 | run_r39_iteration | B28 | wired 09-27 | pytest 5 passed；**全链真跑 463.8s verdict=NEGATIVE 收档落定**（六判据 2 绿 4 红未改判；archive_ledger run-r39-archive/1.0 件身份 main 1d4f459fe9b3/tar cd2e92e44ec1）；判红不进门禁（B24 语义留档） | (本批) |
 | build_route_library | B29 | wired 09-27 | pytest 5 passed（聚类/族键稳定/败局世界审计/语料不足抛/真跑）；真跑 77 局 49 族覆盖 85.7%（42 有 best_route/7 uncovered）；败局世界 milk/wool/goose 全 covered=False=补路由缺口如实；evidence/route_library_realrun.json | (本批) |
-| _route40_select | B29 | wired 09-27 | pytest route 组 5 passed（指纹累计/step144 命中锁定/无族回退/step0 复位/异常回退）；族键与 build 跨件同键钉住；route=None=回退现行店对逻辑 | (本批) |
+| _route40_select | B29 | wired 09-27 | pytest route 组 5 passed（指纹累计/step144 命中锁定/无族回退/step0 复位/异常回退）；族键与 build 跨件同键钉住；route=None=回退现行店对逻辑；只读选择不改表，选定生效归 _route40_wire_route（B32 再修订） | (本批) |
+| _route40_wire_route | B32再修订 | wired 09-28 | pytest wire 组 4 passed+接线三钉真 r37 全 PASS（①族命中→router_state.route=5/磁带 routes[5]/四表同写 ②无族→表不改锁存=原值 104 ③异常→原样）；挂法=选路步前置父层改写模块级四表（_R108/_R110/_V92 店对键+_V93 值=best_route，店对键镜像 _router 表达式）；step0 复位还原+每局一次幂等 | (本批) |
 | retape_sell_lots | B30 | wired 09-27 | pytest 8 passed（合并/守恒破抛/窗外不动/非卖单不动/空槽不变/真跑+越窗抛/参数抛）；真跑：窗内单数中位 139→41、整路由卖单中位 435→**337 达标**（40/41 路由）、守恒 369 对全过、双跑恒等；只提前不推后；evidence/retape_lots_realrun.json | (本批) |
 | apply_race_slots | B30 | wired 09-27 | pytest race 组 3 passed（前移生效含多重集守恒/资金序反例/异常原动作）；SELL 原序稳定前移挤空槽、SELL↔BUY 相对序逐位不变（V57 最强解读） | (本批) |
 | apply_slot_hygiene | B30 | wired 09-27 | pytest hygiene 组 3 passed（清坑+链式补洞/拿不准不清三变体/异常+step0 复位）；四条判定全真才清（同槽在+钱货对账零变化+单形+步标连续）；补洞保相对序空槽不动 | (本批) |
-| inject_r40_block | B31 | wired 09-27 | pytest 8 组（三件抽取/库嵌入/校验四条/撞名预检）；_route40_agent 单参包装钉尾（父层→续段选择→竞速→补洞，fail-safe PASS 兜底）+内嵌续段库（repr 单行+canonical sha 对账） | (本批) |
+| inject_r40_block | B31 | wired 09-27 | pytest 8 组（件源抽取/库嵌入/校验四条/撞名预检）；_route40_agent 单参包装钉尾（选路→接线→父层→竞速→补洞，B32 再修订选路步前置；fail-safe PASS 兜底）+内嵌续段库（repr 单行+canonical sha 对账） | (本批) |
 | audit_diff_r40_vs_r37 | B31 | wired 09-27 | pytest audit 组绿（两类归因/sell_lots 状态机重放双向恒等/前缀破坏抛/锚行）；真跑零 UNATTRIBUTED | (本批) |
 | pack_r40 | B31 | wired 09-27 | pytest pack 组绿（字段/双跑/tar 形态/文案/缺件 null）；manifest orderbook_r40_manifest/1.0（链四节点+库/块/变更表三 sha 自证）；build_tar_bytes 真源复用 | (本批) |
 | build_r40 | B31 | wired 09-27 | pytest build 组绿；**真跑构建**：main 227f0de52e82（1,699,873B）/tar ae8431c69de3 双跑恒等/块 4b1b0a4999d7/库 0236c30e…一致/sell_lots 2020 行；归因 ok 零越界；r37 零改动；evidence/build_r40_realrun.json | (本批) |

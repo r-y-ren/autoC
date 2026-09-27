@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-"""inject_r40_block（R23 L2）：运行时三件注入。
+"""inject_r40_block（R23 L2）：运行时件注入。
 
-责任契约：_route40_select/apply_race_slots/apply_slot_hygiene+内嵌续段库
-追加尾部；校验四条+库 sha 对账沿 B17/B23 先例；捕获行避底版撞名（_R40_*）。
+责任契约：_route40_select/_route40_wire_route/apply_race_slots/
+apply_slot_hygiene+内嵌续段库追加尾部；校验四条+库 sha 对账沿 B17/B23
+先例；捕获行避底版撞名（_R40_*）。
 """
 from __future__ import annotations
 
@@ -11,35 +12,52 @@ import hashlib
 import json
 from typing import Any, Dict
 
-# 三件单一真源抽取序（_route40_agent 单参包装钉尾=装载后 last-callable）。
-_BLOCK_FUNCS = ("_route40_select", "apply_race_slots", "apply_slot_hygiene")
+# 运行时件单一真源抽取序（_route40_agent 单参包装钉尾=装载后 last-callable；
+# B32 再修订：_route40_wire_route 接线件随 route_select 组件抽取）。
+_BLOCK_FUNCS = ("_route40_select", "_route40_wire_route", "apply_race_slots",
+                "apply_slot_hygiene")
 
-# 组件名→运行时件源函数名（B32 修订：build_r40 components 开关；抽取序同上）。
-_COMPONENT_FUNCS: Dict[str, str] = {
-    "route_select": "_route40_select",
-    "race_slots": "apply_race_slots",
-    "slot_hygiene": "apply_slot_hygiene",
+# 组件名→运行时件源函数名（B32 修订：build_r40 components 开关；抽取序同上；
+# route_select 组件=选路+接线两件）。
+_COMPONENT_FUNCS: Dict[str, tuple] = {
+    "route_select": ("_route40_select", "_route40_wire_route"),
+    "race_slots": ("apply_race_slots",),
+    "slot_hygiene": ("apply_slot_hygiene",),
 }
 
 # 块绑定名全集（撞名预检用；Any/Dict 为条件缺省填充不入集，不覆盖底版既有绑定）。
-_BLOCK_BOUND = {"_route40_select", "apply_race_slots", "apply_slot_hygiene",
-                "_route40_agent", "_R40_CALLABLES", "_R40_PARENT",
-                "_R40_LIBRARY", "_R40_TYPING"}
+_BLOCK_BOUND = {"_route40_select", "_route40_wire_route", "apply_race_slots",
+                "apply_slot_hygiene", "_route40_agent", "_R40_CALLABLES",
+                "_R40_PARENT", "_R40_LIBRARY", "_R40_TYPING"}
 
 # 块锚行核心短语（与 audit_diff_r40_vs_r37/pack_r40 识别口径一致；全文恰一次）。
 _BLOCK_CORE = "r40 运行时尾块"
 
+# 选路步前置集（B32 再修订接线）：_route40_select→_route40_wire_route 必须
+# 先于父层调用——基座 _router 的 step>=144 锁存发生在父层调用内，接线改表
+# 必须赶在锁存之前；竞速/补洞作用于父层动作故在父层之后。
+_PRE_PARENT = ("_route40_select", "_route40_wire_route")
+
 # 单参官方入口包装（运行时件链转调；形态按 runtime_r40 现约定定形，docstring
-# 留档——三件签名/语义见 runtime_r40.py：_route40_select(observation, library=None)
-# 只读续段选择（latched/异常回退）、apply_race_slots(observation, action)→调整后
-# action、apply_slot_hygiene(observation, action)→{"action","cleared","filled"}）。
-# 包装文本=_agent_src(件集) 单一真源生成：全三件=历史 _AGENT_SRC 形态（B32 前
-# 字节稳）；子集（B32 修订 components 开关）=同骨架只链所选件。
+# 留档——各件签名/语义见 runtime_r40.py：_route40_select(observation, library=None)
+# 只读续段选择（latched/异常回退）、_route40_wire_route(observation, selection)
+# 选路接线（表改写/step0 复位/异常原样）、apply_race_slots(observation, action)
+# →调整后 action、apply_slot_hygiene(observation, action)→{"action","cleared",
+# "filled"}）。
+# 包装文本=_agent_src(件集) 单一真源生成：全件=历史形态+接线步前置（B32 再
+# 修订接线生效形态）；子集（B32 修订 components 开关）=同骨架只链所选件。
 _STEP_SRC: Dict[str, str] = {
     "_route40_select": (
         "    try:\n"
         "        _route40_agent._last_select = _route40_select(\n"
         "            observation, globals().get(\"_R40_LIBRARY\"))\n"
+        "    except Exception:\n"
+        "        pass\n"),
+    "_route40_wire_route": (
+        "    try:\n"
+        "        _route40_agent._last_wire = _route40_wire_route(\n"
+        "            observation, getattr(_route40_agent, \"_last_select\",\n"
+        "                                None))\n"
         "    except Exception:\n"
         "        pass\n"),
     "apply_race_slots": (
@@ -58,13 +76,17 @@ _STEP_SRC: Dict[str, str] = {
 
 _FULL_DOC = '''单参数入口适配（官方 runner 语义：action = last_callable(observation)）。
 
-    转调三件链（runtime_r40 现约定定形，docstring 留档）：
-    - _route40_select(observation, 库)：step144 续段选择——只读、跨步 latched、
-      异常回退 {route: None, family: None, confidence: 0.0}；结果存
-      _route40_agent._last_select（测试可查），不改动作。
-    - apply_race_slots(observation, action)：同回合卖单竞速——只动 SELL 槽序
-      （空槽位次语义+V57 资金序不变量），异常→原动作。
-    - apply_slot_hygiene(observation, action)：队列补洞——返回
+    转调件链（runtime_r40 现约定定形，docstring 留档；B32 再修订接线）：
+    - 前置步（父层取动作之前）：_route40_select(observation, 库) step144
+      续段选择——只读、跨步 latched、异常回退 {route: None, family: None,
+      confidence: 0.0}，结果存 _route40_agent._last_select（测试可查）→
+      _route40_wire_route(observation, 选定) 选路接线——把 best_route 写进
+      基座模块级路由表使 _router step>=144 锁存到选定路线（表改写挂法见
+      该件 docstring；无族/conf=0/异常→表零改动回退现状），结果存 _last_wire。
+      两步必须先于父层：基座锁存发生在父层调用内，事后改表不生效。
+    - 父层取动作后：apply_race_slots(observation, action) 同回合卖单竞速——
+      只动 SELL 槽序（空槽位次语义+V57 资金序不变量），异常→原动作；
+      apply_slot_hygiene(observation, action) 队列补洞——返回
       {"action", "cleared", "filled"}，取其 "action" 为最终动作。
     接线沿 _predict_agent 先例：父层=注入层捕获变量 _R40_PARENT、库=内嵌
     _R40_LIBRARY，均经 globals() 查找（测试可注入假父层/假库）。
@@ -85,7 +107,12 @@ _AGENT_PROLOGUE = (
 
 
 def _agent_src(funcs: Sequence[str]) -> str:
-    """单参包装文本（单一真源生成）：funcs=启用运行时件（_BLOCK_FUNCS 序）。"""
+    """单参包装文本（单一真源生成）：funcs=启用运行时件（_BLOCK_FUNCS 序）。
+
+    组装序留档（B32 再修订接线）：选路步（_route40_select→_route40_wire_route）
+    先于父层调用（基座 _router 的 step>=144 锁存发生在父层调用内，接线改表
+    必须赶在锁存之前）；竞速/补洞步在父层之后（作用于父层动作）。
+    """
     funcs = tuple(funcs)
     if funcs == _BLOCK_FUNCS:
         doc = _FULL_DOC
@@ -94,16 +121,17 @@ def _agent_src(funcs: Sequence[str]) -> str:
                "；fail-safe 语义与全件形态同款（异常→父层动作原样）。"
                "本函数必须保持为模块 globals 最后一个 callable。"
                % ", ".join(funcs))
-    steps = "".join(_STEP_SRC[f] for f in funcs)
-    return ("def _route40_agent(observation):\n    \"\"\"%s\n    \"\"\"\n%s%s"
-            "    return action" % (doc, _AGENT_PROLOGUE, steps))
+    pre = "".join(_STEP_SRC[f] for f in funcs if f in _PRE_PARENT)
+    post = "".join(_STEP_SRC[f] for f in funcs if f not in _PRE_PARENT)
+    return ("def _route40_agent(observation):\n    \"\"\"%s\n    \"\"\"\n%s%s%s"
+            "    return action" % (doc, pre, _AGENT_PROLOGUE, post))
 
 
 _AGENT_SRC = _agent_src(_BLOCK_FUNCS)
 
 
 def _resolve_components(components: Any) -> Tuple[str, ...]:
-    """components→启用运行时件名（_BLOCK_FUNCS 序）；None=全三件；非法即抛。"""
+    """components→启用运行时件名（_BLOCK_FUNCS 序）；None=全件；非法即抛。"""
     if components is None:
         return _BLOCK_FUNCS
     if isinstance(components, (str, bytes)) or not isinstance(
@@ -115,7 +143,7 @@ def _resolve_components(components: Any) -> Tuple[str, ...]:
         if c not in _COMPONENT_FUNCS:
             raise ValueError("components 未知组件 %r（仅 %s）"
                              % (c, sorted(_COMPONENT_FUNCS)))
-        want.add(_COMPONENT_FUNCS[c])
+        want.update(_COMPONENT_FUNCS[c])
     out = tuple(f for f in _BLOCK_FUNCS if f in want)
     if not out:
         raise ValueError("components 至少启用一件运行时件")
@@ -221,24 +249,29 @@ def _split_library(library: Any):
 
 def inject_r40_block(main_text: str, library: Any,
                      components: Any = None) -> Dict[str, Any]:
-    """生成 r40 运行时块（三件+库）追加尾部，跑校验四条+库 sha 对账。
+    """生成 r40 运行时块（件链+库）追加尾部，跑校验四条+库 sha 对账。
 
     签名意图：输入: r37 main 文本+库数据 / 输出: {main_text, block_sha} /
     错误: 校验不过即抛。
 
     【签名微调登记（B32 修订批间）】第三参 components: Any=None——缺省
-    None=全三件（历史形态字节稳）；组件名序列（"route_select"/"race_slots"/
+    None=全件（历史形态字节稳）；组件名序列（"route_select"/"race_slots"/
     "slot_hygiene" 子集）只抽取+链化所选件（_agent_src 单一真源生成包装，
     校验四条/库 sha 对账全同）；空集/未知组件名→ValueError。
+    【B32 再修订（用户裁决「接线路由库再验一轮」）】route_select 组件扩为
+    两件（_route40_select 选路+_route40_wire_route 接线）；选路步改前置父层
+    （基座 _router 的 step>=144 锁存发生在父层调用内，接线改表必须赶在锁存
+    之前——此前 _route40_select 空转即因链序在父层之后+返回值无人消费）。
 
     命名方案（docstring 留档；捕获行 _R40_* 避底版 _PREDICT_*/_R37_GUARD_* 系
     撞名，注入前撞名预检、撞名即抛，先例 inject_predict.py）：
-    - 单一真源=runtime_r40.py：三件（_route40_select/apply_race_slots/
-      apply_slot_hygiene）源码经 ast 整段抽取生成块文本，零手抄零改名
-      （抽取序=_BLOCK_FUNCS，_route40_agent 单参包装钉尾）。
+    - 单一真源=runtime_r40.py：各件（_route40_select/_route40_wire_route/
+      apply_race_slots/apply_slot_hygiene）源码经 ast 整段抽取生成块文本，
+      零手抄零改名（抽取序=_BLOCK_FUNCS，_route40_agent 单参包装钉尾）。
     - 单参包装 _route40_agent(observation)（官方入口，形态按 runtime_r40 现
-      约定定形，详见 _AGENT_SRC docstring）：父层取动作 → _route40_select
-      续段选择（只读，结果存 _last_select）→ apply_race_slots 竞速 →
+      约定定形，详见 _AGENT_SRC docstring）：_route40_select 续段选择（只读，
+      结果存 _last_select）→ _route40_wire_route 选路接线（表改写使基座锁存
+      选定路线，结果存 _last_wire）→ 父层取动作 → apply_race_slots 竞速 →
       apply_slot_hygiene 补洞取 action → 返回；异常 fail-safe。
     - 捕获行机制：_R40_CALLABLES/_R40_PARENT 位于块首、先于块内一切 def 与
       import 执行（exec 时序保证捕获到注入时刻 globals 既有最后 callable=底版
@@ -304,7 +337,7 @@ def inject_r40_block(main_text: str, library: Any,
 
     header = (
         "# ============ " + _BLOCK_CORE + "（自动生成，勿手改） ============\n"
-        "# r40 块内容：续段选择器+同回合卖单竞速+队列补洞三件链+内嵌续段库"
+        "# r40 块内容：续段选择器+选路接线件+同回合卖单竞速+队列补洞件链+内嵌续段库"
         "（锚行=本块首行标记，audit/pack 按核心短语识别）\n"
         "_R40_CALLABLES = [v for k, v in list(globals().items())"
         " if callable(v) and not k.startswith(\"__\")]\n"

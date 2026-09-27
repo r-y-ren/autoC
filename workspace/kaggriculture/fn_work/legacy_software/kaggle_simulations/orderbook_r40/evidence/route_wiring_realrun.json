@@ -1,0 +1,114 @@
+{
+ "record": "route-wiring/1.0",
+ "generated_at": "2026-09-28T02:20:00Z",
+ "batch": "B32 再修订（用户裁决「接线路由库再验一轮」）",
+ "mounting": {
+  "method": "_route40_agent 包装层选路步前置（父层取动作之前）调 _route40_select 得 best_route 后，经 globals() 改写模块级四张路由表（_R108_SHOP_ROUTES/_R110_OLD_SHOPS/_V92_TABLE 店对键=best_route；_V93_ROUTE_BY_RIVAL 值重写=best_route 封特例反覆盖），基座 _router 于 step>=144 锁存 state['route'] 即选定路线；店对键推导镜像 _router 表达式",
+  "why_pre_parent": "基座锁存发生在父层调用内（_router step>=144 首拍查表后 day6 锁存），事后改表不生效——接线步必须前置",
+  "invariants": "只改「选哪条路线」决策面；无族命中/conf=0/route 非 int→表零改动回退现状；异常→原样 fail-safe；step0 或步标回退→恢复四表原值（_wire_state.orig 逐项还原）；day27 step>=648 强制 route=2 基座既有后段行为不改",
+  "runtime_piece": "runtime_r40._route40_wire_route（函数属性 _wire_state 自包含，_fp_state 同款；route_select 组件=选路+接线两件，inject_r40 _BLOCK_FUNCS 抽取序）"
+ },
+ "wiring_nails": {
+  "nail1_family_hit_base_latches_best_route": "PASS——构造族 2|1|WHEAT:5|BAKERY+FARMERS_MARKET best_route=5：真 r37 基座 _router 锁存 router_state.route==5（店对原值 104）、chassis 磁带=routes[5]、四表同写=5、_last_wire.wired=True",
+  "nail2_no_family_tables_untouched": "PASS——无族库：四表快照逐位不变、_last_wire.wired=False、锁存=店对原值 104（回退现状）",
+  "nail3_exception_tables_untouched": "PASS——店对表写入抛（__setitem__ boom）：四表零改动、链 fail-safe 出 dict 动作、锁存=店对原值"
+ },
+ "effect_table": {
+  "note": "六判据接线前（judge_r23_ablation_realrun.json）vs 接线后（judge_r23_wired_realrun.json）；同语料口径=败局 12（build_r40.LOSS_IDS 单一真源）+联赛 350+对照 30+16 workers",
+  "c1_rebuild_route": {
+   "pre": {
+    "top550_winrate": 0.8393,
+    "seg_delta_median": -1956.0,
+    "pass": false
+   },
+   "post": {
+    "top550_winrate": 0.8393,
+    "seg_delta_median": -1956.0,
+    "pass": false
+   }
+  },
+  "c2_sell_exec": {
+   "pre": {
+    "seg_delta_median": -1956.0,
+    "realized_px_up_pct": -0.03,
+    "pass": false
+   },
+   "post": {
+    "seg_delta_median": -1956.0,
+    "realized_px_up_pct": -0.03,
+    "pass": false
+   }
+  },
+  "c3_queue_hygiene": {
+   "pre": {
+    "fill_rate": 0.9,
+    "realized_px_up_pct": -0.03,
+    "pass": false
+   },
+   "post": {
+    "fill_rate": 0.9,
+    "realized_px_up_pct": -0.03,
+    "pass": false
+   }
+  },
+  "c4_sim_judge": {
+   "pre": {
+    "speedup": 13.992,
+    "consistency_rate": 1.0,
+    "pass": true
+   },
+   "post": {
+    "speedup": 13.177,
+    "consistency_rate": 1.0,
+    "pass": true
+   }
+  },
+  "c5_h2h_r37": {
+   "pre": {
+    "h2h_rate": 0.8786,
+    "n_seeds": 70,
+    "pass": true
+   },
+   "post": {
+    "h2h_rate": 0.8786,
+    "n_seeds": 70,
+    "pass": true
+   }
+  },
+  "c6_league_winrate": {
+   "pre": {
+    "league_winrate": 0.7714,
+    "n_seeds": 175,
+    "pass": false
+   },
+   "post": {
+    "league_winrate": 0.7714,
+    "n_seeds": 175,
+    "pass": false
+   }
+  },
+  "overall": {
+   "pre": {
+    "n_pass": 2,
+    "pass": false
+   },
+   "post": {
+    "n_pass": 2,
+    "pass": false
+   }
+  },
+  "diagnosis": "接线机械生效（三钉实证）但决策面为空：库 42 个带 best_route 的族逐位==基座店对表锁存（族键含首二店，历史局 route 本就按店对表复刻推断，margin 选优胜出=表路由本身）→改表改的是原值，行为零变化；12 败局真观察流族命中 12/12、带 best_route 9/12（3 族无胜局回退）。唯一真差异面=_V93_ROUTE_BY_RIVAL 特例（rkey 命中时基座 128 vs 库族 9），本次 374 局未现翻转→六判据逐位同前（speedup 13.992→13.177 墙钟抖动非行为面）"
+ },
+ "artifact_shas": {
+  "r40_main_sha256": "4ce951f088740e0b3d4366dbf95f8bb225817b0417bbb2fcea6292a559ee9ea8",
+  "r40_main_sha256_pre_wiring": "712e89f4907aa9b825f82277c79dfcd15737f16b57220ab9a60c6433a765b802",
+  "block_sha256": "b5ce2f6899dffad09ffec53c1827824d532e7ea919d7c8e341d7a8d90f7662d1",
+  "route_library_sha256": "0236c30e4e728166c8a8751535517a75c5c133092f2e8f14f2b197baa193ed68",
+  "r37_main_sha256": "4b237e412d5101937ad66aa0751454721dec2d5a73fa2743d65768b286a2cb3f"
+ },
+ "evidence": {
+  "judge_wired": "evidence/judge_r23_wired_realrun.json",
+  "judge_pre_wiring": "evidence/judge_r23_ablation_realrun.json",
+  "build_wired": "evidence/build_r40_realrun.json"
+ }
+}

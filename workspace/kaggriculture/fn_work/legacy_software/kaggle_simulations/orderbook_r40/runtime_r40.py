@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-"""R23 运行时三件（注入包内）。
+"""R23 运行时件（注入包内）。
 
-责任契约：_route40_select（step144 续段选择）/apply_race_slots（同回合
-卖单竞速）/apply_slot_hygiene（队列补洞）。本文件源文本由 inject_r40_block
-追加进包内（含内嵌续段库）。
+责任契约：_route40_select（step144 续段选择）/_route40_wire_route（选路
+接线：把选定路线写进基座模块级路由表）/apply_race_slots（同回合卖单竞速）/
+apply_slot_hygiene（队列补洞）。本文件源文本由 inject_r40_block 追加进
+包内（含内嵌续段库）。
 """
 from __future__ import annotations
 
@@ -29,6 +30,8 @@ def _route40_select(observation: Dict[str, Any], library: Any = None) -> Dict[st
     - 回退信号：route=None 表示回退现行 `_router` 店对逻辑（无族命中/族无胜局
       best_route/库缺/异常一律 {route: None, family: None 或族键, confidence: 0.0}；
       异常不锁定，后续好拍可重触发）。confidence=置信度（命中=族 win_rate）。
+    - 本件只读选择不改表；选定路线的生效归 _route40_wire_route 接线件
+      （表改写挂法见其 docstring，B32 再修订）。
     """
     import json
 
@@ -99,6 +102,102 @@ def _route40_select(observation: Dict[str, Any], library: Any = None) -> Dict[st
         return dict(out)
     except Exception:
         return dict(fallback)
+
+
+def _route40_wire_route(observation: Dict[str, Any], selection: Any) -> Dict[str, Any]:
+    """接线件（B32 再修订「接线路由库再验一轮」）：把 _route40_select 选定
+    路线写进基座模块级路由表，使基座 _router 真正锁存到 best_route（消融
+    查明①此前空转：返回值无人消费，_router 照旧走店对表）。
+
+    挂法留档（实测可达=模块级表改写；注入块与基座同一模块 globals）：
+    - 基座 _router 于 step>=144 首拍按 shops=tuple(unlocked_shops[:2]) 店对
+      锁存 state['route']：无 YARN→_R108_SHOP_ROUTES（缺省 100）/含 YARN→
+      _R110_OLD_SHOPS（缺省 0），_V92_TABLE 再覆盖；'YARN_STORE' 在店对且
+      rkey∈_V93_ROUTE_BY_RIVAL 时特例最终覆盖。本件由 _route40_agent 包装层
+      在选路步（父层取动作之前，step144 或首拍）被调：①当拍店对键写进三张
+      店对表=best_route；②_V93_ROUTE_BY_RIVAL 值全部重写为 best_route（键
+      不动）——特例路径亦恒输出选定路线（其优先级在 _V92 之后，不中和会
+      反覆盖）。店对键推导镜像 _router 表达式（_get 同义），保证同键命中。
+    - 只改「选哪条路线」这一个决策面：无族命中/族无胜局（selection.route
+      None）或 confidence≤0 或 route 非 int→表零改动（回退现状）；异常→
+      原样 fail-safe；不碰磁带主体/动作链。step>=648 的 day27 强制 route=2
+      属基座既有后段行为，不在本件面（不改）。
+    - 新局复位：step==0 或步标回退→按 _wire_state["orig"] 逐项恢复四表原值
+      （每局全新模块命名空间本就隔离，仍留复位防同空间复用）；每局只接线
+      一次（wired 标记防跨拍重复登记原值）。
+    - 状态自包含 _route40_wire_route._wire_state（函数属性，注入友好，
+      _fp_state 同款）={last_step, wired, route, shops,
+      orig:[(表, 键, 原在, 原值)]}。
+    - 依赖面：globals() 无表/表非 dict→逐项跳过；无路由表命名空间（单测/
+      假父层）恒 wired=False 零副作用。
+
+    签名意图：输入: observation+selection（_route40_select 返回形）/
+    输出: {"wired", "route", "shops"} 观测记录 / 错误: 异常→
+    {"wired": False, "route": None, "shops": []}。
+    """
+    try:
+        if not isinstance(observation, dict):
+            raise TypeError("observation 非 dict")
+        raw = observation.get("step")
+        if raw is not None:
+            step = int(raw)
+        else:
+            step = int(observation.get("day", 0)) * 24 + \
+                int(observation.get("hour", 0))
+        st = getattr(_route40_wire_route, "_wire_state", None)
+        if st is None or step == 0 or step < st.get("last_step", -1):
+            if isinstance(st, dict):
+                for tbl, key, had, val in st.get("orig", []):
+                    try:
+                        if had:
+                            tbl[key] = val
+                        else:
+                            tbl.pop(key, None)
+                    except Exception:
+                        pass
+            st = {"last_step": -1, "wired": False, "route": None,
+                  "shops": [], "orig": []}
+            _route40_wire_route._wire_state = st
+        st["last_step"] = step
+        sel = selection if isinstance(selection, dict) else {}
+        route = sel.get("route")
+        conf = sel.get("confidence", 0.0)
+        if not (isinstance(route, int) and not isinstance(route, bool)
+                and float(conf) > 0):
+            return {"wired": False, "route": None, "shops": []}
+        if st["wired"]:
+            return {"wired": True, "route": st["route"],
+                    "shops": list(st["shops"])}
+        town = observation.get("town")
+        get = getattr(town, "get", None)
+        ups = get("unlocked_shops", []) if callable(get) else []
+        shops = tuple((ups or [])[:2])
+        g = globals()
+        orig = st["orig"]
+        touched = 0
+        for name in ("_R108_SHOP_ROUTES", "_R110_OLD_SHOPS", "_V92_TABLE"):
+            tbl = g.get(name)
+            if not isinstance(tbl, dict):
+                continue
+            orig.append((tbl, shops, shops in tbl, tbl.get(shops)))
+            tbl[shops] = route
+            touched += 1
+        tbl = g.get("_V93_ROUTE_BY_RIVAL")
+        if isinstance(tbl, dict) and tbl:
+            for key in list(tbl):
+                orig.append((tbl, key, True, tbl[key]))
+                tbl[key] = route
+            touched += 1
+        if not touched:
+            # 无路由表命名空间（单测/假父层）：零副作用恒 wired=False。
+            st["orig"] = []
+            return {"wired": False, "route": None, "shops": []}
+        st["wired"] = True
+        st["route"] = route
+        st["shops"] = list(shops)
+        return {"wired": True, "route": route, "shops": list(shops)}
+    except Exception:
+        return {"wired": False, "route": None, "shops": []}
 
 
 def apply_race_slots(observation: Dict[str, Any], action: Dict[str, Any]) -> Dict[str, Any]:

@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
-"""R23 测试面：runtime_r40（续段选择/竞速/补洞三件）。
+"""R23 测试面：runtime_r40（续段选择/选路接线/竞速/补洞四件）。
 
 route 组（B29）：指纹累计 / step144 命中选路 / 无族回退 / step0 复位 /
-异常回退。race 组（B30b）：SELL 前移生效 / V57 资金序反例 / 异常原动作。
+异常回退。wire 组（B32 再修订）：四表同写接线生效 / 无族·conf=0·异常零改动 /
+step0 复位还原。race 组（B30b）：SELL 前移生效 / V57 资金序反例 / 异常原动作。
 hygiene 组（B30b）：零执行单清坑+补洞 / 拿不准不清 / 异常原动作+step0 复位。
 """
 import json
+import sys
 
 import pytest  # noqa: F401
 
 try:
     from orderbook_r40.runtime_r40 import (
-        _route40_select, apply_race_slots, apply_slot_hygiene)
+        _route40_select, _route40_wire_route, apply_race_slots,
+        apply_slot_hygiene)
 except ImportError:  # 兜底：直接以 orderbook_r40/ 为 sys.path 根跑测
-    from runtime_r40 import _route40_select, apply_race_slots, \
-        apply_slot_hygiene
+    from runtime_r40 import _route40_select, _route40_wire_route, \
+        apply_race_slots, apply_slot_hygiene
 
 KEY_A = "2|1|WHEAT:5|BAKERY+FARMERS_MARKET"     # 累计口径命中键
 KEY_ZERO = "0|0|WHEAT:5|BAKERY+FARMERS_MARKET"  # 零累计对照键（亦在库中）
@@ -56,6 +59,7 @@ def _obs(t, hands=0, uq=1, crops=None, shops=()):
 
 def _reset():
     _route40_select._fp_state = None
+    _route40_wire_route._wire_state = None
     apply_slot_hygiene._ledger = None
 
 
@@ -141,6 +145,105 @@ def test_route40_select_exception_fallback():
                                 shops=["BAKERY", "FARMERS_MARKET"]),
                            None) == FALLBACK
     assert _feed_key_a()["route"] == 5     # 异常后仍可正常命中
+
+
+# ------------------------------ wire 组（B32 再修订接线） ------------------------------
+
+def test_wire_route_patches_tables_latches_once(monkeypatch):
+    """接线生效：四表同写=best_route（含 V93 特例值中和）；跨拍幂等——
+    wired 标记防重复登记原值（否则复位还原被污染）。"""
+    t108, t110, t92, t93 = _wire_env(monkeypatch)
+    sel = {"route": 5, "family": KEY_A, "confidence": 2 / 3}
+    out = _route40_wire_route(_wobs(144), sel)
+    assert out == {"wired": True, "route": 5,
+                   "shops": ["BAKERY", "FARMERS_MARKET"]}
+    assert t108[("BAKERY", "FARMERS_MARKET")] == 5
+    assert t110[("BAKERY", "FARMERS_MARKET")] == 5
+    assert t92[("BAKERY", "FARMERS_MARKET")] == 5
+    assert t93 == {(229.0, 9989): 5}          # 键不动值改写（特例反覆盖封死）
+    st = _route40_wire_route._wire_state
+    n_orig = len(st["orig"])
+    out2 = _route40_wire_route(_wobs(145), sel)   # 跨拍幂等
+    assert out2 == out and len(st["orig"]) == n_orig
+    # 无路由表命名空间零副作用（假父层/单测形态）
+    _reset()
+    for name in ("_R108_SHOP_ROUTES", "_R110_OLD_SHOPS", "_V92_TABLE",
+                 "_V93_ROUTE_BY_RIVAL"):
+        monkeypatch.delattr(sys.modules[_route40_wire_route.__module__],
+                            name, raising=False)
+    assert _route40_wire_route(_wobs(144), sel) == {
+        "wired": False, "route": None, "shops": []}
+
+
+def test_wire_route_no_hit_no_change(monkeypatch):
+    """无族/conf=0/route 非法→表零改动（回退现状=店对表原值）。"""
+    t108, t110, t92, t93 = _wire_env(monkeypatch)
+    snap = (dict(t108), dict(t110), dict(t92), dict(t93))
+    for sel in ({"route": None, "family": KEY_A, "confidence": 0.0},
+                {"route": 5, "family": KEY_A, "confidence": 0.0},
+                {"route": 5, "family": KEY_A, "confidence": "bad"},
+                {"route": True, "family": KEY_A, "confidence": 1.0},
+                {"route": "5", "family": KEY_A, "confidence": 1.0},
+                {"family": KEY_A}, None, "junk"):
+        assert _route40_wire_route(_wobs(144), sel) == {
+            "wired": False, "route": None, "shops": []}
+        assert (t108, t110, t92, t93) == snap
+
+
+def test_wire_route_exception_original(monkeypatch):
+    """异常→原样：坏观察/表写入炸→wired False、表零改动、后续表不半改。"""
+    t108, t110, t92, t93 = _wire_env(monkeypatch)
+    snap = (dict(t108), dict(t110), dict(t92), dict(t93))
+    sel = {"route": 5, "family": KEY_A, "confidence": 1.0}
+    for obs in (None, "junk", 42, {"step": "bad"}, {"day": "x", "hour": "y"}):
+        assert _route40_wire_route(obs, sel)["wired"] is False
+    assert (t108, t110, t92, t93) == snap
+    mod = sys.modules[_route40_wire_route.__module__]
+
+    class _Boom(dict):
+        def __setitem__(self, key, value):
+            raise RuntimeError("boom")
+
+    monkeypatch.setattr(mod, "_R108_SHOP_ROUTES", _Boom(t108), raising=False)
+    assert _route40_wire_route(_wobs(144), sel)["wired"] is False
+    assert (t108, t110, t92, t93) == snap
+    assert ("BAKERY", "FARMERS_MARKET") not in t110   # 后续表不半改
+    assert ("BAKERY", "FARMERS_MARKET") not in t92
+    assert t93 == {(229.0, 9989): 128}
+
+
+def test_wire_route_step0_restores_tables(monkeypatch):
+    """step0 新局复位：四表原值还原（新增键 pop/覆盖值回旧），可再次接线。"""
+    t108, t110, t92, t93 = _wire_env(monkeypatch)
+    sel = {"route": 5, "family": KEY_A, "confidence": 1.0}
+    assert _route40_wire_route(_wobs(144), sel)["wired"] is True
+    assert _route40_wire_route(_wobs(0), FALLBACK)["wired"] is False  # 新局拍
+    assert t108 == {("BAKERY", "FARMERS_MARKET"): 104}
+    assert t110 == {("BAKERY", "YARN_STORE"): 3}
+    assert t92 == {("BAKERY", "YARN_STORE"): 9}
+    assert t93 == {(229.0, 9989): 128}
+    assert _route40_wire_route(_wobs(144), sel)["wired"] is True  # 复位后可再接
+    assert t108[("BAKERY", "FARMERS_MARKET")] == 5
+
+
+def _wire_env(monkeypatch):
+    """假路由四表注入件模块命名空间（wire 经 globals() 取表）；复位 wire 态。"""
+    mod = sys.modules[_route40_wire_route.__module__]
+    t108 = {("BAKERY", "FARMERS_MARKET"): 104}
+    t110 = {("BAKERY", "YARN_STORE"): 3}
+    t92 = {("BAKERY", "YARN_STORE"): 9}
+    t93 = {(229.0, 9989): 128}
+    monkeypatch.setattr(mod, "_R108_SHOP_ROUTES", t108, raising=False)
+    monkeypatch.setattr(mod, "_R110_OLD_SHOPS", t110, raising=False)
+    monkeypatch.setattr(mod, "_V92_TABLE", t92, raising=False)
+    monkeypatch.setattr(mod, "_V93_ROUTE_BY_RIVAL", t93, raising=False)
+    _route40_wire_route._wire_state = None
+    return t108, t110, t92, t93
+
+
+def _wobs(step, shops=("BAKERY", "FARMERS_MARKET")):
+    """wire 观察桩：步标+首二店最小观察。"""
+    return {"step": step, "town": {"unlocked_shops": list(shops)}}
 
 
 def test_apply_race_slots_sell_forward():

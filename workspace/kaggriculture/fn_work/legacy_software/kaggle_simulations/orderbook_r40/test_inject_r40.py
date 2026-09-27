@@ -53,13 +53,14 @@ def test_inject_tail_append_invariant():
 
 
 def test_inject_three_funcs_extraction_and_library_embed():
-    # ②三件抽取：runtime_r40.py 三件源 ast 整段按 _BLOCK_FUNCS 序在块内、
+    # ②件源抽取：runtime_r40.py 各件源 ast 整段按 _BLOCK_FUNCS 序在块内、
     # _route40_agent 单参包装钉尾、捕获行先于一切 def；库行恰一行=参数核心。
     assert inject_r40._BLOCK_FUNCS == (
-        "_route40_select", "apply_race_slots", "apply_slot_hygiene")
-    assert {"_route40_select", "apply_race_slots", "apply_slot_hygiene",
-            "_route40_agent", "_R40_CALLABLES", "_R40_PARENT",
-            "_R40_LIBRARY"} <= inject_r40._BLOCK_BOUND    # 撞名预检含全集
+        "_route40_select", "_route40_wire_route", "apply_race_slots",
+        "apply_slot_hygiene")
+    assert {"_route40_select", "_route40_wire_route", "apply_race_slots",
+            "apply_slot_hygiene", "_route40_agent", "_R40_CALLABLES",
+            "_R40_PARENT", "_R40_LIBRARY"} <= inject_r40._BLOCK_BOUND
     main, lib = _base_main(), _lib()
     out = inject_r40.inject_r40_block(main, lib)
     assert set(out) == {"main_text", "block_sha"}
@@ -190,7 +191,8 @@ def test_inject_bad_input_raises():
                       "_R40_CALLABLES = []\n",
                       "def apply_slot_hygiene(observation, action):\n    return {}\n",
                       "def apply_race_slots(observation, action):\n    return {}\n",
-                      "def _route40_select(observation, library=None):\n    return {}\n"):
+                      "def _route40_select(observation, library=None):\n    return {}\n",
+                      "def _route40_wire_route(observation, selection):\n    return {}\n"):
         with pytest.raises(ValueError, match="撞名"):
             inject_r40.inject_r40_block(colliding, lib)
     # 坏库：非 dict→TypeError；不可作 Python 字面量内嵌/不可 canonical sha→ValueError
@@ -271,6 +273,141 @@ def test_inject_real_r37_smoke():
     assert raw_injected[:len(raw_main)] == raw_main
     assert out["block_sha"] == hashlib.sha256(payload.encode("utf-8")).hexdigest()
     assert main.count("r40 运行时尾块") == 0               # 底版锚行零在场
+
+
+# ---------------------- ⑨ 接线验证三钉（B32 再修订） ----------------------
+
+def test_wire_nail_1_family_hit_base_latches_best_route():
+    # ①构造有 best_route 的族→基座实际走该路线：探针观察路由锁存值+磁带使用
+    # （_IMPL.chassis.players[seat] 的 router_state/route）+四表同写实证。
+    lib = _wire_lib(best_route=5)
+    ns = _wire_real_base(lib)
+    pristine = ns["_R108_SHOP_ROUTES"][WIRE_SHOPS]
+    assert pristine != 5                      # 店对原值≠best（区分真伪接线）
+    entry = ns["_route40_agent"]
+    for t in range(0, 145):
+        assert isinstance(entry(_wire_obs(t)), dict)
+    sel = entry._last_select
+    assert sel["route"] == 5 and sel["family"] == WIRE_KEY
+    assert sel["confidence"] == pytest.approx(2 / 3)
+    assert entry._last_wire["wired"] is True and entry._last_wire["route"] == 5
+    st = ns["_IMPL"].chassis.players[0]
+    assert st["router_state"]["day6"] is True
+    assert st["router_state"]["route"] == 5   # 路由锁存值=选定路线
+    assert st["route"] == 5                   # 磁带使用=routes[5]
+    assert ns["_R108_SHOP_ROUTES"][WIRE_SHOPS] == 5
+    assert ns["_R110_OLD_SHOPS"][WIRE_SHOPS] == 5
+    assert ns["_V92_TABLE"][WIRE_SHOPS] == 5
+    assert all(v == 5 for v in ns["_V93_ROUTE_BY_RIVAL"].values())
+
+
+def test_wire_nail_2_no_family_tables_untouched():
+    # ②无族→表不改：四表逐项同原值、_last_wire wired=False、锁存=店对原值
+    # （基座店对逻辑原样生效=回退现状）。
+    ns = _wire_real_base(_wire_lib_empty())
+    snap = _wire_snap(ns)
+    entry = ns["_route40_agent"]
+    for t in range(0, 145):
+        assert isinstance(entry(_wire_obs(t)), dict)
+    sel = entry._last_select
+    assert sel["route"] is None and sel["confidence"] == 0.0
+    assert entry._last_wire == {"wired": False, "route": None, "shops": []}
+    assert _wire_snap(ns) == snap             # 四表零改动
+    st = ns["_IMPL"].chassis.players[0]
+    assert st["router_state"]["day6"] is True
+    assert st["router_state"]["route"] == snap["r108"][WIRE_SHOPS]
+
+
+def test_wire_nail_3_exception_tables_untouched():
+    # ③异常→原样：接线改表中途抛（店对表写入炸）→四表零改动、链活（fail-safe
+    # 出 dict 动作）、锁存=店对原值。
+    class _Boom(dict):
+        def __setitem__(self, key, value):
+            raise RuntimeError("boom")
+
+    def _prep(ns):
+        ns["_R108_SHOP_ROUTES"] = _Boom(ns["_R108_SHOP_ROUTES"])
+
+    ns = _wire_real_base(_wire_lib(best_route=5), prep=_prep)
+    snap = _wire_snap(ns)
+    entry = ns["_route40_agent"]
+    outs = [entry(_wire_obs(t)) for t in range(0, 145)]
+    assert all(isinstance(a, dict) for a in outs)     # 链活着
+    assert entry._last_select["route"] == 5           # 选路命中但接线炸
+    assert entry._last_wire == {"wired": False, "route": None, "shops": []}
+    assert _wire_snap(ns) == snap                     # 四表零改动
+    st = ns["_IMPL"].chassis.players[0]
+    assert st["router_state"]["route"] == snap["r108"][WIRE_SHOPS]
+
+
+# ------------------------- 接线三钉夹具 -------------------------
+
+WIRE_KEY = "2|1|WHEAT:5|BAKERY+FARMERS_MARKET"   # 指纹流族键（test_runtime 同键）
+WIRE_SHOPS = ("BAKERY", "FARMERS_MARKET")
+
+
+def _wire_lib(best_route=5):
+    """含 WIRE_KEY 胜局族（有 best_route）的合成续段库。"""
+    return {
+        "version": "routelib/1.0",
+        "families": {
+            WIRE_KEY: {"n_games": 3, "win_rate": 2 / 3,
+                       "best_route": best_route, "margin_mean": 750.0,
+                       "segments": {str(best_route): {
+                           "n": 3, "win_rate": 2 / 3, "margin_mean": 500.0}}},
+        },
+        "default": {"n_games": 3, "win_rate": 2 / 3,
+                    "best_route": best_route, "margin_mean": 750.0,
+                    "segments": {}},
+        "defeat_worlds": {},
+    }
+
+
+def _wire_lib_empty():
+    """无族库（任何族键都不命中→回退形）。"""
+    return {"version": "routelib/1.0", "families": {},
+            "default": {"n_games": 0, "win_rate": 0.0, "best_route": None,
+                        "margin_mean": 0.0, "segments": {}},
+            "defeat_worlds": {}}
+
+
+def _wire_obs(t):
+    """指纹流观察（族键 WIRE_KEY）：hires=2（t>=1 计 2 手）、land=1（t>=50
+    买 1 地）、step144 WHEAT:5+首二店 BAKERY+FARMERS_MARKET。"""
+    hands = [] if t == 0 else [[0, 0], [0, 0]]
+    uq = ["NW"] if t < 50 else ["NW", "NE"]
+    tiles = [[{"kind": "PLANT", "crop": "WHEAT"}] * 5] if t >= 144 else [[]]
+    return {
+        "step": t, "day": t // 24, "hour": t % 24, "player": 0,
+        "farms": [{"money": 210.0, "hands": hands, "farmer": [0, 0],
+                   "unlocked_quadrants": uq, "tiles": tiles},
+                  {"money": 229.0, "hands": [], "farmer": [1, 1],
+                   "unlocked_quadrants": ["NW"], "tiles": [[]]}],
+        "market": {"inventory": {"WHEAT": 9989, "MILK": 500},
+                   "prices": {"WHEAT": 25, "MILK": 160}},
+        "town": {"unlocked_shops": list(WIRE_SHOPS)},
+        "private": {"shed": {}, "seeds": {}, "inventories": [{}, {}]},
+    }
+
+
+def _wire_real_base(lib, prep=None):
+    """真 r37 文本+库注入装载（全新 ns）；prep(ns) 可注入异常面。"""
+    base_path = Path(__file__).resolve().parents[1] / "orderbook_r37" / \
+        "build" / "main.py"
+    out = inject_r40.inject_r40_block(base_path.read_text(encoding="utf-8"), lib)
+    ns: dict = {}
+    exec(compile(out["main_text"], "<wire nail>", "exec"), ns)
+    if prep is not None:
+        prep(ns)
+    return ns
+
+
+def _wire_snap(ns):
+    """四张路由表内容快照（表改写不变量观测面）。"""
+    return {"r108": dict(ns["_R108_SHOP_ROUTES"]),
+            "old": dict(ns["_R110_OLD_SHOPS"]),
+            "v92": dict(ns["_V92_TABLE"]),
+            "v93": dict(ns["_V93_ROUTE_BY_RIVAL"])}
 
 
 # ------------------------------ 夹具 ------------------------------

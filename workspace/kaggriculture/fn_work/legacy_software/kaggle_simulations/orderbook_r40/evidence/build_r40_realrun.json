@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-28T01:09:00",
+ "generated_at": "2026-09-28T02:20:05",
  "generated_by": "build_r40_realrun",
  "r37_main_path": "orderbook_r37/build/main.py",
  "corpus": {
@@ -30,9 +30,9 @@
  },
  "sha_summary": {
   "r37_main_sha256": "4b237e412d5101937ad66aa0751454721dec2d5a73fa2743d65768b286a2cb3f",
-  "main_sha256": "712e89f4907aa9b825f82277c79dfcd15737f16b57220ab9a60c6433a765b802",
-  "tar_sha256": "274fefedfb4303dba4aa823566e4dd89670030f9c3c1877b2321063287721945",
-  "block_sha256": "70f9129861f230023f29f2a0aa740b4d5371ae783977ac79fde151e50be6a985",
+  "main_sha256": "4ce951f088740e0b3d4366dbf95f8bb225817b0417bbb2fcea6292a559ee9ea8",
+  "tar_sha256": "9ab0047f73b22793c1c090067bf5fb943253e689bc37917e073bcb879b60dbd5",
+  "block_sha256": "b5ce2f6899dffad09ffec53c1827824d532e7ea919d7c8e341d7a8d90f7662d1",
   "route_library_sha256": "0236c30e4e728166c8a8751535517a75c5c133092f2e8f14f2b197baa193ed68",
   "sell_lots_change_sha256": "a1b6ae801f3337be3432ee45df08bf522a0a790b0b19dda1cdec6b58c8e9126d",
   "base_node_r37": "23a513f903317e4d6133aea87e5205bd75cab057090e92c162e5c3be8e32707f"
@@ -42,8 +42,8 @@
   "whitelist": {
    "runtime_block": {
     "present": true,
-    "bytes": 28598,
-    "sha256": "70f9129861f230023f29f2a0aa740b4d5371ae783977ac79fde151e50be6a985"
+    "bytes": 34452,
+    "sha256": "b5ce2f6899dffad09ffec53c1827824d532e7ea919d7c8e341d7a8d90f7662d1"
    },
    "sell_lots": {
     "present": true,
@@ -97,8 +97,8 @@
   "unattributed": []
  },
  "double_run_sha256": {
-  "run1": "274fefedfb4303dba4aa823566e4dd89670030f9c3c1877b2321063287721945",
-  "run2": "274fefedfb4303dba4aa823566e4dd89670030f9c3c1877b2321063287721945"
+  "run1": "9ab0047f73b22793c1c090067bf5fb943253e689bc37917e073bcb879b60dbd5",
+  "run2": "9ab0047f73b22793c1c090067bf5fb943253e689bc37917e073bcb879b60dbd5"
  },
  "sell_lots_summary": {
   "rows": 529,
@@ -149,34 +149,34 @@
  },
  "build": {
   "main_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
-  "main_sha256": "712e89f4907aa9b825f82277c79dfcd15737f16b57220ab9a60c6433a765b802",
-  "tar_sha256": "274fefedfb4303dba4aa823566e4dd89670030f9c3c1877b2321063287721945",
+  "main_sha256": "4ce951f088740e0b3d4366dbf95f8bb225817b0417bbb2fcea6292a559ee9ea8",
+  "tar_sha256": "9ab0047f73b22793c1c090067bf5fb943253e689bc37917e073bcb879b60dbd5",
   "manifest": {
    "schema": "orderbook_r40_manifest/1.0",
    "generated": "2026-09-28",
    "variant": "r40",
    "description": "public derivative with route library and late-season sell execution",
-   "main_sha256": "712e89f4907aa9b825f82277c79dfcd15737f16b57220ab9a60c6433a765b802",
-   "main_bytes": 1417929,
-   "tar_sha256": "274fefedfb4303dba4aa823566e4dd89670030f9c3c1877b2321063287721945",
-   "tar_bytes": 664435,
+   "main_sha256": "4ce951f088740e0b3d4366dbf95f8bb225817b0417bbb2fcea6292a559ee9ea8",
+   "main_bytes": 1423783,
+   "tar_sha256": "9ab0047f73b22793c1c090067bf5fb943253e689bc37917e073bcb879b60dbd5",
+   "tar_bytes": 666359,
    "tar_members": [
     "main.py"
    ],
    "double_run_sha256": {
-    "run1": "274fefedfb4303dba4aa823566e4dd89670030f9c3c1877b2321063287721945",
-    "run2": "274fefedfb4303dba4aa823566e4dd89670030f9c3c1877b2321063287721945"
+    "run1": "9ab0047f73b22793c1c090067bf5fb943253e689bc37917e073bcb879b60dbd5",
+    "run2": "9ab0047f73b22793c1c090067bf5fb943253e689bc37917e073bcb879b60dbd5"
    },
    "base_sha_chain": {
     "a16e0e9b": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab",
     "r34a": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
     "r37": "23a513f903317e4d6133aea87e5205bd75cab057090e92c162e5c3be8e32707f",
-    "r40": "712e89f4907aa9b825f82277c79dfcd15737f16b57220ab9a60c6433a765b802"
+    "r40": "4ce951f088740e0b3d4366dbf95f8bb225817b0417bbb2fcea6292a559ee9ea8"
    },
    "runtime_block": {
     "present": true,
-    "bytes": 28598,
-    "sha256": "70f9129861f230023f29f2a0aa740b4d5371ae783977ac79fde151e50be6a985"
+    "bytes": 34452,
+    "sha256": "b5ce2f6899dffad09ffec53c1827824d532e7ea919d7c8e341d7a8d90f7662d1"
    },
    "route_library_sha256": "0236c30e4e728166c8a8751535517a75c5c133092f2e8f14f2b197baa193ed68",
    "sell_lots_change_sha256": "a1b6ae801f3337be3432ee45df08bf522a0a790b0b19dda1cdec6b58c8e9126d",
@@ -187,8 +187,8 @@
    "whitelist": {
     "runtime_block": {
      "present": true,
-     "bytes": 28598,
-     "sha256": "70f9129861f230023f29f2a0aa740b4d5371ae783977ac79fde151e50be6a985"
+     "bytes": 34452,
+     "sha256": "b5ce2f6899dffad09ffec53c1827824d532e7ea919d7c8e341d7a8d90f7662d1"
     },
     "sell_lots": {
      "present": true,
@@ -241,7 +241,7 @@
    },
    "unattributed": []
   },
-  "block_sha": "70f9129861f230023f29f2a0aa740b4d5371ae783977ac79fde151e50be6a985",
+  "block_sha": "b5ce2f6899dffad09ffec53c1827824d532e7ea919d7c8e341d7a8d90f7662d1",
   "library_sha256": "0236c30e4e728166c8a8751535517a75c5c133092f2e8f14f2b197baa193ed68",
   "sell_lots_change_sha256": "a1b6ae801f3337be3432ee45df08bf522a0a790b0b19dda1cdec6b58c8e9126d"
  }
