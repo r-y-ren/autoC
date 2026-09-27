@@ -3,7 +3,8 @@
 > 本梯批次前缀沿 F/G 惯例：R10 用 S 系列续号。
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
-|---|---|---|---|
+|---| 2026-09-28 | R24 批次计划立表（B33-B35）+轻量对账 | 对账判定**对得上**（fn-check 三段跑通；R24 十桩与 responsibility 逐名吻合、functions.md 无 R24 行=开批前正常态、零谎报）；**存量债首曝（非 R24 面）**：全量 2639P/68F/4E 中 11 红=R24 测试桩（预期），余 57F+4E 属 legacy_software/tests 与 tests/migrate_snapshot_suite 环境/树债（snapshot_tests 缺 conftest 等）——不在 R24 核验面（=orderbook_r40/ 测试），批间门裁决；脚本小疵：tests 镜像段 __pycache__ pyc 误报 |
+|---|---|---|
 | S1(完成 09-23) | 运行时纯函数层：_cxs_harvest_completable → _cxs_completable_plant_demand → _cxs_seed_surplus → _cxs_seed_truncate → _cxs_agent；+FIRST_HARVEST_STEPS 常数转录（vendored wheel+交叉校验）；+侦察任务：plan_view 契约定形（读基座磁带未来 PLANT/BUY_SEED 通道，RACE 扫描先例） | test_layer_s.py 全绿（含构造用例三件=门③(c) 单测面；surplus 不确定→None；s671 边界） | 零误杀语义的落点批——每层失败方向必须朝"不截" |
 | S2(完成 09-23) | 构建面：append_layer_s_block → build_layer_s_candidate | build 实跑产出注入版 main.py+submission.tar.gz+build_manifest.json；双跑逐字节；diff 仅尾部追加 | round-30 打包配方复用 |
 | S3(完成 09-24) | 验证面：replay_action_diff → precision_subset_check → constructed_invariant_cases → gate_equivalence_precision → gate_h2h_vs_verbatim → gate_lineage_strength → gate_launch_fourgate_l1 → verify_layer_s_gates；+语料备制：strip 26 局 /tmp/r30 回放→最小重演形态归档 fn_docs/hybrid/results/replays-r30-26/（体积预算 <10MB，R8 先例） | verify_layer_s_gates 实跑四门 evidence 四件套全绿（=发射前置达成） | 8 函数=单批上限；语料是门③输入 |
@@ -34,6 +35,10 @@
 | B22(完成 09-26) | R21-S1 卖流库+预测运行时六件 | pytest 9 绿桩清零（sellflow 4+runtime 5）；**真跑 86 局建库**（29,470 事件/158 键/库 sha acb76cfc…）+键集成探针命中真库 | 库键规范=「店对\|m钱_w麦」两件对齐（并行开发键缝当场缝合）；dodge 避让账 due_step 留档待裁决 |
 | B23(完成 09-26) | R21-S2 构建面四件 | 37 测绿桩清零（inject 7/audit 8/pack 6/build 5+既有）；真跑产出 r38（main 1e07f0f2d69a/块 292,740B 含真库）；库 sha 三口径对账恒等；审计零越界；双跑恒等 | 签名微调登记：pack_r38/build_r38 +out_dir=None；变更集=纯尾块（manifest 自证，无 SHEEP 式内嵌行） |
 | B24(完成 09-26) | R21-S3 判决线+门禁+总指挥 | 56 测全绿桩清零；判决真跑 overall=**NEGATIVE（判负·如实）**：晚崩 0/15、对照 10/10 负、h2h 0.0；五门真跑 FAIL（h2h/饿死红）；**按预绑定判负→收档不建发射版** | 真因=预测块摧毁现金流（预测写入 9975/避让 3329、每局 −146.6k）；r37 件复刻对照证测量无误；收档台账+run_summary 落档 |
+
+| ▶ B33 | R24-S1 库面+选路口径：extract_world_fingerprint（shared）+ build_route_library_v2 + _route40_select[改造] | pytest fingerprint 组+library v2 组+runtime route 组全绿（禁入守卫红/族数≤12/族内 n≥5/兜底族 WORLDBASE/fallback 形构造用例）；真语料建库实跑（族数/n 分布/覆盖率审计落盘） | 核心口径批：族键=世界开局画像，店对/自家走法量禁入即红 |
+| B34 | R24-S2 构建面：inject_r41_block + audit_diff_r41_vs_r40 + pack_r41 + build_r41 wired | pytest 构建面全绿；build_r41 真跑构建（审计白名单零越界/双跑恒等/r40 字节零改动/库 v2 sha 对账） | 注入只接管选路；sell_lots/race_slots/hygiene/_route40_wire_route 不碰 |
+| B35 | R24-S3 判决+门禁+总指挥：library_info_check + judge_r24 + verify_r41_gates + run_r41_iteration wired | pytest 全绿桩清零；judge_r24 真跑判决（h2h vs r40≥0.55+库信息自检命中>未命中+观测三项，evidence 落盘）；run_r41 全链（pytest 门先行/判红不进门禁/台账预绑定） | 判正→发射（standing 台账；计分对=最近 2 提交，发射挤掉 r37）；判负→收档 |
 
 ## 变更记录（计划层事件）
 | 日期 | 事件 | 说明 |

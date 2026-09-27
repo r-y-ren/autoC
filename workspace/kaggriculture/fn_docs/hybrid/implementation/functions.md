@@ -161,3 +161,14 @@
 | judge_r23 | B32 | wired 09-27 | pytest judge 组 4 passed；**真跑（24 定向+350 联赛+对照 30）overall=1/6 NEGATIVE（如实）**：c1 榜前 550 段 0.325✓∧d21-28 −1968.5✗/c2 段差✗+单价+0.0%✗/c3 挂单 0.92✓+单价✗/c4 提速 13.6x✓+对照 30/30✓/c5 h2h 0.179✗/c6 总胜率 0.36✗；管线可信度=基线逐局精确一致；evidence/judge_r23_realrun.json | (本批) |
 | verify_r40_gates | B32 | wired 09-27 | pytest 4 passed（全绿路/红不短路/fail-closed/独立 n）；五门 R37-R39 重定向（last-callable=_route40_agent/血统链四节点） | (本批) |
 | run_r40_iteration | B32 | wired 09-27 | pytest 5 passed（全链 POSITIVE/判红收档不进门禁/门禁红不发射/Error 留痕/收档台账形态）；判决红→NEGATIVE 收档预绑定；全链整合待批间门裁决后收口 | (本批) |
+| extract_world_fingerprint | B33 | stub 09-28 | 核验命令: pytest orderbook_r40/test_route_library_v2.py（fingerprint 组；判据=R24 ①守卫用例原文） | — |
+| build_route_library_v2 | B33 | stub 09-28 | 核验命令: pytest orderbook_r40/test_route_library_v2.py（判据=R24 ①形状/兜底/n≥5 构造用例原文） | — |
+| _route40_select | B33(改造) | stub 09-28 | 核验命令: pytest orderbook_r40/test_runtime_r41.py（route 组；判据=R24 ①形状用例原文）——现役实现 runtime_r40.py:14，改造目标态见 responsibility【R24 增补】 | — |
+| inject_r41_block | B34 | stub 09-28 | 核验命令: pytest orderbook_r40/test_inject_r41.py | — |
+| audit_diff_r41_vs_r40 | B34 | stub 09-28 | 核验命令: pytest orderbook_r40/test_build_r41.py（audit 组） | — |
+| pack_r41 | B34 | stub 09-28 | 核验命令: pytest orderbook_r40/test_build_r41.py（pack 组） | — |
+| build_r41 | B34 | stub 09-28 | 核验命令: pytest orderbook_r40/test_build_r41.py | — |
+| library_info_check | B35 | stub 09-28 | 核验命令: pytest orderbook_r40/test_judge_r24.py（info 组；判据=R24 ②原文） | — |
+| judge_r24 | B35 | stub 09-28 | 核验命令: pytest orderbook_r40/test_judge_r24.py（判据=R24 ②③④ 原文） | — |
+| verify_r41_gates | B35 | stub 09-28 | 核验命令: pytest orderbook_r40/test_gates_r41.py | — |
+| run_r41_iteration | B35 | stub 09-28 | 核验命令: pytest orderbook_r40/test_run_r41.py | — |
