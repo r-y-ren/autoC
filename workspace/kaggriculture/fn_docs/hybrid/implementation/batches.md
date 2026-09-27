@@ -59,5 +59,9 @@
 | B26(完成 09-27) | R22-S2 六件（波次 A 毛期手术+流库 v2 并行→B 构建面集成） | 全包 84 绿+3 桩零回退；真跑 r39 构建（main b0370ee619e7/tar b6da5f12bf52）；审计两类零越界（283 行变更表逐条吻合）；刀次 min 5 | 流库 30 新+86 旧合并 213 键 hit 覆盖 16%；毛期偏移 16 格 |
 | B27(完成 09-27) | R22-S3 判决反制三件 | 19 测绿（counter 4+flip v2 10+judge v2 5）；真跑 371.9s 六判据=**2 绿 4 红 overall=NEGATIVE** | 关键发现：**fire=0 过度限频**（六门+克隆门全关）；h2h 0.375 全平负=毛期错峰小负贡献；反制臂双方 1.0=反制件偏弱 |
 | B28(完成 09-27) | R22-S4 门禁+总指挥 | 105 测全绿零桩；全链真跑 463.8s verdict=NEGATIVE→archive_ledger+run_summary 正式收档 | R22 全批次完结；判负收档=用户预置承诺兑现 |
+| ▶ B29 | R23-S1 路由库批：build_route_library → _route40_select | pytest route_library+runtime route 组全绿；续段库真建（开局长相聚类+败局世界补路由） | 623 族口径；无族命中回退现行店对逻辑 |
+| B30 | R23-S2 执行面批：retape_sell_lots → apply_race_slots → apply_slot_hygiene | pytest lots+runtime race/hygiene 全绿；卖单批量化守恒核算+竞速槽序+补洞 | 只动卖侧；空槽位次+V57 资金序不变量 |
+| B31 | R23-S3 构建+仿真桥批：inject_r40_block → audit_diff_r40_vs_r37 → pack_r40 → build_r40 → sim_bridge | build_r40 真跑产出 r40 件+审计两类零越界；sim_bridge 对照 ≥30 局一致+提速读数 | 底=r37；仿真器只进判决 |
+| B32 | R23-S4 判决+门禁批：segment_stats → judge_r23 → verify_r40_gates → run_r40_iteration | 判决真跑（败局 12 局+联赛+分段+对照）六判据实数；全链整合裁决 | 分项+总判；判负收档预绑定 |
 | 2026-09-26 | B23 签名微调登记 | pack_r38/build_r38 +out_dir=None；变更集=纯尾块（manifest 自证）；库 sha 口径统一 ensure_ascii=False（评审 P3） |
 | 2026-09-26 | R21 批次计划立表（B22-B24）+轻量对账 | 对账判定**对得上**（28 桩全落 orderbook_predict 零外溢、r37 133 绿、49 绿基线持平、抽查命令全绿）；**环境清理**：/tmp usrquota 曾耗尽（Errno 122）——清孤儿缓存 pairsnap/v4bfull/r31b/r31/r29b 约 3.9G，写入恢复；判决语料 r33audit（卖流库源）/kagr22/r30 保留 |
