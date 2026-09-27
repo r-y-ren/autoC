@@ -565,3 +565,36 @@ def test_build_r39_realrun():
     ev_path = _HERE / "evidence" / "build_r39_realrun.json"
     ev_path.write_text(json.dumps(ev, ensure_ascii=False, indent=1) + "\n",
                        encoding="utf-8")
+
+
+def test_pack_r39_double_run_mismatch_raises(monkeypatch):
+    """负向钉（评审 P2）：双跑不等即抛 RuntimeError 且不落盘。"""
+    import tempfile, os as _os
+    import orderbook_predict.build_r39 as _b39
+    calls = {"n": 0}
+    real = _b39.pack_r39
+
+    def _flaky(*a, **k):
+        # 直接篡底层：包装 build_tar_bytes 使两次打包字节不同
+        raise AssertionError("unused")
+
+    # 通过 monkeypatch build_tar_bytes 造非确定
+    import orderbook_2965_adopt.build_adopt as _ba
+    orig = _ba.build_tar_bytes
+    state = {"n": 0}
+    def fake_tar(text):
+        state["n"] += 1
+        return orig(text) + b"\x00" * state["n"]   # 第二次多一字节
+    monkeypatch.setattr(_ba, "build_tar_bytes", fake_tar)
+    with tempfile.TemporaryDirectory() as td:
+        main = _os.path.join(td, "main.py")
+        # 最小合法形态：锚行核心短语一次+前两换行
+        open(main, "w", encoding="utf-8").write(
+            "X = 1\n\n# ============ r38 对手预测尾块（自动生成，勿手改） ============\n")
+        try:
+            _b39.pack_r39(main, out_dir=td)   # 首参=路径（契约）
+            raise SystemExit("should have raised")
+        except RuntimeError:
+            pass
+        except SystemExit:
+            raise AssertionError("双跑不等未抛")
