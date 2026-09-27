@@ -1089,7 +1089,7 @@
       - _route40_select
       - apply_race_slots
       - apply_slot_hygiene
-    - audit_diff_vs_r37
+    - audit_diff_r40_vs_r37
     - pack_r40
   - judge_r23
     - sim_bridge
@@ -1136,7 +1136,7 @@
         - 职责：队列补洞——识别零执行占坑单（上一拍挂出未成交）→清坑+后位有效单前移补洞（空槽位次语义不破坏）；只动自家市场单；异常→原动作。
         - 签名意图：输入: observation, action / 输出: 调整后 action+补洞账 / 错误: 异常→原动作。
         - 调用方：inject_r40_block 注入链。tested：自有单测。核验命令：测试: orderbook_r40/test_runtime_r40.py（hygiene 组）。
-    - **audit_diff_vs_r37** [L2|新增]
+    - **audit_diff_r40_vs_r37** [L2|新增]
       - 职责：白名单两类——①尾部运行时块（含库）②磁带 sell_lots diff（变更表归因）；白名单外即抛；输出归因表。
       - 签名意图：输入: r40 main+r37 main+change_table / 输出: 归因表 / 错误: 白名单外即抛。
       - 调用方：build_r40。tested：自有单测。核验命令：测试: orderbook_r40/test_build_r40.py（audit 组）。
