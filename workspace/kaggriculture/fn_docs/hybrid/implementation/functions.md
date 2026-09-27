@@ -141,8 +141,8 @@
 | audit_diff_vs_r37 | B26 | 改造 wired 09-27 | pytest audit 组 4 passed；两类白名单（尾块 v2 锚行+shear_phase blob 归因带变更表核对）；v1 单类路径 19 测零回退；真跑零 UNATTRIBUTED（283 行=16 偏移+267 no-op 逐条吻合） | (本批) |
 | pack_r39 | B26 | wired 09-27 | pytest pack 组 5 passed；manifest orderbook_r39_manifest/1.0（链 a16e0e9b→r34a→r37 剥块→r39；predict_block/library/shear_change 三 sha 自证）；build_tar_bytes 真源复用；文案 "…(v2) and anti-counter schedule" | (本批) |
 | build_r39 | B26 | wired 09-27 | pytest build 组 4 passed；**真跑构建**：main b0370ee619e7/tar b6da5f12bf52/块 a9b310a4145c/库 fd30fba3…/shear 2ebeb766…；归因 ok 零越界；双跑恒等；r37 零改动；evidence/build_r39_realrun.json | (本批) |
-| make_counter_opponent | B27 | stub 09-27 | 测试: test_judge_predict.py（counter 组） | — |
-| flip_stats | B27 | 改造待做 09-27（v2 动作降量面） | 测试: test_judge_predict.py（flip v2 组） | — |
-| judge_predict_replay | B27 | 改造待做 09-27（v2 六判据+反制臂） | 测试: test_judge_predict.py（v2 组） | — |
+| make_counter_opponent | B27 | wired 09-27 | pytest counter 组 4 passed（可装载/嗅探倒毛/Anti-Shock/异常 PASS 兜底）；Wool Front-Runner 型：嗅探羊提交/剪毛→1-2 回合后倒毛 dump_qty+Anti-Shock；真件留档 sha+脚本全文 | (本批) |
+| flip_stats | B27 | 改造 wired 09-27 | pytest flip v2 组 10 passed（fire_count/dodge_postpone 恒 0 反例/credit 多源累计/UNKNOWN） | (本批) |
+| judge_predict_replay | B27 | 改造 wired 09-27 | pytest judge v2 组 5 passed；**真跑 371.9s overall=NEGATIVE（如实）**：①对照 1 局负 min −2101 ✗②晚崩 1/15 ✗③h2h 0.375（0W6T2L）✗④动作降量 fire 0·postpone 0 ✓⑤反制臂 1.0≥1.0 ✓⑥草莓 −1.6 ✗；evidence/judge_predict_v2_realrun.json | (本批) |
 | verify_r39_gates | B28 | stub 09-27 | 测试: test_gates_r39.py | — |
 | run_r39_iteration | B28 | stub 09-27 | 测试: test_run_r39.py | — |
