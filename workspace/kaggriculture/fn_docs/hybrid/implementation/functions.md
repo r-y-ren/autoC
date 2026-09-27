@@ -144,5 +144,5 @@
 | make_counter_opponent | B27 | wired 09-27 | pytest counter 组 4 passed（可装载/嗅探倒毛/Anti-Shock/异常 PASS 兜底）；Wool Front-Runner 型：嗅探羊提交/剪毛→1-2 回合后倒毛 dump_qty+Anti-Shock；真件留档 sha+脚本全文 | (本批) |
 | flip_stats | B27 | 改造 wired 09-27 | pytest flip v2 组 10 passed（fire_count/dodge_postpone 恒 0 反例/credit 多源累计/UNKNOWN） | (本批) |
 | judge_predict_replay | B27 | 改造 wired 09-27 | pytest judge v2 组 5 passed；**真跑 371.9s overall=NEGATIVE（如实）**：①对照 1 局负 min −2101 ✗②晚崩 1/15 ✗③h2h 0.375（0W6T2L）✗④动作降量 fire 0·postpone 0 ✓⑤反制臂 1.0≥1.0 ✓⑥草莓 −1.6 ✗；evidence/judge_predict_v2_realrun.json | (本批) |
-| verify_r39_gates | B28 | stub 09-27 | 测试: test_gates_r39.py | — |
-| run_r39_iteration | B28 | stub 09-27 | 测试: test_run_r39.py | — |
+| verify_r39_gates | B28 | wired 09-27 | pytest 4 passed（全绿路/红不短路/fail-closed 含剥块坏锚/独立 n）；五门 R37/R38 同款重定向（last-callable=_predict_agent/血统链四节点对账）；签名微调 evidence_dir | (本批) |
+| run_r39_iteration | B28 | wired 09-27 | pytest 5 passed；**全链真跑 463.8s verdict=NEGATIVE 收档落定**（六判据 2 绿 4 红未改判；archive_ledger run-r39-archive/1.0 件身份 main 1d4f459fe9b3/tar cd2e92e44ec1）；判红不进门禁（B24 语义留档） | (本批) |

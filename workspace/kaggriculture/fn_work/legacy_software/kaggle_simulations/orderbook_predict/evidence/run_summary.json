@@ -1,34 +1,33 @@
 {
- "protocol": "run-r38/1.0",
+ "protocol": "run-r39/1.0",
  "stage": {
-  "library": {
-   "n_files": 86,
-   "n_keys": 158,
-   "n_used": 86,
-   "sha256_of_library": "acb76cfca109f0a54a0b869dd3866db672a3fe4e6205d4af232505fbaef9d05e",
-   "evidence_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_predict/evidence/sellflow_library_realrun.json"
-  },
   "build": {
-   "main_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_predict/build/main.py",
-   "main_sha256": "1e07f0f2d69a832f2a06e31d530fb00251591bccb581edde60fc96994ca4a4b1",
-   "tar_sha256": "51b388e5d9b38634bef9b89eb6675b0a07f229c01450bdb651a164921e98edf2",
-   "block_sha": "ed11bf1f77f4b22aa8fcf0ca8458bd59ea890aea2f51bef5e7eb16cf30dce742",
-   "library_sha256": "acb76cfca109f0a54a0b869dd3866db672a3fe4e6205d4af232505fbaef9d05e",
-   "evidence_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_predict/evidence/build_r38_realrun.json"
+   "main_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_predict/build/main.py",
+   "main_sha256": "1d4f459fe9b381951b59c41224329dc2965af90632bacffa048a466f5cca1bd6",
+   "tar_sha256": "cd2e92e44ec1d3b2f8e48f108b304c68f94030dbb0189c1db8642179b11393a8",
+   "block_sha": "39c107658f121717639bcb3470aee5a4989fc67f595b5c264b87899a2767cc78",
+   "library_sha256": "fd30fba3b8f57ae14aa90b268dafb40fd8bb20e69ffc2b3cdcc9492c7fc4d555",
+   "shear_change_sha256": "2ebeb766b88de3f53b75287055db93e471ac1afdce1a922e681ce4c2c0882a6b",
+   "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_predict/evidence/run_r39_build_realrun.json"
   },
   "judgment": {
    "pass": false,
+   "n_criteria": 6,
    "criteria": {
     "control_not_flipped": false,
     "late_flip_ge_third": false,
-    "h2h_vs_r37_ge_055": false
+    "h2h_vs_r37_ge_055": false,
+    "action_throttle": true,
+    "counter_arm_not_worse": true,
+    "realized_px_not_down": false
    },
    "red": [
     "control_not_flipped",
     "late_flip_ge_third",
-    "h2h_vs_r37_ge_055"
+    "h2h_vs_r37_ge_055",
+    "realized_px_not_down"
    ],
-   "evidence_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_predict/evidence/judge_predict_realrun.json"
+   "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_predict/evidence/run_r39_judge_realrun.json"
   },
   "gates": {
    "skipped": true,
@@ -38,50 +37,55 @@
  "verdict": {
   "verdict": "NEGATIVE",
   "launch_ready": false,
-  "reason": "判决判据红：control_not_flipped, late_flip_ge_third, h2h_vs_r37_ge_055",
+  "reason": "六判据红：control_not_flipped, late_flip_ge_third, h2h_vs_r37_ge_055, realized_px_not_down",
   "judgment_green": false,
   "gates_green": false,
   "standing_launch": null,
   "archive_ledger": {
-   "generated_at": "2026-09-27T03:01:09",
-   "protocol": "run-r38-archive/1.0",
+   "generated_at": "2026-09-27T17:03:30",
+   "protocol": "run-r39-archive/1.0",
    "archive_note": "判负收档留赛后资产，不建发射版",
    "verdict": "NEGATIVE",
    "launch_ready": false,
-   "reason": "判决判据红：control_not_flipped, late_flip_ge_third, h2h_vs_r37_ge_055",
+   "reason": "六判据红：control_not_flipped, late_flip_ge_third, h2h_vs_r37_ge_055, realized_px_not_down",
    "artifacts": {
-    "main_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_predict/build/main.py",
-    "main_sha256": "1e07f0f2d69a832f2a06e31d530fb00251591bccb581edde60fc96994ca4a4b1",
-    "tar_sha256": "51b388e5d9b38634bef9b89eb6675b0a07f229c01450bdb651a164921e98edf2",
-    "description": "public derivative with opponent sell prediction (front-run + dodge)",
+    "main_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_predict/build/main.py",
+    "main_sha256": "1d4f459fe9b381951b59c41224329dc2965af90632bacffa048a466f5cca1bd6",
+    "tar_sha256": "cd2e92e44ec1d3b2f8e48f108b304c68f94030dbb0189c1db8642179b11393a8",
+    "description": "public derivative with throttled opponent sell prediction (v2) and anti-counter schedule",
     "base_sha_chain": {
      "a16e0e9b": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab",
      "r34a": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
-     "r37": "4b237e412d5101937ad66aa0751454721dec2d5a73fa2743d65768b286a2cb3f",
-     "r38": "1e07f0f2d69a832f2a06e31d530fb00251591bccb581edde60fc96994ca4a4b1"
+     "r37": "c63a96289d88602ccbb115b1eea3f1b98804a7ee957150ac9d9dbcbad340a145",
+     "r39": "1d4f459fe9b381951b59c41224329dc2965af90632bacffa048a466f5cca1bd6"
     }
    },
    "judgment": {
     "pass": false,
+    "n_criteria": 6,
     "criteria": {
      "control_not_flipped": false,
      "late_flip_ge_third": false,
-     "h2h_vs_r37_ge_055": false
+     "h2h_vs_r37_ge_055": false,
+     "action_throttle": true,
+     "counter_arm_not_worse": true,
+     "realized_px_not_down": false
     },
     "red": [
      "control_not_flipped",
      "late_flip_ge_third",
-     "h2h_vs_r37_ge_055"
+     "h2h_vs_r37_ge_055",
+     "realized_px_not_down"
     ],
-    "evidence_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_predict/evidence/judge_predict_realrun.json"
+    "evidence_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_predict/evidence/run_r39_judge_realrun.json"
    },
    "gates": {
     "skipped": true,
     "overall": false
    },
    "gates_ledger": null,
-   "ledger_path": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_predict/evidence/archive_ledger.json"
+   "ledger_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_predict/evidence/archive_ledger.json"
   }
  },
- "wall_s": 308.6
+ "wall_s": 463.8
 }
