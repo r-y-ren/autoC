@@ -7,7 +7,10 @@ _predict_agent（单参官方入口，父层=_r37_agent 链）→ infer_rival_se
 （卖流库检索：首二店+step-2 身份指纹）→ extrapolate_sells（差分外推 v2：
 限频六道门+量级档+credit 减记，1-2 步钩子写入 opponent_plan 容器）→
 apply_dodge（v2 门：预测倾销价<base→deny，action 原样零改动）。
-置信不足→不动作 fail-safe；门只出 allow/deny 信号不改动作。本文件源文本由
+置信不足→不动作 fail-safe；门只出 allow/deny 信号不改动作。开火门/credit
+自供给校准 09-27（B27 调参再战，拦截数据 evidence/fire_calibration.json）：
+克隆门放宽为「克隆 或 置信≥0.3 且历史门过」、plan 段缺→自家近 48 步实卖净额
+自供给，六道门常数零改动（详见 _predict_agent docstring）。本文件源文本由
 inject_predict_block 追加进包内（含内嵌库数据）。
 
 实现口径（自包含：常数/小工具定义在各函数体内，stdlib only，注入底版
@@ -364,7 +367,9 @@ def extrapolate_sells(inference: Any, matches: Any, plan: Any,
        "plan": {item: 48h 计划卖量余量},    # credit 记账本体（写单减记）
        "prices": {item: base 价},          # obs 市场价（缺该品→不写 fail-safe）
        "dump_prices": {item: 预测倾销价}}   # 缺省=base（放行）
-    棚存/计划量/基价取不到→不写（fail-safe）。
+    棚存/计划量/基价取不到→不写（fail-safe）。本件合同零改动（校准 09-27）：
+    plan 段缺时的自供给归 _predict_agent 账面段（近 48 步自家实卖净额），
+    直调本件仍按 fail-safe 不写。
 
     签名意图：输入: 推断账+匹配结果+plan 容器+credit 账（可选 credit=None）/
     输出: {"written": [{"item","qty","tier"}], "skipped": [{"item","reason"}],
@@ -628,27 +633,43 @@ def apply_dodge(observation: Dict[str, Any], action: Dict[str, Any],
 
 def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
     """入口包装 v2（R22 改1-改3，单参官方入口，last-callable）：父层取动作 →
-    detect_clone 判克隆 → **is_clone=False 直接返回父层动作（全链零动作零写入）**
-    → infer → match → extrapolate（限频六门+量级档+credit 减记）→ apply_dodge
-    门（deny 品的 written 条目作废回滚 credit）→ 返回父层动作。
+    detect_clone 判克隆 → 开火门（校准 09-27 放宽，见下）→ infer → match →
+    extrapolate（限频六门+量级档+credit 减记）→ apply_dodge 门（deny 品的
+    written 条目作废回滚 credit）→ 返回父层动作。
+
+    开火门（校准 09-27，B27 调参再战；拦截数据=evidence/fire_calibration.json）：
+    旧=is_clone 单通道（非克隆整链零写入；判决语料 43140 步仅放行 40 步
+    0.09%，fire 合计 0 过度限频）→ 新=is_clone ∨（置信≥0.3 ∧ 历史门过）。
+    依据拦截数据：置信≥0.7 面过全门候选仅 10 个（落不了健康区 100-1000），
+    置信≥0.3 面 299 个/写单 ~403（判据 fire 面 ~260-350 落区）——置信阈随
+    拦截分布由 0.7 设想校到 0.3（最小放松集：K=4/窗 336-646/带通 4-99/价门/
+    噪声门/每步每品 1 单标定均非瓶颈，零改动）。
+    credit 自供给（校准 09-27）：旧=plan 段缺→不写（账面量门 fail-safe；判决
+    语料自供给缺位使候选 13165 个被 no_account 唯一卡死、fire 恒 0）→ 新=
+    plan 段缺→按自家近 48 步实卖净额自供给（净额=Σ实卖−Σ同窗已开火，禁净
+    加卖保留：Σ48h 写量 ≤ Σ48h 自家实卖；净额<带通下限 4 不供给；注入账
+    plan 条目优先不覆盖，自供给项每步随窗净额刷新）。
 
     接线沿 v1：父层=注入层捕获变量 _PREDICT_PARENT、库=内嵌 _PREDICT_LIBRARY，
     均经 globals() 查找（测试可注入假父层/假库）。
-    step==0 复位全账：推断账（infer_rival_sells._ledger）、卖流身份
+    step==0 复位全账后不走链（复位拍原样返回，差分自 step 2 起算）：推断账
+    （infer_rival_sells._ledger）、卖流身份
     （match_sellflow._identity）、相似度快照（detect_clone._stream）、plan 容器
     （_predict_agent._opponent_plan，槽形 {"market": [...]}）、credit 账
-    （_predict_agent._credit）、自家成交账（_own_fills）、门账（_dodge_log）与
+    （_predict_agent._credit）、自家成交账（_own_fills）、实卖流（_own_flow，
+    自供给 credit 用）、自供给集（_self_plan）、门账（_dodge_log）与
     written 作废账（_written）。
     credit 账（可注入 _predict_agent._credit；形见 extrapolate_sells）：
     {"plan": {item: 计划余量}[, "dump_prices"/"stock"/"prices" 覆盖]}；棚存
     （observation["private"]["shed"]）与 base 价（observation["market"]
-    ["prices"]）每步自 observation 补齐、账内覆盖优先；plan 段缺→不写
-    （fail-safe）。
+    ["prices"]）每步自 observation 补齐、账内覆盖优先；plan 段缺→自供给
+    （校准 09-27，见上；自供给也取不到→不写 fail-safe）。
     链内 deny 回滚：apply_dodge 判 deny 的品→该品 written 条目作废、plan 钩子
     单撤回、credit 等额回滚（防净加卖账不残留）。返回动作=父层动作原样。
     任何异常→父层动作原样（fail-safe）；父层缺失/父层抛→PASS 兜底
     {"farmer":["PASS"],"hands":[],"market":[]}。
     """
+    CONF_TH = 0.3   # 开火门置信阈（校准 09-27：0.7 设想→0.3，依据见 docstring）
     base_action = None
     try:
         if not isinstance(observation, dict):
@@ -676,6 +697,8 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
             except Exception:
                 pass
             _predict_agent._own_fills = {"sell": {}, "buy": {}, "floor_sells": {}}
+            _predict_agent._own_flow = []
+            _predict_agent._self_plan = set()
             _predict_agent._dodge_log = []
             _predict_agent._opponent_plan = []
             _predict_agent._credit = {}
@@ -685,10 +708,64 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
         if not callable(parent):
             return {"farmer": ["PASS"], "hands": [], "market": []}
         base_action = parent(observation)
+        if step == 0:
+            return base_action    # 复位拍不走链（校准 09-27 保 v2 step-0 口径）
 
-        # ---- 克隆门：非克隆→父层动作原样，全链零动作零写入 ----
+        # ---- 自家成交账（供下一步 infer 差分）+实卖流（供自供给 credit） ----
+        obs_private = observation.get("private") or {}
+        obs_market = observation.get("market") or {}
+        obs_prices = obs_market.get("prices") if isinstance(obs_market, dict) else None
+        own_fills = getattr(_predict_agent, "_own_fills", None)
+        if not isinstance(own_fills, dict):
+            own_fills = {"sell": {}, "buy": {}, "floor_sells": {}}
+        inference = infer_rival_sells(observation, own_fills)
+        fills = {"sell": {}, "buy": {}, "floor_sells": {}}
+        try:
+            prices_obs = obs_prices if isinstance(obs_prices, dict) else {}
+            market = base_action.get("market") if isinstance(base_action, dict) else None
+            for o in market or []:
+                if not (isinstance(o, list) and len(o) >= 3):
+                    continue
+                op, item = o[0], o[1]
+                try:
+                    q = abs(int(o[2] or 0))
+                except Exception:
+                    continue
+                if op == "SELL":
+                    p = prices_obs.get(item)
+                    if isinstance(p, (int, float)) and not isinstance(p, bool) and p <= 1:
+                        fills["floor_sells"][item] = fills["floor_sells"].get(item, 0) + q
+                    else:
+                        fills["sell"][item] = fills["sell"].get(item, 0) + q
+                elif op == "BUY_PRODUCT":
+                    fills["buy"][item] = fills["buy"].get(item, 0) + q
+            _predict_agent._own_fills = fills
+        except Exception:
+            pass
+        flow_rec = {"own": dict(fills.get("sell") or {}), "fired": {}}
+        flow = getattr(_predict_agent, "_own_flow", None)
+        if not isinstance(flow, list):
+            flow = []
+        flow.append(flow_rec)
+        del flow[:-48]
+        _predict_agent._own_flow = flow
+
+        ledger = getattr(infer_rival_sells, "_ledger", None)
+        infer_arg = ledger if isinstance(ledger, dict) and isinstance(ledger.get("items"), dict) \
+            else inference
+        library = globals().get("_PREDICT_LIBRARY")
+        match = match_sellflow(observation, library)
+
+        # ---- 开火门（校准 09-27）：克隆 或 高置信（置信≥0.3 且历史门过） ----
         clone = detect_clone(observation)
-        if not (isinstance(clone, dict) and clone.get("is_clone")):
+        is_clone = isinstance(clone, dict) and bool(clone.get("is_clone"))
+        conf, noise = 0.0, True
+        try:
+            conf = float((match or {}).get("confidence") or 0.0)
+            noise = bool(((match or {}).get("matches") or {}).get("skipped", True))
+        except Exception:
+            pass
+        if not (is_clone or (conf >= CONF_TH and not noise)):
             return base_action
 
         plan = getattr(_predict_agent, "_opponent_plan", None)
@@ -698,14 +775,11 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
             plan.append({"market": []})
         _predict_agent._opponent_plan = plan
 
-        # ---- credit 账（传入账 + observation 补齐棚存/base 价） ----
+        # ---- credit 账（传入账 + observation 补齐棚存/base 价 + 自供给） ----
         acct = getattr(_predict_agent, "_credit", None)
         if not isinstance(acct, dict):
             acct = {}
-        obs_private = observation.get("private") or {}
         obs_shed = obs_private.get("shed") if isinstance(obs_private, dict) else None
-        obs_market = observation.get("market") or {}
-        obs_prices = obs_market.get("prices") if isinstance(obs_market, dict) else None
         stock = dict(obs_shed) if isinstance(obs_shed, dict) else {}
         if isinstance(acct.get("stock"), dict):
             stock.update(acct["stock"])
@@ -716,6 +790,29 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
         if not isinstance(plan_map, dict):
             plan_map = {}
             acct["plan"] = plan_map
+        # ---- 自供给 credit（校准 09-27）：plan 段缺→近 48 步自家实卖净额 ----
+        self_items = getattr(_predict_agent, "_self_plan", None)
+        if not isinstance(self_items, set):
+            self_items = set()
+        eff: Dict[str, int] = {}
+        try:
+            for rec in flow[-48:]:
+                if not isinstance(rec, dict):
+                    continue
+                for k, v in (rec.get("own") or {}).items():
+                    eff[k] = eff.get(k, 0) + int(v)
+                for k, v in (rec.get("fired") or {}).items():
+                    eff[k] = eff.get(k, 0) - int(v)
+        except Exception:
+            eff = {}
+        for item, val in eff.items():
+            val = int(val)
+            if item in self_items:
+                plan_map[item] = max(0, val)     # 自供给项随窗净额刷新
+            elif item not in plan_map and val >= 4:
+                plan_map[item] = val             # 净额≥带通下限 4 才供给（禁净加卖）
+                self_items.add(item)
+        _predict_agent._self_plan = self_items
         dump_map = acct.get("dump_prices")
         if not isinstance(dump_map, dict):
             dump_map = {}
@@ -724,16 +821,6 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
         account = {"stock": stock, "plan": plan_map,
                    "prices": prices, "dump_prices": dump_map}
 
-        own_fills = getattr(_predict_agent, "_own_fills", None)
-        if not isinstance(own_fills, dict):
-            own_fills = {"sell": {}, "buy": {}, "floor_sells": {}}
-
-        inference = infer_rival_sells(observation, own_fills)
-        ledger = getattr(infer_rival_sells, "_ledger", None)
-        infer_arg = ledger if isinstance(ledger, dict) and isinstance(ledger.get("items"), dict) \
-            else inference
-        library = globals().get("_PREDICT_LIBRARY")
-        match = match_sellflow(observation, library)
         ext = extrapolate_sells(infer_arg, match, plan, account)
 
         agg: Dict[str, Dict[str, Any]] = {}
@@ -792,28 +879,23 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
                 pass
         _predict_agent._written = final_written
 
-        # ---- 自家成交账（供下一步 infer）+门账 ----
+        # ---- 实卖流记 fired（校准 09-27 自供给净额；deny 回滚的不计） ----
         try:
-            prices_obs = obs_prices if isinstance(obs_prices, dict) else {}
-            fills = {"sell": {}, "buy": {}, "floor_sells": {}}
-            market = base_action.get("market") if isinstance(base_action, dict) else None
-            for o in market or []:
-                if not (isinstance(o, list) and len(o) >= 3):
+            fired_rec = flow_rec.get("fired")
+            if not isinstance(fired_rec, dict):
+                fired_rec = {}
+                flow_rec["fired"] = fired_rec
+            for debit in ext.get("credit_debited") or []:
+                if not isinstance(debit, dict) or not debit.get("item"):
                     continue
-                op, item = o[0], o[1]
+                item = str(debit["item"])
+                if gates.get(item) == "deny":
+                    continue
                 try:
-                    q = abs(int(o[2] or 0))
+                    q = abs(int(debit.get("qty", 0) or 0))
                 except Exception:
                     continue
-                if op == "SELL":
-                    p = prices_obs.get(item)
-                    if isinstance(p, (int, float)) and not isinstance(p, bool) and p <= 1:
-                        fills["floor_sells"][item] = fills["floor_sells"].get(item, 0) + q
-                    else:
-                        fills["sell"][item] = fills["sell"].get(item, 0) + q
-                elif op == "BUY_PRODUCT":
-                    fills["buy"][item] = fills["buy"].get(item, 0) + q
-            _predict_agent._own_fills = fills
+                fired_rec[item] = fired_rec.get(item, 0) + q
         except Exception:
             pass
         log = getattr(_predict_agent, "_dodge_log", None)

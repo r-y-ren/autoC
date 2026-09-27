@@ -1,0 +1,329 @@
+{
+ "schema": "fire_calibration/1.0",
+ "generated_at": "2026-09-27T08:12:53Z",
+ "task": "B27 调参再战·标定 09-27：预测引擎 v2 限频参数校准，开火量落 100-1000（判决语料口径）",
+ "method": {
+  "probe": "agent.planner.twin 前向重演（judge_predict_replay 重演臂同构）+ 装载命名空间 monkeypatch 插桩（detect_clone/match_sellflow/extrapolate_sells 包装器；反事实逐门独立评估于 orig 调用前快照）",
+  "corpus": "判决语料 36 条目（run_r38.DEFAULT_CORPUS）去重 30 局（20 败局+10 对照）×双席位=60 运行",
+  "modes": {
+   "A": "as-is 原样链路（仅观测）",
+   "B": "克隆门强制放行（记真值）测六门漏斗",
+   "S": "克隆门放行 + 自供给 credit 模拟（plan=近48步自家实卖−同窗开火净额）",
+   "tuned": "校准后真件（build/main.py 重注入）原样跑"
+  },
+  "judged_fire_metric": "判据口径=flip_stats fire_count：末步 written 非空取之，否则 plan hook 槽（n_plan）；窗外末步 written=0 → 判据即 plan hook 槽合计",
+  "note": "探针为临时脚本（/tmp/fire_probe.py），本文件为留档产物；数字均为本次实跑实数"
+ },
+ "as_is": {
+  "mode": "A",
+  "totals": {
+   "clone_steps": 43140,
+   "clone_true_steps": 40,
+   "match_calls": 40,
+   "match_conf_ge_07": 0,
+   "ext_written_total": 0,
+   "fire_final_total": 0,
+   "fire_final_max": 0,
+   "first_fail": {},
+   "sole_blocker": {},
+   "fail_sets": {},
+   "theta_sensitivity_written": {
+    "clone_or_conf>=0.3": 0,
+    "clone_or_conf>=0.4": 0,
+    "clone_or_conf>=0.45": 0,
+    "clone_or_conf>=0.5": 0,
+    "clone_or_conf>=0.55": 0,
+    "clone_or_conf>=0.6": 0,
+    "clone_or_conf>=0.65": 0,
+    "clone_or_conf>=0.7": 0
+   }
+  },
+  "note": "克隆门外链路几乎不动：match 40 次/ext 40 次，写 0"
+ },
+ "clone_gate_open": {
+  "mode": "B",
+  "totals": {
+   "clone_steps": 43140,
+   "clone_true_steps": 40,
+   "match_calls": 43140,
+   "match_conf_ge_07": 375,
+   "ext_written_total": 0,
+   "first_fail": {
+    "noise": 12980,
+    "window": 20265,
+    "no_account": 14003,
+    "below_k": 140
+   },
+   "sole_blocker": {
+    "no_plan": 13165
+   },
+   "fail_sets": {
+    "below_k+no_plan+noise+window": 1337,
+    "no_plan+noise+window": 4498,
+    "no_plan+noise": 5913,
+    "below_k+no_plan+noise": 884,
+    "floor+no_plan+noise": 152,
+    "below_k+floor+no_plan+noise": 104,
+    "floor+no_plan+noise+window": 61,
+    "no_plan+window": 16467,
+    "below_k+no_plan+window": 3440,
+    "no_plan": 13165,
+    "below_k+no_plan": 128,
+    "floor+no_plan+window": 358,
+    "below_k+floor+no_plan+noise+window": 31,
+    "floor+no_plan": 838,
+    "below_k+floor+no_plan": 12
+   }
+  },
+  "note": "开克隆门后六门漏斗（候选 47388 个·调用前快照口径）"
+ },
+ "self_credit_sim": {
+  "mode": "S",
+  "totals": {
+   "ext_written_total": 751,
+   "first_fail": {
+    "noise": 12980,
+    "window": 20265,
+    "band": 8481,
+    "no_account": 4984,
+    "dup": 82,
+    "below_k": 140,
+    "floor": 25
+   },
+   "sole_blocker": {
+    "noise": 2113,
+    "window": 1928,
+    "band": 7634,
+    "no_plan": 4966,
+    "below_k": 21,
+    "floor": 25
+   },
+   "theta_sensitivity_written": {
+    "clone_or_conf>=0.3": 403,
+    "clone_or_conf>=0.4": 29,
+    "clone_or_conf>=0.45": 29,
+    "clone_or_conf>=0.5": 29,
+    "clone_or_conf>=0.55": 29,
+    "clone_or_conf>=0.6": 29,
+    "clone_or_conf>=0.65": 13,
+    "clone_or_conf>=0.7": 13
+   },
+   "combo_pass_candidates": {
+    "conf>=0.25|win=336-646|K>=4|band>=4": 513,
+    "conf>=0.25|win=336-646|K>=4|band>=2": 1537,
+    "conf>=0.25|win=336-646|K>=2|band>=4": 534,
+    "conf>=0.25|win=336-646|K>=2|band>=2": 1575,
+    "conf>=0.25|win=150-699|K>=4|band>=4": 1680,
+    "conf>=0.25|win=150-699|K>=4|band>=2": 3129,
+    "conf>=0.25|win=150-699|K>=2|band>=4": 1704,
+    "conf>=0.25|win=150-699|K>=2|band>=2": 3176,
+    "conf>=0.3|win=336-646|K>=4|band>=4": 299,
+    "conf>=0.3|win=336-646|K>=4|band>=2": 956,
+    "conf>=0.3|win=336-646|K>=2|band>=4": 316,
+    "conf>=0.3|win=336-646|K>=2|band>=2": 986,
+    "conf>=0.3|win=150-699|K>=4|band>=4": 896,
+    "conf>=0.3|win=150-699|K>=4|band>=2": 1906,
+    "conf>=0.3|win=150-699|K>=2|band>=4": 916,
+    "conf>=0.3|win=150-699|K>=2|band>=2": 1941,
+    "conf>=0.35|win=336-646|K>=4|band>=4": 74,
+    "conf>=0.35|win=336-646|K>=4|band>=2": 172,
+    "conf>=0.35|win=336-646|K>=2|band>=4": 79,
+    "conf>=0.35|win=336-646|K>=2|band>=2": 180,
+    "conf>=0.35|win=150-699|K>=4|band>=4": 513,
+    "conf>=0.35|win=150-699|K>=4|band>=2": 874,
+    "conf>=0.35|win=150-699|K>=2|band>=4": 520,
+    "conf>=0.35|win=150-699|K>=2|band>=2": 884,
+    "conf>=0.4|win=336-646|K>=4|band>=4": 21,
+    "conf>=0.4|win=336-646|K>=4|band>=2": 41,
+    "conf>=0.4|win=336-646|K>=2|band>=4": 22,
+    "conf>=0.4|win=336-646|K>=2|band>=2": 44,
+    "conf>=0.4|win=150-699|K>=4|band>=4": 289,
+    "conf>=0.4|win=150-699|K>=4|band>=2": 516,
+    "conf>=0.4|win=150-699|K>=2|band>=4": 290,
+    "conf>=0.4|win=150-699|K>=2|band>=2": 519,
+    "conf>=0.7|win=336-646|K>=4|band>=4": 10,
+    "conf>=0.7|win=336-646|K>=4|band>=2": 29,
+    "conf>=0.7|win=336-646|K>=2|band>=4": 10,
+    "conf>=0.7|win=336-646|K>=2|band>=2": 30,
+    "conf>=0.7|win=150-699|K>=4|band>=4": 56,
+    "conf>=0.7|win=150-699|K>=4|band>=2": 78,
+    "conf>=0.7|win=150-699|K>=2|band>=4": 56,
+    "conf>=0.7|win=150-699|K>=2|band>=2": 79
+   }
+  },
+  "plan_hook_slots_total": 472,
+  "note": "自供给 credit 后真写 751 条/472 槽（克隆门全开上限）"
+ },
+ "per_gate_interception": [
+  {
+   "gate": "克隆门",
+   "first_fail": null,
+   "sole_blocker": null,
+   "measured": "43140 步仅放行 40（0.09%，step1 现金镜像；similarity 通道 obs 无动作字段恒 0）",
+   "bottleneck": true
+  },
+  {
+   "gate": "credit 账面门（plan 段缺→不写）",
+   "first_fail": 14003,
+   "sole_blocker": 13165,
+   "measured": "mode B 唯一杀手榜第一；60 运行 fire 恒 0",
+   "bottleneck": true
+  },
+  {
+   "gate": "触发窗 336-646",
+   "first_fail": 20265,
+   "sole_blocker": 1928,
+   "measured": "拦 ~43% 候选（窗外步）",
+   "bottleneck": false
+  },
+  {
+   "gate": "噪声门（历史门）",
+   "first_fail": 12980,
+   "sole_blocker": 2113,
+   "measured": "拦 ~27%（含整局全拦的席位：命中条目 history 不达标）",
+   "bottleneck": false
+  },
+  {
+   "gate": "带通 4-99",
+   "first_fail": 8481,
+   "sole_blocker": 7634,
+   "measured": "mode S 自供给下 qty<4 小额预算被拦（禁净加卖本职）",
+   "bottleneck": false
+  },
+  {
+   "gate": "开火门槛 K=4（2×pred）",
+   "first_fail": 140,
+   "sole_blocker": 21,
+   "measured": "拦 ~0.3%",
+   "bottleneck": false
+  },
+  {
+   "gate": "每步每品 1 单（dup）",
+   "first_fail": 82,
+   "sole_blocker": 133,
+   "measured": "稳态写入落 step+2 槽，仅重复槽拦",
+   "bottleneck": false
+  },
+  {
+   "gate": "价门（base/floor）",
+   "first_fail": 25,
+   "sole_blocker": 25,
+   "measured": "floor 25 个，base 门 0",
+   "bottleneck": false
+  }
+ ],
+ "confidence_face": {
+  "match_calls_ge_07": 375,
+  "match_calls_total": 43140,
+  "pass_all_candidates_conf_ge_07_current_gates": 10,
+  "pass_all_candidates_conf_ge_03_current_gates": 299,
+  "real_written_at_conf_ge_03_calls": 403,
+  "real_written_at_conf_ge_07_calls": 13,
+  "note": "置信=min(1,n/10)×集中度；库条目多品分布使其极少 ≥0.7——阈 0.7 面不足以落健康区，0.3 面 299 候选/403 写单落区"
+ },
+ "relaxation": [
+  {
+   "change": "开火门（克隆门）放宽",
+   "old": "is_clone 单通道（非克隆整链零写入）",
+   "new": "is_clone ∨（confidence≥0.3 ∧ 历史门过）",
+   "basis": "克隆门 43140 步放行 40（0.09%）为总闸；conf≥0.7 面过全门候选 10 个/写单 13（落不了 100-1000），conf≥0.3 面 299 候选/写单 403 → 判据 fire ~260 落区；置信阈按拦截分布 0.7→0.3"
+  },
+  {
+   "change": "credit 账面门自供给",
+   "old": "plan 段缺→不写（fail-safe）",
+   "new": "plan 段缺→按自家近 48 步实卖净额自供给（净额=Σ实卖−Σ同窗已开火；净额<4 不供给；注入 plan 条目优先；禁净加卖保留）",
+   "basis": "判决语料自供给缺位→13165 候选被 no_account 唯一卡死、fire 恒 0；自供给后写单量级由自家实卖封顶（mode S 全开 751 条/472 槽）"
+  }
+ ],
+ "kept_unchanged": [
+  "K=4",
+  "窗 336-646",
+  "带通 4-99",
+  "min_sell_price=2+base 价门",
+  "噪声门",
+  "每步每品 1 单",
+  "extrapolate_sells 门合同（直调仍 fail-safe）"
+ ],
+ "minimal_set_note": "候选②K=4→2（sole 21）、③窗→150-699、④带通 4→2 均非落区瓶颈，按最小放松集不动",
+ "verification_tuned_pkg": {
+  "pkg": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_predict/build/main.py",
+  "rebuild": "inject_predict_block 同 base 同库（library_sha256 fd30fba3… 不变）+ 校准后 predict_block 源 + pack_r39",
+  "ext_written_total": 419,
+  "plan_hook_slots_total": 223,
+  "plan_hook_slots_max_per_run": 35,
+  "runs_firing": 8,
+  "n_runs": 60,
+  "first_fail": {
+   "window": 14564,
+   "band": 3148,
+   "no_account": 336,
+   "no_credit": 3244,
+   "dup": 49,
+   "below_k": 90,
+   "floor": 13
+  },
+  "fire_final_total_last_step_written": 0,
+  "per_run_slots": [
+   0,
+   15,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   26,
+   25,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   34,
+   35,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   26,
+   32,
+   0,
+   0,
+   0,
+   0,
+   0,
+   30,
+   0
+  ]
+ }
+}

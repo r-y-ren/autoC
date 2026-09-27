@@ -9,7 +9,8 @@ global/置信=样本数×集中度/库缺失置信 0）；extrapolate v2 组 = e
 （限频六道门逐项[窗外/低于 K/每步每品 1 单/带通两端/价门/噪声门]+量级档
 少中多+credit 减记与禁净加卖）；dodge v2 组 = apply_dodge（门判定 allow/deny
 两分支、action 原样零改动反例、异常全 allow）；入口 v2 组 = _predict_agent
-（非克隆零动作零写入/克隆走链/credit step0 复位/deny 回滚/异常 fail-safe）；
+（开火门校准 09-27：非克隆低置信零写入/克隆或高置信走链/自供给 credit 禁净
+加卖/健康区间 fire 100-1000/credit step0 复位/deny 回滚/异常 fail-safe）；
 clone 组 = detect_clone。
 合成 obs 形状：{"step","day","hour","player","farms":[{money},…],
 "market":{"inventory","prices"},"town":{"unlocked_shops"},"private"}（引擎
@@ -31,6 +32,8 @@ def _clean_state():
                      (predict_block.detect_clone, "_stream"),
                      (predict_block.extrapolate_sells, "_credit"),
                      (predict_block._predict_agent, "_own_fills"),
+                     (predict_block._predict_agent, "_own_flow"),
+                     (predict_block._predict_agent, "_self_plan"),
                      (predict_block._predict_agent, "_dodge_log"),
                      (predict_block._predict_agent, "_opponent_plan"),
                      (predict_block._predict_agent, "_credit"),
@@ -389,8 +392,9 @@ def test_apply_dodge():
 
 
 def test_predict_agent(monkeypatch):
-    """入口 v2：非克隆→父层动作原样（全链零动作零写入）；克隆→走链
-    （detect_clone→infer→match→extrapolate credit 减记）；step0 复位全账。"""
+    """入口 v2：开火门（校准 09-27）非克隆且置信<0.3→父层动作原样零写入；
+    克隆→走链（detect_clone→infer→match→extrapolate credit 减记）；step0
+    复位全账（含自供给 _own_flow/_self_plan）。"""
     calls = []
     sentinel = _act([["SELL", "WOOL", 1]])
     actions = {500: sentinel}
@@ -408,7 +412,8 @@ def test_predict_agent(monkeypatch):
     monkeypatch.setattr(predict_block, "_PREDICT_LIBRARY", lib, raising=False)
     shops = ["BAKERY", "YARN_STORE"]
 
-    # ①假父层注入 + 非克隆→父层动作原样，全链零动作零写入（plan/credit 不动）。
+    # ①假父层注入 + 非克隆且置信 0（m250 指纹不命中→global 空→confidence=0
+    #   <0.3 开火阈）→父层动作原样、零写入（plan/credit 不动；校准 09-27 反例）。
     predict_block._predict_agent._opponent_plan = []
     predict_block._predict_agent._credit = {"plan": {"MILK": 7}}
     o500 = _obs(500, inv={"WHEAT": 9989}, prices={"WHEAT": 25}, shops=shops,
@@ -422,6 +427,8 @@ def test_predict_agent(monkeypatch):
     # ②克隆走链：step 499 播种推断账 → step 500 差分对手净卖 MILK 6（精确）
     #   → match TOP-1 命中置信 1.0 → extrapolate 六门全过写 plan[501]（量级档
     #   中）+credit 减记 30→0 → dodge 门 allow → 父层动作原样返回。
+    predict_block.match_sellflow._identity = None  # ①的 step-500 快照（money 250）
+    #   不得污染②身份指纹（m229）——开火门放宽后非开火步也过 match，显式重抓
     predict_block.detect_clone._stream = {"agree": 20, "total": 20}  # 相似度 1.0
     predict_block._predict_agent._credit = {"plan": {"MILK": 30}}
     predict_block.infer_rival_sells(
@@ -523,6 +530,117 @@ def test_predict_agent_deny_rollback_and_failsafe(monkeypatch):
                         raising=False)
     out = predict_block._predict_agent(_obs(511))
     assert out == {"farmer": ["PASS"], "hands": [], "market": []}
+
+
+def _reset_agent_state():
+    """清 _predict_agent 跨步账（同 fixture 口径，测试内手动分段用）。"""
+    for attr in ("_own_fills", "_own_flow", "_self_plan", "_dodge_log",
+                 "_opponent_plan", "_credit", "_written"):
+        try:
+            delattr(predict_block._predict_agent, attr)
+        except AttributeError:
+            pass
+    for fn, attr in ((predict_block.infer_rival_sells, "_ledger"),
+                     (predict_block.match_sellflow, "_identity"),
+                     (predict_block.detect_clone, "_stream")):
+        try:
+            delattr(fn, attr)
+        except AttributeError:
+            pass
+
+
+def test_predict_agent_fire_gate_and_self_credit(monkeypatch):
+    """开火门+credit 自供给（校准 09-27 新面）：①非克隆∧置信≥0.3∧历史门过∧
+    plan 段缺→按自家近 48 步实卖净额自供给开火（禁净加卖：写量≤实卖）；
+    ②历史门不过（history_hits<3）→非克隆无高置信→零写；③plan 缺且无自家
+    实卖→自供给取不到→零写（fail-safe 保留）。"""
+
+    def _fake_parent(observation):
+        return _act([["SELL", "MILK", 30]])
+
+    monkeypatch.setattr(predict_block, "_PREDICT_PARENT", _fake_parent,
+                        raising=False)
+    shops = ["BAKERY", "YARN_STORE"]
+
+    def _lib(hits, rate):
+        return {"version": "t", "global": {}, "keys": {
+            "BAKERY|YARN_STORE||m229_w9989": {
+                "n_episodes": 8, "history_hits": hits, "hit_rate": rate,
+                "hist": {"10": {"MILK": {"qty_sum": 20, "count": 10,
+                                         "qty_max": 6}}}}}}
+
+    def _drive(lo, hi):
+        out = None
+        for s in range(lo, hi):
+            out = predict_block._predict_agent(_obs(
+                s, inv={"WHEAT": 9989, "MILK": 500},
+                prices={"MILK": 160, "WHEAT": 25}, shops=shops,
+                shed={"MILK": 50}))
+        return out
+
+    # ①非克隆（现金差 40/无相似度快照）+置信 1.0（历史门过）→开火；
+    #   plan 段缺→自供给=近 48 步自家实卖 MILK 净额（每步 30）。
+    monkeypatch.setattr(predict_block, "_PREDICT_LIBRARY", _lib(5, 0.9),
+                        raising=False)
+    out = _drive(495, 501)
+    assert out == _act([["SELL", "MILK", 30]])       # 门不改动作
+    plan = predict_block._predict_agent._opponent_plan
+    fire = sum(1 for slot in plan if isinstance(slot, dict) and slot.get("market"))
+    assert fire >= 1                                 # 非克隆高置信面开火
+    assert predict_block._predict_agent._self_plan == {"MILK"}
+    hook_qty = sum(abs(int(o[2] or 0))
+                   for slot in plan for o in (slot.get("market") or []))
+    # 禁净加卖：累计写量 ≤ 自家同窗实卖（6 步×30=180）
+    assert 0 < hook_qty <= 180
+
+    # ②历史门不过（hits<3）→置信 0→不开火（噪声门外的置信门反例）。
+    _reset_agent_state()
+    monkeypatch.setattr(predict_block, "_PREDICT_LIBRARY", _lib(2, 0.9),
+                        raising=False)
+    _drive(495, 501)
+    plan = getattr(predict_block._predict_agent, "_opponent_plan", [])
+    assert all(not slot.get("market") for slot in plan or [])
+    assert getattr(predict_block._predict_agent, "_written", []) == []
+
+    # ③plan 缺且无自家实卖→自供给取不到→零写（fail-safe 保留）。
+    _reset_agent_state()
+    monkeypatch.setattr(predict_block, "_PREDICT_PARENT",
+                        lambda observation: _act([]), raising=False)
+    monkeypatch.setattr(predict_block, "_PREDICT_LIBRARY", _lib(5, 0.9),
+                        raising=False)
+    _drive(495, 501)
+    plan = getattr(predict_block._predict_agent, "_opponent_plan", [])
+    assert all(not slot.get("market") for slot in plan or [])
+    assert getattr(predict_block._predict_agent, "_written", []) == []
+
+
+def test_predict_agent_fire_health_zone(monkeypatch):
+    """开火量健康区间（校准 09-27）：合成语料（360 步窗口内推进）使 fire 落
+    100-1000——口径=plan hook 槽（判据 flip_stats fire_count 备源；末步窗外
+    written=0 时判据即取此数），对齐判决语料健康区 100-1000。"""
+
+    def _fake_parent(observation):
+        return _act([["SELL", "MILK", 6]])
+
+    monkeypatch.setattr(predict_block, "_PREDICT_PARENT", _fake_parent,
+                        raising=False)
+    hist = {str(w): {"MILK": {"qty_sum": 60, "count": 10, "qty_max": 6}}
+            for w in range(5, 15)}
+    lib = {"version": "t", "global": {},
+           "keys": {"BAKERY|YARN_STORE||m250_w9989": {
+               "n_episodes": 8, "history_hits": 5, "hit_rate": 0.95,
+               "hist": hist}}}
+    monkeypatch.setattr(predict_block, "_PREDICT_LIBRARY", lib, raising=False)
+    for s in range(300, 660):
+        predict_block._predict_agent(_obs(
+            s, inv={"WHEAT": 9989, "MILK": 500},
+            prices={"MILK": 160, "WHEAT": 25},
+            shops=["BAKERY", "YARN_STORE"], money=(210.0, 250.0),
+            shed={"MILK": 6}))
+    plan = predict_block._predict_agent._opponent_plan
+    fire = sum(1 for slot in plan if isinstance(slot, dict) and slot.get("market"))
+    assert 100 <= fire <= 1000
+    assert getattr(predict_block._predict_agent, "_written", []) == []  # 末步窗外
 
 
 def test_match_sellflow_canonical_key():
