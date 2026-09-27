@@ -1075,3 +1075,88 @@
     - 职责：五门全量 fail-closed 沿 R37/R38 管线重定向（last-callable=_predict_agent、h2h 主对 r37 ≥0.55 独立 n、谱系、饿死零容忍+净经济非负、合规四轴/launch 四门）。
     - 签名意图：输入: r39 包 / 输出: 各门结果+overall / 错误: fail-closed。
     - 调用方：run_r39_iteration。tested：自有单测。核验命令：测试: orderbook_predict/test_gates_r39.py。
+
+---
+
+## 【R23 增补·2026-09-27】路由库·执行面·判决基建（P1-P4 四件合一，r40 候选）
+
+## 结构概览（增补）
+- run_r40_iteration ← R23
+  - build_r40
+    - build_route_library
+    - retape_sell_lots
+    - inject_r40_block
+      - _route40_select
+      - apply_race_slots
+      - apply_slot_hygiene
+    - audit_diff_vs_r37
+    - pack_r40
+  - judge_r23
+    - sim_bridge
+    - segment_stats
+  - verify_r40_gates
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R23 | run_r40_iteration（判决线：judge_r23→sim_bridge/segment_stats） |
+
+## 功能块 run_r40_iteration ← R23
+（块引言：R23 四件（证据=分析24 败局解剖 12 局+调研 B 级）：改1 条件路由库+同开局面拼接（step144 续段选择器替代店对粗选；败局世界补路由：牛奶流/羊毛流/鹅蛋流开局族）→改2 卖货执行（d21-28 晚季批量化[卖单少而大]+同回合卖单竞速[抢价执行，调研单价差 8-10%]）→改3 队列补洞（零执行单清坑+后位补洞，空槽位次语义）→改4 Rust 仿真器判决基建（16x 只进判决、抽样对照官方引擎一致后才可用）。构建底=r37 在飞件；产物 orderbook_r40/+fn_work/tools/sim_bridge/。）
+
+- **run_r40_iteration** [L0|新增]
+  - 职责：编排——build_r40 产 r40 件 → judge_r23 判决（败局 12 局定向重演+联赛 300-500+分段统计+仿真器对照）→ 分项+总判全绿才 verify_r40_gates 五门 → 交发射（standing 台账）；任一红→收档（预绑定）。evidence+台账。
+  - 签名意图：输入: 无（CLI） / 输出: {build, judgment, gates, verdict} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验命令：测试: orderbook_r40/test_run_r40.py。
+  - **build_r40** [L1|新增]
+    - 职责：构建编排——r37 字节为底 → build_route_library 建续段库 → retape_sell_lots 卖单批量化手术 → inject_r40_block 注入运行时三件（续段选择器/竞速/补洞）→ audit → pack_r40；r37 零改动。
+    - 签名意图：输入: r37 main 路径 / 输出: r40 main+manifest+变更集审计 / 错误: 超白名单即抛。
+    - 调用方：run_r40_iteration。tested：自有单测。核验命令：测试: orderbook_r40/test_build_r40.py。
+    - **build_route_library** [L2|新增]
+      - 职责：续段库构建——历史对局（败局 12 局+胜局+top-30 回放）按"开局长相族"（前 144 步宏观指纹聚类，623 族口径）提取好路线续段（step144 后段）；败局世界定向补路由（牛奶流/羊毛流/鹅蛋流对手开局族覆盖率审计）；输出紧凑库+构建审计（族数/覆盖率/sha）。
+      - 签名意图：输入: 回放/对局目录+分族配置 / 输出: {library, build_audit} / 错误: 语料不足或聚类失败即抛。
+      - 调用方：build_r40。tested：自有单测。核验命令：测试: orderbook_r40/test_route_library.py。
+    - **retape_sell_lots** [L2|新增]
+      - 职责：卖单批量化手术——d21-28 晚季窗磁带 SELL 单合并放大（少而大，目标批量化率对标胜局对手 ~337 单级）；只动卖单量/槽、不动物品总量（卖出守恒）；越窗/守恒破→抛；变更表 kind=sell_lots。
+      - 签名意图：输入: 磁带路由表+批量化参数 / 输出: {routes, change_table} / 错误: 卖出守恒破即抛。
+      - 调用方：build_r40。tested：自有单测。核验命令：测试: orderbook_r40/test_retape_lots.py。
+    - **inject_r40_block** [L2|新增]
+      - 职责：运行时三件注入（_route40_select/apply_race_slots/apply_slot_hygiene+内嵌续段库）——校验四条+库 sha 对账沿 B17/B23 先例；捕获行避底版撞名（_R40_* 系）；末 callable=官方入口（沿 _predict_agent 链或新入口，docstring 定）。
+      - 签名意图：输入: r37 main 文本+库数据 / 输出: {main_text, block_sha} / 错误: 校验不过即抛。
+      - 调用方：build_r40。tested：自有单测。核验命令：测试: orderbook_r40/test_inject_r40.py。
+      - **_route40_select** [L3|新增]（运行时）
+        - 职责：step144 续段选择——按当局开局长相族（前 144 步宏观指纹）查内嵌库选路线续段，替代店对粗选；无族命中→回退现行 `_router` 店对逻辑；只读选择不改磁带主体。
+        - 签名意图：输入: observation+库 / 输出: {route, family, confidence} / 错误: 库缺→回退默认路由。
+        - 调用方：inject_r40_block 注入链。tested：自有单测。核验命令：测试: orderbook_r40/test_runtime_r40.py（route 组）。
+      - **apply_race_slots** [L3|新增]（运行时）
+        - 职责：同回合卖单竞速——我方 SELL 单前移至市场表前部槽（对手挂单前成交；沿空槽位次语义+V57 资金序不变量）；只动 SELL 槽序；竞速收益按调研口径判（单价 +3% 判据）。
+        - 签名意图：输入: observation, action / 输出: 调整后 action / 错误: 异常→原动作。
+        - 调用方：inject_r40_block 注入链。tested：自有单测。核验命令：测试: orderbook_r40/test_runtime_r40.py（race 组）。
+      - **apply_slot_hygiene** [L3|新增]（运行时）
+        - 职责：队列补洞——识别零执行占坑单（上一拍挂出未成交）→清坑+后位有效单前移补洞（空槽位次语义不破坏）；只动自家市场单；异常→原动作。
+        - 签名意图：输入: observation, action / 输出: 调整后 action+补洞账 / 错误: 异常→原动作。
+        - 调用方：inject_r40_block 注入链。tested：自有单测。核验命令：测试: orderbook_r40/test_runtime_r40.py（hygiene 组）。
+    - **audit_diff_vs_r37** [L2|新增]
+      - 职责：白名单两类——①尾部运行时块（含库）②磁带 sell_lots diff（变更表归因）；白名单外即抛；输出归因表。
+      - 签名意图：输入: r40 main+r37 main+change_table / 输出: 归因表 / 错误: 白名单外即抛。
+      - 调用方：build_r40。tested：自有单测。核验命令：测试: orderbook_r40/test_build_r40.py（audit 组）。
+    - **pack_r40** [L2|新增]
+      - 职责：确定性打包+manifest 沿 R16 配方；sha 链（…→r37→r40）+库 sha+变更表 sha+描述 "public derivative with route library and late-season sell execution"。
+      - 签名意图：输入: r40 main / 输出: submission.tar.gz+manifest / 错误: 双跑不一致即抛。
+      - 调用方：build_r40。tested：自有单测。核验命令：测试: orderbook_r40/test_build_r40.py（pack 组）。
+  - **judge_r23** [L1|新增]
+    - 职责：判决 v23——败局 12 局定向重演（分析24 败局谱系）+联赛 300-500 局（含榜前 550 段强手样本）+分段统计（d21-28 资金差/实现单价/有效挂单率）+仿真器对照（≥30 局抽样与官方引擎逐局一致）；聚合分项四判据+总判出 evidence。
+    - 签名意图：输入: r40 包+语料+副证配置 / 输出: evidence JSON / 错误: 单局红计入不短路。
+    - 调用方：run_r40_iteration。tested：自有单测。核验命令：测试: orderbook_r40/test_judge_r23.py（判据=R23 ②分项+总判原文）。
+    - **sim_bridge** [L2|新增]
+      - 职责：仿真器桥接——加载 debmalyaroy 仿真器（kaggsim 纯 stdlib/预编译二进制，fn_work/tools/sim_bridge/）；抽样 ≥30 局与官方引擎逐局对照（终局资金一致 100% 才算对照过）；跑判决局（16x）；对照不一致→降级回官方引擎并留档。
+      - 签名意图：输入: 仿真器配置+对照语料 / 输出: {loaded, consistency, wall_speedup} / 错误: 对照不过→降级不抛（留档）。
+      - 调用方：judge_r23。tested：自有单测。核验命令：测试: orderbook_r40/test_sim_bridge.py。
+    - **segment_stats** [L2|新增]
+      - 职责：分段统计——逐局 d21-28 段资金差、实现单价（成交额/量）、有效挂单占比（成交单/挂单）、批量化率（单均量）；输出分项判据所需读数；缺字段→UNKNOWN。
+      - 签名意图：输入: 对局状态序列+原局基线 / 输出: {seg_delta, realized_px, fill_rate, lot_size, verdict} / 错误: 缺字段→UNKNOWN。
+      - 调用方：judge_r23。tested：自有单测。核验命令：测试: orderbook_r40/test_judge_r23.py（segment 组）。
+  - **verify_r40_gates** [L1|新增]
+    - 职责：五门全量 fail-closed 沿 R37-R39 管线重定向（last-callable 断言/h2h 主对 r37 ≥0.55 独立 n/谱系/饿死零容忍+净经济/合规四轴/launch）。
+    - 签名意图：输入: r40 包 / 输出: 各门结果+overall / 错误: fail-closed。
+    - 调用方：run_r40_iteration。tested：自有单测。核验命令：测试: orderbook_r40/test_gates_r40.py。
