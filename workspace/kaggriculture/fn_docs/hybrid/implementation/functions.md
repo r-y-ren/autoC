@@ -148,9 +148,9 @@
 | run_r39_iteration | B28 | wired 09-27 | pytest 5 passed；**全链真跑 463.8s verdict=NEGATIVE 收档落定**（六判据 2 绿 4 红未改判；archive_ledger run-r39-archive/1.0 件身份 main 1d4f459fe9b3/tar cd2e92e44ec1）；判红不进门禁（B24 语义留档） | (本批) |
 | build_route_library | B29 | wired 09-27 | pytest 5 passed（聚类/族键稳定/败局世界审计/语料不足抛/真跑）；真跑 77 局 49 族覆盖 85.7%（42 有 best_route/7 uncovered）；败局世界 milk/wool/goose 全 covered=False=补路由缺口如实；evidence/route_library_realrun.json | (本批) |
 | _route40_select | B29 | wired 09-27 | pytest route 组 5 passed（指纹累计/step144 命中锁定/无族回退/step0 复位/异常回退）；族键与 build 跨件同键钉住；route=None=回退现行店对逻辑 | (本批) |
-| retape_sell_lots | B30 | stub 09-27 | 测试: orderbook_r40/test_retape_lots.py | — |
-| apply_race_slots | B30 | stub 09-27 | 测试: orderbook_r40/test_runtime_r40.py（race 组） | — |
-| apply_slot_hygiene | B30 | stub 09-27 | 测试: orderbook_r40/test_runtime_r40.py（hygiene 组） | — |
+| retape_sell_lots | B30 | wired 09-27 | pytest 8 passed（合并/守恒破抛/窗外不动/非卖单不动/空槽不变/真跑+越窗抛/参数抛）；真跑：窗内单数中位 139→41、整路由卖单中位 435→**337 达标**（40/41 路由）、守恒 369 对全过、双跑恒等；只提前不推后；evidence/retape_lots_realrun.json | (本批) |
+| apply_race_slots | B30 | wired 09-27 | pytest race 组 3 passed（前移生效含多重集守恒/资金序反例/异常原动作）；SELL 原序稳定前移挤空槽、SELL↔BUY 相对序逐位不变（V57 最强解读） | (本批) |
+| apply_slot_hygiene | B30 | wired 09-27 | pytest hygiene 组 3 passed（清坑+链式补洞/拿不准不清三变体/异常+step0 复位）；四条判定全真才清（同槽在+钱货对账零变化+单形+步标连续）；补洞保相对序空槽不动 | (本批) |
 | inject_r40_block | B31 | stub 09-27 | 测试: orderbook_r40/test_inject_r40.py | — |
 | audit_diff_r40_vs_r37 | B31 | stub 09-27 | 测试: orderbook_r40/test_build_r40.py（audit 组） | — |
 | pack_r40 | B31 | stub 09-27 | 测试: orderbook_r40/test_build_r40.py（pack 组） | — |

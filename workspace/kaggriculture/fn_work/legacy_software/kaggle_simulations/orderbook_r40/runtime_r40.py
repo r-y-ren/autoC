@@ -107,8 +107,48 @@ def apply_race_slots(observation: Dict[str, Any], action: Dict[str, Any]) -> Dic
 
     签名意图：输入: observation, action / 输出: 调整后 action /
     错误: 异常→原动作。
+
+    选型留档（B30b 保守法）：
+    - 槽位语义：action["market"] 为位置性列表，空槽 [] 有意义；总槽数
+      不变、不删不增单、不动物品/单量，只重排 SELL 槽序。
+    - 前移规则：SELL 单按原序稳定前移，挤进本区段更靠前的空 [] 槽；
+      区段=被非 SELL 单（HIRE/BUY*）锚定的最大连续槽区间。SELL↔非 SELL
+      相对序逐位不变 = V57 资金序不变量天然成立（HIRE/BUY 不得挪到供资
+      卖单前）；SELL 间换序方案弃用——换序可把供资卖单挤到其 BUY 之后，
+      BUY 相对前移至供资卖单前即 V57 因果洞违例。
+    - observation 保留签名位（竞速只需当拍槽位；对手挂单建模留后续）。
+    - 异常/形态非法（action 非 dict、market 非列表、槽位非列表）→返回
+      原动作对象。
     """
-    raise NotImplementedError("unimplemented:fn:apply_race_slots")
+    try:
+        if not isinstance(action, dict):
+            raise TypeError("action 非 dict")
+        market = action.get("market")
+        if not isinstance(market, list):
+            raise TypeError("market 非列表")
+        for slot in market:
+            if not isinstance(slot, list):
+                raise TypeError("槽位非列表")
+        new_market = []
+        region: list = []
+
+        def _flush_region():
+            sells = [o for o in region if o and o[0] == "SELL"]
+            empties = sum(1 for o in region if not o)
+            new_market.extend(sells)
+            new_market.extend([] for _ in range(empties))
+            del region[:]
+
+        for slot in market:
+            if slot and slot[0] != "SELL":
+                _flush_region()
+                new_market.append(slot)
+            else:
+                region.append(slot)
+        _flush_region()
+        return {**action, "market": new_market}
+    except Exception:
+        return action
 
 
 def apply_slot_hygiene(observation: Dict[str, Any], action: Dict[str, Any]) -> Dict[str, Any]:
@@ -117,5 +157,130 @@ def apply_slot_hygiene(observation: Dict[str, Any], action: Dict[str, Any]) -> D
 
     签名意图：输入: observation, action / 输出: 调整后 action+补洞账 /
     错误: 异常→原动作。
+
+    口径留档（B30b 保守法）：
+    - 返回 {"action": 调整后动作, "cleared": [{"slot","order"}…],
+      "filled": [{"to","from","order"}…]}；异常→{"action": 原动作对象,
+      "cleared": [], "filled": []}。
+    - 跨步账本 apply_slot_hygiene._ledger（函数属性自包含，注入友好）：
+      {last_step, orders{槽: tuple(单)}, money, inv}，记当拍调整前（注入链
+      收到）的 market 意图快照+对账快照；step==0 或步标回退=新局复位
+      （只重建账本，不清坑）；步标非严格 +1 连续→拿不准不清。
+    - 零执行占坑单判定（四条全真才清，拿不准→不清）：①上一拍同槽挂出的
+      单本拍仍原样在（逐元素相等）；②该拍成交对账无变化——farm money 与
+      该单物品的 market.inventory 跨拍零变化且键俱在（精确相等）；③单形
+      SELL/BUY*（BUY/BUY_PRODUCT/BUY_ANIMAL 带物品字段；HIRE/BUY_LAND
+      原子单拿不准不清）；④步标连续。
+    - 清坑=置 [] 保位次（不删槽）；补洞=后位有效单链式前移填坑——每坑取
+      其后最近的自家有效单（有效单=非空且未判为占坑）前移入坑，原槽置 []
+      成新坑续填直至其后无有效单；空槽原地不动（只前移有效单），槽总数
+      不变；移动保相对序→资金序（V57）不破坏；零执行单从未供资/耗资，
+      清坑资金因果中性。只动 action["market"]（自家市场单）。
     """
-    raise NotImplementedError("unimplemented:fn:apply_slot_hygiene")
+    def _snap(obs):
+        money = None
+        inv = None
+        try:
+            farms = obs.get("farms")
+            player = int(obs.get("player", 0))
+            if isinstance(farms, list) and 0 <= player < len(farms):
+                farm = farms[player]
+                if isinstance(farm, dict):
+                    money = farm.get("money")
+            mkt = obs.get("market")
+            if isinstance(mkt, dict):
+                raw = mkt.get("inventory")
+                if isinstance(raw, dict):
+                    inv = dict(raw)
+        except Exception:
+            money, inv = None, None
+        return money, inv
+
+    try:
+        if not isinstance(observation, dict):
+            raise TypeError("observation 非 dict")
+        if not isinstance(action, dict):
+            raise TypeError("action 非 dict")
+        market = action.get("market")
+        if not isinstance(market, list):
+            raise TypeError("market 非列表")
+        for slot in market:
+            if not isinstance(slot, list):
+                raise TypeError("槽位非列表")
+        raw = observation.get("step")
+        if raw is not None:
+            step = int(raw)
+        else:
+            step = int(observation.get("day", 0)) * 24 + \
+                int(observation.get("hour", 0))
+        money, inv = _snap(observation)
+        st = getattr(apply_slot_hygiene, "_ledger", None)
+        if st is None or step == 0 or step < st.get("last_step", -1):
+            st = {"last_step": -1, "orders": {}, "money": None, "inv": None}
+            apply_slot_hygiene._ledger = st
+        contiguous = (step == st.get("last_step", -1) + 1)
+        cur_orders = {k: tuple(o) for k, o in enumerate(market) if o}
+        cleared = []
+        holes = []
+        if contiguous:
+            for k in sorted(cur_orders):
+                order = market[k]
+                if st["orders"].get(k) != cur_orders[k]:
+                    continue
+                op = order[0]
+                if not (isinstance(op, str) and
+                        (op == "SELL" or op in ("BUY", "BUY_PRODUCT",
+                                                "BUY_ANIMAL"))):
+                    continue
+                if len(order) < 2 or not isinstance(order[1], str):
+                    continue
+                item = order[1]
+                prev_inv = st.get("inv")
+                if not (isinstance(prev_inv, dict) and isinstance(inv, dict)
+                        and item in prev_inv and item in inv):
+                    continue
+                if st.get("money") is None or money is None:
+                    continue
+                if st["money"] != money or prev_inv[item] != inv[item]:
+                    continue
+                cleared.append({"slot": k, "order": list(order)})
+                holes.append(k)
+        filled = []
+        if holes:
+            new_market = list(market)
+            moved_from = set()
+            frontier = list(holes)
+            pos = 0
+            while pos < len(frontier):
+                h = frontier[pos]
+                pos += 1
+                src = None
+                for j in range(h + 1, len(market)):
+                    if j in holes or j in moved_from or not market[j]:
+                        continue
+                    src = j
+                    break
+                if src is None:
+                    continue
+                moved_from.add(src)
+                filled.append({"to": h, "from": src,
+                               "order": list(market[src])})
+                new_market[h] = market[src]
+                new_market[src] = []
+                frontier.append(src)
+            for h in holes:
+                if not any(f["to"] == h for f in filled):
+                    new_market[h] = []
+            st["last_step"] = step
+            st["orders"] = cur_orders
+            st["money"] = money
+            st["inv"] = inv
+            return {"action": {**action, "market": new_market},
+                    "cleared": cleared, "filled": filled}
+        st["last_step"] = step
+        st["orders"] = cur_orders
+        st["money"] = money
+        st["inv"] = inv
+        return {"action": action, "cleared": [], "filled": []}
+    except Exception:
+        return {"action": action, "cleared": [], "filled": []}

@@ -1,0 +1,1511 @@
+{
+ "source": "/tmp/kagr_root/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+ "params": {
+  "max_orders_target": 337,
+  "window": [
+   504,
+   672
+  ]
+ },
+ "n_routes": 41,
+ "window_orders": {
+  "before_median": 139,
+  "after_median": 41,
+  "before_total": 5843,
+  "after_total": 1762
+ },
+ "avg_qty_per_order": {
+  "before_median": 48.896,
+  "after_median": 161.146
+ },
+ "route_sell_counts": {
+  "before_median": 435,
+  "after_median": 337,
+  "target": 337,
+  "n_at_or_below_target": 40
+ },
+ "conservation": {
+  "ok": true,
+  "n_route_item_pairs": 369
+ },
+ "encode_roundtrip": true,
+ "change_table_rows": 2020,
+ "per_route": {
+  "0": {
+   "before": {
+    "window_orders": 126,
+    "window_qty": 6558,
+    "avg_qty": 52.048,
+    "total_orders": 396,
+    "totals": {
+     "WHEAT": 18297,
+     "FERTILIZER": 10357,
+     "WOOL": 7184,
+     "MILK": 8257,
+     "MELON": 6072,
+     "EGG": 8077,
+     "STRAWBERRY": 6253,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 67,
+    "window_qty": 6558,
+    "avg_qty": 97.881,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18297,
+     "FERTILIZER": 10357,
+     "WOOL": 7184,
+     "MILK": 8257,
+     "MELON": 6072,
+     "EGG": 8077,
+     "STRAWBERRY": 6253,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "1": {
+   "before": {
+    "window_orders": 151,
+    "window_qty": 8699,
+    "avg_qty": 57.609,
+    "total_orders": 418,
+    "totals": {
+     "WHEAT": 10406,
+     "FERTILIZER": 8447,
+     "WOOL": 9580,
+     "MILK": 4421,
+     "MELON": 1172,
+     "EGG": 1169,
+     "STRAWBERRY": 10390,
+     "CARROT": 1182,
+     "TOMATO": 1100
+    }
+   },
+   "after": {
+    "window_orders": 70,
+    "window_qty": 8699,
+    "avg_qty": 124.271,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 10406,
+     "FERTILIZER": 8447,
+     "WOOL": 9580,
+     "MILK": 4421,
+     "MELON": 1172,
+     "EGG": 1169,
+     "STRAWBERRY": 10390,
+     "CARROT": 1182,
+     "TOMATO": 1100
+    }
+   }
+  },
+  "2": {
+   "before": {
+    "window_orders": 89,
+    "window_qty": 6532,
+    "avg_qty": 73.393,
+    "total_orders": 349,
+    "totals": {
+     "WHEAT": 18294,
+     "FERTILIZER": 10352,
+     "WOOL": 7177,
+     "MILK": 8244,
+     "MELON": 6072,
+     "EGG": 8074,
+     "STRAWBERRY": 6253,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 77,
+    "window_qty": 6532,
+    "avg_qty": 84.831,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18294,
+     "FERTILIZER": 10352,
+     "WOOL": 7177,
+     "MILK": 8244,
+     "MELON": 6072,
+     "EGG": 8074,
+     "STRAWBERRY": 6253,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "3": {
+   "before": {
+    "window_orders": 151,
+    "window_qty": 8634,
+    "avg_qty": 57.179,
+    "total_orders": 451,
+    "totals": {
+     "WHEAT": 25285,
+     "FERTILIZER": 18351,
+     "WOOL": 12594,
+     "MILK": 9319,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 37,
+    "window_qty": 8634,
+    "avg_qty": 233.351,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25285,
+     "FERTILIZER": 18351,
+     "WOOL": 12594,
+     "MILK": 9319,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "4": {
+   "before": {
+    "window_orders": 151,
+    "window_qty": 8634,
+    "avg_qty": 57.179,
+    "total_orders": 448,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18341,
+     "WOOL": 12694,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 40,
+    "window_qty": 8634,
+    "avg_qty": 215.85,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18341,
+     "WOOL": 12694,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "5": {
+   "before": {
+    "window_orders": 164,
+    "window_qty": 8684,
+    "avg_qty": 52.951,
+    "total_orders": 470,
+    "totals": {
+     "WHEAT": 25292,
+     "FERTILIZER": 18343,
+     "WOOL": 12733,
+     "MILK": 9342,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13299,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 31,
+    "window_qty": 8684,
+    "avg_qty": 280.129,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25292,
+     "FERTILIZER": 18343,
+     "WOOL": 12733,
+     "MILK": 9342,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13299,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "6": {
+   "before": {
+    "window_orders": 151,
+    "window_qty": 8634,
+    "avg_qty": 57.179,
+    "total_orders": 449,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18343,
+     "WOOL": 12694,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 39,
+    "window_qty": 8634,
+    "avg_qty": 221.385,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18343,
+     "WOOL": 12694,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "7": {
+   "before": {
+    "window_orders": 151,
+    "window_qty": 8634,
+    "avg_qty": 57.179,
+    "total_orders": 451,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18343,
+     "WOOL": 12694,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 37,
+    "window_qty": 8634,
+    "avg_qty": 233.351,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18343,
+     "WOOL": 12694,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "8": {
+   "before": {
+    "window_orders": 151,
+    "window_qty": 8634,
+    "avg_qty": 57.179,
+    "total_orders": 449,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18342,
+     "WOOL": 12702,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 39,
+    "window_qty": 8634,
+    "avg_qty": 221.385,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18342,
+     "WOOL": 12702,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "9": {
+   "before": {
+    "window_orders": 63,
+    "window_qty": 6561,
+    "avg_qty": 104.143,
+    "total_orders": 299,
+    "totals": {
+     "WHEAT": 18287,
+     "FERTILIZER": 10324,
+     "WOOL": 7300,
+     "MILK": 8221,
+     "MELON": 6072,
+     "STRAWBERRY": 6250,
+     "EGG": 8018,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 57,
+    "window_qty": 6561,
+    "avg_qty": 115.105,
+    "total_orders": 293,
+    "totals": {
+     "WHEAT": 18287,
+     "FERTILIZER": 10324,
+     "WOOL": 7300,
+     "MILK": 8221,
+     "MELON": 6072,
+     "STRAWBERRY": 6250,
+     "EGG": 8018,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "10": {
+   "before": {
+    "window_orders": 151,
+    "window_qty": 8634,
+    "avg_qty": 57.179,
+    "total_orders": 455,
+    "totals": {
+     "WHEAT": 25307,
+     "FERTILIZER": 18348,
+     "WOOL": 12594,
+     "MILK": 9319,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 33,
+    "window_qty": 8634,
+    "avg_qty": 261.636,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25307,
+     "FERTILIZER": 18348,
+     "WOOL": 12594,
+     "MILK": 9319,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "11": {
+   "before": {
+    "window_orders": 151,
+    "window_qty": 8634,
+    "avg_qty": 57.179,
+    "total_orders": 451,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18342,
+     "WOOL": 12594,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 37,
+    "window_qty": 8634,
+    "avg_qty": 233.351,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25282,
+     "FERTILIZER": 18342,
+     "WOOL": 12594,
+     "MILK": 9322,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13265,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "12": {
+   "before": {
+    "window_orders": 106,
+    "window_qty": 6674,
+    "avg_qty": 62.962,
+    "total_orders": 397,
+    "totals": {
+     "WHEAT": 18421,
+     "FERTILIZER": 10380,
+     "WOOL": 7368,
+     "MILK": 8220,
+     "MELON": 6072,
+     "STRAWBERRY": 6263,
+     "EGG": 8018,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 46,
+    "window_qty": 6674,
+    "avg_qty": 145.087,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18421,
+     "FERTILIZER": 10380,
+     "WOOL": 7368,
+     "MILK": 8220,
+     "MELON": 6072,
+     "STRAWBERRY": 6263,
+     "EGG": 8018,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "100": {
+   "before": {
+    "window_orders": 112,
+    "window_qty": 6553,
+    "avg_qty": 58.509,
+    "total_orders": 380,
+    "totals": {
+     "WHEAT": 18297,
+     "FERTILIZER": 10350,
+     "WOOL": 7184,
+     "MILK": 8251,
+     "MELON": 6072,
+     "EGG": 8078,
+     "STRAWBERRY": 6260,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 69,
+    "window_qty": 6553,
+    "avg_qty": 94.971,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18297,
+     "FERTILIZER": 10350,
+     "WOOL": 7184,
+     "MILK": 8251,
+     "MELON": 6072,
+     "EGG": 8078,
+     "STRAWBERRY": 6260,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "101": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 435,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10349,
+     "WOOL": 7198,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 41,
+    "window_qty": 6607,
+    "avg_qty": 161.146,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10349,
+     "WOOL": 7198,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "103": {
+   "before": {
+    "window_orders": 187,
+    "window_qty": 7854,
+    "avg_qty": 42.0,
+    "total_orders": 524,
+    "totals": {
+     "WHEAT": 21619,
+     "FERTILIZER": 10339,
+     "WOOL": 7252,
+     "MILK": 8316,
+     "MELON": 6072,
+     "EGG": 8162,
+     "STRAWBERRY": 6318,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 7,
+    "window_qty": 7854,
+    "avg_qty": 1122.0,
+    "total_orders": 344,
+    "totals": {
+     "WHEAT": 21619,
+     "FERTILIZER": 10339,
+     "WOOL": 7252,
+     "MILK": 8316,
+     "MELON": 6072,
+     "EGG": 8162,
+     "STRAWBERRY": 6318,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "104": {
+   "before": {
+    "window_orders": 165,
+    "window_qty": 6726,
+    "avg_qty": 40.764,
+    "total_orders": 470,
+    "totals": {
+     "WHEAT": 18741,
+     "FERTILIZER": 10339,
+     "WOOL": 7249,
+     "MILK": 8316,
+     "MELON": 6072,
+     "EGG": 8149,
+     "STRAWBERRY": 6295,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 32,
+    "window_qty": 6726,
+    "avg_qty": 210.188,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18741,
+     "FERTILIZER": 10339,
+     "WOOL": 7249,
+     "MILK": 8316,
+     "MELON": 6072,
+     "EGG": 8149,
+     "STRAWBERRY": 6295,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "105": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 435,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10351,
+     "WOOL": 7200,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 41,
+    "window_qty": 6607,
+    "avg_qty": 161.146,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10351,
+     "WOOL": 7200,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "106": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 437,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10351,
+     "WOOL": 7199,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 39,
+    "window_qty": 6607,
+    "avg_qty": 169.41,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10351,
+     "WOOL": 7199,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "107": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 434,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10351,
+     "WOOL": 7198,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 42,
+    "window_qty": 6607,
+    "avg_qty": 157.31,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10351,
+     "WOOL": 7198,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "108": {
+   "before": {
+    "window_orders": 165,
+    "window_qty": 6726,
+    "avg_qty": 40.764,
+    "total_orders": 461,
+    "totals": {
+     "WHEAT": 18357,
+     "FERTILIZER": 10350,
+     "WOOL": 7222,
+     "MILK": 8314,
+     "MELON": 6072,
+     "EGG": 8112,
+     "STRAWBERRY": 6283,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 41,
+    "window_qty": 6726,
+    "avg_qty": 164.049,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18357,
+     "FERTILIZER": 10350,
+     "WOOL": 7222,
+     "MILK": 8314,
+     "MELON": 6072,
+     "EGG": 8112,
+     "STRAWBERRY": 6283,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "109": {
+   "before": {
+    "window_orders": 169,
+    "window_qty": 8660,
+    "avg_qty": 51.243,
+    "total_orders": 478,
+    "totals": {
+     "WHEAT": 25293,
+     "FERTILIZER": 18343,
+     "WOOL": 12694,
+     "MILK": 9324,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13278,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 28,
+    "window_qty": 8660,
+    "avg_qty": 309.286,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25293,
+     "FERTILIZER": 18343,
+     "WOOL": 12694,
+     "MILK": 9324,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13278,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "110": {
+   "before": {
+    "window_orders": 84,
+    "window_qty": 6597,
+    "avg_qty": 78.536,
+    "total_orders": 354,
+    "totals": {
+     "WHEAT": 18347,
+     "FERTILIZER": 10340,
+     "WOOL": 7137,
+     "MILK": 8226,
+     "MELON": 6072,
+     "EGG": 8142,
+     "STRAWBERRY": 6258,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 67,
+    "window_qty": 6597,
+    "avg_qty": 98.463,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18347,
+     "FERTILIZER": 10340,
+     "WOOL": 7137,
+     "MILK": 8226,
+     "MELON": 6072,
+     "EGG": 8142,
+     "STRAWBERRY": 6258,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "111": {
+   "before": {
+    "window_orders": 194,
+    "window_qty": 6626,
+    "avg_qty": 34.155,
+    "total_orders": 502,
+    "totals": {
+     "WHEAT": 18379,
+     "FERTILIZER": 10357,
+     "WOOL": 7194,
+     "MILK": 8257,
+     "MELON": 6072,
+     "EGG": 8106,
+     "STRAWBERRY": 6256,
+     "CARROT": 18047,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 29,
+    "window_qty": 6626,
+    "avg_qty": 228.483,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18379,
+     "FERTILIZER": 10357,
+     "WOOL": 7194,
+     "MILK": 8257,
+     "MELON": 6072,
+     "EGG": 8106,
+     "STRAWBERRY": 6256,
+     "CARROT": 18047,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "112": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 454,
+    "totals": {
+     "WHEAT": 19671,
+     "FERTILIZER": 10347,
+     "WOOL": 7218,
+     "MILK": 8275,
+     "MELON": 6072,
+     "EGG": 8111,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 22,
+    "window_qty": 6607,
+    "avg_qty": 300.318,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 19671,
+     "FERTILIZER": 10347,
+     "WOOL": 7218,
+     "MILK": 8275,
+     "MELON": 6072,
+     "EGG": 8111,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "113": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 430,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10346,
+     "WOOL": 7198,
+     "MILK": 8260,
+     "MELON": 6072,
+     "EGG": 8088,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 46,
+    "window_qty": 6607,
+    "avg_qty": 143.63,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10346,
+     "WOOL": 7198,
+     "MILK": 8260,
+     "MELON": 6072,
+     "EGG": 8088,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "114": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 432,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10348,
+     "WOOL": 7198,
+     "MILK": 8257,
+     "MELON": 6072,
+     "EGG": 8088,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 44,
+    "window_qty": 6607,
+    "avg_qty": 150.159,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10348,
+     "WOOL": 7198,
+     "MILK": 8257,
+     "MELON": 6072,
+     "EGG": 8088,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "115": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 430,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10349,
+     "WOOL": 7198,
+     "MILK": 8254,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 46,
+    "window_qty": 6607,
+    "avg_qty": 143.63,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10349,
+     "WOOL": 7198,
+     "MILK": 8254,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "116": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 432,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10349,
+     "WOOL": 7198,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 44,
+    "window_qty": 6607,
+    "avg_qty": 150.159,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10349,
+     "WOOL": 7198,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "117": {
+   "before": {
+    "window_orders": 133,
+    "window_qty": 6646,
+    "avg_qty": 49.97,
+    "total_orders": 412,
+    "totals": {
+     "WHEAT": 18334,
+     "FERTILIZER": 10357,
+     "WOOL": 7191,
+     "MILK": 8259,
+     "MELON": 6072,
+     "EGG": 8133,
+     "STRAWBERRY": 6275,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 58,
+    "window_qty": 6646,
+    "avg_qty": 114.586,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18334,
+     "FERTILIZER": 10357,
+     "WOOL": 7191,
+     "MILK": 8259,
+     "MELON": 6072,
+     "EGG": 8133,
+     "STRAWBERRY": 6275,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "118": {
+   "before": {
+    "window_orders": 126,
+    "window_qty": 6560,
+    "avg_qty": 52.063,
+    "total_orders": 412,
+    "totals": {
+     "WHEAT": 18313,
+     "FERTILIZER": 10352,
+     "WOOL": 7184,
+     "MILK": 8274,
+     "MELON": 6072,
+     "EGG": 8079,
+     "STRAWBERRY": 6259,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 51,
+    "window_qty": 6560,
+    "avg_qty": 128.627,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18313,
+     "FERTILIZER": 10352,
+     "WOOL": 7184,
+     "MILK": 8274,
+     "MELON": 6072,
+     "EGG": 8079,
+     "STRAWBERRY": 6259,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "119": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 435,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10349,
+     "WOOL": 7198,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 41,
+    "window_qty": 6607,
+    "avg_qty": 161.146,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10349,
+     "WOOL": 7198,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "120": {
+   "before": {
+    "window_orders": 135,
+    "window_qty": 6601,
+    "avg_qty": 48.896,
+    "total_orders": 431,
+    "totals": {
+     "WHEAT": 18351,
+     "FERTILIZER": 10352,
+     "WOOL": 7187,
+     "MILK": 8274,
+     "MELON": 6072,
+     "EGG": 8086,
+     "STRAWBERRY": 6263,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 41,
+    "window_qty": 6601,
+    "avg_qty": 161.0,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18351,
+     "FERTILIZER": 10352,
+     "WOOL": 7187,
+     "MILK": 8274,
+     "MELON": 6072,
+     "EGG": 8086,
+     "STRAWBERRY": 6263,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "121": {
+   "before": {
+    "window_orders": 138,
+    "window_qty": 6632,
+    "avg_qty": 48.058,
+    "total_orders": 434,
+    "totals": {
+     "WHEAT": 18324,
+     "FERTILIZER": 10357,
+     "WOOL": 7203,
+     "MILK": 8272,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6304,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 41,
+    "window_qty": 6632,
+    "avg_qty": 161.756,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18324,
+     "FERTILIZER": 10357,
+     "WOOL": 7203,
+     "MILK": 8272,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6304,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "122": {
+   "before": {
+    "window_orders": 142,
+    "window_qty": 6726,
+    "avg_qty": 47.366,
+    "total_orders": 438,
+    "totals": {
+     "WHEAT": 18357,
+     "FERTILIZER": 10350,
+     "WOOL": 7222,
+     "MILK": 8314,
+     "MELON": 6072,
+     "EGG": 8112,
+     "STRAWBERRY": 6283,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 41,
+    "window_qty": 6726,
+    "avg_qty": 164.049,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18357,
+     "FERTILIZER": 10350,
+     "WOOL": 7222,
+     "MILK": 8314,
+     "MELON": 6072,
+     "EGG": 8112,
+     "STRAWBERRY": 6283,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "123": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 430,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10348,
+     "WOOL": 7198,
+     "MILK": 8257,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 46,
+    "window_qty": 6607,
+    "avg_qty": 143.63,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10348,
+     "WOOL": 7198,
+     "MILK": 8257,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "124": {
+   "before": {
+    "window_orders": 192,
+    "window_qty": 7574,
+    "avg_qty": 39.448,
+    "total_orders": 488,
+    "totals": {
+     "WHEAT": 19261,
+     "FERTILIZER": 10347,
+     "WOOL": 7194,
+     "MILK": 8286,
+     "MELON": 6072,
+     "EGG": 8096,
+     "STRAWBERRY": 6302,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 41,
+    "window_qty": 7574,
+    "avg_qty": 184.732,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 19261,
+     "FERTILIZER": 10347,
+     "WOOL": 7194,
+     "MILK": 8286,
+     "MELON": 6072,
+     "EGG": 8096,
+     "STRAWBERRY": 6302,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "125": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 435,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10351,
+     "WOOL": 7200,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 41,
+    "window_qty": 6607,
+    "avg_qty": 161.146,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18322,
+     "FERTILIZER": 10351,
+     "WOOL": 7200,
+     "MILK": 8269,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "126": {
+   "before": {
+    "window_orders": 139,
+    "window_qty": 6607,
+    "avg_qty": 47.532,
+    "total_orders": 422,
+    "totals": {
+     "WHEAT": 18310,
+     "FERTILIZER": 10339,
+     "WOOL": 7298,
+     "MILK": 8254,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   },
+   "after": {
+    "window_orders": 54,
+    "window_qty": 6607,
+    "avg_qty": 122.352,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 18310,
+     "FERTILIZER": 10339,
+     "WOOL": 7298,
+     "MILK": 8254,
+     "MELON": 6072,
+     "EGG": 8084,
+     "STRAWBERRY": 6293,
+     "CARROT": 18045,
+     "TOMATO": 6000
+    }
+   }
+  },
+  "127": {
+   "before": {
+    "window_orders": 169,
+    "window_qty": 8660,
+    "avg_qty": 51.243,
+    "total_orders": 478,
+    "totals": {
+     "WHEAT": 25293,
+     "FERTILIZER": 18343,
+     "WOOL": 12694,
+     "MILK": 9324,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13278,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 28,
+    "window_qty": 8660,
+    "avg_qty": 309.286,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25293,
+     "FERTILIZER": 18343,
+     "WOOL": 12694,
+     "MILK": 9324,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13278,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  },
+  "128": {
+   "before": {
+    "window_orders": 169,
+    "window_qty": 8660,
+    "avg_qty": 51.243,
+    "total_orders": 475,
+    "totals": {
+     "WHEAT": 25293,
+     "FERTILIZER": 18349,
+     "WOOL": 12097,
+     "MILK": 9327,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13278,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   },
+   "after": {
+    "window_orders": 31,
+    "window_qty": 8660,
+    "avg_qty": 279.355,
+    "total_orders": 337,
+    "totals": {
+     "WHEAT": 25293,
+     "FERTILIZER": 18349,
+     "WOOL": 12097,
+     "MILK": 9327,
+     "MELON": 7072,
+     "EGG": 9070,
+     "STRAWBERRY": 13278,
+     "CARROT": 19045,
+     "TOMATO": 7000
+    }
+   }
+  }
+ }
+}

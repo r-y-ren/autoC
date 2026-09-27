@@ -2,16 +2,19 @@
 """R23 测试面：runtime_r40（续段选择/竞速/补洞三件）。
 
 route 组（B29）：指纹累计 / step144 命中选路 / 无族回退 / step0 复位 /
-异常回退。race/hygiene 组保持桩红（后续批次）。
+异常回退。race 组（B30b）：SELL 前移生效 / V57 资金序反例 / 异常原动作。
+hygiene 组（B30b）：零执行单清坑+补洞 / 拿不准不清 / 异常原动作+step0 复位。
 """
 import json
 
 import pytest  # noqa: F401
 
 try:
-    from orderbook_r40.runtime_r40 import _route40_select
+    from orderbook_r40.runtime_r40 import (
+        _route40_select, apply_race_slots, apply_slot_hygiene)
 except ImportError:  # 兜底：直接以 orderbook_r40/ 为 sys.path 根跑测
-    from runtime_r40 import _route40_select
+    from runtime_r40 import _route40_select, apply_race_slots, \
+        apply_slot_hygiene
 
 KEY_A = "2|1|WHEAT:5|BAKERY+FARMERS_MARKET"     # 累计口径命中键
 KEY_ZERO = "0|0|WHEAT:5|BAKERY+FARMERS_MARKET"  # 零累计对照键（亦在库中）
@@ -53,6 +56,15 @@ def _obs(t, hands=0, uq=1, crops=None, shops=()):
 
 def _reset():
     _route40_select._fp_state = None
+    apply_slot_hygiene._ledger = None
+
+
+def _hobs(step, money=500.0, inv=None):
+    """hygiene/race 组观察桩：可控 money/inventory 的最小观察。"""
+    return {"step": step, "player": 1,
+            "farms": [{"money": 0.0}, {"money": money}],
+            "market": {"inventory": dict(inv if inv is not None
+                                         else {"WHEAT": 10}), "prices": {}}}
 
 
 def _feed_key_a(lib=LIB):
@@ -131,9 +143,118 @@ def test_route40_select_exception_fallback():
     assert _feed_key_a()["route"] == 5     # 异常后仍可正常命中
 
 
-def test_apply_race_slots():
-    raise NotImplementedError("unimplemented:fn:apply_race_slots")
+def test_apply_race_slots_sell_forward():
+    """竞速前移生效：SELL 按原序挤进区段前部空槽，空槽后移保槽数；
+    非 SELL 锚单原位不动；不删不增单；输入动作不被改。"""
+    sell_w = ["SELL", "WHEAT", 5]
+    sell_wo = ["SELL", "WOOL", 3]
+    buy = ["BUY_PRODUCT", "SEED", 2]
+    action = {"farmer": ["PASS"], "hands": [["PLANT", 0, 0, "WHEAT"]],
+              "market": [[], sell_w, [], sell_wo, buy, []]}
+    res = apply_race_slots(_hobs(120), action)
+    assert res["market"] == [["SELL", "WHEAT", 5], ["SELL", "WOOL", 3],
+                             [], [], ["BUY_PRODUCT", "SEED", 2], []]
+    assert res["farmer"] == ["PASS"] and res["hands"] == [["PLANT", 0, 0, "WHEAT"]]
+    # 不删不增单：槽位多重集守恒
+    assert sorted(map(tuple, res["market"])) == \
+        sorted(map(tuple, action["market"]))
+    assert action["market"] == [[], sell_w, [], sell_wo, buy, []]
 
 
-def test_apply_slot_hygiene():
-    raise NotImplementedError("unimplemented:fn:apply_slot_hygiene")
+def test_apply_race_slots_v57_funding_invariant():
+    """V57 资金序反例：供资卖单可前移，但绝不跨越 BUY/HIRE——SELL 间换序
+    的天真法会把 BUY 挤到供资卖单前（违例形态），钉住不发生。"""
+    sell_fund = ["SELL", "WHEAT", 5]        # 供资卖单（flush 日卖→买）
+    buy = ["BUY_PRODUCT", "WHEAT", 3]
+    sell_wo = ["SELL", "WOOL", 3]
+    action = {"farmer": ["PASS"], "hands": [],
+              "market": [[], sell_fund, buy, sell_wo, []]}
+    res = apply_race_slots(_hobs(121), action)
+    m = res["market"]
+    assert m == [["SELL", "WHEAT", 5], [], ["BUY_PRODUCT", "WHEAT", 3],
+                 ["SELL", "WOOL", 3], []]
+    assert m.index(sell_fund) < m.index(buy)   # 供资卖单仍在 BUY 前（V57）
+    assert m.index(sell_wo) > m.index(buy)     # WOOL 未跨越 BUY/HIRE
+    # 反例形态留档：SELL 间换序天真法把 BUY 挪到供资卖单前 = V57 违例
+    naive = [["SELL", "WOOL", 3], buy, sell_fund, [], []]
+    assert naive.index(buy) < naive.index(sell_fund)
+
+
+def test_apply_race_slots_exception_original():
+    """异常/形态非法→原动作对象逐字返回；正常动作照常前移。"""
+    action = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 5]]}
+    assert apply_race_slots(_hobs(122), None) is None
+    bad = {"market": "bad"}
+    assert apply_race_slots(_hobs(122), bad) is bad
+    bad2 = {"market": [["SELL", "WHEAT", 5], "junk"]}
+    assert apply_race_slots(_hobs(122), bad2) is bad2
+    ok = {"farmer": ["PASS"], "hands": [], "market": [[], ["SELL", "WHEAT", 5]]}
+    assert apply_race_slots(_hobs(122), ok)["market"] == \
+        [["SELL", "WHEAT", 5], []]
+
+
+def test_apply_slot_hygiene_clear_and_fill():
+    """零执行占坑单清坑+补洞：同槽同单+成交对账零变化→置 [] 清坑，
+    后位有效单链式前移填坑（空槽原地不动、保槽不删）；只动市场单。"""
+    _reset()
+    squatter = ["SELL", "WHEAT", 5]
+    buy = ["BUY_PRODUCT", "SEED", 2]
+    wool = ["SELL", "WOOL", 3]
+    a1 = {"farmer": ["PASS"], "hands": [], "market": [squatter, [], [], []]}
+    r1 = apply_slot_hygiene(_hobs(100, money=500.0, inv={"WHEAT": 10}), a1)
+    assert r1["cleared"] == [] and r1["action"] is a1      # 首拍只记账
+    a2 = {"farmer": ["PASS"], "hands": [],
+          "market": [squatter, buy, [], wool]}
+    r2 = apply_slot_hygiene(_hobs(101, money=500.0, inv={"WHEAT": 10}), a2)
+    assert r2["cleared"] == [{"slot": 0, "order": ["SELL", "WHEAT", 5]}]
+    assert r2["filled"] == [
+        {"to": 0, "from": 1, "order": ["BUY_PRODUCT", "SEED", 2]},
+        {"to": 1, "from": 3, "order": ["SELL", "WOOL", 3]}]
+    assert r2["action"]["market"] == [["BUY_PRODUCT", "SEED", 2],
+                                      ["SELL", "WOOL", 3], [], []]
+    assert r2["action"]["farmer"] == ["PASS"]   # 只动自家市场单
+    assert a2["market"] == [squatter, buy, [], wool]   # 输入不被改
+
+
+def test_apply_slot_hygiene_unsure_keeps():
+    """拿不准不清（保守）：对账有变化/账本缺拍/单形变动→一概不清坑。"""
+    _reset()
+    squatter = ["SELL", "WHEAT", 5]
+    a1 = {"farmer": ["PASS"], "hands": [], "market": [squatter, []]}
+    # ①无账本（首拍）不与历史对账→不清
+    r = apply_slot_hygiene(_hobs(200, money=500.0), a1)
+    assert r["cleared"] == [] and r["filled"] == []
+    # ②money 变化（可能已成交）→不清
+    _reset()
+    apply_slot_hygiene(_hobs(200, money=500.0), a1)
+    a2 = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 5], []]}
+    r = apply_slot_hygiene(_hobs(201, money=520.0), a2)
+    assert r["cleared"] == [] and r["filled"] == [] and r["action"] is a2
+    # ③同槽单形变动（qty 5→3）→不清
+    _reset()
+    apply_slot_hygiene(_hobs(300, money=500.0), a1)
+    a3 = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 3], []]}
+    r = apply_slot_hygiene(_hobs(301, money=500.0), a3)
+    assert r["cleared"] == [] and r["filled"] == []
+
+
+def test_apply_slot_hygiene_exception_and_step0_reset():
+    """异常→原动作+空账；step0/步标回退→账本复位（本拍不清、次拍起
+    重新对账可清）。"""
+    action = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 5]]}
+    r = apply_slot_hygiene(None, action)
+    assert r["action"] is action and r["cleared"] == [] and r["filled"] == []
+    bad = {"market": "bad"}
+    r = apply_slot_hygiene(_hobs(1), bad)
+    assert r["action"] is bad and r["cleared"] == []
+    _reset()
+    squatter = ["SELL", "WHEAT", 5]
+    a1 = {"farmer": ["PASS"], "hands": [], "market": [squatter, []]}
+    apply_slot_hygiene(_hobs(50, money=500.0), a1)          # 建账
+    a2 = {"farmer": ["PASS"], "hands": [], "market": [squatter, []]}
+    r = apply_slot_hygiene(_hobs(0, money=500.0), a2)       # step0 复位
+    assert r["cleared"] == [] and r["action"] is a2         # 不带旧账清坑
+    a3 = {"farmer": ["PASS"], "hands": [], "market": [squatter, []]}
+    r = apply_slot_hygiene(_hobs(1, money=500.0), a3)       # 复位后重新对账
+    assert r["cleared"] == [{"slot": 0, "order": ["SELL", "WHEAT", 5]}]
+    assert r["filled"] == [] and r["action"]["market"] == [[], []]
