@@ -1,0 +1,248 @@
+{
+ "generated_at": "2026-09-27T21:34:17",
+ "generated_by": "build_r40_realrun",
+ "r37_main_path": "orderbook_r37/build/main.py",
+ "corpus": {
+  "dirs": [
+   "/tmp/kagr23",
+   "/tmp/kagr22"
+  ],
+  "loss_ids": [
+   113735225,
+   113817068,
+   113754147,
+   113852533,
+   113962831,
+   113724375,
+   113837634,
+   113873625,
+   114064544,
+   113838925,
+   113764768,
+   113738419
+  ],
+  "loss_search_dirs": [
+   "/tmp/kagr23",
+   "/tmp/kagr22",
+   "/tmp/kagr24"
+  ],
+  "n_files": 77
+ },
+ "sha_summary": {
+  "r37_main_sha256": "4b237e412d5101937ad66aa0751454721dec2d5a73fa2743d65768b286a2cb3f",
+  "main_sha256": "227f0de52e828256617e45dc78992c9621e2deeecf54375b2dad5af6742559fc",
+  "tar_sha256": "ae8431c69de3b6de71030c96490c9732a142f2f4be6677d6522bd3c07ba3b412",
+  "block_sha256": "4b1b0a4999d75ebde24598df63a2425b7780c9729d12ff4ccbd5e72365024c9a",
+  "route_library_sha256": "0236c30e4e728166c8a8751535517a75c5c133092f2e8f14f2b197baa193ed68",
+  "sell_lots_change_sha256": "d15a59533cc5227d81a85a516f3e179cf658c4e832b81f3e1a9ca656a31132ea",
+  "base_node_r37": "60391b8c609158cda91914aa64233e226fb0ad0dd53b34e901273eab8dd847f0"
+ },
+ "diff_attribution": {
+  "ok": true,
+  "whitelist": {
+   "runtime_block": {
+    "present": true,
+    "bytes": 28119,
+    "sha256": "4b1b0a4999d75ebde24598df63a2425b7780c9729d12ff4ccbd5e72365024c9a"
+   },
+   "sell_lots": {
+    "present": true,
+    "rows": 2020,
+    "changed_routes": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10",
+     "11",
+     "12",
+     "100",
+     "101",
+     "103",
+     "104",
+     "105",
+     "106",
+     "107",
+     "108",
+     "109",
+     "110",
+     "111",
+     "112",
+     "113",
+     "114",
+     "115",
+     "116",
+     "117",
+     "118",
+     "119",
+     "120",
+     "121",
+     "122",
+     "123",
+     "124",
+     "125",
+     "126",
+     "127",
+     "128"
+    ],
+    "sha256": "d15a59533cc5227d81a85a516f3e179cf658c4e832b81f3e1a9ca656a31132ea"
+   }
+  },
+  "unattributed": []
+ },
+ "double_run_sha256": {
+  "run1": "ae8431c69de3b6de71030c96490c9732a142f2f4be6677d6522bd3c07ba3b412",
+  "run2": "ae8431c69de3b6de71030c96490c9732a142f2f4be6677d6522bd3c07ba3b412"
+ },
+ "sell_lots_summary": {
+  "rows": 2020,
+  "n_changed": 41,
+  "changed_routes": [
+   "0",
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "6",
+   "7",
+   "8",
+   "9",
+   "10",
+   "11",
+   "12",
+   "100",
+   "101",
+   "103",
+   "104",
+   "105",
+   "106",
+   "107",
+   "108",
+   "109",
+   "110",
+   "111",
+   "112",
+   "113",
+   "114",
+   "115",
+   "116",
+   "117",
+   "118",
+   "119",
+   "120",
+   "121",
+   "122",
+   "123",
+   "124",
+   "125",
+   "126",
+   "127",
+   "128"
+  ]
+ },
+ "build": {
+  "main_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
+  "main_sha256": "227f0de52e828256617e45dc78992c9621e2deeecf54375b2dad5af6742559fc",
+  "tar_sha256": "ae8431c69de3b6de71030c96490c9732a142f2f4be6677d6522bd3c07ba3b412",
+  "manifest": {
+   "schema": "orderbook_r40_manifest/1.0",
+   "generated": "2026-09-27",
+   "variant": "r40",
+   "description": "public derivative with route library and late-season sell execution",
+   "main_sha256": "227f0de52e828256617e45dc78992c9621e2deeecf54375b2dad5af6742559fc",
+   "main_bytes": 1699873,
+   "tar_sha256": "ae8431c69de3b6de71030c96490c9732a142f2f4be6677d6522bd3c07ba3b412",
+   "tar_bytes": 698041,
+   "tar_members": [
+    "main.py"
+   ],
+   "double_run_sha256": {
+    "run1": "ae8431c69de3b6de71030c96490c9732a142f2f4be6677d6522bd3c07ba3b412",
+    "run2": "ae8431c69de3b6de71030c96490c9732a142f2f4be6677d6522bd3c07ba3b412"
+   },
+   "base_sha_chain": {
+    "a16e0e9b": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab",
+    "r34a": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
+    "r37": "60391b8c609158cda91914aa64233e226fb0ad0dd53b34e901273eab8dd847f0",
+    "r40": "227f0de52e828256617e45dc78992c9621e2deeecf54375b2dad5af6742559fc"
+   },
+   "runtime_block": {
+    "present": true,
+    "bytes": 28119,
+    "sha256": "4b1b0a4999d75ebde24598df63a2425b7780c9729d12ff4ccbd5e72365024c9a"
+   },
+   "route_library_sha256": "0236c30e4e728166c8a8751535517a75c5c133092f2e8f14f2b197baa193ed68",
+   "sell_lots_change_sha256": "d15a59533cc5227d81a85a516f3e179cf658c4e832b81f3e1a9ca656a31132ea",
+   "complete": true
+  },
+  "diff_attribution": {
+   "ok": true,
+   "whitelist": {
+    "runtime_block": {
+     "present": true,
+     "bytes": 28119,
+     "sha256": "4b1b0a4999d75ebde24598df63a2425b7780c9729d12ff4ccbd5e72365024c9a"
+    },
+    "sell_lots": {
+     "present": true,
+     "rows": 2020,
+     "changed_routes": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "100",
+      "101",
+      "103",
+      "104",
+      "105",
+      "106",
+      "107",
+      "108",
+      "109",
+      "110",
+      "111",
+      "112",
+      "113",
+      "114",
+      "115",
+      "116",
+      "117",
+      "118",
+      "119",
+      "120",
+      "121",
+      "122",
+      "123",
+      "124",
+      "125",
+      "126",
+      "127",
+      "128"
+     ],
+     "sha256": "d15a59533cc5227d81a85a516f3e179cf658c4e832b81f3e1a9ca656a31132ea"
+    }
+   },
+   "unattributed": []
+  },
+  "block_sha": "4b1b0a4999d75ebde24598df63a2425b7780c9729d12ff4ccbd5e72365024c9a",
+  "library_sha256": "0236c30e4e728166c8a8751535517a75c5c133092f2e8f14f2b197baa193ed68",
+  "sell_lots_change_sha256": "d15a59533cc5227d81a85a516f3e179cf658c4e832b81f3e1a9ca656a31132ea"
+ }
+}

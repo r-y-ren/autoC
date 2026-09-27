@@ -61,7 +61,7 @@
 | B28(完成 09-27) | R22-S4 门禁+总指挥 | 105 测全绿零桩；全链真跑 463.8s verdict=NEGATIVE→archive_ledger+run_summary 正式收档 | R22 全批次完结；判负收档=用户预置承诺兑现 |
 | B29(完成 09-27) | R23-S1 路由库批 | 10 测绿（+2 桩=B30 预期）；真跑建库 77 局/49 族/覆盖 85.7%；族键 build↔runtime 跨件同键 | **败局世界三型全 uncovered**（我方从未在这些开局赢过）=补路由真缺口，判决见分晓 |
 | B30(完成 09-27) | R23-S2 执行面批（两路并行） | 19 测绿（lots 8+runtime 11）；真跑卖单中位 435→337 达标+守恒 369 对全过；竞速/清坑 V57 保守处理 | 只动卖侧；空槽位次全保 |
-| ▶ B31 | R23-S3 构建+仿真桥批：inject_r40_block → audit_diff_r40_vs_r37 → pack_r40 → build_r40 → sim_bridge | build_r40 真跑产出 r40 件+审计两类零越界；sim_bridge 对照 ≥30 局一致+提速读数 | 底=r37；仿真器只进判决 |
-| B32 | R23-S4 判决+门禁批：segment_stats → judge_r23 → verify_r40_gates → run_r40_iteration | 判决真跑（败局 12 局+联赛+分段+对照）六判据实数；全链整合裁决 | 分项+总判；判负收档预绑定 |
+| B31(完成 09-27) | R23-S3 构建+仿真桥批（两路并行） | 28 测绿（inject 8+build 14+sim 6）；真跑 r40 构建（227f0de52e82/tar ae8431c69de3 三 sha 自证）；**仿真器认证桥 30/30 一致** | 提速单线程 5.41x（≥10x 判据靠 B32 并行跑法达标——登记） |
+| ▶ B32 | R23-S4 判决+门禁批：segment_stats → judge_r23 → verify_r40_gates → run_r40_iteration | 判决真跑（败局 12 局+联赛+分段+对照）六判据实数；全链整合裁决 | 分项+总判；判负收档预绑定 |
 | 2026-09-26 | B23 签名微调登记 | pack_r38/build_r38 +out_dir=None；变更集=纯尾块（manifest 自证）；库 sha 口径统一 ensure_ascii=False（评审 P3） |
 | 2026-09-26 | R21 批次计划立表（B22-B24）+轻量对账 | 对账判定**对得上**（28 桩全落 orderbook_predict 零外溢、r37 133 绿、49 绿基线持平、抽查命令全绿）；**环境清理**：/tmp usrquota 曾耗尽（Errno 122）——清孤儿缓存 pairsnap/v4bfull/r31b/r31/r29b 约 3.9G，写入恢复；判决语料 r33audit（卖流库源）/kagr22/r30 保留 |
