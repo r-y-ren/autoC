@@ -14,12 +14,12 @@ import hashlib
 import json
 from typing import Any, Dict
 
-# 五函数单一真源抽取序（_predict_agent 钉尾=装载后 last-callable）。
+# 六件单一真源抽取序（_predict_agent 钉尾=装载后 last-callable；v2 含 detect_clone）。
 _BLOCK_FUNCS = ("detect_clone", "infer_rival_sells", "match_sellflow", "extrapolate_sells",
                 "apply_dodge", "_predict_agent")
 
 # 块绑定名全集（撞名预检用；Any/Dict 为条件缺省填充不入集，不覆盖底版既有绑定）。
-_BLOCK_BOUND = {"_PREDICT_CALLABLES", "_PREDICT_PARENT", "_PREDICT_LIBRARY",
+_BLOCK_BOUND = {"detect_clone", "_PREDICT_CALLABLES", "_PREDICT_PARENT", "_PREDICT_LIBRARY",
                 "_PREDICT_TYPING", "infer_rival_sells", "match_sellflow",
                 "extrapolate_sells", "apply_dodge", "_predict_agent"}
 

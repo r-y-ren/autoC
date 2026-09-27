@@ -259,7 +259,7 @@ def test_inject_real_r37_smoke():
         "block_sha256": out["block_sha"],
         "library_sha256": _sha_of(lib),
         "last_callable": "_predict_agent",
-        "n_block_funcs": 5,
+        "n_block_funcs": 6,
     }
     assert ev["injected_bytes"] == ev["r37_main_bytes"] + ev["block_bytes"]
     ev_path = Path(__file__).resolve().parent / "evidence" / "inject_r38_smoke.json"
