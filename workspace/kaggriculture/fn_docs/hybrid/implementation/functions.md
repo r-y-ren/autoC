@@ -135,12 +135,12 @@
 | extrapolate_sells | B25 | 改造 wired 09-27 | pytest 六门逐项（窗 336-646/K=4·2×pred/每步每品 1 单/带通 4-99·min(棚存,48h 计划)/价门 min_sell_price=2+base/噪声门 skipped）+tier 三档+credit 减记禁净加卖；常量落 extrapolate 内 | (本批) |
 | apply_dodge | B25 | 改造 wired 09-27 | pytest 门两分支+action 零改动反例+异常全 allow；**删除顺延/置 [] 旧语义**（公开负结果教训落地） | (本批) |
 | _predict_agent | B25 | 改造 wired 09-27 | pytest 非克隆零写入/克隆走链/step0 复位全账含 credit/deny 回滚 plan 钩子+credit/异常 fail-safe | (本批) |
-| build_sellflow_library | B26 | 改造待做 09-27（v2 top-30+命中率字段） | 测试: test_sellflow.py（v2 组） | — |
-| retape_shear_phase | B26 | stub 09-27 | 测试: test_shear_phase.py | — |
-| inject_predict_block | B26 | 改造待做 09-27（v2 块） | 测试: test_inject_predict.py（v2 组） | — |
-| audit_diff_vs_r37 | B26 | 改造待做 09-27（两类白名单） | 测试: test_build_r39.py（audit 组） | — |
-| pack_r39 | B26 | stub 09-27 | 测试: test_build_r39.py（pack 组） | — |
-| build_r39 | B26 | stub 09-27 | 测试: test_build_r39.py（构建编排） | — |
+| build_sellflow_library | B26 | 改造 wired 09-27 | pytest 11 passed（top-30 时间序/新旧合并/hit 3×0.75/样本<3 缺省/<30 抛/真跑）；真跑 30 新(17,570 事件)+86 旧(29,470)→213 键、hit 覆盖 34/213、库 sha fd30fba3…；hit 口径=窗桶预期 ±50% 含界、条目级聚合 | (本批) |
+| retape_shear_phase | B26 | wired 09-27 | pytest 5 passed（偏移+刀次≥5/越季 no-op/不动买卖 FEED CARE 反例/空槽不变/真跑）；真 r37=16 格偏移(+2 天型)/267 no-op/刀次 min 5；走位曼哈顿 ≤1 可达校验 | (本批) |
+| inject_predict_block | B26 | 改造 wired 09-27 | pytest 8 passed（v2 块形态组新增）；六件抽取序+内嵌 v2 库+四条校验+库 sha 对账（canonical ensure_ascii=False）；锚行短语不动 | (本批) |
+| audit_diff_vs_r37 | B26 | 改造 wired 09-27 | pytest audit 组 4 passed；两类白名单（尾块 v2 锚行+shear_phase blob 归因带变更表核对）；v1 单类路径 19 测零回退；真跑零 UNATTRIBUTED（283 行=16 偏移+267 no-op 逐条吻合） | (本批) |
+| pack_r39 | B26 | wired 09-27 | pytest pack 组 5 passed；manifest orderbook_r39_manifest/1.0（链 a16e0e9b→r34a→r37 剥块→r39；predict_block/library/shear_change 三 sha 自证）；build_tar_bytes 真源复用；文案 "…(v2) and anti-counter schedule" | (本批) |
+| build_r39 | B26 | wired 09-27 | pytest build 组 4 passed；**真跑构建**：main b0370ee619e7/tar b6da5f12bf52/块 a9b310a4145c/库 fd30fba3…/shear 2ebeb766…；归因 ok 零越界；双跑恒等；r37 零改动；evidence/build_r39_realrun.json | (本批) |
 | make_counter_opponent | B27 | stub 09-27 | 测试: test_judge_predict.py（counter 组） | — |
 | flip_stats | B27 | 改造待做 09-27（v2 动作降量面） | 测试: test_judge_predict.py（flip v2 组） | — |
 | judge_predict_replay | B27 | 改造待做 09-27（v2 六判据+反制臂） | 测试: test_judge_predict.py（v2 组） | — |

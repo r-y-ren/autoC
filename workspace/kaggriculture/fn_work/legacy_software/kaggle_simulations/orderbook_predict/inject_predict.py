@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-"""inject_predict_block（R21 L2）：预测块注入。
+"""inject_predict_block（R21 L2；R22 改造→v2 块）：预测块注入。
 
-责任契约（fn_docs/hybrid/responsibility.md【R21 增补】）：
-生成预测块源码（_predict_agent 四函数链+内嵌卖流库数据）追加到副本尾部；
-注入校验四条沿 B17（py_compile/AST/装载后 globals 末 callable=_predict_agent
-单参可调/逐字节尾部追加零改行）+库数据完整性校验（库 sha 对账）；捕获行
+责任契约（fn_docs/hybrid/responsibility.md【R21 增补】+【R22 增补】）：
+生成预测块源码（六件 v2：detect_clone+五函数链+_predict_agent，含 credit 账）
++内嵌卖流库数据（v2 库）追加到副本尾部；注入校验四条沿 B17（py_compile/AST/
+装载后 globals 末 callable=_predict_agent 单参可调/逐字节尾部追加零改行）
++库数据完整性校验（库 sha 对账，canonical ensure_ascii=False 口径）；捕获行
 命名避底版撞名（先例 _R37_GUARD_PARENT）。
 """
 from __future__ import annotations
@@ -100,16 +101,16 @@ def _split_library(library: Any):
 
 
 def inject_predict_block(main_text: str, library: Any) -> Dict[str, Any]:
-    """生成预测块（四函数链+库数据）追加尾部，跑注入校验四条+库 sha 对账。
+    """生成预测块（六件 v2 链+库数据）追加尾部，跑注入校验四条+库 sha 对账。
 
     签名意图：输入: r37 main 文本+库数据 / 输出: {main_text, block_sha} /
     错误: 校验任一不过即抛。
 
     命名方案（docstring 留档；捕获行命名 _PREDICT_* 避底版 _R37_GUARD_*/
     _r37_agent 系撞名，注入前撞名预检、撞名即抛，先例 inject_guard.py）：
-    - 单一真源=predict_block.py：五函数（infer_rival_sells / match_sellflow /
-      extrapolate_sells / apply_dodge / _predict_agent）源码经 ast 整段抽取
-      生成块文本，零手抄零改名（_predict_agent 钉尾）。
+    - 单一真源=predict_block.py：六件 v2（detect_clone / infer_rival_sells /
+      match_sellflow / extrapolate_sells / apply_dodge / _predict_agent）源码
+      经 ast 整段抽取生成块文本，零手抄零改名（_predict_agent 钉尾）。
     - 捕获行机制：_PREDICT_CALLABLES/_PREDICT_PARENT 位于块首、先于块内一切
       def 与 import 执行（exec 时序保证捕获到注入时刻 globals 既有最后
       callable=底版基座 agent[真 r37=_r37_agent 链]，而非块内自身函数）；
@@ -120,7 +121,8 @@ def inject_predict_block(main_text: str, library: Any) -> Dict[str, Any]:
       ["_PREDICT_PARENT"] 调父层、globals()["_PREDICT_LIBRARY"] 取库
       （predict_block.py 现约定）。
     - 自包含：stdlib only——typing 缺省填充（仅供五函数签名注解求值）置捕获行
-      之后（Dict/Any 皆 callable，不得抢 globals 末位）且不覆盖底版既有绑定。
+      之后（Dict/Any 皆 callable，不得抢 globals 末位；仅供六函数签名注解
+      求值）且不覆盖底版既有绑定。
     - 块文本=追加载荷整体（含前置两空行分隔，B17 尾块同款形态），
       block_sha = sha256(块文本 utf-8 字节)；确定性：同输入同输出（块文本只
       依赖 predict_block.py 源与库数据，与 main_text 无关）。
@@ -160,7 +162,7 @@ def inject_predict_block(main_text: str, library: Any) -> Dict[str, Any]:
     except Exception as exc:
         raise ValueError("坏库：库数据不可紧凑 JSON 内嵌/不可 canonical sha: %r" % exc) from exc
 
-    # ---- 1. 块文本生成（predict_block.py 五函数源 ast 整段抽取，禁手抄第二份） ----
+    # ---- 1. 块文本生成（predict_block.py 六件源 ast 整段抽取，禁手抄第二份） ----
     src_path = Path(__file__).resolve().with_name("predict_block.py")
     src = src_path.read_text(encoding="utf-8")
     src_tree = ast.parse(src, filename=str(src_path))
@@ -177,6 +179,8 @@ def inject_predict_block(main_text: str, library: Any) -> Dict[str, Any]:
 
     header = (
         "# ============ r38 对手预测尾块（自动生成，勿手改） ============\n"
+        "# r39 v2 块内容：detect_clone+五函数链+内嵌卖流库 v2（锚行短语沿 v1，"
+        "audit/pack 识别不动）\n"
         "_PREDICT_CALLABLES = [v for k, v in list(globals().items())"
         " if callable(v) and not k.startswith(\"__\")]\n"
         "_PREDICT_PARENT = _PREDICT_CALLABLES[-1] if _PREDICT_CALLABLES else None\n"

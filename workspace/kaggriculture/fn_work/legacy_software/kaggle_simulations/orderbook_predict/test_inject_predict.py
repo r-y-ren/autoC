@@ -22,6 +22,8 @@ responsibility.md【R21 增补】inject_predict_block 行）：
 ⑦真 r37 文本实跑——orderbook_r37/build/main.py 全文注入+四条独立复跑全过
   （真链捕获：_PREDICT_PARENT is _r37_agent），evidence/inject_r38_smoke.json
   记字节/sha（r37/injected/block 字节、injected/block/library sha）。
+⑧v2 块形态（B26c）——_BLOCK_FUNCS 六件序钉死（_predict_agent 钉尾）+块内
+  v2 注释+锚行核心短语沿 v1 不动+六件源段按序在块内+块 sha 口径。
 """
 import ast
 import copy
@@ -222,6 +224,33 @@ def test_inject_library_sha_reconcile(monkeypatch):
     monkeypatch.setattr(inject_predict, "_library_literal", _corrupt_literal)
     with pytest.raises(RuntimeError, match="库sha对账红"):
         inject_predict.inject_predict_block(main, lib)
+
+
+def test_inject_v2_block_shape():
+    # ⑧v2 块形态：_BLOCK_FUNCS 六件序（_predict_agent 钉尾）、块内 v2 注释、
+    # 锚行核心短语沿 v1、六件源段按 _BLOCK_FUNCS 序在块内、sha 口径。
+    assert inject_predict._BLOCK_FUNCS == (
+        "detect_clone", "infer_rival_sells", "match_sellflow",
+        "extrapolate_sells", "apply_dodge", "_predict_agent")
+    assert inject_predict._BLOCK_FUNCS[-1] == "_predict_agent"
+    assert "detect_clone" in inject_predict._BLOCK_BOUND   # 撞名预检含六件
+    main, lib = _base_main(), _lib()
+    out = inject_predict.inject_predict_block(main, lib)
+    payload = out["main_text"][len(main):]
+    assert payload.startswith(
+        "\n\n# ============ r38 对手预测尾块（自动生成，勿手改） ============\n")
+    assert "r39 v2 块内容" in payload                      # 块内 v2 注释
+    src_path = Path(inject_predict.__file__).resolve().with_name("predict_block.py")
+    src = src_path.read_text(encoding="utf-8")
+    segs = {}
+    for node in ast.parse(src).body:
+        if isinstance(node, ast.FunctionDef):
+            segs[node.name] = ast.get_source_segment(src, node)
+    pos = [payload.index(segs[n]) for n in inject_predict._BLOCK_FUNCS]
+    assert pos == sorted(pos)                              # 六件按 _BLOCK_FUNCS 序
+    assert payload.index(segs["_predict_agent"]) == max(pos)   # _predict_agent 钉尾
+    assert out["block_sha"] == hashlib.sha256(
+        payload.encode("utf-8")).hexdigest()
 
 
 def test_inject_real_r37_smoke():

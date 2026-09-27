@@ -56,8 +56,8 @@
 | 2026-09-25 | B19 签名微调+判决口径登记 | ①replay_guard_verdict +baseline_final=None/+our_seat="renyxin"；②judge_cash_guard_replay 口径=逐局逐席 l1≥原版（R10 同源用语；合计口径 +130k 作敏感度并列入账）；③parse step 口径=replay 原生 si（磁带 X↔行 X+1）；④tmpfs 配额曾耗尽（孤儿 pyc 101M 清理后补拉 2 局） |
 | 2026-09-26 | B20+守卫三修收口（用户裁决：修正版守卫+判决/小联赛双验） | 400 局全量联赛 0-200 确诊守卫过度扣单（微探针：一局扣 16/17 买畜单顺延 25-57 步+种子永久丢）→三修（逐单价丢单保护/投影计卖单收入/种子入重发）+重建 efa7b195f189…→双验：判决三指标全绿保持、小联赛 60 局 **h2h 0.6136≥0.55** 全谱零负；R20 剪毛=轮次达标（8-12 轮/局）但每羊 4 次（目标 5 未达）呈批间门 |
 | B25(完成 09-27) | R22-S1 预测引擎 v2 六件（感知面+动作面两段顺序） | pytest 全绿（runtime 9 测；全包 59 绿+6 桩零回退）；六门/credit/删失/克隆门逐项钉住 | dodge 旧"顺延"语义删除=公开负结果教训落地；credit 禁净加卖 |
-| ▶ B26 | R22-S2 流库+毛期手术+构建六件：build_sellflow_library[改造] → retape_shear_phase → inject_predict_block[改造] → audit_diff_vs_r37[改造] → pack_r39 → build_r39 | build_r39 真跑产出 r39 件；审计两类白名单零 UNATTRIBUTED；毛期错峰刀次 ≥5；双跑恒等 | 底=r37 字节；流库 top-30 新鲜回放 |
-| B27 | R22-S3 判决反制三件：make_counter_opponent → flip_stats[改造] → judge_predict_replay[改造] | 判决真跑（26+10+反制臂）出 evidence；六判据实数如实 | 判负→收档（预绑定） |
+| B26(完成 09-27) | R22-S2 六件（波次 A 毛期手术+流库 v2 并行→B 构建面集成） | 全包 84 绿+3 桩零回退；真跑 r39 构建（main b0370ee619e7/tar b6da5f12bf52）；审计两类零越界（283 行变更表逐条吻合）；刀次 min 5 | 流库 30 新+86 旧合并 213 键 hit 覆盖 16%；毛期偏移 16 格 |
+| ▶ B27 | R22-S3 判决反制三件：make_counter_opponent → flip_stats[改造] → judge_predict_replay[改造] | 判决真跑（26+10+反制臂）出 evidence；六判据实数如实 | 判负→收档（预绑定） |
 | B28 | R22-S4 门禁+总指挥：verify_r39_gates → run_r39_iteration | 五门实跑+全链整合裁决 | 发射裁决呈批间门 |
 | 2026-09-26 | B23 签名微调登记 | pack_r38/build_r38 +out_dir=None；变更集=纯尾块（manifest 自证）；库 sha 口径统一 ensure_ascii=False（评审 P3） |
 | 2026-09-26 | R21 批次计划立表（B22-B24）+轻量对账 | 对账判定**对得上**（28 桩全落 orderbook_predict 零外溢、r37 133 绿、49 绿基线持平、抽查命令全绿）；**环境清理**：/tmp usrquota 曾耗尽（Errno 122）——清孤儿缓存 pairsnap/v4bfull/r31b/r31/r29b 约 3.9G，写入恢复；判决语料 r33audit（卖流库源）/kagr22/r30 保留 |
