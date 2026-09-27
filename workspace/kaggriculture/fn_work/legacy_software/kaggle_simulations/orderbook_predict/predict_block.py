@@ -4,9 +4,10 @@
 责任契约（fn_docs/hybrid/responsibility.md【R21 增补】）：
 _predict_agent（单参官方入口，父层=_r37_agent 链）→ infer_rival_sells（净卖
 反推：公开库存差分−自家成交−确定性城镇消费，$1 地板为下界）→ match_sellflow
-（卖流库检索：首二店+step-2 身份指纹）→ extrapolate_sells（差分外推 1-2 步
-写入 opponent_plan 容器）→ apply_dodge（预测倾销→我方卖单错峰/减量）。
-置信不足→不动作 fail-safe；只动卖单时点/量。本文件源文本由
+（卖流库检索：首二店+step-2 身份指纹）→ extrapolate_sells（差分外推 v2：
+限频六道门+量级档+credit 减记，1-2 步钩子写入 opponent_plan 容器）→
+apply_dodge（v2 门：预测倾销价<base→deny，action 原样零改动）。
+置信不足→不动作 fail-safe；门只出 allow/deny 信号不改动作。本文件源文本由
 inject_predict_block 追加进包内（含内嵌库数据）。
 
 实现口径（自包含：常数/小工具定义在各函数体内，stdlib only，注入底版
@@ -17,19 +18,28 @@ from typing import Any, Dict  # noqa: F401
 
 
 def infer_rival_sells(observation: Dict[str, Any], own_fills: Any) -> Dict[str, Any]:
-    """净卖反推（R21 L4）：market.inventory 差分−自家成交−确定性城镇消费
-    →对手上一步净卖量/品类；$1 地板成交不入库存→下界标志；跨步账本供外推。
+    """净卖反推 v2（R22 改2）：market.inventory 差分−自家成交−确定性城镇消费
+    →对手上一步净卖量/品类；删失处理（$1 地板只记下界）+噪声门；跨步账本供外推。
 
     引擎口径（kaggriculture.py）：步 S 的更新=双方成交（_process_market）后
     立即 _town_consume(S)——故观测差分 obs[S]→obs[S+1] 覆盖「步 S 的成交 +
     步 S 触发的城镇消费」；逆推式
-      对手净卖 = 库存差分 + 城镇消费 − 自家净卖（sell−buy）。
+      D = 库存差分 + 城镇消费，U = 自家净卖（sell−buy），对手净卖 = D−U。
     城镇消费（确定性，interval 取 4/24）：S % 4 == 0 时每 shop 实例对旗下
     各品扣 multiplier（单品类店 2、多品类店 1）；S % 24 == 0 时中心单全品
-    （FERTILIZER 除外）各扣 1。自家 SELL 价>1 才入库存（引擎 _commit_unit：
-    $1 成交不入库存）→ 不计入自家净卖，改记 floor_sells 佐证下界。
-    下界标志：该品现/前步市场价 ≤ 1（地板）或自家账带 floor_sells
-    （地板成交对公开库存不可见→净卖只少不多）。
+    （FERTILIZER 除外）各扣 1。
+    自家快照=**最终改单后**动作流：own_fills 参数即最终动作账（_predict_agent
+    从最终 action 收账），杜绝 stale-snapshot trap（改单差额全记到对手头上）。
+    自家 SELL 价>1 才入库存（引擎 _commit_unit：$1 成交不入库存）→ 不计入
+    自家净卖，改记 floor_sells 佐证删失。
+
+    删失处理（R22 改2）：$1 地板成交不入公开库存→公开库存差分低估对手卖量，
+    地板截断后无有限上界。反推时该品满足任一删失/噪声条件——现/前步市场价
+    ≤$3、推算 sold=max(0,D−U)<2（噪声门，不入精确账）、自家账带 floor_sells
+    （$1 成交对公开库存不可见）——净卖**只记下界** {"net_qty": max(0,D−U),
+    "lower_bound": True}，禁止当精确值、禁止填 0（下界为 0 即整条不入账）。
+    非删失（价>$3 且 sold≥2 且无 floor 证据）→ 精确账 {"net_qty": D−U,
+    "lower_bound": False}。
 
     跨步账本 = 函数属性 infer_rival_sells._ledger（自包含）：
       {"step", "prev": {"step","inv","prices","shops"},
@@ -37,9 +47,9 @@ def infer_rival_sells(observation: Dict[str, Any], own_fills: Any) -> Dict[str, 
     仅当 prev.step == step−1（相邻步）才出账；步序跳跃/首步/step 0 只重建
     快照不出账。供 extrapolate_sells 差分外推。
 
-    签名意图：输入: observation（逐步调用）+自有成交账
+    签名意图：输入: observation（逐步调用）+自有最终成交账
     {"sell":{item:qty},"buy":{item:qty}[,"floor_sells":{item:qty}]}（可 None）/
-    输出: {item: {net_qty, lower_bound}}（净卖≠0 或下界品才入账）/
+    输出: {item: {net_qty, lower_bound}}（下界>0 或精确净卖才入账）/
     错误: 字段缺失/畸形→空账 {} 不抛、账本不动。
     """
     try:
@@ -127,16 +137,24 @@ def infer_rival_sells(observation: Dict[str, Any], own_fills: Any) -> Dict[str, 
                 continue
             own_net = f_sell.get(item, 0) - f_buy.get(item, 0)
             net = diff + consume.get(item, 0) - own_net
-            floor = f_floor.get(item, 0) > 0
+            sold = max(0, net)
+            # ---- 删失/噪声门：价≤$3 或 sold<2 或自家 floor_sells 证据 ----
+            censored = f_floor.get(item, 0) > 0 or sold < 2
             for p in (prices_now.get(item), prices_prev.get(item)):
-                if isinstance(p, (int, float)) and not isinstance(p, bool) and p <= 1:
-                    floor = True
-            if net == 0 and not floor:
-                continue
-            result[item] = {"net_qty": int(net), "lower_bound": bool(floor)}
+                if isinstance(p, (int, float)) and not isinstance(p, bool) and p <= 3:
+                    censored = True
+            if censored:
+                if sold == 0:
+                    continue  # 禁填 0：下界为 0 不入账（删失后无有限上界）
+                rec = {"net_qty": int(sold), "lower_bound": True}
+            else:
+                if net == 0:
+                    continue
+                rec = {"net_qty": int(net), "lower_bound": False}
+            result[item] = rec
             hist = history.setdefault(item, [])
             if isinstance(hist, list):
-                hist.append(int(net))
+                hist.append(int(rec["net_qty"]))
                 if len(hist) > 64:
                     del hist[:-64]
 
@@ -152,40 +170,55 @@ def infer_rival_sells(observation: Dict[str, Any], own_fills: Any) -> Dict[str, 
 
 
 def match_sellflow(observation: Dict[str, Any], library: Any) -> Dict[str, Any]:
-    """卖流库检索（R21 L4）：键=（unlocked_shops[:2] 组合，step-2 身份指纹），
-    取当前步窗 ±w 的对手 SELL 分布；无键→回退全局分布；置信=样本数×集中度。
+    """卖流库检索 v2（R22 改3）：TOP-1 键匹配（只取命中的最优一键，不做多键
+    展开）；远端信号（预测 1-4 回合后）需库条目带 history_hits≥3 且
+    hit_rate≥0.70（库新字段）才采纳，否则 skipped；无键回退 library["global"]
+    且置信降一档（×0.5）。
 
     库结构（与 build_sellflow_library 共同约定）：
       {"version", "keys": {f"{shop_pair}||{fingerprint}":
           {"n_episodes", "hist": {"<win>": {"<ITEM>":
-              {"qty_sum","count","qty_max"}}}}},
-       "global": {同 hist 形}}，win = step//48。
+              {"qty_sum","count","qty_max"}}}
+           [,"history_hits": int, "hit_rate": float]}},
+       "global": {同 hist 形 或入口形 {"n_episodes","hist"[,"history_hits",
+           "hit_rate"]}}}，win = step//48。
     键编码（本件钉住，兼容候选同查）：shop_pair=",".join(unlocked_shops[:2])；
     fingerprint=f"{round(float(money),3)}:{int(WHEAT inv)}"（step==2 的对手
     快照：farms[1−player].money + market.inventory.WHEAT；跨步身份存函数属性
     match_sellflow._identity，无快照回退当前观测值）。
     取窗：win=step//48，聚合 win−1..win+1（w=1）内各品直方。
+    TOP-1：候选键（规范键+兼容键）命中的入口按 n_episodes 最大取一（同分取
+    候选序最前，"最优"=样本数最多），只聚合该一键，不做多键展开。
+    历史置信门（远端 1-4 回合信号）：选中入口带 history_hits/hit_rate 新字段
+    →须 history_hits≥3 且 hit_rate≥0.70（含界）才采纳；否则 source="skipped"、
+    items 空、confidence=0。缺新字段=旧库条目沿 v1 采纳（门只对带字段条目生效）。
+    无键→library["global"]（支持 bare-hist 与入口两形），置信 ×0.5 降一档。
 
     置信口径（简单可测）：
       样本因子 = min(1, n/10)，n=窗内 count 之和；
       集中度 = 最大单品 qty_sum / 全部 qty_sum（空分布=0）；
-      confidence = 样本因子 × 集中度 ∈ [0,1]。
+      confidence = 样本因子 × 集中度 ∈ [0,1]（global 再 ×0.5）。
 
     签名意图：输入: observation+库 /
-    输出: {"matches": {"items","wins","source","key","step"}, "confidence"} /
+    输出: {"matches": {"items","wins","source","key","step","skipped"},
+           "confidence", "top1": {"key","source","adopted"}} /
     错误: 库缺失/畸形→confidence=0（不抛）。
     """
-    empty = {"items": {}, "wins": [], "source": "none", "key": None, "step": -1}
+    empty = {"items": {}, "wins": [], "source": "none", "key": None,
+             "step": -1, "skipped": True}
+    top_none = {"key": None, "source": "none", "adopted": False}
     try:
         if not isinstance(observation, dict):
-            return {"matches": empty, "confidence": 0.0}
+            return {"matches": empty, "confidence": 0.0,
+                    "top1": dict(top_none)}
         raw_step = observation.get("step")
         if raw_step is None:
             step = int(observation.get("day", 0)) * 24 + int(observation.get("hour", 0))
         else:
             step = int(raw_step)
         if not isinstance(library, dict) or not library:
-            return {"matches": dict(empty, step=step), "confidence": 0.0}
+            return {"matches": dict(empty, step=step), "confidence": 0.0,
+                    "top1": dict(top_none)}
         town = observation.get("town") or {}
         shops = list((town.get("unlocked_shops") or []) if isinstance(town, dict) else [])
         player = int(observation.get("player", 0))
@@ -195,7 +228,7 @@ def match_sellflow(observation: Dict[str, Any], library: Any) -> Dict[str, Any]:
         inv = (observation.get("market") or {}).get("inventory") or {}
         wheat = int(inv.get("WHEAT", 0) or 0)
     except Exception:
-        return {"matches": empty, "confidence": 0.0}
+        return {"matches": empty, "confidence": 0.0, "top1": dict(top_none)}
 
     # ---- step-2 身份指纹（跨步自包含；步序回跳/无快照时重抓） ----
     try:
@@ -228,18 +261,44 @@ def match_sellflow(observation: Dict[str, Any], library: Any) -> Dict[str, Any]:
         for sp in (shop_pair, str(tuple(str(s) for s in shops[:2]))):
             for fp in (f"{fp_money}:{fp_wheat}", f"({fp_money}, {fp_wheat})"):
                 cand.append(f"{sp}||{fp}")
-        entry, source, key_used, n_episodes = None, "none", None, 0
+        # ---- TOP-1：候选命中里按 n_episodes 取最优一键（同分取候选序最前） ----
+        best = None
         if isinstance(keys, dict):
-            for c in cand:
+            for idx, c in enumerate(cand):
                 hit = keys.get(c)
                 if isinstance(hit, dict) and isinstance(hit.get("hist"), dict):
-                    entry, source, key_used = hit["hist"], "key", c
-                    n_episodes = int(hit.get("n_episodes", 0) or 0)
-                    break
-        if entry is None and isinstance(glob, dict) and glob:
-            entry, source = glob, "global"
+                    n_hit = int(hit.get("n_episodes", 0) or 0)
+                    if best is None or n_hit > best[0]:
+                        best = (n_hit, idx, c, hit)
+        entry, source, key_used, gate_src = None, "none", None, None
+        if best is not None:
+            _, _, key_used, gate_src = best
+            entry, source = gate_src["hist"], "key"
+        elif isinstance(glob, dict) and glob:
+            if isinstance(glob.get("hist"), dict):
+                gate_src, entry = glob, glob["hist"]
+            else:
+                gate_src, entry = glob, glob
+            source = "global"
         if entry is None:
-            return {"matches": dict(empty, step=step), "confidence": 0.0}
+            return {"matches": dict(empty, step=step), "confidence": 0.0,
+                    "top1": dict(top_none)}
+        # ---- 历史置信门（远端 1-4 回合信号；带新字段条目才走门） ----
+        if isinstance(gate_src, dict) and ("history_hits" in gate_src
+                                           or "hit_rate" in gate_src):
+            try:
+                h_hits = int(gate_src.get("history_hits", 0) or 0)
+                h_rate = float(gate_src.get("hit_rate", 0.0) or 0.0)
+            except Exception:
+                h_hits, h_rate = 0, 0.0
+            adopted = h_hits >= 3 and h_rate >= 0.70
+        else:
+            adopted = True  # 旧库条目（无新字段）沿 v1 采纳
+        top1 = {"key": key_used, "source": source, "adopted": bool(adopted)}
+        if not adopted:
+            return {"matches": {"items": {}, "wins": [], "source": "skipped",
+                                "key": key_used, "step": step, "skipped": True},
+                    "confidence": 0.0, "top1": top1}
         # ---- 窗口聚合（win=step//48，±1） ----
         cur_win = step // 48
         wins = [cur_win - 1, cur_win, cur_win + 1]
@@ -267,60 +326,103 @@ def match_sellflow(observation: Dict[str, Any], library: Any) -> Dict[str, Any]:
         top = max((a["qty_sum"] for a in items.values()), default=0)
         concentration = (top / total) if total > 0 else 0.0
         confidence = min(1.0, n / 10.0) * concentration
-        if source == "key" and n_episodes:
-            pass  # n_episodes 为注记字段，置信只依样本数与集中度
+        if source == "global":
+            confidence *= 0.5  # 无键回退 global：置信降一档
         return {"matches": {"items": items, "wins": wins, "source": source,
-                            "key": key_used, "step": step},
-                "confidence": float(confidence)}
+                            "key": key_used, "step": step, "skipped": False},
+                "confidence": float(confidence), "top1": top1}
     except Exception:
-        return {"matches": dict(empty, step=step), "confidence": 0.0}
+        return {"matches": dict(empty, step=step), "confidence": 0.0,
+                "top1": dict(top_none)}
 
 
-def extrapolate_sells(inference: Any, matches: Any, plan: Any) -> Dict[str, Any]:
-    """差分外推（R21 L4）：净卖推断+卖流匹配合成对手未来 1-2 步预期 SELL 单
-    （["SELL",item,qty]）写入 opponent_plan 容器对应步位。
+def extrapolate_sells(inference: Any, matches: Any, plan: Any,
+                      credit: Any = None) -> Dict[str, Any]:
+    """差分外推 v2（R22 改1/改2/改3）：限频六道门 + 量级档 + credit 减记。
 
-    契约：plan=按步索引的 dict 列表（基座 _front_run 契约 plan[step]["market"]
-    单形状）。合成规则（简单可测）：
-      候选品 = 推断净卖>0 的品 ∪ 库分布有量（count>0 且 qty_sum>0）的品；
-      qty = 净卖（net_qty>0）否则 库均单量 round(qty_sum/count)；≤0 不写；
-      步位 = 当前步+1 与 +2（当前步取推断账 "step"，缺→匹配结果 "step"，
-      仍缺→不写）；同槽已有该品 SELL 单→量取 max 合并（不重复堆单）。
-    置信 < 0.5 → 全部不写（fail-safe 不动作）。
+    限频六道门（全过才写；任一不过→skipped 记因不写）：
+      ①触发窗：step∈[336,646]（步号取 inference["step"]，缺→matches 步号，
+        仍缺→不写 no_step）；
+      ②开火门槛：近 2 回合（step+1+step+2）TOP-1 预测净卖 = 2×pred ≥ K=4；
+        pred=推断净卖 net_qty（>0 时）否则 TOP-1 库均单量 round(qty_sum/count)；
+      ③每步每品恰 1 单：目标步位已有该品 SELL 单→该步位跳过不堆单（dup）；
+      ④量级带通：qty=min(该品棚存, 自家 48h 计划卖量余量) 且 4≤qty≤99
+        （两端拒绝：带外不写 band；带内含界 4/99）；
+      ⑤价门：min_sell_price=2 + base 价门——base=obs 市场价该品（传入账
+        prices 段，缺→推断账 prev.prices）；预测倾销价<base→不写（price）、
+        预测倾销价<2→不写（floor）；
+      ⑥噪声门：matches.skipped（远端未过历史门）→不写（noise）。
+    输出量级档：written 条目 {"item","qty","tier"}，**不写具体步位**；tier 按
+    qty 分档 少<20 / 中 20-60 / 多>60；plan 写入沿 v1 的 1-2 回合步位
+    （step+1/step+2）仅作 _front_run 钩子触发，tier 供抢跑量决策。
+    credit 减记：每写一单，credit 账按 qty 扣减该品自家后续计划卖量
+    （禁净加卖：credit≤0 不再写、累计写量 ≤ 计划量）。
 
-    inference 兼容两形：推断账 {"step","items":{item:{net_qty,lower_bound}},
-    ...}（infer_rival_sells._ledger）或净卖映射 {item:{net_qty,...}}。
-    matches = match_sellflow 输出 {"matches":…, "confidence":…}。
+    credit 账（传入账；credit 参数缺→函数属性 extrapolate_sells._credit；
+    可为 callable；纯 credit 形 {item: 余量} 等价 {"plan": 该形}）：
+      {"stock": {item: 棚存},              # observation["private"]["shed"] 口径
+       "plan": {item: 48h 计划卖量余量},    # credit 记账本体（写单减记）
+       "prices": {item: base 价},          # obs 市场价（缺该品→不写 fail-safe）
+       "dump_prices": {item: 预测倾销价}}   # 缺省=base（放行）
+    棚存/计划量/基价取不到→不写（fail-safe）。
 
-    签名意图：输入: 推断账+匹配结果+plan 容器 /
-    输出: {"written": [{"step","item","qty"}], "skipped": [{"item","reason"}]} /
-    错误: 容器畸形/槽位畸形→该处不写不抛。
+    签名意图：输入: 推断账+匹配结果+plan 容器+credit 账（可选 credit=None）/
+    输出: {"written": [{"item","qty","tier"}], "skipped": [{"item","reason"}],
+           "credit_debited": [{"item","step","qty"}]} /
+    错误: 容器畸形/槽位畸形/坏输入→不写不抛。
     """
+    K = 4                      # 开火门槛：近 2 回合预测净卖下限（单位）
+    WIN_LO, WIN_HI = 336, 646  # 触发窗（含界）
+    QTY_LO, QTY_HI = 4, 99     # 量级带通（含界）
+    MIN_SELL_PRICE = 2         # 机箱价地板
 
     def _skip(items, reason):
         return [{"item": i, "reason": reason} for i in items]
 
+    def _account(raw):
+        if callable(raw):
+            try:
+                raw = raw()
+            except Exception:
+                raw = None
+        if not isinstance(raw, dict):
+            raw = {}
+        if any(k in raw for k in ("stock", "plan", "prices", "dump_prices")):
+            stock = raw.get("stock") if isinstance(raw.get("stock"), dict) else {}
+            plan_map = raw.get("plan") if isinstance(raw.get("plan"), dict) else {}
+            prices = raw.get("prices") if isinstance(raw.get("prices"), dict) else {}
+            dump = raw.get("dump_prices") if isinstance(raw.get("dump_prices"), dict) else {}
+        else:
+            stock, prices, dump = {}, {}, {}
+            plan_map = raw  # 纯 credit 形 {item: 计划卖量余量}
+        return stock, plan_map, prices, dump
+
     try:
-        conf, dist, match_step = 0.0, {}, None
+        dist, match_step, noise = {}, None, False
         if isinstance(matches, dict):
-            conf = float(matches.get("confidence", 0.0) or 0.0)
             inner = matches.get("matches")
             if isinstance(inner, dict):
                 match_step = inner.get("step", matches.get("step"))
                 dist = inner.get("items") if isinstance(inner.get("items"), dict) else {}
+                noise = bool(inner.get("skipped", False))
             else:
                 match_step = matches.get("step")
         inf_step = None
+        inf_prices: Dict[str, Any] = {}
         if isinstance(inference, dict) and isinstance(inference.get("items"), dict):
             inf_map = inference["items"]
             inf_step = inference.get("step")
+            prev = inference.get("prev")
+            if isinstance(prev, dict) and isinstance(prev.get("prices"), dict):
+                inf_prices = prev["prices"]
         elif isinstance(inference, dict):
             inf_map = {k: v for k, v in inference.items()
                        if isinstance(v, dict) and "net_qty" in v}
         else:
             inf_map = {}
     except Exception:
-        return {"written": [], "skipped": [{"item": "*", "reason": "bad_input"}]}
+        return {"written": [], "skipped": [{"item": "*", "reason": "bad_input"}],
+                "credit_debited": []}
 
     candidates = []
     try:
@@ -341,30 +443,97 @@ def extrapolate_sells(inference: Any, matches: Any, plan: Any) -> Dict[str, Any]
         candidates = []
 
     if not isinstance(plan, list):
-        return {"written": [], "skipped": _skip(candidates or ["*"], "bad_plan")}
+        return {"written": [], "skipped": _skip(candidates or ["*"], "bad_plan"),
+                "credit_debited": []}
     step = inf_step if inf_step is not None else match_step
-    if step is None:
-        return {"written": [], "skipped": _skip(candidates or ["*"], "no_step")}
-    if conf < 0.5:
-        return {"written": [], "skipped": _skip(candidates or ["*"], "low_confidence")}
+    try:
+        if isinstance(step, bool) or not isinstance(step, (int, float)):
+            raise TypeError("step")
+        step = int(step)
+    except Exception:
+        return {"written": [], "skipped": _skip(candidates or ["*"], "no_step"),
+                "credit_debited": []}
 
-    written, skipped = [], []
+    raw_credit = credit if credit is not None else getattr(extrapolate_sells, "_credit", None)
+    stock_map, plan_map, price_map, dump_map = _account(raw_credit)
+
+    written, skipped, debits = [], [], []
+    in_window = WIN_LO <= step <= WIN_HI
     for item in candidates:
+        # ⑥噪声门：远端未过历史门的信号不写
+        if noise:
+            skipped.append({"item": item, "reason": "noise"})
+            continue
+        # ①触发窗
+        if not in_window:
+            skipped.append({"item": item, "reason": "window"})
+            continue
+        # ---- TOP-1 预测量（②开火门槛：近 2 回合 ≥K 单位） ----
         try:
             net = int(inf_map.get(item, {}).get("net_qty", 0) or 0)
-            rec = dist.get(item) or {}
+        except Exception:
+            net = 0
+        rec = dist.get(item) or {}
+        try:
             cnt = int(rec.get("count", 0) or 0)
             qs = int(rec.get("qty_sum", 0) or 0)
-            rate = int(round(qs / cnt)) if cnt > 0 else 0
-            qty = net if net > 0 else rate
         except Exception:
-            skipped.append({"item": item, "reason": "bad_record"})
+            cnt, qs = 0, 0
+        rate = int(round(qs / cnt)) if cnt > 0 else 0
+        pred = net if net > 0 else rate
+        if 2 * pred < K:
+            skipped.append({"item": item, "reason": "below_k"})
             continue
-        if qty <= 0:
-            skipped.append({"item": item, "reason": "no_qty"})
+        # ---- 账面量（④：qty=min(棚存, 自家 48h 计划卖量)） ----
+        try:
+            credit_left = plan_map.get(item)
+            if credit_left is None:
+                raise TypeError("plan")
+            credit_left = int(credit_left)
+        except Exception:
+            skipped.append({"item": item, "reason": "no_account"})
             continue
-        placed = 0
-        for t in (int(step) + 1, int(step) + 2):
+        if credit_left <= 0:
+            skipped.append({"item": item, "reason": "no_credit"})
+            continue
+        try:
+            if stock_map.get(item) is None:
+                raise TypeError("stock")
+            stock_qty = int(stock_map[item])
+        except Exception:
+            skipped.append({"item": item, "reason": "no_account"})
+            continue
+        qty = min(stock_qty, credit_left)
+        if qty < QTY_LO or qty > QTY_HI:
+            skipped.append({"item": item, "reason": "band"})
+            continue
+        # ---- 价门（⑤：min_sell_price=2 + base 价门） ----
+        base = price_map.get(item)
+        if base is None:
+            base = inf_prices.get(item)
+        try:
+            if base is None:
+                raise TypeError("base")
+            base = float(base)
+        except Exception:
+            skipped.append({"item": item, "reason": "no_account"})
+            continue
+        try:
+            dump = float(dump_map.get(item, base))
+        except Exception:
+            skipped.append({"item": item, "reason": "price"})
+            continue
+        if dump < base:
+            skipped.append({"item": item, "reason": "price"})
+            continue
+        if dump < MIN_SELL_PRICE:
+            skipped.append({"item": item, "reason": "floor"})
+            continue
+        # ---- 写入（③每步每品恰 1 单 + credit 减记） ----
+        placed, why = 0, None
+        for t in (step + 1, step + 2):
+            if credit_left <= 0:
+                break
             if t < 0 or t >= len(plan):
                 continue
             slot = plan[t]
@@ -376,134 +545,109 @@ def extrapolate_sells(inference: Any, matches: Any, plan: Any) -> Dict[str, Any]
                 slot["market"] = market
             if not isinstance(market, list):
                 continue
-            merged = False
-            for order in market:
-                if isinstance(order, list) and len(order) >= 3 and order[0] == "SELL" \
-                        and order[1] == item:
-                    try:
-                        order[2] = max(int(order[2] or 0), int(qty))
-                    except Exception:
-                        pass
-                    merged = True
-                    break
-            if not merged:
-                market.append(["SELL", item, int(qty)])
-            written.append({"step": t, "item": item, "qty": int(qty)})
+            dup = any(isinstance(o, list) and len(o) >= 3 and o[0] == "SELL"
+                      and o[1] == item for o in market)
+            if dup:
+                why = "dup"
+                skipped.append({"item": item, "reason": "dup"})
+                continue
+            q = min(stock_qty, credit_left)
+            if q < QTY_LO or q > QTY_HI:
+                why = "band"
+                skipped.append({"item": item, "reason": "band"})
+                continue
+            market.append(["SELL", item, int(q)])
+            plan_map[item] = credit_left - int(q)
+            credit_left -= int(q)
+            tier = "少" if q < 20 else ("中" if q <= 60 else "多")
+            written.append({"item": item, "qty": int(q), "tier": tier})
+            debits.append({"item": item, "step": t, "qty": int(q)})
             placed += 1
-        if placed == 0:
+        if placed == 0 and why is None:
             skipped.append({"item": item, "reason": "bad_slot"})
-    return {"written": written, "skipped": skipped}
+    return {"written": written, "skipped": skipped, "credit_debited": debits}
 
 
 def apply_dodge(observation: Dict[str, Any], action: Dict[str, Any],
                 predictions: Any) -> Dict[str, Any]:
-    """避让（R21 L4）：预测对手 1-2 步内集中抛售某品（置信足）→我方本步该品
-    SELL 单顺延（槽置 [] 保位次）或减量改单；否则零动作。
+    """避让 v2（R22 改2）=**门**（删除 v1 "顺延置 []/减量改单" 语义——公开负
+    结果先例：持货等峰值 −$1.2k~−$3.2k/局）：只做每品 allow/deny 判定，**action
+    原样返回零改动**（不碰任何单，防御走价门不前拉、货到棚才卖）。
 
-    判定（简单可测）：predictions={"confidence": float, "sells":
-    [{"item","qty","steps"}]}（qty=该品未来 1-2 步合计预期抛售量，steps=抛售
-    步位）。置信 ≥ 0.5 且该品合计 Q ≥ 3（集中抛售线）才动该品，否则零动作。
-    动作（只动卖单时点/量）：仅扫 action["market"] 中 ["SELL", item, q]——
-      Q ≥ q → 整单顺延：槽置 []（保位次），dodges 记
-        {"op":"defer","item","qty","slot","due_step"}（due_step=预测抛售末步）；
-      0 < Q < q → 减量改单 ["SELL", item, q−Q]，{"op":"reduce","qty":Q,
-        "new_qty":q−Q,…}。
-    不碰 BUY_*（买种养单）、farmer/hands（HARVEST/FEED/CARE）、槽位数与出口
-    截断；非 SELL 与空槽原样。
+    判定（每品两分支）：base=observation["market"]["prices"][item]（obs 市场价
+    该品）；预测倾销价=predictions["prices"][item]（或 sells/written 条目
+    "price"，缺省=base=放行）；**预测倾销价 < base → "deny"**（该品本步不前拉
+    不加卖，保留原计划卖单原样），否则 "allow"。
+    输出 gates 供调用方（_predict_agent）执行 deny 品的写入作废/credit 回滚；
+    本函数自身绝不改 action（同对象返回）。
+    异常（observation 非 dict / predictions 畸形 / 评估抛错）→全 allow +
+    原 action。
 
-    签名意图：输入: observation, action, 预测结果 / 输出:
-    {"action": 调整后 action（零动作=原对象）, "dodges": 避让账} /
-    错误: 异常→原 action 同对象+dodges=[]。
+    签名意图：输入: observation, action, 预测结果 /
+    输出: {"action": 原 action（同对象零改动）,
+           "gates": {item: "allow"|"deny"}} /
+    错误: 异常→全 allow+原动作。
     """
+    items = []
+    price_hint: Dict[str, Any] = {}
     try:
-        conf = 0.0
-        sells = []
         if isinstance(predictions, dict):
-            conf = float(predictions.get("confidence", 0.0) or 0.0)
+            prices = predictions.get("prices")
+            if isinstance(prices, dict):
+                for k, v in prices.items():
+                    items.append(str(k))
+                    price_hint[str(k)] = v
             raw = predictions.get("sells")
             if not isinstance(raw, list):
                 raw = predictions.get("written")
-            if isinstance(raw, list):
-                agg: Dict[str, Dict[str, Any]] = {}
-                for rec in raw:
-                    if not isinstance(rec, dict) or not rec.get("item"):
-                        continue
-                    item = str(rec["item"])
-                    try:
-                        q = abs(int(rec.get("qty", 0) or 0))
-                    except Exception:
-                        q = 0
-                    steps = rec.get("steps")
-                    if not isinstance(steps, list):
-                        steps = [rec["step"]] if rec.get("step") is not None else []
-                    slot = agg.setdefault(item, {"item": item, "qty": 0, "steps": []})
-                    slot["qty"] += q
-                    for s in steps:
-                        if s not in slot["steps"]:
-                            slot["steps"].append(s)
-                sells = [v for v in agg.values() if v["qty"] > 0]
+            for rec in raw or []:
+                if isinstance(rec, dict) and rec.get("item"):
+                    it = str(rec["item"])
+                    if it not in items:
+                        items.append(it)
+                    if it not in price_hint and rec.get("price") is not None:
+                        price_hint[it] = rec.get("price")
     except Exception:
-        return {"action": action, "dodges": []}
-
-    if conf < 0.5 or not sells:
-        return {"action": action, "dodges": []}
+        items, price_hint = [], {}
+    gates: Dict[str, str] = {}
     try:
-        if not isinstance(action, dict):
-            return {"action": action, "dodges": []}
-        market = action.get("market")
-        if not isinstance(market, list):
-            return {"action": action, "dodges": []}
-    except Exception:
-        return {"action": action, "dodges": []}
-
-    try:
-        dodge_min_qty = 3
-        new_market = list(market)
-        dodges = []
-        for pred in sells:
-            item, total = pred["item"], int(pred["qty"])
-            if total < dodge_min_qty:
+        market = (observation or {}).get("market") if isinstance(observation, dict) else None
+        obs_prices = (market or {}).get("prices") if isinstance(market, dict) else {}
+        obs_prices = obs_prices if isinstance(obs_prices, dict) else {}
+        for item in items:
+            base = obs_prices.get(item)
+            dump = price_hint.get(item, base)
+            if base is None or dump is None:
+                gates[item] = "allow"
                 continue
-            due = max(pred["steps"]) if pred["steps"] else -1
-            for i, order in enumerate(market):
-                if not (isinstance(order, list) and len(order) >= 3
-                        and order[0] == "SELL" and order[1] == item):
-                    continue
-                try:
-                    q = int(order[2] or 0)
-                except Exception:
-                    continue
-                if q <= 0:
-                    continue
-                if total >= q:
-                    new_market[i] = []
-                    dodges.append({"op": "defer", "item": item, "qty": q,
-                                   "slot": i, "due_step": due})
-                else:
-                    new_market[i] = ["SELL", item, q - total]
-                    dodges.append({"op": "reduce", "item": item, "qty": total,
-                                   "new_qty": q - total, "slot": i, "due_step": due})
-        if not dodges:
-            return {"action": action, "dodges": []}
-        return {"action": dict(action, market=new_market), "dodges": dodges}
+            gates[item] = "deny" if float(dump) < float(base) else "allow"
     except Exception:
-        return {"action": action, "dodges": []}
+        gates = {item: "allow" for item in items}
+    return {"action": action, "gates": gates}
 
 
 def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
-    """入口包装（R21 L3，单参官方入口，last-callable）：父层取动作→推断账→
-    match→extrapolate 写 opponent_plan 容器→apply_dodge 调整本步卖单→返回。
+    """入口包装 v2（R22 改1-改3，单参官方入口，last-callable）：父层取动作 →
+    detect_clone 判克隆 → **is_clone=False 直接返回父层动作（全链零动作零写入）**
+    → infer → match → extrapolate（限频六门+量级档+credit 减记）→ apply_dodge
+    门（deny 品的 written 条目作废回滚 credit）→ 返回父层动作。
 
-    接线：父层=注入层捕获变量 _PREDICT_PARENT、库=内嵌 _PREDICT_LIBRARY，
-    均经 globals() 查找（本函数体内回退方案；测试可注入假父层/假库）。
-    流程：step==0 复位（infer 账本、match step-2 身份、自家成交账、避让账、
-    plan 容器 _predict_agent._opponent_plan，槽形 {"market": [...]}）→
-    父层取动作 → infer_rival_sells（自家成交账=上一步本层最终动作的市场单：
-    SELL 价>1 记 sell、$1 记 floor_sells、BUY_PRODUCT 记 buy）→ match_sellflow
-    → extrapolate_sells（推断账+匹配结果写 plan 容器）→ apply_dodge（按 written
-    聚合 {item:{qty 合计,steps}}+置信做避让）→ 返回调整后动作。
-    只动卖单时点/量。任何异常→父层动作原样（fail-safe）；父层缺失/父层抛
-    →PASS 兜底 {"farmer":["PASS"],"hands":[],"market":[]}。
+    接线沿 v1：父层=注入层捕获变量 _PREDICT_PARENT、库=内嵌 _PREDICT_LIBRARY，
+    均经 globals() 查找（测试可注入假父层/假库）。
+    step==0 复位全账：推断账（infer_rival_sells._ledger）、卖流身份
+    （match_sellflow._identity）、相似度快照（detect_clone._stream）、plan 容器
+    （_predict_agent._opponent_plan，槽形 {"market": [...]}）、credit 账
+    （_predict_agent._credit）、自家成交账（_own_fills）、门账（_dodge_log）与
+    written 作废账（_written）。
+    credit 账（可注入 _predict_agent._credit；形见 extrapolate_sells）：
+    {"plan": {item: 计划余量}[, "dump_prices"/"stock"/"prices" 覆盖]}；棚存
+    （observation["private"]["shed"]）与 base 价（observation["market"]
+    ["prices"]）每步自 observation 补齐、账内覆盖优先；plan 段缺→不写
+    （fail-safe）。
+    链内 deny 回滚：apply_dodge 判 deny 的品→该品 written 条目作废、plan 钩子
+    单撤回、credit 等额回滚（防净加卖账不残留）。返回动作=父层动作原样。
+    任何异常→父层动作原样（fail-safe）；父层缺失/父层抛→PASS 兜底
+    {"farmer":["PASS"],"hands":[],"market":[]}。
     """
     base_action = None
     try:
@@ -517,7 +661,7 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
                 raise TypeError("observation[step] must be a number")
             step = int(raw_step)
 
-        # ---- step==0 复位账与 plan 容器 ----
+        # ---- step==0 复位全账 ----
         if step == 0:
             try:
                 infer_rival_sells._ledger = None
@@ -527,14 +671,25 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
                 match_sellflow._identity = None
             except Exception:
                 pass
+            try:
+                detect_clone._stream = None
+            except Exception:
+                pass
             _predict_agent._own_fills = {"sell": {}, "buy": {}, "floor_sells": {}}
             _predict_agent._dodge_log = []
             _predict_agent._opponent_plan = []
+            _predict_agent._credit = {}
+            _predict_agent._written = []
 
         parent = globals().get("_PREDICT_PARENT")
         if not callable(parent):
             return {"farmer": ["PASS"], "hands": [], "market": []}
         base_action = parent(observation)
+
+        # ---- 克隆门：非克隆→父层动作原样，全链零动作零写入 ----
+        clone = detect_clone(observation)
+        if not (isinstance(clone, dict) and clone.get("is_clone")):
+            return base_action
 
         plan = getattr(_predict_agent, "_opponent_plan", None)
         if not isinstance(plan, list):
@@ -542,6 +697,32 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
         while len(plan) <= min(step + 2, 719):
             plan.append({"market": []})
         _predict_agent._opponent_plan = plan
+
+        # ---- credit 账（传入账 + observation 补齐棚存/base 价） ----
+        acct = getattr(_predict_agent, "_credit", None)
+        if not isinstance(acct, dict):
+            acct = {}
+        obs_private = observation.get("private") or {}
+        obs_shed = obs_private.get("shed") if isinstance(obs_private, dict) else None
+        obs_market = observation.get("market") or {}
+        obs_prices = obs_market.get("prices") if isinstance(obs_market, dict) else None
+        stock = dict(obs_shed) if isinstance(obs_shed, dict) else {}
+        if isinstance(acct.get("stock"), dict):
+            stock.update(acct["stock"])
+        prices = dict(obs_prices) if isinstance(obs_prices, dict) else {}
+        if isinstance(acct.get("prices"), dict):
+            prices.update(acct["prices"])
+        plan_map = acct.get("plan")
+        if not isinstance(plan_map, dict):
+            plan_map = {}
+            acct["plan"] = plan_map
+        dump_map = acct.get("dump_prices")
+        if not isinstance(dump_map, dict):
+            dump_map = {}
+            acct["dump_prices"] = dump_map
+        _predict_agent._credit = acct
+        account = {"stock": stock, "plan": plan_map,
+                   "prices": prices, "dump_prices": dump_map}
 
         own_fills = getattr(_predict_agent, "_own_fills", None)
         if not isinstance(own_fills, dict):
@@ -553,33 +734,69 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
             else inference
         library = globals().get("_PREDICT_LIBRARY")
         match = match_sellflow(observation, library)
-        ext = extrapolate_sells(infer_arg, match, plan)
+        ext = extrapolate_sells(infer_arg, match, plan, account)
 
         agg: Dict[str, Dict[str, Any]] = {}
         for rec in ext.get("written") or []:
             if not isinstance(rec, dict) or not rec.get("item"):
                 continue
-            slot = agg.setdefault(str(rec["item"]), {"item": str(rec["item"]),
-                                                     "qty": 0, "steps": []})
+            item = str(rec["item"])
+            slot = agg.setdefault(item, {"item": item, "qty": 0,
+                                         "tier": rec.get("tier")})
             try:
                 slot["qty"] += abs(int(rec.get("qty", 0) or 0))
             except Exception:
                 pass
+        pred_prices = {item: dump_map[item] for item in agg if item in dump_map}
+        predictions = {"confidence": (match or {}).get("confidence", 0.0),
+                       "sells": [v for v in agg.values() if v["qty"] > 0],
+                       "prices": pred_prices}
+        dodged = apply_dodge(observation, base_action, predictions)
+        gates = dodged.get("gates")
+        gates = gates if isinstance(gates, dict) else {}
+
+        # ---- deny 回滚：written 条目作废 + plan 钩子单回滚 + credit 回滚 ----
+        final_written = []
+        for rec in ext.get("written") or []:
+            if not isinstance(rec, dict) or not rec.get("item"):
+                continue
+            if gates.get(str(rec["item"])) == "deny":
+                continue
+            final_written.append(rec)
+        for debit in ext.get("credit_debited") or []:
+            if not isinstance(debit, dict) or not debit.get("item"):
+                continue
+            item = str(debit["item"])
+            if gates.get(item) != "deny":
+                continue
             try:
-                if rec.get("step") is not None and rec["step"] not in slot["steps"]:
-                    slot["steps"].append(rec["step"])
+                t, q = int(debit.get("step")), int(debit.get("qty"))
+            except Exception:
+                continue
+            slot = plan[t] if 0 <= t < len(plan) and isinstance(plan[t], dict) else None
+            market = slot.get("market") if slot else None
+            if isinstance(market, list):
+                for order in list(market):
+                    if isinstance(order, list) and len(order) >= 3 \
+                            and order[0] == "SELL" and order[1] == item:
+                        try:
+                            if int(order[2] or 0) != q:
+                                continue
+                        except Exception:
+                            continue
+                        market.remove(order)
+                        break
+            try:
+                plan_map[item] = int(plan_map.get(item, 0) or 0) + q
             except Exception:
                 pass
-        predictions = {"confidence": (match or {}).get("confidence", 0.0),
-                       "sells": [v for v in agg.values() if v["qty"] > 0]}
-        dodged = apply_dodge(observation, base_action, predictions)
-        final_action = dodged.get("action", base_action)
+        _predict_agent._written = final_written
 
-        # ---- 自家成交账（供下一步 infer）+避让账 ----
+        # ---- 自家成交账（供下一步 infer）+门账 ----
         try:
-            prices = (observation.get("market") or {}).get("prices") or {}
+            prices_obs = obs_prices if isinstance(obs_prices, dict) else {}
             fills = {"sell": {}, "buy": {}, "floor_sells": {}}
-            market = final_action.get("market") if isinstance(final_action, dict) else None
+            market = base_action.get("market") if isinstance(base_action, dict) else None
             for o in market or []:
                 if not (isinstance(o, list) and len(o) >= 3):
                     continue
@@ -589,7 +806,7 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
                 except Exception:
                     continue
                 if op == "SELL":
-                    p = prices.get(item) if isinstance(prices, dict) else None
+                    p = prices_obs.get(item)
                     if isinstance(p, (int, float)) and not isinstance(p, bool) and p <= 1:
                         fills["floor_sells"][item] = fills["floor_sells"].get(item, 0) + q
                     else:
@@ -602,9 +819,10 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
         log = getattr(_predict_agent, "_dodge_log", None)
         if not isinstance(log, list):
             log = []
-        log.extend(dodged.get("dodges") or [])
+        for item in sorted(gates):
+            log.append({"item": item, "gate": gates[item]})
         _predict_agent._dodge_log = log
-        return final_action
+        return base_action
     except Exception:
         return base_action if base_action is not None \
             else {"farmer": ["PASS"], "hands": [], "market": []}
@@ -612,10 +830,94 @@ def _predict_agent(observation: Dict[str, Any]) -> Dict[str, Any]:
 
 def detect_clone(observation: Dict[str, Any]) -> Dict[str, Any]:
     """克隆/强匹配判定（R22 改4/改3 门）：step1 现金差<$0.5 或行为相似度
-    ≥0.95（近 N 步动作流一致率）判克隆；任一字段缺失/边界值→保守返回
+    ≥0.95（近 N=10 步动作流一致率）判克隆；任一字段缺失/边界值→保守返回
     非克隆（不 fire）；跨步快照自包含。
+
+    判定（两规则任一命中 is_clone=True，trigger 记命中规则）：
+      ①step1 现金镜像：obs["step"]==1 且 farms[1−player].money 与
+        farms[player].money 差 < $0.5（严格；0.5 边界不 fire）；
+      ②行为相似度：近 N=10 步动作流一致率 similarity ≥ 0.95（含界）。
+    跨步快照 = 函数属性 detect_clone._stream（自包含，测试可注入）：
+      {"agree": 一致步数, "total": 总步数, "window": [0/1,...]}——每次调用
+    若双方席位动作字段在（farms[i]["action"]，dict/list 动作流）则 canonical
+    归一判等追加 1/0，window 只留近 N=10 步并同步 agree/total；
+    similarity = agree/total（total==0→0.0）；无动作字段的调用不推进快照
+    （similarity 用既有缓存，快照即跨步证据）。
+    保守口径：observation 非 dict / step、player、farms、双方 money 缺失、
+    畸形（含 bool 冒充数）、席位越界 → 整体返回非克隆；现金差==0.5 边界
+    → ①不 fire；异常→非克隆 {is_clone: False, similarity: 0.0, evidence: {}}。
 
     签名意图：输入: observation（逐步调用） / 输出: {is_clone, similarity,
     evidence} / 错误: 异常→非克隆。
     """
-    raise NotImplementedError("unimplemented:fn:detect_clone")
+    try:
+        if not isinstance(observation, dict):
+            return {"is_clone": False, "similarity": 0.0, "evidence": {}}
+        raw_step = observation.get("step")
+        if raw_step is None:
+            step = int(observation.get("day", 0)) * 24 + int(observation.get("hour", 0))
+        else:
+            if isinstance(raw_step, bool) or not isinstance(raw_step, (int, float)):
+                return {"is_clone": False, "similarity": 0.0, "evidence": {}}
+            step = int(raw_step)
+        player = observation.get("player")
+        if isinstance(player, bool) or not isinstance(player, (int, float)):
+            return {"is_clone": False, "similarity": 0.0, "evidence": {}}
+        player = int(player)
+        if player not in (0, 1):
+            return {"is_clone": False, "similarity": 0.0, "evidence": {}}
+        farms = observation.get("farms")
+        if not isinstance(farms, list) or len(farms) <= 1 - player:
+            return {"is_clone": False, "similarity": 0.0, "evidence": {}}
+        own_seat, rival_seat = farms[player], farms[1 - player]
+        if not isinstance(own_seat, dict) or not isinstance(rival_seat, dict):
+            return {"is_clone": False, "similarity": 0.0, "evidence": {}}
+
+        def _money(seat):
+            m = seat.get("money")
+            if isinstance(m, bool) or not isinstance(m, (int, float)):
+                raise ValueError("money missing")
+            return float(m)
+
+        m_own, m_rival = _money(own_seat), _money(rival_seat)
+    except Exception:
+        return {"is_clone": False, "similarity": 0.0, "evidence": {}}
+
+    try:
+        cash_diff = abs(m_rival - m_own)
+        try:
+            st = detect_clone._stream
+        except Exception:
+            st = None
+        st = st if isinstance(st, dict) else {}
+        agree = int(st.get("agree", 0) or 0)
+        total = int(st.get("total", 0) or 0)
+        window = st.get("window") if isinstance(st.get("window"), list) else None
+
+        def _norm(a):
+            if isinstance(a, dict):
+                return tuple(sorted((str(k), _norm(v)) for k, v in a.items()))
+            if isinstance(a, (list, tuple)):
+                return tuple(_norm(v) for v in a)
+            return a
+
+        own_act, rival_act = own_seat.get("action"), rival_seat.get("action")
+        if own_act is not None and rival_act is not None:
+            flag = 1 if _norm(own_act) == _norm(rival_act) else 0
+            window = list(window or []) + [flag]
+            window = window[-10:]  # 近 N=10 步
+            agree, total = int(sum(window)), len(window)
+            detect_clone._stream = {"agree": agree, "total": total,
+                                    "window": window}
+        similarity = (agree / total) if total > 0 else 0.0
+        trigger = []
+        if step == 1 and cash_diff < 0.5:
+            trigger.append("cash")
+        if total > 0 and similarity >= 0.95:
+            trigger.append("similarity")
+        evidence = {"step": step, "cash_diff": cash_diff, "agree": agree,
+                    "total": total, "trigger": "+".join(trigger) or None}
+        return {"is_clone": bool(trigger), "similarity": float(similarity),
+                "evidence": evidence}
+    except Exception:
+        return {"is_clone": False, "similarity": 0.0, "evidence": {}}
