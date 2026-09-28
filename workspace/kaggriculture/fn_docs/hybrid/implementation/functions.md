@@ -174,3 +174,18 @@
 | judge_r24 | B36 | cancelled 09-28 | 同上 | — |
 | verify_r41_gates | B36 | cancelled 09-28 | 同上 | — |
 | run_r41_iteration | B36 | cancelled 09-28 | 同上 | — |
+| merge_same_item_orders | B37 | tested 09-28 | pytest test_slot.py merge 组 2 passed（同品合单/腾位 [] 保槽/守恒/非 SELL 不动/确定性/TypeError） | (本批) |
+| clear_dead_slots | B37 | tested 09-28 | pytest clear 组 2 passed（库存 0 清/超量截/qty<0 清/qty==0 不重复/fail-safe 原列表） | (本批) |
+| select_best_layout | B37 | tested 09-28 | pytest layout 组 2 passed（高单价前置/空集原序）；迷你模拟=逐单位衰减重报价+同槽 1:1 内化 | (本批) |
+| apply_slot_orchestration | B37 | wired 09-28 | pytest 8 passed（全组）；**真跑实证**：真局帧+真磁带动作——SELL 30 截到库存 20（防 abort 生效）、原动作未改写、账本六键 | (本批) |
+| apply_endgame_liquidation | B38 | stub 09-28 | 核验命令: pytest orderbook_r42/test_endgame.py（判据=R25 ②原文） | — |
+| apply_mirror_gate | B38 | stub 09-28 | 核验命令: pytest orderbook_r42/test_mirror.py（判据=R25 ③原文） | — |
+| inject_r42_block | B39 | stub 09-28 | 核验命令: pytest orderbook_r42/test_build_r42.py（inject 组） | — |
+| audit_diff_r42_vs_r40 | B39 | stub 09-28 | 核验命令: pytest orderbook_r42/test_build_r42.py（audit 组） | — |
+| pack_r42 | B39 | stub 09-28 | 核验命令: pytest orderbook_r42/test_build_r42.py（pack 组） | — |
+| build_r42 | B39 | stub 09-28 | 核验命令: pytest orderbook_r42/test_build_r42.py | — |
+| endgame_stats | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_judge_r25.py（endgame 组） | — |
+| mirror_arm_stats | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_judge_r25.py（mirror 组） | — |
+| judge_r25 | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_judge_r25.py（判据=R25 ①②③+总判原文） | — |
+| verify_r42_gates | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_gates_r42.py | — |
+| run_r42_iteration | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_run_r42.py | — |

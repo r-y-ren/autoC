@@ -8,6 +8,7 @@
 | 2026-09-28 | **B33 实验臂两轮设计修正（登记）**：①烟测暴露邻域替代臂产品错配巨损（−3k~−6k/局）→**安慰剂臂实证机制零伤**（强制=基座线，delta 0.0 逐位同）巨损为真效应；②路线考古：41 线=同一计划的**卖货时机变体**（加权卖货步 1927-2045 共 118 步≈5 天谱，路线号=时机轴），组合差 <1.5%、畜群面跨局近常量→臂改**时机常量三臂**（generic=中位/early=最早/late=最晚，闸门=基座≠强制线才生效）；假设=面孔预测价格轨迹→卖货时机条件化（热早冷晚）；邻域臂留档默认不跑 | 签名微调：build_ab_variant 第五参 arm_route；run_route_ab_experiments 默认臂(generic,early,late)；route_timing_profiles/pick_timing_routes 新增（时机画像） |
 | 2026-09-28 | **R24 判负收档（B33 实验证据闭环；预绑定条款执行）**：320 配对单元因果对照——基座店对→路线表全面胜出时机三臂（早/中/晚）与邻域臂；逐店对/逐对手异质性全查无正翻胜格（最好净翻 0，最差 −15）；收档台账 evidence/archive_ledger.json（run-r24-archive/1.0）；B34-B36 注销 | 判据②（命中库胜率方向性>未命中）由实验证明不可达：全部格子翻胜≤翻负 |
 | 2026-09-28 | **B33 评审回执（PASS with notes）+两处 P2 口径漂移补登记**：①fingerprint 三桶语义=实现真值（a=WOOL/MILK 偏移档、b=WHEAT 库存档、c=STRAWBERRY/WHEAT 偏移档；契约原写'变动方向组合'的③语义以实现为准，纯静态偏移）；②generic 臂=**基座表众数线**（实盘 105）非全谱时机中位（登记措辞'中位'系简写，以 arm_routes 账本可溯为准）；P3 三件（返回多 arm 键/签名意图残留 v2 措辞/边角 NameError fail 闭合）留档不修（收档件） | 代码即真值惯例；评审结论无 P0/P1，判负方向不受影响 |
+| 2026-09-28 | **R25 批次计划立表（B37-B40）+轻量对账（后台跑动）**：签名微调三件登记——①select_best_layout 第二参=公开市场态（观察无盘口字段，对手模型=同槽 1:1 交错内化进迷你模拟）；②merge/clear 只动 SELL 项（责任'不动买单/HIRE/空槽'），同品合并腾位以 [] 占位保槽位次；③clear_dead_slots 判据=会 abort 的卖单（qty≤0/库存 0/量超库存则截到库存），'错位后移'为其危害面 | 机制依据=references/2026-09-28-execution-faces-scan.md 一-1~5 引擎一手 |
 |---|---|---|
 | S1(完成 09-23) | 运行时纯函数层：_cxs_harvest_completable → _cxs_completable_plant_demand → _cxs_seed_surplus → _cxs_seed_truncate → _cxs_agent；+FIRST_HARVEST_STEPS 常数转录（vendored wheel+交叉校验）；+侦察任务：plan_view 契约定形（读基座磁带未来 PLANT/BUY_SEED 通道，RACE 扫描先例） | test_layer_s.py 全绿（含构造用例三件=门③(c) 单测面；surplus 不确定→None；s671 边界） | 零误杀语义的落点批——每层失败方向必须朝"不截" |
 | S2(完成 09-23) | 构建面：append_layer_s_block → build_layer_s_candidate | build 实跑产出注入版 main.py+submission.tar.gz+build_manifest.json；双跑逐字节；diff 仅尾部追加 | round-30 打包配方复用 |
@@ -44,6 +45,9 @@
 | ~~B34~~ | ~~建库+选路口径批~~ | **随 R24 判负注销**（09-28） | 实验证明库无正翻胜格可售——建库已无信息可装，继续=假完成 |
 | ~~B35~~ | ~~构建面批~~ | **随 R24 判负注销**（09-28） | 同上（判负预绑定：不建发射版） |
 | ~~B36~~ | ~~判决+门禁+总指挥批~~ | **随 R24 判负注销**（09-28） | 判决级证据=A/B 账本（直接测得库的信息含量=②判据）；②③无可判正路径 |
+| ▶ B38 | R25-S2 P2+P3 运行时批：apply_endgame_liquidation + apply_mirror_gate | pytest test_endgame+test_mirror 全绿（648 切换/降序清算序/镜像触发与不触发/credit 净加卖 0） | 镜像判定只用公开农场面 |
+| B39 | R25-S3 构建面批：inject_r42_block + audit_diff_r42_vs_r40 + pack_r42 + build_r42 wired | pytest test_build_r42 全绿+真跑构建（审计零越界/双跑恒等/r40 零改动） | 尾块注入三件+常量；_R42_* 捕获行 |
+| B40 | R25-S4 判决+门禁+总指挥：endgame_stats + mirror_arm_stats + judge_r25 + verify_r42_gates + run_r42_iteration wired | pytest 全绿桩清零+judge 真跑（R25 ①②③+总判）+发射/收档预绑定 | 判正且 09-28 窗内→standing 发射；判负/过窗→收档 |
 
 ## 变更记录（计划层事件）
 | 日期 | 事件 | 说明 |
