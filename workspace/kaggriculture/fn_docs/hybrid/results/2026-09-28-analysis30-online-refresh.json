@@ -1,0 +1,513 @@
+{
+ "_generated_at": "2026-09-28T09:27:01Z",
+ "source": {
+  "cli": "/home/renyxin/.local/bin/kaggle",
+  "auth": "pull_meta.py 口径：KAGGLE_API_TOKEN=$(kaggle auth print-access-token 2>/dev/null) 注入后跑后续命令；本次 print-access-token 未返回 token，回落默认 kaggle.json 凭据，全部命令正常返回",
+  "slug_extraction": "slug=kaggriculture，程序化自 fn_docs/hybrid/results/2026-09-23-round30-read.json source.commands 正则 competitions (?:submissions|episodes|replay) (\\S+)（无手拼）；kaggle competitions list -s kaggriculture --csv 交叉验证命中 https://www.kaggle.com/competitions/kaggriculture",
+  "commands": [
+   "kaggle competitions list -s kaggriculture --csv",
+   "kaggle competitions leaderboard kaggriculture -d -p /tmp/kagr30/  # 解出 kaggriculture-publicleaderboard-2026-09-28T09:07:56.csv（全量 10112 队）",
+   "kaggle competitions submissions kaggriculture --format json  # 41 条",
+   "kaggle kernels list --competition kaggriculture --sort-by dateRun --page-size 200 --format csv  # 100 行（无翻页标记；dateRun 降序，窗口判定取表头）",
+   "kaggle competitions topics list kaggriculture --format csv  # 全量翻页 --page-token 2..11，共 217 帖",
+   "kaggle kernels pull haodou092/kaggriculture-harvest-ledger -m -p /tmp/kagr30/haodou2  # 版本核验：metadata 无版本字段；版本钉选 pull /81（对照）/82/83 均 403，版本号未找到"
+  ],
+  "抓取日期": "2026-09-28",
+  "baseline": "/tmp/kagr29/kaggriculture-publicleaderboard-2026-09-28T08:39:31.csv",
+  "baseline_scan": "fn_docs/hybrid/references/2026-09-28-family-update-scan.md（16:46:14 CST 午后扫描，mtime 实证）；family 对位口径参照 fn_docs/hybrid/analyses/29-2026-09-28-family-benchmark.md（14 名在册、13 上榜）",
+  "时间口径": "Kaggle CLI/CSV 时间戳均为 UTC（08:39Z CSV 由 16:39 CST 下载实证；r40 launch_ledger submitted_at 带 Z 与 CLI date 一致）；CST=UTC+8"
+ },
+ "leaderboard": {
+  "snapshot": "2026-09-28T09:07:56Z（=17:07:56 CST 下载）",
+  "url": "https://www.kaggle.com/competitions/kaggriculture/leaderboard",
+  "total_teams": 10112,
+  "total_teams_0839z": 10110,
+  "our_row": {
+   "rank": 2143,
+   "team": "renyxin",
+   "score": 1656.0,
+   "last_submission": "2026-09-27 18:26:46Z",
+   "submission_count": 2,
+   "in_flight": "r40 = ref 56616285（launch_ledger 对号：fn_work/legacy_software/kaggle_simulations/orderbook_r40/evidence/launch_ledger.json）"
+  },
+  "delta_vs_0839": {
+   "our": {
+    "rank": "2164→2143（+21 位）",
+    "score": "1653.7→1656.0（+2.3）",
+    "new_submission": false,
+    "note": "无新提交，同一件 r40 的环境重打分漂移（收敛上行）"
+   },
+   "family": [
+    {
+     "family_name": "Georgy Mamarin",
+     "team_name": "Georgy Mamarin",
+     "rank": "393→404（-11 位）",
+     "score": "2351.0→2345.4（-5.6）",
+     "new_submission": false
+    },
+    {
+     "family_name": "tetsu2131",
+     "team_name": "tetsu2131",
+     "rank": "471→484（-13 位）",
+     "score": "2310.8→2307.3（-3.5）",
+     "new_submission": false
+    },
+    {
+     "family_name": "haodou092",
+     "team_name": "haodou092",
+     "rank": "697→703（-6 位）",
+     "score": "2220.2→2215.6（-4.6）",
+     "new_submission": true
+    },
+    {
+     "family_name": "Lynxx",
+     "team_name": "Lynxx",
+     "rank": "698→713（-15 位）",
+     "score": "2219.9→2210.6（-9.3）",
+     "new_submission": false
+    },
+    {
+     "family_name": "Alperen Aydın",
+     "team_name": "Alperen Aydın",
+     "rank": "765→769（-4 位）",
+     "score": "2187.5→2187.5（+0.0）",
+     "new_submission": false
+    },
+    {
+     "family_name": "AlekseiProvorov",
+     "team_name": "AlekseiProvorov",
+     "rank": "772→778（-6 位）",
+     "score": "2185.4→2184.6（-0.8）",
+     "new_submission": false
+    },
+    {
+     "family_name": "shiiin9",
+     "team_name": "shiiin9",
+     "rank": "1022→1088（-66 位）",
+     "score": "2078.4→2053.2（-25.2）",
+     "new_submission": false
+    },
+    {
+     "family_name": "prairieee",
+     "team_name": "prairieee",
+     "rank": "1094→1095（-1 位）",
+     "score": "2049.2→2049.2（+0.0）",
+     "new_submission": false
+    },
+    {
+     "family_name": "GURU",
+     "team_name": "GURU Prasaatha S",
+     "rank": "1341→1329（+12 位）",
+     "score": "1957.2→1961.1（+3.9）",
+     "new_submission": false
+    },
+    {
+     "family_name": "destbreso",
+     "team_name": "David Estevez",
+     "rank": "1362→1353（+9 位）",
+     "score": "1949.9→1953.0（+3.1）",
+     "new_submission": false
+    },
+    {
+     "family_name": "track",
+     "team_name": "track",
+     "rank": "1495→1461（+34 位）",
+     "score": "1905.8→1909.8（+4.0）",
+     "new_submission": false
+    },
+    {
+     "family_name": "kkkk",
+     "team_name": "kkkk",
+     "rank": "1699→1691（+8 位）",
+     "score": "1833.0→1829.8（-3.2）",
+     "new_submission": false
+    },
+    {
+     "family_name": "uninhibited-scholar",
+     "team_name": "uninhibited-scholar",
+     "rank": "1836→1828（+8 位）",
+     "score": "1772.9→1772.9（+0.0）",
+     "new_submission": false
+    }
+   ],
+   "notes": "rank_delta=08:39Z 名次−09:07:56Z 名次（正=上升）；score_delta=现值−08:39Z 值。①13 上榜同门 30 分钟内：名次 5 升 8 跌，分数 3 升 3 平 7 跌——12/13 件 last_sub 未变，跌幅系同件重打分漂移；最大跌幅 shiiin9 −25.2（−66 位）。②唯一同门新动作=haodou092（kernel 新 run 08:46:38.833Z + 新提交 08:47:08Z，均在 16:46 基线后），现分 2215.6 系新件收敛中口径。③我方无新提交，r40 同件漂移 +2.3、名次 +21。④池面换手高峰：08:39:31Z 后 28 分钟内 97 队换新提交（示例 Gordeev Max #9 08:41:31Z、tadashikato #761 08:39:50Z）；total_teams 10110→10112（+2 新队）。⑤kaggle competitions list 元数据 userRank=2139（17:05 CST 自报端点）与榜 CSV 2143 差 4 位口径，以 CSV 为准。"
+  },
+  "top10": [
+   {
+    "rank": 1,
+    "team": "M & M & P & Q",
+    "score": 3039.1,
+    "last_sub": "2026-09-28 01:12:33"
+   },
+   {
+    "rank": 2,
+    "team": "DSM",
+    "score": 3027.2,
+    "last_sub": "2026-09-28 05:22:44"
+   },
+   {
+    "rank": 3,
+    "team": "Boey",
+    "score": 2998.3,
+    "last_sub": "2026-09-24 12:57:23"
+   },
+   {
+    "rank": 4,
+    "team": "Vadim Vasilenko",
+    "score": 2968.6,
+    "last_sub": "2026-09-27 17:21:07"
+   },
+   {
+    "rank": 5,
+    "team": "DECEM",
+    "score": 2960.4,
+    "last_sub": "2026-09-28 08:16:18"
+   },
+   {
+    "rank": 6,
+    "team": "Azat Akhtyamov",
+    "score": 2925.0,
+    "last_sub": "2026-09-27 23:47:42"
+   },
+   {
+    "rank": 7,
+    "team": "Unknown Mother-Goose",
+    "score": 2897.5,
+    "last_sub": "2026-09-28 00:18:44"
+   },
+   {
+    "rank": 8,
+    "team": "Fourth Quadrant",
+    "score": 2891.2,
+    "last_sub": "2026-09-27 17:25:11"
+   },
+   {
+    "rank": 9,
+    "team": "Gordeev Max",
+    "score": 2875.3,
+    "last_sub": "2026-09-28 08:41:31"
+   },
+   {
+    "rank": 10,
+    "team": "Victor @ Tufa Labs",
+    "score": 2870.6,
+    "last_sub": "2026-09-28 06:07:38"
+   }
+  ],
+  "family_rows": [
+   {
+    "family_name": "Georgy Mamarin",
+    "team_name": "Georgy Mamarin",
+    "alias_note": "kernel 作者 georgymamarin（注意拼写非 georgymarin）",
+    "rank_0839z": 393,
+    "rank_now": 404,
+    "rank_delta": -11,
+    "score_0839z": 2351.0,
+    "score_now": 2345.4,
+    "score_delta": -5.6,
+    "last_sub_0839z": "2026-09-27 19:28:26",
+    "last_sub_now": "2026-09-27 19:28:26",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "tetsu2131",
+    "team_name": "tetsu2131",
+    "alias_note": "kernel 作者 tetsutani",
+    "rank_0839z": 471,
+    "rank_now": 484,
+    "rank_delta": -13,
+    "score_0839z": 2310.8,
+    "score_now": 2307.3,
+    "score_delta": -3.5,
+    "last_sub_0839z": "2026-09-27 02:52:06",
+    "last_sub_now": "2026-09-27 02:52:06",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "haodou092",
+    "team_name": "haodou092",
+    "alias_note": "同名（kernel haodou092/kaggriculture-harvest-ledger）",
+    "rank_0839z": 697,
+    "rank_now": 703,
+    "rank_delta": -6,
+    "score_0839z": 2220.2,
+    "score_now": 2215.6,
+    "score_delta": -4.6,
+    "last_sub_0839z": "2026-09-28 02:23:53",
+    "last_sub_now": "2026-09-28 08:47:08",
+    "new_submission": true,
+    "note": "唯一新提交同门：08:46:38.833Z kernel 新 run + 08:47:08Z 新提交（16:47 CST），现分 2215.6 为新件收敛中口径待观察"
+   },
+   {
+    "family_name": "Lynxx",
+    "team_name": "Lynxx",
+    "alias_note": "kernel 作者 lynnsakurai",
+    "rank_0839z": 698,
+    "rank_now": 713,
+    "rank_delta": -15,
+    "score_0839z": 2219.9,
+    "score_now": 2210.6,
+    "score_delta": -9.3,
+    "last_sub_0839z": "2026-09-27 14:15:57",
+    "last_sub_now": "2026-09-27 14:15:57",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "Alperen Aydın",
+    "team_name": "Alperen Aydın",
+    "alias_note": "kernel 作者 alperen5252525；近名 Alperen Söylen 为他人（#695/2217.9）勿混",
+    "rank_0839z": 765,
+    "rank_now": 769,
+    "rank_delta": -4,
+    "score_0839z": 2187.5,
+    "score_now": 2187.5,
+    "score_delta": 0.0,
+    "last_sub_0839z": "2026-09-27 10:47:07",
+    "last_sub_now": "2026-09-27 10:47:07",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "AlekseiProvorov",
+    "team_name": "AlekseiProvorov",
+    "alias_note": "kernel 作者 leoprovorov",
+    "rank_0839z": 772,
+    "rank_now": 778,
+    "rank_delta": -6,
+    "score_0839z": 2185.4,
+    "score_now": 2184.6,
+    "score_delta": -0.8,
+    "last_sub_0839z": "2026-09-28 03:04:33",
+    "last_sub_now": "2026-09-28 03:04:33",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "shiiin9",
+    "team_name": "shiiin9",
+    "alias_note": "kernel 作者 shiiin9",
+    "rank_0839z": 1022,
+    "rank_now": 1088,
+    "rank_delta": -66,
+    "score_0839z": 2078.4,
+    "score_now": 2053.2,
+    "score_delta": -25.2,
+    "last_sub_0839z": "2026-09-28 06:17:26",
+    "last_sub_now": "2026-09-28 06:17:26",
+    "new_submission": false,
+    "note": "同件重打分漂移 −25.2，30 分钟内最大跌幅；无新提交"
+   },
+   {
+    "family_name": "prairieee",
+    "team_name": "prairieee",
+    "alias_note": "含 haideptry（analysis29 口径）",
+    "rank_0839z": 1094,
+    "rank_now": 1095,
+    "rank_delta": -1,
+    "score_0839z": 2049.2,
+    "score_now": 2049.2,
+    "score_delta": 0.0,
+    "last_sub_0839z": "2026-09-28 02:22:13",
+    "last_sub_now": "2026-09-28 02:22:13",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "GURU",
+    "team_name": "GURU Prasaatha S",
+    "alias_note": "kernel 作者 guruprasaathas111；近名 guruguru000 为他人（#1062，30 分钟 +212 位 +79.2，06:17 新提交）勿混",
+    "rank_0839z": 1341,
+    "rank_now": 1329,
+    "rank_delta": 12,
+    "score_0839z": 1957.2,
+    "score_now": 1961.1,
+    "score_delta": 3.9,
+    "last_sub_0839z": "2026-09-28 07:37:30",
+    "last_sub_now": "2026-09-28 07:37:30",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "destbreso",
+    "team_name": "David Estevez",
+    "alias_note": "榜名=David Estevez（analysis29 以 #1362/1949.9 位分对号；直接搜 destb/breso 无行）",
+    "rank_0839z": 1362,
+    "rank_now": 1353,
+    "rank_delta": 9,
+    "score_0839z": 1949.9,
+    "score_now": 1953.0,
+    "score_delta": 3.1,
+    "last_sub_0839z": "2026-09-26 15:00:04",
+    "last_sub_now": "2026-09-26 15:00:04",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "track",
+    "team_name": "track",
+    "alias_note": "含 ahmed/ahmedberatozer 系（analysis29 口径）",
+    "rank_0839z": 1495,
+    "rank_now": 1461,
+    "rank_delta": 34,
+    "score_0839z": 1905.8,
+    "score_now": 1909.8,
+    "score_delta": 4.0,
+    "last_sub_0839z": "2026-09-28 07:38:50",
+    "last_sub_now": "2026-09-28 07:38:50",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "kkkk",
+    "team_name": "kkkk",
+    "alias_note": "近名 momohuhu_kkkkkarrot 为他人（#2340）勿混",
+    "rank_0839z": 1699,
+    "rank_now": 1691,
+    "rank_delta": 8,
+    "score_0839z": 1833.0,
+    "score_now": 1829.8,
+    "score_delta": -3.2,
+    "last_sub_0839z": "2026-09-28 02:19:57",
+    "last_sub_now": "2026-09-28 02:19:57",
+    "new_submission": false,
+    "note": ""
+   },
+   {
+    "family_name": "uninhibited-scholar",
+    "team_name": "uninhibited-scholar",
+    "alias_note": "kernel 作者 uninhibitedscholar（kernel 实名 kaggriculture-beyond-48）",
+    "rank_0839z": 1836,
+    "rank_now": 1828,
+    "rank_delta": 8,
+    "score_0839z": 1772.9,
+    "score_now": 1772.9,
+    "score_delta": 0.0,
+    "last_sub_0839z": "2026-09-28 02:51:58",
+    "last_sub_now": "2026-09-28 02:51:58",
+    "new_submission": false,
+    "note": ""
+   }
+  ]
+ },
+ "submissions": [
+  {
+   "ref": 56616285,
+   "round_tag": "r40（在飞=终榜 best-of-2 计分件）",
+   "date": "2026-09-27T18:26:46.153Z",
+   "description": "public derivative with route library and late-season sell execution",
+   "status": "COMPLETE",
+   "publicScore": 1656.0
+  },
+  {
+   "ref": 56580761,
+   "round_tag": "r37（与 r40 构成 best-of-2 对）",
+   "date": "2026-09-26T13:45:53.293Z",
+   "description": "public derivative with cash-floor guard and earlier flock schedule",
+   "status": "COMPLETE",
+   "publicScore": 1403.9
+  },
+  {
+   "ref": 56526029,
+   "round_tag": "r34a（冻结件）",
+   "date": "2026-09-24T16:13:14.190Z",
+   "description": "public derivative, adopted increments (EXP402/402/IG)",
+   "status": "COMPLETE",
+   "publicScore": 1741.2
+  },
+  {
+   "ref": 56517991,
+   "round_tag": "r33",
+   "date": "2026-09-24T09:39:46.440Z",
+   "description": "public derivative with seed-truncation layer + late-window carrot demand clamp (tuned)",
+   "status": "COMPLETE",
+   "publicScore": 1797.4
+  },
+  {
+   "ref": 56517593,
+   "round_tag": "r32",
+   "date": "2026-09-24T09:19:29.063Z",
+   "description": "public derivative with seed-truncation layer + late-window carrot demand clamp",
+   "status": "COMPLETE",
+   "publicScore": 1975.3
+  },
+  {
+   "ref": 56508268,
+   "round_tag": "r31",
+   "date": "2026-09-24T01:27:14.180Z",
+   "description": "public derivative with seed-truncation layer",
+   "status": "COMPLETE",
+   "publicScore": 2012.1
+  },
+  {
+   "ref": 56491673,
+   "round_tag": "r30",
+   "date": "2026-09-23T11:23:58.683Z",
+   "description": "public derivative: shiiin9 order-book layer on V55 base (Apache-2.0; verbatim rebuild, byte-deterministic)",
+   "status": "COMPLETE",
+   "publicScore": 2071.4
+  },
+  {
+   "ref": 56487449,
+   "round_tag": "—",
+   "date": "2026-09-23T07:55:12.017Z",
+   "description": "public derivative: kaitofukami v48 public-notebook build (verbatim, byte-identical rebuild)",
+   "status": "COMPLETE",
+   "publicScore": 1044.9
+  },
+  {
+   "ref": 56461336,
+   "round_tag": "—",
+   "date": "2026-09-22T10:08:55.783Z",
+   "description": "public derivative with economic-guard layer (v4b: market/milestone layers off per online forensics; dead-price guard retained)",
+   "status": "COMPLETE",
+   "publicScore": 1033.7
+  },
+  {
+   "ref": 56452187,
+   "round_tag": "—",
+   "date": "2026-09-22T03:53:46.293Z",
+   "description": "public derivative with modifications (market/economic-guard layers) v2: tape-protected midgame sell layer + dead-price economic guard + milestone monitor",
+   "status": "COMPLETE",
+   "publicScore": 1072.9
+  }
+ ],
+ "submissions_meta": {
+  "ledger_total": 41,
+  "kept": "2026-09-22 及以后 10 条（r30 起 8 条全收）；更早 31 条（2026-09-20 及以前）略，见 CLI 全量",
+  "in_flight_check": "r40 ref 56616285 状态 COMPLETE、无 PENDING/QUEUED 件；'在飞'指终榜 best-of-2（active={r37,r40}，09-29 择优，launch_ledger note）仍可换件，非队列中",
+  "today_quota_utc_2026-09-28": "已用 0/5（今日 UTC 无提交记录；日额度 5=自报：r40 launch_ledger '每日 1/5、候选 r40 1/2；今日余量 4'，CLI 无额度端点=未找到）",
+  "today_quota_cst": "CST 日历口径今日已用 1/5（r40 02:26:46 CST=09-27 18:26:46Z）；额度日界按 UTC 口径更可能（r40 为 09-27 UTC 日 1/5 与台账一致）"
+ },
+ "incremental_scan": {
+  "window": "2026-09-28 08:00:00Z（16:00 CST）→ 09:21Z（17:21 CST）；基线=16:46:14 CST 午后扫描",
+  "new_runs_after_1600": [
+   {
+    "kernel": "haodou092/kaggriculture-harvest-ledger",
+    "url": "https://www.kaggle.com/code/haodou092/kaggriculture-harvest-ledger",
+    "lastRunTime": "2026-09-28 08:46:38.833Z（=16:46:38.833 CST）",
+    "baseline_state": "16:46 午后扫描在册行=09-28 02:23（V81，02:23:53Z 提交）",
+    "relation_to_baseline": "基线落盘（16:46:14 CST mtime）后约 24 秒出现的新 run；按午后扫描口径'版本保存必触发新 run'推断为新版本（版本号未找到：kernel-metadata 无版本字段，版本钉选 pull /81 对照亦 403）",
+    "companion_submission": "30 秒后 08:47:08Z 新提交入榜（见 new_submissions_after_baseline）",
+    "votes_at_pull": 107
+   }
+  ],
+  "new_kernels": [],
+  "new_topics": [],
+  "new_submissions_after_baseline": [
+   {
+    "team": "haodou092",
+    "last_sub_0839z": "2026-09-28 02:23:53Z",
+    "last_sub_now": "2026-09-28 08:47:08Z",
+    "score_0839z": 2220.2,
+    "score_now": 2215.6,
+    "rank": "697→703",
+    "url": "https://www.kaggle.com/competitions/kaggriculture",
+    "note": "同门唯一基线后新提交；新件分收敛中。池面共 97 队基线后换提交（28 分钟内），如 Gordeev Max #9（08:41:31Z）"
+   }
+  ],
+  "notes": "a) 新 kernel：窗口内 0 条——kernels list 按 dateRun 降序，入窗者仅 haodou092 在册件一件，余者 ≤07:11:15Z（leoprovorov/a-song-of-ice-and-fire-fixed-flexible）。窗口外未登记近邻件 3 条（16:00 CST 前已在册可见、非基线后新增，供登记核对）：leoprovorov/31415926535897932384626433832795058202884197169399（09-27 17:57:01Z，9 票，https://www.kaggle.com/code/leoprovorov/31415926535897932384626433832795058202884197169399）、haideptry/the-shepherds-ledger-herd-safe-sovereign（09-27 15:15:53Z，26 票，https://www.kaggle.com/code/haideptry/the-shepherds-ledger-herd-safe-sovereign）、ashok205/top10-replay-dataset-archive（09-27 22:40:49Z，19 票，https://www.kaggle.com/code/ashok205/top10-replay-dataset-archive；午后扫描已按在册数据入口处理）。b) 讨论帖：07:02 基线帖 743993（2026-09-28 07:02:56.472Z，https://www.kaggle.com/competitions/kaggriculture/discussion/743993）之后无新帖——topics list 不按时间排序，全量 11 页 217 帖翻完核对；老帖新回复未核（CLI topics list 不含回复时间轴）。c) kernels list 单页封顶 100 行（--page-size 200 亦然、无翻页标记），dateRun 降序取顶，窗口判定不受影响。"
+ }
+}
