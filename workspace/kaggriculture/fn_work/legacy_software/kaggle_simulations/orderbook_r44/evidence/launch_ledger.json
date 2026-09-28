@@ -1,0 +1,20 @@
+{
+ "launch_ledger": "r44/r27-face",
+ "entry": {
+  "date": "2026-09-28T21:06:27+08:00",
+  "status": "PENDING",
+  "description": "public derivative with day-high realization",
+  "form": "A",
+  "main_sha256": "b387307fc12e26107c58ee604146fc621099ce88124fa0876fdd7cef28300bd9",
+  "tar_sha256": "ae07207a43b887ee94922ebfcd7ad9890d3b63591aafd0a5bbecc0b673640b90",
+  "auth": "用户裁决'判据重裁，发 A'（2026-09-28 fn-implement 判决处置轮）+standing 代执行，台账留痕",
+  "criteria_adjudication": "钱带 +2k~4k 降观测（判据设计错：预期量误作达标门）；核心判据重裁=胜率≥0.55∧钱差非负∧零足迹；A 臂 30-8-2/0.775/+424.9/非触发拍零足迹判正；B 单=零足迹无效应、AB 边际 −295.5→B/AB 收档",
+  "judgment": "judgment_r27_v2.json（n=40 双席折叠，242 局次；v1 judgment_r27.json=元数缺陷假象已注记作废）",
+  "gates": "gates_r44_a.json overall PASS（五门零红；h2h 0.625 独立 n=8 seeds 670000-670007；确定性双跑 sha 9605b12c…；身份链 a16e0e9b→r34a→r37→r40→r44_a）",
+  "quota": "每日 2/5（P1=1/5 本件=2/5）；候选 r44 1/2",
+  "ref": 56641599,
+  "submitted_at": "2026-09-28T13:06:27Z",
+  "pair_semantics_note": "计分对 {r34a-new 56637411, 本件 56641599}（r40 1656 被挤出——发射序列裁决原案）；P3 发射须过 09-29 晨读数门（对内最低收敛 ≥1656）",
+  "expected_signal": "胜率口径优于 r40（判决 0.775 先验）；榜分收敛上行"
+ }
+}

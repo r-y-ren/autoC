@@ -33,7 +33,7 @@ SCHEMA = "orderbook_r44_manifest/1.0"
 DESCRIPTIONS = {
     "A": "public derivative with day-high realization",
     "B": "public derivative with glut gate",
-    "AB": "public derivative with day-high realization and glut gate",
+    "AB": "public derivative with day-high realization / glut gate",
 }
 
 # 形态→产物目录名（调用方按此给 out_dir；本函数只落 out_dir 本身）

@@ -63,7 +63,7 @@ def test_build_r44_variant(synth_base, tmp_path):
     for form, desc in (("A", "public derivative with day-high realization"),
                        ("B", "public derivative with glut gate"),
                        ("AB", "public derivative with day-high realization "
-                              "and glut gate")):
+                              "/ glut gate")):
         out = tmp_path / ("out_" + form)
         res = b44.build_r44_variant(str(synth_base), form, out)
         main_p = out / "main.py"
