@@ -1,0 +1,26 @@
+{
+ "protocol": "r34a-resubmit-record/1.0",
+ "generated_at": "2026-09-28T18:12:00+08:00",
+ "variant": "r34a (byte-lottery re-run, 分析30 P1)",
+ "authorized_by": "用户裁决'P1先发'（fn-grill 发射序列轮 2026-09-28）+ standing 代执行沿惯例；分析29/30 P1 字节彩票（零代码零下行）",
+ "slug_source": "程序化提取 fn_docs/hybrid/results/2026-09-23-round30-read.json source.commands + kaggle competitions list 在线核验（勿手拼）",
+ "tar": {
+  "path": "orderbook_2965_adopt/a/submission.tar.gz",
+  "sha256": "a1ef3c165062a685d5c0aaaaa142d7268cd6b2c84883add919b9afcdd203c4ca",
+  "sha256_verified_at_submit": true,
+  "bytes": 632366
+ },
+ "message": "public derivative, adopted increments (EXP402/402/IG) (new run)",
+ "submitted_utc": "2026-09-28T10:08:47",
+ "ref": 56637411,
+ "status_readback": "SubmissionStatus.PENDING",
+ "budget_note": "今日 1/5（CLI 回读 '4 submissions remaining today'）；候选 r34a 2/2 用满",
+ "pair_semantics_note": "终榜 best-of-2=最近 2 提交取优；本发后计分对 {r37(56580761, 1403.9), r40(56616285)} → {r40, 56637411}（r37 挤出，保底=r40 现值 1652.2-1656）；再发第 3 件将挤掉 r40，须过 09-29 晨读数门（R28 发射条款）",
+ "expected_signal": "收敛读数 >1656.0（分析30 P1 预期 1700-1885 带）；≤1656 则榜分=max() 保底不变（零损失）",
+ "baseline_scores_readback": {
+  "r40_56616285": "1652.2 (publicScore endpoint; LB CSV 口径 1656.0)",
+  "r34a_orig_56526029": "1741.2",
+  "r33_56517991": "1797.4",
+  "r32_56517593": "1975.3"
+ }
+}
