@@ -1161,10 +1161,14 @@
     - 签名意图：输入: r40 包 / 输出: 各门结果+overall / 错误: fail-closed。
     - 调用方：run_r40_iteration。tested：自有单测。核验命令：测试: orderbook_r40/test_gates_r40.py。
 
-## 【R24 增补·2026-09-28】库口径重设计（族粒度脱离店对，r41 候选）
+## 【R24 增补·2026-09-28】库口径重设计（r41 候选；同日快速通道修订 v2：市场面族键+仿真 A/B 实测语料）
+
+> 修订留痕（用户裁决"仿真 A/B 实测"+授权"结果最优自行决定"）：v1 具名三维（起始地块布局/作物适性/城镇需求节律）经 71 局方差扫描证伪为常量（evidence/r24_world_variance_forensic.json）；v2 族键=市场面画像、库值=A/B 实测账本（replay 路线=店对强制锁存=第二循环性）。v1 本块无函数 wired，属未实施块修订，全块按 v2 重写。
 
 ## 结构概览（增补）
 - run_r41_iteration ← R24
+  - run_route_ab_experiments
+    - build_ab_variant
   - build_r41
     - build_route_library_v2
     - inject_r41_block
@@ -1175,40 +1179,48 @@
     - library_info_check
     - sim_bridge
   - verify_r41_gates
-- extract_world_fingerprint（共享：build_route_library_v2, _route40_select）
+- extract_world_fingerprint（共享：build_route_library_v2, _route40_select, run_route_ab_experiments）
 
 ## 需求覆盖矩阵（增补行）
 | 需求 | 顶层函数 |
 |---|---|
-| R24 | run_r41_iteration（判决线：judge_r24→library_info_check/sim_bridge） |
+| R24 | run_r41_iteration（实验线：run_route_ab_experiments→build_ab_variant；判决线：judge_r24→library_info_check/sim_bridge） |
 
 ## 共享函数（增补）
-- **extract_world_fingerprint**（调用方：build_route_library_v2, _route40_select）
-  - 职责：世界开局画像提取——从对局状态序列（建库口径）或运行时 observation（选路口径）提取**外生世界面**三维离散签名：①起始地块布局桶（地块数/尺寸）②作物适性桶（主力适性档）③城镇需求节律桶（需求品项序列模式）。签名=三桶标 "a|b|c" 离散字符串，桶界在实现规格定但须可复算。**禁入守卫（硬）**：签名与中间量不得含店名/店对/店表导出量/route_id/自家走法量（hires/land_buys/tiles_by_crop 等）——检出即抛（守卫用例红）。建库与运行时两口径同函数同输出（同世界→同签名，跨口径一致性用例覆盖）。
-  - 签名意图：输入: 状态序列或 observation（step≤144 可观测外生面） / 输出: 签名字符串或 None / 错误: 禁入量检出→抛；字段缺失→None（caller 转兜底）。
+- **extract_world_fingerprint**（调用方：build_route_library_v2, _route40_select, run_route_ab_experiments）
+  - 职责：市场面画像提取（v2）——从对局状态序列或运行时 observation 的 step144 时点提取**市场面三桶离散签名**：①价格偏移桶（主力变现品 WOOL/MILK/STRAWBERRY/WHEAT 价格相对基准偏移档）②库存水位桶（市场库存分档）③需求节奏桶（价格/库存变动方向组合档）；签名=三桶标 "a|b|c"，桶界实现规格定但须可复算。**禁入守卫（硬）**：签名与中间量不得含店名/店对/店表导出量/route_id/自家走法量——检出即抛。建库/运行时/实验三口径同函数同输出。
+  - 签名意图：输入: 状态序列或 observation（step≤144 市场面） / 输出: 签名字符串或 None / 错误: 禁入量检出→抛；字段缺失→None（caller 转兜底）。
   - tested 策略：自有单测。核验命令：测试: orderbook_r40/test_route_library_v2.py（fingerprint 组；判据=R24 ①守卫用例原文）。
 
 ## 功能块 run_r41_iteration ← R24
-（块引言：R24 库口径重设计——r40 路由库接线零效果法证：族键含店对→从店表反推路线再按店对分组=循环数据，且 49 族/77 局过碎。本块只改账本口径一件事：①族键换**世界开局画像**（外生世界面三维：起始地块布局/作物适性/城镇需求节律；店对/自家走法量禁入）→②族预算加粗（全库 ≤12 族、族内 n≥5，不足并兜底族 WORLDBASE）→③运行时改画像匹配（店对锁存降兜底）→④判决=单挑 vs r40 ≥0.55+库信息自检（命中>未命中方向性、交叉口径防循环）+观测；已判负面（对手抢跑/避让/敌指纹路由）不复活；r37/r40 字节不动（构建底=r40 在飞件）；环境零增量（Rust 仿真器+现有判决脚本沿用）。产物=orderbook_r40/ v2（R22 原位演进先例）。）
+（块引言：R24 v2 库口径重设计——族键=市场面画像（与店表解耦、唯一有方差的可观测外生面）；库值=仿真强制路线 A/B 实测（control=基座店对路线、treatment=同店对邻域替代路线，随机分配逐局记 face/arm/route/margin）；族预算 ≤12 族/族内 n≥5/兜底族 WORLDBASE；运行时按画像查库、查不到走店对锁存兜底；判决=单挑 vs r40 ≥0.55+库信息自检（实验效应口径：最优臂 vs 对照臂实测效应>0）+观测。已判负面不复活；r37/r40 字节不动（构建底=r40）；环境零增量。产物=orderbook_r40/ v2。）
 
 - **run_r41_iteration** [L0|新增]
-  - 职责：编排——build_r41 产 r41 件 → pytest 全绿（R24 ①）才进判决 → judge_r24 判决（h2h vs r40+库信息自检+观测）→ 核心判据全绿才 verify_r41_gates 五门 → 交发射（standing 台账留痕；计分对=最近 2 提交，发射后 r37 挤出、须对 r40 达标才值得发）；任一红→收档。evidence+台账。
-  - 签名意图：输入: 无（CLI） / 输出: {build, judgment, gates, verdict} / 错误: fail-closed。
+  - 职责：编排——run_route_ab_experiments 产实验账本 → build_r41 产 r41 件（库从账本建）→ pytest 全绿（R24 ①）才进判决 → judge_r24 判决 → 核心判据全绿才 verify_r41_gates 五门 → 交发射（standing 台账；计分对=最近 2 提交，发射挤掉 r37）；任一红→收档。evidence+台账。
+  - 签名意图：输入: 无（CLI） / 输出: {experiments, build, judgment, gates, verdict} / 错误: fail-closed。
   - 调用方：操作者。tested：自有单测。核验命令：测试: orderbook_r40/test_run_r41.py。
+  - **run_route_ab_experiments** [L1|新增]
+    - 职责：路线 A/B 实验编排——实验臂设计（control=基座店对路线不动；treatment=同店对邻域替代路线：共享一店的店对中非基座路线众数，无邻域→弃样）→ build_ab_variant 产各臂实验件 → sim_bridge 并行联赛随机分配对局 → 逐局记录 {face 签名, arm, route, margin} → 实验账本落盘（含每臂/每族样本数与 CI）；样本不足→报。
+    - 签名意图：输入: r40 main+臂配置+对局规模配置 / 输出: {ledger, arm_stats} / 错误: 臂构建失败或样本不足→抛。
+    - 调用方：run_r41_iteration。tested：自有单测。核验命令：测试: orderbook_r40/test_run_r41.py（ab 组）。
+    - **build_ab_variant** [L2|新增]
+      - 职责：实验臂件构建——r40 字节+尾部强制路由小块（选定臂 route 常量，经 _route40_wire_route 同款表改写机制锁存；control 臂=原字节零改动）；judge-side only 不进发射链；sha 自证。
+      - 签名意图：输入: r40 main+arm 配置（route 或 None=control） / 输出: {main_text, arm_sha} / 错误: 构建失败即抛。
+      - 调用方：run_route_ab_experiments。tested：自有单测。核验命令：测试: orderbook_r40/test_run_r41.py（ab 组）。
   - **build_r41** [L1|新增]
-    - 职责：构建编排——r40 字节为底 → build_route_library_v2 建世界画像库 → inject_r41_block 注入库 v2+改造后选择器 → audit_diff_r41_vs_r40 → pack_r41；r40 已发射件字节零改动。
-    - 签名意图：输入: r40 main 路径 / 输出: r41 main+manifest+变更集审计 / 错误: 超白名单即抛。
+    - 职责：构建编排——build_route_library_v2 从实验账本建库 → inject_r41_block 注入 → audit_diff_r41_vs_r40 → pack_r41；r40 已发射件字节零改动。
+    - 签名意图：输入: r40 main+实验账本 / 输出: r41 main+manifest+变更集审计 / 错误: 超白名单即抛。
     - 调用方：run_r41_iteration。tested：自有单测。核验命令：测试: orderbook_r40/test_build_r41.py。
-    - **build_route_library_v2** [L2|新增]
-      - 职责：库 v2 构建——语料（既有 77 局+新拉增量，含 r37/r40 实战局）逐局提取 extract_world_fingerprint 签名分族；**族预算（硬）**：总族数 ≤12 且族内 n≥5，超预算→降桶合并、仍不足→并兜底族 `WORLDBASE`；每族统计 {best_route（族内胜局实际路线按胜率取优）, win_rate, n}；输出库+构建审计（族数/n 分布/覆盖率/sha）。语料不足（有效局低于下限）或族预算不可满足→抛。
-      - 签名意图：输入: 对局目录+分桶配置 / 输出: {library, build_audit} / 错误: 语料不足/族预算破→抛。
+    - **build_route_library_v2** [L2|改造]
+      - 职责：（改造目标态）库 v2 构建——**族=extract_world_fingerprint 市场面签名**（禁入守卫沿共享件）；**值=实验账本实测**：每族 best=实测期望 margin 最优臂（对照臂亦参赛，best=None 表示维持店对锁存）+win_rate+n；族预算（硬）：总族数 ≤12 且族内 n≥5，超预算→降桶合并、仍不足→并兜底族 `WORLDBASE`；输出库+构建审计（族数/n 分布/每臂效应/覆盖率/sha）。账本不足→抛。
+      - 签名意图：输入: 实验账本+分桶配置 / 输出: {library, build_audit} / 错误: 账本不足/族预算破→抛。
       - 调用方：build_r41。tested：自有单测。核验命令：测试: orderbook_r40/test_route_library_v2.py（判据=R24 ①形状/兜底/n≥5 构造用例原文）。
     - **inject_r41_block** [L2|新增]
-      - 职责：r41 运行时注入——r40 字节注入库 v2+改造后 _route40_select（step144 选路改世界画像匹配，店对锁存降兜底）；校验四条+库 sha 对账沿先例；捕获行避撞名（_R41_* 系）；末 callable=官方入口。只接管选路——sell_lots/race_slots/hygiene 三件与 _route40_wire_route 不碰。
+      - 职责：r41 运行时注入——r40 字节注入库 v2+改造后 _route40_select（step144 选路改市场面匹配，店对锁存降兜底）；校验四条+库 sha 对账沿先例；捕获行避撞名（_R41_* 系）；末 callable=官方入口。只接管选路——sell_lots/race_slots/hygiene 与 _route40_wire_route 不碰。
       - 签名意图：输入: r40 main 文本+库 v2 数据 / 输出: {main_text, block_sha} / 错误: 校验不过即抛。
       - 调用方：build_r41。tested：自有单测。核验命令：测试: orderbook_r40/test_inject_r41.py。
       - **_route40_select** [L3|改造]（运行时）
-        - 职责：（改造目标态）step144 续段选择——以 extract_world_fingerprint 世界画像签名查库 v2：命中族→best_route（confidence=族 win_rate）；库缺/画像缺失/异常→{route: None, family: None 或族键, confidence: 0.0}（fallback 形沿用，下游现行店对锁存作兜底）。只读选择不改磁带主体；fail-safe 不抛。
+        - 职责：（改造目标态 v2）step144 续段选择——以 extract_world_fingerprint 市场面签名查库 v2：命中族且 best 非 None→best 路线（confidence=族 win_rate）；best=None/库缺/画像缺失/异常→{route: None, family: None 或族键, confidence: 0.0}（fallback 形沿用，下游店对锁存兜底）。只读选择不改磁带主体；fail-safe 不抛。
         - 签名意图：输入: observation+库 / 输出: {route, family, confidence} / 错误: 统一走 fallback 形。
         - 调用方：inject_r41_block 注入链。tested：自有单测。核验命令：测试: orderbook_r40/test_runtime_r41.py（route 组；判据=R24 ①形状用例原文）。
     - **audit_diff_r41_vs_r40** [L2|新增]
@@ -1216,21 +1228,21 @@
       - 签名意图：输入: r41 main+r40 main+变更表 / 输出: 归因表 / 错误: 白名单外即抛。
       - 调用方：build_r41。tested：自有单测。核验命令：测试: orderbook_r40/test_build_r41.py（audit 组）。
     - **pack_r41** [L2|新增]
-      - 职责：确定性打包+manifest 沿配方；sha 链（…→r37→r40→r41）+库 v2 sha+描述 "public derivative with world-fingerprint route library"；双跑一致。
+      - 职责：确定性打包+manifest 沿配方；sha 链（…→r37→r40→r41）+库 v2 sha+实验账本 sha+描述 "public derivative with world-fingerprint route library"；双跑一致。
       - 签名意图：输入: r41 main / 输出: submission.tar.gz+manifest / 错误: 双跑不一致即抛。
       - 调用方：build_r41。tested：自有单测。核验命令：测试: orderbook_r40/test_build_r41.py（pack 组）。
   - **judge_r24** [L1|新增]
-    - 职责：判决 v24——联赛 h2h vs **r40**（核心判据 ≥0.55，足量独立局）+库信息自检（library_info_check）+观测记录（联赛总胜率/族命中率/族内 n 分布）；聚合 evidence。判据=R24 验收 ②③④ 原文。
+    - 职责：判决 v24——联赛 h2h vs **r40**（核心判据 ≥0.55，足量独立局）+库信息自检（library_info_check，实验效应口径）+观测记录（联赛总胜率/族命中率/族内 n 分布）；聚合 evidence。判据=R24 验收 ②③④ 原文。
     - 签名意图：输入: r41 包+语料+副证配置 / 输出: evidence JSON / 错误: 单局红计入不短路。
     - 调用方：run_r41_iteration。tested：自有单测。核验命令：测试: orderbook_r40/test_judge_r24.py（判据=R24 ②③④ 原文）。
-    - **library_info_check** [L2|新增]
-      - 职责：库信息自检——**交叉口径防循环**（建库/检验分样本或留一法）：命中库（非兜底族）对局胜率 − 未命中/兜底对局胜率 > 0 方向性检验；同时输出族命中率+族内 n 分布（兼 R24 ④ 观测）。
-      - 签名意图：输入: 判决对局集+库 / 输出: {hit_wr, miss_wr, delta, verdict, hit_rate, n_dist} / 错误: 样本不足→UNKNOWN 不短路。
+    - **library_info_check** [L2|改造]
+      - 职责：（改造目标态）库信息自检——**实验效应口径**：实验账本中命中族（best 非 None）的最优臂相对对照臂实测期望效应 > 0（分族 CI/样本数落盘）；未命中/兜底族作反面对照；交叉口径防循环（建库/检验分样本或留一法）；输出族命中率+族内 n 分布（兼 R24 ④ 观测）。
+      - 签名意图：输入: 实验账本+库 / 输出: {effect, ci, verdict, hit_rate, n_dist} / 错误: 样本不足→UNKNOWN 不短路。
       - 调用方：judge_r24。tested：自有单测。核验命令：测试: orderbook_r40/test_judge_r24.py（info 组；判据=R24 ②原文）。
     - **sim_bridge** [L2|上游覆盖: judge_r23]
-      - 职责：仿真器桥接复用——Rust 仿真器（30/30 一致性认证、13.6x）零增量沿用；判决局跑分与对照口径不变。
+      - 职责：仿真器桥接复用——Rust 仿真器（30/30 一致性认证、13.6x）零增量沿用；判决/实验局跑分与对照口径不变。
       - 签名意图：输入: 仿真器配置+对照语料 / 输出: {loaded, consistency, wall_speedup} / 错误: 对照不过→降级留档。
-      - 调用方：judge_r24。tested 策略：上游覆盖: judge_r23。核验命令：上游覆盖: judge_r23。
+      - 调用方：judge_r24, run_route_ab_experiments。tested 策略：上游覆盖: judge_r23。核验命令：上游覆盖: judge_r23。
   - **verify_r41_gates** [L1|新增]
     - 职责：五门全量 fail-closed 沿管线重定向（last-callable 断言/h2h 主对 **r40** ≥0.55 独立 n/谱系/饿死零容忍+净经济/合规四轴/launch）。
     - 签名意图：输入: r41 包 / 输出: 各门结果+overall / 错误: fail-closed。
