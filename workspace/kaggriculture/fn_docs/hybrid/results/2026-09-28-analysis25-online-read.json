@@ -1,0 +1,4013 @@
+{
+ "analysis": "analysis25-online-read (data round, 2026-09-28)",
+ "generated_at": "2026-09-28T04:20:36Z",
+ "source": {
+  "cli": "/home/renyxin/.local/bin/kaggle",
+  "slug": "kaggriculture",
+  "auth": "KAGGLE_API_TOKEN=$($KAGGLE auth print-access-token 2>/dev/null) 注入（本次空/429，退默认 kaggle.json 凭证成功）",
+  "commands": [
+   "KAGGLE_API_TOKEN=$(/home/renyxin/.local/bin/kaggle auth print-access-token 2>/dev/null)",
+   "/home/renyxin/.local/bin/kaggle competitions submissions kaggriculture --format json",
+   "/home/renyxin/.local/bin/kaggle competitions episodes 56580761 --format json   # r37（88 PUBLIC + 1 VALIDATION）",
+   "/home/renyxin/.local/bin/kaggle competitions episodes 56616285 --format json   # r40（75 PUBLIC + 1 VALIDATION）",
+   "/home/renyxin/.local/bin/kaggle competitions episodes 56526029 --format json   # r34a 对照（373 PUBLIC）",
+   "/home/renyxin/.local/bin/kaggle competitions episodes 56517991 --format json   # r33 对照（278，冻结）",
+   "/home/renyxin/.local/bin/kaggle competitions episodes 56517593 --format json   # r32 对照（86，冻结）",
+   "/home/renyxin/.local/bin/kaggle competitions episodes 56508268 --format json   # r31 对照（86，冻结，非 ref 跟踪）",
+   "/home/renyxin/.local/bin/kaggle competitions episodes 56491673 --format json   # r30 对照（162，冻结）",
+   "/home/renyxin/.local/bin/kaggle competitions leaderboard kaggriculture --download -p /tmp/kagr24  # 全量 10105 行",
+   "/home/renyxin/.local/bin/kaggle competitions leaderboard kaggriculture --show --csv",
+   "python3 /tmp/kagr24/pull25_meta.py      # -> submissions25.json / episodes25-*.json / meta25_summary.json / 榜 csv",
+   "python3 /tmp/kagr24/pull25_replays.py   # r37 新 22 + r40 75 局 replay -> rows25_raw.json（v2 增量落盘）",
+   "python3 /tmp/kagr25/snap25.py           # -> 本快照（唯一入库写入）"
+  ],
+  "parse_note": "CLI --format json 尾部跟 usage 行；json.JSONDecoder().raw_decode 截到最后 ']'（pull_meta.py 惯例）；replay 解析复用 /tmp/kagr24/pull24_replays.py parse_replay（a22_dissect 已验证约定：day d=steps[d*24..d*24+23]、farms=jl(steps[si][0].observation.farms)、rewards 双席、末拍 farms[].money）",
+  "format_note": "顶层形态对齐 2026-09-27-analysis23-r37-online-read.json（analysis/generated_at/source/refs/r37_rows_note/r37_rows/summary/anomalies/fails/selfplay）；additive: leaderboard、r40_rows_note、r40_rows（a24 字段集 compact 子集）",
+  "pull_window_utc": {
+   "meta_first": "2026-09-28T04:00:58Z",
+   "meta_last": "2026-09-28T04:01:11Z",
+   "replays_first": "2026-09-28T04:13:40Z",
+   "replays_last": "2026-09-28T04:20:30Z",
+   "leaderboard_csv": "kaggriculture-publicleaderboard-2026-09-28T04:01:09.csv"
+  },
+  "replay_cache_note": "r37 前 66 局复用 /tmp/kagr23+/tmp/kagr24 已拉件（rows24.json 解析产物，episode 不可变）；本轮新拉 r37 22 + r40 局入 /tmp/kagr25。/tmp 用户配额突发受限：胜局回放解析后即删，仅败局留缓存；rows 保留全量解剖数据，raw 可按 episode id 复拉",
+  "baseline": {
+   "a23": "fn_docs/hybrid/results/2026-09-27-analysis23-r37-online-read.json（r37 1390.6@55，89.1% 49W-6L，pull 2026-09-26T19:29Z）",
+   "a24": "fn_docs/hybrid/results/2026-09-27-analysis24-r37-losses-read.json（r37 1384.1@66，81.8% 54W-12L，12 败全高段、9/12 败 d21-28；r34a 1805.3@342；榜面 10070 队，我方 1853 名/1805.3）",
+   "board_rule": "本轮证据：board=最近 2 提交取优（a24 'max(两提交)' 的窗口修正）"
+  }
+ },
+ "refs": {
+  "r37": {
+   "tag": "r37",
+   "ref": 56580761,
+   "date": "2026-09-26T13:45:53.293000",
+   "status": "SubmissionStatus.COMPLETE",
+   "description": "public derivative with cash-floor guard and earlier flock schedule",
+   "fileName": "submission.tar.gz",
+   "now_score": 1397.8,
+   "now_games": 88,
+   "episode_types": {
+    "EpisodeType.EPISODE_TYPE_PUBLIC": 88,
+    "EpisodeType.EPISODE_TYPE_VALIDATION": 1
+   },
+   "pending_states": [],
+   "first_create": "2026-09-26T13:45:53.658000",
+   "last_create": "2026-09-28T03:34:01.992000",
+   "prev_score": 1384.1,
+   "prev_games": 66,
+   "prev_source": "analysis24 snapshot fn_docs/hybrid/results/2026-09-27-analysis24-r37-losses-read.json（pull 2026-09-27T09:20Z）",
+   "d_score": 13.7,
+   "new_games": 22,
+   "slope_per_game": 0.6227
+  },
+  "r40": {
+   "tag": "r40",
+   "ref": 56616285,
+   "date": "2026-09-27T18:26:46.153000",
+   "status": "SubmissionStatus.COMPLETE",
+   "description": "public derivative with route library and late-season sell execution",
+   "fileName": "submission.tar.gz",
+   "now_score": 1664.6,
+   "now_games": 75,
+   "episode_types": {
+    "EpisodeType.EPISODE_TYPE_PUBLIC": 75,
+    "EpisodeType.EPISODE_TYPE_VALIDATION": 1
+   },
+   "pending_states": [],
+   "first_create": "2026-09-27T18:26:46.483000",
+   "last_create": "2026-09-28T03:30:00.680000",
+   "prev_score": null,
+   "prev_games": 0,
+   "prev_source": "本轮首读（提交 2026-09-27T18:26:46Z=本地 09-28 02:26，首局 createTime 18:26:46.483，即提交后 0.2s 开局）",
+   "d_score": null,
+   "new_games": 75,
+   "slope_per_game": null
+  },
+  "r34a": {
+   "tag": "r34a",
+   "ref": 56526029,
+   "date": "2026-09-24T16:13:14.190000",
+   "status": "SubmissionStatus.COMPLETE",
+   "description": "public derivative, adopted increments (EXP402/402/IG)",
+   "fileName": "submission.tar.gz",
+   "now_score": 1741.2,
+   "now_games": 373,
+   "episode_types": {
+    "EpisodeType.EPISODE_TYPE_PUBLIC": 373,
+    "EpisodeType.EPISODE_TYPE_VALIDATION": 1
+   },
+   "pending_states": [],
+   "first_create": "2026-09-24T16:13:14.556000",
+   "last_create": "2026-09-27T18:30:01.225000",
+   "prev_score": 1805.3,
+   "prev_games": 342,
+   "prev_source": "analysis24 snapshot（pull 2026-09-27T09:20Z）",
+   "d_score": -64.1,
+   "new_games": 31,
+   "slope_per_game": -2.0677
+  },
+  "r33": {
+   "tag": "r33",
+   "ref": 56517991,
+   "date": "2026-09-24T09:39:46.440000",
+   "status": "SubmissionStatus.COMPLETE",
+   "description": "public derivative with seed-truncation layer + late-window carrot demand clamp (tuned)",
+   "fileName": "submission.tar.gz",
+   "now_score": 1797.4,
+   "now_games": 278,
+   "episode_types": {
+    "EpisodeType.EPISODE_TYPE_PUBLIC": 278,
+    "EpisodeType.EPISODE_TYPE_VALIDATION": 1
+   },
+   "pending_states": [],
+   "first_create": "2026-09-24T09:39:46.808000",
+   "last_create": "2026-09-26T13:52:47.494000",
+   "prev_score": 1797.4,
+   "prev_games": 278,
+   "prev_source": "analysis24 snapshot（pull 2026-09-27T09:20Z）",
+   "d_score": 0.0,
+   "new_games": 0,
+   "slope_per_game": null
+  },
+  "r32": {
+   "tag": "r32",
+   "ref": 56517593,
+   "date": "2026-09-24T09:19:29.063000",
+   "status": "SubmissionStatus.COMPLETE",
+   "description": "public derivative with seed-truncation layer + late-window carrot demand clamp",
+   "fileName": "submission.tar.gz",
+   "now_score": 1975.3,
+   "now_games": 86,
+   "episode_types": {
+    "EpisodeType.EPISODE_TYPE_PUBLIC": 86,
+    "EpisodeType.EPISODE_TYPE_VALIDATION": 1
+   },
+   "pending_states": [],
+   "first_create": "2026-09-24T09:19:29.410000",
+   "last_create": "2026-09-24T15:57:01.926000",
+   "prev_score": 1975.3,
+   "prev_games": 86,
+   "prev_source": "analysis24 snapshot（pull 2026-09-27T09:20Z）",
+   "d_score": 0.0,
+   "new_games": 0,
+   "slope_per_game": null
+  },
+  "r30": {
+   "tag": "r30",
+   "ref": 56491673,
+   "date": "2026-09-23T11:23:58.683000",
+   "status": "SubmissionStatus.COMPLETE",
+   "description": "public derivative: shiiin9 order-book layer on V55 base (Apache-2.0; verbatim rebuild, byte-deterministic)",
+   "fileName": "submission.tar.gz",
+   "now_score": 2071.4,
+   "now_games": 162,
+   "episode_types": {
+    "EpisodeType.EPISODE_TYPE_PUBLIC": 162,
+    "EpisodeType.EPISODE_TYPE_VALIDATION": 1
+   },
+   "pending_states": [],
+   "first_create": "2026-09-23T11:23:59.064000",
+   "last_create": "2026-09-24T09:08:50.095000",
+   "prev_score": 2071.4,
+   "prev_games": 162,
+   "prev_source": "analysis24 snapshot（pull 2026-09-27T09:20Z）",
+   "d_score": 0.0,
+   "new_games": 0,
+   "slope_per_game": null
+  }
+ },
+ "r37_rows_note": "本轮 22 新局（analysis24 66 局之外）；episode/createTime/opp/seat/res/margin/ourF/oppF/opp_band/money_ratio/mirror 由 replay 实解析（rewards 双席+末拍 farms[].money），checkpoints=当日尾 step 席位 money 差、seg_gap=窗口内 money 差增量、worst_seg=最差段（a24 同款口径）",
+ "r37_rows": [
+  {
+   "episode": 114099525,
+   "tag": "r37",
+   "createTime": "2026-09-27T09:21:17.191000",
+   "opp": "Unkn0wn",
+   "seat": 0,
+   "res": "W",
+   "margin": 2333.0,
+   "ourF": 111208.0,
+   "oppF": 108875.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.0106,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 12330.0,
+    "d20": 6462.0,
+    "d29": 2333.0
+   },
+   "seg_gap": {
+    "d0_10": 12330.0,
+    "d11_20": -5868.0,
+    "d21_28": 195.0,
+    "d29": -4324.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -5868.0
+  },
+  {
+   "episode": 114114936,
+   "tag": "r37",
+   "createTime": "2026-09-27T10:05:19.163000",
+   "opp": "alcanta",
+   "seat": 1,
+   "res": "L",
+   "margin": -3512.0,
+   "ourF": 81190.0,
+   "oppF": 84702.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": -0.02117,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -8.0,
+    "d20": -2205.0,
+    "d29": -3512.0
+   },
+   "seg_gap": {
+    "d0_10": -8.0,
+    "d11_20": -2197.0,
+    "d21_28": -1718.0,
+    "d29": 411.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -2197.0
+  },
+  {
+   "episode": 114119338,
+   "tag": "r37",
+   "createTime": "2026-09-27T10:17:15.544000",
+   "opp": "TheMightiestMan",
+   "seat": 0,
+   "res": "W",
+   "margin": 251.0,
+   "ourF": 89603.0,
+   "oppF": 89352.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.0014,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 16.0,
+    "d20": 254.0,
+    "d29": 251.0
+   },
+   "seg_gap": {
+    "d0_10": 16.0,
+    "d11_20": 238.0,
+    "d21_28": -855.0,
+    "d29": 852.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -855.0
+  },
+  {
+   "episode": 114166865,
+   "tag": "r37",
+   "createTime": "2026-09-27T12:25:28.009000",
+   "opp": "Shun Liou",
+   "seat": 1,
+   "res": "W",
+   "margin": 3214.0,
+   "ourF": 143393.0,
+   "oppF": 140179.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.01133,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 272.0,
+    "d20": 1063.0,
+    "d29": 3214.0
+   },
+   "seg_gap": {
+    "d0_10": 272.0,
+    "d11_20": 791.0,
+    "d21_28": 3753.0,
+    "d29": -1602.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -1602.0
+  },
+  {
+   "episode": 114212815,
+   "tag": "r37",
+   "createTime": "2026-09-27T14:33:17.618000",
+   "opp": "Md Arafat #2",
+   "seat": 1,
+   "res": "W",
+   "margin": 6192.0,
+   "ourF": 114085.0,
+   "oppF": 107893.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.02789,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -217.0,
+    "d20": 4565.0,
+    "d29": 6192.0
+   },
+   "seg_gap": {
+    "d0_10": -217.0,
+    "d11_20": 4782.0,
+    "d21_28": 1157.0,
+    "d29": 470.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -217.0
+  },
+  {
+   "episode": 114213622,
+   "tag": "r37",
+   "createTime": "2026-09-27T14:33:18.928000",
+   "opp": "Arun Khatua",
+   "seat": 1,
+   "res": "W",
+   "margin": 5003.0,
+   "ourF": 109523.0,
+   "oppF": 104520.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.02337,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 659.0,
+    "d20": 3057.0,
+    "d29": 5003.0
+   },
+   "seg_gap": {
+    "d0_10": 659.0,
+    "d11_20": 2398.0,
+    "d21_28": 4707.0,
+    "d29": -2761.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -2761.0
+  },
+  {
+   "episode": 114224891,
+   "tag": "r37",
+   "createTime": "2026-09-27T15:05:31.142000",
+   "opp": "snc5656",
+   "seat": 0,
+   "res": "L",
+   "margin": -666.0,
+   "ourF": 142779.0,
+   "oppF": 143445.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00233,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 25.0,
+    "d20": -67.0,
+    "d29": -666.0
+   },
+   "seg_gap": {
+    "d0_10": 25.0,
+    "d11_20": -92.0,
+    "d21_28": 1487.0,
+    "d29": -2086.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -2086.0
+  },
+  {
+   "episode": 114261063,
+   "tag": "r37",
+   "createTime": "2026-09-27T16:45:29.671000",
+   "opp": "umizora",
+   "seat": 1,
+   "res": "L",
+   "margin": -1019.0,
+   "ourF": 137119.0,
+   "oppF": 138138.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.0037,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -674.0,
+    "d20": -129.0,
+    "d29": -1019.0
+   },
+   "seg_gap": {
+    "d0_10": -674.0,
+    "d11_20": 545.0,
+    "d21_28": -890.0,
+    "d29": 0.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -890.0
+  },
+  {
+   "episode": 114297951,
+   "tag": "r37",
+   "createTime": "2026-09-27T18:25:41.041000",
+   "opp": "Anaconda",
+   "seat": 0,
+   "res": "W",
+   "margin": 11073.0,
+   "ourF": 84197.0,
+   "oppF": 73124.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.07038,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 396.0,
+    "d20": 2205.0,
+    "d29": 11073.0
+   },
+   "seg_gap": {
+    "d0_10": 396.0,
+    "d11_20": 1809.0,
+    "d21_28": 7867.0,
+    "d29": 1001.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 396.0
+  },
+  {
+   "episode": 114305131,
+   "tag": "r37",
+   "createTime": "2026-09-27T18:46:06.203000",
+   "opp": "Aura Farming",
+   "seat": 1,
+   "res": "L",
+   "margin": -411.0,
+   "ourF": 147866.0,
+   "oppF": 148277.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00139,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -15.0,
+    "d20": -115.0,
+    "d29": -411.0
+   },
+   "seg_gap": {
+    "d0_10": -15.0,
+    "d11_20": -100.0,
+    "d21_28": 1398.0,
+    "d29": -1694.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -1694.0
+  },
+  {
+   "episode": 114328240,
+   "tag": "r37",
+   "createTime": "2026-09-27T19:49:58.877000",
+   "opp": "Becegatto",
+   "seat": 1,
+   "res": "W",
+   "margin": 2732.0,
+   "ourF": 87460.0,
+   "oppF": 84728.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.01587,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -29.0,
+    "d20": 246.0,
+    "d29": 2732.0
+   },
+   "seg_gap": {
+    "d0_10": -29.0,
+    "d11_20": 275.0,
+    "d21_28": 2381.0,
+    "d29": 105.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -29.0
+  },
+  {
+   "episode": 114332614,
+   "tag": "r37",
+   "createTime": "2026-09-27T20:01:59.304000",
+   "opp": "Ender",
+   "seat": 0,
+   "res": "L",
+   "margin": -630.0,
+   "ourF": 120241.0,
+   "oppF": 120871.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00261,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 39.0,
+    "d20": -205.0,
+    "d29": -630.0
+   },
+   "seg_gap": {
+    "d0_10": 39.0,
+    "d11_20": -244.0,
+    "d21_28": -453.0,
+    "d29": 28.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -453.0
+  },
+  {
+   "episode": 114353279,
+   "tag": "r37",
+   "createTime": "2026-09-27T20:58:00.014000",
+   "opp": "Kaan Dınız",
+   "seat": 0,
+   "res": "L",
+   "margin": -115.0,
+   "ourF": 108459.0,
+   "oppF": 108574.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00053,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -11.0,
+    "d20": -87.0,
+    "d29": -115.0
+   },
+   "seg_gap": {
+    "d0_10": -11.0,
+    "d11_20": -76.0,
+    "d21_28": 346.0,
+    "d29": -374.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -374.0
+  },
+  {
+   "episode": 114354572,
+   "tag": "r37",
+   "createTime": "2026-09-27T21:01:59.188000",
+   "opp": "MJVinay",
+   "seat": 0,
+   "res": "W",
+   "margin": 3439.0,
+   "ourF": 111101.0,
+   "oppF": 107662.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.01572,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 988.0,
+    "d20": 1212.0,
+    "d29": 3439.0
+   },
+   "seg_gap": {
+    "d0_10": 988.0,
+    "d11_20": 224.0,
+    "d21_28": 4033.0,
+    "d29": -1806.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -1806.0
+  },
+  {
+   "episode": 114381129,
+   "tag": "r37",
+   "createTime": "2026-09-27T22:14:00.524000",
+   "opp": "Prince Special",
+   "seat": 1,
+   "res": "L",
+   "margin": -4722.0,
+   "ourF": 105279.0,
+   "oppF": 110001.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.02193,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 7624.0,
+    "d20": 7379.0,
+    "d29": -4722.0
+   },
+   "seg_gap": {
+    "d0_10": 7624.0,
+    "d11_20": -245.0,
+    "d21_28": -2589.0,
+    "d29": -9512.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -9512.0
+  },
+  {
+   "episode": 114398148,
+   "tag": "r37",
+   "createTime": "2026-09-27T23:01:58.843000",
+   "opp": "Alexander Dudin",
+   "seat": 0,
+   "res": "L",
+   "margin": -356.0,
+   "ourF": 145077.0,
+   "oppF": 145433.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00123,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -8.0,
+    "d20": -14.0,
+    "d29": -356.0
+   },
+   "seg_gap": {
+    "d0_10": -8.0,
+    "d11_20": -6.0,
+    "d21_28": -374.0,
+    "d29": 32.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -374.0
+  },
+  {
+   "episode": 114423528,
+   "tag": "r37",
+   "createTime": "2026-09-28T00:10:02.723000",
+   "opp": "Ahmed Mostafa #2",
+   "seat": 0,
+   "res": "W",
+   "margin": 4867.0,
+   "ourF": 84632.0,
+   "oppF": 79765.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.02961,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 1186.0,
+    "d20": 1968.0,
+    "d29": 4867.0
+   },
+   "seg_gap": {
+    "d0_10": 1186.0,
+    "d11_20": 782.0,
+    "d21_28": 3375.0,
+    "d29": -476.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -476.0
+  },
+  {
+   "episode": 114465882,
+   "tag": "r37",
+   "createTime": "2026-09-28T02:06:07.429000",
+   "opp": "t.me/anpilovetg",
+   "seat": 1,
+   "res": "L",
+   "margin": -62.0,
+   "ourF": 145113.0,
+   "oppF": 145175.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00021,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -8.0,
+    "d20": -547.0,
+    "d29": -62.0
+   },
+   "seg_gap": {
+    "d0_10": -8.0,
+    "d11_20": -539.0,
+    "d21_28": 349.0,
+    "d29": 136.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -539.0
+  },
+  {
+   "episode": 114467383,
+   "tag": "r37",
+   "createTime": "2026-09-28T02:10:01.518000",
+   "opp": "Daniel Guo",
+   "seat": 1,
+   "res": "L",
+   "margin": -19.0,
+   "ourF": 76439.0,
+   "oppF": 76458.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": -0.00012,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -18.0,
+    "d20": -267.0,
+    "d29": -19.0
+   },
+   "seg_gap": {
+    "d0_10": -18.0,
+    "d11_20": -249.0,
+    "d21_28": 599.0,
+    "d29": -351.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -351.0
+  },
+  {
+   "episode": 114479186,
+   "tag": "r37",
+   "createTime": "2026-09-28T02:42:02.004000",
+   "opp": "SatoshiN04",
+   "seat": 1,
+   "res": "W",
+   "margin": 4848.0,
+   "ourF": 94917.0,
+   "oppF": 90069.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.02621,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 12496.0,
+    "d20": 2064.0,
+    "d29": 4848.0
+   },
+   "seg_gap": {
+    "d0_10": 12496.0,
+    "d11_20": -10432.0,
+    "d21_28": 249.0,
+    "d29": 2535.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -10432.0
+  },
+  {
+   "episode": 114496003,
+   "tag": "r37",
+   "createTime": "2026-09-28T03:30:00.701000",
+   "opp": "Jane Street Farmers",
+   "seat": 0,
+   "res": "W",
+   "margin": 740.0,
+   "ourF": 106784.0,
+   "oppF": 106044.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00348,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -8.0,
+    "d20": 435.0,
+    "d29": 740.0
+   },
+   "seg_gap": {
+    "d0_10": -8.0,
+    "d11_20": 443.0,
+    "d21_28": 129.0,
+    "d29": 176.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -8.0
+  },
+  {
+   "episode": 114498287,
+   "tag": "r37",
+   "createTime": "2026-09-28T03:34:01.992000",
+   "opp": "Jacob Alstrup",
+   "seat": 1,
+   "res": "W",
+   "margin": 1659.0,
+   "ourF": 106387.0,
+   "oppF": 104728.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00786,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 9.0,
+    "d20": 1176.0,
+    "d29": 1659.0
+   },
+   "seg_gap": {
+    "d0_10": 9.0,
+    "d11_20": 1167.0,
+    "d21_28": 4014.0,
+    "d29": -3531.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -3531.0
+  }
+ ],
+ "r40_rows_note": "r40 75 局（发射 2026-09-27T18:26:46Z）；字段同 r37_rows",
+ "r40_rows": [
+  {
+   "episode": 114300643,
+   "tag": "r40",
+   "createTime": "2026-09-27T18:34:00.005000",
+   "opp": "Siddharth Kumar Gopal",
+   "seat": 1,
+   "res": "W",
+   "margin": 84379.0,
+   "ourF": 145306.0,
+   "oppF": 60927.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.40914,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 8602.0,
+    "d20": 41375.0,
+    "d29": 84379.0
+   },
+   "seg_gap": {
+    "d0_10": 8602.0,
+    "d11_20": 32773.0,
+    "d21_28": 33128.0,
+    "d29": 9876.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 8602.0
+  },
+  {
+   "episode": 114302084,
+   "tag": "r40",
+   "createTime": "2026-09-27T18:38:00.035000",
+   "opp": "Yash Katiyar",
+   "seat": 1,
+   "res": "W",
+   "margin": 64108.0,
+   "ourF": 151039.0,
+   "oppF": 86931.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.2694,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 18097.0,
+    "d20": 45794.0,
+    "d29": 64108.0
+   },
+   "seg_gap": {
+    "d0_10": 18097.0,
+    "d11_20": 27697.0,
+    "d21_28": 14420.0,
+    "d29": 3894.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": 3894.0
+  },
+  {
+   "episode": 114303532,
+   "tag": "r40",
+   "createTime": "2026-09-27T18:42:00.132000",
+   "opp": "Davide",
+   "seat": 0,
+   "res": "W",
+   "margin": 63822.0,
+   "ourF": 96350.0,
+   "oppF": 32528.0,
+   "opp_band": "weak<60k",
+   "money_ratio": 0.49521,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 17264.0,
+    "d20": 39921.0,
+    "d29": 63822.0
+   },
+   "seg_gap": {
+    "d0_10": 17264.0,
+    "d11_20": 22657.0,
+    "d21_28": 19391.0,
+    "d29": 4510.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": 4510.0
+  },
+  {
+   "episode": 114304991,
+   "tag": "r40",
+   "createTime": "2026-09-27T18:46:05.935000",
+   "opp": "Chaowei Liang",
+   "seat": 1,
+   "res": "W",
+   "margin": 23445.0,
+   "ourF": 107229.0,
+   "oppF": 83784.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.12274,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 15689.0,
+    "d20": 23397.0,
+    "d29": 23445.0
+   },
+   "seg_gap": {
+    "d0_10": 15689.0,
+    "d11_20": 7708.0,
+    "d21_28": -2629.0,
+    "d29": 2677.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -2629.0
+  },
+  {
+   "episode": 114306449,
+   "tag": "r40",
+   "createTime": "2026-09-27T18:50:00.917000",
+   "opp": "WangQrkkk",
+   "seat": 0,
+   "res": "W",
+   "margin": 40260.0,
+   "ourF": 128331.0,
+   "oppF": 88071.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.18604,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 3464.0,
+    "d20": 26754.0,
+    "d29": 40260.0
+   },
+   "seg_gap": {
+    "d0_10": 3464.0,
+    "d11_20": 23290.0,
+    "d21_28": 10516.0,
+    "d29": 2990.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": 2990.0
+  },
+  {
+   "episode": 114307894,
+   "tag": "r40",
+   "createTime": "2026-09-27T18:54:00.792000",
+   "opp": "Kevin Cao",
+   "seat": 1,
+   "res": "W",
+   "margin": 16464.0,
+   "ourF": 125331.0,
+   "oppF": 108867.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.0703,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 10709.0,
+    "d20": 16532.0,
+    "d29": 16464.0
+   },
+   "seg_gap": {
+    "d0_10": 10709.0,
+    "d11_20": 5823.0,
+    "d21_28": 839.0,
+    "d29": -907.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -907.0
+  },
+  {
+   "episode": 114309331,
+   "tag": "r40",
+   "createTime": "2026-09-27T18:58:00.355000",
+   "opp": "dqvide",
+   "seat": 1,
+   "res": "W",
+   "margin": 29021.0,
+   "ourF": 151033.0,
+   "oppF": 122012.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.10629,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 5073.0,
+    "d20": 26103.0,
+    "d29": 29021.0
+   },
+   "seg_gap": {
+    "d0_10": 5073.0,
+    "d11_20": 21030.0,
+    "d21_28": 2223.0,
+    "d29": 695.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": 695.0
+  },
+  {
+   "episode": 114310772,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:02:00.023000",
+   "opp": "MP Gamimg",
+   "seat": 1,
+   "res": "W",
+   "margin": 13481.0,
+   "ourF": 177278.0,
+   "oppF": 163797.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.03953,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 12694.0,
+    "d20": 14852.0,
+    "d29": 13481.0
+   },
+   "seg_gap": {
+    "d0_10": 12694.0,
+    "d11_20": 2158.0,
+    "d21_28": 756.0,
+    "d29": -2127.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -2127.0
+  },
+  {
+   "episode": 114312231,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:06:02.791000",
+   "opp": "Samuel Watson",
+   "seat": 1,
+   "res": "W",
+   "margin": 21520.0,
+   "ourF": 61091.0,
+   "oppF": 39571.0,
+   "opp_band": "weak<60k",
+   "money_ratio": 0.21378,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 2166.0,
+    "d20": 8046.0,
+    "d29": 21520.0
+   },
+   "seg_gap": {
+    "d0_10": 2166.0,
+    "d11_20": 5880.0,
+    "d21_28": 10654.0,
+    "d29": 2820.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 2166.0
+  },
+  {
+   "episode": 114313664,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:10:00.612000",
+   "opp": "mhw",
+   "seat": 1,
+   "res": "L",
+   "margin": -4416.0,
+   "ourF": 125981.0,
+   "oppF": 130397.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.01722,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 8163.0,
+    "d20": 11194.0,
+    "d29": -4416.0
+   },
+   "seg_gap": {
+    "d0_10": 8163.0,
+    "d11_20": 3031.0,
+    "d21_28": -12094.0,
+    "d29": -3516.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -12094.0
+  },
+  {
+   "episode": 114315124,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:14:00.108000",
+   "opp": "Cliffton",
+   "seat": 0,
+   "res": "L",
+   "margin": -1233.0,
+   "ourF": 89231.0,
+   "oppF": 90464.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00686,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 31.0,
+    "d20": -576.0,
+    "d29": -1233.0
+   },
+   "seg_gap": {
+    "d0_10": 31.0,
+    "d11_20": -607.0,
+    "d21_28": -731.0,
+    "d29": 74.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -731.0
+  },
+  {
+   "episode": 114316611,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:17:59.297000",
+   "opp": "DL",
+   "seat": 0,
+   "res": "W",
+   "margin": 14443.0,
+   "ourF": 120036.0,
+   "oppF": 105593.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.06401,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 1027.0,
+    "d20": 5588.0,
+    "d29": 14443.0
+   },
+   "seg_gap": {
+    "d0_10": 1027.0,
+    "d11_20": 4561.0,
+    "d21_28": 9433.0,
+    "d29": -578.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -578.0
+  },
+  {
+   "episode": 114318116,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:21:59.628000",
+   "opp": "Kometa",
+   "seat": 0,
+   "res": "W",
+   "margin": 16787.0,
+   "ourF": 92502.0,
+   "oppF": 75715.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.09979,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 2095.0,
+    "d20": 5016.0,
+    "d29": 16787.0
+   },
+   "seg_gap": {
+    "d0_10": 2095.0,
+    "d11_20": 2921.0,
+    "d21_28": 9475.0,
+    "d29": 2296.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 2095.0
+  },
+  {
+   "episode": 114319605,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:26:01.913000",
+   "opp": "Lumberjacks",
+   "seat": 0,
+   "res": "W",
+   "margin": 21098.0,
+   "ourF": 83432.0,
+   "oppF": 62334.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.14474,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 1407.0,
+    "d20": 4279.0,
+    "d29": 21098.0
+   },
+   "seg_gap": {
+    "d0_10": 1407.0,
+    "d11_20": 2872.0,
+    "d21_28": 14806.0,
+    "d29": 2013.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 1407.0
+  },
+  {
+   "episode": 114321084,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:29:58.966000",
+   "opp": "novasync88",
+   "seat": 0,
+   "res": "W",
+   "margin": 5796.0,
+   "ourF": 78463.0,
+   "oppF": 72667.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.03835,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 1612.0,
+    "d20": 1247.0,
+    "d29": 5796.0
+   },
+   "seg_gap": {
+    "d0_10": 1612.0,
+    "d11_20": -365.0,
+    "d21_28": 3353.0,
+    "d29": 1196.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -365.0
+  },
+  {
+   "episode": 114322547,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:33:59.810000",
+   "opp": "fly",
+   "seat": 1,
+   "res": "W",
+   "margin": 10487.0,
+   "ourF": 167617.0,
+   "oppF": 157130.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.03229,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 928.0,
+    "d20": 2357.0,
+    "d29": 10487.0
+   },
+   "seg_gap": {
+    "d0_10": 928.0,
+    "d11_20": 1429.0,
+    "d21_28": 13976.0,
+    "d29": -5846.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -5846.0
+  },
+  {
+   "episode": 114324006,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:37:59.325000",
+   "opp": "Nightingale",
+   "seat": 1,
+   "res": "L",
+   "margin": -2614.0,
+   "ourF": 92165.0,
+   "oppF": 94779.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.01398,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -160.0,
+    "d20": -303.0,
+    "d29": -2614.0
+   },
+   "seg_gap": {
+    "d0_10": -160.0,
+    "d11_20": -143.0,
+    "d21_28": -2364.0,
+    "d29": 53.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -2364.0
+  },
+  {
+   "episode": 114325480,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:41:59.019000",
+   "opp": "Raiden.B",
+   "seat": 1,
+   "res": "W",
+   "margin": 5995.0,
+   "ourF": 101316.0,
+   "oppF": 95321.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.03049,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 627.0,
+    "d20": 4255.0,
+    "d29": 5995.0
+   },
+   "seg_gap": {
+    "d0_10": 627.0,
+    "d11_20": 3628.0,
+    "d21_28": 1209.0,
+    "d29": 531.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": 531.0
+  },
+  {
+   "episode": 114326949,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:46:03.307000",
+   "opp": "kglctf",
+   "seat": 1,
+   "res": "W",
+   "margin": 4799.0,
+   "ourF": 77942.0,
+   "oppF": 73143.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.03176,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 225.0,
+    "d20": 2355.0,
+    "d29": 4799.0
+   },
+   "seg_gap": {
+    "d0_10": 225.0,
+    "d11_20": 2130.0,
+    "d21_28": 2352.0,
+    "d29": 92.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": 92.0
+  },
+  {
+   "episode": 114328427,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:49:59.116000",
+   "opp": "OpenModelMap",
+   "seat": 0,
+   "res": "W",
+   "margin": 10411.0,
+   "ourF": 107602.0,
+   "oppF": 97191.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.05084,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -266.0,
+    "d20": 11196.0,
+    "d29": 10411.0
+   },
+   "seg_gap": {
+    "d0_10": -266.0,
+    "d11_20": 11462.0,
+    "d21_28": -1591.0,
+    "d29": 806.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -1591.0
+  },
+  {
+   "episode": 114329891,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:53:59.398000",
+   "opp": "shawnYiB",
+   "seat": 0,
+   "res": "L",
+   "margin": -2420.0,
+   "ourF": 104901.0,
+   "oppF": 107321.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.0114,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 1352.0,
+    "d20": 2094.0,
+    "d29": -2420.0
+   },
+   "seg_gap": {
+    "d0_10": 1352.0,
+    "d11_20": 742.0,
+    "d21_28": -2238.0,
+    "d29": -2276.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -2276.0
+  },
+  {
+   "episode": 114331352,
+   "tag": "r40",
+   "createTime": "2026-09-27T19:57:59.503000",
+   "opp": "PursueML",
+   "seat": 0,
+   "res": "W",
+   "margin": 3640.0,
+   "ourF": 71507.0,
+   "oppF": 67867.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.02612,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 1656.0,
+    "d20": 1662.0,
+    "d29": 3640.0
+   },
+   "seg_gap": {
+    "d0_10": 1656.0,
+    "d11_20": 6.0,
+    "d21_28": 2008.0,
+    "d29": -30.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -30.0
+  },
+  {
+   "episode": 114332830,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:01:59.641000",
+   "opp": "Shaokai Zhang",
+   "seat": 1,
+   "res": "W",
+   "margin": 3583.0,
+   "ourF": 73124.0,
+   "oppF": 69541.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.02511,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 717.0,
+    "d20": 1468.0,
+    "d29": 3583.0
+   },
+   "seg_gap": {
+    "d0_10": 717.0,
+    "d11_20": 751.0,
+    "d21_28": 2543.0,
+    "d29": -428.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -428.0
+  },
+  {
+   "episode": 114334280,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:06:01.209000",
+   "opp": "Jackylw",
+   "seat": 0,
+   "res": "W",
+   "margin": 1607.0,
+   "ourF": 138644.0,
+   "oppF": 137037.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00583,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 20.0,
+    "d20": 490.0,
+    "d29": 1607.0
+   },
+   "seg_gap": {
+    "d0_10": 20.0,
+    "d11_20": 470.0,
+    "d21_28": 1431.0,
+    "d29": -314.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -314.0
+  },
+  {
+   "episode": 114335768,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:09:59.823000",
+   "opp": "Jayanth Koppala",
+   "seat": 1,
+   "res": "L",
+   "margin": -589.0,
+   "ourF": 101049.0,
+   "oppF": 101638.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00291,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -23.0,
+    "d20": -1853.0,
+    "d29": -589.0
+   },
+   "seg_gap": {
+    "d0_10": -23.0,
+    "d11_20": -1830.0,
+    "d21_28": 2962.0,
+    "d29": -1698.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -1830.0
+  },
+  {
+   "episode": 114337232,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:14:07.537000",
+   "opp": "dacheah",
+   "seat": 1,
+   "res": "W",
+   "margin": 1865.0,
+   "ourF": 137873.0,
+   "oppF": 136008.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00681,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 113.0,
+    "d20": 198.0,
+    "d29": 1865.0
+   },
+   "seg_gap": {
+    "d0_10": 113.0,
+    "d11_20": 85.0,
+    "d21_28": 3203.0,
+    "d29": -1536.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -1536.0
+  },
+  {
+   "episode": 114338692,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:17:59.823000",
+   "opp": "fog flower",
+   "seat": 0,
+   "res": "W",
+   "margin": 9352.0,
+   "ourF": 66606.0,
+   "oppF": 57254.0,
+   "opp_band": "weak<60k",
+   "money_ratio": 0.0755,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 1241.0,
+    "d20": 2584.0,
+    "d29": 9352.0
+   },
+   "seg_gap": {
+    "d0_10": 1241.0,
+    "d11_20": 1343.0,
+    "d21_28": 8852.0,
+    "d29": -2084.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -2084.0
+  },
+  {
+   "episode": 114340151,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:22:00.507000",
+   "opp": "Aaron amacadu",
+   "seat": 0,
+   "res": "W",
+   "margin": 5096.0,
+   "ourF": 98253.0,
+   "oppF": 93157.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.02662,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -146.0,
+    "d20": 1866.0,
+    "d29": 5096.0
+   },
+   "seg_gap": {
+    "d0_10": -146.0,
+    "d11_20": 2012.0,
+    "d21_28": 2947.0,
+    "d29": 283.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -146.0
+  },
+  {
+   "episode": 114341619,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:26:02.617000",
+   "opp": "Haitao56 ",
+   "seat": 1,
+   "res": "W",
+   "margin": 19029.0,
+   "ourF": 91886.0,
+   "oppF": 72857.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.11551,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 209.0,
+    "d20": 98.0,
+    "d29": 19029.0
+   },
+   "seg_gap": {
+    "d0_10": 209.0,
+    "d11_20": -111.0,
+    "d21_28": 14235.0,
+    "d29": 4696.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -111.0
+  },
+  {
+   "episode": 114343086,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:29:59.098000",
+   "opp": "inny",
+   "seat": 0,
+   "res": "W",
+   "margin": 1505.0,
+   "ourF": 126272.0,
+   "oppF": 124767.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.006,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 251.0,
+    "d20": 531.0,
+    "d29": 1505.0
+   },
+   "seg_gap": {
+    "d0_10": 251.0,
+    "d11_20": 280.0,
+    "d21_28": 4511.0,
+    "d29": -3537.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -3537.0
+  },
+  {
+   "episode": 114344563,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:33:59.611000",
+   "opp": "higuuu",
+   "seat": 1,
+   "res": "W",
+   "margin": 1991.0,
+   "ourF": 72330.0,
+   "oppF": 70339.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.01396,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -141.0,
+    "d20": 351.0,
+    "d29": 1991.0
+   },
+   "seg_gap": {
+    "d0_10": -141.0,
+    "d11_20": 492.0,
+    "d21_28": 1613.0,
+    "d29": 27.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -141.0
+  },
+  {
+   "episode": 114346015,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:37:59.540000",
+   "opp": "PyJa",
+   "seat": 1,
+   "res": "L",
+   "margin": -9.0,
+   "ourF": 90749.0,
+   "oppF": 90758.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -5e-05,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 939.0,
+    "d20": 1379.0,
+    "d29": -9.0
+   },
+   "seg_gap": {
+    "d0_10": 939.0,
+    "d11_20": 440.0,
+    "d21_28": -1274.0,
+    "d29": -114.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -1274.0
+  },
+  {
+   "episode": 114347480,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:41:59.603000",
+   "opp": "Bungalow0",
+   "seat": 0,
+   "res": "L",
+   "margin": -2248.0,
+   "ourF": 80253.0,
+   "oppF": 82501.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": -0.01381,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 265.0,
+    "d20": -565.0,
+    "d29": -2248.0
+   },
+   "seg_gap": {
+    "d0_10": 265.0,
+    "d11_20": -830.0,
+    "d21_28": -1563.0,
+    "d29": -120.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -1563.0
+  },
+  {
+   "episode": 114348943,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:46:02.187000",
+   "opp": "Ryosei Hara",
+   "seat": 1,
+   "res": "W",
+   "margin": 1436.0,
+   "ourF": 102001.0,
+   "oppF": 100565.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00709,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -60.0,
+    "d20": 109.0,
+    "d29": 1436.0
+   },
+   "seg_gap": {
+    "d0_10": -60.0,
+    "d11_20": 169.0,
+    "d21_28": 1788.0,
+    "d29": -461.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -461.0
+  },
+  {
+   "episode": 114350415,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:49:59.019000",
+   "opp": "Nadeem Kilani",
+   "seat": 0,
+   "res": "W",
+   "margin": 1612.0,
+   "ourF": 121507.0,
+   "oppF": 119895.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00668,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 695.0,
+    "d20": 1007.0,
+    "d29": 1612.0
+   },
+   "seg_gap": {
+    "d0_10": 695.0,
+    "d11_20": 312.0,
+    "d21_28": 738.0,
+    "d29": -133.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -133.0
+  },
+  {
+   "episode": 114351866,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:53:59.939000",
+   "opp": "keeplooking",
+   "seat": 1,
+   "res": "W",
+   "margin": 347.0,
+   "ourF": 103896.0,
+   "oppF": 103549.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00167,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 51.0,
+    "d20": 235.0,
+    "d29": 347.0
+   },
+   "seg_gap": {
+    "d0_10": 51.0,
+    "d11_20": 184.0,
+    "d21_28": 112.0,
+    "d29": 0.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": 0.0
+  },
+  {
+   "episode": 114353326,
+   "tag": "r40",
+   "createTime": "2026-09-27T20:58:00.098000",
+   "opp": "Дмитрий Томилов",
+   "seat": 0,
+   "res": "W",
+   "margin": 2436.0,
+   "ourF": 135554.0,
+   "oppF": 133118.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00907,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -224.0,
+    "d20": -886.0,
+    "d29": 2436.0
+   },
+   "seg_gap": {
+    "d0_10": -224.0,
+    "d11_20": -662.0,
+    "d21_28": 3454.0,
+    "d29": -132.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -662.0
+  },
+  {
+   "episode": 114354776,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:01:59.602000",
+   "opp": "Meteor",
+   "seat": 0,
+   "res": "W",
+   "margin": 1433.0,
+   "ourF": 96460.0,
+   "oppF": 95027.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00748,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 201.0,
+    "d20": 137.0,
+    "d29": 1433.0
+   },
+   "seg_gap": {
+    "d0_10": 201.0,
+    "d11_20": -64.0,
+    "d21_28": 1413.0,
+    "d29": -117.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -117.0
+  },
+  {
+   "episode": 114355959,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:06:00.503000",
+   "opp": "Ali Eren Oğuztaş",
+   "seat": 1,
+   "res": "L",
+   "margin": -761.0,
+   "ourF": 99367.0,
+   "oppF": 100128.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00381,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -7.0,
+    "d20": -211.0,
+    "d29": -761.0
+   },
+   "seg_gap": {
+    "d0_10": -7.0,
+    "d11_20": -204.0,
+    "d21_28": -581.0,
+    "d29": 31.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -581.0
+  },
+  {
+   "episode": 114356240,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:06:01.044000",
+   "opp": "Alan",
+   "seat": 1,
+   "res": "W",
+   "margin": 240.0,
+   "ourF": 87060.0,
+   "oppF": 86820.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.00138,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 0.0,
+    "d20": 0.0,
+    "d29": 240.0
+   },
+   "seg_gap": {
+    "d0_10": 0.0,
+    "d11_20": 0.0,
+    "d21_28": 240.0,
+    "d29": 0.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 0.0
+  },
+  {
+   "episode": 114357686,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:09:59.889000",
+   "opp": "zhuo wamg",
+   "seat": 0,
+   "res": "L",
+   "margin": -205.0,
+   "ourF": 143571.0,
+   "oppF": 143776.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00071,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 185.0,
+    "d20": -518.0,
+    "d29": -205.0
+   },
+   "seg_gap": {
+    "d0_10": 185.0,
+    "d11_20": -703.0,
+    "d21_28": 342.0,
+    "d29": -29.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -703.0
+  },
+  {
+   "episode": 114359169,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:13:59.496000",
+   "opp": "Nat Bel ML Fun",
+   "seat": 1,
+   "res": "W",
+   "margin": 138.0,
+   "ourF": 111701.0,
+   "oppF": 111563.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00062,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 60.0,
+    "d20": -129.0,
+    "d29": 138.0
+   },
+   "seg_gap": {
+    "d0_10": 60.0,
+    "d11_20": -189.0,
+    "d21_28": 266.0,
+    "d29": 1.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -189.0
+  },
+  {
+   "episode": 114360627,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:17:59.511000",
+   "opp": "samg",
+   "seat": 0,
+   "res": "W",
+   "margin": 284.0,
+   "ourF": 130108.0,
+   "oppF": 129824.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00109,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 0.0,
+    "d20": 0.0,
+    "d29": 284.0
+   },
+   "seg_gap": {
+    "d0_10": 0.0,
+    "d11_20": 0.0,
+    "d21_28": 284.0,
+    "d29": 0.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 0.0
+  },
+  {
+   "episode": 114362099,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:22:00.200000",
+   "opp": "farmer-kuni",
+   "seat": 0,
+   "res": "W",
+   "margin": 323.0,
+   "ourF": 112816.0,
+   "oppF": 112493.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00143,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 0.0,
+    "d20": 0.0,
+    "d29": 323.0
+   },
+   "seg_gap": {
+    "d0_10": 0.0,
+    "d11_20": 0.0,
+    "d21_28": 304.0,
+    "d29": 19.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 0.0
+  },
+  {
+   "episode": 114363554,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:26:02.149000",
+   "opp": "modelcollapse",
+   "seat": 1,
+   "res": "W",
+   "margin": 598.0,
+   "ourF": 108510.0,
+   "oppF": 107912.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00276,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 30.0,
+    "d20": 94.0,
+    "d29": 598.0
+   },
+   "seg_gap": {
+    "d0_10": 30.0,
+    "d11_20": 64.0,
+    "d21_28": 369.0,
+    "d29": 135.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 30.0
+  },
+  {
+   "episode": 114365021,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:29:59.352000",
+   "opp": "Egg D. Kernel",
+   "seat": 1,
+   "res": "L",
+   "margin": -629.0,
+   "ourF": 110557.0,
+   "oppF": 111186.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00284,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 109.0,
+    "d20": 91.0,
+    "d29": -629.0
+   },
+   "seg_gap": {
+    "d0_10": 109.0,
+    "d11_20": -18.0,
+    "d21_28": -723.0,
+    "d29": 3.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -723.0
+  },
+  {
+   "episode": 114366490,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:33:59.617000",
+   "opp": "sssskilo",
+   "seat": 0,
+   "res": "W",
+   "margin": 254.0,
+   "ourF": 110709.0,
+   "oppF": 110455.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00115,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 78.0,
+    "d20": 79.0,
+    "d29": 254.0
+   },
+   "seg_gap": {
+    "d0_10": 78.0,
+    "d11_20": 1.0,
+    "d21_28": 53.0,
+    "d29": 122.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": 1.0
+  },
+  {
+   "episode": 114367928,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:37:59.214000",
+   "opp": "Affriza Wildan Fauzan",
+   "seat": 1,
+   "res": "W",
+   "margin": 178.0,
+   "ourF": 136533.0,
+   "oppF": 136355.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00065,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 0.0,
+    "d20": 3.0,
+    "d29": 178.0
+   },
+   "seg_gap": {
+    "d0_10": 0.0,
+    "d11_20": 3.0,
+    "d21_28": 169.0,
+    "d29": 6.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 0.0
+  },
+  {
+   "episode": 114369397,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:42:00.533000",
+   "opp": "Daiki Takahashi",
+   "seat": 1,
+   "res": "W",
+   "margin": 2119.0,
+   "ourF": 86016.0,
+   "oppF": 83897.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.01247,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 78.0,
+    "d20": 78.0,
+    "d29": 2119.0
+   },
+   "seg_gap": {
+    "d0_10": 78.0,
+    "d11_20": 0.0,
+    "d21_28": 1934.0,
+    "d29": 107.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": 0.0
+  },
+  {
+   "episode": 114370845,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:46:02.786000",
+   "opp": "lemon13418",
+   "seat": 1,
+   "res": "L",
+   "margin": -139.0,
+   "ourF": 114533.0,
+   "oppF": 114672.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00061,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -2.0,
+    "d20": -221.0,
+    "d29": -139.0
+   },
+   "seg_gap": {
+    "d0_10": -2.0,
+    "d11_20": -219.0,
+    "d21_28": -31.0,
+    "d29": 113.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -219.0
+  },
+  {
+   "episode": 114372316,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:50:01.017000",
+   "opp": "Sophie555",
+   "seat": 1,
+   "res": "W",
+   "margin": 461.0,
+   "ourF": 74580.0,
+   "oppF": 74119.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.0031,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -178.0,
+    "d20": -132.0,
+    "d29": 461.0
+   },
+   "seg_gap": {
+    "d0_10": -178.0,
+    "d11_20": 46.0,
+    "d21_28": 597.0,
+    "d29": -4.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -178.0
+  },
+  {
+   "episode": 114372401,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:50:01.149000",
+   "opp": "Запрети мне брать H100",
+   "seat": 1,
+   "res": "L",
+   "margin": -221.0,
+   "ourF": 122206.0,
+   "oppF": 122427.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.0009,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -18.0,
+    "d20": -498.0,
+    "d29": -221.0
+   },
+   "seg_gap": {
+    "d0_10": -18.0,
+    "d11_20": -480.0,
+    "d21_28": 745.0,
+    "d29": -468.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -480.0
+  },
+  {
+   "episode": 114373773,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:54:00.223000",
+   "opp": "Pavel Pavlov",
+   "seat": 1,
+   "res": "L",
+   "margin": -864.0,
+   "ourF": 78134.0,
+   "oppF": 78998.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": -0.0055,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -9.0,
+    "d20": -124.0,
+    "d29": -864.0
+   },
+   "seg_gap": {
+    "d0_10": -9.0,
+    "d11_20": -115.0,
+    "d21_28": -342.0,
+    "d29": -398.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -398.0
+  },
+  {
+   "episode": 114375244,
+   "tag": "r40",
+   "createTime": "2026-09-27T21:58:00.664000",
+   "opp": "Jules",
+   "seat": 1,
+   "res": "W",
+   "margin": 2.0,
+   "ourF": 94445.0,
+   "oppF": 94443.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 1e-05,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -8.0,
+    "d20": -8.0,
+    "d29": 2.0
+   },
+   "seg_gap": {
+    "d0_10": -8.0,
+    "d11_20": 0.0,
+    "d21_28": 12.0,
+    "d29": -2.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -8.0
+  },
+  {
+   "episode": 114376720,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:02:00.522000",
+   "opp": "wakaka",
+   "seat": 1,
+   "res": "L",
+   "margin": -30.0,
+   "ourF": 62325.0,
+   "oppF": 62355.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": -0.00024,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 248.0,
+    "d20": -1021.0,
+    "d29": -30.0
+   },
+   "seg_gap": {
+    "d0_10": 248.0,
+    "d11_20": -1269.0,
+    "d21_28": 870.0,
+    "d29": 121.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -1269.0
+  },
+  {
+   "episode": 114378193,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:06:01.013000",
+   "opp": "Zhang Feifan",
+   "seat": 0,
+   "res": "W",
+   "margin": 699.0,
+   "ourF": 57923.0,
+   "oppF": 57224.0,
+   "opp_band": "weak<60k",
+   "money_ratio": 0.00607,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -309.0,
+    "d20": -66.0,
+    "d29": 699.0
+   },
+   "seg_gap": {
+    "d0_10": -309.0,
+    "d11_20": 243.0,
+    "d21_28": 1110.0,
+    "d29": -345.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -345.0
+  },
+  {
+   "episode": 114379688,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:10:01.515000",
+   "opp": "Ivo Georgiev",
+   "seat": 0,
+   "res": "L",
+   "margin": -448.0,
+   "ourF": 146507.0,
+   "oppF": 146955.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00153,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 23.0,
+    "d20": -1.0,
+    "d29": -448.0
+   },
+   "seg_gap": {
+    "d0_10": 23.0,
+    "d11_20": -24.0,
+    "d21_28": 1403.0,
+    "d29": -1850.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -1850.0
+  },
+  {
+   "episode": 114381116,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:14:00.514000",
+   "opp": "YuyaSuzuki",
+   "seat": 1,
+   "res": "W",
+   "margin": 1146.0,
+   "ourF": 107255.0,
+   "oppF": 106109.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00537,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -160.0,
+    "d20": -77.0,
+    "d29": 1146.0
+   },
+   "seg_gap": {
+    "d0_10": -160.0,
+    "d11_20": 83.0,
+    "d21_28": 639.0,
+    "d29": 584.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -160.0
+  },
+  {
+   "episode": 114382583,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:18:00.545000",
+   "opp": "Yi Yu",
+   "seat": 0,
+   "res": "W",
+   "margin": 2446.0,
+   "ourF": 64360.0,
+   "oppF": 61914.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.01937,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 59.0,
+    "d20": 303.0,
+    "d29": 2446.0
+   },
+   "seg_gap": {
+    "d0_10": 59.0,
+    "d11_20": 244.0,
+    "d21_28": 2082.0,
+    "d29": 61.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": 59.0
+  },
+  {
+   "episode": 114384044,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:22:00.012000",
+   "opp": "No Name #2",
+   "seat": 0,
+   "res": "W",
+   "margin": 902.0,
+   "ourF": 103622.0,
+   "oppF": 102720.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00437,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -29.0,
+    "d20": 146.0,
+    "d29": 902.0
+   },
+   "seg_gap": {
+    "d0_10": -29.0,
+    "d11_20": 175.0,
+    "d21_28": 742.0,
+    "d29": 14.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -29.0
+  },
+  {
+   "episode": 114385491,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:26:01.018000",
+   "opp": "tech-Mira",
+   "seat": 1,
+   "res": "W",
+   "margin": 63.0,
+   "ourF": 116973.0,
+   "oppF": 116910.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00027,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -18.0,
+    "d20": -90.0,
+    "d29": 63.0
+   },
+   "seg_gap": {
+    "d0_10": -18.0,
+    "d11_20": -72.0,
+    "d21_28": 379.0,
+    "d29": -226.0
+   },
+   "worst_seg": "d29",
+   "worst_seg_gap": -226.0
+  },
+  {
+   "episode": 114386954,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:29:59.338000",
+   "opp": "Márcio Santos",
+   "seat": 0,
+   "res": "W",
+   "margin": 36.0,
+   "ourF": 77588.0,
+   "oppF": 77552.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.00023,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -8.0,
+    "d20": -8.0,
+    "d29": 36.0
+   },
+   "seg_gap": {
+    "d0_10": -8.0,
+    "d11_20": 0.0,
+    "d21_28": 44.0,
+    "d29": 0.0
+   },
+   "worst_seg": "d0_10",
+   "worst_seg_gap": -8.0
+  },
+  {
+   "episode": 114388425,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:33:59.831000",
+   "opp": "Dubnium",
+   "seat": 0,
+   "res": "W",
+   "margin": 833.0,
+   "ourF": 81207.0,
+   "oppF": 80374.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.00516,
+   "mirror": false,
+   "checkpoints": {
+    "d10": -151.0,
+    "d20": 4969.0,
+    "d29": 833.0
+   },
+   "seg_gap": {
+    "d0_10": -151.0,
+    "d11_20": 5120.0,
+    "d21_28": -2727.0,
+    "d29": -1409.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -2727.0
+  },
+  {
+   "episode": 114389888,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:37:59.440000",
+   "opp": "power spy",
+   "seat": 0,
+   "res": "W",
+   "margin": 948.0,
+   "ourF": 92289.0,
+   "oppF": 91341.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00516,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 0.0,
+    "d20": -1.0,
+    "d29": 948.0
+   },
+   "seg_gap": {
+    "d0_10": 0.0,
+    "d11_20": -1.0,
+    "d21_28": 844.0,
+    "d29": 105.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -1.0
+  },
+  {
+   "episode": 114391350,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:41:59.253000",
+   "opp": "yu9824",
+   "seat": 0,
+   "res": "L",
+   "margin": -1083.0,
+   "ourF": 99665.0,
+   "oppF": 100748.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.0054,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 0.0,
+    "d20": -47.0,
+    "d29": -1083.0
+   },
+   "seg_gap": {
+    "d0_10": 0.0,
+    "d11_20": -47.0,
+    "d21_28": -1065.0,
+    "d29": 29.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -1065.0
+  },
+  {
+   "episode": 114392820,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:46:02.593000",
+   "opp": "byncpy",
+   "seat": 1,
+   "res": "L",
+   "margin": -3375.0,
+   "ourF": 88993.0,
+   "oppF": 92368.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.01861,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 5855.0,
+    "d20": -9558.0,
+    "d29": -3375.0
+   },
+   "seg_gap": {
+    "d0_10": 5855.0,
+    "d11_20": -15413.0,
+    "d21_28": 1908.0,
+    "d29": 4275.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -15413.0
+  },
+  {
+   "episode": 114394290,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:49:59.454000",
+   "opp": "Lan_Sky",
+   "seat": 1,
+   "res": "W",
+   "margin": 325.0,
+   "ourF": 80850.0,
+   "oppF": 80525.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": 0.00201,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -10.0,
+    "d20": -277.0,
+    "d29": 325.0
+   },
+   "seg_gap": {
+    "d0_10": -10.0,
+    "d11_20": -267.0,
+    "d21_28": 610.0,
+    "d29": -8.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -267.0
+  },
+  {
+   "episode": 114395398,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:53:59.354000",
+   "opp": "Kerem Ercin",
+   "seat": 1,
+   "res": "L",
+   "margin": -433.0,
+   "ourF": 110842.0,
+   "oppF": 111275.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00195,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -8.0,
+    "d20": -194.0,
+    "d29": -433.0
+   },
+   "seg_gap": {
+    "d0_10": -8.0,
+    "d11_20": -186.0,
+    "d21_28": -411.0,
+    "d29": 172.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -411.0
+  },
+  {
+   "episode": 114395744,
+   "tag": "r40",
+   "createTime": "2026-09-27T22:53:59.929000",
+   "opp": "jay tsang",
+   "seat": 1,
+   "res": "W",
+   "margin": 214.0,
+   "ourF": 146173.0,
+   "oppF": 145959.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": 0.00073,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 0.0,
+    "d20": 344.0,
+    "d29": 214.0
+   },
+   "seg_gap": {
+    "d0_10": 0.0,
+    "d11_20": 344.0,
+    "d21_28": -130.0,
+    "d29": 0.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -130.0
+  },
+  {
+   "episode": 114410398,
+   "tag": "r40",
+   "createTime": "2026-09-27T23:34:00.038000",
+   "opp": "Raef Guizani",
+   "seat": 0,
+   "res": "L",
+   "margin": -429.0,
+   "ourF": 106011.0,
+   "oppF": 106440.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00202,
+   "mirror": true,
+   "checkpoints": {
+    "d10": 0.0,
+    "d20": 171.0,
+    "d29": -429.0
+   },
+   "seg_gap": {
+    "d0_10": 0.0,
+    "d11_20": 171.0,
+    "d21_28": -600.0,
+    "d29": 0.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -600.0
+  },
+  {
+   "episode": 114417233,
+   "tag": "r40",
+   "createTime": "2026-09-27T23:54:00.087000",
+   "opp": "YKuma",
+   "seat": 1,
+   "res": "L",
+   "margin": -81.0,
+   "ourF": 112095.0,
+   "oppF": 112176.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00036,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -7.0,
+    "d20": -7.0,
+    "d29": -81.0
+   },
+   "seg_gap": {
+    "d0_10": -7.0,
+    "d11_20": 0.0,
+    "d21_28": -74.0,
+    "d29": 0.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -74.0
+  },
+  {
+   "episode": 114430761,
+   "tag": "r40",
+   "createTime": "2026-09-28T00:30:01.888000",
+   "opp": "bpbpbpbpb",
+   "seat": 1,
+   "res": "L",
+   "margin": -823.0,
+   "ourF": 84750.0,
+   "oppF": 85573.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": -0.00483,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 382.0,
+    "d20": -154.0,
+    "d29": -823.0
+   },
+   "seg_gap": {
+    "d0_10": 382.0,
+    "d11_20": -536.0,
+    "d21_28": -585.0,
+    "d29": -84.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -585.0
+  },
+  {
+   "episode": 114455880,
+   "tag": "r40",
+   "createTime": "2026-09-28T01:38:01.913000",
+   "opp": "Son Pham",
+   "seat": 1,
+   "res": "L",
+   "margin": -809.0,
+   "ourF": 69516.0,
+   "oppF": 70325.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": -0.00579,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 20.0,
+    "d20": -314.0,
+    "d29": -809.0
+   },
+   "seg_gap": {
+    "d0_10": 20.0,
+    "d11_20": -334.0,
+    "d21_28": -386.0,
+    "d29": -109.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -386.0
+  },
+  {
+   "episode": 114480760,
+   "tag": "r40",
+   "createTime": "2026-09-28T02:46:06.834000",
+   "opp": "Masataka Suzuki",
+   "seat": 0,
+   "res": "L",
+   "margin": -239.0,
+   "ourF": 87439.0,
+   "oppF": 87678.0,
+   "opp_band": "mid60-90k",
+   "money_ratio": -0.00136,
+   "mirror": true,
+   "checkpoints": {
+    "d10": -21.0,
+    "d20": -122.0,
+    "d29": -239.0
+   },
+   "seg_gap": {
+    "d0_10": -21.0,
+    "d11_20": -101.0,
+    "d21_28": -803.0,
+    "d29": 686.0
+   },
+   "worst_seg": "d21_28",
+   "worst_seg_gap": -803.0
+  },
+  {
+   "episode": 114495988,
+   "tag": "r40",
+   "createTime": "2026-09-28T03:30:00.680000",
+   "opp": "linchuhan",
+   "seat": 1,
+   "res": "L",
+   "margin": -1170.0,
+   "ourF": 113152.0,
+   "oppF": 114322.0,
+   "opp_band": "strong>=90k",
+   "money_ratio": -0.00514,
+   "mirror": false,
+   "checkpoints": {
+    "d10": 64.0,
+    "d20": -555.0,
+    "d29": -1170.0
+   },
+   "seg_gap": {
+    "d0_10": 64.0,
+    "d11_20": -619.0,
+    "d21_28": -66.0,
+    "d29": -549.0
+   },
+   "worst_seg": "d11_20",
+   "worst_seg_gap": -619.0
+  }
+ ],
+ "summary": {
+  "r37": {
+   "games": 88,
+   "W": 66,
+   "L": 22,
+   "T": 0,
+   "win_rate": 0.75,
+   "margin_median": 6251.0,
+   "margin_mean": 13084.9,
+   "margin_min": -18060.0,
+   "margin_max": 103636.0,
+   "loss_margin_sorted": [
+    -18060.0,
+    -9365.0,
+    -7232.0,
+    -4722.0,
+    -3512.0,
+    -2586.0,
+    -2135.0,
+    -1944.0,
+    -1840.0,
+    -1329.0,
+    -1314.0,
+    -1106.0,
+    -1019.0,
+    -666.0,
+    -630.0,
+    -542.0,
+    -411.0,
+    -356.0,
+    -285.0,
+    -115.0,
+    -62.0,
+    -19.0
+   ],
+   "loss_margin_median": -1210.0,
+   "bands": {
+    "weak<60k": {
+     "n": 3,
+     "W": 3,
+     "L": 0,
+     "win_rate": 1.0
+    },
+    "mid60-90k": {
+     "n": 34,
+     "W": 28,
+     "L": 6,
+     "win_rate": 0.8235
+    },
+    "strong>=90k": {
+     "n": 51,
+     "W": 35,
+     "L": 16,
+     "win_rate": 0.6863
+    }
+   },
+   "worst_seg_counts": {
+    "d21_28": 17,
+    "d29": 36,
+    "d0_10": 21,
+    "d11_20": 14
+   },
+   "worst_seg_counts_losses": {
+    "d21_28": 12,
+    "d29": 6,
+    "d11_20": 4
+   },
+   "catastrophic_losses_gt10k": 1,
+   "unique_opponents": 87,
+   "seat_split": {
+    "seat0": 45,
+    "seat1": 43,
+    "seat0_W": 37,
+    "seat1_W": 29
+   },
+   "mirror": [
+    113738419,
+    114119338,
+    114305131,
+    114353279,
+    114398148,
+    114465882,
+    114467383
+   ],
+   "prev_win_rate_a23": {
+    "games": 55,
+    "win_rate": 0.8909,
+    "W": 49,
+    "L": 6,
+    "source": "analysis23 snapshot（49W-6L@55，1390.6）"
+   },
+   "prev_win_rate_a24": {
+    "games": 66,
+    "win_rate": 0.8182,
+    "W": 54,
+    "L": 12,
+    "source": "analysis24 snapshot（54W-12L@66，1384.1；12 败全高段、9/12 败 d21-28）"
+   },
+   "window_since_a24": {
+    "new_games": 22,
+    "W": 12,
+    "L": 10,
+    "win_rate": 0.5455,
+    "score_delta": 13.7,
+    "slope_per_game": 0.6227,
+    "note": "1384.1@66 -> 1397.8@88（analysis24 拉取 2026-09-27T09:20Z 后 22 新局）"
+   },
+   "new_loss_pattern": {
+    "window": "analysis24 拉取（2026-09-27T09:20Z）后 22 新局中的败局",
+    "n_losses": 10,
+    "margins_sorted": [
+     -4722.0,
+     -3512.0,
+     -1019.0,
+     -666.0,
+     -630.0,
+     -411.0,
+     -356.0,
+     -115.0,
+     -62.0,
+     -19.0
+    ],
+    "worst_seg_counts": {
+     "d11_20": 2,
+     "d21_28": 3,
+     "d29": 5
+    },
+    "opp_band_counts": {
+     "mid60-90k": 2,
+     "strong>=90k": 8
+    },
+    "rows": [
+     {
+      "episode": 114381129,
+      "createTime": "2026-09-27T22:14:00.524000",
+      "opp": "Prince Special",
+      "seat": 1,
+      "margin": -4722.0,
+      "ourF": 105279.0,
+      "oppF": 110001.0,
+      "opp_band": "strong>=90k",
+      "checkpoints": {
+       "d10": 7624.0,
+       "d20": 7379.0,
+       "d29": -4722.0
+      },
+      "seg_gap": {
+       "d0_10": 7624.0,
+       "d11_20": -245.0,
+       "d21_28": -2589.0,
+       "d29": -9512.0
+      },
+      "worst_seg": "d29",
+      "worst_seg_gap": -9512.0,
+      "mirror": false,
+      "opp_board_rank": 2733,
+      "opp_board_score": 1440.6
+     },
+     {
+      "episode": 114114936,
+      "createTime": "2026-09-27T10:05:19.163000",
+      "opp": "alcanta",
+      "seat": 1,
+      "margin": -3512.0,
+      "ourF": 81190.0,
+      "oppF": 84702.0,
+      "opp_band": "mid60-90k",
+      "checkpoints": {
+       "d10": -8.0,
+       "d20": -2205.0,
+       "d29": -3512.0
+      },
+      "seg_gap": {
+       "d0_10": -8.0,
+       "d11_20": -2197.0,
+       "d21_28": -1718.0,
+       "d29": 411.0
+      },
+      "worst_seg": "d11_20",
+      "worst_seg_gap": -2197.0,
+      "mirror": false,
+      "opp_board_rank": 1015,
+      "opp_board_score": 2102.4
+     },
+     {
+      "episode": 114261063,
+      "createTime": "2026-09-27T16:45:29.671000",
+      "opp": "umizora",
+      "seat": 1,
+      "margin": -1019.0,
+      "ourF": 137119.0,
+      "oppF": 138138.0,
+      "opp_band": "strong>=90k",
+      "checkpoints": {
+       "d10": -674.0,
+       "d20": -129.0,
+       "d29": -1019.0
+      },
+      "seg_gap": {
+       "d0_10": -674.0,
+       "d11_20": 545.0,
+       "d21_28": -890.0,
+       "d29": 0.0
+      },
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -890.0,
+      "mirror": false,
+      "opp_board_rank": 1044,
+      "opp_board_score": 2093.3
+     },
+     {
+      "episode": 114224891,
+      "createTime": "2026-09-27T15:05:31.142000",
+      "opp": "snc5656",
+      "seat": 0,
+      "margin": -666.0,
+      "ourF": 142779.0,
+      "oppF": 143445.0,
+      "opp_band": "strong>=90k",
+      "checkpoints": {
+       "d10": 25.0,
+       "d20": -67.0,
+       "d29": -666.0
+      },
+      "seg_gap": {
+       "d0_10": 25.0,
+       "d11_20": -92.0,
+       "d21_28": 1487.0,
+       "d29": -2086.0
+      },
+      "worst_seg": "d29",
+      "worst_seg_gap": -2086.0,
+      "mirror": false,
+      "opp_board_rank": 1184,
+      "opp_board_score": 2032.6
+     },
+     {
+      "episode": 114332614,
+      "createTime": "2026-09-27T20:01:59.304000",
+      "opp": "Ender",
+      "seat": 0,
+      "margin": -630.0,
+      "ourF": 120241.0,
+      "oppF": 120871.0,
+      "opp_band": "strong>=90k",
+      "checkpoints": {
+       "d10": 39.0,
+       "d20": -205.0,
+       "d29": -630.0
+      },
+      "seg_gap": {
+       "d0_10": 39.0,
+       "d11_20": -244.0,
+       "d21_28": -453.0,
+       "d29": 28.0
+      },
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -453.0,
+      "mirror": false,
+      "opp_board_rank": 927,
+      "opp_board_score": 2139.7
+     },
+     {
+      "episode": 114305131,
+      "createTime": "2026-09-27T18:46:06.203000",
+      "opp": "Aura Farming",
+      "seat": 1,
+      "margin": -411.0,
+      "ourF": 147866.0,
+      "oppF": 148277.0,
+      "opp_band": "strong>=90k",
+      "checkpoints": {
+       "d10": -15.0,
+       "d20": -115.0,
+       "d29": -411.0
+      },
+      "seg_gap": {
+       "d0_10": -15.0,
+       "d11_20": -100.0,
+       "d21_28": 1398.0,
+       "d29": -1694.0
+      },
+      "worst_seg": "d29",
+      "worst_seg_gap": -1694.0,
+      "mirror": true,
+      "opp_board_rank": 883,
+      "opp_board_score": 2155.9
+     },
+     {
+      "episode": 114398148,
+      "createTime": "2026-09-27T23:01:58.843000",
+      "opp": "Alexander Dudin",
+      "seat": 0,
+      "margin": -356.0,
+      "ourF": 145077.0,
+      "oppF": 145433.0,
+      "opp_band": "strong>=90k",
+      "checkpoints": {
+       "d10": -8.0,
+       "d20": -14.0,
+       "d29": -356.0
+      },
+      "seg_gap": {
+       "d0_10": -8.0,
+       "d11_20": -6.0,
+       "d21_28": -374.0,
+       "d29": 32.0
+      },
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -374.0,
+      "mirror": true,
+      "opp_board_rank": 1898,
+      "opp_board_score": 1762.3
+     },
+     {
+      "episode": 114353279,
+      "createTime": "2026-09-27T20:58:00.014000",
+      "opp": "Kaan Dınız",
+      "seat": 0,
+      "margin": -115.0,
+      "ourF": 108459.0,
+      "oppF": 108574.0,
+      "opp_band": "strong>=90k",
+      "checkpoints": {
+       "d10": -11.0,
+       "d20": -87.0,
+       "d29": -115.0
+      },
+      "seg_gap": {
+       "d0_10": -11.0,
+       "d11_20": -76.0,
+       "d21_28": 346.0,
+       "d29": -374.0
+      },
+      "worst_seg": "d29",
+      "worst_seg_gap": -374.0,
+      "mirror": true,
+      "opp_board_rank": 1572,
+      "opp_board_score": 1895.5
+     },
+     {
+      "episode": 114465882,
+      "createTime": "2026-09-28T02:06:07.429000",
+      "opp": "t.me/anpilovetg",
+      "seat": 1,
+      "margin": -62.0,
+      "ourF": 145113.0,
+      "oppF": 145175.0,
+      "opp_band": "strong>=90k",
+      "checkpoints": {
+       "d10": -8.0,
+       "d20": -547.0,
+       "d29": -62.0
+      },
+      "seg_gap": {
+       "d0_10": -8.0,
+       "d11_20": -539.0,
+       "d21_28": 349.0,
+       "d29": 136.0
+      },
+      "worst_seg": "d11_20",
+      "worst_seg_gap": -539.0,
+      "mirror": true,
+      "opp_board_rank": 2593,
+      "opp_board_score": 1497.8
+     },
+     {
+      "episode": 114467383,
+      "createTime": "2026-09-28T02:10:01.518000",
+      "opp": "Daniel Guo",
+      "seat": 1,
+      "margin": -19.0,
+      "ourF": 76439.0,
+      "oppF": 76458.0,
+      "opp_band": "mid60-90k",
+      "checkpoints": {
+       "d10": -18.0,
+       "d20": -267.0,
+       "d29": -19.0
+      },
+      "seg_gap": {
+       "d0_10": -18.0,
+       "d11_20": -249.0,
+       "d21_28": 599.0,
+       "d29": -351.0
+      },
+      "worst_seg": "d29",
+      "worst_seg_gap": -351.0,
+      "mirror": true,
+      "opp_board_rank": 1693,
+      "opp_board_score": 1847.2
+     }
+    ]
+   }
+  },
+  "r37_window_new22": {
+   "games": 22,
+   "W": 12,
+   "L": 10,
+   "T": 0,
+   "win_rate": 0.5455,
+   "margin_median": 495.5,
+   "margin_mean": 1583.6,
+   "margin_min": -4722.0,
+   "margin_max": 11073.0,
+   "loss_margin_sorted": [
+    -4722.0,
+    -3512.0,
+    -1019.0,
+    -666.0,
+    -630.0,
+    -411.0,
+    -356.0,
+    -115.0,
+    -62.0,
+    -19.0
+   ],
+   "loss_margin_median": -520.5,
+   "bands": {
+    "mid60-90k": {
+     "n": 6,
+     "W": 4,
+     "L": 2,
+     "win_rate": 0.6667
+    },
+    "strong>=90k": {
+     "n": 16,
+     "W": 8,
+     "L": 8,
+     "win_rate": 0.5
+    }
+   },
+   "worst_seg_counts": {
+    "d11_20": 4,
+    "d21_28": 4,
+    "d29": 10,
+    "d0_10": 4
+   },
+   "worst_seg_counts_losses": {
+    "d11_20": 2,
+    "d29": 5,
+    "d21_28": 3
+   },
+   "catastrophic_losses_gt10k": 0,
+   "unique_opponents": 22,
+   "seat_split": {
+    "seat0": 10,
+    "seat1": 12,
+    "seat0_W": 6,
+    "seat1_W": 6
+   },
+   "mirror": [
+    114119338,
+    114305131,
+    114353279,
+    114398148,
+    114465882,
+    114467383
+   ]
+  },
+  "r40": {
+   "games": 75,
+   "W": 51,
+   "L": 24,
+   "T": 0,
+   "win_rate": 0.68,
+   "margin_median": 598.0,
+   "margin_mean": 6509.2,
+   "margin_min": -4416.0,
+   "margin_max": 84379.0,
+   "loss_margin_sorted": [
+    -4416.0,
+    -3375.0,
+    -2614.0,
+    -2420.0,
+    -2248.0,
+    -1233.0,
+    -1170.0,
+    -1083.0,
+    -864.0,
+    -823.0,
+    -809.0,
+    -761.0,
+    -629.0,
+    -589.0,
+    -448.0,
+    -433.0,
+    -429.0,
+    -239.0,
+    -221.0,
+    -205.0,
+    -139.0,
+    -81.0,
+    -30.0,
+    -9.0
+   ],
+   "loss_margin_median": -695.0,
+   "bands": {
+    "weak<60k": {
+     "n": 4,
+     "W": 4,
+     "L": 0,
+     "win_rate": 1.0
+    },
+    "mid60-90k": {
+     "n": 25,
+     "W": 19,
+     "L": 6,
+     "win_rate": 0.76
+    },
+    "strong>=90k": {
+     "n": 46,
+     "W": 28,
+     "L": 18,
+     "win_rate": 0.6087
+    }
+   },
+   "worst_seg_counts": {
+    "d0_10": 17,
+    "d29": 25,
+    "d21_28": 18,
+    "d11_20": 15
+   },
+   "worst_seg_counts_losses": {
+    "d21_28": 14,
+    "d29": 3,
+    "d11_20": 7
+   },
+   "catastrophic_losses_gt10k": 0,
+   "unique_opponents": 75,
+   "seat_split": {
+    "seat0": 32,
+    "seat1": 43,
+    "seat0_W": 24,
+    "seat1_W": 27
+   },
+   "mirror": [
+    114346015,
+    114351866,
+    114356240,
+    114357686,
+    114359169,
+    114360627,
+    114362099,
+    114366490,
+    114367928,
+    114370845,
+    114372316,
+    114372401,
+    114375244,
+    114376720,
+    114379688,
+    114385491,
+    114386954,
+    114394290,
+    114395398,
+    114395744,
+    114410398,
+    114417233,
+    114480760
+   ],
+   "loss_pattern": {
+    "n_losses": 24,
+    "margins_sorted": [
+     -4416.0,
+     -3375.0,
+     -2614.0,
+     -2420.0,
+     -2248.0,
+     -1233.0,
+     -1170.0,
+     -1083.0,
+     -864.0,
+     -823.0,
+     -809.0,
+     -761.0,
+     -629.0,
+     -589.0,
+     -448.0,
+     -433.0,
+     -429.0,
+     -239.0,
+     -221.0,
+     -205.0,
+     -139.0,
+     -81.0,
+     -30.0,
+     -9.0
+    ],
+    "worst_seg_counts": {
+     "d11_20": 7,
+     "d21_28": 14,
+     "d29": 3
+    },
+    "rows": [
+     {
+      "episode": 114313664,
+      "createTime": "2026-09-27T19:10:00.612000",
+      "opp": "mhw",
+      "margin": -4416.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -12094.0,
+      "checkpoints": {
+       "d10": 8163.0,
+       "d20": 11194.0,
+       "d29": -4416.0
+      },
+      "opp_board_rank": 87,
+      "opp_board_score": 2630.5
+     },
+     {
+      "episode": 114392820,
+      "createTime": "2026-09-27T22:46:02.593000",
+      "opp": "byncpy",
+      "margin": -3375.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d11_20",
+      "worst_seg_gap": -15413.0,
+      "checkpoints": {
+       "d10": 5855.0,
+       "d20": -9558.0,
+       "d29": -3375.0
+      },
+      "opp_board_rank": 1764,
+      "opp_board_score": 1813.3
+     },
+     {
+      "episode": 114324006,
+      "createTime": "2026-09-27T19:37:59.325000",
+      "opp": "Nightingale",
+      "margin": -2614.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -2364.0,
+      "checkpoints": {
+       "d10": -160.0,
+       "d20": -303.0,
+       "d29": -2614.0
+      },
+      "opp_board_rank": 1648,
+      "opp_board_score": 1861.3
+     },
+     {
+      "episode": 114329891,
+      "createTime": "2026-09-27T19:53:59.398000",
+      "opp": "shawnYiB",
+      "margin": -2420.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d29",
+      "worst_seg_gap": -2276.0,
+      "checkpoints": {
+       "d10": 1352.0,
+       "d20": 2094.0,
+       "d29": -2420.0
+      },
+      "opp_board_rank": 2783,
+      "opp_board_score": 1420.3
+     },
+     {
+      "episode": 114347480,
+      "createTime": "2026-09-27T20:41:59.603000",
+      "opp": "Bungalow0",
+      "margin": -2248.0,
+      "opp_band": "mid60-90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -1563.0,
+      "checkpoints": {
+       "d10": 265.0,
+       "d20": -565.0,
+       "d29": -2248.0
+      },
+      "opp_board_rank": 3611,
+      "opp_board_score": 1124.2
+     },
+     {
+      "episode": 114315124,
+      "createTime": "2026-09-27T19:14:00.108000",
+      "opp": "Cliffton",
+      "margin": -1233.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -731.0,
+      "checkpoints": {
+       "d10": 31.0,
+       "d20": -576.0,
+       "d29": -1233.0
+      },
+      "opp_board_rank": 3205,
+      "opp_board_score": 1263.7
+     },
+     {
+      "episode": 114495988,
+      "createTime": "2026-09-28T03:30:00.680000",
+      "opp": "linchuhan",
+      "margin": -1170.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d11_20",
+      "worst_seg_gap": -619.0,
+      "checkpoints": {
+       "d10": 64.0,
+       "d20": -555.0,
+       "d29": -1170.0
+      },
+      "opp_board_rank": 2104,
+      "opp_board_score": 1682.5
+     },
+     {
+      "episode": 114391350,
+      "createTime": "2026-09-27T22:41:59.253000",
+      "opp": "yu9824",
+      "margin": -1083.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -1065.0,
+      "checkpoints": {
+       "d10": 0.0,
+       "d20": -47.0,
+       "d29": -1083.0
+      },
+      "opp_board_rank": 2049,
+      "opp_board_score": 1704.0
+     },
+     {
+      "episode": 114373773,
+      "createTime": "2026-09-27T21:54:00.223000",
+      "opp": "Pavel Pavlov",
+      "margin": -864.0,
+      "opp_band": "mid60-90k",
+      "worst_seg": "d29",
+      "worst_seg_gap": -398.0,
+      "checkpoints": {
+       "d10": -9.0,
+       "d20": -124.0,
+       "d29": -864.0
+      },
+      "opp_board_rank": 2059,
+      "opp_board_score": 1701.8
+     },
+     {
+      "episode": 114430761,
+      "createTime": "2026-09-28T00:30:01.888000",
+      "opp": "bpbpbpbpb",
+      "margin": -823.0,
+      "opp_band": "mid60-90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -585.0,
+      "checkpoints": {
+       "d10": 382.0,
+       "d20": -154.0,
+       "d29": -823.0
+      },
+      "opp_board_rank": 924,
+      "opp_board_score": 2140.7
+     },
+     {
+      "episode": 114455880,
+      "createTime": "2026-09-28T01:38:01.913000",
+      "opp": "Son Pham",
+      "margin": -809.0,
+      "opp_band": "mid60-90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -386.0,
+      "checkpoints": {
+       "d10": 20.0,
+       "d20": -314.0,
+       "d29": -809.0
+      },
+      "opp_board_rank": 1923,
+      "opp_board_score": 1751.7
+     },
+     {
+      "episode": 114355959,
+      "createTime": "2026-09-27T21:06:00.503000",
+      "opp": "Ali Eren Oğuztaş",
+      "margin": -761.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -581.0,
+      "checkpoints": {
+       "d10": -7.0,
+       "d20": -211.0,
+       "d29": -761.0
+      },
+      "opp_board_rank": 2185,
+      "opp_board_score": 1654.6
+     },
+     {
+      "episode": 114365021,
+      "createTime": "2026-09-27T21:29:59.352000",
+      "opp": "Egg D. Kernel",
+      "margin": -629.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -723.0,
+      "checkpoints": {
+       "d10": 109.0,
+       "d20": 91.0,
+       "d29": -629.0
+      },
+      "opp_board_rank": 2388,
+      "opp_board_score": 1580.0
+     },
+     {
+      "episode": 114335768,
+      "createTime": "2026-09-27T20:09:59.823000",
+      "opp": "Jayanth Koppala",
+      "margin": -589.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d11_20",
+      "worst_seg_gap": -1830.0,
+      "checkpoints": {
+       "d10": -23.0,
+       "d20": -1853.0,
+       "d29": -589.0
+      },
+      "opp_board_rank": 2629,
+      "opp_board_score": 1484.0
+     },
+     {
+      "episode": 114379688,
+      "createTime": "2026-09-27T22:10:01.515000",
+      "opp": "Ivo Georgiev",
+      "margin": -448.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d29",
+      "worst_seg_gap": -1850.0,
+      "checkpoints": {
+       "d10": 23.0,
+       "d20": -1.0,
+       "d29": -448.0
+      },
+      "opp_board_rank": 1956,
+      "opp_board_score": 1737.1
+     },
+     {
+      "episode": 114395398,
+      "createTime": "2026-09-27T22:53:59.354000",
+      "opp": "Kerem Ercin",
+      "margin": -433.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -411.0,
+      "checkpoints": {
+       "d10": -8.0,
+       "d20": -194.0,
+       "d29": -433.0
+      },
+      "opp_board_rank": 972,
+      "opp_board_score": 2116.8
+     },
+     {
+      "episode": 114410398,
+      "createTime": "2026-09-27T23:34:00.038000",
+      "opp": "Raef Guizani",
+      "margin": -429.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -600.0,
+      "checkpoints": {
+       "d10": 0.0,
+       "d20": 171.0,
+       "d29": -429.0
+      },
+      "opp_board_rank": 2181,
+      "opp_board_score": 1656.4
+     },
+     {
+      "episode": 114480760,
+      "createTime": "2026-09-28T02:46:06.834000",
+      "opp": "Masataka Suzuki",
+      "margin": -239.0,
+      "opp_band": "mid60-90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -803.0,
+      "checkpoints": {
+       "d10": -21.0,
+       "d20": -122.0,
+       "d29": -239.0
+      },
+      "opp_board_rank": 1969,
+      "opp_board_score": 1732.7
+     },
+     {
+      "episode": 114372401,
+      "createTime": "2026-09-27T21:50:01.149000",
+      "opp": "Запрети мне брать H100",
+      "margin": -221.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d11_20",
+      "worst_seg_gap": -480.0,
+      "checkpoints": {
+       "d10": -18.0,
+       "d20": -498.0,
+       "d29": -221.0
+      },
+      "opp_board_rank": 1299,
+      "opp_board_score": 1985.1
+     },
+     {
+      "episode": 114357686,
+      "createTime": "2026-09-27T21:09:59.889000",
+      "opp": "zhuo wamg",
+      "margin": -205.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d11_20",
+      "worst_seg_gap": -703.0,
+      "checkpoints": {
+       "d10": 185.0,
+       "d20": -518.0,
+       "d29": -205.0
+      },
+      "opp_board_rank": 1340,
+      "opp_board_score": 1970.5
+     },
+     {
+      "episode": 114370845,
+      "createTime": "2026-09-27T21:46:02.786000",
+      "opp": "lemon13418",
+      "margin": -139.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d11_20",
+      "worst_seg_gap": -219.0,
+      "checkpoints": {
+       "d10": -2.0,
+       "d20": -221.0,
+       "d29": -139.0
+      },
+      "opp_board_rank": 2025,
+      "opp_board_score": 1714.6
+     },
+     {
+      "episode": 114417233,
+      "createTime": "2026-09-27T23:54:00.087000",
+      "opp": "YKuma",
+      "margin": -81.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -74.0,
+      "checkpoints": {
+       "d10": -7.0,
+       "d20": -7.0,
+       "d29": -81.0
+      },
+      "opp_board_rank": 1608,
+      "opp_board_score": 1882.6
+     },
+     {
+      "episode": 114376720,
+      "createTime": "2026-09-27T22:02:00.522000",
+      "opp": "wakaka",
+      "margin": -30.0,
+      "opp_band": "mid60-90k",
+      "worst_seg": "d11_20",
+      "worst_seg_gap": -1269.0,
+      "checkpoints": {
+       "d10": 248.0,
+       "d20": -1021.0,
+       "d29": -30.0
+      },
+      "opp_board_rank": 1974,
+      "opp_board_score": 1731.9
+     },
+     {
+      "episode": 114346015,
+      "createTime": "2026-09-27T20:37:59.540000",
+      "opp": "PyJa",
+      "margin": -9.0,
+      "opp_band": "strong>=90k",
+      "worst_seg": "d21_28",
+      "worst_seg_gap": -1274.0,
+      "checkpoints": {
+       "d10": 939.0,
+       "d20": 1379.0,
+       "d29": -9.0
+      },
+      "opp_board_rank": 1280,
+      "opp_board_score": 1995.0
+     }
+    ]
+   }
+  },
+  "score_slope": {
+   "definition": "from-launch=(今分-600.0)/今局数；window=Δ分/新局数（读数窗口端点）",
+   "launch_first_score": 600.0,
+   "launch_first_score_provenance": "新件起始基线 600.0：exports/online/round22_ledger.json 'publicScore 600.0 starting baseline' + analysis22 + a23/a24 同口径；r40 同锚（无发射后中间读数可校验，锚定假设同 a23-A3）",
+   "r37": {
+    "now_score": 1397.8,
+    "now_games": 88,
+    "d_score_from_launch": 797.8,
+    "from_launch_slope_per_game": 9.0659,
+    "windows": [
+     {
+      "from": "1390.6@55",
+      "to": "1384.1@66",
+      "d_score": -6.5,
+      "new_games": 11,
+      "slope_per_game": -0.5909,
+      "src": "a23->a24"
+     },
+     {
+      "from": "1384.1@66",
+      "to": "1397.8@88",
+      "d_score": 13.7,
+      "new_games": 22,
+      "slope_per_game": 0.6227,
+      "src": "a24->now"
+     }
+    ]
+   },
+   "r40": {
+    "now_score": 1664.6,
+    "now_games": 75,
+    "d_score_from_launch": 1064.6,
+    "from_launch_slope_per_game": 14.1947,
+    "note": "发射即首读，无中间读数；from-launch 唯一口径（锚定 600.0）"
+   }
+  },
+  "r40_vs_r37": {
+   "question": "r40 是否在追上 r37（同窗/同局数口径）",
+   "r40": {
+    "score": 1664.6,
+    "games": 75,
+    "from_launch_slope": 14.1947,
+    "submit_utc": "2026-09-27T18:26:46.153000"
+   },
+   "r37": {
+    "score": 1397.8,
+    "games": 88,
+    "from_launch_slope": 9.0659,
+    "window_since_a24_slope": 0.6227
+   },
+   "same_game_count": {
+    "at_games": 75,
+    "r40_score": 1664.6,
+    "r37_interpolated_score": 1389.7,
+    "interp_method": "r37@66=1384.1 与 r37@88 端点线性插值",
+    "lead_r40": 274.9
+   },
+   "same_wallclock_window": {
+    "window": "2026-09-27T18:26:46.483000 -> 2026-09-28T03:34:01.992000",
+    "r40_games": 75,
+    "r37_games_in_window": 13,
+    "r37_in_window_W": 6,
+    "r37_in_window_L": 7
+   },
+   "verdict": "r40 不止追上、同局数已领先 r37 约 274.9 分（r40@75=1664.6 vs r37@75≈1389.7）；from-launch 斜率 r40 14.1947/局 vs r37 9.0659/局。对 r34a（1741.2@373，已停收局）仍差 76.6 分"
+  },
+  "leaderboard": {
+   "csv": "kaggriculture-publicleaderboard-2026-09-28T04:01:09.csv",
+   "teams": 10105,
+   "top10": [
+    {
+     "rank": 1,
+     "team": "M & M & P & Q",
+     "score": 3036.5,
+     "last_submission": "2026-09-28 01:12:33",
+     "members": "morimo,msd0110,piiiiiiiii,qistripute"
+    },
+    {
+     "rank": 2,
+     "team": "DSM",
+     "score": 3017.2,
+     "last_submission": "2026-09-27 20:44:28",
+     "members": "denden12,masspeaks,shimishige"
+    },
+    {
+     "rank": 3,
+     "team": "Boey",
+     "score": 2992.8,
+     "last_submission": "2026-09-24 12:57:23",
+     "members": "boeychenjun"
+    },
+    {
+     "rank": 4,
+     "team": "DECEM",
+     "score": 2976.8,
+     "last_submission": "2026-09-27 23:51:46",
+     "members": "zy1343930734"
+    },
+    {
+     "rank": 5,
+     "team": "Vadim Vasilenko",
+     "score": 2975.1,
+     "last_submission": "2026-09-27 17:21:07",
+     "members": "vadimvasilenko"
+    },
+    {
+     "rank": 6,
+     "team": "Azat Akhtyamov",
+     "score": 2940.2,
+     "last_submission": "2026-09-27 23:47:42",
+     "members": "azakhtyamov"
+    },
+    {
+     "rank": 7,
+     "team": "Unknown Mother-Goose",
+     "score": 2916.2,
+     "last_submission": "2026-09-28 00:18:44",
+     "members": "linkinpony"
+    },
+    {
+     "rank": 8,
+     "team": "Majkel1337",
+     "score": 2902.7,
+     "last_submission": "2026-09-26 10:48:06",
+     "members": "majkel1337"
+    },
+    {
+     "rank": 9,
+     "team": "🐚seek inspiration🐚",
+     "score": 2896.7,
+     "last_submission": "2026-09-27 21:17:52",
+     "members": "kurupical"
+    },
+    {
+     "rank": 10,
+     "team": "mtmr_s1",
+     "score": 2892.4,
+     "last_submission": "2026-09-27 18:25:09",
+     "members": "mtmrs1"
+    }
+   ],
+   "us": {
+    "rank": 2156,
+    "team": "renyxin",
+    "score": 1664.6,
+    "last_submission": "2026-09-27 18:26:46",
+    "submission_count": "2"
+   },
+   "band": {
+    "top1": 3036.5,
+    "top10_min": 2892.4,
+    "top1_to_top10_width": 144.1,
+    "top10_median": 2957.6499999999996,
+    "dsm_now": {
+     "rank": 2,
+     "score": 3017.2
+    },
+    "dsm_prev_a24": {
+     "rank": 1,
+     "score": 3112.9,
+     "source": "analysis24 榜面（2026-09-27T09:20Z）"
+    },
+    "prev_top1_a24": "DSM 3112.9",
+    "prev_top10_band_a24": [
+     2897.7,
+     3112.9
+    ],
+    "prev_teams_a24": 10070
+   },
+   "us_vs_a24": {
+    "rank_a24": 1853,
+    "score_a24": 1805.3,
+    "rank_now": 2156,
+    "score_now": 1664.6,
+    "d_rank": 303,
+    "d_score": -140.7
+   },
+   "board_rule_observed": {
+    "hypothesis": "board score = 最近 2 提交中的较优分（SubmissionCount=2 口径）",
+    "evidence": [
+     "a24（2026-09-27T09:20Z）：最近 2 提交=r37 1384.1 + r34a 1805.3 -> board 1805.3",
+     "now（1664.6）：最近 2 提交=r40 1664.6 + r37 1397.8 -> board 1664.6（r34a 1741.2 为第 3 近、不计入）"
+    ],
+    "note": "a24 'board=max(两提交)' 修正为 'max(最近两提交)'：r34a 分更高但被挤出计分窗"
+   }
+  }
+ },
+ "anomalies": [
+  {
+   "id": "A1",
+   "kind": "榜分口径再修正（我方排名下跌主因）",
+   "detail": "我方榜分 1664.6=r40 分，r34a 1741.2（更高）不计——board=最近 2 提交取优（非全局 max，也非 latest；a24 证据一致）。r34a 被挤出计分窗 -> 榜分 1805.3->1664.6（Δ-140.7）、排名 1853->2156（Δ303），非对局实力回退"
+  },
+  {
+   "id": "A2",
+   "kind": "r37 负斜率后转正、胜率续降",
+   "detail": "a24 窗 -0.59/局（11 局 5W-6L）后本窗 +0.6227/局（22 局 12W-10L），评分 1384.1->1397.8；累计胜率 89.1%(a23)->81.8%(a24)->0.75（66W-22L@88）"
+  },
+  {
+   "id": "A3",
+   "kind": "r37 新败局形态：窄幅+后移",
+   "detail": "本窗 10 败 margin -4722.0~-19.0（a24 前 12 败含 -18,060/-9,365/-7,232 大败）；worst_seg 分布 {'d11_20': 2, 'd21_28': 3, 'd29': 5}——d21_28 集中度下降、d29 末日段翻车占比升（a24 时 9/12 败在 d21_28）"
+  },
+  {
+   "id": "A4",
+   "kind": "r40 爬坡陡、同局数反超 r37",
+   "detail": "r40 1664.6@75（提交 2026-09-27T18:26:46Z），from-launch +14.1947/局 vs r37 9.0659/局；同局数（75）领先 r37 约 274.9 分；对 r34a 仍差 76.6"
+  },
+  {
+   "id": "A5",
+   "kind": "调度律确认：活跃=最近 2 提交",
+   "detail": "r40 提交（18:26:46Z）后 r34a 最后一局 2026-09-27T18:30:01.225000 即停收局（373 局冻结），r37 仍活跃至 2026-09-28T03:34:01.992000；局数增速 r40 75/9h > r37 22/18h > r34a 0——a20 '活跃件取最近 2 提交' 确认；r33/r32/r30 全冻结"
+  },
+  {
+   "id": "A6",
+   "kind": "榜面头部换位",
+   "detail": "DSM 3112.9（a24 rank1）->3017.2（rank 2），top1 易主 M & M & P & Q 3036.5；top10 带宽 144.1（a24: 215.2），队伍 10070->10105——头部仍在漂移"
+  },
+  {
+   "id": "A7",
+   "kind": "锚定假设 + token 429 + 拉取异常",
+   "detail": "评分斜率仍锚 600.0 起始基线（r40 同锚，无中间读数校验）；print-access-token 空/429 退默认 kaggle.json 凭证成功；回放拉取遭 /tmp 用户配额突发限制（首跑被杀），v2 换增量落盘+胜局即删后完成，截断件 1 个自动 purge 重拉"
+  }
+ ],
+ "fails": [],
+ "selfplay": []
+}
