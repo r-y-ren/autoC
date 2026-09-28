@@ -43,3 +43,26 @@ WOOL/MELON 过剩支是平方崩塌（sq 3.2-3.6）——**牲畜品抛售自伤
    精确排程有确定收益面。
 4. **对倒零和确认**：BUY_PRODUCT(inv−1) 语义=同拍买卖对倒净零，tape 的对倒设计
    是规则级安全的（不动它）。
+
+## 四、生产/消耗/成本全表（2026-09-28 补，源码 L11-22, L99-108, L728-755）
+
+**作物**（seed 价, 首产日, 最大日, 间隔, 单次量/持有, ongoing）：
+- WHEAT（10, d2, d4, —, 6, 一次性）；CARROT（20, d2, d3, —, 4, 一次性）；
+- TOMATO（50, d8, —, 1 天, 4, 续产）；STRAWBERRY（100, d10, —, 2 天, 4, 续产）；
+- MELON（80, d10-12, —, 6, 一次性）。
+**牲畜**（cost, 建筑型, 首产日, 间隔, 持有上限, 产品）：
+- GOOSE（300, COOP, d4, 1 天, 4, EGG）；COW（400, PASTURE, d8, 2 天, 6, MILK）；
+- SHEEP（500, PASTURE, d6, 3 天, 6, WOOL）。
+**雇工成本**：当日第 n 次雇=1×fib(n)（1,1,2,3,5,8,13…）。
+**城镇排水（确定性价格支撑）**：
+- 每 4 步：**每家已解锁商店各排其每个产品 1 件**（单品店 ×2：YARN_STORE 排 2 WOOL、
+  PET_CAFE 排 2 CARROT；同名多实例独立排水）；
+- 每 24 步：城镇中心排全品各 1（除 FERTILIZER）；排完即刷新全品价格。
+**SHOPS 表**：BAKERY(EGG,WHEAT)/PIZZA(MILK,TOMATO,WHEAT)/BRUNCH(EGG,WHEAT,STRAW)
+/YARN(WOOL)/ICE_CREAM(STRAW,MILK,WHEAT)/PET_CAFE(CARROT)/SMOOTHIE(STRAW,MILK)
+/FARMERS_MARKET(WHEAT,CARROT,TOMATO,STRAW)；商店有放回抽签、实例上限 8。
+
+**合成要点（"卖多少"的解析口径）**：排水表+定价曲线+双方卖单 → **价格轨迹完全可
+预测**；最优卖速≈"按城镇吸收速率出清"（尤其 WOOL/MILK 这类 T 小、过剩支陡的品，
+库存压在 I0=10000 下方=吃稀缺溢价，冲过折点=平方/线性崩价）。MILK 过剩支 linear
+vs WOOL 平方 —— 与行为面"重牛轻羊"互证：**牛线可规模化的曲线原因**。
