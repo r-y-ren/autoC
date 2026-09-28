@@ -1,0 +1,53 @@
+{
+ "archive_ledger": "run-r28-archive/1.0",
+ "entry": {
+  "date": "2026-09-28T22:40:00+08:00",
+  "verdict": "NEGATIVE",
+  "auth": "R28 预绑定条款（判负→收档为赛后资产，不发射）；读数门不适用",
+  "judgment": "evidence/judgment_r28.json（527 局次+60 对照；sim_bridge 30/30 认证；零红局）",
+  "criteria": {
+   "net_identity_zero": {
+    "verdict": "FAIL",
+    "violations": 604,
+    "note": "提前层叠在基座自带 r36_debts/sell_lead/suppress 预留机制上=净多卖（磁带 due_step 常无对应 SELL 可抵扣）"
+   },
+   "mirror_win_rate": {
+    "verdict": "FAIL",
+    "value": 0.5,
+    "note": "确定性自克隆 margin 恒 0.0→0.55 阈值在此对手形态结构性不可达（判据口径教训留档）"
+   },
+   "realized_px_no_drop": {
+    "verdict": "FAIL",
+    "candidate": 1.0475,
+    "baseline": 1.0666
+   },
+   "counter_not_flipped": {
+    "verdict": "PASS",
+    "value": 1.0
+   },
+   "h2h_vs_r40": {
+    "verdict": "FAIL",
+    "value": 0.3917,
+    "detail": "17W/30L/13T"
+   },
+   "control_not_negative": {
+    "verdict": "PASS",
+    "win_rate": 0.9524,
+    "median_margin": 6816
+   }
+  },
+  "research_note": "红区有条件重访第 7 负：三件套（账本/门/有界视界）整搬仍负——根因=与基座自有预留机制双计；若战后重访，须先建模基座 r36_debts/sell_lead/suppress 并入账本口径。26 败局重演 22W/4L 与对照强=提前卖对'陌生对手磁带'有利但对同基座对手净负（倾销/低价拍挪量同族）",
+  "build": {
+   "main_sha256": "efe6b0120020061105213130e94f345e4af84d82dbeec57330a3280ebe5523ea",
+   "tar_sha256": "dacb068c8f5dfc87da4402f1b9f1fa855781ef5396715b1d8dc49f864a6c0924",
+   "params_pinned": {
+    "k": 4,
+    "horizon": 48,
+    "window": [
+     192,
+     695
+    ]
+   }
+  }
+ }
+}

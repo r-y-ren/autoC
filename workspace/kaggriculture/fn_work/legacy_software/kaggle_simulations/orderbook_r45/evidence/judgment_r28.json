@@ -1,0 +1,5348 @@
+{
+ "_generated_at": "2026-09-28T14:39:36Z",
+ "version": "judge-r45/1.0",
+ "source": {
+  "commands": [
+   "cd /mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r45 && python3 -m pytest -q",
+   "cd /mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations && python3 orderbook_r45/evidence/judgment_r28_driver.py"
+  ],
+  "note": "R28 真判决：build_r45+sim_bridge 对照认证+judge_r45 缺省六局组；台账=装载命名空间 _ADV_LEDGER 快照（不改码采集）",
+  "seed_base": 670000
+ },
+ "arms": [
+  {
+   "arm": "mirror",
+   "n": 60,
+   "wins": 0,
+   "losses": 0,
+   "ties": 60,
+   "mean_margin": 0.0,
+   "median_margin": 0.0,
+   "win_rate": 0.5,
+   "independent_seeds": true,
+   "seated": true,
+   "incomplete": 0,
+   "red_seeds": [],
+   "opponent": {
+    "kind": "clone_mirror",
+    "fingerprint": 1.0,
+    "bar": 0.95
+   },
+   "red": false
+  },
+  {
+   "arm": "counter",
+   "n": 60,
+   "wins": 60,
+   "losses": 0,
+   "ties": 0,
+   "mean_margin": 171755.5,
+   "median_margin": 177567.5,
+   "win_rate": 1.0,
+   "independent_seeds": true,
+   "seated": true,
+   "incomplete": 0,
+   "red_seeds": [],
+   "opponent": {
+    "kind": "wool_front_runner",
+    "config": {
+     "sniff_window": 2,
+     "dump_qty": 48,
+     "anti_shock": true
+    },
+    "features": {
+     "name": "Wool Front-Runner 反制对手",
+     "sniff": "对手羊 BUY_ANIMAL/剪毛 HARVEST 信号（动作流 opponent_action/last_actions 对手席或农格差分）",
+     "dump": "嗅探命中后提前 2 回合集中倒毛：WOOL 集中 SELL 48 一次",
+     "anti_shock": "step-1 不跟大单、吸收麦冲击（step≤1 不出市场单）",
+     "fallback": "异常→最简 PASS 对手",
+     "defaults": {
+      "sniff_window": 2,
+      "dump_qty": 48,
+      "anti_shock": true
+     }
+    }
+   },
+   "red": false
+  },
+  {
+   "arm": "replay_loss",
+   "n": 26,
+   "wins": 22,
+   "losses": 4,
+   "ties": 0,
+   "mean_margin": 15673.8,
+   "median_margin": 6309.0,
+   "win_rate": 0.8462,
+   "independent_seeds": true,
+   "seated": false,
+   "incomplete": 0,
+   "red_seeds": [],
+   "opponent": null,
+   "red": false
+  },
+  {
+   "arm": "control_win",
+   "n": 21,
+   "wins": 20,
+   "losses": 1,
+   "ties": 0,
+   "mean_margin": 18150.8,
+   "median_margin": 6816.0,
+   "win_rate": 0.9524,
+   "independent_seeds": true,
+   "seated": false,
+   "incomplete": 0,
+   "red_seeds": [],
+   "opponent": null,
+   "red": false
+  },
+  {
+   "arm": "baseline_r40",
+   "n": 60,
+   "wins": 0,
+   "losses": 0,
+   "ties": 60,
+   "mean_margin": 0.0,
+   "median_margin": 0.0,
+   "win_rate": 0.5,
+   "independent_seeds": true,
+   "seated": true,
+   "incomplete": 0,
+   "red_seeds": [],
+   "opponent": {
+    "kind": "configured"
+   },
+   "red": false
+  },
+  {
+   "arm": "h2h_r40",
+   "n": 60,
+   "wins": 17,
+   "losses": 30,
+   "ties": 13,
+   "mean_margin": -113.5,
+   "median_margin": -5.5,
+   "win_rate": 0.3917,
+   "independent_seeds": true,
+   "seated": true,
+   "incomplete": 0,
+   "red_seeds": [],
+   "opponent": {
+    "kind": "configured"
+   },
+   "red": false
+  }
+ ],
+ "criteria": {
+  "net_identity": {
+   "value": 604,
+   "bar": 0,
+   "verdict": "FAIL",
+   "detail": [
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670000-s0",
+     "item": "WHEAT",
+     "advanced": 32.0,
+     "settled": 0.0,
+     "delta": 32.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670000-s0#opp1",
+     "item": "WHEAT",
+     "advanced": 32.0,
+     "settled": 0.0,
+     "delta": 32.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670008-s0",
+     "item": "EGG",
+     "advanced": 8.0,
+     "settled": 0.0,
+     "delta": 8.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670008-s0",
+     "item": "WHEAT",
+     "advanced": 9.0,
+     "settled": 0.0,
+     "delta": 9.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670008-s0#opp1",
+     "item": "EGG",
+     "advanced": 8.0,
+     "settled": 0.0,
+     "delta": 8.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670008-s0#opp1",
+     "item": "WHEAT",
+     "advanced": 9.0,
+     "settled": 0.0,
+     "delta": 9.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670016-s0",
+     "item": "WHEAT",
+     "advanced": 27.0,
+     "settled": 0.0,
+     "delta": 27.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670016-s0#opp1",
+     "item": "WHEAT",
+     "advanced": 27.0,
+     "settled": 0.0,
+     "delta": 27.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670032-s0",
+     "item": "WHEAT",
+     "advanced": 43.0,
+     "settled": 37.0,
+     "delta": 6.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670032-s0#opp1",
+     "item": "WHEAT",
+     "advanced": 43.0,
+     "settled": 37.0,
+     "delta": 6.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670048-s0",
+     "item": "WHEAT",
+     "advanced": 1.0,
+     "settled": 0.0,
+     "delta": 1.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670048-s0#opp1",
+     "item": "WHEAT",
+     "advanced": 1.0,
+     "settled": 0.0,
+     "delta": 1.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670056-s0",
+     "item": "WHEAT",
+     "advanced": 37.0,
+     "settled": 32.0,
+     "delta": 5.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670056-s0#opp1",
+     "item": "WHEAT",
+     "advanced": 37.0,
+     "settled": 32.0,
+     "delta": 5.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670000-s1#opp0",
+     "item": "WHEAT",
+     "advanced": 32.0,
+     "settled": 0.0,
+     "delta": 32.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670000-s1",
+     "item": "WHEAT",
+     "advanced": 32.0,
+     "settled": 0.0,
+     "delta": 32.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670008-s1#opp0",
+     "item": "EGG",
+     "advanced": 8.0,
+     "settled": 0.0,
+     "delta": 8.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670008-s1#opp0",
+     "item": "WHEAT",
+     "advanced": 9.0,
+     "settled": 0.0,
+     "delta": 9.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670008-s1",
+     "item": "EGG",
+     "advanced": 8.0,
+     "settled": 0.0,
+     "delta": 8.0
+    },
+    {
+     "kind": "identity_violation",
+     "game_id": "mirror-670008-s1",
+     "item": "WHEAT",
+     "advanced": 9.0,
+     "settled": 0.0,
+     "delta": 9.0
+    }
+   ]
+  },
+  "mirror_win_rate": {
+   "value": 0.5,
+   "bar": 0.55,
+   "verdict": "FAIL"
+  },
+  "realized_px_no_drop": {
+   "value": {
+    "candidate": 1.0475,
+    "baseline": 1.0666
+   },
+   "verdict": "FAIL"
+  },
+  "counter_not_flipped": {
+   "value": 1.0,
+   "bar": 0.5,
+   "verdict": "PASS"
+  },
+  "control_not_negative": {
+   "value": {
+    "win_rate": 0.9524,
+    "median_margin": 6816.0
+   },
+   "bar": 0.5,
+   "verdict": "PASS"
+  },
+  "h2h_vs_r40": {
+   "value": 0.3917,
+   "bar": 0.55,
+   "verdict": "FAIL"
+  }
+ },
+ "verdict": "NEGATIVE",
+ "net_identity": {
+  "violations": 604,
+  "detail": [
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670000-s0",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670000-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670008-s0",
+    "item": "EGG",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670008-s0",
+    "item": "WHEAT",
+    "advanced": 9.0,
+    "settled": 0.0,
+    "delta": 9.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670008-s0#opp1",
+    "item": "EGG",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670008-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 9.0,
+    "settled": 0.0,
+    "delta": 9.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670016-s0",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670016-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670032-s0",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 37.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670032-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 37.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670048-s0",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670048-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670056-s0",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670056-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670000-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670000-s1",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670008-s1#opp0",
+    "item": "EGG",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670008-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 9.0,
+    "settled": 0.0,
+    "delta": 9.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670008-s1",
+    "item": "EGG",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670008-s1",
+    "item": "WHEAT",
+    "advanced": 9.0,
+    "settled": 0.0,
+    "delta": 9.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670016-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670016-s1",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670032-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 37.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670032-s1",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 37.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670048-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670048-s1",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670056-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670056-s1",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670001-s0",
+    "item": "WHEAT",
+    "advanced": 11.0,
+    "settled": 0.0,
+    "delta": 11.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670001-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 11.0,
+    "settled": 0.0,
+    "delta": 11.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670009-s0",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670009-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670017-s0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670017-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670033-s0",
+    "item": "WHEAT",
+    "advanced": 11.0,
+    "settled": 10.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670033-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 11.0,
+    "settled": 10.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670041-s0",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670041-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670049-s0",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670049-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670057-s0",
+    "item": "MILK",
+    "advanced": 12.0,
+    "settled": 0.0,
+    "delta": 12.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670057-s0",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670057-s0#opp1",
+    "item": "MILK",
+    "advanced": 12.0,
+    "settled": 0.0,
+    "delta": 12.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670057-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670001-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 11.0,
+    "settled": 0.0,
+    "delta": 11.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670001-s1",
+    "item": "WHEAT",
+    "advanced": 11.0,
+    "settled": 0.0,
+    "delta": 11.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670009-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670009-s1",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670017-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670017-s1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670033-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 11.0,
+    "settled": 10.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670033-s1",
+    "item": "WHEAT",
+    "advanced": 11.0,
+    "settled": 10.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670041-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670041-s1",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670049-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670049-s1",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670057-s1#opp0",
+    "item": "MILK",
+    "advanced": 12.0,
+    "settled": 0.0,
+    "delta": 12.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670057-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670057-s1",
+    "item": "MILK",
+    "advanced": 12.0,
+    "settled": 0.0,
+    "delta": 12.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670057-s1",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670002-s0",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 34.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670002-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 34.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670010-s0",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670010-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670026-s0",
+    "item": "WHEAT",
+    "advanced": 368.0,
+    "settled": 344.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670026-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 368.0,
+    "settled": 344.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670034-s0",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670034-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670042-s0",
+    "item": "EGG",
+    "advanced": 6.0,
+    "settled": 2.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670042-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670042-s0#opp1",
+    "item": "EGG",
+    "advanced": 6.0,
+    "settled": 2.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670042-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s0",
+    "item": "MILK",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s0",
+    "item": "STRAWBERRY",
+    "advanced": 6.0,
+    "settled": 4.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s0",
+    "item": "WHEAT",
+    "advanced": 34.0,
+    "settled": 0.0,
+    "delta": 34.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s0#opp1",
+    "item": "MILK",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s0#opp1",
+    "item": "STRAWBERRY",
+    "advanced": 6.0,
+    "settled": 4.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 34.0,
+    "settled": 0.0,
+    "delta": 34.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670058-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670058-s0",
+    "item": "WHEAT",
+    "advanced": 33.0,
+    "settled": 0.0,
+    "delta": 33.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670058-s0#opp1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670058-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 33.0,
+    "settled": 0.0,
+    "delta": 33.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670002-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 34.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670002-s1",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 34.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670010-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670010-s1",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670026-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 368.0,
+    "settled": 344.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670026-s1",
+    "item": "WHEAT",
+    "advanced": 368.0,
+    "settled": 344.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670034-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670034-s1",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670042-s1#opp0",
+    "item": "EGG",
+    "advanced": 6.0,
+    "settled": 2.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670042-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670042-s1",
+    "item": "EGG",
+    "advanced": 6.0,
+    "settled": 2.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670042-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s1#opp0",
+    "item": "MILK",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s1#opp0",
+    "item": "STRAWBERRY",
+    "advanced": 6.0,
+    "settled": 4.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 34.0,
+    "settled": 0.0,
+    "delta": 34.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s1",
+    "item": "MILK",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s1",
+    "item": "STRAWBERRY",
+    "advanced": 6.0,
+    "settled": 4.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670050-s1",
+    "item": "WHEAT",
+    "advanced": 34.0,
+    "settled": 0.0,
+    "delta": 34.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670058-s1#opp0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670058-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 33.0,
+    "settled": 0.0,
+    "delta": 33.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670058-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670058-s1",
+    "item": "WHEAT",
+    "advanced": 33.0,
+    "settled": 0.0,
+    "delta": 33.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670003-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 21.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670003-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 21.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670011-s0",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 16.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670011-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 16.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670019-s0",
+    "item": "CARROT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670019-s0",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 18.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670019-s0#opp1",
+    "item": "CARROT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670019-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 18.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670027-s0",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 0.0,
+    "delta": 22.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670027-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 0.0,
+    "delta": 22.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670035-s0",
+    "item": "WOOL",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670035-s0#opp1",
+    "item": "WOOL",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670043-s0",
+    "item": "WHEAT",
+    "advanced": 42.0,
+    "settled": 37.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670043-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 42.0,
+    "settled": 37.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670051-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670051-s0",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670051-s0#opp1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670051-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670059-s0",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670059-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670003-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 21.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670003-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 21.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670011-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 16.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670011-s1",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 16.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670019-s1#opp0",
+    "item": "CARROT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670019-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 18.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670019-s1",
+    "item": "CARROT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670019-s1",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 18.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670027-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 0.0,
+    "delta": 22.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670027-s1",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 0.0,
+    "delta": 22.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670035-s1#opp0",
+    "item": "WOOL",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670035-s1",
+    "item": "WOOL",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670043-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 42.0,
+    "settled": 37.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670043-s1",
+    "item": "WHEAT",
+    "advanced": 42.0,
+    "settled": 37.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670051-s1#opp0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670051-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670051-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670051-s1",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670059-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670059-s1",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670004-s0",
+    "item": "WHEAT",
+    "advanced": 386.0,
+    "settled": 346.0,
+    "delta": 40.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670004-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 386.0,
+    "settled": 346.0,
+    "delta": 40.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670012-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670012-s0",
+    "item": "WHEAT",
+    "advanced": 34.0,
+    "settled": 0.0,
+    "delta": 34.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670012-s0#opp1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670012-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 34.0,
+    "settled": 0.0,
+    "delta": 34.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670020-s0",
+    "item": "WHEAT",
+    "advanced": 383.0,
+    "settled": 342.0,
+    "delta": 41.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670020-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 383.0,
+    "settled": 342.0,
+    "delta": 41.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670028-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670028-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670044-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670044-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670052-s0",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670052-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670004-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 386.0,
+    "settled": 346.0,
+    "delta": 40.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670004-s1",
+    "item": "WHEAT",
+    "advanced": 386.0,
+    "settled": 346.0,
+    "delta": 40.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670012-s1#opp0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670012-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 34.0,
+    "settled": 0.0,
+    "delta": 34.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670012-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670012-s1",
+    "item": "WHEAT",
+    "advanced": 34.0,
+    "settled": 0.0,
+    "delta": 34.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670020-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 383.0,
+    "settled": 342.0,
+    "delta": 41.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670020-s1",
+    "item": "WHEAT",
+    "advanced": 383.0,
+    "settled": 342.0,
+    "delta": 41.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670028-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670028-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670044-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670044-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670052-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670052-s1",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670005-s0",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670005-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670013-s0",
+    "item": "WHEAT",
+    "advanced": 28.0,
+    "settled": 0.0,
+    "delta": 28.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670013-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670021-s0",
+    "item": "WHEAT",
+    "advanced": 12.0,
+    "settled": 11.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670021-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 12.0,
+    "settled": 11.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670029-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670029-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670037-s0",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670037-s0",
+    "item": "WOOL",
+    "advanced": 9.0,
+    "settled": 0.0,
+    "delta": 9.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670037-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670037-s0#opp1",
+    "item": "WOOL",
+    "advanced": 9.0,
+    "settled": 0.0,
+    "delta": 9.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670045-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670045-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670053-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670053-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670005-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670005-s1",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670013-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 28.0,
+    "settled": 0.0,
+    "delta": 28.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670013-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670021-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 12.0,
+    "settled": 11.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670021-s1",
+    "item": "WHEAT",
+    "advanced": 12.0,
+    "settled": 11.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670029-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670029-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670037-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670037-s1#opp0",
+    "item": "WOOL",
+    "advanced": 9.0,
+    "settled": 0.0,
+    "delta": 9.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670037-s1",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670037-s1",
+    "item": "WOOL",
+    "advanced": 9.0,
+    "settled": 0.0,
+    "delta": 9.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670045-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670045-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670053-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670053-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670006-s0",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670006-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670014-s0",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670014-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670038-s0",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670038-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670046-s0",
+    "item": "WHEAT",
+    "advanced": 25.0,
+    "settled": 9.0,
+    "delta": 16.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670046-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 25.0,
+    "settled": 9.0,
+    "delta": 16.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670054-s0",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 35.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670054-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 35.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670006-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670006-s1",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670014-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670014-s1",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670038-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670038-s1",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670046-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 25.0,
+    "settled": 9.0,
+    "delta": 16.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670046-s1",
+    "item": "WHEAT",
+    "advanced": 25.0,
+    "settled": 9.0,
+    "delta": 16.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670054-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 35.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670054-s1",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 35.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670007-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670007-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670015-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670023-s0",
+    "item": "WHEAT",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670023-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670031-s0",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 0.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670031-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 0.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670039-s0",
+    "item": "WHEAT",
+    "advanced": 16.0,
+    "settled": 0.0,
+    "delta": 16.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670039-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 16.0,
+    "settled": 0.0,
+    "delta": 16.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670047-s0",
+    "item": "WHEAT",
+    "advanced": 376.0,
+    "settled": 357.0,
+    "delta": 19.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670047-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 376.0,
+    "settled": 357.0,
+    "delta": 19.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670055-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670055-s0",
+    "item": "WHEAT",
+    "advanced": 31.0,
+    "settled": 0.0,
+    "delta": 31.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670055-s0#opp1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670055-s0#opp1",
+    "item": "WHEAT",
+    "advanced": 31.0,
+    "settled": 0.0,
+    "delta": 31.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670007-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670007-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670015-s1",
+    "item": "WHEAT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670023-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670023-s1",
+    "item": "WHEAT",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670031-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 0.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670031-s1",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 0.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670039-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 16.0,
+    "settled": 0.0,
+    "delta": 16.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670039-s1",
+    "item": "WHEAT",
+    "advanced": 16.0,
+    "settled": 0.0,
+    "delta": 16.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670047-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 376.0,
+    "settled": 357.0,
+    "delta": 19.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670047-s1",
+    "item": "WHEAT",
+    "advanced": 376.0,
+    "settled": 357.0,
+    "delta": 19.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670055-s1#opp0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670055-s1#opp0",
+    "item": "WHEAT",
+    "advanced": 31.0,
+    "settled": 0.0,
+    "delta": 31.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670055-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "mirror-670055-s1",
+    "item": "WHEAT",
+    "advanced": 31.0,
+    "settled": 0.0,
+    "delta": 31.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671000-s0",
+    "item": "MILK",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671000-s0",
+    "item": "WHEAT",
+    "advanced": 17.0,
+    "settled": 9.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671008-s0",
+    "item": "WHEAT",
+    "advanced": 16.0,
+    "settled": 9.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671016-s0",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671024-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671024-s0",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671032-s0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671048-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671056-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671056-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671000-s1",
+    "item": "WHEAT",
+    "advanced": 14.0,
+    "settled": 9.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671008-s1",
+    "item": "WHEAT",
+    "advanced": 16.0,
+    "settled": 9.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671016-s1",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671024-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671024-s1",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671032-s1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671040-s1",
+    "item": "MILK",
+    "advanced": 13.0,
+    "settled": 0.0,
+    "delta": 13.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671048-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671056-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671056-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671001-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671001-s0",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671017-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671025-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671025-s0",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671033-s0",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671041-s0",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 15.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671049-s0",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671057-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671001-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671001-s1",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671017-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671025-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671025-s1",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671033-s1",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671041-s1",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 15.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671049-s1",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671057-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671002-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 1.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671010-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671018-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671026-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671026-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671034-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671034-s0",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671042-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671042-s0",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671050-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671050-s0",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671058-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671058-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671002-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 1.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671010-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671018-s1",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671026-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671026-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671034-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671034-s1",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671042-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671042-s1",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671050-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671050-s1",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671058-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671058-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671003-s0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671011-s0",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 25.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671019-s0",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 16.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671027-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671035-s0",
+    "item": "MILK",
+    "advanced": 11.0,
+    "settled": 0.0,
+    "delta": 11.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671043-s0",
+    "item": "MILK",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671043-s0",
+    "item": "WHEAT",
+    "advanced": 361.0,
+    "settled": 349.0,
+    "delta": 12.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671051-s0",
+    "item": "WHEAT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671059-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 9.0,
+    "delta": 20.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671003-s1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671011-s1",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 25.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671019-s1",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 16.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671027-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671035-s1",
+    "item": "MILK",
+    "advanced": 11.0,
+    "settled": 0.0,
+    "delta": 11.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671043-s1",
+    "item": "MILK",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671043-s1",
+    "item": "WHEAT",
+    "advanced": 361.0,
+    "settled": 349.0,
+    "delta": 12.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671051-s1",
+    "item": "WHEAT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671059-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 9.0,
+    "delta": 20.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671004-s0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671012-s0",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 9.0,
+    "delta": 14.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671020-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671020-s0",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671028-s0",
+    "item": "WHEAT",
+    "advanced": 176.0,
+    "settled": 150.0,
+    "delta": 26.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671036-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671036-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671044-s0",
+    "item": "WHEAT",
+    "advanced": 19.0,
+    "settled": 11.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671044-s0",
+    "item": "WOOL",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671052-s0",
+    "item": "MILK",
+    "advanced": 22.0,
+    "settled": 1.0,
+    "delta": 21.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671052-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671052-s0",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671004-s1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671012-s1",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 9.0,
+    "delta": 14.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671020-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671020-s1",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671028-s1",
+    "item": "WHEAT",
+    "advanced": 176.0,
+    "settled": 150.0,
+    "delta": 26.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671036-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671036-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671044-s1",
+    "item": "WHEAT",
+    "advanced": 19.0,
+    "settled": 11.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671044-s1",
+    "item": "WOOL",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671052-s1",
+    "item": "MILK",
+    "advanced": 22.0,
+    "settled": 1.0,
+    "delta": 21.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671052-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671052-s1",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671005-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671005-s0",
+    "item": "WOOL",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671013-s0",
+    "item": "STRAWBERRY",
+    "advanced": 6.0,
+    "settled": 4.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671021-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671021-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671029-s0",
+    "item": "WOOL",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671037-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671037-s0",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671045-s0",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 15.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671053-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671053-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671005-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671005-s1",
+    "item": "WOOL",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671013-s1",
+    "item": "STRAWBERRY",
+    "advanced": 6.0,
+    "settled": 4.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671021-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671021-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671029-s1",
+    "item": "WOOL",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671037-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671037-s1",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671045-s1",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 15.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671053-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671053-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671006-s0",
+    "item": "WHEAT",
+    "advanced": 10.0,
+    "settled": 3.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671014-s0",
+    "item": "STRAWBERRY",
+    "advanced": 6.0,
+    "settled": 4.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671022-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671022-s0",
+    "item": "WHEAT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671030-s0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671038-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671038-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671054-s0",
+    "item": "WHEAT",
+    "advanced": 18.0,
+    "settled": 10.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671006-s1",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 2.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671014-s1",
+    "item": "STRAWBERRY",
+    "advanced": 6.0,
+    "settled": 4.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671022-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671022-s1",
+    "item": "WHEAT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671030-s1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671038-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671038-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671054-s1",
+    "item": "WHEAT",
+    "advanced": 18.0,
+    "settled": 10.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671007-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671007-s0",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671015-s0",
+    "item": "WHEAT",
+    "advanced": 12.0,
+    "settled": 0.0,
+    "delta": 12.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671023-s0",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 16.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671031-s0",
+    "item": "WHEAT",
+    "advanced": 363.0,
+    "settled": 345.0,
+    "delta": 18.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671039-s0",
+    "item": "WHEAT",
+    "advanced": 18.0,
+    "settled": 10.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671047-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671047-s0",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671055-s0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671007-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671007-s1",
+    "item": "WHEAT",
+    "advanced": 8.0,
+    "settled": 0.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671015-s1",
+    "item": "STRAWBERRY",
+    "advanced": 9.0,
+    "settled": 7.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671015-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671023-s1",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 16.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671031-s1",
+    "item": "WHEAT",
+    "advanced": 363.0,
+    "settled": 348.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671039-s1",
+    "item": "WHEAT",
+    "advanced": 18.0,
+    "settled": 10.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671047-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671047-s1",
+    "item": "WHEAT",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "counter-671055-s1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 10.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112429867",
+    "item": "WHEAT",
+    "advanced": 39.0,
+    "settled": 34.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112447520",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112448710",
+    "item": "WHEAT",
+    "advanced": 33.0,
+    "settled": 28.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112432199",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 0.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112449890",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112433355",
+    "item": "WHEAT",
+    "advanced": 35.0,
+    "settled": 0.0,
+    "delta": 35.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112451110",
+    "item": "WHEAT",
+    "advanced": 162.0,
+    "settled": 148.0,
+    "delta": 14.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112452290",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 25.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112435662",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112453461",
+    "item": "MILK",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112453461",
+    "item": "WHEAT",
+    "advanced": 173.0,
+    "settled": 150.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112436859",
+    "item": "WHEAT",
+    "advanced": 26.0,
+    "settled": 0.0,
+    "delta": 26.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112454627",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112438060",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112455881",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112439305",
+    "item": "WHEAT",
+    "advanced": 28.0,
+    "settled": 0.0,
+    "delta": 28.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112457053",
+    "item": "WHEAT",
+    "advanced": 26.0,
+    "settled": 0.0,
+    "delta": 26.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112440436",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 16.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112457102",
+    "item": "EGG",
+    "advanced": 3.0,
+    "settled": 2.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112457102",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112440493",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112441644",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112442810",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112442810",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112443969",
+    "item": "WHEAT",
+    "advanced": 19.0,
+    "settled": 9.0,
+    "delta": 10.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112445139",
+    "item": "WHEAT",
+    "advanced": 35.0,
+    "settled": 1.0,
+    "delta": 34.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "replay-112446302",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 0.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112429867",
+    "item": "WHEAT",
+    "advanced": 39.0,
+    "settled": 34.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112449890",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112451110",
+    "item": "WHEAT",
+    "advanced": 162.0,
+    "settled": 148.0,
+    "delta": 14.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112432199",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 0.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112453461",
+    "item": "MILK",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112453461",
+    "item": "WHEAT",
+    "advanced": 173.0,
+    "settled": 150.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112433355",
+    "item": "WHEAT",
+    "advanced": 35.0,
+    "settled": 0.0,
+    "delta": 35.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112457053",
+    "item": "WHEAT",
+    "advanced": 26.0,
+    "settled": 0.0,
+    "delta": 26.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112457102",
+    "item": "EGG",
+    "advanced": 3.0,
+    "settled": 2.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112457102",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112435662",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112436859",
+    "item": "WHEAT",
+    "advanced": 26.0,
+    "settled": 0.0,
+    "delta": 26.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112438060",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112439305",
+    "item": "WHEAT",
+    "advanced": 28.0,
+    "settled": 0.0,
+    "delta": 28.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112440436",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 16.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112440493",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112441644",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112442810",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112442810",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112443969",
+    "item": "WHEAT",
+    "advanced": 19.0,
+    "settled": 9.0,
+    "delta": 10.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112447520",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "control-win-112448710",
+    "item": "WHEAT",
+    "advanced": 33.0,
+    "settled": 28.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675000-s0",
+    "item": "EGG",
+    "advanced": 6.0,
+    "settled": 2.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675000-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675008-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675016-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675016-s0",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675024-s0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675032-s0",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 9.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675048-s0",
+    "item": "WHEAT",
+    "advanced": 25.0,
+    "settled": 0.0,
+    "delta": 25.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675056-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675056-s0",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675000-s1",
+    "item": "EGG",
+    "advanced": 6.0,
+    "settled": 2.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675000-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675008-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675016-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675016-s1",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675024-s1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675032-s1",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 9.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675048-s1",
+    "item": "WHEAT",
+    "advanced": 25.0,
+    "settled": 0.0,
+    "delta": 25.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675056-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675056-s1",
+    "item": "WHEAT",
+    "advanced": 32.0,
+    "settled": 0.0,
+    "delta": 32.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675001-s0",
+    "item": "WHEAT",
+    "advanced": 31.0,
+    "settled": 0.0,
+    "delta": 31.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675009-s0",
+    "item": "WHEAT",
+    "advanced": 38.0,
+    "settled": 33.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675017-s0",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675025-s0",
+    "item": "WHEAT",
+    "advanced": 33.0,
+    "settled": 9.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675033-s0",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675041-s0",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675049-s0",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675057-s0",
+    "item": "WHEAT",
+    "advanced": 384.0,
+    "settled": 342.0,
+    "delta": 42.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675001-s1",
+    "item": "WHEAT",
+    "advanced": 31.0,
+    "settled": 0.0,
+    "delta": 31.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675009-s1",
+    "item": "WHEAT",
+    "advanced": 38.0,
+    "settled": 33.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675017-s1",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675025-s1",
+    "item": "WHEAT",
+    "advanced": 33.0,
+    "settled": 9.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675033-s1",
+    "item": "WHEAT",
+    "advanced": 23.0,
+    "settled": 0.0,
+    "delta": 23.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675041-s1",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675049-s1",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675057-s1",
+    "item": "WHEAT",
+    "advanced": 384.0,
+    "settled": 342.0,
+    "delta": 42.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675010-s0",
+    "item": "WHEAT",
+    "advanced": 14.0,
+    "settled": 0.0,
+    "delta": 14.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675018-s0",
+    "item": "EGG",
+    "advanced": 10.0,
+    "settled": 2.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675018-s0",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 0.0,
+    "delta": 22.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675026-s0",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 22.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675034-s0",
+    "item": "WHEAT",
+    "advanced": 4.0,
+    "settled": 3.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675042-s0",
+    "item": "WHEAT",
+    "advanced": 39.0,
+    "settled": 34.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675050-s0",
+    "item": "WHEAT",
+    "advanced": 28.0,
+    "settled": 0.0,
+    "delta": 28.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675058-s0",
+    "item": "WHEAT",
+    "advanced": 39.0,
+    "settled": 34.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675010-s1",
+    "item": "WHEAT",
+    "advanced": 14.0,
+    "settled": 0.0,
+    "delta": 14.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675018-s1",
+    "item": "EGG",
+    "advanced": 10.0,
+    "settled": 2.0,
+    "delta": 8.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675018-s1",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 0.0,
+    "delta": 22.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675026-s1",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 22.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675034-s1",
+    "item": "WHEAT",
+    "advanced": 4.0,
+    "settled": 3.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675042-s1",
+    "item": "WHEAT",
+    "advanced": 39.0,
+    "settled": 34.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675050-s1",
+    "item": "WHEAT",
+    "advanced": 28.0,
+    "settled": 0.0,
+    "delta": 28.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675058-s1",
+    "item": "WHEAT",
+    "advanced": 39.0,
+    "settled": 34.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675003-s0",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675011-s0",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675019-s0",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 0.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675027-s0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675035-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675043-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675043-s0",
+    "item": "WHEAT",
+    "advanced": 35.0,
+    "settled": 0.0,
+    "delta": 35.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675051-s0",
+    "item": "WHEAT",
+    "advanced": 42.0,
+    "settled": 37.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675003-s1",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675011-s1",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675019-s1",
+    "item": "WHEAT",
+    "advanced": 24.0,
+    "settled": 0.0,
+    "delta": 24.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675027-s1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675035-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675043-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675043-s1",
+    "item": "WHEAT",
+    "advanced": 35.0,
+    "settled": 0.0,
+    "delta": 35.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675051-s1",
+    "item": "WHEAT",
+    "advanced": 42.0,
+    "settled": 37.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675004-s0",
+    "item": "CARROT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675004-s0",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675012-s0",
+    "item": "MILK",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675012-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675020-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675036-s0",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675044-s0",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 34.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675052-s0",
+    "item": "EGG",
+    "advanced": 6.0,
+    "settled": 3.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675052-s0",
+    "item": "WHEAT",
+    "advanced": 181.0,
+    "settled": 150.0,
+    "delta": 31.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675004-s1",
+    "item": "CARROT",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675004-s1",
+    "item": "WHEAT",
+    "advanced": 37.0,
+    "settled": 32.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675012-s1",
+    "item": "MILK",
+    "advanced": 3.0,
+    "settled": 0.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675012-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675020-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675036-s1",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675044-s1",
+    "item": "WHEAT",
+    "advanced": 40.0,
+    "settled": 34.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675052-s1",
+    "item": "EGG",
+    "advanced": 6.0,
+    "settled": 3.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675052-s1",
+    "item": "WHEAT",
+    "advanced": 181.0,
+    "settled": 150.0,
+    "delta": 31.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675005-s0",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 9.0,
+    "delta": 13.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675013-s0",
+    "item": "WHEAT",
+    "advanced": 191.0,
+    "settled": 150.0,
+    "delta": 41.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675021-s0",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675029-s0",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675037-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675045-s0",
+    "item": "MILK",
+    "advanced": 14.0,
+    "settled": 0.0,
+    "delta": 14.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675045-s0",
+    "item": "WHEAT",
+    "advanced": 26.0,
+    "settled": 0.0,
+    "delta": 26.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675053-s0",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675005-s1",
+    "item": "WHEAT",
+    "advanced": 22.0,
+    "settled": 9.0,
+    "delta": 13.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675013-s1",
+    "item": "WHEAT",
+    "advanced": 191.0,
+    "settled": 150.0,
+    "delta": 41.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675021-s1",
+    "item": "WHEAT",
+    "advanced": 2.0,
+    "settled": 0.0,
+    "delta": 2.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675029-s1",
+    "item": "WHEAT",
+    "advanced": 27.0,
+    "settled": 0.0,
+    "delta": 27.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675037-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675045-s1",
+    "item": "MILK",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675045-s1",
+    "item": "WHEAT",
+    "advanced": 26.0,
+    "settled": 0.0,
+    "delta": 26.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675053-s1",
+    "item": "WHEAT",
+    "advanced": 43.0,
+    "settled": 38.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675006-s0",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675014-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675014-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675022-s0",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675030-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675030-s0",
+    "item": "WHEAT",
+    "advanced": 25.0,
+    "settled": 0.0,
+    "delta": 25.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675046-s0",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675046-s0",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675054-s0",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 0.0,
+    "delta": 21.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675006-s1",
+    "item": "WHEAT",
+    "advanced": 5.0,
+    "settled": 0.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675014-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675014-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675022-s1",
+    "item": "WHEAT",
+    "advanced": 30.0,
+    "settled": 0.0,
+    "delta": 30.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675030-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675030-s1",
+    "item": "WHEAT",
+    "advanced": 25.0,
+    "settled": 0.0,
+    "delta": 25.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675046-s1",
+    "item": "STRAWBERRY",
+    "advanced": 5.0,
+    "settled": 4.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675046-s1",
+    "item": "WHEAT",
+    "advanced": 6.0,
+    "settled": 0.0,
+    "delta": 6.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675054-s1",
+    "item": "WHEAT",
+    "advanced": 21.0,
+    "settled": 0.0,
+    "delta": 21.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675007-s0",
+    "item": "EGG",
+    "advanced": 3.0,
+    "settled": 2.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675007-s0",
+    "item": "WHEAT",
+    "advanced": 28.0,
+    "settled": 0.0,
+    "delta": 28.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675015-s0",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675023-s0",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675031-s0",
+    "item": "WHEAT",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675039-s0",
+    "item": "WHEAT",
+    "advanced": 20.0,
+    "settled": 9.0,
+    "delta": 11.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675047-s0",
+    "item": "WHEAT",
+    "advanced": 26.0,
+    "settled": 21.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675055-s0",
+    "item": "EGG",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675055-s0",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675007-s1",
+    "item": "EGG",
+    "advanced": 5.0,
+    "settled": 2.0,
+    "delta": 3.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675007-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675015-s1",
+    "item": "WHEAT",
+    "advanced": 29.0,
+    "settled": 0.0,
+    "delta": 29.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675023-s1",
+    "item": "WHEAT",
+    "advanced": 1.0,
+    "settled": 0.0,
+    "delta": 1.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675031-s1",
+    "item": "WHEAT",
+    "advanced": 4.0,
+    "settled": 0.0,
+    "delta": 4.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675039-s1",
+    "item": "WHEAT",
+    "advanced": 20.0,
+    "settled": 9.0,
+    "delta": 11.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675047-s1",
+    "item": "WHEAT",
+    "advanced": 26.0,
+    "settled": 21.0,
+    "delta": 5.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675055-s1",
+    "item": "EGG",
+    "advanced": 7.0,
+    "settled": 0.0,
+    "delta": 7.0
+   },
+   {
+    "kind": "identity_violation",
+    "game_id": "h2h_r40-675055-s1",
+    "item": "WHEAT",
+    "advanced": 15.0,
+    "settled": 0.0,
+    "delta": 15.0
+   }
+  ],
+  "games": 527,
+  "checked_items": 907,
+  "ok": false
+ },
+ "corpus": {
+  "n_replay_games": 26,
+  "error": null,
+  "default_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/results/replays-r30-26"
+ },
+ "control_not_negative": {
+  "present": true,
+  "win_rate": 0.9524,
+  "median_margin": 6816.0,
+  "red": false,
+  "not_negative": true
+ },
+ "board": {
+  "seed_base": 670000,
+  "seated": true,
+  "independent_seeds": true,
+  "opponents": {
+   "mirror": {
+    "kind": "clone_mirror",
+    "fingerprint": 1.0,
+    "bar": 0.95
+   },
+   "counter": {
+    "kind": "wool_front_runner",
+    "config": {
+     "sniff_window": 2,
+     "dump_qty": 48,
+     "anti_shock": true
+    },
+    "features": {
+     "name": "Wool Front-Runner 反制对手",
+     "sniff": "对手羊 BUY_ANIMAL/剪毛 HARVEST 信号（动作流 opponent_action/last_actions 对手席或农格差分）",
+     "dump": "嗅探命中后提前 2 回合集中倒毛：WOOL 集中 SELL 48 一次",
+     "anti_shock": "step-1 不跟大单、吸收麦冲击（step≤1 不出市场单）",
+     "fallback": "异常→最简 PASS 对手",
+     "defaults": {
+      "sniff_window": 2,
+      "dump_qty": 48,
+      "anti_shock": true
+     }
+    }
+   },
+   "baseline_r40": {
+    "kind": "configured"
+   },
+   "h2h_r40": {
+    "kind": "configured"
+   }
+  }
+ },
+ "elapsed_s": 547.73,
+ "r28_run": {
+  "driver": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r45/evidence/judgment_r28_driver.py",
+  "build": {
+   "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
+   "base_main_sha256": "4ce951f088740e0b3d4366dbf95f8bb225817b0417bbb2fcea6292a559ee9ea8",
+   "main_sha256": "efe6b0120020061105213130e94f345e4af84d82dbeec57330a3280ebe5523ea",
+   "tar_sha256": "dacb068c8f5dfc87da4402f1b9f1fa855781ef5396715b1d8dc49f864a6c0924",
+   "main_bytes": 1498156,
+   "params_pinned": {
+    "k": 4,
+    "horizon": 48,
+    "window": [
+     192,
+     695
+    ]
+   },
+   "three_pieces": {
+    "debt_ledger": {
+     "sha256": "92cfd01d087866ac9933c4604468b30df868f178d7a31f2ccdea6c71594ce46b",
+     "bytes": 34792
+    },
+    "valley_gate": {
+     "sha256": "e1c8e6e1807c9e9bbeff1f6a7fd5d68f4a39f2d964ace13169efe396724e6058",
+     "bytes": 4140
+    },
+    "advance_layer": {
+     "sha256": "92cfd01d087866ac9933c4604468b30df868f178d7a31f2ccdea6c71594ce46b",
+     "bytes": 34792
+    }
+   },
+   "audit": {
+    "whitelist": [
+     "advance_stack_block"
+    ],
+    "prefix_identical": true,
+    "zones_zero_change": {
+     "tape": "unchanged（前缀逐字节恒等）",
+     "routing": "unchanged（前缀逐字节恒等）",
+     "anti_clone": "unchanged（前缀逐字节恒等）",
+     "slot_reorder": "unchanged（前缀逐字节恒等）",
+     "terminal": "unchanged（前缀逐字节恒等）"
+    },
+    "tail_bytes": 74373,
+    "tail_sha256": "b8e2c7eb56ff92a40c4180f7b7658a327f742fcb20eeee0bd328b19b56722580"
+   },
+   "manifest_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r45/build/build_manifest.json"
+  },
+  "bridge_auth": {
+   "n_seeds": 30,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "engine": "sim",
+   "wall_speedup": 5.238,
+   "timing": {
+    "official_s": 31.8997,
+    "sim_s": 6.0906,
+    "measured_speedup": 5.238
+   },
+   "kagg_version": "kagg 0.1.0 (engine kaggle-environments 1.32.7)",
+   "record": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r45/evidence/sim_bridge_auth_r28.json"
+  },
+  "counter_opponent": {
+   "kind": "wool_front_runner",
+   "config": {
+    "sniff_window": 2,
+    "dump_qty": 48,
+    "anti_shock": true
+   },
+   "features": {
+    "name": "Wool Front-Runner 反制对手",
+    "sniff": "对手羊 BUY_ANIMAL/剪毛 HARVEST 信号（动作流 opponent_action/last_actions 对手席或农格差分）",
+    "dump": "嗅探命中后提前 2 回合集中倒毛：WOOL 集中 SELL 48 一次",
+    "anti_shock": "step-1 不跟大单、吸收麦冲击（step≤1 不出市场单）",
+    "fallback": "异常→最简 PASS 对手",
+    "defaults": {
+     "sniff_window": 2,
+     "dump_qty": 48,
+     "anti_shock": true
+    }
+   },
+   "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r45/evidence/counter_wool_front_runner.py"
+  },
+  "control_group": {
+   "source": "fn_docs/hybrid/results/replays-r30-26 同库胜局（margin>0）tape 重演",
+   "n_games": 21,
+   "win_loss_split_of_library": {
+    "n_win": 21,
+    "n_loss": 5
+   }
+  },
+  "harvest": {
+   "scope": "逐局逐席 r45 装载命名空间 _ADV_LEDGER 快照（镜像臂双席均入账；r40 席无台账不入账）",
+   "n_trace_records": 527,
+   "n_ledger_records": 527
+  },
+  "budget": {
+   "cap": 600,
+   "auth_engine_games": 60,
+   "judgment_games": 527,
+   "total_engine_games": 587,
+   "within_cap": true
+  },
+  "wall_clock": {
+   "total_elapsed_s": 595.23,
+   "judge_elapsed_s": 547.73
+  },
+  "anomalies": [],
+  "reproduce_commands": [
+   "cd /mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r45 && python3 -m pytest -q",
+   "cd /mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations && python3 orderbook_r45/evidence/judgment_r28_driver.py"
+  ],
+  "not_run": [
+   "verify_r45_gates（任务圈禁：不跑五门）",
+   "发射（任务圈禁：不发射；读数门由主会话定）"
+  ]
+ }
+}
