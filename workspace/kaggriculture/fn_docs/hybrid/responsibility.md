@@ -1346,4 +1346,84 @@
   - **verify_r42_gates** [L1|新增]
     - 职责：五门全量 fail-closed 沿管线重定向（last-callable 断言/h2h 主对 **r40** ≥0.55 独立 n/谱系/饿死零容忍+净经济/合规四轴/launch）。
     - 签名意图：输入: r42 包 / 输出: 各门结果+overall / 错误: fail-closed。
-    - 调用方：run_r42_iteration。tested：自有单测。核验命令：测试: orderbook_r42/test_gates_r42.py。
+    - 调用方：run_r42_iteration。tested：自有单测。核验命令：测试: orderbook_r42/test_gates_r42.py。\n
+## 【R26 增补·2026-09-28】卖价计算器三件套（构建期磁带手术，r43 候选）
+
+> 块引言：主线切换（用户裁决"允许更改主线"）。**全部改动=构建期磁带手术**
+> （retape_sheep._decode_routes/_encode_routes 编解码器+R20 手术先例），
+> **零运行时注入**（r40 尾块不动——空链 +0 性质由构造保证）。三件=①排水对齐
+> 卖序（期望排水节奏重排+逐品守恒+终拍排空+同拍并单语义保留）②羊线生命周期
+> （变现窗后删羊 CARE/FEED，刀次不减）③跨拍细颗粒（大额同拍卖单按排水节奏
+> 拆相邻拍，守恒）。仪器四件套内置（安慰剂臂=纯重编码恒等/单件消融=组件开关/
+> 同局配对/翻胜主语）。产物 orderbook_r43/。
+
+## 结构概览（增补）
+- run_r43_iteration ← R26
+  - build_r43
+    - build_drain_table
+    - retape_drain_aligned
+    - retape_sheep_lifecycle
+    - retape_granularity
+    - audit_diff_r43_vs_r40
+    - pack_r43
+  - judge_r26
+    - realized_price_stats
+    - sim_bridge
+  - verify_r43_gates
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R26 | run_r43_iteration（构建线：build_r43；判决线：judge_r26→realized_price_stats/sim_bridge） |
+
+## 功能块 run_r43_iteration ← R26
+（功能口=R26 三件合一；验收=R26 ①②③原文；发射预绑定=判正→standing 发射（max() 语义，窗口纪律修订已登记））
+
+- **run_r43_iteration** [L0|新增]
+  - 职责：编排——build_r43 产 r43 件（含组件开关供消融）→ pytest 全绿（R26 ①）→ judge_r26 判决（安慰剂臂+单件消融+同局配对，分项+总判）→ 全绿才 verify_r43_gates 五门 → 判正→standing 发射（台账留痕）；判负→收档（预绑定）。evidence+台账。
+  - 签名意图：输入: 无（CLI）/组件开关 / 输出: {build, judgment, gates, verdict} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验命令：测试: orderbook_r43/test_run_r43.py。
+  - **build_r43** [L1|新增]
+    - 职责：构建编排——r40 字节解码 →（组件开关）retape_drain_aligned/retape_sheep_lifecycle/retape_granularity 三手术（各带守恒账）→ 重编码 → audit_diff_r43_vs_r40 → pack_r43；组件全关=纯重编码（安慰剂件，须与 r40 字节恒等）；r40 已发射件零改动。
+    - 签名意图：输入: r40 main 路径+组件开关配置 / 输出: r43 main+manifest+三手术账+变更审计 / 错误: 任一手术守恒破即抛（不产出）。
+    - 调用方：run_r43_iteration。tested：自有单测。核验命令：测试: orderbook_r43/test_build_r43.py。
+    - **build_drain_table** [L2|新增]
+      - 职责：期望排水表——对每条路线求其服务的店对集合（基座锁存表反查），按引擎排水规则（每 4 步每店各 1 件/单品店×2+每 24 步中心全品各 1，references/2026-09-28-engine-pricing-extraction.md 四节）算逐品逐日期望排水量；输出紧凑表。
+      - 签名意图：输入: 锁存表（或店对集合映射）+排水参数 / 输出: {route_id: {item: 日排水}} / 错误: 表缺即抛。
+      - 调用方：build_r43（供①③）。tested：自有单测。核验命令：测试: orderbook_r43/test_retape_drain.py（drain 表组）。
+    - **retape_drain_aligned** [L2|新增]
+      - 职责：①排水对齐卖序——逐路线把 SELL 事件时点重排到期望排水节奏（卖量摊到吸收节奏、WOOL/MILK 库存压折点下方）；守恒铁律：逐品总卖出量恒等、终拍排空（stranding≈0）、同拍同品并单语义保留（并单后不拆）；只动 SELL 的时点与单量拆分，不动 BUY/FEED/CARE/HARVEST。
+      - 签名意图：输入: 解码路由表+排水表 / 输出: {routes, 守恒账, 变更表 kind=drain_align} / 错误: 守恒破或非卖面被改即抛。
+      - 调用方：build_r43。tested：自有单测。核验命令：测试: orderbook_r43/test_retape_drain.py（判据=R26 ①守恒/排空构造用例原文）。
+    - **retape_sheep_lifecycle** [L2|新增]
+      - 职责：②羊线生命周期——羊毛变现窗完成后（该路线最后一次 WOOL SELL 后）删后续羊 CARE/FEED 磁带指令；变现窗内排程与刀次不动（R20 剪毛排程保）；只删羊喂护指令，不动牛鹅与其他面。
+      - 签名意图：输入: 解码路由表 / 输出: {routes, 变更表 kind=sheep_lifecycle, 刀次账} / 错误: 非喂护面被改即抛。
+      - 调用方：build_r43。tested：自有单测。核验命令：测试: orderbook_r43/test_retape_sheep.py。
+    - **retape_granularity** [L2|新增]
+      - 职责：③跨拍细颗粒——大额同拍 SELL（超过阈值）按该品排水节奏拆分至相邻拍（目标单均量向 4.6-5.9 量级靠拢）；逐品守恒；同拍内同品仍并单（在①之后运行，只拆跨拍）。
+      - 签名意图：输入: 解码路由表+排水表+阈值配置 / 输出: {routes, 变更表 kind=granularity, 守恒账} / 错误: 守恒破即抛。
+      - 调用方：build_r43。tested：自有单测。核验命令：测试: orderbook_r43/test_retape_gran.py。
+    - **audit_diff_r43_vs_r40** [L2|新增]
+      - 职责：变更归因审计——白名单三类=三手术的磁带事件差分（对账变更表逐条吻合）；**运行时块零差异**（r40 尾块逐字节同）；白名单外即抛。
+      - 签名意图：输入: r43 main+r40 main+三变更表 / 输出: 归因表 / 错误: 白名单外即抛。
+      - 调用方：build_r43。tested：自有单测。核验命令：测试: orderbook_r43/test_build_r43.py（audit 组）。
+    - **pack_r43** [L2|新增]
+      - 职责：确定性打包+manifest；sha 链（…→r37→r40→r43）+描述 "public derivative with drain-aligned selling and sheep lifecycle surgery"；双跑一致。
+      - 签名意图：输入: r43 main / 输出: submission.tar.gz+manifest / 错误: 双跑不一致即抛。
+      - 调用方：build_r43。tested：自有单测。核验命令：测试: orderbook_r43/test_build_r43.py（pack 组）。
+  - **judge_r26** [L1|新增]
+    - 职责：判决 v26——仪器四件套内置：**安慰剂臂**（纯重编码件 vs r40，须恒等胜率≈0.5）→**单件消融**（三组件各单独件 vs r40，逐件效应>0 才保留）→**全件配对联赛**（r43 vs r40 同 seed 双席 traced）；分项=实现价 ≥0.88 ∧ 终局钱 ≥10.5 万/局 ∧ stranding≈0（同局 r40 侧对照）；总判=h2h ≥0.55；聚合 evidence。
+    - 签名意图：输入: r43 包+语料+配置 / 输出: evidence JSON / 错误: 单局红计入不短路。
+    - 调用方：run_r43_iteration。tested：自有单测。核验命令：测试: orderbook_r43/test_judge_r26.py（判据=R26 ②③原文）。
+    - **realized_price_stats** [L2|新增]
+      - 职责：实现价读数——逐局逐席 Σ(qty×卖时市价)/Σ(qty×该局该品日均价)+终局钱+终拍滞留；供同局配对（我侧 vs r40 侧）。
+      - 签名意图：输入: traced 对局（sinks 或状态序列） / 输出: {realized_px, terminal_money, stranding} / 错误: 缺字段→UNKNOWN。
+      - 调用方：judge_r26。tested：自有单测。核验命令：测试: orderbook_r43/test_judge_r26.py（realized 组）。
+    - **sim_bridge** [L2|上游覆盖: judge_r23]
+      - 职责：仿真器桥接复用（30/30 认证、13.6x，零增量）。
+      - 签名意图：输入: 仿真器配置+对照语料 / 输出: {loaded, consistency, wall_speedup} / 错误: 对照不过→降级留档。
+      - 调用方：judge_r26。tested 策略：上游覆盖: judge_r23。核验命令：上游覆盖: judge_r23。
+  - **verify_r43_gates** [L1|新增]
+    - 职责：五门全量 fail-closed 沿管线重定向（last-callable=_route40_agent **不变**（零注入！）/h2h 主对 r40 ≥0.55 独立 n/谱系/饿死零容忍+净经济/合规四轴/launch）。
+    - 签名意图：输入: r43 包 / 输出: 各门结果+overall / 错误: fail-closed。
+    - 调用方：run_r43_iteration。tested：自有单测。核验命令：测试: orderbook_r43/test_gates_r43.py。
