@@ -37,20 +37,20 @@ def test_merge_rejects_bad_input():
 # ---------------------------------------------- clear 组 --
 
 def test_clear_dead_slots_abort_prevention():
-    """会 abort 的卖单清理：库存 0 清除、超量截到库存、qty<0 清除、
-    qty==0 留给旧件 hygiene 不重复。"""
+    """死单清理（机制修正版，消融 B37 毒点）：不截量（磁带卖单可含本拍收成，
+    截量=系统性少卖）；只清真零库存单与 qty<0；qty==0 留给旧件 hygiene。"""
     orders = _m(["SELL", "WHEAT", 10], ["SELL", "MILK", 5],
                 ["SELL", "WOOL", 3], ["SELL", "EGG", 0],
                 ["SELL", "CARROT", -2])
     stock = {"WHEAT": 4, "MILK": 0, "EGG": 9}
     out = so.clear_dead_slots(orders, None, stock)
     got = out["orders"]
-    assert got[0] == ["SELL", "WHEAT", 4]     # 超量截到库存
-    assert got[1] == []                       # 库存 0 → 清（会 abort）
+    assert got[0] == ["SELL", "WHEAT", 10]    # 不截量（可能有本拍收成）
+    assert got[1] == []                       # 库存 0 → 清（必 abort 占槽）
     assert got[2] == []                       # stock 无 WOOL=0 → 清
     assert got[3] == ["SELL", "EGG", 0]       # qty==0 不重复处理
     assert got[4] == []                       # qty<0 → 清
-    assert out["cleared"] == 3 and out["trimmed"] == 1
+    assert out["cleared"] == 3 and out["trimmed"] == 0
 
 
 def test_clear_dead_slots_fail_safe():
@@ -88,13 +88,13 @@ def test_apply_slot_orchestration_composition():
         ["BUY_PRODUCT", "WHEAT", 3], ["HIRE"])}
     out = so.apply_slot_orchestration(obs, action)
     m = out["action"]["market"]
-    assert out["ledger"]["merged"] == 1          # 15→12 截到库存
+    assert out["ledger"]["merged"] == 1          # 15 合一单（不截量）
     assert out["ledger"]["cleared"] == 0
-    assert out["ledger"]["trimmed"] == 1
+    assert out["ledger"]["trimmed"] == 0
     assert out["ledger"]["layout"] == "price_desc"
     # MILK(100) 该排到卖单最前槽；买单/HIRE 原位不动
     assert m[0] == ["SELL", "MILK", 2]
-    assert m[2] == ["SELL", "WHEAT", 12]
+    assert m[2] == ["SELL", "WHEAT", 15]
     assert m[3] == ["BUY_PRODUCT", "WHEAT", 3]
     assert m[4] == ["HIRE"]
     assert action["market"][0] == ["SELL", "WHEAT", 10]   # 原动作未被改写

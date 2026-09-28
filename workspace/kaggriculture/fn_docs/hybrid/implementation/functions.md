@@ -184,8 +184,8 @@
 | audit_diff_r42_vs_r40 | B39 | tested+wired 09-28 | pytest audit 组 1 passed（纯尾部白名单/篡改基座即抛）；真跑零越界 | (本批) |
 | pack_r42 | B39 | tested+wired 09-28 | pytest pack 组 1 passed（双跑恒等/manifest 键集/sha 链 r42 节点）；真跑 tar 900c5077… | (本批) |
 | build_r42 | B39 | wired 09-28 | pytest 5 passed；**真跑构建**：main 24619a54…/tar 900c5077…/块 16,184B；审计一类零越界；sha 链 a16e0e9b→r34a→r37→r40→r42；装载冒烟末 callable=_route42_agent | (本批) |
-| endgame_stats | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_judge_r25.py（endgame 组） | — |
-| mirror_arm_stats | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_judge_r25.py（mirror 组） | — |
-| judge_r25 | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_judge_r25.py（判据=R25 ①②③+总判原文） | — |
-| verify_r42_gates | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_gates_r42.py | — |
-| run_r42_iteration | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_run_r42.py | — |
+| endgame_stats | B40 | tested+wired 09-28 | pytest endgame 组 2 passed（配对中位/stranding/翻正/UNKNOWN）；真跑=同局对手侧配对 | (本批) |
+| mirror_arm_stats | B40 | tested+wired 09-28 | pytest mirror 组 1 passed（子集胜率/credit 恒等式/缺账本 UNKNOWN） | (本批) |
+| judge_r25 | B40 | wired 09-28 | **真跑判决 NEGATIVE（如实）**：修正版配对口径 h2h vs r40 0.0@240/联赛 0.1667@90；①单价 −7.97%+段差 −8268✗ ②d29 8094<15766+stranding 244.7>0✗ ③镜像臂 0.0✗；evidence/judge_r25_realrun.json | (本批) |
+| verify_r42_gates | B40 | tested 09-28 | pytest gates 组 3 passed（末 callable/身份链/谱系/h2h+净经济门）；判红不进门禁（run 预绑定） | (本批) |
+| run_r42_iteration | B40 | wired 09-28 | pytest 2 passed（预绑定分叉：判正+门绿+窗内→发射台账/否则收档）；**真跑全链→NEGATIVE→archive_ledger run-r42-archive/1.0 落档** | (本批) |

@@ -105,14 +105,11 @@ def clear_dead_slots(orders: Any, last_fills: Any = None,
                 continue
             if stock_map is not None:
                 avail = stock_map.get(item, 0)
+                # 机制修正（消融 B37 毒点）：不截量——磁带卖单可含本拍收成，
+                # 截量=系统性少卖；只清真零库存单（该单必 abort 纯占槽）。
                 if avail <= 0 and qty > 0:
                     out[i] = []
                     cleared += 1
-                elif qty > avail > 0:
-                    e2 = list(e)
-                    e2[2] = avail
-                    out[i] = e2
-                    trimmed += 1
         return {"orders": out, "cleared": cleared, "trimmed": trimmed}
     except Exception:
         return {"orders": list(orders) if isinstance(orders, (list, tuple))

@@ -31,12 +31,12 @@ def test_mirror_gate_triggers_on_equal_fingerprints():
             _obs(t, f, _farm(), {"WHEAT": 50}),
             {"market": [["SELL", "WHEAT", 2]]})
     assert out["ledger"]["mirror"] is True
-    assert out["ledger"]["repaid"] > 0                   # 稳态：前移被后续偿还
     out2 = mr.apply_mirror_gate(
         _obs(25, f, _farm(), {"WHEAT": 50}),
         {"market": [["SELL", "WHEAT", 2]]})
-    assert out2["ledger"]["boosted"] > 0                 # 提前量生效
-    assert out2["credit"].get("WHEAT", 0) > 0            # credit 记账
+    # 机制修正（消融 −80k 毒点）：提前量停用——门只检测留档不动作
+    assert out2["ledger"]["boosted"] == 0
+    assert out2["credit"].get("WHEAT", 0) == 0
 
 
 def test_mirror_gate_no_trigger_on_different_farms():

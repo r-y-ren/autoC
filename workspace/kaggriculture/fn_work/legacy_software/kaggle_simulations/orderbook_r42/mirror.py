@@ -109,7 +109,7 @@ def apply_mirror_gate(observation: Dict[str, Any],
                 state["mirror"] = True
 
         boosted = 0
-        if state["mirror"]:
+        if False and state["mirror"]:  # 机制修正：消融 −80k 毒点，提前量停用
             priv = obs.get("private") if isinstance(obs.get("private"),
                                                     dict) else {}
             shed = priv.get("shed") if isinstance(priv.get("shed"), dict) \

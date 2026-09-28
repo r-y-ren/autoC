@@ -1,0 +1,3 @@
+bridge: True 1.0
+VERDICT: {"verdict": "NEGATIVE", "launch_ready": false, "reason": "核心判据False/门禁False/窗口False"}
+JUDGE: {"h2h_vs_r40": 0.0, "league_win_rate": 0.1667, "pass": false, "criteria": {"p1": {"realized_px_delta_pct": -7.97, "d21_28_seg_delta_median": -8268.0, "verdict": "FAIL"}, "p2": {"d29_margin_median": 8094.0, "stranding_mean": 244.71, "base_d29_median": 15766.0, "base_stranding_mean": 0.0, "flips": 0, "verdict": "FAIL"}, "p3": {"n": 240, "win_rate": 0.0, "net_add_sell": 0.0, "verdict": "FAIL"}}, "n_h2h": 240, "n_league": 90, "n_errors": 0}
