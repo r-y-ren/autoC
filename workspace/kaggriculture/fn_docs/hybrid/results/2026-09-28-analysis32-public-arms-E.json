@@ -1,0 +1,1222 @@
+{
+ "_generated_at": "2026-09-29T00:02:02",
+ "version": "analysis32-public-arms-E/1.0",
+ "source": {
+  "抓取日期": "2026-09-28",
+  "cli": "/home/renyxin/.local/bin/kaggle（kaggle kernels pull；鉴权经 kaggle auth print-access-token，本次未回 token，回落 kaggle.json 凭据正常）",
+  "commands": [
+   "kaggle kernels pull leoprovorov/a-song-of-ice-and-fire-fixed-flexible -p /tmp/arms_e/t1_leoprovorov",
+   "curl https://raw.githubusercontent.com/mooman0222/Kaggriculture-opencode/main/agents/e087/main.py",
+   "curl https://raw.githubusercontent.com/mooman0222/Kaggriculture-opencode/main/agents/e085/main.py",
+   "kaggle kernels pull prvsiyan/kaggriculture-floor-aware-market-ledger-20260923 -p /tmp/arms_e/t3_prvsiyan",
+   "kaggle kernels pull prvsiyan/kaggriculture-frontier-the-moon-counts-melons -p /tmp/arms_e/t3b_prvsiyan_melons",
+   "kaggle kernels pull statma/kaggriculture-herd-safe-sale-window-race-ca25 -p /tmp/arms_e/t4_statma",
+   "curl https://api.github.com/repos/doanthuan/kaggriculture/git/trees/HEAD?recursive=1",
+   "curl https://raw.githubusercontent.com/doanthuan/kaggriculture/main/agents/v7.py",
+   "curl https://raw.githubusercontent.com/doanthuan/kaggriculture/main/agents/public/prvsiyan_melons.py",
+   "python3 /tmp/arms_e/prep_pkg.py（build_adopt.build_tar_bytes 打包）",
+   "python3 /tmp/arms_e/gates_pub.py（四门体检）",
+   "python3 /tmp/arms_e/cert_bridge.py（sim_bridge 对照认证）",
+   "python3 /tmp/arms_e/judge_pub.py（判决 300 局次）"
+  ],
+  "payload_decoding": {
+   "leoprovorov": "末格 PAYLOAD_B85：base64.b85decode → lzma.decompress → main.py；sha256 与 EXPECTED_MAIN_SHA256 逐字节对上（12ad317ecac6c07fb2c2e10bf4820ecd1fd4551a5a36aa0e34ab93b2c33c2693）",
+   "statma": "ARCHIVE_BYTES：base64.b64decode → gzip tar（成员 LICENSE.txt/NOTICE.txt/main.py）；main sha 对上 EXPECTED_MAIN_SHA256（c4b72e64acede4053c4b41d797afb562ce2aeadf5d9d0cf58e18aed9baa33c9e）"
+  }
+ },
+ "protocol": {
+  "corpus": "judgment_r27_v2 同语料：26 败局种子 + 660000 起补种子（局组 660000+i*17 错开，i=臂序）",
+  "loss_seeds": [
+   1825501814,
+   2013941152,
+   786146079,
+   1883261866,
+   963182245,
+   240876256,
+   1705553586,
+   2009279466,
+   161402123,
+   435866961,
+   841473039,
+   1388158282,
+   1647385154,
+   671940665,
+   219073637,
+   1439493993,
+   1360429471,
+   671494671,
+   1900972921,
+   973657130,
+   1911990026,
+   1918725083,
+   176568822,
+   427304807,
+   720683523,
+   906608145
+  ],
+  "fold": "双席折叠 judge_r44._fold_arm（同 seed 两席均分：胜 1.0/平 0.5/负 0.0；≥1 胜 ≤0 负）",
+  "main_judgment": "件 vs r40（orderbook_r40/build/main.py），同 seed 双席",
+  "sim_bridge": {
+   "certified_first": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "wall_speedup": 5.219,
+   "cert_runs": 60,
+   "engine_used_in_judgment": "sim（认证过后 auto 走仿真器）"
+  },
+  "workers": 2,
+  "budget": {
+   "cap": 300,
+   "judgment_runs_used": 300,
+   "cert_runs_separate": 60
+  },
+  "budget_note": "局次=引擎跑局（双席各计 1）。判决 4 件 300 局次正好满额：L/M/S 各 38 seed×2=76，D 36 seed×2=72（n_supp 12→10 预算微裁）。认证 60 局次与门禁自打局（3 局/件）另计。n_supp 未达 12 因目标件发掘数超预算假设（5 可跑），26 败局核心语料保持完整。",
+  "entry_rule": "入口=最终 callable；唯一例外 leoprovorov 件（末 callable=install_water_repair_local_patch 安装器，属发布形态陷阱），按官方 AGENTS.md 'main.py 根目录带 agent 函数' 契约取命名 agent，harness 侧垫片装载（臂源码零改动）。严格末 callable 口径下该件每步返回闭包→引擎吞为恒 PASS（构造性退化，实测 1 次探测已示），未耗局次。",
+  "behavior_口径": {
+   "卖单数": "整局我席 action.market 中 SELL 单张数（逐局均值）",
+   "单均量": "ΣSELL 指令量 / 卖单数",
+   "卖时三桶": "SELL 量按 d0-9/d10-19/d20-29 分桶占比",
+   "滞留": "终局 private.shed 逐品 × 末拍报价 折价合计",
+   "实现价": "judge_r26 口径 Σ(qty×卖时报价)/Σ(qty×该局该品日均报价)",
+   "终局钱": "终局 farms[我席].money"
+  }
+ },
+ "targets": [
+  {
+   "target": "目标1 leoprovorov MarketShock-M1-WR1K 提交件",
+   "source_url": "https://www.kaggle.com/code/leoprovorov/a-song-of-ice-and-fire-fixed-flexible（末格 payload）",
+   "sha256": {
+    "main.py": "12ad317ecac6c07fb2c2e10bf4820ecd1fd4551a5a36aa0e34ab93b2c33c2693",
+    "main_bytes": 897851,
+    "tar_sha256": "96165d6107208c4f556dbe4f26fed8dff1b501ffc89fb263ca31821cdbd73091"
+   },
+   "entry": {
+    "rule": "最终 callable（judge_r23._load_entry 官方语义）",
+    "last_callable": "install_water_repair_local_patch",
+    "entry_used_path": "/tmp/arms_e/t1_leoprovorov/entry_named_agent.py",
+    "note": "末 callable=install_water_repair_local_patch（安装器，dict 插入序被后续 def 顶到末位；该件主链内 4 处 `del agent` 重插但收尾 install 又落后）；命名 agent=完整策略（step1009 家族 route 簇：step144 前共享开局→首二店选路 15 店对→11 计划→step648 全量清算→712-718 有界终局规划；WR1K=day21 本地浇水修复补丁）"
+   },
+   "gates": {
+    "四门": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "entry_last_callable": "install_water_repair_local_patch",
+    "has_named_agent": true,
+    "entry_used": "entry_named_agent.py",
+    "entry_note": "末 callable=install_water_repair_local_patch（安装器，官方 last-callable 口径取到即恒 PASS 退化）；按官方 AGENTS.md agent 函数契约取命名 agent，垫片装载",
+    "gate1_装载": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0,
+     "first_action": {
+      "farmer": [
+       "NORTH"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_ANIMAL",
+        "COW",
+        2
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        2
+       ]
+      ]
+     }
+    },
+    "gate2_双席DONE_每步lt1s": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 165.99,
+      "p99_step_ms": 4.53,
+      "wall_s": 4.8
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 278.59,
+      "p99_step_ms": 4.44,
+      "wall_s": 5.3
+     }
+    ],
+    "gate3_确定性_sha": {
+     "run1": "91627f3b40a31bcd8fb90abb7b2ede40a6d36781ea3fe78be7e1f283755c30e9",
+     "run2": "91627f3b40a31bcd8fb90abb7b2ede40a6d36781ea3fe78be7e1f283755c30e9"
+    },
+    "gate4_体积身份": {
+     "match": true,
+     "tar_members_ok": true,
+     "tar_inner_main_matches_disk": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.5,
+     "main_sha256": "12ad317ecac6c07fb2c2e10bf4820ecd1fd4551a5a36aa0e34ab93b2c33c2693",
+     "tar_sha256": "96165d6107208c4f556dbe4f26fed8dff1b501ffc89fb263ca31821cdbd73091"
+    },
+    "selfplay_rewards": [
+     [
+      96400.0,
+      96400.0
+     ],
+     [
+      105050.0,
+      105050.0
+     ]
+    ],
+    "errors": []
+   },
+   "judgment": {
+    "arm": "leoprovorov_marketshock_m1_wr1k",
+    "n": 38,
+    "wins": 2,
+    "losses": 35,
+    "ties": 1,
+    "h2h": 0.0658,
+    "mean_margin": -1780.8,
+    "margin_median": -1519.0,
+    "n_games_run": 76,
+    "n_errors": 0,
+    "seeds": [
+     1825501814,
+     2013941152,
+     786146079,
+     1883261866,
+     963182245,
+     240876256,
+     1705553586,
+     2009279466,
+     161402123,
+     435866961,
+     841473039,
+     1388158282,
+     1647385154,
+     671940665,
+     219073637,
+     1439493993,
+     1360429471,
+     671494671,
+     1900972921,
+     973657130,
+     1911990026,
+     1918725083,
+     176568822,
+     427304807,
+     720683523,
+     906608145,
+     660000,
+     660001,
+     660002,
+     660003,
+     660004,
+     660005,
+     660006,
+     660007,
+     660008,
+     660009,
+     660010,
+     660011
+    ],
+    "supp_seeds": [
+     660000,
+     660001,
+     660002,
+     660003,
+     660004,
+     660005,
+     660006,
+     660007,
+     660008,
+     660009,
+     660010,
+     660011
+    ],
+    "bar_h2h": 0.55,
+    "bar_pass": false,
+    "engine": "sim",
+    "wall_s": 163.3,
+    "rows_file": "/tmp/arms_e/judgment/rows_leoprovorov_marketshock_m1_wr1k.json"
+   },
+   "behavior_decomposition": {
+    "n_sell_orders": 443.3816,
+    "qty_per_order": 195.645,
+    "realized_px": 1.0112,
+    "stranding": 0.0,
+    "terminal_money": 95378.6316,
+    "sell_bucket_qty_share": {
+     "d0_9": 0.0015,
+     "d10_19": 0.0102,
+     "d20_29": 0.9884
+    }
+   },
+   "takeaway": "大单晚清算路线（单均 195 股、98.8% 卖量 d20-29、实现价仅 1.011）被 r40 稳定小败（h2h 0.066）——'经济高≠对局强'，卖法形态是主差异；另：发布件必须验 get_last_callable 入口身份，安装器收尾即陷阱"
+  },
+  {
+   "target": "目标2 mooman0222/Kaggriculture-opencode agents/e087（10,145 行）",
+   "source_url": "https://github.com/mooman0222/Kaggriculture-opencode/blob/main/agents/e087/main.py",
+   "sha256": {
+    "main.py": "ccba51e12d4d470b47eb3e38528aae7cb03caca7b09b5aa8739dc4a52942d6d7",
+    "main_bytes": 1196443,
+    "tar_sha256": "e6962d458ed542210b6f3245246af6ba6457c7fbb55f1dd91ce679adee4baa63"
+   },
+   "entry": {
+    "rule": "最终 callable（judge_r23._load_entry 官方语义）",
+    "last_callable": "step1009_step1008_fortyfirst_final_fixedsell_closure_agent",
+    "entry_used_path": "/tmp/arms_e/pkg/mooman_e087/main.py",
+    "note": "末 callable=step1009_step1008_fortyfirst_final_fixedsell_closure_agent（globals().pop('agent') 重插保末位=命名 agent，等价）"
+   },
+   "gates": {
+    "四门": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "entry_last_callable": "step1009_step1008_fortyfirst_final_fixedsell_closure_agent",
+    "has_named_agent": true,
+    "entry_used": "main.py",
+    "entry_note": null,
+    "gate1_装载": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0,
+     "first_action": {
+      "farmer": [
+       "NORTH"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_ANIMAL",
+        "COW",
+        2
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        2
+       ]
+      ]
+     }
+    },
+    "gate2_双席DONE_每步lt1s": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 156.27,
+      "p99_step_ms": 23.8,
+      "wall_s": 6.5
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 319.37,
+      "p99_step_ms": 37.46,
+      "wall_s": 7.2
+     }
+    ],
+    "gate3_确定性_sha": {
+     "run1": "4c69f6f1970741ee79c31b6fdcad8b9418b72a4b7578c899a3e5174f9115faaf",
+     "run2": "4c69f6f1970741ee79c31b6fdcad8b9418b72a4b7578c899a3e5174f9115faaf"
+    },
+    "gate4_体积身份": {
+     "match": true,
+     "tar_members_ok": true,
+     "tar_inner_main_matches_disk": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.623,
+     "main_sha256": "ccba51e12d4d470b47eb3e38528aae7cb03caca7b09b5aa8739dc4a52942d6d7",
+     "tar_sha256": "e6962d458ed542210b6f3245246af6ba6457c7fbb55f1dd91ce679adee4baa63"
+    },
+    "selfplay_rewards": [
+     [
+      94200.0,
+      94200.0
+     ],
+     [
+      101268.0,
+      101268.0
+     ]
+    ],
+    "errors": []
+   },
+   "judgment": {
+    "arm": "mooman_e087",
+    "n": 38,
+    "wins": 32,
+    "losses": 5,
+    "ties": 1,
+    "h2h": 0.8553,
+    "mean_margin": 429.6,
+    "margin_median": 413.5,
+    "n_games_run": 76,
+    "n_errors": 0,
+    "seeds": [
+     1825501814,
+     2013941152,
+     786146079,
+     1883261866,
+     963182245,
+     240876256,
+     1705553586,
+     2009279466,
+     161402123,
+     435866961,
+     841473039,
+     1388158282,
+     1647385154,
+     671940665,
+     219073637,
+     1439493993,
+     1360429471,
+     671494671,
+     1900972921,
+     973657130,
+     1911990026,
+     1918725083,
+     176568822,
+     427304807,
+     720683523,
+     906608145,
+     660017,
+     660018,
+     660019,
+     660020,
+     660021,
+     660022,
+     660023,
+     660024,
+     660025,
+     660026,
+     660027,
+     660028
+    ],
+    "supp_seeds": [
+     660017,
+     660018,
+     660019,
+     660020,
+     660021,
+     660022,
+     660023,
+     660024,
+     660025,
+     660026,
+     660027,
+     660028
+    ],
+    "bar_h2h": 0.55,
+    "bar_pass": true,
+    "engine": "sim",
+    "wall_s": 213.6,
+    "rows_file": "/tmp/arms_e/judgment/rows_mooman_e087.json"
+   },
+   "behavior_decomposition": {
+    "n_sell_orders": 315.9079,
+    "qty_per_order": 6.6417,
+    "realized_px": 1.075,
+    "stranding": 0.0,
+    "terminal_money": 94621.4079,
+    "sell_bucket_qty_share": {
+     "d0_9": 0.0671,
+     "d10_19": 0.3674,
+     "d20_29": 0.5654
+    }
+   },
+   "takeaway": "唯一增量=番茄晚市放量门槛 9000→7500（含对手番茄供给预测 _cxtb_their_supply+排水余量 2.4/日、d26-29 十格 ~80 单元），配 step1009 公共底盘即 h2h 0.855 碾压 r40、实现价 1.075 全场最高——'对手供给预测型晚市放量'是真实可移植强机制"
+  },
+  {
+   "target": "目标4 statma Herd-Safe Sale Window race ca25（EXP410 系）",
+   "source_url": "https://www.kaggle.com/code/statma/kaggriculture-herd-safe-sale-window-race-ca25",
+   "sha256": {
+    "main.py": "c4b72e64acede4053c4b41d797afb562ce2aeadf5d9d0cf58e18aed9baa33c9e",
+    "main_bytes": 1033759,
+    "tar_sha256": "d803a7d5ddfd6a80643b5c6ec546d241887427e0f987f88d213f4472e3748132"
+   },
+   "entry": {
+    "rule": "最终 callable（judge_r23._load_entry 官方语义）",
+    "last_callable": "opening_liquidity_agent",
+    "entry_used_path": "/tmp/arms_e/pkg/statma_ca25/main.py",
+    "note": "末 callable=opening_liquidity_agent（包装 _OPENING_LIQUIDITY_PARENT，step0 市场序列 BUY WHEAT8/SELL WHEAT3/BUY_SEED WHEAT1 校验）"
+   },
+   "gates": {
+    "四门": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "entry_last_callable": "opening_liquidity_agent",
+    "has_named_agent": true,
+    "entry_used": "main.py",
+    "entry_note": null,
+    "gate1_装载": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0,
+     "first_action": {
+      "farmer": [
+       "NORTH"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_ANIMAL",
+        "COW",
+        2
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        2
+       ]
+      ]
+     }
+    },
+    "gate2_双席DONE_每步lt1s": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 410.35,
+      "p99_step_ms": 5.85,
+      "wall_s": 6.1
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 359.37,
+      "p99_step_ms": 5.53,
+      "wall_s": 5.9
+     }
+    ],
+    "gate3_确定性_sha": {
+     "run1": "77b3fd3b8e3dde0ee0d8a22e82295d57823da1a4b34ab0fcaae1ad6ab8e7c4b9",
+     "run2": "77b3fd3b8e3dde0ee0d8a22e82295d57823da1a4b34ab0fcaae1ad6ab8e7c4b9"
+    },
+    "gate4_体积身份": {
+     "match": true,
+     "tar_members_ok": true,
+     "tar_inner_main_matches_disk": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.601,
+     "main_sha256": "c4b72e64acede4053c4b41d797afb562ce2aeadf5d9d0cf58e18aed9baa33c9e",
+     "tar_sha256": "d803a7d5ddfd6a80643b5c6ec546d241887427e0f987f88d213f4472e3748132"
+    },
+    "selfplay_rewards": [
+     [
+      96006.0,
+      96006.0
+     ],
+     [
+      103844.0,
+      103844.0
+     ]
+    ],
+    "errors": []
+   },
+   "judgment": {
+    "arm": "statma_ca25",
+    "n": 38,
+    "wins": 18,
+    "losses": 17,
+    "ties": 3,
+    "h2h": 0.5132,
+    "mean_margin": 60.0,
+    "margin_median": 1.0,
+    "n_games_run": 76,
+    "n_errors": 0,
+    "seeds": [
+     1825501814,
+     2013941152,
+     786146079,
+     1883261866,
+     963182245,
+     240876256,
+     1705553586,
+     2009279466,
+     161402123,
+     435866961,
+     841473039,
+     1388158282,
+     1647385154,
+     671940665,
+     219073637,
+     1439493993,
+     1360429471,
+     671494671,
+     1900972921,
+     973657130,
+     1911990026,
+     1918725083,
+     176568822,
+     427304807,
+     720683523,
+     906608145,
+     660034,
+     660035,
+     660036,
+     660037,
+     660038,
+     660039,
+     660040,
+     660041,
+     660042,
+     660043,
+     660044,
+     660045
+    ],
+    "supp_seeds": [
+     660034,
+     660035,
+     660036,
+     660037,
+     660038,
+     660039,
+     660040,
+     660041,
+     660042,
+     660043,
+     660044,
+     660045
+    ],
+    "bar_h2h": 0.55,
+    "bar_pass": false,
+    "engine": "sim",
+    "wall_s": 217.6,
+    "rows_file": "/tmp/arms_e/judgment/rows_statma_ca25.json"
+   },
+   "behavior_decomposition": {
+    "n_sell_orders": 337.3816,
+    "qty_per_order": 11.0414,
+    "realized_px": 1.0585,
+    "stranding": 0.0,
+    "terminal_money": 94308.2763,
+    "sell_bucket_qty_share": {
+     "d0_9": 0.0389,
+     "d10_19": 0.2093,
+     "d20_29": 0.7518
+    }
+   },
+   "takeaway": "V39 底盘+RACE 保留式卖单（step192 起 horizon 40/margin 12）+RACEPX 价门+COURIER（h≥12 优质货当日送卖）+HERD 物种置换（d10 鹅→羊/牛：羊毛/奶报价≥150+店铺结构判定，BUILD_COOP→BUILD_PASTURE 重写、超计划余量即卖）——h2h 0.513 与 r40 均势，保留式卖法是可平手机制"
+  },
+  {
+   "target": "目标5 doan 鹅引擎（doanthuan/kaggriculture agents/v7.py）",
+   "source_url": "https://github.com/doanthuan/kaggriculture/blob/main/agents/v7.py",
+   "sha256": {
+    "main.py": "8520b050603683d70ba2b5597f697202642eb47b61a90955c60211dcff716c6b",
+    "main_bytes": 20123,
+    "tar_sha256": "0883430850f07c2f50f5240ce760b77dcb44f70b46e1070f7ca63c04c0d39cd1"
+   },
+   "entry": {
+    "rule": "最终 callable（judge_r23._load_entry 官方语义）",
+    "last_callable": "agent",
+    "entry_used_path": "/tmp/arms_e/pkg/doan_v7_goose/main.py",
+    "note": "末 callable=agent（co_argcount=1）"
+   },
+   "gates": {
+    "四门": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "entry_last_callable": "agent",
+    "has_named_agent": true,
+    "entry_used": "main.py",
+    "entry_note": null,
+    "gate1_装载": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0,
+     "first_action": {
+      "farmer": [
+       "PICKUP",
+       "GOOSE",
+       5
+      ],
+      "hands": [
+       [
+        "WEST"
+       ]
+      ],
+      "market": [
+       [
+        "SELL",
+        "EGG",
+        10000
+       ]
+      ]
+     }
+    },
+    "gate2_双席DONE_每步lt1s": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 414.95,
+      "p99_step_ms": 0.38,
+      "wall_s": 3.3
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 147.19,
+      "p99_step_ms": 0.39,
+      "wall_s": 3.0
+     }
+    ],
+    "gate3_确定性_sha": {
+     "run1": "9331571e2ea6cf06e7d22617b4f68bb8b6627b9fa19405fb570acfc541317e31",
+     "run2": "9331571e2ea6cf06e7d22617b4f68bb8b6627b9fa19405fb570acfc541317e31"
+    },
+    "gate4_体积身份": {
+     "match": true,
+     "tar_members_ok": true,
+     "tar_inner_main_matches_disk": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.006,
+     "main_sha256": "8520b050603683d70ba2b5597f697202642eb47b61a90955c60211dcff716c6b",
+     "tar_sha256": "0883430850f07c2f50f5240ce760b77dcb44f70b46e1070f7ca63c04c0d39cd1"
+    },
+    "selfplay_rewards": [
+     [
+      34473.0,
+      35329.0
+     ],
+     [
+      33129.0,
+      33037.0
+     ]
+    ],
+    "errors": []
+   },
+   "judgment": {
+    "arm": "doan_v7_goose",
+    "n": 36,
+    "wins": 0,
+    "losses": 36,
+    "ties": 0,
+    "h2h": 0.0,
+    "mean_margin": -129964.2,
+    "margin_median": -130837.5,
+    "n_games_run": 72,
+    "n_errors": 0,
+    "seeds": [
+     1825501814,
+     2013941152,
+     786146079,
+     1883261866,
+     963182245,
+     240876256,
+     1705553586,
+     2009279466,
+     161402123,
+     435866961,
+     841473039,
+     1388158282,
+     1647385154,
+     671940665,
+     219073637,
+     1439493993,
+     1360429471,
+     671494671,
+     1900972921,
+     973657130,
+     1911990026,
+     1918725083,
+     176568822,
+     427304807,
+     720683523,
+     906608145,
+     660051,
+     660052,
+     660053,
+     660054,
+     660055,
+     660056,
+     660057,
+     660058,
+     660059,
+     660060
+    ],
+    "supp_seeds": [
+     660051,
+     660052,
+     660053,
+     660054,
+     660055,
+     660056,
+     660057,
+     660058,
+     660059,
+     660060
+    ],
+    "bar_h2h": 0.55,
+    "bar_pass": false,
+    "engine": "sim",
+    "wall_s": 153.1,
+    "rows_file": "/tmp/arms_e/judgment/rows_doan_v7_goose.json"
+   },
+   "behavior_decomposition": {
+    "n_sell_orders": 746.3889,
+    "qty_per_order": 9245.4479,
+    "realized_px": 0.9997,
+    "stranding": 209.3194,
+    "terminal_money": 34231.2083,
+    "sell_bucket_qty_share": {
+     "d0_9": 0.333,
+     "d10_19": 0.333,
+     "d20_29": 0.333
+    }
+   },
+   "takeaway": "鹅经济学本体可吸（蛋对数曲线无限吸纳/饲料自家麦/肥料 $25k 共享池早卖晚买/fib 雇工为硬约束/回本门控扩张/melon waves d0/5/10），但整机远弱：h2h 0/36、终局 34.2k、每步大额 sentinel SELL 喷单（746 单/局、单均 9,250）反而把对手喂到 164k 均——对局该族拿到的高分是对手不适配的镜像红利，非自身强度"
+  }
+ ],
+ "discovery_failures": [
+  {
+   "target": "目标3 prvsiyan/kaggriculture-floor-aware-market-ledger-20260923",
+   "source_url": "https://www.kaggle.com/code/prvsiyan/kaggriculture-floor-aware-market-ledger-20260923",
+   "status": "发掘失败（非可跑件）",
+   "detail": "16 格 notebook 全文无 def agent/BUY_SEED/market 动作面；核心格=纯 stdlib 账本库（CASH_PRODUCTS 7 品 PRICE_RULES 曲线表 standard_cash_price/town_draw/infer_rival_sales），作者原文自述 'This is an accounting tool, not an agent or score claim'——无入口 callable，不可过判决机",
+   "salvage": "该作者对战强件真身=prvsiyan/kaggriculture-frontier-the-moon-counts-melons（doanthuan/kaggriculture README 指认其 main.py 即此件；镜像 agents/public/prvsiyan_melons.py sha256=178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a）。PRICE_RULES 7 品曲线表可作引擎价格曲线校对参考"
+  },
+  {
+   "target": "doan 系检索（目标5 前置）",
+   "status": "已找到（非失败）",
+   "detail": "kaggle kernels list --user doan / --search 'doan kaggriculture' / 'goose kaggriculture' 均无 doan 用户件（'Not found'）；GitHub 检索命中 CDrookieDc/kaggriculture（goose economy 描述）与 doanthuan/kaggriculture（=mooman refs/github-2026-09-27.md 所述 'doan pool 9 体+README'，agents/public/ 9 件对手池 + agents/v5.py/v6.py/v7.py 鹅引擎自研系）"
+  }
+ ],
+ "fidelity_checks": {
+  "official_vs_sim_bank_pairs": [
+   {
+    "seed": 1825501814,
+    "official": [
+     35021.0,
+     159229.0
+    ],
+    "sim": [
+     35021.0,
+     159229.0
+    ],
+    "match": true
+   },
+   {
+    "seed": 786146079,
+    "official": [
+     35717.0,
+     186394.0
+    ],
+    "sim": [
+     35717.0,
+     186394.0
+    ],
+    "match": true
+   },
+   {
+    "seed": 660051,
+    "official": [
+     36803.0,
+     169340.0
+    ],
+    "sim": [
+     36803.0,
+     169340.0
+    ],
+    "match": true
+   },
+   {
+    "seed": 660052,
+    "official": [
+     34930.0,
+     159137.0
+    ],
+    "sim": [
+     34930.0,
+     159137.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "mooman_e087",
+    "seed": 1825501814,
+    "official": [
+     89747.0,
+     89159.0
+    ],
+    "sim": [
+     89747.0,
+     89159.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "mooman_e087",
+    "seed": 660017,
+    "official": [
+     94885.0,
+     94169.0
+    ],
+    "sim": [
+     94885.0,
+     94169.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "leoprovorov",
+    "seed": 1825501814,
+    "official": [
+     89066.0,
+     90942.0
+    ],
+    "sim": [
+     89066.0,
+     90942.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "leoprovorov",
+    "seed": 660017,
+    "official": [
+     95124.0,
+     97733.0
+    ],
+    "sim": [
+     95124.0,
+     97733.0
+    ],
+    "match": true
+   }
+  ],
+  "n_match": 8,
+  "n_checked": 8
+ },
+ "noise": [
+  "e085/e087 每局 step718 向 stdout print('HP_TELEMETRY', _HP_STATS)（双席各 1 行/局）——臂自身遥测打印，判决日志噪声，不影响动作",
+  "kaggle_environments import 期警告：open_spiel_env 缺 pyspiel、cabt 缺 libcg.so（本机环境噪声，与臂无关）",
+  "harness 已知越界写不修不管口径：本次判决/门禁期间未观测到臂源码落盘副作用（pkg 目录与 /tmp/arms_e 无新增 __pycache__/杂件）"
+ ],
+ "anomalies": [
+  "leoprovorov 件 self-play 经济最高（96.4k/105.1k）却 h2h 0.066 负于 r40——大单清算形态（单均 195 股、98.8% 卖量 d20-29）被市场感知型对手稳定小败（中位 −1,519）；同时其在场把 r40 经济喂高（r40 侧 90.9k~97.7k，对 e087 时 89.2k~94.2k）",
+  "doan v7 每步 1 张大额 sentinel SELL（746 单/局、单均 9,250 股）：自身终局仅 34.2k，但把对手经济推到 113k~211k（r40 对常态臂 ~95k）——与 mooman 调查自报（doan v5/v6/v7 +112k~+144k 我方胜）同向；对局该族时的高额优势部分是其卖压喷子喂出来的，不宜计入自身强度",
+  "mooman 仓库实际最新为 e088/e089（e089 commit 2026-09-28T09:51Z『E089提出：me4 镜像对手路线重扫 + 卖持 oracle + hold 层』），晚于本次受测 e087（02:37Z）——e089/e088 为后续发掘候选"
+ ],
+ "bonus_arms": [
+  {
+   "name": "prvsiyan_melons（目标3 真身，doan 池镜像）",
+   "source_url": "https://raw.githubusercontent.com/doanthuan/kaggriculture/main/agents/public/prvsiyan_melons.py（本体 kernel=prvsiyan/kaggriculture-frontier-the-moon-counts-melons）",
+   "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+   "entry": "末 callable=_final_sell_block_reorder_entrypoint",
+   "gates": {
+    "四门": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "entry_last_callable": "_final_sell_block_reorder_entrypoint",
+    "has_named_agent": true,
+    "entry_used": "main.py",
+    "entry_note": null,
+    "gate1_装载": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0,
+     "first_action": {
+      "farmer": [
+       "NORTH"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_ANIMAL",
+        "COW",
+        2
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        2
+       ]
+      ]
+     }
+    },
+    "gate2_双席DONE_每步lt1s": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 199.7,
+      "p99_step_ms": 5.69,
+      "wall_s": 5.4
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 296.28,
+      "p99_step_ms": 6.75,
+      "wall_s": 6.4
+     }
+    ],
+    "gate3_确定性_sha": {
+     "run1": "ed741f54a2acd7d5de09b14bc9c1c9b7a708ca3a1352a15e730c825635692505",
+     "run2": "ed741f54a2acd7d5de09b14bc9c1c9b7a708ca3a1352a15e730c825635692505"
+    },
+    "gate4_体积身份": {
+     "match": true,
+     "tar_members_ok": true,
+     "tar_inner_main_matches_disk": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.603,
+     "main_sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+     "tar_sha256": "a620b409f9f9351212459c0645678a08f09a7dd72c07c38cc49c71d27563c63f"
+    },
+    "selfplay_rewards": [
+     [
+      95962.0,
+      95962.0
+     ],
+     [
+      104311.0,
+      104311.0
+     ]
+    ],
+    "errors": []
+   },
+   "judgment": "未跑（300 局次预算已尽；门禁自打 95,962/104,311 经济为公开件第一梯队，与 leoprovorov 相当）",
+   "note": "mooman 对战表实测（E082 12-24 局）：20W4L +408（doan Champion）——建议下轮预算优先补判"
+  },
+  {
+   "name": "mooman_e085（目标2 附带，'若快也测'口径）",
+   "source_url": "https://raw.githubusercontent.com/mooman0222/Kaggriculture-opencode/main/agents/e085/main.py",
+   "sha256": "e0cb93aedf9f154820bfc1bae5874a70df55c9950004d1f9d26a4c6316bf83d2",
+   "entry": "末 callable=step1009_step1008_fortyfirst_final_fixedsell_closure_agent",
+   "gates": {
+    "四门": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "entry_last_callable": "step1009_step1008_fortyfirst_final_fixedsell_closure_agent",
+    "has_named_agent": true,
+    "entry_used": "main.py",
+    "entry_note": null,
+    "gate1_装载": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0,
+     "first_action": {
+      "farmer": [
+       "NORTH"
+      ],
+      "hands": [],
+      "market": [
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "HIRE"
+       ],
+       [
+        "BUY_ANIMAL",
+        "COW",
+        2
+       ],
+       [
+        "BUY_ANIMAL",
+        "SHEEP",
+        2
+       ]
+      ]
+     }
+    },
+    "gate2_双席DONE_每步lt1s": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 439.99,
+      "p99_step_ms": 32.39,
+      "wall_s": 8.7
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 381.31,
+      "p99_step_ms": 40.69,
+      "wall_s": 8.5
+     }
+    ],
+    "gate3_确定性_sha": {
+     "run1": "6a8f4075cfe095f7ab6c1e91f4136c92e8d8f2ec4d01d0f714b4881a2db61299",
+     "run2": "6a8f4075cfe095f7ab6c1e91f4136c92e8d8f2ec4d01d0f714b4881a2db61299"
+    },
+    "gate4_体积身份": {
+     "match": true,
+     "tar_members_ok": true,
+     "tar_inner_main_matches_disk": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.625,
+     "main_sha256": "e0cb93aedf9f154820bfc1bae5874a70df55c9950004d1f9d26a4c6316bf83d2",
+     "tar_sha256": "2d97b03720922f71d32bd7858e7a959240a8f286020727baf45762ab37b2b875"
+    },
+    "selfplay_rewards": [
+     [
+      94732.0,
+      94732.0
+     ],
+     [
+      101268.0,
+      101268.0
+     ]
+    ],
+    "errors": []
+   },
+   "judgment": "未跑（预算已尽）；四门全绿、自打 94,732/101,268，与 e087 同 commit 同底座（e085=未加番茄门原档）"
+  }
+ ],
+ "takeaways_ranked": [
+  "e087 型『对手供给预测+收入下限门控的晚市放量』（番茄 d26-29 十格、门槛 7,500）以最小增量胜 r40（h2h 0.855/实现价 1.075）——最值得拆解移植的公开机制",
+  "卖法形态 > 经济规模：leoprovorov 自打经济最高（96-105k）却 h2h 0.066；e087 自打更低反全胜——大单晚清算（195 股/单、98.8% d20-29）是可被市场感知惩罚的形态",
+  "statma 保留式卖单（RACE reservation：step192 起、horizon 40、margin 12）+HERD 物种置换（羊毛/奶报价 ≥150 + 蛋店缺席才换）能与 r40 打平（0.513）——防守型可平手机制清单新条目",
+  "doan 鹅经济学（蛋 sink/肥料池/fib 雇工约束/回本门控）值得抄 memo，但其对局高分是卖压喷子喂对手的镜像红利（对手 113-211k vs 常态 95k），同族对局成绩要剔除该红利再读",
+  "发布形态教训：末 callable 必须是真入口（leoprovorov 安装器收尾陷阱）；mooman 的 globals().pop('agent') 重插保末位是正确做法"
+ ]
+}
