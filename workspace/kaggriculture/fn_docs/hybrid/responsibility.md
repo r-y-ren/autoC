@@ -1427,3 +1427,206 @@
     - 职责：五门全量 fail-closed 沿管线重定向（last-callable=_route40_agent **不变**（零注入！）/h2h 主对 r40 ≥0.55 独立 n/谱系/饿死零容忍+净经济/合规四轴/launch）。
     - 签名意图：输入: r43 包 / 输出: 各门结果+overall / 错误: fail-closed。
     - 调用方：run_r43_iteration。tested：自有单测。核验命令：测试: orderbook_r43/test_gates_r43.py。
+
+## 【R27 增补·2026-09-28】日内新高变现+谷底闸门（拆两件独立判·择优单发，r44 候选族）
+
+> 块引言：裁决分析30 P2。两件**独立候选独立判决**（归因干净），**择优只发一件**（用户裁决）：
+> 件 A=日内新高变现（执行期订单层追加：当日报价严格创新高→可卖库存即刻清仓，卖入强势非持货等待）；
+> 件 B=谷底闸门（纯减法：quote<base 的我方层加挂单删除；**磁带基座原卖单豁免不动**——Q2 边界裁决，
+> 防滑向"持货等峰值"已证负族，保非触发拍零足迹）。三形态 A 单/B 单/A+B 同局配对（B 单臂在纯 r40 上
+> 预期零足迹=等价面恒等即合法消融证据；B 效应以 A+B 边际计）。构建底=r40 字节（main 4ce951f088740e0b，
+> 零改动）；薄缝注入沿 layer S 形态；磁带五区零改动。产物 orderbook_r44_a/、orderbook_r44_b/、
+> orderbook_r44_ab/（A+B 形态为可发射形态之一）。仪器四件套沿 R26 先例内置。
+
+## 结构概览（增补）
+- run_r44_iteration ← R27
+  - build_r44_variant
+    - append_dayhigh_block
+      - _dayhigh_agent
+        - detect_dayhigh
+        - plan_dayhigh_sells
+    - append_glutgate_block
+      - _glutgate_agent
+        - gate_added_sells
+  - judge_r44
+    - pick_launch_form
+  - verify_r44_gates
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R27 | run_r44_iteration（构建线：build_r44_variant[form=A/B/AB]；判决线：judge_r44→pick_launch_form/realized_price_stats[复用]/quote_context[共享]；门禁：verify_r44_gates） |
+
+## 共享函数（增补）
+- **quote_context**（调用方：detect_dayhigh, gate_added_sells, select_advanceable[R28]）
+  - 职责：市场报价上下文——day=step//24；逐品当日迄今最高价跟踪（换日复位）；quote_of(step,item)（公开市场报价）；base_of(item)（引擎 base 表 WHEAT25/CARROT35/TOMATO60/STRAWBERRY120/MELON250/EGG50/MILK160/WOOL200/FERT100，口径=references/2026-09-28-engine-pricing-extraction.md）。
+  - 签名意图：输入: observation 序列/当前 obs+跟踪器 / 输出: {day, day_highs, quote, base} / 错误: 缺字段→None（调用方按 fail-safe 处理）。
+  - tested 策略：自有单测。核验命令：测试: test_quote_context.py。
+- **realized_price_stats** [L2|上游覆盖: judge_r26]（调用方：judge_r44, judge_r45）
+  - 职责：实现价读数复用（逐局逐席 Σ(qty×卖时市价)/Σ(qty×日均价)+终局钱+终拍滞留）；本族复用不改写。
+  - 签名意图：输入: traced 对局 / 输出: {realized_px, terminal_money, stranding} / 错误: 缺字段→UNKNOWN。
+  - tested 策略：上游覆盖: judge_r26。核验命令：上游覆盖: judge_r26。
+
+## 功能块 run_r44_iteration ← R27
+（功能口=R27 两件三形态；验收=R27 ①②原文；发射=判正即发（用户原令）+择优单发（用户裁决）+计分对纪律：本件=第 2 发，挤 r37 保 r40→对={r34a-new 56637411, 本件}）
+
+- **run_r44_iteration** [L0|新增]
+  - 职责：编排——build_r44_variant 产三形态件（A/B/AB）→ pytest 全绿（R27 ①）→ judge_r44 三形态同局配对+单件消融+安慰剂 → pick_launch_form 择优 → verify_r44_gates 五门（对选定形态）→ 判正→standing 发射（台账留痕+计分对核对）；任一红→收档（预绑定）。evidence+台账。
+  - 签名意图：输入: 无（CLI）+形态/参数配置 / 输出: {build×3, judgment, launch_form, gates, verdict} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验命令：测试: orderbook_r44/test_run_r44.py。
+  - **build_r44_variant** [L1|新增]
+    - 职责：构建编排——r40 字节按 form∈{A,B,AB} 注入对应尾块链（AB 形态=dayhigh 层在内、glutgate 层在外——门过滤含追加单的最终列表）→ diff 审计（改动仅限注入块，磁带五区零改动、r40 在飞件零改动）→ 确定性打包+manifest+sha 链（…→r34a→r40→r44_*）；描述文案 "public derivative with day-high realization / glut gate"（按形态）。
+    - 签名意图：输入: r40 main 路径+form / 输出: r44_{form} main+submission.tar.gz+manifest+diff 审计 / 错误: 审计白名单外或双跑不一致即抛（不产出）。
+    - 调用方：run_r44_iteration。tested：自有单测。核验命令：测试: orderbook_r44/test_build_r44.py。
+    - **append_dayhigh_block** [L2|新增]
+      - 职责：把 _dayhigh_agent 运行时层追加进候选尾块（先例=append_layer_s_block：块首捕获宿主末 callable、末函数=_dayhigh_agent 成新末 callable）；三道写入前防线沿先例（拒原件/判重/纯净副本）。
+      - 签名意图：输入: 候选 main 源 / 输出: 注入后 main 源 / 错误: 拒原件/重复注入即抛。
+      - 调用方：build_r44_variant。tested：自有单测。核验命令：测试: orderbook_r44/test_build_r44.py（inject 组）。
+      - **_dayhigh_agent** [L3|新增]
+        - 职责：运行时包装（fail-open 三道沿现役语义）——捕获宿主末 callable→逐步取基座动作→detect_dayhigh 判当日新高品→plan_dayhigh_sells 产追加单→并入动作市场单列表+变更台账；任何异常→基座动作原样返回（同对象）；step==0 复位当日新高跟踪器与台账。
+        - 签名意图：输入: observation+基座动作 / 输出: 含追加动作或原动作（同对象） / 错误: 内部异常吞掉回退原动作。
+        - 调用方：候选包末 callable 链。tested：自有单测（构造驱动）。核验命令：测试: orderbook_r44/test_dayhigh_agent.py。
+        - **detect_dayhigh** [L4|新增]
+          - 职责：当日新高判定——对 7 品（EGG/MILK/WOOL/CARROT/TOMATO/STRAWBERRY/MELON）判 quote>当日迄今最高（**严格**新高）且父链当前未在卖该品；quote<2 品永不触发；维护逐日最高价跟踪（day=step//24 换日复位）。
+          - 签名意图：输入: quote_context+基座动作+跟踪器 / 输出: 触发品集合 / 错误: 跟踪器异常→空集（零动作）。
+          - 调用方：_dayhigh_agent。tested：自有单测。核验命令：测试: orderbook_r44/test_dayhigh_agent.py（detect 组）。
+        - **plan_dayhigh_sells** [L4|新增]
+          - 职责：追加单计划——逐触发品算可卖量（在仓可卖库存−本步已挂同品卖量；只卖已有货，不新增产量动作）；按 price×qty 降序产 SELL 单；槽位=并入最早同品 SELL 槽、不能并则置于首个花费单（BUY_SEED/BUY_PRODUCT/BUY_ANIMAL/HIRE/BUY_LAND）之前；**10 槽满→放弃该追加**（宁缺勿挤，不挤掉原单）。
+          - 签名意图：输入: 触发品集合+库存+基座动作市场单列表 / 输出: 追加单列表+槽位安排+变更台账 / 错误: 库存不确定→该品零追加。
+          - 调用方：_dayhigh_agent。tested：自有单测。核验命令：测试: orderbook_r44/test_dayhigh_agent.py（plan 组；判据=R27 ①构造用例原文）。
+    - **append_glutgate_block** [L2|新增]
+      - 职责：把 _glutgate_agent 运行时层追加进候选尾块（形态 B=单独层；形态 AB=接在 dayhigh 层外层）；防线同 append_dayhigh_block。
+      - 签名意图：输入: 候选 main 源 / 输出: 注入后 main 源 / 错误: 同上。
+      - 调用方：build_r44_variant。tested：自有单测。核验命令：测试: orderbook_r44/test_build_r44.py（inject 组）。
+      - **_glutgate_agent** [L3|新增]
+        - 职责：运行时包装（fail-safe）——捕获宿主末 callable→取动作→gate_added_sells 过滤→返回；异常回退原动作；step==0 复位。
+        - 签名意图：输入: observation+宿主动作 / 输出: 过滤后动作或原动作 / 错误: 回退原动作。
+        - 调用方：候选包末 callable 链。tested：自有单测。核验命令：测试: orderbook_r44/test_glutgate_agent.py。
+        - **gate_added_sells** [L4|新增]
+          - 职责：谷底闸门（纯减法）——对动作市场单列表中**我方层加挂**的 SELL 单（dayhigh 追加台账标记/执行层非磁带加卖标记）逐单判 quote<base_of(item) 即删；**磁带基座原计划卖单一律豁免不动**（Q2 边界）；删除台账逐条留痕。
+          - 签名意图：输入: observation+动作+加挂标记（台账） / 输出: 过滤后市场单列表+删除台账 / 错误: 标记缺失→保守视作磁带单=不删。
+          - 调用方：_glutgate_agent。tested：自有单测。核验命令：测试: orderbook_r44/test_glutgate_agent.py（判据=R27 ①门删除/磁带豁免构造用例原文）。
+  - **judge_r44** [L1|新增]
+    - 职责：判决 v27——三形态（A/B/AB）×同局配对（vs r40 同 seed 双席）+单件消融（B 效应=AB vs A 边际）+安慰剂臂（B 单≡r40 逐字节等价面；A 非触发拍零足迹）；判据=A 臂实现价 ≥0.80（局级中位）∧ 终局钱 +2k~4k/局 ∧ h2h ≥0.55；B 臂等价面恒等 ∧ AB 边际>0；聚合 evidence（source 记可复跑命令）。
+    - 签名意图：输入: 三形态包+语料+配置 / 输出: evidence JSON（逐形态逐局 Δ+判据表） / 错误: 单局红计入不短路。
+    - 调用方：run_r44_iteration。tested：自有单测。核验命令：测试: orderbook_r44/test_judge_r44.py（判据=R27 ②原文）。
+    - **pick_launch_form** [L2|新增]
+      - 职责：择优（用户裁决"两件都判、择优只发一件"）——按预登记评分序（判据达成数>h2h>实现价）从 {A,B,AB} 取**唯一**发射形态；输出选择+理由+落选形态收档标记；计分对核对（第 2 发挤 r37 保 r40）。
+      - 签名意图：输入: evidence JSON / 输出: {launch_form, rationale, archived_forms} / 错误: 无形态达标→不选（全收档）。
+      - 调用方：judge_r44。tested：自有单测。核验命令：测试: orderbook_r44/test_judge_r44.py（pick 组）。
+  - **verify_r44_gates** [L1|新增]
+    - 职责：五门 fail-closed 沿管线（装载 last-callable/双席 DONE+<1s/确定性双跑/体积身份链/h2h 主对 r40 ≥0.55 独立 n）对**选定发射形态**全跑。
+    - 签名意图：输入: 选定形态包 / 输出: 各门结果+overall / 错误: fail-closed。
+    - 调用方：run_r44_iteration。tested：自有单测。核验命令：测试: orderbook_r44/test_gates_r44.py。
+
+## 【R28 增补·2026-09-28】债务账本式卖提前（三件套整搬·红区有条件重访，r45 候选）
+
+> 块引言：裁决分析30 P3（激进项，红区有条件重访）。**三件套整搬不拆（任一缺失=构建失败）**：
+> ①债务账本（r36_debts 口径：提前量记债、原 due_step 抵扣——净量恒等硬不变量"提前卖≠多卖"）
+> ②谷底闸门（quote≥base 才提前，语义复用 R27 gate_added_sells）③有界视界提前（只提前磁带计划内、
+> 已入仓、k 拍内本就要卖的量；视界 clamp(measure_rival_lead+12, 40, 48)；窗口 step 192-695；保护首个
+> 计划卖单；跳 dawn 拍/同拍 BUY_PRODUCT/当天 PICKUP 品）。镜像检测**只调视界永不加卖**；alperen
+> `_ADV_BOOK=False` 无记账形态不采。构建底=r40 字节；产物 orderbook_r45/。发射=判正后过**读数门**
+> （09-29 晨计分对最低 ≥1656 才发，本件=第 3 发会挤 r34a-new——用户裁决），否则收档赛后。
+
+## 结构概览（增补）
+- run_r45_iteration ← R28
+  - build_r45
+    - append_advance_stack_block
+      - _advance_agent
+        - select_advanceable
+        - apply_advance_with_debt
+        - settle_debts
+        - measure_rival_lead
+  - judge_r45
+    - verify_net_identity
+    - run_mirror_counter_judgment
+  - verify_r45_gates
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R28 | run_r45_iteration（构建线：build_r45→append_advance_stack_block[三件套白名单]；判决线：judge_r45→verify_net_identity/run_mirror_counter_judgment/realized_price_stats[复用]/quote_context[共享]；门禁：verify_r45_gates） |
+
+## 功能块 run_r45_iteration ← R28
+（功能口=R28 三件套整搬；验收=R28 ①②原文[五判据]；发射=判正后读数门，参数 k/视界/窗口判决标定后定桩入 manifest）
+
+- **run_r45_iteration** [L0|新增]
+  - 职责：编排——build_r45 产 r45 件（三件套白名单 diff 审计）→ pytest 全绿（R28 ①）→ judge_r45（镜像压力板+反制臂+26 败局重演+胜局对照）→ 五判据核对 → 全绿才 verify_r45_gates 五门 → **读数门**（09-29 晨计分对两件中最低收敛 ≥1656 才交 standing 发射，台账留痕；否则收档赛后资产）。
+  - 签名意图：输入: 无（CLI）+参数配置 / 输出: {build, judgment, gates, verdict, launch_decision} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验命令：测试: orderbook_r45/test_run_r45.py。
+  - **build_r45** [L1|新增]
+    - 职责：构建编排——r40 字节+append_advance_stack_block（**账本+门+提前层三件一起注入，缺任一即构建失败**）→ diff 审计（白名单=advance 栈注入块；磁带五区零改动）→ 确定性打包+manifest（k/视界/窗口参数定桩登记）+sha 链（…→r40→r45）；描述 "public derivative with debt-ledgered advance selling"。
+    - 签名意图：输入: r40 main+参数配置 / 输出: r45 main+submission.tar.gz+manifest+diff 审计 / 错误: 三件不齐/审计白名单外即抛（不产出）。
+    - 调用方：run_r45_iteration。tested：自有单测。核验命令：测试: orderbook_r45/test_build_r45.py。
+    - **append_advance_stack_block** [L2|新增]
+      - 职责：advance 栈注入（先例形态沿 append_layer_s_block）；谷底闸门实现复用 R27 gate_added_sells 语义（quote≥base 才提前，作用于提前单生成口）；三件缺一不注入（宁可构建失败）。
+      - 签名意图：输入: 候选 main 源+三件模块源 / 输出: 注入后 main 源 / 错误: 缺件即抛。
+      - 调用方：build_r45。tested：自有单测。核验命令：测试: orderbook_r45/test_build_r45.py（inject 组）。
+      - **_advance_agent** [L3|新增]
+        - 职责：运行时包装（fail-safe）——逐回合：settle_debts 先结账（due_step 抵扣防双卖）→ select_advanceable 判可提前量 → apply_advance_with_debt 执行提前（门内）→ 变更台账；任何异常→宿主动作原样返回；step==0 复位账本。
+        - 签名意图：输入: observation+宿主动作 / 输出: 调整后动作或原动作 / 错误: 回退原动作。
+        - 调用方：候选包末 callable 链。tested：自有单测。核验命令：测试: orderbook_r45/test_advance_agent.py。
+        - **select_advanceable** [L4|新增]
+          - 职责：可提前量判定——条件集=磁带计划内未来 ≤k 拍本就要卖 ∧ 货已入仓 ∧ quote≥2 ∧ quote≥base ∧ 非 dawn 拍（step%24==23）∧ 非同拍 BUY_PRODUCT ∧ 非当天 PICKUP 品 ∧ 非"首个计划卖单"保护品；视界上限 clamp(measure_rival_lead+12, 40, 48)；窗口 step 192-695 外零动作。
+          - 签名意图：输入: observation+磁带计划视图+账本 / 输出: {item, qty, from_step→to_step} 提前单集 / 错误: 计划视图解析失败→空集（零动作）。
+          - 调用方：_advance_agent。tested：自有单测。核验命令：测试: orderbook_r45/test_advance_agent.py（select 组；判据=R28 ①构造用例原文）。
+        - **apply_advance_with_debt** [L4|新增]
+          - 职责：提前执行+记账——提前单插入当前拍卖单列表（队首语义沿 first-in-line 先例）；**等额记债到原 due_step**（r36_debts 口径）；净量恒等硬不变量（本步提前量=到期抵扣量）；台账逐笔留痕。
+          - 签名意图：输入: 提前单集+动作+账本 / 输出: 动作+更新后账本 / 错误: 记账失败→该笔不提前。
+          - 调用方：_advance_agent。tested：自有单测。核验命令：测试: orderbook_r45/test_advance_agent.py（apply/debt 组）。
+        - **settle_debts** [L4|新增]
+          - 职责：债务结算——到原 due_step 从该品磁带卖单按债量抵扣（只减不加；债量>单量→该单清零+溢出告警）；跨步台账防重复抵扣。
+          - 签名意图：输入: 当前拍动作+账本 / 输出: 抵扣后动作+账本 / 错误: 账本异常→不抵扣（保守=不双卖优先）。
+          - 调用方：_advance_agent。tested：自有单测。核验命令：测试: orderbook_r45/test_advance_agent.py（settle 组；净量恒等构造用例）。
+        - **measure_rival_lead** [L4|新增]
+          - 职责：对手提前量测量——公开库存差分反推对手卖量节奏（rival_sold=inv'−inv+town_draw−own_sold，删失口径 $1 地板只记下界）；输出近窗最大 lead（拍数）供视界 clamp；样本不足→默认 lead=40。
+          - 签名意图：输入: observation 历史窗 / 输出: lead 拍数 / 错误: 数据不足→默认值。
+          - 调用方：select_advanceable。tested：自有单测。核验命令：测试: orderbook_r45/test_advance_agent.py（lead 组）。
+  - **judge_r45** [L1|新增]
+    - 职责：判决 v28——镜像压力板（克隆/指纹 ≥0.95 局专组）+反制模拟臂（Wool Front-Runner：嗅探养羊时点提前倒毛砸价）+26 败局重演+胜局对照（不翻负）；五判据核对（净加卖恒等违例=0 ∧ 镜像胜率 ≥0.55 ∧ 实现价不降 ∧ 反制不翻车 ∧ h2h vs r40 ≥0.55）；聚合 evidence。
+    - 签名意图：输入: r45 包+语料+配置 / 输出: evidence JSON（逐组逐局 WL+Δ+判据表） / 错误: 单局红计入不短路。
+    - 调用方：run_r45_iteration。tested：自有单测。核验命令：测试: orderbook_r45/test_judge_r45.py（判据=R28 ②原文）。
+    - **verify_net_identity** [L2|新增]
+      - 职责：净量恒等核验——逐局逐品对账"提前卖出量=到期抵扣量"，违例计数（判据=0）；输出违例明细；违例>0 判决即红。
+      - 签名意图：输入: traced 对局+账本台账 / 输出: {violations, detail} / 错误: 台账缺失→违例计 1（fail-closed）。
+      - 调用方：judge_r45。tested：自有单测。核验命令：测试: orderbook_r45/test_judge_r45.py（identity 组）。
+    - **run_mirror_counter_judgment** [L2|新增]
+      - 职责：压力面执行——镜像压力板局组+反制臂局组编排（seated 双席位、独立 seed n 报）；反制臂=Wool Front-Runner 构造对手。
+      - 签名意图：输入: r45 包+局组配置 / 输出: 逐组 WL+margin / 错误: 组不可跑→fail-closed 记红。
+      - 调用方：judge_r45。tested：自有单测。核验命令：测试: orderbook_r45/test_judge_r45.py（board 组）。
+  - **verify_r45_gates** [L1|新增]
+    - 职责：五门 fail-closed 沿管线对 r45 包全跑（装载/双席 DONE+<1s/确定性双跑/体积身份链/h2h 主对 r40 ≥0.55 独立 n）。
+    - 签名意图：输入: r45 包 / 输出: 各门结果+overall / 错误: fail-closed。
+    - 调用方：run_r45_iteration。tested：自有单测。核验命令：测试: orderbook_r45/test_gates_r45.py。
+
+## 【R29 增补·2026-09-28】全网源码对标参考轮（只挖不改，研究轨）
+
+> 块引言：裁决分析30 P5，P2/P3 波结束后执行（[P1]）。无提交面——产物=映射清单报告
+> （analyses/31-*.md）+references 册登记+对手池种子定义/SOP 更新留痕。**不实施任何代码改动**。
+
+## 结构概览（增补）
+- run_r29_mining ← R29
+  - check_reference_map
+  - register_opponent_pool_seeds
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R29 [P1] | run_r29_mining（工具线：check_reference_map/register_opponent_pool_seeds；交付面=报告与登记，非代码） |
+
+## 功能块 run_r29_mining ← R29
+（功能口=R29 研究挖掘；验收=R29 可观察判据原文——谁看/看什么/什么算对=四字段齐+来源 URL+抓取日期在册+禁区标注齐）
+
+- **run_r29_mining** [L0|新增]
+  - 职责：编排研究轮——候选甄选（387 仓库 triage 面+五强解包件+顶层名录）→ 映射清单起草（逐条四字段：证据[URL+行级]/挂接面/预期信号/禁区冲突度）→ check_reference_map 过检 → 报告落 analyses/31-*.md+references INDEX 登记 → register_opponent_pool_seeds 名录/SOP 回灌。**不实施任何代码改动**。
+  - 签名意图：输入: 调研语料（references 册+解包件） / 输出: 报告+登记留痕 / 错误: 检查不过→打回补字段（不落盘）。
+  - 调用方：操作者。tested：自有单测。核验命令：测试: test_r29_mining.py（编排组）。
+  - **check_reference_map** [L1|新增]
+    - 职责：映射清单 lint——逐条校验四字段非空、来源 URL 在 references INDEX 在册、抓取日期在场、禁区冲突度∈{无,低,中,高,禁区同族}；输出缺项清单。
+    - 签名意图：输入: 映射清单（markdown/JSON） / 输出: {pass, missing} / 错误: 格式不可解析→fail。
+    - 调用方：run_r29_mining。tested：自有单测。核验命令：测试: test_r29_mining.py（lint 组；判据=R29 验收原文）。
+  - **register_opponent_pool_seeds** [L1|新增]
+    - 职责：名录回灌——顶层名录（UMG/Majkel/4th/DECEM/SpaTaro/kuro/Rudra-r34l/prvsiyan/farm2945/flexonafft/statma/doan 系）并入对手池种子定义（追加不改旧种子）；"对手换血"判定法写入读数 SOP 留痕；跨频道线索（nikital7/Nikita Lugovoy）登记。
+    - 签名意图：输入: 名录+对手池种子定义+SOP 文档 / 输出: 更新后定义+留痕记录 / 错误: 名录重复/冲突→跳过并记录。
+    - 调用方：run_r29_mining。tested：自有单测。核验命令：测试: test_r29_mining.py（registry 组）。
