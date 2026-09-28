@@ -226,6 +226,6 @@
 | judge_r45 | B48 | tested 09-28 | test_judge_r45 40 passed（五判据阈值/evidence 契约/realized 复用） | (本批) |
 | verify_r45_gates | B48 | tested 09-28 | test_gates_r45 40 passed（五门真包绿+红分支） | (本批) |
 | run_r45_iteration | B48 | wired 09-28 | test_run_r45 40 passed（读数门三分支+端到端真接线 LAUNCH） | (本批) |
-| check_reference_map | B49 | tested 09-28 | test_r29_mining 19 passed（四字段/INDEX 在册/风险域/7 形态坏格式） | (本批) |
-| register_opponent_pool_seeds | B49 | tested 09-28 | test_r29_mining 19 passed（追加不改旧/重复冲突跳过/SOP 留痕） | (本批) |
-| run_r29_mining | B49 | tested 09-28 | test_r29_mining 19 passed（不过不落盘/三面落盘/确定性复跑） | (本批) |
+| check_reference_map | B49 | wired 09-28 | test_r29_mining 19 passed（四字段/INDEX 在册/风险域/7 形态坏格式） | (本批) |
+| register_opponent_pool_seeds | B49 | wired 09-28 | test_r29_mining 19 passed（追加不改旧/重复冲突跳过/SOP 留痕） | (本批) |
+| run_r29_mining | B49 | wired 09-28 | test_r29_mining 19 passed（不过不落盘/三面落盘/确定性复跑） | (本批) |
