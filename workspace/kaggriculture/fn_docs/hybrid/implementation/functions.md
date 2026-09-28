@@ -189,3 +189,14 @@
 | judge_r25 | B40 | wired 09-28 | **真跑判决 NEGATIVE（如实）**：修正版配对口径 h2h vs r40 0.0@240/联赛 0.1667@90；①单价 −7.97%+段差 −8268✗ ②d29 8094<15766+stranding 244.7>0✗ ③镜像臂 0.0✗；evidence/judge_r25_realrun.json | (本批) |
 | verify_r42_gates | B40 | tested 09-28 | pytest gates 组 3 passed（末 callable/身份链/谱系/h2h+净经济门）；判红不进门禁（run 预绑定） | (本批) |
 | run_r42_iteration | B40 | wired 09-28 | pytest 2 passed（预绑定分叉：判正+门绿+窗内→发射台账/否则收档）；**真跑全链→NEGATIVE→archive_ledger run-r42-archive/1.0 落档** | (本批) |
+| build_drain_table | B41 | tested 09-28 | pytest drain 表组 1 passed（多品×1/单品×2+中心/空表抛）；真跑 15 路线（毛线族 13.6/日 vs 通用 7-8） | (本批) |
+| retape_drain_aligned | B41 | tested 09-28 | pytest 3 passed（超胃口推后+守恒+源槽 []/减量/非卖面不动/窗口前与零排水不动/终拍钳界）；槽位纪律=尾追加 | (本批) |
+| retape_sheep_lifecycle | B41 | tested 09-28 | pytest 2 passed（无毛线 skip/真带冒烟刀次账+变更全 kind）；定位复用 _derive_grid_info 羊格站位 | (本批) |
+| retape_granularity | B41 | tested 09-28 | pytest 2 passed（大单拆块守恒/阈值下不动/摊不完回填源槽守恒） | (本批) |
+| audit_diff_r43_vs_r40 | B42 | stub 09-28 | 核验命令: pytest orderbook_r43/test_build_r43.py（audit 组） | — |
+| pack_r43 | B42 | stub 09-28 | 核验命令: pytest orderbook_r43/test_build_r43.py（pack 组） | — |
+| build_r43 | B42 | stub 09-28 | 核验命令: pytest orderbook_r43/test_build_r43.py | — |
+| realized_price_stats | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_judge_r26.py（realized 组） | — |
+| judge_r26 | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_judge_r26.py（判据=R26 ②③原文） | — |
+| verify_r43_gates | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_gates_r43.py | — |
+| run_r43_iteration | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_run_r43.py | — |
