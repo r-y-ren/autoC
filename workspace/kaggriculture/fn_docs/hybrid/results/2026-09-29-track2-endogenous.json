@@ -1,0 +1,1166 @@
+{
+ "_generated_at": "2026-09-28T23:02:56Z",
+ "experiment": "track2 内生重构对照实验：X1 卫生层（同拍碎单合并+幻影死单清理）内生版（织入 H1 内层 step1009 单列表构造点函数体）vs 外挂版（现 H1 尾块）vs 无卫生基座",
+ "source": {
+  "commands": [
+   "python3 orderbook_track2_lab/build_track2.py",
+   "python3 orderbook_track2_lab/gates_track2.py",
+   "python3 orderbook_track2_lab/judge_track2.py"
+  ],
+  "seed_base": 672000,
+  "seed_stagger": "672000+i*43（新中性块 n=20 防过拟合）",
+  "replay_seeds_26": [
+   1825501814,
+   2013941152,
+   786146079,
+   1883261866,
+   963182245,
+   240876256,
+   1705553586,
+   2009279466,
+   161402123,
+   435866961,
+   841473039,
+   1388158282,
+   1647385154,
+   671940665,
+   219073637,
+   1439493993,
+   1360429471,
+   671494671,
+   1900972921,
+   973657130,
+   1911990026,
+   1918725083,
+   176568822,
+   427304807,
+   720683523,
+   906608145
+  ],
+  "neutral_seeds_20": [
+   672000,
+   672043,
+   672086,
+   672129,
+   672172,
+   672215,
+   672258,
+   672301,
+   672344,
+   672387,
+   672430,
+   672473,
+   672516,
+   672559,
+   672602,
+   672645,
+   672688,
+   672731,
+   672774,
+   672817
+  ],
+  "corpus_total_folds": 46,
+  "form_mains": {
+   "inner": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_track2_lab/build/h1_inner/main.py",
+   "outer": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_track2_lab/build/h1_outer/main.py",
+   "base": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_track2_lab/build/h1_base/main.py"
+  },
+  "pairs": [
+   [
+    "inner",
+    "outer"
+   ],
+   [
+    "inner",
+    "base"
+   ],
+   [
+    "outer",
+    "base"
+   ]
+  ],
+  "workers": 2,
+  "terminal_money_caliber": "farms[obs.player].money（干净口径）",
+  "experiment": "track2 内生 vs 外挂：X1 卫生层内生版（step1009 构造点函数体织入）对现 H1 外挂版（字节恒等）",
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "wall_speedup": 4.81,
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "timing": {
+    "official_s": 34.6043,
+    "sim_s": 7.1942,
+    "measured_speedup": 4.81
+   },
+   "version": "simbridge/1.0"
+  }
+ },
+ "builds": {
+  "h1_outer": {
+   "form": "h1_outer",
+   "main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+   "main_bytes": 1204861,
+   "tar_sha256": "ae65788d754d9753dcea38a7952085dd0441d0551dddc8b77421b6c1bcf3d47e",
+   "tar_bytes": 656846,
+   "base_main_sha256": "bdb821178ca73c0e8480f06c1887e20921caea0438398a5edb68bd9ad20b1de8",
+   "outer_main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+   "entry_last_callable": "_hs_agent",
+   "byte_identical_to_H1_outer": true,
+   "byte_identical_to_base": false,
+   "weave": "外挂 X1 尾块（字节恒等现 H1）",
+   "compile_ok": true
+  },
+  "h1_inner": {
+   "form": "h1_inner",
+   "main_sha256": "f6fbcb1b190e22fb398b69381f6983975352c4ec7ab7bfe17d2dd8f8a322e4f5",
+   "main_bytes": 1201366,
+   "tar_sha256": "91b80eae14eb386ae41fef05f0f26a8564cbcaf7f798fe374e57d0d754267b25",
+   "tar_bytes": 655061,
+   "base_main_sha256": "bdb821178ca73c0e8480f06c1887e20921caea0438398a5edb68bd9ad20b1de8",
+   "outer_main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+   "entry_last_callable": "pet_any_demand_agent",
+   "byte_identical_to_H1_outer": false,
+   "byte_identical_to_base": false,
+   "weave": "step1009 函数体内生卫生（无尾块）",
+   "compile_ok": true
+  },
+  "h1_base": {
+   "form": "h1_base",
+   "main_sha256": "bdb821178ca73c0e8480f06c1887e20921caea0438398a5edb68bd9ad20b1de8",
+   "main_bytes": 1197043,
+   "tar_sha256": "5d69d8ccc0cb312504ef9738605ff36f41470549836aa4cb0db3b9261ef4a818",
+   "tar_bytes": 653909,
+   "base_main_sha256": "bdb821178ca73c0e8480f06c1887e20921caea0438398a5edb68bd9ad20b1de8",
+   "outer_main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+   "entry_last_callable": "pet_any_demand_agent",
+   "byte_identical_to_H1_outer": false,
+   "byte_identical_to_base": true,
+   "weave": "无卫生基座（字节恒等采纳件）",
+   "compile_ok": true
+  }
+ },
+ "diff_audit": {
+  "anchor_function": "step1009_step1008_fortyfirst_final_fixedsell_closure_agent",
+  "anchor_role": "内层链末段单列表构造点（_s793_reorder 组装 market 列表/槽位；其输出=外挂 X1 的输入；_r36_reserve/step738/928 系列构造点均汇入此点）",
+  "base_changed_line_band": [
+   10122,
+   10134
+  ],
+  "prefix_identical": true,
+  "suffix_identical": true,
+  "original_block": "def step1009_step1008_fortyfirst_final_fixedsell_closure_agent(observation,configuration=None):\n    if int(observation.get('step',0))==0:_S1009_REPORT.update(calls=0,changed=0,errors=0)\n    _S1009_REPORT['calls']+=1\n    action=_S1009_PARENT(observation,configuration)\n    try:\n        result=_s793_reorder(observation,action)\n        if _s834_key(result)!=_s834_key(action):\n            _S1009_REPORT['changed']+=1\n            st=_RACE_STATE.get(int(observation.get('player',0)))\n            if st is not None and st.get('prev_action') is not None and st.get('step')==int(observation.get('step',0)):st['prev_action']=result\n        return result\n    except Exception:\n        _S1009_REPORT['errors']+=1;return action\n",
+  "weaved_block": "def step1009_step1008_fortyfirst_final_fixedsell_closure_agent(observation,configuration=None):\n    # ---- track2 内生 X1 卫生（同拍碎单并最早槽 + 幻影死单清理；零跨拍） ----\n    def _hy_qty(raw):\n        if isinstance(raw,bool):\n            return None\n        if isinstance(raw,int):\n            return raw\n        if isinstance(raw,float) and raw.is_integer():\n            return int(raw)\n        return None\n    def _hy_projected(obs,act):\n        try:\n            player=int((obs or {}).get('player',0))\n        except Exception:\n            player=0\n        try:\n            view=_View(obs,player,_IMPL.chassis.cfg)\n            proj=_IMPL.chassis._projected_shed(act,view)\n            return {k:int(v) for k,v in dict(proj).items()}\n        except Exception:\n            try:\n                shed=((obs or {}).get('private') or {}).get('shed') or {}\n                return {k:int(v) for k,v in dict(shed).items()}\n            except Exception:\n                return {}\n    def _hy_post(obs,act):\n        _h=_S1009_REPORT.setdefault('hyg',dict(calls=0,changed_turns=0,dropped_dead=0,clamped_orders=0,clamped_qty=0,merged_fragments=0,merged_qty=0,unparsed_kept=0,window_out=0,errors=0,ticks=[]))\n        _h['calls']+=1\n        try:\n            if not isinstance(act,dict):\n                return act\n            market=act.get('market')\n            if not isinstance(market,list) or not market:\n                return act\n            try:\n                step=int((obs or {}).get('step',0))\n            except Exception:\n                step=0\n            if step<624:\n                _h['window_out']+=1\n                return act\n            avail=dict(_hy_projected(obs,act))\n            kept=[]\n            changed=False\n            for entry in market:\n                is_sell=(isinstance(entry,(list,tuple)) and len(entry)>=3 and entry[0]=='SELL')\n                if not is_sell:\n                    kept.append(['other',entry])\n                    if isinstance(entry,(list,tuple)) and len(entry)>=3 and entry[0] in ('BUY_PRODUCT','BUY_ANIMAL'):\n                        q=_hy_qty(entry[2])\n                        if q is not None and q>0:\n                            avail[entry[1]]=avail.get(entry[1],0)+q\n                    continue\n                item=entry[1]\n                qty=_hy_qty(entry[2])\n                if qty is None:\n                    kept.append(['other',entry])\n                    _h['unparsed_kept']+=1\n                    continue\n                if qty<=0:\n                    changed=True\n                    _h['dropped_dead']+=1\n                    continue\n                have=avail.get(item,0)\n                n=qty if qty<=have else have\n                if n<qty:\n                    changed=True\n                    _h['clamped_orders']+=1\n                    _h['clamped_qty']+=qty-n\n                if n<=0:\n                    changed=True\n                    _h['dropped_dead']+=1\n                    continue\n                avail[item]=have-n\n                target=-1\n                for i,rec in enumerate(kept):\n                    if rec[0]=='sell' and rec[1][1]==item:\n                        target=i\n                        break\n                if target>=0:\n                    cross_buy=any(rec[0]=='other' and isinstance(rec[1],(list,tuple)) and len(rec[1])>=3 and rec[1][0] in ('BUY_PRODUCT','BUY_ANIMAL') and rec[1][1]==item for rec in kept[target+1:])\n                    if not cross_buy:\n                        kept[target][1]=['SELL',item,_hy_qty(kept[target][1][2])+n]\n                        changed=True\n                        _h['merged_fragments']+=1\n                        _h['merged_qty']+=n\n                        continue\n                if n==qty:\n                    kept.append(['sell',entry])\n                else:\n                    kept.append(['sell',['SELL',item,n]])\n            out=[rec[1] for rec in kept][:10]\n            if not changed:\n                return act\n            _h['changed_turns']+=1\n            if len(_h['ticks'])<400:\n                _h['ticks'].append(step)\n            return dict(act,market=out)\n        except Exception:\n            _h['errors']+=1\n            return act\n    if int(observation.get('step',0))==0:_S1009_REPORT.update(calls=0,changed=0,errors=0,hyg=dict(calls=0,changed_turns=0,dropped_dead=0,clamped_orders=0,clamped_qty=0,merged_fragments=0,merged_qty=0,unparsed_kept=0,window_out=0,errors=0,ticks=[]))\n    _S1009_REPORT['calls']+=1\n    action=_S1009_PARENT(observation,configuration)\n    try:\n        result=_s793_reorder(observation,action)\n        result=_hy_post(observation,result)\n        if _s834_key(result)!=_s834_key(action):\n            _S1009_REPORT['changed']+=1\n            st=_RACE_STATE.get(int(observation.get('player',0)))\n            if st is not None and st.get('prev_action') is not None and st.get('step')==int(observation.get('step',0)):st['prev_action']=result\n        return result\n    except Exception:\n        _S1009_REPORT['errors']+=1;return action\n",
+  "diff_lines": [
+   "--- base/step1009_body",
+   "+++ inner/step1009_body",
+   "@@ -1,9 +1,110 @@",
+   " def step1009_step1008_fortyfirst_final_fixedsell_closure_agent(observation,configuration=None):",
+   "-    if int(observation.get('step',0))==0:_S1009_REPORT.update(calls=0,changed=0,errors=0)",
+   "+    # ---- track2 内生 X1 卫生（同拍碎单并最早槽 + 幻影死单清理；零跨拍） ----",
+   "+    def _hy_qty(raw):",
+   "+        if isinstance(raw,bool):",
+   "+            return None",
+   "+        if isinstance(raw,int):",
+   "+            return raw",
+   "+        if isinstance(raw,float) and raw.is_integer():",
+   "+            return int(raw)",
+   "+        return None",
+   "+    def _hy_projected(obs,act):",
+   "+        try:",
+   "+            player=int((obs or {}).get('player',0))",
+   "+        except Exception:",
+   "+            player=0",
+   "+        try:",
+   "+            view=_View(obs,player,_IMPL.chassis.cfg)",
+   "+            proj=_IMPL.chassis._projected_shed(act,view)",
+   "+            return {k:int(v) for k,v in dict(proj).items()}",
+   "+        except Exception:",
+   "+            try:",
+   "+                shed=((obs or {}).get('private') or {}).get('shed') or {}",
+   "+                return {k:int(v) for k,v in dict(shed).items()}",
+   "+            except Exception:",
+   "+                return {}",
+   "+    def _hy_post(obs,act):",
+   "+        _h=_S1009_REPORT.setdefault('hyg',dict(calls=0,changed_turns=0,dropped_dead=0,clamped_orders=0,clamped_qty=0,merged_fragments=0,merged_qty=0,unparsed_kept=0,window_out=0,errors=0,ticks=[]))",
+   "+        _h['calls']+=1",
+   "+        try:",
+   "+            if not isinstance(act,dict):",
+   "+                return act",
+   "+            market=act.get('market')",
+   "+            if not isinstance(market,list) or not market:",
+   "+                return act",
+   "+            try:",
+   "+                step=int((obs or {}).get('step',0))",
+   "+            except Exception:",
+   "+                step=0",
+   "+            if step<624:",
+   "+                _h['window_out']+=1",
+   "+                return act",
+   "+            avail=dict(_hy_projected(obs,act))",
+   "+            kept=[]",
+   "+            changed=False",
+   "+            for entry in market:",
+   "+                is_sell=(isinstance(entry,(list,tuple)) and len(entry)>=3 and entry[0]=='SELL')",
+   "+                if not is_sell:",
+   "+                    kept.append(['other',entry])",
+   "+                    if isinstance(entry,(list,tuple)) and len(entry)>=3 and entry[0] in ('BUY_PRODUCT','BUY_ANIMAL'):",
+   "+                        q=_hy_qty(entry[2])",
+   "+                        if q is not None and q>0:",
+   "+                            avail[entry[1]]=avail.get(entry[1],0)+q",
+   "+                    continue",
+   "+                item=entry[1]",
+   "+                qty=_hy_qty(entry[2])",
+   "+                if qty is None:",
+   "+                    kept.append(['other',entry])",
+   "+                    _h['unparsed_kept']+=1",
+   "+                    continue",
+   "+                if qty<=0:",
+   "+                    changed=True",
+   "+                    _h['dropped_dead']+=1",
+   "+                    continue",
+   "+                have=avail.get(item,0)",
+   "+                n=qty if qty<=have else have",
+   "+                if n<qty:",
+   "+                    changed=True",
+   "+                    _h['clamped_orders']+=1",
+   "+                    _h['clamped_qty']+=qty-n",
+   "+                if n<=0:",
+   "+                    changed=True",
+   "+                    _h['dropped_dead']+=1",
+   "+                    continue",
+   "+                avail[item]=have-n",
+   "+                target=-1",
+   "+                for i,rec in enumerate(kept):",
+   "+                    if rec[0]=='sell' and rec[1][1]==item:",
+   "+                        target=i",
+   "+                        break",
+   "+                if target>=0:",
+   "+                    cross_buy=any(rec[0]=='other' and isinstance(rec[1],(list,tuple)) and len(rec[1])>=3 and rec[1][0] in ('BUY_PRODUCT','BUY_ANIMAL') and rec[1][1]==item for rec in kept[target+1:])",
+   "+                    if not cross_buy:",
+   "+                        kept[target][1]=['SELL',item,_hy_qty(kept[target][1][2])+n]",
+   "+                        changed=True",
+   "+                        _h['merged_fragments']+=1",
+   "+                        _h['merged_qty']+=n",
+   "+                        continue",
+   "+                if n==qty:",
+   "+                    kept.append(['sell',entry])",
+   "+                else:",
+   "+                    kept.append(['sell',['SELL',item,n]])",
+   "+            out=[rec[1] for rec in kept][:10]",
+   "+            if not changed:",
+   "+                return act",
+   "+            _h['changed_turns']+=1",
+   "+            if len(_h['ticks'])<400:",
+   "+                _h['ticks'].append(step)",
+   "+            return dict(act,market=out)",
+   "+        except Exception:",
+   "+            _h['errors']+=1",
+   "+            return act",
+   "+    if int(observation.get('step',0))==0:_S1009_REPORT.update(calls=0,changed=0,errors=0,hyg=dict(calls=0,changed_turns=0,dropped_dead=0,clamped_orders=0,clamped_qty=0,merged_fragments=0,merged_qty=0,unparsed_kept=0,window_out=0,errors=0,ticks=[]))",
+   "     _S1009_REPORT['calls']+=1",
+   "     action=_S1009_PARENT(observation,configuration)",
+   "     try:",
+   "         result=_s793_reorder(observation,action)",
+   "+        result=_hy_post(observation,result)",
+   "         if _s834_key(result)!=_s834_key(action):",
+   "             _S1009_REPORT['changed']+=1",
+   "             st=_RACE_STATE.get(int(observation.get('player',0)))"
+  ],
+  "diff_all_in_function_body": true,
+  "checks": {
+   "outer_byte_identical_to_H1": true,
+   "base_byte_identical_to_adopt": true,
+   "inner_diff_confined_to_function_body": true,
+   "inner_last_callable_unchanged": true
+  }
+ },
+ "gates": {
+  "overall_passed": true,
+  "forms": {
+   "h1_outer": {
+    "load": {
+     "passed": true,
+     "entry": "_hs_agent",
+     "expected": "_hs_agent"
+    },
+    "health": {
+     "passed": true,
+     "step_budget_ms": 1000.0,
+     "episodes": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 159.38,
+       "p99_step_ms": 22.19,
+       "mean_step_ms": 2.14,
+       "wall_s": 6.0,
+       "passed": true
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 157.6,
+       "p99_step_ms": 33.85,
+       "mean_step_ms": 2.33,
+       "wall_s": 6.2,
+       "passed": true
+      }
+     ]
+    },
+    "determinism": {
+     "passed": true,
+     "rerun_seed": 101,
+     "hashes": {
+      "run1": "7b070889d6233ad0317f2a978fa449a18e182e28ba961da8b9f8917b93c5da5a",
+      "run2": "7b070889d6233ad0317f2a978fa449a18e182e28ba961da8b9f8917b93c5da5a"
+     }
+    },
+    "identity": {
+     "passed": true,
+     "main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+     "tar_size_mb": 0.657,
+     "tar_members": [
+      "main.py"
+     ],
+     "inner_matches_disk": true,
+     "sha_matches_manifest": true,
+     "base_relation": "字节恒等现 H1（外挂 X1 尾块）",
+     "base_relation_ok": true
+    },
+    "overall": true
+   },
+   "h1_inner": {
+    "load": {
+     "passed": true,
+     "entry": "pet_any_demand_agent",
+     "expected": "pet_any_demand_agent"
+    },
+    "health": {
+     "passed": true,
+     "step_budget_ms": 1000.0,
+     "episodes": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 148.29,
+       "p99_step_ms": 23.14,
+       "mean_step_ms": 2.43,
+       "wall_s": 6.4,
+       "passed": true
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 128.06,
+       "p99_step_ms": 33.67,
+       "mean_step_ms": 2.52,
+       "wall_s": 6.6,
+       "passed": true
+      }
+     ]
+    },
+    "determinism": {
+     "passed": true,
+     "rerun_seed": 101,
+     "hashes": {
+      "run1": "7b070889d6233ad0317f2a978fa449a18e182e28ba961da8b9f8917b93c5da5a",
+      "run2": "7b070889d6233ad0317f2a978fa449a18e182e28ba961da8b9f8917b93c5da5a"
+     }
+    },
+    "identity": {
+     "passed": true,
+     "main_sha256": "f6fbcb1b190e22fb398b69381f6983975352c4ec7ab7bfe17d2dd8f8a322e4f5",
+     "tar_size_mb": 0.655,
+     "tar_members": [
+      "main.py"
+     ],
+     "inner_matches_disk": true,
+     "sha_matches_manifest": true,
+     "base_relation": "diff 圈禁 step1009 函数体（前后缀逐字恒等；无尾块）",
+     "base_relation_ok": true
+    },
+    "overall": true
+   },
+   "h1_base": {
+    "load": {
+     "passed": true,
+     "entry": "pet_any_demand_agent",
+     "expected": "pet_any_demand_agent"
+    },
+    "health": {
+     "passed": true,
+     "step_budget_ms": 1000.0,
+     "episodes": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 167.46,
+       "p99_step_ms": 24.35,
+       "mean_step_ms": 2.61,
+       "wall_s": 6.8,
+       "passed": true
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 236.45,
+       "p99_step_ms": 36.99,
+       "mean_step_ms": 2.65,
+       "wall_s": 6.9,
+       "passed": true
+      }
+     ]
+    },
+    "determinism": {
+     "passed": true,
+     "rerun_seed": 101,
+     "hashes": {
+      "run1": "6d888f2607b3dd7493a0fa6fa8f9382fbd7b83e2255d5a894beb1793b4486fc3",
+      "run2": "6d888f2607b3dd7493a0fa6fa8f9382fbd7b83e2255d5a894beb1793b4486fc3"
+     }
+    },
+    "identity": {
+     "passed": true,
+     "main_sha256": "bdb821178ca73c0e8480f06c1887e20921caea0438398a5edb68bd9ad20b1de8",
+     "tar_size_mb": 0.654,
+     "tar_members": [
+      "main.py"
+     ],
+     "inner_matches_disk": true,
+     "sha_matches_manifest": true,
+     "base_relation": "字节恒等采纳件基座（无卫生）",
+     "base_relation_ok": true
+    },
+    "overall": true
+   }
+  }
+ },
+ "pairs": {
+  "inner_vs_outer": {
+   "h2h": 0.5,
+   "wins": 0,
+   "losses": 0,
+   "ties": 46,
+   "mean_margin": 0.0,
+   "realized_px_median": 1.0829,
+   "terminal_money_median": 96737.5,
+   "n_error_games": 0
+  },
+  "inner_vs_base": {
+   "h2h": 0.75,
+   "wins": 23,
+   "losses": 0,
+   "ties": 23,
+   "mean_margin": 4.1,
+   "realized_px_median": 1.0829,
+   "terminal_money_median": 96739.0,
+   "n_error_games": 0
+  },
+  "outer_vs_base": {
+   "h2h": 0.75,
+   "wins": 23,
+   "losses": 0,
+   "ties": 23,
+   "mean_margin": 4.1,
+   "realized_px_median": 1.0829,
+   "terminal_money_median": 96739.0,
+   "n_error_games": 0
+  }
+ },
+ "pairs_full_files": {
+  "inner_vs_outer": "fn_work/legacy_software/kaggle_simulations/orderbook_track2_lab/evidence/pair_inner_vs_outer.json",
+  "inner_vs_base": "fn_work/legacy_software/kaggle_simulations/orderbook_track2_lab/evidence/pair_inner_vs_base.json",
+  "outer_vs_base": "fn_work/legacy_software/kaggle_simulations/orderbook_track2_lab/evidence/pair_outer_vs_base.json"
+ },
+ "hygiene_stats": {
+  "caliber": "挂单墙=judgment trace wall_stats（两臂同语料同对手 base；inner 取 inner_vs_base 我席，outer 取 outer_vs_base 我席）；台账=gates 局 _X1_REPORT / _S1009_REPORT.hyg 实测计数",
+  "wall_inner_vs_outer": {
+   "all_days": {
+    "inner": {
+     "orders_total": 28657,
+     "phantom_orders_qty_gt_held": 12463,
+     "avg_qty_per_order": 6.46,
+     "qty_total": 185206.0,
+     "max_qty": 90.0
+    },
+    "outer": {
+     "orders_total": 28657,
+     "phantom_orders_qty_gt_held": 12463,
+     "avg_qty_per_order": 6.46,
+     "qty_total": 185206.0,
+     "max_qty": 90.0
+    }
+   },
+   "step_ge_624": {
+    "inner": {
+     "orders_total": 6662,
+     "phantom_orders_qty_gt_held": 2761,
+     "avg_qty_per_order": 6.98,
+     "qty_total": 46505.0,
+     "max_qty": 60.0
+    },
+    "outer": {
+     "orders_total": 6662,
+     "phantom_orders_qty_gt_held": 2761,
+     "avg_qty_per_order": 6.98,
+     "qty_total": 46505.0,
+     "max_qty": 60.0
+    }
+   },
+   "d27": {
+    "inner": {
+     "orders_total": 1385,
+     "phantom_orders_qty_gt_held": 386,
+     "avg_qty_per_order": 6.12,
+     "qty_total": 8480.0,
+     "max_qty": 28.0
+    },
+    "outer": {
+     "orders_total": 1385,
+     "phantom_orders_qty_gt_held": 386,
+     "avg_qty_per_order": 6.12,
+     "qty_total": 8480.0,
+     "max_qty": 28.0
+    }
+   },
+   "step_670_695": {
+    "inner": {
+     "orders_total": 1901,
+     "phantom_orders_qty_gt_held": 891,
+     "avg_qty_per_order": 6.12,
+     "qty_total": 11637.0,
+     "max_qty": 33.0
+    },
+    "outer": {
+     "orders_total": 1901,
+     "phantom_orders_qty_gt_held": 891,
+     "avg_qty_per_order": 6.12,
+     "qty_total": 11637.0,
+     "max_qty": 33.0
+    }
+   }
+  },
+  "ledger_counts_gate_episodes": {
+   "outer_X1": [
+    [
+     {
+      "source": "_X1_REPORT",
+      "calls": 719,
+      "changed_turns": 10,
+      "dropped_dead": 4,
+      "clamped_orders": 10,
+      "clamped_qty": 28,
+      "merged_fragments": 0,
+      "merged_qty": 0,
+      "unparsed_kept": 0,
+      "window_out": 361,
+      "errors": 0
+     },
+     {
+      "source": "_X1_REPORT",
+      "calls": 719,
+      "changed_turns": 10,
+      "dropped_dead": 4,
+      "clamped_orders": 10,
+      "clamped_qty": 28,
+      "merged_fragments": 0,
+      "merged_qty": 0,
+      "unparsed_kept": 0,
+      "window_out": 361,
+      "errors": 0
+     }
+    ],
+    [
+     {
+      "source": "_X1_REPORT",
+      "calls": 719,
+      "changed_turns": 11,
+      "dropped_dead": 5,
+      "clamped_orders": 9,
+      "clamped_qty": 24,
+      "merged_fragments": 2,
+      "merged_qty": 3,
+      "unparsed_kept": 0,
+      "window_out": 360,
+      "errors": 0
+     },
+     {
+      "source": "_X1_REPORT",
+      "calls": 719,
+      "changed_turns": 11,
+      "dropped_dead": 5,
+      "clamped_orders": 9,
+      "clamped_qty": 24,
+      "merged_fragments": 2,
+      "merged_qty": 3,
+      "unparsed_kept": 0,
+      "window_out": 360,
+      "errors": 0
+     }
+    ],
+    [
+     {
+      "source": "_X1_REPORT",
+      "calls": 719,
+      "changed_turns": 10,
+      "dropped_dead": 4,
+      "clamped_orders": 10,
+      "clamped_qty": 28,
+      "merged_fragments": 0,
+      "merged_qty": 0,
+      "unparsed_kept": 0,
+      "window_out": 361,
+      "errors": 0
+     },
+     {
+      "source": "_X1_REPORT",
+      "calls": 719,
+      "changed_turns": 10,
+      "dropped_dead": 4,
+      "clamped_orders": 10,
+      "clamped_qty": 28,
+      "merged_fragments": 0,
+      "merged_qty": 0,
+      "unparsed_kept": 0,
+      "window_out": 361,
+      "errors": 0
+     }
+    ]
+   ],
+   "inner_hyg": [
+    [
+     {
+      "source": "_S1009_REPORT.hyg",
+      "calls": 719,
+      "changed_turns": 10,
+      "dropped_dead": 4,
+      "clamped_orders": 10,
+      "clamped_qty": 28,
+      "merged_fragments": 0,
+      "merged_qty": 0,
+      "unparsed_kept": 0,
+      "window_out": 361,
+      "errors": 0,
+      "ticks": [
+       624,
+       631,
+       639,
+       649,
+       650,
+       665,
+       673,
+       680,
+       698,
+       708
+      ]
+     },
+     {
+      "source": "_S1009_REPORT.hyg",
+      "calls": 719,
+      "changed_turns": 10,
+      "dropped_dead": 4,
+      "clamped_orders": 10,
+      "clamped_qty": 28,
+      "merged_fragments": 0,
+      "merged_qty": 0,
+      "unparsed_kept": 0,
+      "window_out": 361,
+      "errors": 0,
+      "ticks": [
+       624,
+       631,
+       639,
+       649,
+       650,
+       665,
+       673,
+       680,
+       698,
+       708
+      ]
+     }
+    ],
+    [
+     {
+      "source": "_S1009_REPORT.hyg",
+      "calls": 719,
+      "changed_turns": 11,
+      "dropped_dead": 5,
+      "clamped_orders": 9,
+      "clamped_qty": 24,
+      "merged_fragments": 2,
+      "merged_qty": 3,
+      "unparsed_kept": 0,
+      "window_out": 360,
+      "errors": 0,
+      "ticks": [
+       625,
+       627,
+       634,
+       637,
+       649,
+       650,
+       665,
+       673,
+       680,
+       698,
+       708
+      ]
+     },
+     {
+      "source": "_S1009_REPORT.hyg",
+      "calls": 719,
+      "changed_turns": 11,
+      "dropped_dead": 5,
+      "clamped_orders": 9,
+      "clamped_qty": 24,
+      "merged_fragments": 2,
+      "merged_qty": 3,
+      "unparsed_kept": 0,
+      "window_out": 360,
+      "errors": 0,
+      "ticks": [
+       625,
+       627,
+       634,
+       637,
+       649,
+       650,
+       665,
+       673,
+       680,
+       698,
+       708
+      ]
+     }
+    ],
+    [
+     {
+      "source": "_S1009_REPORT.hyg",
+      "calls": 719,
+      "changed_turns": 10,
+      "dropped_dead": 4,
+      "clamped_orders": 10,
+      "clamped_qty": 28,
+      "merged_fragments": 0,
+      "merged_qty": 0,
+      "unparsed_kept": 0,
+      "window_out": 361,
+      "errors": 0,
+      "ticks": [
+       624,
+       631,
+       639,
+       649,
+       650,
+       665,
+       673,
+       680,
+       698,
+       708
+      ]
+     },
+     {
+      "source": "_S1009_REPORT.hyg",
+      "calls": 719,
+      "changed_turns": 10,
+      "dropped_dead": 4,
+      "clamped_orders": 10,
+      "clamped_qty": 28,
+      "merged_fragments": 0,
+      "merged_qty": 0,
+      "unparsed_kept": 0,
+      "window_out": 361,
+      "errors": 0,
+      "ticks": [
+       624,
+       631,
+       639,
+       649,
+       650,
+       665,
+       673,
+       680,
+       698,
+       708
+      ]
+     }
+    ]
+   ]
+  },
+  "semantics_parity": {
+   "n_cases": 400,
+   "seed": 20260929,
+   "n_mismatch": 0,
+   "mismatch_examples": [],
+   "passed": true
+  }
+ },
+ "footprint_audit": {
+  "_generated_at": "2026-09-28T22:45:27Z",
+  "window_target_step_ge": 624,
+  "caliber": "同 seed 同件自打逐拍动作流对比；目标拍=step>=624（X1 触发窗）；非目标拍=step<624 须零差异（零足迹硬断言）",
+  "pairs": {
+   "h1_inner_vs_h1_base@s101": {
+    "seed": 101,
+    "seats": [
+     {
+      "seat": 0,
+      "n_ticks": 719,
+      "n_diff_ticks": 10,
+      "first_diff_step": 624,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 624,
+      "diff_step_max": 708
+     },
+     {
+      "seat": 1,
+      "n_ticks": 719,
+      "n_diff_ticks": 10,
+      "first_diff_step": 624,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 624,
+      "diff_step_max": 708
+     }
+    ]
+   },
+   "h1_outer_vs_h1_base@s101": {
+    "seed": 101,
+    "seats": [
+     {
+      "seat": 0,
+      "n_ticks": 719,
+      "n_diff_ticks": 10,
+      "first_diff_step": 624,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 624,
+      "diff_step_max": 708
+     },
+     {
+      "seat": 1,
+      "n_ticks": 719,
+      "n_diff_ticks": 10,
+      "first_diff_step": 624,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 624,
+      "diff_step_max": 708
+     }
+    ]
+   },
+   "h1_inner_vs_h1_outer@s101": {
+    "seed": 101,
+    "seats": [
+     {
+      "seat": 0,
+      "n_ticks": 719,
+      "n_diff_ticks": 0,
+      "first_diff_step": null,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": null,
+      "diff_step_max": null
+     },
+     {
+      "seat": 1,
+      "n_ticks": 719,
+      "n_diff_ticks": 0,
+      "first_diff_step": null,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": null,
+      "diff_step_max": null
+     }
+    ]
+   },
+   "h1_inner_vs_h1_base@s102": {
+    "seed": 102,
+    "seats": [
+     {
+      "seat": 0,
+      "n_ticks": 719,
+      "n_diff_ticks": 11,
+      "first_diff_step": 625,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 625,
+      "diff_step_max": 708
+     },
+     {
+      "seat": 1,
+      "n_ticks": 719,
+      "n_diff_ticks": 11,
+      "first_diff_step": 625,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 625,
+      "diff_step_max": 708
+     }
+    ]
+   },
+   "h1_outer_vs_h1_base@s102": {
+    "seed": 102,
+    "seats": [
+     {
+      "seat": 0,
+      "n_ticks": 719,
+      "n_diff_ticks": 11,
+      "first_diff_step": 625,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 625,
+      "diff_step_max": 708
+     },
+     {
+      "seat": 1,
+      "n_ticks": 719,
+      "n_diff_ticks": 11,
+      "first_diff_step": 625,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 625,
+      "diff_step_max": 708
+     }
+    ]
+   },
+   "h1_inner_vs_h1_outer@s102": {
+    "seed": 102,
+    "seats": [
+     {
+      "seat": 0,
+      "n_ticks": 719,
+      "n_diff_ticks": 0,
+      "first_diff_step": null,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": null,
+      "diff_step_max": null
+     },
+     {
+      "seat": 1,
+      "n_ticks": 719,
+      "n_diff_ticks": 0,
+      "first_diff_step": null,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": null,
+      "diff_step_max": null
+     }
+    ]
+   },
+   "h1_inner_vs_h1_base@s101_rerun": {
+    "seed": 101,
+    "seats": [
+     {
+      "seat": 0,
+      "n_ticks": 719,
+      "n_diff_ticks": 10,
+      "first_diff_step": 624,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 624,
+      "diff_step_max": 708
+     },
+     {
+      "seat": 1,
+      "n_ticks": 719,
+      "n_diff_ticks": 10,
+      "first_diff_step": 624,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 624,
+      "diff_step_max": 708
+     }
+    ]
+   },
+   "h1_outer_vs_h1_base@s101_rerun": {
+    "seed": 101,
+    "seats": [
+     {
+      "seat": 0,
+      "n_ticks": 719,
+      "n_diff_ticks": 10,
+      "first_diff_step": 624,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 624,
+      "diff_step_max": 708
+     },
+     {
+      "seat": 1,
+      "n_ticks": 719,
+      "n_diff_ticks": 10,
+      "first_diff_step": 624,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": 624,
+      "diff_step_max": 708
+     }
+    ]
+   },
+   "h1_inner_vs_h1_outer@s101_rerun": {
+    "seed": 101,
+    "seats": [
+     {
+      "seat": 0,
+      "n_ticks": 719,
+      "n_diff_ticks": 0,
+      "first_diff_step": null,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": null,
+      "diff_step_max": null
+     },
+     {
+      "seat": 1,
+      "n_ticks": 719,
+      "n_diff_ticks": 0,
+      "first_diff_step": null,
+      "n_diff_step_lt_624": 0,
+      "non_target_zero_footprint": true,
+      "diff_step_min": null,
+      "diff_step_max": null
+     }
+    ]
+   }
+  },
+  "hygiene_ticks": {
+   "s101": {
+    "n_ticks": 20,
+    "n_ticks_lt_624": 0,
+    "all_in_window": true,
+    "min_tick": 624
+   },
+   "s102": {
+    "n_ticks": 22,
+    "n_ticks_lt_624": 0,
+    "all_in_window": true,
+    "min_tick": 625
+   },
+   "s101_rerun": {
+    "n_ticks": 20,
+    "n_ticks_lt_624": 0,
+    "all_in_window": true,
+    "min_tick": 624
+   }
+  },
+  "anomaly": [],
+  "overall_non_target_zero_footprint": true
+ },
+ "budget": {
+  "cap_局次": 350,
+  "auth_局次": 60,
+  "judgment_局次": 276,
+  "gate_局次": 9,
+  "folds": 138,
+  "total_局次": 345,
+  "within_cap": true
+ },
+ "criteria": {
+  "h2h_inner_vs_outer": 0.5,
+  "inner_not_negative_vs_outer": true,
+  "h2h_inner_vs_base": 0.75,
+  "h2h_outer_vs_base": 0.75,
+  "outer_vs_base_replay_WLT": {
+   "wins": 13,
+   "losses": 0,
+   "ties": 13,
+   "h2h": 0.75
+  },
+  "outer_vs_base_neutral_WLT": {
+   "wins": 10,
+   "losses": 0,
+   "ties": 10,
+   "h2h": 0.75
+  },
+  "realized_px_nonneg": true,
+  "gates_all_pass": true,
+  "semantics_parity_pass": true,
+  "footprint_non_target_zero": true
+ },
+ "winner": {
+  "main_judgment": "inner_vs_outer（内生版 vs 外挂版；h2h≥0.5=内生不过负）",
+  "verdict": "内生不过负：inner vs outer h2h=0.5≥0.5（同语义同读数下内生摆放不劣于外挂尾块）",
+  "readings": {
+   "inner_vs_outer": {
+    "h2h": 0.5,
+    "wins": 0,
+    "losses": 0,
+    "ties": 46,
+    "mean_margin": 0.0,
+    "realized_px_median": 1.0829,
+    "terminal_money_median": 96737.5,
+    "n_error_games": 0
+   },
+   "inner_vs_base": {
+    "h2h": 0.75,
+    "wins": 23,
+    "losses": 0,
+    "ties": 23,
+    "mean_margin": 4.1,
+    "realized_px_median": 1.0829,
+    "terminal_money_median": 96739.0,
+    "n_error_games": 0
+   },
+   "outer_vs_base": {
+    "h2h": 0.75,
+    "wins": 23,
+    "losses": 0,
+    "ties": 23,
+    "mean_margin": 4.1,
+    "realized_px_median": 1.0829,
+    "terminal_money_median": 96739.0,
+    "n_error_games": 0
+   }
+  }
+ },
+ "verdict": "内生不过负：inner vs outer h2h=0.5≥0.5（同语义同读数下内生摆放不劣于外挂尾块）",
+ "anomaly": {
+  "harness_noise": [
+   "HP_TELEMETRY stdout 行（H 件自报 telemetry）——已知 harness 越界写副作用，不修不管",
+   "kaggle_environments 加载 open_spiel_env/cabt 失败告警（无关环境，忽略）"
+  ],
+  "build_phase_defect_fixed": "内生版初稿误用 _S1008_PARENT 作父调用（跳过 step1008 整层），足迹审计抓到非目标拍差异（s102 457/481/553/577）后修正为 _S1009_PARENT 并重建；最终形态审计=非目标拍零足迹。该缺陷是足迹审计有效性的正证。",
+  "debug_episodes_outside_scored_budget": "缺陷定位期 exploratory 局（初版 gates 9 局 + 复现/消融/修复验证 8 局）为 harness 调试，不计入判决矩阵；计分预算仅 gates 9 + auth 60 + judgment 276 = 345 局次",
+  "n_error_games": {
+   "inner_vs_outer": 0,
+   "inner_vs_base": 0,
+   "outer_vs_base": 0
+  }
+ },
+ "elapsed_s": 913.4
+}
