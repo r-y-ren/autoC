@@ -1200,11 +1200,11 @@
   - 签名意图：输入: 无（CLI） / 输出: {experiments, build, judgment, gates, verdict} / 错误: fail-closed。
   - 调用方：操作者。tested：自有单测。核验命令：测试: orderbook_r40/test_run_r41.py。
   - **run_route_ab_experiments** [L1|新增]
-    - 职责：路线 A/B 实验编排——实验臂设计（control=基座店对路线不动；treatment=同店对邻域替代路线：共享一店的店对中非基座路线众数，无邻域→弃样）→ build_ab_variant 产各臂实验件 → sim_bridge 并行联赛随机分配对局 → 逐局记录 {face 签名, arm, route, margin} → 实验账本落盘（含每臂/每族样本数与 CI）；样本不足→报。
+    - 职责：路线 A/B 实验编排——实验臂设计（v3 时机常量三臂：generic=中位/early=最早/late=最晚卖货线，闸门=基座≠强制线；control=基座不动；邻域臂留档默认不跑——B33 烟测+安慰剂实证后修正，登记 batches.md）→ build_ab_variant 产各臂实验件 → 两阶段配对跑局（phase1 control+trace 取 face/pair/基线；phase2 各臂同 seed+seat 配对）→ 逐单元记录 {face, pair, margins} → 实验账本落盘（含每臂/每族样本数与效应）；样本不足→账本先落盘后抛。
     - 签名意图：输入: r40 main+臂配置+对局规模配置 / 输出: {ledger, arm_stats} / 错误: 臂构建失败或样本不足→抛。
     - 调用方：run_r41_iteration。tested：自有单测。核验命令：测试: orderbook_r40/test_run_r41.py（ab 组）。
     - **build_ab_variant** [L2|新增]
-      - 职责：实验臂件构建——r40 字节+尾部强制路由小块（选定臂 route 常量，经 _route40_wire_route 同款表改写机制锁存；control 臂=原字节零改动）；judge-side only 不进发射链；sha 自证。
+      - 职责：实验臂件构建——r40 字节+尾部强制路由小块（const 臂：选定臂 route 常量+基座闸门，覆盖 `_route40_select` 命中即强制、否则透传底选路；alt 臂：邻域替代表；control 臂=原字节零改动）；末 callable 语义保持（尾块零新增具名 callable）；judge-side only 不进发射链；sha 自证。
       - 签名意图：输入: r40 main+arm 配置（route 或 None=control） / 输出: {main_text, arm_sha} / 错误: 构建失败即抛。
       - 调用方：run_route_ab_experiments。tested：自有单测。核验命令：测试: orderbook_r40/test_run_r41.py（ab 组）。
   - **build_r41** [L1|新增]
