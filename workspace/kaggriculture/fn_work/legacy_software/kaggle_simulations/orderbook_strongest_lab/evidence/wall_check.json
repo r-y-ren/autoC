@@ -1,0 +1,891 @@
+{
+ "_generated_at": "2026-09-28T18:39:19Z",
+ "version": "wall-check/1.0",
+ "source": {
+  "commands": [
+   "python3 orderbook_strongest_lab/wall_check.py"
+  ],
+  "seeds": [
+   1825501814,
+   2013941152,
+   786146079,
+   1883261866,
+   963182245,
+   240876256,
+   1705553586,
+   2009279466
+  ],
+  "n_games": 16,
+  "h_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_strongest_lab/evidence/H_base_main.py.copy",
+  "opp": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r44_a/main.py",
+  "workers": 2
+ },
+ "wall_present_signal": {
+  "step_670_695_big_orders_qty_ge_500": 0,
+  "step_670_695_max_qty": 33.0,
+  "step_670_695_avg_qty": 6.07,
+  "step_ge_624_phantom_orders": 600,
+  "clamp_sells_setting": false
+ },
+ "aggregate": {
+  "all_days": {
+   "orders_total": 5150,
+   "qty_total": 37342.0,
+   "avg_qty_per_order": 7.25,
+   "max_qty": 90.0,
+   "phantom_orders_qty_gt_held": 2296,
+   "phantom_qty_over_held": 11172.0,
+   "big_orders_qty_ge_500": 0,
+   "big_orders_qty_ge_500_qty": 0
+  },
+  "step_ge_624": {
+   "orders_total": 1246,
+   "qty_total": 8592.0,
+   "avg_qty_per_order": 6.9,
+   "max_qty": 60.0,
+   "phantom_orders_qty_gt_held": 600,
+   "phantom_qty_over_held": 2850.0,
+   "big_orders_qty_ge_500": 0,
+   "big_orders_qty_ge_500_qty": 0
+  },
+  "step_670_695": {
+   "orders_total": 362,
+   "qty_total": 2198.0,
+   "avg_qty_per_order": 6.07,
+   "max_qty": 33.0,
+   "phantom_orders_qty_gt_held": 204,
+   "phantom_qty_over_held": 962.0,
+   "big_orders_qty_ge_500": 0,
+   "big_orders_qty_ge_500_qty": 0
+  },
+  "d27": {
+   "orders_total": 244,
+   "qty_total": 1532.0,
+   "avg_qty_per_order": 6.28,
+   "max_qty": 27.0,
+   "phantom_orders_qty_gt_held": 94,
+   "phantom_qty_over_held": 274.0,
+   "big_orders_qty_ge_500": 0,
+   "big_orders_qty_ge_500_qty": 0
+  }
+ },
+ "per_game": [
+  {
+   "seed": 1825501814,
+   "seat": 0,
+   "banks": [
+    91698.0,
+    90317.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 340,
+     "qty_total": 1773.0,
+     "avg_qty_per_order": 5.21,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 154,
+     "phantom_qty_over_held": 717.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 89,
+     "qty_total": 547.0,
+     "avg_qty_per_order": 6.15,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 44,
+     "phantom_qty_over_held": 220.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 24,
+     "qty_total": 149.0,
+     "avg_qty_per_order": 6.21,
+     "max_qty": 33.0,
+     "phantom_orders_qty_gt_held": 14,
+     "phantom_qty_over_held": 75.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 17,
+     "qty_total": 117.0,
+     "avg_qty_per_order": 6.88,
+     "max_qty": 27.0,
+     "phantom_orders_qty_gt_held": 8,
+     "phantom_qty_over_held": 30.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 2013941152,
+   "seat": 0,
+   "banks": [
+    99471.0,
+    98853.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 288,
+     "qty_total": 1842.0,
+     "avg_qty_per_order": 6.4,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 134,
+     "phantom_qty_over_held": 794.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 57,
+     "qty_total": 486.0,
+     "avg_qty_per_order": 8.53,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 30,
+     "phantom_qty_over_held": 155.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 19,
+     "qty_total": 141.0,
+     "avg_qty_per_order": 7.42,
+     "max_qty": 31.0,
+     "phantom_orders_qty_gt_held": 12,
+     "phantom_qty_over_held": 56.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 14,
+     "qty_total": 91.0,
+     "avg_qty_per_order": 6.5,
+     "max_qty": 27.0,
+     "phantom_orders_qty_gt_held": 5,
+     "phantom_qty_over_held": 10.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 786146079,
+   "seat": 0,
+   "banks": [
+    101702.0,
+    100440.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 334,
+     "qty_total": 1733.0,
+     "avg_qty_per_order": 5.19,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 144,
+     "phantom_qty_over_held": 672.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 84,
+     "qty_total": 504.0,
+     "avg_qty_per_order": 6.0,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 35,
+     "phantom_qty_over_held": 170.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 24,
+     "qty_total": 133.0,
+     "avg_qty_per_order": 5.54,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 13,
+     "phantom_qty_over_held": 56.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 14,
+     "qty_total": 88.0,
+     "avg_qty_per_order": 6.29,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 4,
+     "phantom_qty_over_held": 13.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 1883261866,
+   "seat": 0,
+   "banks": [
+    114023.0,
+    112940.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 341,
+     "qty_total": 3137.0,
+     "avg_qty_per_order": 9.2,
+     "max_qty": 89.0,
+     "phantom_orders_qty_gt_held": 141,
+     "phantom_qty_over_held": 680.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 85,
+     "qty_total": 570.0,
+     "avg_qty_per_order": 6.71,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 43,
+     "phantom_qty_over_held": 235.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 23,
+     "qty_total": 156.0,
+     "avg_qty_per_order": 6.78,
+     "max_qty": 20.0,
+     "phantom_orders_qty_gt_held": 14,
+     "phantom_qty_over_held": 85.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 18,
+     "qty_total": 118.0,
+     "avg_qty_per_order": 6.56,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 7,
+     "phantom_qty_over_held": 33.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 963182245,
+   "seat": 0,
+   "banks": [
+    83392.0,
+    81458.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 254,
+     "qty_total": 1682.0,
+     "avg_qty_per_order": 6.62,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 133,
+     "phantom_qty_over_held": 711.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 67,
+     "qty_total": 483.0,
+     "avg_qty_per_order": 7.21,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 37,
+     "phantom_qty_over_held": 157.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 22,
+     "qty_total": 130.0,
+     "avg_qty_per_order": 5.91,
+     "max_qty": 20.0,
+     "phantom_orders_qty_gt_held": 13,
+     "phantom_qty_over_held": 50.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 14,
+     "qty_total": 87.0,
+     "avg_qty_per_order": 6.21,
+     "max_qty": 27.0,
+     "phantom_orders_qty_gt_held": 7,
+     "phantom_qty_over_held": 12.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 240876256,
+   "seat": 0,
+   "banks": [
+    92366.0,
+    90533.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 333,
+     "qty_total": 1761.0,
+     "avg_qty_per_order": 5.29,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 146,
+     "phantom_qty_over_held": 672.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 77,
+     "qty_total": 498.0,
+     "avg_qty_per_order": 6.47,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 37,
+     "phantom_qty_over_held": 163.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 20,
+     "qty_total": 130.0,
+     "avg_qty_per_order": 6.5,
+     "max_qty": 20.0,
+     "phantom_orders_qty_gt_held": 12,
+     "phantom_qty_over_held": 50.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 15,
+     "qty_total": 86.0,
+     "avg_qty_per_order": 5.73,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 5,
+     "phantom_qty_over_held": 12.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 1705553586,
+   "seat": 0,
+   "banks": [
+    77810.0,
+    76101.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 356,
+     "qty_total": 5001.0,
+     "avg_qty_per_order": 14.05,
+     "max_qty": 90.0,
+     "phantom_orders_qty_gt_held": 147,
+     "phantom_qty_over_held": 663.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 84,
+     "qty_total": 712.0,
+     "avg_qty_per_order": 8.48,
+     "max_qty": 60.0,
+     "phantom_orders_qty_gt_held": 37,
+     "phantom_qty_over_held": 163.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 24,
+     "qty_total": 132.0,
+     "avg_qty_per_order": 5.5,
+     "max_qty": 16.0,
+     "phantom_orders_qty_gt_held": 12,
+     "phantom_qty_over_held": 55.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 16,
+     "qty_total": 89.0,
+     "avg_qty_per_order": 5.56,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 6,
+     "phantom_qty_over_held": 16.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 2009279466,
+   "seat": 0,
+   "banks": [
+    106425.0,
+    105849.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 329,
+     "qty_total": 1742.0,
+     "avg_qty_per_order": 5.29,
+     "max_qty": 38.0,
+     "phantom_orders_qty_gt_held": 149,
+     "phantom_qty_over_held": 677.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 80,
+     "qty_total": 496.0,
+     "avg_qty_per_order": 6.2,
+     "max_qty": 38.0,
+     "phantom_orders_qty_gt_held": 37,
+     "phantom_qty_over_held": 162.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 25,
+     "qty_total": 128.0,
+     "avg_qty_per_order": 5.12,
+     "max_qty": 22.0,
+     "phantom_orders_qty_gt_held": 12,
+     "phantom_qty_over_held": 54.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 14,
+     "qty_total": 90.0,
+     "avg_qty_per_order": 6.43,
+     "max_qty": 21.0,
+     "phantom_orders_qty_gt_held": 5,
+     "phantom_qty_over_held": 11.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 1825501814,
+   "seat": 1,
+   "banks": [
+    90317.0,
+    91698.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 340,
+     "qty_total": 1773.0,
+     "avg_qty_per_order": 5.21,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 154,
+     "phantom_qty_over_held": 717.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 89,
+     "qty_total": 547.0,
+     "avg_qty_per_order": 6.15,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 44,
+     "phantom_qty_over_held": 220.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 24,
+     "qty_total": 149.0,
+     "avg_qty_per_order": 6.21,
+     "max_qty": 33.0,
+     "phantom_orders_qty_gt_held": 14,
+     "phantom_qty_over_held": 75.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 17,
+     "qty_total": 117.0,
+     "avg_qty_per_order": 6.88,
+     "max_qty": 27.0,
+     "phantom_orders_qty_gt_held": 8,
+     "phantom_qty_over_held": 30.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 2013941152,
+   "seat": 1,
+   "banks": [
+    98853.0,
+    99471.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 288,
+     "qty_total": 1842.0,
+     "avg_qty_per_order": 6.4,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 134,
+     "phantom_qty_over_held": 794.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 57,
+     "qty_total": 486.0,
+     "avg_qty_per_order": 8.53,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 30,
+     "phantom_qty_over_held": 155.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 19,
+     "qty_total": 141.0,
+     "avg_qty_per_order": 7.42,
+     "max_qty": 31.0,
+     "phantom_orders_qty_gt_held": 12,
+     "phantom_qty_over_held": 56.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 14,
+     "qty_total": 91.0,
+     "avg_qty_per_order": 6.5,
+     "max_qty": 27.0,
+     "phantom_orders_qty_gt_held": 5,
+     "phantom_qty_over_held": 10.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 786146079,
+   "seat": 1,
+   "banks": [
+    100440.0,
+    101702.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 334,
+     "qty_total": 1733.0,
+     "avg_qty_per_order": 5.19,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 144,
+     "phantom_qty_over_held": 672.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 84,
+     "qty_total": 504.0,
+     "avg_qty_per_order": 6.0,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 35,
+     "phantom_qty_over_held": 170.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 24,
+     "qty_total": 133.0,
+     "avg_qty_per_order": 5.54,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 13,
+     "phantom_qty_over_held": 56.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 14,
+     "qty_total": 88.0,
+     "avg_qty_per_order": 6.29,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 4,
+     "phantom_qty_over_held": 13.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 1883261866,
+   "seat": 1,
+   "banks": [
+    112940.0,
+    114023.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 341,
+     "qty_total": 3137.0,
+     "avg_qty_per_order": 9.2,
+     "max_qty": 89.0,
+     "phantom_orders_qty_gt_held": 141,
+     "phantom_qty_over_held": 680.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 85,
+     "qty_total": 570.0,
+     "avg_qty_per_order": 6.71,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 43,
+     "phantom_qty_over_held": 235.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 23,
+     "qty_total": 156.0,
+     "avg_qty_per_order": 6.78,
+     "max_qty": 20.0,
+     "phantom_orders_qty_gt_held": 14,
+     "phantom_qty_over_held": 85.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 18,
+     "qty_total": 118.0,
+     "avg_qty_per_order": 6.56,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 7,
+     "phantom_qty_over_held": 33.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 963182245,
+   "seat": 1,
+   "banks": [
+    81458.0,
+    83392.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 254,
+     "qty_total": 1682.0,
+     "avg_qty_per_order": 6.62,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 133,
+     "phantom_qty_over_held": 711.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 67,
+     "qty_total": 483.0,
+     "avg_qty_per_order": 7.21,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 37,
+     "phantom_qty_over_held": 157.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 22,
+     "qty_total": 130.0,
+     "avg_qty_per_order": 5.91,
+     "max_qty": 20.0,
+     "phantom_orders_qty_gt_held": 13,
+     "phantom_qty_over_held": 50.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 14,
+     "qty_total": 87.0,
+     "avg_qty_per_order": 6.21,
+     "max_qty": 27.0,
+     "phantom_orders_qty_gt_held": 7,
+     "phantom_qty_over_held": 12.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 240876256,
+   "seat": 1,
+   "banks": [
+    90533.0,
+    92366.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 333,
+     "qty_total": 1761.0,
+     "avg_qty_per_order": 5.29,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 146,
+     "phantom_qty_over_held": 672.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 77,
+     "qty_total": 498.0,
+     "avg_qty_per_order": 6.47,
+     "max_qty": 36.0,
+     "phantom_orders_qty_gt_held": 37,
+     "phantom_qty_over_held": 163.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 20,
+     "qty_total": 130.0,
+     "avg_qty_per_order": 6.5,
+     "max_qty": 20.0,
+     "phantom_orders_qty_gt_held": 12,
+     "phantom_qty_over_held": 50.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 15,
+     "qty_total": 86.0,
+     "avg_qty_per_order": 5.73,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 5,
+     "phantom_qty_over_held": 12.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 1705553586,
+   "seat": 1,
+   "banks": [
+    76101.0,
+    77810.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 356,
+     "qty_total": 5001.0,
+     "avg_qty_per_order": 14.05,
+     "max_qty": 90.0,
+     "phantom_orders_qty_gt_held": 147,
+     "phantom_qty_over_held": 663.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 84,
+     "qty_total": 712.0,
+     "avg_qty_per_order": 8.48,
+     "max_qty": 60.0,
+     "phantom_orders_qty_gt_held": 37,
+     "phantom_qty_over_held": 163.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 24,
+     "qty_total": 132.0,
+     "avg_qty_per_order": 5.5,
+     "max_qty": 16.0,
+     "phantom_orders_qty_gt_held": 12,
+     "phantom_qty_over_held": 55.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 16,
+     "qty_total": 89.0,
+     "avg_qty_per_order": 5.56,
+     "max_qty": 18.0,
+     "phantom_orders_qty_gt_held": 6,
+     "phantom_qty_over_held": 16.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  },
+  {
+   "seed": 2009279466,
+   "seat": 1,
+   "banks": [
+    105849.0,
+    106425.0
+   ],
+   "error": null,
+   "wall": {
+    "all_days": {
+     "orders": 329,
+     "qty_total": 1742.0,
+     "avg_qty_per_order": 5.29,
+     "max_qty": 38.0,
+     "phantom_orders_qty_gt_held": 149,
+     "phantom_qty_over_held": 677.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_ge_624": {
+     "orders": 80,
+     "qty_total": 496.0,
+     "avg_qty_per_order": 6.2,
+     "max_qty": 38.0,
+     "phantom_orders_qty_gt_held": 37,
+     "phantom_qty_over_held": 162.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "step_670_695": {
+     "orders": 25,
+     "qty_total": 128.0,
+     "avg_qty_per_order": 5.12,
+     "max_qty": 22.0,
+     "phantom_orders_qty_gt_held": 12,
+     "phantom_qty_over_held": 54.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    },
+    "d27": {
+     "orders": 14,
+     "qty_total": 90.0,
+     "avg_qty_per_order": 6.43,
+     "max_qty": 21.0,
+     "phantom_orders_qty_gt_held": 5,
+     "phantom_qty_over_held": 11.0,
+     "big_orders_qty_ge_500": 0,
+     "big_orders_qty_ge_500_qty": 0
+    }
+   }
+  }
+ ],
+ "elapsed_s": 69.8
+}

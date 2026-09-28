@@ -1,0 +1,966 @@
+{
+ "_generated_at": "2026-09-28T19:36:00Z",
+ "source": {
+  "commands": [
+   "python3 orderbook_strongest_lab/build_strongest.py",
+   "python3 orderbook_strongest_lab/gates_strongest.py",
+   "python3 orderbook_strongest_lab/judge_strongest.py"
+  ],
+  "seed_base": 671000,
+  "seed_stagger": "671000+i*23（局组错开；新中性块 n=20 防过拟合）",
+  "replay_seeds_26": [
+   1825501814,
+   2013941152,
+   786146079,
+   1883261866,
+   963182245,
+   240876256,
+   1705553586,
+   2009279466,
+   161402123,
+   435866961,
+   841473039,
+   1388158282,
+   1647385154,
+   671940665,
+   219073637,
+   1439493993,
+   1360429471,
+   671494671,
+   1900972921,
+   973657130,
+   1911990026,
+   1918725083,
+   176568822,
+   427304807,
+   720683523,
+   906608145
+  ],
+  "neutral_seeds_20": [
+   671000,
+   671023,
+   671046,
+   671069,
+   671092,
+   671115,
+   671138,
+   671161,
+   671184,
+   671207,
+   671230,
+   671253,
+   671276,
+   671299,
+   671322,
+   671345,
+   671368,
+   671391,
+   671414,
+   671437
+  ],
+  "corpus_total_folds": 46,
+  "pairs": [
+   [
+    "h0",
+    "h1"
+   ],
+   [
+    "h0",
+    "h12"
+   ],
+   [
+    "h1",
+    "A"
+   ],
+   [
+    "h1",
+    "r40"
+   ],
+   [
+    "h12",
+    "A"
+   ],
+   [
+    "h0",
+    "A"
+   ],
+   [
+    "h0",
+    "r40"
+   ]
+  ],
+  "workers": 2,
+  "terminal_money_caliber": "farms[obs.player].money（干净口径，非 judge_r26 farms[0]）",
+  "budget": {
+   "cap_局次": 450,
+   "auth_games": 60,
+   "judgment_局次_folds": 322,
+   "judgment_games": 644,
+   "gate_games": 16,
+   "total_局次_folds": 330,
+   "total_games": 720
+  }
+ },
+ "wall_check": {
+  "verdict": "H 无墙（r40 族 route2 670-695 qty≈1000 幻影单墙缺席：max 单量 33-90、qty>=500 单 0）；X1 的墙目标缺席，但碎单/小幻影卫生层另有微小目标",
+  "signal": {
+   "step_670_695_big_orders_qty_ge_500": 0,
+   "step_670_695_max_qty": 33.0,
+   "step_670_695_avg_qty": 6.07,
+   "step_ge_624_phantom_orders": 600,
+   "clamp_sells_setting": false
+  },
+  "aggregate": {
+   "all_days": {
+    "orders_total": 5150,
+    "qty_total": 37342.0,
+    "avg_qty_per_order": 7.25,
+    "max_qty": 90.0,
+    "phantom_orders_qty_gt_held": 2296,
+    "phantom_qty_over_held": 11172.0,
+    "big_orders_qty_ge_500": 0,
+    "big_orders_qty_ge_500_qty": 0
+   },
+   "step_ge_624": {
+    "orders_total": 1246,
+    "qty_total": 8592.0,
+    "avg_qty_per_order": 6.9,
+    "max_qty": 60.0,
+    "phantom_orders_qty_gt_held": 600,
+    "phantom_qty_over_held": 2850.0,
+    "big_orders_qty_ge_500": 0,
+    "big_orders_qty_ge_500_qty": 0
+   },
+   "step_670_695": {
+    "orders_total": 362,
+    "qty_total": 2198.0,
+    "avg_qty_per_order": 6.07,
+    "max_qty": 33.0,
+    "phantom_orders_qty_gt_held": 204,
+    "phantom_qty_over_held": 962.0,
+    "big_orders_qty_ge_500": 0,
+    "big_orders_qty_ge_500_qty": 0
+   },
+   "d27": {
+    "orders_total": 244,
+    "qty_total": 1532.0,
+    "avg_qty_per_order": 6.28,
+    "max_qty": 27.0,
+    "phantom_orders_qty_gt_held": 94,
+    "phantom_qty_over_held": 274.0,
+    "big_orders_qty_ge_500": 0,
+    "big_orders_qty_ge_500_qty": 0
+   }
+  }
+ },
+ "builds": {
+  "h0": {
+   "sha256": "bdb821178ca73c0e8480f06c1887e20921caea0438398a5edb68bd9ad20b1de8",
+   "bytes": 1197043,
+   "injected_tail_bytes": 0,
+   "layers": [],
+   "byte_identical_to_H": true,
+   "entry": "H_native_last_callable"
+  },
+  "placebo": {
+   "sha256": "0ef5dfa64b6a06ac3f3459cfb11524653bb5df8b53fc625374582bb901802195",
+   "bytes": 1198815,
+   "injected_tail_bytes": 1772,
+   "layers": [],
+   "byte_identical_to_H": false,
+   "entry": "_hs_agent"
+  },
+  "h1": {
+   "sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+   "bytes": 1204861,
+   "injected_tail_bytes": 7818,
+   "layers": [
+    "x1"
+   ],
+   "byte_identical_to_H": false,
+   "entry": "_hs_agent"
+  },
+  "h12": {
+   "sha256": "820b7d52e0fc3b4f6694ebb1ef792daf2dfccd1854aab4aaa6c7a049a594b628",
+   "bytes": 1212244,
+   "injected_tail_bytes": 15201,
+   "layers": [
+    "x2",
+    "x1"
+   ],
+   "byte_identical_to_H": false,
+   "entry": "_hs_agent"
+  }
+ },
+ "gates": {
+  "overall_passed": true,
+  "forms": {
+   "h0": {
+    "load": true,
+    "health": true,
+    "determinism": true,
+    "identity": true,
+    "overall": true
+   },
+   "placebo": {
+    "load": true,
+    "health": true,
+    "determinism": true,
+    "identity": true,
+    "overall": true
+   },
+   "h1": {
+    "load": true,
+    "health": true,
+    "determinism": true,
+    "identity": true,
+    "overall": true
+   },
+   "h12": {
+    "load": true,
+    "health": true,
+    "determinism": true,
+    "identity": true,
+    "overall": true
+   }
+  }
+ },
+ "pairs": {
+  "h0_vs_h1": {
+   "n_games": 92,
+   "wins": 0,
+   "losses": 26,
+   "ties": 20,
+   "h2h": 0.2174,
+   "mean_margin": -4.9,
+   "ours": {
+    "realized_px_median": 1.0825,
+    "realized_px_mean": 1.0828,
+    "terminal_money_median": 91608.5,
+    "terminal_money_mean": 94706.5,
+    "stranding_median": 0.0
+   },
+   "opp_side": {
+    "realized_px_median": 1.083,
+    "realized_px_mean": 1.0835,
+    "terminal_money_median": 91615.5,
+    "terminal_money_mean": 94711.4,
+    "stranding_median": 0.0
+   },
+   "wall": {
+    "n_games_traced": 92,
+    "all_days": {
+     "orders_total": 29448,
+     "qty_total": 184680.0,
+     "avg_qty_per_order": 6.27,
+     "max_qty": 90.0,
+     "phantom_orders_qty_gt_held": 13447,
+     "phantom_qty_over_held": 65107.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_ge_624": {
+     "orders_total": 7196,
+     "qty_total": 48510.0,
+     "avg_qty_per_order": 6.74,
+     "max_qty": 60.0,
+     "phantom_orders_qty_gt_held": 3572,
+     "phantom_qty_over_held": 16678.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_670_695": {
+     "orders_total": 2048,
+     "qty_total": 12836.0,
+     "avg_qty_per_order": 6.27,
+     "max_qty": 33.0,
+     "phantom_orders_qty_gt_held": 1162,
+     "phantom_qty_over_held": 5678.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "d27": {
+     "orders_total": 1400,
+     "qty_total": 8708.0,
+     "avg_qty_per_order": 6.22,
+     "max_qty": 29.0,
+     "phantom_orders_qty_gt_held": 550,
+     "phantom_qty_over_held": 1572.0,
+     "big_orders_qty_ge_500": 0
+    }
+   }
+  },
+  "h0_vs_h12": {
+   "n_games": 92,
+   "wins": 0,
+   "losses": 26,
+   "ties": 20,
+   "h2h": 0.2174,
+   "mean_margin": -4.9,
+   "ours": {
+    "realized_px_median": 1.0825,
+    "realized_px_mean": 1.0828,
+    "terminal_money_median": 91608.5,
+    "terminal_money_mean": 94706.5,
+    "stranding_median": 0.0
+   },
+   "opp_side": {
+    "realized_px_median": 1.083,
+    "realized_px_mean": 1.0835,
+    "terminal_money_median": 91615.5,
+    "terminal_money_mean": 94711.4,
+    "stranding_median": 0.0
+   },
+   "wall": {
+    "n_games_traced": 92,
+    "all_days": {
+     "orders_total": 29448,
+     "qty_total": 184680.0,
+     "avg_qty_per_order": 6.27,
+     "max_qty": 90.0,
+     "phantom_orders_qty_gt_held": 13447,
+     "phantom_qty_over_held": 65107.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_ge_624": {
+     "orders_total": 7196,
+     "qty_total": 48510.0,
+     "avg_qty_per_order": 6.74,
+     "max_qty": 60.0,
+     "phantom_orders_qty_gt_held": 3572,
+     "phantom_qty_over_held": 16678.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_670_695": {
+     "orders_total": 2048,
+     "qty_total": 12836.0,
+     "avg_qty_per_order": 6.27,
+     "max_qty": 33.0,
+     "phantom_orders_qty_gt_held": 1162,
+     "phantom_qty_over_held": 5678.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "d27": {
+     "orders_total": 1400,
+     "qty_total": 8708.0,
+     "avg_qty_per_order": 6.22,
+     "max_qty": 29.0,
+     "phantom_orders_qty_gt_held": 550,
+     "phantom_qty_over_held": 1572.0,
+     "big_orders_qty_ge_500": 0
+    }
+   }
+  },
+  "h1_vs_A": {
+   "n_games": 92,
+   "wins": 46,
+   "losses": 0,
+   "ties": 0,
+   "h2h": 1.0,
+   "mean_margin": 1569.6,
+   "ours": {
+    "realized_px_median": 1.0785,
+    "realized_px_mean": 1.0796,
+    "terminal_money_median": 92676.0,
+    "terminal_money_mean": 95528.0,
+    "stranding_median": 0.0
+   },
+   "opp_side": {
+    "realized_px_median": 1.0643,
+    "realized_px_mean": 1.0661,
+    "terminal_money_median": 90388.5,
+    "terminal_money_mean": 93877.5,
+    "stranding_median": 0.0
+   },
+   "wall": {
+    "n_games_traced": 92,
+    "all_days": {
+     "orders_total": 28847,
+     "qty_total": 181830.0,
+     "avg_qty_per_order": 6.3,
+     "max_qty": 90.0,
+     "phantom_orders_qty_gt_held": 12581,
+     "phantom_qty_over_held": 62309.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_ge_624": {
+     "orders_total": 6595,
+     "qty_total": 45642.0,
+     "avg_qty_per_order": 6.92,
+     "max_qty": 60.0,
+     "phantom_orders_qty_gt_held": 2728,
+     "phantom_qty_over_held": 13926.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_670_695": {
+     "orders_total": 1891,
+     "qty_total": 11426.0,
+     "avg_qty_per_order": 6.04,
+     "max_qty": 33.0,
+     "phantom_orders_qty_gt_held": 882,
+     "phantom_qty_over_held": 4256.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "d27": {
+     "orders_total": 1360,
+     "qty_total": 8406.0,
+     "avg_qty_per_order": 6.18,
+     "max_qty": 29.0,
+     "phantom_orders_qty_gt_held": 398,
+     "phantom_qty_over_held": 1334.0,
+     "big_orders_qty_ge_500": 0
+    }
+   }
+  },
+  "h1_vs_r40": {
+   "n_games": 92,
+   "wins": 38,
+   "losses": 7,
+   "ties": 1,
+   "h2h": 0.837,
+   "mean_margin": 502.8,
+   "ours": {
+    "realized_px_median": 1.0745,
+    "realized_px_mean": 1.0738,
+    "terminal_money_median": 92089.0,
+    "terminal_money_mean": 94862.6,
+    "stranding_median": 0.0
+   },
+   "opp_side": {
+    "realized_px_median": 1.054,
+    "realized_px_mean": 1.057,
+    "terminal_money_median": 91750.5,
+    "terminal_money_mean": 94278.9,
+    "stranding_median": 0.0
+   },
+   "wall": {
+    "n_games_traced": 92,
+    "all_days": {
+     "orders_total": 28763,
+     "qty_total": 181704.0,
+     "avg_qty_per_order": 6.32,
+     "max_qty": 90.0,
+     "phantom_orders_qty_gt_held": 12573,
+     "phantom_qty_over_held": 62313.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_ge_624": {
+     "orders_total": 6509,
+     "qty_total": 45762.0,
+     "avg_qty_per_order": 7.03,
+     "max_qty": 60.0,
+     "phantom_orders_qty_gt_held": 2734,
+     "phantom_qty_over_held": 14080.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_670_695": {
+     "orders_total": 1833,
+     "qty_total": 11482.0,
+     "avg_qty_per_order": 6.26,
+     "max_qty": 33.0,
+     "phantom_orders_qty_gt_held": 886,
+     "phantom_qty_over_held": 4298.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "d27": {
+     "orders_total": 1352,
+     "qty_total": 8452.0,
+     "avg_qty_per_order": 6.25,
+     "max_qty": 29.0,
+     "phantom_orders_qty_gt_held": 398,
+     "phantom_qty_over_held": 1402.0,
+     "big_orders_qty_ge_500": 0
+    }
+   }
+  },
+  "h12_vs_A": {
+   "n_games": 92,
+   "wins": 46,
+   "losses": 0,
+   "ties": 0,
+   "h2h": 1.0,
+   "mean_margin": 1569.6,
+   "ours": {
+    "realized_px_median": 1.0785,
+    "realized_px_mean": 1.0796,
+    "terminal_money_median": 92676.0,
+    "terminal_money_mean": 95528.0,
+    "stranding_median": 0.0
+   },
+   "opp_side": {
+    "realized_px_median": 1.0643,
+    "realized_px_mean": 1.0661,
+    "terminal_money_median": 90388.5,
+    "terminal_money_mean": 93877.5,
+    "stranding_median": 0.0
+   },
+   "wall": {
+    "n_games_traced": 92,
+    "all_days": {
+     "orders_total": 28847,
+     "qty_total": 181830.0,
+     "avg_qty_per_order": 6.3,
+     "max_qty": 90.0,
+     "phantom_orders_qty_gt_held": 12581,
+     "phantom_qty_over_held": 62309.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_ge_624": {
+     "orders_total": 6595,
+     "qty_total": 45642.0,
+     "avg_qty_per_order": 6.92,
+     "max_qty": 60.0,
+     "phantom_orders_qty_gt_held": 2728,
+     "phantom_qty_over_held": 13926.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_670_695": {
+     "orders_total": 1891,
+     "qty_total": 11426.0,
+     "avg_qty_per_order": 6.04,
+     "max_qty": 33.0,
+     "phantom_orders_qty_gt_held": 882,
+     "phantom_qty_over_held": 4256.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "d27": {
+     "orders_total": 1360,
+     "qty_total": 8406.0,
+     "avg_qty_per_order": 6.18,
+     "max_qty": 29.0,
+     "phantom_orders_qty_gt_held": 398,
+     "phantom_qty_over_held": 1334.0,
+     "big_orders_qty_ge_500": 0
+    }
+   }
+  },
+  "h0_vs_A": {
+   "n_games": 92,
+   "wins": 46,
+   "losses": 0,
+   "ties": 0,
+   "h2h": 1.0,
+   "mean_margin": 1565.1,
+   "ours": {
+    "realized_px_median": 1.0778,
+    "realized_px_mean": 1.0789,
+    "terminal_money_median": 92674.0,
+    "terminal_money_mean": 95525.3,
+    "stranding_median": 0.0
+   },
+   "opp_side": {
+    "realized_px_median": 1.0643,
+    "realized_px_mean": 1.0661,
+    "terminal_money_median": 90390.0,
+    "terminal_money_mean": 93879.4,
+    "stranding_median": 0.0
+   },
+   "wall": {
+    "n_games_traced": 92,
+    "all_days": {
+     "orders_total": 29413,
+     "qty_total": 184460.0,
+     "avg_qty_per_order": 6.27,
+     "max_qty": 90.0,
+     "phantom_orders_qty_gt_held": 13395,
+     "phantom_qty_over_held": 64885.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_ge_624": {
+     "orders_total": 7161,
+     "qty_total": 48272.0,
+     "avg_qty_per_order": 6.74,
+     "max_qty": 60.0,
+     "phantom_orders_qty_gt_held": 3542,
+     "phantom_qty_over_held": 16502.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_670_695": {
+     "orders_total": 2051,
+     "qty_total": 12528.0,
+     "avg_qty_per_order": 6.11,
+     "max_qty": 33.0,
+     "phantom_orders_qty_gt_held": 1142,
+     "phantom_qty_over_held": 5358.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "d27": {
+     "orders_total": 1384,
+     "qty_total": 8682.0,
+     "avg_qty_per_order": 6.27,
+     "max_qty": 29.0,
+     "phantom_orders_qty_gt_held": 550,
+     "phantom_qty_over_held": 1568.0,
+     "big_orders_qty_ge_500": 0
+    }
+   }
+  },
+  "h0_vs_r40": {
+   "n_games": 92,
+   "wins": 37,
+   "losses": 7,
+   "ties": 2,
+   "h2h": 0.8261,
+   "mean_margin": 498.7,
+   "ours": {
+    "realized_px_median": 1.0739,
+    "realized_px_mean": 1.0732,
+    "terminal_money_median": 92087.0,
+    "terminal_money_mean": 94860.1,
+    "stranding_median": 0.0
+   },
+   "opp_side": {
+    "realized_px_median": 1.054,
+    "realized_px_mean": 1.057,
+    "terminal_money_median": 91751.5,
+    "terminal_money_mean": 94280.5,
+    "stranding_median": 0.0
+   },
+   "wall": {
+    "n_games_traced": 92,
+    "all_days": {
+     "orders_total": 29339,
+     "qty_total": 184326.0,
+     "avg_qty_per_order": 6.28,
+     "max_qty": 90.0,
+     "phantom_orders_qty_gt_held": 13391,
+     "phantom_qty_over_held": 64881.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_ge_624": {
+     "orders_total": 7085,
+     "qty_total": 48384.0,
+     "avg_qty_per_order": 6.83,
+     "max_qty": 60.0,
+     "phantom_orders_qty_gt_held": 3552,
+     "phantom_qty_over_held": 16648.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "step_670_695": {
+     "orders_total": 2003,
+     "qty_total": 12578.0,
+     "avg_qty_per_order": 6.28,
+     "max_qty": 33.0,
+     "phantom_orders_qty_gt_held": 1154,
+     "phantom_qty_over_held": 5394.0,
+     "big_orders_qty_ge_500": 0
+    },
+    "d27": {
+     "orders_total": 1376,
+     "qty_total": 8720.0,
+     "avg_qty_per_order": 6.34,
+     "max_qty": 29.0,
+     "phantom_orders_qty_gt_held": 544,
+     "phantom_qty_over_held": 1628.0,
+     "big_orders_qty_ge_500": 0
+    }
+   }
+  }
+ },
+ "placebo_identity": {
+  "n_checked": 8,
+  "n_match": 8,
+  "detail": [
+   {
+    "seed": 1825501814,
+    "seat": 0,
+    "banks_match": true,
+    "margin": 0.0,
+    "h0_margin": 0.0
+   },
+   {
+    "seed": 671000,
+    "seat": 0,
+    "banks_match": true,
+    "margin": -120.0,
+    "h0_margin": -120.0
+   },
+   {
+    "seed": 1825501814,
+    "seat": 1,
+    "banks_match": true,
+    "margin": 0.0,
+    "h0_margin": 0.0
+   },
+   {
+    "seed": 671000,
+    "seat": 1,
+    "banks_match": true,
+    "margin": 120.0,
+    "h0_margin": 120.0
+   },
+   {
+    "seed": 906608145,
+    "seat": 0,
+    "banks_match": true,
+    "margin": 0.0,
+    "h0_margin": 0.0
+   },
+   {
+    "seed": 671437,
+    "seat": 0,
+    "banks_match": true,
+    "margin": 0.0,
+    "h0_margin": 0.0
+   },
+   {
+    "seed": 906608145,
+    "seat": 1,
+    "banks_match": true,
+    "margin": 0.0,
+    "h0_margin": 0.0
+   },
+   {
+    "seed": 671437,
+    "seat": 1,
+    "banks_match": true,
+    "margin": 0.0,
+    "h0_margin": 0.0
+   }
+  ]
+ },
+ "round_robin": {
+  "points": {
+   "h0": 291,
+   "h1": 351,
+   "h12": 236,
+   "A": 0,
+   "r40": 45
+  },
+  "folds": {
+   "h0": 184,
+   "h1": 138,
+   "h12": 92,
+   "A": 138,
+   "r40": 92
+  },
+  "wins": {
+   "h0": 83,
+   "h1": 110,
+   "h12": 72,
+   "A": 0,
+   "r40": 14
+  },
+  "ties": {
+   "h0": 42,
+   "h1": 21,
+   "h12": 20,
+   "A": 0,
+   "r40": 3
+  },
+  "losses": {
+   "h0": 59,
+   "h1": 7,
+   "h12": 0,
+   "A": 138,
+   "r40": 75
+  },
+  "points_per_fold": {
+   "h0": 1.582,
+   "h1": 2.543,
+   "h12": 2.565,
+   "A": 0.0,
+   "r40": 0.489
+  },
+  "h2h_matrix": {
+   "h0": {
+    "h1": 0.2174,
+    "h12": 0.2174,
+    "A": 1.0,
+    "r40": 0.8261
+   },
+   "h1": {
+    "h0": 0.7826,
+    "A": 1.0,
+    "r40": 0.837
+   },
+   "h12": {
+    "h0": 0.7826,
+    "A": 1.0
+   },
+   "A": {
+    "h1": 0.0,
+    "h12": 0.0,
+    "h0": 0.0
+   },
+   "r40": {
+    "h1": 0.163,
+    "h0": 0.1739
+   }
+  }
+ },
+ "wall_before_after": {
+  "note": "d27 挂量墙前后对照（h0=H 原样=before，h1=H+X1=after；step>=624 窗；h0 墙取 h0_vs_h1 我席，h1 墙取 h1_vs_A 我席——墙形态为我席动作流属性）",
+  "before_h0": {
+   "n_games_traced": 92,
+   "all_days": {
+    "orders_total": 29448,
+    "qty_total": 184680.0,
+    "avg_qty_per_order": 6.27,
+    "max_qty": 90.0,
+    "phantom_orders_qty_gt_held": 13447,
+    "phantom_qty_over_held": 65107.0,
+    "big_orders_qty_ge_500": 0
+   },
+   "step_ge_624": {
+    "orders_total": 7196,
+    "qty_total": 48510.0,
+    "avg_qty_per_order": 6.74,
+    "max_qty": 60.0,
+    "phantom_orders_qty_gt_held": 3572,
+    "phantom_qty_over_held": 16678.0,
+    "big_orders_qty_ge_500": 0
+   },
+   "step_670_695": {
+    "orders_total": 2048,
+    "qty_total": 12836.0,
+    "avg_qty_per_order": 6.27,
+    "max_qty": 33.0,
+    "phantom_orders_qty_gt_held": 1162,
+    "phantom_qty_over_held": 5678.0,
+    "big_orders_qty_ge_500": 0
+   },
+   "d27": {
+    "orders_total": 1400,
+    "qty_total": 8708.0,
+    "avg_qty_per_order": 6.22,
+    "max_qty": 29.0,
+    "phantom_orders_qty_gt_held": 550,
+    "phantom_qty_over_held": 1572.0,
+    "big_orders_qty_ge_500": 0
+   }
+  },
+  "after_h1": {
+   "n_games_traced": 92,
+   "all_days": {
+    "orders_total": 28847,
+    "qty_total": 181830.0,
+    "avg_qty_per_order": 6.3,
+    "max_qty": 90.0,
+    "phantom_orders_qty_gt_held": 12581,
+    "phantom_qty_over_held": 62309.0,
+    "big_orders_qty_ge_500": 0
+   },
+   "step_ge_624": {
+    "orders_total": 6595,
+    "qty_total": 45642.0,
+    "avg_qty_per_order": 6.92,
+    "max_qty": 60.0,
+    "phantom_orders_qty_gt_held": 2728,
+    "phantom_qty_over_held": 13926.0,
+    "big_orders_qty_ge_500": 0
+   },
+   "step_670_695": {
+    "orders_total": 1891,
+    "qty_total": 11426.0,
+    "avg_qty_per_order": 6.04,
+    "max_qty": 33.0,
+    "phantom_orders_qty_gt_held": 882,
+    "phantom_qty_over_held": 4256.0,
+    "big_orders_qty_ge_500": 0
+   },
+   "d27": {
+    "orders_total": 1360,
+    "qty_total": 8406.0,
+    "avg_qty_per_order": 6.18,
+    "max_qty": 29.0,
+    "phantom_orders_qty_gt_held": 398,
+    "phantom_qty_over_held": 1334.0,
+    "big_orders_qty_ge_500": 0
+   }
+  },
+  "delta_h1_minus_h0_step_ge_624": {
+   "orders": -601,
+   "phantom_orders": -844
+  },
+  "wall_check_H_stream": {
+   "all_days": {
+    "orders_total": 5150,
+    "qty_total": 37342.0,
+    "avg_qty_per_order": 7.25,
+    "max_qty": 90.0,
+    "phantom_orders_qty_gt_held": 2296,
+    "phantom_qty_over_held": 11172.0,
+    "big_orders_qty_ge_500": 0,
+    "big_orders_qty_ge_500_qty": 0
+   },
+   "step_ge_624": {
+    "orders_total": 1246,
+    "qty_total": 8592.0,
+    "avg_qty_per_order": 6.9,
+    "max_qty": 60.0,
+    "phantom_orders_qty_gt_held": 600,
+    "phantom_qty_over_held": 2850.0,
+    "big_orders_qty_ge_500": 0,
+    "big_orders_qty_ge_500_qty": 0
+   },
+   "step_670_695": {
+    "orders_total": 362,
+    "qty_total": 2198.0,
+    "avg_qty_per_order": 6.07,
+    "max_qty": 33.0,
+    "phantom_orders_qty_gt_held": 204,
+    "phantom_qty_over_held": 962.0,
+    "big_orders_qty_ge_500": 0,
+    "big_orders_qty_ge_500_qty": 0
+   },
+   "d27": {
+    "orders_total": 244,
+    "qty_total": 1532.0,
+    "avg_qty_per_order": 6.28,
+    "max_qty": 27.0,
+    "phantom_orders_qty_gt_held": 94,
+    "phantom_qty_over_held": 274.0,
+    "big_orders_qty_ge_500": 0,
+    "big_orders_qty_ge_500_qty": 0
+   }
+  },
+  "wall_present_signal": {
+   "step_670_695_big_orders_qty_ge_500": 0,
+   "step_670_695_max_qty": 33.0,
+   "step_670_695_avg_qty": 6.07,
+   "step_ge_624_phantom_orders": 600,
+   "clamp_sells_setting": false
+  }
+ },
+ "criteria": {
+  "h2h_h0_vs_A": 1.0,
+  "h2h_h0_vs_r40": 0.8261,
+  "h2h_h1_vs_A": 1.0,
+  "h2h_h1_vs_r40": 0.837,
+  "h2h_h0_vs_h1": 0.2174,
+  "h2h_h0_vs_h12": 0.2174,
+  "realized_px_h1_vs_A": 1.0785,
+  "realized_px_h1_vs_r40": 1.0745,
+  "realized_px_h0_vs_A": 1.0778,
+  "realized_px_h0_vs_r40": 1.0739,
+  "realized_px_nonneg": true,
+  "beats_A_all_H_forms": true,
+  "beats_r40": true,
+  "X1_wall_target_absent_no_qty500_wall": true,
+  "X1_fragment_hygiene_edge_h0_lt_h1": true,
+  "X2_noop_h0_h1_eq_h0_h12": true
+ },
+ "winner": {
+  "arm": "h1",
+  "label": "H+X1（haodou V82 采纳件 + d27 挂量墙卫生层 X1）",
+  "runner_up": "h0（H 本身）",
+  "verdict": "墙核查：H 无 qty≈1000 幻影单墙（r40 族 route2 670-695 签名缺席，max 单量 33-90、qty>=500 单 0）→ X1 的墙目标缺席。但 H 同品碎单+小幻影单（step>=624 计 3572 幻影/7196 单）为 X1 的碎单合并卫生提供了微小目标：H1(H+X1) 对 H0(H 本身) h2h 0.78、+$4.9/局、实现价 +0.0007——非墙清理，是碎单合并微增益。X2(日新高补全) 在 H 上完全无作用（h0-vs-h12 与 h0-vs-h1 读数逐项相同）。循环赛积分：H 系（h1/h12/h0）均胜 A(h2h 1.0,+1565~1570) 与 r40(h2h 0.83,+499~503)、实现价非负(1.074-1.078)。故最强=H1（H+X1），但与 H 本身（H0）几乎等价（差 +4.9/局，远小于对 A/r40 的 +500~1570）；X2 无作用。若严格遵循'无墙→H 本身'，则 H 本身即最强基座，X1 为可选微增强。"
+ },
+ "anomaly": {
+  "harness_noise": [
+   "HP_TELEMETRY stdout 行（H 件自报 telemetry）——已知 harness 越界写副作用，不修不管",
+   "kaggle_environments 加载 open_spiel_env/cabt 失败告警（无关环境，忽略）",
+   "orderbook_r40/evidence/sim_bridge_degraded.json 被 sim_bridge 认证写副作用触碰（harness 越界写既有文件，任务口径：不修不管，仅报噪声）"
+  ],
+  "judge_r26_farms0_defect": "终局钱改用 farms[obs.player].money 干净口径（judge_r26 farms[0] 污染缺陷在册，未用）",
+  "n_error_games": {
+   "h0_vs_h1": 0,
+   "h0_vs_h12": 0,
+   "h1_vs_A": 0,
+   "h1_vs_r40": 0,
+   "h12_vs_A": 0,
+   "h0_vs_A": 0,
+   "h0_vs_r40": 0
+  },
+  "budget_compliance": "局次 330/450（cap 合规）"
+ },
+ "elapsed_s": 1756.8
+}
