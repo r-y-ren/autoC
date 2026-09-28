@@ -14,3 +14,4 @@
 
 <!-- 新条目从这里追加 -->
 | 2026-09-28-engine-pricing-extraction.md | 引擎定价公式逐品参数表+结算语义+可利用点 | kaggle-environments 1.32.7 源码直读（A 级） | 2026-09-28 |
+| `2026-09-28-family-update-scan.md` | notebook：https://www.kaggle.com/code/leoprovorov/a-song-of-ice-and-fire-fixed-flexible （v22）、https://www.kaggle.com/code/guruprasaathas111/kaggriculture-master-engine-v53e01d74d8f （v3）；讨论区：https://www.kaggle.com/competitions/kaggriculture/discussion/743993 ；版本核查：kernels list（dateRun）+ API kernels/pull（currentVersionNumber）；[前次] 2026-09-28-execution-faces-scan.md | 2026-09-28 | 同门增量扫描：在册 12 件晨扫后全部无新版；新收 leoprovorov Part 3 冰火分解（Majkel1337 461 胜局 7.7% 冰/卖单 1% 冰/day0 磁带 93% 一致/十一队分叉步谱 + MarketShock-M1-WR1K 提交件 d21 浇水修复）与 guru Master Engine V5（R44 现金响应探针镜像双门 2→3→4 拍卖窗 + R37 对手暴露收入排序 + R36 债务账本）；候选：镜像门分级触发链、冰火分歧诊断器、暴露收入作回放先验 | 镜像门控卖窗臂升级、执行精度判决实验设计 |
