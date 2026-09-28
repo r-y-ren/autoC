@@ -1,0 +1,67 @@
+bridge: True 1.0 50s
+VERDICT: {"verdict": "NEGATIVE", "launch_ready": false, "reason": "判据False/门禁False/窗口True"}
+ARMS: {
+ "full": {
+  "n": 120,
+  "h2h": 0.0,
+  "mean_margin": -102576.9,
+  "realized_px_mean": 1.0216,
+  "terminal_money_mean": 94852.5,
+  "stranding_mean": 0.0
+ },
+ "placebo": {
+  "n": 120,
+  "h2h": 0.0167,
+  "mean_margin": 0.0,
+  "realized_px_mean": 1.0698,
+  "terminal_money_mean": 89926.3,
+  "stranding_mean": 0.0
+ },
+ "drain": {
+  "n": 120,
+  "h2h": 0.1583,
+  "mean_margin": -1795.7,
+  "realized_px_mean": 1.0472,
+  "terminal_money_mean": 89685.1,
+  "stranding_mean": 0.0
+ },
+ "gran": {
+  "n": 120,
+  "h2h": 0.0,
+  "mean_margin": -102577.3,
+  "realized_px_mean": 1.0255,
+  "terminal_money_mean": 94629.5,
+  "stranding_mean": 0.0
+ },
+ "sheep": {
+  "n": 120,
+  "h2h": 0.0167,
+  "mean_margin": 0.0,
+  "realized_px_mean": 1.0698,
+  "terminal_money_mean": 89926.3,
+  "stranding_mean": 0.0
+ }
+}
+CRIT: {
+ "placebo_identity": {
+  "value": 0.0167,
+  "verdict": "FAIL"
+ },
+ "realized_px": {
+  "value": 1.0216,
+  "bar": 0.88,
+  "verdict": "PASS"
+ },
+ "terminal_money": {
+  "value": 94852.5,
+  "bar": 105000.0,
+  "verdict": "FAIL"
+ },
+ "h2h": {
+  "value": 0.0,
+  "bar": 0.55,
+  "verdict": "FAIL"
+ }
+}
+GATES: false
+total 504s

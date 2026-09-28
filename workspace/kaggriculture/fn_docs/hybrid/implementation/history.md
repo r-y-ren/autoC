@@ -54,3 +54,4 @@
 | 2026-09-28 | B40 | R25-S4 判决+门禁+总指挥（endgame_stats/mirror_arm_stats/judge_r25/verify_r42_gates/run_r42_iteration） | 28 测全绿；首判 330 局全负→消融隔离（镜像 −80k/清算 −8k/编排 −25k/空链 0）→机制修正三件→复测仍负→**判负收档（预绑定）不发射**；真因=启发式重排拆磁带订单簿槽位设计；P1 忠实版留战后 |
 | 2026-09-28 | B41 | R26-S1 手术批（build_drain_table/retape_drain_aligned/retape_sheep_lifecycle/retape_granularity） | 8 测绿；排水表 15 路线（毛线族 13.6/日）；槽位纪律贯穿（源槽 []/减量+尾追加+PASS 换删）；真带冒烟过 |
 | 2026-09-28 | B42 | R26-S2 构建面四件（build_r43/audit/pack） | 4 测绿；**安慰剂恒等实证**（纯重编码=r40 字节）；全件真跑构建审计白名单过 |
+| 2026-09-28 | B43 | R26-S3 判决+门禁+总指挥（realized_price_stats/judge_r26/verify_r43_gates/run_r43_iteration） | 19 测全绿；真跑 5 臂判决 NEGATIVE（gran −102.6k 跨拍毒+倾销补贴对手倒卖机制；drain −1.8k；sheep 零效应；placebo 全平局）；**判负收档不发射** |

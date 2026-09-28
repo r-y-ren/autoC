@@ -196,7 +196,7 @@
 | audit_diff_r43_vs_r40 | B42 | tested 09-28 | pytest audit 组 1 passed（区间外差异即抛）；真跑白名单一类过 | (本批) |
 | pack_r43 | B42 | tested 09-28 | pytest pack 组 1 passed（双跑恒等/manifest 键集/r43 链节点） | (本批) |
 | build_r43 | B42 | wired 09-28 | pytest 4 passed；**真跑**：**安慰剂件与 r40 逐字节恒等**（编解码无损证）+全件构建（三类手术变更行>0、审计白名单过、manifest 自证） | (本批) |
-| realized_price_stats | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_judge_r26.py（realized 组） | — |
-| judge_r26 | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_judge_r26.py（判据=R26 ②③原文） | — |
-| verify_r43_gates | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_gates_r43.py | — |
-| run_r43_iteration | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_run_r43.py | — |
+| realized_price_stats | B43 | tested 09-28 | pytest realized 组 2 passed（口径 Σqty·px/Σqty·日均价/终局钱/滞留/坏输入 UNKNOWN） | (本批) |
+| judge_r26 | B43 | wired 09-28 | pytest 判据组 1 passed；**真跑 5 臂×120 局**：full h2h 0.0/gran −102.6k/局（跨拍拆单毒+倾销补贴对手倒卖机制）/drain −1.8k/sheep 零效应/placebo 全平局（逐字节同件互打必平——判据带[0.35,0.65]设计错，健康本质另证）；evidence/judge_r26_realrun.json | (本批) |
+| verify_r43_gates | B43 | tested 09-28 | pytest 2 passed（零注入断言=_route40_agent 不变/身份链/谱系锚）；判红不进门禁 | (本批) |
+| run_r43_iteration | B43 | wired 09-28 | pytest 2 passed（预绑定分叉）；**真跑全链→NEGATIVE→archive_ledger run-r43-archive/1.0 落档，不发射** | (本批) |
