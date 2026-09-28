@@ -1247,3 +1247,103 @@
     - 职责：五门全量 fail-closed 沿管线重定向（last-callable 断言/h2h 主对 **r40** ≥0.55 独立 n/谱系/饿死零容忍+净经济/合规四轴/launch）。
     - 签名意图：输入: r41 包 / 输出: 各门结果+overall / 错误: fail-closed。
     - 调用方：run_r41_iteration。tested：自有单测。核验命令：测试: orderbook_r40/test_gates_r41.py。
+
+## 【R25 增补·2026-09-28】执行面三件合一（卖单槽位编排/终日清算/镜像门控，r42 候选）
+
+> 块引言：R25 三件（证据=分析25：引擎一手"同槽 1:1 平权+单列表 10 单硬截断+死单错位后移"=卖价差机械根源；外部自报 shiiin9 槽位排序 +758/局、alperen First-in-Line +412 CI[+202,+650]、uninhibited 地平线红线 ≤24 拍；败局分层 d21-28×14/d29×5/镜像 5/10）。构建底=r40 在飞件字节；产物 orderbook_r42/。**r40 既有运行时件（_route40_select/_route40_wire_route/apply_race_slots/apply_slot_hygiene）不动**——三件在注入链后置增量编排（race_slots 竞速/qty==0 清坑之后），互不重叠：本块清坑只管"错位后移"类、前置只管现金净卖单、合并只管同品碎单。红线：卖窗提前 ≤24 拍；不碰基座反应层/磁带产线。环境零增量（Python+Rust 仿真器沿用）。
+
+## 结构概览（增补）
+- run_r42_iteration ← R25
+  - build_r42
+    - apply_slot_orchestration
+      - merge_same_item_orders
+      - clear_dead_slots
+      - select_best_layout
+    - apply_endgame_liquidation
+    - apply_mirror_gate
+    - inject_r42_block
+    - audit_diff_r42_vs_r40
+    - pack_r42
+  - judge_r25
+    - endgame_stats
+    - mirror_arm_stats
+    - segment_stats
+    - sim_bridge
+  - verify_r42_gates
+
+## 需求覆盖矩阵（增补行）
+| 需求 | 顶层函数 |
+|---|---|
+| R25 | run_r42_iteration（构建线：build_r42；判决线：judge_r25→endgame_stats/mirror_arm_stats/segment_stats/sim_bridge） |
+
+## 功能块 run_r42_iteration ← R25
+（功能口=分析25 P1-P3 三件；验收=R25 ①②③+总判原文；发射预绑定=判正且 09-28 窗内→standing 发射，否则收档。）
+
+- **run_r42_iteration** [L0|新增]
+  - 职责：编排——build_r42 产 r42 件 → pytest 全绿（R25 ①）才进判决 → judge_r25 判决（分项+总判）→ 核心判据全绿才 verify_r42_gates 五门 → 判正且 09-28 窗内→交发射（standing 台账留痕；计分对=最近 2 提交，发射挤掉 r37）；判负或过窗→收档（预绑定）。evidence+台账。
+  - 签名意图：输入: 无（CLI） / 输出: {build, judgment, gates, verdict} / 错误: fail-closed。
+  - 调用方：操作者。tested：自有单测。核验命令：测试: orderbook_r42/test_run_r42.py。
+  - **build_r42** [L1|新增]
+    - 职责：构建编排——r40 字节为底 → inject_r42_block 注入三运行时件 → audit_diff_r42_vs_r40 → pack_r42；r40 已发射件字节零改动。
+    - 签名意图：输入: r40 main 路径+常量配置 / 输出: r42 main+manifest+变更集审计 / 错误: 超白名单即抛。
+    - 调用方：run_r42_iteration。tested：自有单测。核验命令：测试: orderbook_r42/test_build_r42.py。
+    - **apply_slot_orchestration** [L2|新增]（运行时 P1 主件）
+      - 职责：卖单槽位编排（step≥144 卖单窗逐拍）——对自家 market 卖单列表：①同品合并（merge_same_item_orders）②死单清理（clear_dead_slots，只管"错位后移"类，qty==0 归旧件 hygiene）③现金净卖单前置早槽（同槽 1:1 平权早位先成交）④摆法择优（select_best_layout ≤4 候选取实现单价优者）；不动 HARVEST/买单/空槽位次语义；V57 资金序不变量；异常→原动作。
+      - 签名意图：输入: observation, action / 输出: 重排后 action+槽位账本 / 错误: 异常→原动作。
+      - 调用方：inject_r42_block 注入链（race_slots/hygiene 后置）。tested：自有单测。核验命令：测试: orderbook_r42/test_slot.py（判据=R25 ①合并守恒/10 槽上限构造用例原文）。
+      - **merge_same_item_orders** [L3|新增]
+        - 职责：同品碎单合并——单列表同品多单合成大单（超 10 张强制合成至 ≤10，引擎单列表 10 单硬截断）；量守恒校验（合并前后总量恒等）；保留前部槽位优先序。
+        - 签名意图：输入: 卖单列表 / 输出: 合并后列表+守恒账 / 错误: 守恒破→抛（caller 转原动作）。
+        - 调用方：apply_slot_orchestration。tested：自有单测。核验命令：测试: orderbook_r42/test_slot.py（merge 组）。
+      - **clear_dead_slots** [L3|新增]
+        - 职责：死单清理（错位后移类）——挂出未成交且队列位次劣化的单识别并清除（qty==0 真占坑归旧件 hygiene 不重复）；输出清坑账。
+        - 签名意图：输入: 卖单列表+上一拍成交回报 / 输出: 清理后列表+清坑账 / 错误: 异常→原列表。
+        - 调用方：apply_slot_orchestration。tested：自有单测。核验命令：测试: orderbook_r42/test_slot.py（clear 组）。
+      - **select_best_layout** [L3|新增]
+        - 职责：摆法择优——待发卖单 ≤4 摆法候选（前置现金/后置/混合/均分），逐候选迷你盘口模拟（同槽 1:1 平权、位置序、$1 地板成交不入库存——引擎一手口径）取实现单价最优；无盘口/缺字段→首候选。
+        - 签名意图：输入: 待发卖单+当前盘口（可见订单列） / 输出: 最优摆法+模拟读数 / 错误: 异常→首候选。
+        - 调用方：apply_slot_orchestration。tested：自有单测。核验命令：测试: orderbook_r42/test_slot.py（layout 组）。
+    - **apply_endgame_liquidation** [L2|新增]（运行时 P2）
+      - 职责：终日清算器——step≥648 切换清算模式：停 BUY 类市场单（BUY_SEED/BUY_PRODUCT/BUY_ANIMAL）、仓内可卖品按 −price×qty 降序生成 SELL 出清单；steps 712-718 七拍显式清算序（逐拍按降序消化）；终拍滞留（stranding）归零目标；产出清算账本。异常→原动作。
+      - 签名意图：输入: observation, action / 输出: action（替换 market 段）+清算账本 / 错误: 异常→原动作。
+      - 调用方：inject_r42_block 注入链。tested：自有单测。核验命令：测试: orderbook_r42/test_endgame.py（判据=R25 ②清算序构造用例原文）。
+    - **apply_mirror_gate** [L2|新增]（运行时 P3）
+      - 职责：镜像门控——比较双方公开农场指纹（unlocked_quadrants/tiles 结构/畜群公开量——**只用公开面，不做对手行为预测**）；相等→本局卖窗提前 2 拍（计划中 t+2 的卖单前移本拍）；credit 记账=前移量按品项从后续计划等额扣减（禁净加卖）；指纹缺失→门不触发；异常→零动作。
+      - 签名意图：输入: observation, action / 输出: action+credit 账本 / 错误: 异常→零动作（原样）。
+      - 调用方：inject_r42_block 注入链。tested：自有单测。核验命令：测试: orderbook_r42/test_mirror.py（判据=R25 ③触发/不触发/净加卖 0 构造用例原文）。
+    - **inject_r42_block** [L2|新增]
+      - 职责：r42 运行时注入——r40 字节尾部注入三运行时件+常量；校验四条+sha 对账沿先例；捕获行避撞名（_R42_* 系）；末 callable=官方入口。只加尾块。
+      - 签名意图：输入: r40 main 文本+常量配置 / 输出: {main_text, block_sha} / 错误: 校验不过即抛。
+      - 调用方：build_r42。tested：自有单测。核验命令：测试: orderbook_r42/test_build_r42.py（inject 组）。
+    - **audit_diff_r42_vs_r40** [L2|新增]
+      - 职责：变更归因审计——白名单一类=尾部运行时块（三件+常量）；白名单外即抛；输出归因表。
+      - 签名意图：输入: r42 main+r40 main+变更表 / 输出: 归因表 / 错误: 白名单外即抛。
+      - 调用方：build_r42。tested：自有单测。核验命令：测试: orderbook_r42/test_build_r42.py（audit 组）。
+    - **pack_r42** [L2|新增]
+      - 职责：确定性打包+manifest；sha 链（…→r37→r40→r42）+描述 "public derivative with slot orchestration, endgame liquidation and mirror gating"；双跑一致。
+      - 签名意图：输入: r42 main / 输出: submission.tar.gz+manifest / 错误: 双跑不一致即抛。
+      - 调用方：build_r42。tested：自有单测。核验命令：测试: orderbook_r42/test_build_r42.py（pack 组）。
+  - **judge_r25** [L1|新增]
+    - 职责：判决 v25——分项+总判（判据=R25 ①②③+总判原文）：①P1=实现单价 ≥+5% ∧ d21-28 段差中位 >0（segment_stats）；②P2=尾段翻车子集（d29 败形态 5 局）翻正 ≥3/5 ∧ stranding 下降（endgame_stats）；③P3=镜像臂胜率 ≥0.55 ∧ credit 净加卖=0（mirror_arm_stats）；总判=h2h vs r40 ≥0.55 ∧ 联赛总胜率 ≥80%（85% 观测留档）；聚合 evidence。
+    - 签名意图：输入: r42 包+语料+副证配置 / 输出: evidence JSON / 错误: 单局红计入不短路。
+    - 调用方：run_r42_iteration。tested：自有单测。核验命令：测试: orderbook_r42/test_judge_r25.py（判据=R25 ①②③+总判原文）。
+    - **endgame_stats** [L2|新增]
+      - 职责：尾段读数——逐局 d29 段资金差、终拍滞留值（仓内可卖品按终价估值）、翻车翻正判读（对尾段翻车子集）；缺字段→UNKNOWN。
+      - 签名意图：输入: 对局状态序列+基线局集 / 输出: {d29_margin, stranding_value, flips, verdict} / 错误: 缺字段→UNKNOWN。
+      - 调用方：judge_r25。tested：自有单测。核验命令：测试: orderbook_r42/test_judge_r25.py（endgame 组）。
+    - **mirror_arm_stats** [L2|新增]
+      - 职责：镜像臂读数——镜像对局组（公开指纹相等判定成立的对局）胜率+credit 账本核对（净加卖=0 判据）；非镜像局作对照。
+      - 签名意图：输入: 镜像臂对局集+credit 账本 / 输出: {win_rate, net_add_sell, verdict} / 错误: 缺账本→UNKNOWN。
+      - 调用方：judge_r25。tested：自有单测。核验命令：测试: orderbook_r42/test_judge_r25.py（mirror 组）。
+    - **segment_stats** [L2|上游覆盖: judge_r23]
+      - 职责：d21-28 段读数复用（资金差/实现单价/有效挂单率/批量化率）。
+      - 签名意图：输入: 对局状态序列 / 输出: {seg_delta, realized_px, fill_rate, lot_size, verdict} / 错误: 缺字段→UNKNOWN。
+      - 调用方：judge_r25。tested 策略：上游覆盖: judge_r23。核验命令：上游覆盖: judge_r23。
+    - **sim_bridge** [L2|上游覆盖: judge_r23]
+      - 职责：仿真器桥接复用（30/30 认证、13.6x 并行，零增量）。
+      - 签名意图：输入: 仿真器配置+对照语料 / 输出: {loaded, consistency, wall_speedup} / 错误: 对照不过→降级留档。
+      - 调用方：judge_r25。tested 策略：上游覆盖: judge_r23。核验命令：上游覆盖: judge_r23。
+  - **verify_r42_gates** [L1|新增]
+    - 职责：五门全量 fail-closed 沿管线重定向（last-callable 断言/h2h 主对 **r40** ≥0.55 独立 n/谱系/饿死零容忍+净经济/合规四轴/launch）。
+    - 签名意图：输入: r42 包 / 输出: 各门结果+overall / 错误: fail-closed。
+    - 调用方：run_r42_iteration。tested：自有单测。核验命令：测试: orderbook_r42/test_gates_r42.py。
