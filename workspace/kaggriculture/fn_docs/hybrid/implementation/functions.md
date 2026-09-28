@@ -193,9 +193,9 @@
 | retape_drain_aligned | B41 | tested 09-28 | pytest 3 passed（超胃口推后+守恒+源槽 []/减量/非卖面不动/窗口前与零排水不动/终拍钳界）；槽位纪律=尾追加 | (本批) |
 | retape_sheep_lifecycle | B41 | tested 09-28 | pytest 2 passed（无毛线 skip/真带冒烟刀次账+变更全 kind）；定位复用 _derive_grid_info 羊格站位 | (本批) |
 | retape_granularity | B41 | tested 09-28 | pytest 2 passed（大单拆块守恒/阈值下不动/摊不完回填源槽守恒） | (本批) |
-| audit_diff_r43_vs_r40 | B42 | stub 09-28 | 核验命令: pytest orderbook_r43/test_build_r43.py（audit 组） | — |
-| pack_r43 | B42 | stub 09-28 | 核验命令: pytest orderbook_r43/test_build_r43.py（pack 组） | — |
-| build_r43 | B42 | stub 09-28 | 核验命令: pytest orderbook_r43/test_build_r43.py | — |
+| audit_diff_r43_vs_r40 | B42 | tested 09-28 | pytest audit 组 1 passed（区间外差异即抛）；真跑白名单一类过 | (本批) |
+| pack_r43 | B42 | tested 09-28 | pytest pack 组 1 passed（双跑恒等/manifest 键集/r43 链节点） | (本批) |
+| build_r43 | B42 | wired 09-28 | pytest 4 passed；**真跑**：**安慰剂件与 r40 逐字节恒等**（编解码无损证）+全件构建（三类手术变更行>0、审计白名单过、manifest 自证） | (本批) |
 | realized_price_stats | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_judge_r26.py（realized 组） | — |
 | judge_r26 | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_judge_r26.py（判据=R26 ②③原文） | — |
 | verify_r43_gates | B43 | stub 09-28 | 核验命令: pytest orderbook_r43/test_gates_r43.py | — |
