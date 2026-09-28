@@ -1,0 +1,2916 @@
+{
+ "n_games": 92,
+ "wins": 35,
+ "losses": 11,
+ "ties": 0,
+ "h2h": 0.7609,
+ "mean_margin": 303.5,
+ "fold_margins": [
+  604.0,
+  -378.0,
+  769.0,
+  424.0,
+  -693.0,
+  -1014.0,
+  672.0,
+  312.0,
+  -701.0,
+  209.0,
+  325.0,
+  -118.0,
+  836.0,
+  163.0,
+  763.0,
+  833.0,
+  88.0,
+  332.0,
+  -96.0,
+  386.0,
+  479.0,
+  299.0,
+  1044.0,
+  308.0,
+  -68.0,
+  187.0,
+  1110.0,
+  784.0,
+  283.0,
+  -332.0,
+  208.0,
+  645.0,
+  -272.0,
+  -35.0,
+  78.0,
+  512.0,
+  -228.0,
+  426.0,
+  1408.0,
+  567.0,
+  113.0,
+  13.0,
+  848.0,
+  911.0,
+  678.0,
+  279.0
+ ],
+ "margin_per_game": {
+  "mean": 303.5,
+  "median": 310.0,
+  "min": -1014.0,
+  "max": 1408.0
+ },
+ "ours": {
+  "realized_px_median": 1.0777,
+  "realized_px_mean": 1.0737,
+  "realized_px_min": 1.0396,
+  "terminal_money_median": 96075.0,
+  "terminal_money_mean": 98791.8,
+  "stranding_median": 0.0
+ },
+ "opp_side": {
+  "realized_px_median": 1.0575,
+  "realized_px_mean": 1.0586,
+  "realized_px_min": 1.0207,
+  "terminal_money_median": 95748.0,
+  "terminal_money_mean": 98388.3,
+  "stranding_median": 0.0
+ },
+ "engines": [
+  {
+   "engine": "sim",
+   "fallback_reason": null
+  },
+  {
+   "engine": "sim",
+   "fallback_reason": null
+  },
+  {
+   "engine": "sim",
+   "fallback_reason": null
+  },
+  {
+   "engine": "sim",
+   "fallback_reason": null
+  }
+ ],
+ "n_error_games": 0,
+ "replay_r30_26": {
+  "n_games": 52,
+  "wins": 21,
+  "losses": 5,
+  "ties": 0,
+  "h2h": 0.8077,
+  "mean_margin": 394.0,
+  "fold_margins": [
+   479.0,
+   299.0,
+   1044.0,
+   308.0,
+   -68.0,
+   187.0,
+   1110.0,
+   784.0,
+   283.0,
+   -332.0,
+   208.0,
+   645.0,
+   -272.0,
+   -35.0,
+   78.0,
+   512.0,
+   -228.0,
+   426.0,
+   1408.0,
+   567.0,
+   113.0,
+   13.0,
+   848.0,
+   911.0,
+   678.0,
+   279.0
+  ],
+  "margin_per_game": {
+   "mean": 394.0,
+   "median": 303.5,
+   "min": -332.0,
+   "max": 1408.0
+  },
+  "ours": {
+   "realized_px_median": 1.0773,
+   "realized_px_mean": 1.074,
+   "realized_px_min": 1.0396,
+   "terminal_money_median": 92585.5,
+   "terminal_money_mean": 95553.6,
+   "stranding_median": 0.0
+  },
+  "opp_side": {
+   "realized_px_median": 1.0554,
+   "realized_px_mean": 1.059,
+   "realized_px_min": 1.0347,
+   "terminal_money_median": 92513.0,
+   "terminal_money_mean": 95087.6,
+   "stranding_median": 0.0
+  },
+  "engines": [
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   }
+  ],
+  "n_error_games": 0
+ },
+ "neutral_672000_i29": {
+  "n_games": 40,
+  "wins": 14,
+  "losses": 6,
+  "ties": 0,
+  "h2h": 0.7,
+  "mean_margin": 185.8,
+  "fold_margins": [
+   604.0,
+   -378.0,
+   769.0,
+   424.0,
+   -693.0,
+   -1014.0,
+   672.0,
+   312.0,
+   -701.0,
+   209.0,
+   325.0,
+   -118.0,
+   836.0,
+   163.0,
+   763.0,
+   833.0,
+   88.0,
+   332.0,
+   -96.0,
+   386.0
+  ],
+  "margin_per_game": {
+   "mean": 185.8,
+   "median": 318.5,
+   "min": -1014.0,
+   "max": 836.0
+  },
+  "ours": {
+   "realized_px_median": 1.0796,
+   "realized_px_mean": 1.0733,
+   "realized_px_min": 1.0487,
+   "terminal_money_median": 103546.0,
+   "terminal_money_mean": 103001.4,
+   "stranding_median": 0.0
+  },
+  "opp_side": {
+   "realized_px_median": 1.0616,
+   "realized_px_mean": 1.058,
+   "realized_px_min": 1.0207,
+   "terminal_money_median": 102981.0,
+   "terminal_money_mean": 102679.3,
+   "stranding_median": 0.0
+  },
+  "engines": [
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   }
+  ],
+  "n_error_games": 0
+ },
+ "rows_lite": [
+  {
+   "game_id": "i1-i2-vsr40-1825501814-s0",
+   "seed": 1825501814,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 567.0,
+   "realized_px": 1.0792,
+   "terminal_money": 89309.0,
+   "opp_realized_px": 1.0509,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 6,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-786146079-s0",
+   "seed": 786146079,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": -332.0,
+   "realized_px": 1.0717,
+   "terminal_money": 100280.0,
+   "opp_realized_px": 1.0585,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 211,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 211,
+     "courier_ticks": 34,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-963182245-s0",
+   "seed": 963182245,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": -272.0,
+   "realized_px": 1.1047,
+   "terminal_money": 83327.0,
+   "opp_realized_px": 1.0994,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 201,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 201,
+     "courier_ticks": 35,
+     "courier_boosts": 4,
+     "courier_boost_units": 25,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1705553586-s0",
+   "seed": 1705553586,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 1408.0,
+   "realized_px": 1.085,
+   "terminal_money": 77319.0,
+   "opp_realized_px": 1.0691,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-161402123-s0",
+   "seed": 161402123,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 479.0,
+   "realized_px": 1.0787,
+   "terminal_money": 88865.0,
+   "opp_realized_px": 1.0729,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 35,
+     "courier_boosts": 2,
+     "courier_boost_units": 6,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-841473039-s0",
+   "seed": 841473039,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 208.0,
+   "realized_px": 1.0901,
+   "terminal_money": 99946.0,
+   "opp_realized_px": 1.0785,
+   "arm_changed_turns": 5,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 5,
+     "herd_gate_open_ticks": 214,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 214,
+     "courier_ticks": 35,
+     "courier_boosts": 5,
+     "courier_boost_units": 27,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 5,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1647385154-s0",
+   "seed": 1647385154,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 426.0,
+   "realized_px": 1.0551,
+   "terminal_money": 143790.0,
+   "opp_realized_px": 1.0526,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 31,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 31,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-219073637-s0",
+   "seed": 219073637,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 1044.0,
+   "realized_px": 1.0982,
+   "terminal_money": 89476.0,
+   "opp_realized_px": 1.0818,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 7,
+     "courier_inserts": 1,
+     "courier_insert_units": 1,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1360429471-s0",
+   "seed": 1360429471,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 78.0,
+   "realized_px": 1.0613,
+   "terminal_money": 105367.0,
+   "opp_realized_px": 1.0459,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 192,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 192,
+     "courier_ticks": 35,
+     "courier_boosts": 4,
+     "courier_boost_units": 21,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1900972921-s0",
+   "seed": 1900972921,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 13.0,
+   "realized_px": 1.0816,
+   "terminal_money": 93754.0,
+   "opp_realized_px": 1.0559,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 65,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 65,
+     "courier_ticks": 32,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1911990026-s0",
+   "seed": 1911990026,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 848.0,
+   "realized_px": 1.0465,
+   "terminal_money": 115161.0,
+   "opp_realized_px": 1.0477,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 367,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 367,
+     "courier_ticks": 42,
+     "courier_boosts": 3,
+     "courier_boost_units": 17,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-176568822-s0",
+   "seed": 176568822,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 299.0,
+   "realized_px": 1.0578,
+   "terminal_money": 102494.0,
+   "opp_realized_px": 1.0549,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 3,
+     "courier_boost_units": 5,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-720683523-s0",
+   "seed": 720683523,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 283.0,
+   "realized_px": 1.0536,
+   "terminal_money": 111264.0,
+   "opp_realized_px": 1.0483,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672000-s0",
+   "seed": 672000,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 604.0,
+   "realized_px": 1.0827,
+   "terminal_money": 60334.0,
+   "opp_realized_px": 1.052,
+   "arm_changed_turns": 6,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 6,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 5,
+     "courier_boost_units": 18,
+     "courier_inserts": 1,
+     "courier_insert_units": 2,
+     "courier_hoists": 5,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672058-s0",
+   "seed": 672058,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 769.0,
+   "realized_px": 1.0836,
+   "terminal_money": 92560.0,
+   "opp_realized_px": 1.0656,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 1,
+     "courier_insert_units": 2,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672116-s0",
+   "seed": 672116,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": -693.0,
+   "realized_px": 1.0645,
+   "terminal_money": 133276.0,
+   "opp_realized_px": 1.0503,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 123,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 123,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672174-s0",
+   "seed": 672174,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 672.0,
+   "realized_px": 1.0505,
+   "terminal_money": 126114.0,
+   "opp_realized_px": 1.0382,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 44,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 44,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672232-s0",
+   "seed": 672232,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": -701.0,
+   "realized_px": 1.0768,
+   "terminal_money": 88125.0,
+   "opp_realized_px": 1.0818,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 3,
+     "courier_boost_units": 9,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672290-s0",
+   "seed": 672290,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 325.0,
+   "realized_px": 1.0983,
+   "terminal_money": 94048.0,
+   "opp_realized_px": 1.0705,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 4,
+     "courier_boost_units": 11,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672348-s0",
+   "seed": 672348,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 836.0,
+   "realized_px": 1.0823,
+   "terminal_money": 98859.0,
+   "opp_realized_px": 1.0629,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 191,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 191,
+     "courier_ticks": 34,
+     "courier_boosts": 3,
+     "courier_boost_units": 9,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672406-s0",
+   "seed": 672406,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 763.0,
+   "realized_px": 1.0906,
+   "terminal_money": 70918.0,
+   "opp_realized_px": 1.0481,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 7,
+     "courier_inserts": 1,
+     "courier_insert_units": 4,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672464-s0",
+   "seed": 672464,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 156.0,
+   "realized_px": 1.0589,
+   "terminal_money": 109418.0,
+   "opp_realized_px": 1.0604,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 3,
+     "courier_boost_units": 7,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672522-s0",
+   "seed": 672522,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": -96.0,
+   "realized_px": 1.052,
+   "terminal_money": 128351.0,
+   "opp_realized_px": 1.0312,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 1,
+     "courier_boost_units": 1,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1825501814-s1",
+   "seed": 1825501814,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 567.0,
+   "realized_px": 1.0792,
+   "terminal_money": 89309.0,
+   "opp_realized_px": 1.0509,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 6,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-786146079-s1",
+   "seed": 786146079,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": -332.0,
+   "realized_px": 1.0717,
+   "terminal_money": 100280.0,
+   "opp_realized_px": 1.0585,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 211,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 211,
+     "courier_ticks": 34,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-963182245-s1",
+   "seed": 963182245,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": -272.0,
+   "realized_px": 1.1047,
+   "terminal_money": 83327.0,
+   "opp_realized_px": 1.0994,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 201,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 201,
+     "courier_ticks": 35,
+     "courier_boosts": 4,
+     "courier_boost_units": 25,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1705553586-s1",
+   "seed": 1705553586,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 1408.0,
+   "realized_px": 1.085,
+   "terminal_money": 77319.0,
+   "opp_realized_px": 1.0691,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-161402123-s1",
+   "seed": 161402123,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 479.0,
+   "realized_px": 1.0787,
+   "terminal_money": 88865.0,
+   "opp_realized_px": 1.0729,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 35,
+     "courier_boosts": 2,
+     "courier_boost_units": 6,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-841473039-s1",
+   "seed": 841473039,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 208.0,
+   "realized_px": 1.0901,
+   "terminal_money": 99946.0,
+   "opp_realized_px": 1.0785,
+   "arm_changed_turns": 5,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 5,
+     "herd_gate_open_ticks": 214,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 214,
+     "courier_ticks": 35,
+     "courier_boosts": 5,
+     "courier_boost_units": 27,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 5,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1647385154-s1",
+   "seed": 1647385154,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 426.0,
+   "realized_px": 1.0551,
+   "terminal_money": 143790.0,
+   "opp_realized_px": 1.0526,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 31,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 31,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-219073637-s1",
+   "seed": 219073637,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 1044.0,
+   "realized_px": 1.0982,
+   "terminal_money": 89476.0,
+   "opp_realized_px": 1.0818,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 7,
+     "courier_inserts": 1,
+     "courier_insert_units": 1,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1360429471-s1",
+   "seed": 1360429471,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 78.0,
+   "realized_px": 1.0613,
+   "terminal_money": 105367.0,
+   "opp_realized_px": 1.0459,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 192,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 192,
+     "courier_ticks": 35,
+     "courier_boosts": 4,
+     "courier_boost_units": 21,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1900972921-s1",
+   "seed": 1900972921,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 13.0,
+   "realized_px": 1.0816,
+   "terminal_money": 93754.0,
+   "opp_realized_px": 1.0559,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 65,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 65,
+     "courier_ticks": 32,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1911990026-s1",
+   "seed": 1911990026,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 848.0,
+   "realized_px": 1.0465,
+   "terminal_money": 115161.0,
+   "opp_realized_px": 1.0477,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 367,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 367,
+     "courier_ticks": 42,
+     "courier_boosts": 3,
+     "courier_boost_units": 17,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-176568822-s1",
+   "seed": 176568822,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 299.0,
+   "realized_px": 1.0578,
+   "terminal_money": 102494.0,
+   "opp_realized_px": 1.0549,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 3,
+     "courier_boost_units": 5,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-720683523-s1",
+   "seed": 720683523,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 283.0,
+   "realized_px": 1.0536,
+   "terminal_money": 111264.0,
+   "opp_realized_px": 1.0483,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672000-s1",
+   "seed": 672000,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 604.0,
+   "realized_px": 1.0827,
+   "terminal_money": 60334.0,
+   "opp_realized_px": 1.052,
+   "arm_changed_turns": 6,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 6,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 5,
+     "courier_boost_units": 18,
+     "courier_inserts": 1,
+     "courier_insert_units": 2,
+     "courier_hoists": 5,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672058-s1",
+   "seed": 672058,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 769.0,
+   "realized_px": 1.0836,
+   "terminal_money": 92560.0,
+   "opp_realized_px": 1.0656,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 1,
+     "courier_insert_units": 2,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672116-s1",
+   "seed": 672116,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": -693.0,
+   "realized_px": 1.0645,
+   "terminal_money": 133276.0,
+   "opp_realized_px": 1.0503,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 123,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 123,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672174-s1",
+   "seed": 672174,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 672.0,
+   "realized_px": 1.0505,
+   "terminal_money": 126114.0,
+   "opp_realized_px": 1.0382,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 44,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 44,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672232-s1",
+   "seed": 672232,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": -701.0,
+   "realized_px": 1.0768,
+   "terminal_money": 88125.0,
+   "opp_realized_px": 1.0818,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 3,
+     "courier_boost_units": 9,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672290-s1",
+   "seed": 672290,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 325.0,
+   "realized_px": 1.0983,
+   "terminal_money": 94048.0,
+   "opp_realized_px": 1.0705,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 4,
+     "courier_boost_units": 11,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672348-s1",
+   "seed": 672348,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 836.0,
+   "realized_px": 1.0823,
+   "terminal_money": 98859.0,
+   "opp_realized_px": 1.0629,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 191,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 191,
+     "courier_ticks": 34,
+     "courier_boosts": 3,
+     "courier_boost_units": 9,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672406-s1",
+   "seed": 672406,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 763.0,
+   "realized_px": 1.0906,
+   "terminal_money": 70918.0,
+   "opp_realized_px": 1.0481,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 7,
+     "courier_inserts": 1,
+     "courier_insert_units": 4,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672464-s1",
+   "seed": 672464,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 20.0,
+   "realized_px": 1.0589,
+   "terminal_money": 109350.0,
+   "opp_realized_px": 1.0604,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 3,
+     "courier_boost_units": 7,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672522-s1",
+   "seed": 672522,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": -96.0,
+   "realized_px": 1.052,
+   "terminal_money": 128351.0,
+   "opp_realized_px": 1.0312,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 1,
+     "courier_boost_units": 1,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-2013941152-s0",
+   "seed": 2013941152,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 279.0,
+   "realized_px": 1.0396,
+   "terminal_money": 98102.0,
+   "opp_realized_px": 1.0369,
+   "arm_changed_turns": 9,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 9,
+     "herd_gate_open_ticks": 248,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 248,
+     "courier_ticks": 38,
+     "courier_boosts": 6,
+     "courier_boost_units": 25,
+     "courier_inserts": 3,
+     "courier_insert_units": 12,
+     "courier_hoists": 6,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1883261866-s0",
+   "seed": 1883261866,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 113.0,
+   "realized_px": 1.0633,
+   "terminal_money": 113299.0,
+   "opp_realized_px": 1.0533,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 3,
+     "courier_boost_units": 7,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-240876256-s0",
+   "seed": 240876256,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 308.0,
+   "realized_px": 1.0802,
+   "terminal_money": 90140.0,
+   "opp_realized_px": 1.0471,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 3,
+     "courier_boost_units": 8,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-2009279466-s0",
+   "seed": 2009279466,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 678.0,
+   "realized_px": 1.0582,
+   "terminal_money": 106280.0,
+   "opp_realized_px": 1.0347,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 99,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 99,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 6,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-435866961-s0",
+   "seed": 435866961,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 187.0,
+   "realized_px": 1.0858,
+   "terminal_money": 80481.0,
+   "opp_realized_px": 1.0811,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 5,
+     "courier_inserts": 1,
+     "courier_insert_units": 1,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1388158282-s0",
+   "seed": 1388158282,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 388.0,
+   "realized_px": 1.0591,
+   "terminal_money": 84905.0,
+   "opp_realized_px": 1.0517,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 254,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 254,
+     "courier_ticks": 41,
+     "courier_boosts": 3,
+     "courier_boost_units": 18,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-671940665-s0",
+   "seed": 671940665,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 784.0,
+   "realized_px": 1.0793,
+   "terminal_money": 89281.0,
+   "opp_realized_px": 1.065,
+   "arm_changed_turns": 0,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 0,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 0,
+     "courier_boost_units": 0,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 0,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1439493993-s0",
+   "seed": 1439493993,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": -296.0,
+   "realized_px": 1.0758,
+   "terminal_money": 117646.0,
+   "opp_realized_px": 1.0723,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 197,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 197,
+     "courier_ticks": 34,
+     "courier_boosts": 4,
+     "courier_boost_units": 11,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-671494671-s0",
+   "seed": 671494671,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 1110.0,
+   "realized_px": 1.1062,
+   "terminal_money": 64494.0,
+   "opp_realized_px": 1.0668,
+   "arm_changed_turns": 5,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 5,
+     "herd_gate_open_ticks": 157,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 157,
+     "courier_ticks": 35,
+     "courier_boosts": 5,
+     "courier_boost_units": 28,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 5,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-973657130-s0",
+   "seed": 973657130,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": -35.0,
+   "realized_px": 1.0816,
+   "terminal_money": 91417.0,
+   "opp_realized_px": 1.0597,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 2,
+     "courier_boost_units": 7,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1918725083-s0",
+   "seed": 1918725083,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 911.0,
+   "realized_px": 1.087,
+   "terminal_money": 87849.0,
+   "opp_realized_px": 1.0577,
+   "arm_changed_turns": 0,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 0,
+     "herd_gate_open_ticks": 161,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 161,
+     "courier_ticks": 33,
+     "courier_boosts": 0,
+     "courier_boost_units": 0,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 0,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-427304807-s0",
+   "seed": 427304807,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": -68.0,
+   "realized_px": 1.0706,
+   "terminal_money": 99503.0,
+   "opp_realized_px": 1.0441,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 49,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 49,
+     "courier_ticks": 35,
+     "courier_boosts": 3,
+     "courier_boost_units": 11,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-906608145-s0",
+   "seed": 906608145,
+   "seat": 0,
+   "group": "replay_r30_26",
+   "margin": 645.0,
+   "realized_px": 1.0738,
+   "terminal_money": 60551.0,
+   "opp_realized_px": 1.0477,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672029-s0",
+   "seed": 672029,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": -378.0,
+   "realized_px": 1.0901,
+   "terminal_money": 114454.0,
+   "opp_realized_px": 1.0853,
+   "arm_changed_turns": 6,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 6,
+     "herd_gate_open_ticks": 123,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 123,
+     "courier_ticks": 35,
+     "courier_boosts": 6,
+     "courier_boost_units": 22,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 6,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672087-s0",
+   "seed": 672087,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 424.0,
+   "realized_px": 1.0535,
+   "terminal_money": 116807.0,
+   "opp_realized_px": 1.04,
+   "arm_changed_turns": 0,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 0,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 0,
+     "courier_boost_units": 0,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 0,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672145-s0",
+   "seed": 672145,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": -1014.0,
+   "realized_px": 1.0592,
+   "terminal_money": 140458.0,
+   "opp_realized_px": 1.0572,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 86,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 86,
+     "courier_ticks": 35,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672203-s0",
+   "seed": 672203,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 312.0,
+   "realized_px": 1.0829,
+   "terminal_money": 108233.0,
+   "opp_realized_px": 1.0714,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 4,
+     "courier_boost_units": 11,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672261-s0",
+   "seed": 672261,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 209.0,
+   "realized_px": 1.0917,
+   "terminal_money": 126087.0,
+   "opp_realized_px": 1.0861,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 128,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 128,
+     "courier_ticks": 35,
+     "courier_boosts": 3,
+     "courier_boost_units": 15,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672319-s0",
+   "seed": 672319,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": -118.0,
+   "realized_px": 1.0487,
+   "terminal_money": 128415.0,
+   "opp_realized_px": 1.0306,
+   "arm_changed_turns": 0,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 0,
+     "herd_gate_open_ticks": 37,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 37,
+     "courier_ticks": 32,
+     "courier_boosts": 0,
+     "courier_boost_units": 0,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 0,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672377-s0",
+   "seed": 672377,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 163.0,
+   "realized_px": 1.0511,
+   "terminal_money": 76439.0,
+   "opp_realized_px": 1.0207,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 213,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 213,
+     "courier_ticks": 42,
+     "courier_boosts": 2,
+     "courier_boost_units": 14,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672435-s0",
+   "seed": 672435,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 833.0,
+   "realized_px": 1.092,
+   "terminal_money": 82359.0,
+   "opp_realized_px": 1.0683,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 6,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672493-s0",
+   "seed": 672493,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 332.0,
+   "realized_px": 1.0721,
+   "terminal_money": 92953.0,
+   "opp_realized_px": 1.0677,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 3,
+     "courier_boost_units": 9,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672551-s0",
+   "seed": 672551,
+   "seat": 0,
+   "group": "neutral_672000_i29",
+   "margin": 386.0,
+   "realized_px": 1.0851,
+   "terminal_money": 71854.0,
+   "opp_realized_px": 1.071,
+   "arm_changed_turns": 7,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 7,
+     "herd_gate_open_ticks": 213,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 213,
+     "courier_ticks": 34,
+     "courier_boosts": 5,
+     "courier_boost_units": 29,
+     "courier_inserts": 2,
+     "courier_insert_units": 8,
+     "courier_hoists": 5,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-2013941152-s1",
+   "seed": 2013941152,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 279.0,
+   "realized_px": 1.0396,
+   "terminal_money": 98102.0,
+   "opp_realized_px": 1.0369,
+   "arm_changed_turns": 9,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 9,
+     "herd_gate_open_ticks": 248,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 248,
+     "courier_ticks": 38,
+     "courier_boosts": 6,
+     "courier_boost_units": 25,
+     "courier_inserts": 3,
+     "courier_insert_units": 12,
+     "courier_hoists": 6,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1883261866-s1",
+   "seed": 1883261866,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 113.0,
+   "realized_px": 1.0633,
+   "terminal_money": 113299.0,
+   "opp_realized_px": 1.0533,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 3,
+     "courier_boost_units": 7,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-240876256-s1",
+   "seed": 240876256,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 308.0,
+   "realized_px": 1.0802,
+   "terminal_money": 90140.0,
+   "opp_realized_px": 1.0471,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 3,
+     "courier_boost_units": 8,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-2009279466-s1",
+   "seed": 2009279466,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 678.0,
+   "realized_px": 1.0582,
+   "terminal_money": 106280.0,
+   "opp_realized_px": 1.0347,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 99,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 99,
+     "courier_ticks": 32,
+     "courier_boosts": 2,
+     "courier_boost_units": 6,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-435866961-s1",
+   "seed": 435866961,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 187.0,
+   "realized_px": 1.0858,
+   "terminal_money": 80481.0,
+   "opp_realized_px": 1.0811,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 5,
+     "courier_inserts": 1,
+     "courier_insert_units": 1,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1388158282-s1",
+   "seed": 1388158282,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 636.0,
+   "realized_px": 1.0591,
+   "terminal_money": 85024.0,
+   "opp_realized_px": 1.0517,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 254,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 254,
+     "courier_ticks": 41,
+     "courier_boosts": 3,
+     "courier_boost_units": 18,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-671940665-s1",
+   "seed": 671940665,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 784.0,
+   "realized_px": 1.0793,
+   "terminal_money": 89281.0,
+   "opp_realized_px": 1.065,
+   "arm_changed_turns": 0,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 0,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 0,
+     "courier_boost_units": 0,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 0,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1439493993-s1",
+   "seed": 1439493993,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": -160.0,
+   "realized_px": 1.0758,
+   "terminal_money": 117714.0,
+   "opp_realized_px": 1.0723,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 198,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 198,
+     "courier_ticks": 34,
+     "courier_boosts": 4,
+     "courier_boost_units": 11,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-671494671-s1",
+   "seed": 671494671,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 1110.0,
+   "realized_px": 1.1062,
+   "terminal_money": 64494.0,
+   "opp_realized_px": 1.0668,
+   "arm_changed_turns": 5,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 5,
+     "herd_gate_open_ticks": 157,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 157,
+     "courier_ticks": 35,
+     "courier_boosts": 5,
+     "courier_boost_units": 28,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 5,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-973657130-s1",
+   "seed": 973657130,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": -35.0,
+   "realized_px": 1.0816,
+   "terminal_money": 91417.0,
+   "opp_realized_px": 1.0597,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 33,
+     "courier_boosts": 2,
+     "courier_boost_units": 7,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-1918725083-s1",
+   "seed": 1918725083,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 911.0,
+   "realized_px": 1.087,
+   "terminal_money": 87849.0,
+   "opp_realized_px": 1.0577,
+   "arm_changed_turns": 0,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 0,
+     "herd_gate_open_ticks": 161,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 161,
+     "courier_ticks": 33,
+     "courier_boosts": 0,
+     "courier_boost_units": 0,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 0,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-427304807-s1",
+   "seed": 427304807,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": -68.0,
+   "realized_px": 1.0706,
+   "terminal_money": 99503.0,
+   "opp_realized_px": 1.0441,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 49,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 49,
+     "courier_ticks": 35,
+     "courier_boosts": 3,
+     "courier_boost_units": 11,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-906608145-s1",
+   "seed": 906608145,
+   "seat": 1,
+   "group": "replay_r30_26",
+   "margin": 645.0,
+   "realized_px": 1.0738,
+   "terminal_money": 60551.0,
+   "opp_realized_px": 1.0477,
+   "arm_changed_turns": 1,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 1,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 1,
+     "courier_boost_units": 3,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 1,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672029-s1",
+   "seed": 672029,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": -378.0,
+   "realized_px": 1.0901,
+   "terminal_money": 114454.0,
+   "opp_realized_px": 1.0853,
+   "arm_changed_turns": 6,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 6,
+     "herd_gate_open_ticks": 123,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 123,
+     "courier_ticks": 35,
+     "courier_boosts": 6,
+     "courier_boost_units": 22,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 6,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672087-s1",
+   "seed": 672087,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 424.0,
+   "realized_px": 1.0535,
+   "terminal_money": 116807.0,
+   "opp_realized_px": 1.04,
+   "arm_changed_turns": 0,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 0,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 0,
+     "courier_boost_units": 0,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 0,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672145-s1",
+   "seed": 672145,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": -1014.0,
+   "realized_px": 1.0592,
+   "terminal_money": 140458.0,
+   "opp_realized_px": 1.0572,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 86,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 86,
+     "courier_ticks": 35,
+     "courier_boosts": 2,
+     "courier_boost_units": 4,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672203-s1",
+   "seed": 672203,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 312.0,
+   "realized_px": 1.0829,
+   "terminal_money": 108233.0,
+   "opp_realized_px": 1.0714,
+   "arm_changed_turns": 4,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 4,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 4,
+     "courier_boost_units": 11,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 4,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672261-s1",
+   "seed": 672261,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 209.0,
+   "realized_px": 1.0917,
+   "terminal_money": 126087.0,
+   "opp_realized_px": 1.0861,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 128,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 128,
+     "courier_ticks": 35,
+     "courier_boosts": 3,
+     "courier_boost_units": 15,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672319-s1",
+   "seed": 672319,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": -118.0,
+   "realized_px": 1.0487,
+   "terminal_money": 128415.0,
+   "opp_realized_px": 1.0306,
+   "arm_changed_turns": 0,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 0,
+     "herd_gate_open_ticks": 37,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 37,
+     "courier_ticks": 32,
+     "courier_boosts": 0,
+     "courier_boost_units": 0,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 0,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672377-s1",
+   "seed": 672377,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 163.0,
+   "realized_px": 1.0511,
+   "terminal_money": 76439.0,
+   "opp_realized_px": 1.0207,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 213,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 213,
+     "courier_ticks": 42,
+     "courier_boosts": 2,
+     "courier_boost_units": 14,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672435-s1",
+   "seed": 672435,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 833.0,
+   "realized_px": 1.092,
+   "terminal_money": 82359.0,
+   "opp_realized_px": 1.0683,
+   "arm_changed_turns": 2,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 2,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 34,
+     "courier_boosts": 2,
+     "courier_boost_units": 6,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 2,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672493-s1",
+   "seed": 672493,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 332.0,
+   "realized_px": 1.0721,
+   "terminal_money": 92953.0,
+   "opp_realized_px": 1.0677,
+   "arm_changed_turns": 3,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 3,
+     "herd_gate_open_ticks": 0,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 0,
+     "courier_ticks": 32,
+     "courier_boosts": 3,
+     "courier_boost_units": 9,
+     "courier_inserts": 0,
+     "courier_insert_units": 0,
+     "courier_hoists": 3,
+     "errors": 0
+    }
+   },
+   "error": null
+  },
+  {
+   "game_id": "i1-i2-vsr40-672551-s1",
+   "seed": 672551,
+   "seat": 1,
+   "group": "neutral_672000_i29",
+   "margin": 386.0,
+   "realized_px": 1.0851,
+   "terminal_money": 71854.0,
+   "opp_realized_px": 1.071,
+   "arm_changed_turns": 7,
+   "arm_reports": {
+    "_I2_REPORT": {
+     "calls": 718,
+     "changed_turns": 7,
+     "herd_gate_open_ticks": 213,
+     "herd_inserts": 0,
+     "herd_insert_units": 0,
+     "herd_no_extra_ticks": 213,
+     "courier_ticks": 34,
+     "courier_boosts": 5,
+     "courier_boost_units": 29,
+     "courier_inserts": 2,
+     "courier_insert_units": 8,
+     "courier_hoists": 5,
+     "errors": 0
+    }
+   },
+   "error": null
+  }
+ ],
+ "elapsed_s": 206.3
+}
