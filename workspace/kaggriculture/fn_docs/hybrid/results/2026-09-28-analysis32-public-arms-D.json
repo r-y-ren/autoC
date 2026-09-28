@@ -1,0 +1,4466 @@
+{
+ "_generated_at": "2026-09-28T17:54:51Z",
+ "version": "analysis32-public-arms-D/1.1",
+ "subject": {
+  "guru_master_engine_v5": {
+   "label": "guru_master_engine_v5",
+   "name": "guruprasaathas111/kaggriculture-master-engine-v53e01d74d8f",
+   "team": "GURU Prasaatha S",
+   "rank_note": "榜 1957.2（family 对位）",
+   "artifact": "/tmp/arms_d/pack/guru_master_engine_v5/main.py",
+   "entry": "agent",
+   "main_sha256": "708c7485fa964853b193f175dcd83020602c005e159ce82e38dc350b22e970c8",
+   "tar_sha256": "ddec56dcbde9c8f1a612e584f2184ce68fc4fdbd1e33c5a76ac26aba270c67da",
+   "main_bytes": 311246,
+   "tar_bytes": 151557,
+   "pack_recipe": "orderbook_2965_adopt.build_adopt.build_tar_bytes",
+   "submission_tar": "/tmp/arms_d/pack/guru_master_engine_v5/submission.tar.gz",
+   "declared_sha256": "708c7485fa964853b193f175dcd83020602c005e159ce82e38dc350b22e970c8",
+   "sha_match_declared": true,
+   "form": "%%writefile 直体（cell5）"
+  },
+  "ahmed_v57": {
+   "label": "ahmed_v57",
+   "name": "ahmedberatozer/kaggriculture-v57-funding-order-invariant",
+   "team": "Alperen Aydın 队列系（ahmedberatozer）",
+   "rank_note": "榜 1906（任务给定）",
+   "artifact": "/tmp/arms_d/pack/ahmed_v57/main.py",
+   "entry": "v57_agent",
+   "main_sha256": "2ee689fdc58f38b7bf6b80b8d3f48129d19b47201dbee51fdcbd977498a5106f",
+   "tar_sha256": "34d2c61331f952dfbafad56c5ed76c3978bc259ff73004a6230a970eb9291687",
+   "main_bytes": 1067076,
+   "tar_bytes": 627071,
+   "pack_recipe": "orderbook_2965_adopt.build_adopt.build_tar_bytes",
+   "submission_tar": "/tmp/arms_d/pack/ahmed_v57/submission.tar.gz",
+   "declared_sha256": "2ee689fdc58f38b7bf6b80b8d3f48129d19b47201dbee51fdcbd977498a5106f",
+   "sha_match_declared": true,
+   "form": "SOURCE_BLOB=b85+zlib（cell2）"
+  },
+  "uninhibited_beyond48": {
+   "label": "uninhibited_beyond48",
+   "name": "uninhibitedscholar/kaggriculture-beyond-48-order-sequencing",
+   "team": "uninhibitedscholar",
+   "rank_note": "榜 1773（任务给定）",
+   "artifact": "/tmp/arms_d/pack/uninhibited_beyond48/main.py",
+   "entry": "agent",
+   "main_sha256": "4757f3f5b28db8a2f4614bb08993a8a567a7d49bae1ac324fbcfbcc1af60e95e",
+   "tar_sha256": "0983ad63118a47205c44aaeabd8d1772034380b5768bd4ab0dcf6752b64d4f8b",
+   "main_bytes": 350794,
+   "tar_bytes": 141507,
+   "pack_recipe": "orderbook_2965_adopt.build_adopt.build_tar_bytes",
+   "submission_tar": "/tmp/arms_d/pack/uninhibited_beyond48/submission.tar.gz",
+   "declared_sha256": "4757f3f5b28db8a2f4614bb08993a8a567a7d49bae1ac324fbcfbcc1af60e95e",
+   "sha_match_declared": true,
+   "form": "BLOB=b85+gzip（cell12）"
+  },
+  "haideptry_2965_pure": {
+   "label": "haideptry_2965_pure",
+   "name": "haideptry/the-2965-master-hybrid-engine（纯原件）",
+   "team": "haideptry",
+   "rank_note": "榜 2049（任务给定）；我方 r34a 同源基座",
+   "artifact": "/tmp/arms_d/pack/haideptry_2965_pure/main.py",
+   "entry": "_HR_PARENT",
+   "main_sha256": "bc8f84641d8e5ae8e083089c79572ed873b0f32dd071572f5efdcf342ec1143f",
+   "tar_sha256": "e74bb3dbc43b1379fbf9be776bd5c638bfac5180db2eaa835ae53e48e13999f9",
+   "main_bytes": 1031606,
+   "tar_bytes": 629090,
+   "pack_recipe": "orderbook_2965_adopt.build_adopt.build_tar_bytes",
+   "submission_tar": "/tmp/arms_d/pack/haideptry_2965_pure/submission.tar.gz",
+   "declared_sha256": "bc8f84641d8e5ae8e083089c79572ed873b0f32dd071572f5efdcf342ec1143f",
+   "sha_match_declared": true,
+   "form": "AGENT_B64=b64+gzip 解码（build_adopt.fetch_2965_source 同产物）",
+   "note": "纯原件非我方叠加层：与 r34a 的差异=我方叠加层；本臂量纯件在我方语境读数"
+  }
+ },
+ "source": {
+  "commands": [
+   "python3 /tmp/arms_d/fetch_pieces.py",
+   "python3 /tmp/arms_d/unpack_pieces.py",
+   "python3 /tmp/arms_d/pack.py",
+   "python3 /tmp/arms_d/gates.py",
+   "python3 /tmp/arms_d/judgment.py"
+  ],
+  "seed_base": 660000,
+  "n_seeds": 42,
+  "loss_seeds": [
+   1825501814,
+   2013941152,
+   786146079,
+   1883261866,
+   963182245,
+   240876256,
+   1705553586,
+   2009279466,
+   161402123,
+   435866961,
+   841473039,
+   1388158282,
+   1647385154,
+   671940665,
+   219073637,
+   1439493993,
+   1360429471,
+   671494671,
+   1900972921,
+   973657130,
+   1911990026,
+   1918725083,
+   176568822,
+   427304807,
+   720683523,
+   906608145
+  ],
+  "supp_seeds": [
+   660000,
+   660013,
+   660026,
+   660039,
+   660052,
+   660065,
+   660078,
+   660091,
+   660104,
+   660117,
+   660130,
+   660143,
+   660156,
+   660169,
+   660182,
+   660195
+  ],
+  "seeds": [
+   1825501814,
+   2013941152,
+   786146079,
+   1883261866,
+   963182245,
+   240876256,
+   1705553586,
+   2009279466,
+   161402123,
+   435866961,
+   841473039,
+   1388158282,
+   1647385154,
+   671940665,
+   219073637,
+   1439493993,
+   1360429471,
+   671494671,
+   1900972921,
+   973657130,
+   1911990026,
+   1918725083,
+   176568822,
+   427304807,
+   720683523,
+   906608145,
+   660000,
+   660013,
+   660026,
+   660039,
+   660052,
+   660065,
+   660078,
+   660091,
+   660104,
+   660117,
+   660130,
+   660143,
+   660156,
+   660169,
+   660182,
+   660195
+  ],
+  "r40_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
+  "protocol": "judgment_r27_v2 同语料族（26 败局种子+660000 起补种子 n=16，seed=660000+13i 局组错开）双席折叠（judge_r44._fold_arm 同实现）；主判=件 vs r40；sim_bridge 先对照认证（快线）；workers=2；四臂共用同语料（配对可比）",
+  "抓取日期": "2026-09-28"
+ },
+ "gates": {
+  "guru_master_engine_v5": {
+   "load": {
+    "passed": true,
+    "entry_key": "agent",
+    "entry_callable": "agent",
+    "kaggle_submission_agent": null,
+    "entry_is_ksa": false,
+    "expected_entry": "agent",
+    "n_callables": 90,
+    "note": "官方末 callable 语义（j23._load_entry）；入口名不假定=agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "rewards": [
+       99131.0,
+       99131.0
+      ],
+      "max_step_ms": 126.51,
+      "p99_step_ms": 3.78,
+      "mean_step_ms": 0.5,
+      "turns_played": 720,
+      "wall_s": 3.8,
+      "error": null,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "rewards": [
+       104253.0,
+       104253.0
+      ],
+      "max_step_ms": 249.86,
+      "p99_step_ms": 3.93,
+      "mean_step_ms": 0.75,
+      "turns_played": 720,
+      "wall_s": 4.2,
+      "error": null,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "665ebe9e35e624f8d2da90d2798bac47c1f0da83274dbd016ef696be08dd6c9e",
+     "run2": "665ebe9e35e624f8d2da90d2798bac47c1f0da83274dbd016ef696be08dd6c9e"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "main_sha256": "708c7485fa964853b193f175dcd83020602c005e159ce82e38dc350b22e970c8",
+    "tar_sha256": "ddec56dcbde9c8f1a612e584f2184ce68fc4fdbd1e33c5a76ac26aba270c67da",
+    "main_bytes": 311246,
+    "declared_sha256_match": true,
+    "tar_size_mb": 0.145,
+    "tar_members": [
+     "main.py"
+    ],
+    "tar_rebuild_reproducible": true,
+    "chain_note": "公开件无我方 base_sha_chain 锚；sha 自闭合（declared↔解包↔manifest↔盘上↔tar 内层）"
+   }
+  },
+  "ahmed_v57": {
+   "load": {
+    "passed": true,
+    "entry_key": "v57_agent",
+    "entry_callable": "v57_agent",
+    "kaggle_submission_agent": "v57_agent",
+    "entry_is_ksa": false,
+    "expected_entry": "v57_agent",
+    "n_callables": 231,
+    "note": "官方末 callable 语义（j23._load_entry）；入口名不假定=agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "rewards": [
+       96639.0,
+       96639.0
+      ],
+      "max_step_ms": 231.0,
+      "p99_step_ms": 5.92,
+      "mean_step_ms": 1.69,
+      "turns_played": 720,
+      "wall_s": 5.3,
+      "error": null,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "rewards": [
+       104163.0,
+       104163.0
+      ],
+      "max_step_ms": 271.07,
+      "p99_step_ms": 5.07,
+      "mean_step_ms": 1.52,
+      "turns_played": 720,
+      "wall_s": 5.1,
+      "error": null,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "4fd79249f7a1de5cc993d2c0fd7b1539d02dfc21421e8bdce6ee496fb417fea4",
+     "run2": "4fd79249f7a1de5cc993d2c0fd7b1539d02dfc21421e8bdce6ee496fb417fea4"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "main_sha256": "2ee689fdc58f38b7bf6b80b8d3f48129d19b47201dbee51fdcbd977498a5106f",
+    "tar_sha256": "34d2c61331f952dfbafad56c5ed76c3978bc259ff73004a6230a970eb9291687",
+    "main_bytes": 1067076,
+    "declared_sha256_match": true,
+    "tar_size_mb": 0.598,
+    "tar_members": [
+     "main.py"
+    ],
+    "tar_rebuild_reproducible": true,
+    "chain_note": "公开件无我方 base_sha_chain 锚；sha 自闭合（declared↔解包↔manifest↔盘上↔tar 内层）"
+   }
+  },
+  "uninhibited_beyond48": {
+   "load": {
+    "passed": true,
+    "entry_key": "agent",
+    "entry_callable": "agent",
+    "kaggle_submission_agent": null,
+    "entry_is_ksa": false,
+    "expected_entry": "agent",
+    "n_callables": 11,
+    "note": "官方末 callable 语义（j23._load_entry）；入口名不假定=agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "rewards": [
+       96628.0,
+       96628.0
+      ],
+      "max_step_ms": 144.25,
+      "p99_step_ms": 3.44,
+      "mean_step_ms": 0.73,
+      "turns_played": 720,
+      "wall_s": 4.2,
+      "error": null,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "rewards": [
+       101601.0,
+       101601.0
+      ],
+      "max_step_ms": 260.18,
+      "p99_step_ms": 3.61,
+      "mean_step_ms": 1.02,
+      "turns_played": 720,
+      "wall_s": 4.3,
+      "error": null,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "93d5bc04ec771a8beb8961a1464de5ee90fe1a1ddf164eaaa29dd50bed9a3fd4",
+     "run2": "93d5bc04ec771a8beb8961a1464de5ee90fe1a1ddf164eaaa29dd50bed9a3fd4"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "main_sha256": "4757f3f5b28db8a2f4614bb08993a8a567a7d49bae1ac324fbcfbcc1af60e95e",
+    "tar_sha256": "0983ad63118a47205c44aaeabd8d1772034380b5768bd4ab0dcf6752b64d4f8b",
+    "main_bytes": 350794,
+    "declared_sha256_match": true,
+    "tar_size_mb": 0.135,
+    "tar_members": [
+     "main.py"
+    ],
+    "tar_rebuild_reproducible": true,
+    "chain_note": "公开件无我方 base_sha_chain 锚；sha 自闭合（declared↔解包↔manifest↔盘上↔tar 内层）"
+   }
+  },
+  "haideptry_2965_pure": {
+   "load": {
+    "passed": true,
+    "entry_key": "_HR_PARENT",
+    "entry_callable": "agent",
+    "kaggle_submission_agent": "agent",
+    "entry_is_ksa": false,
+    "expected_entry": "_HR_PARENT",
+    "n_callables": 233,
+    "note": "官方末 callable 语义（j23._load_entry）；入口名不假定=agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "rewards": [
+       96006.0,
+       96006.0
+      ],
+      "max_step_ms": 181.44,
+      "p99_step_ms": 5.98,
+      "mean_step_ms": 1.82,
+      "turns_played": 720,
+      "wall_s": 5.4,
+      "error": null,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "rewards": [
+       103844.0,
+       103844.0
+      ],
+      "max_step_ms": 313.64,
+      "p99_step_ms": 4.93,
+      "mean_step_ms": 1.94,
+      "turns_played": 720,
+      "wall_s": 5.6,
+      "error": null,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "563327bece0f28ac30450295b157c5749b6dd05a7a4f128fd6e2a5a284c67ddf",
+     "run2": "563327bece0f28ac30450295b157c5749b6dd05a7a4f128fd6e2a5a284c67ddf"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "main_sha256": "bc8f84641d8e5ae8e083089c79572ed873b0f32dd071572f5efdcf342ec1143f",
+    "tar_sha256": "e74bb3dbc43b1379fbf9be776bd5c638bfac5180db2eaa835ae53e48e13999f9",
+    "main_bytes": 1031606,
+    "declared_sha256_match": true,
+    "tar_size_mb": 0.6,
+    "tar_members": [
+     "main.py"
+    ],
+    "tar_rebuild_reproducible": true,
+    "chain_note": "公开件无我方 base_sha_chain 锚；sha 自闭合（declared↔解包↔manifest↔盘上↔tar 内层）"
+   }
+  }
+ },
+ "gates_overall": {
+  "guru_master_engine_v5": {
+   "passed": true,
+   "failed_gates": []
+  },
+  "ahmed_v57": {
+   "passed": true,
+   "failed_gates": []
+  },
+  "uninhibited_beyond48": {
+   "passed": true,
+   "failed_gates": []
+  },
+  "haideptry_2965_pure": {
+   "passed": true,
+   "failed_gates": []
+  }
+ },
+ "sim_bridge_auth": {
+  "loaded": true,
+  "consistency": {
+   "n_checked": 30,
+   "n_match": 30,
+   "rate": 1.0
+  },
+  "consistency_ok": true,
+  "wall_speedup": 5.112,
+  "timing": {
+   "official_s": 30.7422,
+   "sim_s": 6.0137,
+   "measured_speedup": 5.112
+  },
+  "record": "/tmp/arms_d/sim_bridge_auth.json"
+ },
+ "arms": [
+  {
+   "arm": "guru_master_engine_v5",
+   "opponent": "r40（orderbook_r40/build/main.py）",
+   "n": 42,
+   "wins": 0,
+   "losses": 42,
+   "ties": 0,
+   "h2h": 0.0,
+   "mean_margin": -6011.0,
+   "realized_px_median": 1.0041,
+   "realized_px_mean": 1.0026,
+   "terminal_money_median": 95342.0,
+   "rows": 84,
+   "red_rows": 0
+  },
+  {
+   "arm": "ahmed_v57",
+   "opponent": "r40（orderbook_r40/build/main.py）",
+   "n": 42,
+   "wins": 12,
+   "losses": 29,
+   "ties": 1,
+   "h2h": 0.2976,
+   "mean_margin": -238.9,
+   "realized_px_median": 1.0538,
+   "realized_px_mean": 1.0563,
+   "terminal_money_median": 99567.5,
+   "rows": 84,
+   "red_rows": 0
+  },
+  {
+   "arm": "uninhibited_beyond48",
+   "opponent": "r40（orderbook_r40/build/main.py）",
+   "n": 42,
+   "wins": 0,
+   "losses": 42,
+   "ties": 0,
+   "h2h": 0.0,
+   "mean_margin": -5699.4,
+   "realized_px_median": 1.0118,
+   "realized_px_mean": 1.0084,
+   "terminal_money_median": 94031.0,
+   "rows": 84,
+   "red_rows": 0
+  },
+  {
+   "arm": "haideptry_2965_pure",
+   "opponent": "r40（orderbook_r40/build/main.py）",
+   "n": 42,
+   "wins": 15,
+   "losses": 23,
+   "ties": 4,
+   "h2h": 0.4048,
+   "mean_margin": 80.1,
+   "realized_px_median": 1.0665,
+   "realized_px_mean": 1.0644,
+   "terminal_money_median": 99005.5,
+   "rows": 84,
+   "red_rows": 0
+  }
+ ],
+ "arm_reads": {
+  "guru_master_engine_v5": {
+   "fold": {
+    "n": 42,
+    "wins": 0,
+    "losses": 42,
+    "ties": 0,
+    "h2h": 0.0,
+    "mean_margin": -6011.0,
+    "realized_px_median": 1.0041,
+    "realized_px_mean": 1.0026,
+    "terminal_money_median": 95342.0,
+    "red_rows": 0,
+    "terminal_money_note": "banks[seat] 口径（非 judge_r26 farms[0] 读法，不受污染）"
+   },
+   "delta_dist": {
+    "n_rows": 84,
+    "mean": -6011.0,
+    "median": -5355.0,
+    "q1": -7680.0,
+    "q3": -3750.0,
+    "min": -17752.0,
+    "max": -274.0,
+    "n_positive": 0,
+    "n_negative": 84,
+    "n_zero": 0,
+    "per_row": [
+     {
+      "seed": 1825501814,
+      "seat": 0,
+      "margin": -7490.0
+     },
+     {
+      "seed": 786146079,
+      "seat": 0,
+      "margin": -3750.0
+     },
+     {
+      "seed": 963182245,
+      "seat": 0,
+      "margin": -8357.0
+     },
+     {
+      "seed": 1705553586,
+      "seat": 0,
+      "margin": -6124.0
+     },
+     {
+      "seed": 161402123,
+      "seat": 0,
+      "margin": -2713.0
+     },
+     {
+      "seed": 841473039,
+      "seat": 0,
+      "margin": -7629.0
+     },
+     {
+      "seed": 1647385154,
+      "seat": 0,
+      "margin": -1783.0
+     },
+     {
+      "seed": 219073637,
+      "seat": 0,
+      "margin": -5533.0
+     },
+     {
+      "seed": 1360429471,
+      "seat": 0,
+      "margin": -1668.0
+     },
+     {
+      "seed": 1900972921,
+      "seat": 0,
+      "margin": -3568.0
+     },
+     {
+      "seed": 1911990026,
+      "seat": 0,
+      "margin": -4207.0
+     },
+     {
+      "seed": 176568822,
+      "seat": 0,
+      "margin": -2591.0
+     },
+     {
+      "seed": 720683523,
+      "seat": 0,
+      "margin": -2165.0
+     },
+     {
+      "seed": 660000,
+      "seat": 0,
+      "margin": -12057.0
+     },
+     {
+      "seed": 660026,
+      "seat": 0,
+      "margin": -4271.0
+     },
+     {
+      "seed": 660052,
+      "seat": 0,
+      "margin": -3764.0
+     },
+     {
+      "seed": 660078,
+      "seat": 0,
+      "margin": -14107.0
+     },
+     {
+      "seed": 660104,
+      "seat": 0,
+      "margin": -5920.0
+     },
+     {
+      "seed": 660130,
+      "seat": 0,
+      "margin": -7680.0
+     },
+     {
+      "seed": 660156,
+      "seat": 0,
+      "margin": -4084.0
+     },
+     {
+      "seed": 660182,
+      "seat": 0,
+      "margin": -11110.0
+     },
+     {
+      "seed": 1825501814,
+      "seat": 1,
+      "margin": -7490.0
+     },
+     {
+      "seed": 786146079,
+      "seat": 1,
+      "margin": -3750.0
+     },
+     {
+      "seed": 963182245,
+      "seat": 1,
+      "margin": -8357.0
+     },
+     {
+      "seed": 1705553586,
+      "seat": 1,
+      "margin": -6124.0
+     },
+     {
+      "seed": 161402123,
+      "seat": 1,
+      "margin": -2713.0
+     },
+     {
+      "seed": 841473039,
+      "seat": 1,
+      "margin": -7772.0
+     },
+     {
+      "seed": 1647385154,
+      "seat": 1,
+      "margin": -1783.0
+     },
+     {
+      "seed": 219073637,
+      "seat": 1,
+      "margin": -5533.0
+     },
+     {
+      "seed": 1360429471,
+      "seat": 1,
+      "margin": -1668.0
+     },
+     {
+      "seed": 1900972921,
+      "seat": 1,
+      "margin": -3568.0
+     },
+     {
+      "seed": 1911990026,
+      "seat": 1,
+      "margin": -17752.0
+     },
+     {
+      "seed": 176568822,
+      "seat": 1,
+      "margin": -2591.0
+     },
+     {
+      "seed": 720683523,
+      "seat": 1,
+      "margin": -2165.0
+     },
+     {
+      "seed": 660000,
+      "seat": 1,
+      "margin": -12296.0
+     },
+     {
+      "seed": 660026,
+      "seat": 1,
+      "margin": -4271.0
+     },
+     {
+      "seed": 660052,
+      "seat": 1,
+      "margin": -3764.0
+     },
+     {
+      "seed": 660078,
+      "seat": 1,
+      "margin": -14107.0
+     },
+     {
+      "seed": 660104,
+      "seat": 1,
+      "margin": -5920.0
+     },
+     {
+      "seed": 660130,
+      "seat": 1,
+      "margin": -7680.0
+     },
+     {
+      "seed": 660156,
+      "seat": 1,
+      "margin": -4084.0
+     },
+     {
+      "seed": 660182,
+      "seat": 1,
+      "margin": -11110.0
+     },
+     {
+      "seed": 2013941152,
+      "seat": 0,
+      "margin": -6211.0
+     },
+     {
+      "seed": 1883261866,
+      "seat": 0,
+      "margin": -3275.0
+     },
+     {
+      "seed": 240876256,
+      "seat": 0,
+      "margin": -4374.0
+     },
+     {
+      "seed": 2009279466,
+      "seat": 0,
+      "margin": -1901.0
+     },
+     {
+      "seed": 435866961,
+      "seat": 0,
+      "margin": -4591.0
+     },
+     {
+      "seed": 1388158282,
+      "seat": 0,
+      "margin": -5177.0
+     },
+     {
+      "seed": 671940665,
+      "seat": 0,
+      "margin": -9501.0
+     },
+     {
+      "seed": 1439493993,
+      "seat": 0,
+      "margin": -3067.0
+     },
+     {
+      "seed": 671494671,
+      "seat": 0,
+      "margin": -4800.0
+     },
+     {
+      "seed": 973657130,
+      "seat": 0,
+      "margin": -8677.0
+     },
+     {
+      "seed": 1918725083,
+      "seat": 0,
+      "margin": -7506.0
+     },
+     {
+      "seed": 427304807,
+      "seat": 0,
+      "margin": -9892.0
+     },
+     {
+      "seed": 906608145,
+      "seat": 0,
+      "margin": -6276.0
+     },
+     {
+      "seed": 660013,
+      "seat": 0,
+      "margin": -2213.0
+     },
+     {
+      "seed": 660039,
+      "seat": 0,
+      "margin": -3917.0
+     },
+     {
+      "seed": 660065,
+      "seat": 0,
+      "margin": -5789.0
+     },
+     {
+      "seed": 660091,
+      "seat": 0,
+      "margin": -4781.0
+     },
+     {
+      "seed": 660117,
+      "seat": 0,
+      "margin": -11980.0
+     },
+     {
+      "seed": 660143,
+      "seat": 0,
+      "margin": -4266.0
+     },
+     {
+      "seed": 660169,
+      "seat": 0,
+      "margin": -7565.0
+     },
+     {
+      "seed": 660195,
+      "seat": 0,
+      "margin": -9705.0
+     },
+     {
+      "seed": 2013941152,
+      "seat": 1,
+      "margin": -6167.0
+     },
+     {
+      "seed": 1883261866,
+      "seat": 1,
+      "margin": -3275.0
+     },
+     {
+      "seed": 240876256,
+      "seat": 1,
+      "margin": -4374.0
+     },
+     {
+      "seed": 2009279466,
+      "seat": 1,
+      "margin": -1901.0
+     },
+     {
+      "seed": 435866961,
+      "seat": 1,
+      "margin": -4591.0
+     },
+     {
+      "seed": 1388158282,
+      "seat": 1,
+      "margin": -6441.0
+     },
+     {
+      "seed": 671940665,
+      "seat": 1,
+      "margin": -9501.0
+     },
+     {
+      "seed": 1439493993,
+      "seat": 1,
+      "margin": -2921.0
+     },
+     {
+      "seed": 671494671,
+      "seat": 1,
+      "margin": -4800.0
+     },
+     {
+      "seed": 973657130,
+      "seat": 1,
+      "margin": -8677.0
+     },
+     {
+      "seed": 1918725083,
+      "seat": 1,
+      "margin": -7506.0
+     },
+     {
+      "seed": 427304807,
+      "seat": 1,
+      "margin": -9892.0
+     },
+     {
+      "seed": 906608145,
+      "seat": 1,
+      "margin": -6276.0
+     },
+     {
+      "seed": 660013,
+      "seat": 1,
+      "margin": -274.0
+     },
+     {
+      "seed": 660039,
+      "seat": 1,
+      "margin": -3917.0
+     },
+     {
+      "seed": 660065,
+      "seat": 1,
+      "margin": -5789.0
+     },
+     {
+      "seed": 660091,
+      "seat": 1,
+      "margin": -4781.0
+     },
+     {
+      "seed": 660117,
+      "seat": 1,
+      "margin": -11773.0
+     },
+     {
+      "seed": 660143,
+      "seat": 1,
+      "margin": -4266.0
+     },
+     {
+      "seed": 660169,
+      "seat": 1,
+      "margin": -7565.0
+     },
+     {
+      "seed": 660195,
+      "seat": 1,
+      "margin": -9705.0
+     }
+    ]
+   },
+   "seed_deltas": [
+    {
+     "seed": 660000,
+     "delta": -12176.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660013,
+     "delta": -1243.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660026,
+     "delta": -4271.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660039,
+     "delta": -3917.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660052,
+     "delta": -3764.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660065,
+     "delta": -5789.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660078,
+     "delta": -14107.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660091,
+     "delta": -4781.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660104,
+     "delta": -5920.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660117,
+     "delta": -11876.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660130,
+     "delta": -7680.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660143,
+     "delta": -4266.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660156,
+     "delta": -4084.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660169,
+     "delta": -7565.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660182,
+     "delta": -11110.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660195,
+     "delta": -9705.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 161402123,
+     "delta": -2713.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 176568822,
+     "delta": -2591.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 219073637,
+     "delta": -5533.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 240876256,
+     "delta": -4374.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 427304807,
+     "delta": -9892.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 435866961,
+     "delta": -4591.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 671494671,
+     "delta": -4800.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 671940665,
+     "delta": -9501.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 720683523,
+     "delta": -2165.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 786146079,
+     "delta": -3750.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 841473039,
+     "delta": -7700.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 906608145,
+     "delta": -6276.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 963182245,
+     "delta": -8357.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 973657130,
+     "delta": -8677.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1360429471,
+     "delta": -1668.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1388158282,
+     "delta": -5809.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1439493993,
+     "delta": -2994.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1647385154,
+     "delta": -1783.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1705553586,
+     "delta": -6124.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1825501814,
+     "delta": -7490.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1883261866,
+     "delta": -3275.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1900972921,
+     "delta": -3568.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1911990026,
+     "delta": -10979.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1918725083,
+     "delta": -7506.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 2009279466,
+     "delta": -1901.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 2013941152,
+     "delta": -6189.0,
+     "seats_valid": 2
+    }
+   ]
+  },
+  "ahmed_v57": {
+   "fold": {
+    "n": 42,
+    "wins": 12,
+    "losses": 29,
+    "ties": 1,
+    "h2h": 0.2976,
+    "mean_margin": -238.9,
+    "realized_px_median": 1.0538,
+    "realized_px_mean": 1.0563,
+    "terminal_money_median": 99567.5,
+    "red_rows": 0,
+    "terminal_money_note": "banks[seat] 口径（非 judge_r26 farms[0] 读法，不受污染）"
+   },
+   "delta_dist": {
+    "n_rows": 84,
+    "mean": -238.9,
+    "median": -223.5,
+    "q1": -439.0,
+    "q3": 38.0,
+    "min": -11361.0,
+    "max": 11631.0,
+    "n_positive": 25,
+    "n_negative": 59,
+    "n_zero": 0,
+    "per_row": [
+     {
+      "seed": 1825501814,
+      "seat": 0,
+      "margin": -690.0
+     },
+     {
+      "seed": 786146079,
+      "seat": 0,
+      "margin": -262.0
+     },
+     {
+      "seed": 963182245,
+      "seat": 0,
+      "margin": 1233.0
+     },
+     {
+      "seed": 1705553586,
+      "seat": 0,
+      "margin": 305.0
+     },
+     {
+      "seed": 161402123,
+      "seat": 0,
+      "margin": -1598.0
+     },
+     {
+      "seed": 841473039,
+      "seat": 0,
+      "margin": -275.0
+     },
+     {
+      "seed": 1647385154,
+      "seat": 0,
+      "margin": -94.0
+     },
+     {
+      "seed": 219073637,
+      "seat": 0,
+      "margin": 38.0
+     },
+     {
+      "seed": 1360429471,
+      "seat": 0,
+      "margin": 24.0
+     },
+     {
+      "seed": 1900972921,
+      "seat": 0,
+      "margin": -50.0
+     },
+     {
+      "seed": 1911990026,
+      "seat": 0,
+      "margin": -251.0
+     },
+     {
+      "seed": 176568822,
+      "seat": 0,
+      "margin": -196.0
+     },
+     {
+      "seed": 720683523,
+      "seat": 0,
+      "margin": -439.0
+     },
+     {
+      "seed": 660000,
+      "seat": 0,
+      "margin": -109.0
+     },
+     {
+      "seed": 660026,
+      "seat": 0,
+      "margin": -52.0
+     },
+     {
+      "seed": 660052,
+      "seat": 0,
+      "margin": -343.0
+     },
+     {
+      "seed": 660078,
+      "seat": 0,
+      "margin": 202.0
+     },
+     {
+      "seed": 660104,
+      "seat": 0,
+      "margin": -889.0
+     },
+     {
+      "seed": 660130,
+      "seat": 0,
+      "margin": -128.0
+     },
+     {
+      "seed": 660156,
+      "seat": 0,
+      "margin": -1206.0
+     },
+     {
+      "seed": 660182,
+      "seat": 0,
+      "margin": -97.0
+     },
+     {
+      "seed": 1825501814,
+      "seat": 1,
+      "margin": -690.0
+     },
+     {
+      "seed": 786146079,
+      "seat": 1,
+      "margin": -262.0
+     },
+     {
+      "seed": 963182245,
+      "seat": 1,
+      "margin": 1233.0
+     },
+     {
+      "seed": 1705553586,
+      "seat": 1,
+      "margin": 305.0
+     },
+     {
+      "seed": 161402123,
+      "seat": 1,
+      "margin": -1598.0
+     },
+     {
+      "seed": 841473039,
+      "seat": 1,
+      "margin": -275.0
+     },
+     {
+      "seed": 1647385154,
+      "seat": 1,
+      "margin": -94.0
+     },
+     {
+      "seed": 219073637,
+      "seat": 1,
+      "margin": 38.0
+     },
+     {
+      "seed": 1360429471,
+      "seat": 1,
+      "margin": 24.0
+     },
+     {
+      "seed": 1900972921,
+      "seat": 1,
+      "margin": -50.0
+     },
+     {
+      "seed": 1911990026,
+      "seat": 1,
+      "margin": -251.0
+     },
+     {
+      "seed": 176568822,
+      "seat": 1,
+      "margin": -196.0
+     },
+     {
+      "seed": 720683523,
+      "seat": 1,
+      "margin": -439.0
+     },
+     {
+      "seed": 660000,
+      "seat": 1,
+      "margin": -369.0
+     },
+     {
+      "seed": 660026,
+      "seat": 1,
+      "margin": -52.0
+     },
+     {
+      "seed": 660052,
+      "seat": 1,
+      "margin": -343.0
+     },
+     {
+      "seed": 660078,
+      "seat": 1,
+      "margin": 202.0
+     },
+     {
+      "seed": 660104,
+      "seat": 1,
+      "margin": -889.0
+     },
+     {
+      "seed": 660130,
+      "seat": 1,
+      "margin": -128.0
+     },
+     {
+      "seed": 660156,
+      "seat": 1,
+      "margin": -1206.0
+     },
+     {
+      "seed": 660182,
+      "seat": 1,
+      "margin": -97.0
+     },
+     {
+      "seed": 2013941152,
+      "seat": 0,
+      "margin": 5390.0
+     },
+     {
+      "seed": 1883261866,
+      "seat": 0,
+      "margin": -140.0
+     },
+     {
+      "seed": 240876256,
+      "seat": 0,
+      "margin": 108.0
+     },
+     {
+      "seed": 2009279466,
+      "seat": 0,
+      "margin": -284.0
+     },
+     {
+      "seed": 435866961,
+      "seat": 0,
+      "margin": -400.0
+     },
+     {
+      "seed": 1388158282,
+      "seat": 0,
+      "margin": -879.0
+     },
+     {
+      "seed": 671940665,
+      "seat": 0,
+      "margin": -5787.0
+     },
+     {
+      "seed": 1439493993,
+      "seat": 0,
+      "margin": -2574.0
+     },
+     {
+      "seed": 671494671,
+      "seat": 0,
+      "margin": -495.0
+     },
+     {
+      "seed": 973657130,
+      "seat": 0,
+      "margin": -349.0
+     },
+     {
+      "seed": 1918725083,
+      "seat": 0,
+      "margin": -1183.0
+     },
+     {
+      "seed": 427304807,
+      "seat": 0,
+      "margin": 28.0
+     },
+     {
+      "seed": 906608145,
+      "seat": 0,
+      "margin": -799.0
+     },
+     {
+      "seed": 660013,
+      "seat": 0,
+      "margin": 1550.0
+     },
+     {
+      "seed": 660039,
+      "seat": 0,
+      "margin": 87.0
+     },
+     {
+      "seed": 660065,
+      "seat": 0,
+      "margin": 53.0
+     },
+     {
+      "seed": 660091,
+      "seat": 0,
+      "margin": -32.0
+     },
+     {
+      "seed": 660117,
+      "seat": 0,
+      "margin": 11631.0
+     },
+     {
+      "seed": 660143,
+      "seat": 0,
+      "margin": 56.0
+     },
+     {
+      "seed": 660169,
+      "seat": 0,
+      "margin": -297.0
+     },
+     {
+      "seed": 660195,
+      "seat": 0,
+      "margin": -387.0
+     },
+     {
+      "seed": 2013941152,
+      "seat": 1,
+      "margin": 5390.0
+     },
+     {
+      "seed": 1883261866,
+      "seat": 1,
+      "margin": -140.0
+     },
+     {
+      "seed": 240876256,
+      "seat": 1,
+      "margin": 108.0
+     },
+     {
+      "seed": 2009279466,
+      "seat": 1,
+      "margin": -284.0
+     },
+     {
+      "seed": 435866961,
+      "seat": 1,
+      "margin": -400.0
+     },
+     {
+      "seed": 1388158282,
+      "seat": 1,
+      "margin": -631.0
+     },
+     {
+      "seed": 671940665,
+      "seat": 1,
+      "margin": -5787.0
+     },
+     {
+      "seed": 1439493993,
+      "seat": 1,
+      "margin": -2438.0
+     },
+     {
+      "seed": 671494671,
+      "seat": 1,
+      "margin": -495.0
+     },
+     {
+      "seed": 973657130,
+      "seat": 1,
+      "margin": -349.0
+     },
+     {
+      "seed": 1918725083,
+      "seat": 1,
+      "margin": -1183.0
+     },
+     {
+      "seed": 427304807,
+      "seat": 1,
+      "margin": 28.0
+     },
+     {
+      "seed": 906608145,
+      "seat": 1,
+      "margin": -799.0
+     },
+     {
+      "seed": 660013,
+      "seat": 1,
+      "margin": 3514.0
+     },
+     {
+      "seed": 660039,
+      "seat": 1,
+      "margin": 87.0
+     },
+     {
+      "seed": 660065,
+      "seat": 1,
+      "margin": 53.0
+     },
+     {
+      "seed": 660091,
+      "seat": 1,
+      "margin": -32.0
+     },
+     {
+      "seed": 660117,
+      "seat": 1,
+      "margin": -11361.0
+     },
+     {
+      "seed": 660143,
+      "seat": 1,
+      "margin": 56.0
+     },
+     {
+      "seed": 660169,
+      "seat": 1,
+      "margin": -297.0
+     },
+     {
+      "seed": 660195,
+      "seat": 1,
+      "margin": -387.0
+     }
+    ]
+   },
+   "seed_deltas": [
+    {
+     "seed": 660000,
+     "delta": -239.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660013,
+     "delta": 2532.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660026,
+     "delta": -52.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660039,
+     "delta": 87.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660052,
+     "delta": -343.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660065,
+     "delta": 53.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660078,
+     "delta": 202.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660091,
+     "delta": -32.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660104,
+     "delta": -889.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660117,
+     "delta": 135.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660130,
+     "delta": -128.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660143,
+     "delta": 56.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660156,
+     "delta": -1206.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660169,
+     "delta": -297.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660182,
+     "delta": -97.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660195,
+     "delta": -387.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 161402123,
+     "delta": -1598.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 176568822,
+     "delta": -196.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 219073637,
+     "delta": 38.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 240876256,
+     "delta": 108.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 427304807,
+     "delta": 28.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 435866961,
+     "delta": -400.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 671494671,
+     "delta": -495.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 671940665,
+     "delta": -5787.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 720683523,
+     "delta": -439.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 786146079,
+     "delta": -262.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 841473039,
+     "delta": -275.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 906608145,
+     "delta": -799.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 963182245,
+     "delta": 1233.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 973657130,
+     "delta": -349.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1360429471,
+     "delta": 24.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1388158282,
+     "delta": -755.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1439493993,
+     "delta": -2506.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1647385154,
+     "delta": -94.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1705553586,
+     "delta": 305.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1825501814,
+     "delta": -690.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1883261866,
+     "delta": -140.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1900972921,
+     "delta": -50.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1911990026,
+     "delta": -251.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1918725083,
+     "delta": -1183.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 2009279466,
+     "delta": -284.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 2013941152,
+     "delta": 5390.0,
+     "seats_valid": 2
+    }
+   ]
+  },
+  "uninhibited_beyond48": {
+   "fold": {
+    "n": 42,
+    "wins": 0,
+    "losses": 42,
+    "ties": 0,
+    "h2h": 0.0,
+    "mean_margin": -5699.4,
+    "realized_px_median": 1.0118,
+    "realized_px_mean": 1.0084,
+    "terminal_money_median": 94031.0,
+    "red_rows": 0,
+    "terminal_money_note": "banks[seat] 口径（非 judge_r26 farms[0] 读法，不受污染）"
+   },
+   "delta_dist": {
+    "n_rows": 84,
+    "mean": -5699.4,
+    "median": -4460.0,
+    "q1": -8017.0,
+    "q3": -2007.0,
+    "min": -22018.0,
+    "max": -829.0,
+    "n_positive": 0,
+    "n_negative": 84,
+    "n_zero": 0,
+    "per_row": [
+     {
+      "seed": 1825501814,
+      "seat": 0,
+      "margin": -22018.0
+     },
+     {
+      "seed": 786146079,
+      "seat": 0,
+      "margin": -7226.0
+     },
+     {
+      "seed": 963182245,
+      "seat": 0,
+      "margin": -4925.0
+     },
+     {
+      "seed": 1705553586,
+      "seat": 0,
+      "margin": -2007.0
+     },
+     {
+      "seed": 161402123,
+      "seat": 0,
+      "margin": -2731.0
+     },
+     {
+      "seed": 841473039,
+      "seat": 0,
+      "margin": -1785.0
+     },
+     {
+      "seed": 1647385154,
+      "seat": 0,
+      "margin": -1452.0
+     },
+     {
+      "seed": 219073637,
+      "seat": 0,
+      "margin": -1497.0
+     },
+     {
+      "seed": 1360429471,
+      "seat": 0,
+      "margin": -5788.0
+     },
+     {
+      "seed": 1900972921,
+      "seat": 0,
+      "margin": -8407.0
+     },
+     {
+      "seed": 1911990026,
+      "seat": 0,
+      "margin": -4718.0
+     },
+     {
+      "seed": 176568822,
+      "seat": 0,
+      "margin": -1965.0
+     },
+     {
+      "seed": 720683523,
+      "seat": 0,
+      "margin": -1440.0
+     },
+     {
+      "seed": 660000,
+      "seat": 0,
+      "margin": -12111.0
+     },
+     {
+      "seed": 660026,
+      "seat": 0,
+      "margin": -6624.0
+     },
+     {
+      "seed": 660052,
+      "seat": 0,
+      "margin": -2073.0
+     },
+     {
+      "seed": 660078,
+      "seat": 0,
+      "margin": -13616.0
+     },
+     {
+      "seed": 660104,
+      "seat": 0,
+      "margin": -3203.0
+     },
+     {
+      "seed": 660130,
+      "seat": 0,
+      "margin": -6178.0
+     },
+     {
+      "seed": 660156,
+      "seat": 0,
+      "margin": -2478.0
+     },
+     {
+      "seed": 660182,
+      "seat": 0,
+      "margin": -1622.0
+     },
+     {
+      "seed": 1825501814,
+      "seat": 1,
+      "margin": -22018.0
+     },
+     {
+      "seed": 786146079,
+      "seat": 1,
+      "margin": -7226.0
+     },
+     {
+      "seed": 963182245,
+      "seat": 1,
+      "margin": -4925.0
+     },
+     {
+      "seed": 1705553586,
+      "seat": 1,
+      "margin": -2007.0
+     },
+     {
+      "seed": 161402123,
+      "seat": 1,
+      "margin": -2731.0
+     },
+     {
+      "seed": 841473039,
+      "seat": 1,
+      "margin": -1629.0
+     },
+     {
+      "seed": 1647385154,
+      "seat": 1,
+      "margin": -1452.0
+     },
+     {
+      "seed": 219073637,
+      "seat": 1,
+      "margin": -1497.0
+     },
+     {
+      "seed": 1360429471,
+      "seat": 1,
+      "margin": -5788.0
+     },
+     {
+      "seed": 1900972921,
+      "seat": 1,
+      "margin": -8407.0
+     },
+     {
+      "seed": 1911990026,
+      "seat": 1,
+      "margin": -10604.0
+     },
+     {
+      "seed": 176568822,
+      "seat": 1,
+      "margin": -1965.0
+     },
+     {
+      "seed": 720683523,
+      "seat": 1,
+      "margin": -1440.0
+     },
+     {
+      "seed": 660000,
+      "seat": 1,
+      "margin": -12330.0
+     },
+     {
+      "seed": 660026,
+      "seat": 1,
+      "margin": -6624.0
+     },
+     {
+      "seed": 660052,
+      "seat": 1,
+      "margin": -2073.0
+     },
+     {
+      "seed": 660078,
+      "seat": 1,
+      "margin": -13616.0
+     },
+     {
+      "seed": 660104,
+      "seat": 1,
+      "margin": -3203.0
+     },
+     {
+      "seed": 660130,
+      "seat": 1,
+      "margin": -6178.0
+     },
+     {
+      "seed": 660156,
+      "seat": 1,
+      "margin": -2478.0
+     },
+     {
+      "seed": 660182,
+      "seat": 1,
+      "margin": -1622.0
+     },
+     {
+      "seed": 2013941152,
+      "seat": 0,
+      "margin": -10003.0
+     },
+     {
+      "seed": 1883261866,
+      "seat": 0,
+      "margin": -829.0
+     },
+     {
+      "seed": 240876256,
+      "seat": 0,
+      "margin": -2906.0
+     },
+     {
+      "seed": 2009279466,
+      "seat": 0,
+      "margin": -13715.0
+     },
+     {
+      "seed": 435866961,
+      "seat": 0,
+      "margin": -1143.0
+     },
+     {
+      "seed": 1388158282,
+      "seat": 0,
+      "margin": -10956.0
+     },
+     {
+      "seed": 671940665,
+      "seat": 0,
+      "margin": -9636.0
+     },
+     {
+      "seed": 1439493993,
+      "seat": 0,
+      "margin": -1989.0
+     },
+     {
+      "seed": 671494671,
+      "seat": 0,
+      "margin": -6506.0
+     },
+     {
+      "seed": 973657130,
+      "seat": 0,
+      "margin": -3468.0
+     },
+     {
+      "seed": 1918725083,
+      "seat": 0,
+      "margin": -8017.0
+     },
+     {
+      "seed": 427304807,
+      "seat": 0,
+      "margin": -11781.0
+     },
+     {
+      "seed": 906608145,
+      "seat": 0,
+      "margin": -3670.0
+     },
+     {
+      "seed": 660013,
+      "seat": 0,
+      "margin": -4671.0
+     },
+     {
+      "seed": 660039,
+      "seat": 0,
+      "margin": -1837.0
+     },
+     {
+      "seed": 660065,
+      "seat": 0,
+      "margin": -4249.0
+     },
+     {
+      "seed": 660091,
+      "seat": 0,
+      "margin": -7263.0
+     },
+     {
+      "seed": 660117,
+      "seat": 0,
+      "margin": -8589.0
+     },
+     {
+      "seed": 660143,
+      "seat": 0,
+      "margin": -2743.0
+     },
+     {
+      "seed": 660169,
+      "seat": 0,
+      "margin": -6374.0
+     },
+     {
+      "seed": 660195,
+      "seat": 0,
+      "margin": -6114.0
+     },
+     {
+      "seed": 2013941152,
+      "seat": 1,
+      "margin": -9942.0
+     },
+     {
+      "seed": 1883261866,
+      "seat": 1,
+      "margin": -829.0
+     },
+     {
+      "seed": 240876256,
+      "seat": 1,
+      "margin": -2906.0
+     },
+     {
+      "seed": 2009279466,
+      "seat": 1,
+      "margin": -13715.0
+     },
+     {
+      "seed": 435866961,
+      "seat": 1,
+      "margin": -1143.0
+     },
+     {
+      "seed": 1388158282,
+      "seat": 1,
+      "margin": -10697.0
+     },
+     {
+      "seed": 671940665,
+      "seat": 1,
+      "margin": -9636.0
+     },
+     {
+      "seed": 1439493993,
+      "seat": 1,
+      "margin": -1829.0
+     },
+     {
+      "seed": 671494671,
+      "seat": 1,
+      "margin": -6506.0
+     },
+     {
+      "seed": 973657130,
+      "seat": 1,
+      "margin": -3468.0
+     },
+     {
+      "seed": 1918725083,
+      "seat": 1,
+      "margin": -8017.0
+     },
+     {
+      "seed": 427304807,
+      "seat": 1,
+      "margin": -11781.0
+     },
+     {
+      "seed": 906608145,
+      "seat": 1,
+      "margin": -3670.0
+     },
+     {
+      "seed": 660013,
+      "seat": 1,
+      "margin": -2782.0
+     },
+     {
+      "seed": 660039,
+      "seat": 1,
+      "margin": -1837.0
+     },
+     {
+      "seed": 660065,
+      "seat": 1,
+      "margin": -4249.0
+     },
+     {
+      "seed": 660091,
+      "seat": 1,
+      "margin": -7263.0
+     },
+     {
+      "seed": 660117,
+      "seat": 1,
+      "margin": -3114.0
+     },
+     {
+      "seed": 660143,
+      "seat": 1,
+      "margin": -2743.0
+     },
+     {
+      "seed": 660169,
+      "seat": 1,
+      "margin": -6374.0
+     },
+     {
+      "seed": 660195,
+      "seat": 1,
+      "margin": -6114.0
+     }
+    ]
+   },
+   "seed_deltas": [
+    {
+     "seed": 660000,
+     "delta": -12220.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660013,
+     "delta": -3726.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660026,
+     "delta": -6624.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660039,
+     "delta": -1837.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660052,
+     "delta": -2073.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660065,
+     "delta": -4249.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660078,
+     "delta": -13616.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660091,
+     "delta": -7263.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660104,
+     "delta": -3203.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660117,
+     "delta": -5851.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660130,
+     "delta": -6178.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660143,
+     "delta": -2743.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660156,
+     "delta": -2478.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660169,
+     "delta": -6374.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660182,
+     "delta": -1622.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660195,
+     "delta": -6114.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 161402123,
+     "delta": -2731.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 176568822,
+     "delta": -1965.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 219073637,
+     "delta": -1497.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 240876256,
+     "delta": -2906.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 427304807,
+     "delta": -11781.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 435866961,
+     "delta": -1143.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 671494671,
+     "delta": -6506.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 671940665,
+     "delta": -9636.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 720683523,
+     "delta": -1440.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 786146079,
+     "delta": -7226.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 841473039,
+     "delta": -1707.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 906608145,
+     "delta": -3670.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 963182245,
+     "delta": -4925.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 973657130,
+     "delta": -3468.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1360429471,
+     "delta": -5788.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1388158282,
+     "delta": -10826.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1439493993,
+     "delta": -1909.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1647385154,
+     "delta": -1452.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1705553586,
+     "delta": -2007.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1825501814,
+     "delta": -22018.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1883261866,
+     "delta": -829.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1900972921,
+     "delta": -8407.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1911990026,
+     "delta": -7661.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1918725083,
+     "delta": -8017.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 2009279466,
+     "delta": -13715.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 2013941152,
+     "delta": -9972.5,
+     "seats_valid": 2
+    }
+   ]
+  },
+  "haideptry_2965_pure": {
+   "fold": {
+    "n": 42,
+    "wins": 15,
+    "losses": 23,
+    "ties": 4,
+    "h2h": 0.4048,
+    "mean_margin": 80.1,
+    "realized_px_median": 1.0665,
+    "realized_px_mean": 1.0644,
+    "terminal_money_median": 99005.5,
+    "red_rows": 0,
+    "terminal_money_note": "banks[seat] 口径（非 judge_r26 farms[0] 读法，不受污染）"
+   },
+   "delta_dist": {
+    "n_rows": 84,
+    "mean": 80.1,
+    "median": -25.0,
+    "q1": -62.0,
+    "q3": 133.0,
+    "min": -4991.0,
+    "max": 11310.0,
+    "n_positive": 34,
+    "n_negative": 50,
+    "n_zero": 0,
+    "per_row": [
+     {
+      "seed": 1825501814,
+      "seat": 0,
+      "margin": 152.0
+     },
+     {
+      "seed": 786146079,
+      "seat": 0,
+      "margin": -37.0
+     },
+     {
+      "seed": 963182245,
+      "seat": 0,
+      "margin": -392.0
+     },
+     {
+      "seed": 1705553586,
+      "seat": 0,
+      "margin": 79.0
+     },
+     {
+      "seed": 161402123,
+      "seat": 0,
+      "margin": -26.0
+     },
+     {
+      "seed": 841473039,
+      "seat": 0,
+      "margin": -149.0
+     },
+     {
+      "seed": 1647385154,
+      "seat": 0,
+      "margin": -44.0
+     },
+     {
+      "seed": 219073637,
+      "seat": 0,
+      "margin": -23.0
+     },
+     {
+      "seed": 1360429471,
+      "seat": 0,
+      "margin": 188.0
+     },
+     {
+      "seed": 1900972921,
+      "seat": 0,
+      "margin": 26.0
+     },
+     {
+      "seed": 1911990026,
+      "seat": 0,
+      "margin": 258.0
+     },
+     {
+      "seed": 176568822,
+      "seat": 0,
+      "margin": -6.0
+     },
+     {
+      "seed": 720683523,
+      "seat": 0,
+      "margin": -60.0
+     },
+     {
+      "seed": 660000,
+      "seat": 0,
+      "margin": 50.0
+     },
+     {
+      "seed": 660026,
+      "seat": 0,
+      "margin": -73.0
+     },
+     {
+      "seed": 660052,
+      "seat": 0,
+      "margin": 295.0
+     },
+     {
+      "seed": 660078,
+      "seat": 0,
+      "margin": -62.0
+     },
+     {
+      "seed": 660104,
+      "seat": 0,
+      "margin": -61.0
+     },
+     {
+      "seed": 660130,
+      "seat": 0,
+      "margin": 194.0
+     },
+     {
+      "seed": 660156,
+      "seat": 0,
+      "margin": -24.0
+     },
+     {
+      "seed": 660182,
+      "seat": 0,
+      "margin": -35.0
+     },
+     {
+      "seed": 1825501814,
+      "seat": 1,
+      "margin": 152.0
+     },
+     {
+      "seed": 786146079,
+      "seat": 1,
+      "margin": -37.0
+     },
+     {
+      "seed": 963182245,
+      "seat": 1,
+      "margin": -392.0
+     },
+     {
+      "seed": 1705553586,
+      "seat": 1,
+      "margin": 79.0
+     },
+     {
+      "seed": 161402123,
+      "seat": 1,
+      "margin": -26.0
+     },
+     {
+      "seed": 841473039,
+      "seat": 1,
+      "margin": -149.0
+     },
+     {
+      "seed": 1647385154,
+      "seat": 1,
+      "margin": -44.0
+     },
+     {
+      "seed": 219073637,
+      "seat": 1,
+      "margin": -23.0
+     },
+     {
+      "seed": 1360429471,
+      "seat": 1,
+      "margin": 188.0
+     },
+     {
+      "seed": 1900972921,
+      "seat": 1,
+      "margin": 26.0
+     },
+     {
+      "seed": 1911990026,
+      "seat": 1,
+      "margin": 258.0
+     },
+     {
+      "seed": 176568822,
+      "seat": 1,
+      "margin": -6.0
+     },
+     {
+      "seed": 720683523,
+      "seat": 1,
+      "margin": -60.0
+     },
+     {
+      "seed": 660000,
+      "seat": 1,
+      "margin": -220.0
+     },
+     {
+      "seed": 660026,
+      "seat": 1,
+      "margin": -73.0
+     },
+     {
+      "seed": 660052,
+      "seat": 1,
+      "margin": 295.0
+     },
+     {
+      "seed": 660078,
+      "seat": 1,
+      "margin": -62.0
+     },
+     {
+      "seed": 660104,
+      "seat": 1,
+      "margin": -61.0
+     },
+     {
+      "seed": 660130,
+      "seat": 1,
+      "margin": 194.0
+     },
+     {
+      "seed": 660156,
+      "seat": 1,
+      "margin": -24.0
+     },
+     {
+      "seed": 660182,
+      "seat": 1,
+      "margin": -35.0
+     },
+     {
+      "seed": 2013941152,
+      "seat": 0,
+      "margin": 1204.0
+     },
+     {
+      "seed": 1883261866,
+      "seat": 0,
+      "margin": -7.0
+     },
+     {
+      "seed": 240876256,
+      "seat": 0,
+      "margin": -37.0
+     },
+     {
+      "seed": 2009279466,
+      "seat": 0,
+      "margin": 133.0
+     },
+     {
+      "seed": 435866961,
+      "seat": 0,
+      "margin": -58.0
+     },
+     {
+      "seed": 1388158282,
+      "seat": 0,
+      "margin": -132.0
+     },
+     {
+      "seed": 671940665,
+      "seat": 0,
+      "margin": -4851.0
+     },
+     {
+      "seed": 1439493993,
+      "seat": 0,
+      "margin": -114.0
+     },
+     {
+      "seed": 671494671,
+      "seat": 0,
+      "margin": 74.0
+     },
+     {
+      "seed": 973657130,
+      "seat": 0,
+      "margin": -65.0
+     },
+     {
+      "seed": 1918725083,
+      "seat": 0,
+      "margin": -62.0
+     },
+     {
+      "seed": 427304807,
+      "seat": 0,
+      "margin": -101.0
+     },
+     {
+      "seed": 906608145,
+      "seat": 0,
+      "margin": -27.0
+     },
+     {
+      "seed": 660013,
+      "seat": 0,
+      "margin": 1503.0
+     },
+     {
+      "seed": 660039,
+      "seat": 0,
+      "margin": 1119.0
+     },
+     {
+      "seed": 660065,
+      "seat": 0,
+      "margin": 253.0
+     },
+     {
+      "seed": 660091,
+      "seat": 0,
+      "margin": -122.0
+     },
+     {
+      "seed": 660117,
+      "seat": 0,
+      "margin": 11310.0
+     },
+     {
+      "seed": 660143,
+      "seat": 0,
+      "margin": -49.0
+     },
+     {
+      "seed": 660169,
+      "seat": 0,
+      "margin": 122.0
+     },
+     {
+      "seed": 660195,
+      "seat": 0,
+      "margin": 121.0
+     },
+     {
+      "seed": 2013941152,
+      "seat": 1,
+      "margin": 1204.0
+     },
+     {
+      "seed": 1883261866,
+      "seat": 1,
+      "margin": -7.0
+     },
+     {
+      "seed": 240876256,
+      "seat": 1,
+      "margin": -37.0
+     },
+     {
+      "seed": 2009279466,
+      "seat": 1,
+      "margin": 133.0
+     },
+     {
+      "seed": 435866961,
+      "seat": 1,
+      "margin": -58.0
+     },
+     {
+      "seed": 1388158282,
+      "seat": 1,
+      "margin": 126.0
+     },
+     {
+      "seed": 671940665,
+      "seat": 1,
+      "margin": -4851.0
+     },
+     {
+      "seed": 1439493993,
+      "seat": 1,
+      "margin": 32.0
+     },
+     {
+      "seed": 671494671,
+      "seat": 1,
+      "margin": 74.0
+     },
+     {
+      "seed": 973657130,
+      "seat": 1,
+      "margin": -65.0
+     },
+     {
+      "seed": 1918725083,
+      "seat": 1,
+      "margin": -62.0
+     },
+     {
+      "seed": 427304807,
+      "seat": 1,
+      "margin": -101.0
+     },
+     {
+      "seed": 906608145,
+      "seat": 1,
+      "margin": -27.0
+     },
+     {
+      "seed": 660013,
+      "seat": 1,
+      "margin": 3467.0
+     },
+     {
+      "seed": 660039,
+      "seat": 1,
+      "margin": 1119.0
+     },
+     {
+      "seed": 660065,
+      "seat": 1,
+      "margin": 253.0
+     },
+     {
+      "seed": 660091,
+      "seat": 1,
+      "margin": -122.0
+     },
+     {
+      "seed": 660117,
+      "seat": 1,
+      "margin": -4991.0
+     },
+     {
+      "seed": 660143,
+      "seat": 1,
+      "margin": -49.0
+     },
+     {
+      "seed": 660169,
+      "seat": 1,
+      "margin": 122.0
+     },
+     {
+      "seed": 660195,
+      "seat": 1,
+      "margin": 121.0
+     }
+    ]
+   },
+   "seed_deltas": [
+    {
+     "seed": 660000,
+     "delta": -85.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660013,
+     "delta": 2485.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660026,
+     "delta": -73.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660039,
+     "delta": 1119.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660052,
+     "delta": 295.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660065,
+     "delta": 253.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660078,
+     "delta": -62.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660091,
+     "delta": -122.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660104,
+     "delta": -61.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660117,
+     "delta": 3159.5,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660130,
+     "delta": 194.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660143,
+     "delta": -49.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660156,
+     "delta": -24.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660169,
+     "delta": 122.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660182,
+     "delta": -35.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 660195,
+     "delta": 121.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 161402123,
+     "delta": -26.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 176568822,
+     "delta": -6.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 219073637,
+     "delta": -23.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 240876256,
+     "delta": -37.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 427304807,
+     "delta": -101.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 435866961,
+     "delta": -58.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 671494671,
+     "delta": 74.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 671940665,
+     "delta": -4851.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 720683523,
+     "delta": -60.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 786146079,
+     "delta": -37.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 841473039,
+     "delta": -149.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 906608145,
+     "delta": -27.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 963182245,
+     "delta": -392.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 973657130,
+     "delta": -65.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1360429471,
+     "delta": 188.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1388158282,
+     "delta": -3.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1439493993,
+     "delta": -41.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1647385154,
+     "delta": -44.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1705553586,
+     "delta": 79.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1825501814,
+     "delta": 152.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1883261866,
+     "delta": -7.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1900972921,
+     "delta": 26.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1911990026,
+     "delta": 258.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 1918725083,
+     "delta": -62.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 2009279466,
+     "delta": 133.0,
+     "seats_valid": 2
+    },
+    {
+     "seed": 2013941152,
+     "delta": 1204.0,
+     "seats_valid": 2
+    }
+   ]
+  }
+ },
+ "criteria": {
+  "guru_master_engine_v5": {
+   "r27_rejudge": {
+    "win_rate_ge_055": {
+     "value": 0.0,
+     "verdict": "FAIL",
+     "bar": 0.55,
+     "note": "件 vs r40 双席折叠胜率（n=42 独立局）"
+    },
+    "money_delta_non_negative": {
+     "value": -6011.0,
+     "verdict": "FAIL",
+     "bar": 0.0,
+     "note": "均钱差（件席钱−r40 席钱）"
+    },
+    "zero_footprint": {
+     "value": "N/A",
+     "verdict": "N/A",
+     "note": "公开整件非我方层，零足迹面不适用"
+    }
+   },
+   "r28_applicable": {
+    "h2h_vs_r40": {
+     "value": 0.0,
+     "verdict": "FAIL",
+     "bar": 0.55
+    },
+    "realized_px_no_drop": {
+     "value": {
+      "candidate": 1.0026,
+      "baseline": 1.0493
+     },
+     "verdict": "FAIL",
+     "note": "candidate=件侧行级实现价均值；baseline=r40 侧均值"
+    },
+    "not_applicable": {
+     "net_identity": "N/A（我方层台账恒等，非我方层不适用）",
+     "mirror_win_rate": "N/A（本组不设镜像臂，预算局次限）",
+     "counter_not_flipped": "N/A（R28 反制臂专用）",
+     "control_not_negative": "N/A（R28 胜局对照专用）"
+    }
+   },
+   "gates_4": "PASS"
+  },
+  "ahmed_v57": {
+   "r27_rejudge": {
+    "win_rate_ge_055": {
+     "value": 0.2976,
+     "verdict": "FAIL",
+     "bar": 0.55,
+     "note": "件 vs r40 双席折叠胜率（n=42 独立局）"
+    },
+    "money_delta_non_negative": {
+     "value": -238.9,
+     "verdict": "FAIL",
+     "bar": 0.0,
+     "note": "均钱差（件席钱−r40 席钱）"
+    },
+    "zero_footprint": {
+     "value": "N/A",
+     "verdict": "N/A",
+     "note": "公开整件非我方层，零足迹面不适用"
+    }
+   },
+   "r28_applicable": {
+    "h2h_vs_r40": {
+     "value": 0.2976,
+     "verdict": "FAIL",
+     "bar": 0.55
+    },
+    "realized_px_no_drop": {
+     "value": {
+      "candidate": 1.0563,
+      "baseline": 1.0616
+     },
+     "verdict": "FAIL",
+     "note": "candidate=件侧行级实现价均值；baseline=r40 侧均值"
+    },
+    "not_applicable": {
+     "net_identity": "N/A（我方层台账恒等，非我方层不适用）",
+     "mirror_win_rate": "N/A（本组不设镜像臂，预算局次限）",
+     "counter_not_flipped": "N/A（R28 反制臂专用）",
+     "control_not_negative": "N/A（R28 胜局对照专用）"
+    }
+   },
+   "gates_4": "PASS"
+  },
+  "uninhibited_beyond48": {
+   "r27_rejudge": {
+    "win_rate_ge_055": {
+     "value": 0.0,
+     "verdict": "FAIL",
+     "bar": 0.55,
+     "note": "件 vs r40 双席折叠胜率（n=42 独立局）"
+    },
+    "money_delta_non_negative": {
+     "value": -5699.4,
+     "verdict": "FAIL",
+     "bar": 0.0,
+     "note": "均钱差（件席钱−r40 席钱）"
+    },
+    "zero_footprint": {
+     "value": "N/A",
+     "verdict": "N/A",
+     "note": "公开整件非我方层，零足迹面不适用"
+    }
+   },
+   "r28_applicable": {
+    "h2h_vs_r40": {
+     "value": 0.0,
+     "verdict": "FAIL",
+     "bar": 0.55
+    },
+    "realized_px_no_drop": {
+     "value": {
+      "candidate": 1.0084,
+      "baseline": 1.0569
+     },
+     "verdict": "FAIL",
+     "note": "candidate=件侧行级实现价均值；baseline=r40 侧均值"
+    },
+    "not_applicable": {
+     "net_identity": "N/A（我方层台账恒等，非我方层不适用）",
+     "mirror_win_rate": "N/A（本组不设镜像臂，预算局次限）",
+     "counter_not_flipped": "N/A（R28 反制臂专用）",
+     "control_not_negative": "N/A（R28 胜局对照专用）"
+    }
+   },
+   "gates_4": "PASS"
+  },
+  "haideptry_2965_pure": {
+   "r27_rejudge": {
+    "win_rate_ge_055": {
+     "value": 0.4048,
+     "verdict": "FAIL",
+     "bar": 0.55,
+     "note": "件 vs r40 双席折叠胜率（n=42 独立局）"
+    },
+    "money_delta_non_negative": {
+     "value": 80.1,
+     "verdict": "PASS",
+     "bar": 0.0,
+     "note": "均钱差（件席钱−r40 席钱）"
+    },
+    "zero_footprint": {
+     "value": "N/A",
+     "verdict": "N/A",
+     "note": "公开整件非我方层，零足迹面不适用"
+    }
+   },
+   "r28_applicable": {
+    "h2h_vs_r40": {
+     "value": 0.4048,
+     "verdict": "FAIL",
+     "bar": 0.55
+    },
+    "realized_px_no_drop": {
+     "value": {
+      "candidate": 1.0644,
+      "baseline": 1.0657
+     },
+     "verdict": "FAIL",
+     "note": "candidate=件侧行级实现价均值；baseline=r40 侧均值"
+    },
+    "not_applicable": {
+     "net_identity": "N/A（我方层台账恒等，非我方层不适用）",
+     "mirror_win_rate": "N/A（本组不设镜像臂，预算局次限）",
+     "counter_not_flipped": "N/A（R28 反制臂专用）",
+     "control_not_negative": "N/A（R28 胜局对照专用）"
+    }
+   },
+   "gates_4": "PASS"
+  }
+ },
+ "verdict": {
+  "guru_master_engine_v5": {
+   "gates_4": "PASS",
+   "r27_rejudge": "FAIL",
+   "r28_applicable": "FAIL",
+   "checks_passed": 0,
+   "checks_failed": 4,
+   "overall": "FAIL"
+  },
+  "ahmed_v57": {
+   "gates_4": "PASS",
+   "r27_rejudge": "FAIL",
+   "r28_applicable": "FAIL",
+   "checks_passed": 0,
+   "checks_failed": 4,
+   "overall": "FAIL"
+  },
+  "uninhibited_beyond48": {
+   "gates_4": "PASS",
+   "r27_rejudge": "FAIL",
+   "r28_applicable": "FAIL",
+   "checks_passed": 0,
+   "checks_failed": 4,
+   "overall": "FAIL"
+  },
+  "haideptry_2965_pure": {
+   "gates_4": "PASS",
+   "r27_rejudge": "FAIL",
+   "r28_applicable": "FAIL",
+   "checks_passed": 1,
+   "checks_failed": 3,
+   "overall": "FAIL"
+  }
+ },
+ "behavior_decomposition": {
+  "guru_master_engine_v5": {
+   "piece_side": {
+    "n_sell_orders_total": 36189,
+    "sell_qty_total": 7654938.0,
+    "avg_qty_per_order": 211.527,
+    "qty_by_day": [
+     3612.0,
+     252.0,
+     588.0,
+     756.0,
+     756.0,
+     588.0,
+     2292.0,
+     958.0,
+     2820.0,
+     2036.0,
+     7018.0,
+     3432.0,
+     3286.0,
+     7248.0,
+     8120.0,
+     8694.0,
+     259139.0,
+     159721.0,
+     7756.0,
+     8534.0,
+     6982.0,
+     9856.0,
+     10209.0,
+     15073.0,
+     10306.0,
+     13823.0,
+     16401.0,
+     513581.0,
+     2022847.0,
+     4548254.0
+    ],
+    "orders_by_day": [
+     168,
+     168,
+     252,
+     420,
+     420,
+     336,
+     700,
+     574,
+     634,
+     798,
+     966,
+     392,
+     372,
+     514,
+     890,
+     954,
+     1264,
+     1014,
+     1166,
+     1016,
+     1077,
+     1223,
+     1500,
+     1599,
+     1506,
+     2070,
+     1975,
+     2110,
+     3508,
+     6603
+    ],
+    "qty_buckets_three": {
+     "d0_9": 14658.0,
+     "d10_19": 472948.0,
+     "d20_29": 7167332.0
+    },
+    "mean_sell_day_wavg": 27.7,
+    "realized_px_mean": 1.0026,
+    "realized_px_median": 1.0041,
+    "stranding_median": 0.0,
+    "stranding_mean": 0.0,
+    "games_with_reads": 84,
+    "terminal_money_median_reader_polluted_farms0": 99024.0,
+    "terminal_money_median": 92695.5
+   },
+   "r40_side": {
+    "n_sell_orders_total": 26654,
+    "sell_qty_total": 284741.0,
+    "avg_qty_per_order": 10.683,
+    "qty_by_day": [
+     1260.0,
+     252.0,
+     588.0,
+     756.0,
+     756.0,
+     588.0,
+     2416.0,
+     712.0,
+     2164.0,
+     2244.0,
+     7004.0,
+     3998.0,
+     5076.0,
+     5263.0,
+     5592.0,
+     8753.0,
+     8113.0,
+     7851.0,
+     7560.0,
+     5334.0,
+     7660.0,
+     8904.0,
+     8980.0,
+     10260.0,
+     7120.0,
+     8766.0,
+     9495.0,
+     120055.0,
+     11104.0,
+     16117.0
+    ],
+    "orders_by_day": [
+     84,
+     168,
+     336,
+     588,
+     504,
+     420,
+     686,
+     454,
+     735,
+     918,
+     940,
+     514,
+     521,
+     535,
+     906,
+     945,
+     1061,
+     866,
+     1012,
+     1052,
+     1137,
+     1072,
+     1256,
+     1330,
+     1087,
+     1385,
+     1224,
+     1275,
+     1658,
+     1985
+    ],
+    "qty_buckets_three": {
+     "d0_9": 11736.0,
+     "d10_19": 64544.0,
+     "d20_29": 208461.0
+    },
+    "mean_sell_day_wavg": 22.65,
+    "realized_px_mean": 1.0493,
+    "realized_px_median": 1.0501,
+    "stranding_median": 0.0,
+    "stranding_mean": 0.0,
+    "games_with_reads": 84,
+    "terminal_money_median_reader_polluted_farms0": 99024.0,
+    "terminal_money_median": 98364.5
+   },
+   "realized_px_diff_per_game": {
+    "n": 84,
+    "mean": -0.0466,
+    "median": -0.0461,
+    "min": -0.1042,
+    "max": 0.0328,
+    "n_positive": 2,
+    "n_negative": 82,
+    "n_zero": 0
+   },
+   "note": "卖单总数/单均量=动作流 SELL 命令口径（发单量非成交量）；卖时三桶=step//24 日桶 d0-9/d10-19/d20-29；滞留=终局 shed 按市价估值（judge_r26.realized_price_stats.stranding）；实现价差=件侧−r40 侧逐局差",
+   "terminal_money_corrected_subset": {
+    "note": "judge_r26.realized_price_stats 的 terminal_money 固定读 farms[0].money（玩家 0 钱）——双侧同值污染（既有读数件缺陷，不改既有代码，此处以 farms[obs.player].money 修正在 8 种子子集重算并登记）",
+    "subset_seeds": [
+     1825501814,
+     786146079,
+     240876256,
+     427304807,
+     660000,
+     660013,
+     660026,
+     660039
+    ],
+    "n_rows": 16,
+    "piece_money_median_fixed": 92695.5,
+    "r40_money_median_fixed": 98364.5,
+    "piece_money_median_reader_farms0": 94987.0,
+    "banks_piece_median": 93771.0,
+    "banks_r40_median": 99355.5,
+    "banks_margin_median": -4322.5
+   }
+  },
+  "ahmed_v57": {
+   "piece_side": {
+    "n_sell_orders_total": 28019,
+    "sell_qty_total": 277905.0,
+    "avg_qty_per_order": 9.918,
+    "qty_by_day": [
+     1260.0,
+     252.0,
+     588.0,
+     756.0,
+     756.0,
+     588.0,
+     2424.0,
+     796.0,
+     2164.0,
+     2244.0,
+     7468.0,
+     4160.0,
+     5106.0,
+     5656.0,
+     5568.0,
+     8864.0,
+     8170.0,
+     8564.0,
+     7880.0,
+     5225.0,
+     8100.0,
+     9159.0,
+     9088.0,
+     11100.0,
+     7410.0,
+     9022.0,
+     10047.0,
+     108089.0,
+     11308.0,
+     16093.0
+    ],
+    "orders_by_day": [
+     84,
+     168,
+     336,
+     588,
+     504,
+     420,
+     690,
+     496,
+     736,
+     918,
+     992,
+     568,
+     502,
+     613,
+     922,
+     998,
+     1068,
+     966,
+     1060,
+     1060,
+     1189,
+     1118,
+     1292,
+     1513,
+     1127,
+     1480,
+     1539,
+     1380,
+     1657,
+     2035
+    ],
+    "qty_buckets_three": {
+     "d0_9": 11828.0,
+     "d10_19": 66661.0,
+     "d20_29": 199416.0
+    },
+    "mean_sell_day_wavg": 22.41,
+    "realized_px_mean": 1.0563,
+    "realized_px_median": 1.0538,
+    "stranding_median": 0.0,
+    "stranding_mean": 0.0,
+    "games_with_reads": 84,
+    "terminal_money_median_reader_polluted_farms0": 98054.0,
+    "terminal_money_median": 95913.5
+   },
+   "r40_side": {
+    "n_sell_orders_total": 26629,
+    "sell_qty_total": 296682.0,
+    "avg_qty_per_order": 11.141,
+    "qty_by_day": [
+     1260.0,
+     252.0,
+     588.0,
+     756.0,
+     756.0,
+     588.0,
+     2416.0,
+     712.0,
+     2164.0,
+     2290.0,
+     6998.0,
+     3998.0,
+     5046.0,
+     5296.0,
+     5508.0,
+     8738.0,
+     8110.0,
+     7846.0,
+     7552.0,
+     5229.0,
+     7763.0,
+     8694.0,
+     9040.0,
+     10459.0,
+     7228.0,
+     8582.0,
+     9593.0,
+     132085.0,
+     11130.0,
+     16005.0
+    ],
+    "orders_by_day": [
+     84,
+     168,
+     336,
+     588,
+     504,
+     420,
+     686,
+     454,
+     736,
+     930,
+     940,
+     514,
+     502,
+     553,
+     910,
+     956,
+     1058,
+     884,
+     1016,
+     1058,
+     1152,
+     1063,
+     1278,
+     1317,
+     1047,
+     1351,
+     1224,
+     1286,
+     1649,
+     1965
+    ],
+    "qty_buckets_three": {
+     "d0_9": 11782.0,
+     "d10_19": 64321.0,
+     "d20_29": 220579.0
+    },
+    "mean_sell_day_wavg": 22.83,
+    "realized_px_mean": 1.0616,
+    "realized_px_median": 1.0608,
+    "stranding_median": 0.0,
+    "stranding_mean": 0.0,
+    "games_with_reads": 84,
+    "terminal_money_median_reader_polluted_farms0": 98054.0,
+    "terminal_money_median": 95840.5
+   },
+   "realized_px_diff_per_game": {
+    "n": 84,
+    "mean": -0.0053,
+    "median": -0.0053,
+    "min": -0.0209,
+    "max": 0.0199,
+    "n_positive": 10,
+    "n_negative": 74,
+    "n_zero": 0
+   },
+   "note": "卖单总数/单均量=动作流 SELL 命令口径（发单量非成交量）；卖时三桶=step//24 日桶 d0-9/d10-19/d20-29；滞留=终局 shed 按市价估值（judge_r26.realized_price_stats.stranding）；实现价差=件侧−r40 侧逐局差",
+   "terminal_money_corrected_subset": {
+    "note": "judge_r26.realized_price_stats 的 terminal_money 固定读 farms[0].money（玩家 0 钱）——双侧同值污染（既有读数件缺陷，不改既有代码，此处以 farms[obs.player].money 修正在 8 种子子集重算并登记）",
+    "subset_seeds": [
+     1825501814,
+     786146079,
+     240876256,
+     427304807,
+     660000,
+     660013,
+     660026,
+     660039
+    ],
+    "n_rows": 16,
+    "piece_money_median_fixed": 95913.5,
+    "r40_money_median_fixed": 95840.5,
+    "piece_money_median_reader_farms0": 95899.5,
+    "banks_piece_median": 96915.5,
+    "banks_r40_median": 96847.5,
+    "banks_margin_median": -12.0
+   }
+  },
+  "uninhibited_beyond48": {
+   "piece_side": {
+    "n_sell_orders_total": 37859,
+    "sell_qty_total": 7515873.0,
+    "avg_qty_per_order": 198.523,
+    "qty_by_day": [
+     5292.0,
+     252.0,
+     588.0,
+     756.0,
+     756.0,
+     588.0,
+     2416.0,
+     953.0,
+     2719.0,
+     2042.0,
+     7646.0,
+     3683.0,
+     3945.0,
+     7901.0,
+     7717.0,
+     9457.0,
+     170318.0,
+     105872.0,
+     8464.0,
+     8317.0,
+     7479.0,
+     10322.0,
+     10633.0,
+     16287.0,
+     9713.0,
+     12662.0,
+     14092.0,
+     513505.0,
+     2022810.0,
+     4548688.0
+    ],
+    "orders_by_day": [
+     168,
+     168,
+     252,
+     420,
+     420,
+     336,
+     745,
+     566,
+     641,
+     858,
+     1030,
+     522,
+     403,
+     628,
+     1014,
+     1001,
+     1367,
+     935,
+     1131,
+     1310,
+     1318,
+     1440,
+     1722,
+     2179,
+     1287,
+     1722,
+     1987,
+     2127,
+     3475,
+     6687
+    ],
+    "qty_buckets_three": {
+     "d0_9": 16362.0,
+     "d10_19": 333320.0,
+     "d20_29": 7166191.0
+    },
+    "mean_sell_day_wavg": 27.9,
+    "realized_px_mean": 1.0084,
+    "realized_px_median": 1.0118,
+    "stranding_median": 0.0,
+    "stranding_mean": 0.0,
+    "games_with_reads": 84,
+    "terminal_money_median_reader_polluted_farms0": 97916.5,
+    "terminal_money_median": 90705.0
+   },
+   "r40_side": {
+    "n_sell_orders_total": 26745,
+    "sell_qty_total": 260228.0,
+    "avg_qty_per_order": 9.73,
+    "qty_by_day": [
+     1260.0,
+     252.0,
+     588.0,
+     756.0,
+     756.0,
+     588.0,
+     2435.0,
+     730.0,
+     2167.0,
+     2251.0,
+     7088.0,
+     4087.0,
+     4499.0,
+     4552.0,
+     4869.0,
+     7462.0,
+     7208.0,
+     6752.0,
+     7123.0,
+     5095.0,
+     6945.0,
+     8165.0,
+     8174.0,
+     9161.0,
+     7035.0,
+     8328.0,
+     8732.0,
+     106105.0,
+     10874.0,
+     16191.0
+    ],
+    "orders_by_day": [
+     84,
+     168,
+     336,
+     588,
+     504,
+     420,
+     699,
+     468,
+     739,
+     930,
+     964,
+     530,
+     494,
+     534,
+     925,
+     933,
+     1056,
+     840,
+     1046,
+     1047,
+     1131,
+     1076,
+     1277,
+     1295,
+     1081,
+     1410,
+     1238,
+     1266,
+     1640,
+     2026
+    ],
+    "qty_buckets_three": {
+     "d0_9": 11783.0,
+     "d10_19": 58735.0,
+     "d20_29": 189710.0
+    },
+    "mean_sell_day_wavg": 22.58,
+    "realized_px_mean": 1.0569,
+    "realized_px_median": 1.0532,
+    "stranding_median": 0.0,
+    "stranding_mean": 0.0,
+    "games_with_reads": 84,
+    "terminal_money_median_reader_polluted_farms0": 97916.5,
+    "terminal_money_median": 100329.0
+   },
+   "realized_px_diff_per_game": {
+    "n": 84,
+    "mean": -0.0485,
+    "median": -0.044,
+    "min": -0.1183,
+    "max": -0.0066,
+    "n_positive": 0,
+    "n_negative": 84,
+    "n_zero": 0
+   },
+   "note": "卖单总数/单均量=动作流 SELL 命令口径（发单量非成交量）；卖时三桶=step//24 日桶 d0-9/d10-19/d20-29；滞留=终局 shed 按市价估值（judge_r26.realized_price_stats.stranding）；实现价差=件侧−r40 侧逐局差",
+   "terminal_money_corrected_subset": {
+    "note": "judge_r26.realized_price_stats 的 terminal_money 固定读 farms[0].money（玩家 0 钱）——双侧同值污染（既有读数件缺陷，不改既有代码，此处以 farms[obs.player].money 修正在 8 种子子集重算并登记）",
+    "subset_seeds": [
+     1825501814,
+     786146079,
+     240876256,
+     427304807,
+     660000,
+     660013,
+     660026,
+     660039
+    ],
+    "n_rows": 16,
+    "piece_money_median_fixed": 90705.0,
+    "r40_money_median_fixed": 100329.0,
+    "piece_money_median_reader_farms0": 95677.0,
+    "banks_piece_median": 91792.0,
+    "banks_r40_median": 101804.5,
+    "banks_margin_median": -6925.0
+   }
+  },
+  "haideptry_2965_pure": {
+   "piece_side": {
+    "n_sell_orders_total": 26954,
+    "sell_qty_total": 300587.0,
+    "avg_qty_per_order": 11.152,
+    "qty_by_day": [
+     1260.0,
+     252.0,
+     588.0,
+     756.0,
+     756.0,
+     588.0,
+     2416.0,
+     712.0,
+     2164.0,
+     2334.0,
+     7030.0,
+     3998.0,
+     5042.0,
+     5296.0,
+     5508.0,
+     8738.0,
+     8094.0,
+     7858.0,
+     7584.0,
+     5298.0,
+     7701.0,
+     8760.0,
+     9048.0,
+     10237.0,
+     7264.0,
+     8631.0,
+     9497.0,
+     136064.0,
+     11189.0,
+     15924.0
+    ],
+    "orders_by_day": [
+     84,
+     168,
+     336,
+     588,
+     504,
+     420,
+     686,
+     454,
+     736,
+     938,
+     944,
+     514,
+     504,
+     553,
+     910,
+     956,
+     1056,
+     886,
+     1016,
+     1060,
+     1154,
+     1065,
+     1285,
+     1315,
+     1078,
+     1375,
+     1404,
+     1353,
+     1639,
+     1973
+    ],
+    "qty_buckets_three": {
+     "d0_9": 11826.0,
+     "d10_19": 64446.0,
+     "d20_29": 224315.0
+    },
+    "mean_sell_day_wavg": 22.88,
+    "realized_px_mean": 1.0644,
+    "realized_px_median": 1.0665,
+    "stranding_median": 0.0,
+    "stranding_mean": 0.0,
+    "games_with_reads": 84,
+    "terminal_money_median_reader_polluted_farms0": 98180.0,
+    "terminal_money_median": 95877.0
+   },
+   "r40_side": {
+    "n_sell_orders_total": 26668,
+    "sell_qty_total": 280778.0,
+    "avg_qty_per_order": 10.529,
+    "qty_by_day": [
+     1260.0,
+     252.0,
+     588.0,
+     756.0,
+     756.0,
+     588.0,
+     2416.0,
+     712.0,
+     2164.0,
+     2290.0,
+     6998.0,
+     3998.0,
+     5046.0,
+     5296.0,
+     5508.0,
+     8738.0,
+     8094.0,
+     7860.0,
+     7574.0,
+     5212.0,
+     7737.0,
+     8797.0,
+     9075.0,
+     10403.0,
+     7243.0,
+     8640.0,
+     9505.0,
+     116127.0,
+     11186.0,
+     15959.0
+    ],
+    "orders_by_day": [
+     84,
+     168,
+     336,
+     588,
+     504,
+     420,
+     686,
+     454,
+     736,
+     930,
+     940,
+     514,
+     502,
+     553,
+     910,
+     956,
+     1056,
+     888,
+     1016,
+     1058,
+     1154,
+     1073,
+     1282,
+     1324,
+     1060,
+     1374,
+     1217,
+     1272,
+     1639,
+     1974
+    ],
+    "qty_buckets_three": {
+     "d0_9": 11782.0,
+     "d10_19": 64324.0,
+     "d20_29": 204672.0
+    },
+    "mean_sell_day_wavg": 22.59,
+    "realized_px_mean": 1.0657,
+    "realized_px_median": 1.0669,
+    "stranding_median": 0.0,
+    "stranding_mean": 0.0,
+    "games_with_reads": 84,
+    "terminal_money_median_reader_polluted_farms0": 98180.0,
+    "terminal_money_median": 95946.0
+   },
+   "realized_px_diff_per_game": {
+    "n": 84,
+    "mean": -0.0013,
+    "median": -0.0001,
+    "min": -0.0171,
+    "max": 0.0052,
+    "n_positive": 21,
+    "n_negative": 45,
+    "n_zero": 18
+   },
+   "note": "卖单总数/单均量=动作流 SELL 命令口径（发单量非成交量）；卖时三桶=step//24 日桶 d0-9/d10-19/d20-29；滞留=终局 shed 按市价估值（judge_r26.realized_price_stats.stranding）；实现价差=件侧−r40 侧逐局差",
+   "terminal_money_corrected_subset": {
+    "note": "judge_r26.realized_price_stats 的 terminal_money 固定读 farms[0].money（玩家 0 钱）——双侧同值污染（既有读数件缺陷，不改既有代码，此处以 farms[obs.player].money 修正在 8 种子子集重算并登记）",
+    "subset_seeds": [
+     1825501814,
+     786146079,
+     240876256,
+     427304807,
+     660000,
+     660013,
+     660026,
+     660039
+    ],
+    "n_rows": 16,
+    "piece_money_median_fixed": 95877.0,
+    "r40_money_median_fixed": 95946.0,
+    "piece_money_median_reader_farms0": 95895.5,
+    "banks_piece_median": 96878.5,
+    "banks_r40_median": 96947.5,
+    "banks_margin_median": -37.0
+   }
+  }
+ },
+ "budget": {
+  "cap": 300,
+  "auth": 30,
+  "judgment_folded": 168,
+  "judgment_seat_runs": 336,
+  "gates": 12,
+  "gates_note": "四件×(health 2 局+det 1 局)=12 局（体检已跑）",
+  "auth_games": 30,
+  "auth_engine_runs": 60,
+  "total_conservative": 288,
+  "total_seat_runs": 408,
+  "accounting_note": "局次口径=折叠独立局（judge_r44._fold_arm『同 seed 双席折叠为独立局（席位翻转不双计）』原文语义）：判决 4 臂×(26 败局+16 补)=4×42=168 局；auth 30 局×双引擎=60 跑；门禁 12 局（4 件×health2+det1）。保守合计 60+168+12=240 ≤ 300（预算较紧）。席位级跑数另记：判决 336（42 种子×双席×4 臂）+auth 60+门禁 12=408——席位翻转按契约不双计故不入局次口径。；终局钱修正子集 +32 折叠局（64 席跑）→保守合计 272 ≤ 300。；sim/official 抽查 +16 折叠局（32 席跑）→保守合计 288 ≤ 300。",
+  "within_cap": true,
+  "money_fix_subset": {
+   "folded_games": 32,
+   "seat_runs": 64,
+   "note": "终局钱修正子集（8 种子×双席×4 件）重算，读数修正用"
+  },
+  "spotcheck": {
+   "folded_games": 16,
+   "seat_runs": 32,
+   "note": "sim 快线 vs 官方引擎同局对照（每件 2 种子×双席×双引擎）"
+  }
+ },
+ "anomalies": [
+  "读数件缺陷（不改既有代码）：judge_r26.realized_price_stats.terminal_money 固定读 farms[0].money，双侧同值污染——已在 8 种子子集以 farms[obs.player].money 修正并登记（money_recalc.json）；behavior_*的 terminal_money_median 已替换为修正值，原值留档 *_reader_polluted_farms0",
+  "harness 越界写副作用（已知不修）：sim_bridge 降级回退会向 orderbook_r40/evidence/sim_bridge_degraded.json 追加记录（本次 +2 条smoke 回退；另有他组/先前 8+5 条同文件噪声）；gates/judgment 全程零红局"
+ ],
+ "elapsed_s": 709.4,
+ "money_recalc_record": "/tmp/arms_d/money_recalc.json",
+ "sim_spotcheck_vs_official": {
+  "n_checked": 16,
+  "n_match": 16,
+  "detail": [
+   {
+    "arm": "guru_master_engine_v5",
+    "game_id": "guru_master_engine_v5-1825501814-s0",
+    "official_banks": [
+     86767.0,
+     94257.0
+    ],
+    "sim_banks": [
+     86767.0,
+     94257.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "guru_master_engine_v5",
+    "game_id": "guru_master_engine_v5-1825501814-s1",
+    "official_banks": [
+     94257.0,
+     86767.0
+    ],
+    "sim_banks": [
+     94257.0,
+     86767.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "guru_master_engine_v5",
+    "game_id": "guru_master_engine_v5-660000-s0",
+    "official_banks": [
+     80622.0,
+     92679.0
+    ],
+    "sim_banks": [
+     80622.0,
+     92679.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "guru_master_engine_v5",
+    "game_id": "guru_master_engine_v5-660000-s1",
+    "official_banks": [
+     92796.0,
+     80500.0
+    ],
+    "sim_banks": [
+     92796.0,
+     80500.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "ahmed_v57",
+    "game_id": "ahmed_v57-1825501814-s0",
+    "official_banks": [
+     89326.0,
+     90016.0
+    ],
+    "sim_banks": [
+     89326.0,
+     90016.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "ahmed_v57",
+    "game_id": "ahmed_v57-1825501814-s1",
+    "official_banks": [
+     90016.0,
+     89326.0
+    ],
+    "sim_banks": [
+     90016.0,
+     89326.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "ahmed_v57",
+    "game_id": "ahmed_v57-660000-s0",
+    "official_banks": [
+     85192.0,
+     85301.0
+    ],
+    "sim_banks": [
+     85192.0,
+     85301.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "ahmed_v57",
+    "game_id": "ahmed_v57-660000-s1",
+    "official_banks": [
+     85436.0,
+     85067.0
+    ],
+    "sim_banks": [
+     85436.0,
+     85067.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "uninhibited_beyond48",
+    "game_id": "uninhibited_beyond48-1825501814-s0",
+    "official_banks": [
+     76658.0,
+     98676.0
+    ],
+    "sim_banks": [
+     76658.0,
+     98676.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "uninhibited_beyond48",
+    "game_id": "uninhibited_beyond48-1825501814-s1",
+    "official_banks": [
+     98676.0,
+     76658.0
+    ],
+    "sim_banks": [
+     98676.0,
+     76658.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "uninhibited_beyond48",
+    "game_id": "uninhibited_beyond48-660000-s0",
+    "official_banks": [
+     83361.0,
+     95472.0
+    ],
+    "sim_banks": [
+     83361.0,
+     95472.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "uninhibited_beyond48",
+    "game_id": "uninhibited_beyond48-660000-s1",
+    "official_banks": [
+     95596.0,
+     83266.0
+    ],
+    "sim_banks": [
+     95596.0,
+     83266.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "haideptry_2965_pure",
+    "game_id": "haideptry_2965_pure-1825501814-s0",
+    "official_banks": [
+     89986.0,
+     89834.0
+    ],
+    "sim_banks": [
+     89986.0,
+     89834.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "haideptry_2965_pure",
+    "game_id": "haideptry_2965_pure-1825501814-s1",
+    "official_banks": [
+     89834.0,
+     89986.0
+    ],
+    "sim_banks": [
+     89834.0,
+     89986.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "haideptry_2965_pure",
+    "game_id": "haideptry_2965_pure-660000-s0",
+    "official_banks": [
+     85351.0,
+     85301.0
+    ],
+    "sim_banks": [
+     85351.0,
+     85301.0
+    ],
+    "match": true
+   },
+   {
+    "arm": "haideptry_2965_pure",
+    "game_id": "haideptry_2965_pure-660000-s1",
+    "official_banks": [
+     85436.0,
+     85216.0
+    ],
+    "sim_banks": [
+     85436.0,
+     85216.0
+    ],
+    "match": true
+   }
+  ],
+  "note": "sim 快线 vs 官方引擎同局 banks 对照（每件 2 种子×双席）"
+ }
+}
