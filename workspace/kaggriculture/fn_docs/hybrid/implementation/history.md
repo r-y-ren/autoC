@@ -55,3 +55,8 @@
 | 2026-09-28 | B41 | R26-S1 手术批（build_drain_table/retape_drain_aligned/retape_sheep_lifecycle/retape_granularity） | 8 测绿；排水表 15 路线（毛线族 13.6/日）；槽位纪律贯穿（源槽 []/减量+尾追加+PASS 换删）；真带冒烟过 |
 | 2026-09-28 | B42 | R26-S2 构建面四件（build_r43/audit/pack） | 4 测绿；**安慰剂恒等实证**（纯重编码=r40 字节）；全件真跑构建审计白名单过 |
 | 2026-09-28 | B43 | R26-S3 判决+门禁+总指挥（realized_price_stats/judge_r26/verify_r43_gates/run_r43_iteration） | 19 测全绿；真跑 5 臂判决 NEGATIVE（gran −102.6k 跨拍毒+倾销补贴对手倒卖机制；drain −1.8k；sheep 零效应；placebo 全平局）；**判负收档不发射** |
+| 2026-09-28 | B44 | quote_context, detect_dayhigh, plan_dayhigh_sells, _dayhigh_agent, gate_added_sells, _glutgate_agent | 17 测绿（含返修：宿主元数自适应+真基座接线用例）；真判决 v2 驱动零异常 |
+| 2026-09-28 | B45 | build_r44_variant, append_dayhigh_block, append_glutgate_block | 11 测绿；真 r40 三形态构建+审计白名单+双跑恒等 |
+| 2026-09-28 | B46 | judge_r44, pick_launch_form, verify_r44_gates, run_r44_iteration | 27 测绿；判决 v2 真跑 n=40（A 30-8-2/0.775/+424.9）→判据重裁 A 判正择优 |
+| 2026-09-28 | B48 | build_r45, append_advance_stack_block, verify_net_identity, run_mirror_counter_judgment, judge_r45, verify_r45_gates, run_r45_iteration | 40 测绿；评审 P0（实现价读数恒空假负）返修中 |
+| 2026-09-28 | B49 | check_reference_map, register_opponent_pool_seeds, run_r29_mining | 19 测绿 |

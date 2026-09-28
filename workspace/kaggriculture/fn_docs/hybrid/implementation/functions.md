@@ -201,12 +201,12 @@
 | verify_r43_gates | B43 | tested 09-28 | pytest 2 passed（零注入断言=_route40_agent 不变/身份链/谱系锚）；判红不进门禁 | (本批) |
 | run_r43_iteration | B43 | wired 09-28 | pytest 2 passed（预绑定分叉）；**真跑全链→NEGATIVE→archive_ledger run-r43-archive/1.0 落档，不发射** | (本批) |
 
-| quote_context | B44 | tested 09-28 | pytest r44 六件 13 passed（形状/换日/None） | (本批) |
-| detect_dayhigh | B44 | tested 09-28 | test_dayhigh_agent 13 passed（严格新高/等值/quote<2/父链） | (本批) |
-| plan_dayhigh_sells | B44 | tested 09-28 | test_dayhigh_agent 13 passed（守恒/槽序/花费单前置/10槽弃） | (本批) |
-| _dayhigh_agent | B44 | tested 09-28 | test_dayhigh_agent 13 passed（E2E 台账/零足迹/复位/回退） | (本批) |
-| gate_added_sells | B44 | tested 09-28 | test_glutgate_agent 13 passed（门删/磁带豁免/保守不删） | (本批) |
-| _glutgate_agent | B44 | tested 09-28 | test_glutgate_agent 13 passed（注册表/零足迹/回退） | (本批) |
+| quote_context | B44 | tested 09-28 | pytest r44 层件 17 passed（形状/换日/None） | (本批) |
+| detect_dayhigh | B44 | tested 09-28 | test_dayhigh_agent 17 passed（严格新高/等值/quote<2/父链） | (本批) |
+| plan_dayhigh_sells | B44 | tested 09-28 | test_dayhigh_agent 17 passed（守恒/槽序/花费单前置/10槽弃） | (本批) |
+| _dayhigh_agent | B44 | tested 09-28 | test_dayhigh_agent 17 passed（E2E 台账/零足迹/复位/回退） | (本批) |
+| gate_added_sells | B44 | tested 09-28 | test_glutgate_agent 17 passed（门删/磁带豁免/保守不删） | (本批) |
+| _glutgate_agent | B44 | tested 09-28 | test_glutgate_agent 17 passed（注册表/零足迹/回退） | (本批) |
 | build_r44_variant | B45 | wired 09-28 | test_build_r44 11 passed+真 r40 构建冒烟三形态 sha 落账 | (本批) |
 | append_dayhigh_block | B45 | wired 09-28 | test_build_r44 11 passed（三防线/AB 链序/末 callable） | (本批) |
 | append_glutgate_block | B45 | wired 09-28 | test_build_r44 11 passed（同上） | (本批) |
