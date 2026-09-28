@@ -60,3 +60,4 @@
 | 2026-09-28 | B46 | judge_r44, pick_launch_form, verify_r44_gates, run_r44_iteration | 27 测绿；判决 v2 真跑 n=40（A 30-8-2/0.775/+424.9）→判据重裁 A 判正择优 |
 | 2026-09-28 | B48 | build_r45, append_advance_stack_block, verify_net_identity, run_mirror_counter_judgment, judge_r45, verify_r45_gates, run_r45_iteration | 40 测绿；评审 P0（实现价读数恒空假负）返修中 |
 | 2026-09-28 | B49 | check_reference_map, register_opponent_pool_seeds, run_r29_mining | 19 测绿 |
+| 2026-09-28 | B47 | select_advanceable, apply_advance_with_debt, settle_debts, measure_rival_lead, _advance_agent | 13 测绿（重派落成；元数自适应+净量恒等往返+删失口径） |

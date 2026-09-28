@@ -5,6 +5,7 @@ from __future__ import annotations
 import gzip
 import json
 
+from orderbook_r43 import judge_r26 as j26
 from orderbook_r45 import run_r45 as r45
 
 # ---- 构建夹具（与 build/gates 测试面同形态） ------------------------------
@@ -155,8 +156,13 @@ def test_run_r45_fail_closed_gates_red(tmp_path, monkeypatch):
 
 
 def make_e2e_runner():
-    """假局组执行器（判决+五门共用）：smoke 双席自打带 DONE/预算/sha；其余
-    臂带 margin+reads。"""
+    """假局组执行器（判决+五门共用）：smoke 双席自打带 DONE/预算/sha；reads
+    由真 judge_r26.realized_price_stats 从 traced states 算出（不伪造）。"""
+    # d0 价 22→18 卖 10@18 → 日均价 20 → realized_px=0.9（真链路口径）
+    reads = j26.realized_price_stats(
+        [(0, {"market": {"prices": {"WHEAT": 22.0}}}, {"market": []}),
+         (1, {"market": {"prices": {"WHEAT": 18.0}}},
+          {"market": [["SELL", "WHEAT", 10]]})])
 
     def runner(specs, cfg):
         rows = []
@@ -166,7 +172,7 @@ def make_e2e_runner():
                    "margin": 10.0, "error": None,
                    "statuses": ["DONE", "DONE"], "max_step_s": 0.2,
                    "actions_sha256": "sha-%s" % s["game_id"],
-                   "reads": {"realized_px": 0.9}}
+                   "reads": reads}
             rows.append(row)
         return rows
 
@@ -194,6 +200,7 @@ def test_run_r45_end_to_end_all_green(tmp_path):
         runner=make_e2e_runner(), corpus=str(corpus),
         traces=[{"game_id": "g1"}], ledger=dict(LEDGER_OK),
         baseline_realized_px=0.85, n_seeds=2,
+        control={"n": 2, "opponent": {"type": "python", "path": "/tmp/ctrl.py"}},
         reading_gate={"readings": {"r40": 1700.0, "r34a-new": 1741.2}}))
     assert out["launch_decision"]["decision"] == "LAUNCH"
     assert out["verdict"]["verdict"] == "POSITIVE"

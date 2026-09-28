@@ -214,11 +214,11 @@
 | pick_launch_form | B46 | tested 09-28 | test_judge_r44 27 passed（评分序/无达标收档/计分对注记） | (本批) |
 | verify_r44_gates | B46 | tested 09-28 | test_gates_r44 27 passed（五门红绿/fail-closed） | (本批) |
 | run_r44_iteration | B46 | tested 09-28 | test_run_r44 27 passed（编排短路/判正判负/收档传递） | (本批) |
-| select_advanceable | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
-| apply_advance_with_debt | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
-| settle_debts | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
-| measure_rival_lead | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
-| _advance_agent | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
+| select_advanceable | B47 | tested 09-28 | test_advance_agent 13 passed（条件 8 条/视界 clamp/192-695/解析失败空集） | (本批) |
+| apply_advance_with_debt | B47 | tested 09-28 | test_advance_agent 13 passed（队首插单/等额记债/失败不提前） | (本批) |
+| settle_debts | B47 | tested 09-28 | test_advance_agent 13 passed（due 抵扣/溢出告警/防重复/恒等往返） | (本批) |
+| measure_rival_lead | B47 | tested 09-28 | test_advance_agent 13 passed（删失下界/近窗 48 拍/不足→40） | (本批) |
+| _advance_agent | B47 | tested 09-28 | test_advance_agent 13 passed（元数自适应宿主/全链/step0 复位） | (本批) |
 | build_r45 | B48 | wired 09-28 | test_build_r45 40 passed+真构建 main/tar/manifest+三件缺一即抛 | (本批) |
 | append_advance_stack_block | B48 | wired 09-28 | test_build_r45 40 passed（缺件抛/前缀恒等/末 callable 归一） | (本批) |
 | verify_net_identity | B48 | tested 09-28 | test_judge_r45 40 passed（恒等正反/台账缺失 fail-closed） | (本批) |

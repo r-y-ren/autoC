@@ -3,9 +3,14 @@
 
 责任契约（fn_docs/hybrid/responsibility.md【R28 增补】）：判决 v28——镜像
 压力板（克隆/指纹 ≥0.95 局专组）+Wool Front-Runner 反制臂+26 败局重演+胜局
-对照（不翻负）；五判据核对（净加卖恒等违例=0 ∧ 镜像胜率 ≥0.55 ∧ 实现价不降
-∧ 反制不翻车 ∧ h2h vs r40 ≥0.55）；聚合 evidence JSON。单局红计入（按负）
-不短路。
+对照（不翻负）；判据核对（净加卖恒等违例=0 ∧ 镜像胜率 ≥0.55 ∧ 实现价不降
+∧ 反制不翻车 ∧ 胜局对照不翻负 ∧ h2h vs r40 ≥0.55）；聚合 evidence JSON。
+单局红计入（按负）不短路。
+
+真 trace 链路（实现价两侧读数）：局组 specs 一律 trace=True（judge_r26
+._chunk 回行带 reads=realized_price_stats[我方 traced sink]）；候选侧=非基线
+臂 reads，基线侧=config 定桩 > 行级 reads_opp > 基线臂（baseline_r40=r40
+自镜像）reads——缺任一侧→realized_px_no_drop FAIL（fail-closed）。
 
 复用（跨批契约）：判决机器=orderbook_r40/judge_r23（装载/局规格）+
 orderbook_r43/judge_r26（_play 跑局+realized_price_stats 读数，不改写）+
@@ -34,16 +39,21 @@ MODULE_DIR = Path(__file__).resolve().parent
 REPLAY_CORPUS_DEFAULT = (MODULE_DIR.parents[3] / "fn_docs" / "hybrid"
                          / "results" / "replays-r30-26")
 RECORD_VERSION = "judge-r45/1.0"
-SEED_BASE = 660000
+# seed 域错开惯例（64=judge_r26/65=gates_r43/66=judge_r44/67=r45）：
+# r45 判决局组=670000 域 +gi*1000 错开；门禁 h2h 另取 678000 独立段（独立 n 报）。
+SEED_BASE = 670000
 N_SEEDS_DEFAULT = 8
 MIRROR_BAR = 0.55            # 镜像压力板胜率门槛
 COUNTER_BAR = 0.50           # 反制臂不翻车（不转负）
+CONTROL_BAR = 0.50           # 胜局对照不翻负（胜率不降下限）
 H2H_BAR = 0.55               # h2h vs r40 门槛（seated 双席位）
 NET_IDENTITY_BAR = 0         # 净加卖恒等违例门槛
 FINGERPRINT_BAR = 0.95       # 镜像专组克隆/指纹下限
 PASS_ACTION = {"farmer": ["PASS"], "hands": [], "market": []}
+# 基线侧（r40）局组：我方位=r40 自镜像——真 trace 链路下基线实现价的结构来源
+BASELINE_ARMS = ("baseline_r40",)
 CRITERIA_KEYS = ("net_identity", "mirror_win_rate", "realized_px_no_drop",
-                 "counter_not_flipped", "h2h_vs_r40")
+                 "counter_not_flipped", "control_not_negative", "h2h_vs_r40")
 
 
 def judge_r45(package, corpus, config):
@@ -134,7 +144,7 @@ def judge_r45(package, corpus, config):
                     "arm": "replay_loss", "seated": False,
                     "error": "%s: %s" % (type(exc).__name__, exc),
                 })
-        # ---- 局组装配（镜像/反制/败局重演/胜局对照/h2h） --------------------
+        # ---- 局组装配（镜像/反制/败局重演/胜局对照/基线/h2h） --------------
         r40_main = str(cfg.get("r40_main") or (MODULE_DIR.parent
                                                / "orderbook_r40" / "build"
                                                / "main.py"))
@@ -145,11 +155,15 @@ def judge_r45(package, corpus, config):
                 {"arm": "counter", "n": n_default},       # Wool Front-Runner
                 {"arm": "replay_loss", "games": replay_games,
                  "seated": False},                        # 26 败局重演
+                # 胜局对照（不翻负）：缺省恒入局组；内容=配置化输入（缺→红）
+                dict(cfg.get("control") or {}, arm="control_win"),
+                # 基线侧（r40 自镜像）：实现价不降的结构基线（真 trace 链路）
+                {"arm": "baseline_r40", "n": n_default,
+                 "agent": {"type": "python", "path": r40_main},
+                 "opponent": {"type": "python", "path": r40_main}},
+                {"arm": "h2h_r40", "n": n_default,
+                 "opponent": {"type": "python", "path": r40_main}},
             ]
-            if isinstance(cfg.get("control"), dict) and cfg["control"]:
-                groups.append(dict(cfg["control"], arm="control_win"))
-            groups.append({"arm": "h2h_r40", "n": n_default,
-                           "opponent": {"type": "python", "path": r40_main}})
         board = {"groups": groups, "runner": cfg.get("runner"),
                  "seed_base": seed_base, "n": n_default,
                  "counter_config": cfg.get("counter_config"),
@@ -158,32 +172,40 @@ def judge_r45(package, corpus, config):
         # ---- 净量恒等（台账缺失→违例计 1，fail-closed） --------------------
         ident = verify_net_identity(cfg.get("traces"), cfg.get("ledger"))
         # ---- 实现价（realized_price_stats 复用 judge_r26，不改写） ---------
+        # 真 trace 链路（局组 trace=True→_chunk 回行带 reads）候选/基线两侧
+        # 都接通：候选=我方位（非基线臂）reads；基线=config 定桩 > 行级
+        # reads_opp > 基线臂（r40 自镜像）reads。
         from orderbook_r43 import judge_r26 as j26  # noqa: WPS433
         cand_px: List[float] = []
-        base_px: List[float] = []
+        base_pair: List[float] = []
+        base_arm: List[float] = []
         for row in (board_out.get("rows") or []):
             if not isinstance(row, dict):
                 continue
+            is_baseline = row.get("arm") in BASELINE_ARMS
             reads = row.get("reads")
             if not isinstance(reads, dict) and row.get("states") is not None:
                 reads = j26.realized_price_stats(row.get("states"))
             if isinstance(reads, dict):
                 px = reads.get("realized_px")
                 if isinstance(px, (int, float)) and not isinstance(px, bool):
-                    cand_px.append(float(px))
+                    (base_arm if is_baseline else cand_px).append(float(px))
             reads_opp = row.get("reads_opp")
             if isinstance(reads_opp, dict):
                 pxo = reads_opp.get("realized_px")
                 if isinstance(pxo, (int, float)) and not isinstance(pxo, bool):
-                    base_px.append(float(pxo))
+                    base_pair.append(float(pxo))
         candidate_px = round(sum(cand_px) / len(cand_px), 4) if cand_px else None
         cfg_base = cfg.get("baseline_realized_px")
         if isinstance(cfg_base, (int, float)) and not isinstance(cfg_base, bool):
             baseline_px = float(cfg_base)
+        elif base_pair:
+            baseline_px = round(sum(base_pair) / len(base_pair), 4)
+        elif base_arm:
+            baseline_px = round(sum(base_arm) / len(base_arm), 4)
         else:
-            baseline_px = round(sum(base_px) / len(base_px), 4) if base_px \
-                else None
-        # ---- 五判据核对（阈值分支全 fail-closed） --------------------------
+            baseline_px = None
+        # ---- 判据核对（R28 五判据+胜局对照不翻负；阈值分支全 fail-closed） --
         arms_rows = list(board_out.get("arms") or [])
         arms_by = {a.get("arm"): a for a in arms_rows if isinstance(a, dict)}
         mirror_wr = (arms_by.get("mirror") or {}).get("win_rate")
@@ -200,6 +222,17 @@ def judge_r45(package, corpus, config):
                        and candidate_px >= baseline_px)
         net_ok = isinstance(ident.get("violations"), int) and \
             ident["violations"] <= NET_IDENTITY_BAR
+        control_row = arms_by.get("control_win") or {}
+        control_wr = control_row.get("win_rate")
+        control_med = control_row.get("median_margin")
+        # 胜局对照不翻负：对照组 Δ 中位 ≥0 或胜率不降（≥0.5）；缺/红→FAIL
+        control_ok = (bool(control_row) and not control_row.get("red")
+                      and ((isinstance(control_med, (int, float))
+                            and not isinstance(control_med, bool)
+                            and control_med >= 0)
+                           or (isinstance(control_wr, float)
+                               and not isinstance(control_wr, bool)
+                               and control_wr >= CONTROL_BAR)))
         criteria = {
             "net_identity": {
                 "value": ident.get("violations"), "bar": NET_IDENTITY_BAR,
@@ -214,14 +247,17 @@ def judge_r45(package, corpus, config):
             "counter_not_flipped": {
                 "value": counter_wr, "bar": COUNTER_BAR,
                 "verdict": "PASS" if counter_ok else "FAIL"},
+            "control_not_negative": {
+                "value": {"win_rate": control_wr,
+                          "median_margin": control_med},
+                "bar": CONTROL_BAR,
+                "verdict": "PASS" if control_ok else "FAIL"},
             "h2h_vs_r40": {
                 "value": h2h_wr, "bar": H2H_BAR,
                 "verdict": "PASS" if h2h_ok else "FAIL"},
         }
         verdict = "POSITIVE" if all(
             c.get("verdict") == "PASS" for c in criteria.values()) else "NEGATIVE"
-        control_row = arms_by.get("control_win") or {}
-        control_wr = control_row.get("win_rate")
         evidence = {
             "_generated_at": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
             "version": RECORD_VERSION,
@@ -236,8 +272,9 @@ def judge_r45(package, corpus, config):
             "control_not_negative": {
                 "present": bool(control_row),
                 "win_rate": control_wr,
-                "not_negative": (control_wr >= 0.5 if isinstance(
-                    control_wr, float) else None)},
+                "median_margin": control_med,
+                "red": bool(control_row.get("red")) if control_row else None,
+                "not_negative": bool(control_ok)},
             "board": {"seed_base": board_out.get("seed_base"),
                       "seated": board_out.get("seated"),
                       "independent_seeds": board_out.get("independent_seeds"),
@@ -425,15 +462,19 @@ def run_mirror_counter_judgment(package, board_config):
                 seeds = group.get("seeds")
                 if not isinstance(seeds, list) or not seeds:
                     seeds = [seed_base + gi * 1000 + i for i in range(n_group)]
+                # 我方位可覆写（基线臂=r40 自镜像）；trace=True 保 _chunk 回行
+                # 带 reads（真 trace 链路：实现价候选/基线两侧都可读数）
+                ours = dict(group["agent"]) if isinstance(group.get("agent"),
+                                                          dict) else \
+                    {"type": "python", "path": main_path}
                 for seed in seeds:
                     for seat in (0, 1):
-                        ours = {"type": "python", "path": main_path}
                         others = dict(opp)
                         agents = [ours, others] if seat == 0 else [others, ours]
                         specs.append({
                             "game_id": "%s-%s-s%d" % (arm, seed, seat),
                             "seed": int(seed), "arm": arm, "kind": "board",
-                            "our_seat": seat, "trace": False, "agents": agents,
+                            "our_seat": seat, "trace": True, "agents": agents,
                         })
             else:
                 # ---- 显式局组（26 败局重演等：tape 对手/固定席位）----------
@@ -457,6 +498,7 @@ def run_mirror_counter_judgment(package, board_config):
                     spec.setdefault("arm", arm)
                     spec.setdefault("kind", "board")
                     spec.setdefault("seed", j)
+                    spec.setdefault("trace", True)   # 真 trace 链路（回行带 reads）
                     if "agents" not in spec:
                         opp_in = spec.get("opponent")
                         if not isinstance(opp_in, dict) or not opp_in:
@@ -467,7 +509,9 @@ def run_mirror_counter_judgment(package, board_config):
                                             "margin": None,
                                             "error": "局组缺对手构造（opponent）"})
                             continue
-                        ours = {"type": "python", "path": main_path}
+                        ours = dict(group["agent"]) if isinstance(
+                            group.get("agent"), dict) else \
+                            {"type": "python", "path": main_path}
                         seat = int(spec.get("our_seat", 0) or 0)
                         spec["agents"] = [ours, dict(opp_in)] if seat == 0 \
                             else [dict(opp_in), ours]
@@ -549,11 +593,18 @@ def run_mirror_counter_judgment(package, board_config):
             decided = wins + losses + ties
             win_rate = round((wins + 0.5 * ties) / decided, 4) if decided \
                 else 0.0
+            sorted_m = sorted(seed_margins)
+            mid = len(sorted_m) // 2
+            median_margin = round(
+                (sorted_m[mid] if len(sorted_m) % 2
+                 else (sorted_m[mid - 1] + sorted_m[mid]) / 2), 1) \
+                if sorted_m else None
             arms.append({
                 "arm": arm, "n": n, "wins": wins, "losses": losses,
                 "ties": ties,
                 "mean_margin": round(sum(seed_margins) / len(seed_margins), 1)
                 if seed_margins else None,
+                "median_margin": median_margin,
                 "win_rate": win_rate, "independent_seeds": True,
                 "seated": seated, "incomplete": incomplete,
                 "red_seeds": red_seeds[:20],

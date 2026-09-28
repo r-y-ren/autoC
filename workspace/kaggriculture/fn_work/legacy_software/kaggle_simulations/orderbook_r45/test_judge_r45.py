@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """R28 测试面：判决线（判据=R28 ②原文：净加卖恒等违例 0∧镜像胜率 ≥0.55∧
-实现价不降∧反制臂不翻车∧h2h vs r40 ≥0.55；镜像板/反制臂编排假局组夹具）。"""
+实现价不降∧反制臂不翻车∧胜局对照不翻负∧h2h vs r40 ≥0.55；镜像板/反制臂编排
+假局组夹具）。实现价读数一律走真 judge_r26.realized_price_stats（traced
+states→reads），不以伪造 reads 盖住真 trace 链路。"""
 from __future__ import annotations
 
 import gzip
@@ -8,16 +10,28 @@ import json
 
 import pytest
 
+from orderbook_r43 import judge_r26 as j26
 from orderbook_r45 import judge_r45 as j45
 
 PASS_ACTION = {"farmer": ["PASS"], "hands": [], "market": []}
 
+# ---- traced states 夹具（真 realized_price_stats 口径） -------------------
+# 候选侧：d0 观察价 22→18、卖 10@18，日均价 20 → realized_px=0.9
+CAND_STATES = [(0, {"market": {"prices": {"WHEAT": 22.0}}}, {"market": []}),
+               (1, {"market": {"prices": {"WHEAT": 18.0}}},
+                {"market": [["SELL", "WHEAT", 10]]})]
+# 基线侧（r40）：d0 观察价 30→20、卖 10@20，日均价 25 → realized_px=0.8
+BASE_STATES = [(0, {"market": {"prices": {"WHEAT": 30.0}}}, {"market": []}),
+               (1, {"market": {"prices": {"WHEAT": 20.0}}},
+                {"market": [["SELL", "WHEAT", 10]]})]
 
-# ---- 假局组夹具（runner(specs, cfg) -> rows；不跑真引擎） -----------------
-def make_runner(margins_by_arm, px=0.9, capture=None, raise_for=()):
-    """按 arm 配置 margin（标量/逐行列表）的假局组执行器。
 
-    margin=None→红行（error 计入，fail-closed 口径同单局红）。
+def make_runner(margins_by_arm, states_by_arm=None, opp_states=None,
+                capture=None, raise_for=()):
+    """假局组执行器：margin 按 arm（标量/逐行列表；None=红行）。
+
+    reads 一律=真 judge_r26.realized_price_stats(traced states)（不伪造）；
+    opp_states 给→行级补 reads_opp（基线侧读数）。
     """
     def runner(specs, cfg):
         seen = capture if capture is not None else []
@@ -38,10 +52,13 @@ def make_runner(margins_by_arm, px=0.9, capture=None, raise_for=()):
                              "arm": arm, "our_seat": s.get("our_seat", 0),
                              "margin": None, "error": "faked red"})
                 continue
-            rows.append({"game_id": s["game_id"], "seed": s["seed"],
-                         "arm": arm, "our_seat": s.get("our_seat", 0),
-                         "margin": float(m), "error": None,
-                         "reads": {"realized_px": px}})
+            states = (states_by_arm or {}).get(arm, CAND_STATES)
+            row = {"game_id": s["game_id"], "seed": s["seed"], "arm": arm,
+                   "our_seat": s.get("our_seat", 0), "margin": float(m),
+                   "error": None, "reads": j26.realized_price_stats(states)}
+            if opp_states is not None:
+                row["reads_opp"] = j26.realized_price_stats(opp_states)
+            rows.append(row)
         return rows
     return runner
 
@@ -133,10 +150,11 @@ def test_run_mirror_counter_judgment():
         assert row["wins"] == n and row["losses"] == 0
         assert row["win_rate"] == 1.0
         assert row["mean_margin"] > 0
-    # seated 双席位：每 seed 两局（seat 0/1），对手席互换
+    # seated 双席位：每 seed 两局（seat 0/1），对手席互换；trace=True 真链路
     mirror_specs = [s for s in capture if s["arm"] == "mirror"]
     assert len(mirror_specs) == 3 * 2
     assert sorted({s["our_seat"] for s in mirror_specs}) == [0, 1]
+    assert all(s["trace"] is True for s in capture)   # 回行须带 reads
     # 镜像对手=克隆/指纹 ≥0.95
     opp = out["opponents"]["mirror"]
     assert opp["kind"] == "clone_mirror"
@@ -167,13 +185,15 @@ def test_run_mirror_counter_judgment_seed_fold_and_red_counting():
     assert row["incomplete"] == 1
     assert row["red_seeds"] == [13]
     assert row["win_rate"] == pytest.approx((1 + 0.5 * 1) / 3)
+    assert row["median_margin"] == 10.0           # Δ 中位（不翻负判据用）
 
 
 def test_run_mirror_counter_judgment_unrunnable_red():
     """组不可跑→fail-closed 记红。"""
     out = j45.run_mirror_counter_judgment(
         {"main_path": "/tmp/r45_main.py"},
-        {"groups": [{"arm": "mirror", "n": 2}], "runner": make_runner({}, raise_for=("mirror",))})
+        {"groups": [{"arm": "mirror", "n": 2}],
+         "runner": make_runner({}, raise_for=("mirror",))})
     row = out["arms"][0]
     assert row["red"] is True
     assert row["win_rate"] == 0.0
@@ -197,6 +217,7 @@ def test_run_mirror_counter_judgment_replay_games_seated_false(tmp_path):
     assert row["wins"] == 1 and row["losses"] == 1   # 解析红按负计入
     assert len(capture) == 1                          # 红局不进 runner
     assert capture[0]["agents"][0]["type"] == "tape"  # our_seat=1→tape 在 0 位
+    assert capture[0]["trace"] is True                # 显式局组同样走真 trace
 
 
 # ============================== judge_r45 ==================================
@@ -206,6 +227,8 @@ def _judge(tmp_path, runner, **extra):
            "baseline_realized_px": 0.85,
            "evidence_path": str(tmp_path / "ev.json"),
            "groups": [{"arm": "mirror", "n": 2}, {"arm": "counter", "n": 2},
+                      {"arm": "control_win", "n": 2,
+                       "opponent": {"type": "python", "path": "/tmp/ctrl.py"}},
                       {"arm": "h2h_r40", "n": 2,
                        "opponent": {"type": "python", "path": "/tmp/r40.py"}}]}
     corpus = extra.pop("corpus", [])
@@ -214,9 +237,9 @@ def _judge(tmp_path, runner, **extra):
 
 
 def test_judge_r45(tmp_path):
-    """全绿：五判据全 PASS→POSITIVE；evidence 契约键齐。"""
+    """全绿：判据全 PASS→POSITIVE；evidence 契约键齐。"""
     ev = _judge(tmp_path, make_runner({"mirror": 100.0, "counter": 50.0,
-                                       "h2h_r40": 20.0}, px=0.9))
+                                       "h2h_r40": 20.0, "control_win": 30.0}))
     assert ev["verdict"] == "POSITIVE"
     assert all(c["verdict"] == "PASS" for c in ev["criteria"].values())
     # evidence 契约
@@ -232,23 +255,21 @@ def test_judge_r45(tmp_path):
 def test_judge_r45_mirror_threshold_branch(tmp_path):
     """镜像胜率阈值分支：0.55 边界 PASS、0.50 FAIL。"""
     margins = [1.0, 1.0] * 11 + [-1.0, -1.0] * 9      # 11 胜 9 负/20 seeds
+    groups = [{"arm": "mirror", "n": 20},
+              {"arm": "counter", "n": 2},
+              {"arm": "control_win", "n": 2,
+               "opponent": {"type": "python", "path": "/tmp/ctrl.py"}},
+              {"arm": "h2h_r40", "n": 2,
+               "opponent": {"type": "python", "path": "/tmp/r40.py"}}]
     ev = _judge(tmp_path, make_runner({"mirror": margins, "counter": 1.0,
-                                       "h2h_r40": 1.0}, px=0.9),
-                n_seeds=20, groups=[{"arm": "mirror", "n": 20},
-                                    {"arm": "counter", "n": 2},
-                                    {"arm": "h2h_r40", "n": 2,
-                                     "opponent": {"type": "python",
-                                                  "path": "/tmp/r40.py"}}])
+                                       "h2h_r40": 1.0, "control_win": 1.0}),
+                n_seeds=20, groups=groups)
     assert ev["criteria"]["mirror_win_rate"]["value"] == pytest.approx(0.55)
     assert ev["criteria"]["mirror_win_rate"]["verdict"] == "PASS"
     margins2 = [1.0, 1.0] * 10 + [-1.0, -1.0] * 10
     ev2 = _judge(tmp_path, make_runner({"mirror": margins2, "counter": 1.0,
-                                        "h2h_r40": 1.0}, px=0.9),
-                 n_seeds=20, groups=[{"arm": "mirror", "n": 20},
-                                     {"arm": "counter", "n": 2},
-                                     {"arm": "h2h_r40", "n": 2,
-                                      "opponent": {"type": "python",
-                                                   "path": "/tmp/r40.py"}}])
+                                        "h2h_r40": 1.0, "control_win": 1.0}),
+                 n_seeds=20, groups=groups)
     assert ev2["criteria"]["mirror_win_rate"]["verdict"] == "FAIL"
     assert ev2["verdict"] == "NEGATIVE"
 
@@ -256,31 +277,69 @@ def test_judge_r45_mirror_threshold_branch(tmp_path):
 def test_judge_r45_counter_and_h2h_threshold_branches(tmp_path):
     """反制不翻车（≥0.50）/h2h ≥0.55 阈值分支。"""
     ev = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": [-1.0, -1.0],
-                                       "h2h_r40": 1.0}, px=0.9))
+                                       "h2h_r40": 1.0, "control_win": 1.0}))
     assert ev["criteria"]["counter_not_flipped"]["verdict"] == "FAIL"
     ev2 = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
-                                        "h2h_r40": [-1.0, -1.0]}, px=0.9))
+                                        "h2h_r40": [-1.0, -1.0],
+                                        "control_win": 1.0}))
     assert ev2["criteria"]["h2h_vs_r40"]["verdict"] == "FAIL"
     # 反制边界：1 胜 1 负 → 0.50 PASS（不翻车）
     ev3 = _judge(tmp_path, make_runner({"mirror": 1.0,
                                         "counter": [1.0, -1.0],
-                                        "h2h_r40": 1.0}, px=0.9))
+                                        "h2h_r40": 1.0, "control_win": 1.0}))
     assert ev3["criteria"]["counter_not_flipped"]["value"] == pytest.approx(0.5)
     assert ev3["criteria"]["counter_not_flipped"]["verdict"] == "PASS"
 
 
+def test_judge_r45_control_not_negative_branch(tmp_path):
+    """胜局对照不翻负（入判据闸 verdict）：翻负 FAIL/Δ 中位 ≥0 PASS/缺组 FAIL。"""
+    groups = [{"arm": "mirror", "n": 2}, {"arm": "counter", "n": 2},
+              {"arm": "control_win", "n": 2,
+               "opponent": {"type": "python", "path": "/tmp/ctrl.py"}},
+              {"arm": "h2h_r40", "n": 2,
+               "opponent": {"type": "python", "path": "/tmp/r40.py"}}]
+    # 翻负：对照组全负（Δ 中位<0 且胜率 0）→FAIL→verdict NEGATIVE
+    ev = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
+                                       "h2h_r40": 1.0,
+                                       "control_win": -20.0}), groups=groups)
+    assert ev["criteria"]["control_not_negative"]["value"] == {
+        "win_rate": 0.0, "median_margin": -20.0}
+    assert ev["criteria"]["control_not_negative"]["verdict"] == "FAIL"
+    assert ev["verdict"] == "NEGATIVE"
+    # Δ 中位 ≥0（胜率 <0.5 亦不翻负）→PASS
+    games = [{"game_id": "c-%d" % i, "seed": 3000 + i, "our_seat": 0,
+              "opponent": {"type": "python", "path": "/tmp/opp.py"}}
+             for i in range(5)]
+    ev2 = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
+                                        "h2h_r40": 1.0,
+                                        "control_win": [0.0, 0.0, 0.0, -5.0,
+                                                        -5.0]}),
+                 groups=groups[:2] + [{"arm": "control_win", "seated": False,
+                                       "games": games}, groups[3]])
+    assert ev2["criteria"]["control_not_negative"]["value"] == {
+        "win_rate": 0.3, "median_margin": 0.0}
+    assert ev2["criteria"]["control_not_negative"]["verdict"] == "PASS"
+    # 缺对照组→FAIL（fail-closed）
+    ev3 = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
+                                        "h2h_r40": 1.0}),
+                 groups=groups[:2] + [groups[3]])
+    assert ev3["criteria"]["control_not_negative"]["verdict"] == "FAIL"
+
+
 def test_judge_r45_realized_px_no_drop_branch(tmp_path):
-    """实现价不降：候选≥基线 PASS、候选<基线 FAIL、基线缺失 FAIL（fail-closed）。"""
+    """实现价不降：候选(真 reads 0.9)≥基线 PASS、<基线 FAIL、基线缺失 FAIL。"""
     ok = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
-                                       "h2h_r40": 1.0}, px=0.9),
+                                       "h2h_r40": 1.0, "control_win": 1.0}),
                 baseline_realized_px=0.85)
     assert ok["criteria"]["realized_px_no_drop"]["verdict"] == "PASS"
     drop = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
-                                         "h2h_r40": 1.0}, px=0.9),
+                                         "h2h_r40": 1.0,
+                                         "control_win": 1.0}),
                   baseline_realized_px=0.95)
     assert drop["criteria"]["realized_px_no_drop"]["verdict"] == "FAIL"
     miss = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
-                                         "h2h_r40": 1.0}, px=0.9),
+                                         "h2h_r40": 1.0,
+                                         "control_win": 1.0}),
                   baseline_realized_px=None)
     assert miss["criteria"]["realized_px_no_drop"]["verdict"] == "FAIL"
 
@@ -303,20 +362,75 @@ def test_judge_r45_realized_px_from_states_reuse_judge_r26(tmp_path):
     assert ev["criteria"]["realized_px_no_drop"]["verdict"] == "PASS"
 
 
+def test_judge_r45_realized_ok_true_real_trace_chain(tmp_path):
+    """P0 证据：真 trace 链路（j26._chunk 回行形状、reads=真 realized_price_
+    stats）下 realized_ok 可为 True，v28 判正可达——基线侧两条路径皆接通。"""
+    cand_reads = j26.realized_price_stats(CAND_STATES)
+    base_reads = j26.realized_price_stats(BASE_STATES)
+    assert cand_reads["realized_px"] == 0.9        # 真函数算出的候选侧读数
+    assert base_reads["realized_px"] == 0.8        # 真函数算出的基线侧读数
+
+    def _chunk_row(s, reads, reads_opp=None):
+        """j26._chunk 回行形状（keys 同 _chunk）：margin 由 banks+seat 归一。"""
+        seat = int(s.get("our_seat", 0) or 0)
+        banks = [20000.0, 10000.0] if seat == 0 else [10000.0, 20000.0]
+        row = {"game_id": s["game_id"], "seed": s["seed"], "seat": seat,
+               "arm": s.get("arm"), "banks": banks, "error": None,
+               "margin": float(banks[seat] - banks[1 - seat]),
+               "reads": reads}
+        if reads_opp is not None:
+            row["reads_opp"] = reads_opp          # 行级补基线侧读数
+        return row
+
+    groups = [{"arm": "mirror", "n": 2}, {"arm": "counter", "n": 2},
+              {"arm": "control_win", "n": 2,
+               "opponent": {"type": "python", "path": "/tmp/ctrl.py"}},
+              {"arm": "h2h_r40", "n": 2,
+               "opponent": {"type": "python", "path": "/tmp/r40.py"}}]
+    # 路径①行级 reads_opp（同局配对基线；无 config 定桩）
+    ev = _judge(tmp_path,
+                lambda specs, cfg: [_chunk_row(s, cand_reads,
+                                               reads_opp=base_reads)
+                                    for s in specs],
+                groups=groups, baseline_realized_px=None)
+    assert ev["criteria"]["realized_px_no_drop"]["value"] == {
+        "candidate": 0.9, "baseline": 0.8}
+    assert ev["criteria"]["realized_px_no_drop"]["verdict"] == "PASS"
+    assert ev["verdict"] == "POSITIVE"            # 判正可达（真链路实证）
+
+    # 路径②基线臂（baseline_r40=r40 自镜像结构基线；无 config 定桩）
+    def runner_arm(specs, cfg):
+        return [_chunk_row(s, base_reads if s.get("arm") == "baseline_r40"
+                           else cand_reads) for s in specs]
+
+    groups_b = groups[:3] + [
+        {"arm": "baseline_r40", "n": 2,
+         "agent": {"type": "python", "path": "/tmp/r40.py"},
+         "opponent": {"type": "python", "path": "/tmp/r40.py"}},
+        groups[3]]
+    ev2 = _judge(tmp_path, runner_arm, groups=groups_b,
+                 baseline_realized_px=None)
+    assert ev2["criteria"]["realized_px_no_drop"]["value"] == {
+        "candidate": 0.9, "baseline": 0.8}
+    assert ev2["criteria"]["realized_px_no_drop"]["verdict"] == "PASS"
+    assert ev2["verdict"] == "POSITIVE"
+
+
 def test_judge_r45_net_identity_fail_closed(tmp_path):
     """净加卖恒等违例>0→判决红（fail-closed 传递）。"""
     bad_ledger = {"g1": {"debts": [{"item": "WOOL", "qty": 5, "due_step": 10,
                                     "advance_step": 8}],
                          "settled": [{"item": "WOOL", "qty": 2, "step": 10}]}}
     ev = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
-                                       "h2h_r40": 1.0}, px=0.9),
+                                       "h2h_r40": 1.0, "control_win": 1.0}),
                 ledger=bad_ledger)
     assert ev["criteria"]["net_identity"]["verdict"] == "FAIL"
     assert ev["criteria"]["net_identity"]["value"] >= 1
     assert ev["verdict"] == "NEGATIVE"
     # 台账缺失→违例计 1→红
     ev2 = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
-                                        "h2h_r40": 1.0}, px=0.9), ledger=None)
+                                        "h2h_r40": 1.0, "control_win": 1.0}),
+                 ledger=None)
     assert ev2["criteria"]["net_identity"]["value"] == 1
     assert ev2["verdict"] == "NEGATIVE"
 
@@ -328,7 +442,7 @@ def test_judge_r45_replay_corpus_group(tmp_path):
     ev = _judge(tmp_path, make_runner({"mirror": 1.0, "counter": 1.0,
                                        "h2h_r40": 1.0,
                                        "replay_loss": [1.0, -1.0, 1.0]},
-                                      capture=capture, px=0.9),
+                                      capture=capture),
                 groups=None, corpus=str(corpus))
     replay = [a for a in ev["arms"] if a["arm"] == "replay_loss"][0]
     assert replay["n"] == 3
@@ -338,6 +452,8 @@ def test_judge_r45_replay_corpus_group(tmp_path):
     assert len(specs) == 3
     assert all(s["agents"][0]["type"] == "tape" or
                s["agents"][1]["type"] == "tape" for s in specs)
+    # 缺省局组恒含胜局对照（内容配置化；缺→红记）
+    assert any(a["arm"] == "control_win" for a in ev["arms"])
     # 在库 26 败局语料（R28 判据原文口径）
     in_repo = sorted(j45.REPLAY_CORPUS_DEFAULT.glob("episode-*.json*"))
     assert len(in_repo) == 26
@@ -345,7 +461,8 @@ def test_judge_r45_replay_corpus_group(tmp_path):
 
 def test_judge_r45_fail_closed_runner_error(tmp_path):
     """局组不可跑→镜像臂红记→判据红→NEGATIVE（fail-closed 传递）。"""
-    ev = _judge(tmp_path, make_runner({"counter": 1.0, "h2h_r40": 1.0},
+    ev = _judge(tmp_path, make_runner({"counter": 1.0, "h2h_r40": 1.0,
+                                       "control_win": 1.0},
                                       raise_for=("mirror",)))
     assert ev["criteria"]["mirror_win_rate"]["verdict"] == "FAIL"
     assert ev["verdict"] == "NEGATIVE"

@@ -28,7 +28,9 @@ ENTRY_NAME = "_advance_agent"
 SIZE_CAP_BYTES = 100 * 1024 * 1024      # 包体上限（门④）
 STEP_BUDGET_S = 1.0                     # 单步预算（门② <1s）
 SMOKE_SEEDS = (101, 102)                # 双席自打 smoke seeds（r30 管线同款）
-H2H_SEED_BASE = 650000
+# seed 域错开惯例（64/65/66/67）：r45=670000 域——judge_r45 局组 670000+gi*1000，
+# 本门 h2h 取 678000 独立段（与判决局组零交叠；独立 seed n 报）。
+H2H_SEED_BASE = 678000
 N_H2H_GATE = 8                          # h2h 门独立 seed 数（席位翻转不双计）
 H2H_BAR = 0.55
 MANIFEST_NAME = "build_manifest.json"
