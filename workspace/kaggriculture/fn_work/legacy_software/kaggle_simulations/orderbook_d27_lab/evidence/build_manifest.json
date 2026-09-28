@@ -1,0 +1,78 @@
+{
+ "schema": "orderbook_d27_lab_manifest/1.0",
+ "generated": "2026-09-28T17:49:33Z",
+ "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r44_a/main.py",
+ "base_main_sha256": "b387307fc12e26107c58ee604146fc621099ce88124fa0876fdd7cef28300bd9",
+ "base_bytes": 1441184,
+ "append_only_prefix_identical": true,
+ "sentinel": "\"\"\"d27 lab 实验尾块",
+ "entry": "_d27_agent",
+ "layers": {
+  "x1": "件 X1=d27 挂量墙卫生（step>=624 同拍内死单清理/超库存 clamp/同品碎单并最早槽；零跨拍挪量）",
+  "x2": "件 X2=日新高簇补全（tetsutani step928/948 语义差：父链在卖残量变现/投射仓基（当日 PICKUP 跳过）/追加单并首单 qty>0 口径）"
+ },
+ "form_layer_order": {
+  "placebo": [],
+  "x1": [
+   "x1"
+  ],
+  "x2": [
+   "x2"
+  ],
+  "x12": [
+   "x2",
+   "x1"
+  ]
+ },
+ "scope_notes": {
+  "x1_window": "step>=624 全程（同拍内整理；终局 718 清算输出结构性卫生不变：逐品单条正量实存挂单，无碎单/无超库存/无死单——R29 终局清算器零触碰实测在案）",
+  "x2_window": "全程（日新高簇语义补齐；同拍追加族）",
+  "cross_tick": "零跨拍挪量（禁区红线 R23/R26）",
+  "race_state_sync": "step928/948 的 _RACE_STATE prev_action 回写守卫未补（防非触发拍级联足迹；残留语义差在报告列明）"
+ },
+ "forms": {
+  "placebo": {
+   "main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_d27_lab/build/placebo/main.py",
+   "sha256": "7214897c01407b324bb1795e5fa0c6bc3fe320032c2e28f19f1f3ee6c2044e0c",
+   "bytes": 1443260,
+   "injected_tail_bytes": 2076,
+   "layers": [],
+   "compile_ok": true,
+   "entry_last_callable": "_d27_agent"
+  },
+  "x1": {
+   "main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_d27_lab/build/x1/main.py",
+   "sha256": "100b1b0550316ec372416ca1e1d15fbfde5fffcbd34bc08fb42c4c998e7fb44e",
+   "bytes": 1449306,
+   "injected_tail_bytes": 8122,
+   "layers": [
+    "x1"
+   ],
+   "compile_ok": true,
+   "entry_last_callable": "_d27_agent"
+  },
+  "x2": {
+   "main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_d27_lab/build/x2/main.py",
+   "sha256": "091be4199051a53903ae0d9d8be8d16ec140413a44c1895367c4018f84937584",
+   "bytes": 1450744,
+   "injected_tail_bytes": 9560,
+   "layers": [
+    "x2"
+   ],
+   "compile_ok": true,
+   "entry_last_callable": "_d27_agent"
+  },
+  "x12": {
+   "main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_d27_lab/build/x12/main.py",
+   "sha256": "31f36d7ae015222449c677ab2cd14a45780d37f71060173741b98b7fc5229e21",
+   "bytes": 1456689,
+   "injected_tail_bytes": 15505,
+   "layers": [
+    "x2",
+    "x1"
+   ],
+   "compile_ok": true,
+   "entry_last_callable": "_d27_agent"
+  }
+ }
+}
