@@ -45,8 +45,7 @@
 | ~~B34~~ | ~~建库+选路口径批~~ | **随 R24 判负注销**（09-28） | 实验证明库无正翻胜格可售——建库已无信息可装，继续=假完成 |
 | ~~B35~~ | ~~构建面批~~ | **随 R24 判负注销**（09-28） | 同上（判负预绑定：不建发射版） |
 | ~~B36~~ | ~~判决+门禁+总指挥批~~ | **随 R24 判负注销**（09-28） | 判决级证据=A/B 账本（直接测得库的信息含量=②判据）；②③无可判正路径 |
-| ▶ B39 | R25-S3 构建面批：inject_r42_block + audit_diff_r42_vs_r40 + pack_r42 + build_r42 wired | pytest test_build_r42 全绿+真跑构建（审计零越界/双跑恒等/r40 零改动） | 尾块注入三件+常量；_R42_* 捕获行 |
-| B40 | R25-S4 判决+门禁+总指挥：endgame_stats + mirror_arm_stats + judge_r25 + verify_r42_gates + run_r42_iteration wired | pytest 全绿桩清零+judge 真跑（R25 ①②③+总判）+发射/收档预绑定 | 判正且 09-28 窗内→standing 发射；判负/过窗→收档 |
+| ▶ B40 | R25-S4 判决+门禁+总指挥：endgame_stats + mirror_arm_stats + judge_r25 + verify_r42_gates + run_r42_iteration wired | pytest 全绿桩清零+judge 真跑（R25 ①②③+总判）+发射/收档预绑定 | 判正且 09-28 窗内→standing 发射；判负/过窗→收档 |
 
 ## 变更记录（计划层事件）
 | 日期 | 事件 | 说明 |

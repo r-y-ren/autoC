@@ -180,10 +180,10 @@
 | apply_slot_orchestration | B37 | wired 09-28 | pytest 8 passed（全组）；**真跑实证**：真局帧+真磁带动作——SELL 30 截到库存 20（防 abort 生效）、原动作未改写、账本六键 | (本批) |
 | apply_endgame_liquidation | B38 | tested+wired 09-28 | pytest 4 passed（648 前 noop/停采购+价值降序清算序/712 全量出清/fail-safe）；真跑待 B40 判决批（模拟局） | (本批) |
 | apply_mirror_gate | B38 | tested+wired 09-28 | pytest 4 passed（指纹相等触发稳态前移/不等不触发/credit 偿还禁净加卖/缺字段不触发+fail-safe）；机制=尾窗卖速×2 拍提前+credit 抵扣 | (本批) |
-| inject_r42_block | B39 | stub 09-28 | 核验命令: pytest orderbook_r42/test_build_r42.py（inject 组） | — |
-| audit_diff_r42_vs_r40 | B39 | stub 09-28 | 核验命令: pytest orderbook_r42/test_build_r42.py（audit 组） | — |
-| pack_r42 | B39 | stub 09-28 | 核验命令: pytest orderbook_r42/test_build_r42.py（pack 组） | — |
-| build_r42 | B39 | stub 09-28 | 核验命令: pytest orderbook_r42/test_build_r42.py | — |
+| inject_r42_block | B39 | tested+wired 09-28 | pytest inject 组 2 passed（捕获行/件集恒等/末 callable/AST 改名防撞）；真跑注入 16,184B 块 sha 3e40038a… | (本批) |
+| audit_diff_r42_vs_r40 | B39 | tested+wired 09-28 | pytest audit 组 1 passed（纯尾部白名单/篡改基座即抛）；真跑零越界 | (本批) |
+| pack_r42 | B39 | tested+wired 09-28 | pytest pack 组 1 passed（双跑恒等/manifest 键集/sha 链 r42 节点）；真跑 tar 900c5077… | (本批) |
+| build_r42 | B39 | wired 09-28 | pytest 5 passed；**真跑构建**：main 24619a54…/tar 900c5077…/块 16,184B；审计一类零越界；sha 链 a16e0e9b→r34a→r37→r40→r42；装载冒烟末 callable=_route42_agent | (本批) |
 | endgame_stats | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_judge_r25.py（endgame 组） | — |
 | mirror_arm_stats | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_judge_r25.py（mirror 组） | — |
 | judge_r25 | B40 | stub 09-28 | 核验命令: pytest orderbook_r42/test_judge_r25.py（判据=R25 ①②③+总判原文） | — |

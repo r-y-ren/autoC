@@ -50,3 +50,4 @@
 | 2026-09-28 | R24 收档 | 判负收档（预绑定"判负照旧收档"）：基座表因果胜出全部替代臂，库无正翻胜格；B34-B36 注销；archive_ledger run-r24-archive/1.0 | 路线选择杠杆穷尽（v1 循环零效应→v2 A/B 实测判负）；留赛后资产：A/B 账本+方差法证+时机画像 |
 | 2026-09-28 | B37 | R25-S1 P1 槽位编排四件（merge_same_item_orders/clear_dead_slots/select_best_layout/apply_slot_orchestration） | 8 测绿；真跑实证=SELL 30 截到库存 20 防 abort；机制贴引擎一手（同槽 1:1/逐单位重报价/10 槽/死单占槽）；签名微调三件登记 |
 | 2026-09-28 | B38 | R25-S2 P2 终日清算器+P3 镜像门（apply_endgame_liquidation/apply_mirror_gate） | 8 测绿；清算=648 停采购+价值降序均摊+712 全量出清；镜像=公开指纹逐坐标比对+2 拍稳态前移+credit 偿还（净加卖 0 钉住） |
+| 2026-09-28 | B39 | R25-S3 构建面四件（inject_r42_block/audit_diff_r42_vs_r40/pack_r42/build_r42） | 5 测绿；真跑构建 main 24619a54…/tar 900c5077…（块 16,184B、审计零越界、sha 链五节点、双跑恒等）；AST 改名防撞（_R42P_ 前缀、字符串字面量不动） |
