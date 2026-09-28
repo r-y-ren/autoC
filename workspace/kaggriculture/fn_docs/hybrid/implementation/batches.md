@@ -83,3 +83,14 @@
 | 2026-09-27 | B31 签名微调登记 | build_r40/pack_r40 +out_dir=None；audit_diff_r40_vs_r37 首两参=路径（B26 同规）；sim_bridge run_games(games, config) 判决跑口（并行口径 B32 启用） |
 | 2026-09-26 | B23 签名微调登记 | pack_r38/build_r38 +out_dir=None；变更集=纯尾块（manifest 自证）；库 sha 口径统一 ensure_ascii=False（评审 P3） |
 | 2026-09-26 | R21 批次计划立表（B22-B24）+轻量对账 | 对账判定**对得上**（28 桩全落 orderbook_predict 零外溢、r37 133 绿、49 绿基线持平、抽查命令全绿）；**环境清理**：/tmp usrquota 曾耗尽（Errno 122）——清孤儿缓存 pairsnap/v4bfull/r31b/r31/r29b 约 3.9G，写入恢复；判决语料 r33audit（卖流库源）/kagr22/r30 保留 |
+
+## 【R27-R29 批次计划·2026-09-28】B44-B49（用户令"不用收缩，开始执行，尽可能多开子代理并行"——执行档位=子代理并行，文件所有权互斥）
+| 批次 | 函数/任务清单 | 验收点 | 注 |
+|---|---|---|---|
+| ▶ B44 | quote_context, detect_dayhigh, plan_dayhigh_sells, _dayhigh_agent, gate_added_sells, _glutgate_agent | test_quote_context/test_dayhigh_agent/test_glutgate_agent 全绿 | R27 双运行时层；层码须可文本内嵌（stdlib-only 自含） |
+| B45 | build_r44_variant, append_dayhigh_block, append_glutgate_block | test_build_r44 全绿+构建冒烟 | 三形态 A/B/AB；append_layer_s_block 先例 |
+| B46 | judge_r44, pick_launch_form, verify_r44_gates, run_r44_iteration | test_judge_r44/test_gates_r44/test_run_r44 全绿 | 三形态判决+择优单发+计分对核对 |
+| B47 | select_advanceable, apply_advance_with_debt, settle_debts, measure_rival_lead, _advance_agent | test_advance_agent 全绿 | R28 提前+账本层；净量恒等硬不变量 |
+| B48 | build_r45, append_advance_stack_block, verify_net_identity, run_mirror_counter_judgment, judge_r45, verify_r45_gates, run_r45_iteration | test_build_r45/test_judge_r45/test_gates_r45/test_run_r45 全绿 | 三件套缺一即构建失败；读数门在 run 编排 |
+| B49 | check_reference_map, register_opponent_pool_seeds, run_r29_mining | fn_work/tests/run_r29_mining/test_r29_mining.py 全绿 | R29 研究轨只挖不改 |
+| 2026-09-28 | **B44-B46/B48/B49 五批并行落成（23/28 函数；B47 服务端拦截重派中）**：r44 树 51 测全绿+真 r40 三形态构建冒烟；r45（除 B47）40 测绿+真构建；r29 19 测绿。**签名/形状登记**：①B44 detect_dayhigh 返回 {item:触发价}（plan 需触发价排序）；plan 返回 {orders,slots,ledger,market}；gate 返回 {market,removed}；day_highs=截至上一步基线（当前价 fold 在后）；无基线不触发（防 dawn 盲清）；10 槽满只弃插新、并单不占槽仍执行；并单门删=净扣追加量。②B45 三签名零微调；层源须换行收尾；块尾 del+回绑保末 callable（_DH_HOST/_GG_HOST 捕获沿 _CXS_HOST 先例）。③B46 零微调；A 臂判据带=[2000,4000] 含端点；触发面取超集（换日首拍∨严格新高）防口径误红；realized_price_stats 惰性 import 复用+薄封装兜底。④B48 modules 逻辑键 {debt_ledger,valley_gate,advance_layer} 缺一即抛；反制不翻车阈值定 win_rate≥0.50；读数门 config={"readings":{计分对两件},"threshold":1656.0}，有效数值 <2=数据缺失收档。⑤B49 check_reference_map +index_doc 可选参（缺省程序化发现战役根，R20 不拼字面路径）；run_r29_mining corpus 钉 dict 形状、报告名固定 31-r29-reference-map.md | 对账判定对得上（28/28/56、零谎报；存量债口径沿上周期） |

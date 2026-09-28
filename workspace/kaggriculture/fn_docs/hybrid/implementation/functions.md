@@ -200,3 +200,32 @@
 | judge_r26 | B43 | wired 09-28 | pytest 判据组 1 passed；**真跑 5 臂×120 局**：full h2h 0.0/gran −102.6k/局（跨拍拆单毒+倾销补贴对手倒卖机制）/drain −1.8k/sheep 零效应/placebo 全平局（逐字节同件互打必平——判据带[0.35,0.65]设计错，健康本质另证）；evidence/judge_r26_realrun.json | (本批) |
 | verify_r43_gates | B43 | tested 09-28 | pytest 2 passed（零注入断言=_route40_agent 不变/身份链/谱系锚）；判红不进门禁 | (本批) |
 | run_r43_iteration | B43 | wired 09-28 | pytest 2 passed（预绑定分叉）；**真跑全链→NEGATIVE→archive_ledger run-r43-archive/1.0 落档，不发射** | (本批) |
+
+| quote_context | B44 | tested 09-28 | pytest r44 六件 13 passed（形状/换日/None） | (本批) |
+| detect_dayhigh | B44 | tested 09-28 | test_dayhigh_agent 13 passed（严格新高/等值/quote<2/父链） | (本批) |
+| plan_dayhigh_sells | B44 | tested 09-28 | test_dayhigh_agent 13 passed（守恒/槽序/花费单前置/10槽弃） | (本批) |
+| _dayhigh_agent | B44 | tested 09-28 | test_dayhigh_agent 13 passed（E2E 台账/零足迹/复位/回退） | (本批) |
+| gate_added_sells | B44 | tested 09-28 | test_glutgate_agent 13 passed（门删/磁带豁免/保守不删） | (本批) |
+| _glutgate_agent | B44 | tested 09-28 | test_glutgate_agent 13 passed（注册表/零足迹/回退） | (本批) |
+| build_r44_variant | B45 | wired 09-28 | test_build_r44 11 passed+真 r40 构建冒烟三形态 sha 落账 | (本批) |
+| append_dayhigh_block | B45 | wired 09-28 | test_build_r44 11 passed（三防线/AB 链序/末 callable） | (本批) |
+| append_glutgate_block | B45 | wired 09-28 | test_build_r44 11 passed（同上） | (本批) |
+| judge_r44 | B46 | tested 09-28 | test_judge_r44 27 passed（判据阈值边/消融边际/安慰剂 KILLED/evidence 契约） | (本批) |
+| pick_launch_form | B46 | tested 09-28 | test_judge_r44 27 passed（评分序/无达标收档/计分对注记） | (本批) |
+| verify_r44_gates | B46 | tested 09-28 | test_gates_r44 27 passed（五门红绿/fail-closed） | (本批) |
+| run_r44_iteration | B46 | tested 09-28 | test_run_r44 27 passed（编排短路/判正判负/收档传递） | (本批) |
+| select_advanceable | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
+| apply_advance_with_debt | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
+| settle_debts | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
+| measure_rival_lead | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
+| _advance_agent | B47 | stub 09-28 | 测试: orderbook_r45/test_advance_agent.py | — |
+| build_r45 | B48 | wired 09-28 | test_build_r45 40 passed+真构建 main/tar/manifest+三件缺一即抛 | (本批) |
+| append_advance_stack_block | B48 | wired 09-28 | test_build_r45 40 passed（缺件抛/前缀恒等/末 callable 归一） | (本批) |
+| verify_net_identity | B48 | tested 09-28 | test_judge_r45 40 passed（恒等正反/台账缺失 fail-closed） | (本批) |
+| run_mirror_counter_judgment | B48 | tested 09-28 | test_judge_r45 40 passed（双席折叠/反制臂/组不可跑记红） | (本批) |
+| judge_r45 | B48 | tested 09-28 | test_judge_r45 40 passed（五判据阈值/evidence 契约/realized 复用） | (本批) |
+| verify_r45_gates | B48 | tested 09-28 | test_gates_r45 40 passed（五门真包绿+红分支） | (本批) |
+| run_r45_iteration | B48 | wired 09-28 | test_run_r45 40 passed（读数门三分支+端到端真接线 LAUNCH） | (本批) |
+| check_reference_map | B49 | tested 09-28 | test_r29_mining 19 passed（四字段/INDEX 在册/风险域/7 形态坏格式） | (本批) |
+| register_opponent_pool_seeds | B49 | tested 09-28 | test_r29_mining 19 passed（追加不改旧/重复冲突跳过/SOP 留痕） | (本批) |
+| run_r29_mining | B49 | tested 09-28 | test_r29_mining 19 passed（不过不落盘/三面落盘/确定性复跑） | (本批) |
