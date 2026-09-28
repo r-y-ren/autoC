@@ -1,5 +1,6 @@
 # 件 A 日内新高变现运行时层（注入候选尾块；fail-open 三道）
 # 双形态：文本内嵌态与 quote_context 同名空间（裸名调用）；独立导入态引模块。
+import inspect  # 元数自适应宿主调用（stdlib-only）
 try:
     quote_context  # 内嵌态已同名定义在前，直接沿用（不重绑）
 except NameError:
@@ -218,7 +219,25 @@ def plan_dayhigh_sells(trigger_items, inventory, market_orders):
 
 def _dayhigh_agent(observation, configuration=None):
     """运行时包装：捕获宿主末 callable→取基座动作→detect_dayhigh→plan_dayhigh_sells→并入市场单列表+台账；异常→原动作；step==0 复位跟踪器"""
-    action = _DH_HOST(observation, configuration)  # 宿主调用在 try 之外（layer S 先例）
+    # 元数自适应宿主调用：真宿主 r40 末函数 _route40_agent(observation) 只收 1 参，
+    # layer S 链先例宿主收 (observation, configuration) 2 参。inspect.signature().bind
+    # 只探不调定形态（探错不会执行宿主体；每次调用都探=同宿主同参恒定形态，且换宿主
+    # 即生效）；元数不可判→2 参先例形态。真调用仍在 try 之外（layer S 先例：宿主
+    # 自身故障不吞）。
+    _host_form2 = True
+    try:
+        _sig = inspect.signature(_DH_HOST)
+        try:
+            _sig.bind(observation, configuration)
+        except TypeError:
+            _sig.bind(observation)  # 1 参形态（r40 真宿主）
+            _host_form2 = False
+    except Exception:
+        _host_form2 = True  # 元数不可判→2 参先例形态
+    if _host_form2:
+        action = _DH_HOST(observation, configuration)
+    else:
+        action = _DH_HOST(observation)
     try:
         step = int(observation.get("step", 0))
         if step == 0:

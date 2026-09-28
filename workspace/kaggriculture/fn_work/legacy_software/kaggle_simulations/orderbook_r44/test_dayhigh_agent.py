@@ -2,6 +2,9 @@
 """R27 测试面：件 A 日内新高变现（detect 新高判定/plan 槽位计划/agent 运行时包装）。"""
 from __future__ import annotations
 
+import ast
+import os
+
 from orderbook_r44 import dayhigh_layer as dh
 
 
@@ -121,18 +124,21 @@ def test_plan_dayhigh_sells_slots():
 
 
 def test_dayhigh_agent():
-    """运行时包装：新高→追加单并入动作+台账；step==0 复位跟踪器与台账；无触发零足迹。"""
+    """运行时包装：新高→追加单并入动作+台账；step==0 复位跟踪器与台账；无触发零足迹。
+    mock=真宿主同元数 def _route40_agent(observation)（1 参）形态驱动全链。"""
     dh._DH_TRACKER.clear()
     dh._DH_ADDED.clear()
     action = {"farmer": ["PASS"], "hands": [],
               "market": [["BUY_SEED", "WHEAT", 3]]}
-    monkey_host = lambda obs, cfg=None: action  # noqa: E731
+
+    def _route40_agent(observation):  # 真基座末函数同元数（1 参）
+        return action
+
     # 新高触发：追加单置于首个花费单之前+台账留痕
     dh._DH_TRACKER.update({"day": 1, "day_highs": {"EGG": 50.0}})
-    import types
     old_host = dh._DH_HOST
     try:
-        dh._DH_HOST = monkey_host
+        dh._DH_HOST = _route40_agent
         out = dh._dayhigh_agent(_obs(30, {"EGG": 60.0}, shed={"EGG": 5}))
     finally:
         dh._DH_HOST = old_host
@@ -144,7 +150,7 @@ def test_dayhigh_agent():
     dh._DH_TRACKER.update({"day": 1, "day_highs": {"EGG": 50.0}})
     dh._DH_ADDED.clear()
     try:
-        dh._DH_HOST = monkey_host
+        dh._DH_HOST = _route40_agent
         out = dh._dayhigh_agent(_obs(30, {"EGG": 50.0}, shed={"EGG": 5}))
     finally:
         dh._DH_HOST = old_host
@@ -154,7 +160,7 @@ def test_dayhigh_agent():
     dh._DH_TRACKER.update({"day": 7, "day_highs": {"EGG": 999.0}})
     dh._DH_ADDED.append({"item": "EGG", "qty": 1, "slot": 0, "step": 7})
     try:
-        dh._DH_HOST = monkey_host
+        dh._DH_HOST = _route40_agent
         out = dh._dayhigh_agent(_obs(0, {"EGG": 10.0}, shed={"EGG": 5}))
     finally:
         dh._DH_HOST = old_host
@@ -164,18 +170,22 @@ def test_dayhigh_agent():
 
 
 def test_dayhigh_agent_fail_safe(monkeypatch):
-    """内部异常→基座动作原样返回（同对象）。"""
+    """内部异常→基座动作原样返回（同对象）。mock=真宿主同元数（1 参）。"""
     dh._DH_TRACKER.clear()
     dh._DH_ADDED.clear()
     action = {"farmer": ["PASS"], "hands": [], "market": []}
-    monkeypatch.setattr(dh, "_DH_HOST", lambda obs, cfg=None: action)
+
+    def _route40_agent(observation):  # 真基座末函数同元数（1 参）
+        return action
+
+    monkeypatch.setattr(dh, "_DH_HOST", _route40_agent)
     dh._DH_TRACKER.update({"day": 1, "day_highs": {"EGG": 50.0}})
     monkeypatch.setattr(dh, "detect_dayhigh",
                         lambda *a, **k: (_ for _ in ()).throw(RuntimeError()))
     out = dh._dayhigh_agent(_obs(30, {"EGG": 60.0}, shed={"EGG": 5}))
     assert out is action
     monkeypatch.undo()
-    monkeypatch.setattr(dh, "_DH_HOST", lambda obs, cfg=None: action)
+    monkeypatch.setattr(dh, "_DH_HOST", _route40_agent)
     monkeypatch.setattr(dh, "detect_dayhigh", lambda *a, **k: {"EGG": 60.0})
     monkeypatch.setattr(dh, "plan_dayhigh_sells",
                         lambda *a, **k: (_ for _ in ()).throw(ValueError()))
@@ -183,6 +193,62 @@ def test_dayhigh_agent_fail_safe(monkeypatch):
     assert out is action
     # 观测缺字段（quote_context→None）→原动作
     monkeypatch.undo()
-    monkeypatch.setattr(dh, "_DH_HOST", lambda obs, cfg=None: action)
+    monkeypatch.setattr(dh, "_DH_HOST", _route40_agent)
     out = dh._dayhigh_agent({"player": 0})
     assert out is action
+
+
+def test_dayhigh_agent_host_arity_forms(monkeypatch):
+    """宿主元数自适应：2 参宿主（layer S 链先例形态，可选参与必参）驱动全链，
+    与 1 参宿主结果一致。"""
+    action = {"farmer": ["PASS"], "hands": [], "market": [["BUY_SEED", "WHEAT", 3]]}
+
+    def _host2(observation, configuration=None):  # 2 参（可选参，layer S 先例形态）
+        return action
+
+    def _host2req(observation, configuration):  # 2 参（必参）
+        return action
+
+    for host in (_host2, _host2req):
+        dh._DH_TRACKER.clear()
+        dh._DH_ADDED.clear()
+        dh._DH_TRACKER.update({"day": 1, "day_highs": {"EGG": 50.0}})
+        monkeypatch.setattr(dh, "_DH_HOST", host)
+        out = dh._dayhigh_agent(_obs(30, {"EGG": 60.0}, shed={"EGG": 5}))
+        assert out["market"] == [["SELL", "EGG", 5], ["BUY_SEED", "WHEAT", 3]]
+        assert dh._DH_ADDED == [{"item": "EGG", "qty": 5, "slot": 0, "step": 30}]
+
+
+def test_real_base_host_arity_wiring(monkeypatch):
+    """真基座元数接线：orderbook_r40/build/main.py 末函数元数契约（AST 读源码取
+    签名+只 exec 该函数定义段，不跑全局）驱动 AB 全链——宿主调用绑定 1 参形态，
+    不抛 TypeError。"""
+    main_py = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           os.pardir, "orderbook_r40", "build", "main.py")
+    src = open(main_py, encoding="utf-8").read()
+    tree = ast.parse(src)
+    fn = [n for n in tree.body if isinstance(n, ast.FunctionDef)][-1]
+    assert fn.name == "_route40_agent"  # 末函数元数契约=官方 runner 单参入口
+    assert (len(fn.args.posonlyargs) + len(fn.args.args),
+            len(fn.args.defaults), fn.args.vararg, fn.args.kwarg) == (1, 0, None, None)
+    ns = {}
+    exec(ast.get_source_segment(src, fn), ns)  # 只 exec 该函数定义段，不跑全局
+    real_host = ns[fn.name]
+    # 1) 真函数单层接线：_dayhigh_agent 调用不抛 TypeError，追加单落在真宿主动作上
+    dh._DH_TRACKER.clear()
+    dh._DH_ADDED.clear()
+    dh._DH_TRACKER.update({"day": 1, "day_highs": {"EGG": 50.0}})
+    monkeypatch.setattr(dh, "_DH_HOST", real_host)
+    out = dh._dayhigh_agent(_obs(30, {"EGG": 60.0}, shed={"EGG": 5}))
+    assert out["farmer"] == ["PASS"]  # 真宿主 PASS 动作流经
+    assert out["market"] == [["SELL", "EGG", 5]]
+    assert dh._DH_ADDED == [{"item": "EGG", "qty": 5, "slot": 0, "step": 30}]
+    # 2) AB 全链：_glutgate_agent→_dayhigh_agent→真宿主（quote≥base 门不动）
+    from orderbook_r44 import glutgate_layer as gg
+    dh._DH_TRACKER.clear()
+    dh._DH_ADDED.clear()
+    dh._DH_TRACKER.update({"day": 1, "day_highs": {"EGG": 50.0}})
+    monkeypatch.setattr(gg, "_GG_HOST", dh._dayhigh_agent)
+    monkeypatch.setattr(gg, "_DH_ADDED", dh._DH_ADDED, raising=False)
+    out = gg._glutgate_agent(_obs(30, {"EGG": 60.0}, shed={"EGG": 5}))
+    assert out["market"] == [["SELL", "EGG", 5]]

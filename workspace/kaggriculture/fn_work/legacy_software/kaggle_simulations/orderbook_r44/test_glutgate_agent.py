@@ -2,6 +2,9 @@
 """R27 测试面：件 B 谷底闸门（门删除/磁带豁免/标记缺失保守/并单磁带余量/agent 包装）。"""
 from __future__ import annotations
 
+import ast
+import os
+
 from orderbook_r44 import glutgate_layer as gg
 
 
@@ -86,14 +89,18 @@ def test_gate_added_sells():
 
 def test_glutgate_agent():
     """运行时包装：注册表命中→过滤+删除台账；B 单形态（无注册表）零足迹；
-    step==0 复位删除台账。"""
+    step==0 复位删除台账。mock=真宿主同元数 def _route40_agent(observation)（1 参）。"""
     action = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "EGG", 5]]}
+
+    def _route40_agent(observation):  # 真基座末函数同元数（1 参）
+        return action
+
     gg._GG_REMOVED.clear()
     # AB 形态：_DH_ADDED 注册表经 globals() 命中→删我方加挂单
     gg._DH_ADDED = [{"item": "EGG", "qty": 5, "slot": 0, "step": 30}]
     old_host, old_gate = gg._GG_HOST, gg.gate_added_sells
     try:
-        gg._GG_HOST = lambda obs, cfg=None: action
+        gg._GG_HOST = _route40_agent
         out = gg._glutgate_agent(_obs(30, {"EGG": 40.0}))
     finally:
         del gg._DH_ADDED
@@ -104,7 +111,7 @@ def test_glutgate_agent():
     assert action["market"] == [["SELL", "EGG", 5]]  # 宿主动作不动
     # B 单形态：无 _DH_ADDED 注册表→标记缺失→保守不删→同对象零足迹
     try:
-        gg._GG_HOST = lambda obs, cfg=None: action
+        gg._GG_HOST = _route40_agent
         out = gg._glutgate_agent(_obs(30, {"EGG": 40.0}))
     finally:
         gg._GG_HOST = old_host
@@ -112,7 +119,7 @@ def test_glutgate_agent():
     # step==0 复位删除台账
     gg._GG_REMOVED.append({"item": "X", "qty": 1, "slot": 0, "step": 9})
     try:
-        gg._GG_HOST = lambda obs, cfg=None: action
+        gg._GG_HOST = _route40_agent
         out = gg._glutgate_agent(_obs(0, {"EGG": 40.0}))
     finally:
         gg._GG_HOST = old_host
@@ -120,15 +127,59 @@ def test_glutgate_agent():
     assert old_gate is gg.gate_added_sells
 
 
-def test_glutgate_agent_fail_safe(monkeypatch):
-    """内部异常→宿主动作原样返回（同对象）。"""
+def test_glutgate_agent_host_arity_forms(monkeypatch):
+    """宿主元数自适应：2 参宿主（layer S 链先例形态，可选参与必参）驱动结果与 1 参一致。"""
     action = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "EGG", 5]]}
-    monkeypatch.setattr(gg, "_GG_HOST", lambda obs, cfg=None: action)
+
+    def _host2(observation, configuration=None):  # 2 参（可选参，layer S 先例形态）
+        return action
+
+    def _host2req(observation, configuration):  # 2 参（必参）
+        return action
+
+    for host in (_host2, _host2req):
+        gg._GG_REMOVED.clear()
+        gg._DH_ADDED = [{"item": "EGG", "qty": 5, "slot": 0, "step": 30}]
+        try:
+            monkeypatch.setattr(gg, "_GG_HOST", host)
+            out = gg._glutgate_agent(_obs(30, {"EGG": 40.0}))
+        finally:
+            del gg._DH_ADDED
+        assert out["market"] == []
+        assert gg._GG_REMOVED == [{"item": "EGG", "qty": 5, "slot": 0, "step": 30}]
+
+
+def test_real_base_host_arity_wiring(monkeypatch):
+    """真基座元数接线：orderbook_r40/build/main.py 末函数元数契约（AST 读源码取签名+
+    只 exec 该函数定义段，不跑全局）驱动 _glutgate_agent——宿主调用绑定 1 参形态，
+    不抛 TypeError。"""
+    main_py = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           os.pardir, "orderbook_r40", "build", "main.py")
+    src = open(main_py, encoding="utf-8").read()
+    fn = [n for n in ast.parse(src).body if isinstance(n, ast.FunctionDef)][-1]
+    assert fn.name == "_route40_agent"
+    assert (len(fn.args.posonlyargs) + len(fn.args.args),
+            len(fn.args.defaults), fn.args.vararg, fn.args.kwarg) == (1, 0, None, None)
+    ns = {}
+    exec(ast.get_source_segment(src, fn), ns)  # 只 exec 该函数定义段，不跑全局
+    monkeypatch.setattr(gg, "_GG_HOST", ns[fn.name])
+    out = gg._glutgate_agent(_obs(30, {"EGG": 40.0}))
+    assert out["farmer"] == ["PASS"] and out["market"] == []  # 真宿主动作流经且零足迹
+
+
+def test_glutgate_agent_fail_safe(monkeypatch):
+    """内部异常→宿主动作原样返回（同对象）。mock=真宿主同元数（1 参）。"""
+    action = {"farmer": ["PASS"], "hands": [], "market": [["SELL", "EGG", 5]]}
+
+    def _route40_agent(observation):  # 真基座末函数同元数（1 参）
+        return action
+
+    monkeypatch.setattr(gg, "_GG_HOST", _route40_agent)
     monkeypatch.setattr(
         gg, "gate_added_sells",
         lambda *a, **k: (_ for _ in ()).throw(RuntimeError()))
     assert gg._glutgate_agent(_obs(30, {"EGG": 40.0})) is action
     # 观测非 dict（step 解析异常）→同对象回退
     monkeypatch.undo()
-    monkeypatch.setattr(gg, "_GG_HOST", lambda obs, cfg=None: action)
+    monkeypatch.setattr(gg, "_GG_HOST", _route40_agent)
     assert gg._glutgate_agent(None) is action
