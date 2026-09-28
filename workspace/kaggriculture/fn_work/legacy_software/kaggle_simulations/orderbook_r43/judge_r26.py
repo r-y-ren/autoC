@@ -27,7 +27,8 @@ TERMINAL_MONEY_BAR = 105000.0
 def realized_price_stats(states: Any) -> Dict[str, Any]:
     """实现价读数。签名意图：输入: traced 对局 [(step, obs, action)] /
     输出: {realized_px, terminal_money, stranding} / 错误: 缺字段→UNKNOWN。
-    口径：实现价=Σ(qty×卖时市价)/Σ(qty×该局该品日均价)。"""
+    口径：实现价=Σ(qty×卖时市价)/Σ(qty×该局该品日均价)；
+    终局钱=farms[obs.player].money（逐席干净口径，非 farms[0] 双侧污染读法）。"""
     try:
         daily: Dict[Tuple[int, str], List[float]] = {}
         sells: List[Tuple[int, str, float, float]] = []   # (day,item,qty,px)
@@ -68,12 +69,20 @@ def realized_price_stats(states: Any) -> Dict[str, Any]:
         terminal = UNKNOWN
         stranding = UNKNOWN
         if isinstance(last_obs, dict):
-            farm = (last_obs.get("farms") or [{}])[0] if \
-                isinstance(last_obs.get("farms"), list) else {}
+            # 逐席干净口径：farms[obs.player].money（缺席号回落席 0），
+            # 修 P2 缺陷——旧 farms[0] 恒读使同局双侧读数同值污染。
             try:
-                terminal = round(float(farm.get("money", 0.0)), 2)
+                player = int(last_obs.get("player", 0))
             except (TypeError, ValueError):
-                pass
+                player = 0
+            farms = last_obs.get("farms")
+            if isinstance(farms, list) and 0 <= player < len(farms) \
+                    and isinstance(farms[player], dict):
+                try:
+                    terminal = round(float(farms[player].get("money", 0.0)),
+                                     2)
+                except (TypeError, ValueError):
+                    pass
             prices = ((last_obs.get("market") or {}) if
                       isinstance(last_obs.get("market"), dict) else {}
                       ).get("prices") or {}

@@ -13,6 +13,29 @@ from pathlib import Path
 from typing import Any, Dict
 
 MODULE_DIR = Path(__file__).resolve().parent
+LEDGER_RECORDS = ("archive_ledger.json", "launch_ledger.json",
+                  "run_summary.json")
+
+
+def write_record(path: Any, payload: Dict[str, Any]) -> Path:
+    """收档件只读守卫（09-28 证据覆写事故教训，判决机器台账写点单口径）。
+
+    台账/汇总收档件（archive_ledger/launch_ledger/run_summary）已存在即视为
+    已收档——拒绝写入（模板占位/新跑数据不得覆写历史判决证据）；需要重跑时
+    先收档（git 记录）再移除旧件。新写落盘后置只读（0o444，收档件转只读）。
+    测试一律经 evidence_dir 把写路径钉死在 tmp（写面隔离）。
+    """
+    p = Path(path)
+    if p.name in LEDGER_RECORDS and p.exists():
+        raise RuntimeError("收档件只读：%s 已存在，拒绝覆写历史判决台账" % p)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(payload, ensure_ascii=False, indent=1,
+                           default=str) + "\n", encoding="utf-8")
+    try:
+        p.chmod(0o444)
+    except OSError:
+        pass
+    return p
 
 
 def run_r43_iteration(argv: Any = None) -> Dict[str, Any]:
@@ -23,6 +46,7 @@ def run_r43_iteration(argv: Any = None) -> Dict[str, Any]:
     from orderbook_r43 import judge_r26 as j26  # noqa: WPS433
     cfg = dict(argv) if isinstance(argv, dict) else {}
     t0 = time.perf_counter()
+    ev_dir = Path(cfg.get("evidence_dir") or MODULE_DIR / "evidence")
     r40_main = cfg.get("r40_main") or MODULE_DIR.parent / "orderbook_r40" / \
         "build" / "main.py"
     out_dir = cfg.get("out_dir") or MODULE_DIR / "build"
@@ -55,10 +79,7 @@ def run_r43_iteration(argv: Any = None) -> Dict[str, Any]:
                                          ("arms", "criteria", "pass")},
                             "auth": "预绑定『判正→standing 发射』（max() "
                                     "语义窗口纪律修订已登记）+台账留痕"}}
-        (MODULE_DIR / "evidence").mkdir(parents=True, exist_ok=True)
-        (MODULE_DIR / "evidence" / "launch_ledger.json").write_text(
-            json.dumps(ledger, ensure_ascii=False, indent=1, default=str)
-            + "\n", encoding="utf-8")
+        write_record(ev_dir / "launch_ledger.json", ledger)
     else:
         verdict = {"verdict": "NEGATIVE", "launch_ready": False,
                    "reason": "判据%s/门禁%s/窗口%s" % (
@@ -71,10 +92,7 @@ def run_r43_iteration(argv: Any = None) -> Dict[str, Any]:
                             "judgment": {k: ev.get(k) for k in
                                          ("arms", "criteria", "pass")},
                             "main_sha256": full["main_sha256"]}}
-        (MODULE_DIR / "evidence").mkdir(parents=True, exist_ok=True)
-        (MODULE_DIR / "evidence" / "archive_ledger.json").write_text(
-            json.dumps(ledger, ensure_ascii=False, indent=1, default=str)
-            + "\n", encoding="utf-8")
+        write_record(ev_dir / "archive_ledger.json", ledger)
     return {"build": full, "judgment": ev, "gates": gates_out,
             "verdict": verdict,
             "elapsed_s": round(time.perf_counter() - t0, 2)}

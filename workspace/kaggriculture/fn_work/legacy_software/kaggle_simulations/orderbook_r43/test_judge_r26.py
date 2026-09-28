@@ -30,6 +30,34 @@ def test_realized_price_stats_bad_input():
     assert out["realized_px"] == "UNKNOWN"
 
 
+def test_terminal_money_per_player_two_sides_distinguishable():
+    """P2 修后口径：同局双侧读数可区分（逐席 farms[obs.player].money）。
+
+    同一局两个 traced sink（席 0 / 席 1 视角）末观察携带全场 farms
+    [120000, 88000]——旧 farms[0] 恒读会双侧同值 120000（污染症状），
+    修后各读本席：席 0→120000、席 1→88000。
+    """
+    farms = [{"money": 120000.0}, {"money": 88000.0}]
+    sink0 = [(0, {"market": {"prices": {"WHEAT": 30}}, "player": 0,
+                  "farms": farms}, {"market": []}),
+             (718, {"market": {"prices": {"WHEAT": 40}}, "player": 0,
+                    "farms": farms, "private": {"shed": {}}}, {"market": []})]
+    sink1 = [(0, {"market": {"prices": {"WHEAT": 30}}, "player": 1,
+                  "farms": farms}, {"market": []}),
+             (718, {"market": {"prices": {"WHEAT": 40}}, "player": 1,
+                    "farms": farms, "private": {"shed": {}}}, {"market": []})]
+    out0 = j26.realized_price_stats(sink0)
+    out1 = j26.realized_price_stats(sink1)
+    assert out0["terminal_money"] == 120000.0     # 席 0 本席钱
+    assert out1["terminal_money"] == 88000.0      # 席 1 本席钱（非 farms[0]）
+    assert out0["terminal_money"] != out1["terminal_money"]   # 双侧可区分
+    # 缺席号回落席 0（旧行为兼容）
+    out_nop = j26.realized_price_stats(
+        [(718, {"market": {"prices": {"WHEAT": 40}}, "farms": farms},
+          {"market": []})])
+    assert out_nop["terminal_money"] == 120000.0
+
+
 def test_judge_criteria_bars(monkeypatch, tmp_path):
     """判据门槛：placebo 带/实现价/终局钱/h2h 汇总与 pass 聚合。"""
     fake_rows = {}

@@ -1,75 +1,14 @@
 {
  "archive_ledger": "run-r43-archive/1.0",
  "entry": {
-  "date": "2026-09-28T08:24:07Z",
+  "date": "2026-09-28T21:55:15Z",
   "verdict": "NEGATIVE",
   "archive_note": "判负收档留下一战役资产",
   "judgment": {
-   "arms": {
-    "full": {
-     "n": 120,
-     "h2h": 0.0,
-     "mean_margin": -102576.9,
-     "realized_px_mean": 1.0216,
-     "terminal_money_mean": 94852.5,
-     "stranding_mean": 0.0
-    },
-    "placebo": {
-     "n": 120,
-     "h2h": 0.0167,
-     "mean_margin": 0.0,
-     "realized_px_mean": 1.0698,
-     "terminal_money_mean": 89926.3,
-     "stranding_mean": 0.0
-    },
-    "drain": {
-     "n": 120,
-     "h2h": 0.1583,
-     "mean_margin": -1795.7,
-     "realized_px_mean": 1.0472,
-     "terminal_money_mean": 89685.1,
-     "stranding_mean": 0.0
-    },
-    "gran": {
-     "n": 120,
-     "h2h": 0.0,
-     "mean_margin": -102577.3,
-     "realized_px_mean": 1.0255,
-     "terminal_money_mean": 94629.5,
-     "stranding_mean": 0.0
-    },
-    "sheep": {
-     "n": 120,
-     "h2h": 0.0167,
-     "mean_margin": 0.0,
-     "realized_px_mean": 1.0698,
-     "terminal_money_mean": 89926.3,
-     "stranding_mean": 0.0
-    }
-   },
-   "criteria": {
-    "placebo_identity": {
-     "value": 0.0167,
-     "verdict": "FAIL"
-    },
-    "realized_px": {
-     "value": 1.0216,
-     "bar": 0.88,
-     "verdict": "PASS"
-    },
-    "terminal_money": {
-     "value": 94852.5,
-     "bar": 105000.0,
-     "verdict": "FAIL"
-    },
-    "h2h": {
-     "value": 0.0,
-     "bar": 0.55,
-     "verdict": "FAIL"
-    }
-   },
+   "arms": {},
+   "criteria": {},
    "pass": false
   },
-  "main_sha256": "eee0cef97f8d4067f72dffe1850c37eacc2fa7a50e4364f979c35212d28fafc6"
+  "main_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
  }
 }

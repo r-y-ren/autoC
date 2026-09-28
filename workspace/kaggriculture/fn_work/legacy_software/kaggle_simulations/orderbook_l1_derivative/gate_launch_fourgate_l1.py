@@ -51,6 +51,8 @@ SIZE_CAP_BYTES = 100 * 1024 * 1024        # 与单实现 SIZE_CAP_BYTES 同值
 L1_LAST_CALLABLE = "_cxs_agent"
 BASELINE_LAST_CALLABLE = "_cxd_agent"
 DROPPED_DETAIL_CAP = 48                   # 附加断言逐差步明细上限（防台账膨胀）
+LEDGER_RECORDS = ("archive_ledger.json", "launch_ledger.json",
+                  "run_summary.json")     # 收档件只读守卫对象（09-28 教训）
 
 
 def _sha256(data: bytes) -> str:
@@ -257,6 +259,12 @@ def run(pkg_path=None, evidence_path=None) -> dict:
     evidence_path = (os.path.abspath(evidence_path) if evidence_path is not None
                      else os.path.join(evidence_dir,
                                        "launch_check_evidence.json"))
+    # 收档件只读守卫（09-28 证据覆写事故教训）：台账收档件已存在即拒绝覆写
+    # ——门禁/判决写点不得把证据打到收档件上；先行拒写，不驱动长局。
+    if os.path.basename(evidence_path) in LEDGER_RECORDS \
+            and os.path.exists(evidence_path):
+        raise RuntimeError("收档件只读：%s 已存在，拒绝覆写历史判决台账"
+                           % evidence_path)
     gates = {"load": False, "full_episodes": False, "determinism": False,
              "package": False}
     truncation = {"ok": False, "divergent_steps": []}

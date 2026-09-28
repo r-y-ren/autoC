@@ -1,0 +1,1239 @@
+{
+ "_generated_at": "2026-09-28T22:27:35Z",
+ "version": "track3-block-calibration/1.0",
+ "source": {
+  "purpose": "分析35 P4 跨块读数校准（h1_base 对 r40 旧块 0.837 / 新中性块 0.772 的 ±0.06 漂移量化）",
+  "arms": {
+   "h1_base": "fn_work/legacy_software/kaggle_simulations/orderbook_iter1_lab/build/h1_base/main.py",
+   "i1": "fn_work/legacy_software/kaggle_simulations/orderbook_iter1_lab/build/i1/main.py",
+   "i2": "fn_work/legacy_software/kaggle_simulations/orderbook_iter1_lab/build/i2/main.py",
+   "i12": "fn_work/legacy_software/kaggle_simulations/orderbook_iter1_lab/build/i12/main.py",
+   "r40_self": "fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py"
+  },
+  "opponent": "fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
+  "blocks": {
+   "replay26_b16": [
+    1825501814,
+    2013941152,
+    1883261866,
+    963182245,
+    1705553586,
+    161402123,
+    435866961,
+    1388158282,
+    671940665,
+    219073637,
+    1360429471,
+    671494671,
+    973657130,
+    1918725083,
+    176568822,
+    720683523
+   ],
+   "neutral_671000_i23_b16": [
+    671000,
+    671023,
+    671046,
+    671069,
+    671092,
+    671115,
+    671138,
+    671161,
+    671184,
+    671207,
+    671230,
+    671253,
+    671276,
+    671299,
+    671322,
+    671345
+   ],
+   "neutral_672000_i29_b16": [
+    672000,
+    672029,
+    672058,
+    672087,
+    672116,
+    672145,
+    672174,
+    672203,
+    672232,
+    672261,
+    672290,
+    672319,
+    672348,
+    672377,
+    672406,
+    672435
+   ]
+  },
+  "n_per_block": 16,
+  "workers": 4,
+  "caliber": "双席折叠 h2h（fold_arm）；实现价/终局钱 farms[obs.player].money 干净口径（judge_iter1.clean_reads）",
+  "reuse": "judge_iter1._play/fold_arm/aggregate（不改写）",
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "wall_speedup": 4.908,
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "version": "simbridge/1.0"
+  }
+ },
+ "rows": {
+  "h1_base__replay26_b16": {
+   "arm": "h1_base",
+   "block": "replay26_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 14,
+   "losses": 1,
+   "ties": 1,
+   "h2h": 0.9062,
+   "mean_margin": 509.6,
+   "realized_px_median": 1.0793,
+   "terminal_money_median": 89330.0,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    665.0,
+    289.0,
+    1144.0,
+    223.0,
+    1185.0,
+    784.0,
+    275.0,
+    71.0,
+    -23.0,
+    16.0,
+    40.0,
+    1414.0,
+    667.0,
+    147.0,
+    911.0,
+    346.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 48.4
+  },
+  "h1_base__neutral_671000_i23_b16": {
+   "arm": "h1_base",
+   "block": "neutral_671000_i23_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 13,
+   "losses": 3,
+   "ties": 0,
+   "h2h": 0.8125,
+   "mean_margin": 418.0,
+   "realized_px_median": 1.0663,
+   "terminal_money_median": 90503.5,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    676.0,
+    243.0,
+    858.0,
+    826.0,
+    -271.0,
+    745.0,
+    -255.0,
+    300.0,
+    533.0,
+    200.0,
+    -232.0,
+    857.0,
+    1097.0,
+    183.5,
+    354.0,
+    573.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 51.1
+  },
+  "h1_base__neutral_672000_i29_b16": {
+   "arm": "h1_base",
+   "block": "neutral_672000_i29_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 11,
+   "losses": 5,
+   "ties": 0,
+   "h2h": 0.6875,
+   "mean_margin": 196.9,
+   "realized_px_median": 1.0815,
+   "terminal_money_median": 103560.5,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    664.0,
+    -757.0,
+    756.0,
+    424.0,
+    -224.0,
+    -1024.0,
+    665.0,
+    264.0,
+    -623.0,
+    244.0,
+    245.0,
+    -118.0,
+    883.0,
+    167.0,
+    815.0,
+    770.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 49.3
+  },
+  "i1__replay26_b16": {
+   "arm": "i1",
+   "block": "replay26_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 13,
+   "losses": 2,
+   "ties": 1,
+   "h2h": 0.8438,
+   "mean_margin": 297.9,
+   "realized_px_median": 1.0781,
+   "terminal_money_median": 89053.0,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    606.0,
+    289.0,
+    1144.0,
+    223.0,
+    1185.0,
+    -2038.0,
+    275.0,
+    71.0,
+    -23.0,
+    16.0,
+    40.0,
+    1414.0,
+    228.0,
+    80.0,
+    911.0,
+    346.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 47.8
+  },
+  "i1__neutral_671000_i23_b16": {
+   "arm": "i1",
+   "block": "neutral_671000_i23_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 12,
+   "losses": 4,
+   "ties": 0,
+   "h2h": 0.75,
+   "mean_margin": 281.7,
+   "realized_px_median": 1.0663,
+   "terminal_money_median": 90503.5,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    676.0,
+    243.0,
+    -1264.0,
+    826.0,
+    -330.0,
+    745.0,
+    -255.0,
+    300.0,
+    533.0,
+    200.0,
+    -232.0,
+    857.0,
+    1097.0,
+    183.5,
+    354.0,
+    573.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 47.5
+  },
+  "i1__neutral_672000_i29_b16": {
+   "arm": "i1",
+   "block": "neutral_672000_i29_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 11,
+   "losses": 5,
+   "ties": 0,
+   "h2h": 0.6875,
+   "mean_margin": 186.4,
+   "realized_px_median": 1.0808,
+   "terminal_money_median": 103483.0,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    664.0,
+    -757.0,
+    756.0,
+    424.0,
+    -244.0,
+    -1024.0,
+    665.0,
+    264.0,
+    -574.0,
+    244.0,
+    245.0,
+    -118.0,
+    686.0,
+    167.0,
+    815.0,
+    770.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 47.9
+  },
+  "i2__replay26_b16": {
+   "arm": "i2",
+   "block": "replay26_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 14,
+   "losses": 2,
+   "ties": 0,
+   "h2h": 0.875,
+   "mean_margin": 484.2,
+   "realized_px_median": 1.0793,
+   "terminal_money_median": 89295.0,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    479.0,
+    299.0,
+    1044.0,
+    187.0,
+    1110.0,
+    784.0,
+    283.0,
+    -272.0,
+    -35.0,
+    78.0,
+    512.0,
+    1408.0,
+    567.0,
+    113.0,
+    911.0,
+    279.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 47.7
+  },
+  "i2__neutral_671000_i23_b16": {
+   "arm": "i2",
+   "block": "neutral_671000_i23_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 14,
+   "losses": 2,
+   "ties": 0,
+   "h2h": 0.875,
+   "mean_margin": 427.3,
+   "realized_px_median": 1.0667,
+   "terminal_money_median": 90458.0,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    778.0,
+    243.0,
+    818.0,
+    710.0,
+    -63.0,
+    755.0,
+    50.0,
+    129.0,
+    349.0,
+    159.0,
+    -329.0,
+    852.0,
+    1217.0,
+    257.5,
+    305.0,
+    607.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 48.0
+  },
+  "i2__neutral_672000_i29_b16": {
+   "arm": "i2",
+   "block": "neutral_672000_i29_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 11,
+   "losses": 5,
+   "ties": 0,
+   "h2h": 0.6875,
+   "mean_margin": 187.9,
+   "realized_px_median": 1.0825,
+   "terminal_money_median": 103546.0,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    604.0,
+    -378.0,
+    769.0,
+    424.0,
+    -693.0,
+    -1014.0,
+    672.0,
+    312.0,
+    -701.0,
+    209.0,
+    325.0,
+    -118.0,
+    836.0,
+    163.0,
+    763.0,
+    833.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 47.5
+  },
+  "i12__replay26_b16": {
+   "arm": "i12",
+   "block": "replay26_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 13,
+   "losses": 3,
+   "ties": 0,
+   "h2h": 0.8125,
+   "mean_margin": 272.5,
+   "realized_px_median": 1.0781,
+   "terminal_money_median": 88960.5,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    420.0,
+    299.0,
+    1044.0,
+    187.0,
+    1110.0,
+    -2038.0,
+    283.0,
+    -272.0,
+    -35.0,
+    78.0,
+    512.0,
+    1408.0,
+    128.0,
+    46.0,
+    911.0,
+    279.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 47.7
+  },
+  "i12__neutral_671000_i23_b16": {
+   "arm": "i12",
+   "block": "neutral_671000_i23_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 13,
+   "losses": 3,
+   "ties": 0,
+   "h2h": 0.8125,
+   "mean_margin": 290.9,
+   "realized_px_median": 1.0667,
+   "terminal_money_median": 90458.0,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    778.0,
+    243.0,
+    -1304.0,
+    710.0,
+    -124.0,
+    755.0,
+    50.0,
+    129.0,
+    349.0,
+    159.0,
+    -329.0,
+    852.0,
+    1217.0,
+    257.5,
+    305.0,
+    607.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 47.7
+  },
+  "i12__neutral_672000_i29_b16": {
+   "arm": "i12",
+   "block": "neutral_672000_i29_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 11,
+   "losses": 5,
+   "ties": 0,
+   "h2h": 0.6875,
+   "mean_margin": 177.4,
+   "realized_px_median": 1.0817,
+   "terminal_money_median": 103468.5,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    604.0,
+    -378.0,
+    769.0,
+    424.0,
+    -713.0,
+    -1014.0,
+    672.0,
+    312.0,
+    -652.0,
+    209.0,
+    325.0,
+    -118.0,
+    639.0,
+    163.0,
+    763.0,
+    833.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 48.0
+  },
+  "r40_self__replay26_b16": {
+   "arm": "r40_self",
+   "block": "replay26_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 0,
+   "losses": 0,
+   "ties": 16,
+   "h2h": 0.5,
+   "mean_margin": 0.0,
+   "realized_px_median": 1.0689,
+   "terminal_money_median": 90136.5,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 42.5
+  },
+  "r40_self__neutral_671000_i23_b16": {
+   "arm": "r40_self",
+   "block": "neutral_671000_i23_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 0,
+   "losses": 0,
+   "ties": 16,
+   "h2h": 0.5,
+   "mean_margin": 0.0,
+   "realized_px_median": 1.0594,
+   "terminal_money_median": 92790.0,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 44.3
+  },
+  "r40_self__neutral_672000_i29_b16": {
+   "arm": "r40_self",
+   "block": "neutral_672000_i29_b16",
+   "n_folds": 16,
+   "n_games": 32,
+   "wins": 0,
+   "losses": 0,
+   "ties": 16,
+   "h2h": 0.5,
+   "mean_margin": 0.0,
+   "realized_px_median": 1.0629,
+   "terminal_money_median": 105173.0,
+   "stranding_median": 0.0,
+   "fold_margins": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "n_error_games": 0,
+   "engines": [
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    },
+    {
+     "engine": "sim",
+     "fallback_reason": null
+    }
+   ],
+   "elapsed_s": 41.7
+  }
+ },
+ "drift_table": {
+  "h1_base": {
+   "by_block": {
+    "replay26_b16": {
+     "h2h": 0.9062,
+     "mean_margin": 509.6,
+     "realized_px_median": 1.0793,
+     "terminal_money_median": 89330.0
+    },
+    "neutral_671000_i23_b16": {
+     "h2h": 0.8125,
+     "mean_margin": 418.0,
+     "realized_px_median": 1.0663,
+     "terminal_money_median": 90503.5
+    },
+    "neutral_672000_i29_b16": {
+     "h2h": 0.6875,
+     "mean_margin": 196.9,
+     "realized_px_median": 1.0815,
+     "terminal_money_median": 103560.5
+    }
+   },
+   "h2h_spread": 0.2187,
+   "margin_spread": 312.7
+  },
+  "i1": {
+   "by_block": {
+    "replay26_b16": {
+     "h2h": 0.8438,
+     "mean_margin": 297.9,
+     "realized_px_median": 1.0781,
+     "terminal_money_median": 89053.0
+    },
+    "neutral_671000_i23_b16": {
+     "h2h": 0.75,
+     "mean_margin": 281.7,
+     "realized_px_median": 1.0663,
+     "terminal_money_median": 90503.5
+    },
+    "neutral_672000_i29_b16": {
+     "h2h": 0.6875,
+     "mean_margin": 186.4,
+     "realized_px_median": 1.0808,
+     "terminal_money_median": 103483.0
+    }
+   },
+   "h2h_spread": 0.1563,
+   "margin_spread": 111.5
+  },
+  "i2": {
+   "by_block": {
+    "replay26_b16": {
+     "h2h": 0.875,
+     "mean_margin": 484.2,
+     "realized_px_median": 1.0793,
+     "terminal_money_median": 89295.0
+    },
+    "neutral_671000_i23_b16": {
+     "h2h": 0.875,
+     "mean_margin": 427.3,
+     "realized_px_median": 1.0667,
+     "terminal_money_median": 90458.0
+    },
+    "neutral_672000_i29_b16": {
+     "h2h": 0.6875,
+     "mean_margin": 187.9,
+     "realized_px_median": 1.0825,
+     "terminal_money_median": 103546.0
+    }
+   },
+   "h2h_spread": 0.1875,
+   "margin_spread": 296.3
+  },
+  "i12": {
+   "by_block": {
+    "replay26_b16": {
+     "h2h": 0.8125,
+     "mean_margin": 272.5,
+     "realized_px_median": 1.0781,
+     "terminal_money_median": 88960.5
+    },
+    "neutral_671000_i23_b16": {
+     "h2h": 0.8125,
+     "mean_margin": 290.9,
+     "realized_px_median": 1.0667,
+     "terminal_money_median": 90458.0
+    },
+    "neutral_672000_i29_b16": {
+     "h2h": 0.6875,
+     "mean_margin": 177.4,
+     "realized_px_median": 1.0817,
+     "terminal_money_median": 103468.5
+    }
+   },
+   "h2h_spread": 0.125,
+   "margin_spread": 113.5
+  },
+  "r40_self": {
+   "by_block": {
+    "replay26_b16": {
+     "h2h": 0.5,
+     "mean_margin": 0.0,
+     "realized_px_median": 1.0689,
+     "terminal_money_median": 90136.5
+    },
+    "neutral_671000_i23_b16": {
+     "h2h": 0.5,
+     "mean_margin": 0.0,
+     "realized_px_median": 1.0594,
+     "terminal_money_median": 92790.0
+    },
+    "neutral_672000_i29_b16": {
+     "h2h": 0.5,
+     "mean_margin": 0.0,
+     "realized_px_median": 1.0629,
+     "terminal_money_median": 105173.0
+    }
+   },
+   "h2h_spread": 0.0,
+   "margin_spread": 0.0
+  }
+ },
+ "elapsed_s": 744.9,
+ "cross_block_rule": {
+  "same_block_only": "跨实验/跨臂比较只在同块读数之间做（同块才比）",
+  "cross_block_weighted": "跨块必须并报逐块读数+folds 加权合并值（Σfold_margin/Σn，不得只报单一 headline）",
+  "noise_floor": "r40_self 逐块 h2h≈0.5 为块噪声地板；臂间差须超双侧块漂移带才可判机制差"
+ }
+}
