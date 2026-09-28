@@ -161,16 +161,16 @@
 | judge_r23 | B32 | wired 09-27 | pytest judge 组 4 passed；**真跑（24 定向+350 联赛+对照 30）overall=1/6 NEGATIVE（如实）**：c1 榜前 550 段 0.325✓∧d21-28 −1968.5✗/c2 段差✗+单价+0.0%✗/c3 挂单 0.92✓+单价✗/c4 提速 13.6x✓+对照 30/30✓/c5 h2h 0.179✗/c6 总胜率 0.36✗；管线可信度=基线逐局精确一致；evidence/judge_r23_realrun.json | (本批) |
 | verify_r40_gates | B32 | wired 09-27 | pytest 4 passed（全绿路/红不短路/fail-closed/独立 n）；五门 R37-R39 重定向（last-callable=_route40_agent/血统链四节点） | (本批) |
 | run_r40_iteration | B32 | wired 09-27 | pytest 5 passed（全链 POSITIVE/判红收档不进门禁/门禁红不发射/Error 留痕/收档台账形态）；判决红→NEGATIVE 收档预绑定；全链整合待批间门裁决后收口 | (本批) |
-| extract_world_fingerprint | B33(改造) | stub 09-28 | 核验命令: pytest orderbook_r40/test_route_library_v2.py（fingerprint 组；判据=R24 ①守卫用例原文）——v2=市场面三桶签名 | — |
-| build_ab_variant | B33 | stub 09-28 | 核验命令: pytest orderbook_r40/test_run_r41.py（ab 组） | — |
-| run_route_ab_experiments | B33 | stub 09-28 | 核验命令: pytest orderbook_r40/test_run_r41.py（ab 组） | — |
-| build_route_library_v2 | B34(改造) | stub 09-28 | 核验命令: pytest orderbook_r40/test_route_library_v2.py（判据=R24 ①构造用例原文）——v2=族市场面/值账本实测 | — |
-| _route40_select | B34(改造) | stub 09-28 | 核验命令: pytest orderbook_r40/test_runtime_r41.py（route 组）——现役实现 runtime_r40.py:14，目标态=市场面匹配 | — |
-| inject_r41_block | B35 | stub 09-28 | 核验命令: pytest orderbook_r40/test_inject_r41.py | — |
-| audit_diff_r41_vs_r40 | B35 | stub 09-28 | 核验命令: pytest orderbook_r40/test_build_r41.py（audit 组） | — |
-| pack_r41 | B35 | stub 09-28 | 核验命令: pytest orderbook_r40/test_build_r41.py（pack 组） | — |
-| build_r41 | B35 | stub 09-28 | 核验命令: pytest orderbook_r40/test_build_r41.py | — |
-| library_info_check | B36(改造) | stub 09-28 | 核验命令: pytest orderbook_r40/test_judge_r24.py（info 组；判据=R24 ②原文）——v2=实验效应口径 | — |
-| judge_r24 | B36 | stub 09-28 | 核验命令: pytest orderbook_r40/test_judge_r24.py（判据=R24 ②③④ 原文） | — |
-| verify_r41_gates | B36 | stub 09-28 | 核验命令: pytest orderbook_r40/test_gates_r41.py | — |
-| run_r41_iteration | B36 | stub 09-28 | 核验命令: pytest orderbook_r40/test_run_r41.py | — |
+| extract_world_fingerprint | B33(改造) | wired 09-28 | pytest fingerprint 组 6 passed（形状/边界/解耦证明/守卫红/缺失 None/跨口径同输出）；市场面三桶 a\|b\|c（价格偏移/库存水位/需求节奏） | (本批) |
+| build_ab_variant | B33 | wired 09-28 | pytest ab 组（control 恒等/alt 覆盖/末 callable 语义/const 闸门/确定性）；真跑三臂件构建 sha 自证 | (本批) |
+| run_route_ab_experiments | B33 | wired 09-28 | pytest 账本编排（配对/家族统计/样本不足落盘后抛）；**真跑 1280 局 643s**：320 配对单元，净翻胜 generic −54/early −152/late −129——判负主证 evidence/ab_ledger_realrun.json | (本批) |
+| build_route_library_v2 | B34(改造) | cancelled 09-28 | 随 R24 判负收档注销（库无正翻胜格可售） | — |
+| _route40_select | B34(改造) | cancelled 09-28 | 随 R24 判负收档注销（现役实现不动） | — |
+| inject_r41_block | B35 | cancelled 09-28 | 随 R24 判负收档注销（判负预绑定：不建发射版） | — |
+| audit_diff_r41_vs_r40 | B35 | cancelled 09-28 | 随 R24 判负收档注销 | — |
+| pack_r41 | B35 | cancelled 09-28 | 随 R24 判负收档注销 | — |
+| build_r41 | B35 | cancelled 09-28 | 随 R24 判负收档注销 | — |
+| library_info_check | B36(改造) | cancelled 09-28 | 判决级证据=A/B 账本（②判据由实验证明不可达） | — |
+| judge_r24 | B36 | cancelled 09-28 | 同上 | — |
+| verify_r41_gates | B36 | cancelled 09-28 | 同上 | — |
+| run_r41_iteration | B36 | cancelled 09-28 | 同上 | — |

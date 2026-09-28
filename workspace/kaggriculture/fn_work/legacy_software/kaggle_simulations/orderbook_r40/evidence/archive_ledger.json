@@ -1,0 +1,36 @@
+{
+ "archive_ledger": "run-r24-archive/1.0",
+ "entry": {
+  "date": "2026-09-28T03:11:01Z",
+  "verdict": "NEGATIVE",
+  "archive_note": "判负收档留赛后资产，不建发射版",
+  "requirement": "R24 库口径重设计（族粒度脱离店对）v2（市场面族键+仿真 A/B 实测语料）",
+  "evidence": {
+   "ab_ledger": "orderbook_r40/evidence/ab_ledger_realrun.json",
+   "world_variance_forensic": "orderbook_r40/evidence/r24_world_variance_forensic.json",
+   "bridge_cert": "orderbook_r40/evidence/ab_bridge_cert.json"
+  },
+  "core_numbers": {
+   "paired_units": 320,
+   "arms": {
+    "generic(route105 中位时机)": {
+     "treated": 204,
+     "net_flip": -54
+    },
+    "early(route9 最早)": {
+     "treated": 232,
+     "net_flip": -152
+    },
+    "late(route122 最晚)": {
+     "treated": 314,
+     "net_flip": -129
+    }
+   },
+   "best_cell": "M|H|H+generic: margin +1261/局但净翻胜 0（4/4）——评分只认 W/L，零贡献",
+   "placebo_check": "强制=基座线 delta 0.0 逐位同（机制零伤实证）",
+   "route_archaeology": "41 路线=同一计划卖货时机变体（加权卖货步 1927-2045=118 步≈5 天谱）；组合差<1.5%；开局外生面 71/71 局常量"
+  },
+  "conclusion": "基座店对→路线表在因果对照下全面胜出所有时机/邻域替代臂；库无正翻胜格可售；路线选择杠杆穷尽",
+  "pre_binding": "requirements R24『判正才打包过五道门提交；判负照旧收档』预绑定条款执行"
+ }
+}

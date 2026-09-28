@@ -1,0 +1,4341 @@
+{
+ "version": "ab-r41/3.0",
+ "written_at": "2026-09-28T03:03:00Z",
+ "config": {
+  "n_seeds": 160,
+  "seed_base": 550000,
+  "per_opp": 40,
+  "workers": 16,
+  "arms": [
+   "generic",
+   "early",
+   "late"
+  ],
+  "opponents": [
+   "orderbook_r37/build/main.py",
+   "orderbook_2965_adopt/a/main.py",
+   "orderbook_2965_adopt/b/main.py",
+   "v48_derivative/main.py"
+  ],
+  "main_sha": "4ce951f088740e0b",
+  "arm_routes": {
+   "generic": 105,
+   "early": 9,
+   "late": 122
+  },
+  "timing_profiles_minmax": [
+   9,
+   122
+  ],
+  "alt_table_n": 35
+ },
+ "n_units_planned": 320,
+ "n_units_paired": 320,
+ "n_units_treated": {
+  "generic": 204,
+  "early": 232,
+  "late": 314
+ },
+ "units": [
+  {
+   "seed": 550000,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 8.0,
+   "margins": {
+    "generic": -248.0,
+    "early": null,
+    "late": -1354.0
+   }
+  },
+  {
+   "seed": 550000,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 8.0,
+   "margins": {
+    "generic": -248.0,
+    "early": null,
+    "late": -1354.0
+   }
+  },
+  {
+   "seed": 550001,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+YARN_STORE",
+   "margin_control": 17.0,
+   "margins": {
+    "generic": -3215.0,
+    "early": null,
+    "late": -4761.0
+   }
+  },
+  {
+   "seed": 550001,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+YARN_STORE",
+   "margin_control": 17.0,
+   "margins": {
+    "generic": -3215.0,
+    "early": null,
+    "late": -4761.0
+   }
+  },
+  {
+   "seed": 550002,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 11.0,
+   "margins": {
+    "generic": -13507.0,
+    "early": null,
+    "late": -14106.0
+   }
+  },
+  {
+   "seed": 550002,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 11.0,
+   "margins": {
+    "generic": -13507.0,
+    "early": null,
+    "late": -14106.0
+   }
+  },
+  {
+   "seed": 550003,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -5901.0,
+    "early": null,
+    "late": -6682.0
+   }
+  },
+  {
+   "seed": 550003,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -5901.0,
+    "early": null,
+    "late": -6682.0
+   }
+  },
+  {
+   "seed": 550004,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 20.0,
+   "margins": {
+    "generic": -4.0,
+    "early": -13115.0,
+    "late": 1226.0
+   }
+  },
+  {
+   "seed": 550004,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 20.0,
+   "margins": {
+    "generic": -4.0,
+    "early": -13115.0,
+    "late": 1226.0
+   }
+  },
+  {
+   "seed": 550005,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 33.0,
+   "margins": {
+    "generic": null,
+    "early": -9162.0,
+    "late": -449.0
+   }
+  },
+  {
+   "seed": 550005,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 33.0,
+   "margins": {
+    "generic": null,
+    "early": -9162.0,
+    "late": -449.0
+   }
+  },
+  {
+   "seed": 550006,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": null,
+    "early": -15098.0,
+    "late": 692.0
+   }
+  },
+  {
+   "seed": 550006,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": null,
+    "early": -15098.0,
+    "late": 692.0
+   }
+  },
+  {
+   "seed": 550007,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+YARN_STORE",
+   "margin_control": 11.0,
+   "margins": {
+    "generic": -8276.0,
+    "early": null,
+    "late": -9341.0
+   }
+  },
+  {
+   "seed": 550007,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+YARN_STORE",
+   "margin_control": 11.0,
+   "margins": {
+    "generic": -8276.0,
+    "early": null,
+    "late": -9341.0
+   }
+  },
+  {
+   "seed": 550008,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": 18.0,
+   "margins": {
+    "generic": 532.0,
+    "early": -7418.0,
+    "late": 482.0
+   }
+  },
+  {
+   "seed": 550008,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": 18.0,
+   "margins": {
+    "generic": 532.0,
+    "early": -7418.0,
+    "late": 482.0
+   }
+  },
+  {
+   "seed": 550009,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+YARN_STORE",
+   "margin_control": 19.0,
+   "margins": {
+    "generic": -8476.0,
+    "early": null,
+    "late": -9739.0
+   }
+  },
+  {
+   "seed": 550009,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+YARN_STORE",
+   "margin_control": 19.0,
+   "margins": {
+    "generic": -8476.0,
+    "early": null,
+    "late": -9739.0
+   }
+  },
+  {
+   "seed": 550010,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 22.0,
+   "margins": {
+    "generic": 33.0,
+    "early": -8726.0,
+    "late": -1001.0
+   }
+  },
+  {
+   "seed": 550010,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 22.0,
+   "margins": {
+    "generic": 33.0,
+    "early": -8726.0,
+    "late": -1001.0
+   }
+  },
+  {
+   "seed": 550011,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 70.0,
+   "margins": {
+    "generic": -1929.0,
+    "early": null,
+    "late": -1059.0
+   }
+  },
+  {
+   "seed": 550011,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 70.0,
+   "margins": {
+    "generic": -1874.0,
+    "early": null,
+    "late": -1003.0
+   }
+  },
+  {
+   "seed": 550012,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": 16.0,
+    "early": -10931.0,
+    "late": -988.0
+   }
+  },
+  {
+   "seed": 550012,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": 16.0,
+    "early": -10931.0,
+    "late": -988.0
+   }
+  },
+  {
+   "seed": 550013,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 154.0,
+   "margins": {
+    "generic": null,
+    "early": -6037.0,
+    "late": 427.0
+   }
+  },
+  {
+   "seed": 550013,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": -88.0,
+   "margins": {
+    "generic": null,
+    "early": -6283.0,
+    "late": 184.0
+   }
+  },
+  {
+   "seed": 550014,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": null,
+    "early": -10266.0,
+    "late": -47.0
+   }
+  },
+  {
+   "seed": 550014,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": null,
+    "early": -10266.0,
+    "late": -47.0
+   }
+  },
+  {
+   "seed": 550015,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 44.0,
+   "margins": {
+    "generic": 191.0,
+    "early": -10644.0,
+    "late": -1084.0
+   }
+  },
+  {
+   "seed": 550015,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 44.0,
+   "margins": {
+    "generic": 191.0,
+    "early": -10644.0,
+    "late": -1084.0
+   }
+  },
+  {
+   "seed": 550016,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": null,
+    "early": -24988.0,
+    "late": -813.0
+   }
+  },
+  {
+   "seed": 550016,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": null,
+    "early": -23763.0,
+    "late": -813.0
+   }
+  },
+  {
+   "seed": 550017,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": 10.0,
+   "margins": {
+    "generic": 4789.0,
+    "early": null,
+    "late": 7653.0
+   }
+  },
+  {
+   "seed": 550017,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": 10.0,
+   "margins": {
+    "generic": 4789.0,
+    "early": null,
+    "late": 7653.0
+   }
+  },
+  {
+   "seed": 550018,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 18.0,
+   "margins": {
+    "generic": -56.0,
+    "early": -8999.0,
+    "late": 1175.0
+   }
+  },
+  {
+   "seed": 550018,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 18.0,
+   "margins": {
+    "generic": -56.0,
+    "early": -8999.0,
+    "late": 1175.0
+   }
+  },
+  {
+   "seed": 550019,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 40.0,
+   "margins": {
+    "generic": -171.0,
+    "early": -10378.0,
+    "late": -650.0
+   }
+  },
+  {
+   "seed": 550019,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 40.0,
+   "margins": {
+    "generic": -171.0,
+    "early": -10378.0,
+    "late": -650.0
+   }
+  },
+  {
+   "seed": 550020,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 1.0,
+   "margins": {
+    "generic": 8352.0,
+    "early": null,
+    "late": 8691.0
+   }
+  },
+  {
+   "seed": 550020,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 1.0,
+   "margins": {
+    "generic": 8352.0,
+    "early": null,
+    "late": 8691.0
+   }
+  },
+  {
+   "seed": 550021,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 8.0,
+   "margins": {
+    "generic": -16.0,
+    "early": -11414.0,
+    "late": 1002.0
+   }
+  },
+  {
+   "seed": 550021,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 8.0,
+   "margins": {
+    "generic": -16.0,
+    "early": -11414.0,
+    "late": 1002.0
+   }
+  },
+  {
+   "seed": 550022,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -2817.0,
+    "early": null,
+    "late": -2823.0
+   }
+  },
+  {
+   "seed": 550022,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -2817.0,
+    "early": null,
+    "late": -2823.0
+   }
+  },
+  {
+   "seed": 550023,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 12.0,
+   "margins": {
+    "generic": null,
+    "early": -9663.0,
+    "late": 361.0
+   }
+  },
+  {
+   "seed": 550023,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 12.0,
+   "margins": {
+    "generic": null,
+    "early": -9663.0,
+    "late": 361.0
+   }
+  },
+  {
+   "seed": 550024,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": -2686.0,
+    "early": null,
+    "late": -2338.0
+   }
+  },
+  {
+   "seed": 550024,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": -2686.0,
+    "early": null,
+    "late": -2338.0
+   }
+  },
+  {
+   "seed": 550025,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PET_CAFE+PIZZA_SHOP",
+   "margin_control": 15.0,
+   "margins": {
+    "generic": null,
+    "early": -8166.0,
+    "late": 299.0
+   }
+  },
+  {
+   "seed": 550025,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PET_CAFE+PIZZA_SHOP",
+   "margin_control": 15.0,
+   "margins": {
+    "generic": null,
+    "early": -8166.0,
+    "late": 299.0
+   }
+  },
+  {
+   "seed": 550026,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 27.0,
+   "margins": {
+    "generic": null,
+    "early": -10258.0,
+    "late": -477.0
+   }
+  },
+  {
+   "seed": 550026,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 27.0,
+   "margins": {
+    "generic": null,
+    "early": -10258.0,
+    "late": -477.0
+   }
+  },
+  {
+   "seed": 550027,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 9.0,
+   "margins": {
+    "generic": 247.0,
+    "early": -11334.0,
+    "late": -486.0
+   }
+  },
+  {
+   "seed": 550027,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 9.0,
+   "margins": {
+    "generic": 247.0,
+    "early": -11334.0,
+    "late": -486.0
+   }
+  },
+  {
+   "seed": 550028,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 18.0,
+   "margins": {
+    "generic": 4339.0,
+    "early": null,
+    "late": 5128.0
+   }
+  },
+  {
+   "seed": 550028,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 18.0,
+   "margins": {
+    "generic": 4339.0,
+    "early": null,
+    "late": 5128.0
+   }
+  },
+  {
+   "seed": 550029,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+PIZZA_SHOP",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": 241.0,
+    "early": -17776.0,
+    "late": 174.0
+   }
+  },
+  {
+   "seed": 550029,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+PIZZA_SHOP",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": 241.0,
+    "early": -17776.0,
+    "late": 174.0
+   }
+  },
+  {
+   "seed": 550030,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": null,
+    "early": -4797.0,
+    "late": -1396.0
+   }
+  },
+  {
+   "seed": 550030,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": null,
+    "early": -4797.0,
+    "late": -1396.0
+   }
+  },
+  {
+   "seed": 550031,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": 36.0,
+   "margins": {
+    "generic": null,
+    "early": -10877.0,
+    "late": -544.0
+   }
+  },
+  {
+   "seed": 550031,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": 36.0,
+   "margins": {
+    "generic": null,
+    "early": -10877.0,
+    "late": -544.0
+   }
+  },
+  {
+   "seed": 550032,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": -855.0,
+   "margins": {
+    "generic": -61.0,
+    "early": -10771.0,
+    "late": -788.0
+   }
+  },
+  {
+   "seed": 550032,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|H",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": 689.0,
+   "margins": {
+    "generic": 1527.0,
+    "early": -9355.0,
+    "late": 800.0
+   }
+  },
+  {
+   "seed": 550033,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 64.0,
+   "margins": {
+    "generic": null,
+    "early": -17551.0,
+    "late": -380.0
+   }
+  },
+  {
+   "seed": 550033,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 64.0,
+   "margins": {
+    "generic": null,
+    "early": -17551.0,
+    "late": -380.0
+   }
+  },
+  {
+   "seed": 550034,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+   "margin_control": 35.0,
+   "margins": {
+    "generic": null,
+    "early": 56.0,
+    "late": -478.0
+   }
+  },
+  {
+   "seed": 550034,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+   "margin_control": 35.0,
+   "margins": {
+    "generic": null,
+    "early": 56.0,
+    "late": -478.0
+   }
+  },
+  {
+   "seed": 550035,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": 20.0,
+    "early": 200.0,
+    "late": 20.0
+   }
+  },
+  {
+   "seed": 550035,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": 20.0,
+    "early": 200.0,
+    "late": 20.0
+   }
+  },
+  {
+   "seed": 550036,
+   "seat": 0,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+   "margin_control": 7.0,
+   "margins": {
+    "generic": null,
+    "early": -16471.0,
+    "late": -368.0
+   }
+  },
+  {
+   "seed": 550036,
+   "seat": 1,
+   "opponent": "build",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+   "margin_control": 7.0,
+   "margins": {
+    "generic": null,
+    "early": -16471.0,
+    "late": -368.0
+   }
+  },
+  {
+   "seed": 550037,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 22.0,
+   "margins": {
+    "generic": -718.0,
+    "early": -7792.0,
+    "late": 829.0
+   }
+  },
+  {
+   "seed": 550037,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 22.0,
+   "margins": {
+    "generic": -718.0,
+    "early": -7792.0,
+    "late": 829.0
+   }
+  },
+  {
+   "seed": 550038,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+PET_CAFE",
+   "margin_control": 6.0,
+   "margins": {
+    "generic": null,
+    "early": 106.0,
+    "late": 197.0
+   }
+  },
+  {
+   "seed": 550038,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+PET_CAFE",
+   "margin_control": 6.0,
+   "margins": {
+    "generic": null,
+    "early": 6622.0,
+    "late": 197.0
+   }
+  },
+  {
+   "seed": 550039,
+   "seat": 0,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 31.0,
+   "margins": {
+    "generic": -9867.0,
+    "early": null,
+    "late": -10483.0
+   }
+  },
+  {
+   "seed": 550039,
+   "seat": 1,
+   "opponent": "build",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 31.0,
+   "margins": {
+    "generic": -9867.0,
+    "early": null,
+    "late": -10483.0
+   }
+  },
+  {
+   "seed": 551000,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 10.0,
+   "margins": {
+    "generic": null,
+    "early": -10850.0,
+    "late": -854.0
+   }
+  },
+  {
+   "seed": 551000,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 10.0,
+   "margins": {
+    "generic": null,
+    "early": -10850.0,
+    "late": -854.0
+   }
+  },
+  {
+   "seed": 551001,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "PET_CAFE+PIZZA_SHOP",
+   "margin_control": 33.0,
+   "margins": {
+    "generic": null,
+    "early": -11023.0,
+    "late": 1885.0
+   }
+  },
+  {
+   "seed": 551001,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "PET_CAFE+PIZZA_SHOP",
+   "margin_control": 33.0,
+   "margins": {
+    "generic": null,
+    "early": -11023.0,
+    "late": 1885.0
+   }
+  },
+  {
+   "seed": 551002,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -3926.0,
+    "early": null,
+    "late": -4643.0
+   }
+  },
+  {
+   "seed": 551002,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -3926.0,
+    "early": null,
+    "late": -4643.0
+   }
+  },
+  {
+   "seed": 551003,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 53.0,
+   "margins": {
+    "generic": null,
+    "early": -2538.0,
+    "late": -749.0
+   }
+  },
+  {
+   "seed": 551003,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 53.0,
+   "margins": {
+    "generic": null,
+    "early": -2538.0,
+    "late": -749.0
+   }
+  },
+  {
+   "seed": 551004,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": 37.0,
+   "margins": {
+    "generic": null,
+    "early": -6223.0,
+    "late": -782.0
+   }
+  },
+  {
+   "seed": 551004,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": 37.0,
+   "margins": {
+    "generic": null,
+    "early": -6223.0,
+    "late": -782.0
+   }
+  },
+  {
+   "seed": 551005,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|H",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": -579.0,
+   "margins": {
+    "generic": 1007.0,
+    "early": -9151.0,
+    "late": 971.0
+   }
+  },
+  {
+   "seed": 551005,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|H",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": -579.0,
+   "margins": {
+    "generic": 1007.0,
+    "early": -9151.0,
+    "late": 971.0
+   }
+  },
+  {
+   "seed": 551006,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 9.0,
+   "margins": {
+    "generic": -6649.0,
+    "early": null,
+    "late": -6784.0
+   }
+  },
+  {
+   "seed": 551006,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 9.0,
+   "margins": {
+    "generic": -6649.0,
+    "early": null,
+    "late": -6784.0
+   }
+  },
+  {
+   "seed": 551007,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": null,
+    "early": -10884.0,
+    "late": -287.0
+   }
+  },
+  {
+   "seed": 551007,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": null,
+    "early": -10884.0,
+    "late": -287.0
+   }
+  },
+  {
+   "seed": 551008,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 42.0,
+   "margins": {
+    "generic": -3486.0,
+    "early": null,
+    "late": -3834.0
+   }
+  },
+  {
+   "seed": 551008,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 42.0,
+   "margins": {
+    "generic": -3486.0,
+    "early": null,
+    "late": -3834.0
+   }
+  },
+  {
+   "seed": 551009,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": 7.0,
+   "margins": {
+    "generic": 3270.0,
+    "early": null,
+    "late": 2793.0
+   }
+  },
+  {
+   "seed": 551009,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": 7.0,
+   "margins": {
+    "generic": 3270.0,
+    "early": null,
+    "late": 2793.0
+   }
+  },
+  {
+   "seed": 551010,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": -43.0,
+   "margins": {
+    "generic": 2891.0,
+    "early": null,
+    "late": 1974.0
+   }
+  },
+  {
+   "seed": 551010,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 89.0,
+   "margins": {
+    "generic": 3032.0,
+    "early": null,
+    "late": 2115.0
+   }
+  },
+  {
+   "seed": 551011,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "FARMERS_MARKET+PIZZA_SHOP",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": 367.0,
+    "early": -10418.0,
+    "late": 866.0
+   }
+  },
+  {
+   "seed": 551011,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "FARMERS_MARKET+PIZZA_SHOP",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": 367.0,
+    "early": -10418.0,
+    "late": 866.0
+   }
+  },
+  {
+   "seed": 551012,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": -11496.0,
+    "early": null,
+    "late": -11323.0
+   }
+  },
+  {
+   "seed": 551012,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": -11496.0,
+    "early": null,
+    "late": -11323.0
+   }
+  },
+  {
+   "seed": 551013,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+SMOOTHIE_SHOP",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": null,
+    "early": -6734.0,
+    "late": -581.0
+   }
+  },
+  {
+   "seed": 551013,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+SMOOTHIE_SHOP",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": null,
+    "early": -6734.0,
+    "late": -581.0
+   }
+  },
+  {
+   "seed": 551014,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|H",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": 373.0,
+   "margins": {
+    "generic": 2309.0,
+    "early": -6828.0,
+    "late": 2407.0
+   }
+  },
+  {
+   "seed": 551014,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|H",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": 373.0,
+   "margins": {
+    "generic": 2309.0,
+    "early": -6828.0,
+    "late": 2407.0
+   }
+  },
+  {
+   "seed": 551015,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": 30.0,
+   "margins": {
+    "generic": -1248.0,
+    "early": null,
+    "late": 1676.0
+   }
+  },
+  {
+   "seed": 551015,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": 30.0,
+   "margins": {
+    "generic": -1248.0,
+    "early": null,
+    "late": 1676.0
+   }
+  },
+  {
+   "seed": 551016,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 65.0,
+   "margins": {
+    "generic": -2911.0,
+    "early": null,
+    "late": -3711.0
+   }
+  },
+  {
+   "seed": 551016,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 65.0,
+   "margins": {
+    "generic": -2911.0,
+    "early": null,
+    "late": -3711.0
+   }
+  },
+  {
+   "seed": 551017,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+PIZZA_SHOP",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -355.0,
+    "early": -11888.0,
+    "late": null
+   }
+  },
+  {
+   "seed": 551017,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+PIZZA_SHOP",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -355.0,
+    "early": -11888.0,
+    "late": null
+   }
+  },
+  {
+   "seed": 551018,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BAKERY",
+   "margin_control": 21.0,
+   "margins": {
+    "generic": 85.0,
+    "early": -10242.0,
+    "late": 690.0
+   }
+  },
+  {
+   "seed": 551018,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BAKERY",
+   "margin_control": 21.0,
+   "margins": {
+    "generic": 85.0,
+    "early": -10242.0,
+    "late": 690.0
+   }
+  },
+  {
+   "seed": 551019,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "FARMERS_MARKET+PIZZA_SHOP",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": 587.0,
+    "early": -15470.0,
+    "late": 500.0
+   }
+  },
+  {
+   "seed": 551019,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "FARMERS_MARKET+PIZZA_SHOP",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": 587.0,
+    "early": -15474.0,
+    "late": 500.0
+   }
+  },
+  {
+   "seed": 551020,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 19.0,
+   "margins": {
+    "generic": null,
+    "early": -16749.0,
+    "late": -645.0
+   }
+  },
+  {
+   "seed": 551020,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 19.0,
+   "margins": {
+    "generic": null,
+    "early": -16749.0,
+    "late": -645.0
+   }
+  },
+  {
+   "seed": 551021,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 2.0,
+   "margins": {
+    "generic": -10045.0,
+    "early": null,
+    "late": -10669.0
+   }
+  },
+  {
+   "seed": 551021,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 2.0,
+   "margins": {
+    "generic": -10045.0,
+    "early": null,
+    "late": -10669.0
+   }
+  },
+  {
+   "seed": 551022,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+PET_CAFE",
+   "margin_control": 38.0,
+   "margins": {
+    "generic": null,
+    "early": -11243.0,
+    "late": -1044.0
+   }
+  },
+  {
+   "seed": 551022,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+PET_CAFE",
+   "margin_control": 38.0,
+   "margins": {
+    "generic": null,
+    "early": -11243.0,
+    "late": -1044.0
+   }
+  },
+  {
+   "seed": 551023,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": 35.0,
+   "margins": {
+    "generic": null,
+    "early": -5563.0,
+    "late": -388.0
+   }
+  },
+  {
+   "seed": 551023,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": 35.0,
+   "margins": {
+    "generic": null,
+    "early": -5563.0,
+    "late": -388.0
+   }
+  },
+  {
+   "seed": 551024,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 21.0,
+   "margins": {
+    "generic": -246.0,
+    "early": -7830.0,
+    "late": -987.0
+   }
+  },
+  {
+   "seed": 551024,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 21.0,
+   "margins": {
+    "generic": -246.0,
+    "early": -7830.0,
+    "late": -987.0
+   }
+  },
+  {
+   "seed": 551025,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 29.0,
+   "margins": {
+    "generic": null,
+    "early": 4319.0,
+    "late": -1536.0
+   }
+  },
+  {
+   "seed": 551025,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 29.0,
+   "margins": {
+    "generic": null,
+    "early": 4319.0,
+    "late": -1536.0
+   }
+  },
+  {
+   "seed": 551026,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 33.0,
+   "margins": {
+    "generic": null,
+    "early": -17958.0,
+    "late": -473.0
+   }
+  },
+  {
+   "seed": 551026,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 33.0,
+   "margins": {
+    "generic": null,
+    "early": -17958.0,
+    "late": -473.0
+   }
+  },
+  {
+   "seed": 551027,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 701.0,
+   "margins": {
+    "generic": 1078.0,
+    "early": -15510.0,
+    "late": -1225.0
+   }
+  },
+  {
+   "seed": 551027,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 701.0,
+   "margins": {
+    "generic": 1078.0,
+    "early": -15510.0,
+    "late": -1225.0
+   }
+  },
+  {
+   "seed": 551028,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 80.0,
+   "margins": {
+    "generic": null,
+    "early": -1632.0,
+    "late": -609.0
+   }
+  },
+  {
+   "seed": 551028,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 80.0,
+   "margins": {
+    "generic": null,
+    "early": -1632.0,
+    "late": -609.0
+   }
+  },
+  {
+   "seed": 551029,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BAKERY",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": 882.0,
+    "early": -10970.0,
+    "late": 290.0
+   }
+  },
+  {
+   "seed": 551029,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BAKERY",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": 882.0,
+    "early": -10970.0,
+    "late": 290.0
+   }
+  },
+  {
+   "seed": 551030,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": 1215.0,
+    "early": null,
+    "late": 409.0
+   }
+  },
+  {
+   "seed": 551030,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": 1215.0,
+    "early": null,
+    "late": 409.0
+   }
+  },
+  {
+   "seed": 551031,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 72.0,
+   "margins": {
+    "generic": -3486.0,
+    "early": null,
+    "late": -3388.0
+   }
+  },
+  {
+   "seed": 551031,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 72.0,
+   "margins": {
+    "generic": -3486.0,
+    "early": null,
+    "late": -3388.0
+   }
+  },
+  {
+   "seed": 551032,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 406.0,
+   "margins": {
+    "generic": 382.0,
+    "early": -24138.0,
+    "late": -1370.0
+   }
+  },
+  {
+   "seed": 551032,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 406.0,
+   "margins": {
+    "generic": 382.0,
+    "early": -24138.0,
+    "late": -1370.0
+   }
+  },
+  {
+   "seed": 551033,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": null,
+    "early": -9967.0,
+    "late": -1188.0
+   }
+  },
+  {
+   "seed": 551033,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 16.0,
+   "margins": {
+    "generic": null,
+    "early": -9967.0,
+    "late": -1188.0
+   }
+  },
+  {
+   "seed": 551034,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BAKERY",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": 347.0,
+    "early": -10291.0,
+    "late": -20.0
+   }
+  },
+  {
+   "seed": 551034,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+BAKERY",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": 347.0,
+    "early": -10291.0,
+    "late": -20.0
+   }
+  },
+  {
+   "seed": 551035,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 57.0,
+   "margins": {
+    "generic": null,
+    "early": -7934.0,
+    "late": -324.0
+   }
+  },
+  {
+   "seed": 551035,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 57.0,
+   "margins": {
+    "generic": null,
+    "early": -7934.0,
+    "late": -324.0
+   }
+  },
+  {
+   "seed": 551036,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": -11.0,
+   "margins": {
+    "generic": 787.0,
+    "early": null,
+    "late": 1583.0
+   }
+  },
+  {
+   "seed": 551036,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 121.0,
+   "margins": {
+    "generic": 924.0,
+    "early": null,
+    "late": 1720.0
+   }
+  },
+  {
+   "seed": 551037,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 63.0,
+   "margins": {
+    "generic": 860.0,
+    "early": -11034.0,
+    "late": 183.0
+   }
+  },
+  {
+   "seed": 551037,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 63.0,
+   "margins": {
+    "generic": 860.0,
+    "early": -11034.0,
+    "late": 183.0
+   }
+  },
+  {
+   "seed": 551038,
+   "seat": 0,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": null,
+    "early": -16914.0,
+    "late": -715.0
+   }
+  },
+  {
+   "seed": 551038,
+   "seat": 1,
+   "opponent": "a",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 24.0,
+   "margins": {
+    "generic": null,
+    "early": -16914.0,
+    "late": -715.0
+   }
+  },
+  {
+   "seed": 551039,
+   "seat": 0,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+PET_CAFE",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": null,
+    "early": -5896.0,
+    "late": 577.0
+   }
+  },
+  {
+   "seed": 551039,
+   "seat": 1,
+   "opponent": "a",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+PET_CAFE",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": null,
+    "early": -5896.0,
+    "late": 577.0
+   }
+  },
+  {
+   "seed": 552000,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 605.0,
+   "margins": {
+    "generic": 537.0,
+    "early": -8974.0,
+    "late": -83.0
+   }
+  },
+  {
+   "seed": 552000,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 605.0,
+   "margins": {
+    "generic": 537.0,
+    "early": -8974.0,
+    "late": -83.0
+   }
+  },
+  {
+   "seed": 552001,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+YARN_STORE",
+   "margin_control": 97.0,
+   "margins": {
+    "generic": -5643.0,
+    "early": null,
+    "late": -8203.0
+   }
+  },
+  {
+   "seed": 552001,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+YARN_STORE",
+   "margin_control": 97.0,
+   "margins": {
+    "generic": -5643.0,
+    "early": null,
+    "late": -8203.0
+   }
+  },
+  {
+   "seed": 552002,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "FARMERS_MARKET+PET_CAFE",
+   "margin_control": 253.0,
+   "margins": {
+    "generic": -590.0,
+    "early": -6779.0,
+    "late": -1320.0
+   }
+  },
+  {
+   "seed": 552002,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "FARMERS_MARKET+PET_CAFE",
+   "margin_control": 253.0,
+   "margins": {
+    "generic": -590.0,
+    "early": -6779.0,
+    "late": -1320.0
+   }
+  },
+  {
+   "seed": 552003,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 33.0,
+   "margins": {
+    "generic": null,
+    "early": -9304.0,
+    "late": -215.0
+   }
+  },
+  {
+   "seed": 552003,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+ICE_CREAM_SHOP",
+   "margin_control": 33.0,
+   "margins": {
+    "generic": null,
+    "early": -6508.0,
+    "late": -215.0
+   }
+  },
+  {
+   "seed": 552004,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 34.0,
+   "margins": {
+    "generic": 10.0,
+    "early": -13223.0,
+    "late": 1544.0
+   }
+  },
+  {
+   "seed": 552004,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 34.0,
+   "margins": {
+    "generic": 10.0,
+    "early": -13223.0,
+    "late": 1544.0
+   }
+  },
+  {
+   "seed": 552005,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+PIZZA_SHOP",
+   "margin_control": 20.0,
+   "margins": {
+    "generic": null,
+    "early": -18639.0,
+    "late": -357.0
+   }
+  },
+  {
+   "seed": 552005,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+PIZZA_SHOP",
+   "margin_control": 20.0,
+   "margins": {
+    "generic": null,
+    "early": -18639.0,
+    "late": -357.0
+   }
+  },
+  {
+   "seed": 552006,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 292.0,
+   "margins": {
+    "generic": -5707.0,
+    "early": null,
+    "late": -3825.0
+   }
+  },
+  {
+   "seed": 552006,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 292.0,
+   "margins": {
+    "generic": -5707.0,
+    "early": null,
+    "late": -3825.0
+   }
+  },
+  {
+   "seed": 552007,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+   "margin_control": -11.0,
+   "margins": {
+    "generic": null,
+    "early": -5501.0,
+    "late": -548.0
+   }
+  },
+  {
+   "seed": 552007,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+   "margin_control": -11.0,
+   "margins": {
+    "generic": null,
+    "early": -5501.0,
+    "late": -548.0
+   }
+  },
+  {
+   "seed": 552008,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 849.0,
+   "margins": {
+    "generic": null,
+    "early": -9933.0,
+    "late": 281.0
+   }
+  },
+  {
+   "seed": 552008,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 849.0,
+   "margins": {
+    "generic": null,
+    "early": -9933.0,
+    "late": 281.0
+   }
+  },
+  {
+   "seed": 552009,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": -1242.0,
+   "margins": {
+    "generic": null,
+    "early": -2318.0,
+    "late": 390.0
+   }
+  },
+  {
+   "seed": 552009,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": -1242.0,
+   "margins": {
+    "generic": null,
+    "early": -2318.0,
+    "late": 390.0
+   }
+  },
+  {
+   "seed": 552010,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|M",
+   "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": null,
+    "early": -11116.0,
+    "late": -1072.0
+   }
+  },
+  {
+   "seed": 552010,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|M",
+   "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": null,
+    "early": -11116.0,
+    "late": -1072.0
+   }
+  },
+  {
+   "seed": 552011,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 27.0,
+   "margins": {
+    "generic": 1708.0,
+    "early": null,
+    "late": 1473.0
+   }
+  },
+  {
+   "seed": 552011,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 27.0,
+   "margins": {
+    "generic": 1708.0,
+    "early": null,
+    "late": 1473.0
+   }
+  },
+  {
+   "seed": 552012,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+PIZZA_SHOP",
+   "margin_control": 75.0,
+   "margins": {
+    "generic": -504.0,
+    "early": -10863.0,
+    "late": -741.0
+   }
+  },
+  {
+   "seed": 552012,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+PIZZA_SHOP",
+   "margin_control": 75.0,
+   "margins": {
+    "generic": -504.0,
+    "early": -10863.0,
+    "late": -741.0
+   }
+  },
+  {
+   "seed": 552013,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 26.0,
+   "margins": {
+    "generic": -46.0,
+    "early": -6423.0,
+    "late": -1029.0
+   }
+  },
+  {
+   "seed": 552013,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 26.0,
+   "margins": {
+    "generic": -46.0,
+    "early": -6423.0,
+    "late": -1029.0
+   }
+  },
+  {
+   "seed": 552014,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+FARMERS_MARKET",
+   "margin_control": 2.0,
+   "margins": {
+    "generic": 1437.0,
+    "early": -5017.0,
+    "late": 393.0
+   }
+  },
+  {
+   "seed": 552014,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+FARMERS_MARKET",
+   "margin_control": 2.0,
+   "margins": {
+    "generic": 1437.0,
+    "early": -5017.0,
+    "late": 393.0
+   }
+  },
+  {
+   "seed": 552015,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 232.0,
+   "margins": {
+    "generic": null,
+    "early": -27319.0,
+    "late": -661.0
+   }
+  },
+  {
+   "seed": 552015,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 232.0,
+   "margins": {
+    "generic": null,
+    "early": -27319.0,
+    "late": -661.0
+   }
+  },
+  {
+   "seed": 552016,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+SMOOTHIE_SHOP",
+   "margin_control": -40.0,
+   "margins": {
+    "generic": -64.0,
+    "early": -13097.0,
+    "late": -1158.0
+   }
+  },
+  {
+   "seed": 552016,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+SMOOTHIE_SHOP",
+   "margin_control": -40.0,
+   "margins": {
+    "generic": -64.0,
+    "early": -13097.0,
+    "late": -1158.0
+   }
+  },
+  {
+   "seed": 552017,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 35.0,
+   "margins": {
+    "generic": -608.0,
+    "early": null,
+    "late": -1990.0
+   }
+  },
+  {
+   "seed": 552017,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 35.0,
+   "margins": {
+    "generic": -608.0,
+    "early": null,
+    "late": -1990.0
+   }
+  },
+  {
+   "seed": 552018,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+YARN_STORE",
+   "margin_control": 120.0,
+   "margins": {
+    "generic": -832.0,
+    "early": null,
+    "late": -2171.0
+   }
+  },
+  {
+   "seed": 552018,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+YARN_STORE",
+   "margin_control": 120.0,
+   "margins": {
+    "generic": -832.0,
+    "early": null,
+    "late": -2171.0
+   }
+  },
+  {
+   "seed": 552019,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": null,
+    "early": -7135.0,
+    "late": -1045.0
+   }
+  },
+  {
+   "seed": 552019,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 23.0,
+   "margins": {
+    "generic": null,
+    "early": -7135.0,
+    "late": -1045.0
+   }
+  },
+  {
+   "seed": 552020,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+FARMERS_MARKET",
+   "margin_control": 371.0,
+   "margins": {
+    "generic": 1716.0,
+    "early": 549.0,
+    "late": 229.0
+   }
+  },
+  {
+   "seed": 552020,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+FARMERS_MARKET",
+   "margin_control": 371.0,
+   "margins": {
+    "generic": 1716.0,
+    "early": 549.0,
+    "late": 229.0
+   }
+  },
+  {
+   "seed": 552021,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": -1702.0,
+   "margins": {
+    "generic": 5784.0,
+    "early": null,
+    "late": 6248.0
+   }
+  },
+  {
+   "seed": 552021,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": -1558.0,
+   "margins": {
+    "generic": 5872.0,
+    "early": null,
+    "late": 6314.0
+   }
+  },
+  {
+   "seed": 552022,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": -613.0,
+   "margins": {
+    "generic": 2041.0,
+    "early": null,
+    "late": 2421.0
+   }
+  },
+  {
+   "seed": 552022,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+YARN_STORE",
+   "margin_control": -613.0,
+   "margins": {
+    "generic": 2041.0,
+    "early": null,
+    "late": 2421.0
+   }
+  },
+  {
+   "seed": 552023,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 79.0,
+   "margins": {
+    "generic": -7916.0,
+    "early": null,
+    "late": -8462.0
+   }
+  },
+  {
+   "seed": 552023,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 79.0,
+   "margins": {
+    "generic": -7916.0,
+    "early": null,
+    "late": -8462.0
+   }
+  },
+  {
+   "seed": 552024,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -2288.0,
+    "early": -13915.0,
+    "late": -3377.0
+   }
+  },
+  {
+   "seed": 552024,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 0.0,
+   "margins": {
+    "generic": -2288.0,
+    "early": -13915.0,
+    "late": -3377.0
+   }
+  },
+  {
+   "seed": 552025,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 31.0,
+   "margins": {
+    "generic": 4497.0,
+    "early": null,
+    "late": 3541.0
+   }
+  },
+  {
+   "seed": 552025,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 31.0,
+   "margins": {
+    "generic": 4497.0,
+    "early": null,
+    "late": 3541.0
+   }
+  },
+  {
+   "seed": 552026,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": null,
+    "early": -12461.0,
+    "late": -716.0
+   }
+  },
+  {
+   "seed": 552026,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 25.0,
+   "margins": {
+    "generic": null,
+    "early": -12461.0,
+    "late": -716.0
+   }
+  },
+  {
+   "seed": 552027,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+YARN_STORE",
+   "margin_control": 119.0,
+   "margins": {
+    "generic": 879.0,
+    "early": null,
+    "late": -75.0
+   }
+  },
+  {
+   "seed": 552027,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+YARN_STORE",
+   "margin_control": 119.0,
+   "margins": {
+    "generic": 879.0,
+    "early": null,
+    "late": -75.0
+   }
+  },
+  {
+   "seed": 552028,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|M",
+   "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+   "margin_control": 15.0,
+   "margins": {
+    "generic": null,
+    "early": -10899.0,
+    "late": -1198.0
+   }
+  },
+  {
+   "seed": 552028,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|M",
+   "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+   "margin_control": 15.0,
+   "margins": {
+    "generic": null,
+    "early": -10899.0,
+    "late": -1198.0
+   }
+  },
+  {
+   "seed": 552029,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 1451.0,
+   "margins": {
+    "generic": 1563.0,
+    "early": -4040.0,
+    "late": 2099.0
+   }
+  },
+  {
+   "seed": 552029,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 1451.0,
+   "margins": {
+    "generic": 1563.0,
+    "early": -4040.0,
+    "late": 2099.0
+   }
+  },
+  {
+   "seed": 552030,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 5.0,
+   "margins": {
+    "generic": null,
+    "early": -10992.0,
+    "late": -802.0
+   }
+  },
+  {
+   "seed": 552030,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 5.0,
+   "margins": {
+    "generic": null,
+    "early": -10992.0,
+    "late": -802.0
+   }
+  },
+  {
+   "seed": 552031,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 936.0,
+   "margins": {
+    "generic": 639.0,
+    "early": -9312.0,
+    "late": 821.0
+   }
+  },
+  {
+   "seed": 552031,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 936.0,
+   "margins": {
+    "generic": 639.0,
+    "early": -9312.0,
+    "late": 821.0
+   }
+  },
+  {
+   "seed": 552032,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+BAKERY",
+   "margin_control": 377.0,
+   "margins": {
+    "generic": 1555.0,
+    "early": -9611.0,
+    "late": 1170.0
+   }
+  },
+  {
+   "seed": 552032,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+BAKERY",
+   "margin_control": 377.0,
+   "margins": {
+    "generic": 1555.0,
+    "early": -9611.0,
+    "late": 1170.0
+   }
+  },
+  {
+   "seed": 552033,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 626.0,
+   "margins": {
+    "generic": null,
+    "early": -13628.0,
+    "late": -747.0
+   }
+  },
+  {
+   "seed": 552033,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 626.0,
+   "margins": {
+    "generic": null,
+    "early": -13628.0,
+    "late": -747.0
+   }
+  },
+  {
+   "seed": 552034,
+   "seat": 0,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+   "margin_control": 15.0,
+   "margins": {
+    "generic": null,
+    "early": -5807.0,
+    "late": -1227.0
+   }
+  },
+  {
+   "seed": 552034,
+   "seat": 1,
+   "opponent": "b",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+   "margin_control": 15.0,
+   "margins": {
+    "generic": null,
+    "early": -5807.0,
+    "late": -1227.0
+   }
+  },
+  {
+   "seed": 552035,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 151.0,
+   "margins": {
+    "generic": null,
+    "early": 147.0,
+    "late": -715.0
+   }
+  },
+  {
+   "seed": 552035,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BAKERY+BRUNCH_SPOT",
+   "margin_control": 151.0,
+   "margins": {
+    "generic": null,
+    "early": 147.0,
+    "late": -715.0
+   }
+  },
+  {
+   "seed": 552036,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+YARN_STORE",
+   "margin_control": 129.0,
+   "margins": {
+    "generic": -14396.0,
+    "early": null,
+    "late": -15292.0
+   }
+  },
+  {
+   "seed": 552036,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "BAKERY+YARN_STORE",
+   "margin_control": 129.0,
+   "margins": {
+    "generic": -14396.0,
+    "early": null,
+    "late": -15292.0
+   }
+  },
+  {
+   "seed": 552037,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 269.0,
+   "margins": {
+    "generic": -225.0,
+    "early": -10624.0,
+    "late": -1101.0
+   }
+  },
+  {
+   "seed": 552037,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 269.0,
+   "margins": {
+    "generic": -225.0,
+    "early": -10624.0,
+    "late": -1101.0
+   }
+  },
+  {
+   "seed": 552038,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 77.0,
+   "margins": {
+    "generic": -4730.0,
+    "early": null,
+    "late": -3733.0
+   }
+  },
+  {
+   "seed": 552038,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+YARN_STORE",
+   "margin_control": 77.0,
+   "margins": {
+    "generic": -4730.0,
+    "early": null,
+    "late": -3733.0
+   }
+  },
+  {
+   "seed": 552039,
+   "seat": 0,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": 347.0,
+   "margins": {
+    "generic": 1045.0,
+    "early": -7787.0,
+    "late": -161.0
+   }
+  },
+  {
+   "seed": 552039,
+   "seat": 1,
+   "opponent": "b",
+   "face": "L|H|H",
+   "pair": "BAKERY+FARMERS_MARKET",
+   "margin_control": 97.0,
+   "margins": {
+    "generic": 803.0,
+    "early": -8040.0,
+    "late": -406.0
+   }
+  },
+  {
+   "seed": 553000,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+PIZZA_SHOP",
+   "margin_control": 49457.0,
+   "margins": {
+    "generic": 49457.0,
+    "early": 34155.0,
+    "late": 50452.0
+   }
+  },
+  {
+   "seed": 553000,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+PIZZA_SHOP",
+   "margin_control": 49457.0,
+   "margins": {
+    "generic": 49457.0,
+    "early": 34155.0,
+    "late": 50452.0
+   }
+  },
+  {
+   "seed": 553001,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|M",
+   "pair": "ICE_CREAM_SHOP+PIZZA_SHOP",
+   "margin_control": 22218.0,
+   "margins": {
+    "generic": 23046.0,
+    "early": -2284.0,
+    "late": null
+   }
+  },
+  {
+   "seed": 553001,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|M",
+   "pair": "ICE_CREAM_SHOP+PIZZA_SHOP",
+   "margin_control": 22218.0,
+   "margins": {
+    "generic": 23046.0,
+    "early": -2284.0,
+    "late": null
+   }
+  },
+  {
+   "seed": 553002,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 17419.0,
+   "margins": {
+    "generic": 16956.0,
+    "early": null,
+    "late": 15965.0
+   }
+  },
+  {
+   "seed": 553002,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 17419.0,
+   "margins": {
+    "generic": 16956.0,
+    "early": null,
+    "late": 15965.0
+   }
+  },
+  {
+   "seed": 553003,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 24333.0,
+   "margins": {
+    "generic": 25003.0,
+    "early": 11284.0,
+    "late": 23934.0
+   }
+  },
+  {
+   "seed": 553003,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 24333.0,
+   "margins": {
+    "generic": 25003.0,
+    "early": 11284.0,
+    "late": 23934.0
+   }
+  },
+  {
+   "seed": 553004,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 42610.0,
+   "margins": {
+    "generic": 43119.0,
+    "early": 31948.0,
+    "late": 42369.0
+   }
+  },
+  {
+   "seed": 553004,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 42610.0,
+   "margins": {
+    "generic": 43119.0,
+    "early": 31948.0,
+    "late": 42369.0
+   }
+  },
+  {
+   "seed": 553005,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 42461.0,
+   "margins": {
+    "generic": 42461.0,
+    "early": 45585.0,
+    "late": 41834.0
+   }
+  },
+  {
+   "seed": 553005,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 42461.0,
+   "margins": {
+    "generic": 42461.0,
+    "early": 45585.0,
+    "late": 41834.0
+   }
+  },
+  {
+   "seed": 553006,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+PET_CAFE",
+   "margin_control": 16439.0,
+   "margins": {
+    "generic": null,
+    "early": -2044.0,
+    "late": 16596.0
+   }
+  },
+  {
+   "seed": 553006,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "ICE_CREAM_SHOP+PET_CAFE",
+   "margin_control": 21182.0,
+   "margins": {
+    "generic": null,
+    "early": 1814.0,
+    "late": 20805.0
+   }
+  },
+  {
+   "seed": 553007,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 26683.0,
+   "margins": {
+    "generic": null,
+    "early": 11907.0,
+    "late": 26020.0
+   }
+  },
+  {
+   "seed": 553007,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "FARMERS_MARKET+SMOOTHIE_SHOP",
+   "margin_control": 26623.0,
+   "margins": {
+    "generic": null,
+    "early": 12866.0,
+    "late": 25856.0
+   }
+  },
+  {
+   "seed": 553008,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 43297.0,
+   "margins": {
+    "generic": 33105.0,
+    "early": null,
+    "late": 32362.0
+   }
+  },
+  {
+   "seed": 553008,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+YARN_STORE",
+   "margin_control": 30664.0,
+   "margins": {
+    "generic": 32408.0,
+    "early": null,
+    "late": 31348.0
+   }
+  },
+  {
+   "seed": 553009,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 16191.0,
+   "margins": {
+    "generic": 25295.0,
+    "early": null,
+    "late": 25490.0
+   }
+  },
+  {
+   "seed": 553009,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 16191.0,
+   "margins": {
+    "generic": 25295.0,
+    "early": null,
+    "late": 25490.0
+   }
+  },
+  {
+   "seed": 553010,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 29920.0,
+   "margins": {
+    "generic": 29907.0,
+    "early": 15082.0,
+    "late": 29310.0
+   }
+  },
+  {
+   "seed": 553010,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 29920.0,
+   "margins": {
+    "generic": 29907.0,
+    "early": 15082.0,
+    "late": 29310.0
+   }
+  },
+  {
+   "seed": 553011,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 14426.0,
+   "margins": {
+    "generic": 16361.0,
+    "early": 3329.0,
+    "late": 14472.0
+   }
+  },
+  {
+   "seed": 553011,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 14426.0,
+   "margins": {
+    "generic": 16361.0,
+    "early": 3329.0,
+    "late": 14472.0
+   }
+  },
+  {
+   "seed": 553012,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 25588.0,
+   "margins": {
+    "generic": 25588.0,
+    "early": 8494.0,
+    "late": 24797.0
+   }
+  },
+  {
+   "seed": 553012,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+   "margin_control": 25588.0,
+   "margins": {
+    "generic": 25588.0,
+    "early": 8494.0,
+    "late": 24797.0
+   }
+  },
+  {
+   "seed": 553013,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 27497.0,
+   "margins": {
+    "generic": 26705.0,
+    "early": 15208.0,
+    "late": 25973.0
+   }
+  },
+  {
+   "seed": 553013,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+   "margin_control": 27497.0,
+   "margins": {
+    "generic": 26705.0,
+    "early": 15208.0,
+    "late": 25973.0
+   }
+  },
+  {
+   "seed": 553014,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+YARN_STORE",
+   "margin_control": 24096.0,
+   "margins": {
+    "generic": 20911.0,
+    "early": null,
+    "late": 19236.0
+   }
+  },
+  {
+   "seed": 553014,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+YARN_STORE",
+   "margin_control": 37751.0,
+   "margins": {
+    "generic": 16084.0,
+    "early": null,
+    "late": 15236.0
+   }
+  },
+  {
+   "seed": 553015,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 38667.0,
+   "margins": {
+    "generic": 38586.0,
+    "early": 29256.0,
+    "late": 38457.0
+   }
+  },
+  {
+   "seed": 553015,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 38667.0,
+   "margins": {
+    "generic": 38586.0,
+    "early": 29256.0,
+    "late": 38457.0
+   }
+  },
+  {
+   "seed": 553016,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+   "margin_control": 10279.0,
+   "margins": {
+    "generic": null,
+    "early": -8984.0,
+    "late": 10517.0
+   }
+  },
+  {
+   "seed": 553016,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+   "margin_control": 10279.0,
+   "margins": {
+    "generic": null,
+    "early": -8984.0,
+    "late": 10517.0
+   }
+  },
+  {
+   "seed": 553017,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+PIZZA_SHOP",
+   "margin_control": 35541.0,
+   "margins": {
+    "generic": 35777.0,
+    "early": 25564.0,
+    "late": 35638.0
+   }
+  },
+  {
+   "seed": 553017,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|M",
+   "pair": "PIZZA_SHOP+PIZZA_SHOP",
+   "margin_control": 35541.0,
+   "margins": {
+    "generic": 35777.0,
+    "early": 25564.0,
+    "late": 35638.0
+   }
+  },
+  {
+   "seed": 553018,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+PET_CAFE",
+   "margin_control": 91739.0,
+   "margins": {
+    "generic": 97846.0,
+    "early": 78466.0,
+    "late": 94403.0
+   }
+  },
+  {
+   "seed": 553018,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+PET_CAFE",
+   "margin_control": 91739.0,
+   "margins": {
+    "generic": 97846.0,
+    "early": 78466.0,
+    "late": 94403.0
+   }
+  },
+  {
+   "seed": 553019,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+SMOOTHIE_SHOP",
+   "margin_control": 46825.0,
+   "margins": {
+    "generic": null,
+    "early": 23162.0,
+    "late": 45001.0
+   }
+  },
+  {
+   "seed": 553019,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "PET_CAFE+SMOOTHIE_SHOP",
+   "margin_control": 46825.0,
+   "margins": {
+    "generic": null,
+    "early": 23162.0,
+    "late": 45001.0
+   }
+  },
+  {
+   "seed": 553020,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+   "margin_control": 15558.0,
+   "margins": {
+    "generic": null,
+    "early": -2709.0,
+    "late": 15340.0
+   }
+  },
+  {
+   "seed": 553020,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+   "margin_control": 15558.0,
+   "margins": {
+    "generic": null,
+    "early": -2709.0,
+    "late": 15340.0
+   }
+  },
+  {
+   "seed": 553021,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 68798.0,
+   "margins": {
+    "generic": 68847.0,
+    "early": 40966.0,
+    "late": 67461.0
+   }
+  },
+  {
+   "seed": 553021,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 68798.0,
+   "margins": {
+    "generic": 68847.0,
+    "early": 40966.0,
+    "late": 67461.0
+   }
+  },
+  {
+   "seed": 553022,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 27868.0,
+   "margins": {
+    "generic": null,
+    "early": 12213.0,
+    "late": 27162.0
+   }
+  },
+  {
+   "seed": 553022,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 27868.0,
+   "margins": {
+    "generic": null,
+    "early": 12213.0,
+    "late": 27162.0
+   }
+  },
+  {
+   "seed": 553023,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 32134.0,
+   "margins": {
+    "generic": null,
+    "early": 12497.0,
+    "late": 31930.0
+   }
+  },
+  {
+   "seed": 553023,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 32134.0,
+   "margins": {
+    "generic": null,
+    "early": 12497.0,
+    "late": 31930.0
+   }
+  },
+  {
+   "seed": 553024,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 17483.0,
+   "margins": {
+    "generic": 17968.0,
+    "early": null,
+    "late": 17299.0
+   }
+  },
+  {
+   "seed": 553024,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "SMOOTHIE_SHOP+YARN_STORE",
+   "margin_control": 17483.0,
+   "margins": {
+    "generic": 17968.0,
+    "early": null,
+    "late": 17299.0
+   }
+  },
+  {
+   "seed": 553025,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": 16439.0,
+   "margins": {
+    "generic": null,
+    "early": -4686.0,
+    "late": 15206.0
+   }
+  },
+  {
+   "seed": 553025,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+ICE_CREAM_SHOP",
+   "margin_control": 19520.0,
+   "margins": {
+    "generic": null,
+    "early": 2107.0,
+    "late": 18849.0
+   }
+  },
+  {
+   "seed": 553026,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 36504.0,
+   "margins": {
+    "generic": 35850.0,
+    "early": 36536.0,
+    "late": 35285.0
+   }
+  },
+  {
+   "seed": 553026,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PET_CAFE",
+   "margin_control": 36504.0,
+   "margins": {
+    "generic": 35850.0,
+    "early": 36536.0,
+    "late": 35285.0
+   }
+  },
+  {
+   "seed": 553027,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+   "margin_control": 38347.0,
+   "margins": {
+    "generic": null,
+    "early": 39507.0,
+    "late": 36483.0
+   }
+  },
+  {
+   "seed": 553027,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+   "margin_control": 38347.0,
+   "margins": {
+    "generic": null,
+    "early": 39507.0,
+    "late": 36483.0
+   }
+  },
+  {
+   "seed": 553028,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "FARMERS_MARKET+YARN_STORE",
+   "margin_control": 14440.0,
+   "margins": {
+    "generic": 13874.0,
+    "early": null,
+    "late": 13723.0
+   }
+  },
+  {
+   "seed": 553028,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "FARMERS_MARKET+YARN_STORE",
+   "margin_control": 14440.0,
+   "margins": {
+    "generic": 13874.0,
+    "early": null,
+    "late": 13723.0
+   }
+  },
+  {
+   "seed": 553029,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 17027.0,
+   "margins": {
+    "generic": null,
+    "early": -14613.0,
+    "late": 16044.0
+   }
+  },
+  {
+   "seed": 553029,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 17027.0,
+   "margins": {
+    "generic": null,
+    "early": -14613.0,
+    "late": 16044.0
+   }
+  },
+  {
+   "seed": 553030,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 8519.0,
+   "margins": {
+    "generic": null,
+    "early": -11867.0,
+    "late": 8519.0
+   }
+  },
+  {
+   "seed": 553030,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+SMOOTHIE_SHOP",
+   "margin_control": 8519.0,
+   "margins": {
+    "generic": null,
+    "early": -11867.0,
+    "late": 8519.0
+   }
+  },
+  {
+   "seed": 553031,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 22336.0,
+   "margins": {
+    "generic": null,
+    "early": 13776.0,
+    "late": 21385.0
+   }
+  },
+  {
+   "seed": 553031,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+   "margin_control": 22336.0,
+   "margins": {
+    "generic": null,
+    "early": 13776.0,
+    "late": 21385.0
+   }
+  },
+  {
+   "seed": 553032,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+FARMERS_MARKET",
+   "margin_control": 48263.0,
+   "margins": {
+    "generic": 48869.0,
+    "early": 37116.0,
+    "late": 47801.0
+   }
+  },
+  {
+   "seed": 553032,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+FARMERS_MARKET",
+   "margin_control": 48263.0,
+   "margins": {
+    "generic": 48869.0,
+    "early": 37116.0,
+    "late": 47801.0
+   }
+  },
+  {
+   "seed": 553033,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+FARMERS_MARKET",
+   "margin_control": 78886.0,
+   "margins": {
+    "generic": 79367.0,
+    "early": 59330.0,
+    "late": 78358.0
+   }
+  },
+  {
+   "seed": 553033,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "FARMERS_MARKET+FARMERS_MARKET",
+   "margin_control": 78886.0,
+   "margins": {
+    "generic": 79367.0,
+    "early": 59330.0,
+    "late": 78358.0
+   }
+  },
+  {
+   "seed": 553034,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BRUNCH_SPOT+YARN_STORE",
+   "margin_control": 16208.0,
+   "margins": {
+    "generic": 12368.0,
+    "early": null,
+    "late": 12811.0
+   }
+  },
+  {
+   "seed": 553034,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BRUNCH_SPOT+YARN_STORE",
+   "margin_control": 16208.0,
+   "margins": {
+    "generic": 12368.0,
+    "early": null,
+    "late": 12811.0
+   }
+  },
+  {
+   "seed": 553035,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+   "margin_control": 29308.0,
+   "margins": {
+    "generic": null,
+    "early": 18059.0,
+    "late": 28496.0
+   }
+  },
+  {
+   "seed": 553035,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|H",
+   "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+   "margin_control": 29308.0,
+   "margins": {
+    "generic": null,
+    "early": 18059.0,
+    "late": 28496.0
+   }
+  },
+  {
+   "seed": 553036,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 30584.0,
+   "margins": {
+    "generic": 30434.0,
+    "early": 16400.0,
+    "late": 29936.0
+   }
+  },
+  {
+   "seed": 553036,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|M",
+   "pair": "BAKERY+PIZZA_SHOP",
+   "margin_control": 30584.0,
+   "margins": {
+    "generic": 30434.0,
+    "early": 16400.0,
+    "late": 29936.0
+   }
+  },
+  {
+   "seed": 553037,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+PIZZA_SHOP",
+   "margin_control": 16224.0,
+   "margins": {
+    "generic": 17181.0,
+    "early": -14610.0,
+    "late": null
+   }
+  },
+  {
+   "seed": 553037,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+PIZZA_SHOP",
+   "margin_control": 16224.0,
+   "margins": {
+    "generic": 17181.0,
+    "early": -14610.0,
+    "late": null
+   }
+  },
+  {
+   "seed": 553038,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+   "margin_control": 18169.0,
+   "margins": {
+    "generic": null,
+    "early": 19.0,
+    "late": 17754.0
+   }
+  },
+  {
+   "seed": 553038,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "M|H|H",
+   "pair": "ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+   "margin_control": 18169.0,
+   "margins": {
+    "generic": null,
+    "early": 19.0,
+    "late": 17754.0
+   }
+  },
+  {
+   "seed": 553039,
+   "seat": 0,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 29105.0,
+   "margins": {
+    "generic": 29107.0,
+    "early": 18079.0,
+    "late": 28442.0
+   }
+  },
+  {
+   "seed": 553039,
+   "seat": 1,
+   "opponent": "v48_derivative",
+   "face": "L|H|M",
+   "pair": "BAKERY+PET_CAFE",
+   "margin_control": 32554.0,
+   "margins": {
+    "generic": 32546.0,
+    "early": 20306.0,
+    "late": 32247.0
+   }
+  }
+ ],
+ "arm_stats": {
+  "arm_routes": {
+   "generic": 105,
+   "early": 9,
+   "late": 122
+  },
+  "families": {
+   "L|H|H": {
+    "early": {
+     "n": 56,
+     "mean_delta": -9927.8,
+     "mean_margin_control": 15148.59,
+     "mean_margin_arm": 5220.79,
+     "win_rate_control": 0.8929,
+     "win_rate_arm": 0.4464
+    },
+    "generic": {
+     "n": 52,
+     "mean_delta": -859.15,
+     "mean_margin_control": 15289.52,
+     "mean_margin_arm": 14430.37,
+     "win_rate_control": 0.9038,
+     "win_rate_arm": 0.7115
+    },
+    "late": {
+     "n": 66,
+     "mean_delta": -1510.77,
+     "mean_margin_control": 13798.06,
+     "mean_margin_arm": 12287.29,
+     "win_rate_control": 0.9091,
+     "win_rate_arm": 0.5606
+    }
+   },
+   "L|H|M": {
+    "early": {
+     "n": 76,
+     "mean_delta": -10989.43,
+     "mean_margin_control": 8925.45,
+     "mean_margin_arm": -2063.99,
+     "win_rate_control": 1.0,
+     "win_rate_arm": 0.2237
+    },
+    "generic": {
+     "n": 100,
+     "mean_delta": -1752.69,
+     "mean_margin_control": 6612.91,
+     "mean_margin_arm": 4860.22,
+     "win_rate_control": 0.94,
+     "win_rate_arm": 0.54
+    },
+    "late": {
+     "n": 130,
+     "mean_delta": -1519.26,
+     "mean_margin_control": 6244.28,
+     "mean_margin_arm": 4725.02,
+     "win_rate_control": 0.9538,
+     "win_rate_arm": 0.5538
+    }
+   },
+   "M|H|H": {
+    "early": {
+     "n": 74,
+     "mean_delta": -12078.68,
+     "mean_margin_control": 6465.11,
+     "mean_margin_arm": -5613.57,
+     "win_rate_control": 0.8919,
+     "win_rate_arm": 0.2432
+    },
+    "generic": {
+     "n": 26,
+     "mean_delta": 1261.23,
+     "mean_margin_control": 4229.77,
+     "mean_margin_arm": 5491.0,
+     "win_rate_control": 0.6154,
+     "win_rate_arm": 0.6154
+    },
+    "late": {
+     "n": 84,
+     "mean_delta": -277.33,
+     "mean_margin_control": 5643.81,
+     "mean_margin_arm": 5366.48,
+     "win_rate_control": 0.8571,
+     "win_rate_arm": 0.3571
+    }
+   },
+   "M|H|M": {
+    "early": {
+     "n": 26,
+     "mean_delta": -13724.92,
+     "mean_margin_control": 6870.0,
+     "mean_margin_arm": -6854.92,
+     "win_rate_control": 0.9231,
+     "win_rate_arm": 0.1538
+    },
+    "generic": {
+     "n": 26,
+     "mean_delta": 72.85,
+     "mean_margin_control": 9707.04,
+     "mean_margin_arm": 9779.88,
+     "win_rate_control": 0.9231,
+     "win_rate_arm": 0.7692
+    },
+    "late": {
+     "n": 34,
+     "mean_delta": -170.09,
+     "mean_margin_control": 6125.03,
+     "mean_margin_arm": 5954.94,
+     "win_rate_control": 0.9412,
+     "win_rate_arm": 0.5882
+    }
+   }
+  },
+  "overall": {
+   "generic": {
+    "n": 204,
+    "mean_delta": -908.13,
+    "mean_margin_control": 8915.21,
+    "mean_margin_arm": 8007.08,
+    "win_rate_control": 0.8873,
+    "win_rate_arm": 0.6225
+   },
+   "early": {
+    "n": 232,
+    "mean_delta": -11387.17,
+    "mean_margin_control": 9412.47,
+    "mean_margin_arm": -1974.7,
+    "win_rate_control": 0.931,
+    "win_rate_arm": 0.2759
+   },
+   "late": {
+    "n": 314,
+    "mean_delta": -1039.15,
+    "mean_margin_control": 7658.47,
+    "mean_margin_arm": 6619.32,
+    "win_rate_control": 0.9172,
+    "win_rate_arm": 0.5064
+   }
+  }
+ },
+ "elapsed_s": 584.68
+}
