@@ -1,0 +1,10 @@
+def test_advance_agent():
+    raise NotImplementedError("unimplemented:fn:_advance_agent")
+def test_select_advanceable():
+    raise NotImplementedError("unimplemented:fn:select_advanceable")
+def test_apply_advance_with_debt():
+    raise NotImplementedError("unimplemented:fn:apply_advance_with_debt")
+def test_settle_debts():
+    raise NotImplementedError("unimplemented:fn:settle_debts")
+def test_measure_rival_lead():
+    raise NotImplementedError("unimplemented:fn:measure_rival_lead")
