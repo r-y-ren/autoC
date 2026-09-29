@@ -1,0 +1,56 @@
+{
+ "pairs": {
+  "knee_x10_vs_h1": {
+   "n": 32,
+   "W": 0,
+   "L": 32,
+   "T": 0,
+   "mean_delta": -2877.03,
+   "net_flip_wins": -22,
+   "flips_neg": 22
+  },
+  "knee_x20_vs_h1": {
+   "n": 32,
+   "W": 0,
+   "L": 32,
+   "T": 0,
+   "mean_delta": -2876.66,
+   "net_flip_wins": -22,
+   "flips_neg": 22
+  }
+ },
+ "criteria": {
+  "knee_x10": {
+   "checks": {
+    "净翻胜>0": false,
+    "flips_neg==0": false,
+    "终局滞留不升": true
+   },
+   "net_flip_wins": -22,
+   "flips_neg": 22,
+   "stranding_mean_delta": 0.0,
+   "positive_arm": false
+  },
+  "knee_x20": {
+   "checks": {
+    "净翻胜>0": false,
+    "flips_neg==0": false,
+    "终局滞留不升": true
+   },
+   "net_flip_wins": -22,
+   "flips_neg": 22,
+   "stranding_mean_delta": 0.0,
+   "positive_arm": false
+  }
+ },
+ "budget": {
+  "cap_局次": 300,
+  "smoke_局次": 2,
+  "aborted_attempt_局次": 64,
+  "auth_局次": 60,
+  "gate_局次": 8,
+  "judgment_局次": 96,
+  "total_局次": 230,
+  "within_cap": true
+ }
+}

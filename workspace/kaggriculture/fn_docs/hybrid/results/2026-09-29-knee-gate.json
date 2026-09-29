@@ -1,0 +1,1930 @@
+{
+ "version": "knee-gate/1.0",
+ "experiment": "谷底三品价格膝点量门实测（knee-gate；判决先行·不发射）：FERTILIZER/MILK/WOOL 本步 SELL 单量按 quote<0.7×base 截留至 min(沈存30%,步帽X)（X=10/20 两变体），只减不挪、截掉的量由磁带后续卖单/终局清算自然出清",
+ "source": {
+  "commands": [
+   "python3 orderbook_knee_lab/build_knee.py",
+   "python3 orderbook_knee_lab/judge_knee.py"
+  ],
+  "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_strongest_lab/build/h1/main.py",
+  "base_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+  "corpus": {
+   "loss_folds": [
+    1825501814,
+    2013941152,
+    786146079,
+    1883261866,
+    963182245,
+    240876256,
+    1705553586,
+    2009279466
+   ],
+   "neutral_folds": [
+    672000,
+    672089,
+    672178,
+    672267,
+    672356,
+    672445,
+    672534,
+    672623
+   ],
+   "neutral_spec": "672000+i*89（任务给定新中性块 n=8）",
+   "folds_per_variant": 16,
+   "strata": "26 败局回放（canonical 前 8 fold）+ 新中性块 672000+i*89（i=0..7）；双席 fold n=16/变体"
+  },
+  "opponents": [
+   "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/b/main.py",
+   "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py"
+  ],
+  "workers": 2,
+  "caliber": "margin=终局 banks[our]−banks[opp]；终局钱 farms[obs.player].money 干净口径；分品实现价=Σ(filled×成交价)/Σ(filled×base)（影子引擎逐拍归因 value/filled），提交口径 Σ(qty×卖时市价) 对照；终局滞留=末拍 shed×quote（judge_strongest 同口径）",
+  "criterion": "净翻胜>0 ∧ flips_neg==0 ∧ 终局滞留不升（配对 Δ 均值≤0；截留不能变死货）",
+  "base_px_table": {
+   "WHEAT": 25,
+   "CARROT": 35,
+   "TOMATO": 60,
+   "STRAWBERRY": 120,
+   "MELON": 250,
+   "EGG": 50,
+   "MILK": 160,
+   "WOOL": 200,
+   "FERTILIZER": 100
+  },
+  "corner_ref_ratio_fill": {
+   "FERTILIZER": 0.4518,
+   "MILK": 0.5669,
+   "WOOL": 0.599
+  },
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "wall_speedup": 4.939,
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "timing": {
+    "official_s": 31.5802,
+    "sim_s": 6.3946,
+    "measured_speedup": 4.939
+   },
+   "version": "simbridge/1.0"
+  }
+ },
+ "mechanism": {
+  "layer": "knee（尾块注入沿 append 先例；宿主=h1 件 _hs_agent；入口=_kg_agent 末 callable）",
+  "items": [
+   "FERTILIZER",
+   "MILK",
+   "WOOL"
+  ],
+  "knee_rule": "该品当前 quote < 0.7×base 触发截留；quote≥0.7×base 全量挂卖（膝点=价崩拐点，简单可实现口径）",
+  "cap_rule": "本步该品挂卖总量截留至 min(沈存×30%, 步帽 X)（沈存=同拍投射仓 _xd7_projected，失败回退裸 shed）",
+  "clearing": "截留不是挪卖：截掉的量留在棚里，由磁带后续卖单/终局清算（712-718）自然出清；终局清算窗 step≥712 不截留（出清路径保真，亦不干扰 E182 终局规划器物理守卫）",
+  "constraints": [
+   "只减不挪",
+   "零跨拍挪量（R23/R26）",
+   "磁带 blob 零触碰",
+   "非 SELL/挂量不确定条目原样保留",
+   "异常回退原动作（同对象零足迹）"
+  ],
+  "variants": {
+   "knee_x10": {
+    "step_cap": 10
+   },
+   "knee_x20": {
+    "step_cap": 20
+   }
+  }
+ },
+ "params": {
+  "knee_x10": {
+   "manifest_main_sha256": "f90845c8915933a7a90f03fafdaa292a87fefc1c428a3b79a296b97a4ea94408",
+   "injected_tail_bytes": 8104,
+   "params": {
+    "items": [
+     "FERTILIZER",
+     "MILK",
+     "WOOL"
+    ],
+    "base_px": {
+     "FERTILIZER": 100,
+     "MILK": 160,
+     "WOOL": 200
+    },
+    "knee_factor": 0.7,
+    "keep_frac": 0.3,
+    "step_cap": 10,
+    "terminal_start": 712
+   }
+  },
+  "knee_x20": {
+   "manifest_main_sha256": "5477378e6b5d765e4a7314658c86e8c4229ed3f6e0e2f8ac64b35cfa638a9b72",
+   "injected_tail_bytes": 8104,
+   "params": {
+    "items": [
+     "FERTILIZER",
+     "MILK",
+     "WOOL"
+    ],
+    "base_px": {
+     "FERTILIZER": 100,
+     "MILK": 160,
+     "WOOL": 200
+    },
+    "knee_factor": 0.7,
+    "keep_frac": 0.3,
+    "step_cap": 20,
+    "terminal_start": 712
+   }
+  }
+ },
+ "gates": {
+  "knee_x10": {
+   "load": {
+    "passed": true,
+    "entry": "_kg_agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 147.7,
+      "p99_step_ms": 35.42,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 273.29,
+      "p99_step_ms": 34.52,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "8c098f3517c083291a194dca0e140e72ce12316d41cbbebb804b2aa6f3711220",
+     "run2": "8c098f3517c083291a194dca0e140e72ce12316d41cbbebb804b2aa6f3711220"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "checks": {
+     "size_lt_100mb": true,
+     "tar_members_exact": true,
+     "inner_matches_disk": true,
+     "sha_matches_manifest": true,
+     "h1_base_sha_ok": true,
+     "h1_prefix_identical": true,
+     "injected_not_identity": true,
+     "entry_manifest_ok": true
+    },
+    "main_sha256": "f90845c8915933a7a90f03fafdaa292a87fefc1c428a3b79a296b97a4ea94408",
+    "tar_size_mb": 0.659,
+    "tar_members": [
+     "main.py"
+    ],
+    "base_main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+    "byte_identical_to_h1": false,
+    "injected_tail_bytes": 8104
+   },
+   "overall": true
+  },
+  "knee_x20": {
+   "load": {
+    "passed": true,
+    "entry": "_kg_agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 182.36,
+      "p99_step_ms": 31.94,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 320.23,
+      "p99_step_ms": 33.38,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "8c098f3517c083291a194dca0e140e72ce12316d41cbbebb804b2aa6f3711220",
+     "run2": "8c098f3517c083291a194dca0e140e72ce12316d41cbbebb804b2aa6f3711220"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "checks": {
+     "size_lt_100mb": true,
+     "tar_members_exact": true,
+     "inner_matches_disk": true,
+     "sha_matches_manifest": true,
+     "h1_base_sha_ok": true,
+     "h1_prefix_identical": true,
+     "injected_not_identity": true,
+     "entry_manifest_ok": true
+    },
+    "main_sha256": "5477378e6b5d765e4a7314658c86e8c4229ed3f6e0e2f8ac64b35cfa638a9b72",
+    "tar_size_mb": 0.659,
+    "tar_members": [
+     "main.py"
+    ],
+    "base_main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+    "byte_identical_to_h1": false,
+    "injected_tail_bytes": 8104
+   },
+   "overall": true
+  }
+ },
+ "knee_trigger_surface": {
+  "knee_x10": {
+   "n_games": 32,
+   "games_with_truncation": 32,
+   "truncated_qty_total": 45168.0,
+   "per_item": {
+    "FERTILIZER": {
+     "knee_quote_steps": 11888.0,
+     "sell_steps": 2146.0,
+     "trig_steps": 2146.0,
+     "sell_orders": 2198.0,
+     "requested_qty": 12036.0,
+     "posted_qty": 6805.0,
+     "truncated_orders": 1043.0,
+     "truncated_qty": 5231.0,
+     "dropped_orders": 65.0,
+     "trig_steps_per_game": 67.1,
+     "truncated_qty_per_game": 163.5
+    },
+    "MILK": {
+     "knee_quote_steps": 10573.0,
+     "sell_steps": 8656.0,
+     "trig_steps": 8656.0,
+     "sell_orders": 8656.0,
+     "requested_qty": 29805.0,
+     "posted_qty": 3566.0,
+     "truncated_orders": 8493.0,
+     "truncated_qty": 26239.0,
+     "dropped_orders": 6197.0,
+     "trig_steps_per_game": 270.5,
+     "truncated_qty_per_game": 820.0
+    },
+    "WOOL": {
+     "knee_quote_steps": 9685.0,
+     "sell_steps": 4234.0,
+     "trig_steps": 4234.0,
+     "sell_orders": 4234.0,
+     "requested_qty": 15736.0,
+     "posted_qty": 2038.0,
+     "truncated_orders": 4145.0,
+     "truncated_qty": 13698.0,
+     "dropped_orders": 2863.0,
+     "trig_steps_per_game": 132.3,
+     "truncated_qty_per_game": 428.1
+    }
+   }
+  },
+  "knee_x20": {
+   "n_games": 32,
+   "games_with_truncation": 32,
+   "truncated_qty_total": 45160.0,
+   "per_item": {
+    "FERTILIZER": {
+     "knee_quote_steps": 11888.0,
+     "sell_steps": 2146.0,
+     "trig_steps": 2146.0,
+     "sell_orders": 2198.0,
+     "requested_qty": 12028.0,
+     "posted_qty": 6805.0,
+     "truncated_orders": 1043.0,
+     "truncated_qty": 5223.0,
+     "dropped_orders": 65.0,
+     "trig_steps_per_game": 67.1,
+     "truncated_qty_per_game": 163.2
+    },
+    "MILK": {
+     "knee_quote_steps": 10573.0,
+     "sell_steps": 8656.0,
+     "trig_steps": 8656.0,
+     "sell_orders": 8656.0,
+     "requested_qty": 29805.0,
+     "posted_qty": 3566.0,
+     "truncated_orders": 8493.0,
+     "truncated_qty": 26239.0,
+     "dropped_orders": 6197.0,
+     "trig_steps_per_game": 270.5,
+     "truncated_qty_per_game": 820.0
+    },
+    "WOOL": {
+     "knee_quote_steps": 9685.0,
+     "sell_steps": 4234.0,
+     "trig_steps": 4234.0,
+     "sell_orders": 4234.0,
+     "requested_qty": 15736.0,
+     "posted_qty": 2038.0,
+     "truncated_orders": 4145.0,
+     "truncated_qty": 13698.0,
+     "dropped_orders": 2863.0,
+     "trig_steps_per_game": 132.3,
+     "truncated_qty_per_game": 428.1
+    }
+   }
+  }
+ },
+ "pairs": {
+  "knee_x10_vs_h1": {
+   "n": 32,
+   "W": 0,
+   "L": 32,
+   "T": 0,
+   "mean_delta": -2877.03,
+   "win_control": 30,
+   "win_variant": 8,
+   "flips_pos": 0,
+   "flips_neg": 22,
+   "net_flip_wins": -22,
+   "loss_recovery": "0/16 败局 Δ>0",
+   "control_win_guard_ok": false,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": -4023.0,
+     "delta": -4698.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": -4023.0,
+     "delta": -4698.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": -1187.0,
+     "delta": -1538.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": -1187.0,
+     "delta": -1538.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -2520.0,
+     "delta": -2214.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -2520.0,
+     "delta": -2214.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20556.0,
+     "margin_variant": 17884.0,
+     "delta": -2672.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20485.0,
+     "margin_variant": 17808.0,
+     "delta": -2677.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": -2740.0,
+     "delta": -2859.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": -2740.0,
+     "delta": -2859.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": -2209.0,
+     "delta": -2771.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": -2209.0,
+     "delta": -2771.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": -1537.0,
+     "delta": -2981.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": -1537.0,
+     "delta": -2981.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 23748.0,
+     "delta": -3133.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 23748.0,
+     "delta": -3133.0
+    },
+    {
+     "seed": 672000,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": -1352.0,
+     "delta": -2025.0
+    },
+    {
+     "seed": 672000,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": -1352.0,
+     "delta": -2025.0
+    },
+    {
+     "seed": 672089,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "a",
+     "margin_control": 866.0,
+     "margin_variant": -2607.0,
+     "delta": -3473.0
+    },
+    {
+     "seed": 672089,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "a",
+     "margin_control": 866.0,
+     "margin_variant": -2607.0,
+     "delta": -3473.0
+    },
+    {
+     "seed": 672178,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "b",
+     "margin_control": 359.0,
+     "margin_variant": -1934.0,
+     "delta": -2293.0
+    },
+    {
+     "seed": 672178,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "b",
+     "margin_control": 359.0,
+     "margin_variant": -1934.0,
+     "delta": -2293.0
+    },
+    {
+     "seed": 672267,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "v48_derivative",
+     "margin_control": 25187.0,
+     "margin_variant": 23252.0,
+     "delta": -1935.0
+    },
+    {
+     "seed": 672267,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "v48_derivative",
+     "margin_control": 21028.0,
+     "margin_variant": 18345.0,
+     "delta": -2683.0
+    },
+    {
+     "seed": 672356,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "build",
+     "margin_control": 344.0,
+     "margin_variant": -3399.0,
+     "delta": -3743.0
+    },
+    {
+     "seed": 672356,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "build",
+     "margin_control": 344.0,
+     "margin_variant": -3399.0,
+     "delta": -3743.0
+    },
+    {
+     "seed": 672445,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "a",
+     "margin_control": 451.0,
+     "margin_variant": -3369.0,
+     "delta": -3820.0
+    },
+    {
+     "seed": 672445,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "a",
+     "margin_control": 451.0,
+     "margin_variant": -3369.0,
+     "delta": -3820.0
+    },
+    {
+     "seed": 672534,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "b",
+     "margin_control": 313.0,
+     "margin_variant": -2116.0,
+     "delta": -2429.0
+    },
+    {
+     "seed": 672534,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "b",
+     "margin_control": 313.0,
+     "margin_variant": -2116.0,
+     "delta": -2429.0
+    },
+    {
+     "seed": 672623,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "v48_derivative",
+     "margin_control": 16551.0,
+     "margin_variant": 13479.0,
+     "delta": -3072.0
+    },
+    {
+     "seed": 672623,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "v48_derivative",
+     "margin_control": 16551.0,
+     "margin_variant": 13479.0,
+     "delta": -3072.0
+    }
+   ],
+   "positive_arm": false
+  },
+  "knee_x20_vs_h1": {
+   "n": 32,
+   "W": 0,
+   "L": 32,
+   "T": 0,
+   "mean_delta": -2876.66,
+   "win_control": 30,
+   "win_variant": 8,
+   "flips_pos": 0,
+   "flips_neg": 22,
+   "net_flip_wins": -22,
+   "loss_recovery": "0/16 败局 Δ>0",
+   "control_win_guard_ok": false,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": -4023.0,
+     "delta": -4698.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": -4023.0,
+     "delta": -4698.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": -1184.0,
+     "delta": -1535.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": -1184.0,
+     "delta": -1535.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -2520.0,
+     "delta": -2214.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -2520.0,
+     "delta": -2214.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20556.0,
+     "margin_variant": 17884.0,
+     "delta": -2672.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20485.0,
+     "margin_variant": 17808.0,
+     "delta": -2677.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": -2739.0,
+     "delta": -2858.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": -2739.0,
+     "delta": -2858.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": -2209.0,
+     "delta": -2771.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": -2209.0,
+     "delta": -2771.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": -1537.0,
+     "delta": -2981.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": -1537.0,
+     "delta": -2981.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 23748.0,
+     "delta": -3133.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 23748.0,
+     "delta": -3133.0
+    },
+    {
+     "seed": 672000,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": -1352.0,
+     "delta": -2025.0
+    },
+    {
+     "seed": 672000,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": -1352.0,
+     "delta": -2025.0
+    },
+    {
+     "seed": 672089,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "a",
+     "margin_control": 866.0,
+     "margin_variant": -2607.0,
+     "delta": -3473.0
+    },
+    {
+     "seed": 672089,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "a",
+     "margin_control": 866.0,
+     "margin_variant": -2607.0,
+     "delta": -3473.0
+    },
+    {
+     "seed": 672178,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "b",
+     "margin_control": 359.0,
+     "margin_variant": -1934.0,
+     "delta": -2293.0
+    },
+    {
+     "seed": 672178,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "b",
+     "margin_control": 359.0,
+     "margin_variant": -1934.0,
+     "delta": -2293.0
+    },
+    {
+     "seed": 672267,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "v48_derivative",
+     "margin_control": 25187.0,
+     "margin_variant": 23252.0,
+     "delta": -1935.0
+    },
+    {
+     "seed": 672267,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "v48_derivative",
+     "margin_control": 21028.0,
+     "margin_variant": 18345.0,
+     "delta": -2683.0
+    },
+    {
+     "seed": 672356,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "build",
+     "margin_control": 344.0,
+     "margin_variant": -3399.0,
+     "delta": -3743.0
+    },
+    {
+     "seed": 672356,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "build",
+     "margin_control": 344.0,
+     "margin_variant": -3399.0,
+     "delta": -3743.0
+    },
+    {
+     "seed": 672445,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "a",
+     "margin_control": 451.0,
+     "margin_variant": -3369.0,
+     "delta": -3820.0
+    },
+    {
+     "seed": 672445,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "a",
+     "margin_control": 451.0,
+     "margin_variant": -3369.0,
+     "delta": -3820.0
+    },
+    {
+     "seed": 672534,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "b",
+     "margin_control": 313.0,
+     "margin_variant": -2116.0,
+     "delta": -2429.0
+    },
+    {
+     "seed": 672534,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "b",
+     "margin_control": 313.0,
+     "margin_variant": -2116.0,
+     "delta": -2429.0
+    },
+    {
+     "seed": 672623,
+     "seat": 0,
+     "stratum": "neutral_672000_i89",
+     "opponent": "v48_derivative",
+     "margin_control": 16551.0,
+     "margin_variant": 13481.0,
+     "delta": -3070.0
+    },
+    {
+     "seed": 672623,
+     "seat": 1,
+     "stratum": "neutral_672000_i89",
+     "opponent": "v48_derivative",
+     "margin_control": 16551.0,
+     "margin_variant": 13481.0,
+     "delta": -3070.0
+    }
+   ],
+   "positive_arm": false
+  }
+ },
+ "per_item_realized": {
+  "h1": {
+   "per_item": {
+    "CARROT": {
+     "base_px": 35.0,
+     "filled_qty": 4553.0,
+     "filled_value": 259165.0,
+     "avg_fill_px": 56.92,
+     "ratio_fill": 1.6263,
+     "req_qty": 4553.0,
+     "avg_submit_px": 58.88,
+     "ratio_submit": 1.6823
+    },
+    "EGG": {
+     "base_px": 50.0,
+     "filled_qty": 3487.0,
+     "filled_value": 182269.0,
+     "avg_fill_px": 52.27,
+     "ratio_fill": 1.0454,
+     "req_qty": 3511.0,
+     "avg_submit_px": 52.64,
+     "ratio_submit": 1.0528
+    },
+    "FERTILIZER": {
+     "base_px": 100.0,
+     "filled_qty": 10632.0,
+     "filled_value": 487360.0,
+     "avg_fill_px": 45.84,
+     "ratio_fill": 0.4584,
+     "req_qty": 10904.0,
+     "avg_submit_px": 47.17,
+     "ratio_submit": 0.4717
+    },
+    "MELON": {
+     "base_px": 250.0,
+     "filled_qty": 2304.0,
+     "filled_value": 470770.0,
+     "avg_fill_px": 204.33,
+     "ratio_fill": 0.8173,
+     "req_qty": 2352.0,
+     "avg_submit_px": 212.45,
+     "ratio_submit": 0.8498
+    },
+    "MILK": {
+     "base_px": 160.0,
+     "filled_qty": 5858.0,
+     "filled_value": 460277.0,
+     "avg_fill_px": 78.57,
+     "ratio_fill": 0.4911,
+     "req_qty": 6883.0,
+     "avg_submit_px": 78.16,
+     "ratio_submit": 0.4885
+    },
+    "STRAWBERRY": {
+     "base_px": 120.0,
+     "filled_qty": 7918.0,
+     "filled_value": 949844.0,
+     "avg_fill_px": 119.96,
+     "ratio_fill": 0.9997,
+     "req_qty": 8926.0,
+     "avg_submit_px": 124.65,
+     "ratio_submit": 1.0388
+    },
+    "TOMATO": {
+     "base_px": 60.0,
+     "filled_qty": 320.0,
+     "filled_value": 74730.0,
+     "avg_fill_px": 233.53,
+     "ratio_fill": 3.8922,
+     "req_qty": 320.0,
+     "avg_submit_px": 248.18,
+     "ratio_submit": 4.1363
+    },
+    "WHEAT": {
+     "base_px": 25.0,
+     "filled_qty": 23488.0,
+     "filled_value": 978179.0,
+     "avg_fill_px": 41.65,
+     "ratio_fill": 1.6658,
+     "req_qty": 24130.0,
+     "avg_submit_px": 42.52,
+     "ratio_submit": 1.7008
+    },
+    "WOOL": {
+     "base_px": 200.0,
+     "filled_qty": 4670.0,
+     "filled_value": 563709.0,
+     "avg_fill_px": 120.71,
+     "ratio_fill": 0.6035,
+     "req_qty": 5322.0,
+     "avg_submit_px": 123.65,
+     "ratio_submit": 0.6182
+    }
+   },
+   "aggregate": {
+    "ratio_fill_all": 0.8196,
+    "ratio_submit_all": 0.8312,
+    "n_games": 32,
+    "shadow_mismatch_steps": 0
+   }
+  },
+  "knee_x10": {
+   "per_item": {
+    "CARROT": {
+     "base_px": 35.0,
+     "filled_qty": 4462.0,
+     "filled_value": 254602.0,
+     "avg_fill_px": 57.06,
+     "ratio_fill": 1.6303,
+     "req_qty": 4462.0,
+     "avg_submit_px": 59.02,
+     "ratio_submit": 1.6863
+    },
+    "EGG": {
+     "base_px": 50.0,
+     "filled_qty": 3206.0,
+     "filled_value": 168188.0,
+     "avg_fill_px": 52.46,
+     "ratio_fill": 1.0492,
+     "req_qty": 3231.0,
+     "avg_submit_px": 52.83,
+     "ratio_submit": 1.0565
+    },
+    "FERTILIZER": {
+     "base_px": 100.0,
+     "filled_qty": 10398.0,
+     "filled_value": 477549.0,
+     "avg_fill_px": 45.93,
+     "ratio_fill": 0.4593,
+     "req_qty": 10456.0,
+     "avg_submit_px": 46.86,
+     "ratio_submit": 0.4686
+    },
+    "MELON": {
+     "base_px": 250.0,
+     "filled_qty": 2304.0,
+     "filled_value": 470770.0,
+     "avg_fill_px": 204.33,
+     "ratio_fill": 0.8173,
+     "req_qty": 2352.0,
+     "avg_submit_px": 212.45,
+     "ratio_submit": 0.8498
+    },
+    "MILK": {
+     "base_px": 160.0,
+     "filled_qty": 5827.0,
+     "filled_value": 453312.0,
+     "avg_fill_px": 77.8,
+     "ratio_fill": 0.4862,
+     "req_qty": 5893.0,
+     "avg_submit_px": 82.65,
+     "ratio_submit": 0.5166
+    },
+    "STRAWBERRY": {
+     "base_px": 120.0,
+     "filled_qty": 7792.0,
+     "filled_value": 950641.0,
+     "avg_fill_px": 122.0,
+     "ratio_fill": 1.0167,
+     "req_qty": 8058.0,
+     "avg_submit_px": 128.43,
+     "ratio_submit": 1.0703
+    },
+    "TOMATO": {
+     "base_px": 60.0,
+     "filled_qty": 310.0,
+     "filled_value": 72834.0,
+     "avg_fill_px": 234.95,
+     "ratio_fill": 3.9158,
+     "req_qty": 310.0,
+     "avg_submit_px": 249.96,
+     "ratio_submit": 4.166
+    },
+    "WHEAT": {
+     "base_px": 25.0,
+     "filled_qty": 21924.0,
+     "filled_value": 913602.0,
+     "avg_fill_px": 41.67,
+     "ratio_fill": 1.6669,
+     "req_qty": 22923.0,
+     "avg_submit_px": 42.6,
+     "ratio_submit": 1.7041
+    },
+    "WOOL": {
+     "base_px": 200.0,
+     "filled_qty": 4623.0,
+     "filled_value": 560465.0,
+     "avg_fill_px": 121.23,
+     "ratio_fill": 0.6062,
+     "req_qty": 4775.0,
+     "avg_submit_px": 128.85,
+     "ratio_submit": 0.6443
+    }
+   },
+   "aggregate": {
+    "ratio_fill_all": 0.8169,
+    "ratio_submit_all": 0.8534,
+    "n_games": 32,
+    "shadow_mismatch_steps": 0
+   }
+  },
+  "knee_x20": {
+   "per_item": {
+    "CARROT": {
+     "base_px": 35.0,
+     "filled_qty": 4462.0,
+     "filled_value": 254602.0,
+     "avg_fill_px": 57.06,
+     "ratio_fill": 1.6303,
+     "req_qty": 4462.0,
+     "avg_submit_px": 59.02,
+     "ratio_submit": 1.6863
+    },
+    "EGG": {
+     "base_px": 50.0,
+     "filled_qty": 3206.0,
+     "filled_value": 168188.0,
+     "avg_fill_px": 52.46,
+     "ratio_fill": 1.0492,
+     "req_qty": 3231.0,
+     "avg_submit_px": 52.83,
+     "ratio_submit": 1.0565
+    },
+    "FERTILIZER": {
+     "base_px": 100.0,
+     "filled_qty": 10398.0,
+     "filled_value": 477555.0,
+     "avg_fill_px": 45.93,
+     "ratio_fill": 0.4593,
+     "req_qty": 10456.0,
+     "avg_submit_px": 46.86,
+     "ratio_submit": 0.4686
+    },
+    "MELON": {
+     "base_px": 250.0,
+     "filled_qty": 2304.0,
+     "filled_value": 470770.0,
+     "avg_fill_px": 204.33,
+     "ratio_fill": 0.8173,
+     "req_qty": 2352.0,
+     "avg_submit_px": 212.45,
+     "ratio_submit": 0.8498
+    },
+    "MILK": {
+     "base_px": 160.0,
+     "filled_qty": 5827.0,
+     "filled_value": 453312.0,
+     "avg_fill_px": 77.8,
+     "ratio_fill": 0.4862,
+     "req_qty": 5893.0,
+     "avg_submit_px": 82.65,
+     "ratio_submit": 0.5166
+    },
+    "STRAWBERRY": {
+     "base_px": 120.0,
+     "filled_qty": 7792.0,
+     "filled_value": 950641.0,
+     "avg_fill_px": 122.0,
+     "ratio_fill": 1.0167,
+     "req_qty": 8058.0,
+     "avg_submit_px": 128.43,
+     "ratio_submit": 1.0703
+    },
+    "TOMATO": {
+     "base_px": 60.0,
+     "filled_qty": 310.0,
+     "filled_value": 72834.0,
+     "avg_fill_px": 234.95,
+     "ratio_fill": 3.9158,
+     "req_qty": 310.0,
+     "avg_submit_px": 249.96,
+     "ratio_submit": 4.166
+    },
+    "WHEAT": {
+     "base_px": 25.0,
+     "filled_qty": 21924.0,
+     "filled_value": 913602.0,
+     "avg_fill_px": 41.67,
+     "ratio_fill": 1.6669,
+     "req_qty": 22923.0,
+     "avg_submit_px": 42.6,
+     "ratio_submit": 1.7041
+    },
+    "WOOL": {
+     "base_px": 200.0,
+     "filled_qty": 4623.0,
+     "filled_value": 560465.0,
+     "avg_fill_px": 121.23,
+     "ratio_fill": 0.6062,
+     "req_qty": 4775.0,
+     "avg_submit_px": 128.85,
+     "ratio_submit": 0.6443
+    }
+   },
+   "aggregate": {
+    "ratio_fill_all": 0.8169,
+    "ratio_submit_all": 0.8534,
+    "n_games": 32,
+    "shadow_mismatch_steps": 0
+   }
+  }
+ },
+ "stranding": {
+  "h1": {
+   "terminal_money_mean": 94045.9,
+   "terminal_money_median": 97405.0,
+   "stranding_mean": 0.0,
+   "stranding_median": 0.0,
+   "stranding_knee_items_mean": {
+    "FERTILIZER": 0.0,
+    "MILK": 0.0,
+    "WOOL": 0.0
+   },
+   "shed_end_knee_items_mean": {
+    "FERTILIZER": 0.0,
+    "MILK": 0.0,
+    "WOOL": 0.0
+   }
+  },
+  "knee_x10": {
+   "terminal_money_mean": 92080.3,
+   "terminal_money_median": 95418.0,
+   "stranding_mean": 0.0,
+   "stranding_median": 0.0,
+   "stranding_knee_items_mean": {
+    "FERTILIZER": 0.0,
+    "MILK": 0.0,
+    "WOOL": 0.0
+   },
+   "shed_end_knee_items_mean": {
+    "FERTILIZER": 0.0,
+    "MILK": 0.0,
+    "WOOL": 0.0
+   }
+  },
+  "knee_x20": {
+   "terminal_money_mean": 92080.6,
+   "terminal_money_median": 95419.0,
+   "stranding_mean": 0.0,
+   "stranding_median": 0.0,
+   "stranding_knee_items_mean": {
+    "FERTILIZER": 0.0,
+    "MILK": 0.0,
+    "WOOL": 0.0
+   },
+   "shed_end_knee_items_mean": {
+    "FERTILIZER": 0.0,
+    "MILK": 0.0,
+    "WOOL": 0.0
+   }
+  },
+  "paired_knee_x10_vs_h1": {
+   "n": 32,
+   "mean_delta": 0.0,
+   "median_delta": 0.0,
+   "max_delta": 0.0,
+   "n_up": 0,
+   "not_up": true,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672000,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672000,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672089,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672089,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672178,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672178,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672267,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672267,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672356,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672356,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672445,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672445,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672534,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672534,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672623,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672623,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    }
+   ]
+  },
+  "paired_knee_x20_vs_h1": {
+   "n": 32,
+   "mean_delta": 0.0,
+   "median_delta": 0.0,
+   "max_delta": 0.0,
+   "n_up": 0,
+   "not_up": true,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672000,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672000,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672089,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672089,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672178,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672178,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672267,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672267,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672356,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672356,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672445,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672445,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672534,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672534,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672623,
+     "seat": 0,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672623,
+     "seat": 1,
+     "stranding_control": 0.0,
+     "stranding_variant": 0.0,
+     "delta": 0.0
+    }
+   ]
+  }
+ },
+ "terminal_money": {
+  "h1": {
+   "mean": 94045.9,
+   "median": 97405.0
+  },
+  "knee_x10": {
+   "mean": 92080.3,
+   "median": 95418.0
+  },
+  "knee_x20": {
+   "mean": 92080.6,
+   "median": 95419.0
+  }
+ },
+ "criteria": {
+  "knee_x10": {
+   "checks": {
+    "净翻胜>0": false,
+    "flips_neg==0": false,
+    "终局滞留不升": true
+   },
+   "net_flip_wins": -22,
+   "flips_neg": 22,
+   "stranding_mean_delta": 0.0,
+   "positive_arm": false
+  },
+  "knee_x20": {
+   "checks": {
+    "净翻胜>0": false,
+    "flips_neg==0": false,
+    "终局滞留不升": true
+   },
+   "net_flip_wins": -22,
+   "flips_neg": 22,
+   "stranding_mean_delta": 0.0,
+   "positive_arm": false
+  }
+ },
+ "verdict": {
+  "criterion": "净翻胜>0 ∧ flips_neg==0 ∧ 终局滞留不升（配对 Δ 均值≤0；截留不能变死货）",
+  "positive_variants": [],
+  "per_variant": {
+   "knee_x10": {
+    "net_flip_wins": -22,
+    "flips_neg": 22,
+    "mean_delta": -2877.03,
+    "stranding_mean_delta": 0.0,
+    "positive_arm": false
+   },
+   "knee_x20": {
+    "net_flip_wins": -22,
+    "flips_neg": 22,
+    "mean_delta": -2876.66,
+    "stranding_mean_delta": 0.0,
+    "positive_arm": false
+   }
+  },
+  "knee_items_ratio_fill": {
+   "h1": {
+    "FERTILIZER": {
+     "ratio_fill": 0.4584,
+     "ratio_submit": 0.4717,
+     "filled_qty": 10632.0
+    },
+    "MILK": {
+     "ratio_fill": 0.4911,
+     "ratio_submit": 0.4885,
+     "filled_qty": 5858.0
+    },
+    "WOOL": {
+     "ratio_fill": 0.6035,
+     "ratio_submit": 0.6182,
+     "filled_qty": 4670.0
+    }
+   },
+   "knee_x10": {
+    "FERTILIZER": {
+     "ratio_fill": 0.4593,
+     "ratio_submit": 0.4686,
+     "filled_qty": 10398.0
+    },
+    "MILK": {
+     "ratio_fill": 0.4862,
+     "ratio_submit": 0.5166,
+     "filled_qty": 5827.0
+    },
+    "WOOL": {
+     "ratio_fill": 0.6062,
+     "ratio_submit": 0.6443,
+     "filled_qty": 4623.0
+    }
+   },
+   "knee_x20": {
+    "FERTILIZER": {
+     "ratio_fill": 0.4593,
+     "ratio_submit": 0.4686,
+     "filled_qty": 10398.0
+    },
+    "MILK": {
+     "ratio_fill": 0.4862,
+     "ratio_submit": 0.5166,
+     "filled_qty": 5827.0
+    },
+    "WOOL": {
+     "ratio_fill": 0.6062,
+     "ratio_submit": 0.6443,
+     "filled_qty": 4623.0
+    }
+   }
+  },
+  "verdict": "价格膝点量门正臂：无（两变体均未达判据）"
+ },
+ "budget": {
+  "cap_局次": 300,
+  "smoke_局次": 2,
+  "aborted_attempt_局次": 64,
+  "auth_局次": 60,
+  "gate_局次": 8,
+  "judgment_局次": 96,
+  "total_局次": 230,
+  "within_cap": true
+ },
+ "anomaly": [],
+ "_generated_at": "2026-09-29T14:08:41Z",
+ "elapsed_s": 349.1
+}
