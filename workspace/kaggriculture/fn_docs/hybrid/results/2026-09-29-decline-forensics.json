@@ -1,0 +1,1595 @@
+{
+ "meta": {
+  "analysis": "2026-09-29-decline-forensics (kaggriculture 对局法证：我方读数下滑根因)",
+  "question": "H1 峰 2074→2069.5(11:15Z)→2053.0(13:45Z)；H 2015→1988.1、A 1821.2→1778.5 亦跌；同门普跌——下滑=池面漂移/对手换血/被特定策略克制？",
+  "campaign": "kaggriculture",
+  "refs": {
+   "H1": 56650881,
+   "oc_c3": 56672720,
+   "H": 56647399,
+   "A": 56641599
+  },
+  "generated_utc": "2026-09-29T14:19:43Z"
+ },
+ "source": {
+  "cli": "/home/renyxin/.local/bin/kaggle",
+  "auth": "kaggle auth print-access-token 空（429/不可用），回落默认 kaggle.json 凭据（analysis30 同口径），全部命令正常返回",
+  "slug_extraction": "slug=kaggriculture 程序化自 fn_docs/hybrid/results/2026-09-23-round30-read.json source.commands 正则 competitions (?:submissions|episodes|replay) (\\S+)（pull_meta.py 口径，无手拼）；kaggle competitions list -s 交叉验证命中",
+  "commands": [
+   "kaggle competitions submissions kaggriculture --format json",
+   "kaggle competitions episodes <ref> --format json  # 4 refs + r30-r33 历史清单复用 campaign 既有 episodes-*.json",
+   "kaggle competitions leaderboard kaggriculture -d -p /tmp/forensics/  # kaggriculture-publicleaderboard-2026-09-29T13:45:37.csv 全量 10159 队",
+   "kaggle competitions replay <episode_id> -p /tmp/forensics/replays  # 378 局逐局拉取，抽取后即删（replay 31MB/局不入库）",
+   "python3 /tmp/forensics/extract.py -> games_features.jsonl；python3 /tmp/forensics/analyze.py -> analysis_out.json"
+  ],
+  "抓取日期": "2026-09-29",
+  "episodes_pulled": {
+   "H1": 117,
+   "H": 123,
+   "oc_c3": 48,
+   "A": "40(sampled/84)",
+   "weekago_r30-33": 50,
+   "total": 378
+  },
+  "weekago_window": "2026-09-23T11:29 → 2026-09-24T22:26 (r30/r31/r32/r33 局, episodes-r3X-*.json 语料)",
+  "baselines": [
+   "fn_docs/hybrid/references/2026-09-29-kaggle-channel-scan.md (09-29T11:15 榜面快照+同门下沉)",
+   "fn_docs/hybrid/analyses/29-2026-09-28-family-benchmark.md (09-28T08:39Z 同门基线)",
+   "fn_docs/hybrid/analyses/readout_sop.md (mooman 换血判定法口径)",
+   "orderbook_strongest_lab/evidence/launch_ledger.json + fn_docs/governance/JOURNAL.md (读数时点)"
+  ]
+ },
+ "trajectories": {
+  "readings_note": "publicScore 读数时点采自 JOURNAL.md/分析39 最强台账/channel-scan 11:15Z 快照/13:45:37Z 实抓榜 CSV+submissions",
+  "readings": {
+   "H1": [
+    {
+     "t": "2026-09-29 (analysis36 时点)",
+     "score": 1973.0,
+     "note": "1973+ 爬分中（09-28T19:48 发射后收敛）",
+     "src": "fn_docs/governance/JOURNAL.md:406"
+    },
+    {
+     "t": "2026-09-29 (analysis38 时点)",
+     "score": 2034.0,
+     "note": "2034↑",
+     "src": "fn_docs/governance/JOURNAL.md:408"
+    },
+    {
+     "t": "2026-09-29 (analysis39 时点 ~10:50Z)",
+     "score": 2074.0,
+     "note": "峰 2074.0↑",
+     "src": "fn_docs/governance/JOURNAL.md:409"
+    },
+    {
+     "t": "2026-09-29T11:15Z",
+     "score": 2069.5,
+     "note": "−4.5 榜面 813 名",
+     "src": "fn_docs/hybrid/references/2026-09-29-kaggle-channel-scan.md:72"
+    },
+    {
+     "t": "2026-09-29T13:45:37Z",
+     "score": 2053.0,
+     "note": "榜 828 名（实抓）",
+     "src": "leaderboard CSV + submissions"
+    },
+    {
+     "t": "2026-09-29T14:19:55Z",
+     "score": 2051.3,
+     "note": "收尾读数（−1.7 续跌）",
+     "src": "submissions 二拉"
+    }
+   ],
+   "H": [
+    {
+     "t": "2026-09-28T17:00Z (H 发射时)",
+     "score": 1821.2,
+     "note": "JOURNAL401 误记 A 1821.2 为计分对 floor；H 当时未收敛",
+     "src": "fn_docs/governance/JOURNAL.md:401"
+    },
+    {
+     "t": "2026-09-28T22:20Z",
+     "score": 1973.9,
+     "note": "↑ 收敛中（H1 台账 pair_semantics）",
+     "src": "orderbook_strongest_lab/evidence/launch_ledger.json"
+    },
+    {
+     "t": "2026-09-29 (analysis36)",
+     "score": 2004.2,
+     "note": "",
+     "src": "fn_docs/governance/JOURNAL.md:406"
+    },
+    {
+     "t": "2026-09-29 (analysis38)",
+     "score": 2015.0,
+     "note": "峰 2015↑",
+     "src": "fn_docs/governance/JOURNAL.md:408"
+    },
+    {
+     "t": "2026-09-29T13:45:37Z",
+     "score": 1988.1,
+     "note": "已换下（10:55Z 后无新局）",
+     "src": "submissions"
+    }
+   ],
+   "A": [
+    {
+     "t": "2026-09-28T17:00Z",
+     "score": 1821.2,
+     "note": "峰 1821.2",
+     "src": "fn_docs/governance/JOURNAL.md:401"
+    },
+    {
+     "t": "2026-09-28T22:20Z",
+     "score": 1778.5,
+     "note": "收敛回落",
+     "src": "orderbook_strongest_lab/evidence/launch_ledger.json"
+    },
+    {
+     "t": "2026-09-29T13:45:37Z",
+     "score": 1778.5,
+     "note": "19:37Z 后无新局=冻结值",
+     "src": "submissions"
+    }
+   ],
+   "oc_c3": [
+    {
+     "t": "2026-09-29T10:51:56Z",
+     "score": null,
+     "note": "发射（换下 H）",
+     "src": "submissions"
+    },
+    {
+     "t": "2026-09-29T11:15Z",
+     "score": 976.7,
+     "note": "收敛爬分中（勿读劣化）",
+     "src": "channel-scan:72"
+    },
+    {
+     "t": "2026-09-29T13:45:37Z",
+     "score": 1966.4,
+     "note": "48 局后",
+     "src": "submissions"
+    },
+    {
+     "t": "2026-09-29T14:19:55Z",
+     "score": 1946.8,
+     "note": "收敛噪声内",
+     "src": "submissions 二拉"
+    }
+   ]
+  },
+  "games_per_hour_public": {
+   "H1": {
+    "window": "09-28T19:53 → 09-29T13:27",
+    "n_public": 120,
+    "by_hour": {
+     "2026-09-28T19": 1,
+     "2026-09-28T20": 18,
+     "2026-09-28T21": 21,
+     "2026-09-28T22": 17,
+     "2026-09-28T23": 20,
+     "2026-09-29T00": 6,
+     "2026-09-29T01": 3,
+     "2026-09-29T02": 4,
+     "2026-09-29T03": 3,
+     "2026-09-29T04": 2,
+     "2026-09-29T05": 3,
+     "2026-09-29T06": 2,
+     "2026-09-29T08": 2,
+     "2026-09-29T09": 3,
+     "2026-09-29T10": 5,
+     "2026-09-29T11": 3,
+     "2026-09-29T12": 5,
+     "2026-09-29T13": 2
+    }
+   },
+   "H": {
+    "window": "09-28T17:02 → 09-29T10:55",
+    "n_public": 124,
+    "note": "10:55 后无新局=被 oc_c3 换下",
+    "by_hour": {
+     "2026-09-28T17": 15,
+     "2026-09-28T18": 21,
+     "2026-09-28T19": 20,
+     "2026-09-28T20": 19,
+     "2026-09-28T21": 9,
+     "2026-09-28T22": 6,
+     "2026-09-28T23": 7,
+     "2026-09-29T00": 4,
+     "2026-09-29T01": 3,
+     "2026-09-29T02": 5,
+     "2026-09-29T03": 3,
+     "2026-09-29T04": 3,
+     "2026-09-29T05": 1,
+     "2026-09-29T06": 3,
+     "2026-09-29T07": 1,
+     "2026-09-29T08": 2,
+     "2026-09-29T09": 1,
+     "2026-09-29T10": 1
+    }
+   },
+   "oc_c3": {
+    "window": "09-29T10:59 → 13:43",
+    "n_public": 48,
+    "by_hour": {
+     "2026-09-29T10": 1,
+     "2026-09-29T11": 17,
+     "2026-09-29T12": 16,
+     "2026-09-29T13": 14
+    }
+   },
+   "A": {
+    "window": "09-28T13:14 → 19:37",
+    "n_public": 84,
+    "note": "19:37 后无新局=换下",
+    "by_hour": {
+     "2026-09-28T13": 12,
+     "2026-09-28T14": 16,
+     "2026-09-28T15": 17,
+     "2026-09-28T16": 17,
+     "2026-09-28T17": 13,
+     "2026-09-28T18": 3,
+     "2026-09-28T19": 6
+    }
+   }
+  },
+  "slope": {
+   "H1": "峰 2074.0(~10:50Z)→2069.5(11:15Z)→2053.0(13:45Z)：下滑 −21.0/3h，斜率加速（−4.5/25min → −16.5/2.5h）；11:15Z 后新增 ~13 局；14:19:55Z 收尾读数 2051.3（−1.7 续跌）",
+   "H": "峰 2015(analysis38)→1988.1(13:45Z)：−26.9；末局 10:55Z 后冻结",
+   "A": "峰 1821.2(09-28 17:00Z)→1778.5 收敛冻结",
+   "oc_c3": "976.7(11:15Z)→1966.4(13:45Z) 爬分中（新件收敛噪声，742856 在册模式）"
+  },
+  "closing_read": "2026-09-29T14:19:55Z：H1 2051.3（续跌）、oc_c3 1946.8（收敛中）、H 1988.1/A 1778.5（冻结）"
+ },
+ "trajectory_rewards": {
+  "note": "逐局 h2h 质量代理（replay rewards 实测 my/opp）；平台 publicScore 为 rating 型估计器（新件 40-70 局收敛，742856 在册），非 reward 比值简单均值——比值仅作对局质量指标",
+  "H1": {
+   "n": 117,
+   "win_rate": 0.607,
+   "windows": {
+    "W0_0928": {
+     "n": 77,
+     "my_mean": 98181.8,
+     "opp_mean": 95112.3,
+     "my_over_opp": 1.0323,
+     "win_rate": 0.701,
+     "margin_mean": 3069.5,
+     "opp_rank_median": 1075,
+     "opp_rank_mean": 1529.1,
+     "family_share": 0.026,
+     "mirror_self_share": 0.0
+    },
+    "W1_0929_00-08": {
+     "n": 20,
+     "my_mean": 93018.4,
+     "opp_mean": 94270.4,
+     "my_over_opp": 0.9867,
+     "win_rate": 0.55,
+     "margin_mean": -1252.0,
+     "opp_rank_median": 759,
+     "opp_rank_mean": 771,
+     "family_share": 0.0,
+     "mirror_self_share": 0.0
+    },
+    "W2_0929_08-11": {
+     "n": 10,
+     "my_mean": 107033.6,
+     "opp_mean": 110260.3,
+     "my_over_opp": 0.9707,
+     "win_rate": 0.3,
+     "margin_mean": -3226.7,
+     "opp_rank_median": 618,
+     "opp_rank_mean": 589.8,
+     "family_share": 0.0,
+     "mirror_self_share": 0.0
+    },
+    "W3_0929_11plus": {
+     "n": 10,
+     "my_mean": 89695.3,
+     "opp_mean": 90497.8,
+     "my_over_opp": 0.9911,
+     "win_rate": 0.3,
+     "margin_mean": -802.5,
+     "opp_rank_median": 721,
+     "opp_rank_mean": 663,
+     "family_share": 0.0,
+     "mirror_self_share": 0.0
+    }
+   },
+   "cum_ratio_x2000_ckpt": {
+    "n20@09-28T21:00": 2254.2,
+    "n40@09-28T21:58": 2121.6,
+    "n60@09-28T23:06": 2081.6,
+    "n77@09-28T23:58": 2064.5,
+    "n97@09-29T06:51": 2045.9,
+    "n107@09-29T10:55": 2034.7,
+    "n117@09-29T13:27": 2030.5
+   },
+   "winrate_by_band": {
+    "weekago": {
+     "top550": {
+      "n": 3,
+      "win_rate": 0.667,
+      "margin_mean": 3165.7
+     },
+     "mid": {
+      "n": 19,
+      "win_rate": 0.579,
+      "margin_mean": 1890.1
+     },
+     "low": {
+      "n": 28,
+      "win_rate": 0.643,
+      "margin_mean": 5988.7
+     }
+    },
+    "early_W0W1": {
+     "top550": {
+      "n": 11,
+      "win_rate": 0.545,
+      "margin_mean": 137.8
+     },
+     "mid": {
+      "n": 59,
+      "win_rate": 0.644,
+      "margin_mean": 99.3
+     },
+     "low": {
+      "n": 27,
+      "win_rate": 0.778,
+      "margin_mean": 7553.2
+     }
+    },
+    "recent_W2W3": {
+     "top550": {
+      "n": 8,
+      "win_rate": 0.125,
+      "margin_mean": -4910.2
+     },
+     "mid": {
+      "n": 11,
+      "win_rate": 0.364,
+      "margin_mean": -190.4
+     },
+     "low": {
+      "n": 1,
+      "win_rate": 1.0,
+      "margin_mean": 1084.0
+     }
+    }
+   }
+  },
+  "H": {
+   "n": 123,
+   "win_rate": 0.545,
+   "windows": {
+    "W0_0928": {
+     "n": 97,
+     "my_mean": 99909.6,
+     "opp_mean": 97690.1,
+     "my_over_opp": 1.0227,
+     "win_rate": 0.598,
+     "margin_mean": 2219.5,
+     "opp_rank_median": 1364,
+     "opp_rank_mean": 1593.1,
+     "family_share": 0.01,
+     "mirror_self_share": 0.0
+    },
+    "W1_0929_00-08": {
+     "n": 22,
+     "my_mean": 95530.9,
+     "opp_mean": 95587.9,
+     "my_over_opp": 0.9994,
+     "win_rate": 0.409,
+     "margin_mean": -57.0,
+     "opp_rank_median": 904,
+     "opp_rank_mean": 1003.4,
+     "family_share": 0.045,
+     "mirror_self_share": 0.0
+    },
+    "W2_0929_08-11": {
+     "n": 4,
+     "my_mean": 100006.2,
+     "opp_mean": 100033.8,
+     "my_over_opp": 0.9997,
+     "win_rate": 0.0,
+     "margin_mean": -27.5,
+     "opp_rank_median": 717,
+     "opp_rank_mean": 756.5,
+     "family_share": 0.0,
+     "mirror_self_share": 0.0
+    }
+   },
+   "winrate_by_band": {
+    "early": {
+     "top550": {
+      "n": 13,
+      "win_rate": 0.231,
+      "margin_mean": -5701.0
+     },
+     "mid": {
+      "n": 67,
+      "win_rate": 0.493,
+      "margin_mean": -287.1
+     },
+     "low": {
+      "n": 39,
+      "win_rate": 0.795,
+      "margin_mean": 7881.6
+     }
+    },
+    "recent": {
+     "mid": {
+      "n": 4,
+      "win_rate": 0.0,
+      "margin_mean": -27.5
+     }
+    }
+   }
+  },
+  "oc_c3": {
+   "n": 48,
+   "win_rate": 0.583,
+   "note": "趋势用：同换血池内 margin_mean +3785、对 WFR 型 13/23 胜（C3 羊毛防御有正贡献）；但其配对带偏软（top550 仅 4/48）不可与 H1 直比",
+   "windows": {
+    "W2_0929_08-11": {
+     "n": 1,
+     "my_mean": 79197.0,
+     "opp_mean": 24432.0,
+     "my_over_opp": 3.2415,
+     "win_rate": 1.0,
+     "margin_mean": 54765.0,
+     "opp_rank_median": 5364,
+     "opp_rank_mean": 5364,
+     "family_share": 0.0,
+     "mirror_self_share": 0.0
+    },
+    "W3_0929_11plus": {
+     "n": 47,
+     "my_mean": 95819.4,
+     "opp_mean": 93119.4,
+     "my_over_opp": 1.029,
+     "win_rate": 0.574,
+     "margin_mean": 2700.0,
+     "opp_rank_median": 980,
+     "opp_rank_mean": 1473.7,
+     "family_share": 0.021,
+     "mirror_self_share": 0.0
+    }
+   }
+  },
+  "A": {
+   "n_sampled": 40,
+   "win_rate": 0.5,
+   "note": "09-28T19:37 后无新局=换下冻结 1778.5；峰值 1821.2 为收敛期读数"
+  }
+ },
+ "losses": {
+  "note": "margin=rewards[我方]−rewards[对手]（replay 实测终局钱）；profile 规则：WFR=羊毛收入占比≥4%且≥12 单位大额倒毛≥2 次（counter_wool_front_runner 倒毛口径）；MarketShock=≥150 大单≥2 且末段收入占比≥35%（或均单≥120 且末段≥50%）；镜像同质=细单高频（卖单≥250、均单≤8、hire≥150，harvest-ledger 玩法）",
+  "opponents": {
+   "H1_losses_top": [
+    {
+     "t": "2026-09-29T02:50",
+     "ep": 115032104,
+     "opp": "colum2131",
+     "rank": 288,
+     "band": "top550",
+     "margin": -28501.0,
+     "my_reward": 125941.0,
+     "opp_reward": 154442.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 335,
+     "sell_avg_qty": 6.0,
+     "wool_big_orders": 2,
+     "wool_rev_share": 0.023,
+     "herd_end": {
+      "GOOSE": 5,
+      "COW": 6,
+      "SHEEP": 6
+     },
+     "opp_money": 154442.0
+    },
+    {
+     "t": "2026-09-29T09:35",
+     "ep": 115168613,
+     "opp": "Yizhou",
+     "rank": 10,
+     "band": "top550",
+     "margin": -27039.0,
+     "my_reward": 100583.0,
+     "opp_reward": 127622.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 390,
+     "sell_avg_qty": 4.2,
+     "wool_big_orders": 0,
+     "wool_rev_share": 0.215,
+     "herd_end": {
+      "COW": 8,
+      "SHEEP": 1,
+      "GOOSE": 1
+     },
+     "opp_money": 127622.0
+    },
+    {
+     "t": "2026-09-29T12:23",
+     "ep": 115228270,
+     "opp": "인공저능연구소( Artificial Idiocy Lab )",
+     "rank": 390,
+     "band": "top550",
+     "margin": -6671.0,
+     "my_reward": 77068.0,
+     "opp_reward": 83739.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 408,
+     "sell_avg_qty": 7.5,
+     "wool_big_orders": 3,
+     "wool_rev_share": 0.201,
+     "herd_end": {
+      "COW": 7,
+      "GOOSE": 5
+     },
+     "opp_money": 83739.0
+    },
+    {
+     "t": "2026-09-29T03:18",
+     "ep": 115044426,
+     "opp": "flaty",
+     "rank": 629,
+     "band": "mid",
+     "margin": -3577.0,
+     "my_reward": 112636.0,
+     "opp_reward": 116213.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 289,
+     "sell_avg_qty": 6.4,
+     "wool_big_orders": 17,
+     "wool_rev_share": 0.469,
+     "herd_end": {
+      "SHEEP": 17,
+      "COW": 6
+     },
+     "opp_money": 116213.0
+    },
+    {
+     "t": "2026-09-28T20:40",
+     "ep": 114871955,
+     "opp": "ZekeAlx",
+     "rank": 2377,
+     "band": "low",
+     "margin": -3287.0,
+     "my_reward": 83321.0,
+     "opp_reward": 86608.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 296,
+     "sell_avg_qty": 6.2,
+     "wool_big_orders": 17,
+     "wool_rev_share": 0.483,
+     "herd_end": {
+      "SHEEP": 17,
+      "COW": 6
+     },
+     "opp_money": 86608.0
+    },
+    {
+     "t": "2026-09-28T23:22",
+     "ep": 114934736,
+     "opp": "To be happy",
+     "rank": 1719,
+     "band": "low",
+     "margin": -2849.0,
+     "my_reward": 126121.0,
+     "opp_reward": 128970.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 298,
+     "sell_avg_qty": 6.1,
+     "wool_big_orders": 16,
+     "wool_rev_share": 0.451,
+     "herd_end": {
+      "SHEEP": 17,
+      "COW": 6
+     },
+     "opp_money": 128970.0
+    },
+    {
+     "t": "2026-09-28T22:22",
+     "ep": 114911313,
+     "opp": "sissoko cheick",
+     "rank": 2267,
+     "band": "low",
+     "margin": -2714.0,
+     "my_reward": 92978.0,
+     "opp_reward": 95692.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 282,
+     "sell_avg_qty": 6.1,
+     "wool_big_orders": 0,
+     "wool_rev_share": 0.037,
+     "herd_end": {
+      "GOOSE": 7,
+      "COW": 6,
+      "SHEEP": 4
+     },
+     "opp_money": 95692.0
+    },
+    {
+     "t": "2026-09-28T22:05",
+     "ep": 114904212,
+     "opp": "おかゆん",
+     "rank": 1261,
+     "band": "mid",
+     "margin": -2473.0,
+     "my_reward": 79443.0,
+     "opp_reward": 81916.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 289,
+     "sell_avg_qty": 6.4,
+     "wool_big_orders": 15,
+     "wool_rev_share": 0.529,
+     "herd_end": {
+      "SHEEP": 11,
+      "COW": 6
+     },
+     "opp_money": 81916.0
+    },
+    {
+     "t": "2026-09-28T21:08",
+     "ep": 114882545,
+     "opp": "Mohmed Hafez",
+     "rank": 289,
+     "band": "top550",
+     "margin": -2287.0,
+     "my_reward": 110447.0,
+     "opp_reward": 112734.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 356,
+     "sell_avg_qty": 5.2,
+     "wool_big_orders": 1,
+     "wool_rev_share": 0.048,
+     "herd_end": {
+      "GOOSE": 3,
+      "COW": 8,
+      "SHEEP": 6
+     },
+     "opp_money": 112734.0
+    },
+    {
+     "t": "2026-09-29T10:11",
+     "ep": 115181842,
+     "opp": "Claudex - An",
+     "rank": 438,
+     "band": "top550",
+     "margin": -2137.0,
+     "my_reward": 114029.0,
+     "opp_reward": 116166.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 272,
+     "sell_avg_qty": 6.2,
+     "wool_big_orders": 0,
+     "wool_rev_share": 0.085,
+     "herd_end": {
+      "GOOSE": 7,
+      "COW": 6,
+      "SHEEP": 4
+     },
+     "opp_money": 116166.0
+    },
+    {
+     "t": "2026-09-29T10:55",
+     "ep": 115197098,
+     "opp": "Paing",
+     "rank": 368,
+     "band": "top550",
+     "margin": -1684.0,
+     "my_reward": 102414.0,
+     "opp_reward": 104098.0,
+     "profile": [
+      "WFR羊毛前跑攻击型"
+     ],
+     "sell_orders": 346,
+     "sell_avg_qty": 19.0,
+     "wool_big_orders": 8,
+     "wool_rev_share": 0.082,
+     "herd_end": {
+      "SHEEP": 11,
+      "COW": 6
+     },
+     "opp_money": 104098.0
+    },
+    {
+     "t": "2026-09-29T06:51",
+     "ep": 115132170,
+     "opp": "Aashka",
+     "rank": 388,
+     "band": "top550",
+     "margin": -1633.0,
+     "my_reward": 106077.0,
+     "opp_reward": 107710.0,
+     "profile": [
+      "常规/未分类"
+     ],
+     "sell_orders": 425,
+     "sell_avg_qty": 23.7,
+     "wool_big_orders": 1,
+     "wool_rev_share": 0.009,
+     "herd_end": {
+      "GOOSE": 5,
+      "COW": 6,
+      "SHEEP": 6
+     },
+     "opp_money": 107710.0
+    },
+    {
+     "t": "2026-09-28T21:28",
+     "ep": 114890823,
+     "opp": "lime0001",
+     "rank": 852,
+     "band": "mid",
+     "margin": -1327.0,
+     "my_reward": 81138.0,
+     "opp_reward": 82465.0,
+     "profile": [
+      "WFR羊毛前跑攻击型"
+     ],
+     "sell_orders": 239,
+     "sell_avg_qty": 15.4,
+     "wool_big_orders": 9,
+     "wool_rev_share": 0.338,
+     "herd_end": {
+      "SHEEP": 11,
+      "COW": 6
+     },
+     "opp_money": 82465.0
+    },
+    {
+     "t": "2026-09-29T11:59",
+     "ep": 115220076,
+     "opp": "Gronk",
+     "rank": 822,
+     "band": "mid",
+     "margin": -1245.0,
+     "my_reward": 68392.0,
+     "opp_reward": 69637.0,
+     "profile": [
+      "WFR羊毛前跑攻击型"
+     ],
+     "sell_orders": 314,
+     "sell_avg_qty": 8.7,
+     "wool_big_orders": 2,
+     "wool_rev_share": 0.141,
+     "herd_end": {
+      "GOOSE": 3,
+      "COW": 8,
+      "SHEEP": 6
+     },
+     "opp_money": 69637.0
+    },
+    {
+     "t": "2026-09-29T10:43",
+     "ep": 115192865,
+     "opp": "Le Viet",
+     "rank": 307,
+     "band": "top550",
+     "margin": -1018.0,
+     "my_reward": 112176.0,
+     "opp_reward": 113194.0,
+     "profile": [
+      "WFR羊毛前跑攻击型"
+     ],
+     "sell_orders": 299,
+     "sell_avg_qty": 12.3,
+     "wool_big_orders": 12,
+     "wool_rev_share": 0.222,
+     "herd_end": {
+      "SHEEP": 11,
+      "COW": 6
+     },
+     "opp_money": 113194.0
+    },
+    {
+     "t": "2026-09-29T08:39",
+     "ep": 115150066,
+     "opp": "nickyl",
+     "rank": 474,
+     "band": "top550",
+     "margin": -870.0,
+     "my_reward": 133729.0,
+     "opp_reward": 134599.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 293,
+     "sell_avg_qty": 5.9,
+     "wool_big_orders": 1,
+     "wool_rev_share": 0.031,
+     "herd_end": {
+      "COW": 12,
+      "SHEEP": 5
+     },
+     "opp_money": 134599.0
+    },
+    {
+     "t": "2026-09-29T11:39",
+     "ep": 115212897,
+     "opp": "Taeyang",
+     "rank": 746,
+     "band": "mid",
+     "margin": -701.0,
+     "my_reward": 91075.0,
+     "opp_reward": 91776.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 331,
+     "sell_avg_qty": 5.9,
+     "wool_big_orders": 0,
+     "wool_rev_share": 0.038,
+     "herd_end": {
+      "GOOSE": 3,
+      "COW": 8,
+      "SHEEP": 6
+     },
+     "opp_money": 91776.0
+    },
+    {
+     "t": "2026-09-29T08:51",
+     "ep": 115154573,
+     "opp": "trantrikien239",
+     "rank": 618,
+     "band": "mid",
+     "margin": -622.0,
+     "my_reward": 97921.0,
+     "opp_reward": 98543.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 344,
+     "sell_avg_qty": 4.9,
+     "wool_big_orders": 1,
+     "wool_rev_share": 0.041,
+     "herd_end": {
+      "GOOSE": 3,
+      "COW": 8,
+      "SHEEP": 6
+     },
+     "opp_money": 98543.0
+    },
+    {
+     "t": "2026-09-28T21:40",
+     "ep": 114894857,
+     "opp": "nofreewill42",
+     "rank": 1090,
+     "band": "mid",
+     "margin": -526.0,
+     "my_reward": 114064.0,
+     "opp_reward": 114590.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 322,
+     "sell_avg_qty": 5.5,
+     "wool_big_orders": 1,
+     "wool_rev_share": 0.032,
+     "herd_end": {
+      "GOOSE": 3,
+      "COW": 9,
+      "SHEEP": 5
+     },
+     "opp_money": 114590.0
+    },
+    {
+     "t": "2026-09-29T00:30",
+     "ep": 114966887,
+     "opp": "Antonoof",
+     "rank": 805,
+     "band": "mid",
+     "margin": -469.0,
+     "my_reward": 70358.0,
+     "opp_reward": 70827.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 257,
+     "sell_avg_qty": 6.6,
+     "wool_big_orders": 7,
+     "wool_rev_share": 0.343,
+     "herd_end": {
+      "SHEEP": 11,
+      "COW": 6
+     },
+     "opp_money": 70827.0
+    }
+   ],
+   "H1_worst": [
+    {
+     "t": "2026-09-29T02:50",
+     "ep": 115032104,
+     "opp": "colum2131",
+     "rank": 288,
+     "band": "top550",
+     "margin": -28501.0,
+     "my_reward": 125941.0,
+     "opp_reward": 154442.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 335,
+     "sell_avg_qty": 6.0,
+     "wool_big_orders": 2,
+     "wool_rev_share": 0.023,
+     "herd_end": {
+      "GOOSE": 5,
+      "COW": 6,
+      "SHEEP": 6
+     },
+     "opp_money": 154442.0
+    },
+    {
+     "t": "2026-09-29T09:35",
+     "ep": 115168613,
+     "opp": "Yizhou",
+     "rank": 10,
+     "band": "top550",
+     "margin": -27039.0,
+     "my_reward": 100583.0,
+     "opp_reward": 127622.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 390,
+     "sell_avg_qty": 4.2,
+     "wool_big_orders": 0,
+     "wool_rev_share": 0.215,
+     "herd_end": {
+      "COW": 8,
+      "SHEEP": 1,
+      "GOOSE": 1
+     },
+     "opp_money": 127622.0
+    },
+    {
+     "t": "2026-09-29T12:23",
+     "ep": 115228270,
+     "opp": "인공저능연구소( Artificial Idiocy Lab )",
+     "rank": 390,
+     "band": "top550",
+     "margin": -6671.0,
+     "my_reward": 77068.0,
+     "opp_reward": 83739.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 408,
+     "sell_avg_qty": 7.5,
+     "wool_big_orders": 3,
+     "wool_rev_share": 0.201,
+     "herd_end": {
+      "COW": 7,
+      "GOOSE": 5
+     },
+     "opp_money": 83739.0
+    },
+    {
+     "t": "2026-09-29T03:18",
+     "ep": 115044426,
+     "opp": "flaty",
+     "rank": 629,
+     "band": "mid",
+     "margin": -3577.0,
+     "my_reward": 112636.0,
+     "opp_reward": 116213.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 289,
+     "sell_avg_qty": 6.4,
+     "wool_big_orders": 17,
+     "wool_rev_share": 0.469,
+     "herd_end": {
+      "SHEEP": 17,
+      "COW": 6
+     },
+     "opp_money": 116213.0
+    },
+    {
+     "t": "2026-09-28T20:40",
+     "ep": 114871955,
+     "opp": "ZekeAlx",
+     "rank": 2377,
+     "band": "low",
+     "margin": -3287.0,
+     "my_reward": 83321.0,
+     "opp_reward": 86608.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 296,
+     "sell_avg_qty": 6.2,
+     "wool_big_orders": 17,
+     "wool_rev_share": 0.483,
+     "herd_end": {
+      "SHEEP": 17,
+      "COW": 6
+     },
+     "opp_money": 86608.0
+    },
+    {
+     "t": "2026-09-28T23:22",
+     "ep": 114934736,
+     "opp": "To be happy",
+     "rank": 1719,
+     "band": "low",
+     "margin": -2849.0,
+     "my_reward": 126121.0,
+     "opp_reward": 128970.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 298,
+     "sell_avg_qty": 6.1,
+     "wool_big_orders": 16,
+     "wool_rev_share": 0.451,
+     "herd_end": {
+      "SHEEP": 17,
+      "COW": 6
+     },
+     "opp_money": 128970.0
+    },
+    {
+     "t": "2026-09-28T22:22",
+     "ep": 114911313,
+     "opp": "sissoko cheick",
+     "rank": 2267,
+     "band": "low",
+     "margin": -2714.0,
+     "my_reward": 92978.0,
+     "opp_reward": 95692.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 282,
+     "sell_avg_qty": 6.1,
+     "wool_big_orders": 0,
+     "wool_rev_share": 0.037,
+     "herd_end": {
+      "GOOSE": 7,
+      "COW": 6,
+      "SHEEP": 4
+     },
+     "opp_money": 95692.0
+    },
+    {
+     "t": "2026-09-28T22:05",
+     "ep": 114904212,
+     "opp": "おかゆん",
+     "rank": 1261,
+     "band": "mid",
+     "margin": -2473.0,
+     "my_reward": 79443.0,
+     "opp_reward": 81916.0,
+     "profile": [
+      "WFR羊毛前跑攻击型",
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 289,
+     "sell_avg_qty": 6.4,
+     "wool_big_orders": 15,
+     "wool_rev_share": 0.529,
+     "herd_end": {
+      "SHEEP": 11,
+      "COW": 6
+     },
+     "opp_money": 81916.0
+    }
+   ],
+   "H_losses_recent": [
+    {
+     "t": "2026-09-28T18:33",
+     "ep": 114825733,
+     "opp": "没落者",
+     "rank": 781,
+     "band": "mid",
+     "margin": -23542.0,
+     "my_reward": 63703.0,
+     "opp_reward": 87245.0,
+     "profile": [
+      "MarketShock大单晚清算型"
+     ],
+     "sell_orders": 458,
+     "sell_avg_qty": 25.1,
+     "wool_big_orders": 1,
+     "wool_rev_share": 0.208,
+     "herd_end": {
+      "COW": 3,
+      "GOOSE": 3
+     },
+     "opp_money": 87245.0
+    },
+    {
+     "t": "2026-09-28T18:09",
+     "ep": 114816890,
+     "opp": "Hello San Francisco",
+     "rank": 178,
+     "band": "top550",
+     "margin": -20508.0,
+     "my_reward": 101850.0,
+     "opp_reward": 122358.0,
+     "profile": [
+      "常规/未分类"
+     ],
+     "sell_orders": 417,
+     "sell_avg_qty": 11.0,
+     "wool_big_orders": 0,
+     "wool_rev_share": 0.022,
+     "herd_end": {
+      "COW": 15,
+      "GOOSE": 3,
+      "SHEEP": 1
+     },
+     "opp_money": 122358.0
+    },
+    {
+     "t": "2026-09-28T19:29",
+     "ep": 114846478,
+     "opp": "saitamad",
+     "rank": 466,
+     "band": "top550",
+     "margin": -19930.0,
+     "my_reward": 66194.0,
+     "opp_reward": 86124.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 438,
+     "sell_avg_qty": 4.5,
+     "wool_big_orders": 0,
+     "wool_rev_share": 0.051,
+     "herd_end": {
+      "COW": 5,
+      "GOOSE": 10
+     },
+     "opp_money": 86124.0
+    },
+    {
+     "t": "2026-09-28T20:32",
+     "ep": 114868940,
+     "opp": "WarRusher",
+     "rank": 78,
+     "band": "top550",
+     "margin": -19565.0,
+     "my_reward": 109223.0,
+     "opp_reward": 128788.0,
+     "profile": [
+      "镜像同质(harvest-ledger细单高频型)"
+     ],
+     "sell_orders": 308,
+     "sell_avg_qty": 5.3,
+     "wool_big_orders": 0,
+     "wool_rev_share": 0.049,
+     "herd_end": {
+      "COW": 3,
+      "GOOSE": 6
+     },
+     "opp_money": 128788.0
+    },
+    {
+     "t": "2026-09-28T19:09",
+     "ep": 114838966,
+     "opp": "Blu3s",
+     "rank": 439,
+     "band": "top550",
+     "margin": -12070.0,
+     "my_reward": 64788.0,
+     "opp_reward": 76858.0,
+     "profile": [
+      "WFR羊毛前跑攻击型"
+     ],
+     "sell_orders": 241,
+     "sell_avg_qty": 6.7,
+     "wool_big_orders": 3,
+     "wool_rev_share": 0.317,
+     "herd_end": {
+      "SHEEP": 3,
+      "COW": 8,
+      "GOOSE": 1
+     },
+     "opp_money": 76858.0
+    },
+    {
+     "t": "2026-09-29T06:55",
+     "ep": 115133132,
+     "opp": "fog flower",
+     "rank": 450,
+     "band": "top550",
+     "margin": -4107.0,
+     "my_reward": 101492.0,
+     "opp_reward": 105599.0,
+     "profile": [
+      "常规/未分类"
+     ],
+     "sell_orders": 236,
+     "sell_avg_qty": 7.3,
+     "wool_big_orders": 1,
+     "wool_rev_share": 0.039,
+     "herd_end": {
+      "GOOSE": 3,
+      "COW": 8,
+      "SHEEP": 3
+     },
+     "opp_money": 105599.0
+    },
+    {
+     "t": "2026-09-28T18:41",
+     "ep": 114829038,
+     "opp": "iwance",
+     "rank": 1493,
+     "band": "mid",
+     "margin": -4007.0,
+     "my_reward": 117983.0,
+     "opp_reward": 121990.0,
+     "profile": [
+      "WFR羊毛前跑攻击型"
+     ],
+     "sell_orders": 319,
+     "sell_avg_qty": 13.5,
+     "wool_big_orders": 2,
+     "wool_rev_share": 0.069,
+     "herd_end": {
+      "GOOSE": 5,
+      "COW": 6,
+      "SHEEP": 6
+     },
+     "opp_money": 121990.0
+    },
+    {
+     "t": "2026-09-28T21:20",
+     "ep": 114887372,
+     "opp": "kaito ide 31",
+     "rank": 780,
+     "band": "mid",
+     "margin": -3009.0,
+     "my_reward": 105395.0,
+     "opp_reward": 108404.0,
+     "profile": [
+      "WFR羊毛前跑攻击型"
+     ],
+     "sell_orders": 355,
+     "sell_avg_qty": 14.1,
+     "wool_big_orders": 2,
+     "wool_rev_share": 0.118,
+     "herd_end": {
+      "SHEEP": 9,
+      "COW": 6,
+      "GOOSE": 2
+     },
+     "opp_money": 108404.0
+    }
+   ],
+   "headline": "最大两败=colum2131(rank 288) −28501（02:50Z，镜像同质强件）与 Yizhou(rank 10,榜面 2874.5 #10) −27039（09:35Z）；W3 败局多为 ±8~700 微负（13:27 matthewwh −32 / 13:11 永井こうたろう −16 / 12:59 shoryakumar mishra −64 / 12:47 Suna-D −8）"
+  },
+  "profiles": {
+   "class_share_and_winrate": {
+    "weekago_r30_33": {
+     "WFR": {
+      "n": 7,
+      "share": 0.14,
+      "win_rate": 0.857
+     },
+     "CLONE": {
+      "n": 19,
+      "share": 0.38,
+      "win_rate": 0.579
+     },
+     "OTHER": {
+      "n": 17,
+      "share": 0.34,
+      "win_rate": 0.529
+     },
+     "WFR+CLONE": {
+      "n": 7,
+      "share": 0.14,
+      "win_rate": 0.714
+     }
+    },
+    "H1_early_W0W1": {
+     "OTHER": {
+      "n": 24,
+      "share": 0.247,
+      "win_rate": 0.917
+     },
+     "WFR+CLONE": {
+      "n": 24,
+      "share": 0.247,
+      "win_rate": 0.5
+     },
+     "WFR": {
+      "n": 12,
+      "share": 0.124,
+      "win_rate": 0.667
+     },
+     "CLONE": {
+      "n": 37,
+      "share": 0.381,
+      "win_rate": 0.622
+     }
+    },
+    "H1_recent_W2W3": {
+     "CLONE": {
+      "n": 12,
+      "share": 0.6,
+      "win_rate": 0.25
+     },
+     "OTHER": {
+      "n": 1,
+      "share": 0.05,
+      "win_rate": 1.0
+     },
+     "WFR": {
+      "n": 3,
+      "share": 0.15,
+      "win_rate": 0.0
+     },
+     "WFR+CLONE": {
+      "n": 4,
+      "share": 0.2,
+      "win_rate": 0.5
+     }
+    }
+   },
+   "interpretation": "WFR 占比一周前 28%→H1 早期 37%→近期 35%（无激增）；镜像同质 52%→63%→80%（激增）；MarketShock 大单晚清算 12%→4%→0%（我方稳定提款的弱型消失，胜率损失部分源于此）。对各类胜率齐跌（WFR 0.79→0.56→0.29，镜像 0.62→0.57→0.31）=非单一克制型，是各类承载体换成了更强的新件"
+  }
+ },
+ "mirror_share": {
+  "note": "镜像内耗=同玩法互打（harvest-ledger 细单高频镜像局）边际≈0；具名同门队互打几乎不发生（配对池 1 万队）",
+  "H1": {
+   "W0_0928": {
+    "name_family_n": 2,
+    "name_family_share": 0.026,
+    "mirror_self_n": 0,
+    "behavior_clone": {
+     "n": 46,
+     "margin_mean": 754.1,
+     "my_mean": 101513.8,
+     "opp_mean": 100759.7,
+     "win_rate": 0.587
+    },
+    "non_clone": {
+     "n": 31,
+     "margin_mean": 6505.3,
+     "my_mean": 93237.6,
+     "opp_mean": 86732.3,
+     "win_rate": 0.871
+    },
+    "clone_share": 0.597
+   },
+   "W1_0929_00-08": {
+    "name_family_n": 0,
+    "name_family_share": 0.0,
+    "mirror_self_n": 0,
+    "behavior_clone": {
+     "n": 15,
+     "margin_mean": -2085.7,
+     "my_mean": 94278.7,
+     "opp_mean": 96364.3,
+     "win_rate": 0.533
+    },
+    "non_clone": {
+     "n": 5,
+     "margin_mean": 1248.8,
+     "my_mean": 89237.4,
+     "opp_mean": 87988.6,
+     "win_rate": 0.6
+    },
+    "clone_share": 0.75
+   },
+   "W2_0929_08-11": {
+    "name_family_n": 0,
+    "name_family_share": 0.0,
+    "mirror_self_n": 0,
+    "behavior_clone": {
+     "n": 7,
+     "margin_mean": -4378.4,
+     "my_mean": 107664.9,
+     "opp_mean": 112043.3,
+     "win_rate": 0.286
+    },
+    "non_clone": {
+     "n": 3,
+     "margin_mean": -539.3,
+     "my_mean": 105560.7,
+     "opp_mean": 106100.0,
+     "win_rate": 0.333
+    },
+    "clone_share": 0.7
+   },
+   "W3_0929_11plus": {
+    "name_family_n": 0,
+    "name_family_share": 0.0,
+    "mirror_self_n": 0,
+    "behavior_clone": {
+     "n": 9,
+     "margin_mean": -753.3,
+     "my_mean": 92062.3,
+     "opp_mean": 92815.7,
+     "win_rate": 0.333
+    },
+    "non_clone": {
+     "n": 1,
+     "margin_mean": -1245.0,
+     "my_mean": 68392.0,
+     "opp_mean": 69637.0,
+     "win_rate": 0.0
+    },
+    "clone_share": 0.9
+   }
+  },
+  "H_all": {
+   "name_family_n": 2,
+   "name_family_share": 0.016,
+   "mirror_self_n": 0,
+   "behavior_clone": {
+    "n": 73,
+    "margin_mean": -141.1,
+    "my_mean": 99703.2,
+    "opp_mean": 99844.3,
+    "win_rate": 0.466
+   },
+   "non_clone": {
+    "n": 50,
+    "margin_mean": 4484.5,
+    "my_mean": 98292.1,
+    "opp_mean": 93807.6,
+    "win_rate": 0.66
+   },
+   "clone_share": 0.593
+  },
+  "oc_c3": {
+   "name_family_n": 1,
+   "name_family_share": 0.021,
+   "mirror_self_n": 0,
+   "behavior_clone": {
+    "n": 26,
+    "margin_mean": -888.2,
+    "my_mean": 91731.3,
+    "opp_mean": 92619.4,
+    "win_rate": 0.538
+   },
+   "non_clone": {
+    "n": 22,
+    "margin_mean": 9307.1,
+    "my_mean": 99895.3,
+    "opp_mean": 90588.2,
+    "win_rate": 0.636
+   },
+   "clone_share": 0.542
+  },
+  "weekago_r30_33": {
+   "name_family_n": 0,
+   "name_family_share": 0.0,
+   "mirror_self_n": 0,
+   "behavior_clone": {
+    "n": 26,
+    "margin_mean": 3341.8,
+    "my_mean": 103435.4,
+    "opp_mean": 100093.6,
+    "win_rate": 0.615
+   },
+   "non_clone": {
+    "n": 24,
+    "margin_mean": 5258.5,
+    "my_mean": 101312.0,
+    "opp_mean": 96053.5,
+    "win_rate": 0.625
+   },
+   "clone_share": 0.52
+  },
+  "key_finding": "具名同门内耗对 H1 仅 2/117（2.6%，W1 后 0）+ 自对 0 局；但行为镜像（细单高频 harvest-ledger 玩法）对局占比 52%(一周前)→63%(W0W1)→80%(W2W3)，且镜像局边际塌缩到 ≈0（H1 早期镜像局 margin +56 vs 非镜像 +5775；H 全程镜像 −141 vs 非镜像 +4485；oc_c3 镜像 −888 vs 非镜像 +9307）——'内耗双输'以玩法镜像形态存在且占比创新高，微负边际累积正是读数阴跌的微观载体"
+ },
+ "churn_test": {
+  "method": "readout_sop.md mooman 换血判定法：读数窗内对手池名录集合变动（新面孔入池/旧种子掉出）则判对手群体换血、不作自身退化归因；辅以败局 vs 胜局对手 rank 分布位移",
+  "H1": {
+   "early_W0W1": {
+    "n": 97,
+    "rank_mean": 1372.8,
+    "rank_median": 1041
+   },
+   "recent_W2W3": {
+    "n": 20,
+    "rank_mean": 626.4,
+    "rank_median": 623
+   },
+   "loss_rank_dist_recent": {
+    "mean": 526.8,
+    "median": 589,
+    "top550_share": 0.5
+   },
+   "win_rank_dist_recent": {
+    "mean": 858.8,
+    "median": 826,
+    "top550_share": 0.167
+   },
+   "loss_rank_dist_weekago": {
+    "mean": 1540.2,
+    "median": 1507,
+    "top550_share": 0.053
+   },
+   "new_faces_in_recent": "19/20（95%）",
+   "top550_share_shift": "8%(W0W1)→40%(W2W3)",
+   "low_band_share_shift": "28%→5%",
+   "winrate_vs_same_band": "top550 0.55→0.12、mid 0.64→0.36——同带胜率塌陷由带内载体换血（新强件取代旧件）解释，非我方行为变化（H1 冻结）"
+  },
+  "roster_churn_evidence": "channel-scan 11:15Z 实录：前 20 全员 09-28 12:00 后有提交=全线终局换血中；新面孔强件入池实证——败局对手含 Yizhou(#10 榜面 2874.5)、colum2131(#288)、Le Viet(#307)、matthewwh(#346)、Paing(#368)、인공저능연구소(#390)、Claudex(#438)、Pai(#482)",
+  "family_pure_drift": {
+   "tetsu2131": "2310.8→2064.2（−246.6，末次提交 09-27=纯漂移）",
+   "Lynxx": "2219.9→1999.3（−220.6，纯漂移）",
+   "Georgy Mamarin": "2351.0→2150.9（−200.1，09-29 新交）",
+   "haodou092": "2220.2→1639.7（V89 新交收敛中）",
+   "Alperen Aydın": "2187.5→1912.8",
+   "AlekseiProvorov": "2185.4→1846.9",
+   "prairieee": "2049.2→1818.5",
+   "shiiin9": "2078.4→2116.1（新交）",
+   "guruguru000": "1957.2→2103.5（新交）",
+   "uninhibited-scholar": "1772.9→2066.7（新交）",
+   "我方 H1": "2074.0→2053.0（−21.0，带内最稳，channel-scan 原判）"
+  },
+  "verdict": "命中换血判定：读数窗（09-28 12:00Z 后）对手池名录整体换血（顶段全员换新件入池），H1 对手 rank 均值 1372.8→626.4、top550 占比 8%→40%、95% 新面孔；同门无新交件（tetsu/Lynxx）同窗纯漂移 −220~−247。判定=对手群体换血（终局换血期），非自身退化；H1 为冻结件（09-28T19:48 发射后字节不变），'我们变弱'在因果上不成立"
+ },
+ "conclusion": {
+  "verdict": "混因：主因=对手换血（终局换血期强件换血入池），传播机制=池面漂移（同门普跌/旧件读数普降的载体），放大器=镜像同质内耗（80% 对局边际≈0 零和化）；被特定策略克制=不成立",
+  "weights": "换血≈主因（对手带位移 1372→626、对同带胜率 0.55→0.12、95% 新面孔、顶段名录全换）；池面漂移=换血的直接后果（无新交件亦 −220+，磁带被 80% 镜像玩法重塑）；镜像内耗=放大器（微负边际累积决定读数走向）；被克否证（WFR 占比 37→35 无激增、无单一克制型、各类胜率齐跌、MarketShock 弱型反消失）",
+  "why_h1_dropped_2074_to_2053": "09-29 08:00Z 后 H1 20 局：胜率 0.30、对 top550 0.12（margin −4910）、对手 rank 中位 623；W3 十局六负多为 ±8~700 微负镜像局，另有 rank 10/288/390 强件大败（−27039/−28501/−6671）",
+  "counter_hypotheses_rejected": [
+   "自身退化：H1 冻结件行为不可变，且同门同窗普跌 −200+ 而我方仅 −21",
+   "单一策略克制：无 WFR 激增（35%≈37%）、无大单晚清算激增（反而 4%→0%）、败局分散于镜像强件+羊毛攻击两类且载体均为换血新强件",
+   "纯池面漂移（无换血）：与 rank 分布位移+名录全换矛盾——漂移是换血的结果而非独立原因"
+  ],
+  "trend_note": "oc_c3（H1+画像器+C3 羊毛防御）同池 11-13 时窗 48 局胜率 0.574、对 WFR 13/23、margin +3785——羊毛防御面在换血池内有正贡献；但其配对带偏软（top550 4/48），仅作趋势"
+ },
+ "anomaly": [
+  "平台 publicScore 为 rating 型估计器（新件 40-70 局收敛），与 Σmy/Σopp×2000 等 reward 代理不吻合（H 全量 2035.7 vs 读数 1988.1）；读数峰谷滞后于对局质量（h2h 质量自 n=20 起单调下行 2254→2030，而读数爬升至 ~10:50Z 才见顶 2074）",
+  "H1 3 局/H 1 局 ERRORED 无 replay 未计入；A 仅抽样 40/84 局（轨迹用途）",
+  "oc_c3 11:15Z 读数 976.7→13:45Z 1966.4 为新件收敛噪声（742856 在册模式），不作劣化解读",
+  "|margin|<1000 镜像微局占比：一周前 60%→H1 早期 69%→近期 65%（H 全程 85%）——读数实质由大量抛硬币局决定，方差天然大",
+  "W2/W3 各 10 局小样本，单局边际贡献大；若继续配对，按同门纯漂移轨迹（−200+）读数预计继续走低，除非计分对切换（oc_c3 已在爬分）"
+ ],
+ "evidence_files": {
+  "raw_features": "/tmp/forensics/games_features.jsonl (378 局逐局特征)",
+  "analysis_out": "/tmp/forensics/analysis_out.json",
+  "manifest": "/tmp/forensics/manifest.json",
+  "leaderboard_csv": "/tmp/forensics/lb/kaggriculture-publicleaderboard-2026-09-29T13:45:37.csv",
+  "scripts": [
+   "/tmp/forensics/extract.py",
+   "/tmp/forensics/analyze.py"
+  ]
+ }
+}
