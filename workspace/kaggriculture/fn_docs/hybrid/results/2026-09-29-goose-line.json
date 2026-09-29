@@ -1,0 +1,7095 @@
+{
+ "_generated_at": "2026-09-29T09:18:16Z",
+ "version": "judge-goose-diag/1.0",
+ "mode": "诊断性判决（孪生三闸全 VIOLATION 但包已建成——实测能否跑完局）",
+ "source": {
+  "commands": [
+   "python3 orderbook_goose_lab/econ_model.py",
+   "python3 orderbook_goose_lab/goose_line.py --build-all",
+   "python3 orderbook_goose_lab/gates_goose.py（未跑，见 anomaly）",
+   "诊断胶水 runner /tmp/goose_diag_run.py（临时不入库）：复用 judge_goose.{ensure_auth,make_units,specs_for,ab_stats,_agg_econ,econ_face}，FOLDS 覆盖 n=12 诊断口径，臂=control H1 + goose9econ + goose7"
+  ],
+  "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_strongest_lab/build/h1/main.py",
+  "base_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+  "corpus": {
+   "loss_folds": [
+    1825501814,
+    2013941152,
+    786146079,
+    1883261866,
+    963182245,
+    240876256
+   ],
+   "neutral_folds": [
+    672000,
+    672071,
+    672142,
+    672213,
+    672284,
+    672355
+   ],
+   "strata": "26 败局语料取前 6 fold 回放 + 新中性块 672000+i*71（i=0..5）；fold 口径 n=12 双席/臂（24 局/臂）",
+   "auth_corpus_n": 34
+  },
+  "pairs_caliber": "变体 vs H1 原版配对（ab_r41/K2 净翻胜定义）：control=H1 vs 对手 O，arm=变体 vs 同 O，同 seed+seat；margin=run_games banks（farms[obs.player] 干净口径）",
+  "workers": 2,
+  "opponents": [
+   "orderbook_r37/build/main.py",
+   "orderbook_2965_adopt/a/main.py",
+   "orderbook_2965_adopt/b/main.py",
+   "v48_derivative/main.py"
+  ],
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "engine": "sim",
+   "wall_speedup": 5.131,
+   "version": "simbridge/1.0"
+  }
+ },
+ "budget": {
+  "cap_局次": 200,
+  "caliber": "局次=game（fold=games/2 同报）",
+  "auth_games": 30,
+  "control_games": 24,
+  "variant_games": 48,
+  "total_games": 102,
+  "total_局次_folds": 51,
+  "within_cap": true
+ },
+ "variants": {
+  "goose5": {
+   "spec": {
+    "target": {
+     "GOOSE": 5,
+     "COW": 6,
+     "SHEEP": 6
+    },
+    "desc": "纯增量档 5 鹅（6牛6羊5鹅 17 头）"
+   },
+   "desc": "纯增量档 5 鹅（6牛6羊5鹅 17 头）",
+   "target": {
+    "GOOSE": 5,
+    "COW": 6,
+    "SHEEP": 6
+   },
+   "n_table_rows": 6659,
+   "kept_twin": false,
+   "n_bad_routes": 40,
+   "gates": "not_run",
+   "gates_overall": "not_run",
+   "diag_judged": false,
+   "audit_summary": {
+    "conservation_match": 41,
+    "conservation_n": 41,
+    "slot_ok": true,
+    "shared_seg": {
+     "trunk": {
+      "groups": 154,
+      "divergent": 0
+     },
+     "tail": {
+      "groups": 150,
+      "divergent": 3
+     }
+    }
+   },
+   "feasibility": {
+    "verdict": "VIOLATION",
+    "n_routes": 41,
+    "n_bad_routes": 40,
+    "gate_kinds_failed": {
+     "cash": 0,
+     "labor": 40,
+     "cap": 0
+    },
+    "realized_gap_mean": 3.41,
+    "final_money_base_mean": 145703.3,
+    "final_money_var_mean": 112459.3,
+    "anchor_seed2": [
+     {
+      "route": "0",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 135,
+      "final_money_base": 157758,
+      "final_money_var": 104315,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "101",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 172,
+      "final_money_base": 144372,
+      "final_money_var": 97508,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "109",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "final_money_base": 147206,
+      "final_money_var": 109055,
+      "stranded_base": 0,
+      "stranded_var": 1
+     }
+    ],
+    "bad_routes_detail": [
+     {
+      "route": "0",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 134,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 156281,
+      "final_money_var": 115630
+     },
+     {
+      "route": "1",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 5,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 138748,
+      "final_money_var": 116124
+     },
+     {
+      "route": "2",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 134,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 156367,
+      "final_money_var": 112932
+     },
+     {
+      "route": "3",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 4,
+       "GOOSE": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 140865,
+      "final_money_var": 92236
+     },
+     {
+      "route": "4",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 5,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 140839,
+      "final_money_var": 111873
+     },
+     {
+      "route": "5",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 5,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 140654,
+      "final_money_var": 116860
+     },
+     {
+      "route": "6",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 4,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 140552,
+      "final_money_var": 114576
+     },
+     {
+      "route": "7",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 5,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 140586,
+      "final_money_var": 114706
+     },
+     {
+      "route": "8",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 5,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 140586,
+      "final_money_var": 114747
+     },
+     {
+      "route": "9",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 16,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 2,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 137453,
+      "final_money_var": 81074
+     },
+     {
+      "route": "10",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 16,
+      "realized_var": 9,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 2,
+       "GOOSE": 3,
+       "SHEEP": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 160136,
+      "final_money_var": 96168
+     },
+     {
+      "route": "11",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 17,
+      "realized_var": 10,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 5,
+       "GOOSE": 2,
+       "COW": 2
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 140494,
+      "final_money_var": 100863
+     },
+     {
+      "route": "12",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 9,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 4,
+       "COW": 1
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 119635,
+      "final_money_var": 88079
+     },
+     {
+      "route": "100",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 129,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 155806,
+      "final_money_var": 116278
+     },
+     {
+      "route": "101",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 144,
+      "realized_base": 16,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 135961,
+      "final_money_var": 109122
+     },
+     {
+      "route": "103",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 144,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 150931,
+      "final_money_var": 122697
+     },
+     {
+      "route": "104",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 144,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 149736,
+      "final_money_var": 117663
+     },
+     {
+      "route": "105",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 143,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 155240,
+      "final_money_var": 119107
+     },
+     {
+      "route": "106",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 30,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 155240,
+      "final_money_var": 112640
+     },
+     {
+      "route": "107",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 72,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 155265,
+      "final_money_var": 114890
+     },
+     {
+      "route": "108",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 143,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 155097,
+      "final_money_var": 120470
+     },
+     {
+      "route": "109",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 5,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 137191,
+      "final_money_var": 120356
+     },
+     {
+      "route": "110",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 128,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 154345,
+      "final_money_var": 118155
+     },
+     {
+      "route": "111",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 134,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 152139,
+      "final_money_var": 113313
+     },
+     {
+      "route": "112",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 144,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 147129,
+      "final_money_var": 117850
+     },
+     {
+      "route": "113",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 144,
+      "realized_base": 16,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 136157,
+      "final_money_var": 109563
+     },
+     {
+      "route": "114",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 30,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 4,
+       "COW": 4,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 149997,
+      "final_money_var": 116525
+     },
+     {
+      "route": "115",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 1,
+      "realized_base": 17,
+      "realized_var": 10,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 6,
+       "SHEEP": 2,
+       "GOOSE": 2
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 145877,
+      "final_money_var": 103434
+     },
+     {
+      "route": "116",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 144,
+      "realized_base": 16,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 135961,
+      "final_money_var": 108360
+     },
+     {
+      "route": "117",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 134,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 4,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 150343,
+      "final_money_var": 107463
+     },
+     {
+      "route": "119",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 144,
+      "realized_base": 16,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 135961,
+      "final_money_var": 109122
+     },
+     {
+      "route": "120",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 143,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 153129,
+      "final_money_var": 120113
+     },
+     {
+      "route": "121",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 143,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 155649,
+      "final_money_var": 120344
+     },
+     {
+      "route": "122",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 143,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 155097,
+      "final_money_var": 120455
+     },
+     {
+      "route": "123",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 67,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 157813,
+      "final_money_var": 121016
+     },
+     {
+      "route": "124",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 143,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 154027,
+      "final_money_var": 119383
+     },
+     {
+      "route": "125",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 143,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 6,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 155240,
+      "final_money_var": 119107
+     },
+     {
+      "route": "126",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 5,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 122215,
+      "final_money_var": 112377
+     },
+     {
+      "route": "127",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 5,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 137191,
+      "final_money_var": 120356
+     },
+     {
+      "route": "128",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 80,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 5,
+       "COW": 5,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 12,
+       "COOP": 6
+      },
+      "final_money_base": 137123,
+      "final_money_var": 120063
+     }
+    ]
+   },
+   "table_full_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/evidence/change_table_goose5.json",
+   "pkg_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/build/goose5"
+  },
+  "goose7": {
+   "spec": {
+    "target": {
+     "GOOSE": 7,
+     "COW": 6,
+     "SHEEP": 4
+    },
+    "desc": "纯增量档 7 鹅（6牛4羊7鹅 17 头）"
+   },
+   "desc": "纯增量档 7 鹅（6牛4羊7鹅 17 头）",
+   "target": {
+    "GOOSE": 7,
+    "COW": 6,
+    "SHEEP": 4
+   },
+   "n_table_rows": 7021,
+   "kept_twin": false,
+   "n_bad_routes": 41,
+   "gates": "not_run",
+   "gates_overall": "not_run",
+   "diag_judged": true,
+   "audit_summary": {
+    "conservation_match": 41,
+    "conservation_n": 41,
+    "slot_ok": true,
+    "shared_seg": {
+     "trunk": {
+      "groups": 154,
+      "divergent": 0
+     },
+     "tail": {
+      "groups": 150,
+      "divergent": 3
+     }
+    }
+   },
+   "feasibility": {
+    "verdict": "VIOLATION",
+    "n_routes": 41,
+    "n_bad_routes": 41,
+    "gate_kinds_failed": {
+     "cash": 0,
+     "labor": 41,
+     "cap": 0
+    },
+    "realized_gap_mean": 3.1,
+    "final_money_base_mean": 145703.3,
+    "final_money_var_mean": 106737.8,
+    "anchor_seed2": [
+     {
+      "route": "0",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 9,
+      "final_money_base": 157758,
+      "final_money_var": 109178,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "101",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 8,
+      "final_money_base": 144372,
+      "final_money_var": 104080,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "109",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 82,
+      "final_money_base": 147206,
+      "final_money_var": 106539,
+      "stranded_base": 0,
+      "stranded_var": 1
+     }
+    ],
+    "bad_routes_detail": [
+     {
+      "route": "0",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 6,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 156281,
+      "final_money_var": 96049
+     },
+     {
+      "route": "1",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 5
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 138748,
+      "final_money_var": 111879
+     },
+     {
+      "route": "2",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 6,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 156367,
+      "final_money_var": 95146
+     },
+     {
+      "route": "3",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 3,
+       "GOOSE": 5,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 140865,
+      "final_money_var": 106748
+     },
+     {
+      "route": "4",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 140839,
+      "final_money_var": 111161
+     },
+     {
+      "route": "5",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 5
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 140654,
+      "final_money_var": 111593
+     },
+     {
+      "route": "6",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 16,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 140552,
+      "final_money_var": 110939
+     },
+     {
+      "route": "7",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 16,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 140586,
+      "final_money_var": 110973
+     },
+     {
+      "route": "8",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 16,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 140586,
+      "final_money_var": 111065
+     },
+     {
+      "route": "9",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 20,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 4,
+       "COW": 4,
+       "GOOSE": 6
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 137453,
+      "final_money_var": 114766
+     },
+     {
+      "route": "10",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 5
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 160136,
+      "final_money_var": 109678
+     },
+     {
+      "route": "11",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 16,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 140494,
+      "final_money_var": 110909
+     },
+     {
+      "route": "12",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 4,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "SHEEP": 3,
+       "COW": 4
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 119635,
+      "final_money_var": 104328
+     },
+     {
+      "route": "100",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 75,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 4,
+       "SHEEP": 4
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 155806,
+      "final_money_var": 120518
+     },
+     {
+      "route": "101",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 5,
+      "realized_base": 16,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 135961,
+      "final_money_var": 91361
+     },
+     {
+      "route": "103",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 5,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 150931,
+      "final_money_var": 102104
+     },
+     {
+      "route": "104",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 5,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 149736,
+      "final_money_var": 99525
+     },
+     {
+      "route": "105",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 199,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 155240,
+      "final_money_var": 115322
+     },
+     {
+      "route": "106",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 4,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 155240,
+      "final_money_var": 109602
+     },
+     {
+      "route": "107",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 13,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 4,
+       "COW": 4,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 155265,
+      "final_money_var": 96541
+     },
+     {
+      "route": "108",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 199,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 155097,
+      "final_money_var": 115476
+     },
+     {
+      "route": "109",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 5
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 137191,
+      "final_money_var": 107104
+     },
+     {
+      "route": "110",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 4,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 154345,
+      "final_money_var": 97997
+     },
+     {
+      "route": "111",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 5,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 5,
+       "SHEEP": 4
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 152139,
+      "final_money_var": 122780
+     },
+     {
+      "route": "112",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 5,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 147129,
+      "final_money_var": 98409
+     },
+     {
+      "route": "113",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 5,
+      "realized_base": 16,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 136157,
+      "final_money_var": 92987
+     },
+     {
+      "route": "114",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 2,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 3,
+       "GOOSE": 5,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 149997,
+      "final_money_var": 105511
+     },
+     {
+      "route": "115",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 3,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 3,
+       "GOOSE": 6,
+       "COW": 4
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 145877,
+      "final_money_var": 99369
+     },
+     {
+      "route": "116",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 5,
+      "realized_base": 16,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 135961,
+      "final_money_var": 91361
+     },
+     {
+      "route": "117",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 75,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "SHEEP": 4,
+       "COW": 4
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 150343,
+      "final_money_var": 118466
+     },
+     {
+      "route": "118",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 5,
+      "realized_base": 10,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 134781,
+      "final_money_var": 90951
+     },
+     {
+      "route": "119",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 5,
+      "realized_base": 16,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 3,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 135961,
+      "final_money_var": 91361
+     },
+     {
+      "route": "120",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 199,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 153129,
+      "final_money_var": 115915
+     },
+     {
+      "route": "121",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 199,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 155649,
+      "final_money_var": 116329
+     },
+     {
+      "route": "122",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 199,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 155097,
+      "final_money_var": 115468
+     },
+     {
+      "route": "123",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 13,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 4,
+       "SHEEP": 4
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 157813,
+      "final_money_var": 108626
+     },
+     {
+      "route": "124",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 199,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 154027,
+      "final_money_var": 115527
+     },
+     {
+      "route": "125",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 199,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 3
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 155240,
+      "final_money_var": 115322
+     },
+     {
+      "route": "126",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 5
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 122215,
+      "final_money_var": 103072
+     },
+     {
+      "route": "127",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 5
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 137191,
+      "final_money_var": 107104
+     },
+     {
+      "route": "128",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "SHEEP": 4,
+       "GOOSE": 5,
+       "COW": 5
+      },
+      "structures_var": {
+       "PASTURE": 11,
+       "COOP": 7
+      },
+      "final_money_base": 137123,
+      "final_money_var": 106906
+     }
+    ]
+   },
+   "table_full_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/evidence/change_table_goose7.json",
+   "pkg_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/build/goose7"
+  },
+  "goose9": {
+   "spec": {
+    "target": {
+     "GOOSE": 9,
+     "COW": 6,
+     "SHEEP": 2
+    },
+    "desc": "纯增量档 9 鹅（6牛2羊9鹅 17 头）"
+   },
+   "desc": "纯增量档 9 鹅（6牛2羊9鹅 17 头）",
+   "target": {
+    "GOOSE": 9,
+    "COW": 6,
+    "SHEEP": 2
+   },
+   "n_table_rows": 7216,
+   "kept_twin": false,
+   "n_bad_routes": 41,
+   "gates": "not_run",
+   "gates_overall": "not_run",
+   "diag_judged": false,
+   "audit_summary": {
+    "conservation_match": 41,
+    "conservation_n": 41,
+    "slot_ok": true,
+    "shared_seg": {
+     "trunk": {
+      "groups": 154,
+      "divergent": 0
+     },
+     "tail": {
+      "groups": 150,
+      "divergent": 3
+     }
+    }
+   },
+   "feasibility": {
+    "verdict": "VIOLATION",
+    "n_routes": 41,
+    "n_bad_routes": 41,
+    "gate_kinds_failed": {
+     "cash": 0,
+     "labor": 41,
+     "cap": 0
+    },
+    "realized_gap_mean": 4.2,
+    "final_money_base_mean": 145703.3,
+    "final_money_var_mean": 102982.8,
+    "anchor_seed2": [
+     {
+      "route": "0",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 1,
+      "final_money_base": 157758,
+      "final_money_var": 97559,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "101",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 0,
+      "final_money_base": 144372,
+      "final_money_var": 91113,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "109",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 82,
+      "final_money_base": 147206,
+      "final_money_var": 103226,
+      "stranded_base": 0,
+      "stranded_var": 1
+     }
+    ],
+    "bad_routes_detail": [
+     {
+      "route": "0",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 8,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 156281,
+      "final_money_var": 99891
+     },
+     {
+      "route": "1",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 138748,
+      "final_money_var": 106802
+     },
+     {
+      "route": "2",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 8,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 156367,
+      "final_money_var": 96846
+     },
+     {
+      "route": "3",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 4,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 140865,
+      "final_money_var": 103964
+     },
+     {
+      "route": "4",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 140839,
+      "final_money_var": 106613
+     },
+     {
+      "route": "5",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 140654,
+      "final_money_var": 106467
+     },
+     {
+      "route": "6",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 140552,
+      "final_money_var": 105292
+     },
+     {
+      "route": "7",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 140586,
+      "final_money_var": 105326
+     },
+     {
+      "route": "8",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 140586,
+      "final_money_var": 105944
+     },
+     {
+      "route": "9",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 3,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 4,
+       "SHEEP": 2,
+       "GOOSE": 4
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 137453,
+      "final_money_var": 89857
+     },
+     {
+      "route": "10",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 16,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "SHEEP": 2,
+       "COW": 4
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 160136,
+      "final_money_var": 100743
+     },
+     {
+      "route": "11",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 140494,
+      "final_money_var": 105362
+     },
+     {
+      "route": "12",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 1,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 2,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 119635,
+      "final_money_var": 93917
+     },
+     {
+      "route": "100",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 3,
+      "realized_base": 17,
+      "realized_var": 10,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 2,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 155806,
+      "final_money_var": 92851
+     },
+     {
+      "route": "101",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 16,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 135961,
+      "final_money_var": 94381
+     },
+     {
+      "route": "103",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 4,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 150931,
+      "final_money_var": 102790
+     },
+     {
+      "route": "104",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 4,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 149736,
+      "final_money_var": 100776
+     },
+     {
+      "route": "105",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 204,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 155240,
+      "final_money_var": 108715
+     },
+     {
+      "route": "106",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 204,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 155240,
+      "final_money_var": 102440
+     },
+     {
+      "route": "107",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 12,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 155265,
+      "final_money_var": 94610
+     },
+     {
+      "route": "108",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 204,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 155097,
+      "final_money_var": 107584
+     },
+     {
+      "route": "109",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 4,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 137191,
+      "final_money_var": 107024
+     },
+     {
+      "route": "110",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 3,
+      "realized_base": 17,
+      "realized_var": 9,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 4,
+       "GOOSE": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 154345,
+      "final_money_var": 97462
+     },
+     {
+      "route": "111",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 5,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 152139,
+      "final_money_var": 113362
+     },
+     {
+      "route": "112",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 147129,
+      "final_money_var": 94946
+     },
+     {
+      "route": "113",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 16,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 4,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 136157,
+      "final_money_var": 99400
+     },
+     {
+      "route": "114",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 149997,
+      "final_money_var": 110497
+     },
+     {
+      "route": "115",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 8,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 145877,
+      "final_money_var": 109747
+     },
+     {
+      "route": "116",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 16,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 135961,
+      "final_money_var": 94394
+     },
+     {
+      "route": "117",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 74,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 150343,
+      "final_money_var": 109196
+     },
+     {
+      "route": "118",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 10,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 134781,
+      "final_money_var": 91715
+     },
+     {
+      "route": "119",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 16,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 5,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 135961,
+      "final_money_var": 94381
+     },
+     {
+      "route": "120",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 204,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 153129,
+      "final_money_var": 109501
+     },
+     {
+      "route": "121",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 204,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 155649,
+      "final_money_var": 108060
+     },
+     {
+      "route": "122",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 204,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 155097,
+      "final_money_var": 106714
+     },
+     {
+      "route": "123",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 18,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 4,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 157813,
+      "final_money_var": 105268
+     },
+     {
+      "route": "124",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 204,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 154027,
+      "final_money_var": 108493
+     },
+     {
+      "route": "125",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 204,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 4,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 155240,
+      "final_money_var": 108715
+     },
+     {
+      "route": "126",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 4,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 122215,
+      "final_money_var": 109025
+     },
+     {
+      "route": "127",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 4,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 137191,
+      "final_money_var": 107024
+     },
+     {
+      "route": "128",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 4,
+       "GOOSE": 7,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 137123,
+      "final_money_var": 106200
+     }
+    ]
+   },
+   "table_full_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/evidence/change_table_goose9.json",
+   "pkg_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/build/goose9"
+  },
+  "mix76": {
+   "spec": {
+    "target": {
+     "GOOSE": 7,
+     "COW": 6,
+     "SHEEP": 0
+    },
+    "desc": "混合档 7鹅6牛（13 头菜单口径）"
+   },
+   "desc": "混合档 7鹅6牛（13 头菜单口径）",
+   "target": {
+    "GOOSE": 7,
+    "COW": 6,
+    "SHEEP": 0
+   },
+   "n_table_rows": 7676,
+   "kept_twin": false,
+   "n_bad_routes": 40,
+   "gates": "not_run",
+   "gates_overall": "not_run",
+   "diag_judged": false,
+   "audit_summary": {
+    "conservation_match": 41,
+    "conservation_n": 41,
+    "slot_ok": true,
+    "shared_seg": {
+     "trunk": {
+      "groups": 154,
+      "divergent": 0
+     },
+     "tail": {
+      "groups": 150,
+      "divergent": 3
+     }
+    }
+   },
+   "feasibility": {
+    "verdict": "VIOLATION",
+    "n_routes": 41,
+    "n_bad_routes": 40,
+    "gate_kinds_failed": {
+     "cash": 0,
+     "labor": 40,
+     "cap": 0
+    },
+    "realized_gap_mean": 1.98,
+    "final_money_base_mean": 145703.3,
+    "final_money_var_mean": 104425.7,
+    "anchor_seed2": [
+     {
+      "route": "0",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "final_money_base": 157758,
+      "final_money_var": 104704,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "101",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 86,
+      "final_money_base": 144372,
+      "final_money_var": 95649,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "109",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "final_money_base": 147206,
+      "final_money_var": 99806,
+      "stranded_base": 0,
+      "stranded_var": 1
+     }
+    ],
+    "bad_routes_detail": [
+     {
+      "route": "0",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 156281,
+      "final_money_var": 111251
+     },
+     {
+      "route": "1",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 138748,
+      "final_money_var": 108537
+     },
+     {
+      "route": "2",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 156367,
+      "final_money_var": 111338
+     },
+     {
+      "route": "3",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 140865,
+      "final_money_var": 108678
+     },
+     {
+      "route": "4",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 140839,
+      "final_money_var": 110754
+     },
+     {
+      "route": "5",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 140654,
+      "final_money_var": 110643
+     },
+     {
+      "route": "6",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 140552,
+      "final_money_var": 110107
+     },
+     {
+      "route": "7",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 140586,
+      "final_money_var": 110139
+     },
+     {
+      "route": "8",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 140586,
+      "final_money_var": 110138
+     },
+     {
+      "route": "9",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 13,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 9
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 137453,
+      "final_money_var": 89870
+     },
+     {
+      "route": "10",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 160136,
+      "final_money_var": 95937
+     },
+     {
+      "route": "11",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 140494,
+      "final_money_var": 110006
+     },
+     {
+      "route": "12",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 95,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 5,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 119635,
+      "final_money_var": 106118
+     },
+     {
+      "route": "100",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 155806,
+      "final_money_var": 92635
+     },
+     {
+      "route": "101",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 8,
+       "COW": 7
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 135961,
+      "final_money_var": 97744
+     },
+     {
+      "route": "103",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 8,
+       "COW": 7
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 150931,
+      "final_money_var": 98301
+     },
+     {
+      "route": "104",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 8,
+       "COW": 7
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 149736,
+      "final_money_var": 96917
+     },
+     {
+      "route": "105",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 155240,
+      "final_money_var": 109081
+     },
+     {
+      "route": "106",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 155240,
+      "final_money_var": 108767
+     },
+     {
+      "route": "107",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 16,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 5
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 9
+      },
+      "final_money_base": 155265,
+      "final_money_var": 86413
+     },
+     {
+      "route": "108",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 155097,
+      "final_money_var": 109090
+     },
+     {
+      "route": "109",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 137191,
+      "final_money_var": 106803
+     },
+     {
+      "route": "110",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 154345,
+      "final_money_var": 104340
+     },
+     {
+      "route": "111",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 7
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 152139,
+      "final_money_var": 105837
+     },
+     {
+      "route": "112",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 8,
+       "COW": 7
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 147129,
+      "final_money_var": 98125
+     },
+     {
+      "route": "113",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 136157,
+      "final_money_var": 100470
+     },
+     {
+      "route": "114",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 149997,
+      "final_money_var": 106510
+     },
+     {
+      "route": "115",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 8,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 145877,
+      "final_money_var": 107267
+     },
+     {
+      "route": "116",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 135961,
+      "final_money_var": 100345
+     },
+     {
+      "route": "117",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 150343,
+      "final_money_var": 107963
+     },
+     {
+      "route": "119",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 8,
+       "COW": 7
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 135961,
+      "final_money_var": 97744
+     },
+     {
+      "route": "120",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 153129,
+      "final_money_var": 110372
+     },
+     {
+      "route": "121",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 155649,
+      "final_money_var": 109746
+     },
+     {
+      "route": "122",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 155097,
+      "final_money_var": 109090
+     },
+     {
+      "route": "123",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 16,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 5
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 9
+      },
+      "final_money_base": 157813,
+      "final_money_var": 86529
+     },
+     {
+      "route": "124",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 154027,
+      "final_money_var": 109186
+     },
+     {
+      "route": "125",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "COW": 6
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 155240,
+      "final_money_var": 109081
+     },
+     {
+      "route": "126",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 122215,
+      "final_money_var": 107490
+     },
+     {
+      "route": "127",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 137191,
+      "final_money_var": 106803
+     },
+     {
+      "route": "128",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 78,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "COW": 6,
+       "GOOSE": 8
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 137123,
+      "final_money_var": 106457
+     }
+    ]
+   },
+   "table_full_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/evidence/change_table_mix76.json",
+   "pkg_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/build/mix76"
+  },
+  "mix79": {
+   "spec": {
+    "target": {
+     "GOOSE": 7,
+     "COW": 0,
+     "SHEEP": 9
+    },
+    "desc": "混合档 7鹅9羊（16 头菜单口径）"
+   },
+   "desc": "混合档 7鹅9羊（16 头菜单口径）",
+   "target": {
+    "GOOSE": 7,
+    "COW": 0,
+    "SHEEP": 9
+   },
+   "n_table_rows": 7868,
+   "kept_twin": false,
+   "n_bad_routes": 40,
+   "gates": "not_run",
+   "gates_overall": "not_run",
+   "diag_judged": false,
+   "audit_summary": {
+    "conservation_match": 41,
+    "conservation_n": 41,
+    "slot_ok": true,
+    "shared_seg": {
+     "trunk": {
+      "groups": 154,
+      "divergent": 0
+     },
+     "tail": {
+      "groups": 150,
+      "divergent": 3
+     }
+    }
+   },
+   "feasibility": {
+    "verdict": "VIOLATION",
+    "n_routes": 41,
+    "n_bad_routes": 40,
+    "gate_kinds_failed": {
+     "cash": 0,
+     "labor": 40,
+     "cap": 0
+    },
+    "realized_gap_mean": 2.63,
+    "final_money_base_mean": 145703.3,
+    "final_money_var_mean": 109691.6,
+    "anchor_seed2": [
+     {
+      "route": "0",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 29,
+      "final_money_base": 157758,
+      "final_money_var": 113878,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "101",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 29,
+      "final_money_base": 144372,
+      "final_money_var": 114426,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "109",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "final_money_base": 147206,
+      "final_money_var": 109108,
+      "stranded_base": 0,
+      "stranded_var": 0
+     }
+    ],
+    "bad_routes_detail": [
+     {
+      "route": "0",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 156281,
+      "final_money_var": 111437
+     },
+     {
+      "route": "1",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 138748,
+      "final_money_var": 107826
+     },
+     {
+      "route": "2",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 156367,
+      "final_money_var": 108376
+     },
+     {
+      "route": "3",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 140865,
+      "final_money_var": 121411
+     },
+     {
+      "route": "4",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 7,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 140839,
+      "final_money_var": 109255
+     },
+     {
+      "route": "5",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 140654,
+      "final_money_var": 107866
+     },
+     {
+      "route": "6",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 140552,
+      "final_money_var": 108598
+     },
+     {
+      "route": "7",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 140586,
+      "final_money_var": 108644
+     },
+     {
+      "route": "8",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 140586,
+      "final_money_var": 108700
+     },
+     {
+      "route": "9",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 14,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 137453,
+      "final_money_var": 97011
+     },
+     {
+      "route": "10",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 16,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 6,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 160136,
+      "final_money_var": 120518
+     },
+     {
+      "route": "11",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 7,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 140494,
+      "final_money_var": 108153
+     },
+     {
+      "route": "12",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 123,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 7,
+       "GOOSE": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 119635,
+      "final_money_var": 109737
+     },
+     {
+      "route": "100",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 155806,
+      "final_money_var": 87995
+     },
+     {
+      "route": "101",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 16,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 135961,
+      "final_money_var": 111894
+     },
+     {
+      "route": "103",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 150931,
+      "final_money_var": 115083
+     },
+     {
+      "route": "104",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 149736,
+      "final_money_var": 111669
+     },
+     {
+      "route": "105",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 155240,
+      "final_money_var": 111378
+     },
+     {
+      "route": "106",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 1,
+       "SHEEP": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 155240,
+      "final_money_var": 102528
+     },
+     {
+      "route": "107",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 66,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 1,
+       "SHEEP": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 155265,
+      "final_money_var": 117495
+     },
+     {
+      "route": "108",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 155097,
+      "final_money_var": 110671
+     },
+     {
+      "route": "109",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 137191,
+      "final_money_var": 105514
+     },
+     {
+      "route": "110",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 172,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "SHEEP": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 154345,
+      "final_money_var": 107356
+     },
+     {
+      "route": "111",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 1,
+       "SHEEP": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 152139,
+      "final_money_var": 100998
+     },
+     {
+      "route": "112",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 147129,
+      "final_money_var": 112668
+     },
+     {
+      "route": "113",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 16,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 136157,
+      "final_money_var": 111963
+     },
+     {
+      "route": "114",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 170,
+      "realized_base": 17,
+      "realized_var": 16,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7,
+       "COW": 1
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 149997,
+      "final_money_var": 102659
+     },
+     {
+      "route": "115",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 172,
+      "realized_base": 17,
+      "realized_var": 16,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7,
+       "COW": 1
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 145877,
+      "final_money_var": 122728
+     },
+     {
+      "route": "116",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 16,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 135961,
+      "final_money_var": 111894
+     },
+     {
+      "route": "117",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 128,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 8,
+       "SHEEP": 7
+      },
+      "structures_var": {
+       "PASTURE": 9,
+       "COOP": 9
+      },
+      "final_money_base": 150343,
+      "final_money_var": 111173
+     },
+     {
+      "route": "119",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 16,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 135961,
+      "final_money_var": 111894
+     },
+     {
+      "route": "120",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 153129,
+      "final_money_var": 112408
+     },
+     {
+      "route": "121",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 155649,
+      "final_money_var": 111180
+     },
+     {
+      "route": "122",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 155097,
+      "final_money_var": 110671
+     },
+     {
+      "route": "123",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 66,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 1,
+       "SHEEP": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 157813,
+      "final_money_var": 117261
+     },
+     {
+      "route": "124",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 154027,
+      "final_money_var": 112782
+     },
+     {
+      "route": "125",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 28,
+      "realized_base": 17,
+      "realized_var": 13,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 1,
+       "SHEEP": 6
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 155240,
+      "final_money_var": 111378
+     },
+     {
+      "route": "126",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 16,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 122215,
+      "final_money_var": 107008
+     },
+     {
+      "route": "127",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 137191,
+      "final_money_var": 105514
+     },
+     {
+      "route": "128",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 227,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "SHEEP": 8,
+       "GOOSE": 7
+      },
+      "structures_var": {
+       "PASTURE": 10,
+       "COOP": 8
+      },
+      "final_money_base": 137123,
+      "final_money_var": 105255
+     }
+    ]
+   },
+   "table_full_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/evidence/change_table_mix79.json",
+   "pkg_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/build/mix79"
+  },
+  "goose9econ": {
+   "spec": {
+    "target": {
+     "GOOSE": 9,
+     "COW": 4,
+     "SHEEP": 2
+    },
+    "desc": "经济解最优档 9鹅4牛2羊（网格 top1）"
+   },
+   "desc": "经济解最优档 9鹅4牛2羊（网格 top1）",
+   "target": {
+    "GOOSE": 9,
+    "COW": 4,
+    "SHEEP": 2
+   },
+   "n_table_rows": 7968,
+   "kept_twin": false,
+   "n_bad_routes": 41,
+   "gates": "not_run",
+   "gates_overall": "not_run",
+   "diag_judged": true,
+   "audit_summary": {
+    "conservation_match": 41,
+    "conservation_n": 41,
+    "slot_ok": true,
+    "shared_seg": {
+     "trunk": {
+      "groups": 154,
+      "divergent": 0
+     },
+     "tail": {
+      "groups": 150,
+      "divergent": 3
+     }
+    }
+   },
+   "feasibility": {
+    "verdict": "VIOLATION",
+    "n_routes": 41,
+    "n_bad_routes": 41,
+    "gate_kinds_failed": {
+     "cash": 0,
+     "labor": 41,
+     "cap": 0
+    },
+    "realized_gap_mean": 4.54,
+    "final_money_base_mean": 145703.3,
+    "final_money_var_mean": 101353.9,
+    "anchor_seed2": [
+     {
+      "route": "0",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 1,
+      "final_money_base": 157758,
+      "final_money_var": 98940,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "101",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 0,
+      "final_money_base": 144372,
+      "final_money_var": 90652,
+      "stranded_base": 0,
+      "stranded_var": 0
+     },
+     {
+      "route": "109",
+      "seed": 780030,
+      "min_money_base": 27,
+      "min_money_var": 82,
+      "final_money_base": 147206,
+      "final_money_var": 104370,
+      "stranded_base": 0,
+      "stranded_var": 1
+     }
+    ],
+    "bad_routes_detail": [
+     {
+      "route": "0",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 8,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 156281,
+      "final_money_var": 104624
+     },
+     {
+      "route": "1",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 3
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 138748,
+      "final_money_var": 108542
+     },
+     {
+      "route": "2",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 8,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 156367,
+      "final_money_var": 101987
+     },
+     {
+      "route": "3",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "SHEEP": 2,
+       "COW": 3
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 140865,
+      "final_money_var": 101860
+     },
+     {
+      "route": "4",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 3
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 140839,
+      "final_money_var": 109203
+     },
+     {
+      "route": "5",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 3
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 140654,
+      "final_money_var": 109078
+     },
+     {
+      "route": "6",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 3
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 140552,
+      "final_money_var": 108215
+     },
+     {
+      "route": "7",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 3
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 140586,
+      "final_money_var": 108239
+     },
+     {
+      "route": "8",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 15,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 3
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 140586,
+      "final_money_var": 108701
+     },
+     {
+      "route": "9",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 3,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "SHEEP": 2,
+       "COW": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 137453,
+      "final_money_var": 83384
+     },
+     {
+      "route": "10",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 16,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "SHEEP": 2,
+       "COW": 3
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 160136,
+      "final_money_var": 99490
+     },
+     {
+      "route": "11",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 79,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 8,
+       "SHEEP": 2,
+       "COW": 3
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 140494,
+      "final_money_var": 105776
+     },
+     {
+      "route": "12",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 1,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 3,
+      "held_var": {
+       "GOOSE": 7,
+       "SHEEP": 2,
+       "COW": 2
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 119635,
+      "final_money_var": 89397
+     },
+     {
+      "route": "100",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 3,
+      "realized_base": 17,
+      "realized_var": 10,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 2,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 8,
+       "COOP": 10
+      },
+      "final_money_base": 155806,
+      "final_money_var": 93511
+     },
+     {
+      "route": "101",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 16,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 135961,
+      "final_money_var": 95126
+     },
+     {
+      "route": "103",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 150931,
+      "final_money_var": 103464
+     },
+     {
+      "route": "104",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 149736,
+      "final_money_var": 101221
+     },
+     {
+      "route": "105",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 169,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 155240,
+      "final_money_var": 104668
+     },
+     {
+      "route": "106",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 166,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 155240,
+      "final_money_var": 97902
+     },
+     {
+      "route": "107",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 12,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 2,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 155265,
+      "final_money_var": 90484
+     },
+     {
+      "route": "108",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 169,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 155097,
+      "final_money_var": 103186
+     },
+     {
+      "route": "109",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 137191,
+      "final_money_var": 102844
+     },
+     {
+      "route": "110",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 3,
+      "realized_base": 17,
+      "realized_var": 9,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "COW": 4,
+       "GOOSE": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 154345,
+      "final_money_var": 97326
+     },
+     {
+      "route": "111",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 152139,
+      "final_money_var": 112161
+     },
+     {
+      "route": "112",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 147129,
+      "final_money_var": 96404
+     },
+     {
+      "route": "113",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 16,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 136157,
+      "final_money_var": 101296
+     },
+     {
+      "route": "114",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 149997,
+      "final_money_var": 107386
+     },
+     {
+      "route": "115",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 8,
+      "realized_base": 17,
+      "realized_var": 10,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 145877,
+      "final_money_var": 96127
+     },
+     {
+      "route": "116",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 16,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 135961,
+      "final_money_var": 95143
+     },
+     {
+      "route": "117",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 74,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 8,
+       "COW": 2,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 6,
+       "COOP": 12
+      },
+      "final_money_base": 150343,
+      "final_money_var": 104866
+     },
+     {
+      "route": "118",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 10,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 134781,
+      "final_money_var": 92723
+     },
+     {
+      "route": "119",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 7,
+      "realized_base": 16,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 6,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 135961,
+      "final_money_var": 95126
+     },
+     {
+      "route": "120",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 169,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 153129,
+      "final_money_var": 105534
+     },
+     {
+      "route": "121",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 169,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 155649,
+      "final_money_var": 104732
+     },
+     {
+      "route": "122",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 169,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 155097,
+      "final_money_var": 103319
+     },
+     {
+      "route": "123",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 19,
+      "realized_base": 17,
+      "realized_var": 12,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 157813,
+      "final_money_var": 92842
+     },
+     {
+      "route": "124",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 169,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 154027,
+      "final_money_var": 104650
+     },
+     {
+      "route": "125",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 169,
+      "realized_base": 17,
+      "realized_var": 11,
+      "stranded_base": 0,
+      "stranded_var": 0,
+      "held_var": {
+       "GOOSE": 7,
+       "COW": 3,
+       "SHEEP": 1
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 155240,
+      "final_money_var": 104668
+     },
+     {
+      "route": "126",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 16,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 122215,
+      "final_money_var": 105725
+     },
+     {
+      "route": "127",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 137191,
+      "final_money_var": 102844
+     },
+     {
+      "route": "128",
+      "fail": [
+       "labor"
+      ],
+      "min_money_base": 27,
+      "min_money_var": 81,
+      "realized_base": 17,
+      "realized_var": 14,
+      "stranded_base": 0,
+      "stranded_var": 1,
+      "held_var": {
+       "GOOSE": 9,
+       "SHEEP": 2,
+       "COW": 2
+      },
+      "structures_var": {
+       "PASTURE": 7,
+       "COOP": 11
+      },
+      "final_money_base": 137123,
+      "final_money_var": 101735
+     }
+    ]
+   },
+   "table_full_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/evidence/change_table_goose9econ.json",
+   "pkg_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_lab/build/goose9econ"
+  }
+ },
+ "feasibility": {
+  "goose5": {
+   "verdict": "VIOLATION",
+   "n_bad_routes": 40,
+   "gate_kinds_failed": {
+    "cash": 0,
+    "labor": 40,
+    "cap": 0
+   },
+   "anchor_seed2": [
+    {
+     "route": "0",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 135,
+     "final_money_base": 157758,
+     "final_money_var": 104315,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "101",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 172,
+     "final_money_base": 144372,
+     "final_money_var": 97508,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "109",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 81,
+     "final_money_base": 147206,
+     "final_money_var": 109055,
+     "stranded_base": 0,
+     "stranded_var": 1
+    }
+   ]
+  },
+  "goose7": {
+   "verdict": "VIOLATION",
+   "n_bad_routes": 41,
+   "gate_kinds_failed": {
+    "cash": 0,
+    "labor": 41,
+    "cap": 0
+   },
+   "anchor_seed2": [
+    {
+     "route": "0",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 9,
+     "final_money_base": 157758,
+     "final_money_var": 109178,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "101",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 8,
+     "final_money_base": 144372,
+     "final_money_var": 104080,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "109",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 82,
+     "final_money_base": 147206,
+     "final_money_var": 106539,
+     "stranded_base": 0,
+     "stranded_var": 1
+    }
+   ]
+  },
+  "goose9": {
+   "verdict": "VIOLATION",
+   "n_bad_routes": 41,
+   "gate_kinds_failed": {
+    "cash": 0,
+    "labor": 41,
+    "cap": 0
+   },
+   "anchor_seed2": [
+    {
+     "route": "0",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 1,
+     "final_money_base": 157758,
+     "final_money_var": 97559,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "101",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 0,
+     "final_money_base": 144372,
+     "final_money_var": 91113,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "109",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 82,
+     "final_money_base": 147206,
+     "final_money_var": 103226,
+     "stranded_base": 0,
+     "stranded_var": 1
+    }
+   ]
+  },
+  "mix76": {
+   "verdict": "VIOLATION",
+   "n_bad_routes": 40,
+   "gate_kinds_failed": {
+    "cash": 0,
+    "labor": 40,
+    "cap": 0
+   },
+   "anchor_seed2": [
+    {
+     "route": "0",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 81,
+     "final_money_base": 157758,
+     "final_money_var": 104704,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "101",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 86,
+     "final_money_base": 144372,
+     "final_money_var": 95649,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "109",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 81,
+     "final_money_base": 147206,
+     "final_money_var": 99806,
+     "stranded_base": 0,
+     "stranded_var": 1
+    }
+   ]
+  },
+  "mix79": {
+   "verdict": "VIOLATION",
+   "n_bad_routes": 40,
+   "gate_kinds_failed": {
+    "cash": 0,
+    "labor": 40,
+    "cap": 0
+   },
+   "anchor_seed2": [
+    {
+     "route": "0",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 29,
+     "final_money_base": 157758,
+     "final_money_var": 113878,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "101",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 29,
+     "final_money_base": 144372,
+     "final_money_var": 114426,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "109",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 227,
+     "final_money_base": 147206,
+     "final_money_var": 109108,
+     "stranded_base": 0,
+     "stranded_var": 0
+    }
+   ]
+  },
+  "goose9econ": {
+   "verdict": "VIOLATION",
+   "n_bad_routes": 41,
+   "gate_kinds_failed": {
+    "cash": 0,
+    "labor": 41,
+    "cap": 0
+   },
+   "anchor_seed2": [
+    {
+     "route": "0",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 1,
+     "final_money_base": 157758,
+     "final_money_var": 98940,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "101",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 0,
+     "final_money_base": 144372,
+     "final_money_var": 90652,
+     "stranded_base": 0,
+     "stranded_var": 0
+    },
+    {
+     "route": "109",
+     "seed": 780030,
+     "min_money_base": 27,
+     "min_money_var": 82,
+     "final_money_base": 147206,
+     "final_money_var": 104370,
+     "stranded_base": 0,
+     "stranded_var": 1
+    }
+   ]
+  }
+ },
+ "econ_model": {
+  "engine_source": {
+   "file": "kaggle_environments/envs/kaggriculture/kaggriculture.py",
+   "sha256": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+   "pricing_doc": "fn_docs/hybrid/references/2026-09-28-engine-pricing-extraction.md",
+   "note": "EGG base50/T=332 hinge→0.40/log→0.20（任务提要 T=45 与源码/抽取档 332 不符，以源码 332 为准，anomaly 登记）"
+  },
+  "model": {
+   "objective": "期望净收入=Σ品 日产量×当日价（吸收表×价表）−购置−饲料麦−fib 雇工−地；回本门控=购置波次按累计回款解锁",
+   "absorption": {
+    "town_drain": "铺每 4 步各排 1 件/品（单品铺 ×2）；期望=6/日/实例×品铺占比（8 型均匀抽签 d3..d24 逐日解锁，上限 8 实例）；中心日 1 件（除 FERTILIZER）",
+    "egg_sink": "EGG 过剩支 log（amp 1.722）=对数级吸收；WOOL/MELON 过剩支sq=二次崩塌；MILK 过剩支 linear"
+   },
+   "production": "满照护（喂+照料日日）：GOOSE d≥pd+3 日 2 枚（cap4）/COW 隔日 2 奶/SHEEP 3 日 3 毛（引擎 pending_care_bonus 语义复刻）",
+   "fib_labor": "Σ fib(k)×日；heads×4 ops/日×1.3 步行系数/24 转",
+   "fert_pool": "$25k 早卖晚买共享池（d1-6 卖窗；无城镇排水=纯池）"
+  },
+  "schedule": {
+   "trunk_wave": {
+    "window": "d0-d3（steps 1/1/65/88，链内 4COW+2SHEEP 基线）",
+    "rule": "回本门控第一波：GEASE 优先（300 金最廉、蛋 d4 起流）→按目标谱最大余数法缩到 6 头作 trunk 波次谱"
+   },
+   "egg_sell": {
+    "rule": "产日产日卖（蛋对数支无限吸纳；挂量按产比缩放）",
+    "absorption": "EGG above 支 log：Δp=−1.722·ln(1+x)（x=过量），抛 1k 蛋价仅落 ~39；对数级吸收=sink"
+   },
+   "fert": {
+    "sell_window": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "buyback": "d6+ 池底回购做 FERTILIZE",
+    "pool_cap_$": 25000
+   },
+   "fib_labor": "HIRE=当日第 k 雇 fib(k)（1,1,2,3,5,8,13…）；ops=4/头/日（FEED/CARE/HARVEST/COLLECT_FERT）+作物；24 转/人/日"
+  },
+  "grid_top10": [
+   {
+    "spec": {
+     "GOOSE": 9,
+     "COW": 4,
+     "SHEEP": 2
+    },
+    "heads": 15,
+    "net": 41506.0,
+    "min_cash": 293.0,
+    "income": {
+     "EGG": 20466.0,
+     "MILK": 20400.0,
+     "WOOL": 16540.0,
+     "FERTILIZER": 7110.0
+    }
+   },
+   {
+    "spec": {
+     "GOOSE": 7,
+     "COW": 4,
+     "SHEEP": 2
+    },
+    "heads": 13,
+    "net": 38475.0,
+    "min_cash": 96.0,
+    "income": {
+     "EGG": 16072.0,
+     "MILK": 20400.0,
+     "WOOL": 16540.0,
+     "FERTILIZER": 6383.0
+    }
+   },
+   {
+    "spec": {
+     "GOOSE": 9,
+     "COW": 4,
+     "SHEEP": 4
+    },
+    "heads": 17,
+    "net": 32305.0,
+    "min_cash": 293.0,
+    "income": {
+     "EGG": 20466.0,
+     "MILK": 20400.0,
+     "WOOL": 9080.0,
+     "FERTILIZER": 7769.0
+    }
+   },
+   {
+    "spec": {
+     "GOOSE": 7,
+     "COW": 4,
+     "SHEEP": 4
+    },
+    "heads": 15,
+    "net": 29252.0,
+    "min_cash": 93.0,
+    "income": {
+     "EGG": 16072.0,
+     "MILK": 20400.0,
+     "WOOL": 9080.0,
+     "FERTILIZER": 7110.0
+    }
+   },
+   {
+    "spec": {
+     "GOOSE": 9,
+     "COW": 6,
+     "SHEEP": 2
+    },
+    "heads": 17,
+    "net": 28565.0,
+    "min_cash": 293.0,
+    "income": {
+     "EGG": 20466.0,
+     "MILK": 9000.0,
+     "WOOL": 16540.0,
+     "FERTILIZER": 7769.0
+    }
+   },
+   {
+    "spec": {
+     "GOOSE": 7,
+     "COW": 4,
+     "SHEEP": 6
+    },
+    "heads": 17,
+    "net": 27299.0,
+    "min_cash": 93.0,
+    "income": {
+     "EGG": 16072.0,
+     "MILK": 20400.0,
+     "WOOL": 8868.0,
+     "FERTILIZER": 7769.0
+    }
+   },
+   {
+    "spec": {
+     "GOOSE": 9,
+     "COW": 4,
+     "SHEEP": 0
+    },
+    "heads": 13,
+    "net": 26729.0,
+    "min_cash": 296.0,
+    "income": {
+     "EGG": 20466.0,
+     "MILK": 20400.0,
+     "WOOL": 0.0,
+     "FERTILIZER": 6383.0
+    }
+   },
+   {
+    "spec": {
+     "GOOSE": 5,
+     "COW": 4,
+     "SHEEP": 4
+    },
+    "heads": 13,
+    "net": 26213.0,
+    "min_cash": 296.0,
+    "income": {
+     "EGG": 11670.0,
+     "MILK": 20400.0,
+     "WOOL": 9080.0,
+     "FERTILIZER": 6383.0
+    }
+   },
+   {
+    "spec": {
+     "GOOSE": 7,
+     "COW": 6,
+     "SHEEP": 2
+    },
+    "heads": 15,
+    "net": 25512.0,
+    "min_cash": 93.0,
+    "income": {
+     "EGG": 16072.0,
+     "MILK": 9000.0,
+     "WOOL": 16540.0,
+     "FERTILIZER": 7110.0
+    }
+   },
+   {
+    "spec": {
+     "GOOSE": 7,
+     "COW": 8,
+     "SHEEP": 2
+    },
+    "heads": 17,
+    "net": 25147.0,
+    "min_cash": 93.0,
+    "income": {
+     "EGG": 16072.0,
+     "MILK": 10176.0,
+     "WOOL": 16540.0,
+     "FERTILIZER": 7769.0
+    }
+   }
+  ],
+  "variant_econ": {
+   "goose5": {
+    "target": {
+     "GOOSE": 5,
+     "COW": 6,
+     "SHEEP": 6
+    },
+    "kind": "uniform",
+    "net": 11297.0,
+    "min_cash": 293.0,
+    "income_total": 37307.0,
+    "income": {
+     "EGG": 11670.0,
+     "MILK": 9000.0,
+     "WOOL": 8868.0,
+     "FERTILIZER": 7769.0
+    },
+    "cost_buy": 6900,
+    "cost_feed": 11900.0,
+    "cost_hire": 210,
+    "hands": 4,
+    "unbought": {
+     "COW": 3,
+     "SHEEP": 6
+    },
+    "note": null
+   },
+   "goose7": {
+    "target": {
+     "GOOSE": 7,
+     "COW": 6,
+     "SHEEP": 4
+    },
+    "kind": "uniform",
+    "net": 16311.0,
+    "min_cash": 93.0,
+    "income_total": 41921.0,
+    "income": {
+     "EGG": 16072.0,
+     "MILK": 9000.0,
+     "WOOL": 9080.0,
+     "FERTILIZER": 7769.0
+    },
+    "cost_buy": 6500,
+    "cost_feed": 11900.0,
+    "cost_hire": 210,
+    "hands": 4,
+    "unbought": {
+     "COW": 4,
+     "SHEEP": 4
+    },
+    "note": null
+   },
+   "goose9": {
+    "target": {
+     "GOOSE": 9,
+     "COW": 6,
+     "SHEEP": 2
+    },
+    "kind": "uniform",
+    "net": 28565.0,
+    "min_cash": 293.0,
+    "income_total": 53775.0,
+    "income": {
+     "EGG": 20466.0,
+     "MILK": 9000.0,
+     "WOOL": 16540.0,
+     "FERTILIZER": 7769.0
+    },
+    "cost_buy": 6100,
+    "cost_feed": 11900.0,
+    "cost_hire": 210,
+    "hands": 4,
+    "unbought": {
+     "COW": 6,
+     "SHEEP": 2
+    },
+    "note": null
+   },
+   "mix76": {
+    "target": {
+     "GOOSE": 7,
+     "COW": 6,
+     "SHEEP": 0
+    },
+    "kind": "uniform",
+    "net": 10735.0,
+    "min_cash": 96.0,
+    "income_total": 31455.0,
+    "income": {
+     "EGG": 16072.0,
+     "MILK": 9000.0,
+     "WOOL": 0.0,
+     "FERTILIZER": 6383.0
+    },
+    "cost_buy": 4500,
+    "cost_feed": 9100.0,
+    "cost_hire": 120,
+    "hands": 3,
+    "unbought": {
+     "COW": 4
+    },
+    "note": null
+   },
+   "mix79": {
+    "target": {
+     "GOOSE": 7,
+     "COW": 0,
+     "SHEEP": 9
+    },
+    "kind": "uniform",
+    "net": 10632.0,
+    "min_cash": 393.0,
+    "income_total": 35642.0,
+    "income": {
+     "EGG": 16072.0,
+     "MILK": 0.0,
+     "WOOL": 12114.0,
+     "FERTILIZER": 7456.0
+    },
+    "cost_buy": 6600,
+    "cost_feed": 11200.0,
+    "cost_hire": 210,
+    "hands": 4,
+    "unbought": {
+     "SHEEP": 8
+    },
+    "note": null
+   },
+   "shopshift2": {
+    "target": {
+     "GOOSE": 9,
+     "COW": 4,
+     "SHEEP": 2
+    },
+    "kind": "shop_shift",
+    "net": null,
+    "min_cash": null,
+    "income_total": null,
+    "income": null,
+    "cost_buy": null,
+    "cost_feed": null,
+    "cost_hire": null,
+    "hands": null,
+    "unbought": null,
+    "note": null
+   }
+  }
+ },
+ "diag_completion": {
+  "control": {
+   "n_rows": 24,
+   "n_completed_DONE": 24,
+   "n_done_full_trace": 24,
+   "done_rate": 1.0,
+   "full_trace_rate": 1.0,
+   "n_error": 0,
+   "error_rate": 0.0,
+   "errors": [],
+   "terminal_money_mean": 99737.8,
+   "terminal_money_median": 100285.5,
+   "margin_mean": 5115.2,
+   "engines": [
+    "sim"
+   ]
+  },
+  "goose9econ": {
+   "n_rows": 24,
+   "n_completed_DONE": 0,
+   "n_done_full_trace": 0,
+   "done_rate": 0.0,
+   "full_trace_rate": 0.0,
+   "n_error": 24,
+   "error_rate": 1.0,
+   "errors": [
+    {
+     "game_id": "goose-goose9econ-1825501814-s0",
+     "seed": 1825501814,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-786146079-s0",
+     "seed": 786146079,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-963182245-s0",
+     "seed": 963182245,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-672000-s0",
+     "seed": 672000,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-672142-s0",
+     "seed": 672142,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-672284-s0",
+     "seed": 672284,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-1825501814-s1",
+     "seed": 1825501814,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-786146079-s1",
+     "seed": 786146079,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-963182245-s1",
+     "seed": 963182245,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-672000-s1",
+     "seed": 672000,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-672142-s1",
+     "seed": 672142,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose9econ-672284-s1",
+     "seed": 672284,
+     "seat": 1,
+     "error": "AssertionError: "
+    }
+   ],
+   "terminal_money_mean": null,
+   "terminal_money_median": null,
+   "margin_mean": null,
+   "engines": [
+    "sim"
+   ]
+  },
+  "goose7": {
+   "n_rows": 24,
+   "n_completed_DONE": 0,
+   "n_done_full_trace": 0,
+   "done_rate": 0.0,
+   "full_trace_rate": 0.0,
+   "n_error": 24,
+   "error_rate": 1.0,
+   "errors": [
+    {
+     "game_id": "goose-goose7-1825501814-s0",
+     "seed": 1825501814,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-786146079-s0",
+     "seed": 786146079,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-963182245-s0",
+     "seed": 963182245,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-672000-s0",
+     "seed": 672000,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-672142-s0",
+     "seed": 672142,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-672284-s0",
+     "seed": 672284,
+     "seat": 0,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-1825501814-s1",
+     "seed": 1825501814,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-786146079-s1",
+     "seed": 786146079,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-963182245-s1",
+     "seed": 963182245,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-672000-s1",
+     "seed": 672000,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-672142-s1",
+     "seed": 672142,
+     "seat": 1,
+     "error": "AssertionError: "
+    },
+    {
+     "game_id": "goose-goose7-672284-s1",
+     "seed": 672284,
+     "seat": 1,
+     "error": "AssertionError: "
+    }
+   ],
+   "terminal_money_mean": null,
+   "terminal_money_median": null,
+   "margin_mean": null,
+   "engines": [
+    "sim"
+   ]
+  }
+ },
+ "pairs": {
+  "goose9econ": {
+   "n": 0,
+   "mean_delta": 0.0,
+   "mean_margin_control": 0.0,
+   "mean_margin_arm": 0.0,
+   "win_rate_control": 0.0,
+   "win_rate_arm": 0.0,
+   "net_flip_wins": 0,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "control_win_guard_ok": true,
+   "loss_recovery": "0/0 败局 delta>0",
+   "positive_arm": false,
+   "spec": {
+    "target": {
+     "GOOSE": 9,
+     "COW": 4,
+     "SHEEP": 2
+    },
+    "desc": "经济解最优档 9鹅4牛2羊（网格 top1）"
+   },
+   "units_lite": [],
+   "measured": false,
+   "diag_readings": {
+    "done_variant": "0/24 DONE（24/24 AssertionError，首调即崩）",
+    "done_control": "24/24 DONE（全轨迹 24/24 719 拍）",
+    "error_rate_variant": 1.0,
+    "error_rate_control": 0.0,
+    "terminal_money_control_mean_all24": 99737.8,
+    "terminal_money_control_median_all24": 100285.5,
+    "margin_mean_control_all24": 5115.2,
+    "terminal_money_variant": null,
+    "net_flip_wins": null,
+    "unmeasurable_reason": "变体局 0% DONE → 配对 margin/终局钱/净翻胜不可得（ab_stats n=0 的 0 值为占位非实测）"
+   }
+  },
+  "goose7": {
+   "n": 0,
+   "mean_delta": 0.0,
+   "mean_margin_control": 0.0,
+   "mean_margin_arm": 0.0,
+   "win_rate_control": 0.0,
+   "win_rate_arm": 0.0,
+   "net_flip_wins": 0,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "control_win_guard_ok": true,
+   "loss_recovery": "0/0 败局 delta>0",
+   "positive_arm": false,
+   "spec": {
+    "target": {
+     "GOOSE": 7,
+     "COW": 6,
+     "SHEEP": 4
+    },
+    "desc": "纯增量档 7 鹅（6牛4羊7鹅 17 头）"
+   },
+   "units_lite": [],
+   "measured": false,
+   "diag_readings": {
+    "done_variant": "0/24 DONE（24/24 AssertionError，首调即崩）",
+    "done_control": "24/24 DONE（全轨迹 24/24 719 拍）",
+    "error_rate_variant": 1.0,
+    "error_rate_control": 0.0,
+    "terminal_money_control_mean_all24": 99737.8,
+    "terminal_money_control_median_all24": 100285.5,
+    "margin_mean_control_all24": 5115.2,
+    "terminal_money_variant": null,
+    "net_flip_wins": null,
+    "unmeasurable_reason": "变体局 0% DONE → 配对 margin/终局钱/净翻胜不可得（ab_stats n=0 的 0 值为占位非实测）"
+   }
+  }
+ },
+ "econ_stats": {
+  "goose9econ": {
+   "control": {
+    "n": 0,
+    "terminal_money_mean": null,
+    "terminal_money_median": null,
+    "egg_fert_share_mean": null,
+    "egg_income_mean": null,
+    "fert_income_mean": null,
+    "daily_money_mean": {}
+   },
+   "variant": {
+    "n": 0,
+    "terminal_money_mean": null,
+    "terminal_money_median": null,
+    "egg_fert_share_mean": null,
+    "egg_income_mean": null,
+    "fert_income_mean": null,
+    "daily_money_mean": {}
+   },
+   "terminal_money_delta_mean": null,
+   "egg_fert_share_control": null,
+   "egg_fert_share_variant": null
+  },
+  "goose7": {
+   "control": {
+    "n": 0,
+    "terminal_money_mean": null,
+    "terminal_money_median": null,
+    "egg_fert_share_mean": null,
+    "egg_income_mean": null,
+    "fert_income_mean": null,
+    "daily_money_mean": {}
+   },
+   "variant": {
+    "n": 0,
+    "terminal_money_mean": null,
+    "terminal_money_median": null,
+    "egg_fert_share_mean": null,
+    "egg_income_mean": null,
+    "fert_income_mean": null,
+    "daily_money_mean": {}
+   },
+   "terminal_money_delta_mean": null,
+   "egg_fert_share_control": null,
+   "egg_fert_share_variant": null
+  }
+ },
+ "criteria": {
+  "positive_arm": "净翻胜>0（net_flip_wins=win_variant−win_control）的变体为正臂；胜局对照不翻负（flips_neg==0）",
+  "corpus_n": "12 fold 双席/臂=24 局（6 败局回放 LOSS_SEEDS_26[:6] + 6 新中性 672000+i*71 i=0..5）",
+  "done_caliber": "局完成 DONE = error is None ∧ banks≠None；全轨迹 = 本席 trace 719 拍（step 0..718）齐（引擎整局走完）；异常率 = error 行占比",
+  "terminal_money": "farms[obs.player] 口径：run_games banks=farms[seat].money（终局）；econ_face 逐日/终局为 trace 交叉读数",
+  "econ_face": "逐日现金（d0..d29）/终局钱/蛋肥收入占比（EGG+FERTILIZER 挂单量×挂价 占比）",
+  "verdict_rules": "①变体局跑不完或净翻大负（net_flip_wins<0，或 =0 且 mean_delta<0）→ GOOSE_LINE_INFEASIBLE_OR_NEGATIVE（可行性违规+实测负双证）；②意外正→如实报并标注孪生口径失真待查"
+ },
+ "verdict": {
+  "verdict": "GOOSE_LINE_INFEASIBLE_OR_NEGATIVE",
+  "note": "可行性违规+实测负双证：①孪生三闸全 VIOLATION（劳动闸 realized（落位+滞留）< 基线 40-41/41 路由，cash/cap 闸全过）；②实测诊断局两变体均 0/24 DONE（24/24 首调 AssertionError，局跑不完），对照 H1 24/24 DONE 全轨迹。净翻胜/终局钱实测不可得（无完局）——按任务判据『变体局跑不完』分支落锤",
+  "positive_variants": [],
+  "measured_negative_variants": [],
+  "incomplete_game_variants": [
+   "goose9econ",
+   "goose7"
+  ],
+  "feasibility_violation_variants": [
+   "goose5",
+   "goose7",
+   "goose9",
+   "mix76",
+   "mix79",
+   "goose9econ"
+  ],
+  "double_evidence": "feasibility VIOLATION（劳动闸 40-41/41 路由） ∧ 实测（局完成率/净翻胜）双证",
+  "budget_compliance": "局次 102/200（cap 合规）",
+  "root_cause": {
+   "signature": "AssertionError（空消息）于变体 agent 首调（step 0）",
+   "mechanism": "H1 磁带外壳 _ALT_MODE='HybridOpening' 首调 _alt_install 开局改写，内置基线磁带自检断言 assert tape[29]['hands'][2]==['BUILD_PASTURE']（main.py:6496）；goose_line trunk 手术 build_flip 已把 route 0 step 29 tile (2,4) 从 BUILD_PASTURE 翻为 BUILD_COOP（GOOSE 落位需 COOP；change_table_goose9econ.json 登记），断言失配 → 局 0% DONE",
+   "probe": "只读探针：exec 变体 main.py 命名空间直调 _alt_install('HybridOpening'/'Mixed') 均在同一断言炸（goose9econ/goose7 同症）",
+   "scope": "H1 磁带外壳对基线 trunk 形态硬断言（tape[2..5]hands[1]==PASS、tape[29]BUILD_PASTURE、tape[49..57]hands[0]==PASS、tape[:96] 单数≤10）；鹅线手术按设计改动 trunk 链与落位格结构 → 与外壳自检不兼容（产线变体包在现役外壳下不可跑）"
+  }
+ },
+ "anomaly": [
+  "任务提要 EGG T=45 与引擎源码/抽取档 T=332 不符（源码直读 kaggriculture.py MARKET_PARAMS EGG T=332）——econ_model 以 332 为准",
+  "goose5: tail 共享段 3 组跨路由有差异（仅 route 2 尾被复用；HARVEST 物种无关=零风险，信息登记）",
+  "goose5: feasibility 孪生 40 路由未过三闸（劳动闸 realized（落位+滞留）< 基线；cash/cap 闸全过）——已弃判",
+  "goose7/route 0: 2 次换链被 10 单帽阻断（同拍拆单不可用，改用邻链补偿；trunk 波次谱与计划差 1 已登记）",
+  "goose7: tail 共享段 3 组跨路由有差异（仅 route 2 尾被复用；HARVEST 物种无关=零风险，信息登记）",
+  "goose7: feasibility 孪生 41 路由未过三闸（劳动闸 realized（落位+滞留）< 基线；cash/cap 闸全过）——已弃判",
+  "goose9/route 0: 2 次换链被 10 单帽阻断（同拍拆单不可用，改用邻链补偿；trunk 波次谱与计划差 1 已登记）",
+  "goose9: tail 共享段 3 组跨路由有差异（仅 route 2 尾被复用；HARVEST 物种无关=零风险，信息登记）",
+  "goose9: feasibility 孪生 41 路由未过三闸（劳动闸 realized（落位+滞留）< 基线；cash/cap 闸全过）——已弃判",
+  "mix76/route 0: 2 次换链被 10 单帽阻断（同拍拆单不可用，改用邻链补偿；trunk 波次谱与计划差 1 已登记）",
+  "mix76: tail 共享段 3 组跨路由有差异（仅 route 2 尾被复用；HARVEST 物种无关=零风险，信息登记）",
+  "mix76: feasibility 孪生 40 路由未过三闸（劳动闸 realized（落位+滞留）< 基线；cash/cap 闸全过）——已弃判",
+  "mix79: tail 共享段 3 组跨路由有差异（仅 route 2 尾被复用；HARVEST 物种无关=零风险，信息登记）",
+  "mix79: feasibility 孪生 40 路由未过三闸（劳动闸 realized（落位+滞留）< 基线；cash/cap 闸全过）——已弃判",
+  "goose9econ/route 0: 2 次换链被 10 单帽阻断（同拍拆单不可用，改用邻链补偿；trunk 波次谱与计划差 1 已登记）",
+  "goose9econ: tail 共享段 3 组跨路由有差异（仅 route 2 尾被复用；HARVEST 物种无关=零风险，信息登记）",
+  "goose9econ: feasibility 孪生 41 路由未过三闸（劳动闸 realized（落位+滞留）< 基线；cash/cap 闸全过）——已弃判",
+  "基线 route 101 落位 16/17（一格引擎 no-op：(3,2) GOOSE 库存缺链属基线自身行为；三闸按基线相对口径）",
+  "judge_goose.ensure_auth 默认语料 28 seed（26 败局+2）< min_checked=30，默认调用会自判认证未过；诊断口径以 34 seed 语料（26 败局+6 中性672000+i*71+2026092901/02）认证 {'n_checked': 30, 'n_match': 30, 'rate': 1.0}（胶水侧补足，judge_goose.py 未改）",
+  "gates_goose 四门未跑（evidence/goose_gates.json 缺）：本收尾不补跑四门，孪生三闸已 VIOLATION 判弃，四门非判决必要条件",
+  "econ_model.json variants 含 shopshift2（shop_shift 档）未构建包；goose9econ 走 econ 网格 top1（{GOOSE:9,COW:4,SHEEP:2}），econ_model.variants 无独立条目",
+  "孪生 anchor seed780030 终局钱 var 全档 < base（见 feasibility.anchor_seed2）——变体磁带终局钱普遍低于基线，与配对实测互证",
+  "goose9econ 诊断局 24/24 异常（error_rate=1.00）：AssertionError: ; AssertionError: ; AssertionError: ",
+  "goose7 诊断局 24/24 异常（error_rate=1.00）：AssertionError: ; AssertionError: ; AssertionError: ",
+  "变体局根因（实测探针钉死）：goose9econ/goose7 首调即 AssertionError——H1 外壳 _alt_install('HybridOpening') 断言 tape[29]['hands'][2]==['BUILD_PASTURE']，而 goose_line 手术 build_flip 已将 route 0 step 29 tile(2,4) 翻为 BUILD_COOP（change_table_goose9econ/goose7.json 登记）→ 0/24 DONE；对照 H1 24/24 DONE。非 harness 噪声（变体包自身失配），净翻胜/终局钱因而不可得",
+  "H1 磁带外壳另含多处基线 trunk 硬断言（tape[2..5]hands[1]==PASS、tape[49..57]hands[0]==PASS、tape[:96] 市场单数≤10）与 _CL 层 tape[84..91]hands[0]==PASS 断言：鹅线手术如触碰这些格同样会炸——产线重生成需与外壳自检协同（本次未修，边界外）",
+  "harness 噪声不修不管（任务边界）；终局钱 farms[obs.player] 口径"
+ ],
+ "elapsed_s": 116.4
+}

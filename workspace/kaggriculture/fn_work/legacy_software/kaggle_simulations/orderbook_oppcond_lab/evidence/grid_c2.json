@@ -1,0 +1,904 @@
+{
+ "_generated_at": "2026-09-29T08:29:59Z",
+ "version": "oppcond-grid-c2/1.0",
+ "source": {
+  "commands": [
+   "python3 orderbook_oppcond_lab/build_oppcond.py grid",
+   "python3 orderbook_oppcond_lab/calibrate_grid_c2.py"
+  ],
+  "grid": [
+   8,
+   12,
+   16,
+   24
+  ],
+  "opponents": [
+   "r37",
+   "2965a",
+   "r40"
+  ],
+  "grid_seeds": [
+   673000,
+   673037
+  ],
+  "seed_isolation": "throwaway 域 673000+i*37（判决语料零交集）",
+  "selection_rule": "H*=argmax_H min_对手 mean_Δ（minimax 护逐面无劣化），并列取大 H（贴 40 档默认更稳）",
+  "workers": 2
+ },
+ "table": {
+  "8": {
+   "per_opponent": {
+    "r37": {
+     "n_units": 4,
+     "deltas": [
+      -58.0,
+      -58.0,
+      200.0,
+      200.0
+     ],
+     "mean_delta": 71.0
+    },
+    "2965a": {
+     "n_units": 4,
+     "deltas": [
+      -58.0,
+      -58.0,
+      217.0,
+      217.0
+     ],
+     "mean_delta": 79.5
+    },
+    "r40": {
+     "n_units": 4,
+     "deltas": [
+      -58.0,
+      -58.0,
+      208.0,
+      208.0
+     ],
+     "mean_delta": 75.0
+    }
+   },
+   "min_mean_delta": 71.0,
+   "pooled_mean_delta": 75.17
+  },
+  "12": {
+   "per_opponent": {
+    "r37": {
+     "n_units": 4,
+     "deltas": [
+      -23.0,
+      -23.0,
+      166.0,
+      166.0
+     ],
+     "mean_delta": 71.5
+    },
+    "2965a": {
+     "n_units": 4,
+     "deltas": [
+      -23.0,
+      -23.0,
+      183.0,
+      183.0
+     ],
+     "mean_delta": 80.0
+    },
+    "r40": {
+     "n_units": 4,
+     "deltas": [
+      -23.0,
+      -23.0,
+      174.0,
+      174.0
+     ],
+     "mean_delta": 75.5
+    }
+   },
+   "min_mean_delta": 71.5,
+   "pooled_mean_delta": 75.67
+  },
+  "16": {
+   "per_opponent": {
+    "r37": {
+     "n_units": 4,
+     "deltas": [
+      -16.0,
+      -16.0,
+      -232.0,
+      -232.0
+     ],
+     "mean_delta": -124.0
+    },
+    "2965a": {
+     "n_units": 4,
+     "deltas": [
+      -16.0,
+      -16.0,
+      -215.0,
+      -215.0
+     ],
+     "mean_delta": -115.5
+    },
+    "r40": {
+     "n_units": 4,
+     "deltas": [
+      -16.0,
+      -16.0,
+      -224.0,
+      -224.0
+     ],
+     "mean_delta": -120.0
+    }
+   },
+   "min_mean_delta": -124.0,
+   "pooled_mean_delta": -119.83
+  },
+  "24": {
+   "per_opponent": {
+    "r37": {
+     "n_units": 4,
+     "deltas": [
+      0.0,
+      0.0,
+      -34.0,
+      -34.0
+     ],
+     "mean_delta": -17.0
+    },
+    "2965a": {
+     "n_units": 4,
+     "deltas": [
+      0.0,
+      0.0,
+      -44.0,
+      -44.0
+     ],
+     "mean_delta": -22.0
+    },
+    "r40": {
+     "n_units": 4,
+     "deltas": [
+      0.0,
+      0.0,
+      -34.0,
+      -34.0
+     ],
+     "mean_delta": -17.0
+    }
+   },
+   "min_mean_delta": -22.0,
+   "pooled_mean_delta": -18.67
+  }
+ },
+ "h_short_selected": 12,
+ "n_games": 60,
+ "n_error_games": 0,
+ "engines": [
+  "official",
+  "official"
+ ],
+ "elapsed_s": 180.9,
+ "rows": [
+  {
+   "tag": "base",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    83001.0,
+    83214.0
+   ],
+   "error": null,
+   "margin": -213.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82990.0,
+    83226.0
+   ],
+   "error": null,
+   "margin": -236.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    83002.0,
+    83215.0
+   ],
+   "error": null,
+   "margin": -213.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83247.0,
+    82976.0
+   ],
+   "error": null,
+   "margin": -271.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83221.0,
+    82992.0
+   ],
+   "error": null,
+   "margin": -229.0
+  },
+  {
+   "tag": "base",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102341.0,
+    101710.0
+   ],
+   "error": null,
+   "margin": 631.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102453.0,
+    101656.0
+   ],
+   "error": null,
+   "margin": 797.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102352.0,
+    101755.0
+   ],
+   "error": null,
+   "margin": 597.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101641.0,
+    102472.0
+   ],
+   "error": null,
+   "margin": 831.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101954.0,
+    102353.0
+   ],
+   "error": null,
+   "margin": 399.0
+  },
+  {
+   "tag": "base",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    83001.0,
+    83214.0
+   ],
+   "error": null,
+   "margin": -213.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82990.0,
+    83226.0
+   ],
+   "error": null,
+   "margin": -236.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    83002.0,
+    83215.0
+   ],
+   "error": null,
+   "margin": -213.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83247.0,
+    82976.0
+   ],
+   "error": null,
+   "margin": -271.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83221.0,
+    82992.0
+   ],
+   "error": null,
+   "margin": -229.0
+  },
+  {
+   "tag": "base",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102351.0,
+    101706.0
+   ],
+   "error": null,
+   "margin": 645.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102462.0,
+    101634.0
+   ],
+   "error": null,
+   "margin": 828.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102344.0,
+    101743.0
+   ],
+   "error": null,
+   "margin": 601.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101619.0,
+    102481.0
+   ],
+   "error": null,
+   "margin": 862.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101932.0,
+    102362.0
+   ],
+   "error": null,
+   "margin": 430.0
+  },
+  {
+   "tag": "base",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82998.0,
+    83220.0
+   ],
+   "error": null,
+   "margin": -222.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82987.0,
+    83232.0
+   ],
+   "error": null,
+   "margin": -245.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82999.0,
+    83221.0
+   ],
+   "error": null,
+   "margin": -222.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83253.0,
+    82973.0
+   ],
+   "error": null,
+   "margin": -280.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83227.0,
+    82989.0
+   ],
+   "error": null,
+   "margin": -238.0
+  },
+  {
+   "tag": "base",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102337.0,
+    101714.0
+   ],
+   "error": null,
+   "margin": 623.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102453.0,
+    101656.0
+   ],
+   "error": null,
+   "margin": 797.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102348.0,
+    101759.0
+   ],
+   "error": null,
+   "margin": 589.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101641.0,
+    102472.0
+   ],
+   "error": null,
+   "margin": 831.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101954.0,
+    102353.0
+   ],
+   "error": null,
+   "margin": 399.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82976.0,
+    83247.0
+   ],
+   "error": null,
+   "margin": -271.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82992.0,
+    83221.0
+   ],
+   "error": null,
+   "margin": -229.0
+  },
+  {
+   "tag": "base",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83214.0,
+    83001.0
+   ],
+   "error": null,
+   "margin": -213.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83226.0,
+    82990.0
+   ],
+   "error": null,
+   "margin": -236.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "r37",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83215.0,
+    83002.0
+   ],
+   "error": null,
+   "margin": -213.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102472.0,
+    101641.0
+   ],
+   "error": null,
+   "margin": 831.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102353.0,
+    101954.0
+   ],
+   "error": null,
+   "margin": 399.0
+  },
+  {
+   "tag": "base",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101710.0,
+    102341.0
+   ],
+   "error": null,
+   "margin": 631.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101656.0,
+    102453.0
+   ],
+   "error": null,
+   "margin": 797.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "r37",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101755.0,
+    102352.0
+   ],
+   "error": null,
+   "margin": 597.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82976.0,
+    83247.0
+   ],
+   "error": null,
+   "margin": -271.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82992.0,
+    83221.0
+   ],
+   "error": null,
+   "margin": -229.0
+  },
+  {
+   "tag": "base",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83214.0,
+    83001.0
+   ],
+   "error": null,
+   "margin": -213.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83226.0,
+    82990.0
+   ],
+   "error": null,
+   "margin": -236.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "2965a",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83215.0,
+    83002.0
+   ],
+   "error": null,
+   "margin": -213.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102481.0,
+    101619.0
+   ],
+   "error": null,
+   "margin": 862.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102362.0,
+    101932.0
+   ],
+   "error": null,
+   "margin": 430.0
+  },
+  {
+   "tag": "base",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101706.0,
+    102351.0
+   ],
+   "error": null,
+   "margin": 645.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101634.0,
+    102462.0
+   ],
+   "error": null,
+   "margin": 828.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "2965a",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101743.0,
+    102344.0
+   ],
+   "error": null,
+   "margin": 601.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82973.0,
+    83253.0
+   ],
+   "error": null,
+   "margin": -280.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 0,
+   "banks": [
+    82989.0,
+    83227.0
+   ],
+   "error": null,
+   "margin": -238.0
+  },
+  {
+   "tag": "base",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83220.0,
+    82998.0
+   ],
+   "error": null,
+   "margin": -222.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83232.0,
+    82987.0
+   ],
+   "error": null,
+   "margin": -245.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "r40",
+   "seed": 673000,
+   "seat": 1,
+   "banks": [
+    83221.0,
+    82999.0
+   ],
+   "error": null,
+   "margin": -222.0
+  },
+  {
+   "tag": "h8",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102472.0,
+    101641.0
+   ],
+   "error": null,
+   "margin": 831.0
+  },
+  {
+   "tag": "h16",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 0,
+   "banks": [
+    102353.0,
+    101954.0
+   ],
+   "error": null,
+   "margin": 399.0
+  },
+  {
+   "tag": "base",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101714.0,
+    102337.0
+   ],
+   "error": null,
+   "margin": 623.0
+  },
+  {
+   "tag": "h12",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101656.0,
+    102453.0
+   ],
+   "error": null,
+   "margin": 797.0
+  },
+  {
+   "tag": "h24",
+   "opponent": "r40",
+   "seed": 673037,
+   "seat": 1,
+   "banks": [
+    101759.0,
+    102348.0
+   ],
+   "error": null,
+   "margin": 589.0
+  }
+ ]
+}

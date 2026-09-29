@@ -1,0 +1,65 @@
+{
+ "version": "oppcond-build-c3/1.0",
+ "mode": "c3_only",
+ "generated": "2026-09-29T10:16:09Z",
+ "design": "画像器 + C3 条件羊毛错峰；无 C1 无 C2（c1=False → _OC_C1_CLASSES=() 惰性；c2=False → _OC_C2_CLASSES=() 惰性；layers 无 c1_route/c2_horizon）",
+ "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_strongest_lab/build/h1/main.py",
+ "base_main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+ "byte_zero_change_on_base": true,
+ "profiler_core_sha256": "0ed5e7c23bf08f9e6e3797de26beeef4ea7e93d0c013d00e59086f5c67e5e05f",
+ "c3_delta": {
+  "changed_steps": 443,
+  "routes_touched": 34,
+  "market_slot_touched_steps": 0,
+  "change_table_rows": 427,
+  "surgery_stats": {
+   "cells": 283,
+   "phase_cuts": 427,
+   "moved": 147,
+   "no_move": 280,
+   "kept_d29": 182,
+   "kept_other": 1329,
+   "by_target": {
+    "d20->d21": 32,
+    "d23->d25": 20,
+    "d17->d19": 30,
+    "d20->d22": 16,
+    "d17->d18": 32,
+    "d23->d24": 17
+   }
+  }
+ },
+ "c3_delta_expected": {
+  "changed_steps": 443,
+  "routes_touched": 34
+ },
+ "c3_blob_bytes": 3457,
+ "c3_variant_routes_hash": "7063419afa1a7151",
+ "c3_same_source_as_full_set": "build_oppcond.build_c3_delta（layer_k1.retape_phase_offset；全套形态 oc_c1c2c3 同一手术差量件）",
+ "form": {
+  "form": "oc_c3",
+  "cfg": {
+   "c1": false,
+   "c2": false,
+   "c3": true,
+   "h_short": 0
+  },
+  "main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+  "main_bytes": 1219816,
+  "tar_sha256": "e13f0d4b0ef915fcffc0c4b8413e181348603a9f2e97ecd0db0083769e41be7e",
+  "layers": [
+   "profiler",
+   "c3_wool_phase"
+  ],
+  "route_arm": null,
+  "trigger_key": null,
+  "c3_variant_routes_hash": "7063419afa1a7151"
+ },
+ "probes_ok": true,
+ "probe_rows": {
+  "core": 7,
+  "c1": 0,
+  "c2": 0,
+  "c3": 4
+ }
+}
