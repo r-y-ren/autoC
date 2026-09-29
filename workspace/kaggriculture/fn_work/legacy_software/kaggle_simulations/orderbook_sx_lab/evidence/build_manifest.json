@@ -1,0 +1,112 @@
+{
+ "schema": "orderbook_sx_lab_manifest/1.0",
+ "form": "sx",
+ "generated": "2026-09-29T19:19:15Z",
+ "composite": "mpx_w24_p2_3_h14 + expx_v2 层",
+ "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_oppcond_lab/build/oc_c3/main.py",
+ "base_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+ "main_sha256": "f6a15f047dc2cb22bba2f70640ffebd64e84ab83376245607bcc01448ecb5ee7",
+ "main_bytes": 1233361,
+ "tar_sha256": "912deb3eb67688fac861015cbd019250e489eacf9ec0fef1c7340f6219772acc",
+ "tar_bytes": 667917,
+ "tar_members": [
+  "main.py"
+ ],
+ "mpx_winner": {
+  "form": "mpx_w24_p2_3_h14",
+  "levels": [
+   2,
+   1,
+   0,
+   2
+  ],
+  "main_sha256": "f0101de9b558d1f56334739f9a49a0a0d4bc860a898792a9b69fc72c3d84e44f"
+ },
+ "expx_layer": {
+  "k": 12,
+  "win_end": 648,
+  "term": 718,
+  "label": "件 SX=mpx 胜者件（mpx_w24_p2_3_h14）+expX_V2 层（MODELPX 预测核 p_next 精确化+边际收益定单量+胜位守卫[窗收缩 step144-648+滞留保险]）；take_long 共享面组合 _expx_take(_mx_cap)；零跨拍挪量、磁带 blob 零触碰、异常回退基线语义）"
+ },
+ "params": {
+  "win": 24,
+  "planned": 2,
+  "items": [
+   "MILK",
+   "STRAWBERRY",
+   "WOOL"
+  ],
+  "h0": 14
+ },
+ "subs": [
+  {
+   "old": "inv_next=inv+rival_avg+planned-_s758_draw_units(item,step);p_next=float(_r37_market_price(item,max(0,int(inv_next))))",
+   "new": "p_next=_expx_pnext(item,step,inv,rival_avg,avail,p_now,planned,observation)",
+   "count": 4
+  },
+  {
+   "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+   "new": "take=min(avail,_expx_take(item,step,inv,p_now,_mx_cap(item,p_now,step,planned),avail,observation))",
+   "count": 1
+  },
+  {
+   "old": "take=min(avail,10)",
+   "new": "take=min(avail,_expx_take(item,step,inv,p_now,10,avail,observation))",
+   "count": 3
+  },
+  {
+   "old": "planned=6",
+   "new": "planned=_MX_PLANNED",
+   "count": 4
+  },
+  {
+   "old": "len(hist[i])>12:del hist[i][:6]",
+   "new": "len(hist[i])>_MX_WIN:del hist[i][:_MX_WIN//2]",
+   "count": 3
+  },
+  {
+   "old": "len(h[i])>12:del h[i][:6]",
+   "new": "len(h[i])>_MX_WIN:del h[i][:_MX_WIN//2]",
+   "count": 1
+  },
+  {
+   "old": "_S758_ITEMS=('MILK','STRAWBERRY','WOOL')",
+   "new": "_S758_ITEMS=_MX_ITEMS",
+   "count": 1
+  },
+  {
+   "old": "_S758_HOURS = tuple(range(1,23))",
+   "new": "_S758_HOURS = tuple(range(_MX_H0,23))",
+   "count": 1
+  }
+ ],
+ "subs_roundtrip_identity_ok": true,
+ "gate_literal_untouched": true,
+ "entry_last_callable": "_expx_agent",
+ "host_entry": "_mx_agent",
+ "chain": "expx_agent→mx_agent→hs_agent",
+ "compile_ok": true,
+ "diff_audit": {
+  "surface_A_expx": {
+   "prediction_core": "p_next 计算 4 处（B1.PRED_OLD→_expx_pnext）",
+   "sizing": "take=min(avail,10) 3 处→_expx_take(...,10,...)",
+   "guard": "胜位守卫：窗收缩 step144-648（648 后 fire_x=fire_base）+ 滞留保险（MR 持有时模型窗内峰值容量清不掉→基线出货）"
+  },
+  "surface_B_mpx": {
+   "window_literal": "滑窗 len(hist[i])>12:del[:6] ×3 + len(h[i])>12 ×1 → _MX_WIN/_MX_WIN//2",
+   "params": "planned=6×4 / 品项集×1 / 时段×1（_MX_PLANNED/_MX_ITEMS/_MX_H0）",
+   "cap": "take_long 量帽 → _mx_cap(item,p_now,step,planned) 钉死 (3,6,10)"
+  },
+  "shared_sites": {
+   "count": 1,
+   "literals": [
+    "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13"
+   ],
+   "reconciliation": "take_long 1 处（expx 与 mpx 同指基座字面量 B1.TAKE_LONG_OLD==BMP.SUBS[0][0]）→ 组合 take=min(avail,_expx_take(...,_mx_cap(...),...))：expx 边际定单量/滞留保险以 mpx 量帽 (3,6,10) 为上限（语义组合非冲突，expx 不推翻 mpx 帽）"
+  },
+  "orthogonal_prediction_vs_window": true,
+  "name_overlap": [],
+  "zero_name_conflict": true,
+  "conflict_verdict": "ZERO_CONFLICT（预测核/窗字面量严格正交；唯一共享面 take_long 组合 _expx_take(_mx_cap) 语义无矛盾；_MX_* 与 _EXPX_* 命名零碰撞）"
+ }
+}

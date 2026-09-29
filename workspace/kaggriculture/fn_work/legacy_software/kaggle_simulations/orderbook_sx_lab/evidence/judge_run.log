@@ -1,0 +1,74 @@
+sim auth: True {'n_checked': 30, 'n_match': 30, 'rate': 1.0}
+HP_TELEMETRY {'extension_signals': 72, 'rejected_signals': 39}
+smoke: 1052.0 None
+HP_TELEMETRY {'extension_signals': 77, 'rejected_signals': 25}
+HP_TELEMETRY {'extension_signals': 81, 'rejected_signals': 46}
+HP_TELEMETRY {'extension_signals': 99, 'rejected_signals': 28}
+HP_TELEMETRY {'extension_signals': 53, 'rejected_signals': 75}
+HP_TELEMETRY {'extension_signals': 52, 'rejected_signals': 73}
+HP_TELEMETRY {'extension_signals': 82, 'rejected_signals': 57}
+HP_TELEMETRY {'extension_signals': 83, 'rejected_signals': 33}
+HP_TELEMETRY {'extension_signals': 50, 'rejected_signals': 82}
+HP_TELEMETRY {'extension_signals': 61, 'rejected_signals': 57}
+HP_TELEMETRY {'extension_signals': 2, 'rejected_signals': 91}
+HP_TELEMETRY {'extension_signals': 77, 'rejected_signals': 39}
+HP_TELEMETRY {'extension_signals': 11, 'rejected_signals': 79}
+HP_TELEMETRY {'extension_signals': 86, 'rejected_signals': 35}
+HP_TELEMETRY {'extension_signals': 11, 'rejected_signals': 86}
+HP_TELEMETRY {'extension_signals': 103, 'rejected_signals': 22}
+HP_TELEMETRY {'extension_signals': 0, 'rejected_signals': 95}
+HP_TELEMETRY {'extension_signals': 77, 'rejected_signals': 25}
+HP_TELEMETRY {'extension_signals': 81, 'rejected_signals': 46}
+HP_TELEMETRY {'extension_signals': 99, 'rejected_signals': 28}
+HP_TELEMETRY {'extension_signals': 53, 'rejected_signals': 75}
+HP_TELEMETRY {'extension_signals': 52, 'rejected_signals': 73}
+HP_TELEMETRY {'extension_signals': 82, 'rejected_signals': 57}
+HP_TELEMETRY {'extension_signals': 83, 'rejected_signals': 33}
+HP_TELEMETRY {'extension_signals': 50, 'rejected_signals': 82}
+HP_TELEMETRY {'extension_signals': 61, 'rejected_signals': 57}
+HP_TELEMETRY {'extension_signals': 2, 'rejected_signals': 91}
+HP_TELEMETRY {'extension_signals': 77, 'rejected_signals': 39}
+HP_TELEMETRY {'extension_signals': 11, 'rejected_signals': 79}
+HP_TELEMETRY {'extension_signals': 76, 'rejected_signals': 40}
+HP_TELEMETRY {'extension_signals': 11, 'rejected_signals': 86}
+HP_TELEMETRY {'extension_signals': 103, 'rejected_signals': 22}
+HP_TELEMETRY {'extension_signals': 0, 'rejected_signals': 95}
+oc_c3 games 32 err 0 tm 96058.1 win_fill_total 81166.5 shadow_mism 0 73.4 s
+HP_TELEMETRY {'extension_signals': 72, 'rejected_signals': 41}
+HP_TELEMETRY {'extension_signals': 88, 'rejected_signals': 45}
+HP_TELEMETRY {'extension_signals': 107, 'rejected_signals': 19}
+HP_TELEMETRY {'extension_signals': 56, 'rejected_signals': 71}
+HP_TELEMETRY {'extension_signals': 52, 'rejected_signals': 73}
+HP_TELEMETRY {'extension_signals': 83, 'rejected_signals': 58}
+HP_TELEMETRY {'extension_signals': 84, 'rejected_signals': 39}
+HP_TELEMETRY {'extension_signals': 50, 'rejected_signals': 81}
+HP_TELEMETRY {'extension_signals': 60, 'rejected_signals': 59}
+HP_TELEMETRY {'extension_signals': 2, 'rejected_signals': 92}
+HP_TELEMETRY {'extension_signals': 77, 'rejected_signals': 35}
+HP_TELEMETRY {'extension_signals': 8, 'rejected_signals': 85}
+HP_TELEMETRY {'extension_signals': 78, 'rejected_signals': 39}
+HP_TELEMETRY {'extension_signals': 13, 'rejected_signals': 82}
+HP_TELEMETRY {'extension_signals': 103, 'rejected_signals': 22}
+HP_TELEMETRY {'extension_signals': 2, 'rejected_signals': 92}
+mpx games 32 err 0 tm 96184.7 win_fill_total 81235.9 shadow_mism 0 72.0 s
+HP_TELEMETRY {'extension_signals': 68, 'rejected_signals': 24}
+HP_TELEMETRY {'extension_signals': 79, 'rejected_signals': 55}
+HP_TELEMETRY {'extension_signals': 94, 'rejected_signals': 32}
+HP_TELEMETRY {'extension_signals': 56, 'rejected_signals': 71}
+HP_TELEMETRY {'extension_signals': 50, 'rejected_signals': 80}
+HP_TELEMETRY {'extension_signals': 81, 'rejected_signals': 58}
+HP_TELEMETRY {'extension_signals': 74, 'rejected_signals': 38}
+HP_TELEMETRY {'extension_signals': 50, 'rejected_signals': 81}
+HP_TELEMETRY {'extension_signals': 58, 'rejected_signals': 70}
+HP_TELEMETRY {'extension_signals': 2, 'rejected_signals': 90}
+HP_TELEMETRY {'extension_signals': 80, 'rejected_signals': 37}
+HP_TELEMETRY {'extension_signals': 8, 'rejected_signals': 83}
+HP_TELEMETRY {'extension_signals': 79, 'rejected_signals': 37}
+HP_TELEMETRY {'extension_signals': 13, 'rejected_signals': 82}
+HP_TELEMETRY {'extension_signals': 106, 'rejected_signals': 21}
+HP_TELEMETRY {'extension_signals': 2, 'rejected_signals': 87}
+sx games 32 err 0 tm 96128.2 win_fill_total 81191.2 shadow_mism 0 72.8 s
+footprint(sx vs mpx): 32 / 32
+sx vs mpx: W14/L16/T2 h2h 0.4688 dM -73.31 flips_neg 0 dWin -44.69 px_nonneg False crit {'sx_vs_mpx_h2h>=0.5': False, 'flips_neg==0': True, '实现价非负（Δratio_fill 三品∧全品均值≥0）': False, '窗差不降（d14-27 fill 总窗配对 mean Δ≥0）': False}
+DONE 258.9 s budget: {'cap_局次': 250, 'smoke_局次': 1, 'auth_局次': 60, 'judgment_局次': 96, 'total_局次': 157, 'within_cap': True, 'note': '预算=认证 60(30 局×2 引擎)+冒烟 1+判决 96（3 臂×32 单元）=157≤250'}
+VERDICT: NOT_CONFIRMED（详见 criteria）
