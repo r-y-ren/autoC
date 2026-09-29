@@ -1,0 +1,247 @@
+{
+ "_generated_at": "2026-09-29T16:10:02Z",
+ "version": "judge-fullplan/1.0",
+ "corpus": {
+  "loss_folds": [
+   1825501814,
+   2013941152,
+   786146079,
+   1883261866,
+   963182245,
+   240876256,
+   1705553586,
+   2009279466
+  ],
+  "neutral_folds": [
+   672000,
+   672101,
+   672202,
+   672303,
+   672404,
+   672505,
+   672606,
+   672707
+  ],
+  "strata": "26 败局前 8 fold + 新中性 672000+i*101（i=0..7）；n=16 双席"
+ },
+ "pairs_caliber": "control=oc_c3 vs O / arm=goose_full vs 同 O（同 seed+seat）+ H1 参照列；margin=banks[farms[obs.player]]",
+ "opponents": [
+  "orderbook_r37/build/main.py",
+  "orderbook_2965_adopt/a/main.py",
+  "orderbook_2965_adopt/b/main.py",
+  "v48_derivative/main.py"
+ ],
+ "pairs": {
+  "goose_full_vs_oc_c3": {
+   "n": 32,
+   "mean_delta": -10291.47,
+   "mean_margin_control": 8752.09,
+   "mean_margin_var": -1539.38,
+   "win_rate_control": 0.875,
+   "win_rate_var": 0.4375,
+   "net_flip_wins": -14,
+   "flips_pos": 0,
+   "flips_neg": 14,
+   "loss_recovery": "4/16 败局 delta>0",
+   "positive_arm": false
+  },
+  "goose_full_vs_h1": {
+   "n": 32,
+   "mean_delta": -10291.47,
+   "mean_margin_control": 8752.09,
+   "mean_margin_var": -1539.38,
+   "win_rate_control": 0.875,
+   "win_rate_var": 0.4375,
+   "net_flip_wins": -14,
+   "flips_pos": 0,
+   "flips_neg": 14,
+   "loss_recovery": "4/16 败局 delta>0",
+   "positive_arm": false
+  },
+  "oc_c3_vs_h1": {
+   "n": 32,
+   "mean_delta": 0.0,
+   "mean_margin_control": 8752.09,
+   "mean_margin_var": 8752.09,
+   "win_rate_control": 0.875,
+   "win_rate_var": 0.875,
+   "net_flip_wins": 0,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "loss_recovery": "0/16 败局 delta>0",
+   "positive_arm": false
+  }
+ },
+ "econ_stats": {
+  "oc_c3": {
+   "n": 32,
+   "terminal_money_mean": 88880.4,
+   "terminal_money_median": 91860.0,
+   "egg_fert_share_mean": 0.14,
+   "egg_income_mean": 5334.0,
+   "fert_income_mean": 16161.6,
+   "daily_money_mean": {
+    "0": 3000.0,
+    "1": 15.0,
+    "2": 103.2,
+    "3": 216.5,
+    "4": 293.6,
+    "5": 698.8,
+    "6": 814.4,
+    "7": 1221.4,
+    "8": 605.7,
+    "9": 1479.6,
+    "10": 2550.9,
+    "11": 15994.2,
+    "12": 15060.5,
+    "13": 18246.6,
+    "14": 20045.8,
+    "15": 23194.1,
+    "16": 27866.6,
+    "17": 33976.4,
+    "18": 38968.5,
+    "19": 43113.2,
+    "20": 47309.6,
+    "21": 52422.0,
+    "22": 57967.3,
+    "23": 61913.4,
+    "24": 65363.8,
+    "25": 69150.8,
+    "26": 72212.8,
+    "27": 76487.9,
+    "28": 81549.2,
+    "29": 88880.4
+   }
+  },
+  "goose_full": {
+   "n": 32,
+   "terminal_money_mean": 90371.0,
+   "terminal_money_median": 86443.0,
+   "egg_fert_share_mean": 0.2316,
+   "egg_income_mean": 20216.4,
+   "fert_income_mean": 16997.6,
+   "daily_money_mean": {
+    "0": 3000.0,
+    "1": 15.0,
+    "2": 103.2,
+    "3": 216.5,
+    "4": 293.6,
+    "5": 698.8,
+    "6": 814.4,
+    "7": 1371.4,
+    "8": 706.1,
+    "9": 1839.7,
+    "10": 2867.6,
+    "11": 16321.2,
+    "12": 15327.8,
+    "13": 18662.4,
+    "14": 20653.2,
+    "15": 22495.0,
+    "16": 26609.4,
+    "17": 32690.8,
+    "18": 37879.7,
+    "19": 42413.6,
+    "20": 46883.9,
+    "21": 52724.8,
+    "22": 58586.0,
+    "23": 63192.2,
+    "24": 66981.8,
+    "25": 70923.2,
+    "26": 74066.8,
+    "27": 78489.4,
+    "28": 83041.5,
+    "29": 90371.0
+   }
+  },
+  "h1": {
+   "n": 32,
+   "terminal_money_mean": 88880.4,
+   "terminal_money_median": 91860.0,
+   "egg_fert_share_mean": 0.14,
+   "egg_income_mean": 5334.0,
+   "fert_income_mean": 16161.6,
+   "daily_money_mean": {
+    "0": 3000.0,
+    "1": 15.0,
+    "2": 103.2,
+    "3": 216.5,
+    "4": 293.6,
+    "5": 698.8,
+    "6": 814.4,
+    "7": 1221.4,
+    "8": 605.7,
+    "9": 1479.6,
+    "10": 2550.9,
+    "11": 15994.2,
+    "12": 15060.5,
+    "13": 18246.6,
+    "14": 20045.8,
+    "15": 23194.1,
+    "16": 27866.6,
+    "17": 33976.4,
+    "18": 38968.5,
+    "19": 43113.2,
+    "20": 47309.6,
+    "21": 52422.0,
+    "22": 57967.3,
+    "23": 61913.4,
+    "24": 65363.8,
+    "25": 69150.8,
+    "26": 72212.8,
+    "27": 76487.9,
+    "28": 81549.2,
+    "29": 88880.4
+   }
+  },
+  "terminal_money_delta_mean": 1490.6,
+  "egg_fert_share": {
+   "oc_c3": 0.14,
+   "goose_full": 0.2316,
+   "h1": 0.14
+  }
+ },
+ "criteria": {
+  "rule": "净翻胜>0 ∧ flips_neg==0 ∧ 终局钱不降（goose_full vs oc_c3）∧ 蛋肥收入占比报告",
+  "checks": {
+   "net_flip_pos": false,
+   "flips_neg_zero": false,
+   "terminal_money_not_down": true,
+   "egg_fert_share_reported": true
+  },
+  "all_pass": false
+ },
+ "head_compare": {
+  "head": {
+   "G": "9-11（中位 10）",
+   "WHEAT": "169（涨队配方）",
+   "money_end": "105.7k",
+   "sample": "12 局 19 席（MMPQ 5/DSM 4/DECEM 6/VICTOR 4；2026-09-28~29 PUBLIC 回放）"
+  },
+  "goose_full_target": {
+   "G": 10,
+   "C": 4,
+   "S": 2,
+   "WHEAT_plants": "163（基线不变，≈头部 169 带内）",
+   "note": "C7/G9-11/S6-8 型按 16-17 链劳动预算裁剪"
+  }
+ },
+ "verdict": {
+  "verdict": "NO_POSITIVE_GOOSE_ARM",
+  "positive": false,
+  "budget_compliance": "局次 126/400（cap 合规）"
+ },
+ "budget": {
+  "cap_局次": 400,
+  "auth_games": 30,
+  "control_games": 32,
+  "variant_games": 32,
+  "h1_games": 32,
+  "total_games": 126,
+  "within_cap": true
+ },
+ "anomaly": [
+  "harness 噪声不修不管（任务边界）；终局钱 farms[obs.player] 口径",
+  "孪生口径为 solo gengame（对手 PASS）：牛奶/羊毛价不饱和，变体 solo 钱可低于基线；判据以配对实测（真实对手）为准——蛋吸收（log 支）在对饱和市场下占优是头部鹅漂移的经济解释（econ_model 镜像世界）"
+ ],
+ "elapsed_s": 279.1
+}

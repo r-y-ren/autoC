@@ -1,0 +1,1438 @@
+{
+ "_generated_at": "2026-09-29T16:21:24Z",
+ "version": "goose-fullplan-evidence/1.0",
+ "task": "B4c 鹅线全计划供养式重建（剖析→三件协同重生成→判决；不发射/不提交）",
+ "dissect": {
+  "sources": [
+   "fn_docs/hybrid/results/2026-09-29-top-games-analysis.json（88 局头部池实抓）",
+   "kaggle competitions replay 官方日包系（12 局 19 席头部回放逐拍剖析，2026-09-29 抓取）",
+   "fn_docs/hybrid/results/2026-09-29-goose-line.json（B4b 判死档案=外科件/死因）"
+  ],
+  "sample": "12 局 19 席（MMPQ 5 / DSM 4 / DECEM 6 / VICTOR 4）",
+  "buy_goose_day": "d6 主波 12/19 席、d8-9 次波 7/19、d10-11 收尾；总量 G 6-12 中位 10（支持 n=19）",
+  "coop_pattern": "中央簇 x2-6 / y2-7 紧凑块（10×10 格；各队 bbox 均值 x2-6/y2-7）",
+  "feed_care_rhythm": "FEED 12.5-14.9/日、CARE 12.4-14.6/日（中位；随 24-26 头畜群比例照护）",
+  "egg_harvest_rhythm": "鹅格 HARVEST 5.3-6.1/日，最大间隙 2 日（19/19 席一致）",
+  "egg_sell_point": "日产日卖；成交价/日均价 中位 1.00（p25 0.98 / p75 1.00，n=806 单）；qty 8/日",
+  "labor_split_vs_wheat": "畜线 18-19% / 作物线 28-31% / 物流 46-47%（总 7.0k-7.7k ops/局）",
+  "herd_money": "C7-8/G9-11/S3-8；WHEAT 153-201（涨队 169）/CARROT 28-56（涨队 31.5）；终局钱头部中位 105.7k"
+ },
+ "top_params": {
+  "head_recipe": "GOOSE 9 + WHEAT 169 + CARROT 31.5（涨队）",
+  "head_money_end": "105.7k（头部中位）",
+  "target_type": "C7/G9-11/S6-8 按头部中位 + 我方 16-17 链劳动预算裁剪 → G10/C4/S2 型",
+  "baseline_oc_c3": "C7/S6/G3 族（16-17 链）；WHEAT 163/CARROT 31（≈涨队配方带内）"
+ },
+ "rebuild": {
+  "schedule": {
+   "version": "goose-fullplan-schedule/1.0",
+   "econ_top": {
+    "spec": {
+     "GOOSE": 9,
+     "COW": 4,
+     "SHEEP": 2
+    },
+    "net": 41506.0,
+    "income": {
+     "EGG": 20466.0,
+     "MILK": 20400.0,
+     "WOOL": 16540.0,
+     "FERTILIZER": 7110.0
+    },
+    "min_cash": 293.0,
+    "grid_src": "orderbook_goose_lab/econ_model.py"
+   },
+   "target_spec": {
+    "GOOSE": 10,
+    "COW": 4,
+    "SHEEP": 2,
+    "note": "头部中位 G10 + 我方 16-17 链劳动预算裁剪（C7/G9-11/S6-8 型）"
+   },
+   "buy_waves": {
+    "rule": "回本门控：trunk 波（d0-d3 4COW+2SHEEP）不动；branch 波 d6-11 换 GOOSE（头部买鹅日=d6 主波+d8-11 续波）",
+    "branch_buy_days": {
+     "6": 82,
+     "7": 56,
+     "8": 83,
+     "9": 77,
+     "10": 83,
+     "11": 29
+    }
+   },
+   "coop_placement": {
+    "rule": "沿用基线落位格（走线已成型）；BUILD_PASTURE→BUILD_COOP 随换链翻转（放置先于落位）",
+    "head_pattern": "中央簇 x2-6/y2-7（棚旁 4-10 格紧凑块，10×10 格）",
+    "sites_per_route": {
+     "0": 10,
+     "1": 10,
+     "2": 10,
+     "3": 10,
+     "4": 10,
+     "5": 10,
+     "6": 10,
+     "7": 10,
+     "8": 10,
+     "9": 10,
+     "10": 10,
+     "11": 10,
+     "12": 10,
+     "100": 9,
+     "101": 10,
+     "103": 10,
+     "104": 10,
+     "105": 10,
+     "106": 10,
+     "107": 10,
+     "108": 10,
+     "109": 10,
+     "110": 10,
+     "111": 10,
+     "112": 10,
+     "113": 10,
+     "114": 10,
+     "115": 10,
+     "116": 10,
+     "117": 10,
+     "118": 10,
+     "119": 10,
+     "120": 10,
+     "121": 10,
+     "122": 10,
+     "123": 10,
+     "124": 10,
+     "125": 10,
+     "126": 10,
+     "127": 10,
+     "128": 10
+    }
+   },
+   "egg_rhythm": {
+    "rule": "鹅格 HARVEST 间隙 ≤2 日（cap4×2 枚/日）；冗余位 COLLECT_FERTILIZER→HARVEST（仅鹅格，护肥料池）",
+    "head_max_gap": 2
+   },
+   "egg_sell": {
+    "rule": "EGG 槽按 G 产比缩放；d12 起每日改写 2 个富余 MILK/WOOL 槽为 SELL EGG qty=2×G（清棚=饲料供养）；每品每日首槽与 d<12 槽不动（现金流/品类）",
+    "head": "日产日卖，价/日均价 中位 1.00（p25 0.98/p75 1.00），qty 8/日"
+   },
+   "labor_budget": {
+    "rule": "FEED/CARE 工时不动（保命/照护 lever）；收蛋工时按 ≤2 日缺口重排；劳动闸=落位+滞留 ≥ 基线（孪生逐路由验证）",
+    "head_split": "畜线 18-19% / 作物线 28-31% / 物流 46-47%（总 7.0k-7.7k ops）"
+   },
+   "head_params": {
+    "sample": "12 局 19 席（MMPQ 5/DSM 4/DECEM 6/VICTOR 4；2026-09-28~29 PUBLIC 回放）",
+    "buy_goose_first_day": "d6 主波（12/19 席）；d8-9 次波（7/19）；d10-11 收尾",
+    "buy_goose_total": "G 6-12，中位 10",
+    "coop_pattern": "中央簇 x2-6/y2-7（棚旁 4-10 格紧凑块，10×10 格）",
+    "feed_care": "FEED 12-15/日、CARE 12-15/日（随畜群 24-26 头比例照护）",
+    "egg_harvest": "鹅格 HARVEST 5.3-6.1/日，最大间隙 2 日（全样本一致）",
+    "egg_sell": "日产日卖，价/日均价 中位 1.00（p25 0.98/p75 1.00），qty 8/日",
+    "labor_split": "畜线 18-19% / 作物线 28-31% / 物流 46-47%（总 7.0k-7.7k ops）",
+    "herd_med": "C7-8/G9-11/S3-8；WHEAT 153-201 格（涨队 169）/CARROT 28-56（涨队 31.5）",
+    "money_end": "头部中位 105.7k"
+   }
+  },
+  "labor": {
+   "rule": "FEED/CARE 工时不动（保命/照护 lever）；收蛋工时重排=鹅格 COLLECT_FERTILIZER→HARVEST 补 ≤2 日缺口（2037 次转换，deficit 日 396）；劳动闸=落位+滞留≥基线",
+   "labor_tables_sample": {
+    "0": {
+     "per_tile": {
+      "4,4": {
+       "species": "COW",
+       "fed_days": 26,
+       "cared_days": 30,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "4,3": {
+       "species": "COW",
+       "fed_days": 26,
+       "cared_days": 28,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "3,3": {
+       "species": "SHEEP",
+       "fed_days": 27,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 3
+      },
+      "3,4": {
+       "species": "SHEEP",
+       "fed_days": 29,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 4
+      },
+      "4,2": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 27,
+       "harvest_days": 10,
+       "harvest_max_gap": 3
+      },
+      "2,4": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 24,
+       "harvest_days": 10,
+       "harvest_max_gap": 2
+      },
+      "5,4": {
+       "species": "GOOSE",
+       "fed_days": 22,
+       "cared_days": 24,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "5,3": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 23,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "6,4": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 22,
+       "harvest_days": 12,
+       "harvest_max_gap": 2
+      },
+      "5,2": {
+       "species": "COW",
+       "fed_days": 20,
+       "cared_days": 21,
+       "harvest_days": 7,
+       "harvest_max_gap": 4
+      },
+      "7,4": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 22,
+       "harvest_days": 13,
+       "harvest_max_gap": 3
+      },
+      "6,3": {
+       "species": "GOOSE",
+       "fed_days": 21,
+       "cared_days": 21,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "6,2": {
+       "species": "GOOSE",
+       "fed_days": 19,
+       "cared_days": 20,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "1,4": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 19,
+       "harvest_days": 11,
+       "harvest_max_gap": 3
+      },
+      "3,2": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 18,
+       "harvest_days": 14,
+       "harvest_max_gap": 3
+      },
+      "4,1": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 18,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      },
+      "2,3": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 18,
+       "harvest_days": 13,
+       "harvest_max_gap": 2
+      }
+     },
+     "op_lines": {
+      "other": 541,
+      "logistics": 3030,
+      "animal": 1100,
+      "crop_or_harvest": 1972
+     },
+     "animal_share": 0.166
+    },
+    "1": {
+     "per_tile": {
+      "4,4": {
+       "species": "COW",
+       "fed_days": 26,
+       "cared_days": 29,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "4,3": {
+       "species": "COW",
+       "fed_days": 27,
+       "cared_days": 28,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "3,3": {
+       "species": "SHEEP",
+       "fed_days": 27,
+       "cared_days": 28,
+       "harvest_days": 8,
+       "harvest_max_gap": 3
+      },
+      "3,4": {
+       "species": "SHEEP",
+       "fed_days": 29,
+       "cared_days": 30,
+       "harvest_days": 8,
+       "harvest_max_gap": 4
+      },
+      "4,2": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 26,
+       "harvest_days": 10,
+       "harvest_max_gap": 3
+      },
+      "2,4": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 24,
+       "harvest_days": 10,
+       "harvest_max_gap": 2
+      },
+      "5,4": {
+       "species": "GOOSE",
+       "fed_days": 22,
+       "cared_days": 23,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "5,3": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 24,
+       "harvest_days": 15,
+       "harvest_max_gap": 2
+      },
+      "6,4": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 22,
+       "harvest_days": 12,
+       "harvest_max_gap": 2
+      },
+      "5,2": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 22,
+       "harvest_days": 12,
+       "harvest_max_gap": 2
+      },
+      "6,3": {
+       "species": "GOOSE",
+       "fed_days": 21,
+       "cared_days": 21,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "7,4": {
+       "species": "SHEEP",
+       "fed_days": 20,
+       "cared_days": 21,
+       "harvest_days": 6,
+       "harvest_max_gap": 3
+      },
+      "6,2": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 20,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "1,4": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 19,
+       "harvest_days": 11,
+       "harvest_max_gap": 3
+      },
+      "3,2": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 19,
+       "harvest_days": 14,
+       "harvest_max_gap": 3
+      },
+      "4,1": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 18,
+       "harvest_days": 11,
+       "harvest_max_gap": 3
+      },
+      "2,3": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 18,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      }
+     },
+     "op_lines": {
+      "other": 701,
+      "logistics": 3250,
+      "animal": 1103,
+      "crop_or_harvest": 1960
+     },
+     "animal_share": 0.157
+    },
+    "9": {
+     "per_tile": {
+      "4,4": {
+       "species": "COW",
+       "fed_days": 26,
+       "cared_days": 30,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "4,3": {
+       "species": "COW",
+       "fed_days": 26,
+       "cared_days": 28,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "3,3": {
+       "species": "SHEEP",
+       "fed_days": 28,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 3
+      },
+      "3,4": {
+       "species": "SHEEP",
+       "fed_days": 29,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 4
+      },
+      "4,2": {
+       "species": "COW",
+       "fed_days": 23,
+       "cared_days": 27,
+       "harvest_days": 10,
+       "harvest_max_gap": 3
+      },
+      "2,4": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 24,
+       "harvest_days": 10,
+       "harvest_max_gap": 2
+      },
+      "5,4": {
+       "species": "GOOSE",
+       "fed_days": 23,
+       "cared_days": 24,
+       "harvest_days": 15,
+       "harvest_max_gap": 2
+      },
+      "5,3": {
+       "species": "GOOSE",
+       "fed_days": 23,
+       "cared_days": 23,
+       "harvest_days": 15,
+       "harvest_max_gap": 2
+      },
+      "6,4": {
+       "species": "GOOSE",
+       "fed_days": 21,
+       "cared_days": 22,
+       "harvest_days": 12,
+       "harvest_max_gap": 2
+      },
+      "5,2": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 21,
+       "harvest_days": 12,
+       "harvest_max_gap": 2
+      },
+      "6,3": {
+       "species": "GOOSE",
+       "fed_days": 21,
+       "cared_days": 21,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "7,4": {
+       "species": "SHEEP",
+       "fed_days": 21,
+       "cared_days": 22,
+       "harvest_days": 6,
+       "harvest_max_gap": 3
+      },
+      "6,2": {
+       "species": "GOOSE",
+       "fed_days": 19,
+       "cared_days": 20,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "3,2": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 18,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      },
+      "1,4": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 19,
+       "harvest_days": 11,
+       "harvest_max_gap": 3
+      },
+      "4,1": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 18,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      },
+      "2,3": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 18,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      }
+     },
+     "op_lines": {
+      "other": 834,
+      "logistics": 3114,
+      "animal": 1084,
+      "crop_or_harvest": 1959
+     },
+     "animal_share": 0.155
+    },
+    "12": {
+     "per_tile": {
+      "4,4": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 28,
+       "harvest_days": 10,
+       "harvest_max_gap": 4
+      },
+      "4,3": {
+       "species": "COW",
+       "fed_days": 21,
+       "cared_days": 27,
+       "harvest_days": 8,
+       "harvest_max_gap": 7
+      },
+      "3,3": {
+       "species": "SHEEP",
+       "fed_days": 28,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 3
+      },
+      "3,4": {
+       "species": "SHEEP",
+       "fed_days": 29,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 4
+      },
+      "4,2": {
+       "species": "COW",
+       "fed_days": 21,
+       "cared_days": 25,
+       "harvest_days": 9,
+       "harvest_max_gap": 4
+      },
+      "2,4": {
+       "species": "COW",
+       "fed_days": 20,
+       "cared_days": 21,
+       "harvest_days": 10,
+       "harvest_max_gap": 2
+      },
+      "5,3": {
+       "species": "GOOSE",
+       "fed_days": 22,
+       "cared_days": 23,
+       "harvest_days": 15,
+       "harvest_max_gap": 2
+      },
+      "5,4": {
+       "species": "GOOSE",
+       "fed_days": 23,
+       "cared_days": 24,
+       "harvest_days": 15,
+       "harvest_max_gap": 2
+      },
+      "6,4": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 22,
+       "harvest_days": 12,
+       "harvest_max_gap": 2
+      },
+      "5,2": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 21,
+       "harvest_days": 12,
+       "harvest_max_gap": 2
+      },
+      "6,3": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 21,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "7,4": {
+       "species": "GOOSE",
+       "fed_days": 21,
+       "cared_days": 22,
+       "harvest_days": 13,
+       "harvest_max_gap": 3
+      },
+      "6,2": {
+       "species": "SHEEP",
+       "fed_days": 19,
+       "cared_days": 21,
+       "harvest_days": 6,
+       "harvest_max_gap": 4
+      },
+      "3,2": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 18,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      },
+      "1,4": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 19,
+       "harvest_days": 11,
+       "harvest_max_gap": 3
+      },
+      "4,1": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 18,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      },
+      "2,3": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 18,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      }
+     },
+     "op_lines": {
+      "other": 627,
+      "logistics": 3321,
+      "animal": 1085,
+      "crop_or_harvest": 1981
+     },
+     "animal_share": 0.155
+    },
+    "101": {
+     "per_tile": {
+      "4,4": {
+       "species": "COW",
+       "fed_days": 26,
+       "cared_days": 30,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "4,3": {
+       "species": "COW",
+       "fed_days": 26,
+       "cared_days": 28,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "3,3": {
+       "species": "SHEEP",
+       "fed_days": 27,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 3
+      },
+      "3,4": {
+       "species": "SHEEP",
+       "fed_days": 29,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 4
+      },
+      "4,2": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 27,
+       "harvest_days": 10,
+       "harvest_max_gap": 3
+      },
+      "2,4": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 24,
+       "harvest_days": 10,
+       "harvest_max_gap": 2
+      },
+      "5,4": {
+       "species": "GOOSE",
+       "fed_days": 22,
+       "cared_days": 24,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "5,3": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 23,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "6,4": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 22,
+       "harvest_days": 12,
+       "harvest_max_gap": 2
+      },
+      "5,2": {
+       "species": "COW",
+       "fed_days": 20,
+       "cared_days": 21,
+       "harvest_days": 7,
+       "harvest_max_gap": 4
+      },
+      "7,4": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 22,
+       "harvest_days": 13,
+       "harvest_max_gap": 3
+      },
+      "6,3": {
+       "species": "GOOSE",
+       "fed_days": 21,
+       "cared_days": 21,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "6,2": {
+       "species": "GOOSE",
+       "fed_days": 19,
+       "cared_days": 20,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "1,4": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 19,
+       "harvest_days": 11,
+       "harvest_max_gap": 3
+      },
+      "3,2": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 18,
+       "harvest_days": 14,
+       "harvest_max_gap": 3
+      },
+      "4,1": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 17,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      },
+      "2,3": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 18,
+       "harvest_days": 13,
+       "harvest_max_gap": 2
+      }
+     },
+     "op_lines": {
+      "other": 554,
+      "logistics": 3063,
+      "animal": 1094,
+      "crop_or_harvest": 1992
+     },
+     "animal_share": 0.163
+    },
+    "110": {
+     "per_tile": {
+      "4,4": {
+       "species": "COW",
+       "fed_days": 25,
+       "cared_days": 29,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "4,3": {
+       "species": "COW",
+       "fed_days": 26,
+       "cared_days": 28,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "3,3": {
+       "species": "SHEEP",
+       "fed_days": 27,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 3
+      },
+      "3,4": {
+       "species": "SHEEP",
+       "fed_days": 29,
+       "cared_days": 29,
+       "harvest_days": 8,
+       "harvest_max_gap": 4
+      },
+      "4,2": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 27,
+       "harvest_days": 10,
+       "harvest_max_gap": 2
+      },
+      "2,4": {
+       "species": "COW",
+       "fed_days": 24,
+       "cared_days": 24,
+       "harvest_days": 10,
+       "harvest_max_gap": 2
+      },
+      "5,4": {
+       "species": "GOOSE",
+       "fed_days": 21,
+       "cared_days": 23,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "5,3": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 23,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "6,4": {
+       "species": "GOOSE",
+       "fed_days": 19,
+       "cared_days": 21,
+       "harvest_days": 12,
+       "harvest_max_gap": 2
+      },
+      "5,2": {
+       "species": "COW",
+       "fed_days": 20,
+       "cared_days": 21,
+       "harvest_days": 7,
+       "harvest_max_gap": 4
+      },
+      "7,4": {
+       "species": "GOOSE",
+       "fed_days": 20,
+       "cared_days": 22,
+       "harvest_days": 13,
+       "harvest_max_gap": 3
+      },
+      "6,3": {
+       "species": "GOOSE",
+       "fed_days": 21,
+       "cared_days": 21,
+       "harvest_days": 14,
+       "harvest_max_gap": 2
+      },
+      "6,2": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 19,
+       "harvest_days": 11,
+       "harvest_max_gap": 2
+      },
+      "1,4": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 19,
+       "harvest_days": 11,
+       "harvest_max_gap": 3
+      },
+      "3,2": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 18,
+       "harvest_days": 14,
+       "harvest_max_gap": 3
+      },
+      "4,1": {
+       "species": "GOOSE",
+       "fed_days": 18,
+       "cared_days": 18,
+       "harvest_days": 12,
+       "harvest_max_gap": 3
+      },
+      "2,3": {
+       "species": "GOOSE",
+       "fed_days": 17,
+       "cared_days": 18,
+       "harvest_days": 13,
+       "harvest_max_gap": 2
+      }
+     },
+     "op_lines": {
+      "other": 532,
+      "logistics": 3213,
+      "animal": 1111,
+      "crop_or_harvest": 2040
+     },
+     "animal_share": 0.161
+    }
+   },
+   "conversions": {
+    "chains_to_goose": 315,
+    "sell_qty_scaled": 563,
+    "sell_retargeted": 1056
+   }
+  },
+  "assertions": {
+   "regenerated": true,
+   "values_source": "重建后 route-0 磁带导出（build_plan_table）",
+   "patched": [
+    {
+     "old": "assert tape[step]['hands'][1]==['PASS']",
+     "new": "assert tape[step]['hands'][1]==_GP_PLAN['h1_pass'][step]",
+     "n": 1
+    },
+    {
+     "old": "assert tape[29]['hands'][2]==['BUILD_PASTURE']",
+     "new": "assert tape[29]['hands'][2]==_GP_PLAN['t29_h2']",
+     "n": 1
+    },
+    {
+     "old": "assert tape[step]['hands'][0]==['PASS']",
+     "new": "assert tape[step]['hands'][0]==_GP_PLAN['h0_pass'][step]",
+     "n": 1
+    },
+    {
+     "old": "assert max(len(a.get('market',[])) for a in tape[:96])<=10",
+     "new": "assert max(len(a.get('market',[])) for a in tape[:96])<=_GP_PLAN['market_cap']",
+     "n": 1
+    },
+    {
+     "old": "assert tape[step]['hands'][0] == ['PASS']",
+     "new": "assert tape[step]['hands'][0] == _GP_PLAN['h0_pass2'][step]",
+     "n": 1
+    }
+   ],
+   "plan_table": {
+    "h1_pass": {
+     "2": [
+      "PASS"
+     ],
+     "3": [
+      "PASS"
+     ],
+     "4": [
+      "PASS"
+     ],
+     "5": [
+      "PASS"
+     ],
+     "6": [
+      "PASS"
+     ]
+    },
+    "t29_h2": [
+     "BUILD_PASTURE"
+    ],
+    "h0_pass": {
+     "49": [
+      "PASS"
+     ],
+     "50": [
+      "PASS"
+     ],
+     "51": [
+      "PASS"
+     ],
+     "52": [
+      "PASS"
+     ],
+     "53": [
+      "PASS"
+     ],
+     "54": [
+      "PASS"
+     ],
+     "55": [
+      "PASS"
+     ],
+     "56": [
+      "PASS"
+     ],
+     "57": [
+      "PASS"
+     ]
+    },
+    "h0_pass2": {
+     "84": [
+      "PASS"
+     ],
+     "85": [
+      "PASS"
+     ],
+     "86": [
+      "PASS"
+     ],
+     "87": [
+      "PASS"
+     ],
+     "88": [
+      "PASS"
+     ],
+     "89": [
+      "PASS"
+     ],
+     "90": [
+      "PASS"
+     ],
+     "91": [
+      "PASS"
+     ]
+    },
+    "market_cap": 10,
+    "goose_places": 10
+   },
+   "new_invariants": [
+    "mid(144..648) PLACE GOOSE 数 == goose_places=10"
+   ],
+   "semantics": "磁带必须符合计划表才许开局改写（计划自洽自检语义保持）"
+  },
+  "assert_probe": {
+   "passed": true,
+   "probed": "末位 _alt_install('HybridOpening')（含首段+CL 段断言）"
+  },
+  "diff_scope": {
+   "n_change_hunks": 7,
+   "hunks": [
+    {
+     "tag": "replace",
+     "base_lines": [
+      946,
+      947
+     ],
+     "new_lines": [
+      946,
+      947
+     ]
+    },
+    {
+     "tag": "insert",
+     "base_lines": [
+      6478,
+      6478
+     ],
+     "new_lines": [
+      6478,
+      6481
+     ]
+    },
+    {
+     "tag": "replace",
+     "base_lines": [
+      6492,
+      6493
+     ],
+     "new_lines": [
+      6495,
+      6496
+     ]
+    },
+    {
+     "tag": "replace",
+     "base_lines": [
+      6495,
+      6496
+     ],
+     "new_lines": [
+      6498,
+      6499
+     ]
+    },
+    {
+     "tag": "replace",
+     "base_lines": [
+      6500,
+      6501
+     ],
+     "new_lines": [
+      6503,
+      6504
+     ]
+    },
+    {
+     "tag": "replace",
+     "base_lines": [
+      6515,
+      6516
+     ],
+     "new_lines": [
+      6518,
+      6521
+     ]
+    },
+    {
+     "tag": "replace",
+     "base_lines": [
+      6611,
+      6612
+     ],
+     "new_lines": [
+      6616,
+      6617
+     ]
+    }
+   ]
+  }
+ },
+ "feasibility": {
+  "twin_seed": 780010,
+  "gates": "现金 min_money≥0 / 劳动 realized(落位+滞留)≥基线 / 棚容 held≤结构格",
+  "n_routes": 41,
+  "n_pass": 41,
+  "n_bad": 0,
+  "rollbacks": [],
+  "realized_pairs": [
+   {
+    "route": "0",
+    "base": 17,
+    "var": 17
+   },
+   {
+    "route": "1",
+    "base": 16,
+    "var": 16
+   },
+   {
+    "route": "2",
+    "base": 17,
+    "var": 17
+   },
+   {
+    "route": "3",
+    "base": 17,
+    "var": 17
+   },
+   {
+    "route": "4",
+    "base": 16,
+    "var": 16
+   },
+   {
+    "route": "5",
+    "base": 16,
+    "var": 16
+   },
+   {
+    "route": "6",
+    "base": 17,
+    "var": 17
+   },
+   {
+    "route": "7",
+    "base": 17,
+    "var": 17
+   },
+   {
+    "route": "8",
+    "base": 17,
+    "var": 17
+   },
+   {
+    "route": "9",
+    "base": 17,
+    "var": 17
+   },
+   {
+    "route": "10",
+    "base": 16,
+    "var": 17
+   },
+   {
+    "route": "11",
+    "base": 17,
+    "var": 17
+   }
+  ],
+  "conservation": {
+   "conservation_n": 41,
+   "conservation_match": 41,
+   "slot_ok": true,
+   "shared_seg": {
+    "trunk": {
+     "groups": 154,
+     "divergent": 0
+    },
+    "tail": {
+     "groups": 150,
+     "divergent": 1
+    }
+   },
+   "n_table_rows": 4996
+  }
+ },
+ "pairs": {
+  "goose_full_vs_oc_c3": {
+   "n": 32,
+   "mean_delta": -10291.47,
+   "mean_margin_control": 8752.09,
+   "mean_margin_var": -1539.38,
+   "win_rate_control": 0.875,
+   "win_rate_var": 0.4375,
+   "net_flip_wins": -14,
+   "flips_pos": 0,
+   "flips_neg": 14,
+   "loss_recovery": "4/16 败局 delta>0",
+   "positive_arm": false
+  },
+  "goose_full_vs_h1": {
+   "n": 32,
+   "mean_delta": -10291.47,
+   "mean_margin_control": 8752.09,
+   "mean_margin_var": -1539.38,
+   "win_rate_control": 0.875,
+   "win_rate_var": 0.4375,
+   "net_flip_wins": -14,
+   "flips_pos": 0,
+   "flips_neg": 14,
+   "loss_recovery": "4/16 败局 delta>0",
+   "positive_arm": false
+  },
+  "oc_c3_vs_h1": {
+   "n": 32,
+   "mean_delta": 0.0,
+   "mean_margin_control": 8752.09,
+   "mean_margin_var": 8752.09,
+   "win_rate_control": 0.875,
+   "win_rate_var": 0.875,
+   "net_flip_wins": 0,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "loss_recovery": "0/16 败局 delta>0",
+   "positive_arm": false
+  }
+ },
+ "econ_stats": {
+  "oc_c3": {
+   "n": 32,
+   "terminal_money_mean": 88880.4,
+   "terminal_money_median": 91860.0,
+   "egg_fert_share_mean": 0.14,
+   "egg_income_mean": 5334.0,
+   "fert_income_mean": 16161.6,
+   "daily_money_mean": {
+    "0": 3000.0,
+    "1": 15.0,
+    "2": 103.2,
+    "3": 216.5,
+    "4": 293.6,
+    "5": 698.8,
+    "6": 814.4,
+    "7": 1221.4,
+    "8": 605.7,
+    "9": 1479.6,
+    "10": 2550.9,
+    "11": 15994.2,
+    "12": 15060.5,
+    "13": 18246.6,
+    "14": 20045.8,
+    "15": 23194.1,
+    "16": 27866.6,
+    "17": 33976.4,
+    "18": 38968.5,
+    "19": 43113.2,
+    "20": 47309.6,
+    "21": 52422.0,
+    "22": 57967.3,
+    "23": 61913.4,
+    "24": 65363.8,
+    "25": 69150.8,
+    "26": 72212.8,
+    "27": 76487.9,
+    "28": 81549.2,
+    "29": 88880.4
+   }
+  },
+  "goose_full": {
+   "n": 32,
+   "terminal_money_mean": 90371.0,
+   "terminal_money_median": 86443.0,
+   "egg_fert_share_mean": 0.2316,
+   "egg_income_mean": 20216.4,
+   "fert_income_mean": 16997.6,
+   "daily_money_mean": {
+    "0": 3000.0,
+    "1": 15.0,
+    "2": 103.2,
+    "3": 216.5,
+    "4": 293.6,
+    "5": 698.8,
+    "6": 814.4,
+    "7": 1371.4,
+    "8": 706.1,
+    "9": 1839.7,
+    "10": 2867.6,
+    "11": 16321.2,
+    "12": 15327.8,
+    "13": 18662.4,
+    "14": 20653.2,
+    "15": 22495.0,
+    "16": 26609.4,
+    "17": 32690.8,
+    "18": 37879.7,
+    "19": 42413.6,
+    "20": 46883.9,
+    "21": 52724.8,
+    "22": 58586.0,
+    "23": 63192.2,
+    "24": 66981.8,
+    "25": 70923.2,
+    "26": 74066.8,
+    "27": 78489.4,
+    "28": 83041.5,
+    "29": 90371.0
+   }
+  },
+  "h1": {
+   "n": 32,
+   "terminal_money_mean": 88880.4,
+   "terminal_money_median": 91860.0,
+   "egg_fert_share_mean": 0.14,
+   "egg_income_mean": 5334.0,
+   "fert_income_mean": 16161.6,
+   "daily_money_mean": {
+    "0": 3000.0,
+    "1": 15.0,
+    "2": 103.2,
+    "3": 216.5,
+    "4": 293.6,
+    "5": 698.8,
+    "6": 814.4,
+    "7": 1221.4,
+    "8": 605.7,
+    "9": 1479.6,
+    "10": 2550.9,
+    "11": 15994.2,
+    "12": 15060.5,
+    "13": 18246.6,
+    "14": 20045.8,
+    "15": 23194.1,
+    "16": 27866.6,
+    "17": 33976.4,
+    "18": 38968.5,
+    "19": 43113.2,
+    "20": 47309.6,
+    "21": 52422.0,
+    "22": 57967.3,
+    "23": 61913.4,
+    "24": 65363.8,
+    "25": 69150.8,
+    "26": 72212.8,
+    "27": 76487.9,
+    "28": 81549.2,
+    "29": 88880.4
+   }
+  },
+  "terminal_money_delta_mean": 1490.6,
+  "egg_fert_share": {
+   "oc_c3": 0.14,
+   "goose_full": 0.2316,
+   "h1": 0.14
+  }
+ },
+ "criteria": {
+  "rule": "净翻胜>0 ∧ flips_neg==0 ∧ 终局钱不降（goose_full vs oc_c3）∧ 蛋肥收入占比报告",
+  "checks": {
+   "net_flip_pos": false,
+   "flips_neg_zero": false,
+   "terminal_money_not_down": true,
+   "egg_fert_share_reported": true
+  },
+  "all_pass": false
+ },
+ "verdict": {
+  "verdict": "NO_POSITIVE_GOOSE_ARM",
+  "positive": false,
+  "budget_compliance": "局次 126/400（cap 合规）"
+ },
+ "head_compare": {
+  "head": {
+   "G": "9-11（中位 10）",
+   "WHEAT": "169（涨队配方）",
+   "money_end": "105.7k",
+   "sample": "12 局 19 席（MMPQ 5/DSM 4/DECEM 6/VICTOR 4；2026-09-28~29 PUBLIC 回放）"
+  },
+  "goose_full_target": {
+   "G": 10,
+   "C": 4,
+   "S": 2,
+   "WHEAT_plants": "163（基线不变，≈头部 169 带内）",
+   "note": "C7/G9-11/S6-8 型按 16-17 链劳动预算裁剪"
+  }
+ },
+ "budget": {
+  "cap_局次": 400,
+  "auth_games": 30,
+  "control_games": 32,
+  "variant_games": 32,
+  "h1_games": 32,
+  "total_games": 126,
+  "within_cap": true
+ },
+ "anomaly": [
+  "孪生口径=solo gengame（对手 PASS）：牛奶/羊毛价不饱和，solo 钱变体可低于基线（twin 均值 -4265）；判据以配对实测（真实对手）为准——EGG 过剩支 log 吸收在饱和市场占优（econ_model 镜像世界+头部鹅漂移实证）",
+  "tail 共享段 1 组跨路由差异（仅 route 2 尾被复用；HARVEST 物种无关=零风险，信息登记）",
+  "EGG T=332 以引擎源码为准（任务提要 T=45 不符，B4b anomaly 同源）",
+  "harness 噪声不修不管（任务边界）；终局钱 farms[obs.player] 口径"
+ ],
+ "build_manifest": {
+  "form": "goose_full",
+  "entry": "_hs_agent",
+  "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_oppcond_lab/build/oc_c3/main.py",
+  "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+  "main_sha256": "f0f5e653abc897009910c733d212128126ebff3c99f58fc39371b01506f94db2",
+  "main_bytes": 1258973,
+  "tar_sha256": "f69daf3f862dcb9bbf593c25d96a745da65c12dfe56e55680491c2a29630ce68",
+  "tar_bytes": 695533,
+  "diff_scope": "_R108_DATA blob + 外壳断言重生成块（_GP_PLAN）——其余逐字=基底",
+  "n_change_rows": 4996
+ },
+ "pkg_dir": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_goose_fullplan_lab/build/goose_full"
+}

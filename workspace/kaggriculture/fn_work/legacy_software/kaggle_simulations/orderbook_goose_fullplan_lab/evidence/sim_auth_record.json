@@ -1,0 +1,22 @@
+{
+ "record_version": "simbridge/1.0",
+ "records": [
+  {
+   "at": "2026-09-29T16:07:33Z",
+   "kind": "degrade",
+   "reason": "对照样本不足（n_checked=28<min_checked=30）",
+   "loaded": true,
+   "consistency": {
+    "n_checked": 28,
+    "n_match": 28,
+    "rate": 1.0
+   },
+   "timing": {
+    "official_s": 29.8261,
+    "sim_s": 5.6425,
+    "measured_speedup": 5.286
+   },
+   "version": "simbridge/1.0"
+  }
+ ]
+}
