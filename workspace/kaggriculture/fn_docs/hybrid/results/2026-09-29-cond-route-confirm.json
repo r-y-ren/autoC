@@ -1,0 +1,2581 @@
+{
+ "_generated_at": "2026-09-29T00:17:03Z",
+ "version": "cond-route-confirm/1.0",
+ "source": {
+  "commands": [
+   "python3 orderbook_track1_lab/cond_route_build.py",
+   "python3 orderbook_track1_lab/cond_route_gates.py",
+   "python3 orderbook_track1_lab/cond_route_judge.py"
+  ],
+  "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_strongest_lab/build/h1/main.py",
+  "base_main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+  "cond_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_track1_lab/build_cond/c_main.py",
+  "workers": 2,
+  "corpus": {
+   "replay_r30_26": [
+    1825501814,
+    2013941152,
+    786146079,
+    1883261866,
+    963182245,
+    240876256,
+    1705553586,
+    2009279466,
+    161402123,
+    435866961,
+    841473039,
+    1388158282,
+    1647385154,
+    671940665,
+    219073637,
+    1439493993,
+    1360429471,
+    671494671,
+    1900972921,
+    973657130,
+    1911990026,
+    1918725083,
+    176568822,
+    427304807,
+    720683523,
+    906608145
+   ],
+   "neutral_672000_i47": [
+    672000,
+    672047,
+    672094,
+    672141,
+    672188,
+    672235,
+    672282,
+    672329,
+    672376,
+    672423,
+    672470,
+    672517,
+    672564,
+    672611,
+    672658,
+    672705,
+    672752,
+    672799,
+    672846,
+    672893
+   ],
+   "n_folds": 46,
+   "fold": "双席折叠"
+  },
+  "caliber": {
+   "margin": "farms[our].money−farms[opp].money（run_games banks 干净口径）",
+   "terminal_money": "farms[obs.player].money（judge_strongest.clean_reads）",
+   "realized_px": "Σ(qty×卖时市价)/Σ(qty×该局该品日均价)（clean_reads 同式）",
+   "delta": "margin_arm−margin_control 同 seed+seat 配对（轨道 1 mean_delta 同式）",
+   "footprint": "同 seed 同席同对手 arm vs ctrl 逐拍动作流对比（canon JSON）"
+  },
+  "cond_main_sha256": "7983f1227144fbd2707db81f73d8648f65ea1f08a9f367793caa35063dbae4fa",
+  "cond_tar_sha256": "0fb5dbc43e8484b2383f245500134a895a33c9604a77f81d93d91a40d19da397",
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "wall_speedup": 5.295,
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "timing": {
+    "official_s": 31.6264,
+    "sim_s": 5.973,
+    "measured_speedup": 5.295
+   },
+   "version": "simbridge/1.0"
+  },
+  "trigger_slice_mining": {
+   "method": "gengame 磁带重放定向（H1/H1 实录磁带预测店对；mine_worlds 唯件）",
+   "rec_seed": 960001,
+   "seed_domain": "691000+i*53",
+   "n_scanned_predictions": 140,
+   "n_found": 12,
+   "seeds": [
+    691000,
+    692007,
+    692166,
+    692749,
+    693173,
+    693438,
+    695982,
+    696300,
+    696565,
+    697519,
+    698261,
+    698367
+   ],
+   "elapsed_s": 8.6,
+   "seeds_used": [
+    691000,
+    692007,
+    692166,
+    692749,
+    693173,
+    693438,
+    695982,
+    696300,
+    696565,
+    697519,
+    698261,
+    698367
+   ],
+   "prediction_check": {
+    "method": "mine_validate 机制：录制磁带 gengame 重放预测 vs 实跑 trace 店对",
+    "n": 58,
+    "n_match": 58,
+    "rate": 1.0,
+    "rows": [
+     {
+      "seed": 672000,
+      "kind": "global",
+      "pred": "PET_CAFE+PET_CAFE",
+      "actual": "PET_CAFE+PET_CAFE",
+      "match": true
+     },
+     {
+      "seed": 672047,
+      "kind": "global",
+      "pred": "PIZZA_SHOP+SMOOTHIE_SHOP",
+      "actual": "PIZZA_SHOP+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672094,
+      "kind": "global",
+      "pred": "BAKERY+PIZZA_SHOP",
+      "actual": "BAKERY+PIZZA_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672141,
+      "kind": "global",
+      "pred": "FARMERS_MARKET+PIZZA_SHOP",
+      "actual": "FARMERS_MARKET+PIZZA_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672188,
+      "kind": "global",
+      "pred": "PIZZA_SHOP+PIZZA_SHOP",
+      "actual": "PIZZA_SHOP+PIZZA_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672235,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+      "actual": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672282,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+      "actual": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672329,
+      "kind": "global",
+      "pred": "PET_CAFE+YARN_STORE",
+      "actual": "PET_CAFE+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 672376,
+      "kind": "global",
+      "pred": "ICE_CREAM_SHOP+PIZZA_SHOP",
+      "actual": "ICE_CREAM_SHOP+PIZZA_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672423,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+      "actual": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672470,
+      "kind": "global",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 672517,
+      "kind": "global",
+      "pred": "ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+      "actual": "ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672564,
+      "kind": "global",
+      "pred": "BAKERY+BRUNCH_SPOT",
+      "actual": "BAKERY+BRUNCH_SPOT",
+      "match": true
+     },
+     {
+      "seed": 672611,
+      "kind": "global",
+      "pred": "PET_CAFE+SMOOTHIE_SHOP",
+      "actual": "PET_CAFE+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672658,
+      "kind": "global",
+      "pred": "BAKERY+PET_CAFE",
+      "actual": "BAKERY+PET_CAFE",
+      "match": true
+     },
+     {
+      "seed": 672705,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+PET_CAFE",
+      "actual": "BRUNCH_SPOT+PET_CAFE",
+      "match": true
+     },
+     {
+      "seed": 672752,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+PIZZA_SHOP",
+      "actual": "BRUNCH_SPOT+PIZZA_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672799,
+      "kind": "global",
+      "pred": "BAKERY+ICE_CREAM_SHOP",
+      "actual": "BAKERY+ICE_CREAM_SHOP",
+      "match": true
+     },
+     {
+      "seed": 672846,
+      "kind": "global",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 672893,
+      "kind": "global",
+      "pred": "PET_CAFE+SMOOTHIE_SHOP",
+      "actual": "PET_CAFE+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 161402123,
+      "kind": "global",
+      "pred": "PIZZA_SHOP+PIZZA_SHOP",
+      "actual": "PIZZA_SHOP+PIZZA_SHOP",
+      "match": true
+     },
+     {
+      "seed": 176568822,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+      "actual": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+      "match": true
+     },
+     {
+      "seed": 219073637,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+      "actual": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 240876256,
+      "kind": "global",
+      "pred": "BAKERY+ICE_CREAM_SHOP",
+      "actual": "BAKERY+ICE_CREAM_SHOP",
+      "match": true
+     },
+     {
+      "seed": 427304807,
+      "kind": "global",
+      "pred": "BAKERY+SMOOTHIE_SHOP",
+      "actual": "BAKERY+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 435866961,
+      "kind": "global",
+      "pred": "BAKERY+ICE_CREAM_SHOP",
+      "actual": "BAKERY+ICE_CREAM_SHOP",
+      "match": true
+     },
+     {
+      "seed": 671494671,
+      "kind": "global",
+      "pred": "BAKERY+YARN_STORE",
+      "actual": "BAKERY+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 671940665,
+      "kind": "global",
+      "pred": "FARMERS_MARKET+FARMERS_MARKET",
+      "actual": "FARMERS_MARKET+FARMERS_MARKET",
+      "match": true
+     },
+     {
+      "seed": 720683523,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+      "actual": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 786146079,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+PIZZA_SHOP",
+      "actual": "BRUNCH_SPOT+PIZZA_SHOP",
+      "match": true
+     },
+     {
+      "seed": 841473039,
+      "kind": "global",
+      "pred": "FARMERS_MARKET+YARN_STORE",
+      "actual": "FARMERS_MARKET+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 906608145,
+      "kind": "global",
+      "pred": "BAKERY+BAKERY",
+      "actual": "BAKERY+BAKERY",
+      "match": true
+     },
+     {
+      "seed": 963182245,
+      "kind": "global",
+      "pred": "PET_CAFE+YARN_STORE",
+      "actual": "PET_CAFE+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 973657130,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+FARMERS_MARKET",
+      "actual": "BRUNCH_SPOT+FARMERS_MARKET",
+      "match": true
+     },
+     {
+      "seed": 1360429471,
+      "kind": "global",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 1388158282,
+      "kind": "global",
+      "pred": "YARN_STORE+YARN_STORE",
+      "actual": "YARN_STORE+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 1439493993,
+      "kind": "global",
+      "pred": "BAKERY+SMOOTHIE_SHOP",
+      "actual": "BAKERY+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 1647385154,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+      "actual": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 1705553586,
+      "kind": "global",
+      "pred": "BAKERY+BRUNCH_SPOT",
+      "actual": "BAKERY+BRUNCH_SPOT",
+      "match": true
+     },
+     {
+      "seed": 1825501814,
+      "kind": "global",
+      "pred": "FARMERS_MARKET+PIZZA_SHOP",
+      "actual": "FARMERS_MARKET+PIZZA_SHOP",
+      "match": true
+     },
+     {
+      "seed": 1883261866,
+      "kind": "global",
+      "pred": "BRUNCH_SPOT+FARMERS_MARKET",
+      "actual": "BRUNCH_SPOT+FARMERS_MARKET",
+      "match": true
+     },
+     {
+      "seed": 1900972921,
+      "kind": "global",
+      "pred": "PIZZA_SHOP+SMOOTHIE_SHOP",
+      "actual": "PIZZA_SHOP+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 1911990026,
+      "kind": "global",
+      "pred": "SMOOTHIE_SHOP+YARN_STORE",
+      "actual": "SMOOTHIE_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 1918725083,
+      "kind": "global",
+      "pred": "PIZZA_SHOP+SMOOTHIE_SHOP",
+      "actual": "PIZZA_SHOP+SMOOTHIE_SHOP",
+      "match": true
+     },
+     {
+      "seed": 2009279466,
+      "kind": "global",
+      "pred": "ICE_CREAM_SHOP+PET_CAFE",
+      "actual": "ICE_CREAM_SHOP+PET_CAFE",
+      "match": true
+     },
+     {
+      "seed": 2013941152,
+      "kind": "global",
+      "pred": "PET_CAFE+YARN_STORE",
+      "actual": "PET_CAFE+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 691000,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 692007,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 692166,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 692749,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 693173,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 693438,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 695982,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 696300,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 696565,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 697519,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 698261,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     },
+     {
+      "seed": 698367,
+      "kind": "slice",
+      "pred": "ICE_CREAM_SHOP+YARN_STORE",
+      "actual": "ICE_CREAM_SHOP+YARN_STORE",
+      "match": true
+     }
+    ]
+   }
+  }
+ },
+ "gates": {
+  "_generated_at": "2026-09-29T00:10:02Z",
+  "version": "cond-route-gates/1.0",
+  "source": {
+   "commands": [
+    "python3 orderbook_track1_lab/cond_route_build.py",
+    "python3 orderbook_track1_lab/cond_route_gates.py"
+   ],
+   "episode_seeds": [
+    101,
+    102
+   ],
+   "pkg": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_track1_lab/build_cond"
+  },
+  "gates": {
+   "load": {
+    "passed": true,
+    "entry": "_hs_agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 131.95,
+      "p99_step_ms": 22.51,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 272.63,
+      "p99_step_ms": 34.26,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "67fc6df7b8fee6567523148fc9d40c6f864997b9185a85bd058b916e492a9efa",
+     "run2": "67fc6df7b8fee6567523148fc9d40c6f864997b9185a85bd058b916e492a9efa"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "main_sha256": "7983f1227144fbd2707db81f73d8648f65ea1f08a9f367793caa35063dbae4fa",
+    "tar_size_mb": 0.657,
+    "tar_members": [
+     "main.py"
+    ],
+    "inner_matches_disk": true,
+    "sha_matches_manifest": true,
+    "base_prefix_identical": true,
+    "byte_identical_to_H1_base": false,
+    "base_main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337"
+   }
+  },
+  "overall_passed": true
+ },
+ "trigger_stats": {
+  "n_trigger_folds_global": 3,
+  "trigger_seeds_global": [
+   672470,
+   672846,
+   1360429471
+  ],
+  "n_trigger_folds_slice": 12,
+  "trigger_seeds_slice": [
+   691000,
+   692007,
+   692166,
+   692749,
+   693173,
+   693438,
+   695982,
+   696300,
+   696565,
+   697519,
+   698261,
+   698367
+  ],
+  "n_trigger_folds_total": 15,
+  "n_trigger_games_total": 45,
+  "cell_match_slice": {
+   "n": 12,
+   "n_match": 12
+  }
+ },
+ "footprint_audit": {
+  "design": "同 seed 同席同对手配对：armA=C@0/H1@1、armB=H1@0/C@1 vs ctrl=H1@0/H1@1；逐拍动作流对比 4 流（A0vsC0/B1vsC1 主、A1vsC1/B0vsC0 副）",
+  "streams": [
+   "A0_vs_C0",
+   "B1_vs_C1",
+   "A1_vs_C1",
+   "B0_vs_C0"
+  ],
+  "n_groups_total": 58,
+  "n_non_trigger_groups": 43,
+  "n_trigger_groups": 15,
+  "non_trigger_violations": [],
+  "zero_footprint": true,
+  "trigger_world_diffs": [
+   {
+    "seed": 672470,
+    "stream": "A0_vs_C0",
+    "n_diff": 557,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 672470,
+    "stream": "B1_vs_C1",
+    "n_diff": 557,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 672470,
+    "stream": "A1_vs_C1",
+    "n_diff": 97,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 672470,
+    "stream": "B0_vs_C0",
+    "n_diff": 97,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 672846,
+    "stream": "A0_vs_C0",
+    "n_diff": 565,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 672846,
+    "stream": "B1_vs_C1",
+    "n_diff": 565,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 672846,
+    "stream": "A1_vs_C1",
+    "n_diff": 113,
+    "first_diff_step": 385
+   },
+   {
+    "seed": 672846,
+    "stream": "B0_vs_C0",
+    "n_diff": 113,
+    "first_diff_step": 385
+   },
+   {
+    "seed": 1360429471,
+    "stream": "A0_vs_C0",
+    "n_diff": 546,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 1360429471,
+    "stream": "B1_vs_C1",
+    "n_diff": 546,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 1360429471,
+    "stream": "A1_vs_C1",
+    "n_diff": 135,
+    "first_diff_step": 361
+   },
+   {
+    "seed": 1360429471,
+    "stream": "B0_vs_C0",
+    "n_diff": 135,
+    "first_diff_step": 361
+   },
+   {
+    "seed": 691000,
+    "stream": "A0_vs_C0",
+    "n_diff": 535,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 691000,
+    "stream": "B1_vs_C1",
+    "n_diff": 535,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 691000,
+    "stream": "A1_vs_C1",
+    "n_diff": 98,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 691000,
+    "stream": "B0_vs_C0",
+    "n_diff": 98,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 692007,
+    "stream": "A0_vs_C0",
+    "n_diff": 535,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 692007,
+    "stream": "B1_vs_C1",
+    "n_diff": 535,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 692007,
+    "stream": "A1_vs_C1",
+    "n_diff": 69,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 692007,
+    "stream": "B0_vs_C0",
+    "n_diff": 69,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 692166,
+    "stream": "A0_vs_C0",
+    "n_diff": 536,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 692166,
+    "stream": "B1_vs_C1",
+    "n_diff": 536,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 692166,
+    "stream": "A1_vs_C1",
+    "n_diff": 102,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 692166,
+    "stream": "B0_vs_C0",
+    "n_diff": 102,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 692749,
+    "stream": "A0_vs_C0",
+    "n_diff": 532,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 692749,
+    "stream": "B1_vs_C1",
+    "n_diff": 532,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 692749,
+    "stream": "A1_vs_C1",
+    "n_diff": 39,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 692749,
+    "stream": "B0_vs_C0",
+    "n_diff": 39,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 693173,
+    "stream": "A0_vs_C0",
+    "n_diff": 542,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 693173,
+    "stream": "B1_vs_C1",
+    "n_diff": 542,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 693173,
+    "stream": "A1_vs_C1",
+    "n_diff": 48,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 693173,
+    "stream": "B0_vs_C0",
+    "n_diff": 48,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 693438,
+    "stream": "A0_vs_C0",
+    "n_diff": 533,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 693438,
+    "stream": "B1_vs_C1",
+    "n_diff": 533,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 693438,
+    "stream": "A1_vs_C1",
+    "n_diff": 90,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 693438,
+    "stream": "B0_vs_C0",
+    "n_diff": 90,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 695982,
+    "stream": "A0_vs_C0",
+    "n_diff": 541,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 695982,
+    "stream": "B1_vs_C1",
+    "n_diff": 541,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 695982,
+    "stream": "A1_vs_C1",
+    "n_diff": 81,
+    "first_diff_step": 361
+   },
+   {
+    "seed": 695982,
+    "stream": "B0_vs_C0",
+    "n_diff": 81,
+    "first_diff_step": 361
+   },
+   {
+    "seed": 696300,
+    "stream": "A0_vs_C0",
+    "n_diff": 561,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 696300,
+    "stream": "B1_vs_C1",
+    "n_diff": 561,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 696300,
+    "stream": "A1_vs_C1",
+    "n_diff": 90,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 696300,
+    "stream": "B0_vs_C0",
+    "n_diff": 90,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 696565,
+    "stream": "A0_vs_C0",
+    "n_diff": 545,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 696565,
+    "stream": "B1_vs_C1",
+    "n_diff": 545,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 696565,
+    "stream": "A1_vs_C1",
+    "n_diff": 87,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 696565,
+    "stream": "B0_vs_C0",
+    "n_diff": 87,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 697519,
+    "stream": "A0_vs_C0",
+    "n_diff": 540,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 697519,
+    "stream": "B1_vs_C1",
+    "n_diff": 540,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 697519,
+    "stream": "A1_vs_C1",
+    "n_diff": 90,
+    "first_diff_step": 361
+   },
+   {
+    "seed": 697519,
+    "stream": "B0_vs_C0",
+    "n_diff": 90,
+    "first_diff_step": 361
+   },
+   {
+    "seed": 698261,
+    "stream": "A0_vs_C0",
+    "n_diff": 536,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 698261,
+    "stream": "B1_vs_C1",
+    "n_diff": 536,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 698261,
+    "stream": "A1_vs_C1",
+    "n_diff": 49,
+    "first_diff_step": 343
+   },
+   {
+    "seed": 698261,
+    "stream": "B0_vs_C0",
+    "n_diff": 49,
+    "first_diff_step": 343
+   },
+   {
+    "seed": 698367,
+    "stream": "A0_vs_C0",
+    "n_diff": 557,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 698367,
+    "stream": "B1_vs_C1",
+    "n_diff": 557,
+    "first_diff_step": 144
+   },
+   {
+    "seed": 698367,
+    "stream": "A1_vs_C1",
+    "n_diff": 109,
+    "first_diff_step": 145
+   },
+   {
+    "seed": 698367,
+    "stream": "B0_vs_C0",
+    "n_diff": 109,
+    "first_diff_step": 145
+   }
+  ],
+  "pair_consistency_all": true
+ },
+ "global": {
+  "pair": "C_vs_H1",
+  "slice": "global",
+  "n_folds": 46,
+  "wins": 0,
+  "losses": 3,
+  "ties": 43,
+  "h2h": 0.4674,
+  "mean_margin": -405.7,
+  "fold_margins": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   -1941.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   -10137.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   -6583.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "ours": {
+   "realized_px_median": 1.0838,
+   "realized_px_mean": 1.0822,
+   "terminal_money_median": 93076.5,
+   "terminal_money_mean": 95855.1,
+   "stranding_median": 0.0
+  },
+  "opp_side": {
+   "realized_px_median": 1.0838,
+   "realized_px_mean": 1.0817,
+   "terminal_money_median": 93076.5,
+   "terminal_money_mean": 96259.9,
+   "stranding_median": 0.0
+  },
+  "engines": [
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   }
+  ],
+  "n_error_games": 0,
+  "rows_lite": [
+   {
+    "seed": 672000,
+    "kind": "global",
+    "pair": "PET_CAFE+PET_CAFE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 61047.0,
+    "px_A": 1.0897,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672047,
+    "kind": "global",
+    "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 124195.0,
+    "px_A": 1.0576,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672094,
+    "kind": "global",
+    "pair": "BAKERY+PIZZA_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 83429.0,
+    "px_A": 1.0813,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672141,
+    "kind": "global",
+    "pair": "FARMERS_MARKET+PIZZA_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 87042.0,
+    "px_A": 1.0921,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672188,
+    "kind": "global",
+    "pair": "PIZZA_SHOP+PIZZA_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 110127.0,
+    "px_A": 1.1004,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672235,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 126404.0,
+    "px_A": 1.0556,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672282,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 102318.0,
+    "px_A": 1.0689,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672329,
+    "kind": "global",
+    "pair": "PET_CAFE+YARN_STORE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 110.0,
+    "margin_B": -110.0,
+    "margin_ctrl_s0": 110.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 74381.0,
+    "px_A": 1.1386,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672376,
+    "kind": "global",
+    "pair": "ICE_CREAM_SHOP+PIZZA_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 129077.0,
+    "px_A": 1.0602,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672423,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 90121.0,
+    "px_A": 1.1215,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672470,
+    "kind": "global",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": -1941.0,
+    "margin_B": -1941.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": -1941.0,
+    "delta_B": -1941.0,
+    "tm_A": 133048.0,
+    "px_A": 1.0436,
+    "fp_diffs": {
+     "A0_vs_C0": 557,
+     "B1_vs_C1": 557,
+     "A1_vs_C1": 97,
+     "B0_vs_C0": 97
+    },
+    "error": null
+   },
+   {
+    "seed": 672517,
+    "kind": "global",
+    "pair": "ICE_CREAM_SHOP+ICE_CREAM_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 98547.0,
+    "px_A": 1.1082,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672564,
+    "kind": "global",
+    "pair": "BAKERY+BRUNCH_SPOT",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 119709.0,
+    "px_A": 1.0602,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672611,
+    "kind": "global",
+    "pair": "PET_CAFE+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 74910.0,
+    "px_A": 1.1195,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672658,
+    "kind": "global",
+    "pair": "BAKERY+PET_CAFE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 61991.0,
+    "px_A": 1.1006,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672705,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+PET_CAFE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": -114.0,
+    "margin_B": 114.0,
+    "margin_ctrl_s0": -114.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 92219.0,
+    "px_A": 1.0665,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672752,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 66394.0,
+    "px_A": 1.0775,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672799,
+    "kind": "global",
+    "pair": "BAKERY+ICE_CREAM_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 95253.0,
+    "px_A": 1.0847,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 672846,
+    "kind": "global",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": -10137.0,
+    "margin_B": -10137.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": -10137.0,
+    "delta_B": -10137.0,
+    "tm_A": 117226.0,
+    "px_A": 1.0414,
+    "fp_diffs": {
+     "A0_vs_C0": 565,
+     "B1_vs_C1": 565,
+     "A1_vs_C1": 113,
+     "B0_vs_C0": 113
+    },
+    "error": null
+   },
+   {
+    "seed": 672893,
+    "kind": "global",
+    "pair": "PET_CAFE+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 83607.0,
+    "px_A": 1.0867,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 161402123,
+    "kind": "global",
+    "pair": "PIZZA_SHOP+PIZZA_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 88664.0,
+    "px_A": 1.0916,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 176568822,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+ICE_CREAM_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 102857.0,
+    "px_A": 1.0661,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 219073637,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 88072.0,
+    "px_A": 1.1167,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 240876256,
+    "kind": "global",
+    "pair": "BAKERY+ICE_CREAM_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 90345.0,
+    "px_A": 1.092,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 427304807,
+    "kind": "global",
+    "pair": "BAKERY+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 98448.0,
+    "px_A": 1.0851,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 435866961,
+    "kind": "global",
+    "pair": "BAKERY+ICE_CREAM_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 81100.0,
+    "px_A": 1.0931,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 671494671,
+    "kind": "global",
+    "pair": "BAKERY+YARN_STORE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 63791.0,
+    "px_A": 1.1161,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 671940665,
+    "kind": "global",
+    "pair": "FARMERS_MARKET+FARMERS_MARKET",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 88608.0,
+    "px_A": 1.083,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 720683523,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 111252.0,
+    "px_A": 1.0579,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 786146079,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+PIZZA_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 101272.0,
+    "px_A": 1.0828,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 841473039,
+    "kind": "global",
+    "pair": "FARMERS_MARKET+YARN_STORE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 100308.0,
+    "px_A": 1.0987,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 906608145,
+    "kind": "global",
+    "pair": "BAKERY+BAKERY",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 60352.0,
+    "px_A": 1.0787,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 963182245,
+    "kind": "global",
+    "pair": "PET_CAFE+YARN_STORE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 81072.0,
+    "px_A": 1.1244,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 973657130,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 90469.0,
+    "px_A": 1.0935,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 1360429471,
+    "kind": "global",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": -6583.0,
+    "margin_B": -6583.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": -6583.0,
+    "delta_B": -6583.0,
+    "tm_A": 106058.0,
+    "px_A": 1.0461,
+    "fp_diffs": {
+     "A0_vs_C0": 546,
+     "B1_vs_C1": 546,
+     "A1_vs_C1": 135,
+     "B0_vs_C0": 135
+    },
+    "error": null
+   },
+   {
+    "seed": 1388158282,
+    "kind": "global",
+    "pair": "YARN_STORE+YARN_STORE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": -119.0,
+    "margin_B": 119.0,
+    "margin_ctrl_s0": -119.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 84671.0,
+    "px_A": 1.0742,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 1439493993,
+    "kind": "global",
+    "pair": "BAKERY+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": -68.0,
+    "margin_B": 68.0,
+    "margin_ctrl_s0": -68.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 117363.0,
+    "px_A": 1.0882,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 1647385154,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 144012.0,
+    "px_A": 1.0561,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 1705553586,
+    "kind": "global",
+    "pair": "BAKERY+BRUNCH_SPOT",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 76628.0,
+    "px_A": 1.0862,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 1825501814,
+    "kind": "global",
+    "pair": "FARMERS_MARKET+PIZZA_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 90227.0,
+    "px_A": 1.0819,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 1883261866,
+    "kind": "global",
+    "pair": "BRUNCH_SPOT+FARMERS_MARKET",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 112726.0,
+    "px_A": 1.0672,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 1900972921,
+    "kind": "global",
+    "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 93820.0,
+    "px_A": 1.0877,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 1911990026,
+    "kind": "global",
+    "pair": "SMOOTHIE_SHOP+YARN_STORE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 114565.0,
+    "px_A": 1.0502,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 1918725083,
+    "kind": "global",
+    "pair": "PIZZA_SHOP+SMOOTHIE_SHOP",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 87312.0,
+    "px_A": 1.1045,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 2009279466,
+    "kind": "global",
+    "pair": "ICE_CREAM_SHOP+PET_CAFE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 106204.0,
+    "px_A": 1.0606,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   },
+   {
+    "seed": 2013941152,
+    "kind": "global",
+    "pair": "PET_CAFE+YARN_STORE",
+    "trigger": false,
+    "cell_pred": null,
+    "cell_match": null,
+    "margin_A": 0.0,
+    "margin_B": 0.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 0.0,
+    "delta_B": 0.0,
+    "tm_A": 97997.0,
+    "px_A": 1.0425,
+    "fp_diffs": {
+     "A0_vs_C0": 0,
+     "B1_vs_C1": 0,
+     "A1_vs_C1": 0,
+     "B0_vs_C0": 0
+    },
+    "error": null
+   }
+  ]
+ },
+ "trigger_slice": {
+  "pair": "C_vs_H1",
+  "slice": "slice",
+  "n_folds": 12,
+  "wins": 5,
+  "losses": 7,
+  "ties": 0,
+  "h2h": 0.4167,
+  "mean_margin": -1482.2,
+  "fold_margins": [
+   -4631.0,
+   1835.0,
+   -7247.5,
+   -3443.0,
+   3314.0,
+   -7365.0,
+   2310.0,
+   -9459.0,
+   -886.0,
+   3275.0,
+   7283.0,
+   -2772.0
+  ],
+  "ours": {
+   "realized_px_median": 1.0564,
+   "realized_px_mean": 1.0615,
+   "terminal_money_median": 118172.0,
+   "terminal_money_mean": 119581.5,
+   "stranding_median": 0.0
+  },
+  "opp_side": {
+   "realized_px_median": 1.0623,
+   "realized_px_mean": 1.0696,
+   "terminal_money_median": 120757.0,
+   "terminal_money_mean": 121071.4,
+   "stranding_median": 0.0
+  },
+  "engines": [
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   },
+   {
+    "engine": "sim",
+    "fallback_reason": null
+   }
+  ],
+  "n_error_games": 0,
+  "rows_lite": [
+   {
+    "seed": 691000,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": -4631.0,
+    "margin_B": -4631.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": -4631.0,
+    "delta_B": -4631.0,
+    "tm_A": 98762.0,
+    "px_A": 1.0882,
+    "fp_diffs": {
+     "A0_vs_C0": 535,
+     "B1_vs_C1": 535,
+     "A1_vs_C1": 98,
+     "B0_vs_C0": 98
+    },
+    "error": null
+   },
+   {
+    "seed": 692007,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": 1835.0,
+    "margin_B": 1835.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 1835.0,
+    "delta_B": 1835.0,
+    "tm_A": 134092.0,
+    "px_A": 1.0548,
+    "fp_diffs": {
+     "A0_vs_C0": 535,
+     "B1_vs_C1": 535,
+     "A1_vs_C1": 69,
+     "B0_vs_C0": 69
+    },
+    "error": null
+   },
+   {
+    "seed": 692166,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": -7179.0,
+    "margin_B": -7316.0,
+    "margin_ctrl_s0": 74.0,
+    "delta_A": -7253.0,
+    "delta_B": -7242.0,
+    "tm_A": 114006.0,
+    "px_A": 1.0511,
+    "fp_diffs": {
+     "A0_vs_C0": 536,
+     "B1_vs_C1": 536,
+     "A1_vs_C1": 102,
+     "B0_vs_C0": 102
+    },
+    "error": null
+   },
+   {
+    "seed": 692749,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": -3443.0,
+    "margin_B": -3443.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": -3443.0,
+    "delta_B": -3443.0,
+    "tm_A": 123693.0,
+    "px_A": 1.0546,
+    "fp_diffs": {
+     "A0_vs_C0": 532,
+     "B1_vs_C1": 532,
+     "A1_vs_C1": 39,
+     "B0_vs_C0": 39
+    },
+    "error": null
+   },
+   {
+    "seed": 693173,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": 3314.0,
+    "margin_B": 3314.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 3314.0,
+    "delta_B": 3314.0,
+    "tm_A": 116900.0,
+    "px_A": 1.0563,
+    "fp_diffs": {
+     "A0_vs_C0": 542,
+     "B1_vs_C1": 542,
+     "A1_vs_C1": 48,
+     "B0_vs_C0": 48
+    },
+    "error": null
+   },
+   {
+    "seed": 693438,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": -7365.0,
+    "margin_B": -7365.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": -7365.0,
+    "delta_B": -7365.0,
+    "tm_A": 112468.0,
+    "px_A": 1.0674,
+    "fp_diffs": {
+     "A0_vs_C0": 533,
+     "B1_vs_C1": 533,
+     "A1_vs_C1": 90,
+     "B0_vs_C0": 90
+    },
+    "error": null
+   },
+   {
+    "seed": 695982,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": 2310.0,
+    "margin_B": 2310.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 2310.0,
+    "delta_B": 2310.0,
+    "tm_A": 126405.0,
+    "px_A": 1.0749,
+    "fp_diffs": {
+     "A0_vs_C0": 541,
+     "B1_vs_C1": 541,
+     "A1_vs_C1": 81,
+     "B0_vs_C0": 81
+    },
+    "error": null
+   },
+   {
+    "seed": 696300,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": -9459.0,
+    "margin_B": -9459.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": -9459.0,
+    "delta_B": -9459.0,
+    "tm_A": 119444.0,
+    "px_A": 1.0453,
+    "fp_diffs": {
+     "A0_vs_C0": 561,
+     "B1_vs_C1": 561,
+     "A1_vs_C1": 90,
+     "B0_vs_C0": 90
+    },
+    "error": null
+   },
+   {
+    "seed": 696565,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": -886.0,
+    "margin_B": -886.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": -886.0,
+    "delta_B": -886.0,
+    "tm_A": 113212.0,
+    "px_A": 1.0898,
+    "fp_diffs": {
+     "A0_vs_C0": 545,
+     "B1_vs_C1": 545,
+     "A1_vs_C1": 87,
+     "B0_vs_C0": 87
+    },
+    "error": null
+   },
+   {
+    "seed": 697519,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": 3275.0,
+    "margin_B": 3275.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 3275.0,
+    "delta_B": 3275.0,
+    "tm_A": 123603.0,
+    "px_A": 1.0628,
+    "fp_diffs": {
+     "A0_vs_C0": 540,
+     "B1_vs_C1": 540,
+     "A1_vs_C1": 90,
+     "B0_vs_C0": 90
+    },
+    "error": null
+   },
+   {
+    "seed": 698261,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": 7283.0,
+    "margin_B": 7283.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": 7283.0,
+    "delta_B": 7283.0,
+    "tm_A": 144620.0,
+    "px_A": 1.036,
+    "fp_diffs": {
+     "A0_vs_C0": 536,
+     "B1_vs_C1": 536,
+     "A1_vs_C1": 49,
+     "B0_vs_C0": 49
+    },
+    "error": null
+   },
+   {
+    "seed": 698367,
+    "kind": "slice",
+    "pair": "ICE_CREAM_SHOP+YARN_STORE",
+    "trigger": true,
+    "cell_pred": "ICE_CREAM_SHOP+YARN_STORE",
+    "cell_match": true,
+    "margin_A": -2772.0,
+    "margin_B": -2772.0,
+    "margin_ctrl_s0": 0.0,
+    "delta_A": -2772.0,
+    "delta_B": -2772.0,
+    "tm_A": 107806.0,
+    "px_A": 1.0564,
+    "fp_diffs": {
+     "A0_vs_C0": 557,
+     "B1_vs_C1": 557,
+     "A1_vs_C1": 109,
+     "B0_vs_C0": 109
+    },
+    "error": null
+   }
+  ],
+  "delta_paired": {
+   "caliber": "margin_arm−margin_control（同 seed+seat 配对；轨道 1 mean_delta 同式）",
+   "n_units": 24,
+   "mean_delta": -1482.21,
+   "per_unit": [
+    -4631.0,
+    -4631.0,
+    1835.0,
+    1835.0,
+    -7253.0,
+    -7242.0,
+    -3443.0,
+    -3443.0,
+    3314.0,
+    3314.0,
+    -7365.0,
+    -7365.0,
+    2310.0,
+    2310.0,
+    -9459.0,
+    -9459.0,
+    -886.0,
+    -886.0,
+    3275.0,
+    3275.0,
+    7283.0,
+    7283.0,
+    -2772.0,
+    -2772.0
+   ],
+   "net_flip_wins": 9,
+   "win_arm": 10,
+   "win_control": 1
+  },
+  "n_达标": true
+ },
+ "verdict": {
+  "criteria": {
+   "全局 h2h≥0.5（永不变差）": false,
+   "非触发世界零足迹": true,
+   "触发切片 Δ>0 复现（mean_delta>0 且 h2h mean_margin>0）": false,
+   "触发切片 n≥12 配对单元": true
+  },
+  "never_worse": false,
+  "trigger_positive": false,
+  "verdict": "NOT_CONFIRMED（详见 criteria）",
+  "repro_context": {
+   "track1_cell": {
+    "cell": "ICE_CREAM_SHOP+YARN_STORE",
+    "route": 105,
+    "n": 16,
+    "mean_delta": 1232.44,
+    "net_flip_wins": 1
+   },
+   "this_run_slice": {
+    "n_units": 24,
+    "mean_delta": -1482.21,
+    "h2h": 0.4167
+   },
+   "note": "机制同（mechanism_identity_check 触发世界逐拍全同）；Δ 未复现为对手依赖所致"
+  }
+ },
+ "budget": {
+  "cap_局次": 250,
+  "auth_games_separate": 60,
+  "mining_games_separate": 2,
+  "judgment_games": 174,
+  "global_games": 138,
+  "slice_games": 36,
+  "judgment_局次_folds": 58
+ },
+ "anomaly": [
+  "harness 噪声：HP_TELEMETRY stdout 行（H1 件自报 telemetry）——不修不管",
+  "harness 噪声：kaggle_environments 可选环境加载告警（open_spiel/cabt）——无关环境忽略",
+  "判世界时点=step144 揭示帧（world 第二店 step143 才落定，最早可判时点；pre-144 件 C 与 H1 逐字节同 → world 实现不受处理影响）",
+  "轨道1 正臂钱效应本身高噪：ICE+YARN/r105 逐 fold Δ=[-6838,-2031,-1134,+604,+1933,+4395,+5276,+6404]（3/8 fold 为负），mean=+1232 由 2 个大正 fold 撑起，netflip 仅 +1/16（flips_pos5/flips_neg4）",
+  "Δ 对手依赖：逐对手 mean_delta（轨道1 口径）=r37 +2295 / 2965a +1136 / 2965b −217 / H1（本次）−1482——原正臂格并非对手无关恒正",
+  "本设计对照=H1 自打（H1vsH1 终局钱恰等，margin_control=0 于 11/12 组）→ win_control/net_flip_wins 口径退化，判读以 mean_delta 与 fold margin 为准",
+  "非触发 fold 全为 0.0：C≡H1 镜像自打终局钱恰等（margin_A=margin_B=0）→ 43 个非触发 fold 全平，h2h 只由触发 fold 决定",
+  "挖掘预测 58/58 全中（gengame 重放定向法在 H1/H1 磁带口径下 cell_match_rate=1.0，mine_validate 机制复验成立）"
+ ],
+ "elapsed_s": 535.7,
+ "mechanism_identity_check": {
+  "design": "件 C vs 轨道1 正臂 ab_t1a_r105_main.py 同 (seed,席) 对 H1 实跑逐拍动作流对比（kaggsim run_match record）",
+  "trigger_seed_691000": {
+   "seed": 691000,
+   "world_C": [
+    "YARN_STORE",
+    "ICE_CREAM_SHOP"
+   ],
+   "world_r105": [
+    "YARN_STORE",
+    "ICE_CREAM_SHOP"
+   ],
+   "banks_C": [
+    99424.0,
+    104055.0
+   ],
+   "banks_r105": [
+    99424.0,
+    104055.0
+   ],
+   "n_steps": 719,
+   "n_diff_C_vs_r105arm": 0,
+   "first_diff": null
+  },
+  "nontrigger_seed_672000": {
+   "seed": 672000,
+   "world_C": [
+    "PET_CAFE",
+    "PET_CAFE"
+   ],
+   "world_r105": [
+    "PET_CAFE",
+    "PET_CAFE"
+   ],
+   "banks_C": [
+    61050.0,
+    61050.0
+   ],
+   "banks_r105": [
+    61497.0,
+    61292.0
+   ],
+   "n_steps": 719,
+   "n_diff_C_vs_r105arm": 160,
+   "first_diff": 151
+  },
+  "conclusion": "触发世界（含两序）件 C 与轨道1 r105 正臂逐拍全同（n_diff=0、banks 一致）；非触发世界按设计分叉（ab 常开臂 base≠105 皆强推，件 C 条件放行）——Δ 异号非机制漂移，是对手依赖+原信号噪声"
+ }
+}

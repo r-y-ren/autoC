@@ -1,0 +1,71 @@
+{
+ "_generated_at": "2026-09-29T00:10:02Z",
+ "version": "cond-route-gates/1.0",
+ "source": {
+  "commands": [
+   "python3 orderbook_track1_lab/cond_route_build.py",
+   "python3 orderbook_track1_lab/cond_route_gates.py"
+  ],
+  "episode_seeds": [
+   101,
+   102
+  ],
+  "pkg": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_track1_lab/build_cond"
+ },
+ "gates": {
+  "load": {
+   "passed": true,
+   "entry": "_hs_agent"
+  },
+  "health": {
+   "passed": true,
+   "step_budget_ms": 1000.0,
+   "episodes": [
+    {
+     "seed": 101,
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "turns_played": 720,
+     "max_step_ms": 131.95,
+     "p99_step_ms": 22.51,
+     "passed": true
+    },
+    {
+     "seed": 102,
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "turns_played": 720,
+     "max_step_ms": 272.63,
+     "p99_step_ms": 34.26,
+     "passed": true
+    }
+   ]
+  },
+  "determinism": {
+   "passed": true,
+   "rerun_seed": 101,
+   "hashes": {
+    "run1": "67fc6df7b8fee6567523148fc9d40c6f864997b9185a85bd058b916e492a9efa",
+    "run2": "67fc6df7b8fee6567523148fc9d40c6f864997b9185a85bd058b916e492a9efa"
+   }
+  },
+  "identity": {
+   "passed": true,
+   "main_sha256": "7983f1227144fbd2707db81f73d8648f65ea1f08a9f367793caa35063dbae4fa",
+   "tar_size_mb": 0.657,
+   "tar_members": [
+    "main.py"
+   ],
+   "inner_matches_disk": true,
+   "sha_matches_manifest": true,
+   "base_prefix_identical": true,
+   "byte_identical_to_H1_base": false,
+   "base_main_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337"
+  }
+ },
+ "overall_passed": true
+}
