@@ -1,0 +1,159 @@
+{
+ "version": "v89-build/1.0",
+ "generated": "2026-09-29T11:48:43Z",
+ "artifact": {
+  "kernel": "haodou092/kaggriculture-harvest-ledger",
+  "kernel_version": "V89（notebook 自述：Observable Mirror Gate）",
+  "notebook": "/tmp/v89test/pull/kaggriculture-harvest-ledger.ipynb",
+  "notebook_sha256": "5322f36d3fe8264c7cdcd31c29e26046e8e3fd45191ead6f11ae47ceb1c76c8b",
+  "extraction": "B 组口径：FILES base85+zlib 内嵌三件，EXPECTED sha 自校验解包（analysis32-public-arms-B 同法）",
+  "embedded_files": {
+   "main.py": {
+    "sha256": "01ee3976f97a9ac71be40eff667b24c5a69cd86fce88bbbdf25ea1e10aecd60d",
+    "bytes": 1198277
+   },
+   "LICENSE.txt": {
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "bytes": 11358
+   },
+   "NOTICE.txt": {
+    "sha256": "fc94b2e05a11b5c08a6b12a44e5d78658e2e343af07e30a5e1f4532955bdb6fd",
+    "bytes": 173
+   }
+  },
+  "main_sha256": "01ee3976f97a9ac71be40eff667b24c5a69cd86fce88bbbdf25ea1e10aecd60d",
+  "main_bytes": 1198277,
+  "entry_last_callable": "gated_fixed_sell_agent",
+  "diff_vs_v82": "3 改块（tail wrapper 区 10136-10179）：删 pet_any_demand_agent PET_CAFE 倾斜；增 _g793_shape/_s793_reorder 覆写/gated_fixed_sell_agent——step96-119 镜像谱判门（结构镜像∧现金差≥20=cha22 谱特征→跳过投机置换）"
+ },
+ "forms": {
+  "v89_pure": {
+   "schema": "orderbook_v89_lab_manifest/1.0",
+   "form": "v89_pure",
+   "generated": "2026-09-29T11:48:44Z",
+   "source_notebook": "/tmp/v89test/pull/kaggriculture-harvest-ledger.ipynb",
+   "source_notebook_sha256": "5322f36d3fe8264c7cdcd31c29e26046e8e3fd45191ead6f11ae47ceb1c76c8b",
+   "provenance": "kernels pull haodou092/kaggriculture-harvest-ledger 2026-09-29（kernel HEAD=V89 Observable Mirror Gate）；B 组口径：FILES base85+zlib 内嵌三件，EXPECTED sha 自校验解包（analysis32-public-arms-B 同法）；EXPECTED main.py sha 自校验通过",
+   "base_main_sha256": "01ee3976f97a9ac71be40eff667b24c5a69cd86fce88bbbdf25ea1e10aecd60d",
+   "embedded_expected_main_sha256": "01ee3976f97a9ac71be40eff667b24c5a69cd86fce88bbbdf25ea1e10aecd60d",
+   "byte_identical_to_v89": true,
+   "append_only_prefix_identical": true,
+   "entry_last_callable": "gated_fixed_sell_agent",
+   "entry_expected": "gated_fixed_sell_agent",
+   "compile_ok": true,
+   "layers": [],
+   "note": "外部件（haodou 作者后续版 V89）无我方 sha 链锚，身份登记自闭合（manifest↔盘上↔tar 成员↔内嵌 EXPECTED）",
+   "main_sha256": "01ee3976f97a9ac71be40eff667b24c5a69cd86fce88bbbdf25ea1e10aecd60d",
+   "main_bytes": 1198277,
+   "tar_sha256": "5f10e79b864ce43581968d134e2ccc44136ca6019050907ff5d36667e86c9100",
+   "tar_bytes": 654351,
+   "tar_members": [
+    "main.py"
+   ],
+   "tar_rebuild_reproducible": true,
+   "tar_inner_main_matches_disk": true,
+   "tar_size_ok": true
+  },
+  "v89_full": {
+   "schema": "orderbook_v89_lab_manifest/1.0",
+   "form": "v89_full",
+   "generated": "2026-09-29T11:48:49Z",
+   "base_main_sha256": "01ee3976f97a9ac71be40eff667b24c5a69cd86fce88bbbdf25ea1e10aecd60d",
+   "byte_identical_to_v89": false,
+   "append_only_prefix_identical": true,
+   "entry_last_callable": "_hs_agent",
+   "entry_expected": "_hs_agent",
+   "compile_ok": true,
+   "layers": [
+    "x1_hygiene",
+    "profiler",
+    "c3_wool_phase"
+   ],
+   "layer_order": "V89 基座 → X1 尾块（build_strongest.build_block 剥件）→ oppcond 尾块（画像器+C3；C1/C2 惰性关闭）→ 入口 _hs_agent",
+   "profiler_core_sha256": "0ed5e7c23bf08f9e6e3797de26beeef4ea7e93d0c013d00e59086f5c67e5e05f",
+   "c3_delta": {
+    "changed_steps": 443,
+    "routes_touched": 34,
+    "market_slot_touched_steps": 0,
+    "change_table_rows": 427
+   },
+   "c3_delta_expected": {
+    "changed_steps": 443,
+    "routes_touched": 34
+   },
+   "c3_variant_routes_hash": "7063419afa1a7151",
+   "c3_recomputed_on_v89_base": true,
+   "probes": {
+    "verify_form": {
+     "probe_core": 7,
+     "probe_c3": 4,
+     "all_match": true
+    },
+    "g793_conflict_static": {
+     "name_footprint_intersection": [],
+     "injected_names": [
+      "_hs_agent",
+      "_oc_after",
+      "_oc_c3_swap",
+      "_oc_cls",
+      "_oc_decide",
+      "_oc_lock_if_due",
+      "_oc_own_sells",
+      "_oc_r36_reserve",
+      "_oc_rival_animals",
+      "_oc_router",
+      "_oc_sim",
+      "_oc_state_for",
+      "_oc_state_new",
+      "_oc_town_draw",
+      "_oc_update",
+      "_x1_post",
+      "_x1_qty",
+      "_x1_reset",
+      "_xd7_call",
+      "_xd7_projected"
+     ],
+     "static_cross_reference_clean": true
+    },
+    "g793_conflict_dynamic": {
+     "shape_ok": true,
+     "g793_bypass_ok": true,
+     "g793_report_after_bypass": {
+      "calls": 0,
+      "classified": 1,
+      "bypassed": 1,
+      "errors": 0
+     },
+     "c3_swap_ok": true,
+     "c3_changed_steps": 443,
+     "x1_hygiene_ok": true,
+     "x1_report": {
+      "calls": 1,
+      "changed_turns": 1,
+      "dropped_dead": 2,
+      "clamped_orders": 1,
+      "clamped_qty": 5,
+      "merged_fragments": 0,
+      "merged_qty": 0,
+      "unparsed_kept": 0,
+      "window_out": 0,
+      "errors": 0
+     },
+     "dual_armed_ok": true,
+     "note": "G793 改卖单置换序（order 轴）、C3 改羊毛落刀相位（timing 轴）、X1 改同拍挂量卫生（qty 轴）；三轴正交、状态字典互不共享（_G793_* vs _OC_*/_X1_* 零交集），双武装 errors=0"
+    }
+   },
+   "main_sha256": "f6362e3d500e18666f2b5585413a30fd9a10285462770b8eb8af9ad8672b81a8",
+   "main_bytes": 1221050,
+   "tar_sha256": "eae80e5db2eee810f9bbb5b552cf4944cbb7af897ceb4d7e20d00741869924b3",
+   "tar_bytes": 664140,
+   "tar_members": [
+    "main.py"
+   ],
+   "tar_rebuild_reproducible": true,
+   "tar_inner_main_matches_disk": true,
+   "tar_size_ok": true
+  }
+ },
+ "elapsed_s": 5.9
+}
