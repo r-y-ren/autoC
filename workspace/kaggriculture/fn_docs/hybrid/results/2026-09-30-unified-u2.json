@@ -1,0 +1,1000 @@
+{
+ "version": "unified-u2/1.0",
+ "experiment": "U2 温和统一（模型门控形态）：mpx 焦窗（+175.7）与 expx 模型核（+81）同面不可堆叠——保留 mpx 胜者件窗节奏，模型只做门（当前=窗内局部峰才放行预卖）；主判 u2 vs mpx 胜者件，参照 u2 vs oc_c3",
+ "source": {
+  "commands": [
+   "python3 orderbook_unified_u2_lab/build_unified_u2.py",
+   "python3 orderbook_unified_u2_lab/judge_unified_u2.py"
+  ],
+  "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_modelpx_lab/build/mpx_w24_p2_3_h14/main.py",
+  "base_sha256": "f0101de9b558d1f56334739f9a49a0a0d4bc860a898792a9b69fc72c3d84e44f",
+  "u2_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_unified_u2_lab/build/u2/main.py",
+  "u2_main_sha256": "99f6f09f1b34f1be3fd68fd95437e9f031ecea55c91ba7171928a1af6390e113",
+  "corpus": {
+   "loss_folds": [
+    1825501814,
+    2013941152,
+    786146079,
+    1883261866,
+    963182245,
+    240876256,
+    1705553586,
+    2009279466
+   ],
+   "neutral_folds": [
+    673000,
+    673125,
+    673250,
+    673375,
+    673500,
+    673625,
+    673750,
+    673875
+   ],
+   "neutral_spec": "673000+i*125（i=0..7）",
+   "n16": "败局 8 + 中性 8 =16 fold（n=16 双席=32 局/臂）"
+  },
+  "workers": 2,
+  "caliber": {
+   "margin": "banks[our]−banks[opp]（run_games banks）",
+   "terminal_money": "farms[obs.player].money（干净口径）",
+   "window": "d14-27 窗 step 336-648 逐日=step//24（14..26）；fill 口径=影子引擎逐拍归因；submit 口径=挂单 qty×卖时市价",
+   "h2h": "同 (seed,seat) 配对 (W+0.5T)/n（margin Δ 口径）"
+  },
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "version": "simbridge/1.0"
+  }
+ },
+ "gate_design": "门=MODELPX 预卖放行条件加一：当前报价 p_now ≥ 未来 K=6 拍投影价最大值（当前=窗内局部峰才放行，不卖在下坡上）；投影=expx 件同源简化版（引擎公式 _r37_market_price+参数表、城镇排水 _u2_draw、对手流 rival_avg=站点 S758 侧 4 拍均值）；648 后回基线守卫沿用（step≥648 门恒过=mpx 基线语义）；异常回退基线（门恒过+gate_err 计数）；门纯收紧（fire_u2=fire_base∧gate，只可能少卖不可能多卖）；量帽/窗/时段/品项/planned/阈 0.5 与 mpx 胜者件逐字节同（只加门不动节奏）",
+ "gates": {
+  "load": {
+   "passed": true,
+   "entry": "_u2_agent"
+  },
+  "health": {
+   "passed": true,
+   "step_budget_ms": 1000.0,
+   "episodes": [
+    {
+     "seed": 101,
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "turns_played": 720,
+     "max_step_ms": 143.16,
+     "p99_step_ms": 23.43,
+     "passed": true
+    },
+    {
+     "seed": 102,
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "turns_played": 720,
+     "max_step_ms": 235.78,
+     "p99_step_ms": 40.6,
+     "passed": true
+    }
+   ]
+  },
+  "determinism": {
+   "passed": true,
+   "rerun_seed": 101,
+   "hashes": {
+    "run1": "894d6b6c1265b37d285be76e1ed6f1e8ca73ff8e1cb724b8e1affd764e14c8b9",
+    "run2": "894d6b6c1265b37d285be76e1ed6f1e8ca73ff8e1cb724b8e1affd764e14c8b9"
+   }
+  },
+  "identity": {
+   "passed": true,
+   "main_sha256": "99f6f09f1b34f1be3fd68fd95437e9f031ecea55c91ba7171928a1af6390e113",
+   "tar_size_mb": 0.666,
+   "tar_members": [
+    "main.py"
+   ],
+   "inner_matches_disk": true,
+   "sha_matches_manifest": true,
+   "base_prefix_identical": true,
+   "reverse_extract_byte_identical_to_mpx_base": true,
+   "expect_byte_identical": false,
+   "base_main_sha256": "f0101de9b558d1f56334739f9a49a0a0d4bc860a898792a9b69fc72c3d84e44f"
+  },
+  "overall": true
+ },
+ "footprint_audit": {
+  "passed": true,
+  "gate_ledger": {
+   "calls": 22976,
+   "gate_calls": 466,
+   "base_fires": 434,
+   "gate_pass": 140,
+   "gate_blocked": 294,
+   "gate_err": 0,
+   "post648_pass": 74,
+   "fires": 140
+  },
+  "ledger_games": 32,
+  "pure_restriction": true,
+  "stream_checked": 32,
+  "stream_ok": 32,
+  "violations": [],
+  "caliber": "非触发局（gate_blocked==0）我席动作流须与 mpx 胜者件逐拍恒等；触发局允许分歧（门生效面）；门台账须纯收紧（gate_pass+gate_blocked==base_fires ∧ fires==gate_pass）；反替换回程逐字节=mpx 胜者件（identity 门）",
+  "structural": {
+   "roundtrip_identity_ok": true,
+   "subs": [
+    {
+     "old": "if p_next<p_cur-0.5:",
+     "count": 4
+    }
+   ],
+   "reverse_extract": "尾块剥离+字面量反替换→逐字节=mpx 胜者件源",
+   "tail_bytes": 4257,
+   "only_gate_added": "4 处放行条件字面量 + 门层尾块；量帽/窗/时段/品项/planned/阈与 mpx 胜者件逐字节同"
+  }
+ },
+ "pairs": {
+  "arms": {
+   "mpx": {
+    "n_units": 32,
+    "margin_mean": 6734.22,
+    "terminal_money_mean": 100784.7
+   },
+   "oc_c3": {
+    "n_units": 32,
+    "margin_mean": 6630.78,
+    "terminal_money_mean": 100685.8
+   },
+   "u2": {
+    "n_units": 32,
+    "margin_mean": 6703.53,
+    "terminal_money_mean": 100771.7
+   }
+  },
+  "main_u2_vs_mpx": {
+   "n": 32,
+   "W": 18,
+   "L": 8,
+   "T": 6,
+   "mean_delta": -30.69,
+   "win_control": 28,
+   "win_variant": 28,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "net_flip_wins": 0,
+   "loss_recovery": "8/16 败局 Δ>0",
+   "control_win_guard_ok": true,
+   "positive_arm": false,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 949.0,
+     "margin_variant": 988.0,
+     "delta": 39.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 949.0,
+     "margin_variant": 988.0,
+     "delta": 39.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 578.0,
+     "margin_variant": 578.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 578.0,
+     "margin_variant": 578.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -79.0,
+     "margin_variant": -268.0,
+     "delta": -189.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -79.0,
+     "margin_variant": -268.0,
+     "delta": -189.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20535.0,
+     "margin_variant": 20548.0,
+     "delta": 13.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20464.0,
+     "margin_variant": 20477.0,
+     "delta": 13.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 103.0,
+     "margin_variant": 222.0,
+     "delta": 119.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 103.0,
+     "margin_variant": 222.0,
+     "delta": 119.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 660.0,
+     "margin_variant": 273.0,
+     "delta": -387.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 660.0,
+     "margin_variant": 273.0,
+     "delta": -387.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1608.0,
+     "margin_variant": 1608.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1608.0,
+     "margin_variant": 1608.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26954.0,
+     "margin_variant": 27129.0,
+     "delta": 175.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26954.0,
+     "margin_variant": 27129.0,
+     "delta": 175.0
+    },
+    {
+     "seed": 673000,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "build",
+     "margin_control": -153.0,
+     "margin_variant": -147.0,
+     "delta": 6.0
+    },
+    {
+     "seed": 673000,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "build",
+     "margin_control": -153.0,
+     "margin_variant": -147.0,
+     "delta": 6.0
+    },
+    {
+     "seed": 673125,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "a",
+     "margin_control": 260.0,
+     "margin_variant": 260.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 673125,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "a",
+     "margin_control": 260.0,
+     "margin_variant": 260.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 673250,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "b",
+     "margin_control": 1036.0,
+     "margin_variant": 1042.0,
+     "delta": 6.0
+    },
+    {
+     "seed": 673250,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "b",
+     "margin_control": 700.0,
+     "margin_variant": 706.0,
+     "delta": 6.0
+    },
+    {
+     "seed": 673375,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "v48_derivative",
+     "margin_control": 28645.0,
+     "margin_variant": 28442.0,
+     "delta": -203.0
+    },
+    {
+     "seed": 673375,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "v48_derivative",
+     "margin_control": 28645.0,
+     "margin_variant": 28442.0,
+     "delta": -203.0
+    },
+    {
+     "seed": 673500,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "build",
+     "margin_control": 312.0,
+     "margin_variant": 321.0,
+     "delta": 9.0
+    },
+    {
+     "seed": 673500,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "build",
+     "margin_control": 312.0,
+     "margin_variant": 321.0,
+     "delta": 9.0
+    },
+    {
+     "seed": 673625,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "a",
+     "margin_control": 515.0,
+     "margin_variant": 528.0,
+     "delta": 13.0
+    },
+    {
+     "seed": 673625,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "a",
+     "margin_control": 515.0,
+     "margin_variant": 528.0,
+     "delta": 13.0
+    },
+    {
+     "seed": 673750,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "b",
+     "margin_control": 246.0,
+     "margin_variant": 351.0,
+     "delta": 105.0
+    },
+    {
+     "seed": 673750,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "b",
+     "margin_control": 246.0,
+     "margin_variant": 351.0,
+     "delta": 105.0
+    },
+    {
+     "seed": 673875,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "v48_derivative",
+     "margin_control": 25782.0,
+     "margin_variant": 25585.0,
+     "delta": -197.0
+    },
+    {
+     "seed": 673875,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "v48_derivative",
+     "margin_control": 25782.0,
+     "margin_variant": 25585.0,
+     "delta": -197.0
+    }
+   ]
+  },
+  "ref_u2_vs_oc_c3": {
+   "n": 32,
+   "W": 24,
+   "L": 8,
+   "T": 0,
+   "mean_delta": 72.75,
+   "win_control": 26,
+   "win_variant": 28,
+   "flips_pos": 2,
+   "flips_neg": 0,
+   "net_flip_wins": 2,
+   "loss_recovery": "12/16 败局 Δ>0",
+   "control_win_guard_ok": true,
+   "positive_arm": true,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": 988.0,
+     "delta": 313.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": 988.0,
+     "delta": 313.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": 578.0,
+     "delta": 227.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": 578.0,
+     "delta": 227.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -268.0,
+     "delta": 38.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -268.0,
+     "delta": 38.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20556.0,
+     "margin_variant": 20548.0,
+     "delta": -8.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20485.0,
+     "margin_variant": 20477.0,
+     "delta": -8.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": 222.0,
+     "delta": 103.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": 222.0,
+     "delta": 103.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": 273.0,
+     "delta": -289.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": 273.0,
+     "delta": -289.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": 1608.0,
+     "delta": 164.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": 1608.0,
+     "delta": 164.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 27129.0,
+     "delta": 248.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 27129.0,
+     "delta": 248.0
+    },
+    {
+     "seed": 673000,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "build",
+     "margin_control": -213.0,
+     "margin_variant": -147.0,
+     "delta": 66.0
+    },
+    {
+     "seed": 673000,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "build",
+     "margin_control": -213.0,
+     "margin_variant": -147.0,
+     "delta": 66.0
+    },
+    {
+     "seed": 673125,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "a",
+     "margin_control": 182.0,
+     "margin_variant": 260.0,
+     "delta": 78.0
+    },
+    {
+     "seed": 673125,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "a",
+     "margin_control": 182.0,
+     "margin_variant": 260.0,
+     "delta": 78.0
+    },
+    {
+     "seed": 673250,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "b",
+     "margin_control": 1013.0,
+     "margin_variant": 1042.0,
+     "delta": 29.0
+    },
+    {
+     "seed": 673250,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "b",
+     "margin_control": 679.0,
+     "margin_variant": 706.0,
+     "delta": 27.0
+    },
+    {
+     "seed": 673375,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "v48_derivative",
+     "margin_control": 28701.0,
+     "margin_variant": 28442.0,
+     "delta": -259.0
+    },
+    {
+     "seed": 673375,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "v48_derivative",
+     "margin_control": 28701.0,
+     "margin_variant": 28442.0,
+     "delta": -259.0
+    },
+    {
+     "seed": 673500,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "build",
+     "margin_control": -43.0,
+     "margin_variant": 321.0,
+     "delta": 364.0
+    },
+    {
+     "seed": 673500,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "build",
+     "margin_control": -43.0,
+     "margin_variant": 321.0,
+     "delta": 364.0
+    },
+    {
+     "seed": 673625,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "a",
+     "margin_control": 415.0,
+     "margin_variant": 528.0,
+     "delta": 113.0
+    },
+    {
+     "seed": 673625,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "a",
+     "margin_control": 415.0,
+     "margin_variant": 528.0,
+     "delta": 113.0
+    },
+    {
+     "seed": 673750,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "b",
+     "margin_control": 388.0,
+     "margin_variant": 351.0,
+     "delta": -37.0
+    },
+    {
+     "seed": 673750,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "b",
+     "margin_control": 388.0,
+     "margin_variant": 351.0,
+     "delta": -37.0
+    },
+    {
+     "seed": 673875,
+     "seat": 0,
+     "stratum": "neutral_673000_i125",
+     "opponent": "v48_derivative",
+     "margin_control": 25570.0,
+     "margin_variant": 25585.0,
+     "delta": 15.0
+    },
+    {
+     "seed": 673875,
+     "seat": 1,
+     "stratum": "neutral_673000_i125",
+     "opponent": "v48_derivative",
+     "margin_control": 25570.0,
+     "margin_variant": 25585.0,
+     "delta": 15.0
+    }
+   ]
+  },
+  "ctx_mpx_vs_oc_c3": {
+   "n": 32,
+   "W": 24,
+   "L": 8,
+   "T": 0,
+   "mean_delta": 103.44,
+   "win_control": 26,
+   "win_variant": 28,
+   "flips_pos": 2,
+   "flips_neg": 0,
+   "net_flip_wins": 2,
+   "loss_recovery": "12/16 败局 Δ>0",
+   "control_win_guard_ok": true,
+   "positive_arm": true
+  },
+  "realized": {
+   "vs_mpx_nonneg_both": false,
+   "vs_mpx_all_mean_delta": -0.0003,
+   "vs_mpx_milk_mean_delta": -0.0001,
+   "vs_oc_c3_nonneg_both": true
+  }
+ },
+ "window_stats": {
+  "window": "d14-27（step 336-648）",
+  "paired_delta_vs_mpx": {
+   "fill_total": -19.56,
+   "fill_milk": 7.81,
+   "submit_total": -9.69,
+   "submit_milk": 14.38
+  },
+  "paired_delta_vs_oc_c3": {
+   "fill_total": -9.38,
+   "fill_milk": 24.0,
+   "submit_total": -21.56,
+   "submit_milk": 2.88
+  },
+  "per_day_fill_total_delta_vs_mpx": {
+   "14": -9.94,
+   "15": 13.81,
+   "16": 0.0,
+   "17": 0.0,
+   "18": -0.81,
+   "19": 0.38,
+   "20": 6.0,
+   "21": 0.0,
+   "22": 13.31,
+   "23": -4.12,
+   "24": 1.31,
+   "25": -5.88,
+   "26": -33.62
+  },
+  "agg_by_arm": {
+   "mpx": {
+    "n_games": 32,
+    "window": "d14-20（step 336-480）",
+    "mean_fill_total": 79001.6,
+    "mean_fill_milk": 9799.8,
+    "mean_submit_total": 90795.1,
+    "mean_submit_milk": 12232.9,
+    "per_day_fill_total_mean": {
+     "14": 4552.7,
+     "15": 7514.4,
+     "16": 7660.1,
+     "17": 7041.5,
+     "18": 6867.2,
+     "19": 5608.2,
+     "20": 7519.7,
+     "21": 6623.9,
+     "22": 5444.4,
+     "23": 5428.7,
+     "24": 4557.4,
+     "25": 4488.3,
+     "26": 5695.0
+    },
+    "per_day_fill_milk_mean": {
+     "14": 1527.8,
+     "15": 1970.4,
+     "16": 787.4,
+     "17": 222.4,
+     "18": 841.1,
+     "19": 702.0,
+     "20": 580.8,
+     "21": 393.0,
+     "22": 621.8,
+     "23": 581.1,
+     "24": 424.4,
+     "25": 758.9,
+     "26": 388.8
+    }
+   },
+   "oc_c3": {
+    "n_games": 32,
+    "window": "d14-20（step 336-480）",
+    "mean_fill_total": 78991.4,
+    "mean_fill_milk": 9783.6,
+    "mean_submit_total": 90806.9,
+    "mean_submit_milk": 12244.4,
+    "per_day_fill_total_mean": {
+     "14": 4543.7,
+     "15": 7513.9,
+     "16": 7658.7,
+     "17": 7038.1,
+     "18": 6867.4,
+     "19": 5608.6,
+     "20": 7517.1,
+     "21": 6619.7,
+     "22": 5427.2,
+     "23": 5424.5,
+     "24": 4553.5,
+     "25": 4527.5,
+     "26": 5691.7
+    },
+    "per_day_fill_milk_mean": {
+     "14": 1521.4,
+     "15": 1969.9,
+     "16": 785.9,
+     "17": 222.4,
+     "18": 841.1,
+     "19": 702.0,
+     "20": 578.2,
+     "21": 389.3,
+     "22": 605.2,
+     "23": 581.1,
+     "24": 420.2,
+     "25": 775.6,
+     "26": 391.1
+    }
+   },
+   "u2": {
+    "n_games": 32,
+    "window": "d14-20（step 336-480）",
+    "mean_fill_total": 78982.0,
+    "mean_fill_milk": 9807.6,
+    "mean_submit_total": 90785.4,
+    "mean_submit_milk": 12247.3,
+    "per_day_fill_total_mean": {
+     "14": 4542.8,
+     "15": 7528.2,
+     "16": 7660.1,
+     "17": 7041.5,
+     "18": 6866.4,
+     "19": 5608.6,
+     "20": 7525.7,
+     "21": 6623.9,
+     "22": 5457.8,
+     "23": 5424.5,
+     "24": 4558.8,
+     "25": 4482.4,
+     "26": 5661.3
+    },
+    "per_day_fill_milk_mean": {
+     "14": 1516.6,
+     "15": 1984.2,
+     "16": 787.4,
+     "17": 222.4,
+     "18": 841.1,
+     "19": 702.0,
+     "20": 587.1,
+     "21": 393.0,
+     "22": 627.3,
+     "23": 578.1,
+     "24": 423.5,
+     "25": 756.8,
+     "26": 387.9
+    }
+   }
+  }
+ },
+ "criteria": {
+  "h2h_vs_mpx≥0.55": {
+   "h2h": 0.6562,
+   "W": 18,
+   "T": 6,
+   "L": 8,
+   "passed": true
+  },
+  "flips_neg==0": {
+   "flips_neg": 0,
+   "passed": true
+  },
+  "实现价非负": {
+   "nonneg_both": false,
+   "all_mean_delta": -0.0003,
+   "milk_mean_delta": -0.0001,
+   "passed": false
+  },
+  "窗差≥mpx": {
+   "d14_27_fill_total_delta": -19.56,
+   "passed": false
+  }
+ },
+ "verdict": {
+  "positive_arm": false,
+  "criteria_passed": false,
+  "gates_passed": true,
+  "footprint_gate_passed": true,
+  "h2h_vs_mpx": 0.6562,
+  "mean_delta_vs_mpx": -30.69,
+  "flips_neg": 0,
+  "net_flip_wins_vs_mpx": 0,
+  "d14_27_fill_total_delta_vs_mpx": -19.56,
+  "ref_vs_oc_c3_mean_delta": 72.75,
+  "terminal_money_mean": {
+   "mpx": 100784.7,
+   "oc_c3": 100685.8,
+   "u2": 100771.7
+  },
+  "launch": "不发射不提交（判决先行）；上线决策移交用户"
+ },
+ "budget": {
+  "cap_局次": 300,
+  "auth_局次": 60,
+  "judgment_局次": 96,
+  "mpx_局次": 32,
+  "oc_c3_局次": 32,
+  "u2_局次": 32,
+  "gates_局次": 4,
+  "cap_scope": "全部局次（认证 60 + 四门 4 + 判决 96）≤300",
+  "judgment_局次_total": 96,
+  "total_局次": 160,
+  "within_cap": true
+ },
+ "anomaly": [],
+ "_generated_at": "2026-09-29T20:15:09Z",
+ "elapsed_s": 288.6
+}
