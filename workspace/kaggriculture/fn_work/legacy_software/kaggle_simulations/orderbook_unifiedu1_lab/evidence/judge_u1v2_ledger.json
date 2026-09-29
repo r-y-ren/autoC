@@ -1,0 +1,73 @@
+{
+ "h2h": {
+  "u1v2a": {
+   "design": "u1v2a 与 mpx_w24_p2_3_h14 直接同局；16 fold×双席",
+   "n": 32,
+   "W": 6,
+   "L": 26,
+   "T": 0,
+   "win_rate": 0.1875,
+   "mean_margin": -166.12,
+   "terminal_money_mean": 100380.1
+  },
+  "u1v2b": {
+   "design": "u1v2b 与 mpx_w24_p2_3_h14 直接同局；16 fold×双席",
+   "n": 32,
+   "W": 8,
+   "L": 24,
+   "T": 0,
+   "win_rate": 0.25,
+   "mean_margin": -147.5,
+   "terminal_money_mean": 100401.6
+  }
+ },
+ "criteria": {
+  "u1v2a": {
+   "checks": {
+    "h2h_vs_mpx>=0.55": false,
+    "flips_neg==0": true,
+    "实现价非负（Δratio_fill 三品∧全品均值≥0）": false,
+    "窗差>=mpx（u1v2 vs oc_c3 ≥ mpx vs oc_c3）": false
+   },
+   "h2h_win_rate": 0.1875,
+   "flips_neg": 0,
+   "net_flip_wins": 4,
+   "mean_delta_vs_mpx": -37.81,
+   "mean_delta_vs_oc_c3": 105.31,
+   "realized_px_nonneg_all_three": false,
+   "window_fill_total_delta_vs_oc_c3": 44.19,
+   "window_fill_total_delta_mpx_vs_oc_c3": 47.19,
+   "positive_arm": false,
+   "胜率口径附注": "R27 重裁先例：胜率=天梯硬通货，单列胜率正信号；重裁三判据=胜率≥0.55∧钱差非负∧零足迹",
+   "win_rate_signal": false
+  },
+  "u1v2b": {
+   "checks": {
+    "h2h_vs_mpx>=0.55": false,
+    "flips_neg==0": true,
+    "实现价非负（Δratio_fill 三品∧全品均值≥0）": false,
+    "窗差>=mpx（u1v2 vs oc_c3 ≥ mpx vs oc_c3）": true
+   },
+   "h2h_win_rate": 0.25,
+   "flips_neg": 0,
+   "net_flip_wins": 4,
+   "mean_delta_vs_mpx": -11.81,
+   "mean_delta_vs_oc_c3": 131.31,
+   "realized_px_nonneg_all_three": false,
+   "window_fill_total_delta_vs_oc_c3": 57.75,
+   "window_fill_total_delta_mpx_vs_oc_c3": 47.19,
+   "positive_arm": false,
+   "胜率口径附注": "R27 重裁先例：胜率=天梯硬通货，单列胜率正信号；重裁三判据=胜率≥0.55∧钱差非负∧零足迹",
+   "win_rate_signal": false
+  }
+ },
+ "budget": {
+  "cap_局次": 300,
+  "auth_局次": 60,
+  "gate_局次": 8,
+  "smoke_局次": 1,
+  "judgment_局次": 192,
+  "total_局次": 261,
+  "within_cap": true
+ }
+}

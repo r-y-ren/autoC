@@ -996,5 +996,675 @@
  },
  "anomaly": [],
  "_generated_at": "2026-09-29T20:15:09Z",
- "elapsed_s": 288.6
+ "elapsed_s": 288.6,
+ "v2": {
+  "version": "unified-u2-v2/1.0",
+  "experiment": "U2v2 软门版（U2 硬门 h2h 0.656 正信号、钱面被锋利门拖负）：①容差门 tol 1%/3% 两档；②跌幅门 drop_half（Wangyh666 形态：跌>$0.5 半量放行而非全拦）/drop1_block（仅跌>$1 才拦）全试择优；主判各形态 vs mpx 胜者件，判据沿四条+胜率口径附注",
+  "source": {
+   "commands": [
+    "python3 orderbook_unified_u2_lab/build_unified_u2v2.py",
+    "python3 orderbook_unified_u2_lab/judge_unified_u2v2.py"
+   ],
+   "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_modelpx_lab/build/mpx_w24_p2_3_h14/main.py",
+   "base_sha256": "f0101de9b558d1f56334739f9a49a0a0d4bc860a898792a9b69fc72c3d84e44f",
+   "corpus": {
+    "loss_folds": [
+     1825501814,
+     2013941152,
+     786146079,
+     1883261866,
+     963182245,
+     240876256,
+     1705553586,
+     2009279466
+    ],
+    "neutral_folds": [
+     673000,
+     673127,
+     673254,
+     673381,
+     673508,
+     673635,
+     673762,
+     673889
+    ],
+    "neutral_spec": "673000+i*127（i=0..7）",
+    "n16": "败局 8 + 中性 8 =16 fold（n=16 双席=32 局/臂）"
+   },
+   "workers": 2,
+   "caliber": {
+    "margin": "banks[our]−banks[opp]（run_games banks）",
+    "terminal_money": "farms[obs.player].money（干净口径）",
+    "window": "d14-27 窗 step 336-648；fill=影子引擎逐拍归因",
+    "h2h": "同 (seed,seat) 配对 (W+0.5T)/n（margin Δ 口径）"
+   },
+   "sim_auth": {
+    "loaded": true,
+    "consistency": {
+     "n_checked": 30,
+     "n_match": 30,
+     "rate": 1.0
+    },
+    "consistency_ok": true,
+    "degraded": false,
+    "degraded_reason": null,
+    "engine": "sim",
+    "version": "simbridge/1.0"
+   }
+  },
+  "gate_design": "U2v2 软门（mpx 胜者件窗节奏零改动）：①容差门=放行 iff p_now ≥ max(投影K=6)×(1−tol)（引擎公式+城镇排水+对手流同 U2；tol 1%/3% 两档）；②跌幅门 drop_half=Wangyh666 形态（跌>$0.5 触发时 take 取半量≥1 放行，非全拦）/ drop1_block=字面形态（仅跌>$1 才拦）。648 后回基线守卫沿用（门恒过+量整形关断）；异常回退基线；非触发拍零足迹；量帽/窗/时段/品项/planned/阈 0.5 与 mpx 胜者件逐字节同",
+  "forms": {
+   "u2v2_tol1": {
+    "mode": "tol",
+    "tol": 0.01,
+    "desc": "容差门 1%：p_now ≥ max(投影K=6)×0.99"
+   },
+   "u2v2_tol3": {
+    "mode": "tol",
+    "tol": 0.03,
+    "desc": "容差门 3%：p_now ≥ max(投影K=6)×0.97"
+   },
+   "u2v2_drop1_block": {
+    "mode": "drop_block",
+    "tol": 1.0,
+    "desc": "跌幅门字面：p_now−p_next>$1 才拦，否则全量"
+   },
+   "u2v2_drop_half": {
+    "mode": "drop_half",
+    "tol": 0.5,
+    "desc": "跌幅门 Wangyh666 形态：跌>$0.5 半量前置（跌幅触发时改半量放行而非全拦）"
+   }
+  },
+  "gates": {
+   "u2v2_tol1": {
+    "load": {
+     "passed": true,
+     "entry": "_u2_agent"
+    },
+    "health": {
+     "passed": true,
+     "step_budget_ms": 1000.0,
+     "episodes": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 145.3,
+       "p99_step_ms": 22.43,
+       "passed": true
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 271.64,
+       "p99_step_ms": 41.19,
+       "passed": true
+      }
+     ]
+    },
+    "determinism": {
+     "passed": true,
+     "rerun_seed": 101,
+     "hashes": {
+      "run1": "894d6b6c1265b37d285be76e1ed6f1e8ca73ff8e1cb724b8e1affd764e14c8b9",
+      "run2": "894d6b6c1265b37d285be76e1ed6f1e8ca73ff8e1cb724b8e1affd764e14c8b9"
+     }
+    },
+    "identity": {
+     "passed": true,
+     "main_sha256": "4df10055f27df5af294e69b57b8e8ebeafd73043a8fcb806e0b52a08e16bfa62",
+     "tar_members": [
+      "main.py"
+     ],
+     "inner_matches_disk": true,
+     "sha_matches_manifest": true,
+     "reverse_extract_byte_identical_to_mpx_base": true,
+     "base_main_sha256": "f0101de9b558d1f56334739f9a49a0a0d4bc860a898792a9b69fc72c3d84e44f"
+    },
+    "overall": true
+   },
+   "u2v2_tol3": {
+    "load": {
+     "passed": true,
+     "entry": "_u2_agent"
+    },
+    "health": {
+     "passed": true,
+     "step_budget_ms": 1000.0,
+     "episodes": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 164.2,
+       "p99_step_ms": 22.63,
+       "passed": true
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 239.15,
+       "p99_step_ms": 41.97,
+       "passed": true
+      }
+     ]
+    },
+    "determinism": {
+     "passed": true,
+     "rerun_seed": 101,
+     "hashes": {
+      "run1": "25f6d2f49934c36139166534a2dde3e55e6955d51143ed35ef5b1f836dabca97",
+      "run2": "25f6d2f49934c36139166534a2dde3e55e6955d51143ed35ef5b1f836dabca97"
+     }
+    },
+    "identity": {
+     "passed": true,
+     "main_sha256": "88fbad695fb4e38045668a67e8f34762eaec16f09434552aea7352f81d6fed65",
+     "tar_members": [
+      "main.py"
+     ],
+     "inner_matches_disk": true,
+     "sha_matches_manifest": true,
+     "reverse_extract_byte_identical_to_mpx_base": true,
+     "base_main_sha256": "f0101de9b558d1f56334739f9a49a0a0d4bc860a898792a9b69fc72c3d84e44f"
+    },
+    "overall": true
+   },
+   "u2v2_drop1_block": {
+    "load": {
+     "passed": true,
+     "entry": "_u2_agent"
+    },
+    "health": {
+     "passed": true,
+     "step_budget_ms": 1000.0,
+     "episodes": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 239.23,
+       "p99_step_ms": 22.97,
+       "passed": true
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 270.97,
+       "p99_step_ms": 40.16,
+       "passed": true
+      }
+     ]
+    },
+    "determinism": {
+     "passed": true,
+     "rerun_seed": 101,
+     "hashes": {
+      "run1": "5eddd69ba33289d71428468555fbc2469310ede55e33c1675d484927afe50d3c",
+      "run2": "5eddd69ba33289d71428468555fbc2469310ede55e33c1675d484927afe50d3c"
+     }
+    },
+    "identity": {
+     "passed": true,
+     "main_sha256": "7b98b7cf3317d54d70577c7e7807767abdd278ae825b4a6b0b31d75c2c9c1e8a",
+     "tar_members": [
+      "main.py"
+     ],
+     "inner_matches_disk": true,
+     "sha_matches_manifest": true,
+     "reverse_extract_byte_identical_to_mpx_base": true,
+     "base_main_sha256": "f0101de9b558d1f56334739f9a49a0a0d4bc860a898792a9b69fc72c3d84e44f"
+    },
+    "overall": true
+   },
+   "u2v2_drop_half": {
+    "load": {
+     "passed": true,
+     "entry": "_u2_agent"
+    },
+    "health": {
+     "passed": true,
+     "step_budget_ms": 1000.0,
+     "episodes": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 153.44,
+       "p99_step_ms": 22.52,
+       "passed": true
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 330.17,
+       "p99_step_ms": 37.29,
+       "passed": true
+      }
+     ]
+    },
+    "determinism": {
+     "passed": true,
+     "rerun_seed": 101,
+     "hashes": {
+      "run1": "65271964723f6aa155d2427445b411b214f21c3a00244e68bd0ca4602ac72f98",
+      "run2": "65271964723f6aa155d2427445b411b214f21c3a00244e68bd0ca4602ac72f98"
+     }
+    },
+    "identity": {
+     "passed": true,
+     "main_sha256": "5d2d12468a5d1ec53c3d3e4726de54e6a5d29eb038fc97ca45c72b2ce7992df0",
+     "tar_members": [
+      "main.py"
+     ],
+     "inner_matches_disk": true,
+     "sha_matches_manifest": true,
+     "reverse_extract_byte_identical_to_mpx_base": true,
+     "base_main_sha256": "f0101de9b558d1f56334739f9a49a0a0d4bc860a898792a9b69fc72c3d84e44f"
+    },
+    "overall": true
+   }
+  },
+  "footprint_audit": {
+   "u2v2_tol1": {
+    "passed": true,
+    "gate_ledger": {
+     "calls": 22976,
+     "gate_calls": 544,
+     "base_fires": 512,
+     "gate_pass": 144,
+     "gate_blocked": 368,
+     "gate_err": 0,
+     "post648_pass": 84,
+     "fires": 144,
+     "half_fires": 0
+    },
+    "pure_restriction": true,
+    "stream_checked": 32,
+    "stream_ok": 32,
+    "violations": []
+   },
+   "u2v2_tol3": {
+    "passed": true,
+    "gate_ledger": {
+     "calls": 22976,
+     "gate_calls": 414,
+     "base_fires": 382,
+     "gate_pass": 180,
+     "gate_blocked": 202,
+     "gate_err": 0,
+     "post648_pass": 86,
+     "fires": 180,
+     "half_fires": 0
+    },
+    "pure_restriction": true,
+    "stream_checked": 32,
+    "stream_ok": 32,
+    "violations": []
+   },
+   "u2v2_drop1_block": {
+    "passed": true,
+    "gate_ledger": {
+     "calls": 22976,
+     "gate_calls": 684,
+     "base_fires": 652,
+     "gate_pass": 102,
+     "gate_blocked": 550,
+     "gate_err": 0,
+     "post648_pass": 86,
+     "fires": 102,
+     "half_fires": 0
+    },
+    "pure_restriction": true,
+    "stream_checked": 32,
+    "stream_ok": 32,
+    "violations": []
+   },
+   "u2v2_drop_half": {
+    "passed": true,
+    "gate_ledger": {
+     "calls": 22976,
+     "gate_calls": 462,
+     "base_fires": 432,
+     "gate_pass": 432,
+     "gate_blocked": 0,
+     "gate_err": 0,
+     "post648_pass": 82,
+     "fires": 432,
+     "half_fires": 350
+    },
+    "pure_restriction": true,
+    "stream_checked": 32,
+    "stream_ok": 32,
+    "violations": []
+   }
+  },
+  "pairs": {
+   "u2v2_tol1": {
+    "pair": {
+     "n": 32,
+     "W": 20,
+     "L": 8,
+     "T": 4,
+     "mean_delta": -1.81,
+     "win_control": 26,
+     "win_variant": 26,
+     "flips_pos": 0,
+     "flips_neg": 0,
+     "net_flip_wins": 0,
+     "loss_recovery": "8/16 败局 Δ>0",
+     "control_win_guard_ok": true,
+     "positive_arm": false
+    },
+    "window": {
+     "fill_total": 17.62,
+     "fill_milk": 4.12,
+     "submit_total": 68.38,
+     "submit_milk": 17.12
+    },
+    "realized": {
+     "nonneg_both": false,
+     "all": -0.0006,
+     "milk": -0.0012
+    },
+    "margin_mean": 7080.03,
+    "terminal_money_mean": 99219.9
+   },
+   "u2v2_tol3": {
+    "pair": {
+     "n": 32,
+     "W": 18,
+     "L": 8,
+     "T": 6,
+     "mean_delta": -5.5,
+     "win_control": 26,
+     "win_variant": 26,
+     "flips_pos": 0,
+     "flips_neg": 0,
+     "net_flip_wins": 0,
+     "loss_recovery": "8/16 败局 Δ>0",
+     "control_win_guard_ok": true,
+     "positive_arm": false
+    },
+    "window": {
+     "fill_total": 21.25,
+     "fill_milk": 4.94,
+     "submit_total": 67.06,
+     "submit_milk": 21.69
+    },
+    "realized": {
+     "nonneg_both": false,
+     "all": -0.0003,
+     "milk": -0.0006
+    },
+    "margin_mean": 7076.34,
+    "terminal_money_mean": 99233.4
+   },
+   "u2v2_drop1_block": {
+    "pair": {
+     "n": 32,
+     "W": 18,
+     "L": 12,
+     "T": 2,
+     "mean_delta": 35.94,
+     "win_control": 26,
+     "win_variant": 28,
+     "flips_pos": 2,
+     "flips_neg": 0,
+     "net_flip_wins": 2,
+     "loss_recovery": "8/16 败局 Δ>0",
+     "control_win_guard_ok": true,
+     "positive_arm": true
+    },
+    "window": {
+     "fill_total": 1.81,
+     "fill_milk": 28.62,
+     "submit_total": 73.56,
+     "submit_milk": 33.88
+    },
+    "realized": {
+     "nonneg_both": false,
+     "all": 0.0,
+     "milk": -0.0002
+    },
+    "margin_mean": 7117.78,
+    "terminal_money_mean": 99271.4
+   },
+   "u2v2_drop_half": {
+    "pair": {
+     "n": 32,
+     "W": 18,
+     "L": 10,
+     "T": 4,
+     "mean_delta": 48.44,
+     "win_control": 26,
+     "win_variant": 30,
+     "flips_pos": 4,
+     "flips_neg": 0,
+     "net_flip_wins": 4,
+     "loss_recovery": "6/16 败局 Δ>0",
+     "control_win_guard_ok": true,
+     "positive_arm": true
+    },
+    "window": {
+     "fill_total": 4.81,
+     "fill_milk": 14.31,
+     "submit_total": 2.12,
+     "submit_milk": -3.5
+    },
+    "realized": {
+     "nonneg_both": true,
+     "all": 0.0001,
+     "milk": 0.0003
+    },
+    "margin_mean": 7130.28,
+    "terminal_money_mean": 99252.3
+   },
+   "mpx_control": {
+    "n_units": 32,
+    "margin_mean": 7081.84,
+    "terminal_money_mean": 99198.8
+   }
+  },
+  "window_stats": {},
+  "criteria": {
+   "u2v2_tol1": {
+    "h2h_vs_mpx≥0.55": {
+     "h2h": 0.6875,
+     "W": 20,
+     "T": 4,
+     "L": 8,
+     "passed": true
+    },
+    "flips_neg==0": {
+     "flips_neg": 0,
+     "passed": true
+    },
+    "实现价非负": {
+     "nonneg_both": false,
+     "all_mean_delta": -0.0006,
+     "milk_mean_delta": -0.0012,
+     "passed": false
+    },
+    "窗差≥mpx": {
+     "d14_27_fill_total_delta": 17.62,
+     "passed": true
+    }
+   },
+   "u2v2_tol3": {
+    "h2h_vs_mpx≥0.55": {
+     "h2h": 0.6562,
+     "W": 18,
+     "T": 6,
+     "L": 8,
+     "passed": true
+    },
+    "flips_neg==0": {
+     "flips_neg": 0,
+     "passed": true
+    },
+    "实现价非负": {
+     "nonneg_both": false,
+     "all_mean_delta": -0.0003,
+     "milk_mean_delta": -0.0006,
+     "passed": false
+    },
+    "窗差≥mpx": {
+     "d14_27_fill_total_delta": 21.25,
+     "passed": true
+    }
+   },
+   "u2v2_drop1_block": {
+    "h2h_vs_mpx≥0.55": {
+     "h2h": 0.5938,
+     "W": 18,
+     "T": 2,
+     "L": 12,
+     "passed": true
+    },
+    "flips_neg==0": {
+     "flips_neg": 0,
+     "passed": true
+    },
+    "实现价非负": {
+     "nonneg_both": false,
+     "all_mean_delta": 0.0,
+     "milk_mean_delta": -0.0002,
+     "passed": false
+    },
+    "窗差≥mpx": {
+     "d14_27_fill_total_delta": 1.81,
+     "passed": true
+    }
+   },
+   "u2v2_drop_half": {
+    "h2h_vs_mpx≥0.55": {
+     "h2h": 0.625,
+     "W": 18,
+     "T": 4,
+     "L": 10,
+     "passed": true
+    },
+    "flips_neg==0": {
+     "flips_neg": 0,
+     "passed": true
+    },
+    "实现价非负": {
+     "nonneg_both": true,
+     "all_mean_delta": 0.0001,
+     "milk_mean_delta": 0.0003,
+     "passed": true
+    },
+    "窗差≥mpx": {
+     "d14_27_fill_total_delta": 4.81,
+     "passed": true
+    }
+   }
+  },
+  "win_rate_notes": {
+   "u2v2_tol1": "胜率口径附注（R27 重裁先例）：h2h=0.6875≥0.6 但钱面刀口级未达（实现价非负），胜率是天梯硬通货，单独标注供裁决",
+   "u2v2_tol3": "胜率口径附注（R27 重裁先例）：h2h=0.6562≥0.6 但钱面刀口级未达（实现价非负），胜率是天梯硬通货，单独标注供裁决"
+  },
+  "verdict": {
+   "three_arm_table": [
+    "u2v2_tol1",
+    "u2v2_tol3",
+    "u2v2_drop_half"
+   ],
+   "drop_arm_selected": {
+    "form": "u2v2_drop_half",
+    "desc": "跌幅门 Wangyh666 形态：跌>$0.5 半量前置（跌幅触发时改半量放行而非全拦）",
+    "selection": "跌幅族两形态全试择优（判据过数→h2h→mean_delta）",
+    "other": {
+     "u2v2_drop1_block": {
+      "criteria_passed": false,
+      "h2h": 0.5938,
+      "mean_delta": 35.94
+     }
+    }
+   },
+   "tol_arm_selected": "u2v2_tol1",
+   "per_form": {
+    "u2v2_tol1": {
+     "criteria_passed": false,
+     "h2h": 0.6875,
+     "mean_delta_vs_mpx": -1.81,
+     "flips_neg": 0,
+     "d14_27_fill_total_delta": 17.62,
+     "win_rate_note": "胜率口径附注（R27 重裁先例）：h2h=0.6875≥0.6 但钱面刀口级未达（实现价非负），胜率是天梯硬通货，单独标注供裁决"
+    },
+    "u2v2_tol3": {
+     "criteria_passed": false,
+     "h2h": 0.6562,
+     "mean_delta_vs_mpx": -5.5,
+     "flips_neg": 0,
+     "d14_27_fill_total_delta": 21.25,
+     "win_rate_note": "胜率口径附注（R27 重裁先例）：h2h=0.6562≥0.6 但钱面刀口级未达（实现价非负），胜率是天梯硬通货，单独标注供裁决"
+    },
+    "u2v2_drop1_block": {
+     "criteria_passed": false,
+     "h2h": 0.5938,
+     "mean_delta_vs_mpx": 35.94,
+     "flips_neg": 0,
+     "d14_27_fill_total_delta": 1.81,
+     "win_rate_note": null
+    },
+    "u2v2_drop_half": {
+     "criteria_passed": true,
+     "h2h": 0.625,
+     "mean_delta_vs_mpx": 48.44,
+     "flips_neg": 0,
+     "d14_27_fill_total_delta": 4.81,
+     "win_rate_note": null
+    }
+   },
+   "positive_arm": true,
+   "launch": "不发射不提交（判决先行）；上线决策移交用户"
+  },
+  "budget": {
+   "cap_局次": 250,
+   "auth_局次": 60,
+   "judgment_局次": 160,
+   "mpx_局次": 32,
+   "gates_局次": 16,
+   "cap_scope": "全部局次（认证 60 + 四门 4×形态 + 判决 32×臂）≤250",
+   "u2v2_tol1_局次": 32,
+   "u2v2_tol3_局次": 32,
+   "u2v2_drop1_block_局次": 32,
+   "u2v2_drop_half_局次": 32,
+   "total_局次": 236,
+   "within_cap": true
+  },
+  "anomaly": [],
+  "_generated_at": "2026-09-29T20:38:18Z",
+  "elapsed_s": 518.7
+ }
 }

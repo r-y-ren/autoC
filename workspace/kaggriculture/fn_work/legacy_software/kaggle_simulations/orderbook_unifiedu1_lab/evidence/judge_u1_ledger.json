@@ -1,0 +1,69 @@
+{
+ "h2h": {
+  "W": 5,
+  "L": 27,
+  "T": 0,
+  "win_rate": 0.1562
+ },
+ "pairs": {
+  "u1_vs_mpx": {
+   "n": 32,
+   "W": 12,
+   "L": 20,
+   "T": 0,
+   "mean_delta": -44.19,
+   "net_flip_wins": 2,
+   "flips_neg": 0
+  },
+  "u1_vs_oc_c3": {
+   "n": 32,
+   "W": 23,
+   "L": 9,
+   "T": 0,
+   "mean_delta": 102.28,
+   "net_flip_wins": 2,
+   "flips_neg": 0
+  },
+  "mpx_vs_oc_c3": {
+   "n": 32,
+   "W": 28,
+   "L": 4,
+   "T": 0,
+   "mean_delta": 146.47,
+   "net_flip_wins": 0,
+   "flips_neg": 0
+  }
+ },
+ "window": {
+  "u1_vs_oc_c3": 31.88,
+  "mpx_vs_oc_c3": 27.47
+ },
+ "criteria": {
+  "checks": {
+   "h2h_vs_mpx>=0.55": false,
+   "flips_neg==0": true,
+   "实现价非负（Δratio_fill 三品∧全品均值≥0）": false,
+   "窗差>=mpx（d14-27 fill 总窗配对 Δ u1 vs oc_c3 ≥ mpx vs oc_c3）": true
+  },
+  "h2h_win_rate": 0.1562,
+  "h2h_W_L_T": "5/27/0",
+  "flips_neg": 0,
+  "net_flip_wins": 2,
+  "mean_delta_u1_minus_mpx": -44.19,
+  "realized_px_nonneg_all_three": false,
+  "window_fill_total_delta_u1_vs_oc_c3": 31.88,
+  "window_fill_total_delta_mpx_vs_oc_c3": 27.47,
+  "four_gates_passed": true,
+  "footprint_gate_passed": true,
+  "positive_arm": false
+ },
+ "budget": {
+  "cap_局次": 300,
+  "auth_局次": 60,
+  "gate_局次": 4,
+  "smoke_局次": 1,
+  "judgment_局次": 128,
+  "total_局次": 193,
+  "within_cap": true
+ }
+}
