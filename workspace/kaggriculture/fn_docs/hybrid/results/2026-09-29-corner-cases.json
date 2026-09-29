@@ -1,0 +1,1572 @@
+{
+ "version": "corner-cases/1.0",
+ "experiment": "三改进角实测（诊断+判决先行）：任务一 H1 分品实现价 vs base 口径体检（对照 tetsutani 自报/冠军 0.903）；任务二 care2（CARE 翻倍）+fertilize-on（吸收率定速）建模轮结论首验；任务三 dephase 卖相位去集中（禁区下合法面=日新高追加单挂拍轮转）",
+ "source": {
+  "commands": [
+   "python3 orderbook_corner_lab/judge_corner.py"
+  ],
+  "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_strongest_lab/build/h1/main.py",
+  "base_sha256": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337",
+  "corpus": {
+   "loss_folds": [
+    1825501814,
+    2013941152,
+    786146079,
+    1883261866,
+    963182245,
+    240876256,
+    1705553586,
+    2009279466
+   ],
+   "neutral_folds": [
+    672000,
+    672083,
+    672166,
+    672249,
+    672332,
+    672415,
+    672498,
+    672581
+   ],
+   "neutral_spec": "672000+i*83（新中性块 n=8）",
+   "folds_per_variant": 16,
+   "strata": "26 败局回放（canonical 前 8 fold）+ 新中性块 672000+i*83（i=0..7）；双席 fold n=16/变体"
+  },
+  "opponents": [
+   "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r37/build/main.py",
+   "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/a/main.py",
+   "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_2965_adopt/b/main.py",
+   "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/v48_derivative/main.py"
+  ],
+  "workers": 2,
+  "caliber": "margin=终局 banks[our]−banks[opp]；终局钱 farms[obs.player].money 干净口径交叉核对；实现价=Σ(qty×成交价)/Σ(qty×base)（成交价=影子引擎逐拍归因 value/filled），提交口径 Σ(qty×卖时市价) 对照",
+  "criterion": "净翻胜>0 的变体为正臂；胜局对照不翻负（flips_neg==0）",
+  "base_px_table": {
+   "WHEAT": 25,
+   "CARROT": 35,
+   "TOMATO": 60,
+   "STRAWBERRY": 120,
+   "MELON": 250,
+   "EGG": 50,
+   "MILK": 160,
+   "WOOL": 200,
+   "FERTILIZER": 100
+  },
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "wall_speedup": 5.405,
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "timing": {
+    "official_s": 32.8917,
+    "sim_s": 6.085,
+    "measured_speedup": 5.405
+   },
+   "version": "simbridge/1.0"
+  }
+ },
+ "realized_base": {
+  "per_item": {
+   "CARROT": {
+    "base_px": 35.0,
+    "filled_qty": 4456.0,
+    "filled_value": 236508.0,
+    "avg_fill_px": 53.08,
+    "ratio_fill": 1.5165,
+    "req_qty": 4456.0,
+    "avg_submit_px": 54.86,
+    "ratio_submit": 1.5674
+   },
+   "EGG": {
+    "base_px": 50.0,
+    "filled_qty": 2786.0,
+    "filled_value": 146292.0,
+    "avg_fill_px": 52.51,
+    "ratio_fill": 1.0502,
+    "req_qty": 2796.0,
+    "avg_submit_px": 52.82,
+    "ratio_submit": 1.0564
+   },
+   "FERTILIZER": {
+    "base_px": 100.0,
+    "filled_qty": 10616.0,
+    "filled_value": 479662.0,
+    "avg_fill_px": 45.18,
+    "ratio_fill": 0.4518,
+    "req_qty": 10906.0,
+    "avg_submit_px": 46.57,
+    "ratio_submit": 0.4657
+   },
+   "MELON": {
+    "base_px": 250.0,
+    "filled_qty": 2304.0,
+    "filled_value": 470272.0,
+    "avg_fill_px": 204.11,
+    "ratio_fill": 0.8164,
+    "req_qty": 2304.0,
+    "avg_submit_px": 213.9,
+    "ratio_submit": 0.8556
+   },
+   "MILK": {
+    "base_px": 160.0,
+    "filled_qty": 6368.0,
+    "filled_value": 577578.0,
+    "avg_fill_px": 90.7,
+    "ratio_fill": 0.5669,
+    "req_qty": 7446.0,
+    "avg_submit_px": 90.73,
+    "ratio_submit": 0.567
+   },
+   "STRAWBERRY": {
+    "base_px": 120.0,
+    "filled_qty": 7920.0,
+    "filled_value": 812624.0,
+    "avg_fill_px": 102.6,
+    "ratio_fill": 0.855,
+    "req_qty": 9040.0,
+    "avg_submit_px": 107.29,
+    "ratio_submit": 0.8941
+   },
+   "TOMATO": {
+    "base_px": 60.0,
+    "filled_qty": 480.0,
+    "filled_value": 122090.0,
+    "avg_fill_px": 254.35,
+    "ratio_fill": 4.2392,
+    "req_qty": 480.0,
+    "avg_submit_px": 271.82,
+    "ratio_submit": 4.5304
+   },
+   "WHEAT": {
+    "base_px": 25.0,
+    "filled_qty": 20406.0,
+    "filled_value": 838436.0,
+    "avg_fill_px": 41.09,
+    "ratio_fill": 1.6435,
+    "req_qty": 21158.0,
+    "avg_submit_px": 41.96,
+    "ratio_submit": 1.6785
+   },
+   "WOOL": {
+    "base_px": 200.0,
+    "filled_qty": 5020.0,
+    "filled_value": 601192.0,
+    "avg_fill_px": 119.76,
+    "ratio_fill": 0.5988,
+    "req_qty": 5822.0,
+    "avg_submit_px": 124.97,
+    "ratio_submit": 0.6248
+   }
+  },
+  "aggregate": {
+   "ratio_fill_all": 0.7869,
+   "ratio_submit_all": 0.8026,
+   "n_games": 32
+  },
+  "对照": {
+   "tetsutani_self_report": {
+    "WOOL": [
+     0.65,
+     0.7
+    ],
+    "MILK": [
+     0.61,
+     0.67
+    ],
+    "note": "tetsutani 自报：WOOL/MILK 被自冲谷底；城镇排走品 1.5-2.1×"
+   },
+   "champion_base_caliber": 0.903,
+   "opp_side_in_same_games": {
+    "ratio_fill_all": 0.7428,
+    "ratio_submit_all": 0.5403,
+    "n_games": 32
+   },
+   "opp_side_per_item": {
+    "CARROT": {
+     "base_px": 35.0,
+     "filled_qty": 3782.0,
+     "filled_value": 196894.0,
+     "avg_fill_px": 52.06,
+     "ratio_fill": 1.4875,
+     "req_qty": 3892.0,
+     "avg_submit_px": 53.81,
+     "ratio_submit": 1.5375
+    },
+    "EGG": {
+     "base_px": 50.0,
+     "filled_qty": 2008.0,
+     "filled_value": 104326.0,
+     "avg_fill_px": 51.96,
+     "ratio_fill": 1.0391,
+     "req_qty": 2014.0,
+     "avg_submit_px": 52.16,
+     "ratio_submit": 1.0432
+    },
+    "FERTILIZER": {
+     "base_px": 100.0,
+     "filled_qty": 10206.0,
+     "filled_value": 449652.0,
+     "avg_fill_px": 44.06,
+     "ratio_fill": 0.4406,
+     "req_qty": 41504.0,
+     "avg_submit_px": 19.48,
+     "ratio_submit": 0.1948
+    },
+    "MELON": {
+     "base_px": 250.0,
+     "filled_qty": 2184.0,
+     "filled_value": 433442.0,
+     "avg_fill_px": 198.46,
+     "ratio_fill": 0.7938,
+     "req_qty": 2292.0,
+     "avg_submit_px": 207.3,
+     "ratio_submit": 0.8292
+    },
+    "MILK": {
+     "base_px": 160.0,
+     "filled_qty": 6602.0,
+     "filled_value": 535470.0,
+     "avg_fill_px": 81.11,
+     "ratio_fill": 0.5069,
+     "req_qty": 7944.0,
+     "avg_submit_px": 81.78,
+     "ratio_submit": 0.5111
+    },
+    "STRAWBERRY": {
+     "base_px": 120.0,
+     "filled_qty": 8324.0,
+     "filled_value": 869162.0,
+     "avg_fill_px": 104.42,
+     "ratio_fill": 0.8701,
+     "req_qty": 9836.0,
+     "avg_submit_px": 113.01,
+     "ratio_submit": 0.9417
+    },
+    "TOMATO": {
+     "base_px": 60.0,
+     "filled_qty": 320.0,
+     "filled_value": 89412.0,
+     "avg_fill_px": 279.41,
+     "ratio_fill": 4.6569,
+     "req_qty": 320.0,
+     "avg_submit_px": 300.76,
+     "ratio_submit": 5.0127
+    },
+    "WHEAT": {
+     "base_px": 25.0,
+     "filled_qty": 16656.0,
+     "filled_value": 674859.0,
+     "avg_fill_px": 40.52,
+     "ratio_fill": 1.6207,
+     "req_qty": 18146.0,
+     "avg_submit_px": 41.36,
+     "ratio_submit": 1.6542
+    },
+    "WOOL": {
+     "base_px": 200.0,
+     "filled_qty": 5224.0,
+     "filled_value": 609448.0,
+     "avg_fill_px": 116.66,
+     "ratio_fill": 0.5833,
+     "req_qty": 6098.0,
+     "avg_submit_px": 116.83,
+     "ratio_submit": 0.5842
+    }
+   },
+   "note": "比例=Σ(qty×成交价)/Σ(qty×base)；tetsutani 自报与冠军 0.903 为 base 口径同表可比；opp 侧=同局四对手（r37/2965a/2965b/v48_derivative）"
+  },
+  "n_games_traced": 32,
+  "caliber_fill": "成交价=影子引擎逐拍归因 value/filled",
+  "caliber_submit": "提交口径=Σ(qty_req×卖时市价)/Σ(qty_req×base)（judge_strongest clean_reads 同族）",
+  "task1_answer": {
+   "wool_milk_valley_self_harm": {
+    "WOOL": 0.5988,
+    "MILK": 0.5669,
+    "threshold": "对照 tetsutani 自冲带 0.61-0.70；<0.9 视为谷底自伤"
+   },
+   "most_hurt_items": [
+    {
+     "item": "FERTILIZER",
+     "ratio_fill": 0.4518
+    },
+    {
+     "item": "MILK",
+     "ratio_fill": 0.5669
+    },
+    {
+     "item": "WOOL",
+     "ratio_fill": 0.5988
+    }
+   ]
+  }
+ },
+ "care2": {
+  "variant": {
+   "stats": {
+    "routes": 34,
+    "derive_failed": 7,
+    "events_base": 13722,
+    "inserted": 8995,
+    "inserted_eff": 159,
+    "inserted_noop": 8836,
+    "shortfall": 4727,
+    "guarded_skipped": 14
+   },
+   "conservation": {
+    "ok": true,
+    "note": "非空闲件零丢失零改写；空闲 PASS 仅被 CARE插入改写；市场单零触碰（写时复制池语义）",
+    "n_inserted": 8995,
+    "n_table_rows": 8995
+   },
+   "twin": {
+    "verdict": "PASS",
+    "twin_rids": [
+     "9",
+     "117",
+     "114"
+    ],
+    "n_checks": 6,
+    "n_violation": 0
+   },
+   "main_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_corner_lab/build/variant_care2_main.py",
+   "kept": true,
+   "elapsed_s": 1.36
+  },
+  "pairs": {
+   "n": 32,
+   "W": 2,
+   "L": 26,
+   "T": 4,
+   "mean_delta": -190.5,
+   "win_control": 26,
+   "win_variant": 22,
+   "flips_pos": 0,
+   "flips_neg": 4,
+   "net_flip_wins": -4,
+   "loss_recovery": "0/16 败局 Δ>0",
+   "control_win_guard_ok": false,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": 661.0,
+     "delta": -14.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": 661.0,
+     "delta": -14.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": 316.0,
+     "delta": -35.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": 316.0,
+     "delta": -35.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -449.0,
+     "delta": -143.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -449.0,
+     "delta": -143.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20556.0,
+     "margin_variant": 20547.0,
+     "delta": -9.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20485.0,
+     "margin_variant": 20478.0,
+     "delta": -7.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": -440.0,
+     "delta": -559.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": -440.0,
+     "delta": -559.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": 515.0,
+     "delta": -47.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": 515.0,
+     "delta": -47.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": 1444.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": 1444.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 26592.0,
+     "delta": -289.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 26592.0,
+     "delta": -289.0
+    },
+    {
+     "seed": 672000,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": 722.0,
+     "delta": 49.0
+    },
+    {
+     "seed": 672000,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": 722.0,
+     "delta": 49.0
+    },
+    {
+     "seed": 672083,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 1546.0,
+     "margin_variant": 1546.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672083,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 1546.0,
+     "margin_variant": 1546.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 672166,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": 249.0,
+     "margin_variant": 231.0,
+     "delta": -18.0
+    },
+    {
+     "seed": 672166,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": 249.0,
+     "margin_variant": 231.0,
+     "delta": -18.0
+    },
+    {
+     "seed": 672249,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 26253.0,
+     "margin_variant": 26243.0,
+     "delta": -10.0
+    },
+    {
+     "seed": 672249,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 26253.0,
+     "margin_variant": 26243.0,
+     "delta": -10.0
+    },
+    {
+     "seed": 672332,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": -219.0,
+     "margin_variant": -257.0,
+     "delta": -38.0
+    },
+    {
+     "seed": 672332,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": -219.0,
+     "margin_variant": -257.0,
+     "delta": -38.0
+    },
+    {
+     "seed": 672415,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 935.0,
+     "margin_variant": -991.0,
+     "delta": -1926.0
+    },
+    {
+     "seed": 672415,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 935.0,
+     "margin_variant": -991.0,
+     "delta": -1926.0
+    },
+    {
+     "seed": 672498,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": -14.0,
+     "margin_variant": -15.0,
+     "delta": -1.0
+    },
+    {
+     "seed": 672498,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": -14.0,
+     "margin_variant": -15.0,
+     "delta": -1.0
+    },
+    {
+     "seed": 672581,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 18613.0,
+     "margin_variant": 18604.0,
+     "delta": -9.0
+    },
+    {
+     "seed": 672581,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 18613.0,
+     "margin_variant": 18604.0,
+     "delta": -9.0
+    }
+   ],
+   "positive_arm": false,
+   "elapsed_s": 71.82
+  }
+ },
+ "fertilize_on": {
+  "variant": {
+   "stats": {
+    "routes": 34,
+    "derive_failed": 7,
+    "events_base": 2702,
+    "inserted": 1431,
+    "inserted_eff": 1431,
+    "shortfall": 15841,
+    "guarded_skipped": 8,
+    "pace": "每 3 日/植格（引擎吸收窗 day..day+2）"
+   },
+   "conservation": {
+    "ok": true,
+    "note": "非空闲件零丢失零改写；空闲 PASS 仅被 FERTILIZE插入改写；市场单零触碰（写时复制池语义）",
+    "n_inserted": 1431,
+    "n_table_rows": 1431
+   },
+   "twin": {
+    "verdict": "PASS",
+    "twin_rids": [
+     "1",
+     "9",
+     "3"
+    ],
+    "n_checks": 6,
+    "n_violation": 0
+   },
+   "main_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_corner_lab/build/variant_fert_on_main.py",
+   "kept": true,
+   "elapsed_s": 1.38
+  },
+  "pairs": {
+   "n": 32,
+   "W": 8,
+   "L": 24,
+   "T": 0,
+   "mean_delta": -114.78,
+   "win_control": 26,
+   "win_variant": 26,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "net_flip_wins": 0,
+   "loss_recovery": "2/16 败局 Δ>0",
+   "control_win_guard_ok": true,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": 638.0,
+     "delta": -37.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": 638.0,
+     "delta": -37.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": 494.0,
+     "delta": 143.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": 494.0,
+     "delta": 143.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -335.0,
+     "delta": -29.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -335.0,
+     "delta": -29.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20556.0,
+     "margin_variant": 20106.0,
+     "delta": -450.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20485.0,
+     "margin_variant": 20028.0,
+     "delta": -457.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": 93.0,
+     "delta": -26.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": 93.0,
+     "delta": -26.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": 447.0,
+     "delta": -115.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": 447.0,
+     "delta": -115.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": 1398.0,
+     "delta": -46.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": 1398.0,
+     "delta": -46.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 26399.0,
+     "delta": -482.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 26399.0,
+     "delta": -482.0
+    },
+    {
+     "seed": 672000,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": 711.0,
+     "delta": 38.0
+    },
+    {
+     "seed": 672000,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": 711.0,
+     "delta": 38.0
+    },
+    {
+     "seed": 672083,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 1546.0,
+     "margin_variant": 1678.0,
+     "delta": 132.0
+    },
+    {
+     "seed": 672083,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 1546.0,
+     "margin_variant": 1678.0,
+     "delta": 132.0
+    },
+    {
+     "seed": 672166,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": 249.0,
+     "margin_variant": 317.0,
+     "delta": 68.0
+    },
+    {
+     "seed": 672166,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": 249.0,
+     "margin_variant": 317.0,
+     "delta": 68.0
+    },
+    {
+     "seed": 672249,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 26253.0,
+     "margin_variant": 26135.0,
+     "delta": -118.0
+    },
+    {
+     "seed": 672249,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 26253.0,
+     "margin_variant": 26135.0,
+     "delta": -118.0
+    },
+    {
+     "seed": 672332,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": -219.0,
+     "margin_variant": -570.0,
+     "delta": -351.0
+    },
+    {
+     "seed": 672332,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": -219.0,
+     "margin_variant": -570.0,
+     "delta": -351.0
+    },
+    {
+     "seed": 672415,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 935.0,
+     "margin_variant": 913.0,
+     "delta": -22.0
+    },
+    {
+     "seed": 672415,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 935.0,
+     "margin_variant": 913.0,
+     "delta": -22.0
+    },
+    {
+     "seed": 672498,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": -14.0,
+     "margin_variant": -367.0,
+     "delta": -353.0
+    },
+    {
+     "seed": 672498,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": -14.0,
+     "margin_variant": -367.0,
+     "delta": -353.0
+    },
+    {
+     "seed": 672581,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 18613.0,
+     "margin_variant": 18428.0,
+     "delta": -185.0
+    },
+    {
+     "seed": 672581,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 18613.0,
+     "margin_variant": 18428.0,
+     "delta": -185.0
+    }
+   ],
+   "positive_arm": false,
+   "elapsed_s": 69.31
+  }
+ },
+ "dephase": {
+  "form": {
+   "form": "追加单相位去集中：日新高追加单簇（S928/S948/S932/S939 纯追加支）挂拍 k%4 轮转全相位（同拍单集不动=只追加零改写；跨拍不挪量=磁带卖单零触碰；跨相位同品同量等价交换=红线未做）",
+   "tape_touched": false,
+   "surface_measurement": {
+    "dh_append_events": 356,
+    "dh_append_units": 2734.0,
+    "dh_append_by_family": {
+     "_S928_REPORT": 234,
+     "_S928_REPORT:eligible": 292,
+     "_S932_REPORT": 20,
+     "_S932_REPORT:eligible": 20,
+     "_S939_REPORT": 16,
+     "_S939_REPORT:eligible": 16,
+     "_S948_REPORT": 86,
+     "_S948_REPORT:eligible": 94
+    },
+    "append_phase4_events": {
+     "1": 356
+    },
+    "realized_sell_concentration_count": 0.3651,
+    "realized_sell_concentration_qty": 0.4544,
+    "note": "47% vs 36%（mooman 实测）口径=卖单 %4 相位最大相位占比；卖单主体=磁带计划单（跨拍挪量红线封死不可重排），日新高追加单=唯一合法去集中面（step928/948 变现簇同拍追加族）"
+   },
+   "implementable": true,
+   "patch": {
+    "form": "追加单相位去集中：日新高追加单簇（S928/S948/S932/S939 纯追加支）挂拍 k%4 轮转全相位",
+    "tape_touched": false,
+    "red_lines": "同拍单集不动（既有单零改写，只追加；同拍并单支不动）；跨拍不挪量（磁带卖单零触碰；追加单=同拍追加族的挂拍选择，非既有单挪量）；跨相位同品同量等价交换=红线未做",
+    "lines_patched": [
+     "S928 追加行→_DH_DEPHASE_BUF 缓冲",
+     "S948 追加行→_DH_DEPHASE_BUF 缓冲",
+     "S932 追加行→_DH_DEPHASE_BUF 缓冲",
+     "S939 追加行→_DH_DEPHASE_BUF 缓冲",
+     "尾层 _dp_agent 挂拍 k%4 轮转+日末/终局强制落挂"
+    ],
+    "anchor_counts": {
+     "S928": 1,
+     "S948": 1,
+     "S932": 1,
+     "S939": 1
+    }
+   },
+   "main_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_corner_lab/build/variant_dephase_main.py"
+  },
+  "pairs": {
+   "n": 32,
+   "W": 14,
+   "L": 18,
+   "T": 0,
+   "mean_delta": -0.31,
+   "win_control": 26,
+   "win_variant": 24,
+   "flips_pos": 0,
+   "flips_neg": 2,
+   "net_flip_wins": -2,
+   "loss_recovery": "8/16 败局 Δ>0",
+   "control_win_guard_ok": false,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": 640.0,
+     "delta": -35.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 675.0,
+     "margin_variant": 640.0,
+     "delta": -35.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": 366.0,
+     "delta": 15.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 351.0,
+     "margin_variant": 366.0,
+     "delta": 15.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -252.0,
+     "delta": 54.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": -306.0,
+     "margin_variant": -252.0,
+     "delta": 54.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20556.0,
+     "margin_variant": 20407.0,
+     "delta": -149.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 20485.0,
+     "margin_variant": 20354.0,
+     "delta": -131.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": 164.0,
+     "delta": 45.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "build",
+     "margin_control": 119.0,
+     "margin_variant": 164.0,
+     "delta": 45.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": 628.0,
+     "delta": 66.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "a",
+     "margin_control": 562.0,
+     "margin_variant": 628.0,
+     "delta": 66.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": 1256.0,
+     "delta": -188.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "b",
+     "margin_control": 1444.0,
+     "margin_variant": 1256.0,
+     "delta": -188.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 26701.0,
+     "delta": -180.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "stratum": "loss_replay",
+     "opponent": "v48_derivative",
+     "margin_control": 26881.0,
+     "margin_variant": 26701.0,
+     "delta": -180.0
+    },
+    {
+     "seed": 672000,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": 739.0,
+     "delta": 66.0
+    },
+    {
+     "seed": 672000,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": 673.0,
+     "margin_variant": 739.0,
+     "delta": 66.0
+    },
+    {
+     "seed": 672083,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 1546.0,
+     "margin_variant": 1598.0,
+     "delta": 52.0
+    },
+    {
+     "seed": 672083,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 1546.0,
+     "margin_variant": 1598.0,
+     "delta": 52.0
+    },
+    {
+     "seed": 672166,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": 249.0,
+     "margin_variant": -28.0,
+     "delta": -277.0
+    },
+    {
+     "seed": 672166,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": 249.0,
+     "margin_variant": -28.0,
+     "delta": -277.0
+    },
+    {
+     "seed": 672249,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 26253.0,
+     "margin_variant": 26162.0,
+     "delta": -91.0
+    },
+    {
+     "seed": 672249,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 26253.0,
+     "margin_variant": 26162.0,
+     "delta": -91.0
+    },
+    {
+     "seed": 672332,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": -219.0,
+     "margin_variant": -239.0,
+     "delta": -20.0
+    },
+    {
+     "seed": 672332,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "build",
+     "margin_control": -219.0,
+     "margin_variant": -239.0,
+     "delta": -20.0
+    },
+    {
+     "seed": 672415,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 935.0,
+     "margin_variant": 733.0,
+     "delta": -202.0
+    },
+    {
+     "seed": 672415,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "a",
+     "margin_control": 935.0,
+     "margin_variant": 733.0,
+     "delta": -202.0
+    },
+    {
+     "seed": 672498,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": -14.0,
+     "margin_variant": -110.0,
+     "delta": -96.0
+    },
+    {
+     "seed": 672498,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "b",
+     "margin_control": -14.0,
+     "margin_variant": -110.0,
+     "delta": -96.0
+    },
+    {
+     "seed": 672581,
+     "seat": 0,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 18613.0,
+     "margin_variant": 19539.0,
+     "delta": 926.0
+    },
+    {
+     "seed": 672581,
+     "seat": 1,
+     "stratum": "neutral_672000_i83",
+     "opponent": "v48_derivative",
+     "margin_control": 18613.0,
+     "margin_variant": 19539.0,
+     "delta": 926.0
+    }
+   ],
+   "positive_arm": false,
+   "elapsed_s": 68.5
+  }
+ },
+ "sell_phase": {
+  "control": {
+   "n_games": 32,
+   "orders": {
+    "0": 2348,
+    "1": 3654,
+    "2": 1998,
+    "3": 2008
+   },
+   "qty": {
+    "0": 16224.0,
+    "1": 29268.0,
+    "2": 9122.0,
+    "3": 9794.0
+   },
+   "phase4_count_share": {
+    "0": 0.2346,
+    "1": 0.3651,
+    "2": 0.1996,
+    "3": 0.2006
+   },
+   "phase4_qty_share": {
+    "0": 0.2519,
+    "1": 0.4544,
+    "2": 0.1416,
+    "3": 0.1521
+   },
+   "concentration_count": 0.3651,
+   "concentration_qty": 0.4544,
+   "s928_append_events": {
+    "1": 356
+   },
+   "s928_append_units_total": 2734.0,
+   "s928_append_events_total": 356,
+   "dh_append_by_family": {
+    "_S928_REPORT": 234,
+    "_S928_REPORT:eligible": 292,
+    "_S932_REPORT": 20,
+    "_S932_REPORT:eligible": 20,
+    "_S939_REPORT": 16,
+    "_S939_REPORT:eligible": 16,
+    "_S948_REPORT": 86,
+    "_S948_REPORT:eligible": 94
+   },
+   "dp_hung_events": {},
+   "dp_hung_events_total": 0
+  },
+  "care2": {
+   "n_games": 32,
+   "orders": {
+    "0": 2356,
+    "1": 3646,
+    "2": 1980,
+    "3": 1982
+   },
+   "qty": {
+    "0": 16276.0,
+    "1": 29306.0,
+    "2": 8748.0,
+    "3": 9646.0
+   },
+   "phase4_count_share": {
+    "0": 0.2365,
+    "1": 0.3659,
+    "2": 0.1987,
+    "3": 0.1989
+   },
+   "phase4_qty_share": {
+    "0": 0.2544,
+    "1": 0.4581,
+    "2": 0.1367,
+    "3": 0.1508
+   },
+   "concentration_count": 0.3659,
+   "concentration_qty": 0.4581,
+   "s928_append_events": {
+    "1": 354
+   },
+   "s928_append_units_total": 2732.0,
+   "s928_append_events_total": 354,
+   "dh_append_by_family": {
+    "_S928_REPORT": 240,
+    "_S928_REPORT:eligible": 298,
+    "_S932_REPORT": 14,
+    "_S932_REPORT:eligible": 14,
+    "_S939_REPORT": 16,
+    "_S939_REPORT:eligible": 16,
+    "_S948_REPORT": 84,
+    "_S948_REPORT:eligible": 92
+   },
+   "dp_hung_events": {},
+   "dp_hung_events_total": 0
+  },
+  "fertilize_on": {
+   "n_games": 32,
+   "orders": {
+    "0": 2348,
+    "1": 3640,
+    "2": 1994,
+    "3": 2010
+   },
+   "qty": {
+    "0": 16194.0,
+    "1": 29300.0,
+    "2": 9104.0,
+    "3": 9814.0
+   },
+   "phase4_count_share": {
+    "0": 0.235,
+    "1": 0.3643,
+    "2": 0.1996,
+    "3": 0.2012
+   },
+   "phase4_qty_share": {
+    "0": 0.2514,
+    "1": 0.4549,
+    "2": 0.1413,
+    "3": 0.1524
+   },
+   "concentration_count": 0.3643,
+   "concentration_qty": 0.4549,
+   "s928_append_events": {
+    "1": 360
+   },
+   "s928_append_units_total": 2740.0,
+   "s928_append_events_total": 360,
+   "dh_append_by_family": {
+    "_S928_REPORT": 234,
+    "_S928_REPORT:eligible": 292,
+    "_S932_REPORT": 20,
+    "_S932_REPORT:eligible": 20,
+    "_S939_REPORT": 16,
+    "_S939_REPORT:eligible": 16,
+    "_S948_REPORT": 90,
+    "_S948_REPORT:eligible": 98
+   },
+   "dp_hung_events": {},
+   "dp_hung_events_total": 0
+  },
+  "dephase": {
+   "n_games": 32,
+   "orders": {
+    "0": 2556,
+    "1": 3512,
+    "2": 2348,
+    "3": 2202
+   },
+   "qty": {
+    "0": 17562.0,
+    "1": 27342.0,
+    "2": 10818.0,
+    "3": 10756.0
+   },
+   "phase4_count_share": {
+    "0": 0.2407,
+    "1": 0.3308,
+    "2": 0.2211,
+    "3": 0.2074
+   },
+   "phase4_qty_share": {
+    "0": 0.2642,
+    "1": 0.4113,
+    "2": 0.1627,
+    "3": 0.1618
+   },
+   "concentration_count": 0.3308,
+   "concentration_qty": 0.4113,
+   "s928_append_events": {
+    "1": 368
+   },
+   "s928_append_units_total": 2758.0,
+   "s928_append_events_total": 368,
+   "dh_append_by_family": {
+    "_S928_REPORT": 234,
+    "_S928_REPORT:eligible": 292,
+    "_S932_REPORT": 20,
+    "_S932_REPORT:eligible": 20,
+    "_S939_REPORT": 18,
+    "_S939_REPORT:eligible": 18,
+    "_S948_REPORT": 96,
+    "_S948_REPORT:eligible": 104
+   },
+   "dp_hung_events": {
+    "0": 122,
+    "1": 104,
+    "2": 102,
+    "3": 98
+   },
+   "dp_hung_events_total": 426
+  }
+ },
+ "verdict": {
+  "criterion": "净翻胜>0 的变体为正臂；胜局对照不翻负（flips_neg==0）",
+  "task1": "分品实现价口径缺口已补（realized_base.per_item）；谷底自伤判定见 realized_base.task1_answer",
+  "task2_positive_variants": [],
+  "task2_verdict": "建模轮首验：care2/fertilize-on 均未达净翻胜>0∧不翻负——结论否定",
+  "task3_positive": null,
+  "task3_verdict": "dephase 追加单挂拍轮转 未达判据（净翻胜>0∧不翻负不成立）",
+  "positive_variants": [],
+  "per_variant": {
+   "care2": {
+    "net_flip_wins": -4,
+    "flips_neg": 4,
+    "mean_delta": -190.5,
+    "positive_arm": false
+   },
+   "fertilize_on": {
+    "net_flip_wins": 0,
+    "flips_neg": 0,
+    "mean_delta": -114.78,
+    "positive_arm": false
+   },
+   "dephase": {
+    "net_flip_wins": -2,
+    "flips_neg": 2,
+    "mean_delta": -0.31,
+    "positive_arm": false
+   }
+  }
+ },
+ "budget": {
+  "cap_局次": 350,
+  "auth_局次": 30,
+  "judgment_局次": 128,
+  "total_局次": 158,
+  "within_cap": true
+ },
+ "anomaly": [
+  "终局钱口径注记：trace 末拍=step718（banks=末拍结算后）——32/32 局 tm 与 banks 差额（tm−banks）中位 -298.0、区间 [-1105.0,-3.0]；margin 判据用 banks 口径不受影响"
+ ],
+ "_generated_at": "2026-09-29T13:26:32Z",
+ "elapsed_s": 324.6
+}
