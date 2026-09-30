@@ -1,0 +1,341 @@
+{
+ "version": "h1x_a_rush/1.0",
+ "task": "h1x_a（d29 申报校准 H1X 移植件）H1X 侧配对验证（极速快测，只测不发/绝不在线提交）",
+ "objects": {
+  "h1x_a": {
+   "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_lowq_lab/build/h1x_a/main.py",
+   "sha256": "24adb04f81bbc9912b2a9342d6264ed11f5edfa1e1ee2450a7da1483b7af9c06",
+   "manifest": "orderbook_lowq_lab/build/h1x_a/build_manifest.json"
+  },
+  "h1x_base": {
+   "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_h1x_lab/build/h1x/main.py",
+   "sha256": "9d073fbaf4f5d74afcb51e861672e1f12d12dc71a7b640a6bc5f963897d9e9e6"
+  }
+ },
+ "design": {
+  "paired": "12 lowq seed（spike_ticks<900）双席 vs oc_c3，同 (seed,seat,opp) 逐 unit delta=h1x_a−h1x",
+  "r40_anchor": "6 fold（674000+i*159, i=0..5）双席 vs r40 弱锚，h2h 回归检查 ≥ H1X 基线 0.8333",
+  "criteria": "①配对 mean_delta>0 ②flips_neg==0 —— 两门过=PASS",
+  "margin": "终局钱 farms[obs.player] 差（tm_us−tm_opp 干净口径）"
+ },
+ "registry_baseline": {
+  "H1X_vs_r40_h2h": 0.8333
+ },
+ "arms": {
+  "paired_vs_h1x": {
+   "design": "同 (seed,seat,opp=oc_c3) 配对，delta=h1x_a−h1x；control=h1x 本体",
+   "flip_table": {
+    "n": 24,
+    "W": 20,
+    "L": 2,
+    "T": 2,
+    "delta_sum": 530.0,
+    "win_control": 15,
+    "win_variant": 15,
+    "flips_pos": 0,
+    "flips_neg": 0,
+    "mean_delta": 22.08,
+    "net_flip_wins": 0
+   },
+   "pairs_detail": [
+    {
+     "seed": 84984751,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": -1183.0,
+     "margin_h1x": -1179.0,
+     "delta": 4.0
+    },
+    {
+     "seed": 84984751,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": 1203.0,
+     "margin_h1x": 1207.0,
+     "delta": 4.0
+    },
+    {
+     "seed": 369579018,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": 442.0,
+     "margin_h1x": 447.0,
+     "delta": 5.0
+    },
+    {
+     "seed": 369579018,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": 442.0,
+     "margin_h1x": 447.0,
+     "delta": 5.0
+    },
+    {
+     "seed": 519583859,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": 262.0,
+     "margin_h1x": 432.0,
+     "delta": 170.0
+    },
+    {
+     "seed": 519583859,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": 262.0,
+     "margin_h1x": 432.0,
+     "delta": 170.0
+    },
+    {
+     "seed": 691180001,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": -156.0,
+     "margin_h1x": -138.0,
+     "delta": 18.0
+    },
+    {
+     "seed": 691180001,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": -156.0,
+     "margin_h1x": -138.0,
+     "delta": 18.0
+    },
+    {
+     "seed": 869622071,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": 38.0,
+     "margin_h1x": 51.0,
+     "delta": 13.0
+    },
+    {
+     "seed": 869622071,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": 38.0,
+     "margin_h1x": 51.0,
+     "delta": 13.0
+    },
+    {
+     "seed": 902308231,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": 8.0,
+     "margin_h1x": 18.0,
+     "delta": 10.0
+    },
+    {
+     "seed": 902308231,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": 8.0,
+     "margin_h1x": 18.0,
+     "delta": 10.0
+    },
+    {
+     "seed": 946703857,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": 7.0,
+     "margin_h1x": 7.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 946703857,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": 7.0,
+     "margin_h1x": 7.0,
+     "delta": 0.0
+    },
+    {
+     "seed": 964977762,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": -44.0,
+     "margin_h1x": -31.0,
+     "delta": 13.0
+    },
+    {
+     "seed": 964977762,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": -44.0,
+     "margin_h1x": -31.0,
+     "delta": 13.0
+    },
+    {
+     "seed": 1027025959,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": -1.0,
+     "margin_h1x": -6.0,
+     "delta": -5.0
+    },
+    {
+     "seed": 1027025959,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": -1.0,
+     "margin_h1x": -6.0,
+     "delta": -5.0
+    },
+    {
+     "seed": 1072483309,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": 22.0,
+     "margin_h1x": 34.0,
+     "delta": 12.0
+    },
+    {
+     "seed": 1072483309,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": 22.0,
+     "margin_h1x": 34.0,
+     "delta": 12.0
+    },
+    {
+     "seed": 1073167058,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": 110.0,
+     "margin_h1x": 124.0,
+     "delta": 14.0
+    },
+    {
+     "seed": 1073167058,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": 110.0,
+     "margin_h1x": 124.0,
+     "delta": 14.0
+    },
+    {
+     "seed": 1423356419,
+     "seat": 0,
+     "opp": "oc_c3",
+     "margin_h1": -64.0,
+     "margin_h1x": -53.0,
+     "delta": 11.0
+    },
+    {
+     "seed": 1423356419,
+     "seat": 1,
+     "opp": "oc_c3",
+     "margin_h1": -64.0,
+     "margin_h1x": -53.0,
+     "delta": 11.0
+    }
+   ],
+   "n_units_planned": 24,
+   "n_pairs": 24,
+   "fold_h1x_a": {
+    "n": 12,
+    "wins": 7,
+    "losses": 4,
+    "ties": 1,
+    "h2h": 0.625,
+    "mean_margin": 74.9,
+    "terminal_money_us_mean": 96654.7,
+    "terminal_money_opp_mean": 96579.8,
+    "mean_margin_clean": 74.9,
+    "n_games": 24,
+    "n_errors": 0
+   },
+   "fold_h1x_base": {
+    "n": 12,
+    "wins": 7,
+    "losses": 4,
+    "ties": 1,
+    "h2h": 0.625,
+    "mean_margin": 52.8,
+    "terminal_money_us_mean": 96646.2,
+    "terminal_money_opp_mean": 96593.4,
+    "mean_margin_clean": 52.8,
+    "n_games": 24,
+    "n_errors": 0
+   }
+  },
+  "r40_anchor": {
+   "design": "6 fold 双席 vs r40 弱锚（回归检查，下限=H1X 基线 0.8333）",
+   "fold": {
+    "n": 6,
+    "wins": 5,
+    "losses": 1,
+    "ties": 0,
+    "h2h": 0.8333,
+    "mean_margin": 678.2,
+    "terminal_money_us_mean": 95486.5,
+    "terminal_money_opp_mean": 94808.3,
+    "mean_margin_clean": 678.2,
+    "n_games": 12,
+    "n_errors": 0
+   },
+   "h2h": 0.8333,
+   "baseline": 0.8333,
+   "regression_ok": true
+  }
+ },
+ "verdict": {
+  "PASS": true,
+  "verdict": "PASS",
+  "mean_delta": 22.08,
+  "flips_neg": 0,
+  "flips_pos": 0,
+  "W_L_T": [
+   20,
+   2,
+   2
+  ],
+  "n_pairs": 24,
+  "completeness": "full",
+  "r40_h2h": 0.8333,
+  "r40_regression_ok": true,
+  "summary": "配对 vs H1X（12 seed 双席 vs oc_c3，full）：W-L-T=20/2/2 mean_delta=22.08 flips_neg=0 flips_pos=0；弱锚 r40 h2h=0.8333（基线 0.8333，回归OK）；两门①delta>0 ②flips_neg=0 → PASS",
+  "launch": "只测不发（在线提交=硬禁令）；发射由主会话执行"
+ },
+ "anomaly": [
+  "harness 噪声不修不管；终局钱 farms[obs.player] 口径；确定性不重跑（构建件已双跑过）"
+ ],
+ "_generated_at": "2026-09-30T23:29:34Z",
+ "gates": {
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "degraded": false,
+   "engine": "sim",
+   "version": "simbridge/1.0",
+   "reused_cache": true
+  }
+ },
+ "criteria": {
+  "rule": "①配对 mean_delta>0 ②flips_neg==0 —— 两门过=PASS",
+  "c1_paired_delta_gt_0": {
+   "mean_delta": 22.08,
+   "passed": true
+  },
+  "c2_flips_neg_eq_0": {
+   "flips_neg": 0,
+   "passed": true
+  }
+ },
+ "budget": {
+  "cap_局次": 100,
+  "auth_缓存复用计账": 30,
+  "paired_实跑": 48,
+  "r40_实跑": 12,
+  "unique_games_run": 60,
+  "total_局次": 90,
+  "within_cap": true
+ },
+ "elapsed_s": 98.7
+}
