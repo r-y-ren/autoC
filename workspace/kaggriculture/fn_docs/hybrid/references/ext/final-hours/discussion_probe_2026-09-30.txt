@@ -1,0 +1,31 @@
+# 讨论区通道原始证据（2026-09-30 17:5x UTC 抓取）
+# 方法：kaggle CLI forums topics show（CLI 无法列出竞赛论坛：ListTopics 403）；
+# 新帖发现：竞赛域 URL 探测 www.kaggle.com/competitions/kaggriculture/discussion/<id>
+# （200=真实帖/301=WriteUp 重定向/404=不存在；200 不区分论坛，归属由内容人工核验）
+# 探测范围：744615-744740（覆盖 16:35 UTC 上轮扫描后全部新 topic id）
+
+## 三关键帖复查（kaggle forums topics show，2026-09-30 17:47-17:52 UTC）
+- 743993 "Will the submissions be open sourced after the competition ends?" commentCount=6，全部回复时间 2026-09-28T12:05-18:44（Syed Asad Ali 4 条 + assssstnuar 2 条 + Hak 1 条）→ 16:35 后无新回复
+- 744614 "Urgent: Is It Possible to Reactivate a Previous Submission Before the Deadline?" commentCount=1，唯一回复 千早愛音 2026-09-30T15:31:27 → 无新回复
+- 742571 "Tournament Question" commentCount=1，唯一回复 Addison Howard 2026-09-22T15:54:43 → 无新回复
+
+## 744615-744740 探测结果（真实帖=200 的全部清单，均经内容核验为外坛/垃圾，非本赛论坛）
+744615 ammahin 14:43 "nerditi pro"（垃圾）
+744617 Will Cukierski 14:48 "Standardizing competition deadline cut-offs"（全站政策帖；正文含 Simulations Competitions: No change）
+744621/744625/744632/744637/744642/744648/744653/744658/744663 [Deleted WriteUp]
+744631 Thinuka Kusalmith 16:20 [Other feedback] Superyachts EDA（外赛）
+744636 AmbrosM 16:31（音频 FILTER_BANK_BANDS notebook 评论，外坛）
+744639 sravani kamjula 16:39（SWE-bench patch 尺寸讨论，外坛）
+744644 Syed Ali Taqi 16:47 "kentucky is the top state"（外坛）
+744647 Arturo Gutiérrez Aguilar 16:47 "0.957 Public → 0.916 Private"（表格赛 postmortem，外坛）
+744649 Rashid Khazeiynasab 16:59 "After 6 submission I just hit 0"（memecoin 交易赛，外坛）
+744650 Akmal Fikry 17:02 "complete the course issues"（课程论坛）
+744659 Grigoriy Zatravkin 17:20 "Repeated System error on submissions"（引用 #742000=ARC-AGI-3 坛，本人不在本赛榜 → 外坛）
+744664 Christine Classy 17:42（垃圾）
+结论：744614（09-30 14:40，上轮已报）之后至 17:5x UTC，本赛论坛零新帖、零榜顶选手发言。
+
+## 744617 全文关键段（Will Cukierski，2026-09-30 14:48:35，kaggle forums topics show 抓取）
+"We are standardizing how competition deadlines apply to in-flight submissions...
+Simulations Competitions (Agent-based): Old=Submission had to be received/uploaded before the deadline; New=No change.
+We are making this change to make it simpler to understand what happens near the deadline and to ensure that (preliminary) correct leaderboards can be released right at the deadline."
+→ 对本赛：截止语义不变，23:59 UTC 前完成上传即可。
