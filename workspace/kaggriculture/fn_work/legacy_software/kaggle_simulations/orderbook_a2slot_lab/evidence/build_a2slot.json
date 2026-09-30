@@ -1,0 +1,21 @@
+{
+ "builds": {
+  "h1x_a2": {
+   "sha256": "1ca2bc252a4d7b84b59d56bc4b5f352566d6bb34c3e8fab1d338e899c6565fb5",
+   "tar_sha256": "c5519eeadffc16ce6853389558561d0a45ba9d03e6405da0fe797dba26bdf184",
+   "checks": {
+    "compile_ok": true,
+    "last_callable_is_entry": true,
+    "base_prefix_identity_ok": true,
+    "roundtrip_strip_identity_ok": true,
+    "host_capture_ok": true,
+    "params_ok": true,
+    "zero_footprint_ok": true,
+    "groove_static_ok": true,
+    "deterministic_double_run_ok": true,
+    "three_member_pack_order_ok": true
+   },
+   "elapsed_s": 0.6
+  }
+ }
+}
