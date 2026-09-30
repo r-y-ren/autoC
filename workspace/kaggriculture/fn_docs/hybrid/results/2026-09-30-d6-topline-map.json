@@ -1,0 +1,592 @@
+{
+ "meta": {
+  "doc": "D6 顶强对表深挖：终交件 vs C_final 血统/清算节奏/行为差 + 可复刻参数（干净室口径）",
+  "built_at": "2026-09-30T14:20+08:00",
+  "scope": "只读对表；不改代码/不提交/不发射；证据仅此 JSON + /tmp/d6mine/",
+  "sources": [
+   "georgymarin/kaggriculture-episodes 本地快照（/tmp/scan7/georgy/ 09-30 00:43：agents.csv 509,378 行、episode_features.csv；/tmp/topdata/gm/ 09-29：teams/episodes/coverage）——数据集本轮复辟 403，stream_hashes.csv 未取到（后台重试中）",
+   "88 局头部对局动作流 games_raw.json（/tmp/topdata/，09-29 22:29，含 176 席 action_stream 逐拍 canonical JSON）",
+   "destbreso x-ray-your-agent 全量输出 log（/tmp/scan7/outs/，#1 sub 56679033 106 局实测画像，09-29 22:58 run）",
+   "本地同 seed 实跑（/tmp/d6mine/run_lines.py，官方引擎）：C_final（c_final/main.py sha a37c0d34）vs tetsu1009（step1009）vs lynn1010（step1010），674000+i*139×双席，16 局 traced",
+   "features.py（georgy 语料采集链 09-28 版）stream_hashes 归一化逐字节采用：canonical JSON(sort_keys,separators=',:')/NUL 间隔/跳过 t=0/sha256 前 16 hex/切点 24·48·100·136·200·300·400·719",
+   "results/2026-09-30-d5-private-blueprint.json（顶强产线/执行参数）、2026-09-29-family-matrix.json、references/2026-09-30-kaggle-sweep4.md（BUY5 族名录+#1 画像）"
+  ],
+  "caliber": {
+   "hash": "与语料 stream_hashes.csv 同口径可比（features.py 逐字节归一化）；h24/h48/h100/h136 等值=同线至该拍",
+   "lcp": "同 seed 双件逐拍动作流最长公共前缀（turn 数）；对梯子族共识流=开局冻结线距离",
+   "rhythm": "SELL 市场单逐拍自算（sells_by_day/单量/首卖拍），本地流按 index=turn 对齐梯子约定（前置占位拍）",
+   "clean_room": "georgy 语料无 LICENSE（自建爬取）→ 只作观测/评测燃料，不移植代码；参数萃取均为行为口径描述"
+  }
+ },
+ "lineage": {
+  "hash_evidence": {
+   "note": "本地复算 hash 与梯子 88 局语料 hash 直接可比：C_final 流的 h24/h48/h100/h136 与梯子 shiiin9 系集群 hash 逐字节相同",
+   "C_final_hashes": {
+    "h24": "813ff9c77b5b18dc",
+    "h48": "a27f596de4501080",
+    "h100": "496e6d885402c636",
+    "h136": "45fff6c2ee8404f3",
+    "h200": "7f94190e98d24df1",
+    "h719": "8d4cd61d80eed67c"
+   },
+   "ladder_obk_cluster": {
+    "h24": "813ff9c77b5b18dc (38 席共享)",
+    "h100": "496e6d885402c636 (36 席共享)"
+   },
+   "tetsu1009_vs_C_final": "h24/h48/h100/h136 全同（同线至 t136），h200 起分叉",
+   "tetsu1009_vs_lynn1010": "同 seed LCP=720 全程逐拍相同（step1009=step1010 语义等价动作级复证）"
+  },
+  "topband_distribution": {
+   "corpus": "88 局头部对局 176 席（09-29 快照）",
+   "BUY5_superfamily": {
+    "seats": 112,
+    "share": 0.636,
+    "teams": 27,
+    "def": "t1 含 BUY_ANIMAL COW 1 + BUY_PRODUCT WHEAT 5（±SHEEP 1/3）",
+    "named": [
+     "M&M&P&Q #1",
+     "Vadim #7",
+     "monsaraida #11",
+     "Yizhou #12",
+     "akmr #17",
+     "unreal #40",
+     "Ueddy #41",
+     "アナコンダ #80",
+     "hff #88",
+     "DSM(early-fp 属此族)",
+     "Victor@Tufa Labs",
+     "yuto083",
+     "Unknown Mother-Goose",
+     "tetsuya&yuanzhe&guoqin"
+    ],
+    "subbranch_note": "族内 sha@24 互异（同开局不同实现）；子支 6fd66d38 系(Victor/Gordeev/monsaraida/TKNP)步 1-24 逐拍全同=同件换装"
+   },
+   "obk_shiiin9_line": {
+    "seats": 29,
+    "share": 0.165,
+    "teams": 20,
+    "def": "t1=BUY_PRODUCT WHEAT 8 + SELL WHEAT 3 + BUY_SEED WHEAT 1；t2=NORTH+HIRE×5+BUY COW 2+SHEEP 2",
+    "named": [
+     "shiiin9",
+     "statma",
+     "renyxin(我方在榜件)",
+     "test_money",
+     "别ban我claude",
+     "+15 单局镜像"
+    ],
+    "note": "我方在榜件 4/4 局落此线；h24 集群 38 席/h100 集群 36 席=镜像池（玩法镜像 80% 主体）"
+   },
+   "indep_HIREopen": {
+    "seats": 13,
+    "share": 0.074,
+    "teams": [
+     "Majkel1337",
+     "My second life",
+     "Harvester"
+    ],
+    "def": "t1 先 HIRE×4-5 后 BUY COW（Majkel 型）"
+   },
+   "other_independent": {
+    "seats": 22,
+    "share": 0.125,
+    "teams": [
+     "Fourth Quadrant(4×COW 开局)",
+     "Boey(SHEEP 开局)",
+     "feles99",
+     "team_fn/Silver",
+     "misc"
+    ]
+   }
+  },
+  "distance_to_C_final": {
+   "metric": "同 seed 逐拍 LCP + hash 切点等值",
+   "vs_step1009_family": {
+    "lcp": "163-185 拍（≈d6.8-7.7）",
+    "hash_equal_through": "h136",
+    "first_divergence_event": "fert 层：C_final hands/farmer 出 FERTILIZE，tetsu 同拍为 PASS（=fert60 层 PASS→FERTILIZE 差异在 d6-7 肥源可用时显形）",
+    "verdict": "同线近亲（shiiin9 底盘共同祖先），距离=fert 附加层"
+   },
+   "vs_ladder_obk_mirror": {
+    "hash_equal_through": "h136（h24/h48/h100/h136 逐字节同）",
+    "consensus_lcp": 150,
+    "verdict": "C_final 即此线（我方在榜件同源）"
+   },
+   "vs_BUY5_superfamily": {
+    "lcp": 0,
+    "verdict": "t1 即分叉，完全不同线"
+   },
+   "vs_Majkel_HIREopen": {
+    "lcp": 0,
+    "verdict": "t1 即分叉"
+   },
+   "our_ladder_footprint": "renyxin 在榜件 34 席全共享 h24=aff9edef8237703e（冻结开局），t1=BUY_PRODUCT WHEAT 20+SELL 15+BUY_SEED 1（WHEAT 20 变体）——与 C_final(WHEAT 8)同族不同版"
+  }
+ },
+ "rhythm_contrast": {
+  "caliber": "SELL 市场单自算均匀口径（本地流 index=turn 对齐）；n=席数",
+  "table": {
+   "BUY5_all": {
+    "n_seats": 112,
+    "sells_by_day_mean": [
+     10.09,
+     10.52,
+     11.33,
+     12.61,
+     13.41,
+     12.29,
+     15.68,
+     13.96,
+     15.39,
+     13.59,
+     12.89,
+     9.27,
+     13.04,
+     12.62,
+     16.66,
+     16.04,
+     20.38,
+     16.22,
+     20.82,
+     17.55,
+     20.0,
+     19.87,
+     19.89,
+     21.65,
+     21.03,
+     22.82,
+     22.63,
+     23.29,
+     25.95,
+     39.34
+    ],
+    "lot_med_med": 4,
+    "lot_mean_med": 5.04,
+    "sell_orders_med": 388,
+    "first_sell_turn_med": 2,
+    "day0_sells_med": 4,
+    "d14_20_share_med": 0.271,
+    "d28_29_share_med": 0.143
+   },
+   "MMPQ_1": {
+    "n_seats": 7,
+    "sells_by_day_mean": [
+     6.0,
+     5.0,
+     5.14,
+     7.43,
+     6.43,
+     6.29,
+     8.29,
+     9.43,
+     10.14,
+     8.57,
+     7.57,
+     7.71,
+     11.0,
+     12.0,
+     15.0,
+     15.43,
+     18.57,
+     16.0,
+     20.14,
+     19.14,
+     20.43,
+     19.71,
+     18.43,
+     20.29,
+     18.14,
+     22.29,
+     21.86,
+     24.43,
+     25.86,
+     38.29
+    ],
+    "lot_med_med": 3,
+    "lot_mean_med": 4.61,
+    "sell_orders_med": 438,
+    "first_sell_turn_med": 2,
+    "day0_sells_med": 6,
+    "d14_20_share_med": 0.284,
+    "d28_29_share_med": 0.143
+   },
+   "obk_shiiin9_line": {
+    "n_seats": 29,
+    "sells_by_day_mean": [
+     1.14,
+     2.07,
+     4.0,
+     7.0,
+     5.0,
+     5.97,
+     8.52,
+     5.62,
+     7.9,
+     13.17,
+     11.76,
+     7.83,
+     7.97,
+     8.21,
+     12.59,
+     13.55,
+     16.41,
+     10.28,
+     14.59,
+     13.45,
+     15.59,
+     14.59,
+     17.66,
+     15.97,
+     13.59,
+     18.24,
+     17.72,
+     16.52,
+     20.48,
+     29.45
+    ],
+    "lot_med_med": 4,
+    "lot_mean_med": 5.49,
+    "sell_orders_med": 333,
+    "first_sell_turn_med": 1,
+    "day0_sells_med": 1,
+    "d14_20_share_med": 0.261,
+    "d28_29_share_med": 0.145
+   },
+   "DECEM": {
+    "n_seats": 9,
+    "sells_by_day_mean": [
+     4.0,
+     5.0,
+     7.78,
+     7.0,
+     6.44,
+     6.0,
+     8.89,
+     8.89,
+     9.56,
+     7.78,
+     9.78,
+     8.22,
+     15.44,
+     15.33,
+     20.56,
+     20.56,
+     22.11,
+     19.78,
+     26.0,
+     23.44,
+     26.44,
+     25.44,
+     25.56,
+     26.22,
+     27.0,
+     28.22,
+     28.89,
+     32.22,
+     31.78,
+     45.11
+    ],
+    "lot_med_med": 2,
+    "lot_mean_med": 3.68,
+    "sell_orders_med": 548,
+    "first_sell_turn_med": 2,
+    "day0_sells_med": 4,
+    "d14_20_share_med": 0.287,
+    "d28_29_share_med": 0.141
+   },
+   "Majkel": {
+    "n_seats": 8,
+    "sells_by_day_mean": [
+     3.25,
+     3.75,
+     3.75,
+     6.25,
+     6.38,
+     8.25,
+     15.5,
+     8.75,
+     13.38,
+     12.0,
+     10.5,
+     10.75,
+     13.5,
+     13.62,
+     15.62,
+     17.5,
+     19.75,
+     16.75,
+     21.75,
+     20.25,
+     20.25,
+     20.75,
+     20.88,
+     20.5,
+     22.5,
+     23.0,
+     21.5,
+     23.38,
+     25.38,
+     39.12
+    ],
+    "lot_med_med": 2,
+    "lot_mean_med": 4.08,
+    "sell_orders_med": 484,
+    "first_sell_turn_med": 2,
+    "day0_sells_med": 3,
+    "d14_20_share_med": 0.282,
+    "d28_29_share_med": 0.14
+   },
+   "C_final_local": {
+    "n_seats": 16,
+    "sells_by_day_mean": [
+     1.0,
+     2.0,
+     4.0,
+     7.0,
+     5.0,
+     6.0,
+     7.25,
+     5.0,
+     7.5,
+     11.25,
+     10.0,
+     4.75,
+     6.75,
+     6.0,
+     11.5,
+     11.5,
+     12.0,
+     11.75,
+     12.25,
+     12.0,
+     12.0,
+     10.5,
+     13.25,
+     13.5,
+     12.25,
+     14.25,
+     12.25,
+     15.5,
+     19.5,
+     22.0
+    ],
+    "lot_med_med": 4,
+    "lot_mean_med": 6.17,
+    "sell_orders_med": 298,
+    "first_sell_turn_med": 1,
+    "day0_sells_med": 1,
+    "d14_20_share_med": 0.299,
+    "d28_29_share_med": 0.145
+   },
+   "tetsu1009_local": {
+    "n_seats": 8,
+    "sells_by_day_mean": [
+     1.0,
+     2.0,
+     4.0,
+     7.0,
+     5.0,
+     6.0,
+     7.25,
+     5.0,
+     7.5,
+     11.25,
+     10.0,
+     4.75,
+     7.5,
+     6.5,
+     12.0,
+     10.75,
+     12.0,
+     12.0,
+     12.25,
+     12.0,
+     12.25,
+     10.25,
+     14.0,
+     13.5,
+     11.75,
+     14.25,
+     13.0,
+     15.75,
+     21.25,
+     23.75
+    ],
+    "lot_med_med": 4,
+    "lot_mean_med": 6.12,
+    "sell_orders_med": 305,
+    "first_sell_turn_med": 1,
+    "day0_sells_med": 1,
+    "d14_20_share_med": 0.292,
+    "d28_29_share_med": 0.153
+   },
+   "lynn1010_local": {
+    "n_seats": 8,
+    "sells_by_day_mean": [
+     1.0,
+     2.0,
+     4.0,
+     7.0,
+     5.0,
+     6.0,
+     7.25,
+     5.0,
+     7.5,
+     11.25,
+     10.0,
+     4.75,
+     7.5,
+     6.5,
+     12.0,
+     10.75,
+     12.0,
+     12.0,
+     12.25,
+     12.0,
+     12.25,
+     10.25,
+     14.0,
+     13.5,
+     11.75,
+     14.25,
+     13.0,
+     15.75,
+     21.25,
+     23.75
+    ],
+    "lot_med_med": 4,
+    "lot_mean_med": 6.12,
+    "sell_orders_med": 305,
+    "first_sell_turn_med": 1,
+    "day0_sells_med": 1,
+    "d14_20_share_med": 0.292,
+    "d28_29_share_med": 0.153
+   }
+  },
+  "headline": {
+   "orders_per_game": "C_final 298（中位）vs BUY5 388 / #1 438 / DECEM 548 / Majkel 484——我方少 23-45%",
+   "lot_size": "C_final lot_med 4 / mean 6.17 vs #1 3/4.61、DECEM 2/3.68、Majkel 2/4.08——我方单量更大、频次更低",
+   "first_sell": "C_final t=1 开卖 vs BUY5/顶强 t=2",
+   "endgame_d29_orders": "C_final 22 单 vs #1 38.3 / BUY5 39.3 / DECEM 45.1——终局抛售我方少 43-51%（大单收口 vs 小单分抛）",
+   "d14_20_window_share": "C_final 0.299 vs 顶强 0.271-0.287——此面基本同带（焦窗无差距）",
+   "d28_29_qty_share": "0.145 vs 0.140-0.153 同带——差在单数非量能",
+   "curve_shape": "C_final/obk 线=缓坡（d0 1 单→d29 22 单）；BUY5=高位起步（d0 4-10 单）+d29 脉冲（38-45）"
+  },
+  "elbow_day_corpus_join": {
+   "src": "agents.csv×episode_features.csv（09-30 00:43）终交 sub join",
+   "coverage_warning": "语料按优先级抽样，终交 sub 仅 1-4 局入库，样本薄仅作旁证",
+   "rows": {
+    "hff": "elbow_med 13 / first_land 6 / peak_crew 12 / tiles 361",
+    "anaconda": "elbow 14 / 6 / 12 / 327",
+    "haodou(V91)": "elbow 10 / 6 / 12 / 238",
+    "FourthQuad": "elbow 12 / 6 / 15 / 421"
+   }
+  }
+ },
+ "adaptive_profile": {
+  "subject": "#1 M&M&P&Q sub 56679033（榜一 3038.3→3109.2）",
+  "xray_facts": {
+   "class": "GLOBAL ADAPTIVE 99.4% 变着，首分叉 t=4，三通道全动（farmer 682/hands 684/market 690 拍有差）",
+   "within_world": "33/33 世界内仍 ADAPTIVE（同商店对局内变着 83.4-99.2%）——同环境也重排",
+   "language": "跨局动作语言 repeat_rate 0.0 / norm_entropy 0.999-1.0 / distinct 15,097(d6-11)→24,861(d20-29)；class=SCHEDULER（逐局重排计划；tapes 锚 1.0、brancher 0.89/0.15/0、composer 0.02）",
+   "macro": "二象限 d6、care 364、herd 中位 COW10/SHEEP1/GOOSE8、d25-29 休耕 10、搁浅金 0、floor sells 5、shed 满载 2、工时 work46.8/carry5.4/move43.2/idle4.6、占用热图半分相关 r=+0.998（结构稳定非噪声）、WARMING UP +3.28/局、78 基因组 0 镜像 0 同胞",
+   "caveat": "x-ray 快照 106 局且未收敛（+3.28/局漂移）"
+  },
+  "variance_landing_spots": {
+   "method": "games_raw 7 局逐局 CV（变着落点=方差结构）",
+   "elastic": {
+    "SHEEP_count_cv": 0.664,
+    "CARROT_tiles_cv": 0.414,
+    "COW_count_cv": 0.314,
+    "GOOSE_count_cv": 0.301,
+    "late_qty_share_cv": 0.132
+   },
+   "frozen": {
+    "hire_n_cv": 0.008,
+    "realized_px_cv": 0.006,
+    "lot_med_cv": 0.166,
+    "WHEAT_tiles_cv": 0.132
+   },
+   "per_game": {
+    "herd": "COW 3-10 / SHEEP 3-19 / GOOSE 6-12",
+    "plant": "WHEAT 133-205(地毯稳) / CARROT 12-96(摆动作物) / STRAWBERRY 20-42",
+    "hire_n": "302-310",
+    "late_qty_share": "0.458-0.714",
+    "money_end": "89.6k-119.9k"
+   },
+   "verdict": "自适应落点=产线配比（SHEEP 弹性最大+CARROT 摆动）与半盘清算时机（late share ±0.13）；冻结面=班组规模/单量/成交价质/WHEAT 地毯。落点同时是产线也是卖时，但产线方差>卖时方差",
+   "topband_wide": "同构方差结构见于全顶带（DECEM/Majkel/akmr 的 SHEEP CV 0.56-0.94、CARROT CV 0.28-0.72）——自适应是顶带设计范式非 #1 独有；#1 极值在动作层 99.4% 变着+SCHEDULER 逐局重排"
+  }
+ },
+ "replicable": {
+  "params": [
+   "BUY5 开局（族标）：t1=BUY_ANIMAL COW 1 + BUY_PRODUCT WHEAT 5（±BUY_ANIMAL SHEEP 1/3）；t2=PICKUP COW→SELL WHEAT 1→HIRE×4→BUY COW 1（±SHEEP）——步 2-5 族内近同",
+   "班组规模：#1 全季 302-310 HIRE、peak_crew 12（first_land d6、二象限 d6）；步 13 后 crew 12 封顶（490 局田野参考）",
+   "单量：lot_med 2-4（#1=3、DECEM/Majkel=2、我方=4）；卖单频次 388-548/局",
+   "畜群：重牛轻羊鹅（#1 中位 COW10/SHEEP1/GOOSE8；GOOSE 小群 6-12 作蛋源）",
+   "肥处置配比：自用 0.46/卖出 0.54（D5 13 局），FERTILIZER 卖出 qmed 0.29-0.33 低位放量",
+   "搁浅金 0 + floor sells ≤5（≤$2 地板卖 5 次封顶）+ shed 满载 2 回合"
+  ],
+  "structure": [
+   "自适应两弹性面=畜群构成（SHEEP 摆幅最大）+作物配比（CARROT 摆动/稳 WHEAT 地毯）；两刚性面=班组规模+单量结构",
+   "半盘清算时机可变（late_qty_share 0.46-0.71）但成交价质恒定（realized_px CV 0.006）——卖时变、卖法不变",
+   "SCHEDULER 型逐局重排（repeat_rate 0）：对手建模别抓脚本指纹，抓宏观约束面（herd 区间/crew 封顶/搁浅金）",
+   "族判定用 t1-8 早段指纹（族内 sha@24 已互异），整流 hash 只判同件换装",
+   "同基座语义等价先例：step1009=step1010 同 seed 全程 720 拍逐拍相同（LCP=720）——闭包实现形态零贡献，收编取其一即可"
+  ],
+  "rhythm": [
+   "终局抛售日（d29）38-45 单小单分抛（BUY5/DECEM/Majkel）vs 大单收口（22）；d28+ 量能占比同带 0.14——差距在订单粒度非出货量",
+   "d14-20 窗承接 27-29% 成交（我方 0.299 同带）——此窗无抄点",
+   "ice 0.4-3% 反应式清仓+价格分位是结果非门槛（D5 复证）",
+   "WOOL d6 首剪 12-24u→d9+ 持续；MILK d8 起爬坡 d12-24 平台；EGG d12-14 起；d29 奶毛蛋 100-359u 清仓（D5）",
+   "FERTILIZER 410-525 COLLECT/局，54% 卖出"
+  ],
+  "gap_map": [
+   {
+    "face": "卖单粒度",
+    "ours": "298 单/lot 6.17",
+    "top": "388-548 单/lot 2-4",
+    "delta": "我方粒度 1.2-1.7×大、频次低 23-45%",
+    "action": "可抄点：终局 d28-29 拆小单分抛（38-45 单形态），中盘维持现节奏"
+   },
+   {
+    "face": "开局族",
+    "ours": "obk 线 t1=WHEAT 8+SELL 3+SEED 1（与 #1 的 BUY5 开局 LCP=0）",
+    "top": "BUY5 族占顶带 63.6% 席位",
+    "delta": "不同线",
+    "action": "开局族切换属整基座采纳（禁区敏感，见 D5），仅记录不采纳"
+   },
+   {
+    "face": "自适应弹性面",
+    "ours": "C_final 行为对手条件化（C3 门）",
+    "top": "SHEEP/CARROT 逐局重排+late share ±0.13",
+    "delta": "我方构成弹性未测",
+    "action": "D3 续作候选：畜群/作物配比响应层"
+   },
+   {
+    "face": "d14-20 焦窗",
+    "ours": 0.299,
+    "top": "0.271-0.287",
+    "delta": "≈0",
+    "action": "无抄点（h14-22 焦窗已同带）"
+   },
+   {
+    "face": "成交价质",
+    "ours": "realized_px 面未单测",
+    "top": "1.02-1.041 CV0.006",
+    "delta": "—",
+    "action": "评测尺常设项"
+   }
+  ]
+ },
+ "anomaly": [
+  "stream_hashes.csv 未取到：georgymarin 数据集 09-30 复辟 403（00:43 曾解封），后台重试 60 次未过——血统图为本地同口径复算（88 局头部语料+本地实跑），全语料 234,492 局分布未覆盖；文件可取后按同脚本重跑即可得全量分布",
+  "语料覆盖抽样偏置：README 自述优先级抽样（中位 sub 仅 2 局入库），episodes_features 终交 sub join 样本 1-4 局，仅旁证",
+  "节奏对照对手不同质：本地 C_final 对局对手为 tetsu/lynn 镜像系（C3 条件门对手依赖），games_raw 为梯子混合对手——卖单频次对照有系统差，形状结论稳健",
+  "局数：C_final n=16 席（4 seed×双席×2 对手）；族侧 n=7-112 席不等",
+  "x-ray 口径差：其 herd SHEEP 中位=1 vs games_raw 7 局样本中位=8（106 局 vs 7 局+计法不同），宏观数以 x-ray 为准、方差结构以 games_raw 为准",
+  "agents.csv 为 00:43 快照非终交定稿（Majkel 04:52、DSM 01:50 新交不在内）；榜面分数为 05:18 快照",
+  "games_raw 88 局含我方在榜件 4 局（09-29 22:29）；我方 C_final 未上梯，距离度量靠本地同 seed 实跑+hash 同口径复算",
+  "sells_by_day 为逐拍 SELL 单计数均匀口径（自算），与 parse_behavior 的 exec_by_day（成交口径）不同——对照表内同口径一致，勿与 D5 exec 数混读",
+  "BUY5 族归属为行为指纹判定（t1 COW1+WHEAT5），与 mooman 分类/poolscan 名录交叉一致但非其原口径"
+ ]
+}

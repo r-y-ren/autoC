@@ -1,0 +1,2461 @@
+{
+ "version": "d8-cfinal-loss/1.0",
+ "_generated_at": "2026-09-30T11:11:10Z",
+ "task": "C_final(a37c0d34) 败局法证：败局分布图/逐拍败因/胜率提升路径/块效应分解（D8）",
+ "artifact": {
+  "path": "fn_work/legacy_software/kaggle_simulations/orderbook_composite_lab/build/c_final/main.py",
+  "sha256": "a37c0d3487fe1d2152ec6c0b767b36afc21ad18207accb2d3cf1f1b077016a92"
+ },
+ "sources": {
+  "row_level_existing": [
+   "/tmp/tourney/crown_rows.jsonl（372 局行=186 fold×双席，crown-final 同源）",
+   "fn_docs/hybrid/results/2026-09-30-crown-final.json（13 对聚合+anomaly）",
+   "fn_docs/hybrid/results/2026-09-30-c-final.json（面板 48/32 局聚合）",
+   "fn_docs/hybrid/results/2026-09-30-s6-v91.json（hedge_value per_unit 56 行=3 块对手×seed×席 margin_cfin）",
+   "fn_docs/hybrid/results/2026-09-30-s5-s809look.json（look3 对照臂=C_final 原件 a37c0d34，块 674000+i*151）",
+   "fn_docs/hybrid/results/2026-09-30-s3-buy5.json（r40 同块 c_final 对照 0.75）",
+   "fn_docs/hybrid/results/2026-09-30-s1-sellform.json（S_form 变体面板=提升路径证据）"
+  ],
+  "probe_rerun": {
+   "script": [
+    "/tmp/d8probe/d8_probe.py（26 局次 traced）",
+    "/tmp/d8probe/d8_inspect.py+2（7 局次逐拍事件 dump）"
+   ],
+   "caliber": "j23._Tracer 双席逐拍 sink + judge_strongest.clean_reads + family_mx.behavior + judge_v89._layer_stats；margin=farms[obs.player].money 终局差",
+   "sim_auth": "复用 /tmp/tourney/crown_sim_auth.json 认证缓存（loaded/consistency_ok，engine=sim）",
+   "margin_reproduction": "26/26 逐局 1 元内复现 crown_rows seat0 margin（追踪器零侵入验证）"
+  },
+  "budget": {
+   "局次": 33,
+   "cap": 40,
+   "note": "26 traced 解剖 + 7 逐拍 dump；不改代码不提交不发射"
+  }
+ },
+ "loss_atlas": {
+  "caliber": "186 fold（judge_r44._fold_arm 语义：两席均分 ≥1 胜/≤0 负/余平；W116-L67-T3 与 crown-final 一致）",
+  "family_map": {
+   "H族": {
+    "members": [
+     "H",
+     "H1",
+     "oc_c3"
+    ],
+    "note": "haodou 血统+上届冠亚锚（H1=oc_c3 行为孪生，champion-tourney behavioral_twins）"
+   },
+   "mpx型": {
+    "members": [
+     "drop_half",
+     "mpx"
+    ],
+    "note": "模型定价/克 C_final 型（drop_half=克星画像，s6 replace_drop_half 记录）"
+   },
+   "step1009族": {
+    "members": [
+     "V89",
+     "e087",
+     "tetsutani"
+    ],
+    "note": "idle-seller 稳节奏公开系（e087=V89 行为孪生）"
+   },
+   "弱锚/公开弱件": {
+    "members": [
+     "A",
+     "prvsiyan",
+     "r34a",
+     "r37",
+     "r40"
+    ],
+    "note": "in-house 弱锚 r40/A/r37/r34a + 公开弱件 prvsiyan"
+   }
+  },
+  "family_totals": {
+   "弱锚/公开弱件": {
+    "W": 49,
+    "L": 11,
+    "T": 0
+   },
+   "H族": {
+    "W": 38,
+    "L": 25,
+    "T": 3
+   },
+   "step1009族": {
+    "W": 20,
+    "L": 16,
+    "T": 0
+   },
+   "mpx型": {
+    "W": 9,
+    "L": 15,
+    "T": 0
+   }
+  },
+  "loss_grid_family_x_marginband": {
+   "bands": [
+    "<100",
+    "100-500",
+    "500-1k",
+    "1k-5k",
+    "5k+"
+   ],
+   "rows": {
+    "弱锚/公开弱件": {
+     "<100": 3,
+     "100-500": 7,
+     "500-1k": 1,
+     "1k-5k": 0,
+     "5k+": 0
+    },
+    "H族": {
+     "<100": 7,
+     "100-500": 6,
+     "500-1k": 8,
+     "1k-5k": 4,
+     "5k+": 0
+    },
+    "step1009族": {
+     "<100": 3,
+     "100-500": 7,
+     "500-1k": 6,
+     "1k-5k": 0,
+     "5k+": 0
+    },
+    "mpx型": {
+     "<100": 7,
+     "100-500": 4,
+     "500-1k": 4,
+     "1k-5k": 0,
+     "5k+": 0
+    }
+   },
+   "findings": [
+    "全部 67 败局 margin 带 <1.5k：无 5k+ 大败，1k-5k 带仅 4 局且全部 H 族（H1 674710/674781/674355、H1 674141 系）——大败面=H 族独占",
+    "66% 败局（44/67）|margin|<500=单拍级可翻盘带；<100 微败 20 局散在各族",
+    "mpx 型败局全带 <1k：mpx 单对最差 h2h 0.3333（12 fold 4-8）但败幅浅（均 -94.5）"
+   ]
+  },
+  "world_features": {
+   "variance_decomposition_loss_indicator": {
+    "seed_world_share": 0.545,
+    "opp_share": 0.127,
+    "residual": 0.328,
+    "note": "败局发生与否由世界（seed）主导 54.5%，对手构成仅 12.7%——输面是'世界型'不是'对手型'"
+   },
+   "poison_seeds_base_block_674000_i141": {
+    "seeds": {
+     "674000": {
+      "losses_of_13": 12,
+      "mean_margin": -294
+     },
+     "674141": {
+      "losses_of_13": 8,
+      "mean_margin": -136
+     },
+     "674282": {
+      "losses_of_13": 0,
+      "mean_margin": 138
+     },
+     "674423": {
+      "losses_of_13": 0,
+      "mean_margin": 673
+     },
+     "674564": {
+      "losses_of_13": 1,
+      "mean_margin": 421
+     },
+     "674705": {
+      "losses_of_13": 11,
+      "mean_margin": 115
+     },
+     "674846": {
+      "losses_of_13": 0,
+      "mean_margin": 667
+     },
+     "674987": {
+      "losses_of_13": 8,
+      "mean_margin": 81
+     },
+     "675128": {
+      "losses_of_13": 2,
+      "mean_margin": 542
+     },
+     "675269": {
+      "losses_of_13": 2,
+      "mean_margin": 56
+     },
+     "675410": {
+      "losses_of_13": 11,
+      "mean_margin": -259
+     },
+     "675551": {
+      "losses_of_13": 2,
+      "mean_margin": 406
+     }
+    },
+    "signature": "674000/674705/675410 全面毒种（对 10-11/13 输，含弱锚）；674141/674987 强手毒种（只输强场）；674282/674423/674846 零败种",
+    "concentration": "5 枚毒种（674000/674141/674705/674987/675410）占 base 块 55 败局中的 48"
+   },
+   "cross_block_validation": "seed 674000 跨块复毒：base 块 vs mpx/H1/oc_c3 −446/−461，s6 块（674000+i*157）三对均值 −451；s6 另有 674628(−1015)/675413(−564) 新毒种=世界效应跨块可迁移",
+   "opening_family_finding": "毒种与善种 d0 各品开局价完全一致（WOOL 205.75/MILK 168.6/STRAWB 127.7…）——毒世界签名不在开局价位，在中盘尖峰动态（d12 WOOL 尖价拍/d22 果麦窗）"
+  },
+  "margin_band_vs_family_note": "margin 带×族交叉表见 loss_grid；对手对 margin 幅度贡献 52%（弱锚大胜拉大），对败局发生贡献仅 12.7%"
+ },
+ "per_tick_dissect": {
+  "design": "mpx 型（mpx+drop_half）与 H 族（H1+H）各抽 ≥4 败局+胜局对照 traced；mpx 型 8L4W、H 族 8L4W、r40 世界对照 2 局",
+  "opening": "26/26 局 d7 钱差=0（开局对称）；败局 d8 起失血",
+  "bleed_windows_loss_vs_win_mean_day_delta": {
+   "loss": {
+    "8": -70,
+    "12": -186,
+    "13": 178,
+    "14": -49,
+    "16": -89,
+    "18": -70,
+    "22": -528,
+    "23": 208,
+    "24": 42,
+    "25": -55,
+    "28": 83
+   },
+   "win": {
+    "15": -42,
+    "23": 211,
+    "25": -60,
+    "26": 135,
+    "27": 91,
+    "28": 224,
+    "29": -220
+   },
+   "finding": "败局主失血拍=d22（均 −528，果麦窗），次=d12（−186，WOOL 尖价窗）/d16/d18；胜局 d22 仅 −18 且 d23/d26-28 回血 +211/+135/+224"
+  },
+  "five_causes": {
+   "卖时_漏拍": "主因：尖价拍（WOOL 144-230/MILK 124-193）对手零散小单成交、我方整拍零挂单。7 dump 局漏拍值均值：败局 3032/局 vs 胜局 1239/局；败局 top 丢拍全是'我方无卖单 vs 对手尖价小单'（act@294/549/685…）",
+   "量_同拍少申报": "次因：同拍共卖时系统性少申报——败局 5.7 拍/12 件/约 1155 元，胜局 1 拍/3 件/21 元。例：act@293 WOOL 尖价 3 vs 7（−911）、act@575 WHEAT 1 vs 10（−394）、act@403 STRAWB 11 vs 12（−201）。另有幻影申报（申报>持仓）败局 +34~43 件/mpx 型",
+   "价格": "非价格水平问题：realized_px 我−对手 ≈0（±0.005 全 26 局）；丢的是尖价拍的捕获（同拍竞速败局 rev_diff −1582~−1753，胜局 −28~+867）",
+   "产线": "非差异化项：逐局品项配比与对手镜像（WHEAT/FERT/WOOL/MILK/MELON/STRB/CARROT ±数件）；败局 FERTILIZE 操作多 50%（231-259 vs 150）为世界驱动（fert60 层 PASS→FERT 转换随世界变），PLANT/BUY_SEED/BUY_ANIMAL 双方一致",
+   "终局清算": "d28+ 尾段成交额差败局 −147~−639（胜局 H1 674213 +963）；d29 终局分抛质量决定 500 内的近败（H1 674213 胜局 d29 丢 −802 仍守住）；stranding 双方全 0（都清空）"
+  },
+  "per_game_rows": [
+   {
+    "opp": "mpx",
+    "seed": 674000,
+    "tag": "L",
+    "family": "mpx型",
+    "margin": -461.0,
+    "margin_expected_seat0": -461.0,
+    "realized_px_diff": 0.0012,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -2691.0,
+     "d14-20": 115.0,
+     "d21-27": -462.0,
+     "d28+": -160.0
+    },
+    "race": {
+     "n": 264,
+     "wins": 4,
+     "losses": 9,
+     "rev_diff": -1753.0,
+     "q_gap": 22
+    },
+    "declare_gap": {
+     "declared_diff": -27,
+     "filled_diff": -30,
+     "phantom_diff": 40
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -819.0
+     ],
+     [
+      26,
+      -238.0
+     ],
+     [
+      12,
+      -214.0
+     ],
+     [
+      25,
+      -199.0
+     ],
+     [
+      8,
+      -85.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 601,
+      "delta": -1081.0
+     },
+     {
+      "step": 625,
+      "delta": -1066.0
+     },
+     {
+      "step": 294,
+      "delta": -916.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -128.0,
+     "20": -42.0,
+     "27": -762.0,
+     "29": -461.0
+    },
+    "ops_sell_n": 298,
+    "ops_sell_qty": 1839,
+    "ops_fertilize": 257,
+    "ops_plant": 239
+   },
+   {
+    "opp": "mpx",
+    "seed": 674705,
+    "tag": "L",
+    "family": "mpx型",
+    "margin": -142.0,
+    "margin_expected_seat0": -142.0,
+    "realized_px_diff": 0.0006,
+    "segments_rev_diff": {
+     "d0-6": 7.0,
+     "d7-13": 0,
+     "d14-20": -1105.0,
+     "d21-27": -391.0,
+     "d28+": -147.0
+    },
+    "race": {
+     "n": 284,
+     "wins": 2,
+     "losses": 1,
+     "rev_diff": -269.0,
+     "q_gap": -2
+    },
+    "declare_gap": {
+     "declared_diff": -2,
+     "filled_diff": -14,
+     "phantom_diff": 12
+    },
+    "worst_day_deltas": [
+     [
+      25,
+      -170.0
+     ],
+     [
+      23,
+      -97.0
+     ],
+     [
+      27,
+      -17.0
+     ],
+     [
+      14,
+      -6.0
+     ],
+     [
+      22,
+      -4.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 423,
+      "delta": -916.0
+     },
+     {
+      "step": 351,
+      "delta": -411.0
+     },
+     {
+      "step": 159,
+      "delta": -372.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 7.0,
+     "13": 7.0,
+     "20": 121.0,
+     "27": -158.0,
+     "29": -142.0
+    },
+    "ops_sell_n": 299,
+    "ops_sell_qty": 1697,
+    "ops_fertilize": 162,
+    "ops_plant": 239
+   },
+   {
+    "opp": "mpx",
+    "seed": 674423,
+    "tag": "W",
+    "family": "mpx型",
+    "margin": 508.0,
+    "margin_expected_seat0": 508.0,
+    "realized_px_diff": 0.0041,
+    "segments_rev_diff": {
+     "d0-6": 7.0,
+     "d7-13": -261.0,
+     "d14-20": -32.0,
+     "d21-27": 310.0,
+     "d28+": 88.0
+    },
+    "race": {
+     "n": 328,
+     "wins": 2,
+     "losses": 4,
+     "rev_diff": 57.0,
+     "q_gap": 0
+    },
+    "declare_gap": {
+     "declared_diff": 5,
+     "filled_diff": -10,
+     "phantom_diff": 15
+    },
+    "worst_day_deltas": [
+     [
+      19,
+      -22.0
+     ],
+     [
+      21,
+      -5.0
+     ],
+     [
+      20,
+      -3.0
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      1,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 302,
+      "delta": -261.0
+     },
+     {
+      "step": 154,
+      "delta": -187.0
+     },
+     {
+      "step": 159,
+      "delta": -185.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 7.0,
+     "13": 82.0,
+     "20": 79.0,
+     "27": 420.0,
+     "29": 508.0
+    },
+    "ops_sell_n": 359,
+    "ops_sell_qty": 1912,
+    "ops_fertilize": 152,
+    "ops_plant": 239
+   },
+   {
+    "opp": "drop_half",
+    "seed": 674000,
+    "tag": "L",
+    "family": "mpx型",
+    "margin": -555.0,
+    "margin_expected_seat0": -555.0,
+    "realized_px_diff": 0.0022,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -2691.0,
+     "d14-20": -189.0,
+     "d21-27": -357.0,
+     "d28+": -309.0
+    },
+    "race": {
+     "n": 266,
+     "wins": 5,
+     "losses": 12,
+     "rev_diff": -842.0,
+     "q_gap": 55
+    },
+    "declare_gap": {
+     "declared_diff": -32,
+     "filled_diff": -32,
+     "phantom_diff": 42
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -819.0
+     ],
+     [
+      25,
+      -305.0
+     ],
+     [
+      12,
+      -214.0
+     ],
+     [
+      26,
+      -131.0
+     ],
+     [
+      17,
+      -102.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 601,
+      "delta": -1081.0
+     },
+     {
+      "step": 294,
+      "delta": -916.0
+     },
+     {
+      "step": 550,
+      "delta": -824.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -128.0,
+     "20": 84.0,
+     "27": -707.0,
+     "29": -555.0
+    },
+    "ops_sell_n": 298,
+    "ops_sell_qty": 1839,
+    "ops_fertilize": 257,
+    "ops_plant": 239
+   },
+   {
+    "opp": "drop_half",
+    "seed": 675410,
+    "tag": "L",
+    "family": "mpx型",
+    "margin": -394.0,
+    "margin_expected_seat0": -394.0,
+    "realized_px_diff": -0.0007,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -2685.0,
+     "d14-20": 39.0,
+     "d21-27": 59.0,
+     "d28+": -639.0
+    },
+    "race": {
+     "n": 233,
+     "wins": 8,
+     "losses": 7,
+     "rev_diff": -1582.0,
+     "q_gap": 17
+    },
+    "declare_gap": {
+     "declared_diff": -25,
+     "filled_diff": -31,
+     "phantom_diff": 41
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -439.0
+     ],
+     [
+      12,
+      -225.0
+     ],
+     [
+      16,
+      -201.0
+     ],
+     [
+      18,
+      -105.0
+     ],
+     [
+      8,
+      -85.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 294,
+      "delta": -941.0
+     },
+     {
+      "step": 550,
+      "delta": -741.0
+     },
+     {
+      "step": 295,
+      "delta": -705.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -44.0,
+     "20": -477.0,
+     "27": -406.0,
+     "29": -394.0
+    },
+    "ops_sell_n": 246,
+    "ops_sell_qty": 1643,
+    "ops_fertilize": 259,
+    "ops_plant": 239
+   },
+   {
+    "opp": "drop_half",
+    "seed": 674423,
+    "tag": "W",
+    "family": "mpx型",
+    "margin": 416.0,
+    "margin_expected_seat0": 416.0,
+    "realized_px_diff": 0.0044,
+    "segments_rev_diff": {
+     "d0-6": 7.0,
+     "d7-13": -261.0,
+     "d14-20": -33.0,
+     "d21-27": 194.0,
+     "d28+": 6.0
+    },
+    "race": {
+     "n": 327,
+     "wins": 3,
+     "losses": 7,
+     "rev_diff": 341.0,
+     "q_gap": 11
+    },
+    "declare_gap": {
+     "declared_diff": 3,
+     "filled_diff": -14,
+     "phantom_diff": 20
+    },
+    "worst_day_deltas": [
+     [
+      19,
+      -22.0
+     ],
+     [
+      21,
+      -5.0
+     ],
+     [
+      20,
+      -3.0
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      1,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 302,
+      "delta": -261.0
+     },
+     {
+      "step": 154,
+      "delta": -187.0
+     },
+     {
+      "step": 159,
+      "delta": -185.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 7.0,
+     "13": 82.0,
+     "20": 79.0,
+     "27": 330.0,
+     "29": 416.0
+    },
+    "ops_sell_n": 359,
+    "ops_sell_qty": 1912,
+    "ops_fertilize": 152,
+    "ops_plant": 239
+   },
+   {
+    "opp": "H1",
+    "seed": 674710,
+    "tag": "L-big",
+    "family": "H族",
+    "margin": -1268.0,
+    "margin_expected_seat0": -1268.0,
+    "realized_px_diff": -0.0052,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -574.0,
+     "d14-20": 125.0,
+     "d21-27": -532.0,
+     "d28+": 0
+    },
+    "race": {
+     "n": 232,
+     "wins": 7,
+     "losses": 8,
+     "rev_diff": -616.0,
+     "q_gap": 6
+    },
+    "declare_gap": {
+     "declared_diff": -15,
+     "filled_diff": -1,
+     "phantom_diff": 5
+    },
+    "worst_day_deltas": [
+     [
+      26,
+      -527.0
+     ],
+     [
+      22,
+      -245.0
+     ],
+     [
+      12,
+      -227.0
+     ],
+     [
+      18,
+      -159.0
+     ],
+     [
+      16,
+      -90.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 625,
+      "delta": -1242.0
+     },
+     {
+      "step": 601,
+      "delta": -669.0
+     },
+     {
+      "step": 550,
+      "delta": -245.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -87.0,
+     "20": -467.0,
+     "27": -1268.0,
+     "29": -1268.0
+    },
+    "ops_sell_n": 246,
+    "ops_sell_qty": 1682,
+    "ops_fertilize": 253,
+    "ops_plant": 249
+   },
+   {
+    "opp": "H1",
+    "seed": 674141,
+    "tag": "L",
+    "family": "H族",
+    "margin": -1073.0,
+    "margin_expected_seat0": -1073.0,
+    "realized_px_diff": 0.0037,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -574.0,
+     "d14-20": 0,
+     "d21-27": 186.0,
+     "d28+": 0
+    },
+    "race": {
+     "n": 244,
+     "wins": 5,
+     "losses": 7,
+     "rev_diff": -210.0,
+     "q_gap": 11
+    },
+    "declare_gap": {
+     "declared_diff": -17,
+     "filled_diff": -2,
+     "phantom_diff": 3
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -814.0
+     ],
+     [
+      12,
+      -227.0
+     ],
+     [
+      16,
+      -184.0
+     ],
+     [
+      18,
+      -163.0
+     ],
+     [
+      8,
+      -85.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 550,
+      "delta": -788.0
+     },
+     {
+      "step": 303,
+      "delta": -227.0
+     },
+     {
+      "step": 404,
+      "delta": -184.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -87.0,
+     "20": -522.0,
+     "27": -1073.0,
+     "29": -1073.0
+    },
+    "ops_sell_n": 250,
+    "ops_sell_qty": 1681,
+    "ops_fertilize": 254,
+    "ops_plant": 238
+   },
+   {
+    "opp": "H1",
+    "seed": 674213,
+    "tag": "W",
+    "family": "H族",
+    "margin": 139.0,
+    "margin_expected_seat0": 139.0,
+    "realized_px_diff": 0.0014,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": 0,
+     "d14-20": -31.0,
+     "d21-27": 963.0,
+     "d28+": 1.0
+    },
+    "race": {
+     "n": 312,
+     "wins": 3,
+     "losses": 2,
+     "rev_diff": 867.0,
+     "q_gap": -11
+    },
+    "declare_gap": {
+     "declared_diff": 10,
+     "filled_diff": 6,
+     "phantom_diff": -12
+    },
+    "worst_day_deltas": [
+     [
+      29,
+      -802.0
+     ],
+     [
+      20,
+      -31.0
+     ],
+     [
+      28,
+      -1.0
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      1,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 717,
+      "delta": -350.0
+     },
+     {
+      "step": 716,
+      "delta": -274.0
+     },
+     {
+      "step": 707,
+      "delta": -174.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": 0.0,
+     "20": -31.0,
+     "27": 942.0,
+     "29": 139.0
+    },
+    "ops_sell_n": 322,
+    "ops_sell_qty": 1636,
+    "ops_fertilize": 153,
+    "ops_plant": 239
+   },
+   {
+    "opp": "H",
+    "seed": 674000,
+    "tag": "L",
+    "family": "H族",
+    "margin": -446.0,
+    "margin_expected_seat0": -446.0,
+    "realized_px_diff": 0.0011,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -628.0,
+     "d14-20": 115.0,
+     "d21-27": 469.0,
+     "d28+": 0
+    },
+    "race": {
+     "n": 286,
+     "wins": 4,
+     "losses": 5,
+     "rev_diff": 61.0,
+     "q_gap": 0
+    },
+    "declare_gap": {
+     "declared_diff": -56,
+     "filled_diff": -7,
+     "phantom_diff": -25
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -819.0
+     ],
+     [
+      12,
+      -230.0
+     ],
+     [
+      8,
+      -85.0
+     ],
+     [
+      14,
+      -54.0
+     ],
+     [
+      20,
+      -38.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 550,
+      "delta": -824.0
+     },
+     {
+      "step": 303,
+      "delta": -230.0
+     },
+     {
+      "step": 193,
+      "delta": -85.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -144.0,
+     "20": -58.0,
+     "27": -446.0,
+     "29": -446.0
+    },
+    "ops_sell_n": 298,
+    "ops_sell_qty": 1839,
+    "ops_fertilize": 257,
+    "ops_plant": 239
+   },
+   {
+    "opp": "H",
+    "seed": 674705,
+    "tag": "L",
+    "family": "H族",
+    "margin": -260.0,
+    "margin_expected_seat0": -260.0,
+    "realized_px_diff": 0.0004,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": 0,
+     "d14-20": 0,
+     "d21-27": -277.0,
+     "d28+": 0
+    },
+    "race": {
+     "n": 294,
+     "wins": 2,
+     "losses": 1,
+     "rev_diff": -96.0,
+     "q_gap": -7
+    },
+    "declare_gap": {
+     "declared_diff": -22,
+     "filled_diff": -1,
+     "phantom_diff": -21
+    },
+    "worst_day_deltas": [
+     [
+      25,
+      -170.0
+     ],
+     [
+      23,
+      -97.0
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      1,
+      0.0
+     ],
+     [
+      2,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 556,
+      "delta": -181.0
+     },
+     {
+      "step": 601,
+      "delta": -170.0
+     },
+     {
+      "step": 1,
+      "delta": 0.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": 0.0,
+     "20": 0.0,
+     "27": -260.0,
+     "29": -260.0
+    },
+    "ops_sell_n": 300,
+    "ops_sell_qty": 1699,
+    "ops_fertilize": 162,
+    "ops_plant": 239
+   },
+   {
+    "opp": "H",
+    "seed": 674423,
+    "tag": "W",
+    "family": "H族",
+    "margin": 75.0,
+    "margin_expected_seat0": 75.0,
+    "realized_px_diff": 0.0022,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": 0,
+     "d14-20": -21.0,
+     "d21-27": 84.0,
+     "d28+": -234.0
+    },
+    "race": {
+     "n": 350,
+     "wins": 2,
+     "losses": 1,
+     "rev_diff": -149.0,
+     "q_gap": -1005
+    },
+    "declare_gap": {
+     "declared_diff": -35,
+     "filled_diff": -5,
+     "phantom_diff": -1024
+    },
+    "worst_day_deltas": [
+     [
+      19,
+      -22.0
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      1,
+      0.0
+     ],
+     [
+      2,
+      0.0
+     ],
+     [
+      3,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 463,
+      "delta": -22.0
+     },
+     {
+      "step": 490,
+      "delta": -20.0
+     },
+     {
+      "step": 1,
+      "delta": 0.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": 0.0,
+     "20": -19.0,
+     "27": 75.0,
+     "29": 75.0
+    },
+    "ops_sell_n": 358,
+    "ops_sell_qty": 1912,
+    "ops_fertilize": 152,
+    "ops_plant": 239
+   },
+   {
+    "opp": "r40",
+    "seed": 674141,
+    "tag": "W-worldpoison-ctrl",
+    "family": "弱锚",
+    "margin": 671.0,
+    "margin_expected_seat0": 671.0,
+    "realized_px_diff": 0.0129,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -2993.0,
+     "d14-20": -526.0,
+     "d21-27": -739.0,
+     "d28+": -1854.0
+    },
+    "race": {
+     "n": 207,
+     "wins": 6,
+     "losses": 15,
+     "rev_diff": -4192.0,
+     "q_gap": -20
+    },
+    "declare_gap": {
+     "declared_diff": -50,
+     "filled_diff": -66,
+     "phantom_diff": 63
+    },
+    "worst_day_deltas": [
+     [
+      29,
+      -1178.0
+     ],
+     [
+      22,
+      -725.0
+     ],
+     [
+      25,
+      -610.0
+     ],
+     [
+      15,
+      -379.0
+     ],
+     [
+      18,
+      -247.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 718,
+      "delta": -1720.0
+     },
+     {
+      "step": 601,
+      "delta": -1185.0
+     },
+     {
+      "step": 451,
+      "delta": -1081.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 8.0,
+     "13": -144.0,
+     "20": -845.0,
+     "27": 628.0,
+     "29": 671.0
+    },
+    "ops_sell_n": 250,
+    "ops_sell_qty": 1684,
+    "ops_fertilize": 254,
+    "ops_plant": 238
+   },
+   {
+    "opp": "mpx",
+    "seed": 674141,
+    "tag": "L",
+    "family": "mpx型",
+    "margin": -987.0,
+    "margin_expected_seat0": -987.0,
+    "realized_px_diff": 0.0023,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -2924.0,
+     "d14-20": -273.0,
+     "d21-27": -780.0,
+     "d28+": -574.0
+    },
+    "race": {
+     "n": 235,
+     "wins": 5,
+     "losses": 7,
+     "rev_diff": -1680.0,
+     "q_gap": 14
+    },
+    "declare_gap": {
+     "declared_diff": -20,
+     "filled_diff": -35,
+     "phantom_diff": 43
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -814.0
+     ],
+     [
+      12,
+      -223.0
+     ],
+     [
+      16,
+      -184.0
+     ],
+     [
+      18,
+      -163.0
+     ],
+     [
+      8,
+      -85.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 294,
+      "delta": -911.0
+     },
+     {
+      "step": 550,
+      "delta": -788.0
+     },
+     {
+      "step": 295,
+      "delta": -680.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -83.0,
+     "20": -531.0,
+     "27": -981.0,
+     "29": -987.0
+    },
+    "ops_sell_n": 250,
+    "ops_sell_qty": 1681,
+    "ops_fertilize": 254,
+    "ops_plant": 238
+   },
+   {
+    "opp": "mpx",
+    "seed": 675410,
+    "tag": "L",
+    "family": "mpx型",
+    "margin": -545.0,
+    "margin_expected_seat0": -545.0,
+    "realized_px_diff": -0.0011,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -2685.0,
+     "d14-20": 78.0,
+     "d21-27": 122.0,
+     "d28+": -639.0
+    },
+    "race": {
+     "n": 233,
+     "wins": 6,
+     "losses": 4,
+     "rev_diff": -1830.0,
+     "q_gap": 11
+    },
+    "declare_gap": {
+     "declared_diff": -21,
+     "filled_diff": -27,
+     "phantom_diff": 37
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -576.0
+     ],
+     [
+      12,
+      -225.0
+     ],
+     [
+      16,
+      -201.0
+     ],
+     [
+      18,
+      -105.0
+     ],
+     [
+      8,
+      -85.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 294,
+      "delta": -941.0
+     },
+     {
+      "step": 550,
+      "delta": -741.0
+     },
+     {
+      "step": 295,
+      "delta": -705.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -44.0,
+     "20": -438.0,
+     "27": -557.0,
+     "29": -545.0
+    },
+    "ops_sell_n": 246,
+    "ops_sell_qty": 1643,
+    "ops_fertilize": 259,
+    "ops_plant": 239
+   },
+   {
+    "opp": "mpx",
+    "seed": 674846,
+    "tag": "W",
+    "family": "mpx型",
+    "margin": 385.0,
+    "margin_expected_seat0": 385.0,
+    "realized_px_diff": 0.0024,
+    "segments_rev_diff": {
+     "d0-6": 7.0,
+     "d7-13": -816.0,
+     "d14-20": -115.0,
+     "d21-27": -375.0,
+     "d28+": -53.0
+    },
+    "race": {
+     "n": 304,
+     "wins": 2,
+     "losses": 1,
+     "rev_diff": -28.0,
+     "q_gap": -1
+    },
+    "declare_gap": {
+     "declared_diff": 2,
+     "filled_diff": -19,
+     "phantom_diff": 21
+    },
+    "worst_day_deltas": [
+     [
+      27,
+      -33.0
+     ],
+     [
+      20,
+      -31.0
+     ],
+     [
+      14,
+      -6.0
+     ],
+     [
+      18,
+      -6.0
+     ],
+     [
+      0,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 302,
+      "delta": -816.0
+     },
+     {
+      "step": 159,
+      "delta": -372.0
+     },
+     {
+      "step": 687,
+      "delta": -357.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 7.0,
+     "13": 56.0,
+     "20": 61.0,
+     "27": 73.0,
+     "29": 385.0
+    },
+    "ops_sell_n": 325,
+    "ops_sell_qty": 1695,
+    "ops_fertilize": 149,
+    "ops_plant": 239
+   },
+   {
+    "opp": "drop_half",
+    "seed": 674141,
+    "tag": "L",
+    "family": "mpx型",
+    "margin": -1060.0,
+    "margin_expected_seat0": -1060.0,
+    "realized_px_diff": 0.0039,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -2924.0,
+     "d14-20": -323.0,
+     "d21-27": -1311.0,
+     "d28+": -574.0
+    },
+    "race": {
+     "n": 235,
+     "wins": 11,
+     "losses": 11,
+     "rev_diff": -1683.0,
+     "q_gap": 21
+    },
+    "declare_gap": {
+     "declared_diff": -26,
+     "filled_diff": -42,
+     "phantom_diff": 50
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -755.0
+     ],
+     [
+      12,
+      -223.0
+     ],
+     [
+      16,
+      -180.0
+     ],
+     [
+      18,
+      -163.0
+     ],
+     [
+      8,
+      -85.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 294,
+      "delta": -911.0
+     },
+     {
+      "step": 550,
+      "delta": -788.0
+     },
+     {
+      "step": 295,
+      "delta": -680.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -83.0,
+     "20": -581.0,
+     "27": -1054.0,
+     "29": -1060.0
+    },
+    "ops_sell_n": 250,
+    "ops_sell_qty": 1681,
+    "ops_fertilize": 254,
+    "ops_plant": 238
+   },
+   {
+    "opp": "drop_half",
+    "seed": 675551,
+    "tag": "L",
+    "family": "mpx型",
+    "margin": -35.0,
+    "margin_expected_seat0": -35.0,
+    "realized_px_diff": -0.0002,
+    "segments_rev_diff": {
+     "d0-6": 7.0,
+     "d7-13": 0,
+     "d14-20": 0,
+     "d21-27": -267.0,
+     "d28+": -330.0
+    },
+    "race": {
+     "n": 281,
+     "wins": 0,
+     "losses": 0,
+     "rev_diff": 0.0,
+     "q_gap": 0
+    },
+    "declare_gap": {
+     "declared_diff": 0,
+     "filled_diff": -6,
+     "phantom_diff": 6
+    },
+    "worst_day_deltas": [
+     [
+      27,
+      -21.0
+     ],
+     [
+      28,
+      -21.0
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      1,
+      0.0
+     ],
+     [
+      2,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 687,
+      "delta": -1485.0
+     },
+     {
+      "step": 159,
+      "delta": -187.0
+     },
+     {
+      "step": 160,
+      "delta": -185.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 7.0,
+     "13": 7.0,
+     "20": 7.0,
+     "27": -14.0,
+     "29": -35.0
+    },
+    "ops_sell_n": 290,
+    "ops_sell_qty": 1693,
+    "ops_fertilize": 143,
+    "ops_plant": 239
+   },
+   {
+    "opp": "drop_half",
+    "seed": 674846,
+    "tag": "W",
+    "family": "mpx型",
+    "margin": 419.0,
+    "margin_expected_seat0": 419.0,
+    "realized_px_diff": 0.004,
+    "segments_rev_diff": {
+     "d0-6": 7.0,
+     "d7-13": -816.0,
+     "d14-20": -608.0,
+     "d21-27": -375.0,
+     "d28+": -53.0
+    },
+    "race": {
+     "n": 304,
+     "wins": 2,
+     "losses": 1,
+     "rev_diff": -28.0,
+     "q_gap": 6
+    },
+    "declare_gap": {
+     "declared_diff": -5,
+     "filled_diff": -26,
+     "phantom_diff": 28
+    },
+    "worst_day_deltas": [
+     [
+      27,
+      -33.0
+     ],
+     [
+      20,
+      -15.0
+     ],
+     [
+      14,
+      -6.0
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      1,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 302,
+      "delta": -816.0
+     },
+     {
+      "step": 454,
+      "delta": -427.0
+     },
+     {
+      "step": 687,
+      "delta": -357.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 7.0,
+     "13": 56.0,
+     "20": 95.0,
+     "27": 107.0,
+     "29": 419.0
+    },
+    "ops_sell_n": 325,
+    "ops_sell_qty": 1695,
+    "ops_fertilize": 149,
+    "ops_plant": 239
+   },
+   {
+    "opp": "H1",
+    "seed": 674781,
+    "tag": "L-big",
+    "family": "H族",
+    "margin": -1307.0,
+    "margin_expected_seat0": -1307.0,
+    "realized_px_diff": 0.0019,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -574.0,
+     "d14-20": -10.0,
+     "d21-27": -110.0,
+     "d28+": 0
+    },
+    "race": {
+     "n": 241,
+     "wins": 7,
+     "losses": 5,
+     "rev_diff": -729.0,
+     "q_gap": -2
+    },
+    "declare_gap": {
+     "declared_diff": -28,
+     "filled_diff": -7,
+     "phantom_diff": 0
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -541.0
+     ],
+     [
+      24,
+      -316.0
+     ],
+     [
+      12,
+      -227.0
+     ],
+     [
+      18,
+      -142.0
+     ],
+     [
+      17,
+      -133.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 550,
+      "delta": -575.0
+     },
+     {
+      "step": 576,
+      "delta": -394.0
+     },
+     {
+      "step": 601,
+      "delta": -248.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -87.0,
+     "20": -386.0,
+     "27": -1307.0,
+     "29": -1307.0
+    },
+    "ops_sell_n": 252,
+    "ops_sell_qty": 1685,
+    "ops_fertilize": 265,
+    "ops_plant": 239
+   },
+   {
+    "opp": "H1",
+    "seed": 675410,
+    "tag": "L",
+    "family": "H族",
+    "margin": -639.0,
+    "margin_expected_seat0": -639.0,
+    "realized_px_diff": -0.0009,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -565.0,
+     "d14-20": 78.0,
+     "d21-27": 387.0,
+     "d28+": -14.0
+    },
+    "race": {
+     "n": 238,
+     "wins": 6,
+     "losses": 4,
+     "rev_diff": -178.0,
+     "q_gap": 8
+    },
+    "declare_gap": {
+     "declared_diff": -18,
+     "filled_diff": -2,
+     "phantom_diff": 5
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -576.0
+     ],
+     [
+      12,
+      -235.0
+     ],
+     [
+      16,
+      -201.0
+     ],
+     [
+      18,
+      -105.0
+     ],
+     [
+      8,
+      -85.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 550,
+      "delta": -741.0
+     },
+     {
+      "step": 303,
+      "delta": -235.0
+     },
+     {
+      "step": 404,
+      "delta": -201.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -54.0,
+     "20": -448.0,
+     "27": -653.0,
+     "29": -639.0
+    },
+    "ops_sell_n": 247,
+    "ops_sell_qty": 1646,
+    "ops_fertilize": 259,
+    "ops_plant": 239
+   },
+   {
+    "opp": "H1",
+    "seed": 675065,
+    "tag": "W",
+    "family": "H族",
+    "margin": 61.0,
+    "margin_expected_seat0": 61.0,
+    "realized_px_diff": 0.0,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": 0,
+     "d14-20": -31.0,
+     "d21-27": 0,
+     "d28+": 0
+    },
+    "race": {
+     "n": 356,
+     "wins": 1,
+     "losses": 0,
+     "rev_diff": -31.0,
+     "q_gap": -1
+    },
+    "declare_gap": {
+     "declared_diff": -1,
+     "filled_diff": -1,
+     "phantom_diff": 0
+    },
+    "worst_day_deltas": [
+     [
+      19,
+      -46.0
+     ],
+     [
+      20,
+      -31.0
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      1,
+      0.0
+     ],
+     [
+      2,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 461,
+      "delta": -46.0
+     },
+     {
+      "step": 483,
+      "delta": -31.0
+     },
+     {
+      "step": 1,
+      "delta": 0.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": 0.0,
+     "20": -77.0,
+     "27": 61.0,
+     "29": 61.0
+    },
+    "ops_sell_n": 361,
+    "ops_sell_qty": 4993,
+    "ops_fertilize": 156,
+    "ops_plant": 239
+   },
+   {
+    "opp": "H",
+    "seed": 674141,
+    "tag": "L",
+    "family": "H族",
+    "margin": -1073.0,
+    "margin_expected_seat0": -1073.0,
+    "realized_px_diff": 0.0071,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -574.0,
+     "d14-20": 0,
+     "d21-27": 179.0,
+     "d28+": 0
+    },
+    "race": {
+     "n": 244,
+     "wins": 6,
+     "losses": 7,
+     "rev_diff": -217.0,
+     "q_gap": 1
+    },
+    "declare_gap": {
+     "declared_diff": -56,
+     "filled_diff": -3,
+     "phantom_diff": -35
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -814.0
+     ],
+     [
+      12,
+      -227.0
+     ],
+     [
+      16,
+      -184.0
+     ],
+     [
+      18,
+      -163.0
+     ],
+     [
+      8,
+      -85.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 550,
+      "delta": -788.0
+     },
+     {
+      "step": 303,
+      "delta": -227.0
+     },
+     {
+      "step": 404,
+      "delta": -184.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -87.0,
+     "20": -522.0,
+     "27": -1073.0,
+     "29": -1073.0
+    },
+    "ops_sell_n": 250,
+    "ops_sell_qty": 1681,
+    "ops_fertilize": 254,
+    "ops_plant": 238
+   },
+   {
+    "opp": "H",
+    "seed": 675410,
+    "tag": "L",
+    "family": "H族",
+    "margin": -639.0,
+    "margin_expected_seat0": -639.0,
+    "realized_px_diff": 0.0013,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -565.0,
+     "d14-20": 78.0,
+     "d21-27": 387.0,
+     "d28+": -14.0
+    },
+    "race": {
+     "n": 238,
+     "wins": 6,
+     "losses": 4,
+     "rev_diff": -178.0,
+     "q_gap": -1
+    },
+    "declare_gap": {
+     "declared_diff": -49,
+     "filled_diff": -2,
+     "phantom_diff": -26
+    },
+    "worst_day_deltas": [
+     [
+      22,
+      -576.0
+     ],
+     [
+      12,
+      -235.0
+     ],
+     [
+      16,
+      -201.0
+     ],
+     [
+      18,
+      -105.0
+     ],
+     [
+      8,
+      -85.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 550,
+      "delta": -741.0
+     },
+     {
+      "step": 303,
+      "delta": -235.0
+     },
+     {
+      "step": 404,
+      "delta": -201.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": -54.0,
+     "20": -448.0,
+     "27": -653.0,
+     "29": -639.0
+    },
+    "ops_sell_n": 247,
+    "ops_sell_qty": 1646,
+    "ops_fertilize": 259,
+    "ops_plant": 239
+   },
+   {
+    "opp": "H",
+    "seed": 674846,
+    "tag": "W",
+    "family": "H族",
+    "margin": 58.0,
+    "margin_expected_seat0": 58.0,
+    "realized_px_diff": 0.0012,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": 0,
+     "d14-20": -31.0,
+     "d21-27": 73.0,
+     "d28+": 0
+    },
+    "race": {
+     "n": 318,
+     "wins": 1,
+     "losses": 0,
+     "rev_diff": 42.0,
+     "q_gap": -23
+    },
+    "declare_gap": {
+     "declared_diff": -37,
+     "filled_diff": 0,
+     "phantom_diff": -37
+    },
+    "worst_day_deltas": [
+     [
+      20,
+      -31.0
+     ],
+     [
+      0,
+      0.0
+     ],
+     [
+      1,
+      0.0
+     ],
+     [
+      2,
+      0.0
+     ],
+     [
+      3,
+      0.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 490,
+      "delta": -31.0
+     },
+     {
+      "step": 1,
+      "delta": 0.0
+     },
+     {
+      "step": 2,
+      "delta": 0.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 0.0,
+     "13": 0.0,
+     "20": -31.0,
+     "27": 58.0,
+     "29": 58.0
+    },
+    "ops_sell_n": 324,
+    "ops_sell_qty": 1694,
+    "ops_fertilize": 149,
+    "ops_plant": 239
+   },
+   {
+    "opp": "r40",
+    "seed": 675410,
+    "tag": "L-worldpoison",
+    "family": "弱锚",
+    "margin": -87.0,
+    "margin_expected_seat0": -87.0,
+    "realized_px_diff": 0.0019,
+    "segments_rev_diff": {
+     "d0-6": 0,
+     "d7-13": -2685.0,
+     "d14-20": -122.0,
+     "d21-27": -88.0,
+     "d28+": -1757.0
+    },
+    "race": {
+     "n": 216,
+     "wins": 9,
+     "losses": 14,
+     "rev_diff": -2496.0,
+     "q_gap": -9
+    },
+    "declare_gap": {
+     "declared_diff": -44,
+     "filled_diff": -40,
+     "phantom_diff": 19
+    },
+    "worst_day_deltas": [
+     [
+      29,
+      -593.0
+     ],
+     [
+      22,
+      -364.0
+     ],
+     [
+      12,
+      -225.0
+     ],
+     [
+      16,
+      -223.0
+     ],
+     [
+      18,
+      -214.0
+     ]
+    ],
+    "top_drop_steps": [
+     {
+      "step": 718,
+      "delta": -1874.0
+     },
+     {
+      "step": 450,
+      "delta": -1446.0
+     },
+     {
+      "step": 695,
+      "delta": -1250.0
+     }
+    ],
+    "day_end_diff": {
+     "7": 8.0,
+     "13": -36.0,
+     "20": -630.0,
+     "27": -409.0,
+     "29": -87.0
+    },
+    "ops_sell_n": 247,
+    "ops_sell_qty": 1645,
+    "ops_fertilize": 259,
+    "ops_plant": 239
+   }
+  ],
+  "dump_missed_tick_stats": [
+   {
+    "opp": "H1",
+    "seed": 674781,
+    "margin": -1307,
+    "miss_ticks": 5,
+    "miss_qty": 15,
+    "miss_value": 1040,
+    "under_ticks": 8,
+    "under_units": 18,
+    "under_value": 1343
+   },
+   {
+    "opp": "mpx",
+    "seed": 674141,
+    "margin": -987,
+    "miss_ticks": 13,
+    "miss_qty": 40,
+    "miss_value": 4260,
+    "under_ticks": 4,
+    "under_units": 7,
+    "under_value": 1327
+   },
+   {
+    "opp": "mpx",
+    "seed": 674423,
+    "margin": 508,
+    "miss_ticks": 18,
+    "miss_qty": 60,
+    "miss_value": 1239,
+    "under_ticks": 1,
+    "under_units": 3,
+    "under_value": 21
+   },
+   {
+    "opp": "H1",
+    "seed": 674710,
+    "margin": -1268,
+    "miss_ticks": 6,
+    "miss_qty": 34,
+    "miss_value": 2812,
+    "under_ticks": 6,
+    "under_units": 8,
+    "under_value": 1003
+   },
+   {
+    "opp": "H",
+    "seed": 674000,
+    "margin": -446,
+    "miss_ticks": 13,
+    "miss_qty": 39,
+    "miss_value": 2493,
+    "under_ticks": 6,
+    "under_units": 21,
+    "under_value": 325
+   },
+   {
+    "opp": "mpx",
+    "seed": 675410,
+    "margin": -545,
+    "miss_ticks": 9,
+    "miss_qty": 30,
+    "miss_value": 2738,
+    "under_ticks": 6,
+    "under_units": 11,
+    "under_value": 1603
+   },
+   {
+    "opp": "drop_half",
+    "seed": 674141,
+    "margin": -1060,
+    "miss_ticks": 25,
+    "miss_qty": 47,
+    "miss_value": 4849,
+    "under_ticks": 4,
+    "under_units": 7,
+    "under_value": 1330
+   }
+  ],
+  "exemplars": [
+   {
+    "game": "mpx 674141 L(-987)",
+    "events": [
+     {
+      "money_step": 294,
+      "day": 12,
+      "delta": -911,
+      "act_step": 293,
+      "our": "WOOL 3@230",
+      "opp": "WOOL 7@230",
+      "cause": "量：尖价拍同拍申报 3 vs 7"
+     },
+     {
+      "money_step": 295,
+      "day": 12,
+      "delta": -680,
+      "act_step": 294,
+      "our": "(无卖单)",
+      "opp": "WOOL 3@227",
+      "cause": "卖时：尖价拍我方零挂单漏拍"
+     },
+     {
+      "money_step": 550,
+      "day": 22,
+      "delta": -788,
+      "act_step": 549,
+      "our": "(无卖单)",
+      "opp": "WOOL 3@144+MILK 3@124",
+      "cause": "卖时：d22 果麦窗对手零散尖峰单漏拍"
+     },
+     {
+      "money_step": 686,
+      "day": 28,
+      "delta": -574,
+      "act_step": 685,
+      "our": "(无卖单)",
+      "opp": "MILK 3@193",
+      "cause": "终局清算：d28 MILK 尖价漏拍"
+     }
+    ]
+   },
+   {
+    "game": "H1 674781 L-big(-1307)",
+    "events": [
+     {
+      "money_step": 550,
+      "day": 22,
+      "delta": -575,
+      "act_step": 549,
+      "our": "(无卖单)",
+      "opp": "WOOL 4@144+MILK 2@11",
+      "cause": "卖时：d22 主漏拍"
+     },
+     {
+      "money_step": 576,
+      "day": 23,
+      "delta": -394,
+      "act_step": 575,
+      "our": "WHEAT 1@41",
+      "opp": "WHEAT 10@41",
+      "cause": "量：同拍 1 vs 10"
+     },
+     {
+      "money_step": 601,
+      "day": 25,
+      "delta": -248,
+      "act_step": 600,
+      "our": "WHEAT 7@40",
+      "opp": "STRAWBERRY 7@30+WHEAT 9@40",
+      "cause": "量：STRB 漏拍+WHEAT 7 vs 9"
+     },
+     {
+      "money_step": 303,
+      "day": 12,
+      "delta": -227,
+      "act_step": 302,
+      "our": "(无卖单)",
+      "opp": "WOOL 1@227",
+      "cause": "卖时：d12 WOOL 尖价漏拍"
+     }
+    ]
+   },
+   {
+    "game": "H1 674710 L-big(-1268)/H 674000 L(-446)/mpx 675410 L(-545)/drop_half 674141 L(-1060)",
+    "events": [
+     {
+      "note": "同机制复现：漏拍值 2493-4849/局、同拍少申报 7-21 件；d22/d12 两大丢拍窗一致"
+     }
+    ]
+   }
+  ]
+ },
+ "improvement_paths": [
+  {
+   "rank": 1,
+   "path": "尖拍补卖+同拍申报量修复（d12 WOOL/d22 果麦窗/d28 MILK 尖价拍全量申报+同拍申报对齐对手）",
+   "evidence": "逐拍 dump：败局漏拍值 3032+少申报 1155/局≈4187 可争夺面；44/67 败局 |margin|<500=单拍可翻盘带；机制局部（SELL 面）不动产线",
+   "expected_gain": "+0.10~0.18（mpx 型/H 族面为主，估翻 15-25 个微败 fold）",
+   "risk": "幻影/槽位回归（败局 over-申报 8.5 拍/局已偏多）；须同块 A/B 配对护栏（s3 教训：无对照会误判块效应）"
+  },
+  {
+   "rank": 2,
+   "path": "采纳 S1 S_form 卖面重写（s_append：lot 2-4 小单+d12-24 平台+d29 终局分抛）",
+   "evidence": "s1-sellform：对 oc_c3 0.7292、mpx 0.75、tetsutani/V89 0.7812（vs C_final 同对面 0.31-0.656）；flips_neg 0；full_exec 0.9062→1.0",
+   "expected_gain": "+0.12~0.25 强面板（已建成可直接 A/B）",
+   "risk": "弱锚出血（r40 0.7812<0.8 判据）；s1 块（674000+i*143）无 C_final 同块对照，提升幅度含块混杂需校准"
+  },
+  {
+   "rank": 3,
+   "path": "d28+ 条件耐心清算（世界画像触发的 V91 式慢清算尾段，仅毒世界启用）",
+   "evidence": "s6：V91 在 C_final 31 败局上胜率 0.2581（flips_pos 8）；败局 tail_d28 rev_diff 系统性负",
+   "expected_gain": "+0.04~0.08（对冲覆盖面 25.8%）",
+   "risk": "V91 全局采用净负（对 C_final 0.333/对 oc_c3 0.167）——必须条件门控，不可全局换装"
+  },
+  {
+   "rank": 4,
+   "path": "毒世界画像+兜底窗口切换（中盘尖峰动态签名→预置卖窗挪移）",
+   "evidence": "seed 世界效应 54.5% 败局方差；5 毒种占 48/55；674000 跨块复毒；d0 开局价无区分度→签名在中盘事件时序",
+   "expected_gain": "+0.08~0.12（长期）",
+   "risk": "对 seed 网格过拟合；画像基建成本高；需留出新块验证"
+  },
+  {
+   "rank": 5,
+   "path": "同拍槽序微调（race slot）——降级",
+   "evidence": "d3-behavior-select 消融：bs2_noslot 对 tetsutani/lynn 配对 −1569/局 48 全负=现行槽序承重；竞速败局 rev_diff 已含在路径 1 的申报量修复内",
+   "expected_gain": "≤+0.02",
+   "risk": "高（消融示警）；仅可在配对护栏下动"
+  }
+ ],
+ "block_decomposition": {
+  "caliber": "C_final 在各判据块 h2h（fold 硬通货）；块=不同 seed 网格（crown_base 674000+i*141 / crown_rematch i*71 / cfin_panel i*139 / s5 i*151 / s6 i*157 / s3 i*147）",
+  "h2h_table": {
+   "oc_c3": {
+    "crown_base": 0.5909,
+    "crown_rematch": 0.625,
+    "cfin_panel": 0.6562,
+    "s5_block": 0.7083,
+    "s6_block": 0.4583
+   },
+   "H1": {
+    "crown_base": 0.5909,
+    "crown_rematch": 0.625
+   },
+   "mpx": {
+    "crown_base": 0.3333,
+    "cfin_panel": 0.625,
+    "s5_block": 0.3125,
+    "s6_block": 0.3125
+   },
+   "tetsutani": {
+    "crown_base": 0.5833,
+    "cfin_panel": 0.6562,
+    "s5_block": 0.4375,
+    "s6_block": 0.5625
+   },
+   "V89": {
+    "crown_base": 0.5833,
+    "cfin_panel": 0.6562,
+    "s5_block": 0.4375
+   },
+   "r40": {
+    "crown_base": 0.75,
+    "cfin_panel": 0.875,
+    "s5_block": 0.8125,
+    "s3_block": 0.75
+   },
+   "A": {
+    "crown_base": 1.0,
+    "cfin_panel": 0.9375,
+    "s5_block": 0.9375
+   }
+  },
+  "anova_weighted_h2h_cells": {
+   "pair_opponent_share": 0.775,
+   "block_world_share": 0.221,
+   "residual": 0.004,
+   "binomial_var_floor_per_cell": 0.0165,
+   "residual_per_cell": 0.0054,
+   "reading": "0.333-0.656 漂移 77.5% 来自对手构成（mpx 弱面对 −0.215、A/r40 强面 +0.311/+0.160），22.1% 来自块/世界构成（s6_block −0.20 最毒、cfin_panel +0.09/s3_block +0.10 最顺）；同对跨块摆幅（mpx 0.312/oc_c3 0.250）≈1.5-2× 二项噪声 se（0.13-0.15）=块效应真实但次要",
+   "decomposition_note": "对手构成≠随机：同块内对手间差是结构性的（mpx 永远弱面）；块间漂移=seed 网格抽到毒种比例不同（见 loss_atlas.world_features），非纯抽样噪声"
+  }
+ },
+ "anomaly": [
+  "margin 口径缝：crown-final anomaly 126 行 farms vs banks 差（本报告 fold 表用 farms 终局钱差=任务口径，banks 并行登记）",
+  "stranding 全探针局=0 双方终局清空——搁浅维度无区分度，终局差全在 d28-29 抛售节奏",
+  "fold 合并注记：H1/oc_c3 的 seed 674000 同现 base/rematch 两腿（确定性复打校验点），fold 计数合并为 27（与 crown-final combined 一致）",
+  "s3 pairs_h2h 的 W/L 明细因 post-process 缺陷失录（源文件自注），块效应只取其 fold 折叠 h2h",
+  "d0 开局价毒/善种完全一致=『开局族』维度在价位面上无区分度（负发现，防止后续误用开局价做毒世界判据）",
+  "探针 margin 复现 26/26 精确（1 元内）=追踪器零侵入；引擎全程 sim（认证缓存复用未重跑 auth）",
+  "H 族探针 674141/675410 对 H1 与 H 同 margin（−1073/−639）再次证实行为近孪生+世界主导"
+ ]
+}

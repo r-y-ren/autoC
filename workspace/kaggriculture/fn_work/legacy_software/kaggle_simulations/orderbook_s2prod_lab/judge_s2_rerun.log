@@ -1,0 +1,8 @@
+panel s2 vs oc_c3 h2h= 0.5417
+panel s2 vs mpx h2h= 0.4688
+panel s2 vs tetsutani h2h= 0.625
+panel s2 vs V89 h2h= 0.625
+panel s2 vs r40 h2h= 0.5625
+panel s2 vs A h2h= 0.9375
+VERDICT: {"s2_sha256": "ca3e0b3781cf7fe7310095ca0c63db626dfbd2065d49733ee9c8d50b097bd94f", "vs_champion_anchor": {"h2h": 0.5417, "grade": "更强"}, "strong_panel_h2h": {"mpx": 0.4688, "tetsutani": 0.625, "V89": 0.625}, "weak_anchor_h2h": {"r40": 0.5625, "A": 0.9375}, "ab_paired": {"net_flip_wins": 0, "flips_pos": 0, "flips_neg": 0, "mean_delta": 0.0, "loss_recovery": "0/16 败局 delta>0"}, "poison_flips_pos": {"674000": "0/4", "674141": "0/4", "674705": "0/4", "674987": "0/4", "675410": "0/4"}, "full_standard_pass": false, "effective_delta": "ZERO——s2 手术面（routes 0/1 steps 157-710）对运行时路由器不可达，32/32 配对逐拍恒等实证；面板
+DONE 0.0 s budget: {'cap_局次': 450, 'caliber': '局次=game（双席各计 1 局）', 'auth': 30, 'ab': 64, 'panel': 208, 'poison': 40, 'total_局次': 342, 'within_cap': True}

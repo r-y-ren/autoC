@@ -1,0 +1,251 @@
+{
+ "budget": {
+  "cap_局次": 500,
+  "auth": 30,
+  "smoke": 2,
+  "ab": 198,
+  "poison": 20,
+  "panel": 172,
+  "total_局次": 422,
+  "within_cap": true
+ },
+ "criteria": {
+  "rule": "①对冠军 oc_c3 ≥0.5（≥0.7 碾压目标）②强面板 {mpx,tetsutani,V89} 逐对 ≥0.5 ③弱锚 {r40,A} 逐对 ≥0.8 ④flips_neg=0（同块配对面）",
+  "c1_vs_oc_c3_ge_0.5": {
+   "h2h": 0.5625,
+   "grade": "强",
+   "passed": true,
+   "target_crush_ge_0.7": false
+  },
+  "c2_strong_all_ge_0.5": {
+   "h2h": {
+    "mpx": 0.6562,
+    "tetsutani": 0.7188,
+    "V89": 0.7188
+   },
+   "passed": true
+  },
+  "c3_weak_all_ge_0.8": {
+   "h2h": {
+    "r40": 0.7812,
+    "A": 0.9062
+   },
+   "passed": false
+  },
+  "c4_flips_neg_zero": {
+   "flips_neg": 4,
+   "flips_pos_all": 5,
+   "passed": false
+  },
+  "poison_flip_kpi": {
+   "翻正数": 6,
+   "翻负数": 0,
+   "per_seed": {
+    "674000": 0,
+    "674141": 0,
+    "674705": 2,
+    "674987": 4,
+    "675410": 0
+   }
+  }
+ },
+ "ab_paired": {
+  "paired_all": {
+   "n": 100,
+   "mean_delta": 51.1,
+   "flips_pos": 5,
+   "flips_neg": 4,
+   "W": 72,
+   "L": 24,
+   "T": 4
+  },
+  "paired_grid159": {
+   "n": 48,
+   "mean_delta": 34.92,
+   "flips_pos": 3,
+   "flips_neg": 4,
+   "W": 30,
+   "L": 16,
+   "T": 2
+  },
+  "paired_loss26": {
+   "n": 52,
+   "mean_delta": 66.04,
+   "flips_pos": 2,
+   "flips_neg": 0,
+   "W": 42,
+   "L": 8,
+   "T": 2
+  }
+ },
+ "panel_h2h": {
+  "oc_c3": 0.5625,
+  "mpx": 0.6562,
+  "tetsutani": 0.7188,
+  "V89": 0.7188,
+  "r40": 0.7812,
+  "A": 0.9062
+ },
+ "poison": {
+  "674000": {
+   "n_pairs": 4,
+   "flips_pos_翻正": 0,
+   "flips_neg_翻负": 0,
+   "mean_delta": 223.0,
+   "margins": [
+    {
+     "opp": "mpx",
+     "seat": 0,
+     "s_append": -413.0,
+     "s8": -352.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 0,
+     "s_append": -475.0,
+     "s8": -90.0
+    },
+    {
+     "opp": "mpx",
+     "seat": 1,
+     "s_append": -413.0,
+     "s8": -352.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 1,
+     "s_append": -475.0,
+     "s8": -90.0
+    }
+   ]
+  },
+  "674141": {
+   "n_pairs": 4,
+   "flips_pos_翻正": 0,
+   "flips_neg_翻负": 0,
+   "mean_delta": 63.0,
+   "margins": [
+    {
+     "opp": "mpx",
+     "seat": 0,
+     "s_append": -622.0,
+     "s8": -559.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 0,
+     "s_append": -580.0,
+     "s8": -517.0
+    },
+    {
+     "opp": "mpx",
+     "seat": 1,
+     "s_append": -407.0,
+     "s8": -344.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 1,
+     "s_append": -365.0,
+     "s8": -302.0
+    }
+   ]
+  },
+  "674705": {
+   "n_pairs": 4,
+   "flips_pos_翻正": 2,
+   "flips_neg_翻负": 0,
+   "mean_delta": 242.5,
+   "margins": [
+    {
+     "opp": "mpx",
+     "seat": 0,
+     "s_append": 75.0,
+     "s8": 305.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 0,
+     "s_append": -50.0,
+     "s8": 205.0
+    },
+    {
+     "opp": "mpx",
+     "seat": 1,
+     "s_append": 75.0,
+     "s8": 305.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 1,
+     "s_append": -50.0,
+     "s8": 205.0
+    }
+   ]
+  },
+  "674987": {
+   "n_pairs": 4,
+   "flips_pos_翻正": 4,
+   "flips_neg_翻负": 0,
+   "mean_delta": 42.5,
+   "margins": [
+    {
+     "opp": "mpx",
+     "seat": 0,
+     "s_append": -17.0,
+     "s8": 21.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 0,
+     "s_append": -46.0,
+     "s8": 1.0
+    },
+    {
+     "opp": "mpx",
+     "seat": 1,
+     "s_append": -17.0,
+     "s8": 21.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 1,
+     "s_append": -46.0,
+     "s8": 1.0
+    }
+   ]
+  },
+  "675410": {
+   "n_pairs": 4,
+   "flips_pos_翻正": 0,
+   "flips_neg_翻负": 0,
+   "mean_delta": 55.0,
+   "margins": [
+    {
+     "opp": "mpx",
+     "seat": 0,
+     "s_append": -503.0,
+     "s8": -448.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 0,
+     "s_append": -597.0,
+     "s8": -542.0
+    },
+    {
+     "opp": "mpx",
+     "seat": 1,
+     "s_append": -503.0,
+     "s8": -448.0
+    },
+    {
+     "opp": "oc_c3",
+     "seat": 1,
+     "s_append": -597.0,
+     "s8": -542.0
+    }
+   ]
+  }
+ }
+}

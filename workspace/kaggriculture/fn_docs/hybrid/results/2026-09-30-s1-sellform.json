@@ -1,0 +1,875 @@
+{
+ "version": "s1-sellform/1.0",
+ "task": "C_final 卖面结构重写为顶强卖面形态（lot 2-4 小单粒度 + 申报背书+ d12-24 平台 + d29 终局分抛 + d0 开局粒度）并按新标准终验（不改既有代码/不提交/不发射）",
+ "rewrite": {
+  "formula": "S_form = C_final(a37c0d34…) + 卖面重写尾块（两形态）",
+  "forms": {
+   "s_split": {
+    "main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_s1form_lab/build/s_split/main.py",
+    "sha256": "60989054af2f52de4e43e212eb013e1cf0f501f91cfd773f4be0fc1a5e5386be",
+    "mode": 0,
+    "semantics": {
+     "small_lot": "①SELL 单量 2-4 档：mode0=同拍拆发（量守恒、槽位 10 帽内、跨拍不拆）；mode1=原单不拆、lot 形态由追加单承载（追加 ≤4/单、可多单）",
+     "decl": "②申报量=min(申报,投射可卖)（decl_m 同序；裁 0 留占槽）",
+     "platform": "③d12-24（288-599）× 12..22 时 MSW 每拍小量（≤4/单、≤2 单/品/拍、不等价峰、非脉冲）",
+     "d29_clearance": "④step 696-711 全品每拍小单分抛（≤4/单、≤2 单/品/拍）——现行攒量（696 止火/718 整仓）改逐拍小单",
+     "d0_grain": "⑤step<24 非原子买单拆 ≤4 小单（量守恒；HIRE/BUY_LAND 原子单不动）",
+     "invariant": "净卖总量恒等（拆发量守恒+追加只挂投射可卖余量+终局清算兜底；同拍内形态变化，零跨拍挪量）；异常回退原动作"
+    }
+   },
+   "s_append": {
+    "main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_s1form_lab/build/s_append/main.py",
+    "sha256": "4608e9e01e5741151a034d88e7ba594e64013f384365b15f356be5f47d88f17d",
+    "mode": 1,
+    "semantics": {
+     "small_lot": "①SELL 单量 2-4 档：mode0=同拍拆发（量守恒、槽位 10 帽内、跨拍不拆）；mode1=原单不拆、lot 形态由追加单承载（追加 ≤4/单、可多单）",
+     "decl": "②申报量=min(申报,投射可卖)（decl_m 同序；裁 0 留占槽）",
+     "platform": "③d12-24（288-599）× 12..22 时 MSW 每拍小量（≤4/单、≤2 单/品/拍、不等价峰、非脉冲）",
+     "d29_clearance": "④step 696-711 全品每拍小单分抛（≤4/单、≤2 单/品/拍）——现行攒量（696 止火/718 整仓）改逐拍小单",
+     "d0_grain": "⑤step<24 非原子买单拆 ≤4 小单（量守恒；HIRE/BUY_LAND 原子单不动）",
+     "invariant": "净卖总量恒等（拆发量守恒+追加只挂投射可卖余量+终局清算兜底；同拍内形态变化，零跨拍挪量）；异常回退原动作"
+    }
+   }
+  },
+  "components": {
+   "small_lot_granularity": "①小单清仓流：SELL 单量 3/6/10 帽位→lot 2-4 档。s_split=同拍拆发（同拍拆并语义·X1 量守恒同族；跨拍不拆=R23/R26 红线；槽位 10 帽内拆发、超帽合并尾部保总量）；s_append=多拍小单追加回退形态（R26 线预案：追加单量 ≤4/单、可多单承载 lot 形态）",
+   "decl_backing": "②申报背书：申报量=min(申报,投射可卖)（decl_m 同序口径；裁 0 留占槽；decl 中立性=钱面无损实证；全清率→0.72-0.94 顶强形=副产品）",
+   "platform_release": "③d12-24 平台投放（D6：d14-20 窗无差距、窗不动）：MSW×12..22 时（C_final 焦窗窗权沿用）每拍小量（≤4/单、≤2 单/品/拍、不等价峰、非脉冲）",
+   "d29_clearance": "④d29 终局分抛（D6 节奏点·顶强 38-45 张 vs 我方 22）：step 696-711 全品每拍小单分抛（追加 ≤4/单、可多单）——现行攒量（S758 族 696 止火、718 整仓清算）改逐拍小单",
+   "d0_grain": "⑤d0 开局粒度（D6 节奏点·BUY5 d0 4-10 单 vs 我方 1）：step<24 非原子买单拆 ≤4 小单（量守恒；HIRE/BUY_LAND 原子单不动）——按订单粒度口径实现；若 D6 指开局买量扩张（产线面），属净卖总量恒等禁区外议题，登记移交"
+  },
+  "invariants": {
+   "net_sold_identity": "净卖总量恒等（同品累计卖出量与基线一致：拆发量守恒+追加只挂投射可卖余量+终局清算兜底；只改单量形态与频次——同拍内形态变化，零跨拍挪量）",
+   "lot_sum_per_tick": "拆发前后同拍同品总量恒等（量守恒）",
+   "tape_untouched": "磁带 blob 零触碰；非 SELL/不确定挂量原样保留",
+   "anomaly_fallback": "异常回退宿主动作（同对象零足迹）"
+  },
+  "red_line": "跨拍卖量移动仍禁（R23 并单/R26 拆单七负实证）；同拍拆发=同拍内形态变化；D6 订单粒度=唯一可抄主差距（lot med 4/mean 6.17 → 顶强 2-4/3.68-5.04）",
+  "d5_d6_target": {
+   "lot_med": "2-4",
+   "lot_mean": "3.68-5.04",
+   "full_exec": "0.72-0.94",
+   "d29_orders": "38-45",
+   "d0_buy_orders": "4-10",
+   "window": "d14-20 同带（0.28-0.30）不动"
+  },
+  "form_comparison": {
+   "caliber": "同 (seed,seat,对手) 配对 margin（n=32 对/形态）；control=c_final",
+   "flips": {
+    "s_split": {
+     "n": 32,
+     "W": 0,
+     "L": 32,
+     "T": 0,
+     "delta_sum": -66563.0,
+     "win_control": 26,
+     "win_variant": 10,
+     "flips_pos": 0,
+     "flips_neg": 16,
+     "mean_delta": -2080.09,
+     "net_flip_wins": -16
+    },
+    "s_append": {
+     "n": 32,
+     "W": 7,
+     "L": 24,
+     "T": 1,
+     "delta_sum": -1210.0,
+     "win_control": 26,
+     "win_variant": 26,
+     "flips_pos": 0,
+     "flips_neg": 0,
+     "mean_delta": -37.81,
+     "net_flip_wins": 0
+    }
+   },
+   "stats": {
+    "control": {
+     "full_exec": 0.9062,
+     "mean_lot": 6.51,
+     "n_sell_orders": 9592,
+     "d29_orders_per_game": 23.0,
+     "mean_margin": 6067.8,
+     "stranding_mean": 0.0
+    },
+    "s_split": {
+     "full_exec": 1.0,
+     "mean_lot": 3.904,
+     "n_sell_orders": 14898,
+     "d29_orders_per_game": 41.6,
+     "mean_margin": 3987.7,
+     "stranding_mean": 0.0
+    },
+    "s_append": {
+     "full_exec": 1.0,
+     "mean_lot": 6.391,
+     "n_sell_orders": 9101,
+     "d29_orders_per_game": 24.2,
+     "mean_margin": 6030.0,
+     "stranding_mean": 0.0
+    }
+   },
+   "r26_line_split_loses": true,
+   "panel_form": "s_append"
+  }
+ },
+ "design": {
+  "commands": [
+   "python3 orderbook_s1form_lab/build_s_form.py",
+   "python3 orderbook_s1form_lab/judge_s_form.py"
+  ],
+  "corpus": {
+   "folds": [
+    674000,
+    674143,
+    674286,
+    674429,
+    674572,
+    674715,
+    674858,
+    675001,
+    675144,
+    675287,
+    675430,
+    675573,
+    675716,
+    675859,
+    676002,
+    676145,
+    676288,
+    676431,
+    676574,
+    676717,
+    676860,
+    677003,
+    677146,
+    677289
+   ],
+   "spec": "674000+i*143 新块；配对面 control+2 形态 各 n=16 双席=32 局/臂；面板 vs oc_c3 n=24 双席=48 局、余对 n=16 双席=32 局（胜出形态）",
+   "paired_folds": [
+    674000,
+    674143,
+    674286,
+    674429,
+    674572,
+    674715,
+    674858,
+    675001,
+    675144,
+    675287,
+    675430,
+    675573,
+    675716,
+    675859,
+    676002,
+    676145
+   ]
+  },
+  "workers": 2,
+  "caliber": {
+   "h2h": "judge_r44._fold_arm 同 seed 双席折叠（fail-closed）",
+   "margin": "终局 farms[obs.player].money 差（干净口径）",
+   "flips": "同 (seed,seat,对手) 配对 margin：control 胜而 variant 负记 flips_neg（判据 flips_neg=0）",
+   "full_exec": "影子引擎逐单归因：requested>0 SELL 单 filled==requested 记全清（decl 同源口径）",
+   "lot": "提交口径正挂量 SELL 单 qty 直方图/均值",
+   "net_sold": "影子引擎分品累计成交（filled）配对对照",
+   "form_select": "配对面形态对照定主审形态：拆发形态判负（flips_neg>0 或 mean_delta<0）→ R26 线预案启动，s_append 上主审",
+   "hard_currency": "胜率=硬通货；margin/终局钱只作参考"
+  },
+  "panel": {
+   "oc_c3": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_oppcond_lab/build/oc_c3/main.py",
+   "mpx": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_modelpx_lab/build/mpx_w24_p2_3_h14/main.py",
+   "tetsutani": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_racegap_lab/opponents/tetsu1009/main.py",
+   "V89": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_v89_lab/build/v89_pure/main.py",
+   "r40": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
+   "A": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r44_a/main.py"
+  }
+ },
+ "gates": {
+  "build": {
+   "s_split": {
+    "checks": {
+     "compile_ok": true,
+     "last_callable_is_entry": true,
+     "base_prefix_identity_ok": true,
+     "roundtrip_strip_identity_ok": true,
+     "host_capture_is_hs_agent": true,
+     "mode_ok": true
+    },
+    "sha256": "60989054af2f52de4e43e212eb013e1cf0f501f91cfd773f4be0fc1a5e5386be",
+    "base_sha256": "a37c0d3487fe1d2152ec6c0b767b36afc21ad18207accb2d3cf1f1b077016a92"
+   },
+   "s_append": {
+    "checks": {
+     "compile_ok": true,
+     "last_callable_is_entry": true,
+     "base_prefix_identity_ok": true,
+     "roundtrip_strip_identity_ok": true,
+     "host_capture_is_hs_agent": true,
+     "mode_ok": true
+    },
+    "sha256": "4608e9e01e5741151a034d88e7ba594e64013f384365b15f356be5f47d88f17d",
+    "base_sha256": "a37c0d3487fe1d2152ec6c0b767b36afc21ad18207accb2d3cf1f1b077016a92"
+   }
+  },
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "version": "simbridge/1.0",
+   "wall_speedup": 5.155
+  },
+  "runtime_invariants": {
+   "net_sold_identity": {
+    "caliber": "影子引擎分品累计成交（filled）配对对照（n=32 局/臂）",
+    "totals": {
+     "control": 58163.0,
+     "s_split": 58169.0,
+     "s_append": 58163.0
+    },
+    "delta_split_vs_control": 6.0,
+    "delta_append_vs_control": 0.0,
+    "per_item": {
+     "CARROT": {
+      "control": 4734.0,
+      "s_split": 4734.0,
+      "s_append": 4734.0,
+      "delta_split": 0.0,
+      "delta_append": 0.0
+     },
+     "EGG": {
+      "control": 2192.0,
+      "s_split": 2192.0,
+      "s_append": 2192.0,
+      "delta_split": 0.0,
+      "delta_append": 0.0
+     },
+     "FERTILIZER": {
+      "control": 10685.0,
+      "s_split": 10685.0,
+      "s_append": 10683.0,
+      "delta_split": 0.0,
+      "delta_append": -2.0
+     },
+     "MELON": {
+      "control": 2304.0,
+      "s_split": 2304.0,
+      "s_append": 2304.0,
+      "delta_split": 0.0,
+      "delta_append": 0.0
+     },
+     "MILK": {
+      "control": 6142.0,
+      "s_split": 6140.0,
+      "s_append": 6140.0,
+      "delta_split": -2.0,
+      "delta_append": -2.0
+     },
+     "STRAWBERRY": {
+      "control": 7889.0,
+      "s_split": 7889.0,
+      "s_append": 7889.0,
+      "delta_split": 0.0,
+      "delta_append": 0.0
+     },
+     "WHEAT": {
+      "control": 18363.0,
+      "s_split": 18361.0,
+      "s_append": 18359.0,
+      "delta_split": -2.0,
+      "delta_append": -4.0
+     },
+     "WOOL": {
+      "control": 5854.0,
+      "s_split": 5864.0,
+      "s_append": 5862.0,
+      "delta_split": 10.0,
+      "delta_append": 8.0
+     }
+    }
+   },
+   "stranding": {
+    "control": 0.0,
+    "s_split": 0.0,
+    "s_append": 0.0
+   },
+   "sf_errors_total": {
+    "s_split": 0,
+    "s_append": 0
+   }
+  }
+ },
+ "panel": {
+  "design": "新标准面板：s_append vs 6 对手；vs oc_c3 n=24 双席=48 局，余对 n=16 双席=32 局（674000+i*143 新块）；h2h=judge_r44._fold_arm；margin/终局钱只作参考",
+  "form": "s_append",
+  "pairs": {
+   "oc_c3": {
+    "n": 24,
+    "wins": 17,
+    "losses": 6,
+    "ties": 1,
+    "h2h": 0.7292,
+    "mean_margin": -51.6,
+    "terminal_money_us_mean": 80963.1,
+    "terminal_money_opp_mean": 81014.8,
+    "mean_margin_clean": -51.6,
+    "n_games": 48,
+    "n_errors": 0
+   },
+   "mpx": {
+    "n": 16,
+    "wins": 11,
+    "losses": 3,
+    "ties": 2,
+    "h2h": 0.75,
+    "mean_margin": 64.3,
+    "terminal_money_us_mean": 71644.6,
+    "terminal_money_opp_mean": 71580.2,
+    "mean_margin_clean": 64.3,
+    "n_games": 32,
+    "n_errors": 0
+   },
+   "tetsutani": {
+    "n": 16,
+    "wins": 12,
+    "losses": 3,
+    "ties": 1,
+    "h2h": 0.7812,
+    "mean_margin": 46.6,
+    "terminal_money_us_mean": 71670.3,
+    "terminal_money_opp_mean": 71623.8,
+    "mean_margin_clean": 46.6,
+    "n_games": 32,
+    "n_errors": 0
+   },
+   "V89": {
+    "n": 16,
+    "wins": 12,
+    "losses": 3,
+    "ties": 1,
+    "h2h": 0.7812,
+    "mean_margin": 46.6,
+    "terminal_money_us_mean": 71670.3,
+    "terminal_money_opp_mean": 71623.8,
+    "mean_margin_clean": 46.6,
+    "n_games": 32,
+    "n_errors": 0
+   },
+   "r40": {
+    "n": 16,
+    "wins": 12,
+    "losses": 3,
+    "ties": 1,
+    "h2h": 0.7812,
+    "mean_margin": 537.4,
+    "terminal_money_us_mean": 71898.7,
+    "terminal_money_opp_mean": 71361.3,
+    "mean_margin_clean": 537.4,
+    "n_games": 32,
+    "n_errors": 0
+   },
+   "A": {
+    "n": 16,
+    "wins": 14,
+    "losses": 1,
+    "ties": 1,
+    "h2h": 0.9062,
+    "mean_margin": 1345.5,
+    "terminal_money_us_mean": 72390.4,
+    "terminal_money_opp_mean": 71044.9,
+    "mean_margin_clean": 1345.5,
+    "n_games": 32,
+    "n_errors": 0
+   }
+  }
+ },
+ "full_exec_stats": {
+  "caliber": "影子引擎逐单归因（decl 同源口径）；requested>0 SELL 单，filled==requested 记全清",
+  "target_band": [
+   0.72,
+   0.94
+  ],
+  "per_arm": {
+   "control": {
+    "n_sell_orders": 9592,
+    "full": 8692,
+    "partial": 900,
+    "full_exec": 0.9062,
+    "requested_qty": 62446.0,
+    "filled_qty": 58163.0,
+    "gap_qty": 4283.0
+   },
+   "s_split": {
+    "n_sell_orders": 14898,
+    "full": 14898,
+    "partial": 0,
+    "full_exec": 1.0,
+    "requested_qty": 58169.0,
+    "filled_qty": 58169.0,
+    "gap_qty": 0.0
+   },
+   "s_append": {
+    "n_sell_orders": 9101,
+    "full": 9101,
+    "partial": 0,
+    "full_exec": 1.0,
+    "requested_qty": 58163.0,
+    "filled_qty": 58163.0,
+    "gap_qty": 0.0
+   }
+  },
+  "delta_full_exec_split": 0.0938,
+  "delta_full_exec_append": 0.0938,
+  "shadow_mismatch_steps": {
+   "control": 0,
+   "s_split": 0,
+   "s_append": 0
+  },
+  "panel_form_vs_panel": {
+   "n_sell_orders": 60616,
+   "full": 60616,
+   "partial": 0,
+   "full_exec": 1.0,
+   "requested_qty": 378318.0,
+   "filled_qty": 378318.0,
+   "gap_qty": 0.0
+  }
+ },
+ "lot_stats": {
+  "target_band": [
+   2,
+   4
+  ],
+  "d5_d6_target": {
+   "lot_med": "2-4",
+   "lot_mean": "3.68-5.04",
+   "d29_orders": "38-45（顶强）vs 22（我方基线）"
+  },
+  "per_arm": {
+   "control": {
+    "n_sell_orders": 9592,
+    "qty_sum": 62446.0,
+    "mean_lot": 6.51,
+    "d29_orders_per_game": 23.0,
+    "hist": {
+     "1": 1620,
+     "2": 1490,
+     "3": 1306,
+     "4": 801,
+     "5": 321,
+     "6": 1079,
+     "7": 300,
+     "8": 412,
+     "9": 515,
+     "10": 180,
+     "11": 119,
+     "12": 417,
+     "13": 145,
+     "14": 119,
+     "15": 116,
+     "16": 135,
+     "17": 81,
+     "18": 59,
+     "19": 26,
+     "20": 37,
+     "21": 39,
+     "22": 21,
+     "23": 8,
+     "24": 39,
+     "25": 3,
+     "26": 4,
+     "27": 12,
+     "28": 9,
+     "29": 3,
+     "30": 4,
+     "31": 2,
+     "32": 6,
+     "33": 14,
+     "34": 4,
+     "35": 4,
+     "36": 30,
+     "37": 2,
+     "38": 6,
+     "39": 6,
+     "40": 2,
+     "48": 6,
+     "55": 2,
+     "59": 4,
+     "60": 8,
+     "63": 4,
+     "65": 2,
+     "71": 4,
+     "73": 2,
+     "74": 2,
+     "77": 2,
+     "79": 2,
+     "80": 10,
+     "81": 2,
+     "82": 4,
+     "83": 8,
+     "84": 6,
+     "85": 2,
+     "86": 2,
+     "88": 2,
+     "89": 16,
+     "90": 6
+    }
+   },
+   "s_split": {
+    "n_sell_orders": 14898,
+    "qty_sum": 58169.0,
+    "mean_lot": 3.904,
+    "d29_orders_per_game": 41.6,
+    "hist": {
+     "1": 1524,
+     "2": 1715,
+     "3": 5132,
+     "4": 5299,
+     "5": 59,
+     "6": 222,
+     "7": 69,
+     "8": 119,
+     "9": 110,
+     "10": 57,
+     "11": 28,
+     "12": 114,
+     "13": 92,
+     "14": 32,
+     "15": 38,
+     "16": 62,
+     "17": 31,
+     "18": 26,
+     "19": 10,
+     "20": 1,
+     "21": 6,
+     "22": 8,
+     "23": 9,
+     "24": 10,
+     "25": 2,
+     "26": 2,
+     "27": 7,
+     "28": 8,
+     "29": 4,
+     "31": 2,
+     "33": 2,
+     "35": 4,
+     "36": 28,
+     "38": 2,
+     "41": 4,
+     "44": 4,
+     "45": 2,
+     "46": 4,
+     "47": 10,
+     "48": 8,
+     "49": 2,
+     "50": 2,
+     "52": 6,
+     "53": 12,
+     "54": 2,
+     "57": 4,
+     "58": 4
+    }
+   },
+   "s_append": {
+    "n_sell_orders": 9101,
+    "qty_sum": 58163.0,
+    "mean_lot": 6.391,
+    "d29_orders_per_game": 24.2,
+    "hist": {
+     "1": 1526,
+     "2": 1448,
+     "3": 1247,
+     "4": 918,
+     "5": 324,
+     "6": 1023,
+     "7": 264,
+     "8": 367,
+     "9": 389,
+     "10": 199,
+     "11": 97,
+     "12": 388,
+     "13": 126,
+     "14": 97,
+     "15": 91,
+     "16": 127,
+     "17": 52,
+     "18": 54,
+     "19": 24,
+     "20": 38,
+     "21": 38,
+     "22": 12,
+     "23": 8,
+     "24": 38,
+     "25": 2,
+     "26": 4,
+     "27": 12,
+     "28": 11,
+     "29": 1,
+     "30": 4,
+     "31": 2,
+     "32": 6,
+     "33": 14,
+     "34": 4,
+     "35": 4,
+     "36": 30,
+     "37": 2,
+     "38": 6,
+     "39": 6,
+     "40": 2,
+     "48": 6,
+     "55": 2,
+     "59": 4,
+     "60": 8,
+     "63": 4,
+     "65": 2,
+     "71": 4,
+     "73": 2,
+     "74": 2,
+     "77": 2,
+     "79": 2,
+     "80": 10,
+     "81": 2,
+     "82": 4,
+     "83": 8,
+     "84": 6,
+     "85": 2,
+     "86": 2,
+     "88": 2,
+     "89": 16,
+     "90": 6
+    }
+   }
+  },
+  "sf_layer_telemetry": {
+   "s_split": {
+    "calls": 23008,
+    "changed_turns": 3641,
+    "errors": 0,
+    "decl_orders": 915,
+    "decl_qty": 4369,
+    "zero_kept": 696,
+    "unparsed_kept": 0,
+    "split_orders": 2757,
+    "split_lots": 4468,
+    "split_qty": 24535,
+    "slot_merge_orders": 1228,
+    "slot_merge_qty": 21983,
+    "plat_orders": 113,
+    "plat_qty": 368,
+    "plat_skipped_slot": 176,
+    "d29_orders": 64,
+    "d29_qty": 228,
+    "d0_buy_orders": 32,
+    "d0_buy_qty": 256
+   },
+   "s_append": {
+    "calls": 23008,
+    "changed_turns": 1097,
+    "errors": 0,
+    "decl_orders": 916,
+    "decl_qty": 4383,
+    "zero_kept": 696,
+    "unparsed_kept": 0,
+    "split_orders": 0,
+    "split_lots": 0,
+    "split_qty": 0,
+    "slot_merge_orders": 0,
+    "slot_merge_qty": 0,
+    "plat_orders": 117,
+    "plat_qty": 385,
+    "plat_skipped_slot": 122,
+    "d29_orders": 92,
+    "d29_qty": 439,
+    "d0_buy_orders": 32,
+    "d0_buy_qty": 256
+   }
+  },
+  "panel_form_vs_panel": {
+   "n_sell_orders": 60616,
+   "qty_sum": 378318.0,
+   "mean_lot": 6.241,
+   "d29_orders_per_game": 24.6,
+   "hist": {
+    "1": 10179,
+    "2": 10252,
+    "3": 8140,
+    "4": 6402,
+    "5": 2074,
+    "6": 6830,
+    "7": 1804,
+    "8": 2497,
+    "9": 2520,
+    "10": 1320,
+    "11": 650,
+    "12": 2288,
+    "13": 668,
+    "14": 640,
+    "15": 551,
+    "16": 821,
+    "17": 248,
+    "18": 234,
+    "19": 140,
+    "20": 296,
+    "21": 282,
+    "22": 134,
+    "23": 38,
+    "24": 280,
+    "25": 26,
+    "26": 12,
+    "27": 68,
+    "28": 56,
+    "29": 26,
+    "30": 12,
+    "31": 28,
+    "32": 40,
+    "33": 76,
+    "34": 12,
+    "35": 16,
+    "36": 212,
+    "37": 16,
+    "38": 28,
+    "39": 60,
+    "40": 16,
+    "47": 4,
+    "48": 36,
+    "55": 12,
+    "57": 8,
+    "59": 24,
+    "60": 56,
+    "63": 28,
+    "65": 16,
+    "71": 24,
+    "73": 12,
+    "74": 12,
+    "77": 12,
+    "79": 12,
+    "80": 64,
+    "81": 16,
+    "82": 24,
+    "83": 48,
+    "84": 42,
+    "85": 14,
+    "86": 4,
+    "87": 8,
+    "88": 12,
+    "89": 96,
+    "90": 40
+   }
+  },
+  "d29_divisor_note": "d29_orders_per_game=每局 d29（step≥696）SELL 单数；首版误按 16 局除（2 倍虚高），已按实局数（配对 32/面板 208）修正并留痕（judge_s_form.py 同步修）"
+ },
+ "criteria": {
+  "rule": "①对 oc_c3 冠军锚 ≥0.5 强/≥0.7 碾压（目标）②强面板 {mpx,tetsutani,V89} 逐对 ≥0.5 ③弱锚 {r40,A} 逐对 ≥0.8 ④flips_neg=0 ⑤full_exec 对照 0.72-0.94 + 单均量对照 2-4",
+  "c1_vs_oc_c3_ge_0.5": {
+   "h2h": 0.7292,
+   "grade": "碾压",
+   "passed": true,
+   "target_crush_ge_0.7": true
+  },
+  "c2_strong_all_ge_0.5": {
+   "h2h": {
+    "mpx": 0.75,
+    "tetsutani": 0.7812,
+    "V89": 0.7812
+   },
+   "passed": true
+  },
+  "c3_weak_all_ge_0.8": {
+   "h2h": {
+    "r40": 0.7812,
+    "A": 0.9062
+   },
+   "passed": false
+  },
+  "c4_flips_neg_zero": {
+   "flips": {
+    "n": 32,
+    "W": 7,
+    "L": 24,
+    "T": 1,
+    "delta_sum": -1210.0,
+    "win_control": 26,
+    "win_variant": 26,
+    "flips_pos": 0,
+    "flips_neg": 0,
+    "mean_delta": -37.81,
+    "net_flip_wins": 0
+   },
+   "passed": true
+  },
+  "c5_form_band": {
+   "full_exec_variant": 1.0,
+   "full_exec_control": 0.9062,
+   "full_exec_target": "0.72-0.94",
+   "full_exec_in_band": false,
+   "mean_lot_variant": 6.391,
+   "mean_lot_control": 6.51,
+   "mean_lot_target": "2-4",
+   "mean_lot_in_band": false,
+   "passed": false
+  }
+ },
+ "verdict": {
+  "panel_form": "s_append",
+  "form_sha256": "4608e9e01e5741151a034d88e7ba594e64013f384365b15f356be5f47d88f17d",
+  "vs_champion_anchor": {
+   "h2h": 0.7292,
+   "grade": "碾压"
+  },
+  "strong_panel_h2h": {
+   "mpx": 0.75,
+   "tetsutani": 0.7812,
+   "V89": 0.7812
+  },
+  "weak_anchor_h2h": {
+   "r40": 0.7812,
+   "A": 0.9062
+  },
+  "flips_neg": 0,
+  "full_exec": {
+   "control": 0.9062,
+   "variant": 1.0,
+   "target": "0.72-0.94"
+  },
+  "mean_lot": {
+   "control": 6.51,
+   "variant": 6.391,
+   "target": "2-4"
+  },
+  "net_sold_identity_delta": 0.0,
+  "criteria_passed": false,
+  "verdict": "S1_SELLFORM_ANCHOR_STRONG_BUT_PANEL_BLEED",
+  "summary": "S_form[s_append]=4608e9e0：对冠军锚 oc_c3 h2h 0.7292（碾压）；强面板 {\"mpx\": 0.75, \"tetsutani\": 0.7812, \"V89\": 0.7812}；弱锚 {\"r40\": 0.7812, \"A\": 0.9062}；flips_neg=0；full_exec 0.9062→1.0（目标 0.72-0.94）；单均量 6.51→6.391（目标 2-4）；净卖总量 Δ=0.0",
+  "launch": "不发射不提交（判决先行）；上线决策移交用户"
+ },
+ "budget": {
+  "cap_局次": 500,
+  "auth": 30,
+  "paired": 96,
+  "panel": 208,
+  "smoke_disclosed_extra": 8,
+  "total_局次": 334,
+  "within_cap": true
+ },
+ "anomaly": [
+  "形态对照（R26 线判定）：s_split 配对 flips_neg=16 mean_delta=-2080.09 → 判负（回退形态上主审）；主审形态=s_append（s_split 判负即启动'多拍小单追加'预案）",
+  "harness 噪声不修不管；终局钱 farms[obs.player] 口径；胜率=硬通货，margin/终局钱只作参考；影子引擎 mismatch 计步留档不修",
+  "拆发=同拍内形态变化（同拍拆并语义·X1 量守恒同族）：同拍同品总量恒等；槽位 10 帽内拆发、超帽合并尾部保总量（slot_merge_* 台账）；机制备忘=引擎逐单位 lockstep 按单序列对，拆发使我方后序 lot 滞后于对手同列长单余量（价格随库存下滑）——D6 粒度实证（顶强 lot 2-4）与本引擎撮合列效应存在张力，形态对照如实登记",
+  "申报背书=decl_m 同序口径（钱面中立实证，2026-09-29-decl-match）：只裁虚申报（引擎断货即 abort 下的必然烂单）；全清率为副产品对照",
+  "d29 分抛/平台只挂投射可卖余量（申报背书同口径）；净卖总量恒等=生产量上界+终局清算兜底（配对影子归因实测）；d29 分抛止于 711 拍（E182 终局规划器 712-718 窗零触碰，拆发量守恒亦不破其状态投影）",
+  "d0 粒度按 D6'订单粒度'口径实现（开局买单拆 ≤4 小单·量守恒）；若 D6'BUY5 d0 4-10 单'实指开局买量扩张（产线面），属净卖总量恒等禁区外议题，登记移交不动手",
+  "形态副产品未全落目标带：full_exec=1.0（目标 0.72-0.94）、单均量=6.391（目标 2-4）；如实登记不修饰",
+  "断点续跑披露：正式跑前 harness 冒烟 8 局（官方引擎 2+2+2+2；含 s_split 原型 vs oc_c3 fold674000 配对 −3965 边距 vs control −446——R26 线判据的前置信号，已入形态对照设计）；局次账本如实计",
+  "非传递性备忘：对冠军锚镜像专优≠全场更强；新标准以逐对口径判",
+  "d29_orders_per_game 口径修正：首版统计误按 16 局除数（2 倍虚高），已按实局数修正：control 23.0/局、s_split 41.6/局、s_append 24.2/局（顶强对照 38-45 张）；数据修正留痕不修饰"
+ ],
+ "_generated_at": "2026-09-30T06:42:31Z",
+ "elapsed_s": 777.6
+}

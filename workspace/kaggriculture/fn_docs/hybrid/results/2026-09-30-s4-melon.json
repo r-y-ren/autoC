@@ -1,0 +1,480 @@
+{
+ "version": "s4-melon/1.0",
+ "task": "S4 复刻独立策略线 S_melon（果品专精+前跑卖引+终局块重排，不叠我方卖面哲学）并按新标准终验；组合臂 C_final+果品件 混装形（同面干扰则只交独立形）；不改既有代码/不提交/不发射",
+ "replic": {
+  "src": "prvsiyan_melons sha 178ae0f7（doan Champion 真身；kernel 镜像三方闭合）",
+  "port": "署名移植整件（注释头；行为零改动）；LICENSE-APACHE-2.0.txt+NOTICE.md 留档",
+  "shared_stack_quant": "prvsiyan 7333 行中 6928 行（94.5%）逐行存在于 c_final：同源 2965/V39 公共栈（route tapes 株数逐品全同 {MELON492,WHEAT6679,STRAWBERRY1353,CARROT1272}，V219/v44y/E182 planner 内生共有）；prvsiyan 独有=ADV(_ADV_ITEMS EXP293)/R148/R108 调度补丁/33_knock/FRO 尾封/seed-float hedge 0；c_final 独有=herdsafe_forecast/step720-725 重排再应用/_S804/_OC_oppcond/M13/fert60",
+  "pillars": {
+   "果品专精产线": "route tapes 果品倾斜（MELON 492 株/41 tape；与 c_final 同源共享磁带，株数全同）+V219/V221B 番茄有限投资配套卖法（money>=12000∧TOMATO 价门）",
+   "前跑卖引": "FRONT_RUN_ITEMS 四品钩子（_front_run，对手计划驱动）在冻结胜者内 dormant（front_run=False/opponent_plan=None）；活体=sell_lead 全品 next-step 预卖+EXP293 ADV 四拍镜像前跑（_ADV_ITEMS 七品）+VQ 碎单压缩",
+   "终局块重排": "step712-718 Shop0909 物理闭合规划（E182 _PLANNER_NS）+_v44y_reorder 尾部再应用（FRO 入口，step>=216）"
+  },
+  "same_block_vs_oc_c3": {
+   "n_units_common": 32,
+   "identical_margin_units": 32,
+   "max_abs_margin_diff": 0.0,
+   "note": "同块同对手逐单元边际差：0 差=行为恒等（复刻保真）；非 0 来自席位/引擎非对称"
+  },
+  "flips_control_prvsiyan": {
+   "n_units": 32,
+   "win_control": 7,
+   "win_variant": 7,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "net_flip_wins": 0
+  }
+ },
+ "design": {
+  "arms": {
+   "s_melon": {
+    "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_melon_lab/build/s_melon/main.py",
+    "form": "独立形态（prvsiyan_melons 整件署名移植，Apache-2.0）"
+   },
+   "mix": {
+    "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_melon_lab/build/mix/main.py",
+    "form": "混装形 C_final+果品件（薄补丁尾块；果品件①四品 next-step 预卖+②712-718 块重排再应用）"
+   }
+  },
+  "corpus": {
+   "neutral_folds": [
+    674000,
+    674149,
+    674298,
+    674447,
+    674596,
+    674745,
+    674894,
+    675043,
+    675192,
+    675341,
+    675490,
+    675639,
+    675788,
+    675937,
+    676086,
+    676235,
+    676384,
+    676533,
+    676682,
+    676831,
+    676980,
+    677129,
+    677278,
+    677427
+   ],
+   "neutral_spec": "674000+i*149（i=0..23）；n=16=前 16 fold 双席；vs oc_c3 加密 n=24",
+   "h2h": "judge_r44._fold_arm（同 seed 双席折叠；胜+0.5平)/n）"
+  },
+  "workers": 2,
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "degraded": false,
+   "engine": "sim",
+   "timing": {
+    "official_s": 29.4006,
+    "sim_s": 5.8209,
+    "measured_speedup": 5.051
+   },
+   "version": "simbridge/1.0"
+  },
+  "caliber": {
+   "margin": "farms[obs.player].money 终局钱差（干净口径）",
+   "unit": "配对单元=(seed,seat)；每对 n=16 双席=32 局（vs oc_c3 n=24=48 局）"
+  }
+ },
+ "panel": {
+  "s_melon|oc_c3": {
+   "a": "s_melon",
+   "b": "oc_c3",
+   "purpose": "c1_冠军锚加密",
+   "n_folds": 24,
+   "W": 5,
+   "L": 18,
+   "T": 1,
+   "h2h": 0.2292,
+   "mean_margin": -564.5,
+   "n_games": 48,
+   "n_errors": 0,
+   "terminal_money_a_mean": 89881.8,
+   "terminal_money_b_mean": 90446.3
+  },
+  "s_melon|mpx": {
+   "a": "s_melon",
+   "b": "mpx",
+   "purpose": "c2_强面板",
+   "n_folds": 16,
+   "W": 1,
+   "L": 15,
+   "T": 0,
+   "h2h": 0.0625,
+   "mean_margin": -831.4,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 89730.0,
+   "terminal_money_b_mean": 90561.4
+  },
+  "s_melon|tetsutani": {
+   "a": "s_melon",
+   "b": "tetsutani",
+   "purpose": "c2_强面板",
+   "n_folds": 16,
+   "W": 3,
+   "L": 12,
+   "T": 1,
+   "h2h": 0.2188,
+   "mean_margin": -605.4,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 89926.4,
+   "terminal_money_b_mean": 90531.8
+  },
+  "s_melon|V89": {
+   "a": "s_melon",
+   "b": "V89",
+   "purpose": "c2_强面板",
+   "n_folds": 16,
+   "W": 3,
+   "L": 12,
+   "T": 1,
+   "h2h": 0.2188,
+   "mean_margin": -605.4,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 89926.4,
+   "terminal_money_b_mean": 90531.8
+  },
+  "s_melon|r40": {
+   "a": "s_melon",
+   "b": "r40",
+   "purpose": "c3_弱锚",
+   "n_folds": 16,
+   "W": 13,
+   "L": 2,
+   "T": 1,
+   "h2h": 0.8438,
+   "mean_margin": 749.6,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 91131.3,
+   "terminal_money_b_mean": 90381.7
+  },
+  "s_melon|A": {
+   "a": "s_melon",
+   "b": "A",
+   "purpose": "c3_弱锚",
+   "n_folds": 16,
+   "W": 2,
+   "L": 13,
+   "T": 1,
+   "h2h": 0.1562,
+   "mean_margin": -259.6,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 90230.9,
+   "terminal_money_b_mean": 90490.5
+  },
+  "s_melon|e085": {
+   "a": "s_melon",
+   "b": "e085",
+   "purpose": "c5_池面专组",
+   "n_folds": 16,
+   "W": 1,
+   "L": 14,
+   "T": 1,
+   "h2h": 0.0938,
+   "mean_margin": -1301.7,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 89856.0,
+   "terminal_money_b_mean": 91157.7
+  },
+  "s_melon|leoprovorov": {
+   "a": "s_melon",
+   "b": "leoprovorov",
+   "purpose": "c5_池面专组",
+   "n_folds": 16,
+   "W": 16,
+   "L": 0,
+   "T": 0,
+   "h2h": 1.0,
+   "mean_margin": 172934.3,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 175934.3,
+   "terminal_money_b_mean": 3000.0
+  },
+  "s_melon|statma": {
+   "a": "s_melon",
+   "b": "statma",
+   "purpose": "c5_池面专组",
+   "n_folds": 16,
+   "W": 13,
+   "L": 2,
+   "T": 1,
+   "h2h": 0.8438,
+   "mean_margin": 770.5,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 91044.7,
+   "terminal_money_b_mean": 90274.2
+  },
+  "s_melon|doan_v7": {
+   "a": "s_melon",
+   "b": "doan_v7",
+   "purpose": "c5_池面专组",
+   "n_folds": 16,
+   "W": 16,
+   "L": 0,
+   "T": 0,
+   "h2h": 1.0,
+   "mean_margin": 129585.6,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 163283.8,
+   "terminal_money_b_mean": 33698.2
+  },
+  "mix|c_final": {
+   "a": "mix",
+   "b": "c_final",
+   "purpose": "combo_同面干扰A/B",
+   "n_folds": 16,
+   "W": 0,
+   "L": 0,
+   "T": 16,
+   "h2h": 0.5,
+   "mean_margin": 0.0,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 90453.0,
+   "terminal_money_b_mean": 90453.0
+  },
+  "s_melon|mix": {
+   "a": "s_melon",
+   "b": "mix",
+   "purpose": "combo_形态对比",
+   "n_folds": 16,
+   "W": 3,
+   "L": 12,
+   "T": 1,
+   "h2h": 0.2188,
+   "mean_margin": -689.3,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 89777.9,
+   "terminal_money_b_mean": 90467.2
+  },
+  "prvsiyan|oc_c3": {
+   "a": "prvsiyan",
+   "b": "oc_c3",
+   "purpose": "c4_flips对照臂+复刻同块对照",
+   "n_folds": 16,
+   "W": 3,
+   "L": 12,
+   "T": 1,
+   "h2h": 0.2188,
+   "mean_margin": -670.2,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 89768.4,
+   "terminal_money_b_mean": 90438.7
+  }
+ },
+ "general_group": {
+  "members": [
+   "e085",
+   "leoprovorov",
+   "statma",
+   "doan_v7"
+  ],
+  "def": "非族对手=r40/A/prvsiyan 之外的池面通用形态（doan 池公开打包件：mooman_e085 / leoprovorov MarketShock-M1-WR1K / statma ca25 / doan v7 goose）",
+  "h2h": {
+   "e085": 0.0938,
+   "leoprovorov": 1.0,
+   "statma": 0.8438,
+   "doan_v7": 1.0
+  },
+  "group_mean": 0.7344,
+  "target_ge": 0.85,
+  "historical_face": "prvsiyan vs r40 史高 0.859（n=20 块 672000+i*31）；mooman 对战 doan 20W4L≈0.833",
+  "passed": false
+ },
+ "criteria": {
+  "rule": "①vs oc_c3 ≥0.5（≥0.7 碾压）②强面板逐对 ≥0.5 ③弱锚逐对 ≥0.8 ④flips_neg=0 ⑤池面专组 ≥0.85（史高面）",
+  "c1_vs_oc_c3": {
+   "h2h": 0.2292,
+   "passed": false,
+   "grade": "未过"
+  },
+  "c2_strong_all_ge_0.5": {
+   "h2h": {
+    "mpx": 0.0625,
+    "tetsutani": 0.2188,
+    "V89": 0.2188
+   },
+   "passed": false
+  },
+  "c3_weak_all_ge_0.8": {
+   "h2h": {
+    "r40": 0.8438,
+    "A": 0.1562
+   },
+   "passed": false
+  },
+  "c4_flips_neg_zero": {
+   "flips": {
+    "n_units": 32,
+    "win_control": 7,
+    "win_variant": 7,
+    "flips_pos": 0,
+    "flips_neg": 0,
+    "net_flip_wins": 0
+   },
+   "passed": true
+  },
+  "c5_general_group_ge_0.85": {
+   "h2h": {
+    "e085": 0.0938,
+    "leoprovorov": 1.0,
+    "statma": 0.8438,
+    "doan_v7": 1.0
+   },
+   "group_mean": 0.7344,
+   "passed": false,
+   "generic_trio_mean": 0.9479,
+   "bimodal_note": "池面画像双峰：通用弱形态 {leoprovorov 1.0, doan_v7 1.0, statma 0.844} 三件均值 0.948 过线；强池面件 e085（tetsutani 同底 0.094）崩盘拖组",
+   "reference": "prvsiyan 史高面 0.859（vs r40，旧块 672000+i*31）；③ s_melon|r40 本块 0.844=史高面对照复现（±0.06 跨块漂移带内）"
+  }
+ },
+ "combo": {
+  "s_melon_vs_mix": {
+   "a": "s_melon",
+   "b": "mix",
+   "purpose": "combo_形态对比",
+   "n_folds": 16,
+   "W": 3,
+   "L": 12,
+   "T": 1,
+   "h2h": 0.2188,
+   "mean_margin": -689.3,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 89777.9,
+   "terminal_money_b_mean": 90467.2
+  },
+  "mix_vs_c_final": {
+   "a": "mix",
+   "b": "c_final",
+   "purpose": "combo_同面干扰A/B",
+   "n_folds": 16,
+   "W": 0,
+   "L": 0,
+   "T": 16,
+   "h2h": 0.5,
+   "mean_margin": 0.0,
+   "n_games": 32,
+   "n_errors": 0,
+   "terminal_money_a_mean": 90453.0,
+   "terminal_money_b_mean": 90453.0
+  },
+  "mix_fruit_piece_telemetry": {
+   "entry": {
+    "calls": 719,
+    "ps_turns": 0,
+    "ps_units": 0,
+    "sup_turns": 0,
+    "sup_units": 0,
+    "ro_turns": 0,
+    "ro_gain": 0,
+    "errors": 0
+   },
+   "_V44Y_REPORT": {
+    "v44y_reorder_turns": 25,
+    "v44y_reorder_gain": 1569.0,
+    "v44y_errors": 0
+   },
+   "_MELON_REPORT": {
+    "calls": 719,
+    "ps_turns": 0,
+    "ps_units": 0,
+    "sup_turns": 0,
+    "sup_units": 0,
+    "ro_turns": 0,
+    "ro_gain": 0,
+    "errors": 0
+   }
+  },
+  "interference_rule": "混装形对基座 c_final 直接 A/B 三分：h2h<0.5 或 mean_margin<0=伤基座（同面干扰）；h2h==0.5 且 |mean_margin|≈0 且果品件触发计数≈0=零增量形态（基座卖面饱和/机制冗余）；否则=正增量。前两种只交独立形"
+ },
+ "verdict": {
+  "s_melon_sha256": "800a0d28be637c5d427fd65a94e3c1491acdf762f8efdeebeb1e6859a55f70f1",
+  "mix_sha256": "c5dd4d08e840358f1e0a879ee733547b1e95a4fa974f53e354b2ecc36b7a72a5",
+  "vs_champion_anchor": {
+   "h2h": 0.2292,
+   "grade": "未过"
+  },
+  "strong_panel_h2h": {
+   "mpx": 0.0625,
+   "tetsutani": 0.2188,
+   "V89": 0.2188
+  },
+  "weak_anchor_h2h": {
+   "r40": 0.8438,
+   "A": 0.1562
+  },
+  "general_group_h2h": {
+   "e085": 0.0938,
+   "leoprovorov": 1.0,
+   "statma": 0.8438,
+   "doan_v7": 1.0
+  },
+  "general_group_mean": 0.7344,
+  "flips_neg": 0,
+  "combo_class": "zero_increment_零增量形态",
+  "combo_interference_hit": true,
+  "delivered_form": "独立形 S_melon（混装形=zero_increment_零增量形态，只交独立形）",
+  "full_standard_pass": false,
+  "verdict": "PARTIAL_PASS",
+  "summary": "S_melon（prvsiyan 冠军件署名移植）：对冠军锚 oc_c3 h2h 0.2292（未过）；强面板 {'mpx': 0.0625, 'tetsutani': 0.2188, 'V89': 0.2188}；弱锚 {'r40': 0.8438, 'A': 0.1562}；池面专组 {'e085': 0.0938, 'leoprovorov': 1.0, 'statma': 0.8438, 'doan_v7': 1.0}（均值 0.7344，史高面 0.859 口径）；flips_neg=0；组合臂混装 C_final+果品件 vs c_final h2h 0.5（zero_increment_零增量形态）；新标准全过=False",
+  "launch": "不发射不提交（判决先行）；上线决策移交用户"
+ },
+ "budget": {
+  "cap_局次": 500,
+  "auth_runs_true": 60,
+  "auth_runs_counted_precedent": 30,
+  "judgment_games": 432,
+  "total_engine_runs_true": 492,
+  "within_cap_true": true,
+  "within_cap_precedent": true
+ },
+ "anomaly": [
+  "harness 噪声不修不管；终局钱 farms[obs.player] 口径；胜率=硬通货，margin/终局钱只作参考；单局红计入不短路（fail-closed 记负）",
+  "FRONT_RUN_ITEMS 四品钩子在 prvsiyan 冻结胜者内 dormant（front_run=False/opponent_plan=None）：其史高面 0.859 由 sell_lead 预卖+ADV 四拍前跑+块重排+果品 tape 组合实现；本复刻=整件忠实移植（活体机制全保留），混装形果品件①则按任务字面激活四品 next-step 预卖",
+  "共享底盘事实：prvsiyan 与 c_final 同源 2965/V39 公共栈（route tapes 株数逐品全同、V219/v44y/E182 planner 内生共有）；'果品专精'差异主要在 ADV（c_final 无）+动态层配置+尾部封印，非 tape 株数差——果品件②（块重排）与基座内生 step720-725 再应用窗重叠=重复基座口径",
+  "混装形果品产线权重（MELON/TOMATO tilt）未入混装：跨计划宇宙移植需重写磁带计划，超出薄补丁口径；独立形 S_melon 自带其 tape 计划面",
+  "果品件①预卖在 c_final 卖面下机制性惰性（探针：132 个前瞻窗 0 成交——基座即产即卖/全清节奏下可预卖量恒为 0，或该品本步已被基座自卖 already）；果品件② 712-718 追加半步 0 增益（基座 step720-725 四连再应用已收敛）——同面干扰定理的零增量形态（基座卖面饱和+机制冗余），非实现缺陷（探针逐步计数留证）",
+  "门禁自打局/机制探针另计（iter1-j 先例）：认证 60 跑 + smoke 3 对×2 + telemetry/决策探针 3×2 + instrumented 2 = 约 26 跑，不计入判跑局次账",
+  "非传递性备忘：对冠军锚镜像专优≠全场更强；prvsiyan 史高 0.859 是对 r40 型市场感知面，对 H1/冠军族 0.109-0.25 崩盘——新策略价值在池面非镜像战，①②是族内硬门槛",
+  "flips 口径：control=prvsiyan 复刻源、variant=S_melon、共同对手 oc_c3、n=16 共同 fold×双席=32 单元；mix 臂 flips 未单跑（预算），以 mix vs c_final 直接 A/B 作同面干扰证据",
+  "池面画像双峰（重点）：对通用弱形态 {leoprovorov,doan_v7} 碾压 1.0（终局钱 +17 万/+13 万级）、statma 0.844、r40 0.844（史高面复现）；但对强池面件 e085 0.094（-1302/局）与 A 0.156 崩盘——prvsiyan 族'非对称强度件'身份在新块复现：史高面 0.859 只对 r40 型市场感知面成立，不外推至强件",
+  "弱锚非对称：③ r40 0.844 过 0.8，A 0.156 崩——弱锚二件对 S_melon 呈两极，A 型（我方日高档）非其可吃面",
+  "首跑因 PAIRS 解包缺陷在开跑前即崩（0 局次损耗）；重启后判跑满额 432 局次零红局（n_errors 全 0）",
+  "预算账本：auth 认证实耗 60 跑（30 对×双引擎）按 c-final 先例记 30；判跑局次 432 如实计；门禁自打/探针 ~26 跑另计；全口径 492≤500"
+ ],
+ "source": {
+  "commands": [
+   "python3 orderbook_melon_lab/build_s_melon.py",
+   "python3 orderbook_melon_lab/build_mix.py",
+   "python3 orderbook_melon_lab/judge_s_melon.py all 2"
+  ],
+  "machine": "judge_r44._fold_arm / j23._load_entry（orderbook_r40 口径）+ sim_bridge（先认证 30/30）",
+  "rows": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_melon_lab/evidence/rows_s_melon.jsonl"
+ },
+ "_generated_at": "2026-09-30T06:17:29Z"
+}

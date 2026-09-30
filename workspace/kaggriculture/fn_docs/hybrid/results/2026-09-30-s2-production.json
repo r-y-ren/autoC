@@ -1,0 +1,898 @@
+{
+ "version": "s2-production/1.0",
+ "task": "S2 产线全重构建判决（同块配对·新标准；不改既有代码/不提交/不发射）",
+ "build": {
+  "form": "s2",
+  "entry": "_hs_agent",
+  "main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_s2prod_lab/build/s2/main.py",
+  "main_sha256": "ca3e0b3781cf7fe7310095ca0c63db626dfbd2065d49733ee9c8d50b097bd94f",
+  "main_bytes": 1247983,
+  "tar_sha256": "56e53d362457100f27d6eb7de9cf77a90faa8262c89ee8a0bed28fabca93924e",
+  "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_composite_lab/build/c_final/main.py",
+  "base_main_sha256": "a37c0d3487fe1d2152ec6c0b767b36afc21ad18207accb2d3cf1f1b077016a92",
+  "spec": {
+   "herd": "GOOSE 加法波次 d6/d8-9/d10-11（现金门）COOP 入 Q0-1（不买地）；COW/SHEEP 链零触碰（加法不换种）；±1 档逐路由自适应",
+   "crop": "WHEAT ~169 / CARROT ~31.5 事件配方；COOP 落位格 d5 起 PLANT 清场（HARVEST 保留；WHEAT 刚性罚分保护）",
+   "fert": "fert60 形态并入（基底已含；自用~43%/卖~57%）",
+   "rhythm": "d6 首剪 / d8 奶起 / d12-14 蛋起 / d29 清仓；MWEGG 3-4 日一波 20-45u 核验",
+   "shell": "_GP_PLAN 重生成 + 三闸 + 守恒 + 逐事件审计",
+   "d6_rigid": "lot 2-4（蛋 lot3）/ crew≤12 / 日补麦 / 搁浅金 0",
+   "cash_safety": "日支出≤日初现金−隔夜储备1500；同拍尾追加；晚间补麦；放养溢出棚内过夜次日续"
+  },
+  "routes_summary": {
+   "0": {
+    "n_add": 7,
+    "n_add_effective": 7,
+    "gates_ok": true,
+    "final_money_base": 156140,
+    "final_money_var": 119268,
+    "held_var": {
+     "GOOSE": 3,
+     "COW": 8,
+     "SHEEP": 6
+    },
+    "realized": [
+     17,
+     17
+    ],
+    "conservation_match": 1,
+    "sell_face_ok": true,
+    "fert": {
+     "fert_ops": 106,
+     "collect_slots": 367,
+     "achieved_rate": 0.289,
+     "form": "fert60（基底 c_final 并入；自用~43%/卖~57%）"
+    }
+   },
+   "1": {
+    "n_add": 8,
+    "n_add_effective": 8,
+    "gates_ok": true,
+    "final_money_base": 137994,
+    "final_money_var": 118715,
+    "held_var": {
+     "GOOSE": 2,
+     "SHEEP": 10,
+     "COW": 6
+    },
+    "realized": [
+     16,
+     18
+    ],
+    "conservation_match": 1,
+    "sell_face_ok": true,
+    "fert": {
+     "fert_ops": 227,
+     "collect_slots": 384,
+     "achieved_rate": 0.591,
+     "form": "fert60（基底 c_final 并入；自用~43%/卖~57%）"
+    }
+   }
+  },
+  "assert_probe": {
+   "passed": true,
+   "probed": "末位 _alt_install('HybridOpening')（含首段+CL 段断言）"
+  }
+ },
+ "source": {
+  "commands": [
+   "python3 orderbook_s2prod_lab/judge_s2.py"
+  ],
+  "corpus": {
+   "ab_folds": [
+    1825501814,
+    2013941152,
+    786146079,
+    1883261866,
+    963182245,
+    240876256,
+    1705553586,
+    2009279466,
+    674000,
+    674161,
+    674322,
+    674483,
+    674644,
+    674805,
+    674966,
+    675127
+   ],
+   "ab_spec": "同块配对：26 败局前 8 + 块 674000+i*161（i=0..7）=n=16 双席=32 局/臂；对手 j23.DEFAULT_OPPONENTS 轮转",
+   "panel_folds_oc_c3": [
+    674000,
+    674161,
+    674322,
+    674483,
+    674644,
+    674805,
+    674966,
+    675127,
+    675288,
+    675449,
+    675610,
+    675771,
+    675932,
+    676093,
+    676254,
+    676415,
+    676576,
+    676737,
+    676898,
+    677059,
+    677220,
+    677381,
+    677542,
+    677703
+   ],
+   "panel_folds_rest": [
+    674000,
+    674161,
+    674322,
+    674483,
+    674644,
+    674805,
+    674966,
+    675127,
+    675288,
+    675449,
+    675610,
+    675771,
+    675932,
+    676093,
+    676254,
+    676415
+   ],
+   "panel_spec": "vs oc_c3 加密 n=24 双席=48 局；{mpx,tetsutani,V89,r40,A} n=16 双席=32 局/对",
+   "poison_seeds": [
+    674000,
+    674141,
+    674705,
+    674987,
+    675410
+   ],
+   "poison_spec": "五毒种各 4 配对单元（双席 ×{oc_c3 强面,r40 弱面}）=4 局/臂/毒种，翻正数以配对面读"
+  },
+  "workers": 2,
+  "caliber": {
+   "h2h": "judge_r44._fold_arm 同 seed 双席折叠（≥1 胜/≤0 负/余平；fail-closed）",
+   "margin": "终局 farms[obs.player].money 差（干净口径；banks 交叉登记）",
+   "terminal_money": "farms[obs.player]",
+   "realized_px": "Σ(qty×挂价)/Σ(qty×base 价)（trace 口径）；三谷底品=FERTILIZER/MILK/WOOL 合计",
+   "hard_currency": "胜率=硬通货；margin/终局钱/实现价只作对照"
+  },
+  "panel": {
+   "oc_c3": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_oppcond_lab/build/oc_c3/main.py",
+   "mpx": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_modelpx_lab/build/mpx_w24_p2_3_h14/main.py",
+   "tetsutani": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_racegap_lab/opponents/tetsu1009/main.py",
+   "V89": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_v89_lab/build/v89_pure/main.py",
+   "r40": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
+   "A": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r44_a/main.py"
+  },
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "version": "simbridge/1.0",
+   "wall_speedup": 5.151,
+   "reused_cache": true
+  }
+ },
+ "ab_pairs": {
+  "n": 32,
+  "mean_delta": 0.0,
+  "W_L_T": [
+   0,
+   0,
+   32
+  ],
+  "win_rate_control": 0.75,
+  "win_rate_variant": 0.75,
+  "net_flip_wins": 0,
+  "flips_pos": 0,
+  "flips_neg": 0,
+  "control_win_guard_ok": true,
+  "loss_recovery": "0/16 败局 delta>0",
+  "design": "同 (seed,seat,opp) 配对：control=C_final vs s2；16 fold 双席=32 对（26 败局前 8 + 块 674000+i*161 i=0..7）",
+  "pairs_lite": [
+   {
+    "seed": 674000,
+    "seat": 0,
+    "stratum": "neutral_674000_i161",
+    "margin_control": -243.0,
+    "margin_variant": -243.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674000,
+    "seat": 1,
+    "stratum": "neutral_674000_i161",
+    "margin_control": -243.0,
+    "margin_variant": -243.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674161,
+    "seat": 0,
+    "stratum": "neutral_674000_i161",
+    "margin_control": -70.0,
+    "margin_variant": -70.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674161,
+    "seat": 1,
+    "stratum": "neutral_674000_i161",
+    "margin_control": -70.0,
+    "margin_variant": -70.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674322,
+    "seat": 0,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 398.0,
+    "margin_variant": 398.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674322,
+    "seat": 1,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 398.0,
+    "margin_variant": 398.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674483,
+    "seat": 0,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 11171.0,
+    "margin_variant": 11171.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674483,
+    "seat": 1,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 11171.0,
+    "margin_variant": 11171.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674644,
+    "seat": 0,
+    "stratum": "neutral_674000_i161",
+    "margin_control": -325.0,
+    "margin_variant": -325.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674644,
+    "seat": 1,
+    "stratum": "neutral_674000_i161",
+    "margin_control": -325.0,
+    "margin_variant": -325.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674805,
+    "seat": 0,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 277.0,
+    "margin_variant": 277.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674805,
+    "seat": 1,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 277.0,
+    "margin_variant": 277.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674966,
+    "seat": 0,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 497.0,
+    "margin_variant": 497.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 674966,
+    "seat": 1,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 497.0,
+    "margin_variant": 497.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 675127,
+    "seat": 0,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 26219.0,
+    "margin_variant": 26219.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 675127,
+    "seat": 1,
+    "stratum": "neutral_674000_i161",
+    "margin_control": 27344.0,
+    "margin_variant": 27344.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 240876256,
+    "seat": 0,
+    "stratum": "loss_replay",
+    "margin_control": 540.0,
+    "margin_variant": 540.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 240876256,
+    "seat": 1,
+    "stratum": "loss_replay",
+    "margin_control": 540.0,
+    "margin_variant": 540.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 786146079,
+    "seat": 0,
+    "stratum": "loss_replay",
+    "margin_control": -360.0,
+    "margin_variant": -360.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 786146079,
+    "seat": 1,
+    "stratum": "loss_replay",
+    "margin_control": -360.0,
+    "margin_variant": -360.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 963182245,
+    "seat": 0,
+    "stratum": "loss_replay",
+    "margin_control": 683.0,
+    "margin_variant": 683.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 963182245,
+    "seat": 1,
+    "stratum": "loss_replay",
+    "margin_control": 683.0,
+    "margin_variant": 683.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 1705553586,
+    "seat": 0,
+    "stratum": "loss_replay",
+    "margin_control": 1646.0,
+    "margin_variant": 1646.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 1705553586,
+    "seat": 1,
+    "stratum": "loss_replay",
+    "margin_control": 1646.0,
+    "margin_variant": 1646.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 1825501814,
+    "seat": 0,
+    "stratum": "loss_replay",
+    "margin_control": 258.0,
+    "margin_variant": 258.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 1825501814,
+    "seat": 1,
+    "stratum": "loss_replay",
+    "margin_control": 258.0,
+    "margin_variant": 258.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 1883261866,
+    "seat": 0,
+    "stratum": "loss_replay",
+    "margin_control": 19135.0,
+    "margin_variant": 19135.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 1883261866,
+    "seat": 1,
+    "stratum": "loss_replay",
+    "margin_control": 19063.0,
+    "margin_variant": 19063.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 2009279466,
+    "seat": 0,
+    "stratum": "loss_replay",
+    "margin_control": 22783.0,
+    "margin_variant": 22783.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 2009279466,
+    "seat": 1,
+    "stratum": "loss_replay",
+    "margin_control": 22783.0,
+    "margin_variant": 22783.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 2013941152,
+    "seat": 0,
+    "stratum": "loss_replay",
+    "margin_control": 532.0,
+    "margin_variant": 532.0,
+    "delta": 0.0
+   },
+   {
+    "seed": 2013941152,
+    "seat": 1,
+    "stratum": "loss_replay",
+    "margin_control": 532.0,
+    "margin_variant": 532.0,
+    "delta": 0.0
+   }
+  ],
+  "n_pairs": 32
+ },
+ "panel": {
+  "design": "s2 vs 面板；vs oc_c3 加密 n=24 双席=48 局，余对 n=16 双席=32 局/对（同块 674000+i*161）；h2h=judge_r44._fold_arm",
+  "pairs": {
+   "oc_c3": {
+    "n": 24,
+    "wins": 12,
+    "losses": 10,
+    "ties": 2,
+    "h2h": 0.5417,
+    "mean_margin": -218.8,
+    "terminal_money_us_mean": 90702.8,
+    "terminal_money_opp_mean": 90921.6,
+    "n_games": 48,
+    "n_errors": 0,
+    "flips_neg": null
+   },
+   "mpx": {
+    "n": 16,
+    "wins": 7,
+    "losses": 8,
+    "ties": 1,
+    "h2h": 0.4688,
+    "mean_margin": -166.8,
+    "terminal_money_us_mean": 89295.8,
+    "terminal_money_opp_mean": 89462.7,
+    "n_games": 32,
+    "n_errors": 0,
+    "flips_neg": null
+   },
+   "tetsutani": {
+    "n": 16,
+    "wins": 9,
+    "losses": 5,
+    "ties": 2,
+    "h2h": 0.625,
+    "mean_margin": -187.4,
+    "terminal_money_us_mean": 89260.5,
+    "terminal_money_opp_mean": 89447.9,
+    "n_games": 32,
+    "n_errors": 0,
+    "flips_neg": null
+   },
+   "V89": {
+    "n": 16,
+    "wins": 9,
+    "losses": 5,
+    "ties": 2,
+    "h2h": 0.625,
+    "mean_margin": -187.4,
+    "terminal_money_us_mean": 89260.6,
+    "terminal_money_opp_mean": 89448.0,
+    "n_games": 32,
+    "n_errors": 0,
+    "flips_neg": null
+   },
+   "r40": {
+    "n": 16,
+    "wins": 9,
+    "losses": 7,
+    "ties": 0,
+    "h2h": 0.5625,
+    "mean_margin": 187.8,
+    "terminal_money_us_mean": 89453.6,
+    "terminal_money_opp_mean": 89265.8,
+    "n_games": 32,
+    "n_errors": 0,
+    "flips_neg": null
+   },
+   "A": {
+    "n": 16,
+    "wins": 15,
+    "losses": 1,
+    "ties": 0,
+    "h2h": 0.9375,
+    "mean_margin": 1112.9,
+    "terminal_money_us_mean": 89896.8,
+    "terminal_money_opp_mean": 88783.9,
+    "n_games": 32,
+    "n_errors": 0,
+    "flips_neg": null
+   }
+  }
+ },
+ "econ": {
+  "target": {
+   "terminal_money_band": 105700,
+   "realized_px_band": 0.903,
+   "src": "2026-09-30-d1-production.json econ_solve.gap_baseline（terminal_money_top=105700 / realized_px_top=0.903；三谷底品=troughs FERTILIZER/MILK/WOOL）"
+  },
+  "c_final": {
+   "n": 32,
+   "terminal_money_mean": 94036.0,
+   "terminal_money_median": 91884.0,
+   "realized_px_overall_mean": 0.8652,
+   "realized_px_trough3_mean": 0.5563,
+   "egg_fert_share_mean": 0.1299
+  },
+  "s2": {
+   "n": 32,
+   "terminal_money_mean": 94036.0,
+   "terminal_money_median": 91884.0,
+   "realized_px_overall_mean": 0.8652,
+   "realized_px_trough3_mean": 0.5563,
+   "egg_fert_share_mean": 0.1299
+  },
+  "s2_panel_oc_c3_supplement": {
+   "n": 48,
+   "terminal_money_mean": 90702.8,
+   "terminal_money_median": 89945.5,
+   "realized_px_overall_mean": 0.8338,
+   "realized_px_trough3_mean": 0.5705,
+   "egg_fert_share_mean": 0.1326
+  },
+  "delta_s2_minus_c_final": {
+   "terminal_money_mean": 0.0,
+   "realized_px_overall_mean": 0.0,
+   "realized_px_trough3_mean": 0.0,
+   "egg_fert_share_mean": 0.0
+  }
+ },
+ "poison_seeds": {
+  "design": "五毒种各 4 配对单元（双席 ×{oc_c3 强面,r40 弱面}）；翻正=control 负 ∧ variant 正；signature 参照 d8（674000/674705/675410 全面毒种；674141/674987 强手毒种）",
+  "seeds": {
+   "674000": {
+    "n": 4,
+    "mean_delta": 0.0,
+    "W_L_T": [
+     0,
+     0,
+     4
+    ],
+    "win_rate_control": 0.0,
+    "win_rate_variant": 0.0,
+    "net_flip_wins": 0,
+    "flips_pos": 0,
+    "flips_neg": 0,
+    "control_win_guard_ok": true,
+    "loss_recovery": "0/0 败局 delta>0",
+    "units_lite": [
+     {
+      "opponent": "oc_c3",
+      "seat": 0,
+      "margin_control": -446.0,
+      "margin_variant": -446.0
+     },
+     {
+      "opponent": "oc_c3",
+      "seat": 1,
+      "margin_control": -446.0,
+      "margin_variant": -446.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 0,
+      "margin_control": -243.0,
+      "margin_variant": -243.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 1,
+      "margin_control": -243.0,
+      "margin_variant": -243.0
+     }
+    ],
+    "flips_pos_of": "0/4"
+   },
+   "674141": {
+    "n": 4,
+    "mean_delta": 0.0,
+    "W_L_T": [
+     0,
+     0,
+     4
+    ],
+    "win_rate_control": 0.5,
+    "win_rate_variant": 0.5,
+    "net_flip_wins": 0,
+    "flips_pos": 0,
+    "flips_neg": 0,
+    "control_win_guard_ok": true,
+    "loss_recovery": "0/0 败局 delta>0",
+    "units_lite": [
+     {
+      "opponent": "oc_c3",
+      "seat": 0,
+      "margin_control": -1073.0,
+      "margin_variant": -1073.0
+     },
+     {
+      "opponent": "oc_c3",
+      "seat": 1,
+      "margin_control": -858.0,
+      "margin_variant": -858.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 0,
+      "margin_control": 1850.0,
+      "margin_variant": 1850.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 1,
+      "margin_control": 2075.0,
+      "margin_variant": 2075.0
+     }
+    ],
+    "flips_pos_of": "0/4"
+   },
+   "674705": {
+    "n": 4,
+    "mean_delta": 0.0,
+    "W_L_T": [
+     0,
+     0,
+     4
+    ],
+    "win_rate_control": 0.0,
+    "win_rate_variant": 0.0,
+    "net_flip_wins": 0,
+    "flips_pos": 0,
+    "flips_neg": 0,
+    "control_win_guard_ok": true,
+    "loss_recovery": "0/0 败局 delta>0",
+    "units_lite": [
+     {
+      "opponent": "oc_c3",
+      "seat": 0,
+      "margin_control": -267.0,
+      "margin_variant": -267.0
+     },
+     {
+      "opponent": "oc_c3",
+      "seat": 1,
+      "margin_control": -267.0,
+      "margin_variant": -267.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 0,
+      "margin_control": -420.0,
+      "margin_variant": -420.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 1,
+      "margin_control": -420.0,
+      "margin_variant": -420.0
+     }
+    ],
+    "flips_pos_of": "0/4"
+   },
+   "674987": {
+    "n": 4,
+    "mean_delta": 0.0,
+    "W_L_T": [
+     0,
+     0,
+     4
+    ],
+    "win_rate_control": 0.5,
+    "win_rate_variant": 0.5,
+    "net_flip_wins": 0,
+    "flips_pos": 0,
+    "flips_neg": 0,
+    "control_win_guard_ok": true,
+    "loss_recovery": "0/0 败局 delta>0",
+    "units_lite": [
+     {
+      "opponent": "oc_c3",
+      "seat": 0,
+      "margin_control": -41.0,
+      "margin_variant": -41.0
+     },
+     {
+      "opponent": "oc_c3",
+      "seat": 1,
+      "margin_control": -41.0,
+      "margin_variant": -41.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 0,
+      "margin_control": 155.0,
+      "margin_variant": 155.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 1,
+      "margin_control": 155.0,
+      "margin_variant": 155.0
+     }
+    ],
+    "flips_pos_of": "0/4"
+   },
+   "675410": {
+    "n": 4,
+    "mean_delta": 0.0,
+    "W_L_T": [
+     0,
+     0,
+     4
+    ],
+    "win_rate_control": 0.5,
+    "win_rate_variant": 0.5,
+    "net_flip_wins": 0,
+    "flips_pos": 0,
+    "flips_neg": 0,
+    "control_win_guard_ok": true,
+    "loss_recovery": "0/0 败局 delta>0",
+    "units_lite": [
+     {
+      "opponent": "oc_c3",
+      "seat": 0,
+      "margin_control": -639.0,
+      "margin_variant": -639.0
+     },
+     {
+      "opponent": "oc_c3",
+      "seat": 1,
+      "margin_control": -639.0,
+      "margin_variant": -639.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 0,
+      "margin_control": 507.0,
+      "margin_variant": 507.0
+     },
+     {
+      "opponent": "r40",
+      "seat": 1,
+      "margin_control": 507.0,
+      "margin_variant": 507.0
+     }
+    ],
+    "flips_pos_of": "0/4"
+   }
+  }
+ },
+ "criteria": {
+  "rule": "①对冠军 oc_c3 ≥0.5（≥0.7 碾压目标）②强面板 {mpx,tetsutani,V89} 逐对 ≥0.5 ③弱锚 {r40,A} 逐对 ≥0.8 ④flips_neg=0（同块配对 A/B 面）；经济面只作对照",
+  "c1_vs_champion_ge_0.5": {
+   "h2h": 0.5417,
+   "grade": "更强",
+   "passed": true,
+   "crush_ge_0.7": false
+  },
+  "c2_strong_all_ge_0.5": {
+   "h2h": {
+    "mpx": 0.4688,
+    "tetsutani": 0.625,
+    "V89": 0.625
+   },
+   "passed": false
+  },
+  "c3_weak_all_ge_0.8": {
+   "h2h": {
+    "r40": 0.5625,
+    "A": 0.9375
+   },
+   "passed": false
+  },
+  "c4_flips_neg_zero": {
+   "ab_flips_neg": 0,
+   "ab_flips_pos": 0,
+   "net_flip_wins": 0,
+   "passed": true
+  },
+  "c5_econ_reference_only": {
+   "terminal_money_s2_vs_band": "94036.0 vs 105700",
+   "realized_px_s2_vs_band": "0.8652 vs 0.903"
+  }
+ },
+ "verdict": {
+  "s2_sha256": "ca3e0b3781cf7fe7310095ca0c63db626dfbd2065d49733ee9c8d50b097bd94f",
+  "vs_champion_anchor": {
+   "h2h": 0.5417,
+   "grade": "更强"
+  },
+  "strong_panel_h2h": {
+   "mpx": 0.4688,
+   "tetsutani": 0.625,
+   "V89": 0.625
+  },
+  "weak_anchor_h2h": {
+   "r40": 0.5625,
+   "A": 0.9375
+  },
+  "ab_paired": {
+   "net_flip_wins": 0,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "mean_delta": 0.0,
+   "loss_recovery": "0/16 败局 delta>0"
+  },
+  "poison_flips_pos": {
+   "674000": "0/4",
+   "674141": "0/4",
+   "674705": "0/4",
+   "674987": "0/4",
+   "675410": "0/4"
+  },
+  "full_standard_pass": false,
+  "effective_delta": "ZERO——s2 手术面（routes 0/1 steps 157-710）对运行时路由器不可达，32/32 配对逐拍恒等实证；面板/经济读数=C_final 基线行为（credit 归基线不归 s2 增量）",
+  "route_reachability": {
+   "mechanism": "_router d6 起按 unlocked_shops[:2] 选路：无 YARN 对→_R108_SHOP_ROUTES→100..128（默认 100）；含 YARN 对（15 种）→_V92_TABLE 一律 9（_V93 例外 128）；route 0 仅作 d0-d5 主干（steps 0..143，与基底逐拍同）；route 2 =d27+ 尾段；routes 1/3-8/10-12 全不可达",
+   "build_scope": "change_table_s2.json 653 行仅 routes 0/1（steps 157-710）——对比 goose_add 先例全 41 路由 18158 行",
+   "empirical": "同 (seed,seat,opp) 配对 32/32 margin 全同（banks 逐字同）；五毒种 5×4 配对单元 delta 全 0"
+  },
+  "verdict": "S2_ZERO_EFFECTIVE_DELTA_PANEL_READ_IS_BASELINE（新标准未全过：c2 强面板 {\"mpx\": 0.4688, \"tetsutani\": 0.625, \"V89\": 0.625} 未全 ≥0.5；c3 弱锚 {\"r40\": 0.5625, \"A\": 0.9375} 未全 ≥0.8；；c1 0.5417 仅『更强』未达碾压 0.7；c4 flips_neg=0 但系基线恒等所致）",
+  "summary": "s2=ca3e0b37：对冠军锚 oc_c3 h2h 0.5417（更强）；强面板 {\"mpx\": 0.4688, \"tetsutani\": 0.625, \"V89\": 0.625}；弱锚 {\"r40\": 0.5625, \"A\": 0.9375}；配对 flips_neg=0 net_flip=0；全过=False。决定性事实：s2 手术面运行时不可达，全部读数=C_final 基线；判 s2 增量=零有效",
+  "launch": "不发射不提交（判决先行）；上线决策移交用户"
+ },
+ "budget": {
+  "cap_局次": 450,
+  "caliber": "局次=game（双席各计 1 局）",
+  "auth": 30,
+  "ab": 64,
+  "panel": 208,
+  "poison": 40,
+  "total_局次": 342,
+  "within_cap": true
+ },
+ "anomaly": [
+  "根因（决定性，最高优先）：S2 增量零显现——build_s2 手术面仅 routes 0/1（change_table 653 行，steps 157-710 全在 d6+ 段），而运行时 _router 自 d6 起按 unlocked_shops[:2] 重选路（无 YARN 对→100..128；含 YARN 对→_V92_TABLE 一律 9），routes 0/1 的 d6+ 段不可达（route 0 仅 d0-d5 主干且零改动、route 1 全不可达）。实证=同 (seed,seat,opp) 配对 32/32 逐拍行为恒等（banks 逐字同），毒种 5×4 单元 delta 全 0；kaggsim 磁带直放（gl._rollout route0）可复现手术差异=手术本体完好，仅路由不可达。对照goose_add 先例=全 41 路由铺手术（18158 行）方命中运行时路由。修法方向（移交用户决策）：手术扩到可达路由集 {9,100..128} 或改路由表把 0/1 纳入可达集，需重跑 build+判决",
+  "消融备注：强制 router=route0 的运行级消融两次超时未出数（强制路由下单局 >8min 病态慢，疑尾段 v31/终局救援层对 route0 尾磁带触发重路径，此现象另行留档）；手术本体完好的判定以磁带级直放为准（gl._rollout route0：held GOOSE 3→4、(5,0) 落位、终局钱 156140→119268 可复现），不依赖该运行级消融",
+  "_bisect 排查收口（_bisect3_repro.py 复现判定）：_bisect.py/_bisect2.py系旧 6 参签名排查件（对终稿 build_s2.py 已 TypeError）；排查点①②③以完整 build_one 路径复现=基底手位覆写 0（20 处均为设计内 plant_clear PLANT→PASS）、动物格 FEED 日丢失 0；但存在自食性残迹：基底 (4,1) GOOSE（d10 落位）在 s2 磁带上丢失、新 GOOSE 落 (5,0)，净 held 持平（realized 17=17 过闸，三闸全过）；消融（抹新增 PLACE GOOSE）后 (4,1) 仍空且棚内搁浅 1 鹅=基底 d10 落位被扰；kaggsim 构建口径 route0 终局钱 156140→119268（−36.9k，含 7 落位格作物清场代价）。判决按实测面读，该残迹不阻判决但留档",
+  "经济面口径：实现价=trace 挂单量×挂价/base 价（corner-cases ratio_submit 同口径）；目标带 105.7k/0.903 取 d1-production gap_baseline 顶强值，仅作对照不入判据",
+  "毒种语义（d8-cfinal-loss 先例）：674000/674705/675410 全面毒种、674141/674987 强手毒种；本次每毒种 4 配对单元（双席 ×强/弱面）小样本，翻正数只作分层读数",
+  "harness 噪声不修不管；终局钱 farms[obs.player] 口径；banks 交叉登记在逐局行；胜率=硬通货，margin/终局钱/实现价只作对照",
+  "非传递性备忘：对冠军锚镜像专优≠全场更强；新标准以逐对口径判"
+ ],
+ "_generated_at": "2026-09-30T12:43:06Z",
+ "elapsed_s": 0.0
+}
