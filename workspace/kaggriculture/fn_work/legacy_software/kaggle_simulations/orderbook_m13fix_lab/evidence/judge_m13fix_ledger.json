@@ -1,0 +1,294 @@
+{
+ "budget": {
+  "cap_局次": 300,
+  "auth_局次": 60,
+  "pairs_局次": 64,
+  "multi_game_局次": 128,
+  "cap_scope": "认证 60 + 配对 32×2 臂 + 双局专组 8×2 席×2 局×2 臂 = 188 ≤ 300",
+  "total_局次": 252,
+  "within_cap": true,
+  "faceB_局次": 64
+ },
+ "criteria": {
+  "净翻胜>0": {
+   "scope": "faceB（ep2 vs h1 实数钱面）主判 + faceA/配对组（结构性平局/逐拍恒等）附记",
+   "faceB_ep2_net_flip_wins": 4,
+   "faceB_ep2_flips_pos": 4,
+   "faceB_ep2_flips_neg": 0,
+   "faceB_ep2_W_L_T": "16/0/0",
+   "faceB_ep2_mean_delta": 1609.25,
+   "faceA_ep2_net_flip_wins": 0,
+   "faceA_ep2_W_L_T": "14/2/0",
+   "faceA_note": "自拷贝镜像恒平局（margin 0 非 >0），净翻胜结构性不可判；Δ 口径 W14/L2 mean+1638.75=污染恢复",
+   "pooled_net_flip_wins": 4,
+   "pairs_net_flip_wins": 0,
+   "passed": true
+  },
+  "flips_neg==0": {
+   "pairs": 0,
+   "faceA_ep2": 0,
+   "faceA_ep1": 0,
+   "faceB_ep2": 0,
+   "faceB_ep1": 0,
+   "passed": true
+  },
+  "双局专组零污染": {
+   "faceA_dh_fix_ep2_zero_given_trigger": "16/16",
+   "faceB_dh_fix_ep2_zero_given_trigger": "16/16",
+   "faceB_dh_fix_ep2_latch_true": 0,
+   "faceB_drop_half_ep2_polluted": "16/16",
+   "faceB_drop_half_ep2_dirty_cells_max": 443,
+   "passed": true
+  },
+  "实现价非负": {
+   "nonneg_both": true,
+   "all_mean_delta": 0.0,
+   "milk_mean_delta": 0.0,
+   "passed": true
+  }
+ },
+ "faceB_ep2_flip_table": {
+  "n": 16,
+  "W": 16,
+  "L": 0,
+  "T": 0,
+  "mean_delta": 1609.25,
+  "win_control": 2,
+  "win_variant": 6,
+  "flips_pos": 4,
+  "flips_neg": 0,
+  "net_flip_wins": 4,
+  "rows_lite": [
+   {
+    "seed": 674000,
+    "seat": 0,
+    "margin_control": -4355.0,
+    "margin_variant": 110.0
+   },
+   {
+    "seed": 674000,
+    "seat": 1,
+    "margin_control": -4355.0,
+    "margin_variant": 110.0
+   },
+   {
+    "seed": 674137,
+    "seat": 0,
+    "margin_control": -4072.0,
+    "margin_variant": -233.0
+   },
+   {
+    "seed": 674137,
+    "seat": 1,
+    "margin_control": -4072.0,
+    "margin_variant": -233.0
+   },
+   {
+    "seed": 674274,
+    "seat": 0,
+    "margin_control": -2519.0,
+    "margin_variant": -197.0
+   },
+   {
+    "seed": 674274,
+    "seat": 1,
+    "margin_control": -2519.0,
+    "margin_variant": -197.0
+   },
+   {
+    "seed": 674411,
+    "seat": 0,
+    "margin_control": -1571.0,
+    "margin_variant": -1452.0
+   },
+   {
+    "seed": 674411,
+    "seat": 1,
+    "margin_control": 652.0,
+    "margin_variant": 771.0
+   },
+   {
+    "seed": 674548,
+    "seat": 0,
+    "margin_control": -144.0,
+    "margin_variant": -67.0
+   },
+   {
+    "seed": 674548,
+    "seat": 1,
+    "margin_control": -144.0,
+    "margin_variant": -67.0
+   },
+   {
+    "seed": 674685,
+    "seat": 0,
+    "margin_control": -1647.0,
+    "margin_variant": -110.0
+   },
+   {
+    "seed": 674685,
+    "seat": 1,
+    "margin_control": -1647.0,
+    "margin_variant": -110.0
+   },
+   {
+    "seed": 674822,
+    "seat": 0,
+    "margin_control": -354.0,
+    "margin_variant": 119.0
+   },
+   {
+    "seed": 674822,
+    "seat": 1,
+    "margin_control": -354.0,
+    "margin_variant": 119.0
+   },
+   {
+    "seed": 674959,
+    "seat": 0,
+    "margin_control": 1251.0,
+    "margin_variant": 1293.0
+   },
+   {
+    "seed": 674959,
+    "seat": 1,
+    "margin_control": -1399.0,
+    "margin_variant": -1357.0
+   }
+  ]
+ },
+ "faceB_ep1_flip_table": {
+  "n": 16,
+  "W": 0,
+  "L": 0,
+  "T": 16,
+  "mean_delta": 0.0,
+  "win_control": 16,
+  "win_variant": 16,
+  "flips_pos": 0,
+  "flips_neg": 0,
+  "net_flip_wins": 0,
+  "rows_lite": [
+   {
+    "seed": 674000,
+    "seat": 0,
+    "margin_control": 181961.0,
+    "margin_variant": 181961.0
+   },
+   {
+    "seed": 674000,
+    "seat": 1,
+    "margin_control": 181961.0,
+    "margin_variant": 181961.0
+   },
+   {
+    "seed": 674137,
+    "seat": 0,
+    "margin_control": 153881.0,
+    "margin_variant": 153881.0
+   },
+   {
+    "seed": 674137,
+    "seat": 1,
+    "margin_control": 153881.0,
+    "margin_variant": 153881.0
+   },
+   {
+    "seed": 674274,
+    "seat": 0,
+    "margin_control": 100567.0,
+    "margin_variant": 100567.0
+   },
+   {
+    "seed": 674274,
+    "seat": 1,
+    "margin_control": 100567.0,
+    "margin_variant": 100567.0
+   },
+   {
+    "seed": 674411,
+    "seat": 0,
+    "margin_control": 183613.0,
+    "margin_variant": 183613.0
+   },
+   {
+    "seed": 674411,
+    "seat": 1,
+    "margin_control": 179037.0,
+    "margin_variant": 179037.0
+   },
+   {
+    "seed": 674548,
+    "seat": 0,
+    "margin_control": 156573.0,
+    "margin_variant": 156573.0
+   },
+   {
+    "seed": 674548,
+    "seat": 1,
+    "margin_control": 156573.0,
+    "margin_variant": 156573.0
+   },
+   {
+    "seed": 674685,
+    "seat": 0,
+    "margin_control": 174868.0,
+    "margin_variant": 174868.0
+   },
+   {
+    "seed": 674685,
+    "seat": 1,
+    "margin_control": 168559.0,
+    "margin_variant": 168559.0
+   },
+   {
+    "seed": 674822,
+    "seat": 0,
+    "margin_control": 181865.0,
+    "margin_variant": 181865.0
+   },
+   {
+    "seed": 674822,
+    "seat": 1,
+    "margin_control": 181865.0,
+    "margin_variant": 181865.0
+   },
+   {
+    "seed": 674959,
+    "seat": 0,
+    "margin_control": 171221.0,
+    "margin_variant": 171221.0
+   },
+   {
+    "seed": 674959,
+    "seat": 1,
+    "margin_control": 171221.0,
+    "margin_variant": 171221.0
+   }
+  ]
+ },
+ "faceB_pollution": {
+  "drop_half": {
+   "n": 16,
+   "ep1_trigger_ok": 16,
+   "ep2_zero_pollution": 0,
+   "ep2_zero_pollution_given_ep1_trigger": 0,
+   "ep2_latch_true": 16,
+   "ep2_dirty_cells_max": 443,
+   "ep2_cls_hist": {
+    "wfr": 16
+   }
+  },
+  "dh_fix": {
+   "n": 16,
+   "ep1_trigger_ok": 16,
+   "ep2_zero_pollution": 16,
+   "ep2_zero_pollution_given_ep1_trigger": 16,
+   "ep2_latch_true": 0,
+   "ep2_dirty_cells_max": 0,
+   "ep2_cls_hist": {
+    "h1_mirror": 16
+   }
+  }
+ }
+}

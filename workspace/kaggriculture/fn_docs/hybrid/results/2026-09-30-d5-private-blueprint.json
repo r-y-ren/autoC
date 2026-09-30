@@ -1,0 +1,138 @@
+{
+  "meta": {
+    "doc": "D5 私调反推 · 顶强产线/执行参数蓝图（供 D1/D3/D4 合成期取参）",
+    "built_at": "2026-09-30T07:20+08:00",
+    "scope": "只读反推；真顶强=私有自适应件未开源，本蓝图从公开回放定量萃取顶强可观察行为参数",
+    "sources": [
+      "graceyunliu/kaggriculture Opponents/tape_majkel1337_114061801.py + tape_thirdfarmclub_111923787.py（top tape 件，实抓解码 719 步动作流）",
+      "kaggle competitions replay 全量回放（实抓）：ep114061801 Majkel1337=149166、ep111923787 THIRD=149665、ep115249381/115267533/115256033 Majkel、ep114612657 DSM、ep114420390 DSM/UMG",
+      "results/2026-09-29-top-games-analysis.json（88 局头部行为聚合，decl-exec/ice/realized 口径）",
+      "games_raw.json 88 局动作流（adaptivity 结构指纹）"
+    ],
+    "evidence_grade_legend": {
+      "A": "一手全量回放（obs+action，可核价格/库存/放置位置）",
+      "B": "一手动作流 tape / 88 局聚合解析（无 obs，行为计数可核）",
+      "C": "二手/继承口径（top-games-analysis 已采，未在本蓝图重核）"
+    }
+  },
+
+  "prod_params": {
+    "buy_animal_day_distribution": {
+      "summary": "COW 开局 d0-1 抢建（首批），SHEEP 分两波（d0 少量 + d3-6 或 d9-15 批量），GOOSE 后置（d1-2 少量或 d6-9 波次）",
+      "COW": "买畜日 d0-4，d0-1 为抢建高峰；样本14局全在 d0 起买",
+      "SHEEP": "两波型：早波 d0-4 / 晚波 d3-15；THIRD 型 d3-6 批量、UMG 型 d6+、Anton 型 d9+",
+      "GOOSE": "后置第二波：Majkel d1-2 或 d6-9；placed 进 COOP 见下",
+      "sample_n": 14, "evidence_grade": "A",
+      "note": "开局固定指纹：turn1 BUY_ANIMAL COW + BUY_PRODUCT WHEAT(饲料)，turn2 SELL WHEAT + HIRE×4-5 + BUY COW + BUY SHEEP"
+    },
+    "herd_structure": {
+      "summary": "畜群构成逐局变动（自适应层）；COOP/PASTURE 集中于象限 0-1，不散布",
+      "composition_varies_by_game": "COW:SHEEP:GOOSE 比逐局大变：Majkel_ref COW主导(29 COW pasture)、THIRD SHEEP主导(39 SHEEP)、Majkel_115267533 SHEEP主导(34)——同队不同局差异显著",
+      "coop_pasture_position": "GOOSE-coop 落象限0(偶象限1)；COW-pasture 象限0-1；即前两个象限聚簇，非随机散布",
+      "sample_n": "6 全量局(位置) + 88 局(构成)", "evidence_grade": "A(位置)/B(构成)",
+      "note": "构成变动是 D3 自适应层的落点：开局冻结、畜群构成响应"
+    },
+    "goose_coop_placement": {
+      "summary": "GOOSE 入 COOP，放置日后置 d6-9（COW/SHEEP 之后的第二波）",
+      "placement_day": "d6-9 为主（Majkel d6-9、DSM d6-8、UMG d8-11、THIRD d2 早置例外）",
+      "build_day": "BUILD_COOP d0-2 起 + d6-9 补建；与 GOOSE 购入/放置同步",
+      "goose_count": "2-16 只/局（小群，作蛋源非主力）",
+      "sample_n": 14, "evidence_grade": "A"
+    },
+    "egg_wool_milk_rhythm": {
+      "summary": "WOOL d6 首剪(18u)→d9 起持续；MILK d8 起爬坡至 d29；EGG d12-14 起（鹅成熟后）；三者 d29 终局清仓",
+      "wool_curve_signature": "d6 固定首剪 12-24u（跨局恒定=剪毛日触发），随后 d9+ 持续小量",
+      "milk_curve_signature": "d8 起量、d12-24 平台、d29 冲高（THIRD d29 单日 109u）",
+      "egg_curve_signature": "d12-14 起量（GOOSE 成熟滞后），持续至 d29",
+      "endgame_dump": "d29 单日奶+毛+蛋清算 100-359u（THIRD 359u / Majkel 49u 日末）——shed 满/季末清仓签名",
+      "sample_n": 6, "evidence_grade": "A"
+    },
+    "fertilizer_disposition": {
+      "summary": "肥料=可变现副产品：自用 FERTILIZE 约 45%、卖出约 55%（三谷底品顶强解法=放量变现不囤积）",
+      "collect_per_game": "410-525 COLLECT_FERTILIZER/局（畜群产肥）",
+      "self_use_frac": "median 0.46 / mean 0.42（自用施肥促产量）",
+      "sell_frac": "median 0.54 / mean 0.58（卖出变现，三谷底品之一）",
+      "sell_price_quantile": "FERTILIZER qmed 0.29-0.33（低-中位放量卖出，不等价峰）",
+      "sample_n": 13, "evidence_grade": "A",
+      "note": "Boey ep115249381 sell_fert 4469 为异常离群（见 anomaly），已排除出中位数口径"
+    },
+    "milk_wool_investment_rhythm": {
+      "summary": "奶毛非囤到高价才卖，而是产量节奏驱动持续变现 + d29 季末清仓",
+      "curve_shape": "d12-24 平台持续投放（每 3-4 日一波 20-45u），非单点脉冲",
+      "price_capture": "MILK qmed 0.37-0.46（中位）、WOOL qmed 0-0.48（逐局差异大）",
+      "sample_n": 6, "evidence_grade": "A"
+    }
+  },
+
+  "exec_params": {
+    "sell_order_release_condition": {
+      "summary": "卖单放行=反应式清仓（非价峰等待）；ice 0.4-3%，价格分位逐品固定但不高位",
+      "ice_rate": "Majkel 0.004 / DECEM 0.009 / M&M&P&Q 0.015 / DSM 0.021（97-99% 反应式；Fourth Quadrant 0.238 离群见 anomaly）",
+      "price_quantile_by_product": "WHEAT qmed 0.5(中)、TOMATO qmed 0.0(底清)、FERTILIZER qmed 0.29-0.33(低中)、MELON qmed 0.1-0.4(早/低位)、MILK qmed 0.37-0.46(中)、WOOL qmed 0-0.48(变)、EGG qmed 0.17-0.5",
+      "timing_function": "放行条件≈『有货即反应式分小单卖出』，逐品价格分位是结果非门槛；未见价峰择时门（与 1% ice 一致）",
+      "sample_n": "6 全量局(分位) + 88 局(ice)", "evidence_grade": "A(分位)/B(ice)"
+    },
+    "d14_20_milk_wool_window": {
+      "summary": "d14-20 窗承接奶毛蛋 22-38% 变现，qmed 0.29-0.49；是中盘平台非脉冲（elite +1330 的持续现金流来源）",
+      "window_share_of_mwegg_qty": "Majkel_ref 0.27 / THIRD_ref 0.22 / Majkel_115267533 0.38",
+      "window_price_quantile_med": "0.29-0.49",
+      "shape": "MW 曲线 d12-24 平台、d29 冲高清算；窗内持续 3-4 日一波 20-45u",
+      "sample_n": 3, "evidence_grade": "A",
+      "note": "+1330 归因属 D3/D4 验证项；本蓝图只给窗内节奏实据"
+    },
+    "decl_exec_matching": {
+      "summary": "小单散布 + 高整单全清 + 高持货背书；实现价高于日均（择时正贡献）",
+      "lot_med": "2-4（Majkel/DECEM/DSM=2、M&M&P&Q=3、Boey/akmr/Victor=4；Fourth Quadrant=10 离群）",
+      "full_exec_rate": "0.72-0.94（Boey 0.935 最高）",
+      "backed_share": "0.84-0.96（申报量多≤持货，整单全清）",
+      "clear_rate": "0.11-0.23",
+      "realized_dayavg": "1.02-1.04（实现价/日均>1，卖在日均上方）",
+      "late_qty_share": "0.44-0.64（44-64% 卖量落 d20-29）",
+      "sample_n": 88, "evidence_grade": "C"
+    }
+  },
+
+  "adaptivity": {
+    "summary": "架构=固定开局 + 自适应中盘畜群构成；同对手重复对局的结构分叉=自适应响应直接证据",
+    "opening_frozen": "开局指纹(turn1-4)跨同对手重复局完全一致（BUY COW+WHEAT→SELL WHEAT+HIRE×4+COW+SHEEP）——开局是确定性脚本，非自适应",
+    "midgame_diverges": "畜群构成跨同对手重复局显著分叉：M&M&P&Q v DECEM 6 局 GOOSE 占比 0.21-0.55、SHEEP 0.12-0.68；Majkel v Victor 2 局 GOOSE 0.26-0.53",
+    "interpretation": "对手恒定而中盘结构变=响应游戏态/市场的自适应（非纯开环 tape）；分叉落点在畜群构成+COOP 数（coop 4-13/局）",
+    "caveat": "分叉与 market/seed 变动混杂，未做对手建模级归因（区分『对市场自适应』vs『对对手自适应』需控 seed，超出本蓝图）",
+    "repeat_matchup_samples": [
+      "M&M&P&Q v DECEM 6 局（115247529/48992/53606/56071/58986/64513）",
+      "Majkel v Vadim 2 局、Majkel v Victor 2 局、akmr v My second life 2 局、Fourth Quadrant v Gordeev 2 局"
+    ],
+    "sample_n": "4 对同对手重复对局(≥2 局)，含 1 对 6 局", "evidence_grade": "B"
+  },
+
+  "evidence_grades": {
+    "A_firsthand_full_replay": {
+      "n_replays": 7, "episodes": [114061801, 111923787, 115249381, 115267533, 115256033, 114612657, 114420390],
+      "covers": ["prod_params 全部", "exec_params 价格分位/d14-20 窗", "COOP/放置位置"],
+      "grade": "A"
+    },
+    "B_firsthand_action_stream": {
+      "n_games": 88, "covers": ["adaptivity 结构指纹", "herd/crop 构成", "88 局 decl-exec/ice 聚合"],
+      "grade": "B"
+    },
+    "C_inherited": {
+      "source": "results/2026-09-29-top-games-analysis.json baseline_0928（leoprovorov 461 胜局）",
+      "covers": ["1% ice 基线", "decl-exec 口径", "realized_dayavg 基线 0.985/1.011"],
+      "grade": "C"
+    }
+  },
+
+  "anomaly": [
+    "Boey ep115249381 sell_fert 4469u（自用肥比 0.04）——肥料卖量异常离群，疑 MarketShock 型抛售或计数伪迹；已排除出肥料中位数口径",
+    "Fourth Quadrant：ice 0.238 + lot_med 10（vs 主流 0.004-0.03 / lot 2-4）——大单固定卖单的另一执行族，非主流反应式小单族",
+    "THIRD ep111923787 d29 单日奶+毛+蛋清算 359u——季末集中清仓极端签名（shed 容量 100 溢出弃置风险）",
+    "开局指纹 turn1-4 跨局字节级一致（含跨对手）——强证据开局为共享/同源固定脚本（与 stream_hashes sha24 口径呼应），开局段不构成差异化优势",
+    "GOOSE placed_day 逐局 d2-11 漂移（THIRD d2 早置 vs UMG d9-11 晚置）——GOOSE 时点非参数化固定，属响应式决策"
+  ],
+
+  "d1_d3_d4_takeaways": {
+    "D1_产线取参": "买畜时序 COW(d0-1)→SHEEP(d3-6/d9-15 两波)→GOOSE(d6-9 入 COOP)；COOP/PASTURE 聚象限0-1；肥料处置=自用~45%/卖~55%；奶毛蛋节奏 d6 首剪/d8 奶爬坡/d12-14 蛋起量/d29 清仓；畜群构成逐局变动（留自适应自由度）",
+    "D3_自适应取参": "冻结开局+自适应中盘畜群构成；同对手重复局结构分叉是响应式证据（非开环）；分叉主落点=GOOSE/SHEEP 占比+COOP 数；需控 seed 区分市场自适应 vs 对手自适应",
+    "D4_执行取参": "反应式小单清仓（lot 2-4、ice<3%、full_exec 0.72-0.94、backed 0.84-0.96）；价格分位逐品固定不高位（WHEAT 中/TOMATO 底清/FERT 低中）；d14-20 窗持续奶毛变现(qmed 0.29-0.49)非脉冲；实现价 1.02-1.04×日均；避 Fourth Quadrant 大单族与 Boey 肥料离群"
+  }
+}

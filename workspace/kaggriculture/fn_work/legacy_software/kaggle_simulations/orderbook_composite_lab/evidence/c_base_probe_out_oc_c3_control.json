@@ -1,0 +1,33 @@
+{
+ "probes": [
+  {
+   "verdict": "INFO",
+   "smoke": {
+    "step0": "ok action=\"{'farmer': ['PASS'], 'hands': [], 'market': [['BUY_PRODUCT', 'WHEAT', 8], ['SELL', 'WHEAT', 3], ['BUY_SEED', 'WHEAT', 1]\"",
+    "step350": "ok action=\"{'farmer': ['FEED'], 'hands': [], 'market': [['SELL', 'MILK', 5], ['SELL', 'WOOL', 5], ['SELL', 'STRAWBERRY', 5], ['BUY_\"",
+    "entry_last_callable": "_hs_agent"
+   },
+   "probe": "P12_entry_smoke"
+  },
+  {
+   "verdict": "FAIL",
+   "ep1_cls": "wfr",
+   "ep1_latch": [
+    true
+   ],
+   "ep1_entries_mutated": 443,
+   "ep1_trigger_ok": true,
+   "ep2_cls": "wfr",
+   "ep2_zero_latch": false,
+   "ep2_zero_swap": false,
+   "ep2_max_entries_mutated": 443,
+   "ep2_latch_true_ticks": 200,
+   "ep2_delta_cells": 443,
+   "note": "\u540c\u8fdb\u7a0b ep1 WFR \u89e6\u53d1 C3 -> ep2 \u955c\u50cf\uff08h1_mirror\uff09\uff1a\u65ad\u8a00 ep2 \u96f6\u6362\u8868\u96f6\u95e9\uff08\u6362\u5c40\u590d\u4f4d\u751f\u6548\uff09\uff1b\u9010\u62cd\u8ff9\u6bcf\u62cd dirty==0",
+   "probe": "P13_dual_game_serial_zero_pollution"
+  }
+ ],
+ "anomaly": [],
+ "artifact": "../orderbook_oppcond_lab/build/oc_c3/main.py",
+ "artifact_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d"
+}

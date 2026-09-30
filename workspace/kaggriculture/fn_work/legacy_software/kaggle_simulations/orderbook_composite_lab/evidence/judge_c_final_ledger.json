@@ -1,0 +1,75 @@
+{
+ "budget": {
+  "cap_局次": 450,
+  "auth": 30,
+  "identity": 96,
+  "multi_game": 32,
+  "panel": 192,
+  "total_局次": 350,
+  "within_cap": true
+ },
+ "criteria": {
+  "rule": "①对 oc_c3 冠军锚 ≥0.5（≥0.6 佳/≥0.7 碾压）②强面板 {mpx,tetsutani,V89} 逐对 ≥0.5 ③弱锚 {r40,A} 逐对 ≥0.8 ④margin/终局钱只作参考 ⑤flips_neg 报数",
+  "c1_vs_oc_c3_ge_0.5": {
+   "h2h": 0.6562,
+   "grade": "佳",
+   "passed": true
+  },
+  "c2_strong_all_ge_0.5": {
+   "h2h": {
+    "mpx": 0.625,
+    "tetsutani": 0.6562,
+    "V89": 0.6562
+   },
+   "passed": true
+  },
+  "c3_weak_all_ge_0.8": {
+   "h2h": {
+    "r40": 0.875,
+    "A": 0.9375
+   },
+   "passed": true
+  },
+  "c4_margin_reference_only": true,
+  "c5_flips_neg_reported": {
+   "vs_oc_c3": 0,
+   "vs_fert60": 0
+  },
+  "zero_regression_single_game": {
+   "vs_fert60_identical": "32/32",
+   "passed": true
+  },
+  "single_game_diff_vs_oc_c3_fert_only": {
+   "strict_fert_only_all": false,
+   "attribution_caliber_all": true,
+   "n_units": 32,
+   "passed": true
+  },
+  "multi_game_p13_zero_pollution": {
+   "c_final_ep2_zero_given_trigger": "8/8",
+   "fert60_control_ep2_polluted": "8/8",
+   "passed": true
+  }
+ },
+ "identity_vs_oc_c3_flip": {
+  "n": 32,
+  "W": 24,
+  "L": 6,
+  "T": 2,
+  "delta_sum": -848.0,
+  "win_control": 28,
+  "win_variant": 28,
+  "flips_pos": 0,
+  "flips_neg": 0,
+  "mean_delta": -26.5,
+  "net_flip_wins": 0
+ },
+ "panel_h2h": {
+  "oc_c3": 0.6562,
+  "mpx": 0.625,
+  "tetsutani": 0.6562,
+  "V89": 0.6562,
+  "r40": 0.875,
+  "A": 0.9375
+ }
+}

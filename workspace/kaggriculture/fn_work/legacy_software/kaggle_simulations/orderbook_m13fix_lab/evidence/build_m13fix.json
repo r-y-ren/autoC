@@ -1,0 +1,16 @@
+{
+ "version": "m13fix-build/1.0",
+ "base_main_sha256": "5d2d12468a5d1ec53c3d3e4726de54e6a5d29eb038fc97ca45c72b2ce7992df0",
+ "form": {
+  "main_sha256": "f4b947e199a70a7d60498266b171dc4dd51109692eb66d2f713c9e81f4827f03",
+  "tar_sha256": "6993fbd55d8a48f00a86505d821db092b80931f8dfb120edd9c6eba896802191",
+  "subs": [
+   {
+    "old": "            h['prev']['own'][item]=h['prev']['own'].get(item,0)+take;_S804_REPORT['fires']+=1;_S804_REPORT['units']+=take;added=True",
+    "new": "            h['prev']['own'][item]=h['prev']['own'].get(item,0)+take\n            _m13h=_S758_HIST.get(player) or {}\n            if (_m13h.get('prev') or {}).get('step')==step:_m13h['prev']['own'][item]=_m13h['prev']['own'].get(item,0)+take\n            _S804_REPORT['fires']+=1;_S804_REPORT['units']+=take;added=True",
+    "count": 1
+   }
+  ],
+  "roundtrip_identity_ok": true
+ }
+}

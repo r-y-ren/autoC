@@ -1,0 +1,53 @@
+{
+ "version": "c-final-build/1.0",
+ "champion_sha": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+ "fert60_sha": "1a5a233f39df64281b91657e1e07cb8926aefa33a85554f34ebbf51f5c3543f7",
+ "form": {
+  "main_sha256": "a37c0d3487fe1d2152ec6c0b767b36afc21ad18207accb2d3cf1f1b077016a92",
+  "tar_sha256": "d501eec66f756fd71a348c0fd1576170d20e24ce9a4c42d41ca5a67998f7a3b2",
+  "subs": [
+   {
+    "old": "            h['prev']['own'][item]=h['prev']['own'].get(item,0)+take;_S804_REPORT['fires']+=1;_S804_REPORT['units']+=take;added=True",
+    "new": "            h['prev']['own'][item]=h['prev']['own'].get(item,0)+take\n            _m13h=_S758_HIST.get(player) or {}\n            if (_m13h.get('prev') or {}).get('step')==step:_m13h['prev']['own'][item]=_m13h['prev']['own'].get(item,0)+take\n            _S804_REPORT['fires']+=1;_S804_REPORT['units']+=take;added=True",
+    "count": 1
+   }
+  ],
+  "roundtrip_identity_ok": true,
+  "diff_audit": {
+   "faces": {
+    "fert": {
+     "src": "orderbook_d1prod_lab/build/fert60（oc_c3+fert 层）",
+     "n_hunks": 7,
+     "hunk_classes": {
+      "fert:tape_blob": 1,
+      "fert:assert_regen": 6
+     }
+    },
+    "m13": {
+     "src": "orderbook_m13fix_lab 三修复件（D1/D2/D3）",
+     "n_hunks": 2,
+     "hunk_classes": {
+      "m13:D3_ledger": 1,
+      "m13:tail": 1
+     }
+    },
+    "oc_c3_sell_face": {
+     "touch": 0,
+     "caliber": "既有市场单零改写（磁带级）+改写区无卖面决策码"
+    }
+   },
+   "tape_cells_changed_oc3_to_fert": 1856,
+   "unit_op_diffs": {
+    "PASS->FERTILIZE": 3152,
+    "other": 0
+   },
+   "unit_op_diff_other_samples": [],
+   "sell_orders_identical_oc3_vs_fert": true,
+   "tape_identical_fert_vs_cfin": true,
+   "hunk_spans_disjoint": true,
+   "unclassified_hunks": 0,
+   "unclassified_samples": [],
+   "zero_conflict": true
+  }
+ }
+}

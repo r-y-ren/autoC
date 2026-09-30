@@ -1,0 +1,16 @@
+build fert46 {'g_add': 0, 'mw_trim': 0, 'fert_u': 0.46}
+  bad_routes: 0 probe: True twin: 145703.3 -> 145366.3 elapsed: 6.3
+build fert23 {'g_add': 0, 'mw_trim': 0, 'fert_u': 0.23}
+  bad_routes: 0 probe: True twin: 145703.3 -> 145700.3 elapsed: 4.9
+build fert60 {'g_add': 0, 'mw_trim': 0, 'fert_u': 0.6}
+  bad_routes: 0 probe: True twin: 145703.3 -> 145185.9 elapsed: 7.2
+build mwtrim1 {'g_add': 0, 'mw_trim': 1, 'fert_u': 0.0}
+  bad_routes: 0 probe: True twin: 145703.3 -> 144517.7 elapsed: 6.4
+build mwtrim2 {'g_add': 0, 'mw_trim': 2, 'fert_u': 0.0}
+  bad_routes: 0 probe: True twin: 145703.3 -> 143191.0 elapsed: 7.9
+build gadd6 {'g_add': 6, 'mw_trim': 0, 'fert_u': 0.0}
+  bad_routes: 0 probe: True twin: 145703.3 -> 110833.0 elapsed: 27.7
+build gadd10 {'g_add': 10, 'mw_trim': 0, 'fert_u': 0.0}
+  bad_routes: 0 probe: True twin: 145703.3 -> 118171.1 elapsed: 32.5
+build fert46_gadd6 {'g_add': 6, 'mw_trim': 0, 'fert_u': 0.46}
+  bad_routes: 0 probe: True twin: 145703.3 -> 110601.1 elapsed: 31.4

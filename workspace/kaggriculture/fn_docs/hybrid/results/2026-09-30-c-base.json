@@ -1,0 +1,1740 @@
+{
+ "version": "c-base-judge/1.0",
+ "task": "完全体底座 C_base = oc_c3（3f8b57fd 冠军件）+ M13 修复层移植（D1 画像换局复位 / D2 C3 闩复位+换表可逆 / D3 s804 自插记账）",
+ "build": {
+  "artifact": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_composite_lab/build/c_base/main.py",
+  "main_sha256": "0643034fb347f655515d3c9b46585e6edcc16b701b0d69494926df2ab3ad18d6",
+  "tar_sha256": "70b38256f222b505209473da0793127a9db7de0aa446d8d10b89c85734282989",
+  "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_oppcond_lab/build/oc_c3/main.py",
+  "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+  "gates": {
+   "G1_sub_count": "PASS (count==1)",
+   "G2_roundtrip_identity": "PASS",
+   "G3_compile": "PASS",
+   "G4_exec_entry": "PASS (末 callable=_hs_agent)"
+  },
+  "footprint": {
+   "patch_footprint": {
+    "inner_sub_count": 1,
+    "inner_sub_added_bytes": 183,
+    "tail_added_bytes": 2030,
+    "diff_hunks": 2,
+    "note": "补丁足迹=1 行内层子串（D3）+ 尾块（D1/D2）；基底其余逐字节不变（G2 反替换回程为证）"
+   },
+   "trigger_surface": {
+    "D1": "仅 step==0 或 step<=last_step（换局边界）改 _OC_STATE[player]",
+    "D2_backup": "仅 wfr 类 ∧ step>=144 首次换表拍写 _M13_C3_BACKUP（读操作）",
+    "D2_restore": "仅换局边界还原 443 条 delta 触点 + 闩复位",
+    "D3": "仅 _s804_apply 自插 SELL 拍双写 _S758_HIST own（prev.step==step 守卫）",
+    "non_trigger_ticks": "零写入（零足迹，轨道 2 口径）"
+   },
+   "delta_map": {
+    "cells": 443,
+    "idx_min": 412,
+    "idx_max": 618,
+    "unchanged_from_base": true,
+    "disjoint_from_base_opening_rewrite": "idx 412-618 ∩ 基座开局改写 0-6 = ∅"
+   },
+   "runtime_zero_footprint_evidence": "probe_c_base P13 逐拍迹（ep2 dirty==0 每拍）+ judge_c_base 32 局 stream_sha 逐拍恒等（identity_pairs.stream_identical）"
+  },
+  "seal": "G2 反替换回程逐字节=oc_c3 基底（roundtrip_identity_ok）"
+ },
+ "fix_port": {
+  "port_from": "orderbook_m13fix_lab/build/u2v2_dh_fix (main_sha f4b947e1…, base u2v2_drop_half 5d2d1246…)",
+  "port_notes": "D3/D1/D2 逐字移植；唯一适配=入口归一 _u2_agent→_hs_agent（oc_c3 末 callable）；尾块引用符号两基座同名同语义，_oc_c3_swap 两基座逐字节同源，无 drop_half 专有耦合",
+  "patches": {
+   "D1": "_oc_after 头部 step==0 或 step<=last_step -> _oc_state_new()（_RACE_STATE 单调闸换局重播模板）",
+   "D2": "_oc_c3_swap 换表前备份 443 条 delta 触点(idx 412-618)；_m13_c3_restore 换局反向还原+闩复位（与基座开局改写 0-6 不相交）",
+   "D3": "_s804_apply 自插 SELL 同步记 _S758_HIST[player]['prev']['own']（prev.step==step 守卫）"
+  },
+  "subs": [
+   {
+    "old": "            h['prev']['own'][item]=h['prev']['own'].get(item,0)+take;_S804_REPORT['fires']+=1;_S804_REPORT['units']+=take;added=True",
+    "new": "            h['prev']['own'][item]=h['prev']['own'].get(item,0)+take\n            _m13h=_S758_HIST.get(player) or {}\n            if (_m13h.get('prev') or {}).get('step')==step:_m13h['prev']['own'][item]=_m13h['prev']['own'].get(item,0)+take\n            _S804_REPORT['fires']+=1;_S804_REPORT['units']+=take;added=True",
+    "count": 1
+   }
+  ],
+  "tail_bytes": 2030,
+  "drop_half_dependency": "无（逐字移植；唯一适配=入口归一 _u2_agent→_hs_agent）"
+ },
+ "source": {
+  "commands": [
+   "python3 orderbook_composite_lab/build_c_base.py",
+   "python3 orderbook_composite_lab/probe_c_base.py",
+   "python3 orderbook_composite_lab/probe_c_base.py ../orderbook_oppcond_lab/build/oc_c3/main.py",
+   "python3 orderbook_composite_lab/judge_c_base.py"
+  ],
+  "corpus": {
+   "loss_folds": [
+    1825501814,
+    2013941152,
+    786146079,
+    1883261866,
+    963182245,
+    240876256,
+    1705553586,
+    2009279466
+   ],
+   "neutral_folds": [
+    674000,
+    674137,
+    674274,
+    674411,
+    674548,
+    674685,
+    674822,
+    674959
+   ],
+   "neutral_spec": "674000+i*137（i=0..7）",
+   "panel_folds": [
+    674000,
+    674137,
+    674274,
+    674411
+   ],
+   "n16": "败局 8 + 中性 8 =16 fold（n=16 双席=32 局/臂）"
+  },
+  "workers": 2,
+  "caliber": {
+   "margin": "banks[our]−banks[opp]（run_games banks）",
+   "terminal_money": "farms[obs.player].money（end_reads）",
+   "flips": "win=margin>0；flips_pos=ctl 负 var 正；flips_neg=ctl 正 var 负；净翻胜=win_var−win_ctl"
+  },
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "version": "simbridge/1.0",
+   "wall_speedup": 5.118
+  }
+ },
+ "identity_pairs": {
+  "design": "c_base(变体) vs oc_c3(对照) 同 (seed,seat) 配对 32 局/臂；单局逐拍恒等=零回归（D1/D2 仅换局边界、D3 掩蔽零现症）",
+  "seal": {
+   "design": "mx_base（全基线参数）vs oc_c3 同 (seed,seat) 双席：我席逐拍动作流 digest 全等 + 终局钱相等（参数级手术行为保真封印）",
+   "n_units": 32,
+   "n_stream_identical": 32,
+   "n_money_equal": 32,
+   "passed": true,
+   "violations": []
+  },
+  "flip_table": {
+   "n": 32,
+   "W": 0,
+   "L": 0,
+   "T": 32,
+   "mean_delta": 0.0,
+   "win_control": 26,
+   "win_variant": 26,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "net_flip_wins": 0,
+   "rows_lite": [
+    {
+     "seed": 1825501814,
+     "seat": 0,
+     "margin_control": 675.0,
+     "margin_variant": 675.0
+    },
+    {
+     "seed": 1825501814,
+     "seat": 1,
+     "margin_control": 675.0,
+     "margin_variant": 675.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 0,
+     "margin_control": 351.0,
+     "margin_variant": 351.0
+    },
+    {
+     "seed": 2013941152,
+     "seat": 1,
+     "margin_control": 351.0,
+     "margin_variant": 351.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 0,
+     "margin_control": -306.0,
+     "margin_variant": -306.0
+    },
+    {
+     "seed": 786146079,
+     "seat": 1,
+     "margin_control": -306.0,
+     "margin_variant": -306.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 0,
+     "margin_control": 20556.0,
+     "margin_variant": 20556.0
+    },
+    {
+     "seed": 1883261866,
+     "seat": 1,
+     "margin_control": 20485.0,
+     "margin_variant": 20485.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 0,
+     "margin_control": 119.0,
+     "margin_variant": 119.0
+    },
+    {
+     "seed": 963182245,
+     "seat": 1,
+     "margin_control": 119.0,
+     "margin_variant": 119.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 0,
+     "margin_control": 562.0,
+     "margin_variant": 562.0
+    },
+    {
+     "seed": 240876256,
+     "seat": 1,
+     "margin_control": 562.0,
+     "margin_variant": 562.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 0,
+     "margin_control": 1444.0,
+     "margin_variant": 1444.0
+    },
+    {
+     "seed": 1705553586,
+     "seat": 1,
+     "margin_control": 1444.0,
+     "margin_variant": 1444.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 0,
+     "margin_control": 26881.0,
+     "margin_variant": 26881.0
+    },
+    {
+     "seed": 2009279466,
+     "seat": 1,
+     "margin_control": 26881.0,
+     "margin_variant": 26881.0
+    },
+    {
+     "seed": 674000,
+     "seat": 0,
+     "margin_control": -262.0,
+     "margin_variant": -262.0
+    },
+    {
+     "seed": 674000,
+     "seat": 1,
+     "margin_control": -262.0,
+     "margin_variant": -262.0
+    },
+    {
+     "seed": 674137,
+     "seat": 0,
+     "margin_control": -1371.0,
+     "margin_variant": -1371.0
+    },
+    {
+     "seed": 674137,
+     "seat": 1,
+     "margin_control": -1371.0,
+     "margin_variant": -1371.0
+    },
+    {
+     "seed": 674274,
+     "seat": 0,
+     "margin_control": 485.0,
+     "margin_variant": 485.0
+    },
+    {
+     "seed": 674274,
+     "seat": 1,
+     "margin_control": 485.0,
+     "margin_variant": 485.0
+    },
+    {
+     "seed": 674411,
+     "seat": 0,
+     "margin_control": 50644.0,
+     "margin_variant": 50644.0
+    },
+    {
+     "seed": 674411,
+     "seat": 1,
+     "margin_control": 44358.0,
+     "margin_variant": 44358.0
+    },
+    {
+     "seed": 674548,
+     "seat": 0,
+     "margin_control": 168.0,
+     "margin_variant": 168.0
+    },
+    {
+     "seed": 674548,
+     "seat": 1,
+     "margin_control": 168.0,
+     "margin_variant": 168.0
+    },
+    {
+     "seed": 674685,
+     "seat": 0,
+     "margin_control": 240.0,
+     "margin_variant": 240.0
+    },
+    {
+     "seed": 674685,
+     "seat": 1,
+     "margin_control": 240.0,
+     "margin_variant": 240.0
+    },
+    {
+     "seed": 674822,
+     "seat": 0,
+     "margin_control": 906.0,
+     "margin_variant": 906.0
+    },
+    {
+     "seed": 674822,
+     "seat": 1,
+     "margin_control": 906.0,
+     "margin_variant": 906.0
+    },
+    {
+     "seed": 674959,
+     "seat": 0,
+     "margin_control": 13767.0,
+     "margin_variant": 13767.0
+    },
+    {
+     "seed": 674959,
+     "seat": 1,
+     "margin_control": 13738.0,
+     "margin_variant": 13738.0
+    }
+   ]
+  },
+  "end_agg": {
+   "oc_c3": {
+    "terminal_money_mean": 96112.6,
+    "terminal_money_median": 91186.0
+   },
+   "c_base": {
+    "terminal_money_mean": 96112.6,
+    "terminal_money_median": 91186.0
+   }
+  }
+ },
+ "multi_game": {
+  "design": "同进程双局串跑：每链=同一件实例贯穿 ep1(WFR 对手 counter_wool_front_runner)→ep2(镜像对手=本件自拷贝全新实例)；8 组×双席×2 臂=32 链 64 局",
+  "groups": [
+   674000,
+   674137,
+   674274,
+   674411,
+   674548,
+   674685,
+   674822,
+   674959
+  ],
+  "probe_P13": {
+   "c_base": {
+    "artifact": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_composite_lab/build/c_base/main.py",
+    "artifact_sha256": "0643034fb347f655515d3c9b46585e6edcc16b701b0d69494926df2ab3ad18d6",
+    "verdicts": {
+     "P12_entry_smoke": "INFO",
+     "P13_dual_game_serial_zero_pollution": "PASS"
+    },
+    "detail_p13": {
+     "ep1_cls": "wfr",
+     "ep1_trigger_ok": true,
+     "ep2_cls": "h1_mirror",
+     "ep2_zero_latch": true,
+     "ep2_zero_swap": true,
+     "ep2_max_entries_mutated": 0
+    }
+   },
+   "oc_c3_control": {
+    "artifact": "../orderbook_oppcond_lab/build/oc_c3/main.py",
+    "artifact_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+    "verdicts": {
+     "P12_entry_smoke": "INFO",
+     "P13_dual_game_serial_zero_pollution": "FAIL"
+    },
+    "detail_p13": {
+     "ep1_cls": "wfr",
+     "ep1_trigger_ok": true,
+     "ep2_cls": "wfr",
+     "ep2_zero_latch": false,
+     "ep2_zero_swap": false,
+     "ep2_max_entries_mutated": 443
+    }
+   }
+  },
+  "chains": [
+   {
+    "arm": "oc_c3",
+    "seed": 674000,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 181961.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -4502.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674000,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 181961.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674000,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 181961.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -4502.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674000,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 181961.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674137,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 153819.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -4003.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674137,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 153819.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674137,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 153819.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -4003.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674137,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 153819.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674274,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 100536.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -3003.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674274,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 100536.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674274,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 100536.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -3003.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674274,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 100536.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674411,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 183605.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -1114.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674411,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 183605.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -1096.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674411,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 179000.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 1078.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674411,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 179000.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 1096.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674548,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 156562.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -36.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674548,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 156562.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674548,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 156562.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -36.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674548,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 156562.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674685,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 174815.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -1919.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674685,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 174815.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674685,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 168481.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -1919.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674685,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 168481.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674822,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 181807.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -1438.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674822,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 181807.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674822,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 181807.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -1438.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674822,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 181807.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 0.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674959,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 170968.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 1283.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674959,
+    "seat": 0,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 170968.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": 1325.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "oc_c3",
+    "seed": 674959,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 170968.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -1367.0,
+    "ep2_latch": [
+     true
+    ],
+    "ep2_dirty_cells": 443,
+    "ep2_cls": "wfr",
+    "ep2_zero_pollution": false,
+    "ep1_trigger_ok": true
+   },
+   {
+    "arm": "c_base",
+    "seed": 674959,
+    "seat": 1,
+    "ep2_opponent": "self_copy",
+    "delta_cells": 443,
+    "ep1_error": null,
+    "ep1_margin": 170968.0,
+    "ep1_latch": [
+     true
+    ],
+    "ep1_dirty_cells": 443,
+    "ep1_cls": "wfr",
+    "ep2_error": null,
+    "ep2_margin": -1325.0,
+    "ep2_latch": [
+     false
+    ],
+    "ep2_dirty_cells": 0,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_pollution": true,
+    "ep1_trigger_ok": true
+   }
+  ],
+  "pollution": {
+   "oc_c3": {
+    "n": 16,
+    "ep1_trigger_ok": 16,
+    "ep2_zero_pollution": 0,
+    "ep2_zero_pollution_given_ep1_trigger": 0,
+    "ep2_latch_true": 16,
+    "ep2_dirty_cells_max": 443,
+    "ep2_cls_hist": {
+     "wfr": 16
+    }
+   },
+   "c_base": {
+    "n": 16,
+    "ep1_trigger_ok": 16,
+    "ep2_zero_pollution": 16,
+    "ep2_zero_pollution_given_ep1_trigger": 16,
+    "ep2_latch_true": 0,
+    "ep2_dirty_cells_max": 0,
+    "ep2_cls_hist": {
+     "h1_mirror": 16
+    }
+   }
+  },
+  "ep1_flip_table": {
+   "n": 16,
+   "W": 0,
+   "L": 0,
+   "T": 16,
+   "mean_delta": 0.0,
+   "win_control": 16,
+   "win_variant": 16,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "net_flip_wins": 0,
+   "rows_lite": [
+    {
+     "seed": 674000,
+     "seat": 0,
+     "margin_control": 181961.0,
+     "margin_variant": 181961.0
+    },
+    {
+     "seed": 674000,
+     "seat": 1,
+     "margin_control": 181961.0,
+     "margin_variant": 181961.0
+    },
+    {
+     "seed": 674137,
+     "seat": 0,
+     "margin_control": 153819.0,
+     "margin_variant": 153819.0
+    },
+    {
+     "seed": 674137,
+     "seat": 1,
+     "margin_control": 153819.0,
+     "margin_variant": 153819.0
+    },
+    {
+     "seed": 674274,
+     "seat": 0,
+     "margin_control": 100536.0,
+     "margin_variant": 100536.0
+    },
+    {
+     "seed": 674274,
+     "seat": 1,
+     "margin_control": 100536.0,
+     "margin_variant": 100536.0
+    },
+    {
+     "seed": 674411,
+     "seat": 0,
+     "margin_control": 183605.0,
+     "margin_variant": 183605.0
+    },
+    {
+     "seed": 674411,
+     "seat": 1,
+     "margin_control": 179000.0,
+     "margin_variant": 179000.0
+    },
+    {
+     "seed": 674548,
+     "seat": 0,
+     "margin_control": 156562.0,
+     "margin_variant": 156562.0
+    },
+    {
+     "seed": 674548,
+     "seat": 1,
+     "margin_control": 156562.0,
+     "margin_variant": 156562.0
+    },
+    {
+     "seed": 674685,
+     "seat": 0,
+     "margin_control": 174815.0,
+     "margin_variant": 174815.0
+    },
+    {
+     "seed": 674685,
+     "seat": 1,
+     "margin_control": 168481.0,
+     "margin_variant": 168481.0
+    },
+    {
+     "seed": 674822,
+     "seat": 0,
+     "margin_control": 181807.0,
+     "margin_variant": 181807.0
+    },
+    {
+     "seed": 674822,
+     "seat": 1,
+     "margin_control": 181807.0,
+     "margin_variant": 181807.0
+    },
+    {
+     "seed": 674959,
+     "seat": 0,
+     "margin_control": 170968.0,
+     "margin_variant": 170968.0
+    },
+    {
+     "seed": 674959,
+     "seat": 1,
+     "margin_control": 170968.0,
+     "margin_variant": 170968.0
+    }
+   ]
+  },
+  "ep2_flip_table": {
+   "n": 16,
+   "W": 16,
+   "L": 0,
+   "T": 0,
+   "mean_delta": 1870.12,
+   "win_control": 2,
+   "win_variant": 2,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "net_flip_wins": 0,
+   "rows_lite": [
+    {
+     "seed": 674000,
+     "seat": 0,
+     "margin_control": -4502.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674000,
+     "seat": 1,
+     "margin_control": -4502.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674137,
+     "seat": 0,
+     "margin_control": -4003.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674137,
+     "seat": 1,
+     "margin_control": -4003.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674274,
+     "seat": 0,
+     "margin_control": -3003.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674274,
+     "seat": 1,
+     "margin_control": -3003.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674411,
+     "seat": 0,
+     "margin_control": -1114.0,
+     "margin_variant": -1096.0
+    },
+    {
+     "seed": 674411,
+     "seat": 1,
+     "margin_control": 1078.0,
+     "margin_variant": 1096.0
+    },
+    {
+     "seed": 674548,
+     "seat": 0,
+     "margin_control": -36.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674548,
+     "seat": 1,
+     "margin_control": -36.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674685,
+     "seat": 0,
+     "margin_control": -1919.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674685,
+     "seat": 1,
+     "margin_control": -1919.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674822,
+     "seat": 0,
+     "margin_control": -1438.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674822,
+     "seat": 1,
+     "margin_control": -1438.0,
+     "margin_variant": 0.0
+    },
+    {
+     "seed": 674959,
+     "seat": 0,
+     "margin_control": 1283.0,
+     "margin_variant": 1325.0
+    },
+    {
+     "seed": 674959,
+     "seat": 1,
+     "margin_control": -1367.0,
+     "margin_variant": -1325.0
+    }
+   ]
+  },
+  "note": "ep1 两臂均触发 C3（设计行为）→ep1 逐拍恒等；ep2 oc_c3 携上局 443 条换表差量+陈旧 wfr 类=污染形态，c_base 零换表零闩"
+ },
+ "panel_smoke": {
+  "design": "c_base vs {mpx, tetsutani} 各 8 局（4 fold 双席，674000+i*137 i=0..3）；oc_c3 同 fold 参照臂交叉登记；强面不掉血初验=各对手 c_base 均值 ≥ oc_c3 均值−0.5",
+  "folds": [
+   674000,
+   674137,
+   674274,
+   674411
+  ],
+  "opponents": {
+   "mpx": {
+    "oc_c3": {
+     "n": 8,
+     "margin_mean": 80.5,
+     "margin_min": -904.0,
+     "W_L_T": [
+      5,
+      3,
+      0
+     ],
+     "end_agg": {
+      "terminal_money_mean": 90928.0,
+      "terminal_money_median": 87665.0
+     },
+     "rows_lite": [
+      {
+       "seed": 674000,
+       "seat": 0,
+       "margin": -64.0
+      },
+      {
+       "seed": 674274,
+       "seat": 0,
+       "margin": 65.0
+      },
+      {
+       "seed": 674000,
+       "seat": 1,
+       "margin": -64.0
+      },
+      {
+       "seed": 674274,
+       "seat": 1,
+       "margin": 65.0
+      },
+      {
+       "seed": 674137,
+       "seat": 0,
+       "margin": 129.0
+      },
+      {
+       "seed": 674411,
+       "seat": 0,
+       "margin": -904.0
+      },
+      {
+       "seed": 674137,
+       "seat": 1,
+       "margin": 129.0
+      },
+      {
+       "seed": 674411,
+       "seat": 1,
+       "margin": 1288.0
+      }
+     ]
+    },
+    "c_base": {
+     "n": 8,
+     "margin_mean": 80.5,
+     "margin_min": -904.0,
+     "W_L_T": [
+      5,
+      3,
+      0
+     ],
+     "end_agg": {
+      "terminal_money_mean": 90928.0,
+      "terminal_money_median": 87665.0
+     },
+     "rows_lite": [
+      {
+       "seed": 674000,
+       "seat": 0,
+       "margin": -64.0
+      },
+      {
+       "seed": 674274,
+       "seat": 0,
+       "margin": 65.0
+      },
+      {
+       "seed": 674000,
+       "seat": 1,
+       "margin": -64.0
+      },
+      {
+       "seed": 674274,
+       "seat": 1,
+       "margin": 65.0
+      },
+      {
+       "seed": 674137,
+       "seat": 0,
+       "margin": 129.0
+      },
+      {
+       "seed": 674411,
+       "seat": 0,
+       "margin": -904.0
+      },
+      {
+       "seed": 674137,
+       "seat": 1,
+       "margin": 129.0
+      },
+      {
+       "seed": 674411,
+       "seat": 1,
+       "margin": 1288.0
+      }
+     ]
+    },
+    "delta_c_base_minus_oc_c3": 0.0,
+    "no_blood_loss_ok": true
+   },
+   "tetsutani": {
+    "oc_c3": {
+     "n": 8,
+     "margin_mean": 55.8,
+     "margin_min": -1040.0,
+     "W_L_T": [
+      3,
+      1,
+      4
+     ],
+     "end_agg": {
+      "terminal_money_mean": 90967.5,
+      "terminal_money_median": 87709.0
+     },
+     "rows_lite": [
+      {
+       "seed": 674000,
+       "seat": 0,
+       "margin": 0.0
+      },
+      {
+       "seed": 674274,
+       "seat": 0,
+       "margin": 167.0
+      },
+      {
+       "seed": 674000,
+       "seat": 1,
+       "margin": 0.0
+      },
+      {
+       "seed": 674274,
+       "seat": 1,
+       "margin": 167.0
+      },
+      {
+       "seed": 674137,
+       "seat": 0,
+       "margin": 0.0
+      },
+      {
+       "seed": 674411,
+       "seat": 0,
+       "margin": -1040.0
+      },
+      {
+       "seed": 674137,
+       "seat": 1,
+       "margin": 0.0
+      },
+      {
+       "seed": 674411,
+       "seat": 1,
+       "margin": 1152.0
+      }
+     ]
+    },
+    "c_base": {
+     "n": 8,
+     "margin_mean": 55.8,
+     "margin_min": -1040.0,
+     "W_L_T": [
+      3,
+      1,
+      4
+     ],
+     "end_agg": {
+      "terminal_money_mean": 90967.5,
+      "terminal_money_median": 87709.0
+     },
+     "rows_lite": [
+      {
+       "seed": 674000,
+       "seat": 0,
+       "margin": 0.0
+      },
+      {
+       "seed": 674274,
+       "seat": 0,
+       "margin": 167.0
+      },
+      {
+       "seed": 674000,
+       "seat": 1,
+       "margin": 0.0
+      },
+      {
+       "seed": 674274,
+       "seat": 1,
+       "margin": 167.0
+      },
+      {
+       "seed": 674137,
+       "seat": 0,
+       "margin": 0.0
+      },
+      {
+       "seed": 674411,
+       "seat": 0,
+       "margin": -1040.0
+      },
+      {
+       "seed": 674137,
+       "seat": 1,
+       "margin": 0.0
+      },
+      {
+       "seed": 674411,
+       "seat": 1,
+       "margin": 1152.0
+      }
+     ]
+    },
+    "delta_c_base_minus_oc_c3": 0.0,
+    "no_blood_loss_ok": true
+   }
+  }
+ },
+ "criteria": {
+  "单局零回归": {
+   "design": "c_base vs oc_c3 32 局逐拍恒等",
+   "stream_identical": "32/32",
+   "money_equal": "32/32",
+   "W_L_T": "0/0/32",
+   "passed": true
+  },
+  "P13探针零换表零闩": {
+   "c_base": {
+    "ep1_cls": "wfr",
+    "ep1_trigger_ok": true,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_latch": true,
+    "ep2_zero_swap": true,
+    "ep2_max_entries_mutated": 0
+   },
+   "oc_c3_control": {
+    "ep1_cls": "wfr",
+    "ep1_trigger_ok": true,
+    "ep2_cls": "wfr",
+    "ep2_zero_latch": false,
+    "ep2_zero_swap": false,
+    "ep2_max_entries_mutated": 443
+   },
+   "passed": true
+  },
+  "双局专组零污染": {
+   "c_base_ep1_trigger_ok": 16,
+   "c_base_ep2_zero_given_trigger": "16/16",
+   "c_base_ep2_latch_true": 0,
+   "c_base_ep2_dirty_cells_max": 0,
+   "oc_c3_ep2_polluted": "16/16",
+   "oc_c3_ep2_dirty_cells_max": 443,
+   "passed": true
+  },
+  "ep2净翻胜≥0": {
+   "ep2_net_flip_wins": 0,
+   "ep2_W_L_T_delta": "16/0/0",
+   "ep2_flips_neg": 0,
+   "passed": true
+  },
+  "面板强面不掉血": {
+   "mpx": {
+    "c_base_mean": 80.5,
+    "oc_c3_mean": 80.5,
+    "delta": 0.0,
+    "passed": true
+   },
+   "tetsutani": {
+    "c_base_mean": 55.8,
+    "oc_c3_mean": 55.8,
+    "delta": 0.0,
+    "passed": true
+   },
+   "passed": true
+  },
+  "flips_neg==0": {
+   "scope": "全单元（配对 32 + ep1 16 + ep2 16）",
+   "pairs": 0,
+   "ep1": 0,
+   "ep2": 0,
+   "pooled": 0,
+   "ep1_W_L_T": "0/0/16",
+   "passed": true
+  }
+ },
+ "verdict": {
+  "criteria_passed": true,
+  "positive_arm": true,
+  "identity_ok": true,
+  "multi_game_zero_pollution_ok": true,
+  "summary": "C_base=oc_c3+M13 修复层移植（四门+反替换封印过）；单局 32/32 逐拍恒等=零回归；P13 探针零换表零闩（oc_c3 对照 FAIL 污染形态）；双局专组 16/16 链零污染（oc_c3 16/16 污染）；ep2 净翻胜 0；面板 c_base≈oc_c3（Δ={'mpx': 0.0, 'tetsutani': 0.0}）",
+  "launch": "不发射不提交（判决先行）；上线决策移交用户"
+ },
+ "budget": {
+  "cap_局次": 250,
+  "auth_局次": 60,
+  "pairs_局次": 64,
+  "multi_game_局次": 64,
+  "panel_局次": 32,
+  "cap_scope": "认证 30×2=60 + 配对 32×2 臂=64 + 双局专组 8×2 席×2 局×2 臂=64 + 面板 2 对手×8 局×2 臂=32 = 220 ≤ 250",
+  "total_局次": 220,
+  "within_cap": true
+ },
+ "anomaly": [],
+ "_generated_at": "2026-09-30T01:17:45Z",
+ "probes": {
+  "c_base": {
+   "artifact": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_composite_lab/build/c_base/main.py",
+   "artifact_sha256": "0643034fb347f655515d3c9b46585e6edcc16b701b0d69494926df2ab3ad18d6",
+   "verdicts": {
+    "P12_entry_smoke": "INFO",
+    "P13_dual_game_serial_zero_pollution": "PASS"
+   },
+   "detail_p13": {
+    "ep1_cls": "wfr",
+    "ep1_trigger_ok": true,
+    "ep2_cls": "h1_mirror",
+    "ep2_zero_latch": true,
+    "ep2_zero_swap": true,
+    "ep2_max_entries_mutated": 0
+   }
+  },
+  "oc_c3_control": {
+   "artifact": "../orderbook_oppcond_lab/build/oc_c3/main.py",
+   "artifact_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+   "verdicts": {
+    "P12_entry_smoke": "INFO",
+    "P13_dual_game_serial_zero_pollution": "FAIL"
+   },
+   "detail_p13": {
+    "ep1_cls": "wfr",
+    "ep1_trigger_ok": true,
+    "ep2_cls": "wfr",
+    "ep2_zero_latch": false,
+    "ep2_zero_swap": false,
+    "ep2_max_entries_mutated": 443
+   }
+  }
+ },
+ "elapsed_s": 451.4
+}

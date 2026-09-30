@@ -1,0 +1,470 @@
+{
+ "schema": "m13-state-closure-audit/1.0",
+ "task": "M13 预卖层状态闭合自查（公开移植陷阱：报价历史状态闭合不严->静默变形）",
+ "date": "2026-09-30",
+ "artifact": {
+  "form": "u2v2_drop_half",
+  "main": "fn_work/legacy_software/kaggle_simulations/orderbook_unified_u2_lab/build/u2v2_drop_half/main.py",
+  "sha256": "5d2d12468a5d1ec53c3d3e4726de54e6a5d29eb038fc97ca45c72b2ce7992df0",
+  "manifest": "build_manifest.json (compile_ok/roundtrip_identity_ok=true)",
+  "probe_scripts": [
+   "/tmp/m13_probe.py",
+   "/tmp/m13_routes_diff.py"
+  ],
+  "probe_raw": "/tmp/m13_probe_out.json"
+ },
+ "state_deps": [
+  {
+   "layer": "焦窗/MODELPX 预卖 fire 点 x4",
+   "sites": [
+    "7820 (_s758 核, h14-22)",
+    "8052 (_s798 hour1, 死支)",
+    "8113 (_s801 hour1 >=95)",
+    "8171 (_s804 hour1 20..94)"
+   ],
+   "deps": [
+    "_S758_HIST[player][item] 窗(对手净流入, max(0,d), 窗24->半剪12)",
+    "hist['prev']=(step,inv,own) 台账",
+    "_r37_market_price/_R37_MARKET_PARAMS(静态参数)",
+    "_RACE_STATE[player]['prev_action'] 同步回写(带 rs['step']==step 闸)"
+   ],
+   "init": "setdefault(player,{}) 惰性; 冷启动空窗->rival_avg=0.0 中性回退(if rival else 0.0)",
+   "day_change": "prev['step']!=step-1 断链->跳过 append 并重播 prev（无跨隙错量）; 窗外(h∉14..22)整体早退不写 prev",
+   "missing_fallback": "inv_all.get(item,0)/prices.get(item,0)->p_now<=1 跳过; p_cur/p_next 计算异常->continue(不发射); take<=0 continue"
+  },
+  {
+   "layer": "焦窗小时1 档(s801/s804)",
+   "sites": [
+    "8113/8171"
+   ],
+   "deps": [
+    "_S804_HIST 独立窗(step==0 clear)",
+    "_S758_HIST 共享窗(s801 hour1 同源更新)"
+   ],
+   "init": "两窗 step==0 复位(step758/step804 包装器)",
+   "day_change": "同上断链语义",
+   "missing_fallback": "p_now 门槛(>=95 / 20..94)不足->原样返回; others 市场支撑缺失->continue"
+  },
+  {
+   "layer": "跌幅半量门 U2V2",
+   "sites": [
+    "10745 _u2_pass / 10778 _u2_qty / 10810 _u2_fire"
+   ],
+   "deps": [
+    "仅台账 _U2_REPORT/_U2_DEC(400 槽)；无历史态"
+   ],
+   "init": "_u2_agent step==0 -> _u2_reset()",
+   "day_change": "step>=648(_U2_WIN_END) 关断直放",
+   "missing_fallback": "base(p_next<p_cur-0.5) 异常->False 不发射; gate 异常->True 回退基线放行; qty 异常->原量。drop_half 模式 _u2_pass 恒 True，_u2_proj 预测核休眠（仅 qty 半量整形生效）"
+  },
+  {
+   "layer": "画像 OC",
+   "sites": [
+    "10584 _oc_after / 10590 _oc_cls / 10537 _oc_decide"
+   ],
+   "deps": [
+    "_OC_STATE[player]（cashdiff1/rival_money1/sim_max/sim_seen/rival_animals_143/prev_inv/prev_step/cls/locked）"
+   ],
+   "init": "_oc_state_new() 惰性；**无 step==0/换局复位**（缺陷 D1）",
+   "day_change": "prev_step!=step-1 断链->rival/own 累计暂停（只影响未消费特征）",
+   "missing_fallback": "特征不齐->'unknown' 保守定类（fail-safe）"
+  },
+  {
+   "layer": "C3 条件卖压",
+   "sites": [
+    "10652 _oc_c3_swap"
+   ],
+   "deps": [
+    "_OC_C3_SWAPPED 一次性闩",
+    "_IMPL.chassis.routes 全局路由表原位换写（443 条 entry，steps>=400）"
+   ],
+   "init": "**闩无复位、换表无还原**（缺陷 D2）",
+   "day_change": "n/a（step>=144 一次性）",
+   "missing_fallback": "cls 非 wfr->零足迹；异常吞掉。C1/C2 本件类集为空(_OC_C1_CLASSES/_OC_C2_CLASSES=())休眠；C2 注入 _V9_ITEM_HZ 有 try/finally save/restore 闭合严"
+  },
+  {
+   "layer": "X1 挂量墙卫生",
+   "sites": [
+    "10268 _x1_post"
+   ],
+   "deps": [
+    "仅 _X1_REPORT 遥测；同拍无跨拍状态"
+   ],
+   "init": "_hs_agent step==0 -> _x1_reset()",
+   "day_change": "n/a（step>=624 窗）",
+   "missing_fallback": "挂量解析失败->原样保留；异常->回退原动作（同对象零足迹）"
+  },
+  {
+   "layer": "（基座参照）RACE 视界",
+   "sites": [
+    "5881 agent/_race_lost"
+   ],
+   "deps": [
+    "_RACE_STATE[player]（hist/level/horizon/prev/prev_action）"
+   ],
+   "init": "state is None or step<=state['step'] -> 整体重播（含换局）",
+   "day_change": "_race_lost 显式 step%24==0 fail-safe",
+   "missing_fallback": "prev/prev_action 缺失->False；实现范式可作 D1/D2 修法模板"
+  }
+ ],
+ "probe_results": [
+  {
+   "verdict": "PASS_no_exception",
+   "fired_orders": [
+    [
+     "SELL",
+     "WOOL",
+     2
+    ],
+    [
+     "SELL",
+     "STRAWBERRY",
+     2
+    ],
+    [
+     "SELL",
+     "MILK",
+     5
+    ]
+   ],
+   "window_after": {
+    "MILK": "absent",
+    "STRAWBERRY": "absent",
+    "WOOL": "absent"
+   },
+   "prev_seeded": true,
+   "report": {
+    "calls": 0,
+    "fires": 3,
+    "units": 9,
+    "errors": 0
+   },
+   "note": "空历史 -> rival_avg 语义=0.0 中性回退（if rival else 0.0），非错值",
+   "probe": "P1_cold_start_first_tick"
+  },
+  {
+   "verdict": "PASS",
+   "window": {
+    "MILK": [
+     0
+    ],
+    "STRAWBERRY": [
+     0
+    ],
+    "WOOL": [
+     0
+    ]
+   },
+   "expected_sample_semantics": "max(0, dInv + draw(step-1) - own); 351: draw(350)=0",
+   "probe": "P2_consecutive_tick_window_append"
+  },
+  {
+   "verdict": "PASS_no_bogus_delta",
+   "window_before": {
+    "MILK": [
+     0
+    ],
+    "STRAWBERRY": [
+     0
+    ],
+    "WOOL": [
+     0
+    ]
+   },
+   "window_after": {
+    "MILK": [
+     0
+    ],
+    "STRAWBERRY": [
+     0
+    ],
+    "WOOL": [
+     0
+    ]
+   },
+   "appended": false,
+   "prev_step": 374,
+   "note": "prev['step']!=step-1 -> 跳过 append 并重播 prev，无跨隙错量",
+   "probe": "P3_daychange_gap_chain_break"
+  },
+  {
+   "verdict": "PASS",
+   "window_before": {
+    "MILK": [
+     0
+    ],
+    "STRAWBERRY": [
+     0
+    ],
+    "WOOL": [
+     0
+    ]
+   },
+   "after_silent": {
+    "MILK": [
+     0,
+     0
+    ],
+    "STRAWBERRY": [
+     0,
+     0
+    ],
+    "WOOL": [
+     0,
+     0
+    ]
+   },
+   "after_rival_buy": {
+    "MILK": [
+     0,
+     0,
+     0
+    ],
+    "STRAWBERRY": [
+     0,
+     0,
+     0
+    ],
+    "WOOL": [
+     0,
+     0,
+     0
+    ]
+   },
+   "after_rival_sell": {
+    "MILK": [
+     0,
+     0,
+     0,
+     51
+    ],
+    "STRAWBERRY": [
+     0,
+     0,
+     0,
+     51
+    ],
+    "WOOL": [
+     0,
+     0,
+     0,
+     51
+    ]
+   },
+   "note": "静默拍 d=0 如实入窗；对手净买 d=-60 钳 0（单边口径，非错值）；对手净卖 d=+50+draw1=51 正确复原",
+   "probe": "P4_rival_flow_semantics"
+  },
+  {
+   "verdict": "PASS",
+   "got": {
+    "q1_drop": 1,
+    "q3_drop": 1,
+    "q6_drop": 3,
+    "q6_nodrop": 6,
+    "post648": 6,
+    "q0": 0,
+    "bad_q": "x"
+   },
+   "probe": "P5_u2_qty_halfgate_bounds"
+  },
+  {
+   "verdict": "PASS",
+   "p_next_None": false,
+   "normal": true,
+   "post648": true,
+   "gate_exception": true,
+   "report": {
+    "calls": 0,
+    "gate_calls": 4,
+    "base_fires": 3,
+    "gate_pass": 3,
+    "gate_blocked": 0,
+    "gate_err": 1,
+    "post648_pass": 1,
+    "fires": 3,
+    "half_fires": 0
+   },
+   "note": "base 异常->False 不发射；gate 异常->True 回退基线放行",
+   "probe": "P6_u2_fire_failsafe"
+  },
+  {
+   "verdict": "PASS",
+   "orders": [
+    [
+     "SELL",
+     "WOOL",
+     5
+    ],
+    [
+     "SELL",
+     "STRAWBERRY",
+     5
+    ],
+    [
+     "SELL",
+     "MILK",
+     5
+    ]
+   ],
+   "s758_prev": true,
+   "s804_prev": true,
+   "s758_win": {
+    "MILK": [],
+    "STRAWBERRY": [],
+    "WOOL": []
+   },
+   "s804_win": {
+    "MILK": [],
+    "STRAWBERRY": [],
+    "WOOL": []
+   },
+   "s804_report": {
+    "calls": 0,
+    "eligible": 2,
+    "fires": 2,
+    "units": 10,
+    "errors": 0
+   },
+   "s758_report": {
+    "calls": 0,
+    "fires": 10,
+    "units": 38,
+    "errors": 0
+   },
+   "probe": "P7_hour1_tiers"
+  },
+  {
+   "verdict": "DEFECT_CONFIRMED",
+   "ep1_cls": "r37_2965_family",
+   "ep2_cls": "r37_2965_family",
+   "last_step": 144,
+   "locked": true,
+   "note": "ep2 特征=h1_mirror 但 _oc_update 的 last_step 单调闸(step<=last_step 直接返回)令 ep2 全部信号被静默丢弃，cls 沿用 ep1",
+   "probe": "P8_oc_cross_episode_staleness"
+  },
+  {
+   "verdict": "PASS",
+   "prev_step": 5,
+   "rival_sold_cum": {},
+   "own_sold_cum": {},
+   "note": "prev_step!=step-1 时 rival/own 累计均暂停，无跨隙错量",
+   "probe": "P9_oc_gap_no_bogus_delta"
+  },
+  {
+   "verdict": "DEFECT_CONFIRMED",
+   "ep1_cls": "wfr",
+   "latch_after_ep1": [
+    true
+   ],
+   "latch_after_ep2_step0": [
+    true
+   ],
+   "c3_swap_route_entries_mutated": 443,
+   "swap_entries_kept_after_ep2_step0": 443,
+   "base_opening_rewrite_entries_at_ep2_step0": 19,
+   "note": "_OC_C3_SWAPPED 无 step==0 复位且 _IMPL.chassis.routes 换表不可逆（羊毛错峰差量跨局保留）；ep2 非 wfr 对手将吃到 ep1 差量",
+   "probe": "P10_c3_latch_no_episode_reset"
+  },
+  {
+   "verdict": "INFO",
+   "smoke": {
+    "step0": "ok action={'farmer': ['PASS'], 'hands': [], 'market': [['BUY_PRODUCT', 'WHEAT', 8], ['SELL', 'WHEAT', 3], ['BUY_SEED', 'WHEAT', 1]]}",
+    "u2_report_after_step0": {
+     "calls": 1,
+     "gate_calls": 0,
+     "base_fires": 0,
+     "gate_pass": 0,
+     "gate_blocked": 0,
+     "gate_err": 0,
+     "post648_pass": 0,
+     "fires": 0,
+     "half_fires": 0
+    },
+    "step350": "ok action={'farmer': ['FEED'], 'hands': [], 'market': [['SELL', 'MILK', 5], ['SELL', 'WOOL', 5], ['SELL', 'STRAWBERRY', 5], ['BUY_SEED', 'WHEAT', 2], ['BUY_SEED', 'CARROT', 8]]}",
+    "u2_report": {
+     "calls": 2,
+     "gate_calls": 0,
+     "base_fires": 0,
+     "gate_pass": 0,
+     "gate_blocked": 0,
+     "gate_err": 0,
+     "post648_pass": 0,
+     "fires": 0,
+     "half_fires": 0
+    }
+   },
+   "probe": "P12_full_entry_smoke"
+  }
+ ],
+ "isolation": {
+  "registry_writes_per_layer": {
+   "X1": [
+    "_X1_REPORT"
+   ],
+   "profile": [
+    "_OC_STATE"
+   ],
+   "C2_reserve": [
+    "_OC_STATE"
+   ],
+   "window_core": [
+    "_S758_HIST",
+    "_S758_REPORT",
+    "_S804_HIST",
+    "_U2_DEC",
+    "_U2_REPORT"
+   ],
+   "drop_half_gate": [
+    "_U2_DEC",
+    "_U2_REPORT"
+   ]
+  },
+  "verdict": "五层注册表互不污染（写集不相交）；唯一跨层共享：_S758_HIST 为焦窗 core/s801/s804(hour1) 按设计共享、fire 点对 _RACE_STATE['prev_action'] 带闸回写（台账一致性，非污染）、_s804 发射计数写 _S758_REPORT（遥测口径交叠，不影响决策）",
+  "note_c3": "C3 为唯一全局注册表写者（_IMPL.chassis.routes）；基座开局改写层同注册表（见 anomaly A2）"
+ },
+ "defects": [
+  {
+   "id": "D1",
+   "loc": "main.py:10570 _OC_STATE / 10584 _oc_after（单调闸 step<=last_step）",
+   "form": "画像注册表无换局复位：episode2 step 重置后全部公开信号被 last_step 闸静默丢弃，cls/locked 沿用 ep1（P8 实证：ep2 特征=h1_mirror 实得 r37_2965_family）",
+   "impact": "多局同进程（本地重放 lab/同进程多 episode）下 C1/C2/C3 条件层吃错类=静默变形；单局生产进程惰性；与 _RACE_STATE/Chassis._state/_S758_HIST 等 step0 复位口径不一致",
+   "fix_suggestion": "_oc_after 开头仿 _RACE_STATE(5883)：step==0 或 step<=last_step -> _OC_STATE[player]=_oc_state_new()（最小修复，待主会话裁决）",
+   "severity": "medium"
+  },
+  {
+   "id": "D2",
+   "loc": "main.py:10649 _OC_C3_SWAPPED / 10652 _oc_c3_swap",
+   "form": "C3 一次性闩无复位且 _IMPL.chassis.routes 换表不可逆（P10 实证：443 条 entry 换写后跨 step0 全部保留，latch 恒 [True]）",
+   "impact": "同 D1 场景：ep2 非 wfr 对手吃到 ep1 的羊毛相位错峰差量；单局惰性",
+   "fix_suggestion": "step==0 复位 latch 并备份/反向还原 routes（与 D1 同一复位块）",
+   "severity": "medium"
+  },
+  {
+   "id": "D3",
+   "loc": "main.py:8171-8175 (_s804 插入) vs 7824 (core own 台账)",
+   "form": "跨档 own 台账不同步：_s804 自插 SELL 只记 _S804_HIST，不记 _S758_HIST['prev']['own']（反向 s801 同理）",
+   "impact": "当前被发射日历掩蔽（hour-1 与 h14-22 核之间 prev 链必然断裂，假 delta 不可达）=零现症；属潜在隐患：若发射时点扩展到相邻时窗将静默高估 rival_avg->过量预卖",
+   "fix_suggestion": "插入时双写两本 own 台账或统一台账源；另建议加断言探针防日历变更回归",
+   "severity": "low(latent)"
+  }
+ ],
+ "anomaly": [
+  {
+   "id": "A1",
+   "note": "_s798_apply hour-1 body（>=100 档）在本链不可达（_s801 hour-1 从不转发 base），死支含陈旧 _S758_HIST 更新路径；无害，建议清理或注明"
+  },
+  {
+   "id": "A2",
+   "note": "基座开局改写层（HybridOpening 系）step0 原位改写 route tape 19 条（steps0-6，PASS->动作），step1+ 零改写；属基座设计行为非移植层引入，轨道2足迹口径应记基座自改"
+  },
+  {
+   "id": "A3",
+   "note": "_s804 发射计数同时写 _S758_REPORT（8175）：遥测口径交叠，不影响决策"
+  },
+  {
+   "id": "A4",
+   "note": "全链冒烟通过：step0 各层复位正常；step350 路由 tape 已含 MILK/STRAWBERRY/WOOL SELL -> MODELPX already 短路不重复发射（正确短路）"
+  }
+ ],
+ "conclusion": "预卖层（焦窗/MODELPX/半量门）历史状态闭合良好：冷启动/换日/历史不足/对手静默四类探针均 fail-safe 回退基线，无 IndexError 无错值静默；缺陷集中于画像层跨局复位缺失（D1/D2，多局同进程场景静默变形；单局惰性）与一条被掩蔽的跨档台账隐患（D3）。只登记未修，待主会话裁决。"
+}
