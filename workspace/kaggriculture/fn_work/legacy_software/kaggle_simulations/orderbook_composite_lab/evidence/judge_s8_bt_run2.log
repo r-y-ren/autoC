@@ -1,0 +1,29 @@
+HP_TELEMETRY {'extension_signals': 74, 'rejected_signals': 56}
+HP_TELEMETRY {'extension_signals': 70, 'rejected_signals': 63}
+S8 vs H1         h2h=0.625 W7 L4 T1 n=12 margin=16.7
+S8 vs oc_c3      h2h=0.625 W7 L4 T1 n=12 margin=16.7
+S8 vs mpx        h2h=0.6667 W8 L4 T0 n=12 margin=20.2
+S8 vs H          h2h=0.6667 W8 L4 T0 n=12 margin=19.8
+S8 vs drop_half  h2h=0.5833 W7 L5 T0 n=12 margin=-14.0
+S8 vs tetsutani  h2h=0.6667 W8 L4 T0 n=12 margin=72.4
+S8 vs V89        h2h=0.6667 W8 L4 T0 n=12 margin=72.5
+S8 vs e087       h2h=0.6667 W8 L4 T0 n=12 margin=182.5
+S8 vs prvsiyan   h2h=0.8333 W10 L2 T0 n=12 margin=782.2
+S8 vs r40        h2h=0.8333 W10 L2 T0 n=12 margin=472.6
+S8 vs A          h2h=1.0 W12 L0 T0 n=12 margin=1657.1
+S8 vs r37        h2h=0.8333 W10 L2 T0 n=12 margin=480.5
+S8 vs r34a       h2h=0.8333 W10 L2 T0 n=12 margin=480.5
+S8 vs C_final    h2h=0.8333 W10 L2 T0 n=12 margin=218.9
+HP_TELEMETRY {'extension_signals': 74, 'rejected_signals': 56}
+HP_TELEMETRY {'extension_signals': 70, 'rejected_signals': 63}
+HP_TELEMETRY {'extension_signals': 94, 'rejected_signals': 32}
+HP_TELEMETRY {'extension_signals': 86, 'rejected_signals': 46}
+HP_TELEMETRY {'extension_signals': 78, 'rejected_signals': 24}
+HP_TELEMETRY {'extension_signals': 77, 'rejected_signals': 26}
+HP_TELEMETRY {'extension_signals': 70, 'rejected_signals': 63}
+HP_TELEMETRY {'extension_signals': 70, 'rejected_signals': 62}
+HP_TELEMETRY {'extension_signals': 80, 'rejected_signals': 30}
+HP_TELEMETRY {'extension_signals': 80, 'rejected_signals': 30}
+HP_TELEMETRY {'extension_signals': 106, 'rejected_signals': 21}
+VERDICT: {"question": "有没有比王座（H1/oc_c3，BT 527.8）更好的版本？现计分对 {C_final, S8} 是否已含天花板？", "s8_anchored_bt_rating": 494.4, "s8_fit_s8_14_bt_rating": 456.8, "s8_fit_full15_bt_rating": 472.4, "s8_fit_full15_rank": 1, "s8_vs_cfinal_direct_h2h": 0.8333, "s8_champion_anchor_h2h": 0.625, "s8_champion_anchor_fold": {"n_folds": 24, "W": 14, "L": 8, "T": 2}, "band_三档": "接近（450≤S8_bt<528）", "decision": "S8 接近天花板：换对边际有限，终窗发射决策自裁", "launch": "只测不发（在线提交=硬禁令）；发射决策移交用户"}
+DONE 36.2 s budget: {'cap_局次': 800, 'auth': 30, 'smoke': 1, 'panel': 0, 'det_check': 6, 'total_局次': 37, 'within_cap': True, 'panel_rows_cache_reused': 336}
