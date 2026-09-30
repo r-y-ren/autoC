@@ -1,0 +1,19 @@
+{
+  "launch_ledger": "h1x-spike/1.0",
+  "entry": {
+    "date": "2026-10-01T03:06:00+08:00",
+    "status": "PENDING",
+    "description": "public derivative (haodou092 harvest-ledger V82, Apache-2.0) with order-hygiene layer + spike capture (H1X)",
+    "form": "h1x（H1 王座基座+S8 尖拍捕获尾块）",
+    "main_sha256": "9d073fbaf4f5d74afcb51e861672e1f12d12dc71a7b640a6bc5f963897d9e9e6",
+    "tar_sha256": "6011f28ddf1f9342aa4d78d02bbc9dbb9689cbe0fa91f6935494792e2be43a25",
+    "auth": "用户裁决'发 H1X，对={S8, H1X}'（2026-10-01 终窗三问后明示）+standing 代执行，台账留痕",
+    "judgment": "h1x_verdict.json：对 H1 本体 0.7083/对王座孪生 0.7083/mpx 0.7083/毒种 20/20 全翻正（H1 本体 8/20）——预设三判据全过'超越王座候选成立'；s8_vs_h1x.json 定音：单挑 S8 0.6875/全场锚点 H1X 0.7083 互补成对",
+    "compliance": "Apache-2.0 三成员包（LICENSE/NOTICE 八层修改署名/main.py）；确定性打包 gzip mtime=0",
+    "quota": "UTC 09-30 日 3/5（C_final+S8+H1X）；CLI 回执'2 submissions remaining today'",
+    "ref": 56716525,
+    "submitted_at": "2026-09-30T19:05:47Z",
+    "pair_semantics_note": "计分对={S8 56708866(1492.6↑), H1X 56716525}；C_final 56697824(1783.1) 挤出（S8 直接对战碾压其 0.833）；终评=max(两件 BT)（官方 742571 口径）",
+    "expected_signal": "终评 BT：H1X ≥ 王座刻度（对 H1 0.7083+毒种护甲）；S8 全合并 BT 第1 佐证；两件互补（S8 单挑面/H1X 全场面）"
+  }
+}
