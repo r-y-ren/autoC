@@ -1,0 +1,319 @@
+{
+ "version": "v94-arena/1.0",
+ "task": "haodou092 harvest-ledger V94（Verified Spatial Mirror Gate，run 2026-09-30 15:56:57Z）紧急池测判决：值不值得进最后计分对（判决先行·只测不发·不提交）",
+ "piece": {
+  "v94_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_docs/hybrid/references/ext/haodou_v94/main.py",
+  "v94_sha256": "531a423a43184bc5864714189595ec1dbbe3c873de48691b0ebd32fa0a2359bb",
+  "source_url": "https://www.kaggle.com/code/haodou092/kaggriculture-harvest-ledger",
+  "fetched": "2026-09-30",
+  "self_reported_version": "V94",
+  "diff_vs_v82": {
+   "v82_sha256": "bdb821178ca73c0e8480f06c1887e20921caea0438398a5edb68bd9ad20b1de8",
+   "hunks": [
+    "+Spatial Mirror Gate（_s738_advance 内）：双农场 shape 指纹（tiles(kind,crop,animal)/unlocked_quadrants/farmer/hands）全同 ∧ |money 差|≤250 → look 4→7（七拍提前卖窗），否则 _S738_LOOK=4 保守视界",
+    "−PET_CAFE 胡萝卜倾斜（V82 pet_any_demand_agent 壳，day10-23 已揭示 PET_CAFE 时 _CA_MARGIN -15→-22）整块删除"
+   ],
+   "production_policy_retained": true,
+   "note": "diff 总输出 37 行=仅此两 hunk；V94=回滚 V82 PET 局部实验+复装 V81 镜像门（与 V81 NOTICE 自述吻合）"
+  },
+  "self_reported_record": "32 屏 24W8L / 24 高带确认 17W1T6L（41.5/56 分）/ 动态双席 32 局 28W4L（自报口径，未迁移验证）"
+ },
+ "source": {
+  "commands": [
+   "python3 orderbook_v94_lab/judge_v94_arena.py"
+  ],
+  "corpus": {
+   "panel_folds": [
+    674000,
+    674131,
+    674262,
+    674393,
+    674524,
+    674655,
+    674786,
+    674917,
+    675048,
+    675179,
+    675310,
+    675441
+   ],
+   "panel_spec": "中性块 674000+i*131（i=0..11）；每对 n=12 fold 双席=24 局",
+   "mirror_folds": [
+    674000,
+    674159,
+    674318,
+    674477,
+    674636,
+    674795,
+    674954,
+    675113
+   ],
+   "mirror_spec": "中性块 674000+i*159（i=0..7）；每对 n=8 fold 双席=16 局（镜像门靶场景=同血脉）"
+  },
+  "workers": 2,
+  "caliber": {
+   "h2h": "judge_r44._fold_arm 同 seed 双席折叠（≥1 胜/≤0 负/余平；缺席/红局→该 seed 记负 fail-closed）",
+   "margin": "farms[obs.player] 终局钱差（干净口径；banks 交叉登记 margin_banks）",
+   "realized_px": "Σ(qty×卖时市价)/Σ(qty×base)（提交口径；BASE_PX=milkwin 表）",
+   "mirror_probe": "V94 镜像门谓词逐拍复算（同 shape 指纹∧|钱差|≤250；谓词窗 144≤step<718∧step%24!=23）——只读 obs，零修改",
+   "hard_currency": "胜率=硬通货；margin/realized_px 只作参考",
+   "zero_modification": "对手件 j23._load_entry 直跑（全新命名空间+末 callable）；适配仅本 harness 层"
+  },
+  "panel": {
+   "oc_c3": {
+    "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_oppcond_lab/build/oc_c3/main.py",
+    "sha": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d"
+   },
+   "c_final": {
+    "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_composite_lab/build/c_final/main.py",
+    "sha": "a37c0d3487fe1d2152ec6c0b767b36afc21ad18207accb2d3cf1f1b077016a92"
+   },
+   "r40": {
+    "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
+    "sha": "4ce951f088740e0b"
+   },
+   "A": {
+    "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r44_a/main.py",
+    "sha": "b387307fc12e2610"
+   }
+  },
+  "mirror": {
+   "haodou_V82": {
+    "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_v94_lab/build/haodou_v82/main.py",
+    "sha": "bdb821178ca73c0e8480f06c1887e20921caea0438398a5edb68bd9ad20b1de8"
+   },
+   "H1": {
+    "path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_topform_lab/build/h1/main.py",
+    "sha": "76b5f842249efa4c89ef841e51212d7cefc886223655683eeb6764974b22f337"
+   }
+  },
+  "sim_auth": {
+   "reused_cache": true,
+   "cache_path": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_composite_lab/evidence/sim_auth_cache.json",
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "engine": "sim",
+   "version": "simbridge/1.0",
+   "wall_speedup": 5.29
+  }
+ },
+ "panel": {
+  "design": "v94 对 4 件面板：每对 n=12 fold 双席=24 局（中性块 674000+i*131）；h2h=judge_r44._fold_arm；margin=farms[obs.player]；胜率=硬通货",
+  "pairs": {
+   "oc_c3": {
+    "n": 12,
+    "wins": 4,
+    "losses": 5,
+    "ties": 3,
+    "h2h": 0.4583,
+    "mean_margin": -46.5,
+    "terminal_money_us_mean": 87035.2,
+    "terminal_money_opp_mean": 87081.8,
+    "mean_margin_banks": -40.0,
+    "realized_px_us": 0.7943,
+    "realized_px_opp": 0.8016,
+    "n_games": 24,
+    "n_errors": 0,
+    "mirror_probe_us": {
+     "n_units": 24,
+     "predicate_evaluated_steps": 13224,
+     "predicate_true_steps": 10658,
+     "trigger_rate": 0.806,
+     "true_gap_mean_of_units": 13.6
+    }
+   },
+   "c_final": {
+    "n": 12,
+    "wins": 5,
+    "losses": 7,
+    "ties": 0,
+    "h2h": 0.4167,
+    "mean_margin": 144.0,
+    "terminal_money_us_mean": 87249.3,
+    "terminal_money_opp_mean": 87105.3,
+    "mean_margin_banks": 150.4,
+    "realized_px_us": 0.7945,
+    "realized_px_opp": 0.8024,
+    "n_games": 24,
+    "n_errors": 0,
+    "mirror_probe_us": {
+     "n_units": 24,
+     "predicate_evaluated_steps": 13224,
+     "predicate_true_steps": 10335,
+     "trigger_rate": 0.7815,
+     "true_gap_mean_of_units": 54.0
+    }
+   },
+   "r40": {
+    "n": 12,
+    "wins": 8,
+    "losses": 4,
+    "ties": 0,
+    "h2h": 0.6667,
+    "mean_margin": 297.4,
+    "terminal_money_us_mean": 87129.1,
+    "terminal_money_opp_mean": 86831.7,
+    "mean_margin_banks": 331.8,
+    "realized_px_us": 0.789,
+    "realized_px_opp": 0.5692,
+    "n_games": 24,
+    "n_errors": 0,
+    "mirror_probe_us": {
+     "n_units": 24,
+     "predicate_evaluated_steps": 13224,
+     "predicate_true_steps": 8970,
+     "trigger_rate": 0.6783,
+     "true_gap_mean_of_units": 47.7
+    }
+   },
+   "A": {
+    "n": 12,
+    "wins": 11,
+    "losses": 1,
+    "ties": 0,
+    "h2h": 0.9167,
+    "mean_margin": 1045.6,
+    "terminal_money_us_mean": 87572.6,
+    "terminal_money_opp_mean": 86527.0,
+    "mean_margin_banks": 1084.6,
+    "realized_px_us": 0.7921,
+    "realized_px_opp": 0.5722,
+    "n_games": 24,
+    "n_errors": 0,
+    "mirror_probe_us": {
+     "n_units": 24,
+     "predicate_evaluated_steps": 13224,
+     "predicate_true_steps": 9034,
+     "trigger_rate": 0.6832,
+     "true_gap_mean_of_units": 41.8
+    }
+   }
+  }
+ },
+ "mirror": {
+  "design": "镜像门靶场景=同血脉：每对 n=8 fold 双席=16 局（中性块 674000+i*159）；镜像触发=V94 谓词逐拍复算（零修改）",
+  "pairs": {
+   "haodou_V82": {
+    "n": 8,
+    "wins": 3,
+    "losses": 4,
+    "ties": 1,
+    "h2h": 0.4375,
+    "mean_margin": -50.2,
+    "terminal_money_us_mean": 85916.0,
+    "terminal_money_opp_mean": 85966.2,
+    "mean_margin_banks": -16.0,
+    "realized_px_us": 0.7024,
+    "realized_px_opp": 0.702,
+    "n_games": 16,
+    "n_errors": 0,
+    "mirror_probe_us": {
+     "n_units": 16,
+     "predicate_evaluated_steps": 8816,
+     "predicate_true_steps": 6924,
+     "trigger_rate": 0.7854,
+     "true_gap_mean_of_units": 25.1
+    }
+   },
+   "H1": {
+    "n": 8,
+    "wins": 3,
+    "losses": 4,
+    "ties": 1,
+    "h2h": 0.4375,
+    "mean_margin": -54.2,
+    "terminal_money_us_mean": 85913.5,
+    "terminal_money_opp_mean": 85967.8,
+    "mean_margin_banks": -20.0,
+    "realized_px_us": 0.7024,
+    "realized_px_opp": 0.7464,
+    "n_games": 16,
+    "n_errors": 0,
+    "mirror_probe_us": {
+     "n_units": 16,
+     "predicate_evaluated_steps": 8816,
+     "predicate_true_steps": 6924,
+     "trigger_rate": 0.7854,
+     "true_gap_mean_of_units": 25.0
+    }
+   }
+  }
+ },
+ "verdict": {
+  "verdict": "COMPETITIVE",
+  "rule": "BEATS_CEILING=vs oc_c3 h2h≥0.5 / COMPETITIVE=0.35-0.5 / WEAK=<0.35 / UNRUNNABLE=装载失败或红局>20%",
+  "vs_oc_c3_h2h": 0.4583,
+  "panel_h2h": {
+   "oc_c3": 0.4583,
+   "c_final": 0.4167,
+   "r40": 0.6667,
+   "A": 0.9167
+  },
+  "mirror_h2h": {
+   "haodou_V82": 0.4375,
+   "H1": 0.4375
+  },
+  "mirror_trigger_rate": {
+   "haodou_V82": 0.7854,
+   "H1": 0.7854
+  },
+  "panel_trigger_rate_non_target": {
+   "oc_c3": 0.806,
+   "c_final": 0.7815,
+   "r40": 0.6783,
+   "A": 0.6832
+  },
+  "mean_margin_vs_oc_c3": -46.5,
+  "realized_px_vs_oc_c3": {
+   "us": 0.7943,
+   "opp": 0.8016
+  },
+  "n_games": 128,
+  "n_errors": 0,
+  "launch": "不发射不提交（判决先行）；上线决策移交用户",
+  "recommendation": "不建议进最后计分对：①对冠军锚 oc_c3 h2h 0.4583<0.5 未过 BEATS_CEILING；②镜像门靶场景（vs V82/H1 同血脉）h2h 0.4375 均值 margin 为负（-50/-54），门触发率 0.785 却未兑现胜率，与我方'镜像提前卖 −80k'历史负结果同向；③对我方 c_final h2h 0.4167（5-7-0）；④正读数只在弱锚（A/r40），按 Never quote the peak 纪律不得据以升舱。COMPETITIVE 档但靶场景负证据。"
+ },
+ "budget": {
+  "auth": 30,
+  "panel": 96,
+  "mirror": 32,
+  "total_局次": 158
+ },
+ "anomaly": [
+  "harness 噪声不修不管；胜率=硬通货，margin/realized_px/触发率只作参考；Never quote the peak",
+  "自报≠可迁移（六连败教训）：V94 自报 41.5/56 与动态 28W4L 不作判决依据，仅登记；判决只认本池实测",
+  "镜像读数注意：镜像门为同血脉靶场景特化，对非同血脉面板件触发率预期≈0（谓词复算登记验证）"
+ ],
+ "_generated_at": "2026-09-30T17:05:11Z",
+ "elapsed_s": 393.2,
+ "launch_readiness": {
+  "compliance_package": {
+   "files": [
+    "main.py",
+    "LICENSE.txt",
+    "NOTICE.txt"
+   ],
+   "license": "Apache-2.0（LICENSE.txt 11358B SHA cfc7749b… 在包）",
+   "notice": "NOTICE.txt 332B SHA b42b73b1…（guruprasaathas111 Master Engine V4 直系署名+V81 镜像门本地改动声明，上游全文保留）",
+   "gaps": [
+    "无文件缺口；归档时需按合规底线补人机分工记录（AI 辅助原创标注）",
+    "发射为第三方公开件原样提交，需用户批准（本任务只测不发）"
+   ]
+  },
+  "main_sha256": "531a423a43184bc5864714189595ec1dbbe3c873de48691b0ebd32fa0a2359bb",
+  "tar_recipe": {
+   "formula": "notebook 内嵌确定性配方：gzip(mtime=0) + tarfile GNU_FORMAT，顺序 main.py/LICENSE.txt/NOTICE.txt，mode 0644、mtime 0、uid/gid 0、uname/gname 空",
+   "rebuilt_tar_sha256": "2a374cd42c737bbbf2586f124e39db6fc0d4f00fe419a1cbbba1a02f3cc07a46",
+   "rebuilt_tar_bytes": 658165,
+   "recipe_verified": true,
+   "source": "复刻 kaggriculture-harvest-ledger.ipynb cell1 打包段；notebook 自报 READY_TO_SUBMIT 口径"
+  },
+  "pair_semantics_note": "若进计分对须用户定换位；实测 vs A 0.9167/r40 0.6667 同向我方 V82 系画像但对面板锚 oc_c3/c_final 均未过",
+  "launch_decision": "移交用户（硬禁令：本任务绝不在线提交）"
+ }
+}

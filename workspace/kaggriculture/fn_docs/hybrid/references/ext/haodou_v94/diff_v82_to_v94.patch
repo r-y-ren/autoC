@@ -1,0 +1,47 @@
+--- /tmp/v82_extract/main.py	1970-01-01 08:00:00.000000000 +0800
++++ /tmp/v94_extract/main.py	2026-10-01 00:38:32.163032128 +0800
+@@ -7515,7 +7515,18 @@
+     if step%24==23 or not _S738_FROM <= step < _S738_TO: return action
+     native=_IMPL.chassis.players[player]
+     plan=[]; first=None
+-    for off in range(1,_S738_LOOK+1):
++    def _shape(farm):
++        tiles=[]
++        for y,row in enumerate(farm.get('tiles',[])):
++            for x,tile in enumerate(row):
++                if isinstance(tile,dict):tiles.append((x,y,tile.get('kind'),tile.get('crop'),tile.get('animal')))
++        return (tuple(tiles),tuple(farm.get('unlocked_quadrants',[])),tuple(farm.get('farmer',[])),tuple(tuple(p) for p in farm.get('hands',[])))
++    farms=obs.get('farms') or []; mirror=False
++    if len(farms)==2:
++        mine,other=farms[player],farms[1-player]
++        mirror=_shape(mine)==_shape(other) and abs(int(mine.get('money',0))-int(other.get('money',0)))<=250
++    look=7 if mirror else _S738_LOOK
++    for off in range(1,look+1):
+         t=step+off
+         if t>718: break
+         for o in _s738_future(player,t):
+@@ -10135,24 +10146,3 @@
+ step1009_step1008_fortyfirst_final_fixedsell_closure_agent.telemetry=_S1009_REPORT
+ agent=step1009_step1008_fortyfirst_final_fixedsell_closure_agent
+ kaggle_submission_agent=agent
+-
+-# Candidate: modest carrot encouragement only after a revealed PET_CAFE.
+-_PET_PARENT=agent
+-_PET_REPORT={'calls':0,'tilted':0,'errors':0}
+-def pet_any_demand_agent(observation,configuration=None):
+-    global _CA_MARGIN
+-    if int(observation.get('step',0))==0:_PET_REPORT.update(calls=0,tilted=0,errors=0)
+-    _PET_REPORT['calls']+=1;old=_CA_MARGIN
+-    try:
+-        day=int(observation.get('day',int(observation.get('step',0))//24))
+-        shops=list((observation.get('town') or {}).get('unlocked_shops') or [])
+-        if 10<=day<=23 and 'PET_CAFE' in shops:
+-            _CA_MARGIN=-22.0;_PET_REPORT['tilted']+=1
+-        return _PET_PARENT(observation,configuration)
+-    except Exception:
+-        _PET_REPORT['errors']+=1;return _PET_PARENT(observation,configuration)
+-    finally:_CA_MARGIN=old
+-pet_any_demand_agent.telemetry=_PET_REPORT
+-agent=pet_any_demand_agent
+-kaggle_submission_agent=agent
+-agent=globals().pop('agent')
