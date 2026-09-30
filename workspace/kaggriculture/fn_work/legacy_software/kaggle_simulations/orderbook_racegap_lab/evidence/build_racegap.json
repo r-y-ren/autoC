@@ -1,0 +1,46 @@
+{
+ "version": "racegap-build/1.0",
+ "generated": "2026-09-29T22:36:58Z",
+ "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_unified_u2_lab/build/u2v2_drop_half/main.py",
+ "base_main_sha256": "5d2d12468a5d1ec53c3d3e4726de54e6a5d29eb038fc97ca45c72b2ce7992df0",
+ "redline": "零跨拍挪量；只动挂单与追加",
+ "arms": {
+  "gap": {
+   "desc": "缺口利用：MODELPX/日新高追加放行加对手流门（近3拍出货≤2 才放行）",
+   "main_sha256": "fb46b53d048258988a85a3f45498db977e3039f2a93ec226abe58634b1ede927",
+   "tar_sha256": "1ff7b3d0f6e05f2311cf2e432176e9c534bacc04e42b3e583865a9cd17b2c0fd",
+   "subs": [
+    {
+     "old": "            if price <= int(prior.get(item, price)):\n                continue",
+     "new": "            if price <= int(prior.get(item, price)) or not _rgp_gap_ok(item, ste",
+     "count": 1
+    },
+    {
+     "old": "        if price <= prior:\n            return action",
+     "new": "        if price <= prior or not _rgp_gap_ok('MILK', step, p):\n            retur",
+     "count": 1
+    },
+    {
+     "old": "        if price<=prior:return action",
+     "new": "        if price<=prior or not _rgp_gap_ok('MILK',step,p):return action",
+     "count": 1
+    },
+    {
+     "old": "            if price<=int(prior.get(item,price)):continue\n            already=",
+     "new": "            if price<=int(prior.get(item,price)) or not _rgp_gap_ok(item, step, ",
+     "count": 1
+    }
+   ],
+   "mechanism": "R28 删失口径对手出货流窗（invΔ+_u2_draw 精确排水−own_sold，0 删失，24 拍滚动）；放行=近 3 拍流和 ≤_RGP_GAP_MAX(2)=非出货缺口（其强拍之间）→放行追加，>2→让位。收口：4 处 MODELPX 追加（_u2_fire 全局重绑纯收紧）+4 处日新高追加（S928/S932/S939/S948 字面量）；窗未满/异常→基线放行；零跨拍挪量、只动追加放行时点",
+   "roundtrip_identity_ok": true
+  },
+  "slot": {
+   "desc": "槽序匹配 v2（保序形态）：同拍我方 SELL 单对齐（保序）+抢先（越非卖单前置）",
+   "main_sha256": "404979127560db58cb6b6f81afe0eef439e30cd261adc685475a61216eea4fc6",
+   "tar_sha256": "1f05a41475d9e8addcc4d2d58ab5313c26c77615c3310ba8b4f950110f56ed5c",
+   "subs": [],
+   "mechanism": "纯同拍重排（零改量/零加减单）：①对齐=SELL 相对序不动（基底计划序=对手稳态单序先验；扫查实测同拍同序 38/51，v1 碰撞项重排破序致负已删）；②抢先=自由 SELL（无同列表同品 BUY_*）越非卖单冒泡前置=我单插其单前（X1 并最早槽的对手自适应版；弱支配：早列竞速只赢不输+买单资金/仓容只更好）；③洗仓腿/同品组/SELL 相对序/非 SELL 相对序不动；无可改→原对象",
+   "roundtrip_identity_ok": true
+  }
+ }
+}

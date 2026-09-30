@@ -1,0 +1,95 @@
+{
+ "version": "day2526-build/1.0",
+ "generated": "2026-09-29T21:42:58Z",
+ "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_unified_u2_lab/build/u2v2_drop_half/main.py",
+ "base_main_sha256": "5d2d12468a5d1ec53c3d3e4726de54e6a5d29eb038fc97ca45c72b2ce7992df0",
+ "forms": {
+  "d2526_milkpass": {
+   "desc": "d25/26 窗（step 576-648）内 MILK 特定品放行：触发时全量前置（不整形），余品半量照旧；窗外原样",
+   "main_sha256": "e0ed977abbdef326af5310e4bf3c69b4667ba181995d89b34945c9261f3c5e91",
+   "tar_sha256": "7c9c9cd46b67f852de98f357353e52c992c6b42e64460c5b0ac1676cf8d32a37",
+   "subs": [
+    {
+     "old": "take=_u2_qty(min(avail,_mx_cap(item,p_now,step,planned)),p_now,p_next,step)",
+     "new": "take=_u2_qty(min(avail,_mx_cap(item,p_now,step,planned)),p_now,p_next,step,item)",
+     "count": 1
+    },
+    {
+     "old": "take=_u2_qty(min(avail,10),p_now,p_next,step)",
+     "new": "take=_u2_qty(min(avail,10),p_now,p_next,step,item)",
+     "count": 3
+    }
+   ],
+   "params_locked": {
+    "mode": "milk_pass",
+    "ratio": 0.5,
+    "win": [
+     576,
+     648
+    ],
+    "drop": 0.5,
+    "u2_mode": "drop_half",
+    "u2_tol": 0.5
+   },
+   "roundtrip_identity_ok": true
+  },
+  "d2526_h70": {
+   "desc": "d25/26 窗（step 576-648）内半量比例 50%→70%：触发时售 70%≥1（全品）；窗外原样",
+   "main_sha256": "9ff780905370667b7e21baaa7222e1bcf4185ebe4f26d9973d6f63365f6d6d1b",
+   "tar_sha256": "059a8e2c08c05021ce6b5ef2e3492dd71aa1e610a930a7f6d4e0ec4896f09722",
+   "subs": [
+    {
+     "old": "take=_u2_qty(min(avail,_mx_cap(item,p_now,step,planned)),p_now,p_next,step)",
+     "new": "take=_u2_qty(min(avail,_mx_cap(item,p_now,step,planned)),p_now,p_next,step,item)",
+     "count": 1
+    },
+    {
+     "old": "take=_u2_qty(min(avail,10),p_now,p_next,step)",
+     "new": "take=_u2_qty(min(avail,10),p_now,p_next,step,item)",
+     "count": 3
+    }
+   ],
+   "params_locked": {
+    "mode": "h70",
+    "ratio": 0.7,
+    "win": [
+     576,
+     648
+    ],
+    "drop": 0.5,
+    "u2_mode": "drop_half",
+    "u2_tol": 0.5
+   },
+   "roundtrip_identity_ok": true
+  },
+  "d2526_neutral": {
+   "desc": "中性封印形（mode=off 恒回退 drop_half 原装 _u2_qty）：等价封印专用，不参判",
+   "main_sha256": "6e5f2253b7b18614b431ce9bb72d9ab163bfeabebd4d9478f711b831d6ffa81c",
+   "tar_sha256": "7fd077a33e52b01aed7a64b0749eb4df0246fb617497ba725b129cdfdff3e16a",
+   "subs": [
+    {
+     "old": "take=_u2_qty(min(avail,_mx_cap(item,p_now,step,planned)),p_now,p_next,step)",
+     "new": "take=_u2_qty(min(avail,_mx_cap(item,p_now,step,planned)),p_now,p_next,step,item)",
+     "count": 1
+    },
+    {
+     "old": "take=_u2_qty(min(avail,10),p_now,p_next,step)",
+     "new": "take=_u2_qty(min(avail,10),p_now,p_next,step,item)",
+     "count": 3
+    }
+   ],
+   "params_locked": {
+    "mode": "off",
+    "ratio": 0.5,
+    "win": [
+     576,
+     648
+    ],
+    "drop": 0.5,
+    "u2_mode": "drop_half",
+    "u2_tol": 0.5
+   },
+   "roundtrip_identity_ok": true
+  }
+ }
+}

@@ -1,0 +1,307 @@
+{
+ "schema": "orderbook_milkwin_lab_manifest/1.0",
+ "generated": "2026-09-29T16:11:12Z",
+ "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_oppcond_lab/build/oc_c3/main.py",
+ "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+ "base_bytes": 1219816,
+ "subs": [
+  {
+   "old": "p_next<p_cur-0.5",
+   "new": "p_next<p_cur-_MX_THR",
+   "count": 4
+  },
+  {
+   "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+   "new": "take=min(avail,_mx_cap(item,p_now,step,planned))",
+   "count": 1
+  },
+  {
+   "old": "take=min(avail,10)",
+   "new": "take=min(avail,_mx_cap_h1(item))",
+   "count": 3
+  }
+ ],
+ "roundtrip_identity": "反替换回程逐字节=基座源（参数级封印）",
+ "sentinel": "\"\"\"milkwin mx 实验尾块",
+ "entry": "_mx_agent",
+ "host": "_hs_agent",
+ "layer": "件 MX=MODELPX 参数级实验（阈 p_next<p_cur-THR 全 4 处同参；量帽三档 MILK 侧加权 3/6/10→6/12/20 或 10/20/30，STRAWBERRY/WOOL 保基线；窗内地毯 d14-20 step336-480 MILK 日新高追加单帽 20/步开关件）；零跨拍挪量、磁带 blob 零触碰、异常回退原动作",
+ "forms": {
+  "mx_base": {
+   "form": "mx_base",
+   "entry": "_mx_agent",
+   "main_sha256": "0dcfd8b826278bc7ed6078976083baec45807696a0cdd7d8434b2961bab7ad7a",
+   "main_bytes": 1227075,
+   "tar_sha256": "eb6a4d26bee1c76558a160099c3aa280d8082b53823d1555270102b9d6e25cef",
+   "tar_bytes": 665874,
+   "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+   "injected_tail_bytes": 7259,
+   "subs": [
+    {
+     "old": "p_next<p_cur-0.5",
+     "new": "p_next<p_cur-_MX_THR",
+     "count": 4
+    },
+    {
+     "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+     "new": "take=min(avail,_mx_cap(item,p_now,step,planned))",
+     "count": 1
+    },
+    {
+     "old": "take=min(avail,10)",
+     "new": "take=min(avail,_mx_cap_h1(item))",
+     "count": 3
+    }
+   ],
+   "params": {
+    "thr": 0.5,
+    "cap_milk": [
+     3,
+     6,
+     10
+    ],
+    "cap_other": [
+     3,
+     6,
+     10
+    ],
+    "carpet": false
+   },
+   "compile_ok": true,
+   "entry_last_callable": "_mx_agent",
+   "host_captured": "_hs_agent",
+   "roundtrip_identity_ok": true,
+   "byte_identical_to_base": false
+  },
+  "mx_cap2": {
+   "form": "mx_cap2",
+   "entry": "_mx_agent",
+   "main_sha256": "a26bb6ad43c7329bf47f9d765a6bd51b626603c058f8eab3857103f2135cae2a",
+   "main_bytes": 1227076,
+   "tar_sha256": "510bbbbc4b4173db98103499708a16cd68a89e8fbece7111a82221b092a673b4",
+   "tar_bytes": 665877,
+   "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+   "injected_tail_bytes": 7260,
+   "subs": [
+    {
+     "old": "p_next<p_cur-0.5",
+     "new": "p_next<p_cur-_MX_THR",
+     "count": 4
+    },
+    {
+     "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+     "new": "take=min(avail,_mx_cap(item,p_now,step,planned))",
+     "count": 1
+    },
+    {
+     "old": "take=min(avail,10)",
+     "new": "take=min(avail,_mx_cap_h1(item))",
+     "count": 3
+    }
+   ],
+   "params": {
+    "thr": 0.5,
+    "cap_milk": [
+     6,
+     12,
+     20
+    ],
+    "cap_other": [
+     3,
+     6,
+     10
+    ],
+    "carpet": false
+   },
+   "compile_ok": true,
+   "entry_last_callable": "_mx_agent",
+   "host_captured": "_hs_agent",
+   "roundtrip_identity_ok": true,
+   "byte_identical_to_base": false
+  },
+  "mx_cap33": {
+   "form": "mx_cap33",
+   "entry": "_mx_agent",
+   "main_sha256": "8cf333513cbfeb18a404a7b9b5e8e2f4de6aca0f6f4164a29a0e268d61b72b32",
+   "main_bytes": 1227077,
+   "tar_sha256": "5bb642c7f8600d8645328f653122ae7d85d66590a17adc071fb19b8bfcecde39",
+   "tar_bytes": 665881,
+   "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+   "injected_tail_bytes": 7261,
+   "subs": [
+    {
+     "old": "p_next<p_cur-0.5",
+     "new": "p_next<p_cur-_MX_THR",
+     "count": 4
+    },
+    {
+     "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+     "new": "take=min(avail,_mx_cap(item,p_now,step,planned))",
+     "count": 1
+    },
+    {
+     "old": "take=min(avail,10)",
+     "new": "take=min(avail,_mx_cap_h1(item))",
+     "count": 3
+    }
+   ],
+   "params": {
+    "thr": 0.5,
+    "cap_milk": [
+     10,
+     20,
+     30
+    ],
+    "cap_other": [
+     3,
+     6,
+     10
+    ],
+    "carpet": false
+   },
+   "compile_ok": true,
+   "entry_last_callable": "_mx_agent",
+   "host_captured": "_hs_agent",
+   "roundtrip_identity_ok": true,
+   "byte_identical_to_base": false
+  },
+  "mx_thr_m02": {
+   "form": "mx_thr_m02",
+   "entry": "_mx_agent",
+   "main_sha256": "949a1b60e14f28fba3765cedd55459eeb16f341873730fdafead45b0c6e97695",
+   "main_bytes": 1227075,
+   "tar_sha256": "632fc3d4d01f1599a7b8927f27a528ddb75f4123927676d39d4c4d9eb3e84dff",
+   "tar_bytes": 665874,
+   "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+   "injected_tail_bytes": 7259,
+   "subs": [
+    {
+     "old": "p_next<p_cur-0.5",
+     "new": "p_next<p_cur-_MX_THR",
+     "count": 4
+    },
+    {
+     "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+     "new": "take=min(avail,_mx_cap(item,p_now,step,planned))",
+     "count": 1
+    },
+    {
+     "old": "take=min(avail,10)",
+     "new": "take=min(avail,_mx_cap_h1(item))",
+     "count": 3
+    }
+   ],
+   "params": {
+    "thr": 0.2,
+    "cap_milk": [
+     3,
+     6,
+     10
+    ],
+    "cap_other": [
+     3,
+     6,
+     10
+    ],
+    "carpet": false
+   },
+   "compile_ok": true,
+   "entry_last_callable": "_mx_agent",
+   "host_captured": "_hs_agent",
+   "roundtrip_identity_ok": true,
+   "byte_identical_to_base": false
+  },
+  "mx_thr_m10": {
+   "form": "mx_thr_m10",
+   "entry": "_mx_agent",
+   "main_sha256": "d0e99f3f17df8e34183cb48cd58d9bbbe3540f7e1a7574512ffe3f982a1736ce",
+   "main_bytes": 1227075,
+   "tar_sha256": "2ee44de41fff9b83c1309d991453529bcb911987741a59b7195a261555849e6d",
+   "tar_bytes": 665873,
+   "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+   "injected_tail_bytes": 7259,
+   "subs": [
+    {
+     "old": "p_next<p_cur-0.5",
+     "new": "p_next<p_cur-_MX_THR",
+     "count": 4
+    },
+    {
+     "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+     "new": "take=min(avail,_mx_cap(item,p_now,step,planned))",
+     "count": 1
+    },
+    {
+     "old": "take=min(avail,10)",
+     "new": "take=min(avail,_mx_cap_h1(item))",
+     "count": 3
+    }
+   ],
+   "params": {
+    "thr": 1.0,
+    "cap_milk": [
+     3,
+     6,
+     10
+    ],
+    "cap_other": [
+     3,
+     6,
+     10
+    ],
+    "carpet": false
+   },
+   "compile_ok": true,
+   "entry_last_callable": "_mx_agent",
+   "host_captured": "_hs_agent",
+   "roundtrip_identity_ok": true,
+   "byte_identical_to_base": false
+  },
+  "mx_carpet": {
+   "form": "mx_carpet",
+   "entry": "_mx_agent",
+   "main_sha256": "6d90e267b77e6e7204aea7593cba23604923e9eb8f7ff321ebf713329dbcf15a",
+   "main_bytes": 1227073,
+   "tar_sha256": "eb1840e1c09dffdc1448946f9719d561935d969cacf2cf8b489258d5f8c920ff",
+   "tar_bytes": 665873,
+   "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+   "injected_tail_bytes": 7257,
+   "subs": [
+    {
+     "old": "p_next<p_cur-0.5",
+     "new": "p_next<p_cur-_MX_THR",
+     "count": 4
+    },
+    {
+     "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+     "new": "take=min(avail,_mx_cap(item,p_now,step,planned))",
+     "count": 1
+    },
+    {
+     "old": "take=min(avail,10)",
+     "new": "take=min(avail,_mx_cap_h1(item))",
+     "count": 3
+    }
+   ],
+   "params": {
+    "thr": 0.5,
+    "cap_milk": [
+     3,
+     6,
+     10
+    ],
+    "cap_other": [
+     3,
+     6,
+     10
+    ],
+    "carpet": true
+   },
+   "compile_ok": true,
+   "entry_last_callable": "_mx_agent",
+   "host_captured": "_hs_agent",
+   "roundtrip_identity_ok": true,
+   "byte_identical_to_base": false
+  }
+ }
+}

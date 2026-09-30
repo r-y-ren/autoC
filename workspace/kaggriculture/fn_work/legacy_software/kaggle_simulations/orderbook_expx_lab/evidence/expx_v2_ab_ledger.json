@@ -1,0 +1,77 @@
+{
+ "pairs": {
+  "expx_v2_vs_oc_c3": {
+   "n": 48,
+   "W": 29,
+   "L": 19,
+   "T": 0,
+   "mean_delta": 81.23,
+   "net_flip_wins": 0,
+   "flips_neg": 0
+  }
+ },
+ "window": {
+  "fill_total_mean_delta": 82.33,
+  "fill_milk_mean_delta": 1.21
+ },
+ "outside_window_fill_mean_delta": 26.17,
+ "recheck_963182245": {
+  "note": "v1 唯一翻负种子（双席 vs r37，margin 119→−156，Δ−275×2）在 v2 语料（含第二中性块）复核",
+  "cells": [
+   {
+    "seat": 0,
+    "opponent": "build",
+    "margin_control": 119.0,
+    "margin_variant": 103.0,
+    "delta": -16.0,
+    "d_window_fill_total": -2.0,
+    "d_window_fill_milk": 0.0,
+    "outside_fill_delta": 39.0,
+    "expx_fires": 5,
+    "expx_units": 68,
+    "stranding_insured": 0,
+    "post_win_base": 18
+   },
+   {
+    "seat": 1,
+    "opponent": "build",
+    "margin_control": 119.0,
+    "margin_variant": 103.0,
+    "delta": -16.0,
+    "d_window_fill_total": -2.0,
+    "d_window_fill_milk": 0.0,
+    "outside_fill_delta": 39.0,
+    "expx_fires": 5,
+    "expx_units": 68,
+    "stranding_insured": 0,
+    "post_win_base": 18
+   }
+  ]
+ },
+ "criteria": {
+  "checks": {
+   "净翻胜>0": false,
+   "flips_neg==0": true,
+   "实现价非负（Δratio_fill 三品∧全品均值≥0）": false,
+   "d14-27窗收入差转正（fill 总窗配对 mean Δ>0）": true
+  },
+  "net_flip_wins": 0,
+  "flips_neg": 0,
+  "W_L_T": "29/19/0",
+  "mean_delta": 81.23,
+  "window_fill_total_mean_delta": 82.33,
+  "window_fill_milk_mean_delta": 1.21,
+  "outside_window_fill_mean_delta": 26.17,
+  "realized_px_nonneg_all_three": false,
+  "footprint_gate_passed": true,
+  "positive_arm": false
+ },
+ "budget": {
+  "cap_局次": 250,
+  "对局口径": 254,
+  "引擎跑口径": 314,
+  "judgment_口径": 192,
+  "within_cap": false,
+  "note": "首跑崩溃重跑+重复认证开销，如实记账（见主 evidence v2.budget）"
+ }
+}

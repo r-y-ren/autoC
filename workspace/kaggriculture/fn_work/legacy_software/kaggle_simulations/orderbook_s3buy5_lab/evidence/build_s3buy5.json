@@ -1,0 +1,1755 @@
+{
+ "version": "s3buy5-build/1.0",
+ "base_sha256": "a37c0d3487fe1d2152ec6c0b767b36afc21ad18207accb2d3cf1f1b077016a92",
+ "forms": {
+  "s3_buy5": {
+   "sha256": "86c4d41e1e1d12509ab4c2da1c32635ce57b474c38f54ddb89eed555462adbaf",
+   "bytes": 1246299,
+   "adaptive_on": true
+  },
+  "s3_open": {
+   "sha256": "e2c73763d6e4e322d7b08901ca9361ce158af7e44e9e8554b183188906562086",
+   "bytes": 1246301,
+   "adaptive_on": false
+  },
+  "s3_adapt0": {
+   "sha256": "b679173d72400641efab3d058ff8f64fa0be0cc3d90947caeff49be89335ac94",
+   "bytes": 1246300,
+   "adaptive_on": true
+  },
+  "s3_wash": {
+   "sha256": "e2fefae92e0fb7a65381acc6d2818758bc2fbb4853b045c4084ddbdfa682d282",
+   "bytes": 1246333,
+   "adaptive_on": false
+  }
+ },
+ "diff_audit": {
+  "faces": {
+   "s3_opening_trunk": {
+    "src": "_alt_install 外壳协同（tape[0..1] market 重排）",
+    "surface": "turn1-2 市场单（D6 族起手 + mooman 洗价形 13/30/30）"
+   },
+   "s3_adaptive_sheep": {
+    "src": "尾块 _s3_apply（step≥144 换表；晚波羊链抑制阶梯）",
+    "tier_cells_all": 672,
+    "elastic_face": "SHEEP 数（GOOSE/COW/班组/单量/卖法=刚性面零触碰）",
+    "per_route": {
+     "0": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "1": {
+      "0": [
+       {
+        "buy_step": 264,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 252,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 264,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 252,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 251,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "2": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "3": {
+      "0": [
+       {
+        "buy_step": 241,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 241,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 241,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 241,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 226,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "4": {
+      "0": [
+       {
+        "buy_step": 264,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 252,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 264,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 252,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 251,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "5": {
+      "0": [
+       {
+        "buy_step": 264,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 252,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 264,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 252,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 251,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "6": {
+      "0": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 226,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "7": {
+      "0": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 226,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "8": {
+      "0": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 226,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "9": {
+      "0": [
+       {
+        "buy_step": 251,
+        "pickup": 266,
+        "unit": "h5",
+        "place": 270
+       },
+       {
+        "buy_step": 250,
+        "pickup": 253,
+        "unit": "h5",
+        "place": 259
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 251,
+        "pickup": 266,
+        "unit": "h5",
+        "place": 270
+       },
+       {
+        "buy_step": 250,
+        "pickup": 253,
+        "unit": "h5",
+        "place": 259
+       },
+       {
+        "buy_step": 216,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 250,
+        "pickup": 252,
+        "unit": "h4",
+        "place": 258
+       }
+      ]
+     },
+     "10": {
+      "0": [
+       {
+        "buy_step": 241,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 241,
+        "pickup": 253,
+        "unit": "h5",
+        "place": 259
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 241,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 241,
+        "pickup": 253,
+        "unit": "h5",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h4",
+        "place": 258
+       }
+      ]
+     },
+     "11": {
+      "0": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 226,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "12": {
+      "0": [
+       {
+        "buy_step": 241,
+        "pickup": 266,
+        "unit": "h5",
+        "place": 270
+       },
+       {
+        "buy_step": 241,
+        "pickup": 253,
+        "unit": "h5",
+        "place": 259
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 241,
+        "pickup": 266,
+        "unit": "h5",
+        "place": 270
+       },
+       {
+        "buy_step": 241,
+        "pickup": 253,
+        "unit": "h5",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h4",
+        "place": 258
+       }
+      ]
+     },
+     "100": {
+      "0": [
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 195,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 195,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 195,
+        "pickup": 204,
+        "unit": "h8",
+        "place": 207
+       }
+      ]
+     },
+     "101": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "103": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "104": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "105": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "106": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "107": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "108": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "109": {
+      "0": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 226,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "110": {
+      "0": [
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "111": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "112": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "113": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "114": {
+      "0": [
+       {
+        "buy_step": 241,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 241,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 241,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 241,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ]
+     },
+     "115": {
+      "0": [
+       {
+        "buy_step": 265,
+        "pickup": 268,
+        "unit": "h5",
+        "place": 275
+       },
+       {
+        "buy_step": 241,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 265,
+        "pickup": 268,
+        "unit": "h5",
+        "place": 275
+       },
+       {
+        "buy_step": 241,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 241,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "116": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "117": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "118": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "119": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "120": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "121": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "122": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "123": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "124": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "125": {
+      "0": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 226,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       },
+       {
+        "buy_step": 217,
+        "pickup": 222,
+        "unit": "h2",
+        "place": 229
+       },
+       {
+        "buy_step": 196,
+        "pickup": 198,
+        "unit": "h5",
+        "place": 201
+       },
+       {
+        "buy_step": 196,
+        "pickup": 197,
+        "unit": "h4",
+        "place": 213
+       }
+      ]
+     },
+     "126": {
+      "0": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 226,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "127": {
+      "0": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 226,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     },
+     "128": {
+      "0": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       }
+      ],
+      "-1": [
+       {
+        "buy_step": 252,
+        "pickup": 266,
+        "unit": "h9",
+        "place": 270
+       },
+       {
+        "buy_step": 251,
+        "pickup": 254,
+        "unit": "h10",
+        "place": 260
+       },
+       {
+        "buy_step": 226,
+        "pickup": 253,
+        "unit": "h2",
+        "place": 259
+       },
+       {
+        "buy_step": 217,
+        "pickup": 252,
+        "unit": "h0",
+        "place": 258
+       }
+      ]
+     }
+    }
+   },
+   "c_final_unchanged": {
+    "sell_face_touch": 0,
+    "fert_touch": 0,
+    "m13_touch": 0,
+    "caliber": "卖面/肥配比/M13 决策码零引用（尾块 marker 扫描）；磁带 blob 逐字节同源"
+   }
+  },
+  "n_hunks": 1,
+  "hunk_classes": {
+   "s3:tail": 1
+  },
+  "unclassified_hunks": 0,
+  "tail_is_append_only": true,
+  "tape_blob_identical": true,
+  "sell_face_markers_in_tail": [],
+  "c3_cells_overlap": [],
+  "zero_conflict": true
+ }
+}

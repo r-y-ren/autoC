@@ -1,0 +1,107 @@
+{
+ "budget": {
+  "cap_局次": 450,
+  "auth_局次": 60,
+  "gates_局次": 4,
+  "judgment_局次": 384,
+  "arms": {
+   "v3p_vs_oc_c3": 32,
+   "v3p_vs_mpx": 32,
+   "oc_c3_vs_mpx": 32,
+   "v3p_vs_tetsutani": 32,
+   "oc_c3_vs_tetsutani": 32,
+   "v3p_vs_V89": 32,
+   "oc_c3_vs_V89": 32,
+   "v3p_vs_r40": 32,
+   "oc_c3_vs_r40": 32,
+   "v3p_vs_A": 32,
+   "oc_c3_vs_A": 32,
+   "v3k_vs_oc_c3": 32
+  },
+  "cap_scope": "全部局次（认证 60 + 四门 4 + 面板判决 384）≤450",
+  "total_局次": 448,
+  "within_cap": true
+ },
+ "criteria": {
+  "①强面板 h2h≥0.5 且对 oc_c3≥0.5": {
+   "strong_pooled_h2h": 0.1875,
+   "h2h_vs_oc_c3": 0.125,
+   "per_member": {
+    "oc_c3": 0.125,
+    "mpx": 0.125,
+    "tetsutani": 0.25,
+    "V89": 0.25
+   },
+   "passed": false
+  },
+  "②弱锚 {r40,A} h2h≥0.8": {
+   "weak_pooled_h2h": 0.875,
+   "per_member": {
+    "r40": 0.8125,
+    "A": 0.9375
+   },
+   "passed": true
+  },
+  "③flips_neg==0": {
+   "scope": "主判=强面板（mpx/tetsutani/V89）；弱/全 scope 附列（②0.8 阈与弱锚全翻守卫自相矛盾，弱锚 flips 仅台账）",
+   "flips_neg_strong": 48,
+   "flips_neg_weak": 2,
+   "flips_neg_all": 50,
+   "passed": false
+  },
+  "④实现价非负": {
+   "same_game_all_mean_delta": -0.0012,
+   "same_game_milk_mean_delta": -0.0014,
+   "nonneg_both": false,
+   "nonneg_three": false,
+   "parallel_mean_delta": {
+    "n": 160,
+    "mean_delta": -0.0,
+    "nonneg": false
+   },
+   "passed": false
+  },
+  "margin 只作参考": {
+   "per_member_margin_mean": {
+    "oc_c3": -230.0,
+    "mpx": -145.06,
+    "tetsutani": -139.0,
+    "V89": -139.0,
+    "r40": 429.25,
+    "A": 1170.19
+   },
+   "note": "分析44 镜像错觉：配对边际≠直接对战；margin 不入判"
+  }
+ },
+ "panel_h2h": {
+  "oc_c3": 0.125,
+  "mpx": 0.125,
+  "tetsutani": 0.25,
+  "V89": 0.25,
+  "r40": 0.8125,
+  "A": 0.9375
+ },
+ "flips_scopes": {
+  "strong": {
+   "n": 96,
+   "flips_neg": 48,
+   "flips_pos": 0,
+   "win_control_oc_c3": 68,
+   "win_variant_v3p": 20
+  },
+  "weak": {
+   "n": 64,
+   "flips_neg": 2,
+   "flips_pos": 2,
+   "win_control_oc_c3": 56,
+   "win_variant_v3p": 56
+  },
+  "all": {
+   "n": 160,
+   "flips_neg": 50,
+   "flips_pos": 2,
+   "win_control_oc_c3": 124,
+   "win_variant_v3p": 76
+  }
+ }
+}

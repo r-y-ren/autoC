@@ -1,0 +1,13 @@
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment cabt failed: /home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/envs/cabt/cg/libcg.so: cannot open shared object file: No such file or directory
+oc_c3 games 32 err 0 tm 89456.9 win 37287.6 engines [{'engine': 'official', 'fallback_reason': None}, {'engine': 'official', 'fallback_reason': None}, {'engine': 'official', 'fallback_reason': None}, {'engine': 'official', 'fallback_reason': None}] 128.9 s
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment cabt failed: /home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/envs/cabt/cg/libcg.so: cannot open shared object file: No such file or directory
+Loading environment open_spiel_env failed: No module named 'pyspiel'
+Loading environment cabt failed: /home/renyxin/.local/lib/python3.14/site-packages/kaggle_environments/envs/cabt/cg/libcg.so: cannot open shared object file: No such file or directory
+mx_carpet games 32 err 0 tm 89451.5 win 37285.8 engines [{'engine': 'official', 'fallback_reason': None}, {'engine': 'official', 'fallback_reason': None}, {'engine': 'official', 'fallback_reason': None}, {'engine': 'official', 'fallback_reason': None}] 129.0 s
+crosscheck: 32 / 32
+CARPET: W6/L4/T22 dM 9.44 netflip 0 flips_neg 0 dWin -1.88 dWinMilk -5.69 px_nonneg False positive False
+per_day milk d: {'14': 0.0, '15': 0.0, '16': -0.12, '17': -3.56, '18': 0.0, '19': -2.0}
+trig: {'carpet_steps_total': 12, 'carpet_units_total': 44, 'games_with_carpet': 12}
+DONE 257.9 s budget: {'envelope_局次': 97, 'arms': {'oc_c3': 32, 'mx_carpet': 32}}

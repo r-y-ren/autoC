@@ -691,5 +691,152 @@ def main():
     return EV
 
 
+def validate_h1x_b():
+    """H1X 侧快速验证（用户裁决 2026-10-01 重裁判据，B 档入候选）：
+    h1x_b vs H1X 本体同块配对（12 fold 双席，674000+i*159，6 对手轮转）
+    + 毒种 5 枚精简（每枚 2 局配对 H1X 对照，均值口径）+ 弱锚 r40/A（各 6 fold，
+    基线=H1X 本体同读数）。判读：配对 delta>0 ∧ flips_neg=0 ∧ 毒种均值不回退
+    ∧ 弱锚不低于 H1X 基线水平。预算 ≤180 局。只读/只测，绝不在线。"""
+    os.chdir(KSIM_DIR)
+    t0 = time.perf_counter()
+    H1X = KSIM_DIR / "orderbook_h1x_lab" / "build" / "h1x" / "main.py"
+    H1XB = HERE / "build" / "h1x_b" / "main.py"
+    bm = json.load(open(HERE / "build" / "h1x_b" / "build_manifest.json"))
+    EV.setdefault("h1x_b_validation", {})
+    out = EV["h1x_b_validation"] = {
+        "version": "h1x-b-validate/1.0",
+        "readjudication": "用户裁决 2026-10-01 终窗：毒种门重裁为均值不回退"
+                          "（B +6.3 过）、弱锚门重裁为基线相对不回退（0.79=基线"
+                          "水平过）→ B 档（lot 4-8）入发射候选",
+        "design": {
+            "arm": "h1x_b = H1X(9d073fba…) 单行手术 lot(2,4)→(4,8)；control=H1X 本体",
+            "artifacts": {"main_sha256": bm["main"]["sha256"],
+                          "tar_sha256": bm["tar"]["sha256"],
+                          "lot": bm["spike_params"]["lot"],
+                          "checks": bm["checks"]},
+            "corpus": {"paired": "12 fold=674000+i*159 双席×6 对手轮转，同 "
+                                 "(seed,seat,opp) 配对 vs H1X 本体",
+                       "poison": "五毒种各 2 局（mpx×双席）配对 H1X 对照（均值口径）",
+                       "weak": "r40/A 各 6 fold 双席；基线=H1X 本体同局"},
+            "caliber": {"margin": "终局钱 farms[obs.player] 差",
+                        "fold": "judge_r44._fold_arm（双席折叠）",
+                        "paired": "flip_stats：delta W-L-T+mean+flips_neg/pos"},
+        },
+        "budget_cap_局次": 180,
+    }
+    flush()
+    from orderbook_r40 import sim_bridge as sb  # noqa: WPS433
+    auth = json.loads((KSIM_DIR / "orderbook_s1form_lab" / "evidence"
+                       / "sim_auth_cache.json").read_text(encoding="utf-8"))
+    if not auth.get("consistency_ok"):
+        out["verdict"] = {"aborted": "sim_bridge 认证缓存未过"}
+        flush()
+        return out
+    run_cfg = {"engine": "auto", "bridge": auth, "workers": WORKERS}
+    budget = 0
+
+    # ---- 1. 同块配对 vs H1X 本体（12 fold 双席×6 对手轮转）----
+    specs_v, specs_c = [], []
+    for j, seed in enumerate(FOLDS_12):
+        on = PAIRED_CYCLE[j % len(PAIRED_CYCLE)]
+        specs_v += mk_specs("h1x_b", H1XB, PANEL[on], on, [seed], "paired")
+        specs_c += mk_specs("h1x_ctl", H1X, PANEL[on], on, [seed], "paired")
+    rows_v = run_specs(specs_v, run_cfg)
+    rows_c = run_specs(specs_c, run_cfg)
+    budget += len(specs_v) + len(specs_c)
+    pairs = pairs_from(rows_c, rows_v)
+    ft = flip_table(pairs)
+    out["paired"] = {"flip": ft,
+                     "fold_h1x_b": fold_of(rows_v),
+                     "fold_h1x_ctl": fold_of(rows_c)}
+    print("h1xb paired mean_delta", ft["mean_delta"], "W/L/T", ft["W"],
+          ft["L"], ft["T"], "flips_neg", ft["flips_neg"], flush=True)
+
+    # ---- 2. 毒种 5 枚精简（每枚 2 局 mpx×双席，配对 H1X 对照，均值口径）----
+    po_v, po_c = [], []
+    for seed in POISON_SEEDS:
+        po_v += mk_specs("h1x_b", H1XB, PANEL["mpx"], "mpx", [seed], "poison")
+        po_c += mk_specs("h1x_ctl", H1X, PANEL["mpx"], "mpx", [seed], "poison")
+    rows_pov = run_specs(po_v, run_cfg)
+    rows_poc = run_specs(po_c, run_cfg)
+    budget += len(po_v) + len(po_c)
+    pairs_po = pairs_from(rows_poc, rows_pov)
+    out["poison"] = {"flip": flip_table(pairs_po), "per_seed": {}}
+    for seed in POISON_SEEDS:
+        ps = [p for p in pairs_po if p[2][0] == seed]
+        ftp = flip_table(ps)
+        out["poison"]["per_seed"][str(seed)] = {
+            "n_pairs": ftp["n"], "W": ftp["W"], "L": ftp["L"], "T": ftp["T"],
+            "mean_delta": ftp["mean_delta"], "flips_neg": ftp["flips_neg"]}
+    print("h1xb poison mean", out["poison"]["flip"]["mean_delta"], flush=True)
+
+    # ---- 3. 弱锚 r40/A（各 6 fold 双席；基线=H1X 本体同局）----
+    out["weak"] = {"design": "h1x_b 与 H1X 本体同 6 fold 双席 vs r40/A；"
+                             "基线相对不回退", "pairs": {}}
+    for on in ("r40", "A"):
+        rv = run_specs(mk_specs("h1x_b", H1XB, PANEL[on], on, FOLDS_12[:6],
+                                "weak"), run_cfg)
+        rc = run_specs(mk_specs("h1x_ctl", H1X, PANEL[on], on, FOLDS_12[:6],
+                                "weak"), run_cfg)
+        budget += len(FOLDS_12[:6]) * 2 * 2
+        fv, fc = fold_of(rv), fold_of(rc)
+        out["weak"]["pairs"][on] = {
+            "h2h_h1x_b": fv["h2h"], "h2h_h1x_ctl": fc["h2h"],
+            "fold_h1x_b": fv, "fold_h1x_ctl": fc,
+            "no_regression": (fv["h2h"] or 0) >= (fc["h2h"] or 0)}
+        print("h1xb weak", on, fv["h2h"], "vs base", fc["h2h"], flush=True)
+
+    # ---- 判读（重裁后口径）----
+    c1a = bool((ft["mean_delta"] or 0) > 0)
+    c1b = bool(ft["flips_neg"] == 0)
+    c2 = bool((out["poison"]["flip"]["mean_delta"] or 0) >= 0)
+    c3 = bool(all(v["no_regression"] for v in out["weak"]["pairs"].values()))
+    checks = {
+        "c1_paired_delta_pos": {"mean_delta": ft["mean_delta"],
+                                "W": ft["W"], "L": ft["L"], "T": ft["T"],
+                                "passed": c1a},
+        "c1_paired_flipsneg0": {"flips_neg": ft["flips_neg"],
+                                "flips_pos": ft["flips_pos"], "passed": c1b},
+        "c2_poison_mean_no_regression": {
+            "mean_delta": out["poison"]["flip"]["mean_delta"],
+            "W": out["poison"]["flip"]["W"], "L": out["poison"]["flip"]["L"],
+            "flips_neg": out["poison"]["flip"]["flips_neg"], "passed": c2},
+        "c3_weak_anchor_baseline_no_regression": {
+            "per": {on: {"h2h_b": v["h2h_h1x_b"], "h2h_base": v["h2h_h1x_ctl"],
+                         "no_regression": v["no_regression"]}
+                    for on, v in out["weak"]["pairs"].items()},
+            "passed": c3}}
+    full = all(c["passed"] for c in checks.values())
+    out["checks"] = checks
+    out["budget"] = {"used_局次": budget, "cap": 180,
+                     "within_cap": budget <= 180}
+    out["verdict"] = {
+        "h1x_b_validation": "PASS" if full else "FAIL",
+        "readjudicated_criteria_passed": full,
+        "launch_candidate": ("B 档成立（s8b 机制 + h1x_b H1X 侧件）"
+                             if full else "H1X 侧验证未过"),
+        "note": "只测不发；在线提交=硬禁令；上线决策移交用户；证据含逐块配对表",
+        "elapsed_s": round(time.perf_counter() - t0, 1)}
+    # 逐局行（配对+毒种+弱锚，h1x_b 侧）
+    seen, per_game = set(), []
+    for r in rows_v + rows_pov:
+        key = (r["seed"], r["seat"], r.get("opponent"))
+        if key in seen:
+            continue
+        seen.add(key)
+        per_game.append({"game_id": r.get("game_id"), "block": r.get("block"),
+                         "seed": r["seed"], "seat": r["seat"],
+                         "opp": r.get("opponent"),
+                         "margin_clean": r.get("margin_clean"),
+                         "tm_us": r.get("tm_us"), "tm_opp": r.get("tm_opp"),
+                         "error": r.get("error")})
+    out["per_game_rows"] = per_game
+    out["elapsed_s"] = out["verdict"]["elapsed_s"]
+    flush()
+    print("H1X_B VERDICT:", json.dumps(out["verdict"], ensure_ascii=False,
+                                       default=str), flush=True)
+    return out
+
+
 if __name__ == "__main__":
     main()

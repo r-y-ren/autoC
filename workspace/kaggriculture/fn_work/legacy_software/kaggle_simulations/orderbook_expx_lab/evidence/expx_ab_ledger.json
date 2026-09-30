@@ -1,0 +1,179 @@
+{
+ "pairs": {
+  "expx_vs_oc_c3": {
+   "n": 32,
+   "W": 19,
+   "L": 13,
+   "T": 0,
+   "mean_delta": 85.38,
+   "net_flip_wins": -2,
+   "flips_neg": 2
+  }
+ },
+ "window": {
+  "fill_total_mean_delta": 144.16,
+  "fill_milk_mean_delta": 9.97
+ },
+ "per_item_table": {
+  "CARROT": {
+   "base_px": 35,
+   "oc_c3": {
+    "ratio_fill": 1.5406,
+    "ratio_submit": 1.5933,
+    "filled_qty": 4520.0
+   },
+   "expx": {
+    "ratio_fill": 1.5407,
+    "ratio_submit": 1.5933,
+    "filled_qty": 4520.0
+   },
+   "d_ratio_fill": 0.0001,
+   "d_ratio_submit": 0.0
+  },
+  "EGG": {
+   "base_px": 50,
+   "oc_c3": {
+    "ratio_fill": 1.0169,
+    "ratio_submit": 1.023,
+    "filled_qty": 2084.0
+   },
+   "expx": {
+    "ratio_fill": 1.0174,
+    "ratio_submit": 1.0224,
+    "filled_qty": 2090.0
+   },
+   "d_ratio_fill": 0.0005,
+   "d_ratio_submit": -0.0006
+  },
+  "FERTILIZER": {
+   "base_px": 100,
+   "oc_c3": {
+    "ratio_fill": 0.4349,
+    "ratio_submit": 0.4498,
+    "filled_qty": 10785.0
+   },
+   "expx": {
+    "ratio_fill": 0.4351,
+    "ratio_submit": 0.45,
+    "filled_qty": 10783.0
+   },
+   "d_ratio_fill": 0.0002,
+   "d_ratio_submit": 0.0002
+  },
+  "MELON": {
+   "base_px": 250,
+   "oc_c3": {
+    "ratio_fill": 0.8185,
+    "ratio_submit": 0.8577,
+    "filled_qty": 2304.0
+   },
+   "expx": {
+    "ratio_fill": 0.8185,
+    "ratio_submit": 0.8577,
+    "filled_qty": 2304.0
+   },
+   "d_ratio_fill": 0.0,
+   "d_ratio_submit": 0.0
+  },
+  "MILK": {
+   "base_px": 160,
+   "oc_c3": {
+    "ratio_fill": 0.5806,
+    "ratio_submit": 0.5782,
+    "filled_qty": 6037.0
+   },
+   "expx": {
+    "ratio_fill": 0.5807,
+    "ratio_submit": 0.5793,
+    "filled_qty": 6043.0
+   },
+   "d_ratio_fill": 0.0001,
+   "d_ratio_submit": 0.0011
+  },
+  "STRAWBERRY": {
+   "base_px": 120,
+   "oc_c3": {
+    "ratio_fill": 0.8448,
+    "ratio_submit": 0.8848,
+    "filled_qty": 7901.0
+   },
+   "expx": {
+    "ratio_fill": 0.8473,
+    "ratio_submit": 0.8947,
+    "filled_qty": 7901.0
+   },
+   "d_ratio_fill": 0.0025,
+   "d_ratio_submit": 0.0099
+  },
+  "TOMATO": {
+   "base_px": 60,
+   "oc_c3": {
+    "ratio_fill": 3.8922,
+    "ratio_submit": 4.1363,
+    "filled_qty": 320.0
+   },
+   "expx": {
+    "ratio_fill": 3.8922,
+    "ratio_submit": 4.1363,
+    "filled_qty": 320.0
+   },
+   "d_ratio_fill": 0.0,
+   "d_ratio_submit": 0.0
+  },
+  "WHEAT": {
+   "base_px": 25,
+   "oc_c3": {
+    "ratio_fill": 1.6455,
+    "ratio_submit": 1.6823,
+    "filled_qty": 20173.0
+   },
+   "expx": {
+    "ratio_fill": 1.6454,
+    "ratio_submit": 1.6822,
+    "filled_qty": 20169.0
+   },
+   "d_ratio_fill": -0.0001,
+   "d_ratio_submit": -0.0001
+  },
+  "WOOL": {
+   "base_px": 200,
+   "oc_c3": {
+    "ratio_fill": 0.7175,
+    "ratio_submit": 0.7444,
+    "filled_qty": 6347.0
+   },
+   "expx": {
+    "ratio_fill": 0.7205,
+    "ratio_submit": 0.7452,
+    "filled_qty": 6341.0
+   },
+   "d_ratio_fill": 0.003,
+   "d_ratio_submit": 0.0008
+  }
+ },
+ "criteria": {
+  "checks": {
+   "净翻胜>0": false,
+   "flips_neg==0": false,
+   "实现价非负（Δratio_fill 三品∧全品均值≥0）": true,
+   "d14-27窗收入差转正（fill 总窗配对 mean Δ>0）": true
+  },
+  "net_flip_wins": -2,
+  "flips_neg": 2,
+  "W_L_T": "19/13/0",
+  "mean_delta": 85.38,
+  "window_fill_total_mean_delta": 144.16,
+  "window_fill_milk_mean_delta": 9.97,
+  "realized_px_nonneg_all_three": true,
+  "footprint_gate_passed": true,
+  "positive_arm": false
+ },
+ "budget": {
+  "cap_局次": 350,
+  "smoke_局次": 1,
+  "auth_局次": 60,
+  "judgment_局次": 64,
+  "total_局次": 125,
+  "within_cap": true
+ }
+}

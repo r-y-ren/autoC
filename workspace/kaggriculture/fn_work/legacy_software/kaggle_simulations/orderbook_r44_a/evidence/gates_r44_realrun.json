@@ -1,0 +1,68 @@
+{
+ "gates": {
+  "load": {
+   "passed": true,
+   "form": "A",
+   "entry": "_dayhigh_agent"
+  },
+  "health": {
+   "passed": true,
+   "step_budget_ms": 1000.0,
+   "episodes": [
+    {
+     "seed": 101,
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "max_step_ms": 158.14,
+     "passed": true
+    },
+    {
+     "seed": 102,
+     "statuses": [
+      "DONE",
+      "DONE"
+     ],
+     "max_step_ms": 294.93,
+     "passed": true
+    }
+   ]
+  },
+  "determinism": {
+   "passed": true,
+   "rerun_seed": 101,
+   "hashes": {
+    "run1": "9605b12cebee58ef7fe898bbe9a6d0643032eb424c53042f53d4a599ed809d3c",
+    "run2": "9605b12cebee58ef7fe898bbe9a6d0643032eb424c53042f53d4a599ed809d3c"
+   }
+  },
+  "identity": {
+   "passed": true,
+   "main_sha256": "b387307fc12e26107c58ee604146fc621099ce88124fa0876fdd7cef28300bd9",
+   "tar_size_mb": 0.64,
+   "chain": [
+    "a16e0e9b",
+    "r34a",
+    "r37",
+    "r40",
+    "r44_a"
+   ]
+  },
+  "h2h": {
+   "passed": true,
+   "h2h_rate": 0.625,
+   "bar": 0.55,
+   "n_independent": 8,
+   "n_games": 16,
+   "wins": 5,
+   "losses": 3,
+   "ties": 0
+  }
+ },
+ "overall": {
+  "passed": true,
+  "failed_gates": [],
+  "version": "gates-r44/1.0"
+ }
+}

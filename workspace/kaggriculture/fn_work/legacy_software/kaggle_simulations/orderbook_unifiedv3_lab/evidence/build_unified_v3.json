@@ -1,0 +1,76 @@
+{
+ "version": "unified-v3-build/1.0",
+ "generated": "2026-09-29T23:32:13Z",
+ "base_main": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_oppcond_lab/build/oc_c3/main.py",
+ "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d",
+ "kernel_design": {
+  "core": "单一连续空间求解器（卖时+卖量+窗联合优化）",
+  "projection": "K=12 拍引擎公式价格轨迹，比较全用未取整连续价（u1v2 取整修复件）",
+  "half_gate": "预测连续跌>$0.5→半量（drop_half 语义并入单核）",
+  "peak_clause": "peak=现价≥连续投影峰→全量（帽内）+MR≤0 截止；platform=小单持续放行不等峰（D5 平台语义）",
+  "window": "peak=小时柔窗；platform=d12-24 平台柔窗（D5）",
+  "guards": "648 后回基线+滞留保险；异常回退基线；非触发拍零足迹"
+ },
+ "forms": {
+  "v3k": {
+   "desc": "peak 形态（原设计对照）：柔窗 h14-22=1.0/h10-13,23=0.5/其余 0；预测连续跌>$0.5→半量、现价≥连续投影峰→全量（帽内）、MR≤0 截止（平局破向卖出）、窗将关闭末拍清剩余、滞留保险",
+   "main_sha256": "e43a6b58b9be15ca11ac26c845302ec1e7ed6d1d06fa5659e258483fc89fd6bf",
+   "tar_sha256": "6d8c4dc48b68242f5fbdfc85f8e3b5749d089fb60b29c85d49dafae65e8642ea",
+   "subs": [
+    {
+     "old": "inv_next=inv+rival_avg+planned-_s758_draw_units(item,step);p_next=float(_r37_market_price(item,max(0,int(inv_next))))",
+     "new": "p_next=_u3_pnext(item,step,inv,rival_avg,avail,p_now,planned,observation)",
+     "count": 4
+    },
+    {
+     "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+     "new": "take=min(avail,_u3_take(item,step,inv,p_now,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))),avail,observation))",
+     "count": 1
+    },
+    {
+     "old": "take=min(avail,10)",
+     "new": "take=min(avail,_u3_take(item,step,inv,p_now,10,avail,observation))",
+     "count": 3
+    }
+   ],
+   "probes": {
+    "window_edges_ok": true,
+    "cap_tiers_ok": true,
+    "half_gate_ok": true,
+    "win_guard_ok": true
+   },
+   "window": "peak=小时权重 h14-22 1.0/h10-13,23 0.5/其余 0",
+   "sizing": "半量门（预测连续跌>$0.5→半量≥1）+峰值全量（帽内）+MR≤0 截止"
+  },
+  "v3p": {
+   "desc": "platform 形态（D5 平台语义主形态）：小单持续放行不等峰（lot 沿帽 3/6/10 小批）、跌幅>$0.5 半量保留、柔窗 d12-24 平台 [288,576)=1.0/其余 0.5（产线节奏对齐）、连续空间比较仅用于跌幅判定",
+   "main_sha256": "67539afd76f58baa80d3558877f1e6585766aca05a2a155fe5a4776ba6ab101f",
+   "tar_sha256": "32b9312c913a84cdadd8be9a7cae4141624b9320b369d6f25a6533f7a4809ad8",
+   "subs": [
+    {
+     "old": "inv_next=inv+rival_avg+planned-_s758_draw_units(item,step);p_next=float(_r37_market_price(item,max(0,int(inv_next))))",
+     "new": "p_next=_u3_pnext(item,step,inv,rival_avg,avail,p_now,planned,observation)",
+     "count": 4
+    },
+    {
+     "old": "take=min(avail,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))))",
+     "new": "take=min(avail,_u3_take(item,step,inv,p_now,(10 if p_now>=100 else (10 if (step%24) in (10,11,12,13) and p_now>=30 else (planned if (step%24) in (10,11,12,13) and p_now>=10 else max(1,planned//2)))),avail,observation))",
+     "count": 1
+    },
+    {
+     "old": "take=min(avail,10)",
+     "new": "take=min(avail,_u3_take(item,step,inv,p_now,10,avail,observation))",
+     "count": 3
+    }
+   ],
+   "probes": {
+    "window_edges_ok": true,
+    "cap_tiers_ok": true,
+    "half_gate_ok": true,
+    "win_guard_ok": true
+   },
+   "window": "platform=d12-24 平台 [288,576) 1.0/其余 0.5",
+   "sizing": "半量门（预测连续跌>$0.5→半量≥1）+平台小单持续放行（lot=max(1,帽×窗权)，不等峰）"
+  }
+ }
+}

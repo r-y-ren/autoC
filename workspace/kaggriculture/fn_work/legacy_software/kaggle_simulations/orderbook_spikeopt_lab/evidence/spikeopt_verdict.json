@@ -1,33 +1,12 @@
 {
- "version": "spikeopt/1.0",
- "task": "尖拍追加量参数上调（lot 2-4→A 3-6/B 4-8）池测：配对增量 vs S8 本体+捕获 KPI+面板+毒种+稳节奏（只测不发，在线提交=硬禁令）",
- "origin": "H1X 线上体检 2026-10-01-h1x-online-read.json：败局 115945260（d16 尖价窗量缺口/漏捕 1122）、115948784（d26 尖价 2877 vs 5265，量缺口 3590）→ lot 帽+topup 空间在高量竞速拍偏薄",
- "design": {
-  "formula": "s8a = S8(a59208fe…) 单行手术 lot(2,4)→(3,6)；s8b = 同手术 (4,8)；其余逐字不动（anti-幻影硬线/槽位 10 帽/step≥712/加卖不挪卖/decl_topup）",
-  "artifacts": {
-   "A": {
-    "main_sha256": "5a5584264dd707b0daca200b4512f3970eabe7a3f2c56742ae7ab0b985736f80",
-    "tar_sha256": "f5a3ded8faf324b3983953659f87324d57a80cbc2cd4257b8e2634a13bfd44b4",
-    "lot": [
-     3,
-     6
-    ],
-    "checks": {
-     "machinery_identity_ok": true,
-     "single_line_diff_ok": true,
-     "compile_ok": true,
-     "last_callable_is_entry": true,
-     "host_capture_ok": true,
-     "params_ok": true,
-     "base_sha_identity_ok": true,
-     "machinery_single_line_ok": true,
-     "deterministic_double_run_ok": true,
-     "tar3_members_ok": true
-    }
-   },
-   "B": {
-    "main_sha256": "ecae0d421504eb04e78a903be2c9fbb1ef3d887bc18b8384605a4c87c3f99c52",
-    "tar_sha256": "06ec6cc113c58e132ac83c979d9715cf2ba795351bb78156075eca2d9084e89f",
+ "h1x_b_validation": {
+  "version": "h1x-b-validate/1.0",
+  "readjudication": "用户裁决 2026-10-01 终窗：毒种门重裁为均值不回退（B +6.3 过）、弱锚门重裁为基线相对不回退（0.79=基线水平过）→ B 档（lot 4-8）入发射候选",
+  "design": {
+   "arm": "h1x_b = H1X(9d073fba…) 单行手术 lot(2,4)→(4,8)；control=H1X 本体",
+   "artifacts": {
+    "main_sha256": "9e076632968f3eaf7231158b5e70583150f1481f125fc3120c6cf60086eabcdb",
+    "tar_sha256": "3b4fee8532e91734ce59cb2402d78473353b6b6ad9e9a9a155d803425817322d",
     "lot": [
      4,
      8
@@ -44,170 +23,95 @@
      "deterministic_double_run_ok": true,
      "tar3_members_ok": true
     }
+   },
+   "corpus": {
+    "paired": "12 fold=674000+i*159 双席×6 对手轮转，同 (seed,seat,opp) 配对 vs H1X 本体",
+    "poison": "五毒种各 2 局（mpx×双席）配对 H1X 对照（均值口径）",
+    "weak": "r40/A 各 6 fold 双席；基线=H1X 本体同局"
+   },
+   "caliber": {
+    "margin": "终局钱 farms[obs.player] 差",
+    "fold": "judge_r44._fold_arm（双席折叠）",
+    "paired": "flip_stats：delta W-L-T+mean+flips_neg/pos"
    }
   },
-  "s8_base": {
-   "main_sha256": "a59208fe79985388a9a5790858b8bce52e0de530e9d2484d0eafbcae04e7c0a6"
-  },
-  "corpus": {
-   "paired": "12 fold=674000+i*159 双席 vs 6 对手轮转（oc_c3/mpx/tetsutani/V89/r40/A），同 (seed,seat,opp) 逐 unit 配对 vs S8 本体",
-   "panel": "vs {oc_c3,H1 王座锚, r40, A}×12 fold 双席",
-   "poison": "五毒种各 {mpx,oc_c3}×双席=4 局配对 S8",
-   "steady": "tetsutani/tetsu1009 8 fold 双席配对 S8"
-  },
-  "caliber": {
-   "margin": "终局钱 farms[obs.player] 差（干净口径）",
-   "fold": "judge_r44._fold_arm（双席折叠独立局）",
-   "paired": "flip_stats：delta W-L-T+mean+flips_neg/pos（主判据）",
-   "capture": "spike 窗声明单代理（线上体检同款）：capture_rate_qty=our/(our+opp)；miss=我 0 对手>0；under=我<对手；量缺口=miss_qty+under_units（件）；win_all=全区镜像线上口径，win_lt712=层窗（step<712）",
-   "hard_currency": "胜率=硬通货；margin/终局钱只作参考"
-  }
- },
- "gates": {
-  "build_A": {
-   "machinery_identity_ok": true,
-   "single_line_diff_ok": true,
-   "compile_ok": true,
-   "last_callable_is_entry": true,
-   "host_capture_ok": true,
-   "params_ok": true,
-   "base_sha_identity_ok": true,
-   "machinery_single_line_ok": true,
-   "deterministic_double_run_ok": true,
-   "tar3_members_ok": true
-  },
-  "build_B": {
-   "machinery_identity_ok": true,
-   "single_line_diff_ok": true,
-   "compile_ok": true,
-   "last_callable_is_entry": true,
-   "host_capture_ok": true,
-   "params_ok": true,
-   "base_sha_identity_ok": true,
-   "machinery_single_line_ok": true,
-   "deterministic_double_run_ok": true,
-   "tar3_members_ok": true
-  },
-  "sim_auth": {
-   "loaded": true,
-   "consistency": {
-    "n_checked": 30,
-    "n_match": 30,
-    "rate": 1.0
-   },
-   "consistency_ok": true,
-   "degraded": false,
-   "degraded_reason": null,
-   "engine": "sim",
-   "version": "simbridge/1.0",
-   "wall_speedup": 5.155,
-   "reused_cache": true
-  }
- },
- "determinism_spotcheck": {
-  "A": {
-   "game_id": "so-A|oc_c3|674000-s0",
-   "banks_run1": [
-    83288.0,
-    83350.0
-   ],
-   "banks_run2": [
-    83288.0,
-    83350.0
-   ],
-   "identical": true
-  },
-  "B": {
-   "game_id": "so-B|oc_c3|674000-s0",
-   "banks_run1": [
-    83288.0,
-    83350.0
-   ],
-   "banks_run2": [
-    83288.0,
-    83350.0
-   ],
-   "identical": true
-  }
- },
- "paired": {
-  "A": {
-   "design": "同 (seed,seat,opp) 逐 unit 配对（control=S8 本体, variant=s8A）；12 fold 双席×6 对手轮转=24 局/臂",
+  "budget_cap_局次": 180,
+  "paired": {
    "flip": {
     "n": 24,
     "W": 4,
     "L": 0,
     "T": 20,
-    "delta_sum": 296.0,
+    "delta_sum": 532.0,
     "win_control": 17,
     "win_variant": 17,
     "flips_pos": 0,
     "flips_neg": 0,
-    "mean_delta": 12.33,
+    "mean_delta": 22.17,
     "net_flip_wins": 0,
     "pairs_detail": [
      {
       "seed": 674000,
       "seat": 0,
       "opp": "oc_c3",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
+      "margin_s8": 247.0,
+      "margin_arm": 253.0,
+      "delta": 6.0
      },
      {
       "seed": 674000,
       "seat": 1,
       "opp": "oc_c3",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
+      "margin_s8": 247.0,
+      "margin_arm": 253.0,
+      "delta": 6.0
      },
      {
       "seed": 674159,
       "seat": 0,
       "opp": "mpx",
-      "margin_s8": 186.0,
-      "margin_arm": 306.0,
-      "delta": 120.0
+      "margin_s8": 559.0,
+      "margin_arm": 819.0,
+      "delta": 260.0
      },
      {
       "seed": 674159,
       "seat": 1,
       "opp": "mpx",
-      "margin_s8": 186.0,
-      "margin_arm": 306.0,
-      "delta": 120.0
+      "margin_s8": 559.0,
+      "margin_arm": 819.0,
+      "delta": 260.0
      },
      {
       "seed": 674318,
       "seat": 0,
       "opp": "tetsutani",
-      "margin_s8": -2744.0,
-      "margin_arm": -2744.0,
+      "margin_s8": 214.0,
+      "margin_arm": 214.0,
       "delta": 0.0
      },
      {
       "seed": 674318,
       "seat": 1,
       "opp": "tetsutani",
-      "margin_s8": -2744.0,
-      "margin_arm": -2744.0,
+      "margin_s8": 214.0,
+      "margin_arm": 214.0,
       "delta": 0.0
      },
      {
       "seed": 674477,
       "seat": 0,
       "opp": "V89",
-      "margin_s8": -63.0,
-      "margin_arm": -63.0,
+      "margin_s8": -131.0,
+      "margin_arm": -131.0,
       "delta": 0.0
      },
      {
       "seed": 674477,
       "seat": 1,
       "opp": "V89",
-      "margin_s8": -63.0,
-      "margin_arm": -63.0,
+      "margin_s8": -131.0,
+      "margin_arm": -131.0,
       "delta": 0.0
      },
      {
@@ -230,4033 +134,758 @@
       "seed": 674795,
       "seat": 0,
       "opp": "A",
-      "margin_s8": 2121.0,
-      "margin_arm": 2121.0,
+      "margin_s8": 2090.0,
+      "margin_arm": 2090.0,
       "delta": 0.0
      },
      {
       "seed": 674795,
       "seat": 1,
       "opp": "A",
-      "margin_s8": 2121.0,
-      "margin_arm": 2121.0,
+      "margin_s8": 2090.0,
+      "margin_arm": 2090.0,
       "delta": 0.0
      },
      {
       "seed": 674954,
       "seat": 0,
       "opp": "oc_c3",
-      "margin_s8": 39.0,
-      "margin_arm": 39.0,
+      "margin_s8": -2.0,
+      "margin_arm": -2.0,
       "delta": 0.0
      },
      {
       "seed": 674954,
       "seat": 1,
       "opp": "oc_c3",
-      "margin_s8": 39.0,
-      "margin_arm": 39.0,
+      "margin_s8": -2.0,
+      "margin_arm": -2.0,
       "delta": 0.0
      },
      {
       "seed": 675113,
       "seat": 0,
       "opp": "mpx",
-      "margin_s8": 46.0,
-      "margin_arm": 46.0,
+      "margin_s8": -150.0,
+      "margin_arm": -150.0,
       "delta": 0.0
      },
      {
       "seed": 675113,
       "seat": 1,
       "opp": "mpx",
-      "margin_s8": 46.0,
-      "margin_arm": 46.0,
+      "margin_s8": -150.0,
+      "margin_arm": -150.0,
       "delta": 0.0
      },
      {
       "seed": 675272,
       "seat": 0,
       "opp": "tetsutani",
-      "margin_s8": 301.0,
-      "margin_arm": 301.0,
+      "margin_s8": 647.0,
+      "margin_arm": 647.0,
       "delta": 0.0
      },
      {
       "seed": 675272,
       "seat": 1,
       "opp": "tetsutani",
-      "margin_s8": -979.0,
-      "margin_arm": -979.0,
+      "margin_s8": -627.0,
+      "margin_arm": -627.0,
       "delta": 0.0
      },
      {
       "seed": 675431,
       "seat": 0,
       "opp": "V89",
-      "margin_s8": 129.0,
-      "margin_arm": 129.0,
+      "margin_s8": 60.0,
+      "margin_arm": 60.0,
       "delta": 0.0
      },
      {
       "seed": 675431,
       "seat": 1,
       "opp": "V89",
-      "margin_s8": 129.0,
-      "margin_arm": 129.0,
+      "margin_s8": 60.0,
+      "margin_arm": 60.0,
       "delta": 0.0
      },
      {
       "seed": 675590,
       "seat": 0,
       "opp": "r40",
-      "margin_s8": 519.0,
-      "margin_arm": 519.0,
+      "margin_s8": 294.0,
+      "margin_arm": 294.0,
       "delta": 0.0
      },
      {
       "seed": 675590,
       "seat": 1,
       "opp": "r40",
-      "margin_s8": 519.0,
-      "margin_arm": 519.0,
+      "margin_s8": 294.0,
+      "margin_arm": 294.0,
       "delta": 0.0
      },
      {
       "seed": 675749,
       "seat": 0,
       "opp": "A",
-      "margin_s8": 1425.0,
-      "margin_arm": 1425.0,
+      "margin_s8": 2469.0,
+      "margin_arm": 2469.0,
       "delta": 0.0
      },
      {
       "seed": 675749,
       "seat": 1,
       "opp": "A",
-      "margin_s8": 1425.0,
-      "margin_arm": 1425.0,
+      "margin_s8": 2469.0,
+      "margin_arm": 2469.0,
       "delta": 0.0
      }
     ]
    },
-   "fold_variant": {
+   "fold_h1x_b": {
     "n": 12,
     "wins": 8,
     "losses": 3,
     "ties": 1,
     "h2h": 0.7083,
-    "mean_margin": 161.0,
+    "mean_margin": 540.1,
     "n_games": 24,
     "n_errors": 0
    },
-   "fold_s8": {
+   "fold_h1x_ctl": {
     "n": 12,
     "wins": 8,
     "losses": 3,
     "ties": 1,
     "h2h": 0.7083,
-    "mean_margin": 148.7,
+    "mean_margin": 517.9,
     "n_games": 24,
     "n_errors": 0
    }
   },
-  "B": {
-   "design": "同 (seed,seat,opp) 逐 unit 配对（control=S8 本体, variant=s8B）；12 fold 双席×6 对手轮转=24 局/臂",
+  "poison": {
    "flip": {
-    "n": 24,
+    "n": 10,
     "W": 4,
-    "L": 0,
-    "T": 20,
-    "delta_sum": 820.0,
-    "win_control": 17,
-    "win_variant": 17,
+    "L": 4,
+    "T": 2,
+    "delta_sum": -50.0,
+    "win_control": 10,
+    "win_variant": 10,
     "flips_pos": 0,
     "flips_neg": 0,
-    "mean_delta": 34.17,
+    "mean_delta": -5.0,
     "net_flip_wins": 0,
     "pairs_detail": [
      {
       "seed": 674000,
       "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674000,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674159,
-      "seat": 0,
       "opp": "mpx",
-      "margin_s8": 186.0,
-      "margin_arm": 568.0,
-      "delta": 382.0
-     },
-     {
-      "seed": 674159,
-      "seat": 1,
-      "opp": "mpx",
-      "margin_s8": 186.0,
-      "margin_arm": 568.0,
-      "delta": 382.0
-     },
-     {
-      "seed": 674318,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": -2744.0,
-      "margin_arm": -2744.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674318,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": -2744.0,
-      "margin_arm": -2744.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674477,
-      "seat": 0,
-      "opp": "V89",
-      "margin_s8": -63.0,
-      "margin_arm": -63.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674477,
-      "seat": 1,
-      "opp": "V89",
-      "margin_s8": -63.0,
-      "margin_arm": -63.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674636,
-      "seat": 0,
-      "opp": "r40",
-      "margin_s8": 555.0,
-      "margin_arm": 555.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674636,
-      "seat": 1,
-      "opp": "r40",
-      "margin_s8": 555.0,
-      "margin_arm": 555.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674795,
-      "seat": 0,
-      "opp": "A",
-      "margin_s8": 2121.0,
-      "margin_arm": 2121.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674795,
-      "seat": 1,
-      "opp": "A",
-      "margin_s8": 2121.0,
-      "margin_arm": 2121.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674954,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": 39.0,
-      "margin_arm": 39.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674954,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": 39.0,
-      "margin_arm": 39.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675113,
-      "seat": 0,
-      "opp": "mpx",
-      "margin_s8": 46.0,
-      "margin_arm": 46.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675113,
-      "seat": 1,
-      "opp": "mpx",
-      "margin_s8": 46.0,
-      "margin_arm": 46.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675272,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 301.0,
-      "margin_arm": 301.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675272,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": -979.0,
-      "margin_arm": -979.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675431,
-      "seat": 0,
-      "opp": "V89",
-      "margin_s8": 129.0,
-      "margin_arm": 129.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675431,
-      "seat": 1,
-      "opp": "V89",
-      "margin_s8": 129.0,
-      "margin_arm": 129.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675590,
-      "seat": 0,
-      "opp": "r40",
-      "margin_s8": 519.0,
-      "margin_arm": 519.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675590,
-      "seat": 1,
-      "opp": "r40",
-      "margin_s8": 519.0,
-      "margin_arm": 519.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675749,
-      "seat": 0,
-      "opp": "A",
-      "margin_s8": 1425.0,
-      "margin_arm": 1425.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675749,
-      "seat": 1,
-      "opp": "A",
-      "margin_s8": 1425.0,
-      "margin_arm": 1425.0,
-      "delta": 0.0
-     }
-    ]
-   },
-   "fold_variant": {
-    "n": 12,
-    "wins": 8,
-    "losses": 3,
-    "ties": 1,
-    "h2h": 0.7083,
-    "mean_margin": 182.8,
-    "n_games": 24,
-    "n_errors": 0
-   },
-   "fold_s8": {
-    "n": 12,
-    "wins": 8,
-    "losses": 3,
-    "ties": 1,
-    "h2h": 0.7083,
-    "mean_margin": 148.7,
-    "n_games": 24,
-    "n_errors": 0
-   }
-  }
- },
- "capture_kpi": {
-  "A": {
-   "caliber": "spike 窗声明单代理（线上体检同款口径）；同 (seed,seat,opp) 配对局双臂对照",
-   "win_all": {
-    "variant_s8A": {
-     "games": 24,
-     "spike_item_ticks": 20670.0,
-     "our_spike_qty": 5640.0,
-     "opp_spike_qty": 6010.0,
-     "miss_ticks": 184.0,
-     "miss_qty": 764.0,
-     "under_ticks": 60.0,
-     "under_units": 330.0,
-     "miss_value": 126822.0,
-     "under_value": 68210.0,
-     "capture_rate_qty": 0.4841,
-     "gap_qty": 1094.0,
-     "gap_value": 195032.0,
-     "per_item": {
-      "MELON": {
-       "ticks": 456,
-       "our": 0.0,
-       "opp": 0.0
-      },
-      "MILK": {
-       "ticks": 9020,
-       "our": 1930.0,
-       "opp": 2064.0
-      },
-      "WHEAT": {
-       "ticks": 208,
-       "our": 284.0,
-       "opp": 152.0
-      },
-      "WOOL": {
-       "ticks": 10986,
-       "our": 3426.0,
-       "opp": 3794.0
-      }
-     }
-    },
-    "control_s8": {
-     "games": 24,
-     "spike_item_ticks": 20670.0,
-     "our_spike_qty": 5640.0,
-     "opp_spike_qty": 6010.0,
-     "miss_ticks": 184.0,
-     "miss_qty": 764.0,
-     "under_ticks": 56.0,
-     "under_units": 324.0,
-     "miss_value": 126822.0,
-     "under_value": 67378.0,
-     "capture_rate_qty": 0.4841,
-     "gap_qty": 1088.0,
-     "gap_value": 194200.0,
-     "per_item": {
-      "MELON": {
-       "ticks": 456,
-       "our": 0.0,
-       "opp": 0.0
-      },
-      "MILK": {
-       "ticks": 9020,
-       "our": 1930.0,
-       "opp": 2064.0
-      },
-      "WHEAT": {
-       "ticks": 208,
-       "our": 284.0,
-       "opp": 152.0
-      },
-      "WOOL": {
-       "ticks": 10986,
-       "our": 3426.0,
-       "opp": 3794.0
-      }
-     }
-    },
-    "delta_capture_rate": 0.0,
-    "delta_gap_qty": 6.0
-   },
-   "win_lt712_layer": {
-    "variant_s8A": {
-     "games": 24,
-     "spike_item_ticks": 20614.0,
-     "our_spike_qty": 5554.0,
-     "opp_spike_qty": 5894.0,
-     "miss_ticks": 184.0,
-     "miss_qty": 764.0,
-     "under_ticks": 58.0,
-     "under_units": 300.0,
-     "miss_value": 126822.0,
-     "under_value": 61130.0,
-     "capture_rate_qty": 0.4852,
-     "gap_qty": 1064.0,
-     "gap_value": 187952.0,
-     "per_item": {
-      "MELON": {
-       "ticks": 456,
-       "our": 0.0,
-       "opp": 0.0
-      },
-      "MILK": {
-       "ticks": 9006,
-       "our": 1924.0,
-       "opp": 2028.0
-      },
-      "WHEAT": {
-       "ticks": 208,
-       "our": 284.0,
-       "opp": 152.0
-      },
-      "WOOL": {
-       "ticks": 10944,
-       "our": 3346.0,
-       "opp": 3714.0
-      }
-     }
-    },
-    "control_s8": {
-     "games": 24,
-     "spike_item_ticks": 20614.0,
-     "our_spike_qty": 5554.0,
-     "opp_spike_qty": 5894.0,
-     "miss_ticks": 184.0,
-     "miss_qty": 764.0,
-     "under_ticks": 54.0,
-     "under_units": 294.0,
-     "miss_value": 126822.0,
-     "under_value": 60298.0,
-     "capture_rate_qty": 0.4852,
-     "gap_qty": 1058.0,
-     "gap_value": 187120.0,
-     "per_item": {
-      "MELON": {
-       "ticks": 456,
-       "our": 0.0,
-       "opp": 0.0
-      },
-      "MILK": {
-       "ticks": 9006,
-       "our": 1924.0,
-       "opp": 2028.0
-      },
-      "WHEAT": {
-       "ticks": 208,
-       "our": 284.0,
-       "opp": 152.0
-      },
-      "WOOL": {
-       "ticks": 10944,
-       "our": 3346.0,
-       "opp": 3714.0
-      }
-     }
-    },
-    "delta_capture_rate": 0.0,
-    "delta_gap_qty": -24.0
-   },
-   "telemetry_variant": {
-    "calls": 17256,
-    "changed_turns": 144,
-    "errors": 0,
-    "spike_item_ticks": 222,
-    "abs_triggers": 146,
-    "fg_triggers": 76,
-    "topup_orders": 62,
-    "topup_qty": 172,
-    "append_orders": 106,
-    "append_qty": 336,
-    "skip_full_decl": 20392,
-    "skip_slot": 82,
-    "step_cap_out": 168
-   },
-   "telemetry_s8": {
-    "calls": 17256,
-    "changed_turns": 144,
-    "errors": 0,
-    "spike_item_ticks": 222,
-    "abs_triggers": 146,
-    "fg_triggers": 76,
-    "topup_orders": 62,
-    "topup_qty": 172,
-    "append_orders": 124,
-    "append_qty": 330,
-    "skip_full_decl": 20392,
-    "skip_slot": 82,
-    "step_cap_out": 168
-   },
-   "lot_variant": {
-    "n_sell_orders": 6642,
-    "qty_sum": 38816.0,
-    "mean_lot": 5.844,
-    "d29_orders_per_game": 22.5,
-    "hist": {
-     "1": 1110,
-     "2": 950,
-     "3": 926,
-     "4": 660,
-     "5": 230,
-     "6": 833,
-     "7": 214,
-     "8": 216,
-     "9": 280,
-     "10": 137,
-     "11": 102,
-     "12": 347,
-     "13": 98,
-     "14": 79,
-     "15": 60,
-     "16": 110,
-     "17": 36,
-     "18": 50,
-     "19": 8,
-     "20": 42,
-     "21": 22,
-     "22": 10,
-     "23": 2,
-     "24": 32,
-     "25": 6,
-     "26": 2,
-     "27": 16,
-     "28": 10,
-     "29": 4,
-     "31": 2,
-     "32": 2,
-     "33": 10,
-     "34": 2,
-     "35": 2,
-     "36": 24,
-     "38": 2,
-     "39": 6
-    }
-   },
-   "lot_s8": {
-    "n_sell_orders": 6660,
-    "qty_sum": 38816.0,
-    "mean_lot": 5.828,
-    "d29_orders_per_game": 22.5,
-    "hist": {
-     "1": 1110,
-     "2": 952,
-     "3": 952,
-     "4": 680,
-     "5": 214,
-     "6": 819,
-     "7": 214,
-     "8": 216,
-     "9": 280,
-     "10": 137,
-     "11": 102,
-     "12": 347,
-     "13": 98,
-     "14": 79,
-     "15": 58,
-     "16": 112,
-     "17": 36,
-     "18": 50,
-     "19": 8,
-     "20": 42,
-     "21": 22,
-     "22": 10,
-     "23": 2,
-     "24": 32,
-     "25": 6,
-     "26": 2,
-     "27": 16,
-     "28": 10,
-     "29": 4,
-     "31": 2,
-     "32": 2,
-     "33": 10,
-     "34": 2,
-     "35": 2,
-     "36": 24,
-     "38": 2,
-     "39": 6
-    }
-   }
-  },
-  "B": {
-   "caliber": "spike 窗声明单代理（线上体检同款口径）；同 (seed,seat,opp) 配对局双臂对照",
-   "win_all": {
-    "variant_s8B": {
-     "games": 24,
-     "spike_item_ticks": 20670.0,
-     "our_spike_qty": 5640.0,
-     "opp_spike_qty": 5998.0,
-     "miss_ticks": 184.0,
-     "miss_qty": 764.0,
-     "under_ticks": 58.0,
-     "under_units": 328.0,
-     "miss_value": 126822.0,
-     "under_value": 67882.0,
-     "capture_rate_qty": 0.4846,
-     "gap_qty": 1092.0,
-     "gap_value": 194704.0,
-     "per_item": {
-      "MELON": {
-       "ticks": 456,
-       "our": 0.0,
-       "opp": 0.0
-      },
-      "MILK": {
-       "ticks": 9020,
-       "our": 1930.0,
-       "opp": 2064.0
-      },
-      "WHEAT": {
-       "ticks": 208,
-       "our": 284.0,
-       "opp": 152.0
-      },
-      "WOOL": {
-       "ticks": 10986,
-       "our": 3426.0,
-       "opp": 3782.0
-      }
-     }
-    },
-    "control_s8": {
-     "games": 24,
-     "spike_item_ticks": 20670.0,
-     "our_spike_qty": 5640.0,
-     "opp_spike_qty": 6010.0,
-     "miss_ticks": 184.0,
-     "miss_qty": 764.0,
-     "under_ticks": 56.0,
-     "under_units": 324.0,
-     "miss_value": 126822.0,
-     "under_value": 67378.0,
-     "capture_rate_qty": 0.4841,
-     "gap_qty": 1088.0,
-     "gap_value": 194200.0,
-     "per_item": {
-      "MELON": {
-       "ticks": 456,
-       "our": 0.0,
-       "opp": 0.0
-      },
-      "MILK": {
-       "ticks": 9020,
-       "our": 1930.0,
-       "opp": 2064.0
-      },
-      "WHEAT": {
-       "ticks": 208,
-       "our": 284.0,
-       "opp": 152.0
-      },
-      "WOOL": {
-       "ticks": 10986,
-       "our": 3426.0,
-       "opp": 3794.0
-      }
-     }
-    },
-    "delta_capture_rate": 0.0005,
-    "delta_gap_qty": 4.0
-   },
-   "win_lt712_layer": {
-    "variant_s8B": {
-     "games": 24,
-     "spike_item_ticks": 20614.0,
-     "our_spike_qty": 5554.0,
-     "opp_spike_qty": 5882.0,
-     "miss_ticks": 184.0,
-     "miss_qty": 764.0,
-     "under_ticks": 56.0,
-     "under_units": 298.0,
-     "miss_value": 126822.0,
-     "under_value": 60802.0,
-     "capture_rate_qty": 0.4857,
-     "gap_qty": 1062.0,
-     "gap_value": 187624.0,
-     "per_item": {
-      "MELON": {
-       "ticks": 456,
-       "our": 0.0,
-       "opp": 0.0
-      },
-      "MILK": {
-       "ticks": 9006,
-       "our": 1924.0,
-       "opp": 2028.0
-      },
-      "WHEAT": {
-       "ticks": 208,
-       "our": 284.0,
-       "opp": 152.0
-      },
-      "WOOL": {
-       "ticks": 10944,
-       "our": 3346.0,
-       "opp": 3702.0
-      }
-     }
-    },
-    "control_s8": {
-     "games": 24,
-     "spike_item_ticks": 20614.0,
-     "our_spike_qty": 5554.0,
-     "opp_spike_qty": 5894.0,
-     "miss_ticks": 184.0,
-     "miss_qty": 764.0,
-     "under_ticks": 54.0,
-     "under_units": 294.0,
-     "miss_value": 126822.0,
-     "under_value": 60298.0,
-     "capture_rate_qty": 0.4852,
-     "gap_qty": 1058.0,
-     "gap_value": 187120.0,
-     "per_item": {
-      "MELON": {
-       "ticks": 456,
-       "our": 0.0,
-       "opp": 0.0
-      },
-      "MILK": {
-       "ticks": 9006,
-       "our": 1924.0,
-       "opp": 2028.0
-      },
-      "WHEAT": {
-       "ticks": 208,
-       "our": 284.0,
-       "opp": 152.0
-      },
-      "WOOL": {
-       "ticks": 10944,
-       "our": 3346.0,
-       "opp": 3714.0
-      }
-     }
-    },
-    "delta_capture_rate": 0.0005,
-    "delta_gap_qty": -26.0
-   },
-   "telemetry_variant": {
-    "calls": 17256,
-    "changed_turns": 146,
-    "errors": 0,
-    "spike_item_ticks": 224,
-    "abs_triggers": 148,
-    "fg_triggers": 76,
-    "topup_orders": 64,
-    "topup_qty": 178,
-    "append_orders": 96,
-    "append_qty": 340,
-    "skip_full_decl": 20390,
-    "skip_slot": 82,
-    "step_cap_out": 168
-   },
-   "telemetry_s8": {
-    "calls": 17256,
-    "changed_turns": 144,
-    "errors": 0,
-    "spike_item_ticks": 222,
-    "abs_triggers": 146,
-    "fg_triggers": 76,
-    "topup_orders": 62,
-    "topup_qty": 172,
-    "append_orders": 124,
-    "append_qty": 330,
-    "skip_full_decl": 20392,
-    "skip_slot": 82,
-    "step_cap_out": 168
-   },
-   "lot_variant": {
-    "n_sell_orders": 6632,
-    "qty_sum": 38816.0,
-    "mean_lot": 5.853,
-    "d29_orders_per_game": 22.5,
-    "hist": {
-     "1": 1110,
-     "2": 950,
-     "3": 924,
-     "4": 646,
-     "5": 228,
-     "6": 823,
-     "7": 222,
-     "8": 226,
-     "9": 280,
-     "10": 137,
-     "11": 102,
-     "12": 347,
-     "13": 100,
-     "14": 79,
-     "15": 58,
-     "16": 110,
-     "17": 36,
-     "18": 50,
-     "19": 8,
-     "20": 42,
-     "21": 22,
-     "22": 10,
-     "23": 2,
-     "24": 32,
-     "25": 6,
-     "26": 2,
-     "27": 16,
-     "28": 10,
-     "29": 4,
-     "31": 2,
-     "32": 2,
-     "33": 10,
-     "34": 2,
-     "35": 2,
-     "36": 24,
-     "38": 2,
-     "39": 6
-    }
-   },
-   "lot_s8": {
-    "n_sell_orders": 6660,
-    "qty_sum": 38816.0,
-    "mean_lot": 5.828,
-    "d29_orders_per_game": 22.5,
-    "hist": {
-     "1": 1110,
-     "2": 952,
-     "3": 952,
-     "4": 680,
-     "5": 214,
-     "6": 819,
-     "7": 214,
-     "8": 216,
-     "9": 280,
-     "10": 137,
-     "11": 102,
-     "12": 347,
-     "13": 98,
-     "14": 79,
-     "15": 58,
-     "16": 112,
-     "17": 36,
-     "18": 50,
-     "19": 8,
-     "20": 42,
-     "21": 22,
-     "22": 10,
-     "23": 2,
-     "24": 32,
-     "25": 6,
-     "26": 2,
-     "27": 16,
-     "28": 10,
-     "29": 4,
-     "31": 2,
-     "32": 2,
-     "33": 10,
-     "34": 2,
-     "35": 2,
-     "36": 24,
-     "38": 2,
-     "39": 6
-    }
-   }
-  }
- },
- "panel": {
-  "A": {
-   "design": "s8A vs 4 对手（12 fold 双席）；h2h=judge_r44._fold_arm 折叠",
-   "pairs": {
-    "oc_c3": {
-     "n": 12,
-     "wins": 6,
-     "losses": 5,
-     "ties": 1,
-     "h2h": 0.5417,
-     "mean_margin": -252.9,
-     "n_games": 24,
-     "n_errors": 0
-    },
-    "H1": {
-     "n": 12,
-     "wins": 6,
-     "losses": 5,
-     "ties": 1,
-     "h2h": 0.5417,
-     "mean_margin": -252.9,
-     "n_games": 24,
-     "n_errors": 0
-    },
-    "r40": {
-     "n": 12,
-     "wins": 9,
-     "losses": 2,
-     "ties": 1,
-     "h2h": 0.7917,
-     "mean_margin": 186.8,
-     "n_games": 24,
-     "n_errors": 0
-    },
-    "A": {
-     "n": 12,
-     "wins": 10,
-     "losses": 1,
-     "ties": 1,
-     "h2h": 0.875,
-     "mean_margin": 1139.8,
-     "n_games": 24,
-     "n_errors": 0
-    }
-   }
-  },
-  "B": {
-   "design": "s8B vs 4 对手（12 fold 双席）；h2h=judge_r44._fold_arm 折叠",
-   "pairs": {
-    "oc_c3": {
-     "n": 12,
-     "wins": 6,
-     "losses": 5,
-     "ties": 1,
-     "h2h": 0.5417,
-     "mean_margin": -230.5,
-     "n_games": 24,
-     "n_errors": 0
-    },
-    "H1": {
-     "n": 12,
-     "wins": 6,
-     "losses": 5,
-     "ties": 1,
-     "h2h": 0.5417,
-     "mean_margin": -230.5,
-     "n_games": 24,
-     "n_errors": 0
-    },
-    "r40": {
-     "n": 12,
-     "wins": 9,
-     "losses": 2,
-     "ties": 1,
-     "h2h": 0.7917,
-     "mean_margin": 182.9,
-     "n_games": 24,
-     "n_errors": 0
-    },
-    "A": {
-     "n": 12,
-     "wins": 10,
-     "losses": 1,
-     "ties": 1,
-     "h2h": 0.875,
-     "mean_margin": 1178.9,
-     "n_games": 24,
-     "n_errors": 0
-    }
-   }
-  }
- },
- "poison": {
-  "A": {
-   "design": "五毒种各 4 局（{mpx,oc_c3}×双席）配对 S8 本体；不许回退",
-   "flip": {
-    "n": 20,
-    "W": 10,
-    "L": 6,
-    "T": 4,
-    "delta_sum": -2.0,
-    "win_control": 8,
-    "win_variant": 6,
-    "flips_pos": 0,
-    "flips_neg": 2,
-    "mean_delta": -0.1,
-    "net_flip_wins": -2,
-    "pairs_detail": [
-     {
-      "seed": 674000,
-      "seat": 0,
-      "opp": "mpx",
-      "margin_s8": -352.0,
-      "margin_arm": -324.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674000,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
+      "margin_s8": 251.0,
+      "margin_arm": 257.0,
+      "delta": 6.0
      },
      {
       "seed": 674000,
       "seat": 1,
       "opp": "mpx",
-      "margin_s8": -352.0,
-      "margin_arm": -324.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674000,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
+      "margin_s8": 251.0,
+      "margin_arm": 257.0,
+      "delta": 6.0
      },
      {
       "seed": 674141,
       "seat": 0,
       "opp": "mpx",
-      "margin_s8": -559.0,
-      "margin_arm": -615.0,
-      "delta": -56.0
-     },
-     {
-      "seed": 674141,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": -517.0,
-      "margin_arm": -573.0,
-      "delta": -56.0
+      "margin_s8": 72.0,
+      "margin_arm": 22.0,
+      "delta": -50.0
      },
      {
       "seed": 674141,
       "seat": 1,
       "opp": "mpx",
-      "margin_s8": -344.0,
-      "margin_arm": -400.0,
-      "delta": -56.0
-     },
-     {
-      "seed": 674141,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": -302.0,
-      "margin_arm": -358.0,
-      "delta": -56.0
+      "margin_s8": 288.0,
+      "margin_arm": 238.0,
+      "delta": -50.0
      },
      {
       "seed": 674705,
       "seat": 0,
       "opp": "mpx",
-      "margin_s8": 305.0,
-      "margin_arm": 329.0,
-      "delta": 24.0
-     },
-     {
-      "seed": 674705,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": 205.0,
-      "margin_arm": 229.0,
-      "delta": 24.0
+      "margin_s8": 386.0,
+      "margin_arm": 442.0,
+      "delta": 56.0
      },
      {
       "seed": 674705,
       "seat": 1,
       "opp": "mpx",
-      "margin_s8": 305.0,
-      "margin_arm": 329.0,
-      "delta": 24.0
-     },
-     {
-      "seed": 674705,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": 205.0,
-      "margin_arm": 229.0,
-      "delta": 24.0
+      "margin_s8": 386.0,
+      "margin_arm": 442.0,
+      "delta": 56.0
      },
      {
       "seed": 674987,
       "seat": 0,
       "opp": "mpx",
-      "margin_s8": 21.0,
-      "margin_arm": -18.0,
-      "delta": -39.0
-     },
-     {
-      "seed": 674987,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": 1.0,
-      "margin_arm": 47.0,
-      "delta": 46.0
+      "margin_s8": 66.0,
+      "margin_arm": 29.0,
+      "delta": -37.0
      },
      {
       "seed": 674987,
       "seat": 1,
       "opp": "mpx",
-      "margin_s8": 21.0,
-      "margin_arm": -18.0,
-      "delta": -39.0
-     },
-     {
-      "seed": 674987,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": 1.0,
-      "margin_arm": 47.0,
-      "delta": 46.0
+      "margin_s8": 66.0,
+      "margin_arm": 29.0,
+      "delta": -37.0
      },
      {
       "seed": 675410,
       "seat": 0,
       "opp": "mpx",
-      "margin_s8": -448.0,
-      "margin_arm": -448.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675410,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": -542.0,
-      "margin_arm": -542.0,
+      "margin_s8": 166.0,
+      "margin_arm": 166.0,
       "delta": 0.0
      },
      {
       "seed": 675410,
       "seat": 1,
       "opp": "mpx",
-      "margin_s8": -448.0,
-      "margin_arm": -448.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675410,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": -542.0,
-      "margin_arm": -542.0,
+      "margin_s8": 166.0,
+      "margin_arm": 166.0,
       "delta": 0.0
      }
     ]
    },
    "per_seed": {
     "674000": {
-     "n_pairs": 4,
-     "W": 4,
+     "n_pairs": 2,
+     "W": 2,
      "L": 0,
      "T": 0,
-     "mean_delta": 28.0,
+     "mean_delta": 6.0,
      "flips_neg": 0
     },
     "674141": {
-     "n_pairs": 4,
+     "n_pairs": 2,
      "W": 0,
-     "L": 4,
-     "T": 0,
-     "mean_delta": -56.0,
-     "flips_neg": 0
-    },
-    "674705": {
-     "n_pairs": 4,
-     "W": 4,
-     "L": 0,
-     "T": 0,
-     "mean_delta": 24.0,
-     "flips_neg": 0
-    },
-    "674987": {
-     "n_pairs": 4,
-     "W": 2,
      "L": 2,
      "T": 0,
-     "mean_delta": 3.5,
-     "flips_neg": 2
-    },
-    "675410": {
-     "n_pairs": 4,
-     "W": 0,
-     "L": 0,
-     "T": 4,
-     "mean_delta": 0.0,
-     "flips_neg": 0
-    }
-   }
-  },
-  "B": {
-   "design": "五毒种各 4 局（{mpx,oc_c3}×双席）配对 S8 本体；不许回退",
-   "flip": {
-    "n": 20,
-    "W": 10,
-    "L": 6,
-    "T": 4,
-    "delta_sum": 126.0,
-    "win_control": 8,
-    "win_variant": 6,
-    "flips_pos": 0,
-    "flips_neg": 2,
-    "mean_delta": 6.3,
-    "net_flip_wins": -2,
-    "pairs_detail": [
-     {
-      "seed": 674000,
-      "seat": 0,
-      "opp": "mpx",
-      "margin_s8": -352.0,
-      "margin_arm": -324.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674000,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674000,
-      "seat": 1,
-      "opp": "mpx",
-      "margin_s8": -352.0,
-      "margin_arm": -324.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674000,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674141,
-      "seat": 0,
-      "opp": "mpx",
-      "margin_s8": -559.0,
-      "margin_arm": -615.0,
-      "delta": -56.0
-     },
-     {
-      "seed": 674141,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": -517.0,
-      "margin_arm": -573.0,
-      "delta": -56.0
-     },
-     {
-      "seed": 674141,
-      "seat": 1,
-      "opp": "mpx",
-      "margin_s8": -344.0,
-      "margin_arm": -400.0,
-      "delta": -56.0
-     },
-     {
-      "seed": 674141,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": -302.0,
-      "margin_arm": -358.0,
-      "delta": -56.0
-     },
-     {
-      "seed": 674705,
-      "seat": 0,
-      "opp": "mpx",
-      "margin_s8": 305.0,
-      "margin_arm": 361.0,
-      "delta": 56.0
-     },
-     {
-      "seed": 674705,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": 205.0,
-      "margin_arm": 261.0,
-      "delta": 56.0
-     },
-     {
-      "seed": 674705,
-      "seat": 1,
-      "opp": "mpx",
-      "margin_s8": 305.0,
-      "margin_arm": 361.0,
-      "delta": 56.0
-     },
-     {
-      "seed": 674705,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": 205.0,
-      "margin_arm": 261.0,
-      "delta": 56.0
-     },
-     {
-      "seed": 674987,
-      "seat": 0,
-      "opp": "mpx",
-      "margin_s8": 21.0,
-      "margin_arm": -18.0,
-      "delta": -39.0
-     },
-     {
-      "seed": 674987,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": 1.0,
-      "margin_arm": 47.0,
-      "delta": 46.0
-     },
-     {
-      "seed": 674987,
-      "seat": 1,
-      "opp": "mpx",
-      "margin_s8": 21.0,
-      "margin_arm": -18.0,
-      "delta": -39.0
-     },
-     {
-      "seed": 674987,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": 1.0,
-      "margin_arm": 47.0,
-      "delta": 46.0
-     },
-     {
-      "seed": 675410,
-      "seat": 0,
-      "opp": "mpx",
-      "margin_s8": -448.0,
-      "margin_arm": -448.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675410,
-      "seat": 0,
-      "opp": "oc_c3",
-      "margin_s8": -542.0,
-      "margin_arm": -542.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675410,
-      "seat": 1,
-      "opp": "mpx",
-      "margin_s8": -448.0,
-      "margin_arm": -448.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675410,
-      "seat": 1,
-      "opp": "oc_c3",
-      "margin_s8": -542.0,
-      "margin_arm": -542.0,
-      "delta": 0.0
-     }
-    ]
-   },
-   "per_seed": {
-    "674000": {
-     "n_pairs": 4,
-     "W": 4,
-     "L": 0,
-     "T": 0,
-     "mean_delta": 28.0,
-     "flips_neg": 0
-    },
-    "674141": {
-     "n_pairs": 4,
-     "W": 0,
-     "L": 4,
-     "T": 0,
-     "mean_delta": -56.0,
+     "mean_delta": -50.0,
      "flips_neg": 0
     },
     "674705": {
-     "n_pairs": 4,
-     "W": 4,
+     "n_pairs": 2,
+     "W": 2,
      "L": 0,
      "T": 0,
      "mean_delta": 56.0,
      "flips_neg": 0
     },
     "674987": {
-     "n_pairs": 4,
-     "W": 2,
+     "n_pairs": 2,
+     "W": 0,
      "L": 2,
      "T": 0,
-     "mean_delta": 3.5,
-     "flips_neg": 2
+     "mean_delta": -37.0,
+     "flips_neg": 0
     },
     "675410": {
-     "n_pairs": 4,
+     "n_pairs": 2,
      "W": 0,
      "L": 0,
-     "T": 4,
+     "T": 2,
      "mean_delta": 0.0,
      "flips_neg": 0
     }
    }
-  }
- },
- "steady": {
-  "A": {
-   "design": "tetsutani/tetsu1009 稳节奏对手 8 fold 双席配对 S8；S9 扰动教训：加量不许伤稳节奏",
-   "flip": {
-    "n": 16,
-    "W": 4,
-    "L": 0,
-    "T": 12,
-    "delta_sum": 296.0,
-    "win_control": 10,
-    "win_variant": 10,
-    "flips_pos": 0,
-    "flips_neg": 0,
-    "mean_delta": 18.5,
-    "net_flip_wins": 0,
-    "pairs_detail": [
-     {
-      "seed": 674000,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674000,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674159,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 102.0,
-      "margin_arm": 222.0,
-      "delta": 120.0
-     },
-     {
-      "seed": 674159,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 102.0,
-      "margin_arm": 222.0,
-      "delta": 120.0
-     },
-     {
-      "seed": 674318,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": -2744.0,
-      "margin_arm": -2744.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674318,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": -2744.0,
-      "margin_arm": -2744.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674477,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": -63.0,
-      "margin_arm": -63.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674477,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": -63.0,
-      "margin_arm": -63.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674636,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 151.0,
-      "margin_arm": 151.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674636,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 151.0,
-      "margin_arm": 151.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674795,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 198.0,
-      "margin_arm": 198.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674795,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 198.0,
-      "margin_arm": 198.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674954,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 204.0,
-      "margin_arm": 204.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674954,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 204.0,
-      "margin_arm": 204.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675113,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 179.0,
-      "margin_arm": 179.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675113,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 179.0,
-      "margin_arm": 179.0,
-      "delta": 0.0
-     }
-    ]
-   },
-   "fold_variant": {
-    "n": 8,
-    "wins": 5,
-    "losses": 3,
-    "ties": 0,
-    "h2h": 0.625,
-    "mean_margin": -239.4,
-    "n_games": 16,
-    "n_errors": 0
-   }
   },
-  "B": {
-   "design": "tetsutani/tetsu1009 稳节奏对手 8 fold 双席配对 S8；S9 扰动教训：加量不许伤稳节奏",
-   "flip": {
-    "n": 16,
-    "W": 4,
-    "L": 0,
-    "T": 12,
-    "delta_sum": 834.0,
-    "win_control": 10,
-    "win_variant": 10,
-    "flips_pos": 0,
-    "flips_neg": 0,
-    "mean_delta": 52.12,
-    "net_flip_wins": 0,
-    "pairs_detail": [
-     {
-      "seed": 674000,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674000,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": -90.0,
-      "margin_arm": -62.0,
-      "delta": 28.0
-     },
-     {
-      "seed": 674159,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 102.0,
-      "margin_arm": 491.0,
-      "delta": 389.0
-     },
-     {
-      "seed": 674159,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 102.0,
-      "margin_arm": 491.0,
-      "delta": 389.0
-     },
-     {
-      "seed": 674318,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": -2744.0,
-      "margin_arm": -2744.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674318,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": -2744.0,
-      "margin_arm": -2744.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674477,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": -63.0,
-      "margin_arm": -63.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674477,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": -63.0,
-      "margin_arm": -63.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674636,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 151.0,
-      "margin_arm": 151.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674636,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 151.0,
-      "margin_arm": 151.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674795,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 198.0,
-      "margin_arm": 198.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674795,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 198.0,
-      "margin_arm": 198.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674954,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 204.0,
-      "margin_arm": 204.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 674954,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 204.0,
-      "margin_arm": 204.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675113,
-      "seat": 0,
-      "opp": "tetsutani",
-      "margin_s8": 179.0,
-      "margin_arm": 179.0,
-      "delta": 0.0
-     },
-     {
-      "seed": 675113,
-      "seat": 1,
-      "opp": "tetsutani",
-      "margin_s8": 179.0,
-      "margin_arm": 179.0,
-      "delta": 0.0
-     }
-    ]
-   },
-   "fold_variant": {
-    "n": 8,
-    "wins": 5,
-    "losses": 3,
-    "ties": 0,
-    "h2h": 0.625,
-    "mean_margin": -205.8,
-    "n_games": 16,
-    "n_errors": 0
-   }
-  }
- },
- "criteria": {
-  "A": {
-   "checks": {
-    "c1_paired_delta_pos_flipsneg0": {
-     "mean_delta": 12.33,
-     "W": 4,
-     "L": 0,
-     "T": 20,
-     "flips_pos": 0,
-     "flips_neg": 0,
-     "passed": true
-    },
-    "c2_capture_rate_up": {
-     "delta_capture_rate": 0.0,
-     "delta_gap_qty": 6.0,
-     "variant": {
-      "games": 24,
-      "spike_item_ticks": 20670.0,
-      "our_spike_qty": 5640.0,
-      "opp_spike_qty": 6010.0,
-      "miss_ticks": 184.0,
-      "miss_qty": 764.0,
-      "under_ticks": 60.0,
-      "under_units": 330.0,
-      "miss_value": 126822.0,
-      "under_value": 68210.0,
-      "capture_rate_qty": 0.4841,
-      "gap_qty": 1094.0,
-      "gap_value": 195032.0,
-      "per_item": {
-       "MELON": {
-        "ticks": 456,
-        "our": 0.0,
-        "opp": 0.0
-       },
-       "MILK": {
-        "ticks": 9020,
-        "our": 1930.0,
-        "opp": 2064.0
-       },
-       "WHEAT": {
-        "ticks": 208,
-        "our": 284.0,
-        "opp": 152.0
-       },
-       "WOOL": {
-        "ticks": 10986,
-        "our": 3426.0,
-        "opp": 3794.0
-       }
-      }
-     },
-     "s8": {
-      "games": 24,
-      "spike_item_ticks": 20670.0,
-      "our_spike_qty": 5640.0,
-      "opp_spike_qty": 6010.0,
-      "miss_ticks": 184.0,
-      "miss_qty": 764.0,
-      "under_ticks": 56.0,
-      "under_units": 324.0,
-      "miss_value": 126822.0,
-      "under_value": 67378.0,
-      "capture_rate_qty": 0.4841,
-      "gap_qty": 1088.0,
-      "gap_value": 194200.0,
-      "per_item": {
-       "MELON": {
-        "ticks": 456,
-        "our": 0.0,
-        "opp": 0.0
-       },
-       "MILK": {
-        "ticks": 9020,
-        "our": 1930.0,
-        "opp": 2064.0
-       },
-       "WHEAT": {
-        "ticks": 208,
-        "our": 284.0,
-        "opp": 152.0
-       },
-       "WOOL": {
-        "ticks": 10986,
-        "our": 3426.0,
-        "opp": 3794.0
-       }
-      }
-     },
-     "passed": false
-    },
-    "c3_throne_anchor_ge_0.5": {
-     "h2h": {
-      "oc_c3": 0.5417,
-      "H1": 0.5417
-     },
-     "passed": true
-    },
-    "c4_weak_anchor_ge_0.8": {
-     "h2h": {
-      "r40": 0.7917,
-      "A": 0.875
-     },
-     "passed": false
-    },
-    "c5_poison_no_regression": {
-     "mean_delta": -0.1,
-     "W": 10,
-     "L": 6,
-     "flips_neg": 2,
-     "passed": false
-    },
-    "c6_steady_flipsneg0": {
-     "mean_delta": 18.5,
-     "W": 4,
-     "L": 0,
-     "flips_neg": 0,
-     "passed": true
-    }
-   },
-   "achieved": 3,
-   "total": 6,
-   "verdict": "FAIL"
-  },
-  "B": {
-   "checks": {
-    "c1_paired_delta_pos_flipsneg0": {
-     "mean_delta": 34.17,
-     "W": 4,
-     "L": 0,
-     "T": 20,
-     "flips_pos": 0,
-     "flips_neg": 0,
-     "passed": true
-    },
-    "c2_capture_rate_up": {
-     "delta_capture_rate": 0.0005,
-     "delta_gap_qty": 4.0,
-     "variant": {
-      "games": 24,
-      "spike_item_ticks": 20670.0,
-      "our_spike_qty": 5640.0,
-      "opp_spike_qty": 5998.0,
-      "miss_ticks": 184.0,
-      "miss_qty": 764.0,
-      "under_ticks": 58.0,
-      "under_units": 328.0,
-      "miss_value": 126822.0,
-      "under_value": 67882.0,
-      "capture_rate_qty": 0.4846,
-      "gap_qty": 1092.0,
-      "gap_value": 194704.0,
-      "per_item": {
-       "MELON": {
-        "ticks": 456,
-        "our": 0.0,
-        "opp": 0.0
-       },
-       "MILK": {
-        "ticks": 9020,
-        "our": 1930.0,
-        "opp": 2064.0
-       },
-       "WHEAT": {
-        "ticks": 208,
-        "our": 284.0,
-        "opp": 152.0
-       },
-       "WOOL": {
-        "ticks": 10986,
-        "our": 3426.0,
-        "opp": 3782.0
-       }
-      }
-     },
-     "s8": {
-      "games": 24,
-      "spike_item_ticks": 20670.0,
-      "our_spike_qty": 5640.0,
-      "opp_spike_qty": 6010.0,
-      "miss_ticks": 184.0,
-      "miss_qty": 764.0,
-      "under_ticks": 56.0,
-      "under_units": 324.0,
-      "miss_value": 126822.0,
-      "under_value": 67378.0,
-      "capture_rate_qty": 0.4841,
-      "gap_qty": 1088.0,
-      "gap_value": 194200.0,
-      "per_item": {
-       "MELON": {
-        "ticks": 456,
-        "our": 0.0,
-        "opp": 0.0
-       },
-       "MILK": {
-        "ticks": 9020,
-        "our": 1930.0,
-        "opp": 2064.0
-       },
-       "WHEAT": {
-        "ticks": 208,
-        "our": 284.0,
-        "opp": 152.0
-       },
-       "WOOL": {
-        "ticks": 10986,
-        "our": 3426.0,
-        "opp": 3794.0
-       }
-      }
-     },
-     "passed": true
-    },
-    "c3_throne_anchor_ge_0.5": {
-     "h2h": {
-      "oc_c3": 0.5417,
-      "H1": 0.5417
-     },
-     "passed": true
-    },
-    "c4_weak_anchor_ge_0.8": {
-     "h2h": {
-      "r40": 0.7917,
-      "A": 0.875
-     },
-     "passed": false
-    },
-    "c5_poison_no_regression": {
-     "mean_delta": 6.3,
-     "W": 10,
-     "L": 6,
-     "flips_neg": 2,
-     "passed": false
-    },
-    "c6_steady_flipsneg0": {
-     "mean_delta": 52.12,
-     "W": 4,
-     "L": 0,
-     "flips_neg": 0,
-     "passed": true
-    }
-   },
-   "achieved": 4,
-   "total": 6,
-   "verdict": "FAIL"
-  }
- },
- "verdict": {
-  "arm_pass": {
-   "A": "FAIL",
-   "B": "FAIL"
-  },
-  "launch_candidate_arm": "A",
-  "selection_rationale": "两档均未全过（移植仍取 A 档，见判读）",
-  "paired_mean_delta": {
-   "A": 12.33,
-   "B": 34.17
-  },
-  "launch_ready": false,
-  "launch_note": "无全过档：机制结论如实登记，不构成发射候选",
-  "transplant_h1x_arm": "A",
-  "h1x_note": "用户裁决 2026-10-01：胜者档（或都不过则 A 档）同手术移植 H1X（build/h1x_<arm>/），H1X 侧验证由主会话安排"
- },
- "anomaly": [
-  "harness 噪声不修不管；margin=终局钱 farms[obs.player]；胜率=硬通货，margin 只作参考；影子引擎 mismatch 留档不修",
-  "捕获 KPI 为声明单代理口径（线上体检同款）：真实成交异步结算；同 (seed,seat,opp) 配对双臂对照读增量",
-  "手术=单行 lot 帽（_S8_LOT_MIN,_S8_LOT_MAX）；其余逐字不动（anti-幻影硬线/槽位 10 帽/step≥712/加卖不挪卖/decl_topup）；尾块 docstring 中 'lot 2-4' 字样为历史注释未改（参数以 _S8_PARAMS['lot'] 为准）",
-  "每档预算≤250 局：S8 对照局按共享计账（A/B 共用缓存去重）",
-  "毒种判据=不回退（配对 vs S8 flips_neg=0 ∧ mean_delta≥0）；S8 毒种 20/20（vs s_append）为核心 KPI 背景"
- ],
- "budget": {
-  "A": {
-   "paired": 24,
-   "panel": 96,
-   "poison": 20,
-   "steady": 16,
-   "smoke_det": 2,
-   "s8_shared": 60,
-   "total_局次": 158,
-   "total_with_s8_shared": 218,
-   "within_cap": true
-  },
-  "B": {
-   "paired": 24,
-   "panel": 96,
-   "poison": 20,
-   "steady": 16,
-   "smoke_det": 2,
-   "s8_shared": 60,
-   "total_局次": 158,
-   "total_with_s8_shared": 218,
-   "within_cap": true
-  }
- },
- "_generated_at": "2026-09-30T22:02:53Z",
- "per_game_rows": {
-  "A": [
-   {
-    "game_id": "so-s8a|oc_c3|674000-s0",
-    "block": "smoke",
-    "seed": 674000,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": -62.0,
-    "tm_us": 82937.0,
-    "tm_opp": 82999.0,
-    "error": null,
-    "capture_rate_qty": 0.4747,
-    "gap_qty": 73.0,
-    "our_spike_qty": 356.0,
-    "opp_spike_qty": 394.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|674000-s1",
-    "block": "smoke",
-    "seed": 674000,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": -62.0,
-    "tm_us": 82937.0,
-    "tm_opp": 82999.0,
-    "error": null,
-    "capture_rate_qty": 0.4747,
-    "gap_qty": 73.0,
-    "our_spike_qty": 356.0,
-    "opp_spike_qty": 394.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674159-s0",
-    "block": "paired",
-    "seed": 674159,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": 306.0,
-    "tm_us": 87098.0,
-    "tm_opp": 86792.0,
-    "error": null,
-    "capture_rate_qty": 0.4966,
-    "gap_qty": 46.0,
-    "our_spike_qty": 367.0,
-    "opp_spike_qty": 372.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674159-s1",
-    "block": "paired",
-    "seed": 674159,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": 306.0,
-    "tm_us": 87098.0,
-    "tm_opp": 86792.0,
-    "error": null,
-    "capture_rate_qty": 0.4966,
-    "gap_qty": 46.0,
-    "our_spike_qty": 367.0,
-    "opp_spike_qty": 372.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674318-s0",
-    "block": "paired",
-    "seed": 674318,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": -2744.0,
-    "tm_us": 77639.0,
-    "tm_opp": 80383.0,
-    "error": null,
-    "capture_rate_qty": 0.445,
-    "gap_qty": 66.0,
-    "our_spike_qty": 182.0,
-    "opp_spike_qty": 227.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674318-s1",
-    "block": "paired",
-    "seed": 674318,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": -2744.0,
-    "tm_us": 77639.0,
-    "tm_opp": 80383.0,
-    "error": null,
-    "capture_rate_qty": 0.445,
-    "gap_qty": 66.0,
-    "our_spike_qty": 182.0,
-    "opp_spike_qty": 227.0
-   },
-   {
-    "game_id": "so-s8a|V89|674477-s0",
-    "block": "paired",
-    "seed": 674477,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "V89",
-    "margin_clean": -63.0,
-    "tm_us": 87962.0,
-    "tm_opp": 88025.0,
-    "error": null,
-    "capture_rate_qty": 0.5072,
-    "gap_qty": 13.0,
-    "our_spike_qty": 106.0,
-    "opp_spike_qty": 103.0
-   },
-   {
-    "game_id": "so-s8a|V89|674477-s1",
-    "block": "paired",
-    "seed": 674477,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "V89",
-    "margin_clean": -63.0,
-    "tm_us": 87962.0,
-    "tm_opp": 88025.0,
-    "error": null,
-    "capture_rate_qty": 0.5072,
-    "gap_qty": 13.0,
-    "our_spike_qty": 106.0,
-    "opp_spike_qty": 103.0
-   },
-   {
-    "game_id": "so-s8a|r40|674636-s0",
-    "block": "paired",
-    "seed": 674636,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "r40",
-    "margin_clean": 555.0,
-    "tm_us": 149102.0,
-    "tm_opp": 148547.0,
-    "error": null,
-    "capture_rate_qty": 0.4864,
-    "gap_qty": 77.0,
-    "our_spike_qty": 303.0,
-    "opp_spike_qty": 320.0
-   },
-   {
-    "game_id": "so-s8a|r40|674636-s1",
-    "block": "paired",
-    "seed": 674636,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "r40",
-    "margin_clean": 555.0,
-    "tm_us": 149102.0,
-    "tm_opp": 148547.0,
-    "error": null,
-    "capture_rate_qty": 0.4864,
-    "gap_qty": 77.0,
-    "our_spike_qty": 303.0,
-    "opp_spike_qty": 320.0
-   },
-   {
-    "game_id": "so-s8a|A|674795-s0",
-    "block": "paired",
-    "seed": 674795,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "A",
-    "margin_clean": 2121.0,
-    "tm_us": 90767.0,
-    "tm_opp": 88646.0,
-    "error": null,
-    "capture_rate_qty": 0.492,
-    "gap_qty": 26.0,
-    "our_spike_qty": 247.0,
-    "opp_spike_qty": 255.0
-   },
-   {
-    "game_id": "so-s8a|A|674795-s1",
-    "block": "paired",
-    "seed": 674795,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "A",
-    "margin_clean": 2121.0,
-    "tm_us": 90767.0,
-    "tm_opp": 88646.0,
-    "error": null,
-    "capture_rate_qty": 0.492,
-    "gap_qty": 26.0,
-    "our_spike_qty": 247.0,
-    "opp_spike_qty": 255.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|674954-s0",
-    "block": "paired",
-    "seed": 674954,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": 39.0,
-    "tm_us": 116172.0,
-    "tm_opp": 116133.0,
-    "error": null,
-    "capture_rate_qty": 0.4838,
-    "gap_qty": 62.0,
-    "our_spike_qty": 449.0,
-    "opp_spike_qty": 479.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|674954-s1",
-    "block": "paired",
-    "seed": 674954,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": 39.0,
-    "tm_us": 116172.0,
-    "tm_opp": 116133.0,
-    "error": null,
-    "capture_rate_qty": 0.4838,
-    "gap_qty": 62.0,
-    "our_spike_qty": 449.0,
-    "opp_spike_qty": 479.0
-   },
-   {
-    "game_id": "so-s8a|mpx|675113-s0",
-    "block": "paired",
-    "seed": 675113,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": 46.0,
-    "tm_us": 63381.0,
-    "tm_opp": 63335.0,
-    "error": null,
-    "capture_rate_qty": 0.5439,
-    "gap_qty": 5.0,
-    "our_spike_qty": 93.0,
-    "opp_spike_qty": 78.0
-   },
-   {
-    "game_id": "so-s8a|mpx|675113-s1",
-    "block": "paired",
-    "seed": 675113,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": 46.0,
-    "tm_us": 63381.0,
-    "tm_opp": 63335.0,
-    "error": null,
-    "capture_rate_qty": 0.5439,
-    "gap_qty": 5.0,
-    "our_spike_qty": 93.0,
-    "opp_spike_qty": 78.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|675272-s0",
-    "block": "paired",
-    "seed": 675272,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 301.0,
-    "tm_us": 113517.0,
-    "tm_opp": 113216.0,
-    "error": null,
-    "capture_rate_qty": 0.4698,
-    "gap_qty": 83.0,
-    "our_spike_qty": 311.0,
-    "opp_spike_qty": 351.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|675272-s1",
-    "block": "paired",
-    "seed": 675272,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": -979.0,
-    "tm_us": 112877.0,
-    "tm_opp": 113856.0,
-    "error": null,
-    "capture_rate_qty": 0.4698,
-    "gap_qty": 83.0,
-    "our_spike_qty": 311.0,
-    "opp_spike_qty": 351.0
-   },
-   {
-    "game_id": "so-s8a|V89|675431-s0",
-    "block": "paired",
-    "seed": 675431,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "V89",
-    "margin_clean": 129.0,
-    "tm_us": 110853.0,
-    "tm_opp": 110724.0,
-    "error": null,
-    "capture_rate_qty": 0.479,
-    "gap_qty": 26.0,
-    "our_spike_qty": 137.0,
-    "opp_spike_qty": 149.0
-   },
-   {
-    "game_id": "so-s8a|V89|675431-s1",
-    "block": "paired",
-    "seed": 675431,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "V89",
-    "margin_clean": 129.0,
-    "tm_us": 110853.0,
-    "tm_opp": 110724.0,
-    "error": null,
-    "capture_rate_qty": 0.479,
-    "gap_qty": 26.0,
-    "our_spike_qty": 137.0,
-    "opp_spike_qty": 149.0
-   },
-   {
-    "game_id": "so-s8a|r40|675590-s0",
-    "block": "paired",
-    "seed": 675590,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "r40",
-    "margin_clean": 519.0,
-    "tm_us": 109115.0,
-    "tm_opp": 108596.0,
-    "error": null,
-    "capture_rate_qty": 0.5385,
-    "gap_qty": 25.0,
-    "our_spike_qty": 98.0,
-    "opp_spike_qty": 84.0
-   },
-   {
-    "game_id": "so-s8a|r40|675590-s1",
-    "block": "paired",
-    "seed": 675590,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "r40",
-    "margin_clean": 519.0,
-    "tm_us": 109115.0,
-    "tm_opp": 108596.0,
-    "error": null,
-    "capture_rate_qty": 0.5385,
-    "gap_qty": 25.0,
-    "our_spike_qty": 98.0,
-    "opp_spike_qty": 84.0
-   },
-   {
-    "game_id": "so-s8a|A|675749-s0",
-    "block": "paired",
-    "seed": 675749,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "A",
-    "margin_clean": 1425.0,
-    "tm_us": 90708.0,
-    "tm_opp": 89283.0,
-    "error": null,
-    "capture_rate_qty": 0.4698,
-    "gap_qty": 45.0,
-    "our_spike_qty": 171.0,
-    "opp_spike_qty": 193.0
-   },
-   {
-    "game_id": "so-s8a|A|675749-s1",
-    "block": "paired",
-    "seed": 675749,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "A",
-    "margin_clean": 1425.0,
-    "tm_us": 90708.0,
-    "tm_opp": 89283.0,
-    "error": null,
-    "capture_rate_qty": 0.4698,
-    "gap_qty": 45.0,
-    "our_spike_qty": 171.0,
-    "opp_spike_qty": 193.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674000-s0",
-    "block": "poison",
-    "seed": 674000,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": -324.0,
-    "tm_us": 82356.0,
-    "tm_opp": 82680.0,
-    "error": null,
-    "capture_rate_qty": 0.4656,
-    "gap_qty": 84.0,
-    "our_spike_qty": 332.0,
-    "opp_spike_qty": 381.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674000-s1",
-    "block": "poison",
-    "seed": 674000,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": -324.0,
-    "tm_us": 82356.0,
-    "tm_opp": 82680.0,
-    "error": null,
-    "capture_rate_qty": 0.4656,
-    "gap_qty": 84.0,
-    "our_spike_qty": 332.0,
-    "opp_spike_qty": 381.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674141-s0",
-    "block": "poison",
-    "seed": 674141,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": -615.0,
-    "tm_us": 96253.0,
-    "tm_opp": 96868.0,
-    "error": null,
-    "capture_rate_qty": 0.4695,
-    "gap_qty": 65.0,
-    "our_spike_qty": 231.0,
-    "opp_spike_qty": 261.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674141-s1",
-    "block": "poison",
-    "seed": 674141,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": -400.0,
-    "tm_us": 96360.0,
-    "tm_opp": 96760.0,
-    "error": null,
-    "capture_rate_qty": 0.4695,
-    "gap_qty": 65.0,
-    "our_spike_qty": 231.0,
-    "opp_spike_qty": 261.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|674141-s0",
-    "block": "poison",
-    "seed": 674141,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": -573.0,
-    "tm_us": 96134.0,
-    "tm_opp": 96707.0,
-    "error": null,
-    "capture_rate_qty": 0.4629,
-    "gap_qty": 60.0,
-    "our_spike_qty": 231.0,
-    "opp_spike_qty": 268.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|674141-s1",
-    "block": "poison",
-    "seed": 674141,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": -358.0,
-    "tm_us": 96241.0,
-    "tm_opp": 96599.0,
-    "error": null,
-    "capture_rate_qty": 0.4629,
-    "gap_qty": 60.0,
-    "our_spike_qty": 231.0,
-    "opp_spike_qty": 268.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674705-s0",
-    "block": "poison",
-    "seed": 674705,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": 329.0,
-    "tm_us": 131948.0,
-    "tm_opp": 131619.0,
-    "error": null,
-    "capture_rate_qty": 0.4968,
-    "gap_qty": 61.0,
-    "our_spike_qty": 310.0,
-    "opp_spike_qty": 314.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674705-s1",
-    "block": "poison",
-    "seed": 674705,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": 329.0,
-    "tm_us": 131948.0,
-    "tm_opp": 131619.0,
-    "error": null,
-    "capture_rate_qty": 0.4968,
-    "gap_qty": 61.0,
-    "our_spike_qty": 310.0,
-    "opp_spike_qty": 314.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|674705-s0",
-    "block": "poison",
-    "seed": 674705,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": 229.0,
-    "tm_us": 131760.0,
-    "tm_opp": 131531.0,
-    "error": null,
-    "capture_rate_qty": 0.4968,
-    "gap_qty": 55.0,
-    "our_spike_qty": 310.0,
-    "opp_spike_qty": 314.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|674705-s1",
-    "block": "poison",
-    "seed": 674705,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": 229.0,
-    "tm_us": 131760.0,
-    "tm_opp": 131531.0,
-    "error": null,
-    "capture_rate_qty": 0.4968,
-    "gap_qty": 55.0,
-    "our_spike_qty": 310.0,
-    "opp_spike_qty": 314.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674987-s0",
-    "block": "poison",
-    "seed": 674987,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": -18.0,
-    "tm_us": 102751.0,
-    "tm_opp": 102769.0,
-    "error": null,
-    "capture_rate_qty": 0.4789,
-    "gap_qty": 82.0,
-    "our_spike_qty": 442.0,
-    "opp_spike_qty": 481.0
-   },
-   {
-    "game_id": "so-s8a|mpx|674987-s1",
-    "block": "poison",
-    "seed": 674987,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": -18.0,
-    "tm_us": 102751.0,
-    "tm_opp": 102769.0,
-    "error": null,
-    "capture_rate_qty": 0.4789,
-    "gap_qty": 82.0,
-    "our_spike_qty": 442.0,
-    "opp_spike_qty": 481.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|674987-s0",
-    "block": "poison",
-    "seed": 674987,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": 47.0,
-    "tm_us": 102632.0,
-    "tm_opp": 102585.0,
-    "error": null,
-    "capture_rate_qty": 0.4789,
-    "gap_qty": 76.0,
-    "our_spike_qty": 442.0,
-    "opp_spike_qty": 481.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|674987-s1",
-    "block": "poison",
-    "seed": 674987,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": 47.0,
-    "tm_us": 102632.0,
-    "tm_opp": 102585.0,
-    "error": null,
-    "capture_rate_qty": 0.4789,
-    "gap_qty": 76.0,
-    "our_spike_qty": 442.0,
-    "opp_spike_qty": 481.0
-   },
-   {
-    "game_id": "so-s8a|mpx|675410-s0",
-    "block": "poison",
-    "seed": 675410,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": -448.0,
-    "tm_us": 110321.0,
-    "tm_opp": 110769.0,
-    "error": null,
-    "capture_rate_qty": 0.463,
-    "gap_qty": 86.0,
-    "our_spike_qty": 338.0,
-    "opp_spike_qty": 392.0
-   },
-   {
-    "game_id": "so-s8a|mpx|675410-s1",
-    "block": "poison",
-    "seed": 675410,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "mpx",
-    "margin_clean": -448.0,
-    "tm_us": 110321.0,
-    "tm_opp": 110769.0,
-    "error": null,
-    "capture_rate_qty": 0.463,
-    "gap_qty": 86.0,
-    "our_spike_qty": 338.0,
-    "opp_spike_qty": 392.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|675410-s0",
-    "block": "poison",
-    "seed": 675410,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": -542.0,
-    "tm_us": 110121.0,
-    "tm_opp": 110663.0,
-    "error": null,
-    "capture_rate_qty": 0.4586,
-    "gap_qty": 84.0,
-    "our_spike_qty": 338.0,
-    "opp_spike_qty": 399.0
-   },
-   {
-    "game_id": "so-s8a|oc_c3|675410-s1",
-    "block": "poison",
-    "seed": 675410,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "oc_c3",
-    "margin_clean": -542.0,
-    "tm_us": 110121.0,
-    "tm_opp": 110663.0,
-    "error": null,
-    "capture_rate_qty": 0.4586,
-    "gap_qty": 84.0,
-    "our_spike_qty": 338.0,
-    "opp_spike_qty": 399.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674000-s0",
-    "block": "steady",
-    "seed": 674000,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": -62.0,
-    "tm_us": 82937.0,
-    "tm_opp": 82999.0,
-    "error": null,
-    "capture_rate_qty": 0.4709,
-    "gap_qty": 79.0,
-    "our_spike_qty": 356.0,
-    "opp_spike_qty": 400.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674000-s1",
-    "block": "steady",
-    "seed": 674000,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": -62.0,
-    "tm_us": 82937.0,
-    "tm_opp": 82999.0,
-    "error": null,
-    "capture_rate_qty": 0.4709,
-    "gap_qty": 79.0,
-    "our_spike_qty": 356.0,
-    "opp_spike_qty": 400.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674159-s0",
-    "block": "steady",
-    "seed": 674159,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 222.0,
-    "tm_us": 87034.0,
-    "tm_opp": 86812.0,
-    "error": null,
-    "capture_rate_qty": 0.492,
-    "gap_qty": 44.0,
-    "our_spike_qty": 367.0,
-    "opp_spike_qty": 379.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674159-s1",
-    "block": "steady",
-    "seed": 674159,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 222.0,
-    "tm_us": 87034.0,
-    "tm_opp": 86812.0,
-    "error": null,
-    "capture_rate_qty": 0.492,
-    "gap_qty": 44.0,
-    "our_spike_qty": 367.0,
-    "opp_spike_qty": 379.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674477-s0",
-    "block": "steady",
-    "seed": 674477,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": -63.0,
-    "tm_us": 87962.0,
-    "tm_opp": 88025.0,
-    "error": null,
-    "capture_rate_qty": 0.5072,
-    "gap_qty": 13.0,
-    "our_spike_qty": 106.0,
-    "opp_spike_qty": 103.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674477-s1",
-    "block": "steady",
-    "seed": 674477,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": -63.0,
-    "tm_us": 87962.0,
-    "tm_opp": 88025.0,
-    "error": null,
-    "capture_rate_qty": 0.5072,
-    "gap_qty": 13.0,
-    "our_spike_qty": 106.0,
-    "opp_spike_qty": 103.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674636-s0",
-    "block": "steady",
-    "seed": 674636,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 151.0,
-    "tm_us": 149118.0,
-    "tm_opp": 148967.0,
-    "error": null,
-    "capture_rate_qty": 0.4898,
-    "gap_qty": 49.0,
-    "our_spike_qty": 336.0,
-    "opp_spike_qty": 350.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674636-s1",
-    "block": "steady",
-    "seed": 674636,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 151.0,
-    "tm_us": 149118.0,
-    "tm_opp": 148967.0,
-    "error": null,
-    "capture_rate_qty": 0.4898,
-    "gap_qty": 49.0,
-    "our_spike_qty": 336.0,
-    "opp_spike_qty": 350.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674795-s0",
-    "block": "steady",
-    "seed": 674795,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 198.0,
-    "tm_us": 90110.0,
-    "tm_opp": 89912.0,
-    "error": null,
-    "capture_rate_qty": 0.5,
-    "gap_qty": 12.0,
-    "our_spike_qty": 239.0,
-    "opp_spike_qty": 239.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674795-s1",
-    "block": "steady",
-    "seed": 674795,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 198.0,
-    "tm_us": 90110.0,
-    "tm_opp": 89912.0,
-    "error": null,
-    "capture_rate_qty": 0.5,
-    "gap_qty": 12.0,
-    "our_spike_qty": 239.0,
-    "opp_spike_qty": 239.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674954-s0",
-    "block": "steady",
-    "seed": 674954,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 204.0,
-    "tm_us": 116240.0,
-    "tm_opp": 116036.0,
-    "error": null,
-    "capture_rate_qty": 0.4792,
-    "gap_qty": 71.0,
-    "our_spike_qty": 449.0,
-    "opp_spike_qty": 488.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|674954-s1",
-    "block": "steady",
-    "seed": 674954,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 204.0,
-    "tm_us": 116240.0,
-    "tm_opp": 116036.0,
-    "error": null,
-    "capture_rate_qty": 0.4792,
-    "gap_qty": 71.0,
-    "our_spike_qty": 449.0,
-    "opp_spike_qty": 488.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|675113-s0",
-    "block": "steady",
-    "seed": 675113,
-    "seat": 0,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 179.0,
-    "tm_us": 63672.0,
-    "tm_opp": 63493.0,
-    "error": null,
-    "capture_rate_qty": 0.5471,
-    "gap_qty": 4.0,
-    "our_spike_qty": 93.0,
-    "opp_spike_qty": 77.0
-   },
-   {
-    "game_id": "so-s8a|tetsutani|675113-s1",
-    "block": "steady",
-    "seed": 675113,
-    "seat": 1,
-    "arm": "s8a",
-    "opp": "tetsutani",
-    "margin_clean": 179.0,
-    "tm_us": 63672.0,
-    "tm_opp": 63493.0,
-    "error": null,
-    "capture_rate_qty": 0.5471,
-    "gap_qty": 4.0,
-    "our_spike_qty": 93.0,
-    "opp_spike_qty": 77.0
-   }
-  ],
-  "B": [
-   {
-    "game_id": "so-s8b|oc_c3|674000-s0",
-    "block": "smoke",
-    "seed": 674000,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": -62.0,
-    "tm_us": 82937.0,
-    "tm_opp": 82999.0,
-    "error": null,
-    "capture_rate_qty": 0.4747,
-    "gap_qty": 73.0,
-    "our_spike_qty": 356.0,
-    "opp_spike_qty": 394.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|674000-s1",
-    "block": "smoke",
-    "seed": 674000,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": -62.0,
-    "tm_us": 82937.0,
-    "tm_opp": 82999.0,
-    "error": null,
-    "capture_rate_qty": 0.4747,
-    "gap_qty": 73.0,
-    "our_spike_qty": 356.0,
-    "opp_spike_qty": 394.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674159-s0",
-    "block": "paired",
-    "seed": 674159,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": 568.0,
-    "tm_us": 87192.0,
-    "tm_opp": 86624.0,
-    "error": null,
-    "capture_rate_qty": 0.5007,
-    "gap_qty": 45.0,
-    "our_spike_qty": 367.0,
-    "opp_spike_qty": 366.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674159-s1",
-    "block": "paired",
-    "seed": 674159,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": 568.0,
-    "tm_us": 87192.0,
-    "tm_opp": 86624.0,
-    "error": null,
-    "capture_rate_qty": 0.5007,
-    "gap_qty": 45.0,
-    "our_spike_qty": 367.0,
-    "opp_spike_qty": 366.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674318-s0",
-    "block": "paired",
-    "seed": 674318,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": -2744.0,
-    "tm_us": 77639.0,
-    "tm_opp": 80383.0,
-    "error": null,
-    "capture_rate_qty": 0.445,
-    "gap_qty": 66.0,
-    "our_spike_qty": 182.0,
-    "opp_spike_qty": 227.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674318-s1",
-    "block": "paired",
-    "seed": 674318,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": -2744.0,
-    "tm_us": 77639.0,
-    "tm_opp": 80383.0,
-    "error": null,
-    "capture_rate_qty": 0.445,
-    "gap_qty": 66.0,
-    "our_spike_qty": 182.0,
-    "opp_spike_qty": 227.0
-   },
-   {
-    "game_id": "so-s8b|V89|674477-s0",
-    "block": "paired",
-    "seed": 674477,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "V89",
-    "margin_clean": -63.0,
-    "tm_us": 87962.0,
-    "tm_opp": 88025.0,
-    "error": null,
-    "capture_rate_qty": 0.5072,
-    "gap_qty": 13.0,
-    "our_spike_qty": 106.0,
-    "opp_spike_qty": 103.0
-   },
-   {
-    "game_id": "so-s8b|V89|674477-s1",
-    "block": "paired",
-    "seed": 674477,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "V89",
-    "margin_clean": -63.0,
-    "tm_us": 87962.0,
-    "tm_opp": 88025.0,
-    "error": null,
-    "capture_rate_qty": 0.5072,
-    "gap_qty": 13.0,
-    "our_spike_qty": 106.0,
-    "opp_spike_qty": 103.0
-   },
-   {
-    "game_id": "so-s8b|r40|674636-s0",
-    "block": "paired",
-    "seed": 674636,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "r40",
-    "margin_clean": 555.0,
-    "tm_us": 149102.0,
-    "tm_opp": 148547.0,
-    "error": null,
-    "capture_rate_qty": 0.4864,
-    "gap_qty": 77.0,
-    "our_spike_qty": 303.0,
-    "opp_spike_qty": 320.0
-   },
-   {
-    "game_id": "so-s8b|r40|674636-s1",
-    "block": "paired",
-    "seed": 674636,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "r40",
-    "margin_clean": 555.0,
-    "tm_us": 149102.0,
-    "tm_opp": 148547.0,
-    "error": null,
-    "capture_rate_qty": 0.4864,
-    "gap_qty": 77.0,
-    "our_spike_qty": 303.0,
-    "opp_spike_qty": 320.0
-   },
-   {
-    "game_id": "so-s8b|A|674795-s0",
-    "block": "paired",
-    "seed": 674795,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "A",
-    "margin_clean": 2121.0,
-    "tm_us": 90767.0,
-    "tm_opp": 88646.0,
-    "error": null,
-    "capture_rate_qty": 0.492,
-    "gap_qty": 26.0,
-    "our_spike_qty": 247.0,
-    "opp_spike_qty": 255.0
-   },
-   {
-    "game_id": "so-s8b|A|674795-s1",
-    "block": "paired",
-    "seed": 674795,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "A",
-    "margin_clean": 2121.0,
-    "tm_us": 90767.0,
-    "tm_opp": 88646.0,
-    "error": null,
-    "capture_rate_qty": 0.492,
-    "gap_qty": 26.0,
-    "our_spike_qty": 247.0,
-    "opp_spike_qty": 255.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|674954-s0",
-    "block": "paired",
-    "seed": 674954,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": 39.0,
-    "tm_us": 116172.0,
-    "tm_opp": 116133.0,
-    "error": null,
-    "capture_rate_qty": 0.4838,
-    "gap_qty": 62.0,
-    "our_spike_qty": 449.0,
-    "opp_spike_qty": 479.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|674954-s1",
-    "block": "paired",
-    "seed": 674954,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": 39.0,
-    "tm_us": 116172.0,
-    "tm_opp": 116133.0,
-    "error": null,
-    "capture_rate_qty": 0.4838,
-    "gap_qty": 62.0,
-    "our_spike_qty": 449.0,
-    "opp_spike_qty": 479.0
-   },
-   {
-    "game_id": "so-s8b|mpx|675113-s0",
-    "block": "paired",
-    "seed": 675113,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": 46.0,
-    "tm_us": 63381.0,
-    "tm_opp": 63335.0,
-    "error": null,
-    "capture_rate_qty": 0.5439,
-    "gap_qty": 5.0,
-    "our_spike_qty": 93.0,
-    "opp_spike_qty": 78.0
-   },
-   {
-    "game_id": "so-s8b|mpx|675113-s1",
-    "block": "paired",
-    "seed": 675113,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": 46.0,
-    "tm_us": 63381.0,
-    "tm_opp": 63335.0,
-    "error": null,
-    "capture_rate_qty": 0.5439,
-    "gap_qty": 5.0,
-    "our_spike_qty": 93.0,
-    "opp_spike_qty": 78.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|675272-s0",
-    "block": "paired",
-    "seed": 675272,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 301.0,
-    "tm_us": 113517.0,
-    "tm_opp": 113216.0,
-    "error": null,
-    "capture_rate_qty": 0.4698,
-    "gap_qty": 83.0,
-    "our_spike_qty": 311.0,
-    "opp_spike_qty": 351.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|675272-s1",
-    "block": "paired",
-    "seed": 675272,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": -979.0,
-    "tm_us": 112877.0,
-    "tm_opp": 113856.0,
-    "error": null,
-    "capture_rate_qty": 0.4698,
-    "gap_qty": 83.0,
-    "our_spike_qty": 311.0,
-    "opp_spike_qty": 351.0
-   },
-   {
-    "game_id": "so-s8b|V89|675431-s0",
-    "block": "paired",
-    "seed": 675431,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "V89",
-    "margin_clean": 129.0,
-    "tm_us": 110853.0,
-    "tm_opp": 110724.0,
-    "error": null,
-    "capture_rate_qty": 0.479,
-    "gap_qty": 26.0,
-    "our_spike_qty": 137.0,
-    "opp_spike_qty": 149.0
-   },
-   {
-    "game_id": "so-s8b|V89|675431-s1",
-    "block": "paired",
-    "seed": 675431,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "V89",
-    "margin_clean": 129.0,
-    "tm_us": 110853.0,
-    "tm_opp": 110724.0,
-    "error": null,
-    "capture_rate_qty": 0.479,
-    "gap_qty": 26.0,
-    "our_spike_qty": 137.0,
-    "opp_spike_qty": 149.0
-   },
-   {
-    "game_id": "so-s8b|r40|675590-s0",
-    "block": "paired",
-    "seed": 675590,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "r40",
-    "margin_clean": 519.0,
-    "tm_us": 109115.0,
-    "tm_opp": 108596.0,
-    "error": null,
-    "capture_rate_qty": 0.5385,
-    "gap_qty": 25.0,
-    "our_spike_qty": 98.0,
-    "opp_spike_qty": 84.0
-   },
-   {
-    "game_id": "so-s8b|r40|675590-s1",
-    "block": "paired",
-    "seed": 675590,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "r40",
-    "margin_clean": 519.0,
-    "tm_us": 109115.0,
-    "tm_opp": 108596.0,
-    "error": null,
-    "capture_rate_qty": 0.5385,
-    "gap_qty": 25.0,
-    "our_spike_qty": 98.0,
-    "opp_spike_qty": 84.0
-   },
-   {
-    "game_id": "so-s8b|A|675749-s0",
-    "block": "paired",
-    "seed": 675749,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "A",
-    "margin_clean": 1425.0,
-    "tm_us": 90708.0,
-    "tm_opp": 89283.0,
-    "error": null,
-    "capture_rate_qty": 0.4698,
-    "gap_qty": 45.0,
-    "our_spike_qty": 171.0,
-    "opp_spike_qty": 193.0
-   },
-   {
-    "game_id": "so-s8b|A|675749-s1",
-    "block": "paired",
-    "seed": 675749,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "A",
-    "margin_clean": 1425.0,
-    "tm_us": 90708.0,
-    "tm_opp": 89283.0,
-    "error": null,
-    "capture_rate_qty": 0.4698,
-    "gap_qty": 45.0,
-    "our_spike_qty": 171.0,
-    "opp_spike_qty": 193.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674000-s0",
-    "block": "poison",
-    "seed": 674000,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": -324.0,
-    "tm_us": 82356.0,
-    "tm_opp": 82680.0,
-    "error": null,
-    "capture_rate_qty": 0.4656,
-    "gap_qty": 84.0,
-    "our_spike_qty": 332.0,
-    "opp_spike_qty": 381.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674000-s1",
-    "block": "poison",
-    "seed": 674000,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": -324.0,
-    "tm_us": 82356.0,
-    "tm_opp": 82680.0,
-    "error": null,
-    "capture_rate_qty": 0.4656,
-    "gap_qty": 84.0,
-    "our_spike_qty": 332.0,
-    "opp_spike_qty": 381.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674141-s0",
-    "block": "poison",
-    "seed": 674141,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": -615.0,
-    "tm_us": 96253.0,
-    "tm_opp": 96868.0,
-    "error": null,
-    "capture_rate_qty": 0.4695,
-    "gap_qty": 65.0,
-    "our_spike_qty": 231.0,
-    "opp_spike_qty": 261.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674141-s1",
-    "block": "poison",
-    "seed": 674141,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": -400.0,
-    "tm_us": 96360.0,
-    "tm_opp": 96760.0,
-    "error": null,
-    "capture_rate_qty": 0.4695,
-    "gap_qty": 65.0,
-    "our_spike_qty": 231.0,
-    "opp_spike_qty": 261.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|674141-s0",
-    "block": "poison",
-    "seed": 674141,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": -573.0,
-    "tm_us": 96134.0,
-    "tm_opp": 96707.0,
-    "error": null,
-    "capture_rate_qty": 0.4629,
-    "gap_qty": 60.0,
-    "our_spike_qty": 231.0,
-    "opp_spike_qty": 268.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|674141-s1",
-    "block": "poison",
-    "seed": 674141,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": -358.0,
-    "tm_us": 96241.0,
-    "tm_opp": 96599.0,
-    "error": null,
-    "capture_rate_qty": 0.4629,
-    "gap_qty": 60.0,
-    "our_spike_qty": 231.0,
-    "opp_spike_qty": 268.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674705-s0",
-    "block": "poison",
-    "seed": 674705,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": 361.0,
-    "tm_us": 131961.0,
-    "tm_opp": 131600.0,
-    "error": null,
-    "capture_rate_qty": 0.4968,
-    "gap_qty": 63.0,
-    "our_spike_qty": 310.0,
-    "opp_spike_qty": 314.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674705-s1",
-    "block": "poison",
-    "seed": 674705,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": 361.0,
-    "tm_us": 131961.0,
-    "tm_opp": 131600.0,
-    "error": null,
-    "capture_rate_qty": 0.4968,
-    "gap_qty": 63.0,
-    "our_spike_qty": 310.0,
-    "opp_spike_qty": 314.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|674705-s0",
-    "block": "poison",
-    "seed": 674705,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": 261.0,
-    "tm_us": 131773.0,
-    "tm_opp": 131512.0,
-    "error": null,
-    "capture_rate_qty": 0.4968,
-    "gap_qty": 57.0,
-    "our_spike_qty": 310.0,
-    "opp_spike_qty": 314.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|674705-s1",
-    "block": "poison",
-    "seed": 674705,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": 261.0,
-    "tm_us": 131773.0,
-    "tm_opp": 131512.0,
-    "error": null,
-    "capture_rate_qty": 0.4968,
-    "gap_qty": 57.0,
-    "our_spike_qty": 310.0,
-    "opp_spike_qty": 314.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674987-s0",
-    "block": "poison",
-    "seed": 674987,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": -18.0,
-    "tm_us": 102751.0,
-    "tm_opp": 102769.0,
-    "error": null,
-    "capture_rate_qty": 0.4789,
-    "gap_qty": 82.0,
-    "our_spike_qty": 442.0,
-    "opp_spike_qty": 481.0
-   },
-   {
-    "game_id": "so-s8b|mpx|674987-s1",
-    "block": "poison",
-    "seed": 674987,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": -18.0,
-    "tm_us": 102751.0,
-    "tm_opp": 102769.0,
-    "error": null,
-    "capture_rate_qty": 0.4789,
-    "gap_qty": 82.0,
-    "our_spike_qty": 442.0,
-    "opp_spike_qty": 481.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|674987-s0",
-    "block": "poison",
-    "seed": 674987,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": 47.0,
-    "tm_us": 102632.0,
-    "tm_opp": 102585.0,
-    "error": null,
-    "capture_rate_qty": 0.4789,
-    "gap_qty": 76.0,
-    "our_spike_qty": 442.0,
-    "opp_spike_qty": 481.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|674987-s1",
-    "block": "poison",
-    "seed": 674987,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": 47.0,
-    "tm_us": 102632.0,
-    "tm_opp": 102585.0,
-    "error": null,
-    "capture_rate_qty": 0.4789,
-    "gap_qty": 76.0,
-    "our_spike_qty": 442.0,
-    "opp_spike_qty": 481.0
-   },
-   {
-    "game_id": "so-s8b|mpx|675410-s0",
-    "block": "poison",
-    "seed": 675410,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": -448.0,
-    "tm_us": 110321.0,
-    "tm_opp": 110769.0,
-    "error": null,
-    "capture_rate_qty": 0.463,
-    "gap_qty": 86.0,
-    "our_spike_qty": 338.0,
-    "opp_spike_qty": 392.0
-   },
-   {
-    "game_id": "so-s8b|mpx|675410-s1",
-    "block": "poison",
-    "seed": 675410,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "mpx",
-    "margin_clean": -448.0,
-    "tm_us": 110321.0,
-    "tm_opp": 110769.0,
-    "error": null,
-    "capture_rate_qty": 0.463,
-    "gap_qty": 86.0,
-    "our_spike_qty": 338.0,
-    "opp_spike_qty": 392.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|675410-s0",
-    "block": "poison",
-    "seed": 675410,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": -542.0,
-    "tm_us": 110121.0,
-    "tm_opp": 110663.0,
-    "error": null,
-    "capture_rate_qty": 0.4586,
-    "gap_qty": 84.0,
-    "our_spike_qty": 338.0,
-    "opp_spike_qty": 399.0
-   },
-   {
-    "game_id": "so-s8b|oc_c3|675410-s1",
-    "block": "poison",
-    "seed": 675410,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "oc_c3",
-    "margin_clean": -542.0,
-    "tm_us": 110121.0,
-    "tm_opp": 110663.0,
-    "error": null,
-    "capture_rate_qty": 0.4586,
-    "gap_qty": 84.0,
-    "our_spike_qty": 338.0,
-    "opp_spike_qty": 399.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674000-s0",
-    "block": "steady",
-    "seed": 674000,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": -62.0,
-    "tm_us": 82937.0,
-    "tm_opp": 82999.0,
-    "error": null,
-    "capture_rate_qty": 0.4709,
-    "gap_qty": 79.0,
-    "our_spike_qty": 356.0,
-    "opp_spike_qty": 400.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674000-s1",
-    "block": "steady",
-    "seed": 674000,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": -62.0,
-    "tm_us": 82937.0,
-    "tm_opp": 82999.0,
-    "error": null,
-    "capture_rate_qty": 0.4709,
-    "gap_qty": 79.0,
-    "our_spike_qty": 356.0,
-    "opp_spike_qty": 400.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674159-s0",
-    "block": "steady",
-    "seed": 674159,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 491.0,
-    "tm_us": 87131.0,
-    "tm_opp": 86640.0,
-    "error": null,
-    "capture_rate_qty": 0.4959,
-    "gap_qty": 43.0,
-    "our_spike_qty": 367.0,
-    "opp_spike_qty": 373.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674159-s1",
-    "block": "steady",
-    "seed": 674159,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 491.0,
-    "tm_us": 87131.0,
-    "tm_opp": 86640.0,
-    "error": null,
-    "capture_rate_qty": 0.4959,
-    "gap_qty": 43.0,
-    "our_spike_qty": 367.0,
-    "opp_spike_qty": 373.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674477-s0",
-    "block": "steady",
-    "seed": 674477,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": -63.0,
-    "tm_us": 87962.0,
-    "tm_opp": 88025.0,
-    "error": null,
-    "capture_rate_qty": 0.5072,
-    "gap_qty": 13.0,
-    "our_spike_qty": 106.0,
-    "opp_spike_qty": 103.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674477-s1",
-    "block": "steady",
-    "seed": 674477,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": -63.0,
-    "tm_us": 87962.0,
-    "tm_opp": 88025.0,
-    "error": null,
-    "capture_rate_qty": 0.5072,
-    "gap_qty": 13.0,
-    "our_spike_qty": 106.0,
-    "opp_spike_qty": 103.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674636-s0",
-    "block": "steady",
-    "seed": 674636,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 151.0,
-    "tm_us": 149118.0,
-    "tm_opp": 148967.0,
-    "error": null,
-    "capture_rate_qty": 0.4898,
-    "gap_qty": 49.0,
-    "our_spike_qty": 336.0,
-    "opp_spike_qty": 350.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674636-s1",
-    "block": "steady",
-    "seed": 674636,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 151.0,
-    "tm_us": 149118.0,
-    "tm_opp": 148967.0,
-    "error": null,
-    "capture_rate_qty": 0.4898,
-    "gap_qty": 49.0,
-    "our_spike_qty": 336.0,
-    "opp_spike_qty": 350.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674795-s0",
-    "block": "steady",
-    "seed": 674795,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 198.0,
-    "tm_us": 90110.0,
-    "tm_opp": 89912.0,
-    "error": null,
-    "capture_rate_qty": 0.5,
-    "gap_qty": 12.0,
-    "our_spike_qty": 239.0,
-    "opp_spike_qty": 239.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674795-s1",
-    "block": "steady",
-    "seed": 674795,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 198.0,
-    "tm_us": 90110.0,
-    "tm_opp": 89912.0,
-    "error": null,
-    "capture_rate_qty": 0.5,
-    "gap_qty": 12.0,
-    "our_spike_qty": 239.0,
-    "opp_spike_qty": 239.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674954-s0",
-    "block": "steady",
-    "seed": 674954,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 204.0,
-    "tm_us": 116240.0,
-    "tm_opp": 116036.0,
-    "error": null,
-    "capture_rate_qty": 0.4792,
-    "gap_qty": 71.0,
-    "our_spike_qty": 449.0,
-    "opp_spike_qty": 488.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|674954-s1",
-    "block": "steady",
-    "seed": 674954,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 204.0,
-    "tm_us": 116240.0,
-    "tm_opp": 116036.0,
-    "error": null,
-    "capture_rate_qty": 0.4792,
-    "gap_qty": 71.0,
-    "our_spike_qty": 449.0,
-    "opp_spike_qty": 488.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|675113-s0",
-    "block": "steady",
-    "seed": 675113,
-    "seat": 0,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 179.0,
-    "tm_us": 63672.0,
-    "tm_opp": 63493.0,
-    "error": null,
-    "capture_rate_qty": 0.5471,
-    "gap_qty": 4.0,
-    "our_spike_qty": 93.0,
-    "opp_spike_qty": 77.0
-   },
-   {
-    "game_id": "so-s8b|tetsutani|675113-s1",
-    "block": "steady",
-    "seed": 675113,
-    "seat": 1,
-    "arm": "s8b",
-    "opp": "tetsutani",
-    "margin_clean": 179.0,
-    "tm_us": 63672.0,
-    "tm_opp": 63493.0,
-    "error": null,
-    "capture_rate_qty": 0.5471,
-    "gap_qty": 4.0,
-    "our_spike_qty": 93.0,
-    "opp_spike_qty": 77.0
-   }
-  ]
- },
- "elapsed_s": 382.6,
- "supplement": {
-  "panel_s8_control": {
-   "design": "S8 本体 vs {oc_c3,H1,r40,A} 12 fold 双席（弱锚/王座锚基线对照，判 r40 0.7917 是否手术回退）",
+  "weak": {
+   "design": "h1x_b 与 H1X 本体同 6 fold 双席 vs r40/A；基线相对不回退",
    "pairs": {
-    "oc_c3": {
-     "n": 12,
-     "wins": 6,
-     "losses": 5,
-     "ties": 1,
-     "h2h": 0.5417,
-     "mean_margin": -265.2,
-     "n_games": 24,
-     "n_errors": 0
-    },
-    "H1": {
-     "n": 12,
-     "wins": 6,
-     "losses": 5,
-     "ties": 1,
-     "h2h": 0.5417,
-     "mean_margin": -265.2,
-     "n_games": 24,
-     "n_errors": 0
-    },
     "r40": {
-     "n": 12,
-     "wins": 9,
-     "losses": 2,
-     "ties": 1,
-     "h2h": 0.7917,
-     "mean_margin": 191.9,
-     "n_games": 24,
-     "n_errors": 0
+     "h2h_h1x_b": 0.8333,
+     "h2h_h1x_ctl": 0.8333,
+     "fold_h1x_b": {
+      "n": 6,
+      "wins": 5,
+      "losses": 1,
+      "ties": 0,
+      "h2h": 0.8333,
+      "mean_margin": 647.0,
+      "n_games": 12,
+      "n_errors": 0
+     },
+     "fold_h1x_ctl": {
+      "n": 6,
+      "wins": 5,
+      "losses": 1,
+      "ties": 0,
+      "h2h": 0.8333,
+      "mean_margin": 671.7,
+      "n_games": 12,
+      "n_errors": 0
+     },
+     "no_regression": true
     },
     "A": {
-     "n": 12,
-     "wins": 10,
-     "losses": 1,
-     "ties": 1,
-     "h2h": 0.875,
-     "mean_margin": 1130.9,
-     "n_games": 24,
-     "n_errors": 0
+     "h2h_h1x_b": 1.0,
+     "h2h_h1x_ctl": 1.0,
+     "fold_h1x_b": {
+      "n": 6,
+      "wins": 6,
+      "losses": 0,
+      "ties": 0,
+      "h2h": 1.0,
+      "mean_margin": 1993.2,
+      "n_games": 12,
+      "n_errors": 0
+     },
+     "fold_h1x_ctl": {
+      "n": 6,
+      "wins": 6,
+      "losses": 0,
+      "ties": 0,
+      "h2h": 1.0,
+      "mean_margin": 1986.2,
+      "n_games": 12,
+      "n_errors": 0
+     },
+     "no_regression": true
     }
    }
   },
-  "capture_sanity_674159_mpx": {
-   "design": "分歧局双臂对照（A vs S8 同 seed/seat/opp）",
-   "rows": [
-    {
-     "arm": "s8",
-     "seed": 674159,
-     "seat": 0,
-     "opp": "mpx",
-     "margin_clean": 186.0,
-     "capture_rate_qty": 0.4966,
-     "our_spike_qty": 367.0,
-     "opp_spike_qty": 372.0,
-     "gap_qty": 45.0,
-     "telemetry": {
-      "append_orders": 6,
-      "append_qty": 17,
-      "skip_slot": 5,
-      "topup_qty": 2
+  "checks": {
+   "c1_paired_delta_pos": {
+    "mean_delta": 22.17,
+    "W": 4,
+    "L": 0,
+    "T": 20,
+    "passed": true
+   },
+   "c1_paired_flipsneg0": {
+    "flips_neg": 0,
+    "flips_pos": 0,
+    "passed": true
+   },
+   "c2_poison_mean_no_regression": {
+    "mean_delta": -5.0,
+    "W": 4,
+    "L": 4,
+    "flips_neg": 0,
+    "passed": false
+   },
+   "c3_weak_anchor_baseline_no_regression": {
+    "per": {
+     "r40": {
+      "h2h_b": 0.8333,
+      "h2h_base": 0.8333,
+      "no_regression": true
+     },
+     "A": {
+      "h2h_b": 1.0,
+      "h2h_base": 1.0,
+      "no_regression": true
      }
     },
-    {
-     "arm": "s8",
-     "seed": 674159,
-     "seat": 1,
-     "opp": "mpx",
-     "margin_clean": 186.0,
-     "capture_rate_qty": 0.4966,
-     "our_spike_qty": 367.0,
-     "opp_spike_qty": 372.0,
-     "gap_qty": 45.0,
-     "telemetry": {
-      "append_orders": 6,
-      "append_qty": 17,
-      "skip_slot": 5,
-      "topup_qty": 2
-     }
-    },
-    {
-     "arm": "s8a",
-     "seed": 674159,
-     "seat": 0,
-     "opp": "mpx",
-     "margin_clean": 306.0,
-     "capture_rate_qty": 0.4966,
-     "our_spike_qty": 367.0,
-     "opp_spike_qty": 372.0,
-     "gap_qty": 46.0,
-     "telemetry": {
-      "append_orders": 6,
-      "append_qty": 18,
-      "skip_slot": 5,
-      "topup_qty": 2
-     }
-    },
-    {
-     "arm": "s8a",
-     "seed": 674159,
-     "seat": 1,
-     "opp": "mpx",
-     "margin_clean": 306.0,
-     "capture_rate_qty": 0.4966,
-     "our_spike_qty": 367.0,
-     "opp_spike_qty": 372.0,
-     "gap_qty": 46.0,
-     "telemetry": {
-      "append_orders": 6,
-      "append_qty": 18,
-      "skip_slot": 5,
-      "topup_qty": 2
-     }
-    }
-   ]
-  }
+    "passed": true
+   }
+  },
+  "budget": {
+   "used_局次": 116,
+   "cap": 180,
+   "within_cap": true
+  },
+  "verdict": {
+   "h1x_b_validation": "FAIL",
+   "readjudicated_criteria_passed": false,
+   "launch_candidate": "H1X 侧验证未过",
+   "note": "只测不发；在线提交=硬禁令；上线决策移交用户；证据含逐块配对表",
+   "elapsed_s": 103.1
+  },
+  "per_game_rows": [
+   {
+    "game_id": "so-h1x_b|oc_c3|674000-s0",
+    "block": "paired",
+    "seed": 674000,
+    "seat": 0,
+    "opp": "oc_c3",
+    "margin_clean": 253.0,
+    "tm_us": 82957.0,
+    "tm_opp": 82704.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|oc_c3|674000-s1",
+    "block": "paired",
+    "seed": 674000,
+    "seat": 1,
+    "opp": "oc_c3",
+    "margin_clean": 253.0,
+    "tm_us": 82957.0,
+    "tm_opp": 82704.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674159-s0",
+    "block": "paired",
+    "seed": 674159,
+    "seat": 0,
+    "opp": "mpx",
+    "margin_clean": 819.0,
+    "tm_us": 87187.0,
+    "tm_opp": 86368.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674159-s1",
+    "block": "paired",
+    "seed": 674159,
+    "seat": 1,
+    "opp": "mpx",
+    "margin_clean": 819.0,
+    "tm_us": 87187.0,
+    "tm_opp": 86368.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|tetsutani|674318-s0",
+    "block": "paired",
+    "seed": 674318,
+    "seat": 0,
+    "opp": "tetsutani",
+    "margin_clean": 214.0,
+    "tm_us": 76753.0,
+    "tm_opp": 76539.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|tetsutani|674318-s1",
+    "block": "paired",
+    "seed": 674318,
+    "seat": 1,
+    "opp": "tetsutani",
+    "margin_clean": 214.0,
+    "tm_us": 76753.0,
+    "tm_opp": 76539.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|V89|674477-s0",
+    "block": "paired",
+    "seed": 674477,
+    "seat": 0,
+    "opp": "V89",
+    "margin_clean": -131.0,
+    "tm_us": 87926.0,
+    "tm_opp": 88057.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|V89|674477-s1",
+    "block": "paired",
+    "seed": 674477,
+    "seat": 1,
+    "opp": "V89",
+    "margin_clean": -131.0,
+    "tm_us": 87926.0,
+    "tm_opp": 88057.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|r40|674636-s0",
+    "block": "paired",
+    "seed": 674636,
+    "seat": 0,
+    "opp": "r40",
+    "margin_clean": 555.0,
+    "tm_us": 149103.0,
+    "tm_opp": 148548.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|r40|674636-s1",
+    "block": "paired",
+    "seed": 674636,
+    "seat": 1,
+    "opp": "r40",
+    "margin_clean": 555.0,
+    "tm_us": 149103.0,
+    "tm_opp": 148548.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|A|674795-s0",
+    "block": "paired",
+    "seed": 674795,
+    "seat": 0,
+    "opp": "A",
+    "margin_clean": 2090.0,
+    "tm_us": 90728.0,
+    "tm_opp": 88638.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|A|674795-s1",
+    "block": "paired",
+    "seed": 674795,
+    "seat": 1,
+    "opp": "A",
+    "margin_clean": 2090.0,
+    "tm_us": 90728.0,
+    "tm_opp": 88638.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|oc_c3|674954-s0",
+    "block": "paired",
+    "seed": 674954,
+    "seat": 0,
+    "opp": "oc_c3",
+    "margin_clean": -2.0,
+    "tm_us": 116086.0,
+    "tm_opp": 116088.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|oc_c3|674954-s1",
+    "block": "paired",
+    "seed": 674954,
+    "seat": 1,
+    "opp": "oc_c3",
+    "margin_clean": -2.0,
+    "tm_us": 116086.0,
+    "tm_opp": 116088.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|675113-s0",
+    "block": "paired",
+    "seed": 675113,
+    "seat": 0,
+    "opp": "mpx",
+    "margin_clean": -150.0,
+    "tm_us": 63469.0,
+    "tm_opp": 63619.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|675113-s1",
+    "block": "paired",
+    "seed": 675113,
+    "seat": 1,
+    "opp": "mpx",
+    "margin_clean": -150.0,
+    "tm_us": 63469.0,
+    "tm_opp": 63619.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|tetsutani|675272-s0",
+    "block": "paired",
+    "seed": 675272,
+    "seat": 0,
+    "opp": "tetsutani",
+    "margin_clean": 647.0,
+    "tm_us": 113732.0,
+    "tm_opp": 113085.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|tetsutani|675272-s1",
+    "block": "paired",
+    "seed": 675272,
+    "seat": 1,
+    "opp": "tetsutani",
+    "margin_clean": -627.0,
+    "tm_us": 113095.0,
+    "tm_opp": 113722.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|V89|675431-s0",
+    "block": "paired",
+    "seed": 675431,
+    "seat": 0,
+    "opp": "V89",
+    "margin_clean": 60.0,
+    "tm_us": 110823.0,
+    "tm_opp": 110763.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|V89|675431-s1",
+    "block": "paired",
+    "seed": 675431,
+    "seat": 1,
+    "opp": "V89",
+    "margin_clean": 60.0,
+    "tm_us": 110823.0,
+    "tm_opp": 110763.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|r40|675590-s0",
+    "block": "paired",
+    "seed": 675590,
+    "seat": 0,
+    "opp": "r40",
+    "margin_clean": 294.0,
+    "tm_us": 109065.0,
+    "tm_opp": 108771.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|r40|675590-s1",
+    "block": "paired",
+    "seed": 675590,
+    "seat": 1,
+    "opp": "r40",
+    "margin_clean": 294.0,
+    "tm_us": 109065.0,
+    "tm_opp": 108771.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|A|675749-s0",
+    "block": "paired",
+    "seed": 675749,
+    "seat": 0,
+    "opp": "A",
+    "margin_clean": 2469.0,
+    "tm_us": 90835.0,
+    "tm_opp": 88366.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|A|675749-s1",
+    "block": "paired",
+    "seed": 675749,
+    "seat": 1,
+    "opp": "A",
+    "margin_clean": 2469.0,
+    "tm_us": 90835.0,
+    "tm_opp": 88366.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674000-s0",
+    "block": "poison",
+    "seed": 674000,
+    "seat": 0,
+    "opp": "mpx",
+    "margin_clean": 257.0,
+    "tm_us": 82782.0,
+    "tm_opp": 82525.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674000-s1",
+    "block": "poison",
+    "seed": 674000,
+    "seat": 1,
+    "opp": "mpx",
+    "margin_clean": 257.0,
+    "tm_us": 82782.0,
+    "tm_opp": 82525.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674141-s0",
+    "block": "poison",
+    "seed": 674141,
+    "seat": 0,
+    "opp": "mpx",
+    "margin_clean": 22.0,
+    "tm_us": 96073.0,
+    "tm_opp": 96051.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674141-s1",
+    "block": "poison",
+    "seed": 674141,
+    "seat": 1,
+    "opp": "mpx",
+    "margin_clean": 238.0,
+    "tm_us": 96181.0,
+    "tm_opp": 95943.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674705-s0",
+    "block": "poison",
+    "seed": 674705,
+    "seat": 0,
+    "opp": "mpx",
+    "margin_clean": 442.0,
+    "tm_us": 132088.0,
+    "tm_opp": 131646.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674705-s1",
+    "block": "poison",
+    "seed": 674705,
+    "seat": 1,
+    "opp": "mpx",
+    "margin_clean": 442.0,
+    "tm_us": 132088.0,
+    "tm_opp": 131646.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674987-s0",
+    "block": "poison",
+    "seed": 674987,
+    "seat": 0,
+    "opp": "mpx",
+    "margin_clean": 29.0,
+    "tm_us": 102696.0,
+    "tm_opp": 102667.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|674987-s1",
+    "block": "poison",
+    "seed": 674987,
+    "seat": 1,
+    "opp": "mpx",
+    "margin_clean": 29.0,
+    "tm_us": 102696.0,
+    "tm_opp": 102667.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|675410-s0",
+    "block": "poison",
+    "seed": 675410,
+    "seat": 0,
+    "opp": "mpx",
+    "margin_clean": 166.0,
+    "tm_us": 110547.0,
+    "tm_opp": 110381.0,
+    "error": null
+   },
+   {
+    "game_id": "so-h1x_b|mpx|675410-s1",
+    "block": "poison",
+    "seed": 675410,
+    "seat": 1,
+    "opp": "mpx",
+    "margin_clean": 166.0,
+    "tm_us": 110547.0,
+    "tm_opp": 110381.0,
+    "error": null
+   }
+  ],
+  "elapsed_s": 103.1
  },
- "h1x_transplant": {
-  "note": "用户裁决 2026-10-01：胜者档（或都不过则 A 档）同手术移植 H1X（orderbook_h1x_lab/build/h1x/main.py sha 9d073fba…，尖拍尾块 machinery sha 19ae92bc… 与 S8 同源、手术点相同）；不必重测面板（H1X 侧验证由主会话安排）",
-  "arm": "A (lot 3-6)",
-  "base_main_sha256": "9d073fbaf4f5d74afcb51e861672e1f12d12dc71a7b640a6bc5f963897d9e9e6",
-  "surgery": "spike_append lot 帽单行手术（其余逐字不动）：_S8_LOT_MIN, _S8_LOT_MAX = 2, 4 → _S8_LOT_MIN, _S8_LOT_MAX = 3, 6",
-  "artifacts": {
-   "main_sha256": "d1a399bfeb3af4957071577acbc985f1a0e931fb4cfbc0343a82e2cab417cb21",
-   "tar_sha256": "85e2df12264d1c1ba9ea7a46901e9da8c46d363e34edba4031b592b7bae55cbf",
-   "members": [
-    "LICENSE.txt",
-    "NOTICE.txt",
-    "main.py"
-   ],
-   "compliance": "Apache-2.0 三成员包（LICENSE.txt+NOTICE.txt+main.py，NOTICE 携本手术署名；h1x 件保留八层修改署名）"
-  },
-  "gates": {
-   "machinery_identity_ok": true,
-   "single_line_diff_ok": true,
-   "compile_ok": true,
-   "last_callable_is_entry": true,
-   "host_capture_ok": true,
-   "params_ok": true,
-   "base_sha_identity_ok": true,
-   "machinery_single_line_ok": true,
-   "deterministic_double_run_ok": true,
-   "tar3_members_ok": true
-  },
-  "determinism": {
-   "main_sha_run1": "d1a399bfeb3af4957071577acbc985f1a0e931fb4cfbc0343a82e2cab417cb21",
-   "main_sha_run2": "d1a399bfeb3af4957071577acbc985f1a0e931fb4cfbc0343a82e2cab417cb21",
-   "tar_sha_run1": "85e2df12264d1c1ba9ea7a46901e9da8c46d363e34edba4031b592b7bae55cbf",
-   "tar_sha_run2": "85e2df12264d1c1ba9ea7a46901e9da8c46d363e34edba4031b592b7bae55cbf",
-   "deterministic_ok": true
-  },
-  "machinery": {
-   "machinery_sha256_before": "19ae92bc86882e6eee176f0a136ab362d28d46b4942e47746eba87808ed0db20",
-   "machinery_sha256_after": "b7b64ebc79d0e25a3ab62a51f76e0ff54ebaaaf7bcba0a42eddec54df9c1530f",
-   "machinery_same_as_s8": true,
-   "machinery": "spike_detect/spike_append/decl_topup/anti_phantom/conservation（除 lot 帽外参数原样）"
-  },
-  "commands": [
-   "python3 orderbook_spikeopt_lab/build_spikeopt.py --form h1x_a"
-  ]
- }
+ "anomaly": [],
+ "budget": {},
+ "_generated_at": "2026-09-30T22:17:51Z"
 }

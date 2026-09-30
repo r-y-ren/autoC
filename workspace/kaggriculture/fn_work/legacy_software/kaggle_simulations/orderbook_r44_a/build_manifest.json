@@ -1,0 +1,47 @@
+{
+ "audit": {
+  "append_only": true,
+  "base_file_unchanged": true,
+  "blocks": [
+   "dayhigh"
+  ],
+  "injected_tail_bytes": 17401,
+  "tape_blob_sha256": "49d77e412a45ee4cc7bdefd1249525e71e0e1623f03f183c936c4122eb6d9c4a",
+  "tape_five_zones_unchanged": true,
+  "whitelist": [
+   "tail_block_injection"
+  ]
+ },
+ "base_main_sha256": "4ce951f088740e0b3d4366dbf95f8bb225817b0417bbb2fcea6292a559ee9ea8",
+ "base_matches_flying_r40": true,
+ "base_sha_chain": {
+  "a16e0e9b": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab",
+  "r34a": "51fc19dba2d0bcbf2d0a3720c26ff318541a0e6ce5800873bc863f612451aa5b",
+  "r37": "23a513f903317e4d6133aea87e5205bd75cab057090e92c162e5c3be8e32707f",
+  "r40": "4ce951f088740e0b3d4366dbf95f8bb225817b0417bbb2fcea6292a559ee9ea8",
+  "r44_a": "b387307fc12e26107c58ee604146fc621099ce88124fa0876fdd7cef28300bd9"
+ },
+ "blocks": {
+  "dayhigh": {
+   "bytes": 17399,
+   "sha256": "2f3f690967022a7d53798414c54e6ef3c54b4bdb25a454ff66e248671bce744a"
+  }
+ },
+ "complete": true,
+ "description": "public derivative with day-high realization",
+ "double_run_sha256": {
+  "run1": "ae07207a43b887ee94922ebfcd7ad9890d3b63591aafd0a5bbecc0b673640b90",
+  "run2": "ae07207a43b887ee94922ebfcd7ad9890d3b63591aafd0a5bbecc0b673640b90"
+ },
+ "form": "A",
+ "generated": "2026-09-28",
+ "main_bytes": 1441184,
+ "main_sha256": "b387307fc12e26107c58ee604146fc621099ce88124fa0876fdd7cef28300bd9",
+ "schema": "orderbook_r44_manifest/1.0",
+ "tar_bytes": 671581,
+ "tar_members": [
+  "main.py"
+ ],
+ "tar_sha256": "ae07207a43b887ee94922ebfcd7ad9890d3b63591aafd0a5bbecc0b673640b90",
+ "variant": "r44_a"
+}

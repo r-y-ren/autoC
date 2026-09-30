@@ -1,0 +1,20 @@
+{
+ "schema": "orderbook_melon_manifest/1.0",
+ "arm": "s_melon",
+ "form": "独立形态（prvsiyan_melons 整件署名移植）",
+ "src": "/tmp/arms_e/pkg/prvsiyan_melons/main.py",
+ "src_sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+ "src_bytes": 1046403,
+ "out": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_melon_lab/build/s_melon/main.py",
+ "out_sha256": "800a0d28be637c5d427fd65a94e3c1491acdf762f8efdeebeb1e6859a55f70f1",
+ "out_bytes": 1048053,
+ "behavior_change": "none（注释头；源逐字节保留在头部之后）",
+ "entry": "kaggle_submission_agent/_final_sell_block_reorder_entrypoint（末 callable 语义不变）",
+ "license": "Apache-2.0（全文 LICENSE-APACHE-2.0.txt；上游通知随件保留）",
+ "pillars": [
+  "果品专精产线：MELON/TOMATO 权重拉高（route tapes 果品倾斜）+V219/V221B 番茄有限投资配套卖法",
+  "前跑卖引：FRONT_RUN_ITEMS 四品 next-step 预卖（_sell_lead/_front_run 钩子）+EXP293 四拍 ADV 镜像前跑",
+  "终局块重排：step712-718 Shop0909 物理闭合终局规划 + _v44y_reorder 尾部再应用（FRO）"
+ ],
+ "mooman_cleanroom": "mooman 件无许可，未移植未引用；概念如需参考走干净室（本次未用）"
+}

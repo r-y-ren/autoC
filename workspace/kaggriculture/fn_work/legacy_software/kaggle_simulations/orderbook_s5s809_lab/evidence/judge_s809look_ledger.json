@@ -1,0 +1,143 @@
+{
+ "budget": {
+  "cap_局次": 350,
+  "auth": 30,
+  "panel": 312,
+  "total_局次": 342,
+  "within_cap": true,
+  "smoke_局次": 2,
+  "cumulative_局次": 344,
+  "cumulative_within_cap": true
+ },
+ "criteria": {
+  "rule": "①对 oc_c3 冠军锚 ≥0.5（≥0.6 佳/≥0.7 碾压）②强面板 {mpx,tetsutani,V89} 逐对 ≥0.5 ③弱锚 {r40,A} 逐对 ≥0.8 ④flips_neg=0（vs look3 配对）⑤守恒足迹=仅 step809 触发面（首差异拍=SELL 面单量签名、触发前零差异）⑥margin/终局钱只作参考",
+  "arms": {
+   "look6": {
+    "c1_vs_oc_c3_ge_0.5": {
+     "h2h": 0.7083,
+     "grade": "碾压",
+     "passed": true
+    },
+    "c2_strong_all_ge_0.5": {
+     "h2h": {
+      "mpx": 0.3125,
+      "tetsutani": 0.4375,
+      "V89": 0.4375
+     },
+     "passed": false
+    },
+    "c3_weak_all_ge_0.8": {
+     "h2h": {
+      "r40": 0.8125,
+      "A": 0.9375
+     },
+     "passed": true
+    },
+    "c4_flips_neg_zero": {
+     "flips_neg": 0,
+     "flips_pos": 0,
+     "passed": true
+    },
+    "c5_footprint_step809_only": {
+     "attribution_ok_all": true,
+     "strict_s809_all": true,
+     "monotone_first_all": true,
+     "trigger_region_all": true,
+     "passed": true
+    },
+    "c6_margin_reference_only": true,
+    "full_standard_pass": false
+   },
+   "look12": {
+    "c1_vs_oc_c3_ge_0.5": {
+     "h2h": 0.7083,
+     "grade": "碾压",
+     "passed": true
+    },
+    "c2_strong_all_ge_0.5": {
+     "h2h": {
+      "mpx": 0.4375,
+      "tetsutani": 0.5625,
+      "V89": 0.5625
+     },
+     "passed": false
+    },
+    "c3_weak_all_ge_0.8": {
+     "h2h": {
+      "r40": 0.8125,
+      "A": 0.9375
+     },
+     "passed": true
+    },
+    "c4_flips_neg_zero": {
+     "flips_neg": 0,
+     "flips_pos": 6,
+     "passed": true
+    },
+    "c5_footprint_step809_only": {
+     "attribution_ok_all": true,
+     "strict_s809_all": false,
+     "monotone_first_all": false,
+     "trigger_region_all": true,
+     "passed": true
+    },
+    "c6_margin_reference_only": true,
+    "full_standard_pass": false
+   }
+  }
+ },
+ "panel_h2h": {
+  "look3": {
+   "oc_c3": 0.7083,
+   "mpx": 0.3125,
+   "tetsutani": 0.4375,
+   "V89": 0.4375,
+   "r40": 0.8125,
+   "A": 0.9375
+  },
+  "look6": {
+   "oc_c3": 0.7083,
+   "mpx": 0.3125,
+   "tetsutani": 0.4375,
+   "V89": 0.4375,
+   "r40": 0.8125,
+   "A": 0.9375
+  },
+  "look12": {
+   "oc_c3": 0.7083,
+   "mpx": 0.4375,
+   "tetsutani": 0.5625,
+   "V89": 0.5625,
+   "r40": 0.8125,
+   "A": 0.9375
+  }
+ },
+ "paired_flips": {
+  "look6": {
+   "n": 104,
+   "W": 22,
+   "L": 4,
+   "T": 78,
+   "delta_sum": 1334.0,
+   "win_control": 64,
+   "win_variant": 64,
+   "flips_pos": 0,
+   "flips_neg": 0,
+   "mean_delta": 12.83,
+   "net_flip_wins": 0
+  },
+  "look12": {
+   "n": 104,
+   "W": 84,
+   "L": 18,
+   "T": 2,
+   "delta_sum": 10093.0,
+   "win_control": 64,
+   "win_variant": 70,
+   "flips_pos": 6,
+   "flips_neg": 0,
+   "mean_delta": 97.05,
+   "net_flip_wins": 6
+  }
+ }
+}
