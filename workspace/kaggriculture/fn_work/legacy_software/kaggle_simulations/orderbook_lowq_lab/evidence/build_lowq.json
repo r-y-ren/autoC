@@ -1,0 +1,19 @@
+{
+ "builds": {
+  "h1x_a": {
+   "sha256": "24adb04f81bbc9912b2a9342d6264ed11f5edfa1e1ee2450a7da1483b7af9c06",
+   "tar_sha256": "3d8d8cbab8fdf58777a7fe67e88d4cffdb74fe283815104da4abb1585aedee11",
+   "checks": {
+    "compile_ok": true,
+    "last_callable_is_entry": true,
+    "base_prefix_identity_ok": true,
+    "roundtrip_strip_identity_ok": true,
+    "host_capture_ok": true,
+    "params_ok": true,
+    "zero_footprint_ok": true,
+    "groove_static_ok": true,
+    "deterministic_double_run_ok": true
+   }
+  }
+ }
+}
