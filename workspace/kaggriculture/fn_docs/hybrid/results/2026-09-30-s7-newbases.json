@@ -1,0 +1,1046 @@
+{
+ "version": "s7-newbases/1.0",
+ "task": "S7 新基座池测：4 件可跑新基座（heso/kaito/djamil/mzcao）进竞技池实测（先池测再谈复刻）；不改既有代码/不提交/不发射",
+ "per_base": {
+  "mzcao": {
+   "artifact": {
+    "name": "mzcao",
+    "path": "/tmp/s7base/pkg/mzcao/main.py",
+    "main_sha256": "14c9354d2ce0e5149ede24448879d818bf78d79fd25df93d9735df7e6e0faa65",
+    "main_bytes": 5608,
+    "entry": "官方 last-callable 语义（j23._load_entry）"
+   },
+   "gates": {
+    "caliber": "四门=package 身份链/full_episodes 双席 DONE+每步预算/determinism 双跑 sha/load 入口驱动（gate_launch_fourgate_l1 公开件版口径；mzcao 多文件包身份链改逐文件 sha+tar 对盘）",
+    "verdicts": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "last_callable": "agent",
+    "has_named_agent": true,
+    "identity": {
+     "caliber": "multi_file_package_identity",
+     "tar_members": [
+      "LICENSE-APACHE-2.0.txt",
+      "THIRD_PARTY_NOTICES.txt",
+      "actions.json",
+      "ensemble.json",
+      "main.py",
+      "model.json",
+      "observation.py",
+      "router_base.py"
+     ],
+     "tar_members_ok": true,
+     "tar_inner_all_match_disk": true,
+     "tar_inner_main_matches_disk": true,
+     "manifest_per_file_sha_match": {
+      "main.py": true,
+      "router_base.py": true,
+      "observation.py": true,
+      "actions.json": true,
+      "model.json": true,
+      "ensemble.json": true,
+      "THIRD_PARTY_NOTICES.txt": true,
+      "LICENSE-APACHE-2.0.txt": true
+     },
+     "dataset_anchor_match": {
+      "main.py": true,
+      "router_base.py": true,
+      "observation.py": true,
+      "model.json": true,
+      "actions.json": true,
+      "ensemble.json": true,
+      "THIRD_PARTY_NOTICES.txt": true,
+      "LICENSE-APACHE-2.0.txt": true
+     },
+     "dataset_anchor_all_ok": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.107,
+     "main_sha256": {
+      "disk": "14c9354d2ce0e5149ede24448879d818bf78d79fd25df93d9735df7e6e0faa65"
+     },
+     "tar_sha256": {
+      "disk": "feca903b358cea1f2aa0e9faff7873ecfbfa0cf121616c43749432082ef9549d",
+      "manifest": "feca903b358cea1f2aa0e9faff7873ecfbfa0cf121616c43749432082ef9549d",
+      "match": true
+     },
+     "license": "Apache-2.0（LICENSE-APACHE-2.0.txt 随包；唯一可合规采纳件）",
+     "match": true
+    },
+    "gate1": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0
+    },
+    "gate23_lite": {
+     "step_budget_ms": 1000.0,
+     "n_episodes": 2,
+     "episode_reads": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 27.06,
+       "mean_step_ms": 0.04,
+       "wall_s": 3.5
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 23.77,
+       "mean_step_ms": 0.04,
+       "wall_s": 3.7
+      }
+     ],
+     "determinism_hashes": {
+      "run1": "3851e1b9f7410b5c2b40dd1d0880c875ef11e883c097195f555cf21e6a650ee2",
+      "run2": "3851e1b9f7410b5c2b40dd1d0880c875ef11e883c097195f555cf21e6a650ee2"
+     }
+    },
+    "errors": [],
+    "wall_s": 11.4
+   },
+   "panel": {
+    "design": "新标准池测面板：7 对×12 局=6 fold×双席（块 674000+i*157 i=0..5）；h2h=judge_r44._fold_arm；margin/终局钱只作参考",
+    "pairs": {
+     "oc_c3": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -20748.9,
+      "terminal_money_us_mean": 86114.4,
+      "terminal_money_opp_mean": 106863.3,
+      "mean_margin_clean": -20748.9,
+      "mean_margin_banks": -24611.1,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c1_冠军锚"
+     },
+     "C_final": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -20669.8,
+      "terminal_money_us_mean": 86265.2,
+      "terminal_money_opp_mean": 106934.9,
+      "mean_margin_clean": -20669.8,
+      "mean_margin_banks": -24502.0,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c0_我方冠军件直战"
+     },
+     "mpx": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -20948.2,
+      "terminal_money_us_mean": 86161.6,
+      "terminal_money_opp_mean": 107109.8,
+      "mean_margin_clean": -20948.2,
+      "mean_margin_banks": -24791.6,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "tetsutani": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -20757.9,
+      "terminal_money_us_mean": 86116.1,
+      "terminal_money_opp_mean": 106874.0,
+      "mean_margin_clean": -20757.9,
+      "mean_margin_banks": -24625.1,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "V89": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -20757.9,
+      "terminal_money_us_mean": 86116.1,
+      "terminal_money_opp_mean": 106874.0,
+      "mean_margin_clean": -20757.9,
+      "mean_margin_banks": -24625.1,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "r40": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -16906.9,
+      "terminal_money_us_mean": 85480.3,
+      "terminal_money_opp_mean": 102387.2,
+      "mean_margin_clean": -16906.9,
+      "mean_margin_banks": -18408.8,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c3_弱锚"
+     },
+     "A": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -14984.7,
+      "terminal_money_us_mean": 86426.9,
+      "terminal_money_opp_mean": 101411.6,
+      "mean_margin_clean": -14984.7,
+      "mean_margin_banks": -16802.3,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c3_弱锚"
+     }
+    }
+   },
+   "criteria": {
+    "rule": "①对冠军锚 oc_c3 h2h ≥0.5 才算'更强'（≥0.7 碾压）②弱锚 {r40,A} 逐对 ≥0.8 ③flips_neg 报数（vs C_final 控制臂配对；判据=报数非零门）④强面板 {mpx,tetsutani,V89} 与直战 C_final 读数作排名支撑面（不设硬门）⑤margin/终局钱只作参考",
+    "c1_vs_oc_c3_ge_0.5": {
+     "h2h": 0.0,
+     "grade": "未过锚",
+     "passed": false
+    },
+    "c2_weak_all_ge_0.8": {
+     "h2h": {
+      "r40": 0.0,
+      "A": 0.0
+     },
+     "passed": false
+    },
+    "c3_flips_neg_report": {
+     "flips_neg": 34,
+     "flips_pos": 0,
+     "both_lose": 38,
+     "n_units": 72
+    },
+    "c4_strong_panel_reference": {
+     "mpx": 0.0,
+     "tetsutani": 0.0,
+     "V89": 0.0
+    },
+    "c5_direct_vs_c_final_reference": 0.0,
+    "c6_margin_reference_only": true,
+    "stronger_than_champion_anchor": false
+   }
+  },
+  "djamil": {
+   "artifact": {
+    "name": "djamil",
+    "path": "/tmp/s7base/pkg/djamil/main.py",
+    "main_sha256": "b0bcdb283742dd37470a2fc622111082054b2426ca8a2c70cd7fdce79bda408a",
+    "main_bytes": 197229,
+    "entry": "官方 last-callable 语义（j23._load_entry）"
+   },
+   "gates": {
+    "caliber": "四门=package 身份链/full_episodes 双席 DONE+每步预算/determinism 双跑 sha/load 入口驱动（gate_launch_fourgate_l1 公开件版口径；mzcao 多文件包身份链改逐文件 sha+tar 对盘）",
+    "verdicts": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "last_callable": "agent",
+    "has_named_agent": true,
+    "identity": {
+     "match": true,
+     "tar_members_ok": true,
+     "tar_inner_main_matches_disk": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.145,
+     "main_sha256": "b0bcdb283742dd37470a2fc622111082054b2426ca8a2c70cd7fdce79bda408a",
+     "tar_sha256": "efc1a030f92268315305b224d7eb9d9bbda89ef90ab781a1c143bd18cdf703a1"
+    },
+    "gate1": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0
+    },
+    "gate23_lite": {
+     "step_budget_ms": 1000.0,
+     "n_episodes": 2,
+     "episode_reads": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 762.25,
+       "mean_step_ms": 5.01,
+       "wall_s": 10.0
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 377.67,
+       "mean_step_ms": 4.63,
+       "wall_s": 9.7
+      }
+     ],
+     "determinism_hashes": {
+      "run1": "4c210e62af2cb5c8960e07f8517fae7d83cc04319cde0357d9561f2969fa8e2f",
+      "run2": "4c210e62af2cb5c8960e07f8517fae7d83cc04319cde0357d9561f2969fa8e2f"
+     }
+    },
+    "errors": [],
+    "wall_s": 30.3
+   },
+   "panel": {
+    "design": "新标准池测面板：7 对×12 局=6 fold×双席（块 674000+i*157 i=0..5）；h2h=judge_r44._fold_arm；margin/终局钱只作参考",
+    "pairs": {
+     "oc_c3": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -28943.0,
+      "terminal_money_us_mean": 80202.2,
+      "terminal_money_opp_mean": 109145.2,
+      "mean_margin_clean": -28943.0,
+      "mean_margin_banks": -30747.4,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c1_冠军锚"
+     },
+     "C_final": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -28731.3,
+      "terminal_money_us_mean": 80410.2,
+      "terminal_money_opp_mean": 109141.5,
+      "mean_margin_clean": -28731.3,
+      "mean_margin_banks": -30455.2,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c0_我方冠军件直战"
+     },
+     "mpx": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -28982.6,
+      "terminal_money_us_mean": 80234.6,
+      "terminal_money_opp_mean": 109217.2,
+      "mean_margin_clean": -28982.6,
+      "mean_margin_banks": -30773.8,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "tetsutani": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -28906.9,
+      "terminal_money_us_mean": 80195.5,
+      "terminal_money_opp_mean": 109102.4,
+      "mean_margin_clean": -28906.9,
+      "mean_margin_banks": -30756.2,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "V89": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -28906.9,
+      "terminal_money_us_mean": 80195.5,
+      "terminal_money_opp_mean": 109102.4,
+      "mean_margin_clean": -28906.9,
+      "mean_margin_banks": -30756.2,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "r40": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -27617.4,
+      "terminal_money_us_mean": 80879.7,
+      "terminal_money_opp_mean": 108497.1,
+      "mean_margin_clean": -27617.4,
+      "mean_margin_banks": -29439.8,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c3_弱锚"
+     },
+     "A": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -26809.4,
+      "terminal_money_us_mean": 80565.8,
+      "terminal_money_opp_mean": 107375.2,
+      "mean_margin_clean": -26809.4,
+      "mean_margin_banks": -28492.0,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c3_弱锚"
+     }
+    }
+   },
+   "criteria": {
+    "rule": "①对冠军锚 oc_c3 h2h ≥0.5 才算'更强'（≥0.7 碾压）②弱锚 {r40,A} 逐对 ≥0.8 ③flips_neg 报数（vs C_final 控制臂配对；判据=报数非零门）④强面板 {mpx,tetsutani,V89} 与直战 C_final 读数作排名支撑面（不设硬门）⑤margin/终局钱只作参考",
+    "c1_vs_oc_c3_ge_0.5": {
+     "h2h": 0.0,
+     "grade": "未过锚",
+     "passed": false
+    },
+    "c2_weak_all_ge_0.8": {
+     "h2h": {
+      "r40": 0.0,
+      "A": 0.0
+     },
+     "passed": false
+    },
+    "c3_flips_neg_report": {
+     "flips_neg": 34,
+     "flips_pos": 0,
+     "both_lose": 38,
+     "n_units": 72
+    },
+    "c4_strong_panel_reference": {
+     "mpx": 0.0,
+     "tetsutani": 0.0,
+     "V89": 0.0
+    },
+    "c5_direct_vs_c_final_reference": 0.0,
+    "c6_margin_reference_only": true,
+    "stronger_than_champion_anchor": false
+   }
+  },
+  "kaito": {
+   "artifact": {
+    "name": "kaito",
+    "path": "/tmp/s7base/pkg/kaito/main.py",
+    "main_sha256": "b041058ec187a8d0a01edc0eab8de068b53deca3e6c1973faf74ace6916ddcb9",
+    "main_bytes": 315484,
+    "entry": "官方 last-callable 语义（j23._load_entry）"
+   },
+   "gates": {
+    "caliber": "四门=package 身份链/full_episodes 双席 DONE+每步预算/determinism 双跑 sha/load 入口驱动（gate_launch_fourgate_l1 公开件版口径；mzcao 多文件包身份链改逐文件 sha+tar 对盘）",
+    "verdicts": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "last_callable": "kaggle_agent_v58",
+    "has_named_agent": true,
+    "identity": {
+     "match": true,
+     "tar_members_ok": true,
+     "tar_inner_main_matches_disk": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.224,
+     "main_sha256": "b041058ec187a8d0a01edc0eab8de068b53deca3e6c1973faf74ace6916ddcb9",
+     "tar_sha256": "90c679e02e78cb436128a6029d39c70a9f345912a1c9ff35956c5ee166b2061c"
+    },
+    "gate1": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0
+    },
+    "gate23_lite": {
+     "step_budget_ms": 1000.0,
+     "n_episodes": 2,
+     "episode_reads": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 556.1,
+       "mean_step_ms": 4.15,
+       "wall_s": 8.9
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 674.51,
+       "mean_step_ms": 4.04,
+       "wall_s": 8.8
+      }
+     ],
+     "determinism_hashes": {
+      "run1": "c0f2f048495e034563b441d054575d6036eae7b0582147d9ced25b571d6d421a",
+      "run2": "c0f2f048495e034563b441d054575d6036eae7b0582147d9ced25b571d6d421a"
+     }
+    },
+    "errors": [],
+    "wall_s": 37.1
+   },
+   "panel": {
+    "design": "新标准池测面板：7 对×12 局=6 fold×双席（块 674000+i*157 i=0..5）；h2h=judge_r44._fold_arm；margin/终局钱只作参考",
+    "pairs": {
+     "oc_c3": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -26853.2,
+      "terminal_money_us_mean": 78103.2,
+      "terminal_money_opp_mean": 104956.5,
+      "mean_margin_clean": -26853.2,
+      "mean_margin_banks": -33387.9,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c1_冠军锚"
+     },
+     "C_final": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -26751.3,
+      "terminal_money_us_mean": 78276.9,
+      "terminal_money_opp_mean": 105028.2,
+      "mean_margin_clean": -26751.3,
+      "mean_margin_banks": -33272.5,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c0_我方冠军件直战"
+     },
+     "mpx": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -26926.7,
+      "terminal_money_us_mean": 78135.2,
+      "terminal_money_opp_mean": 105061.9,
+      "mean_margin_clean": -26926.7,
+      "mean_margin_banks": -33463.7,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "tetsutani": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -27093.8,
+      "terminal_money_us_mean": 78101.2,
+      "terminal_money_opp_mean": 105195.0,
+      "mean_margin_clean": -27093.8,
+      "mean_margin_banks": -33802.0,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "V89": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -27069.8,
+      "terminal_money_us_mean": 78112.3,
+      "terminal_money_opp_mean": 105182.1,
+      "mean_margin_clean": -27069.8,
+      "mean_margin_banks": -33778.0,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "r40": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -26814.3,
+      "terminal_money_us_mean": 78711.2,
+      "terminal_money_opp_mean": 105525.5,
+      "mean_margin_clean": -26814.3,
+      "mean_margin_banks": -33685.5,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c3_弱锚"
+     },
+     "A": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -26893.8,
+      "terminal_money_us_mean": 78277.0,
+      "terminal_money_opp_mean": 105170.8,
+      "mean_margin_clean": -26893.8,
+      "mean_margin_banks": -33692.2,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c3_弱锚"
+     }
+    }
+   },
+   "criteria": {
+    "rule": "①对冠军锚 oc_c3 h2h ≥0.5 才算'更强'（≥0.7 碾压）②弱锚 {r40,A} 逐对 ≥0.8 ③flips_neg 报数（vs C_final 控制臂配对；判据=报数非零门）④强面板 {mpx,tetsutani,V89} 与直战 C_final 读数作排名支撑面（不设硬门）⑤margin/终局钱只作参考",
+    "c1_vs_oc_c3_ge_0.5": {
+     "h2h": 0.0,
+     "grade": "未过锚",
+     "passed": false
+    },
+    "c2_weak_all_ge_0.8": {
+     "h2h": {
+      "r40": 0.0,
+      "A": 0.0
+     },
+     "passed": false
+    },
+    "c3_flips_neg_report": {
+     "flips_neg": 34,
+     "flips_pos": 0,
+     "both_lose": 38,
+     "n_units": 72
+    },
+    "c4_strong_panel_reference": {
+     "mpx": 0.0,
+     "tetsutani": 0.0,
+     "V89": 0.0
+    },
+    "c5_direct_vs_c_final_reference": 0.0,
+    "c6_margin_reference_only": true,
+    "stronger_than_champion_anchor": false
+   }
+  },
+  "heso": {
+   "artifact": {
+    "name": "heso",
+    "path": "/tmp/s7base/pkg/heso/main.py",
+    "main_sha256": "f6e92e2786cc6fc122dbc5e0e0928db276fb68d45dfe0ad2a65a626031950b17",
+    "main_bytes": 775828,
+    "entry": "官方 last-callable 语义（j23._load_entry）"
+   },
+   "gates": {
+    "caliber": "四门=package 身份链/full_episodes 双席 DONE+每步预算/determinism 双跑 sha/load 入口驱动（gate_launch_fourgate_l1 公开件版口径；mzcao 多文件包身份链改逐文件 sha+tar 对盘）",
+    "verdicts": {
+     "package": true,
+     "full_episodes": true,
+     "determinism": true,
+     "load": true
+    },
+    "overall": true,
+    "last_callable": "agent",
+    "has_named_agent": true,
+    "identity": {
+     "match": true,
+     "tar_members_ok": true,
+     "tar_inner_main_matches_disk": true,
+     "tar_size_ok": true,
+     "tar_size_mb": 0.555,
+     "main_sha256": "f6e92e2786cc6fc122dbc5e0e0928db276fb68d45dfe0ad2a65a626031950b17",
+     "tar_sha256": "996cd4b20f9596be976bcbdff27c746f0352b9533dc8b71aaa07ee1492a16a74"
+    },
+    "gate1": {
+     "n_obs_replayed": 719,
+     "n_driven": 240,
+     "n_errors": 0,
+     "n_non_dict_actions": 0
+    },
+    "gate23_lite": {
+     "step_budget_ms": 1000.0,
+     "n_episodes": 2,
+     "episode_reads": [
+      {
+       "seed": 101,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 545.82,
+       "mean_step_ms": 440.81,
+       "wall_s": 636.5
+      },
+      {
+       "seed": 102,
+       "statuses": [
+        "DONE",
+        "DONE"
+       ],
+       "turns_played": 720,
+       "max_step_ms": 625.24,
+       "mean_step_ms": 443.98,
+       "wall_s": 641.0
+      }
+     ],
+     "determinism_hashes": {
+      "run1": "08a49f0f55217a82a918f22963c3522995dceca10d7d693304e0a9cbcc4a3596",
+      "run2": "08a49f0f55217a82a918f22963c3522995dceca10d7d693304e0a9cbcc4a3596"
+     }
+    },
+    "errors": [],
+    "wall_s": 2021.5
+   },
+   "panel": {
+    "design": "新标准池测面板：7 对×12 局=6 fold×双席（块 674000+i*157 i=0..5）；h2h=judge_r44._fold_arm；margin/终局钱只作参考",
+    "pairs": {
+     "oc_c3": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -44665.9,
+      "terminal_money_us_mean": 69538.5,
+      "terminal_money_opp_mean": 114204.4,
+      "mean_margin_clean": -44665.9,
+      "mean_margin_banks": -57658.4,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c1_冠军锚"
+     },
+     "C_final": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -46029.6,
+      "terminal_money_us_mean": 67934.8,
+      "terminal_money_opp_mean": 113964.3,
+      "mean_margin_clean": -46029.6,
+      "mean_margin_banks": -59143.4,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c0_我方冠军件直战"
+     },
+     "mpx": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -40768.2,
+      "terminal_money_us_mean": 68613.7,
+      "terminal_money_opp_mean": 109381.8,
+      "mean_margin_clean": -40768.2,
+      "mean_margin_banks": -52693.2,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "tetsutani": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -44643.8,
+      "terminal_money_us_mean": 69605.3,
+      "terminal_money_opp_mean": 114249.1,
+      "mean_margin_clean": -44643.8,
+      "mean_margin_banks": -58204.2,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "V89": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -44643.8,
+      "terminal_money_us_mean": 69605.3,
+      "terminal_money_opp_mean": 114249.1,
+      "mean_margin_clean": -44643.8,
+      "mean_margin_banks": -58204.2,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c2_强面板"
+     },
+     "r40": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -41133.2,
+      "terminal_money_us_mean": 69096.0,
+      "terminal_money_opp_mean": 110229.2,
+      "mean_margin_clean": -41133.2,
+      "mean_margin_banks": -54609.3,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c3_弱锚"
+     },
+     "A": {
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "h2h": 0.0,
+      "mean_margin": -40337.2,
+      "terminal_money_us_mean": 69823.5,
+      "terminal_money_opp_mean": 110160.7,
+      "mean_margin_clean": -40337.2,
+      "mean_margin_banks": -52309.6,
+      "n_games": 12,
+      "n_errors": 0,
+      "purpose": "c3_弱锚"
+     }
+    }
+   },
+   "criteria": {
+    "rule": "①对冠军锚 oc_c3 h2h ≥0.5 才算'更强'（≥0.7 碾压）②弱锚 {r40,A} 逐对 ≥0.8 ③flips_neg 报数（vs C_final 控制臂配对；判据=报数非零门）④强面板 {mpx,tetsutani,V89} 与直战 C_final 读数作排名支撑面（不设硬门）⑤margin/终局钱只作参考",
+    "c1_vs_oc_c3_ge_0.5": {
+     "h2h": 0.0,
+     "grade": "未过锚",
+     "passed": false
+    },
+    "c2_weak_all_ge_0.8": {
+     "h2h": {
+      "r40": 0.0,
+      "A": 0.0
+     },
+     "passed": false
+    },
+    "c3_flips_neg_report": {
+     "flips_neg": 34,
+     "flips_pos": 0,
+     "both_lose": 38,
+     "n_units": 72
+    },
+    "c4_strong_panel_reference": {
+     "mpx": 0.0,
+     "tetsutani": 0.0,
+     "V89": 0.0
+    },
+    "c5_direct_vs_c_final_reference": 0.0,
+    "c6_margin_reference_only": true,
+    "stronger_than_champion_anchor": false
+   }
+  }
+ },
+ "ranking": {
+  "rule": "主序=vs oc_c3 冠军锚 h2h 降序；次序=强面板均值；再次=弱锚均值；四=直战 C_final h2h；全平手时以全场 mean_margin_clean 均值（大者先，仅参考口径裁决）",
+  "order": [
+   "mzcao",
+   "kaito",
+   "djamil",
+   "heso"
+  ],
+  "per_base_key": {
+   "mzcao": {
+    "vs_oc_c3": -1,
+    "strong_mean": -1.0,
+    "weak_mean": -1.0,
+    "vs_c_final": -1,
+    "margin_mean_ref": -19396.3
+   },
+   "kaito": {
+    "vs_oc_c3": -1,
+    "strong_mean": -1.0,
+    "weak_mean": -1.0,
+    "vs_c_final": -1,
+    "margin_mean_ref": -26914.7
+   },
+   "djamil": {
+    "vs_oc_c3": -1,
+    "strong_mean": -1.0,
+    "weak_mean": -1.0,
+    "vs_c_final": -1,
+    "margin_mean_ref": -28413.9
+   },
+   "heso": {
+    "vs_oc_c3": -1,
+    "strong_mean": -1.0,
+    "weak_mean": -1.0,
+    "vs_c_final": -1,
+    "margin_mean_ref": -43174.5
+   }
+  }
+ },
+ "verdict": {
+  "question": "4 件新基座中有无'更强者'（对冠军锚 oc_c3 ≥0.5）？",
+  "stronger_than_anchor": [],
+  "crushing_ge_0.7": [],
+  "weak_anchor_pass": [],
+  "ranking": [
+   "mzcao",
+   "kaito",
+   "djamil",
+   "heso"
+  ],
+  "adoptable_piece": {
+   "name": "mzcao（LightGBM+XGBoost 树集成）",
+   "license": "Apache-2.0 随包（LGBM-APACHE-2.0.txt/LICENSE-APACHE-2.0.txt）",
+   "status": "唯一可合规采纳件（署名移植面）；采纳决策移交用户"
+  },
+  "launch": "不提交不发射（判决先行）；上线/入库决策移交用户"
+ },
+ "source": {
+  "commands": [
+   "python3 /tmp/s7base/prep_pkg.py",
+   "bwrap … python3 /tmp/s7base/gates_s7.py",
+   "bwrap … python3 /tmp/s7base/judge_s7.py"
+  ],
+  "corpus": {
+   "folds": [
+    674000,
+    674157,
+    674314,
+    674471,
+    674628,
+    674785,
+    674942,
+    675099,
+    675256,
+    675413,
+    675570,
+    675727
+   ],
+   "spec": "674000+i*157 块（i=0..11）；面板用 i=0..5，每对 12 局=6 fold×双席（n=12 双席按 S5 先例预算读法）"
+  },
+  "workers": 2,
+  "caliber": {
+   "h2h": "judge_r44._fold_arm 同 seed 双席折叠（≥1 胜/≤0 负/余平；fail-closed）",
+   "margin": "终局 farms[obs.player].money 差（干净口径；banks 交叉登记）",
+   "hard_currency": "胜率=硬通货；margin/终局钱只作参考"
+  },
+  "panel": {
+   "oc_c3": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_oppcond_lab/build/oc_c3/main.py",
+   "C_final": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_composite_lab/build/c_final/main.py",
+   "mpx": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_modelpx_lab/build/mpx_w24_p2_3_h14/main.py",
+   "tetsutani": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_racegap_lab/opponents/tetsu1009/main.py",
+   "V89": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_v89_lab/build/v89_pure/main.py",
+   "r40": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r40/build/main.py",
+   "A": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_r44_a/main.py"
+  },
+  "bases": {
+   "mzcao": {
+    "path": "/tmp/s7base/pkg/mzcao/main.py",
+    "main_sha256": "14c9354d2ce0e5149ede24448879d818bf78d79fd25df93d9735df7e6e0faa65"
+   },
+   "djamil": {
+    "path": "/tmp/s7base/pkg/djamil/main.py",
+    "main_sha256": "b0bcdb283742dd37470a2fc622111082054b2426ca8a2c70cd7fdce79bda408a"
+   },
+   "kaito": {
+    "path": "/tmp/s7base/pkg/kaito/main.py",
+    "main_sha256": "b041058ec187a8d0a01edc0eab8de068b53deca3e6c1973faf74ace6916ddcb9"
+   },
+   "heso": {
+    "path": "/tmp/s7base/pkg/heso/main.py",
+    "main_sha256": "f6e92e2786cc6fc122dbc5e0e0928db276fb68d45dfe0ad2a65a626031950b17"
+   }
+  },
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "version": "simbridge/1.0",
+   "wall_speedup": 5.062,
+   "reused_cache": true
+  },
+  "foreign_code_sandbox": "bwrap（根只读+/tmp 可写+断网；kaggle CLI 拉件除外）"
+ },
+ "anomaly": [
+  "harness 噪声不修不管；胜率=硬通货，margin/终局钱只作参考",
+  "样本口径披露：每对 n=12 局=6 fold×双席折叠（h2h 粒度 1/6≈0.167），边缘判据宜扩样复核；局次账本=面板 4 件×7 对×12=336+C_final 控制臂 6 对×12=72=408（auth 缓存复用 0 新局次）≤600",
+  "fold 块效应：本块 674000+i*157 与 S6 同块同 harness 可直比其 V91/C_final 校准读数（S6: C_final vs oc_c3 0.4583/mpx 0.3125/tetsutani 0.5625）；跨块历史值勿直比绝对值",
+  "自报数未复核备忘：heso $81k/121k、kaito 58/58 与 238/238、mzcao 2476.8 peak 均为作者自报口径；本报告一切数字为我方实测",
+  "许可面：仅 mzcao Apache-2.0 随包可合规采纳；heso/kaito/djamil 无许可→只池测不入库不移植；djamil V16 底盘来源未钉（禁区9 记录）",
+  "flips 口径：同 (seed,seat,opp) 基座臂 vs C_final 控制臂分跑两局（对手确定性件），flips_neg/flips_pos 为配对翻向计数，非传递性备忘：对冠军锚专优≠全场更强",
+  "mzcao 运行期只需 stdlib（导出树纯 Python 推理），lightgbm/xgboost 只在训练期；8 文件包多文件身份链=dataset agent_manifest 逐文件 sha 锚定，重建 tar sha 与官方 archive_sha256 逐字节一致（feca903b…）",
+  "强面板近克隆备忘：tetsutani(55be5d5f…) 与 V89(01ee3976…) 为同 chassis 双构建（全部顶层 def 同行号）；对被动臂（mzcao/djamil/heso）12/12 局逐拍等同、对活跃臂 kaito 4/6 fold 有小差分、S6 V91 面 11/12 差分→强面板有效独立形态≈2（mpx + tetsu/V89 线），非 3",
+  "双席镜像备忘：座席对换两局终局钱同值（seat-blind 臂如 mzcao 6/6 fold 镜像；kaito 座席敏感镜像破缺）→ n=12 局有效独立样本=6 fold 级（h2h 粒度 1/6≈0.167），S6 同 harness 同性，非 bug",
+  "局次账本补记：面板 336+C_final 控制臂 72=408 sim 局次+四门官方引擎 12 局+smoke 2=422 ≤600（auth 缓存 0 新局次）"
+ ],
+ "budget": {
+  "cap_局次": 600,
+  "auth": 0,
+  "sim_runs": 408,
+  "gates_official_episodes": 12,
+  "smoke": 2,
+  "total_局次": 422,
+  "within_cap": true,
+  "workers": 2
+ },
+ "_generated_at": "2026-09-30T16:18:49Z",
+ "pool_face_note": {
+  "caliber": "D7 池面口径（family 席位占比：indep_other 40.6%/W20_line 28.9%/W8_line 15.2%/mass_c14 13.95%；我方配对带 1900-2300 形态构成 W20 35%/indep 27%/mass_c14 21%/W8 16%）；本节为形态适配判读注记（分析非实测），实测数字仅引本面板",
+  "measured_basis": "4 件对 7 锚 0-24 fold 全负（含弱锚 r40/A 0-6）；margin 全负且对锚不敏感（kaito/djamil 各对均值差 <500）=自身经济瓶颈非对手形态被克",
+  "per_base": {
+   "heso": "RL Transformer 每单位策略（BC 4.6k 回放→PPO 自博弈），非开局书族形（近 indep 形态40.6% 池面最大族）；自适应性理论上对 W20/mass_c14 固定开局书族有形态优势，但实测对弱锚仍 0-6、margin -40k 级→强度远低于池 p50，形态优势无从兑现；纯 Python forward 440ms/步（自报已弃大模型过 actTimeout），工程面亦不适配1s 计时",
+   "kaito": "minimax 公开状态 best-response（轨迹记忆+4 checkpoint 续局/时机专家）=为'已知流'反制而生，理论靶心=W20/W8 开局书族（合计 44% 席）；但其 238/238 自报是对冻结已知流，实测对我方动态锚 0-6（对 tetsutani/V89 近克隆对有 4/6 fold 逐拍差分→其反制分支确实触发仍全负）→known-stream 反制不泛化到活策略面",
+   "djamil": "V16-RC5 专家底盘+GNN+DoubleDQN 窄残差（只推迟 premium SELL 一回合）=专家开局书族形（近 mass_c14/BUY5 谱系形态）；残差干预面过窄无法扭转经济差（margin -27k~-29k 对锚不敏感）；'专家底盘+窄残差'可作学习式合规化参考形但非强度件",
+   "mzcao": "树集成 step-648 晚局 routing 切换（yhay81 shop-router 血统）=晚局决策补丁形，对 W20/indep/mass_c14 均为叠加件非整件→池面形态适配中性；实测4 件中相对最强（margin -15k~-21k，弱锚面 -15k/-17k），仍在弱锚 0-6 之下→池面判读：低于池 p50（1899），落深水弱池段（<1742 p25 附近）"
+  },
+  "pool_read": "四件全部低于我方弱锚（r40/A 在册即弱者粉碎机可 0.83+ 碾压之）→ 按 D7 期望胜率标定，四件终交池期望带位均在 p25 以下（对 1900 中位 sub 期望胜率 <0.4）；对 W20/indep/mass_c14 三形态均无实测适配优势可报"
+ }
+}
