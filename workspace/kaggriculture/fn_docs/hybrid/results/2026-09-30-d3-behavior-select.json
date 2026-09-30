@@ -1,0 +1,717 @@
+{
+ "version": "d3-behavior-select/1.0",
+ "arms": {
+  "design": {
+   "bs_gap": "idle-seller 缺口放量：近 3 拍该品对手流和≤2（R28 删失窗）∧ 品项=对手稳态出货品（24 拍窗累计 argmax）→ 同品首单 SELL 量翻倍（帽内=projected 可售−同品他单，不缩水）；非缺口拍照旧",
+   "bs_slot": "镜像族响应（画像=h1_mirror）：同拍内首个自由 SELL（竞速品、无同品 BUY 腿）提前一槽（单次相邻交换；slot 饱和已证只微调不全错位）；护栏零跨拍（纯同拍置换，量/单数不变）",
+   "bs_c3": "WFR/攻击族 C3 保留（基座换表件不动）；r37/2965 族零动作（矩阵已证优势面安全）；unknown→零足迹",
+   "gate": "全部臂 step≥144（画像锁存）后激活=开局冻结（D5 条款 2）；不加价峰择时门（D5 条款 3）"
+  },
+  "ablation": {
+   "bs2_nogap_vs_bs2": {
+    "opp": [
+     "tetsutani",
+     "lynn"
+    ],
+    "paired": {
+     "n_pairs": 48,
+     "mean_delta": 96.75,
+     "wins": 24,
+     "ties": 8,
+     "losses": 16,
+     "flips_pos": 0,
+     "flips_neg": 0,
+     "deltas_head": [
+      37.0,
+      776.0,
+      37.0,
+      776.0,
+      -2.0,
+      -4.0,
+      -2.0,
+      -4.0,
+      11.0,
+      0.0,
+      11.0,
+      0.0,
+      -6.0,
+      0.0,
+      -6.0,
+      0.0
+     ]
+    }
+   },
+   "bs2_noslot_vs_bs2": {
+    "opp": [
+     "tetsutani",
+     "lynn"
+    ],
+    "paired": {
+     "n_pairs": 48,
+     "mean_delta": -1569.25,
+     "wins": 0,
+     "ties": 0,
+     "losses": 48,
+     "flips_pos": 0,
+     "flips_neg": 38,
+     "deltas_head": [
+      -835.0,
+      -1184.0,
+      -835.0,
+      -1184.0,
+      -530.0,
+      -1715.0,
+      -530.0,
+      -1715.0,
+      -1193.0,
+      -3201.0,
+      -1193.0,
+      -3201.0,
+      -1313.0,
+      -2534.0,
+      -1313.0,
+      -2534.0
+     ]
+    }
+   },
+   "bs2_noc3_vs_bs2": {
+    "opp": [
+     "wfr"
+    ],
+    "paired": {
+     "n_pairs": 24,
+     "mean_delta": 112.08,
+     "wins": 12,
+     "ties": 4,
+     "losses": 8,
+     "flips_pos": 0,
+     "flips_neg": 0,
+     "deltas_head": [
+      123.0,
+      123.0,
+      483.0,
+      483.0,
+      0.0,
+      0.0,
+      -6.0,
+      -6.0,
+      -6.0,
+      -62.0,
+      -6.0,
+      -62.0,
+      0.0,
+      -5.0,
+      0.0,
+      -6.0
+     ]
+    }
+   }
+  },
+  "d5_fourth_arm": {
+   "action": "skipped",
+   "reason": "产线响应（画像族→GOOSE/SHEEP 占比预设档）构建成本高：H1 产线层深埋 tape/圈层规划，尾块安全改写面不足；D5 证据 B 级且未控 seed（市场 vs 对手自适应未分离，蓝图自注）；400 局次预算已排满三臂消融"
+  }
+ },
+ "profiler": {
+  "classes": [
+   "r37_2965_family",
+   "h1_mirror",
+   "wfr",
+   "unknown"
+  ],
+  "cls_by_opponent": {
+   "oc_c3": {
+    "h1_mirror": 24
+   },
+   "mpx": {
+    "h1_mirror": 24
+   },
+   "tetsutani": {
+    "h1_mirror": 24
+   },
+   "V89": {
+    "h1_mirror": 24
+   },
+   "r40": {
+    "r37_2965_family": 24
+   },
+   "A": {
+    "r37_2965_family": 24
+   },
+   "lynn": {
+    "h1_mirror": 24
+   },
+   "wfr": {
+    "wfr": 24
+   }
+  },
+  "accuracy_note": "profiler_core 同源字节（sha 前 16=0ed5e7c23bf08f9e）；面板内tetsutani/V89/lynn/oc_c3/mpx 期望 h1_mirror、r40 期望 r37_2965_family、wfr 期望 wfr",
+  "zero_footprint": {
+   "n_cells": 0,
+   "n_violations": 0,
+   "violations": [],
+   "passed": true,
+   "note": "非镜像类格（如 wfr）上 gap/slot 臂不触发→与 bs2 逐拍digest 恒等；unknown 类零足迹硬证=构建探针⑥"
+  }
+ },
+ "pairs_panel": {
+  "per_member": {
+   "oc_c3": {
+    "n_games": 24,
+    "W": 0,
+    "L": 24,
+    "T": 0,
+    "h2h": 0.0,
+    "margin_mean_ref": -1445.25,
+    "fold_dual_seat": {
+     "W": 0,
+     "L": 12,
+     "T": 0,
+     "h2h": 0.0
+    }
+   },
+   "mpx": {
+    "n_games": 24,
+    "W": 0,
+    "L": 24,
+    "T": 0,
+    "h2h": 0.0,
+    "margin_mean_ref": -1402.92,
+    "fold_dual_seat": {
+     "W": 0,
+     "L": 12,
+     "T": 0,
+     "h2h": 0.0
+    }
+   },
+   "tetsutani": {
+    "n_games": 24,
+    "W": 0,
+    "L": 24,
+    "T": 0,
+    "h2h": 0.0,
+    "margin_mean_ref": -1511.5,
+    "fold_dual_seat": {
+     "W": 0,
+     "L": 12,
+     "T": 0,
+     "h2h": 0.0
+    }
+   },
+   "V89": {
+    "n_games": 24,
+    "W": 0,
+    "L": 24,
+    "T": 0,
+    "h2h": 0.0,
+    "margin_mean_ref": -1511.5,
+    "fold_dual_seat": {
+     "W": 0,
+     "L": 12,
+     "T": 0,
+     "h2h": 0.0
+    }
+   },
+   "r40": {
+    "n_games": 24,
+    "W": 16,
+    "L": 8,
+    "T": 0,
+    "h2h": 0.6667,
+    "margin_mean_ref": 263.33,
+    "fold_dual_seat": {
+     "W": 8,
+     "L": 4,
+     "T": 0,
+     "h2h": 0.6667
+    }
+   },
+   "A": {
+    "n_games": 24,
+    "W": 22,
+    "L": 2,
+    "T": 0,
+    "h2h": 0.9167,
+    "margin_mean_ref": 1191.0,
+    "fold_dual_seat": {
+     "W": 11,
+     "L": 1,
+     "T": 0,
+     "h2h": 0.9167
+    }
+   },
+   "lynn": {
+    "n_games": 24,
+    "W": 0,
+    "L": 24,
+    "T": 0,
+    "h2h": 0.0,
+    "margin_mean_ref": -1511.5,
+    "fold_dual_seat": {
+     "W": 0,
+     "L": 12,
+     "T": 0,
+     "h2h": 0.0
+    }
+   },
+   "wfr": {
+    "n_games": 24,
+    "W": 24,
+    "L": 0,
+    "T": 0,
+    "h2h": 1.0,
+    "margin_mean_ref": 165697.25,
+    "fold_dual_seat": {
+     "W": 12,
+     "L": 0,
+     "T": 0,
+     "h2h": 1.0
+    }
+   }
+  },
+  "strong_pooled": {
+   "n_games": 96,
+   "W": 0,
+   "L": 96,
+   "T": 0,
+   "h2h": 0.0,
+   "margin_mean_ref": -1467.79,
+   "fold_dual_seat": {
+    "W": 0,
+    "L": 12,
+    "T": 0,
+    "h2h": 0.0
+   }
+  },
+  "weak_pooled": {
+   "n_games": 48,
+   "W": 38,
+   "L": 10,
+   "T": 0,
+   "h2h": 0.7917,
+   "margin_mean_ref": 727.17,
+   "fold_dual_seat": {
+    "W": 8,
+    "L": 1,
+    "T": 3,
+    "h2h": 0.7917
+   }
+  },
+  "oc_c3_direct": {
+   "n_games": 24,
+   "W": 0,
+   "L": 24,
+   "T": 0,
+   "h2h": 0.0,
+   "margin_mean_ref": -1445.25,
+   "fold_dual_seat": {
+    "W": 0,
+    "L": 12,
+    "T": 0,
+    "h2h": 0.0
+   }
+  },
+  "margin_note": "margin 只作参考（分析44 镜像错觉：配对边际≠直接对战）"
+ },
+ "family_group": {
+  "per_mirror": {
+   "tetsutani": {
+    "n_games": 24,
+    "W": 0,
+    "L": 24,
+    "T": 0,
+    "h2h": 0.0,
+    "margin_mean_ref": -1511.5,
+    "fold_dual_seat": {
+     "W": 0,
+     "L": 12,
+     "T": 0,
+     "h2h": 0.0
+    }
+   },
+   "V89": {
+    "n_games": 24,
+    "W": 0,
+    "L": 24,
+    "T": 0,
+    "h2h": 0.0,
+    "margin_mean_ref": -1511.5,
+    "fold_dual_seat": {
+     "W": 0,
+     "L": 12,
+     "T": 0,
+     "h2h": 0.0
+    }
+   },
+   "lynn": {
+    "n_games": 24,
+    "W": 0,
+    "L": 24,
+    "T": 0,
+    "h2h": 0.0,
+    "margin_mean_ref": -1511.5,
+    "fold_dual_seat": {
+     "W": 0,
+     "L": 12,
+     "T": 0,
+     "h2h": 0.0
+    }
+   }
+  },
+  "pooled": {
+   "n_games": 72,
+   "W": 0,
+   "L": 72,
+   "T": 0,
+   "h2h": 0.0,
+   "margin_mean_ref": -1511.5,
+   "fold_dual_seat": {
+    "W": 0,
+    "L": 12,
+    "T": 0,
+    "h2h": 0.0
+   }
+  },
+  "baseline_threshold": 0.75,
+  "baseline_ref": "racegap 同族专组基线 0.75（drop_half family aggregate）"
+ },
+ "criteria": {
+  "①强面板 {oc_c3,mpx,tetsutani,V89} h2h≥0.5（n=12 双席）": {
+   "pooled_h2h": 0.0,
+   "per_member": {
+    "oc_c3": 0.0,
+    "mpx": 0.0,
+    "tetsutani": 0.0,
+    "V89": 0.0
+   },
+   "passed": false
+  },
+  "②同族专组 {tetsutani,V89,lynn} h2h≥0.75": {
+   "pooled_h2h": 0.0,
+   "per_mirror": {
+    "tetsutani": 0.0,
+    "V89": 0.0,
+    "lynn": 0.0
+   },
+   "passed": false
+  },
+  "③弱锚 {r40,A} h2h≥0.8": {
+   "pooled_h2h": 0.7917,
+   "per_member": {
+    "r40": 0.6667,
+    "A": 0.9167
+   },
+   "passed": false
+  },
+  "④对 oc_c3 直接 h2h≥0.5（才算更强）": {
+   "h2h_vs_oc_c3": 0.0,
+   "passed": false
+  },
+  "⑤配对边际只作参考": {
+   "note": "margin 不入判；读数见 pairs_panel.margin_note 与 arms.ablation.paired",
+   "passed": true
+  }
+ },
+ "verdict": {
+  "verdict": "BS2_NOT_CONFIRMED（详见 criteria）",
+  "criteria_passed": false,
+  "stronger_than_oc_c3": false,
+  "form": "bs2",
+  "layers": [
+   "profiler",
+   "c3_wool_phase",
+   "bs_gap_volume",
+   "bs_slot_micro"
+  ],
+  "note": "判据预登记于任务书 D3：①强面板 ②同族 0.75 基线 ③弱锚 0.8 ④对 oc_c3 直接 0.5；margin 只作参考；逐件消融见 arms.ablation"
+ },
+ "anomaly": [
+  "tetsutani/V89/lynn 行为簇同构（同 seed 同席动作流 digest 相同，family-matrix probe_identity）——同族专组三件非独立证据",
+  "harness 噪声：HP_TELEMETRY stdout 行（tetsutani 件自报）不入读数",
+  "零足迹硬证=构建探针⑥（unknown→动作对象恒等）+ 逐件消融格读数",
+  "D5 第四臂（产线响应）跳过——见 arms.d5_fourth_arm",
+  "零足迹审计格数=0（消融形态仅跑 h1_mirror/wfr 面，非镜像类格仅 bs2_noc3——已按设计排除）→该审计为空通过；unknown 类零足迹硬证=构建探针⑥（动作对象恒等）",
+  "臂2（同拍一槽微错）为镜像面崩溃主因：消融配对 bs2−bs2_noslot=−1569/局（48/48 全负、38 格翻负）——与 racegap slot v1 诊断同签名（基底 X1 已并最早槽、同族同序 38/51 对齐，任何序内重排破对齐失大单）",
+  "③弱锚 r40 h2h 0.667<0.8 为基座继承读数：r40/A 画像 r37_2965_family→全臂零动作→bs2≡oc_c3 逐字节；0.79 池化 vs 阈值 0.8 属语料漂移（本测定 6 败局+6 中性 vs 巡回赛 12 中性），非臂致损"
+ ],
+ "gates": {
+  "bs2": {
+   "load": {
+    "passed": true,
+    "entry": "_hs_agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 151.1,
+      "p99_step_ms": 21.58,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 247.28,
+      "p99_step_ms": 29.63,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "33ba7e49b678ed81226be3bd5a2335999d9bdcda38996a462aeb2cf9950c65c1",
+     "run2": "33ba7e49b678ed81226be3bd5a2335999d9bdcda38996a462aeb2cf9950c65c1"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "main_sha256": "3f508c1c271c5106c85773bb169bbe5c48d2b95ae3dee3671572fc76b3350c9e",
+    "tar_size_mb": 0.665,
+    "tar_members": [
+     "main.py"
+    ],
+    "inner_matches_disk": true,
+    "sha_matches_manifest": true,
+    "base_prefix_identical": true,
+    "byte_identical_to_H1_base": false,
+    "expect_byte_identical": false,
+    "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d"
+   },
+   "overall": true
+  },
+  "bs2_nogap": {
+   "load": {
+    "passed": true,
+    "entry": "_hs_agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 152.34,
+      "p99_step_ms": 22.45,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 312.63,
+      "p99_step_ms": 32.86,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "038641662fe66345ab8f50497b90623c20fdad36c15c4934199d3ea9cbd1a225",
+     "run2": "038641662fe66345ab8f50497b90623c20fdad36c15c4934199d3ea9cbd1a225"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "main_sha256": "2aca3cd0d4d6cab419dbc8c1ae88e7ca6eaa296fc4d17ea9825f770b1aea44e8",
+    "tar_size_mb": 0.665,
+    "tar_members": [
+     "main.py"
+    ],
+    "inner_matches_disk": true,
+    "sha_matches_manifest": true,
+    "base_prefix_identical": true,
+    "byte_identical_to_H1_base": false,
+    "expect_byte_identical": false,
+    "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d"
+   },
+   "overall": true
+  },
+  "bs2_noslot": {
+   "load": {
+    "passed": true,
+    "entry": "_hs_agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 166.35,
+      "p99_step_ms": 21.53,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 267.6,
+      "p99_step_ms": 29.68,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "6700269cba04901b659579557a45a991a684ee78dc9803bfc6c981870a582a60",
+     "run2": "6700269cba04901b659579557a45a991a684ee78dc9803bfc6c981870a582a60"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "main_sha256": "906ca82ac9aec51c00cfb1406865252e8722b12fe3673116fce05b548196ac7f",
+    "tar_size_mb": 0.665,
+    "tar_members": [
+     "main.py"
+    ],
+    "inner_matches_disk": true,
+    "sha_matches_manifest": true,
+    "base_prefix_identical": true,
+    "byte_identical_to_H1_base": false,
+    "expect_byte_identical": false,
+    "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d"
+   },
+   "overall": true
+  },
+  "bs2_noc3": {
+   "load": {
+    "passed": true,
+    "entry": "_hs_agent"
+   },
+   "health": {
+    "passed": true,
+    "step_budget_ms": 1000.0,
+    "episodes": [
+     {
+      "seed": 101,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 242.37,
+      "p99_step_ms": 17.85,
+      "passed": true
+     },
+     {
+      "seed": 102,
+      "statuses": [
+       "DONE",
+       "DONE"
+      ],
+      "turns_played": 720,
+      "max_step_ms": 256.59,
+      "p99_step_ms": 29.77,
+      "passed": true
+     }
+    ]
+   },
+   "determinism": {
+    "passed": true,
+    "rerun_seed": 101,
+    "hashes": {
+     "run1": "33ba7e49b678ed81226be3bd5a2335999d9bdcda38996a462aeb2cf9950c65c1",
+     "run2": "33ba7e49b678ed81226be3bd5a2335999d9bdcda38996a462aeb2cf9950c65c1"
+    }
+   },
+   "identity": {
+    "passed": true,
+    "main_sha256": "89a77b1f7368df1a77dc5f99322b7d4eb71214ec5a8e2689e2c1c6c99ff62fb8",
+    "tar_size_mb": 0.665,
+    "tar_members": [
+     "main.py"
+    ],
+    "inner_matches_disk": true,
+    "sha_matches_manifest": true,
+    "base_prefix_identical": true,
+    "byte_identical_to_H1_base": false,
+    "expect_byte_identical": false,
+    "base_main_sha256": "3f8b57fd4d5e7070a40e444c130347bbc3ada58ff183ae163b1f3d39ba9bd23d"
+   },
+   "overall": true
+  }
+ },
+ "source": {
+  "sim_auth": {
+   "loaded": true,
+   "consistency": {
+    "n_checked": 30,
+    "n_match": 30,
+    "rate": 1.0
+   },
+   "wall_speedup": 5.07,
+   "consistency_ok": true,
+   "degraded": false,
+   "degraded_reason": null,
+   "engine": "sim",
+   "version": "simbridge/1.0"
+  },
+  "workers": 2,
+  "forms": {
+   "bs2": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_behavsel_lab/build/bs2/main.py",
+   "bs2_nogap": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_behavsel_lab/build/bs2_nogap/main.py",
+   "bs2_noslot": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_behavsel_lab/build/bs2_noslot/main.py",
+   "bs2_noc3": "/mnt/data/Code/autoC/workspace/kaggriculture/fn_work/legacy_software/kaggle_simulations/orderbook_behavsel_lab/build/bs2_noc3/main.py"
+  },
+  "folds_12": [
+   1825501814,
+   2013941152,
+   786146079,
+   1883261866,
+   963182245,
+   240876256,
+   674000,
+   674131,
+   674262,
+   674393,
+   674524,
+   674655
+  ],
+  "folds_spec": "26 败局前 6 + 新中性 674000+i*131×6；双席=24 局/对",
+  "caliber": "h2h=(W+0.5T)/n 直接口径（margin 口径 W/L/T）；fold=同 seed 双席折叠附列；margin 只作参考"
+ },
+ "budget": {
+  "cap_局次": 400,
+  "auth": 60,
+  "gates": 16,
+  "panel": 192,
+  "ablation": 120,
+  "judgment_total": 312,
+  "total": 388,
+  "within_cap": true
+ },
+ "_generated_at": "2026-09-30T03:07:43Z"
+}
