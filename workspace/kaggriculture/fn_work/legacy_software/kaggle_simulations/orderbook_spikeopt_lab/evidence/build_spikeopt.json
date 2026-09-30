@@ -1,0 +1,22 @@
+{
+ "h1x_a": {
+  "sha256": "d1a399bfeb3af4957071577acbc985f1a0e931fb4cfbc0343a82e2cab417cb21",
+  "tar_sha256": "85e2df12264d1c1ba9ea7a46901e9da8c46d363e34edba4031b592b7bae55cbf",
+  "lot": [
+   3,
+   6
+  ],
+  "checks": {
+   "machinery_identity_ok": true,
+   "single_line_diff_ok": true,
+   "compile_ok": true,
+   "last_callable_is_entry": true,
+   "host_capture_ok": true,
+   "params_ok": true,
+   "base_sha_identity_ok": true,
+   "machinery_single_line_ok": true,
+   "deterministic_double_run_ok": true,
+   "tar3_members_ok": true
+  }
+ }
+}
