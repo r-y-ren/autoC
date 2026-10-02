@@ -1,0 +1,277 @@
+##### topic 745074 @ 10:46 UTC
+Topic #745074: Games are played too rarely
+  Author: mikelou1
+  Posted: 2026-10-02 04:15:21.189000
+  Votes: -1  Comments: 5
+
+I only gain around 15 elo per hour despite winning nearly all of the games. At this rate my rating might not converge by the end of the 14 days since I will certainly lose more later on. I remember in the Pokemon TCG games were played nearly once every 4 minutes in the eval period!
+
+Comments:
+├─ Krzysztof Gonia (2026-10-02 06:32:40.263000) [+0]
+│  3 games during an hour can give you 1008 games in 14 days. It's enough for ranking to converge.
+├─ [deleted] (2026-10-02 04:46:18.373000) [+0]
+│  [deleted]
+  ├─ Krzysztof Gonia (2026-10-02 06:31:06.007000) [+-2]
+  │  Final rank is results of the Bradley tournament we are in right now. There is no second tournament.
+    ├─ 千早爱音 (2026-10-02 07:20:17.613000) [+0]
+    │  OKK Thanks for reminding
+    ├─ Sheeesh--- (2026-10-02 07:24:17.217000) [+2]
+    │  https://www.kaggle.com/competitions/kaggriculture/discussion/731587
+    │  Says otherwise
+
+##### topic 744811 @ 10:46 UTC
+Topic #744811: Last accepted submission completed validation but is missing from the active pool
+  Author: Semyon Epanov
+  Posted: 2026-10-01 02:13:07.670000
+  Votes: 3  Comments: 0
+
+Hi Kaggle team,
+
+Our latest submission, was accepted by the platform and successfully completed validation, but it has not been activated for matchmaking.
+
+
+
+Submission status: Complete, score: 600.
+
+Only the validation episode is listed; there are no public matches.
+
+The interface currently also shows 100 submissions available. (as of October 1)
+
+
+Could this be a race condition where the active pool was frozen before validation finished, and the submission was not activated afterward?
+
+Could you please investigate why our latest completed submission is missing from the active pool and activate it if eligible?
+
+Thank you!
+
+No comments
+
+##### topic 744788 @ 10:46 UTC
+Topic #744788: Won a game right at the deadline but my rating didn't update (replay shows "-NaN")
+  Author: srijan k.r keshri
+  Posted: 2026-10-01 00:19:02.549000
+  Votes: 0  Comments: 3
+
+My last game before the deadline doesn't seem to have been rated. Episode 116023960 ran from 23:57:05 to 23:59:24 UTC, ending 35 seconds before the cutoff. I won 144,425 to 144,238, but my rating stayed the same, and the replay shows (-NaN) next to both players:
+
+[Loss] Mohit Babel 1646 (-NaN) vs [Win] srijan k.r keshri 1709 (-NaN)
+
+My earlier games updated normally. My guess is that games still running when the deadline hit skipped the rating update.
+
+Mainly I want to know whether this game (and any others that ended right at the deadline) will still be included in the final Bradley-Terry tournament.
+
+Episode: https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56719490&amp;episodeId=116023960
+
+Screenshot is in the comment below.
+
+Comments:
+├─ Zakaria Aala (2026-10-01 00:25:38.753000) [+1]
+│  It's not an error. The result probably finished after the deadline, and all ranks are currently frozen since this counts as the final public leaderboard. But don't worry, they will be running a pri...
+├─ Starright (2026-10-01 00:25:40.367000) [+0]
+│  Yes, the same, -NaN
+├─ srijan k.r keshri (2026-10-01 00:21:10.847000) [+0]
+
+##### topic 744939 @ 10:46 UTC
+Topic #744939: Question for the top teams: How do you approach simulation competitions?
+  Author: Ashutosh Agarwal
+  Posted: 2026-10-01 14:20:44.060000
+  Votes: 7  Comments: 6
+
+Now that the Kaggriculture competition has ended, I’d love to learn from the top-performing teams about how you approach these kinds of simulation/agent competitions.
+
+I’m completely new to RL and agent-based competitions, and Kaggriculture was one of my first experiences with this type of problem. It made me realize that there are many different directions you can take — ML, RL, optimization, heuristics, game theory, simulation, etc. — but I’m still trying to understand how experienced teams decide what is actually useful.
+
+I’d especially love to know:
+
+
+
+How do you decide whether to use RL, ML, optimization, heuristics, or a combination?
+
+How do you determine whether a new technology/idea is actually helping or just adding complexity?
+
+How do you design experiments and decide which ideas are worth pursuing?
+
+How do you identify the real bottlenecks in your agent?
+
+How do you balance exploring new ideas vs. improving an existing strategy?
+
+How do you decide when to abandon an approach that looked promising initially?
+
+How do you structure your iterations, ablation tests, tuning, and opponent testing?
+
+What does your overall workflow look like from understanding the environment → developing a strategy → testing → optimizing → final submission?
+
+
+I’m not looking for anyone’s confidential implementation or exact strategy. I’m mainly interested in learning the problem-solving mindset and methodology used by experienced teams.
+
+Would really appreciate it if some of the top teams could share their approach. It would be a great learning opportunity for those of us who are new to this area.
+
+Comments:
+├─ Syed Asad Ali (2026-10-01 17:57:29.637000) [+6]
+│  Not a top-10 team (83rd right now), but here's what worked for me, as a quick list:
+│  
+│  
+│  
+│  Exact fast simulator first: rebuild the engine and verify it on real replays. Everything else depends on it.
+│  
+│  ...
+  ├─ Civitasmass (2026-10-02 00:01:31.440000) [+0]
+  │  Did a real nice job！
+├─ MarvinTMB (2026-10-02 06:04:11.883000) [+0]
+│  My model starts behavioural cloning on a two-day corpus of the top games, and then does PPO self-play against a league. It has &lt;1M parameters and trained for about 10 hours on an RTX 5090.
+│  
+│  
+│  
+│  Ho...
+├─ Just A game on your lips (2026-10-02 04:54:49.933000) [+0]
+│  Actually, I only joined the competition about 10 days ago. I decided to bet on RL, so I started with a BC + RL approach.
+│  
+│  My biggest mistake was in the BC phase: I used a very small amount of data ...
+  ├─ Wiz (2026-10-02 04:57:53.900000) [+0]
+  │  check out the top's solution. they built a c version of the game locally for fast runs. with that, "single RL experiment took around two days to complete" wont be the case.
+    ├─ Just A game on your lips (2026-10-02 05:05:55.217000) [+0]
+    │  Even with this C version of the game, RL is still very slow for me.
+    │  
+    │  For each game, I need to feed about 719 × 2 states into the model, then update state in c side. Then, for every rollout step, I ...
+
+##### topic 745036 @ 10:46 UTC
+Topic #745036: It’s SFT all the way down: learning Kaggriculture one action at a time
+  Author: Russell Kirk
+  Posted: 2026-10-01 21:19:38.109000
+  Votes: 26  Comments: 2
+
+It's SFT all the way down.
+
+Provisionally top 10; final standings pending. As of 1 Oct.
+
+Intro · Resources · Models · Features · Data · Biggest lesson
+
+Intro
+
+This covers my attempt at using SFT to solve Kaggriculture. It assumes the vocabulary in the competition overview.
+
+I don't quote leaderboard scores. The Elo-style rating only means something relative to the field at the time: a bot of the same strength would score several hundred points lower later on, because the field as a whole got stronger as time went on, and the rate of improvement increased closer to the deadline, especially once a lot of people moved to using all four quadrants in the last three days.
+
+I mostly document what worked. Plenty didn't, and I don't keep meticulous logs of what failed. Each failure still cost real time. For example, I spent two weeks factoring the game's micro decisions into macro decisions, down to a page of theorems on how to handle them (311 claims, 919 linked pairs). This is the approach I really wanted to take, but it proved too much for agents to keep track of at once, even after I simplified it for them. They still made very subtle mistakes. I imagine this method will work once agents get stronger.
+
+
+
+Resources
+
+I enter each competition to win or learn as much as possible, within a budget. Here: two 4090s I own, a 3090 (that kept dying), a DGX Spark and a laptop 4060 for eval games, Colab G4s rented on 29 and 30 Sep, and Kaggle CPU notebooks for evals. I have two Claude and two GPT subscriptions. These resources are shared among all my projects, including personal ones.
+
+
+
+If I had more compute, I would have used it.
+
+Team name: 有辣条有权 ("you la tiao you quan"). La tiao is a famous cheap spicy snack, and it's a play on the phrase, "To have money is to have power." I don't have a lot of money, but I have snacks and time!
+
+
+
+Models
+
+At the time of writing, the larger, longer-trained B-even model leads N-flow on the live leaderboard. Both are within the provisional gold range.
+
+Abandoned
+
+The macro approach went first, so I won't discuss the architectures I considered there. Everything below came after I switched to micro decisions generated autoregressively. I had this lecture series playing in the background, and it drove the switch. This game doesn't seem that different from writing a paragraph in a very specific style.
+
+I train on the state the winner saw and the actions they sent. During play, the model generates worker commands, then orders, then STOP, one token at a time, with each token seeing the earlier choices from that turn.
+
+Other failures:
+
+
+
+Chain of thought: force an unsupervised label onto every tile before deciding.
+
+Recurrence in depth: rerun the middle blocks several times. Showed a lot of promise early, with some of our best losses, but needed too many ablations to get right. No time to tune how many times, or which layers, to recur, and it ended up doing poorly late with the config I chose. Something I'll try earlier next time.
+
+Depth over width: worse loss immediately.
+
+Massive parallel heads: 36 heads of width 12. Did very well and only started to do poorly later, which leads to Model 1.
+
+
+Model 1: B-even
+
+
+
+
+
+The 36-head model with its heads regrouped to 18 × 24. Shipped with a 4-update sprinkle on the five newest #1-team wins.
+
+
+
+
+
+
+
+Model 2: N flow
+
+
+
+
+
+Random init on one G4. Shipped with a 15-min wash: low-learning-rate SFT on top-3 wins.
+
+
+
+
+
+
+
+
+
+Features
+
+
+
+
+
+Data
+
+How the SFT data was filtered and changed:
+
+
+
+Winners only. Never imitate a losing action. In games we lost, train on the player who beat us.
+
+Weighted to fresh and strong. Hourly buckets by day and rank; the newest and strongest games get most of the draws.
+
+Earlier, our own ladder games too. Whatever beat our policy became training data.
+
+Last day: top 3 only. 30 Sep wins by the top three teams (404 source seats); the seats that beat #1 count 4x.
+
+Short top-ups. 15 minutes at low LR on the newest winners, exporting the current, unaveraged weights (RAW).
+
+Held out. Validation and sealed games were excluded early. Some validation games entered the late pool.
+
+
+We could only find 3 wins against the first-place solution at the time we trained, and two of them were from its own validation games!
+
+
+
+Replays came from Kaggle's daily episode dumps. The replay API was only for our own losses, and on the last two days for everything, at ~150-170 an hour. I also tried pulling replays by hand on the website: similar rate, but the API was less boring :D
+
+
+
+Biggest lesson
+
+What I think was most useful was the workflow I refined during this competition, and will keep refining going forward.
+
+Keep 2-3 ideas alive. Each has a fallback, a current best and a current experiment. Go crazy with the experiment until it beats the best, then try a new crazy experiment. Once you've experimented enough, the best becomes the new fallback. An experiment can itself be a set of ideas, so it's basically tree search over ideas.
+
+
+
+I spent way more time on macro than on micro, and all of it was killed. Many micro branches were killed too.
+
+"Beats the best" is decided by paired games:
+
+
+Feel free to ask questions. This thread will be deleted when write-ups become available, so I’ll probably answer relevant questions directly in the final write-up in about two weeks.
+
+Comments:
+├─ Tom (2026-10-01 23:01:01.457000) [+0]
+│  @russcore  Russ Congrats the solo gold man!  When I team work with you in orbit war I know you can do it one day. Good analysis always leads success in kaggle.
+├─ NT (2026-10-02 08:58:00.583000) [+0]
+│  congratulations！la tiao wang zi
+

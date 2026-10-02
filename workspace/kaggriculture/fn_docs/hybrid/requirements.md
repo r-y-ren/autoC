@@ -289,6 +289,8 @@
 | orderbook_surge_lab/evidence/judgment.json | R14 结果数据源（fn-analyze 依赖）：拉取命令=run_judgment.py，格式=逐局双臂 Δ+verdict，存放 evidence/ |
 | orderbook_mix_lab/evidence/mix_judgment.json | R15 结果数据源：拉取命令=run_mix_judgment.py，格式=逐变体开环 Δ+闭环副证+verdict |
 | v48_hybrid/giant_route/ | R9 遗产排程生成/可行性校验/磁带手术工具（只读取材） |
+| GitHub 搜索 API（repo search/census）+ Kaggle topics show（评论正文） | 赛后情报跑批数据源（2026-10-02 登记）：专名查询一律程序化派生 slug（手键拼写=测量链污染源教训）；拉取命令见 references/ext/postseason-github/provenance.md，快照存 references/ext/postseason-{github,platform}/ |
+| kaggle kernels pull（notebook 全文） | 公开件拆解数据源（2026-10-02 登记）：closing-kernels/ 三件开挖用；第三方代码执行须 bwrap 沙箱 |
 
 ## 范围外
 - **R23 范围外（2026-09-27 用户裁决）**：不动磁带主体/现金守卫/已收档 PREDICT 件；V93 敌指纹路由、BUY_PRODUCT 喂麦时点、day0 作物重排三个公开负方向不碰；仿真器只进判决不进提交包、判决口径切换须留官方引擎对照记录；判负不发射（判决先行）；其余环境沿用零增量。
