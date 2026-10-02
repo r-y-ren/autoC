@@ -1,0 +1,13 @@
+[build-system]
+requires = ["maturin>=1.7,<2"]
+build-backend = "maturin"
+
+[project]
+name = "kagg-engine"
+version = "0.3.24"
+description = "Rust port of the kaggriculture engine (RustEnv, FastEnv-compatible API)"
+requires-python = ">=3.10"
+
+[tool.maturin]
+features = ["python"]
+module-name = "kagg_engine"

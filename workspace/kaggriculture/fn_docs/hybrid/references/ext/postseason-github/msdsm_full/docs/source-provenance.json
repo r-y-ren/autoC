@@ -1,0 +1,345 @@
+{
+  "core_revision": "a78e03b5361de46b3b59489fa27340372793a429",
+  "submission_archives": {
+    "A": "c1098a1a5a0daa829252e70e923f5c3abe3ef3987042af6b1a90f09661a66f2c",
+    "B": "985ca33065b7685f1c7d2fcae3018a7195da37d1b85113fee7d95a8e8bcbc903"
+  },
+  "source_hashes_before_import_refactoring": [
+    {
+      "component": "kaggriculture.observations.feature_expansion",
+      "source_sha256": "a70a5c0a2abe7985c017c91e4d582fed6f41f39d1680cc64e71c7a69a5c595c7"
+    },
+    {
+      "component": "kaggriculture.observations.features",
+      "source_sha256": "4e20f525dc528aaa511cc617887891b9c6dcca6d538766335ea73fb3ce8da74e"
+    },
+    {
+      "component": "kaggriculture.observations.inventory_tracker",
+      "source_sha256": "4cdfcd0886bab56ddb74e605d86c879748d0633e79b3ac04a8b54cb9dfdf630b"
+    },
+    {
+      "component": "kaggriculture.observations.tracker_constants",
+      "source_sha256": "1a0b9c9138f3642e8e098e837ecfdb1a83af98fa859b71fab253541d0b94a9db"
+    },
+    {
+      "component": "kaggriculture.actions.catalog",
+      "source_sha256": "43b8bc8bb84116a5fde18d618db5ba7df433d39438829187a4be6da1812e9073"
+    },
+    {
+      "component": "kaggriculture.training.global_update",
+      "source_sha256": "0e9d959908d20e6bdea0d85943886612cf03eff2ca609d3e89638b7a15602871"
+    },
+    {
+      "component": "kaggriculture.actions.legality",
+      "source_sha256": "4afdcf5f5416ad2f31c92f98ffb4f21a5321f27d7700a2fad49015ba77eac4bd"
+    },
+    {
+      "component": "kaggriculture.training.ppo",
+      "source_sha256": "655bbec81bece40698e514d39a631f0a19b3c0f96ec9c22ca96bd77d8b9b12ee"
+    },
+    {
+      "component": "kaggriculture.training.rollout",
+      "source_sha256": "bf881d4cd8accadea6f38ef779e0b46779451dcb1db1ec2081defad2dbba5a27"
+    },
+    {
+      "component": "kaggriculture.actions.sequential",
+      "source_sha256": "03488692342dd20c72309249b68257286bca1c3e62644be9b8f7d2667417e206"
+    },
+    {
+      "component": "kaggriculture.actions.masks",
+      "source_sha256": "8c5e1bcd6c88639fd59909f0cf6c4d50ac9b7a2f693cce6ea0e36eb6bf003459"
+    },
+    {
+      "component": "kaggriculture.training.host_memory",
+      "source_sha256": "1b4867b4e57ca3bd9dfddb8b9a06181e2647f2981ef28afee30cbcf89c8313b0"
+    },
+    {
+      "component": "kaggriculture.actions.sell_quantity",
+      "source_sha256": "38ef9e5f71660bb775c36bfabaa5ef9764a4f0b9d2d37bd986fb525ea57f8518"
+    },
+    {
+      "component": "kaggriculture.actions.quantities",
+      "source_sha256": "91c79ec043fa49d69e792c166d56df5261472cf75561daa87dc5da4a8594fe27"
+    },
+    {
+      "component": "kaggriculture.training.sampler_keys",
+      "source_sha256": "803447b675196c63eed54ab140a170f7bb01fb5a5dd77d9c4506ce3f8157915c"
+    },
+    {
+      "component": "kaggriculture.training.rollout_chunks",
+      "source_sha256": "094e7459405407fe19ffebeae0f427252c1967accb32829ed075ff4d2c51c475"
+    },
+    {
+      "component": "kaggriculture.training.objectives",
+      "source_sha256": "a370890d9e8d86ece54edab9a44129a41818df3d9047992bf5001f773734a58c"
+    },
+    {
+      "component": "kaggriculture.training.memory_budget",
+      "source_sha256": "cfabe0a068fea41b527c42899d34cc93d293af1ea8a5ff1f7a8cfa4b5117fc1f"
+    },
+    {
+      "component": "kaggriculture.training.heterogeneous_update",
+      "source_sha256": "db4ca24a4d2bb67e9ee60585b453a9b1539a8ae3ae701c4736d079c8bd3787d2"
+    },
+    {
+      "component": "kaggriculture.model.kernels.deferred_optimizer",
+      "source_sha256": "f598f64f9525d3dd7c6bb2b0958978abda3e19b7419e1f6d8b285fdb5f7f6c02"
+    },
+    {
+      "component": "kaggriculture.training.tomato_shop_objective",
+      "source_sha256": "c31a28c4d6125c3b38c7f5cb50f6142e25db09c9c067fb08d4bb6c8aafc0f014"
+    },
+    {
+      "component": "kaggriculture.training.purchase_policy",
+      "source_sha256": "2781a9d0d6e4cdc7a29261036137f5f9deb4092b144d9fb4d74777f0f1c0bc96"
+    },
+    {
+      "component": "kaggriculture.training.purchase_entropy",
+      "source_sha256": "e4ece4fb7cd0968e43380a89d159b57c5506592292d8ae9019d489a545614292"
+    },
+    {
+      "component": "kaggriculture.training.phase_entropy",
+      "source_sha256": "9c329a75fb63de80a4ac9a12823c32e97725f656cf66025df4f3785751febd0e"
+    },
+    {
+      "component": "kaggriculture.training.land_objective",
+      "source_sha256": "a1a909344cb72f44048e4ff1416996afb2e2dd719048b7321e545d071b253c9f"
+    },
+    {
+      "component": "kaggriculture.training.land_metrics",
+      "source_sha256": "f095f32b33b27e53871e3b54a8972196d9744f0dbead97ca8fe8be7d7a00a72d"
+    },
+    {
+      "component": "kaggriculture.training.sharding",
+      "source_sha256": "399a105f57e05ec7093b0d94e405735ae51f160dc5fb9f951ec84a877077d71c"
+    },
+    {
+      "component": "kaggriculture.model.policy",
+      "source_sha256": "ad09f7febc09117a5dd97096cb28bdc3dbf4c7124d6486a94629c04319ff92d6"
+    },
+    {
+      "component": "kaggriculture.model.selected_attention",
+      "source_sha256": "47642e1305fe8a3f2f4a13875dd73c14d285422001b7d837f21787aadd195fa2"
+    },
+    {
+      "component": "kaggriculture.model.partition_attention",
+      "source_sha256": "d9f76bac1ab6ea819d374abff51ae76b69d0c2f7b056dfd6fbb86818a5c3a2a4"
+    },
+    {
+      "component": "kaggriculture.model.kernels.layer_norm",
+      "source_sha256": "df4c364861557a6d72a184de0854f453f77b6e937a452fb6fa94fb4ca3946c59"
+    },
+    {
+      "component": "kaggriculture.training.batch_prefetch",
+      "source_sha256": "67a1db3d28c06ecb706b868d6132458d22a192d9bc3ad07a728210daac3a8cf1"
+    },
+    {
+      "component": "kaggriculture.agents.neural",
+      "source_sha256": "e69e9d41ca95034d78bd9037a64605e4a448d11ace548eb24aba87b6d6184944"
+    },
+    {
+      "component": "kaggriculture.heuristics.shed_patch",
+      "source_sha256": "d1b9a576f59f63435bf3c8b4921646860644a5e1986d89780d29445d390ce479"
+    },
+    {
+      "component": "kaggriculture.actions.patch_inputs",
+      "source_sha256": "45de9b7826569fc3227b0b4002ec6b08e4049a0ba8fd26ccb2cb9091f3187bda"
+    },
+    {
+      "component": "kaggriculture.heuristics.unit_rules",
+      "source_sha256": "0a921cfcfe58a1cb30f9a97db046ce32cbc90dfe648a1fdfb9256f35ea66e587"
+    },
+    {
+      "component": "kaggriculture.actions.final_turn",
+      "source_sha256": "6bfbc403b90dc40a7146a0ab978d93633dccc5ccd29e09099d33d238001b0b88"
+    },
+    {
+      "component": "kaggriculture.model.execution",
+      "source_sha256": "57b647277421d663364620db5f5022ba17914b3a6ad669b88688cff6ddd0d453"
+    },
+    {
+      "component": "kaggriculture.model.kernels.selective_attention",
+      "source_sha256": "1952e207630193cf6a554baf313b79155e5ca456b2531e4197d14fb2aebf1220"
+    },
+    {
+      "component": "kaggriculture.training.checkpointing",
+      "source_sha256": "91ccc00d0ad0aa358f35e9cf9c3c6fe4d23549c411043ca34365a8e1854e939e"
+    },
+    {
+      "component": "kaggriculture.training.entropy_control",
+      "source_sha256": "5c7fa2292bc841d7a8c2a73daaa209a07e8a880d14fca4c4e1b9eb0cb751f03b"
+    },
+    {
+      "component": "kaggriculture.training.last_best",
+      "source_sha256": "099f2b01118593212e5f3d42d833a17a4c02ef077864428b5fbd61452fb9fb64"
+    },
+    {
+      "component": "kaggriculture.training.game_partition",
+      "source_sha256": "7da75d0f141c5852f0780373450a8a79b858b57297f121dbec7b0ca8221eaf63"
+    },
+    {
+      "component": "kaggriculture.training.fixed_entropy_override",
+      "source_sha256": "c30d37d3cf8c3a303abe0594b5b5c51ad04788a2683b26afadf29676e9119f98"
+    },
+    {
+      "component": "kaggriculture.training.distributed.aggregation",
+      "source_sha256": "f24fbe8792ce32545e0361eabc6a26fdbafc0212c0ab0f7d57170b67df36b1f3"
+    },
+    {
+      "component": "kaggriculture.training.behavior_parity",
+      "source_sha256": "3a93a8f52ce8f553daab2e3c27a48894b324426fb75fbf3abcde58935b85304a"
+    },
+    {
+      "component": "kaggriculture.training.bc",
+      "source_sha256": "e836427efc0f49135ec6dab97e03e2a582e7265a29ac3e2817c98b07ac0f29cd"
+    },
+    {
+      "component": "kaggriculture.training.bc_objective",
+      "source_sha256": "3cbbd82767ccc728b8a78fed069282a2c54a4fe97872d649c34b8f0d3f6e466e"
+    },
+    {
+      "component": "kaggriculture.data.prepare_replays",
+      "source_sha256": "5b9d78eec5ba0eefcedb48b21defd9b85f217b99e3a3078003049d37761b9236"
+    },
+    {
+      "component": "kaggriculture.data.shop_scenarios",
+      "source_sha256": "b9cce620918d59f984bd4e75d5aa845c3f09622f41f31e96929c0088ddc1be9f"
+    },
+    {
+      "component": "kaggriculture.data.mix_replays",
+      "source_sha256": "6f634db11c864ba7bb460d7728d057fec96bcd604420d40969e5b25ec9e6670e"
+    },
+    {
+      "component": "kaggriculture.heuristics.postprocess",
+      "source_sha256": "f573feb26ff479245fbd5a857fbf2e02911f72ccb1589b69fa1a5179999b1dd1"
+    },
+    {
+      "component": "kaggriculture.heuristics.handoff",
+      "source_sha256": "35e8e9042af8ce6a6f772b8b37d01da9488a9646c5823e2c451182b0ea27b031"
+    },
+    {
+      "component": "search/LICENSE.kaggle-environments",
+      "source_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "component": "search/future_methods.inc",
+      "source_sha256": "ed7f345b74c0521e4700ce851ee8e8d975d51bb47512e821b59ebdea32a38a62"
+    },
+    {
+      "component": "search/inventory_tracker.py",
+      "source_sha256": "8c8dba5c8f2dd7b1c23af492c3648553efd4ce27cb3089db9ad6adb85f2af33c"
+    },
+    {
+      "component": "search/main.py",
+      "source_sha256": "0901e12198c4d29e990ea5807f8b39aa78eca3c809aa5ea691f924d2a7ba8bed"
+    },
+    {
+      "component": "search/market_timeline.inc",
+      "source_sha256": "cf17fa4fb8392847668e1e39394e64c3abe20bfc1002f2fc7966d3fd377ba798"
+    },
+    {
+      "component": "search/preparation_methods.inc",
+      "source_sha256": "c239b30d8d35eb9026db8586989545ba9ae3b0415eb3d7037cd19b5efec283e0"
+    },
+    {
+      "component": "search/reference_engine.py",
+      "source_sha256": "3fd5e238a070c4081937d3e61dcdd32493d8863ded55887d5be25a76f6822c15"
+    },
+    {
+      "component": "search/requirements.txt",
+      "source_sha256": "a83a2a4ed7ab2e022b9b8a83cfa2b8cf52cc243006c597e8b96f90a8365590ac"
+    },
+    {
+      "component": "search/search_config.json",
+      "source_sha256": "855051fdb464ca578ddc3fa74be7b7dcce0a1b2cba3b9f18505cfffeb2ae8bee"
+    },
+    {
+      "component": "search/search_methods.inc",
+      "source_sha256": "7e9dc0b9484ffec66f88b920bb61aa019744f27064310c20d0e93affcba9c346"
+    },
+    {
+      "component": "search/search_policy.py",
+      "source_sha256": "bc81e5cc1da354c094e9b75297e785421a9ab57bf94edee8039d2e0e30d8491c"
+    },
+    {
+      "component": "search/storage_methods.inc",
+      "source_sha256": "79f52459089d9d4dda4a6139f84a5c27fcad3afef35093eedac6456a8b6b475a"
+    },
+    {
+      "component": "search/terminal_search.cpp",
+      "source_sha256": "1f9ee8eb769577d9c907af0b2e8ca7676e42dd71003dc2c38b3968246ba363ad"
+    },
+    {
+      "component": "search/tracker_constants.py",
+      "source_sha256": "1a0b9c9138f3642e8e098e837ecfdb1a83af98fa859b71fab253541d0b94a9db"
+    },
+    {
+      "component": "native/engine/Cargo.lock",
+      "source_sha256": "ae31d72783dc46363e5a8f840601ed36593e2764f56a2477c66157f591f72bae"
+    },
+    {
+      "component": "native/engine/Cargo.toml",
+      "source_sha256": "863ad8d27d9fd24b4587e7bc6dbb14a55742aa157986c7f899312d19a5b1b9ea"
+    },
+    {
+      "component": "native/engine/pyproject.toml",
+      "source_sha256": "89370a008d80646cba66f6264087f53839accb02a69509b0894638922dba8bae"
+    },
+    {
+      "component": "native/engine/src/catalog.rs",
+      "source_sha256": "4b8b0f2e184993a90f85728eeeb76ccb2b6269103b0bd92c807a05008b32d4a4"
+    },
+    {
+      "component": "native/engine/src/engine.rs",
+      "source_sha256": "66e97264c372b761e67d51ef46d5a3b707fe0111bd1e723e3198b5bf09646cdf"
+    },
+    {
+      "component": "native/engine/src/exp28_features.rs",
+      "source_sha256": "1374866e7571fac1aaa7a404d5cd5dbc6e8bf84edb0c686de3782186416860a7"
+    },
+    {
+      "component": "native/engine/src/features.rs",
+      "source_sha256": "383bc3362060f8a50e16dd8d3c27fbee46f8e9c9d29b4088c2bd8c14ffb1e713"
+    },
+    {
+      "component": "native/engine/src/fixed_tape_features.rs",
+      "source_sha256": "58d652dcb8854f1f665e2180afaefeda1aa608875797016a242af87dec52af7f"
+    },
+    {
+      "component": "native/engine/src/legal_mask_tests.rs",
+      "source_sha256": "e1543000734519d0bb689ea1eb5cefccfee5b1dd1a0f83c3df60d10ac37fe914"
+    },
+    {
+      "component": "native/engine/src/legal_masks.rs",
+      "source_sha256": "50cde1a53cd0b6e1477e1cc79fdc6b27d9d598caa192bc3773640669b2e003f5"
+    },
+    {
+      "component": "native/engine/src/lib.rs",
+      "source_sha256": "8e34386471302c5773b89cc013a8ac869cbcdd42e92eec5451fb06eb894464a3"
+    },
+    {
+      "component": "native/engine/src/patch_masks.rs",
+      "source_sha256": "646d55308a017f7e01904ab7bd55195354687248424c12a4b75fc5ffbd78c633"
+    },
+    {
+      "component": "native/engine/src/patch_sales.rs",
+      "source_sha256": "5b94bf3df682525a197fe1e77146f6be79009962c94c232e8e561a33db9eb9b4"
+    },
+    {
+      "component": "native/engine/src/py_api.rs",
+      "source_sha256": "39d2e6671f2b35021f8919826a4f330fc5be50f59bc135742dfa11cdf953e7bb"
+    },
+    {
+      "component": "native/engine/src/py_random.rs",
+      "source_sha256": "68ad3a91a1d576758ea529239ff6c241948c532418b801e7bbf6929368b48b3a"
+    },
+    {
+      "component": "native/engine/src/state.rs",
+      "source_sha256": "9f72529cf2538fe9f8370d8cc9d1de46760047d87d79a8167ec20277c491b834"
+    },
+    {
+      "component": "native/engine/src/tracker.rs",
+      "source_sha256": "db827462a731ec9e0bdd9602e19609e237e1ade953c75674511f6230dab602f8"
+    }
+  ]
+}

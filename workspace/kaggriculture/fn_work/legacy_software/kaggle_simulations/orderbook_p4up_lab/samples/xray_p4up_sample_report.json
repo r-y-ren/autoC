@@ -1,0 +1,1095 @@
+{
+ "version": "xray-p4up/1.0",
+ "task": "P3 判决尺升级：destbreso X-ray 六判据 + leoprovorov p25 磁带基线（判决先行·只读不发射不提交）",
+ "criteria_spec": {
+  "C1_GLOBAL_WITHIN_WORLD": {
+   "name": "GLOBAL vs WITHIN-WORLD 判定差",
+   "definition": "同一批局的逐拍动作流读两遍：GLOBAL=全体互比；WITHIN-WORLD=按世界（前两店有序对）分组、只在组内互比。店路由器在 t=72/144 随店抽分叉，全局看像狂适应、世界内近乎全同；真 live policy 世界内也分叉。两次读数之差即诊断。",
+   "inputs": "各局 stream（逐拍 action dict，canon 指纹）+ world 分组键",
+   "outputs": "global{cls,frac,first,chan}；within_world[]{world,n,cls,frac,first}；verdict_counts；gap_diagnosis；router_hint",
+   "thresholds": "classify 截断：varying==0→PURE_REPLAY；plan(farmer+hands)变动为0 且 frac<0.25→REPAIRING_SCRIPT；frac<0.10→REPAIRING_SCRIPT；否则 ADAPTIVE（x-ray cell 14 代码常量，自报）；router 窗提示 first∈[70,146] 贴 t=72/144 店抽（cell 14，自报）",
+   "calibration": "自报（cell 13-15）：shop router 全局狂适应/世界内全同；种子与反应不可全分离，分世界组=先剥掉最大的 seed 效应（店抽）",
+   "limits": "t<48 为可观测盲区（引擎确定性，一切 agent 同拍同令）；world 键缺失时 WITHIN-WORLD 不可读"
+  },
+  "C2_KINSHIP_MIRROR": {
+   "name": "血缘谱镜像线 + BARCODE 分叉日",
+   "definition": "一局回放同时留下对战双方动作流：PLAN 一致度（farmer+hands 相同拍占比）认家族；WHOLE 一致度（+market）1.000=同录；BARCODE=每日 d1-4 重锚窗计划+结构市单签名×30 天，首个不一致日=分叉日。镜像线 plan≥0.95；sibling 0.5-0.95；基因群=开局窗（t<144）plan 一致 ≥0.98 连通分量。",
+   "inputs": "mine/opp 逐拍动作流 + margin + episode 标识（opp_sub 可选）",
+   "outputs": "kin_rows[]{plan,whole,bands,fork_day,res,margin}；n_mirror/n_sibling/n_unrelated；mirror_record/mirror_margins；genetic_groups[]{group,games,record,margin_med,...}",
+   "thresholds": "mirror=plan≥0.95；sibling=0.5≤plan<0.95（cell 17，自报）；基因群阈值 0.98、开局窗 PRE=144（cell 19，自报）；BARCODE 窗=每日 h=1..4、30 天（cell 17）",
+   "calibration": "自报（cell 16）：t48 前无可观测差异，早期一致=引擎确定性不是亲缘；a group you only tie is your own chassis",
+   "limits": "BARCODE 仅认 STRUCT(HIRE/BUY_LAND/BUY_ANIMAL)+PROV(BUY_SEED/BUY_PRODUCT) 市单（cell 17 口径）；镜像局两座位非独立，战绩读数应带 design effect 1+φ 置信修正（georgymarin cell 32 口径，mining §2.4）"
+  },
+  "C3_CONVERGENCE": {
+   "name": "收敛三件套（DRIFT/SIGN FLIPS/n）",
+   "definition": "评分是否已停：DRIFT=近 WIN 局评分变化均值（单位=pts/episode，绝不用墙钟）；SIGN FLIPS=非零逐局 delta 变号次数；n=已评局数。WARMING UP=漂移超阈且无变号；SETTLED=漂移≤阈且至少一次变号；否则 SETTLING。配对速率故意不进判决（匹配器调度所致），只换算'多久后再读数'。",
+   "inputs": "按时间序的逐局评分轨迹 traj（updatedScore 序列）；可选 endTime 序列（配对速率）",
+   "outputs": "verdict；drift；flips；n；threshold；window；rating_now；pairing_rate*/reread_eta_h*",
+   "thresholds": "THRESH=1.0 pts/episode（x-ray cell 33 写死，随判声明，自报）；WIN=min(20, n-1)；n<4 不判（'the rating is a rumour'）",
+   "calibration": "自报（cell 32）：批量更新语义下按分钟平均会误读，按 episode 平均才对；配对速率衰减=匹配器认为你已就位",
+   "limits": "阈值是决策不是常数，复用时可换但必须随判声明；无轨迹数据时不判"
+  },
+  "C4_LANGUAGE_FINGERPRINT": {
+   "name": "语言指纹 SCRIPT/BRANCHER/SCHEDULER 三分",
+   "definition": "把拍当话语：5 连非空拍=短语（丢移动/PASS/数量，PLANT/PICKUP/PLACE 保品类参数，市单 HIRE/BUY_LAND 光杆、其余 verb:good）；按日带 6-11/12-19/20-29 统计每局短语在其余局复现（≥半数局出现）占比的中位=repeat_rate，附归一化熵。冻script 全带≈1.0；逐局即兴≈0.0；brancher 前段持干后段融掉。",
+   "inputs": "≥8 局全流（覆盖 t≥144 拍；不足 8 局不读）",
+   "outputs": "bands{(6-11),(12-19),(20-29)}{repeat_rate,norm_entropy,distinct}；class",
+   "thresholds": "类目截断：r0≥0.95 且 r1≥0.7→SCRIPT；r0≥0.5 且 r1<0.5→BRANCHER；r0<0.5→SCHEDULER；其余 MIXED；任一带 None→INSUFFICIENT-SIGNAL（cell 37，自报）；局数地板 8（cell 37）",
+   "calibration": "自报 2026-09-04（cell 36）：磁带族 1.00/0.91-1.00/0.74-0.91；カワシギ 0.89/0.15/0.00；keiz 0.75/0/0；tetsuya & yuanzhe zhou 0.02/0/0；Crop Dusta 0/0/0；盲测对手工逆向过的 8 局恢复全部 7 个已知分叉点（精确率全对，零漏零误）",
+   "limits": "语言类目不是强度（'language only, not strength'）；短语窗跨非空拍连续，空拍不打断语义但占位不计"
+  },
+  "C5_CRATER": {
+   "name": "crater 卖压判据",
+   "definition": "市场共享，卖单即武器：一方大卖砸价后 window 拍内另一方同品卖出=crater。红=对手卖进我砸的坑、蓝=我卖进对手的坑。一阶伤害=victim 数量×吃掉的价差，读作坑的大小而非因果转移。",
+   "inputs": "对战双方逐拍动作流 + 逐拍价格表 prices_t（每品价格）",
+   "outputs": "our_craters[]{t0,t1,prod,dmg}；their_craters[]{...}；totals{dmg,n}",
+   "thresholds": "window=24 拍；卖方按单笔价值 qty×px 取 top=60（cell 25 代码常量，自报）；dmg≤0 或无后继卖单的不计",
+   "calibration": "自报（cell 24）：读作 size of the hole，不作因果转移；配对图取样本内最大 |margin| 一局",
+   "limits": "需逐拍价格序列；无价格数据不判；一阶口径忽略回补/跨品替代"
+  },
+  "C6_BOARD_HALFSPLIT": {
+   "name": "热图半分相关 r≥0.9 反伪影闸",
+   "definition": "棋盘是 10x10 而非袋子：occupancy=逐拍有物格计数、presence=farmer+hands 位置计数。热图永远显得有结构，故双控制：卡方 vs 均匀 + top10 格质量占比；半分相关=局交替分两堆比图，r≥+0.9 才信，低于约 +0.9 当一季噪声。",
+   "inputs": "各局 10x10 occ/pres/unlocked 网格（逐拍累计）",
+   "outputs": "per_kind{corr_half,gate,chi2_dof,top10_share,flat_share,n_cells,n_episodes}",
+   "thresholds": "gate=r≥+0.9（cell 26/27 自述，自报）；卡方按 unlocked 格自由度 n_cells-1",
+   "calibration": "自报（cell 2 注）：稠密棋盘层 n=16 半分 r 0.99 即稳",
+   "limits": "半分按局交替（不是随机）；局数不足时 den=0 → corr 不可算，闸=NOT_COMPUTABLE"
+  }
+ },
+ "cohort": {
+  "n_records": 24,
+  "subjects": [
+   "THIRD FARM CLUB"
+  ],
+  "opponents": [
+   "DECEM",
+   "DSM",
+   "Kaggledew Valley 🏆",
+   "M & M & P & Q",
+   "Majkel1337",
+   "SpaTaro",
+   "Unknown Mother-Goose",
+   "Vadim Vasilenko",
+   "mtmr_s1",
+   "tetsuya & yuanzhe & guoqi",
+   "吃白饭的大肥鱼"
+  ],
+  "worlds": [
+   "BAKERY__ICE_CREAM_SHOP",
+   "BAKERY__PET_CAFE",
+   "BAKERY__PIZZA_SHOP",
+   "BRUNCH_SPOT__BAKERY",
+   "BRUNCH_SPOT__PET_CAFE",
+   "BRUNCH_SPOT__PIZZA_SHOP",
+   "BRUNCH_SPOT__YARN_STORE",
+   "FARMERS_MARKET__BAKERY",
+   "FARMERS_MARKET__FARMERS_MARKET",
+   "FARMERS_MARKET__ICE_CREAM_SHOP",
+   "ICE_CREAM_SHOP__ICE_CREAM_SHOP",
+   "ICE_CREAM_SHOP__PIZZA_SHOP",
+   "ICE_CREAM_SHOP__YARN_STORE",
+   "PET_CAFE__BRUNCH_SPOT",
+   "PET_CAFE__FARMERS_MARKET",
+   "PET_CAFE__ICE_CREAM_SHOP",
+   "PET_CAFE__SMOOTHIE_SHOP",
+   "PET_CAFE__YARN_STORE",
+   "PIZZA_SHOP__BAKERY",
+   "PIZZA_SHOP__BRUNCH_SPOT",
+   "PIZZA_SHOP__YARN_STORE",
+   "SMOOTHIE_SHOP__FARMERS_MARKET",
+   "YARN_STORE__SMOOTHIE_SHOP",
+   "YARN_STORE__YARN_STORE"
+  ],
+  "windows": [
+   "None"
+  ]
+ },
+ "readings": {
+  "C1_GLOBAL_WITHIN_WORLD": {
+   "criteria": "C1_GLOBAL_WITHIN_WORLD",
+   "global": {
+    "cls": "ADAPTIVE",
+    "varying_frac": 1.0,
+    "first_divergence": 0,
+    "channels": {
+     "farmer": 705,
+     "hands": 719,
+     "market": 649
+    },
+    "turns": 719,
+    "n_streams": 24
+   },
+   "within_world": [
+    {
+     "world": "BAKERY__ICE_CREAM_SHOP",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "BAKERY__PET_CAFE",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "BAKERY__PIZZA_SHOP",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "BRUNCH_SPOT__BAKERY",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "BRUNCH_SPOT__PET_CAFE",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "BRUNCH_SPOT__PIZZA_SHOP",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "BRUNCH_SPOT__YARN_STORE",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "FARMERS_MARKET__BAKERY",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "FARMERS_MARKET__FARMERS_MARKET",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "FARMERS_MARKET__ICE_CREAM_SHOP",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "ICE_CREAM_SHOP__ICE_CREAM_SHOP",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "ICE_CREAM_SHOP__PIZZA_SHOP",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "ICE_CREAM_SHOP__YARN_STORE",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "PET_CAFE__BRUNCH_SPOT",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "PET_CAFE__FARMERS_MARKET",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "PET_CAFE__ICE_CREAM_SHOP",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "PET_CAFE__SMOOTHIE_SHOP",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "PET_CAFE__YARN_STORE",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "PIZZA_SHOP__BAKERY",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "PIZZA_SHOP__BRUNCH_SPOT",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "PIZZA_SHOP__YARN_STORE",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "SMOOTHIE_SHOP__FARMERS_MARKET",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "YARN_STORE__SMOOTHIE_SHOP",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    },
+    {
+     "world": "YARN_STORE__YARN_STORE",
+     "n": 1,
+     "cls": "(one episode)",
+     "frac": null,
+     "first": null
+    }
+   ],
+   "verdict_counts": {},
+   "gap_diagnosis": "GLOBAL_ADAPTIVE_BUT_NO_WORLD_REPEAT: 无同世界重复局，世界内读数不可得",
+   "router_hint": null,
+   "threshold": {
+    "classify_frac_repair": 0.25,
+    "classify_frac_low": 0.1,
+    "router_window": [
+     70,
+     146
+    ],
+    "source": "x-ray cell 14 代码常量（自报）"
+   }
+  },
+  "C2_KINSHIP_MIRROR": {
+   "criteria": "C2_KINSHIP_MIRROR",
+   "kin_rows": [
+    {
+     "episode": 112306526,
+     "opp": "mtmr_s1",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -5023.0,
+     "plan": 0.007,
+     "whole": 0.007,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112220030,
+     "opp": "Unknown Mother-Goose",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -394.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112239132,
+     "opp": "Kaggledew Valley 🏆",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -1726.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112232287,
+     "opp": "DECEM",
+     "opp_sub": null,
+     "res": "W",
+     "margin": 2580.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112232217,
+     "opp": "Kaggledew Valley 🏆",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -6689.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112245656,
+     "opp": "Vadim Vasilenko",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -8560.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112225421,
+     "opp": "Majkel1337",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -6286.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112245969,
+     "opp": "Majkel1337",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -5523.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112263482,
+     "opp": "Majkel1337",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -7778.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112273115,
+     "opp": "Vadim Vasilenko",
+     "opp_sub": null,
+     "res": "W",
+     "margin": 3678.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112250771,
+     "opp": "Vadim Vasilenko",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -18636.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112252297,
+     "opp": "SpaTaro",
+     "opp_sub": null,
+     "res": "W",
+     "margin": 563.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112258537,
+     "opp": "mtmr_s1",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -6843.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112279522,
+     "opp": "tetsuya & yuanzhe & guoqi",
+     "opp_sub": null,
+     "res": "W",
+     "margin": 11655.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112301976,
+     "opp": "DECEM",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -5757.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112286913,
+     "opp": "Majkel1337",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -6766.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112316164,
+     "opp": "吃白饭的大肥鱼",
+     "opp_sub": null,
+     "res": "W",
+     "margin": 179.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112309070,
+     "opp": "Kaggledew Valley 🏆",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -6886.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112330542,
+     "opp": "Vadim Vasilenko",
+     "opp_sub": null,
+     "res": "W",
+     "margin": 5793.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112323192,
+     "opp": "Vadim Vasilenko",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -11470.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112318155,
+     "opp": "Kaggledew Valley 🏆",
+     "opp_sub": null,
+     "res": "W",
+     "margin": 7295.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112329159,
+     "opp": "Kaggledew Valley 🏆",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -7048.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112326751,
+     "opp": "DSM",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -11315.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    },
+    {
+     "episode": 112326816,
+     "opp": "M & M & P & Q",
+     "opp_sub": null,
+     "res": "L",
+     "margin": -3641.0,
+     "plan": 0.0,
+     "whole": 0.0,
+     "bands": "0/30",
+     "fork_day": 0
+    }
+   ],
+   "n_mirror": 0,
+   "n_sibling": 0,
+   "n_unrelated": 24,
+   "mirror_record": null,
+   "mirror_margins_sorted": [],
+   "threshold": {
+    "mirror_line": 0.95,
+    "sibling_band": [
+     0.5,
+     0.95
+    ],
+    "source": "x-ray cell 17（自报）"
+   },
+   "genetic_groups": [
+    {
+     "group": "G1",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Unknown Mother-Goose",
+     "record": "W0-L1-T0",
+     "margin_med": -394.0,
+     "worst": -394.0,
+     "best": -394.0
+    },
+    {
+     "group": "G2",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Kaggledew Valley 🏆",
+     "record": "W0-L1-T0",
+     "margin_med": -1726.0,
+     "worst": -1726.0,
+     "best": -1726.0
+    },
+    {
+     "group": "G3",
+     "games": 1,
+     "submissions": 1,
+     "lead": "DECEM",
+     "record": "W1-L0-T0",
+     "margin_med": 2580.0,
+     "worst": 2580.0,
+     "best": 2580.0
+    },
+    {
+     "group": "G4",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Kaggledew Valley 🏆",
+     "record": "W0-L1-T0",
+     "margin_med": -6689.0,
+     "worst": -6689.0,
+     "best": -6689.0
+    },
+    {
+     "group": "G5",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Vadim Vasilenko",
+     "record": "W0-L1-T0",
+     "margin_med": -8560.0,
+     "worst": -8560.0,
+     "best": -8560.0
+    },
+    {
+     "group": "G6",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Majkel1337",
+     "record": "W0-L1-T0",
+     "margin_med": -6286.0,
+     "worst": -6286.0,
+     "best": -6286.0
+    },
+    {
+     "group": "G7",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Majkel1337",
+     "record": "W0-L1-T0",
+     "margin_med": -5523.0,
+     "worst": -5523.0,
+     "best": -5523.0
+    },
+    {
+     "group": "G8",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Majkel1337",
+     "record": "W0-L1-T0",
+     "margin_med": -7778.0,
+     "worst": -7778.0,
+     "best": -7778.0
+    },
+    {
+     "group": "G9",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Vadim Vasilenko",
+     "record": "W1-L0-T0",
+     "margin_med": 3678.0,
+     "worst": 3678.0,
+     "best": 3678.0
+    },
+    {
+     "group": "G10",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Vadim Vasilenko",
+     "record": "W0-L1-T0",
+     "margin_med": -18636.0,
+     "worst": -18636.0,
+     "best": -18636.0
+    },
+    {
+     "group": "G11",
+     "games": 1,
+     "submissions": 1,
+     "lead": "SpaTaro",
+     "record": "W1-L0-T0",
+     "margin_med": 563.0,
+     "worst": 563.0,
+     "best": 563.0
+    },
+    {
+     "group": "G12",
+     "games": 1,
+     "submissions": 1,
+     "lead": "mtmr_s1",
+     "record": "W0-L1-T0",
+     "margin_med": -6843.0,
+     "worst": -6843.0,
+     "best": -6843.0
+    },
+    {
+     "group": "G13",
+     "games": 1,
+     "submissions": 1,
+     "lead": "tetsuya & yuanzhe & guoqi",
+     "record": "W1-L0-T0",
+     "margin_med": 11655.0,
+     "worst": 11655.0,
+     "best": 11655.0
+    },
+    {
+     "group": "G14",
+     "games": 1,
+     "submissions": 1,
+     "lead": "DECEM",
+     "record": "W0-L1-T0",
+     "margin_med": -5757.0,
+     "worst": -5757.0,
+     "best": -5757.0
+    },
+    {
+     "group": "G15",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Majkel1337",
+     "record": "W0-L1-T0",
+     "margin_med": -6766.0,
+     "worst": -6766.0,
+     "best": -6766.0
+    },
+    {
+     "group": "G16",
+     "games": 1,
+     "submissions": 1,
+     "lead": "吃白饭的大肥鱼",
+     "record": "W1-L0-T0",
+     "margin_med": 179.0,
+     "worst": 179.0,
+     "best": 179.0
+    },
+    {
+     "group": "G17",
+     "games": 1,
+     "submissions": 1,
+     "lead": "mtmr_s1",
+     "record": "W0-L1-T0",
+     "margin_med": -5023.0,
+     "worst": -5023.0,
+     "best": -5023.0
+    },
+    {
+     "group": "G18",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Kaggledew Valley 🏆",
+     "record": "W0-L1-T0",
+     "margin_med": -6886.0,
+     "worst": -6886.0,
+     "best": -6886.0
+    },
+    {
+     "group": "G19",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Vadim Vasilenko",
+     "record": "W1-L0-T0",
+     "margin_med": 5793.0,
+     "worst": 5793.0,
+     "best": 5793.0
+    },
+    {
+     "group": "G20",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Vadim Vasilenko",
+     "record": "W0-L1-T0",
+     "margin_med": -11470.0,
+     "worst": -11470.0,
+     "best": -11470.0
+    },
+    {
+     "group": "G21",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Kaggledew Valley 🏆",
+     "record": "W1-L0-T0",
+     "margin_med": 7295.0,
+     "worst": 7295.0,
+     "best": 7295.0
+    },
+    {
+     "group": "G22",
+     "games": 1,
+     "submissions": 1,
+     "lead": "Kaggledew Valley 🏆",
+     "record": "W0-L1-T0",
+     "margin_med": -7048.0,
+     "worst": -7048.0,
+     "best": -7048.0
+    },
+    {
+     "group": "G23",
+     "games": 1,
+     "submissions": 1,
+     "lead": "DSM",
+     "record": "W0-L1-T0",
+     "margin_med": -11315.0,
+     "worst": -11315.0,
+     "best": -11315.0
+    },
+    {
+     "group": "G24",
+     "games": 1,
+     "submissions": 1,
+     "lead": "M & M & P & Q",
+     "record": "W0-L1-T0",
+     "margin_med": -3641.0,
+     "worst": -3641.0,
+     "best": -3641.0
+    }
+   ],
+   "n_groups": 24,
+   "genetic_threshold": {
+    "genetic_plan": 0.98,
+    "pre_window": 144,
+    "source": "x-ray cell 19（自报）"
+   }
+  },
+  "C3_CONVERGENCE": {
+   "criteria": "C3_CONVERGENCE",
+   "threshold": 1.0,
+   "threshold_source": "x-ray cell 33（自报；'a verdict quoted without its threshold is not a verdict'）",
+   "n": 0,
+   "verdict": "TOO_FEW",
+   "drift": null,
+   "flips": null,
+   "window": null,
+   "note": "only 0 rated episodes: too few to classify, the rating is a rumour"
+  },
+  "C4_LANGUAGE_FINGERPRINT": {
+   "criteria": "C4_LANGUAGE_FINGERPRINT",
+   "n_episodes": 24,
+   "threshold": {
+    "class_cutoffs": {
+     "SCRIPT": "r0>=0.95 & r1>=0.7",
+     "BRANCHER": "r0>=0.5 & r1<0.5",
+     "SCHEDULER": "r0<0.5"
+    },
+    "floor_n": 8,
+    "bands": [
+     [
+      6,
+      11
+     ],
+     [
+      12,
+      19
+     ],
+     [
+      20,
+      29
+     ]
+    ],
+    "source": "x-ray cell 37（自报）"
+   },
+   "calibration_self_reported": "自报 2026-09-04（cell 36）：tapes 1.00/0.91-1.00/0.74-0.91；カワシギ 0.89/0.15/0.00；keiz 0.75/0/0；tetsuya & yuanzhe zhou 0.02/0/0；Crop Dusta 0/0/0",
+   "bands": {
+    "d06-11": {
+     "repeat_rate": 0.0,
+     "norm_entropy": 1.0,
+     "distinct": 3407
+    },
+    "d12-19": {
+     "repeat_rate": 0.0,
+     "norm_entropy": 1.0,
+     "distinct": 4602
+    },
+    "d20-29": {
+     "repeat_rate": 0.0,
+     "norm_entropy": 1.0,
+     "distinct": 5630
+    }
+   },
+   "class": "SCHEDULER (composes its plan per game)"
+  },
+  "C5_CRATER": {
+   "criteria": "C5_CRATER",
+   "episode": 112250771,
+   "threshold": {
+    "window_turns": 24,
+    "top_sellers": 60,
+    "source": "x-ray cell 25（自报）"
+   },
+   "status": "OK",
+   "our_craters": [
+    {
+     "t0": 708,
+     "t1": 718,
+     "prod": "MILK",
+     "dmg": 568000
+    },
+    {
+     "t0": 248,
+     "t1": 271,
+     "prod": "MELON",
+     "dmg": 228000
+    },
+    {
+     "t0": 253,
+     "t1": 275,
+     "prod": "MELON",
+     "dmg": 106000
+    },
+    {
+     "t0": 249,
+     "t1": 271,
+     "prod": "MELON",
+     "dmg": 96000
+    },
+    {
+     "t0": 263,
+     "t1": 275,
+     "prod": "MELON",
+     "dmg": 66000
+    },
+    {
+     "t0": 434,
+     "t1": 457,
+     "prod": "WOOL",
+     "dmg": 1032
+    }
+   ],
+   "their_craters": [
+    {
+     "t0": 709,
+     "t1": 718,
+     "prod": "MILK",
+     "dmg": 3384
+    },
+    {
+     "t0": 713,
+     "t1": 718,
+     "prod": "WOOL",
+     "dmg": 2606
+    },
+    {
+     "t0": 713,
+     "t1": 718,
+     "prod": "MILK",
+     "dmg": 1116
+    },
+    {
+     "t0": 714,
+     "t1": 718,
+     "prod": "MILK",
+     "dmg": 1116
+    },
+    {
+     "t0": 715,
+     "t1": 718,
+     "prod": "MILK",
+     "dmg": 900
+    },
+    {
+     "t0": 716,
+     "t1": 718,
+     "prod": "MILK",
+     "dmg": 900
+    }
+   ],
+   "totals": {
+    "our_dmg": 1065032,
+    "their_dmg": 10022,
+    "n_our": 6,
+    "n_their": 6
+   },
+   "reading": "一阶伤害=victim 数量×吃掉的价差；读作 size of the hole，非因果转移（cell 24）",
+   "decisive_episode": {
+    "episode": 112250771,
+    "margin": -18636.0,
+    "world": "PIZZA_SHOP__YARN_STORE",
+    "rule": "样本内最大 |margin| 一局（x-ray cell 24，自报）"
+   }
+  },
+  "C6_BOARD_HALFSPLIT": {
+   "criteria": "C6_BOARD_HALFSPLIT",
+   "n_episodes": 24,
+   "threshold": {
+    "gate_r": 0.9,
+    "source": "x-ray cell 26/27（自报）：'below about +0.9, read the map as one season's noise'"
+   },
+   "status": "OK",
+   "maps": {
+    "occupancy": {
+     "corr_half": 0.9995,
+     "gate": "TRUST",
+     "chi2_dof": 347.5,
+     "top10_share": 0.1654,
+     "flat_share": 0.1333,
+     "n_cells": 75
+    },
+    "presence": {
+     "corr_half": 0.9972,
+     "gate": "TRUST",
+     "chi2_dof": 1296.14,
+     "top10_share": 0.3303,
+     "flat_share": 0.1333,
+     "n_cells": 75
+    }
+   }
+  }
+ },
+ "caveats": [
+  "tape_profile 用全部 24 局；leoprovorov 基线只用胜局（本 cohort 胜局 7），对读时口径差须声明",
+  "t<48 可观测盲区：早期一致=引擎确定性（x-ray cell 16）",
+  "x-ray 自校准数字（语言锚/宏观形状/用工共识/单位时间预算）全部标'自报'，本报告未复测",
+  "exp066_arena.json 无逐局行（仅对级聚合），未作判据输入（任务候选数据缺项）"
+ ],
+ "tape_profile": {
+  "label": "THIRD FARM CLUB",
+  "n_games": 24,
+  "turns": 719,
+  "p10": 0,
+  "p25": 41,
+  "p50": 72,
+  "mean_D_d0_71": 0.2084,
+  "mean_D_d72_143": 0.7332,
+  "bundle_caliber": "leoprovorov f_g(t)：MOVE 并类、数量丢弃、market 集合比、hands 排序列表、附 n_hands（cell 11 数学区）"
+ },
+ "tape_profile_wins_only": {
+  "label": "THIRD FARM CLUB (wins only, leoprovorov 口径)",
+  "n_games": 7,
+  "turns": 719,
+  "p10": 41,
+  "p25": 72,
+  "p50": 72,
+  "mean_D_d0_71": 0.0476,
+  "mean_D_d72_143": 0.6726,
+  "bundle_caliber": "leoprovorov f_g(t)：MOVE 并类、数量丢弃、market 集合比、hands 排序列表、附 n_hands（cell 11 数学区）"
+ },
+ "baseline_lookup": {
+  "measured": {
+   "p10": 0,
+   "p25": 41,
+   "p50": 72
+  },
+  "tape_tier": "EARLY_FORK",
+  "tier_reading": "首店前分叉：短磁带+早规则",
+  "nearest_baseline_team": {
+   "team": "DSM",
+   "delta_p25": 18,
+   "wins": 85,
+   "note": "口径张力待核（mining §五-6）：leoprovorov p25=23（d1 即分叉）vs 我方 09-27 stream_hashes（top1 前缀 0.769@t24→0.557@t300）；样本窗与口径（bundle vs 字节）不同，数据源已撤回无法复核"
+  },
+  "baseline_self_reported": true,
+  "caliber_note": "整拍 bundle = (op(farmer), n_hands, sorted{op(h)}, {op(m)})；op=(class,good)；MOVE 方向并类、数量丢弃、market 按集合；一拍不同=整拍不同（最严口径）",
+  "self_check_rule": "'冰在火位=过刚、火在冰位=白花'（leoprovorov cell 6 应用 5，自检法）：候选 p25 明显长于其世界的同行=白花灵活性；明显短=过刚"
+ },
+ "baseline_lookup_wins_only": {
+  "measured": {
+   "p10": 41,
+   "p25": 72,
+   "p50": 72
+  },
+  "tape_tier": "SHOP1_FORK",
+  "tier_reading": "首店-二店间分叉：查表路由器形态",
+  "nearest_baseline_team": {
+   "team": "Mengfei Li",
+   "delta_p25": 9,
+   "wins": 105,
+   "note": "少数局早分叉、多数局守到 151+：p10≪p25 的'分叉锐度'形态（cell 17）"
+  },
+  "baseline_self_reported": true,
+  "caliber_note": "整拍 bundle = (op(farmer), n_hands, sorted{op(h)}, {op(m)})；op=(class,good)；MOVE 方向并类、数量丢弃、market 按集合；一拍不同=整拍不同（最严口径）",
+  "self_check_rule": "'冰在火位=过刚、火在冰位=白花'（leoprovorov cell 6 应用 5，自检法）：候选 p25 明显长于其世界的同行=白花灵活性；明显短=过刚"
+ },
+ "feats_band_day0_crosscheck": {
+  "team": "THIRD FARM CLUB",
+  "n_episodes": 179,
+  "window": "day0 (t<24)",
+  "status": "OK",
+  "varying_frac": 0.9583,
+  "first_divergence": 1,
+  "cls": "ADAPTIVE",
+  "note": "t<24 在 t<48 盲区内：一致=磁带预期、不一致=强信号；hands 通道缺失（feats-band 口径）"
+ },
+ "_generated_at": "2026-10-02T12:46:02Z"
+}

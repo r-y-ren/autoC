@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kaggriculture-solution"
+version = "0.1.0"
+description = "Behavior cloning, self-play PPO and heuristic controllers for Kaggriculture"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["numpy==2.5.3", "jax==0.11.1", "optax==0.2.8"]
+
+[project.optional-dependencies]
+gpu = ["jax[cuda12]==0.11.1"]
+data = ["kaggle-environments==1.32.7"]
+dev = ["pytest>=8", "ruff>=0.9", "maturin>=1.7,<2"]
+
+[tool.setuptools.packages.find]
+where = ["python"]
+
+[tool.setuptools.package-data]
+"kaggriculture.heuristics" = ["*.json"]
+"kaggriculture.search" = ["*.json", "*.cpp", "*.inc", "LICENSE.*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["python"]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

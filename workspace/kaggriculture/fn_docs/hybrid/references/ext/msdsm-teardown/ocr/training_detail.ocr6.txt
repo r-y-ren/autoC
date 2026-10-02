@@ -1,0 +1,107 @@
+KAGGRICULTURE BC, SELF-PLAY PPO & HEURISTICS
+From random initialization to the final agents
+TIME
+2026 A Random initialization
+| S| Strong public replays =e 9
+Sep 1 Top 20 + 11 extra + 5 historical teachers ttt iS . .
+34 submissions after deduplication 4,459 trajectories - 30 epochs
+3,806 unique games
+( n PPO
+472.1M env steps
+328,320 games
+S| Refreshed top 20 submissions iS BC 2
+Seps 3,993 unique games - refreshed September 5 ns ie aes 4,560 trajectories - 10 epochs
+a
+( n PPO
+900.8M env steps
+626,400 games - resumed from a saved policy
+‘ey Reset heads — masked PPO
+52.80M env steps
+36,720 games - keep the pretrained trunk
+S| Early heuristic agent S| BC 3
+Sep 10 Rule-based / search-based play TTT TTT) 89 trajectories - 1 epoch
+89 public replay trajectories
+( n PPO
+2.140B env steps
+Iteratively improve the planner 1,487,952 games - separate sell-head distillation*
+A\ Net2Net growth + PPO
+Sep 12 886.3M env steps
+616,320 games - continue from the grown policy
+S| Two public teachers = BC4
+Sep 13 214 + 138 = 352 trajectories =-T-77"""|_ 369 tralectories - 3 epochs
+335 unique games J P
+( n PPO
+Sep 16 1.329B env steps - 923,904 games
+Cumulative: 5.780B env steps
+1
+i
+S| Seven public submissions '
+849 teacher trajectories 77 1 i
+i
+i
+3 Inspect trained-policy play
+- —ee eee eee eee
+FEEDBACK FROM THE TRAINED POLICY vt
+it
+1. Observe weaknesses after BC + PPO Wa
+Tomato-heavy shop configurations iH
+Highly skewed / repeated shop types '
+i
+1
+i
+2. Improve the heuristic planner '
+Refine planning for the observed weak cases '
+Task, route and trade planning '
+Local search + simulated annealing !
+' .
+! A Continue PPO — Net2Net growth
+' 155.7M additional env steps
+i . A
+$. Generate targeted self-play ' Resume this saved policy 108,288 games - scale on September 19
+100 standard-shop games I
+100 games with 22 tomato-related shops '
+100 games with 23 shops of one type air
+300 games * 2 seats = 600 trajectories 1! & BC - two public teachers
+. . i
+Shop overrides for teacher-data generation only. 1 ' 112 + 125 = 237 trajectories - 3 epochs - September 21
+1
+ry & BC5
+=_-L—
+Sap 25) 849 + 600 = 1,449 trajectories - 2 epochs
+A PPO - scaled policy
+2.223B env steps
+Final-day handoff Q shite are 1,545,984 games - forks use intermediate policies
+it critic — ————————————————
+4,271,151 games - two saved policies shown below
+& BC - eight submissions & Further growth + BC
+A Action rules OQ Late policy 956 trajectories collected** Two public submissions
+. ae . 3 epochs 256 trajectories - 3 epochs
+Avoid conflicting (eEke and seed overspending Grow again with Net2Net
+Mask useless fertilizer / care / off-board moves Q ;
+Sep 29530 Sell storage overflow; liquidate at game end Final base
+Used at inference and in the final PPO stage. A PPO - replay refresh A PPO - deeper policy
+2.354B env steps 230.3M env steps
+ey Rule-aware PPO 1,636,992 games 160,128 games
+Apply at inference Extra env steps:
+not recovered A Late-policy fork - PPO A Final-base fork - PPO
+Integrate into PPO | Sequential action masks 384.3M env steps 485.4M env steps
+267,264 games 337,536 games
+n n Net2Net - no additional BC Net2Net - no additional BC
+A Final A A Final B September 29 September 30
+Sep 30 nN eee en 1 is * seavental masks Latest saved counts at the October 1 stop.
+inal-day search controller leural policy on every day : a
+i 10.23M parameters 10.23M parameters These parallel weights are not used in Final A or B.
+HOW TO READ THE TRAINING LINEAGE
+A Arrows A PPO design A Environment-step convention
+Inherit trained weights Current-policy self-play; learn from both player seats. 1 game = 719 decisions * 2 players = 1,438 env steps
+; Terminal win / draw / loss reward: +1 / 0 / -1; discount y = 1. One decision by either player counts as one environment step.
+Fork / grow a policy GAE A = 0.97; PPO clipping = 0.2; teacher KL regularization. Cards show the PPO segment / run total, excluding its ancestors.
+----> Teacher trajectories > BC BC = behavior cloning. Each trajectory is one teacher seat. M = million; B = billion. Rounded counts; chronology not to scale.
+Apply rules / search BC dataset counts include held-out trajectories. Separate branches share ancestors; do not sum them as one path.
+--- > Observed weaknesses — refine heuristics
+FINAL A: 11.922B ENV STEPS ON THE RETAINED PPO PATH
+8,290,767 games * 1,438 = 11,922,122,946 env steps. Final B adds PPO whose exact rollout count was not recovered.
+Training totals exclude BC, critic fitting, evaluation and discarded / repeated runs. Parallel-run totals include post-deadline work.
+* Sell-quantity-head distillation used 96 additional self-play games. ** 956 trajectories were collected; the accepted count is unverified.
+Heuristic self-play for BC 5: 100 standard maps, 100 maps with 22 tomato-related shops, 100 with 23 shops of the same type.
+Reconstructed from training records and the actual final submission bundles - Records through October 1, 2026 02/03

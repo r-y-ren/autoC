@@ -1,0 +1,53 @@
+KAGGRICULTURE BC, SELF-PLAY PPO & HEURISTICS
+Shared Transformer architecture and rule-based action patches
+
+A NETWORK ARCHITECTURE Both final agents: 10,225,070 parameters
+
+A Structured observations GQ Shared Transformer trunk GQ Unit policy
+
+Up to 264 tokens 12 pre-LayerNorm residual blocks 500 action candidates per own unit
+
+200 farm cells + 40 units + 1 global Q) Tokenst dapt Width 256 - 8 attention heads
+
+12 commodity / animal + 1 memory oken-type adapters FFN: 256 — 1,024 — 256 - GELU C) Market policy
+
+10 market-order slots Selected ae — 256 Selective 2D rotary position embeddings 10 order slots - 1,903 decoded candidates / slot
+
+124-feature schema; select features by token type. Learned projection per type Dropout: 0 Includes 9 goods x 100 absolute sell quantities
+
+Memory tracks inferred opponent inventory Type-specific heads read the output tokens.
+
+from public information using fixed rules.
+
+A Value head
+Global token — 256 — scalar; paired zero-sum critic
+MODEL GROWTH 10M lineage: 6 > 12 blocks. The final 12-block model contains 10.23M parameters.
+20M lineage: 24 blocks, =19.7M parameters. The deeper branch uses 29 blocks / FFN 1,072, =24.4M.
+Net2Net preserves the starting policy when growing the network. Final inference uses JAX on CPU in FP32.
+
+B HEURISTICS AT INFERENCE Action correction, inventory management and endgame planning
+A Rule-based action patch A Inventory and final cash-out A Heuristic search planner
+
+Prevent duplicate tasks and seed-inventory overspending. Rank overflow sales by current / base price; update prices. Optimize task assignments, routes, harvest and delivery.
+
+Reject off-board moves and unproductive fertilizer / care. Sell remaining stock on the last two actions. Plan trades to maximize terminal money.
+
+Predict storage after actions and trades; sell overflow Force a final DROP for units at the shed. Local search, simulated annealing and multiple restarts.
+
+above capacity 100 while preserving feed wheat. Suppress late buying, hiring and land purchases. Also supplies 600 synthetic trajectories for BC 5.
+
+FINAL A | POST-PROCESSING + FINAL-DAY HANDOFF FINAL B | RULE-AWARE PPO + SEQUENTIAL MASKS
+
+Normally: choose greedy NN actions, then repair or replace them. Use the neural policy throughout the game, including the final day.
+
+N | poli Confidence-ordered repair N Mogit Sequential action selection E f ti
+CUD OCY, Reassign conflicts; may insert seed buys Fs} Farmer, then workers; reserve tiles and seeds LN Otel
+
+Final-day Search replaces the NN PPO uses the same conditional masks for rollout sampling and log-probability recomputation.
+
+controllan Final day (day 29): plan, then execute Forced SELL / DROP components are excluded from the policy loss; outcomes still train the value.
+
+Search: up to ~6 s at final-day dawn; then execute and adjust trades. Apply overflow / final cash-out rules; seed purchases come from the market policy.
+
+Keep / fall back to the NN if the time budget is insufficient or search fails. The final-day search controller is not used by this agent.
+Parameter count includes the value head (66,051 parameters); shared trunk + actor: 10,159,019 parameters. 03 / 03
