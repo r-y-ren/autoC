@@ -1,0 +1,19 @@
+# Virtualenv and caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Packaging output -- rebuilt deterministically by scripts/package_submission.py
+dist/
+build/
+
+# Training output. Two exceptions are versioned: an early ES champion and the
+# opponent supply curves the planner reads.
+artifacts/*
+!artifacts/theta.npy
+!artifacts/opp_supply/
+
+# Logs and local scratch
+*.log

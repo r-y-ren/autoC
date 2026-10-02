@@ -1,0 +1,145 @@
+# ASTRA_REV1 (2026-09-29 17:18Z-17:37Z) — gpt-6-astra code review 1/3 of the shipped tree (master cf68f736): the router and the crew
+
+Coordinator: Claude Fable 5.1. Prompt: S/astra_rev1/prompt.md (common header S/astra_rev/common.md). Output verbatim below. Review 2 (tiles/planting/asks) = 2026-09-29-astra-review2.md; review 3 (decision/market/animals/guards) follows.
+
+## Prompt
+
+### CODE REVIEW OF THE LIVE KAGGLE AGENT (read-only) — 2026-09-29 17:17Z
+
+You are gpt-6-astra, the third participant of this team. The user (team lead) just said: "PFS skip tiles, crew is lazy, do review for router! ask astra to review all code". PFS = our live body (Kaggle simulation "Kaggriculture": 2 farms per game, 30 days x 24 hours = 720 steps, tiles for crops wheat/carrot/tomato/strawberry/melon, animals cow/sheep/goose in pastures/coops, hired hands, a shared market whose prices walk with both players' sales; final score = coins; rating = Bradley-Terry over wins).
+
+The code under review is the EXACT shipped tree (git master cf68f736 = live submissions vrp20_pfsoff / vrp21_clsearch), copied to `S/astra_rev/mastertree/src/kagg3/` (35k lines; core/plan.py 15,994 lines is the day planner; agent/route_vrp.py the live crew router; core/brain.py the Macro decision; agent/runtime.py the per-turn loop; sim/* the projection engine used for planning). Read code with cat/sed/grep. You may run short read-only python checks. NEVER write to or read from any /dev/* path (no `> /dev/null`, no `2>/dev/null`, no `< /dev/null`, no process substitution) — the user forbids it; NEVER run pytest; NEVER modify files; do not run the simulator for more than 2 boards.
+
+#### The user's three complaints, with the measured evidence (all in this repo)
+1. EMPTY TILES. `S/gapcensus2/agg.txt` (104 live games of vrp7/vrp8, same planner): empty tile-days per game d0-27 ours 125.6 vs opponents 72.8; d20-27 ours 75.2 vs 38.7; per-tile map: corner (0,9) = 100 % empty on every game, (9,0) 64.6 %, (0,0) 41 %, the whole outer ring 15-40 % while the centre is 0 %. `docs/strategy/2026-09-26-gapfix1.md`: the cause found was the planner's ask floor `n_dev = _qfloor(dev_frac * n_free)` plus an `n_free-1` rounding, NOT seeds/cash/labour; `docs/strategy/2026-09-26-gapcensus1.md`: replanting stops d19-25 with 61k cash and 0 seeds in stock; 43 more empty tile-days/game than rivals. Every fill patch tried so far (EMPTY1, late ask floor, SLIVER1, IDLETILE1, LATEPLANT1, ROUTEFILL1 — docs/strategy/2026-09-26-*.md, 2026-09-24-routefill1.md) lost coins on the paired judge, mostly because the crew could not serve the extra tiles or the extra wheat moved the shared price. The user does NOT accept the axis as closed: "empty tile is our loss".
+2. LAZY CREW. `S/idleops/report.md`: idle unit-turns per game ours 706 (10.5 % of 6,689 unit-ops) vs our opponents 540 (7.9 %) vs the rank-2 team 335 (5.1 %); by hour ours h0-5 = 21 % idle vs opponents 3 %, h18-23 20.7 %; by cause 684 of the 706 are "work exists" of which 326 have work under the unit's feet (dist 0) and 265 at dist 1. `docs/strategy/2026-09-22`-era read: idle 604 unit-turns/game = h0-2 260 (h1 195 = spawn + pickup wait) + h21-23 270 (h23 166). Top-1 read (docs/strategy/2026-09-19-majkel1.md): the leader's idle 52 vs our 296 unit-turns on the same board; his wheat plantings 177 vs our 139. MOVES: 2,891 unit-turns of moves per game vs a minimum-spanning bound of 1,461 (43 % of all unit-turns are moves).
+3. ROUTER. `docs/strategy/2026-09-26-routeraudit1.md` + `S/routeraudit1/out/summ2.txt`: the shipped VRP router saves 2,101 coins/game of hand bills vs an oracle 2,823 and an rr150 variant 2,693 (not shipped: p99 wall 1.05 s). `docs/strategy/2026-09-27-crewaudit1.md`, `2026-09-29-crew1.md`, `2026-09-29-crewloss1.md`, `2026-09-29-crewloss2.md`: crew audits on the newest games. `docs/strategy/2026-09-23-crew24.md`, `2026-09-23-crewrelay1.md`, `2026-09-24-routeopt1.md`, `2026-09-24-routeopt2.md`, `2026-09-16-routeeff.md`, `2026-09-16-routeorder.md`: earlier router work.
+
+Other facts you need: hands are hired daily at dawn (HIRE at h0) and paid per day; the planner (`core/plan.py: _derive` -> `_routes` -> `_market`) builds one day plan at h0 from a projection and the router (`agent/route_vrp.py: solve_plan/apply`) turns it into per-hour unit moves; per-turn wall budget matters (Kaggle actTimeout; overflow.py guards). The judge that decides shipping now is the closed loop against the faithful public reacting rival "V56" (`S/vband1/vr.py`, 21 live boards + 40 boards) and against the top-10 programme clone `p48c` (`bash S/reactclone1/judge.sh --rival p48c`); a candidate must not lose late animal-product volume or the d15-17 strawberry supply (docs/strategy/2026-09-29-vcheck2.md).
+
+#### What we need from you
+A real code review, not a summary. For EVERY finding: (a) file:line in the mastertree copy, (b) the mechanism in 2-4 sentences, (c) when it fires (days/hours, how often per game, from the evidence or from the code), (d) your estimate of coins/game it costs and the reasoning, (e) the minimal fix, behind a module-level switch that defaults to the current behaviour (byte-identical OFF), with the exact edit described, (f) what could go wrong (price walk, crew overload, timeout). Rank the findings by expected coins/game. Say explicitly for each of the user's three complaints which finding is the ROOT cause and which prior closure (if any) was wrong and why. Do not repeat things already closed unless you show the closure's flaw with a citation. If you find actual BUGS (wrong index, stale state, off-by-one in day/hour, mis-parsed observation, a guard that never fires, dead code that still costs wall time), list them first. End with: the 3 findings to build TODAY (each with the judge bar: margin vs V56 and vs p48c, our own coins, strawberry wall, late animal units) and one line on what you could not check.
+
+Output: markdown, at most 300 lines, a findings table at the top (rank | file:line | title | fires | coins/game | fix size). Write it to the -o file only.
+
+#### YOUR SCOPE (review 1 of 3): THE ROUTER AND THE CREW
+Files: `agent/route_vrp.py` (all 1,928 lines: build, Solver, solve_plan, _unhire_empty, _retry_frozen, _trim_sells, apply, _work_ops), `agent/route_nn.py`, `agent/route_nn3.py` (are they used live? which switch?), `agent/runtime.py` (the turn loop, time budget, fallbacks), `agent/overflow.py`, and in `core/plan.py`: `_routes` (line 13917-15114), `task_order` (7293), `_pipeline_units` (7271), `_pick_masks` (7204), `_rank/_rank_near/_rank_by` (7121-7203), `route_turns` (5343), `crew_push_cum` (5241), `land_reach` (5884), `_midday_place_turn` (4181), `_residual_hire` (8863), `_mirror_crew` (8880), `cash_reserve` (6250), and the hire count logic (grep -n "n_hire\|HIRE\|n_hands\|hands" core/plan.py core/brain.py). Questions to answer with code evidence: why are units idle at h0-2 (spawn + pickup wait) and h21-23 — is it the plan (nothing scheduled) or the router (work scheduled but not reachable)? why is work under a unit's feet (dist 0) left undone 326 times per game? why are 43 % of unit-turns moves — routing order, pickup/drop relays, or shed trips? does the hire count match the work the plan creates (hours of work / hours available), or do we hire hands the plan cannot feed? what does the fallback path do on a router timeout and how often does it fire live? Is there any per-turn state that is recomputed needlessly (wall time) or stale across days?
+
+## Astra's review (verbatim)
+
+| Rank | File:line in mastertree | Title | Fires | Estimated coins/game | Fix size |
+|---|---|---|---|---:|---:|
+| 1 | [agent/overflow.py:473](/mnt/e/_work/kaggriculture3/S/astra_rev/mastertree/src/kagg3/agent/overflow.py:473) | V3 can delete a fresh planting’s mandatory WATER | d0–28, h10–23; overflow rescue before planting | ~100; provisional 0–400 | 4–6 lines |
+| 2 | [agent/overflow.py:526](/mnt/e/_work/kaggriculture3/S/astra_rev/mastertree/src/kagg3/agent/overflow.py:526) | Animal harvest displacement ignores production calendar and banked CARE | Overflow rescue near animal production nights | ~75; provisional 0–250 | 6–10 lines for protection |
+| 3 | [agent/overflow.py:224](/mnt/e/_work/kaggriculture3/S/astra_rev/mastertree/src/kagg3/agent/overflow.py:224) | V1/V2 erase CARE before V3 can price it | d0–28, h10–23; carriers with CARE tails | ~50; provisional 0–150 | 10–20 lines |
+| 4 | [agent/overflow.py:228](/mnt/e/_work/kaggriculture3/S/astra_rev/mastertree/src/kagg3/agent/overflow.py:228) | Cargo projections miss yield added by scheduled watering | WATER followed by HARVEST in remaining plan | Near zero demonstrated; provisional 0–50 | 40–70 lines |
+| 5 | [core/plan.py:12973](/mnt/e/_work/kaggriculture3/S/astra_rev/mastertree/src/kagg3/core/plan.py:12973), [agent/route_vrp.py:266](/mnt/e/_work/kaggriculture3/S/astra_rev/mastertree/src/kagg3/agent/route_vrp.py:266) | Development/admission precedes routing; saved capacity cannot increase the ordinary task set | Daily planning; strongest empty-tile evidence d21–27 | Unproven; ~100 screening estimate, 0–300 positive opportunity | 200–400 lines for a credible experiment |
+
+Confirmed defects and cost-model holes come first; the architectural finding follows. **The coin estimates are screening assumptions, not measured counterfactual gains.** Supplied reports do not identify the live incidence of these particular defects. All code references below refer to `S/astra_rev/mastertree/src/kagg3/`; no files were changed.
+
+**1. V3 can kill a planting it leaves scheduled.**
+
+Mechanism: `_job_cost` returns zero for WATER when the observed tile is not a dictionary, before checking whether retained earlier jobs include PLANT. The protection at `overflow.py:493` is therefore unreachable for a currently empty tile. V3 can retain PLANT and replace its WATER with a deposit; planting initializes `consecutive_unwatered=1`, so the unwatered crop dies that night (`sim/units.py:149`, `sim/eod.py:89`).
+
+A short in-memory check reproduced this: day 14, hour 20, empty tile, scheduled strawberry PLANT at h22 and WATER at h23, excess cargo. V3 changed the suffix from `PASS, PASS, PLANT, WATER` to `PASS, PASS, PLANT, PLACE`; `_job_cost(WATER, …, tile=None, before=[PLANT])` returned `0.0`.
+
+- **Exposure:** a rescue evaluated before a retained planting, with its WATER available for displacement. [OVERFLOW4](/mnt/e/_work/kaggriculture3/docs/strategy/2026-09-22-overflow4.md:25) reports 82 displaced WATER operations per 100 development games; the fresh-plant subset is unknown.
+- **Coins:** provisional 100/game assumes 0.2 lethal cuts/game × 500 coins of lost future net crop value. Neither factor is measured here; the incident can cost much more than one watering turn, especially for an ongoing crop.
+- **Minimal fix:** add module constant `OVERFLOW_PLANT_WATER_FIX_ON = False`. Immediately before the non-dictionary return at line 473, insert `if OVERFLOW_PLANT_WATER_FIX_ON and op == O.OP_WATER and O.OP_PLANT in before: return _INF`. The OFF path retains existing outputs.
+- **Risk:** preventing this displacement can leave cargo overflowing or redirect a rescue onto another valuable job. More surviving crop output changes shared prices and future crew demand.
+- **Prior closure:** OVERFLOW4’s aggregate success does not validate this case. Its pricing logic explicitly intends to protect newly planted crops; the early return defeats that protection.
+
+**2. The animal-harvest cost can be zero when deferral destroys two products.**
+
+Mechanism: `overflow.py:526` prices delayed animal harvesting as `max(0, held + 2 − capacity) × price`. Actual production depends on the animal’s placement day, first-yield delay, interval, feeding, and `pending_care_bonus`; production is `1 + banked_bonus`, capped at capacity (`sim/eod.py:115`). Today’s CARE enters the bank **after** tonight’s production, which also matters when implementing the correction.
+
+Concrete check: a fed sheep placed on d7, examined on d15, holding four wool with three banked bonuses, produces on the coming refresh. Deferring harvest loses two wool at capacity six, but `_job_cost` returns zero. Conversely, `+2` can overprice deferral on a night with no production.
+
+- **Exposure:** V3 harvest deletion or suffix truncation before production nights. OVERFLOW4 reports 207 displaced HARVEST operations/100 games, without an animal/firing-night breakdown.
+- **Coins:** provisional 75/game assumes 0.5 harmful animal deferrals/game × one lost product × 150 coins. The supplied late-crew audits do not support claiming thousands/game from this mechanism.
+- **Minimal fix for today:** add `OVERFLOW_ANIMAL_HARVEST_PROTECT_ON = False`; before the existing animal branch, return `_INF` for a positive-yield animal HARVEST not already represented by a retained HARVEST in `before`. This conservatively prevents the incorrectly priced deletion without introducing a second imperfect animal simulator.
+- **Follow-up exact pricing:** replace protection with the production calendar and bank calculation, considering retained FEED both before and after the harvest. Looking only at `before` would introduce another underpricing case.
+- **Risk:** protection can sacrifice profitable cargo rescue; a delayed harvest is sometimes harmless. Measure overflow destruction and net margin alongside preserved animal units.
+- **Prior closure:** no cited audit tests this cost function against pending CARE banks. Aggregate low cap loss is reassuring but does not establish correctness.
+
+**3. CARE is economically priced only after two earlier guards can erase it.**
+
+Mechanism: `_TAIL` includes CARE (`overflow.py:13`). V1 sorts candidate diversions partly by CARE count, then overwrites the remaining suffix (`:116–142`); V2’s `_project` skips CARE before recording the last productive operation (`:224–226`), allowing `guard_v2` to overwrite it as a finished carrier’s tail (`:319–340`). Runtime runs V1, V2, then V3 (`runtime.py:1003`), so V3’s explicit CARE price cannot protect already deleted work.
+
+An in-memory V2 check with scheduled CARE at h21 and one unit of excess cargo replaced the remaining sequence with `PLACE, PASS, PASS, PASS`. Counting CARE when sorting candidates is not a comparison between its future product value and the rescued cargo’s value.
+
+- **Exposure:** overflow from h10 onward while a carrier has remaining CARE. The supplied reports do not count these overwrites separately; the old total “missed CARE” count must not be attributed to this defect.
+- **Coins:** provisional 50/game assumes one useful CARE erased/game × 0.5 expected realized product × 100 coins. CARE near season end, before escape, or into a capped production can be worthless.
+- **Minimal fix:** add `OVERFLOW_KEEP_CARE_ON = False`. Under it, V1 skips diversion candidates whose replaced suffix contains CARE; `_project` records CARE’s time and position in `last/at_last`, without changing cargo. V2 then starts a finished-carrier return after CARE. Leave V3’s explicitly priced displacement available.
+- **Risk:** less overflow rescue, longer returns, and preservation of low-value CARE. Simply removing CARE from `_TAIL` is insufficient because V2’s last-work calculation remains wrong.
+- **Prior closure:** [OVERFLOW2](/mnt/e/_work/kaggriculture3/docs/strategy/2026-09-22-overflow2.md:32) explicitly allowed CARE displacement; this is an unpriced policy hole, not a newly discovered hidden feature. OVERFLOW4’s “value-priced” description applies to V3, not the entire live guard chain. Placement-night feeding is a separate issue already addressed by shipped `PLACEFEED_ON`; do not reopen it under this finding.
+
+**4. The overflow projections use observed yield after simulating actions that change that yield.**
+
+Mechanism: `_project` and `_trace` read `tile['yield_units']` when processing future HARVEST (`overflow.py:228`, `:430`). They do not apply WATER’s immediate yield increase; FERTILIZE only consumes inventory, without updating the tile’s fertilization state. The engine applies both changes before a subsequent harvest (`sim/units.py:112–115`, `:159`).
+
+A synthetic age-four wheat with yield four, WATER then HARVEST, produces five units under the unit rules; both overflow projections credit four. Consequently, a guard can conclude that stock fits when it does not.
+
+- **Exposure:** a productive watering and harvest still ahead in the same day. A read-only scan of two historical recorded boards found **zero** corresponding wheat-credit mismatches in their dawn router stops; this is not demonstrated as a frequent live loss.
+- **Coins:** no supported positive point estimate; a 0–50/game screening range corresponds to at most roughly half a missed surplus unit at a 100-coin quote. OVERFLOW4’s remaining destruction was only 1.26/1.15 units/game on its development/held-out sets, limiting this particular recovery opportunity there.
+- **Minimal fix:** add `OVERFLOW_YIELD_TRACE_FIX_ON = False`; under it, maintain a private per-tile shadow of yield, watered/fertilized state and lifecycle in both projection functions. Apply WATER/FERTILIZE/HARVEST in execution order; never mutate the observation.
+- **Related router site:** `route_vrp.py:287–290` similarly credits dawn wheat yield when modeling harvested feed. Correct that separately only if an exposed route is demonstrated.
+- **Risk:** detecting more excess invokes more destructive rescue decisions. Fix findings 1–3 first; share the shadow-state helper so V2 and V3 do not diverge.
+
+**5. The ordinary router cannot turn saved time into a larger development ask. This is the empty-tile root, with an unproven economic remedy.**
+
+Mechanism: `brain.py:1177–1178` floors `dev_frac × n_free`; `_derive` selects slots using development-distance rank (`plan.py:11398`). Admission then budgets estimated work (`:12921–12973`), and repair removes unreachable tasks. `route_vrp.build` receives only emitted operations (`:266–275`), while `verify` normally requires the same field-operation multiset (`:1622–1632`); shipped `ROUTE_FILL_MODE="ii"` spends routing gains on crew reduction.
+
+- **Exposure:** every dawn. [GAPFIX1](/mnt/e/_work/kaggriculture3/docs/strategy/2026-09-26-gapfix1.md:14) attributes 67 empty tile-days to the late ask and another 17 to rounding in its diagnosed game. Distance ranking makes the same corners lose repeatedly.
+- **Coins:** idle area is not itself a measured coin loss. A tentative 100/game opportunity, with 0–300 positive upside for a tightly constrained experiment, is consistent with SLIVER1’s small successful cell; broad fill variants establish substantial downside.
+- **Smallest credible new experiment:** add `ROUTE_PRICED_EXTRA_ON = False` in `plan.py`, guarding an additional candidate path after the baseline day plan and VRP result. Evaluate **one** extra crop request through a copied `Macro.plant_target`, rebuild and route it, and retain it only if original field tasks remain covered, herd/animal purchases remain intact, and projected tending/harvest demand through its lifetime is funded. Require positive incremental value after seeds, future crew and shared-price effects; otherwise return the untouched baseline. This is roughly 200–400 lines, not a safe one-line floor patch.
+- **Why this differs from closed ROUTEFILL1:** its future capacity test extrapolates `ROUTE_FILL_FRAC × today’s spare turns` (`route_vrp.py:1670–1691`); that does not establish capacity on the crop’s future busy days. A new candidate needs future-day capacity accounting rather than another multiplier on today’s slack.
+- **Risk:** highest of these findings—future overload, displaced animal service, rival price benefit, and a second planning pass exceeding the dawn budget. Do not build this ahead of the small defects.
+
+The closure “filling … at any dose” in [GAPFIX1:68](/mnt/e/_work/kaggriculture3/docs/strategy/2026-09-26-gapfix1.md:68) exceeds what its tested arms establish. Also, “every fill patch lost coins” is factually too strong: [SLIVER1’s same-tile s2w cell](/mnt/e/_work/kaggriculture3/docs/strategy/2026-09-26-sliver1.md:32) gained **223 own coins and 230 margin**, with +1/−0 flips. It still failed its shipping bar and lacked held-out confirmation; that rejection remains valid.
+
+**Answers to the crew/router questions**
+
+**Dawn idle is predominantly scheduling and release timing, not failed pathfinding.** HIRE at h0 creates a hand available at h1 (`route_vrp.py:139–142`). Purchases execute after unit actions, so goods bought at h1 are usable at h2; `build.avail` models this as `buy_hour + 1` (`:240–246`), and `_sim` waits for release (`:411`). Existing stock and independent tasks can start earlier; the shipped split-route path is enabled. Reopening the rejected blanket H1_WORK switch would ignore its prior price/coin result.
+
+**Late idle is predominantly completion of the admitted task set.** In [ROUTERAUDIT1](/mnt/e/_work/kaggriculture3/docs/strategy/2026-09-26-routeraudit1.md:13), routing reduced dawn idle from 260 to 52 while increasing h21–23 idle from 276 to 451 and removing hires. It preserved field operations; finishing earlier naturally creates tails. Findings 1–3 identify additional ways the later overflow rewrites can remove scheduled work, but do not explain hundreds of turns without live attribution.
+
+**The 326 underfoot count is not 326 lost productive operations.** [IDLEOPS](/mnt/e/_work/kaggriculture3/S/idleops/report.md) reports 232 were performed later that day and 95 were never performed later, with rounding. Its survey counts every unwatered crop as work and treats wheat anywhere in inventories or shed as sufficient for animal feeding (`S/idleops/idle.py:71–94`); it does not require that the idle worker holds the input or that the operation is immediately valuable. Repeated unit/hour observations also do not represent unique tasks. The report measures 2.2 units of decay loss, not 326 units of foregone output.
+
+**The 43% move statistic is not the current router’s demonstrated excess.** The matched historical route audit reduced moves **2,885 → 2,085**, while exact ordering on each hand’s assigned tiles gave 1,998: only 87 moves remained above that particular sequencing bound. The 1,462 MST omits the cost of multiple workers starting at the shed, pickup/release constraints and fixed assignments. Field travel and crew assignment dominate the demonstrated gap; merged pickups account for 83 fewer work operations. The evidence does not support blaming pickup/drop relays for all remaining movement.
+
+**The claimed unshipped rr150 opportunity is already shipped.** `plan.py:7787–7792` sets 150 iterations, destruction size 10, re-solving ON and JIT ON. `_rr_knobs` falls back to 30/8/OFF only without the compiled kernels. [ROUTERJIT1](/mnt/e/_work/kaggriculture3/docs/strategy/2026-09-26-routerjit1.md:73) records bill savings increasing from 2,759 to 3,143/game on its own comparison. The earlier 2,101-versus-2,823 oracle gap cannot be booked again as current recoverable money.
+
+**Hire count is value-based and approximate, then reduced using actual routes.** The planner enumerates hands against cumulative `n_ops + EST_MOVES`, per-unit pickup/lead allowances and `route_turns(h)` (`plan.py:12229`, `:12290`, `:5343`), subtracting wage and applying macro hire preferences. `_residual_hire` still checks affordability (`:8863`); `cash_reserve` reserves future crew money (`:6250`). After routing, reduction/re-solve and `_unhire_empty` remove unnecessary whole hands (`route_vrp.py:852`, `:907`, `:1271`); planner trailing empty rows are also trimmed (`plan.py:13092`).
+
+Thus, hiring is neither a simple “work hours/24” calculation nor obviously hiring wholly unfed hands. Distributed spare hours cannot necessarily eliminate one complete paid hand under position, input and deadline constraints. Day 29 deliberately bypasses VRP to preserve terminal delivery/sales (`route_vrp.py:1190`); removing that bypass without modeling terminal deposits would be unsafe.
+
+**The latest “not labour-bound” closure is too broad.** [CREWLOSS2](/mnt/e/_work/kaggriculture3/docs/strategy/2026-09-29-crewloss2.md:26) reports zero such days, but its inherited definition requires a labour sign **and zero idle hand-turns anywhere that day** (`S/crewloss1/extra.py:21–34`). One early wait rules out the label even if later work is spatially or temporally constrained. Its evidence still argues against blanket extra hiring, and CREW1’s forced-crew losses remain valid; it does not close task admission, assignment or destructive rescheduling.
+
+**Timeout fallback retains a usable plan.** `apply` starts a soft search deadline at approximately 0.65 seconds, catches `_Timeout`, and tries up to 64 complete checkpoints ordered by solution quality while inside the 0.75-second envelope (`route_vrp.py:1536–1563`). `_restore` settles spawns and verifies the result; if none succeeds, the original planner arrays—including hire decisions—are returned. Ordinary solve misses and verification failures likewise preserve the planner plan. This does not emit an all-PASS day.
+
+Current live timeout frequency is **not recoverable from the supplied telemetry**: runtime discards the local stats except `drop_cost`, and TLOG lacks timeout/fallback reason (`runtime.py:981–989`). ROUTERJIT1 measured zero timeouts over 600 recorded dawns on its stated live-clock setup; that is historical benchmark evidence, not a current live rate. Also, the deadline starts after macro/day planning, and C calls/verification are not preemptible: it is not a whole-turn actTimeout guarantee. `overflow.py` protects inventory, not wall time.
+
+**Live switches and state:** `ROUTE_NN_ON` and `ROUTE_NN3_ON` are false (`plan.py:7725`, `:7730`); runtime calls their dispatchers only behind those switches (`runtime.py:1018–1023`). They do not explain live crew behavior. The shipped KERNEL2 cash trigger is 99,999 (`plan.py:15827`), so its enabled framework does not imply the usual kernel takeover.
+
+The day plan is cached and rebuilt on a new day; overflow pending deliveries are cleared then (`runtime.py:945`, `:991`). Solver evaluation caches are recreated for each solve and invalidated when spawn configuration changes; I found no demonstrated stale cross-day route cache. V2 and V3 do separately project the remaining suffix on qualifying h10–23 turns—up to 406 turns/season—but re-projection after a mutation is necessary. Sharing an unchanged within-turn projection could save work; there is no measured wall-time or coin case for prioritizing it.
+
+**Root-cause disposition**
+
+- **Empty tiles:** finding 5 is the established ask/admission root; distance ranking explains the corners. Finding 1 adds a distinct route-rewrite loss mechanism. The universal closure of the fill axis was unjustified; individual failed fill variants remain failed.
+- **Lazy crew:** finding 5 plus input/spawn release timing explains the predominant dawn/tail pattern. Findings 1–3 can destroy useful scheduled work. The inference from “work exists” to immediately executable lost jobs, and the zero-idle definition used to close labour, are both too strong.
+- **Router:** the demonstrated original causes were route assignment and crew reduction, with substantial improvements already shipped. The remaining concrete defects found here sit in post-router overflow rewriting. There is no evidence for another currently available 722 coins/game merely by enabling rr150.
+
+**Three builds TODAY**
+
+Build these as separate default-OFF switches first, then test their combination. OFF must reproduce all six plan arrays and emitted actions exactly on the comparison fixtures.
+
+| Build | V56 margin bar | p48c margin bar | Own coins | Strawberry wall | Late animal units |
+|---|---|---|---|---|---|
+| 1: protect WATER after retained PLANT | Positive paired Δ on v21 and m40 | Positive paired Δ on m40, both seats | Δ ≥ 0 on each set | d15–17 production and sales ≥ control | d18–29 milk/wool/egg/fertilizer production and sales ≥ control |
+| 2: protect positive-yield animal HARVEST from V3 deletion | Same | Same | Same | Same | Same, separately by product; no extra escapes |
+| 3: preserve CARE through V1/V2; let V3 price displacement | Same | Same | Same | Same | Same, separately by product; no extra escapes |
+
+Use the reacting V56 and faithful p48c judges against the exact current control. Require paired margin support at **t ≥ 2** on pooled V56 and p48c, no negative net win flips, and at least the existing V56 floors of 12/21 and 37/40 wins. Reject a candidate that merely raises our coins while raising the rival’s equally. Record total act wall time, fallback reasons, displaced operations and overflow destruction; require apply p99 below 0.65 seconds and complete turns within actTimeout.
+
+Not checked: exact live incidence or realized gains for these defects, new closed-loop judge runs, or a full audit of the compiled kernels; validation here used source review, short in-memory checks and two historical recorded-board datasets, with no pytest or full simulation.

@@ -1,0 +1,4459 @@
+"""Pipelined self-play rollout collection against the official simulator."""
+
+from __future__ import annotations
+
+import threading
+import time
+import types
+from collections.abc import Callable, Generator, Iterator, Sequence
+from contextlib import ExitStack, contextmanager
+from dataclasses import dataclass, replace
+from typing import Any, Generic, TypeVar
+
+import numpy as np
+import torch
+from kaggle_environments import make
+
+from kaggriculture.actions import N_MARKET_KINDS, N_QUANTITIES, N_UNIT_ACTIONS
+from kaggriculture.causal_rollout import LedgerStaging, SelectedFactorTransfer
+from kaggriculture.constants import (
+    ANIMALS,
+    BOARD_SIZE,
+    CROPS,
+    DEFAULT_REWARD_GAMMA,
+    DEFAULT_REWARD_MODE,
+    EPISODE_STEPS,
+    MAX_MARKET_ORDERS,
+    MAX_UNITS,
+    PRODUCTS,
+)
+from kaggriculture.encoding import (
+    BOARD_CHANNELS,
+    CRITIC_FEATURES,
+    GLOBAL_FEATURES,
+    UNIT_FEATURES,
+    pair_potential,
+    shaped_pair_reward,
+    terminal_bank_pair_reward,
+    terminal_pair_utility,
+)
+from kaggriculture.entity import EntityActor
+from kaggriculture.lejepa_model import LejepaCritic
+from kaggriculture.market_set import MARKET_SET_MAX_VALUE, N_MARKET_SET_KINDS
+from kaggriculture.model import ActorOutput, FarmActor, policy_compile_options
+from kaggriculture.modelargs import actor_model_config
+from kaggriculture.opponents import BUILTIN_AGENT_ORDER
+from kaggriculture.orientation import (
+    orient_boards,
+    orient_unit_actions,
+    orient_unit_features,
+    orient_unit_logits,
+    orient_unit_masks,
+    seat_orientations,
+)
+from kaggriculture.policy import PolicyStep, act_batch, categorical_statistics
+from kaggriculture.registry import CONV_ENTITY, architecture_of, resolve_architecture
+from kaggriculture.resource_conditioning import RESOURCE_FEATURES
+from kaggriculture.rust_env import load_native
+from kaggriculture.script_opponents import ScriptAgentPool, ScriptOpponent, ScriptSegment
+from kaggriculture.strategic_actor import PlanChoice, StrategicActor, StrategicOutput
+from kaggriculture.structured import StructuredActor, StructuredInputs
+from kaggriculture.tokens import (
+    ANIMAL_PRIVATE_FIELDS,
+    ANIMAL_TOKEN_FIELDS,
+    CROP_PRIVATE_FIELDS,
+    CROP_TOKEN_FIELDS,
+    FARM_TOKEN_FIELDS,
+    N_TILE_CATEGORICAL,
+    N_TILE_CONTINUOUS,
+    N_UNIT_CATEGORICAL,
+    N_UNIT_CONTINUOUS,
+    PRODUCT_PRIVATE_FIELDS,
+    PRODUCT_TOKEN_FIELDS,
+    TILE_COUNT,
+    TOWN_TOKEN_FIELDS,
+    UNIT_TILE_GATHERS,
+)
+
+_MAX_FLOAT32_CATEGORICAL_DRAW = np.nextafter(np.float32(1.0), np.float32(0.0))
+_NATIVE_TEMPERATURE_FLOOR = 1e-4
+_POPULATION_PAIRING_SEED_SALT = 0x5041_4952
+
+# Per-row codes for the wave's `builtin_agents` argument: 0 samples the row
+# from the network, anything else hands the row to the named engine reference
+# agent inside Rust. Mirrors `BuiltinAgent::from_code` in rust/kagg_env.
+BUILTIN_AGENT_CODES = {name: code for code, name in enumerate(BUILTIN_AGENT_ORDER, start=1)}
+# A row whose action a Python agent file chose off the native step and staged
+# with `BatchEnv.set_submitted_actions`. Mirrors `EXTERNAL_AGENT_CODE` in Rust.
+EXTERNAL_AGENT_CODE = 255
+REWARD_MODES = ("shaped", "terminal-bank", "terminal-outcome")
+SAMPLED_HEAD_FAMILIES = frozenset(("units", "kinds", "quantities"))
+
+
+@dataclass(frozen=True)
+class RolloutBatch:
+    """Behavior rollout: architecture-specific state arrays plus shared factors."""
+
+    architecture: str
+    states: dict[str, np.ndarray]
+    unit_actions: np.ndarray
+    market_kinds: np.ndarray
+    market_quantities: np.ndarray
+    unit_masks: np.ndarray
+    market_kind_masks: np.ndarray
+    market_quantity_masks: np.ndarray
+    unit_active: np.ndarray
+    market_active: np.ndarray
+    market_quantity_active: np.ndarray
+    old_unit_logprobs: np.ndarray
+    old_market_kind_logprobs: np.ndarray
+    old_market_quantity_logprobs: np.ndarray
+    rewards: np.ndarray
+    valid: np.ndarray
+    episode_seeds: np.ndarray
+    final_money: np.ndarray
+    opponent_money: np.ndarray
+    seats: np.ndarray
+    # Which population member sampled the row. A single-learner wave stores
+    # zeros; a population wave stores the pairing schedule's agent index, and
+    # the update partitions on it so one member's advantage scale never
+    # normalizes another's.
+    agents: np.ndarray
+    # Per-trajectory board symmetry. Both seats of a game share one code;
+    # games cycle identity / mirror-x / mirror-y / rotate-180. Mixed and
+    # Python collectors store zeros (identity).
+    orientations: np.ndarray
+    # True only when every stored learner action was sampled from the behavior
+    # distribution rather than selected by argmax. PPO rejects false batches.
+    learner_stochastic: bool
+    entropy_sums: np.ndarray
+    elapsed_seconds: float
+    reward_mode: str = DEFAULT_REWARD_MODE
+    # Behavior-time value predictions `[trajectories, horizon]`, when the
+    # collector computed them itself (`collect_mixed_play_rust(critic=...)`),
+    # and the `behavior_value_key` of the critic weights they were read at.
+    # The update uses them in place of its own replay only while that key still
+    # matches; any other batch carries neither and is replayed as before.
+    behavior_values: np.ndarray | None = None
+    behavior_value_key: tuple[Any, ...] | None = None
+    # Interface 3 records one effective value per market kind. The legacy
+    # slot arrays above remain the compiled engine action for the critic.
+    market_set_values: np.ndarray | None = None
+    market_set_masks: np.ndarray | None = None
+    market_set_active: np.ndarray | None = None
+    old_market_set_logprobs: np.ndarray | None = None
+
+    @property
+    def trajectories(self) -> int:
+        return int(self.rewards.shape[0])
+
+    @property
+    def horizon(self) -> int:
+        return int(self.rewards.shape[1])
+
+    @property
+    def state_count(self) -> int:
+        return int(self.valid.sum())
+
+    @property
+    def mean_entropy(self) -> float:
+        """Mean behavior entropy per active policy component."""
+        components = int(
+            self.unit_active.sum() + self.market_active.sum() + self.market_quantity_active.sum()
+        )
+        if "plan_active" in self.states:
+            components += int(self.states["plan_active"].sum())
+        return float(self.entropy_sums.sum() / max(1, components))
+
+
+def _trajectory_first(values: list[np.ndarray], dtype: np.dtype[Any] | None = None) -> np.ndarray:
+    result = np.stack(values, axis=1)
+    if dtype is not None:
+        result = result.astype(dtype, copy=False)
+    return result
+
+
+def _observations(states: list[list[Any]]) -> list[dict[str, Any]]:
+    return [agent.observation for state in states for agent in state]
+
+
+def _opponent_privates(states: list[list[Any]]) -> list[dict[str, Any]]:
+    out = []
+    for state in states:
+        out.extend((state[1].observation["private"], state[0].observation["private"]))
+    return out
+
+
+def _state_field_specs(architecture: str) -> dict[str, tuple[tuple[int, ...], type]]:
+    """Per-state shape and staging dtype of every architecture state field.
+
+    Structured rollouts persist the exact staging layout of
+    ``StructuredObservation`` plus the centralized-critic extras. The extras
+    come from the opponent seat's viewpoint, so native collection derives
+    them from the paired row's buffers instead of encoding them twice.
+    """
+    if architecture == CONV_ENTITY:
+        return {
+            "board": ((BOARD_CHANNELS, BOARD_SIZE, BOARD_SIZE), np.float16),
+            "global_features": ((GLOBAL_FEATURES,), np.float16),
+            "critic_features": ((CRITIC_FEATURES,), np.float16),
+            "units": ((MAX_UNITS, UNIT_FEATURES), np.float16),
+            "unit_positions": ((MAX_UNITS, 2), np.int8),
+        }
+    if resolve_architecture(architecture).structured_inputs:
+        gathers = len(UNIT_TILE_GATHERS)
+        return {
+            **(
+                {
+                    "plan_indices": ((), np.int32),
+                    "old_plan_logprobs": ((), np.float32),
+                    "plan_active": ((), np.bool_),
+                }
+                if architecture == "strategic-plan"
+                else {}
+            ),
+            **({"policy_ledger": ((593,), np.int64)} if architecture == "causal-execution" else {}),
+            **(
+                {"market_resources": ((MAX_MARKET_ORDERS, RESOURCE_FEATURES), np.float32)}
+                if architecture == "lejepa"
+                else {}
+            ),
+            "tile_categorical": ((2 * TILE_COUNT, N_TILE_CATEGORICAL), np.int8),
+            "tile_continuous": ((2 * TILE_COUNT, N_TILE_CONTINUOUS), np.float16),
+            "unit_categorical": ((MAX_UNITS, N_UNIT_CATEGORICAL), np.int8),
+            "unit_continuous": ((MAX_UNITS, N_UNIT_CONTINUOUS), np.float16),
+            "unit_tile_gather": ((MAX_UNITS, gathers), np.int8),
+            "unit_tile_gather_valid": ((MAX_UNITS, gathers), np.bool_),
+            "products": ((len(PRODUCTS), len(PRODUCT_TOKEN_FIELDS)), np.float16),
+            "animals": ((len(ANIMALS), len(ANIMAL_TOKEN_FIELDS)), np.float16),
+            "crops": ((len(CROPS), len(CROP_TOKEN_FIELDS)), np.float16),
+            "farms": ((2, len(FARM_TOKEN_FIELDS)), np.float16),
+            "town": ((len(TOWN_TOKEN_FIELDS),), np.float16),
+            "opponent_unit_categorical": ((MAX_UNITS, N_UNIT_CATEGORICAL), np.int8),
+            "opponent_unit_continuous": ((MAX_UNITS, N_UNIT_CONTINUOUS), np.float16),
+            "opponent_unit_active": ((MAX_UNITS,), np.bool_),
+            "critic_products": ((len(PRODUCTS), len(PRODUCT_PRIVATE_FIELDS)), np.float16),
+            "critic_animals": ((len(ANIMALS), len(ANIMAL_PRIVATE_FIELDS)), np.float16),
+            "critic_crops": ((len(CROPS), len(CROP_PRIVATE_FIELDS)), np.float16),
+        }
+    raise ValueError(f"unknown rollout architecture {architecture!r}")
+
+
+_SHARED_FIELD_SPECS: dict[str, tuple[tuple[int, ...], type]] = {
+    "unit_actions": ((MAX_UNITS,), np.int8),
+    "market_kinds": ((MAX_MARKET_ORDERS,), np.int8),
+    "market_quantities": ((MAX_MARKET_ORDERS,), np.int8),
+    "unit_masks": ((MAX_UNITS, N_UNIT_ACTIONS), np.bool_),
+    "market_kind_masks": ((MAX_MARKET_ORDERS, N_MARKET_KINDS), np.bool_),
+    "market_quantity_masks": ((MAX_MARKET_ORDERS, N_QUANTITIES), np.bool_),
+    "unit_active": ((MAX_UNITS,), np.bool_),
+    "market_active": ((MAX_MARKET_ORDERS,), np.bool_),
+    "market_quantity_active": ((MAX_MARKET_ORDERS,), np.bool_),
+    "old_unit_logprobs": ((MAX_UNITS,), np.float32),
+    "old_market_kind_logprobs": ((MAX_MARKET_ORDERS,), np.float32),
+    "old_market_quantity_logprobs": ((MAX_MARKET_ORDERS,), np.float32),
+    "rewards": ((), np.float32),
+    "valid": ((), np.bool_),
+}
+
+_SHARED_ROLLOUT_FIELDS = tuple(_SHARED_FIELD_SPECS)
+_MARKET_SET_FIELD_SPECS: dict[str, tuple[tuple[int, ...], type]] = {
+    "market_set_values": ((N_MARKET_SET_KINDS,), np.uint8),
+    "market_set_masks": ((N_MARKET_SET_KINDS, MARKET_SET_MAX_VALUE + 1), np.bool_),
+    "market_set_active": ((N_MARKET_SET_KINDS,), np.bool_),
+    "old_market_set_logprobs": ((N_MARKET_SET_KINDS,), np.float32),
+}
+_MARKET_SET_ROLLOUT_FIELDS = tuple(_MARKET_SET_FIELD_SPECS)
+
+
+def _rollout_factor_fields(batch: RolloutBatch) -> tuple[str, ...]:
+    if batch.market_set_values is None:
+        return _SHARED_ROLLOUT_FIELDS
+    if any(getattr(batch, name) is None for name in _MARKET_SET_ROLLOUT_FIELDS):
+        raise ValueError("incomplete market-set rollout factors")
+    return (*_SHARED_ROLLOUT_FIELDS, *_MARKET_SET_ROLLOUT_FIELDS)
+
+
+def _paired_columns(fields: tuple[str, ...], private_fields: tuple[str, ...]) -> slice:
+    """The actor columns whose paired-seat values are the critic's private ones.
+
+    Each private field ``opponent_<name>`` is the opponent's own ``<name>``
+    column; they stay one contiguous run so staging slices rather than gathers.
+    """
+    columns = [fields.index(name.removeprefix("opponent_")) for name in private_fields]
+    if columns != list(range(columns[0], columns[0] + len(columns))):
+        raise AssertionError(f"private columns {private_fields} are not contiguous in {fields}")
+    return slice(columns[0], columns[-1] + 1)
+
+
+# Opponent-viewpoint columns the centralized critic reads from the paired
+# row's economy tokens: their own product stock, its liquidation proceeds and
+# forecast price, animal stock, and seed counts.
+_PRODUCT_STOCK_COLUMNS = _paired_columns(PRODUCT_TOKEN_FIELDS, PRODUCT_PRIVATE_FIELDS)
+_ANIMAL_STOCK_COLUMNS = _paired_columns(ANIMAL_TOKEN_FIELDS, ANIMAL_PRIVATE_FIELDS)
+_CROP_SEED_COLUMNS = _paired_columns(CROP_TOKEN_FIELDS, CROP_PRIVATE_FIELDS)
+
+
+def _rollout_array(batch: RolloutBatch, field: str) -> np.ndarray:
+    return batch.states[field] if field in batch.states else getattr(batch, field)
+
+
+def _new_fields(architecture: str) -> dict[str, list[np.ndarray]]:
+    return {name: [] for name in (*_state_field_specs(architecture), *_SHARED_ROLLOUT_FIELDS)}
+
+
+def _record_policy_step(
+    architecture: str, fields: dict[str, list[np.ndarray]], policy_step: PolicyStep
+) -> None:
+    factors = policy_step.factors
+    for name, (_, dtype) in _state_field_specs(architecture).items():
+        if name in {"plan_indices", "old_plan_logprobs", "plan_active"}:
+            if factors.plan is None:
+                raise ValueError("strategic rollout requires recorded plan probabilities")
+            values = (
+                np.ones(factors.plan.shape[0], dtype=np.bool_)
+                if name == "plan_active"
+                else factors.plan[:, 0 if name == "plan_indices" else 1]
+            )
+            fields[name].append(values.astype(dtype, copy=False))
+            continue
+        if name == "market_resources":
+            if factors.market_resources is None:
+                raise ValueError("LeJEPA rollout requires exact pre-order resource state")
+            fields[name].append(factors.market_resources.astype(dtype, copy=False))
+            continue
+        if name == "policy_ledger":
+            if factors.policy_ledger is None:
+                raise ValueError("causal rollout requires exact initial ledger state")
+            fields[name].append(factors.policy_ledger.astype(dtype, copy=False))
+            continue
+        rows = [getattr(row, name) for row in policy_step.encoded]
+        if any(row is None for row in rows):
+            raise ValueError("rollout collection requires opponent private state on every row")
+        fields[name].append(np.stack(rows).astype(dtype, copy=False))
+    fields["unit_actions"].append(factors.unit_actions.astype(np.int8))
+    fields["market_kinds"].append(factors.market_kinds.astype(np.int8))
+    fields["market_quantities"].append(factors.market_quantities.astype(np.int8))
+    fields["unit_masks"].append(factors.unit_masks)
+    fields["market_kind_masks"].append(factors.market_kind_masks)
+    fields["market_quantity_masks"].append(factors.market_quantity_masks)
+    fields["unit_active"].append(factors.unit_active)
+    fields["market_active"].append(factors.market_active)
+    fields["market_quantity_active"].append(factors.market_quantity_active)
+    fields["old_unit_logprobs"].append(factors.unit_logprobs)
+    fields["old_market_kind_logprobs"].append(factors.market_kind_logprobs)
+    fields["old_market_quantity_logprobs"].append(factors.market_quantity_logprobs)
+
+
+def _finish_rollout(
+    architecture: str,
+    fields: dict[str, list[np.ndarray]],
+    *,
+    episode_seeds: np.ndarray,
+    final_money: np.ndarray,
+    opponent_money: np.ndarray,
+    seats: np.ndarray,
+    agents: np.ndarray,
+    entropy_sums: np.ndarray,
+    learner_stochastic: bool,
+    started: float,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+) -> RolloutBatch:
+    return RolloutBatch(
+        architecture=architecture,
+        reward_mode=reward_mode,
+        states={name: _trajectory_first(fields[name]) for name in _state_field_specs(architecture)},
+        **{
+            name: _trajectory_first(fields[name], dtype)
+            for name, (_, dtype) in _SHARED_FIELD_SPECS.items()
+        },
+        episode_seeds=episode_seeds,
+        final_money=final_money,
+        opponent_money=opponent_money,
+        seats=seats,
+        agents=agents,
+        orientations=np.zeros(agents.shape[0], dtype=np.int8),
+        learner_stochastic=learner_stochastic,
+        entropy_sums=entropy_sums,
+        elapsed_seconds=time.perf_counter() - started,
+    )
+
+
+def _native_field_specs(
+    architecture: str, trajectories: int, horizon: int, *, action_interface: int = 1
+) -> dict[str, tuple[tuple[int, ...], type]]:
+    """Return the trajectory-major shape and dtype of every native rollout field."""
+    prefix = (trajectories, horizon)
+    return {
+        name: ((*prefix, *shape), dtype)
+        for name, (shape, dtype) in {
+            **_state_field_specs(architecture),
+            **_SHARED_FIELD_SPECS,
+            **(_MARKET_SET_FIELD_SPECS if action_interface == 3 else {}),
+        }.items()
+    }
+
+
+_TORCH_STORAGE_DTYPES = {
+    np.dtype(np.uint8): torch.uint8,
+    np.dtype(np.float16): torch.float16,
+    np.dtype(np.float32): torch.float32,
+    np.dtype(np.int8): torch.int8,
+    np.dtype(np.int32): torch.int32,
+    np.dtype(np.int64): torch.int64,
+    np.dtype(np.bool_): torch.bool,
+}
+
+
+def allocate_rollout_storage(
+    architecture: str,
+    trajectories: int,
+    horizon: int,
+    *,
+    pin_memory: bool = False,
+    action_interface: int = 1,
+) -> dict[str, np.ndarray]:
+    """Allocate reusable trajectory-major rollout storage.
+
+    Pinned storage is allocated through page-locked torch tensors and exposed
+    as NumPy views, so replay staging can upload the complete rollout to the
+    accelerator asynchronously instead of through pageable-memory copies.
+    """
+    if trajectories < 1 or horizon < 1:
+        raise ValueError("rollout storage requires positive trajectories and horizon")
+    storage: dict[str, np.ndarray] = {}
+    for name, (shape, dtype) in _native_field_specs(
+        architecture, trajectories, horizon, action_interface=action_interface
+    ).items():
+        if pin_memory:
+            tensor = torch.empty(
+                shape, dtype=_TORCH_STORAGE_DTYPES[np.dtype(dtype)], pin_memory=True
+            )
+            storage[name] = tensor.numpy()
+        else:
+            storage[name] = np.empty(shape, dtype=dtype)
+    storage["valid"][:] = True
+    return storage
+
+
+def _native_rollout_storage(
+    storage: dict[str, np.ndarray] | None,
+    architecture: str,
+    trajectories: int,
+    horizon: int,
+    *,
+    action_interface: int = 1,
+) -> dict[str, np.ndarray]:
+    """Validate caller-provided storage or allocate a fresh full-horizon block."""
+    if storage is None:
+        return allocate_rollout_storage(
+            architecture, trajectories, horizon, action_interface=action_interface
+        )
+    specs = _native_field_specs(
+        architecture, trajectories, horizon, action_interface=action_interface
+    )
+    if set(storage) != set(specs):
+        raise ValueError("rollout storage fields do not match the native layout")
+    for name, (shape, dtype) in specs.items():
+        array = storage[name]
+        if array.shape != shape or array.dtype != np.dtype(dtype):
+            raise ValueError(f"rollout storage field {name} has the wrong shape or dtype")
+    storage["valid"][:] = True
+    return storage
+
+
+def _set_market_resource_heads(environment: Any, actors: tuple[Any, ...]) -> None:
+    rank = actors[0].config.quantity_rank
+    kinds, quantities = [], []
+    for actor in actors:
+        conditioner = getattr(actor, "market_resource_conditioner", None)
+        kinds.append(
+            np.zeros((N_MARKET_KINDS, RESOURCE_FEATURES), dtype=np.float32)
+            if conditioner is None
+            else conditioner.kind.weight.detach().float().cpu().numpy()
+        )
+        quantities.append(
+            np.zeros((rank, RESOURCE_FEATURES), dtype=np.float32)
+            if conditioner is None
+            else conditioner.quantity.weight.detach().float().cpu().numpy()
+        )
+    environment.set_market_resource_heads(
+        np.ascontiguousarray(kinds), np.ascontiguousarray(quantities)
+    )
+
+
+def _quantity_heads(
+    actors: tuple[FarmActor | StructuredActor | EntityActor, ...],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Materialize the small selected-kind quantity heads once per rollout."""
+    interfaces = {getattr(actor.config, "action_interface", 1) for actor in actors}
+    if len(interfaces) != 1:
+        raise ValueError("quantity head stack mixes action interfaces")
+
+    def parameter(actor: FarmActor | StructuredActor | EntityActor, name: str) -> np.ndarray:
+        value = getattr(actor, name)
+        if hasattr(value, "weight"):
+            value = value.weight
+        return value.detach().float().cpu().numpy()
+
+    return (
+        np.ascontiguousarray(
+            np.stack([parameter(actor, "market_quantity_kind_gate") for actor in actors])
+        ),
+        np.ascontiguousarray(
+            np.stack([parameter(actor, "market_quantity_value") for actor in actors])
+        ),
+        np.ascontiguousarray(
+            np.stack([parameter(actor, "market_quantity_bias") for actor in actors])
+        ),
+    )
+
+
+def _empty_selected_inputs(
+    inputs: tuple[Any, ...], leading_shape: tuple[int, ...]
+) -> tuple[Any, ...]:
+    """Allocate a reusable row-gather destination matching model inputs."""
+
+    def empty(tensor: torch.Tensor) -> torch.Tensor:
+        return torch.empty(
+            (*leading_shape, *tensor.shape[1:]),
+            dtype=tensor.dtype,
+            device=tensor.device,
+        )
+
+    return tuple(
+        type(entry)(*(empty(tensor) for tensor in entry))
+        if isinstance(entry, tuple)
+        else empty(entry)
+        for entry in inputs
+    )
+
+
+def _select_inputs(
+    inputs: tuple[Any, ...],
+    rows: torch.Tensor,
+    out: tuple[Any, ...] | None = None,
+) -> tuple[Any, ...]:
+    """Gather rows of a model-argument tuple, optionally into persistent storage."""
+    if out is None:
+        return tuple(
+            type(entry)(*(tensor.index_select(0, rows) for tensor in entry))
+            if isinstance(entry, tuple)
+            else entry.index_select(0, rows)
+            for entry in inputs
+        )
+    for entry, destination in zip(inputs, out, strict=True):
+        if isinstance(entry, tuple):
+            for tensor, target in zip(entry, destination, strict=True):
+                torch.index_select(tensor, 0, rows, out=target)
+        else:
+            torch.index_select(entry, 0, rows, out=destination)
+    return out
+
+
+def _lane_view_inputs(
+    inputs: tuple[Any, ...],
+    rows: torch.Tensor,
+    lanes: int,
+    width: int,
+    out: tuple[Any, ...] | None = None,
+) -> tuple[Any, ...]:
+    """Gather rows and fold them into [lanes, width, ...] shapes."""
+    if out is None:
+
+        def folded(tensor: torch.Tensor) -> torch.Tensor:
+            return tensor.index_select(0, rows).view(lanes, width, *tensor.shape[1:])
+
+        return tuple(
+            type(entry)(*(folded(tensor) for tensor in entry))
+            if isinstance(entry, tuple)
+            else folded(entry)
+            for entry in inputs
+        )
+    for entry, destination in zip(inputs, out, strict=True):
+        if isinstance(entry, tuple):
+            for tensor, target in zip(entry, destination, strict=True):
+                torch.index_select(
+                    tensor, 0, rows, out=target.view(rows.numel(), *tensor.shape[1:])
+                )
+        else:
+            torch.index_select(entry, 0, rows, out=destination.view(rows.numel(), *entry.shape[1:]))
+    return out
+
+
+def _leading_tensor(inputs: tuple[Any, ...]) -> torch.Tensor:
+    head = inputs[0]
+    while isinstance(head, tuple):
+        head = head[0]
+    return head
+
+
+@dataclass(frozen=True)
+class _NativeEncodedWave:
+    arrays: dict[str, np.ndarray]
+    host_features: torch.Tensor
+    host_positions: torch.Tensor
+    staged_features: torch.Tensor
+    device_features: torch.Tensor
+    board: torch.Tensor
+    global_features: torch.Tensor
+    critic_features: torch.Tensor
+    units: torch.Tensor
+    unit_positions: torch.Tensor
+
+    def copy_to_device(self) -> None:
+        """Upload the encoded block, then convert it in a separate device kernel.
+
+        The Rust encoder emits fp16 and the model consumes its inference dtype. A
+        single cross-dtype `copy_` uses a same-dtype device temporary before the
+        conversion. This spells out both buffers so they are allocated once and
+        their addresses remain static for CUDA graph capture.
+        """
+        non_blocking = self.device_features.device.type == "cuda"
+        self.staged_features.copy_(self.host_features, non_blocking=non_blocking)
+        self.device_features.copy_(self.staged_features, non_blocking=non_blocking)
+        self.unit_positions.copy_(self.host_positions, non_blocking=non_blocking)
+
+    def refresh(self, environment: Any) -> None:
+        environment.encoded_into(self.arrays)
+
+    def inputs(self) -> tuple[torch.Tensor, ...]:
+        return (self.board, self.global_features, self.units, self.unit_positions)
+
+
+def _native_encoded_wave(
+    environment: Any,
+    device: torch.device,
+    floating_dtype: torch.dtype = torch.float32,
+    device_wave: _NativeEncodedWave | None = None,
+) -> _NativeEncodedWave:
+    """Build reusable Rust output plus packed, optionally pinned model input buffers."""
+    arrays = {name: np.asarray(value) for name, value in environment.encoded_buffers().items()}
+    feature_names = ("board", "global_features", "critic_features", "units")
+    feature_sizes = [arrays[name].size for name in feature_names]
+    pin_memory = device.type == "cuda"
+    host_features = torch.empty(sum(feature_sizes), dtype=torch.float16, pin_memory=pin_memory)
+    staged_features = (
+        torch.empty(sum(feature_sizes), dtype=host_features.dtype, device=device)
+        if device_wave is None
+        else device_wave.staged_features
+    )
+    device_features = (
+        torch.empty(sum(feature_sizes), dtype=floating_dtype, device=device)
+        if device_wave is None
+        else device_wave.device_features
+    )
+    device_views: dict[str, torch.Tensor] = {}
+    cursor = 0
+    for name, size in zip(feature_names, feature_sizes, strict=True):
+        shape = arrays[name].shape
+        host_view = host_features[cursor : cursor + size].reshape(shape)
+        device_views[name] = device_features[cursor : cursor + size].reshape(shape)
+        arrays[name] = host_view.numpy()
+        cursor += size
+
+    host_positions = torch.empty(
+        arrays["unit_positions"].shape,
+        dtype=torch.long,
+        pin_memory=pin_memory,
+    )
+    arrays["unit_positions"] = host_positions.numpy()
+    unit_positions = (
+        torch.empty(host_positions.shape, dtype=torch.long, device=device)
+        if device_wave is None
+        else device_wave.unit_positions
+    )
+    return _NativeEncodedWave(
+        arrays=arrays,
+        host_features=host_features,
+        host_positions=host_positions,
+        staged_features=staged_features,
+        device_features=device_features,
+        board=device_views["board"],
+        global_features=device_views["global_features"],
+        critic_features=device_views["critic_features"],
+        units=device_views["units"],
+        unit_positions=unit_positions,
+    )
+
+
+# Structured Rust output uses three storage dtypes, but all of them travel as
+# raw bytes in one pinned block. The typed views below retain the encoder and
+# model layouts while reducing each CUDA wave to one host-to-device upload.
+_STRUCTURED_CONTINUOUS_BUFFERS = (
+    "tile_continuous",
+    "unit_continuous",
+    "products",
+    "animals",
+    "crops",
+    "farms",
+    "town",
+)
+_STRUCTURED_CATEGORICAL_BUFFERS = ("tile_categorical", "unit_categorical", "unit_tile_gather")
+_STRUCTURED_FLAG_BUFFERS = ("unit_active", "unit_tile_gather_valid")
+
+
+@dataclass(frozen=True)
+class _NativeStructuredWave:
+    arrays: dict[str, np.ndarray]
+    host_transport: torch.Tensor
+    staged_transport: torch.Tensor
+    staged_continuous: torch.Tensor
+    staged_categorical: torch.Tensor
+    device_continuous: torch.Tensor
+    device_categorical: torch.Tensor
+    device_inputs: StructuredInputs
+
+    def copy_to_device(self) -> None:
+        """Upload once, then convert the two model-input groups in place.
+
+        Keeping the same-dtype transport and final model-input buffers removes
+        per-step temporaries. Packing flags into the byte transport also removes
+        two H2D launches; the model reads bool views directly from that block.
+        """
+        non_blocking = self.device_continuous.device.type == "cuda"
+        self.staged_transport.copy_(self.host_transport, non_blocking=non_blocking)
+        self.device_continuous.copy_(self.staged_continuous)
+        self.device_categorical.copy_(self.staged_categorical)
+
+    def refresh(self, environment: Any) -> None:
+        environment.structured_into(self.arrays)
+
+    def inputs(self) -> tuple[StructuredInputs]:
+        return (self.device_inputs,)
+
+
+def _native_structured_wave(
+    environment: Any,
+    device: torch.device,
+    floating_dtype: torch.dtype = torch.float32,
+    device_wave: _NativeStructuredWave | None = None,
+) -> _NativeStructuredWave:
+    """Build reusable structured Rust output plus packed device token tensors."""
+    arrays = {name: np.asarray(value) for name, value in environment.structured_buffers().items()}
+    continuous_elements = sum(arrays[name].size for name in _STRUCTURED_CONTINUOUS_BUFFERS)
+    categorical_elements = sum(arrays[name].size for name in _STRUCTURED_CATEGORICAL_BUFFERS)
+    flag_elements = sum(arrays[name].size for name in _STRUCTURED_FLAG_BUFFERS)
+    continuous_bytes = continuous_elements * 2
+    categorical_end = continuous_bytes + categorical_elements
+    transport_bytes = categorical_end + flag_elements
+
+    host_transport = torch.empty(
+        transport_bytes,
+        dtype=torch.uint8,
+        pin_memory=device.type == "cuda",
+    )
+    host_continuous = host_transport[:continuous_bytes].view(torch.float16)
+    host_categorical = host_transport[continuous_bytes:categorical_end].view(torch.int8)
+    host_flags = host_transport[categorical_end:].view(torch.bool)
+    if device_wave is None:
+        staged_transport = torch.empty(transport_bytes, dtype=torch.uint8, device=device)
+        device_continuous = torch.empty(continuous_elements, dtype=floating_dtype, device=device)
+        device_categorical = torch.empty(categorical_elements, dtype=torch.int64, device=device)
+    else:
+        staged_transport = device_wave.staged_transport
+        device_continuous = device_wave.device_continuous
+        device_categorical = device_wave.device_categorical
+    staged_continuous = staged_transport[:continuous_bytes].view(torch.float16)
+    staged_categorical = staged_transport[continuous_bytes:categorical_end].view(torch.int8)
+    staged_flags = staged_transport[categorical_end:].view(torch.bool)
+    views: dict[str, torch.Tensor] = {}
+
+    def map_group(names: tuple[str, ...], host: torch.Tensor, destination: torch.Tensor) -> None:
+        cursor = 0
+        for name in names:
+            shape = arrays[name].shape
+            size = arrays[name].size
+            arrays[name] = host[cursor : cursor + size].reshape(shape).numpy()
+            views[name] = destination[cursor : cursor + size].reshape(shape)
+            cursor += size
+
+    map_group(_STRUCTURED_CONTINUOUS_BUFFERS, host_continuous, device_continuous)
+    map_group(_STRUCTURED_CATEGORICAL_BUFFERS, host_categorical, device_categorical)
+    map_group(_STRUCTURED_FLAG_BUFFERS, host_flags, staged_flags)
+    return _NativeStructuredWave(
+        arrays=arrays,
+        host_transport=host_transport,
+        staged_transport=staged_transport,
+        staged_continuous=staged_continuous,
+        staged_categorical=staged_categorical,
+        device_continuous=device_continuous,
+        device_categorical=device_categorical,
+        device_inputs=(
+            StructuredInputs(**{name: views[name] for name in StructuredInputs._fields})
+            if device_wave is None
+            else device_wave.device_inputs
+        ),
+    )
+
+
+def _native_wave(
+    architecture: str,
+    environment: Any,
+    device: torch.device,
+    floating_dtype: torch.dtype = torch.float32,
+    device_wave: _NativeEncodedWave | _NativeStructuredWave | None = None,
+) -> _NativeEncodedWave | _NativeStructuredWave:
+    if architecture == CONV_ENTITY:
+        assert device_wave is None or isinstance(device_wave, _NativeEncodedWave)
+        return _native_encoded_wave(environment, device, floating_dtype, device_wave)
+    assert device_wave is None or isinstance(device_wave, _NativeStructuredWave)
+    return _native_structured_wave(environment, device, floating_dtype, device_wave)
+
+
+@dataclass(frozen=True)
+class _HostActorOutput:
+    unit_logits: np.ndarray
+    market_kind_logits: np.ndarray
+    market_quantity_context: np.ndarray
+
+
+@dataclass(frozen=True)
+class _PackedTransfer:
+    """Persistent staging pair for the single D2H copy of a collection step.
+
+    `device` is a flat fp32 block on the model's device and `host` is its pinned
+    mirror. Both are allocated once per collection call and reused by every
+    step, so the steady-state transfer path performs no allocation at all.
+    """
+
+    device: torch.Tensor
+    host: torch.Tensor
+
+
+def _packed_outputs_to_host(
+    outputs: tuple[ActorOutput, ...],
+    transfer: _PackedTransfer | None,
+) -> tuple[list[_HostActorOutput], _PackedTransfer | None]:
+    """Move every policy head into pinned host memory with one device sync.
+
+    This stage measures 2.42 ms of the 17.72 ms collection step (11.9%) and runs
+    719 times per iteration. Most of that was not transfer: the previous
+    implementation widened each of the three heads with `.float()` and then
+    concatenated them, so a step allocated four short-lived device tensors and
+    read every logit twice before the D2H copy even started. Under bf16 autocast
+    the `.float()` calls are real conversion kernels rather than no-ops.
+
+    A persistent packed device block removes both costs. `copy_` into a slice of
+    that block performs the dtype widen as part of the placement, so the separate
+    `.float()` disappears and the concatenation has nothing left to do: the heads
+    land directly in the memory the D2H reads. The pair is allocated on the first
+    step of a collection call and reused by every later step; the element-count
+    guard reallocates it should a block ever be carried into a wave of a
+    different width.
+    """
+    if outputs[0].unit_logits.device.type == "cpu":
+        return (
+            [
+                _HostActorOutput(
+                    output.unit_logits.float().numpy(),
+                    output.market_kind_logits.float().numpy(),
+                    output.market_quantity_context.float().numpy(),
+                )
+                for output in outputs
+            ],
+            transfer,
+        )
+
+    heads = [
+        tensor
+        for output in outputs
+        for tensor in (
+            output.unit_logits,
+            output.market_kind_logits,
+            output.market_quantity_context,
+        )
+    ]
+    total = sum(tensor.numel() for tensor in heads)
+    if transfer is None or transfer.device.numel() != total:
+        transfer = _PackedTransfer(
+            device=torch.empty(total, dtype=torch.float32, device=heads[0].device),
+            host=torch.empty(total, dtype=torch.float32, device="cpu", pin_memory=True),
+        )
+    flat = transfer.host.numpy()
+
+    cursor = 0
+    arrays: list[np.ndarray] = []
+    for tensor in heads:
+        size = tensor.numel()
+        shape = tuple(tensor.shape)
+        transfer.device[cursor : cursor + size].view(shape).copy_(tensor)
+        arrays.append(flat[cursor : cursor + size].reshape(shape))
+        cursor += size
+    transfer.host.copy_(transfer.device, non_blocking=True)
+    # Native sampling consumes the host buffer immediately. This is the
+    # single required D2H synchronization for the complete model wave.
+    torch.cuda.current_stream(heads[0].device).synchronize()
+    host_outputs = [
+        _HostActorOutput(*arrays[index : index + 3]) for index in range(0, 3 * len(outputs), 3)
+    ]
+    return host_outputs, transfer
+
+
+@dataclass(frozen=True)
+class _GpuPreferenceTransfer:
+    """Pinned destinations for the compact native sampler inputs of one step.
+
+    Allocated once per wave so the device-to-host copies that fill it can be
+    recorded into the step graph: a captured memcpy reads and writes fixed
+    addresses, and these are the addresses.
+    """
+
+    units: torch.Tensor
+    kinds: torch.Tensor
+    quantity_context: torch.Tensor
+    quantity_draws: torch.Tensor
+
+    @classmethod
+    def allocate(cls, rows: int, quantity_rank: int) -> _GpuPreferenceTransfer:
+        def pinned(*shape: int) -> torch.Tensor:
+            return torch.empty(shape, dtype=torch.float32, device="cpu", pin_memory=True)
+
+        return cls(
+            units=pinned(rows, MAX_UNITS, N_UNIT_ACTIONS),
+            kinds=pinned(rows, MAX_MARKET_ORDERS, N_MARKET_KINDS),
+            quantity_context=pinned(rows, MAX_MARKET_ORDERS, quantity_rank),
+            quantity_draws=pinned(rows, MAX_MARKET_ORDERS),
+        )
+
+    def arrays(self) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        """Host views; valid once the stream that filled them has been joined."""
+        return (
+            self.units.numpy(),
+            self.kinds.numpy(),
+            self.quantity_context.numpy(),
+            self.quantity_draws.numpy(),
+        )
+
+
+def _row_random(
+    shape: tuple[int, ...],
+    current_rows: torch.Tensor,
+    frozen_rows: torch.Tensor,
+    current_generator: torch.Generator,
+    frozen_generator: torch.Generator,
+    *,
+    device: torch.device,
+) -> torch.Tensor:
+    """Draw independent current/frozen streams into their physical row order."""
+    values = torch.empty(shape, dtype=torch.float32, device=device)
+    for rows, generator in (
+        (current_rows, current_generator),
+        (frozen_rows, frozen_generator),
+    ):
+        if rows.numel():
+            values[rows] = torch.rand(
+                (rows.numel(), *shape[1:]),
+                dtype=torch.float32,
+                device=device,
+                generator=generator,
+            )
+    return values
+
+
+def _gumbel_utilities(
+    logits: torch.Tensor,
+    temperatures: torch.Tensor,
+    deterministic_rows: torch.Tensor,
+    current_rows: torch.Tensor,
+    frozen_rows: torch.Tensor,
+    current_generator: torch.Generator,
+    frozen_generator: torch.Generator,
+) -> torch.Tensor:
+    effective_temperatures = temperatures.clamp_min(_NATIVE_TEMPERATURE_FLOOR)
+    scores = logits.float() / effective_temperatures.reshape(
+        effective_temperatures.shape[0], *((1,) * (logits.ndim - 1))
+    )
+    uniforms = _row_random(
+        tuple(scores.shape),
+        current_rows,
+        frozen_rows,
+        current_generator,
+        frozen_generator,
+        device=scores.device,
+    )
+    uniforms.clamp_(
+        min=torch.finfo(torch.float32).tiny,
+        max=1.0 - torch.finfo(torch.float32).eps,
+    )
+    noise = -torch.log(-torch.log(uniforms))
+    return torch.where(
+        deterministic_rows.reshape(deterministic_rows.shape[0], *((1,) * (logits.ndim - 1))),
+        scores,
+        scores + noise,
+    )
+
+
+def _stage_gpu_preferences(
+    output: ActorOutput,
+    temperatures: torch.Tensor,
+    unit_deterministic_rows: torch.Tensor,
+    kind_deterministic_rows: torch.Tensor,
+    current_rows: torch.Tensor,
+    frozen_rows: torch.Tensor,
+    current_generator: torch.Generator,
+    frozen_generator: torch.Generator,
+    transfer: _GpuPreferenceTransfer,
+) -> None:
+    """Draw the step's Gumbel utilities and quantity draws and start their download.
+
+    Everything here is stream-ordered device work with no host dependency, so
+    the step graph records it directly after the forward: the RNG streams are
+    registered with the graph and advance per replay exactly as they would
+    eagerly. The caller joins the stream before reading ``transfer``.
+    """
+    unit_utilities = _gumbel_utilities(
+        output.unit_logits,
+        temperatures,
+        unit_deterministic_rows,
+        current_rows,
+        frozen_rows,
+        current_generator,
+        frozen_generator,
+    )
+    kind_utilities = _gumbel_utilities(
+        output.market_kind_logits,
+        temperatures,
+        kind_deterministic_rows,
+        current_rows,
+        frozen_rows,
+        current_generator,
+        frozen_generator,
+    )
+    quantity_draws = _row_random(
+        (output.market_quantity_context.shape[0], MAX_MARKET_ORDERS),
+        current_rows,
+        frozen_rows,
+        current_generator,
+        frozen_generator,
+        device=output.market_quantity_context.device,
+    )
+    transfer.units.copy_(unit_utilities, non_blocking=True)
+    transfer.kinds.copy_(kind_utilities, non_blocking=True)
+    transfer.quantity_context.copy_(output.market_quantity_context.float(), non_blocking=True)
+    transfer.quantity_draws.copy_(quantity_draws, non_blocking=True)
+
+
+def _head_determinism_rows(
+    deterministic_rows: np.ndarray,
+    learner_rows: np.ndarray,
+    sampled_heads: tuple[str, ...] | None,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Keep frozen-row modes intact while choosing learner head-family modes."""
+    units = deterministic_rows.copy()
+    kinds = deterministic_rows.copy()
+    quantities = deterministic_rows.copy()
+    if sampled_heads is not None:
+        selected = set(sampled_heads)
+        units[learner_rows] = "units" not in selected
+        kinds[learner_rows] = "kinds" not in selected
+        quantities[learner_rows] = "quantities" not in selected
+    return units, kinds, quantities
+
+
+@dataclass
+class _GpuStatisticsTransfer:
+    """Pinned output staging plus the device copies of the sampled inputs.
+
+    Deferred consumers must join ``ready`` -- or the stream that filled the
+    transfer -- before reusing either the sampled host buffers or this transfer.
+    Collection joins the stream before every native step.
+    """
+
+    host: torch.Tensor
+    arrays: tuple[np.ndarray, ...]
+    ready: torch.cuda.Event
+    inputs: tuple[torch.Tensor, ...]
+    host_inputs: tuple[torch.Tensor, ...]
+
+    @classmethod
+    def allocate(
+        cls,
+        host_inputs: tuple[torch.Tensor, ...],
+        statistic_shapes: tuple[tuple[int, ...], ...],
+        device: torch.device,
+    ) -> _GpuStatisticsTransfer:
+        total = sum(int(np.prod(shape)) for shape in statistic_shapes)
+        host_buffer = torch.empty(total, dtype=torch.float32, device="cpu", pin_memory=True)
+        flat = host_buffer.numpy()
+        cursor = 0
+        arrays: list[np.ndarray] = []
+        for shape in statistic_shapes:
+            size = int(np.prod(shape))
+            arrays.append(flat[cursor : cursor + size].reshape(shape))
+            cursor += size
+        return cls(
+            host=host_buffer,
+            arrays=tuple(arrays),
+            ready=torch.cuda.Event(),
+            # Zeroed: the step graph computes statistics from these before the
+            # first upload lands, and a gather over uninitialized action indices
+            # is a device-side assert rather than a discarded number.
+            inputs=tuple(torch.zeros_like(tensor, device=device) for tensor in host_inputs),
+            host_inputs=host_inputs,
+        )
+
+    def matches(
+        self, host_inputs: tuple[torch.Tensor, ...], statistic_shapes: tuple[tuple[int, ...], ...]
+    ) -> bool:
+        return tuple(array.shape for array in self.arrays) == statistic_shapes and all(
+            target.shape == source.shape and target.dtype == source.dtype
+            for target, source in zip(self.inputs, host_inputs, strict=True)
+        )
+
+
+def _statistics_host_inputs(sampled: dict[str, np.ndarray]) -> tuple[torch.Tensor, ...]:
+    return tuple(torch.from_numpy(np.asarray(sampled[name])) for name in _GPU_STATISTIC_INPUT_NAMES)
+
+
+def _statistics_shapes(
+    host_inputs: tuple[torch.Tensor, ...], strategic: bool
+) -> tuple[tuple[int, ...], ...]:
+    shapes: tuple[tuple[int, ...], ...] = (
+        tuple(host_inputs[0].shape),
+        tuple(host_inputs[1].shape),
+        (host_inputs[0].shape[0],),
+    )
+    if strategic:
+        shapes += ((host_inputs[0].shape[0], 3),)
+    return shapes
+
+
+def _validate_statistics_masks(sampled: dict[str, np.ndarray], output: ActorOutput) -> None:
+    # Masks originate on the host. Reject unsupported decisions here rather
+    # than forcing two CUDA-to-host boolean reductions per environment step.
+    for logits, name in (
+        (output.unit_logits, "unit_masks"),
+        (output.market_kind_logits, "market_kind_masks"),
+    ):
+        mask = np.asarray(sampled[name])
+        if logits.shape != mask.shape:
+            raise ValueError(
+                f"logit/mask shape mismatch: {logits.shape} != {torch.Size(mask.shape)}"
+            )
+        if not mask.any(axis=-1).all():
+            raise ValueError("every categorical decision needs at least one valid action")
+
+
+def _upload_gpu_statistics_inputs(
+    sampled: dict[str, np.ndarray], output: ActorOutput, transfer: _GpuStatisticsTransfer
+) -> None:
+    """Validate the step's host masks and start uploading the sampled factors."""
+    _validate_statistics_masks(sampled, output)
+    transfer.host_inputs = _statistics_host_inputs(sampled)
+    for target, source in zip(transfer.inputs, transfer.host_inputs, strict=True):
+        target.copy_(source, non_blocking=True)
+
+
+def _launch_gpu_statistics(
+    output: ActorOutput,
+    builtin_agents: torch.Tensor,
+    temperatures: torch.Tensor,
+    transfer: _GpuStatisticsTransfer,
+) -> None:
+    """Compute the uploaded step's statistics and start their download.
+
+    Stream-ordered device work only, so the step graph records it ahead of the
+    next forward: it reads the logits the previous replay left in the fixed
+    output buffers before that forward overwrites them.
+    """
+    arguments = (output.unit_logits, output.market_kind_logits, builtin_agents, temperatures)
+    arguments += transfer.inputs
+    if isinstance(output, StrategicOutput):
+        arguments += (output.plan,)
+    # Fusion only: no cudagraph-tree generation/lifetime coupling to model
+    # forwards, and no eager per-statistic copies into another device buffer.
+    packed = _compiled_gpu_policy_statistics(arguments)(*arguments)
+    transfer.host.copy_(packed, non_blocking=True)
+
+
+_GPU_STATISTIC_INPUT_NAMES = (
+    "unit_actions",
+    "market_kinds",
+    "unit_masks",
+    "market_kind_masks",
+    "unit_active",
+    "market_active",
+    "market_quantity_active",
+    "entropy",
+    "market_kind_deltas",
+)
+_GPU_STATISTIC_OUTPUT_NAMES = ("unit_logprobs", "market_kind_logprobs", "entropy")
+_GPU_STATISTICS_CACHE: dict[tuple[Any, ...], Any] = {}
+
+
+def _gpu_policy_statistics(
+    unit_logits: torch.Tensor,
+    kind_logits: torch.Tensor,
+    builtin_agents: torch.Tensor,
+    temperatures: torch.Tensor,
+    unit_actions: torch.Tensor,
+    market_kinds: torch.Tensor,
+    unit_masks: torch.Tensor,
+    kind_masks: torch.Tensor,
+    unit_active: torch.Tensor,
+    kind_active: torch.Tensor,
+    quantity_active: torch.Tensor,
+    quantity_entropy_contribution: torch.Tensor,
+    market_kind_deltas: torch.Tensor,
+    plan: torch.Tensor | None = None,
+) -> torch.Tensor:
+    """Tensor-only FP32 statistics and packing, independent of model compilation."""
+    scale = temperatures.clamp_min(_NATIVE_TEMPERATURE_FLOOR)[:, None, None]
+    unit_logprob, unit_entropy = categorical_statistics(
+        unit_logits / scale, unit_masks, unit_actions, validate_mask=False
+    )
+    kind_logprob, kind_entropy = categorical_statistics(
+        (kind_logits + market_kind_deltas) / scale, kind_masks, market_kinds, validate_mask=False
+    )
+    learned = (builtin_agents == 0)[:, None]
+    unit_logprob = unit_logprob * learned
+    kind_logprob = kind_logprob * learned
+    unit_entropy = unit_entropy * learned
+    kind_entropy = kind_entropy * learned
+    counts = unit_active.sum(1) + kind_active.sum(1) + quantity_active.sum(1)
+    entropy = (
+        (unit_entropy * unit_active).sum(1) + (kind_entropy * kind_active).sum(1)
+    ) / counts.clamp_min(1) + quantity_entropy_contribution
+    if plan is not None:
+        # Native quantity entropy is normalized by physical action components.
+        # The strategic latent is one additional factor in the augmented policy.
+        entropy = (entropy * counts + plan[:, 2] * learned[:, 0]) / (
+            counts + learned[:, 0]
+        ).clamp_min(1)
+        return torch.cat((unit_logprob.flatten(), kind_logprob.flatten(), entropy, plan.flatten()))
+    return torch.cat((unit_logprob.flatten(), kind_logprob.flatten(), entropy))
+
+
+def _compiled_gpu_policy_statistics(inputs: tuple[torch.Tensor, ...]) -> Any:
+    # As with stacked forward layouts, each static geometry gets its own frame
+    # rather than consuming a shared frame's finite recompile budget. Tensor
+    # temperatures are runtime inputs, never Python-valued compile guards.
+    key = tuple((value.shape, value.stride(), value.dtype, value.device) for value in inputs)
+    compiled = _GPU_STATISTICS_CACHE.get(key)
+    if compiled is None:
+        template = _gpu_policy_statistics
+        name = f"_gpu_policy_statistics_{len(_GPU_STATISTICS_CACHE)}"
+        function = types.FunctionType(
+            template.__code__.replace(co_name=name, co_qualname=name),
+            template.__globals__,
+            name,
+            template.__defaults__,
+            template.__closure__,
+        )
+        compiled = torch.compile(
+            function,
+            options=policy_compile_options("default"),
+            fullgraph=True,
+            dynamic=False,
+        )
+        _GPU_STATISTICS_CACHE[key] = compiled
+    return compiled
+
+
+def _fill_gpu_policy_statistics(
+    sampled: dict[str, np.ndarray],
+    output: ActorOutput,
+    builtin_agents: torch.Tensor,
+    temperatures: torch.Tensor,
+    transfer: _GpuStatisticsTransfer | None = None,
+    *,
+    synchronize: bool = True,
+) -> _GpuStatisticsTransfer | None:
+    """Add GPU unit/kind statistics without transporting native quantity logprobs.
+
+    Native quantities already carry the sampler's actual likelihoods, including
+    zero likelihoods for builtin agents. Native ``entropy`` initially contains
+    only their contribution, normalized by all active factors.
+    """
+    device = output.unit_logits.device
+    if device.type == "cpu":
+        _validate_statistics_masks(sampled, output)
+        host_inputs = _statistics_host_inputs(sampled)
+        statistic_shapes = _statistics_shapes(host_inputs, isinstance(output, StrategicOutput))
+        arguments = (output.unit_logits, output.market_kind_logits, builtin_agents, temperatures)
+        arguments += host_inputs
+        if isinstance(output, StrategicOutput):
+            arguments += (output.plan,)
+        packed = _gpu_policy_statistics(*arguments).numpy()
+        cursor = 0
+        for name, shape in zip(_GPU_STATISTIC_OUTPUT_NAMES, statistic_shapes, strict=True):
+            size = int(np.prod(shape))
+            np.copyto(np.asarray(sampled[name]), packed[cursor : cursor + size].reshape(shape))
+            cursor += size
+        return transfer
+
+    host_inputs = _statistics_host_inputs(sampled)
+    statistic_shapes = _statistics_shapes(host_inputs, isinstance(output, StrategicOutput))
+    if (
+        transfer is None
+        or transfer.inputs[0].device != device
+        or not transfer.matches(host_inputs, statistic_shapes)
+    ):
+        transfer = _GpuStatisticsTransfer.allocate(host_inputs, statistic_shapes, device)
+    _upload_gpu_statistics_inputs(sampled, output, transfer)
+    _launch_gpu_statistics(output, builtin_agents, temperatures, transfer)
+    transfer.ready.record()
+    if synchronize:
+        transfer.ready.synchronize()
+        for name, values in zip(_GPU_STATISTIC_OUTPUT_NAMES, transfer.arrays[:3], strict=True):
+            np.copyto(np.asarray(sampled[name]), values)
+    return transfer
+
+
+#: Execution mode for the collection forward. Collection spends roughly two
+#: thirds of its wall clock in this one call, so the choice here is the single
+#: largest lever on rollout cost -- and the shipped default was measurably the
+#: wrong one on both axes it trades off.
+#:
+#: Isolated forward, median of 60 on the production 224-row wave over identical
+#: persistent input buffers (artifacts/benchmarks/backends-*.json):
+#:
+#:     mode                     fp32       bf16
+#:     eager                    4.907 ms   4.396 ms
+#:     cudagraphs               5.309 ms   4.268 ms
+#:     inductor                 2.720 ms   1.626 ms
+#:
+#: `cudagraphs` is a pessimization in fp32: slower than not compiling at all,
+#: which is why enabling it only ever moved the measured rollout by 3.4%. The
+#: forward issues ~859 kernels whose summed device time is well under the
+#: measured wall clock, so the cost is per-kernel overhead; removing launch cost
+#: alone does not touch it, and Inductor's fusion reduces the kernel count.
+#:
+#: Every mode perturbs the sampled behavior policy relative to the distribution
+#: the update path reconstructs, and `update_replay_parity` gates exactly that.
+#: Faster is therefore not automatically admissible -- but here the two axes
+#: agree, because the drift is dominated by *systematic* differences between the
+#: collection and update paths rather than by rounding noise, and the update path
+#: is already Inductor plus bf16. Matching it cancels most of the difference.
+#: Shipped gate, 4 waves, production league-mixed path, cloned conv actor
+#: (artifacts/benchmarks/parity-*.jsonl; bounds 5e-3 / 2e-4 / 1.1e-1):
+#:
+#:     configuration     max_kl      tail       first_minibatch_kl   rollout
+#:     eager / fp32      1.9089e-3   3.185e-5   4.0598e-2            8.91 s
+#:     inductor / bf16   2.2786e-4   0.0        4.9855e-3            5.36 s
+#:
+#: So the selected configuration is 1.66x faster with 8.4x lower drift. Note
+#: `eager` with bf16 alone measures 2.908e-3, worse than fp32: it is the
+#: matching that pays, not the precision. The mode stays a named knob the audit
+#: must be told rather than a silent default, and the library defaults below
+#: preserve the previous behavior so `benchmark_rust_rollout.py` and its
+#: recorded drift artifacts stay comparable; the training and calibration
+#: entrypoints state the measured decision explicitly.
+#:
+#: `graph` replays the *eager* kernel sequence under one collector-owned CUDA
+#: graph: launch overhead goes, but the ~1,900 eager kernels of a structured
+#: step remain and inside a graph each still costs its own scheduling slot.
+#: `inductor_graph` captures the Inductor-fused forward instead -- the same
+#: `mode="default"` compilation as `inductor_default`, so no cudagraph-tree
+#: bookkeeping -- and replays the fused kernels through the same explicit
+#: `_CapturedStep`. It is fusion and capture together; `_CapturedStep`'s
+#: warmup runs compile before the capture begins, which is what the capture
+#: rules require.
+ROLLOUT_FORWARD_MODES = (
+    "eager",
+    "graph",
+    "cudagraphs",
+    "inductor",
+    "inductor_default",
+    "inductor_graph",
+)
+
+
+def _validate_forward_mode(mode: str) -> None:
+    if mode not in ROLLOUT_FORWARD_MODES:
+        raise ValueError(f"unknown rollout forward mode {mode!r}")
+
+
+#: Modes that reach the device through `torch.compile`, and so through
+#: `torch._inductor.cudagraph_trees`' generation bookkeeping.
+COMPILED_ROLLOUT_FORWARD_MODES = ("cudagraphs", "inductor", "inductor_default", "inductor_graph")
+
+#: Modes the collector captures itself with `_CapturedStep`.
+CAPTURED_ROLLOUT_FORWARD_MODES = ("graph", "inductor_graph")
+
+#: The subset of those that lets `cudagraph_trees` capture rather than only
+#: fuse. Capture is what makes a forward's outputs live in a reused private
+#: pool, so it is what `_cuda_graph_generation` has to serialize.
+CAPTURING_ROLLOUT_FORWARD_MODES = ("cudagraphs", "inductor")
+
+
+def _cached_compiled_forward(
+    model: FarmActor | StructuredActor | EntityActor,
+    mode: str = "cudagraphs",
+    method: str = "forward",
+) -> Any:
+    """Return the cached compiled collection forward for `mode`.
+
+    CUDA convolution and GEMM kernels are not bitwise invariant across eager,
+    graph, and fused execution. The shared precision settings preserve policy
+    arithmetic across the compiled rollout/update paths; `update_replay_parity`
+    checks the actual stored sampling likelihoods rather than assuming parity.
+
+    `inductor` is `reduce-overhead`, which adds CUDA graphs to the fusion, and
+    `inductor_default` is the fusion alone. Compilation is lazy: the first call,
+    not this cache lookup, pays the compile cost.
+
+    One compiled callable is cached per mode so a parity audit can measure
+    several in one process without recompiling. `method` names another entry
+    point of the same model, cached beside it: `forward_with_belief` is how a
+    collection that also reads behavior values gets the learner's encoding.
+    """
+    _validate_forward_mode(mode)
+    cache = getattr(model, "_kaggriculture_rollout_forwards", None)
+    if cache is None:
+        cache = {}
+        # Avoid registering compiled wrappers as child modules, which would
+        # pollute checkpoints with a second copy of every parameter.
+        object.__setattr__(model, "_kaggriculture_rollout_forwards", cache)
+    key = mode if method == "forward" else f"{mode}:{method}"
+    compiled = cache.get(key)
+    if compiled is None:
+        entry = getattr(model, method)
+        if mode == "cudagraphs":
+            compiled = torch.compile(entry, backend="cudagraphs", fullgraph=True, dynamic=False)
+        else:
+            compiled = torch.compile(
+                entry,
+                options=policy_compile_options(
+                    "reduce-overhead" if mode == "inductor" else "default"
+                ),
+                fullgraph=True,
+                dynamic=False,
+            )
+        cache[key] = compiled
+    return compiled
+
+
+def _rollout_model_forward(
+    model: FarmActor | StructuredActor | EntityActor,
+    *inputs: Any,
+    mode: str = "cudagraphs",
+    method: str = "forward",
+) -> Any:
+    """Run one static rollout wave through the execution mode `mode` names.
+
+    The mode is the only thing consulted here. An earlier shape took a separate
+    `compile_model` boolean as well, which could veto the mode: a caller stating
+    `inductor` while that boolean was false silently got an eager forward, and a
+    run's provenance would record a configuration it did not execute. One knob
+    cannot contradict itself, so `eager` is spelled as a mode rather than as the
+    absence of a flag. The stacked ensemble takes the same mode, so a wave
+    cannot end up compiling one of its two forwards and not the other.
+    """
+    _validate_forward_mode(mode)
+    if mode not in COMPILED_ROLLOUT_FORWARD_MODES or _leading_tensor(inputs).device.type != "cuda":
+        return model(*inputs) if method == "forward" else getattr(model, method)(*inputs)
+    return _cached_compiled_forward(model, mode, method)(*inputs)
+
+
+def behavior_value_key(critic: Any, autocast: bool) -> tuple[Any, ...]:
+    """Name the critic weights, and the precision, a behavior value is read at.
+
+    Every in-place write to a tensor -- `load_state_dict`, a `copy_`, a foreach
+    optimizer step -- advances its version counter, so two equal keys mean no
+    parameter or buffer the value depends on has been written in between.
+    Fused optimizer kernels are the exception, and `ppo._optimizer_step`
+    advances the counters after them. The tensors' identities are part of the
+    key, so a rebuilt or reassigned module cannot match on counts alone. A
+    `lejepa` critic reads a backbone it deliberately does not register, whose
+    tensors therefore join the key explicitly. The precision is part of the
+    key because the update replays under its own autocast decision, and a value
+    read under another is not the one it would have computed.
+    """
+    tensors = [*critic.parameters(), *critic.buffers()]
+    if isinstance(critic, LejepaCritic):
+        tensors += [*critic.backbone.parameters(), *critic.backbone.buffers()]
+    return (
+        id(critic),
+        bool(autocast),
+        tuple((id(tensor), tensor._version) for tensor in tensors),
+    )
+
+
+def _collected_value_tail(
+    critic: LejepaCritic,
+    learner: StructuredInputs,
+    wave: StructuredInputs,
+    pair_rows: torch.Tensor,
+    belief: Any,
+) -> torch.Tensor:
+    """The `lejepa` critic's value for the learner rows, read off their encoding.
+
+    Assembles exactly what `ppo._critic_batch_args` stages for these rows --
+    the seat's own inputs with the paired seat's private stock columns joined
+    on, and the paired seat's unit slots -- but from the wave's device buffers,
+    so nothing is stored and uploaded a second time to be read here.
+    """
+
+    def paired(tensor: torch.Tensor) -> torch.Tensor:
+        return tensor.index_select(0, pair_rows)
+
+    inputs = learner._replace(
+        products=torch.cat(
+            (learner.products, paired(wave.products)[..., _PRODUCT_STOCK_COLUMNS]), dim=-1
+        ),
+        animals=torch.cat(
+            (learner.animals, paired(wave.animals)[..., _ANIMAL_STOCK_COLUMNS]), dim=-1
+        ),
+        crops=torch.cat((learner.crops, paired(wave.crops)[..., _CROP_SEED_COLUMNS]), dim=-1),
+    )
+    logits = critic(
+        inputs,
+        paired(wave.unit_categorical),
+        paired(wave.unit_continuous),
+        paired(wave.unit_active),
+        belief,
+    )
+    return critic.value(logits)
+
+
+def _cached_value_tail(critic: LejepaCritic, mode: str) -> Any:
+    """The compiled value tail for `mode`, cached on the critic like the forwards."""
+    cache = getattr(critic, "_kaggriculture_rollout_forwards", None)
+    if cache is None:
+        cache = {}
+        object.__setattr__(critic, "_kaggriculture_rollout_forwards", cache)
+    compiled = cache.get(mode)
+    if compiled is None:
+        compiled = (
+            _collected_value_tail
+            if mode not in COMPILED_ROLLOUT_FORWARD_MODES or mode == "cudagraphs"
+            else torch.compile(
+                _collected_value_tail,
+                options=policy_compile_options("default"),
+                fullgraph=True,
+                dynamic=False,
+            )
+        )
+        cache[mode] = compiled
+    return compiled
+
+
+class _StackedActorEnsemble:
+    """One batched forward over several same-architecture actors via stacked weights.
+
+    The lanes share an architecture but not weights. Stacking their parameters
+    lane-wise and running a single vmapped functional call replaces the
+    per-model forward loop, so a whole multi-model side of a wave is one large
+    kernel sequence instead of several small ones. Instances persist for the
+    process and are refilled in place each collection call: a captured CUDA
+    graph keeps reading current weights at stable addresses without any
+    per-step parameter copies.
+
+    Nothing here requires the lanes be frozen, which is what lets a population
+    wave run every concurrently learning member through it: rollout takes no
+    gradient, and the update replays the stored actions through the plain
+    module. The in-place refill reads live weights exactly as it reads a
+    snapshot's.
+    """
+
+    def __init__(self, models: Sequence[FarmActor | StructuredActor | EntityActor]) -> None:
+        first = models[0]
+        self.template = architecture_of(first).actor_class(first.config).to("meta")
+        self.template.eval()
+        if architecture_of(first).name == "causal-execution":
+            self.template.set_device_ledger(first.device_ledger)
+        # The stacked tensors outlive any inference-mode region the collector
+        # runs under; inference tensors would reject the in-place `load`
+        # refills on later calls made outside that region.
+        with torch.inference_mode(False):
+            self.params = self._stacked("named_parameters", models)
+            self.buffers = self._stacked("named_buffers", models)
+        for tensor in (*self.params.values(), *self.buffers.values()):
+            torch._dynamo.mark_static_address(tensor)
+        self._compiled: dict[tuple[str, int], Any] = {}
+
+    @staticmethod
+    def _stacked(
+        source: str, models: Sequence[FarmActor | StructuredActor | EntityActor]
+    ) -> dict[str, torch.Tensor]:
+        states = [dict(getattr(model, source)()) for model in models]
+        return {name: torch.stack([state[name].detach() for state in states]) for name in states[0]}
+
+    def load(self, models: Sequence[FarmActor | StructuredActor | EntityActor]) -> None:
+        for source, stacked_group in (
+            ("named_parameters", self.params),
+            ("named_buffers", self.buffers),
+        ):
+            for lane, model in enumerate(models):
+                state = dict(getattr(model, source)())
+                for name, stacked in stacked_group.items():
+                    stacked[lane].copy_(state[name])
+
+    def _forward(self, *inputs: Any) -> ActorOutput:
+        def run(
+            params: dict[str, torch.Tensor],
+            buffers: dict[str, torch.Tensor],
+            *inner: Any,
+        ) -> ActorOutput:
+            return torch.func.functional_call(self.template, (params, buffers), inner)
+
+        return torch.vmap(run)(self.params, self.buffers, *inputs)
+
+    def _layout_forward(self, tag: str) -> Any:
+        """Give each physical layout its own Dynamo frame and recompile budget."""
+        template = _StackedActorEnsemble._forward
+        name = f"_forward_{tag}"
+        return types.FunctionType(
+            template.__code__.replace(co_name=name, co_qualname=name),
+            template.__globals__,
+            name,
+            template.__defaults__,
+            template.__closure__,
+        ).__get__(self, type(self))
+
+    def __call__(self, *inputs: Any, mode: str) -> ActorOutput:
+        """Run every stacked lane under the same mode as the learner forward.
+
+        A league wave runs this forward once per step in addition to the
+        learner's, and a population wave runs it as the only forward, so leaving
+        it on a backend the learner abandoned would cap the collection speedup
+        at whatever fraction of steps are pure self-play -- and in a population
+        wave it would set every stored row's behavior policy from a path the
+        update does not replay. It takes the same mode for the same measured
+        reason: `cudagraphs` is slower here than not compiling, because this
+        forward is limited by per-kernel overhead rather than launch cost, and
+        only fusion reduces the kernel count.
+
+        `graph` takes the uncompiled path along with `eager`, because there the
+        capture is the collector's and this forward is inside it. Entering the
+        compiler from within a stream capture is not merely slow, it is
+        forbidden: it raises `cudaErrorStreamCaptureUnsupported` and invalidates
+        the capture in progress.
+        """
+        _validate_forward_mode(mode)
+        leading = _leading_tensor(inputs)
+        if mode not in COMPILED_ROLLOUT_FORWARD_MODES or leading.device.type != "cuda":
+            return self._forward(*inputs)
+        # Each physical width keeps a persistent callable. League staging
+        # buckets changing assignments before they reach this exact-shape API.
+        key = (mode, leading.shape[1])
+        compiled = self._compiled.get(key)
+        if compiled is None:
+            layout = self._layout_forward(f"{mode}_w{leading.shape[1]}")
+            if mode == "cudagraphs":
+                compiled = torch.compile(
+                    layout, backend="cudagraphs", fullgraph=True, dynamic=False
+                )
+            else:
+                compiled = torch.compile(
+                    layout,
+                    options=policy_compile_options(
+                        "reduce-overhead" if mode == "inductor" else "default"
+                    ),
+                    fullgraph=True,
+                    dynamic=False,
+                )
+            self._compiled[key] = compiled
+        return compiled(*inputs)
+
+
+_STACKED_ENSEMBLES = threading.local()
+
+
+def _stacked_actor_ensemble(
+    models: Sequence[FarmActor | StructuredActor | EntityActor],
+    namespace: int = 0,
+) -> _StackedActorEnsemble:
+    """Reuse one stacked ensemble per owner, architecture and physical lane count.
+
+    Refilling weights preserves the addresses read by compiled/captured graphs.
+    Different threads and namespaces retain independent mutable weights, so
+    overlapping collectors cannot overwrite one another's policies.
+    """
+    cache_key = (
+        namespace,
+        type(models[0]),
+        models[0].config,
+        len(models),
+        next(models[0].parameters()).device,
+        tuple(parameter.dtype for parameter in models[0].parameters()),
+        tuple(buffer.dtype for buffer in models[0].buffers()),
+    )
+    cache = getattr(_STACKED_ENSEMBLES, "cache", None)
+    if cache is None:
+        _STACKED_ENSEMBLES.cache = cache = {}
+    ensemble = cache.get(cache_key)
+    if ensemble is None:
+        ensemble = _StackedActorEnsemble(models)
+        cache[cache_key] = ensemble
+    else:
+        ensemble.load(models)
+    return ensemble
+
+
+def _league_layout(lanes: int, width: int, *, device: torch.device, mode: str) -> tuple[int, int]:
+    """Bucket compiled neural forwards without changing physical game rows."""
+    if not lanes or device.type != "cuda" or mode not in COMPILED_ROLLOUT_FORWARD_MODES:
+        return lanes, width
+    return 1 << (lanes - 1).bit_length(), 1 << (width - 1).bit_length()
+
+
+def _league_segment_layout(
+    assignments: np.ndarray, neural_lanes: int, *, device: torch.device, mode: str
+) -> tuple[int, int]:
+    """The bucketed ensemble shape one segment's league games run through.
+
+    Lanes at or past `neural_lanes` are built-ins, which never enter the ensemble.
+    """
+    counts = np.bincount(assignments, minlength=neural_lanes)[:neural_lanes]
+    return _league_layout(
+        int(np.count_nonzero(counts)), int(counts.max(initial=0)), device=device, mode=mode
+    )
+
+
+def league_wave_layouts(
+    self_play_games: int,
+    assignments: np.ndarray,
+    neural_lanes: int,
+    *,
+    device: torch.device,
+    mode: str,
+) -> tuple[tuple[int, int], ...]:
+    """Each collection segment's ensemble shape for one mixed-play wave.
+
+    The shapes a wave compiles for are per segment, not per wave: a wave whose
+    league games straddle the segment split gives the first segment only a
+    share of each opponent's games, and that share can land in a smaller bucket
+    than the wave's totals would.
+    """
+    return tuple(
+        _league_segment_layout(assignments[segment.league], neural_lanes, device=device, mode=mode)
+        for segment in _mixed_wave_segments(self_play_games, len(assignments))
+    )
+
+
+@torch.inference_mode()
+def _warmup_league_layout(
+    ensemble: _StackedActorEnsemble,
+    inputs: tuple[Any, ...],
+    *,
+    lanes: int,
+    width: int,
+    mode: str,
+    autocast: bool,
+) -> None:
+    """Warm the selected inference bucket before its captured step loop opens.
+
+    Use the persistent ensemble and its real parameter addresses, not a
+    throwaway stack. No game advances and no policy draw occurs. A previously
+    compiled bucket needs only one forward to initialize runtime resources.
+    """
+    device = next(iter(ensemble.params.values())).device
+    if mode != "inductor_graph" or device.type != "cuda" or lanes < 1 or width < 1:
+        return
+    with torch.random.fork_rng(devices=[]):
+        indices = torch.zeros(lanes * width, dtype=torch.long, device=device)
+        selected = _empty_selected_inputs(inputs, (lanes, width))
+        lane_inputs = _lane_view_inputs(inputs, indices, lanes, width, selected)
+        with torch.autocast(device.type, dtype=torch.bfloat16, enabled=autocast):
+            ensemble(*lane_inputs, mode=mode)
+        torch.cuda.synchronize(device)
+        del lane_inputs, selected, indices
+
+
+def _mark_cuda_graph_step(device: torch.device, enabled: bool) -> None:
+    if not enabled or device.type != "cuda":
+        return
+    mark = getattr(torch.compiler, "cudagraph_mark_step_begin", None)
+    if callable(mark):
+        mark()
+
+
+# `torch._inductor.cudagraph_trees` keeps one tree manager per *thread* but a
+# single process-wide generation counter: `MarkStepBox.mark_step_counter`,
+# which `cudagraph_mark_step_begin` decrements and which every manager reads
+# through `get_curr_generation`. A manager concludes that a new generation has
+# begun -- and so that the previous generation's output buffers may be reused --
+# by seeing that counter differ from the value it recorded on its own last
+# compiled call. Concurrent collectors can otherwise let one thread's mark land
+# between another thread's actor and ensemble forwards, retiring an output that
+# its `index_copy_` has not consumed yet.
+#
+# Holding this across a collector's mark and every compiled forward of one step
+# restores the intended invariant: the counter changes between steps and never
+# inside one. Only cudagraph-tree capture pays for the lock.
+_CUDA_GRAPH_GENERATION = threading.Lock()
+
+
+#: A device-assembled whole-wave output, or the separate current/frozen
+#: outputs that the CPU sampling path assembles after host transfer.
+_StepOutputs = tuple["ActorOutput | None", "ActorOutput | None", "ActorOutput | None"]
+
+#: Whatever a captured region returns. The mixed-play wave and the population
+#: wave capture different shapes and each keeps its own.
+_Captured = TypeVar("_Captured")
+
+
+# Capture switches the caching allocator to a private pool. Serialize this
+# once-per-collection operation against any other collector in the process.
+_CUDA_GRAPH_CAPTURE = threading.Lock()
+_ROLLOUT_STREAMS = threading.local()
+
+
+def _rollout_cuda_streams(device: torch.device) -> tuple[torch.cuda.Stream, torch.cuda.Stream]:
+    """Keep capture/warmup and frozen activation owners stable across waves.
+
+    Like PPO's stream pair, these are thread/device-owned rather than
+    shape-owned. Only streams persist: inputs, outputs and graphs remain owned
+    by the collecting wave, and every use establishes its own dependencies.
+    """
+    streams = getattr(_ROLLOUT_STREAMS, "devices", None)
+    if streams is None:
+        streams = _ROLLOUT_STREAMS.devices = {}
+    index = torch.cuda.current_device() if device.index is None else device.index
+    if index not in streams:
+        streams[index] = (torch.cuda.Stream(device=index), torch.cuda.Stream(device=index))
+    return streams[index]
+
+
+class _CapturedStep(Generic[_Captured]):
+    """One CUDA graph over the whole per-step device region.
+
+    The graph is bounded by the native sampler and storage, which round-trip
+    through host code: it runs the forward, the Gumbel draws that turn its
+    logits into the sampler's utilities, and the copies of those into pinned
+    host memory. Capturing the tail together with the forward is what leaves
+    the host nothing to launch between a replay and the native step.
+
+    This is deliberately not `torch.compile(mode="reduce-overhead")`, which
+    reaches the same idea through `torch._inductor.cudagraph_trees` and its
+    process-global generation bookkeeping. Owning the graph directly makes the
+    recording lifetime explicit.
+
+    The collector holds every input at a fixed address for the life of the
+    wave. `_NativeStructuredWave.copy_to_device` refreshes persistent device
+    buffers in place, `_select_inputs` and `_lane_view_inputs` gather into
+    persistent `out=` storage, every row-index tensor is built once before the
+    step loop, and `_pipeline_replica` refreshes weights through
+    `load_state_dict` rather than rebuilding the module. A replay therefore
+    reads exactly what the step just uploaded.
+
+    Outputs live in the graph's private pool and are overwritten by the next
+    replay, which is the same contract the step already honours: it consumes
+    them into persistent storage before it advances.
+
+    ``generators`` are the sampling streams the region draws from. They are
+    registered with the graph so every replay advances them by the captured
+    amount, and their state is restored after recording: warmup and capture
+    consume draws, and the first replay must draw exactly what an eager first
+    step would have.
+    """
+
+    def __init__(
+        self,
+        run: Callable[[], _Captured],
+        warmup: int = 3,
+        generators: Sequence[torch.Generator] = (),
+    ) -> None:
+        with _CUDA_GRAPH_CAPTURE:
+            self._graph = torch.cuda.CUDAGraph()
+            states = [generator.get_state() for generator in generators]
+            for generator in generators:
+                self._graph.register_generator_state(generator)
+            # The documented recipe: warm up on a side stream so that allocator
+            # growth, cuBLAS handle creation, and any lazy kernel load happen
+            # before the capture rather than inside it.
+            side, _ = _rollout_cuda_streams(torch.cuda.current_stream().device)
+            side.wait_stream(torch.cuda.current_stream())
+            with torch.cuda.stream(side):
+                for _ in range(warmup):
+                    run()
+            torch.cuda.current_stream().wait_stream(side)
+            # Thread-local capture remains robust if an unrelated CUDA-using
+            # thread exists in the embedding process.
+            with torch.cuda.graph(self._graph, stream=side, capture_error_mode="thread_local"):
+                self._outputs = run()
+            # The graph reads its inputs by address. Holding the recipe holds
+            # whatever it closed over, so no input can be freed and its block
+            # reused while the graph still replays over it.
+            self._run = run
+            for generator, state in zip(generators, states, strict=True):
+                generator.set_state(state)
+
+    def __call__(self) -> _Captured:
+        self._graph.replay()
+        return self._outputs
+
+    def close(self) -> None:
+        """Release the executable graph and the pool its outputs live in.
+
+        A wave allocates its own device buffers, so a graph cannot outlive the
+        wave that captured it and a run collects hundreds of times. Dropping the
+        outputs first matters: they are allocated *inside* the private pool, so
+        the pool cannot come back while anything still points into it. Leaving
+        this to refcounting alone works but leaves the order implicit, and the
+        order is the whole point.
+        """
+        del self._outputs
+        self._graph.reset()
+        del self._run
+
+
+def _rollout_value_stream(device: torch.device) -> torch.cuda.Stream:
+    """The persistent stream collected behavior values run on, one per device.
+
+    Separate from `_rollout_cuda_streams` because those two have owners inside
+    the step graph -- capture and the frozen forward -- and the value tail runs
+    outside it, concurrently with the host's native step.
+    """
+    streams = getattr(_ROLLOUT_STREAMS, "values", None)
+    if streams is None:
+        streams = _ROLLOUT_STREAMS.values = {}
+    index = torch.cuda.current_device() if device.index is None else device.index
+    if index not in streams:
+        streams[index] = torch.cuda.Stream(device=index)
+    return streams[index]
+
+
+def _capture_value_tail(
+    critic: LejepaCritic,
+    learner: StructuredInputs,
+    wave: StructuredInputs,
+    pair_rows: torch.Tensor,
+    belief: Any,
+    *,
+    mode: str,
+    autocast: bool,
+) -> _CapturedStep[torch.Tensor]:
+    """Record the value tail over one segment's fixed buffers as its own graph.
+
+    Every argument is a fixed address for the life of the wave: the upload
+    buffers, the league gather's `out=` storage, and the belief the step graph
+    returns from its private pool. Under the collector's autocast decision,
+    which is the precision `behavior_value_key` records.
+    """
+    tail = _cached_value_tail(critic, mode)
+
+    def run() -> torch.Tensor:
+        with torch.autocast("cuda", dtype=torch.bfloat16, enabled=autocast):
+            return tail(critic, learner, wave, pair_rows, belief)
+
+    return _CapturedStep(run)
+
+
+@contextmanager
+def _cuda_graph_generation(device: torch.device, mode: str) -> Iterator[None]:
+    """Run one step's compiled forwards as a single CUDA graph generation."""
+    with ExitStack() as stack:
+        if device.type == "cuda" and mode in CAPTURING_ROLLOUT_FORWARD_MODES:
+            stack.enter_context(_CUDA_GRAPH_GENERATION)
+        _mark_cuda_graph_step(device, mode in COMPILED_ROLLOUT_FORWARD_MODES)
+        yield
+
+
+def _categorical_draws(
+    generator: np.random.Generator, rows: int
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Draw in the same autoregressive component order as the Python sampler."""
+    units = np.empty((rows, MAX_UNITS), dtype=np.float32)
+    kinds = np.empty((rows, MAX_MARKET_ORDERS), dtype=np.float32)
+    quantities = np.empty((rows, MAX_MARKET_ORDERS), dtype=np.float32)
+    for unit in range(MAX_UNITS):
+        units[:, unit] = generator.random(rows)
+    for slot in range(MAX_MARKET_ORDERS):
+        kinds[:, slot] = generator.random(rows)
+        quantities[:, slot] = generator.random(rows)
+    # NumPy generates f64 by default. Values in the last half-ULP below one
+    # round to exactly 1.0 when assigned into these f32 transport buffers, but
+    # a categorical uniform must remain in [0, 1). Preserve the generator's
+    # f64 stream and clamp only the transport representation.
+    for draws in (units, kinds, quantities):
+        np.minimum(draws, _MAX_FLOAT32_CATEGORICAL_DRAW, out=draws)
+    return units, kinds, quantities
+
+
+def _builtin_agent_rows(
+    rows: int,
+    frozen_rows: np.ndarray,
+    learner_rows: np.ndarray,
+    assignments: np.ndarray,
+    lane_codes: np.ndarray,
+    lane_names: Sequence[str],
+) -> np.ndarray:
+    """Per-row built-in codes for the wave, refusing any on a learner seat.
+
+    The native binding takes a code for every row and cannot tell a learner
+    row from an opponent row, so it deliberately checks nothing here. This
+    side knows the seats. A built-in code that landed on a learner row would
+    train the policy on an action it never chose, under log-probabilities the
+    binding writes as zero — a corruption that looks exactly like ordinary
+    data, so it has to be an error rather than a surprise in the journal.
+    """
+    codes = np.zeros(rows, dtype=np.uint8)
+    codes[frozen_rows] = lane_codes[assignments]
+    violations = np.flatnonzero(codes[learner_rows])
+    if violations.size:
+        row = int(learner_rows[violations[0]])
+        lane = int(assignments[int(np.flatnonzero(frozen_rows == row)[0])])
+        raise ValueError(
+            f"built-in lane {lane} ({lane_names[lane]}) was assigned to learner row {row}"
+        )
+    return codes
+
+
+def _validate_learner_temperature(temperature: float) -> None:
+    """Require behavior logits to match the unit-temperature PPO replay policy."""
+    if not np.isfinite(temperature) or temperature != 1.0:
+        raise ValueError("on-policy rollout collection requires learner temperature 1.0")
+
+
+def _validate_reward_gamma(gamma: float) -> None:
+    if not np.isfinite(gamma) or not 0.0 < gamma <= 1.0:
+        raise ValueError("reward gamma must be finite and in (0, 1]")
+
+
+def _validate_reward_mode(reward_mode: str) -> None:
+    if reward_mode not in REWARD_MODES:
+        raise ValueError(f"unknown reward mode {reward_mode!r}")
+
+
+def _native_pair_rewards(
+    sampled: dict[str, Any], gamma: float, reward_mode: str = DEFAULT_REWARD_MODE
+) -> np.ndarray:
+    """Build paired rewards from native terminal flags, utilities, and potentials."""
+    _validate_reward_gamma(gamma)
+    _validate_reward_mode(reward_mode)
+    if reward_mode != "shaped":
+        dones = np.asarray(sampled["dones"], dtype=np.bool_)
+        rewards = np.zeros((dones.shape[0], 2), dtype=np.float32)
+        if dones.any():
+            utilities = np.asarray(sampled["terminal_utilities"], dtype=np.float32)
+            rewards[dones, 0] = utilities[dones]
+            if reward_mode == "terminal-outcome":
+                # Official scores are float(bank), i.e. f64, not raw integers.
+                # Native utilities subtract those scores before the f32 cast;
+                # separately rounded f32 banks can falsely tie. The i64 bank
+                # bound keeps every nonzero normalized f64 score gap above
+                # f32 underflow, so its sign preserves official wins and ties.
+                np.sign(rewards[:, 0], out=rewards[:, 0])
+        np.negative(rewards[:, 0], out=rewards[:, 1])
+        return rewards
+    previous = np.asarray(sampled["previous_potentials"], dtype=np.float32)
+    following = np.asarray(sampled["potentials"], dtype=np.float32)
+    dones = np.asarray(sampled["dones"], dtype=np.bool_)
+    reward_zero = np.float32(gamma) * following - previous
+    if dones.any():
+        utilities = np.asarray(sampled["terminal_utilities"], dtype=np.float32)
+        reward_zero[dones] = utilities[dones] - previous[dones]
+    return np.column_stack((reward_zero, -reward_zero)).astype(np.float32, copy=False)
+
+
+_SAMPLED_FIELD_SOURCES = {
+    "unit_actions": "unit_actions",
+    "market_kinds": "market_kinds",
+    "market_quantities": "market_quantities",
+    "unit_masks": "unit_masks",
+    "market_kind_masks": "market_kind_masks",
+    "market_quantity_masks": "market_quantity_masks",
+    "unit_active": "unit_active",
+    "market_active": "market_active",
+    "market_quantity_active": "market_quantity_active",
+}
+_POLICY_STATISTIC_FIELD_SOURCES = {
+    "old_unit_logprobs": "unit_logprobs",
+    "old_market_kind_logprobs": "market_kind_logprobs",
+    "old_market_quantity_logprobs": "market_quantity_logprobs",
+}
+_MARKET_SET_SAMPLED_FIELD_SOURCES = {
+    "market_set_values": "market_set_values",
+    "market_set_masks": "market_set_masks",
+    "market_set_active": "market_set_active",
+    "old_market_set_logprobs": "market_set_logprobs",
+}
+
+_CONV_ENCODED_FIELDS = ("board", "global_features", "critic_features", "units", "unit_positions")
+_STRUCTURED_ENCODED_FIELDS = (
+    "tile_categorical",
+    "tile_continuous",
+    "unit_categorical",
+    "unit_continuous",
+    "unit_tile_gather",
+    "unit_tile_gather_valid",
+    "products",
+    "animals",
+    "crops",
+    "farms",
+    "town",
+)
+
+
+def _store_native_wave(
+    architecture: str,
+    fields: dict[str, np.ndarray],
+    step: int,
+    encoded: dict[str, np.ndarray],
+    sampled: dict[str, np.ndarray],
+    rewards: np.ndarray,
+    rows: np.ndarray | slice,
+    pair_rows: np.ndarray,
+    *,
+    store_policy_statistics: bool = True,
+) -> None:
+    if architecture == CONV_ENTITY:
+        for name in _CONV_ENCODED_FIELDS:
+            fields[name][:, step] = np.asarray(encoded[name])[rows]
+    else:
+        for name in _STRUCTURED_ENCODED_FIELDS:
+            fields[name][:, step] = np.asarray(encoded[name])[rows]
+        # Centralized-critic extras are the paired seat's own view of the same
+        # buffers, so no second encoding pass exists anywhere.
+        fields["opponent_unit_categorical"][:, step] = np.asarray(encoded["unit_categorical"])[
+            pair_rows
+        ]
+        fields["opponent_unit_continuous"][:, step] = np.asarray(encoded["unit_continuous"])[
+            pair_rows
+        ]
+        fields["opponent_unit_active"][:, step] = np.asarray(encoded["unit_active"])[pair_rows]
+        fields["critic_products"][:, step] = np.asarray(encoded["products"])[pair_rows][
+            :, :, _PRODUCT_STOCK_COLUMNS
+        ]
+        fields["critic_animals"][:, step] = np.asarray(encoded["animals"])[pair_rows][
+            :, :, _ANIMAL_STOCK_COLUMNS
+        ]
+        fields["critic_crops"][:, step] = np.asarray(encoded["crops"])[pair_rows][
+            :, :, _CROP_SEED_COLUMNS
+        ]
+    if "market_resources" in fields:
+        fields["market_resources"][:, step] = np.asarray(sampled["market_resources"])[rows]
+    for destination, source in _SAMPLED_FIELD_SOURCES.items():
+        fields[destination][:, step] = np.asarray(sampled[source])[rows]
+    if "market_set_values" in fields:
+        for destination, source in _MARKET_SET_SAMPLED_FIELD_SOURCES.items():
+            fields[destination][:, step] = np.asarray(sampled[source])[rows]
+    if store_policy_statistics:
+        for destination, source in _POLICY_STATISTIC_FIELD_SOURCES.items():
+            fields[destination][:, step] = np.asarray(sampled[source])[rows]
+    fields["rewards"][:, step] = rewards
+
+
+def _native_batch(
+    architecture: str,
+    fields: dict[str, np.ndarray],
+    *,
+    episode_seeds: np.ndarray,
+    final_money: np.ndarray,
+    opponent_money: np.ndarray,
+    seats: np.ndarray,
+    agents: np.ndarray,
+    entropy_sums: np.ndarray,
+    learner_stochastic: bool,
+    started: float,
+    orientations: np.ndarray | None = None,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+) -> RolloutBatch:
+
+    state_names = set(_state_field_specs(architecture))
+    if orientations is None:
+        orientations = np.zeros(agents.shape[0], dtype=np.int8)
+    return RolloutBatch(
+        architecture=architecture,
+        reward_mode=reward_mode,
+        states={name: array for name, array in fields.items() if name in state_names},
+        **{name: array for name, array in fields.items() if name not in state_names},
+        episode_seeds=episode_seeds,
+        final_money=final_money,
+        opponent_money=opponent_money,
+        seats=seats,
+        agents=agents,
+        orientations=orientations,
+        learner_stochastic=learner_stochastic,
+        entropy_sums=entropy_sums,
+        elapsed_seconds=time.perf_counter() - started,
+    )
+
+
+@torch.inference_mode()
+def _collect_market_set_rust_wave(
+    actor: EntityActor,
+    opponents: tuple[EntityActor, ...],
+    *,
+    self_play_games: int,
+    league_games: int,
+    assignments: np.ndarray,
+    builtin_lanes: tuple[str, ...],
+    seeds: np.ndarray,
+    horizon: int,
+    deterministic: bool,
+    temperature: float,
+    gamma: float,
+    reward_mode: str,
+    frozen_temperatures: np.ndarray,
+    frozen_deterministic: np.ndarray,
+    sampling_seed: int,
+    forward_mode: str,
+    forward_autocast: bool,
+    fields: dict[str, np.ndarray],
+    started: float,
+) -> RolloutBatch:
+    """Collect the per-kind interface with one fused native market step.
+
+    This opt-in path shares the same native engine and stored critic action
+    slots as interface 1. Its decision factors are the separate set arrays.
+    """
+    device = next(actor.parameters()).device
+    games = self_play_games + league_games
+    rows = games * 2
+    environment = load_native().BatchEnv(seeds)
+    sampled = environment.sample_buffers()
+    wave = _native_wave(architecture_of(actor).name, environment, device)
+    learner_seats = (seeds[self_play_games:] % 2).astype(np.int64)
+    learner_rows = np.concatenate(
+        (
+            np.arange(self_play_games * 2, dtype=np.int64),
+            self_play_games * 2 + 2 * np.arange(league_games) + learner_seats,
+        )
+    )
+    frozen_rows = self_play_games * 2 + 2 * np.arange(league_games) + 1 - learner_seats
+    pair_rows = learner_rows ^ 1
+    lane_codes = np.asarray(
+        [0] * len(opponents) + [BUILTIN_AGENT_CODES[name] for name in builtin_lanes],
+        dtype=np.uint8,
+    )
+    builtin_agents = _builtin_agent_rows(
+        rows,
+        frozen_rows,
+        learner_rows,
+        assignments,
+        lane_codes,
+        (*(["neural"] * len(opponents)), *builtin_lanes),
+    )
+    head_ids = np.zeros(rows, dtype=np.uint16)
+    for lane in range(len(opponents)):
+        head_ids[frozen_rows[assignments == lane]] = lane + 1
+    deterministic_rows = np.full(rows, deterministic, dtype=np.bool_)
+    temperatures = np.full(rows, temperature, dtype=np.float32)
+    for lane in range(len(opponents)):
+        selected = frozen_rows[assignments == lane]
+        deterministic_rows[selected] = frozen_deterministic[lane]
+        temperatures[selected] = frozen_temperatures[lane]
+    quantity_kind_gate, quantity_values, quantity_bias = _quantity_heads((actor, *opponents))
+    _set_market_resource_heads(environment, (actor, *opponents))
+    generator = np.random.default_rng(sampling_seed)
+    entropy_sums = np.zeros(learner_rows.size, dtype=np.float64)
+    final = None
+
+    def subset(inputs: StructuredInputs, selected: np.ndarray) -> StructuredInputs:
+        indices = torch.as_tensor(selected, dtype=torch.long, device=device)
+        return StructuredInputs(*(field.index_select(0, indices) for field in inputs))
+
+    for step in range(horizon):
+        wave.refresh(environment)
+        wave.copy_to_device()
+        (inputs,) = wave.inputs()
+        unit_logits = np.zeros((rows, MAX_UNITS, N_UNIT_ACTIONS), dtype=np.float32)
+        contexts = np.zeros(
+            (rows, N_MARKET_SET_KINDS, actor.config.quantity_rank), dtype=np.float32
+        )
+        model_rows = [(actor, learner_rows)] + [
+            (opponent, frozen_rows[assignments == lane]) for lane, opponent in enumerate(opponents)
+        ]
+        for model, selected in model_rows:
+            if not selected.size:
+                continue
+            with torch.autocast(device.type, dtype=torch.bfloat16, enabled=forward_autocast):
+                output = _rollout_model_forward(model, subset(inputs, selected), mode=forward_mode)
+            unit_logits[selected] = output.unit_logits.float().cpu().numpy()
+            contexts[selected] = output.market_quantity_context.float().cpu().numpy()
+        unit_draws = generator.random((rows, MAX_UNITS), dtype=np.float32)
+        market_draws = generator.random((rows, N_MARKET_SET_KINDS), dtype=np.float32)
+        np.minimum(unit_draws, _MAX_FLOAT32_CATEGORICAL_DRAW, out=unit_draws)
+        np.minimum(market_draws, _MAX_FLOAT32_CATEGORICAL_DRAW, out=market_draws)
+        environment.sample_market_set_and_step_into(
+            unit_logits,
+            contexts,
+            quantity_kind_gate,
+            quantity_values,
+            quantity_bias,
+            head_ids,
+            unit_draws,
+            market_draws,
+            deterministic_rows,
+            temperatures,
+            builtin_agents,
+            sampled,
+            sell_order=actor.config.market_set_sell_order,
+            hire_last=actor.config.market_set_hire_last,
+        )
+        rewards = _native_pair_rewards(sampled, gamma, reward_mode).reshape(-1)
+        _store_native_wave(
+            architecture_of(actor).name,
+            fields,
+            step,
+            wave.arrays,
+            sampled,
+            rewards[learner_rows],
+            learner_rows,
+            pair_rows,
+        )
+        counts = np.asarray(sampled["unit_active"])[learner_rows].sum(axis=1) + np.asarray(
+            sampled["market_set_active"]
+        )[learner_rows].sum(axis=1)
+        entropy_sums += np.asarray(sampled["entropy"])[learner_rows] * counts
+        dones = np.asarray(sampled["dones"], dtype=np.bool_)
+        if step + 1 < horizon and dones.any():
+            raise RuntimeError("native market-set rollout terminated before the horizon")
+        if step + 1 == horizon and not dones.all():
+            raise RuntimeError("native market-set rollout did not terminate at the horizon")
+        final = np.asarray(sampled["final_money"], dtype=np.float32)
+
+    assert final is not None
+    return _native_batch(
+        architecture_of(actor).name,
+        fields,
+        episode_seeds=np.concatenate(
+            (
+                np.repeat(seeds[:self_play_games].astype(np.int64), 2),
+                seeds[self_play_games:].astype(np.int64),
+            )
+        ),
+        final_money=final.reshape(-1)[learner_rows],
+        opponent_money=final.reshape(-1)[pair_rows],
+        seats=(learner_rows % 2).astype(np.int8),
+        agents=np.zeros(learner_rows.size, dtype=np.int64),
+        entropy_sums=entropy_sums,
+        learner_stochastic=not deterministic,
+        started=started,
+        reward_mode=reward_mode,
+    )
+
+
+@torch.inference_mode()
+def _collect_mixed_play_rust_wave(
+    actor: FarmActor | StructuredActor | EntityActor,
+    opponents: Sequence[FarmActor | StructuredActor | EntityActor] = (),
+    *,
+    self_play_games: int = 0,
+    league_games: int = 0,
+    opponent_indices: Sequence[int] | np.ndarray | None = None,
+    builtin_lanes: Sequence[str] = (),
+    script_lanes: Sequence[ScriptOpponent] = (),
+    script_pool: ScriptAgentPool | None = None,
+    seed_start: int,
+    self_play_seed_group: int = 1,
+    paired_league_seats: bool = False,
+    episode_steps: int = 720,
+    deterministic: bool = False,
+    sampled_heads: tuple[str, ...] | None = None,
+    temperature: float = 1.0,
+    gamma: float = DEFAULT_REWARD_GAMMA,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+    # Matches `temperature` above, so a caller that omits it gets the symmetric
+    # wave production runs. It defaulted to 0.8 while training sharpened its
+    # league seats, and that default silently reached instruments which never
+    # passed it -- including the schedule sweep that chose the production
+    # learning rate, whose conclusions only transfer if its wave is production's.
+    opponent_temperature: float = 1.0,
+    opponent_temperatures: Sequence[float] | np.ndarray | None = None,
+    deterministic_opponent: bool = False,
+    deterministic_opponents: Sequence[bool] | np.ndarray | None = None,
+    sampling_seed: int = 0,
+    forward_mode: str = "cudagraphs",
+    forward_autocast: bool = False,
+    storage: dict[str, np.ndarray] | None = None,
+    critic: LejepaCritic | None = None,
+) -> RolloutBatch:
+    """Collect self-play and frozen-league games in one native wave.
+
+    Every game advances inside the same BatchEnv step, so the learner runs a
+    single large forward per step covering both seats of every self-play game
+    plus the current seat of every league game, instead of separate smaller
+    self-play and league waves. All frozen league seats run as one additional
+    stacked-weight forward regardless of how many distinct opponents are
+    assigned. Stored trajectories are ordered self-play first, then league,
+    matching a caller-provided storage arena.
+
+    ``builtin_lanes`` names engine reference agents that play league lanes
+    natively inside the wave, with no network behind them. They extend the
+    lane index space that ``opponent_indices`` addresses: lanes below
+    ``len(opponents)`` are frozen networks, the rest are these built-ins in
+    order. Only assigned frozen networks enter the stacked forward. Built-in
+    rows keep their physical sampling positions but need no neural outputs.
+    Each actual (neural lane count, padded width) layout compiles on first use
+    and reuses the persistent ensemble thereafter.
+
+    ``script_lanes`` follow the built-ins in that index space: Python agent
+    files whose seats ``script_pool``'s workers play, one fresh agent
+    namespace per game seat. Each step a segment sends its script seats the
+    state right after its native step and collects their actions right before
+    the next one, so the agents run while the device forward does.
+
+    League game `j` normally plays seed `seed_start + self_play_games + j`
+    with the learner in seat `seed % 2`. ``paired_league_seats`` instead plays
+    each seed from both seats: game `j` takes seed
+    `seed_start + self_play_games + j // 2` with the learner in seat `j % 2`,
+    the official evaluator's paired-seat protocol.
+
+    Rollouts capture only behavior policy state. Value predictions for GAE
+    are replayed from the stored features in one large batched critic pass
+    at update time, where the critic weights are still exactly the behavior
+    weights, instead of paying a small synchronous forward every step.
+
+    The one exception is a `lejepa` ``critic``, whose tower reads the shared
+    backbone's encoding of these very states -- which the learner forward
+    computes here anyway. Handed one, a captured collection runs the tower on
+    that encoding each step, off the step's stream, and returns the values on
+    the batch with the `behavior_value_key` they were read at; the update then
+    skips its replay, three quarters of which is re-encoding the wave through
+    the backbone. Any other collection returns no values, and the update
+    replays exactly as before.
+    """
+    _validate_forward_mode(forward_mode)
+    if self_play_games < 0 or league_games < 0:
+        raise ValueError("game counts cannot be negative")
+    if self_play_games + league_games < 1:
+        raise ValueError("at least one game is required")
+    seeds = wave_game_seeds(seed_start, self_play_games, league_games, self_play_seed_group)
+    league_seats = (seeds[self_play_games:] % 2).astype(np.int64)
+    if paired_league_seats:
+        if league_games % 2:
+            raise ValueError("paired league seats need an even number of league games")
+        league_seats = np.arange(league_games, dtype=np.int64) % 2
+        seeds[self_play_games:] = seed_start + self_play_games + np.arange(league_games) // 2
+    if episode_steps != 720:
+        raise ValueError("the native simulator currently supports the competition horizon 720")
+    if sampled_heads is not None:
+        if deterministic:
+            raise ValueError("sampled_heads conflicts with deterministic=True")
+        if (
+            len(set(sampled_heads)) != len(sampled_heads)
+            or not set(sampled_heads) <= SAMPLED_HEAD_FAMILIES
+        ):
+            raise ValueError("sampled_heads must contain distinct units, kinds, or quantities")
+    opponents = tuple(opponents)
+    builtin_lanes = tuple(builtin_lanes)
+    unknown = sorted(set(builtin_lanes) - BUILTIN_AGENT_CODES.keys())
+    if unknown:
+        raise ValueError(f"unknown built-in league agents: {', '.join(unknown)}")
+    if len(set(builtin_lanes)) != len(builtin_lanes):
+        raise ValueError("built-in league agents must be distinct")
+    script_lanes = tuple(script_lanes)
+    if len({lane.name for lane in script_lanes}) != len(script_lanes):
+        raise ValueError("script league opponents must be distinct")
+    if script_lanes and script_pool is None:
+        raise ValueError("script league opponents need a script agent pool")
+    if script_pool is not None and not set(script_lanes) <= set(script_pool.opponents):
+        raise ValueError("every script league opponent must be loaded in the script agent pool")
+    lane_count = len(opponents) + len(builtin_lanes) + len(script_lanes)
+    if league_games and not lane_count:
+        raise ValueError("league games require at least one frozen, built-in or script opponent")
+    if lane_count and not league_games:
+        raise ValueError("league opponents require league games")
+    if len(opponents) > np.iinfo(np.uint16).max:
+        raise ValueError("too many frozen opponents for native head identifiers")
+    _validate_learner_temperature(temperature)
+    _validate_reward_gamma(gamma)
+    _validate_reward_mode(reward_mode)
+    if opponent_temperatures is None:
+        frozen_temperatures = np.full(len(opponents), opponent_temperature, dtype=np.float32)
+    else:
+        frozen_temperatures = np.asarray(opponent_temperatures, dtype=np.float32)
+        if frozen_temperatures.shape != (len(opponents),):
+            raise ValueError(f"opponent temperatures must have shape {(len(opponents),)}")
+    if opponents and (
+        not np.isfinite(frozen_temperatures).all() or (frozen_temperatures <= 0.0).any()
+    ):
+        raise ValueError("opponent temperatures must be finite and positive")
+    if deterministic_opponents is None:
+        frozen_deterministic = np.full(len(opponents), deterministic_opponent, dtype=np.bool_)
+    else:
+        raw_deterministic = np.asarray(deterministic_opponents)
+        if raw_deterministic.shape != (len(opponents),):
+            raise ValueError(f"deterministic opponent flags must have shape {(len(opponents),)}")
+        if not np.issubdtype(raw_deterministic.dtype, np.bool_):
+            raise ValueError("deterministic opponent flags must be booleans")
+        frozen_deterministic = raw_deterministic.astype(np.bool_, copy=False)
+    if opponent_indices is None:
+        assignments = np.zeros(league_games, dtype=np.int64)
+    else:
+        raw_assignments = np.asarray(opponent_indices)
+        if raw_assignments.shape != (league_games,):
+            raise ValueError(f"opponent indices must have shape {(league_games,)}")
+        if not np.issubdtype(raw_assignments.dtype, np.integer):
+            raise ValueError("opponent indices must be integers")
+        assignments = raw_assignments.astype(np.int64, copy=False)
+    if (assignments < 0).any() or (assignments >= max(1, lane_count)).any():
+        raise ValueError("opponent index is outside the league lane list")
+    started = time.perf_counter()
+    actor.eval()
+    for opponent in opponents:
+        opponent.eval()
+    device = next(actor.parameters()).device
+    if any(next(opponent.parameters()).device != device for opponent in opponents):
+        raise ValueError("current and all frozen models must use the same device")
+    actor_config = actor_model_config(actor.config)
+    if any(
+        type(opponent) is not type(actor) or actor_model_config(opponent.config) != actor_config
+        for opponent in opponents
+    ):
+        raise ValueError("current and frozen actors must use the same model configuration")
+    architecture = architecture_of(actor).name
+    strategic = isinstance(actor, StrategicActor)
+    causal = architecture == "causal-execution"
+    if sampled_heads is not None and (strategic or causal or device.type != "cuda"):
+        raise ValueError("per-head sampling requires a flat actor on CUDA")
+    if (strategic or causal) and device.type != "cuda":
+        raise ValueError("structured experimental collection requires CUDA")
+    if causal:
+        from kaggriculture.device_ledger import get_device_ledger
+
+        actor.set_device_ledger(get_device_ledger(device))
+        for opponent in opponents:
+            opponent.set_device_ledger(actor.device_ledger)
+    if critic is not None and (
+        not isinstance(critic, LejepaCritic) or critic.backbone is not actor.trunk
+    ):
+        raise ValueError("collected behavior values need a lejepa critic on the actor's backbone")
+
+    horizon = episode_steps - 1
+    trajectories = self_play_games * 2 + league_games
+    fields = _native_rollout_storage(
+        storage,
+        architecture,
+        trajectories,
+        horizon,
+        action_interface=actor.config.action_interface,
+    )
+    if script_lanes and (causal or actor.config.action_interface == 3):
+        raise ValueError("script league opponents need the flat factored action interface")
+    if actor.config.action_interface == 3:
+        if not isinstance(actor, EntityActor) or critic is not None or sampled_heads is not None:
+            raise ValueError("market-set rollout requires an entity actor without value tail")
+        if paired_league_seats:
+            raise ValueError("market-set rollout plays league seats by seed parity only")
+        market_batches = []
+        for index, segment in enumerate(_mixed_wave_segments(self_play_games, league_games)):
+            market_batches.append(
+                _collect_market_set_rust_wave(
+                    actor,
+                    opponents,
+                    self_play_games=segment.self_play_games,
+                    league_games=segment.league_games,
+                    assignments=assignments[segment.league],
+                    builtin_lanes=builtin_lanes,
+                    seeds=seeds[segment.game_range],
+                    horizon=horizon,
+                    deterministic=deterministic,
+                    temperature=temperature,
+                    gamma=gamma,
+                    reward_mode=reward_mode,
+                    frozen_temperatures=frozen_temperatures,
+                    frozen_deterministic=frozen_deterministic,
+                    sampling_seed=sampling_seed ^ (index * _SEGMENT_SAMPLING_SALT),
+                    forward_mode=forward_mode,
+                    forward_autocast=forward_autocast,
+                    fields={name: array[segment.trajectories] for name, array in fields.items()},
+                    started=started,
+                )
+            )
+        if len(market_batches) == 1:
+            return market_batches[0]
+        merged = merge_contiguous_rollouts(fields, market_batches)
+        return replace(merged, elapsed_seconds=time.perf_counter() - started)
+    # Interleave two independent halves of the wave so one half's native step,
+    # encode and upload run while the other's step graph executes. Each half is
+    # a self-contained segment with its own BatchEnv, buffers, graph and
+    # sampling streams; the driver below advances them in lockstep and the
+    # arena keeps the self-play-then-league trajectory order because each
+    # game range maps to one contiguous trajectory range.
+    segments = []
+    batches: list[RolloutBatch | None] = []
+    for index, segment in enumerate(_mixed_wave_segments(self_play_games, league_games)):
+        segments.append(
+            _mixed_play_segment(
+                actor,
+                opponents,
+                self_play_games=segment.self_play_games,
+                league_games=segment.league_games,
+                assignments=assignments[segment.league],
+                builtin_lanes=builtin_lanes,
+                script_lanes=script_lanes,
+                script_pool=script_pool,
+                seeds=seeds[segment.game_range],
+                league_seats=league_seats[segment.league],
+                horizon=horizon,
+                deterministic=deterministic,
+                sampled_heads=sampled_heads,
+                temperature=temperature,
+                gamma=gamma,
+                reward_mode=reward_mode,
+                frozen_temperatures=frozen_temperatures,
+                frozen_deterministic=frozen_deterministic,
+                sampling_seed=sampling_seed ^ (index * _SEGMENT_SAMPLING_SALT),
+                forward_mode=forward_mode,
+                forward_autocast=forward_autocast,
+                fields={name: array[segment.trajectories] for name, array in fields.items()},
+                started=started,
+                # Interleaved segments each hold their own opponents' weights: a
+                # shared ensemble would be refilled by the next segment's setup
+                # while this one's captured steps still read it.
+                ensemble_namespace=index,
+                critic=critic,
+            )
+        )
+        batches.append(None)
+    # The replay reads the critic in eval mode, and so does this; its backbone
+    # is the actor's and already follows the actor's mode.
+    critic_training = critic is not None and critic.training
+    if critic is not None:
+        critic.eval()
+    try:
+        for _ in range(horizon):
+            for segment in segments:
+                next(segment)
+        for index, segment in enumerate(segments):
+            try:
+                next(segment)
+            except StopIteration as finished:
+                batches[index] = finished.value
+            else:
+                raise AssertionError("a wave segment yielded more steps than its horizon")
+    finally:
+        if critic is not None:
+            critic.train(critic_training)
+            if device.type == "cuda":
+                # A segment abandoned mid-wave leaves its last value tail queued
+                # on the side stream over buffers the current stream is about
+                # to free and hand out again; join it before they are released.
+                torch.cuda.current_stream(device).wait_stream(_rollout_value_stream(device))
+        # Release a suspended segment's graphs here, behind that join, rather
+        # than whenever the exception's traceback lets go of its frame. This is
+        # a no-op for a segment that finished, or raised, before the join. The
+        # stack closes every segment even if closing one raises.
+        with ExitStack() as closing:
+            for segment in segments:
+                closing.callback(segment.close)
+    if len(batches) == 1:
+        assert batches[0] is not None
+        return batches[0]
+    merged = merge_contiguous_rollouts(fields, [batch for batch in batches if batch is not None])
+    return replace(merged, elapsed_seconds=time.perf_counter() - started)
+
+
+def wave_game_seeds(
+    seed_start: int, self_play_games: int, league_games: int, self_play_seed_group: int = 1
+) -> np.ndarray:
+    """Map seed of every game in a mixed wave, self-play games first.
+
+    Self-play game `g` plays seed `seed_start + g // self_play_seed_group`, so
+    consecutive blocks of that many games share a map. League game `j` keeps
+    `seed_start + self_play_games + j`, the seed it has with no grouping. That
+    keeps its seat (`seed % 2`) and leaves grouping of one bit-identical to
+    all-distinct seeds. The native engine's initial state ignores the seed,
+    which only drives the daily weed draws, so same-seed games differ only by
+    what their policies sampled.
+    """
+    if self_play_seed_group < 1:
+        raise ValueError("self-play seed group must be positive")
+    if self_play_games % self_play_seed_group:
+        raise ValueError("self-play games must divide into whole seed groups")
+    self_play = seed_start + np.arange(self_play_games) // self_play_seed_group
+    league = seed_start + self_play_games + np.arange(league_games)
+    return np.concatenate((self_play, league)).astype(np.uint64)
+
+
+#: Waves with at least this many games collect as two interleaved segments.
+#: Below it a wave is one segment: the pipelining buys nothing for a handful
+#: of games and every small test wave keeps its single-segment draw sequence.
+_SEGMENTED_WAVE_MIN_GAMES = 32
+_SEGMENT_SAMPLING_SALT = 0x5E63_A17D
+
+
+def _wave_segments(games: int) -> tuple[tuple[int, int], ...]:
+    """Contiguous game ranges of the segments a wave of `games` collects as."""
+    if games < _SEGMENTED_WAVE_MIN_GAMES:
+        return ((0, games),)
+    split = (games + 1) // 2
+    return ((0, split), (split, games))
+
+
+@dataclass(frozen=True)
+class _MixedWaveSegment:
+    """One segment of a mixed wave, whose self-play games precede its league games."""
+
+    first_game: int
+    self_play_games: int
+    #: This segment's league games, as a slice of the wave's opponent assignments.
+    league: slice
+    #: Self-play games store both seats and league games only the learner's.
+    trajectories: slice
+
+    @property
+    def league_games(self) -> int:
+        return self.league.stop - self.league.start
+
+    @property
+    def game_range(self) -> slice:
+        """This segment's games as a slice of the wave's game order."""
+        return slice(self.first_game, self.first_game + self.self_play_games + self.league_games)
+
+
+def _mixed_wave_segments(self_play_games: int, league_games: int) -> tuple[_MixedWaveSegment, ...]:
+    """Split a wave's self-play-then-league games into its collection segments."""
+    return tuple(
+        _MixedWaveSegment(
+            first_game=first_game,
+            self_play_games=max(0, min(last_game, self_play_games) - first_game),
+            league=slice(max(first_game - self_play_games, 0), max(last_game - self_play_games, 0)),
+            trajectories=slice(
+                first_game + min(first_game, self_play_games),
+                last_game + min(last_game, self_play_games),
+            ),
+        )
+        for first_game, last_game in _wave_segments(self_play_games + league_games)
+    )
+
+
+@torch.inference_mode()
+def _mixed_play_segment(
+    actor: FarmActor | StructuredActor | EntityActor,
+    opponents: tuple[FarmActor | StructuredActor | EntityActor, ...],
+    *,
+    self_play_games: int,
+    league_games: int,
+    assignments: np.ndarray,
+    builtin_lanes: tuple[str, ...],
+    script_lanes: tuple[ScriptOpponent, ...],
+    script_pool: ScriptAgentPool | None,
+    seeds: np.ndarray,
+    league_seats: np.ndarray,
+    horizon: int,
+    deterministic: bool,
+    sampled_heads: tuple[str, ...] | None,
+    temperature: float,
+    gamma: float,
+    reward_mode: str,
+    frozen_temperatures: np.ndarray,
+    frozen_deterministic: np.ndarray,
+    sampling_seed: int,
+    forward_mode: str,
+    forward_autocast: bool,
+    fields: dict[str, np.ndarray],
+    started: float,
+    ensemble_namespace: int,
+    critic: LejepaCritic | None = None,
+) -> Generator[None, None, RolloutBatch]:
+    """Collect one validated game range of a mixed-play wave, yielding per step.
+
+    Every yield sits after the segment has launched its next step graph and
+    stored the current step, so a driver interleaving two segments overlaps
+    one segment's host work with the other's device work. Inputs are the
+    wave's already-validated arguments restricted to this segment's games.
+    """
+    device = next(actor.parameters()).device
+    architecture = architecture_of(actor).name
+    strategic = isinstance(actor, StrategicActor)
+    causal = architecture == "causal-execution"
+    if causal:
+        from kaggriculture.causal_actor import CausalChoice, CausalOutput
+    lane_count = len(opponents) + len(builtin_lanes) + len(script_lanes)
+    games = self_play_games + league_games
+    environment = load_native().BatchEnv(seeds)
+    rows = games * 2
+    self_play_rows = self_play_games * 2
+    trajectories = self_play_rows + league_games
+    fields = _native_rollout_storage(
+        fields,
+        architecture,
+        trajectories,
+        horizon,
+        action_interface=actor.config.action_interface,
+    )
+    floating_dtype = (
+        next(actor.trunk.parameters()).dtype
+        if architecture_of(actor).structured_inputs
+        else next(actor.parameters()).dtype
+    )
+    encoded_wave = _native_wave(architecture, environment, device, floating_dtype)
+    next_encoded_wave = _native_wave(
+        architecture,
+        environment,
+        device,
+        floating_dtype,
+        device_wave=encoded_wave,
+    )
+    encoded_wave.refresh(environment)
+    encoded_wave.copy_to_device()
+    wave_inputs = encoded_wave.inputs()
+    gpu_sampling = device.type == "cuda"
+    # Native Gumbel sampling with its device-side statistics tail; the causal
+    # path samples inside the native step from selected factors instead.
+    device_sampling = gpu_sampling and not causal
+    sampled = environment.sample_buffers()
+    if gpu_sampling:
+        for name in _GPU_STATISTIC_INPUT_NAMES:
+            sampled[name] = torch.from_numpy(np.asarray(sampled[name])).pin_memory().numpy()
+
+    league_game_rows = self_play_rows + 2 * np.arange(league_games, dtype=np.int64)
+    league_current_rows = league_game_rows + league_seats
+    frozen_rows = league_game_rows + (1 - league_seats)
+    stored_rows = np.concatenate([np.arange(self_play_rows, dtype=np.int64), league_current_rows])
+    generator = np.random.default_rng(sampling_seed)
+    frozen_generator = np.random.default_rng(sampling_seed ^ 0x5EED_1EAF)
+    kind_gate, quantity_values, quantity_bias = _quantity_heads((actor, *opponents))
+    _set_market_resource_heads(environment, (actor, *opponents))
+    # Per-lane decode of everything a frozen row needs. A built-in or script
+    # lane has no network, so it borrows the learner's quantity head and neutral
+    # sampling settings; its agent replaces that row's whole action regardless.
+    lane_names = (
+        *(f"frozen-{index}" for index in range(len(opponents))),
+        *builtin_lanes,
+        *(lane.key for lane in script_lanes),
+    )
+    lane_heads = np.zeros(lane_count, dtype=np.uint16)
+    lane_heads[: len(opponents)] = np.arange(1, len(opponents) + 1, dtype=np.uint16)
+    lane_temperatures = np.ones(lane_count, dtype=np.float32)
+    lane_temperatures[: len(opponents)] = frozen_temperatures
+    lane_deterministic = np.zeros(lane_count, dtype=np.bool_)
+    lane_deterministic[: len(opponents)] = frozen_deterministic
+    lane_codes = np.zeros(lane_count, dtype=np.uint8)
+    first_script_lane = len(opponents) + len(builtin_lanes)
+    lane_codes[len(opponents) : first_script_lane] = [
+        BUILTIN_AGENT_CODES[name] for name in builtin_lanes
+    ]
+    lane_codes[first_script_lane:] = EXTERNAL_AGENT_CODE
+    head_ids = np.zeros(rows, dtype=np.uint16)
+    head_ids[frozen_rows] = lane_heads[assignments]
+    deterministic_rows = np.full(rows, deterministic, dtype=np.bool_)
+    deterministic_rows[frozen_rows] = lane_deterministic[assignments]
+    unit_deterministic_rows, kind_deterministic_rows, deterministic_rows = _head_determinism_rows(
+        deterministic_rows, stored_rows, sampled_heads
+    )
+    temperatures = np.full(rows, temperature, dtype=np.float32)
+    temperatures[frozen_rows] = lane_temperatures[assignments]
+    builtin_agents = _builtin_agent_rows(
+        rows, frozen_rows, stored_rows, assignments, lane_codes, lane_names
+    )
+    entropy_sums = np.zeros(trajectories, dtype=np.float64)
+    final = None
+    packed_transfer: _PackedTransfer | None = None
+    preference_transfer: _GpuPreferenceTransfer | None = None
+    preference_arrays: tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray] | None = None
+    # The per-step device tail below (Gumbel draws, statistics, downloads) is
+    # recorded into the step graph, so its host destinations exist before the
+    # first step rather than being allocated from the first output's shapes.
+    if device_sampling:
+        preference_transfer = _GpuPreferenceTransfer.allocate(rows, actor.config.quantity_rank)
+        preference_arrays = preference_transfer.arrays()
+    gpu_current_generator: torch.Generator | None = None
+    gpu_frozen_generator: torch.Generator | None = None
+    gpu_current_rows: torch.Tensor | None = None
+    gpu_frozen_rows: torch.Tensor | None = None
+    gpu_deterministic_rows: torch.Tensor | None = None
+    gpu_unit_deterministic_rows: torch.Tensor | None = None
+    gpu_kind_deterministic_rows: torch.Tensor | None = None
+    gpu_temperatures: torch.Tensor | None = None
+    statistics_transfer: _GpuStatisticsTransfer | None = None
+    if device_sampling:
+        statistics_host_inputs = _statistics_host_inputs(sampled)
+        statistics_transfer = _GpuStatisticsTransfer.allocate(
+            statistics_host_inputs, _statistics_shapes(statistics_host_inputs, strategic), device
+        )
+    pending_statistics: tuple[int, np.ndarray] | None = None
+    gpu_builtin_agents: torch.Tensor | None = None
+    if gpu_sampling:
+        gpu_current_generator = torch.Generator(device=device)
+        gpu_current_generator.manual_seed(sampling_seed)
+        gpu_frozen_generator = torch.Generator(device=device)
+        gpu_frozen_generator.manual_seed(sampling_seed ^ 0x5EED_1EAF)
+        gpu_current_rows = torch.as_tensor(stored_rows, dtype=torch.long, device=device)
+        gpu_frozen_rows = torch.as_tensor(frozen_rows, dtype=torch.long, device=device)
+        gpu_deterministic_rows = torch.as_tensor(
+            deterministic_rows, dtype=torch.bool, device=device
+        )
+        gpu_unit_deterministic_rows = torch.as_tensor(
+            unit_deterministic_rows, dtype=torch.bool, device=device
+        )
+        gpu_kind_deterministic_rows = torch.as_tensor(
+            kind_deterministic_rows, dtype=torch.bool, device=device
+        )
+        gpu_temperatures = torch.as_tensor(temperatures, dtype=torch.float32, device=device)
+        gpu_builtin_agents = torch.as_tensor(builtin_agents, dtype=torch.uint8, device=device)
+
+    causal_choice = None
+    ledger_staging = None
+    selected_transfer = None
+    causal_destinations = ()
+    if causal:
+        ledger_staging = LedgerStaging(
+            rows, device, actor.device_ledger.minimum, actor.device_ledger.maximum
+        )
+        ledger_staging.refresh(environment)
+        causal_choice = CausalChoice(
+            ledger_staging.device,
+            torch.full((rows, MAX_UNITS), -1, dtype=torch.long, device=device),
+            torch.full((rows, MAX_MARKET_ORDERS), -1, dtype=torch.long, device=device),
+            torch.full((rows, MAX_MARKET_ORDERS), -1, dtype=torch.long, device=device),
+            torch.empty((rows, 36), device=device),
+            gpu_temperatures,
+            gpu_deterministic_rows,
+        )
+        wave_inputs = (*wave_inputs, causal_choice)
+        causal_current_draws = torch.empty((stored_rows.size, 36), device=device)
+        causal_frozen_draws = torch.empty((frozen_rows.size, 36), device=device)
+        causal_destinations = tuple(
+            torch.zeros((rows, *shape), device=device, dtype=dtype)
+            for shape, dtype in (
+                ((MAX_UNITS,), torch.long),
+                ((MAX_MARKET_ORDERS,), torch.long),
+                ((MAX_MARKET_ORDERS,), torch.long),
+                ((MAX_UNITS, N_UNIT_ACTIONS), torch.bool),
+                ((MAX_MARKET_ORDERS, N_MARKET_KINDS), torch.bool),
+                ((MAX_MARKET_ORDERS, N_QUANTITIES), torch.bool),
+                ((MAX_UNITS,), torch.bool),
+                ((MAX_MARKET_ORDERS,), torch.bool),
+                ((MAX_MARKET_ORDERS,), torch.bool),
+                ((36,), torch.float32),
+                ((36,), torch.float32),
+            )
+        )
+
+    plan_choice = None
+    plan_output = None
+    if strategic:
+        plan_choice = PlanChoice(
+            torch.full((rows,), -1, dtype=torch.long, device=device),
+            torch.empty(rows, device=device),
+            gpu_temperatures,
+            gpu_deterministic_rows,
+            torch.zeros(rows, device=device),
+            torch.ones(rows, dtype=torch.bool, device=device),
+        )
+        wave_inputs = (*wave_inputs, plan_choice)
+        plan_output = torch.zeros((rows, 3), dtype=torch.float32, device=device)
+        current_plan_draws = torch.empty(stored_rows.size, device=device)
+        frozen_plan_draws = torch.empty(frozen_rows.size, device=device)
+
+    def refresh_plan_draws() -> None:
+        if causal_choice is not None:
+            torch.rand(
+                causal_current_draws.shape,
+                out=causal_current_draws,
+                generator=gpu_current_generator,
+            )
+            torch.rand(
+                causal_frozen_draws.shape, out=causal_frozen_draws, generator=gpu_frozen_generator
+            )
+            causal_choice.uniforms.index_copy_(0, gpu_current_rows, causal_current_draws)
+            causal_choice.uniforms.index_copy_(0, gpu_frozen_rows, causal_frozen_draws)
+        if plan_choice is not None:
+            torch.rand(
+                current_plan_draws.shape, out=current_plan_draws, generator=gpu_current_generator
+            )
+            torch.rand(
+                frozen_plan_draws.shape, out=frozen_plan_draws, generator=gpu_frozen_generator
+            )
+            plan_choice.uniforms.index_copy_(0, gpu_current_rows, current_plan_draws)
+            plan_choice.uniforms.index_copy_(0, gpu_frozen_rows, frozen_plan_draws)
+
+    refresh_plan_draws()
+
+    def store_statistics(step: int, counts: np.ndarray) -> None:
+        """Store the statistics of `step`; the caller has joined the stream that filled them."""
+        assert statistics_transfer is not None
+        for destination, values in zip(
+            ("old_unit_logprobs", "old_market_kind_logprobs"),
+            statistics_transfer.arrays[:2],
+            strict=True,
+        ):
+            fields[destination][:, step] = values[store_rows]
+        entropy_sums[:] += statistics_transfer.arrays[2][store_rows] * counts
+        if strategic:
+            metadata = statistics_transfer.arrays[3][store_rows]
+            fields["plan_indices"][:, step] = metadata[:, 0]
+            fields["old_plan_logprobs"][:, step] = metadata[:, 1]
+            fields["plan_active"][:, step] = True
+
+    # A pure self-play wave keeps the learner forward over the contiguous full
+    # batch and stores every row, avoiding gather/scatter work entirely.
+    store_rows: np.ndarray | slice = slice(None) if not league_games else stored_rows
+    stored_pair_rows = stored_rows ^ 1
+    current_tensor = None if not league_games else torch.as_tensor(stored_rows, device=device)
+    current_gather: tuple[Any, ...] | None = None
+    lane_gather: tuple[Any, ...] | None = None
+    ensemble: _StackedActorEnsemble | None = None
+    frozen_tensor: torch.Tensor | None = None
+    frozen_store_tensor: torch.Tensor | None = None
+    lane_valid_indices: torch.Tensor | None = None
+    frozen_store_rows: np.ndarray | None = None
+    lane_valid_flat: np.ndarray | None = None
+    lanes = 0
+    lane_width = 0
+    unit_logits: torch.Tensor | np.ndarray | None = None
+    kind_logits: torch.Tensor | np.ndarray | None = None
+    quantity_context: torch.Tensor | np.ndarray | None = None
+    if league_games:
+        frozen_groups = tuple(
+            frozen_rows[np.flatnonzero(assignments == lane)] for lane in range(len(opponents))
+        )
+        active_indices = [index for index, group in enumerate(frozen_groups) if group.size]
+        active_groups = [frozen_groups[index] for index in active_indices]
+        # Bucket only the neural inference buffers. Padding duplicates real
+        # inputs/weights, but is never scattered or sampled as a physical row.
+        lanes, lane_width = _league_segment_layout(
+            assignments, len(opponents), device=device, mode=forward_mode
+        )
+        lane_rows = np.full(
+            (lanes, lane_width), active_groups[0][0] if active_groups else 0, dtype=np.int64
+        )
+        lane_valid = np.zeros((lanes, lane_width), dtype=np.bool_)
+        for lane, group in enumerate(active_groups):
+            lane_rows[lane, : group.size] = group
+            lane_rows[lane, group.size :] = group[0]
+            lane_valid[lane, : group.size] = True
+        lane_valid_flat = lane_valid.reshape(-1)
+        frozen_store_rows = (
+            np.concatenate(active_groups) if active_groups else np.empty(0, dtype=np.int64)
+        )
+        frozen_tensor = torch.as_tensor(lane_rows.reshape(-1), device=device)
+        frozen_store_tensor = torch.as_tensor(frozen_store_rows, device=device)
+        # Resolve padding on the host once. CUDA boolean indexing would compact
+        # dynamically (and synchronize) every step, and cannot be captured.
+        lane_valid_indices = torch.as_tensor(np.flatnonzero(lane_valid_flat), device=device)
+        padded_indices = active_indices + active_indices[:1] * (lanes - len(active_indices))
+        ensemble = (
+            _stacked_actor_ensemble(
+                [opponents[index] for index in padded_indices], namespace=ensemble_namespace
+            )
+            if active_indices
+            else None
+        )
+        # Structured mixed play gathers token tensors for the learner and,
+        # when present, the lane ensemble on every step.
+        # Fixed destinations keep those CUDA addresses stable and replace the
+        # per-step allocator traffic with index_select writes into owned memory.
+        if resolve_architecture(architecture).structured_inputs:
+            current_gather = _empty_selected_inputs(wave_inputs, (stored_rows.size,))
+            if ensemble is not None:
+                lane_gather = _empty_selected_inputs(wave_inputs, (lanes, lane_width))
+        if not gpu_sampling:
+            unit_logits = np.zeros((rows, MAX_UNITS, N_UNIT_ACTIONS), dtype=np.float32)
+            kind_logits = np.zeros((rows, MAX_MARKET_ORDERS, N_MARKET_KINDS), dtype=np.float32)
+            quantity_context = np.zeros(
+                (rows, MAX_MARKET_ORDERS, actor.config.quantity_rank), dtype=np.float32
+            )
+    # Device sampling reads the policy heads from fixed device buffers: the
+    # league path scatters both forwards into them, a pure self-play wave copies
+    # its one forward in, and the statistics recorded at the head of the next
+    # step graph read the previous step's logits from the same addresses.
+    # Zeroed rather than uninitialized: with no ensemble nothing scatters into
+    # the frozen rows, and handing the sampler uninitialized memory -- even in
+    # rows it is contracted to ignore -- is not worth the page.
+    if gpu_sampling and (league_games or device_sampling):
+        output_dtype = torch.bfloat16 if forward_autocast else floating_dtype
+        unit_logits = torch.zeros(
+            (rows, MAX_UNITS, N_UNIT_ACTIONS), dtype=output_dtype, device=device
+        )
+        kind_logits = torch.zeros(
+            (rows, MAX_MARKET_ORDERS, N_MARKET_KINDS), dtype=output_dtype, device=device
+        )
+        quantity_context = torch.zeros(
+            (rows, MAX_MARKET_ORDERS, actor.config.quantity_rank),
+            dtype=output_dtype,
+            device=device,
+        )
+    # Collection runs the actor under whatever precision the audited decision
+    # chose. It is bf16 in the update path regardless, so an fp32 collection
+    # forward is not the conservative option: it is a second precision, and the
+    # gap between the two is what `update_replay_parity` measures.
+    autocast_forward = forward_autocast and device.type == "cuda"
+    # Behavior values read in the wave rather than replayed by the update. Only
+    # the `lejepa` critic can: its tower reads the very encoding the learner
+    # forward already computes, so each step adds the tower alone -- a quarter
+    # of the replay's per-row cost, the backbone being the rest. Only a
+    # captured step can host it, since the tower runs as its own graph on a
+    # side stream over the step graph's fixed output addresses.
+    value_critic = (
+        critic
+        if critic is not None
+        and device.type == "cuda"
+        and forward_mode in CAPTURED_ROLLOUT_FORWARD_MODES
+        else None
+    )
+    learner_belief: list[Any] = []
+    # Taken before the first step reads the weights, as the replay would be.
+    collected_value_key = (
+        behavior_value_key(value_critic, autocast_forward) if value_critic is not None else None
+    )
+
+    def run_actor(*inputs: Any) -> ActorOutput:
+        with torch.autocast(device.type, dtype=torch.bfloat16, enabled=autocast_forward):
+            if value_critic is None:
+                output = _rollout_model_forward(actor, *inputs, mode=forward_mode)
+            else:
+                output, belief = _rollout_model_forward(
+                    actor, *inputs, mode=forward_mode, method="forward_with_belief"
+                )
+                # Reassigned by every run; the capture's run is the last, so
+                # this ends up naming the graph's own output buffers.
+                learner_belief[:] = [belief]
+        assert causal or isinstance(output, (ActorOutput, StrategicOutput))
+        return output
+
+    # The learner and frozen-opponent forwards read disjoint gathered buffers.
+    # Schedule them on separate streams while keeping one physical-game wave;
+    # both streams join before sampling, so every game still advances together.
+    frozen_forward_stream = (
+        _rollout_cuda_streams(device)[1]
+        if league_games and ensemble is not None and device.type == "cuda"
+        else None
+    )
+
+    def run_frozen() -> ActorOutput | None:
+        if ensemble is None:
+            return None
+        assert frozen_tensor is not None
+        with torch.autocast(device.type, dtype=torch.bfloat16, enabled=autocast_forward):
+            lane_output = ensemble(
+                *_lane_view_inputs(wave_inputs, frozen_tensor, lanes, lane_width, lane_gather),
+                mode=forward_mode,
+            )
+        return type(lane_output)(*(tensor.flatten(0, 1) for tensor in lane_output))
+
+    device_output: Any = None
+    if gpu_sampling and (league_games or device_sampling):
+        assert isinstance(unit_logits, torch.Tensor)
+        assert isinstance(kind_logits, torch.Tensor)
+        assert isinstance(quantity_context, torch.Tensor)
+        device_output = (
+            CausalOutput(unit_logits, kind_logits, quantity_context, *causal_destinations)
+            if causal
+            else StrategicOutput(unit_logits, kind_logits, quantity_context, plan_output)
+            if strategic
+            else ActorOutput(unit_logits, kind_logits, quantity_context)
+        )
+
+    def step_forwards() -> _StepOutputs:
+        """Gather, forward and assemble device outputs before host sampling.
+
+        Fixed integer gathers, scatters and copies belong inside the captured
+        region; they land in the fixed buffers `device_output` names.
+        """
+        if not league_games:
+            current = run_actor(*wave_inputs)
+            if device_output is None:
+                return current, None, None
+            for destination, current_values in zip(device_output, current, strict=True):
+                destination.copy_(current_values)
+            return device_output, None, None
+        assert current_tensor is not None
+        if frozen_forward_stream is None:
+            current = run_actor(*_select_inputs(wave_inputs, current_tensor, current_gather))
+            frozen = run_frozen()
+        else:
+            current_stream = torch.cuda.current_stream(device)
+            frozen_forward_stream.wait_stream(current_stream)
+            with torch.cuda.stream(frozen_forward_stream):
+                frozen = run_frozen()
+            current = run_actor(*_select_inputs(wave_inputs, current_tensor, current_gather))
+            current_stream.wait_stream(frozen_forward_stream)
+        if device_output is None:
+            return None, current, frozen
+
+        assert gpu_current_rows is not None
+        assert frozen_store_tensor is not None
+        assert lane_valid_indices is not None
+        for destination, current_values, frozen_values in zip(
+            device_output,
+            current,
+            (None,) * len(device_output) if frozen is None else frozen,
+            strict=True,
+        ):
+            destination.index_copy_(0, gpu_current_rows, current_values.to(destination.dtype))
+            if frozen_values is not None:
+                selected_frozen = frozen_values.index_select(0, lane_valid_indices)
+                destination.index_copy_(
+                    0, frozen_store_tensor, selected_frozen.to(destination.dtype)
+                )
+        return device_output, None, None
+
+    def step_region() -> _StepOutputs:
+        """The whole device side of one step, recorded as one graph.
+
+        Order matters: the previous step's statistics read the logits still in
+        `device_output` and the factors the native step uploaded, then the
+        forward overwrites those logits, then the sampling tail draws from
+        them and starts every download the host needs next.
+        """
+        if not device_sampling:
+            return step_forwards()
+        assert device_output is not None
+        assert statistics_transfer is not None
+        assert preference_transfer is not None
+        assert gpu_builtin_agents is not None
+        assert gpu_temperatures is not None
+        assert gpu_deterministic_rows is not None
+        assert gpu_unit_deterministic_rows is not None
+        assert gpu_kind_deterministic_rows is not None
+        assert gpu_current_rows is not None
+        assert gpu_frozen_rows is not None
+        assert gpu_current_generator is not None
+        assert gpu_frozen_generator is not None
+        _launch_gpu_statistics(
+            device_output, gpu_builtin_agents, gpu_temperatures, statistics_transfer
+        )
+        outputs = step_forwards()
+        _stage_gpu_preferences(
+            device_output,
+            gpu_temperatures,
+            gpu_unit_deterministic_rows,
+            gpu_kind_deterministic_rows,
+            gpu_current_rows,
+            gpu_frozen_rows,
+            gpu_current_generator,
+            gpu_frozen_generator,
+            preference_transfer,
+        )
+        return outputs
+
+    graphed = forward_mode in CAPTURED_ROLLOUT_FORWARD_MODES and device.type == "cuda"
+    step_graph: _CapturedStep[_StepOutputs] | None = None
+    pending_outputs: _StepOutputs | None = None
+    # Marks the end of this segment's region on the stream. The segment joins
+    # this event rather than the stream, so it never waits on the other
+    # segment's replay queued behind its own.
+    outputs_ready = torch.cuda.Event() if gpu_sampling else None
+    value_graph: _CapturedStep[torch.Tensor] | None = None
+    value_stream = _rollout_value_stream(device) if value_critic is not None else None
+    # Marks the end of the latest step's value tail. The next upload and step
+    # replay overwrite the inputs and the encoding that tail reads, so both
+    # join it first; by then the native step has usually given it the time.
+    value_done = torch.cuda.Event() if value_critic is not None else None
+    behavior_values = (
+        torch.zeros((trajectories, horizon), dtype=torch.float32, device=device)
+        if value_critic is not None
+        else None
+    )
+    # Built once, like every other row index: the value graph reads it by
+    # address on each replay, so it must outlive the capture.
+    value_pair_rows = (
+        torch.as_tensor(stored_pair_rows, device=device) if value_critic is not None else None
+    )
+
+    def launch_region(step: int) -> _StepOutputs:
+        if step_graph is not None:
+            outputs = step_graph()
+        else:
+            with _cuda_graph_generation(device, forward_mode):
+                outputs = step_region()
+        if outputs_ready is not None:
+            outputs_ready.record()
+        if value_graph is not None:
+            assert value_stream is not None and value_done is not None
+            assert behavior_values is not None
+            # Off the step's own stream: nothing the sampler or the native step
+            # waits on is behind the tower, which fills the device while the
+            # host steps the environment.
+            value_stream.wait_stream(torch.cuda.current_stream(device))
+            with torch.cuda.stream(value_stream):
+                behavior_values[:, step].copy_(value_graph())
+            value_done.record(value_stream)
+        return outputs
+
+    if ensemble is not None:
+        _warmup_league_layout(
+            ensemble,
+            wave_inputs,
+            lanes=lanes,
+            width=lane_width,
+            mode=forward_mode,
+            autocast=autocast_forward,
+        )
+
+    script: ScriptSegment | None = None
+    script_games = np.flatnonzero(assignments >= first_script_lane)
+    if script_games.size:
+        assert script_pool is not None
+        script_lane_pool_indices = np.asarray(
+            [script_pool.opponents.index(lane) for lane in script_lanes], dtype=np.int64
+        )
+        script = script_pool.segment(
+            environment,
+            game_indices=self_play_games + script_games,
+            players=1 - league_seats[script_games],
+            opponents=script_lane_pool_indices[assignments[script_games] - first_script_lane],
+        )
+    try:
+        if script is not None:
+            script.request()
+        for step in range(horizon):
+            current_ledger = ledger_staging.current if ledger_staging is not None else None
+            if graphed and step_graph is None:
+                # Capture on the first real uploaded wave and replay the static
+                # device region for the remaining steps.
+                step_generators: tuple[torch.Generator, ...] = ()
+                if device_sampling:
+                    assert gpu_current_generator is not None
+                    assert gpu_frozen_generator is not None
+                    step_generators = (gpu_current_generator, gpu_frozen_generator)
+                step_graph = _CapturedStep(step_region, generators=step_generators)
+                if value_critic is not None:
+                    assert value_pair_rows is not None
+                    value_graph = _capture_value_tail(
+                        value_critic,
+                        # The learner forward's rows, which are the stored rows in
+                        # stored order: the whole wave, or the league gather.
+                        wave_inputs[0] if current_gather is None else current_gather[0],
+                        wave_inputs[0],
+                        value_pair_rows,
+                        learner_belief[0],
+                        mode=forward_mode,
+                        autocast=autocast_forward,
+                    )
+            if pending_outputs is not None:
+                full_output, current_output, frozen_output = pending_outputs
+                pending_outputs = None
+            else:
+                full_output, current_output, frozen_output = launch_region(step)
+            if league_games and not gpu_sampling:
+                assert current_output is not None
+                assert isinstance(unit_logits, np.ndarray)
+                assert isinstance(kind_logits, np.ndarray)
+                assert isinstance(quantity_context, np.ndarray)
+                assert frozen_store_rows is not None
+                assert lane_valid_flat is not None
+                transfer_outputs = (
+                    (current_output,) if frozen_output is None else (current_output, frozen_output)
+                )
+                host_outputs, packed_transfer = _packed_outputs_to_host(
+                    transfer_outputs, packed_transfer
+                )
+                current_host = host_outputs[0]
+                frozen_host = None if frozen_output is None else host_outputs[1]
+                for destination, current_values, frozen_values in zip(
+                    (unit_logits, kind_logits, quantity_context),
+                    (
+                        current_host.unit_logits,
+                        current_host.market_kind_logits,
+                        current_host.market_quantity_context,
+                    ),
+                    (
+                        (None, None, None)
+                        if frozen_host is None
+                        else (
+                            frozen_host.unit_logits,
+                            frozen_host.market_kind_logits,
+                            frozen_host.market_quantity_context,
+                        )
+                    ),
+                    strict=True,
+                ):
+                    destination[stored_rows] = current_values
+                    if frozen_values is not None:
+                        destination[frozen_store_rows] = frozen_values[lane_valid_flat]
+                full_output = current_output
+
+            assert full_output is not None
+            if causal:
+                if selected_transfer is None:
+                    selected_transfer = SelectedFactorTransfer(full_output)
+                selected_transfer.copy(full_output)
+                environment.step_factors_into(*selected_transfer.factors, builtin_agents, sampled)
+                selected_transfer.store_statistics(sampled)
+            elif gpu_sampling:
+                assert preference_arrays is not None
+                assert statistics_transfer is not None
+                assert gpu_builtin_agents is not None
+                assert gpu_temperatures is not None
+                assert outputs_ready is not None
+                # The one host join of a step: the region has downloaded this
+                # step's sampler inputs and the previous step's statistics.
+                outputs_ready.synchronize()
+                if pending_statistics is not None:
+                    pending_step, pending_counts = pending_statistics
+                    store_statistics(pending_step, pending_counts)
+                    pending_statistics = None
+                unit_utilities, kind_utilities, step_quantity_context, quantity_draws = (
+                    preference_arrays
+                )
+                if script is not None:
+                    script.stage()
+                environment.select_and_step_into(
+                    unit_utilities,
+                    kind_utilities,
+                    step_quantity_context,
+                    kind_gate,
+                    quantity_values,
+                    quantity_bias,
+                    head_ids,
+                    quantity_draws,
+                    deterministic_rows,
+                    temperatures,
+                    builtin_agents,
+                    sampled,
+                )
+                _upload_gpu_statistics_inputs(sampled, full_output, statistics_transfer)
+                if step + 1 == horizon:
+                    # No further region computes these; launch and join directly.
+                    _launch_gpu_statistics(
+                        full_output, gpu_builtin_agents, gpu_temperatures, statistics_transfer
+                    )
+                    outputs_ready.record()
+                    outputs_ready.synchronize()
+            else:
+                if not league_games:
+                    host_outputs, packed_transfer = _packed_outputs_to_host(
+                        (full_output,), packed_transfer
+                    )
+                    host = host_outputs[0]
+                    step_unit_logits = host.unit_logits
+                    step_kind_logits = host.market_kind_logits
+                    step_quantity_context = host.market_quantity_context
+                    unit_draws, kind_draws, quantity_draws = _categorical_draws(generator, rows)
+                else:
+                    assert isinstance(unit_logits, np.ndarray)
+                    assert isinstance(kind_logits, np.ndarray)
+                    assert isinstance(quantity_context, np.ndarray)
+                    step_unit_logits = np.asarray(unit_logits)
+                    step_kind_logits = np.asarray(kind_logits)
+                    step_quantity_context = np.asarray(quantity_context)
+                    unit_draws = np.empty((rows, MAX_UNITS), dtype=np.float32)
+                    kind_draws = np.empty((rows, MAX_MARKET_ORDERS), dtype=np.float32)
+                    quantity_draws = np.empty((rows, MAX_MARKET_ORDERS), dtype=np.float32)
+                    current_draws = _categorical_draws(generator, stored_rows.size)
+                    frozen_draws = _categorical_draws(frozen_generator, league_games)
+                    for destination, current_values, frozen_values in zip(
+                        (unit_draws, kind_draws, quantity_draws),
+                        current_draws,
+                        frozen_draws,
+                        strict=True,
+                    ):
+                        destination[stored_rows] = current_values
+                        destination[frozen_rows] = frozen_values
+                if script is not None:
+                    script.stage()
+                environment.sample_and_step_into(
+                    step_unit_logits,
+                    step_kind_logits,
+                    step_quantity_context,
+                    kind_gate,
+                    quantity_values,
+                    quantity_bias,
+                    head_ids,
+                    unit_draws,
+                    kind_draws,
+                    quantity_draws,
+                    deterministic_rows,
+                    temperatures,
+                    builtin_agents,
+                    sampled,
+                )
+            if script is not None and step + 1 < horizon:
+                # First, so the agents' next turn overlaps everything below and
+                # the other segment's step.
+                script.request()
+            if step + 1 < horizon:
+                # Both host waves share fixed device destinations. Upload and graph
+                # replay use the sampling/statistics stream, so all reads of this
+                # step's outputs finish before the next replay overwrites them.
+                # The next step joins that stream before the native step or either
+                # pinned host buffer can be refilled.
+                next_encoded_wave.refresh(environment)
+                if value_done is not None:
+                    torch.cuda.current_stream(device).wait_event(value_done)
+                next_encoded_wave.copy_to_device()
+                if ledger_staging is not None:
+                    ledger_staging.refresh(environment, advance=True)
+                refresh_plan_draws()
+                if step_graph is not None:
+                    # Launch ahead of CPU arena storage and consume once at the
+                    # next loop head. Bootstrap runs above; the final step never
+                    # queues a speculative extra forward.
+                    pending_outputs = launch_region(step + 1)
+            rewards = _native_pair_rewards(sampled, gamma, reward_mode).reshape(-1)
+            _store_native_wave(
+                architecture,
+                fields,
+                step,
+                encoded_wave.arrays,
+                sampled,
+                rewards[store_rows],
+                store_rows,
+                stored_pair_rows,
+                store_policy_statistics=causal or not gpu_sampling,
+            )
+            if current_ledger is not None:
+                fields["policy_ledger"][:, step] = current_ledger[store_rows]
+            counts = (
+                np.asarray(sampled["unit_active"])[store_rows].sum(axis=1)
+                + np.asarray(sampled["market_active"])[store_rows].sum(axis=1)
+                + np.asarray(sampled["market_quantity_active"])[store_rows].sum(axis=1)
+            )
+            if strategic:
+                counts = counts + 1
+            if device_sampling:
+                fields["old_market_quantity_logprobs"][:, step] = np.asarray(
+                    sampled["market_quantity_logprobs"]
+                )[store_rows]
+                pending_statistics = (step, counts)
+            else:
+                entropy_sums += np.asarray(sampled["entropy"])[store_rows] * counts
+            dones = np.asarray(sampled["dones"], dtype=np.bool_)
+            if step + 1 < horizon and dones.any():
+                raise RuntimeError("native rollout terminated before the competition horizon")
+            if step + 1 == horizon and not dones.all():
+                raise RuntimeError("native rollout did not terminate at the competition horizon")
+            final = np.asarray(sampled["final_money"], dtype=np.float32)
+            if step + 1 < horizon:
+                encoded_wave, next_encoded_wave = next_encoded_wave, encoded_wave
+            # The next region is in flight and this step is stored: the driver may
+            # now run the other segment's host work against it.
+            yield
+    finally:
+        if script is not None:
+            script.finish()
+
+    if pending_statistics is not None:
+        pending_step, pending_counts = pending_statistics
+        store_statistics(pending_step, pending_counts)
+
+    collected_values = None
+    if behavior_values is not None:
+        assert value_done is not None
+        # Joined before either graph is released: the last tail still reads
+        # the step graph's pool.
+        torch.cuda.current_stream(device).wait_event(value_done)
+        collected_values = behavior_values.cpu().numpy()
+    if value_graph is not None:
+        value_graph.close()
+    # The belief points into the step graph's pool, which cannot be released
+    # while anything still does.
+    learner_belief.clear()
+    if step_graph is not None:
+        step_graph.close()
+
+    assert final is not None
+    self_final = final[:self_play_games]
+    league_final = final[self_play_games:]
+    league_index = np.arange(league_games)
+    final_money = np.concatenate([self_final.reshape(-1), league_final[league_index, league_seats]])
+    opponent_money = np.concatenate(
+        [self_final[:, ::-1].reshape(-1), league_final[league_index, 1 - league_seats]]
+    )
+    batch = _native_batch(
+        architecture,
+        fields,
+        episode_seeds=np.concatenate(
+            [
+                np.repeat(seeds[:self_play_games].astype(np.int64), 2),
+                seeds[self_play_games:].astype(np.int64),
+            ]
+        ),
+        final_money=final_money,
+        opponent_money=opponent_money,
+        seats=np.concatenate(
+            [
+                np.tile(np.asarray([0, 1], dtype=np.int8), self_play_games),
+                league_seats.astype(np.int8),
+            ]
+        ),
+        agents=np.zeros(trajectories, dtype=np.int64),
+        entropy_sums=entropy_sums,
+        learner_stochastic=(
+            not deterministic
+            if sampled_heads is None
+            else set(sampled_heads) == SAMPLED_HEAD_FAMILIES
+        ),
+        started=started,
+        reward_mode=reward_mode,
+    )
+    if collected_values is None:
+        return batch
+    return replace(batch, behavior_values=collected_values, behavior_value_key=collected_value_key)
+
+
+@torch.inference_mode()
+def collect_mixed_play_rust(
+    actor: FarmActor | StructuredActor | EntityActor,
+    opponents: Sequence[FarmActor | StructuredActor | EntityActor] = (),
+    *,
+    self_play_games: int = 0,
+    league_games: int = 0,
+    opponent_indices: Sequence[int] | np.ndarray | None = None,
+    builtin_lanes: Sequence[str] = (),
+    script_lanes: Sequence[ScriptOpponent] = (),
+    script_pool: ScriptAgentPool | None = None,
+    seed_start: int,
+    self_play_seed_group: int = 1,
+    paired_league_seats: bool = False,
+    episode_steps: int = 720,
+    deterministic: bool = False,
+    sampled_heads: tuple[str, ...] | None = None,
+    temperature: float = 1.0,
+    gamma: float = DEFAULT_REWARD_GAMMA,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+    opponent_temperature: float = 1.0,
+    opponent_temperatures: Sequence[float] | np.ndarray | None = None,
+    deterministic_opponent: bool = False,
+    deterministic_opponents: Sequence[bool] | np.ndarray | None = None,
+    sampling_seed: int = 0,
+    forward_mode: str = "cudagraphs",
+    forward_autocast: bool = False,
+    storage: dict[str, np.ndarray] | None = None,
+    critic: LejepaCritic | None = None,
+) -> RolloutBatch:
+    """Collect every game in one native wave and preserve trajectory order.
+
+    A `lejepa` ``critic`` also returns its behavior values on the batch; see
+    `_collect_mixed_play_rust_wave`. ``self_play_seed_group`` makes consecutive
+    blocks of that many self-play games share a map seed (`wave_game_seeds`).
+    """
+    _validate_forward_mode(forward_mode)
+    return _collect_mixed_play_rust_wave(
+        actor,
+        tuple(opponents),
+        self_play_games=self_play_games,
+        league_games=league_games,
+        opponent_indices=opponent_indices,
+        builtin_lanes=builtin_lanes,
+        script_lanes=script_lanes,
+        script_pool=script_pool,
+        seed_start=seed_start,
+        self_play_seed_group=self_play_seed_group,
+        paired_league_seats=paired_league_seats,
+        episode_steps=episode_steps,
+        deterministic=deterministic,
+        sampled_heads=sampled_heads,
+        temperature=temperature,
+        gamma=gamma,
+        reward_mode=reward_mode,
+        opponent_temperature=opponent_temperature,
+        opponent_temperatures=opponent_temperatures,
+        deterministic_opponent=deterministic_opponent,
+        deterministic_opponents=deterministic_opponents,
+        sampling_seed=sampling_seed,
+        forward_mode=forward_mode,
+        forward_autocast=forward_autocast,
+        storage=storage,
+        critic=critic,
+    )
+
+
+def population_pairings(population: int, games: int, *, sampling_seed: int = 0) -> np.ndarray:
+    """Enumerate a seeded, balanced round-robin population schedule.
+
+    Row ``g`` is ``(seat 0 agent, seat 1 agent)`` for game ``g``. Every ordered
+    pair of distinct members appears the same number of times, so each member
+    meets every opponent equally often on both seats and the seat *counts*
+    cancel exactly rather than in expectation -- which is why `games` must be
+    a positive multiple of `population * (population - 1)`. No row ever seats
+    a member against itself.
+
+    ``sampling_seed`` permutes the base ordered-pair list, then stratifies each
+    complete repetition over game-index orientations. Every pair cycles through
+    all four frames in four repetitions, including when the pair count is only
+    two modulo four. This keeps exact pair and seat counts while breaking the
+    permanent pair-to-map coupling. The one wave, per-agent update partition,
+    and head-to-head telemetry all consume these same rows.
+    """
+    if population < 2:
+        raise ValueError("a population wave needs at least two agents")
+    orderings = population * (population - 1)
+    if games < 1 or games % orderings:
+        raise ValueError(
+            f"a population of {population} needs games to be a positive multiple of {orderings}"
+        )
+    ordered = np.asarray(
+        [
+            (first, second)
+            for first in range(population)
+            for second in range(population)
+            if first != second
+        ],
+        dtype=np.int64,
+    )
+    shuffled = ordered[np.random.default_rng(sampling_seed).permutation(orderings)]
+    repetitions = games // orderings
+    source_orientations = np.arange(orderings) % 4
+    orientation_strata = np.asarray(((0, 1, 2, 3), (2, 3, 0, 1), (1, 0, 3, 2), (3, 2, 1, 0)))
+    pairings = np.empty((games, 2), dtype=np.int64)
+    positions = np.arange(orderings)
+    for repetition in range(repetitions):
+        desired = orientation_strata[repetition % 4, source_orientations]
+        available = (repetition * orderings + positions) % 4
+        block = pairings[repetition * orderings : (repetition + 1) * orderings]
+        for orientation in range(4):
+            block[available == orientation] = shuffled[desired == orientation]
+    return pairings
+
+
+@torch.inference_mode()
+def collect_population_play_rust(
+    actors: Sequence[FarmActor | StructuredActor | EntityActor],
+    *,
+    games: int,
+    seed_start: int,
+    episode_steps: int = EPISODE_STEPS,
+    temperature: float = 1.0,
+    gamma: float = DEFAULT_REWARD_GAMMA,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+    sampling_seed: int = 0,
+    forward_mode: str = "cudagraphs",
+    forward_autocast: bool = False,
+    storage: dict[str, np.ndarray] | None = None,
+) -> RolloutBatch:
+    """Collect one wave in which every seat is a concurrently learning member.
+
+    Both seats belong to learners and both are stored, so a wave of `games`
+    returns `2 * games` trajectories in the native batch's own game-major,
+    seat-minor order: `agents[2 * g]` is the seat 0 member of game `g` and
+    `agents[2 * g + 1]` its seat 1 member, matching
+    `population_pairings(len(actors), games)` row for row. There is no frozen
+    lane, no built-in lane and no mirror pairing anywhere in the wave.
+
+    One stacked-ensemble forward covers every row, with lane index equal to
+    agent index. That is strictly less work than the mixed league wave it
+    replaces, which runs the learner's rows and the frozen ensemble's rows as
+    two forwards per step: this is one launch sequence at the same total width.
+    The balanced schedule gives every member exactly the same number of rows,
+    so the lanes need none of the padding an uneven league mix needs.
+
+    Convolutional games cycle identity / mirror-x / mirror-y / rotate-180,
+    with both seats sharing one frame. Every step the encoder output is flipped
+    into the game's frame before the forward, and oriented movement logits are
+    restriped back to real-action columns for the native sampler. Storage keeps
+    the unit factors in the oriented label space, so a row's stored features,
+    masks and actions replay consistently through whichever member collected
+    them. The structured encoding has no orientation mapping yet, so structured
+    population games use the identity frame; their seeded pairing permutation
+    still prevents a fixed ordered pair from remaining tied to one map stratum.
+
+
+    Rollouts capture only behavior policy state. Value predictions for GAE are
+    replayed from the stored features at update time, where the critic weights
+    are still exactly the behavior weights.
+    """
+    _validate_forward_mode(forward_mode)
+    actors = tuple(actors)
+    if any(
+        architecture_of(member).name in ("strategic-plan", "causal-execution") for member in actors
+    ):
+        raise ValueError(
+            "coordinated actors require mixed native collection, not population collection"
+        )
+    population = len(actors)
+    if games < 1:
+        raise ValueError("games must be positive")
+    if episode_steps != EPISODE_STEPS:
+        raise ValueError("the native simulator currently supports the competition horizon 720")
+    _validate_learner_temperature(temperature)
+    _validate_reward_gamma(gamma)
+    _validate_reward_mode(reward_mode)
+    pairings = population_pairings(
+        population,
+        games,
+        sampling_seed=sampling_seed ^ _POPULATION_PAIRING_SEED_SALT,
+    )
+    started = time.perf_counter()
+    for member in actors:
+        member.eval()
+    device = next(actors[0].parameters()).device
+    if any(next(member.parameters()).device != device for member in actors):
+        raise ValueError("every population member must use the same device")
+    actor_config = actor_model_config(actors[0].config)
+    if any(
+        type(member) is not type(actors[0]) or actor_model_config(member.config) != actor_config
+        for member in actors
+    ):
+        raise ValueError("every population member must use the same model configuration")
+    architecture = architecture_of(actors[0]).name
+
+    # The native wave is already game-major and seat-minor, so the schedule
+    # flattens straight into the per-row agent index the sampler wants as its
+    # lane. The convolutional encoding can cycle symmetries; structured waves
+    # remain in the identity frame until that encoding has an equivalent map.
+    agents = pairings.reshape(-1)
+    codes = (
+        seat_orientations(games)
+        if architecture == CONV_ENTITY
+        else np.zeros(games * 2, dtype=np.int8)
+    )
+
+    seeds = np.arange(seed_start, seed_start + games, dtype=np.uint64)
+    environment = load_native().BatchEnv(seeds)
+    rows = games * 2
+    horizon = episode_steps - 1
+    fields = _native_rollout_storage(
+        storage,
+        architecture,
+        rows,
+        horizon,
+        action_interface=actors[0].config.action_interface,
+    )
+    encoded_wave = _native_wave(architecture, environment, device)
+    encoded = encoded_wave.arrays
+    sampled = environment.sample_buffers()
+    kind_gate, quantity_values, quantity_bias = _quantity_heads(actors)
+    _set_market_resource_heads(environment, actors)
+    head_ids = agents.astype(np.uint16)
+    deterministic_rows = np.zeros(rows, dtype=np.bool_)
+    temperatures = np.full(rows, temperature, dtype=np.float32)
+    builtin_agents = np.zeros(rows, dtype=np.uint8)
+    generator = np.random.default_rng(sampling_seed)
+    entropy_sums = np.zeros(rows, dtype=np.float64)
+    pair_rows = np.arange(rows, dtype=np.int64) ^ 1
+    final = None
+    packed_transfer: _PackedTransfer | None = None
+
+    ensemble = _stacked_actor_ensemble(actors)
+    # Equal row counts per member mean a stable sort by agent folds the wave
+    # into full lanes, so the ensemble's shape is fixed by the population size
+    # alone and a captured CUDA graph survives every later wave. The scatter
+    # back is the inverse of that gather; every row is written each step, which
+    # is why the staging buffers below need no initialization.
+    lane_width = rows // population
+    lane_rows = np.argsort(agents, kind="stable")
+    # `_lane_view_inputs` folds with a `view`, so an unbalanced schedule would
+    # mis-group the lanes silently rather than fail: a member's rows would
+    # replay under another's weights, and stored behavior log-probabilities
+    # that belong to the wrong policy look exactly like ordinary data.
+    if not (np.bincount(agents, minlength=population) == lane_width).all():
+        raise ValueError("a population wave needs the same row count for every member")
+    lane_tensor = torch.as_tensor(lane_rows, device=device)
+    unit_logits = np.empty((rows, MAX_UNITS, N_UNIT_ACTIONS), dtype=np.float32)
+    kind_logits = np.empty((rows, MAX_MARKET_ORDERS, N_MARKET_KINDS), dtype=np.float32)
+    quantity_context = np.empty(
+        (rows, MAX_MARKET_ORDERS, actors[0].config.quantity_rank), dtype=np.float32
+    )
+    autocast_forward = forward_autocast and device.type == "cuda"
+
+    def step_forward() -> ActorOutput:
+        """The population wave's whole device-side forward, as one capturable unit."""
+        with torch.autocast(device.type, dtype=torch.bfloat16, enabled=autocast_forward):
+            lane_output = ensemble(
+                *_lane_view_inputs(encoded_wave.inputs(), lane_tensor, population, lane_width),
+                mode=forward_mode,
+            )
+        return ActorOutput(*(tensor.flatten(0, 1) for tensor in lane_output))
+
+    graphed = forward_mode in CAPTURED_ROLLOUT_FORWARD_MODES and device.type == "cuda"
+    step_graph: _CapturedStep[ActorOutput] | None = None
+    for step in range(horizon):
+        encoded_wave.refresh(environment)
+        # Convolutional rows are re-encoded in the native frame every step, so
+        # apply their selected symmetry before upload. Structured rows use the
+        # identity frame and expose different field names.
+        if architecture == CONV_ENTITY:
+            orient_boards(encoded["board"], codes)
+            orient_unit_features(encoded["units"], encoded["unit_positions"], codes)
+        encoded_wave.copy_to_device()
+        if graphed and step_graph is None:
+            step_graph = _CapturedStep(step_forward)
+        if step_graph is not None:
+            output = step_graph()
+        else:
+            with _cuda_graph_generation(device, forward_mode):
+                output = step_forward()
+        host_outputs, packed_transfer = _packed_outputs_to_host((output,), packed_transfer)
+        (host,) = host_outputs
+        for destination, values in zip(
+            (unit_logits, kind_logits, quantity_context),
+            (host.unit_logits, host.market_kind_logits, host.market_quantity_context),
+            strict=True,
+        ):
+            destination[lane_rows] = values
+        unit_draws, kind_draws, quantity_draws = _categorical_draws(generator, rows)
+        # Only convolutional forwards can emit symmetry-oriented movement
+        # logits. Structured logits already use native action columns.
+        if architecture == CONV_ENTITY:
+            orient_unit_logits(unit_logits, codes)
+        environment.sample_and_step_into(
+            unit_logits,
+            kind_logits,
+            quantity_context,
+            kind_gate,
+            quantity_values,
+            quantity_bias,
+            head_ids,
+            unit_draws,
+            kind_draws,
+            quantity_draws,
+            deterministic_rows,
+            temperatures,
+            builtin_agents,
+            sampled,
+        )
+        rewards = _native_pair_rewards(sampled, gamma, reward_mode).reshape(-1)
+        # Storage keeps the unit factors in oriented space so the replay path
+        # reads features, masks and actions out of one label space. The stored
+        # log-probabilities need no remap: P(oriented index i) and P(the real
+        # action it executes) are the same categorical event, and neither the
+        # market fields nor entropy touch movement columns.
+        oriented_sampled = dict(sampled)
+        oriented_sampled["unit_actions"] = orient_unit_actions(sampled["unit_actions"], codes)
+        oriented_sampled["unit_masks"] = orient_unit_masks(sampled["unit_masks"], codes)
+        _store_native_wave(
+            architecture,
+            fields,
+            step,
+            encoded,
+            oriented_sampled,
+            rewards,
+            slice(None),
+            pair_rows,
+        )
+        counts = (
+            np.asarray(sampled["unit_active"]).sum(axis=1)
+            + np.asarray(sampled["market_active"]).sum(axis=1)
+            + np.asarray(sampled["market_quantity_active"]).sum(axis=1)
+        )
+        entropy_sums += np.asarray(sampled["entropy"]) * counts
+        dones = np.asarray(sampled["dones"], dtype=np.bool_)
+        if step + 1 < horizon and dones.any():
+            raise RuntimeError("native rollout terminated before the competition horizon")
+        if step + 1 == horizon and not dones.all():
+            raise RuntimeError("native rollout did not terminate at the competition horizon")
+        final = np.asarray(sampled["final_money"], dtype=np.float32)
+
+    if step_graph is not None:
+        step_graph.close()
+
+    assert final is not None
+    # Copied off the native buffer rather than viewed: the batch outlives this
+    # environment, and a view would keep the whole simulator batch alive.
+    return _native_batch(
+        architecture,
+        fields,
+        episode_seeds=np.repeat(seeds.astype(np.int64), 2),
+        final_money=np.array(final.reshape(-1)),
+        opponent_money=np.array(final[:, ::-1].reshape(-1)),
+        seats=np.tile(np.asarray([0, 1], dtype=np.int8), games),
+        agents=agents,
+        orientations=codes,
+        learner_stochastic=True,
+        entropy_sums=entropy_sums,
+        started=started,
+        reward_mode=reward_mode,
+    )
+
+
+def collect_self_play_rust(
+    actor: FarmActor | StructuredActor | EntityActor,
+    *,
+    games: int,
+    seed_start: int,
+    episode_steps: int = 720,
+    deterministic: bool = False,
+    temperature: float = 1.0,
+    gamma: float = DEFAULT_REWARD_GAMMA,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+    sampling_seed: int = 0,
+    forward_mode: str = "cudagraphs",
+    forward_autocast: bool = False,
+    storage: dict[str, np.ndarray] | None = None,
+) -> RolloutBatch:
+    """Collect both on-policy seats through the exact batched Rust simulator."""
+    _validate_forward_mode(forward_mode)
+    if games < 1:
+        raise ValueError("games must be positive")
+    return collect_mixed_play_rust(
+        actor,
+        self_play_games=games,
+        seed_start=seed_start,
+        episode_steps=episode_steps,
+        deterministic=deterministic,
+        temperature=temperature,
+        gamma=gamma,
+        reward_mode=reward_mode,
+        sampling_seed=sampling_seed,
+        forward_mode=forward_mode,
+        forward_autocast=forward_autocast,
+        storage=storage,
+    )
+
+
+def collect_frozen_opponents_play_rust(
+    actor: FarmActor | StructuredActor | EntityActor,
+    opponents: Sequence[FarmActor | StructuredActor | EntityActor],
+    *,
+    games: int,
+    opponent_indices: Sequence[int] | np.ndarray | None = None,
+    seed_start: int,
+    episode_steps: int = 720,
+    temperature: float = 1.0,
+    gamma: float = DEFAULT_REWARD_GAMMA,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+    opponent_temperature: float = 0.8,
+    opponent_temperatures: Sequence[float] | np.ndarray | None = None,
+    deterministic_opponent: bool = False,
+    deterministic_opponents: Sequence[bool] | np.ndarray | None = None,
+    deterministic: bool = False,
+    sampling_seed: int = 0,
+    forward_mode: str = "cudagraphs",
+    forward_autocast: bool = False,
+    storage: dict[str, np.ndarray] | None = None,
+) -> RolloutBatch:
+    """Collect one current-policy seat per native game against assigned frozen actors."""
+    _validate_forward_mode(forward_mode)
+    if games < 1:
+        raise ValueError("games must be positive")
+    return collect_mixed_play_rust(
+        actor,
+        opponents,
+        league_games=games,
+        opponent_indices=opponent_indices,
+        seed_start=seed_start,
+        episode_steps=episode_steps,
+        deterministic=deterministic,
+        temperature=temperature,
+        gamma=gamma,
+        reward_mode=reward_mode,
+        opponent_temperature=opponent_temperature,
+        opponent_temperatures=opponent_temperatures,
+        deterministic_opponent=deterministic_opponent,
+        deterministic_opponents=deterministic_opponents,
+        sampling_seed=sampling_seed,
+        forward_mode=forward_mode,
+        forward_autocast=forward_autocast,
+        storage=storage,
+    )
+
+
+def collect_frozen_opponent_play_rust(
+    actor: FarmActor | StructuredActor | EntityActor,
+    opponent: FarmActor | StructuredActor | EntityActor,
+    *,
+    games: int,
+    seed_start: int,
+    episode_steps: int = 720,
+    temperature: float = 1.0,
+    gamma: float = DEFAULT_REWARD_GAMMA,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+    opponent_temperature: float = 0.8,
+    deterministic_opponent: bool = False,
+    deterministic: bool = False,
+    sampling_seed: int = 0,
+    forward_mode: str = "cudagraphs",
+    forward_autocast: bool = False,
+) -> RolloutBatch:
+    """Collect one current-policy seat per native game against one frozen actor."""
+    _validate_forward_mode(forward_mode)
+    return collect_frozen_opponents_play_rust(
+        actor,
+        (opponent,),
+        games=games,
+        seed_start=seed_start,
+        episode_steps=episode_steps,
+        temperature=temperature,
+        gamma=gamma,
+        reward_mode=reward_mode,
+        opponent_temperature=opponent_temperature,
+        deterministic_opponent=deterministic_opponent,
+        deterministic=deterministic,
+        sampling_seed=sampling_seed,
+        forward_mode=forward_mode,
+        forward_autocast=forward_autocast,
+    )
+
+
+def collect_self_play(
+    actor: FarmActor | StructuredActor | EntityActor,
+    *,
+    games: int,
+    seed_start: int,
+    episode_steps: int = 720,
+    deterministic: bool = False,
+    temperature: float = 1.0,
+    gamma: float = DEFAULT_REWARD_GAMMA,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+    sampling_seed: int = 0,
+) -> RolloutBatch:
+    """Collect both valid on-policy trajectories from every self-play game."""
+    if getattr(actor.config, "action_interface", 1) == 3:
+        raise ValueError("market-set trajectories require collect_self_play_rust")
+    if games < 1:
+        raise ValueError("games must be positive")
+    if episode_steps < 2:
+        raise ValueError("episode_steps must be at least two")
+    _validate_learner_temperature(temperature)
+    _validate_reward_gamma(gamma)
+    _validate_reward_mode(reward_mode)
+    started = time.perf_counter()
+    actor.eval()
+    architecture = architecture_of(actor).name
+    generator = np.random.default_rng(sampling_seed)
+    environments = [
+        make(
+            "kaggriculture",
+            configuration={"episodeSteps": episode_steps, "seed": seed_start + index},
+            debug=False,
+        )
+        for index in range(games)
+    ]
+    states = [environment.reset(2) for environment in environments]
+    potentials = (
+        np.asarray(
+            [pair_potential(state[0].observation, state[1].observation) for state in states],
+            dtype=np.float32,
+        )
+        if reward_mode == "shaped"
+        else np.zeros(games, dtype=np.float32)
+    )
+    fields = _new_fields(architecture)
+    trajectories = games * 2
+    final_money = np.zeros(trajectories, dtype=np.float32)
+    opponent_money = np.zeros(trajectories, dtype=np.float32)
+    entropy_sums = np.zeros(trajectories, dtype=np.float64)
+    for _ in range(episode_steps):
+        if all(environment.done for environment in environments):
+            break
+        if any(environment.done for environment in environments):
+            raise RuntimeError("synchronous environments terminated at different horizons")
+        policy_step = act_batch(
+            actor,
+            _observations(states),
+            _opponent_privates(states),
+            deterministic=deterministic,
+            temperature=temperature,
+            generator=generator,
+        )
+        _record_policy_step(architecture, fields, policy_step)
+        entropy_sums += policy_step.factors.entropy_sums
+
+        next_states = []
+        step_rewards = np.zeros(trajectories, dtype=np.float32)
+        for game, environment in enumerate(environments):
+            offset = game * 2
+            next_state = environment.step(policy_step.actions[offset : offset + 2])
+            next_states.append(next_state)
+            if any(agent.status == "ERROR" for agent in next_state):
+                raise RuntimeError(f"agent error in self-play seed {seed_start + game}")
+            if environment.done:
+                farms = next_state[0].observation["farms"]
+                money = np.asarray(
+                    [float(farms[0]["money"]), float(farms[1]["money"])], dtype=np.float32
+                )
+                final_money[offset : offset + 2] = money
+                opponent_money[offset : offset + 2] = money[::-1]
+                utility = terminal_pair_utility(
+                    next_state[0].observation, next_state[1].observation
+                )
+                if reward_mode == "terminal-outcome":
+                    utility = float(np.sign(utility))
+                next_potential = np.float32(0.0)
+                pair_rewards = (
+                    shaped_pair_reward(
+                        potentials[game], None, terminal_utility=utility, gamma=gamma
+                    )
+                    if reward_mode == "shaped"
+                    else terminal_bank_pair_reward(utility)
+                )
+            elif reward_mode == "shaped":
+                next_potential = np.float32(
+                    pair_potential(next_state[0].observation, next_state[1].observation)
+                )
+                pair_rewards = shaped_pair_reward(potentials[game], next_potential, gamma=gamma)
+            else:
+                next_potential = np.float32(0.0)
+                pair_rewards = (0.0, -0.0)
+            potentials[game] = next_potential
+            step_rewards[offset : offset + 2] = pair_rewards
+        fields["rewards"].append(step_rewards)
+        fields["valid"].append(np.ones(trajectories, dtype=np.bool_))
+        states = next_states
+    else:
+        raise RuntimeError("self-play rollout exceeded the configured episode horizon")
+
+    if not all(environment.done for environment in environments):
+        raise RuntimeError("self-play rollout ended before all environments reached DONE")
+    return _finish_rollout(
+        architecture,
+        fields,
+        episode_seeds=np.repeat(
+            np.arange(seed_start, seed_start + games, dtype=np.int64), repeats=2
+        ),
+        final_money=final_money,
+        opponent_money=opponent_money,
+        seats=np.tile(np.asarray([0, 1], dtype=np.int8), games),
+        learner_stochastic=not deterministic,
+        agents=np.zeros(trajectories, dtype=np.int64),
+        entropy_sums=entropy_sums,
+        started=started,
+        reward_mode=reward_mode,
+    )
+
+
+def collect_frozen_opponent_play(
+    actor: FarmActor | StructuredActor | EntityActor,
+    opponent: FarmActor | StructuredActor | EntityActor,
+    *,
+    games: int,
+    seed_start: int,
+    episode_steps: int = 720,
+    temperature: float = 1.0,
+    gamma: float = DEFAULT_REWARD_GAMMA,
+    reward_mode: str = DEFAULT_REWARD_MODE,
+    opponent_temperature: float = 0.8,
+    deterministic_opponent: bool = False,
+    deterministic: bool = False,
+    sampling_seed: int = 0,
+) -> RolloutBatch:
+    """Collect one current-policy trajectory per game against a frozen snapshot."""
+    if getattr(actor.config, "action_interface", 1) == 3:
+        raise ValueError("market-set trajectories require collect_frozen_opponent_play_rust")
+    if games < 1:
+        raise ValueError("games must be positive")
+    if episode_steps < 2:
+        raise ValueError("episode_steps must be at least two")
+    _validate_learner_temperature(temperature)
+    _validate_reward_gamma(gamma)
+    _validate_reward_mode(reward_mode)
+    started = time.perf_counter()
+    actor.eval()
+    opponent.eval()
+    architecture = architecture_of(actor).name
+    device = next(actor.parameters()).device
+    if next(opponent.parameters()).device != device:
+        raise ValueError("current and frozen policies must use the same device")
+    current_generator = np.random.default_rng(sampling_seed)
+    opponent_generator = np.random.default_rng(sampling_seed ^ 0x5EED_1EAF)
+    environments = [
+        make(
+            "kaggriculture",
+            configuration={"episodeSteps": episode_steps, "seed": seed_start + index},
+            debug=False,
+        )
+        for index in range(games)
+    ]
+    states = [environment.reset(2) for environment in environments]
+    seats = np.asarray([(seed_start + index) % 2 for index in range(games)], dtype=np.int8)
+    potentials = (
+        np.asarray(
+            [pair_potential(state[0].observation, state[1].observation) for state in states],
+            dtype=np.float32,
+        )
+        if reward_mode == "shaped"
+        else np.zeros(games, dtype=np.float32)
+    )
+    fields = _new_fields(architecture)
+    final_money = np.zeros(games, dtype=np.float32)
+    opponent_money = np.zeros(games, dtype=np.float32)
+    entropy_sums = np.zeros(games, dtype=np.float64)
+    for _ in range(episode_steps):
+        if all(environment.done for environment in environments):
+            break
+        if any(environment.done for environment in environments):
+            raise RuntimeError("synchronous environments terminated at different horizons")
+        current_observations = [
+            state[int(seat)].observation for state, seat in zip(states, seats, strict=True)
+        ]
+        frozen_observations = [
+            state[1 - int(seat)].observation for state, seat in zip(states, seats, strict=True)
+        ]
+        current_step = act_batch(
+            actor,
+            current_observations,
+            [observation["private"] for observation in frozen_observations],
+            deterministic=deterministic,
+            temperature=temperature,
+            generator=current_generator,
+        )
+        frozen_step = act_batch(
+            opponent,
+            frozen_observations,
+            deterministic=deterministic_opponent,
+            temperature=opponent_temperature,
+            generator=opponent_generator,
+        )
+        _record_policy_step(architecture, fields, current_step)
+        entropy_sums += current_step.factors.entropy_sums
+
+        next_states = []
+        step_rewards = np.zeros(games, dtype=np.float32)
+        for game, (environment, seat) in enumerate(zip(environments, seats, strict=True)):
+            actions: list[dict[str, Any] | None] = [None, None]
+            actions[int(seat)] = current_step.actions[game]
+            actions[1 - int(seat)] = frozen_step.actions[game]
+            next_state = environment.step(actions)
+            next_states.append(next_state)
+            if any(agent.status == "ERROR" for agent in next_state):
+                raise RuntimeError(f"agent error in league seed {seed_start + game}")
+            if environment.done:
+                farms = next_state[0].observation["farms"]
+                player_money = (float(farms[0]["money"]), float(farms[1]["money"]))
+                final_money[game] = player_money[int(seat)]
+                opponent_money[game] = player_money[1 - int(seat)]
+                utility = terminal_pair_utility(
+                    next_state[0].observation, next_state[1].observation
+                )
+                if reward_mode == "terminal-outcome":
+                    utility = float(np.sign(utility))
+                next_potential = np.float32(0.0)
+                pair_rewards = (
+                    shaped_pair_reward(
+                        potentials[game], None, terminal_utility=utility, gamma=gamma
+                    )
+                    if reward_mode == "shaped"
+                    else terminal_bank_pair_reward(utility)
+                )
+            elif reward_mode == "shaped":
+                next_potential = np.float32(
+                    pair_potential(next_state[0].observation, next_state[1].observation)
+                )
+                pair_rewards = shaped_pair_reward(potentials[game], next_potential, gamma=gamma)
+            else:
+                next_potential = np.float32(0.0)
+                pair_rewards = (0.0, -0.0)
+            potentials[game] = next_potential
+            step_rewards[game] = pair_rewards[int(seat)]
+        fields["rewards"].append(step_rewards)
+        fields["valid"].append(np.ones(games, dtype=np.bool_))
+        states = next_states
+    else:
+        raise RuntimeError("league rollout exceeded the configured episode horizon")
+
+    if not all(environment.done for environment in environments):
+        raise RuntimeError("league rollout ended before all environments reached DONE")
+    return _finish_rollout(
+        architecture,
+        fields,
+        episode_seeds=np.arange(seed_start, seed_start + games, dtype=np.int64),
+        final_money=final_money,
+        opponent_money=opponent_money,
+        seats=seats,
+        agents=np.zeros(games, dtype=np.int64),
+        entropy_sums=entropy_sums,
+        learner_stochastic=not deterministic,
+        started=started,
+        reward_mode=reward_mode,
+    )
+
+
+_TRAJECTORY_METADATA_FIELDS = (
+    "episode_seeds",
+    "final_money",
+    "opponent_money",
+    "seats",
+    "agents",
+    "orientations",
+    "entropy_sums",
+)
+
+
+def _combined_rollout_metadata(batches: list[RolloutBatch]) -> dict[str, Any]:
+    """Concatenate per-trajectory metadata across compatible batches."""
+    provenance = {batch.learner_stochastic for batch in batches}
+    if len(provenance) != 1:
+        raise ValueError("rollout learner sampling provenance must match")
+    if len({batch.reward_mode for batch in batches}) != 1:
+        raise ValueError("rollout reward modes must match")
+    combined: dict[str, Any] = {
+        field: np.concatenate([getattr(batch, field) for batch in batches], axis=0)
+        for field in _TRAJECTORY_METADATA_FIELDS
+    }
+    combined["elapsed_seconds"] = sum(batch.elapsed_seconds for batch in batches)
+    combined["learner_stochastic"] = batches[0].learner_stochastic
+    combined["reward_mode"] = batches[0].reward_mode
+    # Collected values survive a merge only whole: one part without them, or
+    # read at other weights, and the merged wave is replayed like any other.
+    keys = {batch.behavior_value_key for batch in batches}
+    if (
+        len(keys) == 1
+        and None not in keys
+        and all(batch.behavior_values is not None for batch in batches)
+    ):
+        combined["behavior_values"] = np.concatenate(
+            [batch.behavior_values for batch in batches], axis=0
+        )
+        combined["behavior_value_key"] = keys.pop()
+    return combined
+
+
+def slice_trajectories(batch: RolloutBatch, start: int, stop: int) -> RolloutBatch:
+    """View a contiguous trajectory range of a batch without copying states.
+
+    The slice shares the underlying arrays, so per-part diagnostics of a
+    merged wave cost no memory. The wave's elapsed time is indivisible and
+    carried over unchanged.
+    """
+    if not 0 <= start < stop <= batch.trajectories:
+        raise ValueError("trajectory slice is out of range")
+    return RolloutBatch(
+        architecture=batch.architecture,
+        states={name: array[start:stop] for name, array in batch.states.items()},
+        **{field: getattr(batch, field)[start:stop] for field in _SHARED_ROLLOUT_FIELDS},
+        **{
+            field: getattr(batch, field)[start:stop]
+            for field in _MARKET_SET_ROLLOUT_FIELDS
+            if getattr(batch, field) is not None
+        },
+        **{field: getattr(batch, field)[start:stop] for field in _TRAJECTORY_METADATA_FIELDS},
+        learner_stochastic=batch.learner_stochastic,
+        reward_mode=batch.reward_mode,
+        elapsed_seconds=batch.elapsed_seconds,
+        behavior_values=(
+            None if batch.behavior_values is None else batch.behavior_values[start:stop]
+        ),
+        behavior_value_key=batch.behavior_value_key,
+    )
+
+
+def concatenate_rollouts(batches: list[RolloutBatch]) -> RolloutBatch:
+    """Concatenate compatible current-policy trajectories from several match sources."""
+    if not batches:
+        raise ValueError("at least one rollout batch is required")
+    if len(batches) == 1:
+        return batches[0]
+    if len({batch.horizon for batch in batches}) != 1:
+        raise ValueError("rollout horizons must match")
+    if len({batch.architecture for batch in batches}) != 1:
+        raise ValueError("rollout architectures must match")
+    factor_fields = _rollout_factor_fields(batches[0])
+    if any(_rollout_factor_fields(batch) != factor_fields for batch in batches[1:]):
+        raise ValueError("rollout action interfaces must match")
+    return RolloutBatch(
+        architecture=batches[0].architecture,
+        states={
+            name: np.concatenate([batch.states[name] for batch in batches], axis=0)
+            for name in batches[0].states
+        },
+        **{
+            field: np.concatenate([getattr(batch, field) for batch in batches], axis=0)
+            for field in factor_fields
+        },
+        **_combined_rollout_metadata(batches),
+    )
+
+
+def merge_contiguous_rollouts(
+    storage: dict[str, np.ndarray], batches: list[RolloutBatch]
+) -> RolloutBatch:
+    """Combine batches collected into adjacent views of one storage arena.
+
+    The per-state arrays are taken from the arena without copying; only the
+    small per-trajectory metadata arrays are concatenated. Every batch must
+    occupy exactly its expected row range of the arena, in order.
+    """
+    if not batches:
+        raise ValueError("at least one rollout batch is required")
+    if len({batch.horizon for batch in batches}) != 1:
+        raise ValueError("rollout horizons must match")
+    if len({batch.architecture for batch in batches}) != 1:
+        raise ValueError("rollout architectures must match")
+    architecture = batches[0].architecture
+    state_names = tuple(_state_field_specs(architecture))
+    factor_fields = _rollout_factor_fields(batches[0])
+    if any(_rollout_factor_fields(batch) != factor_fields for batch in batches[1:]):
+        raise ValueError("rollout action interfaces must match")
+    field_names = (*state_names, *factor_fields)
+    rows = sum(batch.trajectories for batch in batches)
+    offset = 0
+    for batch in batches:
+        for field in field_names:
+            expected = storage[field][offset : offset + batch.trajectories]
+            actual = _rollout_array(batch, field)
+            if (
+                actual.shape != expected.shape
+                or actual.__array_interface__["data"][0] != expected.__array_interface__["data"][0]
+            ):
+                raise ValueError("rollout batches are not adjacent views of the storage arena")
+        offset += batch.trajectories
+    if any(storage[field].shape[0] != rows for field in field_names):
+        raise ValueError("storage arena rows do not match the combined batches")
+    return RolloutBatch(
+        architecture=architecture,
+        states={name: storage[name] for name in state_names},
+        **{field: storage[field] for field in factor_fields},
+        **_combined_rollout_metadata(batches),
+    )

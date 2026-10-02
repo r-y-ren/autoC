@@ -1,0 +1,3646 @@
+from __future__ import annotations
+
+import importlib.util
+import json
+import math
+import sys
+from pathlib import Path
+from types import SimpleNamespace
+
+import numpy as np
+import pytest
+import torch
+
+from kaggriculture.league import (
+    BuiltinRef,
+    BuiltinSelection,
+    SnapshotRef,
+    SnapshotSelection,
+    save_actor_snapshot,
+    snapshot_sha256,
+)
+from kaggriculture.model import FarmActor, ModelConfig
+from kaggriculture.modelargs import model_config_from_args
+from kaggriculture.opponents import LEAGUE_REFERENCE_AGENTS
+from kaggriculture.ppo import PpoConfig
+from kaggriculture.registry import CONV_ENTITY, STRUCTURED, resolve_architecture
+from kaggriculture.rollout import population_pairings
+from kaggriculture.structured import StructuredConfig
+
+
+def _training_script():
+    path = Path(__file__).parents[1] / "scripts" / "train_ppo.py"
+    spec = importlib.util.spec_from_file_location("kaggriculture_train_ppo", path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+@pytest.mark.parametrize("selection", [None, "stratified"])
+def test_default_promotions_and_explicit_league_control(monkeypatch, tmp_path, selection) -> None:
+    from kaggriculture.entity import EntityConfig
+    from kaggriculture.modelargs import actor_model_config
+
+    module = _training_script()
+    command = ["train_ppo.py", "--run-dir", str(tmp_path), "--architecture", "entity-attention"]
+    if selection is not None:
+        command.extend(("--league-selection", selection, "--critic-source-read", "false"))
+    monkeypatch.setattr(sys, "argv", command)
+    args = module.parse_args()
+    configuration = model_config_from_args(resolve_architecture(args.architecture), args)
+    assert args.league_selection == (selection or "hardness")
+    assert configuration.critic_source_read is (selection is None)
+    assert actor_model_config(configuration) == actor_model_config(EntityConfig())
+    assert module._training_data_config(args, torch.device("cpu"))["league_selection"] == (
+        selection or "hardness"
+    )
+
+
+def _promoted_recipe(tmp_path: Path) -> list[str]:
+    """The adopted recipe's complete command, as the core campaign records it."""
+    path = Path(__file__).parents[1] / "scripts" / "queue_core_campaign.py"
+    spec = importlib.util.spec_from_file_location("kaggriculture_queue_core_campaign", path)
+    assert spec is not None and spec.loader is not None
+    campaign = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(campaign)
+    recipe = campaign.commands(tmp_path, tmp_path, "control")["ppo"][2:]
+    # The recipe was measured on observation schema 4; the family has since
+    # moved to 8, whose leaderboard clone fits and plays as the v4 one does.
+    schema = recipe.index("--observation-schema-version") + 1
+    assert recipe[schema] == "4"
+    recipe[schema] = "8"
+    return recipe
+
+
+def _resolved_launch(module, monkeypatch, arguments: list[str]):
+    monkeypatch.setattr(sys, "argv", ["train_ppo.py", *arguments])
+    args = module.parse_args()
+    module._validate_args(args)
+    model = model_config_from_args(resolve_architecture(args.architecture), args)
+    return {name: value for name, value in vars(args).items() if name not in model.to_dict()}, model
+
+
+def test_a_plain_launch_resolves_to_the_promoted_recipe(monkeypatch, tmp_path) -> None:
+    """Only what names the run is stated; the parse, the family's resolved model
+    configuration and hence `PpoConfig` all match the recipe's full command."""
+    module = _training_script()
+    recipe = _promoted_recipe(tmp_path)
+    run_specific = ("--run-dir", "--init-actor-from", "--iterations", "--max-hours", "--seed")
+    plain = [token for flag in run_specific for token in (flag, recipe[recipe.index(flag) + 1])]
+
+    stated, stated_model = _resolved_launch(module, monkeypatch, recipe)
+    implicit, implicit_model = _resolved_launch(module, monkeypatch, plain)
+
+    assert implicit == stated
+    assert implicit_model == stated_model
+    assert implicit["architecture"] == "lejepa"
+    assert (implicit["actor_lr"], implicit["actor_gae_lambda"]) == (5e-5, 1.0)
+    assert (implicit["jepa_prediction_coefficient"], implicit["jepa_sigreg_coefficient"]) == (
+        1.0,
+        0.09,
+    )
+    assert implicit["structured_learning_rate"] == 1.5e-5
+    assert implicit["minibatch_size"] == 4096 and not implicit["rematerialize_actor_update"]
+    assert implicit["architecture_panel"] == 25 and implicit["league_builtin_lanes"] == 0
+    assert implicit["league_script_opponent"] == list(LEAGUE_REFERENCE_AGENTS)
+
+
+def test_the_production_command_restates_the_promoted_recipe(monkeypatch, tmp_path) -> None:
+    from kaggriculture.production import PRODUCTION_UPDATE_COMPILE_MODE, build_training_command
+
+    module = _training_script()
+    recipe = _promoted_recipe(tmp_path)
+    command = build_training_command(
+        Path(recipe[recipe.index("--run-dir") + 1]),
+        iterations=int(recipe[recipe.index("--iterations") + 1]),
+        max_hours=float(recipe[recipe.index("--max-hours") + 1]),
+        seed=int(recipe[recipe.index("--seed") + 1]),
+        rollout_forward_mode=recipe[recipe.index("--rollout-forward-mode") + 1],
+        update_compile_mode=PRODUCTION_UPDATE_COMPILE_MODE,
+        initial_actors=(Path(recipe[recipe.index("--init-actor-from") + 1]),),
+    )
+
+    stated, stated_model = _resolved_launch(module, monkeypatch, recipe)
+    production, production_model = _resolved_launch(module, monkeypatch, command[2:])
+
+    # External evaluation is production's asynchronous diagnostic, not training.
+    diagnostic = {"external_eval", "external_eval_opponents", "external_eval_seed_start"}
+    assert production["external_eval"]
+    assert {k: v for k, v in production.items() if k not in diagnostic} == {
+        k: v for k, v in stated.items() if k not in diagnostic
+    }
+    assert production_model == stated_model
+
+
+@pytest.mark.parametrize(
+    ("architecture", "extra", "expected"),
+    [
+        (
+            "entity-attention",
+            (),
+            {
+                "jepa_prediction_coefficient": 0.0,
+                "jepa_sigreg_coefficient": 0.0,
+                "structured_learning_rate": None,
+                "economic_forecast_coefficient": 0.0,
+                "rematerialize_actor_update": True,
+            },
+        ),
+        (
+            "entity-attention",
+            ("--critic-architecture", "forecast"),
+            {"jepa_prediction_coefficient": 0.0, "economic_forecast_coefficient": 1.0},
+        ),
+        (
+            "lejepa",
+            (
+                "--jepa-sigreg-coefficient",
+                "0.2",
+                "--structured-learning-rate",
+                "3e-5",
+                "--rematerialize-actor-update",
+            ),
+            {
+                "jepa_prediction_coefficient": 1.0,
+                "jepa_sigreg_coefficient": 0.2,
+                "structured_learning_rate": 3e-5,
+                "rematerialize_actor_update": True,
+            },
+        ),
+    ],
+)
+def test_family_owned_ppo_settings_follow_the_chosen_family(
+    monkeypatch, tmp_path, architecture, extra, expected
+) -> None:
+    """A non-lejepa launch must not inherit an objective its family refuses,
+    and an explicit flag still wins over the family's default."""
+    module = _training_script()
+    args, _ = _resolved_launch(
+        module,
+        monkeypatch,
+        ["--run-dir", str(tmp_path), "--architecture", architecture, *extra],
+    )
+    assert {name: args[name] for name in expected} == expected
+
+
+def test_single_learner_only_defaults_step_aside_for_populations_and_autocull(
+    monkeypatch, tmp_path
+) -> None:
+    module = _training_script()
+    population, _ = _resolved_launch(
+        module, monkeypatch, ["--run-dir", str(tmp_path), "--population", "4"]
+    )
+    assert population["league_builtin_opponents"] == ""
+    assert population["league_builtin_lanes"] == 0
+    assert population["architecture_panel"] == 0
+
+    culled, _ = _resolved_launch(module, monkeypatch, ["--run-dir", str(tmp_path), "--autocull"])
+    assert culled["architecture_panel"] == 0
+    assert culled["league_script_games"] == 8 * len(LEAGUE_REFERENCE_AGENTS)
+
+
+def test_a_half_stated_built_in_pair_does_not_borrow_the_other_default(
+    monkeypatch, tmp_path
+) -> None:
+    """The agents and their lanes default together; naming one leaves the other
+    absent, so zero lanes disables built-ins and agents without lanes are refused."""
+    module = _training_script()
+    base = ["--run-dir", str(tmp_path)]
+    disabled, _ = _resolved_launch(module, monkeypatch, [*base, "--league-builtin-lanes", "0"])
+    assert (disabled["league_builtin_opponents"], disabled["league_builtin_lanes"]) == ("", 0)
+    monkeypatch.setattr(
+        sys, "argv", ["train_ppo.py", *base, "--league-builtin-opponents", "starter"]
+    )
+    args = module.parse_args()
+    assert args.league_builtin_lanes == 0
+    with pytest.raises(ValueError):
+        module._validate_args(args)
+
+
+def test_an_unflagged_wdl_critic_refuses_other_objectives_at_launch(monkeypatch, tmp_path) -> None:
+    """`lejepa` builds the WDL critic by default, so the objective check has to
+    read the resolved configuration rather than wait for an explicit flag."""
+    module = _training_script()
+    arguments = ["--run-dir", str(tmp_path), "--architecture-panel", "0"]
+    monkeypatch.setattr(sys, "argv", ["train_ppo.py", *arguments, "--reward-mode", "shaped"])
+    with pytest.raises(ValueError, match="WDL critic requires terminal-outcome"):
+        module._validate_args(module.parse_args())
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["train_ppo.py", *arguments, "--reward-mode", "shaped", "--wdl-value", "false"],
+    )
+    module._validate_args(module.parse_args())
+
+
+def test_training_rejects_invalid_checkpoint_gamma_and_kl_boundaries(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    # The WDL critic and the panel both pin gamma to one before the range check.
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_ppo.py",
+            "--run-dir",
+            str(tmp_path),
+            "--wdl-value",
+            "false",
+            "--architecture-panel",
+            "0",
+        ],
+    )
+
+    args = module.parse_args()
+    module._validate_args(args)
+    for rejected in (299.0, 601.0, float("nan")):
+        args.checkpoint_seconds = rejected
+        with pytest.raises(ValueError, match="checkpoint seconds"):
+            module._validate_args(args)
+    args.checkpoint_seconds = 420.0
+
+    args.gamma = 1.5
+    with pytest.raises(ValueError, match="gamma must be finite"):
+        module._validate_args(args)
+    args.gamma = 0.0
+    with pytest.raises(ValueError, match="gamma must be finite"):
+        module._validate_args(args)
+    args.gamma = PpoConfig.gamma
+
+    # The k3 estimator is non-negative and the trust region stops on
+    # `batch_kl > target_kl`, so a non-positive value admits at most the
+    # exactly-parity first minibatch and otherwise no optimizer step at all.
+    # That collapses the update silently, which is worse than failing to start.
+    for rejected in (0.0, -0.01, float("nan"), float("inf")):
+        args.target_kl = rejected
+        with pytest.raises(ValueError, match="target KL"):
+            module._validate_args(args)
+
+
+def test_entropy_coefficient_flag_defaults_off_validates_and_reaches_the_ppo_config(
+    monkeypatch, tmp_path
+) -> None:
+    module = _training_script()
+
+    def parsed(*flags: str):
+        monkeypatch.setattr(
+            sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path), "--device", "cpu", *flags]
+        )
+        return module.parse_args()
+
+    assert parsed().entropy_coefficient == PpoConfig.entropy_coefficient == 0.0
+    args = parsed("--entropy-coefficient", "0.003")
+    module._validate_args(args)
+    assert args.entropy_coefficient == 0.003
+    # Refused at launch rather than at the first update, hours into collection.
+    for rejected in ("-0.001", "nan", "inf"):
+        with pytest.raises(ValueError, match="entropy coefficient"):
+            module._validate_args(parsed("--entropy-coefficient", rejected))
+
+    class Built(Exception):
+        pass
+
+    class RecordingConfig(PpoConfig):
+        def __init__(self, **kwargs) -> None:
+            raise Built(kwargs)
+
+    monkeypatch.setattr(module, "PpoConfig", RecordingConfig)
+    with pytest.raises(Built) as built:
+        module._train(args, [], None)
+    assert built.value.args[0]["entropy_coefficient"] == 0.003
+
+
+def test_structured_auxiliary_cli_is_typed_population_safe_and_resume_bound(
+    monkeypatch, tmp_path
+) -> None:
+    module = _training_script()
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_ppo.py",
+            "--run-dir",
+            str(tmp_path),
+            "--architecture",
+            "structured",
+            "--population",
+            "2",
+            "--games",
+            "2",
+            "--league-games",
+            "0",
+            "--league-script-games",
+            "0",
+            "--structured-decision-coefficient",
+            "0.5",
+            "--structured-latent-coefficient",
+            "0.5",
+            "--structured-critic-latent-coefficient",
+            "0.75",
+            "--structured-critic-value-coefficient",
+            "0.25",
+            "--structured-critic-horizon",
+            "3",
+            "--deterministic-training",
+        ],
+    )
+    args = module.parse_args()
+    module._validate_args(args)
+
+    assert args.structured_critic_horizon == 3
+    assert args.structured_critic_latent_coefficient == pytest.approx(0.75)
+    assert args.structured_critic_value_coefficient == pytest.approx(0.25)
+    assert module._training_data_config(args, torch.device("cpu"))["deterministic_training"]
+
+    args.architecture = CONV_ENTITY
+    with pytest.raises(ValueError, match="require a structured-input architecture"):
+        module._validate_args(args)
+    args.architecture = STRUCTURED
+    args.structured_critic_horizon = 0
+    with pytest.raises(ValueError, match="critic horizon must be positive"):
+        module._validate_args(args)
+
+
+def test_deterministic_training_configures_pytorch_and_cudnn(monkeypatch) -> None:
+    module = _training_script()
+    monkeypatch.delenv("CUBLAS_WORKSPACE_CONFIG", raising=False)
+    try:
+        module._configure_training_determinism(True)
+        assert torch.are_deterministic_algorithms_enabled()
+        assert torch.backends.cudnn.deterministic
+        assert not torch.backends.cudnn.benchmark
+        assert module.os.environ["CUBLAS_WORKSPACE_CONFIG"] == ":4096:8"
+    finally:
+        module._configure_training_determinism(False)
+
+
+def test_recovery_checkpoint_timer_uses_injected_monotonic_clock() -> None:
+    module = _training_script()
+    now = [100.0]
+    timer = module.RecoveryCheckpointTimer(420.0, clock=lambda: now[0])
+
+    now[0] = 519.999
+    assert not timer.due()
+    now[0] = 520.0
+    assert timer.due()
+    timer.committed()
+    now[0] = 939.999
+    assert not timer.due()
+    now[0] = 940.0
+    assert timer.due()
+
+
+def test_population_defaults_drop_the_frozen_lane(monkeypatch, tmp_path) -> None:
+    """`--population 4` must not inherit the single-learner's 128+64 mix.
+
+    That mix is not a valid population wave (128 is not a multiple of 12, and
+    64 frozen games are a league the collector refuses), so leaving those
+    defaults implicit would make every unflagged population launch fail.
+    """
+    module = _training_script()
+    monkeypatch.setattr(
+        sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path), "--population", "4"]
+    )
+
+    args = module.parse_args()
+
+    assert args.population == 4
+    assert args.games == 4 * 3 * 13
+    assert args.league_games == 0
+
+
+def test_built_in_league_flags_reach_selection_and_the_data_provenance(
+    monkeypatch, tmp_path
+) -> None:
+    """A resume that changed which reference agents play is a different data
+    generator, so the setting has to be inside `_training_data_config`."""
+    module = _training_script()
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_ppo.py",
+            "--run-dir",
+            str(tmp_path),
+            "--league-builtin-opponents",
+            " starter , pass ",
+            "--league-builtin-lanes",
+            "2",
+        ],
+    )
+
+    args = module.parse_args()
+    module._validate_args(args)
+
+    assert module._league_builtin_opponents(args) == ["starter", "pass"]
+    recorded = module._training_data_config(args, torch.device("cpu"))
+    assert recorded["league_builtin_opponents"] == "starter,pass"
+    assert recorded["league_builtin_lanes"] == 2
+
+
+def test_hardness_league_flag_reaches_selection_and_resume_provenance(
+    monkeypatch, tmp_path
+) -> None:
+    module = _training_script()
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_ppo.py",
+            "--run-dir",
+            str(tmp_path),
+            "--league-selection",
+            "hardness",
+            "--league-builtin-opponents",
+            "",
+            "--league-builtin-lanes",
+            "0",
+        ],
+    )
+    args = module.parse_args()
+    module._validate_args(args)
+    assert module._training_data_config(args, torch.device("cpu"))["league_selection"] == "hardness"
+    refs = [SnapshotRef(i, tmp_path / f"league-actor-{i:08d}.pt") for i in range(1, 20)]
+    evidence = {"00000001": {"score_sum": 0.0, "games": 100.0, "last_iteration": 19}}
+    selections = module._select_league_opponents(
+        args,
+        refs,
+        20,
+        np.random.default_rng(6),
+        {},
+        pretrained_start=False,
+        matchup_evidence=evidence,
+    )
+    # Eight lanes: discovery, five hardness, and two screening eight stale
+    # snapshots at two games apiece.
+    assert args.league_screen_lanes == 2
+    assert [row.role for row in selections].count("screen") == 8
+    assert {row.role for row in selections} == {"hardness", "discovery", "screen"}
+    assert "00000001" in {row.key for row in selections if row.role == "hardness"}
+    games = module._league_selection_games(args, selections)
+    assert games.sum() == args.league_games
+    assert {
+        int(count) for count, row in zip(games, selections, strict=True) if row.role == "screen"
+    } == {2}
+    assert {
+        int(count) for count, row in zip(games, selections, strict=True) if row.role != "screen"
+    } == {8}
+
+
+def test_hardness_evidence_survives_initial_and_recovery_checkpoint_serialization(tmp_path) -> None:
+    """Exercise both writer paths using captured state, without constructing a model."""
+    from kaggriculture.provenance import source_identity
+    from kaggriculture.training import checkpoint_payload, save_checkpoint, write_checkpoint
+
+    module = _training_script()
+    evidence = {"builtin_pass": {"score_sum": 25.0, "games": 30.0, "last_iteration": 17}}
+    captured = {key: {} for key in ("actor", "critic", "actor_optimizer", "critic_optimizer")}
+    common = dict(
+        model_config=ModelConfig(),
+        ppo_config=PpoConfig(),
+        iteration=18,
+        next_seed=100,
+        metrics={},
+        source_identity=source_identity(),
+        league_matchup_evidence=evidence,
+        training_data_config={"league_selection": "hardness"},
+    )
+    initial = tmp_path / "initial.pt"
+    save_checkpoint(initial, agents=[SimpleNamespace(state=lambda: captured)], **common)
+    recovery = tmp_path / "recovery.pt"
+    payload = checkpoint_payload(
+        agents=[captured],
+        rng_states={key: None for key in ("torch_rng", "cuda_rng", "numpy_rng", "python_rng")},
+        **common,
+    )
+    write_checkpoint(recovery, payload)
+    for path in (initial, recovery):
+        restored = torch.load(path, weights_only=False)
+        assert restored["training_data_config"]["league_selection"] == "hardness"
+        assert (
+            module.validate_matchup_evidence(
+                restored["league_matchup_evidence"], current_iteration=18
+            )
+            == evidence
+        )
+
+
+def test_built_in_league_configuration_must_be_admitted_and_reserved_together(
+    monkeypatch, tmp_path
+) -> None:
+    module = _training_script()
+    monkeypatch.setattr(sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path)])
+    args = module.parse_args()
+
+    args.league_builtin_opponents = "starter"
+    args.league_builtin_lanes = 0
+    with pytest.raises(ValueError, match="must be set together"):
+        module._validate_args(args)
+
+    args.league_builtin_opponents = ""
+    args.league_builtin_lanes = 2
+    with pytest.raises(ValueError, match="must be set together"):
+        module._validate_args(args)
+
+    args.league_builtin_opponents = "public-v27"
+    with pytest.raises(ValueError, match="unknown built-in"):
+        module._validate_args(args)
+
+    args.league_builtin_opponents = "starter,starter"
+    with pytest.raises(ValueError, match="distinct"):
+        module._validate_args(args)
+
+
+def test_model_flags_are_family_scoped_and_default_to_the_family_configuration(
+    monkeypatch, tmp_path
+) -> None:
+    """Warm starting compares model configurations for equality, so an
+    unflagged run must build the family default and a foreign flag must fail
+    loudly instead of being silently dropped."""
+    module = _training_script()
+
+    monkeypatch.setattr(
+        sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path), "--architecture", STRUCTURED]
+    )
+    args = module.parse_args()
+    structured = resolve_architecture(STRUCTURED)
+    assert model_config_from_args(structured, args) == StructuredConfig()
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_ppo.py",
+            "--run-dir",
+            str(tmp_path),
+            "--architecture",
+            STRUCTURED,
+            "--core-layers",
+            "4",
+            "--model-dim",
+            "64",
+        ],
+    )
+    args = module.parse_args()
+    assert model_config_from_args(structured, args) == StructuredConfig(model_dim=64, core_layers=4)
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_ppo.py",
+            "--run-dir",
+            str(tmp_path),
+            "--architecture",
+            STRUCTURED,
+            "--transformer-layers",
+            "7",
+        ],
+    )
+    args = module.parse_args()
+    with pytest.raises(ValueError, match=r"--transformer-layers do not apply"):
+        model_config_from_args(structured, args)
+
+    monkeypatch.setattr(
+        sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path), "--latents", "16"]
+    )
+    args = module.parse_args()
+    with pytest.raises(ValueError, match=r"--latents do not apply"):
+        model_config_from_args(resolve_architecture(CONV_ENTITY), args)
+
+
+def test_training_rejects_a_league_budget_that_drops_opponent_categories(
+    monkeypatch, tmp_path
+) -> None:
+    module = _training_script()
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["train_ppo.py", "--run-dir", str(tmp_path), "--league-games", "2"],
+    )
+
+    with pytest.raises(ValueError, match="initial anchor"):
+        module._validate_args(module.parse_args())
+
+
+def test_balanced_opponent_assignments_are_reproducible_and_seat_balanced() -> None:
+    module = _training_script()
+    first = module._balanced_assignments(11, 4, np.random.default_rng(7), seed_start=17)
+    second = module._balanced_assignments(11, 4, np.random.default_rng(7), seed_start=17)
+
+    np.testing.assert_array_equal(first, second)
+    counts = np.bincount(first, minlength=4)
+    assert counts.max() - counts.min() == 1
+    seats = (17 + np.arange(11)) % 2
+    for opponent in range(4):
+        opponent_seats = np.bincount(seats[first == opponent], minlength=2)
+        assert abs(int(opponent_seats[0]) - int(opponent_seats[1])) <= 1
+    with pytest.raises(ValueError):
+        module._balanced_assignments(0, 4, np.random.default_rng(7))
+
+
+@pytest.mark.parametrize("reward_mode", ["terminal-bank", "shaped"])
+def test_league_diagnostics_remain_separate_per_frozen_policy(tmp_path, reward_mode) -> None:
+    module = _training_script()
+    league = SimpleNamespace(
+        final_money=np.asarray([100.0, 50.0, 80.0, 90.0, 200.0, 10.0]),
+        opponent_money=np.asarray([90.0, 60.0, 80.0, 20.0, 30.0, 40.0]),
+        reward_mode=reward_mode,
+    )
+    assignments = np.asarray([0, 0, 1, 1, 2, 2])
+    selections = [
+        SnapshotSelection(SnapshotRef(2, tmp_path / "historical.pt"), "historical"),
+        SnapshotSelection(SnapshotRef(9, tmp_path / "active.pt"), "active"),
+        BuiltinSelection(BuiltinRef("starter")),
+    ]
+
+    diagnostics, measured_rates = module._league_opponent_diagnostics(
+        league, assignments, selections
+    )
+
+    assert diagnostics["league_opponent_00000002_category"] == "historical"
+    assert diagnostics["league_opponent_00000002_games"] == 2
+    assert diagnostics["league_opponent_00000002_score_rate"] == 0.5
+    assert diagnostics["league_opponent_00000009_category"] == "active"
+    assert diagnostics["league_opponent_00000009_games"] == 2
+    assert diagnostics["league_opponent_00000009_score_rate"] == 0.75
+    # A built-in earns its own journal series and its own PFSP estimate, which
+    # is what lets it retire from the league on its own measurements.
+    assert diagnostics["league_opponent_builtin_starter_category"] == "builtin"
+    assert diagnostics["league_opponent_builtin_starter_games"] == 2
+    assert diagnostics["league_opponent_builtin_starter_score_rate"] == 0.5
+    assert measured_rates == {"00000002": 0.5, "00000009": 0.75, "builtin_starter": 0.5}
+
+
+def test_league_evidence_uses_native_outcomes_when_float32_banks_round_to_ties(tmp_path) -> None:
+    module = _training_script()
+    rewards = np.zeros((3, 719), dtype=np.float32)
+    rewards[:, -1] = [1.0, -1.0, 0.0]
+    league = SimpleNamespace(
+        final_money=np.asarray([100_000_001.0, 99_999_999.0, 100_000_000.0], dtype=np.float32),
+        opponent_money=np.full(3, 100_000_000.0, dtype=np.float32),
+        reward_mode="terminal-outcome",
+        rewards=rewards,
+        valid=np.ones_like(rewards, dtype=np.bool_),
+    )
+    np.testing.assert_array_equal(league.final_money, league.opponent_money)
+    selections = [
+        SnapshotSelection(SnapshotRef(index, tmp_path / f"{index}.pt"), "historical")
+        for index in range(3)
+    ]
+    diagnostics, rates = module._league_opponent_diagnostics(league, np.arange(3), selections)
+    assert rates == {"00000000": 1.0, "00000001": 0.0, "00000002": 0.5}
+    for selection in selections:
+        assert diagnostics[f"league_opponent_{selection.key}_mean_margin"] == 0.0
+    evidence = {}
+    module.update_matchup_evidence(
+        evidence, {key: (1, rate) for key, rate in rates.items()}, iteration=1
+    )
+    assert {key: row["score_sum"] for key, row in evidence.items()} == rates
+
+
+def test_disabled_league_selection_does_not_advance_training_rng(tmp_path) -> None:
+    module = _training_script()
+    args = SimpleNamespace(
+        league_games=0,
+        league_active_opponents=2,
+        league_historical_opponents=2,
+        league_active_pool_size=16,
+        league_builtin_opponents="pass,random,starter",
+        league_builtin_lanes=3,
+    )
+    generator = np.random.default_rng(41)
+    reference = np.random.default_rng(41)
+    refs = [SnapshotRef(0, tmp_path / "league-actor-00000000.pt")]
+
+    assert (
+        module._select_league_opponents(args, refs, 1, generator, {}, pretrained_start=False) == []
+    )
+    assert generator.random() == reference.random()
+
+
+def test_league_score_rate_validation_accepts_only_finite_unit_interval_state() -> None:
+    module = _training_script()
+
+    assert module._validate_league_score_rates({}) == {}
+    assert module._validate_league_score_rates({"00000003": 0.25, "builtin_starter": 1.0}) == {
+        "00000003": 0.25,
+        "builtin_starter": 1.0,
+    }
+    builtin_rates = {f"builtin_{name}": 0.5 for name in module.BUILTIN_OPPONENTS}
+    assert module._validate_league_score_rates(builtin_rates) == builtin_rates
+    for invalid in (
+        None,
+        [("00000003", 0.25)],
+        {3: 0.5},
+        {"3": 0.5},
+        {"builtin_v27": 0.5},
+        {"00000003": 1},
+        {"00000003": float("nan")},
+        {"00000003": 1.5},
+        {"00000003": -0.1},
+    ):
+        with pytest.raises(ValueError):
+            module._validate_league_score_rates(invalid)
+
+
+def test_league_score_rate_blend_decays_all_stale_evidence() -> None:
+    module = _training_script()
+    rates = {"00000001": 1.0}
+
+    module._blend_league_score_rates(rates, {"builtin_starter": 1.0})
+
+    # A first measurement blends against the unmeasured prior of 0.5, so one
+    # perfect wave cannot retire a freshly met opponent.
+    assert rates["builtin_starter"] == pytest.approx(0.75)
+    assert rates["00000001"] == pytest.approx(0.975)
+
+    module._blend_league_score_rates(rates, {"builtin_starter": 1.0})
+    mastered = rates["builtin_starter"]
+    for _ in range(20):
+        module._blend_league_score_rates(rates, {})
+
+    # Learner drift invalidates both immutable built-ins and frozen snapshots.
+    assert 0.5 < rates["builtin_starter"] < mastered
+    assert rates["builtin_starter"] == pytest.approx(0.5 + (mastered - 0.5) * 0.95**20)
+    assert rates["00000001"] < 0.975
+
+
+def test_external_eval_launcher_acknowledges_complete_events_in_fifo_order(
+    monkeypatch, tmp_path
+) -> None:
+    module = _training_script()
+    args = SimpleNamespace(
+        external_eval=True,
+        external_eval_opponents="starter",
+        external_eval_seeds=2,
+        external_eval_seed_start=4_000_000,
+        episode_steps=720,
+        run_dir=tmp_path,
+        population=1,
+    )
+    launched: list[list[str]] = []
+
+    class FakeProcess:
+        def __init__(self, command, **_kwargs):
+            launched.append(command)
+            self.command = command
+            self.returncode: int | None = None
+
+        def poll(self) -> int | None:
+            return self.returncode
+
+        def wait(self) -> int:
+            artifact = Path(self.command[self.command.index("--artifact") + 1])
+            iteration = int(self.command[self.command.index("--iteration") + 1])
+            digest = module.file_sha256(artifact)
+            row = {
+                "event": "external_eval",
+                "iteration": iteration,
+                "artifact": artifact.name,
+                "artifact_sha256": digest,
+                "agent": None,
+                "opponent": "starter",
+                "games": 4,
+                "completed_games": 4,
+                "seed_start": 4_000_000,
+                "seed_count": 2,
+            }
+            marker = {
+                "event": "external_eval_complete",
+                "iteration": iteration,
+                "artifact": artifact.name,
+                "artifact_sha256": digest,
+                "members": [None],
+                "opponents": ["starter"],
+                "records": 1,
+            }
+            with (tmp_path / "metrics-external.jsonl").open("a", encoding="utf-8") as stream:
+                stream.write(json.dumps(row) + "\n")
+                stream.write(json.dumps(marker) + "\n")
+            self.returncode = 0
+            return 0
+
+    monkeypatch.setattr(module.subprocess, "Popen", FakeProcess)
+
+    assert (
+        module._maybe_launch_external_eval(args, tmp_path / "checkpoint-000000.pt", 0, None) is None
+    )
+    checkpoints = []
+    for iteration in (10, 20, 30, 40):
+        checkpoint = tmp_path / f"checkpoint-{iteration:06d}.pt"
+        checkpoint.write_bytes(str(iteration).encode())
+        checkpoints.append(checkpoint)
+
+    process = module._maybe_launch_external_eval(args, checkpoints[0], 10, None)
+    assert isinstance(process, FakeProcess)
+    command = launched[0]
+    assert command[command.index("--artifact") + 1] == str(checkpoints[0])
+    assert command[command.index("--agents") + 1] == ""
+    assert command[command.index("--iteration") + 1] == "10"
+    assert command[command.index("--opponents") + 1] == "starter"
+    assert command[command.index("--output") + 1] == str(tmp_path / "metrics-external.jsonl")
+
+    assert module._maybe_launch_external_eval(args, checkpoints[1], 20, process) is process
+    assert module._maybe_launch_external_eval(args, checkpoints[2], 30, process) is process
+    drained = module._maybe_launch_external_eval(
+        args, checkpoints[3], 40, process, wait_for_slot=True
+    )
+    assert drained is None
+    assert [command[command.index("--iteration") + 1] for command in launched] == [
+        "10",
+        "20",
+        "30",
+        "40",
+    ]
+    assert not (tmp_path / module._EXTERNAL_EVAL_PENDING).exists()
+
+    disabled = SimpleNamespace(**{**vars(args), "external_eval": False})
+    assert module._maybe_launch_external_eval(disabled, checkpoints[2], 30, None) is None
+
+
+def test_a_population_is_probed_from_its_committed_checkpoint(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    args = SimpleNamespace(
+        external_eval=True,
+        external_eval_opponents="starter",
+        external_eval_seeds=2,
+        external_eval_seed_start=4_000_000,
+        episode_steps=720,
+        run_dir=tmp_path,
+        population=4,
+    )
+    launched: list[list[str]] = []
+    monkeypatch.setattr(
+        module.subprocess,
+        "Popen",
+        lambda command, **_kwargs: launched.append(command) or SimpleNamespace(poll=lambda: 0),
+    )
+    checkpoint = tmp_path / "checkpoint-000010.pt"
+    module._maybe_launch_external_eval(args, checkpoint, 10, None)
+    command = launched[0]
+    assert command[command.index("--artifact") + 1] == str(checkpoint)
+    assert command[command.index("--agents") + 1] == "0,1,2,3"
+
+
+def test_external_eval_launch_failure_is_retried_from_the_durable_fifo(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    module = _training_script()
+    args = SimpleNamespace(
+        external_eval=True,
+        external_eval_opponents="starter",
+        external_eval_seeds=2,
+        external_eval_seed_start=4_000_000,
+        episode_steps=720,
+        run_dir=tmp_path,
+        population=1,
+    )
+    monkeypatch.setattr(
+        module.subprocess,
+        "Popen",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(OSError("fork failed")),
+    )
+    checkpoint = tmp_path / "checkpoint-000010.pt"
+    checkpoint.write_bytes(b"checkpoint")
+    assert module._maybe_launch_external_eval(args, checkpoint, 10, None) is None
+    pending_path = tmp_path / module._EXTERNAL_EVAL_PENDING
+    assert pending_path.is_file()
+
+    resumed = SimpleNamespace(
+        **{key: value for key, value in vars(args).items() if key != "_kaggriculture_pending_evals"}
+    )
+    launched: list[list[str]] = []
+
+    class FakeProcess:
+        returncode = None
+
+        def __init__(self, command, **_kwargs):
+            self.command = command
+            launched.append(command)
+
+        def poll(self):
+            return self.returncode
+
+    monkeypatch.setattr(module.subprocess, "Popen", FakeProcess)
+    process = module._maybe_launch_external_eval(resumed, None, 0, None)
+
+    assert isinstance(process, FakeProcess)
+    assert launched[0][launched[0].index("--artifact") + 1] == str(checkpoint)
+    assert launched[0][launched[0].index("--iteration") + 1] == "10"
+    # Launching is not acknowledgement; an interrupted worker remains durable.
+    assert pending_path.is_file()
+    process.returncode = 1
+    replacement = module._maybe_launch_external_eval(resumed, None, 0, process)
+    assert isinstance(replacement, FakeProcess) and replacement is not process
+    assert len(launched) == 2
+    assert pending_path.is_file()
+
+
+def test_final_external_eval_fails_closed_without_completion_record(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    args = SimpleNamespace(
+        external_eval=True,
+        external_eval_opponents="starter",
+        external_eval_seeds=2,
+        external_eval_seed_start=4_000_000,
+        episode_steps=720,
+        run_dir=tmp_path,
+        population=1,
+    )
+    checkpoint = tmp_path / "checkpoint-000010.pt"
+    checkpoint.write_bytes(b"checkpoint")
+
+    class MissingCompletionProcess:
+        returncode = None
+
+        def __init__(self, *_args, **_kwargs):
+            pass
+
+        def poll(self):
+            return self.returncode
+
+        def wait(self):
+            self.returncode = 0
+            return 0
+
+    monkeypatch.setattr(module.subprocess, "Popen", MissingCompletionProcess)
+    process = module._maybe_launch_external_eval(args, checkpoint, 10, None)
+    with pytest.raises(RuntimeError, match="without a matching completion record"):
+        module._maybe_launch_external_eval(args, None, 10, process, wait_for_slot=True)
+    assert (tmp_path / module._EXTERNAL_EVAL_PENDING).is_file()
+
+
+def test_external_eval_opponent_resolution_degrades_instead_of_blocking(capsys, tmp_path) -> None:
+    module = _training_script()
+    missing = tmp_path / "gone.py"
+    args = SimpleNamespace(
+        external_eval=True,
+        external_eval_opponents=f"starter,{missing},",
+    )
+    module._resolve_external_eval_opponents(args)
+    assert args.external_eval
+    assert args.external_eval_opponents == "starter"
+    assert "dropped" in capsys.readouterr().err
+
+    args = SimpleNamespace(external_eval=True, external_eval_opponents=str(missing))
+    module._resolve_external_eval_opponents(args)
+    assert not args.external_eval
+    assert "disabled" in capsys.readouterr().err
+
+
+def test_the_bank_stream_is_off_by_default_and_needs_one_learner(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    base = ["--run-dir", str(tmp_path), "--architecture-panel", "0"]
+    default, _ = _resolved_launch(module, monkeypatch, base)
+    assert (default["bank_advantage_coefficient"], default["self_play_seed_group"]) == (0.0, 1)
+    assert default["bank_advantage_groups"] == "all"
+
+    grouped, _ = _resolved_launch(
+        module,
+        monkeypatch,
+        [
+            *base,
+            "--bank-advantage-coefficient",
+            "0.5",
+            "--bank-advantage-groups",
+            "self-play",
+            "--self-play-seed-group",
+            "4",
+        ],
+    )
+    assert (grouped["bank_advantage_coefficient"], grouped["self_play_seed_group"]) == (0.5, 4)
+    assert grouped["bank_advantage_groups"] == "self-play"
+    # Neither needs the other: the stream can pool a seat's games across seeds,
+    # and grouping alone is a control arm on the same maps.
+    _resolved_launch(module, monkeypatch, [*base, "--bank-advantage-coefficient", "0.5"])
+    _resolved_launch(module, monkeypatch, [*base, "--self-play-seed-group", "4"])
+
+    for arguments, message in (
+        (["--bank-advantage-coefficient", "-0.5"], "nonnegative"),
+        (["--bank-advantage-coefficient", "nan"], "finite"),
+        (["--bank-advantage-coefficient", "0.5", "--population", "2"], "--population 1"),
+        (
+            [
+                "--bank-advantage-coefficient",
+                "0.5",
+                "--architecture",
+                "structured",
+                "--per-entity-critic",
+                "true",
+            ],
+            "per-entity critic",
+        ),
+        (["--self-play-seed-group", "0"], "divide --games"),
+        (["--self-play-seed-group", "3"], "divide --games"),
+        (["--self-play-seed-group", "2", "--population", "2"], "--population 1"),
+    ):
+        monkeypatch.setattr(sys, "argv", ["train_ppo.py", *base, *arguments])
+        with pytest.raises(ValueError, match=message):
+            module._validate_args(module.parse_args())
+
+
+def test_self_play_seed_grouping_is_part_of_the_data_generator(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    monkeypatch.setattr(sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path)])
+    args = module.parse_args()
+    config = module._training_data_config(args, module._device("cpu"))
+    assert config["self_play_seed_group"] == 1
+    args.self_play_seed_group = 4
+    assert module._training_data_config(args, module._device("cpu")) != config
+
+
+def test_training_data_config_captures_rollout_semantics(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    monkeypatch.setattr(sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path)])
+    args = module.parse_args()
+
+    config = module._training_data_config(args, module._device("cpu"))
+
+    assert config["games"] == 128
+    assert config["league_games"] == 64
+    assert config["update_compile_mode"] == "default"
+    assert config["device_type"] == "cpu"
+    # The collector-owned CUDA graph over the Inductor-fused forward: fusion
+    # removes the eager kernel count, and capture removes the launch overhead.
+    assert config["rollout_forward_mode"] == "inductor_graph"
+    # All three move what a resume would produce -- the collection pair moves the
+    # sampled behavior policy and the update mode moves the graphs that consume
+    # it -- so a resume that changes any of them is a different data generator
+    # and must not match the checkpoint's record.
+    for knob, value in (
+        ("rollout_forward_mode", "eager"),
+        ("rollout_bfloat16", False),
+        ("update_compile_mode", "eager"),
+    ):
+        changed = SimpleNamespace(**{**vars(args), knob: value})
+        assert module._training_data_config(changed, module._device("cpu")) != config
+    args.games += 1
+    assert module._training_data_config(args, module._device("cpu")) != config
+
+
+def test_collection_forward_defaults_to_the_measured_configuration(monkeypatch, tmp_path) -> None:
+    """The collector-owned CUDA graph over the Inductor-fused forward measured a
+    3.90 s steady rollout median against the eager-kernel graph's 6.72 s at
+    production shape, with lower update-replay drift."""
+    module = _training_script()
+
+    def parsed(*flags: str):
+        monkeypatch.setattr(sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path), *flags])
+        return module.parse_args()
+
+    default = parsed()
+    assert default.rollout_forward_mode == "inductor_graph"
+    assert default.rollout_bfloat16 is True
+    module._validate_args(default)
+    assert not hasattr(default, "compile_rollout")
+
+    for flags in (
+        ("--rollout-forward-mode", "eager", "--no-rollout-bfloat16"),
+        ("--rollout-forward-mode", "cudagraphs"),
+        ("--no-rollout-bfloat16",),
+    ):
+        module._validate_args(parsed(*flags))
+
+    with pytest.raises(SystemExit):
+        parsed("--rollout-forward-mode", "manual_graph")
+
+
+def test_the_update_compile_knob_is_a_mode_with_no_boolean_beside_it(monkeypatch, tmp_path) -> None:
+    """The update knob is `torch.compile`'s `mode=`, so a boolean cannot name it.
+
+    `--compile-update` is deleted rather than kept as a projection: with both a
+    boolean and a mode at the CLI the two could disagree, and the calibration
+    chain identifies this phase's knob by the mode. The domain is enforced here,
+    at the boundary, because `provenance` re-derives the decision inside the
+    submission bundle and cannot import `ppo.py` to learn what the modes are.
+    """
+    module = _training_script()
+
+    def parsed(*flags: str):
+        monkeypatch.setattr(sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path), *flags])
+        return module.parse_args()
+
+    default = parsed()
+    assert default.update_compile_mode == "default"
+    module._validate_args(default)
+    assert not hasattr(default, "compile_update")
+
+    for mode in module.UPDATE_COMPILE_MODES:
+        assert parsed("--update-compile-mode", mode).update_compile_mode == mode
+
+    for rejected in ("cudagraphs", "true", "1", "reduce_overhead"):
+        with pytest.raises(SystemExit):
+            parsed("--update-compile-mode", rejected)
+
+
+def test_calibration_provenance_binds_initial_command_but_remains_portable(
+    monkeypatch, tmp_path
+) -> None:
+    module = _training_script()
+    identity = module.source_identity()
+    initial_argv = ["train_ppo.py", "--run-dir", str(tmp_path / "initial")]
+    decision = {
+        "source_identity": identity,
+        "rollout_forward_mode": "eager",
+        "update_compile_mode": "eager",
+        "eager_report_sha256": "a" * 64,
+        "eager_report_size_bytes": 100,
+        "mixed_report_sha256": "c" * 64,
+        "mixed_report_size_bytes": 110,
+        "compiled_report_sha256": "b" * 64,
+        "compiled_report_size_bytes": 120,
+        "minimum_compile_speedup": 1.05,
+        "attributed_knob_speedups": {"rollout_forward_mode": 1.0, "update_compile_mode": 1.0},
+        "training_command": [
+            sys.executable,
+            str((Path(__file__).parents[1] / "scripts" / "train_ppo.py").resolve()),
+            *initial_argv[1:],
+        ],
+    }
+    path = tmp_path / "calibration-decision.json"
+    path.write_text(json.dumps(decision), encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", initial_argv)
+
+    provenance = module._load_run_provenance(path, identity, bind_command=True)
+
+    monkeypatch.setattr(sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path / "portable")])
+    assert module._load_run_provenance(path, identity, bind_command=False) == provenance
+    with pytest.raises(ValueError, match="exact training command"):
+        module._load_run_provenance(path, identity, bind_command=True)
+
+
+def test_league_manifest_restore_is_portable_crash_tolerant_and_rejects_rewinds(
+    tmp_path,
+) -> None:
+    module = _training_script()
+    model_config = ModelConfig(
+        cnn_width=8, cnn_blocks=1, model_dim=16, transformer_layers=3, attention_heads=2
+    )
+    actor = FarmActor(model_config)
+    source_run = tmp_path / "source"
+    source_run.mkdir()
+    checkpoint = source_run / "checkpoint-000001.pt"
+    checkpoint.touch()
+    manifest = {}
+    for iteration in range(2):
+        ref = save_actor_snapshot(source_run / "league", actor, iteration)
+        manifest[iteration] = snapshot_sha256(ref.path)
+        with torch.no_grad():
+            next(actor.parameters()).add_(0.01)
+
+    validated = module._validate_league_manifest(manifest, current_iteration=1)
+    destination = tmp_path / "restored" / "league"
+    module._restore_league_archive(
+        checkpoint=checkpoint,
+        destination=destination,
+        manifest=validated,
+        current_iteration=1,
+        model_config=model_config,
+    )
+
+    assert {
+        ref.iteration: snapshot_sha256(ref.path) for ref in module.list_actor_snapshots(destination)
+    } == manifest
+
+    save_actor_snapshot(destination, actor, 2)
+    save_actor_snapshot(destination, actor, 3)
+    invalid = {**validated, 1: "0" * 64}
+    with pytest.raises(ValueError, match="digest mismatch"):
+        module._restore_league_archive(
+            checkpoint=checkpoint,
+            destination=destination,
+            manifest=invalid,
+            current_iteration=1,
+            model_config=model_config,
+        )
+    assert [ref.iteration for ref in module.list_actor_snapshots(destination)] == [0, 1, 2, 3]
+
+    module._restore_league_archive(
+        checkpoint=checkpoint,
+        destination=destination,
+        manifest=validated,
+        current_iteration=1,
+        model_config=model_config,
+    )
+    assert [ref.iteration for ref in module.list_actor_snapshots(destination)] == [0, 1]
+
+    sparse_destination = tmp_path / "sparse" / "league"
+    sparse_manifest = {0: manifest[0]}
+    module._restore_league_archive(
+        checkpoint=checkpoint,
+        destination=sparse_destination,
+        manifest=sparse_manifest,
+        current_iteration=2,
+        model_config=model_config,
+    )
+    save_actor_snapshot(sparse_destination, actor, 1)
+    with pytest.raises(ValueError, match="missing from the checkpoint manifest"):
+        module._restore_league_archive(
+            checkpoint=checkpoint,
+            destination=sparse_destination,
+            manifest=sparse_manifest,
+            current_iteration=2,
+            model_config=model_config,
+        )
+
+
+def test_thinned_archive_retires_from_every_selection_state_and_resumes_after_a_crash(
+    tmp_path,
+) -> None:
+    module = _training_script()
+    actor = FarmActor(_TINY_CONFIG)
+    run = tmp_path / "run"
+    league = run / "league"
+    checkpoint = run / "checkpoint-000040.pt"
+    refs, manifest = [], {}
+    for iteration in range(40):
+        ref = save_actor_snapshot(league, actor, iteration)
+        refs.append(ref)
+        manifest[iteration] = snapshot_sha256(ref.path)
+    checkpoint.touch()
+    easy = {"score_sum": 95.0, "games": 100.0, "last_iteration": 30}
+    evidence = {f"{i:08d}": dict(easy) for i in range(40)}
+    evidence["00000005"] = {"score_sum": 40.0, "games": 100.0, "last_iteration": 30}
+    evidence["script_rival"] = {"score_sum": 1.0, "games": 8.0, "last_iteration": 39}
+    score_rates = {f"{i:08d}": 0.9 for i in range(40)}
+
+    retired = module._retire_league_snapshots(
+        refs, manifest, evidence, score_rates, iteration=40, recent=8
+    )
+
+    gone = {ref.iteration for ref in retired}
+    assert gone and 0 not in gone and 5 not in gone
+    assert not gone & set(range(32, 40))
+    assert not gone & set(manifest)
+    assert not gone & {ref.iteration for ref in refs}
+    assert not {f"{i:08d}" for i in gone} & (set(evidence) | set(score_rates))
+    assert "script_rival" in evidence
+    assert (
+        module._retire_league_snapshots(
+            refs, dict(manifest), dict(evidence), {}, iteration=40, recent=0
+        )
+        == []
+    )
+
+    # Interrupted after the checkpoint without them was written, before they
+    # were deleted: resuming removes them rather than refusing the archive.
+    module._restore_league_archive(
+        checkpoint=checkpoint,
+        destination=league,
+        manifest=manifest,
+        current_iteration=40,
+        model_config=_TINY_CONFIG,
+        archive_recent=8,
+    )
+    assert {ref.iteration for ref in module.list_actor_snapshots(league)} == set(manifest)
+    # A snapshot the grid would keep is not one thinning dropped.
+    save_actor_snapshot(league, actor, 36)
+    manifest.pop(36)
+    with pytest.raises(ValueError, match="missing from the checkpoint manifest"):
+        module._restore_league_archive(
+            checkpoint=checkpoint,
+            destination=league,
+            manifest=manifest,
+            current_iteration=40,
+            model_config=_TINY_CONFIG,
+            archive_recent=8,
+        )
+
+
+def test_seat_balanced_assignments_give_each_opponent_its_exact_games() -> None:
+    module = _training_script()
+    totals = np.array([8, 8, 2, 2, 2, 6, 0, 4])
+    for seed_start in (0, 1):
+        assignments = module._seat_balanced_assignments(
+            totals, np.random.default_rng(seed_start), seed_start=seed_start
+        )
+        seats = (seed_start + np.arange(assignments.size)) % 2
+        assert np.bincount(assignments, minlength=totals.size).tolist() == totals.tolist()
+        for opponent, total in enumerate(totals):
+            # every even allotment is split exactly across the two seats
+            assert np.bincount(seats[assignments == opponent], minlength=2).tolist() == [
+                total // 2,
+                total // 2,
+            ]
+    # the even split keeps its RNG stream: existing runs replay identically
+    for seed in range(5):
+        np.testing.assert_array_equal(
+            module._balanced_assignments(10, 3, np.random.default_rng(seed), seed_start=seed),
+            module._seat_balanced_assignments(
+                np.array([4, 3, 3]), np.random.default_rng(seed), seed_start=seed
+            ),
+        )
+
+
+def test_league_manifest_accepts_sparse_warmup_history_but_requires_the_anchor() -> None:
+    module = _training_script()
+
+    sparse = {0: "a" * 64, 4: "b" * 64}
+    assert module._validate_league_manifest(sparse, current_iteration=4) == sparse
+    with pytest.raises(ValueError, match="iteration zero"):
+        module._validate_league_manifest({2: "b" * 64}, current_iteration=2)
+    with pytest.raises(ValueError, match="digest"):
+        module._validate_league_manifest({0: "not-a-digest"}, current_iteration=0)
+
+
+def test_orphan_checkpoint_matching_ignores_only_volatile_metrics() -> None:
+    module = _training_script()
+    original = {
+        "iteration": 2,
+        "next_seed": 9,
+        "actor": {"weight": torch.tensor([1.0])},
+        "metrics": {"elapsed_hours": 0.1, "iteration_seconds": 20.0},
+    }
+    replayed = {
+        **original,
+        "metrics": {"elapsed_hours": 0.2, "iteration_seconds": 21.0},
+    }
+    assert module._checkpoint_recovery_values_equal(original, replayed)
+    assert not module._checkpoint_recovery_values_equal(original, {**replayed, "next_seed": 10})
+
+
+def test_metrics_journal_rolls_back_to_a_verified_checkpoint_boundary(tmp_path: Path) -> None:
+    module = _training_script()
+    path = tmp_path / "metrics.jsonl"
+    records = [
+        {"iteration": 1, "value_loss": 1.0},
+        {"iteration": 2, "value_loss": 0.5},
+        {"iteration": 3, "value_loss": 0.25},
+    ]
+    path.write_text(
+        "".join(json.dumps(record, sort_keys=True) + "\n" for record in records),
+        encoding="utf-8",
+    )
+
+    module._rollback_metrics_journal(path, 1, records[0])
+
+    assert path.read_text(encoding="utf-8") == json.dumps(records[0], sort_keys=True) + "\n"
+
+    path.write_text(
+        "".join(json.dumps(record, sort_keys=True) + "\n" for record in records),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="does not match recovery state"):
+        module._rollback_metrics_journal(path, 1, {"iteration": 1, "value_loss": 9.0})
+    assert len(path.read_text(encoding="utf-8").splitlines()) == 3
+
+
+@pytest.mark.parametrize("reward_mode", ("shaped", "terminal-bank"))
+def test_main_writes_complete_manifests_and_portably_resumes(
+    monkeypatch,
+    tmp_path,
+    reward_mode,
+) -> None:
+    module = _training_script()
+    run_provenance = module.run_provenance_from_decision(
+        {
+            "source_identity": module.source_identity(),
+            "rollout_forward_mode": "inductor_graph",
+            "update_compile_mode": "default",
+            "eager_report_sha256": "a" * 64,
+            "eager_report_size_bytes": 100,
+            "mixed_report_sha256": "b" * 64,
+            "mixed_report_size_bytes": 110,
+            "compiled_report_sha256": "c" * 64,
+            "compiled_report_size_bytes": 120,
+            "minimum_compile_speedup": 1.05,
+            "attributed_knob_speedups": {
+                "rollout_forward_mode": 1.1,
+                "update_compile_mode": 1.1,
+            },
+        }
+    )
+    monkeypatch.setattr(module, "_load_run_provenance", lambda *_args, **_kwargs: run_provenance)
+
+    class Writer:
+        def __init__(self, *args, **kwargs) -> None:
+            pass
+
+        def add_scalar(self, *args, **kwargs) -> None:
+            pass
+
+        def flush(self) -> None:
+            pass
+
+        def close(self) -> None:
+            pass
+
+    rollout = SimpleNamespace(state_count=1, trajectories=2)
+    collected_gammas: list[float] = []
+
+    def collect(*args, **kwargs):
+        collected_gammas.append(kwargs["gamma"])
+        return rollout
+
+    monkeypatch.setattr(module, "SummaryWriter", Writer)
+    monkeypatch.setattr(module, "collect_mixed_play_rust", collect)
+    monkeypatch.setattr(module, "slice_trajectories", lambda batch, start, stop: batch)
+    monkeypatch.setattr(module, "rollout_diagnostics", lambda batch: {})
+    monkeypatch.setattr(
+        module,
+        "update_replay_parity",
+        lambda *args, **kwargs: _parity_metrics(module),
+    )
+    monkeypatch.setattr(
+        module,
+        "update_ppo",
+        lambda *args, **kwargs: {
+            "actor_updates": 1,
+            "actor_minibatches_intended": 1,
+            "critic_updates": 1,
+            "first_minibatch_component_kl": 0.0,
+            "value_target_saturated_fraction": 0.0,
+            "entropy": 0.2,
+        },
+    )
+
+    def arguments(run_dir: Path, iterations: int, resume: Path | None = None) -> list[str]:
+        values = [
+            "train_ppo.py",
+            "--run-dir",
+            str(run_dir),
+            "--iterations",
+            str(iterations),
+            "--games",
+            "1",
+            "--league-games",
+            "0",
+            "--league-script-games",
+            "0",
+            "--device",
+            "cpu",
+            "--architecture",
+            CONV_ENTITY,
+            "--architecture-panel",
+            "0",
+            "--cnn-width",
+            "8",
+            "--cnn-blocks",
+            "1",
+            "--model-dim",
+            "16",
+            "--transformer-layers",
+            "3",
+            "--attention-heads",
+            "2",
+            "--no-bfloat16",
+            "--gamma",
+            "0.91",
+            "--reward-mode",
+            reward_mode,
+        ]
+        if resume is not None:
+            values.extend(("--resume", str(resume)))
+        return values
+
+    source_run = tmp_path / "source"
+    monkeypatch.setattr(sys, "argv", arguments(source_run, 1))
+    module.main()
+
+    initial = torch.load(source_run / "checkpoint-000000.pt", weights_only=False)
+    latest = torch.load(source_run / "latest.pt", weights_only=False)
+    numbered = torch.load(source_run / "checkpoint-000001.pt", weights_only=False)
+    assert latest["training_data_config"]["reward_mode"] == reward_mode
+    assert (
+        json.loads((source_run / "config.json").read_text())["arguments"]["reward_mode"]
+        == reward_mode
+    )
+    assert set(initial["league_snapshot_manifest"]) == {0}
+    assert set(latest["league_snapshot_manifest"]) == {0, 1}
+    assert numbered["league_snapshot_manifest"] == latest["league_snapshot_manifest"]
+    assert numbered["run_provenance"] == run_provenance
+    assert not (source_run / "latest.pt").is_symlink()
+    assert (source_run / "latest.pt").stat().st_ino == (
+        source_run / "checkpoint-000001.pt"
+    ).stat().st_ino
+
+    # A crash or manual cleanup that removes the immutable name while its
+    # hard-linked latest alias survives is repaired without reserialization.
+    (source_run / "checkpoint-000001.pt").unlink()
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        arguments(source_run, 1, source_run / "latest.pt"),
+    )
+    module.main()
+    repaired = torch.load(source_run / "checkpoint-000001.pt", weights_only=False)
+    assert repaired["league_snapshot_manifest"] == latest["league_snapshot_manifest"]
+    assert (source_run / "latest.pt").stat().st_ino == (
+        source_run / "checkpoint-000001.pt"
+    ).stat().st_ino
+
+    monkeypatch.setattr(sys, "argv", arguments(source_run, 1))
+    with pytest.raises(FileExistsError, match="pre-existing initial checkpoint"):
+        module.main()
+
+    # Simulate a kill after snapshot K+1 became visible but before latest.pt
+    # was replaced. The mocked update leaves actor weights unchanged, so replay
+    # must accept the orphan only if it regenerates the same snapshot state.
+    orphan_actor = module.load_actor_snapshot(
+        source_run / "league" / "league-actor-00000001.pt",
+        device="cpu",
+    )
+    save_actor_snapshot(source_run / "league", orphan_actor, 2)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        arguments(source_run, 2, source_run / "latest.pt"),
+    )
+    module.main()
+    recovered = torch.load(source_run / "latest.pt", weights_only=False)
+    assert set(recovered["league_snapshot_manifest"]) == {0, 1, 2}
+
+    resumed_run = tmp_path / "resumed"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        arguments(resumed_run, 2, source_run / "checkpoint-000001.pt"),
+    )
+    module.main()
+
+    resumed = torch.load(resumed_run / "checkpoint-000002.pt", weights_only=False)
+    assert set(resumed["league_snapshot_manifest"]) == {0, 1, 2}
+    assert [ref.iteration for ref in module.list_actor_snapshots(resumed_run / "league")] == [
+        0,
+        1,
+        2,
+    ]
+
+    portable_only = tmp_path / "portable-only"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        arguments(portable_only, 1, source_run / "checkpoint-000001.pt"),
+    )
+    module.main()
+    assert (portable_only / "latest.pt").is_file()
+    assert collected_gammas and set(collected_gammas) == {0.91}
+
+    mismatched = arguments(tmp_path / "wrong-reward", 2, source_run / "checkpoint-000001.pt")
+    mismatched[mismatched.index("--reward-mode") + 1] = (
+        "terminal-bank" if reward_mode == "shaped" else "shaped"
+    )
+    monkeypatch.setattr(sys, "argv", mismatched)
+    with pytest.raises(ValueError):
+        module.main()
+    assert not (tmp_path / "wrong-reward" / "latest.pt").exists()
+
+    legacy = {**latest, "training_data_config": dict(latest["training_data_config"])}
+    legacy["training_data_config"].pop("reward_mode")
+    legacy_path = tmp_path / "missing-reward.pt"
+    torch.save(legacy, legacy_path)
+    monkeypatch.setattr(sys, "argv", arguments(tmp_path / "missing-reward", 2, legacy_path))
+    with pytest.raises(ValueError):
+        module.main()
+    assert not (tmp_path / "missing-reward" / "latest.pt").exists()
+
+
+def _stub_training_main(monkeypatch, module) -> None:
+    """Stub rollout and update around `main` so a tiny run completes on CPU."""
+    run_provenance = module.run_provenance_from_decision(
+        {
+            "source_identity": module.source_identity(),
+            "rollout_forward_mode": "inductor_graph",
+            "update_compile_mode": "default",
+            "eager_report_sha256": "a" * 64,
+            "eager_report_size_bytes": 100,
+            "mixed_report_sha256": "b" * 64,
+            "mixed_report_size_bytes": 110,
+            "compiled_report_sha256": "c" * 64,
+            "compiled_report_size_bytes": 120,
+            "minimum_compile_speedup": 1.05,
+            "attributed_knob_speedups": {
+                "rollout_forward_mode": 1.1,
+                "update_compile_mode": 1.1,
+            },
+        }
+    )
+    monkeypatch.setattr(module, "_load_run_provenance", lambda *_args, **_kwargs: run_provenance)
+
+    class Writer:
+        def __init__(self, *args, **kwargs) -> None:
+            pass
+
+        def add_scalar(self, *args, **kwargs) -> None:
+            pass
+
+        def flush(self) -> None:
+            pass
+
+        def close(self) -> None:
+            pass
+
+    rollout = SimpleNamespace(state_count=1, trajectories=2)
+    monkeypatch.setattr(module, "SummaryWriter", Writer)
+    monkeypatch.setattr(module, "collect_mixed_play_rust", lambda *args, **kwargs: rollout)
+    monkeypatch.setattr(module, "slice_trajectories", lambda batch, start, stop: batch)
+    monkeypatch.setattr(module, "rollout_diagnostics", lambda batch: {})
+    monkeypatch.setattr(
+        module, "update_replay_parity", lambda *args, **kwargs: _parity_metrics(module)
+    )
+    monkeypatch.setattr(
+        module,
+        "update_ppo",
+        lambda *args, **kwargs: {
+            "actor_updates": 1,
+            "actor_minibatches_intended": 1,
+            "critic_updates": 1,
+            "first_minibatch_component_kl": 0.0,
+            "value_target_saturated_fraction": 0.0,
+            "entropy": 0.2,
+        },
+    )
+
+
+def _stub_arguments(run_dir: Path, iterations: int, *extra: str) -> list[str]:
+    return [
+        "train_ppo.py",
+        "--run-dir",
+        str(run_dir),
+        "--iterations",
+        str(iterations),
+        "--games",
+        "1",
+        "--league-games",
+        "0",
+        "--league-script-games",
+        "0",
+        "--device",
+        "cpu",
+        "--architecture",
+        CONV_ENTITY,
+        "--architecture-panel",
+        "0",
+        "--cnn-width",
+        "8",
+        "--cnn-blocks",
+        "1",
+        "--model-dim",
+        "16",
+        "--transformer-layers",
+        "3",
+        "--attention-heads",
+        "2",
+        "--no-bfloat16",
+        *extra,
+    ]
+
+
+def test_low_disk_checkpoints_and_exits_with_its_own_status(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    _stub_training_main(monkeypatch, module)
+    # Plenty at startup and after the first wave; short from the second on.
+    calls: list[Path] = []
+
+    def disk_usage(path):
+        calls.append(path)
+        return SimpleNamespace(free=10e9 if len(calls) <= 2 else 1e9)
+
+    monkeypatch.setattr(module.shutil, "disk_usage", disk_usage)
+    monkeypatch.setattr(sys, "argv", _stub_arguments(tmp_path, 5, "--min-free-disk-gb", "5"))
+    with pytest.raises(SystemExit) as exited:
+        module.main()
+    assert exited.value.code == module.LOW_DISK != module.CULL
+    # The wave that saw the shortfall is committed and is what `latest` names.
+    assert torch.load(tmp_path / "latest.pt", weights_only=False)["iteration"] == 2
+    assert (tmp_path / "checkpoint-000002.pt").stat().st_ino == (
+        tmp_path / "latest.pt"
+    ).stat().st_ino
+    # Once space is freed the committed wave resumes like any other.
+    monkeypatch.setattr(module.shutil, "disk_usage", lambda path: SimpleNamespace(free=10e9))
+    resumed = tmp_path / "resumed"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        _stub_arguments(
+            resumed, 3, "--min-free-disk-gb", "5", "--resume", str(tmp_path / "latest.pt")
+        ),
+    )
+    module.main()
+    assert torch.load(resumed / "latest.pt", weights_only=False)["iteration"] == 3
+
+
+def test_low_disk_on_the_final_wave_keeps_the_normal_exit(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    _stub_training_main(monkeypatch, module)
+    # Short only when the last wave ends: the run finished, so it exits normally.
+    calls: list[Path] = []
+
+    def disk_usage(path):
+        calls.append(path)
+        return SimpleNamespace(free=10e9 if len(calls) <= 2 else 1e9)
+
+    monkeypatch.setattr(module.shutil, "disk_usage", disk_usage)
+    monkeypatch.setattr(sys, "argv", _stub_arguments(tmp_path, 2, "--min-free-disk-gb", "5"))
+    module.main()
+    assert torch.load(tmp_path / "latest.pt", weights_only=False)["iteration"] == 2
+
+
+def test_disk_guard_is_off_by_default(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    _stub_training_main(monkeypatch, module)
+
+    def disk_usage(path):
+        raise AssertionError("the default guard must not measure the disk")
+
+    monkeypatch.setattr(module.shutil, "disk_usage", disk_usage)
+    monkeypatch.setattr(sys, "argv", _stub_arguments(tmp_path, 2))
+    module.main()
+    assert torch.load(tmp_path / "latest.pt", weights_only=False)["iteration"] == 2
+
+
+def test_low_disk_at_startup_writes_nothing(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    _stub_training_main(monkeypatch, module)
+    monkeypatch.setattr(module.shutil, "disk_usage", lambda path: SimpleNamespace(free=1e9))
+    run_dir = tmp_path / "run"
+    monkeypatch.setattr(sys, "argv", _stub_arguments(run_dir, 2, "--min-free-disk-gb", "5"))
+    with pytest.raises(SystemExit) as exited:
+        module.main()
+    assert exited.value.code == module.LOW_DISK
+    assert list(run_dir.iterdir()) == []
+
+
+def test_parity_audit_is_due_per_staging_configuration_and_on_a_cadence() -> None:
+    module = _training_script()
+    interval = module.REPLAY_PARITY_AUDIT_INTERVAL
+    league = module._parity_staging_key(96)
+    self_play = module._parity_staging_key(0)
+    population = module._parity_staging_key(0, 4)
+    assert {league, self_play, population} == set(module.PARITY_STAGING_KEYS)
+    # A population wave stages its behaviour policy as one vmapped ensemble
+    # forward, a third staging width, so it audits on its own cadence even
+    # though it plays no league rows.
+    assert module._parity_staging_key(96, 4) == population
+
+    # Nothing audited yet: due whichever configuration this iteration uses.
+    assert module._parity_audit_due({}, 0, league)
+    assert module._parity_audit_due({}, 0, self_play)
+    # A resumed process has an empty record, so its first iteration audits
+    # however far into the run it happens to be.
+    assert module._parity_audit_due({}, 137, league)
+
+    audited = {league: 10}
+    assert not module._parity_audit_due(audited, 10 + interval - 1, league)
+    assert module._parity_audit_due(audited, 10 + interval, league)
+    # The league wave being audited says nothing about the self-play-only
+    # arena view, which has never been examined and is therefore still due.
+    assert module._parity_audit_due(audited, 11, self_play)
+
+
+def _parity_metrics(module, *, kl: float = 0.0, tail: float = 0.0, head: str = "unit") -> dict:
+    """Healthy measurements everywhere, with one head raised to (kl, tail)."""
+    metrics: dict[str, float] = {}
+    for component in module.PARITY_COMPONENTS:
+        raised = component == head
+        metrics[f"update_replay_{component}_kl"] = kl if raised else 0.0
+        metrics[f"update_replay_{component}_tail_fraction"] = tail if raised else 0.0
+        metrics[f"update_replay_{component}_active_count"] = 1
+    metrics["update_replay_max_kl"] = kl
+    metrics["update_replay_max_tail_fraction"] = tail
+    return metrics
+
+
+def _ceilings(module):
+    return module._parity_ceilings()
+
+
+def test_a_parity_breach_is_a_defect_only_when_it_steps_away_from_the_last_audit() -> None:
+    # The gate has to separate two populations that both sit past the bound: a
+    # staging defect, which is a step change of orders of magnitude, and
+    # numerics drifting upward as RL sharpens the heads, which crosses by a
+    # hair. Only the first is worth aborting an otherwise healthy run for.
+    module = _training_script()
+    bound = module.MAX_UPDATE_REPLAY_KL
+    factor = module.REPLAY_PARITY_STEP_CHANGE_FACTOR
+    ceilings = _ceilings(module)
+    settled = module._parity_measurements(_parity_metrics(module, kl=bound * 0.8))
+
+    # Inside the bound is not reported at all, however much it jumped: the
+    # step-change test only ever escalates a value already outside the budget.
+    assert module._parity_breaches(_parity_metrics(module, kl=bound), settled, ceilings) == []
+
+    # Past the bound with no history is the launch check, and fatal.
+    [(message, is_defect)] = module._parity_breaches(
+        _parity_metrics(module, kl=bound * 2.0), None, ceilings
+    )
+    assert is_defect
+    assert "policy divergence exceeded" in message
+
+    drifted = _parity_metrics(module, kl=bound * 0.8 * factor)
+    [(message, is_defect)] = module._parity_breaches(drifted, settled, ceilings)
+    assert not is_defect
+    # The comparison itself is the diagnosis, so it belongs in the message,
+    # along with the series to plot rather than a hardcoded one.
+    assert f"previous audit {bound * 0.8}" in message
+    assert "trend in update_replay_unit_kl" in message
+    # Identical warnings say something is off but not whether it is settling or
+    # converging on the ceiling, and the distance only means anything in units
+    # of the growth producing it. This drift is a clean factor of five, so the
+    # ceiling is log(0.025 / 0.02) / log(5) away.
+    assert "0.1 audits of headroom" in message
+
+    stepped = _parity_metrics(module, kl=bound * 0.8 * factor * 1.01)
+    [(_message, is_defect)] = module._parity_breaches(stepped, settled, ceilings)
+    assert is_defect
+
+
+def test_warned_drift_reports_how_many_audits_of_headroom_are_left() -> None:
+    # A warned breach repeats every interval, and identical lines cannot
+    # distinguish drift that is settling from drift converging on the ceiling.
+    # The remaining distance is only meaningful in units of the growth
+    # producing it, so it is reported as audits at the last observed rate --
+    # enough to stop at a checkpoint while the run is still healthy, rather
+    # than discovering the trajectory once the ceiling has already ended it.
+    module = _training_script()
+    ceilings = _ceilings(module)
+    ceiling = ceilings["kl"]
+    bound = module.MAX_UPDATE_REPLAY_KL
+
+    # A realistic 20%-per-audit climb just past the bound: many audits away,
+    # and the count is what says so. 1.2^n from 5.5e-3 reaches 0.025 at n = 8.3.
+    previous, measured = bound * 1.1 * (1.0 / 1.2), bound * 1.1
+    assert measured < module.REPLAY_PARITY_STEP_CHANGE_FACTOR * previous
+    baseline = {
+        **module._parity_measurements(_parity_metrics(module)),
+        "update_replay_unit_kl": previous,
+    }
+    [(message, is_defect)] = module._parity_breaches(
+        _parity_metrics(module, kl=measured), baseline, ceilings
+    )
+    assert not is_defect
+    expected = math.log(ceiling / measured) / math.log(measured / previous)
+    assert expected == pytest.approx(8.3, abs=0.05)
+    assert f"about {expected:.1f} audits of headroom" in message
+
+    # Drift that has stopped climbing has no countdown to report, and inventing
+    # one from a flat or falling pair would read as a prediction of collapse.
+    baseline["update_replay_unit_kl"] = measured
+    [(message, is_defect)] = module._parity_breaches(
+        _parity_metrics(module, kl=measured), baseline, ceilings
+    )
+    assert not is_defect
+    assert "not climbing toward the ceiling" in message
+
+    # A defect is not a countdown: the run is over, so the abort names the
+    # recovery instead.
+    [(message, is_defect)] = module._parity_breaches(
+        _parity_metrics(module, kl=ceiling * 1.01), baseline, ceilings
+    )
+    assert is_defect
+    assert "headroom" not in message
+
+
+def test_a_single_head_defect_is_judged_against_that_head_not_the_largest() -> None:
+    # The gated statistic used to be the max over heads, which exists so a
+    # single-head defect is not diluted by the unit head's 1.45M components.
+    # Baselining that aggregate would hand the dilution straight back: measured
+    # healthy KL is 1.9e-3 on the unit head against 8.0e-4 on the kind head, so
+    # a kind defect judged against the aggregate is excused to 11.9x its own
+    # healthy level rather than the 5x intended.
+    module = _training_script()
+    ceilings = _ceilings(module)
+    baseline = {
+        **module._parity_measurements(_parity_metrics(module, kl=1.9e-3, head="unit")),
+        "update_replay_kind_kl": 8.0e-4,
+    }
+    measured = _parity_metrics(module, kl=8.0e-3, head="kind")
+
+    [(message, is_defect)] = module._parity_breaches(measured, baseline, ceilings)
+
+    # 8e-3 is under 5 x the unit head's 1.9e-3, so aggregate baselining would
+    # have called this drift; against kind's own 8e-4 it is a 10x step.
+    assert module.REPLAY_PARITY_STEP_CHANGE_FACTOR * 1.9e-3 > 8.0e-3
+    assert is_defect
+    assert message.startswith("kind ")
+
+
+def test_gradual_growth_is_still_a_defect_once_it_passes_the_ceiling() -> None:
+    # The step-change test is a derivative, so on its own it says nothing about
+    # level: a value growing by less than the factor per audit is never fatal at
+    # any magnitude, and the baseline advances after every warned audit, so the
+    # accepted level would ratchet without limit.
+    module = _training_script()
+    ceilings = _ceilings(module)
+    assert ceilings["kl"] == pytest.approx(0.025)
+
+    # Just under the ceiling, and a modest step from the last audit: drift.
+    baseline = module._parity_measurements(_parity_metrics(module, kl=0.02))
+    [(_message, is_defect)] = module._parity_breaches(
+        _parity_metrics(module, kl=0.024), baseline, ceilings
+    )
+    assert not is_defect
+
+    # Past it, by a step far too small to trip the factor: still a defect.
+    [(_message, is_defect)] = module._parity_breaches(
+        _parity_metrics(module, kl=0.026), baseline, ceilings
+    )
+    assert is_defect
+
+    # The ceiling is one full step change past the calibrated bound, stated in
+    # the gate's own terms rather than imported from the update's trust region:
+    # target_kl is a safety valve the update never reaches, so a ceiling there
+    # would sit an order of magnitude above the movement it claims to match.
+    # Deriving it from the bound also keeps ceiling >= bound true by
+    # construction, which _validate_parity_baseline's invariant depends on.
+    ceilings = module._parity_ceilings()
+    for statistic, bound, _description in module.PARITY_STATISTICS:
+        assert ceilings[statistic] == pytest.approx(module.REPLAY_PARITY_STEP_CHANGE_FACTOR * bound)
+        assert ceilings[statistic] > bound
+
+
+def test_a_non_finite_measurement_is_a_defect_rather_than_drift() -> None:
+    # NaN fails every ordered comparison, so an implementation that only asks
+    # "did it exceed the bound" and "did it step" reads NaN as drift, warns,
+    # and writes NaN into the baseline, poisoning every later comparison.
+    module = _training_script()
+    ceilings = _ceilings(module)
+    baseline = module._parity_measurements(_parity_metrics(module, kl=1.9e-3))
+
+    for value in (float("nan"), float("inf")):
+        [(_message, is_defect)] = module._parity_breaches(
+            _parity_metrics(module, kl=value), baseline, ceilings
+        )
+        assert is_defect
+
+
+def test_the_reported_abort_line_is_the_step_change_not_the_bound() -> None:
+    # "MAX_" reads as a ceiling, and in a running process it is not one: the
+    # abort line is the step change above the last audit, capped by the
+    # absolute ceiling. A head whose bound sits less than the factor above its
+    # own baseline therefore has a band in which a breach only warns, and that
+    # band has to be legible in telemetry rather than re-derived by whoever is
+    # reading the trend.
+    module = _training_script()
+    bound = module.MAX_UPDATE_REPLAY_KL
+    factor = module.REPLAY_PARITY_STEP_CHANGE_FACTOR
+    ceilings = _ceilings(module)
+
+    # No history: the bound is the abort line, which is the launch check.
+    fresh = module._parity_fatal_thresholds(None, ceilings)
+    assert fresh["update_replay_unit_kl_fatal_at"] == bound
+    assert fresh["update_replay_quantity_tail_fraction_fatal_at"] == (
+        module.MAX_UPDATE_REPLAY_TAIL_FRACTION
+    )
+
+    # A baseline far enough below the bound leaves the bound binding, so the
+    # gate aborts on any breach at all -- the tail gate's normal condition.
+    tight = module._parity_measurements(_parity_metrics(module, kl=bound / (factor * 2.0)))
+    assert module._parity_fatal_thresholds(tight, ceilings)["update_replay_unit_kl_fatal_at"] == (
+        bound
+    )
+
+    # The KL gate's normal condition is the other one: the clone measures
+    # 1.9e-3 against a 5e-3 bound, a ratio of 2.63, so the abort line floats
+    # above the bound and widens as the baseline drifts up -- until the
+    # ceiling, which it never floats past.
+    for measured, expected in ((1.9e-3, factor * 1.9e-3), (4.0e-3, factor * 4.0e-3)):
+        thresholds = module._parity_fatal_thresholds(
+            module._parity_measurements(_parity_metrics(module, kl=measured)), ceilings
+        )
+        assert thresholds["update_replay_unit_kl_fatal_at"] == expected > bound
+    capped = module._parity_fatal_thresholds(
+        module._parity_measurements(_parity_metrics(module, kl=0.02)), ceilings
+    )
+    assert capped["update_replay_unit_kl_fatal_at"] == ceilings["kl"] < factor * 0.02
+
+
+def test_a_resumed_parity_baseline_must_be_complete_and_within_the_ceilings() -> None:
+    # A malformed baseline read as "no history" would make every breach after
+    # a resume fatal again, which is the wedge this state exists to remove, so
+    # anything short of a complete record is refused instead. And a value above
+    # a ceiling can never have been persisted -- the audit producing it aborts
+    # before any checkpoint is written -- so one in a checkpoint is corruption,
+    # and accepting it would excuse every breach below five times it.
+    module = _training_script()
+    ceilings = _ceilings(module)
+    complete = module._parity_measurements(_parity_metrics(module, kl=1.9e-3, tail=3.2e-5))
+    assert module._validate_parity_baseline(complete, ceilings) == complete
+    # An empty record is a run that has not audited yet, not a malformed one.
+    assert module._validate_parity_baseline({}, ceilings) == {}
+
+    for invalid, expected in (
+        (None, "no valid replay-parity baseline"),
+        ({key: 1.0 for key in list(complete)[:-1]}, "baseline is incomplete"),
+        ({**complete, "update_replay_unit_kl": -1.0}, "invalid replay-parity"),
+        ({**complete, "update_replay_unit_kl": float("nan")}, "invalid replay-parity"),
+        ({**complete, "update_replay_unit_kl": 1}, "invalid replay-parity"),
+        # Above the ceiling the live gate would have aborted rather than saved.
+        ({**complete, "update_replay_unit_kl": ceilings["kl"] * 1.01}, "invalid replay-parity"),
+        (
+            {**complete, "update_replay_kind_tail_fraction": ceilings["tail_fraction"] * 1.01},
+            "invalid replay-parity",
+        ),
+    ):
+        with pytest.raises(ValueError, match=expected):
+            module._validate_parity_baseline(invalid, ceilings)
+
+
+def test_replay_parity_is_re_audited_on_a_cadence_and_on_every_resume(
+    capsys,
+    monkeypatch,
+    tmp_path,
+) -> None:
+    # The audited divergence grows as the heads sharpen, so an audit that ran
+    # only at iteration zero would measure it where it is smallest and never
+    # look again. A resume must also audit immediately rather than wait out
+    # the cadence, because it restages every buffer and rebuilds the compiled
+    # callables the audit exists to check.
+    module = _training_script()
+
+    class Writer:
+        def __init__(self, *args, **kwargs) -> None:
+            pass
+
+        def add_scalar(self, *args, **kwargs) -> None:
+            pass
+
+        def flush(self) -> None:
+            pass
+
+        def close(self) -> None:
+            pass
+
+    settled = module.MAX_UPDATE_REPLAY_KL * 0.8
+    audited: list[int] = []
+
+    def parity(*args, **kwargs) -> dict[str, float]:
+        audited.append(len(audited))
+        return _parity_metrics(module, kl=settled)
+
+    monkeypatch.setattr(module, "SummaryWriter", Writer)
+    monkeypatch.setattr(
+        module,
+        "collect_mixed_play_rust",
+        lambda *args, **kwargs: SimpleNamespace(state_count=1, trajectories=2),
+    )
+    monkeypatch.setattr(module, "slice_trajectories", lambda batch, start, stop: batch)
+    monkeypatch.setattr(module, "rollout_diagnostics", lambda batch: {})
+    monkeypatch.setattr(module, "update_replay_parity", parity)
+    monkeypatch.setattr(
+        module,
+        "update_ppo",
+        lambda *args, **kwargs: {
+            "actor_updates": 1,
+            "actor_minibatches_intended": 1,
+            "critic_updates": 1,
+            "first_minibatch_component_kl": 0.0,
+            "value_target_saturated_fraction": 0.0,
+            "entropy": 0.2,
+        },
+    )
+    monkeypatch.setattr(module, "REPLAY_PARITY_AUDIT_INTERVAL", 3)
+
+    def arguments(run_dir: Path, iterations: int, resume: Path | None = None) -> list[str]:
+        values = [
+            "train_ppo.py",
+            "--run-dir",
+            str(run_dir),
+            "--iterations",
+            str(iterations),
+            "--games",
+            "1",
+            "--league-games",
+            "0",
+            "--league-script-games",
+            "0",
+            "--device",
+            "cpu",
+            "--architecture",
+            CONV_ENTITY,
+            "--architecture-panel",
+            "0",
+            "--cnn-width",
+            "8",
+            "--cnn-blocks",
+            "1",
+            "--no-bfloat16",
+        ]
+        if resume is not None:
+            values.extend(("--resume", str(resume)))
+        return values
+
+    run_dir = tmp_path / "cadence"
+    monkeypatch.setattr(sys, "argv", arguments(run_dir, 7))
+    module.main()
+    # Iterations 0, 3 and 6 of seven.
+    assert len(audited) == 3
+
+    monkeypatch.setattr(sys, "argv", arguments(run_dir, 8, run_dir / "latest.pt"))
+    module.main()
+    # One further iteration, and it audits even though the cadence would not
+    # have come round again until iteration nine.
+    assert len(audited) == 4
+
+    # Every per-head measurement is checkpointed, because that is what the
+    # next audit is judged against -- per head, so a defect on one is not
+    # excused by the largest head's level.
+    expected_baseline = module._parity_measurements(_parity_metrics(module, kl=settled))
+    assert set(expected_baseline) == {
+        f"update_replay_{component}_{statistic}"
+        for component in module.PARITY_COMPONENTS
+        for statistic, _bound, _description in module.PARITY_STATISTICS
+    }
+    for name in ("latest.pt", "checkpoint-000000.pt"):
+        checkpoint = torch.load(run_dir / name, weights_only=False)
+        # checkpoint-000000.pt predates the first audit, so it carries an empty
+        # record rather than a missing key -- a missing one is unresumable.
+        assert checkpoint["replay_parity_baseline"] == (
+            expected_baseline if name == "latest.pt" else {}
+        )
+
+    # Drift: past the bound but within a step change of what the same
+    # configuration last measured. The divergence grows as RL sharpens the
+    # heads and the bound was calibrated at the run's starting sharpness, so
+    # killing here would destroy a healthy run over expected numerics -- and
+    # unrecoverably, since the failure precedes the update.
+    drifted = settled * module.REPLAY_PARITY_STEP_CHANGE_FACTOR
+    assert drifted > module.MAX_UPDATE_REPLAY_KL
+    monkeypatch.setattr(
+        module, "update_replay_parity", lambda *args, **kwargs: _parity_metrics(module, kl=drifted)
+    )
+    monkeypatch.setattr(sys, "argv", arguments(run_dir, 12, run_dir / "latest.pt"))
+    module.main()
+    assert (run_dir / "latest.pt").is_file()
+    warning = capsys.readouterr().err
+    assert "unit sampling-vs-update policy divergence exceeded" in warning
+    assert "reads as drift rather than a defect" in warning
+    # The series named for the trend is the breached one, not a hardcoded one.
+    assert "trend in update_replay_unit_kl" in warning
+    # And it reaches the journal, where the trend is the useful artifact.
+    journal = [
+        json.loads(line)
+        for line in (run_dir / "metrics.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    breached = [record for record in journal if record.get("replay_parity_breached")]
+    assert len(breached) == 2
+    assert [record["update_replay_max_kl"] for record in breached] == [drifted, drifted]
+    # Next to each value, the line it was actually judged against -- and the
+    # two differ, because a warned breach advances the baseline and the abort
+    # line is a multiple of it. That widening is the price of drift tolerance
+    # and the reason the line is telemetry rather than a constant to look up.
+    # The first warned breach lifts the abort line to five times the previous
+    # audit; the second would lift it to five times the drifted value, but the
+    # ceiling caps it there. That cap is what stops warned drift ratcheting the
+    # accepted level without limit.
+    ceiling = module._parity_ceilings()["kl"]
+    assert module.REPLAY_PARITY_STEP_CHANGE_FACTOR * drifted > ceiling
+    assert [record["update_replay_unit_kl_fatal_at"] for record in breached] == [
+        pytest.approx(module.REPLAY_PARITY_STEP_CHANGE_FACTOR * settled),
+        pytest.approx(ceiling),
+    ]
+    # A head that measured nothing keeps the bound as its abort line, which is
+    # the whole point of baselining per head rather than on the aggregate.
+    assert breached[-1]["update_replay_kind_kl_fatal_at"] == module.MAX_UPDATE_REPLAY_KL
+    # The warning names the journal row it appears in, not the loop counter.
+    assert "iteration " + str(breached[0]["iteration"]) in warning
+
+    # Resuming that drifted run must not turn the same measurement fatal.
+    # --max-hours makes chunked restarts the designed operating mode, so a
+    # process-scoped baseline would abort every restart after the first drift.
+    monkeypatch.setattr(sys, "argv", arguments(run_dir, 13, run_dir / "latest.pt"))
+    module.main()
+    assert torch.load(run_dir / "latest.pt", weights_only=False)["iteration"] == 13
+
+    # A step change away from that same drifted baseline is a defect, and
+    # still aborts however deep into the run it appears.
+    monkeypatch.setattr(
+        module,
+        "update_replay_parity",
+        lambda *args, **kwargs: _parity_metrics(module, kl=drifted * 100.0),
+    )
+    monkeypatch.setattr(sys, "argv", arguments(run_dir, 14, run_dir / "latest.pt"))
+    with pytest.raises(RuntimeError, match="policy divergence exceeded"):
+        module.main()
+
+    # A fresh run has nothing to compare against, so its first audit is the
+    # launch check and a breach there is fatal.
+    fresh = tmp_path / "fresh"
+    monkeypatch.setattr(sys, "argv", arguments(fresh, 7))
+    with pytest.raises(RuntimeError, match="policy divergence exceeded"):
+        module.main()
+
+    # The tail statistic is gated through the same path, on its own head and
+    # against its own baseline, so a run whose mean KL is healthy still dies on
+    # a materially divergent share appearing where there was none.
+    tail = tmp_path / "tail"
+    monkeypatch.setattr(
+        module,
+        "update_replay_parity",
+        lambda *args, **kwargs: _parity_metrics(
+            module, tail=module.MAX_UPDATE_REPLAY_TAIL_FRACTION * 2.0, head="quantity"
+        ),
+    )
+    monkeypatch.setattr(sys, "argv", arguments(tail, 7))
+    with pytest.raises(RuntimeError, match="quantity sampling-vs-update materially divergent"):
+        module.main()
+
+
+def test_warm_start_flags_validate_freshness_and_sign(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_ppo.py",
+            "--run-dir",
+            str(tmp_path),
+            "--init-actor-from",
+            str(tmp_path / "bc-actor.pt"),
+            "--critic-warmup-iterations",
+            "15",
+        ],
+    )
+    args = module.parse_args()
+    module._validate_args(args)
+    assert args.critic_warmup_iterations == 15
+
+    args.critic_warmup_iterations = -1
+    with pytest.raises(ValueError, match="warmup iterations"):
+        module._validate_args(args)
+
+    # A warmup that spans the run freezes the actor for its whole life, and
+    # the stalled-actor guard is suppressed for exactly those iterations, so
+    # nothing downstream would notice the policy never moved.
+    args.critic_warmup_iterations = args.iterations
+    with pytest.raises(ValueError, match="leave iterations for the actor"):
+        module._validate_args(args)
+
+    args.critic_warmup_iterations = module.MAX_CRITIC_WARMUP_ITERATIONS + 1
+    with pytest.raises(ValueError, match="readiness deadline"):
+        module._validate_args(args)
+
+    args.critic_warmup_iterations = 0
+    args.resume = tmp_path / "latest.pt"
+    with pytest.raises(ValueError, match="fresh run"):
+        module._validate_args(args)
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_ppo.py",
+            "--run-dir",
+            str(tmp_path),
+            "--init-actor-from",
+            str(tmp_path / "bc-actor.pt"),
+        ],
+    )
+    defaulted = module.parse_args()
+    module._validate_args(defaulted)
+    assert defaulted.critic_warmup_iterations == module.DEFAULT_CRITIC_WARMUP_ITERATIONS == 10
+
+
+def test_adaptive_critic_warmup_uses_prior_wave_r_squared_and_has_a_hard_deadline() -> None:
+    module = _training_script()
+
+    active, reason = module._critic_warmup_decision(
+        iteration=4,
+        minimum=5,
+        complete=False,
+        previous_r_squared=[0.9],
+    )
+    assert active and reason == "minimum_iterations"
+
+    active, reason = module._critic_warmup_decision(
+        iteration=5,
+        minimum=5,
+        complete=False,
+        previous_r_squared=[0.09],
+    )
+    assert active and reason == "waiting_for_monte_carlo_r_squared"
+
+    active, reason = module._critic_warmup_decision(
+        iteration=6,
+        minimum=5,
+        complete=False,
+        previous_r_squared=[0.10, 0.35],
+    )
+    assert not active and reason == "monte_carlo_r_squared_ready"
+    assert module._critic_warmup_decision(
+        iteration=20,
+        minimum=5,
+        complete=True,
+        previous_r_squared=[-1.0],
+    ) == (False, "complete")
+
+    with pytest.raises(RuntimeError):
+        module._critic_warmup_decision(
+            iteration=module.MAX_CRITIC_WARMUP_ITERATIONS,
+            minimum=5,
+            complete=False,
+            previous_r_squared=[0.099],
+        )
+    assert module._critic_warmup_decision(
+        iteration=module.MAX_CRITIC_WARMUP_ITERATIONS,
+        minimum=5,
+        complete=False,
+        previous_r_squared=[0.10],
+    ) == (False, "monte_carlo_r_squared_ready")
+
+
+@pytest.mark.parametrize("previous_r_squared", [[], [None], [0.2, 0.09], [0.2, float("nan")]])
+def test_critic_warmup_requires_finite_r_squared_evidence_from_every_member(
+    previous_r_squared,
+) -> None:
+    module = _training_script()
+
+    assert module._critic_warmup_decision(
+        iteration=10,
+        minimum=10,
+        complete=False,
+        previous_r_squared=previous_r_squared,
+    ) == (True, "waiting_for_monte_carlo_r_squared")
+
+
+def test_critic_warmup_rejects_constant_value_bias_and_releases_unbiased_fit() -> None:
+    from kaggriculture.ppo import _explained_variance, _r_squared
+
+    module = _training_script()
+    targets = np.array([-0.1, 0.1])
+    biased = np.array([1.9, 2.1])
+    valid = np.ones_like(targets, dtype=np.bool_)
+    assert _explained_variance(targets, biased, valid) == pytest.approx(1.0)
+
+    assert module._critic_warmup_decision(
+        iteration=10,
+        minimum=10,
+        complete=False,
+        previous_r_squared=[_r_squared(targets, biased, valid)],
+    ) == (True, "waiting_for_monte_carlo_r_squared")
+    assert module._critic_warmup_decision(
+        iteration=10,
+        minimum=10,
+        complete=False,
+        previous_r_squared=[_r_squared(targets, targets, valid)],
+    ) == (False, "monte_carlo_r_squared_ready")
+
+
+@pytest.mark.parametrize("latched", [False, True])
+def test_critic_warmup_resume_rejects_legacy_ev_evidence(latched: bool) -> None:
+    from kaggriculture.training import require_checkpoint_format
+
+    module = _training_script()
+    provenance = {
+        "critic_warmup_iterations": 10,
+        "critic_warmup_state": {
+            "complete": latched,
+            "last_monte_carlo_explained_variance": [1.0],
+        },
+    }
+
+    with pytest.raises(ValueError):
+        require_checkpoint_format({"format_version": 15, "initial_actor": provenance})
+    with pytest.raises(ValueError):
+        module._validate_critic_warmup_state(provenance, population=1)
+    provenance["critic_warmup_state"] = {
+        "complete": False,
+        "last_monte_carlo_r_squared": [-399.0],
+    }
+    minimum, complete, evidence = module._validate_critic_warmup_state(provenance, population=1)
+    assert module._critic_warmup_decision(
+        iteration=10, minimum=minimum, complete=complete, previous_r_squared=evidence
+    ) == (True, "waiting_for_monte_carlo_r_squared")
+
+
+def test_critic_warmup_cannot_be_restated_on_a_resume(monkeypatch, tmp_path) -> None:
+    """The count is persisted with the warm start, so a relaunch must not be
+    able to supply a different one -- and must not be able to supply none.
+    A crash inside the warmup window otherwise resumes with no warmup, and the
+    actor starts stepping against a critic that never finished fitting."""
+    module = _training_script()
+
+    def parsed(*flags: str):
+        monkeypatch.setattr(sys, "argv", ["train_ppo.py", "--run-dir", str(tmp_path), *flags])
+        return module.parse_args()
+
+    unflagged = parsed()
+    module._validate_args(unflagged)
+    assert unflagged.critic_warmup_iterations is None
+
+    restated = parsed("--resume", str(tmp_path / "latest.pt"), "--critic-warmup-iterations", "15")
+    with pytest.raises(ValueError, match="restored from its checkpoint"):
+        module._validate_args(restated)
+
+    orphaned = parsed("--critic-warmup-iterations", "15")
+    with pytest.raises(ValueError, match="only to a warm-started run"):
+        module._validate_args(orphaned)
+
+
+def test_warm_start_record_carries_the_warmup_count_and_clone_source(tmp_path) -> None:
+    """The warm-start record is the channel that survives a resume, so it has
+    to carry both the count the run must keep honoring and the tree that
+    tokenized the demonstrations."""
+    from kaggriculture.inference import ACTOR_ARTIFACT_FORMAT_VERSION
+    from kaggriculture.ppo import PpoConfig
+    from kaggriculture.provenance import source_identity
+    from kaggriculture.training import CHECKPOINT_FORMAT_VERSION, checkpoint_payload
+
+    module = _training_script()
+    config = ModelConfig(
+        cnn_width=8, cnn_blocks=1, model_dim=16, transformer_layers=3, attention_heads=2
+    )
+    identity = source_identity()
+    artifact = tmp_path / "bc-actor.pt"
+    torch.save(
+        {
+            "format_version": ACTOR_ARTIFACT_FORMAT_VERSION,
+            "architecture": CONV_ENTITY,
+            "model_config": config.to_dict(),
+            "actor": FarmActor(config).state_dict(),
+            "iteration": 0,
+            "metrics": {},
+            "source_identity": identity,
+            "run_provenance": None,
+            "bc_provenance": {
+                "teacher": {"label": "public-v27"},
+                "datasets": [{"train_seeds": [1, 2], "holdout_seeds": [3]}],
+            },
+            "seed_usage": [{"domain": "bc", "start": 1, "count": 3}],
+        },
+        artifact,
+    )
+
+    record = module._load_initial_actor(
+        artifact, FarmActor(config), CONV_ENTITY, config, torch.device("cpu")
+    )
+    record["critic_warmup_iterations"] = 15
+    record["critic_warmup_state"] = {
+        "complete": False,
+        "last_monte_carlo_r_squared": [0.04],
+    }
+
+    payload = checkpoint_payload(
+        agents=[
+            {
+                "actor": {},
+                "critic": {},
+                "actor_optimizer": {},
+                "critic_optimizer": {},
+            }
+        ],
+        model_config=config,
+        ppo_config=PpoConfig(epochs=1, minibatch_size=4, use_bfloat16=False),
+        iteration=3,
+        next_seed=11,
+        metrics={},
+        source_identity=identity,
+        rng_states={"torch_rng": None, "cuda_rng": None, "numpy_rng": None, "python_rng": None},
+        initial_actor=record,
+    )
+
+    assert payload["format_version"] == CHECKPOINT_FORMAT_VERSION
+    assert payload["initial_actor"]["critic_warmup_iterations"] == 15
+    assert payload["initial_actor"]["critic_warmup_state"] == {
+        "complete": False,
+        "last_monte_carlo_r_squared": [0.04],
+    }
+    assert module._validate_critic_warmup_state(payload["initial_actor"], population=1) == (
+        15,
+        False,
+        [0.04],
+    )
+    assert payload["initial_actor"]["source_identity"] == identity
+    # This is what the resume branch reads; iteration 3 of a 15-iteration
+    # warmup must still be inside it.
+    restored = int(payload["initial_actor"].get("critic_warmup_iterations", 0))
+    assert payload["iteration"] < restored
+
+
+def test_initial_actor_loads_pretrained_weights_and_binds_provenance(tmp_path) -> None:
+    from dataclasses import replace
+
+    from kaggriculture.inference import ACTOR_ARTIFACT_FORMAT_VERSION
+    from kaggriculture.provenance import source_identity
+
+    module = _training_script()
+    config = ModelConfig(
+        cnn_width=8, cnn_blocks=1, model_dim=16, transformer_layers=3, attention_heads=2
+    )
+    pretrained = FarmActor(config)
+    artifact = tmp_path / "bc-actor.pt"
+    torch.save(
+        {
+            "format_version": ACTOR_ARTIFACT_FORMAT_VERSION,
+            "model_config": config.to_dict(),
+            "actor": pretrained.state_dict(),
+            "iteration": 0,
+            "metrics": {},
+            "source_identity": source_identity(),
+            "run_provenance": None,
+            "bc_provenance": {
+                "teacher": {"label": "public-v27"},
+                "datasets": [{"train_seeds": [1, 2], "holdout_seeds": [3]}],
+            },
+            "seed_usage": [{"domain": "bc", "start": 1, "count": 3}],
+        },
+        artifact,
+    )
+    changed = replace(
+        config,
+        scalar_value=not config.scalar_value,
+        value_atoms=config.value_atoms + 2,
+        value_min=-1.5,
+        value_max=1.5,
+        value_sigma_ratio=0.5,
+    )
+    actor = FarmActor(changed)
+
+    provenance = module._load_initial_actor(
+        artifact, actor, CONV_ENTITY, changed, torch.device("cpu")
+    )
+
+    assert all(
+        torch.equal(value, pretrained.state_dict()[name])
+        for name, value in actor.state_dict().items()
+    )
+    assert provenance["bc_provenance"]["teacher"]["label"] == "public-v27"
+    assert any(row["domain"] == "bc" and row["start"] == 1 for row in provenance["seed_usage"])
+    assert len(provenance["sha256"]) == 64
+
+    other = ModelConfig(
+        cnn_width=16, cnn_blocks=1, model_dim=16, transformer_layers=3, attention_heads=2
+    )
+    with pytest.raises(ValueError, match="model configuration"):
+        module._load_initial_actor(
+            artifact, FarmActor(other), CONV_ENTITY, other, torch.device("cpu")
+        )
+
+
+@pytest.mark.cuda
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
+def test_critic_only_warm_start_preserves_compiled_actor_policy(tmp_path) -> None:
+    from dataclasses import replace
+
+    from kaggle_environments import make
+
+    from kaggriculture.structured import StructuredActor, stack_structured
+    from kaggriculture.tokens import encode_structured_observation
+
+    module = _training_script()
+    config = StructuredConfig(
+        model_dim=32, attention_heads=2, farm_blocks=1, latents=8, core_layers=2
+    )
+    environment = make("kaggriculture", configuration={"episodeSteps": 30, "seed": 3})
+    environment.run(["starter", "starter"])
+    inputs, _ = stack_structured(
+        [
+            encode_structured_observation(environment.steps[step][seat].observation)
+            for step in (1, 25)
+            for seat in (0, 1)
+        ],
+        device="cuda",
+    )
+    with torch.device("cuda"):
+        pretrained = StructuredActor(config).eval()
+        changed = replace(
+            config,
+            critic_state_read=True,
+            critic_core_layers=1,
+            critic_latents=4,
+            # Selects the critic's value head only. A scalar-critic arm must warm
+            # start from the same BC clone as a categorical one rather than
+            # needing its own.
+            scalar_value=True,
+            value_sigma_ratio=0.75,
+        )
+        actor = StructuredActor(changed).eval()
+    artifact = _actor_artifact(
+        tmp_path / "bc-actor.pt", pretrained, config, architecture=STRUCTURED
+    )
+    module._load_initial_actor(artifact, actor, STRUCTURED, changed, torch.device("cuda"))
+    with torch.no_grad(), torch.autocast("cuda", dtype=torch.bfloat16):
+        expected = torch.compile(pretrained, fullgraph=True)(inputs)
+        actual = torch.compile(actor, fullgraph=True)(inputs)
+    for expected_field, actual_field in zip(expected, actual, strict=True):
+        torch.testing.assert_close(actual_field, expected_field, rtol=0, atol=0)
+
+    # Same-shaped actor changes still cannot silently reuse a BC artifact.
+    incompatible = replace(changed, input_reinject_layers=(1,))
+    with pytest.raises(ValueError, match="model configuration"):
+        module._load_initial_actor(artifact, actor, STRUCTURED, incompatible, torch.device("cuda"))
+
+
+def test_update_gates_stop_the_run_before_the_next_iteration_is_wasted() -> None:
+    """Each gate is a different reason the run cannot recover on its own.
+
+    The saturation bound in particular cannot be read off its own description: a
+    categorical critic's mean is bounded by its support, so a critic collapsed
+    onto the outermost atom saturates about 0.37 of the batch and never more.
+    A bound set anywhere at or above that would never fire.
+    """
+    from kaggriculture.ppo import (
+        MAX_FIRST_MINIBATCH_KL,
+        MAX_VALUE_TARGET_SATURATED_FRACTION,
+        MINIMUM_POLICY_ENTROPY,
+    )
+
+    module = _training_script()
+    healthy = {
+        "first_minibatch_component_kl": MAX_FIRST_MINIBATCH_KL,
+        "value_target_saturated_fraction": MAX_VALUE_TARGET_SATURATED_FRACTION,
+        "actor_updates": 113,
+        "actor_minibatches_intended": 113,
+        "max_approx_kl": 0.02,
+        "kl_early_stop": 0,
+        # Inside the band every rate that learned measured, 0.14 to 0.37 nats.
+        "entropy": 0.2,
+    }
+
+    module._gate_update_metrics(healthy, warmup_active=False)
+    module._gate_update_metrics({**healthy, "actor_updates": 0}, warmup_active=True)
+
+    with pytest.raises(RuntimeError, match="first-minibatch KL"):
+        module._gate_update_metrics(
+            {**healthy, "first_minibatch_component_kl": MAX_FIRST_MINIBATCH_KL * 1.01},
+            warmup_active=False,
+        )
+    with pytest.raises(RuntimeError, match="saturated the critic support"):
+        module._gate_update_metrics(
+            {**healthy, "value_target_saturated_fraction": 0.374},
+            warmup_active=False,
+        )
+    # A saturated target starves the actor of an advantage, so the saturation
+    # gate must report first or the run blames the missing update.
+    with pytest.raises(RuntimeError, match="saturated the critic support"):
+        module._gate_update_metrics(
+            {**healthy, "value_target_saturated_fraction": 0.374, "actor_updates": 0},
+            warmup_active=False,
+        )
+    with pytest.raises(RuntimeError, match="without an actor update"):
+        module._gate_update_metrics({**healthy, "actor_updates": 0}, warmup_active=False)
+    # A short KL-clipped epoch and a sharp policy used to kill the run.
+    # Improvement vs public-v27 is the ranking; those are not stop conditions.
+    module._gate_update_metrics(
+        {**healthy, "actor_updates": 1, "kl_early_stop": 1, "max_approx_kl": 0.0857},
+        warmup_active=False,
+    )
+    module._gate_update_metrics({**healthy, "entropy": 0.0}, warmup_active=False)
+    module._gate_update_metrics(
+        {**healthy, "entropy": MINIMUM_POLICY_ENTROPY * 0.99}, warmup_active=False
+    )
+    module._gate_update_metrics(
+        {**healthy, "actor_updates": 0, "kl_early_stop": 1}, warmup_active=True
+    )
+    module._gate_update_metrics({**healthy, "entropy": 0.0}, warmup_active=True)
+
+
+def test_sharp_clone_entropy_is_telemetry_not_a_stop_condition() -> None:
+    """A faithful BC clone may begin sharp while already playing well."""
+    module = _training_script()
+    healthy = {
+        "first_minibatch_component_kl": 0.0,
+        "value_target_saturated_fraction": 0.0,
+        "actor_updates": 113,
+        "actor_minibatches_intended": 113,
+        "max_approx_kl": 0.0,
+        "entropy": 0.0,
+    }
+
+    module._gate_update_metrics(healthy, warmup_active=False)
+    assert module._validate_policy_entropy_reference(0.0) == 0.0
+    with pytest.raises(ValueError, match="finite and nonnegative"):
+        module._validate_policy_entropy_reference(-1e-9)
+
+
+def test_the_entropy_reference_is_persisted_per_population_member() -> None:
+    """A chunked run must not recalibrate its floor against its own sharpening.
+
+    `--max-hours` makes restarts the designed operating mode, so a reference
+    re-measured on resume would ratchet the floor down every few hours until it
+    admitted a collapsed policy. Per member because members warm-started from
+    differently trained artifacts arrive at different sharpnesses.
+    """
+    module = _training_script()
+    # A single learner's record stays the bare scalar every checkpoint carried.
+    assert module._entropy_reference_record([0.29], 1) == 0.29
+    assert module._validate_entropy_references(0.29, population=1) == [0.29]
+    # Written before the warmup ends, no member has stepped and there is nothing
+    # to preserve: a resume measures its own.
+    assert module._entropy_reference_record([None], 1) is None
+    assert module._validate_entropy_references(None, population=1) == [None]
+
+    references = [0.00896, None, 0.29]
+    record = module._entropy_reference_record(references, 3)
+    assert record == references
+    assert module._validate_entropy_references(record, population=3) == references
+    with pytest.raises(ValueError, match="every population member"):
+        module._validate_entropy_references(record, population=4)
+    with pytest.raises(ValueError, match="finite and nonnegative"):
+        module._validate_entropy_references([-0.1, None, 0.29], population=3)
+
+
+def test_structured_persistence_diagnostics_use_each_fresh_wave() -> None:
+    module = _training_script()
+    metrics = {
+        "structured_preupdate_combined": 2.0,
+        "structured_preupdate_decision": 4.0,
+        "structured_preupdate_latent": 0.5,
+        "structured_critic_preupdate_combined": 3.0,
+        "structured_critic_preupdate_latent": 2.0,
+        "structured_critic_preupdate_value": 1.0,
+    }
+    metrics.update(
+        {
+            name.replace("preupdate_", "preupdate_persistence_"): value / 2
+            for name, value in tuple(metrics.items())
+        }
+    )
+    for kind, prefix in (
+        ("actor", "structured_persistence_"),
+        ("critic", "structured_critic_persistence_"),
+    ):
+        measured = module._structured_persistence_diagnostics(metrics, kind=kind)
+        assert measured[f"{prefix}combined_ratio"] == 2.0
+        assert measured[f"{prefix}combined_informative"] == 1
+        assert all(name.endswith(("_ratio", "_informative")) for name in measured)
+
+    # Changing decoder scales next wave must change the comparison immediately,
+    # without historical references or predictor-quality admission state.
+    metrics["structured_preupdate_persistence_latent"] = 1.0
+    actor = module._structured_persistence_diagnostics(metrics, kind="actor")
+    assert actor["structured_persistence_latent_ratio"] == 0.5
+    assert actor["structured_persistence_decision_ratio"] == 2.0
+
+
+def test_zero_decoder_diagnostics_become_informative_on_fresh_waves() -> None:
+    module = _training_script()
+
+    def wave(value: float, baseline: float) -> dict[str, float]:
+        return {
+            "structured_critic_preupdate_combined": 0.5 + value,
+            "structured_critic_preupdate_latent": 0.5,
+            "structured_critic_preupdate_value": value,
+            "structured_critic_preupdate_persistence_combined": 1.0 + baseline,
+            "structured_critic_preupdate_persistence_latent": 1.0,
+            "structured_critic_preupdate_persistence_value": baseline,
+        }
+
+    for value in (0.0, 0.01, 0.0):
+        measured = module._structured_persistence_diagnostics(wave(value, 0.0), kind="critic")
+        assert measured["structured_critic_persistence_value_informative"] == 0
+        assert measured["structured_critic_persistence_value_ratio"] == 1.0
+        json.dumps(measured, allow_nan=False)
+    # There is no arbitrary loss-scale floor: tiny positive baselines carry
+    # genuine information, while a worse-than-persistence ratio remains useful.
+    measured = module._structured_persistence_diagnostics(wave(1e-9, 2e-9), kind="critic")
+    assert measured["structured_critic_persistence_value_informative"] == 1
+    assert measured["structured_critic_persistence_value_ratio"] == 0.5
+    measured = module._structured_persistence_diagnostics(wave(0.1, 0.09), kind="critic")
+    assert measured["structured_critic_persistence_value_ratio"] == pytest.approx(10 / 9)
+    json.dumps(measured, allow_nan=False)
+
+    for value, baseline in (
+        (float("nan"), 1.0),
+        (1.0, float("inf")),
+        (1.0, 1e-320),
+    ):
+        with pytest.raises(FloatingPointError, match="non-finite structured critic persistence"):
+            module._structured_persistence_diagnostics(wave(value, baseline), kind="critic")
+
+
+def _population_wave(module, *, games: int, population: int, steps: int = 2, seed: int = 0):
+    """A synthetic population wave with the row layout the collector's contract fixes.
+
+    Row order is game-major and seat-minor, so `agents` is the pairing table read
+    flat; the loop's partition, its head-to-head table and its sibling-row opponent
+    lookup all depend on exactly that.
+    """
+    from kaggriculture.rollout import _SHARED_ROLLOUT_FIELDS, allocate_rollout_storage
+
+    rows = games * 2
+    storage = allocate_rollout_storage(CONV_ENTITY, rows, steps)
+    generator = np.random.default_rng(seed)
+    for name in ("board", "global_features", "critic_features", "units"):
+        storage[name][:] = generator.standard_normal(storage[name].shape)
+    for name in ("unit_masks", "unit_active", "market_active", "market_quantity_active", "valid"):
+        storage[name][:] = True
+    storage["market_kind_masks"][:] = True
+    storage["market_quantity_masks"][:] = True
+    money = generator.uniform(0.0, 100.0, rows)
+    return SimpleNamespace(
+        architecture=CONV_ENTITY,
+        states={
+            name: storage[name]
+            for name in ("board", "global_features", "critic_features", "units", "unit_positions")
+        },
+        **{name: storage[name] for name in _SHARED_ROLLOUT_FIELDS},
+        agents=population_pairings(population, games).reshape(-1),
+        seats=np.arange(rows, dtype=np.int64) % 2,
+        episode_seeds=np.arange(rows, dtype=np.int64) // 2,
+        final_money=money,
+        opponent_money=money[np.arange(rows) ^ 1],
+        entropy_sums=np.full(rows, 1.0, dtype=np.float64),
+        elapsed_seconds=1.0,
+        state_count=rows * steps,
+        trajectories=rows,
+        horizon=steps,
+        mean_entropy=1.0,
+    )
+
+
+def _distinct_actors(config: ModelConfig, count: int, *, seed: int = 5) -> list[FarmActor]:
+    """`count` actors that genuinely run different programs.
+
+    Fresh initializations do not: this architecture's unit logits carry a large
+    fixed action prior that dominates an untrained head, so cold-started actors
+    pick the same greedy action everywhere and are one policy for the purpose the
+    gate measures. Displacing each head's bias is what four differently trained
+    members differ by, expressed in one line.
+    """
+    torch.manual_seed(seed)
+    actors = [FarmActor(config) for _ in range(count)]
+    with torch.no_grad():
+        for actor in actors:
+            actor.unit_head[1].bias.add_(torch.randn(actor.unit_head[1].bias.shape) * 3.0)
+    return actors
+
+
+def _actor_artifact(
+    path: Path,
+    actor: torch.nn.Module,
+    config: ModelConfig | StructuredConfig,
+    *,
+    architecture: str = CONV_ENTITY,
+) -> Path:
+    """One exported actor artifact of the shape a BC clone writes."""
+    from kaggriculture.inference import ACTOR_ARTIFACT_FORMAT_VERSION
+    from kaggriculture.provenance import source_identity
+
+    torch.save(
+        {
+            "format_version": ACTOR_ARTIFACT_FORMAT_VERSION,
+            "architecture": architecture,
+            "model_config": config.to_dict(),
+            "actor": actor.state_dict(),
+            "iteration": 0,
+            "source_identity": source_identity(),
+            "seed_usage": [],
+        },
+        path,
+    )
+    return path
+
+
+_TINY_CONFIG = ModelConfig(
+    cnn_width=8, cnn_blocks=1, model_dim=16, transformer_layers=3, attention_heads=2
+)
+
+
+def _population_arguments(
+    run_dir: Path,
+    *,
+    population: int,
+    games: int,
+    iterations: int = 1,
+    architecture: str = CONV_ENTITY,
+):
+    arguments = [
+        "train_ppo.py",
+        "--run-dir",
+        str(run_dir),
+        "--iterations",
+        str(iterations),
+        "--population",
+        str(population),
+        "--games",
+        str(games),
+        "--league-games",
+        "0",
+        "--league-script-games",
+        "0",
+        "--league-builtin-opponents",
+        "",
+        "--league-builtin-lanes",
+        "0",
+        "--device",
+        "cpu",
+        "--architecture",
+        architecture,
+        "--architecture-panel",
+        "0",
+        "--model-dim",
+        "16",
+        "--attention-heads",
+        "2",
+        "--no-bfloat16",
+    ]
+    if architecture == CONV_ENTITY:
+        arguments.extend(("--cnn-width", "8", "--cnn-blocks", "1", "--transformer-layers", "3"))
+    return arguments
+
+
+def _run_population_main(
+    module,
+    monkeypatch,
+    run_dir: Path,
+    *,
+    population: int,
+    games: int,
+    iterations: int = 1,
+    initial_actors: tuple[Path, ...] = (),
+    resume: Path | None = None,
+    architecture: str = CONV_ENTITY,
+    critic_warmup_iterations: int = 0,
+    update_fn=None,
+    extra_arguments: tuple[str, ...] = (),
+):
+    """Run one iteration of the loop with only the wave and the update mocked out.
+
+    The partition, the disagreement measurement, its gate, the per-member update
+    gates and the checkpoint payload all run for real; substituting the collector
+    is what makes that possible on a CPU in a test.
+    """
+
+    class Writer:
+        def __init__(self, *args, **kwargs) -> None:
+            pass
+
+        def add_scalar(self, *args, **kwargs) -> None:
+            pass
+
+        def flush(self) -> None:
+            pass
+
+        def close(self) -> None:
+            pass
+
+    seen: list[np.ndarray | None] = []
+
+    def update(*args, rows=None, **kwargs):
+        seen.append(rows)
+        return {
+            "actor_updates": 1,
+            "actor_minibatches_intended": 1,
+            "critic_updates": 1,
+            "first_minibatch_component_kl": 0.0,
+            "value_target_saturated_fraction": 0.0,
+            "entropy": 0.2,
+            "monte_carlo_r_squared": 0.2,
+        }
+
+    wave = _population_wave(module, games=games, population=max(population, 2))
+    if population == 1:
+        wave.agents = np.zeros(wave.agents.size, dtype=np.int64)
+
+    def collect(*args, **kwargs):
+        return wave
+
+    monkeypatch.setattr(module, "SummaryWriter", Writer)
+    monkeypatch.setattr(module, "collect_population_play_rust", collect)
+    monkeypatch.setattr(module, "collect_mixed_play_rust", collect)
+    monkeypatch.setattr(module, "slice_trajectories", lambda batch, start, stop: batch)
+    monkeypatch.setattr(module, "rollout_diagnostics", lambda batch: {})
+    monkeypatch.setattr(module, "update_replay_parity", lambda *a, **k: _parity_metrics(module))
+    monkeypatch.setattr(module, "update_ppo", update if update_fn is None else update_fn)
+    arguments = _population_arguments(
+        run_dir,
+        population=population,
+        games=games,
+        iterations=iterations,
+        architecture=architecture,
+    )
+    for artifact in initial_actors:
+        arguments.extend(("--init-actor-from", str(artifact)))
+    if initial_actors:
+        arguments.extend(("--critic-warmup-iterations", str(critic_warmup_iterations)))
+    if resume is not None:
+        arguments.extend(("--resume", str(resume)))
+    arguments.extend(extra_arguments)
+    monkeypatch.setattr(sys, "argv", arguments)
+    module.main()
+    record = json.loads((run_dir / "metrics.jsonl").read_text().splitlines()[-1])
+    return record, seen
+
+
+def test_runner_enters_joint_training_despite_poor_predictor_persistence(
+    monkeypatch, tmp_path
+) -> None:
+    from kaggriculture.structured import StructuredActor
+
+    module = _training_script()
+    config = StructuredConfig(model_dim=16, attention_heads=2)
+    artifact = _actor_artifact(
+        tmp_path / "initial.pt",
+        StructuredActor(config),
+        config,
+        architecture=STRUCTURED,
+    )
+    phases: list[tuple[int | None, bool, bool]] = []
+
+    def update(*args, actor_epochs=None, **kwargs):
+        phases.append(
+            (
+                actor_epochs,
+                kwargs["structured_actor_auxiliary"],
+                kwargs["structured_critic_auxiliary"],
+            )
+        )
+        metrics = {
+            "actor_updates": 0 if actor_epochs == 0 else 1,
+            "actor_minibatches_intended": 1,
+            "critic_updates": 1,
+            "first_minibatch_component_kl": 0.0,
+            "value_target_saturated_fraction": 0.0,
+            "entropy": 0.2,
+            # Prior-wave evidence releases the actor after the warmup floor.
+            "monte_carlo_r_squared": 0.2,
+        }
+        for prefix, fields in (
+            ("structured_preupdate_", module._STRUCTURED_ACTOR_PERSISTENCE_FIELDS),
+            ("structured_critic_preupdate_", module._STRUCTURED_CRITIC_PERSISTENCE_FIELDS),
+        ):
+            for name in fields:
+                metrics[f"{prefix}{name}"] = 10.0
+                metrics[f"{prefix}persistence_{name}"] = 1.0
+        return metrics
+
+    run_dir = tmp_path / "joint"
+    _run_population_main(
+        module,
+        monkeypatch,
+        run_dir,
+        population=1,
+        games=2,
+        iterations=3,
+        architecture=STRUCTURED,
+        initial_actors=(artifact,),
+        critic_warmup_iterations=1,
+        update_fn=update,
+        extra_arguments=(
+            "--structured-decision-coefficient",
+            "0.5",
+            "--structured-critic-latent-coefficient",
+            "0.5",
+        ),
+    )
+    # This is the actual runner's adaptive warmup transition, not independent
+    # calls to a boolean helper: a bad fresh-wave ratio neither delays release
+    # nor revokes joint learning on the following iteration.
+    # The warmup wave carries the configured auxiliary flag; `actor_epochs=0`
+    # is what keeps the auxiliary out of it, so its warm pass traces the graph
+    # the release wave runs.
+    assert phases == [(0, True, True), (None, True, True), (None, True, True)]
+    records = [json.loads(line) for line in (run_dir / "metrics.jsonl").read_text().splitlines()]
+    updates = [record for record in records if "critic_warmup_active" in record]
+    assert [record["critic_warmup_active"] for record in updates] == [1, 0, 0]
+    for record in updates:
+        assert record["structured_persistence_combined_ratio"] == 10.0
+        assert record["structured_critic_persistence_combined_ratio"] == 10.0
+
+
+def test_a_single_learner_run_keeps_todays_metric_layout(monkeypatch, tmp_path) -> None:
+    """`--population 1` is the path every shipped run and every downstream reader
+    already uses, so it must reshape nothing: the bare metric names stay, no
+    per-agent or population name appears, and the update sees the whole wave."""
+    module = _training_script()
+
+    record, seen = _run_population_main(
+        module, monkeypatch, tmp_path / "single", population=1, games=2
+    )
+
+    assert seen == [None]
+    assert record["entropy"] == 0.2
+    assert not [name for name in record if name.startswith("population")]
+    assert not [name for name in record if name.startswith("agent")]
+
+
+def test_a_population_partitions_its_wave_across_the_members_exactly_once() -> None:
+    """Every row belongs to exactly one member, and the union is the whole wave --
+    otherwise a member trains on another's trajectories or the wave loses rows to
+    no update at all, and both read as an ordinary run."""
+    module = _training_script()
+    population = 4
+    games = population * (population - 1)
+    agents = population_pairings(population, games).reshape(-1)
+
+    rows = module._population_row_partition(agents, population)
+
+    assert len(rows) == population
+    union = np.concatenate(rows)
+    assert sorted(union.tolist()) == list(range(agents.size))
+    assert len(set(union.tolist())) == union.size
+    # Each member holds one seat of every game it plays and no member's rows are
+    # contiguous, which is why the update takes indices rather than a sub-batch.
+    assert {index.size for index in rows} == {2 * (population - 1)}
+    assert any(np.diff(index).max() > 1 for index in rows)
+
+    with pytest.raises(ValueError, match="not covered by agents"):
+        module._population_row_partition(np.array([0, 1, 2, 2], dtype=np.int64), 2)
+
+
+def test_the_disagreement_gate_separates_converged_members_from_distinct_ones() -> None:
+    """The failure this exists for reads healthy everywhere else: converged members
+    score 0.5 against each other by symmetry, so entropy, KL, epoch fraction and
+    the money curve all stay in bounds while the wave carries no gradient."""
+    module = _training_script()
+    wave = _population_wave(module, games=12, population=4, seed=3)
+    forward_args, masks, active = module._population_state_sample(
+        wave, np.random.default_rng(0), torch.device("cpu")
+    )
+
+    distinct = _distinct_actors(_TINY_CONFIG, 4)
+    identical = _distinct_actors(_TINY_CONFIG, 4)
+    for member in identical[1:]:
+        member.load_state_dict(identical[0].state_dict())
+
+    reference = module.mean_off_diagonal(
+        module._population_disagreement(distinct, forward_args, masks, active)
+    )
+    collapsed = module.mean_off_diagonal(
+        module._population_disagreement(identical, forward_args, masks, active)
+    )
+
+    # Members running different programs disagree on most decisions; copies of one
+    # set of weights run the same program and disagree on none.
+    assert reference > 0.5
+    assert collapsed == 0.0
+    module._gate_population_disagreement(reference, reference)
+    with pytest.raises(RuntimeError, match="converged into each other"):
+        module._gate_population_disagreement(collapsed, reference)
+    # The floor is a share of the recorded start, so a run may lose most of its
+    # diversity before the gate calls it collapse.
+    floor = module.POPULATION_DISAGREEMENT_FLOOR_FRACTION * reference
+    module._gate_population_disagreement(floor, reference)
+    with pytest.raises(RuntimeError, match="converged into each other"):
+        module._gate_population_disagreement(floor * 0.99, reference)
+    # A population that agreed everywhere at iteration 0 would make the floor a
+    # share of zero, which admits everything: the gate refuses to be switched off.
+    with pytest.raises(RuntimeError, match="agree on every sampled decision"):
+        module._gate_population_disagreement(0.0, 0.0)
+
+
+def test_members_starting_from_the_same_weights_are_rejected(monkeypatch, tmp_path) -> None:
+    """Four agents built from one checkpoint are numerically identical, which
+    removes the population diversity the run is configured to preserve. Both
+    spellings of that mistake must fail: the same path twice, and two paths
+    holding the same weights."""
+    module = _training_script()
+    artifact = _actor_artifact(
+        tmp_path / "bc-actor.pt", _distinct_actors(_TINY_CONFIG, 1)[0], _TINY_CONFIG
+    )
+    twin = tmp_path / "bc-actor-copy.pt"
+    twin.write_bytes(artifact.read_bytes())
+
+    repeated = _population_arguments(tmp_path / "repeated", population=2, games=2)
+    repeated.extend(
+        (
+            "--init-actor-from",
+            str(artifact),
+            "--init-actor-from",
+            str(artifact),
+            "--critic-warmup-iterations",
+            "0",
+        )
+    )
+    monkeypatch.setattr(sys, "argv", repeated)
+    with pytest.raises(ValueError, match="different artifact per agent"):
+        module.main()
+
+    # Distinct paths, so validation cannot see it: only the artifacts' digests can.
+    copied = _population_arguments(tmp_path / "copied", population=2, games=2)
+    copied.extend(
+        (
+            "--init-actor-from",
+            str(artifact),
+            "--init-actor-from",
+            str(twin),
+            "--critic-warmup-iterations",
+            "0",
+        )
+    )
+    monkeypatch.setattr(sys, "argv", copied)
+    with pytest.raises(ValueError, match="different weights per agent"):
+        module.main()
+
+
+def test_finite_warm_start_cannot_exit_before_actor_release(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    artifact = _actor_artifact(
+        tmp_path / "bc-actor.pt",
+        _distinct_actors(_TINY_CONFIG, 1)[0],
+        _TINY_CONFIG,
+    )
+    run_dir = tmp_path / "short"
+
+    with pytest.raises(RuntimeError, match="final iteration before the critic satisfied"):
+        _run_population_main(
+            module,
+            monkeypatch,
+            run_dir,
+            population=1,
+            games=2,
+            iterations=1,
+            initial_actors=(artifact,),
+        )
+
+    checkpoint = torch.load(run_dir / "latest.pt", weights_only=False)
+    assert checkpoint["iteration"] == 1
+    assert checkpoint["initial_actor"]["critic_warmup_state"] == {
+        "complete": False,
+        "last_monte_carlo_r_squared": [0.2],
+    }
+
+
+def test_a_population_checkpoint_round_trips_and_the_bump_refuses_a_stale_one(
+    monkeypatch, tmp_path
+) -> None:
+    """The payload has to carry every member: restoring one and training the rest
+    from their fresh initialization would report a resumed run. A version-10
+    payload holds four top-level state dicts and no members at all, which is why
+    reading it as a population is refused rather than half-interpreted."""
+    from kaggriculture.inference import POPULATION_CHECKPOINT_KEY
+    from kaggriculture.training import CHECKPOINT_FORMAT_VERSION, TrainingAgent, load_checkpoint
+
+    module = _training_script()
+    population = 3
+    games = population * (population - 1)
+    run_dir = tmp_path / "population"
+
+    artifacts = tuple(
+        _actor_artifact(tmp_path / f"member-{agent}.pt", actor, _TINY_CONFIG)
+        for agent, actor in enumerate(_distinct_actors(_TINY_CONFIG, population))
+    )
+    record, seen = _run_population_main(
+        module,
+        monkeypatch,
+        run_dir,
+        population=population,
+        games=games,
+        initial_actors=artifacts,
+        iterations=2,
+    )
+
+    assert len(seen) == 2 * population
+    for wave_rows in (seen[:population], seen[population:]):
+        assert sorted(np.concatenate(wave_rows).tolist()) == list(range(2 * games))
+    # Per member, so one collapsed member is visible as itself rather than as a
+    # third of an average that still reads healthy.
+    assert {record[f"agent{agent}_entropy"] for agent in range(population)} == {0.2}
+    assert record["population_disagreement_mean"] > 0.0
+    assert record["population_disagreement_floor"] == record["population_disagreement_mean"]
+
+    payload = torch.load(run_dir / "latest.pt", weights_only=False)
+    assert payload["format_version"] == CHECKPOINT_FORMAT_VERSION
+    members = payload[POPULATION_CHECKPOINT_KEY]
+    assert len(members) == population
+    assert all(
+        set(member) == {"actor", "critic", "actor_optimizer", "critic_optimizer", "orientation"}
+        for member in members
+    )
+    # Evaluation plays the real board. Training cycles frames per game,
+    # so a member has no private code to resume under.
+    assert [member["orientation"] for member in members] == [0] * population
+
+    assert not any(name in payload for name in ("actor", "critic", "actor_optimizer"))
+
+    config = _TINY_CONFIG
+    architecture = resolve_architecture({"architecture": CONV_ENTITY})
+    restored = [
+        TrainingAgent(architecture.actor_class(config), architecture.critic_class(config))
+        for _ in range(population)
+    ]
+    reloaded = load_checkpoint(run_dir / "latest.pt", restored, device=torch.device("cpu"))
+    assert reloaded["iteration"] == 2
+    assert reloaded["population_disagreement_reference"] == record["population_disagreement_floor"]
+    assert record["critic_warmup_active"] == 0
+    assert record["critic_warmup_reason"] == "monte_carlo_r_squared_ready"
+    assert record["critic_warmup_ready_members"] == population
+    # The first wave is critic-only even with a zero configured minimum; the
+    # second uses that fresh-wave R-squared to release every actor.
+    assert reloaded["policy_entropy_reference"] == [0.2] * population
+    assert reloaded["initial_actor"]["critic_warmup_state"] == {
+        "complete": True,
+        "last_monte_carlo_r_squared": [0.2] * population,
+    }
+    for member, stored in zip(restored, members, strict=True):
+        assert all(
+            torch.equal(value, stored["actor"][name])
+            for name, value in member.actor.state_dict().items()
+        )
+    # Distinct members, which is the whole point of the population: one restored
+    # set of weights standing in for all three would pass every other assertion.
+    signatures = {
+        tuple(round(float(value.sum()), 6) for value in member.actor.state_dict().values())
+        for member in restored
+    }
+    assert len(signatures) == population
+
+    # The strongest statement of the round trip: the loop itself continues from the
+    # payload. Every population-shaped resume field is read on this path -- one
+    # parity baseline per member and the iteration-0 disagreement reference, which
+    # must be restored rather than re-measured after the members have moved.
+    resumed_dir = tmp_path / "resumed"
+    resumed_record, resumed_rows = _run_population_main(
+        module,
+        monkeypatch,
+        resumed_dir,
+        population=population,
+        games=games,
+        iterations=3,
+        resume=run_dir / "latest.pt",
+    )
+    assert len(resumed_rows) == population
+    assert resumed_record["iteration"] == 3
+    assert (
+        resumed_record["population_disagreement_floor"] == record["population_disagreement_floor"]
+    )
+    assert (resumed_dir / "checkpoint-000003.pt").is_file()
+    resumed_payload = torch.load(resumed_dir / "latest.pt", weights_only=False)
+    assert resumed_payload["policy_entropy_reference"] == [0.2] * population
+    assert resumed_payload["initial_actor"]["critic_warmup_state"]["complete"] is True
+    assert resumed_record["critic_warmup_active"] == 0
+    assert resumed_record["critic_warmup_reason"] == "complete"
+    assert resumed_record["critic_warmup_ready_members"] == population
+
+    stale = tmp_path / "stale.pt"
+    torch.save({**payload, "format_version": CHECKPOINT_FORMAT_VERSION - 1}, stale)
+    with pytest.raises(ValueError, match="unsupported checkpoint format"):
+        load_checkpoint(stale, restored, device=torch.device("cpu"))
+
+
+def _autocull_observation(guard, *, money=100_000.0, loss=1.0, actor_frozen=False):
+    return guard.observe(
+        {
+            "iteration": guard.state["iteration"] + 1,
+            "money_mean": money,
+            "value_loss": loss,
+            "actor_updates": int(not actor_frozen),
+            "updates": 1,
+        },
+        actor_frozen=actor_frozen,
+    )
+
+
+@pytest.mark.parametrize("improvement", [{"money": 120_000.0}, {"loss": 0.5}])
+def test_autocull_either_proxy_improvement_resets_full_patience(improvement) -> None:
+    module = _training_script()
+    guard = module.OnlinePlateauGuard()
+    for _ in range(49):
+        _autocull_observation(guard)
+    assert not guard.culled
+    improved = _autocull_observation(guard, **improvement)
+    assert improved["stale_observations"] == 0
+    assert not guard.culled
+    # A single subsequent regression cannot undo the renewed patience.
+    for _ in range(29):
+        _autocull_observation(guard)
+        assert not guard.culled
+    _autocull_observation(guard)
+    assert guard.culled
+
+
+def test_autocull_small_loss_improvement_resets_patience_but_noise_does_not() -> None:
+    module = _training_script()
+    guard = module.OnlinePlateauGuard()
+    for _ in range(49):
+        _autocull_observation(guard, loss=0.005)
+    improved = _autocull_observation(guard, loss=0.0025)
+    assert improved["stale_observations"] == 0
+    assert not guard.culled
+    # A tiny decrease below the newly established reference is not progress.
+    tiny_decrease = improved["reference"]["value_loss"] * 0.9999
+    for _ in range(29):
+        _autocull_observation(guard, loss=tiny_decrease)
+        assert not guard.culled
+    _autocull_observation(guard, loss=tiny_decrease)
+    assert guard.culled
+
+
+def test_autocull_discards_frozen_waves_and_warmup_extrema() -> None:
+    module = _training_script()
+    guard = module.OnlinePlateauGuard()
+    for _ in range(60):
+        state = _autocull_observation(guard, money=1e9, loss=0.0, actor_frozen=True)
+    assert state["observations"] == 0
+    assert not guard.culled
+    for _ in range(19):
+        _autocull_observation(guard, money=1e9, loss=0.0)
+    state = _autocull_observation(guard)
+    assert state["reference"] == {"money_mean": 100_000.0, "value_loss": 1.0}
+    assert state["ema"] == state["reference"]
+    assert state["stale_observations"] == 0
+    state = _autocull_observation(guard, money=120_000.0)
+    assert state["reference"]["money_mean"] == pytest.approx(102_000.0)
+    assert state["stale_observations"] == 0
+    for _ in range(29):
+        _autocull_observation(guard)
+    assert not guard.culled
+    _autocull_observation(guard)
+    assert guard.culled
+
+
+def test_autocull_resumes_the_same_ema_and_patience_without_aliasing(tmp_path) -> None:
+    module = _training_script()
+    uninterrupted = module.OnlinePlateauGuard()
+    for _ in range(4):
+        _autocull_observation(uninterrupted, actor_frozen=True)
+    for _ in range(45):
+        state = _autocull_observation(uninterrupted)
+    path = tmp_path / "metrics.pt"
+    torch.save({"iteration": 49, "autocull_state": state}, path)
+    metrics = torch.load(path, weights_only=False)
+    resumed = module.OnlinePlateauGuard(metrics["autocull_state"], iteration=49)
+    for _ in range(5):
+        expected = _autocull_observation(uninterrupted)
+        assert _autocull_observation(resumed) == expected
+    assert uninterrupted.culled and resumed.culled
+    assert state["observations"] == 45
+    assert metrics["autocull_state"]["observations"] == 45
+    with pytest.raises(ValueError, match="checkpoint boundary"):
+        module.OnlinePlateauGuard(state, iteration=48)
+    with pytest.raises(ValueError, match="missing autocull state"):
+        module.OnlinePlateauGuard(iteration=49)
+    with pytest.raises(ValueError, match="checkpoint boundary"):
+        module.OnlinePlateauGuard({**state, "stale_observations": 30}, iteration=49)
+    with pytest.raises(ValueError, match="consecutive"):
+        resumed.observe({"iteration": 56}, actor_frozen=True)
+
+
+@pytest.mark.parametrize(
+    "metric,value",
+    [
+        ("value_loss", None),
+        ("value_loss", float("nan")),
+        ("value_loss", -0.1),
+        ("updates", 0),
+    ],
+)
+def test_autocull_requires_meaningful_critic_observations(metric, value) -> None:
+    module = _training_script()
+    guard = module.OnlinePlateauGuard()
+    metrics = {
+        "iteration": 1,
+        "money_mean": 100_000.0,
+        "value_loss": 1.0,
+        "actor_updates": 1,
+        "updates": 1,
+        metric: value,
+    }
+    with pytest.raises(ValueError, match="updated critic value_loss"):
+        guard.observe(metrics, actor_frozen=False)
+
+
+def test_autocull_is_opt_in_population_rejected_and_resume_bound(monkeypatch, tmp_path) -> None:
+    module = _training_script()
+    argv = _population_arguments(tmp_path, population=1, games=1)
+    monkeypatch.setattr(sys, "argv", argv)
+    disabled = module.parse_args()
+    assert not disabled.autocull
+    monkeypatch.setattr(sys, "argv", [*argv, "--autocull"])
+    enabled = module.parse_args()
+    module._validate_args(enabled)
+    assert module._training_data_config(disabled, torch.device("cpu")) != (
+        module._training_data_config(enabled, torch.device("cpu"))
+    )
+    monkeypatch.setattr(
+        sys, "argv", [*_population_arguments(tmp_path, population=2, games=2), "--autocull"]
+    )
+    with pytest.raises(ValueError, match="autocull requires --population 1"):
+        module._validate_args(module.parse_args())
+    guard = module.OnlinePlateauGuard()
+    original = {"metrics": {"autocull_state": _autocull_observation(guard)}}
+    replayed = {"metrics": {"autocull_state": _autocull_observation(guard)}}
+    assert not module._checkpoint_recovery_values_equal(original, replayed)
+
+
+def test_autocull_terminal_boundary_commits_before_exit_and_stays_terminal_on_resume(
+    monkeypatch, tmp_path, capsys
+) -> None:
+    module = _training_script()
+    updates = 0
+
+    def update(*args, **kwargs):
+        nonlocal updates
+        updates += 1
+        return {
+            "actor_updates": 1,
+            "actor_minibatches_intended": 1,
+            "updates": 1,
+            "first_minibatch_component_kl": 0.0,
+            "value_target_saturated_fraction": 0.0,
+            "entropy": 0.2,
+            "money_mean": 100_000.0,
+            "value_loss": 1.0,
+        }
+
+    _run_population_main(
+        module,
+        monkeypatch,
+        tmp_path,
+        population=1,
+        games=2,
+        iterations=49,
+        update_fn=update,
+        extra_arguments=("--autocull",),
+    )
+    initial = torch.load(tmp_path / "checkpoint-000000.pt", weights_only=False)
+    assert initial["metrics"]["autocull_state"]["observations"] == 0
+    checkpoint = torch.load(tmp_path / "latest.pt", weights_only=False)
+    assert checkpoint["metrics"]["autocull_state"]["stale_observations"] == 29
+    capsys.readouterr()
+    real_print = print
+    observed_terminal = []
+
+    def observe_print(message, *args, **kwargs):
+        if isinstance(message, str) and message.startswith("AUTOCULL "):
+            # This executes at emission, not only after main has returned.
+            current = torch.load(tmp_path / "latest.pt", weights_only=False)
+            assert current["iteration"] == 50
+            assert current["metrics"]["autocull_state"]["stale_observations"] == 30
+            assert (tmp_path / "checkpoint-000050.pt").is_file()
+            journal = (tmp_path / "metrics.jsonl").read_text().splitlines()
+            assert json.loads(journal[-1]) == current["metrics"]
+            observed_terminal.append(json.loads(message.removeprefix("AUTOCULL ")))
+        real_print(message, *args, **kwargs)
+
+    monkeypatch.setattr(module, "print", observe_print, raising=False)
+    for _ in range(2):
+        with pytest.raises(SystemExit) as stopped:
+            _run_population_main(
+                module,
+                monkeypatch,
+                tmp_path,
+                population=1,
+                games=2,
+                iterations=100,
+                resume=tmp_path / "latest.pt",
+                update_fn=update,
+                extra_arguments=("--autocull",),
+            )
+        assert stopped.value.code == 75
+        assert updates == 50
+    assert len(observed_terminal) == 2
+    assert not (tmp_path / "checkpoint-000051.pt").exists()
+
+
+def test_actor_wave_budget_excludes_warmup_and_uses_restored_count(tmp_path) -> None:
+    from kaggriculture.architecture_panel import ArchitecturePanelGuard
+
+    module = _training_script()
+    panel = ArchitecturePanelGuard(25)
+    checkpoint = tmp_path / "initial.pt"
+    checkpoint.touch()
+    panel.observe({"score_rate": 0.5, "critic_mse": 0.25}, checkpoint)
+    for iteration in range(1, 36):
+        panel.advance(iteration, actor_active=iteration > 10)
+        if iteration < 35:
+            assert not module._actor_wave_budget_reached(25, panel)
+    assert module._actor_wave_budget_reached(25, panel)
+    panel.observe({"score_rate": 0.5, "critic_mse": 0.25}, Path("final.pt"))
+    restored = ArchitecturePanelGuard(25, panel.snapshot(), iteration=35)
+    assert module._actor_wave_budget_reached(25, restored)
+    assert not module._actor_wave_budget_reached(50, restored)
+    assert not module._actor_wave_budget_reached(None, None)
+    with pytest.raises(ValueError, match="persisted architecture panel"):
+        module._actor_wave_budget_reached(25, None)
+
+
+@pytest.mark.parametrize(
+    ("overrides", "error"),
+    [
+        ({}, None),
+        ({"actor_waves": 0}, "must be positive"),
+        ({"population": 2}, "one learner"),
+        ({"architecture_panel": 0}, "architecture panel"),
+        ({"actor_waves": 499}, "divisible"),
+        ({"iterations": 539}, "maximum critic warmup"),
+        ({"max_hours": 1.0}, "max-hours 0"),
+    ],
+)
+def test_actor_wave_budget_requires_matched_exposure(monkeypatch, tmp_path, overrides, error):
+    module = _training_script()
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_ppo.py",
+            "--run-dir",
+            str(tmp_path),
+            "--actor-waves",
+            "500",
+            "--iterations",
+            "540",
+            "--architecture-panel",
+            "25",
+            "--max-hours",
+            "0",
+            "--device",
+            "cuda",
+            "--reward-mode",
+            "terminal-outcome",
+            "--gamma",
+            "1",
+        ],
+    )
+    args = module.parse_args()
+    assert args.actor_waves == 500
+    for key, value in overrides.items():
+        setattr(args, key, value)
+    if error:
+        with pytest.raises(ValueError, match=error):
+            module._validate_args(args)
+    else:
+        module._validate_args(args)

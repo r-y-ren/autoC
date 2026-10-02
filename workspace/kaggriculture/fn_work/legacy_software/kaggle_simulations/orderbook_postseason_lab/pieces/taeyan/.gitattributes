@@ -1,0 +1,25 @@
+agent/public_v27_kaito.py whitespace=-blank-at-eof
+
+# Byte-exact public sources and validated submission derivative.
+agent/public_v37_more_yield.py -text
+agent/public_master_engine_v2.py -text
+agent/c110_reserve8.py -text
+
+# Keep source fingerprints and deterministic builds stable across checkouts.
+src/kaggriculture_meta/league.py text eol=lf
+src/kaggriculture_meta/build_candidate.py text eol=lf
+src/kaggriculture_meta/package_agent.py text eol=lf
+src/kaggriculture_meta/replay_lab.py text eol=lf
+agent/overlays/*.py text eol=lf
+
+# Byte-exact validated lineage and final submission source (no EOL conversion).
+agent/c947_joint_cargo_delivery.py -text
+agent/c974_native_place_advance.py -text
+agent/c995_integrated_perennial_fertilizer.py -text
+agent/c1001_hanaro_public_shadow.py -text
+agent/c1017_native_crop_survival_water.py -text
+agent/c1041_native_manure_collection.py -text
+agent/c1047_terminal_seed_stock_bound.py -text
+agent/c1054_actual_cargo_depot_delivery.py -text
+agent/c1064_terminal_nonproductive_feed.py -text
+agent/c1200_final.py -text

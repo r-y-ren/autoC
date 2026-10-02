@@ -1,0 +1,187 @@
+{
+  "cpu": {
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "jax_platforms": "cpu",
+    "logical_cpus": 12,
+    "model": "AMD Ryzen 7 2700X Eight-Core Processor",
+    "numpy": "2.4.6",
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "python": "3.11.15"
+  },
+  "identity": {
+    "direct_1x_matches_runtime_cached_plan": "PASS",
+    "four_repeats_each": "PASS",
+    "plans": [
+      {
+        "day": 0,
+        "plan_sha256": "c9cb97df9173f24c582e4a1ae3ff71aae4261bfd771bc7b831e6317fbe908667",
+        "seat": 0,
+        "seed": 1196709180
+      },
+      {
+        "day": 5,
+        "plan_sha256": "211a56031f1cab72cad80d7eab7bcd3b69960385ea334e1df2bf25a4c24b66df",
+        "seat": 0,
+        "seed": 1196709180
+      },
+      {
+        "day": 15,
+        "plan_sha256": "9ca54b6db4b1d97ae84ce8be67855b9745ef959b4c28752003a4e966048464c3",
+        "seat": 0,
+        "seed": 1196709180
+      },
+      {
+        "day": 25,
+        "plan_sha256": "f98227e4bfb6eb983f300d00e5c613458ada5b487474e16284db63aa91fb31b3",
+        "seat": 0,
+        "seed": 1196709180
+      },
+      {
+        "day": 0,
+        "plan_sha256": "c9cb97df9173f24c582e4a1ae3ff71aae4261bfd771bc7b831e6317fbe908667",
+        "seat": 0,
+        "seed": 2097576449
+      },
+      {
+        "day": 5,
+        "plan_sha256": "211a56031f1cab72cad80d7eab7bcd3b69960385ea334e1df2bf25a4c24b66df",
+        "seat": 0,
+        "seed": 2097576449
+      },
+      {
+        "day": 15,
+        "plan_sha256": "a4f6da25ee28bc8b566ab7b2f1d26539d87ce902c5fc189231fdaeea38893ae1",
+        "seat": 0,
+        "seed": 2097576449
+      },
+      {
+        "day": 25,
+        "plan_sha256": "5e22cdc7483455f96ca3df71fd13cb5886528e10c842c1b0cf6abcf0c148b4ea",
+        "seat": 0,
+        "seed": 2097576449
+      },
+      {
+        "day": 0,
+        "plan_sha256": "c9cb97df9173f24c582e4a1ae3ff71aae4261bfd771bc7b831e6317fbe908667",
+        "seat": 0,
+        "seed": 2079139712
+      },
+      {
+        "day": 5,
+        "plan_sha256": "0943ff6466346709d12856ed6dc2bf86bea3e01273e2a090345aedac2cad4a92",
+        "seat": 0,
+        "seed": 2079139712
+      },
+      {
+        "day": 15,
+        "plan_sha256": "ac7537b9ef509d91e5e0651e3c56768dac06bf4d8cecddb2f8a8f9dfb535fb54",
+        "seat": 0,
+        "seed": 2079139712
+      },
+      {
+        "day": 25,
+        "plan_sha256": "2dd8c67d3a70ba3d1511611628c0cd9b5640164e8a32258fee073d324e7329fe",
+        "seat": 0,
+        "seed": 2079139712
+      }
+    ],
+    "runtime_hour1_reuses_tuple": "PASS"
+  },
+  "inputs": {
+    "arms_next_git": "45f8217e9f4b04555af3074dda1e54a7c44f37bf",
+    "arms_next_tree_sha256": "e2fe0a7dff6f29359e93bcd8d7ed71f1969287ce4351cb96dff60e811d29b158",
+    "replays": {
+      "S/postlot/pilot/replay_off_h30_cash/1196709180_0.json": "e2bd997fba0158f91d8df8f5a1588b69d4da0887be8ef67250bcb896940f0827",
+      "S/postlot/pilot/replay_off_h30_cash/2079139712_0.json": "baea3602acce2cfc5aee3d8892ee6cfe3275a971daf67c89ebcf8e82df04a883",
+      "S/postlot/pilot/replay_off_h30_cash/2097576449_0.json": "52020521e5457079aed55a2306c01fe345af8da6e3a06bf7c3b5429e05571ecd"
+    },
+    "switches": {
+      "BANK_BEFORE_LOT_ON": true,
+      "HIRE_ROW_ON": true,
+      "OPEN_PUMP_ON": true,
+      "TAIL_FILL_ON": true
+    },
+    "theta_md5": "7fcf39485bae65ee84171957c5843814",
+    "theta_path": "submission/theta.npy",
+    "theta_sha256": "2cde727e56af3e95958a02bcc3236c6147579d3117e4ff9272815b9f3dab62c3"
+  },
+  "method": {
+    "clock": "time.perf_counter_ns",
+    "rounds": 10,
+    "same_plan_repeated_for_cost_only": true,
+    "timed_region": "n consecutive P.build_day(np, view, macro) calls",
+    "wall_seconds_for_timed_region": 72.43877243995667,
+    "warmup_calls_per_observation": 2
+  },
+  "runtime_budget_sources": {
+    "goal": {
+      "cpu": "1.6 vCPU",
+      "disk": "8 GiB",
+      "memory": "6.5 GiB",
+      "path": ".claude/worktrees/arms-next/GOAL.md",
+      "sha256": "caa76972531522cf3b81865f1111a1bfc6084fcc7bf40575fdc532906896336e",
+      "submission": "<=100 MiB"
+    },
+    "interpretation": "quoted local configuration and GOAL constraints only",
+    "local_config": {
+      "actTimeout_seconds": 1,
+      "path": ".venv/lib/python3.11/site-packages/kaggle_environments/envs/kaggriculture/kaggriculture.json",
+      "remainingOverageTime_default_seconds": 60,
+      "sha256": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "scope": "NumPy build_day timing only; no engine, policy score, or candidate selector",
+  "selection_frozen": {
+    "counts": [
+      1,
+      2,
+      4
+    ],
+    "days": [
+      0,
+      5,
+      15,
+      25
+    ],
+    "observations": 12,
+    "seat": 0,
+    "seeds": [
+      1196709180,
+      2097576449,
+      2079139712
+    ]
+  },
+  "timings": {
+    "1": {
+      "max_ms": 119.728611,
+      "median_ms": 90.4690775,
+      "n_samples": 120,
+      "p95_ms": 95.4144648
+    },
+    "2": {
+      "max_ms": 213.551768,
+      "median_ms": 180.998451,
+      "n_samples": 120,
+      "p95_ms": 191.95187475
+    },
+    "4": {
+      "max_ms": 522.308861,
+      "median_ms": 363.86546350000003,
+      "n_samples": 120,
+      "p95_ms": 391.61328404999995
+    }
+  }
+}

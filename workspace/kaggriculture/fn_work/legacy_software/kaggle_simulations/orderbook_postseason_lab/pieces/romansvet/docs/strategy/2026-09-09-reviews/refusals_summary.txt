@@ -1,0 +1,21 @@
+OUR-seat refusals, theta flow135_g350_gpfwdfv, 24 pinned held-out boards (seat 0, 1 seed each)
+acting turns/game 5666 (unit-action slots 6799); market rows/game SELL 139.7 BUY 82.1
+
+refusal kind                      mean/gamegames>=1     d0-5   d6-10  d11-20  d21-29
+SELL_units_missed                    18.58    100%     0.00    0.00    0.00   18.58
+SELL_row_partial                      2.04    100%     0.00    0.00    0.00    2.04
+unit_WATER_noop                       0.79     25%     0.00    0.00    0.12    0.67
+unit_HARVEST_noop                     0.75     25%     0.00    0.00    0.12    0.62
+SELL_row_zero                         0.33     25%     0.00    0.00    0.00    0.33
+unit_PLANT_noop                       0.04      4%     0.00    0.00    0.00    0.04
+
+TOTAL refused actions/game 3.96 = 0.07% of acting turns (0.06% of all unit slots)
+acting turns per bucket/game: d0-5 481 d6-10 655 d11-20 2449 d21-29 2082
+
+ZERO in every game: BUY_row_zero/partial (BUY_SEED/BUY_PRODUCT/BUY_ANIMAL never refused),
+HIRE_refused, LAND_refused, PLACE noop, DROP/PICKUP/MOVE/FEED/CARE/FERTILIZE/DIG/BUILD noop,
+PLANT_blocked_by_seed_guard, row_malformed, row_dropped_over_max.
+Method: monkey-patched engine _apply_unit_action (state-diff no-op detector, unit-tested on
+10 synthetic illegal actions), _commit_unit, _do_hire, _do_buy_land + make() interpreter wrap.
+Scripts: refusals/instr.py, refusals/runall.sh, refusals/agg.py, refusals/seeds.txt.
+Sweep stopped at 24 of 42 boards (time box); re-run runall.sh to finish, it skips completed.
