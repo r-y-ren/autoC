@@ -10,3 +10,4 @@
 | 2026-10-03 | B5 | build_feature_window, predict_risk_tcn, calibrate_conformal, check_physical_baseline, train_tcn(wired), run_progressive_risk(wired) | 9 passed；缺陷修复 3（指示位维度/批内窗长不定/训练梯度断链） |
 | 2026-10-03 | B6 | update_state, plan_disposal, run_safety_state_machine(wired) | 6 passed；升级直达路径缺陷修复 |
 | 2026-10-03 | B7 | discover_device_module, health_check_module, route_device_frames, run_device_bus(wired) | 5 passed；拔插双态切换实证 |
+| 2026-10-03 | B8 | replay_spectrum_source, capture_spectrum, compute_occupancy, run_spectrum_monitor(wired), sdr_check(wired) | 7 passed；缺席自动回放+双源同管线 |

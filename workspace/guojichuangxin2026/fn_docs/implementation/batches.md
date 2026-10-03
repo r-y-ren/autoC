@@ -5,8 +5,7 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B8 | replay_spectrum_source, capture_spectrum, compute_occupancy, run_spectrum_monitor, sdr_check | sdr_check 双源自检可用 | 依赖 B7 总线 |
-| B9 | pipe_events, register_pages, run_ground_station | run_ground_station wired（五页起服务） | 依赖 B8 瀑布流 |
+| ▶ B9 | pipe_events, register_pages, run_ground_station | run_ground_station wired（五页起服务） | 依赖 B8 瀑布流 |
 | B10 | spawn_sitl, render_console, session_control_api, launch_demo_session | launch_demo_session wired（SIH 冒烟） | R9 演示控制台 |
 | B11 | export_metrics_table, draft_revision_notes, compile_documents, build_materials | build_materials wired | 材料 |
 | B12 | run_eval + 全链路 smoke（smoke_boot 实跑） | eval CLI 实跑出指标分片；sw-boot 绿 | 评估集成收官 |
