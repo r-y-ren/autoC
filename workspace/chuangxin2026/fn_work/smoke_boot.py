@@ -36,9 +36,7 @@ except Exception as exc:
 
 print("[4/4] stub markers ...")
 marks = sum(p.read_text(encoding="utf-8").count("unimplemented:fn:") for p in (ROOT / "src").rglob("*.py"))
-print("      unimplemented:fn: x", marks)
-if marks < 27:
-    fail.append("marker count < 27")
+print("      unimplemented:fn: x", marks, "(实现期递减，fn-close 期应为 0)")
 
 if fail:
     print("SMOKE BOOT FAIL:"); [print("  -", f) for f in fail]; sys.exit(1)
