@@ -76,19 +76,19 @@ milestones:
 acceptance:
   checklist:
     - {id: sw-boot, category: software, item: 一键启动冒烟（SITL 场景起+Web 服务+回放页可用）, method: 自动,
-       cmd: "python workspace/guojichuangxin2026/software/smoke_boot.py"}
+       cmd: "python workspace/guojichuangxin2026/fn_work/smoke_boot.py"}
     - {id: sw-test, category: software, item: 测试套件全过, method: 自动,
-       cmd: "python -m pytest workspace/guojichuangxin2026/software/tests -q"}
+       cmd: "python -m pytest workspace/guojichuangxin2026/fn_work/tests -q"}
     - {id: sw-eval-progressive, category: software, item: 渐进场景 30 次评估（提前量 P10/中位数/达标率+共形覆盖率入 metrics）, method: 自动,
-       cmd: "python workspace/guojichuangxin2026/software/scripts/eval.py --scenario lowbat_headwind --runs 30"}
+       cmd: "python workspace/guojichuangxin2026/fn_work/eval.py --scenario lowbat_headwind --runs 30"}
     - {id: sw-eval-sudden, category: software, item: 突发场景 30 次评估（确认时延 P90+类型正确率入 metrics）, method: 自动,
-       cmd: "python workspace/guojichuangxin2026/software/scripts/eval.py --scenario motor_fail --runs 30"}
+       cmd: "python workspace/guojichuangxin2026/fn_work/eval.py --scenario motor_fail --runs 30"}
     - {id: sw-eval-link, category: software, item: 链路退化注入评估（一致性检测触发+正常段误报计数入 metrics）, method: 自动,
-       cmd: "python workspace/guojichuangxin2026/software/scripts/eval.py --scenario link_degrade --runs 30"}
+       cmd: "python workspace/guojichuangxin2026/fn_work/eval.py --scenario link_degrade --runs 30"}
     - {id: hw-edge, category: hardware, item: Orin NX 端到端推理 P95 时延实测入 metrics（设备不可用时降级回放模式并注记）, method: 自动,
        cmd: "python workspace/guojichuangxin2026/hardware/bench_edge.py"}
     - {id: hw-sdr, category: hardware, item: SDR 占用率响应自检（2.4G 拥塞前后占用率差异+告警触发）, method: 自动,
-       cmd: "python workspace/guojichuangxin2026/hardware/sdr_check.py"}
+       cmd: "python workspace/guojichuangxin2026/fn_work/sdr_check.py"}
     - {id: doc-compile, category: document, item: 计划书 v2 与路演 PPT 编译通过, method: 自动,
        cmd: "python workspace/guojichuangxin2026/docs/build.py"}
     - {id: doc-numbers, category: document, item: 材料性能数字与 metrics 一致, method: 自动,

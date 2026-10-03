@@ -2,7 +2,7 @@
 > 由 fn-divide 产出与独占更新；fn-implement 只读。进度与状态见 implementation/。
 > 职责字段是**重写规约**：凭职责详述 + 签名意图（输入/输出），必须能完美复现该函数功能。
 > ⚠ 实现期发现结构性变化（函数增/删/拆/并/职责或调用关系变化）必须停下回本阶段改本文档。
-> ⚠ 函数总数 38 > 20 预警线：本任务为 9 需求口的系统级工程（数据/双通道模型/SDR/状态机/Web/演示控制台/材料），非单一算法任务；收缩建议见文末，门口裁决。
+> ⚠ 函数总数 43 > 20 预警线（scaffold 落桩实测 43，此前文档误记 34/38 已修正）：本任务为 9 需求口的系统级工程（数据/双通道模型/SDR/状态机/Web/演示控制台/材料），非单一算法任务；收缩建议见文末，门口裁决。
 
 ## 结构概览（纯结构，不带职责）
 - run_ingest ← R1
@@ -354,6 +354,6 @@
 
 ## 产出前自检
 - 矩阵正向：R1-R9 每条恰好一个顶层函数负责 ✓（9/9，无漏实现；R9 变更后新增 launch_demo_session 块）
-- 矩阵反向+树：全部 38 函数经调用链可达顶层入口 ✓（程序入口：run_eval / replay_check / sdr_check / run_ground_station / build_materials / train_tcn / launch_demo_session 及各顶层函数自身；shared 六件均被多顶层引用；无死代码）
+- 矩阵反向+树：全部 43 函数经调用链可达顶层入口 ✓（程序入口：run_eval / replay_check / sdr_check / run_ground_station / build_materials / train_tcn / launch_demo_session 及各顶层函数自身；shared 六件均被多顶层引用；无死代码；scaffold 落桩 43 与本计数一致）
 - 单一功能转变：逐函数复核 ✓（compute_physical_margins 四类余量=同一转变"帧→余量"；register_pages 五路由=同一转变"挂路由"；session_control_api 多端点=同一转变"UI 动作→后端受理"）
-- 函数总数 38 > 20 预警线：**已预警**——成因=9 需求口的系统级工程（接入/双通道/SDR/状态机/Web/演示控制台/材料）；可选收缩项（若要逼近 20）：①砍 train_tcn 独立函数（并入脚本，-1）②R4 两叶子合并为 consistency_check（-1）③R8 的 draft_revision_notes 并入 build_materials 主体（-1）——即便全采纳仍 ~35，低于 20 需砍需求口（不建议；R9 为用户明确要求的面向用户能力，不可砍）。门口裁决：接受 38 或指定收缩项。
+- 函数总数 43 > 20 预警线：**已预警**——成因=9 需求口的系统级工程（接入/双通道/SDR/状态机/Web/演示控制台/材料）；可选收缩项（若要逼近 20）：①砍 train_tcn 独立函数（并入脚本，-1）②R4 两叶子合并为 consistency_check（-1）③R8 的 draft_revision_notes 并入 build_materials 主体（-1）——即便全采纳仍 ~40，低于 20 需砍需求口（不建议；R9 为用户明确要求的面向用户能力，不可砍）。门口裁决：接受 43 或指定收缩项。

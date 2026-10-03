@@ -6,3 +6,4 @@
 | 2026-10-03 | decide | /attack：KB 当日增量批确认（8928e181）+赛程查证（国创 key_dates+南邮校线 cxcy 实抓：排位赛通知未发、材料窗口=至 10 月中旬）；新增约束=一人成军+与电磁干扰平台战役互借力 | grill-notes.md 补纪要；strategy.md 重写六节模板；blueprint.md 成稿（m0 骨架→m1 竖切→m2 全量→m2b 边缘频谱→m3 材料冲刺；11 验收项；mode=apply；auto_chain=true）lint PASS 9d17b614 后待用户确认闸门 |
 | 2026-10-03 | decide | 蓝图经用户确认（唯一人工闸门通过）；auto_chain 翻转为 false（手动波次编排） | blueprint 复校 PASS；decide 阶段收口——下一步 /deliver（K-03 波次编排，首波 m0 骨架）或 /self（人工主导） |
 | 2026-10-03 | deliver | /self 进入（人工主导，副驾模式）：闸门复校 PASS→phase=deliver；auto_chain=false 沿用（手动波次，人定粒度） | fn-grill 边界重算：无新增需用户拍板项，工程默认值清单呈报可否决；m0 未启动待人指令 |
+| 2026-10-03 | deliver | m0 进行中（scaffold 部分）：fn_work/ 骨架落盘（43 函数桩+镜像测试+CLI 入口）；R9 演示控制台经变更通道入册（requirements/README/responsibility 同步）；蓝图验收 cmd 6 处对齐 fn_work 路径复校 PASS | m0 剩余：接口契约实体化（contracts/ 两文件）+数据字典 v1+metrics 键清单——随 fn-implement B1 落地 |

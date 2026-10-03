@@ -6,3 +6,5 @@
 | 2026-10-03 | 全量线:divide | fn-divide 完成：responsibility.md 成稿——8 顶层函数×R1-R8 矩阵双向覆盖+34 函数分层树（六共享件入树）+核验命令全继承需求验收；>20 预警已呈报（收缩选项三件）；门口待选 /fn-scaffold | fn-doc-lint：61 错→3 错，余 3 错=implementation/ 未到阶段缺失；结构检查全绿 |
 | 2026-10-03 | 全量线:grill | 需求变更（变更通道）：用户门口提出 R9 演示控制台——面向用户/演示零代码/游戏化操控；两问定案=2D 指挥中心风+控测试 P0（手动接管列 P1 范围外）；requirements 追加 R9+README 追加功能段 | fn-doc-lint：requirements 结构 0 错 |
 | 2026-10-03 | 全量线:divide | R9 子树重算：新增 launch_demo_session 块（spawn_sitl/session_control_api/render_console 四函数）+R7 四页扩五页+共享件调用方更新；矩阵 9/9，总函数 38 | fn-doc-lint：仍 3 错（implementation 未到阶段），结构全绿 |
+| 2026-10-03 | 全量线:divide | 计数勘误：函数总数 34/38 均为笔误，逐块重算+scaffold 落桩实测=43；responsibility 预警行与自检已修正 | scaffold 落桩 grep=43 与文档一致 |
+| 2026-10-03 | 全量线:scaffold | fn_work/ 骨架落盘：src/ 十包（九顶层+shared）43 函数桩+tests/ 镜像 43 占位（skip）+CLI 入口 8 件（smoke_boot/eval/replay_check/sdr_check/train/materials/server/demo.sh）+pytest.ini/requirements/conftest+战役 .gitignore；蓝图验收 cmd 6 处对齐 fn_work（复校 PASS）；requirements 记路径实体化变更行 | compileall 全绿；pytest 收集 43；桩标记 43；fn-doc-lint 仍仅 3 错（implementation 未到阶段） |
