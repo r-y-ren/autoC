@@ -21,7 +21,7 @@
 | B14 | animate_link_state [P1] | 上游覆盖（serve_console 联动判据） | 非阻塞，有余力做 |
 
 | B16 | scaled_criteria, apply_calibration, resume_from + execute_scenario/build_report 改造 | 40 速国标卡出失效电平+脚注；半程续跑；标定入报告 | 演进轮一 |
-| ▶ B17 | build_mid_material + docs/build.py | build --mid 产材料稿+数字溯源断言 | 演进轮一 |
+| B17 | build_mid_material + docs/build.py | build --mid 产材料稿+数字溯源断言 | 演进轮一 |
 
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 
