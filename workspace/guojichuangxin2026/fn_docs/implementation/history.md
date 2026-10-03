@@ -8,3 +8,5 @@
 | 2026-10-03 | B3 | estimate_distance_trend, consistency_residual, run_link_consistency(wired) | 7 passed；正常零误报+欺骗检出；远距限界记录 |
 | 2026-10-03 | B4 | build_residuals, cusum_detect, classify_fault, run_sudden_fault(wired) | 6 passed；电机时延≤0.6s+链路事件+正常静默 |
 | 2026-10-03 | B5 | build_feature_window, predict_risk_tcn, calibrate_conformal, check_physical_baseline, train_tcn(wired), run_progressive_risk(wired) | 9 passed；缺陷修复 3（指示位维度/批内窗长不定/训练梯度断链） |
+| 2026-10-03 | B6 | update_state, plan_disposal, run_safety_state_machine(wired) | 6 passed；升级直达路径缺陷修复 |
+| 2026-10-03 | B7 | discover_device_module, health_check_module, route_device_frames, run_device_bus(wired) | 5 passed；拔插双态切换实证 |

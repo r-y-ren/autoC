@@ -5,9 +5,7 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B6 | update_state, plan_disposal, run_safety_state_machine | run_safety_state_machine wired | 消费 B4/B5 事件 |
-| B7 | discover_device_module, health_check_module, route_device_frames, run_device_bus | run_device_bus wired（拔插双态用例） | R10 模块化架构 |
-| B8 | replay_spectrum_source, capture_spectrum, compute_occupancy, run_spectrum_monitor, sdr_check | sdr_check 双源自检可用 | 依赖 B7 总线 |
+| ▶ B8 | replay_spectrum_source, capture_spectrum, compute_occupancy, run_spectrum_monitor, sdr_check | sdr_check 双源自检可用 | 依赖 B7 总线 |
 | B9 | pipe_events, register_pages, run_ground_station | run_ground_station wired（五页起服务） | 依赖 B8 瀑布流 |
 | B10 | spawn_sitl, render_console, session_control_api, launch_demo_session | launch_demo_session wired（SIH 冒烟） | R9 演示控制台 |
 | B11 | export_metrics_table, draft_revision_notes, compile_documents, build_materials | build_materials wired | 材料 |
