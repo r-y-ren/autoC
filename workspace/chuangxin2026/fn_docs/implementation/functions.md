@@ -10,7 +10,7 @@
 | read_sigmf | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
 | EstopManager | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
 | make_spectrogram | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
-| create_instrument_backend | B2 | stub (10-03) | 桩断言过 | 31106ded |
+| create_instrument_backend | B2 | wired (10-03) | pytest tests/src/create_instrument_backend → 5 passed；mock 对偶实跑+b210 缺驱动提示断言 | fa9bf5f8 |
 | synthesize_style | B3 | stub (10-03) | 桩断言过 | 31106ded |
 | generate_jamming | B3 | stub (10-03) | 桩断言过 | 31106ded |
 | parse_serial_line | B4 | stub (10-03) | 桩断言过 | 31106ded |
