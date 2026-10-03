@@ -5,8 +5,7 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B5 | build_feature_window, predict_risk_tcn, calibrate_conformal, check_physical_baseline, train_tcn, run_progressive_risk | run_progressive_risk wired | 6 件，建议子代理档；train_tcn 需微型数据冒烟 |
-| B6 | update_state, plan_disposal, run_safety_state_machine | run_safety_state_machine wired | 消费 B4/B5 事件 |
+| ▶ B6 | update_state, plan_disposal, run_safety_state_machine | run_safety_state_machine wired | 消费 B4/B5 事件 |
 | B7 | discover_device_module, health_check_module, route_device_frames, run_device_bus | run_device_bus wired（拔插双态用例） | R10 模块化架构 |
 | B8 | replay_spectrum_source, capture_spectrum, compute_occupancy, run_spectrum_monitor, sdr_check | sdr_check 双源自检可用 | 依赖 B7 总线 |
 | B9 | pipe_events, register_pages, run_ground_station | run_ground_station wired（五页起服务） | 依赖 B8 瀑布流 |
