@@ -5,3 +5,5 @@
 |---|---|---|---|
 | 2026-10-03 | B1 | load_config, open_run_dir, append_record, load_model_artifact | pytest tests/shared → 11 passed 2 skipped（B1 四件单测全绿；2 skip=B2/B12 占位） |
 | 2026-10-03 | B2 | connect_sitl, normalize_telemetry, aggregate_imu_features, compute_physical_margins, replay_check(wired), run_ingest(wired), inject_scenario_fault | pytest → 28 passed 1 skipped；run_ingest 实跑 20Hz×30 帧落盘；缺陷修复 4 处（mkdir/def def/state 假值/IMU 时戳） |
+| 2026-10-03 | B3 | estimate_distance_trend, consistency_residual, run_link_consistency(wired) | 7 passed；正常零误报+欺骗检出；远距限界记录 |
+| 2026-10-03 | B4 | build_residuals, cusum_detect, classify_fault, run_sudden_fault(wired) | 6 passed；电机时延≤0.6s+链路事件+正常静默 |

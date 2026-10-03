@@ -5,9 +5,8 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B3 | estimate_distance_trend, consistency_residual, run_link_consistency | run_link_consistency wired | 供 B4 残差通道消费 |
 | B4 | build_residuals, cusum_detect, classify_fault, run_sudden_fault | run_sudden_fault wired | 残差通道含 B3 证据 |
-| B5 | build_feature_window, predict_risk_tcn, calibrate_conformal, check_physical_baseline, train_tcn, run_progressive_risk | run_progressive_risk wired | 6 件，建议子代理档；train_tcn 需微型数据冒烟 |
+| ▶ B5 | build_feature_window, predict_risk_tcn, calibrate_conformal, check_physical_baseline, train_tcn, run_progressive_risk | run_progressive_risk wired | 6 件，建议子代理档；train_tcn 需微型数据冒烟 |
 | B6 | update_state, plan_disposal, run_safety_state_machine | run_safety_state_machine wired | 消费 B4/B5 事件 |
 | B7 | discover_device_module, health_check_module, route_device_frames, run_device_bus | run_device_bus wired（拔插双态用例） | R10 模块化架构 |
 | B8 | replay_spectrum_source, capture_spectrum, compute_occupancy, run_spectrum_monitor, sdr_check | sdr_check 双源自检可用 | 依赖 B7 总线 |
@@ -15,6 +14,8 @@
 | B10 | spawn_sitl, render_console, session_control_api, launch_demo_session | launch_demo_session wired（SIH 冒烟） | R9 演示控制台 |
 | B11 | export_metrics_table, draft_revision_notes, compile_documents, build_materials | build_materials wired | 材料 |
 | B12 | run_eval + 全链路 smoke（smoke_boot 实跑） | eval CLI 实跑出指标分片；sw-boot 绿 | 评估集成收官 |
+
+| （B3/B4 实现期缺陷修复：dB 残差模型重构/CUSUM 零值键污染/距离参考点对齐——均为实现内修正非结构变化） |
 
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |
