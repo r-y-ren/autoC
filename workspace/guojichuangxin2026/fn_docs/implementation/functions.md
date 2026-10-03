@@ -52,3 +52,14 @@
 | draft_revision_notes | B11 | stub | 测试: tests/build_materials/test_draft_revision_notes.py | 本批 |
 | compile_documents | B11 | stub | 继承 doc-compile 验收（docs/build.py 本体） | 本批 |
 | build_materials | B11 | stub | 继承 R8 验收（doc-compile + doc-numbers） | 本批 |
+| archive_run | B13 | stub | 测试: tests/shared/test_archive_run.py | — |
+| batch_eval | B13 | stub | 继承 R11 验收（runs≥90 归档+data_source 标注） | — |
+| probe_px4_env | B13 | stub | 测试: tests/batch_eval/test_probe_px4_env.py | — |
+| boot_selfcheck | B14 | stub | 继承 R13 验收（三步 PASS） | — |
+| probe_service | B14 | stub | 测试: tests/boot_selfcheck/test_probe_service.py | — |
+| bench_edge | B15 | stub | 继承 R14 验收（dry-run PASS） | — |
+| calibrate_usrp | B15 | stub | 继承 R14 验收（dry-run 参考表） | — |
+| build_package | B16 | stub | 继承 R15 验收（干净 venv pip install+demo 起） | — |
+| write_user_manual | B16 | stub | 测试: tests/build_package/test_write_user_manual.py | — |
+| soak_test | B17 | stub | 继承 R16 验收（--quick 微缩+留痕） | — |
+| make_portable_bundle | B17 | stub | 继承 R16 验收（tar 结构+SHA256） | — |

@@ -47,12 +47,23 @@
   - discover_device_module
   - health_check_module
   - route_device_frames
+- batch_eval ← R11
+  - probe_px4_env
+- boot_selfcheck ← R13
+  - probe_service
+- bench_edge ← R14
+- calibrate_usrp ← R14
+- build_package ← R15
+  - write_user_manual
+- soak_test ← R16
+- make_portable_bundle ← R16
 - load_config
 - open_run_dir
 - append_record
 - load_model_artifact
 - run_eval
 - inject_scenario_fault
+- archive_run
 
 ## 需求覆盖矩阵
 | 需求 | 顶层函数 |
@@ -67,6 +78,12 @@
 | R8 | build_materials |
 | R9 | launch_demo_session |
 | R10 | run_device_bus |
+| R11 | batch_eval |
+| R12 | run_eval |
+| R13 | boot_selfcheck |
+| R14 | bench_edge |
+| R15 | build_package |
+| R16 | soak_test |
 
 ## 共享函数（shared：多顶层共用；矩阵挂全部受益需求）
 - **load_config**（调用方：程序入口, run_ingest, run_progressive_risk, run_sudden_fault, run_link_consistency, run_spectrum_monitor, run_safety_state_machine, run_ground_station, build_materials, launch_demo_session, run_device_bus, run_eval, train_tcn, replay_check, sdr_check）
@@ -89,11 +106,17 @@
   - 签名意图：输入: 模型路径, 期望特征名清单 / 输出: 模型对象 / 错误: 文件缺失/特征不匹配抛 ModelArtifactError
   - tested 策略：自有单测
   - 核验命令：测试: tests/shared/test_load_model_artifact.py
-- **run_eval**（调用方：程序入口）
+- **run_eval**（调用方：程序入口, batch_eval）
   - 职责：批量评估执行器（R2/R3/R4 验收命令本体）——按场景名与次数循环：open_run_dir → run_ingest（inject_scenario_fault 注入）→ 风险管线 → 按失控判据计时出指标（提前量 P10/中位数/达标率、确认时延 P90、类型正确率、误报数）→ append_record 汇总；输出每场景指标汇总表并落运行目录。只写运行目录分片，不写战役顶层 metrics.json（那是 merge_metrics 的领地）。
+  - [改造 10-03 演进轮] R12 口径增量：manifest 记 inject_at_s；突发时延=确认−inject_at；hit_rate 仅渐进场景输出。R11 通道增量：接受 model/quantiles 注入（模型缺席自动回退降级通道并在分片 note 标 degraded）；分片附 data_source（px4|synthetic）。CLI 壳 eval.py 不变。
   - 签名意图：输入: 场景名, 次数, 可选种子清单 / 输出: 指标汇总 dict + 运行目录清单 / 错误: 场景未定义/仿真启动失败即报错退出（非零退出码）
   - tested 策略：自有单测（回放模式跑通最小次数）
   - 核验命令：继承 R2/R3/R4 验收方式（eval CLI 本体）
+- **archive_run**（调用方：batch_eval, boot_selfcheck, soak_test, run_eval）
+  - 职责：把 fn_work/runs 下的运行目录整体归档到 fn_docs/results/<场景>/<目录名>/（含 manifest/metrics/events/frames），保持只拷不移（原件留在工程运行区），返回归档路径；同名冲突加序号；归档清单回写 manifest。
+  - 签名意图：输入: 运行目录路径, 归档根（缺省 fn_docs/results） / 输出: 归档目标路径 / 错误: 源目录缺失抛 FileNotFoundError
+  - tested 策略：自有单测
+  - 核验命令：测试: tests/shared/test_archive_run.py
 - **inject_scenario_fault**（调用方：run_eval, session_control_api）
   - 职责：按场景定义在指定飞行阶段注入故障——低电量+逆风（PX4 电池/风参数）、电机故障（PX4 failure injection 命令）、链路退化（遥测丢弃/延迟注入）；注入时刻与参数记录进运行清单。
   - 签名意图：输入: MAVLink 控制连接, 场景名, 强度档（低/中/高）, 注入时机 / 输出: 注入回执 dict / 错误: 命令拒绝/超时抛 InjectError
@@ -397,3 +420,92 @@
 - 矩阵反向+树：全部函数经调用链可达顶层入口 ✓（程序入口：十个顶层函数 + run_eval / replay_check / sdr_check / train_tcn；shared 六件均被多顶层引用；无死代码）
 - 单一功能转变：逐函数复核 ✓（双源（capture/replay）各自单一、总线三件（发现/健康/路由）各自单一）
 - 函数总数 48 > 20 预警线：**已预警并命令实测**（计数方式：概览树函数行数=功能块与共享节的函数条目数，两者一致才算数）——成因=10 需求口的系统级工程，其中 R10 模块化（4 函数）与 R5 双源（+1）为用户本轮明确要求的即插即测能力，不在可砍之列。门口裁决：接受 48 或指定收缩项。
+
+
+## 功能块 batch_eval ← R11
+（R11：真数据面+批量跑批——PX4 工具链探测（用户 sudo 安装后可用），三场景×N 次批量，产物归档 fn_docs/results，模型经 train_tcn 重训接入。）
+
+- **batch_eval** [L0|新增]
+  - 职责：跨场景批量评估总控——probe_px4_env 定数据面（px4 就绪→spawn_sitl px4 模式；否则 synthetic 兜底并标注）；保证风险模型工件存在（缺则调 train_tcn 合成重训，标 synthetic-trained）；逐场景调 run_eval（注入模型与口径参数）×N 次；逐运行 archive_run 归档；产快照 JSON（runs 数、data_source、按场景口径分列的汇总）写 fn_docs/results/。
+  - 签名意图：输入: scenarios 清单（缺省三场景）, runs_per_scenario（缺省 30）, config / 输出: 快照 dict+归档路径清单 / 错误: PX4 模式拉起失败自动降级 synthetic 并在快照 note 记原因（不中断批量）
+  - 调用方：程序入口
+  - tested 策略：自有单测（synthetic 模式 1×1 微量跑通+归档断言）
+  - 核验命令：继承 R11 验收方式（runs≥90 分片落 fn_docs/results；事件带共形区间；data_source 标注）
+  - **probe_px4_env** [L1|新增]
+    - 职责：探测 PX4 真跑条件——必需命令（make/cmake/arm 工具链）与 sitl.px4_dir 源码树是否可用；输出 {ready, missing:[...], px4_dir}；不做安装（安装属用户 sudo 动作）。
+    - 签名意图：输入: config（sitl 节） / 输出: 就绪报告 dict / 错误: 无（探测失败=not ready）
+    - 调用方：batch_eval
+    - tested 策略：自有单测（缺 px4_dir→not ready；假目录+PATH 注入→ready 路径）
+    - 核验命令：测试: tests/batch_eval/test_probe_px4_env.py
+
+## 功能块 boot_selfcheck ← R13
+（R13：一键自检升三步真验收——合成会话起→服务探活→回放探活。）
+
+- **boot_selfcheck** [L0|新增]
+  - 职责：sw-boot 验收本体三步——①launch_demo_session 起一个短合成会话并等到首帧/首事件；②probe_service 探活平台服务（起 uvicorn 线程后 GET /api/state）；③回放探活（GET /api/runs 对刚归档运行可用，或 frames API 返回非空）；三步全过输出三项 PASS 与汇总退出码；smoke_boot.py 为其 CLI 壳。
+  - 签名意图：输入: 无（读配置；端口可配） / 输出: {step1, step2, step3, pass} 与退出码 0/1 / 错误: 各步失败记入报告不抛
+  - 调用方：程序入口
+  - tested 策略：自有单测（三步微缩版）
+  - 核验命令：继承 R13 验收方式（smoke_boot 单命令三 PASS）
+  - **probe_service** [L1|新增]
+    - 职责：对 localhost 平台服务发 GET 探活（/api/state 与 /api/runs），带重试与超时；返回可达性与延迟 ms。
+    - 签名意图：输入: base_url, 超时, 重试次数 / 输出: {reachable, latency_ms, endpoints} / 错误: 无（不可达=reachable False）
+    - 调用方：boot_selfcheck
+    - tested 策略：自有单测（本地起服务线程探活+拒绝端口反例）
+    - 核验命令：测试: tests/boot_selfcheck/test_probe_service.py
+
+## 功能块 bench_edge ← R14
+（R14 设备就绪：Jetson 侧时延基准——真机执行列 manual，脚本侧 dry-run 自测过。）
+
+- **bench_edge** [L0|新增]
+  - 职责：边缘推理时延基准——dry-run 模式在本机以合成帧测 predict_risk_tcn 端到端 P50/P95（标口径 host-dryrun）；deploy 模式输出 Jetson 部署清单与执行脚本（rsync 包+运行命令），真机结果回读并入 metrics 分片（真机项 manual：设备到位执行）。
+  - 签名意图：输入: mode（dryrun|deploy）, config / 输出: 基准报告 dict（dryrun）或部署指令清单（deploy） / 错误: deploy 无目标配置抛 BenchError 提示设备待接入
+  - 调用方：程序入口
+  - tested 策略：自有单测（dryrun 出有限 P50/P95）
+  - 核验命令：继承 R14 验收方式（dry-run 自检 PASS；真机列 manual）
+
+## 功能块 calibrate_usrp ← R14
+（R14 设备就绪：B210 标定——增益/底噪/频轴核对，dry-run 用回放谱自测。）
+
+- **calibrate_usrp** [L0|新增]
+  - 职责：B210 标定流水——设备在场：扫增益阶梯记录底噪曲线与频轴偏差，产标定表（JSON，capture_spectrum 的 cal 参数消费）；设备缺席：--dry-run 用回放谱走同一流水出参考表并标注 replay；标定表落 fn_docs/results/calibration/。
+  - 签名意图：输入: mode（dryrun|device）, config / 输出: 标定表路径+摘要 / 错误: device 模式无 uhd 抛 CalibError（提示设备待接入）
+  - 调用方：程序入口
+  - tested 策略：自有单测（dryrun 参考表）
+  - 核验命令：继承 R14 验收方式（dry-run 自检 PASS）
+
+## 功能块 build_package ← R15
+（R15 打包与安装：pyproject、pip 可装、用户手册。）
+
+- **build_package** [L0|新增]
+  - 职责：产 pyproject.toml（src 布局映射+入口点 console_scripts：demo/eval/replay-check/sdr-check）并构建 wheel；装后自测——干净 venv pip install 轮子后以入口点起 demo.sh 等价服务探活；write_user_manual 产零术语手册（演示操作/安装/故障排查三节）随包分发。
+  - 签名意图：输入: out_dir / 输出: wheel 路径+自测报告 / 错误: 构建失败抛 BuildError（贴 stderr 摘要）
+  - 调用方：程序入口
+  - tested 策略：自有单测（pyproject 生成+手册内容断言；构建走 subprocess 受 --skip-build 保护）
+  - 核验命令：继承 R15 验收方式（干净 venv pip install 后 demo 起服务）
+  - **write_user_manual** [L1|新增]
+    - 职责：生成零术语用户手册 Markdown（安装/一键演示/控制台操作/常见故障四节，中文），内容从 README 项目功能节派生+安装实测步骤；不做排版美化。
+    - 签名意图：输入: out_path / 输出: 手册路径 / 错误: 无
+    - 调用方：build_package
+    - tested 策略：自有单测（四节齐全断言）
+    - 核验命令：测试: tests/build_package/test_write_user_manual.py
+
+## 功能块 soak_test ← R16
+（R16 长跑稳定性：连续会话+健康记录。）
+
+- **soak_test** [L0|新增]
+  - 职责：长跑稳定性——循环起 launch_demo_session（时长可配，默认连跑至 1h：会话串行直至总时长到），每会话记录帧数/事件数/线程存活/RSS 采样；结束产健康报告（会话数/总帧/内存曲线摘要/异常列表）入 fn_docs/results/soak/；--quick 模式压缩总时长供测试。
+  - 签名意图：输入: duration_s（缺省 3600）, quick / 输出: 健康报告 dict+路径 / 错误: 单会话异常计入报告继续下一会话（崩溃率>50% 提前终止并标注）
+  - 调用方：程序入口
+  - tested 策略：自有单测（--quick 微缩长跑）
+  - 核验命令：继承 R16 验收方式（长跑留痕入 fn_docs/results）
+
+## 功能块 make_portable_bundle ← R16
+（R16 免 root 便携交付包：tar 布局自含环境+数据+手册，解压即跑。）
+
+- **make_portable_bundle** [L0|新增]
+  - 职责：组装便携包——复制 venv（可迁移前缀修正脚本随包）+源码+fixtures+手册+入口脚本（portable_demo.sh：解压后设置 VIRTUAL_ENV 与 PATH 再 exec demo 链）；产 .tar.gz 与 SHA256SUMS；目标机口径 Linux x86_64；不做 ISO（需 root，口径注记于包内 README）。
+  - 签名意图：输入: out_dir / 输出: 包路径+SHA256 / 错误: 环境不可复制（venv 缺）抛 BundleError
+  - 调用方：程序入口
+  - tested 策略：自有单测（tar 结构与 SHA 校验，不解压目标机）
+  - 核验命令：继承 R16 验收方式（解压即跑属目标机人工项，包结构与校验和命令化）
