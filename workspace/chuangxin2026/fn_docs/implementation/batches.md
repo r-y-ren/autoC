@@ -12,7 +12,7 @@
 | B5 | compute_spectrum_stats → record_run_streams | record_run_streams wired：合成三路 60s 落盘+覆盖率≥99% | |
 | B6 | plot_triple_curves → build_report | build_report wired：合成 run 夹具→report.md+三图 | |
 | B7 | calibrate_power(并批), plan_steps, check_failure → execute_scenario | execute_scenario wired：mock+合成链路双卡实跑（国标卡失效电平+对照不误报） | R5 主验收 |
-| ▶ B8 | index_dataset | wired：夹具目录（含一条坏录制）校验+索引 | |
+| B8 | index_dataset | wired：夹具目录（含一条坏录制）校验+索引 | |
 | B9 | grouped_cv_split → train_classifier | wired：小合成数据集端到端（分组 CV 报告；本地 CPU 路径） | /toolbox 远程路径另测 |
 | B10 | predict_style | wired：合成模型+录制预测与真值并列 | |
 | B11 | run_demo | wired：quick 合成路径一条命令 | |
