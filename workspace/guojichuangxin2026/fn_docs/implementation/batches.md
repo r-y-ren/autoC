@@ -5,8 +5,7 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| B2 | connect_sitl, normalize_telemetry, aggregate_imu_features, compute_physical_margins, replay_check, run_ingest, inject_scenario_fault | run_ingest wired（SITL 短飞实跑）+ replay_check 可用 | 7 件，建议子代理档 |
-| B3 | estimate_distance_trend, consistency_residual, run_link_consistency | run_link_consistency wired | 供 B4 残差通道消费 |
+| ▶ B3 | estimate_distance_trend, consistency_residual, run_link_consistency | run_link_consistency wired | 供 B4 残差通道消费 |
 | B4 | build_residuals, cusum_detect, classify_fault, run_sudden_fault | run_sudden_fault wired | 残差通道含 B3 证据 |
 | B5 | build_feature_window, predict_risk_tcn, calibrate_conformal, check_physical_baseline, train_tcn, run_progressive_risk | run_progressive_risk wired | 6 件，建议子代理档；train_tcn 需微型数据冒烟 |
 | B6 | update_state, plan_disposal, run_safety_state_machine | run_safety_state_machine wired | 消费 B4/B5 事件 |
