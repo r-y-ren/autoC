@@ -15,7 +15,7 @@
 | B8 | index_dataset | wired：夹具目录（含一条坏录制）校验+索引 | |
 | B9 | grouped_cv_split → train_classifier | wired：小合成数据集端到端（分组 CV 报告；本地 CPU 路径） | /toolbox 远程路径另测 |
 | B10 | predict_style | wired：合成模型+录制预测与真值并列 | |
-| B11 | run_demo | wired：quick 合成路径一条命令 | |
+| ▶ B11 | run_demo | wired：quick 合成路径一条命令 | |
 | B12 | serve_console | wired：selftest 四点（TestClient 无头） | 浏览器零代码走查=人工项 man-ui-demo |
 | B13 | bridge_to_sitl [P1] | wired：mock SITL 注入台阶对应 | 预研深度可裁 |
 | B14 | animate_link_state [P1] | 上游覆盖（serve_console 联动判据） | 非阻塞，有余力做 |

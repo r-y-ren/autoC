@@ -24,8 +24,8 @@
 | check_failure | B7 | tested (10-03) | 同批 8 passed（四分支） | f413bed5 |
 | execute_scenario | B7 | wired (10-03) | 同批 8 passed——国标卡失效电平+对照不误报端到端 | f413bed5 |
 | index_dataset | B8 | wired (10-03) | pytest tests/src/index_dataset → 1 passed | 7c9c19d0 |
-| grouped_cv_split | B9 | stub (10-03) | 桩断言过 | 31106ded |
-| train_classifier | B9 | stub (10-03) | 桩断言过 | 31106ded |
+| grouped_cv_split | B9 | tested (10-03) | pytest tests/src/train_classifier → 3 passed | fc810971 |
+| train_classifier | B9 | wired (10-03) | 同批 3 passed——8 录制 4 组 F1≥0.9+模型被 predictor 消费 | fc810971 |
 | predict_style | B10 | wired (10-03) | pytest tests/src/predict_style → 1 passed | 7c9c19d0 |
 | run_demo | B11 | stub (10-03) | 桩断言过 | 31106ded |
 | serve_console | B12 | stub (10-03) | 桩断言过 | 31106ded |

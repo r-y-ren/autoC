@@ -12,3 +12,4 @@
 | 10-03 | B6 | plot_triple_curves, build_report（steps.jsonl 联表=JSR 轴；缺表时间轴兜底） | 4 单测绿；三图产出+无步进兜底+报告含固定声明与失效电平行 |
 | 10-03 | B7 | calibrate_power(并批补洞)+plan_steps+check_failure+execute_scenario；夹具判据修正+增益排序 bug 修复 | 10 单测绿（executor 8+calibrate 2）；国标卡实测出失效电平、对照卡零误报、报告自动生成 |
 | 10-03 | B8+B10 | index_dataset, predict_style（npz 模型契约键与训练侧一致；修测试 fftshift 半区权重笔误） | 2 单测绿 |
+| 10-03 | B9 | grouped_cv_split, train_classifier（本地 softmax 降级路径；toolbox 派发占位） | 3 单测绿；分组 CV 同组同侧、端到端 F1≥0.9、npz 模型跨模块契约 |
