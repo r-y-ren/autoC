@@ -5,7 +5,6 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B1 | load_config, open_run_dir, append_record, load_model_artifact | 四件 tested（自有单测绿） | 共享地基，无外部依赖 |
 | B2 | connect_sitl, normalize_telemetry, aggregate_imu_features, compute_physical_margins, replay_check, run_ingest, inject_scenario_fault | run_ingest wired（SITL 短飞实跑）+ replay_check 可用 | 7 件，建议子代理档 |
 | B3 | estimate_distance_trend, consistency_residual, run_link_consistency | run_link_consistency wired | 供 B4 残差通道消费 |
 | B4 | build_residuals, cusum_detect, classify_fault, run_sudden_fault | run_sudden_fault wired | 残差通道含 B3 证据 |
@@ -21,3 +20,5 @@
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |
 |---|---|---|
+| 2026-10-03 | 签名微调 | open_run_dir 增可选 config_snapshot 参数（运行清单落配置快照） |
+| 2026-10-03 | 预授权 | 用户字面授权"剩下的批次一并完成"→批间门不停人，核验照跑照贴 |

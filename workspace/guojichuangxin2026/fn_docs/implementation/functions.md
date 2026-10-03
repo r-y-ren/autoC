@@ -4,10 +4,10 @@
 
 | 函数 | 批次 | 状态(日期) | 核验命令+摘要 | commit |
 |---|---|---|---|---|
-| load_config | B1 | stub | 测试: tests/shared/test_load_config.py | — |
-| open_run_dir | B1 | stub | 测试: tests/shared/test_open_run_dir.py | — |
-| append_record | B1 | stub | 测试: tests/shared/test_append_record.py | — |
-| load_model_artifact | B1 | stub | 测试: tests/shared/test_load_model_artifact.py | — |
+| load_config | B1 | tested | 测试: tests/shared/test_load_config.py → 4 passed | — |
+| open_run_dir | B1 | tested | 测试: tests/shared/test_open_run_dir.py → 2 passed | — |
+| append_record | B1 | tested | 测试: tests/shared/test_append_record.py → 2 passed | — |
+| load_model_artifact | B1 | tested | 测试: tests/shared/test_load_model_artifact.py → 3 passed | — |
 | inject_scenario_fault | B2 | stub | 测试: tests/shared/test_inject_scenario_fault.py | — |
 | run_eval | B12 | stub | 继承 R2/R3/R4 验收（eval CLI 本体） | — |
 | connect_sitl | B2 | stub | 上游覆盖: run_ingest | — |
