@@ -7,3 +7,4 @@
 | 2026-10-03 | 全量线:scaffold | fn-scaffold 完成（用户显式过门指令）：fn_work/ 骨架落盘——src/ 十一包（十顶层+shared）48 桩+tests/ 镜像 48 占位（skip）+CLI 入口 8 件+pytest.ini/requirements/conftest；本阶段零阶段外动作 | compileall 全绿；桩标记 48=责任文档 48=pytest 收集 48 三方对齐；fn-doc-lint 仍仅 3 错（implementation 未到阶段）；门：停等 /fn-implement 或修订 |
 | 2026-10-03 | 全量线:implement | fn-implement 进入（用户显式过门指令，技能 2.0.1）：implementation 三文档落盘——12 批次垂直切片（B1 共享地基→B12 评估集成）+48 行函数清单（全 stub）+空历史表；进入检查=责任文档在/桩在位/本会话三方对齐无漂移 | fn-doc-lint 0 错 0 警（四层文档首次全绿）；批表门口：等用户批准批次计划+选执行档位 |
 | 2026-10-03 | 全量线:implement | 12 批全部完成：48/48 函数 wired/tested，91 passed 0 skipped；缺陷修复全程 20+ 处如实留痕 | fn-check 三件套/compileall/lint 终检输出见收官 commit |
+| 2026-10-03 | 全量线:analyze | fn-analyze 首轮（用户三问：完善度/补充开发/产品完整性）：快照落 fn_docs/results/（motor_fail×2 留档）；三轴出三缺陷（时延口径/命中率口径混杂/数据落点漂移）+两缺口（批量跑批/设备实测）；提案 P1-P5 登记 registry（报告 2026-10-03-d090a6.md） | fn-score 首轮 pending=5 无历史可打 |
