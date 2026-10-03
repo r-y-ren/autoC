@@ -15,3 +15,4 @@
 | 2026-10-03 | B10 | spawn_sitl, render_console, session_control_api, launch_demo_session(wired) | 5 passed；会话端到端冒烟（tee 分流缺陷修复） |
 | 2026-10-03 | B11 | export_metrics_table, draft_revision_notes, compile_documents(wired), build_materials(wired) | 5 passed；端到端两运行目录→三件套产物 |
 | 2026-10-03 | B12 | run_eval(wired)+全链 smoke | 2 passed；motor_fail×2/lowbat×1 批量指标分片；smoke_boot 桩清零 |
+| 2026-10-03 | B13 | archive_run(t), run_eval(wired 改造复走), batch_eval(wired), probe_px4_env(t) | 全套 98 passed；confirm=注入→首确认 0.5s 实测；纬度 cos 误乘 5 处修复 | 
