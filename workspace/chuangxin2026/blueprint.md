@@ -87,21 +87,21 @@ milestones:
 acceptance:
   checklist:
     - {id: sw-boot, category: software, item: 一键启动冒烟（gen dry-run+DUT 空跑+远程算力连通）, method: 自动,
-       cmd: "python workspace/chuangxin2026/software/smoke_boot.py"}
+       cmd: "python workspace/chuangxin2026/fn_work/smoke_boot.py"}
     - {id: sw-test, category: software, item: 测试套件全过, method: 自动,
-       cmd: "python -m pytest workspace/chuangxin2026/software/tests -q"}
+       cmd: "python -m pytest workspace/chuangxin2026/fn_work/tests -q"}
     - {id: sw-loop, category: software, item: 注入-测量闭环出三元曲线（R1–R4）, method: 自动,
-       cmd: "python workspace/chuangxin2026/software/scripts/run_scenario.py --scenario scenarios/smoke_loop.yaml"}
+       cmd: "python workspace/chuangxin2026/fn_work/scripts/run_scenario.py --scenario scenarios/smoke_loop.yaml"}
     - {id: sw-gb42590, category: software, item: GB 42590 §5.11 执行器产出失效电平表且无干扰对照不误报（R5）, method: 自动,
-       cmd: "python workspace/chuangxin2026/software/scripts/run_scenario.py --scenario scenarios/gb42590_noise.yaml"}
+       cmd: "python workspace/chuangxin2026/fn_work/scripts/run_scenario.py --scenario scenarios/gb42590_noise.yaml"}
     - {id: sw-dataset, category: software, item: SigMF 数据集校验+分组索引（R6）, method: 自动,
-       cmd: "python workspace/chuangxin2026/software/scripts/check_dataset.py runs/"}
+       cmd: "python workspace/chuangxin2026/fn_work/scripts/check_dataset.py runs/"}
     - {id: sw-ai, category: software, item: AI 识别端到端（训练→分组 CV→预测并列真值）（R7）, method: 自动,
-       cmd: "python workspace/chuangxin2026/software/scripts/eval_jamming_cls.py"}
+       cmd: "python workspace/chuangxin2026/fn_work/scripts/eval_jamming_cls.py"}
     - {id: sw-demo, category: software, item: 一键演示报告（R8，数字可溯源到本 run）, method: 自动,
-       cmd: "python workspace/chuangxin2026/software/scripts/demo.py --quick"}
+       cmd: "python workspace/chuangxin2026/fn_work/scripts/demo.py --quick"}
     - {id: sw-ui-boot, category: software, item: Web 操控台无头自检（服务起/健康检查/WS 推送/急停生效）（R11–R13）, method: 自动,
-       cmd: "python workspace/chuangxin2026/software/ui_selftest.py"}
+       cmd: "python workspace/chuangxin2026/fn_work/ui_selftest.py"}
     - {id: hw-fw, category: hardware, item: ESP32/NRF24 固件编译烧录+串口 JSON 上报, method: 自动,
        cmd: "python3 workspace/chuangxin2026/hardware/firmware/build_all.py"}
     - {id: doc-mid, category: document, item: STITP 中期材料编译通过, method: 自动,

@@ -7,9 +7,9 @@
 | 交付物 | 来源 | 格式 | 消费方 |
 |---|---|---|---|
 | 性能数字 | `workspace/chuangxin2026/metrics.json`（merge_metrics 唯一入口） | JSON 键值 | 中期/结题报告技术节、软著材料、创新大赛 2027 材料 |
-| 图表素材 | `software/runs/<时间戳>/figs/`（三元曲线/混淆矩阵/瀑布图 PNG） | PNG（命名 `m<里程碑>-<内容>.png`） | 报告、PPT |
-| 结题证据 | `software/runs/<时间戳>/report.md` + `dataset_index.json` | Markdown/JSON | 结题报告附录（A 类"实物并调测"佐证） |
-| 操控台截图 | `software/runs/<时间戳>/figs/ui-<内容>.png`（操控台在线导出或演示时截取） | PNG | 中期/结题报告的"零代码演示"配图、软著材料界面页 |
+| 图表素材 | `fn_work/runs/<时间戳>/figs/`（三元曲线/混淆矩阵/瀑布图 PNG） | PNG（命名 `m<里程碑>-<内容>.png`） | 报告、PPT |
+| 结题证据 | `fn_work/runs/<时间戳>/report.md` + `dataset_index.json` | Markdown/JSON | 结题报告附录（A 类"实物并调测"佐证） |
+| 操控台截图 | `fn_work/runs/<时间戳>/figs/ui-<内容>.png`（操控台在线导出或演示时截取） | PNG | 中期/结题报告的"零代码演示"配图、软著材料界面页 |
 
 ## 2. metrics 键清单（m0 冻结，增删须 JOURNAL 留痕）
 
