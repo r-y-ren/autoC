@@ -2,7 +2,7 @@
 > 由 fn-divide 产出与独占更新；fn-implement 只读。进度与状态见 implementation/。
 > 职责字段是**重写规约**：凭职责详述 + 签名意图（输入/输出），必须能完美复现该函数功能。
 > ⚠ 实现期发现结构性变化（函数增/删/拆/并/职责或调用关系变化）必须停下回本阶段改本文档。
-> ⚠ 函数总数 34 > 20 预警线：本任务为 8 需求口的系统级工程（数据/双通道模型/SDR/状态机/Web/材料），非单一算法任务；收缩建议见文末，门口裁决。
+> ⚠ 函数总数 38 > 20 预警线：本任务为 9 需求口的系统级工程（数据/双通道模型/SDR/状态机/Web/演示控制台/材料），非单一算法任务；收缩建议见文末，门口裁决。
 
 ## 结构概览（纯结构，不带职责）
 - run_ingest ← R1
@@ -34,6 +34,10 @@
 - run_ground_station ← R7
   - pipe_events
   - register_pages
+- launch_demo_session ← R9
+  - spawn_sitl
+  - session_control_api
+  - render_console
 - build_materials ← R8
   - export_metrics_table
   - compile_documents
@@ -56,19 +60,20 @@
 | R6 | run_safety_state_machine |
 | R7 | run_ground_station |
 | R8 | build_materials |
+| R9 | launch_demo_session |
 
 ## 共享函数（shared：多顶层共用；矩阵挂全部受益需求）
-- **load_config**（调用方：程序入口, run_ingest, run_progressive_risk, run_sudden_fault, run_link_consistency, run_spectrum_monitor, run_safety_state_machine, run_ground_station, build_materials, run_eval, train_tcn, replay_check, sdr_check）
+- **load_config**（调用方：程序入口, run_ingest, run_progressive_risk, run_sudden_fault, run_link_consistency, run_spectrum_monitor, run_safety_state_machine, run_ground_station, build_materials, run_eval, train_tcn, replay_check, sdr_check, launch_demo_session）
   - 职责：读取场景定义、阈值、模型路径、运行参数的 YAML 配置，做模式校验（缺字段/类型错/取值域越界即报错），返回冻结配置对象；默认值集中在默认配置文件，不散落代码。
   - 签名意图：输入: 配置文件路径（可选，缺省读包内默认） / 输出: 冻结配置对象（dataclass 树） / 错误: 配置缺失或校验失败抛 ConfigError 并指明字段
   - tested 策略：自有单测
   - 核验命令：测试: tests/test_load_config.py
-- **open_run_dir**（调用方：run_eval, run_ingest, run_spectrum_monitor）
+- **open_run_dir**（调用方：run_eval, run_ingest, run_spectrum_monitor, launch_demo_session）
   - 职责：创建带时间戳与场景标签的运行目录，落运行清单（配置快照+随机种子+机器信息），返回目录路径句柄；同秒冲突自动加序号。
   - 签名意图：输入: 根目录, 场景名, 种子 / 输出: 运行目录路径 / 错误: 根目录不可写抛 IOError
   - tested 策略：自有单测
   - 核验命令：测试: tests/test_open_run_dir.py
-- **append_record**（调用方：run_ingest, run_progressive_risk, run_sudden_fault, run_spectrum_monitor, run_safety_state_machine, run_eval）
+- **append_record**（调用方：run_ingest, run_progressive_risk, run_sudden_fault, run_spectrum_monitor, run_safety_state_machine, run_eval, launch_demo_session）
   - 职责：把一条事件或度量记录以 JSON 行追加写入运行目录的 events.jsonl / metrics 分片文件，保证进程内写序；度量键带场景与时间戳前缀。
   - 签名意图：输入: 运行目录, 记录类型（event|metric）, 载荷 dict / 输出: 无（副作用=落盘） / 错误: 磁盘失败抛 IOError
   - tested 策略：自有单测
@@ -83,7 +88,7 @@
   - 签名意图：输入: 场景名, 次数, 可选种子清单 / 输出: 指标汇总 dict + 运行目录清单 / 错误: 场景未定义/仿真启动失败即报错退出（非零退出码）
   - tested 策略：自有单测（回放模式跑通最小次数）
   - 核验命令：继承 R2/R3/R4 验收方式（demo.eval 本体）
-- **inject_scenario_fault**（调用方：run_eval）
+- **inject_scenario_fault**（调用方：run_eval, session_control_api）
   - 职责：按场景定义在指定飞行阶段注入故障——低电量+逆风（PX4 电池参数/风参数）、电机故障（PX4 failure injection 命令）、链路退化（遥测丢弃/延迟注入）；注入时刻与参数记录进运行清单。
   - 签名意图：输入: MAVLink 控制连接, 场景名, 强度档（低/中/高）, 注入时机 / 输出: 注入回执 dict / 错误: 命令拒绝/超时抛 InjectError
   - tested 策略：自有单测（SITL 起飞注入一次）
@@ -270,14 +275,14 @@
     - 核验命令：测试: tests/test_plan_disposal.py
 
 ## 功能块 run_ground_station ← R7
-（R7：FastAPI+WebSocket 单机服务——仪表盘/事件时间线/频谱瀑布/回放四页，一键启动断网可用。）
+（R7：FastAPI+WebSocket 单机服务——仪表盘/事件时间线/频谱瀑布/回放四页+控制台页，一键启动断网可用。）
 
 - **run_ground_station** [L0|新增]
-  - 职责：平台主入口——组装 FastAPI app（register_pages 挂四页路由，pipe_events 接实时流），uvicorn 起服务（localhost 可配端口），提供静态资源与运行目录索引；`./demo.sh` 与 smoke_boot 的服务端本体。
+  - 职责：平台主入口——组装 FastAPI app（register_pages 挂五页路由含控制台页与 session_control_api 控制端点，pipe_events 接实时流），uvicorn 起服务（localhost 可配端口），提供静态资源与运行目录索引；`./demo.sh` 与 smoke_boot 的服务端本体；浏览器打开即进入控制台页（演示主入口）。
   - 签名意图：输入: 配置（端口/运行目录根）, 可选实时流源 / 输出: 运行中的服务（阻塞） / 错误: 端口占用抛 SystemExit 带提示
   - 调用方：程序入口
   - tested 策略：上游覆盖: sw-boot 验收
-  - 核验命令：继承 R7 验收方式（`./demo.sh` 一键启动四页可看）
+  - 核验命令：继承 R7 验收方式（`./demo.sh` 一键启动五页可看）
   - **pipe_events** [L1|新增]
     - 职责：实时流分发——订阅 run_ingest/双通道事件/状态轨迹/频谱帧的发布端，维护 WebSocket 订阅者集合并广播（JSON 序列化，背压丢帧保序策略：事件全发、频谱帧可抽稀）。
     - 签名意图：输入: 各发布端回调注册, WebSocket 连接管理 / 输出: 无（副作用=广播） / 错误: 单订阅者异常剔除不影响其余
@@ -285,10 +290,10 @@
     - tested 策略：自有单测（本地 WebSocket 客户端收帧）
     - 核验命令：测试: tests/test_pipe_events.py
   - **register_pages** [L1|新增]
-    - 职责：挂载四个页面路由与 API——仪表盘（风险等级/剩余安全时间/能源实时）、事件时间线（含证据链展开）、频谱瀑布（历史环+实时帧）、回放页（选运行目录→时间线重放）；页面模板与静态资源随包分发，无外网依赖。
+    - 职责：挂载五个页面路由与 API——仪表盘（风险等级/剩余安全时间/能源实时）、事件时间线（含证据链展开）、频谱瀑布（历史环+实时帧）、回放页（选运行目录→时间线重放）、控制台页（render_console 的载体，含 session_control_api 控制端点挂载）；页面模板与静态资源随包分发，无外网依赖。
     - 签名意图：输入: FastAPI app, 运行目录根 / 输出: 无（副作用=路由注册） / 错误: 模板缺失启动即报
     - 调用方：run_ground_station
-    - tested 策略：自有单测（四路由 GET 200 + 关键元素存在）
+    - tested 策略：自有单测（五路由 GET 200 + 关键元素存在）
     - 核验命令：测试: tests/test_register_pages.py
 
 ## 功能块 build_materials ← R8
@@ -319,8 +324,36 @@
     - tested 策略：上游覆盖: build_materials
     - 核验命令：继承 doc-compile 验收方式（docs/build.py 本体）
 
+## 功能块 launch_demo_session ← R9
+（R9：演示控制台后端——演示会话全流程 UI 化：选场景一键起飞、飞行中注入故障/调强度、中止归档、时间轴回放；演示零终端零代码。2D 指挥中心风；手动接管模式为 P1 范围外。）
+
+- **launch_demo_session** [L0|新增]
+  - 职责：演示会话编排——从控制台请求发起一次演示：open_run_dir 建运行目录 → spawn_sitl 按场景拉起仿真 → 装配 run_ingest 与风险管线/状态机（复用各顶层函数）→ 事件流接 pipe_events → 返回会话句柄（会话表：id→句柄/运行目录/控制端点）；会话中止或正常结束时归档运行清单（append_record）；同机多会话互不串流。
+  - 签名意图：输入: 会话请求（场景名/强度档/可选种子）, 配置 / 输出: 会话句柄（id, 运行目录, 控制端点） / 错误: 场景未定义/SITL 拉起失败抛 SessionError（含可读原因给 UI 展示）
+  - 调用方：程序入口, session_control_api
+  - tested 策略：自有单测（SIH 最小场景会话冒烟：发起→收帧→中止归档）
+  - 核验命令：继承 R9 验收方式（浏览器全流程判据；单测=tests/test_launch_demo_session.py）
+  - **spawn_sitl** [L1|新增]
+    - 职责：按场景定义拉起 PX4 SITL 进程（Gazebo 主/SIH 备选可配），等心跳就绪并做健康检查，管理进程句柄与日志文件；会话结束/异常时干净回收；同机多会话的端口/MavLink 端点分配。
+    - 签名意图：输入: 场景定义, 仿真器选择 / 输出: 仿真进程句柄（含连接端点） / 错误: 拉起超时/心跳不至抛 SitlError
+    - 调用方：launch_demo_session
+    - tested 策略：自有单测（SIH 拉起→心跳→回收）
+    - 核验命令：测试: tests/test_spawn_sitl.py
+  - **session_control_api** [L1|新增]
+    - 职责：控制台后端 API——UI 动作全映射：发起/中止会话（桥 launch_demo_session）、飞行中注入故障与调强度（桥 inject_scenario_fault）、回放请求（指定运行目录+时间窗）、会话状态查询；按钮按下到后端受理的响应保持演示节奏（≤2 s 目标）。
+    - 签名意图：输入: HTTP/WS 控制请求 / 输出: 动作回执（含受理结果与会话状态） / 错误: 无会话/动作非法返回结构化错误给 UI 展示（不抛裸异常）
+    - 调用方：register_pages
+    - tested 策略：自有单测（FastAPI TestClient 打全控制端点）
+    - 核验命令：测试: tests/test_session_control_api.py
+  - **render_console** [L1|新增]
+    - 职责：控制台页——2D 指挥中心风前端（深色主题）：地图+飞行器航迹、姿态/电量/链路仪表组、频谱瀑布嵌入、事件时间轴、故障注入面板（按钮+强度滑杆 低/中/高）、回放时间轴（暂停/加速/拖动）；模板与静态资源随包分发，无外网依赖；为答辩投屏优化（大字号/高对比）。
+    - 签名意图：输入: 页面路由上下文 / 输出: 控制台页（HTML+静态资源） / 错误: 资源缺失启动即报
+    - 调用方：register_pages
+    - tested 策略：自有单测（路由 GET 200 + 关键元素存在：地图容器/注入面板/时间轴）
+    - 核验命令：测试: tests/test_render_console.py
+
 ## 产出前自检
-- 矩阵正向：R1-R8 每条恰好一个顶层函数负责 ✓（8/8，无漏实现）
-- 矩阵反向+树：全部 34 函数经调用链可达顶层入口 ✓（六个程序入口：run_eval / replay_check / sdr_check / run_ground_station / build_materials / train_tcn 及各顶层函数自身；shared 六件均被多顶层引用；无死代码）
-- 单一功能转变：逐函数复核 ✓（compute_physical_margins 四类余量=同一转变"帧→余量"；register_pages 四路由=同一转变"挂路由"）
-- 函数总数 34 > 20 预警线：**已预警**——成因=8 需求口的系统级工程（接入/双通道/SDR/状态机/Web/材料六块）；可选收缩项（若要逼近 20）：①砍 train_tcn 独立函数（并入脚本，-1）②R4 两叶子合并为 consistency_check（-1）③R8 的 draft_revision_notes 并入 build_materials 主体（-1）——即便全采纳仍 ~31，低于 20 需砍需求口（不建议）。门口裁决：接受 34 或指定收缩项。
+- 矩阵正向：R1-R9 每条恰好一个顶层函数负责 ✓（9/9，无漏实现；R9 变更后新增 launch_demo_session 块）
+- 矩阵反向+树：全部 38 函数经调用链可达顶层入口 ✓（程序入口：run_eval / replay_check / sdr_check / run_ground_station / build_materials / train_tcn / launch_demo_session 及各顶层函数自身；shared 六件均被多顶层引用；无死代码）
+- 单一功能转变：逐函数复核 ✓（compute_physical_margins 四类余量=同一转变"帧→余量"；register_pages 五路由=同一转变"挂路由"；session_control_api 多端点=同一转变"UI 动作→后端受理"）
+- 函数总数 38 > 20 预警线：**已预警**——成因=9 需求口的系统级工程（接入/双通道/SDR/状态机/Web/演示控制台/材料）；可选收缩项（若要逼近 20）：①砍 train_tcn 独立函数（并入脚本，-1）②R4 两叶子合并为 consistency_check（-1）③R8 的 draft_revision_notes 并入 build_materials 主体（-1）——即便全采纳仍 ~35，低于 20 需砍需求口（不建议；R9 为用户明确要求的面向用户能力，不可砍）。门口裁决：接受 38 或指定收缩项。
