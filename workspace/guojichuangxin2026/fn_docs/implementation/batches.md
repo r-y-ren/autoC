@@ -1,6 +1,6 @@
 # batches.md —— 批次表（待办导航）
 > fn-implement 独占更新。▶ = 下一批要完成的任务；未经批间门批准不得增删批次内容。
-> **全部 12 批已完成（2026-10-03）**——批次表清空，留痕见 history.md。
+> **全部 17 批已完成（首轮 12+演进 5，2026-10-03）**——批次表清空，留痕见 history.md。
 > 依赖序自底向上：B1 地基 → 数据接入 → 检测通道 → 决策 → 设备/平台/控制台 → 材料/评估集成。
 > 单批 ≥6 函数的批次（B2/B5）建议子代理逐函数档；其余主会话连续档即可。
 
@@ -9,8 +9,6 @@
 
 | 2026-10-03 | 签名微调 | spawn_sitl 增 synthetic 备选（设备缺席等价数据面）；EventHub 增 publish_sync（会话线程侧发布）；控制台模板寄宿 run_ground_station.console_page → 归位 launch_demo_session.render_console |
 
-| ▶ B16 | build_package, write_user_manual | wheel 产+干净 venv 装后 demo 起 | R15 |
-| B17 | soak_test, make_portable_bundle | --quick 长跑留痕+tar 包 SHA 过 | R16；1h 全量与目标机解压属 manual |
 
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |

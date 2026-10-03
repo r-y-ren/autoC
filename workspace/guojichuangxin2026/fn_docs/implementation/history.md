@@ -18,3 +18,5 @@
 | 2026-10-03 | B13 | archive_run(t), run_eval(wired 改造复走), batch_eval(wired), probe_px4_env(t) | 全套 98 passed；confirm=注入→首确认 0.5s 实测；纬度 cos 误乘 5 处修复 | 
 | 2026-10-03 | B14 | boot_selfcheck(wired), probe_service(t) | 6 passed；三步自检实跑全 PASS |
 | 2026-10-03 | B15 | bench_edge(wired), calibrate_usrp(wired) | 4 passed；dryrun 基准+参考表落档 |
+| 2026-10-03 | B16 | build_package(wired), write_user_manual(t) | 4 passed+真构建：wheel 产+干净 venv 装后自测 passed（ahyd_cli 垫片入包） |
+| 2026-10-03 | B17 | soak_test(wired), make_portable_bundle(wired) | 4 passed+实产：quick 长跑报告留痕+459MB full 便携包（dist/ 已 gitignore） |

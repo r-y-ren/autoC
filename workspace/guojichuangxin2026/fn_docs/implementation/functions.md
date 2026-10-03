@@ -59,7 +59,7 @@
 | probe_service | B14 | tested | 测试: tests/boot_selfcheck/test_probe_service.py | — |
 | bench_edge | B15 | wired 10-03 | 继承 R14 验收（dry-run PASS） | — |
 | calibrate_usrp | B15 | wired 10-03 | 继承 R14 验收（dry-run 参考表） | — |
-| build_package | B16 | stub | 继承 R15 验收（干净 venv pip install+demo 起） | — |
-| write_user_manual | B16 | stub | 测试: tests/build_package/test_write_user_manual.py | — |
-| soak_test | B17 | stub | 继承 R16 验收（--quick 微缩+留痕） | — |
-| make_portable_bundle | B17 | stub | 继承 R16 验收（tar 结构+SHA256） | — |
+| build_package | B16 | wired 10-03 | 继承 R15 验收（干净 venv pip install+demo 起） | — |
+| write_user_manual | B16 | tested | 测试: tests/build_package/test_write_user_manual.py | — |
+| soak_test | B17 | wired 10-03 | 继承 R16 验收（--quick 微缩+留痕） | — |
+| make_portable_bundle | B17 | wired 10-03 | 继承 R16 验收（tar 结构+SHA256） | — |

@@ -1,0 +1,5 @@
+[console_scripts]
+ahyd-demo = ahyd_cli.shims:demo_main
+ahyd-eval = ahyd_cli.shims:eval_main
+ahyd-replay-check = ahyd_cli.shims:replay_main
+ahyd-sdr-check = ahyd_cli.shims:sdr_main
