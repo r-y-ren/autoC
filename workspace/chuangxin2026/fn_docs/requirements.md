@@ -107,7 +107,24 @@ STITP（大学生创新创业训练计划，原称科技创新训练计划）导
 | PyTorch（经 /toolbox→4070） | 训练算力；本地 CPU 降级 |
 | pymavlink + ArduPilot SITL | 仅 R11 |
 | PyVISA | 仅 R9 未来仪表后端（惰性导入） |
-| **结果数据源** | `software/runs/<ts>/`（kpi.csv/events.jsonl/monitor.csv/SigMF/report.md/calibration.json/dataset_index.json）；汇总指标进战役 metrics.json（键清单 m0 冻结，见 contracts/sw-doc-interface.md） |
+| OFL 中文字体文件 | R13 图表渲染（随仓库分发，无网络依赖） |
+| **结果数据源** | `fn_work/runs/<ts>/`（kpi.csv/events.jsonl/monitor.csv/SigMF/report.md/calibration.json/dataset_index.json）；汇总指标进战役 metrics.json（键清单 m0 冻结，见 contracts/sw-doc-interface.md） |
+
+### R13 产品最后一公里（fn-analyze P2，演进轮 2026-10-03） [P0]
+- 内容：①双平台一键启动器（start.sh/start.bat：起操控台服务+自动开浏览器+失败给可操作提示）；②操控台报告中心页（历史 run 列表→点开渲染 report.md）；③产品内快速上手页（零术语，随操控台"帮助"入口）；④图表中文字体内置（OFL 开源字体文件入库+matplotlib 注册，覆盖三元曲线/混淆矩阵，渲染零缺字告警）。
+- 验收方式：`scripts/start.sh --selfcheck`（或 bat 同义）rc=0（服务起+URL 打印）；字体测试：渲染三图断言无 findfont fallback 告警；人工判据=零代码走查扩展（开浏览器→跑卡→**点开历史报告**→全程鼠标）。
+
+### R14 加速判据解耦（P3） [P0]
+- 内容：LINKBENCH_SPEED 同步缩放 criteria.sustain_s/disconnect_s（等效真实时间口径——任何倍速可出失效电平）；report.md 自动脚注"加速倍率 N×（判据同步缩放）"；不缩 safety 顶。
+- 验收方式：`LINKBENCH_SPEED=40 scripts/run_scenario.py scenarios/gb42590_noise.yaml` → fail_levels 非空 且 report.md 含加速脚注（grep 断言）。
+
+### R15 标定消费+断点续跑（P4，fn-implement 评审遗留两项） [P0]
+- 内容：①execute_scenario 启动时读 runs/calibration.json（存在则把场景功率档换算为后端增益并标注来源；缺省=恒等并在 report 注明"未标定"）；②断点续跑：run 目录含 steps.jsonl 且未完成时，从未完成步续跑不重头（同一 run 目录续写）。
+- 验收方式：构造半程 run（删尾部 steps+kpi）→ 重跑同一目录 → steps 总数=计划数且已完成步不重复（断言）；标定存在时 report 含"标定表已应用"字样。
+
+### R16 中期材料编译线（P5） [P0]
+- 内容：docs/build.py `--mid` 产 Markdown 材料稿：自动汇编最新 run 的失效电平表/三元曲线/识别指标/仪器局限声明，数字仅引自 runs 产物与 metrics.json（表外数字=失败）；`--final` 同模板加深（结题轮用）。
+- 验收方式：`python docs/build.py --mid` 产出 docs/mid_draft.md；抽查稿内任一数字可溯源到最新 run 产物（断言脚本）。
 
 ## 范围外（Q4 确认，八项）
 
@@ -119,9 +136,11 @@ STITP（大学生创新创业训练计划，原称科技创新训练计划）导
 - 5.8GHz 被测链路（现有 DUT 均 2.4G；5.8G 仅注入+监测能力验证）
 - 纯仿真多智能体 RL 抗干扰方向
 - 姊妹战役（安航云盾）材料代写
+- **待硬件激活（到货即经演进轮开 R，registry 91d059-1/-6 跟踪）**：P1 固件实装包（esp32_link/nrf24_link+烧录 SOP）、P6 真机激活轮（B210 真发射/真串口/4070 真训练+数据集发布包）
 
 ## 变更记录
 
 | 日期 | 变更 | 原因 |
 |---|---|---|
 | 2026-10-03 | 初版（R1–R12；模块化为 P0 硬约束升格 R9；动画降级 P1 非阻塞） | fn-grill 严格重跑两轮八问全确认（同日早前版本因流程违规作废已删，用户裁定） |
+| 2026-10-03 | **演进轮一**：R13–R16（产品最后一公里/加速判据解耦/标定消费+断点续跑/中期材料线）；范围外补"待硬件"P1/P6 两项；结果数据源路径修正 software/→fn_work/（代码根已迁，蓝图契约同步在案） | 用户裁决 fn-analyze 提案："先把所有软件任务完成，硬件到之后直接补上"+增量四问全推荐采纳 |
