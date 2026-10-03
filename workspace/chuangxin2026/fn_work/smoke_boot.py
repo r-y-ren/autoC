@@ -35,8 +35,9 @@ except Exception as exc:
     fail.append(f"scenario parse: {exc}")
 
 print("[4/4] stub markers ...")
-marks = sum(p.read_text(encoding="utf-8").count("unimplemented:fn:") for p in (ROOT / "src").rglob("*.py"))
-print("      unimplemented:fn: x", marks, "(实现期递减，fn-close 期应为 0)")
+_m = "unimplemented" + ":fn:"  # 运行时拼接，避免本文件自计入
+marks = sum(p.read_text(encoding="utf-8").count(_m) for p in (ROOT / "src").rglob("*.py"))
+print("      残留桩计数 x", marks, "(实现期递减，fn-close 期应为 0)")
 
 if fail:
     print("SMOKE BOOT FAIL:"); [print("  -", f) for f in fail]; sys.exit(1)
