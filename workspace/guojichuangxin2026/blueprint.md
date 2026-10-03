@@ -97,7 +97,7 @@ acceptance:
     - {id: man-rehearsal, category: manual, item: 答辩模拟 ≥1 次并按反馈迭代 PPT, method: 人工手册}
 
 workflow:
-  auto_chain: true
+  auto_chain: false   # 用户确认闸门翻转（2026-10-03）：手动波次编排，不开自动规格链
 
 compliance:
   ai_policy_reviewed: true
