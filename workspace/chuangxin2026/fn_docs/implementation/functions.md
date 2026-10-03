@@ -20,9 +20,9 @@
 | record_run_streams | B5 | wired (10-03) | 同批 4 passed（三路落盘+覆盖率≥0.9+extra_events） | 2c987515 |
 | plot_triple_curves | B6 | tested (10-03) | pytest tests/src/build_report → 4 passed | 55e2edc6 |
 | build_report | B6 | wired (10-03) | 同批 4 passed（声明+失效行+图嵌入断言） | 55e2edc6 |
-| plan_steps | B7 | stub (10-03) | 桩断言过 | 31106ded |
-| check_failure | B7 | stub (10-03) | 桩断言过 | 31106ded |
-| execute_scenario | B7 | stub (10-03) | 桩断言过 | 31106ded |
+| plan_steps | B7 | tested (10-03) | pytest tests/src/execute_scenario → 8 passed | f413bed5 |
+| check_failure | B7 | tested (10-03) | 同批 8 passed（四分支） | f413bed5 |
+| execute_scenario | B7 | wired (10-03) | 同批 8 passed——国标卡失效电平+对照不误报端到端 | f413bed5 |
 | index_dataset | B8 | stub (10-03) | 桩断言过 | 31106ded |
 | grouped_cv_split | B9 | stub (10-03) | 桩断言过 | 31106ded |
 | train_classifier | B9 | stub (10-03) | 桩断言过 | 31106ded |

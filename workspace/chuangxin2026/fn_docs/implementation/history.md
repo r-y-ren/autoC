@@ -10,3 +10,4 @@
 | 10-03 | B4 | parse_serial_line, start_dut_source, collect_dut_samples | 11 单测绿；合成源台阶与 jammer 功率响应、失联 gap 不中断、真实/合成同接口 |
 | 10-03 | B5 | compute_spectrum_stats, record_run_streams（kw jammer/extra_events 签名微调已登记） | 4 单测绿；谱峰位断言、三路文件齐、注入事件入 JSONL、覆盖率≥0.9 |
 | 10-03 | B6 | plot_triple_curves, build_report（steps.jsonl 联表=JSR 轴；缺表时间轴兜底） | 4 单测绿；三图产出+无步进兜底+报告含固定声明与失效电平行 |
+| 10-03 | B7 | calibrate_power(并批补洞)+plan_steps+check_failure+execute_scenario；夹具判据修正+增益排序 bug 修复 | 10 单测绿（executor 8+calibrate 2）；国标卡实测出失效电平、对照卡零误报、报告自动生成 |
