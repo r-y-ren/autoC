@@ -54,6 +54,8 @@ def _fit(X, y, n_classes, iters=300, lr=0.5):
 def _confusion_png(cm, classes, path):
     import matplotlib
     matplotlib.use("Agg")
+    from src.shared.register_cjk_font import register_cjk_font
+    register_cjk_font()
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(4, 4))
     ax.imshow(cm, cmap="Blues")

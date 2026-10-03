@@ -8,6 +8,8 @@ from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
+from src.shared.register_cjk_font import register_cjk_font  # noqa: E402
+register_cjk_font()
 import matplotlib.pyplot as plt  # noqa: E402
 
 
@@ -56,7 +58,8 @@ def plot_triple_curves(kpi_csv, out_dir):
             ax.set_xlabel("时间 ms（无步进表，时间轴兜底）")
         ax.set_ylabel("PER")
         ax.set_title("① PER vs 干扰电平")
-        ax.legend(fontsize=7)
+        if ax.get_legend_handles_labels()[0]:
+            ax.legend(fontsize=7)
         fig.tight_layout(); p1 = out_dir / "per_vs_jsr.png"; fig.savefig(p1); plt.close(fig)
         produced.append(p1)
 
@@ -68,7 +71,8 @@ def plot_triple_curves(kpi_csv, out_dir):
         if "latency_ms" in rows[0] and rows[0]["latency_ms"] not in ("", None):
             ax.plot(ts, [float(r["latency_ms"]) for r in rows], label="时延 ms", ls=":")
         ax.set_xlabel("时间 ms"); ax.set_title("② 吞吐/误码（真实时延列就绪后自动叠加）")
-        ax.legend(fontsize=8)
+        if ax.get_legend_handles_labels()[0]:
+            ax.legend(fontsize=8)
         fig.tight_layout(); p2 = out_dir / "throughput_latency.png"; fig.savefig(p2); plt.close(fig)
         produced.append(p2)
 

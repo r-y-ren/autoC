@@ -107,6 +107,14 @@ def create_app():
     def page():
         return _PAGE
 
+    # [改造←R13] 报告中心/帮助页 + runs 媒体目录（演进轮一增量挂载）
+    from starlette.staticfiles import StaticFiles
+    _runs = Path("runs")
+    if _runs.exists():
+        app.mount("/runs-media", StaticFiles(directory=str(_runs)), name="runsmedia")
+    from src.serve_console.render_static_pages import render_static_pages
+    render_static_pages(app)
+
     @app.websocket("/ws")
     async def ws_endpoint(ws: WebSocket):
         await ws.accept()
