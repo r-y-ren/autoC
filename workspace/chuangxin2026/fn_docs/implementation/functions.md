@@ -11,8 +11,8 @@
 | EstopManager | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
 | make_spectrogram | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
 | create_instrument_backend | B2 | wired (10-03) | pytest tests/src/create_instrument_backend → 5 passed；mock 对偶实跑+b210 缺驱动提示断言 | fa9bf5f8 |
-| synthesize_style | B3 | stub (10-03) | 桩断言过 | 31106ded |
-| generate_jamming | B3 | stub (10-03) | 桩断言过 | 31106ded |
+| synthesize_style | B3 | tested (10-03) | pytest tests/src/generate_jamming → 9 passed | acdfbcab |
+| generate_jamming | B3 | wired (10-03) | 同批 9 passed + gen 入口 dry-run 实跑 rc=0 | acdfbcab |
 | parse_serial_line | B4 | stub (10-03) | 桩断言过 | 31106ded |
 | start_dut_source | B4 | stub (10-03) | 桩断言过 | 31106ded |
 | collect_dut_samples | B4 | stub (10-03) | 桩断言过 | 31106ded |
