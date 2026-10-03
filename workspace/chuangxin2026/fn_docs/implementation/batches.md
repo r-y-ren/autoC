@@ -25,5 +25,6 @@
 | 日期 | 事件 | 说明 |
 |---|---|---|
 | 2026-10-03 | 计划补洞 | calibrate_power（R2 顶层）原漏于批次表，并入 B7 一并实现 |
+| 2026-10-03 | 评审修复+签名微调 | execute_scenario 增 kw estop（操控台急停联通）；calibrate_power 增 warnings（步距偏差>1dB）；补 scripts/record·calibrate·sitl_bridge 三入口（消除死代码 FAIL）；serial seq 记忆改会话级；sitl note 如实化 |
 | 2026-10-03 | 签名微调 | record_run_streams 增 kw jammer/extra_events（执行器联动监测与事件注入，意图级签名不变） |
 | 2026-10-03 | 批次计划立表 | 入口对账：fn-check 残留桩 31（=scaffold 真值）、全量测试 27/27 PASS、镜像齐全；14 批垂直切片覆盖全部 27 函数 |

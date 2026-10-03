@@ -13,7 +13,7 @@ def test_health_scenarios_page():
         assert c.get("/api/health").json()["ok"]
         assert len(c.get("/api/scenarios").json()["scenarios"]) >= 4
         html = c.get("/").text
-        assert "急" in html and "ws" in html.lower() or "websocket" in html.lower()
+        assert "急" in html and ("ws" in html.lower() or "websocket" in html.lower())
 
 
 def test_estop_changes_state():

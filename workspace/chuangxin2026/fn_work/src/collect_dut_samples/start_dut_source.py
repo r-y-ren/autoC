@@ -69,6 +69,7 @@ class SerialDutSource:
         except Exception as exc:
             raise RuntimeError("真实串口源需要 pyserial（pip install pyserial）") from exc
         import serial as _serial
+        reset_seq_tracking()  # 会话级清一次，保住逐行 seq 回退检测
         port = config.get("port")
         if not port:
             raise ValueError("串口源配置缺 port")
@@ -76,7 +77,6 @@ class SerialDutSource:
         self._ser = _serial.Serial(port, 115200, timeout=1.0)
 
     def next_sample(self) -> DutSample:
-        reset_seq_tracking()
         line = self._ser.readline().strip()
         return parse_serial_line(line)
 

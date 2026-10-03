@@ -20,11 +20,17 @@ def calibrate_power(freq_hz_list: list, gain_list: list, runs_dir: str = "runs",
     powers = [e["power_db"] for e in entries]
     devs = [abs(powers[i] - powers[i - 1]) for i in range(1, len(powers))] or [0.0]
     monotonic = all(powers[i] > powers[i - 1] for i in range(1, len(powers)))
+    import statistics
+    med = statistics.median(devs) if devs else 0.0
+    warnings = ["档%d 步距偏差 %.2fdB>1dB" % (i + 1, d)
+                for i, d in enumerate(devs) if abs(d - med) > 1.0]
     out = Path(runs_dir); out.mkdir(parents=True, exist_ok=True)
     path = out / "calibration.json"
     path.write_text(json.dumps({"entries": entries,
                                 "monotonic_ok": monotonic,
-                                "max_deviation_db": max(devs)}, ensure_ascii=False, indent=1),
+                                "max_deviation_db": max(devs),
+                                "warnings": warnings}, ensure_ascii=False, indent=1),
                     encoding="utf-8")
     return {"calibration_path": str(path), "monotonic_ok": monotonic,
-            "max_deviation_db": max(devs), "entries": len(entries)}
+            "max_deviation_db": max(devs), "entries": len(entries),
+            "warnings": warnings}

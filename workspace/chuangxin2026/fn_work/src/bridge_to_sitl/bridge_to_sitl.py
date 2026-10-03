@@ -20,13 +20,13 @@ def bridge_to_sitl(run_dir: str, sitl_host: str = "127.0.0.1:5760"):
     mode = "simulated"
     try:
         import pymavlink  # noqa: F401
-        mode = "pymavlink"
+        mode = "pymavlink-ready"
     except Exception:  # noqa: BLE001
         pass
 
     record = {"mode": mode, "sitl_host": sitl_host, "timeline": timeline,
               "note": ("pymavlink 未安装——本记录为注入计划（真注入随安航云盾联调轮启用）"
-                       if mode == "simulated" else "已按时间线注入 SITL")}
+                       if mode == "simulated" else "pymavlink 已装：注入通道就绪，尚未连接 SITL（联调轮启用）")}
     out = run_dir / "sitl_bridge_log.json"
     out.write_text(json.dumps(record, ensure_ascii=False, indent=1), encoding="utf-8")
     return {"mode": mode, "log": str(out), "steps": len(timeline)}

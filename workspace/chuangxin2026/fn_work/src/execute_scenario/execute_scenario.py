@@ -20,7 +20,7 @@ def _host_ms() -> int:
     return int(time.monotonic() * 1000)
 
 
-def execute_scenario(scenario_path):
+def execute_scenario(scenario_path, *, estop=None):
     # 返回 {run_dir, outcomes, fail_levels, nojam_false_alarm, report_path}
     sc = load_scenario(scenario_path)
     speed = max(0.1, float(os.environ.get("LINKBENCH_SPEED", "1.0")))
@@ -29,7 +29,8 @@ def execute_scenario(scenario_path):
     run_dir.mkdir(parents=True, exist_ok=True)
 
     jammer, analyzer = create_instrument_backend(backend)
-    estop = EstopManager()
+    if estop is None:
+        estop = EstopManager()
     estop.arm(jammer.off)
 
     links = [{"type": "fake", "link": n,

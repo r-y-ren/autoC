@@ -41,8 +41,7 @@ const L=document.getElementById('log');L.textContent+=(JSON.stringify(m.kpi||m)+
 
 def create_app():
     app = FastAPI(title="linkbench console")
-    estop = EstopManager()
-    estop.arm(lambda: None)
+    estop = EstopManager()  # 操控台与运行场景共享的硬急停通道
     state = {"run_thread": None, "last_result": None}
 
     @app.get("/api/health")
@@ -64,7 +63,7 @@ def create_app():
 
         def _work():
             try:
-                state["last_result"] = execute_scenario(card)
+                state["last_result"] = execute_scenario(card, estop=estop)
             except Exception as exc:  # noqa: BLE001
                 estop.fire("ui-run 异常: %s" % exc)
 
@@ -87,6 +86,13 @@ def create_app():
     def runs():
         d = Path("runs")
         return {"runs": sorted(p.name for p in d.iterdir()) if d.exists() else []}
+
+    @app.get("/api/runs/{name}/report")
+    def run_report(name: str):
+        p = Path("runs") / name / "report.md"
+        if not p.exists():
+            return {"error": "no report", "name": name}
+        return {"name": name, "report": p.read_text(encoding="utf-8")}
 
     @app.post("/api/demo")
     def demo():

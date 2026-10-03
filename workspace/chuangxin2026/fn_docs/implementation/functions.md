@@ -5,7 +5,7 @@
 
 | 函数 | 批次 | 状态(日期) | 核验命令+摘要 | commit |
 |---|---|---|---|---|
-| load_scenario | B1 | stub (10-03) | pytest tests/src/shared/load_scenario.py → 桩断言过 | 31106ded |
+| load_scenario | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
 | write_sigmf | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
 | read_sigmf | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
 | EstopManager | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
