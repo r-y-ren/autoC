@@ -27,8 +27,8 @@
 | grouped_cv_split | B9 | tested (10-03) | pytest tests/src/train_classifier → 3 passed | fc810971 |
 | train_classifier | B9 | wired (10-03) | 同批 3 passed——8 录制 4 组 F1≥0.9+模型被 predictor 消费 | fc810971 |
 | predict_style | B10 | wired (10-03) | pytest tests/src/predict_style → 1 passed | 7c9c19d0 |
-| run_demo | B11 | stub (10-03) | 桩断言过 | 31106ded |
-| serve_console | B12 | stub (10-03) | 桩断言过 | 31106ded |
+| run_demo | B11 | wired (10-03) | pytest tests/src/run_demo → 1 passed（报告+失效电平+识别样例三件齐） | b61b442f |
+| serve_console | B12 | wired (10-03) | 同批 3 passed+ui_selftest rc=0（health/场景/急停/WS 四点） | b61b442f |
 | bridge_to_sitl | B13 | stub (10-03) | 桩断言过 | 31106ded |
 | animate_link_state | B14 | stub (10-03) | 桩断言过 | 31106ded |
 
