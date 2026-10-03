@@ -18,8 +18,8 @@
 | collect_dut_samples | B4 | wired (10-03) | 同批 11 passed（双源+gap 续采+回调） | 08b08193 |
 | compute_spectrum_stats | B5 | tested (10-03) | pytest tests/src/record_run_streams → 4 passed | 2c987515 |
 | record_run_streams | B5 | wired (10-03) | 同批 4 passed（三路落盘+覆盖率≥0.9+extra_events） | 2c987515 |
-| plot_triple_curves | B6 | stub (10-03) | 桩断言过 | 31106ded |
-| build_report | B6 | stub (10-03) | 桩断言过 | 31106ded |
+| plot_triple_curves | B6 | tested (10-03) | pytest tests/src/build_report → 4 passed | 55e2edc6 |
+| build_report | B6 | wired (10-03) | 同批 4 passed（声明+失效行+图嵌入断言） | 55e2edc6 |
 | plan_steps | B7 | stub (10-03) | 桩断言过 | 31106ded |
 | check_failure | B7 | stub (10-03) | 桩断言过 | 31106ded |
 | execute_scenario | B7 | stub (10-03) | 桩断言过 | 31106ded |
