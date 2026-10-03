@@ -11,11 +11,11 @@
 | EstopManager | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
 | make_spectrogram | B1 | tested (10-03) | pytest tests/src/shared → 15 passed | 0c62831c |
 | create_instrument_backend | B2 | wired (10-03) | pytest tests/src/create_instrument_backend → 5 passed；mock 对偶实跑+b210 缺驱动提示断言 | fa9bf5f8 |
-| synthesize_style | B3 | tested (10-03) | pytest tests/src/generate_jamming → 9 passed | acdfbcab |
+| synthesize_style | B3 | tested (10-03) | pytest tests/src/generate_jamming → 11 passed | acdfbcab |
 | generate_jamming | B3 | wired (10-03) | 同批 9 passed + gen 入口 dry-run 实跑 rc=0 | acdfbcab |
-| parse_serial_line | B4 | stub (10-03) | 桩断言过 | 31106ded |
-| start_dut_source | B4 | stub (10-03) | 桩断言过 | 31106ded |
-| collect_dut_samples | B4 | stub (10-03) | 桩断言过 | 31106ded |
+| parse_serial_line | B4 | tested (10-03) | pytest tests/src/collect_dut_samples → 11 passed | 08b08193 |
+| start_dut_source | B4 | tested (10-03) | 同批 11 passed（jammer 响应/失联/dead_at） | 08b08193 |
+| collect_dut_samples | B4 | wired (10-03) | 同批 11 passed（双源+gap 续采+回调） | 08b08193 |
 | compute_spectrum_stats | B5 | stub (10-03) | 桩断言过 | 31106ded |
 | record_run_streams | B5 | stub (10-03) | 桩断言过 | 31106ded |
 | plot_triple_curves | B6 | stub (10-03) | 桩断言过 | 31106ded |
