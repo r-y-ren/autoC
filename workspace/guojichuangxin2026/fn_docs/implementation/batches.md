@@ -9,9 +9,7 @@
 
 | 2026-10-03 | 签名微调 | spawn_sitl 增 synthetic 备选（设备缺席等价数据面）；EventHub 增 publish_sync（会话线程侧发布）；控制台模板寄宿 run_ground_station.console_page → 归位 launch_demo_session.render_console |
 
-| ▶ B14 | boot_selfcheck, probe_service（smoke_boot 壳接线） | smoke_boot 三步 PASS | R13 |
-| B15 | bench_edge, calibrate_usrp | 两脚本 dry-run PASS | R14；真机项列 manual |
-| B16 | build_package, write_user_manual | wheel 产+干净 venv 装后 demo 起 | R15 |
+| ▶ B16 | build_package, write_user_manual | wheel 产+干净 venv 装后 demo 起 | R15 |
 | B17 | soak_test, make_portable_bundle | --quick 长跑留痕+tar 包 SHA 过 | R16；1h 全量与目标机解压属 manual |
 
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）

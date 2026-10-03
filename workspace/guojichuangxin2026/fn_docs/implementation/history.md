@@ -16,3 +16,5 @@
 | 2026-10-03 | B11 | export_metrics_table, draft_revision_notes, compile_documents(wired), build_materials(wired) | 5 passed；端到端两运行目录→三件套产物 |
 | 2026-10-03 | B12 | run_eval(wired)+全链 smoke | 2 passed；motor_fail×2/lowbat×1 批量指标分片；smoke_boot 桩清零 |
 | 2026-10-03 | B13 | archive_run(t), run_eval(wired 改造复走), batch_eval(wired), probe_px4_env(t) | 全套 98 passed；confirm=注入→首确认 0.5s 实测；纬度 cos 误乘 5 处修复 | 
+| 2026-10-03 | B14 | boot_selfcheck(wired), probe_service(t) | 6 passed；三步自检实跑全 PASS |
+| 2026-10-03 | B15 | bench_edge(wired), calibrate_usrp(wired) | 4 passed；dryrun 基准+参考表落档 |
