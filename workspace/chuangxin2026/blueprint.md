@@ -8,6 +8,7 @@ scope:
   deliverables:
     - 测评台实物（B210+衰减链+自建双链路 DUT+屏蔽盒夹具，A 类"做出实物并调测"口径，S5）
     - 平台软件 platform 包（六层：干扰生成/功率步进/跨层测量/GB 42590 §5.11 协议执行器/SigMF 归档/AI 识别/一键报告——关键模块自制）
+    - Web 操控台（驾驶舱操控+实时看板+场景卡片一键测+2D 示意动画层；浏览器操作，演示零代码——2026-10-03 用户需求，R11–R13）
     - 受控干扰 SigMF 真值数据集 v1（样式×功率档真值标注，可发布）
     - AI 干扰样式识别模型 + 分组 CV 评测报告（一期核心，2026-10-03 用户决策）
     - STITP 中期材料（~2026-12）与结题材料（~2027 秋）：报告数字全部出自 metrics.json 实测
@@ -52,6 +53,10 @@ tech_stack:
     kb_tech_ids: [pymavlink, ardupilot-sitl]
     rationale: 实测"PER-功率台阶"映射为 ArduPilot SITL 丢包/时延注入，为姊妹战役链路风险通道供受控数据源
     reuse_cost: 低
+  - name: Web 操控台（FastAPI+WebSocket+Vue3 CDN 单页+Canvas 动画，无 Node 构建链）
+    kb_tech_ids: [fastapi, vue3]
+    rationale: 演示零代码+游戏感操控（2026-10-03 用户需求 fn-grill 演进轮）：驾驶舱/场景卡片/2D 实测驱动动画；排期=m1 只读实时页、m2 全量；演示级产品化（一键起服务+浏览器）
+    reuse_cost: 中
   # 注：以上 ID 为 2026-10-03 战役内实抓调研的引用（docs/前沿技术与实现方案补充.md §四/§5.1，逐条带源）；
   # KB-2 卡片化排队慢循环，入库后回填规范卡片 ID。
 
@@ -67,11 +72,11 @@ milestones:
     owner_role: software
     depends_on: []
   - id: m1-vertical
-    task: 端到端竖切（R1–R4）：六类样式生成→衰减链→双链路 KPI→时间对齐→首张三元曲线+标定表；"雏形"达成→启动仪表申报材料
+    task: 端到端竖切（R1–R4）：六类样式生成→衰减链→双链路 KPI→时间对齐→首张三元曲线+标定表；附只读实时曲线页（R11 首 installment）；"雏形"达成→启动仪表申报材料
     owner_role: software
     depends_on: [m0-skeleton]
   - id: m2-full
-    task: 全量实现（R5 协议执行器+R6 数据集+R7 AI 识别+R8 一键报告）＋ **STITP 中期材料**（中期检查 ~2026-12，硬节点）
+    task: 全量实现（R5 协议执行器+R6 数据集+R7 AI 识别+R8 一键报告+R11–R13 Web 操控台全量：驾驶舱/场景卡片/2D 动画）＋ **STITP 中期材料**（中期检查 ~2026-12，硬节点）
     owner_role: software
     depends_on: [m1-vertical]
   - id: m3-polish
@@ -95,6 +100,8 @@ acceptance:
        cmd: "python workspace/chuangxin2026/software/scripts/eval_jamming_cls.py"}
     - {id: sw-demo, category: software, item: 一键演示报告（R8，数字可溯源到本 run）, method: 自动,
        cmd: "python workspace/chuangxin2026/software/scripts/demo.py --quick"}
+    - {id: sw-ui-boot, category: software, item: Web 操控台无头自检（服务起/健康检查/WS 推送/急停生效）（R11–R13）, method: 自动,
+       cmd: "python workspace/chuangxin2026/software/ui_selftest.py"}
     - {id: hw-fw, category: hardware, item: ESP32/NRF24 固件编译烧录+串口 JSON 上报, method: 自动,
        cmd: "python3 -m platformio run -d workspace/chuangxin2026/hardware/firmware"}
     - {id: doc-mid, category: document, item: STITP 中期材料编译通过, method: 自动,
@@ -102,6 +109,7 @@ acceptance:
     - {id: doc-final, category: document, item: 结题报告编译通过（数字与 metrics.json 一致）, method: 自动,
        cmd: "python workspace/chuangxin2026/docs/build.py --final"}
     - {id: man-bench, category: manual, item: 台架物理装配与固定几何标定（屏蔽盒+衰减链+天线位）, method: 人工手册}
+    - {id: man-ui-demo, category: manual, item: 浏览器零代码演示走查（开浏览器→选场景→出报告全程无命令行）, method: 人工手册}
     - {id: man-lab, category: manual, item: 实干扰物理实测（各样式三元曲线补测与复核）, method: 人工手册}
     - {id: man-instrument, category: manual, item: 重型仪表申报与到位跟进（M1 后，导师渠道）, method: 人工手册}
     - {id: man-cy2027, category: manual, item: 创新大赛 2027 报名与参赛（S5 强制条款）, method: 人工手册}
