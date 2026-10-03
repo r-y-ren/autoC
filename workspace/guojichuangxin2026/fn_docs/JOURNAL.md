@@ -8,3 +8,4 @@
 | 2026-10-03 | 全量线:implement | fn-implement 进入（用户显式过门指令，技能 2.0.1）：implementation 三文档落盘——12 批次垂直切片（B1 共享地基→B12 评估集成）+48 行函数清单（全 stub）+空历史表；进入检查=责任文档在/桩在位/本会话三方对齐无漂移 | fn-doc-lint 0 错 0 警（四层文档首次全绿）；批表门口：等用户批准批次计划+选执行档位 |
 | 2026-10-03 | 全量线:implement | 12 批全部完成：48/48 函数 wired/tested，91 passed 0 skipped；缺陷修复全程 20+ 处如实留痕 | fn-check 三件套/compileall/lint 终检输出见收官 commit |
 | 2026-10-03 | 全量线:analyze | fn-analyze 首轮（用户三问：完善度/补充开发/产品完整性）：快照落 fn_docs/results/（motor_fail×2 留档）；三轴出三缺陷（时延口径/命中率口径混杂/数据落点漂移）+两缺口（批量跑批/设备实测）；提案 P1-P5 登记 registry（报告 2026-10-03-d090a6.md） | fn-score 首轮 pending=5 无历史可打 |
+| 2026-10-03 | 全量线:grill | 功能演进轮：fn-analyze 五提案全量采纳（用户三问定范围）——R11 真数据面（PX4 用户装工具链）/R12 口径修正/R13 验收深度+归档/R14 设备就绪脚本/R15 打包安装/R16 长跑+便携包；README 追加软件全清段 | fn-doc-lint 6 错=新 R 未入矩阵（fn-divide 待办）；门：停等 /fn-divide |
