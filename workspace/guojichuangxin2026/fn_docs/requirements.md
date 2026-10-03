@@ -105,3 +105,4 @@
 | 2026-10-03 | 初版成稿（两轮拷问+边界重算收口；工程默认值经用户确认并入：机器分工/失控判据/时延口径/覆盖率 90%/场景三档/计划书 v2=修订建议+可粘贴段落） | fn-grill 阶段收口，产物自 strategy/ 迁入 fn_docs/ 固定位 |
 | 2026-10-03 | 追加 R9 演示控制台（2D 指挥中心风，控测试 P0；手动接管列 P1 范围外） | 用户在 fn-divide 门口提出：产品面向用户、演示零代码、游戏化操控测试（fn-grill 变更通道，两问均按推荐定案） |
 | 2026-10-03 | 验收命令路径实体化：`python -m demo.eval`→`fn_work/eval.py`、`demo.replay_check`→`fn_work/replay_check.py`、`demo.sdr_check`→`fn_work/sdr_check.py`、`./demo.sh`→`fn_work/demo.sh`（语义与参数不变，仅 CLI 载体按 fn-ladder 结构定形） | fn-scaffold 落盘 fn_work/ 结构后路径对齐（快速通道，未放松任何判据） |
+| 2026-10-03 | **任务放弃**：用户显式宣布项目重开（原因=流程违规：①fn-grill→fn-divide 阶段门未经用户显式选择被自行越过 ②责任文档函数计数两次出错（34/38→实测 43）③scaffold 收口混入阶段外动作）。停在：fn-scaffold 完成待门口。fn_docs/ 与 fn_work/ 处置待用户定 | 严格按流程重开：fn-grill 从全新任务起，每阶段门停等显式选择，沉默=等待 |

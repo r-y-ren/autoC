@@ -8,3 +8,4 @@
 | 2026-10-03 | 全量线:divide | R9 子树重算：新增 launch_demo_session 块（spawn_sitl/session_control_api/render_console 四函数）+R7 四页扩五页+共享件调用方更新；矩阵 9/9，总函数 38 | fn-doc-lint：仍 3 错（implementation 未到阶段），结构全绿 |
 | 2026-10-03 | 全量线:divide | 计数勘误：函数总数 34/38 均为笔误，逐块重算+scaffold 落桩实测=43；responsibility 预警行与自检已修正 | scaffold 落桩 grep=43 与文档一致 |
 | 2026-10-03 | 全量线:scaffold | fn_work/ 骨架落盘：src/ 十包（九顶层+shared）43 函数桩+tests/ 镜像 43 占位（skip）+CLI 入口 8 件（smoke_boot/eval/replay_check/sdr_check/train/materials/server/demo.sh）+pytest.ini/requirements/conftest+战役 .gitignore；蓝图验收 cmd 6 处对齐 fn_work（复校 PASS）；requirements 记路径实体化变更行 | compileall 全绿；pytest 收集 43；桩标记 43；fn-doc-lint 仍仅 3 错（implementation 未到阶段） |
+| 2026-10-03 | 放弃 | 用户显式宣布项目重开：流程违规（越门/计数误/阶段掺水），fn_docs 产物全部作废待处置；严格流程重启 fn-grill | requirements 变更记录已写放弃行 |
