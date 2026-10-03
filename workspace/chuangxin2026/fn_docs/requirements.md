@@ -37,35 +37,35 @@ STITP（大学生科技创新训练计划）导师课题《无人机通信链路
 
 ### R1 六类干扰样式生成引擎 [P0]
 - 内容：GNU Radio 自定义块 + UHD Sink，参数化生成六类样式；输入=scenario 段（样式名、中心频率 2400–2483.5MHz、带宽、扫速/占空比、功率档）；输出=射频发射 + 同步样式元数据；错误=参数越界/设备失联→立即停发并退出非 0。
-- 验收方式：`python -m platform.gen --scenario scenarios/smoke.yaml --dry-run` 输出波形参数表与 0 退出码；`--run 10` 落 SigMF 文件且 meta 的 annotations 含 style/power/时间窗；inspectrum 可打开该文件目视核对瀑布形态（谁看/看什么/什么算对：队员打开录制，瀑布图与样式定义一致）。
+- 验收方式：`python -m linkbench.gen --scenario scenarios/smoke.yaml --dry-run` 输出波形参数表与 0 退出码；`--run 10` 落 SigMF 文件且 meta 的 annotations 含 style/power/时间窗；inspectrum 可打开该文件目视核对瀑布形态（谁看/看什么/什么算对：队员打开录制，瀑布图与样式定义一致）。
 
 ### R2 功率步进与 JSR 标定 [P0]
 - 内容：粗档=30dB 衰减器接入/旁路（人工换档，scenario 标注）；细档=B210 软件增益步进；发射前跑一次"链路预算标定"把软件增益差折算为注入功率差表；输出=每次步进的标称 JSR 与 B210 监测通道实测 JSR 双列记录。
-- 验收方式：`python -m platform.calibrate` 生成 calibration.json（频点×增益→注入功率表）并打印单调性检查通过（相邻档差值与设定步距偏差 ≤1dB，超出则告警）；【待实测】首版允差不达标时记录实际值并在报告标注。
+- 验收方式：`python -m linkbench.calibrate` 生成 calibration.json（频点×增益→注入功率表）并打印单调性检查通过（相邻档差值与设定步距偏差 ≤1dB，超出则告警）；【待实测】首版允差不达标时记录实际值并在报告标注。
 
 ### R3 被测双链路固件与统计上报 [P0]
 - 内容：ESP32 固件（STA 模式收 UDP 定长流，统计 PER/重传/RSSI，1Hz 经 USB 串口 JSON 上报）；NRF24 固件（定长包回环，RF24 库读 ARC_CNT/PLOS_CNT 算丢包，同格式上报）；错误=串口断连→记录 gap 事件，不中断注入。
-- 验收方式：不接干扰空跑 5 分钟，`python -m platform.dut --watch` 显示两条链路 PER 均为 0（或本底值）、RSSI 有读数；人为断开一条链路，另一条继续上报且 gap 事件入日志。
+- 验收方式：不接干扰空跑 5 分钟，`python -m linkbench.dut --watch` 显示两条链路 PER 均为 0（或本底值）、RSSI 有读数；人为断开一条链路，另一条继续上报且 gap 事件入日志。
 
 ### R4 跨层采集与时间对齐 [P0]
 - 内容：统一采集器汇流三路——DUT KPI（串口）、B210 监测通道谱统计（第二通道）、注入事件（本机）；全部打同一主机单调时钟时间戳，落 CSV+JSONL；时间对齐精度目标 ≤50ms【待实测】。
-- 验收方式：`python -m platform.record --dur 60` 产出三路文件行数一致率 ≥99%（时间轴覆盖相等），抽查注入事件时刻 ±50ms 内 KPI 出现可见变化或明确无变化结论（判据写入 report）。
+- 验收方式：`python -m linkbench.record --dur 60` 产出三路文件行数一致率 ≥99%（时间轴覆盖相等），抽查注入事件时刻 ±50ms 内 KPI 出现可见变化或明确无变化结论（判据写入 report）。
 
 ### R5 GB 42590 §5.11 协议执行器 [P0]
 - 内容：读 scenario → 自动执行"−5dB 起、5dB 步进至失效判据成立"循环 → 记录失效电平 → 输出三元曲线 PNG + 失效电平表；支持样式批量循环与断点续跑。
-- 验收方式：`python -m platform.run --scenario scenarios/gb42590_noise.yaml` 在 runs/<ts>/ 产出 report.md + 三元曲线 ≥3 张 + 失效电平表；用"无干扰对照"scenario 跑一遍应报告"未失效"而非误报。
+- 验收方式：`python -m linkbench.run --scenario scenarios/gb42590_noise.yaml` 在 runs/<ts>/ 产出 report.md + 三元曲线 ≥3 张 + 失效电平表；用"无干扰对照"scenario 跑一遍应报告"未失效"而非误报。
 
 ### R6 SigMF 真值数据集归档 [P0]
 - 内容：所有 B210 录制按 SigMF v1.2.0 存档；annotations 自动写入样式/功率档/时间窗真值；数据集目录按"录制组"组织并附分组清单（供 R7 分组 CV 与对外发布）。
-- 验收方式：`python -m platform.dataset --check runs/` 对每个录制跑 sigmf 校验通过且 annotations 齐全；生成的 dataset_index.json 含录制组列表（group 字段非空）。
+- 验收方式：`python -m linkbench.dataset --check runs/` 对每个录制跑 sigmf 校验通过且 annotations 齐全；生成的 dataset_index.json 含录制组列表（group 字段非空）。
 
 ### R7 AI 干扰样式识别模型（一期核心，2026-10-03 用户决策） [P0]
 - 内容：谱图分类（CNN 基线，六类+无干扰=七类）；训练数据=R6 数据集（含对照）；评测必须分组 CV（按录制组划分）；训练作业经 /toolbox 调 4070 远程算力，本地可 CPU 冒烟；输出混淆矩阵+Macro-F1 入报告。性能目标（内部）：Macro-F1 ≥0.85【待实测，不达标不阻塞验收，只如实入报告】。
-- 验收方式：`python -m platform.train --data runs/dataset_v1` 端到端产出模型文件+评测报告（含分组 CV 混淆矩阵）；`python -m platform.predict --model <模型> --sigmf <录制>` 对标注录制输出样式预测且与真值并列打印。
+- 验收方式：`python -m linkbench.train --data runs/dataset_v1` 端到端产出模型文件+评测报告（含分组 CV 混淆矩阵）；`python -m linkbench.predict --model <模型> --sigmf <录制>` 对标注录制输出样式预测且与真值并列打印。
 
 ### R8 一键演示与自动报告 [P0]
 - 内容：`demo` 命令串起 R1–R7 最小路径（短场景+小样本推理）；报告 Markdown 含：场景、标定表、三元曲线、失效电平表、识别样例、仪器局限声明（非 CISPR 接收机、传导等效口径）；一切性能数字只引用本 run 实测。UI 上"一键演示"按钮与该命令同一底层（R12 卡片之一）。
-- 验收方式：`python -m platform.demo --quick` 一条命令 0 退出，runs/<ts>/report.md 生成且内嵌图片路径有效；对外文档引用的任何数字能在同 run 产物中找到出处。
+- 验收方式：`python -m linkbench.demo --quick` 一条命令 0 退出，runs/<ts>/report.md 生成且内嵌图片路径有效；对外文档引用的任何数字能在同 run 产物中找到出处。
 
 ### R9 仪表程控抽象层（远期仪表到位的预留） [P1]
 - 内容：定义"干扰源/分析仪"抽象接口（set_style/set_power/get_spectrum），当前后端=B210 实现；未来 1433D/RSA513A 到位时以 PyVISA+SCPI 实现同接口替换，scenario 无需改写。
@@ -73,15 +73,15 @@ STITP（大学生科技创新训练计划）导师课题《无人机通信链路
 
 ### R10 SITL 链路退化注入预研（安航云盾联动） [P1]
 - 内容：ArduPilot SITL + pymavlink，把平台测得的"PER-功率台阶"映射为仿真链路丢包/时延注入，为姊妹项目《安航云盾》的链路风险通道提供受控数据源；产出验证脚本与联调记录。
-- 验收方式：`python -m platform.sitl_bridge --profile runs/<ts>/` 在 SITL 日志中产生与注入台阶时刻对应的 RADIO_STATUS/丢包变化（联调记录截图入 run 目录）。
+- 验收方式：`python -m linkbench.sitl_bridge --profile runs/<ts>/` 在 SITL 日志中产生与注入台阶时刻对应的 RADIO_STATUS/丢包变化（联调记录截图入 run 目录）。
 
 ### R11 Web 操控舱与实时看板（m1 只读首 installment，m2 全量） [P0]
 - 内容：本地 Web 服务（FastAPI+WebSocket）+单页前端。操控舱=样式选卡/功率滑杆/开始-暂停-急停（急停=立即停 TX 的安全键，硬件失联也触发）/场景参数表单→自动生成 scenario；实时看板=三路 KPI 曲线+监测谱瀑布实时刷新；m1 首期只交付"只读实时曲线页"（竖切数据即时可视），操控项 m2 交付。输入=场景参数/UI 事件；输出=WebSocket 推送流（KPI/事件/状态）；错误=后端异常→UI 全局告警条+自动急停。
-- 验收方式：`python -m platform.ui --selftest` 无头自检通过（服务起、/api/health 200、WS 推送心跳到达、急停端点触发后 TX 状态=停）；人工判据：浏览器打开操控台，从选样式到出曲线全程无命令行（谁看/看什么/什么算对：队员按演示剧本走一遍，全程只用鼠标）。
+- 验收方式：`python -m linkbench.ui --selftest` 无头自检通过（服务起、/api/health 200、WS 推送心跳到达、急停端点触发后 TX 状态=停）；人工判据：浏览器打开操控台，从选样式到出曲线全程无命令行（谁看/看什么/什么算对：队员按演示剧本走一遍，全程只用鼠标）。
 
 ### R12 场景卡片与报告中心 [P0]
 - 内容：预设场景卡片（六样式 × GB 42590 协议/快速扫描）、卡片一键执行+进度条+失败原因提示；历史 runs 列表、结果对比视图（失效电平对比条形图、曲线叠加）、report.md 在线查看与导出。
-- 验收方式：`python -m platform.ui --selftest --suite cards` 通过（卡片枚举=scenario 库一致）；人工判据：点一张国标卡片→自动跑完→在线打开报告（零命令行）。
+- 验收方式：`python -m linkbench.ui --selftest --suite cards` 通过（卡片枚举=scenario 库一致）；人工判据：点一张国标卡片→自动跑完→在线打开报告（零命令行）。
 
 ### R13 2D 示意动画层（游戏感门面，Canvas 实现） [P1]
 - 内容：Canvas 动画场景：无人机图形、两条链路光带（绿→黄→红→断裂，随实测 PER/丢包驱动）、B210 干扰源波纹扩散（波纹形态映射样式：单音=同心圆、扫频=移动弧、脉冲=爆闪、噪声=弥散粒子等），全部由实测数据流驱动而非纯装饰；提供"合成数据演示模式"（无硬件时可播）。

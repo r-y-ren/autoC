@@ -103,7 +103,7 @@ acceptance:
     - {id: sw-ui-boot, category: software, item: Web 操控台无头自检（服务起/健康检查/WS 推送/急停生效）（R11–R13）, method: 自动,
        cmd: "python workspace/chuangxin2026/software/ui_selftest.py"}
     - {id: hw-fw, category: hardware, item: ESP32/NRF24 固件编译烧录+串口 JSON 上报, method: 自动,
-       cmd: "python3 -m platformio run -d workspace/chuangxin2026/hardware/firmware"}
+       cmd: "python3 workspace/chuangxin2026/hardware/firmware/build_all.py"}
     - {id: doc-mid, category: document, item: STITP 中期材料编译通过, method: 自动,
        cmd: "python workspace/chuangxin2026/docs/build.py --mid"}
     - {id: doc-final, category: document, item: 结题报告编译通过（数字与 metrics.json 一致）, method: 自动,
