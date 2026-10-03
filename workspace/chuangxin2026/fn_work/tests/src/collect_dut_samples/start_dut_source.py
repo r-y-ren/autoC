@@ -14,8 +14,13 @@ def test_fake_profile_steps():
     src = start_dut_source({"type": "fake", "link": "wifi", "rate_hz": 500,
                             "jam_profile": [(0.0, 0.0), (0.02, 0.5)]})
     a = src.next_sample()
-    b = src.next_sample()
-    assert a.per <= 0.05 and b.per >= 0.4  # 台阶生效（时间推进后）
+    assert a.per <= 0.05
+    b = a
+    for _ in range(40):  # 推进时间到台阶之后（500Hz×40≈80ms>20ms）
+        b = src.next_sample()
+        if b.ts_ms >= 25:
+            break
+    assert b.ts_ms >= 20 and b.per >= 0.4  # 台阶生效
 
 
 def test_fake_reacts_to_jammer_power():
