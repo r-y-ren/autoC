@@ -4,7 +4,7 @@ name: "Hack the North 2026"
 tier: 编程/黑客松
 directions:
   - 黑客松与数据竞赛
-status: upcoming
+status: ended
 organizer: "Hack the North 团队（滑铁卢大学学生团队；协办见 MLH 赛季体系）；赞助方含 Google、RBC、Shopify 等 100+"
 award_levels:
   - name: "Grand Prize（1st Place）"
@@ -40,7 +40,7 @@ ai_policy:
   url: https://hackthenorth.com/faq
   checked: 2026-08-28
 credibility: 官网
-last_verified: 2026-08-28
+last_verified: 2026-10-03
 sources:
   - url: https://hackthenorth.com/
     title: "Hack the North 官方首页（North America's largest student hackathon；2026-09-19~21；1000 hackers/36h；DUM-E 往期展示）"
@@ -60,6 +60,9 @@ sources:
   - url: https://devpost.com/software/dum-e-kgx6at
     title: "DUM-E 项目页原件（HTN 2025 画廊 Winner 徽章项目，winners 深构素材）"
     accessed: 2026-08-28
+  - url: https://www.mlh.com/seasons/2027/events
+    title: "MLH 2027 赛季日历 2026-10-03 复抓（主会话预抓快照 kb/raw/snapshots/2026-10-03_www.mlh.com_d37e34a0.html，消费其内嵌 pastEvents JSON：条目 hack-the-north-e8 'Hack the North' status=ended，startsAt 2026-09-18T19:00Z / endsAt 2026-09-20T20:00Z，SEP 18-20，Waterloo, Ontario，physical，hackthenorth.com）"
+    accessed: 2026-10-03
 ---
 
 # Hack the North 2026 — meta
@@ -86,7 +89,8 @@ sources:
 
 ## 待核验清单
 
+- 2026-10-03 复查（状态滚动）：MLH 2027 赛季页 pastEvents 内嵌条目 `hack-the-north-e8` 已标 **ended**（startsAt 2026-09-18T19:00Z=15:00 EDT / endsAt 2026-09-20T20:00Z=16:00 EDT，Waterloo, Ontario，physical）——会期早于抓取日，`status` 由 `upcoming` 改为 `ended`；key_dates 维持官方站 09-19~21 双页验证值不动。MLH 口径至此（赛后）仍为 09-18~20 且带精确时刻，与官方站 09-19~21 的 1 天出入依旧未解决（见下条）。（来源：https://www.mlh.com/seasons/2027/events；抓取日期：2026-10-03）
 - [ ] HTN 2025 完整获奖名单（请求主会话 browser-use 预抓 hackthenorth2025.devpost.com/winners）。
-- [ ] 赛期 09-19~21 vs MLH 日历 09-18~20 的 1 天出入根因（是否含 9-18 报到日）。
+- [ ] 赛期 09-19~21 vs MLH 日历 09-18~20 的 1 天出入根因（是否含 9-18 报到日；2026-10-03 增数据点：MLH pastEvents 赛后仍记 09-18 19:00Z→09-20 20:00Z，非日历取整误差）。
 - [ ] Sponsor Prizes 清单（历届赞助商奖如 Amazon/Cerebras/Cohere/Rox 等仅检索级线索，未直抓）。
 - [ ] 2027 届申请窗口（预计 2027 年年中，届时再核）。
