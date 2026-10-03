@@ -55,9 +55,13 @@ def execute_scenario(scenario_path, *, estop=None):
     plan_all = plan_steps(sc.injection)
     start_index, done_records, already_finished = (resume_from(run_dir, plan_all)
                                                    if resuming else (0, [], False))
+    pre_events = []
+    if resuming and start_index == 0 and (run_dir / "steps.jsonl").exists():
+        pre_events.append({"type": "resume_reset", "msg": "进度损坏或无可匹配步，从 0 重跑",
+                           "ts_ms": _host_ms()})
     cal_path = Path("runs") / "calibration.json"
     cal_state = {"source": None}
-    kpi_rows, events, step_records = [], [], list(done_records)
+    kpi_rows, events, step_records = [], list(pre_events), list(done_records)
 
     def on_sample(s):
         kpi_rows.append({"ts_ms": _host_ms(), "link": s.link, "seq": s.seq,
@@ -152,7 +156,6 @@ def execute_scenario(scenario_path, *, estop=None):
                 fl.setdefault(st["style"], st["power_db"])
         return fl
 
-    _finalize_executed = True
     report = build_report(run_dir)
     return {"run_dir": run_dir, "outcomes": step_records,
             "fail_levels": _fail_levels(step_records),
