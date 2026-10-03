@@ -10,3 +10,4 @@
 | 2026-10-03 | 全量线:analyze | fn-analyze 首轮（用户三问：完善度/补充开发/产品完整性）：快照落 fn_docs/results/（motor_fail×2 留档）；三轴出三缺陷（时延口径/命中率口径混杂/数据落点漂移）+两缺口（批量跑批/设备实测）；提案 P1-P5 登记 registry（报告 2026-10-03-d090a6.md） | fn-score 首轮 pending=5 无历史可打 |
 | 2026-10-03 | 全量线:grill | 功能演进轮：fn-analyze 五提案全量采纳（用户三问定范围）——R11 真数据面（PX4 用户装工具链）/R12 口径修正/R13 验收深度+归档/R14 设备就绪脚本/R15 打包安装/R16 长跑+便携包；README 追加软件全清段 | fn-doc-lint 6 错=新 R 未入矩阵（fn-divide 待办）；门：停等 /fn-divide |
 | 2026-10-03 | 全量线:divide | 演进轮划分：新增 7 顶层（batch_eval/boot_selfcheck/bench_edge/calibrate_usrp/build_package/soak_test/make_portable_bundle）+4 子件（probe_px4_env/probe_service/write_user_manual/archive_run）+run_eval[改造]；树 48→59；B13-B17 批预登记 | fn-doc-lint 0 错 0 警（含矩阵/树/清单一致）；门：停等 /fn-scaffold |
+| 2026-10-03 | 全量线:scaffold | 演进轮加桩：11 新函数桩+11 测试占位+CLI 6 件（batch_eval/bench_edge/calibrate_usrp/build_package/soak_test/make_portable_bundle）；存量 48 件未动 | compileall 全绿；桩 11=新函数 11；pytest 收集 102；lint 0/0；门：停等 /fn-implement（B13 起） |
