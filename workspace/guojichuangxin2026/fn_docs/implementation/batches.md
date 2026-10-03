@@ -5,7 +5,6 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| B4 | build_residuals, cusum_detect, classify_fault, run_sudden_fault | run_sudden_fault wired | 残差通道含 B3 证据 |
 | ▶ B5 | build_feature_window, predict_risk_tcn, calibrate_conformal, check_physical_baseline, train_tcn, run_progressive_risk | run_progressive_risk wired | 6 件，建议子代理档；train_tcn 需微型数据冒烟 |
 | B6 | update_state, plan_disposal, run_safety_state_machine | run_safety_state_machine wired | 消费 B4/B5 事件 |
 | B7 | discover_device_module, health_check_module, route_device_frames, run_device_bus | run_device_bus wired（拔插双态用例） | R10 模块化架构 |
