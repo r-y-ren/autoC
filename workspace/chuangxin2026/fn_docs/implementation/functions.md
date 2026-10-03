@@ -1,0 +1,35 @@
+# functions.md —— 函数级实现清单（唯一状态真值）
+
+> fn-implement 独占更新。**代码是真值，本表只是导航。**
+> **改任何状态前必须先跑核验命令、在对话中贴出输出，绿了才许改。**
+
+| 函数 | 批次 | 状态(日期) | 核验命令+摘要 | commit |
+|---|---|---|---|---|
+| load_scenario | B1 | stub (10-03) | pytest tests/src/shared/load_scenario.py → 桩断言过 | 31106ded |
+| write_sigmf | B1 | stub (10-03) | 同上镜像 | 31106ded |
+| read_sigmf | B1 | stub (10-03) | 同上镜像 | 31106ded |
+| EstopManager | B1 | stub (10-03) | tests/src/shared/estop.py → 桩断言过 | 31106ded |
+| make_spectrogram | B1 | stub (10-03) | 同上镜像 | 31106ded |
+| create_instrument_backend | B2 | stub (10-03) | 桩断言过 | 31106ded |
+| synthesize_style | B3 | stub (10-03) | 桩断言过 | 31106ded |
+| generate_jamming | B3 | stub (10-03) | 桩断言过 | 31106ded |
+| parse_serial_line | B4 | stub (10-03) | 桩断言过 | 31106ded |
+| start_dut_source | B4 | stub (10-03) | 桩断言过 | 31106ded |
+| collect_dut_samples | B4 | stub (10-03) | 桩断言过 | 31106ded |
+| compute_spectrum_stats | B5 | stub (10-03) | 桩断言过 | 31106ded |
+| record_run_streams | B5 | stub (10-03) | 桩断言过 | 31106ded |
+| plot_triple_curves | B6 | stub (10-03) | 桩断言过 | 31106ded |
+| build_report | B6 | stub (10-03) | 桩断言过 | 31106ded |
+| plan_steps | B7 | stub (10-03) | 桩断言过 | 31106ded |
+| check_failure | B7 | stub (10-03) | 桩断言过 | 31106ded |
+| execute_scenario | B7 | stub (10-03) | 桩断言过 | 31106ded |
+| index_dataset | B8 | stub (10-03) | 桩断言过 | 31106ded |
+| grouped_cv_split | B9 | stub (10-03) | 桩断言过 | 31106ded |
+| train_classifier | B9 | stub (10-03) | 桩断言过 | 31106ded |
+| predict_style | B10 | stub (10-03) | 桩断言过 | 31106ded |
+| run_demo | B11 | stub (10-03) | 桩断言过 | 31106ded |
+| serve_console | B12 | stub (10-03) | 桩断言过 | 31106ded |
+| bridge_to_sitl | B13 | stub (10-03) | 桩断言过 | 31106ded |
+| animate_link_state | B14 | stub (10-03) | 桩断言过 | 31106ded |
+
+（状态：stub / implemented / tested / wired 日期 / blocked: 一句原因；全函数按依赖序平铺）
