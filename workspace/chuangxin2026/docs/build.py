@@ -11,6 +11,7 @@ if __name__ == "__main__":
     out = None
     if "-o" in sys.argv:
         out = sys.argv[sys.argv.index("-o") + 1]
-    res = build_mid_material(mode=mode, out_path=out)
+    fw = Path(__file__).resolve().parent.parent / "fn_work"
+    res = build_mid_material(mode=mode, runs_dir=str(fw / "runs"), out_path=out)
     print(res)
     raise SystemExit(0 if res else 1)
