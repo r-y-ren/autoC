@@ -19,10 +19,10 @@
 | compute_spectrum_stats | B5 | tested (10-03) | pytest tests/src/record_run_streams → 4 passed | 2c987515 |
 | record_run_streams | B5 | wired (10-03) | 同批 4 passed（三路落盘+覆盖率≥0.9+extra_events） | 2c987515 |
 | plot_triple_curves | B6 | tested (10-03) | pytest tests/src/build_report → 4 passed | 55e2edc6 |
-| build_report | B6 | wired (10-03) | 同批 4 passed（声明+失效行+图嵌入断言） | 55e2edc6 |
+| build_report | B6+B16 | wired (10-03) | 脚注/标定行断言随集成测 | 2ee701e6 |
 | plan_steps | B7 | tested (10-03) | pytest tests/src/execute_scenario → 8 passed | f413bed5 |
 | check_failure | B7 | tested (10-03) | 同批 8 passed（四分支） | f413bed5 |
-| execute_scenario | B7 | wired (10-03) | 同批 8 passed——国标卡失效电平+对照不误报端到端 | f413bed5 |
+| execute_scenario | B7+B16 | wired (10-03) | 改造后全量回归+R14/R15 三集成测 | 2ee701e6 |
 | index_dataset | B8 | wired (10-03) | pytest tests/src/index_dataset → 1 passed | 7c9c19d0 |
 | grouped_cv_split | B9 | tested (10-03) | pytest tests/src/train_classifier → 3 passed | fc810971 |
 | train_classifier | B9 | wired (10-03) | 同批 3 passed——8 录制 4 组 F1≥0.9+模型被 predictor 消费 | fc810971 |
