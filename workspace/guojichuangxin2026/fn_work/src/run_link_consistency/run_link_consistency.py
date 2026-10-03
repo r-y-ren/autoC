@@ -12,8 +12,8 @@ _WARMUP_S = 4.0
 def _dist_from_ref(lat, lon, ref):
     if None in (lat, lon, *ref):
         return None
-    return math.hypot((lat - ref[0]) * 111320 * math.cos(math.radians(lat)),
-                      (lon - ref[1]) * 111320)
+    return math.hypot((lat - ref[0]) * 111320,
+                      (lon - ref[1]) * 111320 * math.cos(math.radians(lat)))
 
 
 def run_link_consistency(frames):

@@ -29,6 +29,11 @@ def _crit_frame(frame, scenario):
     return False
 
 
+# 故障生效时刻（合成源内置；px4 源由注入回执写入 manifest 覆盖）
+_INJECT_AT_S = {"lowbat_headwind": 0.0, "motor_fail": 3.0, "link_degrade": 2.0}
+_PROGRESSIVE_ONLY = ("lowbat_headwind",)   # hit_rate 仅渐进场景
+
+
 def _lead_metrics(frames, evs, scenario):
     t_crit = next((float(f["t"]) for f in frames if _crit_frame(f, scenario)), None)
     sev = [e for e in evs if e.get("type") == "progressive"
@@ -37,15 +42,24 @@ def _lead_metrics(frames, evs, scenario):
     if t_crit is None or not sev:
         return {"lead_p10_s": None, "lead_median_s": None, "lead_hit_rate": None,
                 "t_crit": t_crit, "note": "无判据触发或无预警事件"}
+    base = {"lead_p10_s": None, "lead_median_s": None, "lead_hit_rate": None,
+            "t_crit": t_crit}
+    if scenario not in _PROGRESSIVE_ONLY:
+        return base                                # R12：突发/链路场景不报命中率
     leads = [max(0.0, t_crit - float(e["t"])) for e in sev
              if float(e["t"]) <= t_crit]
     if not leads:
-        return {"lead_p10_s": None, "lead_median_s": None, "lead_hit_rate": 0.0,
-                "t_crit": t_crit}
-    return {"lead_p10_s": round(_percentile(leads, 0.10), 3),
-            "lead_median_s": round(stats.median(leads), 3),
-            "lead_hit_rate": round(sum(1 for x in leads if x >= 5.0) / len(leads), 3),
-            "t_crit": t_crit, "n_events": len(leads)}
+        base["lead_hit_rate"] = 0.0
+        return base
+    base.update({"lead_p10_s": round(_percentile(leads, 0.10), 3),
+                 "lead_median_s": round(stats.median(leads), 3),
+                 "lead_hit_rate": round(sum(1 for x in leads if x >= 5.0) / len(leads), 3),
+                 "n_events": len(leads)})
+    return base
+
+
+def inject_at_v(scenario, cfg):
+    return float(cfg.get("inject_at_s", _INJECT_AT_S.get(scenario, 0.0)))
 
 
 def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
@@ -77,6 +91,12 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
     for i in range(runs):
         seed = (seeds[i] if seeds and i < len(seeds) else 1000 + i)
         rd = open_run_dir(runs_root, f"{scenario}_eval", seed=seed)
+        _man = rd / "manifest.json"
+        import json as _json
+        _m = _json.loads(_man.read_text(encoding="utf-8"))
+        _m["inject_at_s"] = float(cfg.get("inject_at_s", _INJECT_AT_S.get(scenario, 0.0)))
+        _m["data_source"] = cfg.get("data_source", "synthetic")
+        _man.write_text(_json.dumps(_m, ensure_ascii=False, indent=1), encoding="utf-8")
         sitl = SyntheticSITL(scenario)
         sitl.inject_scenario(scenario, "mid", {})          # 评估口径：中档强度
         icfg = {"run": {"hz": 20, "duration_s": 12.0, "home": [32.0, 118.8],
@@ -85,7 +105,10 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
         f_link, f_risk, f_mgn, f_sud, f_main = itertools.tee(
             run_ingest(icfg, rd, conn=sitl), 5)
         evs, frames_kept = [], []
-        risk = run_progressive_risk(f_risk, (f["margins"] for f in f_mgn), None)
+        risk = run_progressive_risk(
+            f_risk, (f["margins"] for f in f_mgn),
+            {"model": cfg.get("model"), "quantiles": cfg.get("quantiles"),
+             "thresholds": cfg.get("thresholds")})
         sudden = run_sudden_fault(f_sud)
         link = run_link_consistency(f_link)
         sm = run_safety_state_machine(evs, [], {
@@ -99,23 +122,35 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
             out = next(sm)
             append_record(rd, "event", {"type": "state", "state": out["state"], "t": f["t"]})
             next(link, None)
-        # 指标
+        # 指标（R12 口径：时延=确认时刻−注入生效时刻）
+        inject_at = float(cfg.get("inject_at_s", _INJECT_AT_S.get(scenario, 0.0)))
         m = _lead_metrics(frames_kept, evs, scenario)
         sudden_evs = [e for e in evs if e.get("type") == "sudden"]
-        m["confirm_p90_s"] = round(_percentile(
-            [e["latency_s"] for e in sudden_evs if "latency_s" in e], 0.90), 3) \
-            if sudden_evs and any(e.get("latency_s") is not None for e in sudden_evs) else None
+        m["confirm_p90_s"] = round(max(0.0, float(
+            min(sudden_evs, key=lambda e: float(e["t_confirm"]))["t_confirm"]) - inject_at), 3) \
+            if sudden_evs else None  # R12：时延=注入→首个确认（重触发不计）
         m["type_correct"] = sum(1 for e in sudden_evs
                                 if e.get("fault") in ("电机异常", "电调异常", "链路瞬断"))
         m["type_total"] = len(sudden_evs)
         m["frames"] = len(frames_kept)
         m["replay_ok"] = replay_check(str(rd)) == 0
+        data_source = cfg.get("data_source", "synthetic")
+        note = cfg.get("note", "synthetic-mid")
+        if cfg.get("model") is None and cfg.get("note") is None:
+            note += "+degraded-model"          # R11：模型缺席自动降级并如实标注
         for k, v in m.items():
+            if v is None:
+                continue                     # R12：不适用口径不落键（突发无提前量族）
             append_record(rd, "metric", {"key": f"{scenario}/{k}", "value": v,
-                                         "note": "synthetic-mid"})
+                                         "note": note, "data_source": data_source})
+        append_record(rd, "metric", {"key": f"{scenario}/inject_at_s",
+                                     "value": inject_at, "note": note,
+                                     "data_source": data_source})
         for k, v in m.items():
             all_metrics.setdefault(k, []).append(v)
-    summary = {"scenario": scenario, "runs": runs, "source": "synthetic-mid",
+    summary = {"scenario": scenario, "runs": runs,
+               "data_source": cfg.get("data_source", "synthetic"),
+               "note": cfg.get("note", "synthetic-mid"),
                "summary": {k: (round(stats.median(v), 3) if isinstance(v[0], (int, float))
                                and v[0] is not None else v[-1])
                            for k, v in all_metrics.items() if None not in v}}

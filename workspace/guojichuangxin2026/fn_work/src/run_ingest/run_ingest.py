@@ -60,9 +60,9 @@ def run_ingest(config: dict, run_dir, stop_condition=None, conn=None, realtime: 
                                     getattr(msg, "zg", 0), getattr(msg, "xac", 0),
                                     getattr(msg, "yac", 0), getattr(msg, "zac", 0)))
             frame = normalize_telemetry(batch, state, now=round(t_sim, 3))
-            # 遥测到达间隔异常（链路余量用）：本拍消息量骤降视为 gap
-            expected = max(1, hz // 4)
-            frame["telem_gaps"] = [len(batch) < expected // 2]
+            # 遥测到达间隔异常（链路余量用）：本拍完全无消息视为 gap
+            # （消息速率随源而异，空拍才是无歧义的丢包证据）
+            frame["telem_gaps"] = [len(batch) == 0]
             imu_buf = [s for s in imu_buf if t_sim - s[0] <= 1.0]
             frame.update(aggregate_imu_features(imu_buf))
             margins = compute_physical_margins(frames_hist + [frame], home, wind)

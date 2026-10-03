@@ -20,8 +20,8 @@ def _home_dist_m(f, home):
     if home is None or f.get("lat") is None or f.get("lon") is None:
         return None
     hlat, hlon = home
-    return math.hypot((f["lat"] - hlat) * 111320 * math.cos(math.radians(f["lat"])),
-                      (f["lon"] - hlon) * 111320)
+    return math.hypot((f["lat"] - hlat) * 111320,
+                      (f["lon"] - hlon) * 111320 * math.cos(math.radians(f["lat"])))
 
 
 def compute_physical_margins(frames, home_position=None, wind_ms: float = 0.0,

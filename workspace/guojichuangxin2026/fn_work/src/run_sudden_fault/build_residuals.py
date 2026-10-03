@@ -18,8 +18,8 @@ def build_residuals(frames, raw_telemetry=None):
                if h.get("lat") is not None and h.get("lon") is not None]
         if len(pts) >= 5 and pts[-1][0] > pts[0][0]:
             dt = pts[-1][0] - pts[0][0]
-            dx = (pts[-1][1] - pts[0][1]) * 111320 * math.cos(math.radians(f["lat"]))
-            dy = (pts[-1][2] - pts[0][2]) * 111320
+            dx = (pts[-1][1] - pts[0][1]) * 111320            # 纬度差不乘 cos（cos 只属经度）
+            dy = (pts[-1][2] - pts[0][2]) * 111320 * math.cos(math.radians(f["lat"]))
             v_gps = math.hypot(dx / dt, dy / dt)
             v_loc = math.hypot(f.get("vx") or 0, f.get("vy") or 0)
             out["pos_vel_innov"] = min(abs(v_gps - v_loc) / 6.0, 3.0)

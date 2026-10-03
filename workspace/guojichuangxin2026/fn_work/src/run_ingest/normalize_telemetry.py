@@ -114,8 +114,8 @@ def normalize_telemetry(messages: list, state: dict | None = None, now: float = 
     lx, ly = state.get("local_xy", (None, None))
     pg = state.get("gps_xy_prev"); pl = state.get("local_xy_prev")
     if None not in (gx, gy, lx, ly) and isinstance(pg, tuple) and isinstance(pl, tuple):
-        d_gps = math.hypot((gx - pg[0]) * 111320 * math.cos(math.radians(gx)),
-                           (gy - pg[1]) * 111320)
+        d_gps = math.hypot((gx - pg[0]) * 111320,
+                           (gy - pg[1]) * 111320 * math.cos(math.radians(gx)))
         d_loc = math.hypot(lx - pl[0], ly - pl[1])
         if abs(d_gps - d_loc) > _CROSS_POS_M:  # 两源对位移量的分歧超限→双降质
             mask["lat"] = mask["lon"] = 0

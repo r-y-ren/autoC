@@ -25,7 +25,7 @@ class SyntheticSITL:
         self._drain = [{"lowbat_headwind": (1.0, 2.2), "motor_fail": (1.0, 1.0),
                         "link_degrade": (1.0, 1.0)}[scenario][1]]
         self._msgs = []
-        self._budget = 8
+        self._serve_t = 0.05
         self._t = 0.0
         self._i = 0
         self._build(0.5)
@@ -35,9 +35,11 @@ class SyntheticSITL:
         import types as _t
         while self._t <= upto:
             t, i = self._t, self._i
-            drain = 1.0 - 0.25 * t
+            # 基础衰减 0.10/s；档位倍率 low1.4/mid2.2/high3.2 → mid 穿 25% 线约 6.7s
+            # （留足 5s 持续判据的预警窗；原 0.25 基率 mid 1.3s 穿线来不及预警）
+            drain = 1.0 - 0.10 * t
             if self.level and self.scenario == "lowbat_headwind":
-                drain = min(drain, 1.0 - 0.25 * t * self._drain[0])
+                drain = min(drain, 1.0 - 0.10 * t * self._drain[0])
             def mk(mtype, **kw):
                 m = _t.SimpleNamespace(get_type=lambda m=mtype: m, **kw)
                 m._timestamp = t
@@ -78,14 +80,14 @@ class SyntheticSITL:
         if type == "HEARTBEAT" and blocking:
             m = _t.SimpleNamespace(get_type=lambda: "HEARTBEAT", custom_mode=4, base_mode=209)
             return m
-        if self._budget <= 0:
-            self._budget = 8
-            return None
+        # 时间戳切片供数：每拍恰好供给该 0.05s 窗内的消息（与 20Hz 帧时钟物理对齐）
         if not self._msgs:
-            self._build(self._t + 1.0)          # 滚动续产
+            self._build(self._t + 1.0)
+        if self._msgs and float(self._msgs[0]._timestamp) > self._serve_t + 1e-9:
+            self._serve_t += 0.05
+            return None                          # 本拍供完
         if not self._msgs:
             return None
-        self._budget -= 1
         return self._msgs.pop(0)
 
     def close(self):

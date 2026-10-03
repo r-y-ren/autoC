@@ -7,8 +7,8 @@ _RANGE_M = 9000.0
 
 
 def _dist(a, b):
-    return math.hypot((a[0] - b[0]) * 111320 * math.cos(math.radians(a[0])),
-                      (a[1] - b[1]) * 111320)
+    return math.hypot((a[0] - b[0]) * 111320,
+                      (a[1] - b[1]) * 111320 * math.cos(math.radians(a[0])))
 
 
 def plan_disposal(state, margins, mission_context):
