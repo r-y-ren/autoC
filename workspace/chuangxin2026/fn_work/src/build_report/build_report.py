@@ -31,6 +31,23 @@ def build_report(run_dir):
     if cal.exists():
         lines += ["## 标定表", "", "见 `%s`（本 run 引用）。" % cal.name, ""]
 
+    spd = run_dir / "speed.json"
+    if spd.exists():
+        try:
+            info = json.loads(spd.read_text(encoding="utf-8"))
+            if float(info.get("speed", 1.0)) != 1.0:
+                lines += ["> 脚注：%s" % info.get("note", "加速运行"), ""]
+        except Exception:  # noqa: BLE001
+            pass
+    calst = run_dir / "calibration_state.json"
+    if calst.exists():
+        try:
+            src = json.loads(calst.read_text(encoding="utf-8")).get("source")
+            lines += ["> 标定：%s" % ("标定表已应用（calibration.json）" if src == "calibrated"
+                                     else "未标定（恒等映射）"), ""]
+        except Exception:  # noqa: BLE001
+            pass
+
     lines += ["## 三元曲线", ""]
     if figs["produced"]:
         lines += ["![per_vs_jsr](figs/per_vs_jsr.png)", "",

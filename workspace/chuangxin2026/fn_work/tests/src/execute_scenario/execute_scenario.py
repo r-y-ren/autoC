@@ -56,3 +56,53 @@ def test_control_card_no_false_alarm(tmp_path):
     res = execute_scenario(p)
     assert res["nojam_false_alarm"] is False
     assert res["fail_levels"] == {}
+
+
+# ---- 演进轮一集成（R14 加速判据 / R15 断点+标定） ----
+FWROOT = Path(__file__).resolve().parents[3]
+
+
+def test_r14_fast_speed_still_finds_fail_level(tmp_path, monkeypatch):
+    # 40 倍速跑标准国标卡：判据同步缩放后必须仍能报出失效电平+报告脚注
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("LINKBENCH_SPEED", "40")
+    from src.execute_scenario.execute_scenario import execute_scenario
+    res = execute_scenario(FWROOT / "scenarios" / "gb42590_noise.yaml")
+    assert res["fail_levels"], "40 倍速下失效电平为空=假阴性"
+    text = res["report_path"].read_text(encoding="utf-8")
+    assert "加速倍率 40" in text and "同步缩放" in text
+
+
+def test_r15_resume_half_run(tmp_path, monkeypatch):
+    # 全量跑 mini 卡→截断 steps 至 1 行→以 run 目录重入=断点续跑补齐
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("LINKBENCH_SPEED", "60")
+    from src.execute_scenario.execute_scenario import execute_scenario
+    card = tmp_path / "mini.yaml"
+    card.write_text(GB, encoding="utf-8")
+    res1 = execute_scenario(card)
+    steps_p = res1["run_dir"] / "steps.jsonl"
+    lines = [ln for ln in steps_p.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    steps_p.write_text(lines[0] + "\n", encoding="utf-8")
+    res2 = execute_scenario(res1["run_dir"])
+    assert res2["resumed"] is True
+    new_lines = [ln for ln in steps_p.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    assert len(lines) >= 3                        # 全量跑=失效即停前的 3 步
+    assert len(new_lines) == len(lines)           # 续跑补齐到同样终点
+    assert new_lines[0] == lines[0]               # 已完成首步原样保留
+    assert (res1["run_dir"] / "report.md").exists()
+
+
+def test_r15_calibration_applied_line(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("LINKBENCH_SPEED", "60")
+    (tmp_path / "runs").mkdir()
+    (tmp_path / "runs" / "calibration.json").write_text(json.dumps({"entries": [
+        {"freq_hz": 2422000000, "gain_db": p + 10, "power_db": p}
+        for p in range(-5, 16, 5)]}), encoding="utf-8")
+    from src.execute_scenario.execute_scenario import execute_scenario
+    card = tmp_path / "mini.yaml"
+    card.write_text(GB, encoding="utf-8")
+    res = execute_scenario(card)
+    text = res["report_path"].read_text(encoding="utf-8")
+    assert "标定表已应用" in text
