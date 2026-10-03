@@ -11,3 +11,5 @@
 | 2026-10-03 | B6 | update_state, plan_disposal, run_safety_state_machine(wired) | 6 passed；升级直达路径缺陷修复 |
 | 2026-10-03 | B7 | discover_device_module, health_check_module, route_device_frames, run_device_bus(wired) | 5 passed；拔插双态切换实证 |
 | 2026-10-03 | B8 | replay_spectrum_source, capture_spectrum, compute_occupancy, run_spectrum_monitor(wired), sdr_check(wired) | 7 passed；缺席自动回放+双源同管线 |
+| 2026-10-03 | B9 | pipe_events, register_pages, run_ground_station(wired) | 5 passed；五页+分页 API |
+| 2026-10-03 | B10 | spawn_sitl, render_console, session_control_api, launch_demo_session(wired) | 5 passed；会话端到端冒烟（tee 分流缺陷修复） |

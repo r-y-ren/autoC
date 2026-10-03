@@ -5,10 +5,10 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B9 | pipe_events, register_pages, run_ground_station | run_ground_station wired（五页起服务） | 依赖 B8 瀑布流 |
-| B10 | spawn_sitl, render_console, session_control_api, launch_demo_session | launch_demo_session wired（SIH 冒烟） | R9 演示控制台 |
-| B11 | export_metrics_table, draft_revision_notes, compile_documents, build_materials | build_materials wired | 材料 |
+| ▶ B11 | export_metrics_table, draft_revision_notes, compile_documents, build_materials | build_materials wired | 材料 |
 | B12 | run_eval + 全链路 smoke（smoke_boot 实跑） | eval CLI 实跑出指标分片；sw-boot 绿 | 评估集成收官 |
+
+| 2026-10-03 | 签名微调 | spawn_sitl 增 synthetic 备选（设备缺席等价数据面）；EventHub 增 publish_sync（会话线程侧发布）；控制台模板寄宿 run_ground_station.console_page → 归位 launch_demo_session.render_console |
 
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |
