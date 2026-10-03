@@ -5,8 +5,8 @@
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B1 | shared×5：load_scenario, write_sigmf, read_sigmf, EstopManager, make_spectrogram | 五函数 tested 自有单测绿；四张场景卡真实载入通过 | 共享基座，服务全部顶层 |
-| B2 | create_instrument_backend | wired：mock 后端工厂实跑；b210/pyvisa 惰性分支+缺驱动报错路径 | 仪表插槽；后端类实现于本包内 |
+| B1 | shared×5：load_scenario, write_sigmf, read_sigmf, EstopManager, make_spectrogram | 五函数 tested 自有单测绿；四张场景卡真实载入通过 | 共享基座，服务全部顶层 |
+| ▶ B2 | create_instrument_backend | wired：mock 后端工厂实跑；b210/pyvisa 惰性分支+缺驱动报错路径 | 仪表插槽；后端类实现于本包内 |
 | B3 | synthesize_style → generate_jamming | generate_jamming wired：mock 后端 dry-run 参数表+短跑落 SigMF（合成路径） | 真实射频=人工项 man-lab |
 | B4 | parse_serial_line → start_dut_source → collect_dut_samples | collect_dut_samples wired：合成源连续流+gap 事件+真实/合成同接口 | 链路插槽；真实串口=人工项 |
 | B5 | compute_spectrum_stats → record_run_streams | record_run_streams wired：合成三路 60s 落盘+覆盖率≥99% | |
