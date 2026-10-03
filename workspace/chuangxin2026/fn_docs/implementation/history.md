@@ -16,3 +16,4 @@
 | 10-03 | B11+B12 | run_demo, serve_console（内嵌单页+急停硬通道）；顺修 generate_jamming out_dir 拼层 bug（树内函数、B3 回归同批跑） | 4 单测绿+ui_selftest rc=0；demo 一条命令三件产出 |
 | 10-03 | B13+B14 | bridge_to_sitl [P1], animate_link_state [P1] | 3 单测绿；**27/27 函数全部 wired——fn-implement 全批次完成** |
 | 10-03 | 评审修复轮 | 双轴评审 4 项需修中 4 项当场闭环（三 CLI 入口/estop 联通/serial seq/步距告警+弱断言与文档行修正）；2 项结构性留批间门裁决（execute 复用 record/标定、断点续跑） | 全量测试绿复跑 |
+| 10-03 | B15（演进一） | launch_console/render_static_pages/register_cjk_font + serve_console 改造落位 + 字体接入两绘图方 + legend 守卫 | 全量 77 绿；start --selfcheck rc=0；-W error 三图零告警 |
