@@ -10,7 +10,7 @@ from src.shared.write_sigmf import write_sigmf
 
 def generate_jamming(spec, *, dry_run: bool = False, out_dir=None, backend: str = "b210"):
     # spec=InjectionSpec；dry_run 只产参数表；任何失败先停发再返回
-    out_dir = Path(out_dir or "runs") / "gen"
+    out_dir = Path(out_dir) if out_dir else Path("runs") / "gen"
     errors: list[str] = []
     param_table: list[dict] = []
     sigmf_paths: list[Path] = []
