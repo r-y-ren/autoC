@@ -15,10 +15,9 @@
 | B11 | export_metrics_table, draft_revision_notes, compile_documents, build_materials | build_materials wired | 材料 |
 | B12 | run_eval + 全链路 smoke（smoke_boot 实跑） | eval CLI 实跑出指标分片；sw-boot 绿 | 评估集成收官 |
 
-| （B3/B4 实现期缺陷修复：dB 残差模型重构/CUSUM 零值键污染/距离参考点对齐——均为实现内修正非结构变化） |
-
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |
 |---|---|---|
 | 2026-10-03 | 签名微调 | open_run_dir 增可选 config_snapshot 参数（运行清单落配置快照） |
+| 2026-10-03 | 实现内修正 | B3/B4 缺陷修复：dB 残差模型重构/CUSUM 零值键污染/距离参考点对齐（非结构变化） |
 | 2026-10-03 | 预授权 | 用户字面授权"剩下的批次一并完成"→批间门不停人，核验照跑照贴 |
