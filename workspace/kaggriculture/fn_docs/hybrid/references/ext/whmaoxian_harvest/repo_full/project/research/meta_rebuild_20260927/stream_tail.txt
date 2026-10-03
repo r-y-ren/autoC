@@ -1,0 +1,46 @@
+
+# Historical public sales streams + causal emitted-order bookkeeping.
+_MS_PARENT=phase_b_agent
+_MS_PREDICT_PARENT=_v92_predict2
+_MS_REPORT={'ledger_corrections':0,'ledger_units':0,'q_fires':0,'q_units':0,'gated_turns':0,'errors':0}
+_MP_REPORT=_MS_REPORT
+if _MS_STREAMS:
+    _V92_Q_CACHE.clear()
+    _V92_Q_CACHE['streams']=[(i,{(t,p):q for t,p,q in events}) for i,events in enumerate(_MS_STREAMS)]
+
+def _v92_predict2(obs,action,st):
+    _v92_q_update(obs,st)
+    best=st['best']
+    if best is None:return action
+    matches=st['m'][best];misses=st['f'][best]
+    if matches<_MS_MIN_MATCH or matches/max(1,matches+misses)<_MS_PRECISION:
+        _MS_REPORT['gated_turns']+=1
+        return action
+    return _MS_PREDICT_PARENT(obs,action,st)
+
+def meta_stream_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        for key in _MS_REPORT:_MS_REPORT[key]=0
+        for key in _V92_Q_REPORT:_V92_Q_REPORT[key]=0
+    action=_MS_PARENT(observation,configuration)
+    previous=_V9_RACE.get(seat,{}).get('prev')
+    if _MS_SYNC and previous and previous.get('step')==step:
+        stock=projected_shed(action,FarmView(observation))
+        orders=action.get('market',[])[:10]
+        bought={o[1] for o in orders if len(o)>=3 and o[0]=='BUY_PRODUCT'}
+        for item in V9_RACE_ITEMS:
+            if item in bought:continue
+            requested=sum(max(0,int(o[2])) for o in orders if len(o)>=3 and o[:2]==['SELL',item])
+            sold=min(max(0,int(stock.get(item,0))),requested)
+            old=int(previous.setdefault('own',{}).get(item,0))
+            if sold!=old:
+                _MS_REPORT['ledger_corrections']+=1;_MS_REPORT['ledger_units']+=abs(sold-old)
+            previous['own'][item]=sold
+            previous.setdefault('left',{})[item]=max(0,int(stock.get(item,0))-sold)
+    _MS_REPORT['q_fires']=_V92_Q_REPORT['pred_fires']
+    _MS_REPORT['q_units']=_V92_Q_REPORT['pred_units']
+    return action
+meta_stream_agent.telemetry=_MS_REPORT
+agent=meta_stream_agent
+kaggle_submission_agent=meta_stream_agent

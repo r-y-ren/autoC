@@ -1,0 +1,81 @@
+
+# One-day reactive repair for the deliberately tighter opening finance experiment.
+_OF29_PARENT=agent
+_OF29_STATE={}
+_OF29_REPORT={'rescuer_turns':0,'feed_requests':0,'fertilizer_sales':0,'wheat_requests':0}
+_MP_REPORT=_OF29_REPORT
+
+def _of29_move(position,target):
+    x,y=position;tx,ty=target
+    if x<tx:return ['EAST']
+    if x>tx:return ['WEST']
+    if y<ty:return ['SOUTH']
+    if y>ty:return ['NORTH']
+    return ['PASS']
+
+def opening_feed_rescue_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        _OF29_STATE.clear()
+        for key in _OF29_REPORT:_OF29_REPORT[key]=0
+    action=_OF29_PARENT(observation,configuration)
+    if step//24!=1:return action
+    farm=observation['farms'][seat];private=observation['private'];board=len(farm['tiles']);half=board//2
+    adjacent=[(half-1,half-1),(half,half-1),(half-1,half),(half,half)]
+    positions=[farm['farmer']]+list(farm['hands']);inventories=private['inventories']
+    animals=[((x,y),tile) for y,row in enumerate(farm['tiles']) for x,tile in enumerate(row) if isinstance(tile,dict) and tile.get('animal')]
+    hungry=[pos for pos,tile in animals if tile.get('consecutive_unfed',0)>0 and not tile.get('fed_today')]
+    state=_OF29_STATE.get(seat)
+    if state is None:
+        if not hungry or len(positions)<2:return action
+        targets=[pos for pos,tile in animals if tile.get('fertilizer_available')] or adjacent
+        actor=min(range(1,len(positions)),key=lambda i:min(abs(positions[i][0]-p[0])+abs(positions[i][1]-p[1]) for p in targets))
+        state=_OF29_STATE[seat]={'actor':actor}
+    actor=state['actor']
+    if actor>=len(positions):return action
+    position=tuple(positions[actor]);inventory=inventories[actor] if actor<len(inventories) else {}
+    commands=[list(action.get('farmer') or ['PASS'])]+[list(c) for c in action.get('hands',[])]
+    while len(commands)<len(positions):commands.append(['PASS'])
+    market=[list(o) for o in action.get('market',[])]
+    near=lambda points:min(points,key=lambda p:abs(position[0]-p[0])+abs(position[1]-p[1]))
+    shed_target=near(adjacent);command=['PASS']
+    if hungry and inventory.get('WHEAT',0)>0:
+        target=near(hungry);command=['FEED'] if position==target else _of29_move(position,target)
+        _OF29_REPORT['feed_requests']+=int(command==['FEED'])
+    elif inventory.get('FERTILIZER',0)>0:
+        command=['PLACE','FERTILIZER',inventory['FERTILIZER']] if position in adjacent else _of29_move(position,shed_target)
+    elif hungry and private['shed'].get('WHEAT',0)>0:
+        command=['PICKUP','WHEAT',min(len(hungry),private['shed']['WHEAT'])] if position in adjacent else _of29_move(position,shed_target)
+    else:
+        tasks=[]
+        for pos,tile in animals:
+            if tile.get('fertilizer_available'):tasks.append((300 if hungry else 100,pos,['COLLECT_FERTILIZER']))
+            if tile.get('fed_today') and not tile.get('cared_today'):tasks.append((120,pos,['CARE']))
+        for y,row in enumerate(farm['tiles']):
+            for x,tile in enumerate(row):
+                if isinstance(tile,dict) and tile.get('kind')=='PLANT' and not tile.get('watered_today') and tile.get('consecutive_unwatered',0)>0:
+                    tasks.append((500,(x,y),['WATER']))
+        if tasks:
+            value,target,op=max(tasks,key=lambda task:task[0]/(1+abs(position[0]-task[1][0])+abs(position[1]-task[1][1])))
+            command=op if position==target else _of29_move(position,target)
+    if hungry:
+        market=[o for o in market if o[:2]!=['SELL','WHEAT']]
+        planned=sum(int(o[2]) for o in market if len(o)>=3 and o[:2]==['BUY_PRODUCT','WHEAT'])
+        shortage=max(0,len(hungry)-int(inventory.get('WHEAT',0))-int(private['shed'].get('WHEAT',0))-planned)
+        affordable=int(float(farm['money'])//(float(observation['market']['prices']['WHEAT'])+3))
+        quantity=min(shortage,affordable)
+        if quantity>0 and len(market)<10:
+            market.insert(0,['BUY_PRODUCT','WHEAT',quantity]);_OF29_REPORT['wheat_requests']+=quantity
+            if command[0] not in ('PLACE','FEED'):command=['PASS'] if position in adjacent else _of29_move(position,shed_target)
+    commands[actor]=command
+    result=dict(action,farmer=commands[0],hands=commands[1:],market=market)
+    stock=projected_shed(result,FarmView(observation))
+    planned=sum(int(o[2]) for o in market if len(o)>=3 and o[:2]==['SELL','FERTILIZER'])
+    extra=max(0,int(stock.get('FERTILIZER',0))-planned)
+    if extra>0 and len(market)<10:
+        market.insert(0,['SELL','FERTILIZER',extra]);_OF29_REPORT['fertilizer_sales']+=extra
+    _OF29_REPORT['rescuer_turns']+=1
+    return result
+opening_feed_rescue_agent.telemetry=_OF29_REPORT
+agent=opening_feed_rescue_agent
+kaggle_submission_agent=opening_feed_rescue_agent

@@ -1,0 +1,665 @@
+{
+  "result": {
+    "candidate": "research/meta_rebuild_20260927/candidates/repeat_two.py",
+    "opponent": "submissions/release_v10_r2/main.py",
+    "seed": 1799657451,
+    "seat": 0,
+    "money": [
+      119202.0,
+      110008.0
+    ],
+    "margin": 9194.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "max_seconds": 0.09194170000046142,
+    "total_seconds": 1.6276558999961708,
+    "seconds": 5.278378499999235,
+    "errors": [
+      {},
+      {}
+    ],
+    "invalid_actions": 0,
+    "action_hash": [
+      "036937a1f65993dbfdb0275a7ee00919512aedca12b3c7cff81d88d06de25a72",
+      "08aa9feea0450acc38d3f66e364430962853ed96b8e77d2a1d8c6d206988149c"
+    ],
+    "shops": [
+      "YARN_STORE",
+      "BAKERY",
+      "YARN_STORE",
+      "YARN_STORE",
+      "ICE_CREAM_SHOP",
+      "BAKERY",
+      "BRUNCH_SPOT",
+      "SMOOTHIE_SHOP"
+    ],
+    "valid": true,
+    "checkpoints": [
+      {
+        "step": 24,
+        "money": 12.0,
+        "mix": {
+          "WHEAT": 8,
+          "MELON": 12,
+          "SHEEP": 2,
+          "COW": 2
+        },
+        "hands": 0
+      },
+      {
+        "step": 48,
+        "money": 101.0,
+        "mix": {
+          "WHEAT": 8,
+          "MELON": 12,
+          "PASTURE": 1,
+          "SHEEP": 2,
+          "COW": 2
+        },
+        "hands": 0
+      },
+      {
+        "step": 72,
+        "money": 214.0,
+        "mix": {
+          "WHEAT": 8,
+          "MELON": 12,
+          "COW": 3,
+          "SHEEP": 2
+        },
+        "hands": 0
+      },
+      {
+        "step": 144,
+        "money": 788.0,
+        "mix": {
+          "WHEAT": 3,
+          "STRAWBERRY": 4,
+          "MELON": 12,
+          "COW": 4,
+          "SHEEP": 2
+        },
+        "hands": 0
+      },
+      {
+        "step": 240,
+        "money": 3492.0,
+        "mix": {
+          "WHEAT": 5,
+          "STRAWBERRY": 20,
+          "MELON": 12,
+          "COW": 4,
+          "SHEEP": 9
+        },
+        "hands": 0
+      },
+      {
+        "step": 480,
+        "money": 51380.0,
+        "mix": {
+          "WHEAT": 25,
+          "STRAWBERRY": 33,
+          "SHEEP": 19,
+          "COW": 4,
+          "WEED": 2
+        },
+        "hands": 0
+      },
+      {
+        "step": 696,
+        "money": 107746.0,
+        "mix": {
+          "CARROT": 13,
+          "SHEEP": 19,
+          "WHEAT": 8,
+          "COW": 4,
+          "WEED": 2,
+          "COOP": 1
+        },
+        "hands": 0
+      },
+      {
+        "step": 719,
+        "money": 119202.0,
+        "mix": {
+          "SHEEP": 19,
+          "COW": 4,
+          "WEED": 2,
+          "COOP": 1
+        },
+        "hands": 12
+      }
+    ],
+    "final_inventory": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0,
+      "EGG": 0,
+      "MILK": 0,
+      "WOOL": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "COW": 0,
+      "SHEEP": 0
+    },
+    "final_carried": 0
+  },
+  "events": [
+    {
+      "step": 88,
+      "buy": [
+        [
+          "BUY_ANIMAL",
+          "COW",
+          1
+        ]
+      ],
+      "workers": [],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 92,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 3,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "COW"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 2
+          },
+          "inventory": {}
+        }
+      ],
+      "shed_animals": {
+        "COW": 1,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 95,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 3,
+          "position": [
+            2,
+            4
+          ],
+          "command": [
+            "PLACE",
+            "COW"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "inventory": {
+            "COW": 1
+          }
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 150,
+      "buy": [
+        [
+          "BUY_ANIMAL",
+          "SHEEP",
+          2
+        ]
+      ],
+      "workers": [],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 152,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 0,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP"
+          ],
+          "tile": null,
+          "inventory": {}
+        },
+        {
+          "actor": 5,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP"
+          ],
+          "tile": null,
+          "inventory": {}
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 2
+      }
+    },
+    {
+      "step": 155,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 5,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "inventory": {
+            "SHEEP": 1,
+            "WHEAT": 1
+          }
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 156,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 0,
+          "position": [
+            5,
+            3
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "inventory": {
+            "SHEEP": 1,
+            "WHEAT": 1
+          }
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 173,
+      "buy": [
+        [
+          "BUY_ANIMAL",
+          "SHEEP",
+          1
+        ]
+      ],
+      "workers": [],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 175,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 7,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "inventory": {}
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 1
+      }
+    },
+    {
+      "step": 177,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 7,
+          "position": [
+            6,
+            4
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "inventory": {
+            "SHEEP": 1
+          }
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 178,
+      "buy": [
+        [
+          "BUY_ANIMAL",
+          "SHEEP",
+          1
+        ]
+      ],
+      "workers": [],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 180,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 2,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "inventory": {}
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 1
+      }
+    },
+    {
+      "step": 183,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 2,
+          "position": [
+            5,
+            2
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "inventory": {
+            "SHEEP": 1
+          }
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 196,
+      "buy": [
+        [
+          "BUY_ANIMAL",
+          "SHEEP",
+          2
+        ]
+      ],
+      "workers": [],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 198,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 6,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            2
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": false,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "inventory": {}
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 2
+      }
+    },
+    {
+      "step": 201,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 6,
+          "position": [
+            6,
+            3
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "inventory": {
+            "SHEEP": 2
+          }
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 205,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 6,
+          "position": [
+            7,
+            4
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "inventory": {
+            "SHEEP": 1
+          }
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 216,
+      "buy": [
+        [
+          "BUY_ANIMAL",
+          "SHEEP",
+          1
+        ]
+      ],
+      "workers": [],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "step": 218,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 9,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": true,
+            "pending_care_bonus": 3
+          },
+          "inventory": {}
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 1
+      }
+    },
+    {
+      "step": 222,
+      "buy": [],
+      "workers": [
+        {
+          "actor": 9,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "inventory": {
+            "SHEEP": 1
+          }
+        }
+      ],
+      "shed_animals": {
+        "COW": 0,
+        "SHEEP": 0
+      }
+    }
+  ]
+}

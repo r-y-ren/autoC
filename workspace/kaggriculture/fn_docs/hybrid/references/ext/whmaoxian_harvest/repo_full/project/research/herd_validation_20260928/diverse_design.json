@@ -1,0 +1,88 @@
+{
+  "variants": [
+    {
+      "name": "r2",
+      "path": "submissions/release_v10_r2/main.py",
+      "sha256": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4"
+    },
+    {
+      "name": "yarn_nomilk",
+      "path": "research/meta_rebuild_20260927/candidates/midgame_yarn_nomilk.py",
+      "sha256": "3c79287b13c061d6e92392462a845fc7bb25eafbc92c204c6405ab9c1dc7c227"
+    },
+    {
+      "name": "jit_one",
+      "path": "research/herd_validation_20260928/jit_one.py",
+      "sha256": "61451cd65b072d3bbead9069c23f4313adae80005587b98a9c8b2308944a3b8b"
+    },
+    {
+      "name": "salem_checked",
+      "path": "research/herd_validation_20260928/salem_checked.py",
+      "sha256": "a6997eab8aff4dc04d7c5e4b5bb0c70245f7e4e1995bc0388ab8a480687aeee2"
+    },
+    {
+      "name": "q45_public",
+      "path": "research/herd_validation_20260928/q45_public.py",
+      "sha256": "7aacd7233e5113e41024db0ff85912ab13cbd164e85ed5438af17df25a85b287"
+    },
+    {
+      "name": "qnet5_experiment",
+      "path": "research/herd_validation_20260928/qnet5_experiment.py",
+      "sha256": "c3bbdde59137d7d51062406bdb8b0b5dea2b53058197ace07c265b79beb039e5"
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/herd_validation_20260928/salem_checked.py",
+      "family": "salem_route_mixture",
+      "panel": "new_lineage_program"
+    },
+    {
+      "path": "research/herd_validation_20260928/q45_public.py",
+      "family": "q45_fixed_public",
+      "panel": "fixed_public_program"
+    }
+  ],
+  "seeds": [
+    1799657451,
+    1062296230,
+    760257955,
+    933536965
+  ],
+  "scope": "Development. Salem contains reactive guards and two routes; Q45 is a published fixed-route control, not an independent top-ten program."
+}

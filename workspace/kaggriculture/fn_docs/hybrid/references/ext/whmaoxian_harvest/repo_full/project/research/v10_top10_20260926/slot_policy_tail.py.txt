@@ -1,0 +1,84 @@
+
+# Learned market-slot quantities; only reorder existing unique premium SELLs.
+# No added sales, new purchases, opponent identities or hidden inventories.
+import struct as _sp_struct
+_SP_PARENT=phase_b_agent
+_SP_REPORT={'predictions':0,'reordered':0,'predicted_gain':0.0,'errors':0}
+def _sp_predict(values):
+    values=_sp_struct.unpack('!31f',_sp_struct.pack('!31f',*values))
+    total=[0.0]*10
+    for tree in _SP_FOREST:
+        node=0
+        while tree[node][0]>=0:
+            row=tree[node];node=row[2] if values[row[0]]<=row[1] else row[3]
+        for k in range(10):total[k]+=tree[node][4+k]
+    _SP_REPORT['predictions']+=1
+    return [min(40,max(0,int(x*20*_SP_SCALE/len(_SP_FOREST)+.5))) for x in total]
+def _sp_value(item,qty,slot,opponent,inventory,params):
+    # The official market quotes both players before committing each unit.
+    mine=0.0;theirs=0.0;inv=inventory
+    for k,b in enumerate(opponent):
+        a=qty if k==slot else 0
+        for j in range(max(a,b)):
+            price=_r37_market_price(item,inv,params)
+            if j<a:mine+=price
+            if j<b:theirs+=price
+            if price>1:inv+=int(j<a)+int(j<b)
+    return mine-_SP_RIVAL_WEIGHT*theirs
+def _sp_assignment(scores):
+    n=len(scores);states={0:(0.0,())}
+    for item in range(n):
+        nxt={}
+        for mask,(score,order) in states.items():
+            for position in range(n):
+                if mask&(1<<position):continue
+                key=mask|(1<<position);value=score+scores[item][position]
+                if key not in nxt or value>nxt[key][0]+1e-9:
+                    nxt[key]=(value,order+(position,))
+        states=nxt
+    return states[(1<<n)-1]
+def _sp_reorder(obs,action,predictions):
+    orders=[list(o) for o in action.get('market',[])];new=[list(o) for o in orders]
+    if len(orders)<2:return action
+    projected=projected_shed(action,FarmView(obs));params=_v44y_params(obs)
+    counts={item:sum(len(o)>=3 and o[0]=='SELL' and o[1]==item for o in orders) for item in FLOW_ITEMS}
+    i=0;changed=False
+    while i<len(orders):
+        if not orders[i] or orders[i][0]!='SELL':i+=1;continue
+        end=i
+        while end<len(orders) and orders[end] and orders[end][0]=='SELL':end+=1
+        slots=[s for s in range(i,end) if len(orders[s])>=3 and orders[s][1] in FLOW_ITEMS and counts[orders[s][1]]==1]
+        if len(slots)>=2:
+            scores=[]
+            for s in slots:
+                item=orders[s][1];quantity=min(max(0,int(orders[s][2])),max(0,int(projected.get(item,0))))
+                scores.append([_sp_value(item,quantity,k,predictions[item],int(obs['market']['inventory'][item]),params) for k in slots])
+            best,assignment=_sp_assignment(scores)
+            gain=best-sum(scores[j][j] for j in range(len(slots)))
+            if gain>_SP_MIN_GAIN:
+                for item,position in enumerate(assignment):new[slots[position]]=orders[slots[item]]
+                changed=True;_SP_REPORT['predicted_gain']+=gain
+        i=end
+    if changed:
+        _SP_REPORT['reordered']+=1
+        return dict(action,market=new)
+    return action
+
+def slot_forecast_agent(observation,configuration=None):
+    step=int(observation['step'])
+    if step==0:
+        for key in _SP_REPORT:_SP_REPORT[key]=0
+    predictions={}
+    try:
+        features=flow_observe(observation)
+        if step>=_SP_START:predictions={item:_sp_predict(values) for item,values in features.items()}
+    except Exception:_SP_REPORT['errors']+=1
+    action=_SP_PARENT(observation,configuration)
+    try:
+        if predictions:action=_sp_reorder(observation,action,predictions)
+        flow_commit(observation,action)
+    except Exception:_SP_REPORT['errors']+=1
+    return action
+slot_forecast_agent.telemetry=_SP_REPORT
+agent=slot_forecast_agent
+kaggle_submission_agent=slot_forecast_agent

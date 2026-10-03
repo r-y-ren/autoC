@@ -1,0 +1,92 @@
+{
+  "manifest": {
+    "candidate": "experiments/round9_herd.py",
+    "opponents": [
+      "external/round9/frontier/main.py",
+      "external/round8/master2965/main.py",
+      "experiments/round8_top2_dsm_strict.py",
+      "external/orderbook.py"
+    ],
+    "hashes": {
+      "experiments/round9_herd.py": "8e54b9e292a727ee3c4b67a3c9f6328355a7df7cb26eb56b264974f41d90c58a",
+      "external/round9/frontier/main.py": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "external/round8/master2965/main.py": "93831c18a43c49312a71fa67171224681c52c3fade0259403e8d8fae7973565f",
+      "experiments/round8_top2_dsm_strict.py": "8340cedac73c4a54ca6f1a440385514ef2a9c4fd613c6c86cf14312fc19b9e3f",
+      "external/orderbook.py": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab"
+    },
+    "split": "development",
+    "seeds": [
+      1493764141,
+      632707913,
+      1281817442,
+      317450435
+    ],
+    "seats": [
+      0,
+      1
+    ]
+  },
+  "games": 32,
+  "summary": {
+    "experiments/round8_top2_dsm_strict.py": {
+      "games": 8,
+      "valid": 8,
+      "worlds": 4,
+      "wins": 6,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 15242.875,
+      "median_margin": 18499.0,
+      "points": 0.75,
+      "world_bootstrap_points_95": [
+        0.25,
+        1
+      ]
+    },
+    "external/orderbook.py": {
+      "games": 8,
+      "valid": 8,
+      "worlds": 4,
+      "wins": 6,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 1686.75,
+      "median_margin": 1253.0,
+      "points": 0.75,
+      "world_bootstrap_points_95": [
+        0.25,
+        1
+      ]
+    },
+    "external/round8/master2965/main.py": {
+      "games": 8,
+      "valid": 8,
+      "worlds": 4,
+      "wins": 6,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 1171.25,
+      "median_margin": 290.0,
+      "points": 0.75,
+      "world_bootstrap_points_95": [
+        0.25,
+        1
+      ]
+    },
+    "external/round9/frontier/main.py": {
+      "games": 8,
+      "valid": 8,
+      "worlds": 4,
+      "wins": 2,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -145.75,
+      "median_margin": -1201.0,
+      "points": 0.25,
+      "world_bootstrap_points_95": [
+        0,
+        0.75
+      ]
+    }
+  }
+}

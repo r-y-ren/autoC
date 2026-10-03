@@ -1,0 +1,328 @@
+{
+  "paired_games": 192,
+  "worlds": 24,
+  "familywise_candidates": 15,
+  "base_unmatched": 0,
+  "candidate_unmatched": 0,
+  "invalid_pairs": 0,
+  "metrics": {
+    "margin_change": {
+      "mean": 28.848958333333332,
+      "world_bootstrap_95": [
+        -243.16666666666666,
+        254.47916666666666
+      ],
+      "world_bootstrap_familywise_95": [
+        -415.90625,
+        378.8333333333333
+      ],
+      "median_world": 0.0
+    },
+    "own_cash_change": {
+      "mean": -52.755208333333336,
+      "world_bootstrap_95": [
+        -477.953125,
+        241.70833333333334
+      ],
+      "world_bootstrap_familywise_95": [
+        -724.03125,
+        365.4166666666667
+      ],
+      "median_world": 0.0
+    },
+    "points_change": {
+      "mean": -0.020833333333333332,
+      "world_bootstrap_95": [
+        -0.078125,
+        0.015625
+      ],
+      "world_bootstrap_familywise_95": [
+        -0.125,
+        0.020833333333333332
+      ],
+      "median_world": 0.0
+    }
+  },
+  "opponents": {
+    "experiments/round8_top2_dsm_strict.py": {
+      "paired_games": 48,
+      "margin_change": 277.6041666666667,
+      "points_change": 0,
+      "new_wins": 29,
+      "base_wins": 29,
+      "improved": 6,
+      "worse": 2
+    },
+    "external/round8/master2965/main.py": {
+      "paired_games": 48,
+      "margin_change": -61.25,
+      "points_change": -0.041666666666666664,
+      "new_wins": 44,
+      "base_wins": 46,
+      "improved": 2,
+      "worse": 2
+    },
+    "external/round9/frontier/main.py": {
+      "paired_games": 48,
+      "margin_change": -41.208333333333336,
+      "points_change": -0.041666666666666664,
+      "new_wins": 35,
+      "base_wins": 37,
+      "improved": 2,
+      "worse": 2
+    },
+    "submissions/release_v9/main.py": {
+      "paired_games": 48,
+      "margin_change": -59.75,
+      "points_change": 0.0,
+      "new_wins": 3,
+      "base_wins": 1,
+      "improved": 2,
+      "worse": 2
+    }
+  },
+  "worst_pairs": [
+    {
+      "seed": 202573992,
+      "seat": 0,
+      "opponent": "external/round8/master2965/main.py",
+      "base_margin": 887.0,
+      "new_margin": -3061.0,
+      "margin_change": -3948.0,
+      "own_cash_change": -6742.0,
+      "points_change": -1
+    },
+    {
+      "seed": 202573992,
+      "seat": 1,
+      "opponent": "external/round8/master2965/main.py",
+      "base_margin": 887.0,
+      "new_margin": -3061.0,
+      "margin_change": -3948.0,
+      "own_cash_change": -6742.0,
+      "points_change": -1
+    },
+    {
+      "seed": 202573992,
+      "seat": 0,
+      "opponent": "submissions/release_v9/main.py",
+      "base_margin": 0.0,
+      "new_margin": -3923.0,
+      "margin_change": -3923.0,
+      "own_cash_change": -6928.0,
+      "points_change": -0.5
+    },
+    {
+      "seed": 202573992,
+      "seat": 1,
+      "opponent": "submissions/release_v9/main.py",
+      "base_margin": 0.0,
+      "new_margin": -3923.0,
+      "margin_change": -3923.0,
+      "own_cash_change": -6928.0,
+      "points_change": -0.5
+    },
+    {
+      "seed": 202573992,
+      "seat": 0,
+      "opponent": "external/round9/frontier/main.py",
+      "base_margin": 52.0,
+      "new_margin": -3415.0,
+      "margin_change": -3467.0,
+      "own_cash_change": -6413.0,
+      "points_change": -1
+    },
+    {
+      "seed": 202573992,
+      "seat": 1,
+      "opponent": "external/round9/frontier/main.py",
+      "base_margin": 52.0,
+      "new_margin": -3415.0,
+      "margin_change": -3467.0,
+      "own_cash_change": -6413.0,
+      "points_change": -1
+    },
+    {
+      "seed": 1940003352,
+      "seat": 0,
+      "opponent": "experiments/round8_top2_dsm_strict.py",
+      "base_margin": 7833.0,
+      "new_margin": 6966.0,
+      "margin_change": -867.0,
+      "own_cash_change": -2293.0,
+      "points_change": 0
+    },
+    {
+      "seed": 1940003352,
+      "seat": 1,
+      "opponent": "experiments/round8_top2_dsm_strict.py",
+      "base_margin": 7833.0,
+      "new_margin": 6966.0,
+      "margin_change": -867.0,
+      "own_cash_change": -2293.0,
+      "points_change": 0
+    },
+    {
+      "seed": 36505138,
+      "seat": 0,
+      "opponent": "external/round9/frontier/main.py",
+      "base_margin": 411.0,
+      "new_margin": 411.0,
+      "margin_change": 0.0,
+      "own_cash_change": 0.0,
+      "points_change": 0
+    },
+    {
+      "seed": 36505138,
+      "seat": 0,
+      "opponent": "submissions/release_v9/main.py",
+      "base_margin": 0.0,
+      "new_margin": 0.0,
+      "margin_change": 0.0,
+      "own_cash_change": 0.0,
+      "points_change": 0.0
+    },
+    {
+      "seed": 36505138,
+      "seat": 0,
+      "opponent": "experiments/round8_top2_dsm_strict.py",
+      "base_margin": -14560.0,
+      "new_margin": -14560.0,
+      "margin_change": 0.0,
+      "own_cash_change": 0.0,
+      "points_change": 0
+    },
+    {
+      "seed": 36505138,
+      "seat": 0,
+      "opponent": "external/round8/master2965/main.py",
+      "base_margin": 1621.0,
+      "new_margin": 1621.0,
+      "margin_change": 0.0,
+      "own_cash_change": 0.0,
+      "points_change": 0
+    }
+  ],
+  "best_pairs": [
+    {
+      "seed": 248311050,
+      "seat": 0,
+      "opponent": "experiments/round8_top2_dsm_strict.py",
+      "base_margin": -11729.0,
+      "new_margin": -7971.0,
+      "margin_change": 3758.0,
+      "own_cash_change": 3070.0,
+      "points_change": 0
+    },
+    {
+      "seed": 248311050,
+      "seat": 1,
+      "opponent": "experiments/round8_top2_dsm_strict.py",
+      "base_margin": -11729.0,
+      "new_margin": -7971.0,
+      "margin_change": 3758.0,
+      "own_cash_change": 3070.0,
+      "points_change": 0
+    },
+    {
+      "seed": 1940003352,
+      "seat": 0,
+      "opponent": "submissions/release_v9/main.py",
+      "base_margin": 0.0,
+      "new_margin": 2489.0,
+      "margin_change": 2489.0,
+      "own_cash_change": 2800.0,
+      "points_change": 0.5
+    },
+    {
+      "seed": 1940003352,
+      "seat": 1,
+      "opponent": "submissions/release_v9/main.py",
+      "base_margin": 0.0,
+      "new_margin": 2489.0,
+      "margin_change": 2489.0,
+      "own_cash_change": 2800.0,
+      "points_change": 0.5
+    },
+    {
+      "seed": 1940003352,
+      "seat": 0,
+      "opponent": "external/round9/frontier/main.py",
+      "base_margin": 131.0,
+      "new_margin": 2609.0,
+      "margin_change": 2478.0,
+      "own_cash_change": 2783.0,
+      "points_change": 0
+    },
+    {
+      "seed": 1940003352,
+      "seat": 0,
+      "opponent": "external/round8/master2965/main.py",
+      "base_margin": 912.0,
+      "new_margin": 3390.0,
+      "margin_change": 2478.0,
+      "own_cash_change": 2789.0,
+      "points_change": 0
+    },
+    {
+      "seed": 1940003352,
+      "seat": 1,
+      "opponent": "external/round9/frontier/main.py",
+      "base_margin": 131.0,
+      "new_margin": 2609.0,
+      "margin_change": 2478.0,
+      "own_cash_change": 2783.0,
+      "points_change": 0
+    },
+    {
+      "seed": 1940003352,
+      "seat": 1,
+      "opponent": "external/round8/master2965/main.py",
+      "base_margin": 912.0,
+      "new_margin": 3390.0,
+      "margin_change": 2478.0,
+      "own_cash_change": 2789.0,
+      "points_change": 0
+    },
+    {
+      "seed": 202573992,
+      "seat": 0,
+      "opponent": "experiments/round8_top2_dsm_strict.py",
+      "base_margin": 5530.0,
+      "new_margin": 7567.0,
+      "margin_change": 2037.0,
+      "own_cash_change": 3427.0,
+      "points_change": 0
+    },
+    {
+      "seed": 202573992,
+      "seat": 1,
+      "opponent": "experiments/round8_top2_dsm_strict.py",
+      "base_margin": 5530.0,
+      "new_margin": 7567.0,
+      "margin_change": 2037.0,
+      "own_cash_change": 3427.0,
+      "points_change": 0
+    },
+    {
+      "seed": 159926990,
+      "seat": 1,
+      "opponent": "experiments/round8_top2_dsm_strict.py",
+      "base_margin": -11499.0,
+      "new_margin": -9632.0,
+      "margin_change": 1867.0,
+      "own_cash_change": 3230.0,
+      "points_change": 0
+    },
+    {
+      "seed": 1613957652,
+      "seat": 0,
+      "opponent": "experiments/round8_top2_dsm_strict.py",
+      "base_margin": 15852.0,
+      "new_margin": 17454.0,
+      "margin_change": 1602.0,
+      "own_cash_change": 1655.0,
+      "points_change": 0
+    }
+  ]
+}

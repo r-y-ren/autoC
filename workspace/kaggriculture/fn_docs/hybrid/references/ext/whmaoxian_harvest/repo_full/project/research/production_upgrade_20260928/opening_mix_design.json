@@ -1,0 +1,63 @@
+{
+  "variants": [
+    {
+      "name": "opening_goose1",
+      "path": "research/production_upgrade_20260928/candidates/opening_goose1.py",
+      "sha256": "c411a1347f269a6d7dece9b00c9bc7250d2b7118d4d2896676fdf3528706192a"
+    },
+    {
+      "name": "opening_goose2",
+      "path": "research/production_upgrade_20260928/candidates/opening_goose2.py",
+      "sha256": "f2afb1e2145ae8f30b3345235dd012e4ac11120a71e7f300eb70fb16baaf03b7"
+    }
+  ],
+  "seeds": [
+    1799657451,
+    362266734,
+    1937023860,
+    1215000230,
+    105901812,
+    1586045662,
+    1082225306,
+    366774585,
+    1535424212
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "scope": "Capital and earlier-production experiment; not a release."
+}

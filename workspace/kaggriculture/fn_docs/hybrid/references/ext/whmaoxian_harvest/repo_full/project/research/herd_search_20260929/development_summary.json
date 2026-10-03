@@ -1,0 +1,615 @@
+{
+  "extended": {
+    "research/meta_rebuild_20260927/candidates/midgame_yarn_nomilk.py": {
+      "cases": 224,
+      "worlds": 16,
+      "panels": {
+        "direct_reference": {
+          "cases": 32,
+          "invalid": 0,
+          "paired": 32,
+          "wins": 4,
+          "losses": 2,
+          "base_wins": 1,
+          "better_outcomes": 4,
+          "worse_outcomes": 1,
+          "mean_margin_delta": 114.19,
+          "worst_margin_delta": -2124.0
+        },
+        "new_public_program": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 52,
+          "losses": 12,
+          "base_wins": 56,
+          "better_outcomes": 0,
+          "worse_outcomes": 4,
+          "mean_margin_delta": 81.14,
+          "worst_margin_delta": -2926.0
+        },
+        "public_program": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 61,
+          "losses": 3,
+          "base_wins": 62,
+          "better_outcomes": 0,
+          "worse_outcomes": 1,
+          "mean_margin_delta": 81.44,
+          "worst_margin_delta": -2325.0
+        },
+        "responsive_proxy": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 46,
+          "losses": 18,
+          "base_wins": 46,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 837.27,
+          "worst_margin_delta": -518.0
+        }
+      },
+      "decisions": {
+        "shoprule@150": 107,
+        "SHEEP@173": 46,
+        "shoprule@173": 36,
+        "noplan@169": 28,
+        "GOOSE@150": 7
+      }
+    },
+    "research/meta_rebuild_20260927/candidates/midgame_yarn_selective.py": {
+      "cases": 224,
+      "worlds": 16,
+      "panels": {
+        "direct_reference": {
+          "cases": 32,
+          "invalid": 0,
+          "paired": 32,
+          "wins": 4,
+          "losses": 4,
+          "base_wins": 1,
+          "better_outcomes": 4,
+          "worse_outcomes": 3,
+          "mean_margin_delta": -26.75,
+          "worst_margin_delta": -2255.0
+        },
+        "new_public_program": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 48,
+          "losses": 16,
+          "base_wins": 56,
+          "better_outcomes": 0,
+          "worse_outcomes": 8,
+          "mean_margin_delta": -52.55,
+          "worst_margin_delta": -2926.0
+        },
+        "public_program": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 61,
+          "losses": 3,
+          "base_wins": 62,
+          "better_outcomes": 0,
+          "worse_outcomes": 1,
+          "mean_margin_delta": -13.28,
+          "worst_margin_delta": -3188.0
+        },
+        "responsive_proxy": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 46,
+          "losses": 18,
+          "base_wins": 46,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 946.83,
+          "worst_margin_delta": -2386.0
+        }
+      },
+      "decisions": {
+        "shoprule@150": 107,
+        "SHEEP@173": 62,
+        "keep@173": 20,
+        "noplan@169": 28,
+        "GOOSE@150": 7
+      }
+    },
+    "research/meta_rebuild_20260927/candidates/midgame_yarn_sheep.py": {
+      "cases": 224,
+      "worlds": 16,
+      "panels": {
+        "direct_reference": {
+          "cases": 32,
+          "invalid": 0,
+          "paired": 32,
+          "wins": 4,
+          "losses": 8,
+          "base_wins": 1,
+          "better_outcomes": 4,
+          "worse_outcomes": 7,
+          "mean_margin_delta": -470.44,
+          "worst_margin_delta": -4880.0
+        },
+        "new_public_program": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 42,
+          "losses": 22,
+          "base_wins": 56,
+          "better_outcomes": 0,
+          "worse_outcomes": 14,
+          "mean_margin_delta": -521.86,
+          "worst_margin_delta": -5356.0
+        },
+        "public_program": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 57,
+          "losses": 7,
+          "base_wins": 62,
+          "better_outcomes": 0,
+          "worse_outcomes": 5,
+          "mean_margin_delta": -378.44,
+          "worst_margin_delta": -4947.0
+        },
+        "responsive_proxy": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 46,
+          "losses": 18,
+          "base_wins": 46,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 946.77,
+          "worst_margin_delta": -2386.0
+        }
+      },
+      "decisions": {
+        "shoprule@150": 107,
+        "SHEEP@173": 82,
+        "noplan@169": 28,
+        "GOOSE@150": 7
+      }
+    },
+    "submissions/release_v10_r2/main.py": {
+      "cases": 224,
+      "worlds": 16,
+      "panels": {
+        "direct_reference": {
+          "cases": 32,
+          "invalid": 0,
+          "paired": 32,
+          "wins": 1,
+          "losses": 1,
+          "base_wins": 1,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 0.0,
+          "worst_margin_delta": 0.0
+        },
+        "new_public_program": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 56,
+          "losses": 8,
+          "base_wins": 56,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 0.0,
+          "worst_margin_delta": 0.0
+        },
+        "public_program": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 62,
+          "losses": 2,
+          "base_wins": 62,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 0.0,
+          "worst_margin_delta": 0.0
+        },
+        "responsive_proxy": {
+          "cases": 64,
+          "invalid": 0,
+          "paired": 64,
+          "wins": 46,
+          "losses": 18,
+          "base_wins": 46,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 0.0,
+          "worst_margin_delta": 0.0
+        }
+      },
+      "decisions": {
+        "shoprule@150": 107,
+        "shoprule@173": 82,
+        "noplan@169": 28,
+        "GOOSE@150": 7
+      }
+    }
+  },
+  "repeated": {
+    "research/herd_search_20260929/candidates/early_one.py": {
+      "cases": 70,
+      "worlds": 5,
+      "panels": {
+        "direct_reference": {
+          "cases": 10,
+          "invalid": 0,
+          "paired": 10,
+          "wins": 4,
+          "losses": 0,
+          "base_wins": 0,
+          "better_outcomes": 4,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 1632.6,
+          "worst_margin_delta": 0.0
+        },
+        "new_public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 16,
+          "losses": 4,
+          "base_wins": 16,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 1765.35,
+          "worst_margin_delta": 0.0
+        },
+        "public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 20,
+          "losses": 0,
+          "base_wins": 20,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 398.45,
+          "worst_margin_delta": -659.0
+        },
+        "responsive_proxy": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 14,
+          "losses": 6,
+          "base_wins": 14,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 1012.8,
+          "worst_margin_delta": 0.0
+        }
+      },
+      "decisions": {
+        "SHEEP@88": 22,
+        "shoprule@150": 36,
+        "GOOSE@150": 6,
+        "shoprule@173": 2,
+        "noplan@169": 2,
+        "SHEEP@173": 2
+      }
+    },
+    "research/herd_search_20260929/candidates/repeat_care_ev.py": {
+      "cases": 57,
+      "worlds": 5,
+      "panels": {
+        "direct_reference": {
+          "cases": 10,
+          "invalid": 0,
+          "paired": 10,
+          "wins": 4,
+          "losses": 0,
+          "base_wins": 0,
+          "better_outcomes": 4,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2795.0,
+          "worst_margin_delta": 0.0
+        },
+        "new_public_program": {
+          "cases": 7,
+          "invalid": 0,
+          "paired": 7,
+          "wins": 6,
+          "losses": 1,
+          "base_wins": 6,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 4131.57,
+          "worst_margin_delta": 0.0
+        },
+        "public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 20,
+          "losses": 0,
+          "base_wins": 20,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 732.55,
+          "worst_margin_delta": 0.0
+        },
+        "responsive_proxy": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 14,
+          "losses": 6,
+          "base_wins": 14,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 1343.45,
+          "worst_margin_delta": -2386.0
+        }
+      },
+      "decisions": {
+        "SHEEP@178": 18,
+        "shoprule@150": 27,
+        "GOOSE@150": 6,
+        "keep@178": 4,
+        "noplan@169": 2
+      }
+    },
+    "research/herd_search_20260929/candidates/repeat_early.py": {
+      "cases": 70,
+      "worlds": 5,
+      "panels": {
+        "direct_reference": {
+          "cases": 10,
+          "invalid": 0,
+          "paired": 10,
+          "wins": 4,
+          "losses": 0,
+          "base_wins": 0,
+          "better_outcomes": 4,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 3867.0,
+          "worst_margin_delta": 0.0
+        },
+        "new_public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 16,
+          "losses": 4,
+          "base_wins": 16,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 4047.05,
+          "worst_margin_delta": 0.0
+        },
+        "public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 20,
+          "losses": 0,
+          "base_wins": 20,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 1769.05,
+          "worst_margin_delta": 0.0
+        },
+        "responsive_proxy": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 14,
+          "losses": 6,
+          "base_wins": 14,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2595.0,
+          "worst_margin_delta": 0.0
+        }
+      },
+      "decisions": {
+        "SHEEP@178": 24,
+        "shoprule@150": 36,
+        "GOOSE@150": 6,
+        "shoprule@173": 2,
+        "noplan@169": 2
+      }
+    },
+    "research/herd_search_20260929/candidates/repeat_ev.py": {
+      "cases": 70,
+      "worlds": 5,
+      "panels": {
+        "direct_reference": {
+          "cases": 10,
+          "invalid": 0,
+          "paired": 10,
+          "wins": 4,
+          "losses": 0,
+          "base_wins": 0,
+          "better_outcomes": 4,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2795.0,
+          "worst_margin_delta": 0.0
+        },
+        "new_public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 16,
+          "losses": 4,
+          "base_wins": 16,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2829.4,
+          "worst_margin_delta": 0.0
+        },
+        "public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 20,
+          "losses": 0,
+          "base_wins": 20,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 732.55,
+          "worst_margin_delta": 0.0
+        },
+        "responsive_proxy": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 14,
+          "losses": 6,
+          "base_wins": 14,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2085.85,
+          "worst_margin_delta": 0.0
+        }
+      },
+      "decisions": {
+        "SHEEP@178": 24,
+        "shoprule@150": 36,
+        "GOOSE@150": 6,
+        "shoprule@173": 2,
+        "noplan@169": 2
+      }
+    },
+    "research/herd_search_20260929/candidates/repeat_keep4.py": {
+      "cases": 70,
+      "worlds": 5,
+      "panels": {
+        "direct_reference": {
+          "cases": 10,
+          "invalid": 0,
+          "paired": 10,
+          "wins": 4,
+          "losses": 0,
+          "base_wins": 0,
+          "better_outcomes": 4,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2795.0,
+          "worst_margin_delta": 0.0
+        },
+        "new_public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 16,
+          "losses": 4,
+          "base_wins": 16,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2829.4,
+          "worst_margin_delta": 0.0
+        },
+        "public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 20,
+          "losses": 0,
+          "base_wins": 20,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 732.55,
+          "worst_margin_delta": 0.0
+        },
+        "responsive_proxy": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 14,
+          "losses": 6,
+          "base_wins": 14,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2085.85,
+          "worst_margin_delta": 0.0
+        }
+      },
+      "decisions": {
+        "SHEEP@178": 24,
+        "shoprule@150": 36,
+        "GOOSE@150": 6,
+        "shoprule@173": 2,
+        "noplan@169": 2
+      }
+    },
+    "research/herd_search_20260929/candidates/repeat_safe.py": {
+      "cases": 70,
+      "worlds": 5,
+      "panels": {
+        "direct_reference": {
+          "cases": 10,
+          "invalid": 0,
+          "paired": 10,
+          "wins": 4,
+          "losses": 0,
+          "base_wins": 0,
+          "better_outcomes": 4,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2795.0,
+          "worst_margin_delta": 0.0
+        },
+        "new_public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 16,
+          "losses": 4,
+          "base_wins": 16,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2829.4,
+          "worst_margin_delta": 0.0
+        },
+        "public_program": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 20,
+          "losses": 0,
+          "base_wins": 20,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 732.55,
+          "worst_margin_delta": 0.0
+        },
+        "responsive_proxy": {
+          "cases": 20,
+          "invalid": 0,
+          "paired": 20,
+          "wins": 14,
+          "losses": 6,
+          "base_wins": 14,
+          "better_outcomes": 0,
+          "worse_outcomes": 0,
+          "mean_margin_delta": 2085.85,
+          "worst_margin_delta": 0.0
+        }
+      },
+      "decisions": {
+        "SHEEP@178": 24,
+        "shoprule@150": 36,
+        "GOOSE@150": 6,
+        "shoprule@173": 2,
+        "noplan@169": 2
+      }
+    }
+  }
+}

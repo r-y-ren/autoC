@@ -1,0 +1,17 @@
+Kaggriculture V10-R2, local revision, 2026-09-26.
+
+This revision retains the complete V10 source and all of its upstream notices.
+Local modifications: net-five-unit opening grain purchase to avoid a fragile
+initial buy/sell round trip; activation of observed-opponent-stock sale
+reservations; bounded advance-window and supply-threshold selection by successive
+closed-loop development tournaments. No opponent identities, replay seeds or
+future observations are used to select runtime actions.
+
+The additional public programs, public opponent replays and test harness are
+evaluation material only. They are NOT included as new code in this submission.
+Public-program test results and replay probes do not certify an online rating.
+The target is 2800; actual rating remains unmeasured until an authorized submission.
+
+The local additions are provided under Apache-2.0, consistent with the inherited
+source. Complete inherited V10 NOTICE follows unchanged below.
+--------------------------------------------------------------------------

@@ -1,0 +1,3 @@
+### How to use this evidence
+
+Both panels are balanced across seats and use the pinned Kaggriculture engine. The fixed panel compares the public source's three opening modes; the holdout uses fresh seeds and the selected mode only. These are regression measurements, not a promise about Kaggle's ladder. Keep the completed Kaggle row as the authority, and keep the source and archive hashes attached when comparing future versions.

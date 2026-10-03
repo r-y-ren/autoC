@@ -118,3 +118,26 @@ grad_ok True | cuda_mem_MB 24.3
 ```
 | `2026-10-02-remote-eval-prep.md` | 远程实测（ssh wsl/ssh win，2026-10-02 19:00-19:25 UTC）：nvidia-smi/pip freeze/烟测 4 项全输出；pip 源 download.pytorch.org/whl/cu129 + pypi.org；[前次] 2026-10-02-baseroute-recon.md（神经系三墙）、2026-10-02-monitor-baseline.md（msdsm 权重未放基线） | 2026-10-02 | 远程评测环境预备完成：first WSL2（RTX 4070 Laptop 8GB/驱动 615.71.08/CUDA UMD 13.4）venv 隔离装 torch 2.13.0+cu129 + jax 0.11.2 cuda12 + kaggle-environments==1.32.7 一轮零冲突；四项烟测（torch CUDA matmul/jax CudaDevice/kaggle-env 导入/MLP 前向反向）4/4 过；坑=WSL VM 空闲自灭需挂载保活、wsl-sudo FW_PASS 变量名错位（已补别名）、jax XLA 预分配 OOM 噪声（PREALLOCATE=false 可消） | msdsm #1 官方权重/CarsonBurke checkpoint 一旦投放即评测（SOP 三步=传权重→装载→判决机口径跑池测）；.wslconfig vmIdleTimeout 与 env 变量名归一呈裁 |
 ```
+
+## 触发器（2026-10-03 增补）
+
+> 触发逻辑：**监控档（10-07 / 10-15 二档 + 日常复查）任一触发条件命中 → 立即走 §五 SOP 三步（传权重→装载→判决机口径跑池测）**，不再另行请示节奏（命中事实本身仍需带来源 URL+抓取时间戳呈报）。运行时前提已于 2026-10-03 落实：远程链路两处工具面问题修复（WSL 空闲自灭→vmIdleTimeout=3600000；wsl-sudo 变量归一→FW_PASS/WIN_PASS），详见 `2026-10-03-remotecompute-fixes.md`——评测起跑不再依赖人工保活。
+
+**触发条件（命中其一即启动）**：
+
+| # | 条件 | 命中判定口径 | 判定人 |
+|---|---|---|---|
+| T1 | **msdsm #1 官方解权重投放**（"supplied separately" 落地：release/数据集/另发通道任一形态） | 监控档实抓核验（仓 releases/tags、HF api、讨论区链接三路），基线=`2026-10-02-monitor-baseline.md`（未放） | 主会话呈报，**用户裁决**（信源/许可口径） |
+| T2 | **CarsonBurke checkpoint 投放**（仓附件/release） | 同上三路实抓；Carson/debmal（route 表）沿用既有清单一并盯 | 主会话呈报，**用户裁决** |
+| T3 | **WHmaoxian123 检查点裁定通过**（`ext/whmaoxian_harvest/` 已收 1.8G：检查点 3 件取样+ZIP64 分卷；许可=根级无 LICENSE+逐件 Apache-2.0 混态 2.2% 覆盖，见 `2026-10-03-whmaoxian-license-harvest.md` §1） | 用户对"检查点快照 zip 属未授权备份差集、不可装载"或"按 Apache-2.0 覆盖子集放行 r3/r4_2/r5 终件候选"作出明确裁定后，按裁定范围触发 | **用户独占裁决**（许可口径，流程级挂账） |
+
+**当前盯防清单（2026-10-03 时点，监控档逐项过）**：
+
+1. msdsm #1 官方解权重（T1）——12-block 10.23M 参数表已备（`2026-10-02-msdsm-teardown.md`）。
+2. CarsonBurke checkpoint（T2）+ debmal route 表（复测条件未到位，`2026-10-02-monitor-round2-github.md` P3）。
+3. WHmaoxian123：检查点裁定（T3）+ 是否补根级许可/投放检查点。
+4. 超王座三件（Carson/debmal/msdsm 沿用既有清单，本轮零增量基线续用）。
+5. 终榜窗（**~10-15 出榜，收敛窗至 10-14**）：获奖感言潮 + 闭源大户（alperen5252525/DECEM(zy1343930734)/majkel1337）开号概率最高窗口。
+6. 次级：CheungLeeJR/rxymitchy 补许可/补排名自报；DS_completation 复盘续写（main 最后推送 10-02T01:48Z）；hustleailab 文正文换通道核实；graceyunliu 自进化循环 PASS 数。
+
+**不触发即不动作**：监控档未命中时维持登记不搬运、只登记不复测；每次监控档在对应报告回写本节命中状态（命中→SOP 启动时间戳；未命中→基线续用声明）。

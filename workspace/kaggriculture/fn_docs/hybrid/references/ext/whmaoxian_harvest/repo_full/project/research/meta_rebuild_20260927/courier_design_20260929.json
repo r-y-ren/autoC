@@ -1,0 +1,70 @@
+{
+  "variants": [
+    {
+      "name": "courier20",
+      "path": "research/meta_rebuild_20260927/candidates/courier20.py",
+      "sha256": "3439d937cbe3beb8ec9d7c7a074dde7300431e96cbea68ff74b1dcbabf60cba4",
+      "settings": {
+        "hour": 20,
+        "risk": 85,
+        "workers": 2,
+        "load": 4,
+        "book": true
+      }
+    },
+    {
+      "name": "courier18",
+      "path": "research/meta_rebuild_20260927/candidates/courier18.py",
+      "sha256": "989a91b84dad2ed802a2dbb231dbb27a81a47e8d3cf0b77ce83fc5b6cad4c41d",
+      "settings": {
+        "hour": 18,
+        "risk": 85,
+        "workers": 2,
+        "load": 4,
+        "book": true
+      }
+    },
+    {
+      "name": "courier18_raw",
+      "path": "research/meta_rebuild_20260927/candidates/courier18_raw.py",
+      "sha256": "24fa6ed0aba077fd360aeefb09e425d43be75103aced98e8d0b3d8d410a5061d",
+      "settings": {
+        "hour": 18,
+        "risk": 60,
+        "workers": 2,
+        "load": 4,
+        "book": false
+      }
+    },
+    {
+      "name": "courier16",
+      "path": "research/meta_rebuild_20260927/candidates/courier16.py",
+      "sha256": "130164eff2c3122913ae9f29bf2759cf5b4fb315ad34ce6c1bedea17b69aa65a",
+      "settings": {
+        "hour": 16,
+        "risk": 60,
+        "workers": 4,
+        "load": 4,
+        "book": true
+      }
+    }
+  ],
+  "seeds": [
+    425791982,
+    1075269887,
+    1799657451
+  ],
+  "roster": [
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    }
+  ],
+  "scope": "Development routing screen, not a proven monotonic upgrade. Only native nonproductive route tails are redirected; closed-loop regression checks required."
+}

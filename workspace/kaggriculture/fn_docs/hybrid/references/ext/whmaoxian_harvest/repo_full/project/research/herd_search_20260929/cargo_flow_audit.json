@@ -1,0 +1,472 @@
+{
+  "result": {
+    "candidate": "research/herd_search_20260929/candidates/repeat_early.py",
+    "opponent": "submissions/release_v10_r2/main.py",
+    "seed": 1799657451,
+    "seat": 0,
+    "money": [
+      117696.0,
+      104802.0
+    ],
+    "margin": 12894.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "max_seconds": 0.07479560000501806,
+    "total_seconds": 1.3593258000546484,
+    "seconds": 4.44029810000211,
+    "errors": [
+      {},
+      {}
+    ],
+    "invalid_actions": 0,
+    "action_hash": [
+      "e52f315509dd9f9428841fd84c528680f692fcf7961a54c3189fddaf7a5899ce",
+      "570c8af5351c68f89f7edb1fd4f7697c8734bb6673a12aed8d3948ff88895f20"
+    ],
+    "shops": [
+      "YARN_STORE",
+      "BAKERY",
+      "YARN_STORE",
+      "YARN_STORE",
+      "ICE_CREAM_SHOP",
+      "BAKERY",
+      "BRUNCH_SPOT",
+      "SMOOTHIE_SHOP"
+    ],
+    "valid": true,
+    "checkpoints": [
+      {
+        "step": 24,
+        "money": 12.0,
+        "mix": {
+          "WHEAT": 8,
+          "MELON": 12,
+          "SHEEP": 2,
+          "COW": 2
+        },
+        "hands": 0
+      },
+      {
+        "step": 48,
+        "money": 101.0,
+        "mix": {
+          "WHEAT": 8,
+          "MELON": 12,
+          "PASTURE": 1,
+          "SHEEP": 2,
+          "COW": 2
+        },
+        "hands": 0
+      },
+      {
+        "step": 72,
+        "money": 214.0,
+        "mix": {
+          "WHEAT": 8,
+          "MELON": 12,
+          "COW": 3,
+          "SHEEP": 2
+        },
+        "hands": 0
+      },
+      {
+        "step": 144,
+        "money": 688.0,
+        "mix": {
+          "WHEAT": 3,
+          "STRAWBERRY": 4,
+          "MELON": 12,
+          "COW": 3,
+          "SHEEP": 3
+        },
+        "hands": 0
+      },
+      {
+        "step": 240,
+        "money": 3392.0,
+        "mix": {
+          "WHEAT": 5,
+          "STRAWBERRY": 20,
+          "MELON": 12,
+          "COW": 3,
+          "SHEEP": 10
+        },
+        "hands": 0
+      },
+      {
+        "step": 480,
+        "money": 53628.0,
+        "mix": {
+          "WHEAT": 25,
+          "STRAWBERRY": 33,
+          "SHEEP": 20,
+          "COW": 3,
+          "WEED": 2
+        },
+        "hands": 0
+      },
+      {
+        "step": 696,
+        "money": 109843.0,
+        "mix": {
+          "CARROT": 13,
+          "SHEEP": 20,
+          "WHEAT": 8,
+          "COW": 3,
+          "WEED": 2,
+          "COOP": 1
+        },
+        "hands": 0
+      },
+      {
+        "step": 719,
+        "money": 117696.0,
+        "mix": {
+          "SHEEP": 20,
+          "COW": 3,
+          "WEED": 2,
+          "COOP": 1
+        },
+        "hands": 12
+      }
+    ],
+    "final_inventory": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0,
+      "EGG": 0,
+      "MILK": 0,
+      "WOOL": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "COW": 0,
+      "SHEEP": 0
+    },
+    "final_carried": 0
+  },
+  "counts": {
+    "sheep_ready:NORTH": 66,
+    "sheep_ready:HARVEST": 114,
+    "sheep_ready:FEED": 79,
+    "sheep_ready:WEST": 50,
+    "sheep_ready:CARE": 80,
+    "sheep_ready:COLLECT_FERTILIZER": 54,
+    "sheep_ready:EAST": 36,
+    "milk_place_with_only_wool": 2,
+    "wool_waiting_units": 16,
+    "sheep_ready:SOUTH": 13,
+    "sheep_ready:PICKUP": 16,
+    "sheep_ready:PASS": 5
+  },
+  "examples": [
+    {
+      "step": 269,
+      "actor": 0,
+      "position": [
+        4,
+        4
+      ],
+      "command": [
+        "PLACE",
+        "MILK",
+        6
+      ],
+      "inventory": {
+        "WOOL": 4
+      }
+    },
+    {
+      "step": 717,
+      "actor": 5,
+      "position": [
+        5,
+        4
+      ],
+      "command": [
+        "PLACE",
+        "MILK",
+        1000
+      ],
+      "inventory": {
+        "WOOL": 12
+      }
+    }
+  ],
+  "daily": [
+    {
+      "step": 24,
+      "cash": [
+        12.0,
+        12.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 48,
+      "cash": [
+        101.0,
+        101.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 72,
+      "cash": [
+        214.0,
+        214.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 96,
+      "cash": [
+        165.0,
+        265.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 120,
+      "cash": [
+        575.0,
+        675.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 144,
+      "cash": [
+        688.0,
+        788.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 168,
+      "cash": [
+        1135.0,
+        1235.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 192,
+      "cash": [
+        7.0,
+        307.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 216,
+      "cash": [
+        803.0,
+        1103.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 240,
+      "cash": [
+        3392.0,
+        3692.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 264,
+      "cash": [
+        15236.0,
+        15536.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 288,
+      "cash": [
+        5177.0,
+        5977.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 4
+    },
+    {
+      "step": 312,
+      "cash": [
+        10544.0,
+        10190.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 8
+    },
+    {
+      "step": 336,
+      "cash": [
+        14057.0,
+        12016.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 5
+    },
+    {
+      "step": 360,
+      "cash": [
+        18295.0,
+        15043.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 1
+    },
+    {
+      "step": 384,
+      "cash": [
+        23114.0,
+        19910.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 8
+    },
+    {
+      "step": 408,
+      "cash": [
+        31768.0,
+        27777.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 4
+    },
+    {
+      "step": 432,
+      "cash": [
+        45690.0,
+        41795.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 10
+    },
+    {
+      "step": 456,
+      "cash": [
+        50045.0,
+        44439.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 12
+    },
+    {
+      "step": 480,
+      "cash": [
+        53628.0,
+        47059.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 20
+    },
+    {
+      "step": 504,
+      "cash": [
+        64288.0,
+        55982.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 12
+    },
+    {
+      "step": 528,
+      "cash": [
+        66359.0,
+        58053.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 16
+    },
+    {
+      "step": 552,
+      "cash": [
+        71428.0,
+        62353.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 16
+    },
+    {
+      "step": 576,
+      "cash": [
+        79705.0,
+        70634.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 16
+    },
+    {
+      "step": 600,
+      "cash": [
+        85338.0,
+        74684.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 11
+    },
+    {
+      "step": 624,
+      "cash": [
+        89846.0,
+        79066.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 15
+    },
+    {
+      "step": 648,
+      "cash": [
+        99582.0,
+        86346.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 672,
+      "cash": [
+        102582.0,
+        89820.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 20
+    },
+    {
+      "step": 696,
+      "cash": [
+        109843.0,
+        96675.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    },
+    {
+      "step": 719,
+      "cash": [
+        117696.0,
+        104802.0
+      ],
+      "carried_wool": 0,
+      "shed_wool": 0
+    }
+  ],
+  "scope": "One diagnostic execution on a known development world, not independent validation."
+}

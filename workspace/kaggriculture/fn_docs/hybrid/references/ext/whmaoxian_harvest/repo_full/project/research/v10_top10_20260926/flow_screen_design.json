@@ -1,0 +1,119 @@
+{
+  "candidates": [
+    {
+      "name": "observe",
+      "path": "research/v10_top10_20260926/flow_candidates/observe.py",
+      "sha256": "386ac8d0bd91b03c860b300e461c65e9a700a3361263c53999756da6701cb476",
+      "mode": "observe",
+      "threshold": 0.2,
+      "start": 216
+    },
+    {
+      "name": "filter20",
+      "path": "research/v10_top10_20260926/flow_candidates/filter20.py",
+      "sha256": "dbfc592ea8883cc6cf00abede125b09cede8c8921f3495b25aee2c0d3aaecfe1",
+      "mode": "filter",
+      "threshold": 0.2,
+      "start": 216
+    },
+    {
+      "name": "filter40",
+      "path": "research/v10_top10_20260926/flow_candidates/filter40.py",
+      "sha256": "aff8f64f800749fed56e53a94bb7d3c9cc7ce1106c8f4f4b02853c836dd74d91",
+      "mode": "filter",
+      "threshold": 0.4,
+      "start": 216
+    },
+    {
+      "name": "replace20",
+      "path": "research/v10_top10_20260926/flow_candidates/replace20.py",
+      "sha256": "af3a451c3df0f9764623777e093de6a9a038188f271bbdf431bcb853e3d97bf9",
+      "mode": "replace",
+      "threshold": 0.2,
+      "start": 216
+    },
+    {
+      "name": "replace40",
+      "path": "research/v10_top10_20260926/flow_candidates/replace40.py",
+      "sha256": "3a20eaa868094146f5d38b8c2ba64f140ea1dd7db0a27be5cd7b77f5f4649bc7",
+      "mode": "replace",
+      "threshold": 0.4,
+      "start": 216
+    },
+    {
+      "name": "replace20_late",
+      "path": "research/v10_top10_20260926/flow_candidates/replace20_late.py",
+      "sha256": "4a98ec871f7795f4163c4fc7211ebc7eecb4c84eb67ee6fc647852816a109cbf",
+      "mode": "replace",
+      "threshold": 0.2,
+      "start": 360
+    },
+    {
+      "name": "reorder",
+      "path": "research/v10_top10_20260926/flow_candidates/reorder.py",
+      "sha256": "4ab984de932502eda4b572353378d0a0bd694a33014bcab33c299520925f7172",
+      "mode": "reorder",
+      "threshold": 0.2,
+      "start": 216
+    },
+    {
+      "name": "combined20",
+      "path": "research/v10_top10_20260926/flow_candidates/combined20.py",
+      "sha256": "8b1cdcae1fbb5c5fcb17f9866cac9f54397f7eefcd1cb72831bdb44e5b3bb41e",
+      "mode": "combined",
+      "threshold": 0.2,
+      "start": 216
+    },
+    {
+      "name": "r2",
+      "path": "submissions/release_v10_r2/main.py"
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/marketshock_adapter.py",
+      "family": "marketshock",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/structured_adapter.py",
+      "family": "structured",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/generation5/advance36.py",
+      "family": "counter_advance36",
+      "panel": "counter_population"
+    }
+  ],
+  "seeds": [
+    1465027458,
+    1776534244
+  ],
+  "total_jobs": 288
+}

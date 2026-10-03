@@ -1,0 +1,542 @@
+[
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_01_default.py",
+    "sha256": "f9cecc6f77744a9ab5291511a01079d46b2b23d741a1b60e2a3d5f595d541250",
+    "source": "research/v10_top10_20260926/study_opponents/style_01.py",
+    "source_sha256": "f9cecc6f77744a9ab5291511a01079d46b2b23d741a1b60e2a3d5f595d541250",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_01_no_budget.py",
+    "sha256": "b1582c04e7f22c96302e0a588548bdc6e6f9df677d2a7b98818ed8273c77bf45",
+    "source": "research/v10_top10_20260926/study_opponents/style_01.py",
+    "source_sha256": "f9cecc6f77744a9ab5291511a01079d46b2b23d741a1b60e2a3d5f595d541250",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_01_no_dead.py",
+    "sha256": "e62b9308a633d8760733c10155226f0cbde273f22a8c3c74e6a9b1c721a7bcc6",
+    "source": "research/v10_top10_20260926/study_opponents/style_01.py",
+    "source_sha256": "f9cecc6f77744a9ab5291511a01079d46b2b23d741a1b60e2a3d5f595d541250",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_01_minimal.py",
+    "sha256": "1620e3690f1b7b7db0cbc676a9d7e367bb07d663f3f13c5736f1c03b8aa080a3",
+    "source": "research/v10_top10_20260926/study_opponents/style_01.py",
+    "source_sha256": "f9cecc6f77744a9ab5291511a01079d46b2b23d741a1b60e2a3d5f595d541250",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_01_trace_market.py",
+    "sha256": "6ff816beb8ceb888342eb48d5b868868cdaf1d07882a22e487faed8a9bc483c8",
+    "source": "research/v10_top10_20260926/study_opponents/style_01.py",
+    "source_sha256": "f9cecc6f77744a9ab5291511a01079d46b2b23d741a1b60e2a3d5f595d541250",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_02_default.py",
+    "sha256": "7d3e84e288bbdc8412f0173fb25d58f225bc6184d3c20053c7703578393cd32d",
+    "source": "research/v10_top10_20260926/study_opponents/style_02.py",
+    "source_sha256": "7d3e84e288bbdc8412f0173fb25d58f225bc6184d3c20053c7703578393cd32d",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_02_no_budget.py",
+    "sha256": "75d0881589bc679531919518735491742231df0924db33432881590ffe3c8bc0",
+    "source": "research/v10_top10_20260926/study_opponents/style_02.py",
+    "source_sha256": "7d3e84e288bbdc8412f0173fb25d58f225bc6184d3c20053c7703578393cd32d",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_02_no_dead.py",
+    "sha256": "d8411784f0c8816339a8bb7fe92502778991b4b51182140a3b1fe8a852d40efd",
+    "source": "research/v10_top10_20260926/study_opponents/style_02.py",
+    "source_sha256": "7d3e84e288bbdc8412f0173fb25d58f225bc6184d3c20053c7703578393cd32d",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_02_minimal.py",
+    "sha256": "5c945da923844d8e971a93056abceb1b1bf245e5109257047abbf1d20585cc1b",
+    "source": "research/v10_top10_20260926/study_opponents/style_02.py",
+    "source_sha256": "7d3e84e288bbdc8412f0173fb25d58f225bc6184d3c20053c7703578393cd32d",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_02_trace_market.py",
+    "sha256": "32fe2107688a84c9a4497b1d92d12902119906304895680c81856aae371f19fc",
+    "source": "research/v10_top10_20260926/study_opponents/style_02.py",
+    "source_sha256": "7d3e84e288bbdc8412f0173fb25d58f225bc6184d3c20053c7703578393cd32d",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_03_default.py",
+    "sha256": "7251db4bc0dd3009f56c86c20cbfbec189cde431e1cc88ff88f33adb795304bb",
+    "source": "research/v10_top10_20260926/study_opponents/style_03.py",
+    "source_sha256": "7251db4bc0dd3009f56c86c20cbfbec189cde431e1cc88ff88f33adb795304bb",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_03_no_budget.py",
+    "sha256": "0967ae2f6d335030aa7f3569c44aeca510a7c6796068b60ac28cd9c4f69c84f9",
+    "source": "research/v10_top10_20260926/study_opponents/style_03.py",
+    "source_sha256": "7251db4bc0dd3009f56c86c20cbfbec189cde431e1cc88ff88f33adb795304bb",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_03_no_dead.py",
+    "sha256": "75dbe63e39ba9b299f84f9b4bdeb4de75f9037d6b51385fbbd27127b432c900e",
+    "source": "research/v10_top10_20260926/study_opponents/style_03.py",
+    "source_sha256": "7251db4bc0dd3009f56c86c20cbfbec189cde431e1cc88ff88f33adb795304bb",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_03_minimal.py",
+    "sha256": "3a069c84ab10a5b33a7bc5345c54e18d889c1ab08415a9a4f9c1959ba9931cdb",
+    "source": "research/v10_top10_20260926/study_opponents/style_03.py",
+    "source_sha256": "7251db4bc0dd3009f56c86c20cbfbec189cde431e1cc88ff88f33adb795304bb",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_03_trace_market.py",
+    "sha256": "317607f115e73f2af0689199726b5c8f7e95de505d5633ce3f4b0ad44833d036",
+    "source": "research/v10_top10_20260926/study_opponents/style_03.py",
+    "source_sha256": "7251db4bc0dd3009f56c86c20cbfbec189cde431e1cc88ff88f33adb795304bb",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_04_default.py",
+    "sha256": "71ec34fc0c63a04e45b73320043f25b238ca0218217d5cde55b7b4c229871bdc",
+    "source": "research/v10_top10_20260926/study_opponents/style_04.py",
+    "source_sha256": "71ec34fc0c63a04e45b73320043f25b238ca0218217d5cde55b7b4c229871bdc",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_04_no_budget.py",
+    "sha256": "441deddfb066180a1224de953573b4868bfc1baed18ce46edd607351f1cc89e4",
+    "source": "research/v10_top10_20260926/study_opponents/style_04.py",
+    "source_sha256": "71ec34fc0c63a04e45b73320043f25b238ca0218217d5cde55b7b4c229871bdc",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_04_no_dead.py",
+    "sha256": "2f95e25d30a570ada40c20411466b8186dee25e728c8741e974638ded24bfe81",
+    "source": "research/v10_top10_20260926/study_opponents/style_04.py",
+    "source_sha256": "71ec34fc0c63a04e45b73320043f25b238ca0218217d5cde55b7b4c229871bdc",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_04_minimal.py",
+    "sha256": "92484618224ad6374effbbae16524aaa726a910672341dc880178633571910ea",
+    "source": "research/v10_top10_20260926/study_opponents/style_04.py",
+    "source_sha256": "71ec34fc0c63a04e45b73320043f25b238ca0218217d5cde55b7b4c229871bdc",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_04_trace_market.py",
+    "sha256": "70a42c89246a84ecf0b73b9ba2f56d11e2ae302635871f9a0b26a9d50b6937c5",
+    "source": "research/v10_top10_20260926/study_opponents/style_04.py",
+    "source_sha256": "71ec34fc0c63a04e45b73320043f25b238ca0218217d5cde55b7b4c229871bdc",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_05_default.py",
+    "sha256": "896ce933db58a6ae5091011cdf0b625d339f089339951f942506acb48801c74c",
+    "source": "research/v10_top10_20260926/study_opponents/style_05.py",
+    "source_sha256": "896ce933db58a6ae5091011cdf0b625d339f089339951f942506acb48801c74c",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_05_no_budget.py",
+    "sha256": "a1c8637731481dc922e412707f82fdb26a6eae8b581ff03f6ef4f7fece13a075",
+    "source": "research/v10_top10_20260926/study_opponents/style_05.py",
+    "source_sha256": "896ce933db58a6ae5091011cdf0b625d339f089339951f942506acb48801c74c",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_05_no_dead.py",
+    "sha256": "fb4ac49e4f1631d13a6f009f8671514fcc30cab32ef1f0bbcb3454eb7ae21dc8",
+    "source": "research/v10_top10_20260926/study_opponents/style_05.py",
+    "source_sha256": "896ce933db58a6ae5091011cdf0b625d339f089339951f942506acb48801c74c",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_05_minimal.py",
+    "sha256": "7fb18786c3e4ecac40c428c33512953b661708e4074ce500a95de26b1d8c90dc",
+    "source": "research/v10_top10_20260926/study_opponents/style_05.py",
+    "source_sha256": "896ce933db58a6ae5091011cdf0b625d339f089339951f942506acb48801c74c",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_05_trace_market.py",
+    "sha256": "39766cf32b320f144d1e880eee8ec4fe11bad2c44e981801e2b2fba7a9d4a479",
+    "source": "research/v10_top10_20260926/study_opponents/style_05.py",
+    "source_sha256": "896ce933db58a6ae5091011cdf0b625d339f089339951f942506acb48801c74c",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_06_default.py",
+    "sha256": "ea6d78044f9bd0033309cc41a8e86c43d31c34f1fe220da3ad3909946a1aa724",
+    "source": "research/v10_top10_20260926/study_opponents/style_06.py",
+    "source_sha256": "ea6d78044f9bd0033309cc41a8e86c43d31c34f1fe220da3ad3909946a1aa724",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_06_no_budget.py",
+    "sha256": "88ac60670aac99d4229560a5c3326dbb0c66a9c40b0e5a0898e58b84a2c67898",
+    "source": "research/v10_top10_20260926/study_opponents/style_06.py",
+    "source_sha256": "ea6d78044f9bd0033309cc41a8e86c43d31c34f1fe220da3ad3909946a1aa724",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_06_no_dead.py",
+    "sha256": "c5e9f857f148bf9beac03f5867b26f3d2e05f4c346985c96e328f84751667528",
+    "source": "research/v10_top10_20260926/study_opponents/style_06.py",
+    "source_sha256": "ea6d78044f9bd0033309cc41a8e86c43d31c34f1fe220da3ad3909946a1aa724",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_06_minimal.py",
+    "sha256": "ff3f7f6d5f7247bea32df25b97f3dbba80557cbbb6c5c5ff48ebcefda54fc678",
+    "source": "research/v10_top10_20260926/study_opponents/style_06.py",
+    "source_sha256": "ea6d78044f9bd0033309cc41a8e86c43d31c34f1fe220da3ad3909946a1aa724",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_06_trace_market.py",
+    "sha256": "3d27a6bc40a59bc644c204b5af2b2f53b8bbe0a14232f3eab69988a369f82872",
+    "source": "research/v10_top10_20260926/study_opponents/style_06.py",
+    "source_sha256": "ea6d78044f9bd0033309cc41a8e86c43d31c34f1fe220da3ad3909946a1aa724",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_07_default.py",
+    "sha256": "7db2f71416aa109f99dfab5b78c00ddaffa869b56cecc7ca55f25e04f34e2615",
+    "source": "research/v10_top10_20260926/study_opponents/style_07.py",
+    "source_sha256": "7db2f71416aa109f99dfab5b78c00ddaffa869b56cecc7ca55f25e04f34e2615",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_07_no_budget.py",
+    "sha256": "563eb4da3d4acc717bfcaa5dc8934918a4f6c05736e6e07f9092d74314b99fee",
+    "source": "research/v10_top10_20260926/study_opponents/style_07.py",
+    "source_sha256": "7db2f71416aa109f99dfab5b78c00ddaffa869b56cecc7ca55f25e04f34e2615",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_07_no_dead.py",
+    "sha256": "6625244065072a15db14ff5403abe9feb4804b7d897fd268587a76879e74ee60",
+    "source": "research/v10_top10_20260926/study_opponents/style_07.py",
+    "source_sha256": "7db2f71416aa109f99dfab5b78c00ddaffa869b56cecc7ca55f25e04f34e2615",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_07_minimal.py",
+    "sha256": "0b56929662513f7f2a66c1ee1071ac2314b588a5e7abade46a4e6da97c84a193",
+    "source": "research/v10_top10_20260926/study_opponents/style_07.py",
+    "source_sha256": "7db2f71416aa109f99dfab5b78c00ddaffa869b56cecc7ca55f25e04f34e2615",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_07_trace_market.py",
+    "sha256": "ccad33a58e85a864c87ebfd0ee0e16fa7acec53a409634159b9f9210a573ad51",
+    "source": "research/v10_top10_20260926/study_opponents/style_07.py",
+    "source_sha256": "7db2f71416aa109f99dfab5b78c00ddaffa869b56cecc7ca55f25e04f34e2615",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_08_default.py",
+    "sha256": "f4cbad3cac6d9b7c13fbd82c4689baceb8e4d4debf2801e9c28f44a3d786a400",
+    "source": "research/v10_top10_20260926/study_opponents/style_08.py",
+    "source_sha256": "f4cbad3cac6d9b7c13fbd82c4689baceb8e4d4debf2801e9c28f44a3d786a400",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_08_no_budget.py",
+    "sha256": "8b0c40ecacd061ad3538e46ecc4268da9a0ac06d79a50b9852d418282ca101fa",
+    "source": "research/v10_top10_20260926/study_opponents/style_08.py",
+    "source_sha256": "f4cbad3cac6d9b7c13fbd82c4689baceb8e4d4debf2801e9c28f44a3d786a400",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_08_no_dead.py",
+    "sha256": "c452f6e9dd970240473150199ce1d0d4e705fba1cd7f216b60e5975f42baae92",
+    "source": "research/v10_top10_20260926/study_opponents/style_08.py",
+    "source_sha256": "f4cbad3cac6d9b7c13fbd82c4689baceb8e4d4debf2801e9c28f44a3d786a400",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_08_minimal.py",
+    "sha256": "8d9562ca0bb54ba44005312b52c1423b4adfa1c04fafa496a6af8a7ff7437aa1",
+    "source": "research/v10_top10_20260926/study_opponents/style_08.py",
+    "source_sha256": "f4cbad3cac6d9b7c13fbd82c4689baceb8e4d4debf2801e9c28f44a3d786a400",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_08_trace_market.py",
+    "sha256": "a65523f3d60ba540bc4f4c3e3f6de70e7c1469078312c1b84bf8b6f929f1ae42",
+    "source": "research/v10_top10_20260926/study_opponents/style_08.py",
+    "source_sha256": "f4cbad3cac6d9b7c13fbd82c4689baceb8e4d4debf2801e9c28f44a3d786a400",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_09_default.py",
+    "sha256": "74de65403135c52fe905de35b7b46c850ad6d44bd1e959f4741d77219d6a3c45",
+    "source": "research/v10_top10_20260926/study_opponents/style_09.py",
+    "source_sha256": "74de65403135c52fe905de35b7b46c850ad6d44bd1e959f4741d77219d6a3c45",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_09_no_budget.py",
+    "sha256": "992ac4989e1ca3001bfe2019ec58ebd9338bd5a95535bf9a03149b7cff96ebd5",
+    "source": "research/v10_top10_20260926/study_opponents/style_09.py",
+    "source_sha256": "74de65403135c52fe905de35b7b46c850ad6d44bd1e959f4741d77219d6a3c45",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_09_no_dead.py",
+    "sha256": "a1d35b9ab55440a3c41413dfd0e279e5c6de6e17d2b034692cd432c191e07fc1",
+    "source": "research/v10_top10_20260926/study_opponents/style_09.py",
+    "source_sha256": "74de65403135c52fe905de35b7b46c850ad6d44bd1e959f4741d77219d6a3c45",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_09_minimal.py",
+    "sha256": "5479168062ffe76f72de52cd9882f0bd4287961a2d2b0666d1493545af6465b0",
+    "source": "research/v10_top10_20260926/study_opponents/style_09.py",
+    "source_sha256": "74de65403135c52fe905de35b7b46c850ad6d44bd1e959f4741d77219d6a3c45",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_09_trace_market.py",
+    "sha256": "c3519824fac0027524869cb2a055ad8d9d246f72a226a2e9ab3f8febe533a5d3",
+    "source": "research/v10_top10_20260926/study_opponents/style_09.py",
+    "source_sha256": "74de65403135c52fe905de35b7b46c850ad6d44bd1e959f4741d77219d6a3c45",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_10_default.py",
+    "sha256": "2b06de8d037e2a1a773f38976d5c3cd987aa97ab0878afe5ee3fd404737a5913",
+    "source": "research/v10_top10_20260926/study_opponents/style_10.py",
+    "source_sha256": "2b06de8d037e2a1a773f38976d5c3cd987aa97ab0878afe5ee3fd404737a5913",
+    "settings": {},
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_10_no_budget.py",
+    "sha256": "0f58ec89ff5aca0b5e9f5f67bb5c04e3ef8b27a32d704c72638da32080a8ff5b",
+    "source": "research/v10_top10_20260926/study_opponents/style_10.py",
+    "source_sha256": "2b06de8d037e2a1a773f38976d5c3cd987aa97ab0878afe5ee3fd404737a5913",
+    "settings": {
+      "budget_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_10_no_dead.py",
+    "sha256": "5416dc4e56a2858436d7be43c11ee96d40a3624b19e7cd320de46f9d91efd4f8",
+    "source": "research/v10_top10_20260926/study_opponents/style_10.py",
+    "source_sha256": "2b06de8d037e2a1a773f38976d5c3cd987aa97ab0878afe5ee3fd404737a5913",
+    "settings": {
+      "dead_stock": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_10_minimal.py",
+    "sha256": "92004e072cfd23ceb2744056a0d59693b38f396a43b147edc52cda5472469064",
+    "source": "research/v10_top10_20260926/study_opponents/style_10.py",
+    "source_sha256": "2b06de8d037e2a1a773f38976d5c3cd987aa97ab0878afe5ee3fd404737a5913",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  },
+  {
+    "path": "research/v10_top10_20260926/guard_ablations/top_style_10_trace_market.py",
+    "sha256": "efeaf900ad3eb15689e8806fd7854579ef89d6fb27bc491c3b6c7374f80b1758",
+    "source": "research/v10_top10_20260926/study_opponents/style_10.py",
+    "source_sha256": "2b06de8d037e2a1a773f38976d5c3cd987aa97ab0878afe5ee3fd404737a5913",
+    "settings": {
+      "budget_guard": false,
+      "dead_stock": false,
+      "sell_lead": false,
+      "clamp_sells": false,
+      "room_guard": false
+    },
+    "scope": "Local reactive replay proxy, not the original private agent."
+  }
+]

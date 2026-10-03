@@ -1,0 +1,16 @@
+
+def paired_report(rows):
+    import random
+    BASE='submissions/release_v10_r2/main.py'
+    key=lambda r:(r['family'],r['seed'],r['seat'])
+    baselines={key(r):r for r in rows if r['candidate']==BASE and r.get('valid')}
+    points=lambda r:1.0 if r['margin']>0 else (0.5 if r['margin']==0 else 0.0)
+    result=[]
+    for c in sorted({r['candidate'] for r in rows if r['candidate']!=BASE}):
+        pairs=[(r,baselines[key(r)]) for r in rows if r['candidate']==c and r.get('valid') and key(r) in baselines and r['family']!='r2']
+        worlds={}
+        for r,b in pairs:worlds.setdefault(r['seed'],[]).append(points(r)-points(b))
+        vals=[sum(v)/len(v) for v in worlds.values()];rng=random.Random(281928)
+        draws=sorted(sum(rng.choices(vals,k=len(vals)))/len(vals) for _ in range(4000)) if vals else []
+        result.append(dict(candidate=c,external_pairs=len(pairs),worlds=len(vals),external_wins=sum(r['margin']>0 for r,b in pairs),baseline_wins=sum(b['margin']>0 for r,b in pairs),flipped_losses=sum(r['margin']>0 and b['margin']<0 for r,b in pairs),lost_wins=sum(r['margin']<0 and b['margin']>0 for r,b in pairs),mean_margin_gain=sum(r['margin']-b['margin'] for r,b in pairs)/max(1,len(pairs)),score_rate_gain=sum(vals)/max(1,len(vals)),world_bootstrap_95=[draws[100],draws[3899]] if draws else None))
+    return result

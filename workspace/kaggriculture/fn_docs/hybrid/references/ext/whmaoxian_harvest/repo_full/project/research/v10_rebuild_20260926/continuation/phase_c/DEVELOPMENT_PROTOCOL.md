@@ -1,0 +1,1 @@
+Phase C tests public-state cargo readiness. Phase A/B outcomes are now seen diagnostic data. The batch includes all six public programs, three adversarial variants, three direct references, and fixed-replay diagnostics. Replays are not equivalent to reactive private agents. Any revised source needs fresh frozen final worlds; do not reuse prior holdouts as unseen.

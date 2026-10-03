@@ -1,0 +1,65 @@
+{
+  "source": "https://www.kaggle.com/static/assets/app.js?v=a66597b288845158",
+  "bytes": 5241852,
+  "matches": [
+    {
+      "pattern": "ListKernels",
+      "count": 5,
+      "snippets": [
+        ".toJson(e.detailFilterCriteria)),(null==e?void 0:e.readMask)&&(n.readMask=(null!=(t=e.readMask.paths)?t:[]).join(\",\")),n}},tR,\"kernels.KernelsService/ListKernels\",void 0),listKernelsApiPath:\"/api/i/kernels.KernelsService/ListKernels\",listKernelSessionOutput:(0,B.o7)({toJson:function(e){return e}},{fromJson:function(e){var t=Q({},nt,e);return(null==e?void 0:e.items)?t.items=e.ite",
+        "sk=(null!=(t=e.readMask.paths)?t:[]).join(\",\")),n}},tR,\"kernels.KernelsService/ListKernels\",void 0),listKernelsApiPath:\"/api/i/kernels.KernelsService/ListKernels\",listKernelSessionOutput:(0,B.o7)({toJson:function(e){return e}},{fromJson:function(e){var t=Q({},nt,e);return(null==e?void 0:e.items)?t.items=e.items.map(function(e){return tG.fromJson(e)}):t.items=[],t}},\"kernels.Kern",
+        "n e}},{fromJson:function(e){var t=c({},h,e);return(null==e?void 0:e.kernelsWithSecret)||(t.kernelsWithSecret=[]),t}},\"user_secrets.UserSecretsService/ListKernelsWithSecret\",void 0),listKernelsWithSecretApiPath:\"/api/i/user_secrets.UserSecretsService/ListKernelsWithSecret\",listUserSecretsMetadata:(0,s.UU)({toJson:function(e){var t=c({},e);return(null==e?void 0:e.target)&&(t.targe",
+        "thSecret=[]),t}},\"user_secrets.UserSecretsService/ListKernelsWithSecret\",void 0),listKernelsWithSecretApiPath:\"/api/i/user_secrets.UserSecretsService/ListKernelsWithSecret\",listUserSecretsMetadata:(0,s.UU)({toJson:function(e){var t=c({},e);return(null==e?void 0:e.target)&&(t.target=A.toJson(e.target)),(null==e?void 0:e.provider)&&(t.provider=I.toJson(e.provider)),t}},{fromJson:f",
+        ".toJson(e.detailFilterCriteria)),(null==e?void 0:e.readMask)&&(t.readMask=(null!=(n=e.readMask.paths)?n:[]).join(\",\")),t}},s6,\"kernels.KernelsService/ListKernels\",void 0),(0,nc.o7)({toJson:function(e){return e}},{fromJson:function(e){var n=oy({},iL,e);return(null==e?void 0:e.items)?n.items=e.items.map(function(e){return ic.fromJson(e)}):n.items=[],n}},\"kernels.KernelsService/Lis"
+      ]
+    },
+    {
+      "pattern": "GetUserProfile",
+      "count": 0,
+      "snippets": []
+    },
+    {
+      "pattern": "ListTopics",
+      "count": 0,
+      "snippets": []
+    },
+    {
+      "pattern": "GetUserActivity",
+      "count": 8,
+      "snippets": [
+        "tSupportPhoneNumbersResponseWireFormat3:()=>ri,GetUploadWarningDismissedRequestWireFormat3:()=>rs,GetUploadWarningDismissedResponseWireFormat3:()=>rl,GetUserActivityRequestWireFormat3:()=>ru,GetUserActivityResponseWireFormat3:()=>rm,GetUserAvatarRequestWireFormat3:()=>rf,GetUserCountRequestWireFormat3:()=>rp,GetUserCountResponseWireFormat3:()=>rg,GetUserDiscussionCountsRequestWireFo",
+        ")=>ri,GetUploadWarningDismissedRequestWireFormat3:()=>rs,GetUploadWarningDismissedResponseWireFormat3:()=>rl,GetUserActivityRequestWireFormat3:()=>ru,GetUserActivityResponseWireFormat3:()=>rm,GetUserAvatarRequestWireFormat3:()=>rf,GetUserCountRequestWireFormat3:()=>rp,GetUserCountResponseWireFormat3:()=>rg,GetUserDiscussionCountsRequestWireFormat3:()=>rh,GetUserEmojiSkinToneRequestW",
+        "rofilePreview\",void 0),getProfilePreviewApiPath:\"/api/i/users.ProfileService/GetProfilePreview\",getUserActivity:(0,et.o7)(ru,rm,\"users.ProfileService/GetUserActivity\",void 0),getUserActivityApiPath:\"/api/i/users.ProfileService/GetUserActivity\",getUserDiscussionCounts:(0,et.o7)(rh,tx,\"users.ProfileService/GetUserDiscussionCounts\",void 0),getUserDiscussionCountsApiPath:\"/api/i/users.P",
+        "GetProfilePreview\",getUserActivity:(0,et.o7)(ru,rm,\"users.ProfileService/GetUserActivity\",void 0),getUserActivityApiPath:\"/api/i/users.ProfileService/GetUserActivity\",getUserDiscussionCounts:(0,et.o7)(rh,tx,\"users.ProfileService/GetUserDiscussionCounts\",void 0),getUserDiscussionCountsApiPath:\"/api/i/users.ProfileService/GetUserDiscussionCounts\",getUserWriteUpCounts:(0,et.o7)(rW,sW,\"",
+        "ireFormat3:()=>Az,AchievementSummaryWireFormat3:()=>RL,BatchUpdateUserAchievementsResponseWireFormat3:()=>R7,GetNudgeConfigResponseWireFormat3:()=>O9,GetUserActivityRequestWireFormat3:()=>NN,GetUserRankingsV2ResponseWireFormat3:()=>NZ,AchievementTypeRankingWireFormat3:()=>RG,ListFollowersUserIdType:()=>Dy,GetUserVerificationRequestWireFormat3:()=>N2,ListProfilePinsResponseWireFormat",
+        "erByWireFormat3:()=>DD,LoginMessageId:()=>DF,CheckForNudgeRequestWireFormat3:()=>Ao,GenerateApiTokenRequestWireFormat3:()=>OE,MedalWireFormat3:()=>DV,GetUserActivityResponseWireFormat3:()=>Nh,GetUserManagedGroupRequestWireFormat3:()=>NK,GetCurrentUserRequestWireFormat3:()=>OJ,LoginMessageIdWireFormat3:()=>Dw,PhoneVerificationFailureReason:()=>DQ,CreateSynchronizedGroupRequestWireFor",
+        "rofilePreview\",void 0),getProfilePreviewApiPath:\"/api/i/users.ProfileService/GetProfilePreview\",getUserActivity:(0,nc.o7)(NN,Nh,\"users.ProfileService/GetUserActivity\",void 0),getUserActivityApiPath:\"/api/i/users.ProfileService/GetUserActivity\",getUserDiscussionCounts:(0,nc.o7)(Nb,AX,\"users.ProfileService/GetUserDiscussionCounts\",void 0),getUserDiscussionCountsApiPath:\"/api/i/users.P",
+        "GetProfilePreview\",getUserActivity:(0,nc.o7)(NN,Nh,\"users.ProfileService/GetUserActivity\",void 0),getUserActivityApiPath:\"/api/i/users.ProfileService/GetUserActivity\",getUserDiscussionCounts:(0,nc.o7)(Nb,AX,\"users.ProfileService/GetUserDiscussionCounts\",void 0),getUserDiscussionCountsApiPath:\"/api/i/users.ProfileService/GetUserDiscussionCounts\",getUserWriteUpCounts:(0,nc.o7)(N6,C7,\""
+      ]
+    },
+    {
+      "pattern": "ProfileService",
+      "count": 60,
+      "snippets": [
+        "gQueryNudgeApiPath:\"/api/i/users.NudgeService/TestBigQueryNudge\"},profileService:{createProfilePin:(0,et.UU)(tu,ee.q.protobuf.EmptyWireFormat3,\"users.ProfileService/CreateProfilePin\"),createProfilePinApiPath:\"/api/i/users.ProfileService/CreateProfilePin\",deleteProfilePin:(0,et.UU)(tD,ee.q.protobuf.EmptyWireFormat3,\"users.ProfileService/DeleteProfilePin\"),deleteProfilePinApiPath:\"/a",
+        "eService:{createProfilePin:(0,et.UU)(tu,ee.q.protobuf.EmptyWireFormat3,\"users.ProfileService/CreateProfilePin\"),createProfilePinApiPath:\"/api/i/users.ProfileService/CreateProfilePin\",deleteProfilePin:(0,et.UU)(tD,ee.q.protobuf.EmptyWireFormat3,\"users.ProfileService/DeleteProfilePin\"),deleteProfilePinApiPath:\"/api/i/users.ProfileService/DeleteProfilePin\",getProfile:(0,et.o7)(n4,re,\"",
+        "ofilePin\"),createProfilePinApiPath:\"/api/i/users.ProfileService/CreateProfilePin\",deleteProfilePin:(0,et.UU)(tD,ee.q.protobuf.EmptyWireFormat3,\"users.ProfileService/DeleteProfilePin\"),deleteProfilePinApiPath:\"/api/i/users.ProfileService/DeleteProfilePin\",getProfile:(0,et.o7)(n4,re,\"users.ProfileService/GetProfile\",void 0),getProfileApiPath:\"/api/i/users.ProfileService/GetProfile\",g",
+        "ofilePin\",deleteProfilePin:(0,et.UU)(tD,ee.q.protobuf.EmptyWireFormat3,\"users.ProfileService/DeleteProfilePin\"),deleteProfilePinApiPath:\"/api/i/users.ProfileService/DeleteProfilePin\",getProfile:(0,et.o7)(n4,re,\"users.ProfileService/GetProfile\",void 0),getProfileApiPath:\"/api/i/users.ProfileService/GetProfile\",getProfilePreview:(0,et.o7)(n3,n5,\"users.ProfileService/GetProfilePreview",
+        "at3,\"users.ProfileService/DeleteProfilePin\"),deleteProfilePinApiPath:\"/api/i/users.ProfileService/DeleteProfilePin\",getProfile:(0,et.o7)(n4,re,\"users.ProfileService/GetProfile\",void 0),getProfileApiPath:\"/api/i/users.ProfileService/GetProfile\",getProfilePreview:(0,et.o7)(n3,n5,\"users.ProfileService/GetProfilePreview\",void 0),getProfilePreviewApiPath:\"/api/i/users.ProfileService/Get",
+        "h:\"/api/i/users.ProfileService/DeleteProfilePin\",getProfile:(0,et.o7)(n4,re,\"users.ProfileService/GetProfile\",void 0),getProfileApiPath:\"/api/i/users.ProfileService/GetProfile\",getProfilePreview:(0,et.o7)(n3,n5,\"users.ProfileService/GetProfilePreview\",void 0),getProfilePreviewApiPath:\"/api/i/users.ProfileService/GetProfilePreview\",getUserActivity:(0,et.o7)(ru,rm,\"users.ProfileServi",
+        ")(n4,re,\"users.ProfileService/GetProfile\",void 0),getProfileApiPath:\"/api/i/users.ProfileService/GetProfile\",getProfilePreview:(0,et.o7)(n3,n5,\"users.ProfileService/GetProfilePreview\",void 0),getProfilePreviewApiPath:\"/api/i/users.ProfileService/GetProfilePreview\",getUserActivity:(0,et.o7)(ru,rm,\"users.ProfileService/GetUserActivity\",void 0),getUserActivityApiPath:\"/api/i/users.Pro",
+        ".ProfileService/GetProfile\",getProfilePreview:(0,et.o7)(n3,n5,\"users.ProfileService/GetProfilePreview\",void 0),getProfilePreviewApiPath:\"/api/i/users.ProfileService/GetProfilePreview\",getUserActivity:(0,et.o7)(ru,rm,\"users.ProfileService/GetUserActivity\",void 0),getUserActivityApiPath:\"/api/i/users.ProfileService/GetUserActivity\",getUserDiscussionCounts:(0,et.o7)(rh,tx,\"users.Profi"
+      ]
+    },
+    {
+      "pattern": "KernelService",
+      "count": 0,
+      "snippets": []
+    },
+    {
+      "pattern": "ForumService",
+      "count": 0,
+      "snippets": []
+    }
+  ]
+}

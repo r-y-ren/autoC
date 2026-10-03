@@ -1,0 +1,43 @@
+import contextlib, hashlib, io, json, os, sys
+from contextlib import contextmanager
+
+@contextmanager
+def silence_native_output():
+    sys.stdout.flush()
+    sys.stderr.flush()
+    saved_out, saved_err = os.dup(1), os.dup(2)
+    sink = os.open(os.devnull, os.O_WRONLY)
+    try:
+        os.dup2(sink, 1)
+        os.dup2(sink, 2)
+        yield
+    finally:
+        os.dup2(saved_out, 1)
+        os.dup2(saved_err, 2)
+        os.close(saved_out)
+        os.close(saved_err)
+        os.close(sink)
+
+with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()), silence_native_output():
+    env = make("kaggriculture", configuration={"episodeSteps": 720, "seed": 29453000})
+    steps = env.run([str(MAIN), str(CONTROL)])
+assert len(steps) == 720
+final = steps[-1]
+statuses = [agent["status"] for agent in final]
+rewards = [agent["reward"] for agent in final]
+callbacks_per_agent = [sum(state[i].get("action") is not None for state in steps[1:]) for i in range(2)]
+actions = [[row[i].get("action") for row in steps[1:]] for i in range(2)]
+def digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+actions_sha256 = [digest([digest(action) for action in seat]) for seat in actions]
+assert statuses == ["DONE", "DONE"]
+assert callbacks_per_agent == [719, 719]
+assert all(isinstance(value, (int, float)) for value in rewards)
+assert actions_sha256 == EXPECTED_ACTIONS_SHA256, "Pinned full-game action stream mismatch."
+assert rewards == EXPECTED_REWARDS, "Pinned full-game rewards mismatch."
+print("PASS: host core", HOST_CORE_VERSION, "used the exact pinned Kaggriculture source/schema.")
+print("PASS: 720 states; DONE/DONE; 719 callbacks per seat.")
+print("PASS: action SHA-256", actions_sha256, "rewards", rewards)
+RUNTIME_CLEANUP.cleanup()
+assert not Path(str(MAIN)).exists() and not Path(str(NOTICE)).exists()
+print("PASS: temporary policy, game source, schema and license removed; submission archive remains.")

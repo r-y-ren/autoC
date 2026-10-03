@@ -1,0 +1,85 @@
+{
+  "kind": "frozen_trace_diagnostic_not_live_top10",
+  "results": [
+    {
+      "rank": 1,
+      "team": "DSM",
+      "rating_snapshot": 3127.5,
+      "submission_id": 56401245,
+      "episode_id": 111476076,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242856069,
+          "submissionId": 56372014,
+          "reward": 132641,
+          "initialScore": 3052.2772144015476,
+          "updatedScore": 3048.8972273349673,
+          "teamId": 16730524
+        },
+        {
+          "id": 242856070,
+          "submissionId": 56401245,
+          "reward": 150643,
+          "index": 1,
+          "initialScore": 3124.1412500691226,
+          "updatedScore": 3127.521237135703,
+          "teamId": 16732748
+        }
+      ],
+      "time": "2026-09-21T03:55:57.641857500Z",
+      "split": "study",
+      "candidate": null,
+      "candidate_seat": 0,
+      "money": 132641.0,
+      "opponent_money": 150643.0,
+      "delta": -18002.0,
+      "original_rewards": [
+        132641.0,
+        150643.0
+      ],
+      "seconds": 4.458246600000166,
+      "max_action_seconds": 8e-06
+    },
+    {
+      "rank": 2,
+      "team": "Vadim Vasilenko",
+      "rating_snapshot": 3072.5,
+      "submission_id": 56396983,
+      "episode_id": 111475104,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242854123,
+          "submissionId": 56352346,
+          "reward": 79547,
+          "initialScore": 3045.207932296173,
+          "updatedScore": 3050.1583377903667,
+          "teamId": 16640510
+        },
+        {
+          "id": 242854124,
+          "submissionId": 56396983,
+          "reward": 75867,
+          "index": 1,
+          "initialScore": 3072.5382868344727,
+          "updatedScore": 3067.587881340279,
+          "teamId": 16770421
+        }
+      ],
+      "time": "2026-09-21T03:57:32.134771900Z",
+      "split": "study",
+      "candidate": null,
+      "candidate_seat": 0,
+      "money": 79547.0,
+      "opponent_money": 75867.0,
+      "delta": 3680.0,
+      "original_rewards": [
+        79547.0,
+        75867.0
+      ],
+      "seconds": 4.227237499999774,
+      "max_action_seconds": 5e-06
+    }
+  ]
+}

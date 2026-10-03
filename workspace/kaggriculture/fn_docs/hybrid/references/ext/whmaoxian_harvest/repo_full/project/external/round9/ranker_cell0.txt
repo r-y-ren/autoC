@@ -1,0 +1,28 @@
+# Kaggriculture: rank your agent against a known ladder
+
+[Kaggriculture](https://www.kaggle.com/competitions/kaggriculture) scores you on
+**head-to-head wins**, not on an absolute metric. That makes progress genuinely hard
+to read. Your agent banked 40,000 coins — is that good? It depends entirely on who it
+played. Beating the built-in `starter` baseline tells you almost nothing, and the
+public leaderboard only updates after you have spent a submission.
+
+So I built a fixed ladder to measure against. This notebook:
+
+1. loads **ten documented reference agents** spanning a very wide skill range, plus the
+   top-meta agent that beats all ten of them,
+2. lets you plug in **your own agent** three different ways,
+3. plays a seat-swapped round robin and ranks everyone with **Bradley-Terry** —
+   the same method the competition uses for final standings,
+4. tells you which rung you landed on,
+5. and writes a **submittable `submission.tar.gz`**, so the agent you ranked is
+   literally the artifact you submit.
+
+The whole default run takes a couple of minutes. There is a knob at the bottom for a
+much heavier evaluation when you want tighter error bars.
+
+> **What you need:** the
+> [Kaggriculture Reference Agents](https://www.kaggle.com/datasets/raykkretzschmar/kaggriculture-reference-agents)
+> dataset attached (Add Input → Datasets), the output of
+> [Findings from Zero to Top Meta](https://www.kaggle.com/code/raykkretzschmar/kaggriculture-findings-from-zero-to-top-meta)
+> attached (Add Input → Notebook Output) for the rung above the ladder, and
+> **Internet on** so the notebook can install a matching `kaggle-environments`.

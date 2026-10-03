@@ -1,0 +1,1288 @@
+{
+  "episode_id": 112398688,
+  "classification": "public_ladder_game",
+  "names": [
+    "MauoXX",
+    "zigiella"
+  ],
+  "submission_id": null,
+  "seed": 281675694,
+  "rewards": [
+    118749.0,
+    118462.0
+  ],
+  "statuses": [
+    "DONE",
+    "DONE"
+  ],
+  "states": 720,
+  "environment_version": "1.32.7",
+  "source_sha256": "9fa83701138e80e3e5f9a6479cc2fa1c7e8a8965c4bd85d4e45d05ec5d4ffd4e",
+  "persistent_official_entrypoint_parity": [
+    {
+      "seat": 0,
+      "entrypoint": "round8_production_fusion_agent",
+      "matching_actions": 719,
+      "differences": [],
+      "actual_action_sha256": "86193c5904557f91928e9e9b0b61d52437b94cb966380cb32cf8ab4e58dbbd59",
+      "recorded_action_sha256": "86193c5904557f91928e9e9b0b61d52437b94cb966380cb32cf8ab4e58dbbd59",
+      "max_local_seconds": 0.06226550000428688,
+      "exposed_nonzero_error_counters": {}
+    }
+  ],
+  "logs": [],
+  "instrumented_reproduction": {
+    "unchanged_engine_functions_called": true,
+    "all_1440_observations_equal_excluding_timing": true,
+    "final_rewards_equal": true
+  },
+  "metrics": [
+    {
+      "sales_units": {
+        "WHEAT": 367,
+        "FERTILIZER": 347,
+        "WOOL": 97,
+        "MILK": 320,
+        "MELON": 72,
+        "STRAWBERRY": 249,
+        "CARROT": 126
+      },
+      "sales_revenue": {
+        "WHEAT": 13545,
+        "FERTILIZER": 15164,
+        "WOOL": 8707,
+        "MILK": 45659,
+        "MELON": 14267,
+        "STRAWBERRY": 40711,
+        "CARROT": 6147
+      },
+      "floor_sales_units": {
+        "WOOL": 30,
+        "MILK": 16,
+        "FERTILIZER": 6
+      },
+      "purchase_cost": {
+        "BUY_PRODUCT:WHEAT": 4579,
+        "BUY_SEED:WHEAT": 1590,
+        "BUY_ANIMAL:COW": 4800,
+        "BUY_ANIMAL:SHEEP": 2500,
+        "BUY_SEED:MELON": 960,
+        "BUY_SEED:STRAWBERRY": 3300,
+        "BUY_PRODUCT:FERTILIZER": 2614,
+        "BUY_SEED:CARROT": 800
+      },
+      "purchase_units": {
+        "BUY_PRODUCT:WHEAT": 134,
+        "BUY_SEED:WHEAT": 159,
+        "BUY_ANIMAL:COW": 12,
+        "BUY_ANIMAL:SHEEP": 5,
+        "BUY_SEED:MELON": 12,
+        "BUY_SEED:STRAWBERRY": 33,
+        "BUY_PRODUCT:FERTILIZER": 94,
+        "BUY_SEED:CARROT": 40
+      },
+      "operations": {
+        "PASS": 441,
+        "NORTH": 918,
+        "SOUTH": 499,
+        "PICKUP": 208,
+        "WEST": 874,
+        "BUILD_PASTURE": 19,
+        "PLACE": 99,
+        "PLANT": 239,
+        "CARE": 404,
+        "WATER": 1099,
+        "FEED": 336,
+        "COLLECT_FERTILIZER": 379,
+        "EAST": 586,
+        "HARVEST": 477,
+        "DROP": 53,
+        "DIG": 38,
+        "FERTILIZE": 119
+      },
+      "nonpass_unchanged_operations": {
+        "CARE": 13,
+        "COLLECT_FERTILIZER": 8,
+        "WATER": 10,
+        "DIG": 4,
+        "PLACE": 3,
+        "HARVEST": 18,
+        "FERTILIZE": 1
+      },
+      "overflow": {},
+      "overflow_events": [],
+      "hire_cost": 4308.0,
+      "land_cost": 3000.0,
+      "hires": 267,
+      "sales_by_day": {
+        "0": 438,
+        "1": 299,
+        "2": 550,
+        "3": 503,
+        "4": 623,
+        "5": 520,
+        "6": 3500,
+        "7": 780,
+        "8": 3563,
+        "9": 2635,
+        "10": 16668,
+        "11": 4348,
+        "12": 4212,
+        "13": 2429,
+        "14": 4805,
+        "15": 7575,
+        "16": 6853,
+        "17": 4802,
+        "18": 7626,
+        "19": 9099,
+        "20": 9079,
+        "21": 8820,
+        "22": 7139,
+        "23": 7136,
+        "24": 4675,
+        "25": 4064,
+        "26": 3934,
+        "27": 3599,
+        "28": 6156,
+        "29": 7770
+      },
+      "nonpass_unchanged_examples": [
+        {
+          "step": 91,
+          "unit": 0,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            4,
+            4
+          ]
+        },
+        {
+          "step": 107,
+          "unit": 0,
+          "action": [
+            "COLLECT_FERTILIZER"
+          ],
+          "position": [
+            3,
+            3
+          ]
+        },
+        {
+          "step": 111,
+          "unit": 0,
+          "action": [
+            "COLLECT_FERTILIZER"
+          ],
+          "position": [
+            3,
+            4
+          ]
+        },
+        {
+          "step": 115,
+          "unit": 0,
+          "action": [
+            "COLLECT_FERTILIZER"
+          ],
+          "position": [
+            2,
+            4
+          ]
+        },
+        {
+          "step": 123,
+          "unit": 1,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            4,
+            4
+          ]
+        },
+        {
+          "step": 132,
+          "unit": 4,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            3,
+            1
+          ]
+        },
+        {
+          "step": 155,
+          "unit": 4,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            2,
+            2
+          ]
+        },
+        {
+          "step": 167,
+          "unit": 0,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            8,
+            3
+          ]
+        },
+        {
+          "step": 173,
+          "unit": 6,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            5,
+            4
+          ]
+        },
+        {
+          "step": 186,
+          "unit": 1,
+          "action": [
+            "DIG"
+          ],
+          "position": [
+            1,
+            0
+          ]
+        },
+        {
+          "step": 189,
+          "unit": 1,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            1,
+            0
+          ]
+        },
+        {
+          "step": 191,
+          "unit": 3,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            7,
+            0
+          ]
+        },
+        {
+          "step": 195,
+          "unit": 6,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            5,
+            4
+          ]
+        },
+        {
+          "step": 212,
+          "unit": 2,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            8,
+            0
+          ]
+        },
+        {
+          "step": 220,
+          "unit": 5,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            5,
+            4
+          ]
+        },
+        {
+          "step": 227,
+          "unit": 3,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            5,
+            2
+          ]
+        },
+        {
+          "step": 258,
+          "unit": 0,
+          "action": [
+            "PLACE",
+            "MILK",
+            12
+          ],
+          "position": [
+            4,
+            4
+          ]
+        },
+        {
+          "step": 268,
+          "unit": 0,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            4,
+            4
+          ]
+        },
+        {
+          "step": 304,
+          "unit": 6,
+          "action": [
+            "DIG"
+          ],
+          "position": [
+            8,
+            0
+          ]
+        },
+        {
+          "step": 317,
+          "unit": 9,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            4,
+            3
+          ]
+        },
+        {
+          "step": 321,
+          "unit": 4,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            7,
+            4
+          ]
+        },
+        {
+          "step": 323,
+          "unit": 2,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            1,
+            6
+          ]
+        },
+        {
+          "step": 335,
+          "unit": 9,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            1,
+            2
+          ]
+        },
+        {
+          "step": 347,
+          "unit": 8,
+          "action": [
+            "HARVEST"
+          ],
+          "position": [
+            4,
+            1
+          ]
+        },
+        {
+          "step": 353,
+          "unit": 0,
+          "action": [
+            "HARVEST"
+          ],
+          "position": [
+            3,
+            2
+          ]
+        }
+      ],
+      "snapshots": [
+        {
+          "step": 0,
+          "money": 3000.0,
+          "land": 1,
+          "farm_mix": {},
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 0,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 0,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 24,
+          "money": 6.0,
+          "land": 1,
+          "farm_mix": {
+            "WHEAT": 8,
+            "MELON": 12,
+            "SHEEP": 2,
+            "COW": 2
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 0,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 3,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 72,
+          "money": 208.0,
+          "land": 1,
+          "farm_mix": {
+            "WHEAT": 8,
+            "MELON": 12,
+            "COW": 3,
+            "SHEEP": 2
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 0,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 6,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 144,
+          "money": 782.0,
+          "land": 1,
+          "farm_mix": {
+            "WHEAT": 3,
+            "STRAWBERRY": 4,
+            "MELON": 12,
+            "COW": 4,
+            "SHEEP": 2
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 2,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 19,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 240,
+          "money": 2782.0,
+          "land": 2,
+          "farm_mix": {
+            "WHEAT": 5,
+            "STRAWBERRY": 20,
+            "MELON": 12,
+            "COW": 9,
+            "SHEEP": 4
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 1,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 1,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 36,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 480,
+          "money": 61214.0,
+          "land": 3,
+          "farm_mix": {
+            "WHEAT": 25,
+            "STRAWBERRY": 33,
+            "COW": 12,
+            "SHEEP": 5
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 14,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 12,
+            "SHEEP": 0,
+            "STRAWBERRY": 6,
+            "TOMATO": 0,
+            "WHEAT": 35,
+            "WOOL": 3
+          },
+          "carried": {}
+        },
+        {
+          "step": 696,
+          "money": 111220.0,
+          "land": 3,
+          "farm_mix": {
+            "CARROT": 21,
+            "COW": 12,
+            "SHEEP": 5,
+            "PASTURE": 1
+          },
+          "shed": {
+            "CARROT": 39,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 6,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 9,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 42,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 719,
+          "money": 118749.0,
+          "land": 3,
+          "farm_mix": {
+            "COW": 12,
+            "SHEEP": 5,
+            "PASTURE": 1
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 0,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 0,
+            "WOOL": 0
+          },
+          "carried": {}
+        }
+      ],
+      "final_inventory": {
+        "CARROT": 0,
+        "COW": 0,
+        "EGG": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "MELON": 0,
+        "MILK": 0,
+        "SHEEP": 0,
+        "STRAWBERRY": 0,
+        "TOMATO": 0,
+        "WHEAT": 0,
+        "WOOL": 0
+      },
+      "final_seeds": {
+        "CARROT": 0,
+        "MELON": 0,
+        "STRAWBERRY": 0,
+        "TOMATO": 0,
+        "WHEAT": 5
+      },
+      "final_unharvested": {
+        "COW": 1
+      },
+      "money_identity": 118749.0
+    },
+    {
+      "sales_units": {
+        "WHEAT": 362,
+        "FERTILIZER": 347,
+        "WOOL": 97,
+        "MILK": 320,
+        "MELON": 72,
+        "STRAWBERRY": 249,
+        "CARROT": 126
+      },
+      "sales_revenue": {
+        "WHEAT": 13403,
+        "FERTILIZER": 15190,
+        "WOOL": 8747,
+        "MILK": 45130,
+        "MELON": 14267,
+        "STRAWBERRY": 40869,
+        "CARROT": 6147
+      },
+      "floor_sales_units": {
+        "WOOL": 26,
+        "FERTILIZER": 6,
+        "MILK": 14
+      },
+      "purchase_cost": {
+        "BUY_PRODUCT:WHEAT": 4423,
+        "BUY_SEED:WHEAT": 1590,
+        "BUY_ANIMAL:COW": 4800,
+        "BUY_ANIMAL:SHEEP": 2500,
+        "BUY_SEED:MELON": 960,
+        "BUY_SEED:STRAWBERRY": 3300,
+        "BUY_PRODUCT:FERTILIZER": 2610,
+        "BUY_SEED:CARROT": 800
+      },
+      "purchase_units": {
+        "BUY_PRODUCT:WHEAT": 129,
+        "BUY_SEED:WHEAT": 159,
+        "BUY_ANIMAL:COW": 12,
+        "BUY_ANIMAL:SHEEP": 5,
+        "BUY_SEED:MELON": 12,
+        "BUY_SEED:STRAWBERRY": 33,
+        "BUY_PRODUCT:FERTILIZER": 94,
+        "BUY_SEED:CARROT": 40
+      },
+      "operations": {
+        "PASS": 441,
+        "NORTH": 918,
+        "SOUTH": 499,
+        "PICKUP": 208,
+        "WEST": 874,
+        "BUILD_PASTURE": 19,
+        "PLACE": 99,
+        "PLANT": 239,
+        "CARE": 404,
+        "WATER": 1099,
+        "FEED": 336,
+        "COLLECT_FERTILIZER": 379,
+        "EAST": 586,
+        "HARVEST": 477,
+        "DROP": 53,
+        "DIG": 38,
+        "FERTILIZE": 119
+      },
+      "nonpass_unchanged_operations": {
+        "CARE": 13,
+        "COLLECT_FERTILIZER": 8,
+        "WATER": 10,
+        "DIG": 4,
+        "PLACE": 3,
+        "HARVEST": 18,
+        "FERTILIZE": 1
+      },
+      "overflow": {},
+      "overflow_events": [],
+      "hire_cost": 4308.0,
+      "land_cost": 3000.0,
+      "hires": 267,
+      "sales_by_day": {
+        "0": 294,
+        "1": 299,
+        "2": 550,
+        "3": 503,
+        "4": 623,
+        "5": 520,
+        "6": 3500,
+        "7": 780,
+        "8": 3563,
+        "9": 2635,
+        "10": 16668,
+        "11": 4348,
+        "12": 4212,
+        "13": 2429,
+        "14": 4805,
+        "15": 7575,
+        "16": 6853,
+        "17": 4802,
+        "18": 7626,
+        "19": 9087,
+        "20": 9079,
+        "21": 8632,
+        "22": 7196,
+        "23": 6399,
+        "24": 5236,
+        "25": 4064,
+        "26": 3934,
+        "27": 3599,
+        "28": 6140,
+        "29": 7802
+      },
+      "nonpass_unchanged_examples": [
+        {
+          "step": 91,
+          "unit": 0,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            4,
+            4
+          ]
+        },
+        {
+          "step": 107,
+          "unit": 0,
+          "action": [
+            "COLLECT_FERTILIZER"
+          ],
+          "position": [
+            3,
+            3
+          ]
+        },
+        {
+          "step": 111,
+          "unit": 0,
+          "action": [
+            "COLLECT_FERTILIZER"
+          ],
+          "position": [
+            3,
+            4
+          ]
+        },
+        {
+          "step": 115,
+          "unit": 0,
+          "action": [
+            "COLLECT_FERTILIZER"
+          ],
+          "position": [
+            2,
+            4
+          ]
+        },
+        {
+          "step": 123,
+          "unit": 1,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            4,
+            4
+          ]
+        },
+        {
+          "step": 132,
+          "unit": 4,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            3,
+            1
+          ]
+        },
+        {
+          "step": 155,
+          "unit": 4,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            2,
+            2
+          ]
+        },
+        {
+          "step": 167,
+          "unit": 0,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            8,
+            3
+          ]
+        },
+        {
+          "step": 173,
+          "unit": 6,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            5,
+            4
+          ]
+        },
+        {
+          "step": 186,
+          "unit": 1,
+          "action": [
+            "DIG"
+          ],
+          "position": [
+            1,
+            0
+          ]
+        },
+        {
+          "step": 189,
+          "unit": 1,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            1,
+            0
+          ]
+        },
+        {
+          "step": 191,
+          "unit": 3,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            7,
+            0
+          ]
+        },
+        {
+          "step": 195,
+          "unit": 6,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            5,
+            4
+          ]
+        },
+        {
+          "step": 212,
+          "unit": 2,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            8,
+            0
+          ]
+        },
+        {
+          "step": 220,
+          "unit": 5,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            5,
+            4
+          ]
+        },
+        {
+          "step": 227,
+          "unit": 3,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            5,
+            2
+          ]
+        },
+        {
+          "step": 258,
+          "unit": 0,
+          "action": [
+            "PLACE",
+            "MILK",
+            12
+          ],
+          "position": [
+            4,
+            4
+          ]
+        },
+        {
+          "step": 268,
+          "unit": 0,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            4,
+            4
+          ]
+        },
+        {
+          "step": 304,
+          "unit": 6,
+          "action": [
+            "DIG"
+          ],
+          "position": [
+            8,
+            0
+          ]
+        },
+        {
+          "step": 317,
+          "unit": 9,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            4,
+            3
+          ]
+        },
+        {
+          "step": 321,
+          "unit": 4,
+          "action": [
+            "CARE"
+          ],
+          "position": [
+            7,
+            4
+          ]
+        },
+        {
+          "step": 323,
+          "unit": 2,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            1,
+            6
+          ]
+        },
+        {
+          "step": 335,
+          "unit": 9,
+          "action": [
+            "WATER"
+          ],
+          "position": [
+            1,
+            2
+          ]
+        },
+        {
+          "step": 347,
+          "unit": 8,
+          "action": [
+            "HARVEST"
+          ],
+          "position": [
+            4,
+            1
+          ]
+        },
+        {
+          "step": 353,
+          "unit": 0,
+          "action": [
+            "HARVEST"
+          ],
+          "position": [
+            3,
+            2
+          ]
+        }
+      ],
+      "snapshots": [
+        {
+          "step": 0,
+          "money": 3000.0,
+          "land": 1,
+          "farm_mix": {},
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 0,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 0,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 24,
+          "money": 18.0,
+          "land": 1,
+          "farm_mix": {
+            "WHEAT": 8,
+            "MELON": 12,
+            "SHEEP": 2,
+            "COW": 2
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 0,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 3,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 72,
+          "money": 220.0,
+          "land": 1,
+          "farm_mix": {
+            "WHEAT": 8,
+            "MELON": 12,
+            "COW": 3,
+            "SHEEP": 2
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 0,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 6,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 144,
+          "money": 794.0,
+          "land": 1,
+          "farm_mix": {
+            "WHEAT": 3,
+            "STRAWBERRY": 4,
+            "MELON": 12,
+            "COW": 4,
+            "SHEEP": 2
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 2,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 19,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 240,
+          "money": 2794.0,
+          "land": 2,
+          "farm_mix": {
+            "WHEAT": 5,
+            "STRAWBERRY": 20,
+            "MELON": 12,
+            "COW": 9,
+            "SHEEP": 4
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 1,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 1,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 36,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 480,
+          "money": 61214.0,
+          "land": 3,
+          "farm_mix": {
+            "WHEAT": 25,
+            "STRAWBERRY": 33,
+            "COW": 12,
+            "SHEEP": 5
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 14,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 12,
+            "SHEEP": 0,
+            "STRAWBERRY": 6,
+            "TOMATO": 0,
+            "WHEAT": 35,
+            "WOOL": 3
+          },
+          "carried": {}
+        },
+        {
+          "step": 696,
+          "money": 110900.0,
+          "land": 3,
+          "farm_mix": {
+            "CARROT": 21,
+            "WEED": 1,
+            "COW": 12,
+            "SHEEP": 5,
+            "PASTURE": 1
+          },
+          "shed": {
+            "CARROT": 39,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 6,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 9,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 42,
+            "WOOL": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 719,
+          "money": 118462.0,
+          "land": 3,
+          "farm_mix": {
+            "WEED": 1,
+            "COW": 12,
+            "SHEEP": 5,
+            "PASTURE": 1
+          },
+          "shed": {
+            "CARROT": 0,
+            "COW": 0,
+            "EGG": 0,
+            "FERTILIZER": 0,
+            "GOOSE": 0,
+            "MELON": 0,
+            "MILK": 0,
+            "SHEEP": 0,
+            "STRAWBERRY": 0,
+            "TOMATO": 0,
+            "WHEAT": 0,
+            "WOOL": 0
+          },
+          "carried": {}
+        }
+      ],
+      "final_inventory": {
+        "CARROT": 0,
+        "COW": 0,
+        "EGG": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "MELON": 0,
+        "MILK": 0,
+        "SHEEP": 0,
+        "STRAWBERRY": 0,
+        "TOMATO": 0,
+        "WHEAT": 0,
+        "WOOL": 0
+      },
+      "final_seeds": {
+        "CARROT": 0,
+        "MELON": 0,
+        "STRAWBERRY": 0,
+        "TOMATO": 0,
+        "WHEAT": 5
+      },
+      "final_unharvested": {
+        "COW": 1
+      },
+      "money_identity": 118462.0
+    }
+  ],
+  "limitations": [
+    "A self validation episode cannot explain recent ladder rating changes.",
+    "Unchanged unit operations include harmless empty DROP/PICKUP and redundant WATER; not every such operation has a profitable replacement.",
+    "Final unharvested output is not recoverable coin value: reachability, remaining actions and marginal price matter."
+  ]
+}

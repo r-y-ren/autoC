@@ -1,0 +1,1434 @@
+{
+  "research/v10_rebuild_20260926/continuation/phase_b/generation6/similarity90.py": {
+    "recorded": 218,
+    "expected": 218,
+    "complete": true,
+    "panels": {
+      "actual_v10_loss": {
+        "games": 11,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.5454545454545454,
+        "mean_margin": 954.2727272727273,
+        "worst": -2816.0
+      },
+      "counter_population": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 18,
+        "ties": 14,
+        "losses": 16,
+        "points": 0.5208333333333334,
+        "mean_margin": 145.9375,
+        "worst": -952.0
+      },
+      "direct_reference": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 29,
+        "ties": 12,
+        "losses": 7,
+        "points": 0.7291666666666666,
+        "mean_margin": 459.1666666666667,
+        "worst": -952.0
+      },
+      "public_program": {
+        "games": 96,
+        "invalid": 0,
+        "wins": 93,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.96875,
+        "mean_margin": 8241.604166666666,
+        "worst": -2546.0
+      },
+      "unseen_trace": {
+        "games": 15,
+        "invalid": 0,
+        "wins": 11,
+        "ties": 0,
+        "losses": 4,
+        "points": 0.7333333333333333,
+        "mean_margin": 55721.13333333333,
+        "worst": -2366.0
+      }
+    },
+    "families": {
+      "aurax": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 6694.375,
+        "worst": 1785.0
+      },
+      "counter_longreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 2,
+        "losses": 11,
+        "points": 0.25,
+        "mean_margin": -204.375,
+        "worst": -810.0
+      },
+      "counter_phase_a": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 12,
+        "losses": 2,
+        "points": 0.5,
+        "mean_margin": 0.0,
+        "worst": -952.0
+      },
+      "counter_shortreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 642.1875,
+        "worst": -586.0
+      },
+      "fieldcraft": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 3379.75,
+        "worst": -2546.0
+      },
+      "market_smart": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 7335.0,
+        "worst": 3086.0
+      },
+      "marketshock": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 2205.6875,
+        "worst": 302.0
+      },
+      "phase_b": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 12,
+        "losses": 2,
+        "points": 0.5,
+        "mean_margin": 0.0,
+        "worst": -952.0
+      },
+      "shoprouter": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 19284.0625,
+        "worst": 6277.0
+      },
+      "structured": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 10550.75,
+        "worst": 1705.0
+      },
+      "v10": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 749.0,
+        "worst": -735.0
+      },
+      "v9": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 14,
+        "ties": 0,
+        "losses": 2,
+        "points": 0.875,
+        "mean_margin": 628.5,
+        "worst": -82.0
+      }
+    }
+  },
+  "research/v10_rebuild_20260926/continuation/phase_c/advance_only2.py": {
+    "recorded": 218,
+    "expected": 218,
+    "complete": true,
+    "panels": {
+      "actual_v10_loss": {
+        "games": 11,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.5454545454545454,
+        "mean_margin": 939.6363636363636,
+        "worst": -2772.0
+      },
+      "counter_population": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 18,
+        "ties": 12,
+        "losses": 18,
+        "points": 0.5,
+        "mean_margin": 141.72916666666666,
+        "worst": -952.0
+      },
+      "direct_reference": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 29,
+        "ties": 10,
+        "losses": 9,
+        "points": 0.7083333333333334,
+        "mean_margin": 449.7916666666667,
+        "worst": -952.0
+      },
+      "public_program": {
+        "games": 96,
+        "invalid": 0,
+        "wins": 93,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.96875,
+        "mean_margin": 8236.71875,
+        "worst": -2546.0
+      },
+      "unseen_trace": {
+        "games": 15,
+        "invalid": 0,
+        "wins": 11,
+        "ties": 0,
+        "losses": 4,
+        "points": 0.7333333333333333,
+        "mean_margin": 55716.53333333333,
+        "worst": -2366.0
+      }
+    },
+    "families": {
+      "aurax": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 6707.125,
+        "worst": 1785.0
+      },
+      "counter_longreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 2,
+        "losses": 11,
+        "points": 0.25,
+        "mean_margin": -204.375,
+        "worst": -810.0
+      },
+      "counter_phase_a": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 10,
+        "losses": 4,
+        "points": 0.4375,
+        "mean_margin": -12.625,
+        "worst": -952.0
+      },
+      "counter_shortreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 642.1875,
+        "worst": -586.0
+      },
+      "fieldcraft": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 3382.75,
+        "worst": -2546.0
+      },
+      "market_smart": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 7336.375,
+        "worst": 3089.0
+      },
+      "marketshock": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 2150.0625,
+        "worst": 302.0
+      },
+      "phase_b": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 10,
+        "losses": 4,
+        "points": 0.4375,
+        "mean_margin": -12.625,
+        "worst": -952.0
+      },
+      "shoprouter": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 19294.25,
+        "worst": 6282.0
+      },
+      "structured": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 10549.75,
+        "worst": 1705.0
+      },
+      "v10": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 749.0,
+        "worst": -735.0
+      },
+      "v9": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 14,
+        "ties": 0,
+        "losses": 2,
+        "points": 0.875,
+        "mean_margin": 613.0,
+        "worst": -82.0
+      }
+    }
+  },
+  "research/v10_rebuild_20260926/continuation/phase_c/ready0.py": {
+    "recorded": 218,
+    "expected": 218,
+    "complete": true,
+    "panels": {
+      "actual_v10_loss": {
+        "games": 11,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.5454545454545454,
+        "mean_margin": 952.5454545454545,
+        "worst": -2648.0
+      },
+      "counter_population": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 19,
+        "ties": 2,
+        "losses": 27,
+        "points": 0.4166666666666667,
+        "mean_margin": 121.60416666666667,
+        "worst": -952.0
+      },
+      "direct_reference": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 32,
+        "ties": 2,
+        "losses": 14,
+        "points": 0.6875,
+        "mean_margin": 459.7916666666667,
+        "worst": -952.0
+      },
+      "public_program": {
+        "games": 96,
+        "invalid": 0,
+        "wins": 93,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.96875,
+        "mean_margin": 8262.84375,
+        "worst": -2574.0
+      },
+      "unseen_trace": {
+        "games": 15,
+        "invalid": 0,
+        "wins": 11,
+        "ties": 0,
+        "losses": 4,
+        "points": 0.7333333333333333,
+        "mean_margin": 55672.26666666667,
+        "worst": -2366.0
+      }
+    },
+    "families": {
+      "aurax": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 6790.375,
+        "worst": 1848.0
+      },
+      "counter_longreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 0,
+        "losses": 13,
+        "points": 0.1875,
+        "mean_margin": -218.625,
+        "worst": -810.0
+      },
+      "counter_phase_a": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 5,
+        "ties": 2,
+        "losses": 9,
+        "points": 0.375,
+        "mean_margin": -9.625,
+        "worst": -952.0
+      },
+      "counter_shortreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 11,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.6875,
+        "mean_margin": 593.0625,
+        "worst": -586.0
+      },
+      "fieldcraft": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 3305.625,
+        "worst": -2574.0
+      },
+      "market_smart": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 7361.625,
+        "worst": 3110.0
+      },
+      "marketshock": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 2194.0625,
+        "worst": 334.0
+      },
+      "phase_b": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 5,
+        "ties": 2,
+        "losses": 9,
+        "points": 0.375,
+        "mean_margin": -9.625,
+        "worst": -952.0
+      },
+      "shoprouter": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 19318.75,
+        "worst": 6282.0
+      },
+      "structured": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 10606.625,
+        "worst": 1739.0
+      },
+      "v10": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 744.25,
+        "worst": -735.0
+      },
+      "v9": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 14,
+        "ties": 0,
+        "losses": 2,
+        "points": 0.875,
+        "mean_margin": 644.75,
+        "worst": -231.0
+      }
+    }
+  },
+  "research/v10_rebuild_20260926/continuation/phase_c/ready12.py": {
+    "recorded": 218,
+    "expected": 218,
+    "complete": true,
+    "panels": {
+      "actual_v10_loss": {
+        "games": 11,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.5454545454545454,
+        "mean_margin": 954.2727272727273,
+        "worst": -2816.0
+      },
+      "counter_population": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 18,
+        "ties": 14,
+        "losses": 16,
+        "points": 0.5208333333333334,
+        "mean_margin": 145.9375,
+        "worst": -952.0
+      },
+      "direct_reference": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 29,
+        "ties": 12,
+        "losses": 7,
+        "points": 0.7291666666666666,
+        "mean_margin": 459.1666666666667,
+        "worst": -952.0
+      },
+      "public_program": {
+        "games": 96,
+        "invalid": 0,
+        "wins": 93,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.96875,
+        "mean_margin": 8241.604166666666,
+        "worst": -2546.0
+      },
+      "unseen_trace": {
+        "games": 15,
+        "invalid": 0,
+        "wins": 11,
+        "ties": 0,
+        "losses": 4,
+        "points": 0.7333333333333333,
+        "mean_margin": 55721.13333333333,
+        "worst": -2366.0
+      }
+    },
+    "families": {
+      "aurax": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 6694.375,
+        "worst": 1785.0
+      },
+      "counter_longreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 2,
+        "losses": 11,
+        "points": 0.25,
+        "mean_margin": -204.375,
+        "worst": -810.0
+      },
+      "counter_phase_a": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 12,
+        "losses": 2,
+        "points": 0.5,
+        "mean_margin": 0.0,
+        "worst": -952.0
+      },
+      "counter_shortreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 642.1875,
+        "worst": -586.0
+      },
+      "fieldcraft": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 3379.75,
+        "worst": -2546.0
+      },
+      "market_smart": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 7335.0,
+        "worst": 3086.0
+      },
+      "marketshock": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 2205.6875,
+        "worst": 302.0
+      },
+      "phase_b": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 12,
+        "losses": 2,
+        "points": 0.5,
+        "mean_margin": 0.0,
+        "worst": -952.0
+      },
+      "shoprouter": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 19284.0625,
+        "worst": 6277.0
+      },
+      "structured": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 10550.75,
+        "worst": 1705.0
+      },
+      "v10": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 749.0,
+        "worst": -735.0
+      },
+      "v9": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 14,
+        "ties": 0,
+        "losses": 2,
+        "points": 0.875,
+        "mean_margin": 628.5,
+        "worst": -82.0
+      }
+    }
+  },
+  "research/v10_rebuild_20260926/continuation/phase_c/ready2.py": {
+    "recorded": 218,
+    "expected": 218,
+    "complete": true,
+    "panels": {
+      "actual_v10_loss": {
+        "games": 11,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.5454545454545454,
+        "mean_margin": 939.6363636363636,
+        "worst": -2772.0
+      },
+      "counter_population": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 20,
+        "ties": 8,
+        "losses": 20,
+        "points": 0.5,
+        "mean_margin": 136.97916666666666,
+        "worst": -952.0
+      },
+      "direct_reference": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 33,
+        "ties": 6,
+        "losses": 9,
+        "points": 0.75,
+        "mean_margin": 438.9166666666667,
+        "worst": -952.0
+      },
+      "public_program": {
+        "games": 96,
+        "invalid": 0,
+        "wins": 93,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.96875,
+        "mean_margin": 8246.864583333334,
+        "worst": -2545.0
+      },
+      "unseen_trace": {
+        "games": 15,
+        "invalid": 0,
+        "wins": 11,
+        "ties": 0,
+        "losses": 4,
+        "points": 0.7333333333333333,
+        "mean_margin": 55710.933333333334,
+        "worst": -2366.0
+      }
+    },
+    "families": {
+      "aurax": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 6718.125,
+        "worst": 1785.0
+      },
+      "counter_longreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 2,
+        "losses": 11,
+        "points": 0.25,
+        "mean_margin": -196.0,
+        "worst": -810.0
+      },
+      "counter_phase_a": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 6,
+        "losses": 4,
+        "points": 0.5625,
+        "mean_margin": -8.0,
+        "worst": -952.0
+      },
+      "counter_shortreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 11,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.6875,
+        "mean_margin": 614.9375,
+        "worst": -586.0
+      },
+      "fieldcraft": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 3423.375,
+        "worst": -2545.0
+      },
+      "market_smart": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 7337.375,
+        "worst": 3089.0
+      },
+      "marketshock": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 2150.9375,
+        "worst": 309.0
+      },
+      "phase_b": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 6,
+        "losses": 4,
+        "points": 0.5625,
+        "mean_margin": -8.0,
+        "worst": -952.0
+      },
+      "shoprouter": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 19294.375,
+        "worst": 6282.0
+      },
+      "structured": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 10557.0,
+        "worst": 1739.0
+      },
+      "v10": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 730.375,
+        "worst": -735.0
+      },
+      "v9": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 14,
+        "ties": 0,
+        "losses": 2,
+        "points": 0.875,
+        "mean_margin": 594.375,
+        "worst": -250.0
+      }
+    }
+  },
+  "research/v10_rebuild_20260926/continuation/phase_c/ready6.py": {
+    "recorded": 218,
+    "expected": 218,
+    "complete": true,
+    "panels": {
+      "actual_v10_loss": {
+        "games": 11,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.5454545454545454,
+        "mean_margin": 954.2727272727273,
+        "worst": -2816.0
+      },
+      "counter_population": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 18,
+        "ties": 14,
+        "losses": 16,
+        "points": 0.5208333333333334,
+        "mean_margin": 145.9375,
+        "worst": -952.0
+      },
+      "direct_reference": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 29,
+        "ties": 12,
+        "losses": 7,
+        "points": 0.7291666666666666,
+        "mean_margin": 459.1666666666667,
+        "worst": -952.0
+      },
+      "public_program": {
+        "games": 96,
+        "invalid": 0,
+        "wins": 93,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.96875,
+        "mean_margin": 8241.604166666666,
+        "worst": -2546.0
+      },
+      "unseen_trace": {
+        "games": 15,
+        "invalid": 0,
+        "wins": 11,
+        "ties": 0,
+        "losses": 4,
+        "points": 0.7333333333333333,
+        "mean_margin": 55721.13333333333,
+        "worst": -2366.0
+      }
+    },
+    "families": {
+      "aurax": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 6694.375,
+        "worst": 1785.0
+      },
+      "counter_longreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 2,
+        "losses": 11,
+        "points": 0.25,
+        "mean_margin": -204.375,
+        "worst": -810.0
+      },
+      "counter_phase_a": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 12,
+        "losses": 2,
+        "points": 0.5,
+        "mean_margin": 0.0,
+        "worst": -952.0
+      },
+      "counter_shortreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 642.1875,
+        "worst": -586.0
+      },
+      "fieldcraft": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 3379.75,
+        "worst": -2546.0
+      },
+      "market_smart": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 7335.0,
+        "worst": 3086.0
+      },
+      "marketshock": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 2205.6875,
+        "worst": 302.0
+      },
+      "phase_b": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 12,
+        "losses": 2,
+        "points": 0.5,
+        "mean_margin": 0.0,
+        "worst": -952.0
+      },
+      "shoprouter": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 19284.0625,
+        "worst": 6277.0
+      },
+      "structured": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 10550.75,
+        "worst": 1705.0
+      },
+      "v10": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 749.0,
+        "worst": -735.0
+      },
+      "v9": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 14,
+        "ties": 0,
+        "losses": 2,
+        "points": 0.875,
+        "mean_margin": 628.5,
+        "worst": -82.0
+      }
+    }
+  },
+  "research/v10_rebuild_20260926/continuation/phase_c/unrestricted2.py": {
+    "recorded": 218,
+    "expected": 218,
+    "complete": true,
+    "panels": {
+      "actual_v10_loss": {
+        "games": 11,
+        "invalid": 0,
+        "wins": 7,
+        "ties": 0,
+        "losses": 4,
+        "points": 0.6363636363636364,
+        "mean_margin": 1070.0,
+        "worst": -3379.0
+      },
+      "counter_population": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 20,
+        "ties": 8,
+        "losses": 20,
+        "points": 0.5,
+        "mean_margin": 136.97916666666666,
+        "worst": -952.0
+      },
+      "direct_reference": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 33,
+        "ties": 6,
+        "losses": 9,
+        "points": 0.75,
+        "mean_margin": 438.875,
+        "worst": -952.0
+      },
+      "public_program": {
+        "games": 96,
+        "invalid": 0,
+        "wins": 93,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.96875,
+        "mean_margin": 7916.447916666667,
+        "worst": -2645.0
+      },
+      "unseen_trace": {
+        "games": 15,
+        "invalid": 0,
+        "wins": 9,
+        "ties": 0,
+        "losses": 6,
+        "points": 0.6,
+        "mean_margin": 55119.333333333336,
+        "worst": -2959.0
+      }
+    },
+    "families": {
+      "aurax": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 6584.625,
+        "worst": 1785.0
+      },
+      "counter_longreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 2,
+        "losses": 11,
+        "points": 0.25,
+        "mean_margin": -196.0,
+        "worst": -810.0
+      },
+      "counter_phase_a": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 6,
+        "losses": 4,
+        "points": 0.5625,
+        "mean_margin": -8.0,
+        "worst": -952.0
+      },
+      "counter_shortreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 11,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.6875,
+        "mean_margin": 614.9375,
+        "worst": -586.0
+      },
+      "fieldcraft": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 3305.8125,
+        "worst": -2645.0
+      },
+      "market_smart": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 6857.125,
+        "worst": 3089.0
+      },
+      "marketshock": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 2203.0625,
+        "worst": 508.0
+      },
+      "phase_b": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 6,
+        "ties": 6,
+        "losses": 4,
+        "points": 0.5625,
+        "mean_margin": -8.0,
+        "worst": -952.0
+      },
+      "shoprouter": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 18526.4375,
+        "worst": 5380.0
+      },
+      "structured": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 10021.625,
+        "worst": 1739.0
+      },
+      "v10": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 730.25,
+        "worst": -735.0
+      },
+      "v9": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 14,
+        "ties": 0,
+        "losses": 2,
+        "points": 0.875,
+        "mean_margin": 594.375,
+        "worst": -250.0
+      }
+    }
+  },
+  "submissions/release_v10/main.py": {
+    "recorded": 218,
+    "expected": 218,
+    "complete": true,
+    "panels": {
+      "actual_v10_loss": {
+        "games": 11,
+        "invalid": 0,
+        "wins": 0,
+        "ties": 0,
+        "losses": 11,
+        "points": 0,
+        "mean_margin": -4489.090909090909,
+        "worst": -22611.0
+      },
+      "counter_population": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 7,
+        "ties": 0,
+        "losses": 41,
+        "points": 0.14583333333333334,
+        "mean_margin": -748.4583333333334,
+        "worst": -2519.0
+      },
+      "direct_reference": {
+        "games": 48,
+        "invalid": 0,
+        "wins": 19,
+        "ties": 12,
+        "losses": 17,
+        "points": 0.5208333333333334,
+        "mean_margin": 188.29166666666666,
+        "worst": -1856.0
+      },
+      "public_program": {
+        "games": 96,
+        "invalid": 0,
+        "wins": 79,
+        "ties": 0,
+        "losses": 17,
+        "points": 0.8229166666666666,
+        "mean_margin": 5766.84375,
+        "worst": -17463.0
+      },
+      "unseen_trace": {
+        "games": 15,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 2,
+        "points": 0.8666666666666667,
+        "mean_margin": 38920.4,
+        "worst": -2366.0
+      }
+    },
+    "families": {
+      "aurax": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 0,
+        "losses": 14,
+        "points": 0.125,
+        "mean_margin": -9218.9375,
+        "worst": -17463.0
+      },
+      "counter_longreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 0,
+        "losses": 13,
+        "points": 0.1875,
+        "mean_margin": -420.25,
+        "worst": -1335.0
+      },
+      "counter_phase_a": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 0,
+        "losses": 13,
+        "points": 0.1875,
+        "mean_margin": -749.0,
+        "worst": -1856.0
+      },
+      "counter_shortreserve": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 1,
+        "ties": 0,
+        "losses": 15,
+        "points": 0.0625,
+        "mean_margin": -1076.125,
+        "worst": -2519.0
+      },
+      "fieldcraft": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 13,
+        "ties": 0,
+        "losses": 3,
+        "points": 0.8125,
+        "mean_margin": 3315.625,
+        "worst": -2544.0
+      },
+      "market_smart": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 7506.1875,
+        "worst": 2795.0
+      },
+      "marketshock": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 2748.4375,
+        "worst": 986.0
+      },
+      "phase_b": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 3,
+        "ties": 0,
+        "losses": 13,
+        "points": 0.1875,
+        "mean_margin": -749.0,
+        "worst": -1856.0
+      },
+      "shoprouter": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 19334.5625,
+        "worst": 6797.0
+      },
+      "structured": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 16,
+        "ties": 0,
+        "losses": 0,
+        "points": 1,
+        "mean_margin": 10915.1875,
+        "worst": 2245.0
+      },
+      "v10": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 2,
+        "ties": 12,
+        "losses": 2,
+        "points": 0.5,
+        "mean_margin": 0.0,
+        "worst": -1214.0
+      },
+      "v9": {
+        "games": 16,
+        "invalid": 0,
+        "wins": 14,
+        "ties": 0,
+        "losses": 2,
+        "points": 0.875,
+        "mean_margin": 1313.875,
+        "worst": -100.0
+      }
+    }
+  }
+}

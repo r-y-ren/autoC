@@ -1,0 +1,38 @@
+rows = []
+for rank, (sub, bank) in enumerate(top_subs.items()):
+    row = ladder_r[ladder_r.winner_sub.eq(sub) & ladder_r.winner_bank.eq(bank)].iloc[0]
+    seat = 0 if row.bank_0 >= row.bank_1 else 1
+    rows.append({"who": name_of(row.team_1 if seat else row.team_0), "bank": bank,
+                 **(fingerprint_row(row.episode_id, seat) or {})})
+mid_pool = ladder_r[ladder_r.winner_bank.between(*ladder_r.winner_bank.quantile([.45, .55]))]
+mid = (mid_pool.iloc[0] if len(mid_pool)
+       else ladder_r.loc[(ladder_r.winner_bank - ladder_r.winner_bank.median()).abs().idxmin()])
+seat = 0 if mid.bank_0 >= mid.bank_1 else 1
+rows.append({"who": f"{name_of(mid.team_1 if seat else mid.team_0)} (mid-ladder)",
+             "bank": mid.winner_bank, **(fingerprint_row(mid.episode_id, seat) or {})})
+
+fp = pd.DataFrame(rows)
+fp["top crop"] = fp.plants.map(lambda d: max(d, key=d.get).title() if d else "—")
+fp["plantings"] = fp.plants.map(lambda d: sum(d.values()))
+display(fp[["who", "bank", "hires / day", "peak crew", "first land (day)",
+            "plantings", "top crop"]]
+        .style.hide(axis="index")
+        .format({"bank": "{:,.0f}", "hires / day": "{:.1f}", "first land (day)": "{:.0f}"},
+                na_rep="—")
+        .set_properties(**{"font-size": "13px"})
+        .set_table_styles([{"selector": "th", "props": [("font-size", "13px")]}]))
+
+lead, base = fp.iloc[0], fp.iloc[-1]
+crops_top = [c for c in fp["top crop"][:3].tolist() if c != "—"]
+uniq_crops = list(dict.fromkeys(crops_top))
+lead_land = ("never buys land in this game" if pd.isna(lead["first land (day)"])
+             else f"takes land on day **{lead['first land (day)']:.0f}**")
+base_land = ("the mid-ladder farm never buys any" if pd.isna(base["first land (day)"])
+             else f"the mid-ladder farm waits until day {base['first land (day)']:.0f}")
+crop_line = (f"All of the biggest wins lead with {uniq_crops[0]}." if len(uniq_crops) == 1
+             else f"The three biggest wins lead with {', '.join(crops_top)}. The winning crop "
+                  f"varies; what repeats is the economics around it, not the plant.")
+display(Markdown(
+    f"One best game per submission, so read it as a sketch rather than a verdict. Still, the "
+    f"record holder ({lead['who']}) runs a crew of **{lead['peak crew']:.0f}** against the "
+    f"mid-ladder's **{base['peak crew']:.0f}** and {lead_land}; {base_land}. {crop_line}"))

@@ -1,0 +1,43 @@
+fig, ax = plt.subplots(figsize=(12.1, 5.0))
+ax.set_xlim(0, 12)
+ax.set_ylim(0, 5.3)
+ax.axis("off")
+
+ax.text(0.3, 4.72, "One-turn premium market lead",
+        fontsize=18, fontweight="bold", color=NAVY)
+ax.text(0.3, 4.30,
+        "Move only available stock; conserve the planned two-turn quantity.",
+        fontsize=11.5, color=SLATE)
+
+def draw_box(x, y, width, label, color, text_color="white"):
+    patch = FancyBboxPatch(
+        (x, y), width, 0.82,
+        boxstyle="round,pad=0.04,rounding_size=0.13",
+        linewidth=0, facecolor=color,
+    )
+    ax.add_patch(patch)
+    ax.text(x + width / 2, y + 0.41, label,
+            ha="center", va="center", fontsize=11.3,
+            fontweight="bold", color=text_color)
+
+ax.text(0.3, 3.18, "Base schedule", fontsize=12.5,
+        fontweight="bold", color=NAVY, va="center")
+draw_box(2.55, 2.76, 2.45, "turn t: hold", LIGHT, NAVY)
+draw_box(8.10, 2.76, 2.75, "turn t+1: SELL q", SLATE)
+ax.add_patch(FancyArrowPatch((5.15, 3.17), (7.93, 3.17),
+                             arrowstyle="-|>", mutation_scale=15,
+                             linewidth=1.8, color=SLATE))
+
+ax.text(0.3, 1.53, "V16-RC5", fontsize=12.5,
+        fontweight="bold", color=NAVY, va="center")
+draw_box(2.55, 1.11, 2.45, "turn t: SELL s", TEAL)
+draw_box(8.10, 1.11, 2.75, "turn t+1: SELL q-s", MINT, NAVY)
+ax.add_patch(FancyArrowPatch((5.15, 1.52), (7.93, 1.52),
+                             arrowstyle="-|>", mutation_scale=15,
+                             linewidth=1.8, color=TEAL))
+
+ax.text(6.0, 0.42,
+        "gate: town demand(t) = 0   •   invariant: s + (q-s) = q",
+        ha="center", fontsize=11.2, color=SLATE)
+fig.savefig("premium_market_lead.png", bbox_inches="tight", facecolor="white")
+plt.show()

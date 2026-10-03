@@ -1,0 +1,37 @@
+
+# Round 10: settle an earned spare-worker harvest whenever the inventory is
+# actually present in the shed, even if there are no idle hands this turn.
+# This also allows the final day to liquidate the prior day's captured stock.
+def _r10_flush_credited(obs, action):
+    state = _R9S_STATE.get(int(obs['player']))
+    if not state or not state.get('credit'):
+        return action
+    market = [list(order) for order in (action.get('market') or [])]
+    stock = projected_shed(action, FarmView(obs))
+    changed = False
+    for item in ('MILK','WOOL','EGG','CARROT','TOMATO','STRAWBERRY','MELON'):
+        credit = int(state['credit'].get(item, 0))
+        if credit <= 0:
+            continue
+        planned = sum(int(order[2]) for order in market
+                      if order and len(order) >= 3 and order[:2] == ['SELL', item])
+        extra = min(credit, max(0, int(stock.get(item, 0)) - planned))
+        if extra <= 0:
+            continue
+        existing = next((order for order in market if order and order[:2] == ['SELL', item]), None)
+        if existing is not None:
+            existing[2] = int(existing[2]) + extra
+        elif len(market) < 10:
+            market.append(['SELL', item, extra])
+        else:
+            continue
+        state['credit'][item] -= extra
+        _R9S_REPORT['sales'] += extra
+        changed = True
+    return dict(action, market=market) if changed else action
+
+def round10_credit_agent(observation, configuration=None):
+    return _r10_flush_credited(observation,
+                               round9_slack_agent(observation, configuration))
+
+round10_credit_agent.telemetry = _R9S_REPORT

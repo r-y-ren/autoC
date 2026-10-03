@@ -1,0 +1,48 @@
+feat_p = pd.read_csv(f"{BASE}/episode_features.csv").drop_duplicates("episode_id")
+feat_p = feat_p[feat_p.episode_id.isin(ladder_r.episode_id)]
+# Cells share one namespace: a bare `rows` here once shadowed section 4's `rows`
+# that the personal report reads, so everything local to this cell wears mkt_.
+mkt_goods = sorted({c[len("price_"):-len("_min")] for c in feat_p.columns
+                    if c.startswith("price_") and c.endswith("_min")})
+# The market opens with the same order book every episode, so turn 0 of any replay
+# supplies the opening price for every good.
+base_replay = load_replay(ladder_r.episode_id.iloc[-1])
+mkt_base = {g.lower(): p for g, p in
+            base_replay["steps"][0][0]["observation"]["market"]["prices"].items()}
+del base_replay; gc.collect()
+
+mkt_rows = []
+for g in mkt_goods:
+    mkt_lo = feat_p[f"price_{g}_min"] / mkt_base[g]
+    mkt_hi = feat_p[f"price_{g}_max"] / mkt_base[g]
+    mkt_rows.append({"good": g, "lo_p10": mkt_lo.quantile(.1), "lo_med": mkt_lo.median(),
+                     "hi_med": mkt_hi.median(), "hi_p90": mkt_hi.quantile(.9)})
+mkt_rng = pd.DataFrame(mkt_rows)
+mkt_rng["band"] = mkt_rng.hi_med - mkt_rng.lo_med    # width of the median episode's price ride
+mkt_rng = mkt_rng.sort_values("band")
+
+fig, ax = plt.subplots(figsize=(8.2, 4.2))
+mkt_y = np.arange(len(mkt_rng))
+ax.hlines(mkt_y, mkt_rng.lo_p10, mkt_rng.hi_p90, color=C_ACC, lw=2, alpha=.35)
+ax.hlines(mkt_y, mkt_rng.lo_med, mkt_rng.hi_med, color=C_ACC, lw=7)
+ax.axvline(1, color="0.3", lw=1, ls=":")
+ax.set_yticks(mkt_y, [g.title() for g in mkt_rng.good])
+ax.set_xlabel("episode price range, as a multiple of the opening price")
+ax.set_title(f"Which markets move, and which way ({len(feat_p):,} replayed episodes)")
+plt.tight_layout(); plt.show()
+
+mkt_wild, mkt_calm = mkt_rng.iloc[-1], mkt_rng.iloc[0]
+mkt_down = mkt_rng.loc[mkt_rng.lo_med.idxmin()]
+# The floor is 1 coin, so a ratio here can read "0.00x"; coins tell it straight.
+mkt_down_coins = feat_p[f"price_{mkt_down.good}_min"].median()
+mkt_note = ("" if mkt_down.good == mkt_wild.good else
+            f" Direction is part of the story too: half of all games dump **{mkt_down.good.title()}** "
+            f"down to **{mkt_down_coins:.0f} coin{'s' if mkt_down_coins != 1 else ''}** against an "
+            f"opening price of **{mkt_base[mkt_down.good]}**.")
+display(Markdown(
+    f"Thick bars span the median episode's low and high; thin lines run from the 10th "
+    f"percentile of the lows to the 90th of the highs. **{mkt_wild.good.title()}** moves the "
+    f"most: the median episode already rides it from **{mkt_wild.lo_med:.2f}x** to "
+    f"**{mkt_wild.hi_med:.1f}x** of its opening price. **{mkt_calm.good.title()}** barely "
+    f"leaves its base.{mkt_note} A market that never moves is one nobody trades hard, and "
+    f"that gap is a strategy signal in itself."))

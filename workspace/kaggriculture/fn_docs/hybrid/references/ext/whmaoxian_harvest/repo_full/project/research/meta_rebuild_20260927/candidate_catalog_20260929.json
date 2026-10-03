@@ -1,0 +1,5560 @@
+{
+  "files": 154,
+  "read_valid_rows": 76200,
+  "baseline_contexts": 6085,
+  "conflicting_contexts": 6,
+  "policies": 843,
+  "ranked": [
+    {
+      "sha256": "e90925154be1495fe85282b8b3d937c7f55ed2d1a3296dd323d11947d0ea7d6b",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/harvest_priority_6.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/harvest_priority_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 64,
+      "losses": 8,
+      "ties": 0,
+      "point_gain": 6,
+      "margin_gain": 3894.28,
+      "direct_cases": 12,
+      "direct_wins": 8,
+      "direct_losses": 0,
+      "gain_rate": 0.08333333333333333
+    },
+    {
+      "sha256": "ce68278d4b4a5c3e124ae6ff82b55526903248385c4dcd621f2827745188a9a5",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/harvest_priority_1.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/harvest_priority_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 64,
+      "losses": 8,
+      "ties": 0,
+      "point_gain": 6,
+      "margin_gain": 3894.01,
+      "direct_cases": 12,
+      "direct_wins": 8,
+      "direct_losses": 0,
+      "gain_rate": 0.08333333333333333
+    },
+    {
+      "sha256": "df775a4264b5a976e90720b87f114ceb48b8f96bdbb998651f3c48405755d1c6",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/harvest_priority_3.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/harvest_priority_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 64,
+      "losses": 8,
+      "ties": 0,
+      "point_gain": 6,
+      "margin_gain": 3894.01,
+      "direct_cases": 12,
+      "direct_wins": 8,
+      "direct_losses": 0,
+      "gain_rate": 0.08333333333333333
+    },
+    {
+      "sha256": "6de28484651417dbbe6fc0b20e7e070f994b06a578fbcdf03ada84b98d5c2037",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_126.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 60,
+      "losses": 18,
+      "ties": 0,
+      "point_gain": 5,
+      "margin_gain": -2338.67,
+      "direct_cases": 12,
+      "direct_wins": 6,
+      "direct_losses": 6,
+      "gain_rate": 0.0641025641025641
+    },
+    {
+      "sha256": "6b21eab0dd628f9324e5e55c410c9118b018c1da7159b24c764ac83b5244b064",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/stack_all_gate.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/combinations_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 78,
+      "losses": 18,
+      "ties": 0,
+      "point_gain": 5,
+      "margin_gain": 112.44,
+      "direct_cases": 16,
+      "direct_wins": 12,
+      "direct_losses": 4,
+      "gain_rate": 0.052083333333333336
+    },
+    {
+      "sha256": "907a7b66c0194913a47ffd988b762e73f8cde94324ef506bea94592c079ba727",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/stack_full.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/combinations_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 78,
+      "losses": 18,
+      "ties": 0,
+      "point_gain": 5,
+      "margin_gain": 112.44,
+      "direct_cases": 16,
+      "direct_wins": 12,
+      "direct_losses": 4,
+      "gain_rate": 0.052083333333333336
+    },
+    {
+      "sha256": "c6509846c41b6937e214aad96d2b2c267953de9fb39354c0c15c0b49705db9fb",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/stack_all_gate_late.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/combinations_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 77,
+      "losses": 19,
+      "ties": 0,
+      "point_gain": 4,
+      "margin_gain": 172.72,
+      "direct_cases": 16,
+      "direct_wins": 14,
+      "direct_losses": 2,
+      "gain_rate": 0.041666666666666664
+    },
+    {
+      "sha256": "07295a6fb413ef2009b37426ecc3b243df76c0addf12a1f6edfc5d7b921330e9",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/stack_care_gate.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/combinations_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 77,
+      "losses": 19,
+      "ties": 0,
+      "point_gain": 4,
+      "margin_gain": 35.8,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 2,
+      "gain_rate": 0.041666666666666664
+    },
+    {
+      "sha256": "37ac73f32b55772c42043c3d0ac3a2b6688d116f9ba564784d458e6e05ab053b",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/noop_combined.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/noop_extended_results.jsonl",
+        "research/midgame_campaign_20260928/noop_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 144,
+      "worlds": 12,
+      "opponents": 6,
+      "wins": 124,
+      "losses": 20,
+      "ties": 0,
+      "point_gain": 5,
+      "margin_gain": 81.5,
+      "direct_cases": 24,
+      "direct_wins": 20,
+      "direct_losses": 4,
+      "gain_rate": 0.034722222222222224
+    },
+    {
+      "sha256": "77004dee79d7d79acad0f1ebb0287f2f98912bff4f32e57fbce12463b5942982",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/g3_robust.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/harvest_g4_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/herd_g3_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 83,
+      "losses": 29,
+      "ties": 0,
+      "point_gain": 3,
+      "margin_gain": 365.91,
+      "direct_cases": 18,
+      "direct_wins": 12,
+      "direct_losses": 4,
+      "gain_rate": 0.026785714285714284
+    },
+    {
+      "sha256": "d37276ec01a09f9c33ffba9b5a2149c277bf7a709aebccc115b76a81ed4e54e6",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/g3_future50.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_g3_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 83,
+      "losses": 29,
+      "ties": 0,
+      "point_gain": 3,
+      "margin_gain": 365.91,
+      "direct_cases": 16,
+      "direct_wins": 10,
+      "direct_losses": 4,
+      "gain_rate": 0.026785714285714284
+    },
+    {
+      "sha256": "5f6aa6b2d9bf25e031dfa8a8cfe341936eb01ca94506f1e7bb127e69f7aa7932",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/g3_correct_future.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_g3_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 83,
+      "losses": 29,
+      "ties": 0,
+      "point_gain": 3,
+      "margin_gain": 365.91,
+      "direct_cases": 16,
+      "direct_wins": 10,
+      "direct_losses": 4,
+      "gain_rate": 0.026785714285714284
+    },
+    {
+      "sha256": "1b05c880ba3a73cff31d1758d54820e675758d1a1ad004c70a40aca859f36d6e",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/g3_firstcare.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_g3_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 83,
+      "losses": 29,
+      "ties": 0,
+      "point_gain": 3,
+      "margin_gain": 195.03,
+      "direct_cases": 16,
+      "direct_wins": 10,
+      "direct_losses": 4,
+      "gain_rate": 0.026785714285714284
+    },
+    {
+      "sha256": "4c4795500218db6340799fd5b9a414af3845790ec3eb4c03b4a5b57c60282b36",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/repeat_v2_one.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_g3_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/repeat_screen_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/repeat_v2_smoke_results_20260928.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 99,
+      "losses": 29,
+      "ties": 0,
+      "point_gain": 3,
+      "margin_gain": 327.7,
+      "direct_cases": 18,
+      "direct_wins": 12,
+      "direct_losses": 4,
+      "gain_rate": 0.0234375
+    },
+    {
+      "sha256": "40d4c1e062e638cb9b6372b8e7d6c606de6cc3e657de05e5d5bc2030ba50fa16",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/stack_care_late.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/combinations_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 75,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 66.49,
+      "direct_cases": 16,
+      "direct_wins": 14,
+      "direct_losses": 2,
+      "gain_rate": 0.020833333333333332
+    },
+    {
+      "sha256": "a288733a9a1fd542b165eafeed17ef579bf851eef071a68a82b0a855135ec2d5",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/stack_care_nomilk.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/combinations_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 75,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 10.99,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 0,
+      "gain_rate": 0.020833333333333332
+    },
+    {
+      "sha256": "0649ddf693bc3e9257fc177a101aacc647e6570ed7953e0d18ee5d7e53cb2621",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/dmitrii_net8.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/rebased_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 92,
+      "losses": 4,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": -514.44,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 14,
+      "gain_rate": 0.020833333333333332
+    },
+    {
+      "sha256": "70504989f43bf8a6884905791b4638c837430795ff527fc54805a86e8d68f4f4",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/noop_fertilizer.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/noop_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 40,
+      "losses": 8,
+      "ties": 0,
+      "point_gain": 1,
+      "margin_gain": 53.98,
+      "direct_cases": 8,
+      "direct_wins": 5,
+      "direct_losses": 3,
+      "gain_rate": 0.020833333333333332
+    },
+    {
+      "sha256": "cb2dbfc3d86a2dce6b36fab40b9383ab94b878b1c5557010ccd2f5afc69e5e90",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/sequence_v2_early3_nomilk.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/harvest_priority_results.jsonl",
+        "research/meta_rebuild_20260927/herd_sequence_v2_results.jsonl",
+        "research/meta_rebuild_20260927/loss_fixture_results.jsonl",
+        "research/meta_rebuild_20260927/recent_proxy_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 304,
+      "worlds": 17,
+      "opponents": 22,
+      "wins": 251,
+      "losses": 53,
+      "ties": 0,
+      "point_gain": 6,
+      "margin_gain": 1564.02,
+      "direct_cases": 22,
+      "direct_wins": 8,
+      "direct_losses": 0,
+      "gain_rate": 0.019736842105263157
+    },
+    {
+      "sha256": "87072dcd41a1c4c429af5765f7867ced8ab5233f384a4de98284ce045374ec87",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/sequence_v2_early6_nomilk.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_sequence_v2_results.jsonl",
+        "research/meta_rebuild_20260927/loss_fixture_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 13,
+      "opponents": 12,
+      "wins": 85,
+      "losses": 23,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 1733.68,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 0,
+      "gain_rate": 0.018518518518518517
+    },
+    {
+      "sha256": "247c590157261a14dd52518e122830b961027997a4c4151dd67110272f61cc4a",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/fixed_pred_gate6.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/predictor_fixed_results.jsonl",
+        "research/midgame_campaign_20260928/forecast_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 9,
+      "opponents": 6,
+      "wins": 87,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 26.22,
+      "direct_cases": 18,
+      "direct_wins": 3,
+      "direct_losses": 3,
+      "gain_rate": 0.018518518518518517
+    },
+    {
+      "sha256": "4fff0f0742ca6c889bd57dc166fea6353a5f3d7ba872fbf7146dc2e79e061be8",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/fused_herd_gate6.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/fusion_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/fusion_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 87,
+      "losses": 27,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 275.32,
+      "direct_cases": 18,
+      "direct_wins": 17,
+      "direct_losses": 1,
+      "gain_rate": 0.017543859649122806
+    },
+    {
+      "sha256": "c77de170ad3439899e6e4e265e549643a761e9d79950443fe91cbb0a024a7eda",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/noop_care.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/noop_extended_results.jsonl",
+        "research/midgame_campaign_20260928/noop_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 144,
+      "worlds": 12,
+      "opponents": 6,
+      "wins": 121,
+      "losses": 23,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 26.59,
+      "direct_cases": 24,
+      "direct_wins": 8,
+      "direct_losses": 0,
+      "gain_rate": 0.013888888888888888
+    },
+    {
+      "sha256": "ec645249db76c2d93657d4b2c92d5caaebdf10e9e0d4eada22053da4b60f4b2d",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/depot_sell.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/noop_deposit_results_20260929.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 64,
+      "losses": 8,
+      "ties": 0,
+      "point_gain": 1.0,
+      "margin_gain": 66.69,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.013888888888888888
+    },
+    {
+      "sha256": "11fbddcd54ed48f3a6a6f6fca04f0cee7d20bfa7fd592a0e00595c1d9282b3ce",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/depot_raw.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/noop_deposit_results_20260929.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 64,
+      "losses": 8,
+      "ties": 0,
+      "point_gain": 1.0,
+      "margin_gain": 66.43,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.013888888888888888
+    },
+    {
+      "sha256": "f7ffc88dcb7a8fccaffcfa3f14234a6c46233343331811a29b5de15c2498ab92",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/depot_late.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/noop_deposit_results_20260929.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 64,
+      "losses": 8,
+      "ties": 0,
+      "point_gain": 1.0,
+      "margin_gain": 22.78,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.013888888888888888
+    },
+    {
+      "sha256": "49800cdc24937fdbf69a166831f3a5f2227d7f3891a1064b360a3a2898fddd4b",
+      "paths": [
+        "research/macro_population_20260927/population/macro_b28f566495b8.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g1_results.jsonl",
+        "research/macro_population_20260927/g2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 152,
+      "worlds": 12,
+      "opponents": 7,
+      "wins": 101,
+      "losses": 31,
+      "ties": 20,
+      "point_gain": 2.0,
+      "margin_gain": 46.57,
+      "direct_cases": 24,
+      "direct_wins": 1,
+      "direct_losses": 1,
+      "gain_rate": 0.013157894736842105
+    },
+    {
+      "sha256": "efd91f5a045c9eb6fa86f939a0c1af292d962677eeb4ae6c4b88e62f18297b92",
+      "paths": [
+        "research/route_value_20260927/conservative.py"
+      ],
+      "sources": [
+        "research/route_value_20260927/pilot_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 134,
+      "losses": 26,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 1339.59,
+      "direct_cases": 16,
+      "direct_wins": 1,
+      "direct_losses": 1,
+      "gain_rate": 0.0125
+    },
+    {
+      "sha256": "dbd5160c2f9cc858d4ef266f30f85ba86f053023dd114a8c25ac3267d296d771",
+      "paths": [
+        "research/v10_top10_20260926/herd_allocation/both_expected.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_allocation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 130,
+      "losses": 30,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 317.96,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0125
+    },
+    {
+      "sha256": "790a315295e9acb13f11b88ad97cf717a714cc2b4fa4ec11d28117f42a19cfca",
+      "paths": [
+        "research/v10_top10_20260926/herd_expectation/risk25_stock1.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_expectation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 130,
+      "losses": 30,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 285.7,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0125
+    },
+    {
+      "sha256": "7fb6d10e69cabe0ca05c52ad4133c4d2215a491f63af072945447778a87bca06",
+      "paths": [
+        "research/v10_top10_20260926/herd_expectation/risk0_stock1.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_expectation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 130,
+      "losses": 30,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 239.94,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0125
+    },
+    {
+      "sha256": "07285510954c1103065717380ff8baeba609a97a4dc80b49006468385815ddbf",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/fused_herd_finish.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/fusion_replication_results_20260929.jsonl",
+        "research/production_upgrade_20260928/fusion_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/fusion_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 402,
+      "worlds": 38,
+      "opponents": 12,
+      "wins": 310,
+      "losses": 92,
+      "ties": 0,
+      "point_gain": 5.0,
+      "margin_gain": 388.88,
+      "direct_cases": 66,
+      "direct_wins": 55,
+      "direct_losses": 9,
+      "gain_rate": 0.012437810945273632
+    },
+    {
+      "sha256": "527267e8cee4f4b7c9408d2f53772e939f297908f5602ec85f09053428a4da71",
+      "paths": [
+        "research/v10_top10_20260926/micro_candidates/all_harvest_first.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/extended_results.jsonl",
+        "research/v10_top10_20260926/micro_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 176,
+      "worlds": 8,
+      "opponents": 11,
+      "wins": 140,
+      "losses": 36,
+      "ties": 0,
+      "point_gain": 2.0,
+      "margin_gain": 12.7,
+      "direct_cases": 16,
+      "direct_wins": 12,
+      "direct_losses": 4,
+      "gain_rate": 0.011363636363636364
+    },
+    {
+      "sha256": "3fd8215058d0b821d2890fa99e524e35f1553010a05f39968f27eafc1e11738e",
+      "paths": [
+        "research/v10_top10_20260926/micro_candidates/all_care_first.py"
+      ],
+      "sources": [
+        "research/route_value_20260927/broad_results.jsonl",
+        "research/v10_top10_20260926/endgame_delivery_results.jsonl",
+        "research/v10_top10_20260926/extended_results.jsonl",
+        "research/v10_top10_20260926/herd_allocation_results.jsonl",
+        "research/v10_top10_20260926/herd_expectation_results.jsonl",
+        "research/v10_top10_20260926/micro_screen_results.jsonl",
+        "research/v10_top10_20260926/product_pressure_screen_results.jsonl",
+        "research/v10_top10_20260926/production_scale_results.jsonl",
+        "research/v10_top10_20260926/route_expansion_results.jsonl",
+        "research/v10_top10_20260926/tomato_gate2_results.jsonl",
+        "research/v10_top10_20260926/tomato_gate3_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 560,
+      "worlds": 24,
+      "opponents": 19,
+      "wins": 457,
+      "losses": 103,
+      "ties": 0,
+      "point_gain": 6.0,
+      "margin_gain": 14.44,
+      "direct_cases": 48,
+      "direct_wins": 44,
+      "direct_losses": 4,
+      "gain_rate": 0.010714285714285714
+    },
+    {
+      "sha256": "1b8e4ee79423e9ee5e899f7dd2880b4458adf5c75f0231579730348768c2735b",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/early_selective.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_extended_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 192,
+      "worlds": 16,
+      "opponents": 6,
+      "wins": 146,
+      "losses": 46,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 506.61,
+      "direct_cases": 32,
+      "direct_wins": 9,
+      "direct_losses": 1,
+      "gain_rate": 0.010416666666666666
+    },
+    {
+      "sha256": "0b031a5057973a82dcfdec2bf53c1ba7a41086ebfb6fa63a3d73b2fc06e28b4e",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/early_nomilk.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_extended_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 192,
+      "worlds": 16,
+      "opponents": 6,
+      "wins": 146,
+      "losses": 46,
+      "ties": 0,
+      "point_gain": 2,
+      "margin_gain": 491.02,
+      "direct_cases": 32,
+      "direct_wins": 9,
+      "direct_losses": 1,
+      "gain_rate": 0.010416666666666666
+    },
+    {
+      "sha256": "3cc04e680e94770aeb7a8bddfc9acf9f5c16b595e31d38dc4060d8b4ae0b6878",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/g3_native_robust.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_g3_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 81,
+      "losses": 31,
+      "ties": 0,
+      "point_gain": 1,
+      "margin_gain": 385.59,
+      "direct_cases": 16,
+      "direct_wins": 10,
+      "direct_losses": 4,
+      "gain_rate": 0.008928571428571428
+    },
+    {
+      "sha256": "5d0bee636a55a560ab98bbf2eb5b33a4df3619011c7decb08cae3abbb157e39e",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/g3_native_sales.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_g3_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 81,
+      "losses": 31,
+      "ties": 0,
+      "point_gain": 1,
+      "margin_gain": 334.73,
+      "direct_cases": 16,
+      "direct_wins": 10,
+      "direct_losses": 4,
+      "gain_rate": 0.008928571428571428
+    },
+    {
+      "sha256": "67c69325a36aaf94bfeac56591cd3cf1a9bf5ab5323e318996e4d40b0f7fa751",
+      "paths": [
+        "research/herd_validation_20260928/jit_one_terminal.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/fresh_diagnostic_results.jsonl",
+        "research/herd_validation_20260928/prospective_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 404,
+      "worlds": 52,
+      "opponents": 26,
+      "wins": 318,
+      "losses": 86,
+      "ties": 0,
+      "point_gain": 3,
+      "margin_gain": 240.86,
+      "direct_cases": 64,
+      "direct_wins": 54,
+      "direct_losses": 2,
+      "gain_rate": 0.007425742574257425
+    },
+    {
+      "sha256": "8f5980f519040f71c342c04cf66e07f79c791a43c6965ea5c386d866b403c308",
+      "paths": [
+        "research/herd_validation_20260928/nomilk_terminal.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/fresh_diagnostic_results.jsonl",
+        "research/herd_validation_20260928/prospective_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 404,
+      "worlds": 52,
+      "opponents": 26,
+      "wins": 318,
+      "losses": 86,
+      "ties": 0,
+      "point_gain": 3,
+      "margin_gain": 240.29,
+      "direct_cases": 64,
+      "direct_wins": 54,
+      "direct_losses": 2,
+      "gain_rate": 0.007425742574257425
+    },
+    {
+      "sha256": "71ed6dacfa1b196c5b6c6329bef22c9133e523db53b5215175f23db1dd7c2971",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/fused_finish.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/fusion_replication_results_20260929.jsonl",
+        "research/production_upgrade_20260928/fusion_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/fusion_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 402,
+      "worlds": 38,
+      "opponents": 12,
+      "wins": 307,
+      "losses": 95,
+      "ties": 0,
+      "point_gain": 2.0,
+      "margin_gain": 63.35,
+      "direct_cases": 66,
+      "direct_wins": 56,
+      "direct_losses": 8,
+      "gain_rate": 0.004975124378109453
+    },
+    {
+      "sha256": "3c79287b13c061d6e92392462a845fc7bb25eafbc92c204c6405ab9c1dc7c227",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/midgame_yarn_nomilk.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/herd_extended_results.jsonl",
+        "research/herd_validation_20260928/current_diagnostic_results.jsonl",
+        "research/herd_validation_20260928/diverse_results.jsonl",
+        "research/herd_validation_20260928/herd_extended_results.jsonl",
+        "research/meta_rebuild_20260927/herd_extended_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/herd_extended_results_20260929.jsonl",
+        "research/meta_rebuild_20260927/herd_extension_results.jsonl",
+        "research/meta_rebuild_20260927/loss_fixture_results.jsonl",
+        "research/meta_rebuild_20260927/midgame_herd_results.jsonl",
+        "research/meta_rebuild_20260927/recent_proxy_results.jsonl",
+        "research/midgame_campaign_20260928/extended_results.jsonl",
+        "research/midgame_campaign_20260928/recent_panel_results.jsonl",
+        "research/production_upgrade_20260928/herd_stage1_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 1998,
+      "worlds": 191,
+      "opponents": 90,
+      "wins": 1596,
+      "losses": 400,
+      "ties": 2,
+      "point_gain": 7.0,
+      "margin_gain": 354.98,
+      "direct_cases": 274,
+      "direct_wins": 45,
+      "direct_losses": 9,
+      "gain_rate": 0.0035035035035035035
+    },
+    {
+      "sha256": "007dbac71d56e760fc8ae85bb6cf3f013232394bc2f185350437db81072d491d",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/fixed_pred_off.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_extended_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/predictor_fixed_results.jsonl",
+        "research/midgame_campaign_20260928/forecast_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 300,
+      "worlds": 25,
+      "opponents": 6,
+      "wins": 230,
+      "losses": 70,
+      "ties": 0,
+      "point_gain": 1,
+      "margin_gain": 44.11,
+      "direct_cases": 50,
+      "direct_wins": 21,
+      "direct_losses": 23,
+      "gain_rate": 0.0033333333333333335
+    },
+    {
+      "sha256": "1bdbe2a203156f6eb6837acbedad0105caa9ea56c56a8928977653ccbce1e17d",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/terminal256.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/fresh_diagnostic_results.jsonl",
+        "research/herd_validation_20260928/prospective_results.jsonl",
+        "research/meta_rebuild_20260927/terminal_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 500,
+      "worlds": 60,
+      "opponents": 26,
+      "wins": 406,
+      "losses": 94,
+      "ties": 0,
+      "point_gain": 1,
+      "margin_gain": 3.56,
+      "direct_cases": 80,
+      "direct_wins": 63,
+      "direct_losses": 3,
+      "gain_rate": 0.002
+    },
+    {
+      "sha256": "2d5edc6d3be0756a4deed22ee5f48029ed4e1c50a64e8d5b4f22bb1287e80844",
+      "paths": [
+        "research/herd_search_20260929/candidates/repeat_early_transport.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/transport_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 60,
+      "worlds": 5,
+      "opponents": 6,
+      "wins": 50,
+      "losses": 10,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 2819.93,
+      "direct_cases": 10,
+      "direct_wins": 4,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "a7634ec1a68ceecdd1506a5d98ae504405523eb71a6d14431c88e435cc122126",
+      "paths": [
+        "research/herd_search_20260929/candidates/expected_repeat_r0_cash0.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/expected_repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 60,
+      "worlds": 5,
+      "opponents": 6,
+      "wins": 50,
+      "losses": 10,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 2724.17,
+      "direct_cases": 10,
+      "direct_wins": 4,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "de915c0afed1602ae82b7c1d53b1a877fe906f07a5ec15577e552d83610bc29f",
+      "paths": [
+        "research/herd_search_20260929/candidates/expected_repeat_r25_cash0.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/expected_repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 60,
+      "worlds": 5,
+      "opponents": 6,
+      "wins": 50,
+      "losses": 10,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 2724.17,
+      "direct_cases": 10,
+      "direct_wins": 4,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "d444eade8a647b5ca63ad818665552c09effbc8a70544cdfcdcaeb1834a824f4",
+      "paths": [
+        "research/herd_search_20260929/candidates/repeat_ev_transport.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/transport_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 60,
+      "worlds": 5,
+      "opponents": 6,
+      "wins": 50,
+      "losses": 10,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1882.6,
+      "direct_cases": 10,
+      "direct_wins": 4,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "1ec45c2ca322be1e6bc1e66f4d57204a9383844ae637127d67f989ce902437c6",
+      "paths": [
+        "research/herd_search_20260929/candidates/expected_repeat_r0_cash650.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/expected_repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 60,
+      "worlds": 5,
+      "opponents": 6,
+      "wins": 50,
+      "losses": 10,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1803.07,
+      "direct_cases": 10,
+      "direct_wins": 4,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "de7fffa3860a4e33a86baf77444a8a76b277422324700e20bd4867a4c7e9e39f",
+      "paths": [
+        "research/herd_search_20260929/candidates/expected_repeat_r25_cash650.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/expected_repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 60,
+      "worlds": 5,
+      "opponents": 6,
+      "wins": 50,
+      "losses": 10,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1803.07,
+      "direct_cases": 10,
+      "direct_wins": 4,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "441f9b0fae45c23ab91653e9e449a4d9132ef12e85f63b8fe8bb2adb020bb957",
+      "paths": [
+        "research/herd_validation_20260928/early_two.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/repeat_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 46,
+      "losses": 2,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1338.44,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "7290e8fd68274a2d64695a88dfa499397db84ea751f6c790c49edbf117e8c6c2",
+      "paths": [
+        "research/herd_validation_20260928/repeat_selective.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/repeat_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 46,
+      "losses": 2,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1338.44,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "83e6b1cf2091ff9fb2911c122e64147651679a843d5554196a5d2b913694ce8a",
+      "paths": [
+        "research/herd_validation_20260928/repeat_nomilk.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/repeat_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 46,
+      "losses": 2,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1338.44,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "9c6883d68a0f1e53305e3f97da5af9f4291cf35493e136385a7165a3b6d78d03",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/early800.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/timing_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 42,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1187.33,
+      "direct_cases": 8,
+      "direct_wins": 6,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "63f5ae15e57387f03e2cbcb24ae705c821314da03433e78be7315b4e5444dcb4",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/retry_late.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/timing_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 42,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1187.33,
+      "direct_cases": 8,
+      "direct_wins": 6,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "15bf6c802537f6a6af9c8eeab2f7172eb077720da7cd9c16e727e033ac390ef1",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/late_selective.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/timing_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 42,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1187.33,
+      "direct_cases": 8,
+      "direct_wins": 6,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "e6d0f98b67a50b67e83ab38ef50414bf93a13867ff7e6a0f217c472ea93456f3",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/late_single.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/timing_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 42,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1187.33,
+      "direct_cases": 8,
+      "direct_wins": 6,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "6241ef5af6eba1c8730b1253f9afc5b3dc9272dca8c579e227b6644f7baa964a",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/early_force2.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/early_results.jsonl",
+        "research/production_upgrade_20260928/replay_diagnostic_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 66,
+      "worlds": 10,
+      "opponents": 12,
+      "wins": 49,
+      "losses": 17,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 1104.58,
+      "direct_cases": 10,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "61451cd65b072d3bbead9069c23f4313adae80005587b98a9c8b2308944a3b8b",
+      "paths": [
+        "research/herd_validation_20260928/jit_one.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/diverse_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 64,
+      "worlds": 4,
+      "opponents": 8,
+      "wins": 62,
+      "losses": 2,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 796.31,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "a9db8643dfa2d960de36e48a12cb607112f1e2336281b12dbb18277c402b1b9c",
+      "paths": [
+        "research/herd_validation_20260928/early_one.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/repeat_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 46,
+      "losses": 2,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 673.58,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "537b080ab9f695b525790c22bdf34160991690e8faf451aed5904fc1c07166e0",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/funded2_r5.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/funded_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/funded_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 85,
+      "losses": 29,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 648.36,
+      "direct_cases": 18,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "ac5bd9b2cb0d29a64677783e33cf001ab34de863619e4373ded714871116ba5f",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/funded2_r25.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/funded_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/funded_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 85,
+      "losses": 29,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 648.36,
+      "direct_cases": 18,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "fa5c12cb852dccfcfd6eb521c7d786c7c9afcb8e6d8f8530ddfca58366d649bb",
+      "paths": [
+        "research/herd_validation_20260928/jit_herd_100.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/current_diagnostic_results.jsonl",
+        "research/herd_validation_20260928/jit_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 94,
+      "worlds": 43,
+      "opponents": 52,
+      "wins": 73,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 623.26,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "bbbb9320b020dcb2dbb10d44cf294cbd02493519032ce5f13e3f858a37d8ec4b",
+      "paths": [
+        "research/herd_validation_20260928/jit_herd_50.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/current_diagnostic_results.jsonl",
+        "research/herd_validation_20260928/jit_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 94,
+      "worlds": 43,
+      "opponents": 52,
+      "wins": 73,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 623.26,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "0cf93009c140efffbac0eff4dccf2de15c3f37c4e2db47a337d515ba8a2b3e43",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/herd_cash.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/early_herd_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 59,
+      "losses": 13,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 592.03,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "d5880518fc145ddc07f4661fb3ce26f177dc07192ef91eb08a2c1d42bc4cd3e7",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/funded4_strict.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/funded_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/funded_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 85,
+      "losses": 29,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 554.88,
+      "direct_cases": 18,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "8bb0828c161070c4a7030f7142185a9f1834713473fb02228eb1b8745a54825d",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/early_repeat2.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/early_results.jsonl",
+        "research/production_upgrade_20260928/replay_diagnostic_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 66,
+      "worlds": 10,
+      "opponents": 12,
+      "wins": 49,
+      "losses": 17,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 519.53,
+      "direct_cases": 10,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "83d9c80e001d3c13ad9b0b5ee8ee40c3ad2615a43c19aa6abb08c0b260daf131",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/early_repeat4.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/early_results.jsonl",
+        "research/production_upgrade_20260928/replay_diagnostic_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 66,
+      "worlds": 10,
+      "opponents": 12,
+      "wins": 49,
+      "losses": 17,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 519.53,
+      "direct_cases": 10,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "f47f8a833b7a652b1e04a50cd5c4f487591542498a52032f030a75e3494281e0",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/early_nomilk4.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/early_results.jsonl",
+        "research/production_upgrade_20260928/replay_diagnostic_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 66,
+      "worlds": 10,
+      "opponents": 12,
+      "wins": 49,
+      "losses": 17,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 519.53,
+      "direct_cases": 10,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "39d0572131b4f6d0f3e803b01a18c067a773438dc364c0efa1bb013d2b5e5a7d",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/early_strict4.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/early_results.jsonl",
+        "research/production_upgrade_20260928/replay_diagnostic_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 66,
+      "worlds": 10,
+      "opponents": 12,
+      "wins": 49,
+      "losses": 17,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 497.29,
+      "direct_cases": 10,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "1460df9c13de761fb80b0e200e97fe4ee730b918c3a2220c0250ca7bd3348bea",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/early_yarn.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_extended_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 192,
+      "worlds": 16,
+      "opponents": 6,
+      "wins": 144,
+      "losses": 48,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 472.62,
+      "direct_cases": 32,
+      "direct_wins": 11,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "d35fdb1901f2fa1336533d6638f9dc9d82d7e9ed850edebb5c3a2d8443e59ea6",
+      "paths": [
+        "research/v10_top10_20260926/herd_allocation/sheep_value.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_allocation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 344.35,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "e9c375711dd662ac7648747b02d58f52e190954cdf97074e56e5c030e834012d",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/early500.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/timing_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 42,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 178.29,
+      "direct_cases": 8,
+      "direct_wins": 6,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "0db9fe25e65fea0f0e86ebce9bd90ab5a39b55aaeb8ff716d7f1d997744f002a",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/early_selective.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/timing_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 42,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 178.29,
+      "direct_cases": 8,
+      "direct_wins": 6,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "d81e3980bde61da2cb8b51299aeceae7f98815bb87916e000deb91ebc94a7818",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/late_both.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/husbandry_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 59.83,
+      "direct_cases": 16,
+      "direct_wins": 16,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "12064f1a53ac7cc4bdfa68b85d738b10b6ae5e669bb0758131f5798e9a198d1d",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/late_care.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_extended_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/husbandry_results.jsonl",
+        "research/meta_rebuild_20260927/repeat_screen_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 416,
+      "worlds": 32,
+      "opponents": 8,
+      "wins": 330,
+      "losses": 86,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 46.35,
+      "direct_cases": 64,
+      "direct_wins": 55,
+      "direct_losses": 9,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "a9d3c5fc00ce3ba2172e4bbff9c430b791b6b8399043b3abd52ea13511116e64",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/depot_only.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/noop_deposit_results_20260929.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 62,
+      "losses": 8,
+      "ties": 2,
+      "point_gain": 0.0,
+      "margin_gain": 45.22,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "3fea4fd6fa80a7bb6e8afc32e7d4ac295b226b231bcae5125538bc3f7a6aa10c",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_9.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 55,
+      "losses": 23,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 44.86,
+      "direct_cases": 12,
+      "direct_wins": 11,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "df3137df14b915cfa06c1b92a52de195eea6eeb897d8004335f5d5318e92604e",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/wealth1500.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/risk_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 98,
+      "worlds": 29,
+      "opponents": 35,
+      "wins": 74,
+      "losses": 20,
+      "ties": 4,
+      "point_gain": 0.0,
+      "margin_gain": 40.26,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "122f80cd0d77baa0801cdf048027271ade2b1bdc2529d73957a41fe57b5325fa",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate2/r0_g500.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 35.67,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "714156624567501f7e135083d80da5ba7f0e9a1543d2ddb3de0a42a5b9a07942",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate2/r0_g2000.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 35.67,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "f047b4df4195c3e28495dd5b7ae43c6e743a11ac1244cb2983e52ed81c755ae7",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate3/r0_net0.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate3_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 25.39,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "cd2b66be1f18b1036d4bf53c703e3b2828065ecec4f5249d92cf3431e8ec2038",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate3/r0_net1000.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate3_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 25.39,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "e0047c85aa6417902160de4d7545e81e00b8d6c7dc2aeb211db1017f2ac2b999",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/latewealth1500.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/risk_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 98,
+      "worlds": 29,
+      "opponents": 35,
+      "wins": 74,
+      "losses": 20,
+      "ties": 4,
+      "point_gain": 0.0,
+      "margin_gain": 23.69,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "92f84385052daa600d9111f8404e6e552a99112c36e8326ae9d3476c40290202",
+      "paths": [
+        "research/v10_top10_20260926/bc_integration/hold_p55_q8.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/bc_integration/extended_results.jsonl",
+        "research/v10_top10_20260926/bc_integration/screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 200,
+      "worlds": 10,
+      "opponents": 10,
+      "wins": 176,
+      "losses": 24,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 23.18,
+      "direct_cases": 20,
+      "direct_wins": 13,
+      "direct_losses": 7,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "d7a51a479c48a38e5a9065583b1dc42c4b891b66eeacd7cda147e8f41481d03d",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/wealth3000.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/risk_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 98,
+      "worlds": 29,
+      "opponents": 35,
+      "wins": 74,
+      "losses": 20,
+      "ties": 4,
+      "point_gain": 0.0,
+      "margin_gain": 18.36,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "b1a66da62dfb5bcabd2766f9f35eafa11edd7d7acc0bef357bc6355620ac3df1",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/late_feed.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/husbandry_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 17.04,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "77395fef507fe48bb24e5c49422a286d35d3192ec69eabf06fdc171fa43b1cf4",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/stream12.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/stream_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 11.52,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "dd58039656fc7ba37f8bb72e52c4569ca249b1e1eb3c42f96d28e7f7fa45d8ed",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/early_single.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/early_results.jsonl",
+        "research/production_upgrade_20260928/replay_diagnostic_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 66,
+      "worlds": 10,
+      "opponents": 12,
+      "wins": 49,
+      "losses": 17,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 7.41,
+      "direct_cases": 10,
+      "direct_wins": 1,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "b42a4d771fa1dc9930834ad71ee231fea25f0b180665f779a6a7c338d079489b",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/book_predictors.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/book_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 7.15,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "3cbed3c1f097d111c9803195c3e9247af6647181579d1fd2a5a34d08bafe0c11",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/book_both.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/book_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 7.15,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "0b9f4a10ac8a1d11a76f75fd283d9bc5ca6b0b7ec9c476d98b0dd3a0b6b31973",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/sync_only.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/stream_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 7.15,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "a627f7b2dd931044228381689e5f1c311f86d4996795f875c3114ff2a9777cab",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/value5.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/pilot_results.jsonl",
+        "research/meta_rebuild_20260927/value_extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 10,
+      "opponents": 6,
+      "wins": 102,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 3.06,
+      "direct_cases": 20,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "9c2cc93efd027d438759a7afaad6488f9d269ba53d8c8c261d5a892acdeb76a0",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/value15.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/pilot_results.jsonl",
+        "research/meta_rebuild_20260927/value_extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 10,
+      "opponents": 6,
+      "wins": 102,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 3.04,
+      "direct_cases": 20,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "9d128602d2cbfcc9198dced10a43b83534b765db1db2b1d64bcb958cb840cdfb",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/terminal128.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/terminal_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 2.75,
+      "direct_cases": 16,
+      "direct_wins": 8,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "2b32ff030559c45c99ecea4173856a2dc1348fd3b0edf7dc6ceec024a57c70d6",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/book_race.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/book_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.08,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "e3e58fd611b51d7cf138a1aa28c06e1c926db2dc478151058ca7f3c1f92f09a7",
+      "paths": [
+        "research/v10_top10_20260926/endgame_delivery/harvest100.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/endgame_delivery_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.07,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "9fad7779d624120ea1264fea52b963a511dc1de753569d2bd5bbf576e97b5e3f",
+      "paths": [
+        "research/v10_top10_20260926/production_quote/shops2_integral1.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/production_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 110,
+      "losses": 18,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.05,
+      "direct_cases": 2,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "773610e191ea32548558045715a81af00a0d8d50dd20bb6d43dda00284c41104",
+      "paths": [
+        "research/v10_top10_20260926/production_quote/shops3_integral0.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/production_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 110,
+      "losses": 18,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.05,
+      "direct_cases": 2,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "8e2ba63ecbb5b679b931641262f2ef20ea3cc6b143d9ed5199897d766730a29c",
+      "paths": [
+        "research/v10_top10_20260926/production_quote/shops3_integral1.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/production_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 110,
+      "losses": 18,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.05,
+      "direct_cases": 2,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "0a45e4b1afdb8bf99a55fc4a7a82a078ebf129abb2d5815d77dc4d1ea506608f",
+      "paths": [
+        "research/v10_top10_20260926/production_quote/shops4_integral0.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/production_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 110,
+      "losses": 18,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.05,
+      "direct_cases": 2,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "d1feca79c12c5b9f66681a6f6cbfa99954e1a14f34ebcf9b0edeed40f40ea5d7",
+      "paths": [
+        "research/v10_top10_20260926/production_quote/shops4_integral1.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/production_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 110,
+      "losses": 18,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.05,
+      "direct_cases": 2,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "24f0f747b9f9201b9eaf106e1ddae79c08cd80cf19569079f4abbd744373c4dd",
+      "paths": [
+        "research/v10_top10_20260926/endgame_delivery/observe.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/endgame_delivery_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "6e2e6b6e55df28783103c71ccd99b9894590cf1e003404aac26232ec5343d88c",
+      "paths": [
+        "research/v10_top10_20260926/endgame_delivery/collect90.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/endgame_delivery_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "5426293ba16b62617e4cf3c71dbc77b223432e77963260692b9d41b841916140",
+      "paths": [
+        "research/v10_top10_20260926/endgame_delivery/collect100.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/endgame_delivery_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "fa81888c6003baf53414c606dda8220c1e106552cf514e4b84441b62ef91c8df",
+      "paths": [
+        "research/v10_top10_20260926/endgame_delivery/late_maintenance.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/endgame_delivery_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "7543d9cd5a316aee6431f6bbe452725d83e03256d91498cd6018f02440892427",
+      "paths": [
+        "research/v10_top10_20260926/herd_allocation/both_nomilk.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_allocation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "8c911db40e9e2e8807ef3724f8ac07b392b74d885f776ee0a90ec9adfae67258",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate2/r80_g500.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "561206be62b149b2ffe69107706cb767aefa4d6ba3d9fc0a3d066bb9130ab282",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate2/r152_g500.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "dda55b70ce75a36eacf9305208d26db89d5c43992875809d306867731a65a373",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate2/r80_g2000.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "43f76645ecad911e1d0599dcef825561c58285ac7108179713644473a11b5026",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate2/r152_g2000.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "31eaa716c2f85e383985821e096073d15d8a2de9f64a7f547fda0b910570de0f",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate3/r80_net0.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate3_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "2cbceba8922b0a402f98a9b9bbbcd2ce22b0cd899173ce0409489e7fe782fe9c",
+      "paths": [
+        "research/macro_population_20260927/population/macro_338b808c7e60.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g1_results.jsonl",
+        "research/macro_population_20260927/g2_results.jsonl",
+        "research/macro_population_20260927/smoke_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 152,
+      "worlds": 12,
+      "opponents": 7,
+      "wins": 99,
+      "losses": 33,
+      "ties": 20,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "direct_cases": 24,
+      "direct_wins": 1,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "d71b3349c892a36daeb17bfda7ca2939e559620d093196415f666747a6bb787d",
+      "paths": [
+        "research/v10_top10_20260926/endgame_delivery/harvest90.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/endgame_delivery_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": 0.0,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "5a92e373c79d7708af8986eceb352e10e31b00b45dfe22b4a3dba2bc49dd4c6a",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/ready6.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/development_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/fresh_loss_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 173,
+      "worlds": 36,
+      "opponents": 38,
+      "wins": 130,
+      "losses": 29,
+      "ties": 14,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "fd14dc07b0d1c34a8e8054421734a7a054c633dd21c57ccf7da662b342f3f736",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/ready12.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/development_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/fresh_loss_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 173,
+      "worlds": 36,
+      "opponents": 38,
+      "wins": 130,
+      "losses": 29,
+      "ties": 14,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "86bc4c6ed836512dc8adf5605109d437be3750321c447a49db8900200aff1c6f",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/order_mirror.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/order_assignment_results_20260929.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 62,
+      "losses": 8,
+      "ties": 2,
+      "point_gain": 0.0,
+      "margin_gain": -0.03,
+      "direct_cases": 12,
+      "direct_wins": 1,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "077e7a8621f1c725e88b23a60caa3c1891a3751c30ff9a08ffad87952ededad8",
+      "paths": [
+        "research/v10_top10_20260926/tomato_gate3/r80_net1000.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/tomato_gate3_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 128,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -0.04,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "f5aa954d974986b65eafa544391ac3949b453b60c84dc1a8cf37d1a1c97bed9c",
+      "paths": [
+        "research/v10_top10_20260926/production_quote/shops2_integral0.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/production_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 110,
+      "losses": 18,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -0.05,
+      "direct_cases": 2,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "b3f596f865960c2825d242101449f56f76a38d8f476537808606b8e0b9bce0ed",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/stream6_native_book.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/stream_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -3.1,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 4,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "e12d0d8ea985d7b32eca45acca6e6f8fbb0456e8067d1cbe0447c11196d7a1cc",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/stream6.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/stream_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -7.62,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 4,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "9451a7c4d428f252706f7cec897b1e15bb7f66afef4e3954d8f3280eec88ceb2",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/noop_harvest.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/noop_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 39,
+      "losses": 9,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -7.65,
+      "direct_cases": 8,
+      "direct_wins": 3,
+      "direct_losses": 5,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "ac4de8da365cfe6d019618e527c673e6ab059e4e7c88652bd1ffc634012747a4",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/order_broad.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/order_assignment_results_20260929.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 62,
+      "losses": 8,
+      "ties": 2,
+      "point_gain": 0.0,
+      "margin_gain": -7.85,
+      "direct_cases": 12,
+      "direct_wins": 1,
+      "direct_losses": 9,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "fd08161bbd137e2681ab9afee164ae3da36e5e30e23acd416800eaece57d568d",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/cash3000.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/risk_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 98,
+      "worlds": 29,
+      "opponents": 35,
+      "wins": 74,
+      "losses": 20,
+      "ties": 4,
+      "point_gain": 0.0,
+      "margin_gain": -8.1,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "2fef2cb0ccfd6b84c1ff147f681dc3f6840dd5e50ee2d609271f7b086b3ac9c8",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/order_mixed.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/order_assignment_results_20260929.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 62,
+      "losses": 8,
+      "ties": 2,
+      "point_gain": 0.0,
+      "margin_gain": -8.19,
+      "direct_cases": 12,
+      "direct_wins": 1,
+      "direct_losses": 9,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "839d4bf8c4fa2f202d293a90eefe216213d06a920ecfa30a1d30c5c3a454d733",
+      "paths": [
+        "research/v10_top10_20260926/bc_integration/hold_p55_q8_guarded.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/bc_integration/guarded_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 138,
+      "losses": 22,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -10.16,
+      "direct_cases": 16,
+      "direct_wins": 3,
+      "direct_losses": 7,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "d6ed13f9220c50cbe4be471b8d9a59bda258b3bb1759360d6fc20513966ad40f",
+      "paths": [
+        "research/macro_population_20260927/population/macro_ebcc34b964e4.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 63,
+      "losses": 29,
+      "ties": 20,
+      "point_gain": 0.0,
+      "margin_gain": -10.27,
+      "direct_cases": 16,
+      "direct_wins": 1,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "6ae680e8e6f3927ede008903f9e1538e1a092c1e6c0950cfd16d376d572064f0",
+      "paths": [
+        "research/macro_population_20260927/population/macro_88876b4603e9.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 63,
+      "losses": 29,
+      "ties": 20,
+      "point_gain": 0.0,
+      "margin_gain": -10.27,
+      "direct_cases": 16,
+      "direct_wins": 1,
+      "direct_losses": 1,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "a13952f73123178d6a0946606d2f3e4bbd60c38f8a1330e11773a9152b627939",
+      "paths": [
+        "research/v10_top10_20260926/bc_integration/add_p55_q4.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/bc_integration/extended_results.jsonl",
+        "research/v10_top10_20260926/bc_integration/screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 200,
+      "worlds": 10,
+      "opponents": 10,
+      "wins": 176,
+      "losses": 24,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -21.43,
+      "direct_cases": 20,
+      "direct_wins": 7,
+      "direct_losses": 7,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "47a409dcc19cc41ab2bde453afe91279cc2700394dbb1332fd564c89a253c0b7",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/cash1500.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/risk_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 98,
+      "worlds": 29,
+      "opponents": 35,
+      "wins": 74,
+      "losses": 20,
+      "ties": 4,
+      "point_gain": 0.0,
+      "margin_gain": -25.82,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "4da5dad44a694947e2c5c896a900d2b0bf33d20d8f8f1195c361af34d1e88d99",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/value1.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/value_extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 90,
+      "losses": 6,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -27.21,
+      "direct_cases": 16,
+      "direct_wins": 10,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "162c7fe9ed652380815666b3bc15ce5a4aa41df73ac75e687caae1bdbadf7795",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/order_native.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/order_assignment_results_20260929.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 62,
+      "losses": 8,
+      "ties": 2,
+      "point_gain": 0.0,
+      "margin_gain": -39.39,
+      "direct_cases": 12,
+      "direct_wins": 1,
+      "direct_losses": 11,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "85833874deb9c5e98ea21228a7756bf6adfa1769a15726b2581781bd6c4d0e5f",
+      "paths": [
+        "research/v10_top10_20260926/bc_integration/conditional55.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/bc_integration/extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 138,
+      "losses": 22,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -61.4,
+      "direct_cases": 16,
+      "direct_wins": 5,
+      "direct_losses": 5,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "b1396d0ae2121b3fb8c44ee31732f09c98128a78c712adc6237d49e3b90b012d",
+      "paths": [
+        "research/v10_top10_20260926/bc_integration/balanced35.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/bc_integration/extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 138,
+      "losses": 22,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -117.11,
+      "direct_cases": 16,
+      "direct_wins": 7,
+      "direct_losses": 9,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "742f73ed9bbdb37977ca26033cface0e6b0c39d2acb12bf53446789881e51c32",
+      "paths": [
+        "research/v10_top10_20260926/bc_integration/balanced35_guarded.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/bc_integration/guarded_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 138,
+      "losses": 22,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -126.56,
+      "direct_cases": 16,
+      "direct_wins": 9,
+      "direct_losses": 7,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "427892b61483b7fbc7c4a1da51f6cb2127a30250a3adb5fe6a69e71863402d78",
+      "paths": [
+        "research/v10_top10_20260926/bc_integration/imitate25_guarded.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/bc_integration/guarded_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 138,
+      "losses": 22,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -143.69,
+      "direct_cases": 16,
+      "direct_wins": 7,
+      "direct_losses": 9,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "5a28a00f6416095cf0b96559672b093520403ef68e4b28ced518122543db4b06",
+      "paths": [
+        "research/v10_top10_20260926/bc_integration/conditional35.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/bc_integration/extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 138,
+      "losses": 22,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -146.27,
+      "direct_cases": 16,
+      "direct_wins": 9,
+      "direct_losses": 5,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "e03333c6bef0c83764d56f1cc958782f032c5bbdc0684bae1cc2ccd6b61f3e7c",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/generation5/advance36.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation5_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/generation7_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/style_stress_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 288,
+      "worlds": 16,
+      "opponents": 9,
+      "wins": 229,
+      "losses": 25,
+      "ties": 34,
+      "point_gain": 0.0,
+      "margin_gain": -158.92,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "415743a16e5b18c8d2fa9681233ec382fb0eb4bf9a58e06fe83fc9a4702b1c54",
+      "paths": [
+        "research/route_value_20260927/macro_micro.py"
+      ],
+      "sources": [
+        "research/route_value_20260927/macro_combo_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 224,
+      "worlds": 8,
+      "opponents": 14,
+      "wins": 185,
+      "losses": 39,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -162.46,
+      "direct_cases": 16,
+      "direct_wins": 14,
+      "direct_losses": 2,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "f22a8d35f356147740741df58af9411e38c4b11dc5db65d81df531e7e7fe5528",
+      "paths": [
+        "research/v10_top10_20260926/bc_integration/imitate25.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/bc_integration/extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 138,
+      "losses": 22,
+      "ties": 0,
+      "point_gain": 0,
+      "margin_gain": -194.83,
+      "direct_cases": 16,
+      "direct_wins": 3,
+      "direct_losses": 13,
+      "gain_rate": 0.0
+    },
+    {
+      "sha256": "35afe4072485a06f2ffb1e1ac7d55c3bb2cc0110c50a5292d0a611d0fab150e5",
+      "paths": [
+        "research/route_value_20260927/learned.py"
+      ],
+      "sources": [
+        "research/route_value_20260927/broad_results.jsonl",
+        "research/route_value_20260927/pilot_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 384,
+      "worlds": 16,
+      "opponents": 18,
+      "wins": 315,
+      "losses": 69,
+      "ties": 0,
+      "point_gain": -2,
+      "margin_gain": 828.72,
+      "direct_cases": 32,
+      "direct_wins": 3,
+      "direct_losses": 3,
+      "gain_rate": -0.005208333333333333
+    },
+    {
+      "sha256": "31b723474cb5d48aa2f7b2bba08183321c3ed61d922182784e2506ee225a3cb2",
+      "paths": [
+        "research/v10_top10_20260926/micro_candidates/harvest.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/extended_results.jsonl",
+        "research/v10_top10_20260926/micro_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 176,
+      "worlds": 8,
+      "opponents": 11,
+      "wins": 136,
+      "losses": 38,
+      "ties": 2,
+      "point_gain": -1.0,
+      "margin_gain": -1.11,
+      "direct_cases": 16,
+      "direct_wins": 8,
+      "direct_losses": 6,
+      "gain_rate": -0.005681818181818182
+    },
+    {
+      "sha256": "6fd82ab5e77dbcdf776dcf13e57454640375c8a40e43206424c46b1cfcb73a2e",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/ready2.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/development_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/fresh_loss_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 173,
+      "worlds": 36,
+      "opponents": 38,
+      "wins": 132,
+      "losses": 33,
+      "ties": 8,
+      "point_gain": -1.0,
+      "margin_gain": 0.48,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 4,
+      "gain_rate": -0.005780346820809248
+    },
+    {
+      "sha256": "de44918ff84ea2756c0490516dc1fe7382271f1c2b5a67594872c01f88f555c0",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/advance_only2.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/development_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/fresh_loss_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 173,
+      "worlds": 36,
+      "opponents": 38,
+      "wins": 130,
+      "losses": 31,
+      "ties": 12,
+      "point_gain": -1.0,
+      "margin_gain": -5.21,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 4,
+      "gain_rate": -0.005780346820809248
+    },
+    {
+      "sha256": "c241bfda752a23a3a6fd8b58253bb38142db15a32b9b338feddf47d50cde3cde",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/generation6/similarity95.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/generation7_direct_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/generation7_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 336,
+      "worlds": 24,
+      "opponents": 9,
+      "wins": 267,
+      "losses": 27,
+      "ties": 42,
+      "point_gain": -2.0,
+      "margin_gain": 36.88,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.005952380952380952
+    },
+    {
+      "sha256": "e3bc9abd80f0ce81b80450e929c951536424c52a7737472520c9bb42e74ed008",
+      "paths": [
+        "research/herd_validation_20260928/repeat_two_v2.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/current_diagnostic_results.jsonl",
+        "research/herd_validation_20260928/v2_extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 238,
+      "worlds": 56,
+      "opponents": 52,
+      "wins": 185,
+      "losses": 53,
+      "ties": 0,
+      "point_gain": -2,
+      "margin_gain": 449.26,
+      "direct_cases": 32,
+      "direct_wins": 4,
+      "direct_losses": 2,
+      "gain_rate": -0.008403361344537815
+    },
+    {
+      "sha256": "b2f6f15e8e4d0876f286618e9cf44ebf333db396ba640e99208d4a75c1042abc",
+      "paths": [
+        "research/herd_validation_20260928/early_two_v2.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/current_diagnostic_results.jsonl",
+        "research/herd_validation_20260928/v2_extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 238,
+      "worlds": 56,
+      "opponents": 52,
+      "wins": 185,
+      "losses": 53,
+      "ties": 0,
+      "point_gain": -2,
+      "margin_gain": 447.94,
+      "direct_cases": 32,
+      "direct_wins": 4,
+      "direct_losses": 2,
+      "gain_rate": -0.008403361344537815
+    },
+    {
+      "sha256": "60cad084b06279b9f0dea3e89551a27854c9ae317e8a4a8f394163f7cff66324",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/g3_future100.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_g3_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 79,
+      "losses": 33,
+      "ties": 0,
+      "point_gain": -1,
+      "margin_gain": 432.46,
+      "direct_cases": 16,
+      "direct_wins": 8,
+      "direct_losses": 4,
+      "gain_rate": -0.008928571428571428
+    },
+    {
+      "sha256": "5543399037672a68e2b542e9ee6bf7a7eb5890c1080979e71100ee20c637db26",
+      "paths": [
+        "research/macro_population_20260927/population/macro_5a90ca43c24b.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 63,
+      "losses": 31,
+      "ties": 18,
+      "point_gain": -1.0,
+      "margin_gain": 66.93,
+      "direct_cases": 16,
+      "direct_wins": 1,
+      "direct_losses": 3,
+      "gain_rate": -0.008928571428571428
+    },
+    {
+      "sha256": "c7ac36b1305d4bb8675b9032e561347c1ec3f85741ccfb763913dfefe15b7053",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/midgame_yarn_selective.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/herd_extended_results.jsonl",
+        "research/herd_validation_20260928/herd_extended_results.jsonl",
+        "research/meta_rebuild_20260927/herd_extended_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/herd_extended_results_20260929.jsonl",
+        "research/meta_rebuild_20260927/herd_extension_results.jsonl",
+        "research/meta_rebuild_20260927/loss_fixture_results.jsonl",
+        "research/meta_rebuild_20260927/midgame_herd_results.jsonl",
+        "research/midgame_campaign_20260928/extended_results.jsonl",
+        "research/production_upgrade_20260928/herd_stage1_results.jsonl",
+        "research/production_upgrade_20260928/replay_diagnostic_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 1662,
+      "worlds": 142,
+      "opponents": 18,
+      "wins": 1311,
+      "losses": 349,
+      "ties": 2,
+      "point_gain": -15.0,
+      "margin_gain": 324.21,
+      "direct_cases": 274,
+      "direct_wins": 53,
+      "direct_losses": 21,
+      "gain_rate": -0.009025270758122744
+    },
+    {
+      "sha256": "83312c73903b50b99be53805725e02b1d4e1f2c08ace53fab4a5fd00857ed912",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/fixed_pred_gate12.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/predictor_fixed_results.jsonl",
+        "research/midgame_campaign_20260928/forecast_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 9,
+      "opponents": 6,
+      "wins": 84,
+      "losses": 24,
+      "ties": 0,
+      "point_gain": -1,
+      "margin_gain": 21.45,
+      "direct_cases": 18,
+      "direct_wins": 3,
+      "direct_losses": 5,
+      "gain_rate": -0.009259259259259259
+    },
+    {
+      "sha256": "bad65ef32a5cf9c0cdf4c10d2390af11b7d63ff432d1a48c2966c3c90dc3762c",
+      "paths": [
+        "research/v10_top10_20260926/combined_candidates/care_reorder.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 176,
+      "worlds": 8,
+      "opponents": 11,
+      "wins": 136,
+      "losses": 40,
+      "ties": 0,
+      "point_gain": -2.0,
+      "margin_gain": 85.98,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 10,
+      "gain_rate": -0.011363636363636364
+    },
+    {
+      "sha256": "a2bb18ad99f75b83dbde75f1efde148cd9c1764a0c3f7d12353cbb4831e18052",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/unrestricted2.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/development_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/fresh_loss_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 173,
+      "worlds": 36,
+      "opponents": 38,
+      "wins": 131,
+      "losses": 34,
+      "ties": 8,
+      "point_gain": -2.0,
+      "margin_gain": -225.88,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 4,
+      "gain_rate": -0.011560693641618497
+    },
+    {
+      "sha256": "742acde123b4dcbe18f85afbd01c36e79ee6630ff5a73b27dfdae4776c7cc0f6",
+      "paths": [
+        "research/v10_top10_20260926/flow_candidates_v2/reorder.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/extended_results.jsonl",
+        "research/v10_top10_20260926/flow_screen_v2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 176,
+      "worlds": 8,
+      "opponents": 11,
+      "wins": 134,
+      "losses": 40,
+      "ties": 2,
+      "point_gain": -3.0,
+      "margin_gain": 49.61,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 10,
+      "gain_rate": -0.017045454545454544
+    },
+    {
+      "sha256": "ee6dc034e1a9f2a2852e97b276c6b27e316050c3023486c8062fe01258f3c460",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/funded4_r5.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/funded_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/funded_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 83,
+      "losses": 31,
+      "ties": 0,
+      "point_gain": -2,
+      "margin_gain": 363.41,
+      "direct_cases": 18,
+      "direct_wins": 3,
+      "direct_losses": 1,
+      "gain_rate": -0.017543859649122806
+    },
+    {
+      "sha256": "a50b60a9bd6b7e498cbc8deb41bdf1cb202a629c6b4a18e3882fa4c2b2f9c896",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/g3_robust_two.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_g3_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 78,
+      "losses": 34,
+      "ties": 0,
+      "point_gain": -2,
+      "margin_gain": 401.21,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 8,
+      "gain_rate": -0.017857142857142856
+    },
+    {
+      "sha256": "fd0274a1a349926b33dd4592383edc3e51a87de408ea0835c0500412578ffd19",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/sequence_v2_early1.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_sequence_v2_results.jsonl",
+        "research/meta_rebuild_20260927/loss_fixture_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 13,
+      "opponents": 12,
+      "wins": 81,
+      "losses": 27,
+      "ties": 0,
+      "point_gain": -2,
+      "margin_gain": 449.89,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 2,
+      "gain_rate": -0.018518518518518517
+    },
+    {
+      "sha256": "fdb4c7af993dae2af695446d785fa159f73b2481a164d19a83348c409197d8e7",
+      "paths": [
+        "research/v10_top10_20260926/combined_candidates/harvest_reorder.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 176,
+      "worlds": 8,
+      "opponents": 11,
+      "wins": 134,
+      "losses": 42,
+      "ties": 0,
+      "point_gain": -4.0,
+      "margin_gain": 55.85,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 10,
+      "gain_rate": -0.022727272727272728
+    },
+    {
+      "sha256": "25774777d0c0ef046018c68eb3204a7fdc032dd9a54d35b9c00ccb7fd0c611c1",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/midgame_yarn_sheep.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/herd_extended_results.jsonl",
+        "research/herd_validation_20260928/herd_extended_results.jsonl",
+        "research/meta_rebuild_20260927/herd_extended_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/herd_extended_results_20260929.jsonl",
+        "research/meta_rebuild_20260927/herd_extension_results.jsonl",
+        "research/meta_rebuild_20260927/loss_fixture_results.jsonl",
+        "research/meta_rebuild_20260927/midgame_herd_results.jsonl",
+        "research/midgame_campaign_20260928/extended_results.jsonl",
+        "research/production_upgrade_20260928/herd_stage1_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 1656,
+      "worlds": 142,
+      "opponents": 12,
+      "wins": 1285,
+      "losses": 369,
+      "ties": 2,
+      "point_gain": -41.0,
+      "margin_gain": 210.0,
+      "direct_cases": 274,
+      "direct_wins": 54,
+      "direct_losses": 34,
+      "gain_rate": -0.024758454106280192
+    },
+    {
+      "sha256": "031ef49c45e08ccec0a7d885af24a82839f636dcf7bb69c6ba3ece116bcd2524",
+      "paths": [
+        "research/route_value_20260927/combined.py"
+      ],
+      "sources": [
+        "research/route_value_20260927/broad_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 224,
+      "worlds": 8,
+      "opponents": 14,
+      "wins": 179,
+      "losses": 45,
+      "ties": 0,
+      "point_gain": -6,
+      "margin_gain": -402.98,
+      "direct_cases": 16,
+      "direct_wins": 14,
+      "direct_losses": 2,
+      "gain_rate": -0.026785714285714284
+    },
+    {
+      "sha256": "ebb85069c6bdc16d101e3cf137deda1ed72654dece63f0461e92560dad559dbf",
+      "paths": [
+        "research/herd_search_20260929/candidates/repeat_ev.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/archived_panel_results.jsonl",
+        "research/herd_search_20260929/repeated_extended_results.jsonl",
+        "research/herd_search_20260929/repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 284,
+      "worlds": 27,
+      "opponents": 16,
+      "wins": 224,
+      "losses": 60,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": 928.81,
+      "direct_cases": 34,
+      "direct_wins": 6,
+      "direct_losses": 2,
+      "gain_rate": -0.028169014084507043
+    },
+    {
+      "sha256": "744fc1d610288b4f85a3925753dfbcb33a67ff0413f9e310c742f53f793fca27",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/ready0.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/development_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/fresh_loss_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 173,
+      "worlds": 36,
+      "opponents": 38,
+      "wins": 131,
+      "losses": 40,
+      "ties": 2,
+      "point_gain": -5.0,
+      "margin_gain": 0.54,
+      "direct_cases": 16,
+      "direct_wins": 5,
+      "direct_losses": 9,
+      "gain_rate": -0.028901734104046242
+    },
+    {
+      "sha256": "acc8208642c8926da5038f7fca98421024f2b9b9002cfdf8ca0d896c89996452",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_c/wealth500.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/phase_c/risk_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 98,
+      "worlds": 29,
+      "opponents": 35,
+      "wins": 72,
+      "losses": 24,
+      "ties": 2,
+      "point_gain": -3.0,
+      "margin_gain": -1.43,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 4,
+      "gain_rate": -0.030612244897959183
+    },
+    {
+      "sha256": "94ebdebb62bbe5591be89d760edb667bee3b6bee34969e008b0ac0de776f136f",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/repeat_v2_care_audited.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/repeat_screen_20260928_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 92,
+      "losses": 36,
+      "ties": 0,
+      "point_gain": -4,
+      "margin_gain": 122.35,
+      "direct_cases": 16,
+      "direct_wins": 9,
+      "direct_losses": 7,
+      "gain_rate": -0.03125
+    },
+    {
+      "sha256": "927081a4ab2a7af4ef02f96e62690e829c7c138d8b6898fe2aa1fd62d18c2183",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/repeat_v2_funded.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/repeat_screen_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/repeat_v2_smoke_results_20260928.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 92,
+      "losses": 36,
+      "ties": 0,
+      "point_gain": -4,
+      "margin_gain": 65.03,
+      "direct_cases": 18,
+      "direct_wins": 8,
+      "direct_losses": 8,
+      "gain_rate": -0.03125
+    },
+    {
+      "sha256": "c94f129e86c16ef465ab3d05da93717f46eed6f6556a54792ea78dc17e81a2d3",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/repeat_v2_two.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/repeat_screen_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/repeat_v2_smoke_results_20260928.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 92,
+      "losses": 36,
+      "ties": 0,
+      "point_gain": -4,
+      "margin_gain": 49.77,
+      "direct_cases": 18,
+      "direct_wins": 8,
+      "direct_losses": 8,
+      "gain_rate": -0.03125
+    },
+    {
+      "sha256": "5c94cf730491f8c2c16f0e4ae7e54fbd8ff907c5444211cc2f8a13654b1a478a",
+      "paths": [
+        "research/herd_search_20260929/candidates/early_one.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/archived_panel_results.jsonl",
+        "research/herd_search_20260929/repeated_extended_results.jsonl",
+        "research/herd_search_20260929/repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 284,
+      "worlds": 27,
+      "opponents": 16,
+      "wins": 223,
+      "losses": 61,
+      "ties": 0,
+      "point_gain": -9,
+      "margin_gain": 458.0,
+      "direct_cases": 34,
+      "direct_wins": 6,
+      "direct_losses": 4,
+      "gain_rate": -0.03169014084507042
+    },
+    {
+      "sha256": "7457e423b50d241a65335e5cded8612746c93bac67ac9dd8c0d9fa2ead77ed97",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/fused_herd_nopredict.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/fusion_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/fusion_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 81,
+      "losses": 33,
+      "ties": 0,
+      "point_gain": -4,
+      "margin_gain": 270.01,
+      "direct_cases": 18,
+      "direct_wins": 7,
+      "direct_losses": 11,
+      "gain_rate": -0.03508771929824561
+    },
+    {
+      "sha256": "02f7ffc7f60995f6db72782f43eb2638830032360cb96b34880f7a8a9c45533b",
+      "paths": [
+        "research/macro_population_20260927/population/macro_dbb0b7f12e3c.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 61,
+      "losses": 35,
+      "ties": 16,
+      "point_gain": -4.0,
+      "margin_gain": -79.23,
+      "direct_cases": 16,
+      "direct_wins": 1,
+      "direct_losses": 3,
+      "gain_rate": -0.03571428571428571
+    },
+    {
+      "sha256": "0bfd7c054e393c40c4ebeda92d35d553a19d85067fb7d3192f4897a45b89c326",
+      "paths": [
+        "research/macro_population_20260927/population/macro_ae3c071345aa.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 61,
+      "losses": 35,
+      "ties": 16,
+      "point_gain": -4.0,
+      "margin_gain": -79.23,
+      "direct_cases": 16,
+      "direct_wins": 1,
+      "direct_losses": 3,
+      "gain_rate": -0.03571428571428571
+    },
+    {
+      "sha256": "e1273bdcbb4ed769933fcce8e59509a0904129131ea17cc2d964411b4d06677f",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/sequence_v2_early3_ev.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_sequence_v2_results.jsonl",
+        "research/meta_rebuild_20260927/loss_fixture_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 13,
+      "opponents": 12,
+      "wins": 79,
+      "losses": 29,
+      "ties": 0,
+      "point_gain": -4,
+      "margin_gain": 1205.73,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 2,
+      "gain_rate": -0.037037037037037035
+    },
+    {
+      "sha256": "14e61230b3754a51bc0f57d33324b3d16bd85ca276871c647360547241bd98c6",
+      "paths": [
+        "research/herd_search_20260929/candidates/repeat_safe.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/repeated_extended_results.jsonl",
+        "research/herd_search_20260929/repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 204,
+      "worlds": 17,
+      "opponents": 6,
+      "wins": 168,
+      "losses": 36,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": 828.99,
+      "direct_cases": 34,
+      "direct_wins": 6,
+      "direct_losses": 2,
+      "gain_rate": -0.0392156862745098
+    },
+    {
+      "sha256": "e628e98c176059066893c3488996924784abcd31617bca50d3b2fcba156443d9",
+      "paths": [
+        "research/herd_search_20260929/candidates/repeat_keep4.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/repeated_extended_results.jsonl",
+        "research/herd_search_20260929/repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 204,
+      "worlds": 17,
+      "opponents": 6,
+      "wins": 168,
+      "losses": 36,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": 828.97,
+      "direct_cases": 34,
+      "direct_wins": 6,
+      "direct_losses": 2,
+      "gain_rate": -0.0392156862745098
+    },
+    {
+      "sha256": "7c6986cedbcc8273fae565ea7ebb677e69f03263939b472eebdbe086345b0b54",
+      "paths": [
+        "research/herd_search_20260929/candidates/repeat_early.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/archived_panel_results.jsonl",
+        "research/herd_search_20260929/repeated_extended_results.jsonl",
+        "research/herd_search_20260929/repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 284,
+      "worlds": 27,
+      "opponents": 16,
+      "wins": 220,
+      "losses": 64,
+      "ties": 0,
+      "point_gain": -12,
+      "margin_gain": 991.98,
+      "direct_cases": 34,
+      "direct_wins": 6,
+      "direct_losses": 4,
+      "gain_rate": -0.04225352112676056
+    },
+    {
+      "sha256": "348bc1bfce3e5f551f21cf291295bf4c5dce0a883e66434dbbf74ace8555cdae",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/repeat_v2_nomilk.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/repeat_screen_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/repeat_v2_smoke_results_20260928.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 128,
+      "worlds": 8,
+      "opponents": 8,
+      "wins": 90,
+      "losses": 38,
+      "ties": 0,
+      "point_gain": -6,
+      "margin_gain": 223.14,
+      "direct_cases": 18,
+      "direct_wins": 6,
+      "direct_losses": 8,
+      "gain_rate": -0.046875
+    },
+    {
+      "sha256": "259f382ddeb42e2a7e28f23adfdd87ed9b12a915419f2f09c4891fa7cc9d79e0",
+      "paths": [
+        "research/v10_top10_20260926/herd_expectation/risk25_stock0.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_expectation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 120,
+      "losses": 40,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": 135.28,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 4,
+      "gain_rate": -0.05
+    },
+    {
+      "sha256": "2ea8f4f2e3cfd289fd7137487b1c8cce5c08e6745df29c531dfa8e2ec5025084",
+      "paths": [
+        "research/v10_top10_20260926/herd_expectation/risk0_stock0.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_expectation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 120,
+      "losses": 40,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": 100.59,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 4,
+      "gain_rate": -0.05
+    },
+    {
+      "sha256": "e18eb04a6e06cf3c625ce3f6bc7713c81cb48efa3eacb7ceb572c715c9a835e1",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/fused_herd_noadvance.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/fusion_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/fusion_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 79,
+      "losses": 35,
+      "ties": 0,
+      "point_gain": -6,
+      "margin_gain": 184.03,
+      "direct_cases": 18,
+      "direct_wins": 7,
+      "direct_losses": 11,
+      "gain_rate": -0.05263157894736842
+    },
+    {
+      "sha256": "08b21dbebc7f2888bb2406032f800acdfc49908ae3ad151306c64236c1f0ae93",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/fixed_advance_off.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_extended_20260928_results.jsonl",
+        "research/meta_rebuild_20260927/predictor_fixed_results.jsonl",
+        "research/midgame_campaign_20260928/forecast_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 300,
+      "worlds": 25,
+      "opponents": 6,
+      "wins": 213,
+      "losses": 87,
+      "ties": 0,
+      "point_gain": -16,
+      "margin_gain": -108.48,
+      "direct_cases": 50,
+      "direct_wins": 20,
+      "direct_losses": 30,
+      "gain_rate": -0.05333333333333334
+    },
+    {
+      "sha256": "0dff8a3767a34b100de2088c3301705fd1eb975b97b26b5d75f3f579f0049f00",
+      "paths": [
+        "research/macro_population_20260927/population/macro_19933db954f2.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 63,
+      "losses": 41,
+      "ties": 8,
+      "point_gain": -6.0,
+      "margin_gain": 3.05,
+      "direct_cases": 16,
+      "direct_wins": 3,
+      "direct_losses": 7,
+      "gain_rate": -0.05357142857142857
+    },
+    {
+      "sha256": "62ac5e89e4f65c043592779724222f525d6963f61db2ec4ab6024e1cc75ce5b7",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/sequence_v2_early3.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_sequence_v2_results.jsonl",
+        "research/meta_rebuild_20260927/loss_fixture_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 13,
+      "opponents": 12,
+      "wins": 77,
+      "losses": 31,
+      "ties": 0,
+      "point_gain": -6,
+      "margin_gain": 1025.73,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 2,
+      "gain_rate": -0.05555555555555555
+    },
+    {
+      "sha256": "78dc69d944f632ad837c54d9ec5bcba8905b0ad3a6268c7ced6941397218b222",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/sequence_v2_mid3.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/herd_sequence_v2_results.jsonl",
+        "research/meta_rebuild_20260927/loss_fixture_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 13,
+      "opponents": 12,
+      "wins": 77,
+      "losses": 31,
+      "ties": 0,
+      "point_gain": -6,
+      "margin_gain": 1025.73,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 2,
+      "gain_rate": -0.05555555555555555
+    },
+    {
+      "sha256": "d4e36311d368538255fe42f76620cf180e6165645c56307ff2255294e1e3b71c",
+      "paths": [
+        "research/structural_20260927/plans/plan01_physical.py"
+      ],
+      "sources": [
+        "research/structural_20260927/plan_extended_results.jsonl",
+        "research/structural_20260927/plan_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 138,
+      "worlds": 15,
+      "opponents": 5,
+      "wins": 94,
+      "losses": 44,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": -478.8,
+      "direct_cases": 30,
+      "direct_wins": 18,
+      "direct_losses": 12,
+      "gain_rate": -0.057971014492753624
+    },
+    {
+      "sha256": "8063b417473a650aa8b8e001716a0e66258cfb47ef7720019b435ab55db650bb",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/dmitrii_net5.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/rebased_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 76,
+      "losses": 4,
+      "ties": 16,
+      "point_gain": -6.0,
+      "margin_gain": -518.44,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 14,
+      "gain_rate": -0.0625
+    },
+    {
+      "sha256": "6f321edbd318fe772670c459413387ccb4db4656066bb4e7cbefa764e2eea3ce",
+      "paths": [
+        "research/v10_top10_20260926/herd_allocation/both_current.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_allocation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 116,
+      "losses": 44,
+      "ties": 0,
+      "point_gain": -12,
+      "margin_gain": -321.84,
+      "direct_cases": 16,
+      "direct_wins": 6,
+      "direct_losses": 2,
+      "gain_rate": -0.075
+    },
+    {
+      "sha256": "a1e8d7bb1b4764017d06424cc3f12264e8941ffb9689633f9bee23850662206c",
+      "paths": [
+        "research/v10_top10_20260926/herd_allocation/both_strict.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_allocation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 116,
+      "losses": 44,
+      "ties": 0,
+      "point_gain": -12,
+      "margin_gain": -331.05,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 2,
+      "gain_rate": -0.075
+    },
+    {
+      "sha256": "e8b02a17adbe9a135acff17b34009e5f9232b8443a2b1d7137063d6856a8301a",
+      "paths": [
+        "research/v10_top10_20260926/herd_allocation/goose_value.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/herd_allocation_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 160,
+      "worlds": 8,
+      "opponents": 10,
+      "wins": 116,
+      "losses": 44,
+      "ties": 0,
+      "point_gain": -12,
+      "margin_gain": -688.89,
+      "direct_cases": 16,
+      "direct_wins": 4,
+      "direct_losses": 2,
+      "gain_rate": -0.075
+    },
+    {
+      "sha256": "493d14cad60effc5921f1ecac036b14cb8905b303fcaad07a1f463b02f2cf02b",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/fused_herd_gate6_noadvance.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/fusion_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/fusion_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 73,
+      "losses": 41,
+      "ties": 0,
+      "point_gain": -12,
+      "margin_gain": 73.55,
+      "direct_cases": 18,
+      "direct_wins": 7,
+      "direct_losses": 11,
+      "gain_rate": -0.10526315789473684
+    },
+    {
+      "sha256": "d451626ae1b67bd7a7f2441de31b84940691058ec05a1fba1afaeb6eae40eb6c",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/herd8.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/early_herd_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 51,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": 235.36,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 5,
+      "gain_rate": -0.1111111111111111
+    },
+    {
+      "sha256": "910ee8203850922b3bc3fa8e630abb0caa44f9e3db9060fe6d4664591b56dfc3",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/herd12.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/early_herd_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 51,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": 235.36,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 5,
+      "gain_rate": -0.1111111111111111
+    },
+    {
+      "sha256": "5e37b80d08bbfb88f6fc01e413d2a72c1226d5376bfa56ab6a0a2b0f0d0658ee",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/herd_mid.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/early_herd_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 51,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": 235.36,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 5,
+      "gain_rate": -0.1111111111111111
+    },
+    {
+      "sha256": "6b2b72dc543d07f9b18db95cbfc57fa3540f8d3b4ffabe91cad85e8c427f7a57",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/herd_growth.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/early_herd_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 51,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": 235.36,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 5,
+      "gain_rate": -0.1111111111111111
+    },
+    {
+      "sha256": "0f8f1a944e148c5f9df50dbec059886a9cdf3c370cd891cbc9840a2adc618cf1",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/herd16.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/early_herd_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 72,
+      "worlds": 6,
+      "opponents": 6,
+      "wins": 51,
+      "losses": 21,
+      "ties": 0,
+      "point_gain": -8,
+      "margin_gain": -407.31,
+      "direct_cases": 12,
+      "direct_wins": 3,
+      "direct_losses": 5,
+      "gain_rate": -0.1111111111111111
+    },
+    {
+      "sha256": "59ed26dc2cdebc20b49c59295d398c6ee5ac19d54be461d829e8b4678d6d04bf",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/demand/demand2.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/demand_dev_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 38,
+      "losses": 10,
+      "ties": 0,
+      "point_gain": -6.0,
+      "margin_gain": -179.15,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.125
+    },
+    {
+      "sha256": "4a5d66041b5933ce5ede8a9a53c2bc0781912cc84a0441d9cc85fd95e3bb5c8a",
+      "paths": [
+        "research/macro_population_20260927/population/macro_85ac1194737d.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 55,
+      "losses": 49,
+      "ties": 8,
+      "point_gain": -14.0,
+      "margin_gain": -297.74,
+      "direct_cases": 16,
+      "direct_wins": 3,
+      "direct_losses": 11,
+      "gain_rate": -0.125
+    },
+    {
+      "sha256": "8451b5c96ad6c0b88ad99ace7b9c19242b3a31b8cbccda212915979f53d3e47c",
+      "paths": [
+        "research/herd_search_20260929/candidates/repeat_care_ev.py"
+      ],
+      "sources": [
+        "research/herd_search_20260929/repeated_extended_results.jsonl",
+        "research/herd_search_20260929/repeated_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 204,
+      "worlds": 17,
+      "opponents": 6,
+      "wins": 150,
+      "losses": 54,
+      "ties": 0,
+      "point_gain": -26,
+      "margin_gain": -34.34,
+      "direct_cases": 34,
+      "direct_wins": 6,
+      "direct_losses": 8,
+      "gain_rate": -0.12745098039215685
+    },
+    {
+      "sha256": "6b13532fbc2b55b59c6cae8ed8d5cd29fe82d18a7d7e044ed130217e3d1c09d3",
+      "paths": [
+        "submissions/release_v9/main.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g1_results.jsonl",
+        "research/v10_rebuild_20260926/additional_development_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/extended_dev_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/generation4_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_b/replay_recheck_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_b/validation_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/fresh_loss_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/style_stress_results.jsonl",
+        "research/v10_rebuild_20260926/new_public_results.jsonl",
+        "research/v10_rebuild_20260926/opening_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 789,
+      "worlds": 92,
+      "opponents": 43,
+      "wins": 660,
+      "losses": 129,
+      "ties": 0,
+      "point_gain": -105,
+      "margin_gain": -2094.55,
+      "direct_cases": 8,
+      "direct_wins": 0,
+      "direct_losses": 8,
+      "gain_rate": -0.13307984790874525
+    },
+    {
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7",
+      "paths": [
+        "research/structural_20260927/public_programs/farm2945.py"
+      ],
+      "sources": [
+        "research/structural_20260927/public_benchmark_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 80,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 53,
+      "losses": 27,
+      "ties": 0,
+      "point_gain": -11,
+      "margin_gain": 12231.76,
+      "direct_cases": 16,
+      "direct_wins": 1,
+      "direct_losses": 15,
+      "gain_rate": -0.1375
+    },
+    {
+      "sha256": "455ac9e4e3483f39fff03fa6cea83a4784f943da13a54e94f82e95fd9d7be2b3",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/generation6/observed24.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 36,
+      "losses": 10,
+      "ties": 2,
+      "point_gain": -7.0,
+      "margin_gain": -125.12,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.14583333333333334
+    },
+    {
+      "sha256": "d1d60cfaac26c4bbd8abe0f6e0adc10c9e5fd73a98b43c26e8105d85b7bee2a6",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/fused_herd_neither.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/fusion_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/fusion_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 67,
+      "losses": 47,
+      "ties": 0,
+      "point_gain": -18,
+      "margin_gain": -79.68,
+      "direct_cases": 18,
+      "direct_wins": 8,
+      "direct_losses": 10,
+      "gain_rate": -0.15789473684210525
+    },
+    {
+      "sha256": "c976a2663b9715b1e1e3379941f29b2eabdcbb0011c70b86076c207331062202",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/generation6/physics36.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 36,
+      "losses": 12,
+      "ties": 0,
+      "point_gain": -8.0,
+      "margin_gain": -24.08,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.16666666666666666
+    },
+    {
+      "sha256": "0d752816779e2228a21312e69a06d7917c320ed0232d6c170b415920cc6409da",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/generation6/floor36.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 36,
+      "losses": 12,
+      "ties": 0,
+      "point_gain": -8.0,
+      "margin_gain": -24.08,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.16666666666666666
+    },
+    {
+      "sha256": "b62e4abf8a8a988c80b90997491c8f9bc982a4fecad45b9ede2eda062bc09cc5",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/demand/demand1.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/demand_dev_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 34,
+      "losses": 10,
+      "ties": 4,
+      "point_gain": -8.0,
+      "margin_gain": -140.52,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.16666666666666666
+    },
+    {
+      "sha256": "ab90e55aac1de1314e534f4ed6a83f76599519b02daa94fb02d44f5fc7d6eb78",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/generation6/advance36.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 32,
+      "losses": 8,
+      "ties": 8,
+      "point_gain": -8.0,
+      "margin_gain": -174.9,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.16666666666666666
+    },
+    {
+      "sha256": "e966650c1e619f4b793cb25bd466f495dec7743d15a238e70b6051f3fb8f8b26",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/generation6/decay36.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 32,
+      "losses": 8,
+      "ties": 8,
+      "point_gain": -8.0,
+      "margin_gain": -174.9,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.16666666666666666
+    },
+    {
+      "sha256": "6b3f1130520b8ad94379c4bed5f82b631e63cc440436d90d654cf3dcf74b11db",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_oldmap.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 42,
+      "losses": 36,
+      "ties": 0,
+      "point_gain": -13,
+      "margin_gain": -2204.69,
+      "direct_cases": 12,
+      "direct_wins": 4,
+      "direct_losses": 8,
+      "gain_rate": -0.16666666666666666
+    },
+    {
+      "sha256": "3a4601081cc909ae7baf97ec5ddb0e1a8a5a1a27c9cd072cdeaaf7d34c803e0b",
+      "paths": [
+        "submissions/release_v10/main.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g1_results.jsonl",
+        "research/v10_rebuild_20260926/additional_development_results.jsonl",
+        "research/v10_rebuild_20260926/combination_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/extended_dev_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/generation4_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/generation7_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_b/replay_recheck_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_b/validation_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/development_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/fresh_loss_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/phase_c/risk_results.jsonl",
+        "research/v10_rebuild_20260926/continuation/style_stress_results.jsonl",
+        "research/v10_rebuild_20260926/generation2_results.jsonl",
+        "research/v10_rebuild_20260926/new_public_results.jsonl",
+        "research/v10_rebuild_20260926/opening_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 1122,
+      "worlds": 115,
+      "opponents": 45,
+      "wins": 853,
+      "losses": 269,
+      "ties": 0,
+      "point_gain": -199.0,
+      "margin_gain": -2039.21,
+      "direct_cases": 24,
+      "direct_wins": 3,
+      "direct_losses": 21,
+      "gain_rate": -0.17736185383244207
+    },
+    {
+      "sha256": "7ac1a2545ea285fa75b6a51b7ea0bbdb5f334f405f20e72b72f8188a1d898a35",
+      "paths": [
+        "research/meta_rebuild_20260927/public_agents/dmitrii.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/pilot_results.jsonl",
+        "research/meta_rebuild_20260927/value_extended_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 108,
+      "worlds": 10,
+      "opponents": 6,
+      "wins": 72,
+      "losses": 16,
+      "ties": 20,
+      "point_gain": -20.0,
+      "margin_gain": 6158.58,
+      "direct_cases": 20,
+      "direct_wins": 2,
+      "direct_losses": 18,
+      "gain_rate": -0.18518518518518517
+    },
+    {
+      "sha256": "3300ebfb31c5229b4fded90c07ed7ab58671807aab43e931b1e8077fe44619c4",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_3.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 40,
+      "losses": 38,
+      "ties": 0,
+      "point_gain": -15,
+      "margin_gain": -3718.35,
+      "direct_cases": 12,
+      "direct_wins": 2,
+      "direct_losses": 10,
+      "gain_rate": -0.19230769230769232
+    },
+    {
+      "sha256": "7ede542dd4277d36e300c442ff41601beb500a5f1c506f1889697bf00b68d2b5",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_7.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 40,
+      "losses": 38,
+      "ties": 0,
+      "point_gain": -15,
+      "margin_gain": -3721.01,
+      "direct_cases": 12,
+      "direct_wins": 2,
+      "direct_losses": 10,
+      "gain_rate": -0.19230769230769232
+    },
+    {
+      "sha256": "75dbe63e39ba9b299f84f9b4bdeb4de75f9037d6b51385fbbd27127b432c900e",
+      "paths": [
+        "research/v10_top10_20260926/guard_ablations/top_style_03_no_dead.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/guard_ablations_results.jsonl",
+        "research/v10_top10_20260926/route_expansion_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 168,
+      "worlds": 10,
+      "opponents": 10,
+      "wins": 101,
+      "losses": 67,
+      "ties": 0,
+      "point_gain": -33,
+      "margin_gain": -9017.54,
+      "direct_cases": 20,
+      "direct_wins": 12,
+      "direct_losses": 8,
+      "gain_rate": -0.19642857142857142
+    },
+    {
+      "sha256": "0506cf9260fb1176284e744580fd87c1580c42a24a38513a53ef1f38295f34c7",
+      "paths": [
+        "research/macro_population_20260927/population/macro_2bed1c4b008c.py"
+      ],
+      "sources": [
+        "research/macro_population_20260927/g2_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 112,
+      "worlds": 8,
+      "opponents": 7,
+      "wins": 45,
+      "losses": 57,
+      "ties": 10,
+      "point_gain": -23.0,
+      "margin_gain": -5338.71,
+      "direct_cases": 16,
+      "direct_wins": 1,
+      "direct_losses": 7,
+      "gain_rate": -0.20535714285714285
+    },
+    {
+      "sha256": "bef64b3600085d70a7b0bc3b85de15cfe42cd14ff34d0b9f7f715d8417d6f775",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/generation6/book36.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 34,
+      "losses": 14,
+      "ties": 0,
+      "point_gain": -10.0,
+      "margin_gain": -178.85,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.20833333333333334
+    },
+    {
+      "sha256": "97aba0506cd28b0eb10322bb453d32331637862434b3587b7d2873340f16dd6f",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_11.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 38,
+      "losses": 40,
+      "ties": 0,
+      "point_gain": -17,
+      "margin_gain": -893.68,
+      "direct_cases": 12,
+      "direct_wins": 2,
+      "direct_losses": 10,
+      "gain_rate": -0.21794871794871795
+    },
+    {
+      "sha256": "e824dc68feb59a04f7b9e7714814ec1b1416631a45221f985542e43b436526b2",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_10.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 38,
+      "losses": 40,
+      "ties": 0,
+      "point_gain": -17,
+      "margin_gain": -2321.63,
+      "direct_cases": 12,
+      "direct_wins": 0,
+      "direct_losses": 12,
+      "gain_rate": -0.21794871794871795
+    },
+    {
+      "sha256": "786ae4e602eeb736b476ed6e8fca185d78502136a3867938371cec8950b90f1d",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_6.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 38,
+      "losses": 40,
+      "ties": 0,
+      "point_gain": -17,
+      "margin_gain": -3743.71,
+      "direct_cases": 12,
+      "direct_wins": 2,
+      "direct_losses": 10,
+      "gain_rate": -0.21794871794871795
+    },
+    {
+      "sha256": "9efc6122324c3c9e5b7a3d6c67fb590645bc6e97561b09661c2b9cb7716fe84a",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_8.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 38,
+      "losses": 40,
+      "ties": 0,
+      "point_gain": -17,
+      "margin_gain": -3747.17,
+      "direct_cases": 12,
+      "direct_wins": 2,
+      "direct_losses": 10,
+      "gain_rate": -0.21794871794871795
+    },
+    {
+      "sha256": "c411a1347f269a6d7dece9b00c9bc7250d2b7118d4d2896676fdf3528706192a",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/opening_goose1.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/opening_mix_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/opening_mix_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 59,
+      "losses": 55,
+      "ties": 0,
+      "point_gain": -26,
+      "margin_gain": -3156.36,
+      "direct_cases": 18,
+      "direct_wins": 4,
+      "direct_losses": 14,
+      "gain_rate": -0.22807017543859648
+    },
+    {
+      "sha256": "ee0fd34c3e86f5516a086d329a4a381cd70b6230afec2880816bad3b5cd2f133",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/demand/demand05.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/demand_dev_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 30,
+      "losses": 12,
+      "ties": 6,
+      "point_gain": -11.0,
+      "margin_gain": -175.48,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.22916666666666666
+    },
+    {
+      "sha256": "906de8da8720b71e2840b4f99a2e3c738eec92a8fd8d916c7ba930e8499c414e",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_128.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 37,
+      "losses": 41,
+      "ties": 0,
+      "point_gain": -18,
+      "margin_gain": -3818.31,
+      "direct_cases": 12,
+      "direct_wins": 2,
+      "direct_losses": 10,
+      "gain_rate": -0.23076923076923078
+    },
+    {
+      "sha256": "b8d1a46090f5ea9aa1b175eb44c62e30d0bc5d9a0d3f46ede26a53ba1203e294",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_109.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 37,
+      "losses": 41,
+      "ties": 0,
+      "point_gain": -18,
+      "margin_gain": -3986.04,
+      "direct_cases": 12,
+      "direct_wins": 0,
+      "direct_losses": 12,
+      "gain_rate": -0.23076923076923078
+    },
+    {
+      "sha256": "23a278c3670b372ca6c2ca92659ecefaae26d50256ed395acd7fbf15af1354bd",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_127.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 37,
+      "losses": 41,
+      "ties": 0,
+      "point_gain": -18,
+      "margin_gain": -3986.18,
+      "direct_cases": 12,
+      "direct_wins": 0,
+      "direct_losses": 12,
+      "gain_rate": -0.23076923076923078
+    },
+    {
+      "sha256": "7251db4bc0dd3009f56c86c20cbfbec189cde431e1cc88ff88f33adb795304bb",
+      "paths": [
+        "research/v10_top10_20260926/guard_ablations/top_style_03_default.py"
+      ],
+      "sources": [
+        "research/v10_top10_20260926/guard_ablations_results.jsonl",
+        "research/v10_top10_20260926/route_expansion_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 168,
+      "worlds": 10,
+      "opponents": 10,
+      "wins": 89,
+      "losses": 67,
+      "ties": 12,
+      "point_gain": -39.0,
+      "margin_gain": -9019.58,
+      "direct_cases": 20,
+      "direct_wins": 12,
+      "direct_losses": 8,
+      "gain_rate": -0.23214285714285715
+    },
+    {
+      "sha256": "3a6d51dbad0cab831c5e3609e677f9ee39df088609a369f3d70c67b72c026994",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/generation6/safe_only.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 32,
+      "losses": 16,
+      "ties": 0,
+      "point_gain": -12.0,
+      "margin_gain": -291.79,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.25
+    },
+    {
+      "sha256": "a42ede26f2a5bb6b567cec843ed352e2f85a62adad9e26dfb9e42b4ef2fee683",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/pipe16_net5.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/rebased_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 58,
+      "losses": 22,
+      "ties": 16,
+      "point_gain": -24.0,
+      "margin_gain": -843.81,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 16,
+      "gain_rate": -0.25
+    },
+    {
+      "sha256": "9cee7333e5a1e5fdf230322071bf6f735a84aaa83e47caeead71504dcfcb5e62",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/opening_species_goose.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/opening_goose_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 56,
+      "losses": 40,
+      "ties": 0,
+      "point_gain": -26,
+      "margin_gain": -1414.48,
+      "direct_cases": 16,
+      "direct_wins": 2,
+      "direct_losses": 14,
+      "gain_rate": -0.2708333333333333
+    },
+    {
+      "sha256": "9dfd0ee65d90011cbe0dfcc5aba4c4a339d9910cd8b07b1e9255ee2e0ec94b39",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_5.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 33,
+      "losses": 45,
+      "ties": 0,
+      "point_gain": -22,
+      "margin_gain": -5049.55,
+      "direct_cases": 12,
+      "direct_wins": 0,
+      "direct_losses": 12,
+      "gain_rate": -0.28205128205128205
+    },
+    {
+      "sha256": "732956505ca6680ccb07ddea7e94660f8696d211db4f675081530473204658ea",
+      "paths": [
+        "research/meta_rebuild_20260927/candidates/metav4_net5.py"
+      ],
+      "sources": [
+        "research/meta_rebuild_20260927/rebased_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 96,
+      "worlds": 8,
+      "opponents": 6,
+      "wins": 60,
+      "losses": 36,
+      "ties": 0,
+      "point_gain": -30,
+      "margin_gain": -850.27,
+      "direct_cases": 16,
+      "direct_wins": 0,
+      "direct_losses": 16,
+      "gain_rate": -0.3125
+    },
+    {
+      "sha256": "5af232640c83cd494f57d524fc69b7735e4e9b6c078fabfbe0d5aa042b07d5cf",
+      "paths": [
+        "research/structural_20260927/plans/plan02_physical.py"
+      ],
+      "sources": [
+        "research/structural_20260927/livestock_results.jsonl",
+        "research/structural_20260927/plan_extended_results.jsonl",
+        "research/structural_20260927/plan_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 138,
+      "worlds": 15,
+      "opponents": 5,
+      "wins": 58,
+      "losses": 80,
+      "ties": 0,
+      "point_gain": -44,
+      "margin_gain": -9772.62,
+      "direct_cases": 30,
+      "direct_wins": 10,
+      "direct_losses": 20,
+      "gain_rate": -0.3188405797101449
+    },
+    {
+      "sha256": "bab130c0c1a7f2bd88b1fbfa60d3c1121a2d565d4ac9c5e73319b94bf102c519",
+      "paths": [
+        "research/structural_20260927/plans/plan02_default.py"
+      ],
+      "sources": [
+        "research/structural_20260927/livestock_results.jsonl",
+        "research/structural_20260927/plan_extended_results.jsonl",
+        "research/structural_20260927/plan_screen_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 138,
+      "worlds": 15,
+      "opponents": 5,
+      "wins": 58,
+      "losses": 80,
+      "ties": 0,
+      "point_gain": -44,
+      "margin_gain": -11708.61,
+      "direct_cases": 30,
+      "direct_wins": 10,
+      "direct_losses": 20,
+      "gain_rate": -0.3188405797101449
+    },
+    {
+      "sha256": "a240d40926c25c81da455f0cde004eae31e9075386b6ba1d7392630be6a91cd6",
+      "paths": [
+        "research/v10_rebuild_20260926/continuation/phase_b/generation6/observed12.py"
+      ],
+      "sources": [
+        "research/v10_rebuild_20260926/continuation/generation6_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 28,
+      "losses": 20,
+      "ties": 0,
+      "point_gain": -16.0,
+      "margin_gain": -193.35,
+      "direct_cases": 0,
+      "direct_wins": 0,
+      "direct_losses": 0,
+      "gain_rate": -0.3333333333333333
+    },
+    {
+      "sha256": "eace371ffcfc53279433c7ec61a244b69a3e3af62608202c3ac927e6e66a19f9",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/route_12.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/route_choice_results.jsonl",
+        "research/production_upgrade_20260928/route_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/route_preflight_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 78,
+      "worlds": 11,
+      "opponents": 12,
+      "wins": 18,
+      "losses": 60,
+      "ties": 0,
+      "point_gain": -37,
+      "margin_gain": -14088.22,
+      "direct_cases": 12,
+      "direct_wins": 0,
+      "direct_losses": 12,
+      "gain_rate": -0.47435897435897434
+    },
+    {
+      "sha256": "ddeeee41d268398486debf86b6ccdf939360011596e3a4852e49d86889a6be0d",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/opening_c1s3.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/opening_mix_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 16,
+      "losses": 32,
+      "ties": 0,
+      "point_gain": -23,
+      "margin_gain": -6545.15,
+      "direct_cases": 8,
+      "direct_wins": 0,
+      "direct_losses": 8,
+      "gain_rate": -0.4791666666666667
+    },
+    {
+      "sha256": "36bcfeae286a473c6432f778cec7a889a2e4fd46ecccd6c1c1cc2c7ca3b39fd7",
+      "paths": [
+        "research/herd_validation_20260928/route_fixed.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/route_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 64,
+      "worlds": 4,
+      "opponents": 8,
+      "wins": 26,
+      "losses": 38,
+      "ties": 0,
+      "point_gain": -36,
+      "margin_gain": -27841.67,
+      "direct_cases": 8,
+      "direct_wins": 4,
+      "direct_losses": 4,
+      "gain_rate": -0.5625
+    },
+    {
+      "sha256": "b88bc85e2af04262db6944d3d6ea8b81754835311e87457bdb6379c404e88814",
+      "paths": [
+        "research/herd_validation_20260928/route_exact_shops.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/route_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 64,
+      "worlds": 4,
+      "opponents": 8,
+      "wins": 26,
+      "losses": 38,
+      "ties": 0,
+      "point_gain": -36,
+      "margin_gain": -29219.08,
+      "direct_cases": 8,
+      "direct_wins": 4,
+      "direct_losses": 4,
+      "gain_rate": -0.5625
+    },
+    {
+      "sha256": "7aacd7233e5113e41024db0ff85912ab13cbd164e85ed5438af17df25a85b287",
+      "paths": [
+        "research/herd_validation_20260928/q45_public.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/diverse_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 64,
+      "worlds": 4,
+      "opponents": 8,
+      "wins": 20,
+      "losses": 36,
+      "ties": 8,
+      "point_gain": -38.0,
+      "margin_gain": -11018.59,
+      "direct_cases": 8,
+      "direct_wins": 0,
+      "direct_losses": 8,
+      "gain_rate": -0.59375
+    },
+    {
+      "sha256": "f2afb1e2145ae8f30b3345235dd012e4ac11120a71e7f300eb70fb16baaf03b7",
+      "paths": [
+        "research/production_upgrade_20260928/candidates/opening_goose2.py"
+      ],
+      "sources": [
+        "research/production_upgrade_20260928/opening_mix_diagnostic_results.jsonl",
+        "research/production_upgrade_20260928/opening_mix_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 114,
+      "worlds": 14,
+      "opponents": 12,
+      "wins": 16,
+      "losses": 98,
+      "ties": 0,
+      "point_gain": -69,
+      "margin_gain": -11047.94,
+      "direct_cases": 18,
+      "direct_wins": 0,
+      "direct_losses": 18,
+      "gain_rate": -0.6052631578947368
+    },
+    {
+      "sha256": "94c1c2c05ae7cde8fca9ee3957b01112c1cbab82c7434aae6a5f24fa7485bc4c",
+      "paths": [
+        "research/structural_20260927/public_programs/yield_v37.py"
+      ],
+      "sources": [
+        "research/structural_20260927/public_benchmark_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 80,
+      "worlds": 8,
+      "opponents": 5,
+      "wins": 15,
+      "losses": 65,
+      "ties": 0,
+      "point_gain": -49,
+      "margin_gain": -7960.41,
+      "direct_cases": 16,
+      "direct_wins": 1,
+      "direct_losses": 15,
+      "gain_rate": -0.6125
+    },
+    {
+      "sha256": "bf2caeace00463a26d82437efbb51d42bc5e10f970ee9865349970257b2515f2",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/opening_c3s1.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/opening_mix_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 8,
+      "losses": 40,
+      "ties": 0,
+      "point_gain": -31,
+      "margin_gain": -7443.92,
+      "direct_cases": 8,
+      "direct_wins": 0,
+      "direct_losses": 8,
+      "gain_rate": -0.6458333333333334
+    },
+    {
+      "sha256": "ffc69aa034f13bb9fd276834068fb5d0128d7245e81868e6d4fb4f819c3c4883",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/opening_c0s4.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/opening_mix_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 6,
+      "losses": 42,
+      "ties": 0,
+      "point_gain": -33,
+      "margin_gain": -14383.29,
+      "direct_cases": 8,
+      "direct_wins": 0,
+      "direct_losses": 8,
+      "gain_rate": -0.6875
+    },
+    {
+      "sha256": "211aee3e928fe383b8daddca057393ed5ce86a6bc7597d9b80f6304c10bd1443",
+      "paths": [
+        "research/herd_validation_20260928/route_nearest.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/route_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 64,
+      "worlds": 4,
+      "opponents": 8,
+      "wins": 13,
+      "losses": 51,
+      "ties": 0,
+      "point_gain": -49,
+      "margin_gain": -36761.95,
+      "direct_cases": 8,
+      "direct_wins": 2,
+      "direct_losses": 6,
+      "gain_rate": -0.765625
+    },
+    {
+      "sha256": "e340488c9298d5ecfba7d9e3dc97f03a1d4bed42d0ea0beaafe571a87280ec99",
+      "paths": [
+        "research/midgame_campaign_20260928/candidates/opening_c4s0.py"
+      ],
+      "sources": [
+        "research/midgame_campaign_20260928/opening_mix_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 48,
+      "worlds": 4,
+      "opponents": 6,
+      "wins": 2,
+      "losses": 46,
+      "ties": 0,
+      "point_gain": -37,
+      "margin_gain": -50475.02,
+      "direct_cases": 8,
+      "direct_wins": 0,
+      "direct_losses": 8,
+      "gain_rate": -0.7708333333333334
+    },
+    {
+      "sha256": "c3bbdde59137d7d51062406bdb8b0b5dea2b53058197ace07c265b79beb039e5",
+      "paths": [
+        "research/herd_validation_20260928/qnet5_experiment.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/diverse_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 64,
+      "worlds": 4,
+      "opponents": 8,
+      "wins": 10,
+      "losses": 54,
+      "ties": 0,
+      "point_gain": -52,
+      "margin_gain": -19386.45,
+      "direct_cases": 8,
+      "direct_wins": 0,
+      "direct_losses": 8,
+      "gain_rate": -0.8125
+    },
+    {
+      "sha256": "a6997eab8aff4dc04d7c5e4b5bb0c70245f7e4e1995bc0388ab8a480687aeee2",
+      "paths": [
+        "research/herd_validation_20260928/salem_checked.py"
+      ],
+      "sources": [
+        "research/herd_validation_20260928/diverse_results.jsonl"
+      ],
+      "invalid_rows": 0,
+      "paired_external": 64,
+      "worlds": 4,
+      "opponents": 8,
+      "wins": 6,
+      "losses": 54,
+      "ties": 4,
+      "point_gain": -54.0,
+      "margin_gain": -39230.02,
+      "direct_cases": 8,
+      "direct_wins": 0,
+      "direct_losses": 8,
+      "gain_rate": -0.84375
+    }
+  ],
+  "scope": "Retrospective development inventory, not a selection guarantee or rating estimate. Reserved final and heldout filenames excluded. Duplicate contexts counted once by hashes."
+}

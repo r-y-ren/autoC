@@ -1,0 +1,30 @@
+
+# Initial cow/sheep portfolio, retaining animal count and worker paths.
+_K28O_PARENT=phase_b_agent
+_K28O_Y_PARENT=_y_controller
+_K28O_REPORT=dict(opening_changed=0,swaps=0,pick=0,place=0,harvest=0,boost=0,errors=0)
+_MP_REPORT=_K28O_REPORT
+
+def _y_controller(obs,action,state,cfg):
+    result=_K28O_Y_PARENT(obs,action,state,cfg)
+    if int(obs['step'])!=1:return result
+    market=result.get('market',[])
+    cows=[o for o in market if len(o)>=3 and o[:2]==['BUY_ANIMAL','COW']]
+    sheep=[o for o in market if len(o)>=3 and o[:2]==['BUY_ANIMAL','SHEEP']]
+    if len(cows)!=1 or len(sheep)!=1 or cows[0][2]!=2 or sheep[0][2]!=2:return result
+    delta=int(_K28O_DELTA);cows[0][2]=2+delta;sheep[0][2]=2-delta
+    source,target=('SHEEP','COW') if delta>0 else ('COW','SHEEP')
+    state['pending'].append(dict(to=target,**{'from':source},qty=abs(delta),before=int(obs['private']['shed'].get(target,0))))
+    _Y_REPORT['swaps']+=abs(delta);_K28O_REPORT['opening_changed']+=1
+    return result
+
+def opening_mix_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        for key in _K28O_REPORT:_K28O_REPORT[key]=0
+        for key in _Y_REPORT:_Y_REPORT[key]=0
+    action=_K28O_PARENT(observation,configuration)
+    for key in ('swaps','pick','place','harvest','boost','errors'):_K28O_REPORT[key]=_Y_REPORT.get(key,0)
+    return action
+opening_mix_agent.telemetry=_K28O_REPORT
+agent=opening_mix_agent
+kaggle_submission_agent=opening_mix_agent

@@ -1,0 +1,7 @@
+official_snapshot=pd.DataFrame([{'row': 56447012, 'submitted_utc': '2026-09-22T00:31:37.603000', 'official_score': 2313.1, 'experiment': '2026_09_22 current 1.32.7 one-turn race compressed'}, {'row': 56446481, 'submitted_utc': '2026-09-22T00:09:22.140000', 'official_score': 2547.7, 'experiment': '2026_09_22 knockout guard31-v56 portfolio source dde9b944e9b1482d88cf218f9a4d7654fbb9a856bd5382f592d390c29617ac95'}, {'row': 56446203, 'submitted_utc': '2026-09-22T00:03:15.260000', 'official_score': 1094.2, 'experiment': '2026_09_22 seedfloat guard31-v56 portfolio source 64133134111dbe22d2280b5fc74539ef17b918051816ad5313bba6fa09168999'}, {'row': 56446021, 'submitted_utc': '2026-09-22T00:00:58.383000', 'official_score': 810.1, 'experiment': '2026_09_22 adaptive compressed visible router'}, {'row': 56445973, 'submitted_utc': '2026-09-22T00:00:30.093000', 'official_score': 775.9, 'experiment': '20260922 combined guard31-v56 seedfloat knockout'}])
+display(official_snapshot)
+fig, ax=plt.subplots(figsize=(10,3.5))
+ax.bar(official_snapshot.row.astype(str),official_snapshot.official_score,color='#64748b')
+ax.set_xlabel('Exact completed submission row'); ax.set_ylabel('Official rating at snapshot')
+ax.set_title('Previous agents: live results remain the deciding evidence')
+fig.tight_layout(); display(fig); plt.close(fig)

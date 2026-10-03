@@ -1,0 +1,28 @@
+
+# Research only: reconsider unexecuted herd choices after public shop unlocks.
+_K29_HERD_PARENT=phase_b_agent
+_K29_HERD_DEFAULT=(_CS_FROM,_CS_TO,_CS_OPTIONS,_CS_SHOP_RULE,_CS_RATIO,_CS_MIN_GAIN)
+_K29_HERD_REPORT={'eligible_turns':0,'rearmed_turns':0,'turns':0}
+_MP_REPORT=_K29_HERD_REPORT
+
+def early_herd_agent(observation,configuration=None):
+    global _CS_FROM,_CS_TO,_CS_OPTIONS,_CS_SHOP_RULE,_CS_RATIO,_CS_MIN_GAIN
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        for key in _K29_HERD_REPORT:_K29_HERD_REPORT[key]=0
+    _K29_HERD_REPORT['turns']+=1
+    _CS_FROM,_CS_TO,_CS_OPTIONS,_CS_SHOP_RULE,_CS_RATIO,_CS_MIN_GAIN=_K29_HERD_DEFAULT
+    shops=observation['town']['unlocked_shops']
+    milk=sum(s in ('PIZZA_SHOP','ICE_CREAM_SHOP','SMOOTHIE_SHOP') for s in shops)
+    eligible=shops.count('YARN_STORE')>=_K29_MIN_YARN and (not _K29_NO_MILK or milk==0)
+    if eligible and _K29_FROM<=step<_K29_TO:
+        _CS_FROM=_K29_FROM;_CS_TO=_K29_TO;_CS_OPTIONS=('SHEEP',);_CS_SHOP_RULE=''
+        _CS_RATIO=_K29_RATIO;_CS_MIN_GAIN=_K29_GAIN
+        st=_CS_STATE.get(seat)
+        if st and not st.get('mode') and st.get('decided'):
+            st['decided']=False;_K29_HERD_REPORT['rearmed_turns']+=1
+        _K29_HERD_REPORT['eligible_turns']+=1
+    return _K29_HERD_PARENT(observation,configuration)
+early_herd_agent.telemetry=_K29_HERD_REPORT
+agent=early_herd_agent
+kaggle_submission_agent=early_herd_agent

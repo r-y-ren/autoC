@@ -1,0 +1,127 @@
+
+# Local integration, 2026-09-22, Apache-2.0. Frozen v7 retained byte-for-byte above.
+# Exact public tail from haideptry / The 2965 Master Hybrid Engine, notebook v4.
+# https://www.kaggle.com/code/haideptry/the-2965-master-hybrid-engine
+# Original mechanisms retain Ahmed Berat Ozer EXP277/EXP293 and sdy623/jaxa623
+# attribution below. New work is interface integration and validation only.
+# The public whole agent is NOT represented as original local research.
+# ADV: sale advance — front-run mirrors by selling 3 turns early
+# Apache-2.0, Ahmed Berat Ozer EXP293
+# EXP293 sale advance. Mechanism after sdy623 / jaxa623, "Beyond 48-0" (public Kaggle notebook, Apache-2.0): when the
+# native tape sells a pure cash product within the next 3 turns and the units already sit in the shed, sell them now,
+# ahead of a rival executing the same tape.  Own implementation over this project's chassis (tape lookup, projected shed,
+# route 2 after step 648); never on the dawn turn (the warehouse-closing layer inspects the shed there); the first-listed
+# sale of the next turn is left alone when it funds the sale-credit feed purchase; quantities are caps, so the tape's own
+# later SELL simply sells whatever was deposited since.
+_ADV_PARENT=agent
+_ADV_LOOK=3
+_ADV_FROM=144
+_ADV_TO=718
+_ADV_PROTECT=True
+_ADV_FRONT=True
+_ADV_BOOK=False
+_ADV_SUBTRACT_DEBTS=False
+_ADV_ITEMS=('STRAWBERRY','WOOL','EGG','MILK','MELON','CARROT','TOMATO')
+_ADV_REPORT=dict(adv_turns=0,adv_units=0,adv_errors=0)
+def _adv_future(player,t):
+    native=_IMPL.chassis.players[player]
+    return _IMPL.chassis.routes[2 if t>=648 else native['route']][t].get('market',[]) or []
+def _adv_apply(obs,action):
+    step=int(obs['step']);player=int(obs['player'])
+    if step%24==23 or not _ADV_FROM<=step<_ADV_TO:return action
+    native=_IMPL.chassis.players[player];debts=native['sell_state'].setdefault('r36_debts',{})
+    plan=[];first=None
+    for off in range(1,_ADV_LOOK+1):
+        t=step+off
+        if t>718:break
+        for o in _adv_future(player,t):
+            if not o or len(o)<3:continue
+            if first is None:first=o
+            if o[0]=='SELL' and o[1] in _ADV_ITEMS:
+                try:q=max(0,int(o[2]))
+                except Exception:q=0
+                if _ADV_SUBTRACT_DEBTS:q-=debts.get(t,{}).get(o[1],0)   # already reserved by the sale-reservation layer
+                if q>0:plan.append((t,o[1],q))
+    protected=first[1] if _ADV_PROTECT and first is not None and first[0]=='SELL' else None
+    plan=[(t,item,q) for t,item,q in plan if item!=protected]
+    if not plan:return action
+    market=[list(o) for o in (action.get('market') or [])]
+    if any(len(o)>1 and o[0]=='BUY_PRODUCT' for o in market):return action
+    stock=projected_shed(action,FarmView(obs))
+    selling={}
+    for o in market:
+        if len(o)>=3 and o[0]=='SELL':
+            try:selling[o[1]]=selling.get(o[1],0)+max(0,int(o[2]))
+            except Exception:return action
+    commands=[action.get('farmer') or ['PASS'],*(action.get('hands') or [])]
+    picked={c[1] for c in commands if len(c)>1 and c[0]=='PICKUP'}
+    prices=obs['market']['prices'];added=0;extra=[];booked=[]
+    for item in sorted({it for _,it,_ in plan},key=lambda it:-int(prices.get(it,0))):
+        if item in picked or int(prices.get(item,0))<2:continue
+        avail=int(stock.get(item,0))-selling.get(item,0)
+        if avail<1:continue
+        hit=next((o for o in market if len(o)>=3 and o[0]=='SELL' and o[1]==item),None)
+        if hit is None and len(market)+len(extra)>=10:continue
+        n=0
+        for t,it,q in plan:
+            if it!=item or avail<=0:continue
+            take=min(q,avail);booked.append((t,item,take));n+=take;avail-=take
+        if n<1:continue
+        if hit is not None:hit[2]=int(hit[2])+n
+        else:extra.append(['SELL',item,n])
+        added+=n
+    if not added:return action
+    for t,item,take in (booked if _ADV_BOOK else []):
+        d=debts.setdefault(t,{});d[item]=d.get(item,0)+take
+    _ADV_REPORT['adv_turns']+=1;_ADV_REPORT['adv_units']+=added
+    return dict(action,market=extra+market)
+def _adv_frontload(obs,action):
+    """Final market-list order: sales first, then product purchases (with the sales of an item the same list also buys, in
+    their original order), then everything else in its original order.  Sales earlier only add cash and shed room before
+    purchases; a product purchase ahead of fixed-price orders meets the rival's same-item purchase at the same index or
+    earlier."""
+    market=[list(o) for o in (action.get('market') or []) if o]
+    if len(market)<2 or int(obs['step'])<_ADV_FROM:return action
+    buys={o[1] for o in market if len(o)>1 and o[0]=='BUY_PRODUCT'}
+    front=[o for o in market if len(o)>=3 and o[0]=='SELL' and o[1] not in buys]
+    mid=[o for o in market if len(o)>=3 and o[0]=='BUY_PRODUCT' or (len(o)>=3 and o[0]=='SELL' and o[1] in buys)]
+    rest=[o for o in market if o not in front and o not in mid]
+    new=front+mid+rest
+    if new==market:return action
+    _ADV_REPORT['front_turns']=_ADV_REPORT.get('front_turns',0)+1
+    return dict(action,market=new)
+def agent(observation,configuration=None):
+    action=_ADV_PARENT(observation,configuration)
+    try:
+        if int(observation['step'])==0:_ADV_REPORT.update(adv_turns=0,adv_units=0,adv_errors=0)
+        standard=configuration is None or all(configuration.get(k,v)==v for k,v in [('boardSize',10),('turnsPerDay',24),('shedCapacity',100),('maxMarketOrdersPerTurn',10)])
+        if standard:action=_adv_apply(observation,action)
+        if standard and _ADV_FRONT:action=_adv_frontload(observation,action)
+        # the race layer's lost-race detector must judge the final market list (advanced sales included)
+        st=_RACE_STATE.get(int(observation['player']))
+        if st is not None and st.get('prev_action') is not None and st.get('step')==int(observation['step']):st['prev_action']=action
+    except Exception:_ADV_REPORT['adv_errors']+=1
+    _ADV_REPORT.update(getattr(_ADV_PARENT,'telemetry',{}))
+    return action
+agent.telemetry=_ADV_REPORT
+agent=globals().pop('agent')
+
+
+# Final actual entrypoint; expose all component diagnostics instead of hiding parents.
+_R8PUB_PARENT = agent
+_R8PUB_TELEMETRY = {}
+def round8_advance_agent(observation, configuration=None):
+    result = _R8PUB_PARENT(observation, configuration)
+    # Outer layers can move order slots; the existing race detector must compare
+    # the orders actually emitted on this turn on its next update.
+    st = _RACE_STATE.get(int(observation['player']))
+    if st is not None and st.get('prev_action') is not None and st.get('step') == int(observation['step']):
+        st['prev_action'] = result
+    _R8PUB_TELEMETRY.clear()
+    _R8PUB_TELEMETRY.update(_R7_FUSED_REPORT)
+    for namespace_name in ('_R148_REPORT', '_ADV_REPORT', '_IG_REPORT'):
+        for key, value in globals().get(namespace_name, {}).items():
+            _R8PUB_TELEMETRY[namespace_name + '.' + str(key)] = value
+    return result
+round8_advance_agent.telemetry = _R8PUB_TELEMETRY
+agent = round8_advance_agent

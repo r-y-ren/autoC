@@ -1,0 +1,46 @@
+
+# Phase C second mechanism: avoid aggressive sale shifts when safely ahead.
+_D_STATE = {}
+_D_BUFFER = 1500
+_D_WEALTH = True
+_D_START = 216
+_D_REPORT = {'checks': 0, 'conservative_turns': 0}
+_D_PARENT = phase_b_agent
+
+def _d_allow_advance(obs):
+    if int(obs['step']) < _D_START:
+        return True
+    seat = int(obs['player']); mine, other = obs['farms'][seat], obs['farms'][1-seat]
+    advantage = float(mine['money'])-float(other['money'])
+    if _D_WEALTH:
+        prices = obs['market']['prices']
+        own = dict(obs['private']['shed'])
+        for inventory in obs['private']['inventories']:
+            for item, quantity in inventory.items():
+                own[item] = own.get(item, 0)+quantity
+        rival = _OR2_STATE.get(seat, {}).get('stock', {})
+        advantage += sum((own.get(item, 0)-max(0,rival.get(item, 0)))*prices.get(item, 0)
+                         for item in _ADV_ITEMS)
+        for sign, farm in ((1,mine),(-1,other)):
+            for row in farm['tiles']:
+                for tile in row:
+                    if not isinstance(tile, dict):
+                        continue
+                    item = tile.get('crop') or _OR2_ANIMAL.get(tile.get('animal'))
+                    if item in _ADV_ITEMS:
+                        advantage += sign*max(0,int(tile.get('yield_units',0)))*prices.get(item,0)
+    _D_REPORT['checks'] += 1
+    allowed = advantage <= _D_BUFFER
+    if not allowed:
+        _D_REPORT['conservative_turns'] += 1
+    return allowed
+
+def phase_c_risk_agent(observation, configuration=None):
+    if int(observation['step']) == 0:
+        for key in _D_REPORT:
+            _D_REPORT[key] = 0
+    return _D_PARENT(observation, configuration)
+
+phase_c_risk_agent.telemetry = _D_REPORT
+agent = phase_c_risk_agent
+kaggle_submission_agent = phase_c_risk_agent

@@ -1,0 +1,96 @@
+
+# Repeatable, public-demand livestock choice. No opponent private state is used.
+_K28S_PARENT=phase_b_agent
+_K28S_STATES={}
+_K28S_REPORT={'batches':0,'animals':0,'budget_veto':0,'plan_veto':0,'plan_breaks':0,'harvest_credit':0,'extra_sales':0,'repair_actions':0}
+_MP_REPORT=_K28S_REPORT
+
+def _k28s_cost(obs,market):
+    farm=obs['farms'][int(obs['player'])];hires=int(farm['hires_today'])
+    land=len(farm['unlocked_quadrants']);cost=0
+    for o in market:
+        if not o:continue
+        if o[0]=='HIRE':cost+=_v219_fib(hires);hires+=1
+        elif o[0]=='BUY_LAND' and land<4:cost+=(1000,2000,4000)[land-1];land+=1
+        elif len(o)>=3:
+            op,item,q=o[:3];q=max(0,int(q))
+            if op=='BUY_ANIMAL':cost+=q*{'COW':400,'SHEEP':500,'GOOSE':300}[item]
+            elif op=='BUY_SEED':cost+=q*{'WHEAT':10,'CARROT':20,'TOMATO':50,'STRAWBERRY':100,'MELON':80}[item]
+            elif op=='BUY_PRODUCT':cost+=q*(obs['market']['prices'][item]+10)
+    return cost
+
+def repeat_herd_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player']);day=step//24
+    if step==0:
+        _K28S_STATES.clear()
+        for key in _K28S_REPORT:_K28S_REPORT[key]=0
+    st=_K28S_STATES.setdefault(seat,{'pickups':{},'places':{},'sites':set(),'credit':0,'animals':0})
+    action=_K28S_PARENT(observation,configuration)
+    farm=observation['farms'][seat];private=observation['private']
+    market=[list(o) for o in action.get('market',[])]
+    positions=[farm['farmer']]+list(farm['hands'])
+    commands=[list(action.get('farmer') or ['PASS'])]+[list(c or ['PASS']) for c in action.get('hands',[])]
+    shops=observation['town']['unlocked_shops']
+    milk=sum(s in ('PIZZA_SHOP','SMOOTHIE_SHOP','ICE_CREAM_SHOP') for s in shops)
+    cows=sum(isinstance(t,dict) and t.get('animal')=='COW' for row in farm['tiles'] for t in row)
+    buys=[o for o in market if len(o)>=3 and o[:2]==['BUY_ANIMAL','COW'] and int(o[2])>0]
+    eligible=shops.count('YARN_STORE')>0 and (not _K28S_NO_MILK or milk==0)
+    if buys and eligible and _K28S_FROM<=step<_K28S_TO and cows>=_K28S_COW_FLOOR:
+        k=sum(int(o[2]) for o in buys)
+        if st['animals']+k<=_K28S_LIMIT:
+            budget=_k28s_cost(observation,market)+100*k+_K28S_RESERVE
+            if not (_k28s_affordable(observation,action,_K28S_RESERVE) if _K28S_FUND_SALES else farm['money']>=budget):_K28S_REPORT['budget_veto']+=1
+            else:
+                gain=_hd2_ev('SHEEP',k,observation,st)[0]-_hd2_ev('COW',k,observation,st)[0]
+                plan=_cs_plan(observation,action,k,'SHEEP') if gain>=_K28S_MIN_GAIN else None
+                if plan and not (set(plan['pickups'])&set(st['pickups']) or set(plan['places'])&set(st['places'])):
+                    for o in buys:o[1]='SHEEP'
+                    st['pickups'].update(plan['pickups']);st['places'].update(plan['places'])
+                    st['animals']+=k;_K28S_REPORT['animals']+=k;_K28S_REPORT['batches']+=1
+                else:_K28S_REPORT['plan_veto']+=1
+    changed=market!=action.get('market',[])
+    for key in list(st['pickups']):
+        t,actor=key
+        if t!=step:continue
+        amount=st['pickups'].pop(key)
+        adjacent=actor<len(positions) and tuple(positions[actor]) in ((4,4),(5,4),(4,5),(5,5))
+        compatible=actor<len(commands) and (commands[actor][:2] in (['PICKUP','COW'],['PICKUP','SHEEP']) or commands[actor]==['PASS'])
+        if adjacent and compatible and int(private['shed'].get('SHEEP',0))>=amount:
+            commands[actor]=['PICKUP','SHEEP',amount];changed=True
+        else:_K28S_REPORT['plan_breaks']+=1
+    for key in list(st['places']):
+        t,actor=key
+        if t!=step:continue
+        target=st['places'].pop(key);x,y=target;tile=farm['tiles'][y][x]
+        compatible=actor<len(commands) and (commands[actor][:2] in (['PLACE','COW'],['PLACE','SHEEP']) or commands[actor]==['PASS'])
+        valid=actor<len(positions) and tuple(positions[actor])==tuple(target) and isinstance(tile,dict) and tile.get('kind')=='PASTURE' and not tile.get('animal')
+        carried=actor<len(private['inventories']) and private['inventories'][actor].get('SHEEP',0)>0
+        if compatible and valid and carried:
+            commands[actor]=['PLACE','SHEEP'];st['sites'].add((x,y,day));changed=True
+        else:_K28S_REPORT['plan_breaks']+=1
+    for actor,pos in enumerate(positions[:len(commands)]):
+        x,y=pos;tile=farm['tiles'][y][x]
+        if not isinstance(tile,dict) or tile.get('animal')!='SHEEP':continue
+        if (x,y,int(tile['placed_day'])) not in st['sites']:continue
+        if _K28S_REPAIR and commands[actor]==['HARVEST'] and not tile.get('yield_units',0):
+            if not tile.get('cared_today'):commands[actor]=['CARE'];changed=True;_K28S_REPORT['repair_actions']+=1
+            elif tile.get('fertilizer_available'):commands[actor]=['COLLECT_FERTILIZER'];changed=True;_K28S_REPORT['repair_actions']+=1
+        if commands[actor]==['HARVEST']:
+            q=max(0,int(tile.get('yield_units',0)));st['credit']+=q;_K28S_REPORT['harvest_credit']+=q
+    result=dict(action,farmer=commands[0],hands=commands[1:],market=market)
+    if st['credit']>0:
+        stock=projected_shed(result,FarmView(observation))
+        planned=sum(max(0,int(o[2])) for o in market if len(o)>=3 and o[:2]==['SELL','WOOL'])
+        extra=min(st['credit'],max(0,int(stock.get('WOOL',0))-planned))
+        if extra>0:
+            for o in market:
+                if len(o)>=3 and o[:2]==['SELL','WOOL']:
+                    o[2]=int(o[2])+extra;break
+            else:
+                if len(market)<10:market.insert(0,['SELL','WOOL',extra])
+                else:extra=0
+            st['credit']-=extra;_K28S_REPORT['extra_sales']+=extra
+    return result
+repeat_herd_agent.telemetry=_K28S_REPORT
+agent=repeat_herd_agent
+kaggle_submission_agent=repeat_herd_agent

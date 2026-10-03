@@ -1,0 +1,40 @@
+# Behavioural engine check. The version string can lie -- a pip install writes new
+# package metadata while `import kaggle_environments` may still resolve to an older copy
+# earlier on sys.path. So replay a real game out of the dataset and require the banks to
+# match. Expected values are read from the CSV, so this stays correct if the dataset is
+# ever re-measured.
+def _fixture_agent(path, name):
+    spec = importlib.util.spec_from_file_location(f"fixture_{name}", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.agent
+
+
+def verify_engine_behaviour():
+    """Replay one recorded pairing; return (ok, detail)."""
+    games = pd.read_csv(DATASET_DIR / "head_to_head_games.csv")
+    row = games.iloc[0]
+    a = _fixture_agent(DATASET_DIR / f"{row.agent_a}.py", "a")
+    b = _fixture_agent(DATASET_DIR / f"{row.agent_b}.py", "b")
+    seat = int(row.seat_of_a)
+    pair = [a, b] if seat == 0 else [b, a]
+    env = make("kaggriculture",
+               configuration={"episodeSteps": 720, "seed": int(row.seed)}, debug=False)
+    env.run(pair)
+    rewards = [step.reward for step in env.steps[-1]]
+    got_a, got_b = round(rewards[seat]), round(rewards[1 - seat])
+    ok = (got_a == int(row.bank_a)) and (got_b == int(row.bank_b))
+    return ok, (f"{row.agent_a} vs {row.agent_b}, seed {row.seed}, seat {seat}: "
+                f"expected {int(row.bank_a):,}/{int(row.bank_b):,}, got {got_a:,}/{got_b:,}")
+
+
+_ok, _detail = verify_engine_behaviour()
+print(("PASS  " if _ok else "FAIL  ") + _detail)
+if not _ok:
+    raise SystemExit(
+        "The engine is not behaving like the one the dataset was measured on "
+        f"({ENGINE_VERSION}), whatever version string it reports.\n"
+        "Every bank, margin and expected_bank below would be measured in a different "
+        "game than the one documented. Restart the session after installing "
+        f"kaggle-environments=={ENGINE_VERSION}, or re-measure the ladder yourself."
+    )

@@ -1,0 +1,9 @@
+from pathlib import Path
+import base64, hashlib, io, json, tarfile, zlib
+from IPython.display import HTML, FileLink, display
+
+ROOT = Path('/kaggle/working') if Path('/kaggle/working').exists() else Path.cwd()
+RELEASE_DIR = ROOT / 'fieldcraft_release'
+RELEASE_DIR.mkdir(exist_ok=True)
+SEEDS = [2026]   # Each seed is played from both seats; increase for your own checks.
+RUN_MATCH_LAB = True

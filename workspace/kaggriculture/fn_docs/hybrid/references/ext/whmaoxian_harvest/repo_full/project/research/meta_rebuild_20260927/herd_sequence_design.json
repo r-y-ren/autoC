@@ -1,0 +1,137 @@
+{
+  "variants": [
+    {
+      "name": "early1",
+      "path": "research/meta_rebuild_20260927/candidates/sequence_early1.py",
+      "sha256": "342800b646ce2009d7bd3d6c05e5060dad166710740c37cef55e7615f9b81131",
+      "genome": {
+        "start": 72,
+        "end": 264,
+        "cap": 1,
+        "reserve": 50,
+        "nomilk": false,
+        "ratio": 0,
+        "gain": -1000000
+      }
+    },
+    {
+      "name": "early3",
+      "path": "research/meta_rebuild_20260927/candidates/sequence_early3.py",
+      "sha256": "bdfcaab279f395374763a4c24db6a77c0cda88c4900848974c277b5e33a65bf3",
+      "genome": {
+        "start": 72,
+        "end": 264,
+        "cap": 3,
+        "reserve": 150,
+        "nomilk": false,
+        "ratio": 0,
+        "gain": -1000000
+      }
+    },
+    {
+      "name": "mid3",
+      "path": "research/meta_rebuild_20260927/candidates/sequence_mid3.py",
+      "sha256": "f4fc612597bd1ed5bf75fbf7d4cbae75d2c57b456d59891c8f3e884e6b153765",
+      "genome": {
+        "start": 144,
+        "end": 264,
+        "cap": 3,
+        "reserve": 150,
+        "nomilk": false,
+        "ratio": 0,
+        "gain": -1000000
+      }
+    },
+    {
+      "name": "early3_nomilk",
+      "path": "research/meta_rebuild_20260927/candidates/sequence_early3_nomilk.py",
+      "sha256": "7062e1c8eb459ea5ccfeddd0baa49bc3187c5478f33fdf3051f820e4d5b24073",
+      "genome": {
+        "start": 72,
+        "end": 264,
+        "cap": 3,
+        "reserve": 150,
+        "nomilk": true,
+        "ratio": 0,
+        "gain": -1000000
+      }
+    },
+    {
+      "name": "early3_ev",
+      "path": "research/meta_rebuild_20260927/candidates/sequence_early3_ev.py",
+      "sha256": "ade2918f847e0ae6a8a9b0bae3ebeff20f00d06d665c0617de69d5e58c0bf87c",
+      "genome": {
+        "start": 72,
+        "end": 264,
+        "cap": 3,
+        "reserve": 150,
+        "nomilk": false,
+        "ratio": 1.1,
+        "gain": 600
+      }
+    },
+    {
+      "name": "early6_nomilk",
+      "path": "research/meta_rebuild_20260927/candidates/sequence_early6_nomilk.py",
+      "sha256": "6b6f652b9e1c3a42fc45431cad7ff5fbb2d2830a02bbb5af774f5d5134fa57ed",
+      "genome": {
+        "start": 72,
+        "end": 264,
+        "cap": 6,
+        "reserve": 150,
+        "nomilk": true,
+        "ratio": 0,
+        "gain": -1000000
+      }
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "seeds": [
+    1799657451,
+    663685121,
+    1067615585,
+    976013406,
+    1780267114,
+    1402546122,
+    1853178855,
+    583124231
+  ],
+  "cases": 672,
+  "scope": "Development screening; reuse existing identical R2 controls without counting them as new games."
+}

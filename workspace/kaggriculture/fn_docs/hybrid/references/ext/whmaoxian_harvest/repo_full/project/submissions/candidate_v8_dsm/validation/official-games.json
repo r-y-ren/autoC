@@ -1,0 +1,76 @@
+{
+  "source_sha256": "23768116945ebd7500b2e2298616ff6dd974d27ce2c839643cc7d3e3d4cada57",
+  "games": [
+    {
+      "seed": 688041503,
+      "candidate_seat": 0,
+      "opponent": "submissions/release_v7/main.py",
+      "opponent_sha256": "273ca38d83d110166af4e2f2c6748892328488d5292f39fdbe4ef87b11350197",
+      "money": [
+        95461.0,
+        86797.0
+      ],
+      "states": 720,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "actual_candidate_observations": 719,
+      "max_action_seconds_both_official": 0.277254,
+      "max_action_seconds_candidate": 0.005003099999157712,
+      "first_action_seconds_including_load_official": 0.277254,
+      "source_load_seconds": 0.27140179999878455,
+      "execution_mode": "official file-path loader; passive input/output observer",
+      "stderr_records": 0,
+      "nonzero_error_counters": [],
+      "production": {},
+      "final_error_counters": {
+        "entry.layer_fallbacks": 0,
+        "entry.entry_fallbacks": 0,
+        "_R8_IMPL.diagnostics.layer_fallbacks": 0,
+        "_R8_IMPL.diagnostics.entry_fallbacks": 0
+      },
+      "final_telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      }
+    },
+    {
+      "seed": 0,
+      "candidate_seat": 0,
+      "opponent": "submissions/release_v7/main.py",
+      "opponent_sha256": "273ca38d83d110166af4e2f2c6748892328488d5292f39fdbe4ef87b11350197",
+      "money": [
+        82360.0,
+        77193.0
+      ],
+      "states": 720,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "actual_candidate_observations": 719,
+      "max_action_seconds_both_official": 0.409468,
+      "max_action_seconds_candidate": 0.0018063000006804941,
+      "first_action_seconds_including_load_official": 0.243415,
+      "source_load_seconds": 0.24104160000024422,
+      "execution_mode": "official file-path loader; passive input/output observer",
+      "stderr_records": 0,
+      "nonzero_error_counters": [],
+      "production": {},
+      "final_error_counters": {
+        "entry.layer_fallbacks": 0,
+        "entry.entry_fallbacks": 0,
+        "_R8_IMPL.diagnostics.layer_fallbacks": 0,
+        "_R8_IMPL.diagnostics.entry_fallbacks": 0
+      },
+      "final_telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      }
+    }
+  ],
+  "fixture_sha256": "2a40128ee631a9ad3d160f454aa3d6c980a858e09821c73111daff5e515179a7",
+  "observations": 1438,
+  "environment": "kaggle-environments 1.32.7"
+}

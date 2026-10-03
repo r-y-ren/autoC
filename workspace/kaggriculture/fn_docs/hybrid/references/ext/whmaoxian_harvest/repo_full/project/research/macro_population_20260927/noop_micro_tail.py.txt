@@ -1,0 +1,61 @@
+
+# Kaggriculture: reclaim physically ineffective farming commands, not active work.
+_NM_PARENT=phase_b_agent
+_NM_REPORT={'checked':0,'confirmed_noops':0,'care':0,'water':0,'fertilizer':0,'harvest':0,'errors':0}
+_NM_CROPS={'WHEAT':(2,4),'CARROT':(2,3),'MELON':(10,12),'TOMATO':(8,8),'STRAWBERRY':(10,10)}
+def _nm_apply(obs,action):
+    step=int(obs['step']);day=step//24;hour=step%24;seat=int(obs['player'])
+    if not _NM_START<=step<648 or _NM_MODE=='control':return action
+    farm=obs['farms'][seat];positions=[farm['farmer']]+list(farm['hands'])
+    commands=[list(action.get('farmer') or ['PASS'])]+[list(c or ['PASS']) for c in action.get('hands',[])]
+    commands+=[['PASS'] for _ in range(max(0,len(positions)-len(commands)))]
+    work=dict(action,farmer=commands[0],hands=commands[1:])
+    after_farm,after_private=_r127_fields(obs,work)
+    for actor,position in enumerate(positions):
+        original=commands[actor];_NM_REPORT['checked']+=1
+        if original!=['PASS']:
+            if _NM_PASS_ONLY:continue
+            probe=[list(c) for c in commands];probe[actor]=['PASS']
+            quiet=dict(action,farmer=probe[0],hands=probe[1:])
+            quiet_farm,quiet_private=_r127_fields(obs,quiet)
+            if quiet_farm!=after_farm or quiet_private!=after_private:continue
+        _NM_REPORT['confirmed_noops']+=1
+        x,y=position;tile=after_farm['tiles'][y][x]
+        if not isinstance(tile,dict):continue
+        before_tile=farm['tiles'][y][x]
+        animal=tile.get('animal');crop=tile.get('crop');possible={}
+        total=sum(after_private['shed'].values())+sum(sum(b.values()) for b in after_private['inventories'])
+        budget=max(0,85-total) if hour<22 else 0
+        if animal and not tile.get('cared_today'):possible['care']=['CARE']
+        if animal and tile.get('fertilizer_available') and budget>=1 and obs['market']['prices']['FERTILIZER']>=_NM_MIN_PRICE:
+            possible['fertilizer']=['COLLECT_FERTILIZER']
+        if crop and not tile.get('watered_today'):
+            first,last=_NM_CROPS[crop];age=day-int(tile['planted_day'])
+            in_bonus=(last+1)//2<=age<=last
+            fertilized=isinstance(before_tile,dict) and int(before_tile.get('fertilized_until_day',-1))>=day
+            if not in_bonus or fertilized:possible['water']=['WATER']
+        quantity=max(0,int(tile.get('yield_units',0)))
+        mature_crop=crop in ('TOMATO','STRAWBERRY') and day-int(tile['planted_day'])>_NM_CROPS[crop][1]
+        if quantity and quantity<=budget and (animal or mature_crop):possible['harvest']=['HARVEST']
+        for kind in _NM_PRIORITY:
+            if kind not in possible:continue
+            proposed=[list(c) for c in commands];proposed[actor]=possible[kind]
+            trial=dict(action,farmer=proposed[0],hands=proposed[1:])
+            new_farm,new_private=_r127_fields(obs,trial)
+            if new_farm==after_farm and new_private==after_private:continue
+            commands=proposed;work=trial;after_farm=new_farm;after_private=new_private
+            _NM_REPORT[kind]+=1
+            break
+    return work
+
+def noop_micro_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        for key in _NM_REPORT:_NM_REPORT[key]=0
+    action=_NM_PARENT(observation,configuration)
+    try:return _nm_apply(observation,action)
+    except Exception:
+        _NM_REPORT['errors']+=1;return action
+_MP_REPORT=_NM_REPORT
+noop_micro_agent.telemetry=_NM_REPORT
+agent=noop_micro_agent
+kaggle_submission_agent=noop_micro_agent

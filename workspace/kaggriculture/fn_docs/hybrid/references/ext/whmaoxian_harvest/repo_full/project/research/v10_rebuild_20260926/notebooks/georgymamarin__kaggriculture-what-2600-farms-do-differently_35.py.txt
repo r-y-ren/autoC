@@ -1,0 +1,33 @@
+lead_row = fp.iloc[0]
+elbow_txt = ("" if not elbows else
+             (f"day **{min(elbows.values())}**"
+              if min(elbows.values()) == max(elbows.values())
+              else f"day **{min(elbows.values())}–{max(elbows.values())}**"))
+land_txt = ("no land purchase at all" if pd.isna(lead_row["first land (day)"])
+            else f"land on day **{lead_row['first land (day)']:.0f}**")
+crop_txt = (f"and the biggest wins all lead with {uniq_crops[0]}" if len(uniq_crops) == 1
+            else "while the biggest wins disagree on which crop to lead with")
+display(Markdown(textwrap.dedent(f'''
+<a id="s13"></a>
+## Takeaways ({AS_OF:%b %d, %Y} snapshot)
+
+1. The ladder's spread is wide: the record win of **{fmt(rec.winner_bank)}** is
+   **{rec.winner_bank / q[.5]:.1f}×** the median win of **{fmt(q[.5])}**.
+2. Big games share one silhouette: reinvest almost everything, then compound. The leaders cross
+   a tenth of their final bank around in-game {elbow_txt}.
+3. The record holder's measurable edge is labor and land: a crew of
+   **{lead_row['peak crew']:.0f}** and {land_txt}, {crop_txt}.
+4. Market prices inside a game are their own strategy log: in the biggest replayed game melon swung
+   **{(max(prices["MELON"]) - min(prices["MELON"])) / base_price["MELON"]:.0%}** of its base price
+   and wheat ran **{min(prices["WHEAT"])}–{max(prices["WHEAT"])}**.
+
+The [dataset]({"https://www.kaggle.com/datasets/georgymamarin/kaggriculture-episodes"}) and this
+notebook both refresh daily, so these numbers re-compute themselves as the meta moves. Build
+something on top (a deeper dive, an imitation model, a better fingerprint) and post it; I
+feature community work on the dataset page. If there is a metric you want tracked here, say so
+in the comments. Replays come from Kaggle's public episode service; credit to the hosts for
+keeping it open. For the rules behind these curves, see
+[Kaggriculture, Visualized](https://www.kaggle.com/code/georgymamarin/kaggriculture-visualized-what-every-crop-pays).
+
+*— [Georgy Mamarin](https://www.kaggle.com/georgymamarin)*
+''')))

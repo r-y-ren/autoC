@@ -1,0 +1,79 @@
+mine = ladder_r[ladder_r.sub_0.eq(SUBMISSION_ID) | ladder_r.sub_1.eq(SUBMISSION_ID)].copy()
+mine["my_seat"] = mine.sub_1.eq(SUBMISSION_ID).astype(int)
+mine["my_bank"] = np.where(mine.my_seat.eq(1), mine.bank_1, mine.bank_0)
+if mine.empty or mine.my_bank.isna().all():
+    display(Markdown(
+        f"No replayed ladder games for submission **{SUBMISSION_ID}** yet — the crawler usually "
+        f"catches up within a day. Check the id in `episodes.csv` or try tomorrow."))
+else:
+    best = mine.loc[mine.my_bank.idxmax()]
+    my_team = name_of(best.team_1 if best.my_seat else best.team_0)
+    pct = (ladder.winner_bank < best.my_bank).mean()
+
+    fig, ax = plt.subplots(figsize=(8.2, 3.4))
+    ax.hist(ladder.winner_bank, bins=30, color="#D8D2C4")
+    ax.axvline(best.my_bank, color=C_ACC, lw=2.6)
+    ax.axvline(ladder.winner_bank.median(), color=C_MID, lw=1.6, ls="--")
+    ax.annotate(f"you: {fmt(best.my_bank)}", xy=(best.my_bank, ax.get_ylim()[1] * .82),
+                xytext=(8, 0), textcoords="offset points", color=C_ACC, weight="bold", fontsize=10)
+    ax.annotate(f"median win {fmt(ladder.winner_bank.median())}",
+                xy=(ladder.winner_bank.median(), ax.get_ylim()[1] * .55),
+                xytext=(8, 0), textcoords="offset points", color=C_MID, fontsize=9.5)
+    ax.set_xlabel("winner's final bank"); ax.set_ylabel("games")
+    ax.xaxis.set_major_formatter(lambda v, _: f"{v/1000:.0f}k" if v else "0")
+    ax.set_title(f"{my_team}: best game against the whole ladder")
+    plt.tight_layout(); plt.show()
+
+    rid = int(top_subs.index[0])
+    my_fp = fingerprint_row(best.episode_id, int(best.my_seat)) or {}
+    lead_fp = {"who": name_of(LEAD_ROW.team_1 if LEAD_SEAT else LEAD_ROW.team_0),
+                   "bank": LEAD_ROW.winner_bank, **(LEAD_FP or {})}
+    top_crop_of = lambda f: (max(f["plants"], key=f["plants"].get).title()
+                             if f["plants"] else "—")
+    compare = pd.DataFrame([
+        {"": my_team, "best bank": best.my_bank, "games": len(mine),
+         "hires / day": my_fp["hires / day"], "peak crew": my_fp["peak crew"],
+         "first land (day)": my_fp["first land (day)"], "top crop": top_crop_of(my_fp)},
+        {"": f"{lead_fp['who']} (record holder)", "best bank": lead_fp["bank"],
+         "games": int((ladder_r.sub_0.eq(rid) | ladder_r.sub_1.eq(rid)).sum()),
+         "hires / day": lead_fp["hires / day"], "peak crew": lead_fp["peak crew"],
+         "first land (day)": lead_fp["first land (day)"], "top crop": top_crop_of(lead_fp)},
+    ])
+    display(compare.style.hide(axis="index")
+            .format({"best bank": "{:,.0f}", "hires / day": "{:.1f}",
+                     "first land (day)": "{:.0f}"}, na_rep="—")
+            .set_properties(**{"font-size": "13px"})
+            .set_table_styles([{"selector": "th", "props": [("font-size", "13px")]}]))
+
+    display(Markdown(
+        f"**{my_team}** has **{len(mine)}** ladder games on record; its best bank of "
+        f"**{fmt(best.my_bank)}** beats **{pct:.0%}** of all recorded wins. "
+        f"The row below it is the record holder; the gap in crew size and land timing is "
+        f"usually where the difference starts."))
+
+# The free experiment destbreso spotted in the validation games: your submission
+# plays BOTH seats of its own pre-ladder check. If the two seats' action streams
+# tie hash-for-hash, the agent is a script; if they diverge, it reads the board.
+# All names local to this cell wear vp_.
+vp_val = eps[eps.type.eq("EPISODE_TYPE_VALIDATION")
+             & (eps.sub_0.eq(SUBMISSION_ID) | eps.sub_1.eq(SUBMISSION_ID))]
+vp_hits = glob.glob(f"{BASE}/stream_hashes.csv")
+if len(vp_val) and vp_hits:
+    vp_h = pd.read_csv(vp_hits[0])
+    vp_h = vp_h[vp_h.episode_id.isin(set(vp_val.episode_id))]
+    vp_w = vp_h.pivot_table(index="episode_id", columns="seat", values="stream_h719",
+                            aggfunc="first").dropna()
+    if len(vp_w):
+        vp_same = int((vp_w[0] == vp_w[1]).sum())
+        vp_line = (
+            f"identical on **{vp_same} of {len(vp_w)}** (a fixed script does not read the board)"
+            if vp_same else
+            f"different in **all {len(vp_w)}** (the agent reacts to what it sees)")
+        display(Markdown(
+            f"One more free reading, from [destbreso's validation-game experiment]"
+            f"(https://www.kaggle.com/code/destbreso/kaggriculture-the-free-experiment-you-already-ran): "
+            f"in this submission's self-play validation games the two seats' full action "
+            f"streams are {vp_line}."))
+    else:
+        display(Markdown("Validation games for this submission are not hashed yet; "
+                         "the purity check appears once the nightly backfill reaches them."))

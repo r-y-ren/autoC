@@ -1,0 +1,27 @@
+{
+  "builder": "build_release_round8.py",
+  "label": "candidate_v9",
+  "candidate": "experiments/round9_market_slack.py",
+  "source_sha256": "6b13532fbc2b55b59c6cae8ed8d5cd29fe82d18a7d7e044ed130217e3d1c09d3",
+  "entry_name": "round9_slack_agent",
+  "profile": "generic",
+  "archive_sha256": "d4cd59e4be2ff7ad992ca1337f1b67ae6bc96558ac65fc08a924265e50a178e2",
+  "archive_members": [
+    "main.py",
+    "NOTICE.txt",
+    "LICENSE.txt"
+  ],
+  "trigger_seed": 688041503,
+  "default_seed": 0,
+  "promotes_root_entrypoints": false,
+  "strength_approval": false,
+  "online_submission": false,
+  "V92_SELL_LIB_present": false,
+  "status": "candidate; technical checks passed; strength selection pending",
+  "source_bytes": 1081627,
+  "archive_bytes": 648110,
+  "source_urls": {},
+  "license": "See retained full NOTICE/LICENSE and embedded source notices",
+  "environment": "kaggle-environments 1.32.7",
+  "online_score": null
+}

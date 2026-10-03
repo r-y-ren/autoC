@@ -1,0 +1,60 @@
+
+# Bounded one-turn commodity counterplay, using only observable similarity.
+_MC_PARENT=phase_b_agent
+_MC_REPORT={'considered':0,'changed':0,'simulations':0,'estimated_gain':0.0,'errors':0}
+def _mc_scenarios(obs,action,available):
+    step=int(obs['step']);seat=int(obs['player'])
+    same=[list(o) for o in action.get('market',[])[:10]]
+    if _MC_MODE=='mirror':return [(same,dict(available),.8),([],dict(available),.2)]
+    refs=[(same,dict(available),.45),([],dict(available),.15)]
+    native=_IMPL.chassis.players.get(seat)
+    if not native:return refs
+    route=_IMPL.chassis.routes[native['route']]
+    for t,weight in ((step,.2),(step-1,.1),(step+1,.1)):
+        if 0<=t<len(route):refs.append(([list(o) for o in route[t].get('market',[])[:10]],dict(available),weight))
+    return refs
+
+def _mc_select(obs,action):
+    step=int(obs['step']);seat=int(obs['player']);farm=obs['farms'][seat]
+    if not 144<=step<648 or float(farm['money'])<5000:return action
+    original=[list(o) for o in action.get('market',[])[:10]]
+    if len(original)>8 or any(o and o[0]!='SELL' for o in original):return action
+    if _r37_similarity(obs)<_MC_SIMILARITY:return action
+    view=FarmView(obs);available=projected_shed(action,view)
+    if sum(available.values())>80:return action
+    params=_v44y_params(obs);cache={};scenarios=_mc_scenarios(obs,action,available)
+    baseline=[_mc_run(obs,available,original,orders,stock,cache) for orders,stock,w in scenarios]
+    _MC_REPORT['considered']+=1;best=None;best_score=_MC_MIN_GAIN
+    for item in ('FERTILIZER','WHEAT'):
+        inventory=int(obs['market']['inventory'][item])
+        if _r37_market_price(item,inventory+200,params)<=1:continue
+        for direction in ('BUY_PRODUCT','SELL'):
+            room=100-sum(available.values()) if direction=='BUY_PRODUCT' else max(0,int(available.get(item,0)))
+            quantities=sorted(set(min(room,q) for q in (8,_MC_LOT) if min(room,q)>0))
+            for q in quantities:
+                high=max(1,_r37_market_price(item,inventory-200,params))
+                if farm['money']<1500+q*high:continue
+                first=[direction,item,q];second=['SELL' if direction=='BUY_PRODUCT' else 'BUY_PRODUCT',item,q]
+                for orders in ([first]+original+[second],[first,second]+original,original+[first,second]):
+                    values=[];safe=True
+                    for (rival,stock,weight),prior in zip(scenarios,baseline):
+                        after=_mc_run(obs,available,orders,rival,stock,cache);_MC_REPORT['simulations']+=1
+                        keys=set(prior['warehouse'][0])|set(after['warehouse'][0])
+                        if any(prior['warehouse'][0].get(k,0)!=after['warehouse'][0].get(k,0) for k in keys):safe=False;break
+                        delta=after['margin']-prior['margin'];own=after['money'][0]-prior['money'][0]
+                        if own < -_MC_MAX_LOSS:safe=False;break
+                        values.append((delta,weight))
+                    if not safe:continue
+                    score=sum(v*w for v,w in values)-_MC_RISK*sum(max(0,-v)*w for v,w in values)
+                    if score>best_score:best_score=score;best=orders
+    if best is None:return action
+    _MC_REPORT['changed']+=1;_MC_REPORT['estimated_gain']+=best_score
+    return dict(action,market=best)
+
+def counter_market_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        for key in _MC_REPORT:_MC_REPORT[key]=0
+    return _mc_select(observation,_MC_PARENT(observation,configuration))
+counter_market_agent.telemetry=_MC_REPORT
+_MP_REPORT=_MC_REPORT
+agent=counter_market_agent

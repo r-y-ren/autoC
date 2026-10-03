@@ -1,0 +1,4100 @@
+[
+  {
+    "candidate": "experiments/round8_top2_dsm_strict.py",
+    "candidate_sha256": "8340cedac73c4a54ca6f1a440385514ef2a9c4fd613c6c86cf14312fc19b9e3f",
+    "opponent": "external/round8/fieldcraft/main.py",
+    "opponent_sha256": "4aa771451850e68892fc1a847211f0bebffd511d6d3a508a7bb9969e5b881091",
+    "seed": 733556107,
+    "seat": 0,
+    "delta": -37463.0,
+    "kind": "selected_diagnostic_rerun_not_additional_independent_sample",
+    "rewards_match": true,
+    "routing": {
+      "route_switches": 0,
+      "compatible_options": 14,
+      "incompatible_rejected": 634,
+      "state_contract_rejected": 0
+    },
+    "candidate_statistics": {
+      "requests": {
+        "PICKUP": 216,
+        "BUILD_PASTURE": 19,
+        "PLACE": 96,
+        "FEED": 411,
+        "CARE": 417,
+        "PLANT": 225,
+        "WATER": 1141,
+        "COLLECT_FERTILIZER": 451,
+        "DROP": 54,
+        "HARVEST": 537,
+        "BUILD_COOP": 4,
+        "DIG": 45,
+        "FERTILIZE": 237
+      },
+      "no_state_change": {
+        "COLLECT_FERTILIZER": 20,
+        "PICKUP": 11,
+        "CARE": 24,
+        "HARVEST": 46,
+        "WATER": 82,
+        "FEED": 19,
+        "BUILD_PASTURE": 2,
+        "PLACE": 3,
+        "FERTILIZE": 20,
+        "DIG": 6
+      },
+      "state_changing": {
+        "PICKUP": 205,
+        "BUILD_PASTURE": 17,
+        "PLACE": 93,
+        "FEED": 392,
+        "CARE": 393,
+        "PLANT": 225,
+        "WATER": 1059,
+        "COLLECT_FERTILIZER": 431,
+        "DROP": 54,
+        "HARVEST": 491,
+        "BUILD_COOP": 4,
+        "DIG": 39,
+        "FERTILIZE": 217
+      },
+      "harvest_units": {
+        "WHEAT": 646,
+        "WOOL": 272,
+        "MILK": 167,
+        "SHEEP": 0,
+        "MELON": 50,
+        "FERTILIZER": 0,
+        "STRAWBERRY": 211,
+        "EGG": 90,
+        "TOMATO": 89,
+        "CARROT": 64
+      },
+      "crops_lost_unwatered": {
+        "STRAWBERRY": 5,
+        "MELON": 1
+      },
+      "animals_escaped_unfed": {
+        "SHEEP": 9
+      },
+      "midnight_discarded": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      },
+      "sold_units": {
+        "WHEAT": 473,
+        "FERTILIZER": 213,
+        "WOOL": 272,
+        "MILK": 167,
+        "MELON": 50,
+        "STRAWBERRY": 209,
+        "EGG": 90,
+        "TOMATO": 89,
+        "CARROT": 64
+      },
+      "sale_revenue": {
+        "WHEAT": 15579,
+        "FERTILIZER": 11638,
+        "WOOL": 7173,
+        "MILK": 39325,
+        "MELON": 9990,
+        "STRAWBERRY": 52108,
+        "EGG": 3977,
+        "TOMATO": 7107,
+        "CARROT": 3040
+      },
+      "pass_requests": 126,
+      "moves": 3194,
+      "absent_worker_requests": 0,
+      "atomic_seed_blocked": {
+        "STRAWBERRY": 2
+      },
+      "no_state_change_by_day": {
+        "1:COLLECT_FERTILIZER": 1,
+        "1:PICKUP": 1,
+        "2:CARE": 2,
+        "2:HARVEST": 1,
+        "3:CARE": 1,
+        "3:WATER": 1,
+        "4:CARE": 1,
+        "5:FEED": 1,
+        "5:WATER": 1,
+        "6:PICKUP": 5,
+        "6:BUILD_PASTURE": 1,
+        "6:PLACE": 1,
+        "6:FEED": 1,
+        "6:CARE": 2,
+        "7:COLLECT_FERTILIZER": 1,
+        "7:PICKUP": 3,
+        "7:FEED": 1,
+        "7:WATER": 1,
+        "7:CARE": 2,
+        "8:CARE": 1,
+        "8:PICKUP": 2,
+        "8:FEED": 1,
+        "8:COLLECT_FERTILIZER": 1,
+        "8:BUILD_PASTURE": 1,
+        "8:PLACE": 2,
+        "8:WATER": 1,
+        "9:FEED": 1,
+        "9:CARE": 1,
+        "9:COLLECT_FERTILIZER": 1,
+        "9:WATER": 1,
+        "10:FEED": 1,
+        "10:CARE": 1,
+        "10:COLLECT_FERTILIZER": 1,
+        "10:FERTILIZE": 1,
+        "11:FEED": 1,
+        "11:CARE": 1,
+        "11:COLLECT_FERTILIZER": 1,
+        "11:WATER": 3,
+        "12:HARVEST": 3,
+        "12:FEED": 1,
+        "12:CARE": 1,
+        "12:COLLECT_FERTILIZER": 1,
+        "12:WATER": 4,
+        "12:FERTILIZE": 2,
+        "13:FEED": 1,
+        "13:CARE": 1,
+        "13:COLLECT_FERTILIZER": 1,
+        "13:HARVEST": 3,
+        "13:WATER": 5,
+        "14:WATER": 7,
+        "14:FEED": 1,
+        "14:CARE": 1,
+        "14:COLLECT_FERTILIZER": 1,
+        "14:FERTILIZE": 1,
+        "15:COLLECT_FERTILIZER": 1,
+        "15:FERTILIZE": 4,
+        "15:FEED": 1,
+        "15:WATER": 8,
+        "15:CARE": 1,
+        "15:HARVEST": 5,
+        "16:HARVEST": 2,
+        "16:WATER": 9,
+        "16:FEED": 1,
+        "16:CARE": 1,
+        "16:COLLECT_FERTILIZER": 1,
+        "16:FERTILIZE": 1,
+        "17:FEED": 1,
+        "17:CARE": 1,
+        "17:COLLECT_FERTILIZER": 1,
+        "17:FERTILIZE": 1,
+        "17:WATER": 11,
+        "17:HARVEST": 3,
+        "18:HARVEST": 4,
+        "18:FEED": 1,
+        "18:CARE": 1,
+        "18:COLLECT_FERTILIZER": 1,
+        "18:FERTILIZE": 3,
+        "18:WATER": 5,
+        "19:FERTILIZE": 2,
+        "19:WATER": 3,
+        "19:FEED": 1,
+        "19:CARE": 1,
+        "19:HARVEST": 6,
+        "19:COLLECT_FERTILIZER": 1,
+        "19:DIG": 3,
+        "20:HARVEST": 4,
+        "20:FEED": 1,
+        "20:CARE": 1,
+        "20:COLLECT_FERTILIZER": 1,
+        "20:WATER": 5,
+        "20:FERTILIZE": 1,
+        "21:WATER": 6,
+        "21:HARVEST": 3,
+        "21:FEED": 1,
+        "21:CARE": 1,
+        "21:COLLECT_FERTILIZER": 1,
+        "21:FERTILIZE": 1,
+        "22:HARVEST": 3,
+        "22:FEED": 1,
+        "22:CARE": 1,
+        "22:COLLECT_FERTILIZER": 1,
+        "22:WATER": 3,
+        "22:FERTILIZE": 1,
+        "23:FEED": 1,
+        "23:CARE": 1,
+        "23:DIG": 3,
+        "23:COLLECT_FERTILIZER": 1,
+        "23:HARVEST": 2,
+        "23:WATER": 1,
+        "24:COLLECT_FERTILIZER": 1,
+        "24:FERTILIZE": 1,
+        "24:WATER": 1,
+        "24:HARVEST": 1,
+        "25:COLLECT_FERTILIZER": 1,
+        "25:HARVEST": 1,
+        "25:WATER": 1,
+        "26:WATER": 3,
+        "27:HARVEST": 2,
+        "27:FERTILIZE": 1,
+        "27:WATER": 1,
+        "28:HARVEST": 1,
+        "28:WATER": 1,
+        "29:HARVEST": 2
+      },
+      "first_no_state_changes": [
+        {
+          "step": 31,
+          "actor": 4,
+          "position": [
+            3,
+            4
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 34,
+          "actor": 2,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "WHEAT",
+            2
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 50,
+          "actor": 2,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 52,
+          "actor": 4,
+          "position": [
+            4,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 67,
+          "actor": 5,
+          "position": [
+            1,
+            1
+          ],
+          "command": [
+            "HARVEST"
+          ],
+          "tile": null,
+          "carried": {
+            "WHEAT": 2
+          }
+        },
+        {
+          "step": 74,
+          "actor": 2,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 95,
+          "actor": 5,
+          "position": [
+            2,
+            2
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 3,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "WHEAT": 6
+          }
+        },
+        {
+          "step": 101,
+          "actor": 5,
+          "position": [
+            4,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 3
+          }
+        },
+        {
+          "step": 137,
+          "actor": 1,
+          "position": [
+            4,
+            2
+          ],
+          "command": [
+            "FEED"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 3
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 140,
+          "actor": 5,
+          "position": [
+            2,
+            3
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "MELON",
+            "planted_day": 1,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 1,
+            "max_lifespan_step": 336,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "WHEAT": 2
+          }
+        },
+        {
+          "step": 151,
+          "actor": 4,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {}
+        },
+        {
+          "step": 151,
+          "actor": 8,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "COW",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {}
+        },
+        {
+          "step": 153,
+          "actor": 3,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "BUILD_PASTURE"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "COW": 1
+          }
+        },
+        {
+          "step": 153,
+          "actor": 8,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 155,
+          "actor": 3,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 159,
+          "actor": 8,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 165,
+          "actor": 8,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 166,
+          "actor": 8,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "FEED"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 167,
+          "actor": 4,
+          "position": [
+            6,
+            3
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 167,
+          "actor": 8,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        }
+      ]
+    },
+    "opponent_statistics": {
+      "requests": {
+        "PICKUP": 204,
+        "BUILD_PASTURE": 14,
+        "PLACE": 101,
+        "CARE": 405,
+        "PLANT": 239,
+        "WATER": 1100,
+        "FEED": 334,
+        "COLLECT_FERTILIZER": 372,
+        "HARVEST": 476,
+        "DROP": 47,
+        "BUILD_COOP": 5,
+        "DIG": 36,
+        "FERTILIZE": 91
+      },
+      "no_state_change": {
+        "CARE": 13,
+        "COLLECT_FERTILIZER": 8,
+        "WATER": 12,
+        "PLACE": 4,
+        "DIG": 1,
+        "HARVEST": 5
+      },
+      "state_changing": {
+        "PICKUP": 204,
+        "BUILD_PASTURE": 14,
+        "PLACE": 97,
+        "CARE": 392,
+        "PLANT": 239,
+        "WATER": 1088,
+        "FEED": 334,
+        "COLLECT_FERTILIZER": 364,
+        "HARVEST": 471,
+        "DROP": 47,
+        "BUILD_COOP": 5,
+        "FERTILIZE": 91,
+        "DIG": 35
+      },
+      "harvest_units": {
+        "WHEAT": 559,
+        "FERTILIZER": 0,
+        "WOOL": 72,
+        "MILK": 284,
+        "MELON": 72,
+        "EGG": 83,
+        "STRAWBERRY": 251,
+        "CARROT": 91
+      },
+      "crops_lost_unwatered": {
+        "WHEAT": 1,
+        "STRAWBERRY": 1
+      },
+      "animals_escaped_unfed": {},
+      "midnight_discarded": {
+        "WHEAT": 3,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 6,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      },
+      "sold_units": {
+        "WHEAT": 368,
+        "FERTILIZER": 333,
+        "WOOL": 72,
+        "MILK": 284,
+        "MELON": 72,
+        "EGG": 83,
+        "STRAWBERRY": 251,
+        "CARROT": 91
+      },
+      "sale_revenue": {
+        "WHEAT": 11717,
+        "FERTILIZER": 15835,
+        "WOOL": 3491,
+        "MILK": 66653,
+        "MELON": 16268,
+        "EGG": 3674,
+        "STRAWBERRY": 62485,
+        "CARROT": 4315
+      },
+      "pass_requests": 467,
+      "moves": 2812,
+      "absent_worker_requests": 0,
+      "atomic_seed_blocked": {},
+      "no_state_change_by_day": {
+        "3:CARE": 1,
+        "4:COLLECT_FERTILIZER": 3,
+        "5:CARE": 1,
+        "5:WATER": 1,
+        "6:WATER": 2,
+        "7:CARE": 1,
+        "7:WATER": 3,
+        "8:CARE": 1,
+        "8:WATER": 1,
+        "9:CARE": 2,
+        "10:PLACE": 1,
+        "11:CARE": 1,
+        "12:DIG": 1,
+        "13:CARE": 2,
+        "13:WATER": 2,
+        "15:COLLECT_FERTILIZER": 5,
+        "15:HARVEST": 1,
+        "16:CARE": 1,
+        "16:HARVEST": 1,
+        "16:WATER": 1,
+        "16:PLACE": 1,
+        "18:WATER": 1,
+        "21:HARVEST": 1,
+        "27:WATER": 1,
+        "28:CARE": 2,
+        "28:PLACE": 1,
+        "29:HARVEST": 2,
+        "29:CARE": 1,
+        "29:PLACE": 1
+      },
+      "first_no_state_changes": [
+        {
+          "step": 91,
+          "actor": 0,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 2
+          },
+          "carried": {}
+        },
+        {
+          "step": 107,
+          "actor": 0,
+          "position": [
+            3,
+            3
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 2,
+            "FERTILIZER": 3
+          }
+        },
+        {
+          "step": 111,
+          "actor": 0,
+          "position": [
+            3,
+            4
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 1,
+            "FERTILIZER": 4
+          }
+        },
+        {
+          "step": 115,
+          "actor": 0,
+          "position": [
+            2,
+            4
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 3,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {
+            "FERTILIZER": 4
+          }
+        },
+        {
+          "step": 123,
+          "actor": 1,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 3
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 132,
+          "actor": 4,
+          "position": [
+            3,
+            1
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "MELON",
+            "planted_day": 0,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 1,
+            "max_lifespan_step": 312,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 155,
+          "actor": 4,
+          "position": [
+            2,
+            2
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "MELON",
+            "planted_day": 0,
+            "watered_today": true,
+            "consecutive_unwatered": 0,
+            "yield_units": 2,
+            "max_lifespan_step": 312,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 167,
+          "actor": 0,
+          "position": [
+            8,
+            3
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 6,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 173,
+          "actor": 6,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 188,
+          "actor": 1,
+          "position": [
+            1,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 7,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 191,
+          "actor": 3,
+          "position": [
+            7,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 6,
+            "watered_today": true,
+            "consecutive_unwatered": 0,
+            "yield_units": 1,
+            "max_lifespan_step": 264,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 191,
+          "actor": 5,
+          "position": [
+            0,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 7,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 1,
+            "max_lifespan_step": 288,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 195,
+          "actor": 6,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 212,
+          "actor": 2,
+          "position": [
+            8,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 6,
+            "watered_today": true,
+            "consecutive_unwatered": 0,
+            "yield_units": 2,
+            "max_lifespan_step": 264,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "FERTILIZER": 1,
+            "WHEAT": 2
+          }
+        },
+        {
+          "step": 220,
+          "actor": 5,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 3
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 227,
+          "actor": 3,
+          "position": [
+            5,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 7,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          },
+          "carried": {
+            "WHEAT": 1,
+            "COW": 1
+          }
+        },
+        {
+          "step": 258,
+          "actor": 0,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PLACE",
+            "MILK",
+            12
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 268,
+          "actor": 0,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 304,
+          "actor": 6,
+          "position": [
+            8,
+            0
+          ],
+          "command": [
+            "DIG"
+          ],
+          "tile": null,
+          "carried": {
+            "WHEAT": 3
+          }
+        },
+        {
+          "step": 317,
+          "actor": 9,
+          "position": [
+            4,
+            3
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        }
+      ]
+    },
+    "pending_retries": 0,
+    "final_route": "111940707",
+    "runtime_telemetry": {
+      "counters": {
+        "entry.layer_fallbacks": 0,
+        "entry.entry_fallbacks": 0
+      },
+      "nonzero": {},
+      "details": {
+        "entry": {
+          "layer_fallbacks": 0,
+          "entry_fallbacks": 0
+        }
+      }
+    },
+    "final_shed": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0,
+      "EGG": 0,
+      "MILK": 0,
+      "WOOL": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "COW": 0,
+      "SHEEP": 0
+    },
+    "final_carried": [
+      {},
+      {},
+      {
+        "FERTILIZER": 1
+      },
+      {},
+      {
+        "STRAWBERRY": 2,
+        "WHEAT": 6
+      },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "seconds": 10.771788600000946,
+    "final_field_counts": {
+      "TOMATO": 4,
+      "WHEAT": 1,
+      "COW": 6,
+      "WEED": 5,
+      "GOOSE": 3,
+      "PASTURE": 8,
+      "SHEEP": 1,
+      "STRAWBERRY": 1
+    },
+    "final_unharvested_units": {
+      "TOMATO": 0,
+      "WHEAT": 1,
+      "MILK": 0,
+      "EGG": 0,
+      "WOOL": 0,
+      "STRAWBERRY": 0
+    }
+  },
+  {
+    "candidate": "experiments/round8_top2_dsm_strict.py",
+    "candidate_sha256": "8340cedac73c4a54ca6f1a440385514ef2a9c4fd613c6c86cf14312fc19b9e3f",
+    "opponent": "external/round8/master2965/main.py",
+    "opponent_sha256": "93831c18a43c49312a71fa67171224681c52c3fade0259403e8d8fae7973565f",
+    "seed": 733556107,
+    "seat": 0,
+    "delta": -41705.0,
+    "kind": "selected_diagnostic_rerun_not_additional_independent_sample",
+    "rewards_match": true,
+    "routing": {
+      "route_switches": 0,
+      "compatible_options": 14,
+      "incompatible_rejected": 634,
+      "state_contract_rejected": 0
+    },
+    "candidate_statistics": {
+      "requests": {
+        "PICKUP": 216,
+        "BUILD_PASTURE": 19,
+        "PLACE": 96,
+        "FEED": 411,
+        "CARE": 417,
+        "PLANT": 225,
+        "WATER": 1141,
+        "COLLECT_FERTILIZER": 451,
+        "DROP": 54,
+        "HARVEST": 537,
+        "BUILD_COOP": 4,
+        "DIG": 45,
+        "FERTILIZE": 237
+      },
+      "no_state_change": {
+        "COLLECT_FERTILIZER": 20,
+        "PICKUP": 11,
+        "CARE": 24,
+        "HARVEST": 46,
+        "WATER": 82,
+        "FEED": 19,
+        "BUILD_PASTURE": 2,
+        "PLACE": 3,
+        "FERTILIZE": 20,
+        "DIG": 6
+      },
+      "state_changing": {
+        "PICKUP": 205,
+        "BUILD_PASTURE": 17,
+        "PLACE": 93,
+        "FEED": 392,
+        "CARE": 393,
+        "PLANT": 225,
+        "WATER": 1059,
+        "COLLECT_FERTILIZER": 431,
+        "DROP": 54,
+        "HARVEST": 491,
+        "BUILD_COOP": 4,
+        "DIG": 39,
+        "FERTILIZE": 217
+      },
+      "harvest_units": {
+        "WHEAT": 646,
+        "WOOL": 272,
+        "MILK": 167,
+        "SHEEP": 0,
+        "MELON": 50,
+        "FERTILIZER": 0,
+        "STRAWBERRY": 211,
+        "EGG": 90,
+        "TOMATO": 89,
+        "CARROT": 64
+      },
+      "crops_lost_unwatered": {
+        "STRAWBERRY": 5,
+        "MELON": 1
+      },
+      "animals_escaped_unfed": {
+        "SHEEP": 9
+      },
+      "midnight_discarded": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      },
+      "sold_units": {
+        "WHEAT": 473,
+        "FERTILIZER": 213,
+        "WOOL": 272,
+        "MILK": 167,
+        "MELON": 50,
+        "STRAWBERRY": 209,
+        "EGG": 90,
+        "TOMATO": 89,
+        "CARROT": 64
+      },
+      "sale_revenue": {
+        "WHEAT": 15225,
+        "FERTILIZER": 11658,
+        "WOOL": 7173,
+        "MILK": 38111,
+        "MELON": 9990,
+        "STRAWBERRY": 52016,
+        "EGG": 4259,
+        "TOMATO": 7107,
+        "CARROT": 2992
+      },
+      "pass_requests": 126,
+      "moves": 3194,
+      "absent_worker_requests": 0,
+      "atomic_seed_blocked": {
+        "STRAWBERRY": 2
+      },
+      "no_state_change_by_day": {
+        "1:COLLECT_FERTILIZER": 1,
+        "1:PICKUP": 1,
+        "2:CARE": 2,
+        "2:HARVEST": 1,
+        "3:CARE": 1,
+        "3:WATER": 1,
+        "4:CARE": 1,
+        "5:FEED": 1,
+        "5:WATER": 1,
+        "6:PICKUP": 5,
+        "6:BUILD_PASTURE": 1,
+        "6:PLACE": 1,
+        "6:FEED": 1,
+        "6:CARE": 2,
+        "7:COLLECT_FERTILIZER": 1,
+        "7:PICKUP": 3,
+        "7:FEED": 1,
+        "7:WATER": 1,
+        "7:CARE": 2,
+        "8:CARE": 1,
+        "8:PICKUP": 2,
+        "8:FEED": 1,
+        "8:COLLECT_FERTILIZER": 1,
+        "8:BUILD_PASTURE": 1,
+        "8:PLACE": 2,
+        "8:WATER": 1,
+        "9:FEED": 1,
+        "9:CARE": 1,
+        "9:COLLECT_FERTILIZER": 1,
+        "9:WATER": 1,
+        "10:FEED": 1,
+        "10:CARE": 1,
+        "10:COLLECT_FERTILIZER": 1,
+        "10:FERTILIZE": 1,
+        "11:FEED": 1,
+        "11:CARE": 1,
+        "11:COLLECT_FERTILIZER": 1,
+        "11:WATER": 3,
+        "12:HARVEST": 3,
+        "12:FEED": 1,
+        "12:CARE": 1,
+        "12:COLLECT_FERTILIZER": 1,
+        "12:WATER": 4,
+        "12:FERTILIZE": 2,
+        "13:FEED": 1,
+        "13:CARE": 1,
+        "13:COLLECT_FERTILIZER": 1,
+        "13:HARVEST": 3,
+        "13:WATER": 5,
+        "14:WATER": 7,
+        "14:FEED": 1,
+        "14:CARE": 1,
+        "14:COLLECT_FERTILIZER": 1,
+        "14:FERTILIZE": 1,
+        "15:COLLECT_FERTILIZER": 1,
+        "15:FERTILIZE": 4,
+        "15:FEED": 1,
+        "15:WATER": 8,
+        "15:CARE": 1,
+        "15:HARVEST": 5,
+        "16:HARVEST": 2,
+        "16:WATER": 9,
+        "16:FEED": 1,
+        "16:CARE": 1,
+        "16:COLLECT_FERTILIZER": 1,
+        "16:FERTILIZE": 1,
+        "17:FEED": 1,
+        "17:CARE": 1,
+        "17:COLLECT_FERTILIZER": 1,
+        "17:FERTILIZE": 1,
+        "17:WATER": 11,
+        "17:HARVEST": 3,
+        "18:HARVEST": 4,
+        "18:FEED": 1,
+        "18:CARE": 1,
+        "18:COLLECT_FERTILIZER": 1,
+        "18:FERTILIZE": 3,
+        "18:WATER": 5,
+        "19:FERTILIZE": 2,
+        "19:WATER": 3,
+        "19:FEED": 1,
+        "19:CARE": 1,
+        "19:HARVEST": 6,
+        "19:COLLECT_FERTILIZER": 1,
+        "19:DIG": 3,
+        "20:HARVEST": 4,
+        "20:FEED": 1,
+        "20:CARE": 1,
+        "20:COLLECT_FERTILIZER": 1,
+        "20:WATER": 5,
+        "20:FERTILIZE": 1,
+        "21:WATER": 6,
+        "21:HARVEST": 3,
+        "21:FEED": 1,
+        "21:CARE": 1,
+        "21:COLLECT_FERTILIZER": 1,
+        "21:FERTILIZE": 1,
+        "22:HARVEST": 3,
+        "22:FEED": 1,
+        "22:CARE": 1,
+        "22:COLLECT_FERTILIZER": 1,
+        "22:WATER": 3,
+        "22:FERTILIZE": 1,
+        "23:FEED": 1,
+        "23:CARE": 1,
+        "23:DIG": 3,
+        "23:COLLECT_FERTILIZER": 1,
+        "23:HARVEST": 2,
+        "23:WATER": 1,
+        "24:COLLECT_FERTILIZER": 1,
+        "24:FERTILIZE": 1,
+        "24:WATER": 1,
+        "24:HARVEST": 1,
+        "25:COLLECT_FERTILIZER": 1,
+        "25:HARVEST": 1,
+        "25:WATER": 1,
+        "26:WATER": 3,
+        "27:HARVEST": 2,
+        "27:FERTILIZE": 1,
+        "27:WATER": 1,
+        "28:HARVEST": 1,
+        "28:WATER": 1,
+        "29:HARVEST": 2
+      },
+      "first_no_state_changes": [
+        {
+          "step": 31,
+          "actor": 4,
+          "position": [
+            3,
+            4
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 34,
+          "actor": 2,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "WHEAT",
+            2
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 50,
+          "actor": 2,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 52,
+          "actor": 4,
+          "position": [
+            4,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 67,
+          "actor": 5,
+          "position": [
+            1,
+            1
+          ],
+          "command": [
+            "HARVEST"
+          ],
+          "tile": null,
+          "carried": {
+            "WHEAT": 2
+          }
+        },
+        {
+          "step": 74,
+          "actor": 2,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 95,
+          "actor": 5,
+          "position": [
+            2,
+            2
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 3,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "WHEAT": 6
+          }
+        },
+        {
+          "step": 101,
+          "actor": 5,
+          "position": [
+            4,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 3
+          }
+        },
+        {
+          "step": 137,
+          "actor": 1,
+          "position": [
+            4,
+            2
+          ],
+          "command": [
+            "FEED"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 3
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 140,
+          "actor": 5,
+          "position": [
+            2,
+            3
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "MELON",
+            "planted_day": 1,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 1,
+            "max_lifespan_step": 336,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "WHEAT": 2
+          }
+        },
+        {
+          "step": 151,
+          "actor": 4,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {}
+        },
+        {
+          "step": 151,
+          "actor": 8,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "COW",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {}
+        },
+        {
+          "step": 153,
+          "actor": 3,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "BUILD_PASTURE"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "COW": 1
+          }
+        },
+        {
+          "step": 153,
+          "actor": 8,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 155,
+          "actor": 3,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 159,
+          "actor": 8,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 165,
+          "actor": 8,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 166,
+          "actor": 8,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "FEED"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 167,
+          "actor": 4,
+          "position": [
+            6,
+            3
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 167,
+          "actor": 8,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        }
+      ]
+    },
+    "opponent_statistics": {
+      "requests": {
+        "PICKUP": 205,
+        "BUILD_PASTURE": 19,
+        "PLACE": 99,
+        "PLANT": 239,
+        "CARE": 404,
+        "WATER": 1099,
+        "FEED": 330,
+        "COLLECT_FERTILIZER": 379,
+        "HARVEST": 478,
+        "DROP": 52,
+        "DIG": 37,
+        "FERTILIZE": 99
+      },
+      "no_state_change": {
+        "CARE": 13,
+        "COLLECT_FERTILIZER": 8,
+        "WATER": 12,
+        "PLACE": 2,
+        "DIG": 3,
+        "HARVEST": 19,
+        "FERTILIZE": 1
+      },
+      "state_changing": {
+        "PICKUP": 205,
+        "BUILD_PASTURE": 19,
+        "PLACE": 97,
+        "PLANT": 239,
+        "CARE": 391,
+        "WATER": 1087,
+        "FEED": 330,
+        "COLLECT_FERTILIZER": 371,
+        "HARVEST": 459,
+        "DROP": 52,
+        "FERTILIZE": 98,
+        "DIG": 34
+      },
+      "harvest_units": {
+        "WHEAT": 539,
+        "FERTILIZER": 0,
+        "WOOL": 89,
+        "MILK": 323,
+        "MELON": 72,
+        "STRAWBERRY": 249,
+        "CARROT": 122
+      },
+      "crops_lost_unwatered": {
+        "STRAWBERRY": 1
+      },
+      "animals_escaped_unfed": {},
+      "midnight_discarded": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      },
+      "sold_units": {
+        "WHEAT": 340,
+        "FERTILIZER": 344,
+        "WOOL": 89,
+        "MILK": 323,
+        "MELON": 72,
+        "STRAWBERRY": 249,
+        "CARROT": 122
+      },
+      "sale_revenue": {
+        "WHEAT": 10901,
+        "FERTILIZER": 15912,
+        "WOOL": 3508,
+        "MILK": 73588,
+        "MELON": 16268,
+        "STRAWBERRY": 61559,
+        "CARROT": 5617
+      },
+      "pass_requests": 441,
+      "moves": 2842,
+      "absent_worker_requests": 0,
+      "atomic_seed_blocked": {},
+      "no_state_change_by_day": {
+        "3:CARE": 1,
+        "4:COLLECT_FERTILIZER": 3,
+        "5:CARE": 1,
+        "5:WATER": 1,
+        "6:WATER": 2,
+        "7:CARE": 1,
+        "7:WATER": 3,
+        "8:CARE": 1,
+        "8:WATER": 1,
+        "9:CARE": 2,
+        "10:PLACE": 1,
+        "11:CARE": 1,
+        "12:DIG": 1,
+        "13:CARE": 2,
+        "13:WATER": 2,
+        "14:HARVEST": 2,
+        "15:COLLECT_FERTILIZER": 5,
+        "15:HARVEST": 3,
+        "16:CARE": 1,
+        "16:WATER": 1,
+        "16:HARVEST": 2,
+        "16:DIG": 1,
+        "17:HARVEST": 2,
+        "18:WATER": 1,
+        "19:HARVEST": 1,
+        "21:HARVEST": 1,
+        "21:FERTILIZE": 1,
+        "23:HARVEST": 1,
+        "24:HARVEST": 1,
+        "25:HARVEST": 1,
+        "25:DIG": 1,
+        "28:CARE": 2,
+        "28:WATER": 1,
+        "28:HARVEST": 1,
+        "29:HARVEST": 4,
+        "29:CARE": 1,
+        "29:PLACE": 1
+      },
+      "first_no_state_changes": [
+        {
+          "step": 91,
+          "actor": 0,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 2
+          },
+          "carried": {}
+        },
+        {
+          "step": 107,
+          "actor": 0,
+          "position": [
+            3,
+            3
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 2,
+            "FERTILIZER": 3
+          }
+        },
+        {
+          "step": 111,
+          "actor": 0,
+          "position": [
+            3,
+            4
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 1,
+            "FERTILIZER": 4
+          }
+        },
+        {
+          "step": 115,
+          "actor": 0,
+          "position": [
+            2,
+            4
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 3,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {
+            "FERTILIZER": 4
+          }
+        },
+        {
+          "step": 123,
+          "actor": 1,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 3
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 132,
+          "actor": 4,
+          "position": [
+            3,
+            1
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "MELON",
+            "planted_day": 0,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 1,
+            "max_lifespan_step": 312,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 155,
+          "actor": 4,
+          "position": [
+            2,
+            2
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "MELON",
+            "planted_day": 0,
+            "watered_today": true,
+            "consecutive_unwatered": 0,
+            "yield_units": 2,
+            "max_lifespan_step": 312,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 167,
+          "actor": 0,
+          "position": [
+            8,
+            3
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 6,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 173,
+          "actor": 6,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 188,
+          "actor": 1,
+          "position": [
+            1,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 7,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 191,
+          "actor": 3,
+          "position": [
+            7,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 6,
+            "watered_today": true,
+            "consecutive_unwatered": 0,
+            "yield_units": 1,
+            "max_lifespan_step": 264,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 191,
+          "actor": 5,
+          "position": [
+            0,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 7,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 1,
+            "max_lifespan_step": 288,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 195,
+          "actor": 6,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 212,
+          "actor": 2,
+          "position": [
+            8,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 6,
+            "watered_today": true,
+            "consecutive_unwatered": 0,
+            "yield_units": 2,
+            "max_lifespan_step": 264,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "FERTILIZER": 1,
+            "WHEAT": 2
+          }
+        },
+        {
+          "step": 220,
+          "actor": 5,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 3
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 227,
+          "actor": 3,
+          "position": [
+            5,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 7,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          },
+          "carried": {
+            "WHEAT": 1,
+            "COW": 1
+          }
+        },
+        {
+          "step": 258,
+          "actor": 0,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PLACE",
+            "MILK",
+            12
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 268,
+          "actor": 0,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 304,
+          "actor": 6,
+          "position": [
+            8,
+            0
+          ],
+          "command": [
+            "DIG"
+          ],
+          "tile": null,
+          "carried": {
+            "WHEAT": 3
+          }
+        },
+        {
+          "step": 317,
+          "actor": 9,
+          "position": [
+            4,
+            3
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        }
+      ]
+    },
+    "pending_retries": 0,
+    "final_route": "111940707",
+    "runtime_telemetry": {
+      "counters": {
+        "entry.layer_fallbacks": 0,
+        "entry.entry_fallbacks": 0
+      },
+      "nonzero": {},
+      "details": {
+        "entry": {
+          "layer_fallbacks": 0,
+          "entry_fallbacks": 0
+        }
+      }
+    },
+    "final_shed": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0,
+      "EGG": 0,
+      "MILK": 0,
+      "WOOL": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "COW": 0,
+      "SHEEP": 0
+    },
+    "final_carried": [
+      {},
+      {},
+      {
+        "FERTILIZER": 1
+      },
+      {},
+      {
+        "STRAWBERRY": 2,
+        "WHEAT": 6
+      },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "seconds": 14.196415200000047,
+    "final_field_counts": {
+      "TOMATO": 4,
+      "WHEAT": 1,
+      "COW": 6,
+      "WEED": 5,
+      "GOOSE": 3,
+      "PASTURE": 8,
+      "SHEEP": 1,
+      "STRAWBERRY": 1
+    },
+    "final_unharvested_units": {
+      "TOMATO": 0,
+      "WHEAT": 1,
+      "MILK": 0,
+      "EGG": 0,
+      "WOOL": 0,
+      "STRAWBERRY": 0
+    }
+  },
+  {
+    "candidate": "experiments/round8_top2_dsm_strict.py",
+    "candidate_sha256": "8340cedac73c4a54ca6f1a440385514ef2a9c4fd613c6c86cf14312fc19b9e3f",
+    "opponent": "submissions/release_v6/main.py",
+    "opponent_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+    "seed": 800459488,
+    "seat": 0,
+    "delta": -41237.0,
+    "kind": "selected_diagnostic_rerun_not_additional_independent_sample",
+    "rewards_match": true,
+    "routing": {
+      "route_switches": 0,
+      "compatible_options": 14,
+      "incompatible_rejected": 634,
+      "state_contract_rejected": 0
+    },
+    "candidate_statistics": {
+      "requests": {
+        "PICKUP": 216,
+        "BUILD_PASTURE": 19,
+        "PLACE": 96,
+        "FEED": 411,
+        "CARE": 417,
+        "PLANT": 222,
+        "WATER": 1140,
+        "COLLECT_FERTILIZER": 451,
+        "DROP": 54,
+        "HARVEST": 537,
+        "BUILD_COOP": 4,
+        "DIG": 46,
+        "FERTILIZE": 237
+      },
+      "no_state_change": {
+        "COLLECT_FERTILIZER": 20,
+        "PICKUP": 11,
+        "CARE": 24,
+        "HARVEST": 49,
+        "WATER": 91,
+        "FEED": 19,
+        "BUILD_PASTURE": 2,
+        "PLACE": 3,
+        "FERTILIZE": 22,
+        "DIG": 6
+      },
+      "state_changing": {
+        "PICKUP": 205,
+        "BUILD_PASTURE": 17,
+        "PLACE": 93,
+        "FEED": 392,
+        "CARE": 393,
+        "PLANT": 222,
+        "WATER": 1049,
+        "COLLECT_FERTILIZER": 431,
+        "DROP": 54,
+        "HARVEST": 488,
+        "BUILD_COOP": 4,
+        "DIG": 40,
+        "FERTILIZE": 215
+      },
+      "harvest_units": {
+        "WHEAT": 633,
+        "WOOL": 272,
+        "MILK": 167,
+        "SHEEP": 0,
+        "MELON": 50,
+        "FERTILIZER": 0,
+        "STRAWBERRY": 211,
+        "EGG": 90,
+        "TOMATO": 89,
+        "CARROT": 64
+      },
+      "crops_lost_unwatered": {
+        "STRAWBERRY": 5,
+        "MELON": 1
+      },
+      "animals_escaped_unfed": {
+        "SHEEP": 9
+      },
+      "midnight_discarded": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      },
+      "sold_units": {
+        "WHEAT": 460,
+        "FERTILIZER": 215,
+        "WOOL": 272,
+        "MILK": 167,
+        "MELON": 50,
+        "STRAWBERRY": 209,
+        "EGG": 90,
+        "TOMATO": 89,
+        "CARROT": 64
+      },
+      "sale_revenue": {
+        "WHEAT": 18007,
+        "FERTILIZER": 11775,
+        "WOOL": 7169,
+        "MILK": 37419,
+        "MELON": 9990,
+        "STRAWBERRY": 50927,
+        "EGG": 4259,
+        "TOMATO": 7107,
+        "CARROT": 3347
+      },
+      "pass_requests": 129,
+      "moves": 3194,
+      "absent_worker_requests": 0,
+      "atomic_seed_blocked": {
+        "STRAWBERRY": 2,
+        "WHEAT": 3
+      },
+      "no_state_change_by_day": {
+        "1:COLLECT_FERTILIZER": 1,
+        "1:PICKUP": 1,
+        "2:CARE": 2,
+        "2:HARVEST": 1,
+        "3:CARE": 1,
+        "3:WATER": 1,
+        "4:CARE": 1,
+        "5:FEED": 1,
+        "5:WATER": 1,
+        "6:PICKUP": 5,
+        "6:BUILD_PASTURE": 1,
+        "6:PLACE": 1,
+        "6:FEED": 1,
+        "6:CARE": 2,
+        "7:COLLECT_FERTILIZER": 1,
+        "7:PICKUP": 3,
+        "7:FEED": 1,
+        "7:WATER": 1,
+        "7:CARE": 2,
+        "8:CARE": 1,
+        "8:PICKUP": 2,
+        "8:FEED": 1,
+        "8:COLLECT_FERTILIZER": 1,
+        "8:BUILD_PASTURE": 1,
+        "8:PLACE": 2,
+        "8:WATER": 1,
+        "9:FEED": 1,
+        "9:CARE": 1,
+        "9:COLLECT_FERTILIZER": 1,
+        "9:WATER": 3,
+        "10:FEED": 1,
+        "10:CARE": 1,
+        "10:COLLECT_FERTILIZER": 1,
+        "10:FERTILIZE": 1,
+        "11:WATER": 6,
+        "11:FEED": 1,
+        "11:CARE": 1,
+        "11:COLLECT_FERTILIZER": 1,
+        "12:HARVEST": 5,
+        "12:FERTILIZE": 4,
+        "12:WATER": 7,
+        "12:FEED": 1,
+        "12:CARE": 1,
+        "12:COLLECT_FERTILIZER": 1,
+        "13:WATER": 6,
+        "13:HARVEST": 4,
+        "13:FEED": 1,
+        "13:CARE": 1,
+        "13:COLLECT_FERTILIZER": 1,
+        "14:WATER": 7,
+        "14:FEED": 1,
+        "14:CARE": 1,
+        "14:COLLECT_FERTILIZER": 1,
+        "14:FERTILIZE": 1,
+        "15:COLLECT_FERTILIZER": 1,
+        "15:FERTILIZE": 4,
+        "15:FEED": 1,
+        "15:WATER": 8,
+        "15:CARE": 1,
+        "15:HARVEST": 5,
+        "16:HARVEST": 2,
+        "16:WATER": 9,
+        "16:FEED": 1,
+        "16:CARE": 1,
+        "16:COLLECT_FERTILIZER": 1,
+        "16:FERTILIZE": 1,
+        "17:FEED": 1,
+        "17:CARE": 1,
+        "17:COLLECT_FERTILIZER": 1,
+        "17:FERTILIZE": 1,
+        "17:WATER": 11,
+        "17:HARVEST": 3,
+        "18:HARVEST": 4,
+        "18:FEED": 1,
+        "18:CARE": 1,
+        "18:COLLECT_FERTILIZER": 1,
+        "18:FERTILIZE": 3,
+        "18:WATER": 5,
+        "19:FERTILIZE": 2,
+        "19:WATER": 3,
+        "19:FEED": 1,
+        "19:CARE": 1,
+        "19:HARVEST": 6,
+        "19:COLLECT_FERTILIZER": 1,
+        "19:DIG": 3,
+        "20:HARVEST": 4,
+        "20:FEED": 1,
+        "20:CARE": 1,
+        "20:COLLECT_FERTILIZER": 1,
+        "20:WATER": 5,
+        "20:FERTILIZE": 1,
+        "21:WATER": 6,
+        "21:HARVEST": 3,
+        "21:FEED": 1,
+        "21:CARE": 1,
+        "21:COLLECT_FERTILIZER": 1,
+        "21:FERTILIZE": 1,
+        "22:HARVEST": 3,
+        "22:FEED": 1,
+        "22:CARE": 1,
+        "22:COLLECT_FERTILIZER": 1,
+        "22:WATER": 3,
+        "22:FERTILIZE": 1,
+        "23:FEED": 1,
+        "23:CARE": 1,
+        "23:DIG": 3,
+        "23:COLLECT_FERTILIZER": 1,
+        "23:HARVEST": 2,
+        "23:WATER": 1,
+        "24:COLLECT_FERTILIZER": 1,
+        "24:FERTILIZE": 1,
+        "24:WATER": 1,
+        "24:HARVEST": 1,
+        "25:COLLECT_FERTILIZER": 1,
+        "25:HARVEST": 1,
+        "25:WATER": 1,
+        "26:WATER": 3,
+        "27:HARVEST": 2,
+        "27:FERTILIZE": 1,
+        "27:WATER": 1,
+        "28:HARVEST": 1,
+        "28:WATER": 1,
+        "29:HARVEST": 2
+      },
+      "first_no_state_changes": [
+        {
+          "step": 31,
+          "actor": 4,
+          "position": [
+            3,
+            4
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 34,
+          "actor": 2,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "WHEAT",
+            2
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 50,
+          "actor": 2,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 52,
+          "actor": 4,
+          "position": [
+            4,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 67,
+          "actor": 5,
+          "position": [
+            1,
+            1
+          ],
+          "command": [
+            "HARVEST"
+          ],
+          "tile": null,
+          "carried": {
+            "WHEAT": 2
+          }
+        },
+        {
+          "step": 74,
+          "actor": 2,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 95,
+          "actor": 5,
+          "position": [
+            2,
+            2
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 3,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "WHEAT": 6
+          }
+        },
+        {
+          "step": 101,
+          "actor": 5,
+          "position": [
+            4,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 3
+          }
+        },
+        {
+          "step": 137,
+          "actor": 1,
+          "position": [
+            4,
+            2
+          ],
+          "command": [
+            "FEED"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 3
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 140,
+          "actor": 5,
+          "position": [
+            2,
+            3
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "MELON",
+            "planted_day": 1,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 1,
+            "max_lifespan_step": 336,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "WHEAT": 2
+          }
+        },
+        {
+          "step": 151,
+          "actor": 4,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {}
+        },
+        {
+          "step": 151,
+          "actor": 8,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "COW",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {}
+        },
+        {
+          "step": 153,
+          "actor": 3,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "BUILD_PASTURE"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "COW": 1
+          }
+        },
+        {
+          "step": 153,
+          "actor": 8,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 155,
+          "actor": 3,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 159,
+          "actor": 8,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 165,
+          "actor": 8,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 166,
+          "actor": 8,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "FEED"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 167,
+          "actor": 4,
+          "position": [
+            6,
+            3
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {}
+        },
+        {
+          "step": 167,
+          "actor": 8,
+          "position": [
+            6,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE"
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        }
+      ]
+    },
+    "opponent_statistics": {
+      "requests": {
+        "PICKUP": 207,
+        "BUILD_PASTURE": 19,
+        "PLACE": 99,
+        "PLANT": 239,
+        "CARE": 404,
+        "WATER": 1097,
+        "FEED": 327,
+        "COLLECT_FERTILIZER": 379,
+        "HARVEST": 477,
+        "DROP": 52,
+        "DIG": 38,
+        "FERTILIZE": 115
+      },
+      "no_state_change": {
+        "CARE": 13,
+        "COLLECT_FERTILIZER": 8,
+        "WATER": 10,
+        "DIG": 4,
+        "PLACE": 1,
+        "HARVEST": 18,
+        "FERTILIZE": 2
+      },
+      "state_changing": {
+        "PICKUP": 207,
+        "BUILD_PASTURE": 19,
+        "PLACE": 98,
+        "PLANT": 239,
+        "CARE": 391,
+        "WATER": 1087,
+        "FEED": 327,
+        "COLLECT_FERTILIZER": 371,
+        "HARVEST": 459,
+        "DROP": 52,
+        "FERTILIZE": 113,
+        "DIG": 34
+      },
+      "harvest_units": {
+        "WHEAT": 588,
+        "FERTILIZER": 0,
+        "WOOL": 77,
+        "MILK": 323,
+        "MELON": 72,
+        "STRAWBERRY": 247,
+        "CARROT": 103
+      },
+      "crops_lost_unwatered": {
+        "STRAWBERRY": 1
+      },
+      "animals_escaped_unfed": {},
+      "midnight_discarded": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      },
+      "sold_units": {
+        "WHEAT": 395,
+        "FERTILIZER": 343,
+        "WOOL": 77,
+        "MILK": 323,
+        "MELON": 72,
+        "STRAWBERRY": 247,
+        "CARROT": 103
+      },
+      "sale_revenue": {
+        "WHEAT": 15296,
+        "FERTILIZER": 16164,
+        "WOOL": 3500,
+        "MILK": 72267,
+        "MELON": 16268,
+        "STRAWBERRY": 60020,
+        "CARROT": 5323
+      },
+      "pass_requests": 448,
+      "moves": 2866,
+      "absent_worker_requests": 0,
+      "atomic_seed_blocked": {},
+      "no_state_change_by_day": {
+        "3:CARE": 1,
+        "4:COLLECT_FERTILIZER": 3,
+        "5:CARE": 1,
+        "5:WATER": 1,
+        "6:WATER": 2,
+        "7:CARE": 1,
+        "7:DIG": 1,
+        "7:WATER": 2,
+        "8:CARE": 1,
+        "8:WATER": 1,
+        "9:CARE": 2,
+        "10:PLACE": 1,
+        "11:CARE": 1,
+        "12:DIG": 1,
+        "13:CARE": 2,
+        "13:WATER": 2,
+        "14:HARVEST": 2,
+        "15:COLLECT_FERTILIZER": 5,
+        "15:HARVEST": 3,
+        "16:CARE": 1,
+        "16:WATER": 1,
+        "16:HARVEST": 2,
+        "16:DIG": 1,
+        "17:HARVEST": 2,
+        "18:WATER": 1,
+        "19:HARVEST": 1,
+        "21:HARVEST": 1,
+        "21:FERTILIZE": 2,
+        "23:HARVEST": 1,
+        "24:HARVEST": 1,
+        "25:HARVEST": 1,
+        "25:DIG": 1,
+        "28:CARE": 2,
+        "29:HARVEST": 4,
+        "29:CARE": 1
+      },
+      "first_no_state_changes": [
+        {
+          "step": 91,
+          "actor": 0,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 2
+          },
+          "carried": {}
+        },
+        {
+          "step": 107,
+          "actor": 0,
+          "position": [
+            3,
+            3
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 2,
+            "FERTILIZER": 3
+          }
+        },
+        {
+          "step": 111,
+          "actor": 0,
+          "position": [
+            3,
+            4
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          },
+          "carried": {
+            "WHEAT": 1,
+            "FERTILIZER": 4
+          }
+        },
+        {
+          "step": 115,
+          "actor": 0,
+          "position": [
+            2,
+            4
+          ],
+          "command": [
+            "COLLECT_FERTILIZER"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 3,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 0
+          },
+          "carried": {
+            "FERTILIZER": 4
+          }
+        },
+        {
+          "step": 123,
+          "actor": 1,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 3
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 132,
+          "actor": 4,
+          "position": [
+            3,
+            1
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "MELON",
+            "planted_day": 0,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 1,
+            "max_lifespan_step": 312,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 155,
+          "actor": 4,
+          "position": [
+            2,
+            2
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "MELON",
+            "planted_day": 0,
+            "watered_today": true,
+            "consecutive_unwatered": 0,
+            "yield_units": 2,
+            "max_lifespan_step": 312,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 167,
+          "actor": 0,
+          "position": [
+            8,
+            3
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 6,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 173,
+          "actor": 6,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 186,
+          "actor": 1,
+          "position": [
+            1,
+            0
+          ],
+          "command": [
+            "DIG"
+          ],
+          "tile": null,
+          "carried": {}
+        },
+        {
+          "step": 189,
+          "actor": 1,
+          "position": [
+            1,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 7,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 191,
+          "actor": 3,
+          "position": [
+            7,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 6,
+            "watered_today": true,
+            "consecutive_unwatered": 0,
+            "yield_units": 1,
+            "max_lifespan_step": 264,
+            "fertilized_until_day": -1
+          },
+          "carried": {}
+        },
+        {
+          "step": 195,
+          "actor": 6,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 212,
+          "actor": 2,
+          "position": [
+            8,
+            0
+          ],
+          "command": [
+            "WATER"
+          ],
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 6,
+            "watered_today": true,
+            "consecutive_unwatered": 0,
+            "yield_units": 2,
+            "max_lifespan_step": 264,
+            "fertilized_until_day": -1
+          },
+          "carried": {
+            "FERTILIZER": 1,
+            "WHEAT": 2
+          }
+        },
+        {
+          "step": 220,
+          "actor": 5,
+          "position": [
+            5,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 6,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 3
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 227,
+          "actor": 3,
+          "position": [
+            5,
+            2
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 7,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          },
+          "carried": {
+            "WHEAT": 1,
+            "COW": 1
+          }
+        },
+        {
+          "step": 258,
+          "actor": 0,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "PLACE",
+            "MILK",
+            12
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          },
+          "carried": {}
+        },
+        {
+          "step": 268,
+          "actor": 0,
+          "position": [
+            4,
+            4
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        },
+        {
+          "step": 304,
+          "actor": 6,
+          "position": [
+            8,
+            0
+          ],
+          "command": [
+            "DIG"
+          ],
+          "tile": null,
+          "carried": {
+            "WHEAT": 3
+          }
+        },
+        {
+          "step": 317,
+          "actor": 9,
+          "position": [
+            4,
+            3
+          ],
+          "command": [
+            "CARE"
+          ],
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": true,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 2
+          },
+          "carried": {
+            "WHEAT": 1
+          }
+        }
+      ]
+    },
+    "pending_retries": 0,
+    "final_route": "111940707",
+    "runtime_telemetry": {
+      "counters": {
+        "entry.layer_fallbacks": 0,
+        "entry.entry_fallbacks": 0
+      },
+      "nonzero": {},
+      "details": {
+        "entry": {
+          "layer_fallbacks": 0,
+          "entry_fallbacks": 0
+        }
+      }
+    },
+    "final_shed": {
+      "WHEAT": 0,
+      "CARROT": 0,
+      "TOMATO": 0,
+      "STRAWBERRY": 0,
+      "MELON": 0,
+      "EGG": 0,
+      "MILK": 0,
+      "WOOL": 0,
+      "FERTILIZER": 0,
+      "GOOSE": 0,
+      "COW": 0,
+      "SHEEP": 0
+    },
+    "final_carried": [
+      {},
+      {},
+      {
+        "FERTILIZER": 1
+      },
+      {},
+      {
+        "STRAWBERRY": 2,
+        "WHEAT": 6
+      },
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "seconds": 12.704337499999383,
+    "final_field_counts": {
+      "TOMATO": 4,
+      "WHEAT": 1,
+      "COW": 6,
+      "WEED": 5,
+      "GOOSE": 3,
+      "PASTURE": 8,
+      "SHEEP": 1,
+      "STRAWBERRY": 1
+    },
+    "final_unharvested_units": {
+      "TOMATO": 0,
+      "WHEAT": 1,
+      "MILK": 0,
+      "EGG": 0,
+      "WOOL": 0,
+      "STRAWBERRY": 0
+    }
+  }
+]

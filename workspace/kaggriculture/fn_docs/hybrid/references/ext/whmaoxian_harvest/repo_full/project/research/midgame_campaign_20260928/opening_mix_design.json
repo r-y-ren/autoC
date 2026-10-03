@@ -1,0 +1,77 @@
+{
+  "variants": [
+    {
+      "name": "opening_c0s4",
+      "path": "research/midgame_campaign_20260928/candidates/opening_c0s4.py",
+      "sha256": "ffc69aa034f13bb9fd276834068fb5d0128d7245e81868e6d4fb4f819c3c4883",
+      "cows": 0,
+      "sheep": 4
+    },
+    {
+      "name": "opening_c1s3",
+      "path": "research/midgame_campaign_20260928/candidates/opening_c1s3.py",
+      "sha256": "ddeeee41d268398486debf86b6ccdf939360011596e3a4852e49d86889a6be0d",
+      "cows": 1,
+      "sheep": 3
+    },
+    {
+      "name": "opening_c3s1",
+      "path": "research/midgame_campaign_20260928/candidates/opening_c3s1.py",
+      "sha256": "bf2caeace00463a26d82437efbb51d42bc5e10f970ee9865349970257b2515f2",
+      "cows": 3,
+      "sheep": 1
+    },
+    {
+      "name": "opening_c4s0",
+      "path": "research/midgame_campaign_20260928/candidates/opening_c4s0.py",
+      "sha256": "e340488c9298d5ecfba7d9e3dc97f03a1d4bed42d0ea0beaafe571a87280ec99",
+      "cows": 4,
+      "sheep": 0
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "seeds": [
+    1791186457,
+    1702757506,
+    1567180951,
+    1072012823
+  ],
+  "cases": 224,
+  "scope": "Initial-portfolio development screening. Includes cash-flow effects; not an isolated estimate of animal yield."
+}

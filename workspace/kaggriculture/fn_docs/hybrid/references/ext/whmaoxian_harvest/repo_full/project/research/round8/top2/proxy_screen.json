@@ -1,0 +1,358 @@
+[
+  {
+    "variant": "vadim_strict",
+    "seed": 82000,
+    "seat": 0,
+    "money": 99992.0,
+    "opponent_money": 100488.0,
+    "delta": -496.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 42,
+        "incompatible_rejected": 602,
+        "state_contract_rejected": 4
+      },
+      "task_telemetry": {}
+    },
+    "seconds": 7.634087499998714
+  },
+  {
+    "variant": "vadim_strict",
+    "seed": 82000,
+    "seat": 1,
+    "money": 99992.0,
+    "opponent_money": 100488.0,
+    "delta": -496.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 42,
+        "incompatible_rejected": 602,
+        "state_contract_rejected": 4
+      },
+      "task_telemetry": {}
+    },
+    "seconds": 9.629768400000103
+  },
+  {
+    "variant": "dsm_strict",
+    "seed": 82001,
+    "seat": 0,
+    "money": 103099.0,
+    "opponent_money": 118862.0,
+    "delta": -15763.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 35,
+        "incompatible_rejected": 613,
+        "state_contract_rejected": 0
+      },
+      "task_telemetry": {}
+    },
+    "seconds": 7.85049330000038
+  },
+  {
+    "variant": "dsm_strict",
+    "seed": 82001,
+    "seat": 1,
+    "money": 103099.0,
+    "opponent_money": 118862.0,
+    "delta": -15763.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 35,
+        "incompatible_rejected": 613,
+        "state_contract_rejected": 0
+      },
+      "task_telemetry": {}
+    },
+    "seconds": 11.762074199999915
+  },
+  {
+    "variant": "vadim_tasks",
+    "seed": 82002,
+    "seat": 0,
+    "money": 80525.0,
+    "opponent_money": 134224.0,
+    "delta": -53699.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 28,
+        "incompatible_rejected": 611,
+        "state_contract_rejected": 9
+      },
+      "task_telemetry": {
+        "issued_tasks": 2560,
+        "skipped_tasks": 90,
+        "waits": 1735,
+        "weed_repairs": 1,
+        "moves": 2126,
+        "unfinished_daily_tasks": 865,
+        "seed_deferrals": 5
+      }
+    },
+    "seconds": 8.200006600000052
+  },
+  {
+    "variant": "vadim_tasks",
+    "seed": 82002,
+    "seat": 1,
+    "money": 80525.0,
+    "opponent_money": 134224.0,
+    "delta": -53699.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 28,
+        "incompatible_rejected": 611,
+        "state_contract_rejected": 9
+      },
+      "task_telemetry": {
+        "issued_tasks": 2560,
+        "skipped_tasks": 90,
+        "waits": 1735,
+        "weed_repairs": 0,
+        "moves": 2126,
+        "unfinished_daily_tasks": 865,
+        "seed_deferrals": 5
+      }
+    },
+    "seconds": 8.850390600000537
+  },
+  {
+    "variant": "dsm_tasks",
+    "seed": 82003,
+    "seat": 0,
+    "money": 81203.0,
+    "opponent_money": 75378.0,
+    "delta": 5825.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 25,
+        "incompatible_rejected": 622,
+        "state_contract_rejected": 1
+      },
+      "task_telemetry": {
+        "issued_tasks": 3582,
+        "skipped_tasks": 5,
+        "waits": 68,
+        "weed_repairs": 1,
+        "moves": 2685,
+        "unfinished_daily_tasks": 29,
+        "seed_deferrals": 1
+      }
+    },
+    "seconds": 8.778419700000086
+  },
+  {
+    "variant": "dsm_tasks",
+    "seed": 82003,
+    "seat": 1,
+    "money": 81203.0,
+    "opponent_money": 75378.0,
+    "delta": 5825.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 25,
+        "incompatible_rejected": 622,
+        "state_contract_rejected": 1
+      },
+      "task_telemetry": {
+        "issued_tasks": 3582,
+        "skipped_tasks": 5,
+        "waits": 68,
+        "weed_repairs": 1,
+        "moves": 2685,
+        "unfinished_daily_tasks": 29,
+        "seed_deferrals": 1
+      }
+    },
+    "seconds": 9.581035000001066
+  },
+  {
+    "variant": "vadim_strict",
+    "seed": 82004,
+    "seat": 0,
+    "money": 102301.0,
+    "opponent_money": 128466.0,
+    "delta": -26165.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 29,
+        "incompatible_rejected": 614,
+        "state_contract_rejected": 5
+      },
+      "task_telemetry": {}
+    },
+    "seconds": 8.797853300000497
+  },
+  {
+    "variant": "vadim_strict",
+    "seed": 82004,
+    "seat": 1,
+    "money": 102301.0,
+    "opponent_money": 128466.0,
+    "delta": -26165.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 29,
+        "incompatible_rejected": 614,
+        "state_contract_rejected": 5
+      },
+      "task_telemetry": {}
+    },
+    "seconds": 7.57704670000021
+  },
+  {
+    "variant": "dsm_strict",
+    "seed": 82005,
+    "seat": 0,
+    "money": 90134.0,
+    "opponent_money": 80825.0,
+    "delta": 9309.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 35,
+        "incompatible_rejected": 613,
+        "state_contract_rejected": 0
+      },
+      "task_telemetry": {}
+    },
+    "seconds": 7.898814799998945
+  },
+  {
+    "variant": "dsm_strict",
+    "seed": 82005,
+    "seat": 1,
+    "money": 90134.0,
+    "opponent_money": 80825.0,
+    "delta": 9309.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 35,
+        "incompatible_rejected": 613,
+        "state_contract_rejected": 0
+      },
+      "task_telemetry": {}
+    },
+    "seconds": 7.854204799999934
+  }
+]

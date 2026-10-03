@@ -1,0 +1,109 @@
+{
+  "variants": [
+    {
+      "name": "early500",
+      "path": "research/midgame_campaign_20260928/candidates/early500.py",
+      "sha256": "e9c375711dd662ac7648747b02d58f52e190954cdf97074e56e5c030e834012d",
+      "begin": 72,
+      "end": 216,
+      "cash": 500,
+      "retry": true,
+      "gain": 0
+    },
+    {
+      "name": "early800",
+      "path": "research/midgame_campaign_20260928/candidates/early800.py",
+      "sha256": "9c6883d68a0f1e53305e3f97da5af9f4291cf35493e136385a7165a3b6d78d03",
+      "begin": 72,
+      "end": 216,
+      "cash": 800,
+      "retry": true,
+      "gain": 0
+    },
+    {
+      "name": "early_selective",
+      "path": "research/midgame_campaign_20260928/candidates/early_selective.py",
+      "sha256": "0db9fe25e65fea0f0e86ebce9bd90ab5a39b55aaeb8ff716d7f1d997744f002a",
+      "begin": 72,
+      "end": 216,
+      "cash": 500,
+      "retry": true,
+      "gain": 600
+    },
+    {
+      "name": "retry_late",
+      "path": "research/midgame_campaign_20260928/candidates/retry_late.py",
+      "sha256": "63f5ae15e57387f03e2cbcb24ae705c821314da03433e78be7315b4e5444dcb4",
+      "begin": 144,
+      "end": 264,
+      "cash": 800,
+      "retry": true,
+      "gain": 0
+    },
+    {
+      "name": "late_selective",
+      "path": "research/midgame_campaign_20260928/candidates/late_selective.py",
+      "sha256": "15bf6c802537f6a6af9c8eeab2f7172eb077720da7cd9c16e727e033ac390ef1",
+      "begin": 144,
+      "end": 264,
+      "cash": 800,
+      "retry": true,
+      "gain": 600
+    },
+    {
+      "name": "late_single",
+      "path": "research/midgame_campaign_20260928/candidates/late_single.py",
+      "sha256": "e6d0f98b67a50b67e83ab38ef50414bf93a13867ff7e6a0f217c472ea93456f3",
+      "begin": 144,
+      "end": 264,
+      "cash": 800,
+      "retry": false,
+      "gain": 600
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "seeds": [
+    1205068858,
+    1402772681,
+    2095943143,
+    2140042026
+  ],
+  "cases": 336,
+  "scope": "Development only. Timing worlds selected to exercise observed gate, not estimated population win rate; predictor worlds are the first eight frozen uniform worlds. R2 controls in extended_results.jsonl."
+}

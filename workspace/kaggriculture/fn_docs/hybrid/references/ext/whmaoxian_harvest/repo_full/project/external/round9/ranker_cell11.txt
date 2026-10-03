@@ -1,0 +1,13 @@
+Read that chart and the ladder stops looking arbitrary:
+
+- **MELON** grosses ~115 per tile per day, about five times wheat — but its glut curve
+  is *quadratic* (`above_target` 3.60), so the market absorbs only ~150 melons before
+  the price floors. That is why **Melon Mateo** meters his sales into 12-unit lots and
+  holds a price floor, and why buying more land does *not* help him.
+- **MILK** and **WOOL** floor almost as fast. **Rancher Rita** still wins with them,
+  because livestock earns far more *per action* than crops once `CARE` is running.
+- **WHEAT** and **EGG** are logarithmic (`above_target` 0.20) — nearly glut-proof.
+  Wheat is why Rita can run a feed chain without wrecking her own margins.
+
+The general lesson: **in this game, deciding what to sell matters more than deciding
+what to grow.**

@@ -1,0 +1,77 @@
+[
+  {
+    "name": "v37",
+    "sha256": "94c1c2c05ae7cde8fca9ee3957b01112c1cbab82c7434aae6a5f24fa7485bc4c",
+    "bytes": 285100,
+    "imports": [
+      "from __future__ import annotations",
+      "from itertools import permutations as _r53_permutations",
+      "import base64",
+      "import copy",
+      "import json",
+      "import math",
+      "import zlib"
+    ],
+    "calls": [
+      {
+        "line": 939,
+        "call": "json.loads"
+      },
+      {
+        "line": 941,
+        "call": "_PAYLOAD['patches'].items"
+      },
+      {
+        "line": 996,
+        "call": "exec"
+      },
+      {
+        "line": 998,
+        "call": "exec"
+      },
+      {
+        "line": 682,
+        "call": "already.add"
+      },
+      {
+        "line": 2331,
+        "call": "spawns.append"
+      }
+    ]
+  },
+  {
+    "name": "salem",
+    "sha256": "3b1cb91feb451b44d075d853f9211be216aea7f85df09d91fa232e4e9dff8fe9",
+    "bytes": 18498,
+    "imports": [
+      "import base64",
+      "import copy",
+      "import json",
+      "import zlib"
+    ],
+    "calls": [
+      {
+        "line": 7,
+        "call": "json.loads"
+      }
+    ]
+  },
+  {
+    "name": "jaxa",
+    "sha256": "4757f3f5b28db8a2f4614bb08993a8a567a7d49bae1ac324fbcfbcc1af60e95e",
+    "bytes": 350794,
+    "imports": [
+      "import math"
+    ],
+    "calls": [
+      {
+        "line": 11,
+        "call": "exec"
+      },
+      {
+        "line": 310,
+        "call": "frontload"
+      }
+    ]
+  }
+]

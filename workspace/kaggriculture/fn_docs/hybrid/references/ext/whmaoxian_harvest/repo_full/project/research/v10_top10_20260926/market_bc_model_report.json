@@ -1,0 +1,43 @@
+{
+  "training_samples": 33168,
+  "predictive_validation_samples": 11568,
+  "predictive_validation_episodes": [
+    113725041,
+    113734520,
+    113739019,
+    113731935,
+    113737740,
+    113734383
+  ],
+  "trials": [
+    {
+      "depth": 9,
+      "auc": 0.8990105176055572,
+      "ap": 0.7034361975194622,
+      "brier": 0.08197820864376781,
+      "fraction_mae": 0.11952177420314973,
+      "quantity_mae": 0.822522803380369,
+      "high_confidence_count": 45,
+      "high_confidence_precision": 0.9333333373069763
+    },
+    {
+      "depth": 12,
+      "auc": 0.9131673126755656,
+      "ap": 0.7245145536994708,
+      "brier": 0.0773024857859537,
+      "fraction_mae": 0.10984689565171786,
+      "quantity_mae": 0.7474482865610629,
+      "high_confidence_count": 63,
+      "high_confidence_precision": 0.9523809552192688
+    }
+  ],
+  "selected_depth": 12,
+  "trees": 24,
+  "nodes": 17522,
+  "export_parity_samples": 2048,
+  "export_max_difference": 2.220446049250313e-16,
+  "model_sha256": "4c8705b84644e4f9251d1b16ed5046fc5d63838a279c82bcbe596bcc1efe8014",
+  "input_scope": "Own observation and proposed physical/non-SELL actions only; previous own sales are causal history. No opponent private state, identities, episode IDs, or random seeds.",
+  "heldout_agent_replays_used": false,
+  "scope": "Predictive imitation accuracy is not match strength or a leaderboard rating. Final model refitted on declared study data only."
+}

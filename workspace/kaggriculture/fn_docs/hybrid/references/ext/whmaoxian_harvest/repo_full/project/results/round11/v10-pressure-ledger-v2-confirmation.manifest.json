@@ -1,0 +1,94 @@
+{
+  "schema": "kaggriculture-arena-r11-v2",
+  "run_name": "v10-pressure-ledger-v2",
+  "split": "confirmation",
+  "seeds": [
+    814225503,
+    441034721,
+    1184291796,
+    666813568,
+    63267687,
+    1118485925,
+    842964310,
+    1030100497,
+    1856855384,
+    304480177,
+    115423708,
+    961926291,
+    1843104376,
+    403139915,
+    1839002853,
+    1608255193,
+    1974895520,
+    1855732001,
+    1774323661,
+    184436886,
+    1572426704,
+    1907410970,
+    37280166,
+    1273435103,
+    1520260721,
+    1132120381,
+    415394295,
+    649763273,
+    640087740,
+    280230822,
+    1383098561,
+    874379502,
+    1695030398,
+    889740902,
+    82099623,
+    1186013677,
+    324984728,
+    1036616194,
+    213510208,
+    1547609038,
+    1564924213,
+    83999711,
+    646970174,
+    226480416,
+    76689062,
+    1626181153,
+    1743861071,
+    1099458268
+  ],
+  "seed_manifest_sha256": "4a4cff07c6ae9bda2c875db14b9980f4838fae4870837a6d70ff4db81151bb7e",
+  "engine_version": "1.32.7",
+  "episode_steps": 720,
+  "seats": [
+    0,
+    1
+  ],
+  "candidate": {
+    "path": "experiments/v10_pressure_ledger.py",
+    "sha256": "3a4601081cc909ae7baf97ec5ddb0e1a8a5a1a27c9cd072cdeaaf7d34c803e0b"
+  },
+  "baseline": {
+    "path": "submissions/release_v9/main.py",
+    "sha256": "6b13532fbc2b55b59c6cae8ed8d5cd29fe82d18a7d7e044ed130217e3d1c09d3"
+  },
+  "opponents": [
+    {
+      "family": "self_v9",
+      "path": "submissions/release_v9/main.py",
+      "sha256": "6b13532fbc2b55b59c6cae8ed8d5cd29fe82d18a7d7e044ed130217e3d1c09d3"
+    },
+    {
+      "family": "frontier",
+      "path": "external/round9/frontier/main.py",
+      "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a"
+    },
+    {
+      "family": "master",
+      "path": "external/round8/master2965/main.py",
+      "sha256": "93831c18a43c49312a71fa67171224681c52c3fade0259403e8d8fae7973565f"
+    },
+    {
+      "family": "dsm_proxy",
+      "path": "experiments/round8_top2_dsm_strict.py",
+      "sha256": "8340cedac73c4a54ca6f1a440385514ef2a9c4fd613c6c86cf14312fc19b9e3f"
+    }
+  ],
+  "arena_sha256": "4f87cc6f0dd4bc9fd04ce3088f8d3cc83b1683eb3987972a9f7cd699e8317193",
+  "game_runner_sha256": "405d4ab97aef6bb9e25cfa959dd323b84a5af9f0873231e8751e1be733885b00"
+}

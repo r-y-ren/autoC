@@ -1,0 +1,5 @@
+## 14. Public high-score source and opening A/B
+
+The audit began with Tetsutani's Adaptive Farming Strategy for Kaggriculture (the page showed 2,879.7). Its useful lesson is to read public opening state and commit to a coherent route. The stronger reproducible source selected here is haideptry's The 2950 Peak Farm: a bounded zero-idle wheat cycle, day-11 sheep timing, and visible rival-sale reflexes layered over a recorded route chassis.
+
+The source is preserved byte-for-byte with its upstream notices. I screened its published EarlyCycle choice against its Original and Mixed alternatives and against the frozen Pipe16 control. EarlyCycle was retained because it had the highest fixed-panel mean and the strongest fresh holdout. The table below is local exact-engine evidence, not a Kaggle leaderboard score. The official score is the completed server row for the exact archive produced by this package.

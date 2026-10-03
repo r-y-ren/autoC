@@ -1,0 +1,101 @@
+[
+  {
+    "path": "research/macro_population_20260927/cycle_agents/shadow.py",
+    "settings": {
+      "name": "shadow",
+      "threshold": 0.5,
+      "maximum": 8,
+      "side": "both",
+      "shadow": true
+    },
+    "sha256": "5a511f9d8c30106aabb5fd8e610eadab204f079dd16459b2a25e3b9f2a39ae7b"
+  },
+  {
+    "path": "research/macro_population_20260927/cycle_agents/p25_q8.py",
+    "settings": {
+      "name": "p25_q8",
+      "threshold": 0.25,
+      "maximum": 8,
+      "side": "both",
+      "shadow": false
+    },
+    "sha256": "f0ea737547644fcfa628473f1313d4d2fe5145d0481728bdc52543c974eb9373"
+  },
+  {
+    "path": "research/macro_population_20260927/cycle_agents/p25_q24.py",
+    "settings": {
+      "name": "p25_q24",
+      "threshold": 0.25,
+      "maximum": 24,
+      "side": "both",
+      "shadow": false
+    },
+    "sha256": "17aadeb03b125a995a5e3280dfc19f461cdc45343f0d52d8872a1ced39b84960"
+  },
+  {
+    "path": "research/macro_population_20260927/cycle_agents/p50_q8.py",
+    "settings": {
+      "name": "p50_q8",
+      "threshold": 0.5,
+      "maximum": 8,
+      "side": "both",
+      "shadow": false
+    },
+    "sha256": "824318b98afc83ec130927bc73a0aa1982cb4ff59b147797f64fb4780a9d6256"
+  },
+  {
+    "path": "research/macro_population_20260927/cycle_agents/p50_q24.py",
+    "settings": {
+      "name": "p50_q24",
+      "threshold": 0.5,
+      "maximum": 24,
+      "side": "both",
+      "shadow": false
+    },
+    "sha256": "dd076c3e3c86c7d210981754ee3e9cfcbfbdd7b7380ffb99f005f9c3bce65f40"
+  },
+  {
+    "path": "research/macro_population_20260927/cycle_agents/p70_q8.py",
+    "settings": {
+      "name": "p70_q8",
+      "threshold": 0.7,
+      "maximum": 8,
+      "side": "both",
+      "shadow": false
+    },
+    "sha256": "ae87a72736c87f717c20032bd4d7b5be9b7e9a72ea82838216a5ff47781711c1"
+  },
+  {
+    "path": "research/macro_population_20260927/cycle_agents/p70_q24.py",
+    "settings": {
+      "name": "p70_q24",
+      "threshold": 0.7,
+      "maximum": 24,
+      "side": "both",
+      "shadow": false
+    },
+    "sha256": "85c63fba00287e646b8b7f0ea0feb9f5b442fa5765c6be1901b6375684e6dc16"
+  },
+  {
+    "path": "research/macro_population_20260927/cycle_agents/sell_p15_q24.py",
+    "settings": {
+      "name": "sell_p15_q24",
+      "threshold": 0.15,
+      "maximum": 24,
+      "side": "sell",
+      "shadow": false
+    },
+    "sha256": "9a703bb8dd8d545b700e2f6ef5bc4e3c6466036a659e2f55dc1db08f7a54006a"
+  },
+  {
+    "path": "research/macro_population_20260927/cycle_agents/buy_p15_q24.py",
+    "settings": {
+      "name": "buy_p15_q24",
+      "threshold": 0.15,
+      "maximum": 24,
+      "side": "buy",
+      "shadow": false
+    },
+    "sha256": "044c47dfe512557ef62ff9ea0788971ec988167984eeff543122a034e1a30c94"
+  }
+]

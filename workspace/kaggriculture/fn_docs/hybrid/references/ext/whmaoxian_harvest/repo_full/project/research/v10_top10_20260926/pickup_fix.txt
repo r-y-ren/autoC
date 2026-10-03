@@ -1,0 +1,19 @@
+        if op=='PICKUP':
+            item=cmd[1];quantity=int(cmd[2]) if len(cmd)>2 else 1
+            # A historical pickup is additive, not a target carried-inventory level.
+            key=(actor,pointer)
+            outstanding=state.setdefault('pickup_remaining',{}).get(key,quantity)
+            skip=outstanding<=0
+            if outstanding:needs[item]=max(needs.get(item,0),outstanding-stock.get(item,0))
+            if not skip and not distance:
+                take=min(outstanding,stock.get(item,0))
+                if take<=0:
+                    _REPORT['supply_waits']+=1
+                    return ['PASS']
+                stock[item]-=take
+                if take==outstanding:
+                    state['pickup_remaining'].pop(key,None)
+                    state['pointers'][actor]=pointer+1
+                else:
+                    state['pickup_remaining'][key]=outstanding-take
+                return ['PICKUP',item,take]

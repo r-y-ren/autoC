@@ -1,0 +1,22 @@
+if LAB_READY:
+    plt.rcParams.update({'font.family':'DejaVu Sans', 'font.size':11, 'axes.spines.top':False,
+                         'axes.spines.right':False, 'axes.titleweight':'bold'})
+    fig, axes = plt.subplots(1, 2, figsize=(13, 4.5), gridspec_kw={'width_ratios':[1.4,1]})
+    fig.patch.set_facecolor('#f7f8f2')
+    trace = pd.DataFrame(traces)
+    for (seed, seat), frame in trace.groupby(['seed','seat']):
+        axes[0].plot(frame.step/24, frame.agent_cash/1000, label=f'Agent · seat {seat} · seed {seed}',
+                     color=['#246b58','#c59132'][seat], linewidth=2.3)
+    axes[0].axhline(summaries[0]['opponent_cash']/1000, color='#909b95', linestyle='--', label='Passive opponent')
+    axes[0].set(title='Activity becomes cash', xlabel='Day', ylabel='Cash ($ thousands)')
+    axes[0].legend(frameon=False, fontsize=8)
+    common=action_counts.most_common(7)[::-1]
+    axes[1].barh([x[0] for x in common], [x[1] for x in common], color='#246b58', height=.62)
+    axes[1].set(title='Where worker actions go', xlabel='Emitted unit actions · both seats')
+    for ax in axes:
+        ax.set_facecolor('#f7f8f2'); ax.grid(axis='x', alpha=.14); ax.set_axisbelow(True)
+    fig.suptitle('FIELDCRAFT / MATCH LAB', x=.06, ha='left', color='#173f35', fontsize=16, weight='bold')
+    fig.text(.06,.005,'Demonstration against a passive opponent. These results are not leaderboard ratings.',color='#66766e',fontsize=9)
+    fig.tight_layout(rect=[0,.04,1,.94])
+    fig.savefig(ROOT/'match_lab.png', dpi=160, bbox_inches='tight')
+    plt.show()

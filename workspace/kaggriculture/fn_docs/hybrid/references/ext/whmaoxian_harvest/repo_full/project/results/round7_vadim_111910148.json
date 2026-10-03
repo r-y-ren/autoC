@@ -1,0 +1,138 @@
+{
+  "environment_version": "1.32.7",
+  "agent": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\experiments\\round7_routes\\vadim_111910148.py",
+  "agent_sha256": "856862eb530b6d64bf76c297900f41579b7d4af4919db125bb0ac5d29901c5a3",
+  "opponent": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\submissions\\release_v6\\main.py",
+  "games": 4,
+  "opponent_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+  "wins": 0,
+  "ties": 0,
+  "mean_money": 55253.5,
+  "results": [
+    {
+      "seed": 44100,
+      "seat": 0,
+      "money": 45935.0,
+      "opponent_money": 158365.0,
+      "delta": -112430.0,
+      "result": "loss",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 6.258,
+      "max_action_seconds": 0.009854,
+      "max_both_players_action_seconds": 0.108198,
+      "final_carried": 4,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 1,
+        "SHEEP": 5
+      }
+    },
+    {
+      "seed": 44100,
+      "seat": 1,
+      "money": 45935.0,
+      "opponent_money": 158365.0,
+      "delta": -112430.0,
+      "result": "loss",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 6.192,
+      "max_action_seconds": 0.03899,
+      "max_both_players_action_seconds": 0.168529,
+      "final_carried": 4,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 1,
+        "SHEEP": 5
+      }
+    },
+    {
+      "seed": 44101,
+      "seat": 0,
+      "money": 64572.0,
+      "opponent_money": 179061.0,
+      "delta": -114489.0,
+      "result": "loss",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 5.348,
+      "max_action_seconds": 0.013024,
+      "max_both_players_action_seconds": 0.302992,
+      "final_carried": 4,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 5
+      }
+    },
+    {
+      "seed": 44101,
+      "seat": 1,
+      "money": 64572.0,
+      "opponent_money": 179061.0,
+      "delta": -114489.0,
+      "result": "loss",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 6.05,
+      "max_action_seconds": 0.009729,
+      "max_both_players_action_seconds": 0.182688,
+      "final_carried": 4,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 5
+      }
+    }
+  ],
+  "import_notices": "Loading environment halite failed: No module named 'numpy'\nLoading environment kore_fleets failed: No module named 'numpy'\nLoading environment lux_ai_s3 failed: No module named 'numpy'\nLoading environment open_spiel_env failed: No module named 'numpy'\nLoading environment reinforce_tactics failed: No module named 'numpy'\n"
+}

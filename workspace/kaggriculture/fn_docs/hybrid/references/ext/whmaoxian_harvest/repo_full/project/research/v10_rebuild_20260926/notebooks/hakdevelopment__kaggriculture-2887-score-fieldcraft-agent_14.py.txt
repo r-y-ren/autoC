@@ -1,0 +1,6 @@
+display(HTML('<div style="background:#102c28;color:#f7f8f2;padding:22px 26px;border-radius:12px;"><b style="font-size:22px;color:#efd08b;">Ready to run your own match.</b><p>Download the agent archive and keep the manifest with your results.</p></div>'))
+display(FileLink('submission.tar.gz'))
+display(FileLink('release_manifest.json'))
+if LAB_READY:
+    display(FileLink('demo_results.csv'))
+    display(FileLink('match_lab.png'))

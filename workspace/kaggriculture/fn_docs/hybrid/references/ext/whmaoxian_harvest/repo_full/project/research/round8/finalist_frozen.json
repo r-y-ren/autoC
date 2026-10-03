@@ -1,0 +1,17 @@
+{
+  "candidate": "experiments\\round8_bounded_production.py",
+  "sha256": "9fa83701138e80e3e5f9a6479cc2fa1c7e8a8965c4bd85d4e45d05ec5d4ffd4e",
+  "entry": "round8_production_fusion_agent",
+  "decision": "Primary candidate frozen after 240 development games, before observing any confirmation outcomes.",
+  "confirmation_worlds": 40,
+  "pool": [
+    "submissions/release_v6/main.py",
+    "submissions/release_v7/main.py",
+    "external/orderbook.py",
+    "external/round8/master2965/main.py",
+    "experiments/round8_top2_dsm_strict.py",
+    "external/round8/fieldcraft/main.py"
+  ],
+  "acceptance": "Require valid complete games and positive paired world-level points improvement with 95% bootstrap lower bound above zero, plus isolated package checks. Do not retune on confirmation.",
+  "dsm_candidate_status": "Research challenger: strong against v7 but 28/48 versus other strategies; not chosen over the broader-development winner."
+}

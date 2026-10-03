@@ -1,0 +1,179 @@
+{
+  "variants": [
+    {
+      "name": "g3_future50",
+      "path": "research/meta_rebuild_20260927/candidates/g3_future50.py",
+      "sha256": "d37276ec01a09f9c33ffba9b5a2149c277bf7a709aebccc115b76a81ed4e54e6",
+      "scenarios": [
+        0.5
+      ],
+      "correct_first_care": false,
+      "robust": false,
+      "limit": 1,
+      "extra_sales": true
+    },
+    {
+      "name": "g3_future100",
+      "path": "research/meta_rebuild_20260927/candidates/g3_future100.py",
+      "sha256": "60cad084b06279b9f0dea3e89551a27854c9ae317e8a4a8f394163f7cff66324",
+      "scenarios": [
+        1.0
+      ],
+      "correct_first_care": false,
+      "robust": false,
+      "limit": 1,
+      "extra_sales": true
+    },
+    {
+      "name": "g3_firstcare",
+      "path": "research/meta_rebuild_20260927/candidates/g3_firstcare.py",
+      "sha256": "1b05c880ba3a73cff31d1758d54820e675758d1a1ad004c70a40aca859f36d6e",
+      "scenarios": [
+        0.0
+      ],
+      "correct_first_care": true,
+      "robust": false,
+      "limit": 1,
+      "extra_sales": true
+    },
+    {
+      "name": "g3_correct_future",
+      "path": "research/meta_rebuild_20260927/candidates/g3_correct_future.py",
+      "sha256": "5f6aa6b2d9bf25e031dfa8a8cfe341936eb01ca94506f1e7bb127e69f7aa7932",
+      "scenarios": [
+        1.0
+      ],
+      "correct_first_care": true,
+      "robust": false,
+      "limit": 1,
+      "extra_sales": true
+    },
+    {
+      "name": "g3_robust",
+      "path": "research/meta_rebuild_20260927/candidates/g3_robust.py",
+      "sha256": "77004dee79d7d79acad0f1ebb0287f2f98912bff4f32e57fbce12463b5942982",
+      "scenarios": [
+        0.0,
+        1.0
+      ],
+      "correct_first_care": true,
+      "robust": true,
+      "limit": 1,
+      "extra_sales": true
+    },
+    {
+      "name": "g3_robust_two",
+      "path": "research/meta_rebuild_20260927/candidates/g3_robust_two.py",
+      "sha256": "a50b60a9bd6b7e498cbc8deb41bdf1cb202a629c6b4a18e3882fa4c2b2f9c896",
+      "scenarios": [
+        0.0,
+        1.0
+      ],
+      "correct_first_care": true,
+      "robust": true,
+      "limit": 2,
+      "extra_sales": true
+    },
+    {
+      "name": "g3_native_sales",
+      "path": "research/meta_rebuild_20260927/candidates/g3_native_sales.py",
+      "sha256": "5d0bee636a55a560ab98bbf2eb5b33a4df3619011c7decb08cae3abbb157e39e",
+      "scenarios": [
+        0.0
+      ],
+      "correct_first_care": false,
+      "robust": false,
+      "limit": 1,
+      "extra_sales": false
+    },
+    {
+      "name": "g3_native_robust",
+      "path": "research/meta_rebuild_20260927/candidates/g3_native_robust.py",
+      "sha256": "3cc04e680e94770aeb7a8bddfc9acf9f5c16b595e31d38dc4060d8b4ae0b6878",
+      "scenarios": [
+        0.0,
+        1.0
+      ],
+      "correct_first_care": true,
+      "robust": true,
+      "limit": 1,
+      "extra_sales": false
+    },
+    {
+      "name": "repeat_v2_one",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_v2_one.py",
+      "sha256": "4c4795500218db6340799fd5b9a414af3845790ec3eb4c03b4a5b57c60282b36",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 1,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": false,
+        "FUND_SALES": false
+      },
+      "terminal_care": false
+    },
+    {
+      "name": "r2",
+      "path": "submissions/release_v10_r2/main.py",
+      "sha256": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4"
+    }
+  ],
+  "seeds": [
+    149322228,
+    1073337711,
+    1401688540,
+    667602040,
+    347690402,
+    1630685350,
+    1389476168,
+    1780870502
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_01.py",
+      "family": "top_style_01",
+      "panel": "responsive_proxy"
+    }
+  ],
+  "cases": 1280,
+  "scope": "Generation three uses declared development worlds, not heldout. Terminal-care modification excluded after observed regressions."
+}

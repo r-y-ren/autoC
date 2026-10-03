@@ -1,0 +1,14 @@
+def play(agent_a, agent_b, seed=0, steps=720, debug=False):
+    """One episode. Returns (rewards, statuses)."""
+    env = make("kaggriculture",
+               configuration={"episodeSteps": steps, "seed": seed},
+               debug=debug)
+    env.run([agent_a, agent_b])
+    final = env.steps[-1]
+    return [s.reward for s in final], [s.status for s in final]
+
+
+rewards, statuses = play(challenger, reference["fallow_finn"], seed=1, steps=120, debug=True)
+print("120-turn smoke test — rewards:", rewards, "statuses:", statuses)
+assert statuses[0] == "DONE", f"challenger did not survive: {statuses[0]}"
+print("OK")

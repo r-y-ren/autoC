@@ -1,0 +1,34 @@
+
+# Conservative prefix funding: rival net inventory contribution is bounded by shed capacity.
+def _k28s_affordable(obs,action,reserve):
+    farm=obs['farms'][int(obs['player'])];cash=float(farm['money'])
+    stock=dict(projected_shed(action,FarmView(obs)));net={};lower={};hires=int(farm['hires_today']);land=len(farm['unlocked_quadrants'])
+    params={k:dict(v) for k,v in _R37_MARKET_PARAMS.items()}
+    for k,v in (obs['market'].get('params') or {}).items():
+        if k in params and isinstance(v,dict):params[k].update(v)
+    for order in action.get('market',[]):
+        if not order:continue
+        op=order[0]
+        if op=='HIRE':cash-=_v219_fib(hires);hires+=1
+        elif op=='BUY_LAND' and land<4:cash-=(1000,2000,4000)[land-1];land+=1
+        elif len(order)>=3:
+            item=order[1];q=max(0,int(order[2]))
+            if op=='SELL':
+                q=min(q,int(stock.get(item,0)))
+                inv=obs['market']['inventory'][item]+100+net.get(item,0)
+                cash+=sum(_r37_market_price(item,inv+i,params) for i in range(q))
+                stock[item]=stock.get(item,0)-q;net[item]=net.get(item,0)+q
+            elif op=='BUY_ANIMAL':
+                if sum(stock.values())+q>100:return False
+                target='SHEEP' if item=='COW' else item
+                cash-=q*{'COW':400,'SHEEP':500,'GOOSE':300}[target]
+                stock[target]=stock.get(target,0)+q
+            elif op=='BUY_SEED':
+                cash-=q*{'WHEAT':10,'CARROT':20,'TOMATO':50,'STRAWBERRY':100,'MELON':80}[item]
+            elif op=='BUY_PRODUCT':
+                q=min(q,max(0,100-sum(stock.values())))
+                inv=obs['market']['inventory'][item]-100+lower.get(item,0)
+                cash-=sum(_r37_market_price(item,inv-i-1,params) for i in range(q))
+                stock[item]=stock.get(item,0)+q;net[item]=net.get(item,0)-q;lower[item]=lower.get(item,0)-q
+        if cash<0:return False
+    return cash>=reserve

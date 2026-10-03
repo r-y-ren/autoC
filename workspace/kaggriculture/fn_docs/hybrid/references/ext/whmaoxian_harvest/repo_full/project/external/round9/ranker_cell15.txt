@@ -1,0 +1,31 @@
+def find_top_meta():
+    """Locate the top-meta agent from the attached notebook output, if present."""
+    root = Path("/kaggle/input")
+    if not root.exists():
+        return None
+    for candidate in (root / "kaggriculture-findings-from-zero-to-top-meta" / "main.py",
+                      root / "kernels" / "raykkretzschmar/kaggriculture-findings-from-zero-to-top-meta" / "main.py"):
+        if candidate.exists():
+            return candidate
+    # Fall back to any attached main.py that carries the tape the agent is built on.
+    for hit in sorted(root.rglob("main.py")):
+        try:
+            head = hit.read_text(errors="ignore")[:4000]
+        except OSError:
+            continue
+        if "_ACTIONS" in head and "b85decode" in head:
+            return hit
+    return None
+
+
+TOP_META_PATH = find_top_meta()
+TOP_META_SLUG = "top_meta_host"
+if TOP_META_PATH is None:
+    top_meta = None
+    print("top-meta host not attached -- skipping it. Add Input -> Notebook Output ->")
+    print("  raykkretzschmar/kaggriculture-findings-from-zero-to-top-meta")
+else:
+    top_meta = load_agent(TOP_META_PATH, TOP_META_SLUG)
+    TIER_OF[TOP_META_SLUG] = 10
+    NAME_OF[TOP_META_SLUG] = "Top Meta Host"
+    print(f"top-meta host: {TOP_META_PATH} ({TOP_META_PATH.stat().st_size:,} bytes)")

@@ -1,0 +1,57 @@
+
+# Experimental early working-capital policy, operating on legal own inventory.
+_EL_PARENT=phase_b_agent
+_EL_REPORT={'changes':0,'units':0,'protected_units':0,'errors':0}
+def _el_apply(obs,action):
+    step=int(obs['step']);seat=int(obs['player']);cash=obs['farms'][seat]['money']
+    if not _EL_START<=step<_EL_END or cash>=_EL_CASH:return action
+    market=[list(o) for o in action.get('market',[])]
+    if len(market)>=10:return action
+    commands=[action.get('farmer') or ['PASS']]+list(action.get('hands') or [])
+    picked={c[1] for c in commands if len(c)>1 and c[0]=='PICKUP'}
+    bought={o[1] for o in market if len(o)>1 and o[0] in ('BUY_PRODUCT','BUY_ANIMAL')}
+    stock=projected_shed(action,FarmView(obs))
+    future=[]
+    for t in range(step+1,min(719,step+_EL_HORIZON+1)):
+        a=_ca_tape(seat,t)
+        future.extend([a.get('farmer') or ['PASS']]+list(a.get('hands') or []))
+    need={'WHEAT':sum(c==['FEED'] for c in future),
+          'FERTILIZER':sum(c==['FERTILIZE'] for c in future)}
+    extras=[]
+    for item in _EL_ITEMS:
+        if item in picked or item in bought:continue
+        price=int(obs['market']['prices'].get(item,0))
+        if price<2:continue
+        sold=sum(max(0,int(o[2])) for o in market if len(o)>=3 and o[:2]==['SELL',item])
+        reserve=max(0,need.get(item,0))+(_EL_BUFFER if item=='WHEAT' else 0)
+        quantity=min(_EL_MAX,max(0,int(stock.get(item,0))-sold-reserve))
+        if quantity<=0:continue
+        existing=next((o for o in market if len(o)>=3 and o[:2]==['SELL',item]),None)
+        if existing is not None:existing[2]=int(existing[2])+quantity
+        elif len(market)+len(extras)<10:extras.append(['SELL',item,quantity])
+        else:continue
+        _EL_REPORT['units']+=quantity;_EL_REPORT['protected_units']+=reserve
+    if market==action.get('market',[]) and not extras:return action
+    _EL_REPORT['changes']+=1
+    result=dict(action,market=extras+market)
+    previous=_OR2_STATE.get(seat,{}).get('prev')
+    if previous and previous.get('step')==step:
+        for item in _EL_ITEMS:
+            sold=sum(max(0,int(o[2])) for o in result['market'] if len(o)>=3 and o[:2]==['SELL',item])
+            previous.setdefault('own',{})[item]=min(int(stock.get(item,0)),sold)
+    race=_RACE_STATE.get(seat)
+    if race and race.get('step')==step and race.get('prev_action') is not None:race['prev_action']=result
+    return result
+
+def early_liquidity_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        for key in _EL_REPORT:_EL_REPORT[key]=0
+    action=_EL_PARENT(observation,configuration)
+    try:return _el_apply(observation,action)
+    except Exception:
+        _EL_REPORT['errors']+=1
+        return action
+_MP_REPORT=_EL_REPORT
+early_liquidity_agent.telemetry=_EL_REPORT
+agent=early_liquidity_agent
+kaggle_submission_agent=early_liquidity_agent

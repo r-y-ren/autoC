@@ -1,0 +1,47 @@
+
+# Earlier investment uses the same checked 19-plot routes, with a shifted crop clock.
+_EP_PARENT=phase_b_agent
+_EP_STATE={}
+_EP_REPORT={'eligible':0,'requested_workers':0,'confirmed_workers':0,'hire_shortfalls':0,'budget_declines':0,'errors':0,'plants':0,'harvest_requests':0,'fertilizer_requests':0,'qualified':0,'declined':0}
+_EP_LAST_FORECAST={}
+def _ep_qualifies(obs,native):
+    farm=obs['farms'][int(obs['player'])]
+    if set(farm['unlocked_quadrants'])!={'NW','NE','SW'} or farm['money']<18000:return False
+    if any(farm['tiles'][y][x]!='LOCKED' for x,y in _T19_TARGETS):return False
+    if obs['private']['seeds'].get('TOMATO',0) or obs['private']['shed'].get('TOMATO',0):return False
+    if any(isinstance(t,dict) and t.get('crop')=='TOMATO' for row in farm['tiles'] for t in row):return False
+    step=int(obs['step'])
+    for tape in _IMPL.chassis.routes.values():
+        for action in tape[step:719]:
+            if any(o and o[0]=='BUY_LAND' for o in action.get('market',[])):return False
+            if any(c==['PLANT','TOMATO'] for c in [action.get('farmer')]+action.get('hands',[])):return False
+    labor=0
+    for realday in range(_EP_START,_EP_START+12):
+        rel=realday+_EP_SHIFT;plan=_v219_native_day(native,realday)
+        count=max(len(a.get('hands',[])) for a in plan)
+        workers=0 if rel in (19,21,23) else len(_t19_groups(rel))
+        labor+=sum(_v219_fib(i) for i in range(count,count+workers))
+    shops=obs['town']['unlocked_shops'];demand=sum(s in ('PIZZA_SHOP','FARMERS_MARKET') for s in shops)
+    other=obs['farms'][1-int(obs['player'])]
+    rival=sum(isinstance(t,dict) and t.get('crop')=='TOMATO' for row in other['tiles'] for t in row)
+    fixed=4950+labor+38*(int(obs['market']['prices']['FERTILIZER'])+10)
+    scenarios=[];future=[d for d in range(_EP_START+1,_EP_START+12) if d%3==0 and d<=24][:max(0,8-len(shops))]
+    for bits in _ep_itertools.product((0,1),repeat=len(future)):
+        probability=.25**sum(bits)*.75**(len(bits)-sum(bits))
+        arrivals=dict(zip(future,bits));active=demand;value=0
+        inventory=int(obs['market']['inventory']['TOMATO'])+max(_EP_RIVAL,8*rival)
+        for t in range(step,(_EP_START+12)*24):
+            if t%24==0:active+=arrivals.get(t//24,0)
+            if t in ((_EP_START+9)*24+6,(_EP_START+11)*24+6):
+                for _ in range(76):
+                    price=max(1,_r37_market_price('TOMATO',inventory));value+=price
+                    if price>1:inventory+=1
+            if t%4==0:inventory-=active
+            if t%24==0:inventory-=1
+        scenarios.append((value-fixed,probability))
+    mean=sum(v*p for v,p in scenarios);variance=sum(p*(v-mean)**2 for v,p in scenarios)
+    adjusted=mean-_EP_RISK*max(0,variance)**.5
+    _EP_LAST_FORECAST[int(obs['player'])]={'start':_EP_START,'cost':fixed,'labor':labor,'mean_net':mean,'risk_adjusted_net':adjusted,'rival_assumption':max(_EP_RIVAL,8*rival),'known_shops':demand}
+    ok=adjusted>=_EP_MIN_NET
+    _EP_REPORT['qualified' if ok else 'declined']+=1
+    return ok

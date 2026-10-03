@@ -1,0 +1,34 @@
+def load_agent(path, name=None):
+    """Import a single-file Kaggriculture agent and return its `agent` callable."""
+    path = Path(path)
+    name = name or path.stem
+    spec = importlib.util.spec_from_file_location(f"kagri_{name}", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    if not hasattr(module, "agent"):
+        raise AttributeError(f"{path} defines no `agent` function")
+    return module.agent
+
+
+def load_submission_agent(path):
+    '''Load exactly as Kaggle's raw-Python runner does: last callable wins.'''
+    from kaggle_environments.agent import get_last_callable
+    path = Path(path)
+    entrypoint = get_last_callable(path.read_text(), path=str(path))
+    if getattr(entrypoint, "__name__", None) != "agent":
+        raise ValueError(
+            f"Kaggle would execute {entrypoint.__name__} instead of agent(). "
+            "Make agent the last newly-bound callable (for example, finish with "
+            "`kaggle_entrypoint = agent`)."
+        )
+    return entrypoint
+
+
+reference = {}
+for _, row in manifest.iterrows():
+    reference[row.agent_slug] = load_agent(DATASET_DIR / row.file, row.agent_slug)
+
+TIER_OF = dict(zip(manifest.agent_slug, manifest.tier))
+NAME_OF = dict(zip(manifest.agent_slug, manifest.agent_name))
+print(f"loaded {len(reference)} reference agents:",
+      ", ".join(f"{s} (t{TIER_OF[s]})" for s in reference))

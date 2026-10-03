@@ -1,0 +1,130 @@
+{
+  "seeds": [
+    618899896,
+    227921220,
+    436912859,
+    1632663070,
+    1304762868,
+    1053105197,
+    1781822533,
+    1749323386
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/market_smart/single_file.py",
+      "family": "market_smart",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/shoprouter/single_file.py",
+      "family": "shoprouter",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/marketshock_adapter.py",
+      "family": "marketshock",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/structured_adapter.py",
+      "family": "structured",
+      "panel": "public_program"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/route_value_20260927/counter_pool/demo_07.py",
+      "family": "demo_07",
+      "panel": "responsive_proxy",
+      "teacher": "Vadim Vasilenko",
+      "episode": 113728682,
+      "seat": 0,
+      "sha256": "b409cddc01d56b41956db7cb5485d776352a8172d905150f9c197a8e366fae90"
+    },
+    {
+      "path": "research/route_value_20260927/counter_pool/demo_22.py",
+      "family": "demo_22",
+      "panel": "responsive_proxy",
+      "teacher": "M & M & P & Q",
+      "episode": 113734523,
+      "seat": 1,
+      "sha256": "648826d10c78a5755870530c112551d3fa91d1c0c8cdd84272a7e7d31dd26d2f"
+    },
+    {
+      "path": "research/route_value_20260927/counter_pool/demo_06.py",
+      "family": "demo_06",
+      "panel": "responsive_proxy",
+      "teacher": "DSM",
+      "episode": 113726340,
+      "seat": 0,
+      "sha256": "3acda00e61b65fcc9660e6e8bc25a4e55f3a28eb9f5d7158e17c5e111c621aaa"
+    },
+    {
+      "path": "research/route_value_20260927/counter_pool/demo_17.py",
+      "family": "demo_17",
+      "panel": "responsive_proxy",
+      "teacher": "Vadim Vasilenko",
+      "episode": 113733287,
+      "seat": 1,
+      "sha256": "9f7499e2159a59b86d43b62bb8c9a671551b00d1a95a7fcc378941c7626defc2"
+    },
+    {
+      "path": "research/route_value_20260927/counter_pool/demo_20.py",
+      "family": "demo_20",
+      "panel": "responsive_proxy",
+      "teacher": "DSM",
+      "episode": 113734520,
+      "seat": 1,
+      "sha256": "ec8ad04b1998ca01bb92dec5fe6d0eb5b71337734d94e576b23c91bea68509cc"
+    },
+    {
+      "path": "research/route_value_20260927/counter_pool/demo_04.py",
+      "family": "demo_04",
+      "panel": "responsive_proxy",
+      "teacher": "DECEM",
+      "episode": 113725160,
+      "seat": 0,
+      "sha256": "cd719b630385ab60e396d7b36b7ba38a43ce736a510d36a257af48160a5c92ee"
+    },
+    {
+      "path": "research/route_value_20260927/counter_pool/demo_24.py",
+      "family": "demo_24",
+      "panel": "responsive_proxy",
+      "teacher": "Majkel1337",
+      "episode": 113736663,
+      "seat": 0,
+      "sha256": "ce67aa69e84a5c4f0c4f5c6e0de892ca4102252b9346383c72a783203146f0fe"
+    },
+    {
+      "path": "research/route_value_20260927/counter_pool/demo_05.py",
+      "family": "demo_05",
+      "panel": "responsive_proxy",
+      "teacher": "Boey",
+      "episode": 113726340,
+      "seat": 1,
+      "sha256": "58dd307fa1d82d0a04e5d1430f3a850467fa165a48e6b913a2db6f8cea6b139e"
+    }
+  ],
+  "candidates": [
+    "research/route_value_20260927/learned.py",
+    "research/route_value_20260927/combined.py",
+    "research/v10_top10_20260926/micro_candidates/all_care_first.py",
+    "submissions/release_v10_r2/main.py"
+  ],
+  "jobs": 960,
+  "opponent_selection": "Hardest development proxies, maximum two views per teacher.",
+  "scope": "Harder prospective DEVELOPMENT. Proxies are not private leaderboard agents; no rating calibration."
+}

@@ -1,0 +1,93 @@
+
+# Marginal win-value scheduler over current sellable inventory.
+# All future rival flow is a scenario estimate, never hidden-state access.
+_MV_PARENT=phase_b_agent
+_MV_PRODUCTS=('STRAWBERRY','MILK','WOOL','EGG','MELON','CARROT','TOMATO')
+_MV_REPORT={'considered':0,'changes':0,'held_units':0,'extra_units':0,'errors':0}
+def _mv_quantity(obs,item,available,original,params):
+    step=int(obs['step']);seat=int(obs['player']);horizon=_MV_HORIZON
+    shops=obs['town']['unlocked_shops']
+    per_tick=sum((2 if len(_OR2_SHOPS.get(s,()))==1 else 1) for s in shops if item in _OR2_SHOPS.get(s,()))
+    demand=per_tick*sum(t%4==0 for t in range(step,min(719,step+horizon)))
+    demand+=sum(t%24==0 for t in range(step,min(719,step+horizon)))
+    stored=max(0,int(_OR2_STATE.get(seat,{}).get('stock',{}).get(item,0)))
+    mature=0
+    for row in obs['farms'][1-seat]['tiles']:
+        for tile in row:
+            if not isinstance(tile,dict):continue
+            product=tile.get('crop') or {'COW':'MILK','SHEEP':'WOOL','GOOSE':'EGG'}.get(tile.get('animal'))
+            if product==item:mature+=max(0,int(tile.get('yield_units',0)))
+    rival=min(80,int(stored*_MV_STOCK_WEIGHT+mature*_MV_MATURE_WEIGHT+.5))
+    scenarios=((0,_MV_ZERO_PROB),(rival,(1-_MV_ZERO_PROB)*.7),(min(100,rival*2),(1-_MV_ZERO_PROB)*.3))
+    inventory=int(obs['market']['inventory'][item]);maximum=max(original,min(available,_MV_LOT))
+    low=inventory-demand-2;high=inventory+maximum+102
+    cumulative=[0];growth=[0]
+    for level in range(low,high+1):
+        price=max(1,_r37_market_price(item,level,params))
+        cumulative.append(cumulative[-1]+price)
+        growth.append(growth[-1]+int(price>1))
+    def revenue(level,quantity):
+        index=level-low
+        return cumulative[index+quantity]-cumulative[index]
+    def after(level,quantity):
+        index=level-low
+        return level+growth[index+quantity]-growth[index]
+    before=demand//2;remaining=demand-before
+    scores=[]
+    for quantity in range(maximum+1):
+        now=revenue(inventory,quantity);post=after(inventory,quantity)
+        value=0.0
+        for other,weight in scenarios:
+            rival_first=revenue(inventory-before,other)
+            rival_late=revenue(post-before,other)
+            our_late=revenue(after(inventory-before,other)-remaining,quantity)
+            value+=weight*(now-our_late+_MV_RIVAL_WEIGHT*(rival_first-rival_late))
+        scores.append(value)
+    best=max(range(len(scores)),key=lambda q:(scores[q],-abs(q-original)))
+    if scores[best]<=scores[original]+_MV_MIN_GAIN:return original
+    return best
+
+def _mv_apply(obs,action):
+    step=int(obs['step']);seat=int(obs['player']);farm=obs['farms'][seat]
+    if not 216<=step<696 or farm['money']<12000:return action
+    orders=[list(o) for o in action.get('market',[])];projected=projected_shed(action,FarmView(obs))
+    params=_v44y_params(obs);hold=_MV_HOLD and sum(projected.values())<70
+    if any(o and o[0]!='SELL' for o in orders):hold=False
+    changed=False
+    for item in _MV_PRODUCTS:
+        available=max(0,int(projected.get(item,0)))
+        indices=[i for i,o in enumerate(orders) if len(o)>=3 and o[:2]==['SELL',item]]
+        if len(indices)>1 or not available:continue
+        original=min(available,max(0,int(orders[indices[0]][2]))) if indices else 0
+        if not indices and len(orders)>=10:continue
+        _MV_REPORT['considered']+=1
+        desired=_mv_quantity(obs,item,available,original,params)
+        if not hold:desired=max(original,desired)
+        if desired==original:continue
+        if indices:orders[indices[0]]=['SELL',item,desired] if desired else []
+        elif desired:orders.append(['SELL',item,desired])
+        _MV_REPORT['held_units']+=max(0,original-desired)
+        _MV_REPORT['extra_units']+=max(0,desired-original)
+        changed=True
+    if not changed:return action
+    _MV_REPORT['changes']+=1
+    return dict(action,market=orders)
+
+def market_value_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        for key in _MV_REPORT:_MV_REPORT[key]=0
+    action=_MV_PARENT(observation,configuration)
+    try:
+        action=_mv_apply(observation,action)
+        previous=_OR2_STATE.get(int(observation['player']),{}).get('prev')
+        if previous and previous.get('step')==int(observation['step']):
+            available=projected_shed(action,FarmView(observation))
+            for item in _MV_PRODUCTS:
+                quantity=sum(max(0,int(o[2])) for o in action.get('market',[]) if len(o)>=3 and o[:2]==['SELL',item])
+                previous.setdefault('own',{})[item]=min(max(0,int(available.get(item,0))),quantity)
+    except Exception:
+        _MV_REPORT['errors']+=1
+    return action
+market_value_agent.telemetry=_MV_REPORT
+agent=market_value_agent
+kaggle_submission_agent=market_value_agent

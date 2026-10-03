@@ -1,0 +1,632 @@
+{
+  "ledger": "noop_micro_results.jsonl",
+  "rows": 384,
+  "invalid": 0,
+  "groups": [
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "games": 48,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "fieldcraft": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "marketshock": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "r2": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 0,
+          "losses": 0,
+          "ties": 8,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0.0,
+          "margin_gain": 0.0
+        },
+        "top_style_02": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "top_style_03": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 3,
+          "losses": 5,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        }
+      },
+      "external_gain": 0,
+      "changed_economic_cases": 0,
+      "wage_delta_sum": 0.0,
+      "harvest_delta_sum": 0,
+      "cash_delta_sum": 0.0
+    },
+    {
+      "candidate": "research/macro_population_20260927/noop_micro/control.py",
+      "games": 48,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "fieldcraft": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "marketshock": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "r2": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 0,
+          "losses": 0,
+          "ties": 8,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0.0,
+          "margin_gain": 0.0
+        },
+        "top_style_02": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "top_style_03": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 3,
+          "losses": 5,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        }
+      },
+      "external_gain": 0,
+      "changed_economic_cases": 0,
+      "wage_delta_sum": 0.0,
+      "harvest_delta_sum": 0,
+      "cash_delta_sum": 0.0
+    },
+    {
+      "candidate": "research/macro_population_20260927/noop_micro/pass_only.py",
+      "games": 48,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 13.0
+        },
+        "fieldcraft": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 28.875
+        },
+        "marketshock": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -0.75
+        },
+        "r2": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 2,
+          "ties": 2,
+          "points": 0.625,
+          "paired": 8,
+          "gain": 0.125,
+          "margin_gain": 12.75
+        },
+        "top_style_02": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -416.0
+        },
+        "top_style_03": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 3,
+          "losses": 5,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 12.125
+        }
+      },
+      "external_gain": 0,
+      "changed_economic_cases": 28,
+      "wage_delta_sum": 0.0,
+      "harvest_delta_sum": 17,
+      "cash_delta_sum": -422.0
+    },
+    {
+      "candidate": "research/macro_population_20260927/noop_micro/care_only.py",
+      "games": 48,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "fieldcraft": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "marketshock": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "r2": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 0,
+          "losses": 0,
+          "ties": 8,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0.0,
+          "margin_gain": 0.0
+        },
+        "top_style_02": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 26.0
+        },
+        "top_style_03": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 3,
+          "losses": 5,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 5.25
+        }
+      },
+      "external_gain": 0,
+      "changed_economic_cases": 3,
+      "wage_delta_sum": 0.0,
+      "harvest_delta_sum": 3,
+      "cash_delta_sum": 51.0
+    },
+    {
+      "candidate": "research/macro_population_20260927/noop_micro/care_water.py",
+      "games": 48,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 10.25
+        },
+        "fieldcraft": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 12.625
+        },
+        "marketshock": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 10.25
+        },
+        "r2": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 0,
+          "ties": 4,
+          "points": 0.75,
+          "paired": 8,
+          "gain": 0.25,
+          "margin_gain": 20.5
+        },
+        "top_style_02": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 26.0
+        },
+        "top_style_03": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 3,
+          "losses": 5,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 5.25
+        }
+      },
+      "external_gain": 0,
+      "changed_economic_cases": 12,
+      "wage_delta_sum": 0.0,
+      "harvest_delta_sum": 4,
+      "cash_delta_sum": 246.0
+    },
+    {
+      "candidate": "research/macro_population_20260927/noop_micro/care_first.py",
+      "games": 48,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 99.25
+        },
+        "fieldcraft": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 9.125
+        },
+        "marketshock": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -15.0
+        },
+        "r2": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0.0,
+          "margin_gain": -22.25
+        },
+        "top_style_02": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -253.25
+        },
+        "top_style_03": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 3,
+          "losses": 5,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -46.0
+        }
+      },
+      "external_gain": 0,
+      "changed_economic_cases": 48,
+      "wage_delta_sum": -178.0,
+      "harvest_delta_sum": 16,
+      "cash_delta_sum": -714.0
+    },
+    {
+      "candidate": "research/macro_population_20260927/noop_micro/fert_first.py",
+      "games": 48,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 99.25
+        },
+        "fieldcraft": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 9.125
+        },
+        "marketshock": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -20.75
+        },
+        "r2": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0.0,
+          "margin_gain": -31.5
+        },
+        "top_style_02": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -253.25
+        },
+        "top_style_03": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 3,
+          "losses": 5,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -34.0
+        }
+      },
+      "external_gain": 0,
+      "changed_economic_cases": 48,
+      "wage_delta_sum": -178.0,
+      "harvest_delta_sum": 20,
+      "cash_delta_sum": -658.0
+    },
+    {
+      "candidate": "research/macro_population_20260927/noop_micro/harvest_first.py",
+      "games": 48,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": 7.25
+        },
+        "fieldcraft": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -71.5
+        },
+        "marketshock": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 8,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -78.5
+        },
+        "r2": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0.0,
+          "margin_gain": -44.75
+        },
+        "top_style_02": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 4,
+          "losses": 4,
+          "ties": 0,
+          "points": 0.5,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -229.25
+        },
+        "top_style_03": {
+          "games": 8,
+          "invalid": 0,
+          "wins": 3,
+          "losses": 5,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 8,
+          "gain": 0,
+          "margin_gain": -75.25
+        }
+      },
+      "external_gain": 0,
+      "changed_economic_cases": 48,
+      "wage_delta_sum": -178.0,
+      "harvest_delta_sum": 15,
+      "cash_delta_sum": -1814.0
+    }
+  ],
+  "sha256": "ddb695a94d8d3cb38f06c49ff5251f3b1cbfd24380e0d2c81c6e1de9c67ea5dd"
+}

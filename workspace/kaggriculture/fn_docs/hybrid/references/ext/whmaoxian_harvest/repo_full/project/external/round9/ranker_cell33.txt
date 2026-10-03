@@ -1,0 +1,19 @@
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 4.4))
+
+colors = ["#d1495b" if s == CHALLENGER_NAME else "#4c6ef5" for s in table.slug]
+ax1.barh(table.agent[::-1], table.bt_rating[::-1], color=colors[::-1])
+ax1.set_xlabel("Bradley-Terry rating (1500 = field average)")
+ax1.set_title("Ranking — your agent in red")
+ax1.grid(axis="x", alpha=.3)
+
+ref_rows = table[table.slug != CHALLENGER_NAME].sort_values("tier")
+ax2.plot(ref_rows.tier, ref_rows.bt_rating, "-o", color="#4c6ef5", label="reference ladder")
+you = table[table.slug == CHALLENGER_NAME]
+if len(you):
+    ax2.axhline(you.bt_rating.iloc[0], color="#d1495b", ls="--",
+                label=f"you ({int(you.bt_rating.iloc[0])})")
+ax2.set_xlabel("reference tier"); ax2.set_ylabel("BT rating")
+ax2.set_title("Which rung did you land on?")
+ax2.legend(); ax2.grid(alpha=.3)
+
+plt.tight_layout(); plt.show()

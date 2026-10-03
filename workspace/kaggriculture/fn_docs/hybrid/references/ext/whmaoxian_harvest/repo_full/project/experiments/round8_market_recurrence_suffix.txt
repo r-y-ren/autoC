@@ -1,0 +1,113 @@
+# Round8 market experiment: biologically periodic supply scenarios.
+# Only already-planned SELL order positions may change. No new sales or purchases.
+# Historical sale data comes from the current match's public market deltas.
+_R8M_PARENT = round7_orderbook_v56_agent
+_R8M_OLD_REORDER = _cxd_reorder
+_R8M_REPORT = {'r8m_calls':0,'r8m_forecasts':0,'r8m_changed':0,'r8m_evals':0,'r8m_expected_gain':0.0,'r8m_errors':0}
+_R8M_PERIODS = {'MILK':48,'WOOL':72,'STRAWBERRY':48,'EGG':24}
+
+
+def _r8m_supply(obs):
+    t = int(obs['step'])
+    seen = (_V92_P.get(int(obs['player'])) or {}).get('obs', {})
+    result = {}
+    for i,item in enumerate(_V92_P_ITEMS):
+        if item not in _R8M_PERIODS: continue
+        period = _R8M_PERIODS[item]
+        quantities = [sum(seen.get((t-lag+d,i),0) for d in (-1,0,1))
+                      for lag in (period,period*2)]
+        quantity = min(quantities)
+        if quantity >= 4:
+            result[item] = min(40,quantity)
+    return result
+
+
+def _r8m_factor(opp, inv0, mine_stock, opp_stock, params):
+    cache={}
+    opp_schedules={}
+    for i,o in enumerate(opp):
+        if o and len(o)>=3 and o[0] in ('SELL','BUY_PRODUCT') and o[1] in params:
+            opp_schedules.setdefault(o[1],[[] for _ in opp])[i]=o
+    def margin(cand):
+        schedules={item:[] for item in opp_schedules}
+        for i,o in enumerate(cand):
+            if o and len(o)>=3 and o[0] in ('SELL','BUY_PRODUCT') and o[1] in params:
+                schedules.setdefault(o[1],[]).append((i,o[0],int(o[2])))
+        total=0.0
+        for item,schedule in schedules.items():
+            key=(item,tuple(schedule))
+            if key not in cache:
+                mine=[[] for _ in cand]
+                for i,op,n in schedule: mine[i]=[op,item,n]
+                a,b=_v44y_lockstep(mine,opp_schedules.get(item,[[] for _ in opp]),
+                                  {item:inv0[item]}, {item:mine_stock.get(item,0)},
+                                  {item:opp_stock.get(item,0)}, {item:params[item]})
+                cache[key]=a-b
+            total+=cache[key]
+        return total
+    return margin
+
+
+def _r8m_reorder(obs, action):
+    t=int(obs['step'])
+    if not 240<=t<696 or _r37_similarity(obs)>=.85:
+        return _R8M_OLD_REORDER(obs,action)
+    supply=_r8m_supply(obs)
+    orders=[list(o) for o in action.get('market',[]) ]
+    if not supply or len(orders)<2:return _R8M_OLD_REORDER(obs,action)
+    # First preserve every trade selected by the verified mirror optimiser.
+    preserved=_R8M_OLD_REORDER(obs,action)
+    baseline=[list(o) for o in preserved.get('market',[])]
+    slots=[];sells=[]
+    for i,o in enumerate(baseline):
+        if o and o[0]=='SELL':slots.append(i);sells.append(o)
+    if len(sells)<2 or len(sells)>6:return preserved
+    bought={o[1] for o in baseline if o and len(o)>1 and o[0]=='BUY_PRODUCT'}
+    if any(o[1] in bought for o in sells):return preserved
+    active={o[1]:supply[o[1]] for o in sells if o[1] in supply}
+    if not active:return preserved
+    _R8M_REPORT['r8m_calls']+=1;_R8M_REPORT['r8m_forecasts']+=len(active)
+    params=_v44y_params(obs)
+    stock={k:max(0,int(v)) for k,v in projected_shed(action,FarmView(obs)).items()}
+    inv0={k:int(v) for k,v in obs['market']['inventory'].items()}
+    mirror=_v44y_factor_margin(orders,inv0,stock,params)
+    mir0=mirror(baseline)
+    models=[]
+    # Unknown rival order position, represented by three plausible slots.
+    for item,qty in active.items():
+        for slot in (0,1,2):
+            rival=[[] for _ in range(slot)]+[['SELL',item,qty]]
+            f=_r8m_factor(rival,inv0,stock,{item:qty},params)
+            models.append((f,f(baseline)))
+    best=0.0;selected=None;count=0
+    for perm in _cxd_it.permutations(sells):
+        cand=list(baseline)
+        for slot,o in zip(slots,perm):cand[slot]=o
+        if cand==baseline:continue
+        count+=1
+        # Prediction cannot justify sacrificing the existing mirror guarantee.
+        if mirror(cand)<mir0-.01:continue
+        gain=sum(f(cand)-base for f,base in models)/len(models)
+        if gain>best+.5:best=gain;selected=cand
+    _R8M_REPORT['r8m_evals']+=count
+    if selected is None:return preserved
+    _R8M_REPORT['r8m_changed']+=1;_R8M_REPORT['r8m_expected_gain']+=best
+    return dict(preserved,market=selected)
+
+_cxd_reorder=_r8m_reorder
+_R8M_TELEMETRY={}
+
+def round8_market_recurrence_agent(observation,configuration=None):
+    if int(observation.get('step',0))==0:
+        for key in _R8M_REPORT:_R8M_REPORT[key]=0
+    try:
+        result=_R8M_PARENT(observation,configuration)
+    except Exception:
+        _R8M_REPORT['r8m_errors']+=1
+        raise
+    _R8M_TELEMETRY.clear()
+    _R8M_TELEMETRY.update(getattr(_R8M_PARENT,'telemetry',{}))
+    _R8M_TELEMETRY.update(_R8M_REPORT)
+    return result
+round8_market_recurrence_agent.telemetry=_R8M_TELEMETRY
+agent=round8_market_recurrence_agent

@@ -1,0 +1,160 @@
+{
+  "variants": [
+    {
+      "name": "route_3",
+      "path": "research/production_upgrade_20260928/candidates/route_3.py",
+      "route": 3,
+      "sha256": "3300ebfb31c5229b4fded90c07ed7ab58671807aab43e931b1e8077fe44619c4"
+    },
+    {
+      "name": "route_5",
+      "path": "research/production_upgrade_20260928/candidates/route_5.py",
+      "route": 5,
+      "sha256": "9dfd0ee65d90011cbe0dfcc5aba4c4a339d9910cd8b07b1e9255ee2e0ec94b39"
+    },
+    {
+      "name": "route_6",
+      "path": "research/production_upgrade_20260928/candidates/route_6.py",
+      "route": 6,
+      "sha256": "786ae4e602eeb736b476ed6e8fca185d78502136a3867938371cec8950b90f1d"
+    },
+    {
+      "name": "route_7",
+      "path": "research/production_upgrade_20260928/candidates/route_7.py",
+      "route": 7,
+      "sha256": "7ede542dd4277d36e300c442ff41601beb500a5f1c506f1889697bf00b68d2b5"
+    },
+    {
+      "name": "route_8",
+      "path": "research/production_upgrade_20260928/candidates/route_8.py",
+      "route": 8,
+      "sha256": "9efc6122324c3c9e5b7a3d6c67fb590645bc6e97561b09661c2b9cb7716fe84a"
+    },
+    {
+      "name": "route_9",
+      "path": "research/production_upgrade_20260928/candidates/route_9.py",
+      "route": 9,
+      "sha256": "3fea4fd6fa80a7bb6e8afc32e7d4ac295b226b231bcae5125538bc3f7a6aa10c"
+    },
+    {
+      "name": "route_10",
+      "path": "research/production_upgrade_20260928/candidates/route_10.py",
+      "route": 10,
+      "sha256": "e824dc68feb59a04f7b9e7714814ec1b1416631a45221f985542e43b436526b2"
+    },
+    {
+      "name": "route_11",
+      "path": "research/production_upgrade_20260928/candidates/route_11.py",
+      "route": 11,
+      "sha256": "97aba0506cd28b0eb10322bb453d32331637862434b3587b7d2873340f16dd6f"
+    },
+    {
+      "name": "route_12",
+      "path": "research/production_upgrade_20260928/candidates/route_12.py",
+      "route": 12,
+      "sha256": "eace371ffcfc53279433c7ec61a244b69a3e3af62608202c3ac927e6e66a19f9"
+    },
+    {
+      "name": "route_109",
+      "path": "research/production_upgrade_20260928/candidates/route_109.py",
+      "route": 109,
+      "sha256": "b8d1a46090f5ea9aa1b175eb44c62e30d0bc5d9a0d3f46ede26a53ba1203e294"
+    },
+    {
+      "name": "route_126",
+      "path": "research/production_upgrade_20260928/candidates/route_126.py",
+      "route": 126,
+      "sha256": "6de28484651417dbbe6fc0b20e7e070f994b06a578fbcdf03ada84b98d5c2037"
+    },
+    {
+      "name": "route_127",
+      "path": "research/production_upgrade_20260928/candidates/route_127.py",
+      "route": 127,
+      "sha256": "23a278c3670b372ca6c2ca92659ecefaae26d50256ed395acd7fbf15af1354bd"
+    },
+    {
+      "name": "route_128",
+      "path": "research/production_upgrade_20260928/candidates/route_128.py",
+      "route": 128,
+      "sha256": "906de8da8720b71e2840b4f99a2e3c738eec92a8fd8d916c7ba930e8499c414e"
+    },
+    {
+      "name": "route_oldmap",
+      "path": "research/production_upgrade_20260928/candidates/route_oldmap.py",
+      "route": "oldmap",
+      "sha256": "6b3f1130520b8ad94379c4bed5f82b631e63cc440436d90d654cf3dcf74b11db"
+    }
+  ],
+  "seeds": [
+    278825744,
+    462028262,
+    952086862,
+    1096951957,
+    1586045662,
+    1799657451
+  ],
+  "seed_shops": {
+    "278825744": [
+      "YARN_STORE",
+      "FARMERS_MARKET"
+    ],
+    "462028262": [
+      "YARN_STORE",
+      "SMOOTHIE_SHOP"
+    ],
+    "952086862": [
+      "SMOOTHIE_SHOP",
+      "YARN_STORE"
+    ],
+    "1096951957": [
+      "SMOOTHIE_SHOP",
+      "YARN_STORE"
+    ],
+    "1586045662": [
+      "ICE_CREAM_SHOP",
+      "YARN_STORE"
+    ],
+    "1799657451": [
+      "YARN_STORE",
+      "BAKERY"
+    ]
+  },
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "scope": "Yarn-focused DEVELOPMENT stratum from previously declared worlds; non-Yarn routes are unchanged."
+}

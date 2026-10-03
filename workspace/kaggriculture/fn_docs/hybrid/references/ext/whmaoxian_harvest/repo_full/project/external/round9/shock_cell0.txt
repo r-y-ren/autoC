@@ -1,0 +1,16 @@
+# Kaggriculture: A Smaller Market Shock
+
+Kaggriculture combines farm work with a shared market. This agent builds on
+**The 2945 Farm** and uses an otherwise idle opening worker to grow one more
+wheat crop before the same tile becomes a pasture.
+
+The opening buys five wheat for planned use and one extra wheat seed. A worker
+plants and waters at (2, 4) on day zero. The next day's scheduled pasture visit
+waters the crop instead. On day two, another idle worker waters, harvests,
+rebuilds the pasture and delivers the two wheat units for sale. The original
+cow placement at callback 95 remains on schedule. No extra land or workers
+are purchased for this cycle. Later farm and market decisions retain the
+upstream policy.
+
+Run all cells to create `submission.tar.gz` and replay one complete evaluation
+game with the exact pinned Kaggriculture engine. Code is collapsed by default.

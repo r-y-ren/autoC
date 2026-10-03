@@ -1,0 +1,108 @@
+{
+  "manifest": {
+    "candidate": "submissions/release_v7/main.py",
+    "opponents": [
+      "external/round8/master2965/main.py",
+      "experiments/round8_top2_dsm_strict.py",
+      "experiments/round8_top2_dsm_tasks.py",
+      "external/round8/fieldcraft/main.py"
+    ],
+    "hashes": {
+      "submissions/release_v7/main.py": "273ca38d83d110166af4e2f2c6748892328488d5292f39fdbe4ef87b11350197",
+      "external/round8/master2965/main.py": "93831c18a43c49312a71fa67171224681c52c3fade0259403e8d8fae7973565f",
+      "experiments/round8_top2_dsm_strict.py": "8340cedac73c4a54ca6f1a440385514ef2a9c4fd613c6c86cf14312fc19b9e3f",
+      "experiments/round8_top2_dsm_tasks.py": "2849b6b2f188b37b5aa50ed94cc994755302c719cf9da8bef7a604a592c48642",
+      "external/round8/fieldcraft/main.py": "4aa771451850e68892fc1a847211f0bebffd511d6d3a508a7bb9969e5b881091"
+    },
+    "split": "development",
+    "seeds": [
+      1118262502,
+      457648937,
+      1921079672,
+      733556107,
+      399468952,
+      800459488,
+      762418392,
+      1591314292,
+      74661856,
+      1639496701,
+      297318058,
+      1203085951,
+      864591955,
+      1461151229,
+      664462135,
+      1024245625,
+      177405018,
+      544496295,
+      495589527,
+      1906353022
+    ],
+    "seats": [
+      0,
+      1
+    ]
+  },
+  "games": 160,
+  "summary": {
+    "experiments/round8_top2_dsm_strict.py": {
+      "games": 40,
+      "valid": 40,
+      "worlds": 20,
+      "wins": 11,
+      "losses": 29,
+      "ties": 0,
+      "mean_margin": -4593.1,
+      "median_margin": -10900.0,
+      "points": 0.275,
+      "world_bootstrap_points_95": [
+        0.1,
+        0.475
+      ]
+    },
+    "experiments/round8_top2_dsm_tasks.py": {
+      "games": 40,
+      "valid": 40,
+      "worlds": 20,
+      "wins": 34,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": 81262.875,
+      "median_margin": 93013.0,
+      "points": 0.85,
+      "world_bootstrap_points_95": [
+        0.7,
+        1
+      ]
+    },
+    "external/round8/fieldcraft/main.py": {
+      "games": 40,
+      "valid": 40,
+      "worlds": 20,
+      "wins": 30,
+      "losses": 10,
+      "ties": 0,
+      "mean_margin": 2174.925,
+      "median_margin": 2877.0,
+      "points": 0.75,
+      "world_bootstrap_points_95": [
+        0.575,
+        0.925
+      ]
+    },
+    "external/round8/master2965/main.py": {
+      "games": 40,
+      "valid": 40,
+      "worlds": 20,
+      "wins": 12,
+      "losses": 28,
+      "ties": 0,
+      "mean_margin": -600.325,
+      "median_margin": -510.0,
+      "points": 0.3,
+      "world_bootstrap_points_95": [
+        0.125,
+        0.475
+      ]
+    }
+  }
+}

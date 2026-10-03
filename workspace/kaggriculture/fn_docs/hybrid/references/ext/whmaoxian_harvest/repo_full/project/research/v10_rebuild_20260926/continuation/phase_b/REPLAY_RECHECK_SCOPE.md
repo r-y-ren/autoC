@@ -1,0 +1,1 @@
+These are fixed-action counterfactual diagnostics. The original private agents cannot react to a changed market in these tests. Outcomes are not primary promotion points or evidence of defeating the currently ranked private programs. The source was frozen before these probes, and their seed values and opponent identities are not encoded in the candidate.

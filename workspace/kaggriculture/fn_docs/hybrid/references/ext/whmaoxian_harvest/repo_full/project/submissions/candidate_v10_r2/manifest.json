@@ -1,0 +1,27 @@
+{
+  "builder": "build_release_v10_r2_technical.py",
+  "label": "V10-R2",
+  "candidate": "research/v10_rebuild_20260926/continuation/generation5/advance36.py",
+  "source_sha256": "e03333c6bef0c83764d56f1cc958782f032c5bbdc0684bae1cc2ccd6b61f3e7c",
+  "entry_name": "r2_opening_agent",
+  "profile": "generic",
+  "archive_sha256": "9d78488553eeb14c31f396b6539d6921ff0d2655c2913736efd3843f947cf29e",
+  "archive_members": [
+    "main.py",
+    "NOTICE.txt",
+    "LICENSE.txt"
+  ],
+  "trigger_seed": 688041503,
+  "default_seed": 0,
+  "promotes_root_entrypoints": false,
+  "strength_approval": false,
+  "online_submission": false,
+  "V92_SELL_LIB_present": false,
+  "status": "candidate; technical checks passed; strength selection pending",
+  "source_bytes": 1087907,
+  "archive_bytes": 650633,
+  "source_urls": {},
+  "license": "See retained full NOTICE/LICENSE and embedded source notices",
+  "environment": "kaggle-environments 1.32.7",
+  "online_score": null
+}

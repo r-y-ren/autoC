@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "animal": "GOOSE",
+      "first_actual": 4,
+      "old_first": 2.0,
+      "new_first": 4.0,
+      "exact_daily_collection_assumption": true
+    },
+    {
+      "animal": "COW",
+      "first_actual": 6,
+      "old_first": 3.0,
+      "new_first": 6.0,
+      "exact_daily_collection_assumption": true
+    },
+    {
+      "animal": "SHEEP",
+      "first_actual": 6,
+      "old_first": 4.0,
+      "new_first": 6.0,
+      "exact_daily_collection_assumption": true
+    }
+  ],
+  "scope": "Fed and cared daily, all output harvested each production boundary; not a live revenue forecast."
+}

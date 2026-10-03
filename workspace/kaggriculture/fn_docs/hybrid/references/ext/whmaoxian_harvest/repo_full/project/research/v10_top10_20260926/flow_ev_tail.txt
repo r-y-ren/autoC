@@ -1,0 +1,89 @@
+
+# Expected margin, not predicted volume alone, decides optional sale advancement.
+_EV_ADV_PARENT=_adv_apply
+_EV_ACTION={}
+_EV_REPORT={'evaluations':0,'accepted':0,'expected_gain':0.0,'errors':0}
+
+def _ev_sell(item,inventory,quantity,params):
+    revenue=0
+    for _ in range(quantity):
+        price=_r37_market_price(item,inventory,params)
+        revenue+=price
+        if price>1:inventory+=1
+    return revenue,inventory
+
+def _ev_together(item,inventory,mine,theirs,params):
+    revenue=[0,0]
+    for i in range(max(mine,theirs)):
+        price=_r37_market_price(item,inventory,params)
+        active=int(i<mine)+int(i<theirs)
+        if i<mine:revenue[0]+=price
+        if i<theirs:revenue[1]+=price
+        if price>1:inventory+=active
+    return revenue
+
+def _ev_margin(obs,item,quantity,turn,prediction,inventory,params):
+    step=int(obs['step']);shops=obs.get('town',{}).get('unlocked_shops',[])
+    def demand(end):
+        return flow_demand(shops,item)*sum(t%4==0 for t in range(step,end))+sum(t%24==0 for t in range(step,end))
+    total_draw=demand(turn)
+    now_probability=max(0,min(1,prediction[0]*_EV_PROB_SCALE))
+    soon_probability=max(now_probability,min(1,prediction[1]*_EV_PROB_SCALE))
+    batch=max(1,min(40,int(prediction[2]*20/max(.05,prediction[1])+.5)))
+    early_revenue,after_early=_ev_sell(item,inventory,quantity,params)
+    no_event=early_revenue-_ev_sell(item,inventory-total_draw,quantity,params)[0]
+    opp_wait,end_opp_wait=_ev_sell(item,inventory,batch,params)
+    mine_late=_ev_sell(item,end_opp_wait-total_draw,quantity,params)[0]
+    both=_ev_together(item,inventory,quantity,batch,params)
+    simultaneous=(both[0]-mine_late)-(both[1]-opp_wait)
+    event_turn=min(turn-1,step+2);event_draw=demand(event_turn)
+    opp_wait,end_opp_wait=_ev_sell(item,inventory-event_draw,batch,params)
+    mine_late=_ev_sell(item,end_opp_wait-(total_draw-event_draw),quantity,params)[0]
+    opp_early=_ev_sell(item,after_early-event_draw,batch,params)[0]
+    future_event=(early_revenue-mine_late)-(opp_early-opp_wait)
+    return (1-soon_probability)*no_event+now_probability*simultaneous+(soon_probability-now_probability)*future_event
+
+_EV_PRESSURE_BASE=_v10_pressure_plan
+
+def _v10_pressure_plan(obs,plan,protected):
+    step=int(obs['step']);seat=int(obs['player']);cache=_MP_CACHE.get(seat)
+    if step<_MP_START or not cache or cache[0]!=step or seat not in _EV_ACTION:
+        return _EV_PRESSURE_BASE(obs,plan,protected)
+    action=_EV_ACTION[seat];available=projected_shed(action,FarmView(obs))
+    for order in action.get('market',[]):
+        if len(order)>=3 and order[0]=='SELL':available[order[1]]=max(0,available.get(order[1],0)-int(order[2]))
+    result=[];params=_v44y_params(obs)
+    for turn,item,quantity in plan:
+        stock=max(0,int(available.get(item,0)));offset=turn-step
+        if stock<=0:continue
+        if _EV_KEEP_BASE and offset<=_ADV_LOOK and item!=protected:
+            take=min(stock,quantity);result.append((turn,item,take));available[item]-=take;continue
+        if offset>_EV_LOOK or step//72!=turn//72:continue
+        prediction=cache[1].get(item)
+        if prediction is None:continue
+        inventory=int(obs['market']['inventory'][item]);best_gain=_EV_MIN_GAIN;best_quantity=0
+        maximum=min(stock,quantity,30)
+        for take in sorted({1,2,4,8,12,20,maximum}):
+            if take>maximum:continue
+            gain=_ev_margin(obs,item,take,turn,prediction,inventory,params)
+            _EV_REPORT['evaluations']+=1
+            if gain>best_gain:best_gain=gain;best_quantity=take
+        if best_quantity:
+            result.append((turn,item,best_quantity));available[item]-=best_quantity
+            _EV_REPORT['accepted']+=1;_EV_REPORT['expected_gain']+=best_gain
+    return result
+
+def _adv_apply(obs,action):
+    _EV_ACTION[int(obs['player'])]=action
+    return _EV_ADV_PARENT(obs,action)
+
+_EV_PARENT=model_flow_agent
+
+def ev_flow_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        for key in _EV_REPORT:_EV_REPORT[key]=0
+        _EV_ACTION.pop(int(observation['player']),None)
+    return _EV_PARENT(observation,configuration)
+ev_flow_agent.telemetry=_EV_REPORT
+agent=ev_flow_agent
+kaggle_submission_agent=ev_flow_agent

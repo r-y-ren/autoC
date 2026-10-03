@@ -1,0 +1,405 @@
+{
+  "kind": "frozen_trace_diagnostic_not_live_top10",
+  "results": [
+    {
+      "rank": 1,
+      "team": "DSM",
+      "rating_snapshot": 3127.5,
+      "submission_id": 56401245,
+      "episode_id": 111476076,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242856069,
+          "submissionId": 56372014,
+          "reward": 132641,
+          "initialScore": 3052.2772144015476,
+          "updatedScore": 3048.8972273349673,
+          "teamId": 16730524
+        },
+        {
+          "id": 242856070,
+          "submissionId": 56401245,
+          "reward": 150643,
+          "index": 1,
+          "initialScore": 3124.1412500691226,
+          "updatedScore": 3127.521237135703,
+          "teamId": 16732748
+        }
+      ],
+      "time": "2026-09-21T03:55:57.641857500Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 0,
+      "money": 95757.0,
+      "opponent_money": 27709.0,
+      "delta": 68048.0,
+      "original_rewards": [
+        132641.0,
+        150643.0
+      ],
+      "seconds": 4.283375200000137,
+      "max_action_seconds": 0.057646
+    },
+    {
+      "rank": 2,
+      "team": "Vadim Vasilenko",
+      "rating_snapshot": 3072.5,
+      "submission_id": 56396983,
+      "episode_id": 111475104,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242854123,
+          "submissionId": 56352346,
+          "reward": 79547,
+          "initialScore": 3045.207932296173,
+          "updatedScore": 3050.1583377903667,
+          "teamId": 16640510
+        },
+        {
+          "id": 242854124,
+          "submissionId": 56396983,
+          "reward": 75867,
+          "index": 1,
+          "initialScore": 3072.5382868344727,
+          "updatedScore": 3067.587881340279,
+          "teamId": 16770421
+        }
+      ],
+      "time": "2026-09-21T03:57:32.134771900Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 0,
+      "money": 148940.0,
+      "opponent_money": 81889.0,
+      "delta": 67051.0,
+      "original_rewards": [
+        79547.0,
+        75867.0
+      ],
+      "seconds": 4.247067400000105,
+      "max_action_seconds": 0.095509
+    },
+    {
+      "rank": 3,
+      "team": "THIRD FARM CLUB",
+      "rating_snapshot": 3067.4,
+      "submission_id": 56395336,
+      "episode_id": 111476063,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242856043,
+          "submissionId": 56401905,
+          "reward": 112612,
+          "initialScore": 2980.393333076645,
+          "updatedScore": 2986.408007463774,
+          "teamId": 16730612
+        },
+        {
+          "id": 242856044,
+          "submissionId": 56395336,
+          "reward": 111438,
+          "index": 1,
+          "initialScore": 3067.4641400689484,
+          "updatedScore": 3061.449465681819,
+          "teamId": 16730524
+        }
+      ],
+      "time": "2026-09-21T03:58:48.989345900Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 0,
+      "money": 121682.0,
+      "opponent_money": 102945.0,
+      "delta": 18737.0,
+      "original_rewards": [
+        112612.0,
+        111438.0
+      ],
+      "seconds": 4.926049499999863,
+      "max_action_seconds": 0.109658
+    },
+    {
+      "rank": 4,
+      "team": "Majkel1337",
+      "rating_snapshot": 3064.2,
+      "submission_id": 56407295,
+      "episode_id": 111476119,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242856155,
+          "submissionId": 56372014,
+          "reward": 104637,
+          "initialScore": 3056.717891563355,
+          "updatedScore": 3052.2772144015476,
+          "teamId": 16730524
+        },
+        {
+          "id": 242856156,
+          "submissionId": 56407295,
+          "reward": 126873,
+          "index": 1,
+          "initialScore": 3059.8161606153694,
+          "updatedScore": 3064.2568377771768,
+          "teamId": 16718819
+        }
+      ],
+      "time": "2026-09-21T03:55:39.933858500Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 0,
+      "money": 141082.0,
+      "opponent_money": 92446.0,
+      "delta": 48636.0,
+      "original_rewards": [
+        104637.0,
+        126873.0
+      ],
+      "seconds": 4.8687245000000985,
+      "max_action_seconds": 0.068028
+    },
+    {
+      "rank": 5,
+      "team": "SpaTaro",
+      "rating_snapshot": 3045.2,
+      "submission_id": 56352346,
+      "episode_id": 111475104,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242854123,
+          "submissionId": 56352346,
+          "reward": 79547,
+          "initialScore": 3045.207932296173,
+          "updatedScore": 3050.1583377903667,
+          "teamId": 16640510
+        },
+        {
+          "id": 242854124,
+          "submissionId": 56396983,
+          "reward": 75867,
+          "index": 1,
+          "initialScore": 3072.5382868344727,
+          "updatedScore": 3067.587881340279,
+          "teamId": 16770421
+        }
+      ],
+      "time": "2026-09-21T03:57:32.134771900Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 1,
+      "money": 86986.0,
+      "opponent_money": 101337.0,
+      "delta": -14351.0,
+      "original_rewards": [
+        79547.0,
+        75867.0
+      ],
+      "seconds": 5.00648450000017,
+      "max_action_seconds": 0.080758
+    },
+    {
+      "rank": 6,
+      "team": "Unknown Mother-Goose",
+      "rating_snapshot": 3039.7,
+      "submission_id": 56390472,
+      "episode_id": 111469530,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242842977,
+          "submissionId": 56390472,
+          "reward": 102207,
+          "initialScore": 3044.2971155171795,
+          "updatedScore": 3039.745562039025,
+          "teamId": 16730612
+        },
+        {
+          "id": 242842978,
+          "submissionId": 56352346,
+          "reward": 103938,
+          "index": 1,
+          "initialScore": 3040.6563788180188,
+          "updatedScore": 3045.207932296173,
+          "teamId": 16640510
+        }
+      ],
+      "time": "2026-09-21T03:41:41.467871Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 1,
+      "money": 156387.0,
+      "opponent_money": 93418.0,
+      "delta": 62969.0,
+      "original_rewards": [
+        102207.0,
+        103938.0
+      ],
+      "seconds": 4.445857400000023,
+      "max_action_seconds": 0.089569
+    },
+    {
+      "rank": 7,
+      "team": "QQ",
+      "rating_snapshot": 3010.8,
+      "submission_id": 56327925,
+      "episode_id": 111476057,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242856031,
+          "submissionId": 56327925,
+          "reward": 94212,
+          "initialScore": 3016.147681604719,
+          "updatedScore": 3010.809069115998,
+          "teamId": 16817528
+        },
+        {
+          "id": 242856032,
+          "submissionId": 56380335,
+          "reward": 101802,
+          "index": 1,
+          "initialScore": 2966.4970505314714,
+          "updatedScore": 2971.835663020192,
+          "teamId": 16758882
+        }
+      ],
+      "time": "2026-09-21T03:55:44.142996500Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 1,
+      "money": 91527.0,
+      "opponent_money": 84390.0,
+      "delta": 7137.0,
+      "original_rewards": [
+        94212.0,
+        101802.0
+      ],
+      "seconds": 4.961501700000099,
+      "max_action_seconds": 0.071182
+    },
+    {
+      "rank": 8,
+      "team": "Orbital Terraformer",
+      "rating_snapshot": 3006.1,
+      "submission_id": 56263779,
+      "episode_id": 111476065,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242856047,
+          "submissionId": 56400834,
+          "reward": 83476,
+          "initialScore": 2887.8758840862033,
+          "updatedScore": 2885.1324929258603,
+          "teamId": 16923122
+        },
+        {
+          "id": 242856048,
+          "submissionId": 56263779,
+          "reward": 93651,
+          "index": 1,
+          "initialScore": 3006.151303374421,
+          "updatedScore": 3008.894694534764,
+          "teamId": 16675778
+        }
+      ],
+      "time": "2026-09-21T03:57:43.817720700Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 0,
+      "money": 86371.0,
+      "opponent_money": 52811.0,
+      "delta": 33560.0,
+      "original_rewards": [
+        83476.0,
+        93651.0
+      ],
+      "seconds": 4.434912000000168,
+      "max_action_seconds": 0.069765
+    },
+    {
+      "rank": 9,
+      "team": "Yannik Schiffner",
+      "rating_snapshot": 3001.0,
+      "submission_id": 56392345,
+      "episode_id": 111476078,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242856073,
+          "submissionId": 56392345,
+          "reward": 116826,
+          "initialScore": 2998.096247414862,
+          "updatedScore": 3001.0875253345175,
+          "teamId": 16760701
+        },
+        {
+          "id": 242856074,
+          "submissionId": 56393046,
+          "reward": 109929,
+          "index": 1,
+          "initialScore": 2898.4876639904655,
+          "updatedScore": 2895.49638607081,
+          "teamId": 16629972
+        }
+      ],
+      "time": "2026-09-21T03:53:13.655870500Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 1,
+      "money": 107782.0,
+      "opponent_money": 116430.0,
+      "delta": -8648.0,
+      "original_rewards": [
+        116826.0,
+        109929.0
+      ],
+      "seconds": 5.134785100000045,
+      "max_action_seconds": 0.071033
+    },
+    {
+      "rank": 10,
+      "team": "Kaggledew Valley",
+      "rating_snapshot": 2997.2,
+      "submission_id": 56403652,
+      "episode_id": 111476837,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242857593,
+          "submissionId": 56403652,
+          "reward": 98102,
+          "initialScore": 2997.296164778924,
+          "updatedScore": 3000.6416833198773,
+          "teamId": 16633132
+        },
+        {
+          "id": 242857594,
+          "submissionId": 56407797,
+          "reward": 91525,
+          "index": 1,
+          "initialScore": 2923.1927535136483,
+          "updatedScore": 2919.595229706209,
+          "teamId": 16671741
+        }
+      ],
+      "time": "2026-09-21T03:58:14.081796800Z",
+      "split": "study",
+      "candidate": "submissions/release_v5/main.py",
+      "candidate_seat": 1,
+      "money": 94819.0,
+      "opponent_money": 97697.0,
+      "delta": -2878.0,
+      "original_rewards": [
+        98102.0,
+        91525.0
+      ],
+      "seconds": 4.888841500000126,
+      "max_action_seconds": 0.072035
+    }
+  ]
+}

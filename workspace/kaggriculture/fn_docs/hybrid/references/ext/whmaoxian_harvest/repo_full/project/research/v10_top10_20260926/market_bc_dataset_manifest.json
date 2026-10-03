@@ -1,0 +1,111 @@
+{
+  "samples": 44736,
+  "features": 45,
+  "outputs": [
+    "sell_probability",
+    "unconditional_sale_fraction"
+  ],
+  "source_files": [
+    {
+      "episode": 113717056,
+      "sha256": "b2d71324d87f807af7861a99bf4bd630f5cc18ad8cc8eb36cd4299c42ad1803e"
+    },
+    {
+      "episode": 113718271,
+      "sha256": "3d7334a81024fadc69b76a13e7742b9448732da56fba3336da63919943509581"
+    },
+    {
+      "episode": 113725039,
+      "sha256": "25f6c6a01c8409aca4f4c122de28a8671a539ed4cad414848aa49e7678e214ef"
+    },
+    {
+      "episode": 113725041,
+      "sha256": "e094a1d44791e76eb98b62c4cea1dafeeb8015bf8c3a3295aeec9c4c36c31cf3"
+    },
+    {
+      "episode": 113725160,
+      "sha256": "23c5620ce9e381890b573f8e9c29a42dc7b4dbc77373cb4b8a7b28a776d15b00"
+    },
+    {
+      "episode": 113726340,
+      "sha256": "e4aeacfbd698ab81d7d30c99cbdcabe97c6a57dde12404b08edfcaf8dbec1c05"
+    },
+    {
+      "episode": 113728682,
+      "sha256": "b53aafe030fd6ef0368e3734e43cdc725707dd78da1d533ffe6b6b0de081131d"
+    },
+    {
+      "episode": 113729618,
+      "sha256": "732939bd19a5f0c744964d783b8921d01c4c8424fead6ceab54cde88704e61a5"
+    },
+    {
+      "episode": 113730698,
+      "sha256": "a0995b5477a8b4436b7ba438a13246d51d710f657a0181ea4039ea2a696b33b8"
+    },
+    {
+      "episode": 113731935,
+      "sha256": "221ee8557cd7c69e5b52ed5479d48148ab10684d832583431ab13fc8b13fa901"
+    },
+    {
+      "episode": 113731997,
+      "sha256": "dfbb001dce363b448f5f03136c836adde5ca55928eb6f7c0fb3ebf8effefc0d4"
+    },
+    {
+      "episode": 113733231,
+      "sha256": "d1d856370a6db464fcbf102af77eaf594365f0d7eced017763cec21f534b44bf"
+    },
+    {
+      "episode": 113733283,
+      "sha256": "8d304fe6bac755d741657e41658512040d2561b95c98ca359c44e50fbfc0af9f"
+    },
+    {
+      "episode": 113733286,
+      "sha256": "884c9d99e42540eb0af75175f8a652b57350b0f36d1da92a446ff652b8a8a268"
+    },
+    {
+      "episode": 113733287,
+      "sha256": "e50030153d42743b9d04e93e54fb4e38dfa4d23c8986c40b1b4b555a7387c974"
+    },
+    {
+      "episode": 113734383,
+      "sha256": "47968321484d03b324885dfb6401c486dc57edb429ea07bf641b3bff0bf3af57"
+    },
+    {
+      "episode": 113734520,
+      "sha256": "769e43177133df1e09ef9e69961ddd272431e6df61881ffdbe9abb1b2cd074c4"
+    },
+    {
+      "episode": 113734523,
+      "sha256": "ff4dfcb5930d8d34363032bf4ce94f0082bf9f08007a65d390db9abde3a3c7d9"
+    },
+    {
+      "episode": 113735555,
+      "sha256": "9a1e515194b11386c048596b86049b05df0fb397fd67bcb93473f32397f81f63"
+    },
+    {
+      "episode": 113736663,
+      "sha256": "ec0269157abcdee532206bfeed9ab12f57b4466d0c213ea0799af8fe9e5998d6"
+    },
+    {
+      "episode": 113737740,
+      "sha256": "0957ba3797a67cf1ac6615879bd446d33cffe216298fc0d6cb96c1888b0296f4"
+    },
+    {
+      "episode": 113738031,
+      "sha256": "a1a5e5c2bb921bb610af5a7a4054fbe207cbe9fdf715b7df6fd8f11c6832b335"
+    },
+    {
+      "episode": 113739019,
+      "sha256": "671339acc660770e4aa5352cbee363be0ac07546b3e62a75ce853a2d39f17be8"
+    },
+    {
+      "episode": 113739202,
+      "sha256": "0855a69d755076969e396e9867e771617755e23140498c02ce42ab440decaf4a"
+    }
+  ],
+  "feature_source_sha256": "f2d4731e8efb99d47b77e7bff0852b4689aebacf6b5d7ade91851a64eead9c21",
+  "dataset_sha256": "e4572972d57353b11f764792edc2a7b3ffb094595942359c7ffa3b86dc590a5c",
+  "projection_checks": 240,
+  "input_scope": "Own observation and proposed physical/non-SELL actions only; previous own sales are causal history. No opponent private state, identities, episode IDs, or random seeds.",
+  "heldout_used": false
+}

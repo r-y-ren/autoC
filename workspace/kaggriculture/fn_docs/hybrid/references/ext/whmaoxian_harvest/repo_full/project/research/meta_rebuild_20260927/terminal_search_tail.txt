@@ -1,0 +1,27 @@
+
+# More search inside the existing physically certified terminal planner.
+_TS_PARENT=phase_b_agent
+_TS_PLAN=_PLANNER_NS['plan_terminal']
+_TS_REPORT={'calls':0,'accepted':0,'simulations':0,'extra_units':0,'planning_ms_max':0.0,'errors':0}
+_MP_REPORT=_TS_REPORT
+
+def _ts_plan(obs,config,baseline_remaining,**unused):
+    result=_TS_PLAN(obs,config,baseline_remaining,max_simulations=_TS_LIMIT,passes=2,proposals_per_actor=_TS_PROPOSALS)
+    _TS_REPORT['calls']+=1
+    _TS_REPORT['accepted']+=int(bool(result.get('accepted')))
+    _TS_REPORT['simulations']+=int(result.get('simulations',0))
+    _TS_REPORT['planning_ms_max']=max(_TS_REPORT['planning_ms_max'],float(result.get('planning_ms',0)))
+    if result.get('accepted'):
+        delta=result.get('certificate',{}).get('sold_unit_delta',{})
+        assert all(v>=0 for v in delta.values())
+        _TS_REPORT['extra_units']+=sum(delta.values())
+    return result
+_PLANNER_NS['plan_terminal']=_ts_plan
+
+def terminal_search_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        for key in _TS_REPORT:_TS_REPORT[key]=0.0 if key=='planning_ms_max' else 0
+    return _TS_PARENT(observation,configuration)
+terminal_search_agent.telemetry=_TS_REPORT
+agent=terminal_search_agent
+kaggle_submission_agent=terminal_search_agent

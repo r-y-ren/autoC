@@ -1,0 +1,360 @@
+{
+  "kind": "reactive public DSM episode imitation; not DSM private agent",
+  "opponent": "experiments/round7_routes/effective_111918050.py",
+  "rows": [
+    {
+      "source": "submissions/release_v7/main.py",
+      "sha256": "273ca38d83d110166af4e2f2c6748892328488d5292f39fdbe4ef87b11350197",
+      "seed": 81000,
+      "seat": 0,
+      "money": 140178.0,
+      "opponent_money": 118034.0,
+      "delta": 22144.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 6.79,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.054026,
+      "market_report": {},
+      "orderbook_report": {
+        "cxd_turns": 9,
+        "cxd_gain": 480.0,
+        "cxd_evals": 4276,
+        "cxd_budget_hits": 1,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "experiments/round8_market_recurrence.py",
+      "sha256": "605e17eb4e006054453f7859ef01885a85954339b982be92cd0dbb8f9f3db1fb",
+      "seed": 81000,
+      "seat": 0,
+      "money": 140178.0,
+      "opponent_money": 118034.0,
+      "delta": 22144.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 6.82,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.079871,
+      "market_report": {
+        "r8m_calls": 5,
+        "r8m_forecasts": 5,
+        "r8m_changed": 0,
+        "r8m_evals": 9,
+        "r8m_expected_gain": 0,
+        "r8m_errors": 0
+      },
+      "orderbook_report": {
+        "cxd_turns": 9,
+        "cxd_gain": 480.0,
+        "cxd_evals": 4276,
+        "cxd_budget_hits": 1,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "submissions/release_v7/main.py",
+      "sha256": "273ca38d83d110166af4e2f2c6748892328488d5292f39fdbe4ef87b11350197",
+      "seed": 81000,
+      "seat": 1,
+      "money": 140178.0,
+      "opponent_money": 118034.0,
+      "delta": 22144.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.55,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.122159,
+      "market_report": {},
+      "orderbook_report": {
+        "cxd_turns": 9,
+        "cxd_gain": 480.0,
+        "cxd_evals": 4276,
+        "cxd_budget_hits": 1,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "experiments/round8_market_recurrence.py",
+      "sha256": "605e17eb4e006054453f7859ef01885a85954339b982be92cd0dbb8f9f3db1fb",
+      "seed": 81000,
+      "seat": 1,
+      "money": 140178.0,
+      "opponent_money": 118034.0,
+      "delta": 22144.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.67,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.051828,
+      "market_report": {
+        "r8m_calls": 5,
+        "r8m_forecasts": 5,
+        "r8m_changed": 0,
+        "r8m_evals": 9,
+        "r8m_expected_gain": 0,
+        "r8m_errors": 0
+      },
+      "orderbook_report": {
+        "cxd_turns": 9,
+        "cxd_gain": 480.0,
+        "cxd_evals": 4276,
+        "cxd_budget_hits": 1,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "submissions/release_v7/main.py",
+      "sha256": "273ca38d83d110166af4e2f2c6748892328488d5292f39fdbe4ef87b11350197",
+      "seed": 81001,
+      "seat": 0,
+      "money": 119563.0,
+      "opponent_money": 82420.0,
+      "delta": 37143.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.28,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.122465,
+      "market_report": {},
+      "orderbook_report": {
+        "cxd_turns": 1,
+        "cxd_gain": 7.0,
+        "cxd_evals": 2278,
+        "cxd_budget_hits": 1,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "experiments/round8_market_recurrence.py",
+      "sha256": "605e17eb4e006054453f7859ef01885a85954339b982be92cd0dbb8f9f3db1fb",
+      "seed": 81001,
+      "seat": 0,
+      "money": 119563.0,
+      "opponent_money": 82420.0,
+      "delta": 37143.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.53,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.183832,
+      "market_report": {
+        "r8m_calls": 4,
+        "r8m_forecasts": 4,
+        "r8m_changed": 0,
+        "r8m_evals": 12,
+        "r8m_expected_gain": 0,
+        "r8m_errors": 0
+      },
+      "orderbook_report": {
+        "cxd_turns": 1,
+        "cxd_gain": 7.0,
+        "cxd_evals": 2278,
+        "cxd_budget_hits": 1,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "submissions/release_v7/main.py",
+      "sha256": "273ca38d83d110166af4e2f2c6748892328488d5292f39fdbe4ef87b11350197",
+      "seed": 81001,
+      "seat": 1,
+      "money": 119563.0,
+      "opponent_money": 82420.0,
+      "delta": 37143.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.09,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.049595,
+      "market_report": {},
+      "orderbook_report": {
+        "cxd_turns": 1,
+        "cxd_gain": 7.0,
+        "cxd_evals": 2278,
+        "cxd_budget_hits": 1,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "experiments/round8_market_recurrence.py",
+      "sha256": "605e17eb4e006054453f7859ef01885a85954339b982be92cd0dbb8f9f3db1fb",
+      "seed": 81001,
+      "seat": 1,
+      "money": 119563.0,
+      "opponent_money": 82420.0,
+      "delta": 37143.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.32,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.054465,
+      "market_report": {
+        "r8m_calls": 4,
+        "r8m_forecasts": 4,
+        "r8m_changed": 0,
+        "r8m_evals": 12,
+        "r8m_expected_gain": 0,
+        "r8m_errors": 0
+      },
+      "orderbook_report": {
+        "cxd_turns": 1,
+        "cxd_gain": 7.0,
+        "cxd_evals": 2278,
+        "cxd_budget_hits": 1,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "submissions/release_v7/main.py",
+      "sha256": "273ca38d83d110166af4e2f2c6748892328488d5292f39fdbe4ef87b11350197",
+      "seed": 81002,
+      "seat": 0,
+      "money": 82463.0,
+      "opponent_money": 89876.0,
+      "delta": -7413.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.48,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.091921,
+      "market_report": {},
+      "orderbook_report": {
+        "cxd_turns": 9,
+        "cxd_gain": 220.0,
+        "cxd_evals": 4071,
+        "cxd_budget_hits": 2,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "experiments/round8_market_recurrence.py",
+      "sha256": "605e17eb4e006054453f7859ef01885a85954339b982be92cd0dbb8f9f3db1fb",
+      "seed": 81002,
+      "seat": 0,
+      "money": 82463.0,
+      "opponent_money": 89876.0,
+      "delta": -7413.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.57,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.05041,
+      "market_report": {
+        "r8m_calls": 3,
+        "r8m_forecasts": 3,
+        "r8m_changed": 0,
+        "r8m_evals": 121,
+        "r8m_expected_gain": 0,
+        "r8m_errors": 0
+      },
+      "orderbook_report": {
+        "cxd_turns": 9,
+        "cxd_gain": 220.0,
+        "cxd_evals": 4071,
+        "cxd_budget_hits": 2,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "submissions/release_v7/main.py",
+      "sha256": "273ca38d83d110166af4e2f2c6748892328488d5292f39fdbe4ef87b11350197",
+      "seed": 81002,
+      "seat": 1,
+      "money": 82463.0,
+      "opponent_money": 89876.0,
+      "delta": -7413.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.52,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.119219,
+      "market_report": {},
+      "orderbook_report": {
+        "cxd_turns": 9,
+        "cxd_gain": 220.0,
+        "cxd_evals": 4071,
+        "cxd_budget_hits": 2,
+        "cxd_errors": 0
+      }
+    },
+    {
+      "source": "experiments/round8_market_recurrence.py",
+      "sha256": "605e17eb4e006054453f7859ef01885a85954339b982be92cd0dbb8f9f3db1fb",
+      "seed": 81002,
+      "seat": 1,
+      "money": 82463.0,
+      "opponent_money": 89876.0,
+      "delta": -7413.0,
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "seconds": 5.98,
+      "stderr": [],
+      "silent_errors": {},
+      "opponent_silent_errors": {},
+      "max_action_seconds": 0.050742,
+      "market_report": {
+        "r8m_calls": 3,
+        "r8m_forecasts": 3,
+        "r8m_changed": 0,
+        "r8m_evals": 121,
+        "r8m_expected_gain": 0,
+        "r8m_errors": 0
+      },
+      "orderbook_report": {
+        "cxd_turns": 9,
+        "cxd_gain": 220.0,
+        "cxd_evals": 4071,
+        "cxd_budget_hits": 2,
+        "cxd_errors": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+
+# Round9: marginal herd choice from public production and town demand.
+_R9H_PARENT=round8_production_fusion_agent
+_R9H_OLD_TARGET=_y_target
+_R9H_OBS=None
+_R9H_REPORT={'decisions':0,'changed':0,'errors':0}
+_R9H_EVENTS=[]
+_R9H_MIN_GAIN=100.0
+_R9H_PRODUCT={'COW':'MILK','SHEEP':'WOOL'}
+_R9H_FIRST={'COW':8,'SHEEP':6}
+_R9H_PERIOD={'COW':2,'SHEEP':3}
+_R9H_DEMAND={'MILK':('PIZZA_SHOP','ICE_CREAM_SHOP','SMOOTHIE_SHOP'),'WOOL':('YARN_STORE',)}
+
+def _r9h_future(obs):
+    day=int(obs['step'])//24;seat=int(obs['player']);native=_IMPL.chassis.players.get(seat)
+    future=[]
+    if not native:return future
+    tape=_IMPL.chassis.routes[native['route']]
+    shops=obs['town']['unlocked_shops']
+    for t in range(int(obs['step'])+1,min(288,len(tape))):
+        for o in tape[t].get('market',[]):
+            if o and o[0]=='BUY_ANIMAL' and o[1] in _R9H_PRODUCT:
+                to=_R9H_OLD_TARGET(o[1],shops,_Y_CFG) or o[1]
+                future.extend([(to,t//24+1)]*int(o[2]))
+    return future
+
+def _r9h_supply(obs,future):
+    day=int(obs['step'])//24;amount={k:[0.0]*30 for k in _R9H_PRODUCT}
+    for farm in obs['farms']:
+        for row in farm['tiles']:
+            for tile in row:
+                if not isinstance(tile,dict) or tile.get('animal') not in amount:continue
+                kind=tile['animal'];start=int(tile['placed_day']);period=_R9H_PERIOD[kind]
+                first=start+_R9H_FIRST[kind]
+                # Includes care bonuses and observed, as-yet-unharvested output.
+                amount[kind][day]+=float(tile.get('yield_units',0))
+                for d in range(day,30):
+                    if d>=first and (d-first)%period==0:amount[kind][d]+=1+.85*period
+    # Our known future investment schedule is causal information. The rival's
+    # unknown expansion is represented by supply stress, never a replay suffix.
+    for kind,start in future:
+        for d in range(max(day,start+_R9H_FIRST[kind]),30):
+            if (d-start-_R9H_FIRST[kind])%_R9H_PERIOD[kind]==0:amount[kind][d]+=1+.85*_R9H_PERIOD[kind]
+    return amount
+
+def _r9h_value(obs,kind,supply,factor,future_demand):
+    day=int(obs['step'])//24;product=_R9H_PRODUCT[kind];shops=obs['town']['unlocked_shops']
+    inventory=float(obs['market']['inventory'][product]);period=_R9H_PERIOD[kind]
+    start=day+1;first=start+_R9H_FIRST[kind];demand=sum(s in _R9H_DEMAND[product] for s in shops)*(2 if kind=='SHEEP' else 1)
+    expected_new=(2/8 if kind=='SHEEP' else 3/8)
+    value=-_Y_COST[kind]
+    for d in range(day,30):
+        unknown=max(0,min(8,d//3)-len(shops))
+        drain=1+6*(demand+unknown*expected_new*future_demand)
+        inventory+=supply[kind][d]*factor-drain
+        if d>=first and (d-first)%period==0:
+            # First cash payout includes accumulated pre-maturity care.
+            units=1+.85*(_R9H_FIRST[kind] if d==first else period)
+            units=min(6,units)
+            # Price two prospective purchases conservatively; qty is bounded by
+            # the inherited maxq=2 and physical placement controller.
+            quote=_r37_market_price(product,inventory+units)
+            value+=units*quote;inventory+=units*2
+    return value
+
+def _y_target(kind,shops,cfg):
+    original=_R9H_OLD_TARGET(kind,shops,cfg)
+    obs=_R9H_OBS
+    if obs is None or kind not in _R9H_PRODUCT:return original
+    baseline=original or kind
+    alternative='SHEEP' if baseline=='COW' else 'COW'
+    supply=_r9h_supply(obs,_r9h_future(obs))
+    scenarios=[(.8,1.2),(1.,1.),(1.2,.8)]
+    gains=[_r9h_value(obs,alternative,supply,*s)-_r9h_value(obs,baseline,supply,*s) for s in scenarios]
+    chosen=alternative if min(gains)>_R9H_MIN_GAIN else baseline
+    _R9H_REPORT['decisions']+=1;_R9H_REPORT['changed']+=int(chosen!=baseline)
+    _R9H_EVENTS.append({'step':int(obs['step']),'planned':kind,'baseline':baseline,'chosen':chosen,'gain_range':[round(min(gains)),round(max(gains))]})
+    return chosen if chosen!=kind else None
+
+def round9_herd_agent(observation,configuration=None):
+    global _R9H_OBS
+    _R9H_OBS=observation
+    if int(observation['step'])==0:
+        for k in _R9H_REPORT:_R9H_REPORT[k]=0
+        _R9H_EVENTS.clear()
+    return _R9H_PARENT(observation,configuration)
+round9_herd_agent.telemetry=_R9H_REPORT

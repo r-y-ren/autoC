@@ -1,0 +1,5 @@
+for _, row in manifest.iterrows():
+    print(f"--- tier {row.tier}: {row.agent_name} " + "-" * (52 - len(str(row.agent_name))))
+    print("  strategy:", row.strategy)
+    print("  lesson  :", row.lesson)
+    print()

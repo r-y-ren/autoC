@@ -1,0 +1,460 @@
+# Reads the dataset in place: on Kaggle from /kaggle/input, locally from the staging copy.
+import gc, glob, json, os, textwrap, warnings
+from datetime import timezone
+
+# DejaVu, matplotlib's default font, has no CJK glyphs: a Japanese team name prints a
+# warning per glyph and draws as boxes. The names fall back below; the warning goes here.
+warnings.filterwarnings("ignore", message="Glyph")
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import pyarrow.dataset as pads
+from IPython.display import Markdown, display
+
+hits = (glob.glob("/kaggle/input/**/episodes.csv", recursive=True)
+        + glob.glob("../episodes_dataset/episodes.csv")
+        + glob.glob("../../episodes_dataset/episodes.csv"))
+if not hits:
+    raise FileNotFoundError("episodes.csv not found — attach the kaggriculture-episodes dataset")
+BASE = os.path.dirname(hits[0])
+
+eps = pd.read_csv(f"{BASE}/episodes.csv")
+agents = pd.read_csv(f"{BASE}/agents.csv")
+try:                                                      # ids are unreadable on charts
+    teams = pd.read_csv(f"{BASE}/teams.csv")
+except FileNotFoundError:                                 # older dataset version
+    teams = pd.DataFrame(columns=["team_id", "team_name", "ladder_score", "last_submission"])
+NAME = dict(zip(teams.team_id, teams.team_name))
+def name_of(tid):
+    # Chart-safe names: Latin and Cyrillic render everywhere, anything past that
+    # (CJK and friends) becomes "team <id>" instead of tofu boxes on the axis.
+    n = NAME.get(tid, f"team {tid}")
+    return n if all(ord(ch) <= 0x04FF for ch in str(n)) else f"team {tid}"
+# Which episodes have a replay: read it from the 1 MB features table when present.
+# Scanning that column out of replays.parquet costs seconds today and minutes once the
+# corpus is a few GB, so the cheap source wins as the dataset grows.
+try:
+    feats = pd.read_csv(f"{BASE}/episode_features.csv", usecols=["episode_id"])
+    replay_ids = set(feats.episode_id)
+except (FileNotFoundError, ValueError):
+    replay_ids = set()
+    for _shard in sorted(glob.glob(f"{BASE}/replays*.parquet")):
+        replay_ids |= set(pd.read_parquet(_shard, columns=["episode_id"]).episode_id)
+
+def load_replay(episode_id):
+    # A row group here holds 20 replays and decompresses to ~260 MB, so
+    # read_parquet(filters=...) pulls the whole group into memory for one row and
+    # killed the kernel once the corpus passed 800 MB (2026-08-08). Scanning with
+    # batch_size=1 keeps the working set at a single replay.
+    # replays*.parquet matches both layouts: the old single file and the
+    # monthly shards (replays_2026-08.parquet, ...) it was split into.
+    scanner = pads.dataset(sorted(glob.glob(f"{BASE}/replays*.parquet")),
+                           format="parquet").scanner(
+        filter=pads.field("episode_id") == int(episode_id),
+        columns=["replay_json"], batch_size=1)
+    blob = scanner.head(1).column("replay_json")[0].as_py()
+    del scanner
+    gc.collect()
+    out = json.loads(blob)
+    del blob
+    gc.collect()
+    return out
+
+eps["has_replay"] = eps.episode_id.isin(replay_ids)
+eps["winner_bank"] = eps[["bank_0", "bank_1"]].max(axis=1)
+eps["end"] = pd.to_datetime(eps.end_time, format="mixed", utc=True)
+ladder = eps[eps.type.eq("EPISODE_TYPE_PUBLIC") & eps.state.eq("COMPLETED")
+             & eps.winner_bank.gt(0)].copy()
+ladder_r = ladder[ladder.has_replay]
+# Defined here, not in section 3, because the personal report now runs near the top
+# and needs both: cells share one namespace and read in page order.
+ladder_r = ladder_r.assign(
+    winner_sub=np.where(ladder_r.bank_0 >= ladder_r.bank_1, ladder_r.sub_0, ladder_r.sub_1))
+top_subs = ladder_r.groupby("winner_sub").winner_bank.max().nlargest(3)
+
+# Strategy fingerprints live here rather than in section 4 because the personal report
+# reads them two blocks below, and cells share one namespace in page order.
+# Prefer the shipped table: parsing replays here is what pushed the kernel over its
+# memory limit once the corpus passed 800 MB.
+FEAT = pd.read_csv(f"{BASE}/episode_features.csv")
+FEAT_IX = FEAT.set_index(["episode_id", "seat"])
+CROPCOLS = [c for c in FEAT.columns if c.startswith("plants_")]
+
+def fingerprint_row(episode_id, seat):
+    try:
+        r = FEAT_IX.loc[(int(episode_id), int(seat))]
+    except KeyError:
+        # Section 4 defines fingerprint() further down as the method behind these
+        # columns; once that cell has run it also serves as the fallback for a seat
+        # the features table does not cover. Before it runs, there is nothing to fall
+        # back to, so the caller gets None and prints its own "not covered" line.
+        fallback = globals().get("fingerprint")
+        return fallback(episode_id, seat) if fallback else None
+    plants = {c.replace("plants_", "").upper(): int(r[c]) for c in CROPCOLS if r[c] > 0}
+    return {"hires / day": r.total_hires / 30, "peak crew": r.peak_crew,
+            "first land (day)": r.first_land_day, "plants": plants}
+
+# The record holder's fingerprint: section 4 puts it first in its table, the personal
+# report compares against it, so it is computed once here.
+LEAD_ROW = ladder_r[ladder_r.winner_sub.eq(top_subs.index[0])
+                    & ladder_r.winner_bank.eq(top_subs.iloc[0])].iloc[0]
+LEAD_SEAT = 0 if LEAD_ROW.bank_0 >= LEAD_ROW.bank_1 else 1
+LEAD_FP = fingerprint_row(LEAD_ROW.episode_id, LEAD_SEAT)
+AS_OF = eps.end.max()
+
+plt.rcParams.update({
+    "figure.dpi": 90, "font.size": 11, "axes.titlesize": 12, "axes.titleweight": "bold",
+    "axes.spines.top": False, "axes.spines.right": False, "axes.grid": True, "grid.alpha": .25,
+})
+C_TOP, C_MID, C_LOW, C_ACC = "#00795F", "#B84A00", "#9E2B72", "#0072B2"
+fmt = lambda v: f"{v:,.0f}"
+
+# ---------------------------------------------------------------- top band: the lede
+# Kept inside the setup cell on purpose: a separate cell would draw a second
+# "Show hidden code" strip directly under the first, with nothing between them.
+# The block the title promises. Everything local wears tb_.
+# Cohort by RATING THRESHOLD, not by leaderboard position: the snapshot agrees with the
+# live board on the threshold but not on the names, because the top reshuffles hourly.
+tb_feat = pd.read_csv(f"{BASE}/episode_features.csv")
+tb_lad = ladder.copy()
+tb_pool = pd.concat([tb_lad.rating_0, tb_lad.rating_1]).dropna()
+tb_q = 96
+
+def tb_seats(frame, lo, hi=None):
+    # Seats, with the team that owns each one: per-seat medians can otherwise be one
+    # prolific submission repeated, and the block has to be able to say so.
+    out = []
+    for s in (0, 1):
+        r = frame[f"rating_{s}"]
+        keep = frame[(r >= lo) & (r <= hi)] if hi else frame[r >= lo]
+        out.append(keep[["episode_id", f"team_{s}"]]
+                   .rename(columns={f"team_{s}": "tb_team"}).assign(seat=s))
+    return tb_feat.merge(pd.concat(out), on=["episode_id", "seat"])
+
+# The board sets the ceiling, the corpus decides what can actually be served. Hold the
+# ceiling and widen the window first; only drop the threshold if fourteen days still
+# cannot fill it, and say so when that happens. Without this the title can promise a band
+# the page has no games for: measured 2026-09-11, zero parsed seats above 2800 in 14 days.
+tb_ceiling = int(np.floor(np.nanpercentile(
+    teams.ladder_score.dropna() if teams.ladder_score.notna().sum() >= 200 else tb_pool,
+    tb_q) / 50) * 50)
+tb_thr, tb_lowered = tb_ceiling, False
+for tb_win in (2, 4, 7, 14):
+    tb_w = tb_lad[tb_lad.end >= AS_OF - pd.Timedelta(days=tb_win)]
+    tb_top = tb_seats(tb_w, tb_thr)
+    if len(tb_top) >= 40:
+        break
+# Both bands are cut from the SAME ruler: the seats actually played inside the window.
+# Ratings inflate over a season, so an all-history percentile drifts into the bottom of
+# the current field and the word "middle" stops being true (measured on the Aug snapshot:
+# the all-time p45-p55 sat at the 9th-11th percentile of the seats then playing).
+tb_poolw = pd.concat([tb_w.rating_0, tb_w.rating_1]).dropna()
+tb_mid_lo, tb_mid_hi = [np.nanpercentile(tb_poolw, q) for q in (45, 55)]
+if len(tb_top) < 40:
+    tb_lowered = True
+    for tb_thr in range(tb_ceiling - 50, int(tb_mid_hi) + 200, -50):
+        tb_top = tb_seats(tb_w, tb_thr)
+        if len(tb_top) >= 40:
+            break
+tb_mid = tb_seats(tb_w, tb_mid_lo, tb_mid_hi)
+tb_seat_pct = 100 * (tb_poolw >= tb_thr).mean()      # where the band sits among played seats
+tb_teams = tb_top.tb_team.nunique()
+tb_mid_teams = tb_mid.tb_team.nunique()
+tb_conc = 100 * tb_top.tb_team.value_counts().iloc[0] / len(tb_top) if len(tb_top) else 0
+tb_board = int((teams.ladder_score >= tb_thr).sum()) if len(teams) else 0
+tb_of = int(teams.ladder_score.notna().sum())
+tb_board_pct = 100 * tb_board / tb_of if tb_of else float("nan")
+
+display(Markdown("## Today on the ladder"))
+if len(tb_top) < 12 or len(tb_mid) < 12:
+    display(Markdown(
+        f"Too few captured replays above **{tb_thr}** to compare today ({len(tb_top)} seats "
+        f"in {tb_win} days). A band this high can stay empty for a while: at 2,900+ the corpus "
+        f"held zero parsed seats across fourteen days. The whole-corpus view of the same "
+        f"question is [section 4](#s4)."))
+else:
+    # "plantings", not "tiles": features.py counts PLANT actions, so a tile replanted
+    # after every harvest is counted once per planting. All five crops, tomato included.
+    TB_ROWS = [("first land day", "first_land_day"), ("peak crew", "peak_crew"),
+               ("hires over the season", "total_hires"), ("plantings", "tiles_planted"),
+               ("carrot plantings", "plants_carrot"), ("melon plantings", "plants_melon"),
+               ("strawberry plantings", "plants_strawberry"),
+               ("tomato plantings", "plants_tomato"), ("wheat plantings", "plants_wheat")]
+    tb_tab, tb_same, tb_gap = [], [], []
+    for tb_lbl, tb_col in TB_ROWS:
+        a, b = tb_top[tb_col].median(), tb_mid[tb_col].median()
+        if pd.isna(a) or pd.isna(b):
+            continue
+        tb_tab.append(f"| {tb_lbl} | {a:,.0f} | {b:,.0f} |")
+        tb_rel = abs(a - b) / max(a, b, 1)
+        (tb_gap if tb_rel >= 0.25 else tb_same if tb_rel < 0.15 else []).append((tb_rel, tb_lbl, a, b))
+    tb_bank_a, tb_bank_b = tb_top.final_money.median(), tb_mid.final_money.median()
+    tb_tab.append(f"| final bank | {tb_bank_a:,.0f} | {tb_bank_b:,.0f} |")
+    tb_gap.sort(reverse=True)
+    tb_same_txt = ", ".join(f"{lbl} ({a:,.0f} against {b:,.0f})" for _, lbl, a, b in tb_same[:4])
+    tb_same_max = max([r for r, _, _, _ in tb_same[:4]], default=0)
+    # A crop gap on a flat total is a swap: name the crop that pays for it.
+    tb_swap_txt, tb_swap_tot = "", ""
+    tb_tot_a, tb_tot_b = tb_top.tiles_planted.median(), tb_mid.tiles_planted.median()
+    tb_donors = sorted(((tb_top[c].median() - tb_mid[c].median(), l)
+                        for l, c in TB_ROWS if c.startswith("plants_")
+                        and not pd.isna(tb_top[c].median())))
+    if (tb_donors and tb_donors[0][0] < 0 and tb_gap
+            and abs(tb_tot_a - tb_tot_b) / max(tb_tot_a, tb_tot_b, 1) < 0.15
+            and -tb_donors[0][0] >= 0.5 * tb_gap[0][2] - 0.5 * tb_gap[0][3]):
+        tb_swap_tot = f"{tb_tot_a:,.0f} against {tb_tot_b:,.0f}"
+        tb_swap_txt = (f"{tb_donors[0][1].replace(' plantings', '')} "
+                       f"({tb_top[dict(TB_ROWS)[tb_donors[0][1]]].median():,.0f} "
+                       f"against {tb_mid[dict(TB_ROWS)[tb_donors[0][1]]].median():,.0f})")
+    tb_gap_txt = "; ".join(
+        (f"**{a:,.0f}** {lbl} where the middle plants **{b:,.0f}**" if "planting" in lbl
+         else f"{lbl} **{a:,.0f}** where the middle has **{b:,.0f}**")
+        for _, lbl, a, b in tb_gap[:3])
+    tb_money = 100 * (tb_bank_a - tb_bank_b) / max(tb_bank_b, 1)
+
+    # One dashboard, four panels: what differs, how wide the spread is, when it started,
+    # and whether it pays inside a single rating band. A single date badge sits opposite
+    # the title so neither can land on the other.
+    tb_plot = [(lbl, tb_top[col].median(), tb_mid[col].median())
+               for lbl, col in TB_ROWS + [("final bank", "final_money")]
+               if tb_mid[col].median() > 0 and not pd.isna(tb_top[col].median())]
+    tb_crop = (tb_gap[0][1].replace(" plantings", "")
+           if tb_gap and "planting" in tb_gap[0][1] else None)
+    tb_hist, tb_vers, tb_sw, tb_pay_txt, tb_wtd_txt = pd.DataFrame(), [], None, "", ""
+    if tb_crop:
+        tb_ccol = f"plants_{tb_crop}"
+        # EVERY parsed seat, no rating filter. A fixed rating line would select a different
+        # population every day while ratings inflate, and the adoption curve would then be
+        # measuring who clears the line as much as what they plant.
+        tb_series = tb_feat.merge(tb_lad[["episode_id", "end"]], on="episode_id")
+        tb_series["day"] = tb_series.end.dt.strftime("%Y-%m-%d")
+        if "engine_version" not in tb_series:         # older dataset version: no shading
+            tb_series["engine_version"] = np.nan
+        tb_hist = (tb_series.groupby("day")
+                   .agg(n=("seat", "size"),
+                        share=(tb_ccol, lambda x: 100 * (x > 0).mean()),
+                        ver=("engine_version", lambda x: x.astype(str).value_counts().idxmax()
+                             if x.notna().any() else "")))
+        tb_hist = tb_hist[tb_hist.n >= 20]
+        # Version strings sort numerically: "1.32.9" > "1.32.10" as text, and the newest
+        # engine is what the panel and the sentence below both name.
+        tb_vkey = lambda v: tuple(int(x) if x.isdigit() else -1 for x in str(v).split("."))
+        tb_vsum = (tb_series.dropna(subset=["engine_version"])
+                   .groupby("engine_version")
+                   .agg(n=("seat", "size"), share=(tb_ccol, lambda x: 100 * (x > 0).mean())))
+        tb_vsum = tb_vsum[tb_vsum.n >= 500].sort_index(key=lambda ix: ix.map(tb_vkey))
+        tb_vers = [(v, r.share) for v, r in tb_vsum.iterrows()]
+        if tb_vers:                                   # first day the newest version leads
+            tb_lead_v = tb_vers[-1][0]
+            tb_sw = next((d for d, v in tb_hist.ver.items() if v == tb_lead_v), None)
+
+    tb_time = len(tb_hist) >= 8
+    tb_rows_fig = 2 if (tb_crop and tb_time) else 1
+    # The one-row case is the day nothing separates the bands. It needs its own margins:
+    # at the two-row figure's bottom=.09 the x label falls off the canvas.
+    fig = plt.figure(figsize=(8.2, 3.15 * tb_rows_fig + (.8 if tb_rows_fig == 2 else 1.2)))
+    gs = fig.add_gridspec(tb_rows_fig, 2, hspace=.52, wspace=.40, left=.145, right=.925,
+                          top=.875 if tb_rows_fig == 2 else .80,
+                          bottom=.09 if tb_rows_fig == 2 else .20)
+    axA = fig.add_subplot(gs[0, 0] if tb_crop else gs[0, :])
+
+    # Panel A: every median as a share of the middle's. One bar leaves the pack.
+    tb_ratio = [100 * a / b for _, a, b in tb_plot]
+    axA.barh(range(len(tb_plot)), tb_ratio,
+             color=[C_TOP if abs(r - 100) >= 25 else "#CFC8B8" for r in tb_ratio])
+    axA.axvline(100, color=C_MID, lw=1.4)
+    axA.set_yticks(range(len(tb_plot)))
+    axA.set_yticklabels([l.replace(" over the season", "").replace(" plantings", "")
+                         for l, _, _ in tb_plot], fontsize=9)
+    axA.invert_yaxis()
+    axA.tick_params(labelsize=9)
+    axA.set_xlabel("top band as a share of the middle, %", fontsize=9.5)
+    # Title states what the bars show, which on a day with no gap is that nothing differs.
+    axA.set_title("Same farm, different planting" if tb_gap else "Same farm, same planting",
+                  fontsize=11, loc="left")
+    for y, r in enumerate(tb_ratio):
+        # Inside the bar, right-aligned: outside labels collide with the 100% line.
+        axA.text(r - max(tb_ratio) * .012, y, f"{r:.0f}%", va="center", ha="right",
+                 fontsize=8.5, color="white" if abs(r - 100) >= 25 else "#4A4438")
+    axA.set_xlim(0, max(tb_ratio) * 1.06)
+
+    if tb_crop:
+        # Panel B: how many seats reach each level. Survival curves, so the share above
+        # the top band's median can be read off the axis instead of taken on trust.
+        axB = fig.add_subplot(gs[0, 1])
+        tb_tv = np.sort(tb_top[tb_ccol].dropna().values)
+        tb_mv = np.sort(tb_mid[tb_ccol].dropna().values)
+        tb_med_t, tb_med_m = float(np.median(tb_tv)), float(np.median(tb_mv))
+        tb_ov = 100 * (tb_mv >= tb_med_t).mean()      # middle seats already at the top level
+        tb_lo = 100 * (tb_tv <= tb_med_m).mean()      # top seats still at the middle's level
+        tb_wtd = tb_top.groupby("tb_team")[tb_ccol].median().median()
+        tb_wtd_txt = f": {tb_med_t:.0f} per seat, {tb_wtd:.0f} per team"
+        for v, c, lw, lbl in ((tb_mv, "#B0A894", 2.0, "middle"),
+                              (tb_tv, C_TOP, 2.5, f"{tb_thr}+")):
+            axB.step(np.concatenate([[0], v]),
+                     100 * (1 - np.arange(len(v) + 1) / len(v)), where="post",
+                     color=c, lw=lw, label=lbl)
+        axB.axvline(tb_med_t, color=C_MID, lw=1.3, ls="--")
+        axB.plot([tb_med_t], [tb_ov], "o", color="#B0A894", ms=7, zorder=5)
+        axB.annotate(f"{tb_ov:.0f}% of the middle\nis already here",
+                     (tb_med_t, tb_ov), xytext=(9, 14), textcoords="offset points",
+                     fontsize=8.5, color="#6B6250")
+        axB.set_xlim(0, np.percentile(np.concatenate([tb_tv, tb_mv]), 99) * 1.05)
+        axB.set_ylim(0, 105)
+        axB.set_xlabel(f"{tb_crop} plantings in one game", fontsize=9.5)
+        axB.set_ylabel("% of the band planting at least that", fontsize=8.5)
+        axB.tick_params(labelsize=9)
+        axB.set_title("How many reach each level", fontsize=11, loc="left")
+        axB.legend(fontsize=8.5, frameon=False, loc="lower left")
+
+    if tb_crop and tb_time:
+        # Panel C: the same crop over the whole season. The balance patches are the story,
+        # so each engine era gets its own band instead of one line on one switch day.
+        axC = fig.add_subplot(gs[1, 0])
+        tb_x = list(tb_hist.index)
+        tb_runs, tb_start = [], 0
+        for k in range(1, len(tb_x) + 1):
+            if k == len(tb_x) or tb_hist.ver.iloc[k] != tb_hist.ver.iloc[tb_start]:
+                tb_runs.append((tb_start, k - 1, tb_hist.ver.iloc[tb_start]))
+                tb_start = k
+        for k, (lo_i, hi_i, ver) in enumerate(tb_runs):
+            axC.axvspan(lo_i - .5, hi_i + .5, color="#000000" if k % 2 else "#FFFFFF",
+                        alpha=.045, lw=0)
+            if hi_i - lo_i >= 3 and ver:
+                axC.text(min(max((lo_i + hi_i) / 2, 2.5), len(tb_x) - 3.5), 104, ver,
+                         ha="center", va="top", fontsize=8, color=C_MID, fontweight="bold")
+        axC.plot(tb_x, tb_hist.share, color=C_TOP, lw=2.4)
+        axC.fill_between(tb_x, 0, tb_hist.share, color=C_TOP, alpha=.13)
+        axC.set_ylabel(f"% of seats planting {tb_crop}", fontsize=9)
+        axC.set_ylim(0, 112)
+        axC.set_yticks([0, 25, 50, 75, 100])
+        axC.tick_params(labelsize=9)
+        tb_step = max(1, len(tb_x) // 4)
+        axC.set_xticks(range(0, len(tb_x), tb_step))
+        axC.set_xticklabels([tb_x[i][5:] for i in range(0, len(tb_x), tb_step)], fontsize=9)
+        axC.set_xlim(-.5, len(tb_x) - .5)
+        axC.set_title(f"Every game, every day, by engine version", fontsize=11, loc="left")
+
+        # Panel D: the one comparison the fetcher's bias cannot reach, because both sides
+        # come from the same rating band. Median bank by planting level, bootstrap CI.
+        axD = fig.add_subplot(gs[1, 1])
+        tb_pay = tb_mid.dropna(subset=[tb_ccol, "final_money"])
+        tb_cuts = [-1, 9, 20, 30, 41, 10 ** 9]
+        tb_names = ["0-9", "10-20", "21-30", "31-41", "42+"]
+        tb_pay = tb_pay.assign(b=pd.cut(tb_pay[tb_ccol], bins=tb_cuts, labels=tb_names))
+        tb_pay_txt = ""
+        tb_rng = np.random.default_rng(0)
+        tb_px, tb_py, tb_lo_e, tb_hi_e, tb_pn = [], [], [], [], []
+        for k, lbl in enumerate(tb_names):
+            v = tb_pay.final_money[tb_pay.b.eq(lbl)].values
+            if len(v) < 20:
+                continue
+            bsm = np.median(tb_rng.choice(v, (1500, len(v))), axis=1)
+            tb_px.append(k); tb_py.append(np.median(v)); tb_pn.append(len(v))
+            tb_lo_e.append(np.median(v) - np.percentile(bsm, 2.5))
+            tb_hi_e.append(np.percentile(bsm, 97.5) - np.median(v))
+        axD.errorbar(tb_px, tb_py, yerr=[tb_lo_e, tb_hi_e], fmt="o-", color=C_TOP,
+                     ecolor=C_TOP, elinewidth=1.6, capsize=4, ms=7, lw=1.8)
+        axD.set_ylim(min(np.array(tb_py) - np.array(tb_lo_e)) * .955,
+                     max(np.array(tb_py) + np.array(tb_hi_e)) * 1.015)
+        tb_ybot = axD.get_ylim()[0]
+        for x, n in zip(tb_px, tb_pn):
+            axD.annotate(f"n={n:,}", (x, tb_ybot), xytext=(0, 4), textcoords="offset points",
+                         ha="center", va="bottom", fontsize=8, color="#6B6250")
+        axD.set_xticks(tb_px)
+        axD.set_xticklabels([tb_names[k] for k in tb_px], fontsize=9)
+        axD.set_xlim(-.5, max(tb_px) + .5)
+        axD.yaxis.set_major_formatter(lambda v, _: f"{v/1000:,.0f}k")
+        axD.tick_params(labelsize=9)
+        axD.set_xlabel(f"{tb_crop} plantings", fontsize=9.5)
+        axD.set_ylabel("median final bank", fontsize=9)
+        axD.set_title(f"Does it pay inside one band?", fontsize=11, loc="left")
+        # Say it in words only when the intervals actually separate.
+        tb_best = int(np.argmax([y - e for y, e in zip(tb_py, tb_lo_e)]))
+        if tb_best != 0 and len(tb_py) >= 2:
+            tb_sep = (tb_py[tb_best] - tb_lo_e[tb_best]) > (tb_py[0] + tb_hi_e[0])
+            tb_pay_txt = (
+                f"seats that put down {tb_names[tb_px[tb_best]]} {tb_crop} bank "
+                f"{tb_py[tb_best]:,.0f} coins against {tb_py[0]:,.0f} for seats at "
+                f"{tb_names[tb_px[0]]} "
+                f"({100 * (tb_py[tb_best] / max(tb_py[0], 1) - 1):+.0f}%, n={tb_pn[tb_best]:,} "
+                f"and {tb_pn[0]:,})"
+                + (", and the bootstrap intervals do not overlap."
+                   if tb_sep else ", but the bootstrap intervals overlap, so treat the step "
+                                  "as unproven."))
+        else:
+            tb_pay_txt = (f"the median bank does not rise with {tb_crop} plantings: the best "
+                          f"level is the lowest one, so more is not better here.")
+
+    fig.suptitle(f"{tb_thr}+ against the middle of the board", x=.012, y=.99,
+                 ha="left", va="top", fontsize=13, fontweight="bold")
+    fig.text(.988, .99, f"data through {AS_OF:%b %d, %H:%M} UTC", ha="right", va="top",
+             fontsize=10, fontweight="bold", color="white",
+             bbox=dict(boxstyle="round,pad=0.35", facecolor=C_TOP, edgecolor="none"))
+    plt.show()
+
+    display(Markdown(
+        f"**{tb_thr}+** is the top {tb_board_pct:.1f}% of the live board"
+        + (f", {tb_board} of {tb_of:,} teams" if tb_board else "")
+        + f", and the top {tb_seat_pct:.0f}% of the seats actually played in the last "
+          f"{tb_win} days."
+        + (f" Too few captured games at the board's own {tb_q}th percentile "
+           f"({tb_ceiling}), so the band runs lower." if tb_lowered else "") +
+        f" I captured {len(tb_top)} of those seats from {tb_teams} teams, against "
+        f"{len(tb_mid):,} seats from {tb_mid_teams} teams in the middle of the same window: "
+        f"rating {tb_mid_lo:,.0f} to {tb_mid_hi:,.0f}, the 45th to 55th percentile of "
+        f"everything played."))
+
+    if tb_same_txt and tb_gap_txt:
+        display(Markdown(
+            f"**They are not out-expanding you.** {tb_same_txt.capitalize()} all sit within "
+            f"{100 * tb_same_max:.0f}% of the middle. What differs is what goes into the "
+            f"ground: {tb_gap_txt}." + (
+                f" The {tb_crop} rows come out of {tb_swap_txt}, on the same total."
+                if tb_swap_txt else "") +
+            f" Their median bank is {tb_bank_a:,.0f} coins where the middle's is "
+            f"{tb_bank_b:,.0f}, {tb_money:+.0f}%."))
+    elif tb_gap_txt:
+        display(Markdown(f"Where the two bands part: {tb_gap_txt}. Final bank "
+                         f"{tb_bank_a:,.0f} against {tb_bank_b:,.0f} ({tb_money:+.0f}%)."))
+    else:
+        display(Markdown(
+            f"No median differs by a quarter, which is itself the finding: at this window the "
+            f"top band plays the middle's game and banks {tb_money:+.0f}%."))
+
+    if tb_crop:
+        tb_txt = (f"Top right is the same finding with the median out of the way. "
+                  f"{tb_ov:.0f}% of middle seats already put down the {tb_thr}+ band's "
+                  f"{tb_med_t:.0f} {tb_crop} plantings or more, and {tb_lo:.0f}% of the top "
+                  f"band stays at or below the middle's {tb_med_m:.0f}. The bands overlap. "
+                  f"What differs is how many seats play the line.")
+        if tb_time and len(tb_vers) >= 2:
+            tb_txt += (f"\n\nBottom left is every parsed game in the corpus, by day, shaded by "
+                       f"engine version. {tb_crop.capitalize()} sat at {tb_vers[-2][1]:.0f}% of "
+                       f"seats under {tb_vers[-2][0]} and is at {tb_vers[-1][1]:.0f}% under "
+                       f"{tb_vers[-1][0]}"
+                       + (f", which arrived on {pd.Timestamp(tb_sw):%b %d}." if tb_sw else "."))
+        if tb_pay_txt:
+            tb_txt += (f"\n\nBottom right stays inside the middle band, where my fetcher's "
+                       f"taste for top-rated games cannot reach: {tb_pay_txt}")
+        display(Markdown(tb_txt))
+
+    display(Markdown("| | top band | middle |\n|---|---|---|\n" + "\n".join(tb_tab)))
+    display(Markdown(
+        f"Read a gap as a lead to check, not as a measured difference. The corpus holds a few "
+        f"percent of all ladder games and my fetcher pulls top-rated ones first, so the two "
+        f"columns are not sampled alike, and {len(tb_tab)} medians are compared against one "
+        f"fixed threshold: noise alone can leave one of them standing.\n\n"
+        f"The rows are seats, not teams. {tb_teams} teams supply the {len(tb_top)} top-band "
+        f"seats and the largest of them supplies {tb_conc:.0f}%, so one prolific submission "
+        f"carries weight here."
+        # Both sentences below describe things that exist only when a crop gap was found:
+        # without one there is no per-crop median to re-check and no fourth panel to cite.
+        + (f" The band's {tb_crop} median holds up when each team counts once{tb_wtd_txt}."
+           if tb_crop and tb_wtd_txt else "")
+        + (" The bottom-right panel avoids the sampling problem by staying inside one band, "
+           "but a rating band is itself an outcome, so it is a lead too." if tb_pay_txt else "")
+        + "\n\n"
+        f"The whole-corpus version is [section 4](#s4). Your own agent against this field "
+        f"is next."))

@@ -1,0 +1,64 @@
+
+# Study additional quantity on an existing first-slot commodity order.
+# The compensating order is appended, preserving every original order index.
+_CYA_IDLE_PARENT=_cy_choose
+_CYA_REPORT={'candidates':0,'augmented':0,'extra_units':0,'errors':0}
+def _cya_apply(obs,action,history):
+    step=int(obs['step']);seat=int(obs['player']);orders=[list(o) for o in action.get('market',[])]
+    if not _CYA_START<=step<_CYA_END or len(orders)>=10:return action
+    if not any(orders):return _CYA_IDLE_PARENT(obs,action,history) if _CYA_IDLE else action
+    farm=obs['farms'][seat];cash=float(farm['money'])
+    if cash<2000:return action
+    projected=projected_shed(action,FarmView(obs));params=_v44y_params(obs)
+    spending=0;incoming=0;hires=int(farm['hires_today']);land=len(farm['unlocked_quadrants'])
+    for order in orders:
+        if not order:continue
+        op=order[0]
+        if op=='HIRE':spending+=_v219_fib(hires);hires+=1
+        elif op=='BUY_LAND' and land<4:spending+=(1000,2000,4000)[land-1];land+=1
+        elif len(order)>=3 and op in ('BUY_SEED','BUY_ANIMAL','BUY_PRODUCT'):
+            item=order[1];n=max(0,int(order[2]))
+            if op=='BUY_SEED':spending+=n*{'WHEAT':10,'CARROT':20,'TOMATO':50,'STRAWBERRY':100,'MELON':80}[item]
+            elif op=='BUY_ANIMAL':spending+=n*{'COW':400,'SHEEP':500,'GOOSE':300}[item];incoming+=n
+            else:spending+=n*_r37_market_price(item,int(obs['market']['inventory'][item])-220,params);incoming+=n
+    choices=[]
+    for index,order in enumerate(orders[:2]):
+        if len(order)<3 or order[0] not in ('BUY_PRODUCT','SELL') or order[1] not in _CY_ITEMS:continue
+        op,item,n=order[:3];n=max(0,int(n));direction=int(op=='SELL')
+        if not n or (_CYA_SIDE!='both' and _CYA_SIDE!=('buy' if direction==0 else 'sell')):continue
+        if sum(len(o)>1 and o[1]==item for o in orders)!=1:continue
+        inventory=int(obs['market']['inventory'][item])
+        if _r37_market_price(item,inventory+220,params)<=1:continue
+        if _CYA_MODE=='mirror':
+            if _r37_similarity(obs)<.9:continue
+            probability=.8;opposite=0
+        else:
+            prediction=_cy_predict(cycle_features(obs,item,history))
+            probability=prediction[direction];opposite=prediction[1-direction]
+            if probability<_CYA_THRESHOLD or probability-opposite<.15:continue
+        extra=_CYA_MAX
+        if direction==0:extra=min(extra,max(0,100-sum(projected.values())-incoming))
+        else:extra=min(extra,max(0,int(projected.get(item,0))-n))
+        quote=max(1,_r37_market_price(item,inventory-220,params))
+        extra=min(extra,max(0,int((cash-spending-500)//quote)))
+        if extra<=0:continue
+        score=(probability-opposite)*extra
+        choices.append((score,index,item,op,n,extra))
+        _CYA_REPORT['candidates']+=1
+    if not choices:return action
+    _,index,item,op,n,extra=max(choices,key=lambda c:c[0])
+    if _CYA_SHADOW:return action
+    orders[index]=[op,item,n+extra]
+    orders.append(['SELL' if op=='BUY_PRODUCT' else 'BUY_PRODUCT',item,extra])
+    _CYA_REPORT['augmented']+=1;_CYA_REPORT['extra_units']+=extra
+    return dict(action,market=orders)
+_cy_choose=_cya_apply
+
+def augmented_commodity_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        for key in _CYA_REPORT:_CYA_REPORT[key]=0
+    return commodity_cycle_agent(observation,configuration)
+_MP_REPORT=_CYA_REPORT
+augmented_commodity_agent.telemetry=_CYA_REPORT
+agent=augmented_commodity_agent
+kaggle_submission_agent=augmented_commodity_agent

@@ -1,0 +1,35 @@
+def money_curve(row, seat):
+    return [s[0]["observation"]["farms"][seat]["money"]
+            for s in load_replay(row.episode_id)["steps"]]
+
+fig, ax = plt.subplots(figsize=(8.2, 3.8))
+elbows, seen_teams = {}, set()
+for rank, (sub, bank) in enumerate(top_subs.items()):
+    row = ladder_r[ladder_r.winner_sub.eq(sub) & ladder_r.winner_bank.eq(bank)].iloc[0]
+    seat = 0 if row.bank_0 >= row.bank_1 else 1
+    money = money_curve(row, seat)
+    team = name_of(row.team_1 if seat else row.team_0)
+    if team in seen_teams:                     # same team, another submission
+        team = f"{team} (2nd sub)"
+    seen_teams.add(team)
+    ax.plot(money, lw=2.4, color=[C_TOP, C_ACC, C_LOW][rank],
+            label=f"{team}: {fmt(bank)}")
+    cross = next((t for t, m in enumerate(money) if m > bank * .1), None)
+    if cross is not None:
+        elbows[rank + 1] = cross // 24
+
+med_row = ladder_r.loc[(ladder_r.winner_bank - ladder_r.winner_bank.median()).abs().idxmin()]
+seat = 0 if med_row.bank_0 >= med_row.bank_1 else 1
+ax.plot(money_curve(med_row, seat), lw=2.4, color=C_MID, ls="--",
+        label=f"a median game: {fmt(med_row.winner_bank)}")
+ax.legend(fontsize=9.5, frameon=False, loc="upper left")
+ax.set_xlabel("turn (24 turns = one in-game day)"); ax.set_ylabel("coins in the bank")
+ax.yaxis.set_major_formatter(lambda v, _: f"{v/1000:.0f}k" if v else "0")
+ax.set_title("Top farms stay near zero, then compound")
+plt.tight_layout(); plt.show()
+
+if elbows:
+    display(Markdown(
+        "Each top farm crosses a tenth of its final bank on in-game day "
+        + ", ".join(f"**{d}** (top-{r})" for r, d in elbows.items())
+        + ". That crossing, not the last-day sprint, is where the game is decided."))

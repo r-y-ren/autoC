@@ -1,0 +1,103 @@
+{
+  "variants": [
+    {
+      "path": "research/v10_top10_20260926/herd_expectation/risk0_stock0.py",
+      "sha256": "2ea8f4f2e3cfd289fd7137487b1c8cce5c08e6745df29c531dfa8e2ec5025084",
+      "risk_penalty": 0.0,
+      "current_stock_in_forecast": false
+    },
+    {
+      "path": "research/v10_top10_20260926/herd_expectation/risk0_stock1.py",
+      "sha256": "7fb6d10e69cabe0ca05c52ad4133c4d2215a491f63af072945447778a87bca06",
+      "risk_penalty": 0.0,
+      "current_stock_in_forecast": true
+    },
+    {
+      "path": "research/v10_top10_20260926/herd_expectation/risk25_stock0.py",
+      "sha256": "259f382ddeb42e2a7e28f23adfdd87ed9b12a915419f2f09c4891fa7cc9d79e0",
+      "risk_penalty": 0.25,
+      "current_stock_in_forecast": false
+    },
+    {
+      "path": "research/v10_top10_20260926/herd_expectation/risk25_stock1.py",
+      "sha256": "790a315295e9acb13f11b88ad97cf717a714cc2b4fa4ec11d28117f42a19cfca",
+      "risk_penalty": 0.25,
+      "current_stock_in_forecast": true
+    }
+  ],
+  "controls": [
+    "submissions/release_v10_r2/main.py",
+    "research/v10_top10_20260926/micro_candidates/all_care_first.py"
+  ],
+  "seeds": [
+    830864001,
+    1551792789,
+    157360247,
+    16025747,
+    806794162,
+    1210849297,
+    1780737861,
+    1560629804
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/market_smart/single_file.py",
+      "family": "market_smart",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/shoprouter/single_file.py",
+      "family": "shoprouter",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/marketshock_adapter.py",
+      "family": "marketshock",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/structured_adapter.py",
+      "family": "structured",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_01.py",
+      "family": "top_style_01",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_05.py",
+      "family": "top_style_05",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    }
+  ],
+  "total_jobs": 1056,
+  "reused_controls": 352,
+  "fresh_required": 704,
+  "scope": "Development only, on the previously declared eight-world design; not independent confirmation."
+}

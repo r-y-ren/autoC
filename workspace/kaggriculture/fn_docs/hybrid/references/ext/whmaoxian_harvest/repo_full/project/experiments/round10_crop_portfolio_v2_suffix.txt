@@ -1,0 +1,271 @@
+
+# R10 isolated portfolio experiment.  Public-state choice of the native day-11
+# thirteen-plant strawberry tranche; no account, seed, replay or opponent-ID rule.
+# Keep the frozen V9 source above byte-for-byte.  This layer replaces existing
+# seed purchases and PLANT commands, preserving all native labor and land.
+import itertools as _r10cp_it
+
+_R10CP_PARENT = round9_slack_agent
+_R10CP_STATES = {}
+_R10CP_REPORT = dict(decision_0=0, decision_5=0, decision_9=0,
+                     decision_13=0, requested_seed=0, confirmed_seed=0,
+                     requested_plant=0, confirmed_plant=0,
+                     confirmed_harvest=0, confirmed_delivery=0,
+                     requested_sale=0, confirmed_sale=0,
+                     unverified_sale=0, structural_decline=0, errors=0)
+_R10CP_BUY_CHOICES = (0, 5, 9, 13)
+_R10CP_PRODUCTS = ('STRAWBERRY', 'TOMATO')
+_R10CP_SHOP_ITEMS = {
+    'BAKERY': ('EGG', 'WHEAT'), 'PIZZA_SHOP': ('MILK', 'TOMATO', 'WHEAT'),
+    'BRUNCH_SPOT': ('EGG', 'WHEAT', 'STRAWBERRY'), 'YARN_STORE': ('WOOL',),
+    'ICE_CREAM_SHOP': ('STRAWBERRY', 'MILK', 'WHEAT'), 'PET_CAFE': ('CARROT',),
+    'SMOOTHIE_SHOP': ('STRAWBERRY', 'MILK'),
+    'FARMERS_MARKET': ('WHEAT', 'CARROT', 'TOMATO', 'STRAWBERRY'),
+}
+
+
+def _r10cp_visible_supply(obs, item):
+    """Observed plants only; future opponent planting remains uncertain."""
+    first, interval = (10, 2) if item == 'STRAWBERRY' else (8, 1)
+    flow = {day: 0 for day in range(12, 30)}
+    for seat, farm in enumerate(obs['farms']):
+        for row in farm['tiles']:
+            for tile in row:
+                if not isinstance(tile, dict) or tile.get('crop') != item:
+                    continue
+                born = int(tile.get('planted_day', 30))
+                # Own berry tape fertilizes several harvest waves.  A 1.5
+                # delivery factor is a midpoint; opponent's future labor and
+                # fertilizer are unknown, hence only one unit is counted.
+                factor = 1.5 if item == 'STRAWBERRY' and seat == int(obs['player']) else 1.0
+                for n in range(4):
+                    day = born + first + n * interval + 1  # after harvest/deposit
+                    if 12 <= day <= 29:
+                        flow[day] += factor
+    return flow
+
+
+def _r10cp_price_params(obs, item):
+    params = {item: dict(_R37_MARKET_PARAMS[item])}
+    params[item].update(obs['market'].get('params', {}).get(item, {}))
+    return params
+
+
+def _r10cp_scenario_values(obs, item, planted):
+    """Cash from the new tranche under each possible future buyer draw.
+
+    All patch goods are scheduled to reach the shed before day 29.  The berry
+    production is six units per tile over four harvest waves, allowing for
+    existing fertilization.  The tomato patch is worth four units per tile at
+    the actual native day-21 harvest; the 13th tile may miss that harvest, so
+    it is excluded from the tomato count.  This is a physical upper envelope,
+    not a promise of completed sale; smoke telemetry audits the losses.
+    """
+    if item == 'STRAWBERRY':
+        patch = {day: int(round(1.5 * planted)) for day in (22, 24, 26, 28)}
+        buyer_probability = 0.5
+    else:
+        patch = {22: 4 * min(planted, 12)}
+        buyer_probability = 0.25
+    visible = _r10cp_visible_supply(obs, item)
+    params = _r10cp_price_params(obs, item)
+    initial_shops = sum(item in _R10CP_SHOP_ITEMS.get(shop, ())
+                        for shop in obs['town']['unlocked_shops'])
+    future_days = [day for day in (12, 15, 18, 21, 24)
+                   if len(obs['town']['unlocked_shops']) + (day-9)//3 <= 8]
+    values = []
+    for bits in _r10cp_it.product((0, 1), repeat=len(future_days)):
+        probability = buyer_probability ** sum(bits) * (1-buyer_probability) ** (len(bits)-sum(bits))
+        inventory = float(obs['market']['inventory'][item])
+        shop_count = initial_shops
+        revenue = 0
+        for day in range(12, 30):
+            if day in future_days:
+                shop_count += bits[future_days.index(day)]
+            # Six shop draws and one town-centre draw per day.  We model all
+            # visible harvests as saleable, which is conservative for a new
+            # strawberry patch when the existing crop gluts that book.
+            inventory -= 1 + 6 * shop_count
+            baseline_units = int(round(visible[day]))
+            for _ in range(baseline_units):
+                quote = _r37_market_price(item, inventory, params)
+                if quote > 1:
+                    inventory += 1
+            for _ in range(patch.get(day, 0)):
+                quote = _r37_market_price(item, inventory, params)
+                revenue += quote
+                if quote > 1:
+                    inventory += 1
+        values.append((revenue, probability))
+    return values
+
+
+def _r10cp_mean_and_tail(values):
+    mean = sum(value * probability for value, probability in values)
+    # Weighted mean of the lowest 25 percent, rather than a single unlikely
+    # extreme shop draw.  This rewards a diversified crop when the current
+    # premium market has real downside exposure.
+    remaining = 0.25
+    tail = 0.0
+    for value, probability in sorted(values):
+        take = min(remaining, probability)
+        tail += value * take
+        remaining -= take
+        if remaining <= 1e-10:
+            break
+    return mean, tail / 0.25
+
+
+def _r10cp_native_structure(obs):
+    native = _IMPL.chassis.players.get(int(obs['player']))
+    if not native or native.get('route') not in _IMPL.chassis.routes:
+        return False
+    tape = _IMPL.chassis.routes[native['route']][264:288]
+    bought = planted = 0
+    prefixes = []
+    for action in tape:
+        for order in action.get('market', []):
+            if order and order[:2] == ['BUY_SEED', 'STRAWBERRY']:
+                bought += int(order[2]); prefixes.append(bought)
+        for command in [action.get('farmer'), *(action.get('hands') or [])]:
+            if command == ['PLANT', 'STRAWBERRY']:
+                planted += 1
+    return bought == planted == 13 and all(k in prefixes for k in (5, 9, 13))
+
+
+def _r10cp_choice(obs):
+    if not _r10cp_native_structure(obs):
+        _R10CP_REPORT['structural_decline'] += 1
+        return 0
+    # Replacing a planned $100 seed with a $50 seed cannot starve the existing
+    # market purchases.  The crop uses the same worker and tile schedules.
+    strawberry = {n:_r10cp_mean_and_tail(_r10cp_scenario_values(obs, 'STRAWBERRY', n))
+                  for n in (0, 4, 8, 13)}
+    tomato = {n:_r10cp_mean_and_tail(_r10cp_scenario_values(obs, 'TOMATO', n))
+              for n in (0, 5, 9, 13)}
+    def value(k):
+        berry_mean, berry_tail = strawberry[13-k]
+        tomato_mean, tomato_tail = tomato[k]
+        # Only bank cash delivered before the terminal deadline is credited.
+        # Extra $50 per replaced seed is certain.  The 25% downside part is
+        # deliberately conservative about unknown future shops.
+        return 0.7*(berry_mean+tomato_mean) + 0.3*(berry_tail+tomato_tail) + 50*k
+    baseline = value(0)
+    candidates = [(value(k),k) for k in (5,9,13)]
+    best,k = max(candidates, key=lambda pair:(pair[0],-pair[1]))
+    # Five hundred points is a risk budget for delivery error and foregone
+    # future planting flexibility.  It is fixed before league evaluation.
+    return k if best >= baseline+500 else 0
+
+
+def _r10cp_reconcile(obs, state):
+    previous = state.pop('pending', None)
+    if not previous or previous['step'] != int(obs['step'])-1:
+        return
+    private = obs['private']
+    farm = obs['farms'][int(obs['player'])]
+    confirmed_plants = 0
+    for x,y in previous['plants']:
+        tile = farm['tiles'][y][x]
+        if isinstance(tile, dict) and tile.get('crop') == 'TOMATO' and tile.get('planted_day') == 11:
+            confirmed_plants += 1
+            state['tiles'].add((x,y))
+    _R10CP_REPORT['confirmed_plant'] += confirmed_plants
+    actual_seed = int(private['seeds'].get('TOMATO', 0)) - previous['seeds'] + confirmed_plants
+    _R10CP_REPORT['confirmed_seed'] += max(0, min(previous['buys'],actual_seed))
+    for x,y,units in previous['harvests']:
+        tile = farm['tiles'][y][x]
+        if isinstance(tile, dict) and tile.get('crop')=='TOMATO' and tile.get('yield_units',0) == 0:
+            _R10CP_REPORT['confirmed_harvest'] += units
+    after_shed = int(private['shed'].get('TOMATO', 0))
+    if previous['sale'] and after_shed == previous['projected_shed']-previous['sale']:
+        _R10CP_REPORT['confirmed_sale'] += previous['sale']
+        sale = previous['sale']
+    else:
+        if previous['sale']:
+            _R10CP_REPORT['unverified_sale'] += previous['sale']
+        sale = 0
+    # After the prior market phase, midnight may deposit carried produce.  The
+    # observed positive shed increment plus the confirmed sale is actual cargo
+    # that reached storage, not a projected crop yield.
+    if not previous['other_tomato_market']:
+        _R10CP_REPORT['confirmed_delivery'] += max(0, after_shed + sale - previous['shed'])
+
+
+def round10_crop_portfolio_agent(observation, configuration=None):
+    step = int(observation['step'])
+    seat = int(observation['player'])
+    state = _R10CP_STATES.get(seat)
+    if state is None or step <= state['last_step']:
+        state = {'last_step':-1, 'choice':0, 'bought':0, 'planted':0,
+                 'tiles':set(), 'pending':None}
+        _R10CP_STATES[seat] = state
+        _R10CP_REPORT.update({key:0 for key in _R10CP_REPORT})
+    state['last_step'] = step
+    if step > 0:
+        _r10cp_reconcile(observation, state)
+    action = _R10CP_PARENT(observation, configuration)
+    if step == 264:
+        state['choice'] = _r10cp_choice(observation)
+        _R10CP_REPORT['decision_'+str(state['choice'])] += 1
+    if not state['choice']:
+        return action
+    action = dict(action)
+    action['market'] = [list(order) for order in action.get('market', [])]
+    action['hands'] = [list(command) for command in action.get('hands', [])]
+    action['farmer'] = list(action.get('farmer') or ['PASS'])
+    farm = observation['farms'][seat]
+    positions = [farm['farmer'], *farm['hands']]
+    plants = []
+    buys = 0
+    if 264 <= step < 288:
+        for order in action['market']:
+            if order[:2] == ['BUY_SEED','STRAWBERRY'] and state['bought'] < state['choice']:
+                q = int(order[2])
+                if state['bought'] + q <= state['choice']:
+                    order[1] = 'TOMATO'
+                    state['bought'] += q
+                    buys += q
+                    _R10CP_REPORT['requested_seed'] += q
+        commands = [action['farmer'], *action['hands']]
+        for j, command in enumerate(commands):
+            if command == ['PLANT','STRAWBERRY'] and state['planted'] < state['choice'] and j < len(positions):
+                command[1] = 'TOMATO'
+                state['planted'] += 1
+                plants.append(tuple(positions[j]))
+                _R10CP_REPORT['requested_plant'] += 1
+    # Sell only stock already in the shed, before final day, when there is a
+    # legally executable market slot and no competing TOMATO order.  The unit
+    # actions happen first, but not relying on projected deposits avoids a
+    # same-turn overflow or order-capacity assumption.
+    sale = 0
+    tomato_orders = [order for order in action['market'] if len(order)>1 and order[1]=='TOMATO']
+    if step >= 288 and not tomato_orders and len(action['market']) < MAX_ORDERS:
+        stock = int(observation['private']['shed'].get('TOMATO',0))
+        if stock and (int(observation['market']['prices']['TOMATO'])>1 or step>=696):
+            action['market'].append(['SELL','TOMATO',stock])
+            sale = stock
+            _R10CP_REPORT['requested_sale'] += stock
+    harvests = []
+    for j, command in enumerate([action['farmer'], *action['hands']]):
+        if command == ['HARVEST'] and j < len(positions):
+            x,y = positions[j]
+            if (x,y) in state['tiles']:
+                tile = farm['tiles'][y][x]
+                if isinstance(tile,dict) and tile.get('crop')=='TOMATO' and tile.get('yield_units',0)>0:
+                    harvests.append((x,y,int(tile['yield_units'])))
+    # The pre-market projected shed is used only to confirm the actual SELL
+    # on the next observation; investment valuation does not credit it.
+    projected = int(projected_shed(action,FarmView(observation)).get('TOMATO',0))
+    state['pending'] = {'step':step, 'plants':plants, 'buys':buys,
+                        'seeds':int(observation['private']['seeds'].get('TOMATO',0)),
+                        'harvests':harvests, 'sale':sale,
+                        'projected_shed':projected,
+                        'shed':int(observation['private']['shed'].get('TOMATO',0)),
+                        'other_tomato_market':any(order and len(order)>1 and order[1]=='TOMATO' and order[0]!='SELL'
+                                                  for order in action['market'])}
+    return action
+
+round10_crop_portfolio_agent.telemetry = _R10CP_REPORT
+agent = round10_crop_portfolio_agent
+kaggle_submission_agent = round10_crop_portfolio_agent

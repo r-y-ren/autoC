@@ -1,0 +1,41 @@
+
+# Deliver the actual replacement-animal product without moving workers.
+_K29_TRANSPORT_PARENT=agent
+_K29_TRANSPORT_REPORT={'rewrites':0,'delivered_requested':0,'extra_sale_requested':0}
+def herd_transport_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        for key in _K29_TRANSPORT_REPORT:_K29_TRANSPORT_REPORT[key]=0
+    action=_K29_TRANSPORT_PARENT(observation,configuration)
+    state=_CS_STATE.get(seat,{})
+    if state.get('mode')!='SHEEP':return action
+    farm=observation['farms'][seat];private=observation['private'];board=len(farm['tiles'])
+    positions=[farm['farmer']]+farm['hands'];units=[list(action.get('farmer') or ['PASS'])]+[list(c) for c in action.get('hands',[])]
+    changed=False
+    for actor,(pos,command) in enumerate(zip(positions,units)):
+        inv=private['inventories'][actor]
+        if len(command)>=2 and command[:2]==['PLACE','MILK'] and inv.get('MILK',0)==0 and inv.get('WOOL',0)>0 and _shed_adjacent(pos,board):
+            units[actor]=['PLACE','WOOL',int(inv['WOOL'])];changed=True
+            _K29_TRANSPORT_REPORT['rewrites']+=1
+            _K29_TRANSPORT_REPORT['delivered_requested']+=int(inv['WOOL'])
+    if not changed:return action
+    original_stock=projected_shed(action,FarmView(observation))
+    action=dict(action,farmer=units[0],hands=units[1:],market=[list(o) for o in action.get('market',[])])
+    updated_stock=projected_shed(action,FarmView(observation))
+    extra_deposit=max(0,int(updated_stock.get('WOOL',0))-int(original_stock.get('WOOL',0)))
+    market=action['market'];planned=sum(max(0,int(o[2])) for o in market if len(o)>=3 and o[:2]==['SELL','WOOL'])
+    budget=extra_deposit if step>=696 else min(extra_deposit,max(0,int(state.get('credit',0))))
+    quantity=min(budget,max(0,int(updated_stock.get('WOOL',0))-planned))
+    if quantity>0 and (step>=696 or observation['market']['prices'].get('WOOL',1)>1):
+        for order in market:
+            if len(order)>=3 and order[:2]==['SELL','WOOL']:
+                order[2]+=quantity;break
+        else:
+            if len(market)>=10:quantity=0
+            else:market.append(['SELL','WOOL',quantity])
+        state['credit']=max(0,state.get('credit',0)-quantity)
+        _K29_TRANSPORT_REPORT['extra_sale_requested']+=quantity
+    return action
+herd_transport_agent.telemetry=_K29_TRANSPORT_REPORT
+agent=herd_transport_agent
+kaggle_submission_agent=herd_transport_agent

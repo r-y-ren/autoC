@@ -1,0 +1,78 @@
+
+# Optional absolute-cost gate for the existing 19-plot physical planner.
+# Only known shops and public rival crop counts are used; no future draws.
+_PS_PARENT=phase_b_agent
+_PS_BASE_QUAL=_v219_qualifies
+_PS_BASE_T19=_t19_qualifies
+_PS_BASE_REQUEST=_v219_request
+_PS_CHOICES={}
+_PS_REPORT={'considered':0,'qualified':0,'timing_abort':0,'errors':0}
+def _ps_absolute_value(obs,native):
+    farm=obs['farms'][int(obs['player'])]
+    if len(farm['tiles'])!=10 or set(farm['unlocked_quadrants'])!={'NW','NE','SW'}:return None
+    if farm['money']<18000:return None
+    demand=sum(s in ('PIZZA_SHOP','FARMERS_MARKET') for s in obs['town']['unlocked_shops'])
+    if demand<_PS_MIN_SHOPS:return None
+    if any(farm['tiles'][y][x]!='LOCKED' for x,y in _T19_TARGETS):return None
+    if obs['private']['seeds'].get('TOMATO',0) or obs['private']['shed'].get('TOMATO',0):return None
+    if any(isinstance(t,dict) and t.get('crop')=='TOMATO' for row in farm['tiles'] for t in row):return None
+    for tape in _IMPL.chassis.routes.values():
+        for a in tape[432:719]:
+            if any(o and o[0]=='BUY_LAND' for o in a.get('market',[])):return None
+            if any(c==['PLANT','TOMATO'] for c in [a.get('farmer')]+a.get('hands',[])):return None
+    step=int(obs['step']);other=obs['farms'][1-int(obs['player'])]
+    rival=sum(isinstance(t,dict) and t.get('crop')=='TOMATO' for row in other['tiles'] for t in row)
+    consumption=sum(demand*int(t%4==0)+int(t%24==0) for t in range(step,719))
+    supply=max(_PS_RIVAL_UNITS,8*rival)
+    start=int(obs['market']['inventory']['TOMATO'])-consumption+supply
+    revenue=sum(max(1,_r37_market_price('TOMATO',start+unit)) for unit in range(152))
+    # Price the first harvest at day 27's opening and the second at day 29's.
+    # Later actual delivery gains no assumed extra demand; rival supply is front-loaded.
+    revenue=0;already=0
+    for sale_step in (27*24,29*24):
+        draw=sum(demand*int(t%4==0)+int(t%24==0) for t in range(step,sale_step))
+        stock=int(obs['market']['inventory']['TOMATO'])-draw+supply+already
+        revenue+=sum(max(1,_r37_market_price('TOMATO',stock+u)) for u in range(76))
+        already+=76
+    labor=0
+    for day in range(18,30):
+        plan=_v219_native_day(native,day)
+        n=max(len(a.get('hands',[])) for a in plan)
+        workers=0 if day in (19,21,23) else len(_t19_groups(day))
+        labor+=sum(_v219_fib(i) for i in range(n,n+workers))
+    fertilizer=38*(int(obs['market']['prices']['FERTILIZER'])+10)
+    cost=4000+19*50+labor+fertilizer
+    return {'net':revenue-cost,'revenue':revenue,'land_seeds':4950,'labor':labor,'fertilizer':fertilizer,'rival_scenario':supply,'known_demand':demand}
+
+def _v219_qualifies(obs,native):
+    seat=int(obs['player']);_PS_CHOICES.pop(seat,None)
+    if _PS_BASE_QUAL(obs,native):return True
+    _PS_REPORT['considered']+=1
+    value=_ps_absolute_value(obs,native)
+    if value is None or value['net']<_PS_MIN_NET:return False
+    _PS_CHOICES[seat]={'new19':True,'step':int(obs['step']),'forecast':value}
+    _PS_REPORT['qualified']+=1
+    return True
+
+def _t19_qualifies(obs,state):
+    if _PS_CHOICES.get(int(obs['player']),{}).get('new19'):return True
+    return _PS_BASE_T19(obs,state)
+def _v219_request(obs,action,state,native):
+    choice=_PS_CHOICES.get(int(obs['player']),{})
+    if choice.get('new19') and not state.get('committed'):
+        step=int(obs['step'])
+        if step//24!=18 or step%24>1:
+            # Never silently substitute the originally ineligible ten-plot plan.
+            state['eligible']=False;state['t19_enabled']=False
+            _PS_REPORT['timing_abort']+=1
+            return action
+    return _PS_BASE_REQUEST(obs,action,state,native)
+
+def production_scale_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        _PS_CHOICES.pop(int(observation['player']),None)
+        for key in _PS_REPORT:_PS_REPORT[key]=0
+    return _PS_PARENT(observation,configuration)
+production_scale_agent.telemetry=_PS_REPORT
+agent=production_scale_agent
+kaggle_submission_agent=production_scale_agent

@@ -1,0 +1,30 @@
+
+# Test a lower-capital initial animal mix on existing verified worker routes.
+_K28O_PARENT=agent
+_K28O_REPORT={'swapped':0,'plan_declined':0,'order_declined':0}
+def opening_mix_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        for key in _K28O_REPORT:_K28O_REPORT[key]=0
+    action=_K28O_PARENT(observation,configuration)
+    if step!=1:return action
+    orders=[list(o) for o in action.get('market',[])]
+    buys=[i for i,o in enumerate(orders) if len(o)>=3 and o[:2]==['BUY_ANIMAL','COW']]
+    if len(buys)!=1 or int(orders[buys[0]][2])<_K28O_COUNT:
+        _K28O_REPORT['order_declined']+=1;return action
+    plan=_cs_plan(observation,action,_K28O_COUNT,'GOOSE')
+    if plan is None:
+        _K28O_REPORT['plan_declined']+=1;return action
+    idx=buys[0];remaining=int(orders[idx][2])-_K28O_COUNT
+    replacement=([['BUY_ANIMAL','COW',remaining]] if remaining else [])+[['BUY_ANIMAL','GOOSE',_K28O_COUNT]]
+    if len(orders)-1+len(replacement)>10:
+        _K28O_REPORT['order_declined']+=1;return action
+    orders[idx:idx+1]=replacement
+    state=_CS_STATE[seat]
+    state.update(decided=True,mode='GOOSE',plan=plan,broken=False)
+    _CS_REPORT['cs_decision']='GOOSE_INITIAL_%d'%_K28O_COUNT
+    _K28O_REPORT['swapped']=_K28O_COUNT
+    return dict(action,market=orders)
+opening_mix_agent.telemetry=_K28O_REPORT
+agent=opening_mix_agent
+kaggle_submission_agent=opening_mix_agent

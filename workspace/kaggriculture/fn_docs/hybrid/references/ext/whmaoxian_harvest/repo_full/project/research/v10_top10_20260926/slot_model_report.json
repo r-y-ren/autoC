@@ -1,0 +1,27 @@
+{
+  "samples": 120330,
+  "internal_validation_samples": 32088,
+  "trials": [
+    {
+      "depth": 7,
+      "ap": 0.27352242137370264,
+      "quantity_rmse": 0.36475540844098436,
+      "dominant_slot_accuracy": 0.7539393939393939
+    },
+    {
+      "depth": 10,
+      "ap": 0.2991259059377412,
+      "quantity_rmse": 0.35856322843046434,
+      "dominant_slot_accuracy": 0.7545454545454545
+    }
+  ],
+  "selected_depth": 10,
+  "trees": 24,
+  "nodes": 10444,
+  "export_parity_samples": 2048,
+  "export_max_difference": 1.3877787807814457e-17,
+  "model_sha256": "5195d9032e634d9bb85a598047d4faff45efff2f2e166cc64195d435ee8c58b1",
+  "no_private_inputs": true,
+  "heldout_replays_used": false,
+  "scope": "Internal predictive development only; not agent win-rate or score evidence."
+}

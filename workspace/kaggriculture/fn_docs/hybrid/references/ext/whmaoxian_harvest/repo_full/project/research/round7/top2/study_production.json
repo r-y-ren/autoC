@@ -1,0 +1,8778 @@
+[
+  {
+    "team": "Vadim Vasilenko",
+    "submission_id": 56427964,
+    "rating_snapshot": 3097.8,
+    "episode_id": 111917373,
+    "seat": 1,
+    "agents": [
+      {
+        "id": 243739219,
+        "submissionId": 56440961,
+        "reward": 127242,
+        "initialScore": 3037.928386653369,
+        "updatedScore": 3043.550985164968,
+        "teamId": 16681125
+      },
+      {
+        "id": 243739220,
+        "submissionId": 56427964,
+        "reward": 122758,
+        "index": 1,
+        "initialScore": 3103.504796808903,
+        "updatedScore": 3097.882198297304,
+        "teamId": 16770421
+      }
+    ],
+    "end_time": "2026-09-22T06:35:06.411091Z",
+    "split": "study",
+    "seed": 1565596272,
+    "rewards": [
+      127242.0,
+      122758.0
+    ],
+    "snapshots": [
+      {
+        "step": 23,
+        "money": 6.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 47,
+        "money": 2.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 71,
+        "money": 6.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 4,
+          "WHEAT": 6,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 143,
+        "money": 788.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 5,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP"
+        ]
+      },
+      {
+        "step": 239,
+        "money": 405.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "STRAWBERRY": 24,
+          "MELON": 10,
+          "WHEAT": 20,
+          "COW": 9,
+          "SHEEP": 3,
+          "GOOSE": 6
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "step": 359,
+        "money": 25017.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "STRAWBERRY": 32,
+          "WHEAT": 17,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "TOMATO": 5
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 1,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 9,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 4
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "step": 479,
+        "money": 57737.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 12,
+          "WHEAT": 16,
+          "STRAWBERRY": 26,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 2,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 3
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BAKERY"
+        ]
+      },
+      {
+        "step": 599,
+        "money": 84682.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 8,
+          "WHEAT": 28,
+          "STRAWBERRY": 13,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "CARROT": 4
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 2,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 24,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 3
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BAKERY",
+          "SMOOTHIE_SHOP",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "step": 719,
+        "money": 122758.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "TOMATO": 4,
+          "GOOSE": 8,
+          "COW": 9,
+          "PASTURE": 3,
+          "WEED": 2,
+          "STRAWBERRY": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BAKERY",
+          "SMOOTHIE_SHOP",
+          "YARN_STORE"
+        ]
+      }
+    ],
+    "land_acquired_steps": [
+      150,
+      220
+    ],
+    "daily_hands_max": [
+      4,
+      4,
+      6,
+      6,
+      6,
+      6,
+      8,
+      9,
+      9,
+      11,
+      12,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      10,
+      10
+    ],
+    "operations": {
+      "PASS": 146,
+      "PICKUP": 212,
+      "BUILD_PASTURE": 12,
+      "PLACE": 99,
+      "NORTH": 1103,
+      "WEST": 809,
+      "FEED": 411,
+      "CARE": 420,
+      "SOUTH": 611,
+      "PLANT": 225,
+      "WATER": 1124,
+      "EAST": 713,
+      "COLLECT_FERTILIZER": 483,
+      "DROP": 52,
+      "HARVEST": 581,
+      "BUILD_COOP": 12,
+      "FERTILIZE": 207,
+      "DIG": 39
+    },
+    "market_operations": {
+      "BUY_ANIMAL": 24,
+      "BUY_PRODUCT": 27,
+      "SELL": 471,
+      "HIRE": 298,
+      "BUY_SEED": 220,
+      "BUY_LAND": 2
+    },
+    "plantings": {
+      "MELON": 10,
+      "WHEAT": 153,
+      "STRAWBERRY": 33,
+      "TOMATO": 12,
+      "CARROT": 17
+    },
+    "opening": [
+      {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            5
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "COW",
+          1
+        ],
+        "hands": [],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_ANIMAL",
+            "SHEEP",
+            3
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "BUILD_PASTURE"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "COW",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PLACE",
+          "COW",
+          1
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "WHEAT",
+          3
+        ],
+        "hands": [
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "BUILD_PASTURE"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "PASS"
+          ],
+          [
+            "CARE"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "CARE"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "SOUTH"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "WHEAT",
+            1
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "COW",
+            1
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "CARE"
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PASS"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "FEED"
+          ],
+          [
+            "WATER"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      }
+    ],
+    "farmer_hands_digest": [
+      "d32d67efb94002cd",
+      "2f1da08dd9f04b50",
+      "9398fbc2ba4b35fd",
+      "09cce784bedd4aa8",
+      "7d9f7ece363880f4",
+      "500c6aca897584f2",
+      "ba9b0399aeac1e8e",
+      "71d72ae43912c60a",
+      "fa84339dc6497ca7",
+      "7a2a65ecda2f87d3",
+      "3e7b1918ecec5307",
+      "668f1e97d879d876",
+      "29a98b8a14f68563",
+      "8bc2e7b71c39ab87",
+      "140c75ed4c72e472",
+      "2d4303310e235ab3",
+      "68c80542b2fe6994",
+      "1455026748138076",
+      "36f55d51dc7f99ba",
+      "35d01672b999edf5",
+      "30c4e47d1f6b9a5c",
+      "92898c3f5281c66b",
+      "57f91a6635f2a957",
+      "05d08351f926c433",
+      "9ff42a05a769495a",
+      "99d3bcaf07896001",
+      "e9bda8ce02861817",
+      "8e03d92534718169",
+      "0afb0982fc18a5b3",
+      "c884e8e1a44afe21",
+      "207f23b87cf27423",
+      "e66989f8d67271ce",
+      "847e9bf93687188e",
+      "2367da5559678f28",
+      "4e33c4c0d44cfb30",
+      "a9eb4b178b2be0ba",
+      "8502def313dc65f8",
+      "d9555d5cfd1e192f",
+      "b9b6d7022b229625",
+      "6805bfdce0c46584",
+      "acce3c16d90bbccd",
+      "b292465ac2d3bfe0",
+      "e2247aacdb44b99f",
+      "2a7912e5e3f1fb7c",
+      "b526bd9c7a80b6f6",
+      "601d17ec51efedb9",
+      "58d3a37e36868e07",
+      "26a7ea38b1a70525",
+      "9ff42a05a769495a",
+      "1a706b4030be8c6e",
+      "ba00d76b84cc26e3",
+      "d0d0c6b274b48277",
+      "52e89bc68c3b70ce",
+      "cb223c16563b2a18",
+      "353e4438adfa1682",
+      "f36f0b1fdc020987",
+      "83449180724d0304",
+      "48def54d34e7a562",
+      "fe9c91b2ff1e1790",
+      "08faec40f59bb865",
+      "c8a9a2c95cc68123",
+      "cb7ffa3c5bc0a592",
+      "9da3177d644008ce",
+      "6a4e92ca8c7a8eef",
+      "08fe287da3967f58",
+      "241b41ed3822904e",
+      "1b01c85bfb064190",
+      "ecbe46889e2fc2e8",
+      "da6405bcd5c2d864",
+      "0b00b24a7a435d9f",
+      "d73e03f58eb32b3b",
+      "9cc3c6f4b48bda2a",
+      "cd2e978d74a651bc",
+      "3def42a1b79b5529",
+      "83748b4143c46f44",
+      "e17e7b349a2a8f49",
+      "2c6d8873a52e724a",
+      "4c96fbc47ec6528e",
+      "a5cae5b8d8a4238c",
+      "a88d9508b6409871",
+      "301f6e80d9de0d15",
+      "8d7308a17084d4d1",
+      "3d849b57c882f1f0",
+      "d422da5c9915316f",
+      "f6c9a74e3416787d",
+      "1502af8e8d3eebd4",
+      "b972d8d1c9f67237",
+      "2b986aeace144419",
+      "87b331bf4c956dd3",
+      "82dae690e7b6c9ea",
+      "e4dcbaa630135655",
+      "183cfdb08f786b9d",
+      "dca88abd88482c62",
+      "7732e5ec6eb7776a",
+      "a9acedb842979442",
+      "30aacba486ec015f",
+      "8855f5d6131a634d",
+      "02b39f30089b6412",
+      "cd222c950283c5ed",
+      "2a914e80b0b2fb9b",
+      "506cba105ef6b627",
+      "95c60a25d22b0b1f",
+      "41b64b8cc1cd6dda",
+      "a50a70673fec10b3",
+      "546601ac46b86aa1",
+      "114aa9748938a41b",
+      "e90265722699cc73",
+      "a0a1c95da427dac0",
+      "30539ed6ac02c047",
+      "3fb9d781ac313ebc",
+      "ab80df7418321d17",
+      "d8c119b889699862",
+      "b18fe11582d727f8",
+      "0bb4fcf99a5a2148",
+      "e4a2eaf9a664277a",
+      "2d5fbab049c888cc",
+      "3cee7342a1b39275",
+      "6008c479ce507640",
+      "0e7ef47081990db2",
+      "29ac0402800a5d5f",
+      "d32d67efb94002cd",
+      "e1e0aef8415e71b7",
+      "896e9cfbcbd52fdd",
+      "ad63ed20194d548c",
+      "9dbb173b882607b2",
+      "9cec85fb5639fa92",
+      "f8c03cd63f1f43a8",
+      "11e2a6c34dbb69a4",
+      "ee042dd710c27663",
+      "38857dc47b483cfc",
+      "aee8140637c595ba",
+      "2cb0b33996a9d405",
+      "c2eb0ca628583a15",
+      "3b310f929703c5f0",
+      "f9316f7430960b6e",
+      "0a51a575b2214e73",
+      "c2132e964a8f1cac",
+      "0a2de93ee082f9c0",
+      "6e82a2ec02a9251e",
+      "571832f691f428db",
+      "f6c691ad7f90c77d",
+      "d58a240635083ce4",
+      "5ea312d1b23d0f11",
+      "34cdabe512968224",
+      "03d8e33bf37f5263",
+      "c5c9c0e7fc27237d",
+      "5cf0018b924b8edc",
+      "b1e8992aa36fadea",
+      "63e34e609a63eca9",
+      "998a54446a1a87e9",
+      "c103e7003989644f",
+      "fb4fbdb715556e6a",
+      "52cd39bdb1e873cf",
+      "736caef35ba5f096",
+      "5a33cc9fe553b4dd",
+      "ed82b5234f73451a",
+      "d4827e0beb4c5092",
+      "2c9d91bb7919a80b",
+      "edb3f9ad343e7f6b",
+      "f3695322dcabbd3f",
+      "ddd1c38d722bf670",
+      "e72bdfdc12c6e2f7",
+      "4308f02a02e8a19b",
+      "c4b29570087a6943",
+      "f7d3f27389121a2a",
+      "3e4b70ed3228e6ae",
+      "aaeff0d4cf08314f",
+      "be685163325b4fa8",
+      "be6eb3d73231f002",
+      "0840daca101119d5",
+      "3cc8d5268a746bf8",
+      "bc5e0829ae919019",
+      "a95d6380630f8304",
+      "1213b12d32bf7007",
+      "a0eda12ed6f67809",
+      "7f3d391d3d9c5293",
+      "6180b1f0c46b04f1",
+      "4fd64c9ed59b1f62",
+      "fb883c0fc04aa7ba",
+      "c840ff80b7a00444",
+      "24c133730df25148",
+      "376bacd37e1de964",
+      "6eb4438656e5c974",
+      "27d33cb1bd89622a",
+      "7709151f7c3028d8",
+      "1bd126a13216f601",
+      "3d87b088a4f122d9",
+      "f92b2e3cd6d04d5b",
+      "41c637c47f540284",
+      "0c0ffe439f44138e",
+      "ca6e4d009c895ddc",
+      "46176c428804a2b4",
+      "912a76f720e9b0d1",
+      "107a75d8a0714d6b",
+      "fa2108118d536798",
+      "f7eff62b62da44ea",
+      "fb439b5d89bdf224",
+      "08f10b9e1093cd06",
+      "eeaa123480f87cdb",
+      "316b89174cc95e61",
+      "2f51163495f49af6",
+      "c7332c7741b058b4",
+      "52fe8592a617b5b7",
+      "b7bccf80c8019811",
+      "97b9253c5202118f",
+      "93428ce79838fc0b",
+      "907515ebc768c0a1",
+      "0542dc577cebc87e",
+      "fe703a97c357f7aa",
+      "aeeb6a2dd3cf0345",
+      "c8f2729159c2ae60",
+      "d7ef6a9ada7a8d54",
+      "602a3b5b75f96612",
+      "5218dad456dafa25",
+      "f35f9983153111be",
+      "1577bfad06237f6a",
+      "03d8e33bf37f5263",
+      "8cddc142dc9cc778",
+      "84c19c284231ab52",
+      "f4e856e57a9c58f2",
+      "b699a1b0805696a7",
+      "d23fecd35ebed1e4",
+      "e0e4c672992eea6e",
+      "591c9ca553576ec9",
+      "c5c721ea390578e4",
+      "7bf23f6fb1bd1222",
+      "57152b8898f88d80",
+      "adfe65651bd7ad5b",
+      "05ebc1378bb2899e",
+      "1605f7ef74606936",
+      "e2dc94a5b9b7ee00",
+      "66330964b40bef7e",
+      "b037c1966c2a7082",
+      "17855d0d122e619d",
+      "80b5d422fa0ceb15",
+      "80daef953c90148a",
+      "bd4454b94709f0d1",
+      "d071d3a918124645",
+      "11a58f008f792176",
+      "aacc389c02e012ba",
+      "912a76f720e9b0d1",
+      "55186de74c436e26",
+      "8f90c4ca64cc9dac",
+      "1c72d037160ecc4f",
+      "4e51af3a509d3fe1",
+      "e9f0d3bba6f72de2",
+      "ad568083b0f032ab",
+      "3278995c09004101",
+      "4c25687b5957e1a4",
+      "32d834dc490562e6",
+      "f86b6f5e907e39f7",
+      "b6dc9a5755786091",
+      "c299d20c06634913",
+      "71a97f6836303f68",
+      "a8a4be1e8b983804",
+      "df576cc34bf9ff39",
+      "70059b678b995198",
+      "8d977f461639028a",
+      "01ed365ef3fe3a82",
+      "716d39b32e3111f4",
+      "a0ca980c1eb9bf6b",
+      "f8ad12cbf4c85fb0",
+      "3e46ae3a8a0d9c0a",
+      "334320ecd1fa7e9a",
+      "8855f5d6131a634d",
+      "5083e1067f759828",
+      "5e4cf66b9ba2e747",
+      "02236b1997d6d93f",
+      "fdd712db7a6e8abc",
+      "77080eaa7f37b864",
+      "58704e84d4b63fb5",
+      "88ee4098e2c13954",
+      "87c40c88a9986880",
+      "2082333a1fa71b9d",
+      "ba32857c9635db1f",
+      "973bf48d4551f55a",
+      "961e9f6242bb1dc3",
+      "0b3ba23aca8233e4",
+      "1d4c02fc2384600d",
+      "d0f473fa809125a8",
+      "7d248dcbfc1e25b6",
+      "602c0bc3e51bd5be",
+      "f253eb311db29819",
+      "0f0a9ecf2c2d4be4",
+      "2220e7e35c443f18",
+      "02c2c816788a5a88",
+      "f0624b257af84b29",
+      "b864710997f8958a",
+      "03d8e33bf37f5263",
+      "31eff6284d43f9ef",
+      "743ef98264041ba3",
+      "7c934295b8a1ca77",
+      "34552c0ba85e056d",
+      "b143d073ca044fd1",
+      "680c960e2e60aad6",
+      "77f0919cc1031620",
+      "85bd5cc76ab630a7",
+      "c26d4990484c2750",
+      "2946b2b700b77522",
+      "bb9db70082169325",
+      "4d8e2e333f110283",
+      "45a0408d43b93275",
+      "c680e55651aba878",
+      "6b22d888b8bf67ac",
+      "de89c512dca52a53",
+      "b1fcdf25d56c40f1",
+      "6ad952b9f76ce35f",
+      "1d854297fe6b2ef9",
+      "15937c69c20de5ae",
+      "eb6a3f9efd6bb018",
+      "e7d1e7568a00796e",
+      "4a20124b7856cd87",
+      "8855f5d6131a634d",
+      "153715209790c536",
+      "65840f4e806b1d0c",
+      "bb8c31bf152ea311",
+      "ebf0103d8ba04da1",
+      "65606b32ccda156f",
+      "b8d1cb312a539c98",
+      "3cffa43b87acf863",
+      "519e1bfe80ea2f8f",
+      "020f8a1e591a8736",
+      "991c7e0530d9b2ab",
+      "e0ac4b356bcf428c",
+      "098c2a22bab36d3a",
+      "14a6e33f8fc115c8",
+      "029e62abf4e8919b",
+      "875715fad60782dc",
+      "e3c811380b597b64",
+      "1b35d38dfbcf29c8",
+      "7442e48f2e600367",
+      "e5c4efcf20e291a3",
+      "ec9c9c59b154f06b",
+      "47d0800c5285df73",
+      "8e2f5b3487a8054b",
+      "1ce4fd45d8573a6b",
+      "912a76f720e9b0d1",
+      "5d33f56fcb349d31",
+      "c33952351ddad80e",
+      "fc1058e2056369f5",
+      "3244834941325469",
+      "3de681c1f44724f7",
+      "039ba3617465499b",
+      "48ed50d4334f5cd9",
+      "eaa0290bbeab040a",
+      "8325609b3f342d3e",
+      "247972cbf86be4bf",
+      "b5fd35ee79a3bd5e",
+      "af2db3067caa8f8f",
+      "fba47f9e2aa64cad",
+      "710f29370620f8fc",
+      "8a792b5f0e0061bd",
+      "d2fafd07e887cb7a",
+      "d97fee9093a2d04f",
+      "114cd7e2f482560c",
+      "4fd26063f22f1144",
+      "d54173205072b919",
+      "39c676da5f7695dd",
+      "0c88ad4d60819a9f",
+      "f841ee8caa5c2c38",
+      "8855f5d6131a634d",
+      "fc6a283c08fe4e4b",
+      "05650583ca8d524c",
+      "b374c0548482c6a1",
+      "288370394d99aa5d",
+      "b1f1325476248117",
+      "0c88c4d540665f07",
+      "fe8533f7b760def6",
+      "7a4a66a4364ca7cb",
+      "1e28a93f359a4b45",
+      "64dacb187e3b4b67",
+      "e4ffcacddc43ef8f",
+      "3125baeac0c83f7f",
+      "9d6f25d1e5b5e14e",
+      "2420839963be4d34",
+      "fe54f459010db8a2",
+      "1e0592c090dda9f4",
+      "2b9fd54ca3f008fc",
+      "c582f0898a14bbbf",
+      "9635d3d299434f60",
+      "58c62be8e43f0993",
+      "4b3ecd486891a00f",
+      "e3024e971b71e3de",
+      "0d4b4d9c4fe1ec73",
+      "8855f5d6131a634d",
+      "ad51d482dda6bea9",
+      "815c1fdbf97dd2e9",
+      "248b3d24c024d01f",
+      "f9f4c12b5d669a8d",
+      "d9fa46a5cc4256bd",
+      "e5b68bd516c6bc11",
+      "a0ff06fbfc150906",
+      "51a6dfc3bf4c1a8a",
+      "7258f54436ddcd19",
+      "25166ed60c7b0bff",
+      "4bc07e4779e70355",
+      "6c734cbcdc58ed5e",
+      "e11d0de04116e64b",
+      "be0a889f4c3a4c6a",
+      "bd57aebc7bf96923",
+      "85fc7d7383ab0c51",
+      "e928e8c3ee909cc7",
+      "73e0a83155e6e58f",
+      "00a29772791b8887",
+      "8dda3b32a79614d6",
+      "edc78ecbc4a09d9d",
+      "505daefd419c7302",
+      "8644dedbc5659477",
+      "cd2e978d74a651bc",
+      "12533a495cf1ffcb",
+      "e6d392630731d4b1",
+      "df7b96aeed7e1700",
+      "5a85e40fa318dda4",
+      "7475274b3791b93b",
+      "90844cb5ffbe509e",
+      "adc9c5fa590cb792",
+      "dba3bece343ef7de",
+      "be5e8b64c39ae34c",
+      "64a40f5454c3d042",
+      "e88ca0ecf44dbd34",
+      "2e64e1fef385b01d",
+      "d4189a8d2c847c2a",
+      "9a69652894d23b27",
+      "995e59b7bd966d47",
+      "858c469717f0f540",
+      "7745aa62b5a68a17",
+      "f8baa797af14ca4e",
+      "1837bebccc612ee4",
+      "1f5deeba85f029e0",
+      "d4b102adcef74afb",
+      "35cf93aae55caa14",
+      "8e0a4b97599f3dd9",
+      "cd2e978d74a651bc",
+      "6f6c4d53e3d794d2",
+      "0d5efa17f5f6aa6d",
+      "201b29e60c2a83be",
+      "e5c0c0256e1e7b47",
+      "562385cd64b55e82",
+      "eec4f2e25d7bd70c",
+      "7d9007916c620669",
+      "2e0b55a181e64cd8",
+      "94561569fbb91f81",
+      "a82725472d4d3dcf",
+      "807c3f65a2a2251a",
+      "fd300c35462c312d",
+      "06e4b06a82484777",
+      "adbf544f6e0ad887",
+      "5bf340d92f45f4c3",
+      "7e3f05ce9361e98c",
+      "54471601b9d9e782",
+      "92b6db1eff941736",
+      "5323a9494d3448e4",
+      "d10167ffb40d1f72",
+      "36a730745c681ef9",
+      "eee30ec192544dbe",
+      "8936c3b1bca83d98",
+      "cd2e978d74a651bc",
+      "54e290bc839dcde4",
+      "ad400aabc2963306",
+      "bd1fbf0811364ad0",
+      "d7c1d6b528e94f59",
+      "233dcaac22a2e2e0",
+      "5782b36faa053776",
+      "6d5b1bb3abee651b",
+      "926b520f35f8471b",
+      "38169927ad093ca2",
+      "6e64d56cda2e006f",
+      "bc2f40a5c66e0510",
+      "fb4a7663ce2186a1",
+      "96c1ea0c192fd0ed",
+      "4d23883b0343153d",
+      "af4c590a6923382f",
+      "e701856c6d324691",
+      "f65064455cd4c78a",
+      "c869c6d8411b7336",
+      "499fb668717e3c8d",
+      "4bca589294d174f4",
+      "52cabd40b6add25f",
+      "b037b6f28ae1d776",
+      "993277f7f3cdc465",
+      "cd2e978d74a651bc",
+      "b7f612eaaed7bd4f",
+      "3b57a1511a690e80",
+      "b8ad8e5346f57c29",
+      "5ae464c7c290045e",
+      "ffd1e032771105f8",
+      "cda2c0825ed722b1",
+      "c7ec84ce7f4123f5",
+      "3444e0c565aa9562",
+      "4eb5791e547ad967",
+      "6417f1763cbf4716",
+      "9b22f477b605c32b",
+      "de52340a98f2cc44",
+      "8dd597791f18bcd7",
+      "2a0ba3d7a185253a",
+      "2997c7ef966d9de3",
+      "99da14d289be308b",
+      "e3302575d0a8db82",
+      "595b0a4b0f23b262",
+      "a8f55cbebd5ff916",
+      "878384f7ab92d064",
+      "8980b1c2ffa838c3",
+      "ea8b0011dc3be6f8",
+      "6d73c9e75393f29b",
+      "be6eb3d73231f002",
+      "a90fbcedbae32924",
+      "8b84c9260048c19f",
+      "3b7f70dc19b29dd3",
+      "e6cfa948b4897462",
+      "9f5f47f091429e4c",
+      "4f6c3fe77c1be36f",
+      "fdef08f0e2e25176",
+      "64dc828c99654c09",
+      "89cf247d659f347b",
+      "2f10cb1dde0eb8d2",
+      "987128893df33485",
+      "94865cec5378c1ab",
+      "8368f8885b5dda47",
+      "bd6dfdfc3686eeb2",
+      "18f6eb5255148eee",
+      "47fe860856ebaf03",
+      "76eb216647fec802",
+      "67a6efc2420fdbb8",
+      "baac8cee88c016c7",
+      "90ac1d8b41763a99",
+      "c6dc951f9cdcf890",
+      "d71fb7f2d13ae502",
+      "493b450b3e4a3314",
+      "be6eb3d73231f002",
+      "e40fed5a79e19b85",
+      "22c069538067be5a",
+      "b19755b1b31e5f31",
+      "20b7024dd8503a3d",
+      "762b860307e15d23",
+      "aead21634742ab97",
+      "c8f1d2af1505e7b7",
+      "36bc84779d021901",
+      "dd381005e5ab01e9",
+      "613d54b8e9893e7c",
+      "34bdf2626d98de1e",
+      "d659a8f0ed536625",
+      "451595c24d029856",
+      "fa208103746ecc47",
+      "a7329bfddeeb0651",
+      "3643398e44085ffe",
+      "9fd66659f0e40113",
+      "4b6d40542d7ce403",
+      "705551baa54ca7c0",
+      "2289aa7a17b672ec",
+      "3f72c419f37aa883",
+      "1ae5efbb0441df56",
+      "d5684c3a3a62ccdc",
+      "be6eb3d73231f002",
+      "edc126771ea1f180",
+      "dcf607c404ad9522",
+      "0d06eb8f6fa18482",
+      "c98278e2bcd31a34",
+      "99cf46ec87890408",
+      "17496d13feebd299",
+      "5c21605f17d88129",
+      "6ad7d8d2ac7718b7",
+      "dc963b983f7c51f2",
+      "d281b08cb97cff7d",
+      "ec5264482edbb52f",
+      "c50d2965cfc83cc5",
+      "444db1f74fad17f1",
+      "6f8b17a7b957ec02",
+      "7ce91b8f0b3009dc",
+      "74a1609903074f9a",
+      "2dd080d1715e13dc",
+      "f4ac0271235ac68f",
+      "e1ec0a554b05d8f1",
+      "c0fa31631d3bf97b",
+      "ffc1af6910863f04",
+      "7cb995e48c87065d",
+      "b11c84b1c1c88a09",
+      "be6eb3d73231f002",
+      "d449145f353ab006",
+      "2206c58f91a141b0",
+      "dcaa8b5fcb5dad28",
+      "bf03547bcc488fb1",
+      "a05aa963849ff0f4",
+      "4879959b1772dff5",
+      "0e23bea0121bb979",
+      "01c77df2893dfbd3",
+      "dd47528abb5bb206",
+      "7f02ae201334bc1c",
+      "4087d992955e2adb",
+      "9e58090c8ad2b50e",
+      "47507b7dd15a77dc",
+      "005cf756b3d4e6f8",
+      "b5b536f1ce5b16bb",
+      "0903fc8e558adae4",
+      "d7906ce1897a403b",
+      "3e82bf5878c25505",
+      "f52dc2426e9d4848",
+      "7c6bc7ec568673cb",
+      "b86d665587386829",
+      "9326f6c04672aa75",
+      "19792b944c80d3b3",
+      "be6eb3d73231f002",
+      "bbb5b3e43759018d",
+      "a0c45e497a6bc6ca",
+      "d549673755ca36ba",
+      "5ff77bbe74e0c760",
+      "d2651efaa4a68116",
+      "71d2e10bdbdf02ad",
+      "da549175dc8a69ee",
+      "af884ac7f9d2ddd8",
+      "aadf1d4025a31e70",
+      "6eaa88f924684a69",
+      "3a9130cb8aacc6ce",
+      "e8345053f8cf6587",
+      "45d033d9f7c9555e",
+      "988e53f809a8059f",
+      "52eb3c108fb67556",
+      "08d040cb210c662b",
+      "660c9eb66c1a648b",
+      "839f0d219f0d4307",
+      "57869f49b23fc275",
+      "d377180ba1897cbf",
+      "bf2a71eaacc6094a",
+      "0525dacb5cc5e2a2",
+      "584dd38be02c5833",
+      "be6eb3d73231f002",
+      "93efd0b78d015ac3",
+      "9cb9bc340906bf99",
+      "f3ae6cf12004f405",
+      "8729c5d5565862d2",
+      "d0b09566c5cab6ac",
+      "d368a7db2961f0ec",
+      "5f432ec231e3d2ad",
+      "0999f58397b34c5f",
+      "add1df60257ae5b0",
+      "df114560d536e9fc",
+      "ed8a6f75c6db9b2c",
+      "c40b485047700db5",
+      "d22355c79301011b",
+      "9446cbeecfcd20c5",
+      "df247be5a865f993",
+      "5f109e31157131fd",
+      "e8ffe8b5c8664dc1",
+      "03baf4610f5c3f49",
+      "ca6af8a803133af7",
+      "81e333b2ef9dc6cc",
+      "8ce7975c75ea6bb3",
+      "87ee581b1e16d066",
+      "1d3f89b511921cb0",
+      "03d8e33bf37f5263",
+      "35ce960f66137f4b",
+      "c7b1d07e33310639",
+      "7732794230882b4c",
+      "5080971c4efd5345",
+      "e9d416164cb496cc",
+      "f4ca3fa54f1bcaed",
+      "ac6c91694b2f93c4",
+      "49c7f9970a676bbe",
+      "03ccf606dc99ebea",
+      "28d1ee63aba9ddc5",
+      "77fdb1a7d0bcc5e5",
+      "ec311baaf0908d6e",
+      "91014512ca4b8d36",
+      "34321b476b85f7c8",
+      "64b6aceef9bcaafd",
+      "43fe98cdc972e73f",
+      "0fb43136d99e4616",
+      "24566e11168688b4",
+      "bbba61b163d99d55",
+      "1cbf000370456830",
+      "0e1bf8f03e4e3163",
+      "8789683c3656e6ff",
+      "65119b6a9d7d2ad6",
+      "912a76f720e9b0d1",
+      "8d78327cf3dd30e8",
+      "ee7dea81cd319b45",
+      "72c8af31a72727ce",
+      "46be515beb7a7d0e",
+      "17a572ad1167d9d7",
+      "ce3ca5d2ef74425f",
+      "2d4aac5cfc95e9e1",
+      "ab7cc7a9c99cf522",
+      "23ca53986e11e306",
+      "361901570ae5cd9b",
+      "4ebf2acec6ff5ca1",
+      "341b08ca4f4c221d",
+      "88df194de3086684",
+      "e72565c01a29f6de",
+      "59ade2d83457bfd3",
+      "d6247e6b4b808e0d",
+      "23354f312be64cef",
+      "d9db7e110b8071be",
+      "210b7a660d9a0aa7",
+      "629ec28adf0fdde1",
+      "664d0933ce9da86b",
+      "4f82c50f59c7c267",
+      "ea849695ef226dc0",
+      "03d8e33bf37f5263",
+      "3c87b44f60fb9582",
+      "5881c61cef6f1f06",
+      "20f579a9c9d4ce19",
+      "fae20b2cbff5ba4c",
+      "9be1c3f315654212",
+      "38bc41b5f4983969",
+      "be552a1f25945c4d",
+      "f5f93ac28a15034f",
+      "6282b1eb0ebaf517",
+      "23ac03697bbad7b0",
+      "59c99480c280a042",
+      "81974d3494b2e3e4",
+      "199fa06aba9713fa",
+      "880ec54514aec591",
+      "b48efaa679ccf41d",
+      "adfd0dda904b6594",
+      "a0ecdd2629b53f21",
+      "9398eebc37e60859",
+      "5003456d877f20ed",
+      "5182321f24e3e9f1",
+      "adb2b03b405aca6a",
+      "4e681b3a1ce1bf4c"
+    ]
+  },
+  {
+    "team": "Vadim Vasilenko",
+    "submission_id": 56427964,
+    "rating_snapshot": 3097.8,
+    "episode_id": 111910148,
+    "seat": 1,
+    "agents": [
+      {
+        "id": 243724761,
+        "submissionId": 56449618,
+        "reward": 116274,
+        "initialScore": 3050.5919661953626,
+        "updatedScore": 3045.7839397938465,
+        "teamId": 16730524
+      },
+      {
+        "id": 243724762,
+        "submissionId": 56427964,
+        "reward": 123248,
+        "index": 1,
+        "initialScore": 3099.8015478693997,
+        "updatedScore": 3103.504796808903,
+        "teamId": 16770421
+      }
+    ],
+    "end_time": "2026-09-22T06:06:50.643803800Z",
+    "split": "study",
+    "seed": 158526847,
+    "rewards": [
+      116274.0,
+      123248.0
+    ],
+    "snapshots": [
+      {
+        "step": 23,
+        "money": 4.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 47,
+        "money": 0.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 71,
+        "money": 4.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 4,
+          "WHEAT": 6,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 143,
+        "money": 694.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 5,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP"
+        ]
+      },
+      {
+        "step": 239,
+        "money": 391.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "STRAWBERRY": 12,
+          "MELON": 10,
+          "WHEAT": 27,
+          "COW": 7,
+          "SHEEP": 12,
+          "TOMATO": 2
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "YARN_STORE",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "step": 359,
+        "money": 29673.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "STRAWBERRY": 12,
+          "WHEAT": 29,
+          "TOMATO": 11,
+          "COW": 7,
+          "GOOSE": 1,
+          "SHEEP": 15
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BAKERY"
+        ]
+      },
+      {
+        "step": 479,
+        "money": 66927.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 19,
+          "WHEAT": 29,
+          "STRAWBERRY": 4,
+          "COW": 7,
+          "GOOSE": 1,
+          "SHEEP": 15
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 14,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "step": 599,
+        "money": 95974.0,
+        "land": 3,
+        "hands": 12,
+        "counts": {
+          "TOMATO": 13,
+          "WHEAT": 38,
+          "COW": 7,
+          "GOOSE": 1,
+          "SHEEP": 15
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 3,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 2
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "YARN_STORE",
+          "BAKERY"
+        ]
+      },
+      {
+        "step": 719,
+        "money": 123248.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "TOMATO": 3,
+          "WEED": 3,
+          "COW": 4,
+          "GOOSE": 1,
+          "PASTURE": 10,
+          "SHEEP": 8
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "YARN_STORE",
+          "BAKERY"
+        ]
+      }
+    ],
+    "land_acquired_steps": [
+      150,
+      222
+    ],
+    "daily_hands_max": [
+      4,
+      4,
+      6,
+      6,
+      6,
+      6,
+      8,
+      9,
+      9,
+      10,
+      13,
+      11,
+      12,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      12,
+      11,
+      11,
+      11,
+      10,
+      10
+    ],
+    "operations": {
+      "PASS": 150,
+      "PICKUP": 225,
+      "BUILD_PASTURE": 23,
+      "PLACE": 112,
+      "NORTH": 1054,
+      "WEST": 844,
+      "FEED": 448,
+      "CARE": 457,
+      "SOUTH": 614,
+      "PLANT": 256,
+      "WATER": 1097,
+      "EAST": 704,
+      "COLLECT_FERTILIZER": 511,
+      "DROP": 64,
+      "HARVEST": 511,
+      "BUILD_COOP": 1,
+      "FERTILIZE": 206,
+      "DIG": 29
+    },
+    "market_operations": {
+      "BUY_ANIMAL": 32,
+      "BUY_PRODUCT": 22,
+      "SELL": 470,
+      "HIRE": 298,
+      "BUY_SEED": 260,
+      "BUY_LAND": 3
+    },
+    "plantings": {
+      "MELON": 10,
+      "WHEAT": 208,
+      "STRAWBERRY": 12,
+      "TOMATO": 20,
+      "CARROT": 6
+    },
+    "opening": [
+      {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            5
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "COW",
+          1
+        ],
+        "hands": [],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_ANIMAL",
+            "SHEEP",
+            3
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "BUILD_PASTURE"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "COW",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PLACE",
+          "COW",
+          1
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "WHEAT",
+          3
+        ],
+        "hands": [
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "BUILD_PASTURE"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "PASS"
+          ],
+          [
+            "CARE"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "CARE"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "SOUTH"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "WHEAT",
+            1
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "COW",
+            1
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "CARE"
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PASS"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "FEED"
+          ],
+          [
+            "WATER"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      }
+    ],
+    "farmer_hands_digest": [
+      "d32d67efb94002cd",
+      "2f1da08dd9f04b50",
+      "9398fbc2ba4b35fd",
+      "09cce784bedd4aa8",
+      "7d9f7ece363880f4",
+      "500c6aca897584f2",
+      "ba9b0399aeac1e8e",
+      "71d72ae43912c60a",
+      "fa84339dc6497ca7",
+      "7a2a65ecda2f87d3",
+      "3e7b1918ecec5307",
+      "668f1e97d879d876",
+      "29a98b8a14f68563",
+      "8bc2e7b71c39ab87",
+      "140c75ed4c72e472",
+      "2d4303310e235ab3",
+      "68c80542b2fe6994",
+      "1455026748138076",
+      "36f55d51dc7f99ba",
+      "35d01672b999edf5",
+      "30c4e47d1f6b9a5c",
+      "92898c3f5281c66b",
+      "57f91a6635f2a957",
+      "05d08351f926c433",
+      "9ff42a05a769495a",
+      "99d3bcaf07896001",
+      "e9bda8ce02861817",
+      "8e03d92534718169",
+      "0afb0982fc18a5b3",
+      "c884e8e1a44afe21",
+      "207f23b87cf27423",
+      "e66989f8d67271ce",
+      "847e9bf93687188e",
+      "2367da5559678f28",
+      "4e33c4c0d44cfb30",
+      "a9eb4b178b2be0ba",
+      "8502def313dc65f8",
+      "d9555d5cfd1e192f",
+      "b9b6d7022b229625",
+      "6805bfdce0c46584",
+      "acce3c16d90bbccd",
+      "b292465ac2d3bfe0",
+      "e2247aacdb44b99f",
+      "2a7912e5e3f1fb7c",
+      "d9bf87fc68b6a575",
+      "58ebd961063468b9",
+      "e9c7647ab48b23cf",
+      "8d2602d8d0e481a5",
+      "9ff42a05a769495a",
+      "1a706b4030be8c6e",
+      "ba00d76b84cc26e3",
+      "d0d0c6b274b48277",
+      "52e89bc68c3b70ce",
+      "cb223c16563b2a18",
+      "353e4438adfa1682",
+      "f36f0b1fdc020987",
+      "83449180724d0304",
+      "48def54d34e7a562",
+      "fe9c91b2ff1e1790",
+      "08faec40f59bb865",
+      "c8a9a2c95cc68123",
+      "5001458fddc1b322",
+      "d01b58010eebc8c1",
+      "e28b46d1eb42241f",
+      "15dd556cdac0be4d",
+      "cb2ec8b28305763f",
+      "1c47b5cb8db7907b",
+      "f6e241c97a80764a",
+      "cde12fdf70f17947",
+      "f457018822cf5562",
+      "4d204a5fb73460cd",
+      "16eb7e030d61e6ac",
+      "cd2e978d74a651bc",
+      "773d26f5ea88beed",
+      "c25dc801facd5bbe",
+      "b1e412a646697120",
+      "710815d22f1920f6",
+      "4a967f8516388486",
+      "8ebe0a6aca9fd042",
+      "5dc354a0b352bce8",
+      "2cb514102d6c591c",
+      "e184e59b784a5ab6",
+      "4e6347e7c5ab089a",
+      "6a620f0b704ccf9a",
+      "5796bcf5e077ed92",
+      "a9977e031a605a50",
+      "148b37e1e60166e1",
+      "3d517b283f390422",
+      "d2ca60df77cfdf54",
+      "e04fdb863fac1cc9",
+      "d8183a5c94d3245d",
+      "f18a2e0bba25ef65",
+      "bcd1756964e1c664",
+      "c0329c68c1cb6466",
+      "d84faa6e6d0b8457",
+      "ba3f33c19a2b8686",
+      "8855f5d6131a634d",
+      "02b39f30089b6412",
+      "cd222c950283c5ed",
+      "2a914e80b0b2fb9b",
+      "506cba105ef6b627",
+      "95c60a25d22b0b1f",
+      "41b64b8cc1cd6dda",
+      "a50a70673fec10b3",
+      "3000407d0b381cca",
+      "114aa9748938a41b",
+      "db954234ad83ef4e",
+      "41b304bcf3931c26",
+      "aa5834d8d7bf8932",
+      "fe0492608e5f7bed",
+      "5dc7d6aaa6548ebb",
+      "746ef4a10431e5bd",
+      "0ffc255111856b15",
+      "b7ba68fee44737d9",
+      "0564558a89f128a5",
+      "d41e5ed0ab5f4911",
+      "0677a4d407898884",
+      "69b2205328955e7c",
+      "a67c1c3aa4e7054b",
+      "29ac0402800a5d5f",
+      "d32d67efb94002cd",
+      "50ec5196c46a01c6",
+      "18d9624cefd7f588",
+      "36aff64f75f1a347",
+      "7d93009d64efe8f4",
+      "1cbcd5f6c4c6f376",
+      "2f4198675c51ec3e",
+      "c02da56746733519",
+      "6288aad0139fca20",
+      "1a918bb6abc4cd1a",
+      "1fd7641b94b092ba",
+      "5b748d23d0b29ae3",
+      "614dde07ff9cd453",
+      "5db6684301068368",
+      "12c34536d0cd72c3",
+      "68a7df7851fcc8c4",
+      "f049c02a3bf203ac",
+      "11f28c4957545be7",
+      "c9275bd1a69e8aca",
+      "775fb4e90c4de597",
+      "894d59594ad838b9",
+      "02ebefbd92cb6f89",
+      "1376b7da6c6eb642",
+      "ba52bc8f29a6b827",
+      "03d8e33bf37f5263",
+      "c5c9c0e7fc27237d",
+      "5cf0018b924b8edc",
+      "b1e8992aa36fadea",
+      "537523aec0aee7a5",
+      "998a54446a1a87e9",
+      "c103e7003989644f",
+      "41ac02d246edbb28",
+      "4f1f40fcb2fe7f0e",
+      "6f1a8dcb6ae1c48f",
+      "f7d7aca1070c213e",
+      "e5aff5aab713a057",
+      "88b5106001cea0dc",
+      "5d6d910e22c357d9",
+      "498a831307d848cf",
+      "bc33aa481ef7d06b",
+      "d5023c2873f79972",
+      "d5101bb6240c6240",
+      "8747a880be4c8301",
+      "6d1922398ce58107",
+      "27afa5f69612ad31",
+      "2a12a12f94c41c7f",
+      "ee2328132a7017cd",
+      "a2c10cdf5519f8e5",
+      "1236071ad844173a",
+      "0840daca101119d5",
+      "3cc8d5268a746bf8",
+      "bc5e0829ae919019",
+      "a95d6380630f8304",
+      "1213b12d32bf7007",
+      "a0eda12ed6f67809",
+      "0a8f6cf5427d4ac7",
+      "6180b1f0c46b04f1",
+      "8a69df1e0e784cec",
+      "21a38e7870d7838d",
+      "b13f5aadb5d0e236",
+      "91bd771dec4512b0",
+      "2a1e3aa89368935f",
+      "ee61b4f88b804329",
+      "3e1a0600476c46f6",
+      "30fbabccb35b46df",
+      "3d779543b717a15b",
+      "e4c15656f1d45570",
+      "f2bd7bd6f8fc78f5",
+      "5a8c4b7e7473f4a2",
+      "4c85b12092a8075c",
+      "4dfd3b7969db0807",
+      "8aa4ef2598944cd8",
+      "912a76f720e9b0d1",
+      "e2504f770c446a24",
+      "4b9006a5335f8471",
+      "e24c362a64e56bf4",
+      "f7dc8da311dbaf5f",
+      "c113f9b2e2135f90",
+      "5c8b2728add0da47",
+      "2d919072b5f9b84a",
+      "7f5964e8fa064b92",
+      "38d2f731139da1d4",
+      "284b81299f9c29f7",
+      "d720eb07c31bcffe",
+      "dbbf00ed5848b608",
+      "e9b458a7df5344fc",
+      "60b8d9f39d1b3fec",
+      "49386d3d601838c6",
+      "f06f901ff3cf78e4",
+      "0ef7ea7f7f6ba26b",
+      "2a3e60e55ddb70af",
+      "01136fab24893356",
+      "c6d72dfe9c5c3add",
+      "5fcfd73d95ace1a1",
+      "b235974dc3b60f31",
+      "f64e8c79250b5baa",
+      "03d8e33bf37f5263",
+      "0a8fce7aa4ae1f9e",
+      "628f396f01145c56",
+      "d17cd6fd478303f1",
+      "747a2b37600be74a",
+      "a1d4876d97d74534",
+      "25a6f89065df6257",
+      "7eff8122ef0d8136",
+      "2280eff10ebf59d1",
+      "549a9d2d9aac802f",
+      "0d111f283950906d",
+      "a8e452f818a9f9f6",
+      "db2cf5bb5cef6390",
+      "811b7416d46bad2b",
+      "1d1cf78dd71a5611",
+      "fe3152fcdfbd08c6",
+      "99adc91b529cc8e0",
+      "b3e010abe53fd32a",
+      "92bebce13a1ca2d1",
+      "7569ee92a0a854a8",
+      "f0a3e1c2f2837bc0",
+      "e8dc4a70b944f8a9",
+      "1a3e083d19bdf8f5",
+      "7b8461a746ba7d70",
+      "912a76f720e9b0d1",
+      "dc199e1433ec45f4",
+      "a83ba8b6c04569b7",
+      "824a5267ff458f01",
+      "f2d10a0bd454fa39",
+      "81238fec24d14685",
+      "1ed93ea7616ec0bc",
+      "4d0beb2767b8852c",
+      "b6dc79a8d63f2921",
+      "345ea6dbd328c195",
+      "8709b7daebdde417",
+      "81c8b88ee050ecbe",
+      "3e950bf3fc3c78a2",
+      "94f4a71f053878ff",
+      "ac7b4e44e144d65e",
+      "d973a4dd7afddefc",
+      "c3058b95bcd7b600",
+      "18305858a22118ad",
+      "f0ad3c0c02c6b632",
+      "c257923eb55421fc",
+      "029ecce09f761f59",
+      "9f3bc6c8826795d4",
+      "205e499b43626288",
+      "e9d4666a83c26f65",
+      "0c999b89e684334a",
+      "c92732699c494ccc",
+      "cadc1823d2caaddc",
+      "76a6cabb32fd35ee",
+      "85a4915602ed8fd8",
+      "99ddaa3634197d20",
+      "53de728497612c43",
+      "4e78fbf767764666",
+      "e91ee6af288c2288",
+      "e2a2211a8b8af5ee",
+      "c67468a51b53ed83",
+      "0ec2955a6c8959c4",
+      "3e62cbbf26070a3d",
+      "f70bd059b390ffae",
+      "f72b3f21a310c7fb",
+      "dba1fbc8e3b7049d",
+      "12073c46750ffab4",
+      "bdf02788bdb21838",
+      "d0809e04ced262b3",
+      "2dd95942da022ef9",
+      "dd2b6e51d4790824",
+      "f6c2a614e25a8119",
+      "801461116fa46892",
+      "77b1864148b4495b",
+      "912a76f720e9b0d1",
+      "ac90804600a92ae9",
+      "bd0e484d577f321f",
+      "2f064cbe63de33da",
+      "a5e25200421a7126",
+      "1aa0f983c474c83c",
+      "46a2b04aee97cf40",
+      "be7a6450543e08cf",
+      "ccbee05b3c4a3099",
+      "4044d879ae57ebe2",
+      "b214ca0163983f7a",
+      "9b772207771d665a",
+      "998bceba5c5f1553",
+      "9a4cdcbb9a5f0294",
+      "81e60a7f5d627433",
+      "4d4ce614a46c31ef",
+      "fc00f022174aae3b",
+      "96968d530445aef0",
+      "198ef1495c2b00b8",
+      "2797ee79b729b155",
+      "3551bbb42d84b54e",
+      "a5d4f41866a0ee19",
+      "5c65495c9153d6f9",
+      "3dd4401033b2017b",
+      "0c999b89e684334a",
+      "f08171aea54943b3",
+      "40a66beb75ace319",
+      "d15cfbc8103e0f5d",
+      "c1cdf388364630f1",
+      "f08f07c3675d6563",
+      "31bcde729609c1c4",
+      "c07ce20d1ead9e39",
+      "269cd570358337fd",
+      "bb859cecb1d2a814",
+      "b392e1cd15ac38fa",
+      "9ed99ae5c17912be",
+      "326696da77683a03",
+      "edd618c99e8a684a",
+      "8f28b30832c960b5",
+      "2c7b18f549b6ff77",
+      "ffeae14b7c62fcff",
+      "d742e76fcdbd7924",
+      "a237c037b6a418ca",
+      "14f7a11036226d91",
+      "4caf857d0678286a",
+      "372c485df32e2f47",
+      "2108ab90de153a16",
+      "d25a477003d4e164",
+      "912a76f720e9b0d1",
+      "861b98ecf726d4fc",
+      "4caff4863d06da38",
+      "057ce2fee0d17b7e",
+      "df2044bbb1ab1957",
+      "bb5bb047b44f7138",
+      "083ea38ef54202ee",
+      "fbabbff99d37f628",
+      "24d31a6a8880af4a",
+      "60968a3cdd93a519",
+      "66dffb58d3c8d37f",
+      "42c800c38da5cf77",
+      "1eaf9c38e64bef96",
+      "bf9451d6f85b6ba8",
+      "eeb613c36a789470",
+      "fa2a2f2d575472de",
+      "6f9848567b7c1c23",
+      "56e7d123ac46dd25",
+      "69a5bf305c04547b",
+      "8a99c5faceec3412",
+      "911924b537172821",
+      "7a505f4567b7979c",
+      "ad97bd917d7cd794",
+      "47507022e00e4c62",
+      "03d8e33bf37f5263",
+      "4194d0464014ed36",
+      "54402ca0f5deaa1b",
+      "0e8c109c546b83ba",
+      "3868131d141d4f21",
+      "7b5c19f7a19667a3",
+      "d0c009540255ab4d",
+      "4f3a51a1583c54eb",
+      "adc12b927bf01fee",
+      "f54ca945d1586411",
+      "71489723f695c66d",
+      "1f3a9a9cd6d691bf",
+      "3f0f0739190e4a69",
+      "22b879ead4abb247",
+      "2e6bdd0f77dc3b86",
+      "3b30882e2a29e153",
+      "3e8c94788c170374",
+      "f64b4a86655e04e7",
+      "c5c2b9628f0b86bb",
+      "d30ae0beb5a40f44",
+      "d48ab5516b24506c",
+      "9c10c85b3816e25a",
+      "6657dc788acc37e5",
+      "51c7862f0c38bf2c",
+      "912a76f720e9b0d1",
+      "e4693515dfefb38a",
+      "e761ab6de601dfe5",
+      "30496468864f121a",
+      "e90e1cd8ce0007ed",
+      "2d40795566180aa9",
+      "a2a6c7e8ef28ed79",
+      "86529b8c8b78ee93",
+      "d5553a580c030616",
+      "a237a698fe4ef856",
+      "5aec31e02657fba4",
+      "c270890589788727",
+      "4f424156abac2036",
+      "f1f4adc56cf1524f",
+      "8f2f64c57f527e8d",
+      "9897f089cfea935d",
+      "b9af9c8dca58cb65",
+      "9ee374950540246c",
+      "b18e55416c6183d3",
+      "f29995df18c13b8c",
+      "14d0270ca0206eea",
+      "ac35ad51d64aef91",
+      "df6244cfde4b971d",
+      "b7b94a523eb5c308",
+      "0c999b89e684334a",
+      "f87261f26e8b899d",
+      "50d51ef5fafdb109",
+      "9466e2318b37ac6a",
+      "01e6b6cafc3ee4bf",
+      "36696107d2b3f82e",
+      "3e0cb84ed0854f81",
+      "1b31e77a13d8c30a",
+      "c862fe61929e14db",
+      "8768f1a70e340ae9",
+      "7cf7be97ce722e8c",
+      "74b4c610fb083c83",
+      "81cb14106b8cb02d",
+      "8e5496178a6be924",
+      "8511c3a2aeec8da9",
+      "e0dbc2dede6418c4",
+      "8ae355cb34da76e7",
+      "d68cca92303393e6",
+      "bdfbacc2592f2504",
+      "b26f8e9781ae0bbf",
+      "b58f143fc64c6f48",
+      "e2c861faf72cd9eb",
+      "6e2637fd420b27f3",
+      "eb28e04e15251868",
+      "03d8e33bf37f5263",
+      "84338575607a4877",
+      "0f0c0551c3daf736",
+      "63ab6028d4d54c26",
+      "56a0a9eafcaa3b25",
+      "87b92af9fa07761e",
+      "0a523c54dbf68222",
+      "27b7eb8d3a7031db",
+      "d7146b25e4dd73da",
+      "4d343220278ba3e9",
+      "1bb6a71b9b5baf99",
+      "10aaab055cc1d02c",
+      "aa5b67937439fd9b",
+      "35a5e8ea36ce32ca",
+      "7159e257f18b19de",
+      "e5cbe1889e7e74ec",
+      "c1e20f359ceb7b19",
+      "1d853a44f1806c45",
+      "e4c0be8fbd92ce60",
+      "0f0d3297617fecff",
+      "c8a2bae8d83443a1",
+      "de0291a006dbfc80",
+      "31601fb4462f777c",
+      "09681f39e61fc63e",
+      "cd2e978d74a651bc",
+      "a06a0b5c4f811be0",
+      "eff3779141fd6968",
+      "4a014535cfcfd7e0",
+      "7138bcd35f126091",
+      "d42c123aaa5ba7f8",
+      "0dddc7d27e334bb0",
+      "58a8f5f30ac5217a",
+      "101fc918d71ae3ed",
+      "8eae234679fb6a37",
+      "1a67106c3935e501",
+      "ad70cc6556cfecc7",
+      "bde7eefb52103c5c",
+      "6aaeea7fad9fffc8",
+      "7da653681e1ff985",
+      "70f41b3e7e76890c",
+      "afaed98291c5c0de",
+      "56f557b3b2247bbe",
+      "de51af54881027d6",
+      "d0f6d2837c7fa7c2",
+      "241da7a25da9cf8c",
+      "35025c8793912724",
+      "66da92466dbf8aad",
+      "3674adf728804ca5",
+      "cd2e978d74a651bc",
+      "7ab507bc29651a3e",
+      "5141e825335985f7",
+      "4f38ab184ffadbfe",
+      "c32998e6a2a3b924",
+      "dd821371e643cc1b",
+      "f2cd456d5c800f0f",
+      "045797e642a917b4",
+      "862f2efb68a7140b",
+      "b061cc076f9c237c",
+      "55251ec2cd608a42",
+      "1f7f753e15b4ee5d",
+      "37b831367c00955d",
+      "82d8d02c291c848b",
+      "f49f898795bd446b",
+      "859ca7830b793f16",
+      "acd37b746a245a39",
+      "764cd4f7d86ca803",
+      "fc58f5884b49bd09",
+      "73396991311c181c",
+      "33ca5e903af6da2b",
+      "20abe3c0e8f5a435",
+      "60c7346319dc5dcb",
+      "d975f034cdc5252d",
+      "be6eb3d73231f002",
+      "3542dd49419bea7d",
+      "f54f9e7aa314a482",
+      "19ebbc570a29838f",
+      "e42eccbbe1be2910",
+      "3f8b2856cac05527",
+      "d11a8531cb37309f",
+      "f1fea98cb84da67a",
+      "5291a2d64e5ec872",
+      "1460f0c15b45be66",
+      "4cde25d2a23e536c",
+      "d4a87fa0d79fb367",
+      "631b18d5311aa226",
+      "b9951057ac19fa76",
+      "5b3b3ee1e0cdf53b",
+      "4be207941eeba1b0",
+      "965fd32865a9cebf",
+      "d81cda7368854459",
+      "3209de196da6ebe3",
+      "bc205f2e21fdb197",
+      "065d99d964f50d64",
+      "578f0e18bba1dc08",
+      "b57bb801efddb681",
+      "a046033ed15d1e8e",
+      "be6eb3d73231f002",
+      "20e950973aad307d",
+      "b50c2d998a256e7b",
+      "1e459d9e7a4f0a84",
+      "db0a065b0382bb64",
+      "95389bc9674a2e4e",
+      "a528377cf4450b03",
+      "0ceb135030c35f5a",
+      "b2942054629cb340",
+      "813258872ac8f703",
+      "a3166a41c149e4a4",
+      "4e961af94a71e825",
+      "da490b38e1679cde",
+      "732b560834c70db9",
+      "1944c36f2fad945f",
+      "be0713e45c893b08",
+      "0e02300928cb732c",
+      "6047c4e77573daec",
+      "cb0947f01f6915a0",
+      "c05f1fe30b132c56",
+      "3ad90a2d60e13f2e",
+      "0e3ac58e776476dd",
+      "c4bb29cef830f778",
+      "5569013f25bb7389",
+      "be6eb3d73231f002",
+      "3b078b27bece1f4e",
+      "536484498142f5b3",
+      "fb2910726a1de4f1",
+      "33c0bb67d3e472b3",
+      "43106b34b8288a39",
+      "0921f2709caf0a06",
+      "c688745ddd0ad68f",
+      "ab6dccce0fb5996a",
+      "5786f12d14b2b1c5",
+      "13ecdcd04c0a1264",
+      "498867fb6db4c32c",
+      "3e7b1dda533380ee",
+      "1155599988ba81bd",
+      "9cce483a2a40fe67",
+      "ef41b344f956febf",
+      "35293d9005a9b8fa",
+      "432f0839854ed0fa",
+      "cddc966e871b2c7a",
+      "95bd1d7e261f6b22",
+      "9a27f7d87b69cf1b",
+      "fafb4ba0ed1cfca4",
+      "584e13e5d4da459b",
+      "eb9ee6fcacfa190b",
+      "03d8e33bf37f5263",
+      "f26e0ee2efbe0ddb",
+      "dc4502af8e06d567",
+      "6206cab0b461ff8f",
+      "b3f50c8d0f3f5ef4",
+      "9562ac079c7021ff",
+      "c88657611b894273",
+      "72826648b66719ef",
+      "03bd9e6ede71682c",
+      "a3edbb76b5ca7bdb",
+      "52b4103e91566ae9",
+      "1bc7b872cdd345b9",
+      "061c4ce28c40822c",
+      "646f7b9d82fe9272",
+      "4155de363939d855",
+      "35b9d64e6b3240e4",
+      "96c7c2a7e97327bf",
+      "001f50df16c2624d",
+      "546674ece3f60b3f",
+      "070e5a5642546347",
+      "52f7fca8680c8677",
+      "2dca76212c8e7508",
+      "20113fb29b3eaf61",
+      "7a9648e9c9dabe15",
+      "be6eb3d73231f002",
+      "fb5cd64e76217b9d",
+      "fe4a1afcdb658480",
+      "a68833b8069d8093",
+      "caf7743b468d8de6",
+      "8aeb1f9a50c1e49c",
+      "e2faee61d2a9615f",
+      "54cf119791b178a4",
+      "b3fd1aee74da880d",
+      "d2c30777d712d253",
+      "4c76467dece91017",
+      "3dab816e8d9f397e",
+      "f335ec3d2cc2a388",
+      "6fc8e3e8d4c2132e",
+      "7e9760d777aae368",
+      "26fec0a4ef46a7ed",
+      "755c009539b9aeb2",
+      "9ee6218e38246790",
+      "724f5c1bb1a81159",
+      "02d021d288642e31",
+      "7edc73a321b669cb",
+      "397c8b19590206c3",
+      "f358b0737ad6399d",
+      "aa95d188e109035f",
+      "be6eb3d73231f002",
+      "e954722851d3942f",
+      "a04543865ad488ff",
+      "a8d1e609d9999d34",
+      "03f8e955a963adf8",
+      "4be7241913c92393",
+      "ab86fce1ec8127a8",
+      "ff4476b225edbba4",
+      "cd7b993ee8b9a5e6",
+      "4de564233189544f",
+      "e143d315df5857be",
+      "1d102bd5ffb2ba83",
+      "48a2b8bfbf46acc4",
+      "6145952d0c8c0bb4",
+      "52f06641ca042092",
+      "35f3afe645c98fc6",
+      "30a3ac008f7f1aa1",
+      "0ea641199e753380",
+      "55552736331fd6e7",
+      "7f17a4355e50e6bd",
+      "6b96eb7659f2e61c",
+      "a05318327b9fe042",
+      "ddef1c749d3d6865",
+      "e7e824210588257d",
+      "03d8e33bf37f5263",
+      "e2fee2b9a0cf9fda",
+      "619eda4930a44ab7",
+      "90302d6e62c2d547",
+      "8d85964e3208ae4e",
+      "3665d3d10c6d7ce6",
+      "2010070f647f5274",
+      "3014532ff3585448",
+      "adcf68448a25bef4",
+      "6cb7f241ab0f74fb",
+      "66f2f9ac453f14fe",
+      "d6177b941330baf7",
+      "58b443d45980cd3e",
+      "73eb5c59e911bef8",
+      "d0527fd835ff7367",
+      "62ae6d4eaf8cde31",
+      "795e92159f36c838",
+      "375f6b99b34bce5b",
+      "f49e41cd70049757",
+      "b575b8999998700d",
+      "ed57eea17ecbd222",
+      "101f1f7c732579e1",
+      "d2ac20332987148d",
+      "6d0c289a99b06eb4",
+      "912a76f720e9b0d1",
+      "d5d22db9a9f5722e",
+      "9fa75c094cae880c",
+      "ce45792eb0cae3cc",
+      "2a4fa48680c74aa6",
+      "803216d75b578ee4",
+      "1e2602af206a6a3e",
+      "959c6c712380ca4b",
+      "3470a9b826b3fbd5",
+      "aa8ff362bcff49e1",
+      "5729cc03ed8d1db4",
+      "0f98754b7c0c2d80",
+      "b5c6a792a7016f57",
+      "9442379f7ecdc08f",
+      "4e04a7741e6d1beb",
+      "cf31f5e5478c0eda",
+      "04556b975e3dd56d",
+      "12876c3374505387",
+      "2cc1fa5deacb7f56",
+      "130a121d6c4c0971",
+      "23f7fe71b8c89ac6",
+      "a69900cd428303fc",
+      "03d90f075e12de1c",
+      "32cea491a3ffc6d2",
+      "03d8e33bf37f5263",
+      "b4e115005197fe36",
+      "554051a551eced54",
+      "872606d82bf67386",
+      "469694713d0ea15e",
+      "61897fef7a358ad2",
+      "d541a749c12be7fb",
+      "605f170ba9225826",
+      "060ef4130197f620",
+      "2b72995a48b6b1cb",
+      "6124ecadc53e63fe",
+      "d1b9a37a70f7eccb",
+      "37604c32053f261c",
+      "72eabfcfb4d620c7",
+      "8ddab66ab1991f4c",
+      "1d4adb87975ae8e8",
+      "e5555cc9dae01850",
+      "48f990b7391c1295",
+      "4643c8d180ce6f51",
+      "8ffefaf4e4101167",
+      "f7a72f8f73dc7027",
+      "ca3d5489690be16c",
+      "a5fe41c2a3b1ff78"
+    ]
+  },
+  {
+    "team": "Vadim Vasilenko",
+    "submission_id": 56427964,
+    "rating_snapshot": 3097.8,
+    "episode_id": 111903848,
+    "seat": 1,
+    "agents": [
+      {
+        "id": 243712153,
+        "submissionId": 56424800,
+        "reward": 111896,
+        "initialScore": 3064.7762324509704,
+        "updatedScore": 3060.782352010624,
+        "teamId": 16718819
+      },
+      {
+        "id": 243712156,
+        "submissionId": 56427964,
+        "reward": 115891,
+        "index": 1,
+        "initialScore": 3095.8076674290533,
+        "updatedScore": 3099.8015478693997,
+        "teamId": 16770421
+      }
+    ],
+    "end_time": "2026-09-22T05:42:55.054694800Z",
+    "split": "study",
+    "seed": 1532036726,
+    "rewards": [
+      111896.0,
+      115891.0
+    ],
+    "snapshots": [
+      {
+        "step": 23,
+        "money": 8.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 47,
+        "money": 61.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 71,
+        "money": 5.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 4,
+          "WHEAT": 6,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 143,
+        "money": 790.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 6,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP"
+        ]
+      },
+      {
+        "step": 239,
+        "money": 214.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "STRAWBERRY": 15,
+          "MELON": 10,
+          "WHEAT": 23,
+          "COW": 14,
+          "SHEEP": 3,
+          "GOOSE": 3,
+          "TOMATO": 4
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 1,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "PIZZA_SHOP",
+          "FARMERS_MARKET"
+        ]
+      },
+      {
+        "step": 359,
+        "money": 30002.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "STRAWBERRY": 21,
+          "TOMATO": 13,
+          "WHEAT": 19,
+          "COW": 14,
+          "GOOSE": 5,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 1,
+          "SHEEP": 0,
+          "STRAWBERRY": 10,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 3
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "ICE_CREAM_SHOP"
+        ]
+      },
+      {
+        "step": 479,
+        "money": 63674.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 19,
+          "STRAWBERRY": 14,
+          "WHEAT": 18,
+          "COW": 14,
+          "GOOSE": 5,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 1,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 1,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 3
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "ICE_CREAM_SHOP",
+          "BRUNCH_SPOT",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "step": 599,
+        "money": 90261.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 8,
+          "WHEAT": 26,
+          "STRAWBERRY": 8,
+          "CARROT": 11,
+          "COW": 14,
+          "GOOSE": 5,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "ICE_CREAM_SHOP",
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "PET_CAFE",
+          "BAKERY"
+        ]
+      },
+      {
+        "step": 719,
+        "money": 115891.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "TOMATO": 4,
+          "WEED": 3,
+          "COW": 6,
+          "GOOSE": 3,
+          "PASTURE": 4,
+          "COOP": 2
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PIZZA_SHOP",
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "ICE_CREAM_SHOP",
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "PET_CAFE",
+          "BAKERY"
+        ]
+      }
+    ],
+    "land_acquired_steps": [
+      150,
+      220
+    ],
+    "daily_hands_max": [
+      4,
+      4,
+      6,
+      6,
+      6,
+      6,
+      8,
+      9,
+      9,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      10,
+      10
+    ],
+    "operations": {
+      "PASS": 128,
+      "PICKUP": 189,
+      "BUILD_PASTURE": 17,
+      "PLACE": 88,
+      "NORTH": 1118,
+      "WEST": 852,
+      "FEED": 353,
+      "CARE": 364,
+      "SOUTH": 633,
+      "PLANT": 264,
+      "WATER": 1161,
+      "EAST": 725,
+      "COLLECT_FERTILIZER": 478,
+      "DROP": 66,
+      "HARVEST": 550,
+      "BUILD_COOP": 5,
+      "FERTILIZE": 208,
+      "DIG": 41
+    },
+    "market_operations": {
+      "BUY_ANIMAL": 22,
+      "BUY_PRODUCT": 22,
+      "SELL": 482,
+      "HIRE": 296,
+      "BUY_SEED": 238,
+      "BUY_LAND": 2
+    },
+    "plantings": {
+      "MELON": 10,
+      "WHEAT": 186,
+      "STRAWBERRY": 21,
+      "TOMATO": 21,
+      "CARROT": 26
+    },
+    "opening": [
+      {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            5
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "COW",
+          1
+        ],
+        "hands": [],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_ANIMAL",
+            "SHEEP",
+            3
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "BUILD_PASTURE"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "COW",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PLACE",
+          "COW",
+          1
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "WHEAT",
+          3
+        ],
+        "hands": [
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "BUILD_PASTURE"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "PASS"
+          ],
+          [
+            "CARE"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "CARE"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "SOUTH"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "WHEAT",
+            1
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "COW",
+            1
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "CARE"
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PASS"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [
+          [
+            "FEED"
+          ],
+          [
+            "WATER"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      }
+    ],
+    "farmer_hands_digest": [
+      "d32d67efb94002cd",
+      "2f1da08dd9f04b50",
+      "9398fbc2ba4b35fd",
+      "09cce784bedd4aa8",
+      "7d9f7ece363880f4",
+      "500c6aca897584f2",
+      "ba9b0399aeac1e8e",
+      "71d72ae43912c60a",
+      "fa84339dc6497ca7",
+      "7a2a65ecda2f87d3",
+      "3e7b1918ecec5307",
+      "668f1e97d879d876",
+      "ca69a7989337ed57",
+      "27e01c34ee97fe5a",
+      "b4bc3e17a5d628f7",
+      "76346531be9651be",
+      "d2efa73e91716f3b",
+      "39317f066f7daff4",
+      "beb61ce3366fbf32",
+      "333215a53cfc723d",
+      "983494eab349de96",
+      "985a5d4eaaae1cda",
+      "5338816ac780850b",
+      "dfb135ec3bd87a00",
+      "9ff42a05a769495a",
+      "eb2f42f91a8c1249",
+      "44eea5373bd8bcd5",
+      "2c2283b73472738a",
+      "5beec01611d8868f",
+      "05839a7f748f986c",
+      "fddc56599b34720c",
+      "f3921e5757833183",
+      "47eadd9989d6174c",
+      "6380c85c251b092f",
+      "1fc718a4444325a6",
+      "e2b771909b6f3fe1",
+      "893c996dde8ec02f",
+      "b0d8c9d5cc673d2f",
+      "9a3c494cc572dde1",
+      "88a78c58c8bfeb8e",
+      "6dd60124b679e5ae",
+      "9b6ef0187e682a40",
+      "d143831ff45ed2de",
+      "e8dce6a8024164b3",
+      "626da690584d06cf",
+      "95b8ebb21bacdaa2",
+      "97adb376e5b70eca",
+      "53629b8b17a52739",
+      "9ff42a05a769495a",
+      "27a5dc6dda9b7b80",
+      "093608c9fb89c445",
+      "866b07747ff95039",
+      "1656174f5b1e5d74",
+      "9711dace1f5b120b",
+      "cc429a46f1bb75b6",
+      "c1654a1bb4c29705",
+      "77f222ed40e597cb",
+      "52f287607cc3e3e1",
+      "c2aed8a3eeb03059",
+      "be46d106be8a3fbb",
+      "6fe7c602aaac45ba",
+      "ab20cb08347152ac",
+      "3c21811734e9060e",
+      "6fda86c0a40cb8e3",
+      "c5f362f0e71c11de",
+      "4d7a7cd12dc2f756",
+      "0587def1183def5f",
+      "adac443d80324f02",
+      "ef7a6646fa973891",
+      "4b9e2341363758b9",
+      "f19eb9be7d9735ee",
+      "9f777d8c74842f78",
+      "cd2e978d74a651bc",
+      "2244ea9de8487a33",
+      "83748b4143c46f44",
+      "e17e7b349a2a8f49",
+      "7d62e2bb7cdf0012",
+      "28316804cd42c44e",
+      "3c39b851b8d7decf",
+      "17cf0c6ad466ea24",
+      "2456bf62ab4ba747",
+      "1d683699ab16cc85",
+      "c53e7e8a78ea305d",
+      "a3801e02b2caa122",
+      "f51491bccf4c82ed",
+      "2fca19ac6fe97757",
+      "2f22c24b212230c6",
+      "93cb5e241d299b78",
+      "f0309d01e9da91d7",
+      "25996779c54d3a10",
+      "553f382c3201c79f",
+      "9fcb3ee28229f6f1",
+      "4390b212d396a1c9",
+      "c149e573b212e270",
+      "19099c724b341e68",
+      "6744d5a395ed1943",
+      "cd2e978d74a651bc",
+      "02b39f30089b6412",
+      "cd222c950283c5ed",
+      "2a914e80b0b2fb9b",
+      "506cba105ef6b627",
+      "95c60a25d22b0b1f",
+      "41b64b8cc1cd6dda",
+      "ac6cedebeb49d050",
+      "3000407d0b381cca",
+      "4601d85fa0bc9813",
+      "ef839b2a3828ba41",
+      "af40bea273830228",
+      "86252c621239f2e9",
+      "dc5e7b392b85fecf",
+      "6c951b1cbd399452",
+      "da49288b53ac1be8",
+      "2e88173dc6f299c6",
+      "a53ca92fb511d23b",
+      "d1b0ba6918de4739",
+      "8c50f6e250a9472b",
+      "c5172d5da0a4bfad",
+      "fb176a38673ba2be",
+      "a814f592cd16f097",
+      "4ff78befeee797ac",
+      "d32d67efb94002cd",
+      "50ec5196c46a01c6",
+      "18d9624cefd7f588",
+      "36aff64f75f1a347",
+      "7d93009d64efe8f4",
+      "1cbcd5f6c4c6f376",
+      "555bc0fede37f7a4",
+      "1fbefaaf62df59c9",
+      "8c2ca7d1297e545b",
+      "3e25aa1c0c6fd2d8",
+      "afddd8ddd4d65d25",
+      "ddb76c66a8919af5",
+      "fe1d7effddafa609",
+      "6296006228baa550",
+      "96460bfb833abe2a",
+      "02081fd092dc6579",
+      "144deece55afb702",
+      "05c04d4a87cc9844",
+      "30e6356c246fc6f5",
+      "63f2414a6e381cb4",
+      "5fed41c96df3a5b8",
+      "c2c2e2cf4bf24a01",
+      "cca43226baadf685",
+      "3334366499e6818e",
+      "03d8e33bf37f5263",
+      "c5c9c0e7fc27237d",
+      "5cf0018b924b8edc",
+      "b1e8992aa36fadea",
+      "351c3ae1ec5be272",
+      "998a54446a1a87e9",
+      "c103e7003989644f",
+      "fb4fbdb715556e6a",
+      "405c75f9e5615763",
+      "273c782feceeb1f1",
+      "330900448a839541",
+      "f9f44065aae26eba",
+      "f209b50a1af685a3",
+      "a1f673bcc5886d74",
+      "55c6a3c04d06878e",
+      "fc98db44907d36de",
+      "f350c50951d74265",
+      "cfe896f1daf9878a",
+      "b5cbfcab8293f324",
+      "2aa805b11a03e3e9",
+      "ecd5b4b28045235b",
+      "127653dc2911ebe0",
+      "77c0ec80564dcda9",
+      "eb52b47eb5a7e6f4",
+      "d9ca74173f5c3096",
+      "0840daca101119d5",
+      "3cc8d5268a746bf8",
+      "bc5e0829ae919019",
+      "a95d6380630f8304",
+      "1213b12d32bf7007",
+      "25565ea96e2cb8bf",
+      "7f3d391d3d9c5293",
+      "6180b1f0c46b04f1",
+      "4fd64c9ed59b1f62",
+      "6e32af4599add5f9",
+      "57136b980346443b",
+      "88afca9b692a08b7",
+      "7e945b0c5766ff1a",
+      "e00912267226264f",
+      "0af16fd97979142d",
+      "8cc415927aa733f8",
+      "c74d36aacc927b92",
+      "fde42bfa93c6243d",
+      "c64481e46c28c01f",
+      "e8e6f3bff8307e00",
+      "784cc1ef40af4acb",
+      "e8cf180c4143755f",
+      "d898be7da29c5ef3",
+      "912a76f720e9b0d1",
+      "b9741d900556f482",
+      "fa2108118d536798",
+      "cd759a81fa144909",
+      "097edae8097cd546",
+      "5dbe3f3bf547a132",
+      "a9da34f810ded4f3",
+      "f27365e8711f21dc",
+      "b72709306e44a38e",
+      "042306d442e9dce6",
+      "043581f04297ea41",
+      "f767995b00e02eb5",
+      "28666dd166bae539",
+      "fa79a3c4414d2cfb",
+      "0ff9460c7fa2fc4f",
+      "634d15e0ae1daa12",
+      "1388d5c32e317f6c",
+      "2580bfb6581d2629",
+      "0ca95b467d229d61",
+      "2cf08adfa7e90776",
+      "38b8b3960d05524f",
+      "37f79aad5cc79f9c",
+      "a70389f39d10de59",
+      "dc4a704d317a6ece",
+      "03d8e33bf37f5263",
+      "43fe8722e15bf81a",
+      "84c19c284231ab52",
+      "f4e856e57a9c58f2",
+      "68727eb899464eed",
+      "57c414b73bd48353",
+      "dc12702b46469bbb",
+      "cfe436ac233fbf75",
+      "82522477b6df454f",
+      "ab140502eb666fd2",
+      "e86e88d3545a7ae5",
+      "a4913250c42e4d1b",
+      "68a705476690f964",
+      "700c8511ec52d6f2",
+      "097f5f7065e77147",
+      "b2daf73899bbd22e",
+      "3a448e4f02183d71",
+      "9cd450a6cee8e4d6",
+      "b30f8dbc5335d2e5",
+      "96ea0877e4a04a97",
+      "37c4c90c0179edb3",
+      "629b3e44a97429d7",
+      "544e3d1914cd54b2",
+      "867db8324f8abb49",
+      "912a76f720e9b0d1",
+      "55186de74c436e26",
+      "928945e3e2bf6011",
+      "083c58474b15ca83",
+      "1b45afe8a76e660f",
+      "fafc616448a13906",
+      "dc60cbe985205f3c",
+      "cbc02c4bc6ddea0b",
+      "b0ef0ded181899cc",
+      "9fb0563606c78d52",
+      "4db41fa9d2f0db1e",
+      "d771dcb9b8211fa7",
+      "aa2f73bf2dbf6325",
+      "46e4e77064c4f4ba",
+      "60c67b47d11d9ac1",
+      "b10731145fbd28d3",
+      "7d5bae452e7f62bc",
+      "d60a24ca5d1f0e17",
+      "30350e46e3f33c16",
+      "1a289ae4440c63ae",
+      "b1b08c80fc14e80c",
+      "c703acf3f16c8153",
+      "bd9acb2c322882dd",
+      "a8dbf6f5ae32dea0",
+      "8855f5d6131a634d",
+      "6dac50ea09a2d7fd",
+      "98b17172611c3eb9",
+      "217c5b590d369595",
+      "28a4d4357b6a0dba",
+      "2c32c98519cb298f",
+      "af6caac3a16c3129",
+      "955477623b578572",
+      "206e15b190f4de44",
+      "070d206d84f7752d",
+      "af1c5288826d865b",
+      "adafff016e6d7916",
+      "2dbf863cb8aef19a",
+      "411b8dea751c5dae",
+      "ef458f2a7f51a257",
+      "5c0b81aec583c2b8",
+      "b4013c106ac52ff5",
+      "ef787becbc28aa07",
+      "6fbcf0f810210486",
+      "34a92d2f2f823e26",
+      "a06e428319ec3bcd",
+      "3791a23ab0585857",
+      "35af79a358886c90",
+      "0ce76fc784d8f0f0",
+      "03d8e33bf37f5263",
+      "69e4777ef4a1439f",
+      "72634d746ce8df24",
+      "13d30e2115aaaa30",
+      "35151ad11715e3b2",
+      "81b03d0894bf0479",
+      "e6898fc5ccd860aa",
+      "d71532693448b59a",
+      "2715ddfa3bc05ab0",
+      "7d7d3d1294d8f21f",
+      "e10a86794a00de60",
+      "95de2c88e64ac317",
+      "8d669d3e4ba4873d",
+      "c2d2a2040e6da8b7",
+      "a858b0a7a802f1bc",
+      "2533f8fcf21d47c7",
+      "3225039e2d853848",
+      "c8fa3d0bcdf3d79a",
+      "bc599b9c250a7435",
+      "eaa008d6d806de9b",
+      "5a3471fba7c6f2cb",
+      "d505a81e974a4654",
+      "2b15e4f6ad81b0a4",
+      "c374bee23ce54b9a",
+      "8855f5d6131a634d",
+      "0662bf28d61e5b72",
+      "ae611df0cac5bcd4",
+      "d2cb2bbb73b79056",
+      "e214c4094e724c3d",
+      "92dfe7b18548ec5a",
+      "c1c5434a41309b26",
+      "a73c9aeefb5158a4",
+      "3377f6634aa00e88",
+      "2492e36ea4441aaa",
+      "72a4a995852f9613",
+      "2b6632cb23719be5",
+      "006a0ec12e95cb06",
+      "1474bacee49d6a8c",
+      "f1c3b2acb43479e7",
+      "6c0f499018c47eda",
+      "fb97c0771104c4d7",
+      "00e1e975a4436876",
+      "ffc620aa3151a0ae",
+      "82ccfe156af344a5",
+      "3d2503262e243346",
+      "a1a07a38c7c66452",
+      "c53c60cb3e5e9c66",
+      "1884641116c9b9ca",
+      "912a76f720e9b0d1",
+      "ee906edd2a805af0",
+      "7edd6c9f5ce4ea93",
+      "7ef966afae9d9c4a",
+      "fc96c449247f3593",
+      "84791d7191f5e3e5",
+      "365c9ece3044094e",
+      "fc9bfd9b93ff595e",
+      "732a92e251dabeec",
+      "11b05bdbe5fb45a6",
+      "c90ada76ea86c4ed",
+      "9e391fade1d127f0",
+      "ef7a3fac95951774",
+      "87065f4d976495df",
+      "cc4490e11bf91c22",
+      "0bd16311610b3d98",
+      "ef8d1728a10fdf23",
+      "c155edc47ec137d2",
+      "5f5a960d22ce7745",
+      "c8d9441c5a633f6d",
+      "3e381bdaa3c47f4c",
+      "0589379421ee23d8",
+      "cf20635ac723203a",
+      "2080fad7559fda4d",
+      "cd2e978d74a651bc",
+      "7e3940e6d1e39899",
+      "2596fcc55266c09e",
+      "a3c2bd640906dcea",
+      "7bfd66df6e4a5cc8",
+      "570069e5856d44da",
+      "6d914768577e65a8",
+      "e3a615f061ba7c73",
+      "ad835a70a1c0fe0d",
+      "d1c56a296b2feaf1",
+      "20e2a712a9601ec5",
+      "335a019ad5b223d5",
+      "1ca1d552d765fffe",
+      "2f26911a1d9a8db4",
+      "5cbdd43ba9fe0469",
+      "934c9aa83b481285",
+      "6e5538b3f8032ad9",
+      "fbd185e1d8202b88",
+      "41b4288187371754",
+      "3468bcdf50815076",
+      "2a74ba0fc8bf2dc4",
+      "c5f8101a59fa1668",
+      "c7279be9666a1276",
+      "91120b323d0efed4",
+      "912a76f720e9b0d1",
+      "05dd2570616433f3",
+      "8ae3f1a2d36c1c7d",
+      "3f6366beb315af9b",
+      "ba2884e216fd6c39",
+      "d077692ab9cdc340",
+      "900396cfb675f4a1",
+      "6a9bd523fb5b5de2",
+      "09a84767a4ec8f18",
+      "da14cf3f0e9be874",
+      "2a2389736df8399b",
+      "a93bff0e3858890a",
+      "a81c8f7b39b206b9",
+      "320ec024bf66b8be",
+      "36b6eac46c0b8960",
+      "c3d23fb1f0cd8745",
+      "f77064ba755c2e22",
+      "3db164fcf659cb07",
+      "f45232b24291ddb4",
+      "b5d0543a0e22eec1",
+      "9fb8dbcaf76b4a59",
+      "7bb5135f7fdd8380",
+      "09dc0e98ac6e01d8",
+      "8257f7bfc7e6b8ad",
+      "cd2e978d74a651bc",
+      "94e5d4411697687c",
+      "e029d96fef9c666b",
+      "b3f81c4de86f3394",
+      "84e346d4339a5dc4",
+      "31142eb99786e074",
+      "297e27be0f972cdc",
+      "5dd0454064e401b0",
+      "0115b83add850ec8",
+      "03185fb73fbb9438",
+      "2638697d1a2d0580",
+      "53b698a110cb759c",
+      "174ea009df86cbd1",
+      "9da6739a42d131f7",
+      "48affded902a3e06",
+      "1a3bdd3acaf72483",
+      "63cced1a0da35fac",
+      "680078099b9a4a1c",
+      "bba98e269f6c9d2e",
+      "059681891e073e14",
+      "e022341a465f2973",
+      "76cd2c925da0bd03",
+      "d234bff92ea1e278",
+      "7e8bf32f70c3a902",
+      "912a76f720e9b0d1",
+      "c230d74dc493075a",
+      "5e4309cc437d3dd9",
+      "e99e04680bb03515",
+      "7535a7acc0b5e0f1",
+      "2e7759a2f9d6fec0",
+      "1438b87a870efeaa",
+      "babaeca6920f3d48",
+      "fbbe8f7726797ebc",
+      "120123d96d5c6471",
+      "a3f3f95e42bd81e6",
+      "b878929d272606ff",
+      "506e4dbd06390ec9",
+      "a17abc8589b03a1d",
+      "8680eefc7c2c75a0",
+      "a4b34d8ed7f9802f",
+      "337db07aabd423a5",
+      "bd6aeea3d969f266",
+      "81be1495b7c05c4f",
+      "60d17736c2e1b3f4",
+      "e8b64aad3b07b888",
+      "1afb02e7e64c51ef",
+      "4b5ae1f1f573ecd1",
+      "d0566e46d75b1aa5",
+      "cd2e978d74a651bc",
+      "ba0a4459ec22c7fc",
+      "fd834db5c99e29ba",
+      "4089b0897c71da50",
+      "aea7deecf8ccd42f",
+      "1c22e248891cf42a",
+      "1b4489ec590e0214",
+      "32ebb575737b4b1f",
+      "93e77f0294f22c22",
+      "820b5f72d746bb4d",
+      "8b8ea3fe9dcd1c3a",
+      "47cd4dee4777c295",
+      "f8fbb58e09168686",
+      "8d9511c4c0d21f93",
+      "27a4e0d483214228",
+      "b4f16143582550cb",
+      "b9db1ca6526b34d0",
+      "e3bdbf416e2ef4b1",
+      "80740ed046db15c1",
+      "22103b1e6edf3efd",
+      "67f18b8a0e4084ca",
+      "79b539a8c92e851d",
+      "e09528b8f94432f6",
+      "2abe883ac93b2748",
+      "cd2e978d74a651bc",
+      "19eb839533deae4b",
+      "4fea7ebe91459e80",
+      "0cc95ba26f6563aa",
+      "c5a2365cdb6621e6",
+      "606b32ffad1d1194",
+      "3c8f61662ec1f5df",
+      "22e3dcf4f0e77760",
+      "788d675607773317",
+      "4df34027c00a263e",
+      "f7efc135a51c9f5b",
+      "a515c2afaded088d",
+      "e8ba6821079c76a3",
+      "b080a98b75d22cf6",
+      "8ea5c3dd9c6c685a",
+      "980617e05cef61b8",
+      "84cfc350df4c2725",
+      "bd299a8cdbfaef03",
+      "445b95cda3197d8b",
+      "b4e367b40294279d",
+      "db250490e42e849e",
+      "0fff877a1c395712",
+      "b92751697f38a06e",
+      "5125929527cfa319",
+      "be6eb3d73231f002",
+      "9d229327937377ee",
+      "1b7c1bcf13e463de",
+      "b66ec37547f87e40",
+      "9f878c097da4f3c9",
+      "049e6fbf9c58a71c",
+      "ae1d0741a3fa4555",
+      "78b1389b5c44cb11",
+      "08bbee7cd2220283",
+      "2ee4aeb957f530ac",
+      "71e913a44a95ec97",
+      "15defb4ad3611f4b",
+      "521fb9b7d1e4757f",
+      "77394769684378e4",
+      "02155e84df8df1c7",
+      "7b2888f71a49cac4",
+      "60683f1b64d0f934",
+      "cffa7eeea24dccfc",
+      "defae4a7c7de1a26",
+      "ebafe415ec98eb29",
+      "9a7b5a98d02331ee",
+      "04943345992a9c77",
+      "00b3134e36c999ab",
+      "ef89a12a6ac1d987",
+      "be6eb3d73231f002",
+      "7112d214e4ba8227",
+      "70eed03aa7893849",
+      "9a1a1c95d92951c5",
+      "f48255ae1e1a3c8a",
+      "738c99968e1172b7",
+      "5930a3b475076d2a",
+      "7f047d2ad109c63a",
+      "3a9c03e615172d44",
+      "dad6ab5270f0963f",
+      "0f38953852e9cb58",
+      "7490696ddc04d67c",
+      "85df457cea83ab75",
+      "0c5f48fdb834d60d",
+      "76cc20a54c1d7c85",
+      "c0fc86f620f62bb0",
+      "60e8b8da20ff376e",
+      "140d36980c6020cc",
+      "61ffce1d046d42d9",
+      "baa0efa3add8952d",
+      "ace8603661d05388",
+      "9a5707cbeaf06b77",
+      "79c4ea439db294d1",
+      "4f8406bdd888dd33",
+      "be6eb3d73231f002",
+      "bd7964222d55571f",
+      "ee3f9e870d584e81",
+      "453ccbd28857529d",
+      "1efb0cec918275a7",
+      "d932492109fb1738",
+      "e9b44ab39f6dfc9b",
+      "b753486378465ccf",
+      "15a334e65fa3c725",
+      "e5f811c9dba880a7",
+      "204d0bbeb2dc15bc",
+      "5f3e72b0bcb266fe",
+      "8a51badd9eff4429",
+      "0f223c167cb27c81",
+      "788ad7f65941cbf2",
+      "e97e9dd831980406",
+      "ad1a6f49d570ad2d",
+      "eb5abd44acfc78cc",
+      "768d343f0c117572",
+      "7b6f2ebbd72eedbc",
+      "21a92fc22daf971e",
+      "0be3d9bd36153ba1",
+      "380b8f0ddfee9637",
+      "e63eab24cf34b306",
+      "03d8e33bf37f5263",
+      "84de8f7e17419a46",
+      "55b9b5bf670c6f44",
+      "5fa2b1737f8fd3bb",
+      "1c7f59ba7d2a252d",
+      "eca5e446aad6e62a",
+      "b201da8d2e2d8d2f",
+      "8569782f096eeaea",
+      "bf85016e9f4d73cf",
+      "3dc4fe475611c506",
+      "8c530d6948879100",
+      "d54d51ae57d8848c",
+      "66b869bf92ef5556",
+      "aae4a0efdf4144a4",
+      "b135c046049c2ca1",
+      "c37d3e39650c140a",
+      "83ae70fe043f70bc",
+      "f8e41439e5cf4f26",
+      "ce04569e31af1527",
+      "89aed8d502d2dbfc",
+      "7a449e307cd0bfa5",
+      "509f0af627455d39",
+      "138820ecf9ee827e",
+      "9faa3c9169b3ceee",
+      "be6eb3d73231f002",
+      "90aa1839159f9d6f",
+      "496eddde56a82569",
+      "7723d6fbece64565",
+      "4f609684771d3123",
+      "972d9fdbf35bfae8",
+      "68499b0d3f261216",
+      "dbe1615f4c648de8",
+      "69b4954be92849b5",
+      "71f8f5e4c03422b4",
+      "362546ccd7b98d85",
+      "3c82d8a8cf25009f",
+      "51c20dc4afe02818",
+      "0ba9c996b4b4bef7",
+      "f375bfb78eb53bb5",
+      "a1105a7398c55f5d",
+      "929095f43c5a11af",
+      "304049329bf82fac",
+      "8672accd77d1d717",
+      "a2fe9072cae7fe71",
+      "8b049a12d2547749",
+      "d3ec611fe87e2757",
+      "8fac007c0254c128",
+      "c14baef8f388fc36",
+      "be6eb3d73231f002",
+      "8cf618464efc6dc1",
+      "e3954c8363272881",
+      "dfd3e9536a98424d",
+      "adff843824a9a2a7",
+      "87d4bcbd266115d8",
+      "4dc8f625cb047e2e",
+      "1d94c8f4df2a8950",
+      "e172e77785b2119d",
+      "5e01629dd1c5d159",
+      "5985d8b910f87629",
+      "7a1bf95d4a36cd8d",
+      "9ca2d5f25985e8f0",
+      "18645ea4a695adc0",
+      "a18129872e9726ce",
+      "088602c21e290a15",
+      "b88e637bf4775a2a",
+      "369f2785be2fca28",
+      "54bffcb26258f35f",
+      "4ef3e78ac0fc4776",
+      "f255fae68edb1c79",
+      "94c65bad16880b38",
+      "8a6c7099b0fa7ca3",
+      "d012f98f1a106352",
+      "03d8e33bf37f5263",
+      "335298d26f14e4b1",
+      "75166302fc07e8c7",
+      "03afbf200b51d5ea",
+      "bfe1a888eff41504",
+      "b97909102a26a13c",
+      "e5971e899c13fc5f",
+      "b6905126d0abc9a5",
+      "2fc37dda4c3d2a60",
+      "d6961d3e4e0b2665",
+      "6bcdb99000244a6c",
+      "2dd3fcd2942962a2",
+      "4e46de13cc3a7b9d",
+      "15ec40c46a87356b",
+      "e96c562ef45cf7a6",
+      "38cac1afb7e6934e",
+      "f32a5db2a39c2daa",
+      "86f29d8a3518c398",
+      "4acde412d7380fff",
+      "ce43d80b8b087615",
+      "5e64639e0197f55b",
+      "f55b7efee3676b3a",
+      "6bed8662895a1b37",
+      "da667d43691cbe24",
+      "912a76f720e9b0d1",
+      "61d1b897614ec78a",
+      "59778bbb228dfd3a",
+      "db111d9d1b225457",
+      "ccfd00554fcb13c9",
+      "9eeeb41585663c09",
+      "e0009629873c41d6",
+      "a909f883103862bc",
+      "5ee7cfc78a819076",
+      "be5be8fca6a1da3d",
+      "558044b596a2cefe",
+      "7f5ba7062f17799a",
+      "7e88d4a702aa9f8b",
+      "d2c9278033e71c42",
+      "630fd718a052b282",
+      "ba799d3faa26aa33",
+      "40cf7231ab969bdd",
+      "688bfdfceefe7118",
+      "911d620ca4843131",
+      "5a9b3eb4e87fc4ba",
+      "2883cfd1bbf067d5",
+      "2d88c907c20b127b",
+      "5464213916ce1a36",
+      "70f68c5546a6c43a",
+      "03d8e33bf37f5263",
+      "c6a7caea5b69eb0e",
+      "5d6af6ddb84d1dc3",
+      "dd5b1fc8e1bc63e1",
+      "6c0a94d5d47cc112",
+      "993377ed75f907dc",
+      "7d47a452d0790cb0",
+      "d7f53e232e1aa923",
+      "97a61f4e389c7875",
+      "0cc769fdd7ae2d58",
+      "5b20075fba6cbed0",
+      "a51ad41cfabd625d",
+      "bca9dab74be3ecb2",
+      "de07141376bdfeae",
+      "7e761a6ebf0d1ba7",
+      "2c5de6141d7c459e",
+      "7cef450a5daa657c",
+      "6bc429f24467a14b",
+      "2bba7bb5f1b2693e",
+      "d4fed37ba3074485",
+      "238c851bf93ad0e6",
+      "7f3b891bcc2aee36",
+      "4bda77715819845b"
+    ]
+  },
+  {
+    "team": "DSM",
+    "submission_id": 56444344,
+    "rating_snapshot": 3092.8,
+    "episode_id": 111918050,
+    "seat": 1,
+    "agents": [
+      {
+        "id": 243740575,
+        "submissionId": 56449618,
+        "reward": 125091,
+        "initialScore": 3050.1057897646797,
+        "updatedScore": 3045.863775235864,
+        "teamId": 16730524
+      },
+      {
+        "id": 243740576,
+        "submissionId": 56444344,
+        "reward": 130357,
+        "index": 1,
+        "initialScore": 3089.01693210108,
+        "updatedScore": 3092.884540611638,
+        "teamId": 16732748
+      }
+    ],
+    "end_time": "2026-09-22T06:38:47.072022500Z",
+    "split": "study",
+    "seed": 1205398148,
+    "rewards": [
+      125091.0,
+      130357.0
+    ],
+    "snapshots": [
+      {
+        "step": 23,
+        "money": 4.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 47,
+        "money": 0.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 71,
+        "money": 4.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 4,
+          "WHEAT": 4,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 143,
+        "money": 753.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "YARN_STORE"
+        ]
+      },
+      {
+        "step": 239,
+        "money": 56.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "STRAWBERRY": 19,
+          "MELON": 10,
+          "WHEAT": 20,
+          "COW": 6,
+          "SHEEP": 12,
+          "GOOSE": 2
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP"
+        ]
+      },
+      {
+        "step": 359,
+        "money": 31816.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "STRAWBERRY": 28,
+          "WHEAT": 23,
+          "COW": 6,
+          "SHEEP": 12,
+          "GOOSE": 5,
+          "TOMATO": 1
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 15,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP",
+          "PET_CAFE"
+        ]
+      },
+      {
+        "step": 479,
+        "money": 65884.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 4,
+          "WHEAT": 24,
+          "STRAWBERRY": 21,
+          "CARROT": 5,
+          "COW": 6,
+          "SHEEP": 10,
+          "GOOSE": 5
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 1,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 12
+        },
+        "shops": [
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "step": 599,
+        "money": 98648.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 3,
+          "WHEAT": 21,
+          "STRAWBERRY": 13,
+          "CARROT": 20,
+          "COW": 6,
+          "SHEEP": 7,
+          "GOOSE": 5
+        },
+        "shed": {
+          "CARROT": 1,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 2,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 1
+        },
+        "shops": [
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BAKERY"
+        ]
+      },
+      {
+        "step": 719,
+        "money": 130357.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "TOMATO": 2,
+          "WEED": 7,
+          "STRAWBERRY": 2,
+          "COW": 6,
+          "GOOSE": 4,
+          "PASTURE": 6,
+          "COOP": 1
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BAKERY"
+        ]
+      }
+    ],
+    "land_acquired_steps": [
+      150,
+      222
+    ],
+    "daily_hands_max": [
+      4,
+      4,
+      6,
+      6,
+      6,
+      6,
+      8,
+      9,
+      9,
+      10,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      12,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      10,
+      10
+    ],
+    "operations": {
+      "PASS": 111,
+      "PICKUP": 215,
+      "BUILD_PASTURE": 20,
+      "PLACE": 100,
+      "NORTH": 1005,
+      "WEST": 875,
+      "FEED": 409,
+      "CARE": 414,
+      "SOUTH": 702,
+      "PLANT": 244,
+      "WATER": 1152,
+      "COLLECT_FERTILIZER": 470,
+      "DROP": 62,
+      "EAST": 659,
+      "HARVEST": 518,
+      "BUILD_COOP": 5,
+      "FERTILIZE": 247,
+      "DIG": 31
+    },
+    "market_operations": {
+      "BUY_ANIMAL": 23,
+      "BUY_PRODUCT": 31,
+      "SELL": 429,
+      "HIRE": 298,
+      "BUY_SEED": 228,
+      "BUY_LAND": 3
+    },
+    "plantings": {
+      "MELON": 10,
+      "WHEAT": 145,
+      "STRAWBERRY": 31,
+      "TOMATO": 4,
+      "CARROT": 54
+    },
+    "opening": [
+      {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            5
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "COW",
+          1
+        ],
+        "hands": [],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_ANIMAL",
+            "SHEEP",
+            3
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "BUILD_PASTURE"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "COW",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PLACE",
+          "COW",
+          1
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "WHEAT",
+          3
+        ],
+        "hands": [
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "BUILD_PASTURE"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "PASS"
+          ],
+          [
+            "CARE"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "CARE"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "SOUTH"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "WHEAT",
+            1
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "COW",
+            1
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "CARE"
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PASS"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "FEED"
+          ],
+          [
+            "PASS"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      }
+    ],
+    "farmer_hands_digest": [
+      "d32d67efb94002cd",
+      "2f1da08dd9f04b50",
+      "9398fbc2ba4b35fd",
+      "09cce784bedd4aa8",
+      "7d9f7ece363880f4",
+      "500c6aca897584f2",
+      "ba9b0399aeac1e8e",
+      "71d72ae43912c60a",
+      "fa84339dc6497ca7",
+      "7a2a65ecda2f87d3",
+      "3e7b1918ecec5307",
+      "992319a59e1eb09e",
+      "395bc1479c08c40f",
+      "4698231b73684daf",
+      "af831a5209d41830",
+      "ec97cfa8bd25a83a",
+      "d2efa73e91716f3b",
+      "8db126ab60e7886c",
+      "ebc307d857843013",
+      "89c8934f748c4269",
+      "8e39993c3ac978a4",
+      "637f287f2cc10662",
+      "57f91a6635f2a957",
+      "93d1cf1bf8363d20",
+      "9ff42a05a769495a",
+      "99d3bcaf07896001",
+      "e9bda8ce02861817",
+      "8e03d92534718169",
+      "0afb0982fc18a5b3",
+      "0278b2c5c4c87519",
+      "b51f3dc6f1385a0f",
+      "dba4983cecfc5b36",
+      "1862e9e1855b56bc",
+      "f84a5e6234e8375d",
+      "d9f0e53e045edf16",
+      "229d9185d2b2429d",
+      "e0d21b7d8c3216c4",
+      "e5ad2b27f2b7c69c",
+      "bbefa0330f5cb7e0",
+      "fb31009174461fa9",
+      "2e47a47c38c79a3e",
+      "e6b2a75ce67bf063",
+      "9d040f37751627aa",
+      "08bfc068629d8230",
+      "8ccd0087f07dd52b",
+      "9d61d711bf65540c",
+      "f33ec09a13343eaf",
+      "4c53af3c3476deb2",
+      "9ff42a05a769495a",
+      "1a706b4030be8c6e",
+      "ba00d76b84cc26e3",
+      "d0d0c6b274b48277",
+      "52e89bc68c3b70ce",
+      "cb223c16563b2a18",
+      "c0ccc75f2a0adc4b",
+      "e9c1e754552e7c01",
+      "2fc57186707fa713",
+      "50cd784eb1403f84",
+      "337c50e5ed187853",
+      "fcf1e70add1fae5b",
+      "8f6efbd284cd94aa",
+      "41b28e73a71b194f",
+      "4874f78cfd4b21c5",
+      "f7f1c861a586158d",
+      "d4f3c47637edaf81",
+      "863a422e1b915295",
+      "feb27ef9658db164",
+      "5d0ecec6a923ffb3",
+      "0786a1a766fdff89",
+      "266cb445cda16129",
+      "f88ff6f7a4af4a9b",
+      "a8065e6c6fc2d2d4",
+      "cd2e978d74a651bc",
+      "2244ea9de8487a33",
+      "83748b4143c46f44",
+      "caaec13ea111bdd6",
+      "13d75da23dd72ad6",
+      "e4462528cce346ae",
+      "d0c63820c66403bc",
+      "3688d584f6f91e9d",
+      "adfab48c437200d1",
+      "d66385e2c1e6d8bd",
+      "291015d4970da3ea",
+      "3294aa261a7a2ed1",
+      "695a77cb30b8c5e3",
+      "d60c1e9c77eb6904",
+      "1f40c60b62b64116",
+      "d0b6400f4c9c020c",
+      "08ab8aa8fda4d2bd",
+      "2e655b12b41f044f",
+      "05c6abbac3de4981",
+      "1af79f95e8c8b2b8",
+      "47ee928bfd5ab294",
+      "cf1ba2bb5c0d308e",
+      "2fb3889855f37030",
+      "50eedbf144dff1c6",
+      "8855f5d6131a634d",
+      "7dd2093cef0778dd",
+      "3dd9fa315e154b22",
+      "3072883205ba13d7",
+      "e06af1539819e65f",
+      "621323b4432f83b9",
+      "b02f9914e9ae6c20",
+      "aa8bcf7ebd6ee1f1",
+      "4f40fe3003b1b3dd",
+      "f09dd1b4b9704c1b",
+      "39d947fe7652f27d",
+      "c6845af6d25dcd0e",
+      "b5ae3dc0fba2ff05",
+      "97a3b0e7c6162111",
+      "ae9b78bc91720212",
+      "166a958ea7d2716c",
+      "5bc22e2f82e03d2d",
+      "d501fbef47a076ca",
+      "3bc9a2cb49075ceb",
+      "0a16b2dea683fd0a",
+      "b77ba31ff92b1374",
+      "38dfb066760fcf99",
+      "b97b49fdbf0d31bb",
+      "f5478394373ed1c0",
+      "cd2e978d74a651bc",
+      "592890d5239c09bd",
+      "a89502396f30fb34",
+      "52cf9254c8e95f85",
+      "4fd22f2838c49d0c",
+      "2a6a138e784f4e05",
+      "c9f584300e6dad00",
+      "5614dc93692161bf",
+      "731c95bfa27aded6",
+      "a487ff2367978e33",
+      "76f2a0c8fec2a041",
+      "319ce67c01fabaee",
+      "bcb0c0c9b85e1cfe",
+      "0fc77a5c55f5a462",
+      "5be76604eff54580",
+      "1b43aa3ef1f7f4d9",
+      "8cfe3184bf13a598",
+      "65a1609a21f6d9c6",
+      "1172d6e0019fe9fd",
+      "fdfb92a996b5f599",
+      "a62aeccfb472b480",
+      "881aa4605ddecf93",
+      "ead8a8e81f7268d5",
+      "a639ad369fa6ed39",
+      "03d8e33bf37f5263",
+      "c5c9c0e7fc27237d",
+      "5cf0018b924b8edc",
+      "b1e8992aa36fadea",
+      "3deada7510f14197",
+      "998a54446a1a87e9",
+      "c103e7003989644f",
+      "41ac02d246edbb28",
+      "4f1f40fcb2fe7f0e",
+      "6f1a8dcb6ae1c48f",
+      "d11107b62e1db026",
+      "14a4fba79b6f10e8",
+      "d239456f90361b3b",
+      "5e9ed9af90136190",
+      "26d653ccf614be95",
+      "000862f3fa6f85a1",
+      "45fcd70a38f92ca2",
+      "9ea06839b5223398",
+      "8c414d8d608fbd33",
+      "d9eccebe9d7564fe",
+      "b37667a562a8c269",
+      "9cd113f118d9ae89",
+      "8aabec05c2aebe86",
+      "7664f855fd176381",
+      "0c4725e3cbdbf464",
+      "0840daca101119d5",
+      "3cc8d5268a746bf8",
+      "bc5e0829ae919019",
+      "27e270c8893fbe79",
+      "441c91a7379aec4a",
+      "fa34fdef6b5f5c85",
+      "ac3d0858a7ae95b5",
+      "fdb979bd9a458439",
+      "4ced2673011520ed",
+      "2967290421a2c9d2",
+      "3df245cbf4b6a9bd",
+      "0b98b9394339b1f7",
+      "ce2517877a143d61",
+      "d32baad3936e93b3",
+      "3ede0e03ff71fa41",
+      "519c9f2f50e0060e",
+      "74d8843e76bf0009",
+      "a808288594ab0e8e",
+      "edcf842729116812",
+      "079c94bf1931f6ad",
+      "c3568db56f738d7d",
+      "12049b3caf132739",
+      "4b104c848bd87b61",
+      "912a76f720e9b0d1",
+      "78f31157ef3a8b11",
+      "6c94ef2e21074d2d",
+      "7fb8d2cb2cb465f4",
+      "cb72c541ad20be3a",
+      "979022a88dad0af0",
+      "4435cdc85e87cf2c",
+      "a6226cfa4869c5f6",
+      "e3bedd2805c4348c",
+      "83b7c489f3da38f5",
+      "5785081fcfdb1867",
+      "e2f30bf2d1424f5f",
+      "54ba9ca6d5004f56",
+      "a2ababae65c1bfca",
+      "fbd1481da9ce46d1",
+      "672d543b5520962d",
+      "6d47b8b11ac0146e",
+      "f33a0dc31556b459",
+      "9594660993d2ac2e",
+      "ffe538fe155ac47e",
+      "249634a9357591da",
+      "efb0d8f6544e20ae",
+      "b83343e61f549b1b",
+      "dcb7e0c5909c8c94",
+      "03d8e33bf37f5263",
+      "ab3a276e2fcfeb61",
+      "628f396f01145c56",
+      "d17cd6fd478303f1",
+      "a388d33acf79d015",
+      "a1d4876d97d74534",
+      "704cf30d97adf9dd",
+      "f1ad47efc66e6904",
+      "530206790db6f6e9",
+      "31fbe623d2aefe1f",
+      "1dba7ddcac18a61a",
+      "0c1c95cb4fb9c3be",
+      "5b6e6eb48711dbac",
+      "b4ebf2c2cdfc22f3",
+      "1b74a398423eaab8",
+      "7ce64923cff53a34",
+      "b00c97b640d3e290",
+      "c0748d1b83fa6bf0",
+      "97691a9eb28fa7ef",
+      "430ff7a75d734030",
+      "60277d3940c5144e",
+      "cf3bf18f66352c1f",
+      "9f9d867b8f5cec18",
+      "3d6f0d328fac795c",
+      "912a76f720e9b0d1",
+      "55186de74c436e26",
+      "51e3f872d52c4b9a",
+      "ab03acb178a8b550",
+      "9dfa58033a9b9619",
+      "a40b6abc85141dc2",
+      "d89c0c0429b2ed17",
+      "d4927dc42b53d211",
+      "b539c220e00d354d",
+      "162dab0cb9f19c87",
+      "39829c8ad2e9afab",
+      "96b9ff54a6c9c94f",
+      "e925b331c2409508",
+      "cf1c4bf4e638e247",
+      "c826141481727c85",
+      "e4daa03e0e580659",
+      "3cd44aa033239531",
+      "d0d9ffd05c4d0f4d",
+      "f0256bf009e32586",
+      "b507583f55e4e560",
+      "77f9521dc8361559",
+      "741610a36cc7e8ab",
+      "489c79d744659e7c",
+      "72fe9bc57a1fcfc1",
+      "d9ca74173f5c3096",
+      "790e12878a27efb1",
+      "e8c47a264f4a2a17",
+      "be96cc64e3b34c15",
+      "3f22f92cd5e9fec5",
+      "321569b0880760e1",
+      "e4981b6a3da3c0e9",
+      "26b25def54bb9c86",
+      "e5f3725400bd7b2a",
+      "430ffda95923900c",
+      "531766f97833d747",
+      "b6c775942098eaf3",
+      "e58ce2a7c8cf89dc",
+      "8fd66f669fc32493",
+      "cf11e13d854c8aaf",
+      "8c6040faff543699",
+      "32212a718a48192d",
+      "2e57343c7cce9dbf",
+      "4f358997d013081d",
+      "ec3dcd4260ffc9c5",
+      "aa247785267cab20",
+      "1c37fd58dd37b838",
+      "80cf65465d1d636b",
+      "f9e9ded760896053",
+      "03d8e33bf37f5263",
+      "db1f44cd19d0095a",
+      "f1e871f056ab9b2a",
+      "1bc4aa2165bb386b",
+      "7c703546a1eb85f1",
+      "07174775e3e3f386",
+      "26662d72cea0a255",
+      "0bdd87e38d466894",
+      "4a79e2308ba519d2",
+      "6e849997aa685310",
+      "6481dd8a2b25ff09",
+      "cbc40f4cbf06a90e",
+      "f398c7ecdd1aaa5e",
+      "53d2408864f2da31",
+      "f72da0f3578e08ba",
+      "6f3784930964340a",
+      "6e4b2125a3dcb854",
+      "ef4e6431db2d8a3b",
+      "324852ec2477ed8f",
+      "5e450555947f4e4f",
+      "639dfa61eabf791a",
+      "3b749c7dfa9f52a2",
+      "2b6bbb13088e2c4b",
+      "ef84b1006c8e1798",
+      "8855f5d6131a634d",
+      "c3b52fb4250630fd",
+      "f0a093636db0689d",
+      "587b096deb16f417",
+      "af45580e03819185",
+      "07e6be4a77218861",
+      "59dc3a34824052e2",
+      "34ffbb58bb1fba4e",
+      "3227d4d9710022fa",
+      "cff6f9c87c0b8782",
+      "bcdac22297d41938",
+      "0e8f317b2f137d94",
+      "3f3accc6f621cafb",
+      "bd5be9164a5b0a10",
+      "7164a5b65a0fad00",
+      "228ee23f2bd07ef7",
+      "ccc40936c2ed3175",
+      "3be881896fb0135f",
+      "aa075b4f6d9e1c6e",
+      "d3f250c43239437f",
+      "9d29512bda3be2de",
+      "196c66c5e4fcb5b7",
+      "d0c13f4661aa4cda",
+      "3b883804e31facac",
+      "912a76f720e9b0d1",
+      "2c0028b2057ac201",
+      "38105bf759d383c3",
+      "002ff8b91c6deb56",
+      "65eb6cb513caef3c",
+      "fd62841cf05b1371",
+      "18ed89e0125f5680",
+      "babfdb55b024b849",
+      "5d52c70b6695dd33",
+      "6a8f7759acd13160",
+      "efb14d3bf77d9486",
+      "ad07e7bcab446188",
+      "60d3ceacbc53e4a1",
+      "fcfb98f69ddfd6b7",
+      "e30f9a95199d7a56",
+      "4ae6d3f1a95333be",
+      "55bcd33a095cf16b",
+      "f63252fb4aafac30",
+      "1b3b13d673d5058b",
+      "51eb4f296c2dd935",
+      "fd7ba0c0196d850c",
+      "a429936995f92542",
+      "398966778e4c33e4",
+      "8e5000993248bfa7",
+      "03d8e33bf37f5263",
+      "56787461430637c2",
+      "de962b75e9d85171",
+      "7c65176ac33236a8",
+      "2683b97ad585cec8",
+      "9821ee84e34a8ee6",
+      "0e96e65ac99f3b00",
+      "0c861e7005fa2f72",
+      "55bb4fa45ffe9474",
+      "e871cea27baa12b9",
+      "a5d9598126c8195d",
+      "74aaf1a5e7fd1a6e",
+      "4ee5f0224713b09b",
+      "e7bfc4e3c8350e73",
+      "383893e484edd72e",
+      "43c61dc7f584dac7",
+      "e2fb0cc988d2f6a3",
+      "02b8051fe6d8726f",
+      "df4b3f9c4fc0bca1",
+      "0129a605eae7510f",
+      "6639f64361f13d36",
+      "09f69f0de15e79c1",
+      "76660d6db1d9d947",
+      "3b404099063b0739",
+      "912a76f720e9b0d1",
+      "30eff01b1b2508b2",
+      "8ae3051efdccfd51",
+      "8a3366f1cf5c6dec",
+      "93ab49200a450ab8",
+      "95221194623875ab",
+      "bc6c4fdacfae06b6",
+      "783cbf27ff682c35",
+      "ba52e3a9deade4af",
+      "ff271e3bc3b97e3e",
+      "3a9d588858cafddf",
+      "522f4a8fba010b05",
+      "37ee9d0de226f1e7",
+      "5fdca1d3d98ab607",
+      "dfb06405f9694d53",
+      "8cf72007d2bad841",
+      "fa6b1c3bf1c0af76",
+      "dcbae974dcfa427e",
+      "bcdafd952c4ffcaa",
+      "7da95084b2efd129",
+      "f66141d03a81320a",
+      "d13988f1db0f1cd8",
+      "262ed4964bbcb549",
+      "12fa486443ef3016",
+      "8855f5d6131a634d",
+      "f05a42fc2947b4b7",
+      "08a838f29c42d79e",
+      "efd0c3624867bf2a",
+      "a05375b783cbfa0a",
+      "827f3d39670896b9",
+      "131532141e36f118",
+      "f2ff744117253547",
+      "1eec0304581320be",
+      "c9fa047f5e0a575a",
+      "48de0c36d1209b7c",
+      "9ec617f2c52e0d1f",
+      "62a95f16fc2afd23",
+      "b46defa7028064ea",
+      "eacd91f0ed6a6226",
+      "3bcdc24e10cb272a",
+      "2685d96d9f913292",
+      "7ba8e0f316c3b124",
+      "dc09ab592b32477e",
+      "83c0c7f1f73ec1dc",
+      "27083c04718d49c2",
+      "61a5c0a39670a4b6",
+      "dbcff7e7b239861f",
+      "429b47b52effb2c5",
+      "8855f5d6131a634d",
+      "061bcb0b99d39589",
+      "37beb73f05d60cb5",
+      "af28d8c3463008dc",
+      "0342d5b4adfda5d7",
+      "aff99419b5103230",
+      "4aadfd97b8d4f2a7",
+      "c3429be09426de4e",
+      "6b467abe97e39f61",
+      "5b940ab6b0e8e7e1",
+      "8090404cab537a6c",
+      "1df853e6eca9129f",
+      "6f07ea5a074a579a",
+      "7d96fec7266644fe",
+      "6c4eb4affd9b5d30",
+      "3b72c6d9e1303b25",
+      "f5e69103965aff5f",
+      "db64a7e48258745b",
+      "21f8055fef941da5",
+      "c92cab36726899a0",
+      "194af3df09a66f44",
+      "e1f9bbe400c520ec",
+      "92cd54b387883fc3",
+      "d085b32b02497127",
+      "cd2e978d74a651bc",
+      "01df3c284eee5021",
+      "47d06fbae11cb6c9",
+      "81225dc0400b5692",
+      "0cc2b2c8210aa6c1",
+      "3666b11018eb11e9",
+      "20cfae1bc2db770d",
+      "05b807146920615e",
+      "ad43fea88916dcfd",
+      "d1ae86e31145c513",
+      "48453e190be7c917",
+      "e53c98c1483c2373",
+      "072fa283aaf92f83",
+      "27015d305dfe4f34",
+      "5b238b88bd4ae48d",
+      "1e726c0f4bacacf3",
+      "c9a00376bcdffdef",
+      "76a8a2289275085a",
+      "1392021a15c05e17",
+      "9372107915f2fffa",
+      "31536ba25118b3a0",
+      "7ec738c75a8e781f",
+      "c427913edb8becdc",
+      "613fe6b073ac945e",
+      "be6eb3d73231f002",
+      "6afba560b0eb3534",
+      "ee44afeb93cef2be",
+      "6eda1fb6f47189ab",
+      "c328b557f215e042",
+      "c6630ca9383c334b",
+      "e27b3f2364332347",
+      "4ebbcca901b9b433",
+      "36d48601d22cb7e5",
+      "d5ed37a37c1a2dec",
+      "05421670429152b9",
+      "4d9348c063733b11",
+      "f73e8a08bd9a61d3",
+      "82ae9c5ef1b00b80",
+      "a60a05afaf5cded8",
+      "1a8dd58129fb9325",
+      "f04478ba026fad6b",
+      "01c67d6a9947dbbf",
+      "524c122531c65052",
+      "b1a984af8ff69f0a",
+      "5b9811063171f15f",
+      "6f8318e05e49fc28",
+      "d58ff85eeb735d08",
+      "6caf58d76e4def1f",
+      "be6eb3d73231f002",
+      "82b0c51fda3afe3e",
+      "09a2889b45539821",
+      "c6067d74910abe01",
+      "0eca1b2b0cb16a58",
+      "1e1d46e2fa2a6e3f",
+      "eb2eebcc8e45233c",
+      "1f369fb6b2efde03",
+      "bf5d0de823ce9af5",
+      "f68efa462af75243",
+      "90a18a7a5db90104",
+      "d72da0ef89826069",
+      "c55a425daf1e06cb",
+      "06df4b5c2c1df84a",
+      "a5a632e72c433e74",
+      "df0198d584335a5e",
+      "27be204f1d0005c8",
+      "5bfd7818a0441e56",
+      "7f178c4be4d78037",
+      "6accf42cac3ce6f7",
+      "2baf8749a29e6510",
+      "3853bf062dbaddd3",
+      "cff86dfc7c20e775",
+      "4d5970c86cfdd52e",
+      "be6eb3d73231f002",
+      "2ed41057973c85cd",
+      "d8a63095b7a6e641",
+      "8a4a2e6644c8dabf",
+      "4fcaf9fdd18481c6",
+      "edb6ae71dc94200b",
+      "d4b9b6138cba1acc",
+      "5d62cdcfc333fb7a",
+      "7fd675073f6172d1",
+      "86adf5674541f492",
+      "ce16eb7bb86c685e",
+      "a33879c6369ecc39",
+      "69424207735a758b",
+      "cb14f34bcdca056e",
+      "e35dac92424202b6",
+      "bfd08303a0fe17bb",
+      "55c490dffc34779d",
+      "f6682692afbd624b",
+      "2ec86968466f7274",
+      "87c2ee119b8b118a",
+      "577b7a84ad1a0107",
+      "d011014ff0f123f6",
+      "d331dde481b2fe83",
+      "4355cc4e5503ab0c",
+      "be6eb3d73231f002",
+      "d2dbd486168e9afa",
+      "798afcdb9c3a714a",
+      "2a55e50d2c1914aa",
+      "a038a743d0d93fd8",
+      "1d95cd545535c993",
+      "b8eafa9a5f10c56d",
+      "d94d26db8c90e2d7",
+      "c510c86b90bd8679",
+      "2769816d5ccc8007",
+      "be7dd22950b9644d",
+      "8ee4df0c09b663f8",
+      "b7b8ffc757dde225",
+      "635e7730d5c70fe9",
+      "70eb4b2017f35ced",
+      "60722877b80e4120",
+      "0f78d00d1381113b",
+      "d27d8a2581fc4275",
+      "de60b7bb505df372",
+      "44f503d7f5ff02fe",
+      "dbb8aa8d40686101",
+      "291b31197502f27f",
+      "44af08bbb898d779",
+      "1bc470b63d991c37",
+      "912a76f720e9b0d1",
+      "6af82dd93b0e61d8",
+      "2d97021dc5145d29",
+      "a183f85971af3d32",
+      "8ff64c9a5146fa15",
+      "709dead1830bf3cd",
+      "a3f7a9f7678500d3",
+      "06279ed2477800ec",
+      "78d8da84d07e7123",
+      "92dfb7b07200741d",
+      "6b874c39418148cf",
+      "ac273cd42a9d5566",
+      "94cf89091f7bcd63",
+      "5a552f69e1148a72",
+      "20a297605e76162f",
+      "759c7e1d5e95db93",
+      "8a48ffcc052141c0",
+      "fd331309804dd226",
+      "fbcc74a7d915fcfa",
+      "c58ff3d557913fb4",
+      "7c560a9159a3c0a7",
+      "52f6f9ca9f5e5084",
+      "f78a35aa35615058",
+      "101cd5d9e869639d",
+      "be6eb3d73231f002",
+      "b42c4e32ba9ede67",
+      "a1dd8889a634ae99",
+      "8506aef738d8d3c4",
+      "ecfa039669b7b40e",
+      "1b4d066c4526a2a1",
+      "f53873263e69beb7",
+      "184377a6e26ecb87",
+      "fae3536a207e7f44",
+      "5c1bdd21c9216812",
+      "231d959c7ddcd21b",
+      "9a9f164eedd29b92",
+      "77df3834ec89b160",
+      "05b0c9e9ab27391e",
+      "31373a3f389daea5",
+      "120e9235d0d6c2a8",
+      "215efc9a36ee8fd0",
+      "03b92e99160611c6",
+      "593c2525edb6c26d",
+      "3afb810e30f9ff17",
+      "301a60fe175b3025",
+      "9d6fd2fc1a09d90a",
+      "b70a8eb0373dd4ad",
+      "3d515170d0143867",
+      "912a76f720e9b0d1",
+      "8e8e8c6bcd21a007",
+      "7b823a83548692f7",
+      "ec936f413c2c4154",
+      "8128bcee880b6b83",
+      "e7bf78e72b3d8ea5",
+      "50ac102eb93b03da",
+      "00592396d78332c3",
+      "be6bd1cb6e3c86bd",
+      "70d3e545b504c5e2",
+      "9161d8c153fa9361",
+      "bd56adacc16d6004",
+      "a7c40d845bac2eab",
+      "619642d6a7a0f3bf",
+      "11c42df16f3d47dc",
+      "7bbb38c7311d09e3",
+      "2fd5eda4eade4c04",
+      "b648fd1638337489",
+      "c708b775b8efd285",
+      "30c34e2b4f61a289",
+      "cb9509e473d42a3e",
+      "b0414da61a522275",
+      "8c104aa709ffbd0e",
+      "07b5dc4892143dfc",
+      "03d8e33bf37f5263",
+      "503e72fb0fc075a2",
+      "450eac34139ea6fe",
+      "e2a8e430e6a02cf1",
+      "c8fc45ffbc9cd0d9",
+      "af92ad3bfef3f649",
+      "5779369620b8a517",
+      "7a9d628352647e37",
+      "f86058a54ae679ef",
+      "e14e11eac77085d0",
+      "76c91c8589f65bc9",
+      "b1c38a5fbd6b3f72",
+      "54d92f36c1fb821f",
+      "c7d9eb9b357a836d",
+      "6f5f12b2ec882989",
+      "9027e72db649124d",
+      "d70211f64808efb0",
+      "fc25ca999526063f",
+      "33b2f9c4bcc7c790",
+      "62fa3fb251fc4c7b",
+      "5ffe9a34683a5ab5",
+      "c94a0889693308ee",
+      "e2b91dfa7921445b",
+      "ebaff07c5b07a608",
+      "912a76f720e9b0d1",
+      "b8e0392b6b7aafc4",
+      "f525144bab0a71d7",
+      "a59acaa5e9d17f9a",
+      "13ded162760f6d03",
+      "dbde145545a2fba9",
+      "826b8a05a9aff095",
+      "6edcb77734345d4d",
+      "76dd21734c2a84e6",
+      "0dcd6616b36399e9",
+      "fbe15d9a2783975e",
+      "df013eff12f69b63",
+      "1594668a000726b3",
+      "5152dfd258007079",
+      "8cafe5bd387c758b",
+      "27251e8a716423a2",
+      "d731f3608edfb8ff",
+      "86a4d5c6face92d9",
+      "4007da336b56b028",
+      "f5be9da794342039",
+      "dcf4d0a7df79b21b",
+      "c05463342d8cecaa",
+      "6f15013607316b6e",
+      "9c3aa64992f5fbc2",
+      "03d8e33bf37f5263",
+      "89a135af687a0af4",
+      "80025dac13223fa2",
+      "061b23c29ca31325",
+      "9bff0c1e746d02e5",
+      "d9a153881bf21134",
+      "18f9dbae0123fd2a",
+      "712032e99fc4d17d",
+      "a3ce59b9c9fd352f",
+      "c14974bbb1e2dfad",
+      "3ca665775e6fa0e0",
+      "b741811f13938112",
+      "3d3b82a9e40fb85b",
+      "2d3adb06fd29a131",
+      "a400890946149b4e",
+      "423e949a2e375c07",
+      "c39b77acd4402d3f",
+      "bf14ede69eaebb25",
+      "6156aa086219dca2",
+      "6b74999020cc93e3",
+      "c191043127c8622c",
+      "80341913c6c38882",
+      "de8b0c007afaaf59"
+    ]
+  },
+  {
+    "team": "DSM",
+    "submission_id": 56444344,
+    "rating_snapshot": 3092.8,
+    "episode_id": 111915821,
+    "seat": 0,
+    "agents": [
+      {
+        "id": 243736108,
+        "submissionId": 56444344,
+        "reward": 104711,
+        "initialScore": 3085.082007328626,
+        "updatedScore": 3089.01693210108,
+        "teamId": 16732748
+      },
+      {
+        "id": 243736113,
+        "submissionId": 56449618,
+        "reward": 102268,
+        "index": 1,
+        "initialScore": 3050.6442961997104,
+        "updatedScore": 3046.178117085441,
+        "teamId": 16730524
+      }
+    ],
+    "end_time": "2026-09-22T06:32:25.496827300Z",
+    "split": "study",
+    "seed": 111987552,
+    "rewards": [
+      104711.0,
+      102268.0
+    ],
+    "snapshots": [
+      {
+        "step": 23,
+        "money": 4.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 47,
+        "money": 0.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 71,
+        "money": 4.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 4,
+          "WHEAT": 4,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 143,
+        "money": 699.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PET_CAFE"
+        ]
+      },
+      {
+        "step": 239,
+        "money": 99.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "STRAWBERRY": 16,
+          "MELON": 10,
+          "WHEAT": 13,
+          "CARROT": 15,
+          "COW": 7,
+          "GOOSE": 8,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 2,
+          "WOOL": 0
+        },
+        "shops": [
+          "PET_CAFE",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "step": 359,
+        "money": 26639.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "STRAWBERRY": 18,
+          "WHEAT": 12,
+          "CARROT": 18,
+          "TOMATO": 6,
+          "COW": 8,
+          "GOOSE": 10,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 8,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 4,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PET_CAFE",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP",
+          "PIZZA_SHOP"
+        ]
+      },
+      {
+        "step": 479,
+        "money": 49675.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 17,
+          "STRAWBERRY": 14,
+          "WHEAT": 7,
+          "CARROT": 11,
+          "COW": 8,
+          "GOOSE": 10,
+          "SHEEP": 6
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 4,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 1,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 2
+        },
+        "shops": [
+          "PET_CAFE",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP",
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "step": 599,
+        "money": 70763.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 14,
+          "WHEAT": 19,
+          "STRAWBERRY": 7,
+          "CARROT": 12,
+          "COW": 8,
+          "GOOSE": 9,
+          "SHEEP": 6
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 15,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 1,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PET_CAFE",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP",
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "step": 719,
+        "money": 104711.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "TOMATO": 3,
+          "WHEAT": 1,
+          "STRAWBERRY": 4,
+          "WEED": 5,
+          "COW": 6,
+          "GOOSE": 6,
+          "PASTURE": 6,
+          "COOP": 3,
+          "CARROT": 1
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 3,
+          "FERTILIZER": 1,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "PET_CAFE",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP",
+          "PIZZA_SHOP",
+          "FARMERS_MARKET",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT"
+        ]
+      }
+    ],
+    "land_acquired_steps": [
+      150,
+      220
+    ],
+    "daily_hands_max": [
+      4,
+      4,
+      6,
+      6,
+      6,
+      6,
+      8,
+      9,
+      9,
+      10,
+      10,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      10,
+      10
+    ],
+    "operations": {
+      "PASS": 121,
+      "PICKUP": 211,
+      "BUILD_PASTURE": 14,
+      "PLACE": 95,
+      "NORTH": 968,
+      "WEST": 861,
+      "FEED": 386,
+      "CARE": 398,
+      "SOUTH": 702,
+      "PLANT": 262,
+      "WATER": 1129,
+      "COLLECT_FERTILIZER": 492,
+      "DROP": 58,
+      "EAST": 658,
+      "HARVEST": 576,
+      "BUILD_COOP": 11,
+      "FERTILIZE": 221,
+      "DIG": 34
+    },
+    "market_operations": {
+      "BUY_ANIMAL": 23,
+      "BUY_PRODUCT": 35,
+      "SELL": 424,
+      "HIRE": 296,
+      "BUY_SEED": 192,
+      "BUY_LAND": 2
+    },
+    "plantings": {
+      "MELON": 10,
+      "WHEAT": 107,
+      "STRAWBERRY": 22,
+      "CARROT": 105,
+      "TOMATO": 18
+    },
+    "opening": [
+      {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            5
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "COW",
+          1
+        ],
+        "hands": [],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_ANIMAL",
+            "SHEEP",
+            3
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "BUILD_PASTURE"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "COW",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PLACE",
+          "COW",
+          1
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "WHEAT",
+          3
+        ],
+        "hands": [
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "BUILD_PASTURE"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "PASS"
+          ],
+          [
+            "CARE"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "CARE"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "SOUTH"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "WHEAT",
+            1
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "COW",
+            1
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "CARE"
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PASS"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "FEED"
+          ],
+          [
+            "PASS"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      }
+    ],
+    "farmer_hands_digest": [
+      "d32d67efb94002cd",
+      "2f1da08dd9f04b50",
+      "9398fbc2ba4b35fd",
+      "09cce784bedd4aa8",
+      "7d9f7ece363880f4",
+      "500c6aca897584f2",
+      "ba9b0399aeac1e8e",
+      "71d72ae43912c60a",
+      "fa84339dc6497ca7",
+      "7a2a65ecda2f87d3",
+      "3e7b1918ecec5307",
+      "992319a59e1eb09e",
+      "395bc1479c08c40f",
+      "4698231b73684daf",
+      "af831a5209d41830",
+      "ec97cfa8bd25a83a",
+      "d2efa73e91716f3b",
+      "8db126ab60e7886c",
+      "ebc307d857843013",
+      "89c8934f748c4269",
+      "8e39993c3ac978a4",
+      "637f287f2cc10662",
+      "57f91a6635f2a957",
+      "93d1cf1bf8363d20",
+      "9ff42a05a769495a",
+      "99d3bcaf07896001",
+      "e9bda8ce02861817",
+      "8e03d92534718169",
+      "0afb0982fc18a5b3",
+      "0278b2c5c4c87519",
+      "b51f3dc6f1385a0f",
+      "dba4983cecfc5b36",
+      "1862e9e1855b56bc",
+      "f84a5e6234e8375d",
+      "d9f0e53e045edf16",
+      "229d9185d2b2429d",
+      "e0d21b7d8c3216c4",
+      "e5ad2b27f2b7c69c",
+      "bbefa0330f5cb7e0",
+      "fb31009174461fa9",
+      "2e47a47c38c79a3e",
+      "e6b2a75ce67bf063",
+      "9d040f37751627aa",
+      "08bfc068629d8230",
+      "8ccd0087f07dd52b",
+      "9d61d711bf65540c",
+      "f33ec09a13343eaf",
+      "4c53af3c3476deb2",
+      "9ff42a05a769495a",
+      "1a706b4030be8c6e",
+      "ba00d76b84cc26e3",
+      "d0d0c6b274b48277",
+      "52e89bc68c3b70ce",
+      "cb223c16563b2a18",
+      "c0ccc75f2a0adc4b",
+      "e9c1e754552e7c01",
+      "2fc57186707fa713",
+      "50cd784eb1403f84",
+      "337c50e5ed187853",
+      "fcf1e70add1fae5b",
+      "8f6efbd284cd94aa",
+      "41b28e73a71b194f",
+      "4874f78cfd4b21c5",
+      "f7f1c861a586158d",
+      "d4f3c47637edaf81",
+      "863a422e1b915295",
+      "feb27ef9658db164",
+      "5d0ecec6a923ffb3",
+      "0786a1a766fdff89",
+      "266cb445cda16129",
+      "f88ff6f7a4af4a9b",
+      "a8065e6c6fc2d2d4",
+      "cd2e978d74a651bc",
+      "d573a132022939f8",
+      "b431d436366b9cac",
+      "e17e7b349a2a8f49",
+      "7895a3920cddd3f2",
+      "05a33596e0ea9ec9",
+      "61371bfe7302f9b5",
+      "56dadcb10a9d4f1e",
+      "e8461a83ee39b309",
+      "62408eb9494dbe70",
+      "2787abf86ca00b8a",
+      "a75fa6ce80d6d36d",
+      "e04225ab1f7b2e6e",
+      "62ef7ea151022866",
+      "4175edb9f3914378",
+      "a8d4a9926e972d76",
+      "06e6c44514ce207e",
+      "168fafb288b2217e",
+      "9a87ed856fcd3ffd",
+      "7ac5fbd5f67fedcb",
+      "ebb0c8b494934b9c",
+      "d08d47a65507a02e",
+      "cf6c93ef4fd05248",
+      "a639ad369fa6ed39",
+      "8855f5d6131a634d",
+      "297688f5b2a4e15b",
+      "09165f9b7a160761",
+      "814370d1cc49b86b",
+      "4475e3a581147756",
+      "faae253831f14634",
+      "792a487a77365875",
+      "2eafdeeda29b8bdd",
+      "bffe217c27786b0b",
+      "a757a5e31ee38384",
+      "429c3215c43ba764",
+      "c92667e9eb64bb5a",
+      "1017d345fe0feed1",
+      "ad0c50e10071d3e3",
+      "90c7a361fbfefe6f",
+      "022b658dbc651956",
+      "5317040cd675e0f2",
+      "508d616e78819e54",
+      "7f1279a6457ab66c",
+      "917d20e17d6e2c33",
+      "100bf441743c3cc5",
+      "b11737d71afed570",
+      "c4a393ce5a6b50d6",
+      "fde723d26d93fc1f",
+      "cd2e978d74a651bc",
+      "e4614d106e652983",
+      "79d12f03f2e52ee2",
+      "0a528369d949f347",
+      "775bb937b2f7be01",
+      "1f5b3abed07bab78",
+      "ccd982a078951e01",
+      "9855fb0dd0da067f",
+      "0c747fc59e525043",
+      "6e499e9fd6ecdabf",
+      "7e33f8df5e3dd2b6",
+      "232c6e88ae9ae63d",
+      "82c273c5163aa53d",
+      "477626eae32c120b",
+      "107fd9ede44c7135",
+      "829b298eb88f7d90",
+      "f0eb852105e83de9",
+      "c5b94872faf571f0",
+      "00fed8e89b26ef0f",
+      "17c53b6e86e59afd",
+      "784c896e60634f45",
+      "e74cc3a0da4db5fd",
+      "14d721077b084b6a",
+      "fde723d26d93fc1f",
+      "03d8e33bf37f5263",
+      "c5c9c0e7fc27237d",
+      "5cf0018b924b8edc",
+      "b1e8992aa36fadea",
+      "63e34e609a63eca9",
+      "998a54446a1a87e9",
+      "c103e7003989644f",
+      "fb4fbdb715556e6a",
+      "26e72fa1e04ce987",
+      "aed0cf817ca57668",
+      "77bb6522fbb47211",
+      "c01e91e749d78a1c",
+      "44bd41fe7f72db80",
+      "fbb0c9c62099bf75",
+      "a91716fe0313ef9b",
+      "b99edff7e40a2c93",
+      "123995ebb464e5a8",
+      "4511af9dc8ce4d5f",
+      "890ba550408f9733",
+      "e95365568dc59720",
+      "5d7ff00fb77a1261",
+      "08028a531a57a9f1",
+      "86a62c35d1415b77",
+      "7471f0b4bf9e8fde",
+      "1236071ad844173a",
+      "0840daca101119d5",
+      "3cc8d5268a746bf8",
+      "bc5e0829ae919019",
+      "9f106867e857d448",
+      "ee4f053a41b286ae",
+      "c8681ed8f1827e90",
+      "f4b28914ec3fba36",
+      "6b7b6c1c2c019430",
+      "7492a6182d4adf06",
+      "3427a1e132add2b7",
+      "450f95a79bbfcbe4",
+      "6727727625c87ae4",
+      "df7a6163e306e3f3",
+      "9d745f675dcae675",
+      "357b03570e1e1223",
+      "4d0a764d8a591ece",
+      "6991368a198c3d12",
+      "f6317cff7467ed12",
+      "f72fdc4426f63e59",
+      "c50e048e97312d03",
+      "9b6c1125807f1009",
+      "8826b26ad10cdef5",
+      "30270b479436eb23",
+      "912a76f720e9b0d1",
+      "bf764b557be8c72c",
+      "fa2108118d536798",
+      "80a82a46193fc72a",
+      "91eb56e4d222ad55",
+      "574839b6ffa1d037",
+      "7e4600a4dfbc412b",
+      "155c2d505393ecfc",
+      "0a19fde8bd5160b5",
+      "b171443723584e14",
+      "abc9a19901424050",
+      "534d391fbf38cffe",
+      "63068d08ffad76f9",
+      "34c0727806d0e0d7",
+      "181191bf65516789",
+      "d803760f653c1ecf",
+      "d041b63ae5222e9c",
+      "a868bee5d47bedac",
+      "2d5322fe6c3bf6d8",
+      "4844d2878628fadd",
+      "efab65dfa405d661",
+      "618053f7257acf29",
+      "7ebdc069d672b9c9",
+      "3561848ff4f34c71",
+      "03d8e33bf37f5263",
+      "2b300e7b8cdaef2e",
+      "628f396f01145c56",
+      "8b099167ea0bfb13",
+      "4a4e46fd250ae1da",
+      "abd7774b2756e9d3",
+      "8ca97db2b7a6ce77",
+      "01551f8f0d09e29a",
+      "e2248fe84259ce87",
+      "1e1d892b63c6a875",
+      "79f001dbd4522259",
+      "35ccf673a0dff5ff",
+      "d86c9937f434fe1c",
+      "2504f1c0afa13d57",
+      "c98ba3c762522744",
+      "762be3c6cf98b05d",
+      "2a5016e7d284c5ac",
+      "010e93c13131030d",
+      "f27409041b36d112",
+      "25dfeaa3f7ca15c2",
+      "a23666dfbe3bc0b1",
+      "daca502353fe0220",
+      "6667327c11b0f176",
+      "4bb6f4f41897f5c4",
+      "912a76f720e9b0d1",
+      "dc199e1433ec45f4",
+      "5c70fa680513bbab",
+      "9a3ccc2d7e37db8f",
+      "15559a373cf34fda",
+      "71708013e8befdd7",
+      "5b5e98e9d6b937e3",
+      "061fd3e0ea87cdb6",
+      "944dcbfa56fb1427",
+      "945b0d1f9a6181b3",
+      "e3447b7cf5ecea5b",
+      "518c686345369885",
+      "3dcd648bf684e45b",
+      "a5f7ed8ac4b12433",
+      "340edff424d53275",
+      "552dbe31e6e51aee",
+      "db5253e92b7dac57",
+      "d78f6bb94ff5ddeb",
+      "b057dc2d7ef0e5d6",
+      "4fa628a3c73526db",
+      "372da91096a9fa0b",
+      "aa9057f018fbd9f4",
+      "d9f70b44a8f177fd",
+      "7b5559dfc70a1d05",
+      "cd2e978d74a651bc",
+      "cf6efd5cd8511e5e",
+      "2d55468ec0e35a80",
+      "5d1eacbfa9ac5a71",
+      "1e60715f1fa4d016",
+      "321569b0880760e1",
+      "d3252f310411b660",
+      "5f2bc7a3ad55fd30",
+      "2c1af5915af94059",
+      "a2142cd683e70e00",
+      "30a783d0bd7b5783",
+      "9b388419ff6d5f05",
+      "5f0af11d8b447ca3",
+      "623824dccddfd8d9",
+      "0b6fcfad0cb2228e",
+      "7705e3112b302c9c",
+      "60806db735f4c9bb",
+      "e8cf0b4264e80a2c",
+      "537e6beaa85f954a",
+      "e3d49d0feca68181",
+      "88c610947fd45ac3",
+      "40fdb77f3d76f918",
+      "d64e8a886257587c",
+      "b26d2940a7b02db2",
+      "03d8e33bf37f5263",
+      "72c6010a3a83641d",
+      "f4aab53966ce7aee",
+      "e4f39ceb7c43e121",
+      "5b453e60150dd99c",
+      "aac6769a50231b6c",
+      "6aa995ef55d7c0a4",
+      "22ee3dff35b85fde",
+      "7cc524f01bfbef6c",
+      "29572ae887c889c4",
+      "67ae42a78e49fb2c",
+      "b087061a0df4701b",
+      "be9230cc1e6908a8",
+      "ae0889e5825a46c4",
+      "4f8627d74d98d1c0",
+      "6d4df0a38a004321",
+      "c5e66e274498e16a",
+      "35f60e9251bf6902",
+      "2c68fb676a98c472",
+      "f312119179e65798",
+      "5fcd2ab660189deb",
+      "924e79bdbc531502",
+      "65d6f5c2a73cd3d5",
+      "52180b3740854199",
+      "cd2e978d74a651bc",
+      "c78b6754b22b54a6",
+      "a631d8bfb3ca1d22",
+      "c46c69fe49fb1014",
+      "74499c769eb86d83",
+      "f018ef07580c5017",
+      "deb7fe59fdf87832",
+      "9dac45add9ea58c3",
+      "623f44b53c92ee6b",
+      "d5f4b46326cbb41e",
+      "73aa0b8fb6f3a0f1",
+      "b343ec3254e80645",
+      "4606e334ca834333",
+      "af2fa2ae14f08b91",
+      "41aee39dcd693026",
+      "ae613b0c35c0dc01",
+      "a68b4e47eed789d9",
+      "351c8bccf5b7d4fa",
+      "9332abb91bee4e57",
+      "abe462bd5793ba7d",
+      "56103653463cad9f",
+      "022d7dd8a6502d91",
+      "8d8a0ec3758b08c7",
+      "57288dcf49be9582",
+      "cd2e978d74a651bc",
+      "6cd80efaa4c1119c",
+      "5fbba833d77b87c3",
+      "fb361dec830705fc",
+      "fc33185045be0c0c",
+      "b52de5b9b90491ec",
+      "fcce906c81ab5e8a",
+      "993881b45bddad5d",
+      "33928076603a1e3f",
+      "56f780d0d8b52d8f",
+      "5e937c71d229e967",
+      "88bf54a1730e48cf",
+      "2dd4a7ea25b0fe8c",
+      "c6a771f45a0ea22f",
+      "36f40782d159990b",
+      "354d0b3fc828b57b",
+      "c68b795ff2f6ec3c",
+      "94dfee974d2ddea3",
+      "8a9d720219bd4c34",
+      "f3d3d68b85642044",
+      "f1f9e769d8d9c7cd",
+      "7280cc955800b08f",
+      "d2534d5df821dc44",
+      "cc434195530d6cd4",
+      "03d8e33bf37f5263",
+      "01e724dc72a68288",
+      "1bb7367086bf707d",
+      "9145ceedb9d8618e",
+      "a0ce3e0de0bf7b05",
+      "3ec2895267ed4ce4",
+      "3694cfc4a5810fdd",
+      "24f632dbf6f2760d",
+      "9653d3621ff72b97",
+      "4ce23122ebff64bd",
+      "50e2c7ebebc251b6",
+      "57aa2d877531f87d",
+      "a7292757a6c0f3a0",
+      "899627ce456b00c0",
+      "093d9e783a21ebc7",
+      "554dffe33bdb8ada",
+      "5f38c8f9e0417d0b",
+      "6dcecb85cbdf88e5",
+      "7296460b79006e58",
+      "736b0b76c0485c19",
+      "fcf34500cffe96d1",
+      "60aa015e494c0512",
+      "4978ea5f2c647cda",
+      "df1d0a1b4d8aca99",
+      "912a76f720e9b0d1",
+      "4af60358d7aa8785",
+      "b7ec8de9c8ef8b31",
+      "a057593149bcbd63",
+      "be06a2e85fde5005",
+      "3c2dddcb646c2a67",
+      "9bb7c32db62e4c06",
+      "ff31e5c8ba9c4749",
+      "51938572b146d95a",
+      "1027e66263618c80",
+      "ae6231fb94db0e6c",
+      "501a9669a4b08475",
+      "fb778d51f0f8c950",
+      "a35d0dad590f9d76",
+      "4a46b8de9b8cf874",
+      "a6d5e13fe42650a4",
+      "719d8652bb915b20",
+      "d830e681ebb58017",
+      "85d111f86abad140",
+      "b9c099b653c5974a",
+      "1a46f40faa7045b2",
+      "0657041ace367908",
+      "4b3bc533708d3ec9",
+      "ad6f7c3625e0fd9c",
+      "cd2e978d74a651bc",
+      "d00a898cd1a2d93b",
+      "c702faa44fab9098",
+      "f4bf6299485e2a56",
+      "252419228930e333",
+      "b7685ba4218d2d24",
+      "a534c1aec38a5fa1",
+      "6a6585dfcbd1c0b8",
+      "dab1a7279d82ad48",
+      "ee90899015222c80",
+      "b88f25eaebdeae3a",
+      "5643ff95d405ef32",
+      "ae040a27d038e8ce",
+      "aaaec14368f30a06",
+      "f8d9c838082ccba5",
+      "d8637a3463482af6",
+      "6010bc428092e1f7",
+      "084721a5989d5119",
+      "e1d4da03b98d90f2",
+      "735f22039bb1de62",
+      "1f41345253b6fa7f",
+      "689851ab4b0694dc",
+      "7af435457438f7e5",
+      "9d2bb9bf51ee29db",
+      "cd2e978d74a651bc",
+      "ed35050b11783977",
+      "03c713af2db3197f",
+      "11108e8c5fd0899f",
+      "23832083180302d0",
+      "2067f6cc71d9faf3",
+      "2d16695a434e0652",
+      "e36b589b4db00d2f",
+      "402b0968f6727448",
+      "81f098db047704cf",
+      "b8495a44e110d803",
+      "932424fed1e7878c",
+      "ba6c1f8ccdc18c78",
+      "08c8294b23d04cc5",
+      "4ec065782adfb297",
+      "4cd2c344aa17951e",
+      "eda99bc249b38ffc",
+      "c1f0dd39d8e74056",
+      "9e9173f97058de9b",
+      "d0fe96998aaf2a5f",
+      "ceb100dca1961259",
+      "88544a9b107bdb8f",
+      "6e7f41e775db9431",
+      "cc2d310a0fcaae3b",
+      "cd2e978d74a651bc",
+      "57a70415c82aa69b",
+      "932de493de351b49",
+      "24006f5bbea5fe02",
+      "2b580f9cf3f13214",
+      "611447790138b13b",
+      "acc3411655c915e5",
+      "a5d0099165ab52e1",
+      "bcfd73beb0af1a72",
+      "8a5b3fc1bcc2ba56",
+      "dd36e1c140b603ea",
+      "4871c4d835f75e3a",
+      "3c596814f98b7d2f",
+      "8b7b02a0d7d755b2",
+      "812afab07f71c2b4",
+      "20d23e7149941cdf",
+      "1954d61cd7461e97",
+      "f3dae5bb408425b4",
+      "c11269ad84683da2",
+      "038b0f0a116ed909",
+      "4d1f36c19a8f3b25",
+      "7704815e79bd0131",
+      "bd1aa4392f3b5d60",
+      "13733d9724bb4cb2",
+      "cd2e978d74a651bc",
+      "423ecd86e086ef86",
+      "47f4234e907a30f4",
+      "f608005ed0cf1170",
+      "fff0c16c7f091ed2",
+      "fee65afb2be07878",
+      "7176a74c2b9d548a",
+      "0522d7027136e90e",
+      "454d5ef776a22004",
+      "9ae9cee6b00ef1bc",
+      "bdee7915936c3571",
+      "3025c92420405124",
+      "4701872ad93b7004",
+      "147e30e3814b612f",
+      "93dc9c3e56540e2f",
+      "e9b394d44939ea7f",
+      "1fc497ec051e871b",
+      "f1ac157c7b7d2adc",
+      "901a3379c127f594",
+      "29ad69b5101394e7",
+      "5c7c86470bfcae0d",
+      "cf4bdfd48a44805b",
+      "33e625bdf53423c4",
+      "e5155ef734d59691",
+      "be6eb3d73231f002",
+      "69b1d795f6ad90b8",
+      "228f659191bf40b7",
+      "784dfe44afefd4d6",
+      "b6d42eec4776d35b",
+      "d4741e8c013d6a8b",
+      "8f6a31a97c34b7b0",
+      "107c9319068da921",
+      "18bfe4355c43b86c",
+      "b674b370d1585bf7",
+      "b2eb34adc031c289",
+      "18b6655b4a64f53b",
+      "5450eaf7efa1480f",
+      "950493853d103e00",
+      "b9a1f9a931b3f534",
+      "c02a192996cb5c4b",
+      "22273ff299384411",
+      "6a9778e2295d3cc7",
+      "b88560bafe2c7c5c",
+      "12214513e0f80896",
+      "94290080c300b415",
+      "37ade95f8f4197d7",
+      "b9490d4cebc6a937",
+      "c345c75c21ea159e",
+      "be6eb3d73231f002",
+      "afb9213fd4f19894",
+      "ccf3750b76aba60b",
+      "9b1453ac43c2fa06",
+      "972a75415526f9ee",
+      "63301d6eb4c0235a",
+      "d377e02436910ada",
+      "1d8906486fdaca41",
+      "75c70a49b76b92ee",
+      "584de3aba555148e",
+      "3eddd2ffae7d6893",
+      "4072443fe3c60617",
+      "f3a1f57a9dfa48c6",
+      "37acd8a792c25b20",
+      "df849ea9a9fab959",
+      "91e634a7a877702d",
+      "a21c944714e56e82",
+      "a6bd56c72bb75c21",
+      "c48d815ebabda46c",
+      "56925d13fcc2983d",
+      "1b744f31c76dbd70",
+      "a2a6c82b128cce32",
+      "3dd9f9ec92689e28",
+      "9612f84cc5197129",
+      "be6eb3d73231f002",
+      "94e5d4411697687c",
+      "34e551064c3e57b4",
+      "91b3c67925b70169",
+      "2d5b81cb061f10bd",
+      "fa4c15f0d6ba3fd5",
+      "71993545c146cde5",
+      "596ac6f637688dd8",
+      "eee7e251353d53da",
+      "d093fe90b4ab1693",
+      "798aff1e35861b07",
+      "cd9b77e42fb6e88a",
+      "ad229730dcf670ed",
+      "672a690bc8dcf1eb",
+      "f30d9270e1ecef5d",
+      "533452322d34d88d",
+      "79e89c2d29888864",
+      "40a11085cda4f7be",
+      "d2a0a570077a2a4b",
+      "ab238a5f2287244a",
+      "d9d38166129727bc",
+      "14a48e50a2bce746",
+      "7883a9e1ea2eb29e",
+      "7dd4599d231eb615",
+      "03d8e33bf37f5263",
+      "48ee26f25dccadf7",
+      "92ecdafc128ff25c",
+      "470626554e0cac62",
+      "ef4f260cd82bd0ef",
+      "6edba1986b0d8c76",
+      "94e84ccaa5c827f6",
+      "95f3407a28d206bf",
+      "9e7275ae43eef6c4",
+      "e9c51d8c9abb36b4",
+      "1325e97a6c979617",
+      "e1c602f3e6b30ac1",
+      "2a8cf51c67ecd50d",
+      "eac48c41d0f26e79",
+      "e089e1fe275aef75",
+      "dd618f099303f957",
+      "3e7084108fb3c60c",
+      "b9aaf361d250d9a6",
+      "52e2ee8116356946",
+      "714cb7a1df423249",
+      "f08fa09fd8c919c0",
+      "3aac8c78f5e0cd34",
+      "24b302160d4fca6f",
+      "b4da37e3680f30df",
+      "be6eb3d73231f002",
+      "c0969993391b9598",
+      "8fcdd1c517f63ce4",
+      "e74d3fa491de19d3",
+      "9d1cc484092e36ad",
+      "2320f8d9e4df2a6d",
+      "fb158d901d03c19d",
+      "43a6ccb5759cf4ac",
+      "115c07b6bbc53da9",
+      "88b5861753c804a5",
+      "e57e2664378b3b31",
+      "bb14bdcd556961eb",
+      "d74112eb49bb2443",
+      "262a73a478b82934",
+      "ef20abd9a5a9e89f",
+      "64fa64708e7c073b",
+      "db12169e5a9e9c94",
+      "663c95d4a1773e6b",
+      "598fd811c84e9a64",
+      "496fa56954ff8e2c",
+      "fc27a4f36ee8616e",
+      "b07338b3b34f5374",
+      "a4aa7403e166b359",
+      "e15a97a349426096",
+      "be6eb3d73231f002",
+      "b66c9a61894b3b8d",
+      "75ad6519ed661bff",
+      "4bfcecdcdb879a90",
+      "c8747835173017ba",
+      "9b226234a54bd666",
+      "454dd9a2aab0c7ea",
+      "d198edc0ed782760",
+      "3ff43001b11d2f2c",
+      "6e87028ac64a0cce",
+      "95e5e67b1ca961ea",
+      "2021d4b98f57d90d",
+      "ca26a3eb05ac1c68",
+      "9fbbef0acfb5836d",
+      "bccfd4234951dce5",
+      "61f598c31b74fda0",
+      "12fbed34375d4dcf",
+      "2c362955a65cfa43",
+      "f004f363d8c7fe41",
+      "94f26c4f38e8eda0",
+      "ebfa33dec509406e",
+      "c7c96653790cda54",
+      "95749c770f124665",
+      "e491053a48730742",
+      "03d8e33bf37f5263",
+      "9f5f26108efc3790",
+      "20c3b5c200a7b31a",
+      "748019824d74d2cd",
+      "24c6442745598d15",
+      "0a1575e9c8e28716",
+      "907c116d16fbee9e",
+      "7a1791f26eaccb94",
+      "e9e985d86c25510d",
+      "9e31a961b15b014c",
+      "481376e6acd30b68",
+      "8dfd34b556ebfa89",
+      "bfc58a3ad2d19114",
+      "e6e6dd616410e8d1",
+      "a72d64b0accb9751",
+      "02fd30832362b9af",
+      "bd344c7e6970c0dd",
+      "f737bf1ee5fba8b9",
+      "2c71969e218aa9c4",
+      "a04fb22bc6c431c4",
+      "811ba286e4f6308f",
+      "4c6ce77747e1b7bf",
+      "679e757a2deadaa3",
+      "8b81d9d6a5054682",
+      "912a76f720e9b0d1",
+      "f1e5cb77e9cff3d9",
+      "352d339755be5a73",
+      "689befca63f085f1",
+      "2588b0bb04f799ca",
+      "e874310a10313024",
+      "3bcb4ea8f5941375",
+      "1078c4b0c3a001ea",
+      "802da1a0485298aa",
+      "7534d6cdf959c713",
+      "20fa3fa41806a0de",
+      "b3e2cb25fa7f39ba",
+      "cd483dac8857b752",
+      "fe1c64289e09e4dd",
+      "fc64f2fe6a66016c",
+      "edf021f248e19bc3",
+      "6c45accc48a61428",
+      "8982b6f5b0e3635c",
+      "4ce38abe6b0f4436",
+      "e0dcd55166e2a833",
+      "b53ddf6da78e3197",
+      "51f3888c3edfab4a",
+      "7bfc8962e299c664",
+      "f5bdb4bd7101e576",
+      "03d8e33bf37f5263",
+      "220ac74d80660d98",
+      "467af49531104a51",
+      "e4c0ceff34c5e202",
+      "ff4f8fea90460ec8",
+      "a835a52a127fd660",
+      "ea59f66255519eaa",
+      "8412d91e0bce4a4b",
+      "a2e92b1af5532089",
+      "7f4143c4e9e71555",
+      "4efaff4ad4b3f6e4",
+      "ee818b1ad10b1cde",
+      "8df5e123cb46dac5",
+      "3ab739d1049eeaf3",
+      "1b5041a269a3c28d",
+      "cf1758cd8c50647a",
+      "0516c2dd77bd2531",
+      "bb7abc9533fcec89",
+      "16d3ced873658d9e",
+      "ba4a5fe22902010b",
+      "275a458d536d6f64",
+      "5163db9b5ac046c8",
+      "9459e9ff5792c7a6"
+    ]
+  },
+  {
+    "team": "DSM",
+    "submission_id": 56444344,
+    "rating_snapshot": 3092.8,
+    "episode_id": 111910412,
+    "seat": 0,
+    "agents": [
+      {
+        "id": 243725289,
+        "submissionId": 56444344,
+        "reward": 97539,
+        "initialScore": 3080.422759707136,
+        "updatedScore": 3085.082007328626,
+        "teamId": 16732748
+      },
+      {
+        "id": 243725290,
+        "submissionId": 56443671,
+        "reward": 94142,
+        "index": 1,
+        "initialScore": 3090.5425602768396,
+        "updatedScore": 3085.8833126553495,
+        "teamId": 16770421
+      }
+    ],
+    "end_time": "2026-09-22T06:12:56.883212300Z",
+    "split": "study",
+    "seed": 410713514,
+    "rewards": [
+      97539.0,
+      94142.0
+    ],
+    "snapshots": [
+      {
+        "step": 23,
+        "money": 6.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 47,
+        "money": 1.0,
+        "land": 1,
+        "hands": 4,
+        "counts": {
+          "WHEAT": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 71,
+        "money": 7.0,
+        "land": 1,
+        "hands": 6,
+        "counts": {
+          "STRAWBERRY": 4,
+          "WHEAT": 4,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": []
+      },
+      {
+        "step": 143,
+        "money": 750.0,
+        "land": 1,
+        "hands": 5,
+        "counts": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 3,
+          "WOOL": 0
+        },
+        "shops": [
+          "BAKERY"
+        ]
+      },
+      {
+        "step": 239,
+        "money": 78.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "STRAWBERRY": 22,
+          "MELON": 10,
+          "WHEAT": 20,
+          "COW": 11,
+          "SHEEP": 3,
+          "GOOSE": 4,
+          "CARROT": 2
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 3,
+          "WOOL": 0
+        },
+        "shops": [
+          "BAKERY",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "step": 359,
+        "money": 25686.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "STRAWBERRY": 27,
+          "WHEAT": 23,
+          "COW": 11,
+          "SHEEP": 7,
+          "GOOSE": 6,
+          "TOMATO": 1
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 1,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 8
+        },
+        "shops": [
+          "BAKERY",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "step": 479,
+        "money": 57124.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 8,
+          "WHEAT": 17,
+          "STRAWBERRY": 23,
+          "CARROT": 3,
+          "COW": 11,
+          "SHEEP": 7,
+          "GOOSE": 6
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 2,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 3,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 4
+        },
+        "shops": [
+          "BAKERY",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "PET_CAFE"
+        ]
+      },
+      {
+        "step": 599,
+        "money": 71386.0,
+        "land": 3,
+        "hands": 11,
+        "counts": {
+          "TOMATO": 7,
+          "WHEAT": 14,
+          "STRAWBERRY": 12,
+          "CARROT": 20,
+          "COW": 9,
+          "SHEEP": 7,
+          "GOOSE": 6
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 0,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 10,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "BAKERY",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP",
+          "ICE_CREAM_SHOP"
+        ]
+      },
+      {
+        "step": 719,
+        "money": 97539.0,
+        "land": 3,
+        "hands": 10,
+        "counts": {
+          "TOMATO": 2,
+          "STRAWBERRY": 4,
+          "COW": 9,
+          "PASTURE": 5,
+          "GOOSE": 4,
+          "COOP": 1,
+          "WEED": 4
+        },
+        "shed": {
+          "CARROT": 0,
+          "COW": 0,
+          "EGG": 0,
+          "FERTILIZER": 1,
+          "GOOSE": 0,
+          "MELON": 0,
+          "MILK": 0,
+          "SHEEP": 0,
+          "STRAWBERRY": 0,
+          "TOMATO": 0,
+          "WHEAT": 0,
+          "WOOL": 0
+        },
+        "shops": [
+          "BAKERY",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "PET_CAFE",
+          "SMOOTHIE_SHOP",
+          "ICE_CREAM_SHOP"
+        ]
+      }
+    ],
+    "land_acquired_steps": [
+      150,
+      220
+    ],
+    "daily_hands_max": [
+      4,
+      4,
+      6,
+      6,
+      6,
+      5,
+      8,
+      9,
+      9,
+      10,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      12,
+      11,
+      12,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      10,
+      10
+    ],
+    "operations": {
+      "PASS": 138,
+      "PICKUP": 204,
+      "BUILD_PASTURE": 18,
+      "PLACE": 98,
+      "NORTH": 1025,
+      "WEST": 865,
+      "FEED": 383,
+      "CARE": 393,
+      "SOUTH": 706,
+      "PLANT": 244,
+      "WATER": 1114,
+      "COLLECT_FERTILIZER": 497,
+      "DROP": 61,
+      "EAST": 664,
+      "HARVEST": 545,
+      "BUILD_COOP": 6,
+      "FERTILIZE": 240,
+      "DIG": 35
+    },
+    "market_operations": {
+      "BUY_ANIMAL": 27,
+      "BUY_PRODUCT": 33,
+      "SELL": 463,
+      "HIRE": 308,
+      "BUY_SEED": 209,
+      "BUY_LAND": 2
+    },
+    "plantings": {
+      "MELON": 10,
+      "WHEAT": 130,
+      "STRAWBERRY": 31,
+      "CARROT": 65,
+      "TOMATO": 8
+    },
+    "opening": [
+      {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            5
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "COW",
+          1
+        ],
+        "hands": [],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "HIRE"
+          ],
+          [
+            "BUY_ANIMAL",
+            "COW",
+            1
+          ],
+          [
+            "BUY_ANIMAL",
+            "SHEEP",
+            3
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "BUILD_PASTURE"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ],
+          [
+            "PICKUP",
+            "COW",
+            1
+          ],
+          [
+            "PICKUP",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PLACE",
+          "COW",
+          1
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "PICKUP",
+          "WHEAT",
+          3
+        ],
+        "hands": [
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "BUILD_PASTURE"
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ]
+        ],
+        "market": [
+          [
+            "SELL",
+            "WHEAT",
+            1
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "PASS"
+          ],
+          [
+            "CARE"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ],
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            1
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "CARE"
+          ],
+          [
+            "PLACE",
+            "SHEEP",
+            1
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "SOUTH"
+          ],
+          [
+            "WEST"
+          ],
+          [
+            "BUILD_PASTURE"
+          ],
+          [
+            "WEST"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      },
+      {
+        "farmer": [
+          "FEED"
+        ],
+        "hands": [
+          [
+            "PICKUP",
+            "WHEAT",
+            1
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PLACE",
+            "COW",
+            1
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "CARE"
+        ],
+        "hands": [
+          [
+            "NORTH"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ],
+          [
+            "PASS"
+          ]
+        ],
+        "market": []
+      },
+      {
+        "farmer": [
+          "WEST"
+        ],
+        "hands": [
+          [
+            "FEED"
+          ],
+          [
+            "PASS"
+          ],
+          [
+            "PLANT",
+            "MELON"
+          ],
+          [
+            "NORTH"
+          ]
+        ],
+        "market": [
+          [
+            "BUY_SEED",
+            "MELON",
+            2
+          ]
+        ]
+      }
+    ],
+    "farmer_hands_digest": [
+      "d32d67efb94002cd",
+      "2f1da08dd9f04b50",
+      "9398fbc2ba4b35fd",
+      "09cce784bedd4aa8",
+      "7d9f7ece363880f4",
+      "500c6aca897584f2",
+      "ba9b0399aeac1e8e",
+      "71d72ae43912c60a",
+      "fa84339dc6497ca7",
+      "7a2a65ecda2f87d3",
+      "3e7b1918ecec5307",
+      "992319a59e1eb09e",
+      "9df1afaecbc5da3f",
+      "6d7a542aacff201f",
+      "1ab36a0b3a03c468",
+      "ec97cfa8bd25a83a",
+      "d2efa73e91716f3b",
+      "3395d7eabd291f96",
+      "aaf7a7aca51dc361",
+      "01a68eaa535102b0",
+      "34893b52cd39ee20",
+      "6173a07e9a70bf2f",
+      "5bb511ff776a3e42",
+      "79265ad956f9cd37",
+      "9ff42a05a769495a",
+      "99d3bcaf07896001",
+      "e9bda8ce02861817",
+      "8e03d92534718169",
+      "0afb0982fc18a5b3",
+      "0278b2c5c4c87519",
+      "b51f3dc6f1385a0f",
+      "dba4983cecfc5b36",
+      "1862e9e1855b56bc",
+      "f84a5e6234e8375d",
+      "d9f0e53e045edf16",
+      "f209af6b0d7cc17d",
+      "e0d21b7d8c3216c4",
+      "e5ad2b27f2b7c69c",
+      "554065b83c64b52f",
+      "8782373f0a73f6a3",
+      "2e47a47c38c79a3e",
+      "21156b33993295b5",
+      "05f1a38b03992563",
+      "1021d59e1c47a1f1",
+      "e6fc53a9a1a2706b",
+      "d1b384dce37bed44",
+      "dd78f6a09bb7c8c5",
+      "2ee73e2a7c3abc70",
+      "9ff42a05a769495a",
+      "1a706b4030be8c6e",
+      "ba00d76b84cc26e3",
+      "d0d0c6b274b48277",
+      "52e89bc68c3b70ce",
+      "cb223c16563b2a18",
+      "c0ccc75f2a0adc4b",
+      "e9c1e754552e7c01",
+      "2fc57186707fa713",
+      "50cd784eb1403f84",
+      "337c50e5ed187853",
+      "fcf1e70add1fae5b",
+      "8f6efbd284cd94aa",
+      "cfbe71e57be998d2",
+      "86d7f9f518b09da0",
+      "f7f1c861a586158d",
+      "ca7f72aacae27879",
+      "42d78fa0193ea4ec",
+      "fd41006d17fe92d9",
+      "6a84838a4563ec05",
+      "75cda392b0fefb1e",
+      "dac4520e5894ca59",
+      "e5a7a175826e9116",
+      "5986398d5a8179fa",
+      "8855f5d6131a634d",
+      "2244ea9de8487a33",
+      "83748b4143c46f44",
+      "e17e7b349a2a8f49",
+      "144014b6088574b3",
+      "b6e23a2876f879ce",
+      "7458bc04b703fae1",
+      "072ddd51b0ab8f39",
+      "be89d489b952ad28",
+      "2cf06acde85ef52b",
+      "ca106a05eafc0fa2",
+      "edd8abe133d39655",
+      "b7bae20418b25d99",
+      "39f6a69eb1be2f7c",
+      "c6fa1fd04cab7aa8",
+      "96902c2678a1475e",
+      "02fc44534424b8fa",
+      "9189476aaabef740",
+      "cf4be03968010f88",
+      "61c9b14d05cbcef6",
+      "f2652434d729ce8c",
+      "a3b2c50b46d5fb2f",
+      "9d2e298ec1887623",
+      "fde723d26d93fc1f",
+      "8855f5d6131a634d",
+      "d8250f466d8f47fc",
+      "f6dcf74c222b7395",
+      "d1aed909098632c5",
+      "7ff63dfd0c30e426",
+      "bd82a98e0257f197",
+      "b12d49a156759c06",
+      "f0953649109305fb",
+      "94af81ca9a02c6a6",
+      "e0754b1a9cb83236",
+      "8fe2ac491c3fad7e",
+      "4a7db902f473baa8",
+      "a35907b4732639fd",
+      "f3d25513c0bec860",
+      "ecdde20e6889c957",
+      "82a8f3e88dc297e3",
+      "e0e947e5f661c730",
+      "ce71f3202da324db",
+      "f37e87dfe45f7d75",
+      "48b3aeb55bd6469b",
+      "1939cef7807f7e80",
+      "5cd35f7755cf6357",
+      "a57e3395a4337665",
+      "7e54761b65f4a08f",
+      "8855f5d6131a634d",
+      "2b1efbdcd004426b",
+      "f75313e7893d8341",
+      "22692e14ba696e15",
+      "997048df0e72eef5",
+      "f6819124665b33cb",
+      "efcf426eca32ec19",
+      "305c86b3caf5ad31",
+      "663702b7655766e9",
+      "b70169f9c9a268af",
+      "37c007ee2ddf8701",
+      "69e0936698d1e017",
+      "48bfbda0d4dd4c96",
+      "5fffe1f1b331817e",
+      "83eaacb672e423f1",
+      "a74e84d7b06918a6",
+      "aaae436e5d3fb3fd",
+      "cd1fa761e8e709e4",
+      "802d1414b4ff550d",
+      "89e729cd325c15f4",
+      "9253ca02f4fed8b6",
+      "b2d7d208c75e9637",
+      "606a972152af3141",
+      "68467c3e5766c35f",
+      "03d8e33bf37f5263",
+      "c5c9c0e7fc27237d",
+      "5cf0018b924b8edc",
+      "b1e8992aa36fadea",
+      "3deada7510f14197",
+      "998a54446a1a87e9",
+      "c103e7003989644f",
+      "fb4fbdb715556e6a",
+      "ba12777e4b86bcee",
+      "79ed52786060fda5",
+      "13fcb8f2f4a81f3b",
+      "77aae0000d195dae",
+      "9d0614c8ce70f232",
+      "800332f28dfb62c2",
+      "a1c4dca045c5539b",
+      "fae5cb7a2f30c5a8",
+      "647c9a45aa898159",
+      "e04a9d655df77b11",
+      "48c297cfaee54760",
+      "c1360b5ab2874c66",
+      "d6ff77690a04c404",
+      "4783f8066a34cbde",
+      "6eff1c7677f180d3",
+      "3b72a1c40f17e9bd",
+      "0c4725e3cbdbf464",
+      "0840daca101119d5",
+      "3cc8d5268a746bf8",
+      "bc5e0829ae919019",
+      "27e270c8893fbe79",
+      "441c91a7379aec4a",
+      "249bfe146037b596",
+      "ac3d0858a7ae95b5",
+      "a287475f3bba906c",
+      "4ced2673011520ed",
+      "2967290421a2c9d2",
+      "f200b40a1b3e0e09",
+      "8343e546d3eab456",
+      "431744d007c48782",
+      "0209385abe47311c",
+      "358b47e51d6dfdcb",
+      "7ac98e7e09e451e6",
+      "427750ec308219a0",
+      "c3293b2e4210debb",
+      "b5d917e89b112b0c",
+      "f3c057f6605d60a3",
+      "7707b171d8d136f2",
+      "b6f221e378a02137",
+      "a3c51492af56069a",
+      "912a76f720e9b0d1",
+      "b9741d900556f482",
+      "abda7bde5e3685ba",
+      "5657306eb83b80f5",
+      "ea4baf8f1ced99cf",
+      "e6fff86e3398753d",
+      "b7d9f7a360c5f5d5",
+      "802410b0e179e72f",
+      "b533f1770a7e4170",
+      "250173c0df6c88f1",
+      "491de273196837d9",
+      "00e86987f725f915",
+      "64bb199309866657",
+      "569356dfae0ef297",
+      "0105a3bce9b6eace",
+      "49ce91f33062f9c2",
+      "b4cfe132fe85857d",
+      "524d2c4c78040ed1",
+      "bec93125332de7fd",
+      "65af227e226c8939",
+      "7ea1b7309bef4686",
+      "824d9b00afee50cc",
+      "8b715b82e72523d8",
+      "656f79b31d99784c",
+      "03d8e33bf37f5263",
+      "0a8fce7aa4ae1f9e",
+      "628f396f01145c56",
+      "d17cd6fd478303f1",
+      "c64fd75d813adc8e",
+      "abd7774b2756e9d3",
+      "0df5dd488b57c031",
+      "a136b94d51954c60",
+      "6cdb6b83fbc5684c",
+      "e259ec25001c003c",
+      "e6b9b0afe4c1946e",
+      "de2825717cc0209c",
+      "0f792946dd5466c5",
+      "f8d050719e27b53e",
+      "d57178e2622ecd8e",
+      "daf5b41378440b63",
+      "79c14cc653045428",
+      "68147fd1ff47d172",
+      "060da2f9349d6d78",
+      "e8a8f36a82dfc5c0",
+      "1104312949f9b495",
+      "f1cec1e44d877389",
+      "ec9475f448700350",
+      "1fa70e361a4f5f7d",
+      "912a76f720e9b0d1",
+      "55186de74c436e26",
+      "8357c357115112d3",
+      "46d73f351e913b72",
+      "c466162a8bed426c",
+      "6c10d4d9c7e95b67",
+      "a765a79270d78395",
+      "b68eee6378c42625",
+      "e78f0d87f5771a39",
+      "ef2a8a2a584a1681",
+      "b2c3920eb7d09bad",
+      "da16c42a67e16f8f",
+      "e21e596af615582f",
+      "f80e2f8389927396",
+      "b731508017548ef1",
+      "c9d9e6a32c064171",
+      "08eb87c6cb1fc45a",
+      "f0903e1c92c3ba95",
+      "a5fd48edfe341f33",
+      "d94afa67cf8d8c22",
+      "8e1124bcda478fe5",
+      "c1cfe69a7725e646",
+      "a59096f03aab1553",
+      "9da13643f4a8122b",
+      "0c999b89e684334a",
+      "2a8d1f0d0c02fdaf",
+      "98b17172611c3eb9",
+      "be96cc64e3b34c15",
+      "6f275f4266eefa9c",
+      "7a0d110d52b58143",
+      "0fd3458a5b575d0e",
+      "605553fb95f0e23e",
+      "ddd6a51c3773a2f1",
+      "0e57d9f89c11243b",
+      "c5faa38f267f66c1",
+      "526fb62d9d2a3392",
+      "12806c7fad64228b",
+      "dfba10672e02505a",
+      "c9644220fabffedc",
+      "7d7296554b9e4680",
+      "4a61ebb5e2dcf570",
+      "cc71e2589bb9b0ae",
+      "58275e5a1a425625",
+      "f9a94ec753c611e8",
+      "e5b6376a1f2cbf78",
+      "fbe0974539831162",
+      "c44cf0c81bcc95e0",
+      "005149126f554c2b",
+      "8855f5d6131a634d",
+      "7b8c4c20712bca43",
+      "657e4c00fd2919e9",
+      "b34fa8e9f90aa65a",
+      "52ad04ac09390c9c",
+      "42b449abcb8bd240",
+      "57e3d11590cc14f2",
+      "5c0ae96fcc42a86e",
+      "7e8404419b7d8aae",
+      "a71bea277cb005e8",
+      "82b97bf9f108e56c",
+      "4891dfdcf3b288ee",
+      "8ed7f3faaf4e4201",
+      "779d5e0aee6ff774",
+      "1719b078e97309ae",
+      "2cfb649aef0330a9",
+      "4011028227f83f64",
+      "242e1714e9ced418",
+      "8d3f8efdf73ed92f",
+      "782071b6d44fa7cb",
+      "97b26069977b3709",
+      "7ef1a1ddd81e8b61",
+      "0b21b4e5cef3570d",
+      "e644e3a57b5cfd70",
+      "0c999b89e684334a",
+      "5be873becad23445",
+      "c562e765285e55bf",
+      "dc1421deecad5568",
+      "06f3fe314ba9db41",
+      "d5e7bcb03324b67c",
+      "088ccb9504d78d59",
+      "4e4ecaef93a7f960",
+      "89fd95e450c4c4ee",
+      "c63764ef297d62ff",
+      "93e6383b430d5d92",
+      "a5db10908902b09a",
+      "6643fdcfc1fcc8ef",
+      "e4fcb754495059a6",
+      "2dff3dcb2533aed5",
+      "ab945f256ed00284",
+      "c61a21a217ef29a5",
+      "2bddc628359fdc85",
+      "8bc14af9f96489af",
+      "5b03ef19ff78644f",
+      "17ac067637d8280c",
+      "48396822476f1f03",
+      "905062f704e27c86",
+      "458fc33ab7a7b0e2",
+      "912a76f720e9b0d1",
+      "b536b64f3b00549e",
+      "d05edccfc1cbbbd4",
+      "d9732324104a67b5",
+      "8147373f0dff54a4",
+      "0787df052658f207",
+      "d2288397e1598538",
+      "5302b65f45bba207",
+      "7d64d7c9f2dfd232",
+      "2762143f174a4c2d",
+      "9b01a985bf8723f4",
+      "fe9543f67f2a643d",
+      "f15b74e38f19878b",
+      "66523c886845a966",
+      "8e234ad8b5adb70c",
+      "07219d62f14fad6a",
+      "2a54e58f772f6345",
+      "1208f451d3b99780",
+      "bd21b50354e53905",
+      "21d6300ba02b0a15",
+      "7d9787d4c0cdfdcf",
+      "4f0751e359440752",
+      "8ffa5e1926efa5d9",
+      "52c84fcd13129a58",
+      "8855f5d6131a634d",
+      "f15f91a5ce790ad4",
+      "1328a6b1a6a7ff41",
+      "0be428038168f507",
+      "17adbc471107a357",
+      "3df01a1209c26835",
+      "e44b85f7895349d8",
+      "86a7b89bac915432",
+      "465f52f274c2e3b4",
+      "072aa35b1b6a4b3e",
+      "7bdc2116f96ae525",
+      "530d8a78b31fc1e5",
+      "799b80561d3de11f",
+      "a4975126b700f4fc",
+      "b51b741bf677b392",
+      "51f7e81924200c31",
+      "9caa3ec22463fb14",
+      "15c5d7293d3261fc",
+      "d164f483cedec683",
+      "93a8eeca8df12b1f",
+      "74a3878c53a6b745",
+      "5f6faffd5ef0d4d6",
+      "678de0c5cd4dd6ee",
+      "44d3284025962224",
+      "912a76f720e9b0d1",
+      "7048e88b5eea40e1",
+      "fbfbe25eb33c9a94",
+      "227952bd8d68ab2b",
+      "80430e962eeca673",
+      "cab770a8705f3f34",
+      "a9a6c6beeb1e77b8",
+      "5ff01e102df4a4e9",
+      "e44ccc44930c7c1f",
+      "b0d47e546b96f36c",
+      "002b72b9121d4e4d",
+      "fc6ec57ad9508dd9",
+      "f6be1931c482d404",
+      "53328ad7c372749c",
+      "6b7dfd0ba7ba043c",
+      "41d8d91d802322d7",
+      "29cf98a6ed2dd0da",
+      "272e13de11e133ed",
+      "7e6a6efc85739d79",
+      "c70bfa172966f71a",
+      "3940e72bcd1d910c",
+      "1e14263ee1a04797",
+      "2091620c1da832c5",
+      "1dcdd02ab2b8144c",
+      "8855f5d6131a634d",
+      "a50f77454e847356",
+      "7e4bc8fdbb22fe84",
+      "dd94b2e4ab13192f",
+      "c1b81b22851c0c4a",
+      "7126309c8fc2d500",
+      "4903a2758d0fb833",
+      "9cf2cb8bcf4622ac",
+      "68c892bcb6f6dcc7",
+      "3f26f5e824e2d0e4",
+      "e2a92d0be5c36b36",
+      "c9d5636439ee0687",
+      "3cad4c6d3d000294",
+      "f007eaa45200dcf3",
+      "df6ea2ca157b84d1",
+      "07005646f58387cf",
+      "18c4091e7ed9cfd6",
+      "afd105f1710f9e20",
+      "ea65631433113574",
+      "8f1ec1d7cbdc9364",
+      "d3c8f59a82aa30e1",
+      "4f98f17f6a2982f2",
+      "646fe8e4cd232b12",
+      "9f4747f0db8de5aa",
+      "03d8e33bf37f5263",
+      "df044eb4581f3680",
+      "ab4510ca117f506d",
+      "2360d9274674fa50",
+      "1c9ae9b05025a745",
+      "b344156142db3ab8",
+      "2e5cba8c7d64e71a",
+      "8239c5b1c1cbc6d8",
+      "60af8fa9f8f84b72",
+      "1390ee4f52a72c75",
+      "d5318cbd2e96cdb3",
+      "3da447f988d0c719",
+      "c04911625ca8c4e6",
+      "d03745ee714f7e6a",
+      "071671206a620863",
+      "32d8ec8b5e4b18c1",
+      "958933fe1d642658",
+      "1f383dd8aa7452d0",
+      "4da1f942f50afe10",
+      "8f992cfd317238f5",
+      "4bd49ef47e4f3ba2",
+      "82df450bdfc7944b",
+      "4b6f5f5f9b5c1f60",
+      "f86d98d764447932",
+      "cd2e978d74a651bc",
+      "6d3579db6e033d0b",
+      "d6ea2b5186ac2417",
+      "64935043f68157c4",
+      "5ccd1eaca07ff5eb",
+      "f6d989e14f856b7d",
+      "8e08bd4d67df77cf",
+      "bb436453cc25c2f8",
+      "f92e926cc4faf0de",
+      "934f3c8e48ed6216",
+      "428e322811e403b9",
+      "18d2da6977c7ddec",
+      "90ca769855198017",
+      "3818080feaf0dab5",
+      "c17a87e0db1513b8",
+      "cbcadd8ebe29b1a1",
+      "0c384737aceaf512",
+      "e74b84563f79c0ec",
+      "c7037b61aad4ec15",
+      "8d428d3ad6d9d2c2",
+      "06b14964136075e7",
+      "5c9d3d68bc7de6d5",
+      "32e83ae384fe12b9",
+      "fb4ca8e116cdf226",
+      "cd2e978d74a651bc",
+      "48befa767fef6659",
+      "0c1b7070ec42c92f",
+      "f9c50c9a838d9f7b",
+      "246cf8d9650236ca",
+      "e816445dfa1c4f53",
+      "d362f2a46ba68d8b",
+      "031dba16583e05b7",
+      "ff85baa30727db74",
+      "ed74d947e5546239",
+      "7bd0008d5c056798",
+      "a812f9a5cc57175d",
+      "6bde668f094f5cb1",
+      "425f9aceb75aa2c9",
+      "f22f03a9319c78bb",
+      "dafd099f6bfd5b65",
+      "40afe80dabbb6245",
+      "2a32620b7823dc7f",
+      "77f424a20993c995",
+      "b4b79b9c1c34a87b",
+      "57b6bcbe0918215c",
+      "ab61f5245e4755f2",
+      "121c8bfb93a08e2c",
+      "313a50bae6088002",
+      "03d8e33bf37f5263",
+      "059438f0b16a5049",
+      "0b5a979c713ca618",
+      "644274f1c58e65ee",
+      "995155410c16c72f",
+      "7e5512fbec32e31b",
+      "bcb64d603246a216",
+      "01644c872acc15cb",
+      "1549f29417d70ae0",
+      "a48dba0565aad577",
+      "97d125309925fe47",
+      "c4b830955eb87ce0",
+      "356cf62e47bcaf40",
+      "125715cd11710e1b",
+      "9e1dbef8360a18bf",
+      "c8c4ffe83ba22d18",
+      "1adfe47fd1e9286a",
+      "28b1018ad03fa71a",
+      "0009dcd51b6ce8dc",
+      "949c20f13df0d9aa",
+      "904345bb0d36edbf",
+      "10dd96469663ae38",
+      "a93b547409c8ed9c",
+      "8eccb6dc03107fe9",
+      "be6eb3d73231f002",
+      "7112d214e4ba8227",
+      "daf503186fdfe86a",
+      "9d66dbcfcfa48535",
+      "13b5ebf7d7a9cdd2",
+      "56947b49715b9802",
+      "d6e3b14a1aae5946",
+      "9c04556fda2ad8d9",
+      "dc539c8fe1f1d398",
+      "a469afbbf70971d9",
+      "4a9fc90b92d763ce",
+      "3e1c13487343da4e",
+      "bfd625e5450f5eda",
+      "8b8e326dac2a4459",
+      "2c666f36289f1225",
+      "ed0f7431318f069a",
+      "e8f488edd803f461",
+      "4785134ee1315434",
+      "14448772f18698ea",
+      "d9f696dcb1d4974d",
+      "910c8d6c4f7151d1",
+      "c8452ba9f1b82c42",
+      "2fe9e2c02a10f91b",
+      "f096624a618f4d43",
+      "be6eb3d73231f002",
+      "e01bc32872bac319",
+      "af9b403720b83de1",
+      "4b41d64417cc20da",
+      "9023492018469e8d",
+      "9466e0e8c2ff535d",
+      "a45c0b716d860d07",
+      "a1fadb2d37f2b3f5",
+      "eae0ba663f7c1a2e",
+      "06dc032557e6db01",
+      "fb402ff1db67959a",
+      "b297223b19225b57",
+      "5e22793b92d3785c",
+      "a1dd0622eb797c2b",
+      "a65bca3599b12a04",
+      "46dbd688c2b43277",
+      "e1eca22d3206a60c",
+      "fb3cc20a0c10573c",
+      "6dc8fe02b5a30750",
+      "d3cbd66e301af38e",
+      "add9ddb74da02feb",
+      "1e2fb68d63e38956",
+      "7babf395cf16c329",
+      "04d075baefc2b284",
+      "be6eb3d73231f002",
+      "b92be919f0dd6103",
+      "4f5e6c000dfaa2b5",
+      "f858f82201b729c9",
+      "bbfdc3a027d0c18b",
+      "1d7b76f2630f2b1c",
+      "1c16bb45b5ce5dab",
+      "59934e08d6345d62",
+      "83097ad1672afef4",
+      "03038a6fe02731ba",
+      "c7c5f2a9e59a52cd",
+      "01e1c2d16e240628",
+      "fb2aac7ee02083e1",
+      "8f92656b75e22d40",
+      "3dc8d0e702d84699",
+      "33e4274fa9080fab",
+      "6e05bf49c1b2b938",
+      "e3f333083c272351",
+      "1e27debfc936bcbb",
+      "e10a097708fbcb6c",
+      "77a5764a37067df8",
+      "5eb2f87c22509828",
+      "8951206dece0c231",
+      "d4d886b8f87f5096",
+      "be6eb3d73231f002",
+      "5a8e4752c182fbf8",
+      "fd6f841745c24059",
+      "df3eb43fd2fd2536",
+      "fb5692756a8d3751",
+      "c78665c9066f3310",
+      "648ba7161803faf4",
+      "7a87a3e3d5a8795c",
+      "d49a53adbe02cf8a",
+      "4afd37410e4e1aab",
+      "ef821e54b9ccb14e",
+      "2ed20dd340b7d355",
+      "9db8804d8d8ee30b",
+      "28af18cc9d69082b",
+      "c284aab7bce47c3e",
+      "5269ad2fa62f5060",
+      "c9eba19f7579b5c5",
+      "eaec37d8abedfc72",
+      "e142f9fd7b39273e",
+      "e7bd19d6085842f3",
+      "33bee6c75ba184ed",
+      "27fba6845fb471e0",
+      "bab58b92e049c951",
+      "96ffd93b91139915",
+      "be6eb3d73231f002",
+      "f350a5720f53db94",
+      "0bbc62db9f6c00f6",
+      "888dd7cc6bcba73a",
+      "59dc25c419868153",
+      "88a210b322c8a195",
+      "049aa15b3af3e4f2",
+      "01b1fcb1943864c5",
+      "6b41cdcd6a259482",
+      "d2732b563dfe6343",
+      "2c7bd30690aba05e",
+      "e8b6eb9091d1c788",
+      "fab37f45b7d184b1",
+      "346e3b116369e57c",
+      "56051796d53527a5",
+      "ce6ff796877d07a5",
+      "a2ce074d0296eec2",
+      "104828b93142780b",
+      "5988e88b4ab85c22",
+      "040af76759dc2d7c",
+      "a9488308437364ae",
+      "932cfe2285b5fa69",
+      "b95200e4141f694f",
+      "51fd8525d7fcacba",
+      "03d8e33bf37f5263",
+      "f2efd16b5e5b924f",
+      "19b2250bf218d24f",
+      "3c36a016a681f22c",
+      "e4df4ad0deaf10b9",
+      "ae79016ff86766c2",
+      "feb300f21160bfe7",
+      "0fad3468fc8e87af",
+      "8f9561c4a9cf7cee",
+      "dbefe2be1cc58410",
+      "1405b4f16702fed3",
+      "9cce009eca117001",
+      "6c1a0e03725db6d0",
+      "0a713b0dcb2c633b",
+      "6513e0cefba5aa9b",
+      "c17c836afd10de56",
+      "603fca6da77bf1a6",
+      "398592512e1f4d81",
+      "850d1a11be3ce783",
+      "0f0efb456ffebaef",
+      "f01cf4190b3cd6b1",
+      "06c1c68baf2e8a59",
+      "52f0dfb4530de45e",
+      "1c228350b6dbc868",
+      "912a76f720e9b0d1",
+      "ecff0efa27250039",
+      "f337b49a16c9950f",
+      "3a67af9d82046ff8",
+      "703f8d3699d89f99",
+      "b5d0cf33fc2d29ad",
+      "66c7df12eb0ee256",
+      "edc0e4a7f1a6950b",
+      "c6405ada43a072fb",
+      "9b3a83901ceb06df",
+      "6c562e46ec23774a",
+      "a65dd368a91bfdf6",
+      "e2e107214f344199",
+      "bba0b47993cd3b9f",
+      "906c2c3f5d4df8f6",
+      "27e163420a7e1a7a",
+      "0d79cf44f46e2468",
+      "187a1d40f53c02f4",
+      "2f3cc400261856e3",
+      "dd4658644a02e19b",
+      "b72971a0a0eb4de7",
+      "519dbf4374b4a42f",
+      "5dc95099f40d8400",
+      "c5ad63dc62600dc8",
+      "03d8e33bf37f5263",
+      "3c87b44f60fb9582",
+      "4b785cddbd2aa8c4",
+      "d591ee5acdad36d2",
+      "73ea1fbfd184f131",
+      "e365fe58ab2aa933",
+      "51627d0a36ca28d7",
+      "702e27aa662840b4",
+      "7e928f79d6541211",
+      "0de587c08c32ff3d",
+      "598bb172b4430082",
+      "3aa2222a8fb838c9",
+      "4e4a2b3b52d33151",
+      "350ea76135d744ef",
+      "784f5e4815c9462a",
+      "e5772c3a10c7b8c5",
+      "151d6367ee8dfe0d",
+      "c2e6b0300ebb8994",
+      "984a5f5404014599",
+      "17bc4cc337afc023",
+      "79c075bceec8dcbc",
+      "50f5182a905c1ff2",
+      "15ea82c683bbe80b"
+    ]
+  }
+]

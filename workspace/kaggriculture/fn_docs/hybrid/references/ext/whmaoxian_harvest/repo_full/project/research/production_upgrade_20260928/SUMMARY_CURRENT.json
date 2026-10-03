@@ -1,0 +1,2725 @@
+{
+  "captured_utc": "2026-09-28T10:52:56.080697+00:00",
+  "batches": [
+    {
+      "file": "early_results.jsonl",
+      "completed": 420,
+      "expected": 420,
+      "invalid": 0
+    },
+    {
+      "file": "funded_diagnostic_results.jsonl",
+      "completed": 24,
+      "expected": 24,
+      "invalid": 0
+    },
+    {
+      "file": "funded_results.jsonl",
+      "completed": 504,
+      "expected": 504,
+      "invalid": 0
+    },
+    {
+      "file": "fusion_diagnostic_results.jsonl",
+      "completed": 42,
+      "expected": 42,
+      "invalid": 0
+    },
+    {
+      "file": "fusion_results.jsonl",
+      "completed": 882,
+      "expected": 882,
+      "invalid": 0
+    },
+    {
+      "file": "herd_stage1_results.jsonl",
+      "completed": 896,
+      "expected": 896,
+      "invalid": 0
+    },
+    {
+      "file": "replay_diagnostic_results.jsonl",
+      "completed": 48,
+      "expected": 48,
+      "invalid": 0
+    }
+  ],
+  "valid_records": 2816,
+  "unique_valid_cases": 2816,
+  "groups": [
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_nomilk.py",
+      "panel": "direct_reference",
+      "n": 32,
+      "wins": 4,
+      "losses": 2,
+      "ties": 26,
+      "mean_margin": 120.25,
+      "paired_n": 32,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.03125,
+      "margin_gain": 120.25,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.09375
+      ],
+      "decisions": {
+        "shoprule@150": 18,
+        "shoprule@173": 8,
+        "SHEEP@173": 2,
+        "noplan@169": 4
+      },
+      "max_action_seconds": 0.12091099999997823,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_nomilk.py",
+      "panel": "new_public_program",
+      "n": 64,
+      "wins": 57,
+      "losses": 7,
+      "ties": 0,
+      "mean_margin": 749.453125,
+      "paired_n": 64,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.03125,
+      "margin_gain": 78.65625,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.09375
+      ],
+      "decisions": {
+        "shoprule@150": 36,
+        "shoprule@173": 16,
+        "SHEEP@173": 4,
+        "noplan@169": 8
+      },
+      "max_action_seconds": 0.12652350000098522,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_nomilk.py",
+      "panel": "public_program",
+      "n": 64,
+      "wins": 60,
+      "losses": 4,
+      "ties": 0,
+      "mean_margin": 4500.671875,
+      "paired_n": 64,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 143.03125,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 36,
+        "shoprule@173": 16,
+        "SHEEP@173": 4,
+        "noplan@169": 8
+      },
+      "max_action_seconds": 0.23549499999899126,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_nomilk.py",
+      "panel": "responsive_proxy",
+      "n": 64,
+      "wins": 33,
+      "losses": 31,
+      "ties": 0,
+      "mean_margin": 7045.484375,
+      "paired_n": 64,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": -115.421875,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 42,
+        "noplan@169": 2,
+        "shoprule@173": 6,
+        "GOOSE@150": 10,
+        "SHEEP@173": 4
+      },
+      "max_action_seconds": 0.1688257000005251,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_selective.py",
+      "panel": "direct_reference",
+      "n": 32,
+      "wins": 6,
+      "losses": 2,
+      "ties": 24,
+      "mean_margin": 170.3125,
+      "paired_n": 32,
+      "wins_gained": 4,
+      "wins_lost": 0,
+      "point_gain": 0.0625,
+      "margin_gain": 170.3125,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.15625
+      ],
+      "decisions": {
+        "shoprule@150": 18,
+        "keep@173": 6,
+        "SHEEP@173": 4,
+        "noplan@169": 4
+      },
+      "max_action_seconds": 0.11209509999935108,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_selective.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4567.333333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 326.1666666666667,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.1615151000005426,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_selective.py",
+      "panel": "new_public_program",
+      "n": 64,
+      "wins": 57,
+      "losses": 7,
+      "ties": 0,
+      "mean_margin": 755.515625,
+      "paired_n": 64,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.03125,
+      "margin_gain": 84.71875,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.09375
+      ],
+      "decisions": {
+        "shoprule@150": 36,
+        "keep@173": 12,
+        "SHEEP@173": 8,
+        "noplan@169": 8
+      },
+      "max_action_seconds": 0.12634649999927205,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_selective.py",
+      "panel": "public_program",
+      "n": 64,
+      "wins": 60,
+      "losses": 4,
+      "ties": 0,
+      "mean_margin": 4587.703125,
+      "paired_n": 64,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 230.0625,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 36,
+        "keep@173": 12,
+        "SHEEP@173": 8,
+        "noplan@169": 8
+      },
+      "max_action_seconds": 0.26187510000090697,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_selective.py",
+      "panel": "responsive_proxy",
+      "n": 64,
+      "wins": 33,
+      "losses": 31,
+      "ties": 0,
+      "mean_margin": 7033.171875,
+      "paired_n": 64,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": -127.734375,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 42,
+        "noplan@169": 2,
+        "SHEEP@173": 10,
+        "GOOSE@150": 10
+      },
+      "max_action_seconds": 0.1527202999986912,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_sheep.py",
+      "panel": "direct_reference",
+      "n": 32,
+      "wins": 5,
+      "losses": 7,
+      "ties": 20,
+      "mean_margin": -575.3125,
+      "paired_n": 32,
+      "wins_gained": 4,
+      "wins_lost": 1,
+      "point_gain": -0.03125,
+      "margin_gain": -575.3125,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        -0.15625,
+        0.09375
+      ],
+      "decisions": {
+        "shoprule@150": 18,
+        "SHEEP@173": 10,
+        "noplan@169": 4
+      },
+      "max_action_seconds": 0.10586220000004687,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_sheep.py",
+      "panel": "new_public_program",
+      "n": 64,
+      "wins": 50,
+      "losses": 14,
+      "ties": 0,
+      "mean_margin": -78.90625,
+      "paired_n": 64,
+      "wins_gained": 2,
+      "wins_lost": 7,
+      "point_gain": -0.078125,
+      "margin_gain": -749.703125,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        -0.25,
+        0.0625
+      ],
+      "decisions": {
+        "shoprule@150": 36,
+        "SHEEP@173": 20,
+        "noplan@169": 8
+      },
+      "max_action_seconds": 0.1167120000009163,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_sheep.py",
+      "panel": "public_program",
+      "n": 64,
+      "wins": 55,
+      "losses": 9,
+      "ties": 0,
+      "mean_margin": 3839.1875,
+      "paired_n": 64,
+      "wins_gained": 0,
+      "wins_lost": 5,
+      "point_gain": -0.078125,
+      "margin_gain": -518.453125,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        -0.15625,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 36,
+        "SHEEP@173": 20,
+        "noplan@169": 8
+      },
+      "max_action_seconds": 0.22109009999985574,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/midgame_yarn_sheep.py",
+      "panel": "responsive_proxy",
+      "n": 64,
+      "wins": 33,
+      "losses": 31,
+      "ties": 0,
+      "mean_margin": 7033.171875,
+      "paired_n": 64,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": -127.734375,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 42,
+        "noplan@169": 2,
+        "SHEEP@173": 10,
+        "GOOSE@150": 10
+      },
+      "max_action_seconds": 0.1532057000003988,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_force2.py",
+      "panel": "direct_reference",
+      "n": 10,
+      "wins": 3,
+      "losses": 1,
+      "ties": 6,
+      "mean_margin": 1957.8,
+      "paired_n": 10,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.1,
+      "margin_gain": 1957.8,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.3
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 8
+      },
+      "max_action_seconds": 0.09361189999981434,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_force2.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4277.833333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 615.6666666666666,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.1613134999988688,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_force2.py",
+      "panel": "new_public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 2616.7,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1918.2,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.12339319999955478,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_force2.py",
+      "panel": "public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5246.75,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 480.6,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.20633030000135477,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_force2.py",
+      "panel": "responsive_proxy",
+      "n": 20,
+      "wins": 9,
+      "losses": 11,
+      "ties": 0,
+      "mean_margin": 7407.55,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1061.6,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.15233850000004168,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_nomilk4.py",
+      "panel": "direct_reference",
+      "n": 10,
+      "wins": 3,
+      "losses": 1,
+      "ties": 6,
+      "mean_margin": 1042.0,
+      "paired_n": 10,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.1,
+      "margin_gain": 1042.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.3
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 8
+      },
+      "max_action_seconds": 0.1059715999999753,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_nomilk4.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4567.333333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 326.1666666666667,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.1497893000014301,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_nomilk4.py",
+      "panel": "new_public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 1723.0,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1024.5,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.10715979999986303,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_nomilk4.py",
+      "panel": "public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 4802.25,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 36.1,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.22689720000016678,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_nomilk4.py",
+      "panel": "responsive_proxy",
+      "n": 20,
+      "wins": 9,
+      "losses": 11,
+      "ties": 0,
+      "mean_margin": 6901.95,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 556.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.15060319999975036,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat2.py",
+      "panel": "direct_reference",
+      "n": 10,
+      "wins": 3,
+      "losses": 1,
+      "ties": 6,
+      "mean_margin": 1042.0,
+      "paired_n": 10,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.1,
+      "margin_gain": 1042.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.3
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 8
+      },
+      "max_action_seconds": 0.09913119999873743,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat2.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4567.333333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 326.1666666666667,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.16133420000005572,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat2.py",
+      "panel": "new_public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 1723.0,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1024.5,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.10196600000017497,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat2.py",
+      "panel": "public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 4802.25,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 36.1,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.21139059999950405,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat2.py",
+      "panel": "responsive_proxy",
+      "n": 20,
+      "wins": 9,
+      "losses": 11,
+      "ties": 0,
+      "mean_margin": 6901.95,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 556.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.17665480000141542,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat4.py",
+      "panel": "direct_reference",
+      "n": 10,
+      "wins": 3,
+      "losses": 1,
+      "ties": 6,
+      "mean_margin": 1042.0,
+      "paired_n": 10,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.1,
+      "margin_gain": 1042.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.3
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 8
+      },
+      "max_action_seconds": 0.10237519999827782,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat4.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4567.333333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 326.1666666666667,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.1595952000006946,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat4.py",
+      "panel": "new_public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 1723.0,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1024.5,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.11542320000080508,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat4.py",
+      "panel": "public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 4802.25,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 36.1,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.21847300000081304,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_repeat4.py",
+      "panel": "responsive_proxy",
+      "n": 20,
+      "wins": 9,
+      "losses": 11,
+      "ties": 0,
+      "mean_margin": 6901.95,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 556.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.1537466999998287,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_single.py",
+      "panel": "direct_reference",
+      "n": 10,
+      "wins": 1,
+      "losses": 1,
+      "ties": 8,
+      "mean_margin": 0.0,
+      "paired_n": 10,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "noplan@88": 2,
+        "shoprule@150": 8
+      },
+      "max_action_seconds": 0.1001559999986057,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_single.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4812.0,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 81.5,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "noplan@88": 1,
+        "SHEEP@173": 1
+      },
+      "max_action_seconds": 0.16089330000068003,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_single.py",
+      "panel": "new_public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 698.5,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "noplan@88": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.10760579999987385,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_single.py",
+      "panel": "public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 4766.15,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 16,
+        "noplan@88": 4
+      },
+      "max_action_seconds": 0.24457040000015695,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_single.py",
+      "panel": "responsive_proxy",
+      "n": 20,
+      "wins": 9,
+      "losses": 11,
+      "ties": 0,
+      "mean_margin": 6345.95,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 14,
+        "noplan@88": 2,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.16234310000072583,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_strict4.py",
+      "panel": "direct_reference",
+      "n": 10,
+      "wins": 3,
+      "losses": 1,
+      "ties": 6,
+      "mean_margin": 1042.0,
+      "paired_n": 10,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.1,
+      "margin_gain": 1042.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.3
+      ],
+      "decisions": {
+        "shoprule@150": 8,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.09349509999992733,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_strict4.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4812.0,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 81.5,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "keep@178": 1,
+        "SHEEP@173": 1
+      },
+      "max_action_seconds": 0.162144799998714,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_strict4.py",
+      "panel": "new_public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 1723.0,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1024.5,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.09448179999890272,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_strict4.py",
+      "panel": "public_program",
+      "n": 20,
+      "wins": 20,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 4802.25,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 36.1,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 16
+      },
+      "max_action_seconds": 0.20996379999996861,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/early_strict4.py",
+      "panel": "responsive_proxy",
+      "n": 20,
+      "wins": 9,
+      "losses": 11,
+      "ties": 0,
+      "mean_margin": 6901.95,
+      "paired_n": 20,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 556.0,
+      "paired_worlds": 5,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.14808239999911166,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r25.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 3,
+      "losses": 1,
+      "ties": 14,
+      "mean_margin": 1087.6666666666667,
+      "paired_n": 18,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.05555555555555555,
+      "margin_gain": 1087.6666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.16666666666666666
+      ],
+      "decisions": {
+        "shoprule@150": 14,
+        "SHEEP@173": 2,
+        "shoprule@173": 2
+      },
+      "max_action_seconds": 0.11031050000019604,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r25.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4277.833333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 615.6666666666666,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 4
+      },
+      "max_action_seconds": 0.145049900000231,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r25.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 34,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 1785.1666666666667,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1065.6666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 28,
+        "SHEEP@173": 4,
+        "shoprule@173": 4
+      },
+      "max_action_seconds": 0.1255564000002778,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r25.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5262.416666666667,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 267.0,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "shoprule@173": 4
+      },
+      "max_action_seconds": 0.231997599999886,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r25.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 8112.388888888889,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 617.8611111111111,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 26,
+        "noplan@169": 2,
+        "shoprule@173": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.16588640000009036,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r5.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 3,
+      "losses": 1,
+      "ties": 14,
+      "mean_margin": 1087.6666666666667,
+      "paired_n": 18,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.05555555555555555,
+      "margin_gain": 1087.6666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.16666666666666666
+      ],
+      "decisions": {
+        "shoprule@150": 14,
+        "SHEEP@173": 2,
+        "shoprule@173": 2
+      },
+      "max_action_seconds": 0.1181349999988015,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r5.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4277.833333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 615.6666666666666,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.16212550000091142,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r5.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 34,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 1785.1666666666667,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1065.6666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 28,
+        "SHEEP@173": 4,
+        "shoprule@173": 4
+      },
+      "max_action_seconds": 0.1326454999998532,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r5.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5262.416666666667,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 267.0,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 28,
+        "SHEEP@173": 4,
+        "shoprule@173": 4
+      },
+      "max_action_seconds": 0.2370255999994697,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded2_r5.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 8112.388888888889,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 617.8611111111111,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 26,
+        "SHEEP@173": 4,
+        "noplan@169": 2,
+        "shoprule@173": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.16000110000095447,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_r5.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 3,
+      "losses": 1,
+      "ties": 14,
+      "mean_margin": 1087.6666666666667,
+      "paired_n": 18,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.05555555555555555,
+      "margin_gain": 1087.6666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.16666666666666666
+      ],
+      "decisions": {
+        "shoprule@150": 14,
+        "SHEEP@173": 2,
+        "keep@178": 2
+      },
+      "max_action_seconds": 0.10934070000075735,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_r5.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4277.833333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 615.6666666666666,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.13792040000043926,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_r5.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 34,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 1785.1666666666667,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1065.6666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 28,
+        "SHEEP@173": 4,
+        "keep@178": 4
+      },
+      "max_action_seconds": 0.11921169999914127,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_r5.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 34,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 4634.972222222223,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 2,
+      "point_gain": -0.05555555555555555,
+      "margin_gain": -360.44444444444446,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        -0.16666666666666666,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "SHEEP@178": 4
+      },
+      "max_action_seconds": 0.22430920000078913,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_r5.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 7837.5,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 342.97222222222223,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 6,
+        "shoprule@150": 26,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.16710439999951632,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_strict.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 3,
+      "losses": 1,
+      "ties": 14,
+      "mean_margin": 1087.6666666666667,
+      "paired_n": 18,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.05555555555555555,
+      "margin_gain": 1087.6666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.16666666666666666
+      ],
+      "decisions": {
+        "shoprule@150": 14,
+        "SHEEP@173": 2,
+        "keep@178": 2
+      },
+      "max_action_seconds": 0.10915659999955096,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_strict.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4517.333333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 376.1666666666667,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 1,
+        "shoprule@150": 4,
+        "keep@178": 1
+      },
+      "max_action_seconds": 0.14507489999959944,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_strict.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 34,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 1785.1666666666667,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 1065.6666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 28,
+        "SHEEP@173": 4,
+        "keep@178": 4
+      },
+      "max_action_seconds": 0.1206943000015599,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_strict.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5262.416666666667,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 267.0,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 28,
+        "SHEEP@173": 4,
+        "keep@178": 4
+      },
+      "max_action_seconds": 0.2403415999997378,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/funded4_strict.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 7856.277777777777,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 361.75,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 26,
+        "SHEEP@173": 4,
+        "noplan@169": 2,
+        "SHEEP@178": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.16697690000000875,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_finish.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 17,
+      "losses": 1,
+      "ties": 0,
+      "mean_margin": 86.55555555555556,
+      "paired_n": 18,
+      "wins_gained": 16,
+      "wins_lost": 0,
+      "point_gain": 0.4444444444444444,
+      "margin_gain": 86.55555555555556,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.3333333333333333,
+        0.5
+      ],
+      "decisions": {
+        "shoprule@173": 4,
+        "shoprule@150": 14
+      },
+      "max_action_seconds": 0.16203820000009728,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_finish.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4841.166666666667,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 52.333333333333336,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "shoprule@173": 2
+      },
+      "max_action_seconds": 0.19931980000001204,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_finish.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 814.2222222222222,
+      "paired_n": 36,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.05555555555555555,
+      "margin_gain": 94.72222222222223,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.16666666666666666
+      ],
+      "decisions": {
+        "shoprule@173": 8,
+        "shoprule@150": 28
+      },
+      "max_action_seconds": 0.15768410000055155,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_finish.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5100.222222222223,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 104.80555555555556,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 28,
+        "shoprule@173": 8
+      },
+      "max_action_seconds": 0.24315679999926942,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_finish.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 7524.055555555556,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 29.52777777777778,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@173": 6,
+        "shoprule@150": 26,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.21142860000145447,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_finish.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 17,
+      "losses": 1,
+      "ties": 0,
+      "mean_margin": 688.1111111111111,
+      "paired_n": 18,
+      "wins_gained": 16,
+      "wins_lost": 0,
+      "point_gain": 0.4444444444444444,
+      "margin_gain": 688.1111111111111,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.3333333333333333,
+        0.5
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "keep@173": 2
+      },
+      "max_action_seconds": 0.158060600000681,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_finish.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4505.666666666667,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 387.8333333333333,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 4
+      },
+      "max_action_seconds": 0.15395489999900747,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_finish.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 1404.9444444444443,
+      "paired_n": 36,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.05555555555555555,
+      "margin_gain": 685.4444444444445,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.16666666666666666
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.16285179999977117,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_finish.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5121.611111111111,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 126.19444444444444,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.23250519999965036,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_finish.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 7575.055555555556,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 80.52777777777777,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 6,
+        "shoprule@150": 26,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.1792604999991454,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 17,
+      "losses": 1,
+      "ties": 0,
+      "mean_margin": 688.1111111111111,
+      "paired_n": 18,
+      "wins_gained": 16,
+      "wins_lost": 0,
+      "point_gain": 0.4444444444444444,
+      "margin_gain": 688.1111111111111,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.3333333333333333,
+        0.5
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "keep@173": 2
+      },
+      "max_action_seconds": 0.15740510000068753,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4565.833333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 327.6666666666667,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 4
+      },
+      "max_action_seconds": 0.1504787000012584,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 1405.0555555555557,
+      "paired_n": 36,
+      "wins_gained": 2,
+      "wins_lost": 0,
+      "point_gain": 0.05555555555555555,
+      "margin_gain": 685.5555555555555,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.16666666666666666
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.15647010000066075,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5083.055555555556,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 87.63888888888889,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.23498860000108834,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 7538.583333333333,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 44.05555555555556,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 6,
+        "shoprule@150": 26,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.16319380000095407,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6_noadvance.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 7,
+      "losses": 11,
+      "ties": 0,
+      "mean_margin": 290.1111111111111,
+      "paired_n": 18,
+      "wins_gained": 6,
+      "wins_lost": 0,
+      "point_gain": -0.1111111111111111,
+      "margin_gain": 290.1111111111111,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        -0.3888888888888889,
+        0.16666666666666666
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "keep@173": 2
+      },
+      "max_action_seconds": 0.15065560000039113,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6_noadvance.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4953.0,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": -59.5,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.14441790000091714,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6_noadvance.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 22,
+      "losses": 14,
+      "ties": 0,
+      "mean_margin": 754.9444444444445,
+      "paired_n": 36,
+      "wins_gained": 2,
+      "wins_lost": 14,
+      "point_gain": -0.3333333333333333,
+      "margin_gain": 35.44444444444444,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        -0.5555555555555556,
+        -0.1111111111111111
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.15910640000038256,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6_noadvance.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5079.333333333333,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 83.91666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.22096260000034817,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_gate6_noadvance.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 7618.0,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 123.47222222222223,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 6,
+        "shoprule@150": 26,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.15615900000011607,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_neither.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 8,
+      "losses": 10,
+      "ties": 0,
+      "mean_margin": 381.3333333333333,
+      "paired_n": 18,
+      "wins_gained": 8,
+      "wins_lost": 1,
+      "point_gain": -0.05555555555555555,
+      "margin_gain": 381.3333333333333,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        -0.3888888888888889,
+        0.2777777777777778
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "keep@173": 2
+      },
+      "max_action_seconds": 0.15671709999878658,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_neither.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 1,
+      "losses": 5,
+      "ties": 0,
+      "mean_margin": -4828.333333333333,
+      "paired_n": 6,
+      "wins_gained": 1,
+      "wins_lost": 0,
+      "point_gain": 0.16666666666666666,
+      "margin_gain": 65.16666666666667,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.5
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.14908329999889247,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_neither.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 124.27777777777777,
+      "paired_n": 36,
+      "wins_gained": 2,
+      "wins_lost": 21,
+      "point_gain": -0.5277777777777778,
+      "margin_gain": -595.2222222222222,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        -0.8055555555555556,
+        -0.19444444444444445
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.16138989999853948,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_neither.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5165.916666666667,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 170.5,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.15310719999979483,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_neither.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 7656.055555555556,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 161.52777777777777,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 6,
+        "shoprule@150": 26,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.15638140000010026,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_noadvance.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 7,
+      "losses": 11,
+      "ties": 0,
+      "mean_margin": 301.6666666666667,
+      "paired_n": 18,
+      "wins_gained": 6,
+      "wins_lost": 0,
+      "point_gain": -0.1111111111111111,
+      "margin_gain": 301.6666666666667,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        -0.3888888888888889,
+        0.16666666666666666
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "keep@173": 2
+      },
+      "max_action_seconds": 0.15749879999930272,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_noadvance.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4927.666666666667,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": -34.166666666666664,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.1524504999997589,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_noadvance.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 28,
+      "losses": 8,
+      "ties": 0,
+      "mean_margin": 1093.111111111111,
+      "paired_n": 36,
+      "wins_gained": 2,
+      "wins_lost": 8,
+      "point_gain": -0.16666666666666666,
+      "margin_gain": 373.6111111111111,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        -0.3333333333333333,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.1583005000011326,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_noadvance.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5110.5,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 115.08333333333333,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.23304409999946074,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_noadvance.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 7594.277777777777,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 99.75,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 6,
+        "shoprule@150": 26,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.16630710000026738,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_nopredict.py",
+      "panel": "direct_reference",
+      "n": 18,
+      "wins": 7,
+      "losses": 11,
+      "ties": 0,
+      "mean_margin": 508.1111111111111,
+      "paired_n": 18,
+      "wins_gained": 6,
+      "wins_lost": 0,
+      "point_gain": -0.1111111111111111,
+      "margin_gain": 508.1111111111111,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        -0.3888888888888889,
+        0.2222222222222222
+      ],
+      "decisions": {
+        "SHEEP@173": 2,
+        "shoprule@150": 14,
+        "keep@173": 2
+      },
+      "max_action_seconds": 0.15546110000104818,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_nopredict.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4500.833333333333,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 392.6666666666667,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "SHEEP@173": 2
+      },
+      "max_action_seconds": 0.1466045999986818,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_nopredict.py",
+      "panel": "new_public_program",
+      "n": 36,
+      "wins": 30,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": 1282.6666666666667,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 4,
+      "point_gain": -0.1111111111111111,
+      "margin_gain": 563.1666666666666,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        -0.2777777777777778,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.15958750000027067,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_nopredict.py",
+      "panel": "public_program",
+      "n": 36,
+      "wins": 36,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 5139.972222222223,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 144.55555555555554,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 4,
+        "shoprule@150": 28,
+        "keep@173": 4
+      },
+      "max_action_seconds": 0.16287430000011227,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "research/production_upgrade_20260928/candidates/fused_herd_nopredict.py",
+      "panel": "responsive_proxy",
+      "n": 36,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0,
+      "mean_margin": 7576.388888888889,
+      "paired_n": 36,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 81.86111111111111,
+      "paired_worlds": 9,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "SHEEP@173": 6,
+        "shoprule@150": 26,
+        "noplan@169": 2,
+        "GOOSE@150": 2
+      },
+      "max_action_seconds": 0.15873439999995753,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "panel": "direct_reference",
+      "n": 32,
+      "wins": 2,
+      "losses": 2,
+      "ties": 28,
+      "mean_margin": 0.0,
+      "paired_n": 32,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 18,
+        "shoprule@173": 10,
+        "noplan@169": 4
+      },
+      "max_action_seconds": 0.1149107000001095,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "panel": "fixed_replay_diagnostic",
+      "n": 6,
+      "wins": 0,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": -4893.5,
+      "paired_n": 6,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "paired_worlds": 6,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 4,
+        "shoprule@173": 2
+      },
+      "max_action_seconds": 0.15766229999826464,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "panel": "new_public_program",
+      "n": 64,
+      "wins": 55,
+      "losses": 9,
+      "ties": 0,
+      "mean_margin": 670.796875,
+      "paired_n": 64,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 36,
+        "shoprule@173": 20,
+        "noplan@169": 8
+      },
+      "max_action_seconds": 0.12358620000122755,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "panel": "public_program",
+      "n": 64,
+      "wins": 60,
+      "losses": 4,
+      "ties": 0,
+      "mean_margin": 4357.640625,
+      "paired_n": 64,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 36,
+        "shoprule@173": 20,
+        "noplan@169": 8
+      },
+      "max_action_seconds": 0.19732189999922412,
+      "max_seconds_over_1": 0
+    },
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "panel": "responsive_proxy",
+      "n": 64,
+      "wins": 33,
+      "losses": 31,
+      "ties": 0,
+      "mean_margin": 7160.90625,
+      "paired_n": 64,
+      "wins_gained": 0,
+      "wins_lost": 0,
+      "point_gain": 0.0,
+      "margin_gain": 0.0,
+      "paired_worlds": 16,
+      "development_world_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "decisions": {
+        "shoprule@150": 42,
+        "noplan@169": 2,
+        "shoprule@173": 10,
+        "GOOSE@150": 10
+      },
+      "max_action_seconds": 0.16207479999866337,
+      "max_seconds_over_1": 0
+    }
+  ],
+  "scope": "Development comparisons; fixed replay opponents are not responsive programs. No online rating is inferred.",
+  "invalid_samples": []
+}

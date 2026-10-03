@@ -364,3 +364,5 @@
 | 2026-09-28 | **R27 判据重裁（用户裁决"判据重裁，发 A"；fn-grill 语义留痕）**：①"终局钱 +2k~4k/局"由达标门降为**观测指标**——该带系分析30 P2 预期效应量被误写成门（字面下 +5000 亦"带外红"=判据设计错）；②核心判据重裁=**胜率 ≥0.55 ∧ 钱差非负 ∧ 零足迹面**（R23 判据重裁先例同型；天梯按胜率计分=frapercan 口径）；③判决 v2 实测（judgment_r27_v2.json，n=40 双席折叠）：A 臂 30-8-2/胜率 0.775/+424.9/非触发拍零足迹→**判正**；B 单=逐字节零足迹但无效应、AB 边际 −295.5（闸门在日新高之上纯拖累）→B/AB 收档；④择优单发=A（计分对={r34a-new 56637411, A 件}，r40 挤出——序列裁决原案） | 判决 v2 真读数+判据设计缺陷暴露+用户裁决 |
 | kaggle datasets API（list/search/download） | 赛后情报跑批数据源（2026-10-02 二轮登记）：mqingcs 等第三方数据集下载核内容；拉取=kaggle datasets download -d <ref>，落 references/ext/ |
 | remote-compute（ssh wsl，RTX 4070） | 神经件评测算力（2026-10-02 登记）：~/kag_eval_venv（torch+jax+kaggle-env 1.32.7）；SOP 见 references/2026-10-02-remote-eval-prep.md；战役文件不落远程机（D14） |
+| degnonguidi/best-agent-ranking kernel output（ext/mqingcs_upstream/） | mqingcs 件上游常量源（2026-10-03 登记）：kaggle kernels output 拉取，sha256 锚定；dependency_spec 长度+前缀校验，不执行上游 |
+| ashok205 parquet 语料 → M1 预演管线（fn_work/m1_rehearsal/） | 混合系研究数据源（2026-10-03 登记）：26,527 局 8:1:1 按局切；结果=fn_docs/hybrid/results/2026-10-03-m1-rehearsal.json；远程 GPU 训练经 ssh wsl |

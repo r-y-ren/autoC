@@ -1,0 +1,34 @@
+
+# Distinguish our own deliberate species substitution from a change in rival behavior.
+_K28G_PARENT=phase_b_agent
+_K28G_ORIGINAL_SIM=_r37_similarity
+
+def _k28g_similarity(obs):
+    original=_K28G_ORIGINAL_SIM(obs);seat=int(obs['player'])
+    sites=_K28S_STATES.get(seat,{}).get('sites',set())
+    if not sites:return original
+    own,rival=obs['farms'][seat],obs['farms'][1-seat]
+    if own['unlocked_quadrants']!=rival['unlocked_quadrants']:return original
+    matches=total=0
+    for y,(arow,brow) in enumerate(zip(own['tiles'],rival['tiles'])):
+        for x,(a,b) in enumerate(zip(arow,brow)):
+            sa=(a.get('crop'),a.get('animal')) if isinstance(a,dict) else (None,None)
+            sb=(b.get('crop'),b.get('animal')) if isinstance(b,dict) else (None,None)
+            if isinstance(a,dict) and a.get('animal')=='SHEEP' and (x,y,int(a.get('placed_day',-1))) in sites:
+                sa=(None,'COW')
+            if sa!=(None,None) or sb!=(None,None):total+=1;matches+=sa==sb
+    return max(original,matches/total if total>=8 else 0.0)
+
+def _k28g_phase(obs,configuration=None):
+    global _B_SIM_GATE
+    threshold=_B_SIM_GATE;actual=_K28G_ORIGINAL_SIM(obs);adjusted=_k28g_similarity(obs)
+    opportunity=threshold>0 and actual<threshold<=adjusted
+    if opportunity:
+        _K28S_REPORT['gate_opportunities']+=1
+        if _K28G_MODE==1:
+            _B_SIM_GATE=0.0;_K28S_REPORT['gate_changes']+=1
+    try:return _K28G_PARENT(obs,configuration)
+    finally:_B_SIM_GATE=threshold
+
+if _K28G_MODE==2:
+    _r37_similarity=_k28g_similarity

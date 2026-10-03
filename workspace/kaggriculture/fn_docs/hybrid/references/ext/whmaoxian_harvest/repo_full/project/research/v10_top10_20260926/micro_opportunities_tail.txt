@@ -1,0 +1,48 @@
+
+# Same-position opportunities only. Never reroute a worker or steal an active task.
+_U_PARENT=phase_b_agent
+_U_REPORT={'care':0,'water':0,'fertilizer':0,'harvest':0,'errors':0}
+_U_CROPS={'WHEAT':(2,4),'CARROT':(2,3),'MELON':(10,12),'TOMATO':(8,8),'STRAWBERRY':(10,10)}
+
+def micro_opportunity_agent(obs,configuration=None):
+    step=int(obs['step']);day=step//24;hour=step%24;seat=int(obs['player'])
+    if step==0:
+        for key in _U_REPORT:_U_REPORT[key]=0
+    action=_U_PARENT(obs,configuration)
+    if step<_U_START or step>=696:return action
+    try:
+        farm=obs['farms'][seat];positions=[farm['farmer']]+farm['hands']
+        commands=[list(action.get('farmer') or ['PASS'])]+[list(c or ['PASS']) for c in action.get('hands',[])]
+        occupied={tuple(position) for position,command in zip(positions,commands) if command and command[0]!='PASS'}
+        total=sum(obs['private']['shed'].values())+sum(sum(bag.values()) for bag in obs['private']['inventories'])
+        # Bound optional carried goods, and allow later turns to see them before nightfall.
+        cargo_budget=max(0,85-total) if hour<22 else 0
+        for actor,(position,command) in enumerate(zip(positions,commands)):
+            if command!=['PASS'] or tuple(position) in occupied:continue
+            x,y=position;tile=farm['tiles'][y][x]
+            if not isinstance(tile,dict):continue
+            proposed={};animal=tile.get('animal');crop=tile.get('crop')
+            if animal and not tile.get('cared_today') and 'care' in _U_ACTIONS:
+                proposed['care']=(['CARE'],0)
+            if animal and tile.get('fertilizer_available') and cargo_budget>=1 and 'fertilizer' in _U_ACTIONS:
+                proposed['fertilizer']=(['COLLECT_FERTILIZER'],1)
+            if crop and not tile.get('watered_today') and 'water' in _U_ACTIONS:
+                age=day-int(tile.get('planted_day',day));first,last=_U_CROPS[crop]
+                in_bonus=(last+1)//2<=age<=last
+                safe=crop in ('STRAWBERRY','TOMATO') or not in_bonus or tile.get('fertilized_until_day',-1)>=day
+                if safe:proposed['water']=(['WATER'],0)
+            quantity=int(tile.get('yield_units',0))
+            if quantity>0 and quantity<=cargo_budget and 'harvest' in _U_ACTIONS:
+                if animal or crop in ('STRAWBERRY','TOMATO'):
+                    proposed['harvest']=(['HARVEST'],quantity)
+            choice=next((name for name in _U_ACTIONS if name in proposed),None)
+            if choice:
+                new,carried=proposed[choice];commands[actor]=new;cargo_budget-=carried
+                occupied.add(tuple(position));_U_REPORT[choice]+=1
+        return dict(action,farmer=commands[0],hands=commands[1:])
+    except Exception:
+        _U_REPORT['errors']+=1
+        return action
+micro_opportunity_agent.telemetry=_U_REPORT
+agent=micro_opportunity_agent
+kaggle_submission_agent=micro_opportunity_agent

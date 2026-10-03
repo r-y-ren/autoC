@@ -1,0 +1,42 @@
+[
+  {
+    "scope": "outer",
+    "line": 1111,
+    "context": "    if actual!=baseline[0]:\n        _UPGRADE_STATS['shadow_declines']+=1;return actual\n    try:\n        plan=_PLANNER_NS['plan_terminal'](observation,configuration,baseline,max_simulations=64,passes=1,proposals_per_actor=4)\n        _UPGRADE_STATS['max_planning_ms']=max(_UPGRADE_STATS['max_planning_ms'],plan.get('planning_ms',0.0))\n        if not plan.get('accepted'):return actual\n        plan['parent_states_before']=states;_TERMINAL_PLANS[seat]=plan\n        _UPGRADE_STATS['accepted']+=1\n        result=_PLANNER_NS['terminal_action'](observation,configuration,actual,plan)"
+  },
+  {
+    "scope": "literal_1022",
+    "line": 258,
+    "context": "    chosen = direct + [p for p in proposals if p not in direct]\n    return chosen[:max_per_actor]\n\ndef plan_terminal(obs, config, baseline_remaining, *, max_simulations=64, passes=1, proposals_per_actor=4):\n    \"\"\"At 712 accept seven actions; positive physical delivery is mandatory.\"\"\"\n    begun = perf_counter()\n    fallback = {'accepted': False, 'reason': '', 'actions': None, 'simulations': 0}\n    try:\n        if int(_get(obs, 'step', -1)) != START or len(baseline_remaining) != FINAL - START + 1:"
+  },
+  {
+    "scope": "literal_1022",
+    "line": 265,
+    "context": "    try:\n        if int(_get(obs, 'step', -1)) != START or len(baseline_remaining) != FINAL - START + 1:\n            raise Unsupported('planning requires step 712 and exactly seven actions through 718')\n        max_simulations = min(256, max(1, int(max_simulations)))\n        passes = min(2, max(1, int(passes)))\n        proposals_per_actor = min(16, max(1, int(proposals_per_actor)))\n        baseline = simulate(obs, config, baseline_remaining, detailed=True)\n        prices = {item: max(1, float(_get(obs, 'market', {}).get('prices', {}).get(item, 1))) for item in PRODUCTS}\n        current, best = (_clone_schedule(baseline_remaining), baseline)"
+  },
+  {
+    "scope": "literal_1022",
+    "line": 267,
+    "context": "            raise Unsupported('planning requires step 712 and exactly seven actions through 718')\n        max_simulations = min(256, max(1, int(max_simulations)))\n        passes = min(2, max(1, int(passes)))\n        proposals_per_actor = min(16, max(1, int(proposals_per_actor)))\n        baseline = simulate(obs, config, baseline_remaining, detailed=True)\n        prices = {item: max(1, float(_get(obs, 'market', {}).get('prices', {}).get(item, 1))) for item in PRODUCTS}\n        current, best = (_clone_schedule(baseline_remaining), baseline)\n        baseline_value = best_value = _value(baseline, prices)\n        changes, simulations = ([], 0)"
+  },
+  {
+    "scope": "literal_1022",
+    "line": 278,
+    "context": "            improved = False\n            for actor in range(n):\n                winner = None\n                for _, offset, route, bundle_count in _proposals(best, actor, prices, proposals_per_actor):\n                    if simulations >= max_simulations:\n                        break\n                    trial = _clone_schedule(current)\n                    for i, command in enumerate(route, offset):\n                        if actor == 0:"
+  },
+  {
+    "scope": "literal_1022",
+    "line": 279,
+    "context": "            for actor in range(n):\n                winner = None\n                for _, offset, route, bundle_count in _proposals(best, actor, prices, proposals_per_actor):\n                    if simulations >= max_simulations:\n                        break\n                    trial = _clone_schedule(current)\n                    for i, command in enumerate(route, offset):\n                        if actor == 0:\n                            trial[i]['farmer'] = command"
+  },
+  {
+    "scope": "literal_1022",
+    "line": 309,
+    "context": "                    best = simulate(obs, config, current, detailed=True)\n                    changes.append({'pass': sweep, 'actor': actor, 'from_step': START + offset, 'resource_bundles': bundle_count, 'estimated_stock_value': best_value})\n                    improved = True\n                if simulations >= max_simulations:\n                    break\n            if not improved or simulations >= max_simulations:\n                break\n        if not changes or best_value <= baseline_value:\n            return {**fallback, 'reason': 'no positive physical delivery gain', 'simulations': simulations, 'changed_workers': [], 'changes': [], 'certificate': {'stock_value_gain_at_initial_prices': 0, 'sold_unit_delta': dict.fromkeys(PRODUCTS, 0)}, 'planning_ms': (perf_counter() - begun) * 1000}"
+  },
+  {
+    "scope": "literal_1022",
+    "line": 311,
+    "context": "                    improved = True\n                if simulations >= max_simulations:\n                    break\n            if not improved or simulations >= max_simulations:\n                break\n        if not changes or best_value <= baseline_value:\n            return {**fallback, 'reason': 'no positive physical delivery gain', 'simulations': simulations, 'changed_workers': [], 'changes': [], 'certificate': {'stock_value_gain_at_initial_prices': 0, 'sold_unit_delta': dict.fromkeys(PRODUCTS, 0)}, 'planning_ms': (perf_counter() - begun) * 1000}\n        final = simulate(obs, config, current, final_liquidate=True, detailed=True)\n        physical = simulate(obs, config, current)"
+  }
+]

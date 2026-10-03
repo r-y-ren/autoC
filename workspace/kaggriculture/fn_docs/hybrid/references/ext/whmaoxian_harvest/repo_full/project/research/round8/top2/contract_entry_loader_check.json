@@ -1,0 +1,15 @@
+{
+  "old_sha256": "7735d6f4293495a0942a21fb92f6ff6aaec339dc759375e1ecdbe6226c6f2c53",
+  "new_sha256": "23768116945ebd7500b2e2298616ff6dd974d27ce2c839643cc7d3e3d4cada57",
+  "official_loader_old_callable": "_r8_contract",
+  "official_loader_old_signature": "(obs, configuration, action)",
+  "official_loader_new_callable": "round8_dsm_contract_agent",
+  "official_loader_new_signature": "(observation, configuration=None)",
+  "new_source_starts_with_exact_old_source": true,
+  "loader_check_passed": true,
+  "new_complete_official_path_game": "passed after user resumed; 720 states; see contract_entry_full_validation.json",
+  "old_new_full_action_equivalence": "passed: all 719 actions identical on the same live observations",
+  "active_simulation_processes_owned_by_this_task": [],
+  "warning": "The previous five matches explicitly selected agent and do not validate get_last_callable. The 7735 source is invalid under the official loader.",
+  "full_validation_evidence": "contract_entry_full_validation.json"
+}

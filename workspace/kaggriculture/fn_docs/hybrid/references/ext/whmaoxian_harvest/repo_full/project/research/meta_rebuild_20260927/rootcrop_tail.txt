@@ -1,0 +1,46 @@
+
+# Opening production study on the existing verified temporary-crop worker route.
+# Original bounded route: Dmitrii Gluzdov / Nathan Jacob, Apache-2.0.
+_RC_INSTALL_PARENT=_alt_install
+_RC_SALE_PARENT=_alt_sell_extra
+_RC_PARENT=phase_b_agent
+_RC_REPORT={'harvested':0,'delivered':0,'retained_wheat':0,'errors':0}
+_MP_REPORT=_RC_REPORT
+
+def _alt_install(mode):
+    _RC_INSTALL_PARENT(mode)
+    if _RC_CROP!='CARROT' or mode not in ('HybridOpening','EarlyCycle'):return
+    tape=_IMPL.chassis.routes[0]
+    target=next(o for o in tape[0]['market'] if o[:2]==['BUY_SEED','WHEAT'])
+    assert int(target[2])==1
+    target[1]='CARROT'
+    assert tape[5]['hands'][1]==['PLANT','WHEAT']
+    tape[5]['hands'][1]=['PLANT','CARROT']
+
+def _alt_sell_extra(action,item,n):
+    if _RC_KEEP and item=='WHEAT':
+        _RC_REPORT['retained_wheat']+=max(0,int(n))
+        return action
+    return _RC_SALE_PARENT(action,item,n)
+
+def rootcrop_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        for key in _RC_REPORT:_RC_REPORT[key]=0
+    action=_RC_PARENT(observation,configuration)
+    farm=observation['farms'][seat];private=observation['private']
+    if step==88 and len(private['inventories'])>1:
+        _RC_REPORT['harvested']=int(private['inventories'][1].get(_RC_CROP,0))
+    if _RC_CROP=='CARROT' and step==91 and farm['hands']:
+        if tuple(farm['hands'][0])==(4,4) and action['hands'][0]==['DROP']:
+            amount=max(0,int(private['inventories'][1].get('CARROT',0)))
+            stock=projected_shed(action,FarmView(observation))
+            scheduled=sum(max(0,int(o[2])) for o in action.get('market',[]) if len(o)>=3 and o[:2]==['SELL','CARROT'])
+            amount=min(amount,max(0,int(stock.get('CARROT',0))-scheduled))
+            if amount:
+                action=_RC_SALE_PARENT(action,'CARROT',amount)
+                _RC_REPORT['delivered']+=amount
+    return action
+rootcrop_agent.telemetry=_RC_REPORT
+agent=rootcrop_agent
+kaggle_submission_agent=rootcrop_agent

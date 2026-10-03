@@ -1,0 +1,56 @@
+# ---- poster: the ladder at a glance, opening the data half of the page ----
+lb = teams.dropna(subset=["ladder_score"]).sort_values("ladder_score", ascending=False)
+if lb.empty:      # no names yet: fall back to the ratings recorded in the episodes
+    last = agents.sort_values("episode_id").groupby("team_id").rating_after.last()
+    lb = (last.reset_index().rename(columns={"rating_after": "ladder_score"})
+          .assign(team_name=lambda d: d.team_id.map(lambda t: f"team {t}"))
+          .sort_values("ladder_score", ascending=False))
+top5 = lb.head(5).iloc[::-1]
+ladder0 = eps[eps.type.eq("EPISODE_TYPE_PUBLIC") & eps.state.eq("COMPLETED")]
+banks = ladder0[["bank_0", "bank_1"]].max(axis=1).dropna()
+
+fig = plt.figure(figsize=(8.2, 3.9))
+fig.patch.set_facecolor("#FBF7EE")
+fig.text(.015, .97, "The Kaggriculture ladder", fontsize=19, weight="bold",
+         color="#2B241D", va="top")
+fig.text(.015, .845,
+         f"{len(eps):,} episodes · {len(replay_ids):,} full replays · {len(lb):,} teams",
+         fontsize=11, color="#6B6152", va="top")
+# The snapshot date is the one number readers must not miss: give it its own badge.
+_lag_h = (pd.Timestamp.now(tz="UTC") - AS_OF).total_seconds() / 3600
+_badge = "#00795F" if _lag_h <= 24 else "#B84A00"
+fig.text(.985, .975, f"data through {AS_OF:%b %d · %H:%M UTC}",
+         fontsize=12, weight="bold", color="white", ha="right", va="top",
+         bbox=dict(boxstyle="round,pad=0.45", facecolor=_badge, edgecolor="none"))
+gs = fig.add_gridspec(1, 2, width_ratios=[1.15, 1], top=.72, bottom=.16, left=.055, right=.985,
+                      wspace=.28)
+ax1 = fig.add_subplot(gs[0]); ax1.set_facecolor("#FBF7EE")
+ax1.hist(banks, bins=28, color="#00795F")
+ax1.set_title("Where winning banks land", fontsize=11)
+ax1.set_xlabel("winner's final bank"); ax1.set_ylabel("games")
+ax1.xaxis.set_major_formatter(lambda v, _: f"{v/1000:.0f}k" if v else "0")
+ax2 = fig.add_subplot(gs[1]); ax2.set_facecolor("#FBF7EE")
+ax2.barh(range(len(top5)), top5.ladder_score, color="#B84A00", height=.62)
+ax2.set_yticks(range(len(top5)),
+               [n if len(n) < 19 else n[:17] + "…" for n in top5.team_name], fontsize=9)
+ax2.set_title("Top of the leaderboard", fontsize=11)
+if top5.ladder_score.nunique() > 1:
+    ax2.set_xlim(min(top5.ladder_score) * .93, max(top5.ladder_score) * 1.02)
+ax2.set_xlabel("skill rating")
+plt.show()
+display(Markdown(f"<sub>pandas {pd.__version__} · numpy {np.__version__} · "
+                 f"executed {pd.Timestamp.now(tz='UTC'):%Y-%m-%d %H:%M} UTC · "
+                 f"full run ~1 min</sub>"))
+
+# ---- freshness check: a stalled pipeline must be visible, not silent ----
+lag_h = (pd.Timestamp.now(tz="UTC") - AS_OF).total_seconds() / 3600
+if lag_h > 24:
+    display(Markdown(
+        f"> **Heads up: this snapshot is {lag_h / 24:.1f} days behind.** The newest game on "
+        f"record ended {AS_OF:%b %d, %H:%M UTC}, so every number below describes the ladder as "
+        f"it was then, not today. The collector refreshes daily; if this notice is still here "
+        f"tomorrow, the crawl is stuck and I am on it."))
+else:
+    display(Markdown(
+        f"*Fresh: newest recorded game ended {AS_OF:%b %d, %H:%M UTC}, "
+        f"{lag_h:.0f}h before this run.*"))

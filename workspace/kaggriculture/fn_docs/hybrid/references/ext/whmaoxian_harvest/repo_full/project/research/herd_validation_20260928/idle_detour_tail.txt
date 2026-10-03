@@ -1,0 +1,101 @@
+
+# Borrow bounded idle windows, service a nearby animal, then return before native work resumes.
+_DT28_PARENT=phase_b_agent
+_DT28_STATE={}
+_DT28_MOVES={'NORTH':(0,-1),'SOUTH':(0,1),'EAST':(1,0),'WEST':(-1,0)}
+_DT28_REPORT={'plans':0,'care':0,'fertilizer':0,'detour_turns':0,'parent_interruptions':0,'errors':0}
+_MP_REPORT=_DT28_REPORT
+
+def _dt28_path(start,end):
+    x,y=start;tx,ty=end;commands=[]
+    while x!=tx:
+        dx=1 if tx>x else -1;commands.append(['EAST' if dx>0 else 'WEST']);x+=dx
+    while y!=ty:
+        dy=1 if ty>y else -1;commands.append(['SOUTH' if dy>0 else 'NORTH']);y+=dy
+    return commands
+
+def _dt28_idle_length(obs,native,actor):
+    step=int(obs['step']);end=min((step//24+1)*24,696,step+_DT28_HORIZON)
+    count=0
+    for t in range(step,end):
+        tape=_IMPL.chassis.routes[2 if t>=648 else native['route']]
+        action=tape[t];hands=action.get('hands') or []
+        command=hands[actor-1] if actor-1<len(hands) else ['PASS']
+        if command not in ([],['PASS']):break
+        count+=1
+    return count
+
+def _dt28_target(obs,anchor,slack,reserved,occupied):
+    farm=obs['farms'][int(obs['player'])];day=int(obs['step'])//24
+    total=sum(obs['private']['shed'].values())+sum(sum(i.values()) for i in obs['private']['inventories'])
+    best=None
+    for y,row in enumerate(farm['tiles']):
+        for x,tile in enumerate(row):
+            if not isinstance(tile,dict) or tile.get('animal') not in ('COW','SHEEP','GOOSE'):continue
+            site=(x,y)
+            if site in occupied:continue
+            trip=_dt28_path(anchor,site);cost=2*len(trip)+1
+            if cost>slack:continue
+            animal=tile['animal'];product={'COW':'MILK','SHEEP':'WOOL','GOOSE':'EGG'}[animal]
+            first=int(tile['placed_day'])+{'COW':8,'SHEEP':6,'GOOSE':4}[animal]
+            period={'COW':2,'SHEEP':3,'GOOSE':1}[animal]
+            next_day=first if day<first else day+period-(day-first)%period
+            tasks=[]
+            held=int(tile.get('yield_units',0))+int(tile.get('pending_care_bonus',0))
+            cap=4 if animal=='GOOSE' else 6
+            if tile.get('fed_today') and not tile.get('cared_today') and next_day<30 and held<cap-1:
+                tasks.append(('CARE',float(obs['market']['prices'][product])))
+            if _DT28_FERT and total<60 and tile.get('fertilizer_available'):
+                tasks.append(('COLLECT_FERTILIZER',.7*float(obs['market']['prices']['FERTILIZER'])))
+            for op,value in tasks:
+                if (site,op) in reserved or value<_DT28_MIN_VALUE:continue
+                choice=(value/cost,site,op,trip+[[op]]+_dt28_path(site,anchor))
+                if best is None or choice[0]>best[0]:best=choice
+    return best
+
+def idle_window_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        _DT28_STATE[seat]={'plans':{}}
+        for key in _DT28_REPORT:_DT28_REPORT[key]=0
+    plans=_DT28_STATE.setdefault(seat,{'plans':{}})['plans']
+    farm=observation['farms'][seat];positions=[farm['farmer']]+list(farm['hands'])
+    for actor,plan in list(plans.items()):
+        if actor>=len(positions) or tuple(positions[actor])!=plan['expected']:
+            _DT28_REPORT['errors']+=1;raise ValueError('Detour position changed unexpectedly')
+        if step>=plan['start']+len(plan['commands']):
+            if tuple(positions[actor])!=plan['anchor']:raise ValueError('Detour failed to return')
+            del plans[actor]
+    virtual=copy.deepcopy(observation) if plans else observation
+    for actor,plan in plans.items():virtual['farms'][seat]['hands'][actor-1]=list(plan['anchor'])
+    action=_DT28_PARENT(virtual,configuration)
+    commands=[action.get('farmer') or ['PASS']]+list(action.get('hands') or [])
+    commands+=[['PASS'] for _ in range(len(positions)-len(commands))]
+    native=_IMPL.chassis.players.get(seat)
+    if native and 72<=step<696 and not _V219_STATES.get(seat,{}).get('committed'):
+        reserved,_=_r9s_reservations(virtual,native)
+        for actor,command in enumerate(commands[:len(positions)]):
+            if command and command[0] in ('CARE','HARVEST','COLLECT_FERTILIZER'):
+                reserved.add((tuple(positions[actor]),command[0]))
+        occupied={p['site'] for p in plans.values()}
+        for actor in range(1,len(positions)):
+            if actor in plans or commands[actor] not in ([],['PASS']):continue
+            slack=_dt28_idle_length(observation,native,actor)
+            if slack<3:continue
+            anchor=tuple(positions[actor]);best=_dt28_target(observation,anchor,slack,reserved,occupied)
+            if best is None:continue
+            _,site,op,work=best
+            plans[actor]={'anchor':anchor,'expected':anchor,'site':site,'start':step,'commands':work}
+            occupied.add(site);reserved.add((site,op));_DT28_REPORT['plans']+=1
+    for actor,plan in plans.items():
+        if commands[actor] not in ([],['PASS']):_DT28_REPORT['parent_interruptions']+=1
+        command=plan['commands'][step-plan['start']];commands[actor]=list(command)
+        if command[0] in _DT28_MOVES:
+            dx,dy=_DT28_MOVES[command[0]];x,y=plan['expected'];plan['expected']=(x+dx,y+dy)
+        elif command==['CARE']:_DT28_REPORT['care']+=1
+        elif command==['COLLECT_FERTILIZER']:_DT28_REPORT['fertilizer']+=1
+        _DT28_REPORT['detour_turns']+=1
+    return dict(action,farmer=commands[0],hands=commands[1:])
+idle_window_agent.telemetry=_DT28_REPORT
+agent=idle_window_agent
+kaggle_submission_agent=idle_window_agent

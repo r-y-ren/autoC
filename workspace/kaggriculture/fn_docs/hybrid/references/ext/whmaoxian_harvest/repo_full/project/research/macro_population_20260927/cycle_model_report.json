@@ -1,0 +1,67 @@
+{
+  "training_rows": 31636,
+  "validation_rows": 11504,
+  "validation_episodes": [
+    113718271,
+    113739019,
+    113728682,
+    113730698,
+    113733287,
+    113731935
+  ],
+  "trials": [
+    {
+      "depth": 7,
+      "metrics": [
+        {
+          "side": "buy",
+          "auc": 0.9420830672530328,
+          "ap": 0.30133654180865316,
+          "brier": 0.013457034043433565,
+          "confident_count": 0,
+          "confident_precision": null
+        },
+        {
+          "side": "sell",
+          "auc": 0.8601522391713179,
+          "ap": 0.4650384725747617,
+          "brier": 0.06774926344905058,
+          "confident_count": 45,
+          "confident_precision": 0.8444444537162781
+        }
+      ],
+      "quantity_mae": 0.40482033561994507
+    },
+    {
+      "depth": 10,
+      "metrics": [
+        {
+          "side": "buy",
+          "auc": 0.9608175338350365,
+          "ap": 0.4034851196691159,
+          "brier": 0.012212085369051082,
+          "confident_count": 8,
+          "confident_precision": 0.75
+        },
+        {
+          "side": "sell",
+          "auc": 0.8851729557886111,
+          "ap": 0.5182805215999227,
+          "brier": 0.06310210982091875,
+          "confident_count": 59,
+          "confident_precision": 0.8813559412956238
+        }
+      ],
+      "quantity_mae": 0.38303207647848253
+    }
+  ],
+  "selected_depth": 10,
+  "trees": 24,
+  "nodes": 18456,
+  "export_parity_rows": 2048,
+  "export_error": 0.0,
+  "model_sha256": "e2a42ad5269caa928ec0d55b56ccd7ae038c43083780cc9bc4acdf0754bae364",
+  "input_scope": "Public farms, public market, public town and their causal history; no private opponent inventory, identity or seed.",
+  "heldout_agent_tests_used": false,
+  "scope": "Forecast validation only. No claim of strategy strength or rating."
+}

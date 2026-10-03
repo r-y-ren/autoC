@@ -1,0 +1,17 @@
+table = evaluation.copy()
+table["W-T-L"] = table.apply(
+    lambda row: f'{int(row["wins"])}-{int(row["ties"])}-{int(row["losses"])}',
+    axis=1,
+)
+table["Paired +/0/-"] = table.apply(
+    lambda row: (
+        f'{int(row["paired_positive"])}/'
+        f'{int(row["paired_zero"])}/'
+        f'{int(row["paired_negative"])}'
+    ),
+    axis=1,
+)
+table["Mean margin"] = table["mean_margin"].map(lambda value: f"{value:+,.1f}")
+table["Worst margin"] = table["worst_margin"].map(lambda value: f"{value:+,.0f}")
+display(table[["reference", "games", "W-T-L", "Paired +/0/-",
+               "Mean margin", "Worst margin"]].set_index("reference"))

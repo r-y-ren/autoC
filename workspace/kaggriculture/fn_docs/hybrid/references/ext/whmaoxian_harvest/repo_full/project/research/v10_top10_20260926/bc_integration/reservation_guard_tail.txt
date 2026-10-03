@@ -1,0 +1,40 @@
+
+# Do not cancel sales already reserved against the parent's future sell schedule.
+_MBC_HOLD_PARENT_ADVISE = _mbc_advise
+_MBC_HOLD_REPORT = dict(blocked_units=0, blocked_items=0)
+def _mbc_advise(obs, action, context):
+    if int(obs['step']) == 0:
+        _MBC_HOLD_REPORT.update(blocked_units=0, blocked_items=0)
+    result = _MBC_HOLD_PARENT_ADVISE(obs, action, context)
+    if result is action or not _MBC_CFG.get('hold', False):
+        return result
+    before = _mbc_sold(action, context['projected'])
+    after = _mbc_sold(result, context['projected'])
+    native = _IMPL.chassis.players.get(int(obs['player']), {})
+    state = native.get('sell_state', {}); step = int(obs['step'])
+    reserved = {}
+    for due, products in state.get('r36_debts', {}).items():
+        if int(due) > step:
+            for item, quantity in products.items():
+                reserved[item] = reserved.get(item, 0) + max(0, int(quantity))
+    if int(state.get('due_step', -1)) > step:
+        for item, quantity in state.get('suppress', {}).items():
+            reserved[item] = reserved.get(item, 0) + max(0, int(quantity))
+    protected = {item for item in _MBC_ITEMS
+                 if before[item] > after[item] and reserved.get(item, 0) > 0}
+    if not protected:
+        return result
+    orders = [list(o) for o in result.get('market', [])]
+    for index, original in enumerate(action.get('market', [])):
+        if len(original) >= 3 and original[:1] == ['SELL'] and original[1] in protected:
+            orders[index] = list(original)
+    units = sum(before[item] - after[item] for item in protected)
+    _MBC_STATS['held'] -= units
+    _MBC_HOLD_REPORT['blocked_units'] += units
+    _MBC_HOLD_REPORT['blocked_items'] += len(protected)
+    if orders == action.get('market', []):
+        _MBC_STATS['changed'] -= 1
+        return action
+    return dict(result, market=orders)
+agent = globals().pop('agent')
+kaggle_submission_agent = globals().pop('kaggle_submission_agent')

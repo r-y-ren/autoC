@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "original-replay": {
+      "matches": 12,
+      "valid": 12,
+      "wins": 4,
+      "losses": 8,
+      "ties": 0,
+      "opponent_physical_trace_preserved": 12
+    },
+    "submissions/release_v8/main.py": {
+      "matches": 12,
+      "valid": 12,
+      "wins": 12,
+      "losses": 0,
+      "ties": 0,
+      "opponent_physical_trace_preserved": 0
+    },
+    "experiments/round9_market_slack.py": {
+      "matches": 12,
+      "valid": 12,
+      "wins": 12,
+      "losses": 0,
+      "ties": 0,
+      "opponent_physical_trace_preserved": 0
+    }
+  },
+  "counterfactual_only": true,
+  "warning": "Recorded rival actions do not adapt to our changes. This is not a head-to-head win rate against DSM or Vadim."
+}

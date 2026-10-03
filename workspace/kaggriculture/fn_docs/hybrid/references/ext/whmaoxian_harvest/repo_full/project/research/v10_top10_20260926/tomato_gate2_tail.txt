@@ -1,0 +1,62 @@
+
+# Full, observable marginal-cost comparison for the existing physical planner.
+# Offline candidates only. No rival private inventory, future draws or identities.
+_TG_PARENT = phase_b_agent
+_TG_ORIGINAL = _t19_qualifies
+_TG_REPORT = {'checked':0,'accepted':0,'declined':0,'errors':0}
+_TG_DECISIONS = {}
+def _tg_revenue(obs, sales, reserve):
+    step=int(obs['step']); seat=int(obs['player'])
+    demand=sum(s in ('PIZZA_SHOP','FARMERS_MARKET') for s in obs['town']['unlocked_shops'])
+    inventory=float(obs['market']['inventory']['TOMATO'])
+    rival=sum(isinstance(t,dict) and t.get('crop')=='TOMATO' for row in obs['farms'][1-seat]['tiles'] for t in row)
+    # A declared stress assumption, not a known bound on rival future supply.
+    inventory += max(float(reserve),8.0*rival)
+    revenue=0.0
+    for t in range(step,719):
+        if t in sales:
+            for u in range(sales[t]):
+                price=max(1,_r37_market_price('TOMATO',int(round(inventory))))
+                revenue+=price
+                if price>1:inventory+=1
+        expected_new=_TG_EXPECTATION*sum(step < d*24 <= t for d in (21,24))*.25
+        if t%4==0:inventory-=demand+expected_new
+        if t%24==0:inventory-=1
+    return revenue
+
+def _t19_qualifies(obs,state):
+    _TG_REPORT['checked']+=1
+    farm=obs['farms'][int(obs['player'])]
+    if not state.get('eligible') or farm['money']<18000:return False
+    if any(farm['tiles'][y][x]!='LOCKED' for x,y in _T19_TARGETS):return False
+    native=_IMPL.chassis.players[int(obs['player'])]
+    baseline={18:2,19:0,20:1,21:0,22:1,23:0,24:2,25:1,26:3,27:3,28:2,29:2}
+    extra_labor=0; full_labor=0
+    for day in range(18,30):
+        plan=_v219_native_day(native,day)
+        n=max(len(a.get('hands',[])) for a in plan)
+        last=max((i for i,a in enumerate(plan) if any(o==['HIRE'] for o in a.get('market',[]))),default=-1)
+        if day in (20,22,25):baseline[day]=1 if last<=2 else 2
+        if day==26:baseline[day]=2 if last<=2 else 3
+        proposed=0 if day in (19,21,23) else len(_t19_groups(day))
+        newcost=sum(_v219_fib(i) for i in range(n,n+proposed))
+        oldcost=sum(_v219_fib(i) for i in range(n,n+baseline[day]))
+        extra_labor+=newcost-oldcost;full_labor+=newcost
+    oldvalue=_tg_revenue(obs,{d*24+6:20 for d in (26,27,28,29)},_TG_RIVAL)
+    newvalue=_tg_revenue(obs,{27*24+6:76,29*24+6:76},_TG_RIVAL)
+    fertilizer=int(obs['market']['prices']['FERTILIZER'])+10
+    incremental=newvalue-oldvalue-450-extra_labor-18*fertilizer
+    fullnet=newvalue-4950-full_labor-38*fertilizer
+    accepted=incremental>=_TG_MIN_GAIN and fullnet>=_TG_MIN_NET
+    _TG_DECISIONS[int(obs['player'])]={'incremental':incremental,'fullnet':fullnet,'oldrev':oldvalue,'newrev':newvalue,'labor':extra_labor,'accepted':accepted}
+    _TG_REPORT['accepted' if accepted else 'declined']+=1
+    return accepted
+
+def tomato_gate2_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        _TG_DECISIONS.pop(int(observation['player']),None)
+        for key in _TG_REPORT:_TG_REPORT[key]=0
+    return _TG_PARENT(observation,configuration)
+tomato_gate2_agent.telemetry=_TG_REPORT
+agent=tomato_gate2_agent
+kaggle_submission_agent=tomato_gate2_agent

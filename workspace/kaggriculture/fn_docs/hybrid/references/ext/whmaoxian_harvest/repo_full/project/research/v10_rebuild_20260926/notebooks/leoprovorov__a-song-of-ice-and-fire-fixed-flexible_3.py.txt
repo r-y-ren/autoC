@@ -1,0 +1,41 @@
+if SHOW_ANALYSIS:
+    from pathlib import Path
+    from IPython.display import HTML, display
+    import html as _html
+
+    def find_dashboard_asset(filename):
+        roots = [Path("/kaggle/input"), Path("/kaggle/working"), Path.cwd(),
+                 Path("dashboards"), Path("kaggle_notebooks/song-of-ice-and-fire/dashboards")]
+        for root in roots:
+            if not root.is_dir():
+                continue
+            direct = root / filename
+            if direct.is_file():
+                return direct
+            if root.name == "input":
+                found = next(root.glob(f"**/{filename}"), None)
+                if found is not None:
+                    return found
+        return None
+
+    def show_dashboard(filename, height=1800):
+        path = find_dashboard_asset(filename)
+        if path is None:
+            display(HTML('<div class="sc-note red"><b>Dashboard file not found.</b> Attach the companion Dataset that holds <code>'
+                         + filename + '</code> to this notebook, then run it again in ARTICLE mode.</div>'))
+            return None
+        page = path.read_text(encoding="utf-8")
+        print(f"Loaded {filename}: {len(page):,} bytes from {path}")
+        # A copy in the working directory lets the graph be opened from the Output tab in its own browser tab.
+        working = Path("/kaggle/working")
+        if working.is_dir() and path.parent != working:
+            (working / filename).write_text(page, encoding="utf-8")
+        srcdoc = _html.escape(page, quote=True)
+        display(HTML(
+            '<div style="border:1px solid #333729;border-radius:14px;overflow:hidden;background:#12140f;">'
+            f'<iframe srcdoc="{srcdoc}" sandbox="allow-scripts allow-same-origin" '
+            f'style="display:block;width:100%;height:{height}px;border:0;background:#12140f;" title="{filename}"></iframe></div>'
+            f'<p style="font:12px system-ui,sans-serif;color:#6b6f5c;margin:6px 2px 0">If the frame above stays empty, open <b>{filename}</b> '
+            'from the Output tab of this notebook: it is the same interactive graph as a standalone page.</p>'
+        ))
+        return str(path)

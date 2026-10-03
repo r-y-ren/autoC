@@ -1,0 +1,2 @@
+BEST = {'max_hands':12,'hand_turns':19.0,'max_geese':0,'land_days':(6,10,99),'se_tomato_shops':99,'bp_fallback':False,'bp_seq':False,'tomato_last_day':18,'straw_last_day':11,'urgent_pr':14,'ready_pr':16,'window_pr':3,'wheat_fert_pr':0,'deliver_count':4,'dig_pr':8,'zone_pull':8.0,'feed_value_ratio':0.6,'use_blueprint':False,'pickup_extra':0,'fert_pick_extra':0,'bp_from_day':20,'otw_min':3.0,'endgame_steps':30,'plant_stop_steps':55,'idle_boost':12.0,'fert_buy_max_price':0}
+SWITCH = 360

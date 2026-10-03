@@ -1,0 +1,20 @@
+{
+  "builder": "build_release_round8.py",
+  "label": "candidate_v8_dsm",
+  "candidate": "experiments/round8_top2_dsm_contract_entry.py",
+  "source_sha256": "23768116945ebd7500b2e2298616ff6dd974d27ce2c839643cc7d3e3d4cada57",
+  "entry_name": "round8_dsm_contract_agent",
+  "profile": "generic",
+  "archive_sha256": "92bf3540b8b03439127081507ab9248c3fa8ee5d6e0c2d3ec51d045752194ec0",
+  "archive_members": [
+    "main.py",
+    "NOTICE.txt",
+    "LICENSE.txt"
+  ],
+  "trigger_seed": 688041503,
+  "default_seed": 0,
+  "promotes_root_entrypoints": false,
+  "strength_approval": false,
+  "online_submission": false,
+  "V92_SELL_LIB_present": false
+}

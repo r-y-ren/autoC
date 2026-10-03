@@ -1,0 +1,36 @@
+n_subs = pd.unique(agents.submission_id).size
+n_teams = pd.unique(agents.team_id).size
+val_share = eps.type.eq("EPISODE_TYPE_VALIDATION").mean()
+cover = eps.has_replay.mean()
+span_h = (eps.end.max() - eps.end.min()).total_seconds() / 3600
+
+summary = pd.DataFrame({
+    "metric": ["episodes", "with full replay", "ladder games", "validation (self-play)",
+               "submissions seen", "teams seen", "ladder time covered"],
+    "value": [f"{len(eps):,}", f"{len(replay_ids):,} ({cover:.0%})", f"{len(ladder):,}",
+              f"{eps.type.eq('EPISODE_TYPE_VALIDATION').sum():,} ({val_share:.0%})",
+              f"{n_subs:,}", f"{n_teams:,}",
+              f"{span_h:.0f} hours" if span_h <= 72 else f"{span_h / 24:.1f} days"],
+})
+display(summary.style.hide(axis="index").set_properties(**{"font-size": "13px"})
+        .set_table_styles([{"selector": "th", "props": [("font-size", "13px")]}]))
+
+fig, axes = plt.subplots(1, 2, figsize=(8.2, 3.2))
+freq1, width1, unit1 = ("1h", 0.032, "hour") if span_h <= 72 else ("1D", 0.8, "day")
+by_t = eps.set_index("end").resample(freq1).size()
+axes[0].bar(by_t.index, by_t.values, width=width1, color=C_ACC)
+axes[0].set_title(f"Episodes recorded per {unit1}"); axes[0].set_ylabel("episodes")
+axes[0].xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%b %d\n%H:%M"))
+axes[0].tick_params(axis="x", labelsize=8)
+games = agents.groupby("submission_id").size().sort_values(ascending=False)
+axes[1].hist(games.values, bins=min(20, games.nunique()), color=C_TOP)
+axes[1].set_title("Games on record per submission")
+axes[1].set_xlabel("games"); axes[1].set_ylabel("submissions")
+axes[1].yaxis.set_major_locator(plt.matplotlib.ticker.MaxNLocator(integer=True))
+plt.tight_layout(); plt.show()
+
+display(Markdown(
+    f"Coverage is **{cover:.0%}** of episodes; the busiest submission has **{games.max()}** games "
+    f"on record and the median has **{games.median():.0f}**. Validation runs "
+    f"({val_share:.0%} of rows) are a submission playing itself. Filter them out before comparing "
+    f"strength; the rest of this notebook does."))

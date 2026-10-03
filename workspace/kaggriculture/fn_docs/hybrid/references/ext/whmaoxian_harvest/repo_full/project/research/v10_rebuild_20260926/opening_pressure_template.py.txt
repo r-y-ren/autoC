@@ -1,0 +1,50 @@
+# Experimental game-market opening. Inspired by public market-smart farming.
+_R3_PARENT = r2_opening_agent
+_R3_QUANTITY = 8
+_R3_FRONT = True
+_R3_SLOTS = 1
+_R3_STATE = {}
+_R3_REPORT = {'buys':0,'sells':0,'declines':0}
+def r3_opening_pressure(observation, configuration=None):
+    step=int(observation['step']); seat=int(observation['player'])
+    if step==0:
+        _R3_STATE[seat]={}
+        for key in _R3_REPORT:_R3_REPORT[key]=0
+    action=_R3_PARENT(observation,configuration)
+    st=_R3_STATE.setdefault(seat,{})
+    orders=[list(o) for o in action.get('market',[])]
+    if step==1 and len(orders)<10 and sum(o==['HIRE'] for o in orders)==5:
+        farm=observation['farms'][seat]
+        costs=0;hires=int(farm['hires_today'])
+        for o in orders:
+            if not o:continue
+            if o[0]=='HIRE':costs+=_v219_fib(hires);hires+=1
+            elif o[0]=='BUY_ANIMAL':costs+=int(o[2])*{'COW':400,'SHEEP':500,'GOOSE':300}[o[1]]
+            elif o[0]=='BUY_SEED':costs+=int(o[2])*{'WHEAT':10,'CARROT':20,'MELON':80,'TOMATO':50,'STRAWBERRY':100}[o[1]]
+            else:costs=10**9
+        quantity=_R3_QUANTITY
+        inv=int(observation['market']['inventory']['WHEAT'])
+        quote=_r37_market_price('WHEAT',inv-200-quantity)
+        quantity=min(quantity,max(0,int((farm['money']-costs-50)//max(1,quote))))
+        if quantity>0:
+            extra=['BUY_PRODUCT','WHEAT',quantity]
+            orders=([extra]+orders) if _R3_FRONT else (orders+[extra])
+            st['quantity']=quantity
+            _R3_REPORT['buys']+=quantity
+        else:_R3_REPORT['declines']+=1
+    elif step in (2,3) and st.get('quantity',0)>0:
+        stock=projected_shed(action,FarmView(observation))
+        carried=sum(max(0,int(i.get('WHEAT',0))) for i in observation['private']['inventories'])
+        protected=max(0,5-carried)
+        quantity=min(st['quantity'],max(0,int(stock.get('WHEAT',0))-protected))
+        slots=min(_R3_SLOTS,10-len(orders),quantity)
+        if quantity>0 and slots>0:
+            q,r=divmod(quantity,slots)
+            extra=[['SELL','WHEAT',q+(i<r)] for i in range(slots)]
+            orders=extra+orders
+            st['quantity']-=quantity
+            _R3_REPORT['sells']+=quantity
+    return dict(action,market=orders)
+r3_opening_pressure.telemetry=_R3_REPORT
+agent=r3_opening_pressure
+kaggle_submission_agent=r3_opening_pressure

@@ -1,0 +1,227 @@
+{
+  "seeds": [
+    1670115966,
+    758991394,
+    576497735,
+    1330782914
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/marketshock_adapter.py",
+      "family": "marketshock",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    }
+  ],
+  "variants": [
+    {
+      "path": "research/macro_population_20260927/early_liquidity/grain_h4.py",
+      "settings": {
+        "name": "grain_h4",
+        "items": [
+          "WHEAT"
+        ],
+        "horizon": 4,
+        "maximum": 3,
+        "buffer": 0,
+        "cash": 2000,
+        "end": 288
+      },
+      "sha256": "f71a9dd6079655c8cf7898eba5d21490b5e8ecb29142a923e8e611d427bcaeaa"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/grain_h12.py",
+      "settings": {
+        "name": "grain_h12",
+        "items": [
+          "WHEAT"
+        ],
+        "horizon": 12,
+        "maximum": 3,
+        "buffer": 0,
+        "cash": 2000,
+        "end": 288
+      },
+      "sha256": "5e3f2c510aef6511cf648fea760a0e732d61600b522da891b8c4b856b58ab947"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/grain_h24.py",
+      "settings": {
+        "name": "grain_h24",
+        "items": [
+          "WHEAT"
+        ],
+        "horizon": 24,
+        "maximum": 3,
+        "buffer": 0,
+        "cash": 2000,
+        "end": 288
+      },
+      "sha256": "936b44d5593b5d16eb65a1fffe257a89c6a8bc66a9507ef8dc8954a02a74c11c"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/grain_buffer2_h4.py",
+      "settings": {
+        "name": "grain_buffer2_h4",
+        "items": [
+          "WHEAT"
+        ],
+        "horizon": 4,
+        "maximum": 8,
+        "buffer": 2,
+        "cash": 2000,
+        "end": 288
+      },
+      "sha256": "5040f1fcb4d429f226a9d64b7b899e19339e317b087a6043f44d91bf529ea230"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/grain_buffer2_h12.py",
+      "settings": {
+        "name": "grain_buffer2_h12",
+        "items": [
+          "WHEAT"
+        ],
+        "horizon": 12,
+        "maximum": 8,
+        "buffer": 2,
+        "cash": 2000,
+        "end": 288
+      },
+      "sha256": "f7f7001e46acf9a18485c37f93bcccc187fc76459cb3838b8b6262da3f7691a2"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/fert_h12.py",
+      "settings": {
+        "name": "fert_h12",
+        "items": [
+          "FERTILIZER"
+        ],
+        "horizon": 12,
+        "maximum": 4,
+        "buffer": 0,
+        "cash": 2000,
+        "end": 288
+      },
+      "sha256": "11863168b39273437ea39bb24149a4887922289c48b6da737cc39ffac4ac2244"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/mixed_h12.py",
+      "settings": {
+        "name": "mixed_h12",
+        "items": [
+          "FERTILIZER",
+          "WOOL",
+          "MILK",
+          "STRAWBERRY",
+          "CARROT",
+          "WHEAT"
+        ],
+        "horizon": 12,
+        "maximum": 4,
+        "buffer": 2,
+        "cash": 2000,
+        "end": 288
+      },
+      "sha256": "8d18d5b345d2a094a66cafcc31ac024ac15fd8f1ffce71d877a9c331c94e777c"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/fert_h24.py",
+      "settings": {
+        "name": "fert_h24",
+        "items": [
+          "FERTILIZER"
+        ],
+        "horizon": 24,
+        "maximum": 4,
+        "buffer": 0,
+        "cash": 2000,
+        "end": 288
+      },
+      "sha256": "3708fcde394256318f77333b56c99aaefdc39d8567cc6c093dea915c71c5ebd1"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/mixed_h24.py",
+      "settings": {
+        "name": "mixed_h24",
+        "items": [
+          "FERTILIZER",
+          "WOOL",
+          "MILK",
+          "STRAWBERRY",
+          "CARROT",
+          "WHEAT"
+        ],
+        "horizon": 24,
+        "maximum": 4,
+        "buffer": 2,
+        "cash": 2000,
+        "end": 288
+      },
+      "sha256": "e511d002db307e6f1e84e6d1c2785686afb7b43a7e594cc0fad126b8ba7b7e68"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/premium.py",
+      "settings": {
+        "name": "premium",
+        "items": [
+          "WOOL",
+          "MILK",
+          "STRAWBERRY",
+          "CARROT",
+          "MELON",
+          "TOMATO",
+          "EGG"
+        ],
+        "horizon": 12,
+        "maximum": 8,
+        "buffer": 0,
+        "cash": 8000,
+        "end": 288
+      },
+      "sha256": "9e07f4dcea67648d03c80703f26c89dfe31c0ab9fcda9a98e4b507db35a25acb"
+    },
+    {
+      "path": "research/macro_population_20260927/early_liquidity/grain_opening.py",
+      "settings": {
+        "name": "grain_opening",
+        "items": [
+          "WHEAT"
+        ],
+        "horizon": 4,
+        "maximum": 3,
+        "buffer": 0,
+        "cash": 500,
+        "end": 144
+      },
+      "sha256": "f47d3cba605b1f255d0445e71297eb518031bc4a7e2f1c5bc6f09d77256fdbf3"
+    }
+  ],
+  "total": 576,
+  "reused_controls": 48,
+  "fresh": 528,
+  "scope": "Development, not independent final confirmation."
+}

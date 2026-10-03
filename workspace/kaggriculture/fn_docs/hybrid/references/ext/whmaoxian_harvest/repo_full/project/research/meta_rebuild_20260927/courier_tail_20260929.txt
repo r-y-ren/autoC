@@ -1,0 +1,114 @@
+
+# Reclaim the nonproductive tail of a worker's daily route for earlier delivery.
+_K29D_PARENT=phase_b_agent
+_K29D_STATE={}
+_K29D_REPORT={'dispatches':0,'delivery_turns':0,'delivery_units':0,'extra_sale_units':0,'held_for_capacity':0}
+_MP_REPORT=_K29D_REPORT
+_K29D_SAFE={'PASS','NORTH','SOUTH','EAST','WEST','PLACE','DROP'}
+_K29D_HOME=((4,4),(5,4),(4,5),(5,5))
+
+def _k29d_distance(a,b):return abs(a[0]-b[0])+abs(a[1]-b[1])
+def _k29d_sim(obs,action):
+    seat=int(obs['player']);farm=copy.deepcopy(obs['farms'][seat]);private=copy.deepcopy(obs['private'])
+    peak=sum(private['shed'].values());step=int(obs['step'])
+    units=[action.get('farmer') or ['PASS']]+list(action.get('hands') or [])
+    for actor,c in enumerate(units[:len(farm['hands'])+1]):
+        _UNIT_NS['_apply_unit_action'](farm,private,actor,c,len(farm['tiles']),step//24,24,100)
+        peak=max(peak,sum(private['shed'].values()))
+    return private,peak
+
+def _k29d_free_tail(obs,action,actor):
+    step=int(obs['step']);seat=int(obs['player']);farm=obs['farms'][seat]
+    pos=tuple(([farm['farmer']]+farm['hands'])[actor]);home=min(_K29D_HOME,key=lambda h:_k29d_distance(pos,h))
+    arrival=step+_k29d_distance(pos,home)
+    end=(step//24+1)*24-1
+    if arrival>end:return None
+    simulated=pos
+    for t in range(step,end+1):
+        a=action if t==step else _cs_tape(seat,t)
+        cmds=[a.get('farmer') or ['PASS']]+list(a.get('hands') or [])
+        command=cmds[actor] if actor<len(cmds) and cmds[actor] else ['PASS']
+        op=command[0]
+        if op not in _K29D_SAFE:return None
+        if op=='PLACE' and (len(command)<2 or command[1] not in PRODUCTS):return None
+        if op in ('PLACE','DROP') and simulated in _K29D_HOME and t<=arrival:return None
+        if op in _CS_MOVES:
+            dx,dy=_CS_MOVES[op];simulated=(max(0,min(9,simulated[0]+dx)),max(0,min(9,simulated[1]+dy)))
+    return home
+
+def courier_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player']);day,hour=divmod(step,24)
+    if step==0:
+        _K29D_STATE.clear()
+        for key in _K29D_REPORT:_K29D_REPORT[key]=0
+    action=_K29D_PARENT(observation,configuration)
+    if step<144 or step>=696 or hour<_K29D_CFG['hour']:return action
+    st=_K29D_STATE.setdefault(seat,{'day':-1,'workers':{}})
+    if st['day']!=day:st.update(day=day,workers={})
+    farm=observation['farms'][seat];private=observation['private'];positions=[farm['farmer']]+farm['hands']
+    load=sum(private['shed'].values())+sum(sum(b.values()) for b in private['inventories'])
+    if load>=_K29D_CFG['risk'] and len(st['workers'])<_K29D_CFG['workers']:
+        choices=[]
+        for actor,pos in enumerate(positions):
+            if actor in st['workers']:continue
+            bag=private['inventories'][actor];quantity=sum(bag.values())
+            if quantity<_K29D_CFG['load']:continue
+            home=_k29d_free_tail(observation,action,actor)
+            if home is not None:choices.append((-sum(observation['market']['prices'].get(i,0)*n for i,n in bag.items()),actor,home))
+        for _,actor,home in sorted(choices)[:max(0,_K29D_CFG['workers']-len(st['workers']))]:
+            st['workers'][actor]=home;_K29D_REPORT['dispatches']+=1
+    if not st['workers']:return action
+    original=action;base_private,peak=_k29d_sim(observation,original)
+    units=[list(action.get('farmer') or ['PASS'])]+[list(c) for c in action.get('hands',[])]
+    units+=[['PASS'] for _ in range(max(0,len(positions)-len(units)))];requested=0
+    for actor,home in st['workers'].items():
+        if actor>=len(positions):continue
+        pos=tuple(positions[actor]);bag=private['inventories'][actor]
+        if pos[0]!=home[0]:units[actor]=['EAST' if pos[0]<home[0] else 'WEST']
+        elif pos[1]!=home[1]:units[actor]=['SOUTH' if pos[1]<home[1] else 'NORTH']
+        else:
+            space=max(0,100-peak-requested);quantity=sum(bag.values())
+            if quantity and quantity<=space:
+                units[actor]=['DROP'];requested+=quantity
+            elif space and any(bag.get(i,0)>0 for i in PRODUCTS):
+                item=max((i for i in PRODUCTS if bag.get(i,0)>0),key=lambda i:observation['market']['prices'][i])
+                quantity=min(space,bag[item]);units[actor]=['PLACE',item,quantity];requested+=quantity
+            else:
+                units[actor]=['PASS'];_K29D_REPORT['held_for_capacity']+=int(bool(quantity))
+    action=dict(action,farmer=units[0],hands=units[1:],market=[list(o) for o in action.get('market',[])])
+    updated,_=_k29d_sim(observation,action);stock=updated['shed'];market=action['market']
+    additions={i:max(0,int(stock.get(i,0))-int(base_private['shed'].get(i,0))) for i in PRODUCTS}
+    if any(additions.values()):
+        _K29D_REPORT['delivery_turns']+=1;_K29D_REPORT['delivery_units']+=sum(additions.values())
+    animals=sum(bool(isinstance(t,dict) and t.get('animal')) for row in farm['tiles'] for t in row)
+    reserves={'WHEAT':2*animals+2,'FERTILIZER':5};extra={}
+    for item in sorted(PRODUCTS,key=lambda i:-observation['market']['prices'][i]):
+        if observation['market']['prices'][item]<=1:continue
+        planned=sum(min(100,max(0,int(o[2]))) for o in market if len(o)>=3 and o[:2]==['SELL',item])
+        kept=sum(b.get(item,0) for b in updated['inventories'])
+        available=max(0,int(stock.get(item,0))-planned-max(0,reserves.get(item,0)-kept))
+        quantity=min(additions.get(item,0),available)
+        if quantity<=0:continue
+        hit=next((o for o in market if len(o)>=3 and o[:2]==['SELL',item]),None)
+        if hit is not None:quantity=min(quantity,max(0,100-int(hit[2])));hit[2]+=quantity
+        elif len(market)<10:market.append(['SELL',item,quantity])
+        else:quantity=0
+        if quantity:extra[item]=quantity
+    native=_IMPL.chassis.players.get(seat)
+    if native and _K29D_CFG['book']:
+        debts=native['sell_state'].setdefault('r36_debts',{})
+        for item,n in extra.items():
+            for t in range(step+1,min(719,step+49)):
+                planned=sum(min(100,max(0,int(o[2]))) for o in _adv_future(seat,t) if len(o)>=3 and o[:2]==['SELL',item])
+                old=debts.get(t,{}).get(item,0);take=min(n,max(0,planned-old))
+                if take:debts.setdefault(t,{})[item]=old+take;n-=take
+                if n<=0:break
+    previous=_OR2_STATE.get(seat,{}).get('prev')
+    if previous and previous.get('step')==step:
+        for item in _ADV_ITEMS:
+            previous.setdefault('own',{})[item]=min(int(stock.get(item,0)),sum(min(100,max(0,int(o[2]))) for o in market if len(o)>=3 and o[:2]==['SELL',item]))
+    _K29D_REPORT['extra_sale_units']+=sum(extra.values())
+    return action
+courier_agent.telemetry=_K29D_REPORT
+agent=courier_agent
+kaggle_submission_agent=courier_agent

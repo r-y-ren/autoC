@@ -1,0 +1,73 @@
+{
+  "variants": [
+    {
+      "name": "cap_cheap_book",
+      "path": "research/meta_rebuild_20260927/candidates/cap_cheap_book.py",
+      "sha256": "ffdfb86480c04c243a24f8869e05449fb63e295c78e239cb3c79e19b1d781258"
+    },
+    {
+      "name": "cap_value_book",
+      "path": "research/meta_rebuild_20260927/candidates/cap_value_book.py",
+      "sha256": "f451ef340bb1bc567594ac32301d9f1ea69b1c032a5d5a8d217a35ee790e3e8c"
+    },
+    {
+      "name": "cap_cheap_raw",
+      "path": "research/meta_rebuild_20260927/candidates/cap_cheap_raw.py",
+      "sha256": "08e3ab683e1e8a66a635f1abbacd95b8348118bbdd315a30a4eb61e98d22a6ba"
+    },
+    {
+      "name": "cap_value_raw",
+      "path": "research/meta_rebuild_20260927/candidates/cap_value_raw.py",
+      "sha256": "6f3f6390a7c3ef52079b55dbcf032e004dd55d45759bba861f6b4e20677e6a73"
+    }
+  ],
+  "seeds": [
+    425791982,
+    1075269887,
+    1962564957,
+    451267022,
+    498643233,
+    1969293465,
+    1498313738,
+    119073700,
+    1799657451
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "scope": "Development only. Baseline from explicitly matched prior ledgers. Capacity is checked at the actual day boundary, not estimated from total produced goods."
+}

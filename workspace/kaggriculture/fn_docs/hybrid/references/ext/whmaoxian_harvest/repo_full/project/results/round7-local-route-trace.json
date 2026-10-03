@@ -1,0 +1,2117 @@
+[
+  {
+    "seat": 0,
+    "issue_counts": {
+      "insufficient_seeds": 4,
+      "hand_count_mismatch": 68,
+      "pickup_shortage": 24,
+      "empty_input_use": 50,
+      "empty_animal_place": 6
+    },
+    "first_issues": {
+      "insufficient_seeds": [
+        {
+          "step": 21,
+          "crop": "WHEAT",
+          "need": 2,
+          "have": 1
+        },
+        {
+          "step": 233,
+          "crop": "STRAWBERRY",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 237,
+          "crop": "STRAWBERRY",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 666,
+          "crop": "WHEAT",
+          "need": 2,
+          "have": 1
+        }
+      ],
+      "hand_count_mismatch": [
+        {
+          "step": 25,
+          "hands": 1,
+          "reference": 3,
+          "money": 0.0
+        },
+        {
+          "step": 26,
+          "hands": 1,
+          "reference": 3,
+          "money": 0.0
+        },
+        {
+          "step": 27,
+          "hands": 2,
+          "reference": 4,
+          "money": 42.0
+        },
+        {
+          "step": 28,
+          "hands": 2,
+          "reference": 4,
+          "money": 42.0
+        },
+        {
+          "step": 29,
+          "hands": 2,
+          "reference": 4,
+          "money": 42.0
+        },
+        {
+          "step": 30,
+          "hands": 2,
+          "reference": 4,
+          "money": 42.0
+        },
+        {
+          "step": 31,
+          "hands": 2,
+          "reference": 4,
+          "money": 84.0
+        },
+        {
+          "step": 32,
+          "hands": 2,
+          "reference": 4,
+          "money": 4.0
+        },
+        {
+          "step": 33,
+          "hands": 2,
+          "reference": 4,
+          "money": 4.0
+        },
+        {
+          "step": 34,
+          "hands": 2,
+          "reference": 4,
+          "money": 23.0
+        }
+      ],
+      "pickup_shortage": [
+        {
+          "step": 35,
+          "actor": 1,
+          "item": "WHEAT",
+          "need": 2,
+          "have": 1
+        },
+        {
+          "step": 84,
+          "actor": 1,
+          "item": "WHEAT",
+          "need": 4,
+          "have": 2
+        },
+        {
+          "step": 97,
+          "actor": 1,
+          "item": "WHEAT",
+          "need": 3,
+          "have": 1
+        },
+        {
+          "step": 97,
+          "actor": 5,
+          "item": "WHEAT",
+          "need": 3,
+          "have": 0
+        },
+        {
+          "step": 97,
+          "actor": 6,
+          "item": "WHEAT",
+          "need": 3,
+          "have": 0
+        },
+        {
+          "step": 148,
+          "actor": 0,
+          "item": "WHEAT",
+          "need": 5,
+          "have": 0
+        },
+        {
+          "step": 151,
+          "actor": 3,
+          "item": "COW",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 151,
+          "actor": 4,
+          "item": "COW",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 151,
+          "actor": 8,
+          "item": "COW",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 153,
+          "actor": 4,
+          "item": "COW",
+          "need": 1,
+          "have": 0
+        }
+      ],
+      "empty_input_use": [
+        {
+          "step": 101,
+          "actor": 6,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 105,
+          "actor": 6,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 4
+          }
+        },
+        {
+          "step": 110,
+          "actor": 1,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          }
+        },
+        {
+          "step": 150,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 153,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 161,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 170,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 173,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 298,
+          "actor": 5,
+          "op": "FERTILIZE",
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 3,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          }
+        },
+        {
+          "step": 305,
+          "actor": 3,
+          "op": "FERTILIZE",
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 9,
+            "watered_today": false,
+            "consecutive_unwatered": 0,
+            "yield_units": 2,
+            "max_lifespan_step": 336,
+            "fertilized_until_day": -1
+          }
+        }
+      ],
+      "empty_animal_place": [
+        {
+          "step": 165,
+          "actor": 2,
+          "animal": "COW",
+          "pos": [
+            6,
+            2
+          ]
+        },
+        {
+          "step": 228,
+          "actor": 1,
+          "animal": "GOOSE",
+          "pos": [
+            4,
+            5
+          ]
+        },
+        {
+          "step": 228,
+          "actor": 11,
+          "animal": "GOOSE",
+          "pos": [
+            4,
+            5
+          ]
+        },
+        {
+          "step": 232,
+          "actor": 1,
+          "animal": "GOOSE",
+          "pos": [
+            4,
+            6
+          ]
+        },
+        {
+          "step": 233,
+          "actor": 11,
+          "animal": "GOOSE",
+          "pos": [
+            4,
+            7
+          ]
+        },
+        {
+          "step": 237,
+          "actor": 6,
+          "animal": "GOOSE",
+          "pos": [
+            2,
+            6
+          ]
+        }
+      ]
+    },
+    "daily": [
+      {
+        "step": 0,
+        "money": 3000.0,
+        "reference_money": 3000.0,
+        "farm": {},
+        "reference_farm": {}
+      },
+      {
+        "step": 24,
+        "money": 1.0,
+        "reference_money": 6.0,
+        "farm": {
+          "WHEAT": 8,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "WHEAT": 10,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 48,
+        "money": 12.0,
+        "reference_money": 2.0,
+        "farm": {
+          "WHEAT": 8,
+          "MELON": 8,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "WHEAT": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 72,
+        "money": 0.0,
+        "reference_money": 6.0,
+        "farm": {
+          "WHEAT": 5,
+          "STRAWBERRY": 3,
+          "MELON": 5,
+          "WEED": 3,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 4,
+          "WHEAT": 6,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 96,
+        "money": 91.0,
+        "reference_money": 89.0,
+        "farm": {
+          "WHEAT": 3,
+          "STRAWBERRY": 7,
+          "MELON": 5,
+          "WEED": 3,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 8,
+          "MELON": 10,
+          "WHEAT": 2,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 120,
+        "money": 371.0,
+        "reference_money": 360.0,
+        "farm": {
+          "WHEAT": 1,
+          "STRAWBERRY": 8,
+          "MELON": 5,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 9,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 144,
+        "money": 810.0,
+        "reference_money": 788.0,
+        "farm": {
+          "WEED": 1,
+          "STRAWBERRY": 9,
+          "MELON": 5,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 168,
+        "money": 91.0,
+        "reference_money": 88.0,
+        "farm": {
+          "STRAWBERRY": 18,
+          "MELON": 5,
+          "WHEAT": 6,
+          "COW": 6,
+          "PASTURE": 1,
+          "SHEEP": 3,
+          "GOOSE": 2
+        },
+        "reference_farm": {
+          "STRAWBERRY": 19,
+          "MELON": 10,
+          "WHEAT": 6,
+          "COW": 7,
+          "SHEEP": 3,
+          "GOOSE": 2
+        }
+      },
+      {
+        "step": 192,
+        "money": 14.0,
+        "reference_money": 4.0,
+        "farm": {
+          "STRAWBERRY": 19,
+          "MELON": 5,
+          "WHEAT": 6,
+          "COW": 7,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "GOOSE": 2
+        },
+        "reference_farm": {
+          "STRAWBERRY": 20,
+          "MELON": 10,
+          "WHEAT": 6,
+          "COW": 8,
+          "SHEEP": 3,
+          "GOOSE": 2
+        }
+      },
+      {
+        "step": 216,
+        "money": 2149.0,
+        "reference_money": 2573.0,
+        "farm": {
+          "STRAWBERRY": 19,
+          "MELON": 5,
+          "WHEAT": 6,
+          "COW": 7,
+          "PASTURE": 3,
+          "WEED": 1,
+          "SHEEP": 1,
+          "GOOSE": 2
+        },
+        "reference_farm": {
+          "STRAWBERRY": 20,
+          "MELON": 10,
+          "WHEAT": 6,
+          "COW": 8,
+          "SHEEP": 3,
+          "GOOSE": 2
+        }
+      },
+      {
+        "step": 240,
+        "money": 0.0,
+        "reference_money": 405.0,
+        "farm": {
+          "STRAWBERRY": 21,
+          "MELON": 5,
+          "WHEAT": 19,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "GOOSE": 3,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 24,
+          "MELON": 10,
+          "WHEAT": 20,
+          "COW": 9,
+          "SHEEP": 3,
+          "GOOSE": 6
+        }
+      },
+      {
+        "step": 264,
+        "money": 2126.0,
+        "reference_money": 7678.0,
+        "farm": {
+          "STRAWBERRY": 19,
+          "WEED": 5,
+          "MELON": 3,
+          "WHEAT": 20,
+          "GOOSE": 5,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 27,
+          "MELON": 4,
+          "WHEAT": 23,
+          "GOOSE": 8,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 288,
+        "money": 3688.0,
+        "reference_money": 12261.0,
+        "farm": {
+          "STRAWBERRY": 21,
+          "WHEAT": 23,
+          "MELON": 1,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "WEED": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 29,
+          "WHEAT": 25,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 312,
+        "money": 6437.0,
+        "reference_money": 15329.0,
+        "farm": {
+          "STRAWBERRY": 22,
+          "WHEAT": 22,
+          "MELON": 1,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "TOMATO": 2
+        },
+        "reference_farm": {
+          "STRAWBERRY": 30,
+          "WHEAT": 22,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "TOMATO": 2
+        }
+      },
+      {
+        "step": 336,
+        "money": 8307.0,
+        "reference_money": 17568.0,
+        "farm": {
+          "STRAWBERRY": 24,
+          "WHEAT": 18,
+          "WEED": 1,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "TOMATO": 4
+        },
+        "reference_farm": {
+          "STRAWBERRY": 32,
+          "WHEAT": 18,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "TOMATO": 4
+        }
+      },
+      {
+        "step": 360,
+        "money": 16274.0,
+        "reference_money": 25017.0,
+        "farm": {
+          "STRAWBERRY": 24,
+          "WHEAT": 17,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "TOMATO": 5
+        },
+        "reference_farm": {
+          "STRAWBERRY": 32,
+          "WHEAT": 17,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "TOMATO": 5
+        }
+      },
+      {
+        "step": 384,
+        "money": 18881.0,
+        "reference_money": 31253.0,
+        "farm": {
+          "STRAWBERRY": 24,
+          "WHEAT": 15,
+          "GOOSE": 6,
+          "TOMATO": 7,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 32,
+          "WHEAT": 15,
+          "GOOSE": 9,
+          "TOMATO": 7,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 408,
+        "money": 25326.0,
+        "reference_money": 38559.0,
+        "farm": {
+          "STRAWBERRY": 25,
+          "TOMATO": 8,
+          "GOOSE": 6,
+          "WHEAT": 13,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 33,
+          "TOMATO": 8,
+          "GOOSE": 9,
+          "WHEAT": 13,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 432,
+        "money": 30984.0,
+        "reference_money": 45335.0,
+        "farm": {
+          "STRAWBERRY": 25,
+          "TOMATO": 8,
+          "GOOSE": 6,
+          "WHEAT": 13,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 33,
+          "TOMATO": 8,
+          "GOOSE": 9,
+          "WHEAT": 13,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 456,
+        "money": 37078.0,
+        "reference_money": 52626.0,
+        "farm": {
+          "TOMATO": 10,
+          "STRAWBERRY": 23,
+          "GOOSE": 6,
+          "WHEAT": 14,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 10,
+          "STRAWBERRY": 29,
+          "GOOSE": 9,
+          "WHEAT": 14,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 480,
+        "money": 40465.0,
+        "reference_money": 57823.0,
+        "farm": {
+          "TOMATO": 12,
+          "WHEAT": 16,
+          "STRAWBERRY": 20,
+          "WEED": 1,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 12,
+          "WHEAT": 16,
+          "STRAWBERRY": 25,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 504,
+        "money": 45992.0,
+        "reference_money": 65583.0,
+        "farm": {
+          "TOMATO": 12,
+          "WHEAT": 16,
+          "STRAWBERRY": 20,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 12,
+          "WHEAT": 16,
+          "STRAWBERRY": 25,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 528,
+        "money": 48652.0,
+        "reference_money": 69509.0,
+        "farm": {
+          "TOMATO": 12,
+          "WHEAT": 18,
+          "STRAWBERRY": 20,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 12,
+          "WHEAT": 18,
+          "STRAWBERRY": 24,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 552,
+        "money": 52333.0,
+        "reference_money": 74610.0,
+        "farm": {
+          "TOMATO": 12,
+          "WHEAT": 24,
+          "STRAWBERRY": 13,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 12,
+          "WHEAT": 24,
+          "STRAWBERRY": 16,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 576,
+        "money": 55260.0,
+        "reference_money": 79428.0,
+        "farm": {
+          "TOMATO": 10,
+          "WHEAT": 30,
+          "STRAWBERRY": 10,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "CARROT": 1
+        },
+        "reference_farm": {
+          "TOMATO": 10,
+          "WHEAT": 30,
+          "STRAWBERRY": 13,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "CARROT": 1
+        }
+      },
+      {
+        "step": 600,
+        "money": 58909.0,
+        "reference_money": 85239.0,
+        "farm": {
+          "TOMATO": 8,
+          "WHEAT": 28,
+          "STRAWBERRY": 10,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "CARROT": 4
+        },
+        "reference_farm": {
+          "TOMATO": 8,
+          "WHEAT": 28,
+          "STRAWBERRY": 13,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "CARROT": 4
+        }
+      },
+      {
+        "step": 624,
+        "money": 62003.0,
+        "reference_money": 92037.0,
+        "farm": {
+          "TOMATO": 7,
+          "WHEAT": 28,
+          "STRAWBERRY": 9,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "WEED": 1,
+          "SHEEP": 1,
+          "COOP": 3,
+          "CARROT": 7
+        },
+        "reference_farm": {
+          "TOMATO": 7,
+          "WHEAT": 28,
+          "STRAWBERRY": 10,
+          "GOOSE": 9,
+          "COW": 9,
+          "WEED": 1,
+          "SHEEP": 3,
+          "CARROT": 7
+        }
+      },
+      {
+        "step": 648,
+        "money": 64805.0,
+        "reference_money": 99188.0,
+        "farm": {
+          "TOMATO": 5,
+          "WHEAT": 26,
+          "STRAWBERRY": 6,
+          "CARROT": 14,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "WEED": 1
+        },
+        "reference_farm": {
+          "TOMATO": 5,
+          "WHEAT": 26,
+          "STRAWBERRY": 6,
+          "CARROT": 14,
+          "GOOSE": 8,
+          "COW": 9,
+          "SHEEP": 3,
+          "COOP": 1,
+          "WEED": 1
+        }
+      },
+      {
+        "step": 672,
+        "money": 68631.0,
+        "reference_money": 105849.0,
+        "farm": {
+          "TOMATO": 4,
+          "WHEAT": 25,
+          "CARROT": 13,
+          "GOOSE": 6,
+          "WEED": 3,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 2,
+          "STRAWBERRY": 4
+        },
+        "reference_farm": {
+          "TOMATO": 4,
+          "WHEAT": 25,
+          "CARROT": 13,
+          "GOOSE": 8,
+          "COW": 9,
+          "SHEEP": 3,
+          "WEED": 1,
+          "STRAWBERRY": 4
+        }
+      },
+      {
+        "step": 696,
+        "money": 74538.0,
+        "reference_money": 114089.0,
+        "farm": {
+          "TOMATO": 4,
+          "WHEAT": 16,
+          "CARROT": 8,
+          "GOOSE": 6,
+          "WEED": 3,
+          "COW": 8,
+          "PASTURE": 4,
+          "COOP": 2,
+          "STRAWBERRY": 4
+        },
+        "reference_farm": {
+          "TOMATO": 4,
+          "WHEAT": 16,
+          "CARROT": 8,
+          "GOOSE": 8,
+          "COW": 9,
+          "PASTURE": 3,
+          "WEED": 1,
+          "STRAWBERRY": 4
+        }
+      }
+    ]
+  },
+  {
+    "seat": 1,
+    "issue_counts": {
+      "insufficient_seeds": 4,
+      "hand_count_mismatch": 68,
+      "pickup_shortage": 24,
+      "empty_input_use": 50,
+      "empty_animal_place": 6
+    },
+    "first_issues": {
+      "insufficient_seeds": [
+        {
+          "step": 21,
+          "crop": "WHEAT",
+          "need": 2,
+          "have": 1
+        },
+        {
+          "step": 233,
+          "crop": "STRAWBERRY",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 237,
+          "crop": "STRAWBERRY",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 666,
+          "crop": "WHEAT",
+          "need": 2,
+          "have": 1
+        }
+      ],
+      "hand_count_mismatch": [
+        {
+          "step": 25,
+          "hands": 1,
+          "reference": 3,
+          "money": 0.0
+        },
+        {
+          "step": 26,
+          "hands": 1,
+          "reference": 3,
+          "money": 0.0
+        },
+        {
+          "step": 27,
+          "hands": 2,
+          "reference": 4,
+          "money": 42.0
+        },
+        {
+          "step": 28,
+          "hands": 2,
+          "reference": 4,
+          "money": 42.0
+        },
+        {
+          "step": 29,
+          "hands": 2,
+          "reference": 4,
+          "money": 42.0
+        },
+        {
+          "step": 30,
+          "hands": 2,
+          "reference": 4,
+          "money": 42.0
+        },
+        {
+          "step": 31,
+          "hands": 2,
+          "reference": 4,
+          "money": 84.0
+        },
+        {
+          "step": 32,
+          "hands": 2,
+          "reference": 4,
+          "money": 4.0
+        },
+        {
+          "step": 33,
+          "hands": 2,
+          "reference": 4,
+          "money": 4.0
+        },
+        {
+          "step": 34,
+          "hands": 2,
+          "reference": 4,
+          "money": 23.0
+        }
+      ],
+      "pickup_shortage": [
+        {
+          "step": 35,
+          "actor": 1,
+          "item": "WHEAT",
+          "need": 2,
+          "have": 1
+        },
+        {
+          "step": 84,
+          "actor": 1,
+          "item": "WHEAT",
+          "need": 4,
+          "have": 2
+        },
+        {
+          "step": 97,
+          "actor": 1,
+          "item": "WHEAT",
+          "need": 3,
+          "have": 1
+        },
+        {
+          "step": 97,
+          "actor": 5,
+          "item": "WHEAT",
+          "need": 3,
+          "have": 0
+        },
+        {
+          "step": 97,
+          "actor": 6,
+          "item": "WHEAT",
+          "need": 3,
+          "have": 0
+        },
+        {
+          "step": 148,
+          "actor": 0,
+          "item": "WHEAT",
+          "need": 5,
+          "have": 0
+        },
+        {
+          "step": 151,
+          "actor": 3,
+          "item": "COW",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 151,
+          "actor": 4,
+          "item": "COW",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 151,
+          "actor": 8,
+          "item": "COW",
+          "need": 1,
+          "have": 0
+        },
+        {
+          "step": 153,
+          "actor": 4,
+          "item": "COW",
+          "need": 1,
+          "have": 0
+        }
+      ],
+      "empty_input_use": [
+        {
+          "step": 101,
+          "actor": 6,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "COW",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 105,
+          "actor": 6,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": true,
+            "pending_care_bonus": 4
+          }
+        },
+        {
+          "step": 110,
+          "actor": 1,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": true,
+            "fertilizer_available": false,
+            "pending_care_bonus": 4
+          }
+        },
+        {
+          "step": 150,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 153,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 161,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 0,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": false,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 170,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 173,
+          "actor": 0,
+          "op": "FEED",
+          "tile": {
+            "kind": "PASTURE",
+            "animal": "SHEEP",
+            "placed_day": 0,
+            "yield_units": 0,
+            "consecutive_unfed": 1,
+            "fed_today": false,
+            "cared_today": false,
+            "fertilizer_available": true,
+            "pending_care_bonus": 1
+          }
+        },
+        {
+          "step": 298,
+          "actor": 5,
+          "op": "FERTILIZE",
+          "tile": {
+            "kind": "PLANT",
+            "crop": "STRAWBERRY",
+            "planted_day": 3,
+            "watered_today": true,
+            "consecutive_unwatered": 1,
+            "yield_units": 0,
+            "max_lifespan_step": -1,
+            "fertilized_until_day": -1
+          }
+        },
+        {
+          "step": 305,
+          "actor": 3,
+          "op": "FERTILIZE",
+          "tile": {
+            "kind": "PLANT",
+            "crop": "WHEAT",
+            "planted_day": 9,
+            "watered_today": false,
+            "consecutive_unwatered": 0,
+            "yield_units": 2,
+            "max_lifespan_step": 336,
+            "fertilized_until_day": -1
+          }
+        }
+      ],
+      "empty_animal_place": [
+        {
+          "step": 165,
+          "actor": 2,
+          "animal": "COW",
+          "pos": [
+            6,
+            2
+          ]
+        },
+        {
+          "step": 228,
+          "actor": 1,
+          "animal": "GOOSE",
+          "pos": [
+            4,
+            5
+          ]
+        },
+        {
+          "step": 228,
+          "actor": 11,
+          "animal": "GOOSE",
+          "pos": [
+            4,
+            5
+          ]
+        },
+        {
+          "step": 232,
+          "actor": 1,
+          "animal": "GOOSE",
+          "pos": [
+            4,
+            6
+          ]
+        },
+        {
+          "step": 233,
+          "actor": 11,
+          "animal": "GOOSE",
+          "pos": [
+            4,
+            7
+          ]
+        },
+        {
+          "step": 237,
+          "actor": 6,
+          "animal": "GOOSE",
+          "pos": [
+            2,
+            6
+          ]
+        }
+      ]
+    },
+    "daily": [
+      {
+        "step": 0,
+        "money": 3000.0,
+        "reference_money": 3000.0,
+        "farm": {},
+        "reference_farm": {}
+      },
+      {
+        "step": 24,
+        "money": 1.0,
+        "reference_money": 6.0,
+        "farm": {
+          "WHEAT": 8,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "WHEAT": 10,
+          "MELON": 6,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 48,
+        "money": 12.0,
+        "reference_money": 2.0,
+        "farm": {
+          "WHEAT": 8,
+          "MELON": 8,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "WHEAT": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 72,
+        "money": 0.0,
+        "reference_money": 6.0,
+        "farm": {
+          "WHEAT": 5,
+          "STRAWBERRY": 3,
+          "MELON": 5,
+          "WEED": 3,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 4,
+          "WHEAT": 6,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 96,
+        "money": 91.0,
+        "reference_money": 89.0,
+        "farm": {
+          "WHEAT": 3,
+          "STRAWBERRY": 7,
+          "MELON": 5,
+          "WEED": 3,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 8,
+          "MELON": 10,
+          "WHEAT": 2,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 120,
+        "money": 371.0,
+        "reference_money": 360.0,
+        "farm": {
+          "WHEAT": 1,
+          "STRAWBERRY": 8,
+          "MELON": 5,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 9,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 144,
+        "money": 810.0,
+        "reference_money": 788.0,
+        "farm": {
+          "WEED": 1,
+          "STRAWBERRY": 9,
+          "MELON": 5,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 168,
+        "money": 91.0,
+        "reference_money": 88.0,
+        "farm": {
+          "STRAWBERRY": 18,
+          "MELON": 5,
+          "WHEAT": 6,
+          "COW": 6,
+          "PASTURE": 1,
+          "SHEEP": 3,
+          "GOOSE": 2
+        },
+        "reference_farm": {
+          "STRAWBERRY": 19,
+          "MELON": 10,
+          "WHEAT": 6,
+          "COW": 7,
+          "SHEEP": 3,
+          "GOOSE": 2
+        }
+      },
+      {
+        "step": 192,
+        "money": 14.0,
+        "reference_money": 4.0,
+        "farm": {
+          "STRAWBERRY": 19,
+          "MELON": 5,
+          "WHEAT": 6,
+          "COW": 7,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "GOOSE": 2
+        },
+        "reference_farm": {
+          "STRAWBERRY": 20,
+          "MELON": 10,
+          "WHEAT": 6,
+          "COW": 8,
+          "SHEEP": 3,
+          "GOOSE": 2
+        }
+      },
+      {
+        "step": 216,
+        "money": 2149.0,
+        "reference_money": 2573.0,
+        "farm": {
+          "STRAWBERRY": 19,
+          "MELON": 5,
+          "WHEAT": 6,
+          "COW": 7,
+          "PASTURE": 3,
+          "WEED": 1,
+          "SHEEP": 1,
+          "GOOSE": 2
+        },
+        "reference_farm": {
+          "STRAWBERRY": 20,
+          "MELON": 10,
+          "WHEAT": 6,
+          "COW": 8,
+          "SHEEP": 3,
+          "GOOSE": 2
+        }
+      },
+      {
+        "step": 240,
+        "money": 0.0,
+        "reference_money": 405.0,
+        "farm": {
+          "STRAWBERRY": 21,
+          "MELON": 5,
+          "WHEAT": 19,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "GOOSE": 3,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 24,
+          "MELON": 10,
+          "WHEAT": 20,
+          "COW": 9,
+          "SHEEP": 3,
+          "GOOSE": 6
+        }
+      },
+      {
+        "step": 264,
+        "money": 2126.0,
+        "reference_money": 7678.0,
+        "farm": {
+          "STRAWBERRY": 19,
+          "WEED": 5,
+          "MELON": 3,
+          "WHEAT": 20,
+          "GOOSE": 5,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 27,
+          "MELON": 4,
+          "WHEAT": 23,
+          "GOOSE": 8,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 288,
+        "money": 3688.0,
+        "reference_money": 12261.0,
+        "farm": {
+          "STRAWBERRY": 21,
+          "WHEAT": 23,
+          "MELON": 1,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "WEED": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 29,
+          "WHEAT": 25,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 312,
+        "money": 6437.0,
+        "reference_money": 15329.0,
+        "farm": {
+          "STRAWBERRY": 22,
+          "WHEAT": 22,
+          "MELON": 1,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "TOMATO": 2
+        },
+        "reference_farm": {
+          "STRAWBERRY": 30,
+          "WHEAT": 22,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "TOMATO": 2
+        }
+      },
+      {
+        "step": 336,
+        "money": 8307.0,
+        "reference_money": 17568.0,
+        "farm": {
+          "STRAWBERRY": 24,
+          "WHEAT": 18,
+          "WEED": 1,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "TOMATO": 4
+        },
+        "reference_farm": {
+          "STRAWBERRY": 32,
+          "WHEAT": 18,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "TOMATO": 4
+        }
+      },
+      {
+        "step": 360,
+        "money": 16274.0,
+        "reference_money": 25017.0,
+        "farm": {
+          "STRAWBERRY": 24,
+          "WHEAT": 17,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "TOMATO": 5
+        },
+        "reference_farm": {
+          "STRAWBERRY": 32,
+          "WHEAT": 17,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "TOMATO": 5
+        }
+      },
+      {
+        "step": 384,
+        "money": 18881.0,
+        "reference_money": 31253.0,
+        "farm": {
+          "STRAWBERRY": 24,
+          "WHEAT": 15,
+          "GOOSE": 6,
+          "TOMATO": 7,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 32,
+          "WHEAT": 15,
+          "GOOSE": 9,
+          "TOMATO": 7,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 408,
+        "money": 25326.0,
+        "reference_money": 38559.0,
+        "farm": {
+          "STRAWBERRY": 25,
+          "TOMATO": 8,
+          "GOOSE": 6,
+          "WHEAT": 13,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 33,
+          "TOMATO": 8,
+          "GOOSE": 9,
+          "WHEAT": 13,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 432,
+        "money": 30984.0,
+        "reference_money": 45335.0,
+        "farm": {
+          "STRAWBERRY": 25,
+          "TOMATO": 8,
+          "GOOSE": 6,
+          "WHEAT": 13,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "STRAWBERRY": 33,
+          "TOMATO": 8,
+          "GOOSE": 9,
+          "WHEAT": 13,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 456,
+        "money": 37078.0,
+        "reference_money": 52626.0,
+        "farm": {
+          "TOMATO": 10,
+          "STRAWBERRY": 23,
+          "GOOSE": 6,
+          "WHEAT": 14,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 10,
+          "STRAWBERRY": 29,
+          "GOOSE": 9,
+          "WHEAT": 14,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 480,
+        "money": 40465.0,
+        "reference_money": 57823.0,
+        "farm": {
+          "TOMATO": 12,
+          "WHEAT": 16,
+          "STRAWBERRY": 20,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 12,
+          "WHEAT": 16,
+          "STRAWBERRY": 25,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 504,
+        "money": 45992.0,
+        "reference_money": 65583.0,
+        "farm": {
+          "TOMATO": 12,
+          "WHEAT": 16,
+          "STRAWBERRY": 20,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 12,
+          "WHEAT": 16,
+          "STRAWBERRY": 25,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 528,
+        "money": 48565.0,
+        "reference_money": 69509.0,
+        "farm": {
+          "TOMATO": 12,
+          "WHEAT": 18,
+          "STRAWBERRY": 20,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 12,
+          "WHEAT": 18,
+          "STRAWBERRY": 24,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 552,
+        "money": 52060.0,
+        "reference_money": 74610.0,
+        "farm": {
+          "TOMATO": 12,
+          "WHEAT": 24,
+          "STRAWBERRY": 13,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3
+        },
+        "reference_farm": {
+          "TOMATO": 12,
+          "WHEAT": 24,
+          "STRAWBERRY": 16,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3
+        }
+      },
+      {
+        "step": 576,
+        "money": 54512.0,
+        "reference_money": 79428.0,
+        "farm": {
+          "TOMATO": 10,
+          "WHEAT": 30,
+          "STRAWBERRY": 10,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "CARROT": 1
+        },
+        "reference_farm": {
+          "TOMATO": 10,
+          "WHEAT": 30,
+          "STRAWBERRY": 13,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "CARROT": 1
+        }
+      },
+      {
+        "step": 600,
+        "money": 57449.0,
+        "reference_money": 85239.0,
+        "farm": {
+          "TOMATO": 8,
+          "WHEAT": 28,
+          "STRAWBERRY": 10,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "CARROT": 4
+        },
+        "reference_farm": {
+          "TOMATO": 8,
+          "WHEAT": 28,
+          "STRAWBERRY": 13,
+          "GOOSE": 9,
+          "COW": 9,
+          "SHEEP": 3,
+          "CARROT": 4
+        }
+      },
+      {
+        "step": 624,
+        "money": 59834.0,
+        "reference_money": 92037.0,
+        "farm": {
+          "TOMATO": 7,
+          "WHEAT": 28,
+          "STRAWBERRY": 9,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "WEED": 1,
+          "SHEEP": 1,
+          "COOP": 3,
+          "CARROT": 7
+        },
+        "reference_farm": {
+          "TOMATO": 7,
+          "WHEAT": 28,
+          "STRAWBERRY": 10,
+          "GOOSE": 9,
+          "COW": 9,
+          "WEED": 1,
+          "SHEEP": 3,
+          "CARROT": 7
+        }
+      },
+      {
+        "step": 648,
+        "money": 61929.0,
+        "reference_money": 99188.0,
+        "farm": {
+          "TOMATO": 5,
+          "WHEAT": 26,
+          "STRAWBERRY": 6,
+          "CARROT": 14,
+          "GOOSE": 6,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 3,
+          "WEED": 1
+        },
+        "reference_farm": {
+          "TOMATO": 5,
+          "WHEAT": 26,
+          "STRAWBERRY": 6,
+          "CARROT": 14,
+          "GOOSE": 8,
+          "COW": 9,
+          "SHEEP": 3,
+          "COOP": 1,
+          "WEED": 1
+        }
+      },
+      {
+        "step": 672,
+        "money": 65359.0,
+        "reference_money": 105849.0,
+        "farm": {
+          "TOMATO": 4,
+          "WHEAT": 25,
+          "CARROT": 13,
+          "GOOSE": 6,
+          "WEED": 3,
+          "COW": 8,
+          "PASTURE": 3,
+          "SHEEP": 1,
+          "COOP": 2,
+          "STRAWBERRY": 4
+        },
+        "reference_farm": {
+          "TOMATO": 4,
+          "WHEAT": 25,
+          "CARROT": 13,
+          "GOOSE": 8,
+          "COW": 9,
+          "SHEEP": 3,
+          "WEED": 1,
+          "STRAWBERRY": 4
+        }
+      },
+      {
+        "step": 696,
+        "money": 70514.0,
+        "reference_money": 114089.0,
+        "farm": {
+          "TOMATO": 4,
+          "WHEAT": 16,
+          "CARROT": 8,
+          "GOOSE": 6,
+          "WEED": 3,
+          "COW": 8,
+          "PASTURE": 4,
+          "COOP": 2,
+          "STRAWBERRY": 4
+        },
+        "reference_farm": {
+          "TOMATO": 4,
+          "WHEAT": 16,
+          "CARROT": 8,
+          "GOOSE": 8,
+          "COW": 9,
+          "PASTURE": 3,
+          "WEED": 1,
+          "STRAWBERRY": 4
+        }
+      }
+    ]
+  }
+]

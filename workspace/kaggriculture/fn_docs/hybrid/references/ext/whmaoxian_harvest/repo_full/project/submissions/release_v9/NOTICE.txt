@@ -1,0 +1,80 @@
+Kaggriculture candidate_v8: unpromoted candidate, 2026-09-22. Apache-2.0.
+Technical acceptance and strength selection are separate. This package makes
+no claim to a Kaggle rating, DSM's private code, or Vadim Vasilenko's private code.
+
+Frozen v7 lineage: shiiin9 Orderbook and Ahmed Berat Ozer V56 EXP402/EXP410,
+with its complete prior NOTICE retained verbatim below and all embedded source
+notices retained in main.py. Full Apache-2.0 text is in LICENSE.txt.
+
+Appended public market source: haideptry, The 2965 Master Hybrid Engine,
+notebook version 4:
+https://www.kaggle.com/code/haideptry/the-2965-master-hybrid-engine
+Decoded main.py SHA256:
+93831c18a43c49312a71fa67171224681c52c3fade0259403e8d8fae7973565f
+R148 overflow reclaim: Ahmed Berat Ozer EXP277, Apache-2.0.
+ADV sale advance: Ahmed Berat Ozer EXP293, Apache-2.0; mechanism attributed
+in that source to sdy623 / jaxa623, Beyond 48-0. Its original attribution is
+retained verbatim in main.py.
+IG opening guard and cash-sale queue closure: retained from the same public
+Master source. The notebook's complete engine is not local original work.
+These are the source's embedded license statements; no absent standalone
+Master NOTICE/LICENSE or independently verified license metadata is invented.
+
+Local integration/modifications, 2026-09-22, Apache-2.0:
+Attach R148/ADV/IG to the frozen v7 entry; expose complete diagnostics; update
+the race observer with the final emitted orders. Limit ADV and its frontload
+to steps below 696; retain R148/IG at the end of the game.
+Local production repair: observed spatial allocation for 19 southeast tomato
+plots, learned from public episode 111747876 (yomogii), with observation-based
+eligibility, route assignment, hiring budget, maintenance and final delivery.
+https://www.kaggle.com/competitions/kaggriculture/episodes/111747876
+This is local spatial planning code, not an opponent action replay.
+Final local wrapper combines market and production diagnostics only.
+Public Master busyaprime seedfloat/terminal fertilizer-knock layers are not
+included in this candidate. The separate terminal-input trial is not included.
+
+Complete inherited v7 NOTICE follows verbatim:
+--------------------------------------------------------------------------
+Kaggriculture v7 local integration, 2026-09-22. Apache-2.0.
+Base: shiiin9, Your Market List Is an Order Book, including the complete
+Ahmed Berat Ozer V55 lineage and all notices embedded in main.py.
+https://www.kaggle.com/code/shiiin9/your-market-list-is-an-order-book
+Appended mechanisms: Ahmed Berat Ozer V56 EXP402 remaining-planting seed
+budget and EXP410 harvest-aware fertilizer cap.
+https://www.kaggle.com/code/ahmedberatozer/kaggriculture-v56-smarter-seeds-and-fertilizer
+Local integration: attach the V56 tail to Orderbook's _cxd_agent, expose
+combined telemetry, preserve Orderbook source bytes and its constants.
+The repository's Vadim/DSM public-replay research is separate: this artifact
+contains no claim of access to either author's private strategy source code.
+No leaderboard rating is asserted by this package.
+
+Inherited notices from the preceding public-source release follow verbatim:
+--------------------------------------------------------------------------
+Local v54 derivative, 2026-09-20. Direct source: https://www.kaggle.com/code/nathanjacob/kaggriculture-pipe16-idle-workers
+All original source notices retained. Apache-2.0.
+Lean Flock: Ahmed Berat Ozer; Metav4 farm and sheep/crew efficiency: Thomas Tschinkel; productive opening: Dmitrii Gluzdov, adapted by Nathan Jacob.
+Upstream includes yhay81, prvsiyan, aurax7, tetsutani, Rayk Kretzschmar, degnonguidi, leoprovorov, destbreso, lucifer19, salemali7, and Kaggle environment contributors.
+Local changes: explicit complete agent export; optional external sell-library path disabled for V54. No claim of independent production plans or original public evaluation reproduction.
+
+Dmitrii Gluzdov, September 2026: delay temporary opening wheat harvest to day three; restore pasture before cow placement. Apache-2.0. Independent Codex, DeepSeek and Grok candidate screen; only the passing later-harvest layer is included.
+
+
+ROUND 9 LOCAL MODIFICATIONS, 2026-09-23
+
+Frozen candidate: market execution plus completed-day spare-worker operations.
+Reference mechanism: final contiguous SELL-block ordering after later wrappers,
+from prvsiyan, Kaggriculture Frontier / The Moon Counts Melons (Apache-2.0):
+https://www.kaggle.com/code/prvsiyan/kaggriculture-frontier-the-moon-counts-melons
+Public source snapshot SHA256:
+178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a
+The retained inherited _v44y_reorder implementation is invoked on final orders;
+sale lookahead is four, through step718; the earlier clone-order search is disabled.
+
+Original local Round9 contribution: identify paid farm hands whose remaining
+native daily commands are all PASS; reserve other workers' future tasks, and
+use spare time for visible animal care, harvesting and fertilizer collection.
+No extra hires; original entry and mandatory work remain in force.
+No new private top-player code or hidden opponent data was obtained or embedded.
+All inherited source notices and the complete Apache License remain applicable.
+These local modifications are distributed under the same Apache-2.0 license.
+Local benchmarks do not assert an online Kaggle rating.

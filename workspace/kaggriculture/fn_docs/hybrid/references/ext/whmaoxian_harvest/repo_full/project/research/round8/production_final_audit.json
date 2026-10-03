@@ -1,0 +1,43 @@
+{
+  "source_sha256": "05d9d50dd489f78a0561c717e483adef022d0fef1c52af604aed43e85508c02b",
+  "matching_persistent_actions": 719,
+  "different_steps": [],
+  "normal_telemetry": {
+    "eligible": 1,
+    "requested_workers": 28,
+    "confirmed_workers": 28,
+    "hire_shortfalls": 0,
+    "budget_declines": 0,
+    "errors": 0,
+    "plants": 19,
+    "harvest_requests": 38,
+    "fertilizer_requests": 38
+  },
+  "nonzero_error_counters": {},
+  "synthetic_request_checks": [
+    {
+      "kind": "modified_cash_observation_not_game_result",
+      "money": 800,
+      "maintenance_workers": 2,
+      "fertilizer_purchase": false,
+      "all_19_targets_retained_once": true,
+      "market_orders": 5
+    },
+    {
+      "kind": "modified_cash_observation_not_game_result",
+      "money": 1200,
+      "maintenance_workers": 3,
+      "fertilizer_purchase": false,
+      "all_19_targets_retained_once": true,
+      "market_orders": 6
+    },
+    {
+      "kind": "modified_cash_observation_not_game_result",
+      "money": 2400,
+      "maintenance_workers": 4,
+      "fertilizer_purchase": true,
+      "all_19_targets_retained_once": true,
+      "market_orders": 8
+    }
+  ]
+}

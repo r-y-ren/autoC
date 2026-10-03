@@ -1,0 +1,485 @@
+[
+  {
+    "slug": "salemali7/harvest-kaggriculture",
+    "url": "https://www.kaggle.com/api/v1/kernels/pull/salemali7/harvest-kaggriculture",
+    "path": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\new_public_sources\\salemali7__harvest-kaggriculture.json",
+    "sha256": "3dd17841d49d7839d4b044be41a684dd55e8645a16f6209ce3c75a457d22d38f",
+    "metadata": {
+      "languageNullable": "python",
+      "kernelTypeNullable": "notebook",
+      "isPrivateNullable": false,
+      "enableGpuNullable": false,
+      "enableTpuNullable": false,
+      "enableInternetNullable": true,
+      "currentVersionNumberNullable": 9,
+      "dockerImageNullable": "gcr.io/kaggle-images/python@sha256:dafd4ce5668bbf1ad422e4c109e0f18c9623c3a7c7f48b0235f13142755c40b9",
+      "machineShapeNullable": "None",
+      "id": 130232707,
+      "ref": "salemali7/harvest-kaggriculture",
+      "title": "Harvest| Kaggriculture ",
+      "author": "Salem Ali",
+      "slug": "harvest-kaggriculture",
+      "lastRunTime": "2026-09-24T23:46:35.6046204Z",
+      "language": "python",
+      "hasLanguage": true,
+      "kernelType": "notebook",
+      "hasKernelType": true,
+      "isPrivate": false,
+      "hasIsPrivate": true,
+      "enableGpu": false,
+      "hasEnableGpu": true,
+      "enableTpu": false,
+      "hasEnableTpu": true,
+      "enableInternet": true,
+      "hasEnableInternet": true,
+      "categoryIds": [],
+      "datasetDataSources": [],
+      "kernelDataSources": [],
+      "competitionDataSources": [
+        "kaggriculture"
+      ],
+      "modelDataSources": [],
+      "totalVotes": 69,
+      "currentVersionNumber": 9,
+      "hasCurrentVersionNumber": true,
+      "dockerImage": "gcr.io/kaggle-images/python@sha256:dafd4ce5668bbf1ad422e4c109e0f18c9623c3a7c7f48b0235f13142755c40b9",
+      "hasDockerImage": true,
+      "machineShape": "None",
+      "hasMachineShape": true
+    },
+    "cells": [
+      {
+        "index": 0,
+        "type": "markdown",
+        "characters": 3577,
+        "preview": "HarvestForge-X | High-Throughput Farming and Premium-Market Strategy\n\nHarvestForge-X is a production-focused strategy built around rapid livestock expansion, efficient field utilisation, and early access to high-value market opportunities. Its core configuration targets 8 cattle and 4 sheep, while prioritising premium returns from melon, strawberry, and wool.\n\nThe strategy was independently reconstructed by comparing three publicly accessible ref"
+      },
+      {
+        "index": 1,
+        "type": "code",
+        "characters": 0,
+        "preview": ""
+      },
+      {
+        "index": 2,
+        "type": "code",
+        "characters": 88682,
+        "preview": "AGENT_B64 = (\n    'IiIiQkwtTURnb2dvLTEwQzRTLVIwOiBwdWJsaWMtcmVwbGF5IGNvbnNlbnN1cyByb3V0ZSB3aXRoIGdlbmVyaWMgZXhlY3V0'\n    'aW9uIGd1YXJkcy4KClRoaXMgaXMgYSBiZWhhdmlvcmFsIHJlY29uc3RydWN0aW9uIGZyb20gdHdlbHZlIHB1YmxpYyB0cmFj'\n    'ZXMsIG5vdCBlaXRoZXIKdGVhbSdzIGhpZGRlbiBzb3VyY2UgcG9saWN5LiBDbG9uZSBwcmVlbXB0aW9uIGlzIGRpc2FibGVk'\n    'IGluIHRoaXMgZXhwZXJpbWVudC4KIiIiCmltcG9ydCBiYXNlNjQKaW1wb3J0IGNvcHkKaW1wb3J0IGpzb24KaW1wb3J0IG1h'\n    'dGgKaW1wb3J0IHpsaWI"
+      },
+      {
+        "index": 3,
+        "type": "code",
+        "characters": 1318,
+        "preview": "import base64\nimport gzip\nimport hashlib\nimport io\nimport tarfile\nfrom pathlib import Path\n\n# Constants\nEXPECTED_MAIN_SHA = \"d39dba50793d9777c990347443bf0c481c78adaea86055f6f6b0600dcfcd9f2e\"\nEXPECTED_ARCHIVE_SHA = \"a5f0e99ef483408fb524e7ae7c9c2df0c71fd849a30e4fcc54ef50fc166e3ee8\"\nFILE_NAME = \"main.py\"\nNAME____ = \"submission.tar.gz\"\n\ndef decode_and_validate_payload(b64_data: str) -> bytes:\n    \"\"\"Decodes the base64 payload and compiles it to ensur"
+      },
+      {
+        "index": 4,
+        "type": "code",
+        "characters": 1012,
+        "preview": "def START() :\n    # 1. Prepare and verify the main python script\n    payload = decode_and_validate_payload(AGENT_B64)\n    assert hashlib.sha256(payload).hexdigest() == EXPECTED_MAIN_SHA\n    Path(FILE_NAME).write_bytes(payload)\n\n    # 2. Package the script into a tarball\n    build_reproducible_archive(NAME____, FILE_NAME, payload)\n\n    # 3. Verify the resulting archive's hash\n    archive_bytes = Path(NAME____).read_bytes()\n    assert hashlib.sha25"
+      }
+    ],
+    "captured_utc": "2026-09-27T23:46:36.290515+00:00"
+  },
+  {
+    "slug": "prvsiyan/where-the-wheat-remembers-tomorrow-kaggriculture",
+    "url": "https://www.kaggle.com/api/v1/kernels/pull/prvsiyan/where-the-wheat-remembers-tomorrow-kaggriculture",
+    "path": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\new_public_sources\\prvsiyan__where-the-wheat-remembers-tomorrow-kaggriculture.json",
+    "sha256": "b049a566327ea87be36c1e67b895c6ed64a64dc73f83e33b484341f149d14729",
+    "metadata": {
+      "languageNullable": "python",
+      "kernelTypeNullable": "notebook",
+      "isPrivateNullable": false,
+      "enableGpuNullable": false,
+      "enableTpuNullable": false,
+      "enableInternetNullable": false,
+      "currentVersionNumberNullable": 2,
+      "dockerImageNullable": "gcr.io/kaggle-images/python@sha256:dafd4ce5668bbf1ad422e4c109e0f18c9623c3a7c7f48b0235f13142755c40b9",
+      "machineShapeNullable": "None",
+      "id": 133205689,
+      "ref": "prvsiyan/where-the-wheat-remembers-tomorrow-kaggriculture",
+      "title": "Where the Wheat Remembers Tomorrow | Kaggriculture",
+      "author": "prvsiyan",
+      "slug": "where-the-wheat-remembers-tomorrow-kaggriculture",
+      "lastRunTime": "2026-09-24T23:46:36.9767209Z",
+      "language": "python",
+      "hasLanguage": true,
+      "kernelType": "notebook",
+      "hasKernelType": true,
+      "isPrivate": false,
+      "hasIsPrivate": true,
+      "enableGpu": false,
+      "hasEnableGpu": true,
+      "enableTpu": false,
+      "hasEnableTpu": true,
+      "enableInternet": false,
+      "hasEnableInternet": true,
+      "categoryIds": [],
+      "datasetDataSources": [],
+      "kernelDataSources": [],
+      "competitionDataSources": [
+        "kaggriculture"
+      ],
+      "modelDataSources": [],
+      "totalVotes": 14,
+      "currentVersionNumber": 2,
+      "hasCurrentVersionNumber": true,
+      "dockerImage": "gcr.io/kaggle-images/python@sha256:dafd4ce5668bbf1ad422e4c109e0f18c9623c3a7c7f48b0235f13142755c40b9",
+      "hasDockerImage": true,
+      "machineShape": "None",
+      "hasMachineShape": true
+    },
+    "cells": [
+      {
+        "index": 0,
+        "type": "markdown",
+        "characters": 879,
+        "preview": "<div style=\"padding:34px 38px;border-radius:24px;background:linear-gradient(135deg,#102a24 0%,#245345 58%,#b48a35 140%);color:#fff;box-shadow:0 16px 40px rgba(16,42,36,.22)\">\n  <div style=\"font:600 12px/1.3 system-ui;letter-spacing:.22em;text-transform:uppercase;color:#e5cf91\">Kaggriculture \u00b7 public strategy experiment</div>\n  <h1 style=\"font:700 43px/1.05 Georgia,serif;margin:15px 0 12px\">Where the Wheat Remembers Tomorrow</h1>\n  <p style=\"font:"
+      },
+      {
+        "index": 1,
+        "type": "markdown",
+        "characters": 823,
+        "preview": "## The idea\n\nMany strong public agents appear complicated because their farms are long. Yet one unusually consequential decision happens before the farm has really begun: how much wheat inventory to acquire, then immediately release while the rest of the opening is assembled.\n\nI started from a **publicly observable action trajectory** by LagrangianLocomotive, one of the leading teams at collection time. I did not access their private code. The do"
+      },
+      {
+        "index": 2,
+        "type": "code",
+        "characters": 779,
+        "preview": "# Frozen local-screen evidence embedded for reproducibility.\n# 20 current top-10 public trajectories, all eight first-shop regimes,\n# 200 seeds per pairing and both seats = 1,216,000 simulated games.\nfamily_outcome = {'BAKERY': 0.725, 'BRUNCH_SPOT': 0.97375, 'FARMERS_MARKET': 0.824167, 'ICE_CREAM_SHOP': 0.9625, 'PET_CAFE': 0.83875, 'PIZZA_SHOP': 0.632083, 'SMOOTHIE_SHOP': 0.55375, 'YARN_STORE': 0.684318}\n\nsummary = {\n    \"games\": 1_216_000,\n    \""
+      },
+      {
+        "index": 3,
+        "type": "code",
+        "characters": 794,
+        "preview": "import matplotlib.pyplot as plt\n\nlabels = [name.replace(\"_\", \" \").title() for name in family_outcome]\nvalues = list(family_outcome.values())\ncolors = [\"#b48a35\" if value == min(values) else \"#2f6b59\" for value in values]\n\nfig, ax = plt.subplots(figsize=(11, 5.2))\nbars = ax.barh(labels, values, color=colors)\nax.axvline(0.5, color=\"#992f2f\", linestyle=\"--\", linewidth=1.2, label=\"even outcome\")\nax.set_xlim(0, 1)\nax.set_xlabel(\"Local route-screen out"
+      },
+      {
+        "index": 4,
+        "type": "markdown",
+        "characters": 1101,
+        "preview": "## What changed\u2014and what did not\n\nThe route screen found the same late structure repeatedly in competitive Yarn episodes: a modest early flock, then a much larger sheep-and-pasture economy. The best public trajectory in the first screen beat a broad historical panel, but its original 53-unit opening was brittle when challenged against leaders from **all** shop regimes.\n\nThe quantity sweep exposed a useful counterfactual:\n\n| Opening | All-regime m"
+      },
+      {
+        "index": 5,
+        "type": "code",
+        "characters": 18981,
+        "preview": "# Materialize the exact, hash-pinned Python agent.\nimport base64\nimport hashlib\nfrom pathlib import Path\n\nAGENT_B64 = 'IiIibGFncmFuZ2lhbl9xNDVfcm91dGVfMV92MTogZml4ZWQgcHVibGljLXJvdXRlIGRlcml2YXRpdmU7IGV4YWN0LXRlc3QgY2FuZGlkYXRlIG9ubHkuIiIiCmltcG9ydCBiYXNlNjQKaW1wb3J0IGNvcHkKaW1wb3J0IGpzb24KaW1wb3J0IHpsaWIKCl9BQ1RJT05TID0ganNvbi5sb2Fkcyh6bGliLmRlY29tcHJlc3MoYmFzZTY0LmI2NGRlY29kZShiJ2VOcnRYVjF2WEZkeS9DOTg1b000SEZKaTNtaHBOaFpXTmcxSzJzSEdJQXdEMlNCQXN"
+      },
+      {
+        "index": 6,
+        "type": "code",
+        "characters": 696,
+        "preview": "# Structural checks: exact opening, legal response shape, both seats.\nnamespace = {}\nexec(compile(agent_bytes, \"main.py\", \"exec\"), namespace)\nactions = namespace[\"_ACTIONS\"]\nassert len(actions) == 719\nassert actions[0][\"market\"] == [[\"BUY_PRODUCT\", \"WHEAT\", 45]]\nassert actions[1][\"market\"][0] == [\"SELL\", \"WHEAT\", 40]\n\nmock_obs = {\"step\": 0, \"player\": 0, \"farms\": [{\"hands\": []}, {\"hands\": []}]}\nfor seat in (0, 1):\n    mock_obs[\"player\"] = seat\n   "
+      },
+      {
+        "index": 7,
+        "type": "code",
+        "characters": 902,
+        "preview": "# Build a deterministic submission bundle containing exactly root-level main.py.\nimport gzip\nimport io\nimport tarfile\n\ntar_buffer = io.BytesIO()\nwith tarfile.open(fileobj=tar_buffer, mode=\"w\") as bundle:\n    info = tarfile.TarInfo(\"main.py\")\n    info.size = len(agent_bytes)\n    info.mode = 0o644\n    info.mtime = 0\n    bundle.addfile(info, io.BytesIO(agent_bytes))\n\nsubmission_bytes = gzip.compress(tar_buffer.getvalue(), compresslevel=9, mtime=0)\ns"
+      },
+      {
+        "index": 8,
+        "type": "markdown",
+        "characters": 1723,
+        "preview": "## The public ladder begins to answer\n\nThe first completed Kaggle row now provides a real, if still early, external test. At the frozen snapshot below, Q45 had played **13 public episodes and won all 13**, reaching an exact completed-row score of **1887.4**. Opponents ranged from **574.0 to 1799.7** initial rating; the narrowest win was **+3,213**.\n\n<div style=\"display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:12px;margin:18px 0 "
+      },
+      {
+        "index": 9,
+        "type": "code",
+        "characters": 3055,
+        "preview": "# Immutable public trajectory: submission 56027865, snapshot through 13 completed episodes.\npublic_episodes = [{'episode': 1, 'opponent': 'Arunabh Gupta', 'opponent_initial_rating': 634.362, 'margin': 81807, 'rating': 719.151, 'seat': 0}, {'episode': 2, 'opponent': 'omarkami007', 'opponent_initial_rating': 574.007, 'margin': 92164, 'rating': 788.981, 'seat': 1}, {'episode': 3, 'opponent': 'jenninglim', 'opponent_initial_rating': 746.504, 'margin'"
+      },
+      {
+        "index": 10,
+        "type": "markdown",
+        "characters": 620,
+        "preview": "### What the curve says\n\nThe useful signal is not merely \u201c13 wins.\u201d As matchmaking strengthened, margins generally narrowed: the frozen opponent-strength/margin correlation is about **\u22120.746**. Q45 therefore looks like a sound fixed opening and a valuable control, while the remaining gap argues for a dynamic policy that responds to observable opponent behavior.\n\nThe ongoing follow-up freezes exactly that question: whether call-1 market programs c"
+      },
+      {
+        "index": 11,
+        "type": "markdown",
+        "characters": 824,
+        "preview": "## Reading the eventual score honestly\n\nThis version deliberately separates four kinds of evidence:\n\n1. **Public episode evidence** identifies strategic motifs.\n2. **Local route simulation** cheaply tests millions of counterfactual pairings.\n3. **Exact-engine validation** checks rules fidelity on a frozen, unseen seed protocol.\n4. **The completed Kaggle submission row**\u2014and only that row\u2014determines the official public score.\n\nThe bundle above is "
+      }
+    ],
+    "captured_utc": "2026-09-27T23:46:37.505318+00:00"
+  },
+  {
+    "slug": "georgymamarin/kaggriculture-what-2600-farms-do-differently",
+    "url": "https://www.kaggle.com/api/v1/kernels/pull/georgymamarin/kaggriculture-what-2600-farms-do-differently",
+    "path": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\new_public_sources\\georgymamarin__kaggriculture-what-2600-farms-do-differently.json",
+    "sha256": "040e18ac2df8e3fe84ae7c287c5a9ed95f7877dfe0feceeffc6a7469af318d1d",
+    "metadata": {
+      "languageNullable": "python",
+      "kernelTypeNullable": "notebook",
+      "isPrivateNullable": false,
+      "enableGpuNullable": false,
+      "enableTpuNullable": false,
+      "enableInternetNullable": false,
+      "currentVersionNumberNullable": 135,
+      "dockerImageNullable": "gcr.io/kaggle-images/python@sha256:dafd4ce5668bbf1ad422e4c109e0f18c9623c3a7c7f48b0235f13142755c40b9",
+      "machineShapeNullable": "None",
+      "id": 129213318,
+      "ref": "georgymamarin/kaggriculture-what-2600-farms-do-differently",
+      "title": "Kaggriculture | What 2600+ Farms Do Differently",
+      "author": "Georgy Mamarin",
+      "slug": "kaggriculture-what-2600-farms-do-differently",
+      "lastRunTime": "2026-09-24T23:46:38.2182882Z",
+      "language": "python",
+      "hasLanguage": true,
+      "kernelType": "notebook",
+      "hasKernelType": true,
+      "isPrivate": false,
+      "hasIsPrivate": true,
+      "enableGpu": false,
+      "hasEnableGpu": true,
+      "enableTpu": false,
+      "hasEnableTpu": true,
+      "enableInternet": false,
+      "hasEnableInternet": true,
+      "categoryIds": [
+        "games",
+        "simulations",
+        "data visualization",
+        "data analytics",
+        "intermediate",
+        "scheduled"
+      ],
+      "datasetDataSources": [
+        "georgymamarin/kaggriculture-episodes"
+      ],
+      "kernelDataSources": [],
+      "competitionDataSources": [
+        "kaggriculture"
+      ],
+      "modelDataSources": [],
+      "totalVotes": 49,
+      "currentVersionNumber": 135,
+      "hasCurrentVersionNumber": true,
+      "dockerImage": "gcr.io/kaggle-images/python@sha256:dafd4ce5668bbf1ad422e4c109e0f18c9623c3a7c7f48b0235f13142755c40b9",
+      "hasDockerImage": true,
+      "machineShape": "None",
+      "hasMachineShape": true
+    },
+    "cells": [
+      {
+        "index": 0,
+        "type": "markdown",
+        "characters": 637,
+        "preview": "*By [Georgy Mamarin](https://www.kaggle.com/georgymamarin)*\n\nWhat the top of the board does, set against the middle of the same window: what they plant, when they\nbuy land, how big a crew they run. The page reruns on each new dataset version and reports which of\nthose the two bands actually differ on, which some days is none of them. Then the same comparison for\nyour own submission. Both read my\n[Kaggriculture Episodes](https://www.kaggle.com/dat"
+      },
+      {
+        "index": 1,
+        "type": "code",
+        "characters": 27080,
+        "preview": "# Reads the dataset in place: on Kaggle from /kaggle/input, locally from the staging copy.\nimport gc, glob, json, os, textwrap, warnings\nfrom datetime import timezone\n\n# DejaVu, matplotlib's default font, has no CJK glyphs: a Japanese team name prints a\n# warning per glyph and draws as boxes. The names fall back below; the warning goes here.\nwarnings.filterwarnings(\"ignore\", message=\"Glyph\")\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimp"
+      },
+      {
+        "index": 2,
+        "type": "markdown",
+        "characters": 878,
+        "preview": "<a id=\"s11\"></a>\n## Your submission against the ladder\n\nThe part worth forking. Put your own submission id in the cell below and you get a personal\nreport: where your best game lands in the whole field, and how your strategy fingerprint\ncompares with the record holder's. That is one farm rather than the band above, and single names\nat the top turn over within hours, so treat it as a reference point. Find\nyour id in `episodes.csv`, or leave the de"
+      },
+      {
+        "index": 3,
+        "type": "code",
+        "characters": 91,
+        "preview": "SUBMISSION_ID = int(top_subs.index[0])   # TWEAK THIS: your submission id from episodes.csv"
+      },
+      {
+        "index": 4,
+        "type": "code",
+        "characters": 4734,
+        "preview": "mine = ladder_r[ladder_r.sub_0.eq(SUBMISSION_ID) | ladder_r.sub_1.eq(SUBMISSION_ID)].copy()\nmine[\"my_seat\"] = mine.sub_1.eq(SUBMISSION_ID).astype(int)\nmine[\"my_bank\"] = np.where(mine.my_seat.eq(1), mine.bank_1, mine.bank_0)\nif mine.empty or mine.my_bank.isna().all():\n    display(Markdown(\n        f\"No replayed ladder games for submission **{SUBMISSION_ID}** yet \u2014 the crawler usually \"\n        f\"catches up within a day. Check the id in `episodes.c"
+      },
+      {
+        "index": 5,
+        "type": "code",
+        "characters": 3240,
+        "preview": "# ---- poster: the ladder at a glance, opening the data half of the page ----\nlb = teams.dropna(subset=[\"ladder_score\"]).sort_values(\"ladder_score\", ascending=False)\nif lb.empty:      # no names yet: fall back to the ratings recorded in the episodes\n    last = agents.sort_values(\"episode_id\").groupby(\"team_id\").rating_after.last()\n    lb = (last.reset_index().rename(columns={\"rating_after\": \"ladder_score\"})\n          .assign(team_name=lambda d: d"
+      },
+      {
+        "index": 6,
+        "type": "markdown",
+        "characters": 2789,
+        "preview": "**A live report, not a snapshot.** It re-runs on a schedule with the dataset, so every number in\nthe text below is computed at run time. Come back tomorrow and the ladder you see will be the\nladder as it is tomorrow.\n\n<div class=\"alert alert-info\" style=\"border-left: 5px solid #2196f3; padding: 12px 16px; border-radius: 4px;\">\n<b>Two companions, two jobs.</b> This one is about the data and the state of the ladder. My guide\n<a href=\"https://www.ka"
+      },
+      {
+        "index": 7,
+        "type": "markdown",
+        "characters": 19,
+        "preview": "# Part I \u2014 the data"
+      },
+      {
+        "index": 8,
+        "type": "markdown",
+        "characters": 325,
+        "preview": "<a id=\"s1\"></a>\n## 1. What is in the dataset today\n\nBefore the strategy talk, the shape of the data itself: how much of the ladder is captured, how\ndeep the replay coverage goes, and how fast the corpus grows. Column-level docs live on the\n[dataset page](https://www.kaggle.com/datasets/georgymamarin/kaggriculture-episodes)."
+      },
+      {
+        "index": 9,
+        "type": "code",
+        "characters": 2085,
+        "preview": "n_subs = pd.unique(agents.submission_id).size\nn_teams = pd.unique(agents.team_id).size\nval_share = eps.type.eq(\"EPISODE_TYPE_VALIDATION\").mean()\ncover = eps.has_replay.mean()\nspan_h = (eps.end.max() - eps.end.min()).total_seconds() / 3600\n\nsummary = pd.DataFrame({\n    \"metric\": [\"episodes\", \"with full replay\", \"ladder games\", \"validation (self-play)\",\n               \"submissions seen\", \"teams seen\", \"ladder time covered\"],\n    \"value\": [f\"{len(ep"
+      },
+      {
+        "index": 10,
+        "type": "code",
+        "characters": 1050,
+        "preview": "# Copy-paste loaders \u2014 the three safe ways into this dataset, smallest first.\n# (1) Most questions never need the replays: episode_features.csv is one row\n#     per seat with the behavior already parsed out.\n# (2) One game out of the multi-GB corpus, without loading the rest. The glob\n#     matches both layouts: the single replays.parquet and the monthly shards\n#     (replays_2026-08.parquet, ...) that replace it.\ndemo_id = int(ladder_r.episode_i"
+      },
+      {
+        "index": 11,
+        "type": "markdown",
+        "characters": 22,
+        "preview": "# Part II \u2014 the ladder"
+      },
+      {
+        "index": 12,
+        "type": "markdown",
+        "characters": 250,
+        "preview": "<a id=\"s2\"></a>\n## 2. The ladder right now\n\nWinners' final banks across the recorded ladder games, one dot per episode. The spread is the\nstory of this competition: the same board and the same rules produce farms that differ by an\norder of magnitude."
+      },
+      {
+        "index": 13,
+        "type": "code",
+        "characters": 1190,
+        "preview": "fig, ax = plt.subplots(figsize=(8.2, 3.6))\nax.scatter(ladder.end, ladder.winner_bank, s=22, alpha=.55, color=C_ACC, edgecolors=\"white\", lw=.4)\nrec = ladder.loc[ladder.winner_bank.idxmax()]\nax.annotate(f\"record: {fmt(rec.winner_bank)}\", xy=(rec.end, rec.winner_bank),\n            xytext=(10, 6), textcoords=\"offset points\", fontsize=10, weight=\"bold\", color=C_TOP)\nax.set_yscale(\"log\")\nax.yaxis.set_major_formatter(lambda v, _: f\"{v/1000:g}k\" if v >= "
+      },
+      {
+        "index": 14,
+        "type": "markdown",
+        "characters": 271,
+        "preview": "<a id=\"s3\"></a>\n## 3. The shape of a big game\n\nCoin curves of the biggest wins on record against a median game. Top games share a silhouette:\nthe bank stays near zero deep into the season while everything is reinvested, then compounding\ntakes over once the farm is built."
+      },
+      {
+        "index": 15,
+        "type": "code",
+        "characters": 1720,
+        "preview": "def money_curve(row, seat):\n    return [s[0][\"observation\"][\"farms\"][seat][\"money\"]\n            for s in load_replay(row.episode_id)[\"steps\"]]\n\nfig, ax = plt.subplots(figsize=(8.2, 3.8))\nelbows, seen_teams = {}, set()\nfor rank, (sub, bank) in enumerate(top_subs.items()):\n    row = ladder_r[ladder_r.winner_sub.eq(sub) & ladder_r.winner_bank.eq(bank)].iloc[0]\n    seat = 0 if row.bank_0 >= row.bank_1 else 1\n    money = money_curve(row, seat)\n    tea"
+      },
+      {
+        "index": 16,
+        "type": "markdown",
+        "characters": 657,
+        "preview": "<a id=\"s4\"></a>\n## 4. Strategy fingerprints\n\nReplays store actions, not just scores, so you can compare bots by what they do. Those\nfingerprints already sit in `episode_features.csv`, one row per seat for every episode that has\na replay, and section 1 prints how deep that coverage runs, so you rarely need to open a replay\nyourself. The cell below is the method behind the crew, land and crop columns; bank shape and\nprices get measured in sections "
+      },
+      {
+        "index": 17,
+        "type": "code",
+        "characters": 1178,
+        "preview": "def fingerprint(episode_id, seat):\n    # Hires are read from the farm state (hires_today), not from submitted HIRE\n    # orders \u2014 bots keep sending orders the engine rejects once money runs short.\n    crops, first_land, peak_crew, hires_by_day = {}, None, 0, {}\n    for t, step in enumerate(load_replay(episode_id)[\"steps\"]):\n        farm = step[0][\"observation\"][\"farms\"][seat]\n        day = t // 24\n        hires_by_day[day] = max(hires_by_day.get("
+      },
+      {
+        "index": 18,
+        "type": "code",
+        "characters": 2411,
+        "preview": "rows = []\nfor rank, (sub, bank) in enumerate(top_subs.items()):\n    row = ladder_r[ladder_r.winner_sub.eq(sub) & ladder_r.winner_bank.eq(bank)].iloc[0]\n    seat = 0 if row.bank_0 >= row.bank_1 else 1\n    rows.append({\"who\": name_of(row.team_1 if seat else row.team_0), \"bank\": bank,\n                 **(fingerprint_row(row.episode_id, seat) or {})})\nmid_pool = ladder_r[ladder_r.winner_bank.between(*ladder_r.winner_bank.quantile([.45, .55]))]\nmid = "
+      },
+      {
+        "index": 19,
+        "type": "markdown",
+        "characters": 685,
+        "preview": "<a id=\"s5\"></a>\n## 5. What actually separates a big bank from a small one\n\nThe fingerprints above describe single games. With `episode_features.csv` we can ask the blunter\nquestion across every replayed episode at once: which measurable choices track a large final\nbank, and which ones only feel important?\n\nOne column is deliberately missing from this chart. `elbow_day` correlates with the bank at 0.8,\nbut it is derived from the bank itself (the d"
+      },
+      {
+        "index": 20,
+        "type": "code",
+        "characters": 2061,
+        "preview": "feat = pd.read_csv(f\"{BASE}/episode_features.csv\")\nfeat = feat[feat.final_money > 0]\nCROP_COLS = [c for c in feat.columns\n             if c.startswith(\"plants_\") and c[7:].upper() in\n             {\"CARROT\", \"MELON\", \"STRAWBERRY\", \"TOMATO\", \"WHEAT\"}]\nCAND = [\"total_hires\", \"peak_crew\", \"tiles_planted\", \"first_land_day\"] + CROP_COLS\nrho = (feat[CAND + [\"final_money\"]].corr(method=\"spearman\")[\"final_money\"]\n       .drop(\"final_money\").sort_values())"
+      },
+      {
+        "index": 21,
+        "type": "markdown",
+        "characters": 325,
+        "preview": "<a id=\"s6\"></a>\n## 6. The market they create together\n\nPrices are shared between the two players of an episode, and `episode_features.csv` records\nevery episode's low and high for all nine goods. First the whole corpus, so you can see which\nmarkets actually move; then one game up close, where you can watch them being moved."
+      },
+      {
+        "index": 22,
+        "type": "code",
+        "characters": 2860,
+        "preview": "feat_p = pd.read_csv(f\"{BASE}/episode_features.csv\").drop_duplicates(\"episode_id\")\nfeat_p = feat_p[feat_p.episode_id.isin(ladder_r.episode_id)]\n# Cells share one namespace: a bare `rows` here once shadowed section 4's `rows`\n# that the personal report reads, so everything local to this cell wears mkt_.\nmkt_goods = sorted({c[len(\"price_\"):-len(\"_min\")] for c in feat_p.columns\n                    if c.startswith(\"price_\") and c.endswith(\"_min\")})\n#"
+      },
+      {
+        "index": 23,
+        "type": "code",
+        "characters": 1348,
+        "preview": "rec_r = ladder_r.loc[ladder_r.winner_bank.idxmax()]\nreplay = load_replay(rec_r.episode_id)\nprices = {p: [s[0][\"observation\"][\"market\"][\"prices\"][p] for s in replay[\"steps\"]]\n          for p in (\"MELON\", \"WHEAT\")}\nbase_price = {p: prices[p][0] for p in prices}\n\nfig, ax = plt.subplots(figsize=(8.2, 3.4))\nfor p, c in ((\"MELON\", C_TOP), (\"WHEAT\", C_MID)):\n    ax.plot(prices[p], lw=2.2, color=c, label=f\"{p.title()} price\")\n    ax.axhline(base_price[p]"
+      },
+      {
+        "index": 24,
+        "type": "code",
+        "characters": 2953,
+        "preview": "# The Aug 15 balance patch (engine 1.32.7: hinge scarcity pricing for tomato,\n# carrot and egg), measured instead of announced. Self-unlocking: episode_features\n# gains engine_version as the nightly backfill re-parses the corpus; until it\n# covers enough of both sides of the patch, this stays a status line.\neng_f = pd.read_csv(f\"{BASE}/episode_features.csv\")\neng_ok = (\"engine_version\" in eng_f.columns\n          and eng_f.engine_version.notna().me"
+      },
+      {
+        "index": 25,
+        "type": "markdown",
+        "characters": 358,
+        "preview": "<a id=\"s7\"></a>\n## 7. How fast the bar is moving\n\nThe number every competitor wants: how much the ladder improves while you sleep. Median\nwinning bank per time slice, against the record so far. Skip a few days and this is the gap you\ncome back to. Below the clock: the movers, teams whose rating travelled furthest over the last\nseven days of recorded games."
+      },
+      {
+        "index": 26,
+        "type": "code",
+        "characters": 3466,
+        "preview": "# Prefer the collector's own daily series: it covers the whole history at one row per\n# day, while re-deriving it here would re-scan every episode on every run.\nDAILY = None\ntry:\n    DAILY = pd.read_csv(f\"{BASE}/daily_stats.csv\", parse_dates=[\"date\"])\nexcept FileNotFoundError:\n    pass\n\nspan_d6 = (ladder.end.max() - ladder.end.min()).total_seconds() / 86400\nfreq6 = \"2h\" if span_d6 <= 3 else (\"6h\" if span_d6 <= 10 else (\"1D\" if span_d6 <= 30 else "
+      },
+      {
+        "index": 27,
+        "type": "code",
+        "characters": 2502,
+        "preview": "# The week's movers: each team's latest rating against its own rating seven days\n# earlier. Thresholds keep one lucky game from reading as a move. All names local\n# to this cell wear wk_ (cells share one namespace; see the v27 lesson).\nwk_ag = (agents.dropna(subset=[\"rating_after\", \"team_id\"])\n         .merge(ladder[[\"episode_id\", \"end\"]], on=\"episode_id\")\n         .sort_values(\"end\"))\nwk_now = wk_ag.end.max()\nwk_cur = wk_ag[wk_ag.end > wk_now - "
+      },
+      {
+        "index": 28,
+        "type": "markdown",
+        "characters": 275,
+        "preview": "<a id=\"s8\"></a>\n## 8. Who beats whom\n\nRatings compress everything into one number, and that hides the interesting part: matchups don't\nhave to be transitive. Head-to-head win rates between the busiest teams; read a row as the row\nteam's share of wins against the column team."
+      },
+      {
+        "index": 29,
+        "type": "code",
+        "characters": 2255,
+        "preview": "lad = ladder.dropna(subset=[\"team_0\", \"team_1\"]).copy()\nlad[\"winner_team\"] = np.where(lad.bank_0 >= lad.bank_1, lad.team_0, lad.team_1)\nbusiest = (pd.concat([lad.team_0, lad.team_1]).value_counts().head(6).index.tolist())\nmat = pd.DataFrame(np.nan, index=busiest, columns=busiest, dtype=float)\ncounts = pd.DataFrame(0, index=busiest, columns=busiest, dtype=int)\nfor a in busiest:\n    for b in busiest:\n        if a == b:\n            continue\n        "
+      },
+      {
+        "index": 30,
+        "type": "markdown",
+        "characters": 560,
+        "preview": "<a id=\"s9\"></a>\n## 9. How much of this is luck\n\nSame bot, different games: how wide is its spread? This decides how many submissions you need\nbefore believing a result, and whether that one great game was skill or a lucky matchup.\nA useful floor for reading the chart: in\n[destbreso's weed-spawn ablation](https://www.kaggle.com/code/destbreso/kaggriculture-the-free-experiment-you-already-ran)\nthe environment alone moves a bank by a few hundred coi"
+      },
+      {
+        "index": 31,
+        "type": "code",
+        "characters": 1583,
+        "preview": "per_sub = (agents[agents.episode_id.isin(ladder.episode_id)]\n           .groupby(\"submission_id\").final_bank\n           .agg([\"count\", \"median\", \"std\"]).query(\"count >= 4 and median > 0\").dropna())\nper_sub[\"cv\"] = per_sub[\"std\"] / per_sub[\"median\"]\nfig, axes = plt.subplots(1, 2, figsize=(8.2, 3.3))\naxes[0].scatter(per_sub[\"median\"], per_sub[\"cv\"], s=30, alpha=.65, color=C_LOW,\n                edgecolors=\"white\", lw=.5)\naxes[0].set_xlabel(\"median "
+      },
+      {
+        "index": 32,
+        "type": "markdown",
+        "characters": 894,
+        "preview": "<a id=\"s10\"></a>\n## 10. The openings they share\n\nTwo seats with the same stream hash at turn N played byte-identical actions for N straight\nturns: a shared opening is an observation, not a similarity threshold. Two honest limits, both\nmeasured by destbreso: nothing observable differs before turn 48, so early agreement is partly\nthe engine's determinism rather than evidence of copying, and the full-game hash identifies the\nepisode rather than the "
+      },
+      {
+        "index": 33,
+        "type": "code",
+        "characters": 3852,
+        "preview": "# Self-unlocking: one status line until stream-hash coverage passes the gate.\nop_hits = glob.glob(f\"{BASE}/stream_hashes.csv\")\nop_h = pd.read_csv(op_hits[0]) if op_hits else pd.DataFrame(columns=[\"episode_id\", \"seat\"])\nOP_GATE = 0.95\nop_cov = op_h.episode_id.nunique() / max(1, len(eps))\nif op_cov < OP_GATE:\n    display(Markdown(\n        f\"`stream_hashes.csv` covers **{op_h.episode_id.nunique():,}** of **{len(eps):,}** stored \"\n        f\"episodes "
+      },
+      {
+        "index": 34,
+        "type": "markdown",
+        "characters": 1702,
+        "preview": "<a id=\"s12\"></a>\n## Before you quote these numbers\n\nThe honest edges of this snapshot, so the charts above don't overclaim:\n\n- Fingerprints read one best game per submission: a sketch of a strategy at its peak, not its\n  average behavior.\n- The corpus is a crawl, not a census. Episodes are discovered through pairings, so a brand-new\n  submission can lag behind the ladder by a few hours; section 1 prints the exact replay\n  coverage.\n- Head-to-head"
+      },
+      {
+        "index": 35,
+        "type": "code",
+        "characters": 2078,
+        "preview": "lead_row = fp.iloc[0]\nelbow_txt = (\"\" if not elbows else\n             (f\"day **{min(elbows.values())}**\"\n              if min(elbows.values()) == max(elbows.values())\n              else f\"day **{min(elbows.values())}\u2013{max(elbows.values())}**\"))\nland_txt = (\"no land purchase at all\" if pd.isna(lead_row[\"first land (day)\"])\n            else f\"land on day **{lead_row['first land (day)']:.0f}**\")\ncrop_txt = (f\"and the biggest wins all lead with {uniq"
+      }
+    ],
+    "captured_utc": "2026-09-27T23:46:38.777821+00:00"
+  }
+]

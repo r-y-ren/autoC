@@ -1,0 +1,657 @@
+{
+  "variants": [
+    {
+      "name": "r2",
+      "path": "submissions/release_v10_r2/main.py",
+      "sha256": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4"
+    },
+    {
+      "name": "yarn_nomilk",
+      "path": "research/meta_rebuild_20260927/candidates/midgame_yarn_nomilk.py",
+      "sha256": "3c79287b13c061d6e92392462a845fc7bb25eafbc92c204c6405ab9c1dc7c227"
+    },
+    {
+      "name": "repeat_two_v2",
+      "path": "research/herd_validation_20260928/repeat_two_v2.py",
+      "sha256": "e3bc9abd80f0ce81b80450e929c951536424c52a7737472520c9bb42e74ed008",
+      "config": {
+        "start": 72,
+        "stop": 288,
+        "max_swaps": 2,
+        "no_milk": true,
+        "ratio": 0,
+        "gain": -1000000,
+        "reserve": 100,
+        "min_cows": 4
+      }
+    },
+    {
+      "name": "early_two_v2",
+      "path": "research/herd_validation_20260928/early_two_v2.py",
+      "sha256": "b2f6f15e8e4d0876f286618e9cf44ebf333db396ba640e99208d4a75c1042abc",
+      "config": {
+        "start": 72,
+        "stop": 288,
+        "max_swaps": 2,
+        "no_milk": true,
+        "ratio": 0,
+        "gain": -1000000,
+        "reserve": 100,
+        "min_cows": 3
+      }
+    },
+    {
+      "name": "jit_herd_100",
+      "path": "research/herd_validation_20260928/jit_herd_100.py",
+      "sha256": "fa5c12cb852dccfcfd6eb521c7d786c7c9afcb8e6d8f8530ddfca58366d649bb",
+      "reserve": 100
+    },
+    {
+      "name": "jit_herd_50",
+      "path": "research/herd_validation_20260928/jit_herd_50.py",
+      "sha256": "bbbb9320b020dcb2dbb10d44cf294cbd02493519032ce5f13e3f858a37d8ec4b",
+      "reserve": 50
+    }
+  ],
+  "views": [
+    {
+      "episode": 114197750,
+      "opponent_seat": 1,
+      "kind": "known_r2_loss",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\r2_feedback",
+      "seed": 971232712,
+      "rewards": [
+        99977.0,
+        103949.0
+      ],
+      "replay_sha256": "12d51209e0c8b0cb38054a69c187907434cb925aa498d94b279de8fab2635302",
+      "tape_sha256": "7fe052c7f139fcfb069660357fb1538aef4a92bd896f6c5b5652be97ad281f6f"
+    },
+    {
+      "episode": 114242169,
+      "opponent_seat": 1,
+      "kind": "known_r2_loss",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\r2_feedback",
+      "seed": 1799657451,
+      "rewards": [
+        52784.0,
+        75041.0
+      ],
+      "replay_sha256": "62129f966af1c1f9ea5ad9ae32a01c7c68c1179cc0a93e41669ad67b0db94044",
+      "tape_sha256": "3f13a6fb8d67281e7c4e4b198d1df6dd9015d9f33cc6b3688ed21473a140df3f"
+    },
+    {
+      "episode": 114277466,
+      "opponent_seat": 0,
+      "kind": "known_r2_loss",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\r2_feedback",
+      "seed": 1572034091,
+      "rewards": [
+        92060.0,
+        91444.0
+      ],
+      "replay_sha256": "33a715a0fcdfd4883b441212626a9f251a0860caefb0bf609a7e352f69d7d67d",
+      "tape_sha256": "b1cc5d43dd81cc05bbed543feb75cbbd843df57d8d3a8b9357a6ced8e0a96d09"
+    },
+    {
+      "episode": 114289716,
+      "opponent_seat": 0,
+      "kind": "known_r2_loss",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\r2_feedback",
+      "seed": 1171765689,
+      "rewards": [
+        95697.0,
+        94061.0
+      ],
+      "replay_sha256": "b7657e2a562a244c99eb975062ab845c38758b380053eb962f341ef9d93c5d95",
+      "tape_sha256": "4948ab4ac11e11821296d7b62f1f11dad16c993a815fc2018465b8e047f6b942"
+    },
+    {
+      "episode": 114294974,
+      "opponent_seat": 0,
+      "kind": "known_r2_loss",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\r2_feedback",
+      "seed": 1640341819,
+      "rewards": [
+        98266.0,
+        98025.0
+      ],
+      "replay_sha256": "0068963abd630839fd8db7d32bc39fcbcfbd1124f90b3ab4d623a224fcca6a9d",
+      "tape_sha256": "51ee4f2a90cec57211fd11804799000d02ed2fd3bffd3f3a20d2dfda53d95175"
+    },
+    {
+      "episode": 114295244,
+      "opponent_seat": 1,
+      "kind": "known_r2_loss",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\r2_feedback",
+      "seed": 718408916,
+      "rewards": [
+        102957.0,
+        103596.0
+      ],
+      "replay_sha256": "d84b9b0c9852cbfcbea6144c707976ec476c87c9b3bfaf6a98abdabf493566d0",
+      "tape_sha256": "3712e2505bf77c165fc8e42262716f125eeedc365c0ac7c132c679e4d871a24d"
+    },
+    {
+      "episode": 114267880,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1390733823,
+      "rewards": [
+        115494.0,
+        116306.0
+      ],
+      "replay_sha256": "1d6a1d7ce66a2e07bd1576528e930ac5f13777fdb88f673eea3aa0a4c34c8072",
+      "tape_sha256": "6ac51598479b7b7f396b6b1046260ddd000e01a2762ad6899baf74268c338627"
+    },
+    {
+      "episode": 114253158,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1699455618,
+      "rewards": [
+        115529.0,
+        113861.0
+      ],
+      "replay_sha256": "8fac4f5911dce59efab733d4bb0c513d728151b01a1c0024cc22ddcdebd8c3fd",
+      "tape_sha256": "d775e338147bb4004105e921954fbdefe1a33f7acf5a51c7b9d051f68bf0948a"
+    },
+    {
+      "episode": 114267880,
+      "opponent_seat": 0,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1390733823,
+      "rewards": [
+        115494.0,
+        116306.0
+      ],
+      "replay_sha256": "1d6a1d7ce66a2e07bd1576528e930ac5f13777fdb88f673eea3aa0a4c34c8072",
+      "tape_sha256": "11c6e0d6b33095ff3a47d7bf1e825841f0f094405a170636e1d97868102fdb8c"
+    },
+    {
+      "episode": 114259167,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1110241116,
+      "rewards": [
+        101194.0,
+        104818.0
+      ],
+      "replay_sha256": "54a80e9ee5ee94e46993ba2505a8850680d981ed3615c17cb225dff09858766e",
+      "tape_sha256": "c533948b610540c9e63810530e396748a0de6ce2410f4d7585e2fce93ac8cb74"
+    },
+    {
+      "episode": 114266440,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1042173125,
+      "rewards": [
+        84572.0,
+        90670.0
+      ],
+      "replay_sha256": "2780737421202cc6d8d5c322de491b6430e4699168f65063229f87dd8934a385",
+      "tape_sha256": "d421fd55b3c5e2d4d821d41625da75e3e523fc13cb992deec932fbff3f738f2c"
+    },
+    {
+      "episode": 114251685,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 748641956,
+      "rewards": [
+        106054.0,
+        105422.0
+      ],
+      "replay_sha256": "dbfda33ca6b74556b3c957dde550f8209dc1cbaaeedfe4f5e80c181a6049d02b",
+      "tape_sha256": "53cbcc2c478728977bec93b273029d7eecceb63bf87ddc8bf20b5b0b9ad84ae7"
+    },
+    {
+      "episode": 114265030,
+      "opponent_seat": 0,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1832957472,
+      "rewards": [
+        92972.0,
+        80072.0
+      ],
+      "replay_sha256": "964e0179bd52f42736f7c61f7e44b6d893aa54cd69c5fefa7c8d75f501f03417",
+      "tape_sha256": "a8d4f6e6d996c0990b751bcc16e8dbd236618749d13b66df578e39ce4cb25918"
+    },
+    {
+      "episode": 114250216,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 145124858,
+      "rewards": [
+        119320.0,
+        115565.0
+      ],
+      "replay_sha256": "0a55dd958b1feb90dcfcf53574c7ece17ff08cbc467f75a4d65d619b447dcee0",
+      "tape_sha256": "a7b48f73e6c6fdd640e27d3f900a02eec4bd533956984c1a7b64d5b659734af3"
+    },
+    {
+      "episode": 114265033,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 931842424,
+      "rewards": [
+        108467.0,
+        114919.0
+      ],
+      "replay_sha256": "55c62652e267c2b2df114df06e479bda051feda41f7abc8a6fe6cd2327dace10",
+      "tape_sha256": "b464b4b2ce25bd3282df77c4b422e628b763ff9884142320d81790b6fb7fcd49"
+    },
+    {
+      "episode": 114250345,
+      "opponent_seat": 0,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 28715175,
+      "rewards": [
+        99764.0,
+        99823.0
+      ],
+      "replay_sha256": "083fc530f95b5c137cf7455a85d321a93ce7526c423ba69d871e9170b390dd82",
+      "tape_sha256": "cdb276ccd86108e47bb6d0d825ce9dbbd288958d7e5452f3b6b798f80778a0a9"
+    },
+    {
+      "episode": 114263239,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1525050266,
+      "rewards": [
+        111242.0,
+        113025.0
+      ],
+      "replay_sha256": "e70478604a64682af14cae0a5110f7bf3b970536465f1ccdbeb863c4885e6e6d",
+      "tape_sha256": "3895d6877b724e2719d526007210da520744f6f7556d0a4a8ae57e7379dc2680"
+    },
+    {
+      "episode": 114260287,
+      "opponent_seat": 0,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 2066989337,
+      "rewards": [
+        98778.0,
+        101450.0
+      ],
+      "replay_sha256": "54cc1026469990e18faa4a5746dd60bcbb60f1d2d99c5f0675caad9d917ec900",
+      "tape_sha256": "b8a060a357256ff926f27eecec0b0de4c86f9ab5f2283865349129c855ea8d65"
+    },
+    {
+      "episode": 114267646,
+      "opponent_seat": 0,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1099666453,
+      "rewards": [
+        111786.0,
+        110019.0
+      ],
+      "replay_sha256": "8c20aec76b41a37d00e3fb3470a76e367b0a485d7a6b4653a8dfc93b117b4f59",
+      "tape_sha256": "eed570952fffd4d0318d1edeebc9d56b7e4ef07aadea0fbcfdcdf24188624ff1"
+    },
+    {
+      "episode": 114260627,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 952838241,
+      "rewards": [
+        104556.0,
+        116450.0
+      ],
+      "replay_sha256": "746e2e4e166b30164ec63fa371c5278ca19045a85ca04303e2ce2835c4d1df70",
+      "tape_sha256": "690620da4c069ff3dbbdb2535605f926b5ecd11eab5c6b35c65d61740fcf25d3"
+    },
+    {
+      "episode": 114272024,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1748724242,
+      "rewards": [
+        122055.0,
+        126662.0
+      ],
+      "replay_sha256": "ad827b49a629d1f19f4e314da8117b05bc20045e83b893678789ca779e252123",
+      "tape_sha256": "09d3f08e234da4a7ec145bb9f0edf702fb43810e73975829050962dd0860f48c"
+    },
+    {
+      "episode": 114270394,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 896862154,
+      "rewards": [
+        119886.0,
+        121466.0
+      ],
+      "replay_sha256": "456626e62456902cf526a2c2ad2dbbccc442548c646aff0537d7cfddb5d8b5c4",
+      "tape_sha256": "5282226381201fe4152ce2297ceaa51145e3f87663e585965132230017c0ad2d"
+    },
+    {
+      "episode": 114259211,
+      "opponent_seat": 0,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 772870839,
+      "rewards": [
+        102291.0,
+        108008.0
+      ],
+      "replay_sha256": "900044e895f65391ac454fc732b175419bbe82d1cabcd9a9d5d003ce8c1ea44c",
+      "tape_sha256": "d03aaf6cc918e986e3eca7adc3fa1d37bc6dff1ff007319143fdd4480a17b65c"
+    },
+    {
+      "episode": 114244602,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 1351426823,
+      "rewards": [
+        86107.0,
+        87636.0
+      ],
+      "replay_sha256": "890fb993a286e4a6fc4e86f68c1adf9f854d9526bbaa9e1338cef951f6ecf198",
+      "tape_sha256": "d28b703c84c2fb97d8bd44508831aeb338acc92e5fd741b83553c513ef408b7f"
+    },
+    {
+      "episode": 114270638,
+      "opponent_seat": 1,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 751271786,
+      "rewards": [
+        103930.0,
+        103801.0
+      ],
+      "replay_sha256": "4cabdf64a678fdcc900a4462e07d9bc189b3744ffd9138df7e5733dc10484933",
+      "tape_sha256": "9123527f6292002404b2a125917cf5e71e1f14845769e8f9b7850a7f30180385"
+    },
+    {
+      "episode": 114265033,
+      "opponent_seat": 0,
+      "kind": "archived_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\meta_rebuild_20260927\\recent_replays",
+      "seed": 931842424,
+      "rewards": [
+        108467.0,
+        114919.0
+      ],
+      "replay_sha256": "55c62652e267c2b2df114df06e479bda051feda41f7abc8a6fe6cd2327dace10",
+      "tape_sha256": "bf8ddbacedbd29bbaefb6d6e1c474481723b6171203ebee2cff2b92710100f69"
+    },
+    {
+      "episode": 114404750,
+      "opponent_seat": 1,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 209997393,
+      "rewards": [
+        81544.0,
+        80849.0
+      ],
+      "replay_sha256": "2ad5114f85bf4961ce7a1a752ddfe482f86b38b910f4fe0b9727717f9bdbb5a8",
+      "tape_sha256": "69e4f25da795049627b6256619e9b48ae238c054ade8f29fd5bb3e5d8d22f0f7"
+    },
+    {
+      "episode": 114397452,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 1149439287,
+      "rewards": [
+        90391.0,
+        90436.0
+      ],
+      "replay_sha256": "90c9b1180488bf8e5c6048d6b20f92e595696d91a02537cf3bcd88703c453477",
+      "tape_sha256": "8ce3b1207f376fe1575317b4777e0b8fac257cb016e1329f986fa4415eb0bcc3"
+    },
+    {
+      "episode": 114404767,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 200460034,
+      "rewards": [
+        106820.0,
+        108310.0
+      ],
+      "replay_sha256": "0a9930e1b8c634c78b80a98121e37adf62ab6e09d5e98f0aea75a79bba292af6",
+      "tape_sha256": "4d57c200755908a609fe3f2d9a21913dc165b1014a20fbd3e6b3c05124c7c148"
+    },
+    {
+      "episode": 114404750,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 209997393,
+      "rewards": [
+        81544.0,
+        80849.0
+      ],
+      "replay_sha256": "2ad5114f85bf4961ce7a1a752ddfe482f86b38b910f4fe0b9727717f9bdbb5a8",
+      "tape_sha256": "2409fa4cef3200ecf760e961bc83cd7d3d1c7c2e4c57047b2dc8f69dabf9d45c"
+    },
+    {
+      "episode": 114404767,
+      "opponent_seat": 1,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 200460034,
+      "rewards": [
+        106820.0,
+        108310.0
+      ],
+      "replay_sha256": "0a9930e1b8c634c78b80a98121e37adf62ab6e09d5e98f0aea75a79bba292af6",
+      "tape_sha256": "0e5115d8c0b69c00cca29f9adb571943151faf58c95aec9249cb082850308783"
+    },
+    {
+      "episode": 114397478,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 1327617747,
+      "rewards": [
+        123375.0,
+        124517.0
+      ],
+      "replay_sha256": "5b1cc2e856294f0971129bf61eadb8833590ceca62ebda39424aa5acf73c8bc9",
+      "tape_sha256": "a7d4d828aaeef107634d9048429cf06fe4d1abbb4a0b7eca0845d92f5529e297"
+    },
+    {
+      "episode": 114407535,
+      "opponent_seat": 1,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 749635671,
+      "rewards": [
+        109792.0,
+        110460.0
+      ],
+      "replay_sha256": "44fc6c9e0ec449c6bbdd83eb83d733fe35fa387b6196ecee532b5f1189561281",
+      "tape_sha256": "53897fb401ae2aa01673ac7d04e46d9cee9b0554308e9b02e4c77866fc404ce8"
+    },
+    {
+      "episode": 114406100,
+      "opponent_seat": 1,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 1944529321,
+      "rewards": [
+        107147.0,
+        106941.0
+      ],
+      "replay_sha256": "f94af5706086a2b8a8852646dca4afdf937787aac1926e45a09c499fe69e303d",
+      "tape_sha256": "cea1f0ebcf38760c13657a02bf81db8ff5ebe290ef07189a893a2d59b2a867d7"
+    },
+    {
+      "episode": 114407535,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 749635671,
+      "rewards": [
+        109792.0,
+        110460.0
+      ],
+      "replay_sha256": "44fc6c9e0ec449c6bbdd83eb83d733fe35fa387b6196ecee532b5f1189561281",
+      "tape_sha256": "358d57a420a71970cc06870615c71243fcfd895d7c8ec3ec0a55fe878ed38cc9"
+    },
+    {
+      "episode": 114400375,
+      "opponent_seat": 1,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 756935300,
+      "rewards": [
+        134125.0,
+        146184.0
+      ],
+      "replay_sha256": "75cf6ccfc76e9e1d7e339ea1d3e7ffdbb68fb9c18189b7dbd5d2c431e8398b3a",
+      "tape_sha256": "a66d925a708dccbdf235e8ef076ba5be3bbc5dbe407da202b8bb3a8faa68dbc3"
+    },
+    {
+      "episode": 114404582,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 818771775,
+      "rewards": [
+        109305.0,
+        104603.0
+      ],
+      "replay_sha256": "35373eecfc7f039fc15df14a5c814bd9d436b96b61742f52cbd1e3e0a1e5d237",
+      "tape_sha256": "685dc830d6b81004e3b957624faa01e5a8b2b9611e0b1a8df02757b96dfcd8f5"
+    },
+    {
+      "episode": 114397780,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 1491748803,
+      "rewards": [
+        96750.0,
+        94350.0
+      ],
+      "replay_sha256": "98b62bd51081b0a0f1e1cf03b95bf5d3884c0a067049a6ce72d89005285f2b52",
+      "tape_sha256": "5e4d0fbb381ba0b1e2b169bd0a6f60f0a21e7493bce0b86cd2899abdc8e97c79"
+    },
+    {
+      "episode": 114404894,
+      "opponent_seat": 1,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 214474148,
+      "rewards": [
+        94922.0,
+        99695.0
+      ],
+      "replay_sha256": "f464d273869cc6fc2eac3bb1b86b7025419d95dfbe2e1e239f1130f4096caa6a",
+      "tape_sha256": "b3447cdefd28d49c64bc3342875b70e6ee4ef760dee170fc893546918b1d7b52"
+    },
+    {
+      "episode": 114397476,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 2103860238,
+      "rewards": [
+        92650.0,
+        77855.0
+      ],
+      "replay_sha256": "1480b224834507fb23bee46c21e7d2bd0119346055a5a7598b34d49b1d9ae761",
+      "tape_sha256": "77fc54a0a3284440696c6625b031be29af7b618d1da53fd0a56b2db0447c5ba1"
+    },
+    {
+      "episode": 114407438,
+      "opponent_seat": 1,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 864376155,
+      "rewards": [
+        104824.0,
+        101310.0
+      ],
+      "replay_sha256": "581eb6c51f873e5540c6551bdfb42a4fef655dbae11d5fd82dd0a71adffca581",
+      "tape_sha256": "a476698b27997715ccd797cf717ca395344db1712c2d890926e6942187da5558"
+    },
+    {
+      "episode": 114405981,
+      "opponent_seat": 1,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 382494545,
+      "rewards": [
+        94142.0,
+        86743.0
+      ],
+      "replay_sha256": "8d89f4eb60e3494d87b7e821805a5eb9069b65ee95d26bb0f4b7bcd61985a470",
+      "tape_sha256": "51d4c89d31a705b0259a6e9a239cfdf9e6b107f78b8e700fba3d6813e8283be1"
+    },
+    {
+      "episode": 114403381,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 2097484961,
+      "rewards": [
+        86998.0,
+        76305.0
+      ],
+      "replay_sha256": "062d6b28b1847aedce0c28d1831f06eabb5b0c585af974e47f43c66a81c7902a",
+      "tape_sha256": "3944bab2dde44fac73332375713da2892ba2dd3c6dd269976eccee8a1cf2703c"
+    },
+    {
+      "episode": 114396296,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 287728410,
+      "rewards": [
+        109025.0,
+        108418.0
+      ],
+      "replay_sha256": "864e1cf4dd5b861862f1b3c3fac41862b2cd2df5454b8a3d28f39b44fe9d4d85",
+      "tape_sha256": "7d47c264667054dcaf0eae193489101b5170b11c35fa0db45cc9430deb69ead5"
+    },
+    {
+      "episode": 114400378,
+      "opponent_seat": 0,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 1317930005,
+      "rewards": [
+        105274.0,
+        110184.0
+      ],
+      "replay_sha256": "ef34357884c6131ec662a0e11653f33346683518d596dda48b17fd4cdef37076",
+      "tape_sha256": "1c7969352cf9f4895e98d8b9e70a0dd3ed0b9c6fb62fddf49e25e2bc6e46a6ef"
+    },
+    {
+      "episode": 114397780,
+      "opponent_seat": 1,
+      "kind": "current_top10_development",
+      "source": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\herd_validation_20260928\\recent_replays",
+      "seed": 1491748803,
+      "rewards": [
+        96750.0,
+        94350.0
+      ],
+      "replay_sha256": "98b62bd51081b0a0f1e1cf03b95bf5d3884c0a067049a6ce72d89005285f2b52",
+      "tape_sha256": "b78885719896866f1931c293b51c06451be9ec6d894d3f0cb8a27f57a985e370"
+    }
+  ],
+  "scope": "Fixed public actions only. Current and archived development views are not live top-ten opponents."
+}

@@ -1,0 +1,20 @@
+    # Buy upcoming task inputs before the unit reaches the pickup deadline.
+    # Only our own demonstrated task plan is used; no opponent private information.
+    next_inputs={}
+    hour=step%24
+    for actor,queue in enumerate(tasks):
+        pointer=state['pointers'][actor]
+        for task in queue[pointer:]:
+            if task['hour']>hour+_INPUT_LOOK:break
+            command=task['op']
+            if command[0]=='PICKUP':
+                item=command[1]
+                quantity=int(command[2]) if len(command)>2 else 1
+                next_inputs[item]=next_inputs.get(item,0)+quantity
+            if command[0] in ('PLANT','BUILD_PASTURE','BUILD_COOP'):
+                tile=_tile(farm['tiles'],task['xy'])
+                if tile=='LOCKED':needs['land']=max(needs.get('land',0),task['quadrant'])
+    upcoming_stock=_project_stock(observation,commands)
+    for item,quantity in next_inputs.items():
+        needs[item]=max(needs.get(item,0),quantity-upcoming_stock.get(item,0))
+        needs['keep:'+item]=quantity

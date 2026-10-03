@@ -1,0 +1,114 @@
+[
+  {
+    "path": "fieldcraft/main.py",
+    "bytes": 41203,
+    "sha256": "4aa771451850e68892fc1a847211f0bebffd511d6d3a508a7bb9969e5b881091",
+    "imports": [
+      "from mirror_plan import TAPE",
+      "import math as A"
+    ],
+    "suspicious": []
+  },
+  {
+    "path": "fieldcraft/mirror_plan.py",
+    "bytes": 502035,
+    "sha256": "65727d56185b2d61fa6ca6ec999650b4a1f7dc060099ccbee8ce88d35a3b05a0",
+    "imports": [],
+    "suspicious": []
+  },
+  {
+    "path": "market_smart/main.py",
+    "bytes": 333999,
+    "sha256": "f6a756cfb900b9d5f499905d596b63f1fde2445342ac4b1ae04e353739bd62d2",
+    "imports": [
+      "from __future__ import annotations",
+      "import copy",
+      "import base64",
+      "import json",
+      "import zlib",
+      "import math",
+      "from itertools import permutations as _r53_permutations"
+    ],
+    "suspicious": [
+      [
+        3294,
+        "    # physically valid births. The current atomic repair drops invalid requests."
+      ]
+    ]
+  },
+  {
+    "path": "pipe5/main.py",
+    "bytes": 322037,
+    "sha256": "a5cb643b0516906fb7660613a4eebe00a6cc949a8de98d7744a7071038da824c",
+    "imports": [
+      "from __future__ import annotations",
+      "import copy",
+      "import base64",
+      "import json",
+      "import zlib",
+      "import math",
+      "from itertools import permutations as _r53_permutations"
+    ],
+    "suspicious": [
+      [
+        3301,
+        "    # physically valid births. The current atomic repair drops invalid requests."
+      ]
+    ]
+  },
+  {
+    "path": "structured/main.py",
+    "bytes": 5110,
+    "sha256": "21e4b79bbc7bca97ad1af6337322303987d73d95b963b08ebe80a67900bd5360",
+    "imports": [
+      "import copy",
+      "import hashlib",
+      "import inspect",
+      "import json",
+      "from pathlib import Path",
+      "import runpy",
+      "from sheep_admission import evaluate_admission"
+    ],
+    "suspicious": []
+  },
+  {
+    "path": "structured/market_primitives.py",
+    "bytes": 17100,
+    "sha256": "dcfade4643811388ee0264046de23a1f69e44e72cb421e9fcac0930e6a48e67c",
+    "imports": [
+      "from __future__ import annotations",
+      "from collections.abc import Mapping",
+      "from copy import deepcopy",
+      "from dataclasses import dataclass, replace",
+      "import math"
+    ],
+    "suspicious": []
+  },
+  {
+    "path": "structured/sheep_admission.py",
+    "bytes": 14208,
+    "sha256": "16b34ffd055dcfdab0ff728c0ac5524c1a83aacfae2f291eba56573ee4e4e4a4",
+    "imports": [
+      "from __future__ import annotations",
+      "from copy import deepcopy",
+      "import math",
+      "from .market_primitives import price_at",
+      "from market_primitives import price_at"
+    ],
+    "suspicious": []
+  },
+  {
+    "path": "structured/upstream.py",
+    "bytes": 267360,
+    "sha256": "7eb5ab6c48581c82906ab6fa6b2cc5c9607513249ef59b2c45fcd6176e8653dd",
+    "imports": [
+      "from __future__ import annotations",
+      "import copy",
+      "import base64",
+      "import json",
+      "import zlib",
+      "import math"
+    ],
+    "suspicious": []
+  }
+]

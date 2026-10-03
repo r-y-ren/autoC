@@ -1,0 +1,115 @@
+
+# Last-day optional collection by workers with no remaining productive tasks.
+_ED_PARENT=phase_b_agent
+_ED_STATE={}
+_ED_REPORT={'plans':0,'collects':0,'drops':0,'errors':0,'extra_sell_units':0}
+_ED_HOMES=((4,4),(4,5),(5,4),(5,5))
+_ED_MOVES={'NORTH':(0,-1),'SOUTH':(0,1),'EAST':(1,0),'WEST':(-1,0)}
+_ED_ANIMALS={'COW':'MILK','SHEEP':'WOOL','GOOSE':'EGG'}
+def _ed_distance(a,b):return abs(a[0]-b[0])+abs(a[1]-b[1])
+def _ed_home(pos):return min(_ED_HOMES,key=lambda h:(_ed_distance(pos,h),h))
+def _ed_reservations(obs,action):
+    step=int(obs['step']);seat=int(obs['player']);farm=obs['farms'][seat]
+    positions=[list(farm['farmer'])]+[list(p) for p in farm['hands']]
+    current=[action.get('farmer') or ['PASS']]+list(action.get('hands') or [])
+    reserved=set();busy=set()
+    for i,c in enumerate(current[:len(positions)]):
+        if c and c[0] in ('HARVEST','COLLECT_FERTILIZER'):reserved.add((tuple(positions[i]),c[0]))
+        if c and c[0] in _ED_MOVES:
+            dx,dy=_ED_MOVES[c[0]];x,y=positions[i];positions[i]=[max(0,min(9,x+dx)),max(0,min(9,y+dy))]
+    tape=_IMPL.chassis.routes[2]
+    for t in range(step+1,719):
+        a=tape[t];commands=[a.get('farmer') or ['PASS']]+list(a.get('hands') or [])
+        for i,c in enumerate(commands[:len(positions)]):
+            if not c:continue
+            if c[0] not in ('PASS','DROP',*_ED_MOVES):busy.add(i)
+            if c[0] in _ED_MOVES:
+                dx,dy=_ED_MOVES[c[0]];x,y=positions[i];positions[i]=[max(0,min(9,x+dx)),max(0,min(9,y+dy))]
+            elif c[0] in ('HARVEST','COLLECT_FERTILIZER'):reserved.add((tuple(positions[i]),c[0]))
+    busy.update(_V219_STATES.get(seat,{}).get('workers',{}))
+    return reserved,busy
+def _ed_apply(obs,action):
+    step=int(obs['step']);seat=int(obs['player'])
+    if step<_ED_START or step>718:return action
+    if _TERMINAL_PLANS.get(seat,{}).get('accepted'):return action
+    farm=obs['farms'][seat];private=obs['private'];positions=[farm['farmer']]+farm['hands']
+    commands=[action.get('farmer') or ['PASS']]+list(action.get('hands') or [])
+    commands+=[['PASS'] for _ in range(len(positions)-len(commands))]
+    state=_ED_STATE.setdefault(seat,{'jobs':{}});jobs=state['jobs']
+    reserved,busy=_ed_reservations(obs,action)
+    future_quantity=0
+    for (x,y),op in reserved:
+        tile=farm['tiles'][y][x]
+        if not isinstance(tile,dict):continue
+        if op=='HARVEST':
+            future_quantity+=max(0,int(tile.get('yield_units',0)))
+            if tile.get('crop') in ('WHEAT','CARROT','MELON'):future_quantity+=2
+        elif tile.get('fertilizer_available'):future_quantity+=1
+    total=sum(private['shed'].values())+sum(sum(b.values()) for b in private['inventories'])
+    total+=future_quantity+sum(j['quantity'] for j in jobs.values() if j['phase']=='collect')
+    taken={tuple(j['site']) for j in jobs.values()};deposits={};changed=False
+    for actor,job in list(jobs.items()):
+        if actor>=len(positions):jobs.pop(actor);continue
+        pos=tuple(positions[actor]);bag=private['inventories'][actor];home=_ed_home(pos)
+        if job['phase']=='collect':
+            site=tuple(job['site']);tile=farm['tiles'][site[1]][site[0]]
+            available=isinstance(tile,dict) and (tile.get('yield_units',0)>0 if job['op']=='HARVEST' else tile.get('fertilizer_available',False))
+            if not available or _ed_distance(pos,site)+2+_ed_distance(site,_ed_home(site))>719-step:job['phase']='home'
+            elif pos!=site:commands[actor]=_v219_walk(pos,site);changed=True;continue
+            else:commands[actor]=[job['op']];job['phase']='home';_ED_REPORT['collects']+=1;changed=True;continue
+        if not any(bag.values()):jobs.pop(actor,None);continue
+        if pos!=home:commands[actor]=_v219_walk(pos,home);changed=True
+        else:
+            commands[actor]=['DROP'];changed=True
+            for item,q in bag.items():deposits[item]=deposits.get(item,0)+q
+            jobs.pop(actor,None);_ED_REPORT['drops']+=1
+    for actor in range(1,len(positions)):
+        if actor in jobs or actor in busy or commands[actor]!=['PASS'] or any(private['inventories'][actor].values()):continue
+        if len(jobs)>=_ED_MAX_WORKERS:break
+        pos=tuple(positions[actor]);best=None
+        for y,row in enumerate(farm['tiles']):
+            for x,tile in enumerate(row):
+                site=(x,y)
+                if site in taken or not isinstance(tile,dict):continue
+                d=_ed_distance(pos,site);cost=d+2+_ed_distance(site,_ed_home(site))
+                if cost>719-step:continue
+                item=_ED_ANIMALS.get(tile.get('animal')) or tile.get('crop')
+                options=[];quantity=max(0,int(tile.get('yield_units',0)))
+                expiry=int(tile.get('max_lifespan_step',-1))
+                decay=sum(t>=expiry and (t-expiry)%2==0 for t in range(step,step+d)) if expiry>=0 else 0
+                if item in PRODUCTS and quantity>decay:options.append(('HARVEST',item,quantity,quantity-decay))
+                if _ED_FERTILIZER and tile.get('fertilizer_available'):options.append(('COLLECT_FERTILIZER','FERTILIZER',1,1))
+                for op,item,q,delivered in options:
+                    if (site,op) in reserved or total+q>_ED_CAPACITY:continue
+                    value=delivered*float(obs['market']['prices'].get(item,0))
+                    if value<_ED_MIN_VALUE:continue
+                    key=(value/cost,value,-cost,-actor,-y,-x)
+                    if best is None or key>best[0]:best=(key,site,op,q)
+        if best is None:continue
+        _,site,op,q=best;taken.add(site);total+=q
+        job={'site':site,'op':op,'quantity':q,'phase':'collect'};jobs[actor]=job
+        commands[actor]=_v219_walk(pos,site) or [op]
+        if tuple(pos)==site:job['phase']='home';_ED_REPORT['collects']+=1
+        _ED_REPORT['plans']+=1;changed=True
+    if not changed:return action
+    # The existing agent retains complete ownership of every market order.
+    return dict(action,farmer=commands[0],hands=commands[1:])
+
+_ED_PREVIOUS={}
+def endgame_delivery_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0 or step<=_ED_PREVIOUS.get(seat,-1):_ED_STATE.pop(seat,None)
+    _ED_PREVIOUS[seat]=step
+    if step==0:
+        for key in _ED_REPORT:_ED_REPORT[key]=0
+    action=_ED_PARENT(observation,configuration)
+    try:
+        result=_ed_apply(observation,action)
+        assert result.get('market')==action.get('market')
+        return result
+    except Exception:
+        _ED_REPORT['errors']+=1
+        return action
+endgame_delivery_agent.telemetry=_ED_REPORT
+agent=endgame_delivery_agent
+kaggle_submission_agent=endgame_delivery_agent

@@ -1,0 +1,19 @@
+def fingerprint(episode_id, seat):
+    # Hires are read from the farm state (hires_today), not from submitted HIRE
+    # orders — bots keep sending orders the engine rejects once money runs short.
+    crops, first_land, peak_crew, hires_by_day = {}, None, 0, {}
+    for t, step in enumerate(load_replay(episode_id)["steps"]):
+        farm = step[0]["observation"]["farms"][seat]
+        day = t // 24
+        hires_by_day[day] = max(hires_by_day.get(day, 0), farm["hires_today"])
+        peak_crew = max(peak_crew, len(farm["hands"]))
+        a = step[seat].get("action") or {}
+        for order in (a.get("market") or []):
+            if isinstance(order, list) and order and order[0] == "BUY_LAND" and first_land is None:
+                first_land = day
+        for unit in [a.get("farmer") or []] + list(a.get("hands") or []):
+            if isinstance(unit, list) and unit and unit[0] == "PLANT" and len(unit) > 1:
+                crops[unit[1]] = crops.get(unit[1], 0) + 1
+    return {"hires / day": sum(hires_by_day.values()) / max(1, len(hires_by_day)),  # CSV: total_hires
+            "peak crew": peak_crew,
+            "first land (day)": first_land, "plants": crops}

@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "bounded_sell_only_preserves_physical_and_non_sell_orders",
+    "max_ten_order_slots",
+    "low_cash_fallback",
+    "endgame_unchanged",
+    "protect_same_turn_pickup",
+    "input_purchase_turn_unchanged",
+    "shadow_returns_original_object",
+    "observers_receive_final_emitted_sales"
+  ],
+  "scope": "Synthetic contracts only, not match strength."
+}

@@ -1,0 +1,33 @@
+def passive_opponent(observation, configuration):
+    return {'farmer': ['PASS'], 'hands': [], 'market': []}
+
+games, summaries, traces, action_counts = [], [], [], Counter()
+if LAB_READY:
+    for seed in SEEDS:
+        for seat in (0, 1):
+            sys.modules.pop('mirror_plan', None)
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                env = make('kaggriculture', configuration={'seed': int(seed), 'episodeSteps': 720}, debug=True)
+                players = [passive_opponent, passive_opponent]
+                players[seat] = str(RELEASE_DIR/'main.py')
+                started = time.perf_counter()
+                env.run(players)
+            statuses = [s.status for s in env.state]
+            assert statuses == ['DONE', 'DONE'], statuses
+            final_farms = env.state[0].observation['farms']
+            summaries.append({'seed': seed, 'seat': seat, 'agent_cash': final_farms[seat]['money'],
+                              'opponent_cash': final_farms[1-seat]['money'], 'status': 'DONE',
+                              'seconds': round(time.perf_counter()-started, 2)})
+            for index, state in enumerate(env.steps):
+                farms = state[0].observation.get('farms')
+                if farms:
+                    traces.append({'seed':seed, 'seat':seat, 'step':index,
+                                   'agent_cash':farms[seat]['money'], 'opponent_cash':farms[1-seat]['money']})
+                action = state[seat].action or {}
+                for row in [action.get('farmer', [])] + list(action.get('hands', [])):
+                    if row: action_counts[row[0]] += 1
+            games.append(env)
+    results = pd.DataFrame(summaries)
+    results.to_csv(ROOT/'demo_results.csv', index=False)
+    pd.DataFrame(traces).to_csv(ROOT/'demo_trajectories.csv', index=False)
+    display(results.style.format({'agent_cash':'${:,.0f}', 'opponent_cash':'${:,.0f}', 'seconds':'{:.2f}'}).hide(axis='index'))

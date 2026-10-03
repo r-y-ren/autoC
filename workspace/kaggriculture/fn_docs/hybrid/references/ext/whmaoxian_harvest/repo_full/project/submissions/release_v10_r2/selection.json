@@ -1,0 +1,71 @@
+{
+  "candidate": "research/v10_rebuild_20260926/continuation/phase_b/generation6/similarity90.py",
+  "sha256": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4",
+  "entry": "phase_b_agent",
+  "selected_utc": "2026-09-26T12:37:29.930210+00:00",
+  "settings": {
+    "public_layout_similarity_gate": 0.9,
+    "aggressive_observed_stock_threshold": 4,
+    "aggressive_advance_horizon": 36,
+    "conservative_advance_horizon": 12,
+    "conservative_sellnow_disabled": true,
+    "safe_initial_net_wheat": 5,
+    "decay_correction": false,
+    "floor_correction": false
+  },
+  "reason": "Highest complete public-program win points among candidates satisfying all development family and direct-reference gates; counter-policy results and margin used as tie-breaks.",
+  "development_public": {
+    "games": 192,
+    "invalid": 0,
+    "wins": 189,
+    "ties": 0,
+    "losses": 3,
+    "points": 0.984375,
+    "mean_margin": 6411.682291666667,
+    "p10": 1380.0,
+    "worst": -2546.0
+  },
+  "development_counter": {
+    "games": 96,
+    "invalid": 0,
+    "wins": 40,
+    "ties": 34,
+    "losses": 22,
+    "points": 0.59375,
+    "mean_margin": 129.09375,
+    "p10": -424.0,
+    "worst": -952.0
+  },
+  "development_direct": {
+    "v9": {
+      "games": 32,
+      "invalid": 0,
+      "wins": 26,
+      "ties": 0,
+      "losses": 6,
+      "points": 0.8125,
+      "mean_margin": 635.5625,
+      "p10": -82.0,
+      "worst": -134.0
+    },
+    "v10": {
+      "games": 32,
+      "invalid": 0,
+      "wins": 27,
+      "ties": 0,
+      "losses": 5,
+      "points": 0.84375,
+      "mean_margin": 686.875,
+      "p10": -130.0,
+      "worst": -735.0
+    }
+  },
+  "style_outcomes_used_for_selection": false,
+  "rejected_phase_a_sha256": "e03333c6bef0c83764d56f1cc958782f032c5bbdc0684bae1cc2ccd6b61f3e7c",
+  "evidence_hashes": {
+    "generation6": "3fd617fd500d136b52bc2c68b5e6bf33e486ee4005d8a33ef79fda14cd412ccc",
+    "demand_dev": "84cbd51cfa9d55ab3bd4c4a9d731da733e8c3badc7a6acaaaf35f7a68c933bd6",
+    "generation7": "50f399016c5e2853a567ae87130771a6236c13ceb219a3162dc55d75100820fb",
+    "generation7_direct": "469e5fbed7467b4c997459d93540a79441ceca17898540fedb7aa4223ee3087b"
+  }
+}

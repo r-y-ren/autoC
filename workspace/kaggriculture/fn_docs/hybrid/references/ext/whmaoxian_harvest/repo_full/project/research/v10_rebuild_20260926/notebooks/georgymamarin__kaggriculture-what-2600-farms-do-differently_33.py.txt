@@ -1,0 +1,63 @@
+# Self-unlocking: one status line until stream-hash coverage passes the gate.
+op_hits = glob.glob(f"{BASE}/stream_hashes.csv")
+op_h = pd.read_csv(op_hits[0]) if op_hits else pd.DataFrame(columns=["episode_id", "seat"])
+OP_GATE = 0.95
+op_cov = op_h.episode_id.nunique() / max(1, len(eps))
+if op_cov < OP_GATE:
+    display(Markdown(
+        f"`stream_hashes.csv` covers **{op_h.episode_id.nunique():,}** of **{len(eps):,}** stored "
+        f"episodes so far (**{op_cov:.0%}**). The collector backfills more every night; these "
+        f"charts appear on the first scheduled run after coverage passes {OP_GATE:.0%}."))
+else:
+    op_pref = [24, 100, 200, 400, 719]
+    op = op_h[op_h.episode_id.isin(set(ladder_r.episode_id))].merge(
+        ladder_r[["episode_id", "team_0", "team_1", "end"]], on="episode_id", how="left")
+    op["team"] = np.where(op.seat.eq(0), op.team_0, op.team_1)
+
+    fig, (axL, axR) = plt.subplots(1, 2, figsize=(8.2, 3.4))
+    op_share = []
+    for op_t in op_pref:
+        op_col = op[f"stream_h{op_t}"].dropna()
+        op_vc = op_col.value_counts()
+        op_share.append((op_col.map(op_vc) > 1).mean())
+    axL.plot(op_pref, [s * 100 for s in op_share], marker="o", lw=2.2, color=C_ACC)
+    axL.set_xlabel("agree for this many turns"); axL.set_ylabel("% of seats in a shared line")
+    axL.set_title("How long the field stays identical")
+
+    op_top = op.stream_h100.value_counts().idxmax()
+    op_hit = op.assign(hit=op.stream_h100.eq(op_top))
+    op_day = op_hit.set_index("end").resample("1D").hit.mean().dropna()
+    # The two seats of one episode are not independent draws (mirror games exist),
+    # so the naive binomial CI is too narrow. Measure the pairing effect from the
+    # data itself: phi-correlation of the indicator between seats 0 and 1, then
+    # inflate the CI by the design effect 1 + phi.
+    op_w = op_hit.pivot_table(index="episode_id", columns="seat", values="hit",
+                              aggfunc="first").dropna()
+    op_phi = float(op_w[0].astype(float).corr(op_w[1].astype(float))) if len(op_w) > 50 else 0.0
+    op_deff = max(1.0, 1.0 + op_phi)
+    op_n = op_hit.set_index("end").resample("1D").hit.size()
+    op_se = np.sqrt(op_day * (1 - op_day) / op_n.reindex(op_day.index) * op_deff)
+    axR.fill_between(op_day.index, (op_day - 1.96 * op_se) * 100,
+                     (op_day + 1.96 * op_se) * 100, color=C_TOP, alpha=.18, lw=0)
+    axR.plot(op_day.index, op_day * 100, lw=2.2, color=C_TOP)
+    axR.set_ylabel("% of seats that day"); axR.set_title("The biggest turn-100 line, day by day")
+    axR.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%b %d"))
+    axR.tick_params(axis="x", labelsize=8.5)
+    plt.tight_layout(); plt.show()
+
+    op_rec = (op.dropna(subset=["stream_h719", "team"])
+                .groupby(["team", "stream_h719"]).size())
+    op_rec = op_rec[op_rec >= 2]
+    op_line = (f"**{op_rec.reset_index().team.nunique():,}** teams replay at least one fixed "
+               f"recording: the same team, the same bytes for all 719 turns, in two or more "
+               f"games." if len(op_rec) else
+               "No team replays a byte-identical full game twice in the covered slice.")
+    display(Markdown(
+        f"The band on the right is a 95% interval with the seat-pairing of an episode "
+        f"measured in (design effect **{op_deff:.2f}**): two seats of one game are not two "
+        f"independent draws. "
+        f"At turn 24, **{op_share[0]:.0%}** of seats share their line with someone else; by "
+        f"turn 719 that is **{op_share[-1]:.0%}**. The biggest turn-100 line peaked at "
+        f"**{op_day.max():.0%}** of the day's seats. {op_line} The census inherits the "
+        f"collection bias: the crawl favours a few hundred submissions, so these shares "
+        f"describe the covered corpus, not the whole ladder."))

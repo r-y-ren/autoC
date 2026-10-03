@@ -1,0 +1,215 @@
+
+# R11 experimental crop allocator: preserve V9's final entry and native labor.
+# This is an isolated candidate, not a Kaggle submission.
+_R11CO_PARENT = round9_slack_agent
+_R11CO_STATES = {}
+_R11CO_REPORT = {'decision_0': 0, 'decision_5': 0, 'decision_9': 0,
+                 'requested_seed': 0, 'confirmed_seed': 0,
+                 'requested_plant': 0, 'confirmed_plant': 0,
+                 'requested_harvest': 0, 'confirmed_harvest_units': 0,
+                 'requested_sale': 0, 'confirmed_sale': 0,
+                 'structural_decline': 0, 'errors': 0}
+_R11CO_SHOPS_BERRY = {'BRUNCH_SPOT', 'ICE_CREAM_SHOP', 'SMOOTHIE_SHOP', 'FARMERS_MARKET'}
+
+
+def _r11co_native_structure(obs):
+    native = _IMPL.chassis.players.get(int(obs['player']))
+    if not native or native.get('route') not in _IMPL.chassis.routes:
+        return False
+    bought = planted = 0
+    prefixes = set()
+    for action in _IMPL.chassis.routes[native['route']][264:288]:
+        for order in action.get('market', ()):
+            if order and order[:2] == ['BUY_SEED', 'STRAWBERRY']:
+                bought += int(order[2]); prefixes.add(bought)
+        for command in [action.get('farmer'), *(action.get('hands') or ())]:
+            if command == ['PLANT', 'STRAWBERRY']:
+                planted += 1
+    return bought == planted == 13 and {5, 9, 13}.issubset(prefixes)
+
+
+def _r11co_visible_flow(obs, item):
+    own, rival = {}, {}
+    for seat, farm in enumerate(obs['farms']):
+        flow = own if seat == int(obs['player']) else rival
+        for row in farm['tiles']:
+            for tile in row:
+                if not isinstance(tile, dict) or tile.get('crop') != item:
+                    continue
+                born = int(tile.get('planted_day', 30))
+                if item == 'STRAWBERRY':
+                    for wave in range(4):
+                        sale_day = born + 10 + 2*wave + 1
+                        if 11 <= sale_day <= 29:
+                            # Existing own berry program is watered/fertilized,
+                            # but deliverability is below the physical 2-unit cap.
+                            flow[sale_day] = flow.get(sale_day, 0) + (1.6 if flow is own else 1.0)
+                elif item == 'MELON':
+                    sale_day = born + 12 + 1
+                    if 11 <= sale_day <= 29:
+                        flow[sale_day] = flow.get(sale_day, 0) + (3.0 if flow is own else 2.0)
+    return own, rival
+
+
+def _r11co_patch(item, count):
+    if item == 'MELON':
+        # The native day-21 visit occurs on the first nine day-11 sites.  Three
+        # units assumes only two useful bonus waterings (one fertilized).
+        return {22: 3*count} if count else {}
+    # Native V9 13-site route makes four sellable berry waves.  The first two
+    # visits miss one/two end sites, which is explicit instead of averaging six
+    # units per plant (R10's error).  Ongoing output is capped at two per wave.
+    return {22: 2*min(count,12), 24: 2*min(count,11),
+            26: 2*count, 28: 2*count} if count else {}
+
+
+def _r11co_cash(obs, item, count, future_buyer_rate, rival_stress):
+    own, rival = _r11co_visible_flow(obs, item)
+    patch = _r11co_patch(item, count)
+    params = {key: dict(value) for key, value in _R37_MARKET_PARAMS.items()}
+    for key, value in obs['market'].get('params', {}).items():
+        if key in params:
+            params[key].update(value)
+    inventory = float(obs['market']['inventory'][item])
+    known_shops = sum(name in _R11CO_SHOPS_BERRY for name in obs['town']['unlocked_shops']) if item == 'STRAWBERRY' else 0
+    cash = 0.0
+    day0 = int(obs['step']) // 24
+    future = (12, 15, 18, 21, 24)
+    for day in range(day0, 30):
+        if day in future and item == 'STRAWBERRY':
+            known_shops += future_buyer_rate
+        inventory -= 1.0 + 6.0*known_shops
+        # Sell observed rival production before valuing ours.  Unknown future
+        # rival expansion is a scenario rather than a claimed observation.
+        other_units = int(round(rival.get(day, 0) + (rival_stress if day >= 18 else 0)))
+        for _ in range(max(0, other_units)):
+            if _r37_market_price(item, inventory, params) > 1:
+                inventory += 1
+        own_units = int(round(own.get(day, 0)))
+        patch_units = int(patch.get(day, 0))
+        for _ in range(max(0, own_units + patch_units)):
+            quote = _r37_market_price(item, inventory, params)
+            cash += quote
+            if quote > 1:
+                inventory += 1
+    return cash
+
+
+def _r11co_choice(obs):
+    if not _r11co_native_structure(obs):
+        _R11CO_REPORT['structural_decline'] += 1
+        return 0
+    # Fixed physical schedule and seed-cost savings; no episode, opponent
+    # identity, future shop outcome or private rival inventory is consulted.
+    scenarios = ((0.0, 3.0, 0.25), (0.5, 0.0, 0.5), (0.75, 0.0, 0.25))
+    gains = {}
+    for k in (5, 9):
+        deltas = []
+        for future_rate, stress, weight in scenarios:
+            native = _r11co_cash(obs, 'STRAWBERRY', 13, future_rate, stress)
+            mixed = _r11co_cash(obs, 'STRAWBERRY', 13-k, future_rate, stress)
+            native_melon = _r11co_cash(obs, 'MELON', 0, 0, stress)
+            mixed_melon = _r11co_cash(obs, 'MELON', k, 0, stress)
+            # Melon seed is 20 cheaper, and existing worker/land actions stay.
+            deltas.append((mixed + mixed_melon - native - native_melon + 20*k, weight))
+        mean = sum(value*weight for value, weight in deltas)
+        downside = min(value for value, _ in deltas)
+        if downside >= -2500 and mean + 0.25*downside >= 750:
+            gains[k] = mean + 0.25*downside
+    return max(gains, key=gains.get) if gains else 0
+
+
+def _r11co_reconcile(obs, state):
+    pending = state.pop('pending', None)
+    if not pending or pending['step'] + 1 != int(obs['step']):
+        return
+    farm = obs['farms'][int(obs['player'])]
+    private = obs['private']
+    planted = 0
+    for x, y in pending['plants']:
+        tile = farm['tiles'][y][x]
+        if isinstance(tile, dict) and tile.get('crop') == 'MELON' and tile.get('planted_day') == 11:
+            planted += 1
+            state['sites'].add((x,y))
+    _R11CO_REPORT['confirmed_plant'] += planted
+    seed_delta = int(private['seeds'].get('MELON',0)) - pending['seeds'] + planted
+    _R11CO_REPORT['confirmed_seed'] += max(0, min(pending['buys'], seed_delta))
+    for x,y,units in pending['harvests']:
+        if farm['tiles'][y][x] is None:
+            _R11CO_REPORT['confirmed_harvest_units'] += units
+    if pending['sale']:
+        shed_after = int(private['shed'].get('MELON',0))
+        if shed_after <= pending['shed_before'] - pending['sale']:
+            _R11CO_REPORT['confirmed_sale'] += pending['sale']
+
+
+def round11_crop_optimizer_agent(observation, configuration=None):
+    step = int(observation['step']); seat = int(observation['player'])
+    state = _R11CO_STATES.get(seat)
+    if state is None or step <= state['last']:
+        state = {'last': -1, 'choice': 0, 'bought': 0, 'planted': 0,
+                 'sites': set(), 'pending': None}
+        _R11CO_STATES[seat] = state
+        for key in _R11CO_REPORT:
+            _R11CO_REPORT[key] = 0
+    state['last'] = step
+    if step:
+        _r11co_reconcile(observation, state)
+    action = _R11CO_PARENT(observation, configuration)
+    if step == 264:
+        try:
+            state['choice'] = _r11co_choice(observation)
+        except Exception:
+            _R11CO_REPORT['errors'] += 1
+            state['choice'] = 0
+        _R11CO_REPORT['decision_' + str(state['choice'])] += 1
+    if not state['choice']:
+        return action
+    result = dict(action)
+    result['market'] = [list(order) for order in action.get('market', [])]
+    result['farmer'] = list(action.get('farmer') or ['PASS'])
+    result['hands'] = [list(command) for command in action.get('hands', [])]
+    farm = observation['farms'][seat]
+    positions = [farm['farmer'], *farm['hands']]
+    buys = 0; plants = []; harvests = []
+    if 264 <= step < 288:
+        for order in result['market']:
+            if order[:2] == ['BUY_SEED','STRAWBERRY'] and state['bought'] < state['choice']:
+                q = int(order[2])
+                if state['bought'] + q <= state['choice']:
+                    order[1] = 'MELON'; state['bought'] += q; buys += q
+                    _R11CO_REPORT['requested_seed'] += q
+        for j, command in enumerate([result['farmer'], *result['hands']]):
+            if command == ['PLANT','STRAWBERRY'] and state['planted'] < state['choice'] and j < len(positions):
+                command[1] = 'MELON'; state['planted'] += 1
+                plants.append(tuple(positions[j]))
+                _R11CO_REPORT['requested_plant'] += 1
+    for j, command in enumerate([result['farmer'], *result['hands']]):
+        if command == ['HARVEST'] and j < len(positions):
+            x,y = positions[j]
+            if (x,y) in state['sites']:
+                tile = farm['tiles'][y][x]
+                if isinstance(tile,dict) and tile.get('crop') == 'MELON' and tile.get('yield_units',0)>0:
+                    units = int(tile['yield_units'])
+                    harvests.append((x,y,units))
+                    _R11CO_REPORT['requested_harvest'] += units
+    # Only liquidate goods already in the shed; no same-turn speculative sale.
+    sale = 0
+    if step >= 288:
+        stock = int(observation['private']['shed'].get('MELON',0))
+        melon_order = next((order for order in result['market'] if order[:2] == ['SELL','MELON']), None)
+        if melon_order is not None and stock > int(melon_order[2]):
+            sale = stock-int(melon_order[2]); melon_order[2] = stock
+        elif melon_order is None and stock and len(result['market']) < MAX_ORDERS:
+            if int(observation['market']['prices']['MELON']) > 1 or stock > 30 or step >= 696:
+                result['market'].append(['SELL','MELON',stock]); sale = stock
+        _R11CO_REPORT['requested_sale'] += sale
+    state['pending'] = {'step':step, 'plants':plants, 'buys':buys,
+                        'seeds':int(observation['private']['seeds'].get('MELON',0)),
+                        'harvests':harvests, 'sale':sale,
+                        'shed_before':int(observation['private']['shed'].get('MELON',0))}
+    return result
+
+round11_crop_optimizer_agent.telemetry = _R11CO_REPORT
+agent = round11_crop_optimizer_agent
+kaggle_submission_agent = round11_crop_optimizer_agent

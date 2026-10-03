@@ -1,0 +1,96 @@
+{
+  "manifest": {
+    "candidate": "experiments/round10_post_slack_reorder.py",
+    "opponents": [
+      "submissions/release_v9/main.py",
+      "external/round9/frontier/main.py",
+      "experiments/round8_top2_dsm_strict.py",
+      "external/round8/master2965/main.py"
+    ],
+    "hashes": {
+      "experiments/round10_post_slack_reorder.py": "3440d01d8d5aaf43bb5d7fe7bd08e9cc420a287063d835d951bc2f149e4b724a",
+      "submissions/release_v9/main.py": "6b13532fbc2b55b59c6cae8ed8d5cd29fe82d18a7d7e044ed130217e3d1c09d3",
+      "external/round9/frontier/main.py": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "experiments/round8_top2_dsm_strict.py": "8340cedac73c4a54ca6f1a440385514ef2a9c4fd613c6c86cf14312fc19b9e3f",
+      "external/round8/master2965/main.py": "93831c18a43c49312a71fa67171224681c52c3fade0259403e8d8fae7973565f"
+    },
+    "split": "development",
+    "seeds": [
+      1193292362,
+      217881086,
+      483702613,
+      248311050,
+      1551619324,
+      187487710,
+      1072475826,
+      1394971210
+    ],
+    "seats": [
+      0,
+      1
+    ]
+  },
+  "games": 64,
+  "summary": {
+    "experiments/round8_top2_dsm_strict.py": {
+      "games": 16,
+      "valid": 16,
+      "worlds": 8,
+      "wins": 10,
+      "losses": 6,
+      "ties": 0,
+      "mean_margin": 3495.875,
+      "median_margin": 7403.5,
+      "points": 0.625,
+      "world_bootstrap_points_95": [
+        0.25,
+        0.875
+      ]
+    },
+    "external/round8/master2965/main.py": {
+      "games": 16,
+      "valid": 16,
+      "worlds": 8,
+      "wins": 16,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 1130.75,
+      "median_margin": 743.0,
+      "points": 1,
+      "world_bootstrap_points_95": [
+        1.0,
+        1.0
+      ]
+    },
+    "external/round9/frontier/main.py": {
+      "games": 16,
+      "valid": 16,
+      "worlds": 8,
+      "wins": 13,
+      "losses": 3,
+      "ties": 0,
+      "mean_margin": 362.9375,
+      "median_margin": 382.0,
+      "points": 0.8125,
+      "world_bootstrap_points_95": [
+        0.5625,
+        1.0
+      ]
+    },
+    "submissions/release_v9/main.py": {
+      "games": 16,
+      "valid": 16,
+      "worlds": 8,
+      "wins": 15,
+      "losses": 1,
+      "ties": 0,
+      "mean_margin": 130.875,
+      "median_margin": 121.0,
+      "points": 0.9375,
+      "world_bootstrap_points_95": [
+        0.8125,
+        1.0
+      ]
+    }
+  }
+}

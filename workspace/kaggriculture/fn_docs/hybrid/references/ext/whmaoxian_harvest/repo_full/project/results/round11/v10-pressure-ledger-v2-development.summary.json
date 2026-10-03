@@ -1,0 +1,236 @@
+{
+  "schema": "kaggriculture-arena-r11-summary-v1",
+  "run_name": "v10-pressure-ledger-v2",
+  "split": "development",
+  "expected_games": 384,
+  "recorded_games": 384,
+  "valid_games": 384,
+  "invalid_games": 0,
+  "baseline_cache_hits": 192,
+  "fresh_baseline_games": 0,
+  "complete_and_valid": true,
+  "families": {
+    "dsm_proxy": {
+      "candidate": {
+        "games": 48,
+        "wins": 26,
+        "losses": 22,
+        "ties": 0,
+        "win_points": 0.5416666666666666,
+        "mean_margin": 6047.291666666667,
+        "median_margin": 3024.5
+      },
+      "baseline": {
+        "games": 48,
+        "wins": 26,
+        "losses": 22,
+        "ties": 0,
+        "win_points": 0.5416666666666666,
+        "mean_margin": 5890.291666666667,
+        "median_margin": 2806.0
+      },
+      "opponents": {
+        "experiments/round8_top2_dsm_strict.py": {
+          "candidate": {
+            "games": 48,
+            "wins": 26,
+            "losses": 22,
+            "ties": 0,
+            "win_points": 0.5416666666666666,
+            "mean_margin": 6047.291666666667,
+            "median_margin": 3024.5
+          },
+          "baseline": {
+            "games": 48,
+            "wins": 26,
+            "losses": 22,
+            "ties": 0,
+            "win_points": 0.5416666666666666,
+            "mean_margin": 5890.291666666667,
+            "median_margin": 2806.0
+          }
+        }
+      }
+    },
+    "frontier": {
+      "candidate": {
+        "games": 48,
+        "wins": 48,
+        "losses": 0,
+        "ties": 0,
+        "win_points": 1,
+        "mean_margin": 1676.375,
+        "median_margin": 987.0
+      },
+      "baseline": {
+        "games": 48,
+        "wins": 34,
+        "losses": 14,
+        "ties": 0,
+        "win_points": 0.7083333333333334,
+        "mean_margin": 655.8333333333334,
+        "median_margin": 153.0
+      },
+      "opponents": {
+        "external/round9/frontier/main.py": {
+          "candidate": {
+            "games": 48,
+            "wins": 48,
+            "losses": 0,
+            "ties": 0,
+            "win_points": 1,
+            "mean_margin": 1676.375,
+            "median_margin": 987.0
+          },
+          "baseline": {
+            "games": 48,
+            "wins": 34,
+            "losses": 14,
+            "ties": 0,
+            "win_points": 0.7083333333333334,
+            "mean_margin": 655.8333333333334,
+            "median_margin": 153.0
+          }
+        }
+      }
+    },
+    "master": {
+      "candidate": {
+        "games": 48,
+        "wins": 48,
+        "losses": 0,
+        "ties": 0,
+        "win_points": 1,
+        "mean_margin": 2080.125,
+        "median_margin": 1527.0
+      },
+      "baseline": {
+        "games": 48,
+        "wins": 48,
+        "losses": 0,
+        "ties": 0,
+        "win_points": 1,
+        "mean_margin": 1828.5833333333333,
+        "median_margin": 1336.5
+      },
+      "opponents": {
+        "external/round8/master2965/main.py": {
+          "candidate": {
+            "games": 48,
+            "wins": 48,
+            "losses": 0,
+            "ties": 0,
+            "win_points": 1,
+            "mean_margin": 2080.125,
+            "median_margin": 1527.0
+          },
+          "baseline": {
+            "games": 48,
+            "wins": 48,
+            "losses": 0,
+            "ties": 0,
+            "win_points": 1,
+            "mean_margin": 1828.5833333333333,
+            "median_margin": 1336.5
+          }
+        }
+      }
+    },
+    "self_v9": {
+      "candidate": {
+        "games": 48,
+        "wins": 45,
+        "losses": 3,
+        "ties": 0,
+        "win_points": 0.9375,
+        "mean_margin": 888.375,
+        "median_margin": 756.5
+      },
+      "baseline": {
+        "games": 48,
+        "wins": 1,
+        "losses": 1,
+        "ties": 46,
+        "win_points": 0.5,
+        "mean_margin": 0.0,
+        "median_margin": 0.0
+      },
+      "opponents": {
+        "submissions/release_v9/main.py": {
+          "candidate": {
+            "games": 48,
+            "wins": 45,
+            "losses": 3,
+            "ties": 0,
+            "win_points": 0.9375,
+            "mean_margin": 888.375,
+            "median_margin": 756.5
+          },
+          "baseline": {
+            "games": 48,
+            "wins": 1,
+            "losses": 1,
+            "ties": 46,
+            "win_points": 0.5,
+            "mean_margin": 0.0,
+            "median_margin": 0.0
+          }
+        }
+      }
+    }
+  },
+  "paired_by_family": {
+    "dsm_proxy": {
+      "paired_worlds": 24,
+      "mean_point_gain": 0,
+      "mean_margin_gain": 157.0,
+      "point_gain_world_bootstrap_95": [
+        0,
+        0
+      ]
+    },
+    "frontier": {
+      "paired_worlds": 24,
+      "mean_point_gain": 0.2916666666666667,
+      "mean_margin_gain": 1020.5416666666666,
+      "point_gain_world_bootstrap_95": [
+        0.125,
+        0.4583333333333333
+      ]
+    },
+    "master": {
+      "paired_worlds": 24,
+      "mean_point_gain": 0,
+      "mean_margin_gain": 251.54166666666666,
+      "point_gain_world_bootstrap_95": [
+        0,
+        0
+      ]
+    },
+    "self_v9": {
+      "paired_worlds": 24,
+      "mean_point_gain": 0.4375,
+      "mean_margin_gain": 888.375,
+      "point_gain_world_bootstrap_95": [
+        0.3333333333333333,
+        0.5
+      ]
+    }
+  },
+  "promotion_pool": {
+    "families_excluding_self": [
+      "frontier",
+      "master",
+      "dsm_proxy"
+    ],
+    "diagnostic_families": [],
+    "complete_paired_worlds": 24,
+    "mean_point_gain": 0.09722222222222221,
+    "mean_margin_gain": 476.3611111111111,
+    "point_gain_world_bootstrap_95": [
+      0.041666666666666664,
+      0.15277777777777776
+    ],
+    "note": "The three frozen non-self core families receive equal weight; self-play and optional diagnostic opponents cannot inflate promotion points. Both seats remain one world cluster."
+  }
+}

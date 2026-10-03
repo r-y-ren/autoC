@@ -1,0 +1,42 @@
+[
+  {
+    "ProcessId": 196736,
+    "ParentProcessId": 194280,
+    "CommandLine": "\"C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\.venv\\Scripts\\python.exe\" league_round8.py --candidate experiments/round8_top2_dsm_contract_entry.py --opponents submissions/release_v6/main.py submissions/release_v7/main.py external/orderbook.py external/round8/master2965/main.py experiments/round8_top2_dsm_strict.py external/round8/fieldcraft/main.py --split confirmation --workers 6 --output results/round8_dsm_contract_entry_confirmation.json"
+  },
+  {
+    "ProcessId": 196500,
+    "ParentProcessId": 196736,
+    "CommandLine": "\"C:\\Users\\ASUS\\AppData\\Roaming\\uv\\python\\cpython-3.12.11-windows-x86_64-none\\python.exe\" league_round8.py --candidate experiments/round8_top2_dsm_contract_entry.py --opponents submissions/release_v6/main.py submissions/release_v7/main.py external/orderbook.py external/round8/master2965/main.py experiments/round8_top2_dsm_strict.py external/round8/fieldcraft/main.py --split confirmation --workers 6 --output results/round8_dsm_contract_entry_confirmation.json"
+  },
+  {
+    "ProcessId": 194804,
+    "ParentProcessId": 196500,
+    "CommandLine": "\"C:\\Users\\ASUS\\AppData\\Roaming\\uv\\python\\cpython-3.12.11-windows-x86_64-none\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=196500, pipe_handle=560)\" \"--multiprocessing-fork\""
+  },
+  {
+    "ProcessId": 54572,
+    "ParentProcessId": 196500,
+    "CommandLine": "\"C:\\Users\\ASUS\\AppData\\Roaming\\uv\\python\\cpython-3.12.11-windows-x86_64-none\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=196500, pipe_handle=668)\" \"--multiprocessing-fork\""
+  },
+  {
+    "ProcessId": 186380,
+    "ParentProcessId": 196500,
+    "CommandLine": "\"C:\\Users\\ASUS\\AppData\\Roaming\\uv\\python\\cpython-3.12.11-windows-x86_64-none\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=196500, pipe_handle=676)\" \"--multiprocessing-fork\""
+  },
+  {
+    "ProcessId": 160616,
+    "ParentProcessId": 196500,
+    "CommandLine": "\"C:\\Users\\ASUS\\AppData\\Roaming\\uv\\python\\cpython-3.12.11-windows-x86_64-none\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=196500, pipe_handle=400)\" \"--multiprocessing-fork\""
+  },
+  {
+    "ProcessId": 54540,
+    "ParentProcessId": 196500,
+    "CommandLine": "\"C:\\Users\\ASUS\\AppData\\Roaming\\uv\\python\\cpython-3.12.11-windows-x86_64-none\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=196500, pipe_handle=624)\" \"--multiprocessing-fork\""
+  },
+  {
+    "ProcessId": 194044,
+    "ParentProcessId": 196500,
+    "CommandLine": "\"C:\\Users\\ASUS\\AppData\\Roaming\\uv\\python\\cpython-3.12.11-windows-x86_64-none\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=196500, pipe_handle=708)\" \"--multiprocessing-fork\""
+  }
+]

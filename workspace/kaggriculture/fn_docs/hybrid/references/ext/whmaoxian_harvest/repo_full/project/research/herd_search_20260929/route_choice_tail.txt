@@ -1,0 +1,26 @@
+
+# Research-only full production-route choice at the compatible day-six boundary.
+_K29_ROUTE_PARENT=phase_b_agent
+_K29_ROUTE_NATIVE=_IMPL.chassis.router
+_K29_ROUTE_REPORT={'selected':-1,'selection_step':-1,'turns':0}
+_MP_REPORT=_K29_ROUTE_REPORT
+
+def _k29_choose_route(observation,step,state):
+    selected=_K29_ROUTE_NATIVE(observation,step,state)
+    if 144<=step<648:
+        selected=_K29_FORCED_ROUTE
+        state['route']=selected
+        state['expert']='EXP240' if selected>=100 else 'V39'
+        _K29_ROUTE_REPORT['selected']=selected
+        _K29_ROUTE_REPORT['selection_step']=144
+    return selected
+_IMPL.chassis.router=_k29_choose_route
+
+def route_choice_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        _K29_ROUTE_REPORT.update(selected=-1,selection_step=-1,turns=0)
+    _K29_ROUTE_REPORT['turns']+=1
+    return _K29_ROUTE_PARENT(observation,configuration)
+route_choice_agent.telemetry=_K29_ROUTE_REPORT
+agent=route_choice_agent
+kaggle_submission_agent=route_choice_agent

@@ -1,0 +1,67 @@
+
+# Bounded same-geometry livestock substitutions; frozen release stays untouched.
+_HG28_PARENT=phase_b_agent
+_HG28_DEFAULTS=(_CS_FROM,_CS_TO,_CS_OPTIONS,_CS_SHOP_RULE,_CS_RATIO,_CS_MIN_GAIN)
+_HG28_PLAN_BASE=_cs_plan
+_HG28_STATE={}
+_HG28_REPORT={'turns':0,'plans':0,'planned_animals':0,'cash_veto':0,'plan_veto':0,'broken':0}
+_MP_REPORT=_HG28_REPORT
+
+def _cs_plan(obs,action,k,mode):
+    if mode!='SHEEP':return _HG28_PLAN_BASE(obs,action,k,mode)
+    seat=int(obs['player']);farm=obs['farms'][seat]
+    if k+_HG28_STATE[seat]['allocated']>_HG28_CFG['max_swaps']:return None
+    budget=500*k+_HG28_CFG['reserve'];hires=int(farm['hires_today'])
+    for order in action.get('market',[]):
+        if not order:continue
+        if order[0]=='HIRE':
+            a,b=1,1
+            for _ in range(hires):a,b=b,a+b
+            budget+=a;hires+=1
+        elif order[0]=='BUY_LAND':
+            ix=len(farm['unlocked_quadrants'])-1
+            if ix<3:budget+=(1000,2000,4000)[ix]
+        elif order[0]=='BUY_PRODUCT':
+            _HG28_REPORT['cash_veto']+=1;return None
+        elif len(order)>2 and order[0]=='BUY_SEED':
+            budget+=max(0,int(order[2]))*{'WHEAT':10,'CARROT':20,'TOMATO':50,'STRAWBERRY':100,'MELON':80}.get(order[1],0)
+        elif len(order)>2 and order[0]=='BUY_ANIMAL' and order[1]!='COW':
+            budget+=max(0,int(order[2]))*{'GOOSE':300,'SHEEP':500}.get(order[1],0)
+    if float(farm['money'])<budget:_HG28_REPORT['cash_veto']+=1;return None
+    return _HG28_PLAN_BASE(obs,action,k,mode)
+
+def herd_repeat_agent(observation,configuration=None):
+    global _CS_FROM,_CS_TO,_CS_OPTIONS,_CS_SHOP_RULE,_CS_RATIO,_CS_MIN_GAIN
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        _HG28_STATE[seat]={'allocated':0,'plan':None}
+        for key in _HG28_REPORT:_HG28_REPORT[key]=0
+    local=_HG28_STATE.setdefault(seat,{'allocated':0,'plan':None})
+    state=_CS_STATE.get(seat,{})
+    _CS_FROM,_CS_TO,_CS_OPTIONS,_CS_SHOP_RULE,_CS_RATIO,_CS_MIN_GAIN=_HG28_DEFAULTS
+    shops=observation['town']['unlocked_shops']
+    milk=sum(s in ('PIZZA_SHOP','ICE_CREAM_SHOP','SMOOTHIE_SHOP') for s in shops)
+    eligible=shops.count('YARN_STORE')>0 and (not _HG28_CFG['no_milk'] or milk==0)
+    eligible=eligible and _HG28_CFG['start']<=step<_HG28_CFG['stop']
+    cows=sum(isinstance(t,dict) and t.get('animal')=='COW' for row in observation['farms'][seat]['tiles'] for t in row)
+    eligible=eligible and cows>=_HG28_CFG['min_cows']
+    eligible=eligible and local['allocated']<_HG28_CFG['max_swaps']
+    plan=state.get('plan');ending=max((t for t,i in (plan or {}).get('places',{})),default=-1)
+    if state.get('mode')=='SHEEP':_CS_FROM=720
+    if eligible and state.get('mode') in (None,'SHEEP') and not state.get('broken') and ending<step:
+        state['decided']=False
+        _CS_FROM=_HG28_CFG['start'];_CS_TO=_HG28_CFG['stop']
+        _CS_OPTIONS=('SHEEP',);_CS_SHOP_RULE=''
+        _CS_RATIO=_HG28_CFG['ratio'];_CS_MIN_GAIN=_HG28_CFG['gain']
+    result=_HG28_PARENT(observation,configuration)
+    state=_CS_STATE.get(seat,{})
+    plan=state.get('plan')
+    if state.get('mode')=='SHEEP' and plan is not None and plan is not local['plan']:
+        added=len(plan['places']);local['allocated']+=added;local['plan']=plan
+        _HG28_REPORT['plans']+=1;_HG28_REPORT['planned_animals']+=added
+    _HG28_REPORT['broken']=int(bool(state.get('broken')))
+    _HG28_REPORT['turns']+=1
+    return result
+herd_repeat_agent.telemetry=_HG28_REPORT
+agent=herd_repeat_agent
+kaggle_submission_agent=herd_repeat_agent

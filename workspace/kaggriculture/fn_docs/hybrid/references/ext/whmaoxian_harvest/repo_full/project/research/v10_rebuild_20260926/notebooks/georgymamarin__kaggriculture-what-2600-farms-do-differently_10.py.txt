@@ -1,0 +1,17 @@
+# Copy-paste loaders — the three safe ways into this dataset, smallest first.
+# (1) Most questions never need the replays: episode_features.csv is one row
+#     per seat with the behavior already parsed out.
+# (2) One game out of the multi-GB corpus, without loading the rest. The glob
+#     matches both layouts: the single replays.parquet and the monthly shards
+#     (replays_2026-08.parquet, ...) that replace it.
+demo_id = int(ladder_r.episode_id.iloc[-1])
+demo_row = pads.dataset(sorted(glob.glob(f"{BASE}/replays*.parquet"))).scanner(
+    filter=pads.field("episode_id") == demo_id,
+    columns=["replay_json"], batch_size=1).head(1)
+demo = json.loads(demo_row.column("replay_json")[0].as_py())
+print(f"episode {demo_id}: {len(demo['steps'])} steps, "
+      f"{len(demo_row.column('replay_json')[0].as_py()) / 1e6:.0f} MB of JSON, "
+      f"loaded alone in a fraction of a second")
+del demo, demo_row; gc.collect()
+# (3) A whole month as a plain DataFrame, once the monthly shards land:
+#     pd.read_parquet(f"{BASE}/replays_2026-08.parquet")

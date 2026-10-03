@@ -1,0 +1,52 @@
+[
+  {
+    "name": "noop_care",
+    "path": "research/midgame_campaign_20260928/candidates/noop_care.py",
+    "sha256": "c77de170ad3439899e6e4e265e549643a761e9d79950443fe91cbb0a024a7eda",
+    "genome": {
+      "ops": [
+        "CARE"
+      ],
+      "begin": 144,
+      "capacity": 85
+    }
+  },
+  {
+    "name": "noop_fertilizer",
+    "path": "research/midgame_campaign_20260928/candidates/noop_fertilizer.py",
+    "sha256": "70504989f43bf8a6884905791b4638c837430795ff527fc54805a86e8d68f4f4",
+    "genome": {
+      "ops": [
+        "COLLECT_FERTILIZER"
+      ],
+      "begin": 144,
+      "capacity": 85
+    }
+  },
+  {
+    "name": "noop_harvest",
+    "path": "research/midgame_campaign_20260928/candidates/noop_harvest.py",
+    "sha256": "9451a7c4d428f252706f7cec897b1e15bb7f66afef4e3954d8f3280eec88ceb2",
+    "genome": {
+      "ops": [
+        "HARVEST"
+      ],
+      "begin": 144,
+      "capacity": 85
+    }
+  },
+  {
+    "name": "noop_combined",
+    "path": "research/midgame_campaign_20260928/candidates/noop_combined.py",
+    "sha256": "37ac73f32b55772c42043c3d0ac3a2b6688d116f9ba564784d458e6e05ab053b",
+    "genome": {
+      "ops": [
+        "CARE",
+        "COLLECT_FERTILIZER",
+        "HARVEST"
+      ],
+      "begin": 144,
+      "capacity": 85
+    }
+  }
+]

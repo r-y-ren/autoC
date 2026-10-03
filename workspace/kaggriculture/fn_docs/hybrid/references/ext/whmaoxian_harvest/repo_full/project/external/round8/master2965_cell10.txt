@@ -1,0 +1,27 @@
+import io
+import tarfile
+from pathlib import Path
+
+source = Path("main.py").read_bytes()
+buffer = io.BytesIO()
+
+with tarfile.open(fileobj=buffer, mode="w:gz", format=tarfile.GNU_FORMAT) as tf:
+    ti = tarfile.TarInfo("main.py")
+    ti.size = len(source)
+    ti.mtime = 1_700_000_000
+    ti.mode = 0o644
+    tf.addfile(ti, io.BytesIO(source))
+
+archive_bytes = buffer.getvalue()
+Path("submission.tar.gz").write_bytes(archive_bytes)
+
+with tarfile.open(fileobj=io.BytesIO(archive_bytes), mode="r:gz") as tf:
+    members = tf.getmembers()
+    assert len(members) == 1 and members[0].name == "main.py"
+    extracted = tf.extractfile("main.py").read()
+    assert extracted == source
+
+print("📦 Packaged submission.tar.gz successfully!")
+print(f"  • submission.tar.gz : {len(archive_bytes):,} bytes")
+print(f"  • main.py           : {len(source):,} bytes")
+print("\n🚀 Done! Submit submission.tar.gz directly from the Output pane.")

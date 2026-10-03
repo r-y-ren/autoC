@@ -1,0 +1,63 @@
+[
+  {
+    "path": "research/structural_20260927/public_programs/farm2945.py",
+    "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7",
+    "lines": 5760,
+    "imports": [
+      "from __future__ import annotations",
+      "import copy",
+      "import base64",
+      "import json",
+      "import zlib",
+      "import math",
+      "from itertools import permutations as _r53_permutations",
+      "import json as _v92_json, os as _v92_os, zlib as _v92_zlib, base64 as _v92_b64",
+      "import json as _v92_json, os as _v92_os"
+    ],
+    "review_calls": [
+      {
+        "line": 1018,
+        "call": "exec",
+        "context": "exec('# SPDX-License-Identifier: Apache-2.0\\n# Extracted Kaggle / kaggle-environments contributor code; see NOTICE.txt.\\n\"\"\"Exact deterministic unit/decay semantics extracted from kaggle-environments 1.32.7.\\nSource kaggriculture.py SHA256 "
+      },
+      {
+        "line": 1020,
+        "call": "exec",
+        "context": "exec('\"\"\"E182 modification: Shop0909 last-seven-turn physical closure planner.\\n\\nNo engine imports, policy tapes, replay fixtures, RNG or remote calls.\\nThe only supported market continuation is SELL; unknown execution abstains.\\n\"\"\"\\nfrom"
+      },
+      {
+        "line": 3590,
+        "call": "open",
+        "context": "open(path)"
+      }
+    ],
+    "ending": "\"cs_decision\"] = \"noplan@%d\" % step\n                else:\n                    _CS_REPORT[\"cs_decision\"] = \"keep@%d\" % step\n        if st[\"mode\"] and st[\"plan\"] and not st[\"broken\"]:\n            plan = st[\"plan\"]\n            units = [action.get(\"farmer\") or [\"PASS\"]] + list(action.get(\"hands\") or [])\n            for i in range(min(len(units), len(positions))):\n                cmd = units[i] or [\"PASS\"]\n                pos = (int(positions[i][0]), int(positions[i][1]))\n                key = (step, i)\n                if key in plan[\"builds\"]:\n                    if cmd == [\"BUILD_PASTURE\"] and pos == plan[\"builds\"][key]:\n                        units[i] = [\"BUILD_COOP\"]\n                        _CS_REPORT[\"cs_rewrites\"] += 1\n                    else:\n                        st[\"broken\"] = True\n                if key in plan[\"pickups\"]:\n                    if len(cmd) >= 2 and cmd[0] == \"PICKUP\" and cmd[1] == \"COW\":\n                        units[i] = [\"PICKUP\", st[\"mode\"]] + list(cmd[2:])\n                        _CS_REPORT[\"cs_rewrites\"] += 1\n                    else:\n                        st[\"broken\"] = True\n                if key in plan[\"places\"]:\n                    if len(cmd) >= 2 and cmd[0] == \"PLACE\" and cmd[1] == \"COW\" and pos == plan[\"places\"][key]:\n                        units[i] = [\"PLACE\", st[\"mode\"]] + list(cmd[2:])\n                        st[\"pending\"].append((pos[0], pos[1], step // 24))\n                        _CS_REPORT[\"cs_rewrites\"] += 1\n                    else:\n                        st[\"broken\"] = True\n            if st[\"broken\"]:\n                _CS_REPORT[\"cs_broken\"] += 1\n            action = dict(action)\n            action[\"farmer\"] = units[0]\n            action[\"hands\"] = units[1:]\n        # credit harvests on swapped tiles and sell them as they reach the shed\n        if st[\"sites\"]:\n            product = _HD2_SPEC[st[\"mode\"]][\"product\"]\n            units = [action.get(\"farmer\") or [\"PASS\"]] + list(action.get(\"hands\") or [])\n            for i in range(min(len(units), len(positions))):\n                x, y = int(positions[i][0]), int(positions[i][1])\n                tile = farm[\"tiles\"][y][x]\n                if units[i] == [\"HARVEST\"] and (x, y) in st[\"sites\"] and isinstance(tile, dict) \\\n                        and tile.get(\"animal\") == st[\"mode\"]:\n                    n = max(0, int(tile.get(\"yield_units\", 0)))\n                    st[\"credit\"] += n\n                    _CS_REPORT[\"cs_credit\"] += n\n            if st[\"credit\"] > 0:\n                stock = projected_shed(action, FarmView(observation))\n                planned = sum(max(0, int(o[2])) for o in market if len(o) >= 3 and o[:2] == [\"SELL\", product])\n                extra = min(st[\"credit\"], max(0, int(stock.get(product, 0)) - planned))\n                if extra > 0:\n                    for o in market:\n                        if len(o) >= 3 and o[:2] == [\"SELL\", product]:\n                            o[2] = int(o[2]) + extra\n                            break\n                    else:\n                        if len(market) < 10:\n                            market.insert(0, [\"SELL\", product, extra])\n                        else:\n                            extra = 0\n                    st[\"credit\"] -= extra\n                    _CS_REPORT[\"cs_sold\"] += extra\n        action = dict(action)\n        action[\"market\"] = market\n    except Exception:\n        _CS_REPORT[\"cs_errors\"] += 1\n    return action\n\n\nagent.telemetry = _CS_REPORT\nagent = globals().pop('agent')\n"
+  },
+  {
+    "path": "research/structural_20260927/public_programs/yield_v37.py",
+    "sha256": "94c1c2c05ae7cde8fca9ee3957b01112c1cbab82c7434aae6a5f24fa7485bc4c",
+    "lines": 2355,
+    "imports": [
+      "from __future__ import annotations",
+      "import copy",
+      "import base64",
+      "import json",
+      "import zlib",
+      "import math",
+      "from itertools import permutations as _r53_permutations"
+    ],
+    "review_calls": [
+      {
+        "line": 996,
+        "call": "exec",
+        "context": "exec('# SPDX-License-Identifier: Apache-2.0\\n# Extracted Kaggle / kaggle-environments contributor code; see NOTICE.txt.\\n\"\"\"Exact deterministic unit/decay semantics extracted from kaggle-environments 1.32.7.\\nSource kaggriculture.py SHA256 "
+      },
+      {
+        "line": 998,
+        "call": "exec",
+        "context": "exec('\"\"\"E182 modification: Shop0909 last-seven-turn physical closure planner.\\n\\nNo engine imports, policy tapes, replay fixtures, RNG or remote calls.\\nThe only supported market continuation is SELL; unknown execution abstains.\\n\"\"\"\\nfrom"
+      }
+    ],
+    "ending": "rehouse_projected_unresolved']+=max(0,needed)\n    if result!=action:_R51_WAREHOUSE_REPORT['warehouse_changed_turns']+=1\n    return result\n\ndef agent(observation,configuration=None):\n    result=_R51_WAREHOUSE_PARENT(observation,configuration)\n    try:\n        if int(observation['step'])==0:_R51_WAREHOUSE_REPORT.update(warehouse_changed_turns=0,warehouse_extra_sales=0,warehouse_projected_unresolved=0,warehouse_errors=0)\n        if configuration is None or all(configuration.get(k,v)==v for k,v in [('boardSize',10),('turnsPerDay',24),('shedCapacity',100),('maxMarketOrdersPerTurn',10)]):result=_r51_close_warehouse(observation,result)\n    except Exception:_R51_WAREHOUSE_REPORT['warehouse_errors']=_R51_WAREHOUSE_REPORT.get('warehouse_errors',0)+1\n    _R51_WAREHOUSE_REPORT.update(getattr(_R51_WAREHOUSE_PARENT,'telemetry',{}));return result\nagent.telemetry=_R51_WAREHOUSE_REPORT\nagent=globals().pop('agent')\n\nfrom itertools import permutations as _r53_permutations\n_R53_LABOR_REPORT=dict(labor_requests=0,labor_hires_avoided=0,labor_spawn_errors=0,labor_confirmed=0,labor_day26=0,labor_day27=0,labor_day28=0)\n\ndef _r53_labor_assignment(obs,action,fertilizer):\n    step=int(obs['step']);day=step//24;farm=obs['farms'][obs['player']]\n    if day not in (26,27,28) or step%24>2:return None\n    # Do not preempt a later price-gated fertilizer request with a smaller unfertilized team.\n    if day==27 and not fertilizer:return None\n    count=3 if fertilizer else 2\n    positions=[list(farm['farmer'])]+[list(p) for p in farm['hands']]\n    for i,c in enumerate([action.get('farmer') or ['PASS'],*(action.get('hands') or [])][:len(positions)]):\n        if c and c[0] in MOVES:\n            dx,dy=MOVES[c[0]];positions[i]=[max(0,min(9,positions[i][0]+dx)),max(0,min(9,positions[i][1]+dy))]\n    access=((4,4),(5,4),(4,5),(5,5));spawns=[]\n    native_hires=sum(bool(o) and o[0]=='HIRE' for o in action.get('market',[]))\n    for i in range(native_hires+count):\n        chosen=min(access,key=lambda p:(sum(tuple(q)==p for q in positions),access.index(p)));positions.append(list(chosen))\n        if i>=native_hires:spawns.append(chosen)\n    groups=(((5,5),(6,5),(7,5),(8,5)),((9,5),(9,6),(8,6)),((5,6),(6,6),(7,6))) if fertilizer else (tuple((x,5) for x in range(5,10)),tuple((x,6) for x in range(5,10)))\n    choices=[];remaining=23-step%24\n    for assignment in _r53_permutations(groups):\n        costs=[]\n        for start,path in zip(spawns,assignment):\n            distance=abs(start[0]-path[0][0])+abs(start[1]-path[0][1])\n            distance+=sum(abs(a[0]-b[0])+abs(a[1]-b[1]) for a,b in zip(path,path[1:]))\n            distance+=min(abs(path[-1][0]-x)+abs(path[-1][1]-y) for x,y in access)\n            costs.append(distance+(3 if fertilizer else 2)*len(path)+1+int(fertilizer))\n        if max(costs)<=remaining:choices.append((max(costs),sum(costs),assignment))\n    if not choices:return None\n    _,_,assignment=min(choices)\n    return dict(paths=assignment,spawns=spawns,remaining=remaining,workers=count,fertilizer=fertilizer)\n\n_R53_LABOR_PARENT=agent\ndef agent(observation,configuration=None):\n    if isinstance(observation,dict) and observation.get('step')==0:\n        for k in _R53_LABOR_REPORT:_R53_LABOR_REPORT[k]=0\n    result=_R53_LABOR_PARENT(observation,configuration)\n    _R53_LABOR_COMBINED.update(getattr(_R53_LABOR_PARENT,'telemetry',{}));_R53_LABOR_COMBINED.update(_R53_LABOR_REPORT)\n    return result\n_R53_LABOR_COMBINED={}\nagent.telemetry=_R53_LABOR_COMBINED\nagent=globals().pop('agent')\n"
+  }
+]

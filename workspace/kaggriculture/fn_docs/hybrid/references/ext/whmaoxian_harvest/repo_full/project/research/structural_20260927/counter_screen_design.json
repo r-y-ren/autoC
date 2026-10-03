@@ -1,0 +1,128 @@
+{
+  "variants": [
+    {
+      "path": "research/structural_20260927/counter_candidates/mirror_s85_q24.py",
+      "settings": {
+        "mode": "mirror",
+        "similarity": 0.85,
+        "lot": 24,
+        "min_gain": 1.0,
+        "max_loss": 8,
+        "risk": 2.0
+      },
+      "sha256": "0edf53d4eff8a6092d42ed831fcef9c637e231424dcf4a957d3ec47c2c9cb2d2"
+    },
+    {
+      "path": "research/structural_20260927/counter_candidates/mirror_s85_q48.py",
+      "settings": {
+        "mode": "mirror",
+        "similarity": 0.85,
+        "lot": 48,
+        "min_gain": 1.0,
+        "max_loss": 8,
+        "risk": 2.0
+      },
+      "sha256": "1f47333ac8c6fe491a54bdaef9947a4dbc40a5a3763b9f650244fa80eadc6126"
+    },
+    {
+      "path": "research/structural_20260927/counter_candidates/mirror_s95_q24.py",
+      "settings": {
+        "mode": "mirror",
+        "similarity": 0.95,
+        "lot": 24,
+        "min_gain": 1.0,
+        "max_loss": 8,
+        "risk": 2.0
+      },
+      "sha256": "78adf617d11fdf28681b84cf062bf0ec070b5f8132850c6f7a0bd57029214a2f"
+    },
+    {
+      "path": "research/structural_20260927/counter_candidates/mirror_s95_q48.py",
+      "settings": {
+        "mode": "mirror",
+        "similarity": 0.95,
+        "lot": 48,
+        "min_gain": 1.0,
+        "max_loss": 8,
+        "risk": 2.0
+      },
+      "sha256": "9d1cb77a7ce7274a2f956cd52d86b5d473acf18b9b3738a16314da0ea3a83ef4"
+    },
+    {
+      "path": "research/structural_20260927/counter_candidates/mixture_s85_q24.py",
+      "settings": {
+        "mode": "mixture",
+        "similarity": 0.85,
+        "lot": 24,
+        "min_gain": 1.0,
+        "max_loss": 8,
+        "risk": 2.0
+      },
+      "sha256": "1a5c70e444436882b368ffe550b751359a8131e6dc0f061d079ba7d1aacf4d51"
+    },
+    {
+      "path": "research/structural_20260927/counter_candidates/mixture_s85_q48.py",
+      "settings": {
+        "mode": "mixture",
+        "similarity": 0.85,
+        "lot": 48,
+        "min_gain": 1.0,
+        "max_loss": 8,
+        "risk": 2.0
+      },
+      "sha256": "ca4b8195e3a97c09dba7b61d38eb3f904c427a8f3af9ea1e1c643cc8df9127a4"
+    },
+    {
+      "path": "research/structural_20260927/counter_candidates/mixture_s95_q24.py",
+      "settings": {
+        "mode": "mixture",
+        "similarity": 0.95,
+        "lot": 24,
+        "min_gain": 1.0,
+        "max_loss": 8,
+        "risk": 2.0
+      },
+      "sha256": "52cda144e6d16d311fe4cc0be41702bb5503ba86d14959f9f83f07689209940a"
+    },
+    {
+      "path": "research/structural_20260927/counter_candidates/mixture_s95_q48.py",
+      "settings": {
+        "mode": "mixture",
+        "similarity": 0.95,
+        "lot": 48,
+        "min_gain": 1.0,
+        "max_loss": 8,
+        "risk": 2.0
+      },
+      "sha256": "ce94b4e83665ab704cabb93f764f6cc258f7a0a785d012a8a3960cd01a20589b"
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    }
+  ],
+  "seeds": [
+    65663586,
+    1161697292
+  ],
+  "total": 144,
+  "scope": "Mechanism and development; not independent rating calibration."
+}

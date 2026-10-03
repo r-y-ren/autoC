@@ -1,0 +1,17 @@
+{
+  "entrypoint": "main.py:agent",
+  "release": "v4",
+  "environment_tested": "kaggle-environments 1.32.7",
+  "network_required": false,
+  "third_party_runtime_dependencies": [],
+  "files": {
+    "main.py": {
+      "bytes": 12153,
+      "sha256": "cd6827c399d74469f62004514d776964b1e9a6ceef4c0ae261f542afb90f5c7b"
+    },
+    "submission.tar.gz": {
+      "bytes": 3746,
+      "sha256": "9e3a6f603712535c69a65e66d08563a36602febbef4c229e0815ab51d5d1e680"
+    }
+  }
+}

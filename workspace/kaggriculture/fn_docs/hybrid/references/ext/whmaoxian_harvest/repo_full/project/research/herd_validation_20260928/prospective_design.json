@@ -1,0 +1,99 @@
+{
+  "variants": [
+    {
+      "name": "r2",
+      "path": "submissions/release_v10_r2/main.py",
+      "sha256": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/candidates/terminal256.py",
+      "sha256": "1bdbe2a203156f6eb6837acbedad0105caa9ea56c56a8928977653ccbce1e17d",
+      "simulations": 256,
+      "proposals": 16,
+      "name": "terminal_only"
+    },
+    {
+      "name": "jit_one_terminal",
+      "path": "research/herd_validation_20260928/jit_one_terminal.py",
+      "sha256": "67c69325a36aaf94bfeac56591cd3cf1a9bf5ab5323e318996e4d40b0f7fa751"
+    },
+    {
+      "name": "nomilk_terminal",
+      "path": "research/herd_validation_20260928/nomilk_terminal.py",
+      "sha256": "8f5980f519040f71c342c04cf66e07f79c791a43c6965ea5c386d866b403c308"
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "seeds": [
+    1236535750,
+    30999806,
+    293758933,
+    1611680318,
+    986348486,
+    564221927,
+    1982585002,
+    1623148729,
+    1887486280,
+    396381946,
+    1636462825,
+    1781147952,
+    1579695923,
+    1012361688,
+    1491018466,
+    1878572839,
+    1596418548,
+    1674017135,
+    1355042609,
+    932469788,
+    1275528098,
+    1407570494,
+    572263612,
+    1983678022,
+    964555490,
+    1452918602,
+    318439627,
+    962007918,
+    448872757,
+    985801484,
+    1198277099,
+    499073192
+  ],
+  "jobs": 1792,
+  "scope": "Candidates frozen before drawing 32 new random worlds. Independent of this turn development worlds. Local paired evidence only, no online rating conversion."
+}

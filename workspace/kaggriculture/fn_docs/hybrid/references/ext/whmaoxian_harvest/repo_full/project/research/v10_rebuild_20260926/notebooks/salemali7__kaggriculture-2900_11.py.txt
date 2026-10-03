@@ -1,0 +1,24 @@
+chart = evaluation.sort_values("mean_margin")
+colors = [TEAL if label == "Reconstructed 8C/4S core" else BLUE
+          for label in chart["reference"]]
+fig, ax = plt.subplots(figsize=(11.2, 5.8))
+bars = ax.barh(chart["reference"], chart["mean_margin"],
+               color=colors, height=0.58)
+ax.axvline(0, color=SLATE, linewidth=1)
+ax.set_xlabel("Mean V16-RC5 money margin")
+ax.set_title("V16-RC5 remains positive across production and market references",
+             loc="left", pad=28)
+ax.text(0, 1.015, "Live local simulations; both seat orders for every seed",
+        transform=ax.transAxes, color=SLATE, fontsize=10.5)
+ax.grid(axis="x", alpha=0.16)
+ax.spines[["top", "right", "left"]].set_visible(False)
+ax.tick_params(axis="y", length=0)
+limit = chart["mean_margin"].max() * 1.18
+ax.set_xlim(0, limit)
+for bar, value in zip(bars, chart["mean_margin"]):
+    ax.text(value + limit * 0.012,
+            bar.get_y() + bar.get_height() / 2,
+            f"{value:+,.0f}", va="center", fontweight="bold", color=NAVY)
+fig.subplots_adjust(left=0.31, right=0.94, top=0.79, bottom=0.14)
+fig.savefig("dynamic_reference_margins.png", bbox_inches="tight", facecolor="white")
+plt.show()

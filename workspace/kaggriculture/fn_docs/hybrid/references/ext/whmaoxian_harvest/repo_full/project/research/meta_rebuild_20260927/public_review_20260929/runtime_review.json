@@ -1,0 +1,1627 @@
+[
+  {
+    "label": "v37_exec996",
+    "imports": [],
+    "calls": [],
+    "children": [],
+    "functions": [
+      {
+        "name": "_shed_access_tiles",
+        "line": 34,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_is_shed_adjacent",
+        "line": 39,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_new_plant",
+        "line": 42,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_new_animal",
+        "line": 55,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_farmer_position",
+        "line": 69,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_set_farmer_position",
+        "line": 75,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_farmer_inventory",
+        "line": 81,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_inv_add",
+        "line": 87,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_inv_take",
+        "line": 90,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_apply_unit_action",
+        "line": 98,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_decay_plants",
+        "line": 318,
+        "unchanged_r2": false
+      }
+    ]
+  },
+  {
+    "label": "v37_exec998",
+    "imports": [
+      "from copy import deepcopy",
+      "from time import perf_counter"
+    ],
+    "calls": [
+      [
+        16,
+        "getattr",
+        "getattr(obj, key, default)"
+      ]
+    ],
+    "children": [],
+    "functions": [
+      {
+        "name": "Unsupported",
+        "line": 12,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_get",
+        "line": 15,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_settings",
+        "line": 18,
+        "unchanged_r2": false
+      },
+      {
+        "name": "physical_state",
+        "line": 28,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_commands",
+        "line": 34,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_clone_state",
+        "line": 37,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_clone_schedule",
+        "line": 48,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_validate",
+        "line": 60,
+        "unchanged_r2": false
+      },
+      {
+        "name": "liquidation",
+        "line": 81,
+        "unchanged_r2": false
+      },
+      {
+        "name": "shop_liquidation",
+        "line": 93,
+        "unchanged_r2": false
+      },
+      {
+        "name": "simulate",
+        "line": 97,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_ge",
+        "line": 166,
+        "unchanged_r2": false
+      },
+      {
+        "name": "dominates",
+        "line": 169,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_value",
+        "line": 182,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_walk",
+        "line": 186,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_return",
+        "line": 191,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_proposals",
+        "line": 196,
+        "unchanged_r2": false
+      },
+      {
+        "name": "plan_terminal",
+        "line": 258,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_effective_action",
+        "line": 329,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_recover_observed",
+        "line": 332,
+        "unchanged_r2": false
+      },
+      {
+        "name": "terminal_action",
+        "line": 371,
+        "unchanged_r2": false
+      }
+    ]
+  },
+  {
+    "label": "v37",
+    "imports": [
+      "from __future__ import annotations",
+      "from itertools import permutations as _r53_permutations",
+      "import base64",
+      "import copy",
+      "import json",
+      "import math",
+      "import zlib"
+    ],
+    "calls": [
+      [
+        283,
+        "getattr",
+        "getattr(value, \"get\", None)"
+      ],
+      [
+        286,
+        "getattr",
+        "getattr(value, key, default)"
+      ],
+      [
+        1886,
+        "getattr",
+        "getattr(_R37_PARENT, 'telemetry', {})"
+      ],
+      [
+        1911,
+        "getattr",
+        "getattr(_RELEASE_PARENT,'telemetry',{})"
+      ],
+      [
+        2096,
+        "getattr",
+        "getattr(_V233_PARENT,'telemetry',{})"
+      ],
+      [
+        2310,
+        "getattr",
+        "getattr(_R51_WAREHOUSE_PARENT,'telemetry',{})"
+      ],
+      [
+        2351,
+        "getattr",
+        "getattr(_R53_LABOR_PARENT,'telemetry',{})"
+      ],
+      [
+        682,
+        "already.add",
+        "already.add(item)"
+      ],
+      [
+        2242,
+        "getattr",
+        "getattr(_R51_INPUT_PARENT,'telemetry',{})"
+      ],
+      [
+        2331,
+        "spawns.append",
+        "spawns.append(chosen)"
+      ]
+    ],
+    "children": [
+      "v37_exec996",
+      "v37_exec998"
+    ],
+    "functions": [
+      {
+        "name": "_get",
+        "line": 279,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_int",
+        "line": 289,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_fib",
+        "line": 296,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_step_of",
+        "line": 303,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_shed_adjacent",
+        "line": 310,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_tile_at",
+        "line": 317,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_is_noop",
+        "line": 325,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_View",
+        "line": 373,
+        "unchanged_r2": true
+      },
+      {
+        "name": "Chassis",
+        "line": 401,
+        "unchanged_r2": true
+      },
+      {
+        "name": "make_agent",
+        "line": 905,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_router",
+        "line": 948,
+        "unchanged_r2": false
+      },
+      {
+        "name": "agent",
+        "line": 965,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 976,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_parent_liquidate",
+        "line": 1007,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_shadow_terminal",
+        "line": 1019,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1048,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1104,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1200,
+        "unchanged_r2": true
+      },
+      {
+        "name": "FarmView",
+        "line": 1211,
+        "unchanged_r2": true
+      },
+      {
+        "name": "projected_shed",
+        "line": 1214,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_fib",
+        "line": 1230,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_native_day",
+        "line": 1236,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_qualifies",
+        "line": 1241,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_walk",
+        "line": 1264,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_home",
+        "line": 1271,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_request",
+        "line": 1275,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_v219_worker",
+        "line": 1325,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1380,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_shadow_terminal",
+        "line": 1443,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1454,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v224_sales_first",
+        "line": 1464,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1484,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1498,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v231_new_state",
+        "line": 1516,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v231_controller",
+        "line": 1522,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1606,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r36_native_lead",
+        "line": 1630,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r36_suppress",
+        "line": 1634,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r36_reserve",
+        "line": 1646,
+        "unchanged_r2": false
+      },
+      {
+        "name": "agent",
+        "line": 1692,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_shape",
+        "line": 1719,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_market_price",
+        "line": 1734,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_similarity",
+        "line": 1750,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_quote_priority",
+        "line": 1767,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_reorder_sales",
+        "line": 1793,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r44_before",
+        "line": 1821,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r44_after",
+        "line": 1836,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1856,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1899,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v233_eligible",
+        "line": 1929,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v233_request",
+        "line": 1941,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_v233_worker",
+        "line": 1977,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v234_rescue",
+        "line": 2010,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2032,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_shadow_terminal",
+        "line": 2084,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2088,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r51_input_forecast",
+        "line": 2109,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r51_input_gain",
+        "line": 2140,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r51_input_path",
+        "line": 2146,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r51_input_control",
+        "line": 2159,
+        "unchanged_r2": false
+      },
+      {
+        "name": "agent",
+        "line": 2231,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r51_close_warehouse",
+        "line": 2253,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2304,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r53_labor_assignment",
+        "line": 2317,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2347,
+        "unchanged_r2": true
+      }
+    ]
+  },
+  {
+    "label": "salem",
+    "imports": [
+      "import base64",
+      "import copy",
+      "import json",
+      "import zlib"
+    ],
+    "calls": [
+      [
+        32,
+        "getattr",
+        "getattr(value, key, default)"
+      ],
+      [
+        31,
+        "getattr(value, 'get')",
+        "getattr(value, \"get\")(key, default)"
+      ],
+      [
+        30,
+        "getattr",
+        "getattr(value, \"get\")"
+      ],
+      [
+        31,
+        "getattr",
+        "getattr(value, \"get\")"
+      ]
+    ],
+    "children": [],
+    "functions": [
+      {
+        "name": "_get",
+        "line": 27,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_copy_action",
+        "line": 35,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_seat",
+        "line": 44,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_farm",
+        "line": 49,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_align_hands",
+        "line": 54,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_tile_at",
+        "line": 64,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_trace_actor_action",
+        "line": 72,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_weed_repair_action",
+        "line": 81,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_fr_state",
+        "line": 125,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_town_demand_now",
+        "line": 138,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_future_quantity",
+        "line": 150,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_pickup_reserve",
+        "line": 161,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_existing_sell",
+        "line": 173,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_repay",
+        "line": 181,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_front_run",
+        "line": 204,
+        "unchanged_r2": false
+      },
+      {
+        "name": "agent",
+        "line": 236,
+        "unchanged_r2": false
+      }
+    ]
+  },
+  {
+    "label": "jaxa_exec11_exec1002",
+    "imports": [],
+    "calls": [],
+    "children": [],
+    "functions": [
+      {
+        "name": "_shed_access_tiles",
+        "line": 34,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_is_shed_adjacent",
+        "line": 39,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_new_plant",
+        "line": 42,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_new_animal",
+        "line": 55,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_farmer_position",
+        "line": 69,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_set_farmer_position",
+        "line": 75,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_farmer_inventory",
+        "line": 81,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_inv_add",
+        "line": 87,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_inv_take",
+        "line": 90,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_apply_unit_action",
+        "line": 98,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_decay_plants",
+        "line": 318,
+        "unchanged_r2": false
+      }
+    ]
+  },
+  {
+    "label": "jaxa_exec11_exec1004",
+    "imports": [
+      "from copy import deepcopy",
+      "from time import perf_counter"
+    ],
+    "calls": [
+      [
+        16,
+        "getattr",
+        "getattr(obj, key, default)"
+      ]
+    ],
+    "children": [],
+    "functions": [
+      {
+        "name": "Unsupported",
+        "line": 12,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_get",
+        "line": 15,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_settings",
+        "line": 18,
+        "unchanged_r2": false
+      },
+      {
+        "name": "physical_state",
+        "line": 28,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_commands",
+        "line": 34,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_clone_state",
+        "line": 37,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_clone_schedule",
+        "line": 48,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_validate",
+        "line": 60,
+        "unchanged_r2": false
+      },
+      {
+        "name": "liquidation",
+        "line": 81,
+        "unchanged_r2": false
+      },
+      {
+        "name": "shop_liquidation",
+        "line": 93,
+        "unchanged_r2": false
+      },
+      {
+        "name": "simulate",
+        "line": 97,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_ge",
+        "line": 166,
+        "unchanged_r2": false
+      },
+      {
+        "name": "dominates",
+        "line": 169,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_value",
+        "line": 182,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_walk",
+        "line": 186,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_return",
+        "line": 191,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_proposals",
+        "line": 196,
+        "unchanged_r2": false
+      },
+      {
+        "name": "plan_terminal",
+        "line": 258,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_effective_action",
+        "line": 329,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_recover_observed",
+        "line": 332,
+        "unchanged_r2": false
+      },
+      {
+        "name": "terminal_action",
+        "line": 371,
+        "unchanged_r2": false
+      }
+    ]
+  },
+  {
+    "label": "jaxa_exec11_exec3365",
+    "imports": [],
+    "calls": [],
+    "children": [],
+    "functions": [
+      {
+        "name": "_proposals",
+        "line": 1,
+        "unchanged_r2": false
+      }
+    ]
+  },
+  {
+    "label": "jaxa_exec11",
+    "imports": [
+      "from __future__ import annotations",
+      "from itertools import permutations as _r53_permutations",
+      "import base64",
+      "import copy",
+      "import json",
+      "import math",
+      "import zlib"
+    ],
+    "calls": [
+      [
+        288,
+        "getattr",
+        "getattr(value, \"get\", None)"
+      ],
+      [
+        291,
+        "getattr",
+        "getattr(value, key, default)"
+      ],
+      [
+        1900,
+        "getattr",
+        "getattr(_R37_PARENT, 'telemetry', {})"
+      ],
+      [
+        1925,
+        "getattr",
+        "getattr(_RELEASE_PARENT,'telemetry',{})"
+      ],
+      [
+        2117,
+        "getattr",
+        "getattr(_V233_PARENT,'telemetry',{})"
+      ],
+      [
+        2340,
+        "getattr",
+        "getattr(_R51_WAREHOUSE_PARENT,'telemetry',{})"
+      ],
+      [
+        2381,
+        "getattr",
+        "getattr(_R53_LABOR_PARENT,'telemetry',{})"
+      ],
+      [
+        2492,
+        "getattr",
+        "getattr(_R70_PARENT,'telemetry',{})"
+      ],
+      [
+        2606,
+        "getattr",
+        "getattr(_R85_PARENT,'telemetry',{})"
+      ],
+      [
+        2737,
+        "getattr",
+        "getattr(_R95_PARENT,'telemetry',{})"
+      ],
+      [
+        2867,
+        "getattr",
+        "getattr(_R97_PARENT,'telemetry',{})"
+      ],
+      [
+        2943,
+        "getattr",
+        "getattr(_R124_PARENT,'telemetry',{})"
+      ],
+      [
+        3040,
+        "getattr",
+        "getattr(_R127_PARENT,'telemetry',{})"
+      ],
+      [
+        3188,
+        "getattr",
+        "getattr(_R128_PARENT,'telemetry',{})"
+      ],
+      [
+        3326,
+        "getattr",
+        "getattr(_R148_PARENT,'telemetry',{})"
+      ],
+      [
+        3357,
+        "getattr",
+        "getattr(_R149_COPY,name)"
+      ],
+      [
+        687,
+        "already.add",
+        "already.add(item)"
+      ],
+      [
+        2272,
+        "getattr",
+        "getattr(_R51_INPUT_PARENT,'telemetry',{})"
+      ],
+      [
+        2361,
+        "spawns.append",
+        "spawns.append(chosen)"
+      ]
+    ],
+    "children": [
+      "jaxa_exec11_exec1002",
+      "jaxa_exec11_exec1004",
+      "jaxa_exec11_exec3365"
+    ],
+    "functions": [
+      {
+        "name": "_get",
+        "line": 284,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_int",
+        "line": 294,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_fib",
+        "line": 301,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_step_of",
+        "line": 308,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_shed_adjacent",
+        "line": 315,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_tile_at",
+        "line": 322,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_is_noop",
+        "line": 330,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_View",
+        "line": 378,
+        "unchanged_r2": true
+      },
+      {
+        "name": "Chassis",
+        "line": 406,
+        "unchanged_r2": true
+      },
+      {
+        "name": "make_agent",
+        "line": 910,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_router",
+        "line": 952,
+        "unchanged_r2": false
+      },
+      {
+        "name": "agent",
+        "line": 971,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 982,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_parent_liquidate",
+        "line": 1013,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_shadow_terminal",
+        "line": 1025,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1054,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1110,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1206,
+        "unchanged_r2": true
+      },
+      {
+        "name": "FarmView",
+        "line": 1217,
+        "unchanged_r2": true
+      },
+      {
+        "name": "projected_shed",
+        "line": 1220,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_fib",
+        "line": 1236,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_native_day",
+        "line": 1242,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_qualifies",
+        "line": 1247,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_walk",
+        "line": 1270,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_home",
+        "line": 1277,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_request",
+        "line": 1281,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v219_worker",
+        "line": 1339,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1394,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_shadow_terminal",
+        "line": 1457,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1468,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v224_sales_first",
+        "line": 1478,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1498,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1512,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v231_new_state",
+        "line": 1530,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v231_controller",
+        "line": 1536,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1620,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r36_native_lead",
+        "line": 1644,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r36_suppress",
+        "line": 1648,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r36_reserve",
+        "line": 1660,
+        "unchanged_r2": false
+      },
+      {
+        "name": "agent",
+        "line": 1706,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_shape",
+        "line": 1733,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_market_price",
+        "line": 1748,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_similarity",
+        "line": 1764,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_quote_priority",
+        "line": 1781,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r37_reorder_sales",
+        "line": 1807,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r44_before",
+        "line": 1835,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r44_after",
+        "line": 1850,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1870,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 1913,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v233_eligible",
+        "line": 1943,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v233_request",
+        "line": 1955,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_v233_worker",
+        "line": 1998,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_v234_rescue",
+        "line": 2031,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2053,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_shadow_terminal",
+        "line": 2105,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2109,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r51_input_forecast",
+        "line": 2130,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r51_input_gain",
+        "line": 2161,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r51_input_path",
+        "line": 2167,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r51_input_control",
+        "line": 2198,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2261,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r51_close_warehouse",
+        "line": 2283,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2334,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r53_labor_assignment",
+        "line": 2347,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2377,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r62_input_start",
+        "line": 2388,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r68_joint_plans",
+        "line": 2404,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r70_parent_fert_qty",
+        "line": 2430,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r70_before",
+        "line": 2450,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r70_after",
+        "line": 2466,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2484,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r79_tomato_fertilizer_worthwhile",
+        "line": 2498,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r85_feed",
+        "line": 2525,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r85_reserve",
+        "line": 2550,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r85_fertilizer",
+        "line": 2577,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2591,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r86_next_feed",
+        "line": 2615,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r88_feed_bonus_cost",
+        "line": 2653,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r95_reserve",
+        "line": 2680,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r95_replenish",
+        "line": 2702,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2728,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r97_market_stock",
+        "line": 2748,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r97_delivery",
+        "line": 2759,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r97_budget",
+        "line": 2769,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r97_supply",
+        "line": 2786,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 2858,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r124_labor_reserve",
+        "line": 2878,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r124_seed_budget",
+        "line": 2882,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r124_atomic",
+        "line": 2899,
+        "unchanged_r2": false
+      },
+      {
+        "name": "agent",
+        "line": 2922,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r127_fields",
+        "line": 2955,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r127_last_hour",
+        "line": 2967,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r127_prefix_bound",
+        "line": 2989,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r127_priority",
+        "line": 2995,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 3025,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r128_commands",
+        "line": 3050,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r128_future",
+        "line": 3053,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r128_sale_credit",
+        "line": 3057,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r128_next_need",
+        "line": 3067,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r128_field_safe",
+        "line": 3076,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r128_food_need",
+        "line": 3096,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r128_service",
+        "line": 3108,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r128_credit_supply",
+        "line": 3158,
+        "unchanged_r2": false
+      },
+      {
+        "name": "agent",
+        "line": 3174,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_r148_same_stock",
+        "line": 3202,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r148_overflow",
+        "line": 3206,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r148_atomic",
+        "line": 3244,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r148_seed_prefund",
+        "line": 3270,
+        "unchanged_r2": true
+      },
+      {
+        "name": "agent",
+        "line": 3310,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_r149_deepcopy",
+        "line": 3337,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_R149CopyProxy",
+        "line": 3355,
+        "unchanged_r2": false
+      }
+    ]
+  },
+  {
+    "label": "jaxa",
+    "imports": [
+      "import math"
+    ],
+    "calls": [],
+    "children": [
+      "jaxa_exec11"
+    ],
+    "functions": [
+      {
+        "name": "_Horizons",
+        "line": 19,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_shape",
+        "line": 63,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_price",
+        "line": 77,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_fib",
+        "line": 88,
+        "unchanged_r2": true
+      },
+      {
+        "name": "_simulate",
+        "line": 94,
+        "unchanged_r2": false
+      },
+      {
+        "name": "frontload",
+        "line": 146,
+        "unchanged_r2": false
+      },
+      {
+        "name": "advance_sales",
+        "line": 201,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_future_market",
+        "line": 266,
+        "unchanged_r2": false
+      },
+      {
+        "name": "_standard",
+        "line": 283,
+        "unchanged_r2": false
+      },
+      {
+        "name": "agent",
+        "line": 294,
+        "unchanged_r2": false
+      }
+    ]
+  }
+]

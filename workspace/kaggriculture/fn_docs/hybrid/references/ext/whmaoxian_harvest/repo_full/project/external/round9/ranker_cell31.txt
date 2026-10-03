@@ -1,0 +1,12 @@
+---
+## 8. Ranking with Bradley-Terry
+
+Win rate alone is misleading in a ladder: beating tier 0 four times is not the same
+achievement as beating tier 5 twice, but a raw win rate treats them identically.
+
+Bradley-Terry fits each agent a latent strength from *who* it beat, so wins against
+strong opponents count for more. The competition uses the same family of model for
+final standings, which is the main reason I rank this way locally.
+
+I report it on an Elo-like scale (400 points per 10x strength, mean anchored at 1500)
+because those numbers are easier to hold in your head than raw strengths.

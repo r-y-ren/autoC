@@ -1,0 +1,34 @@
+feat = pd.read_csv(f"{BASE}/episode_features.csv")
+feat = feat[feat.final_money > 0]
+CROP_COLS = [c for c in feat.columns
+             if c.startswith("plants_") and c[7:].upper() in
+             {"CARROT", "MELON", "STRAWBERRY", "TOMATO", "WHEAT"}]
+CAND = ["total_hires", "peak_crew", "tiles_planted", "first_land_day"] + CROP_COLS
+rho = (feat[CAND + ["final_money"]].corr(method="spearman")["final_money"]
+       .drop("final_money").sort_values())
+
+fig, axes = plt.subplots(1, 2, figsize=(8.2, 3.8))
+labels = [c.replace("plants_", "plants: ").replace("_", " ") for c in rho.index]
+axes[0].barh(range(len(rho)), rho.values, height=.7,
+             color=[C_TOP if v > 0 else C_LOW for v in rho.values])
+axes[0].set_yticks(range(len(rho)), labels, fontsize=9)
+axes[0].axvline(0, color="#2B241D", lw=.8)
+axes[0].set_xlabel("rank correlation with final bank")
+axes[0].set_title(f"Labor leads, land timing does not (n={len(feat):,})")
+
+top_feat = rho.abs().idxmax()
+axes[1].scatter(feat[top_feat], feat.final_money, s=9, alpha=.25, color=C_ACC, edgecolors="none")
+axes[1].set_xlabel(top_feat.replace("_", " ")); axes[1].set_ylabel("final bank")
+axes[1].yaxis.set_major_formatter(lambda v, _: f"{v/1000:.0f}k" if v else "0")
+axes[1].set_title(f"{top_feat.replace('_', ' ').title()} against the outcome")
+plt.tight_layout(); plt.show()
+
+best_crop = max(CROP_COLS, key=lambda c: rho.get(c, 0))
+display(Markdown(
+    f"Across **{len(feat):,}** seats the strongest signal is **{top_feat.replace('_', ' ')}** "
+    f"(rank correlation **{rho[top_feat]:+.2f}**), with crew size close behind. The day a farm "
+    f"first buys land lands at **{rho['first_land_day']:+.2f}**, near zero, even though land is "
+    f"the thing everyone talks about. Among crops, **{best_crop.replace('plants_', '')}** tracks "
+    f"the bank best (**{rho[best_crop]:+.2f}**). Correlation is not a recipe: heavy hiring may be "
+    f"what winning farms can afford rather than the reason they win. Read it as a list of things "
+    f"worth testing in your own bot, not a ranking of tactics."))

@@ -1,0 +1,67 @@
+[
+  {
+    "variant": "fixed",
+    "path": "experiments\\round8_top2_dsm_tasks_fixed.py",
+    "sha256": "c6a04bb8f1b7ad8e71a8270483439f4247dea6b4b969b2544bd0ba3ea4efe18b",
+    "status": "not_selected",
+    "training_data": "48 fresh study replays; this DSM family embeds 24 DSM routes only",
+    "validation_worlds": [
+      82001,
+      82003,
+      82005
+    ],
+    "source_note": "Independent public-demonstration proxy, not DSM author source. Upstream chassis Apache notices retained."
+  },
+  {
+    "variant": "fixed_v2",
+    "path": "experiments\\round8_top2_dsm_tasks_fixed_v2.py",
+    "sha256": "e59474884f45903c6a52c68e5986200f27559d06986bfe2b289dc0641dd9e200",
+    "status": "not_selected",
+    "training_data": "48 fresh study replays; this DSM family embeds 24 DSM routes only",
+    "validation_worlds": [
+      82001,
+      82003,
+      82005
+    ],
+    "source_note": "Independent public-demonstration proxy, not DSM author source. Upstream chassis Apache notices retained."
+  },
+  {
+    "variant": "dependencies",
+    "path": "experiments\\round8_top2_dsm_tasks_dependencies.py",
+    "sha256": "186cc470355647ccc3927140e09cc38e67103c43949c0f69e8a4a948543d5c58",
+    "status": "not_selected",
+    "training_data": "48 fresh study replays; this DSM family embeds 24 DSM routes only",
+    "validation_worlds": [
+      82001,
+      82003,
+      82005
+    ],
+    "source_note": "Independent public-demonstration proxy, not DSM author source. Upstream chassis Apache notices retained."
+  },
+  {
+    "variant": "release",
+    "path": "experiments\\round8_top2_dsm_tasks_release.py",
+    "sha256": "1acb391dec47d4d08ffcdf9f8d5e40af31abb5eb0ae649802e5274c943f2afbc",
+    "status": "expanded_evaluation_candidate",
+    "training_data": "48 fresh study replays; this DSM family embeds 24 DSM routes only",
+    "validation_worlds": [
+      82001,
+      82003,
+      82005
+    ],
+    "source_note": "Independent public-demonstration proxy, not DSM author source. Upstream chassis Apache notices retained."
+  },
+  {
+    "variant": "recovery",
+    "path": "experiments\\round8_top2_dsm_tasks_recovery.py",
+    "sha256": "a95631337584b81a7a77ca374d868c15170649a0da599306d1ec2b29de478061",
+    "status": "not_selected",
+    "training_data": "48 fresh study replays; this DSM family embeds 24 DSM routes only",
+    "validation_worlds": [
+      82001,
+      82003,
+      82005
+    ],
+    "source_note": "Independent public-demonstration proxy, not DSM author source. Upstream chassis Apache notices retained."
+  }
+]

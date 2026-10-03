@@ -1,0 +1,30 @@
+
+# One macro choice at day six, based only on the then-visible observation.
+_RV_ROUTER_PARENT=_IMPL.chassis.router
+_RV_REPORT={'decisions':0,'switched':0,'route':-1,'score':0.0}
+def _rv_router(observation,step,state):
+    original=_RV_ROUTER_PARENT(observation,step,state)
+    if step==0:_RV_REPORT.update(decisions=0,switched=0,route=-1,score=0.0)
+    if 144<=step<648 and not state.get('rv_latched'):
+        x=_RV_FEATURE_NS['features'](observation)
+        scores=[0.0]*len(_RV_MODEL['routes'])
+        for tree in _RV_MODEL['forest']:
+            node=0
+            while tree[node][0]>=0:
+                f,t,left,right=tree[node][:4];node=left if x[f]<=t else right
+            for i,value in enumerate(tree[node][4:]):scores[i]+=value/len(_RV_MODEL['forest'])
+        scores[0]=0.0;choice=max(range(len(scores)),key=lambda i:scores[i])
+        target=_RV_MODEL['routes'][choice]
+        if target is not None and scores[choice]>=_RV_THRESHOLD and not _RV_SHADOW:
+            state['route']=target;_RV_REPORT['switched']+=1
+        state['rv_latched']=True;_RV_REPORT['decisions']+=1
+        _RV_REPORT['route']=state.get('route',original);_RV_REPORT['score']=scores[choice]
+    return state.get('route',original)
+_IMPL.chassis.router=_rv_router
+_RV_PARENT=phase_b_agent
+def route_value_agent(observation,configuration=None):
+    return _RV_PARENT(observation,configuration)
+route_value_agent.telemetry=_RV_REPORT
+_MP_REPORT=_RV_REPORT
+agent=route_value_agent
+kaggle_submission_agent=route_value_agent

@@ -1,0 +1,173 @@
+# Separate virtual-farm expansion with observed worker IDs and protected baseline.
+_RN_PARENT=phase_b_agent
+_RN_HOME=((4,4),(5,4),(4,5),(5,5))
+_RN_SITES=((5,5),(6,5),(6,6),(5,6))
+_RN_STATE={}
+_RN_REPORT={'evaluations':0,'committed':0,'requested_workers':0,'shortfalls':0,'placed':0,'harvested':0,'feed_requests':0,'errors':0}
+_MP_REPORT=_RN_REPORT
+
+def _rn_walk(pos,target):
+    if pos[0]!=target[0]:return ['EAST' if target[0]>pos[0] else 'WEST']
+    if pos[1]!=target[1]:return ['SOUTH' if target[1]>pos[1] else 'NORTH']
+    return None
+
+def _rn_home(pos):
+    return min(_RN_HOME,key=lambda p:(abs(p[0]-pos[0])+abs(p[1]-pos[1]),p))
+
+def _rn_yields(animal,born,start):
+    spec=_HD2_SPEC[animal];cap={'GOOSE':4,'COW':6,'SHEEP':6}[animal]
+    result={}
+    for d in range(max(start,born+spec['first']),30):
+        age=d-born
+        if (age-spec['first'])%spec['interval']==0:
+            care=spec['first']-1 if age==spec['first'] else spec['interval']
+            result[d]=min(cap,1+care*.9)
+    return result
+
+def _rn_forecast(obs,native,animal,count):
+    day=int(obs['step'])//24;seat=int(obs['player']);item=_HD2_SPEC[animal]['product']
+    demand=1+_hd2_daily_shop_demand(item,obs['town']['unlocked_shops'])
+    _RN_REPORT['evaluations']+=1
+    supplies={d:0.0 for d in range(day+1,30)}
+    for farm in obs['farms']:
+        for row in farm['tiles']:
+            for tile in row:
+                if isinstance(tile,dict) and tile.get('animal')==animal:
+                    for d,n in _rn_yields(animal,int(tile['placed_day']),day+1).items():supplies[d]+=n
+    additions=_rn_yields(animal,day+1,day+1)
+    inventory=float(obs['market']['inventory'][item])+_RN_STOCK_BUFFER
+    revenue=0.0;params=_v44y_params(obs)
+    for d in range(day+1,30):
+        inventory-=demand;inventory+=supplies[d]
+        for _ in range(round(count*additions.get(d,0))):
+            price=max(1,_r37_market_price(item,round(inventory),params))
+            revenue+=price
+            if price>1:inventory+=1
+    wages=0
+    for d in range(day,30):
+        n=max(len(a.get('hands',[])) for a in _v219_native_day(native,d))
+        wages+=_v219_fib(n)
+    days=30-day
+    feed=count*days*max(20,int(obs['market']['prices']['WHEAT'])+15)
+    fertilizer=count*max(0,days-2)*min(25,int(obs['market']['prices']['FERTILIZER']))
+    capital=4000+count*_HD2_SPEC[animal]['cost']
+    net=revenue+fertilizer-capital-feed-wages
+    return {'animal':animal,'net':net,'revenue':revenue,'wages':wages,'feed':feed,'capital':capital,'demand':demand}
+
+def _rn_worker(obs,actor,state,stock):
+    farm=obs['farms'][int(obs['player'])];pos=([farm['farmer']]+farm['hands'])[actor]
+    inv=obs['private']['inventories'][actor];animal=state['animal'];sites=state['sites']
+    home=_rn_home(pos);hour=int(obs['step'])%24
+    if hour>=22-abs(pos[0]-home[0])-abs(pos[1]-home[1]):
+        return _rn_walk(pos,home) or (['DROP'] if sum(inv.values()) else ['PASS'])
+    tiles=[farm['tiles'][y][x] for x,y in sites]
+    missing=sum(isinstance(t,dict) and not t.get('animal') or t is None for t in tiles)
+    unfed=sum(isinstance(t,dict) and t.get('animal')==animal and not t.get('fed_today') for t in tiles)
+    for item,needed in ((animal,missing),('WHEAT',missing+unfed)):
+        gap=max(0,needed-int(inv.get(item,0)))
+        if gap:
+            if tuple(pos) not in _RN_HOME:return _rn_walk(pos,home)
+            take=min(gap,max(0,int(stock.get(item,0))))
+            if take:stock[item]-=take;return ['PICKUP',item,take]
+            return ['PASS']
+    for target,tile in zip(sites,tiles):
+        command=None
+        if tile is None:command=['BUILD_COOP' if animal=='GOOSE' else 'BUILD_PASTURE']
+        elif isinstance(tile,dict) and tile.get('kind')=='WEED':command=['DIG']
+        elif isinstance(tile,dict) and not tile.get('animal'):command=['PLACE',animal,1]
+        elif isinstance(tile,dict) and tile.get('animal')==animal:
+            if not tile.get('fed_today'):command=['FEED']
+            elif not tile.get('cared_today'):command=['CARE']
+            elif tile.get('yield_units',0):command=['HARVEST']
+            elif tile.get('fertilizer_available'):command=['COLLECT_FERTILIZER']
+        if command:return _rn_walk(pos,target) or command
+    return _rn_walk(pos,home) or (['DROP'] if sum(inv.values()) else ['PASS'])
+
+def _rn_apply(obs,action):
+    step=int(obs['step']);day=step//24;hour=step%24;seat=int(obs['player'])
+    farm=obs['farms'][seat];state=_RN_STATE.get(seat)
+    if state is None or step<=state['last']:
+        state=_RN_STATE[seat]={'last':-1,'day':-1,'active':False,'worker':None,'pending':None,'credit':{}}
+        for key in _RN_REPORT:_RN_REPORT[key]=0
+    state['last']=step
+    if day!=state['day']:state.update(day=day,worker=None,pending=None,requested=False)
+    pending=state['pending']
+    if pending and step>pending[0]:
+        if pending[1]<=len(farm['hands']):state['worker']=pending[1]
+        else:_RN_REPORT['shortfalls']+=1
+        state['pending']=None
+    native=_IMPL.chassis.players.get(seat)
+    if not native or day<_RN_START:return action
+    orders=[list(o) for o in action.get('market',[])];plan=_v219_native_day(native,day)
+    n=max(len(a.get('hands',[])) for a in plan)
+    last_hire=max((h for h,a in enumerate(plan) if ['HIRE'] in a.get('market',[])),default=0)
+    ready=hour>=max(1,last_hire+1) and hour<=8 and len(farm['hands'])>=n and not state['requested']
+    if not state['active'] and _RN_START<=day<=_RN_STOP and ready and len(orders)<=5:
+        if set(farm['unlocked_quadrants'])!={'NW','NE','SW'}:return action
+        if any(o and o[0]!='SELL' for o in orders):return action
+        sites=_RN_SITES[:_RN_COUNT]
+        if any(farm['tiles'][y][x]!='LOCKED' for x,y in sites):return action
+        forecasts=[_rn_forecast(obs,native,a,_RN_COUNT) for a in _RN_ANIMALS]
+        choice=max(forecasts,key=lambda f:f['net'])
+        state['last_forecast']=choice
+        if choice['net']<_RN_MIN_NET or farm['money']<choice['capital']+3000:return action
+        orders += [['BUY_LAND'],['BUY_ANIMAL',choice['animal'],_RN_COUNT]]
+        state.update(active=True,animal=choice['animal'],sites=sites,commit_step=step,forecast=choice)
+        _RN_REPORT['committed']+=1
+    if not state['active']:return action
+    if step>state['commit_step'] and 'SE' not in farm['unlocked_quadrants']:
+        state['active']=False;_RN_REPORT['shortfalls']+=1;return action
+    if ready and len(orders)<9:
+        cost=_v219_fib(int(farm['hires_today']))
+        capital=state['forecast']['capital'] if step==state['commit_step'] else 0
+        if farm['money']>=capital+cost+500:
+            orders.append(['HIRE']);state['requested']=True
+            state['pending']=(step,len(farm['hands'])+1)
+            _RN_REPORT['requested_workers']+=1
+    commands=[list(action.get('farmer') or ['PASS'])]+[list(c) for c in action.get('hands',[])]
+    commands += [['PASS'] for _ in range(max(0,len(farm['hands'])+1-len(commands)))]
+    actor=state['worker']
+    if actor is not None and actor<len(commands):commands[actor]=['PASS']
+    projected=projected_shed(dict(action,farmer=commands[0],hands=commands[1:]),FarmView(obs))
+    if actor is not None and actor<len(commands):
+        command=_rn_worker(obs,actor,state,dict(projected));commands[actor]=command
+        pos=([farm['farmer']]+farm['hands'])[actor];tile=farm['tiles'][pos[1]][pos[0]]
+        if command[:2]==['PLACE',state['animal']]:_RN_REPORT['placed']+=1
+        if isinstance(tile,dict) and command==['HARVEST']:
+            item=_HD2_SPEC[state['animal']]['product'];quantity=max(0,int(tile.get('yield_units',0)))
+            state['credit'][item]=state['credit'].get(item,0)+quantity
+            _RN_REPORT['harvested']+=quantity
+        if isinstance(tile,dict) and command==['COLLECT_FERTILIZER'] and tile.get('fertilizer_available'):
+            state['credit']['FERTILIZER']=state['credit'].get('FERTILIZER',0)+1
+    result=dict(action,farmer=commands[0],hands=commands[1:],market=orders)
+    projected=projected_shed(result,FarmView(obs))
+    selling=sum(int(o[2]) for o in orders if len(o)>=3 and o[:2]==['SELL','WHEAT'])
+    buying=sum(int(o[2]) for o in orders if len(o)>=3 and o[:2]==['BUY_PRODUCT','WHEAT'])
+    need=max(0,2*_RN_COUNT-int(projected.get('WHEAT',0))+selling-buying)
+    selling=min(max(0,int(projected.get('WHEAT',0))),max(0,selling))
+    need=max(0,2*_RN_COUNT-int(projected.get('WHEAT',0))+selling-buying)
+    if need and len(orders)<10 and farm['money']>1000:
+        orders.append(['BUY_PRODUCT','WHEAT',min(2*_RN_COUNT,need)])
+        _RN_REPORT['feed_requests']+=min(2*_RN_COUNT,need)
+    for item,credit in list(state['credit'].items()):
+        sold=sum(max(0,int(o[2])) for o in orders if len(o)>=3 and o[:2]==['SELL',item])
+        quantity=min(credit,max(0,int(projected.get(item,0))-sold))
+        if quantity and len(orders)<10:
+            orders.insert(0,['SELL',item,quantity]);state['credit'][item]-=quantity
+    return dict(result,market=orders)
+
+def independent_ranch_agent(observation,configuration=None):
+    action=_RN_PARENT(observation,configuration)
+    if configuration and any(configuration.get(k,v)!=v for k,v in [('boardSize',10),('episodeSteps',720),('maxMarketOrdersPerTurn',10)]):return action
+    action=_rn_apply(observation,action)
+    seat=int(observation['player']);step=int(observation['step'])
+    previous=_OR2_STATE.get(seat,{}).get('prev')
+    if previous and previous.get('step')==step:
+        stock=projected_shed(action,FarmView(observation))
+        for item in _ADV_ITEMS:
+            quantity=sum(max(0,int(o[2])) for o in action.get('market',[]) if len(o)>=3 and o[:2]==['SELL',item])
+            previous.setdefault('own',{})[item]=min(max(0,int(stock.get(item,0))),quantity)
+    return action
+independent_ranch_agent.telemetry=_RN_REPORT
+agent=independent_ranch_agent
+kaggle_submission_agent=independent_ranch_agent

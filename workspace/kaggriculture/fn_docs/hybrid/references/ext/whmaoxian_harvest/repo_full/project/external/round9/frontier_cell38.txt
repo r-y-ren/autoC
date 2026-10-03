@@ -1,0 +1,7 @@
+## 14. What changed after reviewing the 2,879.7 public notebook
+
+The recent public reference was Tetsutani's [Adaptive Farming Strategy for Kaggriculture](https://www.kaggle.com/code/tetsutani/adaptive-farming-strategy-for-kaggriculture), whose page showed **2,879.7**. Its useful idea is a small, visible-state commitment: read the opponent's opening demand and farm shape, choose a coherent season route, and keep later repairs narrow. Its full controller was weaker than our frozen Pipe16 control on the pinned engine, so it is preserved as an idea source rather than copied wholesale.
+
+The candidate in this notebook applies one measured variation. At step 2 it reads the public opponent farm once. Only the stable four-hire/four-hand, 571–599-coin opening is routed to the independently pulled Jaxa policy; every other opening stays on Pipe16. The decision is latched so later market changes cannot retarget the route. This keeps the experiment auditable and avoids the false positives found by a live hires_today == 4 switch.
+
+The borrowed policy is retained with its source notices in the embedded main.py. The table below is local exact-engine evidence, not a Kaggle leaderboard score. The official score is the score on a completed Kaggle submission row for this exact package.

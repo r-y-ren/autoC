@@ -1,0 +1,122 @@
+{
+  "seeds": [
+    667500670,
+    942022459,
+    223350887,
+    1726596017
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/marketshock_adapter.py",
+      "family": "marketshock",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    }
+  ],
+  "variants": [
+    {
+      "name": "adapt_f0_net0",
+      "future": 0,
+      "minimum": 0,
+      "animals": [
+        "COW",
+        "SHEEP",
+        "GOOSE"
+      ],
+      "path": "research/ranch_search_20260927/generation2/adapt_f0_net0.py",
+      "sha256": "80bff4053a966b834482862e5e7cd3ef2ba1bde8a1dbac83beae4c5d03ec7e12"
+    },
+    {
+      "name": "adapt_f0_net3000",
+      "future": 0,
+      "minimum": 3000,
+      "animals": [
+        "COW",
+        "SHEEP",
+        "GOOSE"
+      ],
+      "path": "research/ranch_search_20260927/generation2/adapt_f0_net3000.py",
+      "sha256": "efee5076d97fbfcc8ae72a6055c77f7f97892db3764b32fa550f62a0ca21afec"
+    },
+    {
+      "name": "adapt_f1_net0",
+      "future": 1,
+      "minimum": 0,
+      "animals": [
+        "COW",
+        "SHEEP",
+        "GOOSE"
+      ],
+      "path": "research/ranch_search_20260927/generation2/adapt_f1_net0.py",
+      "sha256": "bb87c64ad2795d88b8682f217fe614e767ce2bbf292c7f0df94ad8af5ca9efdc"
+    },
+    {
+      "name": "adapt_f1_net3000",
+      "future": 1,
+      "minimum": 3000,
+      "animals": [
+        "COW",
+        "SHEEP",
+        "GOOSE"
+      ],
+      "path": "research/ranch_search_20260927/generation2/adapt_f1_net3000.py",
+      "sha256": "95ff0bec9af4b989090b696487c385accb8aa987e38c82933ac01db3d4e28274"
+    },
+    {
+      "name": "probe_sheep",
+      "future": 0,
+      "minimum": -1000000,
+      "animals": [
+        "SHEEP"
+      ],
+      "path": "research/ranch_search_20260927/generation2/probe_sheep.py",
+      "sha256": "4c45737d44c60b4f79858ec1dcc7402341f0b857ce6756bb14cfb5b99cc17d10"
+    },
+    {
+      "name": "probe_cow",
+      "future": 0,
+      "minimum": -1000000,
+      "animals": [
+        "COW"
+      ],
+      "path": "research/ranch_search_20260927/generation2/probe_cow.py",
+      "sha256": "bf862b514fae289577279997f74c8f3a68e60f242d44598436cc1838f2e4c3ce"
+    },
+    {
+      "name": "probe_goose",
+      "future": 0,
+      "minimum": -1000000,
+      "animals": [
+        "GOOSE"
+      ],
+      "path": "research/ranch_search_20260927/generation2/probe_goose.py",
+      "sha256": "4fa8107b2d5e3455cb6684163d3bd1c2e33f77341c0d51e9bb32baf59ec5a51a"
+    }
+  ],
+  "total_games": 384,
+  "scope": "Paired development. Forced-entry probes are diagnostic, not approved candidates."
+}

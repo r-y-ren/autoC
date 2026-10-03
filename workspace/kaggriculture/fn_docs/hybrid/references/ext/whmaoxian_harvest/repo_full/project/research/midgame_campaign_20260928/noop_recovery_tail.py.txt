@@ -1,0 +1,56 @@
+
+# In-place recovery only: no movement, purchases, or feeding are introduced.
+_K28N_PARENT=phase_b_agent
+_K28N_REPORT=dict(inspected=0,care=0,fertilizer=0,harvest=0,errors=0)
+_MP_REPORT=_K28N_REPORT
+
+def noop_recovery_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player']);day=step//24
+    if step==0:
+        for key in _K28N_REPORT:_K28N_REPORT[key]=0
+    action=_K28N_PARENT(observation,configuration)
+    if step<_K28N_CFG['begin'] or step>=672:return action
+    farm=observation['farms'][seat];private=observation['private']
+    positions=[farm['farmer']]+list(farm['hands'])
+    commands=[list(action.get('farmer') or ['PASS'])]+[list(c) for c in action.get('hands',[])]
+    commands+=[['PASS'] for _ in range(len(positions)-len(commands))]
+    reserve=sum(max(0,int(v)) for v in private['shed'].values())
+    reserve+=sum(sum(max(0,int(v)) for v in inv.values()) for inv in private['inventories'])
+    tiles={};visits=None;changed=False
+    for actor,pos in enumerate(positions):
+        key=tuple(pos);original=farm['tiles'][pos[1]][pos[0]]
+        if not isinstance(original,dict) or original.get('animal') not in _CH_ANIMALS:continue
+        if key not in tiles:tiles[key]=dict(original)
+        tile=tiles[key];cmd=commands[actor];op=cmd[0] if cmd else 'PASS'
+        inv=private['inventories'][actor] if actor<len(private['inventories']) else {}
+        noop=(op=='PASS' or op=='CARE' and tile.get('cared_today') or
+              op=='COLLECT_FERTILIZER' and not tile.get('fertilizer_available') or
+              op=='HARVEST' and int(tile.get('yield_units',0))<=0 or
+              op=='FEED' and (tile.get('fed_today') or inv.get('WHEAT',0)<=0) or op=='WATER')
+        if noop:
+            _K28N_REPORT['inspected']+=1
+            if visits is None:visits=_ch_visits_today(observation,action)
+            later={event[1] for event in visits.get(key,[])}
+            product,cap,first,period=_CH_ANIMALS[tile['animal']]
+            birth=int(tile['placed_day'])+first
+            next_day=birth if day<birth else day+(period-(day-birth)%period)
+            if ('CARE' in _K28N_CFG['ops'] and not tile.get('cared_today') and
+                (tile.get('fed_today') or 'FEED' in later) and 'CARE' not in later and
+                next_day<30 and int(tile.get('pending_care_bonus',0))+int(tile.get('yield_units',0))<cap-1):
+                commands[actor]=['CARE'];_K28N_REPORT['care']+=1;changed=True
+            elif ('COLLECT_FERTILIZER' in _K28N_CFG['ops'] and tile.get('fertilizer_available') and
+                  'COLLECT_FERTILIZER' not in later and reserve<_K28N_CFG['capacity']):
+                commands[actor]=['COLLECT_FERTILIZER'];_K28N_REPORT['fertilizer']+=1;changed=True
+            elif ('HARVEST' in _K28N_CFG['ops'] and int(tile.get('yield_units',0))>0 and
+                  'HARVEST' not in later and reserve+int(tile['yield_units'])<_K28N_CFG['capacity']):
+                commands[actor]=['HARVEST'];_K28N_REPORT['harvest']+=int(tile['yield_units']);changed=True
+            op=commands[actor][0]
+        if op=='CARE':tile['cared_today']=True
+        elif op=='FEED' and inv.get('WHEAT',0)>0:tile['fed_today']=True
+        elif op=='COLLECT_FERTILIZER' and tile.get('fertilizer_available'):
+            tile['fertilizer_available']=False;reserve+=1
+        elif op=='HARVEST':reserve+=int(tile.get('yield_units',0));tile['yield_units']=0
+    return dict(action,farmer=commands[0],hands=commands[1:]) if changed else action
+noop_recovery_agent.telemetry=_K28N_REPORT
+agent=noop_recovery_agent
+kaggle_submission_agent=noop_recovery_agent

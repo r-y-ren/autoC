@@ -1,0 +1,38 @@
+
+# Make an existing livestock service stop useful for the substituted animal's calendar.
+def _k28h_harvest(obs,st,actor,tile,command):
+    if command!=['COLLECT_FERTILIZER'] or not tile.get('cared_today'):return command
+    q=int(tile.get('yield_units',0));day=int(obs['step'])//24
+    if q<_K28H_MIN_YIELD:return command
+    price=obs['market']['prices']
+    if price['WOOL']<25 or q*price['WOOL']<1.5*price['FERTILIZER']:return command
+    if _K28H_OVERFLOW_ONLY:
+        age=day+1-int(tile['placed_day'])
+        if age<6 or (age-6)%3 or q+1+tile.get('pending_care_bonus',0)<=6:return command
+    st.setdefault('expedited',{})[actor]=st.setdefault('expedited',{}).get(actor,0)+q
+    _K28S_REPORT['early_harvests']+=1
+    return ['HARVEST']
+
+def _k28h_ship(obs,st,action,commands):
+    farm=obs['farms'][int(obs['player'])];positions=[farm['farmer']]+list(farm['hands'])
+    inventories=obs['private']['inventories']
+    for actor,quota in list(st.get('expedited',{}).items()):
+        if actor>=len(commands) or quota<=0 or tuple(positions[actor]) not in ((4,4),(5,4),(4,5),(5,5)):continue
+        inv=inventories[actor];q=min(quota,int(inv.get('WOOL',0)))
+        if not q:continue
+        cmd=commands[actor];source=cmd[1] if len(cmd)>1 and cmd[0]=='PLACE' else None
+        if cmd!=['PASS'] and source not in ('FERTILIZER','MILK'):continue
+        before_commands=[c if i<actor else ['PASS'] for i,c in enumerate(commands)]
+        before_action=dict(action,farmer=before_commands[0],hands=before_commands[1:])
+        before_stock=projected_shed(before_action,FarmView(obs))
+        full_stock=projected_shed(dict(action,farmer=commands[0],hands=commands[1:]),FarmView(obs))
+        if 100-sum(full_stock.values())<q:continue
+        source_qty=int(inv.get(source,0)) if source else 0
+        request=int(cmd[2]) if len(cmd)>2 else 1
+        can_drop=source is not None and source_qty<=request and inv.get('WOOL',0)==q and all(k in ('WOOL',source) or not n for k,n in inv.items())
+        if source_qty and not can_drop:continue
+        deposit=q+source_qty if can_drop else q
+        if 100-sum(before_stock.values())<deposit:continue
+        commands[actor]=['DROP'] if can_drop else ['PLACE','WOOL',q]
+        st['expedited'][actor]-=q;_K28S_REPORT['early_shipped_units']+=q
+    return commands

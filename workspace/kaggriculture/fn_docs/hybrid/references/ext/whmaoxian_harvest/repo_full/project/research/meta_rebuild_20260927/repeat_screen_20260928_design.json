@@ -1,0 +1,328 @@
+{
+  "variants": [
+    {
+      "name": "repeat_v2_one",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_v2_one.py",
+      "sha256": "4c4795500218db6340799fd5b9a414af3845790ec3eb4c03b4a5b57c60282b36",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 1,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": false,
+        "FUND_SALES": false
+      },
+      "terminal_care": false
+    },
+    {
+      "name": "repeat_v2_two",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_v2_two.py",
+      "sha256": "c94f129e86c16ef465ab3d05da93717f46eed6f6556a54792ea78dc17e81a2d3",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 2,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": false,
+        "FUND_SALES": false
+      },
+      "terminal_care": false
+    },
+    {
+      "name": "repeat_v2_nomilk",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_v2_nomilk.py",
+      "sha256": "348bc1bfce3e5f551f21cf291295bf4c5dce0a883e66434dbbf74ace8555cdae",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 3,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": true,
+        "REPAIR": false,
+        "FUND_SALES": false
+      },
+      "terminal_care": false
+    },
+    {
+      "name": "repeat_v2_funded",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_v2_funded.py",
+      "sha256": "927081a4ab2a7af4ef02f96e62690e829c7c138d8b6898fe2aa1fd62d18c2183",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 3,
+        "RESERVE": 25,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": false,
+        "FUND_SALES": true
+      },
+      "terminal_care": false
+    },
+    {
+      "name": "repeat_v2_care_audited",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_v2_care_audited.py",
+      "sha256": "94ebdebb62bbe5591be89d760edb667bee3b6bee34969e008b0ac0de776f136f",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 3,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": false,
+        "FUND_SALES": false
+      },
+      "terminal_care": true
+    },
+    {
+      "name": "r2",
+      "path": "submissions/release_v10_r2/main.py",
+      "sha256": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4"
+    },
+    {
+      "name": "care_only",
+      "path": "research/meta_rebuild_20260927/candidates/late_care.py",
+      "sha256": "12064f1a53ac7cc4bdfa68b85d738b10b6ae5e669bb0758131f5798e9a198d1d"
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_01.py",
+      "family": "top_style_01",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_04.py",
+      "family": "top_style_04",
+      "panel": "responsive_proxy"
+    }
+  ],
+  "seeds": [
+    149322228,
+    1073337711,
+    1401688540,
+    667602040,
+    347690402,
+    1630685350,
+    1389476168,
+    1780870502
+  ],
+  "inspected_initial_worlds": [
+    {
+      "seed": 149322228,
+      "shops": [
+        "PET_CAFE",
+        "ICE_CREAM_SHOP"
+      ]
+    },
+    {
+      "seed": 1073337711,
+      "shops": [
+        "PET_CAFE",
+        "PET_CAFE"
+      ]
+    },
+    {
+      "seed": 1728768097,
+      "shops": [
+        "SMOOTHIE_SHOP",
+        "ICE_CREAM_SHOP"
+      ]
+    },
+    {
+      "seed": 1401688540,
+      "shops": [
+        "BAKERY",
+        "YARN_STORE"
+      ]
+    },
+    {
+      "seed": 1361625550,
+      "shops": [
+        "FARMERS_MARKET",
+        "FARMERS_MARKET"
+      ]
+    },
+    {
+      "seed": 667602040,
+      "shops": [
+        "SMOOTHIE_SHOP",
+        "YARN_STORE"
+      ]
+    },
+    {
+      "seed": 738691991,
+      "shops": [
+        "SMOOTHIE_SHOP",
+        "PIZZA_SHOP"
+      ]
+    },
+    {
+      "seed": 6500558,
+      "shops": [
+        "ICE_CREAM_SHOP",
+        "PET_CAFE"
+      ]
+    },
+    {
+      "seed": 1582201233,
+      "shops": [
+        "PIZZA_SHOP",
+        "BAKERY"
+      ]
+    },
+    {
+      "seed": 286057531,
+      "shops": [
+        "BAKERY",
+        "PET_CAFE"
+      ]
+    },
+    {
+      "seed": 168837140,
+      "shops": [
+        "ICE_CREAM_SHOP",
+        "FARMERS_MARKET"
+      ]
+    },
+    {
+      "seed": 497576801,
+      "shops": [
+        "BAKERY",
+        "BRUNCH_SPOT"
+      ]
+    },
+    {
+      "seed": 1088150454,
+      "shops": [
+        "FARMERS_MARKET",
+        "PET_CAFE"
+      ]
+    },
+    {
+      "seed": 1855119813,
+      "shops": [
+        "SMOOTHIE_SHOP",
+        "ICE_CREAM_SHOP"
+      ]
+    },
+    {
+      "seed": 347690402,
+      "shops": [
+        "FARMERS_MARKET",
+        "YARN_STORE"
+      ]
+    },
+    {
+      "seed": 1684049201,
+      "shops": [
+        "ICE_CREAM_SHOP",
+        "FARMERS_MARKET"
+      ]
+    },
+    {
+      "seed": 1805021983,
+      "shops": [
+        "FARMERS_MARKET",
+        "BAKERY"
+      ]
+    },
+    {
+      "seed": 1480594287,
+      "shops": [
+        "ICE_CREAM_SHOP",
+        "BAKERY"
+      ]
+    },
+    {
+      "seed": 552073494,
+      "shops": [
+        "FARMERS_MARKET",
+        "FARMERS_MARKET"
+      ]
+    },
+    {
+      "seed": 40026085,
+      "shops": [
+        "BAKERY",
+        "ICE_CREAM_SHOP"
+      ]
+    },
+    {
+      "seed": 575602502,
+      "shops": [
+        "PIZZA_SHOP",
+        "BRUNCH_SPOT"
+      ]
+    },
+    {
+      "seed": 1630685350,
+      "shops": [
+        "YARN_STORE",
+        "FARMERS_MARKET"
+      ]
+    },
+    {
+      "seed": 1389476168,
+      "shops": [
+        "YARN_STORE",
+        "PET_CAFE"
+      ]
+    },
+    {
+      "seed": 1780870502,
+      "shops": [
+        "YARN_STORE",
+        "PIZZA_SHOP"
+      ]
+    }
+  ],
+  "cases": 1008,
+  "scope": "DEVELOPMENT: six Yarn worlds and two non-Yarn controls, selected by R2-prefix shop observations only. No outcome-based world selection. Not representative rating evaluation."
+}

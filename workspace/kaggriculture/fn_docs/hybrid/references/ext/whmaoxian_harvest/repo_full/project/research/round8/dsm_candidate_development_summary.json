@@ -1,0 +1,205 @@
+{
+  "games": 48,
+  "worlds": 8,
+  "valid": 48,
+  "by_opponent": {
+    "external/round8/fieldcraft/main.py": {
+      "games": 16,
+      "worlds": 8,
+      "wins": 10,
+      "ties": 0,
+      "losses": 6,
+      "world_mean_margin": -4021.0625,
+      "world_median_margin": 8891.75,
+      "world_min_margin": -37463.0,
+      "world_max_margin": 22735.0,
+      "positive_worlds": 5,
+      "negative_worlds": 3,
+      "mean_bank": 99784.4375,
+      "max_action_seconds": 0.420342,
+      "max_final_carried_units": 9,
+      "mean_final_carried_units": 6.375,
+      "nonempty_final_shed_games": 0,
+      "nonzero_candidate_error_games": 0,
+      "worlds_with_seat_difference": 1
+    },
+    "external/round8/master2965/main.py": {
+      "games": 16,
+      "worlds": 8,
+      "wins": 8,
+      "ties": 0,
+      "losses": 8,
+      "world_mean_margin": -4756.3125,
+      "world_median_margin": 3846.75,
+      "world_min_margin": -41705.0,
+      "world_max_margin": 21768.0,
+      "positive_worlds": 4,
+      "negative_worlds": 4,
+      "mean_bank": 96242.5,
+      "max_action_seconds": 0.004563,
+      "max_final_carried_units": 9,
+      "mean_final_carried_units": 5.875,
+      "nonempty_final_shed_games": 0,
+      "nonzero_candidate_error_games": 0,
+      "worlds_with_seat_difference": 1
+    },
+    "submissions/release_v6/main.py": {
+      "games": 16,
+      "worlds": 8,
+      "wins": 10,
+      "ties": 0,
+      "losses": 6,
+      "world_mean_margin": -5361.4375,
+      "world_median_margin": 7495.25,
+      "world_min_margin": -41237.0,
+      "world_max_margin": 21660.0,
+      "positive_worlds": 5,
+      "negative_worlds": 3,
+      "mean_bank": 100332.125,
+      "max_action_seconds": 0.004568,
+      "max_final_carried_units": 9,
+      "mean_final_carried_units": 5.875,
+      "nonempty_final_shed_games": 0,
+      "nonzero_candidate_error_games": 0,
+      "worlds_with_seat_difference": 1
+    }
+  },
+  "by_world": [
+    {
+      "seed": 399468952,
+      "by_opponent": {
+        "external/round8/fieldcraft/main.py": {
+          "seat0_delta": 11068.0,
+          "seat1_delta": 11068.0
+        },
+        "external/round8/master2965/main.py": {
+          "seat0_delta": 10026.0,
+          "seat1_delta": 10026.0
+        },
+        "submissions/release_v6/main.py": {
+          "seat0_delta": 10133.0,
+          "seat1_delta": 10133.0
+        }
+      }
+    },
+    {
+      "seed": 457648937,
+      "by_opponent": {
+        "external/round8/fieldcraft/main.py": {
+          "seat0_delta": 13303.0,
+          "seat1_delta": 13303.0
+        },
+        "external/round8/master2965/main.py": {
+          "seat0_delta": 12972.0,
+          "seat1_delta": 12972.0
+        },
+        "submissions/release_v6/main.py": {
+          "seat0_delta": 13466.0,
+          "seat1_delta": 13466.0
+        }
+      }
+    },
+    {
+      "seed": 733556107,
+      "by_opponent": {
+        "external/round8/fieldcraft/main.py": {
+          "seat0_delta": -37463.0,
+          "seat1_delta": -37463.0
+        },
+        "external/round8/master2965/main.py": {
+          "seat0_delta": -41705.0,
+          "seat1_delta": -41705.0
+        },
+        "submissions/release_v6/main.py": {
+          "seat0_delta": -31946.0,
+          "seat1_delta": -31946.0
+        }
+      }
+    },
+    {
+      "seed": 762418392,
+      "by_opponent": {
+        "external/round8/fieldcraft/main.py": {
+          "seat0_delta": 3949.0,
+          "seat1_delta": 12982.0
+        },
+        "external/round8/master2965/main.py": {
+          "seat0_delta": -32.0,
+          "seat1_delta": -4633.0
+        },
+        "submissions/release_v6/main.py": {
+          "seat0_delta": 35.0,
+          "seat1_delta": 9680.0
+        }
+      }
+    },
+    {
+      "seed": 800459488,
+      "by_opponent": {
+        "external/round8/fieldcraft/main.py": {
+          "seat0_delta": -27810.0,
+          "seat1_delta": -27810.0
+        },
+        "external/round8/master2965/main.py": {
+          "seat0_delta": -26053.0,
+          "seat1_delta": -26053.0
+        },
+        "submissions/release_v6/main.py": {
+          "seat0_delta": -41237.0,
+          "seat1_delta": -41237.0
+        }
+      }
+    },
+    {
+      "seed": 1118262502,
+      "by_opponent": {
+        "external/round8/fieldcraft/main.py": {
+          "seat0_delta": 22735.0,
+          "seat1_delta": 22735.0
+        },
+        "external/round8/master2965/main.py": {
+          "seat0_delta": 21768.0,
+          "seat1_delta": 21768.0
+        },
+        "submissions/release_v6/main.py": {
+          "seat0_delta": 21660.0,
+          "seat1_delta": 21660.0
+        }
+      }
+    },
+    {
+      "seed": 1591314292,
+      "by_opponent": {
+        "external/round8/fieldcraft/main.py": {
+          "seat0_delta": -31785.0,
+          "seat1_delta": -31785.0
+        },
+        "external/round8/master2965/main.py": {
+          "seat0_delta": -30464.0,
+          "seat1_delta": -30464.0
+        },
+        "submissions/release_v6/main.py": {
+          "seat0_delta": -37858.0,
+          "seat1_delta": -37858.0
+        }
+      }
+    },
+    {
+      "seed": 1921079672,
+      "by_opponent": {
+        "external/round8/fieldcraft/main.py": {
+          "seat0_delta": 9318.0,
+          "seat1_delta": 9318.0
+        },
+        "external/round8/master2965/main.py": {
+          "seat0_delta": 17738.0,
+          "seat1_delta": 17738.0
+        },
+        "submissions/release_v6/main.py": {
+          "seat0_delta": 18033.0,
+          "seat1_delta": 18033.0
+        }
+      }
+    }
+  ]
+}

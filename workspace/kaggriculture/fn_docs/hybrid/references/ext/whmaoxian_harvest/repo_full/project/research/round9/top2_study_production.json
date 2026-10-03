@@ -1,0 +1,2482 @@
+[
+  {
+    "author": "dsm",
+    "submission": 56468867,
+    "eid": 112386948,
+    "seat": 0,
+    "selection_index": 1,
+    "selection": "chronological index fixed before replay inspection; excludes self matches",
+    "mixes": [
+      {
+        "day": 6,
+        "mix": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shops": [
+          "BAKERY",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "day": 9,
+        "mix": {
+          "STRAWBERRY": 19,
+          "MELON": 10,
+          "WHEAT": 8,
+          "COW": 5,
+          "GOOSE": 5,
+          "SHEEP": 3
+        },
+        "shops": [
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "FARMERS_MARKET"
+        ]
+      },
+      {
+        "day": 12,
+        "mix": {
+          "STRAWBERRY": 26,
+          "WHEAT": 35,
+          "COW": 6,
+          "GOOSE": 11,
+          "SHEEP": 3,
+          "TOMATO": 3
+        },
+        "shops": [
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "FARMERS_MARKET",
+          "PIZZA_SHOP"
+        ]
+      },
+      {
+        "day": 15,
+        "mix": {
+          "STRAWBERRY": 25,
+          "WHEAT": 32,
+          "COW": 6,
+          "GOOSE": 11,
+          "SHEEP": 3,
+          "TOMATO": 15
+        },
+        "shops": [
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "FARMERS_MARKET",
+          "PIZZA_SHOP",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 18,
+        "mix": {
+          "STRAWBERRY": 25,
+          "WHEAT": 24,
+          "TOMATO": 20,
+          "CARROT": 2,
+          "COW": 6,
+          "GOOSE": 11,
+          "SHEEP": 6
+        },
+        "shops": [
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "FARMERS_MARKET",
+          "PIZZA_SHOP",
+          "YARN_STORE",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 20,
+        "mix": {
+          "TOMATO": 21,
+          "WHEAT": 21,
+          "STRAWBERRY": 15,
+          "SHEEP": 12,
+          "COW": 6,
+          "GOOSE": 11
+        },
+        "shops": [
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "FARMERS_MARKET",
+          "PIZZA_SHOP",
+          "YARN_STORE",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 24,
+        "mix": {
+          "TOMATO": 13,
+          "WHEAT": 38,
+          "STRAWBERRY": 2,
+          "SHEEP": 12,
+          "COW": 5,
+          "GOOSE": 9,
+          "CARROT": 7
+        },
+        "shops": [
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "FARMERS_MARKET",
+          "PIZZA_SHOP",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BAKERY",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 29,
+        "mix": {
+          "TOMATO": 3,
+          "WHEAT": 19,
+          "SHEEP": 4,
+          "CARROT": 6,
+          "GOOSE": 6,
+          "COW": 3
+        },
+        "shops": [
+          "BAKERY",
+          "BRUNCH_SPOT",
+          "FARMERS_MARKET",
+          "PIZZA_SHOP",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BAKERY",
+          "YARN_STORE"
+        ]
+      }
+    ],
+    "plant_requests": [
+      [
+        0,
+        "MELON",
+        6
+      ],
+      [
+        0,
+        "WHEAT",
+        9
+      ],
+      [
+        1,
+        "MELON",
+        4
+      ],
+      [
+        1,
+        "WHEAT",
+        1
+      ],
+      [
+        2,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        3,
+        "STRAWBERRY",
+        6
+      ],
+      [
+        6,
+        "STRAWBERRY",
+        8
+      ],
+      [
+        6,
+        "WHEAT",
+        5
+      ],
+      [
+        7,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        7,
+        "WHEAT",
+        3
+      ],
+      [
+        8,
+        "WHEAT",
+        3
+      ],
+      [
+        9,
+        "STRAWBERRY",
+        3
+      ],
+      [
+        9,
+        "TOMATO",
+        1
+      ],
+      [
+        9,
+        "WHEAT",
+        15
+      ],
+      [
+        10,
+        "STRAWBERRY",
+        2
+      ],
+      [
+        10,
+        "TOMATO",
+        1
+      ],
+      [
+        10,
+        "WHEAT",
+        12
+      ],
+      [
+        11,
+        "STRAWBERRY",
+        2
+      ],
+      [
+        11,
+        "TOMATO",
+        1
+      ],
+      [
+        11,
+        "WHEAT",
+        9
+      ],
+      [
+        12,
+        "TOMATO",
+        6
+      ],
+      [
+        12,
+        "WHEAT",
+        6
+      ],
+      [
+        13,
+        "TOMATO",
+        6
+      ],
+      [
+        13,
+        "WHEAT",
+        12
+      ],
+      [
+        14,
+        "WHEAT",
+        8
+      ],
+      [
+        15,
+        "TOMATO",
+        2
+      ],
+      [
+        15,
+        "WHEAT",
+        6
+      ],
+      [
+        16,
+        "TOMATO",
+        3
+      ],
+      [
+        16,
+        "WHEAT",
+        6
+      ],
+      [
+        17,
+        "CARROT",
+        2
+      ],
+      [
+        17,
+        "WHEAT",
+        7
+      ],
+      [
+        18,
+        "TOMATO",
+        2
+      ],
+      [
+        18,
+        "WHEAT",
+        3
+      ],
+      [
+        19,
+        "TOMATO",
+        1
+      ],
+      [
+        19,
+        "WHEAT",
+        8
+      ],
+      [
+        20,
+        "WHEAT",
+        9
+      ],
+      [
+        21,
+        "CARROT",
+        2
+      ],
+      [
+        21,
+        "WHEAT",
+        12
+      ],
+      [
+        22,
+        "CARROT",
+        2
+      ],
+      [
+        22,
+        "WHEAT",
+        12
+      ],
+      [
+        23,
+        "CARROT",
+        3
+      ],
+      [
+        23,
+        "WHEAT",
+        11
+      ],
+      [
+        24,
+        "CARROT",
+        2
+      ],
+      [
+        24,
+        "WHEAT",
+        10
+      ],
+      [
+        25,
+        "CARROT",
+        5
+      ],
+      [
+        25,
+        "WHEAT",
+        7
+      ],
+      [
+        26,
+        "CARROT",
+        8
+      ],
+      [
+        26,
+        "WHEAT",
+        9
+      ],
+      [
+        27,
+        "WHEAT",
+        11
+      ]
+    ]
+  },
+  {
+    "author": "dsm",
+    "submission": 56468867,
+    "eid": 112326822,
+    "seat": 0,
+    "selection_index": 9,
+    "selection": "chronological index fixed before replay inspection; excludes self matches",
+    "mixes": [
+      {
+        "day": 6,
+        "mix": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shops": [
+          "PET_CAFE",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 9,
+        "mix": {
+          "STRAWBERRY": 11,
+          "MELON": 10,
+          "WHEAT": 14,
+          "COW": 4,
+          "SHEEP": 11
+        },
+        "shops": [
+          "PET_CAFE",
+          "YARN_STORE",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "day": 12,
+        "mix": {
+          "STRAWBERRY": 19,
+          "WHEAT": 28,
+          "CARROT": 6,
+          "COW": 5,
+          "SHEEP": 11,
+          "GOOSE": 7,
+          "TOMATO": 4
+        },
+        "shops": [
+          "PET_CAFE",
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "day": 15,
+        "mix": {
+          "STRAWBERRY": 28,
+          "WHEAT": 21,
+          "CARROT": 16,
+          "COW": 5,
+          "SHEEP": 11,
+          "GOOSE": 7,
+          "TOMATO": 4
+        },
+        "shops": [
+          "PET_CAFE",
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP"
+        ]
+      },
+      {
+        "day": 18,
+        "mix": {
+          "STRAWBERRY": 34,
+          "WHEAT": 20,
+          "CARROT": 14,
+          "COW": 5,
+          "SHEEP": 11,
+          "GOOSE": 7,
+          "TOMATO": 4
+        },
+        "shops": [
+          "PET_CAFE",
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 20,
+        "mix": {
+          "TOMATO": 9,
+          "STRAWBERRY": 26,
+          "WHEAT": 25,
+          "CARROT": 12,
+          "COW": 4,
+          "SHEEP": 11,
+          "GOOSE": 7
+        },
+        "shops": [
+          "PET_CAFE",
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 24,
+        "mix": {
+          "TOMATO": 5,
+          "STRAWBERRY": 24,
+          "WHEAT": 29,
+          "CARROT": 9,
+          "COW": 4,
+          "SHEEP": 11,
+          "GOOSE": 6
+        },
+        "shops": [
+          "PET_CAFE",
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP",
+          "YARN_STORE",
+          "PIZZA_SHOP",
+          "PIZZA_SHOP"
+        ]
+      },
+      {
+        "day": 29,
+        "mix": {
+          "TOMATO": 5,
+          "WHEAT": 17,
+          "STRAWBERRY": 5,
+          "CARROT": 14,
+          "COW": 4,
+          "GOOSE": 5,
+          "SHEEP": 1
+        },
+        "shops": [
+          "PET_CAFE",
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "BRUNCH_SPOT",
+          "ICE_CREAM_SHOP",
+          "YARN_STORE",
+          "PIZZA_SHOP",
+          "PIZZA_SHOP"
+        ]
+      }
+    ],
+    "plant_requests": [
+      [
+        0,
+        "MELON",
+        6
+      ],
+      [
+        0,
+        "WHEAT",
+        9
+      ],
+      [
+        1,
+        "MELON",
+        4
+      ],
+      [
+        1,
+        "WHEAT",
+        1
+      ],
+      [
+        2,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        3,
+        "STRAWBERRY",
+        6
+      ],
+      [
+        6,
+        "WHEAT",
+        11
+      ],
+      [
+        7,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        7,
+        "WHEAT",
+        5
+      ],
+      [
+        8,
+        "WHEAT",
+        5
+      ],
+      [
+        9,
+        "STRAWBERRY",
+        2
+      ],
+      [
+        9,
+        "TOMATO",
+        4
+      ],
+      [
+        9,
+        "WHEAT",
+        10
+      ],
+      [
+        10,
+        "CARROT",
+        3
+      ],
+      [
+        10,
+        "STRAWBERRY",
+        2
+      ],
+      [
+        10,
+        "WHEAT",
+        8
+      ],
+      [
+        11,
+        "CARROT",
+        3
+      ],
+      [
+        11,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        11,
+        "WHEAT",
+        7
+      ],
+      [
+        12,
+        "CARROT",
+        5
+      ],
+      [
+        12,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        12,
+        "WHEAT",
+        3
+      ],
+      [
+        13,
+        "CARROT",
+        7
+      ],
+      [
+        13,
+        "STRAWBERRY",
+        5
+      ],
+      [
+        13,
+        "WHEAT",
+        6
+      ],
+      [
+        14,
+        "CARROT",
+        5
+      ],
+      [
+        14,
+        "WHEAT",
+        5
+      ],
+      [
+        15,
+        "CARROT",
+        2
+      ],
+      [
+        15,
+        "STRAWBERRY",
+        5
+      ],
+      [
+        15,
+        "WHEAT",
+        6
+      ],
+      [
+        16,
+        "CARROT",
+        5
+      ],
+      [
+        16,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        16,
+        "WHEAT",
+        6
+      ],
+      [
+        17,
+        "CARROT",
+        7
+      ],
+      [
+        17,
+        "WHEAT",
+        5
+      ],
+      [
+        18,
+        "TOMATO",
+        4
+      ],
+      [
+        18,
+        "WHEAT",
+        9
+      ],
+      [
+        19,
+        "CARROT",
+        5
+      ],
+      [
+        19,
+        "TOMATO",
+        1
+      ],
+      [
+        19,
+        "WHEAT",
+        7
+      ],
+      [
+        20,
+        "CARROT",
+        4
+      ],
+      [
+        20,
+        "WHEAT",
+        11
+      ],
+      [
+        21,
+        "CARROT",
+        2
+      ],
+      [
+        21,
+        "WHEAT",
+        9
+      ],
+      [
+        22,
+        "CARROT",
+        3
+      ],
+      [
+        22,
+        "WHEAT",
+        9
+      ],
+      [
+        23,
+        "CARROT",
+        5
+      ],
+      [
+        23,
+        "WHEAT",
+        6
+      ],
+      [
+        24,
+        "CARROT",
+        4
+      ],
+      [
+        24,
+        "WHEAT",
+        8
+      ],
+      [
+        25,
+        "CARROT",
+        11
+      ],
+      [
+        25,
+        "WHEAT",
+        9
+      ],
+      [
+        26,
+        "CARROT",
+        9
+      ],
+      [
+        26,
+        "WHEAT",
+        6
+      ],
+      [
+        27,
+        "CARROT",
+        5
+      ],
+      [
+        27,
+        "WHEAT",
+        8
+      ]
+    ]
+  },
+  {
+    "author": "dsm",
+    "submission": 56468867,
+    "eid": 112282976,
+    "seat": 0,
+    "selection_index": 17,
+    "selection": "chronological index fixed before replay inspection; excludes self matches",
+    "mixes": [
+      {
+        "day": 6,
+        "mix": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 9,
+        "mix": {
+          "STRAWBERRY": 16,
+          "MELON": 10,
+          "WHEAT": 9,
+          "COW": 4,
+          "SHEEP": 10
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "FARMERS_MARKET"
+        ]
+      },
+      {
+        "day": 12,
+        "mix": {
+          "STRAWBERRY": 29,
+          "WHEAT": 37,
+          "COW": 5,
+          "SHEEP": 10,
+          "GOOSE": 5,
+          "TOMATO": 4
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 15,
+        "mix": {
+          "STRAWBERRY": 29,
+          "WHEAT": 27,
+          "TOMATO": 12,
+          "COW": 5,
+          "SHEEP": 14,
+          "GOOSE": 5
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "YARN_STORE",
+          "PET_CAFE"
+        ]
+      },
+      {
+        "day": 18,
+        "mix": {
+          "STRAWBERRY": 29,
+          "CARROT": 12,
+          "WHEAT": 15,
+          "TOMATO": 14,
+          "COW": 5,
+          "SHEEP": 14,
+          "GOOSE": 5
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "YARN_STORE",
+          "PET_CAFE",
+          "FARMERS_MARKET"
+        ]
+      },
+      {
+        "day": 20,
+        "mix": {
+          "TOMATO": 18,
+          "WHEAT": 16,
+          "STRAWBERRY": 19,
+          "CARROT": 15,
+          "COW": 3,
+          "SHEEP": 14,
+          "GOOSE": 5
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "YARN_STORE",
+          "PET_CAFE",
+          "FARMERS_MARKET"
+        ]
+      },
+      {
+        "day": 24,
+        "mix": {
+          "TOMATO": 13,
+          "WHEAT": 30,
+          "STRAWBERRY": 13,
+          "CARROT": 14,
+          "GOOSE": 5,
+          "SHEEP": 13,
+          "COW": 1
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "YARN_STORE",
+          "PET_CAFE",
+          "FARMERS_MARKET",
+          "FARMERS_MARKET",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 29,
+        "mix": {
+          "TOMATO": 4,
+          "WHEAT": 15,
+          "CARROT": 11,
+          "GOOSE": 4,
+          "SHEEP": 2
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "FARMERS_MARKET",
+          "YARN_STORE",
+          "PET_CAFE",
+          "FARMERS_MARKET",
+          "FARMERS_MARKET",
+          "YARN_STORE"
+        ]
+      }
+    ],
+    "plant_requests": [
+      [
+        0,
+        "MELON",
+        6
+      ],
+      [
+        0,
+        "WHEAT",
+        9
+      ],
+      [
+        1,
+        "MELON",
+        4
+      ],
+      [
+        1,
+        "WHEAT",
+        1
+      ],
+      [
+        2,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        3,
+        "STRAWBERRY",
+        6
+      ],
+      [
+        6,
+        "STRAWBERRY",
+        6
+      ],
+      [
+        6,
+        "WHEAT",
+        7
+      ],
+      [
+        7,
+        "WHEAT",
+        2
+      ],
+      [
+        8,
+        "WHEAT",
+        5
+      ],
+      [
+        9,
+        "STRAWBERRY",
+        3
+      ],
+      [
+        9,
+        "TOMATO",
+        1
+      ],
+      [
+        9,
+        "WHEAT",
+        15
+      ],
+      [
+        10,
+        "STRAWBERRY",
+        5
+      ],
+      [
+        10,
+        "WHEAT",
+        10
+      ],
+      [
+        11,
+        "STRAWBERRY",
+        5
+      ],
+      [
+        11,
+        "TOMATO",
+        3
+      ],
+      [
+        11,
+        "WHEAT",
+        12
+      ],
+      [
+        12,
+        "TOMATO",
+        2
+      ],
+      [
+        12,
+        "WHEAT",
+        6
+      ],
+      [
+        13,
+        "TOMATO",
+        4
+      ],
+      [
+        13,
+        "WHEAT",
+        6
+      ],
+      [
+        14,
+        "TOMATO",
+        2
+      ],
+      [
+        14,
+        "WHEAT",
+        8
+      ],
+      [
+        15,
+        "CARROT",
+        4
+      ],
+      [
+        15,
+        "TOMATO",
+        1
+      ],
+      [
+        15,
+        "WHEAT",
+        7
+      ],
+      [
+        16,
+        "CARROT",
+        3
+      ],
+      [
+        16,
+        "TOMATO",
+        1
+      ],
+      [
+        16,
+        "WHEAT",
+        3
+      ],
+      [
+        17,
+        "CARROT",
+        5
+      ],
+      [
+        17,
+        "WHEAT",
+        4
+      ],
+      [
+        18,
+        "CARROT",
+        3
+      ],
+      [
+        18,
+        "TOMATO",
+        4
+      ],
+      [
+        18,
+        "WHEAT",
+        3
+      ],
+      [
+        19,
+        "CARROT",
+        7
+      ],
+      [
+        19,
+        "WHEAT",
+        6
+      ],
+      [
+        20,
+        "CARROT",
+        6
+      ],
+      [
+        20,
+        "WHEAT",
+        6
+      ],
+      [
+        21,
+        "CARROT",
+        5
+      ],
+      [
+        21,
+        "WHEAT",
+        5
+      ],
+      [
+        22,
+        "CARROT",
+        4
+      ],
+      [
+        22,
+        "WHEAT",
+        12
+      ],
+      [
+        23,
+        "CARROT",
+        6
+      ],
+      [
+        23,
+        "WHEAT",
+        11
+      ],
+      [
+        24,
+        "CARROT",
+        8
+      ],
+      [
+        24,
+        "WHEAT",
+        10
+      ],
+      [
+        25,
+        "CARROT",
+        7
+      ],
+      [
+        25,
+        "WHEAT",
+        8
+      ],
+      [
+        26,
+        "CARROT",
+        13
+      ],
+      [
+        26,
+        "WHEAT",
+        4
+      ],
+      [
+        27,
+        "CARROT",
+        1
+      ],
+      [
+        27,
+        "WHEAT",
+        9
+      ]
+    ]
+  },
+  {
+    "author": "vadim",
+    "submission": 56474685,
+    "eid": 112400909,
+    "seat": 1,
+    "selection_index": 1,
+    "selection": "chronological index fixed before replay inspection; excludes self matches",
+    "mixes": [
+      {
+        "day": 6,
+        "mix": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shops": [
+          "BAKERY",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 9,
+        "mix": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "WHEAT": 14,
+          "COW": 4,
+          "SHEEP": 12
+        },
+        "shops": [
+          "BAKERY",
+          "YARN_STORE",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "day": 12,
+        "mix": {
+          "STRAWBERRY": 16,
+          "WHEAT": 34,
+          "COW": 6,
+          "SHEEP": 12,
+          "GOOSE": 4,
+          "TOMATO": 1
+        },
+        "shops": [
+          "BAKERY",
+          "YARN_STORE",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "day": 15,
+        "mix": {
+          "STRAWBERRY": 21,
+          "COW": 9,
+          "WHEAT": 25,
+          "TOMATO": 4,
+          "SHEEP": 12,
+          "GOOSE": 4
+        },
+        "shops": [
+          "BAKERY",
+          "YARN_STORE",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "day": 18,
+        "mix": {
+          "STRAWBERRY": 25,
+          "COW": 9,
+          "TOMATO": 8,
+          "WHEAT": 17,
+          "SHEEP": 12,
+          "GOOSE": 4
+        },
+        "shops": [
+          "BAKERY",
+          "YARN_STORE",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BRUNCH_SPOT",
+          "PIZZA_SHOP"
+        ]
+      },
+      {
+        "day": 20,
+        "mix": {
+          "WHEAT": 21,
+          "TOMATO": 12,
+          "STRAWBERRY": 15,
+          "COW": 9,
+          "SHEEP": 12,
+          "GOOSE": 4
+        },
+        "shops": [
+          "BAKERY",
+          "YARN_STORE",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BRUNCH_SPOT",
+          "PIZZA_SHOP"
+        ]
+      },
+      {
+        "day": 24,
+        "mix": {
+          "WHEAT": 22,
+          "TOMATO": 11,
+          "STRAWBERRY": 15,
+          "COW": 9,
+          "CARROT": 7,
+          "SHEEP": 7,
+          "GOOSE": 4
+        },
+        "shops": [
+          "BAKERY",
+          "YARN_STORE",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BRUNCH_SPOT",
+          "PIZZA_SHOP",
+          "ICE_CREAM_SHOP",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "day": 29,
+        "mix": {
+          "TOMATO": 5,
+          "CARROT": 9,
+          "COW": 9,
+          "STRAWBERRY": 9,
+          "WHEAT": 11,
+          "GOOSE": 4
+        },
+        "shops": [
+          "BAKERY",
+          "YARN_STORE",
+          "SMOOTHIE_SHOP",
+          "SMOOTHIE_SHOP",
+          "BRUNCH_SPOT",
+          "PIZZA_SHOP",
+          "ICE_CREAM_SHOP",
+          "SMOOTHIE_SHOP"
+        ]
+      }
+    ],
+    "plant_requests": [
+      [
+        0,
+        "MELON",
+        6
+      ],
+      [
+        0,
+        "WHEAT",
+        9
+      ],
+      [
+        1,
+        "MELON",
+        4
+      ],
+      [
+        1,
+        "WHEAT",
+        1
+      ],
+      [
+        2,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        3,
+        "STRAWBERRY",
+        6
+      ],
+      [
+        6,
+        "WHEAT",
+        11
+      ],
+      [
+        7,
+        "WHEAT",
+        6
+      ],
+      [
+        8,
+        "WHEAT",
+        3
+      ],
+      [
+        9,
+        "STRAWBERRY",
+        2
+      ],
+      [
+        9,
+        "WHEAT",
+        16
+      ],
+      [
+        10,
+        "STRAWBERRY",
+        3
+      ],
+      [
+        10,
+        "WHEAT",
+        8
+      ],
+      [
+        11,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        11,
+        "TOMATO",
+        1
+      ],
+      [
+        11,
+        "WHEAT",
+        9
+      ],
+      [
+        12,
+        "STRAWBERRY",
+        3
+      ],
+      [
+        12,
+        "WHEAT",
+        5
+      ],
+      [
+        13,
+        "STRAWBERRY",
+        2
+      ],
+      [
+        13,
+        "TOMATO",
+        2
+      ],
+      [
+        13,
+        "WHEAT",
+        7
+      ],
+      [
+        14,
+        "TOMATO",
+        1
+      ],
+      [
+        14,
+        "WHEAT",
+        8
+      ],
+      [
+        15,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        15,
+        "TOMATO",
+        2
+      ],
+      [
+        15,
+        "WHEAT",
+        3
+      ],
+      [
+        16,
+        "TOMATO",
+        1
+      ],
+      [
+        16,
+        "WHEAT",
+        7
+      ],
+      [
+        17,
+        "TOMATO",
+        1
+      ],
+      [
+        17,
+        "WHEAT",
+        5
+      ],
+      [
+        18,
+        "TOMATO",
+        4
+      ],
+      [
+        18,
+        "WHEAT",
+        7
+      ],
+      [
+        19,
+        "WHEAT",
+        10
+      ],
+      [
+        20,
+        "WHEAT",
+        8
+      ],
+      [
+        21,
+        "WHEAT",
+        10
+      ],
+      [
+        22,
+        "CARROT",
+        2
+      ],
+      [
+        22,
+        "WHEAT",
+        7
+      ],
+      [
+        23,
+        "CARROT",
+        5
+      ],
+      [
+        23,
+        "WHEAT",
+        8
+      ],
+      [
+        24,
+        "CARROT",
+        4
+      ],
+      [
+        24,
+        "WHEAT",
+        4
+      ],
+      [
+        25,
+        "CARROT",
+        7
+      ],
+      [
+        25,
+        "WHEAT",
+        6
+      ],
+      [
+        26,
+        "CARROT",
+        9
+      ],
+      [
+        26,
+        "WHEAT",
+        7
+      ],
+      [
+        27,
+        "CARROT",
+        3
+      ],
+      [
+        27,
+        "WHEAT",
+        11
+      ]
+    ]
+  },
+  {
+    "author": "vadim",
+    "submission": 56474685,
+    "eid": 112370239,
+    "seat": 1,
+    "selection_index": 9,
+    "selection": "chronological index fixed before replay inspection; excludes self matches",
+    "mixes": [
+      {
+        "day": 6,
+        "mix": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "day": 9,
+        "mix": {
+          "STRAWBERRY": 26,
+          "MELON": 10,
+          "COW": 7,
+          "SHEEP": 3,
+          "WHEAT": 1,
+          "GOOSE": 2
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "FARMERS_MARKET"
+        ]
+      },
+      {
+        "day": 12,
+        "mix": {
+          "STRAWBERRY": 34,
+          "WHEAT": 23,
+          "COW": 8,
+          "GOOSE": 7,
+          "SHEEP": 3
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "day": 15,
+        "mix": {
+          "STRAWBERRY": 39,
+          "WHEAT": 15,
+          "COW": 8,
+          "GOOSE": 7,
+          "SHEEP": 3,
+          "TOMATO": 3
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT",
+          "PET_CAFE"
+        ]
+      },
+      {
+        "day": 18,
+        "mix": {
+          "STRAWBERRY": 40,
+          "WHEAT": 12,
+          "COW": 8,
+          "GOOSE": 7,
+          "SHEEP": 3,
+          "TOMATO": 5
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT",
+          "PET_CAFE",
+          "ICE_CREAM_SHOP"
+        ]
+      },
+      {
+        "day": 20,
+        "mix": {
+          "TOMATO": 9,
+          "WHEAT": 14,
+          "STRAWBERRY": 31,
+          "CARROT": 2,
+          "COW": 8,
+          "GOOSE": 7,
+          "SHEEP": 3
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT",
+          "PET_CAFE",
+          "ICE_CREAM_SHOP"
+        ]
+      },
+      {
+        "day": 24,
+        "mix": {
+          "TOMATO": 7,
+          "WHEAT": 21,
+          "STRAWBERRY": 15,
+          "CARROT": 14,
+          "COW": 7,
+          "GOOSE": 7,
+          "SHEEP": 3
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT",
+          "PET_CAFE",
+          "ICE_CREAM_SHOP",
+          "YARN_STORE",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 29,
+        "mix": {
+          "TOMATO": 4,
+          "WHEAT": 10,
+          "CARROT": 4,
+          "STRAWBERRY": 6,
+          "COW": 5,
+          "GOOSE": 4
+        },
+        "shops": [
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP",
+          "FARMERS_MARKET",
+          "BRUNCH_SPOT",
+          "PET_CAFE",
+          "ICE_CREAM_SHOP",
+          "YARN_STORE",
+          "YARN_STORE"
+        ]
+      }
+    ],
+    "plant_requests": [
+      [
+        0,
+        "MELON",
+        6
+      ],
+      [
+        0,
+        "WHEAT",
+        9
+      ],
+      [
+        1,
+        "MELON",
+        4
+      ],
+      [
+        1,
+        "WHEAT",
+        1
+      ],
+      [
+        2,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        3,
+        "STRAWBERRY",
+        5
+      ],
+      [
+        4,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        6,
+        "STRAWBERRY",
+        13
+      ],
+      [
+        6,
+        "WHEAT",
+        1
+      ],
+      [
+        7,
+        "STRAWBERRY",
+        2
+      ],
+      [
+        8,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        8,
+        "WHEAT",
+        1
+      ],
+      [
+        9,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        9,
+        "WHEAT",
+        15
+      ],
+      [
+        10,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        10,
+        "WHEAT",
+        6
+      ],
+      [
+        11,
+        "STRAWBERRY",
+        3
+      ],
+      [
+        11,
+        "WHEAT",
+        7
+      ],
+      [
+        12,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        12,
+        "TOMATO",
+        2
+      ],
+      [
+        12,
+        "WHEAT",
+        3
+      ],
+      [
+        13,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        13,
+        "TOMATO",
+        1
+      ],
+      [
+        13,
+        "WHEAT",
+        5
+      ],
+      [
+        14,
+        "WHEAT",
+        6
+      ],
+      [
+        15,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        15,
+        "WHEAT",
+        5
+      ],
+      [
+        16,
+        "TOMATO",
+        2
+      ],
+      [
+        16,
+        "WHEAT",
+        3
+      ],
+      [
+        17,
+        "WHEAT",
+        4
+      ],
+      [
+        18,
+        "TOMATO",
+        3
+      ],
+      [
+        18,
+        "WHEAT",
+        2
+      ],
+      [
+        19,
+        "CARROT",
+        2
+      ],
+      [
+        19,
+        "TOMATO",
+        1
+      ],
+      [
+        19,
+        "WHEAT",
+        8
+      ],
+      [
+        20,
+        "CARROT",
+        1
+      ],
+      [
+        20,
+        "WHEAT",
+        4
+      ],
+      [
+        21,
+        "CARROT",
+        3
+      ],
+      [
+        21,
+        "WHEAT",
+        4
+      ],
+      [
+        22,
+        "CARROT",
+        2
+      ],
+      [
+        22,
+        "WHEAT",
+        11
+      ],
+      [
+        23,
+        "CARROT",
+        9
+      ],
+      [
+        23,
+        "WHEAT",
+        5
+      ],
+      [
+        24,
+        "CARROT",
+        7
+      ],
+      [
+        24,
+        "WHEAT",
+        10
+      ],
+      [
+        25,
+        "CARROT",
+        10
+      ],
+      [
+        25,
+        "WHEAT",
+        6
+      ],
+      [
+        26,
+        "CARROT",
+        7
+      ],
+      [
+        26,
+        "WHEAT",
+        8
+      ],
+      [
+        27,
+        "CARROT",
+        1
+      ],
+      [
+        27,
+        "WHEAT",
+        9
+      ]
+    ]
+  },
+  {
+    "author": "vadim",
+    "submission": 56474685,
+    "eid": 112323194,
+    "seat": 0,
+    "selection_index": 17,
+    "selection": "chronological index fixed before replay inspection; excludes self matches",
+    "mixes": [
+      {
+        "day": 6,
+        "mix": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "COW": 2,
+          "SHEEP": 3
+        },
+        "shops": [
+          "BAKERY",
+          "PET_CAFE"
+        ]
+      },
+      {
+        "day": 9,
+        "mix": {
+          "STRAWBERRY": 10,
+          "MELON": 10,
+          "WHEAT": 16,
+          "COW": 7,
+          "SHEEP": 3,
+          "GOOSE": 4
+        },
+        "shops": [
+          "BAKERY",
+          "PET_CAFE",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "day": 12,
+        "mix": {
+          "STRAWBERRY": 13,
+          "WHEAT": 35,
+          "CARROT": 10,
+          "COW": 8,
+          "GOOSE": 11,
+          "SHEEP": 3,
+          "TOMATO": 4
+        },
+        "shops": [
+          "BAKERY",
+          "PET_CAFE",
+          "BRUNCH_SPOT",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 15,
+        "mix": {
+          "STRAWBERRY": 13,
+          "WHEAT": 30,
+          "CARROT": 10,
+          "COW": 8,
+          "GOOSE": 11,
+          "SHEEP": 7,
+          "TOMATO": 5
+        },
+        "shops": [
+          "BAKERY",
+          "PET_CAFE",
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "YARN_STORE"
+        ]
+      },
+      {
+        "day": 18,
+        "mix": {
+          "STRAWBERRY": 13,
+          "WHEAT": 30,
+          "CARROT": 6,
+          "SHEEP": 11,
+          "COW": 8,
+          "GOOSE": 11,
+          "TOMATO": 5
+        },
+        "shops": [
+          "BAKERY",
+          "PET_CAFE",
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "day": 20,
+        "mix": {
+          "TOMATO": 9,
+          "STRAWBERRY": 6,
+          "WHEAT": 31,
+          "CARROT": 11,
+          "SHEEP": 11,
+          "COW": 8,
+          "GOOSE": 11
+        },
+        "shops": [
+          "BAKERY",
+          "PET_CAFE",
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BRUNCH_SPOT"
+        ]
+      },
+      {
+        "day": 24,
+        "mix": {
+          "TOMATO": 5,
+          "WHEAT": 41,
+          "STRAWBERRY": 3,
+          "CARROT": 15,
+          "SHEEP": 10,
+          "GOOSE": 11,
+          "COW": 2
+        },
+        "shops": [
+          "BAKERY",
+          "PET_CAFE",
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP"
+        ]
+      },
+      {
+        "day": 29,
+        "mix": {
+          "TOMATO": 4,
+          "WHEAT": 13,
+          "CARROT": 7,
+          "SHEEP": 4,
+          "GOOSE": 10,
+          "COW": 2
+        },
+        "shops": [
+          "BAKERY",
+          "PET_CAFE",
+          "BRUNCH_SPOT",
+          "YARN_STORE",
+          "YARN_STORE",
+          "BRUNCH_SPOT",
+          "BRUNCH_SPOT",
+          "SMOOTHIE_SHOP"
+        ]
+      }
+    ],
+    "plant_requests": [
+      [
+        0,
+        "MELON",
+        6
+      ],
+      [
+        0,
+        "WHEAT",
+        9
+      ],
+      [
+        1,
+        "MELON",
+        4
+      ],
+      [
+        2,
+        "STRAWBERRY",
+        4
+      ],
+      [
+        3,
+        "STRAWBERRY",
+        6
+      ],
+      [
+        6,
+        "WHEAT",
+        11
+      ],
+      [
+        7,
+        "WHEAT",
+        5
+      ],
+      [
+        8,
+        "WHEAT",
+        5
+      ],
+      [
+        9,
+        "STRAWBERRY",
+        2
+      ],
+      [
+        9,
+        "TOMATO",
+        3
+      ],
+      [
+        9,
+        "WHEAT",
+        16
+      ],
+      [
+        10,
+        "CARROT",
+        7
+      ],
+      [
+        10,
+        "WHEAT",
+        12
+      ],
+      [
+        11,
+        "CARROT",
+        3
+      ],
+      [
+        11,
+        "STRAWBERRY",
+        1
+      ],
+      [
+        11,
+        "TOMATO",
+        1
+      ],
+      [
+        11,
+        "WHEAT",
+        8
+      ],
+      [
+        12,
+        "CARROT",
+        3
+      ],
+      [
+        12,
+        "WHEAT",
+        6
+      ],
+      [
+        13,
+        "CARROT",
+        5
+      ],
+      [
+        13,
+        "TOMATO",
+        1
+      ],
+      [
+        13,
+        "WHEAT",
+        6
+      ],
+      [
+        14,
+        "CARROT",
+        2
+      ],
+      [
+        14,
+        "WHEAT",
+        10
+      ],
+      [
+        15,
+        "WHEAT",
+        3
+      ],
+      [
+        16,
+        "WHEAT",
+        14
+      ],
+      [
+        17,
+        "CARROT",
+        6
+      ],
+      [
+        17,
+        "WHEAT",
+        5
+      ],
+      [
+        18,
+        "CARROT",
+        3
+      ],
+      [
+        18,
+        "TOMATO",
+        1
+      ],
+      [
+        18,
+        "WHEAT",
+        9
+      ],
+      [
+        19,
+        "CARROT",
+        3
+      ],
+      [
+        19,
+        "TOMATO",
+        3
+      ],
+      [
+        19,
+        "WHEAT",
+        6
+      ],
+      [
+        20,
+        "CARROT",
+        6
+      ],
+      [
+        20,
+        "WHEAT",
+        11
+      ],
+      [
+        21,
+        "CARROT",
+        3
+      ],
+      [
+        21,
+        "WHEAT",
+        9
+      ],
+      [
+        22,
+        "CARROT",
+        7
+      ],
+      [
+        22,
+        "WHEAT",
+        15
+      ],
+      [
+        23,
+        "CARROT",
+        6
+      ],
+      [
+        23,
+        "WHEAT",
+        12
+      ],
+      [
+        24,
+        "CARROT",
+        4
+      ],
+      [
+        24,
+        "WHEAT",
+        10
+      ],
+      [
+        25,
+        "CARROT",
+        10
+      ],
+      [
+        25,
+        "WHEAT",
+        5
+      ],
+      [
+        26,
+        "CARROT",
+        11
+      ],
+      [
+        26,
+        "WHEAT",
+        7
+      ],
+      [
+        27,
+        "CARROT",
+        1
+      ],
+      [
+        27,
+        "WHEAT",
+        6
+      ]
+    ]
+  }
+]

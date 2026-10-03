@@ -1,0 +1,230 @@
+{
+  "selection": {
+    "candidate": "research/v10_rebuild_20260926/continuation/phase_b/generation6/similarity90.py",
+    "sha256": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4",
+    "entry": "phase_b_agent",
+    "selected_utc": "2026-09-26T12:37:29.930210+00:00",
+    "settings": {
+      "public_layout_similarity_gate": 0.9,
+      "aggressive_observed_stock_threshold": 4,
+      "aggressive_advance_horizon": 36,
+      "conservative_advance_horizon": 12,
+      "conservative_sellnow_disabled": true,
+      "safe_initial_net_wheat": 5,
+      "decay_correction": false,
+      "floor_correction": false
+    },
+    "reason": "Highest complete public-program win points among candidates satisfying all development family and direct-reference gates; counter-policy results and margin used as tie-breaks.",
+    "development_public": {
+      "games": 192,
+      "invalid": 0,
+      "wins": 189,
+      "ties": 0,
+      "losses": 3,
+      "points": 0.984375,
+      "mean_margin": 6411.682291666667,
+      "p10": 1380.0,
+      "worst": -2546.0
+    },
+    "development_counter": {
+      "games": 96,
+      "invalid": 0,
+      "wins": 40,
+      "ties": 34,
+      "losses": 22,
+      "points": 0.59375,
+      "mean_margin": 129.09375,
+      "p10": -424.0,
+      "worst": -952.0
+    },
+    "development_direct": {
+      "v9": {
+        "games": 32,
+        "invalid": 0,
+        "wins": 26,
+        "ties": 0,
+        "losses": 6,
+        "points": 0.8125,
+        "mean_margin": 635.5625,
+        "p10": -82.0,
+        "worst": -134.0
+      },
+      "v10": {
+        "games": 32,
+        "invalid": 0,
+        "wins": 27,
+        "ties": 0,
+        "losses": 5,
+        "points": 0.84375,
+        "mean_margin": 686.875,
+        "p10": -130.0,
+        "worst": -735.0
+      }
+    },
+    "style_outcomes_used_for_selection": false,
+    "rejected_phase_a_sha256": "e03333c6bef0c83764d56f1cc958782f032c5bbdc0684bae1cc2ccd6b61f3e7c",
+    "evidence_hashes": {
+      "generation6": "3fd617fd500d136b52bc2c68b5e6bf33e486ee4005d8a33ef79fda14cd412ccc",
+      "demand_dev": "84cbd51cfa9d55ab3bd4c4a9d731da733e8c3badc7a6acaaaf35f7a68c933bd6",
+      "generation7": "50f399016c5e2853a567ae87130771a6236c13ceb219a3162dc55d75100820fb",
+      "generation7_direct": "469e5fbed7467b4c997459d93540a79441ceca17898540fedb7aa4223ee3087b"
+    }
+  },
+  "seeds": {
+    "primary": [
+      102346655,
+      553009222,
+      1963856543,
+      72425254,
+      1600021781,
+      543399874,
+      887245727,
+      1636032716,
+      1387298382,
+      850163547,
+      346392,
+      228108138,
+      980440003,
+      1810927656,
+      1756503968,
+      1112271833,
+      758136814,
+      105885487,
+      1369795267,
+      1112299946,
+      287662294,
+      1522950696,
+      1689409920,
+      1066987288,
+      480861892,
+      178159911,
+      170839993,
+      1021372025,
+      1707761487,
+      362615789,
+      1704705770,
+      1729201504,
+      741451795,
+      272827205,
+      235735977,
+      45230601,
+      780120851,
+      20786804,
+      1309332448,
+      1493668307,
+      1872574670,
+      1779869151,
+      1999757283,
+      236925649,
+      208622818,
+      217992067,
+      54993173,
+      2966752
+    ],
+    "style": [
+      1587867695,
+      1751888194,
+      1076925171,
+      1541205526,
+      1235809605,
+      1566817745,
+      1153581527,
+      1729046839,
+      1645774862,
+      1126517026,
+      1749488525,
+      1229823431
+    ]
+  },
+  "public_roster": [
+    {
+      "name": "market_smart",
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/market_smart/single_file.py",
+      "sha256": "1ae5ca141e966f540dd46bb9fe354f61222440c6d11a5b56d2f9784944180ece",
+      "mechanical_flattening": false,
+      "source_hash": "f6a756cfb900b9d5f499905d596b63f1fde2445342ac4b1ae04e353739bd62d2"
+    },
+    {
+      "name": "fieldcraft",
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "sha256": "f33f5dba56f359e0428e0c200fd0b9951fb79bd668df28f4159dba95318b0e1d",
+      "mechanical_flattening": true,
+      "source_hash": "4aa771451850e68892fc1a847211f0bebffd511d6d3a508a7bb9969e5b881091"
+    },
+    {
+      "name": "shoprouter",
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/shoprouter/single_file.py",
+      "role": "additional_development",
+      "sha256": "7233e82209eabecd6e718d8670be955ff02893e085e9113a90186f21e7c31938"
+    },
+    {
+      "name": "aurax",
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "role": "additional_development",
+      "sha256": "527c0bee7877ec2a310b0c9140c3e87e1e4eefbaee4a9aae67bd4fb96f4eb970"
+    },
+    {
+      "name": "marketshock",
+      "path": "research/v10_rebuild_20260926/continuation/marketshock_adapter.py",
+      "role": "sealed_opponent",
+      "sha256": "db6f534b649c3cb7e9d7a0ed995738f00f6c83f8ee17ae726430ea525e10b8e1",
+      "original_path": "research/v10_rebuild_20260926/notebooks/extracted/marketshock/main.py",
+      "original_sha256": "12ad317ecac6c07fb2c2e10bf4820ecd1fd4551a5a36aa0e34ab93b2c33c2693",
+      "entrypoint_adapter": true
+    },
+    {
+      "name": "structured",
+      "path": "research/v10_rebuild_20260926/continuation/structured_adapter.py"
+    }
+  ],
+  "style_roster": [
+    {
+      "name": "broker_bea",
+      "path": "research/v10_rebuild_20260926/continuation/reference_agents/broker_bea.py"
+    },
+    {
+      "name": "ledger_lena",
+      "path": "research/v10_rebuild_20260926/continuation/reference_agents/ledger_lena.py"
+    },
+    {
+      "name": "slotter_silas",
+      "path": "research/v10_rebuild_20260926/continuation/reference_agents/slotter_silas.py"
+    },
+    {
+      "name": "closer_cleo",
+      "path": "research/v10_rebuild_20260926/continuation/reference_agents/closer_cleo.py"
+    },
+    {
+      "name": "rancher_rita",
+      "path": "research/v10_rebuild_20260926/continuation/reference_agents/rancher_rita.py"
+    },
+    {
+      "name": "melon_mateo",
+      "path": "research/v10_rebuild_20260926/continuation/reference_agents/melon_mateo.py"
+    }
+  ],
+  "total_games": 2352,
+  "primary_games_per_version": 576,
+  "style_games_per_version": 144,
+  "direct_games_per_old_version": 96,
+  "protocol_sha256": "3825c620f6f165b2c1ecf171a8a56f0d020a3a2e6e9382e3e07682c5d06046d6",
+  "source_hashes": {
+    "research/v10_rebuild_20260926/continuation/phase_b/generation6/similarity90.py": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4",
+    "submissions/release_v9/main.py": "6b13532fbc2b55b59c6cae8ed8d5cd29fe82d18a7d7e044ed130217e3d1c09d3",
+    "submissions/release_v10/main.py": "3a4601081cc909ae7baf97ec5ddb0e1a8a5a1a27c9cd072cdeaaf7d34c803e0b",
+    "research/v10_rebuild_20260926/notebooks/extracted/market_smart/single_file.py": "1ae5ca141e966f540dd46bb9fe354f61222440c6d11a5b56d2f9784944180ece",
+    "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py": "f33f5dba56f359e0428e0c200fd0b9951fb79bd668df28f4159dba95318b0e1d",
+    "research/v10_rebuild_20260926/notebooks/extracted/shoprouter/single_file.py": "7233e82209eabecd6e718d8670be955ff02893e085e9113a90186f21e7c31938",
+    "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py": "527c0bee7877ec2a310b0c9140c3e87e1e4eefbaee4a9aae67bd4fb96f4eb970",
+    "research/v10_rebuild_20260926/continuation/marketshock_adapter.py": "db6f534b649c3cb7e9d7a0ed995738f00f6c83f8ee17ae726430ea525e10b8e1",
+    "research/v10_rebuild_20260926/continuation/structured_adapter.py": "fb5babfadf474cb700c9b3765139f399cd4c25031d05f95060ae773049bfd1d0",
+    "research/v10_rebuild_20260926/continuation/reference_agents/broker_bea.py": "11c5fd48456462ddaad0bda3c3c418d8b6ab0bade7151423d665a208c9f380ca",
+    "research/v10_rebuild_20260926/continuation/reference_agents/ledger_lena.py": "ba961e9e73c8abd54ade1333b71e3d1b8ee66c9a9f757d164d7335e85fbc57f2",
+    "research/v10_rebuild_20260926/continuation/reference_agents/slotter_silas.py": "5bf87500c487fc9613acc735977bd5e5976072f2f0a4f24eea0d56bf397b7215",
+    "research/v10_rebuild_20260926/continuation/reference_agents/closer_cleo.py": "8addafc2de814b4ea76c63a30b166420a0ff8e8a86d40c6ae2651ef5c043d1f9",
+    "research/v10_rebuild_20260926/continuation/reference_agents/rancher_rita.py": "3fcf266fba9c4c68797181efbfb37635b213a2eefc9ac87af1e7ff2d4f9479d6",
+    "research/v10_rebuild_20260926/continuation/reference_agents/melon_mateo.py": "a3e84c6d9288e409cbcc7a731ed398e443407935b3ea75f53e2a3baa6e0a7a15"
+  },
+  "previous_seen_seed_count": 596,
+  "overlap": 0
+}

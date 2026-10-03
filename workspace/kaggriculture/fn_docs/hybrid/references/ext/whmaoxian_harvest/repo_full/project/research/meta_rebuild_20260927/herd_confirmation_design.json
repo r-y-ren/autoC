@@ -1,0 +1,104 @@
+{
+  "variants": [
+    {
+      "name": "frozen_single_nomilk",
+      "path": "research/meta_rebuild_20260927/confirmation_herd_20260928/agent.py",
+      "sha256": "3c79287b13c061d6e92392462a845fc7bb25eafbc92c204c6405ab9c1dc7c227"
+    },
+    {
+      "name": "r2",
+      "path": "submissions/release_v10_r2/main.py",
+      "sha256": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4"
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "seeds": [
+    108112561,
+    271263993,
+    621320742,
+    643304182,
+    1155871037,
+    2058390346,
+    999864627,
+    88337985,
+    707783195,
+    1567273325,
+    1361378708,
+    1796566376,
+    2038403857,
+    164461221,
+    112579226,
+    195102529,
+    1556410138,
+    1176169760,
+    225315904,
+    820466313,
+    1517816989,
+    878341642,
+    1733264736,
+    1464846891,
+    294101371,
+    1888946320,
+    1076312226,
+    346941527,
+    923854999,
+    858985591,
+    1107169329,
+    1479704664,
+    679483898,
+    190623451,
+    1834882397,
+    1551860029,
+    32453952,
+    476240572,
+    1937346425,
+    141331181,
+    87698051,
+    1830289452,
+    145635668,
+    1517952992,
+    672919003,
+    163310846,
+    374455019,
+    1042884582,
+    1208504550,
+    1933838713,
+    1470207687,
+    809277236,
+    212810207,
+    734403453,
+    330849895,
+    916149276,
+    818070924,
+    2020962719,
+    1357477464,
+    1202155018,
+    436687849,
+    827271682,
+    1767913470,
+    57614271
+  ],
+  "cases": 1024,
+  "scope": "Single-component confirmation only. Four public implementations share lineage; no claim of 2800 rating. No further tuning on this panel."
+}

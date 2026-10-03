@@ -1,0 +1,268 @@
+
+
+# Local production repair, 2026-09-22; retain all upstream Apache-2.0 notices.
+# Production layout learned from public episode 111747876 (yomogii).
+# These are spatial work allocations, not frozen opponent action tapes.
+# Runtime decisions use our own observed tiles, funds, workers and shops only.
+import itertools as _t19_it
+_T19_PARENT = round7_orderbook_v56_agent
+_T19_REQUEST = _v219_request
+_T19_WORKER = _v219_worker
+_T19_REPORT = dict(eligible=0, requested_workers=0, confirmed_workers=0,
+                  hire_shortfalls=0, budget_declines=0, errors=0, plants=0,
+                  harvest_requests=0, fertilizer_requests=0)
+_T19_TARGETS = [(x,y) for y in (5,6,7) for x in range(5,10)] + [(x,8) for x in range(6,10)]
+_T19_PLANT = [[(5,5),(6,5),(7,5),(8,5),(9,5),(9,6),(8,6)],
+              [(7,6),(6,6),(5,6),(5,7),(6,7),(7,7)],
+              [(6,8),(7,8),(8,8),(9,8),(9,7),(8,7)]]
+_T19_WATER = [[(5,5),(6,5),(7,5),(8,5),(9,5),(9,6),(8,6),(7,6),(6,6)],
+              [(5,6),(5,7),(6,7),(7,7),(8,7),(9,7),(9,8),(8,8),(7,8),(6,8)]]
+_T19_FERT = [[(7,5),(8,5),(9,5),(9,6),(9,7),(9,8)],
+             [(5,5),(5,6),(5,7),(6,7),(6,8),(7,8),(8,8)],
+             [(6,5),(6,6),(7,6),(7,7),(8,7),(8,6)]]
+_T19_HARVEST = [[(5,5),(6,5),(7,5)],[(7,6),(8,6),(9,6),(9,5),(8,5)],
+                [(6,6),(5,6),(5,7),(6,7),(7,7)],[(8,7),(9,7),(9,8)],[(6,8),(7,8),(8,8)]]
+_T19_FINAL = [_T19_WATER[0],[(5,6),(5,7),(6,7),(7,7)],_T19_PLANT[2]]
+_T19_FOUR = [[(x,y) for x in range(5,10)] for y in (5,6,7)] + [[(x,8) for x in range(6,10)]]
+
+def _t19_distance(a,b):
+    return abs(a[0]-b[0])+abs(a[1]-b[1])
+
+def _t19_qualifies(obs, state):
+    farm=obs['farms'][int(obs['player'])]
+    if not state.get('eligible') or farm['money']<18000:
+        return False
+    if any(farm['tiles'][y][x]!='LOCKED' for x,y in _T19_TARGETS):
+        return False
+    shops=obs['town']['unlocked_shops']
+    demand=sum(s in ('PIZZA_SHOP','FARMERS_MARKET') for s in shops)
+    if demand<4:
+        return False
+    # Ignore future unknown shop draws; reserve at least another nineteen-
+    # plant investment, since an opponent's expansion was already observed.
+    remaining=719-int(obs['step'])
+    other=obs['farms'][1-int(obs['player'])]
+    rival_plants=sum(isinstance(t,dict) and t.get('crop')=='TOMATO' for r in other['tiles'] for t in r)
+    forecast=int(obs['market']['inventory']['TOMATO']) - (remaining//4)*demand - remaining//24 + 152 + max(152,8*rival_plants)
+    quote=max(1,_r37_market_price('TOMATO',forecast))
+    # Price the extra labor from our own known native hiring schedules.
+    extra_labor=0
+    baseline={18:2,19:0,20:1,21:0,22:1,23:0,24:2,25:1,26:3,27:3,28:2,29:2}
+    for day in range(18,30):
+        planned=_v219_native_day(_IMPL.chassis.players[int(obs['player'])],day)
+        n=max(len(a.get('hands',[])) for a in planned)
+        last_hire=max((i for i,a in enumerate(planned) if any(o==['HIRE'] for o in a.get('market',[]))),default=-1)
+        if day in (20,22,25):baseline[day]=1 if last_hire<=2 else 2
+        if day==26:baseline[day]=2 if last_hire<=2 else 3
+        proposed=0 if day in (19,21,23) else len(_t19_groups(day))
+        extra_labor+=sum(_v219_fib(i) for i in range(n,n+proposed))-sum(_v219_fib(i) for i in range(n,n+baseline[day]))
+    incremental_value=72*quote-450-extra_labor-18*int(obs['market']['prices']['FERTILIZER'])
+    state['t19_forecast_value']=incremental_value
+    state['t19_forecast_extra_labor']=extra_labor
+    return incremental_value>=500
+
+_T19_HARVEST_DELIVERY=[[(8, 5), (9, 5), (9, 6), (8, 6)], [(9, 8), (9, 7)], [(5, 6), (6, 7), (6, 8), (6, 6), (5, 5)], [(7, 8), (8, 8), (8, 7)], [(5, 7), (7, 7), (7, 6), (7, 5), (6, 5)]]
+
+def _t19_groups(day):
+    if day==18:return _T19_PLANT
+    if day in (25,26):return _T19_FOUR
+    if day==27:return _T19_HARVEST_DELIVERY
+    if day==29:return _T19_FOUR
+    return _T19_WATER
+
+def _t19_assignment(positions,first,groups,day):
+    best=None
+    for order in _t19_it.permutations(range(len(groups))):
+        durations=[]
+        for i,k in enumerate(order):
+            path=groups[k]
+            start=positions[first+i]
+            entry=_t19_distance(start,path[0])
+            within=sum(_t19_distance(a,b) for a,b in zip(path,path[1:]))
+            ops=len(path)*(2 if day in (18,25,26,27) else 1)
+            pickup=int(day in (25,26))
+            finish=(_t19_distance(path[-1],_v219_home(path[-1]))+1) if day in (27,29) else 0
+            durations.append(entry+within+ops+pickup+finish)
+        score=(max(durations),sum(durations),order)
+        if best is None or score<best[0]:best=(score,order)
+    return best
+
+def _t19_assign(obs, state, pending):
+    farm=obs['farms'][int(obs['player'])]
+    first=pending['first'];day=int(obs['step'])//24
+    groups=pending.get('groups',_t19_groups(day))
+    if len(farm['hands'])+1<first+len(groups) or 'SE' not in farm['unlocked_quadrants']:
+        _T19_REPORT['hire_shortfalls']+=len(groups)
+        return
+    positions=[farm['farmer'],*farm['hands']]
+    best=_t19_assignment(positions,first,groups,day)
+    state['workers']={first+i:{'kind':'crop','targets':list(groups[k]),'t19':True,
+                              'needs_fertilizer':pending.get('fertilize',day in (25,26)),'loaded':False,
+                              'maintenance_first':pending.get('maintenance_first',False)}
+                      for i,k in enumerate(best[1])}
+    _T19_REPORT['confirmed_workers']+=len(groups)
+
+def _v219_request(obs, action, state, native):
+    step=int(obs['step']);day=step//24;hour=step%24
+    if step==432:
+        state['t19_enabled']=_t19_qualifies(obs,state)
+        if state['t19_enabled']:
+            state['targets']=list(_T19_TARGETS)
+            _T19_REPORT['eligible']+=1
+    if not state.get('t19_enabled'):
+        return _T19_REQUEST(obs,action,state,native)
+    pending=state.pop('t19_pending',None)
+    if pending:
+        _t19_assign(obs,state,pending)
+    if state.get('requested_day')==day:
+        return action
+    farm=obs['farms'][int(obs['player'])]
+    if day in (19,21,23):
+        crops=[farm['tiles'][y][x] for x,y in state['targets']]
+        if all(isinstance(t,dict) and t.get('crop')=='TOMATO' and int(t.get('consecutive_unwatered',1))==0 for t in crops):
+            state['requested_day']=day
+            return action
+    planned=_v219_native_day(native,day)
+    if day==18 and hour>1:
+        # No late expansion: all 19 plants must be installed and watered today.
+        state['t19_enabled']=False
+        state['targets']=[(x,y) for y in (5,6) for x in range(5,10)]
+        return _T19_REQUEST(obs,action,state,native)
+    if hour>(18 if state.get('committed') else 6) or any(o and o[0]=='HIRE' for a in planned[hour+1:] for o in a.get('market',[])):
+        return action
+    parent_hires=sum(bool(o) and o[0]=='HIRE' for o in action['market'])
+    expected=max(len(a.get('hands',[])) for a in planned)
+    if len(farm['hands'])+parent_hires!=expected:
+        return action
+    count=len(_t19_groups(day))
+    # Unit moves happen before market hiring; reproduce only those positions
+    # to verify that every new crew route fits its actual remaining callbacks.
+    positions=[list(farm['farmer'])]+[list(p) for p in farm['hands']]
+    moves={'NORTH':(0,-1),'SOUTH':(0,1),'EAST':(1,0),'WEST':(-1,0)}
+    for i,c in enumerate([action.get('farmer') or ['PASS']]+list(action.get('hands') or [])):
+        if i<len(positions) and c and c[0] in moves:
+            dx,dy=moves[c[0]];x,y=positions[i]
+            if 0<=x+dx<10 and 0<=y+dy<10:positions[i]=[x+dx,y+dy]
+    for _ in range(parent_hires+count):positions.append(_ca_spawn(positions,10))
+    schedule=_t19_assignment(positions,expected+1,_t19_groups(day),day)
+    available=(22 if day==29 else 23)-hour
+    if not state.get('committed') and schedule[0][0]>available:
+        _T19_REPORT['schedule_declines']=_T19_REPORT.get('schedule_declines',0)+1
+        return action
+    parent_cost=sum(_v219_fib(n) for n in range(farm['hires_today'],farm['hires_today']+parent_hires))
+    for order in action['market']:
+        if not order:continue
+        if order[0]=='BUY_PRODUCT':parent_cost+=int(order[2])*(int(obs['market']['prices'][order[1]])+10)
+        elif order[0]=='BUY_ANIMAL':parent_cost+=int(order[2])*{'COW':400,'SHEEP':500,'GOOSE':300}[order[1]]
+        elif order[0]=='BUY_SEED':parent_cost+=int(order[2])*{'WHEAT':10,'CARROT':20,'TOMATO':50,'STRAWBERRY':100,'MELON':80}[order[1]]
+    desired_fertilizer=day in (25,26)
+    # A temporarily full order list is common immediately after native hiring.
+    # Wait for the next free slots before shrinking a day's whole crew. Only
+    # after the ordinary planning window closes is a partial shift preferable.
+    full_slots=count+int(desired_fertilizer)+(0 if state.get('committed') else 2)
+    if hour<=6 and len(action['market'])+full_slots>MAX_ORDERS:return action
+    proposal=None
+    normal_groups=_t19_groups(day)
+    for affordable_count in range(count,0,-1):
+        for fertilize in ([True,False] if desired_fertilizer and state.get('committed') else [desired_fertilizer]):
+            if not state.get('committed') and affordable_count!=count:continue
+            extra=[]
+            if not state.get('committed'):extra.extend([['BUY_LAND'],['BUY_SEED','TOMATO',19]])
+            if fertilize:extra.append(['BUY_PRODUCT','FERTILIZER',19])
+            extra.extend([['HIRE'] for _ in range(affordable_count)])
+            if len(action['market'])+len(extra)>MAX_ORDERS:continue
+            budget=parent_cost+sum(_v219_fib(n) for n in range(farm['hires_today']+parent_hires,farm['hires_today']+parent_hires+affordable_count))
+            if not state.get('committed'):budget+=4950
+            if fertilize:budget+=19*(int(obs['market']['prices']['FERTILIZER'])+10)
+            if farm['money']<budget+(0 if state.get('committed') else 3000):continue
+            proposal=(extra,affordable_count,fertilize)
+            break
+        if proposal is not None:break
+    if proposal is None:
+        _T19_REPORT['budget_declines']+=1
+        return action
+    extra,count,fertilize=proposal
+    groups=[list(g) for g in normal_groups]
+    if count<len(groups):
+        packed=[[] for _ in range(count)]
+        for g in groups:packed[min(range(count),key=lambda i:len(packed[i]))].extend(g)
+        groups=packed
+        _T19_REPORT['partial_crews']=_T19_REPORT.get('partial_crews',0)+1
+    state['t19_pending']={'step':step,'first':expected+1,'count':count,'groups':groups,
+                          'fertilize':fertilize,'maintenance_first':count<len(normal_groups)}
+    state['requested_day']=day
+    state['committed']=True
+    _T19_REPORT['requested_workers']+=count
+    return dict(action,market=list(action['market'])+extra)
+
+def _v219_worker(obs, state, actor, role):
+    if not role.get('t19'):
+        return _T19_WORKER(obs,state,actor,role)
+    day=int(obs['step'])//24;step=int(obs['step']);view=FarmView(obs)
+    pos=tuple(view.positions[actor]);inv=view.inventory(actor)
+    home=_v219_home(pos)
+    if day==29 and step>=718-_t19_distance(pos,home) and inv.get('TOMATO',0):
+        return _v219_walk(pos,home) or ['PLACE','TOMATO',int(inv['TOMATO'])]
+    if role.get('needs_fertilizer') and not role.get('loaded'):
+        if inv.get('FERTILIZER',0)>=len(role['targets']):
+            role['loaded']=True
+        elif role.get('pickup_requested'):
+            role['loaded']=True
+        else:
+            walk=_v219_walk(pos,home)
+            if walk:return walk
+            quantity=min(len(role['targets']),int(view.shed.get('FERTILIZER',0)))
+            role['pickup_requested']=True
+            if quantity:return ['PICKUP','FERTILIZER',quantity]
+            role['loaded']=True
+    targets=role['targets']
+    if role.get('maintenance_first') and day<29:
+        def priority(target):
+            x,y=target;t=view.tiles[y][x]
+            urgent=isinstance(t,dict) and t.get('crop')=='TOMATO' and not t.get('watered_today')
+            return (0 if urgent else 1,-int(t.get('consecutive_unwatered',0)) if urgent else 0,_t19_distance(pos,target))
+        targets=sorted(targets,key=priority)
+    for target in targets:
+        x,y=target;tile=view.tiles[y][x]
+        tomato=isinstance(tile,dict) and tile.get('crop')=='TOMATO'
+        if tomato:state['seen_plants'].add(target)
+        command=None
+        if day==18 and not tomato:
+            if tile is None and view.seeds.get('TOMATO',0)>0:
+                command=['PLANT','TOMATO']
+            elif isinstance(tile,dict) and tile.get('kind')=='WEED':command=['DIG']
+        elif tomato:
+            if day<29 and not tile.get('watered_today'):command=['WATER']
+            elif day in (25,26) and tile.get('fertilized_until_day',-1)<day+2 and inv.get('FERTILIZER',0):
+                command=['FERTILIZE']
+            elif day in (27,29) and tile.get('yield_units',0)>0:command=['HARVEST']
+        if command:
+            work=_t19_distance(pos,target)+1
+            back=(_t19_distance(target,_v219_home(target))+1) if day in (27,29) else 0
+            deadline=718 if day==29 else (day+1)*24-1
+            if work+back>deadline-step+1:
+                _T19_REPORT['partial_route_deferrals']=_T19_REPORT.get('partial_route_deferrals',0)+1
+                continue
+            walk=_v219_walk(pos,target)
+            if walk:return walk
+            if command[0]=='PLANT':_T19_REPORT['plants']+=1
+            if command[0]=='HARVEST':_T19_REPORT['harvest_requests']+=1
+            if command[0]=='FERTILIZE':_T19_REPORT['fertilizer_requests']+=1
+            return command
+    if inv.get('TOMATO',0):
+        return _v219_walk(pos,home) or ['PLACE','TOMATO',int(inv['TOMATO'])]
+    if any(inv.values()):return _v219_walk(pos,home) or ['DROP']
+    return ['PASS']
+
+def round8_production_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        for k in _T19_REPORT:_T19_REPORT[k]=0
+    try:
+        return _T19_PARENT(observation,configuration)
+    except Exception:
+        _T19_REPORT['errors']+=1
+        raise
+
+round8_production_agent.telemetry=_T19_REPORT
+agent=round8_production_agent
+kaggle_submission_agent=round8_production_agent

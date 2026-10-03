@@ -1,0 +1,84 @@
+{
+  "variants": [
+    {
+      "name": "finish",
+      "path": "research/production_upgrade_20260928/candidates/fused_finish.py",
+      "sha256": "71ed6dacfa1b196c5b6c6329bef22c9133e523db53b5215175f23db1dd7c2971",
+      "herd": false,
+      "noadvance": false,
+      "pred": "native"
+    },
+    {
+      "name": "herd_finish",
+      "path": "research/production_upgrade_20260928/candidates/fused_herd_finish.py",
+      "sha256": "07285510954c1103065717380ff8baeba609a97a4dc80b49006468385815ddbf",
+      "herd": true,
+      "noadvance": false,
+      "pred": "native"
+    }
+  ],
+  "seeds": [
+    425791982,
+    1075269887,
+    1962564957,
+    451267022,
+    498643233,
+    1969293465,
+    1498313738,
+    119073700,
+    1389751173,
+    1252080102,
+    1818898917,
+    1187508729,
+    1713475714,
+    629333611,
+    828574962,
+    645444885,
+    1921929806,
+    468221150,
+    483114270,
+    1829828459,
+    1246543130,
+    1643920722,
+    681976960,
+    932715650
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "scope": "Replication of pre-existing unchanged candidates on new development worlds, baseline cached in herd_extended_results_20260929.jsonl."
+}

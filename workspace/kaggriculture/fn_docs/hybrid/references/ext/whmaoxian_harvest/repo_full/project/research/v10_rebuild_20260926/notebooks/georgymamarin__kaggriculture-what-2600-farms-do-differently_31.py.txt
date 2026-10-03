@@ -1,0 +1,26 @@
+per_sub = (agents[agents.episode_id.isin(ladder.episode_id)]
+           .groupby("submission_id").final_bank
+           .agg(["count", "median", "std"]).query("count >= 4 and median > 0").dropna())
+per_sub["cv"] = per_sub["std"] / per_sub["median"]
+fig, axes = plt.subplots(1, 2, figsize=(8.2, 3.3))
+axes[0].scatter(per_sub["median"], per_sub["cv"], s=30, alpha=.65, color=C_LOW,
+                edgecolors="white", lw=.5)
+axes[0].set_xlabel("median bank"); axes[0].set_ylabel("spread / median")
+axes[0].xaxis.set_major_formatter(lambda v, _: f"{v/1000:.0f}k" if v else "0")
+axes[0].set_title("Do stronger bots score more consistently?")
+top_ids = per_sub["median"].nlargest(6).index
+lad_agents = agents[agents.episode_id.isin(ladder.episode_id)]
+box = [lad_agents[lad_agents.submission_id.eq(s)].final_bank.values for s in top_ids]
+axes[1].boxplot(box, widths=.6)
+axes[1].set_xticks(range(1, len(top_ids) + 1),
+                   [name_of(lad_agents[lad_agents.submission_id.eq(s)].team_id.iloc[0])[:9]
+                    + f"\n…{str(s)[-3:]}" for s in top_ids])
+axes[1].set_title("Spread of the top six"); axes[1].set_ylabel("final bank")
+axes[1].yaxis.set_major_formatter(lambda v, _: f"{v/1000:.0f}k" if v else "0")
+axes[1].tick_params(axis="x", rotation=45, labelsize=8)
+plt.tight_layout(); plt.show()
+
+display(Markdown(
+    f"Across submissions with at least four games, the typical spread is "
+    f"**{per_sub.cv.median():.0%}** of the median bank (worst: **{per_sub.cv.max():.0%}**). "
+    f"One episode proves little, which is why the ladder keeps playing more of them."))

@@ -1,0 +1,120 @@
+--- release_v9/main.py
++++ release_v10/main.py
+@@ -7833,3 +7833,117 @@
+         for k in _R9S_REPORT:_R9S_REPORT[k]=0
+     return _r9s_apply(observation,_R9S_PARENT(observation,configuration))
+ round9_slack_agent.telemetry=_R9S_REPORT
++
++# Public-state market-pressure experiment. No network or private rival input.
++_V10_ADV_HORIZON = 12
++_V10_ADV_THRESHOLD = 4
++_V10_ADV_REPORT = {'pressure_plans': 0, 'errors': 0}
++
++def _v10_pressure_plan(obs, plan, protected):
++    step = int(obs['step']); seat = int(obs['player'])
++    stock = _OR2_STATE.get(seat, {}).get('stock', {})
++    shops = obs.get('town', {}).get('unlocked_shops', [])
++    result = []
++    for t, item, quantity in plan:
++        if t - step <= _ADV_LOOK and item != protected:
++            result.append((t, item, quantity)); continue
++        if step < 216:
++            continue
++        per_tick = 0
++        for shop in shops:
++            goods = _OR2_SHOPS.get(shop, ())
++            if item in goods:
++                per_tick += 2 if len(goods) == 1 else 1
++        demand = per_tick * sum(x % 4 == 0 for x in range(step, t))
++        demand += sum(x % 24 == 0 for x in range(step, t))
++        if int(stock.get(item, 0)) >= max(_V10_ADV_THRESHOLD, 2 * demand):
++            result.append((t, item, quantity))
++            _V10_ADV_REPORT['pressure_plans'] += 1
++    return result
++
++def _adv_apply(obs,action):
++    step=int(obs['step']);player=int(obs['player'])
++    if step%24==23 or not _ADV_FROM<=step<_ADV_TO:return action
++    native=_IMPL.chassis.players[player];debts=native['sell_state'].setdefault('r36_debts',{})
++    plan=[];first=None
++    for off in range(1,_V10_ADV_HORIZON+1):
++        t=step+off
++        if t>718:break
++        for o in _adv_future(player,t):
++            if not o or len(o)<3:continue
++            if first is None:first=o
++            if o[0]=='SELL' and o[1] in _ADV_ITEMS:
++                try:q=max(0,int(o[2]))
++                except Exception:q=0
++                if _ADV_SUBTRACT_DEBTS:q-=debts.get(t,{}).get(o[1],0)   # already reserved by the sale-reservation layer
++                if q>0:plan.append((t,o[1],q))
++    protected=first[1] if _ADV_PROTECT and first is not None and first[0]=='SELL' else None
++    plan=_v10_pressure_plan(obs,plan,protected)
++    if not plan:return action
++    market=[list(o) for o in (action.get('market') or [])]
++    if any(len(o)>1 and o[0]=='BUY_PRODUCT' for o in market):return action
++    stock=projected_shed(action,FarmView(obs))
++    selling={}
++    for o in market:
++        if len(o)>=3 and o[0]=='SELL':
++            try:selling[o[1]]=selling.get(o[1],0)+max(0,int(o[2]))
++            except Exception:return action
++    commands=[action.get('farmer') or ['PASS'],*(action.get('hands') or [])]
++    picked={c[1] for c in commands if len(c)>1 and c[0]=='PICKUP'}
++    prices=obs['market']['prices'];added=0;extra=[];booked=[]
++    for item in sorted({it for _,it,_ in plan},key=lambda it:-int(prices.get(it,0))):
++        if item in picked or int(prices.get(item,0))<2:continue
++        avail=int(stock.get(item,0))-selling.get(item,0)
++        if avail<1:continue
++        hit=next((o for o in market if len(o)>=3 and o[0]=='SELL' and o[1]==item),None)
++        if hit is None and len(market)+len(extra)>=10:continue
++        n=0
++        for t,it,q in plan:
++            if it!=item or avail<=0:continue
++            take=min(q,avail);booked.append((t,item,take));n+=take;avail-=take
++        if n<1:continue
++        if hit is not None:hit[2]=int(hit[2])+n
++        else:extra.append(['SELL',item,n])
++        added+=n
++    if not added:return action
++    for t,item,take in (booked if _ADV_BOOK else []):
++        d=debts.setdefault(t,{});d[item]=d.get(item,0)+take
++    _ADV_REPORT['adv_turns']+=1;_ADV_REPORT['adv_units']+=added
++    return dict(action,market=extra+market)
++_V10_PARENT=round9_slack_agent
++def v10_pressure_agent(observation,configuration=None):
++    if int(observation["step"])==0:
++        for key in _V10_ADV_REPORT:_V10_ADV_REPORT[key]=0
++    return _V10_PARENT(observation,configuration)
++v10_pressure_agent.telemetry=_V10_ADV_REPORT
++agent=v10_pressure_agent
++kaggle_submission_agent=v10_pressure_agent
++
++# Align the inherited public-flow observer with the final executable sell list.
++# Rival stock remains an estimate, not access to hidden rival inventories.
++_V10_LEDGER_PARENT = v10_pressure_agent
++_V10_LEDGER_REPORT = {'corrected_items': 0, 'quantity_difference': 0}
++
++def v10_ledger_agent(observation, configuration=None):
++    if int(observation['step']) == 0:
++        for key in _V10_LEDGER_REPORT:
++            _V10_LEDGER_REPORT[key] = 0
++    action = _V10_LEDGER_PARENT(observation, configuration)
++    state = _OR2_STATE.get(int(observation['player']), {})
++    previous = state.get('prev')
++    if not previous or previous.get('step') != int(observation['step']):
++        return action
++    available = projected_shed(action, FarmView(observation))
++    own = previous.setdefault('own', {})
++    for item in _ADV_ITEMS:
++        quantity = sum(max(0, int(o[2])) for o in action.get('market', [])[:10]
++                       if len(o) >= 3 and o[:2] == ['SELL', item])
++        sold = min(max(0, int(available.get(item, 0))), quantity)
++        if sold != int(own.get(item, 0)):
++            _V10_LEDGER_REPORT['corrected_items'] += 1
++            _V10_LEDGER_REPORT['quantity_difference'] += sold - int(own.get(item, 0))
++        own[item] = sold
++    return action
++v10_ledger_agent.telemetry = _V10_LEDGER_REPORT
++agent = v10_ledger_agent
++kaggle_submission_agent = v10_ledger_agent

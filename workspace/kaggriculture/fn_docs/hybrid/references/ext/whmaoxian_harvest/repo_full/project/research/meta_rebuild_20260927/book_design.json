@@ -1,0 +1,71 @@
+{
+  "variants": [
+    {
+      "name": "book_predictors",
+      "path": "research/meta_rebuild_20260927/candidates/book_predictors.py",
+      "sha256": "b42a4d771fa1dc9930834ad71ee231fea25f0b180665f779a6a7c338d079489b",
+      "mode": "predictors"
+    },
+    {
+      "name": "book_race",
+      "path": "research/meta_rebuild_20260927/candidates/book_race.py",
+      "sha256": "2b32ff030559c45c99ecea4173856a2dc1348fd3b0edf7dc6ceec024a57c70d6",
+      "mode": "race"
+    },
+    {
+      "name": "book_both",
+      "path": "research/meta_rebuild_20260927/candidates/book_both.py",
+      "sha256": "3cbed3c1f097d111c9803195c3e9247af6647181579d1fd2a5a34d08bafe0c11",
+      "mode": "both"
+    }
+  ],
+  "seeds": [
+    1684412191,
+    1446171992,
+    553688413,
+    738779099,
+    1015531232,
+    251709718,
+    651286560,
+    21039167
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "jobs": 336,
+  "scope": "Observer-channel ablations on declared development worlds. No new holdout opened."
+}

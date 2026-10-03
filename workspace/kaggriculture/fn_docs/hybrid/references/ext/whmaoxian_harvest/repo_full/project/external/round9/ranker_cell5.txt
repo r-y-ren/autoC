@@ -1,0 +1,20 @@
+---
+## 2. Meet the opponents
+
+Ten agents in two bands, and they isolate different variables.
+
+**Tiers 0–5 — authored.** Written from scratch, all sharing a **byte-identical action
+scheduler**; the only difference between them is a `POLICY` dict at the top of each
+file. That is deliberate: any gap in results comes from *economic decisions* alone, not
+from one agent having better pathfinding than another. Diff two of these and the diff
+is the lesson.
+
+**Tiers 6–9 — the shared meta line.** These hold the opposite variable constant. All
+four run the *same* production plan — the public meta line that shows up identically
+across large groups of unrelated teams in public replays — and differ only in their
+**market layer**: what to sell, in what order, and when to hold. Their head-to-head
+ordering differs from their standalone bank ordering.
+
+Together: tiers 0–5 teach you how to build a farm, tiers 6–9 show you that once
+everyone builds the same farm, selling is the whole game. Expect a large jump between
+the two bands — tier 5 banks ~46k, while the meta band banks ~149k–165k.

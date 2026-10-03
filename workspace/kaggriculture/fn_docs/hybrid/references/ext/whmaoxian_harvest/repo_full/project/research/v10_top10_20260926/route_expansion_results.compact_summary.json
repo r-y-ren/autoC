@@ -1,0 +1,150 @@
+{
+  "ledger": "route_expansion_results.jsonl",
+  "rows": 704,
+  "groups": [
+    {
+      "candidate": "research/v10_top10_20260926/guard_ablations/top_style_03_default.py",
+      "panel": "direct_reference",
+      "n": 16,
+      "wins": 10,
+      "ties": 0,
+      "losses": 6,
+      "mean_margin": -10766.44,
+      "pairs": 16,
+      "point_gain": 0.125,
+      "margin_gain": -10766.44
+    },
+    {
+      "candidate": "research/v10_top10_20260926/guard_ablations/top_style_03_default.py",
+      "panel": "public_program",
+      "n": 96,
+      "wins": 60,
+      "ties": 0,
+      "losses": 36,
+      "mean_margin": -2394.24,
+      "pairs": 96,
+      "point_gain": -0.375,
+      "margin_gain": -6771.51
+    },
+    {
+      "candidate": "research/v10_top10_20260926/guard_ablations/top_style_03_default.py",
+      "panel": "responsive_proxy",
+      "n": 64,
+      "wins": 24,
+      "ties": 10,
+      "losses": 30,
+      "mean_margin": -4520.52,
+      "pairs": 64,
+      "point_gain": -0.0469,
+      "margin_gain": -13572.22
+    },
+    {
+      "candidate": "research/v10_top10_20260926/guard_ablations/top_style_03_no_dead.py",
+      "panel": "direct_reference",
+      "n": 16,
+      "wins": 10,
+      "ties": 0,
+      "losses": 6,
+      "mean_margin": -10695.56,
+      "pairs": 16,
+      "point_gain": 0.125,
+      "margin_gain": -10695.56
+    },
+    {
+      "candidate": "research/v10_top10_20260926/guard_ablations/top_style_03_no_dead.py",
+      "panel": "public_program",
+      "n": 96,
+      "wins": 60,
+      "ties": 0,
+      "losses": 36,
+      "mean_margin": -2417.45,
+      "pairs": 96,
+      "point_gain": -0.375,
+      "margin_gain": -6794.72
+    },
+    {
+      "candidate": "research/v10_top10_20260926/guard_ablations/top_style_03_no_dead.py",
+      "panel": "responsive_proxy",
+      "n": 64,
+      "wins": 34,
+      "ties": 0,
+      "losses": 30,
+      "mean_margin": -4477.8,
+      "pairs": 64,
+      "point_gain": 0.0312,
+      "margin_gain": -13529.5
+    },
+    {
+      "candidate": "research/v10_top10_20260926/micro_candidates/all_care_first.py",
+      "panel": "direct_reference",
+      "n": 16,
+      "wins": 16,
+      "ties": 0,
+      "losses": 0,
+      "mean_margin": 2.38,
+      "pairs": 16,
+      "point_gain": 0.5,
+      "margin_gain": 2.38
+    },
+    {
+      "candidate": "research/v10_top10_20260926/micro_candidates/all_care_first.py",
+      "panel": "public_program",
+      "n": 96,
+      "wins": 96,
+      "ties": 0,
+      "losses": 0,
+      "mean_margin": 4381.04,
+      "pairs": 96,
+      "point_gain": 0,
+      "margin_gain": 3.77
+    },
+    {
+      "candidate": "research/v10_top10_20260926/micro_candidates/all_care_first.py",
+      "panel": "responsive_proxy",
+      "n": 64,
+      "wins": 32,
+      "ties": 0,
+      "losses": 32,
+      "mean_margin": 9060.77,
+      "pairs": 64,
+      "point_gain": 0,
+      "margin_gain": 9.06
+    },
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "panel": "direct_reference",
+      "n": 16,
+      "wins": 0,
+      "ties": 16,
+      "losses": 0,
+      "mean_margin": 0.0,
+      "pairs": 16,
+      "point_gain": 0.0,
+      "margin_gain": 0.0
+    },
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "panel": "public_program",
+      "n": 96,
+      "wins": 96,
+      "ties": 0,
+      "losses": 0,
+      "mean_margin": 4377.27,
+      "pairs": 96,
+      "point_gain": 0,
+      "margin_gain": 0.0
+    },
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "panel": "responsive_proxy",
+      "n": 64,
+      "wins": 32,
+      "ties": 0,
+      "losses": 32,
+      "mean_margin": 9051.7,
+      "pairs": 64,
+      "point_gain": 0,
+      "margin_gain": 0.0
+    }
+  ]
+}

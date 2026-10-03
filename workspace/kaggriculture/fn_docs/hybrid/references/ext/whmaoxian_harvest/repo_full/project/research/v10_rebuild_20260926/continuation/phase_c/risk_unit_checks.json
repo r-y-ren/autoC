@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "cash_lead_with_no_rival_stock_is_conservative",
+    "rival_observed_premium_stock_prevents_false_lead",
+    "cash_only_ablation_is_distinct",
+    "early_production_not_changed_by_risk_gate"
+  ],
+  "scope": "synthetic mechanism checks only"
+}

@@ -1,0 +1,89 @@
+{
+  "variants": [
+    {
+      "path": "research/v10_top10_20260926/bc_integration/hold_p55_q8_guarded.py",
+      "sha256": "839d4bf8c4fa2f202d293a90eefe216213d06a920ecfa30a1d30c5c3a454d733",
+      "reservation_contract_checks": 5
+    },
+    {
+      "path": "research/v10_top10_20260926/bc_integration/balanced35_guarded.py",
+      "sha256": "742f73ed9bbdb37977ca26033cface0e6b0c39d2acb12bf53446789881e51c32",
+      "reservation_contract_checks": 5
+    },
+    {
+      "path": "research/v10_top10_20260926/bc_integration/imitate25_guarded.py",
+      "sha256": "427892b61483b7fbc7c4a1da51f6cb2127a30250a3adb5fe6a69e71863402d78",
+      "reservation_contract_checks": 5
+    }
+  ],
+  "seeds": [
+    615499254,
+    1379184486,
+    153892258,
+    162070305,
+    254469542,
+    1442120274,
+    1550631352,
+    354351923
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/market_smart/single_file.py",
+      "family": "market_smart",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/shoprouter/single_file.py",
+      "family": "shoprouter",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/marketshock_adapter.py",
+      "family": "marketshock",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/structured_adapter.py",
+      "family": "structured",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_01.py",
+      "family": "top_style_01",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_05.py",
+      "family": "top_style_05",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    }
+  ],
+  "new_games": 528,
+  "baseline_reference": "extended_results.jsonl",
+  "scope": "Development safety revision, not independent confirmation. Unguarded holding variants are not release-eligible."
+}

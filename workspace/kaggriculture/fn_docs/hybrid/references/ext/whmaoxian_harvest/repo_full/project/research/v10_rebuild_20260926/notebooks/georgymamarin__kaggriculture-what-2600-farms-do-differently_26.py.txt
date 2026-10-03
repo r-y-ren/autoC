@@ -1,0 +1,63 @@
+# Prefer the collector's own daily series: it covers the whole history at one row per
+# day, while re-deriving it here would re-scan every episode on every run.
+DAILY = None
+try:
+    DAILY = pd.read_csv(f"{BASE}/daily_stats.csv", parse_dates=["date"])
+except FileNotFoundError:
+    pass
+
+span_d6 = (ladder.end.max() - ladder.end.min()).total_seconds() / 86400
+freq6 = "2h" if span_d6 <= 3 else ("6h" if span_d6 <= 10 else ("1D" if span_d6 <= 30 else "3D"))
+by_h = (ladder.set_index("end").winner_bank
+        .resample(freq6).agg(["median", "max", "count"]).dropna())
+solid = by_h[by_h["count"] >= 2]
+if len(solid) >= 4:
+    by_h = solid
+fig, ax = plt.subplots(figsize=(8.2, 3.4))
+if DAILY is not None and len(DAILY) >= 3:
+    # Order-statistic 95% CI for each day's median, computed from the raw games:
+    # rank n/2 +- 1.96*sqrt(n)/2. No distribution assumed, which matters for a
+    # quantity with a heavy right tail.
+    ci_rows = []
+    for ci_day, ci_g in ladder.set_index("end").winner_bank.resample("1D"):
+        ci_v = ci_g.sort_values().to_numpy()
+        ci_n = len(ci_v)
+        if ci_n >= 8:
+            ci_lo = int(max(0, np.floor(ci_n / 2 - 1.96 * np.sqrt(ci_n) / 2)))
+            ci_hi = int(min(ci_n - 1, np.ceil(ci_n / 2 + 1.96 * np.sqrt(ci_n) / 2)))
+            ci_rows.append((ci_day, ci_v[ci_lo], ci_v[ci_hi]))
+    if ci_rows:
+        ci_d, ci_l, ci_h = zip(*ci_rows)
+        ax.fill_between(ci_d, ci_l, ci_h, color=C_ACC, alpha=.18, lw=0,
+                        label="95% CI of the median")
+    ax.plot(DAILY.date, DAILY.median_winner_bank, lw=2.8, color=C_ACC, marker="o", ms=6,
+            label="median winning bank")
+    ax.plot(DAILY.date, DAILY.record_bank, lw=2, color=C_TOP, ls="--",
+            label="best single game that day")
+else:
+    ax.plot(by_h.index, by_h["median"], lw=2.6, color=C_ACC,
+            marker="o" if len(by_h) <= 48 else None, ms=5, label="median winning bank")
+    ax.plot(by_h.index, by_h["max"], lw=2, color=C_TOP, ls="--", label="best game so far")
+ax.set_ylabel("coins"); ax.set_xlabel("episode end time (UTC)")
+ax.yaxis.set_major_formatter(lambda v, _: f"{v/1000:.0f}k" if v else "0")
+ax.set_title("A week of the meta: the middle rises, the ceiling holds")
+ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%b %d\n%H:%M"))
+ax.tick_params(axis="x", labelsize=8.5)
+ax.legend(fontsize=9.5, frameon=False)
+plt.tight_layout(); plt.show()
+
+if DAILY is not None and len(DAILY) >= 3:
+    first, last = DAILY.median_winner_bank.iloc[0], DAILY.median_winner_bank.iloc[-1]
+    hours = (DAILY.date.iloc[-1] - DAILY.date.iloc[0]).total_seconds() / 3600
+else:
+    first, last = by_h["median"].iloc[0], by_h["median"].iloc[-1]
+    hours = (by_h.index[-1] - by_h.index[0]).total_seconds() / 3600
+daily = ladder.set_index("end").winner_bank.resample("1D").median().dropna()
+move_txt = f": **{(last / first - 1) * 100:+.0f}%**" if first else ""
+day_txt = (f", and the most recent day moved **{(daily.iloc[-1] / daily.iloc[-2] - 1) * 100:+.0f}%** "
+           f"against the day before" if len(daily) >= 2 and daily.iloc[-2] > 0 else "")
+tail_line = ("A bot that stands still slides down the table on its own." if last >= first else
+             "The median can dip when new bots flood in; the record line is the bar that matters.")
+display(Markdown(
+    f"The median winning bank went from **{fmt(first)}** to **{fmt(last)}** over "
+    f"**{hours:.0f} hours** of ladder{move_txt}{day_txt}. {tail_line}"))

@@ -1,0 +1,77 @@
+Round 8 DSM public-demo contract-entry research candidate NOTICE
+Date: 2026-09-22
+Candidate: experiments/round8_top2_dsm_contract_entry.py
+Frozen SHA256: 23768116945ebd7500b2e2298616ff6dd974d27ce2c839643cc7d3e3d4cada57
+Official entry: round8_dsm_contract_agent
+
+This candidate retains the independently reconstructed DSM public-replay proxy
+and all upstream attribution in the unmodified compact NOTICE appended below.
+It is not DSM private source, DSM's complete algorithm, an official DSM release,
+or an endorsement by DSM. Public observations support the proxy, not claims
+about the original author's implementation. See TOP2_PUBLIC_METHODS.md for the
+boundary of direct public-method evidence.
+
+Local modifications made in this workspace after the compact base:
+1. Fixed-cost cash ordering contract: when current cash cannot cover the
+   existing HIRE and BUY_SEED costs under standard configuration, move only
+   existing SELL orders fully covered by projected owned warehouse goods ahead
+   of those purchases. Preserve original quantities, unit travel, planned hires,
+   and all other orders. Reset the local cash_order_repaired diagnostic at step 0.
+2. Engineering entry repair: expose the final fresh callable name
+   round8_dsm_contract_agent, because redefining an earlier name does not move
+   its namespace insertion position for Kaggle get_last_callable. Pass through
+   runtime, routing, and cash-contract telemetry.
+
+These local changes are attributed to the kaggriculture workspace contributors
+(OpenAI Codex-assisted implementation), not to DSM or the Chassis authors.
+The earlier compact/strict action-equivalence evidence applies to the compact
+base only; this behavior-changing challenger requires its own technical tests.
+No technical test establishes a leaderboard rating, strength approval, or an
+online submission. All original notices and Apache-2.0 license remain retained.
+
+--- Unmodified compact NOTICE begins below ---
+
+Kaggriculture round 8 DSM public-demonstration research proxy
+Engineering package: experiments/round8_top2_dsm_compact.py
+Date: 2026-09-22
+
+This is our independently reconstructed research proxy using the observed public
+actions from 24 DSM competition episodes. It is NOT DSM's private source code,
+an official DSM release, an endorsement, or a reproduction of DSM's full agent.
+DSM is credited as the author/team whose public competition actions were studied.
+No private model, notebook, credentials, or unpublished source were obtained.
+
+Public action source: Kaggle Kaggriculture public episode replays associated with
+DSM submission 56444344. Exact frozen study IDs and provenance are recorded in
+research/round8/top2/index.json, split_manifest.json and compiled_index.json.
+Competition: https://www.kaggle.com/competitions/kaggriculture
+Public replay form: https://www.kaggle.com/competitions/episodes/EPISODE_ID/replay.json
+The records selected for study are distinct from the sealed evaluation records.
+
+Local contributions: actual-action extraction and study, state-compatible route
+selection, and compact packaging of the study proxy. Compact packaging removes
+unused task data and precomputes the same compatibility keys; it does not change
+the frozen strict proxy's actions or route policy. Build and behavioral-equivalence
+evidence: compact_build.json, compact_equivalence.json and compact_cold_load.json
+in this directory. Source SHA-256:
+1cc9732b115dcd1612b3ce848484c88701ac21071ed52f0c00a9571ffbcc0475
+
+The runtime Chassis is attributed public Apache-2.0 code, retained from
+experiments/round7_local_chassis_core.py and external/one_more_wheat.py.
+The public-action observations are research inputs; this notice does not assert
+that DSM licensed private source code or that we own DSM's work. Apache-2.0 applies
+to the inherited runtime and our distributed code modifications. Its full text is
+provided in compact_LICENSE.txt. All inherited source comments remain in main.py;
+inherited strategy/version descriptions describe upstream history and do not imply
+that those complete agents are included in this compact proxy.
+
+----- Original inherited NOTICE (verbatim) -----
+Local v54 derivative, 2026-09-20. Direct source: https://www.kaggle.com/code/nathanjacob/kaggriculture-pipe16-idle-workers
+All original source notices retained. Apache-2.0.
+Lean Flock: Ahmed Berat Ozer; Metav4 farm and sheep/crew efficiency: Thomas Tschinkel; productive opening: Dmitrii Gluzdov, adapted by Nathan Jacob.
+Upstream includes yhay81, prvsiyan, aurax7, tetsutani, Rayk Kretzschmar, degnonguidi, leoprovorov, destbreso, lucifer19, salemali7, and Kaggle environment contributors.
+Local changes: explicit complete agent export; optional external sell-library path disabled for V54. No claim of independent production plans or original public evaluation reproduction.
+
+Dmitrii Gluzdov, September 2026: delay temporary opening wheat harvest to day three; restore pasture before cow placement. Apache-2.0. Independent Codex, DeepSeek and Grok candidate screen; only the passing later-harvest layer is included.
+
+

@@ -1,0 +1,168 @@
+
+# Daily capacitated route construction with shared material reservations.
+_VR_STATE={}
+_VR_REPORT={'days':0,'jobs':0,'unassigned_jobs':0,'executed':0,'supply_waits':0,'errors':0}
+def _vr_cost(route,jobs,start):
+    length=0;where=start;grain=fert=0
+    for index in route:
+        job=jobs[index];length+=_dp_dist(where,job['xy'])+len(job['ops']);where=job['xy']
+        grain+=job['need'].get('WHEAT',0);fert+=job['need'].get('FERTILIZER',0)
+    length+=int(grain>0)+int(fert>0)
+    if route:length+=_dp_dist(where,_dp_home(where))+1
+    return length
+
+def _vr_plan(obs):
+    day=int(obs['step'])//24;hour=int(obs['step'])%24;seat=int(obs['player'])
+    farm=obs['farms'][seat];prices=obs['market']['prices'];private=obs['private']
+    animals=sum(isinstance(t,dict) and 'animal' in t for row in farm['tiles'] for t in row)
+    grain=private['shed'].get('WHEAT',0)+sum(b.get('WHEAT',0) for b in private['inventories'])
+    crop=_dp_crop(day,prices,grain,animals);jobs=[]
+    for y,row in enumerate(farm['tiles']):
+        for x,tile in enumerate(row):
+            ops,value,need=_dp_bundle(tile,day,hour,prices,crop)
+            if not ops:continue
+            essential=0
+            if isinstance(tile,dict) and 'animal' in tile and day<29:
+                if not tile.get('fed_today'):essential+=_VR_FEED
+                if not tile.get('cared_today'):essential+=_VR_CARE
+            if isinstance(tile,dict) and tile.get('kind')=='PLANT':
+                if tile.get('consecutive_unwatered',0)>0:essential+=800
+                if any(c==['HARVEST'] for c in ops):essential+=100
+            jobs.append(dict(xy=(x,y),ops=ops,value=max(0,value)+essential,need=need))
+    starts=[tuple(farm['farmer'])]+[tuple(p) for p in farm['hands']]
+    routes=[[] for _ in starts];costs=[0]*len(starts);pending=set(range(len(jobs)))
+    budget=(719-int(obs['step'])) if day==29 else 23-hour
+    while pending:
+        best=None
+        for index in pending:
+            job=jobs[index]
+            if job['value']<=0:continue
+            for actor,route in enumerate(routes):
+                for offset in range(len(route)+1):
+                    candidate=route[:offset]+[index]+route[offset:]
+                    cost=_vr_cost(candidate,jobs,starts[actor])
+                    if cost>budget:continue
+                    added=max(1,cost-costs[actor]);score=job['value']/added
+                    key=(score,-cost,-actor,-offset,-index)
+                    if best is None or key>best[0]:best=(key,actor,candidate,cost,index)
+        if best is None:break
+        _,actor,route,cost,index=best;routes[actor]=route;costs[actor]=cost;pending.remove(index)
+    plans=[];needs={}
+    for actor,route in enumerate(routes):
+        materials={};commands=[]
+        for index in route:
+            for item,quantity in jobs[index]['need'].items():materials[item]=materials.get(item,0)+quantity
+        for item,quantity in materials.items():needs[item]=needs.get(item,0)+quantity
+        for item in ('WHEAT','FERTILIZER'):
+            if materials.get(item,0):commands.append((starts[actor],['PICKUP',item,materials[item]]))
+        for index in route:
+            commands.extend((jobs[index]['xy'],command) for command in jobs[index]['ops'])
+        if route:commands.append((_dp_home(jobs[route[-1]]['xy']),['DROP']))
+        plans.append(commands)
+    _VR_REPORT['days']+=1;_VR_REPORT['jobs']+=len(jobs)-len(pending)
+    _VR_REPORT['unassigned_jobs']+=len(pending)
+    return dict(plans=plans,pointers=[0]*len(plans),needs=needs,crop=crop,costs=costs)
+
+def _vr_command(obs,actor,state,private):
+    farm=obs['farms'][int(obs['player'])];day=int(obs['step'])//24
+    pos=tuple(([farm['farmer']]+farm['hands'])[actor]);bag=private['inventories'][actor]
+    if actor>=len(state['plans']):return ['PASS']
+    plan=state['plans'][actor];pointer=state['pointers'][actor]
+    while pointer<len(plan):
+        target,command=plan[pointer];op=command[0];tile=farm['tiles'][target[1]][target[0]]
+        skip=False
+        if op=='PICKUP':
+            needed=max(0,command[2]-bag.get(command[1],0))
+            if not needed:skip=True
+            elif pos!=target:return _dp_walk(pos,target)
+            else:
+                quantity=min(needed,private['shed'].get(command[1],0))
+                if quantity:return ['PICKUP',command[1],quantity]
+                _VR_REPORT['supply_waits']+=1
+                if int(obs['step'])%24<6:return ['PASS']
+                skip=True
+        elif op=='FEED':skip=not isinstance(tile,dict) or 'animal' not in tile or tile.get('fed_today') or not bag.get('WHEAT')
+        elif op=='CARE':skip=not isinstance(tile,dict) or 'animal' not in tile or tile.get('cared_today')
+        elif op=='COLLECT_FERTILIZER':skip=not isinstance(tile,dict) or not tile.get('fertilizer_available')
+        elif op=='FERTILIZE':skip=not isinstance(tile,dict) or tile.get('kind')!='PLANT' or not bag.get('FERTILIZER') or tile.get('fertilized_until_day',-1)>=day
+        elif op=='WATER':skip=not isinstance(tile,dict) or tile.get('kind')!='PLANT' or tile.get('watered_today')
+        elif op=='HARVEST':skip=not isinstance(tile,dict) or tile.get('yield_units',0)<=0
+        elif op=='DIG':skip=tile is None or isinstance(tile,dict) and 'animal' in tile
+        elif op=='PLANT':skip=tile is not None or private['seeds'].get(command[1],0)<=0
+        elif op=='DROP':
+            if not sum(bag.values()):skip=True
+            elif pos!=target:return _dp_walk(pos,target)
+            else:
+                room=max(0,100-sum(private['shed'].values()))
+                if room>=sum(bag.values()):return ['DROP']
+                items=[i for i in PRODUCTS if bag.get(i,0)>0]
+                if room and items:
+                    item=max(items,key=lambda i:obs['market']['prices'][i])
+                    return ['PLACE',item,min(room,bag[item])]
+                return ['PASS']
+        if skip:pointer+=1;state['pointers'][actor]=pointer;continue
+        if pos!=target:return _dp_walk(pos,target)
+        state['pointers'][actor]=pointer+1;_VR_REPORT['executed']+=1
+        return list(command)
+    if sum(bag.values()):
+        home=_dp_home(pos)
+        return ['DROP'] if pos==home else _dp_walk(pos,home)
+    return ['PASS']
+
+def _vr_market(obs,state,private):
+    farm=obs['farms'][int(obs['player'])];day,hour=divmod(int(obs['step']),24)
+    prices=obs['market']['prices'];stock=private['shed'];needs={};seeds={}
+    if 'plans' in state:
+        for actor,plan in enumerate(state['plans']):
+            for _,cmd in plan[state['pointers'][actor]:]:
+                if cmd[0]=='FEED':needs['WHEAT']=needs.get('WHEAT',0)+1
+                elif cmd[0]=='FERTILIZE':needs['FERTILIZER']=needs.get('FERTILIZER',0)+1
+                elif cmd[0]=='PLANT':seeds[cmd[1]]=seeds.get(cmd[1],0)+1
+    elif day<29:
+        for row in farm['tiles']:
+            for tile in row:
+                if isinstance(tile,dict) and 'animal' in tile:needs['WHEAT']=needs.get('WHEAT',0)+1
+        needs['FERTILIZER']=12
+        crop=_dp_crop(day,prices,stock.get('WHEAT',0),needs.get('WHEAT',0))
+        if crop:seeds[crop]=8
+    reserve={i:max(0,q-sum(b.get(i,0) for b in private['inventories'])) for i,q in needs.items()}
+    orders=[];cash=float(farm['money'])
+    sales=[['SELL',i,max(0,int(stock.get(i,0))-reserve.get(i,0))] for i in PRODUCTS]
+    sales=[o for o in sales if o[2]>0];sales.sort(key=lambda o:(-prices[o[1]]*o[2],o[1]))
+    orders.extend(sales[:3] if hour<2 else sales[:7])
+    for item,q in reserve.items():
+        amount=max(0,q-int(stock.get(item,0)));unit=int(prices[item])+10
+        amount=min(amount,int(max(0,cash-500)//max(1,unit)))
+        if amount and len(orders)<10:orders.append(['BUY_PRODUCT',item,amount]);cash-=unit*amount
+    for crop,q in seeds.items():
+        amount=max(0,q-int(private['seeds'].get(crop,0)));cost=_DP_CROPS[crop][3]
+        amount=min(amount,int(max(0,cash-500)//cost))
+        if amount and len(orders)<10:orders.append(['BUY_SEED',crop,amount]);cash-=amount*cost
+    if hour<2:
+        for index in range(len(farm['hands']),_VR_WORKERS):
+            cost=_v219_fib(index)
+            if len(orders)>=10 or cash<cost+100:break
+            orders.append(['HIRE']);cash-=cost
+    return orders
+
+def routed_dispatch_agent(observation,configuration=None):
+    step=int(observation['step']);day,hour=divmod(step,24);seat=int(observation['player'])
+    if day<_VR_START:return _DP_PARENT(observation,configuration)
+    state=_VR_STATE.get(seat)
+    if state is None or step<=state['last']:
+        state=_VR_STATE[seat]={'day':-1,'last':-1}
+        for key in _VR_REPORT:_VR_REPORT[key]=0
+    if state['day']!=day:state.clear();state.update(day=day,last=-1)
+    state['last']=step
+    if hour>=2 and 'plans' not in state:state.update(_vr_plan(observation))
+    farm=copy.deepcopy(observation['farms'][seat]);private=copy.deepcopy(observation['private'])
+    commands=[]
+    for actor in range(len(farm['hands'])+1):
+        command=_vr_command(observation,actor,state,private) if 'plans' in state else ['PASS']
+        commands.append(command)
+        _UNIT_NS['_apply_unit_action'](farm,private,actor,command,10,day,24,100)
+    return {'farmer':commands[0],'hands':commands[1:],'market':_vr_market(observation,state,private)}
+routed_dispatch_agent.telemetry=_VR_REPORT
+_MP_REPORT=_VR_REPORT
+agent=routed_dispatch_agent
+kaggle_submission_agent=routed_dispatch_agent

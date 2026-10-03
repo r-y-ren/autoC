@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "checks": [
+    "future_feed_reserve",
+    "own_inventory_bound",
+    "physical_actions_unchanged",
+    "pickup_and_purchase_protection",
+    "ten_slots",
+    "cash_and_time_gate"
+  ],
+  "scope": "Synthetic local contracts only. Future profit and solvency require actual games."
+}

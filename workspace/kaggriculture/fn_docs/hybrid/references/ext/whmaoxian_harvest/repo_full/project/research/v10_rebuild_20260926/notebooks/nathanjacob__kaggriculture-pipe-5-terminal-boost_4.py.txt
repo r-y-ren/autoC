@@ -1,0 +1,4 @@
+from pathlib import Path
+import os, sys, time
+
+WORKDIR = Path('/kaggle/working') if Path('/kaggle/working').is_dir() else Path.cwd()

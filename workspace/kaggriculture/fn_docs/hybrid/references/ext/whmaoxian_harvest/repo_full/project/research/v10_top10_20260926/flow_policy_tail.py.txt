@@ -1,0 +1,103 @@
+
+# Locally trained public-flow prediction; stdlib-only inference.
+import struct as _flow_struct
+_MP_PARENT=phase_b_agent
+_MP_PRESSURE_PARENT=_v10_pressure_plan
+_MP_EXPOSURE=_or2_exposure
+_MP_CACHE={}
+_MP_REPORT={'errors':0,'gated_plans':0,'reordered_turns':0}
+def _mp_predict(features):
+    values=_flow_struct.unpack('!31f',_flow_struct.pack('!31f',*features))
+    total=[0.0,0.0,0.0]
+    for tree in _MP_FOREST:
+        node=0
+        while tree[node][0]>=0:
+            row=tree[node];node=row[2] if values[row[0]]<=row[1] else row[3]
+        row=tree[node]
+        for k in range(3):total[k]+=row[4+k]
+    return tuple(value/len(_MP_FOREST) for value in total)
+
+def _mp_allow_sn(obs,item):
+    if int(obs['step'])<_MP_START:return True
+    cache=_MP_CACHE.get(int(obs['player']))
+    if not cache or cache[0]!=int(obs['step']):return True
+    prediction=cache[1].get(item)
+    return prediction is None or prediction[1]>=_MP_THRESHOLD
+
+def _v10_pressure_plan(obs,plan,protected):
+    step=int(obs['step']);cache=_MP_CACHE.get(int(obs['player']))
+    if step<_MP_START or not cache or cache[0]!=step or _MP_MODE=='reorder':
+        return _MP_PRESSURE_PARENT(obs,plan,protected)
+    if _MP_MODE=='observe':return _MP_PRESSURE_PARENT(obs,plan,protected)
+    candidates=_MP_PRESSURE_PARENT(obs,plan,protected) if _MP_MODE=='filter' else plan
+    result=[];budgets={}
+    for turn,item,quantity in candidates:
+        if turn-step<=_ADV_LOOK and item!=protected:
+            result.append((turn,item,quantity));continue
+        prediction=cache[1].get(item)
+        if prediction is None or prediction[1]<_MP_THRESHOLD:
+            _MP_REPORT['gated_plans']+=1;continue
+        if _MP_MODE=='filter':
+            result.append((turn,item,quantity));continue
+        if item not in budgets:
+            budgets[item]=max(0,int(prediction[2]*20*_MP_VOLUME_SCALE+0.5))
+        take=min(quantity,budgets[item]);budgets[item]-=take
+        if take>0:result.append((turn,item,take))
+    return result
+
+def _mp_reorder(obs,action,predictions):
+    orders=action.get('market',[])
+    if len(orders)<2:return action
+    projected=projected_shed(action,FarmView(obs));changed=False;new=[list(o) for o in orders]
+    index=0
+    while index<len(new):
+        if not new[index] or new[index][0]!='SELL':index+=1;continue
+        end=index
+        while end<len(new) and new[end] and new[end][0]=='SELL':end+=1
+        slots=[i for i in range(index,end) if len(new[i])>=3 and new[i][1] in FLOW_ITEMS]
+        if len(slots)>=2:
+            def score(slot):
+                order=new[slot];item=order[1];p=predictions.get(item,(0.0,0.0,0.0))
+                quantity=min(max(0,int(order[2])),max(0,int(projected.get(item,0))))
+                conditional=p[2]*20/max(.05,p[1])
+                batch=max(0,min(30,int(conditional+.5)))
+                return p[0]*_MP_EXPOSURE(obs,item,quantity,batch)
+            scores={i:score(i) for i in slots}
+            if max(scores.values())-min(scores.values())>_MP_REORDER_MIN:
+                ranked=sorted(slots,key=lambda i:(-scores[i],i));values=[new[i] for i in ranked]
+                if values!=[new[i] for i in slots]:
+                    for slot,order in zip(slots,values):new[slot]=order
+                    changed=True
+        index=end
+    if changed:
+        _MP_REPORT['reordered_turns']+=1
+        return dict(action,market=new)
+    return action
+
+_MP_ORIGINAL_SIM_GATE=_B_SIM_GATE
+
+def model_flow_agent(observation,configuration=None):
+    global _B_SIM_GATE
+    step=int(observation['step']);seat=int(observation['player']);predictions={}
+    if step==0:
+        for key in _MP_REPORT:_MP_REPORT[key]=0
+        _MP_CACHE.pop(seat,None)
+    try:
+        features=flow_observe(observation)
+        if step>=144:predictions={item:_mp_predict(values) for item,values in features.items()}
+        _MP_CACHE[seat]=(step,predictions)
+    except Exception:
+        _MP_REPORT['errors']+=1
+        _MP_CACHE.pop(seat,None)
+    _B_SIM_GATE=0.0 if step>=_MP_START and _MP_MODE in ('replace','combined') else _MP_ORIGINAL_SIM_GATE
+    action=_MP_PARENT(observation,configuration)
+    try:
+        if step>=_MP_START and _MP_MODE in ('reorder','combined'):
+            action=_mp_reorder(observation,action,predictions)
+        flow_commit(observation,action)
+    except Exception:
+        _MP_REPORT['errors']+=1
+    return action
+model_flow_agent.telemetry=_MP_REPORT
+agent=model_flow_agent
+kaggle_submission_agent=model_flow_agent

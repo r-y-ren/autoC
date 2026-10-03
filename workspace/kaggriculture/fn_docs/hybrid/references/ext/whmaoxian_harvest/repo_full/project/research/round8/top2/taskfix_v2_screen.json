@@ -1,0 +1,244 @@
+[
+  {
+    "variant": "dsm_tasks_fixed_v2",
+    "seed": 82001,
+    "seat": 0,
+    "money": 100696.0,
+    "opponent_money": 119507.0,
+    "delta": -18811.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 18,
+        "incompatible_rejected": 630,
+        "state_contract_rejected": 0
+      },
+      "task_telemetry": {
+        "issued_tasks": 3751,
+        "skipped_tasks": 3,
+        "waits": 166,
+        "weed_repairs": 2,
+        "moves": 2626,
+        "unfinished_daily_tasks": 100,
+        "seed_deferrals": 1,
+        "waits_by_operation": {
+          "PICKUP": 10,
+          "PLANT": 1,
+          "PLACE": 2,
+          "WATER": 121,
+          "FERTILIZE": 32
+        },
+        "waits_by_day": {
+          "0": 2,
+          "2": 2,
+          "6": 9,
+          "15": 5,
+          "17": 9,
+          "18": 15,
+          "19": 11,
+          "20": 15,
+          "21": 15,
+          "22": 10,
+          "23": 6,
+          "24": 12,
+          "25": 5,
+          "26": 15,
+          "27": 9,
+          "28": 12,
+          "29": 14
+        },
+        "unfinished_by_operation": {
+          "BUILD_COOP": 1,
+          "WATER": 47,
+          "HARVEST": 21,
+          "PLANT": 12,
+          "FERTILIZE": 16,
+          "DIG": 3
+        },
+        "unfinished_by_day": {
+          "9": 1,
+          "13": 1,
+          "15": 4,
+          "17": 6,
+          "18": 11,
+          "19": 7,
+          "20": 9,
+          "21": 11,
+          "22": 8,
+          "23": 6,
+          "24": 8,
+          "25": 3,
+          "26": 11,
+          "27": 6,
+          "28": 8
+        },
+        "partial_pickups": 0,
+        "missing_target_skips": 0,
+        "input_reserves": 14,
+        "input_topups": 4
+      }
+    },
+    "final_day_unfinished_by_operation": {
+      "WATER": 2,
+      "HARVEST": 3,
+      "DROP": 1
+    },
+    "seconds": 9.250358500001312,
+    "max_action_seconds": 0.123327
+  },
+  {
+    "variant": "dsm_tasks_fixed_v2",
+    "seed": 82003,
+    "seat": 0,
+    "money": 80656.0,
+    "opponent_money": 75449.0,
+    "delta": 5207.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 30,
+        "incompatible_rejected": 618,
+        "state_contract_rejected": 0
+      },
+      "task_telemetry": {
+        "issued_tasks": 3585,
+        "skipped_tasks": 5,
+        "waits": 60,
+        "weed_repairs": 1,
+        "moves": 2686,
+        "unfinished_daily_tasks": 26,
+        "seed_deferrals": 1,
+        "waits_by_operation": {
+          "PICKUP": 18,
+          "PLANT": 1,
+          "WATER": 32,
+          "FERTILIZE": 9
+        },
+        "waits_by_day": {
+          "0": 2,
+          "2": 2,
+          "6": 13,
+          "7": 2,
+          "22": 5,
+          "23": 10,
+          "24": 4,
+          "25": 6,
+          "26": 6,
+          "28": 10
+        },
+        "unfinished_by_operation": {
+          "WATER": 17,
+          "HARVEST": 6,
+          "PLANT": 2,
+          "FERTILIZE": 1
+        },
+        "unfinished_by_day": {
+          "22": 2,
+          "23": 7,
+          "24": 4,
+          "25": 2,
+          "26": 6,
+          "28": 5
+        },
+        "partial_pickups": 1,
+        "missing_target_skips": 0,
+        "input_reserves": 9,
+        "input_topups": 0
+      }
+    },
+    "final_day_unfinished_by_operation": {},
+    "seconds": 10.554788699999335,
+    "max_action_seconds": 0.161709
+  },
+  {
+    "variant": "dsm_tasks_fixed_v2",
+    "seed": 82005,
+    "seat": 0,
+    "money": 88913.0,
+    "opponent_money": 81350.0,
+    "delta": 7563.0,
+    "statuses": [
+      "DONE",
+      "DONE"
+    ],
+    "errors": [],
+    "diagnostics": {
+      "telemetry": {
+        "layer_fallbacks": 0,
+        "entry_fallbacks": 0
+      },
+      "routing_telemetry": {
+        "route_switches": 1,
+        "compatible_options": 30,
+        "incompatible_rejected": 618,
+        "state_contract_rejected": 0
+      },
+      "task_telemetry": {
+        "issued_tasks": 3585,
+        "skipped_tasks": 5,
+        "waits": 60,
+        "weed_repairs": 1,
+        "moves": 2686,
+        "unfinished_daily_tasks": 26,
+        "seed_deferrals": 1,
+        "waits_by_operation": {
+          "PICKUP": 18,
+          "PLANT": 1,
+          "WATER": 32,
+          "FERTILIZE": 9
+        },
+        "waits_by_day": {
+          "0": 2,
+          "2": 2,
+          "6": 13,
+          "7": 2,
+          "22": 5,
+          "23": 10,
+          "24": 4,
+          "25": 6,
+          "26": 6,
+          "28": 10
+        },
+        "unfinished_by_operation": {
+          "WATER": 17,
+          "HARVEST": 6,
+          "PLANT": 2,
+          "FERTILIZE": 1
+        },
+        "unfinished_by_day": {
+          "22": 2,
+          "23": 7,
+          "24": 4,
+          "25": 2,
+          "26": 6,
+          "28": 5
+        },
+        "partial_pickups": 1,
+        "missing_target_skips": 0,
+        "input_reserves": 9,
+        "input_topups": 0
+      }
+    },
+    "final_day_unfinished_by_operation": {},
+    "seconds": 11.406691100000899,
+    "max_action_seconds": 0.204909
+  }
+]

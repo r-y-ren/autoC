@@ -1,0 +1,28 @@
+[
+  {
+    "path": "external\\round9\\frontier\\main.py",
+    "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+    "imports": [
+      "from __future__ import annotations",
+      "from copy import deepcopy",
+      "from itertools import permutations as _r53_permutations",
+      "from time import perf_counter",
+      "import base64",
+      "import copy",
+      "import copy as _y_copy",
+      "import itertools as _v44y_it",
+      "import json",
+      "import json as _v92_json, os as _v92_os",
+      "import json as _v92_json, os as _v92_os, zlib as _v92_zlib, base64 as _v92_b64",
+      "import math",
+      "import random as _opening_random",
+      "import zlib"
+    ],
+    "review_calls": [
+      "market.remove(existing)",
+      "open(path)",
+      "orders.remove(weakest)"
+    ],
+    "literal_execs": 2
+  }
+]

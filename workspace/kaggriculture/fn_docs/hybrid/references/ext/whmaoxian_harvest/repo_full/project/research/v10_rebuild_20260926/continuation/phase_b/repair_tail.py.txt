@@ -1,0 +1,41 @@
+
+# Phase B: public-state uncertainty controls, not opponent-specific switches.
+_B_PARENT=r2_opening_agent
+_B_SIM_GATE=0.0
+_B_DECAY=False
+_B_FLOOR=False
+_B_REPORT={'decay_units_ignored':0,'floor_uncertain_units':0,'conservative_turns':0}
+_B_AGGRESSIVE_HORIZON=_V10_ADV_HORIZON
+_B_AGGRESSIVE_K=_OR2_SN_K
+
+def phase_b_agent(observation,configuration=None):
+    global _V10_ADV_HORIZON,_OR2_SN_K
+    step=int(observation['step']); seat=int(observation['player'])
+    if step==0:
+        for key in _B_REPORT:_B_REPORT[key]=0
+    state=_OR2_STATE.get(seat,{})
+    prev=state.get('prev')
+    if prev and prev.get('step')==step-1:
+        rival=observation['farms'][1-seat]
+        if _B_FLOOR:
+            for item in _ADV_ITEMS:
+                if prev.get('prices',{}).get(item,2)<=1:
+                    _B_REPORT['floor_uncertain_units']+=state.get('stock',{}).get(item,0)
+                    state.setdefault('stock',{})[item]=0
+        if _B_DECAY and step%24!=0:
+            for (x,y),old in list(prev.get('tiles',{}).items()):
+                tile=rival['tiles'][y][x]
+                if old[0]!='P' or old[1] not in _OR2_ONGOING or not isinstance(tile,dict):continue
+                if tile.get('crop')!=old[1] or tile.get('planted_day')!=old[2]:continue
+                expiry=int(tile.get('max_lifespan_step',-1)); current=int(tile.get('yield_units',0))
+                if expiry>=0 and step-1>=expiry and (step-1-expiry)%2==0 and old[3]-current==1 and current>0:
+                    prev['tiles'][(x,y)]=(*old[:3],current)
+                    _B_REPORT['decay_units_ignored']+=1
+    aggressive=_B_SIM_GATE<=0 or _r37_similarity(observation)>=_B_SIM_GATE
+    _V10_ADV_HORIZON=_B_AGGRESSIVE_HORIZON if aggressive else 12
+    _OR2_SN_K=_B_AGGRESSIVE_K if aggressive else 0
+    if not aggressive:_B_REPORT['conservative_turns']+=1
+    return _B_PARENT(observation,configuration)
+phase_b_agent.telemetry=_B_REPORT
+agent=phase_b_agent
+kaggle_submission_agent=phase_b_agent

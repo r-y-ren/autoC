@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "remote_harvest_not_immediately_sellable",
+    "shed_arrival_can_be_sold_same_turn",
+    "possible_shed_drop_clears_cargo_constraint",
+    "midnight_and_nonconsecutive_reset",
+    "no_private_opponent_or_future_state_required"
+  ],
+  "scope": "synthetic local assertions, not win-rate evidence"
+}

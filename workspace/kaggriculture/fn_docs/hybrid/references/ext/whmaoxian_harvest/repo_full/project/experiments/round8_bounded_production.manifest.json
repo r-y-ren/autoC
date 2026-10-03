@@ -1,0 +1,27 @@
+{
+  "base": "experiments\\round8_fullfusion_bounded.py",
+  "base_sha256": "228220d9d9d05f9cd91845180531a5df11c77b0afe405bc935ce7e7ff7358352",
+  "production_source_sha256": "05d9d50dd489f78a0561c717e483adef022d0fef1c52af604aed43e85508c02b",
+  "interfaces_equal": [
+    "_v219_request",
+    "_v219_worker",
+    "_v219_qualifies",
+    "_v219_native_day",
+    "_v219_fib",
+    "_v219_walk",
+    "_v219_home",
+    "_ca_spawn",
+    "FarmView",
+    "projected_shed",
+    "_r37_market_price"
+  ],
+  "captured_parent": "round8_fullfusion_bounded_agent",
+  "final_entry": "round8_production_fusion_agent",
+  "output": "experiments\\round8_bounded_production.py",
+  "sha256": "9fa83701138e80e3e5f9a6479cc2fa1c7e8a8965c4bd85d4e45d05ec5d4ffd4e",
+  "changes_to_frozen_suffix": [
+    "capture actual last callable",
+    "append diagnostics aggregator"
+  ],
+  "validation_scope": "AST interface equality and initialization only; gameplay validation still required"
+}

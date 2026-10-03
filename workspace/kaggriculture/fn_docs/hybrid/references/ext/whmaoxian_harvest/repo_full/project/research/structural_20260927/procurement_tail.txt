@@ -1,0 +1,79 @@
+
+# Separate physical production plans from responsive input procurement.
+# Hints describe our own planned work; no rival private state is consulted.
+_PB_PARENT=standalone_plan_agent
+_PB_REPORT={'turns':0,'changed':0,'refill_units':0,'hire_retries':0,'errors':0}
+def _pb_fib(n):
+    a=b=1
+    for _ in range(n):a,b=b,a+b
+    return a
+
+def procurement_agent(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        for key in _PB_REPORT:_PB_REPORT[key]=0
+    action=_PB_PARENT(observation,configuration)
+    if not _PB_FROM<=step<696:return action
+    view=_View(observation,seat,_PLAN_IMPL.chassis.cfg)
+    available=_PLAN_IMPL.chassis._projected_shed(action,view)
+    reserves={}
+    for item in ('WHEAT','FERTILIZER'):
+        forecast=sum(_PB_NEEDS[t].get(item,0) for t in range(step+1,min(719,step+1+_PB_LOOK)))
+        floor=4 if item=='WHEAT' and step<672 else 0
+        reserves[item]=min(30,max(floor,forecast))
+    market=[];selling={};capital=[]
+    for order in action.get('market',[])[:10]:
+        if not order:continue
+        op=order[0]
+        if op=='SELL' and len(order)>=3:
+            item=order[1];room=max(0,int(available.get(item,0))-selling.get(item,0)-reserves.get(item,0))
+            n=min(room,max(0,int(order[2])))
+            if n:market.append(['SELL',item,n]);selling[item]=selling.get(item,0)+n
+    # Successful demonstration commitments are finite quantities, not BUY-all loops.
+    for order in _PB_CAPITAL[step]:
+        if order and order[0] in ('HIRE','BUY_LAND','BUY_ANIMAL','BUY_SEED'):
+            capital.append(list(order))
+    if step%24<8:
+        target=_PB_WORKERS[step]
+        existing=len(observation['farms'][seat]['hands'])
+        requested=sum(o[0]=='HIRE' for o in capital)
+        short=max(0,target-existing-requested)
+        while short and len(market)+len(capital)<9:
+            capital.insert(0,['HIRE']);short-=1;_PB_REPORT['hire_retries']+=1
+    market.sort(key=lambda o:-(int(observation['market']['prices'].get(o[1],1))*o[2]))
+    market=market[:max(0,8-len(capital))]
+    selling={}
+    for o in market:selling[o[1]]=selling.get(o[1],0)+o[2]
+    orders=market+capital
+    # Sell unneeded inputs while keeping a bounded forecast of scheduled pickups.
+    for item in ('FERTILIZER','WHEAT'):
+        spare=max(0,int(available.get(item,0))-selling.get(item,0)-reserves[item])
+        if spare and len(orders)<8:
+            orders.insert(0,['SELL',item,spare]);selling[item]=selling.get(item,0)+spare
+    cash=float(observation['farms'][seat]['money'])
+    cash+=sum(max(1,int(observation['market']['prices'].get(i,1)))*n*.7 for i,n in selling.items())
+    hires=int(observation['farms'][seat]['hires_today'])
+    land=len(observation['farms'][seat]['unlocked_quadrants'])
+    room=100-sum(available.values())+sum(selling.values())
+    for order in capital:
+        op=order[0]
+        if op=='HIRE':cash-=_pb_fib(hires);hires+=1
+        elif op=='BUY_LAND' and land<4:cash-=(1000,2000,4000)[land-1];land+=1
+        elif op=='BUY_ANIMAL':cash-=int(order[2])*{'COW':400,'GOOSE':300,'SHEEP':500}[order[1]];room-=int(order[2])
+        elif op=='BUY_SEED':cash-=int(order[2])*{'WHEAT':10,'CARROT':20,'TOMATO':50,'STRAWBERRY':100,'MELON':80}[order[1]]
+    for item in ('WHEAT','FERTILIZER'):
+        held=max(0,int(available.get(item,0))-selling.get(item,0))
+        deficit=max(0,reserves[item]-held)
+        price=max(1,int(observation['market']['prices'][item])+12)
+        n=min(deficit,max(0,room),max(0,int(cash//price)))
+        if n and len(orders)<10:
+            orders.append(['BUY_PRODUCT',item,n]);cash-=n*price;room-=n
+            _PB_REPORT['refill_units']+=n
+    result=dict(action,market=orders[:10])
+    _PB_REPORT['turns']+=1
+    _PB_REPORT['changed']+=result['market']!=action.get('market',[])
+    return result
+procurement_agent.telemetry=_PB_REPORT
+_MP_REPORT=_PB_REPORT
+agent=procurement_agent
+kaggle_submission_agent=procurement_agent

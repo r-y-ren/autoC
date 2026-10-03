@@ -1,0 +1,24 @@
+
+# Do not approve a species substitution that relies on uncertain market proceeds.
+_K28C_PLAN_PARENT=_cs_plan
+_K28C_REPORT={'budget_declines':0,'mixed_buy_declines':0,'plans':0}
+def _cs_plan(obs,action,k,mode):
+    if mode=='SHEEP':
+        farm=obs['farms'][int(obs['player'])];cost=100*k+50
+        hires=int(farm['hires_today']);land=len(farm['unlocked_quadrants'])
+        for order in action.get('market',[]):
+            if not order:continue
+            op=order[0]
+            if op=='HIRE':cost+=_v219_fib(hires);hires+=1
+            elif op=='BUY_LAND' and land<4:cost+=(1000,2000,4000)[land-1];land+=1
+            elif op=='BUY_PRODUCT':
+                _K28C_REPORT['mixed_buy_declines']+=1;return None
+            elif len(order)>=3:
+                item=order[1];n=max(0,int(order[2]))
+                if op=='BUY_ANIMAL':cost+=n*{'GOOSE':300,'COW':400,'SHEEP':500}[item]
+                elif op=='BUY_SEED':cost+=n*{'WHEAT':10,'CARROT':20,'TOMATO':50,'STRAWBERRY':100,'MELON':80}[item]
+        if farm['money']<cost:
+            _K28C_REPORT['budget_declines']+=1;return None
+    result=_K28C_PLAN_PARENT(obs,action,k,mode)
+    _K28C_REPORT['plans']+=int(result is not None)
+    return result

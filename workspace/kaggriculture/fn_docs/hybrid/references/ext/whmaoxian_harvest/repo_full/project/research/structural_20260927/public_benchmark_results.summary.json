@@ -1,0 +1,242 @@
+{
+  "ledger": "C:\\Users\\ASUS\\Documents\\ChatGPT\\kaggriculture\\research\\structural_20260927\\public_benchmark_results.jsonl",
+  "rows": 288,
+  "invalid": 0,
+  "groups": [
+    {
+      "candidate": "submissions/release_v10_r2/main.py",
+      "games": 96,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 15,
+          "losses": 1,
+          "ties": 0,
+          "points": 0.9375,
+          "paired": 16,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "fieldcraft": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 13,
+          "losses": 3,
+          "ties": 0,
+          "points": 0.8125,
+          "paired": 16,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "marketshock": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 16,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 16,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "r2": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 1,
+          "losses": 1,
+          "ties": 14,
+          "points": 0.5,
+          "paired": 16,
+          "gain": 0.0,
+          "margin_gain": 0.0
+        },
+        "top_style_02": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 10,
+          "losses": 6,
+          "ties": 0,
+          "points": 0.625,
+          "paired": 16,
+          "gain": 0,
+          "margin_gain": 0.0
+        },
+        "top_style_03": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 10,
+          "losses": 6,
+          "ties": 0,
+          "points": 0.625,
+          "paired": 16,
+          "gain": 0,
+          "margin_gain": 0.0
+        }
+      },
+      "external_gain": 0,
+      "changed_economic_cases": 0,
+      "wage_delta_sum": 0.0,
+      "harvest_delta_sum": 0,
+      "cash_delta_sum": 0.0
+    },
+    {
+      "candidate": "research/structural_20260927/public_programs/farm2945.py",
+      "games": 96,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 15,
+          "losses": 1,
+          "ties": 0,
+          "points": 0.9375,
+          "paired": 16,
+          "gain": 0,
+          "margin_gain": -1526.5625
+        },
+        "fieldcraft": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 11,
+          "losses": 5,
+          "ties": 0,
+          "points": 0.6875,
+          "paired": 16,
+          "gain": -0.125,
+          "margin_gain": -1182.5625
+        },
+        "marketshock": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 1,
+          "losses": 15,
+          "ties": 0,
+          "points": 0.0625,
+          "paired": 16,
+          "gain": -0.9375,
+          "margin_gain": -2234.875
+        },
+        "r2": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 1,
+          "losses": 15,
+          "ties": 0,
+          "points": 0.0625,
+          "paired": 16,
+          "gain": -0.4375,
+          "margin_gain": -2202.9375
+        },
+        "top_style_02": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 16,
+          "losses": 0,
+          "ties": 0,
+          "points": 1,
+          "paired": 16,
+          "gain": 0.375,
+          "margin_gain": 63936.0
+        },
+        "top_style_03": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 10,
+          "losses": 6,
+          "ties": 0,
+          "points": 0.625,
+          "paired": 16,
+          "gain": 0,
+          "margin_gain": 2166.8125
+        }
+      },
+      "external_gain": -0.1375,
+      "changed_economic_cases": 96,
+      "wage_delta_sum": 6718.0,
+      "harvest_delta_sum": 518,
+      "cash_delta_sum": 327951.0
+    },
+    {
+      "candidate": "research/structural_20260927/public_programs/yield_v37.py",
+      "games": 96,
+      "invalid": 0,
+      "families": {
+        "aurax": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 1,
+          "losses": 15,
+          "ties": 0,
+          "points": 0.0625,
+          "paired": 16,
+          "gain": -0.875,
+          "margin_gain": -7504.4375
+        },
+        "fieldcraft": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 1,
+          "losses": 15,
+          "ties": 0,
+          "points": 0.0625,
+          "paired": 16,
+          "gain": -0.75,
+          "margin_gain": -8266.5
+        },
+        "marketshock": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 1,
+          "losses": 15,
+          "ties": 0,
+          "points": 0.0625,
+          "paired": 16,
+          "gain": -0.9375,
+          "margin_gain": -8210.8125
+        },
+        "r2": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 1,
+          "losses": 15,
+          "ties": 0,
+          "points": 0.0625,
+          "paired": 16,
+          "gain": -0.4375,
+          "margin_gain": -6109.125
+        },
+        "top_style_02": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 6,
+          "losses": 10,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 16,
+          "gain": -0.25,
+          "margin_gain": -5316.375
+        },
+        "top_style_03": {
+          "games": 16,
+          "invalid": 0,
+          "wins": 6,
+          "losses": 10,
+          "ties": 0,
+          "points": 0.375,
+          "paired": 16,
+          "gain": -0.25,
+          "margin_gain": -10503.9375
+        }
+      },
+      "external_gain": -0.6125,
+      "changed_economic_cases": 96,
+      "wage_delta_sum": -12661.0,
+      "harvest_delta_sum": -1254,
+      "cash_delta_sum": -520045.0
+    }
+  ],
+  "sha256": "daaeb4290258d25a48ea7191ef6a0d74741a53ccc3ddbb3da3fc7458b6bc704f"
+}

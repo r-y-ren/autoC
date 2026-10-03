@@ -1,0 +1,92 @@
+{
+  "manifest": {
+    "candidate": "experiments/round9_market_combined.py",
+    "opponents": [
+      "external/round9/frontier/main.py",
+      "external/round8/master2965/main.py",
+      "experiments/round8_top2_dsm_strict.py",
+      "external/orderbook.py"
+    ],
+    "hashes": {
+      "experiments/round9_market_combined.py": "f38eff078dce107aaa34ee01142934a9c3f553b065b94b0f74e8741389639148",
+      "external/round9/frontier/main.py": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "external/round8/master2965/main.py": "93831c18a43c49312a71fa67171224681c52c3fade0259403e8d8fae7973565f",
+      "experiments/round8_top2_dsm_strict.py": "8340cedac73c4a54ca6f1a440385514ef2a9c4fd613c6c86cf14312fc19b9e3f",
+      "external/orderbook.py": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab"
+    },
+    "split": "development",
+    "seeds": [
+      1493764141,
+      632707913,
+      1281817442,
+      317450435
+    ],
+    "seats": [
+      0,
+      1
+    ]
+  },
+  "games": 32,
+  "summary": {
+    "experiments/round8_top2_dsm_strict.py": {
+      "games": 8,
+      "valid": 8,
+      "worlds": 4,
+      "wins": 6,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 14238.75,
+      "median_margin": 18525.0,
+      "points": 0.75,
+      "world_bootstrap_points_95": [
+        0.25,
+        1
+      ]
+    },
+    "external/orderbook.py": {
+      "games": 8,
+      "valid": 8,
+      "worlds": 4,
+      "wins": 8,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 693.75,
+      "median_margin": 587.0,
+      "points": 1,
+      "world_bootstrap_points_95": [
+        1,
+        1
+      ]
+    },
+    "external/round8/master2965/main.py": {
+      "games": 8,
+      "valid": 8,
+      "worlds": 4,
+      "wins": 8,
+      "losses": 0,
+      "ties": 0,
+      "mean_margin": 1103.75,
+      "median_margin": 1137.5,
+      "points": 1,
+      "world_bootstrap_points_95": [
+        1,
+        1
+      ]
+    },
+    "external/round9/frontier/main.py": {
+      "games": 8,
+      "valid": 8,
+      "worlds": 4,
+      "wins": 6,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 69.25,
+      "median_margin": 53.0,
+      "points": 0.75,
+      "world_bootstrap_points_95": [
+        0.25,
+        1
+      ]
+    }
+  }
+}

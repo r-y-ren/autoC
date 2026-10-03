@@ -1,0 +1,3 @@
+### How to use this evidence
+
+The two panels cover both seats and every opponent in the retained frontier fixture. They are regression evidence for the route decision, not a substitute for a server score: market randomness, public opponent rotation, and Kaggle's scoring window can move the official rating. If a later completed row disagrees with the local ordering, keep the row as the authority and keep this diagnostic as a transparent experiment record.

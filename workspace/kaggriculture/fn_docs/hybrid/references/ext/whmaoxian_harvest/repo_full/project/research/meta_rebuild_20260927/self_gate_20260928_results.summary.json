@@ -1,0 +1,130 @@
+{
+  "event": "complete",
+  "cases": 30,
+  "invalid": 0,
+  "elapsed": 34.85289680000278,
+  "groups": [
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/gate_all_two.py",
+      "family": "r2",
+      "n": 6,
+      "invalid": 0,
+      "wins": 2,
+      "losses": 4,
+      "ties": 0,
+      "mean_margin": 1781.0,
+      "max_action_seconds": 0.07547160000103759,
+      "plan_breaks": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/gate_audit_two.py",
+      "family": "r2",
+      "n": 6,
+      "invalid": 0,
+      "wins": 2,
+      "losses": 4,
+      "ties": 0,
+      "mean_margin": 1781.0,
+      "max_action_seconds": 0.07339670000146725,
+      "plan_breaks": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/gate_phase_one.py",
+      "family": "r2",
+      "n": 6,
+      "invalid": 0,
+      "wins": 4,
+      "losses": 2,
+      "ties": 0,
+      "mean_margin": 1567.3333333333333,
+      "max_action_seconds": 0.08004110000183573,
+      "plan_breaks": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/gate_phase_two.py",
+      "family": "r2",
+      "n": 6,
+      "invalid": 0,
+      "wins": 2,
+      "losses": 4,
+      "ties": 0,
+      "mean_margin": 1781.0,
+      "max_action_seconds": 0.07530849999966449,
+      "plan_breaks": 0
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/h4_two.py",
+      "family": "r2",
+      "n": 6,
+      "invalid": 0,
+      "wins": 2,
+      "losses": 4,
+      "ties": 0,
+      "mean_margin": 1781.0,
+      "max_action_seconds": 0.07715989999996964,
+      "plan_breaks": 0
+    }
+  ],
+  "paired": [
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/gate_all_two.py",
+      "external_pairs": 0,
+      "worlds": 0,
+      "external_wins": 0,
+      "baseline_wins": 0,
+      "flipped_losses": 0,
+      "lost_wins": 0,
+      "mean_margin_gain": 0.0,
+      "score_rate_gain": 0.0,
+      "world_bootstrap_95": null
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/gate_audit_two.py",
+      "external_pairs": 0,
+      "worlds": 0,
+      "external_wins": 0,
+      "baseline_wins": 0,
+      "flipped_losses": 0,
+      "lost_wins": 0,
+      "mean_margin_gain": 0.0,
+      "score_rate_gain": 0.0,
+      "world_bootstrap_95": null
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/gate_phase_one.py",
+      "external_pairs": 0,
+      "worlds": 0,
+      "external_wins": 0,
+      "baseline_wins": 0,
+      "flipped_losses": 0,
+      "lost_wins": 0,
+      "mean_margin_gain": 0.0,
+      "score_rate_gain": 0.0,
+      "world_bootstrap_95": null
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/gate_phase_two.py",
+      "external_pairs": 0,
+      "worlds": 0,
+      "external_wins": 0,
+      "baseline_wins": 0,
+      "flipped_losses": 0,
+      "lost_wins": 0,
+      "mean_margin_gain": 0.0,
+      "score_rate_gain": 0.0,
+      "world_bootstrap_95": null
+    },
+    {
+      "candidate": "research/meta_rebuild_20260927/candidates/h4_two.py",
+      "external_pairs": 0,
+      "worlds": 0,
+      "external_wins": 0,
+      "baseline_wins": 0,
+      "flipped_losses": 0,
+      "lost_wins": 0,
+      "mean_margin_gain": 0.0,
+      "score_rate_gain": 0.0,
+      "world_bootstrap_95": null
+    }
+  ]
+}

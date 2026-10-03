@@ -1,0 +1,79 @@
+{
+  "v9_sha256": "6b13532fbc2b55b59c6cae8ed8d5cd29fe82d18a7d7e044ed130217e3d1c09d3",
+  "route_count": 41,
+  "all_routes_same_late_seed_sequence": true,
+  "representative_route": {
+    "route": 0,
+    "step19_buy_seed_wheat": 1,
+    "step20_plant_wheat": 1,
+    "step20_buy_seed_wheat": 2,
+    "step21_plant_wheat": 2,
+    "step21_buy_seed_wheat": 0,
+    "step22_to23_buy_seed_wheat": 0,
+    "step24_hire_requests": 3
+  },
+  "replay_episode": 112476879,
+  "replay_compressed_sha256": "deed3658513a9ba84c848fdd667ec068f2d35d1030ff34d915c2842d12e3934b",
+  "replay_trace": [
+    {
+      "step": 19,
+      "before_seeds": 0,
+      "plant_wheat_requests": 0,
+      "buy_seed_wheat_requests": 1,
+      "after_seeds": 1,
+      "before_cash": 31.0,
+      "after_cash": 21.0
+    },
+    {
+      "step": 20,
+      "before_seeds": 1,
+      "plant_wheat_requests": 1,
+      "buy_seed_wheat_requests": 2,
+      "after_seeds": 2,
+      "before_cash": 21.0,
+      "after_cash": 1.0
+    },
+    {
+      "step": 21,
+      "before_seeds": 2,
+      "plant_wheat_requests": 2,
+      "buy_seed_wheat_requests": 0,
+      "after_seeds": 0,
+      "before_cash": 1.0,
+      "after_cash": 1.0
+    },
+    {
+      "step": 22,
+      "before_seeds": 0,
+      "plant_wheat_requests": 0,
+      "buy_seed_wheat_requests": 0,
+      "after_seeds": 0,
+      "before_cash": 1.0,
+      "after_cash": 1.0
+    },
+    {
+      "step": 23,
+      "before_seeds": 0,
+      "plant_wheat_requests": 0,
+      "buy_seed_wheat_requests": 0,
+      "after_seeds": 0,
+      "before_cash": 1.0,
+      "after_cash": 1.0
+    },
+    {
+      "step": 24,
+      "before_seeds": 0,
+      "plant_wheat_requests": 0,
+      "buy_seed_wheat_requests": 0,
+      "after_seeds": 0,
+      "before_cash": 1.0,
+      "after_cash": 0.0
+    }
+  ],
+  "counterfactual_if_step20_buy2_reduced_to_buy1": {
+    "step21_wheat_seeds_at_start": 1,
+    "step21_wheat_plant_requests": 2,
+    "official_atomic_plant_rule_blocks_all_requests": true,
+    "cash_saved": 10
+  }
+}

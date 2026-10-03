@@ -1,0 +1,765 @@
+{
+  "kind": "frozen_trace_diagnostic_not_live_top10",
+  "results": [
+    {
+      "rank": 1,
+      "team": "DSM",
+      "rating_snapshot": 3127.5,
+      "submission_id": 56401245,
+      "episode_id": 111476056,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242856029,
+          "submissionId": 56401245,
+          "reward": 144215,
+          "initialScore": 3120.5927184277557,
+          "updatedScore": 3124.1412500691226,
+          "teamId": 16732748
+        },
+        {
+          "id": 242856030,
+          "submissionId": 56372014,
+          "reward": 123714,
+          "index": 1,
+          "initialScore": 3060.266423204722,
+          "updatedScore": 3056.717891563355,
+          "teamId": 16730524
+        }
+      ],
+      "time": "2026-09-21T03:54:03.240796700Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 140657.0,
+      "opponent_money": 140897.0,
+      "delta": -240.0,
+      "original_rewards": [
+        144215.0,
+        123714.0
+      ],
+      "seconds": 6.201169499999651,
+      "max_action_seconds": 0.445872
+    },
+    {
+      "rank": 1,
+      "team": "DSM",
+      "rating_snapshot": 3127.5,
+      "submission_id": 56401245,
+      "episode_id": 111469532,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242842965,
+          "submissionId": 56407295,
+          "reward": 92962,
+          "initialScore": 3045.2506265526,
+          "updatedScore": 3041.4871931972507,
+          "teamId": 16718819
+        },
+        {
+          "id": 242842967,
+          "submissionId": 56401245,
+          "reward": 101546,
+          "index": 1,
+          "initialScore": 3117.217688683852,
+          "updatedScore": 3120.5927184277557,
+          "teamId": 16732748
+        }
+      ],
+      "time": "2026-09-21T03:30:36.666170300Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 0,
+      "money": 140049.0,
+      "opponent_money": 82792.0,
+      "delta": 57257.0,
+      "original_rewards": [
+        92962.0,
+        101546.0
+      ],
+      "seconds": 6.583336099999997,
+      "max_action_seconds": 0.539849
+    },
+    {
+      "rank": 2,
+      "team": "Vadim Vasilenko",
+      "rating_snapshot": 3072.5,
+      "submission_id": 56396983,
+      "episode_id": 111469056,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242842017,
+          "submissionId": 56407295,
+          "reward": 115001,
+          "initialScore": 3046.9799068042857,
+          "updatedScore": 3042.5215067900535,
+          "teamId": 16718819
+        },
+        {
+          "id": 242842018,
+          "submissionId": 56396983,
+          "reward": 115245,
+          "index": 1,
+          "initialScore": 3068.396741808276,
+          "updatedScore": 3072.5382868344727,
+          "teamId": 16770421
+        }
+      ],
+      "time": "2026-09-21T03:31:20.758546Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 0,
+      "money": 113844.0,
+      "opponent_money": 52815.0,
+      "delta": 61029.0,
+      "original_rewards": [
+        115001.0,
+        115245.0
+      ],
+      "seconds": 8.099805800000013,
+      "max_action_seconds": 0.840251
+    },
+    {
+      "rank": 2,
+      "team": "Vadim Vasilenko",
+      "rating_snapshot": 3072.5,
+      "submission_id": 56396983,
+      "episode_id": 111466834,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242837571,
+          "submissionId": 56407295,
+          "reward": 103722,
+          "initialScore": 3035.454709144829,
+          "updatedScore": 3041.3823571643047,
+          "teamId": 16718819
+        },
+        {
+          "id": 242837572,
+          "submissionId": 56396983,
+          "reward": 97462,
+          "index": 1,
+          "initialScore": 3073.5207073786883,
+          "updatedScore": 3068.396741808276,
+          "teamId": 16770421
+        }
+      ],
+      "time": "2026-09-21T03:24:47.183164700Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 0,
+      "money": 130581.0,
+      "opponent_money": 64304.0,
+      "delta": 66277.0,
+      "original_rewards": [
+        103722.0,
+        97462.0
+      ],
+      "seconds": 7.992597100000239,
+      "max_action_seconds": 0.79337
+    },
+    {
+      "rank": 3,
+      "team": "THIRD FARM CLUB",
+      "rating_snapshot": 3067.4,
+      "submission_id": 56395336,
+      "episode_id": 111469537,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242842981,
+          "submissionId": 56395336,
+          "reward": 85722,
+          "initialScore": 3072.470326888467,
+          "updatedScore": 3067.4641400689484,
+          "teamId": 16730524
+        },
+        {
+          "id": 242842982,
+          "submissionId": 56407295,
+          "reward": 119540,
+          "index": 1,
+          "initialScore": 3041.4871931972507,
+          "updatedScore": 3046.9799068042857,
+          "teamId": 16718819
+        }
+      ],
+      "time": "2026-09-21T03:30:52.949676800Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 150549.0,
+      "opponent_money": 113856.0,
+      "delta": 36693.0,
+      "original_rewards": [
+        85722.0,
+        119540.0
+      ],
+      "seconds": 8.822717199999715,
+      "max_action_seconds": 0.796179
+    },
+    {
+      "rank": 3,
+      "team": "THIRD FARM CLUB",
+      "rating_snapshot": 3067.4,
+      "submission_id": 56395336,
+      "episode_id": 111463663,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242831253,
+          "submissionId": 56395336,
+          "reward": 110647,
+          "initialScore": 3076.4288885617666,
+          "updatedScore": 3072.470326888467,
+          "teamId": 16730524
+        },
+        {
+          "id": 242831254,
+          "submissionId": 56401245,
+          "reward": 125051,
+          "index": 1,
+          "initialScore": 3109.7265095587563,
+          "updatedScore": 3113.685071232056,
+          "teamId": 16732748
+        }
+      ],
+      "time": "2026-09-21T03:12:38.482619500Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 123917.0,
+      "opponent_money": 114533.0,
+      "delta": 9384.0,
+      "original_rewards": [
+        110647.0,
+        125051.0
+      ],
+      "seconds": 9.51644430000033,
+      "max_action_seconds": 0.887214
+    },
+    {
+      "rank": 4,
+      "team": "Majkel1337",
+      "rating_snapshot": 3064.2,
+      "submission_id": 56407295,
+      "episode_id": 111472430,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242848771,
+          "submissionId": 56407295,
+          "reward": 107930,
+          "initialScore": 3055.684132737993,
+          "updatedScore": 3059.8161606153694,
+          "teamId": 16718819
+        },
+        {
+          "id": 242848772,
+          "submissionId": 56384319,
+          "reward": 106274,
+          "index": 1,
+          "initialScore": 3031.768689203302,
+          "updatedScore": 3027.6632965017093,
+          "teamId": 16640510
+        }
+      ],
+      "time": "2026-09-21T03:51:30.940702900Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 103810.0,
+      "opponent_money": 102601.0,
+      "delta": 1209.0,
+      "original_rewards": [
+        107930.0,
+        106274.0
+      ],
+      "seconds": 9.338053800000125,
+      "max_action_seconds": 0.850369
+    },
+    {
+      "rank": 4,
+      "team": "Majkel1337",
+      "rating_snapshot": 3064.2,
+      "submission_id": 56407295,
+      "episode_id": 111471313,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242846535,
+          "submissionId": 56407295,
+          "reward": 160099,
+          "initialScore": 3051.12775530795,
+          "updatedScore": 3055.684132737993,
+          "teamId": 16718819
+        },
+        {
+          "id": 242846536,
+          "submissionId": 56390472,
+          "reward": 157572,
+          "index": 1,
+          "initialScore": 3048.7482151584904,
+          "updatedScore": 3044.2971155171795,
+          "teamId": 16730612
+        }
+      ],
+      "time": "2026-09-21T03:41:14.339200600Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 106843.0,
+      "opponent_money": 60592.0,
+      "delta": 46251.0,
+      "original_rewards": [
+        160099.0,
+        157572.0
+      ],
+      "seconds": 9.09755449999966,
+      "max_action_seconds": 0.921677
+    },
+    {
+      "rank": 5,
+      "team": "SpaTaro",
+      "rating_snapshot": 3045.2,
+      "submission_id": 56352346,
+      "episode_id": 111469536,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242843003,
+          "submissionId": 56352346,
+          "reward": 96936,
+          "initialScore": 3045.3777255129003,
+          "updatedScore": 3040.6563788180188,
+          "teamId": 16640510
+        },
+        {
+          "id": 242843004,
+          "submissionId": 56332038,
+          "reward": 99297,
+          "index": 1,
+          "initialScore": 3031.550589340063,
+          "updatedScore": 3036.2719360349447,
+          "teamId": 16718819
+        }
+      ],
+      "time": "2026-09-21T03:35:54.678951300Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 118479.0,
+      "opponent_money": 52127.0,
+      "delta": 66352.0,
+      "original_rewards": [
+        96936.0,
+        99297.0
+      ],
+      "seconds": 7.8764406000000236,
+      "max_action_seconds": 0.902109
+    },
+    {
+      "rank": 6,
+      "team": "Unknown Mother-Goose",
+      "rating_snapshot": 3039.7,
+      "submission_id": 56390472,
+      "episode_id": 111471313,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242846535,
+          "submissionId": 56407295,
+          "reward": 160099,
+          "initialScore": 3051.12775530795,
+          "updatedScore": 3055.684132737993,
+          "teamId": 16718819
+        },
+        {
+          "id": 242846536,
+          "submissionId": 56390472,
+          "reward": 157572,
+          "index": 1,
+          "initialScore": 3048.7482151584904,
+          "updatedScore": 3044.2971155171795,
+          "teamId": 16730612
+        }
+      ],
+      "time": "2026-09-21T03:41:14.339200600Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 0,
+      "money": 112975.0,
+      "opponent_money": 67333.0,
+      "delta": 45642.0,
+      "original_rewards": [
+        160099.0,
+        157572.0
+      ],
+      "seconds": 8.818234300000313,
+      "max_action_seconds": 0.821357
+    },
+    {
+      "rank": 6,
+      "team": "Unknown Mother-Goose",
+      "rating_snapshot": 3039.7,
+      "submission_id": 56390472,
+      "episode_id": 111463662,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242831223,
+          "submissionId": 56390472,
+          "reward": 98439,
+          "initialScore": 3052.2808326102863,
+          "updatedScore": 3048.7482151584904,
+          "teamId": 16730612
+        },
+        {
+          "id": 242831224,
+          "submissionId": 56401245,
+          "reward": 110430,
+          "index": 1,
+          "initialScore": 3113.685071232056,
+          "updatedScore": 3117.217688683852,
+          "teamId": 16732748
+        }
+      ],
+      "time": "2026-09-21T03:13:34.939953400Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 99746.0,
+      "opponent_money": 64338.0,
+      "delta": 35408.0,
+      "original_rewards": [
+        98439.0,
+        110430.0
+      ],
+      "seconds": 9.639281799999935,
+      "max_action_seconds": 1.103173
+    },
+    {
+      "rank": 7,
+      "team": "QQ",
+      "rating_snapshot": 3010.8,
+      "submission_id": 56327925,
+      "episode_id": 111469534,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242842969,
+          "submissionId": 56327925,
+          "reward": 97129,
+          "initialScore": 3012.349919385201,
+          "updatedScore": 3016.147681604719,
+          "teamId": 16817528
+        },
+        {
+          "id": 242842970,
+          "submissionId": 56392823,
+          "reward": 84223,
+          "index": 1,
+          "initialScore": 2968.615744939306,
+          "updatedScore": 2964.817982719788,
+          "teamId": 16622198
+        }
+      ],
+      "time": "2026-09-21T03:28:37.788191400Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 176730.0,
+      "opponent_money": 60303.0,
+      "delta": 116427.0,
+      "original_rewards": [
+        97129.0,
+        84223.0
+      ],
+      "seconds": 9.275064300000395,
+      "max_action_seconds": 0.984693
+    },
+    {
+      "rank": 7,
+      "team": "QQ",
+      "rating_snapshot": 3010.8,
+      "submission_id": 56327925,
+      "episode_id": 111463672,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242831257,
+          "submissionId": 56327925,
+          "reward": 100964,
+          "initialScore": 3016.440925329903,
+          "updatedScore": 3012.349919385201,
+          "teamId": 16817528
+        },
+        {
+          "id": 242831258,
+          "submissionId": 56352346,
+          "reward": 106735,
+          "index": 1,
+          "initialScore": 3041.286719568198,
+          "updatedScore": 3045.3777255129003,
+          "teamId": 16640510
+        }
+      ],
+      "time": "2026-09-21T03:18:06.719672100Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 160347.0,
+      "opponent_money": 58599.0,
+      "delta": 101748.0,
+      "original_rewards": [
+        100964.0,
+        106735.0
+      ],
+      "seconds": 8.339940100000149,
+      "max_action_seconds": 0.88987
+    },
+    {
+      "rank": 8,
+      "team": "Orbital Terraformer",
+      "rating_snapshot": 3006.1,
+      "submission_id": 56263779,
+      "episode_id": 111469539,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242842979,
+          "submissionId": 56263779,
+          "reward": 77380,
+          "initialScore": 3001.771124621501,
+          "updatedScore": 3006.151303374421,
+          "teamId": 16675778
+        },
+        {
+          "id": 242842980,
+          "submissionId": 56393698,
+          "reward": 72775,
+          "index": 1,
+          "initialScore": 2994.9652997540134,
+          "updatedScore": 2990.5851210010933,
+          "teamId": 16732403
+        }
+      ],
+      "time": "2026-09-21T03:34:27.909154300Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 135835.0,
+      "opponent_money": 72667.0,
+      "delta": 63168.0,
+      "original_rewards": [
+        77380.0,
+        72775.0
+      ],
+      "seconds": 8.073875099999896,
+      "max_action_seconds": 0.856214
+    },
+    {
+      "rank": 8,
+      "team": "Orbital Terraformer",
+      "rating_snapshot": 3006.1,
+      "submission_id": 56263779,
+      "episode_id": 111463669,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242831229,
+          "submissionId": 56263779,
+          "reward": 83761,
+          "initialScore": 3005.7570068546784,
+          "updatedScore": 3001.771124621501,
+          "teamId": 16675778
+        },
+        {
+          "id": 242831230,
+          "submissionId": 56352346,
+          "reward": 85172,
+          "index": 1,
+          "initialScore": 3037.3008373350203,
+          "updatedScore": 3041.286719568198,
+          "teamId": 16640510
+        }
+      ],
+      "time": "2026-09-21T03:16:57.229420700Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 89787.0,
+      "opponent_money": 44927.0,
+      "delta": 44860.0,
+      "original_rewards": [
+        83761.0,
+        85172.0
+      ],
+      "seconds": 8.748153999999886,
+      "max_action_seconds": 0.910478
+    },
+    {
+      "rank": 9,
+      "team": "Yannik Schiffner",
+      "rating_snapshot": 3001.0,
+      "submission_id": 56392345,
+      "episode_id": 111469545,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242842987,
+          "submissionId": 56392345,
+          "reward": 123995,
+          "initialScore": 2994.5940159056895,
+          "updatedScore": 2998.096247414862,
+          "teamId": 16760701
+        },
+        {
+          "id": 242842988,
+          "submissionId": 56371083,
+          "reward": 109375,
+          "index": 1,
+          "initialScore": 2931.125101609783,
+          "updatedScore": 2927.6228701006107,
+          "teamId": 16887437
+        }
+      ],
+      "time": "2026-09-21T03:34:43.009334400Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 131885.0,
+      "opponent_money": 83783.0,
+      "delta": 48102.0,
+      "original_rewards": [
+        123995.0,
+        109375.0
+      ],
+      "seconds": 8.712033799999972,
+      "max_action_seconds": 0.89937
+    },
+    {
+      "rank": 9,
+      "team": "Yannik Schiffner",
+      "rating_snapshot": 3001.0,
+      "submission_id": 56392345,
+      "episode_id": 111463677,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242831251,
+          "submissionId": 56371083,
+          "reward": 84319,
+          "initialScore": 2938.472810215698,
+          "updatedScore": 2934.8070446718734,
+          "teamId": 16887437
+        },
+        {
+          "id": 242831252,
+          "submissionId": 56392345,
+          "reward": 93451,
+          "index": 1,
+          "initialScore": 2990.928250361865,
+          "updatedScore": 2994.5940159056895,
+          "teamId": 16760701
+        }
+      ],
+      "time": "2026-09-21T03:15:24.864188800Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 0,
+      "money": 96897.0,
+      "opponent_money": 84707.0,
+      "delta": 12190.0,
+      "original_rewards": [
+        84319.0,
+        93451.0
+      ],
+      "seconds": 9.232672399999956,
+      "max_action_seconds": 0.838015
+    },
+    {
+      "rank": 10,
+      "team": "Kaggledew Valley",
+      "rating_snapshot": 2997.2,
+      "submission_id": 56403652,
+      "episode_id": 111475922,
+      "seat": 0,
+      "agents": [
+        {
+          "id": 242855761,
+          "submissionId": 56403652,
+          "reward": 86119,
+          "initialScore": 2993.015500821779,
+          "updatedScore": 2997.296164778924,
+          "teamId": 16633132
+        },
+        {
+          "id": 242855762,
+          "submissionId": 56401905,
+          "reward": 85069,
+          "index": 1,
+          "initialScore": 2980.062338026712,
+          "updatedScore": 2975.781674069567,
+          "teamId": 16730612
+        }
+      ],
+      "time": "2026-09-21T03:55:47.172119600Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 1,
+      "money": 87137.0,
+      "opponent_money": 79823.0,
+      "delta": 7314.0,
+      "original_rewards": [
+        86119.0,
+        85069.0
+      ],
+      "seconds": 8.19217880000042,
+      "max_action_seconds": 0.805303
+    },
+    {
+      "rank": 10,
+      "team": "Kaggledew Valley",
+      "rating_snapshot": 2997.2,
+      "submission_id": 56403652,
+      "episode_id": 111474881,
+      "seat": 1,
+      "agents": [
+        {
+          "id": 242853677,
+          "submissionId": 56393046,
+          "reward": 104915,
+          "initialScore": 2901.635444798744,
+          "updatedScore": 2898.4876639904655,
+          "teamId": 16629972
+        },
+        {
+          "id": 242853678,
+          "submissionId": 56403652,
+          "reward": 110477,
+          "index": 1,
+          "initialScore": 2989.8677200135003,
+          "updatedScore": 2993.015500821779,
+          "teamId": 16633132
+        }
+      ],
+      "time": "2026-09-21T03:50:07.521612700Z",
+      "split": "heldout",
+      "candidate": "experiments/v6_top10_market.py",
+      "candidate_seat": 0,
+      "money": 101612.0,
+      "opponent_money": 106302.0,
+      "delta": -4690.0,
+      "original_rewards": [
+        104915.0,
+        110477.0
+      ],
+      "seconds": 10.056358899999395,
+      "max_action_seconds": 1.460703
+    }
+  ]
+}

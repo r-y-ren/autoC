@@ -1,0 +1,98 @@
+{
+  "variants": [
+    {
+      "name": "r2",
+      "path": "submissions/release_v10_r2/main.py",
+      "sha256": "b35b5b09fbec059ab7cbd2ba67a9fbb6d3e467ef5262f3e2ddba592b3e50c1c4"
+    },
+    {
+      "name": "yarn_sheep",
+      "path": "research/meta_rebuild_20260927/candidates/midgame_yarn_sheep.py",
+      "sha256": "25774777d0c0ef046018c68eb3204a7fdc032dd9a54d35b9c00ccb7fd0c611c1"
+    },
+    {
+      "name": "yarn_selective",
+      "path": "research/meta_rebuild_20260927/candidates/midgame_yarn_selective.py",
+      "sha256": "c7ac36b1305d4bb8675b9032e561347c1ec3f85741ccfb763913dfefe15b7053"
+    },
+    {
+      "name": "yarn_nomilk",
+      "path": "research/meta_rebuild_20260927/candidates/midgame_yarn_nomilk.py",
+      "sha256": "3c79287b13c061d6e92392462a845fc7bb25eafbc92c204c6405ab9c1dc7c227"
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/pipe16.py",
+      "family": "pipe16",
+      "panel": "new_public_program"
+    },
+    {
+      "path": "research/meta_rebuild_20260927/public_agents/dmitrii.py",
+      "family": "dmitrii",
+      "panel": "new_public_program"
+    }
+  ],
+  "seeds": [
+    362266734,
+    1937023860,
+    1215000230,
+    105901812,
+    1586045662,
+    1082225306,
+    366774585,
+    1535424212,
+    278825744,
+    952086862,
+    1670981963,
+    1519623924,
+    1868676230,
+    385605071,
+    1096951957,
+    462028262
+  ],
+  "reserve_seeds": [
+    1946879345,
+    1868342360,
+    2011776578,
+    1987235160,
+    328454623,
+    957624017,
+    1145175020,
+    1356077544,
+    321116469,
+    2125255859,
+    469917381,
+    780445742,
+    957674988,
+    900709512,
+    1356244948,
+    620532233
+  ],
+  "scope": "New development seeds. Reserve seeds are not used for this screen."
+}

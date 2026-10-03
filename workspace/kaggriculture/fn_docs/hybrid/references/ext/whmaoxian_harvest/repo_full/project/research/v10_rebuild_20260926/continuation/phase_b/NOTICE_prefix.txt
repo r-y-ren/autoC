@@ -1,0 +1,22 @@
+Kaggriculture V10-R2 local revision, 2026-09-26.
+
+This candidate retains the inherited V10 production, inventory, market and safety
+implementation and all original attribution notices. Local modifications use a
+net-five-unit initial wheat purchase instead of the fragile opening round trip;
+observed-stock reservations and bounded sale advances are enabled only when public
+production-layout similarity supports the common-route assumption. Otherwise the
+original V10 market settings remain in force. Per-game diagnostic counters reset.
+
+The current public opponents, additional reference policies and replay-analysis
+code are evaluation inputs only, not newly integrated submission source.
+No new test-world seeds, opponent identifiers or hidden rival inventories are
+encoded into the local decision rule. A separate offline audit may inspect a full
+replay but that data is never passed as an extra runtime observation.
+
+The previous unconditional candidate was rejected after independent confirmation;
+its evidence remains available. Local tournament results do not certify any online
+rating. The target is 2800; no online score is asserted and no submission is automatic.
+
+Local additions are under Apache-2.0, consistent with the inherited code.
+Complete inherited V10 NOTICE follows unchanged below.
+--------------------------------------------------------------------------

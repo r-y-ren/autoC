@@ -1,0 +1,28 @@
+import ast
+import hashlib
+import sys
+from pathlib import Path
+
+source = Path("main.py").read_bytes().replace(b"\r\n", b"\n")
+Path("main.py").write_bytes(source)
+digest = hashlib.sha256(source).hexdigest()
+
+VALID_SHA256 = {
+    "93831c18a43c49312a71fa67171224681c52c3fade0259403e8d8fae7973565f"
+}
+assert digest in VALID_SHA256, f"Digest mismatch! Expected one of {VALID_SHA256}, got {digest}"
+
+tree = ast.parse(source)
+modules = sorted({a.name.split(".")[0] for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names}
+                 | {n.module.split(".")[0] for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) and n.module})
+assert set(modules) <= set(sys.stdlib_module_names), f"Non-stdlib modules found: {set(modules) - set(sys.stdlib_module_names)}"
+
+namespace = {}
+exec(compile(source, "main.py", "exec"), namespace)
+entry = [v for v in namespace.values() if callable(v)][-1]
+assert entry.__name__ in ("agent", "kaggle_submission_agent", "_33_knock_agent"), f"Entrypoint failed! Resolved to: {entry.__name__}"
+del namespace
+
+print(f"✅ Verified main.py: {len(source):,} bytes | {source.count(b'\n'):,} lines | SHA256: {digest[:16]}...")
+print(f"✅ Stdlib modules: {', '.join(modules)}")
+print(f"✅ Production entrypoint: {entry.__name__}() [OK]")

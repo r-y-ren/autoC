@@ -1,0 +1,108 @@
+[
+  {
+    "name": "v9_safe",
+    "path": "research/v10_rebuild_20260926/generation2/v9_safe.py",
+    "settings": {},
+    "base": "v9",
+    "sha256": "15056a5624586fa26e6126b69008cbbcad8cf607220ed44df1cda5d9988b5973"
+  },
+  {
+    "name": "v9_ledger_safe",
+    "path": "research/v10_rebuild_20260926/generation2/v9_ledger_safe.py",
+    "settings": {},
+    "base": "ledger",
+    "sha256": "d5fbfe64153ee0dc1e4200204c389a719a3350f8b9b97d7b14b4a6241d6fbc31"
+  },
+  {
+    "name": "h4",
+    "path": "research/v10_rebuild_20260926/generation2/h4.py",
+    "settings": {
+      "_V10_ADV_HORIZON": 4
+    },
+    "base": "v10",
+    "sha256": "f1ad8df07a3aba7ba2475db7f8b3e42881362570106544e0d7cd2ca83c97f0d9"
+  },
+  {
+    "name": "h8",
+    "path": "research/v10_rebuild_20260926/generation2/h8.py",
+    "settings": {
+      "_V10_ADV_HORIZON": 8
+    },
+    "base": "v10",
+    "sha256": "11dfb141a96033e8164e6f3cc13df28fc7f2eb7b5c63169ec2f9c2912942a649"
+  },
+  {
+    "name": "h24",
+    "path": "research/v10_rebuild_20260926/generation2/h24.py",
+    "settings": {
+      "_V10_ADV_HORIZON": 24
+    },
+    "base": "v10",
+    "sha256": "e42df9bd518d26cfd02bf34c4b0737aae33c50bd35d460b08ac1ab729804f741"
+  },
+  {
+    "name": "h48",
+    "path": "research/v10_rebuild_20260926/generation2/h48.py",
+    "settings": {
+      "_V10_ADV_HORIZON": 48
+    },
+    "base": "v10",
+    "sha256": "70efe72b28da0175904b933fb28ec2a900a388a7a1bfe1f98f7ec946697c5603"
+  },
+  {
+    "name": "h12_stock12",
+    "path": "research/v10_rebuild_20260926/generation2/h12_stock12.py",
+    "settings": {
+      "_V10_ADV_THRESHOLD": 12
+    },
+    "base": "v10",
+    "sha256": "4aa4ebc85e90bf32f89d29be1f6adcb5122c1169d1960ae36dbd123173189e1a"
+  },
+  {
+    "name": "h24_stock12",
+    "path": "research/v10_rebuild_20260926/generation2/h24_stock12.py",
+    "settings": {
+      "_V10_ADV_HORIZON": 24,
+      "_V10_ADV_THRESHOLD": 12
+    },
+    "base": "v10",
+    "sha256": "0af29953981d6245eea63014874bb76c4fa35870691c95cd8b47bc90ee26d531"
+  },
+  {
+    "name": "h12_book",
+    "path": "research/v10_rebuild_20260926/generation2/h12_book.py",
+    "settings": {
+      "_ADV_BOOK": true,
+      "_ADV_SUBTRACT_DEBTS": true
+    },
+    "base": "v10",
+    "sha256": "3d56a75722d5f852259ee86812757ddfe589abcdfdedad02865cacb9cfbfb0aa"
+  },
+  {
+    "name": "h12_unprotected",
+    "path": "research/v10_rebuild_20260926/generation2/h12_unprotected.py",
+    "settings": {
+      "_ADV_PROTECT": false
+    },
+    "base": "v10",
+    "sha256": "94df467417eb6676447ee059aab540b70f4c6a6b1892c931ca51a4f215020cc4"
+  },
+  {
+    "name": "h12_observed4",
+    "path": "research/v10_rebuild_20260926/generation2/h12_observed4.py",
+    "settings": {
+      "_OR2_SN_K": 4
+    },
+    "base": "v10",
+    "sha256": "cb351e12483c521550e68ef2302f2ef1b1463f6442be400c8d5af34fc6eff38f"
+  },
+  {
+    "name": "h0",
+    "path": "research/v10_rebuild_20260926/generation2/h0.py",
+    "settings": {
+      "_V10_ADV_HORIZON": 0
+    },
+    "base": "v10",
+    "sha256": "4157fc6894fdc631bbbbe2bb2e8eb85542eba83b8a747125ac1373d4271b1b71"
+  }
+]

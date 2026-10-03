@@ -1,0 +1,53 @@
+
+# Counterfactual objective: bank-margin effect on BOTH farms, not own ROI alone.
+# One animal also changes the prices paid to every existing producer.
+# The official end-of-day refresh computes age using next_day; sale-day age
+# is placed_day + first_yield_day (no extra maturity-day offset).
+def _r9h_supply(obs,future):
+    day=int(obs['step'])//24;seat=int(obs['player'])
+    result={side:{k:[0.0]*30 for k in _R9H_PRODUCT} for side in ('own','rival')}
+    for index,farm in enumerate(obs['farms']):
+        target=result['own' if index==seat else 'rival']
+        for row in farm['tiles']:
+            for tile in row:
+                if not isinstance(tile,dict) or tile.get('animal') not in target:continue
+                kind=tile['animal'];first=int(tile['placed_day'])+_R9H_FIRST[kind];period=_R9H_PERIOD[kind]
+                target[kind][day]+=float(tile.get('yield_units',0))
+                first_remaining=True
+                for d in range(max(day+1,first),30):
+                    if (d-first)%period:continue
+                    if first_remaining:
+                        units=min(6,1+float(tile.get('pending_care_bonus',0))+.85*max(0,d-day-1))
+                        first_remaining=False
+                    else:units=min(6,1+.85*period)
+                    target[kind][d]+=units
+    for kind,start in future:
+        first=start+_R9H_FIRST[kind]
+        for d in range(max(day+1,first),30):
+            if (d-first)%_R9H_PERIOD[kind]==0:
+                result['own'][kind][d]+=min(6,1+.85*(_R9H_FIRST[kind] if d==first else _R9H_PERIOD[kind]))
+    return result
+
+def _r9h_value(obs,kind,supply,factor,future_demand):
+    day=int(obs['step'])//24;shops=obs['town']['unlocked_shops'];value=-_Y_COST[kind]
+    for animal,product in _R9H_PRODUCT.items():
+        inventory=float(obs['market']['inventory'][product]);period=_R9H_PERIOD[animal]
+        first=day+1+_R9H_FIRST[animal]
+        demand=sum(s in _R9H_DEMAND[product] for s in shops)*(2 if animal=='SHEEP' else 1)
+        expected_new=(2/8 if animal=='SHEEP' else 3/8)
+        for d in range(day,30):
+            unknown=max(0,min(8,d//3)-len(shops))
+            drain=1+6*(demand+unknown*expected_new*future_demand)
+            own=supply['own'][animal][d];rival=supply['rival'][animal][d]*factor
+            if animal==kind and d>=first and (d-first)%period==0:
+                own+=min(6,1+.85*(_R9H_FIRST[animal] if d==first else period))
+            for z in range(4):
+                delta=(own+rival-drain)/4
+                quote=_r37_market_price(product,inventory+delta/2)
+                value+=(own-rival)*quote/4
+                inventory+=delta if quote>1 else -drain/4
+    return value
+
+def round9_herd_margin_agent(observation,configuration=None):
+    return round9_herd_agent(observation,configuration)
+round9_herd_margin_agent.telemetry=_R9H_REPORT

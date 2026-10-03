@@ -1,0 +1,20 @@
+---
+## 1. Setup
+
+One thing worth being fussy about: **pin the engine version**, and then *verify the pin
+actually took*.
+
+This is not a formality. The same game on the same seed can pay out very differently
+across releases. Every number in the current reference dataset was measured on
+**1.32.7**, and the check below confirms that by replaying a game straight out of
+`head_to_head_games.csv` and requiring it to reproduce to the coin.
+
+Worse, checking the version string is not enough. `importlib.metadata.version()` reads
+the *newly written* package metadata, while `import kaggle_environments` can still
+resolve to an older copy earlier on `sys.path` — so a pip install reports success, the
+version check passes, and the engine you are actually running is the old one. I lost
+several hours to exactly that, comparing measurements taken on three different engines
+without realising it.
+
+So the cell below installs the pin, then **replays a game from the dataset and asserts
+the bank matches**. A behavioural fixture cannot be fooled by a stale import.

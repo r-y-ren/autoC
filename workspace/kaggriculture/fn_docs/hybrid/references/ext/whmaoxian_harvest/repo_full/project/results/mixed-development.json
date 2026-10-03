@@ -1,0 +1,187 @@
+{
+  "environment_version": "1.32.7",
+  "agent": "main.py",
+  "agent_sha256": "9edce37997cfec23228b0ba467422ef6ffa7cdf2c5e4868eec7f660db2bad2d3",
+  "opponent": "agents/baseline_v1.py",
+  "games": 6,
+  "wins": 6,
+  "ties": 0,
+  "mean_money": 40602.0,
+  "results": [
+    {
+      "seed": 20,
+      "seat": 0,
+      "money": 42549.0,
+      "opponent_money": 37239.0,
+      "delta": 5310.0,
+      "result": "win",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 2.917,
+      "final_carried": 0,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "seed": 20,
+      "seat": 1,
+      "money": 42549.0,
+      "opponent_money": 37239.0,
+      "delta": 5310.0,
+      "result": "win",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 5.565,
+      "final_carried": 0,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "seed": 21,
+      "seat": 0,
+      "money": 39525.0,
+      "opponent_money": 31637.0,
+      "delta": 7888.0,
+      "result": "win",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 2.839,
+      "final_carried": 0,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "seed": 21,
+      "seat": 1,
+      "money": 39525.0,
+      "opponent_money": 31637.0,
+      "delta": 7888.0,
+      "result": "win",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 3.583,
+      "final_carried": 0,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "seed": 22,
+      "seat": 0,
+      "money": 39514.0,
+      "opponent_money": 32160.0,
+      "delta": 7354.0,
+      "result": "win",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 3.78,
+      "final_carried": 0,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      }
+    },
+    {
+      "seed": 22,
+      "seat": 1,
+      "money": 39950.0,
+      "opponent_money": 34037.0,
+      "delta": 5913.0,
+      "result": "win",
+      "statuses": [
+        "DONE",
+        "DONE"
+      ],
+      "states": 720,
+      "seconds": 2.738,
+      "final_carried": 0,
+      "final_shed": {
+        "WHEAT": 0,
+        "CARROT": 0,
+        "TOMATO": 0,
+        "STRAWBERRY": 0,
+        "MELON": 0,
+        "EGG": 0,
+        "MILK": 0,
+        "WOOL": 0,
+        "FERTILIZER": 0,
+        "GOOSE": 0,
+        "COW": 0,
+        "SHEEP": 0
+      }
+    }
+  ],
+  "import_notices": "Loading environment halite failed: No module named 'numpy'\nLoading environment kore_fleets failed: No module named 'numpy'\nLoading environment lux_ai_s3 failed: No module named 'numpy'\nLoading environment open_spiel_env failed: No module named 'numpy'\nLoading environment reinforce_tactics failed: No module named 'numpy'\n"
+}

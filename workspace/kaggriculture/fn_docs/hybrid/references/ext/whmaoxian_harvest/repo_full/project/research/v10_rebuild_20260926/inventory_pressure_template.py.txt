@@ -1,0 +1,31 @@
+# Experimental current-observation inventory controller; no opponent identities.
+_R4_PARENT = r2_opening_agent
+_R4_HORIZON = 24
+_R4_RATIO = 2.0
+_R4_BATCH = 8
+_R4_MIN_STOCK = 4
+_R4_REPORT = {'turns':0,'extra_units':0,'errors':0}
+def r4_inventory_pressure(observation,configuration=None):
+    step=int(observation['step']);seat=int(observation['player'])
+    if step==0:
+        for key in _R4_REPORT:_R4_REPORT[key]=0
+    action=_R4_PARENT(observation,configuration)
+    if not _ig_standard(configuration) or not 216<=step<696:return action
+    stock=projected_shed(action,FarmView(observation))
+    rival=_OR2_STATE.get(seat,{}).get('stock',{})
+    orders=[list(o) for o in action.get('market',[])]
+    shops=observation.get('town',{}).get('unlocked_shops',[])
+    end=min(719,step+_R4_HORIZON)
+    ticks=sum(t%4==0 for t in range(step,end))
+    centers=sum(t%24==0 for t in range(step,end))
+    additions=0
+    for item in ('STRAWBERRY','MILK','WOOL','MELON','EGG','CARROT','TOMATO'):
+        already=sum(int(o[2]) for o in orders if len(o)>=3 and o[:2]==['SELL',item])
+        free=max(0,int(stock.get(item,0))-already)
+        if free<=0 or int(observation['market']['prices'].get(item,0))<=1:continue
+        demand=centers
+        for shop in shops:
+            products=_OR2_SHOPS.get(shop,())
+            if item in products:demand+=ticks*(2 if len(products)==1 else 1)
+        exposure=max(0,int(rival.get(item,0)))
+        if exposure<max(_R4_MIN_STOCK,_R4_RATIO*demand):continue

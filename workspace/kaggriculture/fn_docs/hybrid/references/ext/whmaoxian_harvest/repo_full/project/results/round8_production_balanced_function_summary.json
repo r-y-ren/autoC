@@ -1,0 +1,192 @@
+[
+  {
+    "kind": "modified_configuration_functional_check_not_rating_evidence",
+    "configuration_override": {
+      "townCenterSellInterval": 12
+    },
+    "seed": 688041503,
+    "rewards": [
+      156091.0,
+      139953.0
+    ],
+    "telemetry": {
+      "eligible": 1,
+      "requested_workers": 26,
+      "confirmed_workers": 26,
+      "hire_shortfalls": 0,
+      "budget_declines": 0,
+      "errors": 0,
+      "plants": 19,
+      "harvest_requests": 38,
+      "fertilizer_requests": 32
+    },
+    "state": {
+      "t19_forecast_value": 1972,
+      "t19_forecast_extra_labor": 3338,
+      "t19_enabled": true,
+      "committed": true
+    },
+    "replay": "results\\round8_production_function-seed688041503.json.gz",
+    "daily": [
+      {
+        "day": 18,
+        "plants": 19,
+        "watered": 19,
+        "fertilized": 0,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 0,
+        "shed_tomatoes": 0,
+        "hire_count": 14,
+        "hire_spend": 986
+      },
+      {
+        "day": 19,
+        "plants": 0,
+        "watered": 0,
+        "fertilized": 0,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 0,
+        "shed_tomatoes": 0,
+        "hire_count": 11,
+        "hire_spend": 232
+      },
+      {
+        "day": 20,
+        "plants": 0,
+        "watered": 19,
+        "fertilized": 0,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 0,
+        "shed_tomatoes": 0,
+        "hire_count": 13,
+        "hire_spend": 609
+      },
+      {
+        "day": 21,
+        "plants": 0,
+        "watered": 0,
+        "fertilized": 0,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 0,
+        "shed_tomatoes": 0,
+        "hire_count": 11,
+        "hire_spend": 232
+      },
+      {
+        "day": 22,
+        "plants": 0,
+        "watered": 19,
+        "fertilized": 0,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 0,
+        "shed_tomatoes": 0,
+        "hire_count": 12,
+        "hire_spend": 376
+      },
+      {
+        "day": 23,
+        "plants": 0,
+        "watered": 0,
+        "fertilized": 0,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 0,
+        "shed_tomatoes": 0,
+        "hire_count": 12,
+        "hire_spend": 376
+      },
+      {
+        "day": 24,
+        "plants": 0,
+        "watered": 19,
+        "fertilized": 0,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 0,
+        "shed_tomatoes": 0,
+        "hire_count": 13,
+        "hire_spend": 609
+      },
+      {
+        "day": 25,
+        "plants": 0,
+        "watered": 19,
+        "fertilized": 16,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 35,
+        "shed_tomatoes": 0,
+        "hire_count": 14,
+        "hire_spend": 986
+      },
+      {
+        "day": 26,
+        "plants": 0,
+        "watered": 19,
+        "fertilized": 16,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 70,
+        "shed_tomatoes": 0,
+        "hire_count": 14,
+        "hire_spend": 986
+      },
+      {
+        "day": 27,
+        "plants": 0,
+        "watered": 19,
+        "fertilized": 0,
+        "harvested": 70,
+        "live_tomatoes": 19,
+        "held_tomatoes": 35,
+        "shed_tomatoes": 10,
+        "hire_count": 15,
+        "hire_spend": 1596
+      },
+      {
+        "day": 28,
+        "plants": 0,
+        "watered": 19,
+        "fertilized": 0,
+        "harvested": 0,
+        "live_tomatoes": 19,
+        "held_tomatoes": 70,
+        "shed_tomatoes": 0,
+        "hire_count": 13,
+        "hire_spend": 609
+      },
+      {
+        "day": 29,
+        "plants": 0,
+        "watered": 0,
+        "fertilized": 0,
+        "harvested": 70,
+        "live_tomatoes": 19,
+        "held_tomatoes": 0,
+        "shed_tomatoes": 0,
+        "hire_count": 15,
+        "hire_spend": 1596
+      }
+    ],
+    "actual_tomato_market_and_storage": {
+      "0": {
+        "sold": 132,
+        "revenue": 63952,
+        "tomatoes_discarded": 8
+      },
+      "1": {
+        "sold": 80,
+        "revenue": 43884,
+        "tomatoes_discarded": 0
+      }
+    },
+    "final_shed_tomatoes": 0,
+    "final_carried_tomatoes": 0,
+    "harvested_tomatoes": 140
+  }
+]

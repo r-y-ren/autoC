@@ -1,0 +1,29 @@
+
+
+# Isolated V10 ablation: reduce the zero-day wheat round trip while retaining
+# exactly five net units of wheat for the existing feeding and planting tape.
+_R10OC_PARENT = round9_slack_agent
+_R10OC_REPORT = {'changed': 0, 'skipped': 0, 'errors': 0}
+
+
+def round10_opening_cash_v2_agent(observation, configuration=None):
+    action = _R10OC_PARENT(observation, configuration)
+    try:
+        if int(observation.get('step', -1)) != 0:
+            return action
+        market = action.get('market') or []
+        # Exact action-shape guard: no modification if an upstream route or
+        # future V9 revision changes the opening plan.
+        if len(market) < 2 or market[0] != ['BUY_PRODUCT', 'WHEAT', 20] or market[1] != ['SELL', 'WHEAT', 15]:
+            _R10OC_REPORT['skipped'] += 1
+            return action
+        revised = dict(action)
+        revised['market'] = [['BUY_PRODUCT', 'WHEAT', 15], ['SELL', 'WHEAT', 10]] + [list(order) for order in market[2:]]
+        _R10OC_REPORT['changed'] += 1
+        return revised
+    except Exception:
+        _R10OC_REPORT['errors'] += 1
+        return action
+
+
+round10_opening_cash_v2_agent.telemetry = _R10OC_REPORT

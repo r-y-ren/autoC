@@ -1,0 +1,95 @@
+{
+  "variants": [
+    {
+      "name": "repeat_one",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_one.py",
+      "sha256": "4a01d613f12da88fe551ad553320b5fbee1bf7478887606c77385bc0026ecd5e",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 1,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": false
+      }
+    },
+    {
+      "name": "repeat_two",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_two.py",
+      "sha256": "c27474c20d3f90b5dbfaf07ba35e15f861525341295295d1267e98121cda8615",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 2,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": false
+      }
+    },
+    {
+      "name": "repeat_three",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_three.py",
+      "sha256": "2c220768897e806ed550381eddd0911f34844137d6587342e68240eece4dd773",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 3,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": false
+      }
+    },
+    {
+      "name": "repeat_nomilk",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_nomilk.py",
+      "sha256": "50cf4ae22bb580af4a875d3260a1706b6a1eb92db764271940d783db7413a16d",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 3,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": true,
+        "REPAIR": false
+      }
+    },
+    {
+      "name": "repeat_repair",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_repair.py",
+      "sha256": "c19ab304305748cf2b1d95e352562dd81a277203c4fc059489dc6ef26f559f0b",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 3,
+        "RESERVE": 150,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": true
+      }
+    },
+    {
+      "name": "repeat_lowreserve",
+      "path": "research/meta_rebuild_20260927/candidates/repeat_lowreserve.py",
+      "sha256": "291be59df4d6233681cad35ad4493fe06760e02607efe2a6d55c5ed64226ed51",
+      "parameters": {
+        "FROM": 72,
+        "TO": 264,
+        "COW_FLOOR": 2,
+        "LIMIT": 3,
+        "RESERVE": 25,
+        "MIN_GAIN": 600,
+        "NO_MILK": false,
+        "REPAIR": true
+      }
+    }
+  ],
+  "scope": "Known-world mechanism screening. Not rating validation."
+}

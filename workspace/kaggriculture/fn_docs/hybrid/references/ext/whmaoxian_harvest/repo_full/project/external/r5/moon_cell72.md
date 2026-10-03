@@ -1,0 +1,3 @@
+### Worked example: identical goods, different positions
+
+This historical visible-state example sells two milk, two wool and two eggs, followed by the same wheat-seed purchase in slot 3. The original milk → wool → egg order produces modeled trade receipts 347/347 against its clone. Wool → egg → milk produces 349/332, a modeled relative change of +17. The code below loads the exact frozen helper and verifies those numbers. Its clone holds the same projected stock and original order list; the model assumes unlimited money and excludes fixed-price purchases from trade receipts. It is an editable explanation, not a full-game counterfactual. A completed local trace supplied the visible stock and market inputs embedded below.

@@ -1,0 +1,84 @@
+{
+  "captured_utc": "2026-09-26T22:45:26.291328+00:00",
+  "submission_id": 56581759,
+  "board_capture": "2026-09-26T22:36:51.801021+00:00",
+  "public_games": 84,
+  "wins": 76,
+  "losses": 8,
+  "ties": 0,
+  "latest": [
+    {
+      "episode": 113880752,
+      "end": "2026-09-26T22:36:25.180857100Z",
+      "seat": 0,
+      "margin": 1659,
+      "rating": 2008.2011373678909,
+      "opponent_initial_rating": 1960.1649891605794
+    }
+  ],
+  "opponent_rating_ranges": {
+    "2000": 2,
+    "2400": 0,
+    "2600": 0,
+    "2800": 0
+  },
+  "checked_replays": [
+    {
+      "episode": 113880752,
+      "end": "2026-09-26T22:36:25.180857100Z",
+      "seat": 0,
+      "margin": 1659,
+      "rating": 2008.2011373678909,
+      "opponent_initial_rating": 1960.1649891605794,
+      "source_url": "https://www.kaggle.com/competitions/episodes/113880752/replay.json",
+      "replay_sha256": "c4fbc9e7096d9ff29269c77f17058cb2f7b5727fa8f414296b81d57f037150a1",
+      "parity": {
+        "release_v10_r2": {
+          "matching_actions": 719,
+          "total": 719,
+          "first_difference_steps": []
+        },
+        "release_v10": {
+          "matching_actions": 673,
+          "total": 719,
+          "first_difference_steps": [
+            0,
+            150,
+            167,
+            340,
+            343
+          ]
+        }
+      }
+    },
+    {
+      "episode": 113814844,
+      "end": "2026-09-26T19:05:56.727561900Z",
+      "seat": 1,
+      "margin": -591,
+      "rating": 1952.3542518803076,
+      "opponent_initial_rating": 1922.5559410614787,
+      "source_url": "https://www.kaggle.com/competitions/episodes/113814844/replay.json",
+      "replay_sha256": "ec10217a4d6ef3e3193751f790622154ecf5b350bdc31a8f5f340d5518d83bbb",
+      "parity": {
+        "release_v10_r2": {
+          "matching_actions": 719,
+          "total": 719,
+          "first_difference_steps": []
+        },
+        "release_v10": {
+          "matching_actions": 689,
+          "total": 719,
+          "first_difference_steps": [
+            0,
+            385,
+            399,
+            409,
+            414
+          ]
+        }
+      }
+    }
+  ],
+  "scope": "Post-game rating and exact recorded-action checks, not a current rating guarantee."
+}

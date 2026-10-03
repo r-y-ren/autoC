@@ -1,0 +1,27 @@
+
+# Midgame herd experiment: retain worker geometry, vary the first cow batch.
+_K28_HERD_PARENT=phase_b_agent
+_K28_HERD_NATIVE=(_CS_OPTIONS,_CS_SHOP_RULE,_CS_RATIO,_CS_MIN_GAIN)
+_K28_HERD_REPORT={'eligible_turns':0,'turns':0}
+_MP_REPORT=_K28_HERD_REPORT
+
+def midgame_herd_agent(observation,configuration=None):
+    global _CS_OPTIONS,_CS_SHOP_RULE,_CS_RATIO,_CS_MIN_GAIN
+    step=int(observation['step']); shops=observation['town']['unlocked_shops']
+    if step==0:
+        for key in _K28_HERD_REPORT:_K28_HERD_REPORT[key]=0
+    _K28_HERD_REPORT['turns']+=1
+    _CS_OPTIONS,_CS_SHOP_RULE,_CS_RATIO,_CS_MIN_GAIN=_K28_HERD_NATIVE
+    milk=sum(s in ('PIZZA_SHOP','ICE_CREAM_SHOP','SMOOTHIE_SHOP') for s in shops)
+    wool=shops.count('YARN_STORE')
+    eligible=wool>0 and (not _K28_NO_MILK or milk==0)
+    if eligible and 144<=step<192:
+        _CS_OPTIONS=('SHEEP',)
+        _CS_SHOP_RULE=''
+        _CS_RATIO=_K28_RATIO
+        _CS_MIN_GAIN=_K28_GAIN
+        _K28_HERD_REPORT['eligible_turns']+=1
+    return _K28_HERD_PARENT(observation,configuration)
+midgame_herd_agent.telemetry=_K28_HERD_REPORT
+agent=midgame_herd_agent
+kaggle_submission_agent=midgame_herd_agent

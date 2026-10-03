@@ -1,0 +1,25 @@
+import hashlib, tarfile, contextlib, io
+from pathlib import Path
+from kaggle_environments.agent import get_last_callable
+
+with tarfile.open(archive, "r:gz") as tf:
+    members = tf.getnames()
+    assert members == EXPECTED_MEMBERS
+    archived = tf.extractfile("main.py").read()
+    assert archived == Path("main.py").read_bytes()
+    assert hashlib.sha256(archived).hexdigest() == EXPECTED_MAIN_SHA256
+
+assert hashlib.sha256(archive.read_bytes()).hexdigest() == EXPECTED_ARCHIVE_SHA256
+with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+    archived_entry = get_last_callable(archived.decode("utf-8"), path="archived_main.py")
+assert callable(archived_entry)
+assert archived_entry.__name__ == "agent", f"unexpected archived entrypoint: {archived_entry.__name__}"
+
+print("variant:", VARIANT)
+print("files:", ", ".join(members))
+print("internet required: NO")
+print("external Dataset required: NO")
+print("archive SHA-256:", EXPECTED_ARCHIVE_SHA256)
+print("archive byte check: PASS")
+print("archived production entrypoint:", archived_entry.__name__)
+print("production loader gate: PASS")

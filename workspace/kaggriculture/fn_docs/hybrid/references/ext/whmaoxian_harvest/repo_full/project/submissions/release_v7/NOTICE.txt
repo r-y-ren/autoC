@@ -1,0 +1,22 @@
+Kaggriculture v7 local integration, 2026-09-22. Apache-2.0.
+Base: shiiin9, Your Market List Is an Order Book, including the complete
+Ahmed Berat Ozer V55 lineage and all notices embedded in main.py.
+https://www.kaggle.com/code/shiiin9/your-market-list-is-an-order-book
+Appended mechanisms: Ahmed Berat Ozer V56 EXP402 remaining-planting seed
+budget and EXP410 harvest-aware fertilizer cap.
+https://www.kaggle.com/code/ahmedberatozer/kaggriculture-v56-smarter-seeds-and-fertilizer
+Local integration: attach the V56 tail to Orderbook's _cxd_agent, expose
+combined telemetry, preserve Orderbook source bytes and its constants.
+The repository's Vadim/DSM public-replay research is separate: this artifact
+contains no claim of access to either author's private strategy source code.
+No leaderboard rating is asserted by this package.
+
+Inherited notices from the preceding public-source release follow verbatim:
+--------------------------------------------------------------------------
+Local v54 derivative, 2026-09-20. Direct source: https://www.kaggle.com/code/nathanjacob/kaggriculture-pipe16-idle-workers
+All original source notices retained. Apache-2.0.
+Lean Flock: Ahmed Berat Ozer; Metav4 farm and sheep/crew efficiency: Thomas Tschinkel; productive opening: Dmitrii Gluzdov, adapted by Nathan Jacob.
+Upstream includes yhay81, prvsiyan, aurax7, tetsutani, Rayk Kretzschmar, degnonguidi, leoprovorov, destbreso, lucifer19, salemali7, and Kaggle environment contributors.
+Local changes: explicit complete agent export; optional external sell-library path disabled for V54. No claim of independent production plans or original public evaluation reproduction.
+
+Dmitrii Gluzdov, September 2026: delay temporary opening wheat harvest to day three; restore pasture before cow placement. Apache-2.0. Independent Codex, DeepSeek and Grok candidate screen; only the passing later-harvest layer is included.

@@ -1,0 +1,20 @@
+import pandas as pd
+
+route_rules = pd.DataFrame([
+    ("Visible-state route", "from live state", "current public farm + shop state", "select the supplied deterministic route family"),
+    ("Opening pressure", "step 1–2", "public post-opening cash", "use normal pressure or the narrow mirror response"),
+    ("Input protection", "mid season", "funded current orders", "protect WHEAT and service obligations"),
+    ("Race / sale handling", "bounded windows", "known own + public rival state", "preserve supplied reservation and recovery contracts"),
+    ("Storage protection", "late day", "physical inventory", "avoid or recover avoidable capacity loss under supplied checks"),
+    ("Terminal planner", "late season", "physical closeout", "finish the supplied deterministic plan conservatively"),
+], columns=["phase", "step", "decision", "purpose"])
+
+safety_rules = pd.DataFrame([
+    ("Observable state", "required", "runtime decisions come from the environment observation"),
+    ("Mirror response", "cash equality", "no seed, username, or hidden-state lookup"),
+    ("Available stock", "required", "do not sell unsupported quantity"),
+    ("Capacity", "checked", "respect shed and worker inventory constraints"),
+    ("Funded purchases", "preserved", "guards should not break already-funded buys"),
+    ("Fallback", "parent action", "uncertain cases preserve the supplied action"),
+], columns=["control", "value", "role"])
+route_rules

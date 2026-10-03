@@ -1,0 +1,134 @@
+{
+  "seeds": [
+    1516552141,
+    1195617480,
+    292477857,
+    1930478240,
+    171197047,
+    674159763,
+    1357367409,
+    548226051,
+    503317291,
+    1058839211,
+    1153682260,
+    1963653427,
+    147731888,
+    65885264,
+    950513134,
+    642387993,
+    1995069189,
+    1851489214,
+    1778022566,
+    968679520,
+    1769068397,
+    1626705956,
+    8020614,
+    1298164556,
+    1278611197,
+    1555205323,
+    156832490,
+    1577904321,
+    1648589578,
+    170836509,
+    454488202,
+    890572096,
+    710767210,
+    331413017,
+    130721171,
+    633153076,
+    997840689,
+    1423417059,
+    1131025279,
+    351254060,
+    707208312,
+    1220118768,
+    1119182582,
+    1359634378,
+    1437197749,
+    1378846319,
+    1192414411,
+    690335688
+  ],
+  "variants": [
+    {
+      "path": "research/macro_population_20260927/route_population/native_control.py",
+      "route": null,
+      "sha256": "e2a21f0faf76e5b6261c4df58b900d4c82e2638257fee5f0ab6ca008f88fb049"
+    },
+    {
+      "path": "research/macro_population_20260927/route_population/route_0.py",
+      "route": 0,
+      "sha256": "01606047cb50e1ce991bcabf1b86b4e6daef366345d858d3c0ec171166f4e515"
+    },
+    {
+      "path": "research/macro_population_20260927/route_population/route_9.py",
+      "route": 9,
+      "sha256": "edfbcb6bb7eb9d297f37a71fd06aa8327f5fd0a3e8b2ac6e219b4298b8daed16"
+    },
+    {
+      "path": "research/macro_population_20260927/route_population/route_12.py",
+      "route": 12,
+      "sha256": "471375214412aa6677cb02234e6498ea8567f5e7bc9df6003f8a822d5735ab69"
+    },
+    {
+      "path": "research/macro_population_20260927/route_population/route_100.py",
+      "route": 100,
+      "sha256": "1e002fe902e328d1c7b3fa45cb831b89b39556e34e509d5fb043fab45310558a"
+    },
+    {
+      "path": "research/macro_population_20260927/route_population/route_101.py",
+      "route": 101,
+      "sha256": "6568e06dce280bf60329748a540c5787cad9b827f4ba8fe5821dd5f68889e478"
+    },
+    {
+      "path": "research/macro_population_20260927/route_population/route_110.py",
+      "route": 110,
+      "sha256": "e22b69fda4f5f9c33ce9ea6ed61ec35ac347b478c612b4481b796c481366fbc0"
+    },
+    {
+      "path": "research/macro_population_20260927/route_population/route_123.py",
+      "route": 123,
+      "sha256": "efec81c1659130be6b41d78f959f1361f949557cad2a07c7fb4d9a90bb127bc6"
+    },
+    {
+      "path": "research/macro_population_20260927/route_population/route_128.py",
+      "route": 128,
+      "sha256": "61f3d9d5795da61906f9acc0fd98c8c2602890842a022846c76a933802c3a0ec"
+    }
+  ],
+  "roster": [
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/fieldcraft/single_file.py",
+      "family": "fieldcraft",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/notebooks/extracted/aurax/main.py",
+      "family": "aurax",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_rebuild_20260926/continuation/marketshock_adapter.py",
+      "family": "marketshock",
+      "panel": "public_program"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_02.py",
+      "family": "top_style_02",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "research/v10_top10_20260926/study_opponents/style_03.py",
+      "family": "top_style_03",
+      "panel": "responsive_proxy"
+    },
+    {
+      "path": "submissions/release_v10_r2/main.py",
+      "family": "r2",
+      "panel": "direct_reference"
+    }
+  ],
+  "total_games": 5184,
+  "feature_scope": "First two already-opened shops only.",
+  "scope": "Development for route selection, not final validation."
+}

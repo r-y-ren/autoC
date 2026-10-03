@@ -1,0 +1,28 @@
+
+# Choose a complete existing production route once the first two shops are known.
+_K28R_ROUTER_PARENT=_IMPL.chassis.router
+_K28R_ENTRY=agent
+_K28R_REPORT={'selected':-1,'original':-1,'changes':0}
+_MP_REPORT={'route':_K28R_REPORT,'finish':_TF_REPORT,'terminal':_TS_REPORT}
+def _k28r_router(observation,step,state):
+    was_decided=bool(state.get('day6'))
+    original=_K28R_ROUTER_PARENT(observation,step,state)
+    if step>=144 and not was_decided:
+        shops=tuple(observation['town']['unlocked_shops'][:2])
+        chosen=original
+        if 'YARN_STORE' in shops:
+            chosen=_R110_OLD_SHOPS.get(shops,original) if _K28R_MODE=='oldmap' else _K28R_ROUTE
+            if chosen not in _IMPL.chassis.routes:chosen=original
+            state['route']=chosen
+        _K28R_REPORT.update(selected=chosen,original=original,changes=int(chosen!=original))
+        return chosen
+    return original
+_IMPL.chassis.router=_k28r_router
+
+def route_choice_agent(observation,configuration=None):
+    if int(observation['step'])==0:
+        _K28R_REPORT.update(selected=-1,original=-1,changes=0)
+    return _K28R_ENTRY(observation,configuration)
+route_choice_agent.telemetry=_MP_REPORT
+agent=route_choice_agent
+kaggle_submission_agent=route_choice_agent
