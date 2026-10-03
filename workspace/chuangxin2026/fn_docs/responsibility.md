@@ -30,6 +30,12 @@
 - serve_console ← R10
 - bridge_to_sitl ← R11 [P1]
 - animate_link_state ← R12 [P1]
+# ── 演进轮一增量（R13–R16，2026-10-03）──
+- launch_console ← R13
+- build_mid_material ← R16
+- serve_console ← R10+R13 [改造：+render_static_pages]
+- execute_scenario ← R5+R14+R15 [改造：+scaled_criteria/+apply_calibration/+resume_from]
+- shared 增：register_cjk_font
 
 ## 需求覆盖矩阵（P1 在 R 号后标注；非功能约束不进矩阵，fn-close 终检对照 requirements 非功能节）
 
@@ -47,6 +53,10 @@
 | R10 | serve_console |
 | R11 [P1] | bridge_to_sitl |
 | R12 [P1] | animate_link_state |
+| R13 | launch_console；serve_console [改造]（报告中心/帮助页，经 render_static_pages） |
+| R14 | execute_scenario [改造]（scaled_criteria 判据同步缩放+倍率入 run 目录，build_report 出脚注） |
+| R15 | execute_scenario [改造]（apply_calibration 功率换算+resume_from 断点续跑）；build_report [改造]（标定状态行） |
+| R16 | build_mid_material |
 
 ## 共享函数（shared/：多顶层共用；矩阵挂全部受益需求）
 
@@ -287,3 +297,76 @@
 - **矩阵反向 + 树**：全部 27 个函数均有调用链抵达程序入口 ✓（parse_serial_line→start_dut_source→collect_dut_samples→入口；共享函数调用方各标 3–5 个顶层；无死代码）。
 - **单一功能转变**：逐块复核 ✓——每块职责只做一件事；"发射+归档"是同一转变的两面（一次受控注入的完整产出），未再出现复合不相干转变。
 - **函数总数 27 > 20 → 预警**（已向用户呈现，见门口报告；收缩选项待用户裁决）。
+
+
+---
+
+## 演进轮一增量块（R13–R16，2026-10-03；受影响旧块以 [改造] 说明目标态，旧块原文未动）
+
+## 功能块 launch_console ← R13
+
+（块引言：产品最后一公里的入口件——双击即用。start.sh/start.bat 与 scripts/launch.py 的核心：起操控台服务、自动打开浏览器、失败给可操作提示；--selfcheck 自检模式供验收。）
+
+- **launch_console** [L0|新增]
+  - 职责：以子进程/线程启动操控台服务（复用 serve_console），等待 /api/health 就绪后用系统默认浏览器打开操控台地址；端口被占/依赖缺失→打印可操作提示（装依赖/换端口）退出非 0；--selfcheck 只验证"服务起+健康检查过+URL 打印"不起浏览器，返回退出码。
+  - 签名意图：输入: {host, port, selfcheck, no_browser} / 输出: 退出码（0=成功拉起） / 错误: 服务起不来→提示后非 0 退出。
+  - 调用方：程序入口（scripts/launch.py；start.sh/start.bat 包装）
+  - tested 策略：自有单测（selfcheck 路径，无头）
+  - 核验命令：测试: R13 启动器自检（start.sh --selfcheck rc=0，URL 打印）——继承 R13 验收方式
+
+## 功能块 build_mid_material ← R16
+
+（块引言：中期材料编译线。docs/build.py 的核心：定位最新 run 目录→汇编失效电平表/三元曲线/识别指标/仪器局限声明为 Markdown 材料稿；数字仅引自 runs 产物与 metrics.json。）
+
+- **build_mid_material** [L0|新增]
+  - 职责：扫描 runs/ 取最新完整 run（含 report.md 与 steps.jsonl）→读取失效电平/步进记录/识别指标（train_report.md 若在）→按模板生成材料稿（含图相对链接、固定仪器局限声明、数字来源注记）；--final 走同模板加深版（结题轮用）。任何稿内数字必须能在所引 run 产物中找到，否则生成失败并指明。
+  - 签名意图：输入: {mode: mid|final, runs_dir, out_path} / 输出: 材料稿路径 / 错误: 无可用 run/数字溯源失败→非 0 退出并列出失败数字。
+  - 调用方：程序入口（docs/build.py）
+  - tested 策略：自有单测（夹具 run 目录）
+  - 核验命令：测试: R16 编译（build.py --mid 产 mid_draft.md+数字溯源断言）——继承 R16 验收方式
+
+## 增量子函数块
+
+- **render_static_pages** [L1|新增]（挂 serve_console 子树，R13）
+  - 职责：操控台静态页渲染——/reports 报告中心（历史 run 列表+单报告 Markdown→HTML 渲染，复用既有 /api/runs 与 /api/runs/{name}/report 数据）与 /help 快速上手页（零术语：五步走查流程+急停说明）。
+  - 签名意图：输入: HTTP 请求（路径参数 run 名） / 输出: HTML 响应 / 错误: run 不存在→404 页。
+  - 调用方：serve_console
+  - tested 策略：上游覆盖: serve_console
+  - 核验命令：上游覆盖: serve_console——继承 R13 验收（零代码走查含"点开历史报告"）
+- **register_cjk_font**（shared 增，R13）
+  - 职责：把仓库内置 OFL 中文字体注册进 matplotlib（font_manager），幂等；注册后全平台渲染中文标签零 findfont fallback 告警。
+  - 签名意图：输入: 无（字体文件路径内定于包内资源） / 输出: 注册后的字体名 / 错误: 字体文件缺失→异常（属打包错误，立即暴露）。
+  - 调用方：plot_triple_curves, train_classifier
+  - tested 策略：自有单测
+  - 核验命令：测试: R13 字体测试（渲染三图断言无 fallback 告警）
+- **scaled_criteria** [L1|新增]（挂 execute_scenario 子树，R14）
+  - 职责：纯函数——按速度因子返回同步缩放后的判据（sustain_s/disconnect_s 除以倍速，等效真实时间口径；safety 顶不动）与倍率信息（供写 run 目录 speed.json）。
+  - 签名意图：输入: 判据对象, speed: float / 输出: (缩放后判据, {speed, note}) / 错误: speed<=0→ValueError。
+  - 调用方：execute_scenario
+  - tested 策略：自有单测
+  - 核验命令：测试: R14（40 速国标卡 fail_levels 非空+报告脚注 grep）——继承 R14 验收
+- **apply_calibration** [L1|新增]（挂 execute_scenario 子树，R15）
+  - 职责：纯函数——读 calibration.json（存在）→对给定功率档按频点查表/内插换算后端增益并返回来源标注；文件缺省→恒等映射+"未标定"标注。
+  - 签名意图：输入: 功率档 dB, 频点 Hz, calibration 路径 / 输出: (后端增益 dB, 来源: "calibrated|identity") / 错误: 表损坏→按 identity 降级并附告警。
+  - 调用方：execute_scenario
+  - tested 策略：自有单测（有表/无表两分支）
+  - 核验命令：测试: R15（标定存在时 report 含"标定表已应用"）——继承 R15 验收
+- **resume_from** [L1|新增]（挂 execute_scenario 子树，R15）
+  - 职责：纯函数——读 run 目录 steps.jsonl 进度→返回（起跑步索引, 已完成步记录清单, kpi 追加模式标志）；无进度/已完成→(0, [], False)/完成态。
+  - 签名意图：输入: run 目录, 完整步进计划 / 输出: (start_index, done_records, finished: bool) / 错误: 进度文件损坏→从 0 重跑并记事件。
+  - 调用方：execute_scenario
+  - tested 策略：自有单测（半程夹具）
+  - 核验命令：测试: R15（半程 run 重跑 steps 总数=计划数且不重复）——继承 R15 验收
+
+## 受影响旧块 [改造] 目标态（原文未动，实现期经快速通道）
+
+- **serve_console** [改造 ← R13]：职责在原范围内补足"报告中心页+帮助页"（经新子 render_static_pages 挂载 /reports 与 /help），其余行为不变。
+- **execute_scenario** [改造 ← R14/R15]：步进循环改为消费 scaled_criteria 判据与 apply_calibration 换算后的增益；启动时经 resume_from 断点续跑（同 run 目录续写）；倍率信息写 run 目录 speed.json。
+- **build_report** [改造 ← R14/R15]：读 run 目录 speed.json→追加"加速倍率 N×（判据同步缩放）"脚注；读标定应用状态→"标定表已应用/未标定"行。
+
+## 演进轮一自检
+
+- 矩阵正向：R13–R16 各有顶层负责 ✓（R13=launch_console+serve_console 改造；R14/R15=execute_scenario 改造；R16=build_mid_material）。
+- 反向：launch_console→程序入口 ✓；build_mid_material→程序入口 ✓；render_static_pages→serve_console→入口 ✓；register_cjk_font 调用方两顶层 ✓；scaled_criteria/apply_calibration/resume_from→execute_scenario→入口 ✓。无死代码。
+- 单一转变：逐块复核 ✓。
+- 函数总数 27+7=34（>20 预警延续——12+4 需求口的系统广度所致，门内已两轮确认接受）。
