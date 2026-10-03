@@ -72,9 +72,10 @@ def normalize_telemetry(messages: list, state: dict | None = None, now: float = 
             state["local_xy"] = (_get(msg, "x"), _get(msg, "y"))
         elif mtype == "GLOBAL_POSITION_INT":
             lat = _get(msg, "lat"); lon = _get(msg, "lon")
-            frame["lat"] = lat / 1e7 if isinstance(lat, (int, float)) else None
-            frame["lon"] = lon / 1e7 if isinstance(lon, (int, float)) else None
-            mask["lat"] = mask["lon"] = 1 if frame["lat"] is not None else 0
+            _put(frame, mask, state, "lat",
+                 lat / 1e7 if isinstance(lat, (int, float)) else None, now, True)
+            _put(frame, mask, state, "lon",
+                 lon / 1e7 if isinstance(lon, (int, float)) else None, now, True)
             alt = _get(msg, "alt")
             _put(frame, mask, state, "alt_amsl", alt / 1e3 if isinstance(alt, (int, float)) else None, now)
             state["gps_xy"] = (frame.get("lat"), frame.get("lon"))

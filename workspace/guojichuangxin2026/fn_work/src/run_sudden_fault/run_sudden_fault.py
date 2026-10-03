@@ -30,8 +30,9 @@ def run_sudden_fault(frames, raw_telemetry=None, classifier=None, params: dict |
                 feats["ch_mean"][ch] = sum(xs) / len(xs) if xs else 0.0
                 feats["ch_max"][ch] = max(xs) if xs else 0.0
             cls = classify_fault(feats, classifier)
-            yield {"type": "sudden", "t_confirm": conf["t"], "t_onset_est": onset,
+            yield {"type": "sudden", "t": conf["t"], "t_confirm": conf["t"], "t_onset_est": onset,
                    "channels": conf["channels"], "fault": cls["fault"],
                    "confidence": cls["confidence"], "classify_path": cls["path"],
                    "latency_s": round(conf["t"] - onset, 3)}
             res_hist["rows"] = []  # 确认后复位，等待下一突变
+            onset = None             # 时延按事件各自计

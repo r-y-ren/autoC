@@ -8,3 +8,4 @@
 | 2026-10-03 | deliver | /self 进入（人工主导，副驾模式）：闸门复校 PASS→phase=deliver；auto_chain=false 沿用（手动波次，人定粒度） | fn-grill 边界重算：无新增需用户拍板项，工程默认值清单呈报可否决；m0 未启动待人指令 |
 | 2026-10-03 | deliver | m0 进行中（scaffold 部分）：fn_work/ 骨架落盘（43 函数桩+镜像测试+CLI 入口）；R9 演示控制台经变更通道入册（requirements/README/responsibility 同步）；蓝图验收 cmd 6 处对齐 fn_work 路径复校 PASS | m0 剩余：接口契约实体化（contracts/ 两文件）+数据字典 v1+metrics 键清单——随 fn-implement B1 落地 |
 | 2026-10-03 | deliver | **fn-ladder 任务重开**：用户判定流程违规（越门/计数误/阶段掺水）→ 放弃协议执行（放弃行落档）→ fn_docs/ 与 fn_work/ 按用户裁定直接删除（历史 13e70b7c/789c8791/106116f7）→ 全新任务从 fn-grill 重启，确认式重问，每门停等显式选择 | 战役级决策（蓝图/R9/三场景/技术栈）不变；蓝图验收 cmd 指向的 fn_work 路径待新 scaffold 重建后自然复位 |
+| 2026-10-03 | deliver | fn-implement 12 批全部完成（预授权连做）：48/48 函数 wired/tested，91 passed 0 skipped，fn-check 残留桩 0+全量测试 PASS；eval CLI 实跑出指标分片（synthetic-mid 口径）；含 m0 骨架+m1 竖切+m2 主体（合成数据面） | 待办：真实 PX4 SITL 对接与 Jetson/B210 实测（设备到位后 m2b）；模型训练用真实分布数据重训；批间评审子代理按预授权合并为收官统一审查（待 fn-review） |

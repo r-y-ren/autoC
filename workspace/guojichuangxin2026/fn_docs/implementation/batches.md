@@ -1,12 +1,11 @@
 # batches.md —— 批次表（待办导航）
 > fn-implement 独占更新。▶ = 下一批要完成的任务；未经批间门批准不得增删批次内容。
+> **全部 12 批已完成（2026-10-03）**——批次表清空，留痕见 history.md。
 > 依赖序自底向上：B1 地基 → 数据接入 → 检测通道 → 决策 → 设备/平台/控制台 → 材料/评估集成。
 > 单批 ≥6 函数的批次（B2/B5）建议子代理逐函数档；其余主会话连续档即可。
 
 | 批次 | 函数/任务清单 | 验收点 | 注 |
 |---|---|---|---|
-| ▶ B11 | export_metrics_table, draft_revision_notes, compile_documents, build_materials | build_materials wired | 材料 |
-| B12 | run_eval + 全链路 smoke（smoke_boot 实跑） | eval CLI 实跑出指标分片；sw-boot 绿 | 评估集成收官 |
 
 | 2026-10-03 | 签名微调 | spawn_sitl 增 synthetic 备选（设备缺席等价数据面）；EventHub 增 publish_sync（会话线程侧发布）；控制台模板寄宿 run_ground_station.console_page → 归位 launch_demo_session.render_console |
 

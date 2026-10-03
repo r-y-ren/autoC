@@ -13,3 +13,5 @@
 | 2026-10-03 | B8 | replay_spectrum_source, capture_spectrum, compute_occupancy, run_spectrum_monitor(wired), sdr_check(wired) | 7 passed；缺席自动回放+双源同管线 |
 | 2026-10-03 | B9 | pipe_events, register_pages, run_ground_station(wired) | 5 passed；五页+分页 API |
 | 2026-10-03 | B10 | spawn_sitl, render_console, session_control_api, launch_demo_session(wired) | 5 passed；会话端到端冒烟（tee 分流缺陷修复） |
+| 2026-10-03 | B11 | export_metrics_table, draft_revision_notes, compile_documents(wired), build_materials(wired) | 5 passed；端到端两运行目录→三件套产物 |
+| 2026-10-03 | B12 | run_eval(wired)+全链 smoke | 2 passed；motor_fail×2/lowbat×1 批量指标分片；smoke_boot 桩清零 |
