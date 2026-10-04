@@ -26,3 +26,4 @@
 | 2026-10-05 | 登记补遗（评审指认） | R5 门槛重校→requirements 变更记录（指针）；play_local_match steps 增补 option_types/state；cluster 样本 50→12 缩额。**已知断层**：官方 Kaggle 回放无 option_types 字段，真实语料入库后需适配层（R6→R7 接口，正赛期任务） |
 | 2026-10-05 | greedy v5 语义回写（fn-divide 快速通道） | responsibility/requirements 的"手写优先级表"已废——v5=引擎原序选满基线（v1→v5 迭代链见 greedy_priority 血统表；偏离次序须 m2 语料证据）。非功能约束"同种子可复现"同步作废（libcg.so 无种子入口，B1 评审实证） |
 | 2026-10-05 | 迭代轮 1（用户令：自我迭代目标前 5%） | 真实语料接入：11 官方回放入库（我方 3+前三名 8，INDEX 登记）+convert_official_replay 适配器（fn-divide 快速通道）；首轮分析=牌组是开放课目/赢家首选项率更高（方向性 n=11）；**fna-003 首探负结果：榜首牌组单变量 A/B 24 局=净零（12-12），不提交**——净账纪律省下一次盲提交配额 |
+| 2026-10-05 | 迭代轮 2（全自动授权） | 语料扩至 38 局（+26，前三名全量）；v7 类型表克隆（44 键/64% 覆盖）A/B 负 0.37/0.30、v8 计数表保序 A/B 负 0.47——三连负不提交（配额 1/5 未动）；Meta 发现=粗粒度单变量均不敌原序基线，赢家信号在选项身份级；资产文件 winner-type-table.json/winner-count-table.json 入库备深挖 |
