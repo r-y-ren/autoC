@@ -32,7 +32,7 @@ def play_local_match(agent_a, agent_b, deck_a, deck_b, seed, config=None):
 
         return wrapped
 
-    env = make("cabt", configuration=dict(config or {}), debug=True)
+    env = make("cabt", configuration=dict(config or {}), debug=False)
     env.run([wrap(agent_a, deck_a), wrap(agent_b, deck_b)])
 
     final = env.state

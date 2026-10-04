@@ -4,18 +4,18 @@
 
 | 函数 | 批次 | 状态(日期) | 核验命令+摘要 | commit |
 |---|---|---|---|---|
-| play_local_match | B1 | stub 10-05 | 待: pytest -k play_local_match | — |
-| load_agent_callable | B1 | stub 10-05 | 待: pytest -k load_agent_callable | — |
-| assert_no_network | B1 | stub 10-05 | 待: pytest -k assert_no_network | — |
-| write_runs_jsonl | B1 | stub 10-05 | 待: pytest -k write_runs_jsonl | — |
-| index_source_anchors | B1 | stub 10-05 | 待: pytest -k index_source_anchors | — |
-| render_dossier_md | B1 | stub 10-05 | 待: pytest -k render_dossier_md | — |
-| summarize_pool | B2 | stub 10-05 | 待: pytest -k summarize_pool（上游覆盖） | — |
-| run_judge_pool | B2 | stub 10-05 | 待: pytest -k run_judge_pool + entries/smoke_judge.py 实跑 | — |
-| serialize_episode | B2 | stub 10-05 | 待: pytest -k record_episode（上游覆盖） | — |
-| record_episode | B2 | stub 10-05 | 待: pytest -k record_episode | — |
-| first_divergence | B2 | stub 10-05 | 待: pytest -k diff_episode（上游覆盖） | — |
-| diff_episode | B2 | stub 10-05 | 待: pytest -k diff_episode | — |
+| play_local_match | B1 | wired 10-05 | pytest tests/shared → 16 passed（含真局/席位对换/bo1）；b1-smoke 真局落 runs | d76114cc |
+| load_agent_callable | B1 | tested 10-05 | pytest -k load_agent → 4 passed | d76114cc |
+| assert_no_network | B1 | tested 10-05 | pytest -k assert_no_network → 4 passed | d76114cc |
+| write_runs_jsonl | B1 | tested 10-05 | pytest -k write_runs → passed（reload 环境变量隔离） | d76114cc |
+| index_source_anchors | B1 | tested 10-05 | pytest -k index_source → 2 passed | d76114cc |
+| render_dossier_md | B1 | tested 10-05 | pytest -k render_dossier → 2 passed（六问+四级断言） | d76114cc |
+| summarize_pool | B2 | tested 10-05 | 上游覆盖: test_run_judge_pool | — |
+| run_judge_pool | B2 | wired 10-05 | pytest -k run_judge_pool + entries/smoke_judge 实跑 40 局（自镜像 h2h 0.6∈[0.35,0.65]） | 见B2 commit |
+| serialize_episode | B2 | tested 10-05 | 上游覆盖: test_record_episode | — |
+| record_episode | B2 | wired 10-05 | pytest -k record_episode（真局落盘回读+失败标记） | 见B2 commit |
+| first_divergence | B2 | tested 10-05 | 上游覆盖: test_diff_episode（纯函数 4 例） | — |
+| diff_episode | B2 | wired 10-05 | pytest -k diff_episode（自对拍一致+篡改定位+破损行号） | 见B2 commit |
 | probe_engine_facts | B3 | stub 10-05 | 待: pytest -k build_engine_dossier（上游覆盖） | — |
 | build_engine_dossier | B3 | stub 10-05 | 待: pytest -k build_engine_dossier | — |
 | parse_observation | B3 | stub 10-05 | 待: pytest -k seed_agent（上游覆盖） | — |
