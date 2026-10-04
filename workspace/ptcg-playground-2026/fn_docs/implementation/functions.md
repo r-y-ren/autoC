@@ -23,13 +23,13 @@
 | load_default_deck | B3 | tested 10-05 | deck.csv 60 行纯数字（引擎源直读） | 见B3 commit |
 | guard_rails | B3 | tested 10-05 | 上游覆盖: test_seed_agent（越界/去重/minCount 补足/兜底） | 见B3 commit |
 | seed_agent | B3 | wired 10-05 | 锚定标门槛 v2：vs random 0.82/vs first 0.52（60 局）通过；**61 卡字面量 bug 被测试逮住修复**（[3]*34→33） | 见B3 commit |
-| validate_bundle_structure | B4 | stub 10-05 | 待: pytest -k pack_submission（上游覆盖） | — |
-| sandbox_selfplay_once | B4 | stub 10-05 | 待: pytest -k pack_submission（上游覆盖） | — |
-| count_daily_quota | B4 | stub 10-05 | 待: pytest -k pack_submission（上游覆盖） | — |
-| pack_submission | B4 | stub 10-05 | 待: entries/pack_check.py 实跑绿 | — |
-| kaggle_cli_pull | B5 | stub 10-05 | 待: pytest -k fetch_episodes（上游覆盖） | — |
-| dedup_register | B5 | stub 10-05 | 待: pytest -k fetch_episodes（上游覆盖） | — |
-| fetch_episodes | B5 | stub 10-05 | 待: pytest -k fetch_episodes + 真实拉取 | — |
+| validate_bundle_structure | B4 | tested 10-05 | 上游覆盖: test_pack_submission（好/嵌套包） | 见B4/B5 commit |
+| sandbox_selfplay_once | B4 | tested 10-05 | 真包解包装载自对弈 OK | 见B4/B5 commit |
+| count_daily_quota | B4 | tested 10-05 | 5 限/记账/破损容错 | 见B4/B5 commit |
+| pack_submission | B4 | wired 10-05 | entries 等价+真打包双 OK（配额 1/5）；提交 403=账号未接规则（用户动作项） | 见B4/B5 commit |
+| kaggle_cli_pull | B5 | tested 10-05 | 上游覆盖: test_fetch_episodes（mock） | 见B4/B5 commit |
+| dedup_register | B5 | tested 10-05 | 去重+INDEX 登记行 | 见B4/B5 commit |
+| fetch_episodes | B5 | wired 10-05 | mock 流水线绿（失败隔离+seen 持久化）；真实拉取待规则接受 | 见B4/B5 commit |
 | extract_behavior_features | B6 | stub 10-05 | 待: pytest -k cluster_opponents（上游覆盖） | — |
 | cluster_prototypes | B6 | stub 10-05 | 待: pytest -k cluster_opponents（上游覆盖） | — |
 | build_counter_matrix | B6 | stub 10-05 | 待: pytest -k cluster_opponents（上游覆盖） | — |
