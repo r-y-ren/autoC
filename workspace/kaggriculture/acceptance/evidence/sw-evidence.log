@@ -1,0 +1,5 @@
+$ python3 -c "import json,glob,pathlib;W=glob.glob('workspace/kaggr*/')[0];fs=list(pathlib.Path(W).rglob('evidence/*.json'));assert len(fs)>100;[json.load(open(f)) for f in fs];print('evidence ok',len(fs))"
+exit=0
+
+evidence ok 363
+

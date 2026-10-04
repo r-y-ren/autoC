@@ -1,0 +1,46 @@
+{
+  "campaign": {
+    "competition_id": "kaggle-kaggriculture",
+    "blueprint_ref": "93353721",
+    "campaign_id": "kaggriculture"
+  },
+  "checklist": [
+    {
+      "id": "sw-registry",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace/kaggriculture/acceptance/evidence/sw-registry.log"
+    },
+    {
+      "id": "sw-evidence",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace/kaggriculture/acceptance/evidence/sw-evidence.log"
+    },
+    {
+      "id": "sw-test-track",
+      "category": "software",
+      "status": "pass",
+      "evidence": "workspace/kaggriculture/acceptance/evidence/sw-test-track.log"
+    },
+    {
+      "id": "doc-ledger",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace/kaggriculture/acceptance/evidence/doc-ledger.log"
+    },
+    {
+      "id": "doc-metrics",
+      "category": "document",
+      "status": "pass",
+      "evidence": "workspace/kaggriculture/acceptance/evidence/doc-metrics.log"
+    }
+  ],
+  "result": "pass",
+  "generated_at": "2026-10-05T02:55:06",
+  "retry_state": {
+    "count": 1,
+    "max": 3,
+    "tripped": false
+  }
+}

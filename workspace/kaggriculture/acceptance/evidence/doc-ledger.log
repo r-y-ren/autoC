@@ -1,0 +1,5 @@
+$ test -s "$(ls -d workspace/kaggr*/fn_docs/hybrid/analyses/registry.jsonl)" && test -s "$(ls -d workspace/kaggr*/fn_docs/hybrid/references/INDEX.md)" && ls "$(ls -d workspace/kaggr*/fn_docs/hybrid/analyses/)" | grep -q '2026-10' && echo doc-ledger ok
+exit=0
+
+doc-ledger ok
+
