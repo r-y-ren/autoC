@@ -9,9 +9,9 @@
 | B3✅ | R2+R5: probe_engine_facts, build_engine_dossier, parse_observation, greedy_priority, load_default_deck, guard_rails, seed_agent | T1/T2 产出+seed_agent 对 random≥0.9/first≥0.95+无网络静态检查绿 | guard_rails 提前（seed_agent 依赖）；本批完=W1 波门五查 |
 | B4✅ | R4: validate_bundle_structure, sandbox_selfplay_once, count_daily_quota, pack_submission | pack_check 入口绿+submission.tar.gz 产出；**首次提交天梯（用户已授权）** | W2 里程碑 m1 起点 |
 | B5✅ | R6: kaggle_cli_pull, dedup_register, fetch_episodes | mock 测试绿+提交后拉 ≥1 条真实 episode 入 references/episodes/ | 依赖 B4 提交产生对局 |
-| ▶ B6 | R7[P1]: extract_behavior_features, cluster_prototypes, build_counter_matrix, cluster_opponents | 合成集≥50 局聚类稳定重跑测试绿；有真实回放则真跑 | W3 里程碑 m2 起点 |
-| B7 | R8[P1]: filter_high_scores, aggregate_state_action, measure_alignment, emit_asset_spec, mine_assets | 生成器复跑同输出+血统表测试绿 | |
-| B8 | R9a: observe_opponent, decide_tempo, schedule_resources, follow_asset_table, assemble_agent_v2 | 五层装配测试绿+对 random/first 不低于种子件 | guard_rails 已于 B3 |
+| B6✅ | R7[P1]: extract_behavior_features, cluster_prototypes, build_counter_matrix, cluster_opponents | 合成集≥50 局聚类稳定重跑测试绿；有真实回放则真跑 | W3 里程碑 m2 起点 |
+| B7✅ | R8[P1]: filter_high_scores, aggregate_state_action, measure_alignment, emit_asset_spec, mine_assets | 生成器复跑同输出+血统表测试绿 | |
+| ▶ B8 | R9a: observe_opponent, decide_tempo, schedule_resources, follow_asset_table, assemble_agent_v2 | 五层装配测试绿+对 random/first 不低于种子件 | guard_rails 已于 B3 |
 | B9 | R9b: ab_pair_configs, net_delta_j, pooled_winrate, append_registry_row, run_ab_judgment | A/B 判决全链测试绿（台账行含 net_delta_J/pooled_winrate） | |
 | B10 | R10-R12: collect_runs_shards, validate_ladder_readback, prepare_metrics_shards, load_pyxis_env, gsk_judge_smoke, build_gsk_prestudy, check_competition_page, probe_gsk_launch | gsk_prestudy_check 入口绿+probe not-live 落 runs | m4 预研包；全批完→fn-analyze |
 

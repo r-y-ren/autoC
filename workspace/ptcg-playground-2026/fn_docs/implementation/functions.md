@@ -30,15 +30,15 @@
 | kaggle_cli_pull | B5 | tested 10-05 | 上游覆盖: test_fetch_episodes（mock） | 见B4/B5 commit |
 | dedup_register | B5 | tested 10-05 | 去重+INDEX 登记行 | 见B4/B5 commit |
 | fetch_episodes | B5 | wired 10-05 | mock 流水线绿（失败隔离+seen 持久化）；真实拉取待规则接受 | 见B4/B5 commit |
-| extract_behavior_features | B6 | stub 10-05 | 待: pytest -k cluster_opponents（上游覆盖） | — |
-| cluster_prototypes | B6 | stub 10-05 | 待: pytest -k cluster_opponents（上游覆盖） | — |
-| build_counter_matrix | B6 | stub 10-05 | 待: pytest -k cluster_opponents（上游覆盖） | — |
-| cluster_opponents | B6 | stub 10-05 | 待: pytest -k cluster_opponents | — |
-| filter_high_scores | B7 | stub 10-05 | 待: pytest -k mine_assets（上游覆盖） | — |
-| aggregate_state_action | B7 | stub 10-05 | 待: pytest -k mine_assets（上游覆盖） | — |
-| measure_alignment | B7 | stub 10-05 | 待: pytest -k mine_assets（上游覆盖） | — |
-| emit_asset_spec | B7 | stub 10-05 | 待: pytest -k mine_assets（上游覆盖） | — |
-| mine_assets | B7 | stub 10-05 | 待: pytest -k mine_assets | — |
+| extract_behavior_features | B6 | tested 10-05 | 上游覆盖: test_cluster_opponents（first/random 双席真回放） | 见B6/B7 commit |
+| cluster_prototypes | B6 | tested 10-05 | 上游覆盖（K∈2-5 简化轮廓，稳定性±1 断言） | 见B6/B7 commit |
+| build_counter_matrix | B6 | tested 10-05 | 上游覆盖（CSV 产出断言） | 见B6/B7 commit |
+| cluster_opponents | B6 | wired 10-05 | 12 局 first-vs-random 真回放聚出 ≥2 原型+稳定重跑+矩阵/原型卡产出 | 见B6/B7 commit |
+| filter_high_scores | B7 | tested 10-05 | 决出局+分位+快胜排序断言 | 见B6/B7 commit |
+| aggregate_state_action | B7 | tested 10-05 | 状态键-动作签名计数断言 | 见B6/B7 commit |
+| measure_alignment | B7 | tested 10-05 | 上游覆盖: test_mine_assets 端到端 | 见B6/B7 commit |
+| emit_asset_spec | B7 | tested 10-05 | T3 硬字段/血统表/可复跑断言 | 见B6/B7 commit |
+| mine_assets | B7 | wired 10-05 | 8 局真回放端到端：规格书可复跑同输出+方向性标注正确 | 见B6/B7 commit |
 | observe_opponent | B8 | stub 10-05 | 待: pytest -k assemble_agent_v2（上游覆盖） | — |
 | decide_tempo | B8 | stub 10-05 | 待: pytest -k assemble_agent_v2（上游覆盖） | — |
 | schedule_resources | B8 | stub 10-05 | 待: pytest -k assemble_agent_v2（上游覆盖） | — |

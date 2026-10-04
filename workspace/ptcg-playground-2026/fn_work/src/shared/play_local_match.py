@@ -47,10 +47,18 @@ def play_local_match(agent_a, agent_b, deck_a, deck_b, seed, config=None):
             continue
         active = 0 if pair[0].get("status") == "ACTIVE" else 1
         action = pair[active].get("action")
+        obs = pair[active].get("observation") or {}
+        sel = obs.get("select") or {}
+        opt_types = [o.get("type") if isinstance(o, dict) else None for o in (sel.get("option") or [])]
+        cur = obs.get("current") or {}
+        my = (cur.get("players") or [{}])[active] if len(cur.get("players") or []) > active else {}
         steps_out.append({
             "step": i,
             "active": active,
             "action": action if isinstance(action, list) else None,
+            "option_types": opt_types,  # 供聚类/资产对齐（B6/B7 增补字段）
+            "state": {"turn": cur.get("turn"), "hand": my.get("handCount"),
+                      "prize": len(my.get("prize") or [])},
         })
 
     return {
