@@ -67,45 +67,47 @@
 |---|---|
 | R1 | run_judge_pool |
 | R2 | build_engine_dossier |
-| R3 | record_episode, diff_episode |
+| R3 | record_episode |
+| R3 | diff_episode |
 | R4 | pack_submission |
 | R5 | seed_agent |
 | R6 | fetch_episodes |
 | R7 [P1] | cluster_opponents |
 | R8 [P1] | mine_assets |
-| R9 | assemble_agent_v2, run_ab_judgment |
+| R9 | assemble_agent_v2 |
+| R9 | run_ab_judgment |
 | R10 | prepare_metrics_shards |
 | R11 | build_gsk_prestudy |
 | R12 | probe_gsk_launch |
 
 ## 共享函数（shared/：多顶层共用；矩阵挂全部受益需求）
 
-- **play_local_match**（调用方：run_judge_pool, record_episode, run_ab_judgment, sandbox_selfplay_once；受益：R1/R3/R4/R9）
+- **play_local_match**（调用方：run_judge_pool, record_episode, run_ab_judgment, sandbox_selfplay_once）受益：R1/R3/R4/R9
   - 职责：执行一局本地 cabt 对战——给定双方 agent 可调用对象（或装载路径）、双方 deck、随机种子，调 `kaggle_environments.make("cabt")` 跑完，返回结构化局结果（胜方/分差/逐拍动作序列/终局状态）。逐拍动作序列按拍号对齐双方。单局异常（agent 抛错/超时）不向上抛，转为该局失败记录（含失败拍号与原因）。
   - 签名意图：输入: (agent_a, agent_b, deck_a, deck_b, seed) / 输出: MatchResult（含 steps 列表与 outcome；失败局 outcome="failed"+原因）/ 错误: 引擎初始化失败（deck 非法/配置错）抛异常
   - tested 策略：自有单测
   - 核验命令：测试: test_play_local_match
-- **load_agent_callable**（调用方：play_local_match, pack_submission；受益：R1/R3/R4/R9/R5）
+- **load_agent_callable**（调用方：play_local_match, pack_submission）受益：R1/R3/R4/R9/R5
   - 职责：从文件路径装载 agent 函数——模拟 Kaggle 线上装载语义（子目录装载/`/kaggle_simulations/agent/` 等价），返回可调用对象。装载失败报出精确原因（文件缺失/函数名不存在/import 报错原文）。
   - 签名意图：输入: (路径, 函数名="agent") / 输出: callable / 错误: 装载失败抛异常含原因
   - tested 策略：自有单测
   - 核验命令：测试: test_load_agent_callable
-- **assert_no_network**（调用方：seed_agent, assemble_agent_v2；受益：R5/R9）
+- **assert_no_network**（调用方：seed_agent, assemble_agent_v2）受益：R5/R9
   - 职责：静态自检——扫描给定 agent 源码目录 import 树，断言无 socket/http/requests/urllib 等网络模块（赛规禁联网）。命中即返回违规清单。
   - 签名意图：输入: (源码目录) / 输出: 违规模块列表（空=通过）/ 错误: 目录不存在抛异常
   - tested 策略：自有单测
   - 核验命令：测试: test_assert_no_network
-- **write_runs_jsonl**（调用方：run_judge_pool, record_episode, run_ab_judgment, prepare_metrics_shards, probe_gsk_launch；受益：R1/R3/R9/R10/R12）
+- **write_runs_jsonl**（调用方：run_judge_pool, record_episode, run_ab_judgment, prepare_metrics_shards, probe_gsk_launch）受益：R1/R3/R9/R10/R12
   - 职责：把一行结构化结果 JSON 追加落 `fn_work/runs/<类别>-<日期>.jsonl`（自动建目录、原子追加、行含时间戳与来源标记）。
   - 签名意图：输入: (类别, dict) / 输出: 行文件路径 / 错误: 序列化失败抛异常
   - tested 策略：自有单测
   - 核验命令：测试: test_write_runs_jsonl
-- **index_source_anchors**（调用方：build_engine_dossier, build_gsk_prestudy；受益：R2/R11）
+- **index_source_anchors**（调用方：build_engine_dossier, build_gsk_prestudy）受益：R2/R11
   - 职责：读引擎源码文件，按符号名/正则定位关键锚点（计分函数/交互点/失败语义/时间结构/观测构造/rng 调用），输出"符号→行号→源码行"索引表。
   - 签名意图：输入: (源码路径, 符号模式列表) / 输出: [{symbol, line, source_line}] / 错误: 文件不存在抛异常
   - tested 策略：自有单测
   - 核验命令：测试: test_index_source_anchors
-- **render_dossier_md**（调用方：build_engine_dossier, build_gsk_prestudy；受益：R2/R11）
+- **render_dossier_md**（调用方：build_engine_dossier, build_gsk_prestudy）受益：R2/R11
   - 职责：把六问答案与锚点索引装配成 T1 世界参数表与 T2 受控坐标表的 Markdown 骨架（六问各一节、每结论行带 `文件:行号` 引用占位、T2 四级各含示例行）。只装配结构，结论文本由调用方提供。
   - 签名意图：输入: (六问答案 dict, 锚点索引, 输出路径) / 输出: 写盘的 T1/T2 文件路径对 / 错误: 模板字段缺失抛异常
   - tested 策略：自有单测
@@ -215,7 +217,7 @@
 - **seed_agent** [L0|新增]
   - 职责：参赛主函数——parse_observation 解析 obs{logs, current, select}（任一段缺失/None 时走防御兜底：select 缺失→返回合法空选/首选项），greedy_priority 从合法 option 列表按手写优先级（进化>打点>抽牌>收尾，常量带血统标注）选 1..maxCount 个索引。无任何网络/文件副作用。
   - 签名意图：输入: obs dict（+可选 config） / 输出: list[int]（选项索引，长度≤maxCount）/ 错误: 永不抛错（防御层雏形：兜底返回）
-  - 调用方：程序入口（被打包为提交件 main agent）
+  - 调用方：程序入口
   - tested 策略：自有单测
   - 核验命令：测试: test_seed_agent（对 random_agent 胜率≥0.9 n≥50；对 first_agent ≥0.95；None obs 各段不崩；assert_no_network 通过）
   - **parse_observation** [L1|新增]
@@ -233,7 +235,7 @@
   - **load_default_deck** [L1|新增]
     - 职责：产默认 60 卡 deck.csv——从引擎 `all_card_data()`（或数据页卡表）取官方示例牌组写 60 行纯数字文件。
     - 签名意图：输入: (输出路径) / 输出: deck 路径 / 错误: 卡数≠60 抛异常
-    - 调用方：程序入口（打包前置）
+    - 调用方：程序入口
     - tested 策略：上游覆盖: pack_submission
     - 核验命令：上游覆盖: pack_submission
 
@@ -361,7 +363,7 @@
   - **guard_rails** [L1|新增]
     - 职责：防御层终检——动作索引合法性（不越 option 界）、数量≤maxCount、"我真执行了吗"自检标志、自伤上限（弃牌/损失阈值）；违规回退合法首选项。
     - 签名意图：输入: (候选动作, options, max_count, 局面) / 输出: 合法动作 list[int] / 错误: 不抛
-    - 调用方：assemble_agent_v2, seed_agent（复用于种子件终检）
+    - 调用方：assemble_agent_v2, seed_agent
     - tested 策略：上游覆盖: assemble_agent_v2
     - 核验命令：上游覆盖: assemble_agent_v2
 
