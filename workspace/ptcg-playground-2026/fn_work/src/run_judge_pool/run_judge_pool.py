@@ -28,7 +28,7 @@ def run_judge_pool(config):
     deck = list(config.get("deck") or cabt.deck)
     seed0 = int(config.get("seed0", 1))
     bo = int(config.get("bo", 3))
-    if n_mirror < 1 or not anchors:
+    if n_mirror < 1 or n_anchor < 1 or not anchors:
         raise ValueError("局数非法或锚点为空")
 
     rows = []
@@ -55,5 +55,10 @@ def run_judge_pool(config):
     print(f"self-mirror h2h: {h2h} (decided={n_dec}/{n_mirror})")
     for name in sorted(k for k in report["members"] if k != "self"):
         m = report["members"][name]
-        print(f"vs {name}: winrate={m['winrate']} ({m['win']}W/{m['loss']}L/{m['draw']}D, failed={m['failed']})")
+        # 受测体视角：winrate = self 对该锚的胜率（锚的 W/L 与 self 互补）
+        self_w = m["loss"]
+        self_l = m["win"]
+        decided = self_w + self_l
+        self_wr = round(self_w / decided, 4) if decided else None
+        print(f"vs {name}: self_winrate={self_wr} ({self_w}W/{self_l}L/{m['draw']}D, failed={m['failed']})")
     return report

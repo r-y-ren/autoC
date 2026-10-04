@@ -18,11 +18,13 @@ def test_match_runs_and_records_steps():
     assert not r["failed"]
 
 
-def test_seat_swap_changes_perspective():
+def test_seat_swap_completes():
+    # 引擎洗牌 RNG 在 libcg.so 无种子入口（同种子不可复现，B1 评审实证）——
+    # 席位对换测试只断言两局都完整收场，不做确定性等值断言
     r1 = play_local_match(cabt.first_agent, cabt.random_agent, DECK, DECK, seed=42)
     r2 = play_local_match(cabt.random_agent, cabt.first_agent, DECK, DECK, seed=42)
-    # 双席同种子：first 无论坐哪席，其 reward 应一致（席位对换对称性）
-    assert r1["rewards"][0] == r2["rewards"][1]
+    assert all(x in (1, -1, 0) for x in r1["rewards"] + r2["rewards"])
+    assert not r1["failed"] and not r2["failed"]
 
 
 def test_bo1_config():

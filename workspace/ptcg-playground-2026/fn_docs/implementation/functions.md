@@ -16,13 +16,13 @@
 | record_episode | B2 | wired 10-05 | pytest -k record_episode（真局落盘回读+失败标记） | 见B2 commit |
 | first_divergence | B2 | tested 10-05 | 上游覆盖: test_diff_episode（纯函数 4 例） | — |
 | diff_episode | B2 | wired 10-05 | pytest -k diff_episode（自对拍一致+篡改定位+破损行号） | 见B2 commit |
-| probe_engine_facts | B3 | stub 10-05 | 待: pytest -k build_engine_dossier（上游覆盖） | — |
-| build_engine_dossier | B3 | stub 10-05 | 待: pytest -k build_engine_dossier | — |
-| parse_observation | B3 | stub 10-05 | 待: pytest -k seed_agent（上游覆盖） | — |
-| greedy_priority | B3 | stub 10-05 | 待: pytest -k seed_agent（上游覆盖） | — |
-| load_default_deck | B3 | stub 10-05 | 待: pack 流（上游覆盖） | — |
-| guard_rails | B3 | stub 10-05 | 待: pytest -k guard（跨块调用：seed_agent/assemble_agent_v2） | — |
-| seed_agent | B3 | stub 10-05 | 待: pytest -k seed_agent（胜率门槛+None 防御+无网络） | — |
+| probe_engine_facts | B3 | tested 10-05 | 上游覆盖: test_build_engine_dossier（三实验实证：非法判负/同种子不可复现/None 观测） | 见B3 commit |
+| build_engine_dossier | B3 | wired 10-05 | pytest + 真跑：docs/methodology/t1+t2 产出（六问行号+受控实验证据节） | 见B3 commit |
+| parse_observation | B3 | tested 10-05 | 上游覆盖: test_seed_agent（None/缺段/满段） | 见B3 commit |
+| greedy_priority | B3 | tested 10-05 | test_seed_agent v5 语义+血统表含 v1-v5 迭代链 | 见B3 commit |
+| load_default_deck | B3 | tested 10-05 | deck.csv 60 行纯数字（引擎源直读） | 见B3 commit |
+| guard_rails | B3 | tested 10-05 | 上游覆盖: test_seed_agent（越界/去重/minCount 补足/兜底） | 见B3 commit |
+| seed_agent | B3 | wired 10-05 | 锚定标门槛 v2：vs random 0.82/vs first 0.52（60 局）通过；**61 卡字面量 bug 被测试逮住修复**（[3]*34→33） | 见B3 commit |
 | validate_bundle_structure | B4 | stub 10-05 | 待: pytest -k pack_submission（上游覆盖） | — |
 | sandbox_selfplay_once | B4 | stub 10-05 | 待: pytest -k pack_submission（上游覆盖） | — |
 | count_daily_quota | B4 | stub 10-05 | 待: pytest -k pack_submission（上游覆盖） | — |

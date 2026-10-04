@@ -18,7 +18,7 @@ def write_runs_jsonl(category, row):
     """
     payload = {"ts": _dt.datetime.now().isoformat(timespec="seconds"), "category": str(category)}
     payload.update(row)
-    line = json.dumps(payload, ensure_ascii=False, default=str)
+    line = json.dumps(payload, ensure_ascii=False)
     os.makedirs(_RUNS_DIR, exist_ok=True)
     path = os.path.join(_RUNS_DIR, f"{category}-{_dt.date.today().isoformat()}.jsonl")
     with open(path, "a", encoding="utf-8") as f:

@@ -24,6 +24,10 @@ def render_dossier_md(answers, anchors, out_dir):
     missing = [q for q in QUESTIONS if q not in answers]
     if missing:
         raise ValueError(f"六问答案缺失: {missing}")
+    coords = answers.get("coords", [])
+    bad_levels = [c["level"] for c in coords if c.get("level") not in LEVELS]
+    if bad_levels:
+        raise ValueError(f"coords 含非法四级标签: {bad_levels}")
 
     os.makedirs(out_dir, exist_ok=True)
     t1 = os.path.join(out_dir, "t1-world-params.md")
@@ -41,7 +45,6 @@ def render_dossier_md(answers, anchors, out_dir):
         f.write("\n".join(rows))
         f.write("\n\n## 源码锚点\n\n" + anchor_lines + "\n")
 
-    coords = answers.get("coords", [])
     with open(t2, "w", encoding="utf-8") as f:
         f.write("# T2 受控坐标表（四级可控性）\n\n| 状态坐标 | 可控性四级 | 说明 |\n|---|---|---|\n")
         for c in coords:
