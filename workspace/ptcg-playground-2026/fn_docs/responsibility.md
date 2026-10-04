@@ -24,6 +24,7 @@
   - load_default_deck
 - fetch_episodes ← R6
   - kaggle_cli_pull
+  - convert_official_replay
   - dedup_register
 - cluster_opponents ← R7
   - extract_behavior_features
@@ -255,6 +256,12 @@
     - 调用方：fetch_episodes
     - tested 策略：上游覆盖: fetch_episodes
     - 核验命令：上游覆盖: fetch_episodes
+  - **convert_official_replay** [L1|新增]
+    - 职责：（2026-10-05 fn-divide 快速通道新增，fna-001 落地）官方 replay JSON→内部 episode 同构格式（含 option_types/state 提取与双方 deck），供 B6/B7 管线直接消费
+    - 签名意图：输入: (官方 replay 路径, 输出路径?) / 输出: 内部 episode 路径 / 错误: JSON 破损抛异常
+    - 调用方：程序入口
+    - tested 策略：上游覆盖: 真实语料转换实跑（11 局）
+    - 核验命令：上游覆盖: references/episodes/conv/*.conv.json 产出
   - **dedup_register** [L1|新增]
     - 职责：episodeId 去重（对照历史集合）+INDEX.md 追加来源行（URL+抓取日期+局数）。
     - 签名意图：输入: (episodes, index 路径) / 输出: (新入库, 重复跳过) / 错误: INDEX 不可写抛异常

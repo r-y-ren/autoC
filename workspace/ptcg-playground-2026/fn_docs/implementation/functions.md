@@ -27,6 +27,7 @@
 | sandbox_selfplay_once | B4 | tested | 真包解包装载自对弈 OK | 见B4/B5 commit |
 | count_daily_quota | B4 | tested | 5 限/记账/破损容错 | 见B4/B5 commit |
 | pack_submission | B4 | wired 10-05 | entries 等价+真打包双 OK（配额 1/5）；提交 403=账号未接规则（用户动作项） | 见B4/B5 commit |
+| convert_official_replay | B5+ | wired 10-05 | 真实语料 11 局转换实跑（fna-001 适配层） | 见迭代 commit |
 | kaggle_cli_pull | B5 | tested | 上游覆盖: test_fetch_episodes（mock） | 见B4/B5 commit |
 | dedup_register | B5 | tested | 去重+INDEX 登记行 | 见B4/B5 commit |
 | fetch_episodes | B5 | wired 10-05 | mock 流水线绿（失败隔离+seen 持久化）；真实拉取待规则接受 | 见B4/B5 commit |
