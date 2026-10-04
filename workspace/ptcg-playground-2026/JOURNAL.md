@@ -8,3 +8,4 @@
 | 2026-10-05 | deliver-W2b/W3a | fn-ladder B6-B10 全批收官+两轮评审 7 高危全修（引擎熵/61 卡/读数方向/对齐率反转/fetch 契约/pack 入口/漂移断言）；全套 58 tests 绿；GSK 预研包真跑（T1/T2+版本锁+do-nothing 地板 6/6 平）+探活 not-live 双证；metrics 分片链就绪 |
 | 2026-10-05 | deliver-W3b+fn-analyze | fn-analyze 首份复盘落盘（coldstart 基线+4 提案 registry fna-001..004）；R10 真数据闭环：天梯 μ=600（首提 56831987 COMPLETE）回读入 metrics_shards；机械轴 fn-check+doc-lint 双 0；remote-compute 评估=现阶段 CPU 轻载无需远端（0.2s/局本地），GSK 正赛/训练期再启用 |
 | 2026-10-05 | deliver-迭代1 | 自我迭代轮 1（目标前 5%=μ974+）：真实语料管线打通（team-submissions→episodes→replay 链路+适配器，11 局 129MB 入库 INDEX 登记）；首轮画像=三强三种牌组（课目开放）/赢家首选项率更高；fna-003 首探负结果（Schott 牌组×first-order 单变量 A/B 净零 12-12，不提交）；今日配额 1/5 已用 |
+| 2026-10-05 | deliver-迭代3(全自动) | 盘面：μ 跌至 414.5（5 局净负，天梯场强>本地锚）→部署决策=提交 v6（Schott 牌组移植+首序，本地净零但 meta 对齐，天梯实测单变量）；配额今日 2/5 已用（v5+v6）；三连负登记 fna-002；每日自动迭代 cron 挂载（目标 μ≥974） |
