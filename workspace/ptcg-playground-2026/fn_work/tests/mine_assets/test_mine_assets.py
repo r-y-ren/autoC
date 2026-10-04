@@ -23,6 +23,22 @@ def test_filter_quantile_and_decisive():
     assert kept[0]["reason"]["n_steps"] <= kept[-1]["reason"]["n_steps"]
 
 
+def test_alignment_semantics():
+    # 完美对齐=1.0 / 首拍分叉=0 / 中途分叉=idx/n（B3-B7 评审纠反转 bug 后的语义锁定）
+    from src.mine_assets.measure_alignment import measure_alignment
+    mk = lambda acts: {"id": "x", "metadata": {"rewards": [1, -1]},
+                       "steps": [{"step": i + 1, "active": 0, "action": [0],
+                                  "option_types": [a], "state": {"turn": 1, "hand": 7, "prize": 6}}
+                                 for i, a in enumerate(acts)]}
+    table = {(0, 7, 6): {(13,): 1}}
+    perfect = measure_alignment(table, [mk([13, 13, 13])])
+    assert perfect["mean"] == 1.0
+    first_div = measure_alignment(table, [mk([14, 13, 13])])
+    assert first_div["mean"] == 0.0
+    mid_div = measure_alignment(table, [mk([13, 13, 14])])
+    assert mid_div["mean"] == 0.6667  # 第 3 拍分叉：前 2/3 对齐
+
+
 def test_aggregate_counts_and_sig():
     s = [{"step": 1, "active": 0, "action": [0], "option_types": [13, 14], "state": {"turn": 2, "hand": 7, "prize": 6}},
          {"step": 2, "active": 0, "action": [1], "option_types": [13, 14], "state": {"turn": 2, "hand": 7, "prize": 6}}]

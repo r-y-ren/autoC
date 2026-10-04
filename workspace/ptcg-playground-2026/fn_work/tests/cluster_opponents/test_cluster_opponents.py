@@ -24,6 +24,14 @@ def test_cluster_separates_first_random(tmp_path):
     # 稳定性：同数据重跑原型数 ±1、矩阵文件存在
     r2 = cluster_opponents(d1, str(tmp_path / "out2"))
     assert abs(r1["n_prototypes"] - r2["n_prototypes"]) <= 1
+    # 成员漂移 <10%：同数据重跑各原型成员集 Jaccard ≥0.9
+    m1 = {p["proto_id"]: set(p["members"]) for p in r1["prototypes"]}
+    m2 = {p["proto_id"]: set(p["members"]) for p in r2["prototypes"]}
+    for pid, members in m1.items():
+        if pid in m2:
+            inter = len(members & m2[pid])
+            union = len(members | m2[pid])
+            assert union and inter / union >= 0.9, f"原型 {pid} 成员漂移超限"
     assert os.path.isfile(r1["matrix"]) and os.path.isfile(r1["cards_md"])
 
 

@@ -33,6 +33,6 @@ def measure_alignment(asset_table, episodes):
             p = _predict(asset_table, s)
             predicted.append(p if p is not None else ("miss",))
         idx = first_divergence(actual, predicted)
-        per[ep.get("id", "?")] = round((0 if idx is None else idx) / len(decisions), 4)
+        per[ep.get("id", "?")] = round((len(decisions) if idx is None else idx) / len(decisions), 4)  # None=全程一致→1.0（B3-B7 评审纠反正反转 bug）
     mean = round(sum(per.values()) / len(per), 4) if per else None
     return {"per_episode": per, "mean": mean}

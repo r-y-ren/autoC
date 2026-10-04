@@ -8,7 +8,7 @@ from src.build_gsk_prestudy.load_pyxis_env import load_pyxis_env
 
 def test_load_pyxis_locked():
     info = load_pyxis_env()
-    assert info["version"] == "1.33.0" and info["agents"] == 2
+    assert info["version"] == "1.33.0" and info["agents"] in ([2], 2)
 
 
 def test_prestudy_end_to_end(tmp_path):

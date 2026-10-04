@@ -51,7 +51,7 @@
 - 验收方式：命令 `python workspace/ptcg-playground-2026/software/pack_check.py` → 退出码 0，输出含 `tar structure OK` 与 `local self-play OK`。
 
 ### R5 种子件智能体 [P0]（m1）
-- 内容："最傻但完整"参赛件：obs{logs,current,select}→贪心选项（可行动作优先级表：进化>打点>抽牌>收尾，首版手写常量带血统标注）；默认牌组 60 卡（API `all_card_data()` 取官方示例/数据页卡表，不优化）。纯本地推理（禁联网）。
+- 内容："最傻但完整"参赛件：obs{logs,current,select}→引擎原序选满（v5 语义，2026-10-05 实测迭代后回写：手写优先级表 v1-v3 证伪，first 基线 0.82 胜 random；见 greedy_priority.py 血统表）；默认牌组 60 卡=引擎 cabt.py:9-70 自带组逐行拷贝。纯本地推理（禁联网）。
 - 验收方式：pytest——对 random_agent 胜率 ≥0.9（n≥50）；对 first_agent 胜率 ≥0.95；obs 各字段缺失/None 时不崩（防御层雏形）。天梯首提=人工项（man-ladder）。
 
 ### R6 回放采集器 [P0]（m1）
@@ -90,7 +90,7 @@
 | 每日提交配额 ≤5 | 提交流程内置当日计数（本地记录），超限拒绝打包 |
 | 无 GPU 依赖 | 全流程 CPU 可跑（查表/规则为主；RTX 4070 仅预留） |
 | 本地引擎=线上同构 | kaggle-environments 固定版本 1.33.0（requirements 锁定，升级须过对拍） |
-| 判决池可复现 | 同种子同配置同结果（episode 记录器锚定） |
+| 判决池可复现 | ~~同种子同结果~~（作废：libcg.so 洗牌无种子入口，B1 评审实证）→ 同配置按局数收敛（n≥20），episode 记录器锚定动作序列供对拍 |
 
 ## 外部依赖
 

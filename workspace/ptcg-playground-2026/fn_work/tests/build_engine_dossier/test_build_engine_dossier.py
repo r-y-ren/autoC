@@ -27,7 +27,7 @@ def test_dossier_with_real_engine(tmp_path):
     t1, t2 = build_engine_dossier(src, CONCLUSIONS, str(tmp_path))
     c1 = open(t1, encoding="utf-8").read()
     c2 = open(t2, encoding="utf-8").read()
-    assert "受控实验证据" in c1 and "cabt.py" not in "" and "def interpreter" in c1  # 锚点含源码行
+    assert "受控实验证据" in c1 and "def interpreter" in c1  # 锚点含源码行
     for lv in ["可控", "可影响", "可观测不可推", "不可控随机"]:
         assert lv in c2
     # 实验证据三节

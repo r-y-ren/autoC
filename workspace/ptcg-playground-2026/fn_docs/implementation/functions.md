@@ -39,21 +39,21 @@
 | measure_alignment | B7 | tested 10-05 | 上游覆盖: test_mine_assets 端到端 | 见B6/B7 commit |
 | emit_asset_spec | B7 | tested 10-05 | T3 硬字段/血统表/可复跑断言 | 见B6/B7 commit |
 | mine_assets | B7 | wired 10-05 | 8 局真回放端到端：规格书可复跑同输出+方向性标注正确 | 见B6/B7 commit |
-| observe_opponent | B8 | stub 10-05 | 待: pytest -k assemble_agent_v2（上游覆盖） | — |
-| decide_tempo | B8 | stub 10-05 | 待: pytest -k assemble_agent_v2（上游覆盖） | — |
-| schedule_resources | B8 | stub 10-05 | 待: pytest -k assemble_agent_v2（上游覆盖） | — |
-| follow_asset_table | B8 | stub 10-05 | 待: pytest -k assemble_agent_v2（上游覆盖） | — |
-| assemble_agent_v2 | B8 | stub 10-05 | 待: pytest -k assemble_agent_v2 | — |
-| ab_pair_configs | B9 | stub 10-05 | 待: pytest -k run_ab_judgment（上游覆盖） | — |
-| net_delta_j | B9 | stub 10-05 | 待: pytest -k run_ab_judgment（上游覆盖） | — |
-| pooled_winrate | B9 | stub 10-05 | 待: pytest -k run_ab_judgment（上游覆盖） | — |
-| append_registry_row | B9 | stub 10-05 | 待: pytest -k run_ab_judgment（上游覆盖） | — |
-| run_ab_judgment | B9 | stub 10-05 | 待: pytest -k run_ab_judgment | — |
-| collect_runs_shards | B10 | stub 10-05 | 待: pytest -k prepare_metrics_shards（上游覆盖） | — |
-| validate_ladder_readback | B10 | stub 10-05 | 待: pytest -k prepare_metrics_shards（上游覆盖） | — |
-| prepare_metrics_shards | B10 | stub 10-05 | 待: pytest -k prepare_metrics_shards | — |
-| load_pyxis_env | B10 | stub 10-05 | 待: pytest -k gsk（上游覆盖） | — |
-| gsk_judge_smoke | B10 | stub 10-05 | 待: pytest -k gsk（上游覆盖） | — |
-| build_gsk_prestudy | B10 | stub 10-05 | 待: entries/gsk_prestudy_check.py 实跑绿 | — |
-| check_competition_page | B10 | stub 10-05 | 待: pytest -k probe（上游覆盖） | — |
-| probe_gsk_launch | B10 | stub 10-05 | 待: pytest -k probe_gsk_launch | — |
+| observe_opponent | B8 | tested 10-05 | 上游覆盖: test_assemble_agent_v2 | 见B8-B10 commit |
+| decide_tempo | B8 | tested 10-05 | 上游覆盖（抢攻修正单规则） | 见B8-B10 commit |
+| schedule_resources | B8 | tested 10-05 | 上游覆盖（记录性计划） | 见B8-B10 commit |
+| follow_asset_table | B8 | tested 10-05 | 资产命中/缺格/损坏回退三断言 | 见B8-B10 commit |
+| assemble_agent_v2 | B8 | wired 10-05 | 永不抛错+deck 相+60 局门槛（vs random≥0.70 过） | 见B8-B10 commit |
+| ab_pair_configs | B9 | tested 10-05 | 折叠数与下限异常断言 | 见B8-B10 commit |
+| net_delta_j | B9 | tested 10-05 | 均值/CI/折数断言 | 见B8-B10 commit |
+| pooled_winrate | B9 | tested 10-05 | maximin 稳健口径断言 | 见B8-B10 commit |
+| append_registry_row | B9 | tested 10-05 | T5 字段校验+只追加 | 见B8-B10 commit |
+| run_ab_judgment | B9 | wired 10-05 | 全链 12 折真跑：双读数+verdict+registry 行；folds<12 拒绝 | 见B8-B10 commit |
+| collect_runs_shards | B10 | tested 10-05 | 末行快照+source 行号 | 见B8-B10 commit |
+| validate_ladder_readback | B10 | tested 10-05 | 三要素+合理域+ISO 日期 | 见B8-B10 commit |
+| prepare_metrics_shards | B10 | wired 10-05 | 端到端分片目录产出（对接全局 merge_metrics） | 见B8-B10 commit |
+| load_pyxis_env | B10 | tested 10-05 | 版本锁 1.33.0 断言 | 见B8-B10 commit |
+| gsk_judge_smoke | B10 | tested 10-05 | do-nothing 地板 6/6 平局=噪声地板起点 | 见B8-B10 commit |
+| build_gsk_prestudy | B10 | wired 10-05 | 入口真跑：env 锁定+T1/T2（1/n^α/PTRS/500 步回链）+冒烟 | 见B8-B10 commit |
+| check_competition_page | B10 | tested 10-05 | 上游覆盖（双通道证据） | 见B8-B10 commit |
+| probe_gsk_launch | B10 | wired 10-05 | 真跑 not-live（cli=False, http=404）落 runs | 见B8-B10 commit |

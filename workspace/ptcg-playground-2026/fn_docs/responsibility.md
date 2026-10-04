@@ -225,7 +225,7 @@
     - tested 策略：上游覆盖: seed_agent
     - 核验命令：上游覆盖: seed_agent
   - **greedy_priority** [L1|新增]
-    - 职责：贪心选择——对 options 按优先级表（手写常量，每常量行带血统注释：来源=首版拍脑袋标注"待语料定标"）打分取前 maxCount 个索引；无匹配类别时取首选项。
+    - 职责：（v5 语义，2026-10-05 fn-divide 快速通道回写）引擎原序选满 maxCount=first 语义基线；v1 手写优先级表经实测证伪（选项次序编码目标语义，重排=选错目标；迭代链见 greedy_priority.py 血统表）——偏离原序的决策必须待 m2 语料证据
     - 签名意图：输入: (options 列表, max_count) / 输出: list[int] 索引 / 错误: options 空返回 []
     - 调用方：seed_agent
     - tested 策略：上游覆盖: seed_agent
