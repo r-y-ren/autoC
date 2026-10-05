@@ -98,7 +98,7 @@ def play_batch(args):
 def main():
     _init_worker()
     t0 = time.time()
-    NPROC = 12
+    NPROC = 28  # 2026-10-06 升载：12 工人只吃 13% CPU，喂饱 32 核
     pool = Pool(NPROC, initializer=_init_worker)
     MLP = _G["MLP"]
 
