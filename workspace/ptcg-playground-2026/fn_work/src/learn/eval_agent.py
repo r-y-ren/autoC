@@ -89,6 +89,7 @@ def make_agent(weights=None, deck=None):
         opp = players[1 - my_i] if len(players) > 1 - my_i else {}
         my_active = (my.get("active") or [None])[0]
         opp_active = (opp.get("active") or [None])[0]
+        my_prize_left = len(my.get("prize") or [])
         opp_card = _card(opp_active.get("id")) if isinstance(opp_active, dict) else None
         my_card = _card(my_active.get("id")) if isinstance(my_active, dict) else None
 
@@ -112,9 +113,10 @@ def make_agent(weights=None, deck=None):
         fatigue = max(0.0, (opp.get("deckCount") or 0) - (my.get("deckCount") or 0)) / 60.0
         # 算法格覆盖层：防守侧判定（全局一次）
         try:
-            from src.learn.prize_solver import race_bonus, can_ko, _card, _prize_value
-            _wn, _re, danger = race_bonus(my, opp, my_active, opp_active)
+            from src.learn import prize_solver as _ps
+            _wn, _re, danger = _ps.race_bonus(my, opp, my_active, opp_active)
         except Exception:
+            _ps = None
             danger = 0.0
         scores = []
         for i, o in enumerate(opts):
@@ -135,17 +137,18 @@ def make_agent(weights=None, deck=None):
                     if eff >= opp_hp > 0:
                         s += Wt["oneshot"] * _prize_value(opp_card)
                         # 逐选项求解：这一击清奖赏=当场胜利；这一击锁竞速
-                        try:
-                            taken = _prize_value(opp_card)
-                            if my_prize_left - taken <= 0:
-                                s += Wt["win_now"]
-                            else:
-                                retaliation = can_ko(opp_active, my_active) or any(
-                                    can_ko(b, my_active) for b in (opp.get("bench") or []) if isinstance(b, dict))
-                                if not retaliation and my_prize_left - taken <= 2:
-                                    s += Wt["race_edge"]
-                        except Exception:
-                            pass
+                        if _ps is not None:
+                            try:
+                                taken = _ps._prize_value(opp_card)
+                                if my_prize_left - taken <= 0:
+                                    s += Wt["win_now"]
+                                else:
+                                    retaliation = _ps.can_ko(opp_active, my_active) or any(
+                                        _ps.can_ko(b, my_active) for b in (opp.get("bench") or []) if isinstance(b, dict))
+                                    if not retaliation and my_prize_left - taken <= 2:
+                                        s += Wt["race_edge"]
+                            except Exception:
+                                pass
                     s += Wt["damage"] * eff / 100.0
                     weakness_hit = (opp_card and my_card and opp_card.get("weakness") is not None
                                     and opp_card.get("weakness") == my_card.get("pokemonType"))
