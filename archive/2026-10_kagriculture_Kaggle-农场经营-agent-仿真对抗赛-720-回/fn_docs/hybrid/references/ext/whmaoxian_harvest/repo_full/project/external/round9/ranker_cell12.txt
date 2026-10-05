@@ -1,6 +1,0 @@
----
-## 4. Load the reference agents
-
-Nothing clever here — the reference agents are plain single-file Python modules exposing
-`agent(obs)`. Submission archives receive an additional raw-loader check matching the
-competition's unusual **last callable wins** rule.

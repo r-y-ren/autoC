@@ -1,3 +1,0 @@
-manifest = pd.read_csv(DATASET_DIR / "agents_manifest.csv").sort_values("tier")
-manifest[["tier", "agent_name", "headline", "expected_bank",
-          "hands", "extra_quadrants", "crops", "animals"]].to_string(index=False)

@@ -1,1 +1,0 @@
-![Mathematical model](attachment:kaggriculture-mathematical-model.webp)

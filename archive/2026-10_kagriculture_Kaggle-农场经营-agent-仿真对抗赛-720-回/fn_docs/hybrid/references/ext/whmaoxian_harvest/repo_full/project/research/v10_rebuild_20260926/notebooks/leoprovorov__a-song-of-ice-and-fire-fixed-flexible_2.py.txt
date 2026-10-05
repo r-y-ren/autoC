@@ -1,5 +1,0 @@
-MODE = "SUBMISSION"  # use "SUBMISSION" only for a fast graph-free commit
-MODE = MODE.upper().strip()
-assert MODE in {"SUBMISSION", "ARTICLE"}
-SHOW_ANALYSIS = MODE == "ARTICLE"
-print(f"Running in {MODE} mode; interactive graphs: {SHOW_ANALYSIS}")

@@ -1,3 +1,0 @@
-fig,ax=plt.subplots(figsize=(10.6,4.3))
-for pdt in products: ax.plot(days,daily_prices[pdt],linewidth=2,label=pdt.title())
-_forest_axes(ax,"Market · how did the visible quotes evolve?","Day","Market price"); ax.legend(frameon=False,ncol=4,fontsize=8.4,loc="upper left"); ax.grid(axis="y",alpha=.2); _show_fig(fig)

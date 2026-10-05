@@ -1,2 +1,0 @@
-curves = pd.read_csv(DATASET_DIR / "price_curves.csv")
-curves.sort_values("base_price", ascending=False).to_string(index=False)

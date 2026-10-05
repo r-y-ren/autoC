@@ -1,5 +1,0 @@
-## 15. Public 2,879 reference and the measured delayed-harvest test
-
-This package preserves the exact public single-file controller with source SHA `10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970`. The public reference is the route published by Tetsutani and documented at the current high-score release. The control keeps that source byte-identical; the candidate adds one narrow visible-state change: the temporary WHEAT harvest is delayed by one refresh and the crop is dropped after the worker returns. The change does not inspect opponent identity, hidden state, or network data.
-
-The exact-engine paired screen used 64 deterministic seeds in both seats: 128/128 games completed, candidate mean reward minus control `+27.5625`, candidate higher in 125 and control higher in 3. This is local evidence only; official ordering will be read from the next completed server rows.

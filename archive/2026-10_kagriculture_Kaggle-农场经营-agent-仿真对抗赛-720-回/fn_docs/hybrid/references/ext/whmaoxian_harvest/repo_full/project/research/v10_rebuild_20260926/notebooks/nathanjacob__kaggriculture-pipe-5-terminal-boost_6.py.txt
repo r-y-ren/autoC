@@ -1,7 +1,0 @@
-import ast
-
-# Verify the agent parses and has the expected entry point
-tree = ast.parse(source_bytes.decode('utf-8', errors='replace'))
-functions = [node.name for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)]
-assert 'agent' in functions, f'No agent() function found! Functions: {functions[:10]}'
-print(f'Verified: agent() found among {len(functions)} functions')

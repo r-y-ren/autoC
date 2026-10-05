@@ -1,6 +1,0 @@
-### Sanity check first
-
-Before spending minutes on a round robin, play one short game and confirm the agent
-does not crash. A Kaggriculture agent that raises gets status `ERROR` and forfeits, and
-because invalid actions are *silent no-ops* you can otherwise burn a full evaluation on
-an agent that quietly did nothing at all.

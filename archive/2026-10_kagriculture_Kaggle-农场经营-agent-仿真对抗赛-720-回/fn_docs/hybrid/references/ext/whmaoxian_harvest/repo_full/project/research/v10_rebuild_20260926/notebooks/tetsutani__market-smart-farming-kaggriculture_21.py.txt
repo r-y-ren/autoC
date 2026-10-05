@@ -1,9 +1,0 @@
-windows=[("BLOCK 1",1,6),("BLOCK 2",7,12),("BLOCK 3",13,18),("BLOCK 4",19,24),("BLOCK 5",25,30)]
-rows=[]
-for label,d0,d1 in windows:
-    sl=slice(d0-1,d1)
-    start_bank=daily_bank[d0-2] if d0>1 else float(viz_env.steps[0][0].observation.farms[0]["money"])
-    end_bank=daily_bank[d1-1]
-    rows.append({"window":label,"days":f"{d0}–{d1}","bank Δ":end_bank-start_bank,"farm actions":int(sum(daily_farm_actions[sl])),"market orders":int(sum(daily_market_orders[sl])),"peak hands":int(max(daily_hands[sl])),"peak plants":int(max(daily_plants[sl]))})
-ledger=pd.DataFrame(rows); _show_table(ledger,"Six-day ledger · workload and capacity",formats={"bank Δ":lambda x:f"{x:+,.0f}","farm actions":lambda x:f"{x:,}","market orders":lambda x:f"{x:,}"})
-x=np.arange(len(ledger)); w=.36; fig,ax=plt.subplots(figsize=(10.6,4.2)); ax.bar(x-w/2,ledger["farm actions"],w,label="Farm actions",alpha=.9); ax.bar(x+w/2,ledger["market orders"],w,label="Market orders",alpha=.78); _forest_axes(ax,"Workload by six-day window · diagnostic view","Season window","Observed actions"); ax.set_xticks(x,ledger["window"]); ax.legend(frameon=False,ncol=2,loc="upper right",fontsize=8.5); ax.grid(axis="y",alpha=.2); ax.grid(axis="x",alpha=0); _show_fig(fig)
