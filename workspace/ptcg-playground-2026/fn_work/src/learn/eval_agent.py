@@ -21,6 +21,11 @@ W = {
     "retreat_penalty": -1.2,
     "retreat_escape": 2.5,   # 濒死逃脱
     "end": 0.0,
+    # 2026-10-06 扩展旋钮（默认 0=ES 搜索起点）：
+    "weakness_progress": 0.0,  # 弱点利用的磨血价值（damage 被整负后单独通道）
+    "ko_desperation": 0.0,     # 落后时强攻倾向（奖赏差驱动）
+    "ex_retreat_boost": 0.0,   # ex 主动位濒死时的撤退加成
+    "fatigue_push": 0.0,       # 我方牌库更薄时的强攻（防疲劳判负）
 }
 
 
@@ -97,6 +102,11 @@ def make_agent(weights=None, deck=None):
                     doomed = 1.0
                     break
 
+        # 局面级调制项
+        my_prize_left = len(my.get("prize") or [])
+        opp_prize_left = len(opp.get("prize") or [])
+        desperation = max(0.0, my_prize_left - opp_prize_left) / 6.0
+        fatigue = max(0.0, (opp.get("deckCount") or 0) - (my.get("deckCount") or 0)) / 60.0
         scores = []
         for i, o in enumerate(opts):
             if not isinstance(o, dict):
@@ -116,6 +126,11 @@ def make_agent(weights=None, deck=None):
                     if eff >= opp_hp > 0:
                         s += Wt["oneshot"] * _prize_value(opp_card)
                     s += Wt["damage"] * eff / 100.0
+                    weakness_hit = (opp_card and my_card and opp_card.get("weakness") is not None
+                                    and opp_card.get("weakness") == my_card.get("pokemonType"))
+                    if weakness_hit:
+                        s += Wt["weakness_progress"] * eff / 100.0
+                    s += Wt["ko_desperation"] * desperation + Wt["fatigue_push"] * fatigue
                 else:
                     s -= 2.0  # 能量不够硬打=浪费输出位（引擎会禁？ATTACK 不应出现）——防御
             elif t == 8:  # ATTACH（目标=area/index 指的宝可梦）
@@ -125,7 +140,8 @@ def make_agent(weights=None, deck=None):
             elif t in (7, 10, 15):  # PLAY/ABILITY/SKILL
                 s += Wt["play"]
             elif t == 12:  # RETREAT
-                s += Wt["retreat_penalty"] + (Wt["retreat_escape"] if doomed else 0.0)
+                ex_risk = 1.0 if (doomed and my_card and my_card.get("ex")) else 0.0
+                s += Wt["retreat_penalty"] + (Wt["retreat_escape"] if doomed else 0.0) + Wt["ex_retreat_boost"] * ex_risk
             elif t == 14:  # END
                 s += Wt["end"]
             elif t == 11:  # DISCARD（代价）
