@@ -113,11 +113,14 @@ def main():
     GAMES, ITERS = 240, 60
     for it in range(1, ITERS + 1):
         temp = 0.9 if it < ITERS * 0.6 else 0.3  # 前期探索后期收敛
-        batch = [
-            (export_w(model), GAMES // 2, "self", 2000000 + it * 1000, temp),
-            (export_w(model), GAMES // 4, "v5", 2100000 + it * 1000, temp),
-            (export_w(model), GAMES // 4, "eval_agent", 2200000 + it * 1000, temp),
-        ]
+        # 任务粒度=每块 6 局切成 40+ 块（3 大块会让 27 工人围观——2026-10-06 实测教训）
+        batch = []
+        for mode, n, base in (("self", GAMES // 2, 2000000), ("v5", GAMES // 4, 2100000),
+                              ("eval_agent", GAMES // 4, 2200000)):
+            per = 6
+            k = max(1, n // per)
+            for j in range(k):
+                batch.append((export_w(model), per, mode, base + it * 1000 + j * 97, temp))
         chunks = pool.map(play_batch, batch)
         rows = [r for ch in chunks for r in ch[0]]
         nwin = sum(ch[1] for ch in chunks)
