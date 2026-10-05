@@ -151,7 +151,7 @@ def main():
     # 起点=蒸馏专家（BC）
     model = MLP(h=96, seed=11, d=157)  # bc_policy_v4 机制特征维度
     def export_w(m):
-        return {"d": 124, "W1": m.W1.tolist(), "b1": m.b1.tolist(), "W2": m.W2.tolist(), "b2": m.b2.tolist()}
+        return {"d": int(m.W1.shape[1]), "W1": m.W1.tolist(), "b1": m.b1.tolist(), "W2": m.W2.tolist(), "b2": m.b2.tolist()}
     drows = [r for chunk in pool.map(_distill, [(12, 500000 + k * 100) for k in range(NPROC)]) for r in chunk]
     fast_ce_train(model, drows, epochs=25, lr=0.08)
     print(f"[sil] BC 起点 rows={len(drows)}", flush=True)
