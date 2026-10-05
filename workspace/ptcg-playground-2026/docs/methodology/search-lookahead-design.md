@@ -25,7 +25,7 @@
 2. **返回值是 `c_char_p` 不是结构体**:SearchBegin/SearchStep restype=char*(JSON 串);
    按结构体解=按垃圾指针读字段=segfault。SearchStep/End/Release 全部要带 agent_ptr,
    searchId 是 int64。
-3. **`prize` 列表=已拿走的奖赏(开局 0,满 6 即胜)**,不是剩余堆——价值函数符号搞反会
+3. 【2026-10-06 勘误·原表述反了】**`prize` 列表=剩余奖赏堆**(发奖 6→随领取递减归 0 即胜,ctx=41 开局前未发故为 0——原"已拿走"结论系开局前探针误判);价值函数须用**已拿=6−剩余**——符号搞反会
    倒向 END(弃权)。
 
 ## 三、v0 架构(rollout 行动选优)

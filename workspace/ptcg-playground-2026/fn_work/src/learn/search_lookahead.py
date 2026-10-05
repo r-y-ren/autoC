@@ -131,8 +131,9 @@ def state_value(obs: dict, my_i: int) -> float:
     if isinstance(res, int) and res >= 0:
         return 1000.0 if res == my_i else -1000.0
 
-    # 奖赏项:prize=已拿走的奖赏(开局 0),非线性折价(§5.3 终局截断)
-    t_m, t_o = len(my.get("prize") or []), len(opp.get("prize") or [])
+    # 奖赏项:prize 列表=剩余奖赏堆(发奖 6→递减归 0 即胜,f7e752 §5.4 口径)——已拿=6−剩余;非线性折价(§5.3 终局截断)
+    t_m = max(0, 6 - len(my.get("prize") or []))
+    t_o = max(0, 6 - len(opp.get("prize") or []))
     prize = _W_PRIZE * (_prize_score(t_m) - _prize_score(t_o))
 
     my_a = (my.get("active") or [None])[0] or {}
