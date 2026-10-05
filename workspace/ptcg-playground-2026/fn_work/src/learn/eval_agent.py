@@ -74,12 +74,18 @@ def _prize_value(card):
 
 
 def _effective_damage(attack, my_card, opp_card):
+    """引擎实证伤害公式(libcg CalcDamage 反汇编+62 回放+3 开源实现互证):
+    属系=攻击方宝可梦 energyType(与附着能量无关);弱点 ×2 → 抗性 −30(下限 0)。
+    注意 pokemonType 是卡框类别(普通/ex/Mega)不是属系,勿混用。"""
     if not attack:
         return 0
     dmg = attack.get("damage") or 0
-    if opp_card and my_card and opp_card.get("weakness") is not None \
-            and opp_card.get("weakness") == my_card.get("pokemonType"):
-        dmg *= 2
+    if opp_card and my_card:
+        t = my_card.get("energyType")
+        if isinstance(t, int) and opp_card.get("weakness") == t:
+            dmg *= 2
+        if isinstance(t, int) and opp_card.get("resistance") == t:
+            dmg = max(0, dmg - 30)
     return dmg
 
 
@@ -176,7 +182,7 @@ def make_agent(weights=None, deck=None):
                                 pass
                     s += Wt["damage"] * eff / 100.0
                     weakness_hit = (opp_card and my_card and opp_card.get("weakness") is not None
-                                    and opp_card.get("weakness") == my_card.get("pokemonType"))
+                                    and opp_card.get("weakness") == my_card.get("energyType"))
                     if weakness_hit:
                         s += Wt["weakness_progress"] * eff / 100.0
                     s += Wt["ko_desperation"] * desperation + Wt["fatigue_push"] * fatigue

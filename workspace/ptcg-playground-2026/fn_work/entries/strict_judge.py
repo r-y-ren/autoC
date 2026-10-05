@@ -18,7 +18,7 @@ os.chdir(_ROOT)  # 权重/references 相对路径解析与远程 ~/ptcg-train �
 from kaggle_environments.envs.cabt import cabt
 
 from learn.bc_policy import MLP
-from learn.bc_policy_v3 import build_features
+from learn.bc_policy_v4 import build_features
 from learn.eval_agent import make_agent as make_eval_agent
 from shared.load_agent_callable import load_agent_callable
 from shared.play_local_match import play_local_match

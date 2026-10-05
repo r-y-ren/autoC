@@ -22,7 +22,7 @@ def _base(deck):
 def _init_worker():
     from kaggle_environments.envs.cabt import cabt
     from learn.bc_policy import MLP
-    from learn.bc_policy_v3 import build_features
+    from learn.bc_policy_v4 import build_features
     from learn.eval_agent import make_agent as make_eval_agent
     from shared.play_local_match import play_local_match
     _G["deck"] = list(cabt.deck)
@@ -40,6 +40,13 @@ def _init_worker():
         _G[f"style{si}"] = make_eval_agent(weights=vw)
     _G["play"] = play_local_match
     _G["v5"] = _base(_G["deck"])
+    try:
+        import sys as _sy
+        _sy.path.insert(0, os.path.join("references", "opponents", "topdeck"))
+        from shared.load_agent_callable import load_agent_callable
+        _G["topdeck"] = load_agent_callable(os.path.join("references", "opponents", "topdeck", "main.py"))
+    except Exception:
+        _G["topdeck"] = _G["v5"]  # 外部对手装载失败降级,勿断训练
 
 def make_policy_agent(model, record, temperature=1.0, seat="a"):
     rng = random.Random(os.getpid() * 13 + sum(map(ord, seat)) % 9999)  # 确定性种子（hash 随机化禁用）
@@ -142,7 +149,7 @@ def main():
     MLP = _G["MLP"]
 
     # 起点=蒸馏专家（BC）
-    model = MLP(h=96, seed=11, d=124)
+    model = MLP(h=96, seed=11, d=157)  # bc_policy_v4 机制特征维度
     def export_w(m):
         return {"d": 124, "W1": m.W1.tolist(), "b1": m.b1.tolist(), "W2": m.W2.tolist(), "b2": m.b2.tolist()}
     drows = [r for chunk in pool.map(_distill, [(12, 500000 + k * 100) for k in range(NPROC)]) for r in chunk]
@@ -156,7 +163,7 @@ def main():
         for mode, n, base in (("self", GAMES * 4 // 10, 2000000), ("v5", GAMES // 5, 2100000),
                               ("eval_agent", GAMES // 5, 2200000),
                               ("style0", 8, 2300000), ("style1", 8, 2400000),
-                              ("style2", 8, 2500000)):
+                              ("style2", 8, 2500000), ("topdeck", 8, 2600000)):
             per = 6
             k = max(1, n // per)
             for j in range(k):

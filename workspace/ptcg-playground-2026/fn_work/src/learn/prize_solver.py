@@ -32,12 +32,16 @@ def _prize_value(card):
 
 
 def _eff_damage(attack, my_card, opp_card):
+    """引擎实证公式:属系=攻击方 energyType;弱点 ×2 → 抗性 −30(下限 0)"""
     if not attack:
         return 0
     d = attack.get("damage") or 0
-    if opp_card and my_card and opp_card.get("weakness") is not None \
-            and opp_card.get("weakness") == my_card.get("pokemonType"):
-        d *= 2
+    if opp_card and my_card:
+        t = my_card.get("energyType")
+        if isinstance(t, int) and opp_card.get("weakness") == t:
+            d *= 2
+        if isinstance(t, int) and opp_card.get("resistance") == t:
+            d = max(0, d - 30)
     return d
 
 

@@ -1,7 +1,7 @@
 """自对弈 RL 训练器（msdsm 路线复刻：BC 蒸馏热启动 → 自对弈 REINFORCE）
 
 数据主粮=自产对局（32 核并行，日百万级）；真实回放仅作验证添头。
-观测编码=引擎深读语义特征（bc_policy_v3.build_features，124 维）；
+观测编码=机制做全语义特征（bc_policy_v4.build_features，157 维）；
 奖励=奖赏差塑形（档案 J=奖赏差）+胜负终结项；熵正则防坍缩。
 """
 import glob, json, os, random, sys, time
@@ -23,7 +23,7 @@ def _base(deck):
 def _init_worker():
     from kaggle_environments.envs.cabt import cabt
     from learn.bc_policy import MLP
-    from learn.bc_policy_v3 import build_features
+    from learn.bc_policy_v4 import build_features
     from learn.eval_agent import make_agent as make_eval_agent
     from shared.play_local_match import play_local_match
     _G["deck"] = list(cabt.deck)
@@ -230,7 +230,7 @@ def main():
     pool = Pool(NPROC, initializer=_init_worker)
     MLP = _G["MLP"]
     # BC 热启动：专家 eval_agent 在线蒸馏（msdsm BC 段）
-    d = 124
+    d = 157  # bc_policy_v4 机制特征维度
     model = MLP(h=96, seed=11, d=d)
     drows = [r for chunk in pool.map(distill_games, [(12, 500000 + k * 100) for k in range(NPROC)]) for r in chunk]
     if len(drows) > 200:
