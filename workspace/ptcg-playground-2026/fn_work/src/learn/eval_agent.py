@@ -68,9 +68,12 @@ def _card(cid):
 
 
 def _prize_value(card):
+    """奖赏值(官方 CardData 文档):普通 1 / ex 2 / **Mega ex 3**——megaEx 此前误按 2"""
     if not card:
         return 1.0
-    return 2.0 if (card.get("ex") or card.get("megaEx")) else 1.0
+    if card.get("megaEx"):
+        return 3.0
+    return 2.0 if card.get("ex") else 1.0
 
 
 def _effective_damage(attack, my_card, opp_card):
