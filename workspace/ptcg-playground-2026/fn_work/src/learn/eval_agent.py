@@ -33,6 +33,28 @@ W = {
 }
 
 
+def energy_covered(cost, energies):
+    """能量需求匹配：cost=类型多重集（0=无色可由任意能量支付），energies=已附能量类型表。
+
+    元素非 int（引擎语义未知）时退化为数量比较。严于数量比、不误报覆盖。
+    """
+    if not cost:
+        return True
+    try:
+        from collections import Counter
+        need = Counter(t for t in cost if t != 0)
+        have = Counter(e for e in (energies or []) if isinstance(e, int))
+        if not all(isinstance(t, int) for t in cost):
+            return len(energies or []) >= len(cost)  # 语义未知退化
+        for t, n in need.items():
+            if have.get(t, 0) < n:
+                return False
+        leftover = len(energies or []) - sum(need.values())
+        return leftover >= sum(1 for t in cost if t == 0)
+    except Exception:
+        return len(energies or []) >= len(cost)
+
+
 def load_db():
     global _CARDS, _ATTACKS
     if _CARDS is None:
@@ -97,7 +119,7 @@ def make_agent(weights=None, deck=None):
         doomed = 0.0
         if isinstance(opp_active, dict) and isinstance(my_active, dict):
             my_hp = my_active.get("hp") or 999
-            for aid in (opp_card.get("attacks") or []):
+            for aid in ((opp_card or {}).get("attacks") or []):
                 a = _ATTACKS.get(aid)
                 if not a:
                     continue
@@ -113,9 +135,12 @@ def make_agent(weights=None, deck=None):
         fatigue = max(0.0, (opp.get("deckCount") or 0) - (my.get("deckCount") or 0)) / 60.0
         # 算法格覆盖层：防守侧判定（全局一次）
         try:
-            from src.learn import prize_solver as _ps
+            from . import prize_solver as _ps  # 同包相对导入（脚本模式亦可用）
             _wn, _re, danger = _ps.race_bonus(my, opp, my_active, opp_active)
-        except Exception:
+        except Exception as _e:
+            if not globals().get("_PS_WARNED"):
+                globals()["_PS_WARNED"] = True
+                print(f"[eval_agent] prize_solver 加载失败（覆盖层静默关闭）: {_e}", flush=True)
             _ps = None
             danger = 0.0
         scores = []

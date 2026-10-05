@@ -132,8 +132,7 @@ def main():
     ])
     fin["vs_v9"] = finals[0]
     # Judge each anchor separately
-    fin["vs_v5"] = eval_candidate((best_w, 30, 610000))
-    fin["fit_anchors"] = fin["vs_v5"]
+    fin["fit_anchors_mean"] = eval_candidate((best_w, 30, 610000))  # 三锚均值（勿称 vs_v5）
     fin["self_mirror"] = head_to_head((best_w, best_w, 16, 620000))
     fin["confirm_fitness"] = best_f
     fin["best_w"] = {k: round(v, 3) for k, v in best_w.items()}

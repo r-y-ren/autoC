@@ -109,7 +109,7 @@ def extract_pairs(raw_glob="references/episodes/episode-*-replay.json", winners_
 
 class MLP:
     """d 维特征 → h 隐 → 标量打分"""
-    """51 维特征 → 64 隐 → 标量打分。选项间 softmax。纯 numpy。"""
+    """D_N 维特征 → 64 隐 → 标量打分。选项间 softmax。纯 numpy。"""
 
     def __init__(self, h=64, seed=0, d=None):
         rng = np.random.default_rng(seed)

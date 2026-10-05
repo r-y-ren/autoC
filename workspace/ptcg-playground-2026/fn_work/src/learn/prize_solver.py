@@ -1,7 +1,8 @@
 """终局奖赏清算求解器（算法格·第一件）——档案 §七 奖赏竞速数学的落地
 
 纯算术前瞻（不依赖引擎状态克隆）：给定可见场面，算"这一击之后奖赏竞速谁赢"。
-确定性段（双方攻击/HP/能量全可见）→ 精确解；接进评分器=终局覆盖层。
+能量匹配=类型多重集（0=无色任意支付），可达即精确；引擎能量语义未明时退化为数量启发式。
+接进评分器=终局覆盖层。
 """
 from __future__ import annotations
 
@@ -48,16 +49,34 @@ def can_ko(attacker_pokemon, defender_pokemon):
     d_card = _card(defender_pokemon.get("id"))
     if not a_card or not d_card:
         return False
-    have = len(attacker_pokemon.get("energies") or [])
     hp = defender_pokemon.get("hp") or 999
     for aid in (a_card.get("attacks") or []):
         atk = _ATTACKS.get(aid)
         if not atk:
             continue
-        cost = len(atk.get("energies") or [])
-        if have >= cost and _eff_damage(atk, a_card, d_card) >= hp:
+        if energy_covered(atk.get("energies"), attacker_pokemon.get("energies")) \
+                and _eff_damage(atk, a_card, d_card) >= hp:
             return True
     return False
+
+
+def energy_covered(cost, energies):
+    """能量需求匹配：cost=类型多重集（0=无色可由任意能量支付），energies=已附能量类型表。"""
+    if not cost:
+        return True
+    try:
+        from collections import Counter
+        if not all(isinstance(t, int) for t in cost):
+            return len(energies or []) >= len(cost)
+        need = Counter(t for t in cost if t != 0)
+        have = Counter(e for e in (energies or []) if isinstance(e, int))
+        for t, n in need.items():
+            if have.get(t, 0) < n:
+                return False
+        leftover = len(energies or []) - sum(need.values())
+        return leftover >= sum(1 for t in cost if t == 0)
+    except Exception:
+        return len(energies or []) >= len(cost)
 
 
 def race_bonus(my, opp, my_active, opp_active):

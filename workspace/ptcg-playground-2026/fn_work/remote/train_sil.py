@@ -42,7 +42,7 @@ def _init_worker():
     _G["v5"] = _base(_G["deck"])
 
 def make_policy_agent(model, record, temperature=1.0, seat="a"):
-    rng = random.Random(os.getpid() * 13 + hash(seat) % 9999)
+    rng = random.Random(os.getpid() * 13 + sum(map(ord, seat)) % 9999)  # 确定性种子（hash 随机化禁用）
     def agent(obs, config=None):
         sel = (obs or {}).get("select")
         if sel is None:
@@ -127,8 +127,9 @@ def play_batch(args):
             if rw[seat] > 0:
                 n_win += 1
                 for step in rec:
-                    for c in step["chosen"]:
-                        winners_rows.append((step["feats"], c, "sil"))
+                    # 只记 top-1（多选行同 feats 异 label 会造成 CE 互斥监督矛盾）
+                    if step["chosen"]:
+                        winners_rows.append((step["feats"], step["chosen"][0], "sil"))
             else:
                 n_loss += 1
     return winners_rows, n_win, n_loss
@@ -154,8 +155,8 @@ def main():
         batch = []
         for mode, n, base in (("self", GAMES * 4 // 10, 2000000), ("v5", GAMES // 5, 2100000),
                               ("eval_agent", GAMES // 5, 2200000),
-                              ("style0", GAMES // 15, 2300000), ("style1", GAMES // 15, 2400000),
-                              ("style2", GAMES // 15, 2500000)):
+                              ("style0", 8, 2300000), ("style1", 8, 2400000),
+                              ("style2", 8, 2500000)):
             per = 6
             k = max(1, n // per)
             for j in range(k):
@@ -174,7 +175,7 @@ def main():
         nwin = sum(ch[1] for ch in chunks)
         nloss = sum(ch[2] for ch in chunks)
         if len(rows) > 100:
-            # 专家地板：赢家行混 30% 专家行——防"学运气赢家"漂离专家（SIL 数据病）
+            # 专家地板：赢家行混约 33% 专家行（rows 的一半）——防"学运气赢家"漂离专家（SIL 数据病）
             import random as _r
             mixed = rows + _r.sample(drows, min(len(rows) // 2, len(drows)))
             fast_ce_train(model, mixed, epochs=4, lr=0.05)
@@ -189,14 +190,18 @@ def main():
                 hist = {}
                 try:
                     hist = json.load(open("weights/sil_best.json"))
+                    if not isinstance(hist, dict):
+                        hist = {}
                 except Exception:
                     hist = {}
-                if score >= hist.get("fit", -1):
+                hist_fit = hist.get("fit")
+                hist_fit = hist_fit if isinstance(hist_fit, (int, float)) else -1
+                if score >= hist_fit:
                     out = dict(best["w"])
                     out["fit"] = score
                     json.dump(out, open("weights/sil_best.json", "w"))
                 else:
-                    mark = " (未超历史best {:.2f})".format(hist.get("fit", -1))
+                    mark = " (未超历史best {:.2f})".format(hist_fit)
             print(f"[sil] it{it}: win={nwin} loss={nloss} rows={len(rows)} eval={ev}{mark} ({time.time()-t0:.0f}s)", flush=True)
         json.dump(export_w(model), open("weights/sil_latest.json", "w"))
     fin = {"eval": _eval(best["w"], 24, 777000), "best_fit": best["fit"], "elapsed_s": round(time.time() - t0)}

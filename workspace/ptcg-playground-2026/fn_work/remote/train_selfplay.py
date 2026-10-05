@@ -42,7 +42,7 @@ def _softmax_sample(scores, rng, temperature=1.0):
     return int(rng.choices(range(len(p)), weights=p)[0]), p
 
 def make_policy_agent(model, record, temperature=1.0, greedy=False, seat_name="p"):
-    rng = random.Random(os.getpid() * 7 + hash(seat_name) % 10000)
+    rng = random.Random(os.getpid() * 7 + sum(map(ord, seat_name)) % 10000)
     def agent(obs, config=None):
         sel = (obs or {}).get("select")
         if sel is None:
@@ -72,7 +72,7 @@ def make_policy_agent(model, record, temperature=1.0, greedy=False, seat_name="p
                 pvec[i] = 1.0 / max(1, len(chosen))
         else:
             # Gumbel top-k
-            g = np.array([-np.log(max(rng.random(), 1e-12)) for _ in scores])
+            g = np.array([-np.log(max(-np.log(max(rng.random(), 1e-12)), 1e-12)) for _ in scores])  # 真 Gumbel：-log(-log U)
             noisy = np.asarray(scores) / max(temperature, 1e-6) - g
             chosen = sorted(range(len(opts)), key=lambda i: -noisy[i])[:k]
             pvec = np.zeros(len(opts))
@@ -159,9 +159,10 @@ def update(model, traj, lr, entropy_beta, rng):
         s = (H @ model.W2.T + model.b2).ravel()
         s = s - s.max()
         p = np.exp(s); p = p / p.sum()
+        dH_term = entropy_beta * (1.0 / len(p) - p)  # 均匀吸引项（每次决策一次，勿随 k 重复）
         for c in chosen:
             dL = A * _onehot_grad(p, c)  # ∇logπ(a)·A
-            dL = dL + entropy_beta * (1.0 / len(p) - p)  # 熵正则：推向均匀
+            dL = dL + dH_term
             grads["W2"] += (dL @ H).reshape(1, -1)
             grads["b2"] += dL.sum()
             dH = np.outer(dL, model.W2.ravel()) * (1 - H ** 2)
