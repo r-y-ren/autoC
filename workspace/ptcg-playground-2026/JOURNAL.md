@@ -13,3 +13,4 @@
 | 2026-10-06 | 每日迭代轮4 | μ: v6=269.8/v5=322.6（牌组假设被天梯否决）；语料 61 局+转换器升级+三真锚克隆；身份级克隆第四负（同牌组 0.20 净负）不提交；fna-002/005 落 missed、fna-006 新挂（状态评估型）；GSK 探活 not-live |
 | 2026-10-06 | deliver-引擎深读 | 按用户指令停手深解引擎与规则：libcg.so AllCard/AllAttack 全库到手（1431 卡+1755 技能落 references/engine/）+SelectContext 0-48 全谱+奖赏数学实证（普通 1/ex 2）+决策分布实测（MAIN 主战场/输家 TO_ACTIVE 显著多）；档案落 docs/methodology/engine-deep-parse.md——四连负根因定位=所有版本不知卡语义，胜线=奖赏差期望的状态评估 |
 | 2026-10-06 | deliver-迭代5(流派换档) | 引擎深读档案（卡库/奖赏数学/战略翻译）→ES 整定评估骨架 v9 全门槛过线（vs v5 0.62/真锚 0.94-1.00/自镜像 0.58）；五连测：BC v2/v3 亦不过基线（模仿路线收束）；**v9 提交被 Kaggle OAuth 过期阻塞（用户动作项：CLI 重登或 access_token）**；fna-006 achieved/fna-007 新挂 |
+| 2026-10-06 | deliver-迭代6b | v9 ERROR 根因=Kaggle exec 无 __file__（agent 日志实证）→v9.1 数据全内联+exec 预验重提成功（今日 3/5）；远程 32 核两段确认制 ES 稳定运行（gen0 在位 0.844，gen1 拦截一次诅咒升级）；自动化升 4h 轮含远程收获闭环 |

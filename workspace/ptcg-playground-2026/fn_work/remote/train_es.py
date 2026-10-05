@@ -113,7 +113,7 @@ def main():
         top_idx = sorted(range(POP), key=lambda j: -coarse[j])[:4]
         confirms = pool.map(eval_candidate, [(cands[j], 30, 900000 + gen * 100 + t) for t, j in enumerate(top_idx)])
         # In-place protection: top1 also needs to win head-to-head against incumbent
-        h2h = pool.apply(head_to_head, (cands[top_idx[0]], best_w, 20, 990000 + gen))
+        h2h = pool.apply(head_to_head, ((cands[top_idx[0]], best_w, 20, 990000 + gen),))
         ci = confirms[0]
         if ci > best_f + 0.005 and h2h > 0.50:
             best_f, best_w = ci, cands[top_idx[0]]
