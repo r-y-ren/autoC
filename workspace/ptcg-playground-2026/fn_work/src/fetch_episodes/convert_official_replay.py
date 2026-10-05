@@ -31,6 +31,8 @@ def convert_official_replay(path, out_path=None):
             "active": active,
             "action": st.get("action") if isinstance(st.get("action"), list) else None,
             "option_types": [o.get("type") if isinstance(o, dict) else None for o in (sel.get("option") or [])],
+            "options_raw": sel.get("option") or [],  # 2026-10-06 迭代：身份级克隆所需完整字段
+            "context": sel.get("context"),
             "state": {"turn": cur.get("turn"), "hand": my.get("handCount"), "prize": len(my.get("prize") or [])},
         })
     rewards = d.get("rewards") or [raw[-1][i].get("reward") for i in (0, 1)] if raw else [None, None]
