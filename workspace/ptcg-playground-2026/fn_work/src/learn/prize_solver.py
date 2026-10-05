@@ -28,9 +28,18 @@ def _card(cid):
 
 
 def _prize_value(card):
-    """奖赏值:普通 1 / ex 2 / Mega ex 3(官方 CardData 文档)"""
+    """奖赏值(引擎 KOProc3 口径,报告 §5.1):卡框 pokemonType==3(ex)→2 张、==4(Mega ex)→3 张、其他→1 张。
+
+    pokemonType 是卡框类别不是属系(§12.1)。卡效"少拿/多拿 1 张"修正(引擎 Card+0x69 二进制偏移,
+    如 Legacy Energy 整局一次)在 JSON 卡库无对应字段——卡效修正待效果文本解析,不在此估数。
+    megaEx 布尔仅作 pokemonType 缺失时的 fallback(ex/megaEx 两标志互斥,§8.3)。
+    1/2/3 是严格上界:终局截断下领取不超过对方剩余奖赏,余张不取(§5.2/§5.3)。
+    """
     if not card:
         return 1.0
+    pt = card.get("pokemonType")
+    if isinstance(pt, int):
+        return {3: 2.0, 4: 3.0}.get(pt, 1.0)
     if card.get("megaEx"):
         return 3.0
     return 2.0 if card.get("ex") else 1.0
@@ -89,7 +98,12 @@ def energy_covered(cost, energies):
 
 
 def race_bonus(my, opp, my_active, opp_active):
-    """奖赏清算覆盖层 → 给 ATTACK 选项的加成（元组：win_now, race_edge, danger）"""
+    """奖赏清算覆盖层 → 给 ATTACK 选项的加成（元组：win_now, race_edge, danger）
+
+    终局截断(报告 §5.3):领取使对方剩余奖赏归零的瞬间对局结束(reason 1),余张不取——
+    竞速清算不得越过该边界继续累计假想领取;win_now 即"本次击杀是否清空剩余奖赏"的边界判断
+    (can_ko/prize 竞速逻辑已隐含:清空即胜走 win_now 分支,不再算后续反击)。
+    """
     my_prize = len(my.get("prize") or [])
     opp_prize = len(opp.get("prize") or [])
     my_card = _card(my_active.get("id")) if isinstance(my_active, dict) else None

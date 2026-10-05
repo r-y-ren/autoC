@@ -7,6 +7,9 @@
 - 隐藏信息预测 v0:基础怪+能量填充(数量对齐);对手模型后续用 meta 牌组换。
 
 实测(2026-10-06):单次 12 步 rollout ≈1ms;活局内搜索与本地对局引擎共存无冲突。
+
+v0.1 叶子增厚(2026-10-06,引擎规则总报告 f7e752 §5/§6/§7/§10/§14):
+状态条件期望伤害流+行动锁、清场线风险、牌库耗尽、奖赏非线性终局折价、混乱威胁折价。
 """
 from __future__ import annotations
 
@@ -69,8 +72,57 @@ def _attacks_of(card):
     return out
 
 
+_STATUS_HORIZON = 2.0    # 状态期望伤害流折算回合数(假设:灼伤掷币 50% 解期望持续恰 2 回合)
+_POISON_DMG = 10.0       # 毒:poisonValue×10/回合,取默认 10(EffectPoison 可改 2→20,无实测)
+_BURN_DMG = 20.0         # 灼伤:20/回合,Checkup 后掷币正面解
+_CONFUSE_SELF = 30.0     # 混乱攻击掷币反面自伤 30
+_W_PRIZE, _W_HP, _W_THREAT = 10.0, 2.0, 3.0
+_W_LOCK, _W_BOARD, _W_FATIGUE = 2.0, 1.5, 2.0
+_DANGER = -4.0           # 后备空+出战濒死(§7.4 清场速败高危)
+_DECK_REF = 30.0         # 长盘价值衰减参考牌库余量
+
+
+def _prize_score(taken: int) -> float:
+    """奖赏进度非线性计价(§5.3 终局截断):按"距离拿完 6 张还有几步"凸折价。
+
+    g(t)=6×(t/6)^1.5——中间进度相对线性打折(3 张=2.12×10 分,线性为 30 分),
+    越接近拿完边际越高(第 6 张边际≈第 1 张的 4.7 倍,"领先 5 张≈接近胜利");
+    两端 ±60 与旧线性 10×adv 同标定,终局仍由 ±1000 截断。
+    """
+    t = max(0, min(6, int(taken)))
+    return 6.0 * (t / 6.0) ** 1.5
+
+
+def _is_fossil(card) -> bool:
+    """Antique 化石(pokemonType==2)免疫全部特殊状态(§6.2/§12 隐藏规则;简化假设)。"""
+    return bool(card) and (card or {}).get("pokemonType") == 2
+
+
+def _status_flags(P: dict, card) -> dict:
+    """出战位状态五槽(观测 PlayerState 布尔);化石免疫→全假(简化,不建模道具/特性豁免)。"""
+    keys = ("poisoned", "burned", "asleep", "paralyzed", "confused")
+    if _is_fossil(card):
+        return {k: False for k in keys}
+    return {k: bool(P.get(k)) for k in keys}
+
+
+def _status_flow(flags: dict) -> float:
+    """状态期望伤害流(HP/回合):毒 10+灼伤 20;睡/麻无掉血,混乱自伤折进威胁项。"""
+    return (_POISON_DMG if flags["poisoned"] else 0.0) + \
+           (_BURN_DMG if flags["burned"] else 0.0)
+
+
 def state_value(obs: dict, my_i: int) -> float:
-    """叶子状态价值(我方视角):奖赏竞速为主轴,血量差+一击威胁为辅。"""
+    """叶子状态价值(我方视角,报告 §5/§6/§7/§10/§14):奖赏竞速主轴+状态/清场/牌库风险。
+
+    项:奖赏 10×非线性折价(§5.3)| 血差 2×(含状态期望伤害流按 2 回合折算)|
+    一击威胁 3×(混乱 50% 失效+自伤 30 期望折价)| 行动锁 2×(睡/麻禁攻禁撤,§6)|
+    清场 1.5×场上存量差+后备空且出战濒死 −4(§7.4 reason 3 占 18.5%)|
+    疲劳 2×牌库差(§10 reason 2 回合开始硬判负)| 长盘衰减:我方牌库 <30 时
+    慢转换项(血差/威胁/行动锁)按余量折价。
+    假设(毒/烧/睡/麻 0 实测样本,§6.4):毒取默认 poisonValue=10;状态伤害流按
+    2 回合折算;化石(pokemonType==2)免疫全部状态;濒死阈=出战剩余 HP<35%。
+    """
     cur = obs.get("current") or {}
     players = cur.get("players") or []
     my = players[my_i] if len(players) > my_i else {}
@@ -78,25 +130,57 @@ def state_value(obs: dict, my_i: int) -> float:
     res = cur.get("result")
     if isinstance(res, int) and res >= 0:
         return 1000.0 if res == my_i else -1000.0
-    prize_adv = len(my.get("prize") or []) - len(opp.get("prize") or [])  # prize=已拿走的奖赏(开局 0)
+
+    # 奖赏项:prize=已拿走的奖赏(开局 0),非线性折价(§5.3 终局截断)
+    t_m, t_o = len(my.get("prize") or []), len(opp.get("prize") or [])
+    prize = _W_PRIZE * (_prize_score(t_m) - _prize_score(t_o))
+
     my_a = (my.get("active") or [None])[0] or {}
     opp_a = (opp.get("active") or [None])[0] or {}
-    my_hp = (my_a.get("hp") or 0) / 380.0
-    opp_hp = (opp_a.get("hp") or 0) / 380.0
     my_c, opp_c = _card(my_a.get("id")), _card(opp_a.get("id"))
+    my_st = _status_flags(my, my_c)
+    opp_st = _status_flags(opp, opp_c)
 
-    def threat(atk_card, def_card, def_p):
+    # 血差:状态期望伤害流(毒/灼伤)折进有效剩余血量
+    my_hp = max(0.0, (my_a.get("hp") or 0) - _STATUS_HORIZON * _status_flow(my_st)) / 380.0
+    opp_hp = max(0.0, (opp_a.get("hp") or 0) - _STATUS_HORIZON * _status_flow(opp_st)) / 380.0
+
+    def threat(atk_card, def_card, def_p, atk_st):
+        """一击威胁(0/1 基准):睡/麻禁攻→0;混乱→50% 失效+反面自伤 30 的期望折价。"""
+        if atk_st["asleep"] or atk_st["paralyzed"]:
+            return 0.0
         t = 0.0
         for a in _attacks_of(atk_card):
             eff = _eff_damage(a.get("damage") or 0, atk_card, def_card)
             if eff >= (def_p.get("hp") or 0) > 0:
                 t = max(t, 1.0)
+        if atk_st["confused"]:
+            t = 0.5 * t - 0.5 * _CONFUSE_SELF / 380.0
         return t
 
-    my_shot = threat(my_c, opp_c, opp_a)
-    opp_shot = threat(opp_c, my_c, my_a)
-    fatigue = ((my.get("deckCount") or 0) - (opp.get("deckCount") or 0)) / 60.0
-    return 10.0 * prize_adv + 2.0 * (my_hp - opp_hp) + 3.0 * (my_shot - opp_shot) + 0.5 * fatigue
+    my_shot = threat(my_c, opp_c, opp_a, my_st)
+    opp_shot = threat(opp_c, my_c, my_a, opp_st)
+
+    # 行动锁:睡/麻禁攻禁撤,出战位被锁死(混乱自伤/失效已在威胁项,不重复)
+    my_lock = 1.0 if (my_st["asleep"] or my_st["paralyzed"]) else 0.0
+    opp_lock = 1.0 if (opp_st["asleep"] or opp_st["paralyzed"]) else 0.0
+
+    # 清场风险(§7.4):场上存量=出战+备战,差值独立权重;后备空+出战濒死=高危
+    my_n = 1 + len([b for b in (my.get("bench") or []) if isinstance(b, dict)])
+    opp_n = 1 + len([b for b in (opp.get("bench") or []) if isinstance(b, dict)])
+    my_max_hp = (my_c or {}).get("hp") or 380
+    danger = _DANGER if (my_n == 1 and (my_a.get("hp") or 0) < 0.35 * my_max_hp) else 0.0
+
+    # 牌库耗尽(§10):差值进疲劳项;长盘价值随我方牌库余量衰减
+    my_deck_n = my.get("deckCount") or 0
+    fatigue = _W_FATIGUE * (my_deck_n - (opp.get("deckCount") or 0)) / 60.0
+    long_scale = min(1.0, my_deck_n / _DECK_REF)
+
+    return (prize
+            + long_scale * (_W_HP * (my_hp - opp_hp)
+                            + _W_THREAT * (my_shot - opp_shot)
+                            + _W_LOCK * (opp_lock - my_lock))
+            + _W_BOARD * (my_n - opp_n) + danger + fatigue)
 
 
 def choose_with_search(obs: dict, deck: list[int], context: int = 0) -> list[int]:
