@@ -29,6 +29,15 @@ def _init_worker():
     _G["MLP"] = MLP
     _G["build"] = build_features
     _G["eval_agent"] = make_eval_agent(weights=json.load(open("weights/eval_es_v1.json")))  # 整定过的 v9，勿用默认
+    # 风格变体池（非传递对策：防 SIL 过拟合单一老师风格）
+    import random as _pr
+    _base_w = json.load(open("weights/eval_es_v1.json"))
+    for si in range(3):
+        _prng = _pr.Random(1000 + si)
+        vw = dict(_base_w)
+        for k in ("oneshot", "damage", "attach_progress", "evolve", "play", "retreat_penalty"):
+            vw[k] = vw[k] * _prng.uniform(0.5, 1.6)
+        _G[f"style{si}"] = make_eval_agent(weights=vw)
     _G["play"] = play_local_match
     _G["v5"] = _base(_G["deck"])
 
@@ -143,8 +152,10 @@ def main():
 
     def make_batch(it_, temp_, model_w):
         batch = []
-        for mode, n, base in (("self", GAMES // 2, 2000000), ("v5", GAMES // 4, 2100000),
-                              ("eval_agent", GAMES // 4, 2200000)):
+        for mode, n, base in (("self", GAMES * 4 // 10, 2000000), ("v5", GAMES // 5, 2100000),
+                              ("eval_agent", GAMES // 5, 2200000),
+                              ("style0", GAMES // 15, 2300000), ("style1", GAMES // 15, 2400000),
+                              ("style2", GAMES // 15, 2500000)):
             per = 6
             k = max(1, n // per)
             for j in range(k):
@@ -168,13 +179,24 @@ def main():
             mixed = rows + _r.sample(drows, min(len(rows) // 2, len(drows)))
             fast_ce_train(model, mixed, epochs=4, lr=0.05)
         if it % 5 == 0 or it == 1:
-            ev = _eval(export_w(model), 12, 810000 + it)
+            ev = _eval(export_w(model), 20, 810000 + it)
             score = ev["v5"] + ev["eval_agent"]
             mark = ""
             if score > best["fit"]:
                 best = {"fit": score, "w": export_w(model)}
                 mark = " *BEST*"
-                json.dump(best["w"], open("weights/sil_best.json", "w"))
+                # 跨轮保留：只有优于历史 best 才落盘（防新轮开局覆盖旧纪录——2026-10-06 修复）
+                hist = {}
+                try:
+                    hist = json.load(open("weights/sil_best.json"))
+                except Exception:
+                    hist = {}
+                if score >= hist.get("fit", -1):
+                    out = dict(best["w"])
+                    out["fit"] = score
+                    json.dump(out, open("weights/sil_best.json", "w"))
+                else:
+                    mark = " (未超历史best {:.2f})".format(hist.get("fit", -1))
             print(f"[sil] it{it}: win={nwin} loss={nloss} rows={len(rows)} eval={ev}{mark} ({time.time()-t0:.0f}s)", flush=True)
         json.dump(export_w(model), open("weights/sil_latest.json", "w"))
     fin = {"eval": _eval(best["w"], 24, 777000), "best_fit": best["fit"], "elapsed_s": round(time.time() - t0)}
