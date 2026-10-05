@@ -238,6 +238,8 @@ def main():
     else:
         print(f"[sp] 蒸馏样本不足 {len(drows)}，随机热启动", flush=True)
     export_w = lambda m: {"d": d, "W1": m.W1.tolist(), "b1": m.b1.tolist(), "W2": m.W2.tolist(), "b2": m.b2.tolist()}
+    ev0 = eval_greedy(export_w(model), {"v5": _G["v5"], "eval_agent": _G["eval_agent"]}, games=16, seed0=424242)
+    print(f"[sp] 蒸馏起点 eval={ev0}（应接近 v9 水平 vs v5≈0.6）", flush=True)
     print(f"[sp] self-play start procs={NPROC}", flush=True)
     best = {"fit": -1, "w": export_w(model)}
     GAMES_PER_ITER, ITERS = 240, 60
@@ -253,11 +255,13 @@ def main():
         batch_args.append((export_w(model), n_exp, "eval_agent", base_seed + 2000, 1.0))
         chunks = pool.map(run_games, batch_args)
         traj = [x for ch in chunks for x in ch]
-        ll = update(model, traj, lr=0.01, entropy_beta=0.01, rng=random.Random(it))
-        # BC 锚定（防策略漂移离开专家——RL 只做抛光，模仿做地板）
+        ll = update(model, traj, lr=0.004, entropy_beta=0.01, rng=random.Random(it))  # 稳锚版：步长 1/3
+        # BC 锚定——**衰减锚**（防局部最优锁死老师）：
+        # 前 1/3 训练强锚（学手艺），中 1/3 渐弱，后 1/3 微锚（放手探索超越老师）
         if drows:
             import random as _r
-            model.train(_r.sample(drows, min(2000, len(drows))), epochs=1, lr=0.01)
+            anchor_lr = 0.03 * max(0.0, 1.0 - it / (ITERS * 0.7)) + 0.005  # 稳锚版：锚力加倍
+            model.train(_r.sample(drows, min(3000, len(drows))), epochs=2, lr=anchor_lr)
         if it % 5 == 0 or it == 1:
             ev = eval_greedy(export_w(model), {"v5": _G["v5"], "eval_agent": _G["eval_agent"]}, games=12, seed0=800000 + it)
             score = ev["v5"] + ev["eval_agent"]
@@ -266,6 +270,10 @@ def main():
                 best = {"fit": score, "w": export_w(model)}
                 mark = " *BEST*"
                 json.dump(best["w"], open("weights/selfplay_best.json", "w"))
+                # 自我蒸馏阶梯：学生超越老师 → 反哺锚定池（老师随版本进化）
+                if score > 1.15:  # 双锚合计 >1.15 ≈ 稳超专家
+                    drows = []  # 老师退役：锚定关闭，纯自强
+                    print(f"[sp] it{it}: 学生超越专家，锚定关闭（自我蒸馏阶梯）", flush=True)
             print(f"[sp] it{it}: traj={len(traj)} ll={ll:.2f} eval={ev}{mark} ({time.time()-t0:.0f}s)", flush=True)
         json.dump(export_w(model), open("weights/selfplay_latest.json", "w"))
     ev = eval_greedy(best["w"], {"v5": _G["v5"], "eval_agent": _G["eval_agent"], "self": None} if False else {"v5": _G["v5"], "eval_agent": _G["eval_agent"]}, games=24, seed0=777000)
