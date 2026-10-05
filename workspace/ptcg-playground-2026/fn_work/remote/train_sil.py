@@ -28,7 +28,7 @@ def _init_worker():
     _G["deck"] = list(cabt.deck)
     _G["MLP"] = MLP
     _G["build"] = build_features
-    _G["eval_agent"] = make_eval_agent()
+    _G["eval_agent"] = make_eval_agent(weights=json.load(open("weights/eval_es_v1.json")))  # 整定过的 v9，勿用默认
     _G["play"] = play_local_match
     _G["v5"] = _base(_G["deck"])
 
@@ -219,4 +219,14 @@ def _eval(model_w, games, seed0):
     return res
 
 if __name__ == "__main__":
-    main()
+    # 自我接力：一轮 60 代跑完自动开下一轮（机器不空转，收割交给 2h 自动化）
+    import time as _t
+    loop = 0
+    while True:
+        loop += 1
+        print(f"===== 第 {loop} 轮开跑 =====", flush=True)
+        try:
+            main()
+        except Exception as _e:
+            print(f"[sil] 第 {loop} 轮异常: {_e}", flush=True)
+            _t.sleep(30)

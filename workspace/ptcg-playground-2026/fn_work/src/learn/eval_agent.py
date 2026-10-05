@@ -26,6 +26,10 @@ W = {
     "ko_desperation": 0.0,     # 落后时强攻倾向（奖赏差驱动）
     "ex_retreat_boost": 0.0,   # ex 主动位濒死时的撤退加成
     "fatigue_push": 0.0,       # 我方牌库更薄时的强攻（防疲劳判负）
+    # 算法格：终局奖赏清算求解器覆盖层（prize_solver，2026-10-06）
+    "win_now": 0.0,            # 当场清奖赏胜利
+    "race_edge": 0.0,          # 竞速锁定（KO 后他反杀不动且我接近收官）
+    "danger_flee": 0.0,        # 主动位送他当场胜利→撤退加成
 }
 
 
@@ -103,10 +107,15 @@ def make_agent(weights=None, deck=None):
                     break
 
         # 局面级调制项
-        my_prize_left = len(my.get("prize") or [])
         opp_prize_left = len(opp.get("prize") or [])
         desperation = max(0.0, my_prize_left - opp_prize_left) / 6.0
         fatigue = max(0.0, (opp.get("deckCount") or 0) - (my.get("deckCount") or 0)) / 60.0
+        # 算法格覆盖层：防守侧判定（全局一次）
+        try:
+            from src.learn.prize_solver import race_bonus, can_ko, _card, _prize_value
+            _wn, _re, danger = race_bonus(my, opp, my_active, opp_active)
+        except Exception:
+            danger = 0.0
         scores = []
         for i, o in enumerate(opts):
             if not isinstance(o, dict):
@@ -125,6 +134,18 @@ def make_agent(weights=None, deck=None):
                     s += Wt["covered"]
                     if eff >= opp_hp > 0:
                         s += Wt["oneshot"] * _prize_value(opp_card)
+                        # 逐选项求解：这一击清奖赏=当场胜利；这一击锁竞速
+                        try:
+                            taken = _prize_value(opp_card)
+                            if my_prize_left - taken <= 0:
+                                s += Wt["win_now"]
+                            else:
+                                retaliation = can_ko(opp_active, my_active) or any(
+                                    can_ko(b, my_active) for b in (opp.get("bench") or []) if isinstance(b, dict))
+                                if not retaliation and my_prize_left - taken <= 2:
+                                    s += Wt["race_edge"]
+                        except Exception:
+                            pass
                     s += Wt["damage"] * eff / 100.0
                     weakness_hit = (opp_card and my_card and opp_card.get("weakness") is not None
                                     and opp_card.get("weakness") == my_card.get("pokemonType"))
@@ -141,7 +162,7 @@ def make_agent(weights=None, deck=None):
                 s += Wt["play"]
             elif t == 12:  # RETREAT
                 ex_risk = 1.0 if (doomed and my_card and my_card.get("ex")) else 0.0
-                s += Wt["retreat_penalty"] + (Wt["retreat_escape"] if doomed else 0.0) + Wt["ex_retreat_boost"] * ex_risk
+                s += Wt["retreat_penalty"] + (Wt["retreat_escape"] if doomed else 0.0) + Wt["ex_retreat_boost"] * ex_risk + Wt["danger_flee"] * danger
             elif t == 14:  # END
                 s += Wt["end"]
             elif t == 11:  # DISCARD（代价）
