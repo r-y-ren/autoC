@@ -60,6 +60,35 @@ def make_policy_agent(model, record, temperature=1.0, seat="a"):
         return chosen
     return agent
 
+def fast_ce_train(model, rows, epochs=4, lr=0.05):
+    """批量 CE：按选项数分桶，矩阵一次算一桶——消除主进程单线程长空档"""
+    from collections import defaultdict
+    buckets = defaultdict(list)
+    for feats, label, _ in rows:
+        buckets[len(feats)].append((feats, label))
+    for _ep in range(epochs):
+        for n_o, items in buckets.items():
+            B = len(items)
+            X = np.stack([np.stack(f) for f, _ in items])   # (B, n_o, D)
+            y = np.array([l for _, l in items])
+            H = np.tanh(X @ model.W1.T + model.b1)           # (B, n, h)
+            S = (H @ model.W2.T + model.b2).squeeze(-1)      # (B, n)
+            S = S - S.max(axis=1, keepdims=True)
+            P = np.exp(S)
+            P /= P.sum(axis=1, keepdims=True)
+            dS = P.copy()
+            dS[np.arange(B), y] -= 1.0
+            gW2 = np.einsum("bn,bnh->h", dS, H) / B
+            gb2 = dS.sum() / B
+            dH = dS[:, :, None] * model.W2.ravel()[None, None, :] * (1 - H ** 2)
+            gW1 = np.einsum("bnh,bnd->hd", dH, X) / B
+            gb1 = dH.sum(axis=(0, 1)) / B
+            model.W2 -= lr * gW2.reshape(1, -1)  # CE 损失做梯度下降（勿写 +=，那是练坏）
+            model.b2 -= lr * np.array([gb2])
+            model.W1 -= lr * gW1
+            model.b1 -= lr * gb1
+
+
 def play_batch(args):
     model_w, n_games, opponent_mode, seed0, temperature = args
     MLP = _G["MLP"]
@@ -107,26 +136,37 @@ def main():
     def export_w(m):
         return {"d": 124, "W1": m.W1.tolist(), "b1": m.b1.tolist(), "W2": m.W2.tolist(), "b2": m.b2.tolist()}
     drows = [r for chunk in pool.map(_distill, [(12, 500000 + k * 100) for k in range(NPROC)]) for r in chunk]
-    model.train(drows, epochs=12, lr=0.02)
+    fast_ce_train(model, drows, epochs=25, lr=0.08)
     print(f"[sil] BC 起点 rows={len(drows)}", flush=True)
     best = {"fit": -1, "w": export_w(model)}
     GAMES, ITERS = 240, 60
-    for it in range(1, ITERS + 1):
-        temp = 0.9 if it < ITERS * 0.6 else 0.3  # 前期探索后期收敛
-        # 任务粒度=每块 6 局切成 40+ 块（3 大块会让 27 工人围观——2026-10-06 实测教训）
+
+    def make_batch(it_, temp_, model_w):
         batch = []
         for mode, n, base in (("self", GAMES // 2, 2000000), ("v5", GAMES // 4, 2100000),
                               ("eval_agent", GAMES // 4, 2200000)):
             per = 6
             k = max(1, n // per)
             for j in range(k):
-                batch.append((export_w(model), per, mode, base + it * 1000 + j * 97, temp))
-        chunks = pool.map(play_batch, batch)
+                batch.append((model_w, per, mode, base + it_ * 1000 + j * 97, temp_))
+        return batch
+
+    # 流水线：打下一棒的同时上一棒开训（SIL 离策略，晚一拍无害）——消脉冲空档
+    temp = 0.9
+    pending = pool.map_async(play_batch, make_batch(1, temp, export_w(model)))
+    for it in range(1, ITERS + 1):
+        chunks = pending.get()
+        temp = 0.9 if it < ITERS * 0.6 else 0.3
+        if it < ITERS:
+            pending = pool.map_async(play_batch, make_batch(it + 1, temp, export_w(model)))
         rows = [r for ch in chunks for r in ch[0]]
         nwin = sum(ch[1] for ch in chunks)
         nloss = sum(ch[2] for ch in chunks)
         if len(rows) > 100:
-            model.train(rows, epochs=3, lr=0.01)
+            # 专家地板：赢家行混 30% 专家行——防"学运气赢家"漂离专家（SIL 数据病）
+            import random as _r
+            mixed = rows + _r.sample(drows, min(len(rows) // 2, len(drows)))
+            fast_ce_train(model, mixed, epochs=4, lr=0.05)
         if it % 5 == 0 or it == 1:
             ev = _eval(export_w(model), 12, 810000 + it)
             score = ev["v5"] + ev["eval_agent"]
