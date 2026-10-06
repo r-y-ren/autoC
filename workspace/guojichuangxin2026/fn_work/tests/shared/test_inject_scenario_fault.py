@@ -33,7 +33,7 @@ def test_synthetic_path_receipt():
 def test_param_set_path_and_fallback_defs():
     r = inject_scenario_fault(ParamLink(), "lowbat_headwind", "mid", {})
     assert r["path"] == "param_set"
-    assert any(k.startswith("sim_") for k, _ in ParamLink.sent)
+    assert any(k.startswith("SIM_") for k, _ in ParamLink.sent)  # 真实 PX4 参数名
 
 
 def test_no_path_raises():

@@ -28,4 +28,4 @@ def test_px4_path_errors_and_process(monkeypatch, tmp_path):
         def kill(self): pass
     monkeypatch.setattr(sp, "Popen", lambda *a, **kw: FakeProc())
     h = spawn_sitl({"name": "x", "px4_dir": str(tmp_path)}, "px4")
-    assert h["mode"] == "px4" and h["endpoint"].startswith("udp:")
+    assert h["mode"] == "px4" and h["endpoint"].startswith("udpin:")  # PX4 广播口监听

@@ -105,13 +105,19 @@ def spawn_sitl(scenario_def: dict, simulator: str = "synthetic"):
         return {"mode": "synthetic", "endpoint": "inproc", "conn": conn,
                 "process": None, "log": None}
     px4_dir = scenario_def.get("px4_dir") or ""
-    airframe = scenario_def.get("airframe", "gz_x500")
+    airframe = scenario_def.get("airframe", "sihsim_quadx")   # SIH 无头默认（本次编译目标）
     if not px4_dir:
         raise SitlError("px4 模式需配置 sitl.px4_dir（先克隆 PX4-Autopilot）")
+    import sys
+    from pathlib import Path as _P
+    venv_bin = str(_P(px4_dir).parents[1] / "fn_work" / ".venv" / "bin")
     log = open(f"sitl_{airframe}.log", "w")
     try:
-        proc = subprocess.Popen(["make", f"px4_sitl_{airframe}"], cwd=px4_dir,
-                                stdout=log, stderr=subprocess.STDOUT)
+        import os
+        env = {**os.environ, "PATH": venv_bin + ":" + os.environ.get("PATH", "")}
+        proc = subprocess.Popen(["make", "px4_sitl", airframe], cwd=px4_dir,
+                                stdout=log, stderr=subprocess.STDOUT, env=env,
+                                start_new_session=True)   # 独立进程组：回收可杀全家
     except OSError as exc:
         log.close()
         raise SitlError(f"PX4 拉起失败: {exc}") from exc
@@ -119,5 +125,5 @@ def spawn_sitl(scenario_def: dict, simulator: str = "synthetic"):
     if proc.poll() is not None:
         log.close()
         raise SitlError("PX4 进程早退（见 sitl 日志）")
-    return {"mode": "px4", "endpoint": "udp:127.0.0.1:14560", "conn": None,
+    return {"mode": "px4", "endpoint": "udpin:0.0.0.0:14550", "conn": None,
             "process": proc, "log": log}

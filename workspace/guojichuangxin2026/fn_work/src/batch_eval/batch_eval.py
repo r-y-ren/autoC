@@ -13,7 +13,8 @@ def batch_eval(scenarios: list, runs_per_scenario: int = 30,
     import time
     from pathlib import Path
 
-    root = Path(__file__).resolve().parents[2]
+    root = Path(__file__).resolve().parents[2]           # fn_work
+    campaign = Path(__file__).resolve().parents[3]       # 战役根（fn_docs/results 的家）
     import sys
     sys.path.insert(0, str(root / "src"))
     from batch_eval.probe_px4_env import probe_px4_env
@@ -44,11 +45,11 @@ def batch_eval(scenarios: list, runs_per_scenario: int = 30,
         archived = []
         for rd in sorted(Path(runs_root).glob(f"{sc}_eval/*")):
             if (rd / "metrics.jsonl").exists():
-                archived.append(archive_run(str(rd), str(root / "fn_docs" / "results")))
+                archived.append(archive_run(str(rd), str(campaign / "fn_docs" / "results")))
         out["scenarios"][sc] = {"summary": summary.get("summary"),
                                 "archived_runs": len(archived)}
         out["runs_total"] += len(archived)
-    snap = root / "fn_docs" / "results" / f"batch-{out['ts']}.json"
+    snap = campaign / "fn_docs" / "results" / f"batch-{out['ts']}.json"
     snap.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     out["snapshot"] = str(snap)
     print(json.dumps({k: v for k, v in out.items() if k != "scenarios"},

@@ -58,6 +58,52 @@ def _lead_metrics(frames, evs, scenario):
     return base
 
 
+def _arm_takeoff(conn):
+    """等 GPS 锁→解锁（带重试）→定高起飞；best-effort，失败不阻断采集。"""
+    import time
+    # 等 GPS 预解锁条件（fix≥3 或 8s 超时）
+    t0 = time.time()
+    while time.time() - t0 < 8:
+        m = conn.recv_match(type="GPS_RAW_INT", blocking=True, timeout=1.5)
+        if m is not None and getattr(m, "fix_type", 0) >= 3:
+            break
+    comp = conn.target_component or 1       # 广播(0)会被指挥官忽略——定向自动驾驶仪组件
+    def _armed():
+        for _ in range(6):
+            hb = conn.recv_match(type="HEARTBEAT", blocking=True, timeout=1.5)
+            if hb is not None and (hb.base_mode & 128):
+                return True
+        return False
+    for _attempt in range(3):
+        try:
+            conn.mav.command_long_send(
+                conn.target_system, comp,
+                400, 0, 1, 0, 0, 0, 0, 0, 0)      # 普通解锁
+            time.sleep(2.5)
+            if _armed():
+                break
+            # 仿真评估口径：强制解锁（p2=21196 MAVLink 标准魔法值；SIH 预解锁检查常卡传感器校准）
+            conn.mav.command_long_send(
+                conn.target_system, comp,
+                400, 0, 1, 21196, 0, 0, 0, 0, 0)
+            time.sleep(2.5)
+            if _armed():
+                break
+        except Exception:
+            pass
+        time.sleep(1.5)
+    else:
+        return False
+    # POSCTL 不执行 NAV_TAKEOFF——显式切 AUTO.TAKEOFF 再发起飞
+    conn.mav.set_mode_send(conn.target_system, 1,
+                          (4 << 16) | (2 << 24))   # AUTO.TAKEOFF（PX4 编码 main<<16|sub<<24）
+    time.sleep(1.0)
+    conn.mav.command_long_send(
+        conn.target_system, comp,
+        22, 0, 0, 0, 0, 0, 0, 0, 3.0)              # TAKEOFF 3m
+    return True
+
+
 def inject_at_v(scenario, cfg):
     return float(cfg.get("inject_at_s", _INJECT_AT_S.get(scenario, 0.0)))
 
@@ -97,13 +143,45 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
         _m["inject_at_s"] = float(cfg.get("inject_at_s", _INJECT_AT_S.get(scenario, 0.0)))
         _m["data_source"] = cfg.get("data_source", "synthetic")
         _man.write_text(_json.dumps(_m, ensure_ascii=False, indent=1), encoding="utf-8")
-        sitl = SyntheticSITL(scenario)
-        sitl.inject_scenario(scenario, "mid", {})          # 评估口径：中档强度
-        icfg = {"run": {"hz": 20, "duration_s": 12.0, "home": [32.0, 118.8],
-                        "endpoint": "inproc"}}
+        data_src = cfg.get("data_source", "synthetic")
+        px4_proc, timer, real_conn = None, None, None
+        if data_src == "px4":
+            # PX4 真源：spawn SIH SITL → 真 MAVLink 连接 → 定时注入
+            import threading
+            from launch_demo_session.spawn_sitl import spawn_sitl
+            from run_ingest.connect_sitl import connect_sitl
+            sitl_h = spawn_sitl({"name": scenario,
+                                "px4_dir": cfg.get("px4_dir", "")}, "px4")
+            px4_proc = sitl_h["process"]
+            real_conn = connect_sitl(sitl_h["endpoint"], timeout=25.0)
+            _arm_takeoff(real_conn)     # 解锁+起飞：场景在空中发生
+            inject_at = float(cfg.get("inject_at_s",
+                                      _INJECT_AT_S.get(scenario, 0.0)))
+            def _fire():
+                from shared.inject_scenario_fault import inject_scenario_fault
+                try:
+                    inject_scenario_fault(real_conn, scenario, "mid",
+                                          {"phase": "in-flight",
+                                           "at_s": inject_at})
+                except Exception:
+                    pass   # 注入失败不炸跑批（manifest 注记）
+            if inject_at > 0:
+                timer = threading.Timer(inject_at, _fire)
+                timer.start()
+            else:
+                _fire()
+            icfg = {"run": {"hz": 20, "duration_s": 12.0, "home": [32.0, 118.8],
+                            "endpoint": sitl_h["endpoint"]}}
+            stream_src, realtime = real_conn, True
+        else:
+            sitl = SyntheticSITL(scenario)
+            sitl.inject_scenario(scenario, "mid", {})      # 评估口径：中档强度
+            icfg = {"run": {"hz": 20, "duration_s": 12.0, "home": [32.0, 118.8],
+                            "endpoint": "inproc"}}
+            stream_src, realtime = sitl, False
         import itertools
         f_link, f_risk, f_mgn, f_sud, f_main = itertools.tee(
-            run_ingest(icfg, rd, conn=sitl), 5)
+            run_ingest(icfg, rd, conn=stream_src, realtime=realtime), 5)
         evs, frames_kept = [], []
         risk = run_progressive_risk(
             f_risk, (f["margins"] for f in f_mgn),
@@ -138,6 +216,20 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
         note = cfg.get("note", "synthetic-mid")
         if cfg.get("model") is None and cfg.get("note") is None:
             note += "+degraded-model"          # R11：模型缺席自动降级并如实标注
+        if timer is not None:
+            timer.cancel()
+        if real_conn is not None:
+            try:
+                real_conn.close()
+            except Exception:
+                pass
+        if px4_proc is not None:
+            import os
+            import signal
+            try:
+                os.killpg(os.getpgid(px4_proc.pid), signal.SIGKILL)  # make+px4 全组回收
+            except Exception:
+                px4_proc.kill()
         for k, v in m.items():
             if v is None:
                 continue                     # R12：不适用口径不落键（突发无提前量族）

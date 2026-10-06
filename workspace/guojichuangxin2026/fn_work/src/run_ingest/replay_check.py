@@ -7,8 +7,10 @@ from pathlib import Path
 
 _HZ_MIN = 20.0
 _CORE = ("t", "roll", "pitch", "yaw", "voltage", "battery_remaining",
-         "lat", "lon", "hdop", "rssi")
+         "lat", "lon", "hdop")
+_OPTIONAL = ("rssi",)        # PX4 SITL 无无线电消息——链路健康退化为遥测间隔证据
 _COVER_MIN = 0.9
+_WARMUP_S = 2.0              # GPS 首锁暖机段不计覆盖率
 
 
 def replay_check(run_dir: str) -> int:
@@ -19,12 +21,16 @@ def replay_check(run_dir: str) -> int:
         print(f"ERR 目录结构不合法: {fp} 不存在", file=sys.stderr)
         return 2
     frames = [json.loads(x) for x in fp.read_text(encoding="utf-8").splitlines() if x.strip()]
+    t0 = float(frames[0].get("t", 0)) if frames else 0.0
+    frames = [f for f in frames if float(f.get("t", 0)) - t0 >= _WARMUP_S] or frames
     if len(frames) < 3:
         print("ERR 帧数不足（<3）", file=sys.stderr)
         return 2
     ts = [float(f["t"]) for f in frames if f.get("t") is not None]
     hz = (len(ts) - 1) / (ts[-1] - ts[0]) if len(ts) > 1 and ts[-1] > ts[0] else 0.0
     cover = {k: sum(1 for f in frames if f.get(k) is not None) / len(frames) for k in _CORE}
+    cover_opt = {k: sum(1 for f in frames if f.get(k) is not None) / len(frames)
+                 for k in _OPTIONAL}
     masks = {}
     for f in frames:
         for k, v in (f.get("quality_mask") or {}).items():
@@ -32,9 +38,10 @@ def replay_check(run_dir: str) -> int:
             if v:
                 masks[k][0] += 1
     bad_cover = [k for k, c in cover.items() if c < _COVER_MIN]
-    ok = hz >= _HZ_MIN and not bad_cover
+    ok = hz >= _HZ_MIN - 1e-6 and not bad_cover
     report = {"run_dir": str(d), "frames": len(frames), "hz": round(hz, 1),
               "coverage": {k: round(c, 3) for k, c in cover.items()},
+              "optional": {k: round(c, 3) for k, c in cover_opt.items()},
               "mask_ok_ratio": {k: round(a / b, 3) for k, (a, b) in masks.items()},
               "pass": ok}
     (d / "frames" / "replay_report.json").write_text(

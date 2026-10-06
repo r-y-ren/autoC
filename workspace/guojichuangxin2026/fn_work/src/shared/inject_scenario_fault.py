@@ -45,6 +45,14 @@ def inject_scenario_fault(conn, scenario: str, level: str, timing: dict) -> dict
         return receipt
     setter = getattr(getattr(conn, "mav", None), "param_set_send", None)
     if callable(setter):
+        # 真实 PX4 SITL 参数映射（合成名→仿真器实参）
+        px4map = {
+            "sim_battery_drain_x": ("SIM_BAT_CR_PCT", lambda v: 500.0 * float(v)),
+            "sim_wind_ms": ("SIM_WIND_SPD", float),
+            "failure_motor1": ("SIH_MOTOR1_FAIL", float),   # SIH 无此参时静默失败由回执承载
+        }
+        params = {px4map.get(k, (k, float))[0]: px4map.get(k, (None, float))[1](v)
+                  for k, v in params.items()}
         for k, v in params.items():
             setter(conn.target_system if hasattr(conn, "target_system") else 1,
                    getattr(conn, "target_component", 1), k.encode() if isinstance(k, str) else k,
