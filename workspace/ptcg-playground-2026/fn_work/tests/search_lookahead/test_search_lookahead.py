@@ -78,3 +78,93 @@ def test_board_risk_and_deck_fatigue():
     lead = sl.state_value(_obs(_P(deck=50, hp=380), _P(deck=50, hp=1)), 0)
     starved = sl.state_value(_obs(_P(deck=3, hp=380), _P(deck=3, hp=1)), 0)
     assert starved < lead
+
+
+# ---- v0.2 规则感知折叠 _pick_rules_fold + depth(f7e752 §3 回合结构;三模式单变量) ----
+
+def _sel(opts, mc=1, mn=1, ctx=0):
+    return {"context": ctx, "option": opts, "maxCount": mc, "minCount": mn}
+
+
+def _fold_obs(hand=(), my_a=None, opp_a=None, your=0):
+    act = {"id": 920, "hp": 140, "energies": [1]}
+    return {"current": {"yourIndex": your, "result": -1, "players": [
+        {"hand": list(hand), "active": [my_a if my_a is not None else dict(act)],
+         "prize": [], "deckCount": 30},
+        {"hand": [], "active": [opp_a if opp_a is not None else dict(act)],
+         "prize": [], "deckCount": 30}]}}
+
+
+def test_rules_fold_resource_order(monkeypatch):
+    # ①贴能 > 攻击(即使可 KO):攻击即终局化(§3.5),先资源后攻击
+    monkeypatch.setattr(sl, "_eff_damage", lambda *a: 999)
+    sel = _sel([{"type": 13, "attackId": 114},
+                {"type": 8, "area": 2, "index": 0, "inPlayArea": 4, "inPlayIndex": 0},
+                {"type": 14}])
+    hand = [{"id": 3}]  # Basic {W} Energy
+    assert sl._pick_rules_fold(sel, _fold_obs(hand=hand), 0) == [1]
+    # ①贴能出战位优先于备战
+    sel2 = _sel([{"type": 8, "area": 2, "index": 0, "inPlayArea": 5, "inPlayIndex": 0},
+                 {"type": 8, "area": 2, "index": 0, "inPlayArea": 4, "inPlayIndex": 0}])
+    assert sl._pick_rules_fold(sel2, _fold_obs(hand=hand), 0) == [1]
+    # ②支援者(cardType=3)>普通道具;⑦END 殿后(支援者在选项序 2 号位)
+    sel3 = _sel([{"type": 14}, {"type": 7, "index": 1}, {"type": 7, "index": 0}])
+    hand3 = [{"id": 1227}, {"id": 1071}]  # Lillie's Determination(支援者) / 道具
+    assert sl._pick_rules_fold(sel3, _fold_obs(hand=hand3), 0) == [2]
+    # ③进化 > ④其他行动
+    sel4 = _sel([{"type": 7, "index": 0},
+                 {"type": 9, "area": 2, "index": 1, "inPlayArea": 4, "inPlayIndex": 0}])
+    hand4 = [{"id": 1071}, {"id": 3}]
+    assert sl._pick_rules_fold(sel4, _fold_obs(hand=hand4), 0) == [1]
+
+
+def test_rules_fold_attack_tiers(monkeypatch):
+    # ⑤一击 KO > ⑥普通攻击 > ⑦END(旧贪心会拿 0 号=END)
+    monkeypatch.setattr(sl, "_attack_ko", lambda aid, ma, oa: aid == 5)
+    sel = _sel([{"type": 14}, {"type": 13, "attackId": 6}, {"type": 13, "attackId": 5}])
+    assert sl._pick_rules_fold(sel, _fold_obs(), 0) == [2]
+    # ⑥普通攻击取 eff 最大(同档 eff 平手守引擎序)
+    monkeypatch.setattr(sl, "_attack_ko", lambda aid, ma, oa: False)
+    monkeypatch.setattr(sl, "_attack_eff", lambda aid, ma, oa: {6: 10, 7: 60}.get(aid, 0))
+    sel2 = _sel([{"type": 13, "attackId": 6}, {"type": 13, "attackId": 7}])
+    assert sl._pick_rules_fold(sel2, _fold_obs(), 0) == [1]
+    sel3 = _sel([{"type": 13, "attackId": 7}, {"type": 13, "attackId": 6}])
+    assert sl._pick_rules_fold(sel3, _fold_obs(), 0) == [0]
+
+
+def test_rules_fold_ko_needs_energy_covered(monkeypatch):
+    # attack_feats 同款判定:eff 够但能量不覆盖→不算 KO(降普通攻击档)
+    monkeypatch.setattr(sl, "_eff_damage", lambda *a: 999)
+    covered = sl._pick_rules_fold(
+        _sel([{"type": 13, "attackId": 114}]), _fold_obs(my_a={"id": 920, "hp": 140, "energies": [1]}), 0)
+    uncovered = sl._pick_rules_fold(
+        _sel([{"type": 13, "attackId": 114}]), _fold_obs(my_a={"id": 920, "hp": 140, "energies": [4]}), 0)
+    assert covered == uncovered == [0]  # 单攻击选项两者仍选攻击,分类差异只影响档位
+    ko_tier = sl._attack_ko(114, {"id": 920, "energies": [1]}, {"id": 920, "hp": 5})
+    no_tier = sl._attack_ko(114, {"id": 920, "energies": [4]}, {"id": 920, "hp": 5})
+    assert ko_tier is True and no_tier is False
+
+
+def test_rules_fold_actor_perspective_and_fallback():
+    # 行动方视角:yourIndex=1 时按 1 号位手牌/出战分类(对手回合同律)
+    obs = _fold_obs(hand=[{"id": 1227}], your=1)
+    sel = _sel([{"type": 14}, {"type": 7, "index": 0}])
+    assert sl._pick_rules_fold(sel, obs, 0) == [1]
+    # 手牌不可观测(搜索态对手视角)→支援者识别退化为④档(普通行动),仍先于⑦END,不抛
+    assert sl._pick_rules_fold(sel, _fold_obs(hand=[]), 1) == [1]
+    # ④档内守引擎序(两选项同为未分类行动)
+    assert sl._pick_rules_fold(_sel([{"type": 1}, {"type": 2}]), _fold_obs(), 0) == [0]
+    assert sl._pick_rules_fold(_sel([]), _fold_obs(), 0) == []
+
+
+def test_choose_with_search_new_args_fallback():
+    # depth/fold 为新参:不可搜索观测走异常回退=贪心;非本 context 走 _pick,老调用不受影响
+    deck = [1, 2, 3]
+    obs = {"select": _sel([{"type": 7, "index": 0}, {"type": 14}])}
+    assert sl.choose_with_search(obs, deck) == sl._pick(obs["select"])
+    assert sl.choose_with_search(obs, deck, depth=2, fold="rules") == sl._pick(obs["select"])
+    other = {"select": _sel([{"type": 1}, {"type": 2}], ctx=9)}
+    assert sl.choose_with_search(other, deck) == sl._pick(other["select"])
+    ag = sl.make_search_agent(deck, depth=2, fold="rules")
+    assert ag({"select": None}) == list(deck)
+    assert ag(obs) == sl._pick(obs["select"])

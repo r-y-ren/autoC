@@ -10,6 +10,15 @@
 
 v0.1 叶子增厚(2026-10-06,引擎规则总报告 f7e752 §5/§6/§7/§10/§14):
 状态条件期望伤害流+行动锁、清场线风险、牌库耗尽、奖赏非线性终局折价、混乱威胁折价。
+
+v0.2 搜索加深×规则折叠(2026-10-06,规则总报告 f7e752 §3 回合结构;两个正交单变量):
+- depth(默认 1=旧版逐位一致):rollout 折到我方第 depth 次再决策才停。depth=2=
+  「我动→对手回→我再动(贪心/规则折叠代打)→对手回→评叶子」;中途(非末次)抵达
+  我方再决策不再分支(候选数不变),用折叠策略代打。depth>1 时循环内每步查钟,
+  超时回退当层(已折到处)评估;depth=1 循环内不查钟,与旧版逐位一致。
+- fold(默认 "greedy"=旧版攻击优先折叠):"rules"=规则感知折叠 _pick_rules_fold
+  (f7e752 §3.5 攻击即终局化→资源优先序:①贴能 ②支援者 ③进化 ④其他行动
+  ⑤一击 KO 才攻击 ⑥普通攻击 ⑦END;对手回合同律)。
 """
 from __future__ import annotations
 
@@ -49,6 +58,97 @@ def _pick_greedy(sel: dict, my_seat: int) -> list[int]:
     if atk:
         return atk[:k]
     return list(range(k))
+
+
+# ---- 规则感知折叠(v0.2,f7e752 §3 回合结构) ----
+# OptionType(引擎 api.py):7=PLAY(手牌 index) 8=ATTACH(area=2 手牌→inPlayArea/Index)
+# 9=EVOLVE 10=ABILITY 12=RETREAT 13=ATTACK(attackId) 14=END;AreaType:4=ACTIVE 5=BENCH。
+_OPT_PLAY, _OPT_ATTACH, _OPT_EVOLVE, _OPT_END = 7, 8, 9, 14
+_AREA_ACTIVE = 4
+_CARDTYPE_SUPPORTER = 3
+
+
+def _attack_eff(aid, my_a: dict, opp_a: dict) -> float:
+    """攻击有效伤害(W×2/R−30 同款);非攻击/无卡=0。"""
+    if not isinstance(aid, int):
+        return 0.0
+    from learn.bc_policy_v4 import load_db
+    _, attacks = load_db()
+    a = attacks.get(aid)
+    if not a:
+        return 0.0
+    return _eff_damage(a.get("damage") or 0, _card((my_a or {}).get("id")),
+                       _card((opp_a or {}).get("id")))
+
+
+def _attack_ko(aid, my_a: dict, opp_a: dict) -> bool:
+    """一击 KO 判定(attack_feats oneshot 同款):eff≥对方 hp>0 且能量覆盖。"""
+    if not isinstance(aid, int) or not isinstance(opp_a, dict):
+        return False
+    hp = opp_a.get("hp") or 0
+    if not hp > 0:
+        return False
+    if _attack_eff(aid, my_a, opp_a) < hp:
+        return False
+    from learn.bc_policy_v4 import energy_covered, load_db
+    _, attacks = load_db()
+    a = attacks.get(aid)
+    return bool(a) and energy_covered(a.get("energies") or [], (my_a or {}).get("energies") or [])
+
+
+def _pick_rules_fold(sel: dict, obs: dict, my_seat: int) -> list[int]:
+    """规则感知折叠(f7e752 §3.5 攻击即回合终局化→先资源后攻击),对行动方同律。
+
+    优先序:①贴能(ATTACH,出战位优先——出手节奏硬门槛)②打支援者(手牌 cardType=3)
+    ③进化 ④其他行动(道具/竞技场 PLAY、特性、撤退、弃置,守引擎序)⑤一击 KO 攻击
+    ⑥普通攻击(eff 大优先)⑦END。手牌不可观测(搜索态对手视角)时②退化为引擎序
+    (归④档),①③⑤⑥仍可用(只凭 type/attackId)。分类不出的选项归④守引擎序,
+    与旧 _pick_greedy 的 range(k) 兜底同形。
+    """
+    opts = sel.get("option") or []
+    if not opts:
+        return []
+    mc = int(sel.get("maxCount") or 0)
+    mn = int(sel.get("minCount") or 0)
+    k = max(mn, min(mc if mc > 0 else 1, len(opts)))
+    cur = (obs or {}).get("current") or {}
+    players = cur.get("players") or []
+    actor_i = cur.get("yourIndex", 0) or 0  # 折叠以行动方视角取手牌/出战(对手回合同律)
+    actor = players[actor_i] if len(players) > actor_i else {}
+    foe = players[1 - actor_i] if len(players) > 1 - actor_i else {}
+    hand = actor.get("hand") or []
+    actor_a = (actor.get("active") or [None])[0] or {}
+    foe_a = (foe.get("active") or [None])[0] or {}
+
+    def hand_card(o: dict):
+        if o.get("type") not in (_OPT_PLAY, _OPT_ATTACH):
+            return None
+        idx = o.get("index")
+        if not isinstance(idx, int) or not 0 <= idx < len(hand):
+            return None
+        c = hand[idx]
+        return _card(c.get("id")) if isinstance(c, dict) else None
+
+    def key(pair):
+        i, o = pair
+        t = o.get("type")
+        if t == _OPT_ATTACH:
+            return (0, 0 if o.get("inPlayArea") == _AREA_ACTIVE else 1, i)
+        if t == _OPT_PLAY:
+            c = hand_card(o)
+            return (1, i, 0) if (c or {}).get("cardType") == _CARDTYPE_SUPPORTER else (3, i, 0)
+        if t == _OPT_EVOLVE:
+            return (2, i, 0)
+        if t == _OPT_END:
+            return (6, i, 0)
+        if o.get("attackId") is not None:
+            eff = -_attack_eff(o.get("attackId"), actor_a, foe_a)
+            if _attack_ko(o.get("attackId"), actor_a, foe_a):
+                return (4, eff, i)
+            return (5, eff, i)
+        return (3, i, 0)  # 道具/竞技场/特性/撤退/弃置等未列类型:守引擎序
+
+    return [i for i, _ in sorted(enumerate(opts), key=key)[:k]]
 
 
 def _card(cid):
@@ -203,9 +303,43 @@ def state_value(obs: dict, my_i: int, weights: dict | None = None) -> float:
             + w["board"] * (my_n - opp_n) + danger + fatigue)
 
 
+def _rollout_value(st: dict, sid: int, context: int, my_i: int, depth: int,
+                   weights: dict | None, t0: float, rules_fold: bool) -> float:
+    """贪心折叠到我方第 depth 次再决策(或终局/步帽),返回叶子状态价值。
+
+    depth=1 与旧版逐位一致(循环内不查钟);depth>1 每步前查钟,超时回退当层
+    (已折到处)评估——不弃候选。中途(非末次)抵达我方再决策用折叠策略代打,
+    不再分支(候选数不变)。rules_fold=True 用 _pick_rules_fold(行动方同律)。
+    """
+    arrival, n = 0, 0
+    while n < _STEP_CAP:
+        o = st["observation"]
+        nxt = o.get("select")
+        cur2 = o.get("current") or {}
+        if nxt is None or (isinstance(cur2.get("result"), int) and cur2["result"] >= 0):
+            break
+        # 轮到我方决策才停(第 depth 次抵达才停);敌方回合/强制选择继续折叠
+        # (敌我凭 current.yourIndex 判——搜索态里它随换手翻转)
+        if nxt.get("context") == context and cur2.get("yourIndex") == my_i:
+            arrival += 1
+            if arrival >= depth:
+                break
+        if depth > 1 and time.time() - t0 > _TIME_CAP_S:
+            break  # 深搜超时:回退当层评估
+        step = _pick_rules_fold(nxt, o, my_i) if rules_fold else _pick_greedy(nxt, my_i)
+        st = cg_search.search_step(sid, step)
+        n += 1
+    return state_value(st["observation"], my_i, weights)
+
+
 def choose_with_search(obs: dict, deck: list[int], context: int = 0,
-                       weights: dict | None = None) -> list[int]:
-    """在当前选择点用 rollout 选优;任何失败回退贪心。仅对给定 context 启用搜索。"""
+                       weights: dict | None = None, depth: int = 1,
+                       fold: str = "greedy") -> list[int]:
+    """在当前选择点用 rollout 选优;任何失败回退贪心。仅对给定 context 启用搜索。
+
+    depth=折叠轮数(默认 1=旧版);fold="greedy"(默认,旧版攻击优先)|"rules"
+    (规则感知资源优先序,见 _pick_rules_fold)。depth=1+greedy 与旧版逐位一致。
+    """
     sel = (obs or {}).get("select") or {}
     if sel.get("context") != context:
         return _pick(sel)
@@ -228,6 +362,7 @@ def choose_with_search(obs: dict, deck: list[int], context: int = 0,
         opponent_hand=_fill(opp.get("handCount") or 0),
         opponent_active=[],
     )
+    rules_fold = fold == "rules"
     t0 = time.time()
     best_score, best = None, None
     # 多选(maxCount>1)v0 只按贪心;搜索用于单选决策点
@@ -240,20 +375,7 @@ def choose_with_search(obs: dict, deck: list[int], context: int = 0,
             st = cg_search.search_begin(copy.deepcopy(obs), **preds)
             sid = st["searchId"]
             s = cg_search.search_step(sid, [i])
-            n = 0
-            while n < _STEP_CAP:
-                o = s["observation"]
-                nxt = o.get("select")
-                cur2 = o.get("current") or {}
-                if nxt is None or (isinstance(cur2.get("result"), int) and cur2["result"] >= 0):
-                    break
-                # 轮到我方决策才停;敌方回合/强制选择继续折叠
-                # (敌我凭 current.yourIndex 判——搜索态里它随换手翻转)
-                if nxt.get("context") == context and cur2.get("yourIndex") == my_i:
-                    break
-                s = cg_search.search_step(sid, _pick_greedy(nxt, my_i))
-                n += 1
-            v = state_value(s["observation"], my_i, weights)
+            v = _rollout_value(s, sid, context, my_i, depth, weights, t0, rules_fold)
             cg_search.search_release(sid)
             if best_score is None or v > best_score:
                 best_score, best = v, i
@@ -264,11 +386,15 @@ def choose_with_search(obs: dict, deck: list[int], context: int = 0,
     return [best]
 
 
-def make_search_agent(deck: list[int], context: int = 0, weights: dict | None = None):
-    """受测体工厂;weights=七权重按名覆盖(默认现行值,老调用兼容)。"""
+def make_search_agent(deck: list[int], context: int = 0, weights: dict | None = None,
+                      depth: int = 1, fold: str = "rules"):
+    """受测体工厂;weights=七权重按名覆盖(默认现行值);depth=rollout 轮数(默认 1);
+    fold 折叠策略默认 "rules"(资源优先序,fna-028 判决:对在梯 0.700 历史新高;
+    "greedy"=旧攻击优先,仅回退用)。"""
     def agent(obs, config=None):
         sel = (obs or {}).get("select")
         if sel is None:
             return list(deck)
-        return choose_with_search(obs, deck, context=context, weights=weights)
+        return choose_with_search(obs, deck, context=context, weights=weights,
+                                  depth=depth, fold=fold)
     return agent
