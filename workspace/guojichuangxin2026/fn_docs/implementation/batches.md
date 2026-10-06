@@ -15,5 +15,6 @@
 |---|---|---|
 | 2026-10-03 | 签名微调 | open_run_dir 增可选 config_snapshot 参数（运行清单落配置快照） |
 | 2026-10-03 | 实现内修正 | B3/B4 缺陷修复：dB 残差模型重构/CUSUM 零值键污染/距离参考点对齐（非结构变化） |
+| 2026-10-06 | P7 实施留痕 | PX4 真源接通实施内修复集：run_eval PX4 分支（spawn/udpin 连接/定时注入/强制解锁+AUTO.TAKEOFF 模式编码修正）、replay_check 暖机豁免+rssi 降可选（PX4 SITL 无无线电消息）、spawn_sitl 进程组回收+sihsim_quadx 口径、batch_eval 归档根修正（战役 fn_docs/results）；诊断四号实证 SIH 低空限制（电机响应、爬升≈0.3m）——场景事件指标以合成源为准、PX4 源为数据面验证，如实两源口径 |
 | 2026-10-03 | 演进轮记账 | divide 门预登记 functions.md stub 行与 B13-B17 批（lint 一致性要求；实现期由 fn-implement 独占续写）；run_eval 改造并入原块（唯一名约束，[改造] 标注） |
 | 2026-10-03 | 预授权 | 用户字面授权"剩下的批次一并完成"→批间门不停人，核验照跑照贴 |
