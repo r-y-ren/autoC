@@ -81,6 +81,23 @@ _W_LOCK, _W_BOARD, _W_FATIGUE = 2.0, 1.5, 2.0
 _DANGER = -4.0           # 后备空+出战濒死(§7.4 清场速败高危)
 _DECK_REF = 30.0         # 长盘价值衰减参考牌库余量
 
+# 七权重可覆盖表(网格消融入口):默认=现行常量;state_value/choose_with_search/
+# make_search_agent 均收可选 weights=(按名覆盖,未知键忽略),weights=None 时语义与旧版逐位一致。
+W_KEYS = ("prize", "hp", "threat", "lock", "board", "fatigue", "danger")
+DEFAULT_WEIGHTS = {
+    "prize": _W_PRIZE, "hp": _W_HP, "threat": _W_THREAT, "lock": _W_LOCK,
+    "board": _W_BOARD, "fatigue": _W_FATIGUE, "danger": _DANGER,
+}
+
+
+def resolve_weights(weights: dict | None = None) -> dict:
+    """合并七权重:weights 按名覆盖默认值(仅认 W_KEYS 内的键);None/空=现行值。"""
+    w = dict(DEFAULT_WEIGHTS)
+    for k, v in (weights or {}).items():
+        if k in w:
+            w[k] = float(v)
+    return w
+
 
 def _prize_score(taken: int) -> float:
     """奖赏进度非线性计价(§5.3 终局截断):按"距离拿完 6 张还有几步"凸折价。
@@ -112,7 +129,7 @@ def _status_flow(flags: dict) -> float:
            (_BURN_DMG if flags["burned"] else 0.0)
 
 
-def state_value(obs: dict, my_i: int) -> float:
+def state_value(obs: dict, my_i: int, weights: dict | None = None) -> float:
     """叶子状态价值(我方视角,报告 §5/§6/§7/§10/§14):奖赏竞速主轴+状态/清场/牌库风险。
 
     项:奖赏 10×非线性折价(§5.3)| 血差 2×(含状态期望伤害流按 2 回合折算)|
@@ -122,7 +139,9 @@ def state_value(obs: dict, my_i: int) -> float:
     慢转换项(血差/威胁/行动锁)按余量折价。
     假设(毒/烧/睡/麻 0 实测样本,§6.4):毒取默认 poisonValue=10;状态伤害流按
     2 回合折算;化石(pokemonType==2)免疫全部状态;濒死阈=出战剩余 HP<35%。
+    weights:七权重按名覆盖(DEFAULT_WEIGHTS 默认=现行值;None=旧语义逐位一致)。
     """
+    w = resolve_weights(weights)
     cur = obs.get("current") or {}
     players = cur.get("players") or []
     my = players[my_i] if len(players) > my_i else {}
@@ -134,7 +153,7 @@ def state_value(obs: dict, my_i: int) -> float:
     # 奖赏项:prize 列表=剩余奖赏堆(发奖 6→递减归 0 即胜,f7e752 §5.4 口径)——已拿=6−剩余;非线性折价(§5.3 终局截断)
     t_m = max(0, 6 - len(my.get("prize") or []))
     t_o = max(0, 6 - len(opp.get("prize") or []))
-    prize = _W_PRIZE * (_prize_score(t_m) - _prize_score(t_o))
+    prize = w["prize"] * (_prize_score(t_m) - _prize_score(t_o))
 
     my_a = (my.get("active") or [None])[0] or {}
     opp_a = (opp.get("active") or [None])[0] or {}
@@ -170,21 +189,22 @@ def state_value(obs: dict, my_i: int) -> float:
     my_n = 1 + len([b for b in (my.get("bench") or []) if isinstance(b, dict)])
     opp_n = 1 + len([b for b in (opp.get("bench") or []) if isinstance(b, dict)])
     my_max_hp = (my_c or {}).get("hp") or 380
-    danger = _DANGER if (my_n == 1 and (my_a.get("hp") or 0) < 0.35 * my_max_hp) else 0.0
+    danger = w["danger"] if (my_n == 1 and (my_a.get("hp") or 0) < 0.35 * my_max_hp) else 0.0
 
     # 牌库耗尽(§10):差值进疲劳项;长盘价值随我方牌库余量衰减
     my_deck_n = my.get("deckCount") or 0
-    fatigue = _W_FATIGUE * (my_deck_n - (opp.get("deckCount") or 0)) / 60.0
+    fatigue = w["fatigue"] * (my_deck_n - (opp.get("deckCount") or 0)) / 60.0
     long_scale = min(1.0, my_deck_n / _DECK_REF)
 
     return (prize
-            + long_scale * (_W_HP * (my_hp - opp_hp)
-                            + _W_THREAT * (my_shot - opp_shot)
-                            + _W_LOCK * (opp_lock - my_lock))
-            + _W_BOARD * (my_n - opp_n) + danger + fatigue)
+            + long_scale * (w["hp"] * (my_hp - opp_hp)
+                            + w["threat"] * (my_shot - opp_shot)
+                            + w["lock"] * (opp_lock - my_lock))
+            + w["board"] * (my_n - opp_n) + danger + fatigue)
 
 
-def choose_with_search(obs: dict, deck: list[int], context: int = 0) -> list[int]:
+def choose_with_search(obs: dict, deck: list[int], context: int = 0,
+                       weights: dict | None = None) -> list[int]:
     """在当前选择点用 rollout 选优;任何失败回退贪心。仅对给定 context 启用搜索。"""
     sel = (obs or {}).get("select") or {}
     if sel.get("context") != context:
@@ -233,7 +253,7 @@ def choose_with_search(obs: dict, deck: list[int], context: int = 0) -> list[int
                     break
                 s = cg_search.search_step(sid, _pick_greedy(nxt, my_i))
                 n += 1
-            v = state_value(s["observation"], my_i)
+            v = state_value(s["observation"], my_i, weights)
             cg_search.search_release(sid)
             if best_score is None or v > best_score:
                 best_score, best = v, i
@@ -244,10 +264,11 @@ def choose_with_search(obs: dict, deck: list[int], context: int = 0) -> list[int
     return [best]
 
 
-def make_search_agent(deck: list[int], context: int = 0):
+def make_search_agent(deck: list[int], context: int = 0, weights: dict | None = None):
+    """受测体工厂;weights=七权重按名覆盖(默认现行值,老调用兼容)。"""
     def agent(obs, config=None):
         sel = (obs or {}).get("select")
         if sel is None:
             return list(deck)
-        return choose_with_search(obs, deck, context=context)
+        return choose_with_search(obs, deck, context=context, weights=weights)
     return agent
