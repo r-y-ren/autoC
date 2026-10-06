@@ -96,14 +96,39 @@ def _attack_ko(aid, my_a: dict, opp_a: dict) -> bool:
     return bool(a) and energy_covered(a.get("energies") or [], (my_a or {}).get("energies") or [])
 
 
+def _active_ready_attack(my_a: dict, foe_a: dict) -> bool:
+    """出战位已存在能量覆盖且 eff>0 的攻击(贴能止盈判据,fna-029)。
+
+    背景实测(vs v5 六局):确定化对手手牌=deckCount 填充(1 基础怪+余量全 Basic
+    Energy),折叠优先序①贴能恒可满足——2483 次对手回合折叠 100% 选 ATTACH、
+    0 攻击,_STEP_CAP=12 步全吃满,叶子从不评估对手攻击伤害。此判据让"攻击已
+    可发"后贴能不再排攻击之前(攻击即终局化,f7e752 §3.5)。
+    """
+    card = _card((my_a or {}).get("id"))
+    en = (my_a or {}).get("energies") or []
+    for a in _attacks_of(card):
+        if (a.get("damage") or 0) <= 0:
+            continue
+        from learn.bc_policy_v4 import energy_covered
+        if not energy_covered(a.get("energies") or [], en):
+            continue
+        if _eff_damage(a.get("damage"), card, _card((foe_a or {}).get("id"))) > 0:
+            return True
+    return False
+
+
 def _pick_rules_fold(sel: dict, obs: dict, my_seat: int) -> list[int]:
     """规则感知折叠(f7e752 §3.5 攻击即回合终局化→先资源后攻击),对行动方同律。
 
-    优先序:①贴能(ATTACH,出战位优先——出手节奏硬门槛)②打支援者(手牌 cardType=3)
+    优先序:①贴能(ATTACH,出战位优先——出手节奏硬门槛;出战位攻击已可发即止盈
+    降⑥档,fna-029)②打支援者(手牌 cardType=3)
     ③进化 ④其他行动(道具/竞技场 PLAY、特性、撤退、弃置,守引擎序)⑤一击 KO 攻击
     ⑥普通攻击(eff 大优先)⑦END。手牌不可观测(搜索态对手视角)时②退化为引擎序
     (归④档),①③⑤⑥仍可用(只凭 type/attackId)。分类不出的选项归④守引擎序,
-    与旧 _pick_greedy 的 range(k) 兜底同形。
+    与旧 _pick_greedy 的 range(k) 兜底同形。fna-029 止盈:出战位攻击能量已覆盖且
+    eff>0 时,该攻击升为最优先(−2/−1 档,模拟对手"能攻即攻"威胁模型)——
+    否则手牌填充(几乎全能量)令①恒可满足,折叠对手在 12 步视界内 0 攻击
+    (vs v5 六局 2483 次对手折叠 100% 贴能实证),叶子漏计对手伤害流。
     """
     opts = sel.get("option") or []
     if not opts:
@@ -129,10 +154,19 @@ def _pick_rules_fold(sel: dict, obs: dict, my_seat: int) -> list[int]:
         c = hand[idx]
         return _card(c.get("id")) if isinstance(c, dict) else None
 
+    # 出战位攻击已可发(能量覆盖且 eff>0)——止盈开关,fna-029:就绪后折叠改打
+    # "攻击即发"威胁模型(攻击档位 −2/−1 反超全部资源档,贴能降⑥档)。动机:手牌
+    # 填充(1 基础怪+余量全能量)使①贴能恒可满足,修复前模拟对手 100% 贴能、
+    # 12 步视界内 0 攻击(vs v5 六局 2483 次对手折叠实证),叶子漏计对手伤害流;
+    # 中间档(撤退/道具)同样会吃掉视界——就绪后攻击必须最先。
+    ready = _active_ready_attack(actor_a, foe_a)
+
     def key(pair):
         i, o = pair
         t = o.get("type")
         if t == _OPT_ATTACH:
+            if ready:  # 贴能止盈:出战/备战同律(备战贴能视界内不解锁伤害)→ END 档
+                return (6, i, 0)
             return (0, 0 if o.get("inPlayArea") == _AREA_ACTIVE else 1, i)
         if t == _OPT_PLAY:
             c = hand_card(o)
@@ -144,8 +178,8 @@ def _pick_rules_fold(sel: dict, obs: dict, my_seat: int) -> list[int]:
         if o.get("attackId") is not None:
             eff = -_attack_eff(o.get("attackId"), actor_a, foe_a)
             if _attack_ko(o.get("attackId"), actor_a, foe_a):
-                return (4, eff, i)
-            return (5, eff, i)
+                return (-2, eff, i) if ready else (4, eff, i)
+            return (-1, eff, i) if ready else (5, eff, i)
         return (3, i, 0)  # 道具/竞技场/特性/撤退/弃置等未列类型:守引擎序
 
     return [i for i, _ in sorted(enumerate(opts), key=key)[:k]]
