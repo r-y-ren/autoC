@@ -1,8 +1,9 @@
-{"id": "d090a6-1", "date": "2026-10-03", "phenomenon": "真数据面+批量跑批", "target": "run_eval/风险通道", "expected_signal": "runs≥90/lowbat lead_p10≥3s/hit_rate≥0.3", "status": "pending", "scored_in": null}
+{"id": "d090a6-1", "date": "2026-10-03", "phenomenon": "真数据面+批量跑批", "target": "run_eval/风险通道", "expected_signal": "runs≥90/lowbat lead_p10≥3s/hit_rate≥0.3", "status": "missed", "scored_in": null}
 {"id": "d090a6-2", "date": "2026-10-03", "phenomenon": "口径修正（时延/命中率）", "target": "run_eval", "expected_signal": "confirm_p90∈[0.1,0.6]s；突发无 hit_rate", "status": "achieved", "scored_in": null}
 {"id": "d090a6-3", "date": "2026-10-03", "phenomenon": "验收深度（sw-boot 三步+归档）", "target": "smoke_boot/open_run_dir", "expected_signal": "sw-boot 三项 PASS；产物落 fn_docs/results/", "status": "achieved", "scored_in": null}
 {"id": "d090a6-4", "date": "2026-10-03", "phenomenon": "设备实测包", "target": "设备适配器", "expected_signal": "sdr_check 设备分支 PASS；bench P95 实测", "status": "achieved", "scored_in": null}
 {"id": "d090a6-5", "date": "2026-10-03", "phenomenon": "产品化包装（激进）", "target": "打包安装", "expected_signal": "外部机器一键安装可演示", "status": "achieved", "scored_in": null}
-{"id": "d44ab5-6", "date": "2026-10-03", "phenomenon": "官方批量跑批入库（三场景×30）", "target": "batch_eval/材料", "expected_signal": "快照 runs≥90 成表", "status": "pending", "scored_in": null}
-{"id": "d44ab5-7", "date": "2026-10-03", "phenomenon": "PX4 真源切换（待用户工具链）", "target": "batch_eval/材料", "expected_signal": "data_source=px4", "status": "pending", "scored_in": null}
+{"id": "d44ab5-6", "date": "2026-10-03", "phenomenon": "官方批量跑批入库（三场景×30）", "target": "batch_eval/材料", "expected_signal": "快照 runs≥90 成表", "status": "achieved", "scored_in": null}
+{"id": "d44ab5-7", "date": "2026-10-03", "phenomenon": "PX4 真源切换（待用户工具链）", "target": "batch_eval/材料", "expected_signal": "data_source=px4", "status": "achieved", "scored_in": null}
 {"id": "d44ab5-8", "date": "2026-10-03", "phenomenon": "硬件采购清单文档化（档 B）", "target": "batch_eval/材料", "expected_signal": "计划书含硬件采购表", "status": "pending", "scored_in": null}
+{"id": "d44ab5-9", "date": "2026-10-06", "phenomenon": "TCN 模型质量不足：lowbat 命中率 0.0（基线降级/弱模型通道均不及 5s 提前量）", "target": "train_tcn/风险通道", "expected_signal": "lowbat hit_rate≥0.3 且 lead_p10≥3s（合成训练重训后）", "status": "pending", "scored_in": null}

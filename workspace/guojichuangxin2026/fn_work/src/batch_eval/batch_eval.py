@@ -44,7 +44,7 @@ def batch_eval(scenarios: list, runs_per_scenario: int = 30,
                                    + ("+degraded-model" if model is None else "")})
         archived = []
         for rd in sorted(Path(runs_root).glob(f"{sc}_eval/*")):
-            if (rd / "metrics.jsonl").exists():
+            if (rd / "metrics.jsonl").exists() and not _already_archived(rd):
                 archived.append(archive_run(str(rd), str(campaign / "fn_docs" / "results")))
         out["scenarios"][sc] = {"summary": summary.get("summary"),
                                 "archived_runs": len(archived)}
@@ -55,6 +55,17 @@ def batch_eval(scenarios: list, runs_per_scenario: int = 30,
     print(json.dumps({k: v for k, v in out.items() if k != "scenarios"},
                      ensure_ascii=False))
     return out
+
+
+def _already_archived(rd) -> bool:
+    """manifest 已带 archived_to → 跳过（防止重复归档出 +N 混装）。"""
+    import json as _j
+    from pathlib import Path
+    man = Path(rd) / "manifest.json"
+    try:
+        return bool(_j.loads(man.read_text(encoding="utf-8")).get("archived_to"))
+    except Exception:
+        return False
 
 
 def _ensure_model(cfg):
