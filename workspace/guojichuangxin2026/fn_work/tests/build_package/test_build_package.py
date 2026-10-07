@@ -10,3 +10,4 @@ def test_pyproject_generation_skip_build(tmp_path):
     assert "anhang-yundun" in pt and "ahyd-demo" in pt
     assert "shared" in out["packages"] and "batch_eval" in out["packages"]
     assert (tmp_path / "用户手册.md").exists()
+    assert out["hygiene"]["ignore_runs"] and not out["hygiene"]["tracked_artifacts"]  # R24

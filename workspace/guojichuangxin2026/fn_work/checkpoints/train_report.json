@@ -1,21 +1,11 @@
 {
  "samples": 8820,
  "params": 6805,
- "seconds": 15.4,
+ "seconds": 8.4,
  "history": [
   {
    "epoch": 1,
-   "train_loss": NaN,
-   "val_acc_5s": 1.0
-  },
-  {
-   "epoch": 2,
-   "train_loss": NaN,
-   "val_acc_5s": 1.0
-  },
-  {
-   "epoch": 3,
-   "train_loss": NaN,
+   "train_loss": 0.0997,
    "val_acc_5s": 1.0
   }
  ],
@@ -23,5 +13,9 @@
   "probe_recall": 1.0,
   "tcn_val_acc": 1.0,
   "winner": "probe"
+ },
+ "best": {
+  "path": "checkpoints/probe.pkl",
+  "kind": "probe"
  }
 }

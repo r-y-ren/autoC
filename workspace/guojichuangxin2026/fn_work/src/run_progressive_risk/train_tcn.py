@@ -221,7 +221,7 @@ def train_tcn(data_dirs: list, train_config: dict) -> dict:
     report = out_dir / "train_report.json"
     report.write_text(json.dumps({"samples": len(samples), "params": params,
                                   "seconds": round(time.time() - t0, 1), "history": hist,
-                                  "selection": comparison},
+                                  "selection": comparison, "best": best_art},
                                  ensure_ascii=False, indent=1), encoding="utf-8")
     return {"checkpoint": str(ckpt), "report": str(report), "params": params,
             "samples": len(samples), "history": hist, "selection": comparison,

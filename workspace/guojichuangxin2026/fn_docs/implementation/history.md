@@ -21,3 +21,4 @@
 | 2026-10-03 | B16 | build_package(wired), write_user_manual(t) | 4 passed+真构建：wheel 产+干净 venv 装后自测 passed（ahyd_cli 垫片入包） |
 | 2026-10-03 | B17 | soak_test(wired), make_portable_bundle(wired) | 4 passed+实产：quick 长跑报告留痕+459MB full 便携包（dist/ 已 gitignore） |
 | 2026-10-06 | B18 | R17-R22 执行（train_tcn[改]/calibrate_conformal[改]/draft_revision_notes[改]/register_pages[改]/render_console[改]/run_eval[改]/session_control_api[改]）+31 助手审计补账 | 112 tests 绿；7 提案 achieved；流程欠账由审计补账记录（见 batches 变更记录） |
+| 2026-10-06 | B19 | _ensure_model(wired), run_eval[改](wired), export_metrics_table[改](wired), build_package[改](wired), batch_eval[改](wired) | 113 tests 绿；批量实证 note=probe-sel+lead_s=15.5+分片无误导键；索引产物归零 |

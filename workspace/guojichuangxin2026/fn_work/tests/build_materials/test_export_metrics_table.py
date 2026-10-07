@@ -29,3 +29,13 @@ def test_aggregate_and_conflict(tmp_path):
     (bad / "metrics.jsonl").write_text('{"value": 1}\n', encoding="utf-8")
     with pytest.raises(MaterialError, match="无 key"):
         export_metrics_table([str(bad)])
+
+
+def test_r25_derived_aggregates(tmp_path):
+    """R25：lead_s 单值列派生 P10/中位数/达标率（汇总口径供模板）。"""
+    runs = [_run(tmp_path, [("sc/lead_s", 6.0)]), _run(tmp_path, [("sc/lead_s", 4.0)])]
+    t = export_metrics_table(runs)
+    vals = {r["value"] for r in t["by_key"]["sc/lead_p10_s"]}
+    assert t["by_key"]["sc/lead_median_s"][0]["value"] == 5.0
+    assert t["by_key"]["sc/lead_hit_rate"][0]["value"] == 0.5      # 6.0 达标/4.0 不达标
+    assert t["by_key"]["sc/lead_p10_s"][0]["run"] == "(aggregate)"

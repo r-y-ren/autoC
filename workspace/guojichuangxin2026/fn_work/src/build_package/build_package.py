@@ -39,6 +39,22 @@ def build_package(out_dir: str = "dist", skip_build: bool = False) -> dict:
         encoding="utf-8")
     manual = write_user_manual(str(out / "用户手册.md"))
 
+    # R24：打包前置卫生核验——ignore 覆盖 runs_* + 产物入库扫描（发现即失败列清单）
+    import subprocess
+    hygiene = {"ignore_runs": False, "tracked_artifacts": []}
+    gi = root / ".gitignore"
+    gi_txt = gi.read_text(encoding="utf-8") if gi.exists() else ""
+    hygiene["ignore_runs"] = "runs_*/" in gi_txt or "runs*" in gi_txt
+    if not hygiene["ignore_runs"]:
+        raise BuildError("卫生核验失败：.gitignore 缺 runs_*/ 规约")
+    ls = subprocess.run(["git", "ls-files", "fn_work"], capture_output=True,
+                        text=True, cwd=root.parent.parent)
+    hygiene["tracked_artifacts"] = [f for f in ls.stdout.splitlines()
+                                   if "/runs_" in f or f.startswith("fn_work/runs_")]
+    if hygiene["tracked_artifacts"]:
+        raise BuildError(f"卫生核验失败：{len(hygiene['tracked_artifacts'])} 个评估产物在库"
+                         f"（前 3：{hygiene['tracked_artifacts'][:3]}）——先 git rm --cached")
+
     wheels = []
     if not skip_build:
         r = subprocess.run([sys.executable, "-m", "pip", "wheel", "--no-deps",
@@ -61,4 +77,5 @@ def build_package(out_dir: str = "dist", skip_build: bool = False) -> dict:
             raise BuildError(f"装后自测失败: {r2.stderr[-200:]} "
                              f"/ entry={(r3.stdout + r3.stderr)[-200:] if r3 else 'missing'}")
     return {"pyproject": str(pyproject), "manual": manual, "wheels": wheels,
-            "packages": pkgs, "post_install_test": "passed" if wheels else "skipped"}
+            "packages": pkgs, "post_install_test": "passed" if wheels else "skipped",
+            "hygiene": hygiene}

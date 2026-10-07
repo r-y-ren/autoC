@@ -23,8 +23,9 @@ def test_lowbat_lead_metrics_and_bad_scenario(tmp_path):
     summary = run_eval("lowbat_headwind", runs=1,
                        config={"runs_root": str(tmp_path)})
     s = summary["summary"]
-    # R12：渐进场景输出 hit_rate 字段；降级模式（无模型）基线阈低于危险线→0.0 为诚实读数
-    assert "lead_hit_rate" in s and "t_crit" in s
+    # R25 口径：t_crit 恒在；lead 统计键仅在有预警跑时出现（降级无预警=诚实缺省）
+    assert "t_crit" in s
+    assert ("lead_p10_s" in s) == ("lead_hit_rate" in s)
     import pytest
     with pytest.raises(SystemExit):
         run_eval("nope", runs=1, config={"runs_root": str(tmp_path)})
@@ -63,3 +64,7 @@ def test_r11_model_channel_and_degraded_note(tmp_path):
     rd2 = sorted((tmp_path / "mdl" / "lowbat_headwind_eval").iterdir())[0]
     evs = [json.loads(x) for x in (rd2 / "events.jsonl").read_text().splitlines()]
     assert any(e.get("type") == "progressive" and "risk" in e for e in evs)  # 模型通道出共形区间
+    rows2 = [json.loads(x) for x in (rd2 / "metrics.jsonl").read_text().splitlines()]
+    keys2 = {r["key"] for r in rows2 if r.get("key")}
+    assert "lowbat_headwind/lead_s" in keys2            # R25：单值键在
+    assert "lowbat_headwind/lead_p10_s" not in keys2    # R25：误导键不再落分片

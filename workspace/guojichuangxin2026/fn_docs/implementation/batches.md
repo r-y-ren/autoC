@@ -11,6 +11,8 @@
 
 
 ## 变更记录
+| 2026-10-06 | B19 实施留痕 | R23 _ensure_model 选优装载（probe/tcn/回退三分支+train_report 补 best 落盘）；R25 lead_s 单值+汇总聚合+export 派生键；R24 卫生核验+gitignore runs_*/+git rm --cached 336 产物（索引归零，磁盘保留） | 批内补记：train_report.json 曾漏 best 字段致 winner 不达批量（实证修复） |
+
 | 2026-10-06 | 流程审计补账（R17-R22 执行欠账） | 用户指出 R17-R22 未经 divide/scaffold/implement 正式过门即完成——审计属实：①divide 门口未呈报+31 助手单元未入树（B12 起累积）②scaffold 纯改造豁免不成立（有新单元）③implement 无批表/四态/批间门。补账：31 助手入 responsibility 树与块（[L2|补记]）+类/垫片登记；functions.md 补行+七件改造单元状态刷新；名实漂移修复（session_control_api）；死代码 inject_at_v 删除。B18=补账批次 |
 （计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |

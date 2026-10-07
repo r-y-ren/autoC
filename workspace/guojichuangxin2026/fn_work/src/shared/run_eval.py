@@ -49,13 +49,9 @@ def _lead_metrics(frames, evs, scenario):
     # 规格口径（计划书 7.4）：提前量=失控判据成立时刻−**首次**有效预警时刻（每跑一个值）
     pre = [float(e["t"]) for e in sev if float(e["t"]) <= t_crit]
     if not pre:
-        base["lead_hit_rate"] = 0.0
-        return base
+        return base                    # R25：无预警跑不落单值键（诚实缺省）
     lead = max(0.0, t_crit - min(pre))
-    base.update({"lead_p10_s": round(lead, 3),
-                 "lead_median_s": round(lead, 3),
-                 "lead_hit_rate": round(1.0 if lead >= 5.0 else 0.0, 3),
-                 "lead_first_warn_s": round(min(pre), 3)})
+    base["lead_s"] = round(lead, 3)     # R25：单值入分片，统计量上移汇总层
     return base
 
 
@@ -263,6 +259,13 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
                                      "data_source": data_source})
         for k, v in m.items():
             all_metrics.setdefault(k, []).append(v)
+    leads = sorted(v for v in all_metrics.get("lead_s", [])
+                   if isinstance(v, (int, float)))
+    if leads:   # R25：统计量上移汇总层（跨运行 P10/中位数/达标率）
+        all_metrics["lead_p10_s"] = [round(_percentile(leads, 0.10), 3)]
+        all_metrics["lead_median_s"] = [round(stats.median(leads), 3)]
+        all_metrics["lead_hit_rate"] = [round(
+            sum(1 for x in leads if x >= 5.0) / len(leads), 3)]
     summary = {"scenario": scenario, "runs": runs,
                "data_source": cfg.get("data_source", "synthetic"),
                "note": cfg.get("note", "synthetic-mid"),

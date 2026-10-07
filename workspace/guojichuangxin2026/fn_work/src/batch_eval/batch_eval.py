@@ -40,7 +40,7 @@ def batch_eval(scenarios: list, runs_per_scenario: int = 30,
         summary = run_eval(sc, runs_per_scenario,
                            config={**cfg, "model": model, "quantiles": quantiles,
                                    "data_source": data_source,
-                                   "note": f"{data_source}-mid"
+                                   "note": f"{data_source}-mid+{model_note}"
                                    + ("+degraded-model" if model is None else "")})
         archived = []
         for rd in sorted(Path(runs_root).glob(f"{sc}_eval/*")):
@@ -69,25 +69,39 @@ def _already_archived(rd) -> bool:
 
 
 def _ensure_model(cfg):
-    """模型工件保障：缺则合成重训（synthetic-trained 口径）。"""
+    """模型工件保障（R23）：消费 train_tcn best/selection 选优工件；缺失/失败回退合成重训。"""
     import sys
     from pathlib import Path
     root = Path(__file__).resolve().parents[2]
     sys.path.insert(0, str(root / "src"))
-    ckpt = root / "checkpoints" / "tcn.pt"
-    if ckpt.exists() and not cfg.get("retrain"):
-        from run_progressive_risk.build_feature_window import FEATURE_NAMES
+    ckpt_dir = root / "checkpoints"
+    report_fp = ckpt_dir / "train_report.json"
+    if report_fp.exists() and not cfg.get("retrain"):
+        import json
+        import pickle
         try:
-            from shared.load_model_artifact import load_model_artifact
-            blob = load_model_artifact(str(ckpt), FEATURE_NAMES)
-            from run_progressive_risk.predict_risk_tcn import _build
+            rep_json = json.loads(report_fp.read_text(encoding="utf-8"))
+            best = rep_json.get("best") or {}
+            kind = best.get("kind", "tcn")
+            from run_progressive_risk.build_feature_window import FEATURE_NAMES
+            if kind == "probe":
+                import numpy as np
+                from run_progressive_risk.train_tcn import _LinearProbe
+                blob = pickle.load(open(best["path"], "rb"))["probe"]
+                probe = _LinearProbe(np.asarray(blob["w"]), float(blob["b"]),
+                                     blob["fs"], blob["quantiles"], FEATURE_NAMES)
+                return probe, blob["quantiles"], "probe-sel"
             import torch
+            from shared.load_model_artifact import load_model_artifact
+            from run_progressive_risk.predict_risk_tcn import _build
+            blob = load_model_artifact(best.get("path") or
+                                       str(ckpt_dir / "tcn.pt"), FEATURE_NAMES)
             net = _build()
             net.load_state_dict(blob["state_dict"])
             net.eval()
-            return net, {"1": 0.05, "3": 0.10, "5": 0.15, "10": 0.20}, "ckpt-reused"
+            return net, {"1": 0.05, "3": 0.10, "5": 0.15, "10": 0.20}, "tcn-sel"
         except Exception:
-            pass
+            pass                      # 选优工件损坏→回退重训（R23 注记 retrain-*）
     from launch_demo_session.spawn_sitl import SyntheticSITL
     from run_ingest.run_ingest import run_ingest
     from run_progressive_risk.train_tcn import train_tcn
@@ -106,9 +120,18 @@ def _ensure_model(cfg):
     from run_progressive_risk.build_feature_window import FEATURE_NAMES
     from shared.load_model_artifact import load_model_artifact
     from run_progressive_risk.predict_risk_tcn import _build
+    best = res.get("best") or {"path": res["checkpoint"], "kind": "tcn"}
+    if best.get("kind") == "probe":
+        import numpy as np
+        import pickle
+        from run_progressive_risk.train_tcn import _LinearProbe
+        blob = pickle.load(open(best["path"], "rb"))["probe"]
+        return (_LinearProbe(np.asarray(blob["w"]), float(blob["b"]), blob["fs"],
+                             blob["quantiles"], FEATURE_NAMES),
+                blob["quantiles"], "retrain-probe")
     blob = load_model_artifact(res["checkpoint"], FEATURE_NAMES)
     net = _build()
     import torch
     net.load_state_dict(blob["state_dict"])
     net.eval()
-    return net, {"1": 0.05, "3": 0.10, "5": 0.15, "10": 0.20}, "synthetic-trained"
+    return net, {"1": 0.05, "3": 0.10, "5": 0.15, "10": 0.20}, "retrain-tcn"

@@ -9,7 +9,7 @@
 | append_record | B1 | tested | 测试: tests/shared/test_append_record.py → 2 passed | 36178fc6 |
 | load_model_artifact | B1 | tested | 测试: tests/shared/test_load_model_artifact.py → 3 passed | 36178fc6 |
 | inject_scenario_fault | B2 | tested | 测试: tests/shared/test_inject_scenario_fault.py | 59252ced |
-| run_eval | B12→B18 | wired 10-06 | 继承 R2/R3/R4 验收（eval CLI 本体） | a419a834 |
+| run_eval | B12→B18→B19 | wired 10-06 | 继承 R2/R3/R4 验收（eval CLI 本体） | a419a834 |
 | connect_sitl | B2 | tested | 上游覆盖: run_ingest | 59252ced |
 | normalize_telemetry | B2 | tested | 测试: tests/run_ingest/test_normalize_telemetry.py | 59252ced |
 | aggregate_imu_features | B2 | tested | 测试: tests/run_ingest/test_aggregate_imu_features.py | 59252ced |
@@ -48,18 +48,18 @@
 | render_console | B10→B18 | wired 10-06 | 测试: tests/launch_demo_session/test_render_console.py | 2f17e43a |
 | session_control_api | B10→B18 | wired 10-06 | 测试: tests/launch_demo_session/test_session_control_api.py | 2f17e43a |
 | launch_demo_session | B10 | wired 10-03 | 继承 R9 验收（浏览器全流程判据） | 2f17e43a |
-| export_metrics_table | B11 | tested | 测试: tests/build_materials/test_export_metrics_table.py | a419a834 |
+| export_metrics_table | B11→B19 | wired 10-06 | 测试: tests/build_materials/test_export_metrics_table.py | a419a834 |
 | draft_revision_notes | B11→B18 | wired 10-06 | 测试: tests/build_materials/test_draft_revision_notes.py | a419a834 |
 | compile_documents | B11 | wired 10-03 | 继承 doc-compile 验收（docs/build.py 本体） | a419a834 |
 | build_materials | B11 | wired 10-03 | 继承 R8 验收（doc-compile + doc-numbers） | a419a834 |
 | archive_run | B13 | tested | 测试: tests/shared/test_archive_run.py | — |
-| batch_eval | B13 | wired 10-03 | 继承 R11 验收（runs≥90 归档+data_source 标注） | — |
+| batch_eval | B13→B19 | wired 10-06 | 继承 R11 验收（runs≥90 归档+data_source 标注） | — |
 | probe_px4_env | B13 | tested | 测试: tests/batch_eval/test_probe_px4_env.py | — |
 | boot_selfcheck | B14 | wired 10-03 | 继承 R13 验收（三步 PASS） | — |
 | probe_service | B14 | tested | 测试: tests/boot_selfcheck/test_probe_service.py | — |
 | bench_edge | B15 | wired 10-03 | 继承 R14 验收（dry-run PASS） | — |
 | calibrate_usrp | B15 | wired 10-03 | 继承 R14 验收（dry-run 参考表） | — |
-| build_package | B16 | wired 10-03 | 继承 R15 验收（干净 venv pip install+demo 起） | — |
+| build_package | B16→B19 | wired 10-06 | 继承 R15 验收（干净 venv pip install+demo 起） | — |
 | write_user_manual | B16 | tested | 测试: tests/build_package/test_write_user_manual.py | — |
 | soak_test | B17 | wired 10-03 | 继承 R16 验收（--quick 微缩+留痕） | — |
 | make_portable_bundle | B17 | wired 10-03 | 继承 R16 验收（tar 结构+SHA256） | — |
@@ -92,5 +92,5 @@
 | _lift | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _make_fixture | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _page | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
-| _ensure_model | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
+| _ensure_model | B18→B19 | wired 10-06 | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _already_archived | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
