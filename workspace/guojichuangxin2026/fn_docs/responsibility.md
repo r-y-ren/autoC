@@ -239,6 +239,7 @@
     - tested 策略：自有单测
     - 核验命令：测试: tests/run_progressive_risk/test_check_physical_baseline.py
   - **train_tcn** [L1|新增]
+  - [改造 10-06 R23·补记] train_report.json 必含 best 字段（选优结果落盘，供 _ensure_model 消费；曾漏致批量装载断链——回归测试守护）
     - 职责：离线训练管线——从运行目录/回放数据生成监督样本（事件标注=失控判据时刻；按架次/日期分组切分防泄漏，内联完成），训练轻量 TCN（参数量≤200 万），出验证曲线与 checkpoint+特征名清单+版本戳。
     - 签名意图：输入: 数据目录清单, 训练配置 / 输出: checkpoint+元数据+验证报告路径 / 错误: 数据不足/标注缺失抛 TrainError
     - 调用方：程序入口
@@ -383,6 +384,7 @@
   - tested 策略：上游覆盖: doc-compile 验收
   - 核验命令：继承 R8 验收方式（doc-compile + doc-numbers）
   - **export_metrics_table** [L1|新增]
+  - [改造 10-06 R25·补记] lead_s 列派生汇总键（P10/中位数/达标率，(aggregate) 注记）；P10 口径唯一源=run_eval._percentile（线性插值）
     - 职责：读全部 metrics 分片 → 汇总表（指标×场景×运行批次，含统计口径列与来源运行目录），并做一致性校验（同键不同值冲突即报）；不写战役顶层 metrics.json，只产引用表。
     - 签名意图：输入: 运行目录清单 / 输出: 引用表（Markdown+JSON 双格式） / 错误: 冲突/缺失键抛 MaterialError
     - 调用方：build_materials
@@ -528,6 +530,7 @@
 （R15 打包与安装：pyproject、pip 可装、用户手册。）
 
 - **build_package** [L0|新增]
+  - [改造 10-06 R24·签名意图补记] 输出含 hygiene 报告字段（ignore_runs/tracked_artifacts）；卫生扫描 cwd=战役根（评审 C1 修正：原 pathspec 落空致假守卫）
   - [改造 10-06 R24] 打包前置卫生核验：ignore 覆盖 runs_* 规约+产物入库扫描（发现即失败并列清单）；一次性 git rm --cached 与 ignore 补写为 B19 批内 ops 动作留痕。核验=继承 R24（git ls-files 计数 0+打包自检）
   - 职责：产 pyproject.toml（src 布局映射+入口点 console_scripts：demo/eval/replay-check/sdr-check）并构建 wheel；装后自测——干净 venv pip install 轮子后以入口点起 demo.sh 等价服务探活；write_user_manual 产零术语手册（演示操作/安装/故障排查三节）随包分发。
   - 签名意图：输入: out_dir / 输出: wheel 路径+自测报告 / 错误: 构建失败抛 BuildError（贴 stderr 摘要）

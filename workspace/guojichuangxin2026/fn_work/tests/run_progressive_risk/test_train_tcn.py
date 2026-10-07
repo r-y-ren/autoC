@@ -52,3 +52,13 @@ def test_r17_probe_selection_recorded(tmp_path):
     sel = out["selection"]
     assert "winner" in sel and sel["winner"] in ("tcn", "probe")
     assert "best" in out and out["best"]["kind"] in ("tcn", "probe")
+
+
+def test_r23_best_persisted_in_report(tmp_path):
+    """回归：train_report.json 必须含 best（曾漏致批量装载断链）。"""
+    import json
+    from run_progressive_risk.train_tcn import train_tcn
+    dirs = [str(_make_run(tmp_path, tmp_path, f"b{i}")) for i in range(3)]
+    out = train_tcn(dirs, {"epochs": 1, "out_dir": str(tmp_path / "ckpt3"), "min_frames": 60})
+    rep = json.loads((tmp_path / "ckpt3" / "train_report.json").read_text())
+    assert "best" in rep and rep["best"]["kind"] in ("tcn", "probe")

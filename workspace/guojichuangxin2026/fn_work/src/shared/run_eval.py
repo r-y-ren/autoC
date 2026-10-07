@@ -42,8 +42,7 @@ def _lead_metrics(frames, evs, scenario):
     if t_crit is None or not sev:
         return {"lead_p10_s": None, "lead_median_s": None, "lead_hit_rate": None,
                 "t_crit": t_crit, "note": "无判据触发或无预警事件"}
-    base = {"lead_p10_s": None, "lead_median_s": None, "lead_hit_rate": None,
-            "t_crit": t_crit}
+    base = {"t_crit": t_crit}          # R25：统计键不在单跑层（死键字面清除）
     if scenario not in _PROGRESSIVE_ONLY:
         return base                                # R12：突发/链路场景不报命中率
     # 规格口径（计划书 7.4）：提前量=失控判据成立时刻−**首次**有效预警时刻（每跑一个值）

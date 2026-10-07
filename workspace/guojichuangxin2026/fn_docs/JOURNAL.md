@@ -23,3 +23,4 @@
 | 2026-10-06 | 全量线:divide | R23-R25 划分落盘（演进轮只增）：矩阵 25/25 双向覆盖；R23→batch_eval[改]（选优装载+聚合层）/R24→build_package[改]（交付卫生核验，git ops 为 B19 批内动作）/R25→run_eval[改]（lead_s 单值）+session_control_api 签名修正+replay_check 语义补录；纯改造零新函数→scaffold 可合法跳过 | fn-doc-lint 0/0；门：停等 /fn-scaffold 或 /fn-implement（scaffold 跳过需门口确认）或修订 |
 | 2026-10-06 | 全量线:scaffold | 演进轮·纯改造空过（用户显式过门，按仪式核验）：残留桩 0/承接五文件在位/compileall PASS/新函数清点 0——R23-R25 无桩可打，结构树 89 不变 | 门：停等 /fn-implement 或修订 |
 | 2026-10-06 | 全量线:implement | B19 批完成（R23/R24/R25）：probe-sel 批量实证+lead_s 单值口径+产物索引归零；113 tests 绿；train_report 漏 best 字段缺陷实证修复 | 批间门：派评审子代理审 diff→停等 |
+| 2026-10-06 | 全量线:implement | B19 修订轮（用户裁决"开始修订"）：C1 假守卫修复（扫描 cwd→战役根+反例测试"守卫可失败"）/I2 P10 单一口径（run_eval._percentile）/I3 补注记三件/I4 测试镜像（三分支+best 回归+P10 值断言）/M5-M8 全清；116 tests 绿；lint 0/0 | 批间门复呈：停等 |

@@ -74,8 +74,9 @@ def _ensure_model(cfg):
     from pathlib import Path
     root = Path(__file__).resolve().parents[2]
     sys.path.insert(0, str(root / "src"))
-    ckpt_dir = root / "checkpoints"
+    ckpt_dir = Path(cfg.get("ckpt_dir") or root / "checkpoints")   # 测试可注入
     report_fp = ckpt_dir / "train_report.json"
+    _fallback = "forced" if cfg.get("retrain") else ("no-report" if not report_fp.exists() else "broken")
     if report_fp.exists() and not cfg.get("retrain"):
         import json
         import pickle
@@ -128,10 +129,10 @@ def _ensure_model(cfg):
         blob = pickle.load(open(best["path"], "rb"))["probe"]
         return (_LinearProbe(np.asarray(blob["w"]), float(blob["b"]), blob["fs"],
                              blob["quantiles"], FEATURE_NAMES),
-                blob["quantiles"], "retrain-probe")
+                blob["quantiles"], f"retrain-{_fallback}-probe")
     blob = load_model_artifact(res["checkpoint"], FEATURE_NAMES)
     net = _build()
     import torch
     net.load_state_dict(blob["state_dict"])
     net.eval()
-    return net, {"1": 0.05, "3": 0.10, "5": 0.15, "10": 0.20}, "retrain-tcn"
+    return net, {"1": 0.05, "3": 0.10, "5": 0.15, "10": 0.20}, f"retrain-{_fallback}-tcn"

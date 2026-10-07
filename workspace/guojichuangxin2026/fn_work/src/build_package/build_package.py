@@ -48,7 +48,7 @@ def build_package(out_dir: str = "dist", skip_build: bool = False) -> dict:
     if not hygiene["ignore_runs"]:
         raise BuildError("卫生核验失败：.gitignore 缺 runs_*/ 规约")
     ls = subprocess.run(["git", "ls-files", "fn_work"], capture_output=True,
-                        text=True, cwd=root.parent.parent)
+                        text=True, cwd=root.parent)   # 战役根：pathspec 才落在真实 fn_work
     hygiene["tracked_artifacts"] = [f for f in ls.stdout.splitlines()
                                    if "/runs_" in f or f.startswith("fn_work/runs_")]
     if hygiene["tracked_artifacts"]:

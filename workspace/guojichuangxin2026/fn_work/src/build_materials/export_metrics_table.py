@@ -33,7 +33,8 @@ def export_metrics_table(run_dirs: list) -> dict:
             vals = sorted(v["value"] for v in table[k] if isinstance(v["value"], (int, float)))
             if vals:
                 sc = k.split("/")[0]
-                derived = {f"{sc}/lead_p10_s": vals[max(0, int((len(vals) - 1) * 0.10))],
+                from shared.run_eval import _percentile   # R25：P10 单一口径源
+                derived = {f"{sc}/lead_p10_s": _percentile(vals, 0.10),
                            f"{sc}/lead_median_s": _st.median(vals),
                            f"{sc}/lead_hit_rate": sum(1 for x in vals if x >= 5.0) / len(vals)}
                 for dk, dv in derived.items():
