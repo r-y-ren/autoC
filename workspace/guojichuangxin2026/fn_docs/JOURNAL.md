@@ -21,3 +21,4 @@
 | 2026-10-06 | 全量线:审计补账 | 用户指出 R17-R22 跳段——审计属实（第二次同类违规，前次=越门、本次=跳段+新单元未登记）：①grill 门口未停（"全部执行"被过度解读为全程免门）②divide 仅标注改造、31 助手未入树（B12 起累积）③scaffold 豁免不成立（非纯改造）④implement 无批表/四态/批间门。补账：31 助手+类/垫片入 responsibility（[L2|补记]）+functions 行+七件状态刷新+B18 历史；名实漂移修复（mount_control_api→session_control_api 留别名）；死代码 inject_at_v 删 | fn-doc-lint 0/0（含补账单元全链一致）；教训入档：执行前逐段过门、新单元必须先入树 |
 | 2026-10-06 | 全量线:grill | fn-review 发现入演进链：R23 选优断链修复（C1）/R24 产物出库（I1，用户裁决摘除+补忽略）/R25 口径与文档对账（I2/I3/M1+M2，用户裁决单值+批量聚合）；两问裁决落定 | 门口：停等 /fn-divide 或修订 |
 | 2026-10-06 | 全量线:divide | R23-R25 划分落盘（演进轮只增）：矩阵 25/25 双向覆盖；R23→batch_eval[改]（选优装载+聚合层）/R24→build_package[改]（交付卫生核验，git ops 为 B19 批内动作）/R25→run_eval[改]（lead_s 单值）+session_control_api 签名修正+replay_check 语义补录；纯改造零新函数→scaffold 可合法跳过 | fn-doc-lint 0/0；门：停等 /fn-scaffold 或 /fn-implement（scaffold 跳过需门口确认）或修订 |
+| 2026-10-06 | 全量线:scaffold | 演进轮·纯改造空过（用户显式过门，按仪式核验）：残留桩 0/承接五文件在位/compileall PASS/新函数清点 0——R23-R25 无桩可打，结构树 89 不变 | 门：停等 /fn-implement 或修订 |
