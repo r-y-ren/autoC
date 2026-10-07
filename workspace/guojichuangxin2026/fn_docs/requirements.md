@@ -125,6 +125,18 @@
 - 内容：docs/参考文献与技术总结.md（已落盘）+修订建议稿增硬件采购表（档 B：Jetson+B210+接线，价格与来源）。
 - 验收方式：文献总结文件存在且逐条带来源日期；draft_revision_notes 产出含硬件采购表。
 
+### R23 选优工件接线（审计 C1） [P0]
+- 内容：batch_eval._ensure_model 消费 train_tcn 的 best/selection 产物——winner=probe 时从 probe.pkl 重建探针对象装载，winner=tcn 时装载 tcn.pt；selection 缺失/加载失败回退现行为（重训）并注记回退原因。
+- 验收方式：selection.winner=probe 时批量运行的分片 note 含 probe-sel 且 lead 指标与手动口径一致（hit_rate≥0.9）；单测覆盖 probe/tcn/回退三分支。
+
+### R24 评估产物出库与忽略（审计 I1） [P0]
+- 内容：.gitignore 补 `runs_*/`；git rm --cached 摘除已入库的 336 个 runs_* 产物文件（磁盘保留，归档真值已在 fn_docs/results）。
+- 验收方式：`git ls-files | grep -c 'runs_(mat|train|r17)/'` 为 0；pytest 全绿不受影响。
+
+### R25 指标口径与责任文档对账（审计 I2/I3/M1/M2） [P0]
+- 内容：①分片键改单值 lead_s（删除 per-run lead_p10_s/lead_median_s 误导键），P10/中位数/达标率上移 batch_eval 汇总层跨运行计算入快照；②responsibility 补 run_eval 10-06 语义注记（首次告警口径/conformal_coverage+link 指标键/link_evs）、session_control_api 签名意图改挂载语义、replay_check 语义注记（暖机豁免+rssi 可选）；③材料模板占位键对齐汇总口径。
+- 验收方式：分片无 lead_p10_s 键且有 lead_s 键；batch 快照含跨运行 lead_p10_s/lead_hit_rate 聚合；fn-doc-lint 0/0；材料模板占位全可解析。
+
 ## 非功能约束
 
 | 约束 | 判据 |
@@ -157,6 +169,7 @@
 
 | 日期 | 变更 | 原因 |
 |---|---|---|
+| 2026-10-06 | 功能演进：追加 R23-R25（fn-review 审计发现入链：C1 选优断链必修/I1 产物出库[用户裁决摘除+补忽略]/I2+I3+M1+M2 口径与文档对账[用户裁决单值+批量聚合]） | 用户 /fn-grill 指令+两问裁决 |
 | 2026-10-06 | 功能演进：追加 R17-R22（analyze 三轮 A-E 提案全采纳+P8 文献/硬件资产文档化）；用户"开始全部执行"为显式授权，增量细节按推荐默认落盘（E 用确定性模板不用 LLM） | 用户指令+fn-grill 演进轮 |
 | 2026-10-03 | 功能演进：追加 R11-R16（fn-analyze 提案 P1-P5 全量采纳：真数据面/口径修正/验收深度/设备就绪脚本/打包安装/长跑+便携包）；PX4 工具链由用户 sudo 安装；P5 整包的交付盘=免 root 便携包口径 | 用户指令"先把所有软件任务完成，硬件到之后直接补上"+fn-grill 演进三问（范围全选/PX4 现在装/验收按预期信号） |
 | 2026-10-03 | 初版成稿（重开版）：八条必问确认式重问全过；相对前版两处实质变化——①新增 R10 设备模块化架构（缺设备不阻塞、到位即插即测不重构）②R9 重定义为"功能完整 P0、UI 精致度加分项" | 任务重开（前版流程违规作废）；变化均出自用户本轮明确指示 |
