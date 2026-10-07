@@ -105,10 +105,6 @@ def _arm_takeoff(conn):
     return True
 
 
-def inject_at_v(scenario, cfg):
-    return float(cfg.get("inject_at_s", _INJECT_AT_S.get(scenario, 0.0)))
-
-
 def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
     """批量评估：合成/PX4 会话→管线→按失控判据计时→指标入 metrics 分片。
 

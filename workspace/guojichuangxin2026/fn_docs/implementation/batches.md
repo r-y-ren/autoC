@@ -10,7 +10,9 @@
 | 2026-10-03 | 签名微调 | spawn_sitl 增 synthetic 备选（设备缺席等价数据面）；EventHub 增 publish_sync（会话线程侧发布）；控制台模板寄宿 run_ground_station.console_page → 归位 launch_demo_session.render_console |
 
 
-## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
+## 变更记录
+| 2026-10-06 | 流程审计补账（R17-R22 执行欠账） | 用户指出 R17-R22 未经 divide/scaffold/implement 正式过门即完成——审计属实：①divide 门口未呈报+31 助手单元未入树（B12 起累积）②scaffold 纯改造豁免不成立（有新单元）③implement 无批表/四态/批间门。补账：31 助手入 responsibility 树与块（[L2|补记]）+类/垫片登记；functions.md 补行+七件改造单元状态刷新；名实漂移修复（session_control_api）；死代码 inject_at_v 删除。B18=补账批次 |
+（计划层事件：签名微调、需求变更往返、放弃等）
 | 日期 | 事件 | 说明 |
 |---|---|---|
 | 2026-10-03 | 签名微调 | open_run_dir 增可选 config_snapshot 参数（运行清单落配置快照） |

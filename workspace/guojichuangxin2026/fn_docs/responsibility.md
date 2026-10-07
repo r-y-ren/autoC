@@ -8,33 +8,53 @@
 - run_ingest ← R1
   - connect_sitl
   - normalize_telemetry
+    - _get
+    - _put
   - aggregate_imu_features
   - compute_physical_margins
+    - _nan
+    - _clamp01
+    - _home_dist_m
   - replay_check
 - run_progressive_risk ← R2
   - build_feature_window
   - predict_risk_tcn
+    - _build
   - calibrate_conformal
   - check_physical_baseline
   - train_tcn
+    - _load_run
+    - _labels_for
+    - make_dataset
+    - _probe_fit
+    - _window_summary
+    - _sparse_recall
 - run_sudden_fault ← R3
   - build_residuals
   - cusum_detect
   - classify_fault
 - run_link_consistency ← R4
+  - _dist_from_ref
   - estimate_distance_trend
   - consistency_residual
 - run_spectrum_monitor ← R5
+  - _freq_axis
   - capture_spectrum
+    - make_usrp_stream
   - replay_spectrum_source
   - compute_occupancy
   - sdr_check
+    - _lift
+    - _make_fixture
 - run_safety_state_machine ← R6
   - update_state
+    - _score
   - plan_disposal
+    - _dist
 - run_ground_station ← R7
   - pipe_events
   - register_pages
+    - _page
 - build_materials ← R8
   - export_metrics_table
   - draft_revision_notes
@@ -45,9 +65,13 @@
   - render_console
 - run_device_bus ← R10
   - discover_device_module
+    - _probe_usrp
+    - _probe_ssh
   - health_check_module
   - route_device_frames
 - batch_eval ← R11
+  - _ensure_model
+  - _already_archived
   - probe_px4_env
 - boot_selfcheck ← R13
   - probe_service
@@ -58,11 +82,18 @@
 - soak_test ← R16
 - make_portable_bundle ← R16
 - load_config
+  - _deep_merge
+  - _validate
 - open_run_dir
 - append_record
 - load_model_artifact
 - run_eval
+  - _percentile
+  - _crit_frame
+  - _lead_metrics
+  - _arm_takeoff
 - inject_scenario_fault
+  - _params_for
 - archive_run
 
 ## 需求覆盖矩阵
@@ -516,3 +547,197 @@
   - tested 策略：自有单测（tar 结构与 SHA 校验，不解压目标机）
   - 核验命令：继承 R16 验收方式（解压即跑属目标机人工项，包结构与校验和命令化）
 
+## 辅助单元补账（2026-10-06 审计回填；[L2|补记] 为实现期随宿主交付、本次登记）
+
+- **_deep_merge** [L2|补记]
+  - 职责：配置树深合并（默认值+YAML 覆盖）
+  - 签名意图：输入: base/override 两 dict / 输出: 合并 dict / 错误: 无
+  - 调用方：load_config
+  - tested 策略：上游覆盖: load_config
+  - 核验命令：上游覆盖: load_config
+- **_validate** [L2|补记]
+  - 职责：配置模式校验（节/类型/取值域）
+  - 签名意图：输入: 合并后 dict / 输出: 无 / 错误: ConfigError 带字段名
+  - 调用方：load_config
+  - tested 策略：上游覆盖: load_config
+  - 核验命令：上游覆盖: load_config
+- **_percentile** [L2|补记]
+  - 职责：序列分位数（P10/P90 口径）
+  - 签名意图：输入: 数值列表, q / 输出: float / 错误: 空表返 NaN
+  - 调用方：run_eval
+  - tested 策略：上游覆盖: run_eval
+  - 核验命令：上游覆盖: run_eval
+- **_crit_frame** [L2|补记]
+  - 职责：失控判据判定（三场景各自尺子）
+  - 签名意图：输入: 帧, 场景名 / 输出: bool / 错误: 无
+  - 调用方：run_eval
+  - tested 策略：上游覆盖: run_eval
+  - 核验命令：上游覆盖: run_eval
+- **_lead_metrics** [L2|补记]
+  - 职责：首次告警提前量指标（规格口径）
+  - 签名意图：输入: 帧列, 事件列, 场景 / 输出: 指标 dict / 错误: 无
+  - 调用方：run_eval
+  - tested 策略：上游覆盖: run_eval
+  - 核验命令：上游覆盖: run_eval
+- **_arm_takeoff** [L2|补记]
+  - 职责：GPS 等锁→解锁（含强制）→AUTO.TAKEOFF 起飞
+  - 签名意图：输入: MAVLink 连接 / 输出: bool / 错误: best-effort 不抛
+  - 调用方：run_eval
+  - tested 策略：上游覆盖: run_eval
+  - 核验命令：上游覆盖: run_eval
+- **_get** [L2|补记]
+  - 职责：消息属性安全取值
+  - 签名意图：输入: 消息, 名 / 输出: 值或 None / 错误: 无
+  - 调用方：normalize_telemetry
+  - tested 策略：上游覆盖: normalize_telemetry
+  - 核验命令：上游覆盖: normalize_telemetry
+- **_put** [L2|补记]
+  - 职责：单字段写入+掩码+携带表登记
+  - 签名意图：输入: 帧/掩码/状态, 键值, 时刻 / 输出: 无 / 错误: 无
+  - 调用方：normalize_telemetry
+  - tested 策略：上游覆盖: normalize_telemetry
+  - 核验命令：上游覆盖: normalize_telemetry
+- **_nan** [L2|补记]
+  - 职责：空余量占位（raw/norm 双 NaN）
+  - 签名意图：输入: 无 / 输出: dict / 错误: 无
+  - 调用方：compute_physical_margins
+  - tested 策略：上游覆盖: compute_physical_margins
+  - 核验命令：上游覆盖: compute_physical_margins
+- **_clamp01** [L2|补记]
+  - 职责：0-1 截断（NaN 透传）
+  - 签名意图：输入: float / 输出: float / 错误: 无
+  - 调用方：compute_physical_margins
+  - tested 策略：上游覆盖: compute_physical_margins
+  - 核验命令：上游覆盖: compute_physical_margins
+- **_home_dist_m** [L2|补记]
+  - 职责：帧到返航点平面距离（m）
+  - 签名意图：输入: 帧, 返航点 / 输出: float 或 None / 错误: 无
+  - 调用方：compute_physical_margins
+  - tested 策略：上游覆盖: compute_physical_margins
+  - 核验命令：上游覆盖: compute_physical_margins
+- **_load_run** [L2|补记]
+  - 职责：运行目录载入（frames+manifest，兼容 results 归档）
+  - 签名意图：输入: 目录 / 输出: (帧列, manifest) / 错误: TrainError
+  - 调用方：train_tcn
+  - tested 策略：上游覆盖: train_tcn
+  - 核验命令：上游覆盖: train_tcn
+- **_labels_for** [L2|补记]
+  - 职责：危险标签抽取（失控判据时刻）
+  - 签名意图：输入: 帧列, manifest / 输出: t_danger 或 None / 错误: 无
+  - 调用方：train_tcn
+  - tested 策略：上游覆盖: train_tcn
+  - 核验命令：上游覆盖: train_tcn
+- **make_dataset** [L2|补记]
+  - 职责：监督样本生成（按架次分组防泄漏）
+  - 签名意图：输入: 目录列, 配置 / 输出: (窗, y, 组) 三元组列 / 错误: TrainError
+  - 调用方：train_tcn
+  - tested 策略：上游覆盖: train_tcn
+  - 核验命令：上游覆盖: train_tcn
+- **_probe_fit** [L2|补记]
+  - 职责：岭正则最小二乘拟合探针
+  - 签名意图：输入: X[N,3F], y / 输出: (w, b) / 错误: 无
+  - 调用方：train_tcn
+  - tested 策略：上游覆盖: train_tcn
+  - 核验命令：上游覆盖: train_tcn
+- **_window_summary** [L2|补记]
+  - 职责：窗→[3F] 统计摘要（末值/均值/斜率，NaN 安全）
+  - 签名意图：输入: [T,F] / 输出: (摘要, 填充列) / 错误: 无
+  - 调用方：train_tcn
+  - tested 策略：上游覆盖: train_tcn
+  - 核验命令：上游覆盖: train_tcn
+- **_sparse_recall** [L2|补记]
+  - 职责：稀疏事件召回口径（选优判据）
+  - 签名意图：输入: 预测列, 标签列 / 输出: float / 错误: 无
+  - 调用方：train_tcn
+  - tested 策略：上游覆盖: train_tcn
+  - 核验命令：上游覆盖: train_tcn
+- **_dist** [L2|补记]
+  - 职责：两点平面距离（m）
+  - 签名意图：输入: 两点 / 输出: float / 错误: 无
+  - 调用方：plan_disposal
+  - tested 策略：上游覆盖: plan_disposal
+  - 核验命令：上游覆盖: plan_disposal
+- **_dist_from_ref** [L2|补记]
+  - 职责：帧到参考点距离（m）
+  - 签名意图：输入: 帧, 参考点 / 输出: float 或 None / 错误: 无
+  - 调用方：run_link_consistency
+  - tested 策略：上游覆盖: run_link_consistency
+  - 核验命令：上游覆盖: run_link_consistency
+- **_score** [L2|补记]
+  - 职责：窗口严重度打分+证据完整性
+  - 签名意图：输入: 事件窗 / 输出: (分值, 证据列, 完整) / 错误: 无
+  - 调用方：update_state
+  - tested 策略：上游覆盖: update_state
+  - 核验命令：上游覆盖: update_state
+- **_params_for** [L2|补记]
+  - 职责：场景+档位→注入参数映射
+  - 签名意图：输入: 场景/档位/定义 / 输出: 参数 dict / 错误: 无
+  - 调用方：inject_scenario_fault
+  - tested 策略：上游覆盖: inject_scenario_fault
+  - 核验命令：上游覆盖: inject_scenario_fault
+- **_probe_usrp** [L2|补记]
+  - 职责：USRP 在场探测（uhd 延迟导入）
+  - 签名意图：输入: 配置 / 输出: 注册项或 None / 错误: 异常按缺席
+  - 调用方：discover_device_module
+  - tested 策略：上游覆盖: discover_device_module
+  - 核验命令：上游覆盖: discover_device_module
+- **_probe_ssh** [L2|补记]
+  - 职责：TCP 可达探测（Jetson）
+  - 签名意图：输入: 配置 / 输出: 注册项或 None / 错误: 异常按缺席
+  - 调用方：discover_device_module
+  - tested 策略：上游覆盖: discover_device_module
+  - 核验命令：上游覆盖: discover_device_module
+- **_build** [L2|补记]
+  - 职责：TinyTCN 网络工厂（块+双头）
+  - 签名意图：输入: 通道/层数 / 输出: Net / 错误: 无
+  - 调用方：predict_risk_tcn
+  - tested 策略：上游覆盖: predict_risk_tcn
+  - 核验命令：上游覆盖: predict_risk_tcn
+- **make_usrp_stream** [L2|补记]
+  - 职责：UHD 采样流构造（设备侧，uhd 延迟导入）
+  - 签名意图：输入: 模块句柄, 参数 / 输出: IQ 生成器 / 错误: USRPError
+  - 调用方：capture_spectrum
+  - tested 策略：上游覆盖: capture_spectrum
+  - 核验命令：上游覆盖: capture_spectrum
+- **_freq_axis** [L2|补记]
+  - 职责：频轴生成（中心/带宽/点数）
+  - 签名意图：输入: 配置 / 输出: ndarray / 错误: 无
+  - 调用方：run_spectrum_monitor
+  - tested 策略：上游覆盖: run_spectrum_monitor
+  - 核验命令：上游覆盖: run_spectrum_monitor
+- **_lift** [L2|补记]
+  - 职责：占用率抬升均值（自检口径）
+  - 签名意图：输入: 帧列 / 输出: float / 错误: 无
+  - 调用方：sdr_check
+  - tested 策略：上游覆盖: sdr_check
+  - 核验命令：上游覆盖: sdr_check
+- **_make_fixture** [L2|补记]
+  - 职责：合成回放夹具（空闲→拥塞）
+  - 签名意图：输入: 路径 / 输出: 无（落 npz） / 错误: 无
+  - 调用方：sdr_check
+  - tested 策略：上游覆盖: sdr_check
+  - 核验命令：上游覆盖: sdr_check
+- **_page** [L2|补记]
+  - 职责：五页 HTML 模板壳
+  - 签名意图：输入: 标题/正文 / 输出: str / 错误: 无
+  - 调用方：register_pages
+  - tested 策略：上游覆盖: register_pages
+  - 核验命令：上游覆盖: register_pages
+- **_ensure_model** [L2|补记]
+  - 职责：模型工件保障（缺则合成重训）
+  - 签名意图：输入: 配置 / 输出: (model, quantiles, note) / 错误: TrainError
+  - 调用方：batch_eval
+  - tested 策略：上游覆盖: batch_eval
+  - 核验命令：上游覆盖: batch_eval
+- **_already_archived** [L2|补记]
+  - 职责：归档去重判定（manifest.archived_to）
+  - 签名意图：输入: 运行目录 / 输出: bool / 错误: 无
+  - 调用方：batch_eval
+  - tested 策略：上游覆盖: batch_eval
+  - 核验命令：上游覆盖: batch_eval
+
+## 内嵌类型与交付垫片登记（随宿主单元交付，不单列函数）
+- 异常类型（各宿主签名意图已含）：ConfigError/IngestError/TrainError/ConformalError/ModelArtifactError/InjectError/SitlError/SessionError/ReplayError/USRPError/BenchError/CalibError/BuildError/BundleError/MaterialError
+- 承载类（职责见宿主块）：Config(load_config), SyntheticSITL(spawn_sitl), DeviceBus(run_device_bus), EventHub(pipe_events), OnlineCalibrator(calibrate_conformal), _LinearProbe(train_tcn)
+- console_scripts 垫片（build_package 交付物）：ahyd_cli.shims 的 demo_main/eval_main/replay_main/sdr_main/_boot_ok
+- 名实对齐记录：session_control_api 契约名与代码名 mount_control_api 曾漂移，2026-10-06 审计统一为 session_control_api（mount_control_api 保留为兼容别名）；死代码 inject_at_v 已删（无调用方）

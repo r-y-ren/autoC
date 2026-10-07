@@ -19,8 +19,8 @@ def run_ground_station(config: dict, live_source=None):
     app.state.hub = live_source if isinstance(live_source, EventHub) else EventHub()
     # 会话控制端点（R9）挂载
     try:
-        from launch_demo_session.session_control_api import mount_control_api
-        mount_control_api(app)
+        from launch_demo_session.session_control_api import session_control_api
+        session_control_api(app)
     except ImportError:
         pass                                    # B10 前后兼容：控制台端点后挂
     port = int(config.get("port", 8000))

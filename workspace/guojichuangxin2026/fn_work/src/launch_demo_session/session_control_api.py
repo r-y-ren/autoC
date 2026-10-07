@@ -7,7 +7,7 @@ SESSIONS: dict = {}          # id → 会话句柄（launch_demo_session 产出�
 LAST_RUN: dict = {}          # {"id":..., "run_dir":...}
 
 
-def mount_control_api(app):
+def session_control_api(app):
     """把控制端点挂到 FastAPI app（register_pages 调用）。"""
     from fastapi.responses import JSONResponse, StreamingResponse
 
@@ -73,3 +73,6 @@ def mount_control_api(app):
         return StreamingResponse(gen(), media_type="text/event-stream")
 
     return app
+
+
+mount_control_api = session_control_api   # 兼容别名（历史调用点）
