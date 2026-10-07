@@ -121,6 +121,9 @@
 | R20 | build_materials |
 | R21 | run_ground_station |
 | R22 | build_materials |
+| R23 | batch_eval |
+| R24 | build_package |
+| R25 | run_eval |
 
 ## 共享函数（shared：多顶层共用；矩阵挂全部受益需求）
 - **load_config**（调用方：程序入口, run_ingest, run_progressive_risk, run_sudden_fault, run_link_consistency, run_spectrum_monitor, run_safety_state_machine, run_ground_station, build_materials, launch_demo_session, run_device_bus, run_eval, train_tcn, replay_check, sdr_check）
@@ -144,6 +147,7 @@
   - tested 策略：自有单测
   - 核验命令：测试: tests/shared/test_load_model_artifact.py
 - **run_eval**（调用方：程序入口, batch_eval）
+  - [改造 10-06 R25] 分片键改单值 lead_s（删 per-run lead_p10_s/lead_median_s 误导键）；补录 10-06 语义注记（首次告警提前量口径/conformal_coverage+detected+false_alarms 指标键/link_evs 采集）。核验=继承 R25（分片无 lead_p10_s 有 lead_s）
   - 职责：批量评估执行器（R2/R3/R4 验收命令本体）——按场景名与次数循环：open_run_dir → run_ingest（inject_scenario_fault 注入）→ 风险管线 → 按失控判据计时出指标（提前量 P10/中位数/达标率、确认时延 P90、类型正确率、误报数）→ append_record 汇总；输出每场景指标汇总表并落运行目录。只写运行目录分片，不写战役顶层 metrics.json（那是 merge_metrics 的领地）。
   - [改造 10-03 演进轮] R12 口径增量：manifest 记 inject_at_s；突发时延=确认−inject_at；hit_rate 仅渐进场景输出。R11 通道增量：接受 model/quantiles 注入（模型缺席自动回退降级通道并在分片 note 标 degraded）；分片附 data_source（px4|synthetic）。CLI 壳 eval.py 不变。
   - 签名意图：输入: 场景名, 次数, 可选种子清单 / 输出: 指标汇总 dict + 运行目录清单 / 错误: 场景未定义/仿真启动失败即报错退出（非零退出码）
@@ -194,6 +198,7 @@
     - tested 策略：自有单测
     - 核验命令：测试: tests/run_ingest/test_compute_physical_margins.py
   - **replay_check** [L1|新增]
+  - [改造 10-06 R25·语义补录] 覆盖率口径注记：2s GPS 暖机段豁免；rssi 为可选字段（PX4 SITL 无无线电消息，链路健康退化为遥测间隔证据）
     - 职责：R1 验收命令本体——读运行目录，统计统一帧率（≥20 Hz 判 PASS）、字段覆盖率清单（逐字段有效帧占比）、掩码分布，输出 PASS/FAIL 与明细。
     - 签名意图：输入: 运行目录（--run） / 输出: 检查报告, 退出码 0/1 / 错误: 目录结构不合法报错退出
     - 调用方：程序入口
@@ -412,6 +417,7 @@
     - tested 策略：自有单测（SIH 拉起→心跳→回收）
     - 核验命令：测试: tests/launch_demo_session/test_spawn_sitl.py
   - **session_control_api** [L1|新增]
+  - [改造 10-06 R25·签名意图修正] 签名意图正名：输入: FastAPI app（挂载控制路由与端点） / 输出: 无（副作用=路由注册）——stub 期 payload 语义作废（名实已于审计对齐）
     - 职责：控制台后端 API——UI 动作全映射：发起/中止会话（桥 launch_demo_session）、飞行中注入故障与调强度（桥 inject_scenario_fault）、回放请求（指定运行目录+时间窗）、会话状态查询（含设备模块在场状态展示）；按钮按下到后端受理保持演示节奏（≤2 s 目标）。
     - 签名意图：输入: HTTP/WS 控制请求 / 输出: 动作回执（含受理结果与会话状态） / 错误: 无会话/动作非法返回结构化错误给 UI 展示（不抛裸异常）
     - 调用方：register_pages
@@ -452,6 +458,12 @@
     - tested 策略：自有单测（双源同管线等价断言）
     - 核验命令：测试: tests/run_device_bus/test_route_device_frames.py
 
+## 产出前自检（R23-R25 演进轮，2026-10-06）
+- 矩阵正向：R1-R25 全覆盖（25/25）✓（R24 以 build_package"交付卫生"职责承接；一次性 git ops 为 B19 批内动作）
+- 矩阵反向：R23-R25 无新函数——均为既有单元 [改造]（batch_eval/run_eval/build_package）+文档修正（session_control_api 签名/replay_check 注记）✓
+- 纯改造无新单元 → fn-scaffold 依演进链规则合法跳过
+- 函数总数 89（31 补账后）不变 ✓
+
 ## 产出前自检
 - 矩阵正向：R1-R10 每条恰好一个顶层函数负责 ✓（10/10，无漏实现）
 - 矩阵反向+树：全部函数经调用链可达顶层入口 ✓（程序入口：十个顶层函数 + run_eval / replay_check / sdr_check / train_tcn；shared 六件均被多顶层引用；无死代码）
@@ -463,6 +475,7 @@
 （R11：真数据面+批量跑批——PX4 工具链探测（用户 sudo 安装后可用），三场景×N 次批量，产物归档 fn_docs/results，模型经 train_tcn 重训接入。）
 
 - **batch_eval** [L0|新增]
+  - [改造 10-06 R23/R25] R23：_ensure_model 消费 train_tcn best/selection（winner=probe→probe.pkl 重建探针装载；winner=tcn→tcn.pt；缺失/失败回退重训并注记原因）。R25：汇总层增跨运行聚合（lead P10/中位数/达标率入快照）。核验=继承 R23/R25（批量 note 含 probe-sel+hit_rate≥0.9；快照含聚合值）
   - 职责：跨场景批量评估总控——probe_px4_env 定数据面（px4 就绪→spawn_sitl px4 模式；否则 synthetic 兜底并标注）；保证风险模型工件存在（缺则调 train_tcn 合成重训，标 synthetic-trained）；逐场景调 run_eval（注入模型与口径参数）×N 次；逐运行 archive_run 归档；产快照 JSON（runs 数、data_source、按场景口径分列的汇总）写 fn_docs/results/。
   - 签名意图：输入: scenarios 清单（缺省三场景）, runs_per_scenario（缺省 30）, config / 输出: 快照 dict+归档路径清单 / 错误: PX4 模式拉起失败自动降级 synthetic 并在快照 note 记原因（不中断批量）
   - 调用方：程序入口
@@ -515,6 +528,7 @@
 （R15 打包与安装：pyproject、pip 可装、用户手册。）
 
 - **build_package** [L0|新增]
+  - [改造 10-06 R24] 打包前置卫生核验：ignore 覆盖 runs_* 规约+产物入库扫描（发现即失败并列清单）；一次性 git rm --cached 与 ignore 补写为 B19 批内 ops 动作留痕。核验=继承 R24（git ls-files 计数 0+打包自检）
   - 职责：产 pyproject.toml（src 布局映射+入口点 console_scripts：demo/eval/replay-check/sdr-check）并构建 wheel；装后自测——干净 venv pip install 轮子后以入口点起 demo.sh 等价服务探活；write_user_manual 产零术语手册（演示操作/安装/故障排查三节）随包分发。
   - 签名意图：输入: out_dir / 输出: wheel 路径+自测报告 / 错误: 构建失败抛 BuildError（贴 stderr 摘要）
   - 调用方：程序入口
