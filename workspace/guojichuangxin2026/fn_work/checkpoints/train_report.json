@@ -1,17 +1,27 @@
 {
- "samples": 123,
+ "samples": 8820,
  "params": 6805,
- "seconds": 0.3,
+ "seconds": 15.4,
  "history": [
   {
    "epoch": 1,
-   "train_loss": 2.8921,
+   "train_loss": NaN,
    "val_acc_5s": 1.0
   },
   {
    "epoch": 2,
-   "train_loss": 0.0735,
+   "train_loss": NaN,
+   "val_acc_5s": 1.0
+  },
+  {
+   "epoch": 3,
+   "train_loss": NaN,
    "val_acc_5s": 1.0
   }
- ]
+ ],
+ "selection": {
+  "probe_recall": 1.0,
+  "tcn_val_acc": 1.0,
+  "winner": "probe"
+ }
 }

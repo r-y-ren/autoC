@@ -14,7 +14,7 @@ def _table(keys):
 KEYS = ["lowbat_headwind/conformal_coverage", "lowbat_headwind/lead_p10_s",
         "lowbat_headwind/lead_median_s", "lowbat_headwind/lead_hit_rate",
         "link_degrade/detected", "link_degrade/false_alarms",
-        "motor_fail/confirm_p90_s", "motor_fail/type_accuracy", "sdr_check/pass"]
+        "motor_fail/confirm_p90_s", "motor_fail/type_correct", "motor_fail/type_total"]
 
 
 def test_all_placeholders_resolvable():
@@ -29,3 +29,11 @@ def test_all_placeholders_resolvable():
 def test_missing_key_raises():
     with pytest.raises(MaterialError, match="引用键缺失"):
         draft_revision_notes(_table(KEYS[:-1]), "frontier.md")
+
+
+def test_new_sections_present():
+    """R19/R20/R22：评估卫生+安全滤波叙事+硬件采购表入稿。"""
+    out = draft_revision_notes(_table(KEYS), "frontier.md")
+    assert "评估卫生" in out and "tsfm-bench" in out          # R19
+    assert "安全域投影" in out and "Sim-to-Real" in out        # R20
+    assert "硬件采购表" in out and "Jetson Orin NX" in out     # R22

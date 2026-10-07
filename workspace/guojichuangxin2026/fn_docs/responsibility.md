@@ -84,6 +84,12 @@
 | R14 | bench_edge |
 | R15 | build_package |
 | R16 | soak_test |
+| R17 | run_progressive_risk |
+| R18 | run_progressive_risk |
+| R19 | build_materials |
+| R20 | build_materials |
+| R21 | run_ground_station |
+| R22 | build_materials |
 
 ## 共享函数（shared：多顶层共用；矩阵挂全部受益需求）
 - **load_config**（调用方：程序入口, run_ingest, run_progressive_risk, run_sudden_fault, run_link_consistency, run_spectrum_monitor, run_safety_state_machine, run_ground_station, build_materials, launch_demo_session, run_device_bus, run_eval, train_tcn, replay_check, sdr_check）
@@ -509,3 +515,4 @@
   - 调用方：程序入口
   - tested 策略：自有单测（tar 结构与 SHA 校验，不解压目标机）
   - 核验命令：继承 R16 验收方式（解压即跑属目标机人工项，包结构与校验和命令化）
+

@@ -41,3 +41,14 @@ def test_labels_need_danger_crossing(tmp_path):
     import pytest
     with pytest.raises(Exception):
         make_dataset([short], {"min_frames": 20})
+
+
+def test_r17_probe_selection_recorded(tmp_path):
+    """R17：训练报告含探针/TCN 选型对比（实证路线并跑）。"""
+    from run_progressive_risk.train_tcn import train_tcn
+    dirs = [str(_make_run(tmp_path, tmp_path, f"p{i}")) for i in range(3)]
+    out = train_tcn(dirs, {"epochs": 1, "out_dir": str(tmp_path / "ckpt2"),
+                           "min_frames": 60})
+    sel = out["selection"]
+    assert "winner" in sel and sel["winner"] in ("tcn", "probe")
+    assert "best" in out and out["best"]["kind"] in ("tcn", "probe")

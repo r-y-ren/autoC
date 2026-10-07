@@ -46,15 +46,16 @@ def _lead_metrics(frames, evs, scenario):
             "t_crit": t_crit}
     if scenario not in _PROGRESSIVE_ONLY:
         return base                                # R12：突发/链路场景不报命中率
-    leads = [max(0.0, t_crit - float(e["t"])) for e in sev
-             if float(e["t"]) <= t_crit]
-    if not leads:
+    # 规格口径（计划书 7.4）：提前量=失控判据成立时刻−**首次**有效预警时刻（每跑一个值）
+    pre = [float(e["t"]) for e in sev if float(e["t"]) <= t_crit]
+    if not pre:
         base["lead_hit_rate"] = 0.0
         return base
-    base.update({"lead_p10_s": round(_percentile(leads, 0.10), 3),
-                 "lead_median_s": round(stats.median(leads), 3),
-                 "lead_hit_rate": round(sum(1 for x in leads if x >= 5.0) / len(leads), 3),
-                 "n_events": len(leads)})
+    lead = max(0.0, t_crit - min(pre))
+    base.update({"lead_p10_s": round(lead, 3),
+                 "lead_median_s": round(lead, 3),
+                 "lead_hit_rate": round(1.0 if lead >= 5.0 else 0.0, 3),
+                 "lead_first_warn_s": round(min(pre), 3)})
     return base
 
 
@@ -170,13 +171,15 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
                 timer.start()
             else:
                 _fire()
-            icfg = {"run": {"hz": 20, "duration_s": 12.0, "home": [32.0, 118.8],
+            dur = 30.0 if scenario == "lowbat_headwind" else 12.0
+            icfg = {"run": {"hz": 20, "duration_s": dur, "home": [32.0, 118.8],
                             "endpoint": sitl_h["endpoint"]}}
             stream_src, realtime = real_conn, True
         else:
             sitl = SyntheticSITL(scenario)
             sitl.inject_scenario(scenario, "mid", {})      # 评估口径：中档强度
-            icfg = {"run": {"hz": 20, "duration_s": 12.0, "home": [32.0, 118.8],
+            dur = 30.0 if scenario == "lowbat_headwind" else 12.0   # 渐进场景覆盖 21s 危险线
+            icfg = {"run": {"hz": 20, "duration_s": dur, "home": [32.0, 118.8],
                             "endpoint": "inproc"}}
             stream_src, realtime = sitl, False
         import itertools
@@ -189,6 +192,7 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
              "thresholds": cfg.get("thresholds")})
         sudden = run_sudden_fault(f_sud)
         link = run_link_consistency(f_link)
+        link_evs = []
         sm = run_safety_state_machine(evs, [], {
             "position": (32.0, 118.8), "home": (32.001, 118.8),
             "battery_remaining": 80, "gps_ok": True, "link_ok": True, "alternates": []})
@@ -199,10 +203,13 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
                 append_record(rd, "event", ev)
             out = next(sm)
             append_record(rd, "event", {"type": "state", "state": out["state"], "t": f["t"]})
-            next(link, None)
+            le = next(link, None)
+            if le is not None and le.get("anomaly"):
+                link_evs.append(le)
         # 指标（R12 口径：时延=确认时刻−注入生效时刻）
         inject_at = float(cfg.get("inject_at_s", _INJECT_AT_S.get(scenario, 0.0)))
         m = _lead_metrics(frames_kept, evs, scenario)
+        t_crit_ref = m.get("t_crit")
         sudden_evs = [e for e in evs if e.get("type") == "sudden"]
         m["confirm_p90_s"] = round(max(0.0, float(
             min(sudden_evs, key=lambda e: float(e["t_confirm"]))["t_confirm"]) - inject_at), 3) \
@@ -212,6 +219,26 @@ def run_eval(scenario: str, runs: int, seeds=None, config: dict | None = None):
         m["type_total"] = len(sudden_evs)
         m["frames"] = len(frames_kept)
         m["replay_ok"] = replay_check(str(rd)) == 0
+        # R4/R18 实测键：链路检出/误报 + 共形经验覆盖率
+        if scenario == "link_degrade":
+            inj = float(cfg.get("inject_at_s", _INJECT_AT_S.get(scenario, 0.0)))
+            m["detected"] = 1 if any(e["t"] > inj for e in link_evs) else 0
+            m["false_alarms"] = sum(1 for e in link_evs if e["t"] <= inj)
+        if cfg.get("quantiles") and any(e.get("type") == "progressive" and "risk" in e
+                                        for e in evs):
+            covered = total = 0
+            for e in evs:
+                if e.get("type") != "progressive" or "risk" not in e:
+                    continue
+                iv = e["risk"]["intervals"].get("5")
+                if not iv:
+                    continue
+                y5 = 1.0 if (t_crit_ref is not None
+                             and float(e["t"]) + 5.0 >= t_crit_ref) else 0.0
+                total += 1
+                covered += 1 if iv["lo"] <= y5 <= iv["hi"] else 0
+            if total:
+                m["conformal_coverage"] = round(covered / total, 3)
         data_source = cfg.get("data_source", "synthetic")
         note = cfg.get("note", "synthetic-mid")
         if cfg.get("model") is None and cfg.get("note") is None:

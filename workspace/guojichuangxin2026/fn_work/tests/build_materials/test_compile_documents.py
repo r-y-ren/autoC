@@ -10,8 +10,8 @@ from build_materials.compile_documents import MaterialError, compile_documents
 KEYS = {"lowbat_headwind/conformal_coverage": 0.91, "lowbat_headwind/lead_p10_s": 5.6,
         "lowbat_headwind/lead_median_s": 7.1, "lowbat_headwind/lead_hit_rate": 0.8,
         "link_degrade/detected": 1, "link_degrade/false_alarms": 0,
-        "motor_fail/confirm_p90_s": 0.18, "motor_fail/type_accuracy": 1.0,
-        "sdr_check/pass": 1}
+        "motor_fail/confirm_p90_s": 0.18, "motor_fail/type_correct": 1.0, "motor_fail/type_total": 1.0,
+        "link_degrade/detected": 1}
 
 
 def _prep(tmp):

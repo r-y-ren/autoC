@@ -35,11 +35,11 @@ class SyntheticSITL:
         import types as _t
         while self._t <= upto:
             t, i = self._t, self._i
-            # 基础衰减 0.10/s；档位倍率 low1.4/mid2.2/high3.2 → mid 穿 25% 线约 6.7s
-            # （留足 5s 持续判据的预警窗；原 0.25 基率 mid 1.3s 穿线来不及预警）
-            drain = 1.0 - 0.10 * t
+            # 基础衰减 0.016/s；档位倍率 low1.4/mid2.2/high3.2 → mid 穿 25% 线约 21s
+            # （物理口径：8s 特征窗+5s 提前量需危险线晚于 13s；21s 为真实量纲下合理点）
+            drain = 1.0 - 0.016 * t
             if self.level and self.scenario == "lowbat_headwind":
-                drain = min(drain, 1.0 - 0.10 * t * self._drain[0])
+                drain = min(drain, 1.0 - 0.016 * t * self._drain[0])
             def mk(mtype, **kw):
                 m = _t.SimpleNamespace(get_type=lambda m=mtype: m, **kw)
                 m._timestamp = t

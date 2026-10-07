@@ -6,7 +6,7 @@ class TrainError(Exception):
     """数据不足/标注缺失。"""
 
 
-def _load_run(data_dir: str):
+def _load_run(data_dir: str):  # 支持 runs/ 与 fn_docs/results/ 两种布局（同为 manifest+frames）
     import json
     from pathlib import Path
     d = Path(data_dir)
@@ -50,9 +50,77 @@ def make_dataset(data_dirs: list, cfg: dict | None = None):
     return samples
 
 
+class _LinearProbe:
+    """稀疏事件线性探针（arxiv-2609.39386 实证路线）：窗口统计特征→危险概率+分位数平均。"""
+
+    def __init__(self, w, b, feats_summary, quantiles, feature_names):
+        self.w, self.b, self.fs = w, b, feats_summary
+        self.quantiles, self.feature_names = quantiles, feature_names
+
+    def __call__(self, x):
+        """x: [T,F] 或 [1,T,F]（与 predict_risk_tcn 同接口）→ 同构输出 dict。"""
+        import math
+
+        import numpy as np
+        import torch
+        xa = np.asarray(x, dtype=float)
+        if xa.ndim == 3:
+            xa = xa[0]
+        s, _ = _window_summary(xa)                       # [3F] 末值/均值/斜率
+        logit = float((np.asarray(self.w).reshape(1, -1) @ np.nan_to_num(s) + self.b)[0])
+        p5 = 1.0 / (1.0 + math.exp(-logit))
+        probs = {h: max(0.0, min(1.0, p5 * self.quantiles.get(h, 1.0)))
+                 for h in ("1", "3", "5", "10")}
+        return {"probs": probs,
+                "time_to_unsafe_s": max(0.0, min(60.0, (0.5 - p5) * 30.0)),
+                "raw": {"probs": torch.full((1, 4), float(p5))}}
+
+    def state_dict(self):
+        import numpy as np
+        return {"w": self.w.tolist() if hasattr(self.w, "tolist") else list(self.w),
+                "b": float(self.b) if not hasattr(self.b, "tolist") else self.b.tolist(),
+                "fs": self.fs, "quantiles": self.quantiles,
+                "feature_names": self.feature_names, "kind": "probe"}
+
+
+def _probe_fit(X, y):
+    """最小二乘+岭正则拟合探针；X: [N, 3F] 统计摘要；y: 0/1。"""
+    import numpy as np
+    X = np.asarray(X, dtype=float)
+    y = np.asarray(y, dtype=float)
+    Xd = np.nan_to_num(X, nan=0.0)
+    Xb = np.hstack([Xd, np.ones((len(Xd), 1))])
+    lam = 1.0
+    A = Xb.T @ Xb + lam * np.eye(Xb.shape[1])
+    w_full = np.linalg.solve(A, Xb.T @ y)
+    return w_full[:-1], w_full[-1]
+
+
+def _window_summary(win):
+    """[T,F]→[3F] 末值/均值/斜率（NaN 置列中位）。"""
+    import numpy as np
+    w = np.asarray(win, dtype=float)
+    out = []
+    for i in range(w.shape[1]):
+        v = w[:, i]
+        fill = float(np.nanmedian(v)) if np.isfinite(v).any() else 0.0
+        v = np.nan_to_num(v, nan=fill)
+        out += [v[-1], v.mean(), v[-1] - v[0]]
+    return np.asarray(out), [float(np.nanmedian(w[:, i])) if np.isfinite(w[:, i]).any() else 0.0
+                             for i in range(w.shape[1])]
+
+
+def _sparse_recall(preds, ys):
+    """稀疏事件召回口径：p>0.5 报警的正样本占比（误报并报，选优用）。"""
+    hit = sum(1 for p, y in zip(preds, ys) if y > 0.5 and p > 0.5)
+    n_pos = sum(1 for y in ys if y > 0.5) or 1
+    return hit / n_pos
+
+
 def train_tcn(data_dirs: list, train_config: dict) -> dict:
     """小数据快速训练（默认 3 epoch CPU 可跑）；产 checkpoint+元数据+验证报告。"""
     import json
+    import math
     import time
     from pathlib import Path
 
@@ -113,9 +181,48 @@ def train_tcn(data_dirs: list, train_config: dict) -> dict:
     torch.save({"state_dict": net.state_dict(), "feature_names": FEATURE_NAMES,
                 "version": f"tcn-{int(time.time())}", "kind": "tcn",
                 "params": params, "history": hist}, ckpt)
+    # R17：线性探针基线并跑（arxiv-2609.39386 实证路线）——按稀疏事件召回选优
+    import numpy as np
+    probe_ckpt = out_dir / "probe.pkl"
+    probe_note = "skipped"
+    best_kind, best_art = "tcn", {"path": str(ckpt), "kind": "tcn"}
+    try:
+        from run_progressive_risk.build_feature_window import FEATURE_NAMES
+        Xtr, ytr, Xva, yva = [], [], [], []
+        raw_va = []
+        for x, y, g in samples:
+            s, fills = _window_summary(x)
+            (Xva if g in val_g else Xtr).append(s)
+            (yva if g in val_g else ytr).append(y)
+            if g in val_g:
+                raw_va.append(x)
+        if len(Xtr) >= 4:
+            w, b = _probe_fit(Xtr, ytr)
+            probe = _LinearProbe(np.asarray(w), float(b), {"fill": fills},
+                                 {"1": 1.15, "3": 1.05, "5": 1.0, "10": 0.85},
+                                 FEATURE_NAMES)
+            import pickle
+            with open(probe_ckpt, "wb") as fh:
+                pickle.dump({"probe": probe.state_dict(), "version": f"probe-{int(time.time())}",
+                             "feature_names": FEATURE_NAMES, "kind": "probe"}, fh)
+            pv = [float(probe(xw)["probs"]["5"]) for xw in raw_va]   # 原始窗评估（摘要已在内部）
+            probe_recall = _sparse_recall(pv, yva)
+            tc_logits = hist[-1].get("val_acc_5s") or 0.0
+            probe_note = f"probe_recall={probe_recall:.3f} tcn_val_acc={tc_logits:.3f}"
+            if probe_recall >= tc_logits:
+                best_kind, best_art = "probe", {"path": str(probe_ckpt), "kind": "probe"}
+            comparison = {"probe_recall": round(probe_recall, 3),
+                          "tcn_val_acc": round(tc_logits, 3), "winner": best_kind}
+        else:
+            comparison = {"winner": "tcn", "note": "val 不足探针跳过"}
+    except Exception as exc:
+        comparison = {"winner": "tcn", "probe_error": str(exc)}
+
     report = out_dir / "train_report.json"
     report.write_text(json.dumps({"samples": len(samples), "params": params,
-                                  "seconds": round(time.time() - t0, 1), "history": hist},
+                                  "seconds": round(time.time() - t0, 1), "history": hist,
+                                  "selection": comparison},
                                  ensure_ascii=False, indent=1), encoding="utf-8")
     return {"checkpoint": str(ckpt), "report": str(report), "params": params,
-            "samples": len(samples), "history": hist}
+            "samples": len(samples), "history": hist, "selection": comparison,
+            "best": best_art}

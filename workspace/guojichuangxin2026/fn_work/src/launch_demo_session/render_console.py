@@ -31,5 +31,5 @@ async function inject(){await api('/api/session/inject',{level:['low','mid','hig
 async function abortSession(){await api('/api/session/abort',{})}
 async function replay(){const r=await fetch('/api/session/last');document.getElementById('replay').textContent=JSON.stringify(await r.json())}
 async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});document.getElementById('status').textContent=JSON.stringify(await r.json())}
-const es=new EventSource('/api/session/stream');es.onmessage=e=>{const m=JSON.parse(e.data);if(m.state)document.getElementById('status').textContent=m.state;if(m.advice)document.getElementById('advice').textContent=m.advice?.action||'';if(m.event)document.getElementById('events').innerHTML+='<li>'+m.event+'</li>'}
+const es=new EventSource('/api/session/stream');es.onmessage=e=>{const m=JSON.parse(e.data);if(m.state)document.getElementById('status').textContent=m.state;if(m.advice)document.getElementById('advice').textContent=m.advice?.action||'';if(m.event)document.getElementById('events').innerHTML+='<li>'+m.event+'</li>';if(m.summary)document.getElementById('events').innerHTML+='<li><i>'+m.summary+'</i></li>'}
 </script></body></html>"""

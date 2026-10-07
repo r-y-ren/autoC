@@ -15,8 +15,8 @@ def test_end_to_end_from_runs(tmp_path):
                          "lowbat_headwind/lead_hit_rate": 0.8,
                          "link_degrade/detected": 1, "link_degrade/false_alarms": 0,
                          "motor_fail/confirm_p90_s": 0.18,
-                         "motor_fail/type_accuracy": 1.0,
-                         "sdr_check/pass": 1}.items():
+                         "motor_fail/type_correct": 1.0, "motor_fail/type_total": 1.0,
+                         "link_degrade/detected": 1}.items():
                 fh.write(json.dumps({"key": k, "value": v, "ts": "t"}) + "\n")
     out = build_materials([str(tmp_path / "run0"), str(tmp_path / "run1")],
                           {"work_dir": str(tmp_path / "mat")})
