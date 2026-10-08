@@ -25,6 +25,8 @@
 
 | B18 | probe_device_status（实现+测）+ serve_console/render_static_pages [改造落位]（/api_devices+状态栏+深色驾驶舱三页统一）+ launch_console selfcheck 升级（新增改动） | start --selfcheck 含 /api_devices 断言 rc=0；三页风格统一走查（人工） | 演进轮二，单批 |
 
+| B19 | RuntimeFeed, per_response_model, ws_stream_feed（实现+测）+ execute_scenario/serve_console/start_dut_source [改造落位] + 前端四件（双曲线/进度卡/时间线/滑杆预览） | WS 3s≥5 条 kpi 且非常数；滑杆预览=模型一致；DOM 四件断言 | 演进轮三，单批 |
+
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 
 | 日期 | 事件 | 说明 |

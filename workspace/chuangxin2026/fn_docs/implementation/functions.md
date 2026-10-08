@@ -14,7 +14,7 @@
 | synthesize_style | B3 | tested (10-03) | pytest tests/src/generate_jamming → 11 passed | acdfbcab |
 | generate_jamming | B3 | wired (10-03) | 同批 9 passed + gen 入口 dry-run 实跑 rc=0 | acdfbcab |
 | parse_serial_line | B4 | tested (10-03) | pytest tests/src/collect_dut_samples → 11 passed | 08b08193 |
-| start_dut_source | B4 | tested (10-03) | 同批 11 passed（jammer 响应/失联/dead_at） | 08b08193 |
+| start_dut_source | B4+B19 | tested (10-06) | 响应模型共用后原测仍绿 | 58635d6d |
 | collect_dut_samples | B4 | wired (10-03) | 同批 11 passed（双源+gap 续采+回调） | 08b08193 |
 | compute_spectrum_stats | B5 | tested (10-03) | pytest tests/src/record_run_streams → 4 passed | 2c987515 |
 | record_run_streams | B5 | wired (10-03) | 同批 4 passed（三路落盘+覆盖率≥0.9+extra_events） | 2c987515 |
@@ -22,13 +22,13 @@
 | build_report | B6+B16 | wired (10-03) | 脚注/标定行断言随集成测 | 2ee701e6 |
 | plan_steps | B7 | tested (10-03) | pytest tests/src/execute_scenario → 8 passed | f413bed5 |
 | check_failure | B7 | tested (10-03) | 同批 8 passed（四分支） | f413bed5 |
-| execute_scenario | B7+B16 | wired (10-03) | 改造后全量回归+R14/R15 三集成测 | 2ee701e6 |
+| execute_scenario | B7+B16+B19 | wired (10-06) | 发流改造后全量回归绿 | 58635d6d |
 | index_dataset | B8 | wired (10-03) | pytest tests/src/index_dataset → 1 passed | 7c9c19d0 |
 | grouped_cv_split | B9 | tested (10-03) | pytest tests/src/train_classifier → 3 passed | fc810971 |
 | train_classifier | B9 | wired (10-03) | 同批 3 passed——8 录制 4 组 F1≥0.9+模型被 predictor 消费 | fc810971 |
 | predict_style | B10 | wired (10-03) | pytest tests/src/predict_style → 1 passed | 7c9c19d0 |
 | run_demo | B11 | wired (10-03) | pytest tests/src/run_demo → 1 passed（报告+失效电平+识别样例三件齐） | b61b442f |
-| serve_console | B12+B18 | wired (10-06) | 改造后 serve_console 子树 9 测+selftest 六点 | 9d46e25b |
+| serve_console | B12+B18+B19 | wired (10-06) | WS 真源化+/preview+四件 DOM 断言 | 58635d6d |
 | bridge_to_sitl | B13 | wired (10-03) | pytest tests/src/bridge_to_sitl → 1 passed（时间线+模拟标注） | 390bd607 |
 | animate_link_state | B14 | wired (10-03) | pytest tests/src/animate_link_state → 2 passed（分级+波纹全覆盖） | 390bd607 |
 

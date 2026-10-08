@@ -20,3 +20,4 @@
 | 10-03 | B16（演进一） | scaled_criteria/apply_calibration/resume_from 三叶 + execute_scenario 与 build_report [改造] 落位 | 全量 83 绿；40 速国标卡报出失效电平+加速脚注、半程 run 续跑补齐且首步保留、标定表已应用入报告 |
 | 10-03 | B17（演进一） | build_mid_material + docs/build.py runs 解析 | 2 单测+全量 86 绿；python docs/build.py --mid rc=0 产 docs/mid_draft.md（真实 run 汇编，溯源自检过） |
 | 10-06 | B18（演进轮二，单批） | probe_device_status（超时降级语义由测试抓出修复）+serve_console/render_static_pages/launch_console 三处改造落位 | 92 全量绿；start --selfcheck 五点全过（DEVICES OK 9 项 B210=missing 如实红灯）；R17/R18 集成断言过 |
+| 10-06 | B19（演进轮三，单批） | RuntimeFeed/per_response_model/ws_stream_feed 三函数 + execute_scenario/serve_console/start_dut_source 三改造 + 前端四件（canvas 双曲线/进度卡/事件时间线/滑杆预览） | 103 全量绿；WS 实流 ≥5 kpi 非常数、preview=模型一致、四件 DOM、node --check、双自检 rc=0 |
