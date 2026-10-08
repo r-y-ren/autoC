@@ -78,6 +78,29 @@ def test_r20_four_components_dom():
     app = create_app()
     with TestClient(app) as c:
         html = c.get("/").text
-    for marker in ("kpi-chart", "progress-card", "timeline",
-                   "power-slider", "preview-chart"):
-        assert marker in html, marker
+    # 真元素断言（含标签属性），防 JS 字符串假阳性
+    assert '<canvas id="kpi-chart"' in html
+    assert '<canvas id="preview-chart"' in html
+    assert '<input id="power-slider"' in html
+    assert 'id="timeline"' in html and "<div id=\"timeline\"" in html.replace("'", '"').replace('"""', '"')
+    assert 'id="progress-card"' in html
+
+
+def test_r19_ws_end_to_end_run(monkeypatch):
+    # 端到端：/api/run 国标卡（高速）→ WS 3s 内 ≥5 条 kpi 且 per 非常数
+    import time
+    monkeypatch.setenv("LINKBENCH_SPEED", "80")
+    app = create_app()
+    with TestClient(app) as c:
+        c.post("/api/run", json={"scenario": "gb42590_noise"})
+        t0 = time.monotonic()
+        kpis, t5 = [], None
+        with c.websocket_connect("/ws") as ws:
+            while time.monotonic() - t0 < 3.2 and (t5 is None or len(kpis) < 40):
+                m = ws.receive_json()
+                if m.get("type") == "kpi":
+                    kpis.append(m)
+                    if len(kpis) == 5:
+                        t5 = time.monotonic() - t0
+    assert len(kpis) >= 5 and t5 is not None and t5 <= 3.0   # R19：3s 内 ≥5 条
+    assert len({m["per"] for m in kpis}) > 1                 # 全序列非常数

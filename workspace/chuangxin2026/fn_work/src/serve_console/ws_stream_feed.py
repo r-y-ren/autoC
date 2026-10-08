@@ -7,10 +7,10 @@ import time
 
 async def ws_stream_feed(ws, feed):
     # 快照续推→增量 ≤10Hz 节流→空闲 1s 心跳；发送失败静默摘除该连接
-    sub = feed.subscribe()
     try:
         for m in feed.snapshot():
             await ws.send_json(m)
+        sub = feed.subscribe()
         last_data = time.monotonic()
         while True:
             batch = []
@@ -30,4 +30,5 @@ async def ws_stream_feed(ws, feed):
     except Exception:  # noqa: BLE001 —— 断连/发送失败静默退出
         return
     finally:
-        sub.close()
+        if "sub" in locals():
+            sub.close()

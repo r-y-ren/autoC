@@ -58,8 +58,10 @@ def execute_scenario(scenario_path, *, estop=None, feed=None):
                                                    if resuming else (0, [], False))
     pre_events = []
     if resuming and start_index == 0 and (run_dir / "steps.jsonl").exists():
-        pre_events.append({"type": "resume_reset", "msg": "进度损坏或无可匹配步，从 0 重跑",
-                           "ts_ms": _host_ms()})
+        _rr = {"type": "resume_reset", "msg": "进度损坏或无可匹配步，从 0 重跑",
+               "ts_ms": _host_ms()}
+        pre_events.append(_rr)
+        emit(_rr)
     cal_path = Path("runs") / "calibration.json"
     cal_state = {"source": None}
     kpi_rows, events, step_records = [], list(pre_events), list(done_records)
@@ -70,6 +72,10 @@ def execute_scenario(scenario_path, *, estop=None, feed=None):
                 feed.publish(msg)
             except Exception:  # noqa: BLE001 —— 发流不阻断执行
                 pass
+
+    def add_event(e: dict) -> None:
+        events.append(e)
+        emit(e)
 
     def on_sample(s):
         row = {"ts_ms": _host_ms(), "link": s.link, "seq": s.seq,
@@ -83,7 +89,7 @@ def execute_scenario(scenario_path, *, estop=None, feed=None):
         if sc.injection is None:
             dur = max(0.2, 1.0 / speed)
             _samples, gaps = collect_dut_samples(links, dur, on_sample=on_sample)
-            events.extend(gaps)
+            [add_event(g) for g in gaps]
             window = kpi_rows
             failed, kind = check_failure(window, crit_eff)
             nojam_false_alarm = bool(failed)
@@ -117,14 +123,14 @@ def execute_scenario(scenario_path, *, estop=None, feed=None):
                                    "ts_ms": _host_ms()})
                 jammer.set_power_db(gain)
                 jammer.on()
-                events.append({"type": "injection", "style": st.style,
-                               "power_db": st.power_db, "ts_ms": t0})
+                add_event({"type": "injection", "style": st.style,
+                           "power_db": st.power_db, "ts_ms": t0})
                 eff = max(0.05, st.duration_s / speed)
                 _s, gaps = collect_dut_samples(links, eff, on_sample=on_sample)
-                events.extend(gaps)
+                [add_event(g) for g in gaps]
                 jammer.off()
-                events.append({"type": "injection_off", "style": st.style,
-                               "power_db": st.power_db, "ts_ms": _host_ms()})
+                add_event({"type": "injection_off", "style": st.style,
+                           "power_db": st.power_db, "ts_ms": _host_ms()})
                 t1 = _host_ms()
                 window = [r for r in kpi_rows if t0 <= r["ts_ms"] <= t1]
                 failed, kind = check_failure(window, crit_eff)
@@ -133,8 +139,9 @@ def execute_scenario(scenario_path, *, estop=None, feed=None):
                        "failed": failed, "failure_kind": kind}
                 step_records.append(rec)
                 if failed:
-                    events.append({"type": "fail", "style": st.style,
-                                   "power_db": st.power_db, "ts_ms": t1})
+                    add_event({"type": "fail", "style": st.style,
+                               "power_db": st.power_db, "kind": kind,
+                               "ts_ms": t1})
                     break  # 该样式已失效，进下一样式
     except Exception:  # noqa: BLE001 —— 任何异常先急停再抛
         estop.fire("execute_scenario 异常")
@@ -150,9 +157,6 @@ def execute_scenario(scenario_path, *, estop=None, feed=None):
         for r in kpi_rows:
             w.writerow([r["ts_ms"], r["link"], r["seq"], r["per"], r["tx_n"],
                         r["err_n"], r["rssi_dbm"], r["arc_avg"], r["plos_cnt"]])
-    for e in events:
-        emit(e if "type" in e else {"type": "event", **e})
-
     old_events = []
     ev_path = run_dir / "events.jsonl"
     if resuming and ev_path.exists():

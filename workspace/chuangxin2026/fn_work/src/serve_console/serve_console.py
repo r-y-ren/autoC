@@ -21,7 +21,8 @@ _PAGE = _CSS + """<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><ti
 <button class="btn" onclick="api('/api/stop','POST',{})">停止</button>
 <button class="btn btn-danger" id="estop" onclick="api('/api/estop','POST',{})">急 停</button>
 <span style="margin-left:10px"><a href="/reports">报告中心</a> · <a href="/help">帮助</a></span></section>
-<section class="panel"><h2>实时数据</h2><div id="log" style="white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:12px;max-height:220px;overflow:auto"></div></section>
+<section class="panel"><h2>运行进度</h2><div id="progress-card" style="font-family:ui-monospace,monospace">待机</div></section>\n''<section class="panel"><h2>实时双曲线（丢包率 / 相对吞吐）</h2><canvas id="kpi-chart" width="900" height="220" style="width:100%;background:#0a0f18;border-radius:8px"></canvas><div id="chart-tip" style="color:#8fa3c0;font-size:.85em">悬停曲线读数值</div></section>\n''<section class="panel"><h2>功率预览（拖滑杆）</h2><input id="power-slider" type="range" min="-20" max="40" value="0" step="5" style="width:70%"><span id="preview-read" style="font-family:ui-monospace,monospace;margin-left:10px"></span><canvas id="preview-chart" width="900" height="120" style="width:100%;background:#0a0f18;border-radius:8px;margin-top:6px"></canvas></section>\n''<section class="panel"><h2>事件时间线</h2><div id="timeline" style="max-height:180px;overflow:auto"></div></section>\n'
+'<section class="panel"><h2>实时数据</h2><div id="log" style="white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:12px;max-height:220px;overflow:auto"></div></section>
 <section class="panel"><h2>历史运行</h2><div id="runs">-</div></section>
 <script>
 let current=null;
@@ -41,6 +42,7 @@ const label=(m.type==='injection'?'注入 '+(m.style||'')+' @'+(m.power_db??'')+
 d.textContent=label;d.style.cssText='padding:3px 8px;margin:2px 0;background:#1b2740;border-left:3px solid '+(m.type==='fail'?'#e74c3c':m.type==='injection'?'#4da3ff':'#f1c40f')+';border-radius:6px;transition:background .8s';
 d.style.background='#3a2b12';setTimeout(()=>{d.style.background='#1b2740'},800);tl.prepend(d);while(tl.children.length>60)tl.removeChild(tl.lastChild)}
 function onFrame(m){if(m.type==='kpi'){hist.per.push(m.per);hist.thr.push(1-m.per);if(hist.per.length>240){hist.per.shift();hist.thr.shift()}drawChart();
+const lg=document.getElementById('log');if(lg){lg.textContent+=(m.link||'')+' PER='+Number(m.per).toFixed(3)+NL;if(lg.scrollHeight>2000)lg.textContent=lg.textContent.slice(-1500);lg.scrollTop=lg.scrollHeight}
 const pc=document.getElementById('progress-card');if(pc&&m.link)pc.dataset.last='最新 '+(m.link||'')+' PER='+(m.per||0).toFixed(3)}
 else if(m.type==='progress'){const pc=document.getElementById('progress-card');if(pc)pc.textContent='第 '+m.index+'/'+m.total+' 步 · '+(m.style||'')+' · 功率 '+(m.power_db??'')+'dB · 已用 '+(m.elapsed_s??0)+'s'}
 else if(m.type==='event'||m.type==='injection'||m.type==='fail'||m.type==='gap'){pushTimeline(m)}
