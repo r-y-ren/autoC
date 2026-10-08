@@ -22,3 +22,28 @@ def test_estop_changes_state():
         before = c.get("/api/health").json()["state"]
         r = c.post("/api/estop").json()["state"]
         assert before == "armed" and r.startswith("fired")
+
+
+# ---- 演进轮二集成（R17/R18） ----
+
+
+def test_r17_devices_endpoint():
+    app = create_app()
+    with TestClient(app) as c:
+        devs = c.get("/api/devices").json()["devices"]
+        assert len(devs) >= 6
+        assert any(e["id"] == "b210" for e in devs)
+        assert all(set(e) >= {"id", "name", "status", "detail", "ts"} for e in devs)
+
+
+def test_r18_theme_and_status_bar_all_pages():
+    app = create_app()
+    with TestClient(app) as c:
+        for path in ("/", "/reports", "/help"):
+            html = c.get(path).text
+            assert "device-bar" in html, path          # 状态栏挂载
+            assert "--accent" in html, path            # 统一主题变量
+            assert "dot " in html or "dot ok" in html or "dev-chips" in html, path
+        home = c.get("/").text
+        assert "急 停" in home and "btn-danger" in home  # 急停危险色醒目
+        assert "报告中心" in home and "帮助" in home

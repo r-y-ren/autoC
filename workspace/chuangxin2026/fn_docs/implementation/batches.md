@@ -23,11 +23,14 @@
 | B16 | scaled_criteria, apply_calibration, resume_from + execute_scenario/build_report 改造 | 40 速国标卡出失效电平+脚注；半程续跑；标定入报告 | 演进轮一 |
 | B17 | build_mid_material + docs/build.py | build --mid 产材料稿+数字溯源断言 | 演进轮一 |
 
+| ▶ B18 | probe_device_status（实现+测）+ serve_console/render_static_pages [改造落位]（/api_devices+状态栏+深色驾驶舱三页统一）+ launch_console selfcheck 升级（新增改动） | start --selfcheck 含 /api_devices 断言 rc=0；三页风格统一走查（人工） | 演进轮二，单批 |
+
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 
 | 日期 | 事件 | 说明 |
 |---|---|---|
 | 2026-10-03 | 计划补洞 | calibrate_power（R2 顶层）原漏于批次表，并入 B7 一并实现 |
+| 2026-10-06 | 新增改动 | B18 含 launch_console selfcheck 升级（含 /api_devices 探测断言）——R17 验收命令内生要求，随批实施（用户批准 R17 时已隐含） |
 | 2026-10-03 | 评审修复+签名微调 | execute_scenario 增 kw estop（操控台急停联通）；calibrate_power 增 warnings（步距偏差>1dB）；补 scripts/record·calibrate·sitl_bridge 三入口（消除死代码 FAIL）；serial seq 记忆改会话级；sitl note 如实化 |
 | 2026-10-03 | 签名微调 | record_run_streams 增 kw jammer/extra_events（执行器联动监测与事件注入，意图级签名不变） |
 | 2026-10-03 | 批次计划立表 | 入口对账：fn-check 残留桩 31（=scaffold 真值）、全量测试 27/27 PASS、镜像齐全；14 批垂直切片覆盖全部 27 函数 |

@@ -31,6 +31,18 @@ def launch_console(*, host: str = "0.0.0.0", port: int = 8000,
         return 1
     print("CONSOLE READY:", url)
     if selftest:
+        try:
+            devs = httpx.get(url + "api/devices", timeout=5.0).json().get("devices", [])
+        except Exception as exc:  # noqa: BLE001
+            print("SELFTEST FAIL: /api_devices 不可达：%s" % exc)
+            server.should_exit = True
+            return 1
+        if len(devs) < 6 or not any(e.get("id") == "b210" for e in devs):
+            print("SELFTEST FAIL: /api_devices 条目不足（%d）" % len(devs))
+            server.should_exit = True
+            return 1
+        b210_st = [e["status"] for e in devs if e["id"] == "b210"][0]
+        print("DEVICES OK: %d 项（B210=%s）" % (len(devs), b210_st))
         server.should_exit = True
         return 0
     if not no_browser:

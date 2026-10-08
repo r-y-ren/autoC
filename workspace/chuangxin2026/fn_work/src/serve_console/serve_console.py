@@ -10,33 +10,32 @@ from starlette.testclient import TestClient
 
 from src.shared.estop import EstopManager
 
-_PAGE = """<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
-<title>无人机链路抗干扰测评台</title><style>
-body{margin:0;background:#0e1420;color:#dbe4f0;font-family:system-ui}
-.panel{border:1px solid #263248;border-radius:10px;padding:12px;margin:10px}
-#estop{background:#c0392b;color:#fff;font-size:1.3em;padding:16px 30px;border:none;border-radius:10px}
-#log{white-space:pre-wrap;font-family:monospace;font-size:12px;max-height:200px;overflow:auto}
-button.sc{margin:4px;padding:8px 14px}
-</style></head><body>
-<header class="panel"><h1>无人机链路抗干扰测评台</h1><span id="st">state: -</span></header>
-<section class="panel"><h3>场景卡片</h3><div id="cards">加载中…</div>
-<button class="sc" onclick="api('/api/run','POST',{scenario:current})">开始</button>
-<button class="sc" onclick="api('/api/stop','POST',{})">停止</button>
-<button id="estop" onclick="api('/api/estop','POST',{})">急 停</button></section>
-<section class="panel"><h3>实时数据</h3><div id="log"></div></section>
-<section class="panel"><h3>历史运行</h3><div id="runs">-</div></section>
+from src.serve_console.render_static_pages import STATUS_BAR_HTML, _CSS
+
+_PAGE = _CSS + """
+<header class="panel" style="max-width:960px"><h1>无人机链路抗干扰测评台</h1>
+<span id="st">state: -</span></header>
+""" + STATUS_BAR_HTML + """
+<section class="panel"><h2>场景卡片</h2><div id="cards">加载中…</div>
+<button class="btn btn-primary" onclick="api('/api/run','POST',{scenario:current})">开始</button>
+<button class="btn" onclick="api('/api/stop','POST',{})">停止</button>
+<button class="btn btn-danger" id="estop" onclick="api('/api/estop','POST',{})">急 停</button>
+<span style="margin-left:10px"><a href="/reports">报告中心</a> · <a href="/help">帮助</a></span></section>
+<section class="panel"><h2>实时数据</h2><div id="log" style="white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:12px;max-height:220px;overflow:auto"></div></section>
+<section class="panel"><h2>历史运行</h2><div id="runs">-</div></section>
 <script>
 let current=null;
 async function api(p,m,b){const r=await fetch(p,{method:m,headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});return r.json()}
 (async()=>{const s=await api('/api/scenarios','GET');const d=document.getElementById('cards');d.innerHTML='';
-for(const n of s.scenarios){const b=document.createElement('button');b.className='sc';b.textContent=n;
-b.onclick=()=>{current=n;document.querySelectorAll('#cards button').forEach(x=>x.style.border='');b.style.border='2px solid #4da3ff'};
+for(const n of s.scenarios){const b=document.createElement('button');b.className='btn';b.textContent=n;
+b.onclick=()=>{current=n;document.querySelectorAll('#cards button').forEach(x=>x.style.borderColor='');b.style.borderColor='#4da3ff'};
 d.appendChild(b)}})();
 (async()=>{const r=await api('/api/runs','GET');document.getElementById('runs').textContent=JSON.stringify(r.runs)})();
 const ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws');
 ws.onmessage=e=>{const m=JSON.parse(e.data);document.getElementById('st').textContent='state: '+m.state;
-const L=document.getElementById('log');L.textContent+=(JSON.stringify(m.kpi||m)+'\\n');L.scrollTop=L.scrollHeight};
+const L=document.getElementById('log');L.textContent+=(JSON.stringify(m.kpi||m)+'\n');L.scrollTop=L.scrollHeight};
 </script></body></html>"""
+
 
 
 def create_app():
@@ -47,6 +46,11 @@ def create_app():
     @app.get("/api/health")
     def health():
         return {"ok": True, "state": estop.state}
+
+    @app.get("/api/devices")
+    def devices():
+        from src.serve_console.probe_device_status import probe_device_status
+        return {"devices": probe_device_status()}
 
     @app.get("/api/scenarios")
     def scenarios():
@@ -144,7 +148,11 @@ def serve_console(*, host: str = "0.0.0.0", port: int = 8000, selftest: bool = F
             with c.websocket_connect("/ws") as ws:
                 msg = ws.receive_json()
                 assert "state" in msg
-        print("SELFTEST OK: health/scenarios/estop/ws 四点全过")
+            dv = c.get("/api/devices").json()["devices"]
+            assert len(dv) >= 6 and any(e["id"] == "b210" for e in dv)
+            assert all(e["status"] in ("ok", "missing", "pending_manual", "manual_ok")
+                       for e in dv)
+        print("SELFTEST OK: health/scenarios/estop/ws/devices 五点全过")
         return 0
     import uvicorn
     uvicorn.run(app, host=host, port=port)
