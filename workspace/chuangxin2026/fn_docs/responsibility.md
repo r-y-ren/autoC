@@ -45,6 +45,9 @@
 - execute_scenario ← R5+R14+R15+R19 [改造：+feed 发流（kpi/event/progress）]
 - serve_console ← R10+R13+R17+R18+R19+R20 [改造：WS 源化+/api/preview+交互四件挂载]
 - start_dut_source ← R3+R20 [改造：响应模型共用 shared.per_response_model]
+# ── 演进轮四增量（R21，2026-10-06）──
+- collect_dashboard ← R21（serve_console 子）
+- serve_console ← R10+R13+R17+R18+R19+R20+R21 [改造：/api/dashboard+/api/seed_demo+仪表盘网格四卡]
 
 ## 需求覆盖矩阵（P1 在 R 号后标注；非功能约束不进矩阵，fn-close 终检对照 requirements 非功能节）
 
@@ -70,6 +73,7 @@
 | R18 | serve_console [改造]+render_static_pages [改造]（深色驾驶舱统一样式，无新函数） |
 | R19 | RuntimeFeed（shared）+ ws_stream_feed（serve_console 子）+ execute_scenario [改造]（发流）+ serve_console [改造]（WS 真源化） |
 | R20 | per_response_model（shared）+ serve_console [改造]（双曲线/进度卡/时间线/滑杆预览+/api/preview）+ start_dut_source [改造]（响应模型共用） |
+| R21 | collect_dashboard（serve_console 子）+ serve_console [改造]（/api/dashboard+/api/seed_demo/网格四卡挂载） |
 
 ## 共享函数（shared/：多顶层共用；矩阵挂全部受益需求）
 
@@ -449,3 +453,27 @@
 - 反向：RuntimeFeed→execute_scenario→入口 与 ws_stream_feed→serve_console→入口 ✓；per_response_model→两调用方→入口 ✓。无死代码。
 - 单一转变：三新块各自一个转变（缓冲中转/功率→PER/缓冲→网络帧）✓。
 - 函数总数 38（+3）——>20 预警延续（需求口 20 条，门内已四轮确认接受）。
+
+
+---
+
+## 演进轮四增量块（R21，2026-10-06；旧块原文未动）
+
+## 增量子函数块（挂 serve_console 子树）
+
+- **collect_dashboard** [L1|新增]（R21）
+  - 职责：聚合 runs/ 与模型产物 → 仪表盘四组数据（单一转变：盘上产物→仪表盘数据包）。①latest：最新含 report 的 run——场景名（scenario.yaml）、失效电平表（steps.jsonl failed 步）、样本数（kpi 行数）、曲线缩略图相对路径（figs/*.png）、加速/标定脚注（speed.json/calibration_state.json）；②history：全部 run 列表（目录名/mtime/失效数）；③model：最新 train_report 的 Macro-F1 与 dataset_index 的录制数/分组数（缺则空值）；④capability：样式库数（注册表）、场景卡数（scenarios/*.yaml）、插件槽数（仪表/链路/样式=3）、累计 run 数。无 runs → {"empty": true}（前端据此触发 seed）。数字一律取自产物文件，不做任何前端可显示的编造。
+  - 签名意图：输入: runs_dir（缺省 "runs"） / 输出: dict 四组+empty 标记 / 错误: 单项产物缺失→该项空值不抛错（聚合职责内建容错）。
+  - 调用方：serve_console（/api/dashboard 端点）
+  - tested 策略：自有单测（夹具 runs 目录）
+  - 核验命令：测试: R21——/api/dashboard 形状断言+数字可溯源（卡内数字出现在所引 run 产物）+seed_demo 后非空——继承 R21 验收方式
+
+## 受影响旧块 [改造] 目标态（原文未动）
+
+- **serve_console** [改造 ← R21]：①新增 GET /api/dashboard（调 collect_dashboard）；②新增 POST /api/seed_demo（后台线程复用 run_demo(quick=True) 生成演示数据，期间 dashboard 返回 empty=true 的过渡态由前端显示"演示数据生成中"）；③首页改仪表盘网格布局：四卡容器（latest/history+对比 canvas/model/capability）+合成数据角标（latest 卡固定标"合成数据"当 speed≠1 或统一按 runs 来源标注）+无数据自动触发 seed_demo 一次。
+
+## 演进轮四自检
+
+- 矩阵正向：R21=collect_dashboard+serve_console 改造 ✓。反向：collect_dashboard→serve_console→入口 ✓。无死代码。
+- 单一转变：collect_dashboard=产物→数据包聚合（批扫先例同构）✓。
+- 函数总数 39（+1）——>20 预警延续（需求口 21 条，门内已五轮确认接受）。
