@@ -31,3 +31,4 @@
 | 2026-10-08 | 全量线:implement | B20 批完成（R26/R27）：render_device_panel 实现（2 测）+五页指挥中心壳+控制台六区+事件降噪+nav 航迹帧+/api/devices 真值面板；120 tests 绿；boot_selfcheck 三 PASS | 批间门：派评审审 diff→停等 |
 | 2026-10-08 | 全量线:implement | B20 修订（评审建议执行）：I1 断言空洞修复（sudden 补 sev+断言收严）+四 Minor 全清；责任文档快速通道两笔；120 tests 绿 | 批间门复呈：停等 |
 | 2026-10-08 | 全量线:grill | R28 入册（三页数据接通/控制台卡片化+飞行读数/一键演示流程；口径横幅未选不做）；数据源口径钉死=接既有真管线 | 门口：停等 /fn-divide 或修订 |
+| 2026-10-08 | 全量线:divide | R28 划分落盘：矩阵 28/28；零新函数（瀑布流复用 replay_spectrum_source 嵌套路由/一键流程客户端 JS）→scaffold 可合法跳过；三件 [改造] 注记 | lint 0/0；门：停等 /fn-implement（B21 批）或修订 |
