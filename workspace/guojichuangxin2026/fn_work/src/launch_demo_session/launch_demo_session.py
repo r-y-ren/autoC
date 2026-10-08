@@ -98,7 +98,7 @@ def launch_demo_session(request: dict, config: dict | None = None):
                         _emit("event", {"event": f"[{ev.get('type')}] "
                                                  f"{ev.get('fault') or ''} sev={sev} "
                                                  f"t={ev.get('t')}",
-                                        "sev": sev,
+                                        "sev": max(sev, 4) if ev.get("type") == "sudden" else sev,
                                         "time": (ev.get("risk") or {}).get("time_to_unsafe_s")})
                 out = next(sm)
                 if out["state"] != st["state"] or out["advice"]:

@@ -11,6 +11,8 @@
 
 
 ## 变更记录
+| 2026-10-08 | B20 修订（评审 I1+M1-M4） | SSE 断言收严（删恒真空洞分支）+sudden 推送补 sev=4+console 六区断言 6/6 归位+/api/devices 真值钉死（uhd 可导入性一致）+sys.path 挂载期一次；责任文档快速通道两笔（口径句/签名形状） | 120 tests 绿 |
+
 | 2026-10-08 | B20 实施留痕 | R26 五页统一指挥中心壳+控制台六区（canvas 航迹/仪表/色带）+事件降噪+1Hz nav 帧；R27 render_device_panel（tested）+/api/devices 真值（合成/PX4/SDR/Orin+待接入三件） | 120 tests 绿；boot_selfcheck 三步 PASS |
 
 | 2026-10-08 | 演示链路修复（用户实跑 demo.sh 崩溃指令修复） | ①demo.sh venv 优先（系统 python 缺 uvicorn 根因）②smoke_boot 接 boot_selfcheck 三步真验收③run_ground_station 桥接 app.state.cfg（会话共享平台 hub，SSE 断线根因）——实测 SSE 92 帧事件流、三步自检 PASS | 树内既有单元一行级修复，无新函数 |

@@ -8,3 +8,7 @@ def test_console_page_key_elements():
     for needle in ("注入故障", "演示控制台", "waterfall", "事件时间轴", "回放",
                    "scenario", "input type='range'"):
         assert needle in html, needle
+    # R26 六区全覆盖：地图航迹/仪表组/色带/注入/设备面板/时间轴
+    for zone in ("maptrack", "g-risk", "g-time", "g-energy", "band-s0",
+                 "level", "device-panel", "events"):
+        assert zone in html, zone

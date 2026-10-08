@@ -24,5 +24,5 @@ def test_stream_only_noteworthy(tmp_path):
     assert msgs, "应有推送（nav/事件）"
     for m in msgs:
         assert ("nav" in m or "state" in m or "advice" in m
-                or m.get("sev", 0) >= 1 or m.get("event")), f"违规推送: {m}"
+                or m.get("sev", 0) >= 1), f"违规推送(降噪失效): {m}"
     assert any("nav" in m for m in msgs)          # 1Hz 航迹帧在

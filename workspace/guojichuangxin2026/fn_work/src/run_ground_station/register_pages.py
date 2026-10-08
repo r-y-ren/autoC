@@ -97,11 +97,13 @@ def register_pages(app, runs_root):
 
     state = {"latest": {"state": "S0", "risk": None, "advice": None}}
 
+    import sys
+    _src = str(Path(__file__).resolve().parents[1])
+    if _src not in sys.path:
+        sys.path.insert(0, _src)          # 挂载期一次（M4：不再每请求污染）
+
     def _device_report() -> dict:
         """设备真值报告（嵌套闭包，非登记单元）：总线探测+PX4 探测+待接入清单。"""
-        import sys
-        here = Path(__file__).resolve().parents[1]
-        sys.path.insert(0, str(here))
         devices = [{"name": "合成仿真源", "state": "active", "note": "内置数据面"}]
         try:
             from batch_eval.probe_px4_env import probe_px4_env

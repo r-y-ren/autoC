@@ -54,5 +54,7 @@ def test_r26_r27_command_center_and_devices(tmp_path):
     dev = c.get("/api/devices").json()
     names = {d["name"]: d["state"] for d in dev["devices"]}
     assert names["合成仿真源"] == "active"
-    assert names["USRP B210 频谱站"] in ("replay", "device")
+    import importlib.util
+    uhd_absent = importlib.util.find_spec("uhd") is None
+    assert (names["USRP B210 频谱站"] == "replay") == uhd_absent   # 真值钉死
     assert len(dev["pending"]) == 3 and "真机实飞" in str(dev["pending"])

@@ -411,7 +411,7 @@
 （R9 演示控制台后端——演示会话全流程 UI 化：选场景一键起飞、飞行中注入故障/调强度、中止归档、时间轴回放；零终端零代码；功能完整 P0，UI 精致度加分项；手动接管为 P1 范围外。）
 
 - **launch_demo_session** [L0|新增]
-  - [改造 10-08 R26] _emit 降噪：sev=0 且无 state/advice 的帧不推送（events.jsonl 照常全量落盘）。核验=继承 R26（SSE 流全部 sev≥1 或含 state/advice）
+  - [改造 10-08 R26] _emit 降噪：sev=0 且无 state/advice 的帧不推送（events.jsonl 照常全量落盘）。核验=继承 R26（SSE 流仅四类合法帧：sev≥1 或 state/advice 或 type=sudden[推送时补 sev=4] 或 nav 航迹帧）
   - 职责：演示会话编排——从控制台请求发起一次演示：open_run_dir 建运行目录 → spawn_sitl 按场景拉起仿真 → 装配 run_device_bus（设备模块自动发现/降级）与 run_ingest 及风险管线/状态机 → 事件流接 pipe_events → 返回会话句柄（会话表：id→句柄/运行目录/控制端点）；会话中止或正常结束时归档运行清单；同机多会话互不串流。
   - 签名意图：输入: 会话请求（场景名/强度档/可选种子）, 配置 / 输出: 会话句柄（id, 运行目录, 控制端点） / 错误: 场景未定义/SITL 拉起失败抛 SessionError（含可读原因给 UI 展示）
   - 调用方：程序入口, session_control_api
@@ -578,7 +578,7 @@
 
 - **render_device_panel** [L1|新增]
   - 职责：设备状态面板 HTML——①已接设备区（SDR/Jetson/合成源/PX4：在场/缺席/回放降级/健康徽标，数据由调用方传入 registry+probe 报告）②待接入清单区（B210 真机/Orin NX/真飞机徽标：脚本就绪·待设备）；纯模板无副作用；控制台与仪表盘共用。
-  - 签名意图：输入: 设备报告 dict（registry/probe/pending 清单） / 输出: HTML 片段 str / 错误: 无
+  - 签名意图：输入: 设备报告 dict（{"devices":[{name,state,note}], "pending":[{name,status,note}]}；state∈{active,device,replay,ready,pending,degraded,off}） / 输出: HTML 片段 str / 错误: 无
   - 调用方：register_pages, render_console
   - tested 策略：自有单测
   - 核验命令：测试: tests/shared/test_render_device_panel.py
