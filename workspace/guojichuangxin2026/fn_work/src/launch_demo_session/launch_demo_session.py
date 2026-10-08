@@ -80,9 +80,11 @@ def launch_demo_session(request: dict, config: dict | None = None):
                 margins.append(f["margins"])
                 st["frames"] += 1
                 if st["frames"] % 20 == 0:   # R26：1Hz 航迹/仪表帧
+                    import math as _m
                     _emit("event", {"nav": {
                         "lat": f.get("lat"), "lon": f.get("lon"),
                         "alt": f.get("alt_amsl"),
+                        "speed": round(_m.hypot(f.get("vx") or 0, f.get("vy") or 0), 2),
                         "energy": f.get("battery_remaining")}})
                 st["state"] = f.get("quality_mask") and st["state"]
                 le = next(link, None)

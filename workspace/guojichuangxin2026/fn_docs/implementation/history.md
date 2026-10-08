@@ -23,3 +23,4 @@
 | 2026-10-06 | B18 | R17-R22 执行（train_tcn[改]/calibrate_conformal[改]/draft_revision_notes[改]/register_pages[改]/render_console[改]/run_eval[改]/session_control_api[改]）+31 助手审计补账 | 112 tests 绿；7 提案 achieved；流程欠账由审计补账记录（见 batches 变更记录） |
 | 2026-10-06 | B19 | _ensure_model(wired), run_eval[改](wired), export_metrics_table[改](wired), build_package[改](wired), batch_eval[改](wired) | 113 tests 绿；批量实证 note=probe-sel+lead_s=15.5+分片无误导键；索引产物归零 |
 | 2026-10-08 | B20 | render_device_panel(t), register_pages[改](wired), render_console[改](wired), launch_demo_session[改](wired), _page[改](wired) | 120 tests 绿；SSE 降噪断言+/api/devices 真值断言+六区元素断言 |
+| 2026-10-08 | B21 | register_pages[改], render_console[改], launch_demo_session[改], session_control_api[改](flow) | 123 tests 绿；三页数据到达+卡片/读数/流程序列暂停断言 |

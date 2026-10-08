@@ -47,6 +47,40 @@ border-radius:8px}
 """
 
 
+_DASH_JS = r'''<div class='panel'><div class='ptitle'>迷你航迹</div><canvas id='minitrack' height='160'></canvas></div>
+</div></div>
+<script>
+const trk=[];function drawMini(){const c=document.getElementById('minitrack'),x=c.getContext('2d');
+ x.clearRect(0,0,c.width,c.height);x.strokeStyle='#1b2b4d';
+ for(let i=1;i<4;i++){x.beginPath();x.moveTo(0,i*c.height/4);x.lineTo(c.width,i*c.height/4);x.stroke();}
+ if(trk.length>1){x.strokeStyle='#38bdf8';x.beginPath();x.moveTo(trk[0][0],trk[0][1]);
+ for(const p of trk)x.lineTo(p[0],p[1]);x.stroke();}}}
+function upd(s){if(s.state){const lv=parseInt(s.state.slice(1))||0;
+ for(let i=0;i<5;i++)document.getElementById('band-s'+i)?.classList.remove('on');
+ document.getElementById('band-s'+lv)?.classList.add('on');
+ document.getElementById('d-risk').textContent=s.state;
+ document.getElementById('d-risk-bar').style.width=(8+lv*23)+'%';}
+ if(s.time!=null)document.getElementById('d-time').textContent=Math.round(s.time)+'s';
+ if(s.nav){const c=document.getElementById('minitrack');
+  trk.push([((s.nav.lon-118.8)*1e5%c.width+c.width)%c.width,
+            (32.002-s.nav.lat)*1e5%c.height+c.height)%c.height]);
+  if(trk.length>120)trk.shift();drawMini();
+  if(s.nav.energy!=null){document.getElementById('d-energy').textContent=Math.round(s.nav.energy)+'%';
+   document.getElementById('d-energy-bar').style.width=Math.max(4,Math.min(100,s.nav.energy))+'%';}}
+ if(s.advice)document.getElementById('d-advice').textContent='建议：'+(s.advice.action||'');}
+const es=new EventSource('/api/session/stream');es.onmessage=e=>upd(JSON.parse(e.data));
+fetch('/api/session/last').then(r=>r.json()).then(async j=>{
+ if(!j.run_dir)return;const name=j.run_dir.split('/').pop();
+ const fr=await (await fetch('/api/runs/'+name+'/frames')).json();
+ let i=0;const frames=(fr.frames||[]);
+ const iv=setInterval(()=>{if(i>=frames.length){clearInterval(iv);return;}
+  const f=JSON.parse(frames[i++]);
+  upd({nav:{lat:f.lat,lon:f.lon,energy:f.battery_remaining},time:Math.max(0,20.75-(f.t||0))});
+ },150);});
+drawMini();
+</script>'''
+
+
 def _page(title: str, body: str, active: int = 0) -> str:
     """R26 改造：统一指挥中心壳（CSS 变量/布局/顶栏 S0-S4 状态色带）。"""
     names = ["仪表盘", "事件时间线", "频谱瀑布", "回放", "控制台"]
@@ -130,7 +164,7 @@ def register_pages(app, runs_root):
     def dashboard():
         return _page("仪表盘", f"""
 <div class='wrap'><div class='col'>
-<div class='panel'><div class='ptitle'>风险仪表</div><div class='gauges'>
+<div class='panel'><div class='ptitle'>风险仪表</div><div id='d-advice' class='muted' style='margin-bottom:8px'>建议：—</div><div class='gauges'>
 <div class='stat'><div class='k'>风险等级</div><div class='v' id='d-risk'>S0</div>
 <div class='bar'><i id='d-risk-bar' style='width:8%'></i></div></div>
 <div class='stat'><div class='k'>返航能源余量</div><div class='v' id='d-energy'>—</div>
@@ -145,7 +179,7 @@ def register_pages(app, runs_root):
 <a href='/timeline'><button>事件时间线</button></a></div>
 <div class='panel'><div class='ptitle'>口径注记</div>
 <div class='muted'>数据面：合成源出事件指标 / PX4 真源验数据链路（每条记录标注来源）。</div></div>
-</div></div>""", 0)
+{_DASH_JS}""", 0)
 
     @app.get("/timeline", response_class=HTMLResponse)
     def timeline():
@@ -155,7 +189,21 @@ def register_pages(app, runs_root):
 <ul class='timeline' id='events'></ul></div></div>
 <div class='col'><div class='panel'><div class='ptitle'>证据展开</div>
 <div id='evidence' class='muted'>点击事件查看证据链</div></div></div></div>
-<script>fetch('/api/state').then(r=>r.json()).then(s=>{
+<script>
+function esc(s){return (s||'').replace(/</g,'&lt;')}
+fetch('/api/session/last').then(r=>r.json()).then(async j=>{
+ const name=(j.run_dir||'').split('/').pop();if(!name)return;
+ const d=await (await fetch('/api/runs/'+name+'/frames')).json();
+ const ul=document.getElementById('events');
+ (d.events||[]).forEach(e=>{
+  const li=document.createElement('li');li.style.cursor='pointer';
+  li.innerHTML='<b>'+esc(e.type)+'</b> · t='+esc(String(e.t))+'<div class="muted">'+esc(e.summary)+'</div>'
+   +'<div class="evidence muted" style="display:none">'+esc(JSON.stringify(e.evidence||e.channels||e.risk||{}))+'</div>';
+  li.onclick=()=>{const ev=li.querySelector('.evidence');
+   ev.style.display=ev.style.display==='none'?'block':'none';};
+  ul.appendChild(li);});
+});
+fetch('/api/state').then(r=>r.json()).then(s=>{
  if(s.state)document.getElementById('band-s'+s.state.slice(1))?.classList.add('on')})</script>""", 1)
 
     @app.get("/waterfall", response_class=HTMLResponse)
@@ -166,7 +214,20 @@ def register_pages(app, runs_root):
 <canvas id='waterfall' height='320'></canvas>
 <div class='muted'>来源标注：device=真机 / replay=回放（画面等价）</div></div></div>
 <div class='col'><div class='panel'><div class='ptitle'>信道占用</div>
-<div id='occ' class='muted'>等待帧流…</div></div></div></div>""", 2)
+<div id='occ' class='muted'>等待帧流…</div></div></div></div>
+<script>
+const occ=document.getElementById('occ');const cv=document.getElementById('waterfall');
+const es2=new EventSource('/api/spectrum/stream');
+es2.onmessage=e=>{{const m=JSON.parse(e.data);
+ if(m.error){{occ.textContent='错误：'+m.error;return;}}
+ occ.textContent='占用率 '+(m.occ*100).toFixed(1)+'% · 抬升 '+m.lift+'dB';
+ const x=cv.getContext('2d'),W=cv.width,H=cv.height;
+ const img=x.getImageData(0,0,W,Math.max(1,H-2));x.putImageData(img,0,2);
+ const tr=m.trace||[];for(let i=0;i<tr.length;i++){{
+  const v=Math.max(0,Math.min(1,(tr[i]+95)/40));
+  x.fillStyle='rgb('+Math.round(v*255)+','+Math.round(v*160)+',40)';
+  x.fillRect(i*W/tr.length,H-2,Math.ceil(W/tr.length)+1,2);}}}};
+</script>""", 2)
 
     @app.get("/replay", response_class=HTMLResponse)
     def replay():
@@ -197,6 +258,43 @@ async function loadRun(){
     @app.get("/api/state")
     def api_state():
         return JSONResponse(state["latest"])
+
+    @app.get("/api/spectrum/stream")
+    async def api_spectrum_stream(max_frames: int = 0):
+        """R28 瀑布真帧流：复用 replay_spectrum_source 回放管线，~5fps 推送。
+        max_frames>0 时推完即止（测试收口用；默认 0=持续流）。"""
+        import asyncio
+        import math
+
+        from fastapi.responses import StreamingResponse
+        from run_spectrum_monitor.replay_spectrum_source import replay_spectrum_source
+
+        async def gen():
+            try:
+                from run_spectrum_monitor.sdr_check import _make_fixture
+                fx = Path(__file__).resolve().parents[1] / "fixtures" / "spectrum_replay.npz"
+                if not fx.exists():
+                    fx.parent.mkdir(parents=True, exist_ok=True)
+                    _make_fixture(fx)
+                import numpy as np
+                z = np.load(fx)
+                base = np.median(z["frames_dbm"][:5], axis=0)
+                import json as _json
+                for fr in replay_spectrum_source(str(fx), {"loop": True}):
+                    power = fr["power_dbm"]
+                    occ = float(np.mean(power > base + 6.0))
+                    lift = float(np.mean(power) - np.mean(base))
+                    yield "data: " + _json.dumps({
+                        "frame": fr["frame_idx"], "occ": round(occ, 3),
+                        "lift": round(lift, 2),
+                        "trace": [round(float(x), 1) for x in power[::8]]}) + "\n\n"
+                    if max_frames and fr["frame_idx"] + 1 >= max_frames:
+                        return
+                    await asyncio.sleep(0.2)
+            except Exception as exc:
+                yield "data: " + _json.dumps({"error": str(exc)}) + "\n\n"
+
+        return StreamingResponse(gen(), media_type="text/event-stream")
 
     @app.get("/api/devices")
     def api_devices():

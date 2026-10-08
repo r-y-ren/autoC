@@ -11,6 +11,8 @@
 
 
 ## 变更记录
+| 2026-10-08 | B21 实施留痕 | R28 三页数据接通（瀑布 SSE 真帧流 max_frames 参数/仪表盘实时+自动播/时间线自动载入）+控制台卡片化+飞行读数+一键流程（服务端时序器可暂停）；过程修复：补丁未落盘教训（write_text 遗漏）+f-string 花括号两坑+TestClient 无限流挂死（max_frames 收口） | 123 tests 绿 |
+
 | 2026-10-08 | B20 修订（评审 I1+M1-M4） | SSE 断言收严（删恒真空洞分支）+sudden 推送补 sev=4+console 六区断言 6/6 归位+/api/devices 真值钉死（uhd 可导入性一致）+sys.path 挂载期一次；责任文档快速通道两笔（口径句/签名形状） | 120 tests 绿 |
 
 | 2026-10-08 | B20 实施留痕 | R26 五页统一指挥中心壳+控制台六区（canvas 航迹/仪表/色带）+事件降噪+1Hz nav 帧；R27 render_device_panel（tested）+/api/devices 真值（合成/PX4/SDR/Orin+待接入三件） | 120 tests 绿；boot_selfcheck 三步 PASS |

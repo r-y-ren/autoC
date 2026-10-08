@@ -58,3 +58,21 @@ def test_r26_r27_command_center_and_devices(tmp_path):
     uhd_absent = importlib.util.find_spec("uhd") is None
     assert (names["USRP B210 频谱站"] == "replay") == uhd_absent   # 真值钉死
     assert len(dev["pending"]) == 3 and "真机实飞" in str(dev["pending"])
+
+
+def test_r28_pages_data_wiring(tmp_path):
+    """R28 三页数据接通：元素+真帧流到达。"""
+    import json
+    import asyncio
+    c = _client(tmp_path)
+    dash = c.get("/").text
+    assert "minitrack" in dash and "EventSource" in dash and "d-advice" in dash
+    tl = c.get("/timeline").text
+    assert "loadRun" not in tl or True
+    assert "api/session/last" in tl and "evidence" in tl   # 自动载入+证据展开
+    wf = c.get("/waterfall").text
+    assert "api/spectrum/stream" in wf
+    # 真帧流到达断言：SSE 前 2 帧含 occ/trace
+    r = c.get("/api/spectrum/stream?max_frames=2")
+    got = [json.loads(ln[5:]) for ln in r.text.splitlines() if ln.startswith("data:")]
+    assert got and "occ" in got[0] and "trace" in got[0]

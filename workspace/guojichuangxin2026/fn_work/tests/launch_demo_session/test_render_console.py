@@ -12,3 +12,12 @@ def test_console_page_key_elements():
     for zone in ("maptrack", "g-risk", "g-time", "g-energy", "band-s0",
                  "level", "device-panel", "events"):
         assert zone in html, zone
+
+
+def test_r28_cards_readouts_flow():
+    """R28 卡片化+飞行读数+一键流程元素。"""
+    from launch_demo_session.render_console import render_console
+    html = render_console({})
+    for z in ("pickScn", "data-scn='lowbat_headwind'", "data-scn='motor_fail'",
+              "g-alt", "g-speed", "flowStart", "flowPause", "一键演示"):
+        assert z in html, z

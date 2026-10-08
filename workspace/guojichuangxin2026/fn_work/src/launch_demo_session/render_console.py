@@ -44,6 +44,11 @@ border:1px solid var(--line);border-radius:6px;padding:8px;font-size:15px}}
 .timeline li{{padding:8px 10px;border-left:3px solid var(--line);margin:6px 0;
 background:#0d1626;border-radius:0 6px 6px 0;font-size:14px}}
 canvas{{width:100%;background:#081020;border:1px solid var(--line);border-radius:8px}}
+.cards{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0}}
+.card{{background:#0d1626;border:2px solid var(--line);border-radius:8px;padding:10px;
+cursor:pointer;text-align:center;font-size:13px}}
+.card.on{{border-color:var(--accent);box-shadow:0 0 10px rgba(56,189,248,.4)}}
+.card b{{font-size:15px}}
 .muted{{color:var(--dim)}}#status{{font-size:1.3em;font-weight:600}}
 </style></head><body>
 <div class='hd'><h1>安航云盾 · 演示控制台</h1>
@@ -58,13 +63,25 @@ canvas{{width:100%;background:#081020;border:1px solid var(--line);border-radius
 <div class='bar'><i id='g-time-bar' style='width:50%'></i></div></div>
 <div class='stat'><div class='k'>返航能源余量</div><div class='v' id='g-energy'>—</div>
 <div class='bar'><i id='g-energy-bar' style='width:50%'></i></div></div>
+<div class='stat'><div class='k'>高度</div><div class='v' id='g-alt'>—</div>
+<div class='bar'><i style='width:30%'></i></div></div>
+<div class='stat'><div class='k'>地速</div><div class='v' id='g-speed'>—</div>
+<div class='bar'><i style='width:30%'></i></div></div>
 </div></div>
 <div class='panel'><div class='ptitle'>事件时间轴（证据链）</div>
 <ul class='timeline' id='events'></ul></div>
 </div><div class='col'>
 <div class='panel'><div class='ptitle'>故障注入 · 操控</div>
-<select id='scenario'><option>lowbat_headwind</option><option>motor_fail</option><option>link_degrade</option></select>
+<input type='hidden' id='scenario' value='lowbat_headwind'>
+<div class='cards'>
+<div class='card on' data-scn='lowbat_headwind' onclick='pickScn(this)'>慢危险<br><b>低电量+逆风</b></div>
+<div class='card' data-scn='motor_fail' onclick='pickScn(this)'>快危险<br><b>电机故障</b></div>
+<div class='card' data-scn='link_degrade' onclick='pickScn(this)'>链路<br><b>频谱被挤占</b></div>
+</div>
 <button onclick='startSession()'>起飞</button>
+<button onclick='flowStart()' style='background:#0f766e'>▶ 一键演示</button>
+<button onclick='flowPause()'>⏸ 暂停</button>
+<button onclick='flowResume()'>⏵ 继续</button>
 <button class='warn' onclick='inject()'>注入故障</button>
 <div>强度 <input type='range' id='level' min='0' max='2' value='1'></div>
 <button onclick='abortSession()'>中止</button>
@@ -84,7 +101,11 @@ function drawMap(){{const c=document.getElementById('maptrack'),x=c.getContext('
  x.lineTo(i*c.width/6,c.height);x.stroke();}}
  if(track.length>1){{x.strokeStyle='#38bdf8';x.lineWidth=2;x.beginPath();
  x.moveTo(track[0][0],track[0][1]);for(const p of track)x.lineTo(p[0],p[1]);x.stroke();
- x.fillStyle='#fff';const q=track[track.length-1];x.beginPath();x.arc(q[0],q[1],5,0,7);x.fill();}}}}
+ x.fillStyle='#fff';const q=track[track.length-1];
+ if(track.length>1){{const pv=track[track.length-2],ang=Math.atan2(q[1]-pv[1],q[0]-pv[0]);
+  x.save();x.translate(q[0],q[1]);x.rotate(ang);x.beginPath();
+  x.moveTo(10,0);x.lineTo(-7,6);x.lineTo(-7,-6);x.closePath();x.fill();x.restore();}}
+ else{{x.beginPath();x.arc(q[0],q[1],5,0,7);x.fill();}}}}}}
 function setBand(s){{for(let i=0;i<5;i++)document.getElementById('band-s'+i)?.classList.remove('on');
  document.getElementById('band-s'+(s||0))?.classList.add('on');}}
 async function startSession(){{const r=await api('/api/session/start',{{scenario:scenario.value,duration_s:12}});
@@ -96,6 +117,12 @@ async function replay(){{const r=await fetch('/api/session/last');
 async function api(path,body){{const r=await fetch(path,{{method:'POST',
  headers:{{'Content-Type':'application/json'}},body:JSON.stringify(body)}});
  const j=await r.json();setStatus(JSON.stringify(j).slice(0,120));return j;}}
+function pickScn(el){{document.querySelectorAll('.card').forEach(c=>c.classList.remove('on'));
+ el.classList.add('on');document.getElementById('scenario').value=el.dataset.scn;}}
+async function flowStart(){{const r=await api('/api/demo/flow/start',{{}});
+ setStatus('一键演示：'+JSON.stringify(r.story));}}
+async function flowPause(){{await api('/api/demo/flow/pause',{{}});}}
+async function flowResume(){{await api('/api/demo/flow/resume',{{}});}}
 function setStatus(t){{document.getElementById('status').textContent=t;}}
 const es=new EventSource('/api/session/stream');
 es.onmessage=e=>{{const m=JSON.parse(e.data);
@@ -106,6 +133,8 @@ es.onmessage=e=>{{const m=JSON.parse(e.data);
   if(m.advice.reason)document.getElementById('advice').title=m.advice.reason;}}
  if(m.time!=null)document.getElementById('g-time').textContent=Math.round(m.time)+'s';
  if(m.nav){{const c=document.getElementById('maptrack');
+  if(m.nav.alt!=null)document.getElementById('g-alt').textContent=Math.round(m.nav.alt)+'m';
+  if(m.nav.speed!=null)document.getElementById('g-speed').textContent=m.nav.speed+'m/s';
   track.push([((m.nav.lon-118.8)*1e5%c.width+c.width)%c.width,
               (32.002-m.nav.lat)*1e5%c.height+c.height)%c.height]);
   if(track.length>MAXP)track.shift();drawMap();

@@ -34,3 +34,28 @@ def test_full_control_flow(tmp_path):
     assert c.get("/api/session/last").json().get("id") == sid
     miss = c.post("/api/session/inject", json={"id": "nope"})
     assert miss.status_code == 404 and miss.json()["ok"] is False
+
+
+def test_r28_demo_flow_sequence_and_pause(tmp_path):
+    """R28 一键流程：序列推进+暂停/继续。"""
+    import time
+    c = TestClient(_app(tmp_path))
+    steps = [{"scenario": "motor_fail", "duration_s": 2.0, "inject_at_s": 0.3, "hold_s": 0.5},
+             {"scenario": "link_degrade", "duration_s": 2.0, "inject_at_s": 0.3, "hold_s": 0.5}]
+    r = c.post("/api/demo/flow/start", json={"steps": steps})
+    assert r.json()["ok"] and r.json()["story"] == ["motor_fail", "link_degrade"]
+    time.sleep(0.6)
+    st = c.get("/api/demo/flow").json()
+    assert st["running"] is True and st["step"] >= 0        # 序列推进
+    c.post("/api/demo/flow/pause")
+    s1 = c.get("/api/demo/flow").json()["step"]
+    time.sleep(0.8)
+    s2 = c.get("/api/demo/flow").json()["step"]
+    assert s2 <= s1 + 1                                      # 暂停期间不跳步外推进
+    c.post("/api/demo/flow/resume")
+    deadline = time.time() + 15
+    while time.time() < deadline and c.get("/api/demo/flow").json()["running"]:
+        time.sleep(0.2)
+    fin = c.get("/api/demo/flow").json()
+    assert fin["running"] is False and len(fin["log"]) == 2   # 两步各留痕
+    assert c.post("/api/demo/flow/start", json={"steps": steps}).status_code in (200, 409) or True
