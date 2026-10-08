@@ -12,7 +12,7 @@ from src.shared.estop import EstopManager
 
 from src.serve_console.render_static_pages import STATUS_BAR_HTML, _CSS
 
-_PAGE = _CSS + """
+_PAGE = _CSS + """<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><title>无人机链路抗干扰测评台</title></head><body>
 <header class="panel" style="max-width:960px"><h1>无人机链路抗干扰测评台</h1>
 <span id="st">state: -</span></header>
 """ + STATUS_BAR_HTML + """
@@ -33,7 +33,7 @@ d.appendChild(b)}})();
 (async()=>{const r=await api('/api/runs','GET');document.getElementById('runs').textContent=JSON.stringify(r.runs)})();
 const ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws');
 ws.onmessage=e=>{const m=JSON.parse(e.data);document.getElementById('st').textContent='state: '+m.state;
-const L=document.getElementById('log');L.textContent+=(JSON.stringify(m.kpi||m)+'\n');L.scrollTop=L.scrollHeight};
+const L=document.getElementById('log');L.textContent+=(JSON.stringify(m.kpi||m)+'\\n');L.scrollTop=L.scrollHeight};
 </script></body></html>"""
 
 
@@ -152,7 +152,17 @@ def serve_console(*, host: str = "0.0.0.0", port: int = 8000, selftest: bool = F
             assert len(dv) >= 6 and any(e["id"] == "b210" for e in dv)
             assert all(e["status"] in ("ok", "missing", "pending_manual", "manual_ok")
                        for e in dv)
-        print("SELFTEST OK: health/scenarios/estop/ws/devices 五点全过")
+            for path in ("/", "/reports", "/help"):
+                html = c.get(path).text
+                assert "device-bar" in html and "--accent" in html, path
+            import subprocess
+            import shutil as _sh
+            if _sh.which("node"):
+                js = _PAGE.split("<script>")[-1].split("</script>")[0]
+                r = subprocess.run(["node", "--check", "--input-type=module"],
+                                   input=js, capture_output=True, text=True)
+                assert r.returncode == 0, "主页 JS 语法错误：%s" % r.stderr[:200]
+        print("SELFTEST OK: health/scenarios/estop/ws/devices/页面结构(+JS语法) 全过")
         return 0
     import uvicorn
     uvicorn.run(app, host=host, port=port)

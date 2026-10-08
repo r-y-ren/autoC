@@ -127,7 +127,7 @@ STITP（大学生创新创业训练计划，原称科技创新训练计划）导
 - 验收方式：`python docs/build.py --mid` 产出 docs/mid_draft.md；抽查稿内任一数字可溯源到最新 run 产物（断言脚本）。
 
 ### R17 设备状态面板（演进轮二，2026-10-06） [P0]
-- 内容：设备状态一进页面可见。①**自动探测**（每项超时≤2s、异步不阻塞加载）：B210（UHD 设备扫描，惰性导入）、ESP32 串口（/dev/ttyUSB*、ttyACM* 扫描）、NRF24（随串口固件上报；未烧固件=待固件）、Python 依赖（requirements 清单 import 检查）、4070 算力（/toolbox 配置或 TOOLBOX_URL 连通）、PlatformIO（固件编译环境）；②**人工确认**（机器测不了的物理件）：屏蔽箱、天线几何固定、供电 Hub——勾选状态存浏览器本地（localStorage）。输出形状：条目列表 [{id, name, status: ok|missing|pending_manual|manual_ok, detail, ts}]，经 /api_devices 端点返回；主页顶部状态栏（绿/红/黄灯+缺件红徽标）+可展开明细面板；5s 自动轮询+手动刷新按钮；全站（主页/报告中心/帮助）顶部同一状态栏。
+- 内容：设备状态一进页面可见。①**自动探测**（每项超时≤2s、异步不阻塞加载）：B210（UHD 设备扫描，惰性导入）、ESP32 串口（/dev/ttyUSB*、ttyACM* 扫描）、NRF24（随串口固件上报；未烧固件=待固件）、Python 依赖（requirements 清单 import 检查）、4070 算力（/toolbox 配置或 TOOLBOX_URL 连通）、PlatformIO（固件编译环境）；②**人工确认**（机器测不了的物理件）：屏蔽箱、天线几何固定、供电 Hub——勾选状态存浏览器本地（localStorage）。输出形状：条目列表 [{id, name, status: ok|missing|pending_manual|manual_ok, detail, ts}]，经 /api/devices 端点返回（REST 空间统一；原文 /api_devices 字面勘误 2026-10-06）；主页顶部状态栏（绿/红/黄灯+缺件红徽标）+可展开明细面板；5s 自动轮询+手动刷新按钮；全站（主页/报告中心/帮助）顶部同一状态栏。
 - 验收方式：`bash fn_work/scripts/start.sh --selfcheck` 升级后含 /api_devices 探测断言（rc=0 且设备条目≥6 项、B210 缺失时 status=missing 而非报错）；pytest 断言端点返回形状与人工确认项存在；人工判据=打开页面 3 秒内看出"缺哪件"（谁看/看什么/什么算对：队员开页面，能直接说出待购件清单状态）。
 
 ### R18 界面精修·深色驾驶舱（演进轮二） [P0]

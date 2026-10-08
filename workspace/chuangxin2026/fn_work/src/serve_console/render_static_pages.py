@@ -15,9 +15,9 @@ def _md_to_html(text: str, run: str | None = None) -> str:
             table.append(ln)
             continue
         if table:
-            out.append("<table><tr><th>" + "</th><th>".join(table[0].strip("|").split("|")
-                       [0:-1] if False else [c.strip() for c in table[0].strip("|").split("|")])
-                       + "</th></tr>" + "".join(
+            out.append("<table><tr><th>" + "</th><th>".join(
+                c.strip() for c in table[0].strip("|").split("|"))
+                + "</th></tr>" + "".join(
                 "<tr><td>" + "</td><td>".join(c.strip() for c in row.strip("|").split("|"))
                 + "</td></tr>" for row in table[2:]) + "</table>")
             table = []

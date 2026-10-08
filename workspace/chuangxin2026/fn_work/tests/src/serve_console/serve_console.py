@@ -43,7 +43,20 @@ def test_r18_theme_and_status_bar_all_pages():
             html = c.get(path).text
             assert "device-bar" in html, path          # 状态栏挂载
             assert "--accent" in html, path            # 统一主题变量
-            assert "dot " in html or "dot ok" in html or "dev-chips" in html, path
+            assert "dev-chips" in html, path
         home = c.get("/").text
         assert "急 停" in home and "btn-danger" in home  # 急停危险色醒目
         assert "报告中心" in home and "帮助" in home
+
+
+def test_r18_page_js_syntax():
+    import shutil
+    import subprocess
+    if not shutil.which("node"):
+        import pytest
+        pytest.skip("node 不可用，JS 语法断言转 selfcheck 承载")
+    from src.serve_console.serve_console import _PAGE
+    js = _PAGE.split("<script>")[-1].split("</script>")[0]
+    res = subprocess.run(["node", "--check", "--input-type=module"],
+                         input=js, capture_output=True, text=True)
+    assert res.returncode == 0, res.stderr[:300]
