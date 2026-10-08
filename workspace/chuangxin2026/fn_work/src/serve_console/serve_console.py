@@ -16,6 +16,14 @@ _PAGE = _CSS + """<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><ti
 <header class="panel" style="max-width:960px"><h1>无人机链路抗干扰测评台</h1>
 <span id="st">state: -</span></header>
 """ + STATUS_BAR_HTML + """
+<section class="panel" id="dashboard"><h2>结果仪表盘</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px">
+<div id="card-latest" class="panel" style="margin:0">加载中…</div>
+<div id="card-model" class="panel" style="margin:0">加载中…</div>
+<div id="card-capability" class="panel" style="margin:0">加载中…</div>
+</div>
+<div id="card-history" class="panel" style="margin:10px 0 0">加载中…</div>
+</section>
 <section class="panel"><h2>场景卡片</h2><div id="cards">加载中…</div>
 <button class="btn btn-primary" onclick="api('/api/run','POST',{scenario:current})">开始</button>
 <button class="btn" onclick="api('/api/stop','POST',{})">停止</button>
@@ -60,7 +68,8 @@ const chart=document.getElementById('kpi-chart');
 if(chart){chart.onmousemove=ev=>{const r=chart.getBoundingClientRect();const i=Math.round((ev.clientX-r.left)/r.width*Math.max(hist.per.length-1,0));
 const tip=document.getElementById('chart-tip');if(tip&&hist.per[i]!==undefined)tip.textContent='样本'+i+': 丢包率='+hist.per[i].toFixed(3)+' 相对吞吐='+hist.thr[i].toFixed(3)}}
 drawChart();
-</script></body></html>"""
+</script>
+'<script src="/dashboard.js"></script></body></html>"""
 
 
 
@@ -126,6 +135,29 @@ def create_app():
         return {"per": per_response_model(power_db, fail_power_db, base_per),
                 "curve": curve, "power_db": power_db}
 
+    @app.get("/api/dashboard")
+    def dashboard():
+        from src.serve_console.collect_dashboard import collect_dashboard
+        return collect_dashboard()
+
+    @app.post("/api/seed_demo")
+    def seed_demo():
+        if state.get("seeding"):
+            return {"started": False, "reason": "演示数据生成中"}
+        from src.run_demo.run_demo import run_demo
+
+        def _seed():
+            state["seeding"] = True
+            try:
+                state["last_result"] = run_demo(quick=True)
+            except Exception as exc:  # noqa: BLE001
+                estop.fire("seed_demo 异常: %s" % exc)
+            finally:
+                state["seeding"] = False
+        import threading as _th
+        _th.Thread(target=_seed, daemon=True).start()
+        return {"started": True}
+
     @app.get("/api/runs")
     def runs():
         d = Path("runs")
@@ -146,6 +178,12 @@ def create_app():
             state["last_result"] = run_demo(quick=True)
         threading.Thread(target=_work, daemon=True).start()
         return {"started": True}
+
+    @app.get("/dashboard.js")
+    def dashboard_js():
+        from fastapi.responses import FileResponse
+        return FileResponse(Path(__file__).resolve().parent / "static" / "dashboard.js",
+                            media_type="application/javascript")
 
     @app.get("/", response_class=HTMLResponse)
     def page():
