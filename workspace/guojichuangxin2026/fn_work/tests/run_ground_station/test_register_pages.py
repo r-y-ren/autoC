@@ -33,3 +33,26 @@ def test_frames_api_404_and_paging(tmp_path):
         "\n".join(json.dumps({"t": i * 0.05}) for i in range(50)), encoding="utf-8")
     r = c.get("/api/runs/x/frames")
     assert len(r.json()["frames"]) == 20 and r.json()["next"] == 1
+
+
+def test_r26_r27_command_center_and_devices(tmp_path):
+    """R26 布局区元素 + R27 /api/devices 真值。"""
+    c = _client(tmp_path)
+    r = c.get("/").text
+    for zone in ("风险仪表", "设备状态", "d-risk", "band-s0"):
+        assert zone in r, zone
+    tl = c.get("/timeline").text
+    assert "事件流" in tl and "证据链" in tl
+    wf = c.get("/waterfall").text
+    assert "waterfall" in wf and "只收不发" in wf
+    rp = c.get("/replay").text
+    assert "scrub" in rp and "载入" in rp
+    cs = c.get("/console").text
+    for z in ("maptrack", "故障注入", "事件时间轴", "设备状态", "回放"):
+        assert z in cs, z
+    # R27 真值：合成源恒在、SDR 无 uhd→replay、待接入清单三件
+    dev = c.get("/api/devices").json()
+    names = {d["name"]: d["state"] for d in dev["devices"]}
+    assert names["合成仿真源"] == "active"
+    assert names["USRP B210 频谱站"] in ("replay", "device")
+    assert len(dev["pending"]) == 3 and "真机实飞" in str(dev["pending"])

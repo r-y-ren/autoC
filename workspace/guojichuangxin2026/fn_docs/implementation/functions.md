@@ -42,12 +42,12 @@
 | run_spectrum_monitor | B8 | wired 10-03 | 继承 R5 验收（sdr_check 双源自检） | 3d6d6f53 |
 | sdr_check | B8 | wired 10-03 | 继承 R5 验收（自身即验收命令） | 3d6d6f53 |
 | pipe_events | B9 | tested | 测试: tests/run_ground_station/test_pipe_events.py | 2f17e43a |
-| register_pages | B9→B18 | wired 10-06 | 测试: tests/run_ground_station/test_register_pages.py | 2f17e43a |
+| register_pages | B9→B18→B20 | wired 10-08 | 测试: tests/run_ground_station/test_register_pages.py | 2f17e43a |
 | run_ground_station | B9 | wired 10-03 | 继承 R7 验收（一键启动五页可看） | 2f17e43a |
 | spawn_sitl | B10 | tested | 测试: tests/launch_demo_session/test_spawn_sitl.py | 2f17e43a |
-| render_console | B10→B18 | wired 10-06 | 测试: tests/launch_demo_session/test_render_console.py | 2f17e43a |
+| render_console | B10→B18→B20 | wired 10-08 | 测试: tests/launch_demo_session/test_render_console.py | 2f17e43a |
 | session_control_api | B10→B18 | wired 10-06 | 测试: tests/launch_demo_session/test_session_control_api.py | 2f17e43a |
-| launch_demo_session | B10 | wired 10-03 | 继承 R9 验收（浏览器全流程判据） | 2f17e43a |
+| launch_demo_session | B10→B20 | wired 10-08 | 继承 R9 验收（浏览器全流程判据） | 2f17e43a |
 | export_metrics_table | B11→B19 | wired 10-06 | 测试: tests/build_materials/test_export_metrics_table.py | a419a834 |
 | draft_revision_notes | B11→B18 | wired 10-06 | 测试: tests/build_materials/test_draft_revision_notes.py | a419a834 |
 | compile_documents | B11 | wired 10-03 | 继承 doc-compile 验收（docs/build.py 本体） | a419a834 |
@@ -91,7 +91,7 @@
 | _freq_axis | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _lift | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _make_fixture | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
-| _page | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
+| _page | B18→B20 | wired 10-08 | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _ensure_model | B18→B19 | wired 10-06 | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _already_archived | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
-| render_device_panel | B20 | stub | 测试: tests/shared/test_render_device_panel.py | — |
+| render_device_panel | B20 | tested | 测试: tests/shared/test_render_device_panel.py → 2 passed | — |

@@ -22,3 +22,4 @@
 | 2026-10-03 | B17 | soak_test(wired), make_portable_bundle(wired) | 4 passed+实产：quick 长跑报告留痕+459MB full 便携包（dist/ 已 gitignore） |
 | 2026-10-06 | B18 | R17-R22 执行（train_tcn[改]/calibrate_conformal[改]/draft_revision_notes[改]/register_pages[改]/render_console[改]/run_eval[改]/session_control_api[改]）+31 助手审计补账 | 112 tests 绿；7 提案 achieved；流程欠账由审计补账记录（见 batches 变更记录） |
 | 2026-10-06 | B19 | _ensure_model(wired), run_eval[改](wired), export_metrics_table[改](wired), build_package[改](wired), batch_eval[改](wired) | 113 tests 绿；批量实证 note=probe-sel+lead_s=15.5+分片无误导键；索引产物归零 |
+| 2026-10-08 | B20 | render_device_panel(t), register_pages[改](wired), render_console[改](wired), launch_demo_session[改](wired), _page[改](wired) | 120 tests 绿；SSE 降噪断言+/api/devices 真值断言+六区元素断言 |

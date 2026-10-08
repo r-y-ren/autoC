@@ -79,16 +79,27 @@ def launch_demo_session(request: dict, config: dict | None = None):
                     break
                 margins.append(f["margins"])
                 st["frames"] += 1
+                if st["frames"] % 20 == 0:   # R26：1Hz 航迹/仪表帧
+                    _emit("event", {"nav": {
+                        "lat": f.get("lat"), "lon": f.get("lon"),
+                        "alt": f.get("alt_amsl"),
+                        "energy": f.get("battery_remaining")}})
                 st["state"] = f.get("quality_mask") and st["state"]
                 le = next(link, None)
                 pe = next(risk, None)
                 se = next(sudden, None)
                 for ev in filter(None, (pe, se)):
                     evs.append(ev)
-                    append_record(run_dir, "event", ev)
-                    _emit("event", {"event": f"[{ev.get('type')}] "
-                                             f"{ev.get('fault') or ''} sev={ev.get('severity', 0)} "
-                                             f"t={ev.get('t')}"})
+                    append_record(run_dir, "event", ev)   # 落盘全量（R26 降噪仅限推送）
+                    sev = int(ev.get("severity", 0) or 0)
+                    noteworthy = (ev.get("type") == "sudden" or sev >= 1
+                                  or ev.get("risk") is not None)
+                    if noteworthy:   # R26：sev=0 正常帧不推送
+                        _emit("event", {"event": f"[{ev.get('type')}] "
+                                                 f"{ev.get('fault') or ''} sev={sev} "
+                                                 f"t={ev.get('t')}",
+                                        "sev": sev,
+                                        "time": (ev.get("risk") or {}).get("time_to_unsafe_s")})
                 out = next(sm)
                 if out["state"] != st["state"] or out["advice"]:
                     st["state"], st["advice"] = out["state"], out["advice"]
