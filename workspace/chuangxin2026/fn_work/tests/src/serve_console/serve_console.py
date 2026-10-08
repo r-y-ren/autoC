@@ -60,3 +60,24 @@ def test_r18_page_js_syntax():
     res = subprocess.run(["node", "--check", "--input-type=module"],
                          input=js, capture_output=True, text=True)
     assert res.returncode == 0, res.stderr[:300]
+
+
+# ---- 演进轮三集成（R19/R20） ----
+
+
+def test_r20_preview_matches_model():
+    from src.shared.per_response_model import per_response_model
+    app = create_app()
+    with TestClient(app) as c:
+        d = c.get("/api/preview?power_db=5&fail_power_db=10").json()
+    assert d["per"] == per_response_model(5.0, 10.0)      # 预览=实测口径
+    assert any(pt["per"] > 0 for pt in d["curve"]) and len(d["curve"]) >= 10
+
+
+def test_r20_four_components_dom():
+    app = create_app()
+    with TestClient(app) as c:
+        html = c.get("/").text
+    for marker in ("kpi-chart", "progress-card", "timeline",
+                   "power-slider", "preview-chart"):
+        assert marker in html, marker

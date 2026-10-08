@@ -23,7 +23,7 @@ def _host_ms() -> int:
     return int(time.monotonic() * 1000)
 
 
-def execute_scenario(scenario_path, *, estop=None):
+def execute_scenario(scenario_path, *, estop=None, feed=None):
     # 返回 {run_dir, outcomes, fail_levels, nojam_false_alarm, report_path}
     # [改造←R14/R15] 支持传 run 目录=断点续跑；判据同步缩放；标定换算
     sp = Path(scenario_path)
@@ -52,6 +52,7 @@ def execute_scenario(scenario_path, *, estop=None):
               "rate_hz": max(10.0, 40.0 * speed),
               "jammer": jammer} for n in (sc.dut_links or ["wifi"])]
 
+    _t_boot = _host_ms()
     plan_all = plan_steps(sc.injection)
     start_index, done_records, already_finished = (resume_from(run_dir, plan_all)
                                                    if resuming else (0, [], False))
@@ -63,11 +64,20 @@ def execute_scenario(scenario_path, *, estop=None):
     cal_state = {"source": None}
     kpi_rows, events, step_records = [], list(pre_events), list(done_records)
 
+    def emit(msg: dict) -> None:
+        if feed is not None:
+            try:
+                feed.publish(msg)
+            except Exception:  # noqa: BLE001 —— 发流不阻断执行
+                pass
+
     def on_sample(s):
-        kpi_rows.append({"ts_ms": _host_ms(), "link": s.link, "seq": s.seq,
-                         "per": s.per, "tx_n": s.tx_n, "err_n": s.err_n,
-                         "rssi_dbm": s.rssi_dbm, "arc_avg": s.arc_avg,
-                         "plos_cnt": s.plos_cnt})
+        row = {"ts_ms": _host_ms(), "link": s.link, "seq": s.seq,
+               "per": s.per, "tx_n": s.tx_n, "err_n": s.err_n,
+               "rssi_dbm": s.rssi_dbm, "arc_avg": s.arc_avg,
+               "plos_cnt": s.plos_cnt}
+        kpi_rows.append(row)
+        emit({"type": "kpi", **row})
 
     try:
         if sc.injection is None:
@@ -91,6 +101,10 @@ def execute_scenario(scenario_path, *, estop=None):
                         "resumed_finished": True}
             for st in plan_all[start_index:]:
                 t0 = _host_ms()
+                emit({"type": "progress",
+                      "index": st.index + 1, "total": len(plan_all),
+                      "style": st.style, "power_db": st.power_db,
+                      "elapsed_s": round((t0 - _t_boot) / 1000.0, 2)})
                 jammer.set_style(st.style, dict(sc.injection.params or {}))
                 gain, src, warn = apply_calibration(st.power_db, sc.injection.freq_hz,
                                                     cal_path)
@@ -136,6 +150,9 @@ def execute_scenario(scenario_path, *, estop=None):
         for r in kpi_rows:
             w.writerow([r["ts_ms"], r["link"], r["seq"], r["per"], r["tx_n"],
                         r["err_n"], r["rssi_dbm"], r["arc_avg"], r["plos_cnt"]])
+    for e in events:
+        emit(e if "type" in e else {"type": "event", **e})
+
     old_events = []
     ev_path = run_dir / "events.jsonl"
     if resuming and ev_path.exists():

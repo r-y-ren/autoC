@@ -25,23 +25,50 @@ _PAGE = _CSS + """<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><ti
 <section class="panel"><h2>历史运行</h2><div id="runs">-</div></section>
 <script>
 let current=null;
-async function api(p,m,b){const r=await fetch(p,{method:m,headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});return r.json()}
-(async()=>{const s=await api('/api/scenarios','GET');const d=document.getElementById('cards');d.innerHTML='';
+const NL=String.fromCharCode(10);
+const hist={per:[],thr:[]};
+function api(p,m,b){return fetch(p,{method:m||'GET',headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):null}).then(r=>r.json())}
+function drawChart(){const c=document.getElementById('kpi-chart');if(!c)return;const g=c.getContext('2d');
+g.clearRect(0,0,c.width,c.height);g.strokeStyle='#243352';g.beginPath();g.moveTo(40,10);g.lineTo(40,c.height-24);g.lineTo(c.width-10,c.height-24);g.stroke();
+function line(arr,color){if(arr.length<2)return;g.strokeStyle=color;g.beginPath();
+arr.forEach((v,i)=>{const x=40+(c.width-50)*i/Math.max(arr.length-1,1);const y=10+(c.height-34)*(1-v);i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke()}
+line(hist.per,'#e74c3c');line(hist.thr,'#2ecc71');g.fillStyle='#8fa3c0';g.fillText('1.0',6,16);g.fillText('0.0',6,c.height-28)}
+function drawPreview(curve){const c=document.getElementById('preview-chart');if(!c||!curve)return;const g=c.getContext('2d');
+g.clearRect(0,0,c.width,c.height);g.strokeStyle='#243352';g.beginPath();g.moveTo(40,8);g.lineTo(40,c.height-20);g.lineTo(c.width-10,c.height-20);g.stroke();
+g.strokeStyle='#4da3ff';g.beginPath();curve.forEach((pt,i)=>{const x=40+(c.width-50)*i/Math.max(curve.length-1,1);const y=8+(c.height-28)*(1-pt.per);i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke()}
+function pushTimeline(m){const tl=document.getElementById('timeline');if(!tl)return;const d=document.createElement('div');
+const label=(m.type==='injection'?'注入 '+(m.style||'')+' @'+(m.power_db??'')+'dB':m.type==='fail'?'失效 @'+(m.power_db??'')+'dB':m.type==='gap'?'断连':m.type);
+d.textContent=label;d.style.cssText='padding:3px 8px;margin:2px 0;background:#1b2740;border-left:3px solid '+(m.type==='fail'?'#e74c3c':m.type==='injection'?'#4da3ff':'#f1c40f')+';border-radius:6px;transition:background .8s';
+d.style.background='#3a2b12';setTimeout(()=>{d.style.background='#1b2740'},800);tl.prepend(d);while(tl.children.length>60)tl.removeChild(tl.lastChild)}
+function onFrame(m){if(m.type==='kpi'){hist.per.push(m.per);hist.thr.push(1-m.per);if(hist.per.length>240){hist.per.shift();hist.thr.shift()}drawChart();
+const pc=document.getElementById('progress-card');if(pc&&m.link)pc.dataset.last='最新 '+(m.link||'')+' PER='+(m.per||0).toFixed(3)}
+else if(m.type==='progress'){const pc=document.getElementById('progress-card');if(pc)pc.textContent='第 '+m.index+'/'+m.total+' 步 · '+(m.style||'')+' · 功率 '+(m.power_db??'')+'dB · 已用 '+(m.elapsed_s??0)+'s'}
+else if(m.type==='event'||m.type==='injection'||m.type==='fail'||m.type==='gap'){pushTimeline(m)}
+else if(m.type==='idle'){const st=document.getElementById('st');if(st)st.textContent='state: idle'}}
+(async()=>{const s=await api('/api/scenarios');const d=document.getElementById('cards');d.innerHTML='';
 for(const n of s.scenarios){const b=document.createElement('button');b.className='btn';b.textContent=n;
-b.onclick=()=>{current=n;document.querySelectorAll('#cards button').forEach(x=>x.style.borderColor='');b.style.borderColor='#4da3ff'};
-d.appendChild(b)}})();
-(async()=>{const r=await api('/api/runs','GET');document.getElementById('runs').textContent=JSON.stringify(r.runs)})();
+b.onclick=()=>{current=n;document.querySelectorAll('#cards button').forEach(x=>x.style.borderColor='');b.style.borderColor='#4da3ff'};d.appendChild(b)}})();
+(async()=>{const r=await api('/api/runs');document.getElementById('runs').textContent=JSON.stringify(r.runs)})();
 const ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws');
-ws.onmessage=e=>{const m=JSON.parse(e.data);document.getElementById('st').textContent='state: '+m.state;
-const L=document.getElementById('log');L.textContent+=(JSON.stringify(m.kpi||m)+'\\n');L.scrollTop=L.scrollHeight};
+ws.onmessage=e=>{try{onFrame(JSON.parse(e.data))}catch(err){}};
+const slider=document.getElementById('power-slider');
+if(slider){slider.oninput=()=>{api('/api/preview?power_db='+slider.value+'&fail_power_db=10').then(d=>{
+const rd=document.getElementById('preview-read');if(rd)rd.textContent='预览 PER=' + d.per.toFixed(3) + '（该强度下链路丢包预估）';drawPreview(d.curve)})}}
+const chart=document.getElementById('kpi-chart');
+if(chart){chart.onmousemove=ev=>{const r=chart.getBoundingClientRect();const i=Math.round((ev.clientX-r.left)/r.width*Math.max(hist.per.length-1,0));
+const tip=document.getElementById('chart-tip');if(tip&&hist.per[i]!==undefined)tip.textContent='样本'+i+': 丢包率='+hist.per[i].toFixed(3)+' 相对吞吐='+hist.thr[i].toFixed(3)}}
+drawChart();
 </script></body></html>"""
 
 
 
 def create_app():
+    from src.shared.runtime_feed import RuntimeFeed
     app = FastAPI(title="linkbench console")
     estop = EstopManager()  # 操控台与运行场景共享的硬急停通道
-    state = {"run_thread": None, "last_result": None}
+    feed = RuntimeFeed()
+    app.state.feed = feed
+    state = {"run_thread": None, "last_result": None, "feed": feed}
 
     @app.get("/api/health")
     def health():
@@ -67,7 +94,8 @@ def create_app():
 
         def _work():
             try:
-                state["last_result"] = execute_scenario(card, estop=estop)
+                state["last_result"] = execute_scenario(card, estop=estop,
+                                                        feed=state["feed"])
             except Exception as exc:  # noqa: BLE001
                 estop.fire("ui-run 异常: %s" % exc)
 
@@ -85,6 +113,16 @@ def create_app():
     def estop_ep():
         estop.fire("ui-estop")
         return {"state": estop.state}
+
+    @app.get("/api/preview")
+    def preview(power_db: float = 0.0, fail_power_db: float = 10.0,
+                base_per: float = 0.0):
+        from src.shared.per_response_model import per_response_model
+        curve = [{"power_db": x,
+                  "per": per_response_model(x, fail_power_db, base_per)}
+                 for x in range(-20, 41, 5)]
+        return {"per": per_response_model(power_db, fail_power_db, base_per),
+                "curve": curve, "power_db": power_db}
 
     @app.get("/api/runs")
     def runs():
@@ -121,15 +159,9 @@ def create_app():
 
     @app.websocket("/ws")
     async def ws_endpoint(ws: WebSocket):
+        from src.serve_console.ws_stream_feed import ws_stream_feed
         await ws.accept()
-        try:
-            while True:
-                await ws.send_json({"type": "state", "state": estop.state,
-                                    "kpi": {"link": "wifi", "per": 0.0}})
-                import asyncio
-                await asyncio.sleep(0.2)
-        except WebSocketDisconnect:
-            return
+        await ws_stream_feed(ws, state["feed"])
 
     return app
 
@@ -147,7 +179,7 @@ def serve_console(*, host: str = "0.0.0.0", port: int = 8000, selftest: bool = F
             assert e.status_code == 200 and e.json()["state"].startswith("fired")
             with c.websocket_connect("/ws") as ws:
                 msg = ws.receive_json()
-                assert "state" in msg
+                assert "type" in msg   # typed 帧（kpi/event/progress/idle）
             dv = c.get("/api/devices").json()["devices"]
             assert len(dv) >= 6 and any(e["id"] == "b210" for e in dv)
             assert all(e["status"] in ("ok", "missing", "pending_manual", "manual_ok")

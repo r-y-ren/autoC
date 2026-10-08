@@ -5,6 +5,7 @@ import json
 import time
 
 from src.collect_dut_samples.parse_serial_line import DutSample, parse_serial_line, reset_seq_tracking
+from src.shared.per_response_model import per_response_model
 
 
 class FakeDutSource:
@@ -27,7 +28,7 @@ class FakeDutSource:
         per = self._base
         if self.jammer is not None and getattr(self.jammer, "emitting", False):
             p = float(self.jammer.power_db or 0.0)
-            per = max(per, min(1.0, max(0.0, (p - (self.fail_power_db - 15.0)) / 15.0)))
+            per = per_response_model(p, self.fail_power_db, base_per=self._base)
         for t_k, per_k in self.profile:
             if t >= t_k:
                 per = float(per_k)
