@@ -19,3 +19,4 @@
 | 10-03 | B15（演进一） | launch_console/render_static_pages/register_cjk_font + serve_console 改造落位 + 字体接入两绘图方 + legend 守卫 | 全量 77 绿；start --selfcheck rc=0；-W error 三图零告警 |
 | 10-03 | B16（演进一） | scaled_criteria/apply_calibration/resume_from 三叶 + execute_scenario 与 build_report [改造] 落位 | 全量 83 绿；40 速国标卡报出失效电平+加速脚注、半程 run 续跑补齐且首步保留、标定表已应用入报告 |
 | 10-03 | B17（演进一） | build_mid_material + docs/build.py runs 解析 | 2 单测+全量 86 绿；python docs/build.py --mid rc=0 产 docs/mid_draft.md（真实 run 汇编，溯源自检过） |
+| 10-06 | B18（演进轮二，单批） | probe_device_status（超时降级语义由测试抓出修复）+serve_console/render_static_pages/launch_console 三处改造落位 | 92 全量绿；start --selfcheck 五点全过（DEVICES OK 9 项 B210=missing 如实红灯）；R17/R18 集成断言过 |
