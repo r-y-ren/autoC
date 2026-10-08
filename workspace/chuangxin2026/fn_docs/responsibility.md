@@ -39,6 +39,12 @@
 # ── 演进轮二增量（R17–R18，2026-10-06）──
 - serve_console ← R10+R13+R17+R18 [改造：+probe_device_status 子树、/api_devices 端点、状态栏挂载、样式精修]
 - render_static_pages ← R13+R18 [改造：统一深色驾驶舱样式+状态条入三页]
+# ── 演进轮三增量（R19–R20，2026-10-06）──
+- ws_stream_feed ← R19（serve_console 子）
+- shared 增：RuntimeFeed, per_response_model
+- execute_scenario ← R5+R14+R15+R19 [改造：+feed 发流（kpi/event/progress）]
+- serve_console ← R10+R13+R17+R18+R19+R20 [改造：WS 源化+/api/preview+交互四件挂载]
+- start_dut_source ← R3+R20 [改造：响应模型共用 shared.per_response_model]
 
 ## 需求覆盖矩阵（P1 在 R 号后标注；非功能约束不进矩阵，fn-close 终检对照 requirements 非功能节）
 
@@ -62,6 +68,8 @@
 | R16 | build_mid_material |
 | R17 | probe_device_status（serve_console 子）+ serve_console [改造]（/api_devices+状态栏全站） |
 | R18 | serve_console [改造]+render_static_pages [改造]（深色驾驶舱统一样式，无新函数） |
+| R19 | RuntimeFeed（shared）+ ws_stream_feed（serve_console 子）+ execute_scenario [改造]（发流）+ serve_console [改造]（WS 真源化） |
+| R20 | per_response_model（shared）+ serve_console [改造]（双曲线/进度卡/时间线/滑杆预览+/api/preview）+ start_dut_source [改造]（响应模型共用） |
 
 ## 共享函数（shared/：多顶层共用；矩阵挂全部受益需求）
 
@@ -401,3 +409,43 @@
 - 反向：probe_device_status→serve_console→入口 ✓；两改造块函数已有调用链 ✓。无死代码。
 - 单一转变：probe_device_status=异构探测→同构清单（内部六项探测为同类批扫，先例 watch_links/index_dataset 同构）✓。
 - 函数总数 35（+1）——>20 预警延续（需求口已达 18 条，门内已三轮确认接受）。
+
+
+---
+
+## 演进轮三增量块（R19–R20，2026-10-06；旧块原文未动）
+
+## 共享函数增（shared/）
+
+- **RuntimeFeed**（类；调用方：execute_scenario[改造], ws_stream_feed）
+  - 职责：运行数据扇入扇出缓冲（单一转变：发布端→订阅端的缓冲中转）。publish(msg dict) 入缓冲（保序、限长防爆）；snapshot() 返回最近 N 条（重连续推用）；subscribe() 返回可迭代队列（ws_stream_feed 消费）；消息三类 kpi/event/progress 透传不解析。发布端多线程安全（执行线程写、WS 线程读）。
+  - 签名意图：输入: publish=msg dict, subscribe 无参 / 输出: snapshot=最近消息列表, subscribe=消息迭代器 / 错误: 缓冲满丢最旧（不抛错，保实时性）。
+  - tested 策略：自有单测
+  - 核验命令：测试: R19（WS 实流断言）——继承 R19 验收方式
+- **per_response_model**（调用方：start_dut_source[改造], serve_console[改造,/api/preview]）
+  - 职责：功率→PER 响应的唯一模型函数（单一转变）：给定注入功率与失效基准，返回该强度下链路丢包预估——合成链路实测与滑杆预览共用同一函数，保证"预览=实测口径"。
+  - 签名意图：输入: power_db: float, fail_power_db: float, base_per: float=0.0 / 输出: per 估算（0–1） / 错误: 参数非法（fail_power_db 无界）→ValueError。
+  - tested 策略：自有单测
+  - 核验命令：测试: R20（滑杆预览联动断言）——继承 R20 验收方式
+
+## 功能块 ws_stream_feed ← R19（serve_console 子树）
+
+- **ws_stream_feed** [L1|新增]
+  - 职责：RuntimeFeed→WebSocket 帧流（单一转变：缓冲→网络帧）。连接即发 snapshot（重连续推）；随后订阅增量、节流合并 ≤10Hz 后逐帧发送；空闲无消息时定时发 {type:"idle"} 心跳；断连自动摘除不抛全局错。
+  - 签名意图：输入: WebSocket 连接, RuntimeFeed 实例 / 输出: 无（持续发送直到断连） / 错误: 发送失败→静默退出该连接。
+  - 调用方：serve_console（/ws 端点改由本函数承载）
+  - tested 策略：上游覆盖: serve_console（TestClient WS 集成断言）
+  - 核验命令：上游覆盖: serve_console——继承 R19 验收方式（WS 3s 内 ≥5 条 kpi 且非常数）
+
+## 受影响旧块 [改造] 目标态（原文未动）
+
+- **execute_scenario** [改造 ← R19]：新增可选入参 feed（kw，缺省 None 不影响既有行为）；步进循环内向 feed 发 progress（步进序号/总步数/样式/功率/计时）与 event（injection/fail/gap）；采集回调内向 feed 发 kpi（每样本一帧）。不改变任何既有落盘与判定行为。
+- **serve_console** [改造 ← R19/R20]：①/ws 端点改由 ws_stream_feed 承载（替换常量占位推送）；②新增 GET /api/preview?power_db=&fail_power_db=（调 shared.per_response_model，返回预估 per 与响应曲线采样点）；③前端挂载交互四件（canvas 双曲线/进度卡/事件时间线/滑杆预览，原生 DOM，零 CDN）；④/run 启动时创建 RuntimeFeed 传入 execute_scenario 并注册到 WS。
+- **start_dut_source** [改造 ← R20]：FakeDutSource 的功率响应计算改为调用 shared.per_response_model（行为等价，口径唯一化）。
+
+## 演进轮三自检
+
+- 矩阵正向：R19=RuntimeFeed+ws_stream_feed+两改造 ✓；R20=per_response_model+两改造 ✓。
+- 反向：RuntimeFeed→execute_scenario→入口 与 ws_stream_feed→serve_console→入口 ✓；per_response_model→两调用方→入口 ✓。无死代码。
+- 单一转变：三新块各自一个转变（缓冲中转/功率→PER/缓冲→网络帧）✓。
+- 函数总数 38（+3）——>20 预警延续（需求口 20 条，门内已四轮确认接受）。
