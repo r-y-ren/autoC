@@ -136,7 +136,7 @@ es.onmessage=e=>{{const m=JSON.parse(e.data);
   if(m.nav.alt!=null)document.getElementById('g-alt').textContent=Math.round(m.nav.alt)+'m';
   if(m.nav.speed!=null)document.getElementById('g-speed').textContent=m.nav.speed+'m/s';
   track.push([((m.nav.lon-118.8)*1e5%c.width+c.width)%c.width,
-              (32.002-m.nav.lat)*1e5%c.height+c.height)%c.height]);
+              (((32.002-m.nav.lat)*1e5)%c.height+c.height)%c.height]);
   if(track.length>MAXP)track.shift();drawMap();
   if(m.nav.energy!=null){{document.getElementById('g-energy').textContent=Math.round(m.nav.energy)+'%';
    document.getElementById('g-energy-bar').style.width=Math.max(4,Math.min(100,m.nav.energy))+'%';}}}}

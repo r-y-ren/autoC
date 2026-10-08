@@ -95,3 +95,4 @@
 | _ensure_model | B18→B19 | wired 10-06 | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _already_archived | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | render_device_panel | B20 | tested | 测试: tests/shared/test_render_device_panel.py → 2 passed | — |
+| _flow_worker | B21 | tested | 上游覆盖: session_control_api（流程序列/暂停/中止断言） | b690eafe |

@@ -16,9 +16,12 @@ def _flow_worker(app, steps):
     """一键演示时序器（嵌套线程体）：按故事线逐步 起飞→注入→等待→中止；步间可暂停。"""
     import time as _t
     from launch_demo_session.launch_demo_session import launch_demo_session as _launch
-    FLOW.update(running=True, story=[s["scenario"] for s in steps], log=[])
+    FLOW.update(story=[s["scenario"] for s in steps])
+    FLOW["stop"] = False
     try:
         for i, s in enumerate(steps):
+            if FLOW.get("stop"):
+                break
             while not _FLOW_GATE.is_set():
                 FLOW["paused"] = True
                 _FLOW_GATE.wait(timeout=1.0)
@@ -27,12 +30,13 @@ def _flow_worker(app, steps):
                 cfg = getattr(app.state, "cfg", {})
                 h = _launch({"scenario": s["scenario"],
                              "duration_s": float(s.get("duration_s", 12.0))}, cfg)
-                sid = f"flow-{i}"
+                import time as _tt
+                sid = f"flow-{_tt.time():.0f}-{i}"     # 唯一 id（不污染 max(SESSIONS)）
                 h["id"] = sid
                 SESSIONS[sid] = h
+                LAST_RUN.update({"id": sid, "run_dir": h["run_dir"]})   # 最近会话跟上
                 _t.sleep(float(s.get("inject_at_s", 4.0)))
-                if not FLOW.get("aborted"):
-                    h["inject"]("mid")
+                h["inject"]("mid")
                 _t.sleep(float(s.get("hold_s", 6.0)))
                 h["abort"]()
                 FLOW["log"].append({"step": i, "scenario": s["scenario"], "ok": True})
@@ -92,7 +96,7 @@ def session_control_api(app):
                    {"scenario": "motor_fail", "duration_s": 12, "inject_at_s": 3, "hold_s": 6},
                    {"scenario": "link_degrade", "duration_s": 12, "inject_at_s": 3, "hold_s": 6}]
         steps = payload.get("steps") or default
-        FLOW["aborted"] = False
+        FLOW.update(running=True, log=[], step=-1, paused=False)   # 先占坑（关 TOCTOU）
         _FLOW_GATE.set()
         _threading.Thread(target=_flow_worker, args=(app, steps), daemon=True).start()
         return {"ok": True, "story": [s["scenario"] for s in steps]}
@@ -110,6 +114,13 @@ def session_control_api(app):
         _FLOW_GATE.set()
         FLOW["paused"] = False
         return {"ok": True, "state": {k: FLOW[k] for k in ("step", "scenario", "paused")}}
+
+    @app.post("/api/demo/flow/abort")
+    async def flow_abort():
+        """R28：中止一键流程（正在跑的会话照常中止归档）。"""
+        FLOW["stop"] = True
+        _FLOW_GATE.set()
+        return {"ok": True}
 
     @app.get("/api/demo/flow")
     async def flow_status():

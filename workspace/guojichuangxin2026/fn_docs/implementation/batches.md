@@ -11,6 +11,8 @@
 
 
 ## 变更记录
+| 2026-10-08 | B21 修订（评审 C1/C2+I1-I5+M1-M4） | C1/C2 两处 JS 括号修复+node --check 语法门入 tests（渲染后逐块校验，防再犯）；I2 _flow_worker 入册+契约句更正（服务端时序器）；I1 恒真断言删+暂停严格化；I3 FLOW 收敛（TOCTOU/唯一流 id/LAST_RUN/abort 端点）；I4 数据到达链断言；I5 自动播门控+d-time 语义统一；M1-M4 清 | 125 tests 绿；五页 JS 语法门全绿 |
+
 | 2026-10-08 | B21 实施留痕 | R28 三页数据接通（瀑布 SSE 真帧流 max_frames 参数/仪表盘实时+自动播/时间线自动载入）+控制台卡片化+飞行读数+一键流程（服务端时序器可暂停）；过程修复：补丁未落盘教训（write_text 遗漏）+f-string 花括号两坑+TestClient 无限流挂死（max_frames 收口） | 123 tests 绿 |
 
 | 2026-10-08 | B20 修订（评审 I1+M1-M4） | SSE 断言收严（删恒真空洞分支）+sudden 推送补 sev=4+console 六区断言 6/6 归位+/api/devices 真值钉死（uhd 可导入性一致）+sys.path 挂载期一次；责任文档快速通道两笔（口径句/签名形状） | 120 tests 绿 |

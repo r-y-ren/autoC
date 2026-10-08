@@ -62,6 +62,7 @@
 - launch_demo_session ← R9
   - spawn_sitl
   - session_control_api
+    - _flow_worker
   - render_console
 - run_device_bus ← R10
   - discover_device_module
@@ -427,6 +428,7 @@
     - tested 策略：自有单测（SIH 拉起→心跳→回收）
     - 核验命令：测试: tests/launch_demo_session/test_spawn_sitl.py
   - **session_control_api** [L1|新增]
+  - [改造 10-08 B21·补记] 服务端一键演示时序器 _flow_worker 已入册（树+下方块）；/api/demo/flow 四端点挂载于本函数；FLOW 状态收敛（先占坑关 TOCTOU/唯一流 id/LAST_RUN 同步/abort 端点）
   - [改造 10-06 R25·签名意图修正] 签名意图正名：输入: FastAPI app（挂载控制路由与端点） / 输出: 无（副作用=路由注册）——stub 期 payload 语义作废（名实已于审计对齐）
     - 职责：控制台后端 API——UI 动作全映射：发起/中止会话（桥 launch_demo_session）、飞行中注入故障与调强度（桥 inject_scenario_fault）、回放请求（指定运行目录+时间窗）、会话状态查询（含设备模块在场状态展示）；按钮按下到后端受理保持演示节奏（≤2 s 目标）。
     - 签名意图：输入: HTTP/WS 控制请求 / 输出: 动作回执（含受理结果与会话状态） / 错误: 无会话/动作非法返回结构化错误给 UI 展示（不抛裸异常）
@@ -434,7 +436,7 @@
     - tested 策略：自有单测（FastAPI TestClient 打全控制端点）
     - 核验命令：测试: tests/launch_demo_session/test_session_control_api.py
   - **render_console** [L1|新增]
-  - [改造 10-08 R28] 场景卡片化（三大卡片点选替代下拉框）+地图飞机图标+高度/速度读数；一键演示流程按钮（客户端时序器：三场景故事线自动跑，可暂停/继续，调既有 session API）。核验=继承 R28（卡片/读数元素断言+流程序列与暂停断言）
+  - [改造 10-08 R28] 场景卡片化（三大卡片点选替代下拉框）+地图飞机图标+高度/速度读数；一键演示流程按钮（客户端仅按钮与进度展示；时序器=服务端 _flow_worker+/api/demo/flow 四端点 start/pause/resume/abort）。核验=继承 R28（卡片/读数元素断言+流程序列与暂停断言）
   - [改造 10-08 R26] 六区布局：地图航迹（canvas 自绘）/数字仪表组/S0-S4 状态色带/注入面板/设备状态区（render_device_panel）/时间轴；SSE 显示端过滤 sev=0；投屏大字高对比。核验=继承 R26
     - 职责：控制台页——功能完整性优先的演示操控前端：场景选择/起飞/注入面板（按钮+强度滑杆 低/中/高）/实时状态区（风险等级/剩余安全时间/建议动作）/频谱瀑布嵌入/事件时间轴/回放时间轴（暂停/加速/拖动）；深色主题基线（视觉打磨为加分项不阻塞交付）；模板与静态资源随包分发、无外网依赖。
     - 签名意图：输入: 页面路由上下文 / 输出: 控制台页（HTML+静态资源） / 错误: 资源缺失启动即报
@@ -591,6 +593,13 @@
   - 调用方：register_pages, render_console
   - tested 策略：自有单测
   - 核验命令：测试: tests/shared/test_render_device_panel.py
+
+- **_flow_worker** [L2|补记]
+  - 职责：一键演示服务端时序器——按故事线逐步（起飞→定时注入→等待→中止归档），步间经 _FLOW_GATE 可暂停/继续/中止；FLOW 状态机供 /api/demo/flow 查询。
+  - 签名意图：输入: app（取 cfg）, steps 列表 / 输出: 无（副作用=会话执行+FLOW 更新） / 错误: 步内异常记 FLOW.log 不中断
+  - 调用方：session_control_api
+  - tested 策略：上游覆盖: session_control_api
+  - 核验命令：上游覆盖: session_control_api
 
 ## 辅助单元补账（2026-10-06 审计回填；[L2|补记] 为实现期随宿主交付、本次登记）
 

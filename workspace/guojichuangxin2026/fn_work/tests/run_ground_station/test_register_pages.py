@@ -63,12 +63,10 @@ def test_r26_r27_command_center_and_devices(tmp_path):
 def test_r28_pages_data_wiring(tmp_path):
     """R28 三页数据接通：元素+真帧流到达。"""
     import json
-    import asyncio
     c = _client(tmp_path)
     dash = c.get("/").text
     assert "minitrack" in dash and "EventSource" in dash and "d-advice" in dash
     tl = c.get("/timeline").text
-    assert "loadRun" not in tl or True
     assert "api/session/last" in tl and "evidence" in tl   # 自动载入+证据展开
     wf = c.get("/waterfall").text
     assert "api/spectrum/stream" in wf

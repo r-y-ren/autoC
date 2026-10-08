@@ -10,7 +10,7 @@ requires-python = ">=3.11"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ['ahyd_cli', 'anhang_yundun.egg-info', 'batch_eval', 'bench_edge', 'boot_selfcheck', 'build_materials', 'build_package', 'calibrate_usrp', 'launch_demo_session', 'make_portable_bundle', 'run_device_bus', 'run_ground_station', 'run_ingest', 'run_link_consistency', 'run_progressive_risk', 'run_safety_state_machine', 'run_spectrum_monitor', 'run_sudden_fault', 'shared', 'soak_test']
+packages = ['ahyd_cli', 'anhang_yundun.egg-info', 'batch_eval', 'bench_edge', 'boot_selfcheck', 'build_materials', 'build_package', 'calibrate_usrp', 'fixtures', 'launch_demo_session', 'make_portable_bundle', 'run_device_bus', 'run_ground_station', 'run_ingest', 'run_link_consistency', 'run_progressive_risk', 'run_safety_state_machine', 'run_spectrum_monitor', 'run_sudden_fault', 'shared', 'soak_test']
 
 [project.scripts]
 ahyd-demo = "ahyd_cli.shims:demo_main"

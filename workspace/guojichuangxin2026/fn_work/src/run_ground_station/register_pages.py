@@ -47,14 +47,14 @@ border-radius:8px}
 """
 
 
-_DASH_JS = r'''<div class='panel'><div class='ptitle'>迷你航迹</div><canvas id='minitrack' height='160'></canvas></div>
+_DASH_BODY_HTML = r'''<div class='panel'><div class='ptitle'>迷你航迹</div><canvas id='minitrack' height='160'></canvas></div>
 </div></div>
 <script>
 const trk=[];function drawMini(){const c=document.getElementById('minitrack'),x=c.getContext('2d');
  x.clearRect(0,0,c.width,c.height);x.strokeStyle='#1b2b4d';
  for(let i=1;i<4;i++){x.beginPath();x.moveTo(0,i*c.height/4);x.lineTo(c.width,i*c.height/4);x.stroke();}
  if(trk.length>1){x.strokeStyle='#38bdf8';x.beginPath();x.moveTo(trk[0][0],trk[0][1]);
- for(const p of trk)x.lineTo(p[0],p[1]);x.stroke();}}}
+ for(const p of trk)x.lineTo(p[0],p[1]);x.stroke();}}
 function upd(s){if(s.state){const lv=parseInt(s.state.slice(1))||0;
  for(let i=0;i<5;i++)document.getElementById('band-s'+i)?.classList.remove('on');
  document.getElementById('band-s'+lv)?.classList.add('on');
@@ -63,20 +63,24 @@ function upd(s){if(s.state){const lv=parseInt(s.state.slice(1))||0;
  if(s.time!=null)document.getElementById('d-time').textContent=Math.round(s.time)+'s';
  if(s.nav){const c=document.getElementById('minitrack');
   trk.push([((s.nav.lon-118.8)*1e5%c.width+c.width)%c.width,
-            (32.002-s.nav.lat)*1e5%c.height+c.height)%c.height]);
+            (((32.002-s.nav.lat)*1e5)%c.height+c.height)%c.height]);
   if(trk.length>120)trk.shift();drawMini();
   if(s.nav.energy!=null){document.getElementById('d-energy').textContent=Math.round(s.nav.energy)+'%';
    document.getElementById('d-energy-bar').style.width=Math.max(4,Math.min(100,s.nav.energy))+'%';}}
  if(s.advice)document.getElementById('d-advice').textContent='建议：'+(s.advice.action||'');}
 const es=new EventSource('/api/session/stream');es.onmessage=e=>upd(JSON.parse(e.data));
-fetch('/api/session/last').then(r=>r.json()).then(async j=>{
+let autoplay=null;
+fetch('/api/demo/flow').then(r=>r.json()).then(async fl=>{
+ if(fl.running)return;   // R28 门控：会话/流程进行中不自动播
+ const j=await (await fetch('/api/session/last')).json();
  if(!j.run_dir)return;const name=j.run_dir.split('/').pop();
  const fr=await (await fetch('/api/runs/'+name+'/frames')).json();
  let i=0;const frames=(fr.frames||[]);
- const iv=setInterval(()=>{if(i>=frames.length){clearInterval(iv);return;}
+ autoplay=setInterval(()=>{if(i>=frames.length){clearInterval(autoplay);return;}
   const f=JSON.parse(frames[i++]);
-  upd({nav:{lat:f.lat,lon:f.lon,energy:f.battery_remaining},time:Math.max(0,20.75-(f.t||0))});
+  upd({nav:{lat:f.lat,lon:f.lon,energy:f.battery_remaining}});   // d-time 仅 SSE 语义
  },150);});
+es.addEventListener('message',()=>{if(autoplay){clearInterval(autoplay);autoplay=null;}});
 drawMini();
 </script>'''
 
@@ -179,7 +183,7 @@ def register_pages(app, runs_root):
 <a href='/timeline'><button>事件时间线</button></a></div>
 <div class='panel'><div class='ptitle'>口径注记</div>
 <div class='muted'>数据面：合成源出事件指标 / PX4 真源验数据链路（每条记录标注来源）。</div></div>
-{_DASH_JS}""", 0)
+{_DASH_BODY_HTML}""", 0)
 
     @app.get("/timeline", response_class=HTMLResponse)
     def timeline():
@@ -267,6 +271,7 @@ async function loadRun(){
         import math
 
         from fastapi.responses import StreamingResponse
+        max_frames = max(0, int(max_frames or 0))
         from run_spectrum_monitor.replay_spectrum_source import replay_spectrum_source
 
         async def gen():
