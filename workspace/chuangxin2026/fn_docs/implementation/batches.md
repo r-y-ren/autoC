@@ -27,6 +27,8 @@
 
 | B19 | RuntimeFeed, per_response_model, ws_stream_feed（实现+测）+ execute_scenario/serve_console/start_dut_source [改造落位] + 前端四件（双曲线/进度卡/时间线/滑杆预览） | WS 3s≥5 条 kpi 且非常数；滑杆预览=模型一致；DOM 四件断言 | 演进轮三，单批 |
 
+| B20 | collect_dashboard（实现+测）+ serve_console [改造落位]（/api/dashboard+/api/seed_demo+仪表盘网格四卡+对比 canvas+合成角标+无数据自动 seed） | dashboard 形状+数字可溯源断言；seed_demo 端到端（清空 runs→自动填满）；DOM 四卡断言 | 演进轮四，单批 |
+
 ## 变更记录（计划层事件：签名微调、需求变更往返、放弃等）
 
 | 日期 | 事件 | 说明 |

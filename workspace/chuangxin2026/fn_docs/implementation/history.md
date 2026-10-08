@@ -22,3 +22,4 @@
 | 10-06 | B18（演进轮二，单批） | probe_device_status（超时降级语义由测试抓出修复）+serve_console/render_static_pages/launch_console 三处改造落位 | 92 全量绿；start --selfcheck 五点全过（DEVICES OK 9 项 B210=missing 如实红灯）；R17/R18 集成断言过 |
 | 10-06 | B19（演进轮三，单批） | RuntimeFeed/per_response_model/ws_stream_feed 三函数 + execute_scenario/serve_console/start_dut_source 三改造 + 前端四件（canvas 双曲线/进度卡/事件时间线/滑杆预览） | 103 全量绿；WS 实流 ≥5 kpi 非常数、preview=模型一致、四件 DOM、node --check、双自检 rc=0 |
 | 10-06 | B19 评审修复轮 | P1 DOM 真挂载+断言加固+e2e 计时（3s 内第 5 条 kpi）+P2/P3 三小修 | 104 全量绿；ui_selftest 六点、start --selfcheck rc=0 |
+| 10-06 | B20（演进轮四，单批） | collect_dashboard + serve_console 改造（/api/dashboard+/api/seed_demo+网格四卡+dashboard.js 静态资产：JS 独立文件避开内联转义坑） | 108 全量绿；seed 端到端（空 runs→自动播→非空+数字溯源 steps）；双自检 rc=0 |

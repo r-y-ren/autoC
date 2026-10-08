@@ -28,7 +28,7 @@
 | train_classifier | B9 | wired (10-03) | 同批 3 passed——8 录制 4 组 F1≥0.9+模型被 predictor 消费 | fc810971 |
 | predict_style | B10 | wired (10-03) | pytest tests/src/predict_style → 1 passed | 7c9c19d0 |
 | run_demo | B11 | wired (10-03) | pytest tests/src/run_demo → 1 passed（报告+失效电平+识别样例三件齐） | b61b442f |
-| serve_console | B12+B18+B19 | wired (10-06) | WS 真源化+/preview+四件 DOM 断言 | 58635d6d |
+| serve_console | B12+B18+B19+B20 | wired (10-06) | dashboard 两端点+网格四卡+dashboard.js | fe0d547b |
 | bridge_to_sitl | B13 | wired (10-03) | pytest tests/src/bridge_to_sitl → 1 passed（时间线+模拟标注） | 390bd607 |
 | animate_link_state | B14 | wired (10-03) | pytest tests/src/animate_link_state → 2 passed（分级+波纹全覆盖） | 390bd607 |
 
