@@ -94,3 +94,4 @@
 | _page | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _ensure_model | B18→B19 | wired 10-06 | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
 | _already_archived | B18 | tested | 上游覆盖: 宿主函数（2026-10-06 审计补记） | 083be0cc |
+| render_device_panel | B20 | stub | 测试: tests/shared/test_render_device_panel.py | — |

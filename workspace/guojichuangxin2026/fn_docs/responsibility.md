@@ -95,6 +95,7 @@
 - inject_scenario_fault
   - _params_for
 - archive_run
+- render_device_panel
 
 ## 需求覆盖矩阵
 | 需求 | 顶层函数 |
@@ -124,6 +125,8 @@
 | R23 | batch_eval |
 | R24 | build_package |
 | R25 | run_eval |
+| R26 | run_ground_station |
+| R27 | run_ground_station |
 
 ## 共享函数（shared：多顶层共用；矩阵挂全部受益需求）
 - **load_config**（调用方：程序入口, run_ingest, run_progressive_risk, run_sudden_fault, run_link_consistency, run_spectrum_monitor, run_safety_state_machine, run_ground_station, build_materials, launch_demo_session, run_device_bus, run_eval, train_tcn, replay_check, sdr_check）
@@ -368,6 +371,7 @@
     - tested 策略：自有单测（本地 WebSocket 客户端收帧）
     - 核验命令：测试: tests/run_ground_station/test_pipe_events.py
   - **register_pages** [L1|新增]
+  - [改造 10-08 R26/R27] 五页统一指挥中心壳（_page 升级深色分区）+仪表盘/时间线/瀑布/回放四页布局重构；新增 /api/devices 端点（组合 discover_device_module+probe_px4_env+待接入清单静态配置）；仪表盘与控制台挂 render_device_panel。核验=继承 R26/R27（元素断言+API 真值一致）
     - 职责：挂载五个页面路由与 API——仪表盘、事件时间线（证据链展开）、频谱瀑布、回放页、控制台页（render_console 载体，含 session_control_api 控制端点挂载）；页面模板与静态资源随包分发，无外网依赖；界面以功能完整与稳定为验收线，视觉打磨不阻塞交付。
     - 签名意图：输入: FastAPI app, 运行目录根 / 输出: 无（副作用=路由注册） / 错误: 模板缺失启动即报
     - 调用方：run_ground_station
@@ -407,6 +411,7 @@
 （R9 演示控制台后端——演示会话全流程 UI 化：选场景一键起飞、飞行中注入故障/调强度、中止归档、时间轴回放；零终端零代码；功能完整 P0，UI 精致度加分项；手动接管为 P1 范围外。）
 
 - **launch_demo_session** [L0|新增]
+  - [改造 10-08 R26] _emit 降噪：sev=0 且无 state/advice 的帧不推送（events.jsonl 照常全量落盘）。核验=继承 R26（SSE 流全部 sev≥1 或含 state/advice）
   - 职责：演示会话编排——从控制台请求发起一次演示：open_run_dir 建运行目录 → spawn_sitl 按场景拉起仿真 → 装配 run_device_bus（设备模块自动发现/降级）与 run_ingest 及风险管线/状态机 → 事件流接 pipe_events → 返回会话句柄（会话表：id→句柄/运行目录/控制端点）；会话中止或正常结束时归档运行清单；同机多会话互不串流。
   - 签名意图：输入: 会话请求（场景名/强度档/可选种子）, 配置 / 输出: 会话句柄（id, 运行目录, 控制端点） / 错误: 场景未定义/SITL 拉起失败抛 SessionError（含可读原因给 UI 展示）
   - 调用方：程序入口, session_control_api
@@ -426,6 +431,7 @@
     - tested 策略：自有单测（FastAPI TestClient 打全控制端点）
     - 核验命令：测试: tests/launch_demo_session/test_session_control_api.py
   - **render_console** [L1|新增]
+  - [改造 10-08 R26] 六区布局：地图航迹（canvas 自绘）/数字仪表组/S0-S4 状态色带/注入面板/设备状态区（render_device_panel）/时间轴；SSE 显示端过滤 sev=0；投屏大字高对比。核验=继承 R26
     - 职责：控制台页——功能完整性优先的演示操控前端：场景选择/起飞/注入面板（按钮+强度滑杆 低/中/高）/实时状态区（风险等级/剩余安全时间/建议动作）/频谱瀑布嵌入/事件时间轴/回放时间轴（暂停/加速/拖动）；深色主题基线（视觉打磨为加分项不阻塞交付）；模板与静态资源随包分发、无外网依赖。
     - 签名意图：输入: 页面路由上下文 / 输出: 控制台页（HTML+静态资源） / 错误: 资源缺失启动即报
     - 调用方：register_pages
@@ -459,6 +465,12 @@
     - 调用方：run_device_bus
     - tested 策略：自有单测（双源同管线等价断言）
     - 核验命令：测试: tests/run_device_bus/test_route_device_frames.py
+
+## 产出前自检（R26/R27 演进轮，2026-10-08）
+- 矩阵正向：R1-R27 全覆盖（27/27）✓
+- 新函数 1 个：render_device_panel（shared，两页共用）→ scaffold 需为它加桩；其余全 [改造]
+- 矩阵反向：全部函数可达 ✓
+- 函数总数 90→91 ✓
 
 ## 产出前自检（R23-R25 演进轮，2026-10-06）
 - 矩阵正向：R1-R25 全覆盖（25/25）✓（R24 以 build_package"交付卫生"职责承接；一次性 git ops 为 B19 批内动作）
@@ -563,6 +575,13 @@
   - 调用方：程序入口
   - tested 策略：自有单测（tar 结构与 SHA 校验，不解压目标机）
   - 核验命令：继承 R16 验收方式（解压即跑属目标机人工项，包结构与校验和命令化）
+
+- **render_device_panel** [L1|新增]
+  - 职责：设备状态面板 HTML——①已接设备区（SDR/Jetson/合成源/PX4：在场/缺席/回放降级/健康徽标，数据由调用方传入 registry+probe 报告）②待接入清单区（B210 真机/Orin NX/真飞机徽标：脚本就绪·待设备）；纯模板无副作用；控制台与仪表盘共用。
+  - 签名意图：输入: 设备报告 dict（registry/probe/pending 清单） / 输出: HTML 片段 str / 错误: 无
+  - 调用方：register_pages, render_console
+  - tested 策略：自有单测
+  - 核验命令：测试: tests/shared/test_render_device_panel.py
 
 ## 辅助单元补账（2026-10-06 审计回填；[L2|补记] 为实现期随宿主交付、本次登记）
 
@@ -735,6 +754,7 @@
   - tested 策略：上游覆盖: sdr_check
   - 核验命令：上游覆盖: sdr_check
 - **_page** [L2|补记]
+  - [改造 10-08 R26] 统一指挥中心壳（CSS 变量/布局网格/顶栏状态色带），五页共用。核验=继承 R26
   - 职责：五页 HTML 模板壳
   - 签名意图：输入: 标题/正文 / 输出: str / 错误: 无
   - 调用方：register_pages

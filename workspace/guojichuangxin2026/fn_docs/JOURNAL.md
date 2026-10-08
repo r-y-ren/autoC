@@ -26,3 +26,4 @@
 | 2026-10-06 | 全量线:implement | B19 修订轮（用户裁决"开始修订"）：C1 假守卫修复（扫描 cwd→战役根+反例测试"守卫可失败"）/I2 P10 单一口径（run_eval._percentile）/I3 补注记三件/I4 测试镜像（三分支+best 回归+P10 值断言）/M5-M8 全清；116 tests 绿；lint 0/0 | 批间门复呈：停等 |
 | 2026-10-08 | 全量线:implement | 演示链路三修（用户实跑崩溃驱动）：demo.sh venv 化/smoke_boot 三步自检实接/SSE 总线桥接；实测 boot_selfcheck 三 PASS+SSE 92 帧流 | 全测绿；登记 batches 变更记录 |
 | 2026-10-08 | 全量线:grill | R26 页面完善（五页 2D 指挥中心风+事件降噪）/R27 设备状态面板（已接设备真值+待接入清单）入册；三问未应答按推荐默认落盘标注 | 门口：停等 /fn-divide 或修订 |
+| 2026-10-08 | 全量线:divide | R26/R27 划分落盘：矩阵 27/27；新函数仅 render_device_panel（shared 两页共用）→scaffold 需加桩；register_pages/render_console/launch_demo_session/_page 四件 [改造] 注记 | lint 0/0；门：停等 /fn-scaffold（新函数加桩）或修订 |
