@@ -36,8 +36,8 @@ def test_shape_and_traceability(tmp_path):
     assert d["latest"]["fail_levels"] == {"cw": 5}          # 可溯源：出自 steps
     assert d["latest"]["synthetic"] is True and "40" in d["latest"]["speed_note"]
     assert d["capability"]["total_runs"] == 1
-    steps_text = (tmp_path / "runX" / "steps.jsonl").read_text(encoding="utf-8")
-    assert "5" in steps_text                                   # 数字在产物中
+    st = json.loads((tmp_path / "runX" / "steps.jsonl").read_text(encoding="utf-8"))
+    assert d["latest"]["fail_levels"]["cw"] == st["power_db"] == 5   # 等值溯源（非子串）
 
 
 def test_empty_runs(tmp_path):
@@ -58,6 +58,7 @@ def test_r21_dashboard_endpoint_and_dom(tmp_path, monkeypatch):
               "id=\"dashboard\""):
         assert m in html, m
     assert "compare-chart" in js and "seed_demo" in js         # 对比画布+自动播逻辑
+    assert "合成数据" in js and "实测数据" in js                # R21 验收：合成角标
 
 
 def test_r21_seed_demo_end_to_end(tmp_path, monkeypatch):

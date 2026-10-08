@@ -57,8 +57,8 @@ function renderDash(d) {
         + '<select id="cmp-a">' + opts + '</select><span style="color:#8fa3c0">vs</span>'
         + '<select id="cmp-b">' + opts + '</select>'
         + '<button class="btn" onclick="drawCompare()">对比</button></div>'
-        + '<table><tr><th>运行</th><th>失效数</th><th>样本</th></tr>'
-        + d.history.slice(0, 8).map(r => '<tr><td><a href="/reports/' + r.name + '">' + r.name + '</a></td><td>' + r.fails + '</td><td>' + r.kpi_n + '</td></tr>').join('')
+        + '<table><tr><th>运行</th><th>时间</th><th>失效数</th><th>样本</th></tr>'
+        + d.history.slice(0, 8).map(r => '<tr><td><a href="/reports/' + r.name + '">' + r.name + '</a></td><td>' + new Date(r.mtime * 1000).toLocaleString() + '</td><td>' + r.fails + '</td><td>' + r.kpi_n + '</td></tr>').join('')
         + '</table>'
         + '<canvas id="compare-chart" width="900" height="140" style="width:100%;background:#0a0f18;border-radius:8px;margin-top:8px"></canvas>';
     }
