@@ -30,3 +30,4 @@
 | 2026-10-08 | 全量线:scaffold | 演进轮加桩：render_device_panel 一桩+镜像测试占位（存量 90 件未动）；compile PASS/桩=1/收集 117 | 门：停等 /fn-implement（B20 批）或修订 |
 | 2026-10-08 | 全量线:implement | B20 批完成（R26/R27）：render_device_panel 实现（2 测）+五页指挥中心壳+控制台六区+事件降噪+nav 航迹帧+/api/devices 真值面板；120 tests 绿；boot_selfcheck 三 PASS | 批间门：派评审审 diff→停等 |
 | 2026-10-08 | 全量线:implement | B20 修订（评审建议执行）：I1 断言空洞修复（sudden 补 sev+断言收严）+四 Minor 全清；责任文档快速通道两笔；120 tests 绿 | 批间门复呈：停等 |
+| 2026-10-08 | 全量线:grill | R28 入册（三页数据接通/控制台卡片化+飞行读数/一键演示流程；口径横幅未选不做）；数据源口径钉死=接既有真管线 | 门口：停等 /fn-divide 或修订 |
