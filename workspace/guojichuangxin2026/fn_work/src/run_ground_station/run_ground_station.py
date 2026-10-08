@@ -17,6 +17,8 @@ def run_ground_station(config: dict, live_source=None):
     app = FastAPI(title="安航云盾地面管理平台")
     register_pages(app, config.get("runs_root", "runs"))
     app.state.hub = live_source if isinstance(live_source, EventHub) else EventHub()
+    app.state.cfg = {"runs_root": config.get("runs_root", "runs"),
+                     "hub": app.state.hub}   # 会话共享平台总线（SSE 流桥接）
     # 会话控制端点（R9）挂载
     try:
         from launch_demo_session.session_control_api import session_control_api
