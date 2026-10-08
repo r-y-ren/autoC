@@ -36,6 +36,7 @@
 | 2026-10-03 | 计划补洞 | calibrate_power（R2 顶层）原漏于批次表，并入 B7 一并实现 |
 | 2026-10-06 | 勘误 | commit 9d46e25b 消息"9 新测+96 绿"实为 6 新测/92 绿（消息口径笔误，代码与测试为准）；评审越权 P1（主页 JS 换行转义）+P2（DOCTYPE）+P3 两处已修复，JS 语法断言（node --check）入 selftest 与 pytest |
 | 2026-10-06 | 评审修复（B19） | P1 四件 DOM 空转（替换锚点带引号未匹配，JS 全空转且测试假阳性）已修——真元素断言+端到端 WS 计时测；P2 事件步进内即时发流+fail 补 kind；P3 ws snapshot/subscribe 竞态收敛。快照从最旧续推属预期语义（测试口径随之修正） |
+| 2026-10-06 | 评审修复（B20） | P2 冷启动 /runs-media 挂载改无条件；P3 杂散引号/角标断言/等值溯源/时间列 |
 | 2026-10-06 | 新增改动 | B18 含 launch_console selfcheck 升级（含 /api_devices 探测断言）——R17 验收命令内生要求，随批实施（用户批准 R17 时已隐含） |
 | 2026-10-03 | 评审修复+签名微调 | execute_scenario 增 kw estop（操控台急停联通）；calibrate_power 增 warnings（步距偏差>1dB）；补 scripts/record·calibrate·sitl_bridge 三入口（消除死代码 FAIL）；serial seq 记忆改会话级；sitl note 如实化 |
 | 2026-10-03 | 签名微调 | record_run_streams 增 kw jammer/extra_events（执行器联动监测与事件注入，意图级签名不变） |
