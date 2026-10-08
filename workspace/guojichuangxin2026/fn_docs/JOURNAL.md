@@ -27,3 +27,4 @@
 | 2026-10-08 | 全量线:implement | 演示链路三修（用户实跑崩溃驱动）：demo.sh venv 化/smoke_boot 三步自检实接/SSE 总线桥接；实测 boot_selfcheck 三 PASS+SSE 92 帧流 | 全测绿；登记 batches 变更记录 |
 | 2026-10-08 | 全量线:grill | R26 页面完善（五页 2D 指挥中心风+事件降噪）/R27 设备状态面板（已接设备真值+待接入清单）入册；三问未应答按推荐默认落盘标注 | 门口：停等 /fn-divide 或修订 |
 | 2026-10-08 | 全量线:divide | R26/R27 划分落盘：矩阵 27/27；新函数仅 render_device_panel（shared 两页共用）→scaffold 需加桩；register_pages/render_console/launch_demo_session/_page 四件 [改造] 注记 | lint 0/0；门：停等 /fn-scaffold（新函数加桩）或修订 |
+| 2026-10-08 | 全量线:scaffold | 演进轮加桩：render_device_panel 一桩+镜像测试占位（存量 90 件未动）；compile PASS/桩=1/收集 117 | 门：停等 /fn-implement（B20 批）或修订 |
