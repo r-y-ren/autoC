@@ -36,6 +36,9 @@
 - serve_console ← R10+R13 [改造：+render_static_pages]
 - execute_scenario ← R5+R14+R15 [改造：+scaled_criteria/+apply_calibration/+resume_from]
 - shared 增：register_cjk_font
+# ── 演进轮二增量（R17–R18，2026-10-06）──
+- serve_console ← R10+R13+R17+R18 [改造：+probe_device_status 子树、/api_devices 端点、状态栏挂载、样式精修]
+- render_static_pages ← R13+R18 [改造：统一深色驾驶舱样式+状态条入三页]
 
 ## 需求覆盖矩阵（P1 在 R 号后标注；非功能约束不进矩阵，fn-close 终检对照 requirements 非功能节）
 
@@ -57,6 +60,8 @@
 | R14 | execute_scenario [改造]（scaled_criteria 判据同步缩放+倍率入 run 目录，build_report 出脚注） |
 | R15 | execute_scenario [改造]（apply_calibration 功率换算+resume_from 断点续跑）；build_report [改造]（标定状态行） |
 | R16 | build_mid_material |
+| R17 | probe_device_status（serve_console 子）+ serve_console [改造]（/api_devices+状态栏全站） |
+| R18 | serve_console [改造]+render_static_pages [改造]（深色驾驶舱统一样式，无新函数） |
 
 ## 共享函数（shared/：多顶层共用；矩阵挂全部受益需求）
 
@@ -370,3 +375,29 @@
 - 反向：launch_console→程序入口 ✓；build_mid_material→程序入口 ✓；render_static_pages→serve_console→入口 ✓；register_cjk_font 调用方两顶层 ✓；scaled_criteria/apply_calibration/resume_from→execute_scenario→入口 ✓。无死代码。
 - 单一转变：逐块复核 ✓。
 - 函数总数 27+7=34（>20 预警延续——12+4 需求口的系统广度所致，门内已两轮确认接受）。
+
+
+---
+
+## 演进轮二增量块（R17–R18，2026-10-06；旧块原文未动）
+
+## 增量子函数块（挂 serve_console 子树）
+
+- **probe_device_status** [L1|新增]（R17）
+  - 职责：对平台依赖的设备做一轮状态探测并返回统一清单（单一功能转变：异构探测→同构状态清单）。电子件自动探测六项——B210（UHD 设备扫描，惰性导入）、ESP32 串口（/dev/ttyUSB* 与 ttyACM* 扫描）、NRF24（随串口固件上报判定，无固件上报=待固件）、Python 依赖（requirements 清单 import 检查）、4070 算力（/toolbox 配置或 TOOLBOX_URL 连通）、PlatformIO（which pio）；物理件三人工确认项（屏蔽箱/天线几何/供电 Hub）在清单中以 pending_manual 占位（勾选状态由前端 localStorage 持久化，不经本函数）。单项探测超时 ≤2s、单项失败只影响该项状态不抛全局异常。
+  - 签名意图：输入: 无（可选 {timeout_s}） / 输出: 条目列表 [{id, name, status: ok|missing|pending_manual|manual_ok, detail, ts}] / 错误: 无全局错误路径——单项探测异常降级为 status=missing + detail=原因（探测职责内建容错，故不设抛错分支）。
+  - 调用方：serve_console（/api_devices 端点）
+  - tested 策略：自有单测（mock 探测环境：假串口目录/假依赖）
+  - 核验命令：测试: R17——`bash fn_work/scripts/start.sh --selfcheck` 含 /api_devices 断言（rc=0、条目≥6、B210 缺失时 status=missing 不报错）——继承 R17 验收方式
+
+## 受影响旧块 [改造] 目标态（原文未动）
+
+- **serve_console** [改造 ← R17/R18]：①新增 GET /api_devices 端点（调 probe_device_status，JSON 返回）；②/_PAGE 与全部页面顶部挂载设备状态栏（绿/红/黄灯+缺件红徽标，5s 轮询+手动刷新）；③深色驾驶舱样式精修（与 render_static_pages 同一体系）。
+- **render_static_pages** [改造 ← R18]：/reports 与 /help 两页套用统一深色驾驶舱样式（卡片/按钮/间距/表格条纹/数字等宽），页顶同挂设备状态条；纯 HTML+CSS，无构建链。
+
+## 演进轮二自检
+
+- 矩阵正向：R17=probe_device_status+serve_console 改造 ✓；R18=两改造块 ✓（纯样式无新函数，职责归属明确）。
+- 反向：probe_device_status→serve_console→入口 ✓；两改造块函数已有调用链 ✓。无死代码。
+- 单一转变：probe_device_status=异构探测→同构清单（内部六项探测为同类批扫，先例 watch_links/index_dataset 同构）✓。
+- 函数总数 35（+1）——>20 预警延续（需求口已达 18 条，门内已三轮确认接受）。
