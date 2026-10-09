@@ -55,3 +55,11 @@ my_LLM_valut/raw/pdfs/
 
 # PTCG 战役：官方原始回放本地留存不进库（INDEX+conv 转换件入库）
 workspace/ptcg-playground-2026/references/episodes/episode-*-replay.json
+# >>> repo-split >>>（git 拆分：产物分区出主库，见 spec r-y-ren/autoC#2）
+workspace/*
+!workspace/README.md
+!workspace/JOURNAL.md
+archive/
+export/
+kb/raw/
+# <<< repo-split <<<
