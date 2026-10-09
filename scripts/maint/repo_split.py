@@ -52,8 +52,8 @@ def project_root(cli_root: str | None) -> Path:
     return Path(env).resolve() if env else Path(__file__).resolve().parents[2]
 
 
-def git(root: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess:
-    p = subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, timeout=120)
+def git(root: Path, *args: str, check: bool = True, timeout: int = 120) -> subprocess.CompletedProcess:
+    p = subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, timeout=timeout)
     if check and p.returncode != 0:
         raise SystemExit(f"git {' '.join(args)} 失败：{p.stderr.strip()[:400]}")
     return p
@@ -315,7 +315,7 @@ def cmd_adopt(args: argparse.Namespace) -> int:
         if not (d / ".git").is_dir():
             git(root, "init", "-q", "-b", "main", e["path"])
         ensure_remote(d, e["remote"])
-        git(d, "fetch", "-q", "origin")
+        git(d, "fetch", "-q", "origin", timeout=1800)
         git(d, "reset", "-q", "--hard", "origin/main")  # 未跟踪大件不受影响
         print(f"adopt: {e['path']} <- {e['remote']}（收敛到 origin/main）")
     return 0
@@ -372,9 +372,9 @@ def cmd_push(args: argparse.Namespace) -> int:
             print(f"push: 跳过 {e['path']}（无提交）")
             continue
         ensure_remote(d, e["remote"])
-        git(d, "push", "-q", "-u", "origin", "main")
+        git(d, "push", "-q", "-u", "origin", "main", timeout=1800)
         if git(d, "tag", "-l").stdout.split():
-            git(d, "push", "-q", "origin", "--tags")
+            git(d, "push", "-q", "origin", "--tags", timeout=1800)
         print(f"push: {e['path']} -> {e['remote']}")
     return 0
 
