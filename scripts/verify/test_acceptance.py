@@ -33,8 +33,14 @@ BP_TAIL = "compliance: {ai_policy_reviewed: true}\n---\n正文\n"
 
 def make_root() -> Path:
     tmp = Path(tempfile.mkdtemp(prefix="autoc_acc_test_"))
+    # 只拷工程面：产物树（workspace/archive 等）与 .git 整拷会打爆 /tmp 配额（2026-10-09 回归实测）；
+    # workspace 骨架由本夹具现场重建
     shutil.copytree(SRC_ROOT, tmp, dirs_exist_ok=True,
-                    ignore=shutil.ignore_patterns(".venv", "__pycache__", "node_modules"))
+                    ignore=shutil.ignore_patterns(
+                        ".venv", "__pycache__", "node_modules", ".git",
+                        "workspace", "archive", "export", "tools",
+                        "my_LLM_valut", ".flow", ".tmp"))
+    (tmp / "workspace").mkdir(parents=True, exist_ok=True)
     shutil.rmtree(tmp / "workspace" / "acceptance", ignore_errors=True)
     (tmp / "workspace" / "acceptance").mkdir(parents=True, exist_ok=True)
     # 状态钉死：retry 从 0 起数（真实库 retry.count 会漂移，断言不能依赖它）
@@ -111,7 +117,8 @@ def main() -> int:
     # 场景 C：cmd 超时 → 记 fail 不崩溃，证据含 TIMEOUT
     root = make_root()
     try:
-        write_blueprint(root, '    - {id: c1, category: software, item: 卡死, method: m, cmd: "ping -n 30 127.0.0.1 >nul"}\n')
+        # 卡死命令用 python sleep：Windows 味的 ping -n 30 在 iputils 下 3ms 退（2026-10-09 实测），无法触发超时
+        write_blueprint(root, '    - {id: c1, category: software, item: 卡死, method: m, cmd: "python3 -c \'import time; time.sleep(30)\'"}\n')
         p = run_acc(root, {"AUTOC_CMD_TIMEOUT": "2"})
         ev = (root / "workspace/acceptance/evidence/c1.log").read_text(encoding="utf-8")
         run_ok = latest_run(root).is_file()

@@ -304,7 +304,14 @@ def cmd_verify(args: argparse.Namespace) -> int:
 
 def cmd_adopt(args: argparse.Namespace) -> int:
     root = project_root(args.root)
-    m = load_manifest(Path(args.manifest) if args.manifest else default_manifest_path(root))
+    mp = Path(args.manifest) if args.manifest else default_manifest_path(root)
+    if mp.is_file():
+        m = load_manifest(mp)
+    else:
+        # 第二台机器没有 .flow 基线（本机文件不随库走）：按 discover + 远程基址推导清单，
+        # 收敛以远程为准；缺失的分区目录先 mkdir 再重跑
+        m = build_manifest(root, args.remote_base)
+        print("adopt: 无 manifest（新机器），按 discover + remote-base 推导清单")
     entries = m["partitions"] + ([] if args.skip_archive else m["archive"])
     for e in entries:
         d = root / e["path"]

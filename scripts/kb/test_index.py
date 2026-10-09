@@ -44,8 +44,12 @@ INDEX_WITH_3_RUNS = """# KB 总索引（瘦协调者唯一入口）
 def main() -> int:
     tmp = Path(tempfile.mkdtemp(prefix="autoc_idx_test_"))
     try:
+        # 只拷工程面：产物树（workspace/archive 等）与 .git 整拷会打爆 /tmp 配额（2026-10-09 回归实测）
         shutil.copytree(SRC_ROOT, tmp, dirs_exist_ok=True,
-                        ignore=shutil.ignore_patterns(".venv", "__pycache__", "node_modules"))
+                        ignore=shutil.ignore_patterns(
+                            ".venv", "__pycache__", "node_modules", ".git",
+                            "workspace", "archive", "export", "tools",
+                            "my_LLM_valut", ".flow", ".tmp"))
         (tmp / "kb" / "INDEX.md").write_text(INDEX_WITH_3_RUNS, encoding="utf-8")
         env = dict(os.environ, ZCODE_PROJECT_DIR=str(tmp))
         p = subprocess.run([sys.executable, str(tmp / "scripts/kb/build_index.py")],

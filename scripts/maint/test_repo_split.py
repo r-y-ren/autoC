@@ -297,6 +297,16 @@ def main() -> int:
               and sha256_file(root_b / "workspace/demo-a/blueprint.md") == e0["sha256"]["workspace/demo-a/blueprint.md"])
         passed += ok
         print(f"{'PASS' if ok else 'FAIL'} adopt 未跟踪大件不丢且内容与基线一致")
+
+        # 无 manifest 回退（第二台机器无 .flow 基线）：discover + remote-base 推导即收敛
+        import shutil as _sh
+        _sh.rmtree(d_b / ".git", ignore_errors=True)
+        (d_b / "blueprint.md").unlink(missing_ok=True)
+        p = run_rs(root_b, "adopt", "--skip-archive", remote_base=rb)  # 不带 --manifest
+        ok = (p.returncode == 0 and "推导清单" in p.stdout and (d_b / ".git").is_dir()
+              and sha256_file(d_b / "blueprint.md") == e0["sha256"]["workspace/demo-a/blueprint.md"])
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} adopt 无 manifest 回退收敛：rc={p.returncode} {p.stdout.splitlines()[:2]}")
     finally:
         import shutil
         shutil.rmtree(root, ignore_errors=True)
@@ -353,8 +363,8 @@ def main() -> int:
         shutil.rmtree(root, ignore_errors=True)
         shutil.rmtree(rdir, ignore_errors=True)
 
-    print(f"\n{passed}/26 PASS")
-    return 0 if passed == 26 else 1
+    print(f"\n{passed}/27 PASS")
+    return 0 if passed == 27 else 1
 
 
 if __name__ == "__main__":
