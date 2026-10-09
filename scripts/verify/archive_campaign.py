@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""S-06 战役归档（archive_campaign，v2 多战役）。
+"""S-06 战役归档（archive_campaign，v2 多战役，2026-10 git 拆分后口径）。
 
-把单个战役根整体固化到 archive/<YYYY-MM>_<赛事名>_<主题>/（git add + tag），
-然后注销该战役（v2 状态移除注册条目；v1 状态复位 idle）。其余战役不受影响。
+把单个战役根整体固化到 archive/<YYYY-MM>_<赛事名>_<主题>/，然后注销该战役
+（v2 状态移除注册条目；v1 状态复位 idle）。其余战役不受影响。
+git 口径：commit + tag 落**项目仓库**（.git 随目录搬移；无库则在目标位补建快照库），
+主库零提交；项目库有 origin 时 push 分支与 tag（远程即归档证据链）。
 
 安全前置（不满足即拒绝，--force 强制）：
   - <战役根>/blueprint.md 存在（归档名取自其 campaign 字段）
@@ -94,6 +96,10 @@ def git(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, timeout=120)
 
 
+def git_in(path: Path, *args: str, timeout: int = 120) -> subprocess.CompletedProcess:
+    return subprocess.run(["git", *args], cwd=path, capture_output=True, text=True, timeout=timeout)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="战役归档（多战役）")
     ap.add_argument("--campaign", default=None, help="目标战役 id（缺省=唯一登记战役）")
@@ -137,14 +143,15 @@ def main() -> int:
     print(f"[archive] 战役 {cid}（root={camp_root.relative_to(ROOT)}）")
     print(f"[archive] 归档名：{dirname}")
     print(f"[archive] 最新验收：{result}")
-    entries = sorted(p for p in camp_root.iterdir() if not p.name.startswith("."))
+    entries = sorted(p for p in camp_root.iterdir())
     if legacy_root:
         # legacy 平铺根=workspace 本体：容器 README 留守
         entries = [p for p in entries if p.name != "README.md"]
+    # 拆分后：.git/.gitignore 等点文件必须随目录搬移（否则项目库历史与远程被 rmtree 清场）
     if args.dry_run:
         for p in entries:
             print(f"  will move: {p.relative_to(ROOT)}")
-        print(f"[archive] dry-run：目标 {dest.relative_to(ROOT)}，tag=archive/{dirname}")
+        print(f"[archive] dry-run：目标 {dest.relative_to(ROOT)}，tag=archive/{dirname}（落项目仓库）")
         return 0
 
     if dest.exists():
@@ -164,19 +171,36 @@ def main() -> int:
     else:
         shutil.rmtree(camp_root, ignore_errors=True)
 
-    # git：add → commit → tag（commit 必须先于 tag，否则 tag 指向归档前旧提交——T2.1 修复的 P2 缺陷）
-    if git("add", "-A").returncode == 0:
-        c = git("commit", "-m", f"archive({cid}): {dirname}")
+    # git（拆分后口径）：commit+tag 落项目仓库（commit 必须先于 tag——T2.1 修复的 P2 缺陷语义保留）；
+    # 主库零提交；有 origin 则 push 分支与 tag，远程即归档证据链。
+    tag = f"archive/{dirname}"
+    if not (dest / ".git").is_dir():
+        git_in(dest, "init", "-q", "-b", "main")
+    dirty = git_in(dest, "status", "--porcelain").stdout.strip()
+    tagged = False
+    if not dirty:
+        tagged = True
+    elif git_in(dest, "add", "-A").returncode == 0:
+        c = git_in(dest, "-c", "commit.gpgsign=false", "commit", "-m", f"archive({cid}): {dirname}")
         if c.returncode == 0:
-            tag = f"archive/{dirname}"
-            if git("tag", tag).returncode == 0:
-                print(f"[archive] git commit + tag → {tag}（tag 快照包含归档内容）")
-            else:
-                print(f"[archive][warn] tag 失败（可能重名）：{tag}", file=sys.stderr)
+            tagged = True
         else:
-            print(f"[archive][warn] git commit 失败（tag 跳过）：{c.stderr.strip()[:100]}", file=sys.stderr)
+            print(f"[archive][warn] 项目库 commit 失败（tag 跳过）：{c.stderr.strip()[:100]}", file=sys.stderr)
     else:
-        print("[archive][warn] git add 失败，仅完成文件移动（commit/tag 跳过）", file=sys.stderr)
+        print("[archive][warn] 项目库 git add 失败，仅完成文件移动（commit/tag 跳过）", file=sys.stderr)
+    if tagged:
+        if git_in(dest, "tag", tag).returncode == 0:
+            print(f"[archive] 项目库 commit + tag → {tag}（tag 快照包含归档内容）")
+        else:
+            print(f"[archive][warn] tag 失败（可能重名）：{tag}", file=sys.stderr)
+        if git_in(dest, "remote", "get-url", "origin").returncode == 0:
+            p1 = git_in(dest, "push", "-q", "-u", "origin", "main", timeout=1800)
+            p2 = git_in(dest, "push", "-q", "origin", tag, timeout=1800)
+            if p1.returncode == 0 and p2.returncode == 0:
+                print(f"[archive] 项目库已 push（main + {tag}）")
+            else:
+                print("[archive][warn] 项目库 push 失败（本地 tag 已就位，稍后手动 push）",
+                      file=sys.stderr)
 
     # 状态复位：v2 注销该战役（其余战役不动）；v1 复位 idle
     init = ROOT / "scripts" / "guard" / "init_state.py"
