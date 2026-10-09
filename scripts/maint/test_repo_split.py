@@ -363,8 +363,46 @@ def main() -> int:
         shutil.rmtree(root, ignore_errors=True)
         shutil.rmtree(rdir, ignore_errors=True)
 
-    print(f"\n{passed}/27 PASS")
-    return 0 if passed == 27 else 1
+    # ── 循环 4：bootstrap 新战役建库收口 + push 体积预检 ─────────────────────
+    root = make_fixture()
+    try:
+        camp = root / "workspace" / "new-camp"
+        camp.mkdir(parents=True)
+        (camp / "JOURNAL.md").write_text("j\n", encoding="utf-8")
+        (camp / "__pycache__").mkdir()
+        (camp / "__pycache__" / "junk.pyc").write_text("x", encoding="utf-8")
+        p = run_rs(root, "bootstrap", "--path", "workspace/new-camp")
+        inv = json.loads((root / "config/repo_split_repos.json").read_text(encoding="utf-8"))
+        ok = (p.returncode == 0 and (camp / ".git").is_dir()
+              and (camp / ".gitignore").is_file()
+              and "JOURNAL.md" in git(camp, "ls-files").stdout
+              and "__pycache__/junk.pyc" not in git(camp, "ls-files").stdout
+              and any(r["path"] == "workspace/new-camp" for r in inv["repos"])
+              and git(camp, "remote", "get-url", "origin").stdout.strip()
+              == REMOTE_BASE + "/autoC-new-camp")
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} bootstrap 新战役建库收口：rc={p.returncode} "
+              f"{p.stdout[-120:]}{p.stderr[-120:]}")
+    finally:
+        import shutil
+        shutil.rmtree(root, ignore_errors=True)
+
+    root = make_fixture()
+    try:
+        (root / "workspace/demo-a/big.bin").write_bytes(b"\0" * (2 << 20))  # 2MB > 预检上限 1MB
+        mpath = root / "plan.json"
+        assert run_rs(root, "plan", "--json", str(mpath)).returncode == 0
+        assert run_rs(root, "apply", "--manifest", str(mpath)).returncode == 0
+        p = run_rs(root, "push", "--manifest", str(mpath), "--max-file-mb", "1")
+        ok = p.returncode == 1 and "push 中止" in p.stderr and "big.bin" in p.stderr
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} push 单文件体积预检拦截：rc={p.returncode} {p.stderr.splitlines()[:2]}")
+    finally:
+        import shutil
+        shutil.rmtree(root, ignore_errors=True)
+
+    print(f"\n{passed}/29 PASS")
+    return 0 if passed == 29 else 1
 
 
 if __name__ == "__main__":

@@ -18,17 +18,19 @@ git 拆分（spec r-y-ren/autoC#2，票 T1–T6）已落地：**主库只留工�
 
 ## 第二台机器接手步骤
 
-1. **主库**：`git pull --rebase`。
+1. **主库**：在交付分支上 `git pull --rebase`（当前 `deliver/kaggriculture-audit`；合流 `main` 的时机沿用既有里程碑约定，若你只看 main 会拿不到拆分提交）。
    ⚠ 拆分提交会让旧跟踪的产物文件从工作区消失（正常现象，内容在各项目库）；
    **未跟踪大件不受影响**（PX4 树、数据目录、回放 json 等 ignored 内容原地保留）。
 2. **逐项目库收敛**（保留本机未跟踪大件）：
    ```bash
    python scripts/maint/repo_split.py --remote-base https://github.com/r-y-ren adopt --skip-archive
    ```
-   无 manifest 时自动按 discover + 远程基址推导（`.flow` 基线是本机文件，不随库走）；
+   无 `.flow` manifest 时按主库清单 `config/repo_split_repos.json` 收敛（随主库走，是新机器的事实源）；
    某分区目录已被 pull 清空（如纯文本的 `export/`）就先 `mkdir -p <path>` 再重跑。
    要连归档快照库一起收敛就去掉 `--skip-archive`。
    手动等价（每库）：`mkdir -p <path> && cd <path> && git init -b main && git remote add origin <url> && git fetch origin && git reset --hard origin/main`。
+   **新战役**：`init_state --campaign <cid>` 登记后立即
+   `python scripts/maint/repo_split.py --remote-base https://github.com/r-y-ren bootstrap --path workspace/<cid> --push`。
 3. **校验**：各库 `git status` 干净、`HEAD == origin/main`；如旧机器可提供
    `.flow/repo_split/manifest.json`（逐文件 sha256 基线），可跑
    `python scripts/maint/repo_split.py verify --manifest <该文件>` 做全量对账。

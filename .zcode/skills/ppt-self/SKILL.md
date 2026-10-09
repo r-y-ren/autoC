@@ -20,7 +20,7 @@ description: PPT 阶段人工副驾模式（K-13，升级票11）：/ppt 产线�
 1. 进入副驾：主会话声明副驾身份与豁免边界（docs 子树），读 `docs/ppt_brief.md` 与 `docs/ppt/` 现状。
 2. 按用户指令工作：改简报、调页序/版式、跑 ppt-master 的 Edit Native PPTX 路线微调既有 pptx、重生成图片等——一切写操作限 docs 子树。
 3. 数字改动：简报中任何数字调整必须回 `metrics.json` 对应键核对，不得凭空改数（铁律 4）。
-4. 每完成一轮有意义修改：JOURNAL 记行 + git commit（docs 子树内产物）。
+4. 每完成一轮有意义修改：JOURNAL 记行 + 项目仓库 commit（docs 子树内产物）。
 5. 收尾：产物核验（同 K-12 第 3 步）→ 提示 `/archive`。
 
 ## 禁止

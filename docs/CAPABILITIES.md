@@ -21,7 +21,7 @@
 | | 实测数据契约 | metrics.json 约定；browser-use 实测取证 |
 | | 竞赛文档生成 | K-06、K-07（marp=波内草稿）；正式答辩 PPT=K-12（ppt-master 双用户门，票10）；基线-04/05 |
 | | 验收-修复-熔断 | K-04；S-05；H-01 守卫；retry 状态 |
-| | 归档 | K-05；S-06；git tag |
+| | 归档 | K-05；S-06；项目仓库 tag+push |
 | **G3 治理横切** | 写入边界 | H-01（已装）、H-02；各章程禁止清单 |
 | | 上下文隔离 | 子 agent 并发（内建）；章程分片纪律；INDEX 只读纪律 |
 | | 用户入口与可观测 | M-01…M-05 命令；H-03 状态播报；workspace/JOURNAL.md |
@@ -71,7 +71,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | S-03 | sync_tech.py | arXiv API + gh 搜索 + **HF Papers（/api/daily_papers，T4.4 接入：upvotes 门槛+方向关键词过滤，与 arXiv 共用 arxiv-* ID 自然去重，PwC 继任者）** → 规范化 ID 去重 → 候选队列（成品卡片仍由 Hunter 判定；field 间限速 ≥3s + 失败退避重试） | ✅ T2 落地，T3-c 限速，T4.4 增 HF 源（实测黑客松方向产出真实候选） |
 | S-04 | build_index.py | 重建 kb/INDEX.md（跑批记录 append-only 保留） | ✅ T2 已落地 |
 | S-05 | run_acceptance.py | 验收执行器：cmd 自动执行 + 证据存档 + 重试熔断 + run-N.json | ✅ T2 已落地（冒烟通过） |
-| S-06 | archive_campaign.py | fail 拒归档 / dry-run / mv + git tag + workspace 复位 + idle | ✅ T2 已落地（冒烟通过） |
+| S-06 | archive_campaign.py | fail 拒归档 / dry-run / mv + 项目库 commit+tag+push + workspace 复位 + idle | ✅ T2 已落地（冒烟通过） |
 | S-07 | test_guard.py | 守卫回归测试 | ✅ 本轮已落地（16/16 通过） |
 | S-08 | test_lint.py | lint 回归测试（目标识别/日期格式/跳过清单，12 用例） | ✅ T2 校准已落地（12/12 通过） |
 | S-09 | merge_metrics.py | 角色指标分片 → 顶层汇总（metrics.<role>.<键>；K-03 前置项落地） | ✅ T2 已落地 |

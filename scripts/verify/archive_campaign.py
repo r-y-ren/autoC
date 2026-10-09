@@ -30,6 +30,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "guard"))
 import flow_state as fs  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "maint"))
+import repo_split as rs  # noqa: E402
+
+PUSH_TIMEOUT = 1800
+
 CONTAINER_README = """# workspace/ —— 多战役容器（v2）
 
 每个战役一个子目录 `workspace/<战役id>/`（strategy/blueprint/JOURNAL/metrics +
@@ -143,7 +148,10 @@ def main() -> int:
     print(f"[archive] 战役 {cid}（root={camp_root.relative_to(ROOT)}）")
     print(f"[archive] 归档名：{dirname}")
     print(f"[archive] 最新验收：{result}")
-    entries = sorted(p for p in camp_root.iterdir())
+    # 点文件仅白名单随迁（.git/.gitignore 等）：.venv/.env/.cache 不得随目录被 add+push（2026-10-09 评审风险）
+    dot_keep = {".git", ".gitignore", ".gitattributes", ".gitmodules"}
+    entries = sorted(p for p in camp_root.iterdir()
+                     if not p.name.startswith(".") or p.name in dot_keep)
     if legacy_root:
         # legacy 平铺根=workspace 本体：容器 README 留守
         entries = [p for p in entries if p.name != "README.md"]
@@ -176,6 +184,10 @@ def main() -> int:
     tag = f"archive/{dirname}"
     if not (dest / ".git").is_dir():
         git_in(dest, "init", "-q", "-b", "main")
+        if not (dest / ".gitignore").exists():
+            # 无库补建：忽略规则按旧路径前缀改写继承，防被主库忽略的大数据混入快照（大数据不入库）
+            (dest / ".gitignore").write_text(
+                rs.project_gitignore(ROOT, str(camp_root.relative_to(ROOT))), encoding="utf-8")
     dirty = git_in(dest, "status", "--porcelain").stdout.strip()
     tagged = False
     if not dirty:
@@ -194,8 +206,8 @@ def main() -> int:
         else:
             print(f"[archive][warn] tag 失败（可能重名）：{tag}", file=sys.stderr)
         if git_in(dest, "remote", "get-url", "origin").returncode == 0:
-            p1 = git_in(dest, "push", "-q", "-u", "origin", "main", timeout=1800)
-            p2 = git_in(dest, "push", "-q", "origin", tag, timeout=1800)
+            p1 = git_in(dest, "push", "-q", "-u", "origin", "main", timeout=PUSH_TIMEOUT)
+            p2 = git_in(dest, "push", "-q", "origin", tag, timeout=PUSH_TIMEOUT)
             if p1.returncode == 0 and p2.returncode == 0:
                 print(f"[archive] 项目库已 push（main + {tag}）")
             else:

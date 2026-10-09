@@ -17,7 +17,7 @@
 | `export/` | KB 交付导出层（S-15 纯投影，D6；独立 git） | 脚本生成，人读 |
 | `archive/` | 历史作品库（归档目录携带自身 `.git` 与 `archive/…` tag） | **永远只读**（主库不收归档提交） |
 
-**仓库布局（2026-10-09 git 拆分，spec r-y-ren/autoC#2）**：主库只跟踪流程面（`.zcode/`、`config/`、`scripts/`、`kb/` 清洗层、`docs/`、本文件）；`workspace/<cid>/`、`export/`、`kb/raw/`、`archive/<归档名>/` 各带**独立 git 与 GitHub 远程**（`r-y-ren/autoC-*` 系列），产物提交一律落所属项目仓库，主库仅在工作流面变更时 commit。大文件维持本机留存不入库（继承既有忽略口径）；第二台机器经 `python scripts/maint/repo_split.py adopt` 收敛项目库（保留本机未跟踪大件）。
+**仓库布局（2026-10-09 git 拆分，spec r-y-ren/autoC#2）**：主库只跟踪流程面（`.zcode/`、`config/`、`scripts/`、`kb/` 清洗层、`docs/`、本文件）；`workspace/<cid>/`、`export/`、`kb/raw/`、`archive/<归档名>/` 各带**独立 git 与 GitHub 远程**（`r-y-ren/autoC-*` 系列），产物提交一律落所属项目仓库，主库仅在工作流面变更时 commit。大文件维持本机留存不入库（继承既有忽略口径）；第二台机器经 `python scripts/maint/repo_split.py adopt` 收敛项目库（保留本机未跟踪大件），仓库清单以 `config/repo_split_repos.json` 为准。**新战役收口**：`init_state --campaign` 登记后立即 `python scripts/maint/repo_split.py bootstrap --path workspace/<cid> --push` 建项目库并入清单，否则 JOURNAL 留痕无处可 commit。
 
 ## 六条铁律
 

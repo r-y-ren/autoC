@@ -16,7 +16,7 @@ description: 验收编排：执行蓝图验收清单、失败工单路由回责�
    - `fail` → 为每个失败项开工单（`<战役根>/acceptance/ticket-<验收ID>-r<n>.md`：失败证据 + 责任角色 + 期望），`init_state --campaign <cid> --phase deliver` 派回责任角色修复，完成后回到第 1 步重验
    - `pending_manual` → 整理 MANUAL_TEST 清单呈报用户，等待人工结果
 4. **熔断（战役级）**：仅 **fail** 计入该战役 retry 计数（pending=等待人工/核验，不是修复回环；T2.1 裁决）；`retry.count ≥ retry.max`（执行器自动置 tripped）→ **停止自动重试**，向用户呈报全部失败证据与已尝试记录，等待人工决策。cmd 类验收项超时（默认 600s）自动记 fail 并存 TIMEOUT 证据
-5. **分析报告**：`<战役根>/acceptance/report.md`——**按 `config/templates/report-analysis-template.md` 六节产出**（评审标准自评/赛点检查表核对/历年基准对比/人工项/人机分工合规留痕/可复用资产清单；数字仅引该战役 metrics.json）；JOURNAL 记行 + git commit
+5. **分析报告**：`<战役根>/acceptance/report.md`——**按 `config/templates/report-analysis-template.md` 六节产出**（评审标准自评/赛点检查表核对/历年基准对比/人工项/人机分工合规留痕/可复用资产清单；数字仅引该战役 metrics.json）；JOURNAL 记行 + 项目仓库 commit
 6. 提示：`/archive <cid>`
 
 ## 纪律

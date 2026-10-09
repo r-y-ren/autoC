@@ -29,6 +29,8 @@ import sys
 from pathlib import Path
 
 MANIFEST_VERSION = 1
+PUSH_TIMEOUT = 1800
+INVENTORY_REL = "config/repo_split_repos.json"  # 主库随库清单（新机器 adopt 的事实源）
 
 IGNORE_BLOCK = """\
 # >>> repo-split >>>（git 拆分：产物分区出主库，见 spec r-y-ren/autoC#2）
@@ -111,6 +113,12 @@ def discover(root: Path) -> tuple[list[dict], list[dict]]:
         for d in sorted(p for p in ad.iterdir() if p.is_dir()):
             arch.append({"path": f"archive/{d.name}", "repo": f"autoC-{slugify(d.name)}",
                          "tag": f"archive/{d.name}"})
+    # slugify 会吞中文造成同名冲突（同月两个中文赛事 → 同一 repo 名互覆）：冲突即加路径指纹
+    used = {p["repo"] for p in parts}
+    for a in arch:
+        if a["repo"] in used:
+            a["repo"] = f"{a['repo']}-{hashlib.sha1(a['path'].encode()).hexdigest()[:6]}"
+        used.add(a["repo"])
     return parts, arch
 
 
@@ -278,6 +286,11 @@ def cmd_verify(args: argparse.Namespace) -> int:
                 fails.append(f"{full}：文件缺失")
             elif sha256_file(p) != e["sha256"][full]:
                 fails.append(f"{full}：校验和漂移")
+        head = git(d, "ls-tree", "-r", "HEAD", "--name-only", check=False)
+        head_set = set(head.stdout.splitlines()) - {""} if head.returncode == 0 else set()
+        if head_set != expect_set:
+            fails.append(f"{e['path']}：HEAD 提交内容与 manifest 不符（缺{sorted(expect_set - head_set)[:3]}"
+                         f" 多{sorted(head_set - expect_set)[:3]}）")
         if e.get("remote"):
             cur = git(d, "remote", "get-url", "origin", check=False)
             if cur.returncode != 0 or cur.stdout.strip() != e["remote"]:
@@ -307,11 +320,16 @@ def cmd_adopt(args: argparse.Namespace) -> int:
     mp = Path(args.manifest) if args.manifest else default_manifest_path(root)
     if mp.is_file():
         m = load_manifest(mp)
+    elif (root / INVENTORY_REL).is_file():
+        # 第二台机器：主库随库清单是事实源（.flow 基线不随库走）
+        inv = json.loads((root / INVENTORY_REL).read_text(encoding="utf-8"))
+        m = {"partitions": [r for r in inv["repos"] if "tag" not in r],
+             "archive": [r for r in inv["repos"] if "tag" in r]}
+        print(f"adopt: 无 manifest，改用主库清单 {INVENTORY_REL}（{len(inv['repos'])} 库）")
     else:
-        # 第二台机器没有 .flow 基线（本机文件不随库走）：按 discover + 远程基址推导清单，
-        # 收敛以远程为准；缺失的分区目录先 mkdir 再重跑
+        # 兜底：discover + 远程基址推导（可能漏库，务必对照 docs/repo-split-handoff.md 核对）
         m = build_manifest(root, args.remote_base)
-        print("adopt: 无 manifest（新机器），按 discover + remote-base 推导清单")
+        print("adopt: 无 manifest/清单，按 discover + remote-base 推导清单（可能漏库，对照交接清单核对）")
     entries = m["partitions"] + ([] if args.skip_archive else m["archive"])
     for e in entries:
         d = root / e["path"]
@@ -322,7 +340,7 @@ def cmd_adopt(args: argparse.Namespace) -> int:
         if not (d / ".git").is_dir():
             git(root, "init", "-q", "-b", "main", e["path"])
         ensure_remote(d, e["remote"])
-        git(d, "fetch", "-q", "origin", timeout=1800)
+        git(d, "fetch", "-q", "origin", timeout=PUSH_TIMEOUT)
         git(d, "reset", "-q", "--hard", "origin/main")  # 未跟踪大件不受影响
         print(f"adopt: {e['path']} <- {e['remote']}（收敛到 origin/main）")
     return 0
@@ -367,6 +385,7 @@ def cmd_snapshot(args: argparse.Namespace) -> int:
 def cmd_push(args: argparse.Namespace) -> int:
     root = project_root(args.root)
     m = load_manifest(Path(args.manifest) if args.manifest else default_manifest_path(root))
+    limit = int(args.max_file_mb) * 1024 * 1024
     for e in m["partitions"] + m["archive"]:
         d = root / e["path"]
         if not (d / ".git").is_dir():
@@ -378,11 +397,50 @@ def cmd_push(args: argparse.Namespace) -> int:
         if git(d, "rev-parse", "HEAD", check=False).returncode != 0:
             print(f"push: 跳过 {e['path']}（无提交）")
             continue
+        # 推送前单文件体积预检（GitHub 单文件 100MB 硬上限，超限推送必被拒）
+        overs = [f for f in e.get("files", [])
+                 if (root / f).is_file() and (root / f).stat().st_size > limit]
+        if overs:
+            raise SystemExit(f"push 中止：{e['path']} 存在 >{args.max_file_mb}MB 单文件：{overs[:3]}"
+                             "（大件应留在本机不入库）")
         ensure_remote(d, e["remote"])
-        git(d, "push", "-q", "-u", "origin", "main", timeout=1800)
+        git(d, "push", "-q", "-u", "origin", "main", timeout=PUSH_TIMEOUT)
         if git(d, "tag", "-l").stdout.split():
-            git(d, "push", "-q", "origin", "--tags", timeout=1800)
+            git(d, "push", "-q", "origin", "--tags", timeout=PUSH_TIMEOUT)
         print(f"push: {e['path']} -> {e['remote']}")
+    return 0
+
+
+def cmd_bootstrap(args: argparse.Namespace) -> int:
+    """新战役建库收口：init_state 登记后即建项目库（忽略规则继承/remote/首提交）并入主库清单。"""
+    root = project_root(args.root)
+    rel = args.path.strip().strip("/")
+    d = root / rel
+    if not d.is_dir():
+        raise SystemExit(f"bootstrap：{rel} 不存在")
+    if (d / ".git").is_dir():
+        raise SystemExit(f"bootstrap：{rel} 已有项目库")
+    repo = f"autoC-{Path(rel).name}"
+    remote = f"{args.remote_base.rstrip('/')}/{repo}" if args.remote_base else None
+    if not (d / ".gitignore").exists():
+        (d / ".gitignore").write_text(project_gitignore(root, rel), encoding="utf-8")
+    git(root, "init", "-q", "-b", "main", rel)
+    if remote:
+        ensure_remote(d, remote)
+    git(d, "add", "-A")
+    git(d, "-c", "commit.gpgsign=false", "commit", "-q", "--allow-empty",
+        "-m", f"chore(repo-split): 新战役建库 {rel}")
+    inv_path = root / INVENTORY_REL
+    inv = json.loads(inv_path.read_text(encoding="utf-8")) if inv_path.is_file() else {"version": 1, "repos": []}
+    if not any(r.get("path") == rel for r in inv["repos"]):
+        inv["repos"].append({"path": rel, "repo": repo, "remote": remote, "kind": "campaign"})
+        inv["repos"].sort(key=lambda r: r["path"])
+        inv_path.parent.mkdir(parents=True, exist_ok=True)
+        inv_path.write_text(json.dumps(inv, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if args.push and remote:
+        git(d, "push", "-q", "-u", "origin", "main", timeout=PUSH_TIMEOUT)
+    print(f"bootstrap: {rel} -> {repo}" + (f"（remote={remote}，已推送）" if args.push and remote else "")
+          + f"；清单已更新 {INVENTORY_REL}")
     return 0
 
 
@@ -413,7 +471,14 @@ def main() -> int:
         if name == "snapshot":
             sp.add_argument("--no-main-commit", action="store_true",
                             help="主库改动仅暂存不提交（演练用）")
+        if name == "push":
+            sp.add_argument("--max-file-mb", type=int, default=100,
+                            help="单文件体积预检上限（MB，默认 100=GitHub 硬上限）")
         sp.set_defaults(fn=fn)
+    bp = sub.add_parser("bootstrap", help="新战役建库收口（init_state 登记后调用）")
+    bp.add_argument("--path", required=True, help="战役根相对路径，如 workspace/<cid>")
+    bp.add_argument("--push", action="store_true", help="建库后立即推送")
+    bp.set_defaults(fn=cmd_bootstrap)
     args = ap.parse_args()
     return args.fn(args)
 

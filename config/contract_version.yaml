@@ -4,7 +4,7 @@
 # 脚本侧校验：开工前跑 python scripts/guard/contract_check.py——本地与上游（@{u}）版本
 # 不一致即提示先 pull / push（SessionStart 播报的是本地版本）。
 
-schema_version: 19
+schema_version: 20
 
 # 升级依赖的外部插件（各机 ~/.zcode/cli/plugins/cache/<vendor>/<name>/<version>/，不随仓库走）。
 # version 以插件 cache 目录名为准（缺失警示由 session_status.py 检查，目录在位即算可用，不校验版本号）；

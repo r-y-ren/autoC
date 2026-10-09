@@ -27,7 +27,7 @@ description: 正式答辩 PPT 产线（K-12，升级票10）：/accept 通过后
    - **项目目录显式路由到 `<战役根>/docs/ppt/`**（D14：战役产物只落战役根；图片/模板资源同置于此）
    - Gate1（沟通契约+模板选择）与 Gate2（规格锁定）即**用户门**，如实走完不跳过；⛔BLOCKING 门须用户显式确认
 3. **产物核验**：`<战役根>/docs/ppt/exports/*.pptx` 存在；ppt_brief 每个数字能在 metrics.json 中找到对应键。
-4. JOURNAL 记行 + git commit → 提示：`/archive`（战役收尾）或 `/ppt-self`（细节微调副驾）。
+4. JOURNAL 记行 + 项目仓库 commit → 提示：`/archive`（战役收尾）或 `/ppt-self`（细节微调副驾）。
 
 ## 禁止
 

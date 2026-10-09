@@ -42,7 +42,7 @@ description: 人工主导交付会话（副驾模式，D13）：蓝图确认后�
 - 外部抓取/下载材料只进 `<战役根>/references/` 并登记 INDEX（铁律 3）
 - **战役圈禁（D14）**：生成/下载的一切文件（含临时试验）只落战役根内——活跃期间项目根与工程目录被守卫物理锁定（仅放行 `.flow/**`），临时试验放 `references/digests/` 或角色目录，禁止在根目录开 `.tmp-*` 散落目录
 - 蓝图等契约文件改动必须重过 schema 校验（铁律 2）
-- 每会话 JOURNAL 记行 + git commit（铁律 6 / L3 审计）
+- 每会话 JOURNAL 记行 + 项目仓库 commit（铁律 6 / L3 审计）
 
 ## 工作方式
 
@@ -58,4 +58,4 @@ retry.tripped=true 时 /self 是**人工接管出口**：熔断停的是自动�
 
 - **self → deliver**：新会话 /deliver 按蓝图波次续跑；波门会重查该波可编译/测试/验收左移，天然兜住人工改动的回归
 - **deliver → self**：自动交付任意断点可转人工（直接 /self 进入；波门断点状态查 JOURNAL）
-- **收尾**：JOURNAL 记行（标注 self 会话与改动范围）+ git commit → 提示 /accept；阶段停留在 deliver，由 /accept 切 verify
+- **收尾**：JOURNAL 记行（标注 self 会话与改动范围）+ 项目仓库 commit → 提示 /accept；阶段停留在 deliver，由 /accept 切 verify

@@ -91,7 +91,7 @@
                     │  双用户门（Gate1 模板 / Gate2 规格）→ <根>/docs/ppt/ 正式答辩 pptx
                     │  （Marp/K-06 自此定位波内草稿；微调入口 /ppt-self·K-13 副驾）
                     ▼
-              [交付归档] archive_campaign.py：workspace/ ─► archive/<YYYY-MM_赛事_主题>/（只读 + git tag）
+              [交付归档] archive_campaign.py：workspace/ ─► archive/<YYYY-MM_赛事_主题>/（只读 + 项目仓库 tag+push，主库零提交）
 ```
 
 **结构要点（四条骨架纪律）：**
@@ -198,7 +198,7 @@ autoC/
 │   │   └── acceptance/          # 验收角色：执行记录 / 失败工单 / 分析报告
 ├── export/                      # KB 交付导出层（D6：条目层纯投影，读者=团队自用）
 │   └── digest-<方向>-<YYYY-MM>.md  # 方向情报简报（S-15 生成；每3天刷新，当月最后一次跑批转正式版）
-├── archive/                     # 历史作品库（交付物 3，归档后只读，带 git tag）
+├── archive/                     # 历史作品库（交付物 3，归档后只读，归档目录携带自身 .git 与 archive/… tag）
 │   └── 2026-08_挑战杯_智能巡检/
 ├── AGENTS.md                    # 全局纪律与行为红线
 └── README.md
@@ -241,7 +241,7 @@ autoC/
 | 规格派生 planner（升级票09） | 子代理 + mattpocock to-spec/to-tickets → `<根>/specs/`（auto_chain 开启时，首波前） |
 | 答辩 PPT 正式产线（K-12/K-13） | ppt-master 插件 + `/ppt`、`/ppt-self` 命令（/accept 通过后窗口，双用户门） |
 | 验收执行器 | `scripts/verify/run_acceptance.py` + browser-use 实测取证 |
-| 归档 | `scripts/verify/archive_campaign.py` + git tag |
+| 归档 | `scripts/verify/archive_campaign.py`（项目仓库 commit+tag+push，主库零提交） |
 | 契约校验 | `config/templates/*.schema.json` + linter |
 
 ---
