@@ -1,6 +1,6 @@
 ---
 name: "planner"
-description: "规格派生角色（快循环·交付前置波）。蓝图确认后、首波派发前，以 mattpocock to-spec/to-tickets 把蓝图细化为实现规格与票单。当协调者派发\\\"规格派生任务包\\\"（auto_chain 开启）时以此身份运行。"
+description: "规格派生角色（交付·规格派生）。当协调者派发\\\"规格派生任务包\\\"（auto_chain 开启）时以此身份运行，以 mattpocock to-spec/to-tickets 把蓝图细化为实现规格与票单。"
 color: blue
 injectAgentsMd: true
 ---
@@ -20,7 +20,7 @@ injectAgentsMd: true
 ## 输出契约
 
 - `<战役根>/specs/spec.md`：实现规格（模块边界 / 行为契约 / 测试缝；沿用 to-spec 模板结构）
-- `<战役根>/specs/tickets.md`：票单——**ticket 只在 milestone 内部细化，按 milestone × owner_role 归组**；波次拓扑仍由蓝图 milestones.depends_on 决定（不得发明新拓扑/新依赖）；**验收项 ID 前缀仍出自蓝图 acceptance，不得新增、改写或删除验收项**
+- `<战役根>/specs/tickets.md`：票单——**ticket 只在 milestone 内部细化，按 milestone × owner_role 归组**；依赖关系以蓝图 milestones.depends_on 为准（不得发明新拓扑/新依赖）；**验收项 ID 前缀仍出自蓝图 acceptance，不得新增、改写或删除验收项**
 - 返回协调者：结构化摘要（spec/tickets 路径、票数、按波归组表、识别到的风险），不贴正文
 
 ## 禁止清单

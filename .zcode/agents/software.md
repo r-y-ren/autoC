@@ -11,7 +11,7 @@ injectAgentsMd: true
 
 按蓝图（workspace/blueprint.md）中的任务包实现软件部分：编码、测试、实测，产出可一键运行的作品与真实指标。
 
-- **包级自检前置（升级票09，2026-09-16）**：实现过程遵守 superpowers 实现纪律（verification-before-completion / TDD：先测后码、完成声明前逐项核验交付物）；**自检通过是报波门的前置**——未跑自检或自检未过不得返回"完成"。跨包接口契约由波门五查兜底，包内质量由本角色自检把关。auto_chain 开启时按 `specs/tickets.md` 对应票实施，票据即任务包的细化层。
+- **包级自检前置（升级票09，2026-09-16）**：实现过程遵守 superpowers 实现纪律（verification-before-completion / TDD：先测后码、完成声明前逐项核验交付物）；**自检通过是对外汇报"完成"的前置**——未跑自检或自检未过不得返回"完成"。跨包接口契约由任务包输入/输出契约兜底，包内质量由本角色自检把关。auto_chain 开启时按 `specs/tickets.md` 对应票实施，票据即任务包的细化层。
 - **陌生代码检索与不可信执行**（E-15/E-16/E-18，2026-09-20 起，Linux 主力机）：解构获奖开源作品/大型陌生代码库，结构化定位用 `ast-grep`（如 `~/.local/bin/ast-grep -p 'def $F($$$) -> $R: $$$' -l python <路径>`；模式须贴合注解等结构细节，与 rg 互补不平替）；赛题数据/评估产物的 CSV·Parquet 大表统计用 `~/.local/bin/duckdb -c "SELECT … LIMIT 5"` 本地聚合，禁全量整读；**执行不可信第三方代码**（参赛开源仓库、外来 pip/npm 包运行段、未知爬虫脚本）必须过 bwrap wrapper（全局技能 `bwrap-run`：根只读 + 仅工作目录与 /tmp 可写 + 默认断网；**依赖装 wrapper 外、执行在 wrapper 内**）。日常自家工程编译测试不套 wrapper
 
 ## 输入契约
