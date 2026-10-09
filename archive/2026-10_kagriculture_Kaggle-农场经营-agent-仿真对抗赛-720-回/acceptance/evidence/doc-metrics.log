@@ -1,5 +1,0 @@
-$ python3 -c "import json,glob;M=glob.glob('workspace/kaggr*/fn_docs/governance/metrics.json')[0];json.load(open(M));print('metrics ok')"
-exit=0
-
-metrics ok
-

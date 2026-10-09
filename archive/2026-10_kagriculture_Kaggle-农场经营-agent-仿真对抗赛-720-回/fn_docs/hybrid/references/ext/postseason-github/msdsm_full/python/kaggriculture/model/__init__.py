@@ -1,1 +1,0 @@
-"""Kaggriculture solution components."""

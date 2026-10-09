@@ -1,8 +1,0 @@
-P1 external export exists= True
-external fixture sha256= b311a2dff1e933691485661365bff9944b99abe1f6371e7ef85df23b9232133b
-external scope= {'kind': 'external_black_box_stress', 'development_only': True, 'formal_promotion_eligible': False, 'holdout_evidence': False, 'limitations': ['external opponents are distribution-stress evidence only', 'not a promotion gate or holdout generalization claim']}
-external game_count= 2
-external status set= [('DONE', 'DONE')]
-protected present= True
-v48 not-for-submission= read-only black-box stress opponent; not-for-submission
-formal holdout untouched=requires comparison to p1-protected-baseline-01.log

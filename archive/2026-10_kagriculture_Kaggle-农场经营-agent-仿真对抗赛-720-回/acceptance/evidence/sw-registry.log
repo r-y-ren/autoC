@@ -1,5 +1,0 @@
-$ python3 -c "import json,glob;R=glob.glob('workspace/kaggr*/fn_docs/hybrid/analyses/registry.jsonl')[0];rows=[json.loads(l) for l in open(R) if l.strip()];assert len(rows)==43;assert any(r.get('status')=='achieved' for r in rows);print('registry ok',len(rows))"
-exit=0
-
-registry ok 43
-
