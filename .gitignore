@@ -34,14 +34,8 @@ build/
 Thumbs.db
 desktop.ini
 
-# 会话级临时数据（回放抓取/榜单解压等大文件）
-.tmp/
-# 2026-09-01 起语料/运行数据归位战役目录（大文件不入库；README 除外）
-workspace/kaggriculture/fn_docs/references/data/
-workspace/kaggriculture/fn_work/legacy_software/exports/probes/*
-!workspace/kaggriculture/fn_work/legacy_software/exports/probes/README.md
-
-.tmp-plant-audit/
+# 会话级临时数据（回放抓取/榜单解压等大文件；.tmp-* 通用规则于 2026-10-09 越界修复恢复）
+.tmp*/
 
 # 本机视频插件缓存路径（跨设备无用）
 .video_agent/
@@ -53,8 +47,6 @@ my_LLM_valut/
 # 体积纪律（R12/R19）：原始大件不入 git 主线，本机保存+清单声明
 my_LLM_valut/raw/pdfs/
 
-# PTCG 战役：官方原始回放本地留存不进库（INDEX+conv 转换件入库）
-workspace/ptcg-playground-2026/references/episodes/episode-*-replay.json
 # >>> repo-split >>>（git 拆分：产物分区出主库，见 spec r-y-ren/autoC#2）
 workspace/*
 !workspace/README.md
