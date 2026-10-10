@@ -3,6 +3,38 @@
   "note": "git 拆分仓库清单（spec r-y-ren/contest-compass#2）；新战役经 scripts/maint/repo_split.py bootstrap 追加，新机器 adopt 按此收敛",
   "repos": [
     {
+      "path": "archive/2026-08_Kaggriculture-农场博弈-Agent-战役_720-回合供应链博弈-bot（agentic-RL-风向标赛，09-30-终交",
+      "kind": "archive",
+      "repo": "contest-compass-kaggriculture",
+      "remote": "https://github.com/r-y-ren/contest-compass-kaggriculture",
+      "tag": "archive/2026-08_Kaggriculture-农场博弈-Agent-战役_720-回合供应链博弈-bot（agentic-RL-风向标赛，09-30-终交"
+    },
+    {
+      "path": "archive/2026-10_kagriculture_Kaggle-农场经营-agent-仿真对抗赛-720-回",
+      "kind": "archive",
+      "repo": "contest-compass-kagriculture",
+      "remote": "https://github.com/r-y-ren/contest-compass-kagriculture",
+      "tag": "archive/2026-10_kagriculture_Kaggle-农场经营-agent-仿真对抗赛-720-回"
+    },
+    {
+      "path": "export",
+      "kind": "export",
+      "repo": "contest-compass-export",
+      "remote": "https://github.com/r-y-ren/contest-compass-export"
+    },
+    {
+      "path": "kb/raw",
+      "kind": "kbraw",
+      "repo": "contest-compass-kbraw",
+      "remote": "https://github.com/r-y-ren/contest-compass-kbraw"
+    },
+    {
+      "path": "workspace/arc-prize-2026",
+      "repo": "contest-compass-arc-prize-2026",
+      "remote": null,
+      "kind": "campaign"
+    },
+    {
       "path": "workspace/chuangxin2026",
       "kind": "campaign",
       "repo": "contest-compass-chuangxin2026",
@@ -19,32 +51,6 @@
       "kind": "campaign",
       "repo": "contest-compass-ptcg-playground-2026",
       "remote": "https://github.com/r-y-ren/contest-compass-ptcg-playground-2026"
-    },
-    {
-      "path": "export",
-      "kind": "export",
-      "repo": "contest-compass-export",
-      "remote": "https://github.com/r-y-ren/contest-compass-export"
-    },
-    {
-      "path": "kb/raw",
-      "kind": "kbraw",
-      "repo": "contest-compass-kbraw",
-      "remote": "https://github.com/r-y-ren/contest-compass-kbraw"
-    },
-    {
-      "path": "archive/2026-08_Kaggriculture-农场博弈-Agent-战役_720-回合供应链博弈-bot（agentic-RL-风向标赛，09-30-终交",
-      "kind": "archive",
-      "repo": "contest-compass-kaggriculture",
-      "remote": "https://github.com/r-y-ren/contest-compass-kaggriculture",
-      "tag": "archive/2026-08_Kaggriculture-农场博弈-Agent-战役_720-回合供应链博弈-bot（agentic-RL-风向标赛，09-30-终交"
-    },
-    {
-      "path": "archive/2026-10_kagriculture_Kaggle-农场经营-agent-仿真对抗赛-720-回",
-      "kind": "archive",
-      "repo": "contest-compass-kagriculture",
-      "remote": "https://github.com/r-y-ren/contest-compass-kagriculture",
-      "tag": "archive/2026-10_kagriculture_Kaggle-农场经营-agent-仿真对抗赛-720-回"
     }
   ]
 }
