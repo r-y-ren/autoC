@@ -122,8 +122,28 @@ def main() -> int:
         import shutil
         shutil.rmtree(proj.parent, ignore_errors=True)
 
-    print(f"\n{passed}/8 PASS")
-    return 0 if passed == 8 else 1
+    # e2e：取材 → 装配初稿（T6 产稿段，端到端"产得出"）
+    proj = make_project(full=True)
+    try:
+        out = proj.parent / "out"
+        assert run_cm(proj, "--out-dir", str(out)).returncode == 0
+        draft = out / "draft_deck.md"
+        p = subprocess.run(
+            [sys.executable, str(Path(SRC_ROOT) / "scripts/ppt/build_draft_deck.py"),
+             "--material", str(out / "deck_material.json"), "--out", str(draft)],
+            capture_output=True, text=True, timeout=60)
+        text = draft.read_text(encoding="utf-8") if draft.is_file() else ""
+        ok = (p.returncode == 0 and all(h in text for h in
+              ("一、作品", "二、方法", "三、实测", "四、对比", "五、总结"))
+              and "rssi_dbm" in text and "metrics.json" in text and "<!--@goals-->" not in text)
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} e2e 装配初稿（五段+带来源数字）：rc={p.returncode}")
+    finally:
+        import shutil
+        shutil.rmtree(proj.parent, ignore_errors=True)
+
+    print(f"\n{passed}/9 PASS")
+    return 0 if passed == 9 else 1
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ injectAgentsMd: true
 
 消费工程产物（software/hardware 的结论与实测数据），从模板生成竞赛交付文档：项目报告（Typst）、答辩 PPT 草稿（Marp——**升级票10 定位**：正式答辩 pptx 唯一产线为 K-12 /ppt 的 ppt-master，Marp 产物归档时标"草稿"）、申报书/BP（复用已装 documents 技能族的 docx/pptx/pdf/xlsx 能力）与配图（diagram-maker）。
 
-- **PPT 内容简报（K-12 /ppt 第一环，升级票10 补录 2026-09-16）**：验收通过后受 ppt-run 派发，产 `<战役根>/docs/ppt_brief.md`——输入=最终报告+blueprint+验收记录+metrics.json（**数字只出自 metrics 键**）；结构=受众与时长/核心主张线/逐页要点（含 metrics 键引用）/图表清单与数据来源/风险与 Q&A 预案。简报是战役归档物（人机分工留痕），交 ppt-master 作输入源。
+- **PPT 取材与简报（K-12 /ppt，v2 数据源改道 2026-10-09）**：产稿段由取材器（`scripts/ppt/collect_deck_material.py`）从 fn-ladder 文件结构（requirements/responsibility/functions/runs/results/acceptance）提取四段素材与**带来源数据表**；document 角色只做叙事组织与图表——**数字只允许来自取材器数据表（逐项带来源文件）**，缺失如实标注。
 
 ## 输入契约
 

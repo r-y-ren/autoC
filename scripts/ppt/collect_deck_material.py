@@ -21,8 +21,23 @@ import sys
 from pathlib import Path
 
 REQ_HEADING = re.compile(r"^#{1,3}\s*(R\d+)\s*(.*)$")
-FUNC_ROW = re.compile(r"^\|\s*([A-Za-z_][A-Za-z0-9_]*)\s*\|\s*(stub|implemented|tested|wired|blocked)\s*\|")
+FUNC_NAME = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+FUNC_STATUS = re.compile(r"^(stub|implemented|tested|wired|blocked)\b")
 NUM_PAIR = re.compile(r"([A-Za-z_][A-Za-z0-9_]{1,40})\s*[:=]\s*(-?\d+(?:\.\d+)?)(?![\w.])")
+
+
+def parse_func_row(line: str) -> tuple[str, str] | None:
+    """表格行 → (函数名, 状态)；兼容 2 列与 5 列（fn-implement 真实形态）布局。"""
+    if not line.startswith("|"):
+        return None
+    cells = [c.strip() for c in line.strip().strip("|").split("|")]
+    if len(cells) < 2 or not FUNC_NAME.match(cells[0]):
+        return None
+    for c in cells[1:]:
+        m = FUNC_STATUS.match(c)
+        if m:
+            return cells[0], m.group(1)
+    return None
 
 
 def project_root(cli_root: str | None) -> Path:
@@ -60,9 +75,9 @@ def collect_method(docs: Path, missing: list[str]) -> dict:
     functions = []
     if funcs_src.is_file():
         for line in read_text(funcs_src).splitlines():
-            m = FUNC_ROW.match(line.strip())
+            m = parse_func_row(line)
             if m:
-                functions.append({"name": m.group(1), "status": m.group(2),
+                functions.append({"name": m[0], "status": m[1],
                                   "src": "fn_docs/implementation/functions.md"})
     else:
         missing.append("fn_docs/implementation/functions.md")
