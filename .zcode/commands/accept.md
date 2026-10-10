@@ -19,3 +19,5 @@ description: 触发验收节点（v2 可选终检工具）：执行蓝图验收�
 6. JOURNAL 记一行；项目仓库 commit
 
 铁律：验收者不修作品；无证据不判定。
+
+**收尾产物说明**：执行完毕向用户逐项给出产物位置清单供审阅——① `<战役根>/acceptance/run-N.json`；② `<战役根>/acceptance/report.md`；③ `evidence/` 证据文件（逐项）；④ 失败工单（如有）；无产物时明说。

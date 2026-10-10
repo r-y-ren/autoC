@@ -93,6 +93,13 @@ def check_line(root: Path, cat: str, line: str, script_cache: dict) -> list[str]
     return out
 
 
+def check_file(cat: str, text: str) -> list[str]:
+    """文件级规则：命令文档必须含'产物说明'收尾契约（R6）。"""
+    if cat == "commands" and "产物说明" not in text:
+        return ["[R6] 命令文档缺『产物说明』收尾（产物位置须显性呈用户审阅）"]
+    return []
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--root", help="主库根（默认 ZCODE_PROJECT_DIR 或脚本推断）")
@@ -104,12 +111,15 @@ def main() -> int:
     for cat, path in iter_files(root, args.only):
         rel = str(path.relative_to(root))
         try:
-            lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+            text = path.read_text(encoding="utf-8", errors="replace")
         except OSError as e:
             print(f"VIOLATION {cat}:{rel}:0: [IO] 无法读取：{e}")
             total += 1
             continue
-        for i, line in enumerate(lines, 1):
+        for msg in check_file(cat, text):
+            print(f"VIOLATION {cat}:{rel}:0: {msg}")
+            total += 1
+        for i, line in enumerate(text.splitlines(), 1):
             for msg in check_line(root, cat, line, script_cache):
                 print(f"VIOLATION {cat}:{rel}:{i}: {msg}")
                 total += 1

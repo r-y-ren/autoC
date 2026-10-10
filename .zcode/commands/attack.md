@@ -23,3 +23,5 @@ description: 参考方案供给：刷新 KB → 对比矩阵与方案书（赛�
 铁律：方案书**禁止**包含 milestones / acceptance / 接口契约 / fn-ladder 需求种子——不得影响或
 指挥后续推进；推荐结论须引用具体 KB 条目 ID，禁止凭印象；数据不足的维度如实降权告知，禁止硬推。
 方案书系生成参考文本；若摘引外部原文，原文仍归 `<战役根>/references/` 并登记 INDEX（铁律 3）。
+
+**收尾产物说明**：执行完毕向用户逐项给出产物位置清单供审阅——① `kb/briefs/<日期>-<赛事slug>-<方案slug>.md`（方案书）；② `kb/briefs/<同slug>-grill-notes.md`（纪要）；③ `kb/briefs/README.md` 登记行；④ `--to` 时 `<战役根>/docs/briefs/` 副本；无产物时明说。

@@ -18,6 +18,7 @@ SCRIPT = "scripts/maint/doc_lint.py"
 GOOD_CMD = """# 示例命令
 运行 `python scripts/guard/exist.py --campaign <cid> --phase deliver`。
 路径写 `workspace/<cid>/blueprint.md` 与 `workspace/README.md`。
+产物说明：无产物（示例）。
 """
 
 
@@ -78,6 +79,7 @@ def main() -> int:
             ("v1 平铺路径", "blueprint.md" in out and "平铺" in out),
             ("旧插件名", "document-skills" in out and "插件" in out),
             ("方案书禁用节", "禁用节" in out),
+            ("产物说明收尾", "R6" in out),
         ]
         ok_all = p.returncode == 1
         passed += ok_all
@@ -112,8 +114,8 @@ def main() -> int:
         import shutil
         shutil.rmtree(root, ignore_errors=True)
 
-    print(f"\n{passed}/10 PASS")
-    return 0 if passed == 10 else 1
+    print(f"\n{passed}/11 PASS")
+    return 0 if passed == 11 else 1
 
 
 if __name__ == "__main__":

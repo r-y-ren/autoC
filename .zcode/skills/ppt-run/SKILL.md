@@ -46,3 +46,11 @@ description: 正式答辩 PPT 产线（K-12，v2 两段式）：产稿段自动�
 ## 备注
 
 - Marp 产物归档时标"草稿"，不得与正式 pptx 混淆；换 PPT 工具时取材数据（deck_material.json）不作废。
+
+## 产物说明（收尾必做，用户审阅口径）
+
+执行完毕**必须**以「产物说明」收尾，逐项列出本次生成/修改文件的位置供用户审阅：
+
+① `<战役根>/docs/ppt_material/deck_material.json` 与 `deck_brief.md`；② `<战役根>/docs/ppt/draft_deck.md`（及 `draft.pptx`/`exports/*.pptx` 如有）
+
+无产物时明说「无产物（只读）」。

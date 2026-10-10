@@ -12,3 +12,5 @@ description: 正式答辩 PPT（K-12）：/accept 通过后运行——内容简
 4. **产物核验**（pptx 存在 + 数字逐键可溯）→ JOURNAL 记行 + commit → 提示 `/archive`（精修段：人工改稿 / ppt-master / edit-native，见 K-12）
 
 铁律：正式答辩 pptx **唯一产线**（Marp/K-06 仅波内草稿）；数字一律溯源 metrics.json；窗口外（accept 未过/已归档）拒绝运行；战役产物只落战役根（D14）。
+
+**收尾产物说明**：执行完毕向用户逐项给出产物位置清单供审阅——① `<战役根>/docs/ppt_material/deck_material.json` 与 `deck_brief.md`；② `<战役根>/docs/ppt/draft_deck.md`（及 `draft.pptx`/`exports/*.pptx` 如有）；无产物时明说。

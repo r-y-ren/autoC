@@ -14,3 +14,5 @@ description: 手动触发慢循环：按方向配置增量维护 KB-1/KB-2（编
 6. `python scripts/guard/init_state.py --phase idle --by kb-sync`
 
 铁律：全程不读 kb/raw/ 原文进主上下文；子 agent 只回结构化结论。
+
+**收尾产物说明**：执行完毕向用户逐项给出产物位置清单供审阅——① `kb/` 新增/更新条目（逐条路径）；② `kb/INDEX.md` 跑批登记行；③ `kb/quarantine/` 隔离件（如有，附原因）；无产物时明说。
