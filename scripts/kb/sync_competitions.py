@@ -56,7 +56,7 @@ def load_directions(direction_name: str | None) -> list[dict]:
 
 
 def fetch(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": "autoC/0.1 sync_competitions"})
+    req = urllib.request.Request(url, headers={"User-Agent": "contest-compass/0.1 sync_competitions"})
     with urllib.request.urlopen(req, timeout=30) as resp:
         return resp.read().decode("utf-8", errors="replace")
 

@@ -8,7 +8,7 @@
 产出：export/digest-<方向>-<YYYY-MM>.md
   - 赛事日历（关键日期倒计时，按最近日期排序）
   - 技术雷达速览（近期发表卡片 + 比赛映射）
-  - 模式库要点（patterns.md 第五节"对 autoC 战役的启示"整段引用）
+  - 模式库要点（patterns.md 第五节（赛点检查表）整段引用；第六节（对本框架的启示）见各条目原文）
   - 合规提醒（各赛 AI 政策摘要）
 用法：python scripts/kb/export_digest.py [--direction 名称] [--formal] [--interval-days 3] [--selftest]
 版本判定：缺省自动——按跑批节奏（--interval-days，默认 3，对齐每 3 天 cron）推算，

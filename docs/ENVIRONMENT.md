@@ -46,7 +46,7 @@
 | poppler（pdftotext/pdftoppm）、soffice、ffmpeg、rg（系统自带） | 文本层快检 / Office→PDF 后备转换（MinerU 原生失败时）/ 媒体处理 / 快速检索 |
 | ast-grep 0.45.3 / duckdb 1.5.5（~/.local/bin 静态二进制，2026-09-20 装） | E-15 AST 结构化代码检索 / E-16 大表本地聚合（交互式工具位，脚本不依赖） |
 | trafilatura 2.2.0（autoc venv，2026-09-20 装） | E-17 静态页正文降噪：S-02 快照旁 `.extract.md` sidecar（try-import 降级，正则链路保留） |
-| bwrap 0.12.0（系统包；wrapper=全局技能 ~/.zcode/skills/bwrap-run） | E-18 不可信第三方代码执行隔离（根只读+仅工作目录与 /tmp 可写+默认断网） |
+| bwrap 0.12.0（系统包；wrapper=全局技能（插件缓存 my-plugin skills/bwrap-run）） | E-18 不可信第三方代码执行隔离（根只读+仅工作目录与 /tmp 可写+默认断网） |
 | 全局技能层（插件缓存 `~/.zcode/cli/plugins/cache/my-plugin/my-plugin/0.4.0/skills/`；用户层 `~/.zcode/skills` 旧原件已退役） | **八技能**：mineru·bwrap-run·ast-grep·duckdb·trafilatura·remote-compute·web-3d-stack 七工具技能 + toolbox 路由向导（速查型；trafilatura CLI 经 ~/.local/bin 符号链接指向 autoc venv；**增改全局技能须同步 toolbox 路由表与本行**）；本机层不随 git，换机按 toolbox 自检清单重建（2026-10-10 同步：补 remote-compute/web-3d-stack、更正宿主路径） |
 
 （本节为 Linux 侧增量；上表 Windows 基线照旧，双机各管各的运行时。）
@@ -91,3 +91,7 @@
 - 守卫钩子（`.zcode/config.json`）以 `process` 方式调用 `python`（无 shell，Windows 兼容）；若换机器 `python` 不在 PATH，改用 `py` 并同步改 `args`。
 - `.venv/`（既存目录）已被 .gitignore 排除，未在 Phase 0 中使用。
 - 第三方开源工具（如未来 RSSHub）一律 clone 进 gitignored `tools/`，本页登记版本（CAPABILITIES D5 纪律）。
+
+## 命名保留清单（2026-10-10 更名收口，contest-compass）
+
+以下标识**刻意保留旧名**，非遗漏：`AUTOC_CMD_TIMEOUT`（验收器命令超时环境变量）、`AUTOC_READY`（跨仓库固件串口就绪标记，改名破硬件测试契约）、`~/.venvs/autoc` 与测试前缀 `autoc_*`（本机制品名）、schema `$id: autoc/*`（契约标识）、KB 内容历史措辞（含 patterns 启示节引用耦合）、JOURNAL 历史行。

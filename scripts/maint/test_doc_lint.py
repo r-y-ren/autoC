@@ -50,6 +50,11 @@ def make_fixture(bad: bool) -> Path:
         briefs = tmp / "kb" / "briefs"
         briefs.mkdir(parents=True)
         (briefs / "bad.md").write_text("# 方案\n## acceptance 清单\n", encoding="utf-8")
+        sk = tmp / ".zcode" / "skills"
+        (sk / "good-skill").mkdir(parents=True)
+        (sk / "good-skill" / "SKILL.md").write_text("# 好技能\n产物说明：无产物。\n", encoding="utf-8")
+        (sk / "bad-skill").mkdir()
+        (sk / "bad-skill" / "SKILL.md").write_text("# 坏技能\n没有收尾。\n", encoding="utf-8")
     return tmp
 
 
@@ -80,6 +85,7 @@ def main() -> int:
             ("旧插件名", "document-skills" in out and "插件" in out),
             ("方案书禁用节", "禁用节" in out),
             ("产物说明收尾", "R6" in out),
+            ("技能域产物说明", "bad-skill" in out),
         ]
         ok_all = p.returncode == 1
         passed += ok_all
@@ -114,8 +120,8 @@ def main() -> int:
         import shutil
         shutil.rmtree(root, ignore_errors=True)
 
-    print(f"\n{passed}/11 PASS")
-    return 0 if passed == 11 else 1
+    print(f"\n{passed}/12 PASS")
+    return 0 if passed == 12 else 1
 
 
 if __name__ == "__main__":

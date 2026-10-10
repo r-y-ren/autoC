@@ -93,10 +93,11 @@ def check_line(root: Path, cat: str, line: str, script_cache: dict) -> list[str]
     return out
 
 
-def check_file(cat: str, text: str) -> list[str]:
-    """文件级规则：命令文档必须含'产物说明'收尾契约（R6）。"""
-    if cat == "commands" and "产物说明" not in text:
-        return ["[R6] 命令文档缺『产物说明』收尾（产物位置须显性呈用户审阅）"]
+def check_file(cat: str, rel: str, text: str) -> list[str]:
+    """文件级规则：命令文档与技能 SKILL.md 必须含'产物说明'收尾契约（R6；skills/README 等索引豁免）。"""
+    need = cat == "commands" or (cat == "skills" and rel.replace("\\", "/").endswith("SKILL.md"))
+    if need and "产物说明" not in text:
+        return ["[R6] 文档缺『产物说明』收尾（产物位置须显性呈用户审阅）"]
     return []
 
 
@@ -116,7 +117,7 @@ def main() -> int:
             print(f"VIOLATION {cat}:{rel}:0: [IO] 无法读取：{e}")
             total += 1
             continue
-        for msg in check_file(cat, text):
+        for msg in check_file(cat, rel, text):
             print(f"VIOLATION {cat}:{rel}:0: {msg}")
             total += 1
         for i, line in enumerate(text.splitlines(), 1):
