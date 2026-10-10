@@ -33,7 +33,7 @@ PUSH_TIMEOUT = 1800
 INVENTORY_REL = "config/repo_split_repos.json"  # 主库随库清单（新机器 adopt 的事实源）
 
 IGNORE_BLOCK = """\
-# >>> repo-split >>>（git 拆分：产物分区出主库，见 spec r-y-ren/autoC#2）
+# >>> repo-split >>>（git 拆分：产物分区出主库，见 spec r-y-ren/contest-compass#2）
 workspace/*
 !workspace/README.md
 !workspace/JOURNAL.md
@@ -102,16 +102,16 @@ def discover(root: Path) -> tuple[list[dict], list[dict]]:
     if ws.is_dir():
         for d in sorted(p for p in ws.iterdir() if p.is_dir()):
             parts.append({"kind": "campaign", "path": f"workspace/{d.name}",
-                          "repo": f"autoC-{d.name}"})
+                          "repo": f"contest-compass-{d.name}"})
     if (root / "export").is_dir():
-        parts.append({"kind": "export", "path": "export", "repo": "autoC-export"})
+        parts.append({"kind": "export", "path": "export", "repo": "contest-compass-export"})
     if (root / "kb" / "raw").is_dir():
-        parts.append({"kind": "kbraw", "path": "kb/raw", "repo": "autoC-kbraw"})
+        parts.append({"kind": "kbraw", "path": "kb/raw", "repo": "contest-compass-kbraw"})
     arch: list[dict] = []
     ad = root / "archive"
     if ad.is_dir():
         for d in sorted(p for p in ad.iterdir() if p.is_dir()):
-            arch.append({"path": f"archive/{d.name}", "repo": f"autoC-{slugify(d.name)}",
+            arch.append({"path": f"archive/{d.name}", "repo": f"contest-compass-{slugify(d.name)}",
                          "tag": f"archive/{d.name}"})
     # slugify 会吞中文造成同名冲突（同月两个中文赛事 → 同一 repo 名互覆）：冲突即加路径指纹
     used = {p["repo"] for p in parts}
@@ -258,7 +258,7 @@ def cmd_apply(args: argparse.Namespace) -> int:
         git(root, "rm", "-r", "-q", "--cached", "-f", "--", path)
     if not args.no_main_commit:
         git(root, "-c", "commit.gpgsign=false", "commit", "-q",
-            "-m", "chore(repo-split): 产物分区出主库（spec r-y-ren/autoC#2）")
+            "-m", "chore(repo-split): 产物分区出主库（spec r-y-ren/contest-compass#2）")
     print(f"apply: 主库摘除 {m['main']['untrack']} + 忽略块落位"
           + ("（未提交，--no-main-commit）" if args.no_main_commit else "并提交"))
     return 0
@@ -376,7 +376,7 @@ def cmd_snapshot(args: argparse.Namespace) -> int:
     git(root, "rm", "-r", "-q", "--cached", "-f", "--", "archive")
     if not args.no_main_commit:
         git(root, "-c", "commit.gpgsign=false", "commit", "-q",
-            "-m", "chore(repo-split): 归档产物出主库（快照补建，spec r-y-ren/autoC#2）")
+            "-m", "chore(repo-split): 归档产物出主库（快照补建，spec r-y-ren/contest-compass#2）")
     print("snapshot: 主库摘除 archive 并提交" if not args.no_main_commit
           else "snapshot: 主库摘除 archive（未提交）")
     return 0
@@ -420,7 +420,7 @@ def cmd_bootstrap(args: argparse.Namespace) -> int:
         raise SystemExit(f"bootstrap：{rel} 不存在")
     if (d / ".git").is_dir():
         raise SystemExit(f"bootstrap：{rel} 已有项目库")
-    repo = f"autoC-{Path(rel).name}"
+    repo = f"contest-compass-{Path(rel).name}"
     remote = f"{args.remote_base.rstrip('/')}/{repo}" if args.remote_base else None
     if not (d / ".gitignore").exists():
         (d / ".gitignore").write_text(project_gitignore(root, rel), encoding="utf-8")

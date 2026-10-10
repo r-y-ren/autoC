@@ -1,4 +1,4 @@
-# autoC 全局纪律（AGENTS.md）
+# contest-compass 全局纪律（AGENTS.md）
 
 本文件对本仓库内所有会话与子 agent 生效。结构设计见 `docs/DESIGN.md`，两者冲突时以本文的"铁律"为准。
 
@@ -17,9 +17,9 @@
 | `export/` | KB 交付导出层（S-15 纯投影，D6；独立 git） | 脚本生成，人读 |
 | `archive/` | 历史作品库（归档目录携带自身 `.git` 与 `archive/…` tag） | **永远只读**（主库不收归档提交） |
 
-**仓库布局（2026-10-09 git 拆分，spec r-y-ren/autoC#2）**：主库只跟踪流程面（`.zcode/`、`config/`、`scripts/`、`kb/` 清洗层、`docs/`、本文件）；`workspace/<cid>/`、`export/`、`kb/raw/`、`archive/<归档名>/` 各带**独立 git 与 GitHub 远程**（`r-y-ren/autoC-*` 系列），产物提交一律落所属项目仓库，主库仅在工作流面变更时 commit。大文件维持本机留存不入库（继承既有忽略口径）；第二台机器经 `python scripts/maint/repo_split.py adopt` 收敛项目库（保留本机未跟踪大件），仓库清单以 `config/repo_split_repos.json` 为准。**新战役收口**：`init_state` 登记（带战役参数）后立即 `python scripts/maint/repo_split.py bootstrap --path workspace/<cid> --push` 建项目库并入清单，否则 JOURNAL 留痕无处可 commit。
+**仓库布局（2026-10-09 git 拆分，spec r-y-ren/contest-compass#2）**：主库只跟踪流程面（`.zcode/`、`config/`、`scripts/`、`kb/` 清洗层、`docs/`、本文件）；`workspace/<cid>/`、`export/`、`kb/raw/`、`archive/<归档名>/` 各带**独立 git 与 GitHub 远程**（`r-y-ren/contest-compass-*` 系列），产物提交一律落所属项目仓库，主库仅在工作流面变更时 commit。大文件维持本机留存不入库（继承既有忽略口径）；第二台机器经 `python scripts/maint/repo_split.py adopt` 收敛项目库（保留本机未跟踪大件），仓库清单以 `config/repo_split_repos.json` 为准。**新战役收口**：`init_state` 登记（带战役参数）后立即 `python scripts/maint/repo_split.py bootstrap --path workspace/<cid> --push` 建项目库并入清单，否则 JOURNAL 留痕无处可 commit。
 
-**v2 运行边界（2026-10-09，spec r-y-ren/autoC#9）**：工作流**不指挥战役推进**——推进由人工自主进行（推荐按 fn-ladder 技能组，其 tracker/fn-exempt 承担自动化与审计），工作流只提供 KB 自动化（慢循环）、`/attack` 参考方案供给、`/ppt` 文档产线、登记与归档支持。三个在役战役（chuangxin2026、guojichuangxin2026、ptcg-playground-2026）**登记冻结**：推进/验收状态不再维护，归档支持保留。**守卫钩子现为用户有意关闭状态，由用户自行开启，勿擅自改动开关**。**流程面（`.zcode/`、`config/`、`scripts/`、`docs/`、本文件）变更必须独立成提交，禁止夹带于战役/项目提交**。
+**v2 运行边界（2026-10-09，spec r-y-ren/contest-compass#9）**：工作流**不指挥战役推进**——推进由人工自主进行（推荐按 fn-ladder 技能组，其 tracker/fn-exempt 承担自动化与审计），工作流只提供 KB 自动化（慢循环）、`/attack` 参考方案供给、`/ppt` 文档产线、登记与归档支持。三个在役战役（chuangxin2026、guojichuangxin2026、ptcg-playground-2026）**登记冻结**：推进/验收状态不再维护，归档支持保留。**守卫钩子现为用户有意关闭状态，由用户自行开启，勿擅自改动开关**。**流程面（`.zcode/`、`config/`、`scripts/`、`docs/`、本文件）变更必须独立成提交，禁止夹带于战役/项目提交**。
 
 ## 六条铁律
 

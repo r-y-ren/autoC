@@ -1,4 +1,4 @@
-# ===== autoC .gitignore =====
+# ===== contest-compass .gitignore =====
 
 # 第三方开源工具本地落位（RSSHub 等；见 CAPABILITIES D5 纪律）
 tools/
@@ -47,7 +47,7 @@ my_LLM_valut/
 # 体积纪律（R12/R19）：原始大件不入 git 主线，本机保存+清单声明
 my_LLM_valut/raw/pdfs/
 
-# >>> repo-split >>>（git 拆分：产物分区出主库，见 spec r-y-ren/autoC#2）
+# >>> repo-split >>>（git 拆分：产物分区出主库，见 spec r-y-ren/contest-compass#2）
 workspace/*
 !workspace/README.md
 !workspace/JOURNAL.md

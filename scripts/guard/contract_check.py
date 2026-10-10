@@ -8,7 +8,7 @@
 恒 exit 0（advisory；阻断语义由人执行 pull/push 决定）。用法：开工前手动运行，
 或由 SessionStart 播报提示后运行。
 
-多库拆分后口径（2026-10-09，spec r-y-ren/autoC#2）：契约版本只随**主库**（工作流面）走，
+多库拆分后口径（2026-10-09，spec r-y-ren/contest-compass#2）：契约版本只随**主库**（工作流面）走，
 "上游"仅指主库上游分支；各项目仓库（workspace/<cid> 等）无契约文件，不参与本比对。
 """
 

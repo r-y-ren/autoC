@@ -1,4 +1,4 @@
-# autoC — 竞赛情报与参考方案工作区（v2）
+# contest-compass — 竞赛情报与参考方案工作区（v2）
 
 面向**学科竞赛**（挑战杯/互联网+/大创/数模）与**编程/黑客松**（ACM/Kaggle/黑客松）两大类的工作区。
 **v2 边界（2026-10-09 起）**：工作流**不指挥战役推进**——作品与项目迭代由**人工按
@@ -33,7 +33,7 @@ python scripts/guard/init_state.py
 python scripts/guard/test_guard.py && python scripts/kb/lint_kb.py
 ```
 
-多库布局（git 拆分后）：主库只装工作流；各战役/产物在 `r-y-ren/autoC-*` 系列独立仓库。
+多库布局（git 拆分后）：主库只装工作流；各战役/产物在 `r-y-ren/contest-compass-*` 系列独立仓库。
 新机器接手：`python scripts/maint/repo_split.py adopt`（见交接清单）；新战役登记后立即
 `python scripts/maint/repo_split.py bootstrap --path workspace/<cid> --push` 建项目库。
 
@@ -140,5 +140,5 @@ python scripts/maint/doc_lint.py                   # 工作流文档一致性（
 
 - ✅ v1 时代：契约/编排/跑批/能力补全/硬件工具链/内容框架全量落地；两次 git 拆分（产物出主库 + v2 瘦身）
 - 📈 运营中：双方向知识库（34 赛事条目 + 301 技术卡）由 cron 每 3 天自主生长；多库远程
-  [r-y-ren/autoC](https://github.com/r-y-ren/autoC) 系列
+  [r-y-ren/contest-compass](https://github.com/r-y-ren/contest-compass) 系列
 - 🧭 v2 边界：推进归人工（fn-ladder）；工作流管 KB + 参考供给 + 文档产线 + 登记/归档记账

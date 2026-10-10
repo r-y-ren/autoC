@@ -1,4 +1,4 @@
-# autoC — 竞赛情报与作品生成 Agent 框架：结构设计
+# contest-compass — 竞赛情报与作品生成 Agent 框架：结构设计
 
 > 版本 v1.3（2026-09-02）｜本版只定**结构层**：平台选型、循环骨架、阶段定义、目录与文件契约、行为治理。
 > v1.3 变更：**战役圈禁（D14）**——全局 idle 且任一战役活跃（decide/deliver/verify/archive）时，工程目录与
@@ -16,7 +16,7 @@
 > 同轮：外部参考资料唯一归宿 <战役根>/references/（rules/data/code/digests + INDEX.md 台账）。
 > v1.0 变更：T4 内容框架轮——K-09 方向冷启动（/discover）、合规模式三分进蓝图硬校验（prep/apply/assist，D10）、
 > 正文层结构 lint（WARN 级）、跑批成本观测列、远程备份（origin 自动 push）、格式规范模板（CUMCM 论文/BP 骨架）。
-> **v2.0 变更（2026-10-09，spec r-y-ren/autoC#9）**：K-03 推进产线退役（交付由人工按 fn-ladder 进行）；/attack 改纯参考方案书（三节，落 kb/briefs/，禁止充当推进契约）；PPT 产线改两段式（fn-ladder 取材器+模板初稿 → 精修可选，数据源改道 fn 实测产物）；metrics 纪律降级为"实测数字须可溯至项目实测产物"；git 拆分后产物各带独立仓库。**下文交付链路图为 v1 历史结构**。
+> **v2.0 变更（2026-10-09，spec r-y-ren/contest-compass#9）**：K-03 推进产线退役（交付由人工按 fn-ladder 进行）；/attack 改纯参考方案书（三节，落 kb/briefs/，禁止充当推进契约）；PPT 产线改两段式（fn-ladder 取材器+模板初稿 → 精修可选，数据源改道 fn 实测产物）；metrics 纪律降级为"实测数字须可溯至项目实测产物"；git 拆分后产物各带独立仓库。**下文交付链路图为 v1 历史结构**。
 > v0.9 变更：T3-c 能力完善——S-13 ocr_pdf（扫描件解析，实测消化 cumcm 待办并升级 verified）；winners/patterns 解构管线（模板+章程契约+CUMCM 首样板）；文档链冒烟（typst/marp 模板原样编译通过）；双频慢循环（K-08 深度评估+周六 cron）；E-09…E-12 登记；D5 裁决（零新增 MCP、RSSHub 缓判、tools/ 落位纪律、S-13 编号）。
 > v0.8 变更：T2.1 修复轮——审查实测确认的 5 缺陷修复（跑批记录多行丢行 / pending_agent 绕归档闸门 / tag 先于 commit / cmd 超时崩溃及孤儿进程劫持管道 / suggested_fields 循环变量泄漏）+ 2 语义裁决（仅 fail 计入 retry；候选队列生命周期：processed/ + .rejections.yaml 台账 + stars 翻倍重评）+ retry.max 单一事实来源（budget.yaml）+ 三套新回归测试。
 > v0.7 变更：T2 落地——S-02…S-06 脚本、K-01…K-07 技能、H-03 会话播报；K-03 前置项裁决（metrics 分片制已实现并 L2 强制；角色身份级守卫评估后不引入，理由见 §6.2 处置记录）；验收清单新增可选 cmd 字段。
@@ -147,7 +147,7 @@
 ## 4. 目录结构与文件契约（artifact-driven 的核心）
 
 ```
-autoC/
+contest-compass/
 ├── .zcode/                      # 客户端原生配置层（原生感知，不自造平行概念）
 │   ├── agents/                  # 角色章程 = 子 agent 定义（目录名待首个章程编写时实测确认）
 │   ├── skills/                  # SOP 纯函数技能（blueprint-gen / lint / marp-deck / typst-report 等）
@@ -255,7 +255,7 @@ autoC/
   - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制——**v2 多战役（2026-09-01）**：workspace 子树按**最长 root 匹配**路由到所属战役的阶段（deliver 放行该战役根（acceptance/ 与顶层 metrics.json 除外）、verify 放行其 acceptance/、docs/（K-12 PPT 窗口，票10）与 JOURNAL.md（阶段记行）、未登记战役目录拒写、容器 README 仅全局 idle）；kb/ 与工程目录归全局阶段（collect 仅 kb/，idle 放行）——**不识别调用者角色**。**D14 战役圈禁（2026-09-02）**：全局 idle 且任一战役活跃（decide/deliver/verify/archive）时，工程目录与项目根对 Write/Edit 锁定（仅放行 `.flow/**`）——战役生成/下载的文件物理圈禁在所属战役根，kb 维护走 collect 批次，容器 README 相应收紧；脚本级写入（merge_metrics/archive_campaign 等经 Bash）不在此层，由 L3 审计兜底。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）；v1 状态按平铺兼容。
   - 契约文件（blueprint / KB 条目 / 验收清单）必须通过 `config/templates/*.schema.json` 校验：蓝图不过校验不得进入确认闸门；KB 条目不过校验进 quarantine。
   - PostToolUse 钩子对 kb/ 契约文件即时校验（仅四类目标：`<id>/meta.md`、`kb/tech/<id>.md`、`blueprint.md`、`acceptance/*.json`；winners/patterns/raw 等正文文件明确跳过）。
-- **L3 审计兜底——git**：每阶段一个 commit（阶段日志见 workspace/JOURNAL.md），越界改动必然暴露于 diff，可精确回滚（覆盖钩子未拦截的路径，如经 Bash 的写操作）；每轮跑批收尾 `git push` 至私有远程（r-y-ren/autoC）作异地备份。
+- **L3 审计兜底——git**：每阶段一个 commit（阶段日志见 workspace/JOURNAL.md），越界改动必然暴露于 diff，可精确回滚（覆盖钩子未拦截的路径，如经 Bash 的写操作）；每轮跑批收尾 `git push` 至私有远程（r-y-ren/contest-compass）作异地备份。
 
 **流程规则：验收 agent 只开失败工单，不亲手修作品**——修复路由回责任 agent，避免裁判兼运动员。
 

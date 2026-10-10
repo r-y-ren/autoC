@@ -116,9 +116,9 @@ def main() -> int:
         passed += ok
         print(f"{'PASS' if ok else 'FAIL'} plan 分区齐全：{sorted(parts)}")
 
-        ok = (parts["workspace/demo-a"]["repo"] == "autoC-demo-a"
-              and parts["workspace/demo-a"]["remote"] == REMOTE_BASE + "/autoC-demo-a"
-              and parts["workspace/demo-b"]["repo"] == "autoC-demo-b")
+        ok = (parts["workspace/demo-a"]["repo"] == "contest-compass-demo-a"
+              and parts["workspace/demo-a"]["remote"] == REMOTE_BASE + "/contest-compass-demo-a"
+              and parts["workspace/demo-b"]["repo"] == "contest-compass-demo-b")
         passed += ok
         print(f"{'PASS' if ok else 'FAIL'} plan 命名与远程：{parts['workspace/demo-a'].get('remote')}")
 
@@ -248,7 +248,7 @@ def main() -> int:
         ok = p.returncode == 1 and "remote 不符" in p.stdout
         passed += ok
         print(f"{'PASS' if ok else 'FAIL'} verify 抓丢 remote：rc={p.returncode} {p.stdout.splitlines()[:2]}")
-        git(root / "workspace/demo-a", "remote", "add", "origin", REMOTE_BASE + "/autoC-demo-a")
+        git(root / "workspace/demo-a", "remote", "add", "origin", REMOTE_BASE + "/contest-compass-demo-a")
 
         p = run_rs(root, "verify", "--manifest", str(mpath), "--skip-archive")
         ok = p.returncode == 0
@@ -277,7 +277,7 @@ def main() -> int:
 
         e0 = next(x for x in m["partitions"] if x["path"] == "workspace/demo-a")
         rel0 = {f[len(e0["path"]) + 1:] for f in e0["files"]} | {".gitignore"}
-        tree = subprocess.run(["git", f"--git-dir={rb}/autoC-demo-a", "ls-tree", "-r", "main", "--name-only"],
+        tree = subprocess.run(["git", f"--git-dir={rb}/contest-compass-demo-a", "ls-tree", "-r", "main", "--name-only"],
                               capture_output=True, text=True).stdout.split()
         ok = set(tree) == rel0
         passed += ok
@@ -379,7 +379,7 @@ def main() -> int:
               and "__pycache__/junk.pyc" not in git(camp, "ls-files").stdout
               and any(r["path"] == "workspace/new-camp" for r in inv["repos"])
               and git(camp, "remote", "get-url", "origin").stdout.strip()
-              == REMOTE_BASE + "/autoC-new-camp")
+              == REMOTE_BASE + "/contest-compass-new-camp")
         passed += ok
         print(f"{'PASS' if ok else 'FAIL'} bootstrap 新战役建库收口：rc={p.returncode} "
               f"{p.stdout[-120:]}{p.stderr[-120:]}")

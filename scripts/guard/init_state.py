@@ -104,7 +104,7 @@ def upgrade_v1(state: dict, cid: str) -> dict:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="autoC 守卫状态引导/流转（v2 多战役）")
+    ap = argparse.ArgumentParser(description="contest-compass 守卫状态引导/流转（v2 多战役）")
     ap.add_argument("--phase", default=None,
                     help="目标阶段：全局 idle|collect；带 --campaign 时 decide|deliver|verify|archive|idle")
     ap.add_argument("--campaign", default=None, help="目标战役 id（多战役并行时逐战役流转）")

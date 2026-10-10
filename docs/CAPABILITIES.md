@@ -4,7 +4,7 @@
 > 规则：**新增能力必须先登记再实现**；已具备的能力只登记、不重复建设。
 > 反推链：业务目标（DESIGN.md 双循环）→ 阶段任务 → 能力需求。
 
-> **v2 勘误与补登（2026-10-10，spec r-y-ren/autoC#9）**：
+> **v2 勘误与补登（2026-10-10，spec r-y-ren/contest-compass#9）**：
 > - **已退役**：K-03（campaign-run）、M-07（/deliver）——推进产线废除，人工推进走 fn-ladder
 > - **编号勘误**：changelog 原"M-09"系误引，已更正为 **M-06**（/discover）；S-14 历史空缺不复用，K-03/M-07 编号同样不复用
 > - **补登（拆分轮+v2 新增，续排）**：S-20 repo_split.py（多库拆分迁移器）/ S-21 test_repo_split.py / S-22 doc_lint.py（文档一致性 R1-R4）/ S-23 test_doc_lint.py / S-24 collect_deck_material.py（PPT 取材器）/ S-25 build_draft_deck.py（初稿装配器）/ S-26 test_collect_deck_material.py / S-27 build_artifact_indexes.py / S-28 init_state.py / S-29 flow_state.py / S-30 test_init_state.py / S-31 test_inbox.py
@@ -177,7 +177,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 - **T2.1 修复轮（审查驱动）**：✅ 完成——5 个实测缺陷（跑批记录丢行 / pending_agent 绕闸门 / tag 先于 commit / cmd 超时崩溃+孤儿进程劫持 / 循环变量泄漏）+ 2 语义裁决（见 D4）+ retry.max 单一事实来源；新增 S-10/S-11/S-12 三套回归，全量 12+5+4+1 用例通过
 - **T3 外部接入（按模块启用）**：E-01…E-04/E-09…E-11 已装并冒烟；E-05…E-08/E-12 按需（凭据/方向类）
 - **T3-d 能力收口轮**：✅ 完成（2026-08-27）——硬件三件套安装冒烟（pio/kicad-cli/openscad）、S-15 简报导出层、K-01/K-08 预检+收尾断言、验收 cmd 模板库、D6 交付层裁决
-- **T4.3 改进轮**：✅（2026-08-28）——远程备份（r-y-ren/autoC 私有仓 + 跑批收尾自动 push）；正文层结构 lint（首跑抓 3 真实漂移）；scraper/hunter 自检强制化 + K-02 证据强度标注；INDEX 跑批表成本列（分片/token/墙钟）
+- **T4.3 改进轮**：✅（2026-08-28）——远程备份（r-y-ren/contest-compass 私有仓 + 跑批收尾自动 push）；正文层结构 lint（首跑抓 3 真实漂移）；scraper/hunter 自检强制化 + K-02 证据强度标注；INDEX 跑批表成本列（分片/token/墙钟）
 - **T4.1 工作流完善轮（P1-P4）**：✅（2026-08-27）——P1 SPA 抓取修复（catalog SPA 清单 + 主会话预抓规则 + scraper 章程『搜索快照禁作唯一事实源』，Nova 事故机制化）；P2 _surveys 生产触发必查（≥3 卡 / 30 天 / maturity 变化）；P3 作品分析报告模板（六节，挂 acceptor）；P4 watch 项扫描进 K-08 预检
 - **T4 内容框架轮（批次 1 框架件）**：✅（2026-08-27）——schema 三改（meta.award_levels 数据驱动覆盖标准 / tech-card.directions 转必填 / competition_fit.track 六值词表枚举）；winners/patterns/survey 三通用模板（去特化措辞，四节深构含"不足与可改进点"）；config/sources/catalog.md 信源目录；K-09+M-06 落盘；K-02"大显身手"信号显式化；存量 6 卡 track 词表回填
 

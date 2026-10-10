@@ -61,17 +61,17 @@ def main() -> int:
                              f"(重试{retry.get('count', 0)}/{retry.get('max', '-')}{trip})")
             if state.get("phase") == "idle" and fs.active_campaigns(state):
                 parts.append("工程面锁定(D14战役圈禁：战役文件只落所属战役根，根/工程目录禁写)")
-            msg = f"[autoC] {' '.join(parts)}（/status 查看详情；阶段流转只能经 init_state.py）"
+            msg = f"[contest-compass] {' '.join(parts)}（/status 查看详情；阶段流转只能经 init_state.py）"
         else:
             retry = state.get("retry") or {}
             trip = "[⚠ 熔断已触发：停止自动重试，升级人工]" if retry.get("tripped") else ""
             campaign = state.get("campaign")
             cname = campaign.get("name", "无") if isinstance(campaign, dict) else "无"
-            msg = (f"[autoC] 当前阶段={state.get('phase', '?')} 战役={cname} "
+            msg = (f"[contest-compass] 当前阶段={state.get('phase', '?')} 战役={cname} "
                    f"重试={retry.get('count', 0)}/{retry.get('max', '-')} {trip} "
                    f"（v1 单战役状态；升级：init_state --campaign <id> --phase <p>）")
     except Exception:  # noqa: BLE001
-        msg = "[autoC] 守卫状态缺失：运行 python scripts/guard/init_state.py 引导（在此之前写入守卫 fail-closed）"
+        msg = "[contest-compass] 守卫状态缺失：运行 python scripts/guard/init_state.py 引导（在此之前写入守卫 fail-closed）"
 
     msg = f"{msg}｜{contract_line(project_root())}"
     print(json.dumps({"additionalContext": msg}, ensure_ascii=False))

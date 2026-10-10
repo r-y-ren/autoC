@@ -72,7 +72,7 @@ def fetch_hf_daily(api_cfg: dict, days: int, max_items: int, keywords: list[str]
     base = (api_cfg.get("base") or "https://huggingface.co").rstrip("/")
     min_up = int(api_cfg.get("min_upvotes") or 15)
     url = f"{base}/api/daily_papers"
-    req = urllib.request.Request(url, headers={"User-Agent": "autoC/0.1 sync_tech"})
+    req = urllib.request.Request(url, headers={"User-Agent": "contest-compass/0.1 sync_tech"})
     with urllib.request.urlopen(req, timeout=30) as resp:
         rows = json.loads(resp.read())
     cutoff = (datetime.date.today() - datetime.timedelta(days=days)).isoformat()
@@ -111,7 +111,7 @@ def fetch_hf_daily(api_cfg: dict, days: int, max_items: int, keywords: list[str]
 # ---------- arXiv ----------
 
 def fetch_arxiv_once(expr_url: str) -> bytes:
-    req = urllib.request.Request(expr_url, headers={"User-Agent": "autoC/0.1 sync_tech"})
+    req = urllib.request.Request(expr_url, headers={"User-Agent": "contest-compass/0.1 sync_tech"})
     with urllib.request.urlopen(req, timeout=30) as resp:
         return resp.read()
 

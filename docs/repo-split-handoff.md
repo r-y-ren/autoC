@@ -1,20 +1,20 @@
 # repo-split 两机交接清单（2026-10-09）
 
-git 拆分（spec r-y-ren/autoC#2，票 T1–T6）已落地：**主库只留工作流面，产物各建独立 git**。
+git 拆分（spec r-y-ren/contest-compass#2，票 T1–T6）已落地：**主库只留工作流面，产物各建独立 git**。
 本清单给第二台机器（及未来新机）接手用。
 
 ## 仓库清单
 
 | 路径 | GitHub 仓库 | 内容 |
 |---|---|---|
-| 主库根 | `r-y-ren/autoC` | 流程面：`.zcode/` `config/` `scripts/` `kb/` 清洗层 `docs/` AGENTS.md |
-| `workspace/chuangxin2026/` | `r-y-ren/autoC-chuangxin2026` | 战役全量（代码/文档/JOURNAL/metrics/references） |
-| `workspace/guojichuangxin2026/` | `r-y-ren/autoC-guojichuangxin2026` | 同上 |
-| `workspace/ptcg-playground-2026/` | `r-y-ren/autoC-ptcg-playground-2026` | 同上 |
-| `export/` | `r-y-ren/autoC-export` | KB 交付导出层 |
-| `kb/raw/` | `r-y-ren/autoC-kbraw` | 原始抓取文档（引用溯源证据） |
-| `archive/2026-08_Kaggriculture-…/` | `r-y-ren/autoC-kaggriculture` | 归档快照 + `archive/…` tag |
-| `archive/2026-10_kagriculture_…/` | `r-y-ren/autoC-kagriculture` | 归档快照 + `archive/…` tag |
+| 主库根 | `r-y-ren/contest-compass` | 流程面：`.zcode/` `config/` `scripts/` `kb/` 清洗层 `docs/` AGENTS.md |
+| `workspace/chuangxin2026/` | `r-y-ren/contest-compass-chuangxin2026` | 战役全量（代码/文档/JOURNAL/metrics/references） |
+| `workspace/guojichuangxin2026/` | `r-y-ren/contest-compass-guojichuangxin2026` | 同上 |
+| `workspace/ptcg-playground-2026/` | `r-y-ren/contest-compass-ptcg-playground-2026` | 同上 |
+| `export/` | `r-y-ren/contest-compass-export` | KB 交付导出层 |
+| `kb/raw/` | `r-y-ren/contest-compass-kbraw` | 原始抓取文档（引用溯源证据） |
+| `archive/2026-08_Kaggriculture-…/` | `r-y-ren/contest-compass-kaggriculture` | 归档快照 + `archive/…` tag |
+| `archive/2026-10_kagriculture_…/` | `r-y-ren/contest-compass-kagriculture` | 归档快照 + `archive/…` tag |
 
 ## 第二台机器接手步骤
 

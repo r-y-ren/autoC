@@ -205,7 +205,7 @@ def quarantine(path: Path, reason: str) -> Path:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="autoC KB/契约条目校验器")
+    ap = argparse.ArgumentParser(description="contest-compass KB/契约条目校验器")
     ap.add_argument("--hook", action="store_true", help="PostToolUse 钩子模式")
     ap.add_argument("--file", type=str, default=None, help="校验单个文件")
     ap.add_argument("--quarantine", action="store_true", help="全量模式下隔离不合格条目")
