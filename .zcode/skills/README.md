@@ -5,7 +5,7 @@ T2 起逐个落盘，与 `docs/CAPABILITIES.md` 的 K-01…K-07 一一对应：
 | ID | 技能 | 职责 | 所属阶段 |
 |---|---|---|---|
 | K-01 | kb-sync | 慢循环编排（分片派发 C-01/C-02 → lint → 索引 → changelog） | 慢循环 |
-| K-02 | strategy-gen | 对比矩阵 + 一鱼多吃 + 蓝图草稿（schema 校验后呈报） | 决策 |
+| K-02 | strategy-gen | 对比矩阵 + 方案书（赛事/方案/技术栈三节，纯参考落 kb/briefs/） | 参考供给 |
 | K-03 | ~~campaign-run~~ | **已退役（2026-10-09 v2）**：推进产线废除，人工推进走 fn-ladder | — |
 | K-04 | accept-run | 验收执行与失败工单回环（熔断） | 验收 |
 | K-05 | archive-run | 归档与复位 | 归档 |
