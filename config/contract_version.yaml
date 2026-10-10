@@ -4,7 +4,7 @@
 # 脚本侧校验：开工前跑 python scripts/guard/contract_check.py——本地与上游（@{u}）版本
 # 不一致即提示先 pull / push（SessionStart 播报的是本地版本）。
 
-schema_version: 24
+schema_version: 25
 
 # 升级依赖的外部插件（各机 ~/.zcode/cli/plugins/cache/<vendor>/<name>/<version>/，不随仓库走）。
 # version 以插件 cache 目录名为准（缺失警示由 session_status.py 检查，目录在位即算可用，不校验版本号）；
@@ -18,3 +18,4 @@ plugins:
   - {vendor: zcode-plugins-official, name: spreadsheets, version: 0.1.7, purpose: xlsx 文档产线}
   - {vendor: zcode-plugins-official, name: pdf, version: 0.1.7, purpose: pdf 文档产线}
   - {vendor: fn-ladder, name: fn-ladder, version: 2.2.0, purpose: 人工推进主线（tracker 账本/fn-exempt 豁免协议，v2 依赖）}
+  - {vendor: my-plugin, name: my-plugin, version: 0.4.0, purpose: 全局工具技能层（mineru/duckdb/trafilatura/ast-grep/bwrap-run/remote-compute/web-3d-stack + toolbox 向导，D15；增改须同步 toolbox 路由表与 ENVIRONMENT 登记行）}

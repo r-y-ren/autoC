@@ -47,7 +47,7 @@
 | ast-grep 0.45.3 / duckdb 1.5.5（~/.local/bin 静态二进制，2026-09-20 装） | E-15 AST 结构化代码检索 / E-16 大表本地聚合（交互式工具位，脚本不依赖） |
 | trafilatura 2.2.0（autoc venv，2026-09-20 装） | E-17 静态页正文降噪：S-02 快照旁 `.extract.md` sidecar（try-import 降级，正则链路保留） |
 | bwrap 0.12.0（系统包；wrapper=全局技能 ~/.zcode/skills/bwrap-run） | E-18 不可信第三方代码执行隔离（根只读+仅工作目录与 /tmp 可写+默认断网） |
-| 全局技能层（~/.zcode/skills/，2026-09-20 三缺补齐+toolbox 向导） | mineru·bwrap-run·ast-grep·duckdb·trafilatura 五工具技能+toolbox 路由向导（六技能；速查型；trafilatura CLI 经 ~/.local/bin 符号链接指向 autoc venv；**增改全局技能须同步 toolbox 路由表**）；本机层不随 git，换机按此清单重建 |
+| 全局技能层（插件缓存 `~/.zcode/cli/plugins/cache/my-plugin/my-plugin/0.4.0/skills/`；用户层 `~/.zcode/skills` 旧原件已退役） | **八技能**：mineru·bwrap-run·ast-grep·duckdb·trafilatura·remote-compute·web-3d-stack 七工具技能 + toolbox 路由向导（速查型；trafilatura CLI 经 ~/.local/bin 符号链接指向 autoc venv；**增改全局技能须同步 toolbox 路由表与本行**）；本机层不随 git，换机按 toolbox 自检清单重建（2026-10-10 同步：补 remote-compute/web-3d-stack、更正宿主路径） |
 
 （本节为 Linux 侧增量；上表 Windows 基线照旧，双机各管各的运行时。）
 
