@@ -27,16 +27,19 @@ CATEGORIES = {
     "docs": "docs",
     "readme": "README.md",
     "agentsmd": "AGENTS.md",
+    "briefs": "kb/briefs",
 }
 
 SCRIPT_REF = re.compile(r"scripts/[a-z_]+/[A-Za-z0-9_]+\.py")
+FLAG_REF = re.compile(r"--[a-z][a-z0-9-]*")
 INIT_LINE = re.compile(r"init_state")
 PHASE = re.compile(r"--phase\s+(\w+)")
 CAMPAIGN_PHASES = {"decide", "deliver", "verify", "archive"}
 V1_PATH = re.compile(
     r"workspace/(?!README\.md\b|JOURNAL\.md\b|<cid>|<未登记id>|<战役id>)"
-    r"(?:blueprint\.md\b|acceptance\b|software\b|hardware\b|docs\b|references\b|metrics\.json\b|strategy\b)")
+    r"(?:blueprint\.md\b|acceptance\b|software\b|hardware\b|docs\b|references\b|metrics\.json\b|strategy\b|specs\b)")
 OLD_PLUGIN = re.compile(r"document-skills")
+BRIEF_FORBIDDEN = re.compile(r"milestones|acceptance|接口契约|需求种子", re.I)
 
 
 def project_root(cli_root: str | None) -> Path:
@@ -60,11 +63,22 @@ def iter_files(root: Path, only: str | None):
                     yield cat, p
 
 
-def check_line(root: Path, rel_file: str, lineno: int, line: str) -> list[str]:
+def check_line(root: Path, cat: str, line: str, script_cache: dict) -> list[str]:
     out: list[str] = []
-    for m in SCRIPT_REF.finditer(line):
-        if not (root / m.group(0)).is_file():
-            out.append(f"[R1] 引用不存在的脚本 {m.group(0)}")
+    refs = list(SCRIPT_REF.finditer(line))
+    for i, m in enumerate(refs):
+        ref = m.group(0)
+        sp = root / ref
+        if not sp.is_file():
+            out.append(f"[R1] 引用不存在的脚本 {ref}")
+            continue
+        if ref not in script_cache:
+            script_cache[ref] = sp.read_text(encoding="utf-8", errors="replace")
+        body = script_cache[ref]
+        seg_end = refs[i + 1].start() if i + 1 < len(refs) else len(line)
+        for flag in FLAG_REF.findall(line[m.end():seg_end]):
+            if flag not in body:
+                out.append(f"[R1] {ref} 无参数 {flag}")
     if INIT_LINE.search(line):
         phases = PHASE.findall(line)
         need = any(p in CAMPAIGN_PHASES for p in phases) or "--reset" in line
@@ -74,6 +88,8 @@ def check_line(root: Path, rel_file: str, lineno: int, line: str) -> list[str]:
         out.append(f"[R3] v1 平铺路径 {m.group(0)}（应为 workspace/<cid>/…）")
     if OLD_PLUGIN.search(line):
         out.append("[R4] 旧插件名 document-skills（已更名拆分为 documents/pdf/presentations/spreadsheets）")
+    if cat == "briefs" and line.lstrip().startswith("#") and BRIEF_FORBIDDEN.search(line):
+        out.append("[R5] 方案书禁用节（milestones/acceptance/接口契约/需求种子不得成节）")
     return out
 
 
@@ -84,6 +100,7 @@ def main() -> int:
     args = ap.parse_args()
     root = project_root(args.root)
     total = 0
+    script_cache: dict = {}
     for cat, path in iter_files(root, args.only):
         rel = str(path.relative_to(root))
         try:
@@ -93,7 +110,7 @@ def main() -> int:
             total += 1
             continue
         for i, line in enumerate(lines, 1):
-            for msg in check_line(root, rel, i, line):
+            for msg in check_line(root, cat, line, script_cache):
                 print(f"VIOLATION {cat}:{rel}:{i}: {msg}")
                 total += 1
     if total:

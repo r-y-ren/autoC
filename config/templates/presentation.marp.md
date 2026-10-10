@@ -3,7 +3,7 @@ marp: true
 theme: default
 paginate: true
 ---
-<!-- 答辩 PPT 模板（Marp）｜铁律：所有性能数字必须来自 workspace/<cid>/metrics.json，禁止编造 -->
+<!-- 答辩 PPT 模板（Marp）｜铁律：所有性能数字须可溯至项目实测产物（metrics 或 fn 实测区）并注明出处，禁止编造 -->
 
 # {{作品名}}
 
@@ -34,7 +34,7 @@ paginate: true
 
 ## 实测验证
 
-<!-- 每个数字注明 metrics.json 的键名 -->
+<!-- 每个数字注明实测产物出处 -->
 - 性能：FPS / 延迟 / 吞吐
 - 质量：准确率 / 损耗 / 稳定性
 - 成本：BOM / 算力开销

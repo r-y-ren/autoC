@@ -72,6 +72,7 @@ def collect_goals(docs: Path, missing: list[str]) -> list[dict]:
 def collect_method(docs: Path, missing: list[str]) -> dict:
     tree_src = docs / "responsibility.md"
     funcs_src = docs / "implementation" / "functions.md"
+    tracker_src = docs / "implementation" / "tracker.md"
     functions = []
     if funcs_src.is_file():
         for line in read_text(funcs_src).splitlines():
@@ -83,9 +84,33 @@ def collect_method(docs: Path, missing: list[str]) -> dict:
         missing.append("fn_docs/implementation/functions.md")
     if not tree_src.is_file():
         missing.append("fn_docs/responsibility.md")
+    tracker = None
+    if tracker_src.is_file():
+        text = read_text(tracker_src)
+        done = len(re.findall(r"^\s*[-*]\s*\[x\]", text, re.I | re.M))
+        todo = len(re.findall(r"^\s*[-*]\s*\[ \]", text, re.M))
+        tracker = {"src": "fn_docs/implementation/tracker.md",
+                   "steps_done": done, "steps_total": done + todo}
     return {"tree_src": "fn_docs/responsibility.md" if tree_src.is_file() else None,
             "tree_excerpt": "\n".join(read_text(tree_src).splitlines()[:12]) if tree_src.is_file() else "",
-            "functions": functions}
+            "functions": functions, "tracker": tracker}
+
+
+def collect_analyses(docs: Path) -> list[dict]:
+    """fn_docs/analyses/ 三件套：分析报告与 registry（可选源，缺失不计 missing）。"""
+    out: list[dict] = []
+    adir = docs / "analyses"
+    if adir.is_dir():
+        for p in sorted(adir.glob("*.md")):
+            head = next((ln.strip("# ").strip() for ln in read_text(p).splitlines()
+                         if ln.strip().startswith("#")), p.stem)
+            out.append({"title": head, "src": f"fn_docs/analyses/{p.name}"})
+        reg = adir / "registry.jsonl"
+        if reg.is_file():
+            n = len([ln for ln in read_text(reg).splitlines() if ln.strip()])
+            out.append({"title": f"分析台账 registry.jsonl（{n} 条）",
+                        "src": "fn_docs/analyses/registry.jsonl"})
+    return out
 
 
 def collect_measured(proj: Path, missing: list[str]) -> list[dict]:
@@ -155,6 +180,14 @@ def render_brief(data: dict) -> str:
     out.append("## 结论")
     out += [f"- {c['line']}（{c['src']}）" for c in data["conclusion"]] or ["- （缺失）"]
     out.append("")
+    if data.get("analyses"):
+        out.append("## 分析")
+        out += [f"- {a['title']}　`{a['src']}`" for a in data["analyses"]]
+        out.append("")
+        if data["method"].get("tracker"):
+            t = data["method"]["tracker"]
+            out.append(f"> 步骤账本：{t['steps_done']}/{t['steps_total']} 步（`{t['src']}`）")
+            out.append("")
     if data["missing"]:
         out.append("## 缺失")
         out += [f"- {m}" for m in data["missing"]]
@@ -180,6 +213,7 @@ def main() -> int:
         "method": collect_method(proj / "fn_docs", missing),
         "measured": collect_measured(proj, missing),
         "conclusion": collect_conclusion(proj / "fn_docs", missing),
+        "analyses": collect_analyses(proj / "fn_docs"),
         "missing": missing,
     }
     if args.out_dir:

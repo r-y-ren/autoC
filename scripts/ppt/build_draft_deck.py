@@ -102,7 +102,9 @@ def main() -> int:
     out = tpl.replace("{{title}}", title)
     for name in MARKERS:
         out = out.replace(f"<!--@{name}-->", fills[name])
-    Path(args.out).write_text(out, encoding="utf-8")
+    out_path = Path(args.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(out, encoding="utf-8")
     print(f"初稿已装配：{args.out}（五段注入完成，缺失 {len(data.get('missing', []))} 项）")
     return 0
 

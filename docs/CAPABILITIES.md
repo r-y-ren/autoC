@@ -6,7 +6,7 @@
 
 > **v2 勘误与补登（2026-10-10，spec r-y-ren/autoC#9）**：
 > - **已退役**：K-03（campaign-run）、M-07（/deliver）——推进产线废除，人工推进走 fn-ladder
-> - **编号勘误**：changelog 中"M-06"应为 **M-06**（/discover）；S-14 历史空缺不复用
+> - **编号勘误**：changelog 原"M-09"系误引，已更正为 **M-06**（/discover）；S-14 历史空缺不复用，K-03/M-07 编号同样不复用
 > - **补登（拆分轮+v2 新增，续排）**：S-20 repo_split.py（多库拆分迁移器）/ S-21 test_repo_split.py / S-22 doc_lint.py（文档一致性 R1-R4）/ S-23 test_doc_lint.py / S-24 collect_deck_material.py（PPT 取材器）/ S-25 build_draft_deck.py（初稿装配器）/ S-26 test_collect_deck_material.py / S-27 build_artifact_indexes.py / S-28 init_state.py / S-29 flow_state.py / S-30 test_init_state.py / S-31 test_inbox.py
 > - **历史能力**：vault-distill（一次性提炼跑批，已用毕；清退待裁决）
 > - **metrics 纪律降级（v2）**：实测数字须可溯至项目实测产物（metrics 或 fn 实测区）；PPT 取材已改道 fn 文件结构
@@ -110,8 +110,8 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | ID | 技能 | 职责（SOP） | 层 |
 |---|---|---|---|
 | K-01 | kb-sync | 慢循环编排：读方向配置→collect 态→分片派发 C-01/C-02→API 脚本→S-01→S-04→changelog+commit→idle；inbox 投递箱消费（S-16·票03） | ✅ T2 已落地（票03 增补） |
-| K-02 | strategy-gen | grilling 前置（票07·strategy/grill-notes）→读 INDEX+profile→矩阵/一鱼多吃/蓝图草稿（含 auto_chain 开关行·票08）→schema 校验→呈报用户（唯一闸门） | ✅ T2 已落地（票07/08 增补） |
-| K-03 | campaign-run | 读蓝图→deliver 态→auto_chain 时 planner 先行规格派生（票09·specs/，拓扑不变）→任务包（票单细化）→并发派发（software 包级自检前置）→波门→merge_metrics→C-05→JOURNAL | ✅ T2 已落地（票09 增补） |
+| K-02 | strategy-gen | grilling 前置（纪要落 kb/briefs/）→读 INDEX+profile→对比矩阵/一鱼多吃/**三节方案书**（赛事/方案/技术栈，纯参考落 kb/briefs/，禁推进指令）→摘要呈用户（通知非闸门） | ✅ v2 改写（issue#13） |
+| K-03 | ~~campaign-run~~ | **已退役（v2，2026-10-09；编号不复用）**：推进产线废除，人工推进走 fn-ladder | — |
 | K-04 | accept-run | verify 态→S-05→工单路由回环（熔断）→分析报告 | ✅ T2 已落地 |
 | K-05 | archive-run | archive 态→S-06→workspace 复位→idle | ✅ T2 已落地 |
 | K-06 | marp-deck | 模板+metrics 汇总→答辩 PPT 波内草稿（票10 降级定位；正式产线=K-12 /ppt） | ✅ T2 已落地（票10 降级） |
@@ -120,7 +120,7 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | K-08 | kb-deep-sync | 慢循环全量深度跑批（D7 每 3 天）：增量入库+老化重验(12d)/拒绝台账复核/quarantine 清理/winners-patterns 推进/简报导出 | ✅ T3-c 落地，T3-d 按 D7 合并节奏改写 |
 | K-10 | kb-full-build | 全量知识库一次性构建编排（D11：W0-W5 波次、配额豁免质量不降） | ✅ D11 已落地（补登 2026-09-02） |
 | K-11 | self-run | 人工主导交付会话（D13 副驾模式）：豁免瘦协调者/角色矩阵/波次编排（限战役根内），不变量照旧，蓝图改必校验留痕，熔断人工接管出口 | ✅ 2026-09-02 已落地 |
-| K-12 | ppt-run | 正式答辩 PPT 产线（升级票10）：/accept 通过后、/archive 前——document 产内容简报（数字只出自 metrics）→ ppt-master Default 双用户门（Gate1/2），项目路由 docs/ppt/；Marp（K-06）降为波内草稿 | ✅ 2026-09-16 升级票10 |
+| K-12 | ppt-run | 正式答辩 PPT 产线（v2 两段式）：产稿段=fn 取材器→带来源数据表→模板初稿（数字可溯实测产物）；精修段（可选）=ppt-master Default 双用户门（Gate1/2），项目路由 docs/ppt/ | ✅ v2 改写（issue#15） |
 | K-13 | ppt-self | PPT 阶段人工副驾（升级票11）：/self 同款语义限 docs 子树——人指挥微调简报/版式/pptx，数字回 metrics 溯源，与 /ppt 互换续跑 | ✅ 2026-09-16 升级票11 |
 | K-14 | compete-strategy | 对抗比赛从零制胜方法论（控制论十步）：六问读引擎→世界参数表→受控坐标四级→转移函数实测→设定点资产化→净账闭环；含六问法代码导读与 T1-T5 模板（资产规格书/提示词五模板/迭代台账） | ✅ 2026-10-03 落地（kagriculture 实战提炼） |
 
@@ -129,11 +129,11 @@ git 2.48｜python 3.14（+3.12 备用）｜node 24 / npm 11｜gh 2.92｜curl 8.1
 | ID | 命令 | 作用 | 层 |
 |---|---|---|---|
 | M-01 | /kb-sync | 手动触发慢循环（cron 之外的补偿入口） | ✅ 本轮已落盘（契约入口，指向 K-01） |
-| M-02 | /attack | 发起快循环：刷新 KB→K-02 决策 | ✅ 本轮已落盘（契约入口，指向 K-02） |
+| M-02 | /attack | 参考方案供给：刷新 KB→K-02 三节方案书落 kb/briefs/（纯参考，--to 可复制进项目） | ✅ v2 改写（issue#13） |
 | M-03 | /status | 查 phase/战役/JOURNAL/熔断 | ✅ 本轮已落盘（即时可用） |
 | M-04 | /accept | 手动触发验收（K-04） | ✅ 本轮已落盘（契约入口，指向 K-04） |
 | M-06 | /discover | 方向冷启动入口（指向 K-09） | ✅ 批次1已落地 |
-| M-07 | /deliver | 交付会话入口（指向 K-03；多会话工作流的制作起点，含 mode 闸门与跨会话续跑说明） | ✅ 2026-08-28 已落地 |
+| M-07 | ~~/deliver~~ | **已退役（v2，2026-10-09；编号不复用）**：推进产线废除 | — |
 | M-05 | /archive | 手动归档（K-05） | ✅ 本轮已落盘（契约入口，指向 K-05） |
 | M-08 | /self | 人工主导交付入口（指向 K-11；/deliver 的姊妹入口，人指挥主会话直接动手；熔断后人工接管亦走此） | ✅ 2026-09-02 已落地 |
 | M-12 | /ppt | 正式答辩 PPT 入口（指向 K-12；窗口=/accept 通过后、/archive 前；细节微调姊妹入口 /ppt-self） | ✅ 2026-09-16 升级票10 |

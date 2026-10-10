@@ -59,40 +59,30 @@
                                 ▼
                           changelog + git commit
 
-[快循环·按需]  用户指定方向
+[参考供给]  用户指定方向
                     │
                     ▼
-              强制先拉一次 KB 增量（保证决策基于最新信息）
+              强制先拉一次 KB 增量（保证参考基于最新信息）
                     │
                     ▼
-              grilling 前置（K-02·升级票07）：以 KB 为语境完整多轮追问
-                    │  产物 strategy/grill-notes.md（决策树纪要，攻略与蓝图输入）
+              grilling 前置（K-02）：以 KB 为语境完整多轮追问（纪要落 kb/briefs/）
                     ▼
-              Strategy Agent：建议赛道对比矩阵 + "一鱼多吃"路线 + ★作品蓝图
-                    │（蓝图 = workspace/<cid>/blueprint.md，须通过 blueprint.schema.json 校验；
-                    │  呈报含交付开关行 workflow.auto_chain，缺省 true·升级票08）
-              [用户确认蓝图] ◄── 全流程唯一人工闸门（grilling 为第一次交互，此处为第二次）
+              Strategy Agent：对比矩阵 + 一鱼多吃路线 + ★三节方案书（赛事/方案/技术栈）
+                    │（纯参考信息，落 kb/briefs/；**禁止 milestones/acceptance/接口契约/需求种子**——不得影响推进）
+              [用户取用参考] ◄── 通知非闸门；蓝图（项目自用可选契约）另行自拟
                     │
-                    ├──► /self 人工主导交付（K-11 副驾模式：人指挥主会话直接动手，
-                    │     同处 deliver 阶段、同一套不变量与验收出口，两入口可互换续跑）
                     ▼
-              auto_chain 开启时（升级票09）：planner 子代理 to-spec → to-tickets
-                    │  产物 <根>/specs/（ticket 只在 milestone 内细化，波次拓扑不变）
+              项目迭代：人工按 fn-ladder 推进（fn-grill → fn-divide → fn-scaffold → fn-implement → fn-close；
+                    │  自动化与豁免走 fn-exempt 记账；tracker 为步骤真值；/self 副驾可借工作流工具）
                     ▼
-              Coordinator 按蓝图并发分发（文件契约为唯一交接物）：
-              ├── Software Agent ─► workspace/<cid>/software/ ─► 编码 + 沙箱测试 ─► metrics 分片 ─┐
-              ├── Hardware Agent（CLI 路线）──► workspace/<cid>/hardware/ ─► PlatformIO / Wokwi 验证 ─► metrics 分片 ─┤(并行)
-              └── (汇合点) merge_metrics.py 汇总 ─► Document Agent ◄── 消费工程产物 + metrics 汇总 ─► 报告 + 答辩 PPT
-                    │
-              [验收节点] ──不通过──► 失败工单路由回责任 agent 修复（唯一回路边，带熔断）
+              [验收节点 /accept（可选终检工具）] ──不通过──► 失败工单回**人工修复**（熔断计数按战役）
                     │ 通过
                     ▼
-              [PPT 窗口·K-12（升级票10，/accept 通过后、归档前，可选）]
-                    │  document 产 docs/ppt_brief.md（数字只出自 metrics）→ ppt-master
-                    │  双用户门（Gate1 模板 / Gate2 规格）→ <根>/docs/ppt/ 正式答辩 pptx
-                    │  （Marp/K-06 自此定位波内草稿；微调入口 /ppt-self·K-13 副驾）
+              [PPT 窗口·K-12 两段式（可选）]
+                    │  产稿段：fn 取材器 → 带来源数据表 → 模板初稿（数字可溯实测产物）
+                    │  精修段（可选）：ppt-master 双用户门（Gate1 模板 / Gate2 规格）→ <根>/docs/ppt/ 正式答辩 pptx
                     ▼
-              [交付归档] archive_campaign.py：workspace/ ─► archive/<YYYY-MM_赛事_主题>/（只读 + 项目仓库 tag+push，主库零提交）
+              [交付归档] archive_campaign.py：战役根 ─► archive/<YYYY-MM_赛事_主题>/（只读 + 项目仓库 tag+push，主库零提交）
 ```
 
 **结构要点（四条骨架纪律）：**
@@ -123,7 +113,7 @@
 - **grilling 前置（升级票07，2026-09-16）**：以 KB 索引与相关条目为语境对用户完整 grilling（多轮问到无遗漏分支，用户喊停即止），纪要落 `<根>/strategy/grill-notes.md` 作为攻略与蓝图输入；**蓝图呈报确认为第二次交互，人工闸门总数不变**
 - **输出**（Strategy Agent 产出两份待确认文档）：
   1. `<根>/strategy.md`：建议赛道对比矩阵（时间窗 × 技术契合度 × 通吃度 × 画像匹配 × 竞争密度）+ "一鱼多吃"复投路线
-  2. `<根>/blueprint.md`：作品蓝图（范围 / 技术栈，引用 KB-2 卡片 / 跨 agent 接口契约 / 里程碑 / 验收清单 / 合规检查 / **交付开关 workflow.auto_chain**），**须通过 blueprint.schema.json 校验方可提交确认**
+  2. `<根>/blueprint.md`：作品蓝图（范围 / 技术栈，引用 KB-2 卡片 / 跨 agent 接口契约 / 里程碑 / 验收清单 / 合规检查 / **（已退役 v2）交付开关 workflow.auto_chain**），**须通过 blueprint.schema.json 校验方可提交确认**
 - **合规模式三分（D10，schema 硬校验）**：prep（赛前范本级，默认）/ apply（申报制参赛型，须附政策原文佐证，申报附件强制进交付）/ assist（赛中零介入，不启动作品构建）
 - **用户确认蓝图**后进入交付；不认可则改蓝图再确认（闸门可重复，但同一时刻只有一个）
 
@@ -133,8 +123,8 @@
 - **并发**：Software 与 Hardware 子 agent 并行；Document Agent 在汇合点后启动（消费前两者落盘的产物文件）
 - 各角色在各自 `workspace/<role>/` 目录内工作，Bash 沙箱内自验（编译 / 测试 / 仿真）
 - **实测数据契约（分片制；v2 降级：数字须可溯至项目实测产物，PPT 取材已改道 fn 文件结构）**：各工程角色只写自己的 `workspace/<role>/metrics.json` 分片（实测值+测量方法）；`scripts/verify/merge_metrics.py` 确定性汇总为顶层 `workspace/<cid>/metrics.json`（命名空间 `metrics.<role>.<键>`，角色禁写，守卫已拦）。Document Agent 引用的一切性能数字**只能来自汇总文件**，禁止自行编造
-- **人工主导入口（D13，2026-09-02）**：`/self`（M-08 → K-11 副驾模式）与自动编排同处 deliver 阶段、共用同一套 L2 边界与验收出口——主会话豁免瘦协调者约束、角色写入矩阵与波次编排（限战役根内），人定粒度与顺序、主会话直接动手；蓝图可改但改必重校验+留痕；不变量（验收记录只经 /accept、顶层 metrics.json 只经汇总脚本、references/ 归宿、实测数字纪律）与终验全量清单**不豁免**；熔断后人工接管亦走此。两入口可随时互换续跑
-- **自动规格链（升级票08/09，2026-09-16）**：蓝图 `workflow.auto_chain`（缺省 true，确认闸门处可见可改）开启时，首波派发前由 **planner 子代理**（章程 `.zcode/agents/planner.md`）跑 mattpocock to-spec → to-tickets，产物落 `<根>/specs/`——ticket 只在 milestone 内细化、按 milestone×owner_role 归组，**波次拓扑与验收项 ID 仍出自蓝图**；链直通到 implement 完成后单次汇报（无中途人工门，/accept 仍唯一人工验收闸门）。software 章程含**包级自检前置**（superpowers verification-before-completion / TDD：自检过才报波门，波门五查兜底跨包契约）
+- **人工主导入口（D13，2026-09-02）**：`/self`（M-08 → K-11 副驾模式）与自动编排同处 deliver 阶段、共用同一套 L2 边界与验收出口——主会话豁免瘦协调者约束、角色写入矩阵与波次编排（波次编排已退役；限战役根内），人定粒度与顺序、主会话直接动手；蓝图可改但改必重校验+留痕；不变量（验收记录只经 /accept、顶层 metrics.json 只经汇总脚本、references/ 归宿、实测数字纪律）与终验全量清单**不豁免**；熔断后人工接管亦走此。两入口可随时互换续跑
+- **（已退役 v2）自动规格链（升级票08/09，2026-09-16）**：蓝图 `workflow.auto_chain`（缺省 true，确认闸门处可见可改）开启时，首波派发前由 **planner 子代理**（章程 `.zcode/agents/planner.md`）跑 mattpocock to-spec → to-tickets，产物落 `<根>/specs/`——ticket 只在 milestone 内细化、按 milestone×owner_role 归组，**波次拓扑与验收项 ID 仍出自蓝图**；链直通到 implement 完成后单次汇报（无中途人工门，/accept 仍唯一人工验收闸门）。software 章程含**包级自检前置**（superpowers verification-before-completion / TDD：自检过才报波门，波门五查兜底跨包契约）
 
 ### 3.4 验收-修复节点（全自动，可升级人工）
 
@@ -144,7 +134,7 @@
   - 文档：结构完整性、数字与实测产物一致性、格式校验
 - 失败项**带失败证据**生成失败工单，路由回责任 agent 修复后重跑；`.flow/state.json` 记录重试计数（**仅 fail 计数**——pending 是等待而非失败重试，T2.1 裁决；retry.max 单一事实来源为 budget.yaml），**超限熔断**升级人工
 - 通过后生成分析报告（对照该赛评审标准自评 + 历年获奖基准对比）
-- **答辩 PPT 正式产线（K-12/K-13，升级票10/11）**：/accept 通过后、/archive 前为 **PPT 窗口**（守卫对 verify 态放行 `<根>/docs/**` 与 JOURNAL.md）——document 角色产 `docs/ppt_brief.md` 内容简报（数字只出自 metrics.json，铁律 4），ppt-master 插件 Default 路线双用户门（Gate1 沟通契约+模板 / Gate2 规格锁定）生成正式答辩 pptx，项目路由 `<根>/docs/ppt/`；**Marp（K-06）自此定位波内草稿**，正式 pptx 唯一产线为 /ppt；`/ppt-self`（K-13）为该阶段 /self 同款副驾（豁免限 docs 子树，数字改动必须回 metrics 键核对）
+- **答辩 PPT 正式产线（K-12/K-13，升级票10/11）**：/accept 通过后、/archive 前为 **PPT 窗口**（守卫对 verify 态放行 `<根>/docs/**` 与 JOURNAL.md）——document 角色产 `docs/ppt_brief.md` 内容简报（数字须可溯至项目实测产物（v2 降级口径）），ppt-master 插件 Default 路线双用户门（Gate1 沟通契约+模板 / Gate2 规格锁定）生成正式答辩 pptx，项目路由 `<根>/docs/ppt/`；**Marp（K-06）自此定位波内草稿**，正式 pptx 唯一产线为 /ppt；`/ppt-self`（K-13）为该阶段 /self 同款副驾（豁免限 docs 子树，数字改动必须回 metrics 键核对）
 
 ### 3.5 归档
 

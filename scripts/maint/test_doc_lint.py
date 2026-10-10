@@ -29,7 +29,8 @@ def run_lint(root: Path, *args: str) -> subprocess.CompletedProcess:
 def make_fixture(bad: bool) -> Path:
     tmp = Path(tempfile.mkdtemp(prefix="autoc_doclint_test_"))
     (tmp / "scripts" / "guard").mkdir(parents=True)
-    (tmp / "scripts" / "guard" / "exist.py").write_text("# ok\n", encoding="utf-8")
+    (tmp / "scripts" / "guard" / "exist.py").write_text(
+        "# ok\nadd_argument('--campaign')\nadd_argument('--phase')\n", encoding="utf-8")
     cmds = tmp / ".zcode" / "commands"
     cmds.mkdir(parents=True)
     (cmds / "good.md").write_text(GOOD_CMD, encoding="utf-8")
@@ -38,12 +39,16 @@ def make_fixture(bad: bool) -> Path:
             "# 坏命令\n"
             "运行 `python scripts/guard/missing.py`。\n"
             "先 `init_state.py --phase verify --by accept`（缺战役参数）。\n"
+            "跑 `python scripts/guard/exist.py --bogus-flag`（参数不存在）。\n"
             "看 `workspace/blueprint.md` 与 `workspace/acceptance/`。\n"
             "docx 交付走 document-skills。\n",
             encoding="utf-8")
         tpl = tmp / "config" / "templates"
         tpl.mkdir(parents=True)
         (tpl / "t.md").write_text("输出到 workspace/software/ 即可。\n", encoding="utf-8")
+        briefs = tmp / "kb" / "briefs"
+        briefs.mkdir(parents=True)
+        (briefs / "bad.md").write_text("# 方案\n## acceptance 清单\n", encoding="utf-8")
     return tmp
 
 
@@ -69,8 +74,10 @@ def main() -> int:
         checks = [
             ("脚本引用存在性", "missing.py" in out and "不存在" in out),
             ("多战役参数", "--campaign" in out or "战役参数" in out),
+            ("参数存在性", "bogus-flag" in out and "无参数" in out),
             ("v1 平铺路径", "blueprint.md" in out and "平铺" in out),
             ("旧插件名", "document-skills" in out and "插件" in out),
+            ("方案书禁用节", "禁用节" in out),
         ]
         ok_all = p.returncode == 1
         passed += ok_all
@@ -94,8 +101,19 @@ def main() -> int:
         import shutil
         shutil.rmtree(root, ignore_errors=True)
 
-    print(f"\n{passed}/7 PASS")
-    return 0 if passed == 7 else 1
+    # briefs 域：方案书禁用节（R5）点名
+    root = make_fixture(bad=True)
+    try:
+        p = run_lint(root, "--only", "briefs")
+        ok = p.returncode == 1 and "bad.md" in p.stdout and "禁用节" in p.stdout
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} R5 方案书禁用节拦截：rc={p.returncode}")
+    finally:
+        import shutil
+        shutil.rmtree(root, ignore_errors=True)
+
+    print(f"\n{passed}/10 PASS")
+    return 0 if passed == 10 else 1
 
 
 if __name__ == "__main__":

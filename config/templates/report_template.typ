@@ -1,4 +1,4 @@
-// 项目报告模板（Typst）｜铁律：数字必须来自 workspace/<cid>/metrics.json
+// 项目报告模板（Typst）｜铁律：数字须可溯至项目实测产物（metrics 或 fn 实测区）并注明出处
 #set page(paper: "a4", margin: 2.2cm)
 #set text(lang: "zh", size: 11pt)
 #set heading(numbering: "1.1")
@@ -20,7 +20,7 @@
 
 = 实现与验证
 == 实验设置
-== 结果与分析  // 表格数字引自 metrics.json，注明键名
+== 结果与分析  // 表格数字引自实测产物，注明出处
 
 = 对比与讨论  // 对照评审标准与历年获奖基准（引用 kb/competitions 模式库）
 

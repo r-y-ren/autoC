@@ -91,7 +91,7 @@
         "auto_chain": {
           "type": "boolean",
           "default": true,
-          "description": "自动规格链开关：true=蓝图确认后 /deliver 派 planner 跑 to-spec→to-tickets→implement 直通到完成再单次汇报；false=仅原波次编排。缺省视为 true；在蓝图确认人工闸门处可见可改"
+          "description": "自动规格链开关：true=蓝图确认后 （已退役的 /deliver） 派 planner 跑 to-spec→to-tickets→implement 直通到完成再单次汇报；false=仅（已退役的原波次编排）。缺省视为 true；在蓝图确认人工闸门处可见可改"
         }
       }
     },

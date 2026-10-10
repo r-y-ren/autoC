@@ -204,7 +204,7 @@ def main() -> int:
         result = "pass"
 
     retry = read_retry(cid, camp)
-    if result == "fail" and not scoped:  # 仅【全量】运行的 fail 计入重试（T2.1 裁决；D12：scoped 波门诊断不烧熔断额度）
+    if result == "fail" and not scoped:  # 仅【全量】运行的 fail 计入重试（T2.1 裁决；D12：scoped 诊断不烧熔断额度）
         retry["count"] = int(retry.get("count", 0)) + 1
     retry["tripped"] = retry["count"] >= int(retry.get("max", 3))
     # D12 波次左移：scoped 运行即便范围内全过也不得产生可开归档闸门的 pass——

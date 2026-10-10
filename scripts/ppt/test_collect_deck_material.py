@@ -40,6 +40,12 @@ def make_project(full: bool, empty_runs: bool = False) -> Path:
     if full:
         (docs / "acceptance.md").write_text(
             "# 六道终检\n1. 编译：PASS\n2. 测试：PASS\n", encoding="utf-8")
+        (docs / "implementation" / "tracker.md").write_text(
+            "# 步骤账本\n- [x] 步一\n- [x] 步二\n- [ ] 步三\n", encoding="utf-8")
+        (docs / "analyses").mkdir()
+        (docs / "analyses" / "2026-10-01-效果分析.md").write_text(
+            "# 效果分析：基线对比\n正文\n", encoding="utf-8")
+        (docs / "analyses" / "registry.jsonl").write_text('{"id": 1}\n', encoding="utf-8")
         (docs / "results").mkdir()
         (docs / "results" / "2026-10-01-基线.json").write_text('{"per": 0.12}\n', encoding="utf-8")
     runs = proj / "fn_work" / "runs" / "demo"
@@ -82,6 +88,12 @@ def main() -> int:
         ok = any("编译" in c["line"] for c in data["conclusion"]) and data["missing"] == []
         passed += ok
         print(f"{'PASS' if ok else 'FAIL'} 结论段提取且零缺失：missing={data['missing']}")
+
+        tr = data["method"].get("tracker") or {}
+        ok = (tr.get("steps_total") == 3 and tr.get("steps_done") == 2
+              and any("效果分析" in a["title"] for a in data["analyses"]))
+        passed += ok
+        print(f"{'PASS' if ok else 'FAIL'} tracker/analyses 补源：tracker={tr} analyses={data['analyses']}")
 
         brief = (out / "deck_brief.md").read_text(encoding="utf-8")
         ok = all(h in brief for h in ("目标", "方法", "实测", "结论")) and "metrics.json" in brief
@@ -142,8 +154,8 @@ def main() -> int:
         import shutil
         shutil.rmtree(proj.parent, ignore_errors=True)
 
-    print(f"\n{passed}/9 PASS")
-    return 0 if passed == 9 else 1
+    print(f"\n{passed}/10 PASS")
+    return 0 if passed == 10 else 1
 
 
 if __name__ == "__main__":
