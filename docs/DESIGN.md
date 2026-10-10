@@ -16,6 +16,7 @@
 > 同轮：外部参考资料唯一归宿 <战役根>/references/（rules/data/code/digests + INDEX.md 台账）。
 > v1.0 变更：T4 内容框架轮——K-09 方向冷启动（/discover）、合规模式三分进蓝图硬校验（prep/apply/assist，D10）、
 > 正文层结构 lint（WARN 级）、跑批成本观测列、远程备份（origin 自动 push）、格式规范模板（CUMCM 论文/BP 骨架）。
+> **v2.0 变更（2026-10-09，spec r-y-ren/autoC#9）**：K-03 推进产线退役（交付由人工按 fn-ladder 进行）；/attack 改纯参考方案书（三节，落 kb/briefs/，禁止充当推进契约）；PPT 产线改两段式（fn-ladder 取材器+模板初稿 → 精修可选，数据源改道 fn 实测产物）；metrics 纪律降级为"实测数字须可溯至项目实测产物"；git 拆分后产物各带独立仓库。**下文交付链路图为 v1 历史结构**。
 > v0.9 变更：T3-c 能力完善——S-13 ocr_pdf（扫描件解析，实测消化 cumcm 待办并升级 verified）；winners/patterns 解构管线（模板+章程契约+CUMCM 首样板）；文档链冒烟（typst/marp 模板原样编译通过）；双频慢循环（K-08 深度评估+周六 cron）；E-09…E-12 登记；D5 裁决（零新增 MCP、RSSHub 缓判、tools/ 落位纪律、S-13 编号）。
 > v0.8 变更：T2.1 修复轮——审查实测确认的 5 缺陷修复（跑批记录多行丢行 / pending_agent 绕归档闸门 / tag 先于 commit / cmd 超时崩溃及孤儿进程劫持管道 / suggested_fields 循环变量泄漏）+ 2 语义裁决（仅 fail 计入 retry；候选队列生命周期：processed/ + .rejections.yaml 台账 + stars 翻倍重评）+ retry.max 单一事实来源（budget.yaml）+ 三套新回归测试。
 > v0.7 变更：T2 落地——S-02…S-06 脚本、K-01…K-07 技能、H-03 会话播报；K-03 前置项裁决（metrics 分片制已实现并 L2 强制；角色身份级守卫评估后不引入，理由见 §6.2 处置记录）；验收清单新增可选 cmd 字段。
@@ -31,7 +32,7 @@
 
 核心理由：
 
-1. **难点在节点能力，不在图编排。** 本项目真正难的是异构信源解析、完整软件工程、成套文档生成——依赖的是浏览器自动化、document-skills、Bash 沙箱、CUA、子 agent、cron 这些能力，客户端已全部具备；在 LangGraph 中这些需要全部自建。
+1. **难点在节点能力，不在图编排。** 本项目真正难的是异构信源解析、完整软件工程、成套文档生成——依赖的是浏览器自动化、documents 技能族、Bash 沙箱、CUA、子 agent、cron 这些能力，客户端已全部具备；在 LangGraph 中这些需要全部自建。
 2. **人工闸门免费。** 决策确认在会话客户端中是原生 human-in-the-loop；LangGraph 需额外构建交互界面（CLI/Web UI）。
 3. **文件系统即状态存储。** 阶段间只通过文件契约交接：断点续跑 = 检查文件存在性；审计 = git diff。这替代了图框架的 checkpointing 卖点。
 
@@ -68,7 +69,7 @@
                     │  产物 strategy/grill-notes.md（决策树纪要，攻略与蓝图输入）
                     ▼
               Strategy Agent：建议赛道对比矩阵 + "一鱼多吃"路线 + ★作品蓝图
-                    │（蓝图 = workspace/blueprint.md，须通过 blueprint.schema.json 校验；
+                    │（蓝图 = workspace/<cid>/blueprint.md，须通过 blueprint.schema.json 校验；
                     │  呈报含交付开关行 workflow.auto_chain，缺省 true·升级票08）
               [用户确认蓝图] ◄── 全流程唯一人工闸门（grilling 为第一次交互，此处为第二次）
                     │
@@ -79,8 +80,8 @@
                     │  产物 <根>/specs/（ticket 只在 milestone 内细化，波次拓扑不变）
                     ▼
               Coordinator 按蓝图并发分发（文件契约为唯一交接物）：
-              ├── Software Agent ─► workspace/software/ ─► 编码 + 沙箱测试 ─► metrics 分片 ─┐
-              ├── Hardware Agent（CLI 路线）──► workspace/hardware/ ─► PlatformIO / Wokwi 验证 ─► metrics 分片 ─┤(并行)
+              ├── Software Agent ─► workspace/<cid>/software/ ─► 编码 + 沙箱测试 ─► metrics 分片 ─┐
+              ├── Hardware Agent（CLI 路线）──► workspace/<cid>/hardware/ ─► PlatformIO / Wokwi 验证 ─► metrics 分片 ─┤(并行)
               └── (汇合点) merge_metrics.py 汇总 ─► Document Agent ◄── 消费工程产物 + metrics 汇总 ─► 报告 + 答辩 PPT
                     │
               [验收节点] ──不通过──► 失败工单路由回责任 agent 修复（唯一回路边，带熔断）
@@ -131,16 +132,16 @@
 - Coordinator（主 agent）按蓝图拆解为**任务包**，每个任务包 = 输入契约 + 输出契约 + 验收标准
 - **并发**：Software 与 Hardware 子 agent 并行；Document Agent 在汇合点后启动（消费前两者落盘的产物文件）
 - 各角色在各自 `workspace/<role>/` 目录内工作，Bash 沙箱内自验（编译 / 测试 / 仿真）
-- **实测数据契约（分片制）**：各工程角色只写自己的 `workspace/<role>/metrics.json` 分片（实测值+测量方法）；`scripts/verify/merge_metrics.py` 确定性汇总为顶层 `workspace/metrics.json`（命名空间 `metrics.<role>.<键>`，角色禁写，守卫已拦）。Document Agent 引用的一切性能数字**只能来自汇总文件**，禁止自行编造
+- **实测数据契约（分片制；v2 降级：数字须可溯至项目实测产物，PPT 取材已改道 fn 文件结构）**：各工程角色只写自己的 `workspace/<role>/metrics.json` 分片（实测值+测量方法）；`scripts/verify/merge_metrics.py` 确定性汇总为顶层 `workspace/<cid>/metrics.json`（命名空间 `metrics.<role>.<键>`，角色禁写，守卫已拦）。Document Agent 引用的一切性能数字**只能来自汇总文件**，禁止自行编造
 - **人工主导入口（D13，2026-09-02）**：`/self`（M-08 → K-11 副驾模式）与自动编排同处 deliver 阶段、共用同一套 L2 边界与验收出口——主会话豁免瘦协调者约束、角色写入矩阵与波次编排（限战役根内），人定粒度与顺序、主会话直接动手；蓝图可改但改必重校验+留痕；不变量（验收记录只经 /accept、顶层 metrics.json 只经汇总脚本、references/ 归宿、实测数字纪律）与终验全量清单**不豁免**；熔断后人工接管亦走此。两入口可随时互换续跑
 - **自动规格链（升级票08/09，2026-09-16）**：蓝图 `workflow.auto_chain`（缺省 true，确认闸门处可见可改）开启时，首波派发前由 **planner 子代理**（章程 `.zcode/agents/planner.md`）跑 mattpocock to-spec → to-tickets，产物落 `<根>/specs/`——ticket 只在 milestone 内细化、按 milestone×owner_role 归组，**波次拓扑与验收项 ID 仍出自蓝图**；链直通到 implement 完成后单次汇报（无中途人工门，/accept 仍唯一人工验收闸门）。software 章程含**包级自检前置**（superpowers verification-before-completion / TDD：自检过才报波门，波门五查兜底跨包契约）
 
 ### 3.4 验收-修复节点（全自动，可升级人工）
 
-- `scripts/verify/run_acceptance.py` 逐项执行蓝图验收清单（**带 cmd 的项自动执行并存证据，超时记为 fail 并杀整棵进程树**；执行前先汇总 metrics 分片），产物写入 `workspace/acceptance/`：
+- `scripts/verify/run_acceptance.py` 逐项执行蓝图验收清单（**带 cmd 的项自动执行并存证据，超时记为 fail 并杀整棵进程树**；执行前先汇总 metrics 分片），产物写入 `workspace/<cid>/acceptance/`：
   - 软件：一键启动、测试全过、browser-use 实测取证（截图/录屏）、真实数据端到端
   - 硬件：仿真（Wokwi）通过、设计文件/BOM/固件齐备；**物理项列为人工测试项**移交用户
-  - 文档：结构完整性、数字与 metrics.json 一致性、格式校验
+  - 文档：结构完整性、数字与实测产物一致性、格式校验
 - 失败项**带失败证据**生成失败工单，路由回责任 agent 修复后重跑；`.flow/state.json` 记录重试计数（**仅 fail 计数**——pending 是等待而非失败重试，T2.1 裁决；retry.max 单一事实来源为 budget.yaml），**超限熔断**升级人工
 - 通过后生成分析报告（对照该赛评审标准自评 + 历年获奖基准对比）
 - **答辩 PPT 正式产线（K-12/K-13，升级票10/11）**：/accept 通过后、/archive 前为 **PPT 窗口**（守卫对 verify 态放行 `<根>/docs/**` 与 JOURNAL.md）——document 角色产 `docs/ppt_brief.md` 内容简报（数字只出自 metrics.json，铁律 4），ppt-master 插件 Default 路线双用户门（Gate1 沟通契约+模板 / Gate2 规格锁定）生成正式答辩 pptx，项目路由 `<根>/docs/ppt/`；**Marp（K-06）自此定位波内草稿**，正式 pptx 唯一产线为 /ppt；`/ppt-self`（K-13）为该阶段 /self 同款副驾（豁免限 docs 子树，数字改动必须回 metrics 键核对）
@@ -235,9 +236,9 @@ autoC/
 | 方向冷启动（K-09） | `/discover`：信源目录驱动搜索 → 建方向配置与首批条目（框架泛化入口） |
 | 用户确认蓝图 | 会话交互（原生 human-in-the-loop） |
 | Coordinator | 主 agent 把蓝图拆为任务包 |
-| Software Agent + 沙箱 | 子 agent + Bash 工作区（workspace/software/） |
+| Software Agent + 沙箱 | 子 agent + Bash 工作区（workspace/<cid>/software/） |
 | Hardware Agent（CLI 路线，D2 裁决） | PlatformIO / kicad-cli / Wokwi（Bash 调用） |
-| Document Agent | Marp / Typst 模板（config/templates/）+ document-skills 兜底（严格 .pptx 需求）；K-12 简报 + ppt-master 正式产线（Marp 降为波内草稿） |
+| Document Agent | Marp / Typst 模板（config/templates/）+ documents 技能族 兜底（严格 .pptx 需求）；K-12 简报 + ppt-master 正式产线（Marp 降为波内草稿） |
 | 规格派生 planner（升级票09） | 子代理 + mattpocock to-spec/to-tickets → `<根>/specs/`（auto_chain 开启时，首波前） |
 | 答辩 PPT 正式产线（K-12/K-13） | ppt-master 插件 + `/ppt`、`/ppt-self` 命令（/accept 通过后窗口，双用户门） |
 | 验收执行器 | `scripts/verify/run_acceptance.py` + browser-use 实测取证 |
@@ -259,7 +260,7 @@ autoC/
 
 ### 6.2 职责边界（防越界）：三层防线
 
-- **L1 软边界——角色章程（.zcode/agents/）**：每角色一份（职责 / 输入输出契约 / 禁止清单）；Coordinator 按名派发。角色目录级的写入边界（如"Software 不得写 workspace/hardware/"）目前由**章程约定 + git 审计发现**保障，不是物理强制。
+- **L1 软边界——角色章程（.zcode/agents/）**：每角色一份（职责 / 输入输出契约 / 禁止清单）；Coordinator 按名派发。角色目录级的写入边界（如"Software 不得写 workspace/<cid>/hardware/"）目前由**章程约定 + git 审计发现**保障，不是物理强制。
 - **L2 阶段级硬边界——写入路径守卫 + 契约 Schema 校验**：
   - PreToolUse 钩子（`.zcode/config.json` → `hooks.events` → `scripts/guard/guard_path.py`，matcher 为 `Write|Edit|ApplyPatch`）执行的是**阶段级**写入控制——**v2 多战役（2026-09-01）**：workspace 子树按**最长 root 匹配**路由到所属战役的阶段（deliver 放行该战役根（acceptance/ 与顶层 metrics.json 除外）、verify 放行其 acceptance/、docs/（K-12 PPT 窗口，票10）与 JOURNAL.md（阶段记行）、未登记战役目录拒写、容器 README 仅全局 idle）；kb/ 与工程目录归全局阶段（collect 仅 kb/，idle 放行）——**不识别调用者角色**。**D14 战役圈禁（2026-09-02）**：全局 idle 且任一战役活跃（decide/deliver/verify/archive）时，工程目录与项目根对 Write/Edit 锁定（仅放行 `.flow/**`）——战役生成/下载的文件物理圈禁在所属战役根，kb 维护走 collect 批次，容器 README 相应收紧；脚本级写入（merge_metrics/archive_campaign 等经 Bash）不在此层，由 L3 审计兜底。越界即阻断并说明原因；**state 缺失时 fail-closed**（全只读，仅放行 .flow/ 自身）；v1 状态按平铺兼容。
   - 契约文件（blueprint / KB 条目 / 验收清单）必须通过 `config/templates/*.schema.json` 校验：蓝图不过校验不得进入确认闸门；KB 条目不过校验进 quarantine。
@@ -290,7 +291,7 @@ autoC/
 **已知边界与处置记录（K-03 前置项，T2 已裁决落地）：**
 
 1. **角色身份级守卫——评估后不引入（v1）**：钩子负载不含调用者身份，全局 `active_role` 又会破坏 software/hardware 的并发派发。同阶段跨角色越界的保障维持 L1 章程 + L3 git 审计；唯一存在真实写冲突的文件已由下条消除，其余目录冲突风险随分片制大幅降低。
-2. **metrics.json 并发覆盖风险——已解决（分片制）**：角色只写 `workspace/<role>/metrics.json` 分片，`scripts/verify/merge_metrics.py` 确定性汇总为顶层 `workspace/metrics.json`（`metrics.<role>.<键>` 命名空间）。守卫在 deliver 阶段对该生成物拒写（该文件的 L2 强制已生效）；software/hardware/document 三份章程已同步，回归用例已固化。
+2. **metrics.json 并发覆盖风险——已解决（分片制）**：角色只写 `workspace/<role>/metrics.json` 分片，`scripts/verify/merge_metrics.py` 确定性汇总为顶层 `workspace/<cid>/metrics.json`（`metrics.<role>.<键>` 命名空间）。守卫在 deliver 阶段对该生成物拒写（该文件的 L2 强制已生效）；software/hardware/document 三份章程已同步，回归用例已固化。
 
 ### 6.3 客户端自定义能力使用清单
 
@@ -314,7 +315,7 @@ autoC/
 - **硬件物理装配与实测为人工环节** → 验收清单显式区分"agent 可验证项"与"人工测试项"
 - **挑战杯类获奖作品正文稀缺** → KB-1 分析深度分级、标注信源等级，宁缺毋滥
 - **各赛事 AI 使用政策不一**（美赛/Kaggle 等已有明确要求）→ 每个赛事条目维护 AI 政策字段，合规检查为蓝图必含章节
-- **外部插件不随仓库走**（位于各机 `~/.zcode/cli/plugins/cache/<vendor>/<name>/<version>/`）→ 插件清单+版本+安装方式以 `config/contract_version.yaml` 为唯一事实源（mattpocock-skills 1.2.3 规格链、superpowers 6.3.0 实现纪律、ppt-master 0.0.0 答辩 PPT 产线、document-skills 0.1.4 文档产线；缺装从装机机同步 cache 目录或经客户端插件机制安装），SessionStart 播报可用性；某插件缺失时依赖它的能力在该机不可用，开机即见
+- **外部插件不随仓库走**（位于各机 `~/.zcode/cli/plugins/cache/<vendor>/<name>/<version>/`）→ 插件清单+版本+安装方式以 `config/contract_version.yaml` 为唯一事实源（mattpocock-skills 1.2.3 规格链、superpowers 6.3.0 实现纪律、ppt-master 0.0.0 答辩 PPT 产线、documents 技能族 0.1.4 文档产线；缺装从装机机同步 cache 目录或经客户端插件机制安装），SessionStart 播报可用性；某插件缺失时依赖它的能力在该机不可用，开机即见
 
 ---
 
