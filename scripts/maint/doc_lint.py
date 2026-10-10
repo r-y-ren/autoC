@@ -109,6 +109,8 @@ def main() -> int:
     root = project_root(args.root)
     total = 0
     script_cache: dict = {}
+    cmd_names: set[str] = set()
+    skill_dirs: set[str] = set()
     for cat, path in iter_files(root, args.only):
         rel = str(path.relative_to(root))
         try:
@@ -120,10 +122,19 @@ def main() -> int:
         for msg in check_file(cat, rel, text):
             print(f"VIOLATION {cat}:{rel}:0: {msg}")
             total += 1
+        if cat == "commands":
+            cmd_names.add(Path(rel).stem)
+        if cat == "skills" and rel.replace("\\", "/").endswith("SKILL.md"):
+            parts = rel.replace("\\", "/").split("/")
+            if len(parts) >= 2:
+                skill_dirs.add(parts[-2])
         for i, line in enumerate(text.splitlines(), 1):
             for msg in check_line(root, cat, line, script_cache):
                 print(f"VIOLATION {cat}:{rel}:{i}: {msg}")
                 total += 1
+    for c in sorted(cmd_names - skill_dirs):
+        print(f"VIOLATION commands:{c}.md:0: [R7] 命令缺同名技能壳 skills/{c}/（客户端 / 菜单只认技能名，斜杠入口断裂）")
+        total += 1
     if total:
         print(f"doc_lint：{total} 处违规")
         return 1

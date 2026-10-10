@@ -35,6 +35,8 @@ def make_fixture(bad: bool) -> Path:
     cmds = tmp / ".zcode" / "commands"
     cmds.mkdir(parents=True)
     (cmds / "good.md").write_text(GOOD_CMD, encoding="utf-8")
+    (tmp / ".zcode" / "skills" / "good").mkdir(parents=True)
+    (tmp / ".zcode" / "skills" / "good" / "SKILL.md").write_text("# 壳\n产物说明：无产物。\n", encoding="utf-8")
     if bad:
         (cmds / "bad.md").write_text(
             "# 坏命令\n"
@@ -86,6 +88,7 @@ def main() -> int:
             ("方案书禁用节", "禁用节" in out),
             ("产物说明收尾", "R6" in out),
             ("技能域产物说明", "bad-skill" in out),
+            ("命令壳缺失", "R7" in out),
         ]
         ok_all = p.returncode == 1
         passed += ok_all
@@ -120,8 +123,8 @@ def main() -> int:
         import shutil
         shutil.rmtree(root, ignore_errors=True)
 
-    print(f"\n{passed}/12 PASS")
-    return 0 if passed == 12 else 1
+    print(f"\n{passed}/13 PASS")
+    return 0 if passed == 13 else 1
 
 
 if __name__ == "__main__":
