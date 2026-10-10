@@ -663,3 +663,7 @@
   reason: 同一工件去重——SOTER 论文已入库（arxiv-2609.16804 卡，2026-09-16 建）；本轮实抓确认官方开源落地（GitHub SII-fkchen/SOTER 73 stars MIT 推理代码+HF 权重，2026-09-22 API），已按"更新"消化进论文卡（maturity paper→demo、runnable=true、复用成本高→中、补 2 条来源），gh- ID 不另建卡避免同工件双 ID 碎片化；stars 快照 73（0 forks，2026-09-22 API）
   stars: 73
   decided: '2026-09-22'
+- id: gh-Akun-python_autumn-recruitment
+  reason: 非技术工件，拒于映射非信号——实抓 README 确认为秋招备考学习仓（23 个主题模块×232 个教学笔记本，"理解→推导→手写→运行→验证→复盘"学习法，MIT，2026-10-10 抓取），内容为数学/算法/ML/DL/LLM/Agent/AI-Infra 等面试学习资料而非可迁移技术：无独有组件、无方法增量、无可接入比赛作品的实现件（笔记本自包含可跑但仅为教学验证用途，README 自述非生产就绪）；六赛种词表写不出有说服力映射——强行挂 ACM-训练体系也只是"教程先例引用"，对任何同类学习仓都成立故不构成差异化；min_signal stars 门槛虽过（223≥50）仍拒，stars 快照如实记录（223，28 forks，2026-10-10 抓取）
+  stars: 223
+  decided: '2026-10-10'
