@@ -4,13 +4,17 @@
 # 脚本侧校验：开工前跑 python scripts/guard/contract_check.py——本地与上游（@{u}）版本
 # 不一致即提示先 pull / push（SessionStart 播报的是本地版本）。
 
-schema_version: 20
+schema_version: 21
 
 # 升级依赖的外部插件（各机 ~/.zcode/cli/plugins/cache/<vendor>/<name>/<version>/，不随仓库走）。
 # version 以插件 cache 目录名为准（缺失警示由 session_status.py 检查，目录在位即算可用，不校验版本号）；
 # 缺装时从已装机机器同步同名 cache 目录，或经客户端插件机制安装。
 plugins:
-  - {vendor: mattpocock, name: mattpocock-skills, version: 1.2.3, purpose: 规格链（grilling/to-spec/to-tickets/implement）}
-  - {vendor: superpowers-dev, name: superpowers, version: 6.3.0, purpose: 实现纪律（verification-before-completion/TDD）}
-  - {vendor: ppt-master, name: ppt-master, version: 0.0.0, purpose: 答辩 PPT 产线（K-12 /ppt）}
-  - {vendor: zcode-plugins-official, name: document-skills, version: 0.1.4, purpose: docx/pptx/pdf/xlsx 文档产线}
+  - {vendor: mattpocock, name: mattpocock-skills, version: 1.2.3, purpose: 规格链（grilling/to-spec/to-tickets/implement/code-review）}
+  - {vendor: superpowers-dev, name: superpowers, version: 6.4.2, purpose: 实现纪律（verification-before-completion/TDD）}
+  - {vendor: ppt-master, name: ppt-master, version: 0.0.0, purpose: 答辩 PPT 精修段（K-12 /ppt 两段式之精修）}
+  - {vendor: zcode-plugins-official, name: documents, version: 0.1.7, purpose: docx 文档产线}
+  - {vendor: zcode-plugins-official, name: presentations, version: 0.1.7, purpose: pptx 文档产线}
+  - {vendor: zcode-plugins-official, name: spreadsheets, version: 0.1.7, purpose: xlsx 文档产线}
+  - {vendor: zcode-plugins-official, name: pdf, version: 0.1.7, purpose: pdf 文档产线}
+  - {vendor: fn-ladder, name: fn-ladder, version: 2.2.0, purpose: 人工推进主线（tracker 账本/fn-exempt 豁免协议，v2 依赖）}

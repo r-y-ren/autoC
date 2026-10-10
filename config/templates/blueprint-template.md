@@ -1,4 +1,6 @@
-# 蓝图（workspace/blueprint.md）骨架——frontmatter 须过 blueprint.schema.json，不过不得呈报确认
+# 蓝图（workspace/<cid>/blueprint.md）骨架——frontmatter 须过 blueprint.schema.json，不过不得呈报确认
+
+> 注（v2）：蓝图降为**项目自用可选契约**（过 schema 校验后使用）；/attack 不再产蓝图，其输出为纯参考方案书（见 brief-template.md）。
 
 > 用法：复制本骨架填充；`?` 处必填；注释行删除。验收清单默认线按作品类型抄默认项（"完整可实用"的四标准是硬约束）。
 
@@ -48,14 +50,14 @@ acceptance:
   checklist:
     # ── 软件类默认线（完整可实用：可运行/可验证/可维护/可交付）──
     - {id: sw-boot, category: software, item: 一键启动冒烟通过, method: 自动,
-       cmd: "python workspace/software/smoke_boot.py"}
+       cmd: "python workspace/<cid>/software/smoke_boot.py"}
     - {id: sw-test, category: software, item: 测试套件全过, method: 自动,
-       cmd: "python -m pytest workspace/software/tests -q"}
+       cmd: "python -m pytest workspace/<cid>/software/tests -q"}
     # ── 文档类默认线 ──
     - {id: doc-compile, category: document, item: 报告/PPT 编译通过, method: 自动, cmd: ?}
     # ── 硬件类默认线（物理项一律 manual）──
     - {id: hw-fw, category: hardware, item: 固件编译通过, method: 自动,
-       cmd: "python3 -m platformio run -d workspace/hardware/firmware"}
+       cmd: "python3 -m platformio run -d workspace/<cid>/hardware/firmware"}
     # ── 人工项示例 ──
     - {id: man-1, category: manual, item: 物理装配与实测, method: 人工手册}
 

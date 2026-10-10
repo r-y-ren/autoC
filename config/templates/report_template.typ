@@ -1,4 +1,4 @@
-// 项目报告模板（Typst）｜铁律：数字必须来自 workspace/metrics.json
+// 项目报告模板（Typst）｜铁律：数字必须来自 workspace/<cid>/metrics.json
 #set page(paper: "a4", margin: 2.2cm)
 #set text(lang: "zh", size: 11pt)
 #set heading(numbering: "1.1")

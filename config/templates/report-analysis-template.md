@@ -1,8 +1,8 @@
-# 作品分析报告（workspace/acceptance/report.md）——验收通过后的分析产物
+# 作品分析报告（workspace/<cid>/acceptance/report.md）——验收通过后的分析产物
 
 > 第三类交付物的收口文档：验收通过后由 acceptor 按本模板产出，随战役归档。
 > 定位：**第三方事后分析**——不是自夸书，是"对照该赛评审标准，这个作品强在哪、弱在哪、与历届获奖基准比处于什么位置"。
-> 数字纪律：一切性能数字只能引 `workspace/metrics.json`（`metrics.<role>.<键>`），禁止出现 metrics 之外的数字（AGENTS.md 铁律 4）。
+> 数字纪律：一切性能数字只能引 `workspace/<cid>/metrics.json`（`metrics.<role>.<键>`），禁止出现 metrics 之外的数字（AGENTS.md 铁律 4）。
 
 ---
 competition_id: <id>

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "autoc/blueprint",
-  "title": "作品蓝图契约（workspace/blueprint.md frontmatter）",
+  "title": "作品蓝图契约（workspace/<cid>/blueprint.md frontmatter）",
   "description": "唯一人工闸门确认的对象。未通过本校验的蓝图不得提交用户确认。",
   "type": "object",
   "required": ["campaign", "scope", "tech_stack", "interface_contracts", "milestones", "acceptance", "compliance"],

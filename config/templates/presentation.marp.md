@@ -3,7 +3,7 @@ marp: true
 theme: default
 paginate: true
 ---
-<!-- 答辩 PPT 模板（Marp）｜铁律：所有性能数字必须来自 workspace/metrics.json，禁止编造 -->
+<!-- 答辩 PPT 模板（Marp）｜铁律：所有性能数字必须来自 workspace/<cid>/metrics.json，禁止编造 -->
 
 # {{作品名}}
 
