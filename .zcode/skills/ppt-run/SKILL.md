@@ -28,12 +28,15 @@ description: 正式答辩 PPT 产线（K-12，v2 两段式）：产稿段自动�
    → `deck_material.json`（四段素材+带来源数据表）+ `deck_brief.md`（人读简报）；缺失项如实进 missing
 2. **产稿**：`python scripts/ppt/build_draft_deck.py --material <战役根>/docs/ppt_material/deck_material.json --out <战役根>/docs/ppt/draft_deck.md`
    → 五段初稿（数字带来源脚注）；可用 Marp 渲染雏形：`marp <战役根>/docs/ppt/draft_deck.md -o <战役根>/docs/ppt/draft.pptx`
-3. **精修（可选）**：ppt-master Default 路线，输入=draft+material——
-   - **项目目录显式路由到 `<战役根>/docs/ppt/`**（D14：战役产物只落战役根；图片/模板资源同置于此）
-   - Gate1（沟通契约+模板选择）与 Gate2（规格锁定）即**用户门**，⛔BLOCKING 须用户显式确认，不跳过
+3. **精修（可选，两径任选）**：
+   - **ppt-master 路线**：Default 路线，输入=draft+material——
+     - **项目目录显式路由到 `<战役根>/docs/ppt/`**（D14：战役产物只落战役根；图片/模板资源同置于此）
+     - Gate1（沟通契约+模板选择）与 Gate2（规格锁定）即**用户门**，⛔BLOCKING 须用户显式确认，不跳过
+   - **人工径**：直接改稿，或走 ppt-master **原生 pptx 编辑路线**（edit-native，改既有 pptx 不重新生成）；
+     **任何数字改动必须回 `deck_material.json` 来源标注核对（无来源数字不上片）**。
 4. **产物核验**：`<战役根>/docs/ppt/exports/*.pptx`（或 draft.pptx）存在；**每个数字能在
    deck_material.json 的来源标注中找到**（无来源数字不得上片）。
-5. JOURNAL 记行 + 项目仓库 commit → 提示：`/archive`（战役收尾）或 `/ppt-self`（细节微调副驾）。
+5. JOURNAL 记行 + 项目仓库 commit → 提示：`/archive`（战役收尾）；精修段见上（两径任选）。
 
 ## 禁止
 

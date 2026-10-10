@@ -73,7 +73,7 @@
                     │
                     ▼
               项目迭代：人工按 fn-ladder 推进（fn-grill → fn-divide → fn-scaffold → fn-implement → fn-close；
-                    │  自动化与豁免走 fn-exempt 记账；tracker 为步骤真值；/self 副驾可借工作流工具）
+                    │  自动化与豁免走 fn-exempt 记账；tracker 为步骤真值）
                     ▼
               [验收节点 /accept（可选终检工具）] ──不通过──► 失败工单回**人工修复**（熔断计数按战役）
                     │ 通过
@@ -123,7 +123,7 @@
 - **并发**：Software 与 Hardware 子 agent 并行；Document Agent 在汇合点后启动（消费前两者落盘的产物文件）
 - 各角色在各自 `workspace/<role>/` 目录内工作，Bash 沙箱内自验（编译 / 测试 / 仿真）
 - **实测数据契约（分片制；v2 降级：数字须可溯至项目实测产物，PPT 取材已改道 fn 文件结构）**：各工程角色只写自己的 `workspace/<role>/metrics.json` 分片（实测值+测量方法）；`scripts/verify/merge_metrics.py` 确定性汇总为顶层 `workspace/<cid>/metrics.json`（命名空间 `metrics.<role>.<键>`，角色禁写，守卫已拦）。Document Agent 引用的一切性能数字**只能来自汇总文件**，禁止自行编造
-- **人工主导入口（D13，2026-09-02）**：`/self`（M-08 → K-11 副驾模式）与自动编排同处 deliver 阶段、共用同一套 L2 边界与验收出口——主会话豁免瘦协调者约束、角色写入矩阵与波次编排（波次编排已退役；限战役根内），人定粒度与顺序、主会话直接动手；蓝图可改但改必重校验+留痕；不变量（验收记录只经 /accept、顶层 metrics.json 只经汇总脚本、references/ 归宿、实测数字纪律）与终验全量清单**不豁免**；熔断后人工接管亦走此。两入口可随时互换续跑
+- **（已退役 2026-10-10）人工主导入口（D13，2026-09-02）**：`/self`（M-08 → K-11 副驾模式）与自动编排同处 deliver 阶段、共用同一套 L2 边界与验收出口——主会话豁免瘦协调者约束、角色写入矩阵与波次编排（波次编排已退役；限战役根内），人定粒度与顺序、主会话直接动手；蓝图可改但改必重校验+留痕；不变量（验收记录只经 /accept、顶层 metrics.json 只经汇总脚本、references/ 归宿、实测数字纪律）与终验全量清单**不豁免**；熔断后人工接管亦走此。两入口可随时互换续跑
 - **（已退役 v2）自动规格链（升级票08/09，2026-09-16）**：蓝图 `workflow.auto_chain`（缺省 true，确认闸门处可见可改）开启时，首波派发前由 **planner 子代理**（章程 `.zcode/agents/planner.md`）跑 mattpocock to-spec → to-tickets，产物落 `<根>/specs/`——ticket 只在 milestone 内细化、按 milestone×owner_role 归组，**波次拓扑与验收项 ID 仍出自蓝图**；链直通到 implement 完成后单次汇报（无中途人工门，/accept 仍唯一人工验收闸门）。software 章程含**包级自检前置**（superpowers verification-before-completion / TDD：自检过才报波门，波门五查兜底跨包契约）
 
 ### 3.4 验收-修复节点（全自动，可升级人工）
@@ -134,7 +134,7 @@
   - 文档：结构完整性、数字与实测产物一致性、格式校验
 - 失败项**带失败证据**生成失败工单，路由回责任 agent 修复后重跑；`.flow/state.json` 记录重试计数（**仅 fail 计数**——pending 是等待而非失败重试，T2.1 裁决；retry.max 单一事实来源为 budget.yaml），**超限熔断**升级人工
 - 通过后生成分析报告（对照该赛评审标准自评 + 历年获奖基准对比）
-- **答辩 PPT 正式产线（K-12/K-13，升级票10/11）**：/accept 通过后、/archive 前为 **PPT 窗口**（守卫对 verify 态放行 `<根>/docs/**` 与 JOURNAL.md）——document 角色产 `docs/ppt_brief.md` 内容简报（数字须可溯至项目实测产物（v2 降级口径）），ppt-master 插件 Default 路线双用户门（Gate1 沟通契约+模板 / Gate2 规格锁定）生成正式答辩 pptx，项目路由 `<根>/docs/ppt/`；**Marp（K-06）自此定位波内草稿**，正式 pptx 唯一产线为 /ppt；`/ppt-self`（K-13）为该阶段 /self 同款副驾（豁免限 docs 子树，数字改动必须回 metrics 键核对）
+- **答辩 PPT 产线（K-12 两段式；K-13 已退役）**：/accept 通过后、/archive 前为 **PPT 窗口**（守卫对 verify 态放行 `<根>/docs/**` 与 JOURNAL.md）——document 角色产 `docs/ppt_brief.md` 内容简报（数字须可溯至项目实测产物（v2 降级口径）），ppt-master 插件 Default 路线双用户门（Gate1 沟通契约+模板 / Gate2 规格锁定）生成正式答辩 pptx，项目路由 `<根>/docs/ppt/`；**Marp（K-06）自此定位波内草稿**，正式 pptx 唯一产线为 /ppt；`/ppt-self`（K-13）为该阶段 /self 同款副驾（豁免限 docs 子树，数字改动必须回 metrics 键核对）
 
 ### 3.5 归档
 
@@ -230,7 +230,7 @@ autoC/
 | Hardware Agent（CLI 路线，D2 裁决） | PlatformIO / kicad-cli / Wokwi（Bash 调用） |
 | Document Agent | Marp / Typst 模板（config/templates/）+ documents 技能族 兜底（严格 .pptx 需求）；K-12 简报 + ppt-master 正式产线（Marp 降为波内草稿） |
 | 规格派生 planner（升级票09） | 子代理 + mattpocock to-spec/to-tickets → `<根>/specs/`（auto_chain 开启时，首波前） |
-| 答辩 PPT 正式产线（K-12/K-13） | ppt-master 插件 + `/ppt`、`/ppt-self` 命令（/accept 通过后窗口，双用户门） |
+| 答辩 PPT 产线（K-12 两段式） | 取材器+装配器（自动初稿）+（精修可选）ppt-master 插件 / `/ppt` 命令 |
 | 验收执行器 | `scripts/verify/run_acceptance.py` + browser-use 实测取证 |
 | 归档 | `scripts/verify/archive_campaign.py`（项目仓库 commit+tag+push，主库零提交） |
 | 契约校验 | `config/templates/*.schema.json` + linter |
@@ -274,7 +274,7 @@ autoC/
 
 （交付阶段 kb/ 对所有角色只读；archive/ 仅 `archive_campaign.py` 可写；**跨战役写入一律禁止**——多战役并行时各角色只在自己的战役根内活动。）
 
-**人工主导会话豁免（D13）**：经 /self（M-08 → K-11）进入的交付会话，上表角色写入矩阵与 K-03 波次编排对**主会话**限战役根内豁免（可跨角色目录直接动手；L2 阶段硬边界不变——守卫对人机一视同仁）；生成物管辖（acceptance/ 只经验收流程、顶层 metrics.json 只经 S-09 汇总）与"验收者不修作品"语义不豁免——人工修完照走 /accept 重验。
+**（已退役 2026-10-10）人工主导会话豁免（D13）**：经 /self（M-08 → K-11）进入的交付会话，上表角色写入矩阵与 K-03 波次编排对**主会话**限战役根内豁免（可跨角色目录直接动手；L2 阶段硬边界不变——守卫对人机一视同仁）；生成物管辖（acceptance/ 只经验收流程、顶层 metrics.json 只经 S-09 汇总）与"验收者不修作品"语义不豁免——人工修完照走 /accept 重验。
 
 **外部参考材料归宿（L1 章程，2026-09-01 增）**：交付期任何角色抓取/下载的外部材料（赛方规则快照、数据集、第三方包、情报摘要）统一写 `<根>/references/`（rules/data/code/digests 子目录，INDEX.md 登记来源 URL + 抓取日期）；各角色工程目录内只放本工程产物。legacy 战役历史落点 `software/vendor/`、`software/exports/intel/` 因被脚本/manifest 引用保持原位。
 
@@ -289,7 +289,7 @@ autoC/
 |---|---|
 | AGENTS.md | 全局铁律（引用纪律 / 契约纪律 / 合规纪律） |
 | .zcode/agents/ | 角色章程（L1 软边界，见 §6.2） |
-| .zcode/skills/ | SOP 纯函数技能（strategy-gen / campaign-run / marp-deck / typst-report / ppt-run（K-12）/ ppt-self（K-13）等） |
+| .zcode/skills/ | SOP 纯函数技能（strategy-gen / campaign-run / marp-deck / typst-report / ppt-run（K-12）等） |
 | .zcode/config.json → hooks | 写入路径守卫（PreToolUse，process 型；Phase 0 已注册并冒烟验证） |
 | 斜杠命令 | 阶段入口、换会话重启阶段 |
 | 子 agent | 上下文隔离与并发 |

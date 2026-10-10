@@ -14,7 +14,8 @@ description: 触发验收节点（v2 可选终检工具）：执行蓝图验收�
 5. 分支：
    - 全过 → 生成分析报告（对照评审标准自评 + KB-1 历年基准对比），提示可执行 `/archive`
    - 有失败 → 开失败工单（附证据），`python scripts/guard/init_state.py --campaign <cid> --phase deliver --by accept` 退回
-     **人工修复（v2：修复由人工/fn-ladder 进行）**后重验；重试计数 ≥ retry.max 时**熔断**：停止自动重试，向用户呈报失败证据
+     **人工修复（v2：修复由人工/fn-ladder 进行）**后重验；重试计数 ≥ retry.max 时**熔断**：停止自动重试，向用户呈报失败证据——
+     人工修复完成后 `python scripts/guard/init_state.py --campaign <cid> --reset` 清零计数，再重验
 6. JOURNAL 记一行；项目仓库 commit
 
 铁律：验收者不修作品；无证据不判定。
